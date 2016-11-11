@@ -453,6 +453,10 @@ track gwasCatalog override
 snpTable snp144
 snpVersion 144
 
+# override to use hg38 specific html page
+track crispr override
+html crispr
+
 track ncbiRefSeqRefGene
 compositeTrack on
 shortLabel refGeneRefSeq

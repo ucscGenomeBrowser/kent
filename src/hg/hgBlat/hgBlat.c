@@ -745,7 +745,7 @@ printf("</TD>\n");
 printf("</TR>\n<TR>\n");
 userSeq = cartUsualString(cart, "userSeq", "");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
-printf("<TEXTAREA NAME=userSeq ROWS=14 COLS=80>%s</TEXTAREA>\n", userSeq);
+htmlPrintf("<TEXTAREA NAME=userSeq ROWS=14 COLS=80>%s</TEXTAREA>\n", userSeq);
 printf("</TD>\n");
 printf("</TR>\n<TR>\n");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");

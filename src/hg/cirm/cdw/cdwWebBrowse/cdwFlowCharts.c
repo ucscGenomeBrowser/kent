@@ -19,16 +19,9 @@ struct slRow
     struct slInt *fileList; 
     };
 
+//Global variables needed for the recursive function.  
 struct slRow *files; 
 struct slRow *steps; 
-
-void makeFileLink(char *file, struct cart *cart)
-/* Write out wrapper that links us to metadata display */
-{
-printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=file_name&cdwFileVal=%s&%s\">",
-    file, cartSidUrlString(cart));
-printf("%s</A>", file);
-}
 
 static struct slRow *slRowNew(struct slInt *fileList)
 /* Return a new slRow. */
@@ -40,29 +33,19 @@ return a;
 }
 
 static char *stripFilePath(char *url)
-// Grab everything past the last '/' 
+/* Return everything past the last '/' as a string. */ 
 {
 struct slName *pathPieces = charSepToSlNames(url, '/');
 slReverse(&pathPieces); 
 return (pathPieces->name); 
 }
 
-/*int slIntCmp(const void *a, const void *b)
-{
-const struct slInt *intA = ((struct slInt*) a); 
-const struct slInt *intB = ((struct slInt*) b); 
-if (intA->val > intB->val)
-    return 0;
-else return 1; 
-}*/
-
-
 static bool baseCase(struct sqlConnection *conn, int fileId)
-// Generate the row that the clicked file is on, the clicked file will always be first in the row. 
-// Return False if there is no flowchart for the file. 
+/* Generate the row that the clicked file is on, the clicked file will always be first in the row. 
+ * Return False if there is no flowchart for the file. */ 
 {
 char query[1024]; 
-struct slInt *itemList = NULL; // We are building up the item list that our file is in manually
+struct slInt *itemList = NULL; // Used to build up the item list that our file is in manually
 
 // Look for the file in stepOut (it has upstream files)
 sqlSafef(query, sizeof(query), "select * from cdwStepOut where fileId = '%i'", fileId);
@@ -157,7 +140,7 @@ return;
 }
 
 static void addToSteps(int depth, struct slInt *stepRow)
-// add a single step to the global steps; 
+/* Add a single step to the global list of steps at the propper depth. */ 
 {
 
 // Check if there is a row at the current depth; 
@@ -182,104 +165,103 @@ if (slCount(files) < depth) // Make a new row
 // Go to the propper depth in the slRow
 struct slRow *existingRow = slElementFromIx(&files, depth);
 slAddTail(&existingRow->fileList, fileRow); 
-
+return; 
 }
 
 static void rLookForward(struct sqlConnection *conn, int fileId, int depth)
+/* Recursively look forward through the sql databases. The function has two options to recurse, 
+ * forward down an analysis pipeline, or horizontally to a new analysis pipeline. */
 {
-//check for the number of times the file shows up in cdwStepIn
 char query[1024]; 
 // Get the cdwStepIn entry for an entry in the first row, note that the file could have
-// multiple downstream pipelines and will then have multiple entries in cdwStepIn
+// multiple downstream pipelines and will then have multiple entries in cdwStepIn.
 sqlSafef(query, sizeof(query), "select * from cdwStepIn where fileId = '%i'", fileId);
 struct cdwStepIn *cSIList = cdwStepInLoadByQuery(conn,query);
-//if it doesnt; 	return; 
 if (cSIList == NULL)
     return; 
 
 struct cdwStepIn *curStep; 
-// This looks through the pipeline steps horizontally 
-/*	for each step;
-	    load the step && row information at the correct depth; (uses global row/step variables)
-	    recurse on all associated cdwStepOut files at depth + 1; 
-*/
+/* This looks through the pipeline steps horizontally. For each step; load the step and row 
+ * information at the correct depth; (uses global row/step variables). Then recurse on the first
+ * associated cdwStepOut files at depth + 1. */
 for (curStep = cSIList; curStep != NULL; curStep = curStep->next) 
     {
     addToSteps(depth, slIntNew(curStep->stepRunId));
     
-    // get the associated stepOut files 
+    // Get the associated stepOut files.
     sqlSafef(query, sizeof(query), "select * from cdwStepOut where stepRunId = '%u'", curStep->stepRunId); 
     struct cdwStepOut *iter, *cSOList = cdwStepOutLoadByQuery(conn, query);
     
     // Go through the step out files and make a list of ints where each int is a file id;  
     struct slInt *fileIdList = NULL; 
-    // All files in cdwStepIn have at least one corresponding file in cdwStepOut keyed into via the stepRun 
-    // Go through the list of items and make up a list of slInt's that correpond to the fileId's
+    // All files in cdwStepIn have at least one corresponding file in cdwStepOut keyed into via the stepRun. 
+    // Go through the list of items and make up a list of slInt's that correpond to the fileId'.
     for (iter = cSOList; iter != NULL; iter=iter->next)
 	{
 	slAddHead(&fileIdList, slIntNew((int) iter->fileId));
 	}
+    // Keep things ordered. 
     slSort(fileIdList,  *slIntCmp);
     addToFiles(depth + 1, fileIdList); 
-    rLookForward(conn, fileIdList->val, depth+2); // Could put this in the for loop to recurse on all children instead of just 1
+    // Each recursion has a step and file row, hence increase depth by 2. 
+    rLookForward(conn, fileIdList->val, depth+2); 
     }
 }
 
-static void printRowToStep(struct sqlConnection *conn, struct slRow *fileRow, struct slInt *stepRow, int filesPerRow)
+static void printRowToStep(struct sqlConnection *conn, struct slInt *fileRow, struct slInt *stepRow, int filesPerRow)
+/* Given a list of files and a list of steps connect the files to the steps where appropriate.  */ 
 {
 char query[1024];
-struct slInt *item;
+struct slInt *stepIter; 
+//stepIter;
 int count = 0;
-// Go through the list of int's that are the file Id's for each row
-for (item = fileRow->fileList; item != NULL; item = item->next)
+// The input files could go down multiple pipelines, for each step link up the files to the step if appropriate.
+for (stepIter = stepRow; stepIter != NULL; stepIter = stepIter->next)
     {
-    // Check if the files all share the same stepRow
-    // List the last file as a 'n'
-    
-    
-    if(count +1 == filesPerRow)
+    struct slInt *fileIter; 
+    for (fileIter = fileRow; fileIter != NULL; fileIter = fileIter->next)
 	{
-	struct slInt *lastFileId = slElementFromIx(fileRow->fileList, slCount(fileRow->fileList)-1);
-	sqlSafef(query, sizeof(query), "select * from cdwStepIn where fileId='%u' and stepRunId='%i'", lastFileId->val, stepRow->val);
+	// For each file in the file row check if it goes into the current step.  
+	sqlSafef(query, sizeof(query), "select * from cdwStepIn where fileId='%u' and stepRunId='%i'", fileIter->val, stepIter->val);
 	struct cdwStepIn *cSI = cdwStepInLoadByQuery(conn, query);
-	if (cSI==NULL)
+	if (cSI==NULL) // These files are not passed into the current step. 
 	    continue;
-	// Get the file name 
-	sqlSafef(query, sizeof(query), "select * from cdwFile where id = '%u'", lastFileId->val);
+	++count;
+	// All files below connect to the current step.  
+	// Grab the file name and define an edge from the file to the step.  
+	sqlSafef(query, sizeof(query), "select * from cdwFile where id = '%u'", fileIter->val);
 	struct cdwFile *cF = cdwFileLoadByQuery(conn, query);
-	printf("g.setEdge(\"... %s %i\",", stripFilePath(cF->cdwFileName), slCount(fileRow->fileList)); 
-	// Get the step name 
-	sqlSafef(query, sizeof(query), "select * from cdwStepRun where id = '%i'", stepRow->val);
+	printf("g.setEdge(\"%s %i\",", stripFilePath(cF->cdwFileName), count); // The file. 
+	sqlSafef(query, sizeof(query), "select * from cdwStepRun where id = '%i'", stepIter->val);
 	struct cdwStepRun *cSR = cdwStepRunLoadByQuery(conn,query); 
 	sqlSafef(query, sizeof(query), "select * from cdwStepDef where id = '%i'", cSR->stepDef); 
 	struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query); 
-	printf("\"%s\", ""{label:\"\"});\n", cSD->name);	
-	break;
-	}
-    
-    sqlSafef(query, sizeof(query), "select * from cdwStepIn where fileId='%u' and stepRunId='%i'", item->val, stepRow->val);
-    struct cdwStepIn *cSI = cdwStepInLoadByQuery(conn, query);
-    if (stepRow->next != NULL)
-	stepRow = stepRow->next; 
-    
-    if (cSI==NULL)
-	continue;
-    
+	printf("\"%s\", ""{label:\"\"});\n", cSD->name);  // The step. 
 
-    ++count;
-    sqlSafef(query, sizeof(query), "select * from cdwFile where id = '%u'", item->val);
-    struct cdwFile *cF = cdwFileLoadByQuery(conn, query);
-    printf("g.setEdge(\"%s %i\",", stripFilePath(cF->cdwFileName), count); 
-    
-    sqlSafef(query, sizeof(query), "select * from cdwStepRun where id = '%i'", stepRow->val);
-    struct cdwStepRun *cSR = cdwStepRunLoadByQuery(conn,query); 
-    sqlSafef(query, sizeof(query), "select * from cdwStepDef where id = '%i'", cSR->stepDef); 
-    struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query); 
-    printf("\"%s\", ""{label:\"\"});\n", cSD->name);
+	// Handle overflow. 
+	if (count +1  == filesPerRow)
+	    {
+	    struct slInt *lastFileId = slElementFromIx(fileRow, slCount(fileRow)-1);
+	    sqlSafef(query, sizeof(query), "select * from cdwStepIn where fileId='%u' and stepRunId='%i'", lastFileId->val, stepIter->val);
+	    struct cdwStepIn *cSI = cdwStepInLoadByQuery(conn, query);
+	    if (cSI==NULL)
+		continue;
+	    // Get the last file name and define an edge from it to the step. 
+	    sqlSafef(query, sizeof(query), "select * from cdwFile where id = '%u'", lastFileId->val);
+	    struct cdwFile *cF = cdwFileLoadByQuery(conn, query);
+	    printf("g.setEdge(\"... %s %i\",", stripFilePath(cF->cdwFileName), slCount(fileRow)); 
+	    sqlSafef(query, sizeof(query), "select * from cdwStepRun where id = '%i'", stepIter->val);
+	    struct cdwStepRun *cSR = cdwStepRunLoadByQuery(conn,query); 
+	    sqlSafef(query, sizeof(query), "select * from cdwStepDef where id = '%i'", cSR->stepDef); 
+	    struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query); 
+	    printf("\"%s\", ""{label:\"\"});\n", cSD->name);	
+	    break;
+	    }	
+	}
     }
 }
 
-static void printStepToRow(struct sqlConnection *conn, struct slRow *fileRow, struct slInt *stepRow, int filesPerRow)
+static void printStepToRow(struct sqlConnection *conn, struct slInt *fileRow, struct slInt *stepRow, int filesPerRow)
 // The difficult case, a step can produce 1 file in the next row, 2 files, or up to n files.  
 {
 char query[1024]; 
@@ -291,20 +273,20 @@ sqlSafef(query, sizeof(query), "select * from cdwStepDef where id = '%i'", cSR->
 struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query);
 
 struct slInt *item;
-sqlSafef(query, sizeof(query), "select * from cdwStepOut where fileId = '%u'", fileRow->fileList->val);
+sqlSafef(query, sizeof(query), "select * from cdwStepOut where fileId = '%u'", fileRow->val);
 struct cdwStepOut *cSO = cdwStepOutLoadByQuery(conn, query);
 int ourStep = cSO->stepRunId, count=0; 
-for (item = fileRow->fileList; item != NULL; item = item->next)
+for (item = fileRow; item != NULL; item = item->next)
     {
     ++count; 
     if (count == filesPerRow)
 	{
 	if (cSO->stepRunId == ourStep)
 	    {
-	    struct slInt *lastFileId = slElementFromIx(fileRow->fileList, slCount(fileRow->fileList)-1);
+	    struct slInt *lastFileId = slElementFromIx(fileRow, slCount(fileRow)-1);
 	    sqlSafef(query, sizeof(query), "select * from cdwFile where id = '%u'", lastFileId->val);
 	    struct cdwFile *cF = cdwFileLoadByQuery(conn, query);
-	    printf("g.setEdge(\"%s\", \"... %s %i\", {label:\"\"});\n", cSD->name, stripFilePath(cF->cdwFileName), slCount(fileRow->fileList));
+	    printf("g.setEdge(\"%s\", \"... %s %i\", {label:\"\"});\n", cSD->name, stripFilePath(cF->cdwFileName), slCount(fileRow));
 	    }
 	break;
 	}
@@ -401,11 +383,11 @@ stepRow = steps->next;
 for (fileRow = files->next; fileRow != NULL; fileRow=fileRow->next)
     {
     // Print row to step 
-    printRowToStep(conn, fileRow, stepRow->fileList, filesPerRow);  
+    printRowToStep(conn, fileRow->fileList, stepRow->fileList, filesPerRow);  
     // Print step to next row 
     if (fileRow->next != NULL) 
 	{
-	printStepToRow(conn, fileRow->next, stepRow->fileList, filesPerRow);
+	printStepToRow(conn, fileRow->next->fileList, stepRow->fileList, filesPerRow);
 	stepRow = stepRow->next; 
 	}
     if (stepRow == NULL) break;
@@ -439,10 +421,8 @@ printf("var initialScale = 0.75;</script>\n");
 void makeCdwFlowchart(int fileId, struct cart *cart)
 /* Run through SQL tables and generate history flow chart information. */
 {
-
 AllocVar(files); 
 AllocVar(steps); 
-
 struct sqlConnection *conn = cdwConnect(); 
 
 // Verify that the file is a valid file (this should happen in all cases, but check anyways). 

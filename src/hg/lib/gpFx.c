@@ -987,6 +987,21 @@ for(; variant; variant = variant->next)
 	errAbort("gpFxPredEffect needs either 1 variant, or only 1 allele in all variants");
 }
 
+static struct gpFx *gpFxNoVariation(struct variant *variant, struct lm *lm)
+/* Return a gpFx with SO term no_sequence_alteration, for VCF rows that aren't really variants. */
+{
+char *seq = NULL;
+struct allele *allele;
+for (allele = variant->alleles;  allele != NULL;  allele = allele->next)
+    if (allele->isReference)
+        {
+        seq = allele->sequence;
+        // Don't break out of the loop -- pick the last one we see because the first is likely
+        // the "real" reference allele, while the other(s) is something like "<X>" or "<*>".
+        }
+return gpFxNew(seq, "", no_sequence_alteration, none, lm);
+}
+
 struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
 			    struct dnaSeq *transcriptSequence, struct lm *lm)
 // return the predicted effect(s) of a variation list on a genePred
@@ -998,18 +1013,17 @@ checkVariantList(variant);
 
 for (; variant != NULL;  variant = variant->next)
     {
-    // If only the reference allele has been observed, skip it:
-    //#*** Some might like to keep variants e.g. in VCF output... 
-    //#*** aha, Ensembl has requested a term for 'no change' from SONG.
-    //#*** Add that to soTerm when it exists...
     if (! hasAltAllele(variant->alleles))
-	return NULL;
+	effectsList = slCat(effectsList, gpFxNoVariation(variant, lm));
+    else
+        {
+        // check to see if SNP is up or downstream
+        effectsList = slCat(effectsList, gpFxCheckUpDownstream(variant, pred, lm));
 
-    // check to see if SNP is up or downstream
-    effectsList = slCat(effectsList, gpFxCheckUpDownstream(variant, pred, lm));
-
-    // check to see if SNP is in the transcript
-    effectsList = slCat(effectsList, gpFxCheckTranscript(variant, pred, transcriptSequence, lm));
+        // check to see if SNP is in the transcript
+        effectsList = slCat(effectsList,
+                            gpFxCheckTranscript(variant, pred, transcriptSequence, lm));
+        }
     }
 
 return effectsList;

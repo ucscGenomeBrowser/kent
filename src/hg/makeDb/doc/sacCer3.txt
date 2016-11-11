@@ -1673,4 +1673,6 @@ mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/anoCar2/anoCar2.2bit result
     popd
 
 ############################################################################
-
+# Crispr track. See ../crisprTrack/README.txt (2016-09-15 max)
+# Command: doCrispr.sh sacCer3 ensGene
+##############################################################################

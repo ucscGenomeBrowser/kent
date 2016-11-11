@@ -2002,6 +2002,8 @@ return recordCount;
 }
 
 int chopByWhiteRespectDoubleQuotes(char *in, char *outArray[], int outSize)
+// NOTE: this routine does not do what this comment says.  It did not ever remove quotes due to
+// a coding error so I took out the code that pretended to be doing this.  
 /* Like chopString, but specialized for white space separators.
  * Further, any doubleQuotes (") are respected.
  * If doubleQuote is encloses whole string, then they are removed:
@@ -2012,7 +2014,6 @@ int chopByWhiteRespectDoubleQuotes(char *in, char *outArray[], int outSize)
 {
 int recordCount = 0;
 char c;
-char *quoteBegins = NULL;
 boolean quoting = FALSE;
 for (;;)
     {
@@ -2026,13 +2027,7 @@ for (;;)
 
     /* Store start of word and look for end of word. */
     if (outArray != NULL)
-        {
         outArray[recordCount] = in;
-        if (*in == '"')
-            quoteBegins = (in+1);
-        else
-            quoteBegins = NULL;
-        }
     recordCount += 1;
     quoting = FALSE;
     for (;;)
@@ -2042,18 +2037,7 @@ for (;;)
         if (quoting)
             {
             if (c == '"')
-                {
                 quoting = FALSE;
-                if (quoteBegins != NULL) // implies out array
-                    {
-                    if ((c = *(in+1) == 0 )|| isspace(c)) // whole word is quoted.
-                        {
-                        outArray[recordCount-1] = quoteBegins; // Fix beginning of word
-                        quoteBegins = NULL;
-                        break;
-                        }
-                    }
-                }
             }
         else
             {

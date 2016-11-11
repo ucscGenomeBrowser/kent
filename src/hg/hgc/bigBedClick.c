@@ -51,45 +51,46 @@ while (TRUE)
     }
 }
 
-static void detailsTabPrintSpecial(char *name, char *val, struct slPair *extraFields)
-/* some extra fields require special printing code, they all start with '_'  */
+static void extFieldMismatchCounts(char *val)
+/* crispr track: number of mismatches. A comma-sep string of integers */
 {
-// crispr track: number of mismatches. A comma-sep string of integers
-if (sameWord(name, "_mismatchCounts"))
+printf("<tr><td>Number of potential off-targets</td>\n");
+printf("<td>\n");
+char *words[255];
+int wordCount = chopByChar(val, ',', words, ArraySize(words));
+int i;
+printf("<table style='border-style: hidden'><tr>\n");
+for (i=0; i<wordCount; i++)
+    printf("<td style='border:1px solid #CCCCCC; font-weight: normal; width:auto'><b>%d mismatches:</b><br>%s off-targets</td>", i, words[i]);
+printf("</tr></table>\n");
+}
+
+static void extFieldCrisprOfftargets(char *val, struct slPair *extraFields)
+/* crispr track: locations of off-targets. A |-separated string of coords, including strand and 
+ a score
+ e.g. chr15;63615585-;71|chr16;8835640+;70 */
+{
+printf("<tr><td>Potential Off-targets</td>\n");
+
+printf("<td>\n");
+char *coords[65536];
+int coordCount = chopByChar(val, '|', coords, ArraySize(coords));
+int i;
+
+struct subText *subList = NULL;
+slSafeAddHead(&subList, subTextNew("ig:", "intergenic "));
+slSafeAddHead(&subList, subTextNew("ex:", "exon "));
+slSafeAddHead(&subList, subTextNew("in:", "intron "));
+slSafeAddHead(&subList, subTextNew("|", "-"));
+
+struct sqlConnection *conn = hAllocConn(database);
+
+boolean hasLocus = sqlTableExists(conn, "locusName");
+
+if (coordCount==0)
+    puts("Too many off-targets found to display or no off-targets. Please use the Crispor.org link at the top of the page to show all off-targets.\n");
+else
     {
-    printf("<tr><td>Number of potential off-targets</td>\n");
-    printf("<td>\n");
-    char *words[255];
-    int wordCount = chopByChar(val, ',', words, ArraySize(words));
-    int i;
-    printf("<table style='border-style: hidden'><tr>\n");
-    for (i=0; i<wordCount; i++)
-        printf("<td style='border:1px solid #CCCCCC; font-weight: normal; width:auto'><b>%d mismatches:</b><br>%s off-targets</td>", i, words[i]);
-    printf("</tr></table>\n");
-    }
-
-// crispr track: locations of off-targets. A |-separated string of coords, including strand and 
-// a score
-// e.g. chr15;63615585-;71|chr16;8835640+;70
-if (sameWord(name, "_crisprOfftargets"))
-    {
-    printf("<tr><td>Potential Off-targets</td>\n");
-
-    printf("<td>\n");
-    char *coords[65536];
-    int coordCount = chopByChar(val, '|', coords, ArraySize(coords));
-    int i;
-
-    struct subText *subList = NULL;
-    slSafeAddHead(&subList, subTextNew("ig:", "intergenic "));
-    slSafeAddHead(&subList, subTextNew("ex:", "exon "));
-    slSafeAddHead(&subList, subTextNew("in:", "intron "));
-    slSafeAddHead(&subList, subTextNew("|", "-"));
-
-    struct sqlConnection *conn = hAllocConn(database);
-
-    boolean hasLocus = sqlTableExists(conn, "locusName");
-
     printf("<table style='border-collapse:collapse; font-size:12px; table-layout:fixed'>\n");
     printf("<tr>\n"
            "<th style='width:26em'>Mismatched nucleotides</th>\n"
@@ -97,91 +98,102 @@ if (sameWord(name, "_crisprOfftargets"))
     if (hasLocus)
            printf("<th style='width:40em'>Locus</th>\n");
     printf("<th style='width:30em'>Position</th></tr>\n");
-
-    boolean collapsed = FALSE;
-    for (i=0; i<coordCount; i++)
-        {
-        if (i>10)
-            {
-            collapsed = TRUE;
-            printf("<tr class='crisprLinkHidden' style='display:none'>\n");
-            }
-        else
-            printf("<tr>\n");
-
-        // parse single coordinate string
-        // chr15;63615585-;71 = chrom;startPosStrand;scoreAsInt
-        char *parts[3];
-        chopByChar(coords[i], ';', parts, 3);
-        char* chrom = parts[0];
-        char* posStrand = parts[1];
-        char* scoreStr = parts[2];
-
-        // get score and strand
-        char strand = *(posStrand+strlen(posStrand)-1);
-        int pos = atol(posStrand);
-        int scoreInt = atoi(scoreStr);
-        float score = (float)scoreInt/1000;
-
-        // get the DNA sequence - this is slow! twoBit currently does not cache
-        // if the input is not sorted and this list is sorted by off-target score (CFD)
-        struct dnaSeq *seq = hDnaFromSeq(database, chrom, pos, pos+23, dnaUpper);
-        if (strand=='-')
-            reverseComplement(seq->dna, seq->size);
-        char *guideSeq = (char*)slPairFindVal(extraFields, "guideSeq");
-        // PAM = the last three chars of the off-target
-        char *pam = seq->dna+20;
-            
-        // print sequence + PAM
-        printf("<td><tt>");
-        printMismatchString(guideSeq, seq->dna);
-        printf("&nbsp;%s", pam);
-        printf("</tt></td>\n");
-
-        // print score of off-target
-        printf("<td>%0.3f</td>", score);
-
-        // print name of this locus
-        if (hasLocus)
-            {
-            struct sqlResult *sr = hRangeQuery(conn, "locusName", chrom, pos, pos+23, NULL, 0);
-            char **row;
-            row = sqlNextRow(sr);
-            if (row != NULL)
-                {
-                char *desc = row[4];
-                char *descLong = subTextString(subList, desc);
-                printf("<td>%s</td>", descLong);
-                freeMem(descLong);
-                }
-            sqlFreeResult(&sr);
-            }
-        
-        // print link to location
-        printf("<td><a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d (%c)</a></td>\n", 
-            hgTracksPathAndSettings(), database,
-            chrom, pos+1, pos+23, chrom, pos+1, strand);
-
-        printf("</tr>\n");
-        }
-    hFreeConn(&conn);
-    printf("<tr>\n");
-    printf("</table>\n");
-    if (collapsed)
-        {
-        printf("<p><a id='crisprShowAllLink' href='javascript:crisprShowAll()'>"
-            "Show all %d off-targets...</a>\n", coordCount);
-        // inline .js is bad style but why pollute our global .js files for such a rare
-        // case? Maybe we should have a generic "collapsible" class, like bootstrap?
-        printf("<script>\n");
-        printf("function crisprShowAll() {\n");
-        printf("    $('#crisprShowAllLink').hide();\n");
-        printf("    $('.crisprLinkHidden').show();\n");
-        printf("    return false;\n");
-        printf("}\n");
-        printf("</script>\n");
-        }
     }
+
+    
+boolean collapsed = FALSE;
+for (i=0; i<coordCount; i++)
+    {
+    if (i>10)
+        {
+        collapsed = TRUE;
+        printf("<tr class='crisprLinkHidden' style='display:none'>\n");
+        }
+    else
+        printf("<tr>\n");
+
+    // parse single coordinate string
+    // chr15;63615585-;71 = chrom;startPosStrand;scoreAsInt
+    char *parts[3];
+    chopByChar(coords[i], ';', parts, 3);
+    char* chrom = parts[0];
+    char* posStrand = parts[1];
+    char* scoreStr = parts[2];
+
+    // get score and strand
+    char strand = *(posStrand+strlen(posStrand)-1);
+    int pos = atol(posStrand);
+    int scoreInt = atoi(scoreStr);
+    float score = (float)scoreInt/1000;
+
+    // get the DNA sequence - this is slow! twoBit currently does not cache
+    // if the input is not sorted and this list is sorted by off-target score (CFD)
+    struct dnaSeq *seq = hDnaFromSeq(database, chrom, pos, pos+23, dnaUpper);
+    if (strand=='-')
+        reverseComplement(seq->dna, seq->size);
+    char *guideSeq = (char*)slPairFindVal(extraFields, "guideSeq");
+    // PAM = the last three chars of the off-target
+    char *pam = seq->dna+20;
+        
+    // print sequence + PAM
+    printf("<td><tt>");
+    printMismatchString(guideSeq, seq->dna);
+    printf("&nbsp;%s", pam);
+    printf("</tt></td>\n");
+
+    // print score of off-target
+    printf("<td>%0.3f</td>", score);
+
+    // print name of this locus
+    if (hasLocus)
+        {
+        struct sqlResult *sr = hRangeQuery(conn, "locusName", chrom, pos, pos+23, NULL, 0);
+        char **row;
+        row = sqlNextRow(sr);
+        if (row != NULL)
+            {
+            char *desc = row[4];
+            char *descLong = subTextString(subList, desc);
+            printf("<td>%s</td>", descLong);
+            freeMem(descLong);
+            }
+        sqlFreeResult(&sr);
+        }
+    
+    // print link to location
+    printf("<td><a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d (%c)</a></td>\n", 
+        hgTracksPathAndSettings(), database,
+        chrom, pos+1, pos+23, chrom, pos+1, strand);
+
+    printf("</tr>\n");
+    }
+hFreeConn(&conn);
+printf("<tr>\n");
+if (coordCount!=0)
+    printf("</table>\n");
+if (collapsed)
+    {
+    printf("<p><a id='crisprShowAllLink' href='#' onclick='crisprShowAll(); return false;'>"
+        "Show all %d off-targets...</a>\n", coordCount);
+    // inline .js is bad style but why pollute our global .js files for such a rare
+    // case? Maybe we should have a generic "collapsible" class, like bootstrap?
+    printf("<script>\n");
+    printf("function crisprShowAll() {\n");
+    printf("    $('#crisprShowAllLink').hide();\n");
+    printf("    $('.crisprLinkHidden').show();\n");
+    printf("    return false;\n");
+    printf("}\n");
+    printf("</script>\n");
+    }
+}
+
+static void detailsTabPrintSpecial(char *name, char *val, struct slPair *extraFields)
+/* some extra fields require special printing code, they all start with '_'  */
+{
+if (sameWord(name, "_mismatchCounts"))
+    extFieldMismatchCounts(val);
+else if (sameWord(name, "_crisprOfftargets"))
+    extFieldCrisprOfftargets(val, extraFields);
 }
 
 static void seekAndPrintTable(char *url, off_t offset, struct slPair *extraFields)

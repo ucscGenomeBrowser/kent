@@ -2,7 +2,7 @@
 # for emacs: -*- mode: sh; -*-
 
 
-# This file describes how we made the browser database on the 
+# This file describes how we made the browser database on the
 # Chicken (Gallus gallus) May 2006 release.
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -31,14 +31,14 @@
 # DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE 5/14/06 angie)
     mkdir /cluster/data/galGal3/M
     cd /cluster/data/galGal3/M
-    # go to http://www.ncbi.nih.gov/ and search Nucleotide for 
+    # go to http://www.ncbi.nih.gov/ and search Nucleotide for
     # "gallus mitochondrion genome".  That shows the gi number:
-    # 5834843 
+    # 5834843
     # Use that number in the entrez linking interface to get fasta:
     wget -O chrM.fa \
       'http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Text&db=Nucleotide&uid=5834843&dopt=FASTA'
-    # Edit chrM.fa: make sure the long fancy header line says it's the 
-    # Gallus gallus mitochondrion complete genome, and then replace the 
+    # Edit chrM.fa: make sure the long fancy header line says it's the
+    # Gallus gallus mitochondrion complete genome, and then replace the
     # header line with just ">chrM".
 
 
@@ -92,7 +92,7 @@
         endif
       end
     end
-    # splitFaIntoContigs makes new dirs for _randoms.  Move their contents 
+    # splitFaIntoContigs makes new dirs for _randoms.  Move their contents
     # back into the main chrom dirs and get rid of the _random dirs.
     foreach d (*_random)
       set base = `echo $d | sed -e 's/_random$//'`
@@ -228,10 +228,10 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
     # Uh-oh -- in the past, a drop in coverage has meant an RM problem.
     # However, spot-checking the per-chrom coverage of galGal2 vs. galGal3,
     # it seems like many small or random chroms have simply had a lot
-    # of repetitive sequence cut from them (significant drop in size as well 
-    # as drop in coverage), while for many of the large chroms, the coverage 
+    # of repetitive sequence cut from them (significant drop in size as well
+    # as drop in coverage), while for many of the large chroms, the coverage
     # has gone up.  Some chroms grew but the rmsk coverage did not keep up.
-    # chrUn is quite a bit smaller (121M --> 53M).  I saved the per-chrom 
+    # chrUn is quite a bit smaller (121M --> 53M).  I saved the per-chrom
     # coverage figures in /cluster/data/galGal3/RMCompare/ .
 #galGal2:chr1    24219568        183744490       13.181
 #galGal3:chr1    25804441        195192300       13.220
@@ -263,7 +263,7 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
 #galGal2:chrZ_random     2172389 14348615 15.140
 #galGal3:chrZ_random     115568  309836   37.300
     # So I'm inclined to think that it's most likely not a RepeatMasker bug
-    # but a change in the underlying assembly.  Something to run by LaDeana 
+    # but a change in the underlying assembly.  Something to run by LaDeana
     # after reading the release notes...
 
 
@@ -304,7 +304,7 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
 
 #########################################################################
 # SIMPLE REPEATS (TRF) (DONE 5/15/06 angie)
-    # TRF runs pretty quickly now... it takes a few hours total runtime, 
+    # TRF runs pretty quickly now... it takes a few hours total runtime,
     # so instead of binrsyncing and para-running, just do this on the
     # local fileserver
     ssh kkstore03
@@ -353,13 +353,13 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
      cd /cluster/data/galGal3/bed
      mkdir microsat
      cd microsat
-     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed
     /cluster/bin/i386/hgLoadBed galGal3 microsat microsat.bed
 
 
 #########################################################################
 # PROCESS SIMPLE REPEATS INTO MASK (DONE 5/15/06 angie)
-    # After the simpleRepeats track has been built, make a filtered version 
+    # After the simpleRepeats track has been built, make a filtered version
     # of the trf output: keep trf's with period <= 12:
     ssh kkstore03
     cd /cluster/data/galGal3/bed/simpleRepeat
@@ -396,13 +396,13 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
 
 #########################################################################
 # MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 5/15/06 angie)
-    # Note: just to keep things consistent, redid chr1 and chr2 2/26 with 
-    # the ProcessRepeats-only rerun results (only masking changes were 
+    # Note: just to keep things consistent, redid chr1 and chr2 2/26 with
+    # the ProcessRepeats-only rerun results (only masking changes were
     # 5bp in chr1 and 3bp in chr2)
     ssh kkstore03
     cd /cluster/data/galGal3
-    # Soft-mask (lower-case) the contig and chr .fa's, 
-    # then make hard-masked versions from the soft-masked.  
+    # Soft-mask (lower-case) the contig and chr .fa's,
+    # then make hard-masked versions from the soft-masked.
     set trfCtg=bed/simpleRepeat/trfMask
     set trfChr=bed/simpleRepeat/trfMaskChrom
     foreach f (*/chr*.fa)
@@ -446,7 +446,7 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
     mkdir /gbdb/galGal3
     ln -s /cluster/data/galGal3/galGal3.2bit /gbdb/galGal3/
     # Load /gbdb/galGal3/galGal3.2bit paths into database and save size info.
-    # Make a special chromInfo.sql with large index size so that 
+    # Make a special chromInfo.sql with large index size so that
     # chrE22C19W28_E50C23 and chrE22C19W28_E50C23_random don't get collapsed.
     cd /cluster/data/galGal3/bed/chromInfo
     perl -wpe 's/chrom\([0-9]+/chrom\(21/' \
@@ -463,7 +463,7 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
 
 #########################################################################
 # MAKE 10.OOC, 11.OOC FILES FOR BLAT (DONE 5/15/06 angie)
-    # Use -repMatch=380 (based on size -- for human we use 1024, and 
+    # Use -repMatch=380 (based on size -- for human we use 1024, and
     # chicken size is ~37% of human)
     ssh kkr1u00
     cd /cluster/data/galGal3
@@ -535,7 +535,7 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
     cd /cluster/data/galGal3/bed/genscan
     # Make 3 subdirectories for genscan to put their output files in
     mkdir gtf pep subopt
-    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # Generate a list file, genome.list, of all the hard-masked contigs that
     # *do not* consist of all-N's (which would cause genscan to blow up)
     cp /dev/null genome.list
     foreach f ( `ls -1S /cluster/data/galGal3/*/chr*_*/chr*_?{,?}.fa.masked` )
@@ -562,8 +562,8 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
 #Longest finished job:           20131s     335.52m     5.59h    0.23d
 #Submission to last job:         23171s     386.18m     6.44h    0.27d
 
-    # If there are crashes, diagnose with "para problems" / "para crashed".  
-    # If a job crashes due to genscan running out of memory, re-run it 
+    # If there are crashes, diagnose with "para problems" / "para crashed".
+    # If a job crashes due to genscan running out of memory, re-run it
     # manually with "-window=1200000" instead of "-window=2400000".
     ssh kkr5u00
     cd /cluster/data/galGal3/bed/genscan
@@ -612,7 +612,7 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
     cd hg3rdParty/cpgIslands
     make
     mv cpglh.exe /cluster/data/galGal3/bed/cpgIsland/
-    
+
     ssh kolossus
     cd /cluster/data/galGal3/bed/cpgIsland
     foreach f (../../*/chr*.fa.masked)
@@ -686,7 +686,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
 #########################################################################
 # MAKE CHICKEN LINEAGE-SPECIFIC REPEATS (DONE 5/22/06 angie)
-    # In an email 2/13/04, Arian said we could treat all human repeats as 
+    # In an email 2/13/04, Arian said we could treat all human repeats as
     # lineage-specific, but could exclude these from chicken as ancestral:
     # L3, L3a, L3b, MIR, MIR3, MIRb, MIRm
     ssh kkstore03
@@ -712,7 +712,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     doBlastzChainNet.pl -swap /cluster/data/hg18/bed/blastz.galGal3/DEF \
       >& do.log & tail -f do.log
     ln -s blastz.hg18.swap /cluster/data/galGal3/bed/blastz.hg18
-    
+
 
 #########################################################################
 # SWAP CHAINS/NET MM8 (DONE 5/24/06 angie)
@@ -722,7 +722,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     doBlastzChainNet.pl -swap /cluster/data/mm8/bed/blastz.galGal3/DEF \
       >& do.log & tail -f do.log
     ln -s blastz.mm8.swap /cluster/data/galGal3/bed/blastz.mm8
-    
+
 
 #########################################################################
 # SWAP CHAINS/NET RN4 (DONE 5/25/06 angie)
@@ -732,7 +732,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     doBlastzChainNet.pl -swap /cluster/data/rn4/bed/blastz.galGal3/DEF \
       >& do.log & tail -f do.log
     ln -s blastz.rn4.swap /cluster/data/galGal3/bed/blastz.rn4
-    
+
 
 #########################################################################
 # SWAP CHAINS/NET MONDOM4 (DONE 5/26/06 angie)
@@ -742,7 +742,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     doBlastzChainNet.pl -swap /cluster/data/monDom4/bed/blastz.galGal3/DEF \
       >& do.log & tail -f do.log
     ln -s blastz.monDom4.swap /cluster/data/galGal3/bed/blastz.monDom4
-    
+
 
 #########################################################################
 # BLASTZ/CHAIN/NET XENTRO2 (DONE 5/27/06 angie)
@@ -791,7 +791,7 @@ BASE=/cluster/data/galGal3/bed/blastz.xenTro2.2006-05-26
     doBlastzChainNet.pl -swap /cluster/data/danRer4/bed/blastz.galGal3/DEF \
       >& do.log & tail -f do.log
     ln -s blastz.danRer4.swap /cluster/data/galGal3/bed/blastz.danRer4
-    
+
 
 #########################################################################
 # GENBANK AUTO UPDATE (DONE 6/9/06 angie)
@@ -833,7 +833,7 @@ galGal3.downloadDir = galGal3
     cvsup
     # add galGal3 to:
         etc/align.dbs
-        etc/hgwdev.dbs 
+        etc/hgwdev.dbs
     cvs commit
     make etc-update
 
@@ -855,14 +855,14 @@ galGal3.downloadDir = galGal3
 
     cd /cluster/data/galGal3
     for i in */*/*.lft
-       do cat  $i  ; 
+       do cat  $i  ;
     done > jkStuff/subChr.lft
 
-    mkdir -p  /san/sanvol1/scratch/galGal3/blastDb; 
+    mkdir -p  /san/sanvol1/scratch/galGal3/blastDb;
     cd /cluster/data/galGal3/blastDb
-    for i in nhr nin nsq; 
-    do 
-	cp *.$i /san/sanvol1/scratch/galGal3/blastDb; 
+    for i in nhr nin nsq;
+    do
+	cp *.$i /san/sanvol1/scratch/galGal3/blastDb;
     done
 
    mkdir /cluster/data/galGal3/bed/tblastnHg18KG
@@ -879,9 +879,9 @@ galGal3.downloadDir = galGal3
    split -l 60 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl /cluster/bluearc/galGal3/bed/tblastn.hg18KG/kgfa/kg
    ln -s /cluster/bluearc/galGal3/bed/tblastn.hg18KG/kgfa kgfa
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
      done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -917,21 +917,21 @@ then
         liftUp -nosort -type=".psl" -nohead $f.4 /cluster/data/galGal3/jkStuff/liftAll.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.4
 
-        if pslCheck -prot $3.tmp                                                  
-        then                                                                      
-            mv $3.tmp $3                                                          
+        if pslCheck -prot $3.tmp
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0                                                                    
-    fi                                                                            
-fi                                                                                
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
     gensub2 query.lst kg.lst blastGsub blastSpec
-    
+
     # then run the Blast cluster jobs
     ssh kk
     cd /cluster/data/galGal3/bed/tblastn.hg18KG
@@ -989,14 +989,14 @@ chainOne $(path1)
     sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/galGal3/bed/tblastn.hg18KG/blastHg18KG.psl
     pslCheck /cluster/data/galGal3/bed/tblastn.hg18KG/blastHg18KG.psl
     # this is ok.
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/galGal3/bed/tblastn.hg18KG
     hgLoadPsl galGal3 blastHg18KG.psl
     # check coverage
     featureBits galGal3 blastHg18KG
 # 19638830 bases of 1042591351 (1.884%) in intersection
-    
+
     featureBits galGal2 blastHg16KG
 # 17057637 bases of 1054197620 (1.618%) in intersection
 
@@ -1026,7 +1026,7 @@ chainOne $(path1)
     wget --timestamping \
 	ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/gallus_gallus/\*
     cd ..
-    # Extract unversioned accessions from headers and combine into one 
+    # Extract unversioned accessions from headers and combine into one
     # uncompressed file which we will link to from /gbdb/:
     zcat ncbi/*ends*.mfa.gz \
     | perl -wpe 'if (/^>/) { \
@@ -1274,7 +1274,7 @@ rm -fr /scratch/tmp/${root1}_${root2}
     mkdir maf run
     cd run
 
-    # stash binaries 
+    # stash binaries
     mkdir penn
     cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
     cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
@@ -1333,8 +1333,8 @@ cat  << 'EOF' > spec
 #Longest finished job:             890s      14.83m     0.25h    0.01d
 #Submission to last job:           891s      14.85m     0.25h    0.01d
 
-    # Make .gif for tree by pasting the contents of 7way.nh into Galt's 
-    # cgi-bin/phyloGif tool.  Save the .gif in your checkout of the browser/ 
+    # Make .gif for tree by pasting the contents of 7way.nh into Galt's
+    # cgi-bin/phyloGif tool.  Save the .gif in your checkout of the browser/
     # CVS tree as browser/images/phylo/galGal3_7way.gif .
     ssh hgwdev
     cd ~/browser/images/phylo
@@ -1372,7 +1372,7 @@ cat  << 'EOF' > spec
     foreach f (`ls -1rS ../../maf/*.maf`)
       echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $f \
         /cluster/data/galGal3/galGal3.2bit ../maf/$f:t  >> jobs.csh
-    end 
+    end
     echo date >> jobs.csh
     csh -efx jobs.csh >&! jobs.log & tail -f jobs.log
     # 23min
@@ -1389,7 +1389,7 @@ cat  << 'EOF' > spec
     nice hgLoadMaf -pathPrefix=/gbdb/galGal3/multiz7way/anno/maf \
       galGal3 multiz7way
 #Loaded 1488826 mafs in 57 files from /gbdb/galGal3/multiz7way/anno/maf
-    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse
     # machine and then load on hgwdev:
     ssh kolossus
     cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/anno/maf
@@ -1414,7 +1414,7 @@ cat  << 'EOF' > spec
     ssh hgwdev
     mkdir /cluster/data/galGal3/bed/multiz7way.2006-07-18/mafDownloads
     cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/mafDownloads
-    # upstream mafs 
+    # upstream mafs
 cat > mafFrags.csh << 'EOF'
     date
     foreach i (1000 2000 5000)
@@ -1552,7 +1552,7 @@ cat > downloads.csh << 'EOF'
 # --expected-length
 # --target-coverage
 # Also, instead of generating cons and noncons tree models,
-# we use a single, pre-existing tree model -- Elliot Margulies' model 
+# we use a single, pre-existing tree model -- Elliot Margulies' model
 # from the (37-way) ENCODE alignments.
     ssh kkstore03
     cd /cluster/data/galGal3
@@ -1604,11 +1604,11 @@ cat > downloads.csh << 'EOF'
     chmod +x doSplit.csh
 
     rm -f jobList
-    foreach f (../../maf/*.maf) 
+    foreach f (../../maf/*.maf)
       set c = $f:t:r
       echo "doSplit.csh $c {check out line+ $WINDOWS/$c.done}" >> jobList
     end
-    
+
     para make jobList
     para time
 #Completed: 54 of 57 jobs
@@ -1636,9 +1636,9 @@ cat > downloads.csh << 'EOF'
         -o phyloFit.rev.tree
     # Comment from makeHg17.doc:
     # # he ok'ed the results -- not necessary for next human run
-    # TODO: maybe run these by Adam... the numbers in the RATE_MAT and 
+    # TODO: maybe run these by Adam... the numbers in the RATE_MAT and
     # TREE are different between the phyloFit and elliotsEncode models,
-    # not sure if the differences are significant.  I will proceed with 
+    # not sure if the differences are significant.  I will proceed with
     # elliotsEncode as in makeHg17.doc.
 
     # Run phastCons
@@ -1703,7 +1703,7 @@ doPhast.csh $(root1) $(file1) 12 .05 .20
     ssh kolossus
     cd /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons
     #	The sed's and the sort get the file names in chrom,start order
-    # (Hiram tricks -- split into columns on [.-/] with 
+    # (Hiram tricks -- split into columns on [.-/] with
     #    identifying x,y,z, to allow column sorting and
     #    restoring the filename.  Warning: the sort column
     # will depend on how deep you are in the dir
@@ -1752,7 +1752,7 @@ doPhast.csh $(root1) $(file1) 12 .05 .20
     # Create merged posterier probability file and wiggle track data files
     ssh kolossus
     cd /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons/
-    # sort by chromName, chromStart so that items are in numerical order 
+    # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     #next time try Angie's simpler sort, below
     time find ./pp -name "chr*.pp" | \
@@ -1849,7 +1849,7 @@ BASE=/cluster/data/galGal3/bed/blastz.galGal3.2006-09-08
     wget --timestamping \
       'ftp://61.50.158.101/BGI/snps_by_strain/2006-11-28/*'
     # (username & password in email from Yong Zhang 11/29)
-    # Each .tar.gz unpacks into identical sets of files so they will 
+    # Each .tar.gz unpacks into identical sets of files so they will
     # overwrite each other if unpacked into the same directory.  So create
     # a subdir for each strain, and unpack its files in the subdir:
     foreach f (*.tar.gz)
@@ -1882,7 +1882,7 @@ BASE=/cluster/data/galGal3/bed/blastz.galGal3.2006-09-08
     hgLoadBed galGal3 bgiCov bgiCov.bed
     hgLoadBed galGal3 bgiSnp bgiSnp.bed \
       -sqlTable=$HOME/kent/src/hg/lib/bgiSnp.sql
-    # Got this warning but I think it's because the final column is always 
+    # Got this warning but I think it's because the final column is always
     # empty so bed.tab doesn't have the final column... table looks OK.
 #load of bgiSnp did not go as planned: 3306633 record(s), 0 row(s) skipped, 3306633 warning(s) loading bed.tab
 
@@ -1938,7 +1938,7 @@ BLASTZ_L=6000
 BLASTZ_K=2200
 BLASTZ_M=50
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-    
+
 # TARGET: Chicken galGal3 chroms only, no random sequence
 #       The largest is 200 million bases, there are 34 of them
 SEQ1_DIR=/san/sanvol1/scratch/galGal3/galGal3.noRandoms.sdTrf.2bit
@@ -2047,7 +2047,7 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/galGal3/bed/blastz.fr2.2007-03-09
 
     cat << '_EOF_' > DEF
-# chicken vs. fugu 
+# chicken vs. fugu
 
 # Use same params as used for galGal3-xenTro1 (see makeXenTro1.doc)
 BLASTZ_H=2000
@@ -2063,7 +2063,7 @@ SEQ1_LEN=/cluster/data/galGal3/chrom.sizes
 SEQ1_CHUNK=50000000
 SEQ1_LAP=10000
 
-# QUERY: Fugu fr2 
+# QUERY: Fugu fr2
 SEQ2_DIR=/san/sanvol1/scratch/fr2/fr2.2bit
 SEQ2_LEN=/san/sanvol1/scratch/fr2/chrom.sizes
 SEQ2_CTGDIR=/san/sanvol1/scratch/fr2/fr2.scaffolds.2bit
@@ -2106,7 +2106,7 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/galGal3/bed/blastz.fr1.2007-03-09
 
     cat << '_EOF_' > DEF
-# chicken vs. fugu 
+# chicken vs. fugu
 
 # Use same params as used for galGal3-xenTro1 (see makeXenTro1.doc)
 BLASTZ_H=2000
@@ -2122,7 +2122,7 @@ SEQ1_LEN=/cluster/data/galGal3/chrom.sizes
 SEQ1_CHUNK=50000000
 SEQ1_LAP=10000
 
-# QUERY: Fugu fr1 
+# QUERY: Fugu fr1
 SEQ2_DIR=/san/sanvol1/scratch/fr1/chrUn.sdTrf.2bit
 SEQ2_LEN=/san/sanvol1/scratch/fr1/chrom.sizes
 SEQ2_CTGDIR=/san/sanvol1/scratch/fr1/fr1.UnScaffolds.sdTrf.2bit
@@ -2210,15 +2210,15 @@ BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 
 # TARGET: Horse equCab1
 SEQ1_DIR=/san/sanvol1/scratch/equCab1/equCab1.2bit
-SEQ1_LEN=/san/sanvol1/scratch/equCab1/chrom.sizes       
+SEQ1_LEN=/san/sanvol1/scratch/equCab1/chrom.sizes
 # Maximum number of scaffolds that can be lumped together
-SEQ1_LIMIT=500     
+SEQ1_LIMIT=500
 SEQ1_CHUNK=30000000
 SEQ1_LAP=10000
 
 # QUERY: Chicken galGal3
 SEQ2_DIR=/scratch/hg/galGal3/galGal3.2bit
-SEQ2_LEN=/cluster/data/galGal3/chrom.sizes 
+SEQ2_LEN=/cluster/data/galGal3/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
@@ -2305,25 +2305,25 @@ end
     time nice -n 19 featureBits galGal3 chainEquCab1Link \
 	> fb.galGal3.chainEquCab1Link.txt 2>&1
     # 104418042 bases of 1042591351 (10.015%) in intersection
-    
+
 ###########################################################################
 # ENSEMBL GENES (DONE 11/2/07 angie)
     ssh hgwdev
     mkdir /cluster/data/galGal3/bed/ensembl
     cd /cluster/data/galGal3/bed/ensembl
-    # Go to www.ensembl.org and click around their evolving interface 
+    # Go to www.ensembl.org and click around their evolving interface
     # to get the following types of data:
     # 1. a tab-separated file that relates Ensembl gene, transcript and
-    #    protein IDs.  Save as ensGtp.txt.gz  
+    #    protein IDs.  Save as ensGtp.txt.gz
     # 2. peptide fasta with only transcript IDs in header -> ensPep.fa.gz
-    
+
     # They have started dumping GTF files so we can download that directly:
     # wget
     # 'ftp://ftp.ensembl.org/pub/current_gallus_gallus/data/gtf/*'
     # -- but I forgot to do that and just grabbed the GTF from Ensembl
     # BioMart along with the GTP and Pep.
 
-    # Add "chr" to chrom names in the gene data gtf file to make 
+    # Add "chr" to chrom names in the gene data gtf file to make
     # it compatible with our software.  Also change MT --> M.
     zcat ensembl.gff.gz | sed -e 's/^MT/M/; s/^/chr/;' > ensGene.gtf
     ldHgGene -gtf -genePredExt galGal3 ensGene ensGene.gtf
@@ -2477,7 +2477,7 @@ BLASTZ_M=50
 
 # TARGET: Chicken calGal3
 SEQ1_DIR=/scratch/data/galGal3/nib
-SEQ1_LEN=/cluster/data/galGal3/chrom.sizes 
+SEQ1_LEN=/cluster/data/galGal3/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
@@ -2549,7 +2549,7 @@ see doc/builds.txt for specific details.
 #####################################################
 # build 2bit with contigs from random chroms and chrUn (DONE braney 2008-08-30)
     cd /cluster/data/galGal3
-    fgrep -h 'random 
+    fgrep -h 'random
 Un' */*.agp | awk '{if ($5 == "W") print $1, $2-1, $3, $6}' \
     | while read chr start stop contig; \
     do \
@@ -2557,7 +2557,7 @@ Un' */*.agp | awk '{if ($5 == "W") print $1, $2-1, $3, $6}' \
 	| tail -n +2; \
     done > unRandom.fa
 
-    fgrep -v 'random 
+    fgrep -v 'random
 Un' chrom.sizes | awk '{print $1}' | \
     twoBitToFa galGal3.2bit -seqList=stdin noUn.fa
     cat noUn.fa unRandom.fa | faToTwoBit stdin galGal3.blastz.2bit
@@ -2712,7 +2712,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
     #	real    220m54.623s
-    #	 cat fb.galGal3.chainEquCab2Link.txt 
+    #	 cat fb.galGal3.chainEquCab2Link.txt
     #	68476046 bases of 1042591351 (6.568%) in intersection
 
     mkdir /hive/data/genomes/equCab2/bed/blastz.galGal3.swap
@@ -2723,7 +2723,7 @@ TMPDIR=/scratch/tmp
 	-swap -workhorse=hgwdev \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    10m1.381s
-    cat fb.equCab2.chainGalGal3Link.txt 
+    cat fb.equCab2.chainGalGal3Link.txt
     #	73336799 bases of 2428790173 (3.019%) in intersection
 
 ############################################################################
@@ -2776,9 +2776,9 @@ see doc/builds.txt for specific details.
         cat data/pasa.psl  data/nscan.psl  >data/nscanPasa.psl
 
      # modify makefiles that were create during mapping experiments for alignments
-     # these run two cluster batches. The first aligns the reads 
+     # these run two cluster batches. The first aligns the reads
      make >&log&
-     
+
      # load tracks
      hgLoadPsl galGal3 -table=caCondor454 results/nscanPasaUnmappedRealign/combined.psl.gz
      ln -s /hive/data/genomes/galGal3/bed/caCondor454/data/wugsc-454-cdna.fa  /gbdb/galGal3/caCondor454.fa
@@ -2831,7 +2831,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/galGal3/bed
     ln -s lastzMelGal1.2011-03-24 lastz.melGal3
 
-    #   and then swap 
+    #   and then swap
     mkdir /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
     cd /hive/data/genomes/melGal1/bed/blastz.galGal3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -2884,7 +2884,7 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=swarm -tRepeats=windowmaskerSdust \
 	-qRepeats=windowmaskerSdust > do.log 2>&1 &
     #	real    210m1.468s
-    cat fb.galGal3.chainAnoCar2Link.txt 
+    cat fb.galGal3.chainAnoCar2Link.txt
     #	113851392 bases of 1042591351 (10.920%) in intersection
 
     #	running the swap - DONE - 2011-04-26
@@ -2897,7 +2897,7 @@ TMPDIR=/scratch/tmp
 	-syntenicNet -swap -qRepeats=windowmaskerSdust \
 	-tRepeats=windowmaskerSdust > swap.log 2>&1 &
     #	real    11m8.229s
-    cat fb.anoCar2.chainGalGal3Link.txt 
+    cat fb.anoCar2.chainGalGal3Link.txt
     #	116069635 bases of 1701353770 (6.822%) in intersection
 
 ##############################################################################
@@ -2941,7 +2941,7 @@ TMPDIR=/scratch/tmp
 	> do.log 2>&1 &
     #	real    209m23.536s
 
-    cat fb.galGal3.chainXenTro3Link.txt 
+    cat fb.galGal3.chainXenTro3Link.txt
     #	54978665 bases of 1042591351 (5.273%) in intersection
 
     mkdir /hive/data/genomes/xenTro3/bed/blastz.galGal3.swap
@@ -2957,7 +2957,7 @@ TMPDIR=/scratch/tmp
     #	64250673 bases of 1358334882 (4.730%) in intersection
 
 #########################################################################
-# construct liftOver to galGal4 (DONE - 2012-05-25 - Hiram) 
+# construct liftOver to galGal4 (DONE - 2012-05-25 - Hiram)
     screen -S galGal3	# manage this longish running job in a screen
     mkdir /hive/data/genomes/galGal3/bed/blat.galGal4.2012-05-25
     cd /hive/data/genomes/galGal3/bed/blat.galGal4.2012-05-25
@@ -2973,7 +2973,7 @@ TMPDIR=/scratch/tmp
 
     # verify this file exists:
     #	/gbdb/galGal3/liftOver/galGal3ToGalGal4.over.chain.gz
-    # and try out the conversion on genome-test from galGal3 to galGal4 
+    # and try out the conversion on genome-test from galGal3 to galGal4
 
 ############################################################################
 # NUMTS TRACK (DONE 2013-06-15 - Chin)
@@ -3004,4 +3004,21 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
+# LIFTOVER TO galGal5 (DONE - 2016-10-25 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/galGal3/bed/blat.galGal5.2016-10-25
+    cd /hive/data/genomes/galGal3/bed/blat.galGal5.2016-10-25
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/scratch/data/galGal3/11.ooc \
+         galGal3 galGal5
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/scratch/data/galGal3/11.ooc \
+         galGal3 galGal5) > doLiftOverToGalGal5.log 2>&1
+    # real    135m29.733s
 
+    # see if the liftOver menus function in the browser from galGal3 to
+    # galGal5
+
+##############################################################################

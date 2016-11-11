@@ -1,0 +1,38 @@
+<h2>Description</h2>
+<p>
+This track depicts masked sequence as determined by <a href="
+http://bioinformatics.oxfordjournals.org/content/22/2/134.full" target="_blank">WindowMasker</a> on the
+the 09 May 2016 <em>Mus musculus (house mouse)</em>/GCA_001632525.1_BALB_cJ_v1/GCA_001632525.1 genome assembly.
+The WindowMasker tool is included in the NCBI C++ toolkit. The source code
+for the entire toolkit is available from the NCBI
+<a href="ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools++/CURRENT/" target="_blank">
+FTP site</a>.
+</p>
+
+<h2>Methods</h2>
+<p>
+To create this track, WindowMasker was run with the following parameters:
+<pre>
+windowmasker -mk_counts true -input GCA_001632525.1_BALB_cJ_v1.unmasked.fa -output wm_counts
+windowmasker -ustat wm_counts -sdust true -input GCA_001632525.1_BALB_cJ_v1.unmasked.fa -output windowmasker.intervals
+perl -wpe 'if (s/^>lcl\|(.*)\n$//) { $chr = $1; } \
+   if (/^(\d+) - (\d+)/) { \
+   $s=$1; $e=$2+1; s/(\d+) - (\d+)/$chr\t$s\t$e/; 
+   }' windowmasker.intervals > windowmasker.sdust.bed
+</pre>
+The windowmasker.sdust.bed included masking for areas of the
+assembly that are gap.  The file was 'cleaned' to remove those areas
+of masking in gaps, leaving only the sequence masking.  The final
+result covers 726,602,156 bases in the assembly size 2,627,344,254 for
+a percent coverage of % 27.66.
+</p>
+
+<h2>References</h2>
+
+<p>
+Morgulis A, Gertz EM, Sch&auml;ffer AA, Agarwala R.
+<a href="http://bioinformatics.oxfordjournals.org/content/22/2/134.full" target="_blank">
+WindowMasker: window-based masker for sequenced genomes</a>.
+<em>Bioinformatics</em>. 2006 Jan 15;22(2):134-41.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/16287941" target="_blank">16287941</a>
+</p>

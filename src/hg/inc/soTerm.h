@@ -47,6 +47,7 @@ enum soTerm	// the various variant effects
     inframe_insertion=1821,
     inframe_deletion=1822,
     feature_variant=1878,
+    no_sequence_alteration=2073,
     };
 
 char *soTermToString(enum soTerm termNumber);

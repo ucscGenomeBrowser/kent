@@ -14,6 +14,11 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
+#ifndef HTMSHELL_H      /* Wrapper to avoid including this twice. */
+#define HTMSHELL_H
+
+#include "dystring.h"
+
 void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure);
 /* create a cookie with the given stats */
 
@@ -66,6 +71,18 @@ char *htmlEncode(char *s);
 
 char *attributeEncode(char *s);
 // encode double and single quotes in a string to be used as an element attribute
+
+void attributeDecode(char *s);
+/* For html tag attribute values decode html entities &#xHH; */
+
+void cssDecode(char *s);
+/* For CSS values decode "\HH " */
+
+void jsDecode(char *s);
+/* For JS string values decode "\xHH" */
+
+void urlDecode(char *s);
+/* For URL paramter values decode "%HH" */
 
 void htmlMemDeath();
 /* Complain about lack of memory and abort.  */
@@ -199,14 +216,14 @@ void htmlIncludeFile(char *path);
 
 /* ===== Html printf-style escaping functions ====== */
 
-int htmlSafefAbort(boolean noAbort, char *format, ...)
+int htmlSafefAbort(boolean noAbort, int errCode, char *format, ...)
 /* handle noAbort stderror logging and errAbort */
 #ifdef __GNUC__
-__attribute__((format(printf, 2, 3)))
+__attribute__((format(printf, 3, 4)))
 #endif
 ;
 
-int vaHtmlSafefNoAbort(char *buffer, int bufSize, char *format, va_list args, boolean noAbort);
+int vaHtmlSafefNoAbort(char *buffer, int bufSize, char *format, va_list args, boolean noAbort, boolean noWarnOverflow);
 /* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte.
  * Automatically escapes string values.
@@ -221,3 +238,34 @@ __attribute__((format(printf, 3, 4)))
 #endif
 ;
 
+void vaHtmlDyStringPrintf(struct dyString *ds, char *format, va_list args);
+/* VarArgs Printf append to dyString
+ * Strings are escaped according to format type. */
+
+void htmlDyStringPrintf(struct dyString *ds, char *format, ...)
+/* VarArgs Printf append to dyString
+ * Strings are escaped according to format type. */
+#ifdef __GNUC__
+__attribute__((format(printf, 2, 3)))
+#endif
+;
+
+void vaHtmlFprintf(FILE *f, char *format, va_list args);
+/* fprintf using html encoding types */
+
+void htmlFprintf(FILE *f, char *format, ...)
+/* fprintf using html encoding types */
+#ifdef __GNUC__
+__attribute__((format(printf, 2, 3)))
+#endif
+;
+
+void htmlPrintf(char *format, ...)
+/* fprintf using html encoding types */
+#ifdef __GNUC__
+__attribute__((format(printf, 1, 2)))
+#endif
+;
+
+
+#endif /* HTMSHELL_H */

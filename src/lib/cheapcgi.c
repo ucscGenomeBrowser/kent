@@ -11,6 +11,7 @@
 #include "linefile.h"
 #include "errAbort.h"
 #include "filePath.h"
+#include "htmshell.h"
 #ifndef GBROWSE
 #include "mime.h"
 #endif /* GBROWSE */
@@ -1557,10 +1558,17 @@ cgiMakeTextAreaDisableable(varName, initialVal, rowCount, columnCount, FALSE);
 }
 
 void cgiMakeTextAreaDisableable(char *varName, char *initialVal, int rowCount, int columnCount, boolean disabled)
-/* Make a text area that can be disabled. The rea has rowCount X
- * columnCount and with text: intialVal */
+/* Make a text area that can be disabled. The area has rowCount X
+ * columnCount and with text: intialVal
+ *
+ * We found out the hard way be very careful with linefeeds and their encoding inside the text "initialVal".
+ * All browsers submit the textarea values with CR LF newlines.
+ * If there is a lone CR or LF, the browser will insert the missing partner to form a new CR LF pair. 
+ * This can lead to exponential doubling of newline characters or their html entities,
+ * if one of CR or LF is encoded and the other is not.
+ */
 {
-printf("<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d %s>%s</TEXTAREA>", varName,
+htmlPrintf("<TEXTAREA NAME='%s|attr|' ROWS=%d COLS=%d %s|none|>%s</TEXTAREA>", varName,
        rowCount, columnCount, disabled ? "DISABLED" : "",
        (initialVal != NULL ? initialVal : ""));
 }
@@ -1576,10 +1584,10 @@ if (initialVal == NULL)
 if (charSize == 0) charSize = strlen(initialVal);
 if (charSize == 0) charSize = 8;
 
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\"", varName,
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE='%s|attr|'", varName,
         charSize, initialVal);
 if (isNotEmpty(script))
-    printf(" onkeypress=\"%s\"", script);
+    printf(" onkeypress='%s'", script); // TODO XSS
 printf(">\n");
 }
 
@@ -1600,10 +1608,10 @@ if (width==0)
 if (width==0)
     width = 100;
 
-printf("<INPUT TYPE=TEXT class='inputBox' NAME=\"%s\" style='width: %dpx' VALUE=\"%s\"",
-       varName,width, initialVal);
+htmlPrintf("<INPUT TYPE=TEXT class='inputBox' NAME='%s|attr|' style='width:%dpx' VALUE='%s|attr|'",
+       varName, width, initialVal);
 if (isNotEmpty(extra))
-    printf(" %s",extra);
+    printf(" %s",extra); // TODO XSS
 printf(">\n");
 }
 
@@ -1611,7 +1619,7 @@ void cgiMakeIntVarWithExtra(char *varName, int initialVal, int maxDigits, char *
 /* Make a text control filled with initial value and optional extra HTML.  */
 {
 if (maxDigits == 0) maxDigits = 4;
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d %s>", 
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE=%d %s|none|>", // TODO XSS extra
                 varName, maxDigits, initialVal, extra ? extra : "");
 }
 

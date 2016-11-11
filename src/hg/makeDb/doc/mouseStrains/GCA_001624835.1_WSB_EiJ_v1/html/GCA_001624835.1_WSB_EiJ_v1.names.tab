@@ -1,0 +1,4 @@
+#taxId	commonName	submitter	asmName	orgName	bioSample	asmType	asmLevel	asmDate	asmAccession
+10092	Mus musculus domesticus (western European house mouse)	Wellcome Trust Sanger Institute	WSB_EiJ_v1	Mus musculus domesticus (western European house mouse)	SAMN04489831	haploid	Chromosome	26 Apr 2016	GCA_001624835.1
+# reading chrom.sizes file:
+#	'../GCA_001624835.1_WSB_EiJ_v1.chrom.sizes'

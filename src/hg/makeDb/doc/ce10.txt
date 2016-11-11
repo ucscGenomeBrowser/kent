@@ -2601,3 +2601,6 @@ chainOne $(path1)
     # verify it works on genome-test
 
 #############################################################################
+# Crispr track. See ../makeDb/crisprTrack/README.txt (2016-09-15 max)
+# Command: doCrispr.sh ce10 ensGene
+##############################################################################

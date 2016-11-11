@@ -458,3 +458,6 @@ pubBlat load
     # verify it works on genome-test
 
 #############################################################################
+# Crispr track. See ../crisprTrack/README.txt (2016-09-15 max)
+# Command: doCrispr.sh ci2 ensGene
+##############################################################################

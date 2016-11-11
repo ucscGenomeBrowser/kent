@@ -797,7 +797,11 @@ struct trackDb *tdb;
 
 // add all the track names to a hash
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (hashLookup(hash, tdb->track))
+        errAbort("Track %s appears more than once in genome %s.", tdb->track, genome->name);
     hashAdd(hash, tdb->track, tdb);
+    }
 
 // go through and find the container tracks
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
@@ -860,10 +864,19 @@ struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, 64*1024*10
 struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
 lineFileClose(&lf);
 
+char *tagStormName = hashFindVal(genome->settingsHash, "tagStorm");
+char *absStormName  = NULL;
+if (tagStormName)
+    absStormName  = trackHubRelativeUrl(hub->url, tagStormName);
+
 /* Make bigDataUrls more absolute rather than relative to genome.ra dir */
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
     expandBigDataUrl(hub, genome, tdb);
+    if  (absStormName)
+        hashReplace(tdb->settingsHash, "tagStorm", absStormName);
+    }
 
 validateTracks(hub, genome, tdbList);
 

@@ -2021,3 +2021,11 @@ done | tr '[\t]' '[ ]' >> README.txt
     # missing two.
 
 #############################################################################
+# make default species maf  (DONE braney 2016-09-28)
+cd /cluster/data/hg38/bed/multiz100way/anno
+mkdir defaultSpecies
+cd defaultSpecies
+for i in ../result/*.maf; do echo $i; mafSpeciesSubset $i list.txt `basename $i`; done
+mkdir /gbdb/hg38/multiz100way/defaultMaf
+for i in *.maf; do ln -s `pwd`/$i.maf /gbdb/hg38/multiz100way/defaultMaf; done
+hgLoadMaf hg38 mutliz100wayDefault -pathPrefix=/gbdb/hg38/multiz100way/defaultMaf
