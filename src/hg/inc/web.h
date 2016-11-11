@@ -85,6 +85,9 @@ void webEndSectionTables();
 void webStartJWest(struct cart *cart, char *db, char *title);
 /* Start HTML with new banner design by jWest (with modifications). */
 
+void webStartJWestNoBanner(struct cart *cart, char *db, char *title);
+/* Start HTML with new header and footer design by jWest, but no banner */
+
 void webEndJWest();
 /* End HTML that was started with webStartJWest/ */
 

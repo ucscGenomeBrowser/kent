@@ -1173,6 +1173,22 @@ while (hel != NULL)
 return slnList;
 }
 
+struct hash *cartHashList(struct cart *cart, char *var)
+/* Return hash with multiple values for the same var or NULL if not found. */
+{
+struct hashEl *hel = hashLookup(cart->hash, var);
+struct hash *valHash = hashNew(0);
+while (hel != NULL)
+    {
+    if (hel->val != NULL)
+	{
+        hashAdd(valHash, hel->val, NULL);
+	}
+    hel = hashLookupNext(hel);
+    }
+return valHash;
+}
+
 void cartAddString(struct cart *cart, char *var, char *val)
 /* Add string valued cart variable (if called multiple times on same var,
  * will create a list -- retrieve with cartOptionalSlNameList. */
