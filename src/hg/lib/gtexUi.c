@@ -296,11 +296,11 @@ char *geneLabel = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(td
 printf("<b>Label:</b> ");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LABEL);
 cgiMakeRadioButton(cartVar, GTEX_LABEL_SYMBOL , sameString(GTEX_LABEL_SYMBOL, geneLabel));
-printf("%s ", "gene symbol");
+printf("&nbsp;%s&nbsp;", "gene symbol");
 cgiMakeRadioButton(cartVar, GTEX_LABEL_ACCESSION, sameString(GTEX_LABEL_ACCESSION, geneLabel));
-printf("%s ", "accession");
+printf("&nbsp;%s&nbsp;", "accession");
 cgiMakeRadioButton(cartVar, GTEX_LABEL_BOTH, sameString(GTEX_LABEL_BOTH, geneLabel));
-printf("%s ", "both");
+printf("&nbsp;%s&nbsp;", "both");
 }
 
 void gtexGeneUiCodingFilter(struct cart *cart, char *track, struct trackDb *tdb)
