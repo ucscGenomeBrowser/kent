@@ -71,3 +71,10 @@ From script/editor:
 8. Tweak style for leader line color if desired.  e.g. now set to paler (pink) on non-hover.
 
  e.g.   .st37{fill:none;stroke:#F69296;.....
+
+9. Fix some bad id's if still present:
+
+- arteryAorta_Pict_Lo
+- arteryCoronary_Pic_lo
+
+10. Remove empty <g>'s.. e.g. on Liver

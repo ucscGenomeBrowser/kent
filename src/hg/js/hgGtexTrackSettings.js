@@ -30,6 +30,7 @@ var gtexTrackSettings = (function() {
     var _svgRoot;
 
     var _topTissue;     // Highlighted tissue is drawn last so it is on top
+    var _topTissueName = null;
     var _topAura;
 
     var TEXT_HI = '_Text_Hi';
@@ -156,18 +157,29 @@ var gtexTrackSettings = (function() {
         }
     }
 
-    function toggleHighlightTissue(tis) {
-        // Highlight tissue in body map and tissue table
-        // TODO: simplify me
+    function highlightTissue(tis) {
+        // Highlight tissue label and color patch in tissue table
+        toggleHighlightTissue(tis, true);
+    }
+
+    function unHighlightTissue(tis) {
+        toggleHighlightTissue(tis, false);
+    }
+
+    function toggleHighlightTissue(tis, isHovered) {
+        // Highlight/unhighlight tissue in body map and tissue table
 
         // Highlight tissue label and color patch in tissue table
         var $tis = $('#' + tis);
-        if ($tis !== null) {
-            $tis.toggleClass(CLASS_TISSUE_HOVERED);
-            var $colorPatch = $tis.prev('.tissueColor');
-            $colorPatch.toggleClass('tissueHoveredColor');
+        if (tis === null) {
+            return;
         }
-        var isHovered = $tis.hasClass(CLASS_TISSUE_HOVERED) ? true : false;
+        if (isHovered && _topTissueName !== null) {
+            return;
+        }
+        $tis.toggleClass(CLASS_TISSUE_HOVERED, isHovered);
+        var $colorPatch = $tis.prev('.tissueColor');
+        $colorPatch.toggleClass('tissueHoveredColor', isHovered);
 
         // Highlight tissue in body map by changing text appearance, visually moving organ to top
         // and adding a white (or sometimes blue if white background) surround ('aura')
@@ -179,7 +191,7 @@ var gtexTrackSettings = (function() {
             return;
         }
         // TODO: unify with text styling below.  Perhaps just add class to children will do it.
-        textEl.classList.toggle(CLASS_TISSUE_HOVERED);
+        textEl.classList.toggle(CLASS_TISSUE_HOVERED, isHovered);
 
         var lineEl = _svgDoc.getElementById(tis + LEAD_HI);
         var pic = $('#' + tis + PIC_HI, _svgRoot);
@@ -197,17 +209,17 @@ var gtexTrackSettings = (function() {
             if (lineEl !== null) {     // cell types lack leader lines
             lineEl.style.stroke = COLOR_HIGHLIGHT;
             }
-            $(pic).show();
-            $(aura).show();
-
             var topAura = auraEl.cloneNode(true);
             topAura.id = 'topAura';
             _topAura = _svgRoot.appendChild(topAura);
+            $(_topAura).show();
         
             var topTissue = picEl.cloneNode(true);
+            topTissue.addEventListener('mouseleave', onMapLeaveTissue);
             topTissue.id = 'topTissue';
-            topTissue.classList.add(tis);
+            _topTissueName = tis;
             _topTissue = _svgRoot.appendChild(topTissue);
+            $(_topTissue).show();
         } else {
             var color = textEl.classList.contains(CLASS_TISSUE_SELECTED) ? 
                                 COLOR_SELECTED : COLOR_UNSELECTED;
@@ -215,12 +227,11 @@ var gtexTrackSettings = (function() {
             for (i = 0; i < textLineCount; i++) {
                 textEl.children[i].style.fill = color;
             }
-            $(aura).hide();
-            $(pic).hide();
             if (lineEl !== null) {     // cell types lack leader lines
                 lineEl.style.stroke = COLOR_LEADER;      // pink
             }
             _svgRoot.removeChild(_topTissue);
+            _topTissueName = null;
             _svgRoot.removeChild(_topAura);
         }
     }
@@ -250,16 +261,42 @@ var gtexTrackSettings = (function() {
         toggleTissue(tis);
     }
 
-    function onHoverTissue() {
+    function onEnterTissue() {
         // Mouseover on label in tissue list
-        toggleHighlightTissue(this.id);
+        highlightTissue(this.id);
     }
 
-    function onMapHoverTissue(ev) {
+    function onLeaveTissue() {
+        // Mouseover on label in tissue list
+        unHighlightTissue(this.id);
+    }
+
+    function onMapEnterTissue(ev) {
         // Mouseover on tissue shape or label in illustration
         var svgId = ev.currentTarget.id;
-        var tis = tissueFromSvgId(svgId);
-        toggleHighlightTissue(tis);
+        var tis = (svgId === 'topTissue' ? _topTissueName :  tissueFromSvgId(svgId));
+        highlightTissue(tis);
+    }
+
+    function onMapLeaveTissue(ev) {
+        // Mouseover on tissue shape or label in illustration
+        var toTarget = ev.relatedTarget;
+        var toParent;
+
+        //  Handle case where lower and upper shapes are not the same.  If leaving lower to enter upper, we are not really leaving
+        if (toTarget) {
+            if (toTarget.id === 'topTissue') {
+                return;
+            }
+            //  Handle case where there are multiple paths for the tissue, and topTissue will be a parent
+            toParent = toTarget.parentElement;
+            if (toParent && toParent.id === 'topTissue') {
+                return;
+            }
+        }
+        var svgId = ev.currentTarget.id;
+        var tis = (svgId === 'topTissue' ? _topTissueName :  tissueFromSvgId(svgId));
+        unHighlightTissue(tis);
     }
 
     function submitForm() {
@@ -298,20 +335,20 @@ var gtexTrackSettings = (function() {
 
         // Add click and mouseover handler to tissue label in tissue list
         $('#' + tis).click(tis, onClickToggleTissue);
-        $('#' + tis).hover(onHoverTissue, onHoverTissue);
+        $('#' + tis).hover(onEnterTissue, onLeaveTissue);
 
         // Add mouseover and click handlers to tissue label in body map
         var textEl = _svgDoc.getElementById(tis + TEXT_HI);
         if (textEl !== null) {
             textEl.addEventListener('click', onMapClickToggleTissue);
-            textEl.addEventListener('mouseenter', onMapHoverTissue);
-            textEl.addEventListener('mouseleave', onMapHoverTissue);
+            textEl.addEventListener('mouseenter', onMapEnterTissue);
+            textEl.addEventListener('mouseleave', onMapLeaveTissue);
         }
         // add mouseover and click handlers to tissue shape
         var picEl = _svgDoc.getElementById(tis + PIC_LO);
         if (picEl !== null) {
-            picEl.addEventListener('mouseenter', onMapHoverTissue);
-            picEl.addEventListener('mouseleave', onMapHoverTissue);
+            picEl.addEventListener('mouseenter', onMapEnterTissue);
+            picEl.addEventListener('mouseleave', onMapLeaveTissue);
             picEl.addEventListener('mouseup', onMapClickToggleTissue);
         }
     }
