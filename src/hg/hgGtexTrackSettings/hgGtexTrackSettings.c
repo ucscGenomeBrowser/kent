@@ -103,8 +103,7 @@ puts(
 puts(
 "        <!-- row 1 -->\n"
 "        <div class='row'>\n"
-"            <div class='configurator col-md-5'>\n"
-"<b>Label</b>:&nbsp;&nbsp;");
+"            <div class='configurator col-md-5'>\n");
 gtexGeneUiGeneLabel(cart, track, trackDb);
 puts(
 "            </div>\n"
