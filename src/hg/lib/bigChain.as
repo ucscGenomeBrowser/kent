@@ -13,6 +13,6 @@ table bigChain
     uint qSize;         "size of query sequence"
     uint qStart;        "start of alignment on query sequence"
     uint qEnd;          "end of alignment on query sequence"
-    uint chainScore;    "score from chain"
+    double chainScore;    "score from chain"
     )
 
