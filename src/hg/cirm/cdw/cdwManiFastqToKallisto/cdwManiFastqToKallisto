@@ -56,9 +56,9 @@ def findIndex(isMouse):
     Finds the Kallisto index on the current machine. Returns the path as a string. 
     """
     if isMouse: 
-        result = os.getenv("CIRM")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/Mus_musculus.GRCm38.rel79.cdna.all.fa.index"
+        result = os.getenv("CIRM")+"/annotation/mouseTranscriptome/Mus_musculus.GRCm38.rel79.cdna.all.fa.index"
     else: 
-        result = os.getenv("CIRM")+"/annotation/humanTranscriptome/Homo_sapiens.GRCh38.rel79.cdna.all.fa.index"
+        result = os.getenv("CIRM")+"/annotation/johnViviansTranscriptome/kallisto_hg38.idx"
     return result
 
 def makeJob(kallisto, index, meta, bootstraps, files, single, s=1, l=180):
@@ -102,7 +102,7 @@ def makeJobList(manifestFile, outputFile, isMouse, bootstraps, dir, verbose):
     index = findIndex(isMouse) 
     single = True 
     kallistoMani = open("maniKallisto.txt", "w")
-    kallistoMani.write("#file`\tmeta\tformat\toutput\tucsc_db\n")
+    kallistoMani.write("#file\tmeta\tformat\toutput\tucsc_db\n")
 
     # Go through the manifest file.
     for line in open(manifestFile, "r"):   
