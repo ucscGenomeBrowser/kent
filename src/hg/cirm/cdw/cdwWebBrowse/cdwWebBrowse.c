@@ -1227,8 +1227,8 @@ cgiMakeTextVar(whereVar, where, 40);
 printf(" limit ");
 cgiMakeIntVar(limitVar, limit, 7);
 char *menu[2];
-menu[0] = "tsv";
-menu[1] = "ra";
+menu[0] = "ra";
+menu[1] = "tsv";
 
 char *formatVar = "cdwQueryFormat";
 char *format = cartUsualString(cart, formatVar, menu[0]);
