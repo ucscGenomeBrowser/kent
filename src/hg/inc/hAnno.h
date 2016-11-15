@@ -20,6 +20,11 @@ struct annoStreamer *hAnnoStreamerFromTrackDb(struct annoAssembly *assembly, cha
                                               struct jsonElement *config);
 /* Figure out the source and type of data and make an annoStreamer. */
 
+struct annoStreamer *hAnnoStreamerFromBigFileUrl(char *fileOrUrl, struct annoAssembly *assembly,
+                                                 int maxOutRows, char *type);
+/* Determine what kind of big data file/url we have and make streamer for it.
+ * If type is NULL, this will determine type using custom track type or file suffix. */
+
 struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, struct annoAssembly *assembly,
                                              int maxOutRows, enum annoGratorOverlap overlapRule);
 /* Determine what kind of big data file/url we have, make an annoStreamer & in annoGrator. */

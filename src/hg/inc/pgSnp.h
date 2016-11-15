@@ -110,6 +110,9 @@ void printPgDbLink(char *db, struct trackDb *tdb, struct pgSnp *item);
 struct asObject *pgSnpAsObj();
 // Return asObject describing fields of pgSnp
 
+struct asObject *pgSnpFileAsObj();
+// Return asObject describing fields of pgSnp file (no bin)
+
 struct pgSnp *pgSnpLoadNoBin (char **row);
 /* load struct from row without bin */
 

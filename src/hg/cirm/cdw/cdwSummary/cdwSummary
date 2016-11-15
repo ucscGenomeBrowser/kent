@@ -65,13 +65,13 @@ metaFieldsOnlyOne = ['title', 'summary', "submission_date"]
 # can be changed with a command line option
 defaultSeuratAttribute = "tsneCluster"
 
+CIRMPATH = "/hive/groups/cirm"
 
 def getCirmStaticFile(relPath):
     """ make relPath relative to CIRM static data directory.
     The base path can be set with the 'CIRM' environment variable.
     """
-    cirmDataDir="/hive/data/groups/cirm"
-    return join(os.getenv("CIRM", cirmDataDir), relPath)
+    return join(os.getenv("CIRM", CIRMPATH), relPath)
 
 # === command line interface, options and help ===
 def errAbort(msg):
@@ -219,8 +219,6 @@ def jsonTreeToList(fname):
 def writeHeader(ofh, title):
     " write html header part and body tag "
 #<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-#<link rel='STYLESHEET' href='../../style/jquery-ui.css' TYPE='text/css' />
-#<link rel='STYLESHEET' href='../../style/nice_menu.css' TYPE='text/css' />
 #<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.css" >
 #<script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.js"></script>
 #<script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.js"></script>
@@ -230,12 +228,15 @@ def writeHeader(ofh, title):
 <html>
 <head>
 <meta charset="utf-8">
-<link rel='STYLESHEET' href='../../style/HGStyle.css' TYPE='text/css' />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel='STYLESHEET' href='/style/nice_menu.css' TYPE='text/css' />
+<link rel='STYLESHEET' href='/style/HGStyle.css' TYPE='text/css' />
+<link rel='STYLESHEET' href='/style/jquery-ui.css' TYPE='text/css' />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="/js/jquery.plugins.js"></script>
 """)
     newNvd=False
     if newNvd:
@@ -260,8 +261,10 @@ def writeHeader(ofh, title):
 
 <body>
 
+<!--menuBar-->
+
 <style>
-body {
+#mainContent {
    margin-left: 20px;  
    color : #000;
    }
@@ -283,6 +286,8 @@ body {
     padding: 5px;
    }
 </style>
+
+<div id="mainContent">
 
     """ % title)
     # <script type='text/javascript' SRC='../../js/jquery.js'></script>
@@ -2178,18 +2183,9 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annov
 #});
 #</script>""")
     
-    # fix a few things in Chris' html
     htmlFh.write("""
-<script>
-document.body.style.background = "#FFF9D2";
-</script>  
-<style>
-body {
-   margin-left: 20px;  
-   }
-</style>
-    """)
-    htmlFh.write("""</body></html>""")
+</div><!-- mainContent -->
+</body></html>""")
     logging.info("Wrote %s" % htmlFh.name)
 
 def main():

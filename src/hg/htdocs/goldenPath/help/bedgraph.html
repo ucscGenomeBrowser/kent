@@ -39,7 +39,7 @@
 
 		    <P><B>General Structure</B><P> The bedGraph format is
 		    line-oriented.
-		    Bedgraph data are preceeded by a <A
+		    BedGraph data are preceded by a <A
 		    HREF="customTrack.html#TRACK">
 		    track definition line</A>, which
 		    adds a number of options for
@@ -73,7 +73,7 @@
 
 		    <P><B>Data Values</B></P>
 
-		    Bedgraph track data values can be integer or real,
+		    BedGraph track data values can be integer or real,
 		    positive or negative values. Chromosome positions
 		    are specified as 0-relative.  The first chromosome
 		    position is 0.  The last position in a chromosome
@@ -112,6 +112,13 @@ chr19 49303800 49304100 0.50
 chr19 49304100 49304400 0.75
 chr19 49304400 49304700 1.00
 </PRE></FONT>
+<B>Note:</B>
+The above example is a custom track that includes
+a <font color="#0000FF"><tt>track type=...</tt></font> line that is specific
+for loading the data in the browser.
+Such custom <font color="#0000FF"><tt>track ...</tt></font> specific
+lines will cause a raw bedGraph data file to fail validation by other tools,
+such as <tt>validateFiles</tt>, outside of the browser.
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>

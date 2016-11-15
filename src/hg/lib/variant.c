@@ -118,11 +118,24 @@ slReverse(&variant->alleles);
 return variant;
 }
 
-struct variant *variantFromPgSnpAnnoRow(struct annoRow *row, char *refAllele, struct lm *lm)
+struct variant *variantFromPgSnpAnnoRow(struct annoRow *row, char *refAllele, boolean hasBin,
+                                        struct lm *lm)
 /* Translate pgSnp annoRow into variant (allocated by lm). */
 {
 struct pgSnp pgSnp;
-pgSnpStaticLoad(row->data, &pgSnp);
+char **words = row->data;
+char *wordsWithFakeBin[PGSNP_NUM_COLS];
+if (! hasBin)
+    {
+    // pgSnp file input doesn't have a bin column, but the pgSnp code expects one --
+    // so make a fake bin column to ignore.
+    wordsWithFakeBin[0] = "1";
+    int i;
+    for (i = 1;  i < PGSNP_NUM_COLS;  i++)
+        wordsWithFakeBin[i] = words[i-1];
+    words = wordsWithFakeBin;
+    }
+pgSnpStaticLoad(words, &pgSnp);
 return variantNew(pgSnp.chrom, pgSnp.chromStart, pgSnp.chromEnd, pgSnp.alleleCount,
 		  pgSnp.name, refAllele, lm);
 }
