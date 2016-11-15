@@ -55,8 +55,8 @@ static void printBodyMap()
 {
 puts(
 "        <!-- Body Map panel -->\n"
-"           <object id='bodyMapSvg' type='image/svg+xml' class='gbImage gtexBodyMap' data='/images/bodyMap.svg'>\n"
-"               Body Map illustration not found\n"
+"           <object id='bodyMapSvg' type='image/svg+xml' class='gbImage gtexBodyMap' data='/images/gtexBodyMap.svg'>\n"
+"               GTEx Body Map illustration not found\n"
 "           </object>\n");
 }
 
