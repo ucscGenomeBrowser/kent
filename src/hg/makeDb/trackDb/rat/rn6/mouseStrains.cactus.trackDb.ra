@@ -1,0 +1,163 @@
+track cactus
+compositeTrack on
+shortLabel Strain Alignments
+longLabel Snake Track of progressiveCactus Alignments on mouse strains
+group compGeno
+type bed 3
+priority 2
+visibility full
+dragAndDrop subTracks
+html mouseStrains
+
+    track snakeGCA_001624185.1_129S1_SvImJ_v1
+    longLabel GCA_001624185.1_129S1_SvImJ_v1
+    shortLabel 129S1_SvImJ
+    otherSpecies 129S1_SvImJ
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624215.1_A_J_v1
+    longLabel GCA_001624215.1_A_J_v1
+    shortLabel A_J
+    otherSpecies A_J
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624295.1_AKR_J_v1
+    longLabel GCA_001624295.1_AKR_J_v1
+    shortLabel AKR_J
+    otherSpecies AKR_J
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624445.1_CAST_EiJ_v1
+    longLabel GCA_001624445.1_CAST_EiJ_v1
+    shortLabel CAST_EiJ
+    otherSpecies CAST_EiJ
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624475.1_CBA_J_v1
+    longLabel GCA_001624475.1_CBA_J_v1
+    shortLabel CBA_J
+    otherSpecies CBA_J
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624505.1_DBA_2J_v1
+    longLabel GCA_001624505.1_DBA_2J_v1
+    shortLabel DBA_2J
+    otherSpecies DBA_2J
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624535.1_FVB_NJ_v1
+    longLabel GCA_001624535.1_FVB_NJ_v1
+    shortLabel FVB_NJ
+    otherSpecies FVB_NJ
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624675.1_LP_J_v1
+    longLabel GCA_001624675.1_LP_J_v1
+    shortLabel LP_J_v1
+    otherSpecies LP_J_v1
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624675.1_NOD_ShiLtJ_v1
+    longLabel GCA_001624675.1_NOD_ShiLtJ_v1
+    shortLabel NOD_ShiLtJ
+    otherSpecies NOD_ShiLtJ
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624745.1_NZO_HlLtJ_v1
+    longLabel GCA_001624745.1_NZO_HlLtJ_v1
+    shortLabel NZO_HlLtJ
+    otherSpecies NZO_HlLtJ
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624775.1_PWK_PhJ_v1
+    longLabel GCA_001624775.1_PWK_PhJ_v1
+    shortLabel PWK_PhJ
+    otherSpecies PWK_PhJ
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624835.1_WSB_EiJ_v1
+    longLabel GCA_001624835.1_WSB_EiJ_v1
+    shortLabel WSB_EiJ
+    otherSpecies WSB_EiJ
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001624865.1_SPRET_EiJ_v1
+    longLabel GCA_001624865.1_SPRET_EiJ_v1
+    shortLabel SPRET_EiJ
+    otherSpecies SPRET_EiJ
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001632525.1_BALB_cJ_v1
+    longLabel GCA_001632525.1_BALB_cJ_v1
+    shortLabel BALB_cJ
+    otherSpecies BALB_cJ
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001632555.1_C57BL_6NJ_v1
+    longLabel GCA_001632555.1_C57BL_6NJ_v1
+    shortLabel C57BL_6NJ
+    otherSpecies C57BL_6NJ
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeGCA_001632575.1_C3H_HeJ_v1
+    longLabel GCA_001632575.1_C3H_HeJ_v1
+    shortLabel C3H_HeJ
+    otherSpecies C3H_HeJ
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake
+
+    track snakeC57B6J
+    longLabel Mouse Dec. 2011 (GRCm38/mm10/C57B6J)
+    shortLabel mm10/C57B6J
+    otherSpecies C57B6J
+    parent cactus on
+    priority 15
+    bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
+    type halSnake

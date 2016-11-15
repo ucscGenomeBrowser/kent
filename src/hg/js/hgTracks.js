@@ -3339,6 +3339,19 @@ function gotoGetDnaPage() {
     return false;
 }
 
+// A function for the keyboard shortcuts "zoom to x bp"
+function zoomTo(zoomSize) {
+    var flankSize = Math.floor(zoomSize/2);
+    var pos = parsePosition(genomePos.get());
+    var mid = pos.start+(Math.floor((pos.end-pos.start)/2));
+    var newStart = Math.max(mid - flankSize, 0);
+    var newEnd = mid + flankSize - 1;
+    var newPos = genomePos.setByCoordinates(pos.chrom, newStart, newEnd);
+    if (hgTracks.virtualSingleChrom && (newPos.search("virt:")===0))
+        newPos = genomePos.disguisePosition(newPosition); // DISGUISE?
+    imageV2.navigateInPlace("position="+newPos, null, true);
+}
+
   //////////////////////////////////
  //// popup (aka modal dialog) ////
 //////////////////////////////////

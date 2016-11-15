@@ -1,0 +1,108 @@
+<div class="container-fluid">
+<a name='TRACK_TOP'></a>
+    <div class="row gbTrackTitle">
+        <div class="col-md-10">
+            <span class="gbTrackName"> 
+                GTEx Track
+                <span class='gbAssembly'>GRCh37/hg19</span> 
+            </span> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)&nbsp;&nbsp;&nbsp;
+            <!--<a href='#TRACK_HTML' title='Jump to the track description'><i class='gbGoIcon fa fa-info-circle fa-lg'></i>
+-->
+            <a href='#TRACK_HTML' title='Jump to the track description'><span class='gbFaStack fa-stack'><i class='gbGoIcon fa fa-circle fa-stack-2x'></i><i class='gbIconText fa fa-info fa-stack-1x'></i></span>
+</a>
+        </div>
+
+        <div class="col-md-2 text-right">
+
+            <div class="goButtonContainer" title="Go to the Genome Browser">
+                <div class="gbGoButton">GO</div>
+                <i class="gbGoIcon fa fa-play fa-2x"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <!-- Body Map panel -->
+        <div id="bodyMap" class="col-md-6">
+            <!--<object type="image/svg+xml" height="800px" class="gbImage gtexBodyMap" data="/images/bodyMap.svg">-->
+            <object id="bodyMapSvg" type="image/svg+xml" class="gbImage gtexBodyMap" data="/images/bodyMap.svg">
+                Body Map illustration not found
+            </object>
+        </div>
+
+        <div class="col-md-6">
+
+            <!-- Configuration panel -->
+            <div class="row gbSectionBanner">
+                <div class="col-md-10">Configuration</div>
+                <div class="col-md-2 text-right">
+                    <select id="selectVisibility" class="gbSelect">
+                        <option>hide</option> 
+                        <option>dense</option> 
+                        <option>squish</option> 
+                        <option>pack</option> 
+                        <option>full</option> 
+                    </select>
+                </div>
+            </div>
+
+            <!-- row 1 -->
+            <div class="row">
+                <div class="configurator col-md-5">
+                    <b>Label</b>:&nbsp;&nbsp; 
+                        <input type="radio" name="gtexGene.label" value="name"> gene symbol
+                        <input type="radio" name="gtexGene.label" value="accession"> accession
+                        <input type="radio" name="gtexGene.label" value="both"> both
+                </div>
+                <div class="configurator col-md-7">
+        <b>Show GTEx gene model</b>
+        <INPUT TYPE=CHECKBOX NAME="gtexGene.showExons" VALUE=on ><INPUT TYPE=HIDDEN NAME='boolshad.gtexGene.showExons' VALUE='0' class='cbShadow'>
+                </div>
+
+            </div>
+
+            <!-- row 2 -->
+            <div class="row">
+                <div class="configurator col-md-5">
+                    <b>Log10 transform:</b>
+                        <INPUT TYPE=CHECKBOX NAME="gtexGene.logTransform" VALUE=on onchange='gtexTransformChanged("gtexGene")' CHECKED><INPUT TYPE=HIDDEN NAME='boolshad.gtexGene.logTransform' VALUE='0' class='cbShadow'>
+                </div>
+                <div class="configurator col-md-7">
+                    <span class='gtexGeneViewLimitsMaxLabel disabled'><b>View limits maximum:</b></span>
+        <INPUT TYPE=TEXT NAME="gtexGene.maxLimit" SIZE=4 VALUE=300 disabled><span class='gtexGeneViewLimitsMaxLabel disabled'>  RPKM (range 0-711778)</span>
+                </div>
+            </div>
+
+            <!-- row 3 -->
+            <div class="row">
+                <div class="configurator col-md-5">
+                    <b>Limit to protein coding genes:</b>
+                        <INPUT TYPE=CHECKBOX NAME="gtexGene.codingOnly" VALUE=on ><INPUT TYPE=HIDDEN NAME='boolshad.gtexGene.codingOnly' VALUE='0' class='cbShadow'>
+                </div>
+
+                <div class="configurator col-md-7">
+                    <b>Limit to genes scored at or above:</b> 
+                    <input id="scoreInput" value="" size="8">
+                    (range 0-1000)
+                </div>
+            </div>
+
+            <!-- end configure panel -->
+
+            <!-- Tissue list -->
+
+            <div class="row gbSectionBanner">
+
+                <div class="col-md-1">Tissues</div>
+                <div class="col-md-7 gbSectionInfo">
+                    Click label below or in Body Map to set or clear a tissue
+                </div>
+                <div class="col-md-4 gbButtonContainer">
+                    <div id="setAll" class="goButtonContainer gtButton gbWhiteButton">set all</div>
+                    <div id="clearAll" class="goButtonContainer gtButton gbWhiteButton">clear all</div>
+                </div>
+            </div>
+
+

@@ -672,6 +672,8 @@ if (endsWith(fileName, ".bam") || endsWith(fileName, ".cram"))
     return cloneString("bam");
 if (endsWith(fileName, ".vcf.gz"))
     return cloneString("vcfTabix");
+if (endsWith(fileName, ".vcf"))
+    return cloneString("vcf");
 return NULL;
 }
 

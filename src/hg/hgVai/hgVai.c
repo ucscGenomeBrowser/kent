@@ -70,6 +70,10 @@ char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", NULL,};
 #define hgvaUseVariantIds "hgva_useVariantIds"
 #define hgvaVariantIdsLabel "Variant Identifiers"
 #define hgvaVariantIds "hgva_variantIds"
+#define hgvaUseVariantFileOrUrl "hgva_useVariantFileOrUrl"
+#define hgvaVariantFileOrUrlLabel "from file"
+#define hgvaVariantFileOrUrl "hgva_variantFileOrUrl"
+#define hgvaVariantFileOrUrlType "hgva_variantFileOrUrlType"
 #define hgvaVariantPasteContainer "variantPasteContainer"
 
 void addSomeCss()
@@ -2575,13 +2579,15 @@ uint start = 0, end = 0;
 if (sameString(regionType, hgvaRegionTypeRange))
     getCartPosOrDie(&chrom, &start, &end);
 struct annoAssembly *assembly = hAnnoGetAssembly(database);
+boolean isCommandLine = (cgiOptionalString("cgiSpoof") != NULL);
 
 char *geneTrack = cartString(cart, "hgva_geneTrack");
 struct trackDb *geneTdb = tdbForTrack(database, geneTrack, &fullTrackList);
 if (geneTdb == NULL)
     {
     warn("Can't find tdb for gene track %s", geneTrack);
-    doUi();
+    if (! isCommandLine)
+        doUi();
     return;
     }
 
@@ -2606,12 +2612,20 @@ else if (sameString(variantTrack, hgvaUseVariantIds))
     primary = makeVariantIdStreamer(assembly, maxVarRows, &chrom, &start, &end, &commentList);
     primaryLongLabel = hgvaVariantIdsLabel;
     }
+else if (sameString(variantTrack, hgvaUseVariantFileOrUrl))
+    {
+    char *fileOrUrl = cartString(cart, hgvaVariantFileOrUrl);
+    char *type = cartOptionalString(cart, hgvaVariantFileOrUrlType);
+    primary = hAnnoStreamerFromBigFileUrl(fileOrUrl, assembly, maxVarRows, type);
+    primaryLongLabel = hgvaVariantFileOrUrlLabel;
+    }
 else
     {
     struct trackDb *varTdb = getVariantTrackDb(variantTrack);
     if (varTdb == NULL)
 	{
-	doUi();
+        if (! isCommandLine)
+            doUi();
 	return;
 	}
     primary = hAnnoStreamerFromTrackDb(assembly, varTdb->table, varTdb, chrom, maxVarRows, NULL);
@@ -2666,7 +2680,7 @@ if (doHtml)
     {
     webStart(cart, database, "Annotated Variants in VEP/HTML format");
     }
-else
+else if (! isCommandLine)
     {
     // Undo the htmlPushEarlyHandlers() because after this point they make ugly text:
     popWarnHandler();
@@ -2687,7 +2701,7 @@ annoGratorQueryFree(&query);
 
 if (doHtml)
     webEnd();
-else
+else if (! isCommandLine)
     textOutClose(&compressPipeline, NULL);
 }
 
@@ -2697,14 +2711,22 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 if (hIsPrivateHost())
     pushCarefulMemHandler(LIMIT_2or6GB);
-htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
 
 cgiSpoof(&argc, argv);
+boolean isCommandLine = (cgiOptionalString("cgiSpoof") != NULL);
+if (!isCommandLine)
+    htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
 oldVars = hashNew(10);
 setUdcCacheDir();
 boolean startQuery = (cgiUsualString("hgva_startQuery", NULL) != NULL);
 if (startQuery)
-    cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
+    {
+    if (isCommandLine)
+        // No HTTP header for command-line use.
+        cart = cartForSession(hUserCookie(), excludeVars, oldVars);
+    else
+        cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
+    }
 else
     cart = cartAndCookie(hUserCookie(), excludeVars, oldVars);
 
@@ -2729,7 +2751,7 @@ if (lookupPosition(cart, hgvaRange))
     {
     if (startQuery)
 	doQuery();
-    else
+    else if (! isCommandLine)
 	doUi();
     }
 else
@@ -2749,6 +2771,7 @@ else
     }
 
 cartCheckout(&cart);
-cgiExitTime("hgVai", enteredMainTime);
+if (! isCommandLine)
+    cgiExitTime("hgVai", enteredMainTime);
 return 0;
 }

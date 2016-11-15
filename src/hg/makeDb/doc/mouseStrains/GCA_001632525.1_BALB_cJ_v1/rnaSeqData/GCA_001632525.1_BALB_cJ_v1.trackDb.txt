@@ -16,7 +16,7 @@ html html/rnaSeqStar
     track GCA_001632525.1_BALB_cJ_v1ExpressionStar
     shortLabel GCA_001632525.1_BALB_cJ_v1 Expression
     view expression
-    visibility pack
+    visibility dense
     subTrack rnaSeqStar
     maxHeightPixels 100:24:16
     autoScale on
@@ -33,7 +33,7 @@ html html/rnaSeqStar
     track GCA_001632525.1_BALB_cJ_v1_Alignments
     shortLabel Raw Alignments
     view alignment
-    visibility dense
+    visibility hide
     subTrack rnaSeqStar
 
         track bamstar_GCA_001632525.1_BALB_cJ_v1_brain_ERR033005
@@ -63,7 +63,7 @@ html html/rnaSeqStar
     track GCA_001632525.1_BALB_cJ_v1_SpliceJunctions
     shortLabel Splice Junctions
     view junction
-    visibility pack
+    visibility squish
     subTrack rnaSeqStar
 
         track GCA_001632525.1_BALB_cJ_v1_brain_SpliceJunctions

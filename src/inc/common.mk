@@ -25,7 +25,7 @@ UNAME_S := $(shell uname -s)
 FULLWARN = $(shell uname -n)
 
 #global external libraries 
-L=$(kentSrc)/htslib/libhts.a
+L=$(kentSrc)/htslib/libhts.a -lz
 
 # pthreads is required
 ifneq ($(UNAME_S),Darwin)

@@ -491,6 +491,10 @@ struct hash *hash = hub->genomeHash;
 struct hash *ra;
 while ((ra = raNextRecord(lf)) != NULL)
     {
+    // allow that trackDb+hub+genome is in one single file
+    if (hashFindVal(ra, "track"))
+        break;
+
     char *twoBitPath = hashFindVal(ra, "twoBitPath");
     char *genome;
     if (twoBitPath != NULL)
@@ -520,7 +524,6 @@ while ((ra = raNextRecord(lf)) != NULL)
     char *groups = hashFindVal(ra, "groups");
     if (twoBitPath != NULL)
 	{
-	//printf("reading genome %s twoBitPath %s\n", genome, el->twoBitPath);
 	el->description  = hashFindVal(ra, "description");
 	char *organism = hashFindVal(ra, "organism");
 	if (organism == NULL)
@@ -607,8 +610,8 @@ struct lineFile *lf = udcWrapShortLineFile(url, NULL, 256*1024);
 struct hash *hubRa = raNextRecord(lf);
 if (hubRa == NULL)
     errAbort("empty %s in trackHubOpen", url);
-if (raNextRecord(lf) != NULL)
-    errAbort("multiple records in %s", url);
+// no errAbort when more records in hub.txt file: user can stuff
+// trackDb into it
 
 /* Allocate hub and fill in settings field and url. */
 AllocVar(hub);
