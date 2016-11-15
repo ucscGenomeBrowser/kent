@@ -48,7 +48,7 @@ summaryTags = [
 # and in the cell summary page and on the PCA points
 # format is the same as above: external name, internal name, description
 cellInfoTags = [
-("GEO_Sample_age", "sampleAge", "Age"),
+("biosample_source_age_value", "sampleAge", "Age"),
 ("body_part", "body_part", "Body Part"),
 ("GEO_Sample_experiment_sample_name", "sampleName", "Sample Name"),
 ("cell_type", "cell_type", "Cell Type"),
@@ -601,12 +601,12 @@ def extractRelevantTags(rowDict):
     infoDict = {}
     rowDict = dict(rowDict)
 
-    if options.showAllTags:
-        return rowDict
+    #if options.showAllTags:
+    return rowDict
 
-    for extTag, intTag, desc in cellInfoTags:
-        infoDict[intTag] = rowDict.get(extTag, "")
-    return infoDict
+    #for extTag, intTag, desc in cellInfoTags:
+        #infoDict[intTag] = rowDict.get(extTag, "")
+    #return infoDict
     
 def addMetaInfo(metaTabFname, sumData):
     """
@@ -1084,21 +1084,21 @@ def writeCellPage(outDir, sumData):
     writeHeader(ofh, "Single Cell Details")
     ofh.write("<p><h2>Single Cell Details</h2>\n")
 
-    fieldDescs = [
-    ("life_stage" , "Life stage"),
-    ("sampleAge" , "Age"),
-    ("body_part" , "Body Part") ,
-    ("sampleName" , "Cell ID"),
-    ("cellId" , "SRA<br>Run ID"),
-    ("chipId", "Fluidigm<br>Chip ID"),
-    ("sequencer" , "Sequencer"),
+    #fieldDescs = [
+    #("life_stage" , "Life stage"),
+    #("sampleAge" , "Age"),
+    #("body_part" , "Body Part") ,
+    #("sampleName" , "Cell ID"),
+    #("cellId" , "SRA<br>Run ID"),
+    #("chipId", "Fluidigm<br>Chip ID"),
+    #("sequencer" , "Sequencer"),
     #("kallistoProcReads" , "Sequenced<br>Reads"),
     #("kallistoAlnReads" , "Aligned<br>Reads"),
-    ("kallistoProcReads" , "Total K<br>Reads"),
-    ("alnShare" , "Alignable<br>Reads"),
-    ("kallistoEstFragLen" , "Est. Frag.<br>Length"),
-    ("cell_type" , "Submitted Cell<br>Type")
-    ]
+    #("kallistoProcReads" , "Total K<br>Reads"),
+    #("alnShare" , "Alignable<br>Reads"),
+    #("kallistoEstFragLen" , "Est. Frag.<br>Length"),
+    #("cell_type" , "Submitted Cell<br>Type")
+    #]
 
     ofh.write("""
 <style>
@@ -1126,9 +1126,9 @@ def writeCellPage(outDir, sumData):
 <tr>
     """)
 
-    for fieldName, fieldDesc in fieldDescs:
-        ofh.write('<th>%s</th>\n' % \
-            fieldDesc)
+    #for fieldName, fieldDesc in fieldDescs:
+        #ofh.write('<th>%s</th>\n' % \
+            #fieldDesc)
 
     ofh.write("</tr></thead>\n")
     ofh.write("<tbody>\n")
@@ -1137,7 +1137,7 @@ def writeCellPage(outDir, sumData):
 
     for rowDict in outRows:
         ofh.write("<tr>\n  ")
-        for fieldName, fieldDesc in fieldDescs:
+        for fieldName in rowDict:
             val = rowDict[fieldName]
             if fieldName=="sequencer":
                 val = val.replace("Illumina ", "")
