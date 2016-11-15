@@ -306,11 +306,18 @@ return annoRowFromStringArray(variant->chrom, variant->chromStart, variant->chro
 			      wordsOut, sSelf->numCols, callerLm);
 }
 
-static struct variant *variantFromPgSnpRow(struct annoGratorGpVar *self, struct annoRow *row,
-					   char *refAllele)
+static struct variant *variantFromPgSnpTableRow(struct annoGratorGpVar *self, struct annoRow *row,
+                                                char *refAllele)
 /* Translate pgSnp array of words into variant. */
 {
-return variantFromPgSnpAnnoRow(row, refAllele, self->lm);
+return variantFromPgSnpAnnoRow(row, refAllele, TRUE, self->lm);
+}
+
+static struct variant *variantFromPgSnpFileRow(struct annoGratorGpVar *self, struct annoRow *row,
+                                               char *refAllele)
+/* Translate pgSnp array of words into variant. */
+{
+return variantFromPgSnpAnnoRow(row, refAllele, FALSE, self->lm);
 }
 
 static struct variant *variantFromVcfRow(struct annoGratorGpVar *self, struct annoRow *row,
@@ -325,7 +332,9 @@ static void setVariantFromRow(struct annoGratorGpVar *self, struct annoStreamRow
  * incoming rows into generic variants. */
 {
 if (asObjectsMatch(primaryData->streamer->asObj, pgSnpAsObj()))
-    self->variantFromRow = variantFromPgSnpRow;
+    self->variantFromRow = variantFromPgSnpTableRow;
+else if (asObjectsMatch(primaryData->streamer->asObj, pgSnpFileAsObj()))
+    self->variantFromRow = variantFromPgSnpFileRow;
 else if (asObjectsMatch(primaryData->streamer->asObj, vcfAsObj()))
     self->variantFromRow = variantFromVcfRow;
 }

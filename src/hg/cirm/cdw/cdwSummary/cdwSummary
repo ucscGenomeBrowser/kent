@@ -4,7 +4,7 @@
 # information, cell type assignment charts and cell clustering")
 
 import logging, sys, optparse, gzip, marshal, json, urllib2, re, tempfile, os, math
-import string, unicodedata
+import string, unicodedata, itertools
 from collections import defaultdict, Counter, namedtuple
 from os.path import join, basename, dirname, isfile, isdir, getsize
 
@@ -48,7 +48,7 @@ summaryTags = [
 # and in the cell summary page and on the PCA points
 # format is the same as above: external name, internal name, description
 cellInfoTags = [
-("GEO_Sample_age", "sampleAge", "Age"),
+("biosample_source_age_value", "sampleAge", "Age"),
 ("body_part", "body_part", "Body Part"),
 ("GEO_Sample_experiment_sample_name", "sampleName", "Sample Name"),
 ("cell_type", "cell_type", "Cell Type"),
@@ -83,6 +83,8 @@ def parseCmdLine():
     """usage: %prog [options] mysqlDatasetId matrixFname metaFname outDir - create html/js files
     that describes a CDW dataset. Includes basic summary information, cell type assignment
     charts and cell clustering
+
+    matrixFname can be 'none' if no RNA-data is available.
 
     mysqlDatasetId it not necessary, can be any value.
 
@@ -599,12 +601,12 @@ def extractRelevantTags(rowDict):
     infoDict = {}
     rowDict = dict(rowDict)
 
-    if options.showAllTags:
-        return rowDict
+    #if options.showAllTags:
+    return rowDict
 
-    for extTag, intTag, desc in cellInfoTags:
-        infoDict[intTag] = rowDict.get(extTag, "")
-    return infoDict
+    #for extTag, intTag, desc in cellInfoTags:
+        #infoDict[intTag] = rowDict.get(extTag, "")
+    #return infoDict
     
 def addMetaInfo(metaTabFname, sumData):
     """
@@ -1046,16 +1048,21 @@ def prepCellRows(toolFields, toolRows, cellInfo):
         for infoTag, infoVal in cellInfo[cellId].iteritems():
             rowDict[infoTag] = infoVal
 
-        mapShare = 100*float(rowDict["kallistoAlnReads"])/float(rowDict["kallistoProcReads"])
-        #numStr = "%dk" % (int(round(float(rowDict["kallistoProcReads"])/1000)))
-        #rowDict["alnShare"] = "%d %% of %s" % (mapShare, numStr)
-        rowDict["alnShare"] = "%d %%" % (mapShare)
-        #rowDict["readTotal"] = "%d %%" % (mapShare)
-        rowDict["kallistoEstFragLen"] = str(int(float(rowDict["kallistoEstFragLen"])))
-
-        for tag in ["kallistoAlnReads", "kallistoProcReads"]:
-            numStr = "%d" % (int(round(float(rowDict[tag])/1000)))
-            rowDict[tag] = numStr
+        if "kallistoAlnReads" in rowDict:
+            mapShare = 100*float(rowDict["kallistoAlnReads"])/float(rowDict["kallistoProcReads"])
+            #numStr = "%dk" % (int(round(float(rowDict["kallistoProcReads"])/1000)))
+            #rowDict["alnShare"] = "%d %% of %s" % (mapShare, numStr)
+            rowDict["alnShare"] = "%d %%" % (mapShare)
+            #rowDict["readTotal"] = "%d %%" % (mapShare)
+            rowDict["kallistoEstFragLen"] = str(int(float(rowDict["kallistoEstFragLen"])))
+            for tag in ["kallistoAlnReads", "kallistoProcReads"]:
+                numStr = "%d" % (int(round(float(rowDict[tag])/1000)))
+                rowDict[tag] = numStr
+        else:
+            rowDict["alnShare"] = "NA"
+            rowDict["kallistoEstFragLen"] = "NA"
+            for tag in ["kallistoAlnReads", "kallistoProcReads"]:
+                rowDict[tag] = "NA"
 
         outRows.append(rowDict)
     return outRows
@@ -1077,21 +1084,21 @@ def writeCellPage(outDir, sumData):
     writeHeader(ofh, "Single Cell Details")
     ofh.write("<p><h2>Single Cell Details</h2>\n")
 
-    fieldDescs = [
-    ("life_stage" , "Life stage"),
-    ("sampleAge" , "Age"),
-    ("body_part" , "Body Part") ,
-    ("sampleName" , "Cell ID"),
-    ("cellId" , "SRA<br>Run ID"),
-    ("chipId", "Fluidigm<br>Chip ID"),
-    ("sequencer" , "Sequencer"),
+    #fieldDescs = [
+    #("life_stage" , "Life stage"),
+    #("sampleAge" , "Age"),
+    #("body_part" , "Body Part") ,
+    #("sampleName" , "Cell ID"),
+    #("cellId" , "SRA<br>Run ID"),
+    #("chipId", "Fluidigm<br>Chip ID"),
+    #("sequencer" , "Sequencer"),
     #("kallistoProcReads" , "Sequenced<br>Reads"),
     #("kallistoAlnReads" , "Aligned<br>Reads"),
-    ("kallistoProcReads" , "Total K<br>Reads"),
-    ("alnShare" , "Alignable<br>Reads"),
-    ("kallistoEstFragLen" , "Est. Frag.<br>Length"),
-    ("cell_type" , "Submitted Cell<br>Type")
-    ]
+    #("kallistoProcReads" , "Total K<br>Reads"),
+    #("alnShare" , "Alignable<br>Reads"),
+    #("kallistoEstFragLen" , "Est. Frag.<br>Length"),
+    #("cell_type" , "Submitted Cell<br>Type")
+    #]
 
     ofh.write("""
 <style>
@@ -1119,9 +1126,9 @@ def writeCellPage(outDir, sumData):
 <tr>
     """)
 
-    for fieldName, fieldDesc in fieldDescs:
-        ofh.write('<th>%s</th>\n' % \
-            fieldDesc)
+    #for fieldName, fieldDesc in fieldDescs:
+        #ofh.write('<th>%s</th>\n' % \
+            #fieldDesc)
 
     ofh.write("</tr></thead>\n")
     ofh.write("<tbody>\n")
@@ -1130,7 +1137,7 @@ def writeCellPage(outDir, sumData):
 
     for rowDict in outRows:
         ofh.write("<tr>\n  ")
-        for fieldName, fieldDesc in fieldDescs:
+        for fieldName in rowDict:
             val = rowDict[fieldName]
             if fieldName=="sequencer":
                 val = val.replace("Illumina ", "")
@@ -1971,9 +1978,10 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
     fnames = list(allSubFiles(annovarDir, "_multianno.txt"))
 
     sampleNames = []
-    allGenes = set()
+    #allGenes = set()
     allSumms = {}
     mutToSamples = defaultdict(set)
+    nameToMuts = defaultdict(set) # datasetname -> set of coding mutations
     for i, fname in enumerate(fnames):
         logging.info("processing %d out of %d files" % (i, len(fnames)))
         vcfSumm = parseAnnovar(fname, annovarCacheDir)
@@ -1981,68 +1989,113 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
 
         sampleNames.append(sampleName)
         allSumms[sampleName] = vcfSumm
-        allGenes.update(vcfSumm["geneChanges"])
+        #allGenes.update(vcfSumm["geneChanges"])
+
+        flatChanges = set()
+
         # create a mapping (gene,change) -> list of sampleNames
         for gene, muts in vcfSumm["geneChanges"].iteritems():
             for mut in muts:
                 mutToSamples[(gene, mut)].add(sampleName)
+            flatChanges.add( gene+":"+mut )
+        nameToMuts[sampleName] = flatChanges
 
+    # create dict sample -> number of new mutations
+    # and dict sample ->  new mutations
+    baseLine = nameToMuts["HDF_fib"]
+    del sampleNames[sampleNames.index("HDF_fib")]
+
+    newMutCounts = {}
+    sampleToNewMuts = {}
+    allMuts = set()
+    for sampleName, muts in nameToMuts.iteritems():
+        newMuts = muts-baseLine
+        print "sample %s: %d mutations, %d new" % (sampleName, len(muts), len(newMuts))
+        newMutCounts[sampleName] = len(newMuts)
+        sampleToNewMuts[sampleName] = newMuts
+        allMuts.update(newMuts)
+
+    htmlFh.write("All mutations: %d" % len(allMuts))
 
         #if fname.endswith(".vcf.gz"):
             #runSnpEff(fname, annovarCacheDir)
             #runVai(fname, annovarCacheDir)
 
+    # print intersections
+    for a, b in itertools.combinations(nameToMuts, 2):
+        shared = (nameToMuts[a]-baseLine).intersection((nameToMuts[b]-baseLine))
+        row = [a,b,len(shared)]
+        row = [str(x) for x in row]
+        print "\t".join(row)
+
     sampleNames.sort()
 
     # find all mutations that appear everywhere
-    commonMuts = set()
-    for (gene, mut), mutSamples in mutToSamples.iteritems():
-        if len(mutSamples)==len(sampleNames):
-            commonMuts.add( (gene, mut) )
+    #commonMuts = set()
+    #for (gene, mut), mutSamples in mutToSamples.iteritems():
+        #if len(mutSamples)==len(sampleNames):
+            #commonMuts.add( (gene, mut) )
     
-    newSumms = {}
-    newAllGenes = set()
-    for sampleName, vcfSumm in allSumms.iteritems():
-        # remove all mutations that appear everywhere
-        newChanges = defaultdict(list)
-        for gene, muts in vcfSumm["geneChanges"].iteritems():
-            for mut in muts:
-                if not (gene, mut) in commonMuts:
-                    newChanges[gene].append(mut)
+    #changes = {}
+    #allGenes = set()
+    #for sampleName, muts in newMuts.iteritems():
+        ## remove all mutations that appear in the founder cell
+        #newChanges = defaultdict(list)
+        #for gene, muts in vcfSumm["geneChanges"].iteritems():
+            #for mut in muts:
+                #if gene+":"+mut in baseLine:
+                    #continue
+                #else:
+                    #newChanges[gene].append(mut)
         # copy the old object, but use the filtered list
-        newSumm = {}
-        newSumm.update(vcfSumm)
-        newSumm["geneChanges"] = newChanges
-        newSumms[sampleName] = newSumm
-        newAllGenes.update(newChanges)
-
-    allSumms = newSumms
-    allGenes = newAllGenes
+        #newSumm = {}
+        #newSumm.update(vcfSumm)
+        #newSumm["geneChanges"] = newChanges
+        #changes[sampleName] = newChanges
+        #allGenes.update(newChanges.keys())
 
     # write the table headers
-    htmlFh.write("<tr>\n")
-    htmlFh.write("<th>Gene<br>Symbol</th>\n")
+    htmlFh.write("<table style='table-layout:fixed'>\n")
+    htmlFh.write("<thead><tr>\n")
+    htmlFh.write("<th style='width:100px'>Gene<br>Symbol</th>\n")
     for sampleName in sampleNames:
-        htmlFh.write("<th>")
-        htmlFh.write("%s<br>" % sampleName)
-        htmlFh.write("<small>Count: %s</small>\n" % allSumms[sampleName]["varCount"])
+        htmlFh.write("<th style='width:60px'>")
+        htmlFh.write("%s<br>" % sampleName.replace("_", " "))
+        #htmlFh.write("<small>Count: %s</small>\n" % allSumms[sampleName]["varCount"])
+        htmlFh.write("<small>%s</small>\n" % newMutCounts[sampleName])
         htmlFh.write("</th>\n")
-    htmlFh.write("</tr>\n")
+    htmlFh.write("</tr></thead>\n")
 
     # now write the table
-    for geneName in sorted(allGenes):
+    sampleToColor = {
+    "Env" : "light-blue",
+    "Ev" : "yellow",
+    "Lnv" : "orange",
+    "Lv" : "light-green",
+    "LvL" : "light-red"
+    }
+    for mutName in sorted(allMuts):
         htmlFh.write("<tr>\n")
-        htmlFh.write("<td>%s</td>\n" % geneName)
+        htmlFh.write("<td>%s</td>\n" % mutName)
         for sampleName in sampleNames:
-            changeList = allSumms[sampleName]["geneChanges"].get(geneName, [])
-            changeList = [x.replace("p.","") for x in changeList]
-            htmlFh.write("<td>%s</td>\n" % ", ".join(changeList))
+            #changeList = sampleToNewMuts[sampleName].get(mutName, [])
+            #changeList = [x.replace("p.","") for x in changeList]
+            if mutName in sampleToNewMuts[sampleName]:
+                #mutLabel = "X"
+                htmlFh.write("<td style='background-color: black'></td>\n")
+            else:
+                #mutLabel = ""
+                sampleType = sampleName.split("_")[0]
+                if sampleName.startswith("Lv L"):
+                    sampleType = "LvL"
+                color = sampleToColor[sampleType]
+                htmlFh.write("<td style='background-color:%s'></td>\n" % color)
         htmlFh.write("</tr>\n")
     htmlFh.write("</table>\n")
 
-    htmlFh.write("<h4>Mutations in all samples</h4>\n")
-    for gene, mut in commonMuts:
-        htmlFh.write("%s/%s" % (gene, mut))
+    #htmlFh.write("<h4>Mutations in all samples</h4>\n")
+    #for gene, mut in commonMuts:
+        #htmlFh.write("%s/%s" % (gene, mut))
 
 def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annovarDir, geneToSym, tagLabels, outDir):
     """

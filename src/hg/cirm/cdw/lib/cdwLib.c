@@ -2194,9 +2194,9 @@ if (metaCgi != NULL)
 return tagsList;
 }
 
-static int matchCount = 0;
-static boolean doSelect = FALSE;
-static boolean first = TRUE; 
+static int gMatchCount = 0;
+static boolean gDoSelect = FALSE;
+static boolean gFirst = TRUE; 
 
 static void rMatchesToRa(struct tagStorm *tags, struct tagStanza *list, 
     struct rqlStatement *rql, struct lm *lm)
@@ -2205,7 +2205,7 @@ static void rMatchesToRa(struct tagStorm *tags, struct tagStanza *list,
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
-    if (rql->limit < 0 || rql->limit > matchCount)
+    if (rql->limit < 0 || rql->limit > gMatchCount)
 	{
 	if (stanza->children)
 	    rMatchesToRa(tags, stanza->children, rql, lm);
@@ -2213,8 +2213,8 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	    {
 	    if (cdwRqlStatementMatch(rql, stanza, lm))
 		{
-		++matchCount;
-		if (doSelect)
+		++gMatchCount;
+		if (gDoSelect)
 		    {
 		    struct slName *field;
 		    for (field = rql->fieldList; field != NULL; field = field->next)
@@ -2239,7 +2239,7 @@ static void rMatchesToTsv(struct tagStorm *tags, struct tagStanza *list,
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
-    if (rql->limit < 0 || rql->limit > matchCount)  // We are inside the acceptable limit
+    if (rql->limit < 0 || rql->limit > gMatchCount)  // We are inside the acceptable limit
 	{
 	if (stanza->children) // Recurse till we have just leaves. 
 	    rMatchesToTsv(tags, stanza->children, rql, lm);
@@ -2247,13 +2247,13 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	    {
 	    if (cdwRqlStatementMatch(rql, stanza, lm))
 		{
-		++matchCount;
-		if (doSelect)
+		++gMatchCount;
+		if (gDoSelect)
 		    {
 		    struct slName *field;
-		    if (first)// For the first stanza print out a header line. 
+		    if (gFirst)// For the first stanza print out a header line. 
 			{
-			first = FALSE;
+			gFirst = FALSE;
 			printf("#"); 
 			for (field = rql->fieldList; field != NULL; field = field->next)
 			    {
@@ -2266,7 +2266,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 			    if (val != NULL)
 				printf("%s\t",  val);
 			    else 
-				printf("null\t"); 
+				printf("n/a\t"); 
 			    }
 			}
 		    else
@@ -2277,7 +2277,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 			    if (val != NULL)
 				printf("%s\t", val);
 			    else 
-				printf("null\t"); 
+				printf("n/a\t"); 
 			    }
 			}
 		    printf("\n");
@@ -2304,8 +2304,8 @@ slSort(&allFieldList, slNameCmpCase);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
 /* Traverse tag tree outputting when rql statement matches in select case, just
  * updateing count in count case. */
-doSelect = sameWord(rql->command, "select");
-if (doSelect)
+gDoSelect = sameWord(rql->command, "select");
+if (gDoSelect)
     rql->limit = limit;
 struct lm *lm = lmInit(0);
 if (!strcmp(format, "ra"))
@@ -2313,5 +2313,5 @@ if (!strcmp(format, "ra"))
 if (!strcmp(format, "tsv"))
     rMatchesToTsv(tags, tags->forest, rql, lm); 
 if (sameWord(rql->command, "count"))
-    printf("%d\n", matchCount);
+    printf("%d\n", gMatchCount);
 }

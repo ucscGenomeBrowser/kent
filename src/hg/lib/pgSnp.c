@@ -639,7 +639,7 @@ for(i=0;i<tot;i++)
 
 static char *pgSnpAutoSqlString =
 "table pgSnp"
-"\"personal genome SNP\""
+"\"personal genome SNP database table\""
 "   ("
 "   ushort  bin;            \"A field to speed indexing\""
 "   string  chrom;          \"Chromosome\""
@@ -652,10 +652,30 @@ static char *pgSnpAutoSqlString =
 "   )"
 ;
 
+static char *pgSnpFileAutoSqlString =
+"table pgSnp"
+"\"personal genome SNP file format\""
+"   ("
+"   string  chrom;          \"Chromosome\""
+"   uint    chromStart;     \"Start position in chrom\""
+"   uint    chromEnd;       \"End position in chrom\""
+"   string  name;           \"alleles ACTG[/ACTG]\""
+"   int     alleleCount;    \"number of alleles\""
+"   string  alleleFreq;     \"comma separated list of frequency of each allele\""
+"   string  alleleScores;   \"comma separated list of quality scores\""
+"   )"
+;
+
 struct asObject *pgSnpAsObj()
-// Return asObject describing fields of pgSnp
+// Return asObject describing fields of pgSnp database table (includes bin)
 {
 return asParseText(pgSnpAutoSqlString);
+}
+
+struct asObject *pgSnpFileAsObj()
+// Return asObject describing fields of pgSnp file (no bin)
+{
+return asParseText(pgSnpFileAutoSqlString);
 }
 
 struct pgSnp *pgSnpLoadNoBin(char **row)
