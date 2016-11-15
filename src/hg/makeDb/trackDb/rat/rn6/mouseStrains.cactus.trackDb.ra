@@ -7,7 +7,6 @@ type bed 3
 priority 2
 visibility full
 dragAndDrop subTracks
-dbAliasList mm10=C57B6J
 html mouseStrains
 
     track snakeGCA_001624185.1_129S1_SvImJ_v1
@@ -154,10 +153,10 @@ html mouseStrains
     bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
     type halSnake
 
-    track snakern6
-    longLabel Rat Jul. 2014 (RGSC 6.0/rn6)
-    shortLabel Rat rn6
-    otherSpecies rn6
+    track snakeC57B6J
+    longLabel Mouse Dec. 2011 (GRCm38/mm10/C57B6J)
+    shortLabel mm10/C57B6J
+    otherSpecies C57B6J
     parent cactus on
     priority 15
     bigDataUrl /gbdb/hubs/mouseStrains/mouseStrains.hal
