@@ -289,6 +289,11 @@ span#home-link {
     padding-top: 15px;
 }
 
+.trackDescription div:first-child {
+    margin-top: 0;
+    padding-top: 15px;
+}
+
 .trackDescription img {
     border: 1px solid black;
 }
@@ -299,8 +304,7 @@ span#home-link {
     padding-bottom: 20px;
     border-bottom: 1px solid lightgray;
 }
-    
-    
+
 
 /*
 .tissueLabel:hover {
