@@ -2277,7 +2277,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 			    if (val != NULL)
 				printf("%s\t", val);
 			    else 
-				printf("null\t"); 
+				printf("n/a\t"); 
 			    }
 			}
 		    printf("\n");

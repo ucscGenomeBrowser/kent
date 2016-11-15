@@ -40,7 +40,7 @@ printf(
 "           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s &nbsp;&nbsp;&nbsp;\n"
 , trackDb->shortLabel, assembly, trackDb->longLabel);
 puts(
-"           <a href='#TRACK_HTML' title='Jump to the track description'><span class='gbFaStack fa-stack'><i class='gbGoIcon fa fa-circle fa-stack-2x'></i><i class='gbIconText fa fa-info fa-stack-1x'></i></span></a>\n"
+"           <a href='#INFO_SECTION' title='Jump to the track description'><span class='gbFaStack fa-stack'><i class='gbGoIcon fa fa-circle fa-stack-2x'></i><i class='gbIconText fa fa-info fa-stack-1x'></i></span></a>\n"
 "       </div>\n"
 "       <div class='col-md-2 text-right'>\n"
 "           <div class='goButtonContainer' title='Go to the Genome Browser'>\n"
@@ -55,8 +55,8 @@ static void printBodyMap()
 {
 puts(
 "        <!-- Body Map panel -->\n"
-"           <object id='bodyMapSvg' type='image/svg+xml' class='gbImage gtexBodyMap' data='/images/bodyMap.svg'>\n"
-"               Body Map illustration not found\n"
+"           <object id='bodyMapSvg' type='image/svg+xml' class='gbImage gtexBodyMap' data='/images/gtexBodyMap.svg'>\n"
+"               GTEx Body Map illustration not found\n"
 "           </object>\n");
 }
 
@@ -245,6 +245,35 @@ puts(
 "    </div>\n");
 }
 
+static void printDataInfo()
+{
+puts(
+"<a name='INFO_SECTION'></a>\n"
+"    <div class='row gbSectionBanner gbSimpleBanner'>\n"
+"        <div class='col-md-11'>Data Information</div>\n"
+"        <div class='col-md-1'>\n"
+"            <a href='#TRACK_TOP' title='Jump to top of page'>\n"
+"                <i class='gbBannerIcon gbGoIcon fa fa-lg fa-arrow-circle-up'></i>\n"
+"            </a>\n"
+"       </div>\n"
+"    </div>\n"
+);
+puts(
+"    <div class='trackDescriptionPanel'>\n"
+"       <div class='trackDescription'>\n");
+puts("<div class='dataInfo'>");
+printUpdateTime(db, trackDb, NULL);
+puts("</div>");
+
+puts("<div class='dataInfo'>");
+makeSchemaLink(db, trackDb, "View table schema");
+puts("</div>");
+
+puts(
+"     </div>\n"
+"   </div>\n");
+}
+
 static void printTrackDescription()
 {
 puts(
@@ -275,6 +304,7 @@ char where[256];
 safef(where, sizeof(where), "tableName='%s'", track);
 // TODO: use hdb, hTrackDbList to get table names of trackDb, 
 struct trackDb *tdb = trackDbLoadWhere(conn, "trackDb", where);
+trackDbAddTableField(tdb);
 sqlDisconnect(&conn);
 return tdb;
 }
@@ -309,6 +339,7 @@ printTrackHeader();
 printTrackConfig();
 puts(
 "</form>");
+printDataInfo();
 if (trackDb->html)
     printTrackDescription();
 puts(

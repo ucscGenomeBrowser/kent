@@ -398,7 +398,7 @@ if (!printed)
 boolean isWebBrowsableFormat(char *format)
 /* Return TRUE if it's one of the web-browseable formats */
 {
-char *formats[] = {"html", "jpg", "pdf", "text", };
+char *formats[] = {"html", "jpg", "pdf", "png", "text", };
 return stringArrayIx(format, formats, ArraySize(formats)) >= 0;
 }
 
@@ -1232,7 +1232,9 @@ menu[1] = "tsv";
 
 char *formatVar = "cdwQueryFormat";
 char *format = cartUsualString(cart, formatVar, menu[0]);
-cgiMakeDropList(formatVar, menu, 2, formatVar); 
+printf("  "); 
+cgiMakeDropList(formatVar, menu, 2, format);
+printf("  "); 
 cgiMakeButton("View", "View"); 
 printf("</FORM>\n\n");
 

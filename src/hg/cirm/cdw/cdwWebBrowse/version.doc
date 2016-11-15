@@ -3,3 +3,6 @@
    - Added new help page
    - Added new Analysis pull down in place of Query to accommodate as yet blank
         joint dataset page.
+   - Made it so query has tab separated value (tsv) as well as ra format output
+0.53
+   - Added support for PNG files

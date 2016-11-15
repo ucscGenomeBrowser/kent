@@ -18,7 +18,8 @@ In Adobe Illustrator:
 
    NOTE:  the X, Y may need some tweaking -- use crop box viz to guide
 
-    ** Alternatively, if OK to retain title in .svg, one can edit viewbox in SVG.  605, 730, 10, 10
+    ** Alternatively, if OK to retain title in .svg, one can edit viewbox in SVG.
+                  e.g. viewBox="70 45 605 730"
         (make sure Esophageal Junction is not truncated)
 
 3. Save in SVG format (Save As, Format: SVG)
@@ -56,7 +57,7 @@ From script/editor:
         font-family:  Lato-Regular -> Lato,Arial,Helvetica
         font-size: 12.5px -> 11px 
 
-5. Add CSS link to svg (just after header)
+5. Add CSS link to svg (just after <svg> element)
 
 <defs>
     <link rel="stylesheet" href="../style/hgGtexTrackSettings.css" xmlns="http://www.w3.org/1999/xhtml"/>
@@ -70,6 +71,7 @@ From script/editor:
 
 8. Tweak style for leader line color if desired.  e.g. now set to paler (pink) on non-hover.
 
+    was:  #EEC1C24
  e.g.   .st37{fill:none;stroke:#F69296;.....
 
 9. Fix some bad id's if still present:
@@ -78,3 +80,5 @@ From script/editor:
 - arteryCoronary_Pic_lo
 
 10. Remove empty <g>'s.. e.g. on Liver
+
+11. Trim credit. (Remove 'ILLUSTRATION') paths

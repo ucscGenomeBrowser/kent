@@ -25,6 +25,9 @@ void cdwValidateCram(char *path);
 void cdwValidateJpg(char *path);
 /* Check jpg file is really jpg */
 
+void cdwValidatePng(char *path);
+/* Check png file is really png */
+
 void cdwValidateBamIndex(char *path);
 /* Check .bam.bai really is index. */
 
