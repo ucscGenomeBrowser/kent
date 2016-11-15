@@ -1048,16 +1048,21 @@ def prepCellRows(toolFields, toolRows, cellInfo):
         for infoTag, infoVal in cellInfo[cellId].iteritems():
             rowDict[infoTag] = infoVal
 
-        mapShare = 100*float(rowDict["kallistoAlnReads"])/float(rowDict["kallistoProcReads"])
-        #numStr = "%dk" % (int(round(float(rowDict["kallistoProcReads"])/1000)))
-        #rowDict["alnShare"] = "%d %% of %s" % (mapShare, numStr)
-        rowDict["alnShare"] = "%d %%" % (mapShare)
-        #rowDict["readTotal"] = "%d %%" % (mapShare)
-        rowDict["kallistoEstFragLen"] = str(int(float(rowDict["kallistoEstFragLen"])))
-
-        for tag in ["kallistoAlnReads", "kallistoProcReads"]:
-            numStr = "%d" % (int(round(float(rowDict[tag])/1000)))
-            rowDict[tag] = numStr
+        if "kallistoAlnReads" in rowDict:
+            mapShare = 100*float(rowDict["kallistoAlnReads"])/float(rowDict["kallistoProcReads"])
+            #numStr = "%dk" % (int(round(float(rowDict["kallistoProcReads"])/1000)))
+            #rowDict["alnShare"] = "%d %% of %s" % (mapShare, numStr)
+            rowDict["alnShare"] = "%d %%" % (mapShare)
+            #rowDict["readTotal"] = "%d %%" % (mapShare)
+            rowDict["kallistoEstFragLen"] = str(int(float(rowDict["kallistoEstFragLen"])))
+            for tag in ["kallistoAlnReads", "kallistoProcReads"]:
+                numStr = "%d" % (int(round(float(rowDict[tag])/1000)))
+                rowDict[tag] = numStr
+        else:
+            rowDict["alnShare"] = "NA"
+            rowDict["kallistoEstFragLen"] = "NA"
+            for tag in ["kallistoAlnReads", "kallistoProcReads"]:
+                rowDict[tag] = "NA"
 
         outRows.append(rowDict)
     return outRows
