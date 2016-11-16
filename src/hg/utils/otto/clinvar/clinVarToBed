@@ -165,6 +165,40 @@ def parseHgvsFile(hgvsFname):
             allToHgvs[fields[3]]=(fields[6], fields[8])
     return allToHgvs
 
+def accListToHtml(inStr):
+    """
+    given a string of a list of db:acc tuples, like "dbVar:nssv578901, omim:12343", convert the accessions
+    to HTML links to the databases
+    """
+    dbToUrl = {
+    "dbVar": "https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/",
+    "UniProtKB (variants)" : "http://www.uniprot.org/uniprot/%s",
+    "OMIM Allelic Variant" : "http://www.omim.org/entry/%s",
+    "MedGen": "https://www.ncbi.nlm.nih.gov/medgen/%s",
+    "OMIM" : "http://www.omim.org/entry/%s",
+    "Orphanet" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert=%s"
+    }
+
+    newParts = []
+    for part in inStr.split(","):
+        fields = part.split(":")
+        if len(fields)!=2:
+            newParts.append(part)
+            continue
+
+        db, acc = fields
+        accForUrl = acc
+
+        if db in dbToUrl:
+            if "OMIM" in db:
+                accForUrl = accForUrl.replace(".", "#")
+            url = (dbToUrl[db] % accForUrl)
+            newPart = "<a href='%s'>%s:%s</a>" % (url, db, acc)
+        else:
+            newPart = part
+        newParts.append(newPart)
+    return ", ".join(newParts)
+
 # ----------- MAIN --------------
 if args==[] and not options.auto:
     parser.print_help()
@@ -319,13 +353,18 @@ for line in ifh:
             itemRgb = "200,200,200"
 
     geneStr = geneSymbol
-    if geneId.isdigit():
+    #print "XX", geneId, geneSymbol
+    if geneId.isdigit() and geneId!="-1":
+        #print "adding pipe"
         geneStr = geneId+"|"+geneSymbol
-    if len(geneSymbol)>250:
+    if len(geneStr)>250:
+        #print "shortening"
         geneStr = "not shown, too many genes"
         
     name = varId+"|"+name
-    otherIds = otherIds.replace(",", ", ")
+    otherIds = accListToHtml(otherIds)
+
+    phenotypeIds = accListToHtml(phenotypeIds)
 
     row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
