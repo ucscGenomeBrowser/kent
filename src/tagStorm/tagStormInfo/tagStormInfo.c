@@ -7,7 +7,7 @@
 #include "tagStorm.h"
 
 boolean doCounts;
-boolean gValCount = 5;	// Maximum number of values to output
+boolean gValCount = 0;	// Maximum number of values to output.  0 means none
 
 void usage()
 /* Explain usage and exit. */

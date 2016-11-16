@@ -1,0 +1,41 @@
+access has 2 uses with 1 vals
+   2	all
+age has 2 uses with 1 vals
+   2	5
+age_units has 2 uses with 1 vals
+   2	weeks
+assay has 2 uses with 1 vals
+   2	RNA-seq
+biosample_date has 2 uses with 1 vals
+   2	2015-01-00
+donor has 2 uses with 1 vals
+   2	000
+file has 24 uses with 24 vals
+   1	ex01do00or01fa02.fq.gz
+   1	ex01do00or02fa01.fq.gz
+   1	ex00do00or00fa02.fq.gz
+   21	(in 21 others)
+format has 24 uses with 1 vals
+   24	fastq
+lab has 2 uses with 2 vals
+   1	lab_2
+   1	lab_1
+lab_kent_disassociation_protocol has 6 uses with 2 vals
+   4	fetal_liver_digest.pdf
+   2	fetal_brain_digest.pdf
+lab_kent_quality has 6 uses with 3 vals
+   2	0.04
+   2	0.01
+   2	0
+life_stage has 2 uses with 1 vals
+   2	embryo
+organ has 8 uses with 2 vals
+   4	brain
+   4	liver
+part has 24 uses with 4 vals
+   6	4
+   6	3
+   6	2
+   6	(in 1 others)
+sex has 2 uses with 1 vals
+   2	male
