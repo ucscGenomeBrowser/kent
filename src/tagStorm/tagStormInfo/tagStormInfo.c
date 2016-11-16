@@ -6,7 +6,8 @@
 #include "options.h"
 #include "tagStorm.h"
 
-boolean doNames, doCounts;
+boolean doCounts;
+boolean gValCount = 5;	// Maximum number of values to output
 
 void usage()
 /* Explain usage and exit. */
@@ -17,12 +18,14 @@ errAbort(
   "   tagStormInfo input.tags\n"
   "options:\n"
   "   -counts - if set output names, use counts, and value counts of each tag\n"
+  "   -vals=N - display tags and the top N values for them\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"counts", OPTION_BOOLEAN},
+   {"vals", OPTION_INT},
    {NULL, 0},
 };
 
@@ -32,14 +35,14 @@ struct tagInfo
     struct tagInfo *next;   /* Next in list */
     char *tagName;	    /* Name of tag */
     int useCount;	    /* Number of times tag is used */
-    struct hash *tagVals;   /* Hash of tag values */
+    struct hash *tagVals;   /* Hash of tag values, integer valued */
     };
 
 void tagInfoAdd(struct tagInfo *tagInfo, char *tagVal)
 /* Add information about tag to tagInfo */
 {
 tagInfo->useCount += 1;
-hashStore(tagInfo->tagVals, tagVal);
+hashIncInt(tagInfo->tagVals, tagVal);
 }
 
 struct tagInfo *tagInfoNew(char *tagName)
@@ -88,14 +91,36 @@ struct tagStorm *tags = tagStormFromFile(inputTags);
 struct hash *tagHash = hashNew(0);
 long stanzaCount = 0, tagCount = 0, expandedTagCount = 0;
 rFillInStats(tags->forest, 0, tagHash, &stanzaCount, &tagCount, &expandedTagCount);
-if (doCounts)
+if (doCounts || gValCount > 0)
     {
     struct hashEl *el, *list = hashElListHash(tagHash);
     slSort(&list, hashElCmp);
     for (el = list; el != NULL; el = el->next)
         {
 	struct tagInfo *tagInfo = el->val;
-	printf("%s\t%d\t%d\n", tagInfo->tagName, tagInfo->useCount, tagInfo->tagVals->elCount);
+	struct hash *valHash = tagInfo->tagVals;
+	if (gValCount > 0)
+	    {
+	    struct hashEl *valEl, *valList = hashElListHash(valHash);
+	    printf("%s has %d uses with %d vals\n", tagInfo->tagName, tagInfo->useCount,
+		slCount(valList));
+	    slSort(&valList, hashElCmpIntValDesc);
+	    int soFar = 0, i;
+	    for (i=0, valEl = valList; i < gValCount && valEl != NULL; ++i, valEl = valEl->next)
+	        {
+		int valCount = ptToInt(valEl->val);
+		soFar += valCount;
+		printf("   %d\t%s\n", valCount, valEl->name);
+		}
+	    int otherCount = tagInfo->useCount - soFar;
+	    if (otherCount > 0)
+	        printf("   %d\t(in %d others)\n", otherCount, slCount(valEl));
+	    slFreeList(&valList);
+	    }
+	else
+	    {
+	    printf("%d\t%d\t%s\n", tagInfo->useCount, valHash->elCount, tagInfo->tagName);
+	    }
 	}
     }
 else
@@ -124,6 +149,7 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 doCounts = optionExists("counts");
+gValCount = optionInt("vals", gValCount);
 tagStormInfo(argv[1]);
 return 0;
 }
