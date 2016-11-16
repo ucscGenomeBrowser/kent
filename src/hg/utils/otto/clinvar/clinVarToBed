@@ -295,7 +295,12 @@ for line in ifh:
     blockSizes = str(int(end)-int(start))
     blockStarts = "0"
 
-    if dbVarAcc.startswith("nsv"):
+    if dbVarAcc.startswith("nsv") or "copy number" in allType:
+        isCnv = True
+    else:
+        isCnv = False
+
+    if isCnv:
         if "gain" in allType or "duplication" in allType:
             itemRgb = "0,0,255"
         if "deletion" in allType or "loss" in allType:
@@ -336,11 +341,6 @@ for line in ifh:
         else:
              newRow.append(x)
     row = newRow
-
-    if dbVarAcc.startswith("nsv") or "copy number" in allType:
-        isCnv = True
-    else:
-        isCnv = False
 
     if assembly=="GRCh37":
         if chrom=="chrM":
