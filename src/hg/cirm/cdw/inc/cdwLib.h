@@ -491,4 +491,7 @@ void cdwReallyRemoveFile(struct sqlConnection *conn, long long fileId, boolean r
 /* Remove all records of file from database and from Unix file system if 
  * the really flag is set.  Otherwise just print some info on the file. */
 
+char *cdwLocalMenuBar(struct cart *cart, boolean makeAbsolute);
+/* Return menu bar string. Optionally make links in menubar to point to absolute URLs, not relative. */
+
 #endif /* CDWLIB_H */

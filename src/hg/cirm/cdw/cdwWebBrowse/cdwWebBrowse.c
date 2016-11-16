@@ -1614,52 +1614,15 @@ dispatch(conn);
 sqlDisconnect(&conn);
 }
 
-struct dyString *getLoginBits()
-/* Get a little HTML fragment that has login/logout bit of menu */
+static void doSendMenubar()
+/* print http header and menu bar string */
 {
-/* Construct URL to return back to this page */
-char *command = cartUsualString(cart, "cdwCommand", "home");
-char *sidString = cartSidUrlString(cart);
-char returnUrl[PATH_LEN*2];
-safef(returnUrl, sizeof(returnUrl), "http%s://%s/cgi-bin/cdwWebBrowse?cdwCommand=%s&%s",
-    cgiAppendSForHttps(), cgiServerNamePort(), command, sidString );
-char *encodedReturn = cgiEncode(returnUrl);
-
-/* Write a little html into loginBits */
-struct dyString *loginBits = dyStringNew(0);
-dyStringAppend(loginBits, "<li id=\"query\"><a href=\"");
-char *userName = wikiLinkUserName();
-if (userName == NULL)
-    {
-    dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s&%s",
-	    encodedReturn, sidString);
-    dyStringPrintf(loginBits, "\">Login</a></li>");
-    }
-else
-    {
-    dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s&%s",
-	    encodedReturn, sidString);
-    dyStringPrintf(loginBits, "\">Logout %s</a></li>", userName);
-    }
-
-/* Clean up and go home */
-freez(&encodedReturn);
-return loginBits;
-}
-
-static char *localMenuBar()
-/* Return menu bar string */
-{
-struct dyString *loginBits = getLoginBits();
-
-// menu bar html is in a stringified .h file
-struct dyString *dy = dyStringNew(4*1024);
-dyStringPrintf(dy, 
-#include "cdwNavBar.h"
-       , loginBits->string);
-
-
-return menuBarAddUiVars(dy->string, "/cgi-bin/cdw", cartSidUrlString(cart));
+oldVars = hashNew(0);
+cart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, TRUE);
+//cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
+//puts("Content-Type: text/html\n\n");
+char* mb = cdwLocalMenuBar(cart, TRUE);
+puts(mb);
 }
 
 void localWebStartWrapper(char *titleString)
@@ -1690,7 +1653,7 @@ void localWebStartWrapper(char *titleString)
     }
 
 webStartSectionTables();    // Start table layout code
-puts(localMenuBar());	    // Menu bar after tables open but before first section
+puts(cdwLocalMenuBar(cart, FALSE));	    // Menu bar after tables open but before first section
 webFirstSection(titleString);	// Open first section
 webPushErrHandlers();	    // Now can do improved error handler
 }
@@ -1719,6 +1682,8 @@ oldVars = hashNew(0);
 char *cdwCmd = cgiOptionalString("cdwCommand");
 if (sameOk(cdwCmd, "downloadUrls"))
     doDownloadUrls();
+else if (sameOk(cdwCmd, "menubar"))
+    doSendMenubar();
 else
     cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
 return 0;
