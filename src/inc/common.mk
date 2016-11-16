@@ -25,7 +25,7 @@ UNAME_S := $(shell uname -s)
 FULLWARN = $(shell uname -n)
 
 #global external libraries 
-L=$(kentSrc)/htslib/libhts.a -lz
+L=$(kentSrc)/htslib/libhts.a
 
 # pthreads is required
 ifneq ($(UNAME_S),Darwin)
@@ -214,7 +214,7 @@ else
   endif
 endif
 
-L+=${PNGLIB}
+L+=${PNGLIB} -lz -lm
 HG_INC+=${PNGINCL}
 
 # pass through COREDUMP
