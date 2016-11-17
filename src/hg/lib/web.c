@@ -430,15 +430,25 @@ if(!webInTextMode)
     }
 }
 
-void webStartJWestOptionalBanner(struct cart *cart, char *db, char *title, boolean doBanner)
+static void webStartGbOptionalBanner(struct cart *cart, char *db, char *title, boolean doBanner, 
+                                boolean hgGateway)
 /* Start HTML with new header and footer design by JWest.  
-   Optionally display banner above menubar
+   Optionally display banner above menubar.  Use flag with hgGateway, till that is migrated.
  */
 {
 puts("Content-type:text/html\n");
-printf(
-    #include "jWestHeader.h"
-           , title);
+if (hgGateway)
+    {
+    printf(
+        #include "jWestHeader.h"
+               , title);
+    }
+else
+    {
+    printf(
+        #include "gbHeader.h"
+               , title);
+    }
 if (doBanner)
     {
     printf(
@@ -454,30 +464,36 @@ if (navBar)
     {
     puts(navBar);
     // Override nice-menu.css's menu background and fonts:
-    puts("<link rel=\"stylesheet\" href=\"../style/jWest.afterNiceMenu.css\">");
+    puts("<link rel='stylesheet' href='../style/gbAfterMenu.css'>");
     }
 webHeadAlreadyOutputed = TRUE;
 errAbortSetDoContentType(FALSE);
 }
 
-void webStartJWest(struct cart *cart, char *db, char *title)
-/* Start HTML with new banner and footer design by jWest (with modifications). */
-{
-webStartJWestOptionalBanner(cart, db, title, TRUE);
-}
-
-void webStartJWestNoBanner(struct cart *cart, char *db, char *title)
+void webStartGbNoBanner(struct cart *cart, char *db, char *title)
 /* Start HTML with new header and footer design by jWest, but no banner */
 {
-webStartJWestOptionalBanner(cart, db, title, FALSE);
+webStartGbOptionalBanner(cart, db, title, FALSE, FALSE);
 }
 
-void webEndJWest()
+void webEndGb()
 /* End HTML that was started with webStartJWest. */
 {
 googleAnalytics();
 puts("</body></html>");
 webPopErrHandlers();
+}
+
+void webStartJWest(struct cart *cart, char *db, char *title)
+/* Start HTML with new banner and footer design by jWest (with modifications). */
+{
+webStartGbOptionalBanner(cart, db, title, TRUE, TRUE);
+}
+
+void webEndJWest()
+/* End HTML that was started with webStartJWest. */
+{
+webEndGb();
 }
 
 static boolean gotWarnings = FALSE;

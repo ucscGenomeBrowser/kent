@@ -1,313 +1,74 @@
-.jwGold {
-     background-color: #eaca92;
+/* CSS specific to hgGtexTrackSettings CGI: GTEX Track Settings 
+ *      with Body Map illustration and design from JWestDesign.com
+ *
+ * Copyright (C) 2016 The Regents of the University of California
+ */ 
+
+/* Tissue selectors */
+
+.gbmTissueColorPatch {
+    padding: 0 10px;
+    border-width: 2px;
+    border: 2px solid black;    /* color set in C code */
 }
 
-/* Layout tweaks for hgTrackSettings */
-
-/* debug */
-/*
-* {
-    border: 1px pink solid;
-}
-*/
-
-.bannerSubtitle {
-    background-color: #eaca92;
-    padding: 0 18px;
-    margin: 0 8px;
-    font-size: 25px;
-    display: inline;
-    vertical-align: bottom;
+.gbmTissueHovered {
+    color: blue !important;
+    fill: blue;
 }
 
-.gbTrackTitle {
-    background-color: #eaca92;
-    padding: 11px;
-    padding-bottom: 6px;
+.gbmTissueHoveredColor {
+    border-color: blue !important;
+}
+
+.gbmTissueLabel {
+    padding-right: 6px;
+    cursor: pointer;
+}
+
+.gbmTissueSelected {
     font-weight: bold;
-    font-size: 17px;
-    /* color: #003a72; */
     color: black;
 }
 
-.gbTrackName {
-    background-color: #F3E0BE;
-    padding: 2px 8px;
-    margin: -10px;
-    font-weight: normal;
-    /* color: #003a72; */
-    black;
+.gbmTissueNotSelectedColor {
+    background-color: white !important;
 }
 
-.gbAssembly {
-    /* background-color: #EFD5A9; */
-    /* padding: 5px; */
-    margin-left: 6px;
-    font-weight: normal;
-    /* font-style: italic; */
-    font-size: 13px;
-    color: #555;
+.gbmTissueTable {
+    table-layout: auto;
+    border-collapse: separate;
+    border-spacing: 8px 8px;
+    width: 100%;
+    margin-top: 5px;
+    font-size: 12.5px;
 }
 
-.gbAssemblySub {
-    color: gray;
-    font-weight: normal;
-}
+/* Miscellany -- candidates for generic CSS but still a little rough so keeping here */
 
-.gbButtonContainer .goButtonContainer {
-    display: inline-block;
-    margin-top: 2px;
-    cursor: pointer;
-    font-size: 10px;
-}
-
-
-.gbButtonContainer {
-    text-align: right;
-}
-
-.gbGoButton {
-    display: inline-block;
-    color: white;
-    background-color: #003a72; /* dark blue */
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 6px;
-    padding-bottom: 4px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-weight: normal;
-}
-
-.gbGoButton:hover {
-    font-weight: bold;
-}
-
-.gbGoIcon {
-    display: inline-block;
-    color: #003a72; /* dark blue */
-    cursor: pointer;
-}
-
-.gbFaStack {
-    font-size: 70%;
-}
-
-.gbIconText {
-    color: white;
-}
-
-.gbBannerIcon {
-    color: white;
-}
-
-
-.configurator {
-    font-size: 14px;
-    margin-top: 4px;
-}
-
-/*.spacer {
-    padding-top: 1px;
-}
-*/
-
-.gbSelect {
-    /* font-height: 12px; */
-    font-size: 14px;
-    font-weight: normal;
-    color: black;
-    margin: 0 5px;
-}
-
-.gbButton {
-   font-height: 12px;
-}
-
-.gbPanel {
-    margin-bottom: 0;
-}
-
-.gbSearch {
-    font-weight: normal;
-}
-
-.gbImage {
-    margin: 8px;
-}
-
-
-.gtexBodyMap {
-    margin: 4px;
-    margin-top: 3px;
-    margin-left: 30px;
+.gbInputScore {         /* TODO: add hooks for this to C/JS */
+    width: 3em !important;      
 }
 
 .gbSectionBanner {
-    background-color: #4c759c;
+    padding: 3px;
     margin-left; -15px;
     margin-right; -15px;
     margin-top: 6px;
-    padding: 3px;
+    background-color: #4c759c;  /* light blue */
+    color: white;
     font-weight: bold;
     font-size: 15px;
-    color: white;
+}
+
+.gbSectionInfo {
+    margin-top: 3px;
+    color: lightgray;
+    font-size: 13px;
+    font-style: italic;
+    text-align: right;
 }
 
 .gbSimpleBanner {
     padding-left: 30px;
 }
-
-.gbSectionInfo {
-    font-size: 13px;
-    font-style: italic;
-    margin-top: 3px;
-    color: lightgray;
-    text-align: right;
-}
-
-.gbSubsectionBanner {
-    background-color: #eee;
-    padding: 3px;
-    margin-top: 3px;
-    text-align: center;
-}
-
-.gbSectionTitle {
-    margin-top: 3px;
-}
-
-/*
-* {
-    border: 1px solid red;
-}
-*/
-
-div.gbWhiteButton {
-    display: inline-block;
-    font-size: 15px;
-    vertical-align: top;
-    background-color: white;
-    color: black;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 3px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-div.gtButton {
-    padding-top: 1px;
-    padding-bottom: 1px;
-    padding-left: 8px;
-    padding-right: 8px;
-    width: 5em;
-    text-align: center;
-    font-weight: normal;
-}
-
-span#home-link {
-    background-image: url("../images/ucscHelixLogo.png");
-    background-size: contain;
-    width: 84px;
-    background-color: white;
-    background-repeat: no-repeat;
-    top: -8px;
-    height: 32px;
-    background-position: 0 0;
-    margin-left: -9px;
-}
-
-.tissueTable {
-    table-layout: auto;
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 8px 8px;
-    /* border: 2px solid #aaa; */
-    font-size: 12.5px;
-    margin-top: 5px;
-    font-family: Lato, Arial, Helvetica;
-    font-weight: normal;
-}
-
-/*
-.gtexTissueTable {
-    border: 5px #DDD solid;
-    margin: 20px;
-    margin-right: 30px;
-}
-*/
-
-.tissueColor {
-    padding: 0 10px;
-    border-width: 2px;
-}
-
-.tissueNotSelectedColor {
-    background-color: white !important;
-}
-
-.tissueLabel {
-    padding-right: 6px;
-    cursor: pointer;
-}
-
-#bodyMapSvg {
-    margin-top: 0;
-}
-
-#bodyMap {
-    padding: 0;
-}
-
-/* HTML */
-.tissueSelected {
-    font-weight: bold;
-    color: black;
-}
-
-.tissueHovered {
-    color: blue;
-    fill: blue;
-}
-
-.tissueHoveredColor {
-    border-color: blue !important;
-}
-
-.trackDescription {
-    margin-left: 20px;
-}
-
-.trackDescription h2{
-    font-size: 24px;
-    color: #003a72
-}
-
-.trackDescription h2:first-child {
-    margin-top: 0;
-    padding-top: 15px;
-}
-
-.trackDescription div:first-child {
-    margin-top: 0;
-    padding-top: 15px;
-}
-
-.trackDescription img {
-    border: 1px solid black;
-}
-
-.trackDescriptionPanel {
-    margin-top: 0;
-    background-color: #f5f5f5;
-    padding-bottom: 20px;
-    border-bottom: 1px solid lightgray;
-}
-
-
-/*
-.tissueLabel:hover {
-    color: blue;
-}
-*/
