@@ -1145,7 +1145,7 @@
 		<polyline id="brainPutamen_Lead_Hi" class="st38" points="454.5,94.1 410.4,94.1 346.5,115.1 		"/>
 	</g>
 	<g id="brainCerebelHemi_GROUP">
-		<g id="brainCerebelHemi_Pic_Hi" class="st9">
+		<g id="brainCerebelHemi_Pic_Lo" class="st9">
 			<path class="st82" d="M373.9,151.2c-1.2-2.4-0.1-4.7,0.8-5.3c-2.9-0.1-5-1.4-6.3-3.6c-1.7-2.9-0.4-11.9,5.1-13.9
 				c6.6-2.4,10.6-2.6,17.2,4.5c1.6,1.3,9.3,6.8,6.2,18.4L373.9,151.2z"/>
 			<g>
