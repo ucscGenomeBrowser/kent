@@ -33,10 +33,10 @@
 .gbmTissueTable {
     table-layout: auto;
     border-collapse: separate;
-    border-spacing: 8px 8px;
+    border-spacing: 8px;
     width: 100%;
     margin-top: 5px;
-    font-size: 12.5px;
+    font-size: 12px;
 }
 
 /* Miscellany -- candidates for generic CSS but still a little rough so keeping here */
