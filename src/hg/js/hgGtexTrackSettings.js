@@ -261,9 +261,9 @@ var gtexTrackSettings = (function() {
         tissues.forEach(clearTissue);
     }
 
-    function onClickToggleTissue(tis) {
+    function onClickToggleTissue(ev) {
         // Select/unselect from tissue list
-        tis = this.id;  // arg bad
+        tis = ev.data;
         toggleTissue(tis);
     }
 
@@ -274,14 +274,14 @@ var gtexTrackSettings = (function() {
         toggleTissue(tis);
     }
 
-    function onEnterTissue() {
+    function onEnterTissue(ev) {
         // Mouseover on label in tissue list
-        highlightTissue(this.id);
+        highlightTissue(ev.data);
     }
 
-    function onLeaveTissue() {
+    function onLeaveTissue(ev) {
         // Mouseover on label in tissue list
-        unHighlightTissue(this.id);
+        unHighlightTissue(ev.data);
     }
 
     function onMapEnterTissue(ev) {
@@ -347,8 +347,16 @@ var gtexTrackSettings = (function() {
         // Add event handlers to body map and tissue list
 
         // Add click and mouseover handler to tissue label in tissue list
-        $('#' + tis).click(tis, onClickToggleTissue);
-        $('#' + tis).hover(onEnterTissue, onLeaveTissue);
+        var $tis = $('#' + tis);
+        $tis.click(tis, onClickToggleTissue);
+        $tis.mouseenter(tis, onEnterTissue);
+        $tis.mouseleave(tis, onLeaveTissue);
+
+        // Add click and mouseover handler to color patch in tissue list
+        var $colorPatch = $tis.prev('.' + CLASS_TISSUE_COLOR_PATCH);
+        $colorPatch.click(tis, onClickToggleTissue);
+        $colorPatch.mouseenter(tis, onEnterTissue);
+        $colorPatch.mouseleave(tis, onLeaveTissue);
 
         // Add mouseover and click handlers to tissue label in body map
         var textEl = _svgDoc.getElementById(tis + TEXT_HI);
