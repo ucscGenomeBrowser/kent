@@ -18,11 +18,8 @@
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
-char *db = NULL;
-char *version;                        /* GTEx release */
-struct trackDb *trackDb = NULL;
 
-static void printTrackHeader()
+static void printTrackHeader(char *db, struct trackDb *tdb)
 /* Print top banner with track labels */
 // TODO: Try to simplify layout
 {
@@ -38,7 +35,7 @@ printf(
 "               <span class='gbAssembly'> %s </span>\n"
 "           </span>"
 "           <span class='gbTrackTitle'> %s </span>\n"
-, trackDb->shortLabel, assembly, trackDb->longLabel);
+, tdb->shortLabel, assembly, tdb->longLabel);
 puts(
 "<!-- Info icon built from stacked fa icons -->\n"
 "           <a href='#INFO_SECTION' title='Jump to the track description'>\n"
@@ -65,22 +62,22 @@ puts(
 "           </object>\n");
 }
 
-static void printVisSelect()
+static void printVisSelect(struct trackDb *tdb)
 /* Track visibility dropdown */
 {
-enum trackVisibility vis = trackDb->visibility;
-vis = hTvFromString(cartUsualString(cart, trackDb->track, hStringFromTv(vis)));
+enum trackVisibility vis = tdb->visibility;
+vis = hTvFromString(cartUsualString(cart, tdb->track, hStringFromTv(vis)));
 boolean canPack = TRUE;
-hTvDropDownClassVisOnlyAndExtra(trackDb->track, vis, canPack, "gbSelect normalText visDD",
-                                            trackDbSetting(trackDb, "onlyVisibility"), NULL);
+hTvDropDownClassVisOnlyAndExtra(tdb->track, vis, canPack, "gbSelect normalText visDD",
+                                            trackDbSetting(tdb, "onlyVisibility"), NULL);
 }
 
-static void printScoreFilter(struct cart *cart, char *track)
+static void printScoreFilter(struct cart *cart, char *track, struct trackDb *tdb)
 /* Filter on overall gene expression score */
 {
 char buf[512];
 puts("<b>Limit to genes scored at or above:</b>\n");
-safef(buf, sizeof(buf), "%s.%s",  trackDb->track, SCORE_FILTER);
+safef(buf, sizeof(buf), "%s.%s",  tdb->track, SCORE_FILTER);
 int score = cartUsualInt(cart, buf, 0);
 int minScore = 0, maxScore = 1000;
 cgiMakeIntVarWithLimits(buf, score, "Minimum score", 0, minScore, maxScore);
@@ -88,10 +85,10 @@ printf(
 "                    (range %d-%d)\n", minScore, maxScore);
 }
 
-static void printConfigPanel()
+static void printConfigPanel(struct trackDb *tdb)
 /* Controls for track configuration (except for tissues) */
 {
-char *track = trackDb->track;
+char *track = tdb->track;
 puts(
 "        <!-- Configuration panel -->\n"
 "        <div class='row gbSectionBanner'>\n"
@@ -99,7 +96,7 @@ puts(
 "            <div class='col-md-2 text-right'>\n");
 
 /* Track vis dropdown */
-printVisSelect();
+printVisSelect(tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -109,11 +106,11 @@ puts(
 "        <!-- row 1 -->\n"
 "        <div class='row'>\n"
 "            <div class='gbControl col-md-5'>\n");
-gtexGeneUiGeneLabel(cart, track, trackDb);
+gtexGeneUiGeneLabel(cart, track, tdb);
 puts(
 "            </div>\n"
 "            <div class='gbControl col-md-7'>\n");
-gtexGeneUiGeneModel(cart, track, trackDb);
+gtexGeneUiGeneModel(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -121,12 +118,12 @@ puts(
 "        <!-- row 2 -->\n"
 "        <div class='row'>\n"
 "            <div class='gbControl col-md-5'>\n");
-gtexGeneUiLogTransform(cart, track, trackDb);
+gtexGeneUiLogTransform(cart, track, tdb);
 puts(
 "            </div>\n");
 puts(
 "            <div class='gbControl col-md-7'>\n");
-gtexGeneUiViewLimits(cart, track, trackDb);
+gtexGeneUiViewLimits(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -135,14 +132,14 @@ puts(
 "        <div class='row'>\n");
 puts(
 "            <div class='gbControl col-md-5'>\n");
-gtexGeneUiCodingFilter(cart, track, trackDb);
+gtexGeneUiCodingFilter(cart, track, tdb);
 puts(
 "            </div>\n");
 
 /* Filter on score */
 puts(
 "            <div class='gbControl col-md-7'>\n");
-printScoreFilter(cart, track);
+printScoreFilter(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -150,12 +147,13 @@ puts(
 "        <!-- end configure panel -->\n");
 }
 
-static void printTissueTable()
+static void printTissueTable(struct trackDb *tdb)
 /* Output HTML with tissue labels and colors, in 2 columns, to fit next to body map */
 {
+char *version = gtexVersion(tdb->track);
 struct gtexTissue *tis, *tissues = gtexGetTissues(version);
 char var[512];
-safef(var, sizeof var, "%s.%s", trackDb->track, GTEX_TISSUE_SELECT);
+safef(var, sizeof var, "%s.%s", tdb->track, GTEX_TISSUE_SELECT);
 struct hash *selectedHash = cartHashList(cart, var);
 struct gtexTissue **tisTable = NULL;
 int count = slCount(tissues);
@@ -224,11 +222,11 @@ puts(
 puts(
 "</table>");
 char buf[512];
-safef(buf, sizeof(buf), "%s%s.%s", cgiMultListShadowPrefix(), trackDb->track, GTEX_TISSUE_SELECT);
+safef(buf, sizeof(buf), "%s%s.%s", cgiMultListShadowPrefix(), tdb->track, GTEX_TISSUE_SELECT);
 cgiMakeHiddenVar(buf, "0");
 }
 
-static void printTrackConfig()
+static void printTrackConfig(struct trackDb *tdb)
 /* Print track configuration panels, including Body Map.
 The layout is 2-column.  Left column is body map SVG.
 Right column has a top panel for configuration settings (non-tissue),
@@ -243,14 +241,14 @@ printBodyMap();
 puts(
 "        </div>\n"
 "        <div class='col-md-6'>\n");
-printConfigPanel();
-printTissueTable();
+printConfigPanel(tdb);
+printTissueTable(tdb);
 puts(
 "        </div>\n"
 "    </div>\n");
 }
 
-static void printDataInfo()
+static void printDataInfo(char *db, struct trackDb *tdb)
 {
 puts(
 "<a name='INFO_SECTION'></a>\n"
@@ -267,11 +265,11 @@ puts(
 "    <div class='gbTrackDescriptionPanel'>\n"
 "       <div class='gbTrackDescription'>\n");
 puts("<div class='dataInfo'>");
-printUpdateTime(db, trackDb, NULL);
+printUpdateTime(db, tdb, NULL);
 puts("</div>");
 
 puts("<div class='dataInfo'>");
-makeSchemaLink(db, trackDb, "View table schema");
+makeSchemaLink(db, tdb, "View table schema");
 puts("</div>");
 
 puts(
@@ -279,7 +277,7 @@ puts(
 "   </div>\n");
 }
 
-static void printTrackDescription()
+static void printTrackDescription(struct trackDb *tdb)
 {
 puts(
 "<a name='TRACK_HTML'></a>\n"
@@ -292,13 +290,13 @@ puts(
 "    </div>\n"
 "    <div class='gbTrackDescriptionPanel'>\n"
 "       <div class='gbTrackDescription'>\n");
-puts(trackDb->html);
+puts(tdb->html);
 puts(
 "       </div>\n"
 "   </div>\n");
 }
 
-static struct trackDb *getTrackDb(char *database, char *track)
+static struct trackDb *getTrackDb(char *db, char *track)
 /* Check if this is an assembly with GTEx track and get trackDb */
 {
 struct sqlConnection *conn = sqlConnect(db);
@@ -317,18 +315,17 @@ static void doMiddle(struct cart *theCart)
 /* Send HTML with javascript to display the user interface. */
 {
 cart = theCart;
+char *db = NULL, *genome = NULL, *clade = NULL;
+getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 
 // Start web page with new-style header
 webStartGbNoBanner(cart, db, "Genome Browser GTEx Track Settings");
 puts("<link rel='stylesheet' href='../style/hgGtexTrackSettings.css'>");
 
-char *genome = NULL, *clade = NULL;
-getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 char *track = cartString(cart, "g");
-trackDb = getTrackDb(db, track);
-if (!trackDb)
+struct trackDb *tdb = getTrackDb(db, track);
+if (!tdb)
     errAbort("No GTEx track %s found in database %s\n", track, db);
-version = gtexVersion(track);
 
 // Container for bootstrap grid layout
 puts(
@@ -338,13 +335,13 @@ puts(
 printf(
 "<form action='%s' name='MAIN_FORM' method=%s>\n\n",
                 hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
-printTrackHeader();
-printTrackConfig();
+printTrackHeader(db, tdb);
+printTrackConfig(tdb);
 puts(
 "</form>");
-printDataInfo();
-if (trackDb->html)
-    printTrackDescription();
+printDataInfo(db, tdb);
+if (tdb->html)
+    printTrackDescription(tdb);
 puts(
 "</div>");
 
