@@ -29,9 +29,11 @@ var gtexTrackSettings = (function() {
     var _svgDoc;        // SVG has its own DOM
     var _svgRoot;
 
-    var _topTissue;     // Highlighted tissue is drawn last so it is on top
+    // Highlighted tissue is drawn last so it is on top
+    var _topTissueId = 'topTissue';
     var _topTissueName = null;
-    var _topAura;
+    var _topTissue;     // element
+    var _topAura;       // element
 
     var TEXT_HI = '_Text_Hi';
     var LEAD_HI = '_Lead_Hi';
@@ -48,8 +50,12 @@ var gtexTrackSettings = (function() {
     var COLOR_PINK = '#F69296';
     var COLOR_LEADER = COLOR_PINK;
 
-    var CLASS_TISSUE_SELECTED = 'tissueSelected';
-    var CLASS_TISSUE_HOVERED = 'tissueHovered';
+    var CLASS_TISSUE_SELECTED = 'gbmTissueSelected';
+    var CLASS_TISSUE_HOVERED = 'gbmTissueHovered';
+    var CLASS_TISSUE_LABEL = 'gbmTissueLabel';
+    var CLASS_TISSUE_COLOR_PATCH = 'gbmTissueColorPatch';
+    var CLASS_TISSUE_HOVERED_COLOR = 'gbmTissueHoveredColor';
+    var CLASS_TISSUE_UNSELECTED_COLOR = 'gbmTissueNotSelectedColor';
 
     // 53 tissues from GTEx, as in hgTracks.gtexTissue table
     // TODO: Consider generating this list during make, to an auxiliary .js file
@@ -109,10 +115,10 @@ var gtexTrackSettings = (function() {
         $tis.addClass(CLASS_TISSUE_SELECTED);
 
         // Change appearance of color patch in tissue list
-        var colorPatch = $tis.prev('.tissueColor');
-        var tisColor = colorPatch.data('tissueColor');
+        var colorPatch = $tis.prev('.' + CLASS_TISSUE_COLOR_PATCH);
+        var tisColor = colorPatch.data('tissueColor');  // data function prefixes 'data-' to class
         colorPatch.css('background-color', tisColor);
-        colorPatch.removeClass('tissueNotSelectedColor'); 
+        colorPatch.removeClass(CLASS_TISSUE_UNSELECTED_COLOR); 
                 // TODO: less obfuscated approach to colored border
 
         // Set hidden input checkbox, for cart
@@ -132,8 +138,8 @@ var gtexTrackSettings = (function() {
         $tis.removeClass(CLASS_TISSUE_SELECTED);
 
         // Change appearance of color patch in tissue list
-        colorPatch = $tis.prev('.tissueColor');
-        colorPatch.addClass('tissueNotSelectedColor');
+        colorPatch = $tis.prev('.' + CLASS_TISSUE_COLOR_PATCH);
+        colorPatch.addClass(CLASS_TISSUE_UNSELECTED_COLOR);
 
         // Clear hidden input checkbox
         $('#' + tis + ' > input').attr('checked', false);
@@ -178,15 +184,15 @@ var gtexTrackSettings = (function() {
             return;
         }
         $tis.toggleClass(CLASS_TISSUE_HOVERED, isHovered);
-        var $colorPatch = $tis.prev('.tissueColor');
-        $colorPatch.toggleClass('tissueHoveredColor', isHovered);
+        var $colorPatch = $tis.prev('.' + CLASS_TISSUE_COLOR_PATCH);
+        $colorPatch.toggleClass(CLASS_TISSUE_HOVERED_COLOR, isHovered);
 
         // Highlight tissue in body map by changing text appearance, visually moving organ to top
         // and adding a white (or sometimes blue if white background) surround ('aura')
 
         // Highlight tissue label in body map
         // TODO:  Try jQuery here
-        textEl = _svgDoc.getElementById(tis + TEXT_HI);
+        var textEl = _svgDoc.getElementById(tis + TEXT_HI);
         if (textEl === null) {
             return;
         }
@@ -207,7 +213,7 @@ var gtexTrackSettings = (function() {
                 textEl.children[i].style.fill = COLOR_HIGHLIGHT;
             }
             if (lineEl !== null) {     // cell types lack leader lines
-            lineEl.style.stroke = COLOR_HIGHLIGHT;
+                lineEl.style.stroke = COLOR_HIGHLIGHT;
             }
             var topAura = auraEl.cloneNode(true);
             topAura.id = 'topAura';
@@ -216,7 +222,7 @@ var gtexTrackSettings = (function() {
         
             var topTissue = picEl.cloneNode(true);
             topTissue.addEventListener('mouseleave', onMapLeaveTissue);
-            topTissue.id = 'topTissue';
+            topTissue.id = _topTissueId;
             _topTissueName = tis;
             _topTissue = _svgRoot.appendChild(topTissue);
             $(_topTissue).show();
@@ -274,7 +280,7 @@ var gtexTrackSettings = (function() {
     function onMapEnterTissue(ev) {
         // Mouseover on tissue shape or label in illustration
         var svgId = ev.currentTarget.id;
-        var tis = (svgId === 'topTissue' ? _topTissueName :  tissueFromSvgId(svgId));
+        var tis = (svgId === _topTissueId ? _topTissueName :  tissueFromSvgId(svgId));
         highlightTissue(tis);
     }
 
@@ -285,17 +291,17 @@ var gtexTrackSettings = (function() {
 
         //  Handle case where lower and upper shapes are not the same.  If leaving lower to enter upper, we are not really leaving
         if (toTarget) {
-            if (toTarget.id === 'topTissue') {
+            if (toTarget.id === _topTissueId) {
                 return;
             }
             //  Handle case where there are multiple paths for the tissue, and topTissue will be a parent
             toParent = toTarget.parentElement;
-            if (toParent && toParent.id === 'topTissue') {
+            if (toParent && toParent.id === _topTissueId) {
                 return;
             }
         }
         var svgId = ev.currentTarget.id;
-        var tis = (svgId === 'topTissue' ? _topTissueName :  tissueFromSvgId(svgId));
+        var tis = (svgId === _topTissueId ? _topTissueName :  tissueFromSvgId(svgId));
         unHighlightTissue(tis);
     }
 
@@ -317,7 +323,7 @@ var gtexTrackSettings = (function() {
         // Mark tissue labels in svg
         var textEl = _svgDoc.getElementById(tis + TEXT_HI);
         if (textEl !== null) {
-            textEl.classList.add('tissueLabel');
+            textEl.classList.add(CLASS_TISSUE_LABEL);
             if ($('#' + tis).hasClass(CLASS_TISSUE_SELECTED)) {
                 textEl.classList.add(CLASS_TISSUE_SELECTED);
                 setMapTissueElColor(textEl);

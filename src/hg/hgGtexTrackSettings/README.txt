@@ -19,7 +19,7 @@ In Adobe Illustrator:
    NOTE:  the X, Y may need some tweaking -- use crop box viz to guide
 
     ** Alternatively, if OK to retain title in .svg, one can edit viewbox in SVG.
-                  e.g. viewBox="70 45 605 730"
+                  e.g. viewBox="55 45 620 730"
         (make sure Esophageal Junction is not truncated)
 
 3. Save in SVG format (Save As, Format: SVG)
@@ -49,7 +49,7 @@ From script/editor:
 
 3. Adjust viewbox if needed
 
-70 45 600 730
+55 45 620 730
 (check aspect ratio)
         
 4. Change fonts to match Genome Browser and generally work well with page:

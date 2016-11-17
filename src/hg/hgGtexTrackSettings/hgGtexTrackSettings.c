@@ -29,23 +29,23 @@ static void printTrackHeader()
 char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
 puts(
 "<a name='TRACK_TOP'></a>\n"
-"    <div class='row gbTrackTitle'>\n"
+"    <div class='row gbTrackTitleBanner'>\n"
 "       <div class='col-md-10'>\n"
 );
 printf(
 "           <span class='gbTrackName'>\n"
 "               %s Track\n"
-"               <span class='gbAssembly'>%s</span>\n"
-"           </span>\n"
-"           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s &nbsp;&nbsp;&nbsp;\n"
+"               <span class='gbAssembly'> %s </span>\n"
+"           </span>"
+"           <span class='gbTrackTitle'> %s </span>\n"
 , trackDb->shortLabel, assembly, trackDb->longLabel);
 puts(
-"           <a href='#INFO_SECTION' title='Jump to the track description'><span class='gbFaStack fa-stack'><i class='gbGoIcon fa fa-circle fa-stack-2x'></i><i class='gbIconText fa fa-info fa-stack-1x'></i></span></a>\n"
+"           <a href='#INFO_SECTION' title='Jump to the track description'><span class='gbIconSmall fa-stack'><i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i><i class='gbWhiteColor fa fa-info fa-stack-1x'></i></span></a>\n"
 "       </div>\n"
 "       <div class='col-md-2 text-right'>\n"
-"           <div class='goButtonContainer' title='Go to the Genome Browser'>\n"
-"               <div class='gbGoButton'>GO</div>\n"
-"               <i class='gbGoIcon fa fa-play fa-2x'></i>\n"
+"           <div class='gbButtonGoContainer' title='Go to the Genome Browser'>\n"
+"               <div class='gbButtonGo'>GO</div>\n"
+"               <i class='gbBlueDarkColor fa fa-play fa-2x'></i>\n"
 "           </div>\n"
 "       </div>\n"
 "   </div>\n");
@@ -103,11 +103,11 @@ puts(
 puts(
 "        <!-- row 1 -->\n"
 "        <div class='row'>\n"
-"            <div class='configurator col-md-5'>\n");
+"            <div class='gbControl col-md-5'>\n");
 gtexGeneUiGeneLabel(cart, track, trackDb);
 puts(
 "            </div>\n"
-"            <div class='configurator col-md-7'>\n");
+"            <div class='gbControl col-md-7'>\n");
 gtexGeneUiGeneModel(cart, track, trackDb);
 puts(
 "            </div>\n"
@@ -115,12 +115,12 @@ puts(
 puts(
 "        <!-- row 2 -->\n"
 "        <div class='row'>\n"
-"            <div class='configurator col-md-5'>\n");
+"            <div class='gbControl col-md-5'>\n");
 gtexGeneUiLogTransform(cart, track, trackDb);
 puts(
 "            </div>\n");
 puts(
-"            <div class='configurator col-md-7'>\n");
+"            <div class='gbControl col-md-7'>\n");
 gtexGeneUiViewLimits(cart, track, trackDb);
 puts(
 "            </div>\n"
@@ -129,14 +129,14 @@ puts(
 "         <!-- row 3 -->\n"
 "        <div class='row'>\n");
 puts(
-"            <div class='configurator col-md-5'>\n");
+"            <div class='gbControl col-md-5'>\n");
 gtexGeneUiCodingFilter(cart, track, trackDb);
 puts(
 "            </div>\n");
 
 /* Filter on score */
 puts(
-"            <div class='configurator col-md-7'>\n");
+"            <div class='gbControl col-md-7'>\n");
 printScoreFilter(cart, track);
 puts(
 "            </div>\n"
@@ -167,14 +167,14 @@ puts(
  "      Click label below or in Body Map to set or clear a tissue\n"
  "  </div>\n"
  "  <div class='col-md-4 gbButtonContainer'>\n"
- "      <div id='setAll' class='gbButtonContainer gtButton gbWhiteButton'>set all</div>\n"
- "      <div id='clearAll' class='gbButtonContainer gtButton gbWhiteButton'>clear all</div>\n"
+ "      <div id='setAll' class='gbButtonSetClear gbButton'>set all</div>\n"
+ "      <div id='clearAll' class='gbButtonSetClear gbButton'>clear all</div>\n"
  "  </div>\n"
  "</div>\n"
 );
 
 puts(
-"<table class='tissueTable'>\n");
+"<table class='gbmTissueTable'>\n");
 puts(
 "<tr>\n");
 for (tis = tissues; tis != NULL; tis = tis->next)
@@ -191,17 +191,17 @@ for (i=0; i<count; i++)
     tis = tisTable[i];
     boolean isChecked = all || (hashLookup(selectedHash, tis->name) != NULL);
     printf(
-            "<td class='tissueColor %s' "
+            "<td class='gbmTissueColorPatch %s' "
                 "data-tissueColor=#%06X ",
-                    isChecked ? "" : "tissueNotSelectedColor", tis->color);
+                    isChecked ? "" : "gbmTissueNotSelectedColor", tis->color);
     printf(
                 "style='background-color: #%06X;"
-                    "border-style: solid; border-width: 2px;"
                     "border-color: #%06X;'></td>\n",
                     isChecked ? tis->color : 0xFFFFFF, tis->color);
     printf(
-            "<td class='tissueLabel %s' id='%s'>%s",
-                isChecked ? "tissueSelected" : "", tis->name, tis->description);
+            "<td class='gbmTissueLabel %s' id='%s'>%s",
+                isChecked ? "gbmTissueSelected" : "", tis->name, tis->description);
+    // Hidden checkbox stores value for cart
     printf(
             "<input type='checkbox' name='%s' value='%s' %s style='display: none;'>", 
                 var, tis->name, isChecked ? "checked" : "");
@@ -252,15 +252,14 @@ puts(
 "    <div class='row gbSectionBanner gbSimpleBanner'>\n"
 "        <div class='col-md-11'>Data Information</div>\n"
 "        <div class='col-md-1'>\n"
-"            <a href='#TRACK_TOP' title='Jump to top of page'>\n"
-"                <i class='gbBannerIcon gbGoIcon fa fa-lg fa-arrow-circle-up'></i>\n"
-"            </a>\n"
+// TODO: move click handler to JS
+"            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" class='gbIconWhite fa fa-lg fa-arrow-circle-up'></i>\n"
 "       </div>\n"
 "    </div>\n"
 );
 puts(
-"    <div class='trackDescriptionPanel'>\n"
-"       <div class='trackDescription'>\n");
+"    <div class='gbTrackDescriptionPanel'>\n"
+"       <div class='gbTrackDescription'>\n");
 puts("<div class='dataInfo'>");
 printUpdateTime(db, trackDb, NULL);
 puts("</div>");
@@ -281,13 +280,11 @@ puts(
 "    <div class='row gbSectionBanner gbSimpleBanner'>\n"
 "        <div class='col-md-11'>Track Description</div>\n"
 "        <div class='col-md-1'>\n"
-"            <a href='#TRACK_TOP' title='Jump to top of page'>\n"
-"                <i class='gbBannerIcon gbGoIcon fa fa-lg fa-arrow-circle-up'></i>\n"
-"            </a>\n"
+"            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" class='gbIconWhite fa fa-lg fa-arrow-circle-up'></i>\n"
 "       </div>\n"
 "    </div>\n"
-"    <div class='trackDescriptionPanel'>\n"
-"       <div class='trackDescription'>\n");
+"    <div class='gbTrackDescriptionPanel'>\n"
+"       <div class='gbTrackDescription'>\n");
 puts(trackDb->html);
 puts(
 "       </div>\n"
@@ -315,8 +312,7 @@ static void doMiddle(struct cart *theCart)
 cart = theCart;
 
 // Start web page with new-style header
-webStartJWestNoBanner(cart, db, "Genome Browser GTEx Track Settings");
-puts("<link rel='stylesheet' href='../style/bootstrap.min.css'>");
+webStartGbNoBanner(cart, db, "Genome Browser GTEx Track Settings");
 puts("<link rel='stylesheet' href='../style/hgGtexTrackSettings.css'>");
 
 char *genome = NULL, *clade = NULL;
@@ -348,7 +344,7 @@ puts(
 // Initialize illustration display and handle mouseover and clicks
 puts("<script src='../js/hgGtexTrackSettings.js'></script>");
 
-webIncludeFile("inc/jWestFooter.html");
+webIncludeFile("inc/gbFooter.html");
 webEndJWest();
 }
 
