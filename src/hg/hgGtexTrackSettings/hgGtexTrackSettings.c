@@ -322,7 +322,7 @@ getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 webStartGbNoBanner(cart, db, "Genome Browser GTEx Track Settings");
 puts("<link rel='stylesheet' href='../style/hgGtexTrackSettings.css'>");
 
-char *track = cartString(cart, "g");
+char *track = cartUsualString(cart, "g", "gtexGene");
 struct trackDb *tdb = getTrackDb(db, track);
 if (!tdb)
     errAbort("No GTEx track %s found in database %s\n", track, db);
