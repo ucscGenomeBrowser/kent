@@ -398,7 +398,7 @@ if (!printed)
 boolean isWebBrowsableFormat(char *format)
 /* Return TRUE if it's one of the web-browseable formats */
 {
-char *formats[] = {"html", "jpg", "pdf", "text", };
+char *formats[] = {"html", "jpg", "pdf", "png", "text", };
 return stringArrayIx(format, formats, ArraySize(formats)) >= 0;
 }
 

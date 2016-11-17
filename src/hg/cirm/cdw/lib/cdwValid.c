@@ -136,6 +136,15 @@ if (!fileStartsWithOneOfPair(path, "\xff\xd8\xff\xe0", "\xff\xd8\xff\xe1"))
     errAbort("%s is not a valid .jpeg file", fileNameOnly(path));
 }
 
+void cdwValidatePng(char *path)
+/* Check png file is really png */
+{
+// Signature from http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
+static unsigned char pngSig[] = {137, 80, 78, 71, 13, 10, 26, 10, 0};  
+if (!fileStartsWith(path, (char*)pngSig))
+    errAbort("%s is not a valid .png file", fileNameOnly(path));
+}
+
 void cdwValidateBamIndex(char *path)
 /* Check .bam.bai really is index. */
 {
@@ -466,6 +475,7 @@ char *format[] =
 "idat",
 "jpg",
 "pdf",
+"png",
 "rcc",
 "text",
 "vcf",
@@ -569,6 +579,7 @@ if (list == NULL)
 	"idat	An Illumina IDAT file",
 	"jpg JPEG image format",
 	"pdf Postscripts common document format",
+	"png PNG image format",
 	"rcc A Nanostring RCC file",
 	"text	Unicode 8-bit formatted text file",
 	"vcf Variant call format",
