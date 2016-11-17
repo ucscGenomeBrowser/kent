@@ -308,7 +308,7 @@ var gtexTrackSettings = (function() {
     function submitForm() {
     // Submit the form (from GO button -- as in hgGateway.js)
     // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
-    $('.gbGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
+    $('.gbIconGo').removeClass('fa-play').addClass('fa-spinner fa-spin');
     $form = $('form');
     $form.submit();
     }
@@ -382,7 +382,7 @@ var gtexTrackSettings = (function() {
                 initBodyMap();
                 animateTissues();
             }, false);
-            $('.goButtonContainer').click(submitForm);
+            $('.gbButtonGoContainer').click(submitForm);
         });
     }
 

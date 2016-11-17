@@ -140,6 +140,11 @@ span#home-link {
     font-size: 70%; /* set info icon smaller than default */
 }   
 
+/* This class is recognized by JS, which changes to spinner on form submit */
+.gbIconGo {
+    color: #003a72;
+}   
+
 /* UI controls */
 
 .gbButton {
@@ -171,6 +176,7 @@ span#home-link {
     cursor: pointer;
 }
 
+/* This class is recognized by JS, which adds click handler to submit form */
 .gbButtonGoContainer {
     display: inline-block;
     margin-top: 2px;

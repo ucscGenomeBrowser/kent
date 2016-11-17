@@ -40,12 +40,13 @@ printf(
 "           <span class='gbTrackTitle'> %s </span>\n"
 , trackDb->shortLabel, assembly, trackDb->longLabel);
 puts(
+"<!-- Info icon built from stacked fa icons -->\n"
 "           <a href='#INFO_SECTION' title='Jump to the track description'><span class='gbIconSmall fa-stack'><i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i><i class='gbWhiteColor fa fa-info fa-stack-1x'></i></span></a>\n"
 "       </div>\n"
 "       <div class='col-md-2 text-right'>\n"
 "           <div class='gbButtonGoContainer' title='Go to the Genome Browser'>\n"
 "               <div class='gbButtonGo'>GO</div>\n"
-"               <i class='gbBlueDarkColor fa fa-play fa-2x'></i>\n"
+"               <i class='gbIconGo fa fa-play fa-2x'></i>\n"
 "           </div>\n"
 "       </div>\n"
 "   </div>\n");
