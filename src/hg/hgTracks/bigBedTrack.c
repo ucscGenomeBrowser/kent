@@ -131,8 +131,6 @@ void bigBedAddLinkedFeaturesFromExt(struct track *track,
 struct lm *lm = lmInit(0);
 struct trackDb *tdb = track->tdb;
 struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
-char *bedRow[32];
-char startBuf[16], endBuf[16];
 char *scoreFilter = cartOrTdbString(cart, track->tdb, "scoreFilter", NULL);
 char *mouseOverField = cartOrTdbString(cart, track->tdb, "mouseOverField", NULL);
 int minScore = 0;
@@ -140,17 +138,22 @@ if (scoreFilter)
     minScore = atoi(scoreFilter);
 
 struct bbiFile *bbi = fetchBbiForTrack(track);
+int seqTypeField =  0;
+if (sameString(track->tdb->type, "bigPsl"))
+    {
+    seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+    }
+
 int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField);
 
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
     struct linkedFeatures *lf;
     if (sameString(track->tdb->type, "bigPsl"))
 	{
 	char *seq, *cds;
-	struct psl *psl = pslFromBigPsl(chromName, bb,  &seq, &cds); 
-	int sizeMul = 1;  // we're assuming not protein at the moment
+	struct psl *psl = pslFromBigPsl(chromName, bb, seqTypeField,  &seq, &cds); 
+	int sizeMul =  pslIsProtein(psl) ? 3 : 1;
 	boolean isXeno = 0;  // just affects grayIx
 	boolean nameGetsPos = FALSE; // we want the name to stay the name
 
@@ -163,6 +166,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	}
     else
 	{
+        char startBuf[16], endBuf[16];
+        char *bedRow[32];
+
+        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
 	struct bed *bed = bedLoadN(bedRow, fieldCount);
 	lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
 	    scoreMin, scoreMax, useItemRgb);

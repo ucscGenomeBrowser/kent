@@ -2983,6 +2983,7 @@ if (start == end)
     ivEnd++;
     }  
 
+unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
 
 char *bedRow[32];
@@ -2997,10 +2998,14 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	break;
 	}
     }
-pslList = pslFromBigPsl(seqName, bb, NULL, NULL);
+pslList = pslFromBigPsl(seqName, bb, seqTypeField, NULL, NULL);
 
 printf("<H3>%s/Genomic Alignments</H3>", item);
-printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow", tdb->table, item);
+if (pslIsProtein(pslList))
+    printAlignmentsSimple(pslList, start, "htcBigPslAli", tdb->table, item);
+else
+    printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow",
+        tdb->table, item);
 pslFreeList(&pslList);
 printItemDetailsHtml(tdb, item);
 }
@@ -7244,12 +7249,22 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 if (bb == NULL)
     errAbort("item %s not found in range %s:%d-%d in bigBed %s (%s)",
              acc, chrom, start, end, tdb->table, fileName);
-psl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
-genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
+unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+psl = pslFromBigPsl(seqName, bb, seqTypeField, &seq, &cdsString);
+if (cdsString)
+    genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
 
+if (seq == NULL)
+    {
+    printf("Sequence for %s not available.\n", psl->qName);
+    return;
+    }
 struct dnaSeq *rnaSeq = newDnaSeq(seq, strlen(seq), acc);
-showSomeAlignment(psl, rnaSeq, gftRna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+enum gfType type = gftRna;
+if (pslIsProtein(psl))
+    type = gftProt;
+showSomeAlignment(psl, rnaSeq, type, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 }
 
 void htcBigPslAliInWindow(char *acc)
@@ -7295,8 +7310,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	break;
 	}
     }
-wholePsl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
-genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
+unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+wholePsl = pslFromBigPsl(seqName, bb, seqTypeField, &seq, &cdsString);
+
+if (seq == NULL)
+    {
+    printf("Sequence for %s not available.\n", wholePsl->qName);
+    return;
+    }
+if (cdsString)
+    genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
 if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
     partPsl = wholePsl;
