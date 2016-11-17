@@ -254,6 +254,7 @@
 #include "longRange.h"
 #include "hmmstats.h"
 #include "aveStats.h"
+#include "trix.h"
 
 static char *rootDir = "hgcData";
 
@@ -24950,7 +24951,7 @@ doBedDetail(tdb, NULL, itemName);
 void doSnakeClick(struct trackDb *tdb, char *itemName)
 /* Put up page for snakes. */
 {
-genericHeader(tdb, itemName);
+struct trackDb *parentTdb = trackDbTopLevelSelfOrParent(tdb);
 char *otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
 char *hubName = cloneString(database);
 char otherDb[4096];
@@ -24958,8 +24959,20 @@ char *qName = cartOptionalString(cart, "qName");
 int qs = atoi(cartOptionalString(cart, "qs"));
 int qe = atoi(cartOptionalString(cart, "qe"));
 int qWidth = atoi(cartOptionalString(cart, "qWidth"));
+char *qTrack = cartString(cart, "g");
+if(isHubTrack(qTrack) && ! trackHubDatabase(database))
+    hubName = cloneString(qTrack);
 
-if(trackHubDatabase(database))
+struct hash *dbAliasHash = NULL;  // create later when needed
+char * dbAliasList = trackDbSetting(tdb, "dbAliasList");
+if (dbAliasList)
+    dbAliasHash = hashFromString(dbAliasList);
+
+/* current mouse strain hal file has incorrect chrom names */
+char *aliasQName = qName;
+// aliasQName = "chr1";  // temporarily make this work for the mouse hal
+
+if(trackHubDatabase(database) || isHubTrack(qTrack))
     {
     char *ptr = strchr(hubName + 4, '_');
     *ptr = 0;
@@ -24970,12 +24983,25 @@ else
     safef(otherDb, sizeof otherDb, "%s", otherSpecies);
     }
 
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK><B>Link to block in other assembly</A><BR>\n", otherDb, qName, qs, qe,hubName,trackHubSkipHubName(database));
+if (dbAliasHash)
+   {
+   char *otherDbName = trackHubSkipHubName(otherDb);
+   struct hashEl* alias = hashLookup(dbAliasHash, otherDbName);
+   if (alias)
+      safef(otherDb, sizeof otherDb, "%s", (char *)alias->val);
+   }
+
+char headerText[256];
+safef(headerText, sizeof headerText, "reference: %s, query: %s\n", trackHubSkipHubName(database), trackHubSkipHubName(otherDb) );
+genericHeader(parentTdb, headerText);
+
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, qs, qe, hubName, trackHubSkipHubName(database), aliasQName, qs, qe, trackHubSkipHubName(otherDb));
 
 int qCenter = (qs + qe) / 2;
 int newQs = qCenter - qWidth/2;
 int newQe = qCenter + qWidth/2;
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\"><B>Link to same window size in other assembly</A><BR>\n", otherDb, qName, newQs, newQe,hubName,trackHubSkipHubName(database));
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, newQs, newQe,hubName, trackHubSkipHubName(database), aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
+printTrackHtml(tdb);
 } 
 
 bool vsameWords(char *a, va_list args)
