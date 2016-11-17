@@ -26,11 +26,6 @@
     cursor: pointer;
 }
 
-.gbmTissueSelected {
-    font-weight: bold;
-    color: black;
-}
-
 .gbmTissueNotSelectedColor {
     background-color: white !important;
 }
