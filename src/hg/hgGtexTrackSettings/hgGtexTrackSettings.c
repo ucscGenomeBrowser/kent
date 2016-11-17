@@ -41,7 +41,11 @@ printf(
 , trackDb->shortLabel, assembly, trackDb->longLabel);
 puts(
 "<!-- Info icon built from stacked fa icons -->\n"
-"           <a href='#INFO_SECTION' title='Jump to the track description'><span class='gbIconSmall fa-stack'><i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i><i class='gbWhiteColor fa fa-info fa-stack-1x'></i></span></a>\n"
+"           <a href='#INFO_SECTION' title='Jump to the track description'>\n"
+"               <span class='gbIconSmall fa-stack'>\n"
+"                   <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>\n"
+"                   <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>\n"
+"               </span></a>\n"
 "       </div>\n"
 "       <div class='col-md-2 text-right'>\n"
 "           <div class='gbButtonGoContainer' title='Go to the Genome Browser'>\n"
@@ -56,7 +60,7 @@ static void printBodyMap()
 {
 puts(
 "        <!-- Body Map panel -->\n"
-"           <object id='bodyMapSvg' type='image/svg+xml' class='gbImage gtexBodyMap' data='/images/gtexBodyMap.svg'>\n"
+"           <object id='bodyMapSvg' type='image/svg+xml' data='/images/gtexBodyMap.svg'>\n"
 "               GTEx Body Map illustration not found\n"
 "           </object>\n");
 }
@@ -254,7 +258,8 @@ puts(
 "        <div class='col-md-11'>Data Information</div>\n"
 "        <div class='col-md-1'>\n"
 // TODO: move click handler to JS
-"            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" class='gbIconWhite fa fa-lg fa-arrow-circle-up'></i>\n"
+"            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" "
+"                class='gbIconWhite fa fa-lg fa-arrow-circle-up'></i>\n"
 "       </div>\n"
 "    </div>\n"
 );
@@ -281,7 +286,8 @@ puts(
 "    <div class='row gbSectionBanner gbSimpleBanner'>\n"
 "        <div class='col-md-11'>Track Description</div>\n"
 "        <div class='col-md-1'>\n"
-"            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" class='gbIconWhite fa fa-lg fa-arrow-circle-up'></i>\n"
+"            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" "
+"               class='gbIconWhite fa fa-lg fa-arrow-circle-up'></i>\n"
 "       </div>\n"
 "    </div>\n"
 "    <div class='gbTrackDescriptionPanel'>\n"
