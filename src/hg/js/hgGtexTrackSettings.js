@@ -34,6 +34,7 @@ var gtexTrackSettings = (function() {
     var _topTissueName = null;
     var _topTissue;     // element
     var _topAura;       // element
+    var _topLine;       // element
 
     var TEXT_HI = '_Text_Hi';
     var LEAD_HI = '_Lead_Hi';
@@ -219,13 +220,18 @@ var gtexTrackSettings = (function() {
             topAura.id = 'topAura';
             _topAura = _svgRoot.appendChild(topAura);
             $(_topAura).show();
-        
+
             var topTissue = picEl.cloneNode(true);
             topTissue.addEventListener('mouseleave', onMapLeaveTissue);
             topTissue.id = _topTissueId;
             _topTissueName = tis;
             _topTissue = _svgRoot.appendChild(topTissue);
             $(_topTissue).show();
+
+            var topLine = lineEl.cloneNode(true);
+            topLine.id = 'topLine';
+            _topLine = _svgRoot.appendChild(topLine);
+            $(_topLine).show();
         } else {
             var color = textEl.classList.contains(CLASS_TISSUE_SELECTED) ? 
                                 COLOR_SELECTED : COLOR_UNSELECTED;
@@ -239,6 +245,7 @@ var gtexTrackSettings = (function() {
             _svgRoot.removeChild(_topTissue);
             _topTissueName = null;
             _svgRoot.removeChild(_topAura);
+            _svgRoot.removeChild(_topLine);
         }
     }
 

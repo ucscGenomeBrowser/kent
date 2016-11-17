@@ -82,3 +82,24 @@ From script/editor:
 10. Remove empty <g>'s.. e.g. on Liver
 
 11. Trim credit. (Remove 'ILLUSTRATION') paths
+
+=== From Code review
+
+12. Correction: first CerebelHemi_Pic_Hi group -> CerebelHemiPic_Lo
+
+=== From QA
+
+13. Tissue name tweaks to match gtexTissue table, where easily changed:
+
+* Angerior cingulate cortex
+* Substantia nigra
+* Muscle - Skeletal
+* EBV-transformed lymphocytes
+* Transformed fibroblastso
+
+14. Darker outline on Skin Suprapubic Pic_Hi (to match others)
+        -> change stroke in rule .st170 to #231f20
+
+15. Make breast visible (change its style (currently st92) to opacity .7, remove display:none
+
+
