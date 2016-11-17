@@ -1488,7 +1488,6 @@ printf("</TR></TABLE>\n");
 printf("<CENTER><I>charts are based on proportion of files in each category</I></CENTER>\n");
 printf("</td></tr></table>\n");
 
-
 /* Print out high level tags table */
 static char *highLevelTags[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
@@ -1508,6 +1507,8 @@ printf("are attached to. Use browse tags menu to see all tags.");
 
 printf("<BR>\n");
 printf("<center>");
+printf("<a href=\"cdwGetFile/jointCirmBrain1/summary/index.html\"><img " 
+	"src=\"../images/cdwImages/qbg_krgSeurat.png\" width=%d height=%d> </a>\n", 800, 600);
 printf("</center>");
 }
 
