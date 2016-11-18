@@ -31,6 +31,7 @@ void bigPslToPsl(char *bigPslName, char *outputName)
 /* bigPslToPsl - convert bigPsl file to psle. */
 {
 struct bbiFile *bbi = bigBedFileOpen(bigPslName);
+int seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
 struct lm *lm = lmInit(0);
 FILE *f = mustOpen(outputName, "w");
 struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
@@ -45,7 +46,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     
     for(; bbList; bbList = bbList->next)
         {
-        struct psl *psl, *pslList = pslFromBigPsl(chromName, bbList, NULL, NULL);
+        struct psl *psl, *pslList = pslFromBigPsl(chromName, bbList, seqTypeField, NULL, NULL);
 
         for(psl=pslList; psl; psl = psl->next)
             {

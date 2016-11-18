@@ -398,7 +398,7 @@ if (!printed)
 boolean isWebBrowsableFormat(char *format)
 /* Return TRUE if it's one of the web-browseable formats */
 {
-char *formats[] = {"html", "jpg", "pdf", "text", };
+char *formats[] = {"html", "jpg", "pdf", "png", "text", };
 return stringArrayIx(format, formats, ArraySize(formats)) >= 0;
 }
 
@@ -1488,7 +1488,6 @@ printf("</TR></TABLE>\n");
 printf("<CENTER><I>charts are based on proportion of files in each category</I></CENTER>\n");
 printf("</td></tr></table>\n");
 
-
 /* Print out high level tags table */
 static char *highLevelTags[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
@@ -1506,9 +1505,11 @@ webSortableFieldedTable(cart, table, returnUrl, "cdwHome", 0, NULL, NULL);
 printf("This table is a summary of important metadata tags and number of files they ");
 printf("are attached to. Use browse tags menu to see all tags.");
 
-printf("<BR>\n");
-printf("<center>");
-printf("</center>");
+printf("<BR>\n\n\n\n\n\n");
+printf("<TABLE><TR>");
+printf("<a href=\"cdwGetFile/jointCirmBrain1/summary/index.html\"><img " 
+	"src=\"../images/cdwImages/qbg_krgSeurat.png\" width=%d height=%d border=5 style=\"border-width:medium\" > </a>\n", 800, 600);
+printf("</TR></TABLE>");
 }
 
 void doBrowseTags(struct sqlConnection *conn)

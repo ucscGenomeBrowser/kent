@@ -339,8 +339,8 @@
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam, bigBed, bigWig or
-    vcfTabix.  Note that bam and vcfTabix types require a separate
+    the supported remote data file formats: bam/cram, bigBed, bigWig or
+    vcfTabix.  Note that bam/cram and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively).</P>
     <P><B>Example:</B></P>
@@ -2374,14 +2374,16 @@
 
 <!-- - - - - - - - BAM settings - - - - - - - -->
 <DIV class="bam_intro">
-<H3>bam: Compressed Sequence Alignment/Map tracks</H3>
-    <P>The bam format is an
+<H3>bam/cram: Compressed Sequence Alignment/Map tracks</H3>
+    <P>The bam/cram format is an
     indexed compressed data format for sequence alignments.  It is ideal
     for remote access of high-throughput sequence tags and is a native
     output format for some high-throughput sequencing (HTS) aligners.
     The format of bam data is data-file pairs, with an index in a separate file.
+    CRAM files are compressed versions of BAM files where the reference sequence is not included.
+    CRAM files should be listed as "type bam" in trackDb.
     These are frequently remote datasets, not residing on the UCSC server.  Please refer to
-    the <A HREF="../bam.html">BAM track format page</A>
+    the <A HREF="../bam.html">BAM track format page</A> or <A HREF="../cram.html">CRAM track format page</A> 
     and the <A HREF="http://samtools.sourceforge.net/" TARGET=_blank>SAMtools website</A>
     for information on how to create and deploy these remote data files
     for inclusion in the Genome Browser.</P>

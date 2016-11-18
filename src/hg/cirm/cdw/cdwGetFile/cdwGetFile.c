@@ -100,6 +100,8 @@ else if (sameWord(format, "jpg"))
     printf("Content-Type: image/jpeg\n");
 else if (sameWord(format, "pdf"))
     printf("Content-Type: application/pdf\n");
+else if (sameWord(format, "png"))
+    printf("Content-Type: image/png\n");
 else if (sameWord(format, "json"))
     printf("Content-Type: application/json\n");
 else if (sameWord(format, "text"))

@@ -724,6 +724,11 @@ if (vf->format)	// We only can validate if we have something for format
 	cdwValidateJpg(path);
 	suffix = ".jpg";
 	}
+    else if (sameString(format, "png"))
+        {
+	cdwValidatePng(path);
+	suffix = ".png";
+	}
     else if (sameString(format, "expression_matrix"))
 	{
 	makeValidText(conn, path, ef, vf); 

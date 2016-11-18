@@ -29,5 +29,6 @@ table bigPsl
     uint misMatch; " Number of bases that don't match "
     uint repMatch; " Number of bases that match but are part of repeats "
     uint nCount;   " Number of 'N' bases "
+    uint seqType;    "0=empty, 1=nucleotide, 2=amino_acid"
     )
 
