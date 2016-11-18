@@ -35,6 +35,7 @@
 #include "tagStorm.h"
 #include "cdwLib.h"
 #include "trashDir.h"
+#include "wikiLink.h"
 
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
@@ -2194,9 +2195,9 @@ if (metaCgi != NULL)
 return tagsList;
 }
 
-static int matchCount = 0;
-static boolean doSelect = FALSE;
-static boolean first = TRUE; 
+static int gMatchCount = 0;
+static boolean gDoSelect = FALSE;
+static boolean gFirst = TRUE; 
 
 static void rMatchesToRa(struct tagStorm *tags, struct tagStanza *list, 
     struct rqlStatement *rql, struct lm *lm)
@@ -2205,7 +2206,7 @@ static void rMatchesToRa(struct tagStorm *tags, struct tagStanza *list,
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
-    if (rql->limit < 0 || rql->limit > matchCount)
+    if (rql->limit < 0 || rql->limit > gMatchCount)
 	{
 	if (stanza->children)
 	    rMatchesToRa(tags, stanza->children, rql, lm);
@@ -2213,8 +2214,8 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	    {
 	    if (cdwRqlStatementMatch(rql, stanza, lm))
 		{
-		++matchCount;
-		if (doSelect)
+		++gMatchCount;
+		if (gDoSelect)
 		    {
 		    struct slName *field;
 		    for (field = rql->fieldList; field != NULL; field = field->next)
@@ -2239,7 +2240,7 @@ static void rMatchesToTsv(struct tagStorm *tags, struct tagStanza *list,
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
-    if (rql->limit < 0 || rql->limit > matchCount)  // We are inside the acceptable limit
+    if (rql->limit < 0 || rql->limit > gMatchCount)  // We are inside the acceptable limit
 	{
 	if (stanza->children) // Recurse till we have just leaves. 
 	    rMatchesToTsv(tags, stanza->children, rql, lm);
@@ -2247,13 +2248,13 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	    {
 	    if (cdwRqlStatementMatch(rql, stanza, lm))
 		{
-		++matchCount;
-		if (doSelect)
+		++gMatchCount;
+		if (gDoSelect)
 		    {
 		    struct slName *field;
-		    if (first)// For the first stanza print out a header line. 
+		    if (gFirst)// For the first stanza print out a header line. 
 			{
-			first = FALSE;
+			gFirst = FALSE;
 			printf("#"); 
 			for (field = rql->fieldList; field != NULL; field = field->next)
 			    {
@@ -2266,7 +2267,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 			    if (val != NULL)
 				printf("%s\t",  val);
 			    else 
-				printf("null\t"); 
+				printf("n/a\t"); 
 			    }
 			}
 		    else
@@ -2277,7 +2278,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 			    if (val != NULL)
 				printf("%s\t", val);
 			    else 
-				printf("null\t"); 
+				printf("n/a\t"); 
 			    }
 			}
 		    printf("\n");
@@ -2304,8 +2305,8 @@ slSort(&allFieldList, slNameCmpCase);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
 /* Traverse tag tree outputting when rql statement matches in select case, just
  * updateing count in count case. */
-doSelect = sameWord(rql->command, "select");
-if (doSelect)
+gDoSelect = sameWord(rql->command, "select");
+if (gDoSelect)
     rql->limit = limit;
 struct lm *lm = lmInit(0);
 if (!strcmp(format, "ra"))
@@ -2313,5 +2314,60 @@ if (!strcmp(format, "ra"))
 if (!strcmp(format, "tsv"))
     rMatchesToTsv(tags, tags->forest, rql, lm); 
 if (sameWord(rql->command, "count"))
-    printf("%d\n", matchCount);
+    printf("%d\n", gMatchCount);
 }
+
+static struct dyString *getLoginBits(struct cart *cart)
+/* Get a little HTML fragment that has login/logout bit of menu */
+{
+/* Construct URL to return back to this page */
+char *command = cartUsualString(cart, "cdwCommand", "home");
+char *sidString = cartSidUrlString(cart);
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "http%s://%s/cgi-bin/cdwWebBrowse?cdwCommand=%s&%s",
+    cgiAppendSForHttps(), cgiServerNamePort(), command, sidString );
+char *encodedReturn = cgiEncode(returnUrl);
+
+/* Write a little html into loginBits */
+struct dyString *loginBits = dyStringNew(0);
+dyStringAppend(loginBits, "<li id=\"query\"><a href=\"");
+char *userName = wikiLinkUserName();
+if (userName == NULL)
+    {
+    dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s&%s",
+	    encodedReturn, sidString);
+    dyStringPrintf(loginBits, "\">Login</a></li>");
+    }
+else
+    {
+    dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s&%s",
+	    encodedReturn, sidString);
+    dyStringPrintf(loginBits, "\">Logout %s</a></li>", userName);
+    }
+
+/* Clean up and go home */
+freez(&encodedReturn);
+return loginBits;
+}
+
+char *cdwLocalMenuBar(struct cart *cart, boolean makeAbsolute)
+/* Return menu bar string. Optionally make links in menubar to point to absolute URLs, not relative. */
+{
+struct dyString *loginBits = getLoginBits(cart);
+
+// menu bar html is in a stringified .h file
+struct dyString *dy = dyStringNew(4*1024);
+dyStringPrintf(dy, 
+#include "cdwNavBar.h"
+       , loginBits->string);
+
+
+char *menubarStr = menuBarAddUiVars(dy->string, "/cgi-bin/cdw", cartSidUrlString(cart));
+if (!makeAbsolute)
+    return menubarStr;
+
+char *menubarStr2 = replaceChars(menubarStr, "../", "/");
+freez(&menubarStr);
+return menubarStr2;
+}
+

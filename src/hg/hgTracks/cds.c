@@ -716,7 +716,10 @@ else
      */
     struct genbankCds cds;
     if (startsWith("bigPsl", tg->tdb->type))
-	genbankCdsParse(lf->cds, &cds);
+        {
+        if (lf->cds)
+            genbankCdsParse(lf->cds, &cds);
+        }
     else
 	getPslCds(psl, tg, &cds);
 

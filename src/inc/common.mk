@@ -214,7 +214,7 @@ else
   endif
 endif
 
-L+=${PNGLIB}
+L+=${PNGLIB} -lz -lm
 HG_INC+=${PNGINCL}
 
 # pass through COREDUMP

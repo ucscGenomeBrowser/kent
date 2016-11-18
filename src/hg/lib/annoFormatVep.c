@@ -62,6 +62,15 @@ struct annoFormatVepConfig
     struct annoFormatVepExtraSource *extraSources;	// Everything else that may be tacked on
     };
 
+enum afVariantDataType
+    // What type of primary data (variants) are we integrating with?
+    {
+    afvdtInvalid,                       // uninitialized/unknown
+    afvdtVcf,                           // primary data source is VCF
+    afvdtPgSnpTable,                    // primary data source is pgSnp table with bin in .as
+    afvdtPgSnpFile                      // primary data source is pgSnp file, no bin
+    };
+
 struct annoFormatVep
 // Subclass of annoFormatter that writes VEP-equivalent output to a file.
     {
@@ -79,7 +88,7 @@ struct annoFormatVep
     int exonCountIx;			// Index of exonCount from (big)genePred
     int snpNameIx;			// Index of name column from dbSNP source, or -1
     boolean needHeader;			// TRUE if we should print out the header
-    boolean primaryIsVcf;		// TRUE if primary rows are VCF
+    enum afVariantDataType variantType; // Are variants VCF or a flavor of pgSnp?
     boolean doHtml;			// TRUE if we should include html tags & make a <table>.
     };
 
@@ -297,7 +306,7 @@ static char *afVepGetAlleles(struct annoFormatVep *self, struct annoRow *varRow)
 {
 char **varWords = (char **)(varRow->data);
 char *alleles = NULL;
-if (self->primaryIsVcf)
+if (self->variantType == afvdtVcf)
     alleles = lmCloneString(self->lm, vcfGetSlashSepAllelesFromWords(varWords, self->dyScratch));
 else if (self->varAllelesIx >= 0)
     alleles = lmCloneString(self->lm, varWords[self->varAllelesIx]);
@@ -1292,10 +1301,12 @@ char refAllele[refAlBufSize];
 annoAssemblyGetSeq(self->assembly, varRow->chrom, varRow->start, varRow->end,
 		   refAllele, sizeof(refAllele));
 struct variant *variant = NULL;
-if (self->primaryIsVcf)
+if (self->variantType == afvdtVcf)
     variant = variantFromVcfAnnoRow(varRow, refAllele, self->lm, self->dyScratch);
-else
-    variant = variantFromPgSnpAnnoRow(varRow, refAllele, self->lm);
+else if (self->variantType == afvdtPgSnpTable)
+    variant = variantFromPgSnpAnnoRow(varRow, refAllele, TRUE, self->lm);
+else if (self->variantType == afvdtPgSnpFile)
+    variant = variantFromPgSnpAnnoRow(varRow, refAllele, FALSE, self->lm);
 return firstAltAllele(variant->alleles);
 }
 
@@ -1372,18 +1383,22 @@ struct asColumn *varAsColumns = config->variantSource->asObj->columnList;
 self->varNameIx = -1;
 self->varAllelesIx = -1;
 if (asObjectsMatch(config->variantSource->asObj, pgSnpAsObj()))
-    {
-    // pgSnp's "name" column actually contains slash-separated alleles
-    self->varAllelesIx = asColumnFindIx(varAsColumns, "name");
-    }
+    self->variantType = afvdtPgSnpTable;
+else if (asObjectsMatch(config->variantSource->asObj, pgSnpFileAsObj()))
+    self->variantType = afvdtPgSnpFile;
 else if (asObjectsMatch(config->variantSource->asObj, vcfAsObj()))
     {
-    self->primaryIsVcf = TRUE;
+    self->variantType = afvdtVcf;
     self->varNameIx = asColumnFindIx(varAsColumns, "id");
     }
 else
     errAbort("afVepSetConfig: variant source %s doesn't look like pgSnp or VCF",
 	     config->variantSource->name);
+if (self->variantType == afvdtPgSnpTable || self->variantType == afvdtPgSnpFile)
+    {
+    // pgSnp's "name" column actually contains slash-separated alleles
+    self->varAllelesIx = asColumnFindIx(varAsColumns, "name");
+    }
 if (config->gpVarSource == NULL)
     errAbort("afVepSetConfig: config must have a gpVarSource");
 else if (! asColumnNamesMatchFirstN(config->gpVarSource->asObj, genePredAsObj(), 10) &&

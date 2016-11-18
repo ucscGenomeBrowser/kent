@@ -881,8 +881,10 @@ if (varStart < pred->txEnd && varEnd > pred->txStart)
 	int vieEnd = (2 * txc.endExonIx) + (txc.endInExon ? 0 : 1);
 	if (vieEnd < vieStart)
 	    {
-	    // Insertion at exon boundary (or bug)
-	    if (vieEnd != vieStart-1 || varStart != varEnd || txc.startInExon == txc.endInExon)
+	    // vieEnd == vieStart-1 ==> insertion at exon/intron boundary
+            // vieEnd == vieStart-2 ==> insertion at exon-exon boundary (i.e. ref has deletion!)
+	    if ((vieEnd != vieStart-1 && vieEnd != vieStart-2) ||
+                varStart != varEnd)
 		errAbort("gpFxCheckTranscript: expecting insertion in pred=%s "
 			 "but varStart=%d, varEnd=%d, vieStart=%d, vieEnd=%d, "
 			 "starts in %son, ends in %son",

@@ -4,7 +4,7 @@
 # information, cell type assignment charts and cell clustering")
 
 import logging, sys, optparse, gzip, marshal, json, urllib2, re, tempfile, os, math
-import string, unicodedata
+import string, unicodedata, itertools
 from collections import defaultdict, Counter, namedtuple
 from os.path import join, basename, dirname, isfile, isdir, getsize
 
@@ -32,7 +32,7 @@ seuratHeight = 800
 summaryTags = [
 ('title', 'title', 'Title'),
 ('GEO_Series_overall_design', 'design', 'Design'),
-('GEO_Series_summary', 'summary', 'Dataset summary'),
+('GEO_Series_summary', 'summary', 'Description'),
 ('species', 'species', 'Species'),
 ('organ', 'organs', 'Organ'),
 ('submission_date', 'submission_date', 'Submission Date'),
@@ -48,7 +48,7 @@ summaryTags = [
 # and in the cell summary page and on the PCA points
 # format is the same as above: external name, internal name, description
 cellInfoTags = [
-("GEO_Sample_age", "sampleAge", "Age"),
+("biosample_source_age_value", "sampleAge", "Age"),
 ("body_part", "body_part", "Body Part"),
 ("GEO_Sample_experiment_sample_name", "sampleName", "Sample Name"),
 ("cell_type", "cell_type", "Cell Type"),
@@ -65,36 +65,52 @@ metaFieldsOnlyOne = ['title', 'summary', "submission_date"]
 # can be changed with a command line option
 defaultSeuratAttribute = "tsneCluster"
 
+CIRMPATH = "/hive/groups/cirm"
+
+def getCirmStaticFile(relPath):
+    """ make relPath relative to CIRM static data directory.
+    The base path can be set with the 'CIRM' environment variable.
+    """
+    return join(os.getenv("CIRM", CIRMPATH), relPath)
+
 # === command line interface, options and help ===
+def errAbort(msg):
+    print "Fatal Error: "+msg
+    sys.exit(1)
+
 def parseCmdLine():
     parser = optparse.OptionParser(
-    """usage: %prog [options] mysqlDatasetId matrixFname metaFname outDir - create html/js files 
-    that describes a CDW dataset. Includes basic summary information, cell type assignment 
+    """usage: %prog [options] mysqlDatasetId matrixFname metaFname outDir - create html/js files
+    that describes a CDW dataset. Includes basic summary information, cell type assignment
     charts and cell clustering
-    
+
+    matrixFname can be 'none' if no RNA-data is available.
+
     mysqlDatasetId it not necessary, can be any value.
 
     If Seurat is not installed on your machine, install it like this:
-    Rscript -e 'install.packages("devtools", repos="http://cran.rstudio.com/"); 
-    library(devtools); source("http://bioconductor.org/biocLite.R"); 
+    Rscript -e 'install.packages("devtools", repos="http://cran.rstudio.com/");
+    library(devtools); source("http://bioconductor.org/biocLite.R");
     install_github("satijalab/seurat")'
 
     """)
 
-    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
-    parser.add_option("-m", "--markerFile", dest="markerFile", action="store", help="a file that defines marker genes for cell types, format: symbol,gene,cellType, default %default, the mouse version is /hive/groups/cirm/annotation/markers/darmanis2015/top500/mouseMarkers.tab", default=os.getenv("CIRM")+"/annotation/ensToHugo/barres.tab")
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("-m", "--markerFile", dest="markerFile", action="store", help="a file that defines marker genes for cell types, format: symbol,gene,cellType, default %default, the mouse version is /hive/groups/cirm/annotation/markers/darmanis2015/top500/mouseMarkers.tab", default=getCirmStaticFile("annotation/ensToHugo/barres.tab"))
     parser.add_option("", "--symbols", dest="useSyms", action="store_true", help="set this option if the rows in the input matrix file are symbols, not ENSGxxxx gene identifiers. This will read only symbols from the file specified with the -m option")
     parser.add_option("-o", "--offline", dest="offline", action="store_true", help="copy all required style and js files into the output directory")
     parser.add_option("-f", "--force", dest="force", action="store_true", help="do not use the results cache (e.g. summary.tmp) but recreate all input data")
     parser.add_option("-j", "--cellTreeJson", dest="cellTreeJson", action="store", help="a file with the D3-JSON-encoded cell clustering results, default %default", default=None)
     parser.add_option("-c", "--meta", dest="meta", action="store", help="name of the meta table column where the filename is stored. This field is used to link the meta table and RNA-seq output together. Default value:'%default'", default="meta")
-    parser.add_option("-s", "--symTable", dest="symTable", action="store", help="use a table (transcriptId, geneId, symbol) to convert incoming gene identifiers to symbols, default %default, a version for mouse is /hive/groups/cirm/annotation/ensToHugo/genes.mm10", default=os.getenv("CIRM")+"annotation/ensToHugo/genes.hg38") 
+    parser.add_option("-s", "--symTable", dest="symTable", action="store", help="use a table (transcriptId, geneId, symbol) to convert incoming gene identifiers to symbols, default %default, a version for mouse is /hive/groups/cirm/annotation/ensToHugo/genes.mm10", default=getCirmStaticFile("annotation/ensToHugo/genes.hg38"))
     parser.add_option("-a", "--showAllTags", dest="showAllTags", action="store_true", help="show all tags on mouse over, not just our favorite ones (cellInfoTags)")
     parser.add_option("", "--tagLabels", dest="tagLabels", action="store", help="short labels of tags, tab-sep file with two fields, tag name and label for it")
     parser.add_option("", "--seuratAllGenes", dest="seuratAllGenes", action="store_true", help="by default, Seurat is only run on genes that have a symbol. This parameter runs Seurat on all genes.")
     parser.add_option("", "--colors", dest="colors", action="store", help="json file with a nested dict. first key is meta attribute name, second key is a value of the attribute and the html name/hexcode of the color. Example: {'tissue':{'blood':'red'}}")
     parser.add_option("", "--colorBy", dest="colorBy", action="store", help="attribute to color the seurat plot on by default, default is %default", default=defaultSeuratAttribute)
     parser.add_option("-S", "--onlySeurat", dest="onlySeurat", action="store_true", help="create only the seurat plot")
+    parser.add_option("", "--annoDir", dest="annovarDir", action="store", help="name of directory with annovar output files of VCFs")
+
     (options, args) = parser.parse_args()
     if args==[]:
         parser.print_help()
@@ -120,7 +136,7 @@ def makeTmpDirFor(outDir):
     return tmpDir
 
 def lineFileNextRow(inFile):
-    """ 
+    """
     parses tab-sep file with headers in first line
     yields collection.namedtuples
     strips "#"-prefix from header line
@@ -140,6 +156,15 @@ def lineFileNextRow(inFile):
     headers = [re.sub("[^a-zA-Z0-9_]","_", h) for h in headers]
     headers = [x if x!="" else "rowName" for x in headers]
 
+    filtHeads = []
+    for h in headers:
+        if h[0].isdigit():
+            filtHeads.append("x"+h)
+        else:
+            filtHeads.append(h)
+    headers = filtHeads
+
+
     Record = namedtuple('tsvRec', headers)
     for line in fh:
         if line.startswith("#"):
@@ -148,7 +173,7 @@ def lineFileNextRow(inFile):
         # map special chars in meta data to most similar ASCII equivalent
         line = unicodedata.normalize('NFKD', line).encode('ascii','ignore')
         line = line.rstrip("\n")
-        fields = line.split("\t")
+        fields = string.split(line, "\t", maxsplit=len(headers)-1)
         try:
             rec = Record(*fields)
         except Exception, msg:
@@ -157,7 +182,7 @@ def lineFileNextRow(inFile):
             logging.error("Line was: %s" % line)
             logging.error("Does number of fields match headers?")
             logging.error("Headers are: %s" % headers)
-            raise Exception("wrong field count in line %s" % line)
+            raise Exception("header count: %d != field count: %d wrong field count in line %s" % (len(headers), len(fields), line))
         yield rec
 
 def readGeneToSym(fname):
@@ -174,7 +199,7 @@ def readGeneToSym(fname):
         for row in lineFileNextRow(fname):
             d[row.geneId.split(".")[0]]=row.symbol
     return d
-        
+
 def dictToStr(d):
     """ parse a nested D3 dict and return as a comma-sep string of names """
     if d["name"]!= " ":
@@ -194,8 +219,6 @@ def jsonTreeToList(fname):
 def writeHeader(ofh, title):
     " write html header part and body tag "
 #<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-#<link rel='STYLESHEET' href='../../style/jquery-ui.css' TYPE='text/css' />
-#<link rel='STYLESHEET' href='../../style/nice_menu.css' TYPE='text/css' />
 #<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.css" >
 #<script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.js"></script>
 #<script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.js"></script>
@@ -205,12 +228,15 @@ def writeHeader(ofh, title):
 <html>
 <head>
 <meta charset="utf-8">
-<link rel='STYLESHEET' href='../../style/HGStyle.css' TYPE='text/css' />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel='STYLESHEET' href='/style/nice_menu.css' TYPE='text/css' />
+<link rel='STYLESHEET' href='/style/HGStyle.css' TYPE='text/css' />
+<link rel='STYLESHEET' href='/style/jquery-ui.css' TYPE='text/css' />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="/js/jquery.plugins.js"></script>
 """)
     newNvd=False
     if newNvd:
@@ -235,8 +261,10 @@ def writeHeader(ofh, title):
 
 <body>
 
+<!--menuBar-->
+
 <style>
-body {
+#mainContent {
    margin-left: 20px;  
    color : #000;
    }
@@ -258,6 +286,8 @@ body {
     padding: 5px;
    }
 </style>
+
+<div id="mainContent">
 
     """ % title)
     # <script type='text/javascript' SRC='../../js/jquery.js'></script>
@@ -571,12 +601,12 @@ def extractRelevantTags(rowDict):
     infoDict = {}
     rowDict = dict(rowDict)
 
-    if options.showAllTags:
-        return rowDict
+    #if options.showAllTags:
+    return rowDict
 
-    for extTag, intTag, desc in cellInfoTags:
-        infoDict[intTag] = rowDict.get(extTag, "")
-    return infoDict
+    #for extTag, intTag, desc in cellInfoTags:
+        #infoDict[intTag] = rowDict.get(extTag, "")
+    #return infoDict
     
 def addMetaInfo(metaTabFname, sumData):
     """
@@ -686,6 +716,9 @@ def getCommonCellIds(matrixCellIds, metaCellIds):
     """ return cellIds that are common between the matrix and the meta info and inform the user about this important difference.
     Abort if there is no overlap between meta and matrix. 
     """
+    if len(matrixCellIds)==0:
+        return []
+
     matrixCellIds = set(matrixCellIds)
     metaCellIds = set(metaCellIds)
 
@@ -714,7 +747,10 @@ def writeCacheFile(datasetId, exprMatrix, metaTabFname, addMetaTabFname, geneToT
     when we want to change only a little html tag during development
     """
     sumData = {}
-    sumData["cellCount"] = len(exprMatrix)
+    if exprMatrix is not None:
+        sumData["cellCount"] = len(exprMatrix)
+    else:
+        sumData["cellCount"] = 0
     sumData["datasetId"] = datasetId
 
     # get cdw dataset mysql table info
@@ -722,9 +758,10 @@ def writeCacheFile(datasetId, exprMatrix, metaTabFname, addMetaTabFname, geneToT
     sumData = addMetaInfo(metaTabFname, sumData)
     sumData = addAnalysisInfo(addMetaTabFname, sumData)
 
-    sumData["cellIds"] = getCommonCellIds(exprMatrix.keys(), sumData["cellInfo"].keys())
+    if exprMatrix is not None:
+        sumData["cellIds"] = getCommonCellIds(exprMatrix.keys(), sumData["cellInfo"].keys())
 
-    sumData = addMarkerGenes(geneToTypes, exprMatrix, sumData)
+        sumData = addMarkerGenes(geneToTypes, exprMatrix, sumData)
 
     if "pmid" in sumData:
         sumData = addPubmedInfo(sumData["pmid"], sumData, outDir)
@@ -741,9 +778,9 @@ def writeSummarySection(summData, htmlFh):
     if "submission_date" in summData:
         htmlFh.write("""<b>UCSC Dataset ID:</b> <A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%(datasetId)s\">%(datasetId)s</A>&nbsp; &nbsp; <b>submitted:</b> %(submission_date)s &nbsp;<br>
     """ % summData)
-
-    htmlFh.write("<b>Sample count:</b> %d<br>" % summData["cellCount"])
-    #<b>Number of cells:</b> %(cellCount)s<br>
+    sampleCount = summData["cellCount"]
+    if sampleCount!=0:
+        htmlFh.write("<b>Sample count:</b> %d<br>" % sampleCount)
 
     skipTags = ['submission_date', 'title']
 
@@ -994,7 +1031,7 @@ function doHl() {
     return cellIds, exprMatrix
 
 def prepCellRows(toolFields, toolRows, cellInfo):
-    """ convert the tool meta info rows and annots to cell info dicts """
+    """ merge the cell info and tool meta info dicts to a normal table, calculate a few QC-measures """
 
     outRows = []
     for row in toolRows:
@@ -1011,23 +1048,28 @@ def prepCellRows(toolFields, toolRows, cellInfo):
         for infoTag, infoVal in cellInfo[cellId].iteritems():
             rowDict[infoTag] = infoVal
 
-        mapShare = 100*float(rowDict["kallistoAlnReads"])/float(rowDict["kallistoProcReads"])
-        #numStr = "%dk" % (int(round(float(rowDict["kallistoProcReads"])/1000)))
-        #rowDict["alnShare"] = "%d %% of %s" % (mapShare, numStr)
-        rowDict["alnShare"] = "%d %%" % (mapShare)
-        #rowDict["readTotal"] = "%d %%" % (mapShare)
-        rowDict["kallistoEstFragLen"] = str(int(float(rowDict["kallistoEstFragLen"])))
-
-        for tag in ["kallistoAlnReads", "kallistoProcReads"]:
-            numStr = "%d" % (int(round(float(rowDict[tag])/1000)))
-            rowDict[tag] = numStr
+        if "kallistoAlnReads" in rowDict:
+            mapShare = 100*float(rowDict["kallistoAlnReads"])/float(rowDict["kallistoProcReads"])
+            #numStr = "%dk" % (int(round(float(rowDict["kallistoProcReads"])/1000)))
+            #rowDict["alnShare"] = "%d %% of %s" % (mapShare, numStr)
+            rowDict["alnShare"] = "%d %%" % (mapShare)
+            #rowDict["readTotal"] = "%d %%" % (mapShare)
+            rowDict["kallistoEstFragLen"] = str(int(float(rowDict["kallistoEstFragLen"])))
+            for tag in ["kallistoAlnReads", "kallistoProcReads"]:
+                numStr = "%d" % (int(round(float(rowDict[tag])/1000)))
+                rowDict[tag] = numStr
+        else:
+            rowDict["alnShare"] = "NA"
+            rowDict["kallistoEstFragLen"] = "NA"
+            for tag in ["kallistoAlnReads", "kallistoProcReads"]:
+                rowDict[tag] = "NA"
 
         outRows.append(rowDict)
     return outRows
 
 def writeCellPage(outDir, sumData):
     """
-    write a separate page with information about the sequencing info 
+    write a separate page with information about the sequencing info
     for each cell
     """
     toolInfo = sumData.get("toolMeta", [])
@@ -1042,21 +1084,21 @@ def writeCellPage(outDir, sumData):
     writeHeader(ofh, "Single Cell Details")
     ofh.write("<p><h2>Single Cell Details</h2>\n")
 
-    fieldDescs = [
-    ("life_stage" , "Life stage"),
-    ("sampleAge" , "Age"),
-    ("body_part" , "Body Part") ,
-    ("sampleName" , "Cell ID"),
-    ("cellId" , "SRA<br>Run ID"),
-    ("chipId", "Fluidigm<br>Chip ID"),
-    ("sequencer" , "Sequencer"),
+    #fieldDescs = [
+    #("life_stage" , "Life stage"),
+    #("sampleAge" , "Age"),
+    #("body_part" , "Body Part") ,
+    #("sampleName" , "Cell ID"),
+    #("cellId" , "SRA<br>Run ID"),
+    #("chipId", "Fluidigm<br>Chip ID"),
+    #("sequencer" , "Sequencer"),
     #("kallistoProcReads" , "Sequenced<br>Reads"),
     #("kallistoAlnReads" , "Aligned<br>Reads"),
-    ("kallistoProcReads" , "Total K<br>Reads"),
-    ("alnShare" , "Alignable<br>Reads"),
-    ("kallistoEstFragLen" , "Est. Frag.<br>Length"),
-    ("cell_type" , "Submitted Cell<br>Type")
-    ]
+    #("kallistoProcReads" , "Total K<br>Reads"),
+    #("alnShare" , "Alignable<br>Reads"),
+    #("kallistoEstFragLen" , "Est. Frag.<br>Length"),
+    #("cell_type" , "Submitted Cell<br>Type")
+    #]
 
     ofh.write("""
 <style>
@@ -1084,9 +1126,9 @@ def writeCellPage(outDir, sumData):
 <tr>
     """)
 
-    for fieldName, fieldDesc in fieldDescs:
-        ofh.write('<th>%s</th>\n' % \
-            fieldDesc)
+    #for fieldName, fieldDesc in fieldDescs:
+        #ofh.write('<th>%s</th>\n' % \
+            #fieldDesc)
 
     ofh.write("</tr></thead>\n")
     ofh.write("<tbody>\n")
@@ -1095,7 +1137,7 @@ def writeCellPage(outDir, sumData):
 
     for rowDict in outRows:
         ofh.write("<tr>\n  ")
-        for fieldName, fieldDesc in fieldDescs:
+        for fieldName in rowDict:
             val = rowDict[fieldName]
             if fieldName=="sequencer":
                 val = val.replace("Illumina ", "")
@@ -1763,7 +1805,7 @@ def writeSeuratGenes(htmlFh, geneToSym, clusterGenesPath, minPower, minAuc, outD
     htmlFh.write("<h2>Seurat cluster-specific genes with power &gt; %.2f and AUC &gt; %.2f </h2>\n" % (minPower, minAuc))
 
     clusterToGenes = parseSeuratGenes(clusterGenesPath)
-    geneAnnots = parseAnnots([os.getenv("CIRM")+"/annotation/panther.tab",os.getenv("CIRM")+"annotation/markers/pollen/all.tab"])
+    geneAnnots = parseAnnots([getCirmStaticFile("annotation/panther.tab"),getCirmStaticFile("annotation/markers/pollen/all.tab")])
 
     # filter rows
     filtClusterGenes = []
@@ -1837,10 +1879,227 @@ def writeCellInfo(htmlFh, cellInfo, tagLabels):
   var cellInfo = %(cellInfoJson)s;
 </script>""" % locals())
 
-
-def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, geneToSym, tagLabels, outDir):
+def parseManifest(maniFname):
+    """ manifest is a tab-sep file,
+    typical header is "#file   meta    format  output"
+    return as dict output -> rows
     """
-    write an html page and various annex .js and .css files 
+    ret = defaultdict(list)
+    for row in lineFileNextRow(maniFname):
+        ret[row.output].append(row)
+    return ret
+
+def mustRunCmd(cmd, delOnError=None):
+    " run cmd through os.system with debugging "
+    logging.debug("Running cmd: %s" % cmd)
+    ret = os.system(cmd)
+    if ret != 0:
+        if delOnError:
+            os.remove(delOnError)
+        errAbort("Could not run command: %s" % cmd)
+
+def makeCacheFname(fname, cacheDir, prefix, suffix):
+    " create a unique filename in cacheDir for fname, includes file size "
+    fsize = getsize(fname)
+    baseName = prefix+"_"+ fname.replace("/", "_") + ("_%dbytes"%fsize)
+    tmpFname = join(cacheDir, "snpEff_"+baseName+"."+suffix)
+    return tmpFname
+
+#def runSnpEff(fname, tmpDir):
+    #cacheFname = makeCacheFname(fname, tmpDir, "snpEff")
+    #if isfile(cacheFname):
+        #logging.info("%s already exists, not running SnpEFF" % cacheFname)
+        #return
+#
+    #logging.info("Running snpEff on %s" % fname)
+    #baseCmd = "java -Xmx4g -jar /pod/home/max/software/snpEff/snpEff.jar GRCh37.75 "
+    #cmd = baseCmd+" > "+cacheFname
+    #mustRunCmd(cmd, delOnError=cacheFname)
+
+#def runVai(fname, cacheDir):
+    #cacheFname = makeCacheFname(fname, cacheDir, "vai")
+    #cmd = "zcat %s | vcf-sort | ~/vai.pl hg19 /dev/stdin --hgVai=/usr/local/apache/cgi-bin-max/hgVai -geneTrack=knownGene > %s" % (fname, cacheFname)
+    #mustRunCmd(cmd, delOnError=cacheFname)
+
+def parseAnnovar(fname, cacheDir):
+    logging.info("Parsing annovar file %s" % fname)
+    cacheFname = makeCacheFname(fname, cacheDir, "annovarSummary", "json")
+    if isfile(cacheFname):
+        logging.info("Using cached results from %s" % cacheFname)
+        return json.load(open(cacheFname))
+
+    funcCounts = Counter()
+    total = 0
+    symToHgvs = defaultdict(list)
+
+    for row in lineFileNextRow(fname):
+        total+=1
+        exonFunc = row.ExonicFunc_refGene
+        if exonFunc==".":
+            exonFunc = "non-coding"
+        funcCounts[exonFunc] += 1
+
+        if exonFunc=="nonsynonymous SNV" or "frameshift" in exonFunc:
+            aaChg = row.AAChange_refGene
+            fs = aaChg.split(":")
+            sym = fs[0]
+            protHgvs = fs[-1]
+            symToHgvs[sym].append(protHgvs)
+
+    summ = {}
+    summ["varCount"] = total
+    summ["funcCounts"] = funcCounts.most_common()
+    summ["geneChanges"] = dict(symToHgvs)
+
+    logging.info("Writing cache to %s" % cacheFname)
+    json.dump(summ, open(cacheFname, "wb"))
+
+    return summ
+
+def allSubFiles(dirName, suffix=None):
+    " yield all file paths under dirName "
+    for root, dirs, files in os.walk(dirName, followlinks=True):
+        for name in files:
+            if suffix is not None and not name.endswith(suffix):
+                continue
+            yield (os.path.join(root, name))
+
+def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
+    " summarize a list of annovar files "
+    htmlFh.write("<h3>Mutated genes</h3>\n")
+    htmlFh.write("<table>\n")
+
+    annovarCacheDir = join(cacheDir, "annovar")
+    if not isdir(annovarCacheDir):
+        os.makedirs(annovarCacheDir)
+    #maniInfo = parseManifest(maniFname)
+    #for row in maniInfo["variants"]:
+    #fname = row.file
+    fnames = list(allSubFiles(annovarDir, "_multianno.txt"))
+
+    sampleNames = []
+    #allGenes = set()
+    allSumms = {}
+    mutToSamples = defaultdict(set)
+    nameToMuts = defaultdict(set) # datasetname -> set of coding mutations
+    for i, fname in enumerate(fnames):
+        logging.info("processing %d out of %d files" % (i, len(fnames)))
+        vcfSumm = parseAnnovar(fname, annovarCacheDir)
+        sampleName = basename(fname).split(".")[0]
+
+        sampleNames.append(sampleName)
+        allSumms[sampleName] = vcfSumm
+        #allGenes.update(vcfSumm["geneChanges"])
+
+        flatChanges = set()
+
+        # create a mapping (gene,change) -> list of sampleNames
+        for gene, muts in vcfSumm["geneChanges"].iteritems():
+            for mut in muts:
+                mutToSamples[(gene, mut)].add(sampleName)
+            flatChanges.add( gene+":"+mut )
+        nameToMuts[sampleName] = flatChanges
+
+    # create dict sample -> number of new mutations
+    # and dict sample ->  new mutations
+    baseLine = nameToMuts["HDF_fib"]
+    del sampleNames[sampleNames.index("HDF_fib")]
+
+    newMutCounts = {}
+    sampleToNewMuts = {}
+    allMuts = set()
+    for sampleName, muts in nameToMuts.iteritems():
+        newMuts = muts-baseLine
+        print "sample %s: %d mutations, %d new" % (sampleName, len(muts), len(newMuts))
+        newMutCounts[sampleName] = len(newMuts)
+        sampleToNewMuts[sampleName] = newMuts
+        allMuts.update(newMuts)
+
+    htmlFh.write("All mutations: %d" % len(allMuts))
+
+        #if fname.endswith(".vcf.gz"):
+            #runSnpEff(fname, annovarCacheDir)
+            #runVai(fname, annovarCacheDir)
+
+    # print intersections
+    for a, b in itertools.combinations(nameToMuts, 2):
+        shared = (nameToMuts[a]-baseLine).intersection((nameToMuts[b]-baseLine))
+        row = [a,b,len(shared)]
+        row = [str(x) for x in row]
+        print "\t".join(row)
+
+    sampleNames.sort()
+
+    # find all mutations that appear everywhere
+    #commonMuts = set()
+    #for (gene, mut), mutSamples in mutToSamples.iteritems():
+        #if len(mutSamples)==len(sampleNames):
+            #commonMuts.add( (gene, mut) )
+    
+    #changes = {}
+    #allGenes = set()
+    #for sampleName, muts in newMuts.iteritems():
+        ## remove all mutations that appear in the founder cell
+        #newChanges = defaultdict(list)
+        #for gene, muts in vcfSumm["geneChanges"].iteritems():
+            #for mut in muts:
+                #if gene+":"+mut in baseLine:
+                    #continue
+                #else:
+                    #newChanges[gene].append(mut)
+        # copy the old object, but use the filtered list
+        #newSumm = {}
+        #newSumm.update(vcfSumm)
+        #newSumm["geneChanges"] = newChanges
+        #changes[sampleName] = newChanges
+        #allGenes.update(newChanges.keys())
+
+    # write the table headers
+    htmlFh.write("<table style='table-layout:fixed'>\n")
+    htmlFh.write("<thead><tr>\n")
+    htmlFh.write("<th style='width:100px'>Gene<br>Symbol</th>\n")
+    for sampleName in sampleNames:
+        htmlFh.write("<th style='width:60px'>")
+        htmlFh.write("%s<br>" % sampleName.replace("_", " "))
+        #htmlFh.write("<small>Count: %s</small>\n" % allSumms[sampleName]["varCount"])
+        htmlFh.write("<small>%s</small>\n" % newMutCounts[sampleName])
+        htmlFh.write("</th>\n")
+    htmlFh.write("</tr></thead>\n")
+
+    # now write the table
+    sampleToColor = {
+    "Env" : "light-blue",
+    "Ev" : "yellow",
+    "Lnv" : "orange",
+    "Lv" : "light-green",
+    "LvL" : "light-red"
+    }
+    for mutName in sorted(allMuts):
+        htmlFh.write("<tr>\n")
+        htmlFh.write("<td>%s</td>\n" % mutName)
+        for sampleName in sampleNames:
+            #changeList = sampleToNewMuts[sampleName].get(mutName, [])
+            #changeList = [x.replace("p.","") for x in changeList]
+            if mutName in sampleToNewMuts[sampleName]:
+                #mutLabel = "X"
+                htmlFh.write("<td style='background-color: black'></td>\n")
+            else:
+                #mutLabel = ""
+                sampleType = sampleName.split("_")[0]
+                if sampleName.startswith("Lv L"):
+                    sampleType = "LvL"
+                color = sampleToColor[sampleType]
+                htmlFh.write("<td style='background-color:%s'></td>\n" % color)
+        htmlFh.write("</tr>\n")
+    htmlFh.write("</table>\n")
+
+    #htmlFh.write("<h4>Mutations in all samples</h4>\n")
+    #for gene, mut in commonMuts:
+        #htmlFh.write("%s/%s" % (gene, mut))
+
+def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annovarDir, geneToSym, tagLabels, outDir):
+    """
+    write an html page and various annex .js and .css files
     to outDir. Extracted data are written to summary.tmp in outDir,
     so re-generating the page itself is quick.
     To force a data rebuild, run the script with -f or delete
@@ -1863,24 +2122,32 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, geneT
     global seuratAllGenes
     seuratAllGenes = options.seuratAllGenes
 
-    if not isfile(cacheFname) or options.force or not isfile(transHistJsonFname):
+    if matrixFname=="none":
         typeToGenes, geneToTypes = parseMarker(markerFname, useSyms)
-        fullExprMatrix = parseMatrix(matrixFname)
-        cellToType = matrixToCellType(fullExprMatrix, typeToGenes, outDir)
+        sumData = writeCacheFile(datasetId, {}, tagTabFname, kallistoMetaTab, geneToTypes, outDir, cacheFname)
 
-        # write json plotting data
-        writeCellTypeJson(cellToType, cellTypeJsonFname)
-        writeExprTransHistJson(fullExprMatrix, transHistJsonFname)
-        sumData = writeCacheFile(datasetId, fullExprMatrix, tagTabFname, kallistoMetaTab, geneToTypes, outDir, cacheFname)
     else:
-        sumData = json.load(open(cacheFname))
-        fullExprMatrix = None
+        if not isfile(cacheFname) or options.force or not isfile(transHistJsonFname):
+            typeToGenes, geneToTypes = parseMarker(markerFname, useSyms)
 
-    markerGenes = set(sumData["markers"])
+            fullExprMatrix = parseMatrix(matrixFname)
+            cellToType = matrixToCellType(fullExprMatrix, typeToGenes, outDir)
 
-    writeCellPage(outDir, sumData)
-    cellIds, smallExprMatrix = writeHeatmapPage(outDir, sumData)
-    #smallMatrix = transMatrix(cellIds, smallExprMatrix)
+            # write json plotting data
+            writeCellTypeJson(cellToType, cellTypeJsonFname)
+            writeExprTransHistJson(fullExprMatrix, transHistJsonFname)
+                
+            sumData = writeCacheFile(datasetId, fullExprMatrix, tagTabFname, kallistoMetaTab, geneToTypes, outDir, cacheFname)
+
+        else:
+            sumData = json.load(open(cacheFname))
+            fullExprMatrix = None # load the matrix later if needed
+
+        markerGenes = set(sumData["markers"])
+
+        writeCellPage(outDir, sumData)
+        cellIds, smallExprMatrix = writeHeatmapPage(outDir, sumData)
+        #smallMatrix = transMatrix(cellIds, smallExprMatrix)
 
     # write main html page
     htmlFh = open(join(outDir, "index.html"), "w")
@@ -1892,17 +2159,22 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, geneT
 
     writeCellInfo(htmlFh, cellInfo, tagLabels)
 
-    if not options.onlySeurat:
-        htmlFh.write("<p>Details: <a href='cellInfo.html'>Single Cell Details Table</a>\n")
-        writeTransCountSection(htmlFh, transHistJsonFname)
-        htmlFh.write('''Details: <a href="heatmap.html">Expression Heatmap</a>''')
-        writePcaSection(htmlFh, matrixFname, fullExprMatrix, markerGenes, cellInfo, outDir)
+    # only do this part if we have rna-seq data
+    if matrixFname!="none":
+        if not options.onlySeurat:
+            htmlFh.write("<p>Details: <a href='cellInfo.html'>Single Cell Details Table</a>\n")
+            writeTransCountSection(htmlFh, transHistJsonFname)
+            htmlFh.write('''Details: <a href="heatmap.html">Expression Heatmap</a>''')
+            writePcaSection(htmlFh, matrixFname, fullExprMatrix, markerGenes, cellInfo, outDir)
 
-    writeSeuratSection(htmlFh, matrixFname, fullExprMatrix, cellInfo, geneToSym, tagLabels, outDir)
+        writeSeuratSection(htmlFh, matrixFname, fullExprMatrix, cellInfo, geneToSym, tagLabels, outDir)
 
-    if not options.onlySeurat:
-        writeCellTypeSection(htmlFh, cellTypeJsonFname)
+        if not options.onlySeurat:
+            writeCellTypeSection(htmlFh, cellTypeJsonFname)
 
+    if annovarDir:
+        tmpDir = makeTmpDirFor(outDir)
+        writeVcfSummary(htmlFh, cellInfo, annovarDir, tmpDir)
     #htmlFh.write("<h2>Dendrogram</h2>")
     #htmlFh.write("<a href='http://hgwdev-ceisenhart.cse.ucsc.edu/~ceisenhart/radialDendrograms/cirm/quake/quakeBrainGeo1/sleuthGeneClusters2.html'>Link to dendrogram page</a>")
     # activate the collapser
@@ -1916,18 +2188,9 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, geneT
 #});
 #</script>""")
     
-    # fix a few things in Chris' html
     htmlFh.write("""
-<script>
-document.body.style.background = "#FFF9D2";
-</script>  
-<style>
-body {
-   margin-left: 20px;  
-   }
-</style>
-    """)
-    htmlFh.write("""</body></html>""")
+</div><!-- mainContent -->
+</body></html>""")
     logging.info("Wrote %s" % htmlFh.name)
 
 def main():
@@ -1935,13 +2198,15 @@ def main():
     args, options = parseCmdLine()
     mysqlDatasetId, matrixFname, tagTabFname, outDir = args
 
-    #matrixFname = join(inDir + ".geneTpm.tab"
-    kallistoMeta = tagTabFname.replace(".tab", ".kallisto.tab")
-    #tagTabFname = join(inDir, "meta.tab")
+    kallistoMeta = tagTabFname.replace(".tab", ".kallisto.tab").replace(".tsv", ".kallisto.tab")
+    assert(kallistoMeta!=tagTabFname) # the meta data file has to end with .tab or .tsv, otherwise something is fishy
 
     geneToSym = readGeneToSym(options.symTable)
     tagLabels = readTagLabels(options.tagLabels)
 
-    writeDatasetPage(mysqlDatasetId, matrixFname, tagTabFname, kallistoMeta, geneToSym, tagLabels, outDir)
+    #maniFname = options.maniFname
+    annovarDir = options.annovarDir
+
+    writeDatasetPage(mysqlDatasetId, matrixFname, tagTabFname, kallistoMeta, annovarDir, geneToSym, tagLabels, outDir)
 
 main()

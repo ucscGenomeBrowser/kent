@@ -82,6 +82,12 @@ void webEndSectionTables();
 /* Finish with section tables (but don't do /BODY /HTML lik
  * webEnd does. */
 
+void webStartGbNoBanner(struct cart *cart, char *db, char *title);
+/* Start HTML with new header and footer design by jWest, but no banner */
+
+void webEndGb();
+/* End HTML that was started with webStartJWest. */
+
 void webStartJWest(struct cart *cart, char *db, char *title);
 /* Start HTML with new banner design by jWest (with modifications). */
 

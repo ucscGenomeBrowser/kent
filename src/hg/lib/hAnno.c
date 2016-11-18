@@ -165,6 +165,42 @@ hFreeConn(&conn);
 return matches;
 }
 
+struct annoStreamer *hAnnoStreamerFromBigFileUrl(char *fileOrUrl, struct annoAssembly *assembly,
+                                                 int maxOutRows, char *type)
+/* Determine what kind of big data file/url we have and make streamer for it.
+ * If type is NULL, this will determine type using custom track type or file suffix. */
+{
+struct annoStreamer *streamer = NULL;
+if (isEmpty(type))
+    type = customTrackTypeFromBigFile(fileOrUrl);
+if (type == NULL)
+    {
+    if (endsWith(fileOrUrl, "pgSnp") || endsWith(fileOrUrl, "pgsnp") ||
+        endsWith(fileOrUrl, "pgSnp.gz") || endsWith(fileOrUrl, "pgsnp.gz") ||
+        endsWith(fileOrUrl, "bed") || endsWith(fileOrUrl, "bed.gz"))
+        {
+        type = "pgSnp";
+        }
+    else
+        errAbort("Unrecognized bigData type of file or url '%s'", fileOrUrl);
+    }
+if (sameString(type, "bigBed") || sameString("bigGenePred", type))
+    streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
+else if (sameString(type, "vcfTabix"))
+    streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
+else if (sameString(type, "vcf"))
+    streamer = annoStreamVcfNew(fileOrUrl, FALSE, assembly, maxOutRows);
+else if (sameString(type, "bigWig"))
+    streamer = annoStreamBigWigNew(fileOrUrl, assembly);
+else if (sameString(type, "pgSnp"))
+    streamer = annoStreamTabNew(fileOrUrl, assembly, pgSnpFileAsObj());
+else if (sameString(type, "bam"))
+    errAbort("Sorry, BAM is not yet supported");
+else
+    errAbort("Unrecognized bigData type %s of file or url '%s'", type, fileOrUrl);
+return streamer;
+}
+
 struct annoStreamer *hAnnoStreamerFromTrackDb(struct annoAssembly *assembly, char *selTable,
                                               struct trackDb *tdb, char *chrom, int maxOutRows,
                                               struct jsonElement *config)
@@ -263,6 +299,7 @@ struct annoGrator *hAnnoGratorFromTrackDb(struct annoAssembly *assembly, char *s
 struct annoGrator *grator = NULL;
 boolean primaryIsVariants = (primaryAsObj != NULL &&
                              (asObjectsMatch(primaryAsObj, pgSnpAsObj()) ||
+                              asObjectsMatch(primaryAsObj, pgSnpFileAsObj()) ||
                               asObjectsMatch(primaryAsObj, vcfAsObj())));
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 if (bigDataUrl != NULL)

@@ -1,0 +1,167 @@
+track cactus
+compositeTrack on
+shortLabel Cactus Alignments
+longLabel Snake Track of progressiveCactus Alignments
+group compGeno
+type bed 3
+priority 2
+visibility full
+dragAndDrop subTracks
+searchIndex name
+searchTrix ixIxx/GCA_001624295.1_AKR_J_v1.chromAlias.ix
+dbAliasList C57B6J=mm10 rn6=rn6
+html html/mouseStrains
+
+    track snake129S1_SvImJ
+    longLabel Mouse Apr. 2016 (129S1_SvImJ/GCA_001624185.1)
+    shortLabel 129S1_SvImJ
+    otherSpecies 129S1_SvImJ
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeA_J
+    longLabel Mouse Apr. 2016 (A_J/GCA_001624215.1)
+    shortLabel A_J
+    otherSpecies A_J
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeCAST_EiJ
+    longLabel Southeastern Asian mouse Apr. 2016 (CAST_EiJ/GCA_001624445.1)
+    shortLabel CAST_EiJ
+    otherSpecies CAST_EiJ
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeCBA_J
+    longLabel Mouse Apr. 2016 (CBA_J/GCA_001624475.1)
+    shortLabel CBA_J
+    otherSpecies CBA_J
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeDBA_2J
+    longLabel Mouse Apr. 2016 (DBA_2J/GCA_001624505.1)
+    shortLabel DBA_2J
+    otherSpecies DBA_2J
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeFVB_NJ
+    longLabel Mouse Apr. 2016 (FVB_NJ/GCA_001624535.1)
+    shortLabel FVB_NJ
+    otherSpecies FVB_NJ
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeNOD_ShiLtJ
+    longLabel Mouse Apr. 2016 (NOD_ShiLtJ/GCA_001624675.1)
+    shortLabel NOD_ShiLtJ
+    otherSpecies NOD_ShiLtJ
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeNZO_HlLtJ
+    longLabel Mouse Apr. 2016 (NZO_HlLtJ/GCA_001624745.1)
+    shortLabel NZO_HlLtJ
+    otherSpecies NZO_HlLtJ
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakePWK_PhJ
+    longLabel Eastern European mouse Apr. 2016 (PWK_PhJ/GCA_001624775.1)
+    shortLabel PWK_PhJ
+    otherSpecies PWK_PhJ
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeWSB_EiJ
+    longLabel Western European mouse Apr. 2016 (WSB_EiJ/GCA_001624835.1)
+    shortLabel WSB_EiJ
+    otherSpecies WSB_EiJ
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeSPRET_EiJ
+    longLabel Western wild mouse Apr. 2016 (SPRET_EiJ/GCA_001624865.1)
+    shortLabel SPRET_EiJ
+    otherSpecies SPRET_EiJ
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeBALB_cJ
+    longLabel Mouse May 2016 (BALB_cJ/GCA_001632525.1)
+    shortLabel BALB_cJ
+    otherSpecies BALB_cJ
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeC57BL_6NJ
+    longLabel Mouse May 2016 (C57BL_6NJ/GCA_001632555.1)
+    shortLabel C57BL_6NJ
+    otherSpecies C57BL_6NJ
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeC3H_HeJ
+    longLabel Mouse May 2016 (C3H_HeJ/GCA_001632575.1)
+    shortLabel C3H_HeJ
+    otherSpecies C3H_HeJ
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeLP_J
+    longLabel Mouse May 2016 (LP_J/GCA_001632615.1)
+    shortLabel LP_J
+    otherSpecies LP_J
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakeC57B6J
+    longLabel Mouse Dec. 2011 (C57B6J/GRCm38/mm10)
+    shortLabel Mouse mm10
+    otherSpecies C57B6J
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+
+    track snakern6
+    longLabel Rat Jul. 2014 (rn6/RGSC 6.0/rn6)
+    shortLabel Rat rn6
+    otherSpecies rn6
+    parent cactus on
+    priority 15
+    bigDataUrl ../mouseStrains.hal
+    type halSnake
+

@@ -16,7 +16,7 @@ errAbort(
   "usage:\n"
   "   tagStormInfo input.tags\n"
   "options:\n"
-  "   -counts - if set output names and use counts of each tag\n"
+  "   -counts - if set output names, use counts, and value counts of each tag\n"
   );
 }
 
@@ -25,6 +25,32 @@ static struct optionSpec options[] = {
    {"counts", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+struct tagInfo
+/* Keeps track of number of uses and unique values of a tag */
+    {
+    struct tagInfo *next;   /* Next in list */
+    char *tagName;	    /* Name of tag */
+    int useCount;	    /* Number of times tag is used */
+    struct hash *tagVals;   /* Hash of tag values */
+    };
+
+void tagInfoAdd(struct tagInfo *tagInfo, char *tagVal)
+/* Add information about tag to tagInfo */
+{
+tagInfo->useCount += 1;
+hashStore(tagInfo->tagVals, tagVal);
+}
+
+struct tagInfo *tagInfoNew(char *tagName)
+/* Create a new tagInfo structure */
+{
+struct tagInfo *tagInfo;
+AllocVar(tagInfo);
+tagInfo->tagName = cloneString(tagName);
+tagInfo->tagVals = hashNew(0);
+return tagInfo;
+}
 
 void rFillInStats(struct tagStanza *list, int expansion, struct hash *tagHash,
     long *retStanzaCount, long *retTagCount, long *retExpandedCount)
@@ -38,9 +64,16 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     int stanzaSize = 0;
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
+	char *tagName = pair->name;
 	stanzaSize += 1;
 	*retExpandedCount += 1 + expansion;
-	hashIncInt(tagHash, pair->name);
+	struct tagInfo *tagInfo = hashFindVal(tagHash, tagName);
+	if (tagInfo == NULL)
+	     {
+	     tagInfo = tagInfoNew(tagName);
+	     hashAdd(tagHash, tagName, tagInfo);
+	     }
+	tagInfoAdd(tagInfo, pair->val);
 	}
     *retTagCount += stanzaSize;
     rFillInStats(stanza->children, expansion + stanzaSize, tagHash,
@@ -61,8 +94,8 @@ if (doCounts)
     slSort(&list, hashElCmp);
     for (el = list; el != NULL; el = el->next)
         {
-	int i = ptToInt(el->val);
-	printf("%s\t%d\n", el->name, i);
+	struct tagInfo *tagInfo = el->val;
+	printf("%s\t%d\t%d\n", tagInfo->tagName, tagInfo->useCount, tagInfo->tagVals->elCount);
 	}
     }
 else

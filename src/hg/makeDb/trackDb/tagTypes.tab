@@ -31,7 +31,7 @@ baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
 bedNameLabel bed
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl
+bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -74,6 +74,7 @@ dataVersion *
 dateSubmitted bedGraph bed
 dateUnrestricted bed
 db *
+dbAliasList bed halSnake
 dbProfile *
 dbTrackType customTracks
 detailsTabUrls bigBed bigGenePred bigPsl
@@ -274,6 +275,7 @@ origTrackLine customTracks
 otherDb *
 otherDbTable bed
 otherOrg netAlign chain
+otherSpecies halSnake
 pairEndsByName bam
 pairedEndUrlFormat bed
 pairwise wigMaf

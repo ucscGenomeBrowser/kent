@@ -254,6 +254,7 @@
 #include "longRange.h"
 #include "hmmstats.h"
 #include "aveStats.h"
+#include "trix.h"
 
 static char *rootDir = "hgcData";
 
@@ -2983,6 +2984,7 @@ if (start == end)
     ivEnd++;
     }  
 
+unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
 
 char *bedRow[32];
@@ -2997,10 +2999,14 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	break;
 	}
     }
-pslList = pslFromBigPsl(seqName, bb, NULL, NULL);
+pslList = pslFromBigPsl(seqName, bb, seqTypeField, NULL, NULL);
 
 printf("<H3>%s/Genomic Alignments</H3>", item);
-printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow", tdb->table, item);
+if (pslIsProtein(pslList))
+    printAlignmentsSimple(pslList, start, "htcBigPslAli", tdb->table, item);
+else
+    printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow",
+        tdb->table, item);
 pslFreeList(&pslList);
 printItemDetailsHtml(tdb, item);
 }
@@ -7244,12 +7250,22 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 if (bb == NULL)
     errAbort("item %s not found in range %s:%d-%d in bigBed %s (%s)",
              acc, chrom, start, end, tdb->table, fileName);
-psl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
-genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
+unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+psl = pslFromBigPsl(seqName, bb, seqTypeField, &seq, &cdsString);
+if (cdsString)
+    genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
 
+if (seq == NULL)
+    {
+    printf("Sequence for %s not available.\n", psl->qName);
+    return;
+    }
 struct dnaSeq *rnaSeq = newDnaSeq(seq, strlen(seq), acc);
-showSomeAlignment(psl, rnaSeq, gftRna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+enum gfType type = gftRna;
+if (pslIsProtein(psl))
+    type = gftProt;
+showSomeAlignment(psl, rnaSeq, type, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 }
 
 void htcBigPslAliInWindow(char *acc)
@@ -7295,8 +7311,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	break;
 	}
     }
-wholePsl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
-genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
+unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+wholePsl = pslFromBigPsl(seqName, bb, seqTypeField, &seq, &cdsString);
+
+if (seq == NULL)
+    {
+    printf("Sequence for %s not available.\n", wholePsl->qName);
+    return;
+    }
+if (cdsString)
+    genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
 if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
     partPsl = wholePsl;
@@ -24927,7 +24951,7 @@ doBedDetail(tdb, NULL, itemName);
 void doSnakeClick(struct trackDb *tdb, char *itemName)
 /* Put up page for snakes. */
 {
-genericHeader(tdb, itemName);
+struct trackDb *parentTdb = trackDbTopLevelSelfOrParent(tdb);
 char *otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
 char *hubName = cloneString(database);
 char otherDb[4096];
@@ -24935,8 +24959,20 @@ char *qName = cartOptionalString(cart, "qName");
 int qs = atoi(cartOptionalString(cart, "qs"));
 int qe = atoi(cartOptionalString(cart, "qe"));
 int qWidth = atoi(cartOptionalString(cart, "qWidth"));
+char *qTrack = cartString(cart, "g");
+if(isHubTrack(qTrack) && ! trackHubDatabase(database))
+    hubName = cloneString(qTrack);
 
-if(trackHubDatabase(database))
+struct hash *dbAliasHash = NULL;  // create later when needed
+char * dbAliasList = trackDbSetting(tdb, "dbAliasList");
+if (dbAliasList)
+    dbAliasHash = hashFromString(dbAliasList);
+
+/* current mouse strain hal file has incorrect chrom names */
+char *aliasQName = qName;
+// aliasQName = "chr1";  // temporarily make this work for the mouse hal
+
+if(trackHubDatabase(database) || isHubTrack(qTrack))
     {
     char *ptr = strchr(hubName + 4, '_');
     *ptr = 0;
@@ -24947,12 +24983,25 @@ else
     safef(otherDb, sizeof otherDb, "%s", otherSpecies);
     }
 
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK><B>Link to block in other assembly</A><BR>\n", otherDb, qName, qs, qe,hubName,trackHubSkipHubName(database));
+if (dbAliasHash)
+   {
+   char *otherDbName = trackHubSkipHubName(otherDb);
+   struct hashEl* alias = hashLookup(dbAliasHash, otherDbName);
+   if (alias)
+      safef(otherDb, sizeof otherDb, "%s", (char *)alias->val);
+   }
+
+char headerText[256];
+safef(headerText, sizeof headerText, "reference: %s, query: %s\n", trackHubSkipHubName(database), trackHubSkipHubName(otherDb) );
+genericHeader(parentTdb, headerText);
+
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, qs, qe, hubName, trackHubSkipHubName(database), aliasQName, qs, qe, trackHubSkipHubName(otherDb));
 
 int qCenter = (qs + qe) / 2;
 int newQs = qCenter - qWidth/2;
 int newQe = qCenter + qWidth/2;
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\"><B>Link to same window size in other assembly</A><BR>\n", otherDb, qName, newQs, newQe,hubName,trackHubSkipHubName(database));
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, newQs, newQe,hubName, trackHubSkipHubName(database), aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
+printTrackHtml(tdb);
 } 
 
 bool vsameWords(char *a, va_list args)

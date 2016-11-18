@@ -12,6 +12,10 @@
 
 extern char *bigPslCommaSepFieldNames;
 
+#define PSL_SEQTYPE_EMPTY               0
+#define PSL_SEQTYPE_NUCLEOTIDE          1
+#define PSL_SEQTYPE_PROTEIN             2
+
 struct bigPsl
 /* bigPsl pairwise alignment */
     {
@@ -40,6 +44,7 @@ struct bigPsl
     unsigned misMatch;	/*  Number of bases that don't match  */
     unsigned repMatch;	/*  Number of bases that match but are part of repeats  */
     unsigned nCount;	/*  Number of 'N' bases  */
+    unsigned seqType;   /* type of sequence in oSequence */
     };
 
 struct bigPsl *bigPslLoad(char **row);
@@ -81,6 +86,6 @@ void bigPslOutput(struct bigPsl *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct psl  *pslFromBigPsl( char *chrom, struct bigBedInterval *bb,  char **seq, char **cds);
+struct psl  *pslFromBigPsl( char *chrom, struct bigBedInterval *bb,  int seqTypeField, char **seq, char **cds);
 /* build a psl from a bigPsl */
 #endif /* BIGPSL_H */

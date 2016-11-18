@@ -23,6 +23,7 @@
 #include "limits.h"
 #include "snakeUi.h"
 #include "bits.h"
+#include "trix.h"
 
 #include "halBlockViz.h"
 
@@ -677,6 +678,8 @@ for (item=tg->items;item; item = item->next)
     {
     height += tg->itemHeight(tg, item);
     }
+if (height < DUP_LINE_HEIGHT + tg->lineHeight)
+    height = DUP_LINE_HEIGHT + tg->lineHeight;
 return height;
 }
 
@@ -1183,6 +1186,21 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     }
 }
 
+static char *doChromIxSearch(char *trixFile, char *searchName)
+/* search ixFile for the searchName, return name if found */
+{
+struct trix *trix = trixOpen(trixFile);
+char *trixWords[1];
+int trixWordCount = 1;
+trixWords[0] = strLower(searchName);
+char *name = NULL;  // assume NOT found
+
+struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, tsmExact);
+if (tsList)
+   name = tsList->itemId;  // FOUND
+return name;
+}
+
 void halSnakeLoadItems(struct track *tg)
 // load up a snake from a HAL file.   This code is called in threads
 // so *no* use of globals please. All but full snakes are read into a single
@@ -1190,6 +1208,23 @@ void halSnakeLoadItems(struct track *tg)
 {
 unsigned showSnpWidth = cartOrTdbInt(cart, tg->tdb, 
     SNAKE_SHOW_SNP_WIDTH, SNAKE_DEFAULT_SHOW_SNP_WIDTH);
+
+struct hash *dbAliasHash = NULL;  // create later when needed
+char * dbAliasList = trackDbSetting(tg->tdb, "dbAliasList");
+if (dbAliasList)
+    dbAliasHash = hashFromString(dbAliasList);
+
+char * chromAlias = NULL;	// create later when needed
+char * chromAliasFile = trackDbSetting(tg->tdb, "searchTrix");
+if (chromAliasFile)
+   chromAlias = doChromIxSearch(chromAliasFile, chromName);
+
+char *aliasName = chromName;
+if (chromAlias)
+   {
+       if (differentWord(chromAlias, aliasName))
+          aliasName = chromAlias;
+   }
 
 // if we have a network error we want to put out a message about it
 struct errCatch *errCatch = errCatchNew();
@@ -1210,7 +1245,14 @@ if (errCatchStart(errCatch))
     char codeVarName[1024];
     safef(codeVarName, sizeof codeVarName, "%s.coalescent", tg->tdb->track);
     char *coalescent = cartOptionalString(cart, codeVarName);
-    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies, coalescent, &errString);
+    char *otherDbName = trackHubSkipHubName(database);
+    if (dbAliasHash)
+       {
+       struct hashEl* alias = hashLookup(dbAliasHash, otherDbName);
+       if (alias)
+          otherDbName = cloneString((char *)alias->val);
+       }
+    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, otherDbName, aliasName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies, coalescent, &errString);
 
     // did we get any blocks from HAL
     if (head == NULL)

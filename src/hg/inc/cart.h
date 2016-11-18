@@ -175,6 +175,9 @@ struct slName *cartOptionalSlNameList(struct cart *cart, char *var);
 /* Return slName list (possibly with multiple values for the same var) or
  * NULL if not found. */
 
+struct hash *cartHashList(struct cart *cart, char *var);
+/* Return hash with multiple values for the same var or NULL if not found. */
+
 void cartAddString(struct cart *cart, char *var, char *val);
 /* Add string valued cart variable (if called multiple times on same var,
  * will create a list -- retrieve with cartOptionalSlNameList. */

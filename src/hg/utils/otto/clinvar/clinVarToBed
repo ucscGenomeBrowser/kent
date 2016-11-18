@@ -6,7 +6,7 @@ from os.path import join, basename, dirname, isfile, abspath
 from datetime import date, datetime, timedelta
 
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
-parser = optparse.OptionParser("""usage: %prog [options] filename - check and convert clinVar table to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed
+parser = optparse.OptionParser("""usage: %prog [options] summaryFname varAllFname hgvsFname - check and convert the three main clinVar tab-sep files to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed
 
 Output goes into the current dir
 
@@ -23,7 +23,7 @@ if options.debug:
 else:
     logging.basicConfig(level=logging.INFO)
 
-clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	ClinicalSignificance	RS# (dbSNP)	nsv (dbVar)	RCVaccession	TestedInGTR	PhenotypeIDs	Origin	Assembly	Chromosome	Start	Stop	Cytogenetic	ReviewStatus	HGVS(c.)	HGVS(p.)	NumberSubmitters	LastEvaluated	Guidelines	OtherIDs	VariantID	ReferenceAllele	AlternateAllele	SubmitterCategories	ChromosomeAccession\n"
+clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSignificance	ClinSigSimple	LastEvaluated	RS# (dbSNP)	nsv/esv (dbVar)	RCVaccession	PhenotypeIDS	PhenotypeList	Origin	OriginSimple	Assembly	ChromosomeAccession	Chromosome	Start	Stop	ReferenceAllele	AlternateAllele	Cytogenetic	ReviewStatus	NumberSubmitters	Guidelines	TestedInGTR	OtherIDs	SubmitterCategories\n"
 # ==== FUNCTIONs =====
 
 def shortenName(name):
@@ -109,6 +109,96 @@ def compareWithLastMonth(fname, maxDiff):
         cmd = "diff %s %s --speed-large-files > %s" % (fname, previousFname, diffFname)
         os.system(cmd) # ret code is not 0, as there are differences, so no need to check
         raise Exception("too many differences: %d out of %d lines. Look at the differences n the file %s. If you are OK with them, run '/hive/data/outside/otto/clinvar/doUpdate.sh -nocheck'" % (diffCount, todayCount, diffFname))
+
+def parseVariationAlleleFile(varFname):
+    """ return dict allele Id -> variant ID """
+    logging.info("Parsing %s" % varFname)
+    allToVar = {}
+    foundHead = False
+    expHead = "#VariationID	Type	AlleleID	Interpreted"
+    for line in gzip.open(varFname):
+        line = line.rstrip("\n")
+        if line==expHead:
+            foundHead = True
+        if line.startswith("#Var") and "Type" in line:
+            if not line == expHead:
+                print ("Header of variation_allele.txt.gz has changed again. Code needs fixing")
+                print "found:",line
+                print "expected:",expHead
+            else:
+                foundHead = True
+
+        if line.startswith("#"):
+            continue
+        if not foundHead:
+            raise Exception("Header of variation_allele.txt.gz has changed again. Code needs fixing")
+        fields = line.split("\t")
+        allToVar[fields[2]]=fields[0]
+    return allToVar
+
+def parseHgvsFile(hgvsFname):
+    " return dict: allele Id -> (hgvs coding, hgvs protein) "
+    logging.info("Parsing %s" % hgvsFname)
+    expHead	= "#Symbol	GeneID	VariationID	AlleleID	Type	Assembly	NucleotideExpression	NucleotideChange	ProteinExpression	ProteinChange"
+    allToHgvs = {}
+    foundHead = False
+    for line in gzip.open(hgvsFname):
+        line = line.rstrip("\n")
+        if line==expHead:
+            foundHead = True
+        if line.startswith("#Symbol") and "GeneID" in line:
+            if not line == expHead:
+                print ("Header of hgvs file has changed again. Code needs fixing")
+                print "found:",line
+                print "expected:",expHead
+            else:
+                foundHead = True
+
+        if line.startswith("#"):
+            continue
+        if not foundHead:
+            raise Exception("Invalid Header. Code needs fixing, again.")
+
+        fields = line.split("\t")
+        varType = fields[4]
+        if "coding" in varType and not "LRG" in fields[6]:
+            allToHgvs[fields[3]]=(fields[6], fields[8])
+    return allToHgvs
+
+def accListToHtml(inStr):
+    """
+    given a string of a list of db:acc tuples, like "dbVar:nssv578901, omim:12343", convert the accessions
+    to HTML links to the databases
+    """
+    dbToUrl = {
+    "dbVar": "https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/",
+    "UniProtKB (variants)" : "http://www.uniprot.org/uniprot/%s",
+    "OMIM Allelic Variant" : "http://www.omim.org/entry/%s",
+    "MedGen": "https://www.ncbi.nlm.nih.gov/medgen/%s",
+    "OMIM" : "http://www.omim.org/entry/%s",
+    "Orphanet" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert=%s"
+    }
+
+    newParts = []
+    for part in inStr.split(","):
+        fields = part.split(":")
+        if len(fields)!=2:
+            newParts.append(part)
+            continue
+
+        db, acc = fields
+        accForUrl = acc
+
+        if db in dbToUrl:
+            if "OMIM" in db:
+                accForUrl = accForUrl.replace(".", "#")
+            url = (dbToUrl[db] % accForUrl)
+            newPart = "<a href='%s'>%s:%s</a>" % (url, db, acc)
+        else:
+            newPart = part
+        newParts.append(newPart)
+    return ", ".join(newParts)
+
 # ----------- MAIN --------------
 if args==[] and not options.auto:
     parser.print_help()
@@ -119,13 +209,32 @@ outSuffix = ""
 if options.auto:
     today = date.today().isoformat()
     outSuffix = "%s." % today
+    
     url = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
     outFname = "archive/variant_summary.%s.txt.gz" % today
     logging.info("Downlading %s to %s" % (url, outFname))
     open(outFname, "w").write(urllib2.urlopen(url).read())
     filename = outFname
+
+    # get the new variant allele file
+    varUrl = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variation_allele.txt.gz"
+    varFname = join(dirname(filename), "variation_allele.%s.txt.gz" % today)
+    logging.info("Downlading %s to %s" % (varUrl, varFname))
+    open(varFname, "w").write(urllib2.urlopen(varUrl).read())
+
+    # get the new hgvs allele file
+    hgvsUrl = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/hgvs4variation.txt.gz"
+    hgvsFname = join(dirname(filename), "hgvs4variation.%s.txt.gz" % today)
+    logging.info("Downlading %s to %s" % (hgvsUrl, hgvsFname))
+    open(hgvsFname, "w").write(urllib2.urlopen(hgvsUrl).read())
+
 else:
     filename = args[0]
+    varFname = args[1]
+    hgvsFname = args[2]
+
+allToVar = parseVariationAlleleFile(varFname)
+allToHgvs = parseHgvsFile(hgvsFname)
 
 # e.g. GRCh38/hg38 1p36.33-36.31(chr1:1181847-5507243)x1
 # GRCh38/hg38 9p24.3-q34.3(chr9:204193-138179445)
@@ -150,8 +259,8 @@ ifh = gzip.open(filename)
 line1 = ifh.readline()
 if (line1 != clinvarExpectHeaders): # test if clinvar has changed their header line again
     logging.error("ClinVar has changed their header line again")
-    logging.error("current header line: %s" % line1)
-    logging.error("expected header line: %s" % clinvarExpectHeaders)
+    logging.error("current header line: %s" % line1.replace("\t","|"))
+    logging.error("expected header line: %s" % clinvarExpectHeaders.replace("\t","|"))
     raise Exception("code needs fixing")
 
 # open out files
@@ -170,10 +279,16 @@ for line in ifh:
     row = line.split("\t")
     row = [f.replace("\0", "") for f in row ]
 
-    alleleId, allType, name, geneId, geneSymbol, clinSign, snpAcc, dbVarAcc, \
-      irvcAcc, inGtr, phenotypeIds, origin, assembly, chrom, start, end, cytogenetic, \
-      reviewStatus, hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, varId, \
-      refAll, varAll, submCategories, chromAcc = row
+    alleleId, allType, name, geneId, geneSymbol, hgncId, clinSign, clinSignSimple, lastEval, snpAcc, dbVarAcc, \
+      irvcAcc, phenotypeIds, phenotypeList, origin, originSimple, assembly, chromAcc, chrom, start, end, \
+      refAll, varAll, cytogenetic, reviewStatus, numberSubmitters, guidelines, inGtr, otherIds, \
+      submCategories = row
+
+    if alleleId not in allToVar:
+        logging.warn("No variantID for alleleId %s, %s" % (alleleId, irvcAcc))
+        continue
+    varId = allToVar[alleleId]
+    hgvsCod, hgvsProt =  allToHgvs.get(alleleId, ("", ""))
 
     if chrom=="" or assembly=="" or assembly=="NCBI36":
         noAssCount += 1
@@ -214,7 +329,12 @@ for line in ifh:
     blockSizes = str(int(end)-int(start))
     blockStarts = "0"
 
-    if dbVarAcc.startswith("nsv"):
+    if dbVarAcc.startswith("nsv") or "copy number" in allType:
+        isCnv = True
+    else:
+        isCnv = False
+
+    if isCnv:
         if "gain" in allType or "duplication" in allType:
             itemRgb = "0,0,255"
         if "deletion" in allType or "loss" in allType:
@@ -232,14 +352,24 @@ for line in ifh:
         else: # is benign
             itemRgb = "200,200,200"
 
-    if geneSymbol=="more than 10":
-        geneSymbol = "not shown, more than 10 genes"
+    geneStr = geneSymbol
+    #print "XX", geneId, geneSymbol
+    if geneId.isdigit() and geneId!="-1":
+        #print "adding pipe"
+        geneStr = geneId+"|"+geneSymbol
+    if len(geneStr)>250:
+        #print "shortening"
+        geneStr = "not shown, too many genes"
         
     name = varId+"|"+name
+    otherIds = accListToHtml(otherIds)
+
+    phenotypeIds = accListToHtml(phenotypeIds)
+
     row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
-        name, clinSign, allType, geneId, geneSymbol,
-        snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeIds, origin, assembly, cytogenetic,
+        name, clinSign, allType, geneStr,
+        snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeList, phenotypeIds, origin, assembly, cytogenetic,
         reviewStatus, hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds]
 
     # replace clinvar's placeholders with real empty fields
@@ -255,12 +385,11 @@ for line in ifh:
         if chrom=="chrM":
             continue # we don't have the same MT chrom as NCBI, skip these
         ofh = hg19Bed
-        if dbVarAcc.startswith("nsv"):
+        if isCnv:
             ofh = hg19BedCnv
-
     elif assembly=="GRCh38":
         ofh = hg38Bed
-        if dbVarAcc.startswith("nsv"):
+        if isCnv:
             ofh = hg38BedCnv
     else:
         noAssCount +=1
