@@ -1031,7 +1031,7 @@ function doHl() {
     return cellIds, exprMatrix
 
 def prepCellRows(toolFields, toolRows, cellInfo):
-    """ convert the tool meta info rows and annots to cell info dicts """
+    """ merge the cell info and tool meta info dicts to a normal table, calculate a few QC-measures """
 
     outRows = []
     for row in toolRows:
@@ -1069,7 +1069,7 @@ def prepCellRows(toolFields, toolRows, cellInfo):
 
 def writeCellPage(outDir, sumData):
     """
-    write a separate page with information about the sequencing info 
+    write a separate page with information about the sequencing info
     for each cell
     """
     toolInfo = sumData.get("toolMeta", [])
@@ -2198,7 +2198,8 @@ def main():
     args, options = parseCmdLine()
     mysqlDatasetId, matrixFname, tagTabFname, outDir = args
 
-    kallistoMeta = tagTabFname.replace(".tab", ".kallisto.tab")
+    kallistoMeta = tagTabFname.replace(".tab", ".kallisto.tab").replace(".tsv", ".kallisto.tab")
+    assert(kallistoMeta!=tagTabFname) # the meta data file has to end with .tab or .tsv, otherwise something is fishy
 
     geneToSym = readGeneToSym(options.symTable)
     tagLabels = readTagLabels(options.tagLabels)
