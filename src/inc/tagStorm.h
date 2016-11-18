@@ -148,11 +148,12 @@ struct hash *tagStormFieldHash(struct tagStorm *tagStorm);
  * number of times field is used.  For most purposes just used to make sure
  * field exists though. */
 
-struct hash *tagStormCountTagVals(struct tagStorm *tags, char *tag);
+struct hash *tagStormCountTagVals(struct tagStorm *tags, char *tag, char *requiredTag);
 /* Return an integer valued hash keyed by all the different values
  * of tag seen in tagStorm.  The hash is filled with counts of the
  * number of times each value is used that can be recovered with 
- * hashIntVal(hash, key) */
+ * hashIntVal(hash, key).  If requiredTag is not-NULL, stanza must 
+ * have that tag. */
 
 /** Stuff for finding tags within a stanza */
 

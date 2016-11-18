@@ -101,7 +101,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o suggest.o \
     switchDbTss.o synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
     sqlProg.o tfbsCons.o tfbsConsSites.o tablesTables.o \
-    tableDescriptions.o tableStatus.o targetDb.o tfbsConsMap.o \
+    tableDescriptions.o tableStatus.o targetDb.o tfbsConsMap.o tagRepo.o \
     taxonDivision.o taxonGeneticCode.o taxonName.o taxonNode.o taxonXref.o \
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackHub.o trackLayout.o trackTable.o trackVersion.o trashDir.o \
