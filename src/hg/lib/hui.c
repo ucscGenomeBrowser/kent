@@ -46,7 +46,7 @@
 #include "genbank.h"
 #include "htmlPage.h"
 #include "longRange.h"
-#include "tagStorm.h"
+#include "tagRepo.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -185,27 +185,14 @@ freeMem(encValue);
 return dyStringCannibalize(&dyLink);
 }
 
-// static global that maps tagStorm file names to hashes on the "track" value
-static struct hash *tagStanzaHash;
-
 char *tagStormAsHtmlTable(char *tagStormFile, struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
 /* Return a string which is an HTML table of the tags for this track. */
 {
-if (tagStanzaHash == NULL)
-    tagStanzaHash = newHash(5);
-struct hash *stanzaHash = hashFindVal(tagStanzaHash, tagStormFile);
-if (stanzaHash == NULL)
-    {
-    struct tagStorm *tags = tagStormFromFile(tagStormFile);
-    stanzaHash = tagStormUniqueIndex(tags, "track");
-    hashAdd(tagStanzaHash, tagStormFile, stanzaHash);
-    }
+struct slPair *pairs = tagRepoPairs(tagStormFile, "track",  trackHubSkipHubName(tdb->track));
 
-struct tagStanza *stanza = hashFindVal(stanzaHash, trackHubSkipHubName(tdb->track));
-if (stanza == NULL)
+if (pairs == NULL)
     return "";
 
-struct slPair *pairs = tagListIncludingParents(stanza);
 struct dyString *dyTable = dyStringCreate("<table style='display:inline-table;'>");
 
 if (showLongLabel)

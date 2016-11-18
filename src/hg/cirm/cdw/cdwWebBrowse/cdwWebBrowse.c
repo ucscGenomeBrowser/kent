@@ -108,7 +108,7 @@ return total;
 int labCount(struct tagStorm *tags)
 /* Return number of different labs in tags */
 {
-struct hash *hash = tagStormCountTagVals(tags, "lab");
+struct hash *hash = tagStormCountTagVals(tags, "lab", "accession");
 int count = hash->elCount;
 hashFree(&hash);
 return count;
@@ -203,7 +203,7 @@ if (description != NULL)
     printf("<B>%s tag description</B>: %s<BR>\n", tag, description);
 
 /* Print out some summary stats */
-struct hash *hash = tagStormCountTagVals(tags, tag);
+struct hash *hash = tagStormCountTagVals(tags, tag, "accession");
 printf("The <B>%s</B> tag has %d distinct values and is used on %lld files. ", 
     tag, hash->elCount, sumCounts(hash));
 
