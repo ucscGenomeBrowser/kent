@@ -311,8 +311,48 @@ Drupal.theme.prototype = {
   }
 };
 
+/* ********************** */
+/* This code adds the object browser to jQuery */
+/* It allows using newer Jquery versions with our old version of bgiframe. */
+/* copied from http://stackoverflow.com/questions/14798403/typeerror-browser-is-undefined */
+/* Max 2016: It seems that bgiframe is only needed for MSIE6 support, so it is possible we could remove 
+ * bgiframe (and this code) entirely, but bgiframe is used even in our own code, so I'm waiting with this */
 
+if (typeof jQuery.browser == 'undefined') {
+    var matched, browser;
 
+    jQuery.uaMatch = function( ua ) {
+        ua = ua.toLowerCase();
+
+        var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
+            /(webkit)[ \/]([\w.]+)/.exec( ua ) ||
+            /(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
+            /(msie) ([\w.]+)/.exec( ua ) ||
+            ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
+            [];
+
+        return {
+            browser: match[ 1 ] || "",
+            version: match[ 2 ] || "0"
+        };
+    };
+
+    matched = jQuery.uaMatch( navigator.userAgent );
+    browser = {};
+    if ( matched.browser ) {
+        browser[ matched.browser ] = true;
+        browser.version = matched.version;
+    }
+
+    // Chrome is Webkit, but Webkit is also Safari.
+    if ( browser.chrome ) {
+        browser.webkit = true;
+    } else if ( browser.webkit ) {
+        browser.safari = true;
+    }
+    jQuery.browser = browser;
+    /* END OF BROWSER OBJECT */
+}
 
 /* bgiframe v2.1
  * Copyright (c) 2006 Brandon Aaron (http://brandonaaron.net)

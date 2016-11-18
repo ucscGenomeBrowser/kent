@@ -345,6 +345,9 @@ command is one of:
   addTools   - copy the UCSC User Tools, e.g. blat, featureBits, overlapSelect,
                bedToBigBed, pslCDnaFilter, twoBitToFa, gff3ToGenePred, 
                bedSort, ... to /usr/local/bin
+               This has to be run after the browser has been installed, other-
+               wise these packages may be missing: libpng zlib libmysqlclient
+               
 
 parameters for 'minimal', 'mirror' and 'update':
   <assemblyList>     - download Mysql + /gbdb files for a space-separated
