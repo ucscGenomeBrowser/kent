@@ -3130,8 +3130,8 @@ termRegex X(M|R)_[0-9]{6}[0-9]*.[0-9]*
 searchPriority 9.5
 
 track augustusGene
-shortLabel Augustus
-longLabel Augustus gene predictions v3.1
+shortLabel AUGUSTUS
+longLabel AUGUSTUS ab initio gene predictions v3.1
 group genes
 visibility hide
 color 12,105,0
