@@ -1505,11 +1505,11 @@ webSortableFieldedTable(cart, table, returnUrl, "cdwHome", 0, NULL, NULL);
 printf("This table is a summary of important metadata tags and number of files they ");
 printf("are attached to. Use browse tags menu to see all tags.");
 
-printf("<BR>\n");
-printf("<center>");
+printf("<BR>\n\n\n\n\n\n");
+printf("<TABLE><TR>");
 printf("<a href=\"cdwGetFile/jointCirmBrain1/summary/index.html\"><img " 
-	"src=\"../images/cdwImages/qbg_krgSeurat.png\" width=%d height=%d> </a>\n", 800, 600);
-printf("</center>");
+	"src=\"../images/cdwImages/qbg_krgSeurat.png\" width=%d height=%d border=5 style=\"border-width:medium\" > </a>\n", 800, 600);
+printf("</TR></TABLE>");
 }
 
 void doBrowseTags(struct sqlConnection *conn)
