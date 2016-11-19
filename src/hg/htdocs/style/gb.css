@@ -143,7 +143,8 @@ span#home-link {
 /* This class is recognized by JS, which changes to spinner on form submit */
 .gbIconGo {
     color: #003a72;
-    vertical-align: top;
+    vertical-align: -webkit-baseline-middle;
+    vertical-align: -moz-middle-with-baseline;
 }   
 
 /* UI controls */
@@ -170,6 +171,7 @@ span#home-link {
 .gbButtonGo {
     display: inline-block;
     vertical-align: -webkit-baseline-middle;
+    vertical-align: -moz-middle-with-baseline;
     background-color: #003a72; /* dark blue */
     color: white;
     padding: 4px 9px;
