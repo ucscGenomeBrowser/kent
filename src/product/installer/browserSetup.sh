@@ -882,6 +882,14 @@ function installDebian ()
         # do not prompt in apt-get, will set an empty mysql root password
         export DEBIAN_FRONTEND=noninteractive
         apt-get --assume-yes install mysql-server
+        # make sure that missing values do not trigger errors, #18368
+        if [ -f /etc/mysql/mysql.conf.d/mysqld.cnf ]; then
+            # Ubuntu 16
+            sed -i '/^.mysqld.$/a sql_mode=' /etc/mysql/mysql.conf.d/mysqld.cnf
+        else
+            # Ubuntu 14
+            sed -i '/^.mysqld.$/a sql_mode=' /etc/mysql/my.cnf
+        fi
         # flag so script will set mysql root password later to a random value
         SET_MYSQL_ROOT=1
     fi
