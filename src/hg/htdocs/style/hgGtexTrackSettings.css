@@ -4,6 +4,12 @@
  * Copyright (C) 2016 The Regents of the University of California
  */ 
 
+/* SVG */
+#bodyMapSvg {
+    height: 100%;
+    width: 100%;
+}       /* needed by IE */
+
 /* Tissue selectors */
 
 .gbmTissueColorPatch {
