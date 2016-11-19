@@ -26,14 +26,6 @@ struct cart *cart;	// User variables saved from click to click
 struct hash *oldVars;	// Previous cart, before current round of CGI vars folded in
 struct cdwUser *user;	// Our logged in user if any
 
-void usage()
-/* Explain usage and exit. */
-{
-errAbort(
-  "cdwWebBrowse is a cgi script not meant to be run from command line.\n"
-  );
-}
-
 void errExit(char *msg, char *field) 
 /* print http header + message and exit. msg can contain %s */
 {
@@ -57,9 +49,34 @@ else
         errExit("Sorry, user %s does not have access to this file.", user->email);
 }
 
-void apacheSendX(char *format, char *filePath, char *suggestFileName)
-/* send pseudo-HTTP header to tell Apache to transfer filePath with suggestFileName on user's disk 
- * format is one of "fastq", "fasta", defined in cdw.as. if format is NULL, use file extension. */
+static void printFileReplaceVar(char *filePath) 
+/* dump a text file to stdout with the html header, replace <!--menuBar--> with the menubar */
+{
+printf("Content-Type: text/html\n\n");
+
+int c;
+FILE *file = fopen(filePath, "r");
+if (file == 0) 
+    errExit("Cannot open file %s", filePath);
+
+char searchStr[] = "<!--menuBar-->";
+int matchCount = 0;
+while ((c = getc(file)) != EOF)
+    {
+    if (c==searchStr[matchCount])
+        matchCount++;
+    else
+        matchCount = 0;
+    putchar(c);
+    if (matchCount==sizeof(searchStr)-1)
+        puts(cdwLocalMenuBar(cart, TRUE));
+    }
+fclose(file);
+}
+
+void sendFile(char *format, char *filePath, char *suggestFileName)
+/* format is one of "fastq", "fasta", defined in cdw.as. if format is NULL, use file extension. */
+/* send file to user via Apache, using X-Sendfile or stdout, as needed */
 {
 if (format==NULL)
 {
@@ -72,9 +89,13 @@ if (format==NULL)
         }
 }
 
-// html, pdf, jpeg files are shown directly in the internet browser, not downloaded
+// html files are not sent via X-Sendfile as we need to replace one special variable
 if (sameWord(format, "html"))
-    printf("Content-Type: text/html\n");
+    {
+    printFileReplaceVar(filePath);
+    return;
+    }
+// pdf, jpeg files are shown directly in the internet browser, not downloaded
 else if (sameWord(format, "jpg"))
     printf("Content-Type: image/jpeg\n");
 else if (sameWord(format, "pdf"))
@@ -84,13 +105,15 @@ else if (sameWord(format, "png"))
 else if (sameWord(format, "json"))
     printf("Content-Type: application/json\n");
 else if (sameWord(format, "text"))
-    printf("Content-Type: application/json\n");
+    printf("Content-Type: text/plain\n");
 else
     {
     printf("Content-Disposition: attachment; filename=%s\n", suggestFileName);
     printf("Content-Type: application/octet-stream\n");
     }
-printf("Content-Length: %lld\n", (long long)fileSize(suggestFileName));
+
+/* send pseudo-HTTP header to tell Apache to transfer filePath ( will honor byte range ) */
+printf("Content-Length: %lld\n", (long long)fileSize(filePath));
 printf("X-Sendfile: %s\n\n", filePath);
 }
 
@@ -120,7 +143,7 @@ else
     safef(suggestName, sizeof(suggestName), "%s.%s", vf->licensePlate, submitExt);
     }
 
-apacheSendX(vf->format, filePath, suggestName);
+sendFile(vf->format, filePath, suggestName);
 }
 
 void sendFileByPath(struct sqlConnection *conn, char *path) 
@@ -148,7 +171,7 @@ if (ef == NULL)
     errExit("Could not find cdwFile for path %s", path);
 
 mustHaveAccess(conn, ef);
-apacheSendX(NULL, localPath, basename(ef->submitFileName));
+sendFile(NULL, localPath, basename(ef->submitFileName));
 }
 
 struct cdwUser *authUserViaToken(struct sqlConnection *conn) 
@@ -182,6 +205,9 @@ else
 
 char *acc = cgiOptionalString("acc");
 char *path = getenv("PATH_INFO"); // CGI gets trailing /x/y/z like path via this env. var.
+if (path==NULL)
+    path = cgiOptionalString("path"); // when calling via cgi-spoof from command line
+
 boolean useSubmitFname = cgiOptionalInt("useSubmitFname", 0);
 
 if (acc != NULL)
@@ -190,7 +216,7 @@ else if (path != NULL)
     sendFileByPath(conn, path);
 else
     errExit("Need at least the HTTP GET parameter 'acc' with an accession ID " 
-    "or a file path directly after the CGI name, "
+    "or a file path with the HTTP parameter 'path' or the path directly after the CGI name, "
     "separated by '/', e.g. cdwGetFile/valData/ce10/ce10.2bit';", NULL);
 
 }
@@ -209,9 +235,7 @@ char *excludeVars[] = {"submit", NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-boolean isFromWeb = cgiIsOnWeb();
-if (!isFromWeb && !cgiSpoof(&argc, argv))
-    usage();
+cgiSpoof(&argc, argv);
 oldVars = hashNew(0);
 cartEmptyShellNoContent(localWebWrap, hUserCookie(), excludeVars, oldVars);
 return 0;

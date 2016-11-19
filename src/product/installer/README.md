@@ -105,19 +105,19 @@ script with no arguments.
 When you want to update all CGIs and fully mirrored assemblies, you can call the
 script with the `update` parameter like this: 
 
-    sudo bash browserInstall.sh update
+    sudo bash browserSetup.sh update
 
 Minimal mirrors (those that have never mirrored a full assembly) should not 
 use the update command, but rather just re-run the minimal command, as it will
 just update the minimal tables. You may want to add this command to your crontab,
 maybe run it every day, so your local tables stay in sync with UCSC:
 
-    sudo bash browserInstall.sh minimal hg19 hg38
+    sudo bash browserSetup.sh minimal hg19 hg38
 
 To update only the browser software and not the data, use the
 `cgiUpdate` command: 
 
-    sudo bash browserInstall.sh cgiUpdate
+    sudo bash browserSetup.sh cgiUpdate
 
 However, software may break or not work correctly if the needed data is not available. 
 Thus in most circumstances we recommend you use the `mirror` or `update` commands instead
@@ -128,7 +128,12 @@ the temporary files that are created during normal genome browser usage. They ac
 in /usr/local/apache/trash and can quickly take up a lot of space. A command like
 this should be added to your crontab file:
 
-    sudo bash browserInstall.sh clean
+    sudo bash browserSetup.sh clean
+
+If you find that you need the Kent command line utilities in addition to the Genome Browser, the 
+`addTools` command will install all the utils into `/usr/local/bin`:
+
+    sudo bash browserSetup.sh addTools
 
 If you find a bug or your Linux distribution is not supported, please contact 
 [genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). More details about the 
@@ -155,6 +160,9 @@ command is one of:
                recommended, see documentation.
   clean      - remove temporary files of the genome browser older than one 
                day, but do not delete any uploaded custom tracks
+  addTools   - copy the UCSC User Tools, e.g. blat, featureBits, overlapSelect,
+               bedToBigBed, pslCDnaFilter, twoBitToFa, gff3ToGenePred, 
+               bedSort, ... to /usr/local/bin
 
 parameters for 'minimal', 'mirror' and 'update':
   <assemblyList>     - download MySQL + /gbdb files for a space-separated

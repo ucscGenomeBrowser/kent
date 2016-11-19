@@ -345,6 +345,9 @@ command is one of:
   addTools   - copy the UCSC User Tools, e.g. blat, featureBits, overlapSelect,
                bedToBigBed, pslCDnaFilter, twoBitToFa, gff3ToGenePred, 
                bedSort, ... to /usr/local/bin
+               This has to be run after the browser has been installed, other-
+               wise these packages may be missing: libpng zlib libmysqlclient
+               
 
 parameters for 'minimal', 'mirror' and 'update':
   <assemblyList>     - download Mysql + /gbdb files for a space-separated
@@ -879,6 +882,14 @@ function installDebian ()
         # do not prompt in apt-get, will set an empty mysql root password
         export DEBIAN_FRONTEND=noninteractive
         apt-get --assume-yes install mysql-server
+        # make sure that missing values do not trigger errors, #18368
+        if [ -f /etc/mysql/mysql.conf.d/mysqld.cnf ]; then
+            # Ubuntu 16
+            sed -i '/^.mysqld.$/a sql_mode=' /etc/mysql/mysql.conf.d/mysqld.cnf
+        else
+            # Ubuntu 14
+            sed -i '/^.mysqld.$/a sql_mode=' /etc/mysql/my.cnf
+        fi
         # flag so script will set mysql root password later to a random value
         SET_MYSQL_ROOT=1
     fi

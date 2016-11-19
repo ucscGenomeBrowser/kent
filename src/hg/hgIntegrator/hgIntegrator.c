@@ -736,8 +736,9 @@ static void regionQuery(struct annoAssembly *assembly, struct bed4 *region,
                         struct slRef *dataSources, struct trackDb *fullTrackList,
                         struct annoFormatter *formatter)
 /* Get streamers, grators & do query for region.  Wasteful but necessary until
- * streamers internally handle split tables/files (i.e. are chrom-agnostic when
- * opening). */
+ * streamers internally handle split files (i.e. are chrom-agnostic when
+ * opening; we need an hg-level streamer for db table of per-chrom BAM or VCF files
+ * like 1000 Genomes Variants). */
 {
 char *db = assembly->name;
 struct annoStreamer *primary = NULL;
