@@ -108,14 +108,18 @@ return asParseText(dy->string);
 
 struct asObject *hAnnoGetAutoSqlForDbTable(char *db, char *table, struct trackDb *tdb,
                                            boolean skipBin)
-/* Get autoSql for db.dbTable from tdb and/or db.tableDescriptions;
+/* Get autoSql for db.table from optional tdb and/or db.tableDescriptions;
  * if it doesn't match columns, make one up from db.table sql fields.
  * Some subtleties are lost in translation from .as to .sql, that's why
  * we try tdb & db.tableDescriptions first.  But ultimately we need to return
  * an asObj whose columns match all fields of the table. */
 {
 struct sqlConnection *conn = hAllocConn(db);
-struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, table);
+char maybeSplitTable[HDB_MAX_TABLE_STRING];
+if (!hFindSplitTable(db, NULL, table, maybeSplitTable, NULL))
+    errAbort("hAnnoGetAutoSqlForDbTable: can't find table (or split table) for '%s.%s'",
+             db, table);
+struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, maybeSplitTable);
 struct asObject *asObj = NULL;
 if (tdb != NULL)
     asObj = asForTdb(conn, tdb);
@@ -399,11 +403,7 @@ if (!asObj && !isHubTrack(tdb->track))
         else
             return NULL;
         }
-    char maybeSplitTable[HDB_MAX_TABLE_STRING];
-    if (!hFindSplitTable(dataDb, chrom, dbTable, maybeSplitTable, NULL))
-        errAbort("hAnnoGetAutoSqlForTdb: can't find table (or split table) for '%s.%s'",
-                 dataDb, dbTable);
-    asObj = hAnnoGetAutoSqlForDbTable(dataDb, maybeSplitTable, tdb, TRUE);
+    asObj = hAnnoGetAutoSqlForDbTable(dataDb, dbTable, tdb, TRUE);
     }
 return asObj;
 }
