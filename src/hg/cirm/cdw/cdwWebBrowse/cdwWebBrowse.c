@@ -290,6 +290,43 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+char *findIndexLicPlate(struct sqlConnection *conn, long long fileId)
+/* given the fileId of .vcf or .bam file, return the lic. plate of its .tbi or .bai file. Result has to be freed. */
+{
+struct cdwFile *cf = cdwFileFromId(conn, fileId);
+char *submitFnameUpper = cloneString(cf->submitFileName);
+toUpperN(submitFnameUpper, strlen(submitFnameUpper));
+
+char *indexExt = NULL;
+if (endsWith(submitFnameUpper, ".VCF.GZ"))
+    indexExt = ".tbi";
+else if (endsWith(submitFnameUpper, ".BAM"))
+    indexExt = ".bai";
+else
+    {
+    cdwFileFree(&cf);
+    freez(&submitFnameUpper);
+    return NULL;
+    }
+
+char *indexSubmitFname = catTwoStrings(cf->submitFileName, indexExt);
+
+// pull out accession of index file given its submit filename
+char query[16032]; 
+sqlSafef(query, sizeof(query),
+    "SELECT licensePlate FROM cdwFile, cdwValidFile WHERE submitFilename=\"%s\" and cdwValidFile.fileId=cdwFile.id;",
+    indexSubmitFname);
+char *indexLicPlate = sqlQuickString(conn, query);
+if (indexLicPlate == NULL)
+    //errAbort("Could not find an index file for license plate %s, submitFilename %s not found in CDW", mainFileLicPlate, indexSubmitFname);
+    return NULL;
+
+cdwFileFree(&cf);
+freez(&submitFnameUpper);
+freez(&indexSubmitFname);
+return indexLicPlate;
+}
+
 struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)
 /* Create custom track text */
 {
@@ -300,7 +337,17 @@ char *host = hHttpHost();
 dyStringPrintf(dy, "bigDataUrl=http://%s/cgi-bin/cdwGetFile?acc=%s", host, viz->shortLabel);
 if (accessibleFilesToken != NULL)
     dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
+dyStringPrintf(dy, " ");
     
+char *indexLicPlate = findIndexLicPlate(conn, viz->fileId);
+if (indexLicPlate != NULL)
+    {
+    dyStringPrintf(dy, "bigDataIndex=http://%s/cgi-bin/cdwGetFile?acc=%s", host, indexLicPlate);
+    if (accessibleFilesToken != NULL)
+        dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
+    freez(&indexLicPlate);
+    }
+
 dyStringPrintf(dy, " type=%s", viz->type);
 return dy;
 }
@@ -791,7 +838,8 @@ if (efList == NULL)
     return;
     }
 
-accessibleFilesToken = createTokenForUser();
+if (user!=NULL)
+    accessibleFilesToken = createTokenForUser();
 
 /* Let the sql system handle the rest.  Might be one long 'in' clause.... */
 struct hash *suggestHash = accessibleSuggestHash(conn, fields, efList);
@@ -1083,7 +1131,7 @@ void doBrowseDatasets(struct sqlConnection *conn, char *tag)
 {
 printf("<UL>\n");
 char query[PATH_LEN]; 
-sqlSafef(query, sizeof(query), "select * from cdwDataset"); 
+sqlSafef(query, sizeof(query), "SELECT * FROM cdwDataset ORDER BY label "); 
 struct cdwDataset *iter, *cD = cdwDatasetLoadByQuery(conn, query);
 // Go through the cdwDataset table and generate an entry for each dataset. 
 for (iter = cD; iter != NULL; iter = iter->next)
