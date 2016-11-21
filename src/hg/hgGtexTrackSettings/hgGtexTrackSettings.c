@@ -228,8 +228,8 @@ cgiMakeHiddenVar(buf, "0");
 
 static void printTrackConfig(struct trackDb *tdb)
 /* Print track configuration panels, including Body Map.
-The layout is 2-column.  Left column is body map SVG.
-Right column has a top panel for configuration settings (non-tissue),
+The layout is 2-column.  Right column is body map SVG.
+Left column has a top panel for configuration settings (non-tissue),
 and a lower panel with a tissue selection list.
 */
 {
@@ -237,12 +237,12 @@ puts(
 "<!-- Track Configuration Panels -->\n"
 "    <div class='row'>\n"
 "        <div class='col-md-6'>\n");
-printBodyMap();
+printConfigPanel(tdb);
+printTissueTable(tdb);
 puts(
 "        </div>\n"
 "        <div class='col-md-6'>\n");
-printConfigPanel(tdb);
-printTissueTable(tdb);
+printBodyMap();
 puts(
 "        </div>\n"
 "    </div>\n");
