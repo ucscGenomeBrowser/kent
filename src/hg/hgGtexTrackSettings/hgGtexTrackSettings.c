@@ -228,8 +228,8 @@ cgiMakeHiddenVar(buf, "0");
 
 static void printTrackConfig(struct trackDb *tdb)
 /* Print track configuration panels, including Body Map.
-The layout is 2-column.  Left column is body map SVG.
-Right column has a top panel for configuration settings (non-tissue),
+The layout is 2-column.  Right column is body map SVG.
+Left column has a top panel for configuration settings (non-tissue),
 and a lower panel with a tissue selection list.
 */
 {
@@ -237,12 +237,12 @@ puts(
 "<!-- Track Configuration Panels -->\n"
 "    <div class='row'>\n"
 "        <div class='col-md-6'>\n");
-printBodyMap();
+printConfigPanel(tdb);
+printTissueTable(tdb);
 puts(
 "        </div>\n"
 "        <div class='col-md-6'>\n");
-printConfigPanel(tdb);
-printTissueTable(tdb);
+printBodyMap();
 puts(
 "        </div>\n"
 "    </div>\n");
@@ -320,6 +320,7 @@ getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 
 // Start web page with new-style header
 webStartGbNoBanner(cart, db, "Genome Browser GTEx Track Settings");
+puts("<link rel='stylesheet' href='../style/gb.css'>");         // NOTE: This will likely go to web.c
 puts("<link rel='stylesheet' href='../style/hgGtexTrackSettings.css'>");
 
 char *track = cartUsualString(cart, "g", "gtexGene");
@@ -346,7 +347,7 @@ puts(
 "</div>");
 
 // Initialize illustration display and handle mouseover and clicks
-puts("<script src='../js/hgGtexTrackSettings.js'></script>");
+puts("<script type='text/javascript' src='../js/hgGtexTrackSettings.js'></script>");
 
 webIncludeFile("inc/gbFooter.html");
 webEndJWest();

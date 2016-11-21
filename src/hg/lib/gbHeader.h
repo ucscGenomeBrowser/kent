@@ -12,7 +12,6 @@
 "    <link href='https://fonts.googleapis.com/css?family=Oswald:700|Lato:700,700italic,300,400,400italic' rel='stylesheet' type='text/css'>\n"
 "    <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css\">\n"
 "    <link rel=\"stylesheet\" href=\"../style/bootstrap.min.css\">\n"
-"    <link rel=\"stylesheet\" href=\"../style/gb.css\">\n"
 "  </head>\n"
 "\n"
 "  <body>\n"
