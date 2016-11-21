@@ -26,7 +26,7 @@ var gtexTrackSettings = (function() {
 
     // Globals
     
-    var _svgDoc;        // SVG has its own DOM
+    var _svgDoc; // SVG has its own DOM
     var _svgRoot;
 
     // Highlighted tissue is drawn last so it is on top
@@ -381,22 +381,28 @@ var gtexTrackSettings = (function() {
         tissues.forEach(animateTissue);
     }
 
+    function initSvg(svgEl) {
+        _svgDoc = svgEl.contentDocument;
+        _svgRoot = _svgDoc.documentElement;
+        initBodyMap();
+        animateTissues();
+    }
+
     function init() {
         // cart.setCgi('gtexTrackSettings');
 
         $(function() {
             // After page load, tweak layout and initialize event handlers
-            // TODO: need to wait onready ?
-            var bodyMapSvg = document.getElementById('bodyMapSvg');
-
-            // Wait for SVG to load
-            bodyMapSvg.addEventListener('load', function() {
-                _svgRoot = bodyMapSvg.contentDocument.documentElement;
-                _svgDoc = bodyMapSvg.contentDocument;
-                
-                initBodyMap();
-                animateTissues();
-            }, false);
+            // Check if SVG is loaded, if wait for the event
+            var svgEl = document.getElementById('bodyMapSvg');
+            if (svgEl.getSVGDocument()) {
+                initSvg(svgEl);
+            } else {
+                // Wait for SVG to load
+                svgEl.addEventListener('load', function() {
+                    initSvg(svgEl);
+                }, false);
+            }
             $('.gbButtonGoContainer').click(submitForm);
         });
     }
