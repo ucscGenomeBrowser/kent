@@ -23,6 +23,8 @@
 #include "cdw.h"
 #endif
 
+#include "cart.h"
+
 #define cdwRandomString "175d5bc99f7bb7312812c47d236791879BAEXzusIsdklnw86d73<*#$*(#)!DSFOUIHLjksdf"
 
 extern char *cdwDatabase;   /* Name of database we connect to. */
