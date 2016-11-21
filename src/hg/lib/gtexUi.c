@@ -317,7 +317,7 @@ void gtexGeneUiGeneModel(struct cart *cart, char *track, struct trackDb *tdb)
 /* Checkbox to enable display of GTEx gene model */
 {
 char cartVar[1024];
-puts("<b>Show GTEx gene model</b>\n");
+puts("<b>Show GTEx gene model:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SHOW_EXONS);
 boolean showExons = cartCgiUsualBoolean(cart, cartVar, GTEX_SHOW_EXONS_DEFAULT);
 cgiMakeCheckBox(cartVar, showExons);
