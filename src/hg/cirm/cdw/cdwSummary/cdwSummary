@@ -255,6 +255,8 @@ def writeHeader(ofh, title):
         <script src="//demos.flesler.com/jquery/scrollTo/js/jquery.scrollTo-min.js"></script>
         """)
 
+    # the string <!--menuBar--> will get replaced with out menu bar html code by cdwGetFile
+
     ofh.write("""
     <title>%s</title>
 </head>
@@ -770,7 +772,7 @@ def writeCacheFile(datasetId, exprMatrix, metaTabFname, addMetaTabFname, geneToT
     logging.info("Wrote %s" % cacheFname)
     return sumData
 
-def writeSummarySection(summData, htmlFh):
+def generateSummarySection(summData, htmlFh):
     htmlFh.write("""
     <h2>%(title)s</h2>
     <div style="width:800px">""" % summData)
@@ -2097,6 +2099,10 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
     #for gene, mut in commonMuts:
         #htmlFh.write("%s/%s" % (gene, mut))
 
+def pasteSummarySection(summDescFn, htmlFh):
+    " insert manually generated summary section into html file "
+    htmlFh.write(open(summDescFn).read())
+
 def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annovarDir, geneToSym, tagLabels, outDir):
     """
     write an html page and various annex .js and .css files
@@ -2145,7 +2151,7 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annov
 
         markerGenes = set(sumData["markers"])
 
-        writeCellPage(outDir, sumData)
+        #writeCellPage(outDir, sumData)
         cellIds, smallExprMatrix = writeHeatmapPage(outDir, sumData)
         #smallMatrix = transMatrix(cellIds, smallExprMatrix)
 
@@ -2153,11 +2159,15 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annov
     htmlFh = open(join(outDir, "index.html"), "w")
     writeHeader(htmlFh, sumData["title"])
 
-    writeSummarySection(sumData, htmlFh)
+    summDescFn = join(dirname(tagTabFname), "summDesc.html")
+    if not isfile(summDescFn):
+        generateSummarySection(sumData, htmlFh)
+    else:
+        pasteSummarySection(summDescFn, htmlFh)
 
     cellInfo = sumData["cellInfo"]
 
-    writeCellInfo(htmlFh, cellInfo, tagLabels)
+    #writeCellInfo(htmlFh, cellInfo, tagLabels)
 
     # only do this part if we have rna-seq data
     if matrixFname!="none":
@@ -2169,8 +2179,8 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annov
 
         writeSeuratSection(htmlFh, matrixFname, fullExprMatrix, cellInfo, geneToSym, tagLabels, outDir)
 
-        if not options.onlySeurat:
-            writeCellTypeSection(htmlFh, cellTypeJsonFname)
+        #if not options.onlySeurat:
+            #writeCellTypeSection(htmlFh, cellTypeJsonFname)
 
     if annovarDir:
         tmpDir = makeTmpDirFor(outDir)
@@ -2191,6 +2201,7 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annov
     htmlFh.write("""
 </div><!-- mainContent -->
 </body></html>""")
+
     logging.info("Wrote %s" % htmlFh.name)
 
 def main():
