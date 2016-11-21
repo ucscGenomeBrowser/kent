@@ -36,7 +36,8 @@ return unknown;
 
 
 static struct gtexGeneBed *getGtexGene(char *item, char *chrom, int start, int end, char *table)
-/* Retrieve gene info for this item from the main track table */
+/* Retrieve gene info for this item from the main track table.
+ * Item name may be gene name, geneId or name/geneId */
 {
 struct gtexGeneBed *gtexGene = NULL;
 struct sqlConnection *conn = hAllocConn(database);
@@ -45,9 +46,12 @@ char query[512];
 struct sqlResult *sr;
 if (sqlTableExists(conn, table))
     {
-    sqlSafef(query, sizeof query, "SELECT * FROM %s WHERE name = '%s' AND chrom = '%s' "
-                                  " and chromStart = %d and chromEnd = %d", 
-                                        table, item, chrom, start, end);
+    char *geneId = stringIn("ENSG", item);
+    sqlSafef(query, sizeof query, 
+                "SELECT * FROM %s WHERE %s = '%s' "
+                    "AND chrom = '%s' AND chromStart = %d AND chromEnd = %d", 
+                            table, geneId ? "geneId" : "name", geneId ? geneId : item, 
+                                chrom, start, end);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
