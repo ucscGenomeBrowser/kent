@@ -455,17 +455,6 @@
     light for readable labels.</P>
 </DIV>
 
-<div class="format"><code>darkerLabels &lt;on&gt;</code></div>
-    <P>Many tracks undergo multiple revisions over time.  In some cases,
-    the older versions should be retained, but even if they are not, it can be
-    useful to declare the current version of the track.  Use
-    this setting to display a version statement on the track
-    configuration page and item details page of a track.  The string
-    will support limited HTML.</P>
-    <P><B>Example:</B></P>
-    <pre>   dataVersion May 2011 &lt;em&gt;beta&lt;/em&gt;</pre>
-</DIV>
-
 <DIV class="dataVersion"><span class="types all"></span>
 <div class="format"><code>dataVersion &lt;str&gt;</code></div>
     <P>Many tracks undergo multiple revisions over time.  In some cases,
