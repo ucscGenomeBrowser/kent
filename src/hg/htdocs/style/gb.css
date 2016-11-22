@@ -147,6 +147,10 @@ span#home-link {
     vertical-align: -moz-middle-with-baseline;
 }   
 
+.gbIconArrow {
+    cursor: pointer;
+}
+
 /* UI controls */
 
 .gbButton {
