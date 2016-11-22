@@ -290,43 +290,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-char *findIndexLicPlate(struct sqlConnection *conn, long long fileId)
-/* given the fileId of .vcf or .bam file, return the lic. plate of its .tbi or .bai file. Result has to be freed. */
-{
-struct cdwFile *cf = cdwFileFromId(conn, fileId);
-char *submitFnameUpper = cloneString(cf->submitFileName);
-toUpperN(submitFnameUpper, strlen(submitFnameUpper));
-
-char *indexExt = NULL;
-if (endsWith(submitFnameUpper, ".VCF.GZ"))
-    indexExt = ".tbi";
-else if (endsWith(submitFnameUpper, ".BAM"))
-    indexExt = ".bai";
-else
-    {
-    cdwFileFree(&cf);
-    freez(&submitFnameUpper);
-    return NULL;
-    }
-
-char *indexSubmitFname = catTwoStrings(cf->submitFileName, indexExt);
-
-// pull out accession of index file given its submit filename
-char query[16032]; 
-sqlSafef(query, sizeof(query),
-    "SELECT licensePlate FROM cdwFile, cdwValidFile WHERE submitFilename=\"%s\" and cdwValidFile.fileId=cdwFile.id;",
-    indexSubmitFname);
-char *indexLicPlate = sqlQuickString(conn, query);
-if (indexLicPlate == NULL)
-    //errAbort("Could not find an index file for license plate %s, submitFilename %s not found in CDW", mainFileLicPlate, indexSubmitFname);
-    return NULL;
-
-cdwFileFree(&cf);
-freez(&submitFnameUpper);
-freez(&indexSubmitFname);
-return indexLicPlate;
-}
-
 struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)
 /* Create custom track text */
 {
@@ -339,13 +302,17 @@ if (accessibleFilesToken != NULL)
     dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
 dyStringPrintf(dy, " ");
     
-char *indexLicPlate = findIndexLicPlate(conn, viz->fileId);
-if (indexLicPlate != NULL)
+char *indexExt = NULL;
+if (sameWord(viz->type, "bam"))
+    indexExt = ".bai";
+else if (sameWord(viz->type, "vcfTabix"))
+    indexExt = ".tbi";
+
+if (indexExt != NULL)
     {
-    dyStringPrintf(dy, "bigDataIndex=http://%s/cgi-bin/cdwGetFile?acc=%s", host, indexLicPlate);
+    dyStringPrintf(dy, "bigDataIndex=http://%s/cgi-bin/cdwGetFile?addExt=%s&acc=%s", host, indexExt, viz->shortLabel);
     if (accessibleFilesToken != NULL)
         dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
-    freez(&indexLicPlate);
     }
 
 dyStringPrintf(dy, " type=%s", viz->type);
@@ -383,7 +350,7 @@ if (viz == NULL)
     return FALSE;
 struct dyString *track = customTextForFile(conn, viz);
 char *encoded = cgiEncode(track->string);
-printf("<A HREF=\"../cgi-bin/hgTracks");
+printf("<A TARGET=_BLANK HREF=\"../cgi-bin/hgTracks");
 printf("?%s", cartSidUrlString(cart));
 printf("&db=%s", vf->ucscDb);
 printf("&hgt.customText=");
