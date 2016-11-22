@@ -117,10 +117,14 @@ printf("Content-Length: %lld\n", (long long)fileSize(filePath));
 printf("X-Sendfile: %s\n\n", filePath);
 }
 
-void sendFileByAcc(struct sqlConnection *conn, char* acc, boolean useSubmitFname)
+void sendFileByAcc(struct sqlConnection *conn, char* acc, boolean useSubmitFname, char *addExt)
 /* send file identified by acc (=cdwValidFile.licensePlate), suggests a canonical filename of the format
  * <licensePlate>.<originalExtension> 
- * Example URL: http://hgwdev.soe.ucsc.edu/cgi-bin/cdwGetFile?acc=SCH000FSW */
+ * Example URL: http://hgwdev.soe.ucsc.edu/cgi-bin/cdwGetFile?acc=SCH000FSW *
+ * if useSubmitFname is TRUE, suggest the submission filename, not a canonical name.
+ * if addExt is not NULL, will not retrieve the file identified by accession but rather its index file, 
+ * with the given extension (.tbi or .bai) */
+
 {
 struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
 if (vf==NULL)
@@ -129,18 +133,25 @@ if (vf==NULL)
 struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
 char* filePath = cdwPathForFileId(conn, vf->fileId);
 
+if (addExt != NULL)
+    {
+    if (! (sameWord(addExt, ".bai") || sameWord(addExt, ".tbi")))
+        errAbort("The addExt argument to cdwGetFile can only be .bai or .tbi. No other values are allowed.");
+    filePath = catTwoStrings(filePath, addExt);
+    }
+else
+    addExt = ""; // make sure reference to addExt does not fail below
+
 mustHaveAccess(conn, ef);
 
 char suggestName[8000];
 if (useSubmitFname)
-    safef(suggestName, sizeof(suggestName), "%s", basename(ef->submitFileName));
+    safef(suggestName, sizeof(suggestName), "%s%s", basename(ef->submitFileName), addExt);
 else
     {
-    // use the license plate as the basename of the downloaded file.
-    // Take the extension from the submitted filename, as cdwFile.format is not the same as the extension
-    // e.g. when database says format=fasta -> file extension should be .fa.gz
-    char *submitExt = skipBeyondDelimit(basename(ef->submitFileName), '.');
-    safef(suggestName, sizeof(suggestName), "%s.%s", vf->licensePlate, submitExt);
+    char *formatExt = fileExtFromFormat(vf->format);
+    safef(suggestName, sizeof(suggestName), "%s%s%s", vf->licensePlate, formatExt, addExt);
+    freez(&formatExt);
     }
 
 sendFile(vf->format, filePath, suggestName);
@@ -209,9 +220,10 @@ if (path==NULL)
     path = cgiOptionalString("path"); // when calling via cgi-spoof from command line
 
 boolean useSubmitFname = cgiOptionalInt("useSubmitFname", 0);
+char *addExt = cgiOptionalString("addExt");
 
 if (acc != NULL)
-    sendFileByAcc(conn, acc, useSubmitFname);
+    sendFileByAcc(conn, acc, useSubmitFname, addExt);
 else if (path != NULL)
     sendFileByPath(conn, path);
 else

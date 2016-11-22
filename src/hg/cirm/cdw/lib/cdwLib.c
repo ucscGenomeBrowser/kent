@@ -2371,3 +2371,17 @@ freez(&menubarStr);
 return menubarStr2;
 }
 
+char *fileExtFromFormat(char *format)
+/* return file extension given the cdwFile format as defined in cdwValid.c. Result has to be freed */
+{
+if (sameWord(format, "vcf"))
+    return cloneString(".vcf.gz");
+if (sameWord(format, "fasta"))
+    return cloneString(".fa.gz");
+if (sameWord(format, "fastq"))
+    return cloneString(".fastq.gz");
+if (sameWord(format, "unknown"))
+    return cloneString("");
+
+return catTwoStrings(".", format);
+}
