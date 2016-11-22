@@ -207,9 +207,10 @@ if (fileName == NULL)
 	}
     }
 
+char *indexName = hReplaceGbdb(trackDbSetting(tdb, "bigDataIndex"));
 char *cacheDir =  cfgOption("cramRef");
 char *refUrl = trackDbSetting(tdb, "refUrl");
-bamFetchPlus(fileName, position, oneBam, &btd, NULL, refUrl, cacheDir);
+bamAndIndexFetchPlus(fileName, indexName, position, oneBam, &btd, NULL, refUrl, cacheDir);
 if (isPaired)
     {
     char *setting = trackDbSettingOrDefault(tdb, "pairSearchRange", "20000");

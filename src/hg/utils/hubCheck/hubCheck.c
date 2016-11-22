@@ -455,6 +455,10 @@ if (relativeUrl != NULL)
     {
     char *type = trackDbRequiredSetting(tdb, "type");
     char *bigDataUrl = trackHubRelativeUrl(genome->trackDbFile, relativeUrl);
+
+    char *relIdxUrl = trackDbSetting(tdb, "bigDataIndex");
+    char *bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
+
     verbose(2, "checking %s.%s type %s at %s\n", genome->name, tdb->track, type, bigDataUrl);
     if (startsWithWord("bigWig", type))
         {
@@ -479,7 +483,7 @@ if (relativeUrl != NULL)
     else if (startsWithWord("vcfTabix", type))
         {
         /* Just open and close to verify file exists and is correct type. */
-        struct vcfFile *vcf = vcfTabixFileMayOpen(bigDataUrl, NULL, 0, 0, 1, 1);
+        struct vcfFile *vcf = vcfTabixFileAndIndexMayOpen(bigDataUrl, bigDataIndex, NULL, 0, 0, 1, 1);
         if (vcf == NULL)
             // Warnings already indicated whether the tabix file is missing etc.
             errAbort("Couldn't open %s and/or its tabix index (.tbi) file.  "
@@ -489,7 +493,7 @@ if (relativeUrl != NULL)
         }
     else if (startsWithWord("bam", type))
         {
-        bamFileAndIndexMustExist(bigDataUrl);
+        bamFileAndIndexMustExist(bigDataUrl, bigDataIndex);
         }
 #ifdef USE_HAL
     else if (startsWithWord("halSnake", type))
