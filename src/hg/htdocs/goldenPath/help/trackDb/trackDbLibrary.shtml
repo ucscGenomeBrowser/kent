@@ -342,11 +342,27 @@
     the supported remote data file formats: bam/cram, bigBed, bigWig or
     vcfTabix.  Note that bam/cram and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
-    standard suffix (".bai" and ".tbi" respectively).</P>
-    <P><B>Example:</B></P>
+    standard suffix (".bai" and ".tbi" respectively), unless <A
+    <A onclick="jumpTo(this)" HREF="#">bigDataIndex</A> is used.
+
+    </P> <P><B>Example:</B></P>
     <pre>   bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb</pre>
     &nbsp;&nbsp;or
     <pre>   bigDataUrl biBrainH3K4me1.bb</pre>
+</DIV>
+
+<DIV class="bigDataIndex"><span class="types bam vcfTabix"></span>
+<div class="format"><code>bigDataIndex &lt;url/relativePath&gt;</code></div>
+    <P>The location of a remote data file containing the index. This setting
+    can be used when the index cannot be placed alongside the big data file,
+    e.g. because of restricted access permissions or due to file name constraints.
+    <P>The setting is either the full URL (including <code>http:</code> or another protocol)
+    or it is relative to the directory in which the trackDb file containing this setting
+    is located.  The file must be in one of
+    the supported index data file formats: bai (BAM index) or tbi (tabix index).
+
+    </P> <P><B>Example:</B></P>
+    <pre>   bigDataIndex http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bam.bai</pre>
 </DIV>
 
 <DIV class="boxedCfg"><span class="types all"></span>

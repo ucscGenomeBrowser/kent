@@ -212,16 +212,31 @@ return lf;
 
 struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
 /* Wrap a line file around a data file that has been compressed and indexed
- * by the tabix command line program.  The index file <fileOrUrl>.tbi must be
- * readable in addition to fileOrUrl. If there's a problem, warn & return NULL.
+ * by the tabix command line program. <fileOrUrl>.tbi must be readable in
+ * addition to fileOrUrl. If there's a problem, warn & return NULL.  This works
+ * only if kent/src has been compiled with USE_TABIX=1 and linked
+ * with the tabix C library. */
+{
+return lineFileTabixAndIndexMayOpen(fileOrUrl, NULL, zTerm);
+}
+
+
+struct lineFile *lineFileTabixAndIndexMayOpen(char *fileOrUrl, char *tbiFileOrUrl, bool zTerm)
+/* Wrap a line file around a data file that has been compressed and indexed
+ * by the tabix command line program. tbiFileOrUrl can be NULL, it defaults to <fileOrUrl>.tbi.
+ * It must be readable in addition to fileOrUrl. If there's a problem, warn & return NULL.
  * This works only if kent/src has been compiled with USE_TABIX=1 and linked
  * with the tabix C library. */
 {
 if (fileOrUrl == NULL)
     errAbort("lineFileTabixMayOpen: fileOrUrl is NULL");
-int tbiNameSize = strlen(fileOrUrl) + strlen(".tbi") + 1;
-char tbiName[tbiNameSize];
-safef(tbiName, sizeof(tbiName), "%s.tbi", fileOrUrl);
+
+char tbiName[4096];
+if (tbiFileOrUrl==NULL)
+    safef(tbiName, sizeof(tbiName), "%s.tbi", fileOrUrl);
+else
+    safef(tbiName, sizeof(tbiName), "%s", tbiFileOrUrl);
+
 htsFile *htsFile = hts_open(fileOrUrl, "r");
 if (htsFile == NULL)
     {

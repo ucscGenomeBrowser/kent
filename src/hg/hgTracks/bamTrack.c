@@ -509,12 +509,14 @@ if (errCatchStart(errCatch))
 
     char *fileName2 = hReplaceGbdb(fileName);
 
+    char *baiFileOrUrl = hReplaceGbdb(trackDbSetting(tg->tdb, "bigDataIndex"));
+
     char posForBam[512];
     safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
     char *cacheDir =  cfgOption("cramRef");
     char *refUrl = trackDbSetting(tg->tdb, "refUrl");
     if (!isPaired)
-	bamFetchPlus(fileName2, posForBam, addBam, &btd, NULL, refUrl, cacheDir);
+	bamAndIndexFetchPlus(fileName2, baiFileOrUrl, posForBam, addBam, &btd, NULL, refUrl, cacheDir);
     else
 	{
 	char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
@@ -522,7 +524,7 @@ if (errCatchStart(errCatch))
 	if (pairSearchRange > 0)
 	    safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
 		  max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamFetchPlus(fileName2, posForBam, addBamPaired, &btd, NULL, refUrl, cacheDir);
+	bamAndIndexFetchPlus(fileName2, baiFileOrUrl, posForBam, addBamPaired, &btd, NULL, refUrl, cacheDir);
 	struct hashEl *hel;
 	struct hashCookie cookie = hashFirst(btd.pairHash);
 	while ((hel = hashNext(&cookie)) != NULL)

@@ -1155,6 +1155,8 @@ static void vcfTabixLoadItems(struct track *tg)
 /* Load items in window from VCF file using its tabix index file. */
 {
 char *fileOrUrl = NULL;
+char *tbiFileOrUrl = trackDbSetting(tg->tdb, "bigDataIndex"); // unrelated to mysql
+
 /* Figure out url or file name. */
 if (tg->parallelLoading)
     {
@@ -1167,6 +1169,7 @@ else
     fileOrUrl = bbiNameFromSettingOrTableChrom(tg->tdb, conn, tg->table, chromName);
     hFreeConn(&conn);
     }
+
 if (isEmpty(fileOrUrl))
     return;
 int vcfMaxErr = -1;
@@ -1178,7 +1181,7 @@ if (slCount(windows)>1)
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr, -1);
+    vcff = vcfTabixFileAndIndexMayOpen(fileOrUrl, tbiFileOrUrl, chromName, winStart, winEnd, vcfMaxErr, -1);
     if (vcff != NULL)
 	{
 	filterRecords(vcff, tg->tdb);

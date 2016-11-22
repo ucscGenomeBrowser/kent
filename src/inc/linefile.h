@@ -285,6 +285,13 @@ void lineFileRemoveInitialCustomTrackLines(struct lineFile *lf);
      "http://samtools.sourceforge.net/ and rebuilt kent/src with USE_TABIX=1\n" \
      "(see http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables)."
 
+struct lineFile *lineFileTabixAndIndexMayOpen(char *fileOrUrl, char *tbiFileOrUrl, bool zTerm);
+/* Wrap a line file around a data file that has been compressed and indexed
+ * by the tabix command line program. tbiFileOrUrl can be NULL, it defaults to <fileOrUrl>.tbi.
+ * It must be readable in addition to fileOrUrl. If there's a problem, warn & return NULL.
+ * This works only if kent/src has been compiled with USE_TABIX=1 and linked
+ * with the tabix C library. */
+
 struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm);
 /* Wrap a line file around a data file that has been compressed and indexed
  * by the tabix command line program.  The index file <fileName>.tbi must be

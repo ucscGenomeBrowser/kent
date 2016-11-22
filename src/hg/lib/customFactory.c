@@ -2318,16 +2318,22 @@ static struct customTrack *bamLoader(struct customFactory *fac, struct hash *chr
 {
 struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+char *bigDataIndexUrl = hashFindVal(settings, "bigDataIndex");
+
 struct dyString *dyErr = dyStringNew(0);
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
+
 checkAllowedBigDataUrlProtocols(bigDataUrl);
+if (bigDataIndexUrl != NULL)
+    checkAllowedBigDataUrlProtocols(bigDataIndexUrl);
+
 if (doExtraChecking)
     {
     /* protect against temporary network error */
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	{
-	bamFileAndIndexMustExist(bigDataUrl);
+	bamFileAndIndexMustExist(bigDataUrl, bigDataIndexUrl);
 	}
     errCatchEnd(errCatch);
     if (isNotEmpty(errCatch->message->string))
@@ -2366,9 +2372,14 @@ static struct customTrack *vcfTabixLoader(struct customFactory *fac, struct hash
 {
 struct hash *settings = track->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+char *bigDataIndexUrl = hashFindVal(settings, "bigDataIndex");
+
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 struct dyString *dyErr = dyStringNew(0);
 checkAllowedBigDataUrlProtocols(bigDataUrl);
+if (bigDataIndexUrl)
+    checkAllowedBigDataUrlProtocols(bigDataIndexUrl);
+
 if (doExtraChecking)
     {
     /* protect against temporary network error */
@@ -2376,10 +2387,10 @@ if (doExtraChecking)
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	{
-	struct vcfFile *vcff = vcfTabixFileMayOpen(bigDataUrl, NULL, 0, 0, vcfMaxErr, -1);
+	struct vcfFile *vcff = vcfTabixFileAndIndexMayOpen(bigDataUrl, bigDataIndexUrl, NULL, 0, 0, vcfMaxErr, -1);
 	if (vcff == NULL)
 	    {
-            dyStringPrintf(dyErr, "Unable to load and/or parse %s's bigDataUrl %s",
+            dyStringPrintf(dyErr, "Unable to load and/or parse %s's bigDataUrl %s or its tabix index",
 			   track->tdb->shortLabel, bigDataUrl);
 	    }
 	vcfFileFree(&vcff);

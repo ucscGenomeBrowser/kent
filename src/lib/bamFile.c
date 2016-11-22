@@ -13,16 +13,19 @@
 // If KNETFILE_HOOKS is used (as recommended!), then we can simply call bam_index_load
 // without worrying about the samtools lib creating local cache files in cgi-bin:
 
-static bam_index_t *bamOpenIdx(samfile_t *sam, char *fileOrUrl)
+static bam_index_t *bamOpenIdxAndBai(samfile_t *sam, char *fileOrUrl, char *baiFileOrUrl)
 /* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
- * otherwise return NULL. */
+ * otherwise return NULL. baiFileOrUrl can be NULL. */
 {
 if (sam->format.format == cram) 
     return sam_index_load(sam, fileOrUrl);
 
 // assume that index is a .bai file 
 char indexName[4096];
-safef(indexName, sizeof indexName, "%s.bai", fileOrUrl);
+if (baiFileOrUrl==NULL)
+    safef(indexName, sizeof indexName, "%s.bai", fileOrUrl);
+else
+    safef(indexName, sizeof indexName, "%s", baiFileOrUrl);
 return sam_index_load2(sam, fileOrUrl, indexName);
 }
 
@@ -35,6 +38,13 @@ if (pIdx != NULL && *pIdx != NULL)
     free(*pIdx); // Not freeMem, freez etc -- sam just uses malloc/calloc.
     *pIdx = NULL;
     }
+}
+
+static bam_index_t *bamOpenIdx(samfile_t *sam, char *fileOrUrl)
+/* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
+ * otherwise return NULL. baiFileOrUrl can be NULL. */
+{
+return bamOpenIdxAndBai(sam, fileOrUrl, NULL);
 }
 
 boolean bamFileExists(char *fileOrUrl)
@@ -118,12 +128,12 @@ if (pSamFile != NULL)
     }
 }
 
-void bamFileAndIndexMustExist(char *fileOrUrl)
+void bamFileAndIndexMustExist(char *fileOrUrl, char *baiFileOrUrl)
 /* Open both a bam file and its accompanying index or errAbort; this is what it
  * takes for diagnostic info to propagate up through errCatches in calling code. */
 {
 samfile_t *bamF = bamOpen(fileOrUrl, NULL);
-bam_index_t *idx = bamOpenIdx(bamF, fileOrUrl);
+bam_index_t *idx = bamOpenIdxAndBai(bamF, fileOrUrl, baiFileOrUrl);
 if (idx == NULL)
     errAbort("failed to read index file (.bai) corresponding to %s", fileOrUrl);
 bamCloseIdx(&idx);
@@ -188,9 +198,11 @@ if (samfile->format.format == cram)
     }
 }
 
-void bamFetchPlus(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+void bamAndIndexFetchPlus(char *fileOrUrl, char *baiFileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
 		 samfile_t **pSamFile, char *refUrl, char *cacheDir)
-/* Open the .bam file, fetch items in the seq:start-end position range,
+/* Open the .bam file with the .bai index specified by baiFileOrUrl.
+ * baiFileOrUrl can be NULL and defaults to <fileOrUrl>.bai.
+ * Fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData.
  * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
  * The pSamFile parameter is optional.  If non-NULL it will be filled in, just for
@@ -207,7 +219,7 @@ if (fh->format.format == cram)
 bam_hdr_t *header = sam_hdr_read(fh);
 if (pSamFile != NULL)
     *pSamFile = fh;
-bam_index_t *idx = bamOpenIdx(fh, bamFileName);
+bam_index_t *idx = bamOpenIdxAndBai(fh, bamFileName, baiFileOrUrl);
 if (idx == NULL)
     warn("bam_index_load(%s) failed.", bamFileName);
 else
@@ -216,6 +228,12 @@ else
     bamCloseIdx(&idx);
     }
 bamClose(&fh);
+}
+
+void bamFetchPlus(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+		 samfile_t **pSamFile, char *refUrl, char *cacheDir)
+{
+bamAndIndexFetchPlus(fileOrUrl, NULL, position, callbackFunc, callbackData, pSamFile, refUrl, cacheDir);
 }
 
 void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
