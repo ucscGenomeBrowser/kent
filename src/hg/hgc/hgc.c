@@ -3075,9 +3075,9 @@ char *trackName = getParentTrackName(tdb);
 struct trackDb *parentTdb = tdb;
 if (!sameString(trackName, tdb->track))
     parentTdb = hTrackDbForTrack(database, trackName);
-printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
+printf("<P><A HREF=\"%s?g=%s&%s\">"
        "Go to %s track controls</A></P>\n",
-       trackName, cartSidUrlString(cart), parentTdb->shortLabel);
+       hTrackUiForTrack(tdb->track), trackName, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
 static void printDataVersion(struct trackDb *tdb)

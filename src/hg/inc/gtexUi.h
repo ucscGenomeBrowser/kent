@@ -69,6 +69,18 @@
 #define GTEX_LABEL_BOTH           "both"
 #define GTEX_LABEL_DEFAULT  GTEX_LABEL_SYMBOL
 
+/* Identify GTEx gene track as it uses special trackUI. 
+ * NOTE: trackDb must follow this naming convention unless/until there is
+ * a new trackType.
+ */ 
+#define GTEX_GENE_TRACK_BASENAME        "gtexGene"
+
+boolean gtexIsGeneTrack(char *trackName);
+/* Identify GTEx gene track so custom trackUi CGI can be launched */
+
+char *gtexGeneTrackUiName();
+/* Refer to Body Map CGI if suitable */
+
 void gtexPortalLink(char *geneId);
 /* print URL to GTEX portal gene expression page using Ensembl Gene Id*/
 

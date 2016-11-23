@@ -479,6 +479,16 @@ else
 return cfgOptionDefault("browser.cgiRoot", defaultDir);
 }
 
+char *hTrackUiForTrack(char *trackName)
+/* Relative URL to extended track UI, delegated to a track-specific UI if available. */
+{
+if (trackName == NULL)
+    return hgTrackUiName();
+if (gtexIsGeneTrack(trackName))
+    return gtexGeneTrackUiName();
+return hgTrackUiName();
+}
+
 /******  Some stuff for tables of controls ******/
 
 struct controlGrid *startControlGrid(int columns, char *align)
