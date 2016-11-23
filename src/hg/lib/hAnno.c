@@ -138,6 +138,15 @@ else
     }
 }
 
+static char *getBigDataIndexName(struct trackDb *tdb)
+/* Get tbi/bai URL for a BAM/VCF from trackDb or custom track. */
+{
+char *bigIndexUrl = trackDbSetting(tdb, "bigDataIndex");
+if (isNotEmpty(bigIndexUrl))
+    return bigIndexUrl;
+return NULL;
+}
+
 static char *getBigDataFileName(char *db, struct trackDb *tdb, char *selTable, char *chrom)
 /* Get fileName from bigBed/bigWig/BAM/VCF database table, or bigDataUrl from custom track. */
 {
@@ -169,10 +178,11 @@ hFreeConn(&conn);
 return matches;
 }
 
-struct annoStreamer *hAnnoStreamerFromBigFileUrl(char *fileOrUrl, struct annoAssembly *assembly,
+struct annoStreamer *hAnnoStreamerFromBigFileUrl(char *fileOrUrl, char *indexUrl, struct annoAssembly *assembly,
                                                  int maxOutRows, char *type)
 /* Determine what kind of big data file/url we have and make streamer for it.
- * If type is NULL, this will determine type using custom track type or file suffix. */
+ * If type is NULL, this will determine type using custom track type or file suffix.
+ * indexUrl can be NULL, unless the type is VCF and the .tbi file is not alongside the .VCF */
 {
 struct annoStreamer *streamer = NULL;
 if (isEmpty(type))
@@ -191,9 +201,9 @@ if (type == NULL)
 if (sameString(type, "bigBed") || sameString("bigGenePred", type))
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
 else if (sameString(type, "vcfTabix"))
-    streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
+    streamer = annoStreamVcfNew(fileOrUrl, indexUrl, TRUE, assembly, maxOutRows);
 else if (sameString(type, "vcf"))
-    streamer = annoStreamVcfNew(fileOrUrl, FALSE, assembly, maxOutRows);
+    streamer = annoStreamVcfNew(fileOrUrl, NULL, FALSE, assembly, maxOutRows);
 else if (sameString(type, "bigWig"))
     streamer = annoStreamBigWigNew(fileOrUrl, assembly);
 else if (sameString(type, "pgSnp"))
@@ -231,12 +241,13 @@ else if (sameString("longTabix", tdb->type))
 else if (sameString("vcfTabix", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
-    streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
+    char *indexUrl = getBigDataIndexName(tdb);
+    streamer = annoStreamVcfNew(fileOrUrl, indexUrl, TRUE, assembly, maxOutRows);
     }
 else if (sameString("vcf", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, dbTable, chrom);
-    streamer = annoStreamVcfNew(fileOrUrl, FALSE, assembly, maxOutRows);
+    streamer = annoStreamVcfNew(fileOrUrl, NULL, FALSE, assembly, maxOutRows);
     }
 else if (sameString("bam", tdb->type))
     {
@@ -269,7 +280,7 @@ if (streamer == NULL)
 return streamer;
 }
 
-struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, struct annoAssembly *assembly,
+struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, char *indexUrl, struct annoAssembly *assembly,
                                              int maxOutRows, enum annoGratorOverlap overlapRule)
 /* Determine what kind of big data file/url we have and make streamer & grator for it. */
 {
@@ -279,7 +290,7 @@ char *type = customTrackTypeFromBigFile(fileOrUrl);
 if (sameString(type, "bigBed") || sameString("bigGenePred", type))
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
 else if (sameString(type, "vcfTabix"))
-    streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
+    streamer = annoStreamVcfNew(fileOrUrl, indexUrl, TRUE, assembly, maxOutRows);
 else if (sameString(type, "bigWig"))
     grator = annoGrateBigWigNew(fileOrUrl, assembly, agwmAverage);
 else if (sameString(type, "bam"))
@@ -306,6 +317,7 @@ boolean primaryIsVariants = (primaryAsObj != NULL &&
                               asObjectsMatch(primaryAsObj, pgSnpFileAsObj()) ||
                               asObjectsMatch(primaryAsObj, vcfAsObj())));
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+char *indexUrl = getBigDataIndexName(tdb);
 if (bigDataUrl != NULL)
     {
     if (primaryIsVariants && sameString("bigGenePred", tdb->type))
@@ -314,7 +326,7 @@ if (bigDataUrl != NULL)
         grator = annoGratorGpVarNew(streamer);
         }
     else
-        grator = hAnnoGratorFromBigFileUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
+        grator = hAnnoGratorFromBigFileUrl(bigDataUrl, indexUrl, assembly, maxOutRows, overlapRule);
     }
 else if (startsWithWord("wig", tdb->type))
     {
