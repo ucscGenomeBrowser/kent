@@ -72,3 +72,11 @@
 .gbSimpleBanner {
     padding-left: 30px;
 }
+
+.gbmCredit {
+    margin-right: 70px;
+    color: #003a72;     /* dark blue */
+    font-size: 9px;
+    font-style: italic;
+    text-align: right;
+}
