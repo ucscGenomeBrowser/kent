@@ -37,11 +37,6 @@ return startsWith(GTEX_GENE_TRACK_BASENAME, trackName);
 char *gtexGeneTrackUiName()
 /* Refer to Body Map CGI if suitable */
 {
-// TODO: Remove cfg option when CGI is formally released
-#include "hgConfig.h"
-if (!cfgOption("gtexBodyMap"))
-    return hgTrackUiName();
-
 // Display body map configuration page if user is on a browser we've tested
 enum browserType bt = cgiBrowser();
 if (bt == btChrome || bt == btFF || bt == btSafari)
