@@ -253,7 +253,7 @@ static void printDataInfo(char *db, struct trackDb *tdb)
 {
 puts(
 "<a name='INFO_SECTION'></a>\n"
-"    <div class='row gbSectionBanner gbSimpleBanner'>\n"
+"    <div class='row gbSectionBanner'>\n"
 "        <div class='col-md-11'>Data Information</div>\n"
 "        <div class='col-md-1'>\n"
 // TODO: move click handler to JS
@@ -263,7 +263,7 @@ puts(
 "    </div>\n"
 );
 puts(
-"    <div class='gbTrackDescriptionPanel'>\n"
+"    <div class='row gbTrackDescriptionPanel'>\n"
 "       <div class='gbTrackDescription'>\n");
 puts("<div class='dataInfo'>");
 printUpdateTime(db, tdb, NULL);
@@ -282,14 +282,14 @@ static void printTrackDescription(struct trackDb *tdb)
 {
 puts(
 "<a name='TRACK_HTML'></a>\n"
-"    <div class='row gbSectionBanner gbSimpleBanner'>\n"
+"    <div class='row gbSectionBanner'>\n"
 "        <div class='col-md-11'>Track Description</div>\n"
 "        <div class='col-md-1'>\n"
 "            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" "
 "               class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n"
 "       </div>\n"
 "    </div>\n"
-"    <div class='gbTrackDescriptionPanel'>\n"
+"    <div class='row gbTrackDescriptionPanel'>\n"
 "       <div class='gbTrackDescription'>\n");
 puts(tdb->html);
 puts(
