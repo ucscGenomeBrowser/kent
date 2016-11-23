@@ -60,7 +60,7 @@ puts(
 "           <object id='bodyMapSvg' type='image/svg+xml' data='/images/gtexBodyMap.svg'>\n"
 "               GTEx Body Map illustration not found\n"
 "           </object>\n");
-puts("<div class='gbmCredit'>Art credit: Jeffery West Design</div>\n");
+puts("<div class='gbmCredit'>Credit: jwestdesign</div>\n");
 }
 
 static void printVisSelect(struct trackDb *tdb)
