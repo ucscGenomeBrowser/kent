@@ -174,8 +174,10 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
     struct lm *lm = lmInit(0);
     char *fileName = bamFileName(table, conn, region->chrom);
-    struct samAlignment *sam, *samList = bamFetchSamAlignmentPlus(fileName, region->chrom,
-    	region->start, region->end, lm, refUrl, cacheDir );
+    char *baiUrl = bigDataIndexFromCtOrHub(table, conn);
+
+    struct samAlignment *sam, *samList = bamAndIndexFetchSamAlignmentPlus(fileName, baiUrl, region->chrom,
+    	region->start, region->end, lm, refUrl, cacheDir);
     char *row[SAMALIGNMENT_NUM_COLS];
     char numBuf[BAM_NUM_BUF_SIZE];
     for (sam = samList; sam != NULL && (maxOut > 0); sam = sam->next)
@@ -315,6 +317,7 @@ struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count)
 {
 /* Read 10000 items from bam file,  or if they ask for a big list, then 4x what they ask for. */
 char *fileName = bamFileName(table, conn, NULL);
+
 samfile_t *fh = bamOpen(fileName, NULL);
 struct lm *lm = lmInit(0);
 int orderedCount = count * 4;

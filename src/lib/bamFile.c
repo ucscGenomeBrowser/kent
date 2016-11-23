@@ -13,9 +13,10 @@
 // If KNETFILE_HOOKS is used (as recommended!), then we can simply call bam_index_load
 // without worrying about the samtools lib creating local cache files in cgi-bin:
 
-static bam_index_t *bamOpenIdxAndBai(samfile_t *sam, char *fileOrUrl, char *baiFileOrUrl)
+static bam_index_t *bamOpenIndexGivenUrl(samfile_t *sam, char *fileOrUrl, char *baiFileOrUrl)
 /* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
- * otherwise return NULL. baiFileOrUrl can be NULL. */
+ * otherwise return NULL. baiFileOrUrl can be NULL. 
+ * The difference to bamOpenIndex is that the URL/filename of the bai file can be specified. */
 {
 if (sam->format.format == cram) 
     return sam_index_load(sam, fileOrUrl);
@@ -44,7 +45,7 @@ static bam_index_t *bamOpenIdx(samfile_t *sam, char *fileOrUrl)
 /* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
  * otherwise return NULL. baiFileOrUrl can be NULL. */
 {
-return bamOpenIdxAndBai(sam, fileOrUrl, NULL);
+return bamOpenIndexGivenUrl(sam, fileOrUrl, NULL);
 }
 
 boolean bamFileExists(char *fileOrUrl)
@@ -133,7 +134,7 @@ void bamFileAndIndexMustExist(char *fileOrUrl, char *baiFileOrUrl)
  * takes for diagnostic info to propagate up through errCatches in calling code. */
 {
 samfile_t *bamF = bamOpen(fileOrUrl, NULL);
-bam_index_t *idx = bamOpenIdxAndBai(bamF, fileOrUrl, baiFileOrUrl);
+bam_index_t *idx = bamOpenIndexGivenUrl(bamF, fileOrUrl, baiFileOrUrl);
 if (idx == NULL)
     errAbort("failed to read index file (.bai) corresponding to %s", fileOrUrl);
 bamCloseIdx(&idx);
@@ -219,7 +220,7 @@ if (fh->format.format == cram)
 bam_hdr_t *header = sam_hdr_read(fh);
 if (pSamFile != NULL)
     *pSamFile = fh;
-bam_index_t *idx = bamOpenIdxAndBai(fh, bamFileName, baiFileOrUrl);
+bam_index_t *idx = bamOpenIndexGivenUrl(fh, bamFileName, baiFileOrUrl);
 if (idx == NULL)
     warn("bam_index_load(%s) failed.", bamFileName);
 else

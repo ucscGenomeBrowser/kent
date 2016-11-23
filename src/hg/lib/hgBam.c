@@ -187,6 +187,13 @@ struct samAlignment *bamFetchSamAlignmentPlus(char *fileOrUrl, char *chrom, int 
 /* Fetch region as a list of samAlignments - which is more or less an unpacked
  * bam record.  Results is allocated out of lm, since it tends to be large... */
 {
+return bamAndIndexFetchSamAlignmentPlus(fileOrUrl, NULL, chrom, start, end, lm,  refUrl, cacheDir);
+}
+
+struct samAlignment *bamAndIndexFetchSamAlignmentPlus(char *fileOrUrl, char *baiUrl, char *chrom, int start, int end,
+	struct lm *lm,  char *refUrl, char *cacheDir)
+/* Like bamFetchSamAlignmentPlus but can specify bai index file url in addition to the bam file */
+{
 struct bamToSamHelper helper;
 helper.lm = lm;
 helper.chrom = chrom;
@@ -194,7 +201,7 @@ helper.dy = dyStringNew(0);
 helper.samList = NULL;
 char posForBam[256];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", chrom, start+1, end);
-bamFetchPlus(fileOrUrl, posForBam, bamAddOneSamAlignment, &helper, &helper.samFile,
+bamAndIndexFetchPlus(fileOrUrl, baiUrl, posForBam, bamAddOneSamAlignment, &helper, &helper.samFile,
     refUrl, cacheDir);
 dyStringFree(&helper.dy);
 slReverse(&helper.samList);
