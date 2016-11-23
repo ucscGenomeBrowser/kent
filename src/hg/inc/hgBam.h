@@ -36,6 +36,10 @@ struct samAlignment *bamFetchSamAlignmentPlus(char *fileOrUrl, char *chrom, int 
 /* Fetch region as a list of samAlignments - which is more or less an unpacked
  * bam record.  Results is allocated out of lm, since it tends to be large... */
 
+struct samAlignment *bamAndIndexFetchSamAlignmentPlus(char *fileOrUrl, char *baiUrl, char *chrom, int start, int end,
+	struct lm *lm,  char *refUrl, char *cacheDir);
+/* Like bamFetchSamAlignmentPlus but can specify bai index file url in addition to the bam file */
+
 struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, bam_hdr_t *header,  int count, struct lm *lm);
 /* Read next count alignments in SAM format, allocated in lm.  May return less than
  * count at end of file. */

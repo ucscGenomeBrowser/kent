@@ -516,15 +516,25 @@
                     <TD>
                     <P>
                         <B><FONT COLOR="#006666">Question: </FONT></B><BR>
-			"Why does my custom track fail when I use bedToBigBed or utilities like validateFiles?"
+			&quot;Why does my custom track fail when I use <tt>bedToBigBed</tt> or utilities 
+			like <tt>validateFiles</tt>?&quot;
                         <P>
                         <B><FONT COLOR="#006666">Response:</FONT></B><BR>                        
-			Many of the custom track examples on the <a href="http://genome.ucsc.edu/FAQ/FAQformat.html">File Format</a>
-			page include a track "type=..." line that is specific for loading the data in the Browser. This line will cause raw data files to fail
-			validation by other tools, such as bedToBigBed or validateFiles, outside of the Browser. To see an example of using bedToBigBed with 
-			correct input data types, follow this <a href="http://genome.ucsc.edu/goldenPath/help/bigBed.html#Ex3">link</a>.
+			These utilities can fail when the input includes custom track specific lines
+		        at the top of the file that are not considered part of the data.
+			Many of the custom track examples on the
+		        <a href="http://genome.ucsc.edu/FAQ/FAQformat.html"
+			target="_blank">File Format</a>
+			page include a &quot;<tt>track type=...</tt>&quot; line that is specific for loading the 
+                        data in the Browser. This line will cause raw data files to fail
+			validation by other tools, such as <tt>bedToBigBed</tt> or <tt>validateFiles</tt>, 
+                        outside of the Browser. To see an example of using <tt>bedToBigBed</tt> with 
+			correct input data types, follow this
+		        <a href="http://genome.ucsc.edu/goldenPath/help/bigBed.html#Ex3"
+			target="_blank">link</a>.
                         More information about track lines can be found
-                        <A HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html#TRACK)">here</A>.
+                        <A HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html#TRACK)"
+			target="_blank">here</A>.
                     </TD><TD WIDTH=15></TD>
                 </TR>
             </TABLE>

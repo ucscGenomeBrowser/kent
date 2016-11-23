@@ -539,7 +539,10 @@ struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     if (isTabix)
-	vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1);
+        {
+        char *indexUrl = trackDbSetting(tdb, "bigDataIndex");
+	vcff = vcfTabixFileAndIndexMayOpen(fileOrUrl, indexUrl, seqName, start, end, vcfMaxErr, -1);
+        }
     else
 	vcff = vcfFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1, TRUE);
     }

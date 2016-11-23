@@ -20,14 +20,16 @@ struct annoStreamer *hAnnoStreamerFromTrackDb(struct annoAssembly *assembly, cha
                                               struct jsonElement *config);
 /* Figure out the source and type of data and make an annoStreamer. */
 
-struct annoStreamer *hAnnoStreamerFromBigFileUrl(char *fileOrUrl, struct annoAssembly *assembly,
+struct annoStreamer *hAnnoStreamerFromBigFileUrl(char *fileOrUrl, char *indexUrl, struct annoAssembly *assembly,
                                                  int maxOutRows, char *type);
 /* Determine what kind of big data file/url we have and make streamer for it.
- * If type is NULL, this will determine type using custom track type or file suffix. */
+ * If type is NULL, this will determine type using custom track type or file suffix. 
+ * indexUrl can be NULL, unless the type is VCF and the .tbi file is not alongside the .VCF */
 
-struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, struct annoAssembly *assembly,
+struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, char *indexUrl, struct annoAssembly *assembly,
                                              int maxOutRows, enum annoGratorOverlap overlapRule);
 /* Determine what kind of big data file/url we have, make an annoStreamer & in annoGrator. */
+/* indexUrl can be NULL, unless the type is VCF and the .tbi file is not alongside the .VCF */
 
 struct annoGrator *hAnnoGratorFromTrackDb(struct annoAssembly *assembly, char *selTable,
                                           struct trackDb *tdb, char *chrom, int maxOutRows,

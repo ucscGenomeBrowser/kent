@@ -1241,14 +1241,15 @@ printf("where ");
 cgiMakeTextVar(whereVar, where, 40);
 printf(" limit ");
 cgiMakeIntVar(limitVar, limit, 7);
-char *menu[2];
+char *menu[3];
 menu[0] = "ra";
 menu[1] = "tsv";
+menu[2] = "csv";
 
 char *formatVar = "cdwQueryFormat";
 char *format = cartUsualString(cart, formatVar, menu[0]);
 printf("  "); 
-cgiMakeDropList(formatVar, menu, 2, format);
+cgiMakeDropList(formatVar, menu, ArraySize(menu), format);
 printf("  "); 
 cgiMakeButton("View", "View"); 
 printf("</FORM>\n\n");

@@ -34,26 +34,40 @@ else
     return trackIsType(database, table, curTrack, "bigWig", ctLookupName);
 }
 
-char *bigFileNameFromCtOrHub(char *table, struct sqlConnection *conn)
-/* If table is a custom track or hub track, return the bigDataUrl setting;
+static char *settingFromCtOrHub(char *table, struct sqlConnection *conn, char *settingName, boolean mustBeInHub)
+/* If table is a custom track or hub track, return a setting;
  * otherwise return NULL.  Do a freeMem on returned string when done. */
 {
-char *fileName = NULL;
+char *settingVal = NULL;
 if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
     if (ct != NULL)
-        fileName = cloneString(trackDbSetting(ct->tdb, "bigDataUrl"));
+        settingVal = cloneString(trackDbSetting(ct->tdb, settingName));
     }
 else
     {
     struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
     assert(tdb != NULL);
-    fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
-    if (isHubTrack(table))   // if it's a native track, we'll assume it has a table with the name
-        assert(fileName != NULL);
+    settingVal = cloneString(trackDbSetting(tdb, settingName));
+    if (mustBeInHub && isHubTrack(table))   // if it's a native track, we'll assume it has a table with the name
+        assert(settingVal != NULL);
     }
-return fileName;
+return settingVal;
+}
+
+char *bigFileNameFromCtOrHub(char *table, struct sqlConnection *conn)
+/* If table is a custom track or hub track, return the bigDataUrl setting;
+ * otherwise return NULL.  Do a freeMem on returned string when done. */
+{
+return settingFromCtOrHub(table, conn, "bigDataUrl", TRUE);
+}
+
+char *bigDataIndexFromCtOrHub(char *table, struct sqlConnection *conn)
+/* If table is a custom track or hub track, return the bigDataIndex setting;
+ * otherwise return NULL.  Do a freeMem on returned string when done. */
+{
+return settingFromCtOrHub(table, conn, "bigDataIndex", FALSE);
 }
 
 char *bigWigFileName(char *table, struct sqlConnection *conn)
