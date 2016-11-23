@@ -256,7 +256,8 @@ struct lm *lm = lmInit(0);
 struct trackDb *tdb = findTdbForTable(database, curTrack, curTable, ctLookupName);
 char *cacheDir =  cfgOption("cramRef");
 char *refUrl = trackDbSetting(tdb, "refUrl");
-struct samAlignment *sam, *samList = bamFetchSamAlignmentPlus(fileName, region->chrom,
+char *indexUrl = trackDbSetting(tdb, "bigDataIndex");
+struct samAlignment *sam, *samList = bamAndIndexFetchSamAlignmentPlus(fileName, indexUrl, region->chrom,
     	region->start, region->end, lm, refUrl, cacheDir);
 char *row[SAMALIGNMENT_NUM_COLS];
 char numBuf[BAM_NUM_BUF_SIZE];
