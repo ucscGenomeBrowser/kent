@@ -2324,7 +2324,8 @@ struct dyString *dyErr = dyStringNew(0);
 requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
 
 checkAllowedBigDataUrlProtocols(bigDataUrl);
-checkAllowedBigDataUrlProtocols(bigDataIndexUrl);
+if (bigDataIndexUrl != NULL)
+    checkAllowedBigDataUrlProtocols(bigDataIndexUrl);
 
 if (doExtraChecking)
     {

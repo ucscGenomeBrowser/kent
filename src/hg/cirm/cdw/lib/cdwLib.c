@@ -2232,10 +2232,63 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
+static void rMatchesToCsv(struct tagStorm *tags, struct tagStanza *list, 
+    struct rqlStatement *rql, struct lm *lm)
+/* Recursively traverse stanzas on list outputting matching stanzas as a comma separated values file. */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    if (rql->limit < 0 || rql->limit > gMatchCount)  // We are inside the acceptable limit
+	{
+	if (stanza->children) // Recurse till we have just leaves. 
+	    rMatchesToCsv(tags, stanza->children, rql, lm);
+	else    /* Just apply query to leaves */
+	    {
+	    if (cdwRqlStatementMatch(rql, stanza, lm))
+		{
+		++gMatchCount;
+		if (gDoSelect)
+		    {
+		    struct slName *field;
+		    if (gFirst)// For the first stanza print out a header line. 
+			{
+			char *sep = "";
+			gFirst = FALSE;
+			for (field = rql->fieldList; field != NULL; field = field->next)
+			    {
+			    printf("%s%s", sep, field->name); 
+			    sep = ",";
+			    }
+			printf("\n"); 
+			}
+		    char *sep = "";
+		    for (field = rql->fieldList; field != NULL; field = field->next)
+			{
+			fputs(sep, stdout);
+			sep = ",";
+			char *val = naForNull(tagFindVal(stanza, field->name));
+			// Check for embedded comma or existing quotes
+			if (strchr(val, ',') == NULL || (val[0] == '"' && lastChar(val) == '"'))
+			    fputs(val, stdout);
+			else
+			    {
+			    char *esc = makeQuotedString(val, '"');
+			    fputs(esc, stdout);
+			    freeMem(esc);
+			    }
+			}
+		    printf("\n");
+		    }
+		}
+	    }
+	}
+    }
+}
 
 static void rMatchesToTsv(struct tagStorm *tags, struct tagStanza *list, 
     struct rqlStatement *rql, struct lm *lm)
-/* Recursively traverse stanzas on list outputting matching stanzas as a tsv file. */
+/* Recursively traverse stanzas on list outputting matching stanzas as a tab separated values file. */
 {
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
@@ -2256,30 +2309,20 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 			{
 			gFirst = FALSE;
 			printf("#"); 
+			char *sep = "";
 			for (field = rql->fieldList; field != NULL; field = field->next)
 			    {
-			    printf("%s\t", field->name); 
+			    printf("%s%s", sep, field->name); 
+			    sep = "\t";
 			    }
 			printf("\n"); 
-			for (field = rql->fieldList; field != NULL; field = field->next)
-			    {
-			    char *val = tagFindVal(stanza, field->name);
-			    if (val != NULL)
-				printf("%s\t",  val);
-			    else 
-				printf("n/a\t"); 
-			    }
 			}
-		    else
+		    char *sep = "";
+		    for (field = rql->fieldList; field != NULL; field = field->next)
 			{
-			for (field = rql->fieldList; field != NULL; field = field->next)
-			    {
-			    char *val = tagFindVal(stanza, field->name);
-			    if (val != NULL)
-				printf("%s\t", val);
-			    else 
-				printf("n/a\t"); 
-			    }
+			char *val = naForNull(tagFindVal(stanza, field->name));
+			printf("%s%s", sep, val);
+			sep = "\t";
 			}
 		    printf("\n");
 		    }
@@ -2309,10 +2352,12 @@ gDoSelect = sameWord(rql->command, "select");
 if (gDoSelect)
     rql->limit = limit;
 struct lm *lm = lmInit(0);
-if (!strcmp(format, "ra"))
+if (sameString(format, "ra"))
     rMatchesToRa(tags, tags->forest, rql, lm);
-if (!strcmp(format, "tsv"))
+else if (sameString(format, "tsv"))
     rMatchesToTsv(tags, tags->forest, rql, lm); 
+else if (sameString(format, "csv"))
+    rMatchesToCsv(tags, tags->forest, rql, lm);
 if (sameWord(rql->command, "count"))
     printf("%d\n", gMatchCount);
 }
@@ -2371,3 +2416,17 @@ freez(&menubarStr);
 return menubarStr2;
 }
 
+char *fileExtFromFormat(char *format)
+/* return file extension given the cdwFile format as defined in cdwValid.c. Result has to be freed */
+{
+if (sameWord(format, "vcf"))
+    return cloneString(".vcf.gz");
+if (sameWord(format, "fasta"))
+    return cloneString(".fa.gz");
+if (sameWord(format, "fastq"))
+    return cloneString(".fastq.gz");
+if (sameWord(format, "unknown"))
+    return cloneString("");
+
+return catTwoStrings(".", format);
+}

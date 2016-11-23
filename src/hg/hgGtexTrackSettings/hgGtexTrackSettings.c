@@ -257,7 +257,7 @@ puts(
 "        <div class='col-md-1'>\n"
 // TODO: move click handler to JS
 "            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" "
-"                class='gbIconWhite fa fa-lg fa-arrow-circle-up'></i>\n"
+"                class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n"
 "       </div>\n"
 "    </div>\n"
 );
@@ -285,7 +285,7 @@ puts(
 "        <div class='col-md-11'>Track Description</div>\n"
 "        <div class='col-md-1'>\n"
 "            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" "
-"               class='gbIconWhite fa fa-lg fa-arrow-circle-up'></i>\n"
+"               class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n"
 "       </div>\n"
 "    </div>\n"
 "    <div class='gbTrackDescriptionPanel'>\n"

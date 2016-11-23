@@ -496,4 +496,6 @@ void cdwReallyRemoveFile(struct sqlConnection *conn, long long fileId, boolean r
 char *cdwLocalMenuBar(struct cart *cart, boolean makeAbsolute);
 /* Return menu bar string. Optionally make links in menubar to point to absolute URLs, not relative. */
 
+char *fileExtFromFormat(char *format);
+/* return file extension given the cdwFile format as defined in cdwValid.c. Result has to be freed */
 #endif /* CDWLIB_H */
