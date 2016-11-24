@@ -255,6 +255,7 @@
 #include "hmmstats.h"
 #include "aveStats.h"
 #include "trix.h"
+#include "bPlusTree.h"
 
 static char *rootDir = "hgcData";
 
@@ -2972,7 +2973,7 @@ void genericBigPslClick(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, int end)
 /* Handle click in big psl track. */
 {
-struct psl* pslList;
+struct psl* pslList = NULL;
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct lm *lm = lmInit(0);
@@ -2984,22 +2985,41 @@ if (start == end)
     ivEnd++;
     }  
 
+boolean showAll = trackDbSettingOn(tdb, "showAll");
 unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
+struct bigBedInterval *bb, *bbList;
+
+// If showAll is on, show all alignments with this qName, not just the
+// selected one.
+if (showAll)
+    {
+    int fieldIx;
+    struct bptFile *bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
+    struct lm *lm = lmInit(0);
+    bbList = bigBedNameQuery(bbi, bpt, fieldIx, item, lm);
+    }
+else
+    bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
+
 
 char *bedRow[32];
 char startBuf[16], endBuf[16];
+
+int lastChromId = -1;
+char chromName[bbi->chromBpt->keySize+1];
+
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, 4);
-    struct bed *bed = bedLoadN(bedRow, 4);
-    if (sameString(bed->name, item))
+    bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromName, sizeof(chromName));
+
+    lastChromId=bb->chromId;
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, 4);
+    if (sameString(bedRow[3], item))
 	{
-	bb->next = NULL;
-	break;
+        struct psl *psl= pslFromBigPsl(chromName, bb, seqTypeField, NULL, NULL);
+        slAddHead(&pslList, psl);
 	}
     }
-pslList = pslFromBigPsl(seqName, bb, seqTypeField, NULL, NULL);
 
 printf("<H3>%s/Genomic Alignments</H3>", item);
 if (pslIsProtein(pslList))
@@ -5865,7 +5885,7 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	    safef(otherString, sizeof(otherString), "%d&aliTable=%s", psl->tStart, tableName);
             printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
-	    hgcAnchorSomewhere(hgcCommand, itemIn, otherString, psl->tName);
+	    hgcAnchorWindow(hgcCommand, itemIn, psl->tStart, psl->tEnd,  otherString, psl->tName);
 	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d</A>",
 		   psl->match + psl->misMatch + psl->repMatch,
 		   100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
