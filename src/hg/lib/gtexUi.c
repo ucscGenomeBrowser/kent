@@ -8,6 +8,7 @@
 #include "hui.h"
 #include "trackDb.h"
 #include "jsHelper.h"
+#include "hCommon.h"
 #include "gtexTissue.h"
 #include "gtexInfo.h"
 #include "gtexUi.h"
@@ -23,6 +24,26 @@
 
 /* Restrict features on right-click (popup) version */
 static boolean isPopup = FALSE;
+
+/* Path to Body Map-based track configuration */
+static char *_hgGtexTrackSettingsName = "../cgi-bin/hgGtexTrackSettings"; 
+
+boolean gtexIsGeneTrack(char *trackName)
+/* Identify GTEx gene track so custom trackUi CGI can be launched */
+{
+return startsWith(GTEX_GENE_TRACK_BASENAME, trackName);
+}
+
+char *gtexGeneTrackUiName()
+/* Refer to Body Map CGI if suitable */
+{
+// Display body map configuration page if user is on a browser we've tested
+enum browserType bt = cgiBrowser();
+if (bt == btChrome || bt == btFF || bt == btSafari)
+    return(_hgGtexTrackSettingsName);
+
+return hgTrackUiName();
+}
 
 /* Convenience functions for tissue filter controls */
 
@@ -317,7 +338,7 @@ void gtexGeneUiGeneModel(struct cart *cart, char *track, struct trackDb *tdb)
 /* Checkbox to enable display of GTEx gene model */
 {
 char cartVar[1024];
-puts("&nbsp;&nbsp;<b>Show GTEx gene model</b>\n");
+puts("<b>Show GTEx gene model:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SHOW_EXONS);
 boolean showExons = cartCgiUsualBoolean(cart, cartVar, GTEX_SHOW_EXONS_DEFAULT);
 cgiMakeCheckBox(cartVar, showExons);
@@ -436,7 +457,8 @@ printf("<div><b>Tissues:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
 if (isPopup)
     {
-    printf("<a href='../cgi-bin/hgTrackUi?g=%s'><button type='button'>Change</button><a>", track);
+    printf("<a href='%s?g=%s'><button type='button'>Change</button><a>", 
+                hTrackUiForTrack(track), track);
     }
 else
     {

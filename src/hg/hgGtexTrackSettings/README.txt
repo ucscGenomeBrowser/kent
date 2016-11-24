@@ -19,7 +19,7 @@ In Adobe Illustrator:
    NOTE:  the X, Y may need some tweaking -- use crop box viz to guide
 
     ** Alternatively, if OK to retain title in .svg, one can edit viewbox in SVG.
-                  e.g. viewBox="70 45 605 730"
+                  e.g. viewBox="55 45 620 730"
         (make sure Esophageal Junction is not truncated)
 
 3. Save in SVG format (Save As, Format: SVG)
@@ -49,7 +49,7 @@ From script/editor:
 
 3. Adjust viewbox if needed
 
-70 45 600 730
+55 45 620 730
 (check aspect ratio)
         
 4. Change fonts to match Genome Browser and generally work well with page:
@@ -82,3 +82,24 @@ From script/editor:
 10. Remove empty <g>'s.. e.g. on Liver
 
 11. Trim credit. (Remove 'ILLUSTRATION') paths
+
+=== From Code review
+
+12. Correction: first CerebelHemi_Pic_Hi group -> CerebelHemiPic_Lo
+
+=== From QA
+
+13. Tissue name tweaks to match gtexTissue table, where easily changed:
+
+* Angerior cingulate cortex
+* Substantia nigra
+* Muscle - Skeletal
+* EBV-transformed lymphocytes
+* Transformed fibroblastso
+
+14. Darker outline on Skin Suprapubic Pic_Hi (to match others)
+        -> change stroke in rule .st170 to #231f20
+
+15. Make breast visible (change its style (currently st92) to opacity .7, remove display:none
+
+

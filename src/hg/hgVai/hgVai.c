@@ -1421,7 +1421,7 @@ if (grator != NULL)
     }
 // If not in gratorsByName, then attempt to construct it here:
 if (fileName != NULL)
-    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, ANNO_NO_LIMIT, overlapRule);
+    grator = hAnnoGratorFromBigFileUrl(fileName, NULL, assembly, ANNO_NO_LIMIT, overlapRule);
 else
     grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, ANNO_NO_LIMIT,
                                     NULL, overlapRule, NULL);
@@ -1545,7 +1545,7 @@ if (hashFindVal(gratorsByName, seqChangeTable) == NULL)
     if (fileName == NULL)
 	errAbort("'%s' requested, but I can't find fileName for %s",
 		 trackName, seqChangeTable);
-    struct annoGrator *grator = hAnnoGratorFromBigFileUrl(fileName, assembly, ANNO_NO_LIMIT,
+    struct annoGrator *grator = hAnnoGratorFromBigFileUrl(fileName, NULL, assembly, ANNO_NO_LIMIT,
                                                           agoNoConstraint);
     updateGratorList(grator, pGratorList);
     hashAdd(gratorsByName, seqChangeTable, grator);
@@ -1677,7 +1677,7 @@ for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
 	addDbNsfpSeqChange(trackName, assembly, gratorsByName, pGratorList);
 	char *fileName = fileNameFromTable(trackName);
 	if (fileName != NULL)
-	    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, ANNO_NO_LIMIT, agoNoConstraint);
+	    grator = hAnnoGratorFromBigFileUrl(fileName, NULL, assembly, ANNO_NO_LIMIT, agoNoConstraint);
 	}
     else
 	{
@@ -2031,7 +2031,7 @@ if (! fileExists(sampleFile) || forceRebuild)
     geneStream->close(&geneStream);
     carefulClose(&f);
     }
-return annoStreamVcfNew(sampleFile, FALSE, assembly, maxOutRows);
+return annoStreamVcfNew(sampleFile, NULL, FALSE, assembly, maxOutRows);
 }
 
 static char *variantIdPath(struct annoAssembly *assembly, char *variantIds)
@@ -2363,7 +2363,7 @@ if (! fileExists(varFile) || forceRebuild)
 	writeMinimalVcfRow(f, var);
     carefulClose(&f);
     }
-return annoStreamVcfNew(varFile, FALSE, assembly, maxOutRows);
+return annoStreamVcfNew(varFile, NULL, FALSE, assembly, maxOutRows);
 }
 
 static struct trackDb *getVariantTrackDb(char *variantTrack)
@@ -2616,7 +2616,7 @@ else if (sameString(variantTrack, hgvaUseVariantFileOrUrl))
     {
     char *fileOrUrl = cartString(cart, hgvaVariantFileOrUrl);
     char *type = cartOptionalString(cart, hgvaVariantFileOrUrlType);
-    primary = hAnnoStreamerFromBigFileUrl(fileOrUrl, assembly, maxVarRows, type);
+    primary = hAnnoStreamerFromBigFileUrl(fileOrUrl, NULL, assembly, maxVarRows, type);
     primaryLongLabel = hgvaVariantFileOrUrlLabel;
     }
 else

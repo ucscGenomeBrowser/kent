@@ -741,6 +741,10 @@ char *bigFileNameFromCtOrHub(char *table, struct sqlConnection *conn);
 /* If table is a custom track or hub track, return the bigDataUrl setting;
  * otherwise return NULL.  Do a freeMem on returned string when done. */
 
+char *bigDataIndexFromCtOrHub(char *table, struct sqlConnection *conn);
+/* If table is a custom track or hub track, return the bigDataIndex setting;
+ * otherwise return NULL.  Do a freeMem on returned string when done. */
+
 char *bigWigFileName(char *table, struct sqlConnection *conn);
 /* Return file name associated with bigWig.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */

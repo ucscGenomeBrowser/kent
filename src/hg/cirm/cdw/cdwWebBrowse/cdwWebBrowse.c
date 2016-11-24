@@ -108,7 +108,7 @@ return total;
 int labCount(struct tagStorm *tags)
 /* Return number of different labs in tags */
 {
-struct hash *hash = tagStormCountTagVals(tags, "lab");
+struct hash *hash = tagStormCountTagVals(tags, "lab", "accession");
 int count = hash->elCount;
 hashFree(&hash);
 return count;
@@ -203,7 +203,7 @@ if (description != NULL)
     printf("<B>%s tag description</B>: %s<BR>\n", tag, description);
 
 /* Print out some summary stats */
-struct hash *hash = tagStormCountTagVals(tags, tag);
+struct hash *hash = tagStormCountTagVals(tags, tag, "accession");
 printf("The <B>%s</B> tag has %d distinct values and is used on %lld files. ", 
     tag, hash->elCount, sumCounts(hash));
 
@@ -300,7 +300,21 @@ char *host = hHttpHost();
 dyStringPrintf(dy, "bigDataUrl=http://%s/cgi-bin/cdwGetFile?acc=%s", host, viz->shortLabel);
 if (accessibleFilesToken != NULL)
     dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
+dyStringPrintf(dy, " ");
     
+char *indexExt = NULL;
+if (sameWord(viz->type, "bam"))
+    indexExt = ".bai";
+else if (sameWord(viz->type, "vcfTabix"))
+    indexExt = ".tbi";
+
+if (indexExt != NULL)
+    {
+    dyStringPrintf(dy, "bigDataIndex=http://%s/cgi-bin/cdwGetFile?addExt=%s&acc=%s", host, indexExt, viz->shortLabel);
+    if (accessibleFilesToken != NULL)
+        dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
+    }
+
 dyStringPrintf(dy, " type=%s", viz->type);
 return dy;
 }
@@ -336,7 +350,7 @@ if (viz == NULL)
     return FALSE;
 struct dyString *track = customTextForFile(conn, viz);
 char *encoded = cgiEncode(track->string);
-printf("<A HREF=\"../cgi-bin/hgTracks");
+printf("<A TARGET=_BLANK HREF=\"../cgi-bin/hgTracks");
 printf("?%s", cartSidUrlString(cart));
 printf("&db=%s", vf->ucscDb);
 printf("&hgt.customText=");
@@ -791,7 +805,8 @@ if (efList == NULL)
     return;
     }
 
-accessibleFilesToken = createTokenForUser();
+if (user!=NULL)
+    accessibleFilesToken = createTokenForUser();
 
 /* Let the sql system handle the rest.  Might be one long 'in' clause.... */
 struct hash *suggestHash = accessibleSuggestHash(conn, fields, efList);
@@ -1083,7 +1098,7 @@ void doBrowseDatasets(struct sqlConnection *conn, char *tag)
 {
 printf("<UL>\n");
 char query[PATH_LEN]; 
-sqlSafef(query, sizeof(query), "select * from cdwDataset"); 
+sqlSafef(query, sizeof(query), "SELECT * FROM cdwDataset ORDER BY label "); 
 struct cdwDataset *iter, *cD = cdwDatasetLoadByQuery(conn, query);
 // Go through the cdwDataset table and generate an entry for each dataset. 
 for (iter = cD; iter != NULL; iter = iter->next)
@@ -1226,14 +1241,15 @@ printf("where ");
 cgiMakeTextVar(whereVar, where, 40);
 printf(" limit ");
 cgiMakeIntVar(limitVar, limit, 7);
-char *menu[2];
+char *menu[3];
 menu[0] = "ra";
 menu[1] = "tsv";
+menu[2] = "csv";
 
 char *formatVar = "cdwQueryFormat";
 char *format = cartUsualString(cart, formatVar, menu[0]);
 printf("  "); 
-cgiMakeDropList(formatVar, menu, 2, format);
+cgiMakeDropList(formatVar, menu, ArraySize(menu), format);
 printf("  "); 
 cgiMakeButton("View", "View"); 
 printf("</FORM>\n\n");
@@ -1488,7 +1504,6 @@ printf("</TR></TABLE>\n");
 printf("<CENTER><I>charts are based on proportion of files in each category</I></CENTER>\n");
 printf("</td></tr></table>\n");
 
-
 /* Print out high level tags table */
 static char *highLevelTags[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
@@ -1506,9 +1521,11 @@ webSortableFieldedTable(cart, table, returnUrl, "cdwHome", 0, NULL, NULL);
 printf("This table is a summary of important metadata tags and number of files they ");
 printf("are attached to. Use browse tags menu to see all tags.");
 
-printf("<BR>\n");
-printf("<center>");
-printf("</center>");
+printf("<BR>\n\n\n\n\n\n");
+printf("<TABLE><TR>");
+printf("<a href=\"cdwGetFile/jointCirmBrain1/summary/index.html\"><img " 
+	"src=\"../images/cdwImages/qbg_krgSeurat.png\" width=%d height=%d border=5 style=\"border-width:medium\" > </a>\n", 800, 600);
+printf("</TR></TABLE>");
 }
 
 void doBrowseTags(struct sqlConnection *conn)
@@ -1614,52 +1631,15 @@ dispatch(conn);
 sqlDisconnect(&conn);
 }
 
-struct dyString *getLoginBits()
-/* Get a little HTML fragment that has login/logout bit of menu */
+static void doSendMenubar()
+/* print http header and menu bar string */
 {
-/* Construct URL to return back to this page */
-char *command = cartUsualString(cart, "cdwCommand", "home");
-char *sidString = cartSidUrlString(cart);
-char returnUrl[PATH_LEN*2];
-safef(returnUrl, sizeof(returnUrl), "http%s://%s/cgi-bin/cdwWebBrowse?cdwCommand=%s&%s",
-    cgiAppendSForHttps(), cgiServerNamePort(), command, sidString );
-char *encodedReturn = cgiEncode(returnUrl);
-
-/* Write a little html into loginBits */
-struct dyString *loginBits = dyStringNew(0);
-dyStringAppend(loginBits, "<li id=\"query\"><a href=\"");
-char *userName = wikiLinkUserName();
-if (userName == NULL)
-    {
-    dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s&%s",
-	    encodedReturn, sidString);
-    dyStringPrintf(loginBits, "\">Login</a></li>");
-    }
-else
-    {
-    dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s&%s",
-	    encodedReturn, sidString);
-    dyStringPrintf(loginBits, "\">Logout %s</a></li>", userName);
-    }
-
-/* Clean up and go home */
-freez(&encodedReturn);
-return loginBits;
-}
-
-static char *localMenuBar()
-/* Return menu bar string */
-{
-struct dyString *loginBits = getLoginBits();
-
-// menu bar html is in a stringified .h file
-struct dyString *dy = dyStringNew(4*1024);
-dyStringPrintf(dy, 
-#include "cdwNavBar.h"
-       , loginBits->string);
-
-
-return menuBarAddUiVars(dy->string, "/cgi-bin/cdw", cartSidUrlString(cart));
+oldVars = hashNew(0);
+cart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, TRUE);
+//cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
+//puts("Content-Type: text/html\n\n");
+char* mb = cdwLocalMenuBar(cart, TRUE);
+puts(mb);
 }
 
 void localWebStartWrapper(char *titleString)
@@ -1690,7 +1670,7 @@ void localWebStartWrapper(char *titleString)
     }
 
 webStartSectionTables();    // Start table layout code
-puts(localMenuBar());	    // Menu bar after tables open but before first section
+puts(cdwLocalMenuBar(cart, FALSE));	    // Menu bar after tables open but before first section
 webFirstSection(titleString);	// Open first section
 webPushErrHandlers();	    // Now can do improved error handler
 }
@@ -1719,6 +1699,8 @@ oldVars = hashNew(0);
 char *cdwCmd = cgiOptionalString("cdwCommand");
 if (sameOk(cdwCmd, "downloadUrls"))
     doDownloadUrls();
+else if (sameOk(cdwCmd, "menubar"))
+    doSendMenubar();
 else
     cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
 return 0;

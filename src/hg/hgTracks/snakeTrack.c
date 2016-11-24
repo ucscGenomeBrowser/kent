@@ -678,6 +678,8 @@ for (item=tg->items;item; item = item->next)
     {
     height += tg->itemHeight(tg, item);
     }
+if (height < DUP_LINE_HEIGHT + tg->lineHeight)
+    height = DUP_LINE_HEIGHT + tg->lineHeight;
 return height;
 }
 

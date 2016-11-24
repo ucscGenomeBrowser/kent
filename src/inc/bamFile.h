@@ -38,9 +38,10 @@ struct bamChromInfo
 boolean bamFileExists(char *bamFileName);
 /* Return TRUE if we can successfully open the bam file and its index file. */
 
-void bamFileAndIndexMustExist(char *fileOrUrl);
+void bamFileAndIndexMustExist(char *fileOrUrl, char *baiFileOrUrl);
 /* Open both a bam file and its accompanying index or errAbort; this is what it
- * takes for diagnostic info to propagate up through errCatches in calling code. */
+ * takes for diagnostic info to propagate up through errCatches in calling code. 
+ * The parameter baiFileOrUrl can be NULL, defaults of <fileOrUrl>.bai. */
 
 samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName);
 /* Return an open bam file as well as the filename of the bam. */
@@ -62,6 +63,16 @@ void bamFetchAlreadyOpen(samfile_t *samfile, bam_hdr_t *header,  bam_index_t *id
 /* except in this case use an already-open bam file and index (use bam_index_load and free() for */
 /* the index). It seems a little strange to pass the filename in with the open bam, but */
 /* it's just used to report errors. */
+
+void bamAndIndexFetchPlus(char *fileOrUrl, char *baiFileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+		 samfile_t **pSamFile, char *refUrl, char *cacheDir);
+/* Open the .bam file with the .bai index specified by baiFileOrUrl.
+ * baiFileOrUrl can be NULL and defaults to <fileOrUrl>.bai.
+ * Fetch items in the seq:start-end position range,
+ * and call callbackFunc on each bam item retrieved from the file plus callbackData.
+ * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
+ * The pSamFile parameter is optional.  If non-NULL it will be filled in, just for
+ * the benefit of the callback function, with the open samFile.  */
 
 void bamFetchPlus(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
 		 samfile_t **pSamFile, char *refUrl, char *cacheDir);

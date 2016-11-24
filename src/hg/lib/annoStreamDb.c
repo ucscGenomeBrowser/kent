@@ -19,7 +19,8 @@ struct annoStreamDb
     char *db;                           // Database name (e.g. hg19 or customTrash)
     struct sqlConnection *conn;	        // Database connection
     struct sqlResult *sr;		// SQL query result from which we grab rows
-    char *table;			// Table name, must exist in database
+    char *trackTable;			// Name of database table (or root name if split tables)
+    char *table;			// If split, chr..._trackTable; otherwise same as trackTable
     char *baselineQuery;                // SQL query without position constraints
     boolean baselineQueryHasWhere;      // True if baselineQuery contains filter or join clauses
 
@@ -104,14 +105,6 @@ struct annoFilterDb
 
 static const boolean asdDebug = FALSE;
 
-// Potential optimization: call asdMakeBaselineQuery in asdSetRegion, and scale expectedRows
-// by the proportion of the genome that the search region (if one is defined) covers.
-// Pitfall: if we are doing a list of regions, and don't know that from the start, then
-// we would underestimate overall coverage, and might waste a lot of time rebuilding
-// and reloading hashJoins unless we recycle them.
-// Since annoStreamDb does not internally handle split tables yet, hgIntegrator
-// is inefficiently making brand new streamers for each region anyway.  Fix that first.
-
 static void resetMergeState(struct annoStreamDb *self)
 /* Reset or initialize members that track merging of coarse-bin items with fine-bin items. */
 {
@@ -157,17 +150,40 @@ resetMergeState(self);
 resetChunkState(self);
 }
 
+// Forward declaration in order to avoid moving lots of code:
+static void asdUpdateBaselineQuery(struct annoStreamDb *self);
+/* Build a dy SQL query with no position constraints (select ... from ...)
+ * possibly including joins and filters if specified (where ...), using the current splitTable. */
+
 static void asdSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionStart, uint regionEnd)
 /* Set region -- and free current sqlResult if there is one. */
 {
 annoStreamerSetRegion(vSelf, chrom, regionStart, regionEnd);
-resetQueryState((struct annoStreamDb *)vSelf);
+struct annoStreamDb *self = (struct annoStreamDb *)vSelf;
+// If splitTable differs from table, use new chrom in splitTable:
+if (!sameString(self->table, self->trackTable))
+    {
+    char newSplitTable[PATH_LEN];
+    safef(newSplitTable, sizeof(newSplitTable), "%s_%s", chrom, self->trackTable);
+    freeMem(self->table);
+    self->table = cloneString(newSplitTable);
+    }
+resetQueryState(self);
+asdUpdateBaselineQuery(self);
 }
 
 static char **nextRowFromSqlResult(struct annoStreamDb *self)
 /* Stream rows directly from self->sr. */
 {
 return sqlNextRow(self->sr);
+}
+
+INLINE boolean useSplitTable(struct annoStreamDb *self, struct joinerDtf *dtf)
+/* Return TRUE if dtf matches self->{db,table} and table is split. */
+{
+return (sameString(dtf->database, self->db) &&
+        sameString(dtf->table, self->trackTable) &&
+        !sameString(self->table, self->trackTable));
 }
 
 static void appendFieldList(struct annoStreamDb *self, struct dyString *query)
@@ -180,9 +196,14 @@ for (dtf = fieldList;  dtf != NULL;  dtf = dtf->next)
     {
     if (dtf != fieldList)
         dyStringAppendC(query, ',');
-    char dtfString[PATH_LEN];
-    joinerDtfToSqlFieldString(dtf, self->db, dtfString, sizeof(dtfString));
-    dyStringAppend(query, dtfString);
+    if (useSplitTable(self, dtf))
+        dyStringPrintf(query, "%s.%s", self->table, dtf->field);
+    else
+        {
+        char dtfString[PATH_LEN];
+        joinerDtfToSqlFieldString(dtf, self->db, dtfString, sizeof(dtfString));
+        dyStringAppend(query, dtfString);
+        }
     }
 }
 
@@ -190,17 +211,31 @@ static void ignoreEndIndexIfNecessary(struct annoStreamDb *self, char *dbTable,
                                       struct dyString *query)
 /* Don't let mysql use a (chrom, chromEnd) index because that messes up sorting by chromStart. */
 {
-if (sameString(dbTable, self->table) && self->endFieldIndexName != NULL)
+if (sameString(dbTable, self->trackTable) && self->endFieldIndexName != NULL)
     sqlDyStringPrintf(query, " IGNORE INDEX (%s) ", self->endFieldIndexName);
 }
 
 static void appendOneTable(struct annoStreamDb *self, struct joinerDtf *dt, struct dyString *query)
-/* Add the (db.)table string from dt to query. */
+/* Add the (db.)table string from dt to query; if dt is NULL or table is split then
+ * use self->table. */
 {
 char dbTable[PATH_LEN];
-joinerDtfToSqlTableString(dt, self->db, dbTable, sizeof(dbTable));
+if (dt == NULL || useSplitTable(self, dt))
+    safecpy(dbTable, sizeof(dbTable), self->table);
+else
+    joinerDtfToSqlTableString(dt, self->db, dbTable, sizeof(dbTable));
 dyStringAppend(query, dbTable);
 ignoreEndIndexIfNecessary(self, dbTable, query);
+}
+
+INLINE void splitOrDtfToSqlField(struct annoStreamDb *self, struct joinerDtf *dtf,
+                                 char *fieldName, size_t fieldNameSize)
+/* Write [db].table.field into fieldName, where table may be split. */
+{
+if (useSplitTable(self, dtf))
+    safef(fieldName, fieldNameSize, "%s.%s", self->table, dtf->field);
+else
+    joinerDtfToSqlFieldString(dtf, self->db, fieldName, fieldNameSize);
 }
 
 static boolean appendTableList(struct annoStreamDb *self, struct dyString *query)
@@ -208,10 +243,7 @@ static boolean appendTableList(struct annoStreamDb *self, struct dyString *query
 {
 boolean hasLeftJoin = FALSE;
 if (self->joinMixer == NULL || self->joinMixer->sqlRouteList == NULL)
-    {
-    dyStringAppend(query, self->table);
-    ignoreEndIndexIfNecessary(self, self->table, query);
-    }
+    appendOneTable(self, NULL, query);
 else
     {
     // Use both a and b of the first pair and only b of each subsequent pair
@@ -222,8 +254,8 @@ else
         dyStringAppend(query, " left join ");
         appendOneTable(self, jp->b, query);
         char fieldA[PATH_LEN], fieldB[PATH_LEN];
-        joinerDtfToSqlFieldString(jp->a, self->db, fieldA, sizeof(fieldA));
-        joinerDtfToSqlFieldString(jp->b, self->db, fieldB, sizeof(fieldB));
+        splitOrDtfToSqlField(self, jp->a, fieldA, sizeof(fieldA));
+        splitOrDtfToSqlField(self, jp->b, fieldB, sizeof(fieldB));
         struct joinerField *jfA = joinerSetFindField(jp->identifier, jp->a);
         if (sameOk(jfA->separator, ","))
             dyStringPrintf(query, " on find_in_set(%s, %s)", fieldB, fieldA);
@@ -246,7 +278,7 @@ slReverse(&listOut);
 return listOut;
 }
 
-static void asdMakeBaselineQuery(struct annoStreamDb *self)
+static void asdInitBaselineQuery(struct annoStreamDb *self)
 /* Build a dy SQL query with no position constraints (select ... from ...)
  * possibly including joins and filters if specified (where ...). */
 {
@@ -268,6 +300,12 @@ else
     self->sqlRowSize = slCount(self->mainTableDtfList);
     self->bigRowSize = self->sqlRowSize;
     }
+}
+
+static void asdUpdateBaselineQuery(struct annoStreamDb *self)
+/* Build a dy SQL query with no position constraints (select ... from ...)
+ * possibly including joins and filters if specified (where ...), using the current splitTable. */
+{
 struct dyString *query = sqlDyStringCreate("select ");
 appendFieldList(self, query);
 dyStringAppend(query, " from ");
@@ -865,7 +903,7 @@ static void makeMainTableDtfList(struct annoStreamDb *self, struct asObject *mai
 {
 struct joinerDtf mainDtf;
 mainDtf.database = self->db;
-mainDtf.table = self->table;
+mainDtf.table = self->trackTable;
 struct asColumn *col;
 for (col = mainAsObj->columnList;  col != NULL;  col = col->next)
     {
@@ -979,7 +1017,7 @@ static struct asObject *asdAutoSqlFromTableFields(struct annoStreamDb *self,
 struct dyString *newAsText = dyStringCreate("table %sCustom\n"
                                             "\"query based on %s with customized fields.\"\n"
                                             "    (",
-                                            self->table, self->table);
+                                            self->trackTable, self->trackTable);
 // Use a hash of table to asObject so we fetch autoSql only once per table.
 struct hash *asObjCache = hashNew(0);
 // Use a hash of dtf strings to test whether or not one has been added already.
@@ -987,12 +1025,12 @@ struct hash *dtfNames = hashNew(0);
 // Start with all columns of main table:
 struct joinerDtf mainDtf;
 mainDtf.database = self->db;
-mainDtf.table = self->table;
+mainDtf.table = self->trackTable;
 struct asColumn *col;
 for (col = mainAsObj->columnList;  col != NULL;  col = col->next)
     {
     mainDtf.field = col->name;
-    addOneColumn(newAsText, &mainDtf, self->db, self->table, col, dtfNames);
+    addOneColumn(newAsText, &mainDtf, self->db, self->trackTable, col, dtfNames);
     }
 // Append fields from related tables:
 struct joinerDtf *dtf;
@@ -1003,7 +1041,7 @@ for (dtf = self->relatedDtfList;  dtf != NULL;  dtf = dtf->next)
     if (col == NULL)
         errAbort("annoStreamDb: Can't find column %s in autoSql for table %s.%s",
                  dtf->field, dtf->database, dtf->table);
-    addOneColumn(newAsText, dtf, self->db, self->table, col, dtfNames);
+    addOneColumn(newAsText, dtf, self->db, self->trackTable, col, dtfNames);
     }
 dyStringAppendC(newAsText, ')');
 struct asObject *newAsObj = asParseText(newAsText->string);
@@ -1020,6 +1058,7 @@ if (pVSelf == NULL)
     return;
 struct annoStreamDb *self = *(struct annoStreamDb **)pVSelf;
 lmCleanup(&(self->qLm));
+freeMem(self->trackTable);
 freeMem(self->table);
 slNameFreeList(&self->chromList);
 joinerDtfFreeList(&self->mainTableDtfList);
@@ -1068,6 +1107,7 @@ return (sameString(table, "refGene") || sameString(table, "refFlat") ||
 	sameString(table, "xenoRefGene") || sameString(table, "xenoRefFlat") ||
 	sameString(table, "all_mrna") || sameString(table, "xenoMrna") ||
 	sameString(table, "all_est") || sameString(table, "xenoEst") ||
+        sameString(table, "intronEst") ||
 	sameString(table, "refSeqAli") || sameString(table, "xenoRefSeqAli"));
 }
 
@@ -1078,7 +1118,7 @@ return startsWith("pubs", table);
 }
 
 static struct asObject *asdParseConfig(struct annoStreamDb *self, struct jsonElement *configEl)
-/* Extract the autoSql for self->table from the database.
+/* Extract the autoSql for self->trackTable from the database.
  * If configEl is not NULL, expect it to be a description of related tables and fields like this:
  * config = { "relatedTables": [ { "table": "hg19.kgXref",
  *                                 "fields": ["geneSymbol", "description"] },
@@ -1089,12 +1129,7 @@ static struct asObject *asdParseConfig(struct annoStreamDb *self, struct jsonEle
  * column descriptions for each field to the autoSql object that describes our output.
  * It might also have "naForMissing": true/false; if so, set self->naForMissing. */
 {
-//#*** TODO: hAnnoGetAutoSqlForDbTable should do its own split-table checking
-char maybeSplitTable[HDB_MAX_TABLE_STRING];
-if (!hFindSplitTable(self->db, NULL, self->table, maybeSplitTable, NULL))
-    errAbort("annoStreamDbNew: can't find table (or split table) for '%s.%s'",
-             self->db, self->table);
-struct asObject *asObj = hAnnoGetAutoSqlForDbTable(self->db, maybeSplitTable, NULL, TRUE);
+struct asObject *asObj = hAnnoGetAutoSqlForDbTable(self->db, self->trackTable, NULL, TRUE);
 makeMainTableDtfList(self, asObj);
 if (configEl != NULL)
     {
@@ -1206,13 +1241,15 @@ struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly 
  * annoAssembly aa alive for the lifetime of the returned annoStreamer. */
 {
 struct sqlConnection *conn = hAllocConn(db);
-if (!sqlTableExists(conn, table))
-    errAbort("annoStreamDbNew: table '%s' doesn't exist in database '%s'", table, db);
+char splitTable[HDB_MAX_TABLE_STRING];
+if (!hFindSplitTable(db, NULL, table, splitTable, NULL))
+    errAbort("annoStreamDbNew: can't find table (or split table) for '%s.%s'", db, table);
 struct annoStreamDb *self = NULL;
 AllocVar(self);
 self->conn = conn;
 self->db = cloneString(db);
-self->table = cloneString(table);
+self->trackTable = cloneString(table);
+self->table = cloneString(splitTable);
 if (sqlFieldIndex(self->conn, self->table, "bin") == 0)
     {
     self->hasBin = 1;
@@ -1233,7 +1270,7 @@ if (self->hasBin && !sameString(asFirstColumnName, "bin"))
     self->omitBin = 1;
 if (!asdInitBed3Fields(self))
     errAbort("annoStreamDbNew: can't figure out which fields of %s.%s to use as "
-	     "{chrom, chromStart, chromEnd}.", db, table);
+	     "{chrom, chromStart, chromEnd}.", db, self->table);
 // When a table has an index on endField (not startField), sometimes the query optimizer uses it
 // and that ruins the sorting.  Fortunately most tables don't anymore.
 self->endFieldIndexName = sqlTableIndexOnFieldANotB(self->conn, self->table, self->endField,
@@ -1264,7 +1301,8 @@ else
     self->doQuery = asdDoQueryChunking;
     self->nextRowRaw = nextRowFromBuffer;
     }
-asdMakeBaselineQuery(self);
+asdInitBaselineQuery(self);
+asdUpdateBaselineQuery(self);
 struct annoStreamer *sSelf = (struct annoStreamer *)self;
 if (asdDebug)
     sSelf->getHeader = asdGetHeader;

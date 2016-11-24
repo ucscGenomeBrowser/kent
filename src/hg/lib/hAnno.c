@@ -108,14 +108,18 @@ return asParseText(dy->string);
 
 struct asObject *hAnnoGetAutoSqlForDbTable(char *db, char *table, struct trackDb *tdb,
                                            boolean skipBin)
-/* Get autoSql for db.dbTable from tdb and/or db.tableDescriptions;
+/* Get autoSql for db.table from optional tdb and/or db.tableDescriptions;
  * if it doesn't match columns, make one up from db.table sql fields.
  * Some subtleties are lost in translation from .as to .sql, that's why
  * we try tdb & db.tableDescriptions first.  But ultimately we need to return
  * an asObj whose columns match all fields of the table. */
 {
 struct sqlConnection *conn = hAllocConn(db);
-struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, table);
+char maybeSplitTable[HDB_MAX_TABLE_STRING];
+if (!hFindSplitTable(db, NULL, table, maybeSplitTable, NULL))
+    errAbort("hAnnoGetAutoSqlForDbTable: can't find table (or split table) for '%s.%s'",
+             db, table);
+struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, maybeSplitTable);
 struct asObject *asObj = NULL;
 if (tdb != NULL)
     asObj = asForTdb(conn, tdb);
@@ -132,6 +136,15 @@ else
         return pgSnpAsO;
     return asObjectFromFields(table, fieldList, skipBin);
     }
+}
+
+static char *getBigDataIndexName(struct trackDb *tdb)
+/* Get tbi/bai URL for a BAM/VCF from trackDb or custom track. */
+{
+char *bigIndexUrl = trackDbSetting(tdb, "bigDataIndex");
+if (isNotEmpty(bigIndexUrl))
+    return bigIndexUrl;
+return NULL;
 }
 
 static char *getBigDataFileName(char *db, struct trackDb *tdb, char *selTable, char *chrom)
@@ -165,10 +178,11 @@ hFreeConn(&conn);
 return matches;
 }
 
-struct annoStreamer *hAnnoStreamerFromBigFileUrl(char *fileOrUrl, struct annoAssembly *assembly,
+struct annoStreamer *hAnnoStreamerFromBigFileUrl(char *fileOrUrl, char *indexUrl, struct annoAssembly *assembly,
                                                  int maxOutRows, char *type)
 /* Determine what kind of big data file/url we have and make streamer for it.
- * If type is NULL, this will determine type using custom track type or file suffix. */
+ * If type is NULL, this will determine type using custom track type or file suffix.
+ * indexUrl can be NULL, unless the type is VCF and the .tbi file is not alongside the .VCF */
 {
 struct annoStreamer *streamer = NULL;
 if (isEmpty(type))
@@ -187,9 +201,9 @@ if (type == NULL)
 if (sameString(type, "bigBed") || sameString("bigGenePred", type))
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
 else if (sameString(type, "vcfTabix"))
-    streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
+    streamer = annoStreamVcfNew(fileOrUrl, indexUrl, TRUE, assembly, maxOutRows);
 else if (sameString(type, "vcf"))
-    streamer = annoStreamVcfNew(fileOrUrl, FALSE, assembly, maxOutRows);
+    streamer = annoStreamVcfNew(fileOrUrl, NULL, FALSE, assembly, maxOutRows);
 else if (sameString(type, "bigWig"))
     streamer = annoStreamBigWigNew(fileOrUrl, assembly);
 else if (sameString(type, "pgSnp"))
@@ -227,12 +241,13 @@ else if (sameString("longTabix", tdb->type))
 else if (sameString("vcfTabix", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
-    streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
+    char *indexUrl = getBigDataIndexName(tdb);
+    streamer = annoStreamVcfNew(fileOrUrl, indexUrl, TRUE, assembly, maxOutRows);
     }
 else if (sameString("vcf", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, dbTable, chrom);
-    streamer = annoStreamVcfNew(fileOrUrl, FALSE, assembly, maxOutRows);
+    streamer = annoStreamVcfNew(fileOrUrl, NULL, FALSE, assembly, maxOutRows);
     }
 else if (sameString("bam", tdb->type))
     {
@@ -265,7 +280,7 @@ if (streamer == NULL)
 return streamer;
 }
 
-struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, struct annoAssembly *assembly,
+struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, char *indexUrl, struct annoAssembly *assembly,
                                              int maxOutRows, enum annoGratorOverlap overlapRule)
 /* Determine what kind of big data file/url we have and make streamer & grator for it. */
 {
@@ -275,7 +290,7 @@ char *type = customTrackTypeFromBigFile(fileOrUrl);
 if (sameString(type, "bigBed") || sameString("bigGenePred", type))
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
 else if (sameString(type, "vcfTabix"))
-    streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
+    streamer = annoStreamVcfNew(fileOrUrl, indexUrl, TRUE, assembly, maxOutRows);
 else if (sameString(type, "bigWig"))
     grator = annoGrateBigWigNew(fileOrUrl, assembly, agwmAverage);
 else if (sameString(type, "bam"))
@@ -302,6 +317,7 @@ boolean primaryIsVariants = (primaryAsObj != NULL &&
                               asObjectsMatch(primaryAsObj, pgSnpFileAsObj()) ||
                               asObjectsMatch(primaryAsObj, vcfAsObj())));
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+char *indexUrl = getBigDataIndexName(tdb);
 if (bigDataUrl != NULL)
     {
     if (primaryIsVariants && sameString("bigGenePred", tdb->type))
@@ -310,7 +326,7 @@ if (bigDataUrl != NULL)
         grator = annoGratorGpVarNew(streamer);
         }
     else
-        grator = hAnnoGratorFromBigFileUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
+        grator = hAnnoGratorFromBigFileUrl(bigDataUrl, indexUrl, assembly, maxOutRows, overlapRule);
     }
 else if (startsWithWord("wig", tdb->type))
     {
@@ -399,11 +415,7 @@ if (!asObj && !isHubTrack(tdb->track))
         else
             return NULL;
         }
-    char maybeSplitTable[HDB_MAX_TABLE_STRING];
-    if (!hFindSplitTable(dataDb, chrom, dbTable, maybeSplitTable, NULL))
-        errAbort("hAnnoGetAutoSqlForTdb: can't find table (or split table) for '%s.%s'",
-                 dataDb, dbTable);
-    asObj = hAnnoGetAutoSqlForDbTable(dataDb, maybeSplitTable, tdb, TRUE);
+    asObj = hAnnoGetAutoSqlForDbTable(dataDb, dbTable, tdb, TRUE);
     }
 return asObj;
 }

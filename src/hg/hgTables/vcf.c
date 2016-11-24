@@ -256,8 +256,11 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     char *fileName = vcfFileName(conn, table, region->chrom);
     struct vcfFile *vcff;
     if (isTabix)
-	vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
+        {
+        char *indexUrl = bigDataIndexFromCtOrHub(table, conn);
+	vcff = vcfTabixFileAndIndexMayOpen(fileName, indexUrl, region->chrom, region->start, region->end,
 				   100, maxOut);
+        }
     else
 	vcff = vcfFileMayOpen(fileName, region->chrom, region->start, region->end,
 			      100, maxOut, TRUE);
@@ -317,7 +320,7 @@ freeMem(fieldArray);
 freeMem(columnArray);
 }
 
-static void addFilteredBedsOnRegion(char *fileName, struct region *region, char *table,
+static void addFilteredBedsOnRegion(char *fileName, char *indexUrl, struct region *region, char *table,
 				    struct asFilter *filter, struct lm *bedLm,
 				    struct bed **pBedList, struct hash *idHash, int *pMaxOut,
 				    boolean isTabix)
@@ -325,8 +328,8 @@ static void addFilteredBedsOnRegion(char *fileName, struct region *region, char 
 {
 struct vcfFile *vcff;
 if (isTabix)
-    vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
-			       100, *pMaxOut);
+    vcff = vcfTabixFileAndIndexMayOpen(fileName, indexUrl, region->chrom, region->start, region->end,
+            100, *pMaxOut);
 else
     vcff = vcfFileMayOpen(fileName, region->chrom, region->start, region->end,
 			  100, *pMaxOut, TRUE);
@@ -384,7 +387,8 @@ for (region = regionList; region != NULL; region = region->next)
     char *fileName = vcfFileName(conn, table, region->chrom);
     if (fileName == NULL)
 	continue;
-    addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList, idHash, &maxOut,
+    char *indexUrl = bigDataIndexFromCtOrHub(table, conn);
+    addFilteredBedsOnRegion(fileName, indexUrl, region, table, filter, lm, &bedList, idHash, &maxOut,
 			    isTabix);
     freeMem(fileName);
     if (maxOut <= 0)
@@ -402,7 +406,9 @@ struct slName *randomVcfIds(char *table, struct sqlConnection *conn, int count, 
 {
 /* Read 10000 items from vcf file,  or if they ask for a big list, then 4x what they ask for. */
 char *fileName = vcfFileName(conn, table, hDefaultChrom(database));
-struct lineFile *lf = isTabix ? lineFileTabixMayOpen(fileName, TRUE) :
+char *indexUrl = bigDataIndexFromCtOrHub(table, conn);
+
+struct lineFile *lf = isTabix ? lineFileTabixAndIndexMayOpen(fileName, indexUrl, TRUE) :
 				lineFileMayOpen(fileName, TRUE);
 if (lf == NULL)
     noWarnAbort();
@@ -471,7 +477,8 @@ webNewSection("Sample Rows");
 hTableStart();
 
 /* Fetch sample rows. */
-struct lineFile *lf = isTabix ? lineFileTabixMayOpen(fileName, TRUE) :
+char *indexUrl = bigDataIndexFromCtOrHub(table, conn);
+struct lineFile *lf = isTabix ? lineFileTabixAndIndexMayOpen(fileName, indexUrl, TRUE) :
 				lineFileMayOpen(fileName, TRUE);
 if (lf == NULL)
     noWarnAbort();

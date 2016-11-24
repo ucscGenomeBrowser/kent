@@ -281,39 +281,50 @@ fputc(sep,f);
 fprintf(f, "%u", el->repMatch);
 fputc(sep,f);
 fprintf(f, "%u", el->nCount);
+fputc(sep,f);
+fprintf(f, "%u", el->seqType);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct psl  *pslFromBigPsl( char *chrom, struct bigBedInterval *bb,  char **seq, char **cds)
+struct psl  *pslFromBigPsl( char *chrom, struct bigBedInterval *bb, int seqTypeField,  char **seq, char **cds)
 /* build a psl from a bigPsl */
 {
 char *extra = cloneString(bb->rest);
-int numCols = 12 + 12 - 3;
+int numCols = 12 + 13 - 3;
 char *row[numCols];
 int wordCount = chopByChar(extra, '\t', row, numCols);
-if (wordCount != numCols)
-    errAbort("pslFromBigPsl: expected %d columns in `rest' field, found %d columns", numCols, wordCount);
+if (wordCount < numCols - 1)
+    errAbort("pslFromBigPsl: expected at least %d columns in `rest' field, found %d columns", numCols, wordCount);
 
+int seqType = 0;
+if (wordCount == numCols)
+    seqType = sqlUnsigned(row[21]);
+
+if (seq != NULL)
+    *seq = NULL;
+if (cds != NULL)
+    *cds = NULL;
 struct psl *psl;
 int ii;
 int sizeOne;
+boolean isProt = (seqType == PSL_SEQTYPE_PROTEIN);
 AllocVar(psl);
 
 psl->qName = cloneString(row[0]); 
 psl->strand[0] = *row[2];
-if ((cds != NULL) && row[15] != NULL)
+if ((cds != NULL) &&  !isEmpty(row[15]))
     *cds = cloneString(row[15]);
 
-if ((seq != NULL) && row[14] != NULL)
+if ((seq != NULL) && !isEmpty(row[14]))
     *seq = cloneString(row[14]);
 psl->tSize = sqlUnsigned(row[16]);
 psl->match = sqlUnsigned(row[17]);
 psl->misMatch = sqlUnsigned(row[18]);
 psl->repMatch = sqlUnsigned(row[19]);
 psl->nCount = sqlUnsigned(row[20]);
-psl->tName = chrom;
+psl->tName = cloneString(chrom);
 psl->tStart = bb->start;
 psl->tEnd = bb->end;
 psl->blockCount = sqlSigned(row[6]);
@@ -335,6 +346,9 @@ for(ii=0; ii < psl->blockCount; ii++)
 
 // because reference blocks  are always on the positive strand in beds, we need to revComp them
 // if the alignment is meant to be on the reference's negative strand
+if (isProt)
+    for(ii=0; ii < psl->blockCount; ii++)
+        psl->blockSizes[ii] /= 3;
 if (psl->strand[1] == '-')
     {
     psl->strand[1] = '+';

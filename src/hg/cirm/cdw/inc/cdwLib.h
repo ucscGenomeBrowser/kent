@@ -23,6 +23,8 @@
 #include "cdw.h"
 #endif
 
+#include "cart.h"
+
 #define cdwRandomString "175d5bc99f7bb7312812c47d236791879BAEXzusIsdklnw86d73<*#$*(#)!DSFOUIHLjksdf"
 
 extern char *cdwDatabase;   /* Name of database we connect to. */
@@ -491,4 +493,9 @@ void cdwReallyRemoveFile(struct sqlConnection *conn, long long fileId, boolean r
 /* Remove all records of file from database and from Unix file system if 
  * the really flag is set.  Otherwise just print some info on the file. */
 
+char *cdwLocalMenuBar(struct cart *cart, boolean makeAbsolute);
+/* Return menu bar string. Optionally make links in menubar to point to absolute URLs, not relative. */
+
+char *fileExtFromFormat(char *format);
+/* return file extension given the cdwFile format as defined in cdwValid.c. Result has to be freed */
 #endif /* CDWLIB_H */

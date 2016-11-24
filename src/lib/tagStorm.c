@@ -623,14 +623,14 @@ rCountFields(tagStorm->forest, hash);
 return hash;
 }
 
-static void rTagStormCountDistinct(struct tagStanza *list, char *tag, struct hash *uniq)
+static void rTagStormCountDistinct(struct tagStanza *list, char *tag, struct hash *uniq, char *requiredTag)
 /* Fill in hash with number of times have seen each value of tag */
 {
-char *requiredTag = "accession";
+//char *requiredTag = "accession";
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
-    if (tagFindVal(stanza, requiredTag))
+    if ((requiredTag == NULL) || tagFindVal(stanza, requiredTag))
 	{
 	char *val = tagFindVal(stanza, tag);
 	if (val != NULL)
@@ -638,18 +638,19 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	    hashIncInt(uniq, val);
 	    }
 	}
-    rTagStormCountDistinct(stanza->children, tag, uniq);
+    rTagStormCountDistinct(stanza->children, tag, uniq, requiredTag);
     }
 }
 
-struct hash *tagStormCountTagVals(struct tagStorm *tags, char *tag)
+struct hash *tagStormCountTagVals(struct tagStorm *tags, char *tag, char *required)
 /* Return an integer valued hash keyed by all the different values
  * of tag seen in tagStorm.  The hash is filled with counts of the
  * number of times each value is used that can be recovered with 
- * hashIntVal(hash, key) */
+ * hashIntVal(hash, key).  If requiredTag is not-NULL, stanza must 
+ * have that tag. */
 {
 struct hash *uniq = hashNew(0);
-rTagStormCountDistinct(tags->forest, tag, uniq);
+rTagStormCountDistinct(tags->forest, tag, uniq, required);
 return uniq;
 }
 

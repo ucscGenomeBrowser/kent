@@ -1086,6 +1086,7 @@ void pslRc(struct psl *psl)
 unsigned tSize = psl->tSize, qSize = psl->qSize;
 unsigned blockCount = psl->blockCount, i;
 unsigned *tStarts = psl->tStarts, *qStarts = psl->qStarts, *blockSizes = psl->blockSizes;
+int mult = pslIsProtein(psl) ? 3 : 1;
 
 /* swap strand, forcing target to have an explict strand */
 psl->strand[0] = (psl->strand[0] != '-') ? '-' : '+';
@@ -1094,7 +1095,7 @@ psl->strand[2] = 0;
 
 for (i=0; i<blockCount; ++i)
     {
-    tStarts[i] = tSize - (tStarts[i] + blockSizes[i]);
+    tStarts[i] = tSize - (tStarts[i] + mult * blockSizes[i]);
     qStarts[i] = qSize - (qStarts[i] + blockSizes[i]);
     }
 reverseUnsigned(tStarts, blockCount);

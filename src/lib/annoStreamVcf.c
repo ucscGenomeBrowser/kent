@@ -352,7 +352,7 @@ lmCleanup(&self->qLm);
 annoStreamerFree(pVSelf);
 }
 
-struct annoStreamer *annoStreamVcfNew(char *fileOrUrl, boolean isTabix, struct annoAssembly *aa,
+struct annoStreamer *annoStreamVcfNew(char *fileOrUrl, char *indexUrl, boolean isTabix, struct annoAssembly *aa,
 				      int maxRecords)
 /* Create an annoStreamer (subclass) object from a VCF file, which may
  * or may not have been compressed and indexed by tabix. */
@@ -360,7 +360,7 @@ struct annoStreamer *annoStreamVcfNew(char *fileOrUrl, boolean isTabix, struct a
 int maxErr = -1; // don't errAbort on VCF format warnings/errs
 struct vcfFile *vcff;
 if (isTabix)
-    vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, maxErr, 0);
+    vcff = vcfTabixFileAndIndexMayOpen(fileOrUrl, indexUrl, NULL, 0, 0, maxErr, 0);
 else
     vcff = vcfFileMayOpen(fileOrUrl, NULL, 0, 0, maxErr, 0, FALSE);
 if (vcff == NULL)
