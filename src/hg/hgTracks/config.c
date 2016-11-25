@@ -232,7 +232,8 @@ for (group = groupList; group != NULL; group = group->next)
             hPrintf("<A TITLE='%s%s...' HREF='%s?%s=%s&g=%s&hgTracksConfigPage=configure'>",
                     tdb->parent ? "Part of super track: " : "Configure ",
                     tdb->parent ? tdb->parent->shortLabel : tdb->shortLabel,
-                    hgTrackUiName(),cartSessionVarName(), cartSessionId(cart), track->track);
+                    hTrackUiForTrack(tdb->track),
+                    cartSessionVarName(), cartSessionId(cart), track->track);
         hPrintf(" %s", tdb->shortLabel);
         if (tdbIsSuper(tdb))
             hPrintf("...");
