@@ -10,6 +10,7 @@
 
 
 static char *_trashDir()
+/* Return the path for temporary files: default is "." but env var JKTRASH can override. */
 {
 static char *__trashDir = NULL;
 if (__trashDir == NULL)
@@ -29,6 +30,7 @@ strcpy(tn->forHtml, tn->forCgi);
 }
 
 static char *_cgiDir()
+/* Return the path for CGI executables: default is "" but env var JKWEB can override. */
 {
 char *jkwebDir;
 if ((jkwebDir = getenv("JKWEB")) == NULL)
