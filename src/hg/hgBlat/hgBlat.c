@@ -267,7 +267,7 @@ static void makeBigPsl(char *pslName, char *faName, char *db, char *outputBigBed
 /* Make a bigPsl with the blat results. */
 {
 struct tempName bigPslTn;
-trashDirFile(&bigPslTn, "bigPsl", "bp", ".bigPsl");
+trashDirFile(&bigPslTn, "hgBlat", "bp", ".bigPsl");
 
 char cmdBuffer[4096];
 safef(cmdBuffer, sizeof(cmdBuffer), "loader/pslToBigPsl %s -fa=%s stdout | sort -k1,1 -k2,2n  > %s", pslName, faName, bigPslTn.forCgi);
@@ -748,10 +748,10 @@ if (useBigPsl)
     {
     // make bigPsl
     struct tempName bigBedTn;
-    trashDirFile(&bigBedTn, "bigPsl", "bp", ".bb");
+    trashDirFile(&bigBedTn, "hgBlat", "bp", ".bb");
     makeBigPsl(pslTn.forCgi, faTn.forCgi, serve->db, bigBedTn.forCgi);
     struct tempName customTextTn;
-    trashDirFile(&customTextTn, "bigPsl", "ct", ".txt");
+    trashDirFile(&customTextTn, "hgBlat", "ct", ".txt");
     FILE *fp = fopen(customTextTn.forCgi, "w");
     char* host = getenv("HTTP_HOST");
     char* reqUrl = getenv("REQUEST_URI");
