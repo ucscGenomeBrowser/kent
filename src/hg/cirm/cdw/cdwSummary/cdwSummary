@@ -757,10 +757,12 @@ def writeCacheFile(datasetId, exprMatrix, metaTabFname, addMetaTabFname, geneToT
 
     # get cdw dataset mysql table info
     sumData = addCdwDatasetInfo(datasetId, sumData)
-    sumData = addMetaInfo(metaTabFname, sumData)
-    sumData = addAnalysisInfo(addMetaTabFname, sumData)
+    if metaTabFname!="none":
+        sumData = addMetaInfo(metaTabFname, sumData)
+    if metaTabFname!="none":
+        sumData = addAnalysisInfo(addMetaTabFname, sumData)
 
-    if exprMatrix is not None:
+    if exprMatrix is not None and "cellIds" in sumData:
         sumData["cellIds"] = getCommonCellIds(exprMatrix.keys(), sumData["cellInfo"].keys())
 
         sumData = addMarkerGenes(geneToTypes, exprMatrix, sumData)
@@ -2157,17 +2159,16 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annov
 
     # write main html page
     htmlFh = open(join(outDir, "index.html"), "w")
-    writeHeader(htmlFh, sumData["title"])
 
-    summDescFn = join(dirname(tagTabFname), "summDesc.html")
+    summDescFn = "summaryDesc.html"
+    writeHeader(htmlFh, "CIRM Dataset Summary: "+datasetId)
     if not isfile(summDescFn):
         generateSummarySection(sumData, htmlFh)
+        cellInfo = sumData["cellInfo"]
+        writeCellInfo(htmlFh, cellInfo, tagLabels)
     else:
         pasteSummarySection(summDescFn, htmlFh)
-
-    cellInfo = sumData["cellInfo"]
-
-    writeCellInfo(htmlFh, cellInfo, tagLabels)
+        cellInfo = {}
 
     # only do this part if we have rna-seq data
     if matrixFname!="none":
@@ -2209,8 +2210,11 @@ def main():
     args, options = parseCmdLine()
     mysqlDatasetId, matrixFname, tagTabFname, outDir = args
 
-    kallistoMeta = tagTabFname.replace(".tab", ".kallisto.tab").replace(".tsv", ".kallisto.tab")
-    assert(kallistoMeta!=tagTabFname) # the meta data file has to end with .tab or .tsv, otherwise something is fishy
+    if tagTabFname=="none":
+        kallistoMeta = None
+    else:
+        kallistoMeta = tagTabFname.replace(".tab", ".kallisto.tab").replace(".tsv", ".kallisto.tab")
+        assert(kallistoMeta!=tagTabFname) # the meta data file has to end with .tab or .tsv, otherwise something is fishy
 
     geneToSym = readGeneToSym(options.symTable)
     tagLabels = readTagLabels(options.tagLabels)

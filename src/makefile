@@ -29,6 +29,7 @@ libs: topLibs hgLib
 
 cgi: libs
 	cd hg && ${MAKE} cgi
+	cd utils/bedToBigBed && ${MAKE} cgi
 
 cgi-alpha: libs
 	cd hg && ${MAKE} alpha
