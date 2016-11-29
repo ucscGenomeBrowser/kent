@@ -14538,7 +14538,7 @@ registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("ncbiRefSeq", ncbiRefSeqMethods);
 registerTrackHandler("ncbiRefSeqCurated", ncbiRefSeqMethods);
 registerTrackHandler("ncbiRefSeqPredicted", ncbiRefSeqMethods);
-registerTrackHandler("ncbiRefSeqOther", ncbiRefSeqMethods);
+// registerTrackHandler("ncbiRefSeqOther", ncbiRefSeqMethods); has become bed12
 registerTrackHandler("rgdGene2", rgdGene2Methods);
 registerTrackHandler("blastMm6", blastMethods);
 registerTrackHandler("blastDm1FB", blastMethods);

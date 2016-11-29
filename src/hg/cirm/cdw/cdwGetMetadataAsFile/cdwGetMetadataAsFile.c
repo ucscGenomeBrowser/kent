@@ -42,6 +42,29 @@ errAbort(
   );
 }
 
+void setCdwUser(struct sqlConnection *conn)
+/* set the global variable 'user' based on the current cookie */
+{
+char *userName = wikiLinkUserName();
+
+// for debugging, accept the userName on the cgiSpoof command line
+// instead of a cookie
+if (hIsPrivateHost() && userName == NULL)
+    userName = cgiOptionalString("userName");
+
+if (userName != NULL)
+    {
+    user = cdwUserFromUserName(conn, userName);
+    /* Look up email vial hgCentral table */
+    struct sqlConnection *cc = hConnectCentral();
+    char query[512];
+    sqlSafef(query, sizeof(query), "select email from gbMembers where userName='%s'", userName);
+    char *email = sqlQuickString(cc, query);
+    hDisconnectCentral(&cc);
+    user = cdwUserFromEmail(conn, email);
+    }
+}
+
 void cdwGetMetadataAsFile(struct sqlConnection *conn)
 /* Determine the users's download format and generate a file that matches their
  * search criteria in the propper format */ 
@@ -61,13 +84,15 @@ dyStringPrintf(rqlQuery, "where accession");
 if (!isEmpty(where))
     dyStringPrintf(rqlQuery, " and (%s)", where);
 
+
 /* Get the download format from the cart */ 
 char *format = cartString(cart, "Download format");
 
 /* Determine the users meta data access and generate a tagStorm tree of it. */ 
 struct tagStorm *tags = cdwUserTagStorm(conn, user);
 
-/* Identify and print the meta data that matches the users search. */ 
+
+/* Identify and print the meta data that matches the users search. */
 cdwPrintMatchingStanzas(rqlQuery->string, 1000000, tags, format);
 }
 
@@ -77,6 +102,7 @@ void localWebWrap(struct cart *theCart)
 cart = theCart;
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
 printf("Content-Type: text/plain\n\n");
+setCdwUser(conn);
 cdwGetMetadataAsFile(conn); 
 sqlDisconnect(&conn);
 }

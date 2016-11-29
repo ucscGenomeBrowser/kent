@@ -91,7 +91,7 @@ def parseCmdLine():
     If Seurat is not installed on your machine, install it like this:
     Rscript -e 'install.packages("devtools", repos="http://cran.rstudio.com/");
     library(devtools); source("http://bioconductor.org/biocLite.R");
-    install_github("satijalab/seurat")'
+    install_url("https://github.com/satijalab/seurat/releases/download/v1.4.0/Seurat_1.4.0.5.tgz", binary = TRUE)
 
     """)
 
@@ -1496,11 +1496,13 @@ library(methods)
 suppressWarnings(suppressMessages(library(Seurat)))
 print("Seurat: Reading data")
 nbt.data=read.table("%(seuratMatFname)s",sep="\t",header=TRUE,row.names=1)
-nbt.data=log(nbt.data+1)
+#nbt.data=log(nbt.data+1)
 nbt=new("seurat",raw.data=nbt.data)
 print("Seurat: Setup")
-nbt=setup(nbt,project="NBT",min.cells = 3,names.field = 2,names.delim = "_",min.genes = 500,is.expr=1,)
+#nbt=setup(nbt,project="NBT",min.cells = 3,names.field = 2,names.delim = "_",min.genes = 500,is.expr=1,)
+nbt=Setup(nbt,project = "NBT",min.cells = 3,names.field = 2,names.delim = "_",min.genes = 500, do.logNormalize = F, total.expr = 1e4)
 print("Seurat: Mean Variant")
+print("CIRM Warning: We are not regressing out cell cycle or mitochondrial signal yet, see http://satijalab.org/seurat/pbmc-tutorial.html")
 nbt=mean.var.plot(nbt,y.cutoff = 2,x.low.cutoff = 2,fxn.x = expMean,fxn.y = logVarDivMean)
 print("Seurat: PCA")
 nbt=pca(nbt,do.print=FALSE)

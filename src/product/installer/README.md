@@ -136,9 +136,10 @@ If you find that you need the Kent command line utilities in addition to the Gen
     sudo bash browserSetup.sh addTools
 
 If you find a bug or your Linux distribution is not supported, please contact 
-[genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). More details about the 
-Genome Browser installation are at
-<http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product>
+[genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). 
+
+More details about the Genome Browser installation are available at
+<http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;hb=HEAD;f=src/product>
  
 # **All options**
 
