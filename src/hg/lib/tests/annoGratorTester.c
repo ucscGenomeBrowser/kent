@@ -65,7 +65,7 @@ else if (info->asObj && asObjectsMatch(info->asObj, vcfAsObj()))
     {
     //#*** this is kludgey, should test for .tbi file:
     boolean looksLikeTabix = endsWith(info->tableFileUrl, ".gz");
-    streamer = annoStreamVcfNew(info->tableFileUrl, looksLikeTabix, info->assembly, BIGNUM);
+    streamer = annoStreamVcfNew(info->tableFileUrl, NULL, looksLikeTabix, info->assembly, BIGNUM);
     }
 else if (endsWith(info->tableFileUrl, ".bb"))
     {

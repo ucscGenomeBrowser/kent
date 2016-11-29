@@ -24,6 +24,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 #include "trackHub.h"
+#include "hgConfig.h"
 
 
 struct cart *cart;	/* The user's ui state. */
@@ -262,9 +263,24 @@ htmlEnd();
 
 }
 
-void showAliPlaces(char *pslName, char *faName, char *database, 
-		   enum gfType qType, enum gfType tType, 
-		   char *organism, boolean feelingLucky)
+static void makeBigPsl(char *pslName, char *faName, char *db, char *outputBigBed)
+/* Make a bigPsl with the blat results. */
+{
+struct tempName bigPslTn;
+trashDirFile(&bigPslTn, "hgBlat", "bp", ".bigPsl");
+
+char cmdBuffer[4096];
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/pslToBigPsl %s -fa=%s stdout | sort -k1,1 -k2,2n  > %s", pslName, faName, bigPslTn.forCgi);
+system(cmdBuffer);
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -extraIndex=name -tab -as=loader/bigPsl.as -type=bed9+16  %s http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.chrom.sizes %s",
+        bigPslTn.forCgi, db, db, outputBigBed);
+system(cmdBuffer);
+unlink(bigPslTn.forCgi);
+}
+
+void showAliPlaces(char *pslName, char *faName, char *customText, char *database, 
+           enum gfType qType, enum gfType tType, 
+           char *organism, boolean feelingLucky)
 /* Show all the places that align. */
 {
 struct lineFile *lf = pslFileOpen(pslName);
@@ -336,7 +352,7 @@ if(feelingLucky)
     else 
 	{
 	cartWebStart(cart, database, "%s BLAT Results", trackHubSkipHubName(organism));
-	showAliPlaces(pslName, faName, database, qType, tType, organism, FALSE);
+	showAliPlaces(pslName, faName, customText, database, qType, tType, organism, FALSE);
 	cartWebEnd();
 	}
     }
@@ -361,9 +377,14 @@ else
     printf("---------------------------------------------------------------------------------------------------\n");
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
-	printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">",
-	    browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
-	    pslName, faName, uiState, unhideTrack);
+        if (customText)
+            printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&hgt.customText=%s&%s%s\">",
+                browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+                customText, uiState, unhideTrack);
+        else
+            printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s\">",
+                browserUrl, psl->tName, psl->tStart + 1, psl->tEnd, database, 
+                pslName, faName, uiState, unhideTrack);
 	printf("browser</A> ");
 	printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
 	    hgcUrl, psl->tStart, pslName, cgiEncode(faName), psl->qName,  psl->tName,
@@ -491,9 +512,39 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     subChar(seq->dna, 'u', 't');
 }
 
-void blatSeq(char *userSeq, char *organism)
+static char *getUnusedName(char *database, struct cart *cart)
+// Find a track name that isn't currently a custom track.
+{
+struct slName *browserLines = NULL;
+struct customTrack *ctList = customTracksParseCart(database, cart, &browserLines, NULL);
+struct customTrack *ct;
+int count = 0;
+char buffer[4096];
+
+for(;;count++)
+    {
+    for (ct=ctList;
+         ct != NULL;
+         ct=ct->next) 
+        {
+        safef(buffer, sizeof buffer, "ct_BlatResults%d",  count);
+        if (startsWith(buffer, ct->tdb->track))
+            // Found a track with this name.
+            break;
+        }
+
+    if (ct == NULL)
+        break;
+    }
+safef(buffer, sizeof buffer, "Blat Results (%d)",  count);
+
+return cloneString(buffer);
+}
+
+void blatSeq(char *userSeq, char *organism, char *database)
 /* Blat sequence user pasted in. */
 {
+boolean useBigPsl = cfgOptionBooleanDefault("useBlatBigPsl", FALSE);
 FILE *f;
 struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
@@ -692,8 +743,41 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     gfOutputQuery(gvo, f);
     }
 carefulClose(&f);
-showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db, qType, tType, 
+
+if (useBigPsl)
+    {
+    // make bigPsl
+    struct tempName bigBedTn;
+    trashDirFile(&bigBedTn, "hgBlat", "bp", ".bb");
+    makeBigPsl(pslTn.forCgi, faTn.forCgi, serve->db, bigBedTn.forCgi);
+    struct tempName customTextTn;
+    trashDirFile(&customTextTn, "hgBlat", "ct", ".txt");
+    FILE *fp = fopen(customTextTn.forCgi, "w");
+    char* host = getenv("HTTP_HOST");
+    char* reqUrl = getenv("REQUEST_URI");
+    // remove everything after / in URL
+    char *e = strrchr(reqUrl, '/');
+    if (e) *e = 0;
+
+    char *trackName = getUnusedName(database, cart);
+    char *customTextTemplate = "track type=bigPsl visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s/%s/%s name=\"%s\"\n";
+    char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases"; 
+
+    if (qIsProt)
+        extraForMismatch = "";
+    fprintf(fp, customTextTemplate, host, extraForMismatch, host, reqUrl, bigBedTn.forCgi, trackName);
+    fclose(fp);
+
+    char buffer[4096];
+    safef(buffer, sizeof buffer, "http://%s/%s/%s", host, reqUrl, customTextTn.forCgi);
+    showAliPlaces(pslTn.forCgi, faTn.forCgi, buffer, serve->db, qType, tType, 
 	      organism, feelingLucky);
+    }
+else
+    {
+    showAliPlaces(pslTn.forCgi, faTn.forCgi, NULL, serve->db, qType, tType, 
+                  organism, feelingLucky);
+    }
 if(!feelingLucky)
     cartWebEnd();
 gfFileCacheFree(&tFileCache);
@@ -866,7 +950,7 @@ if (isEmpty(userSeq) || orgChange)
     }
 else 
     {
-    blatSeq(skipLeadingSpaces(userSeq), organism);
+    blatSeq(skipLeadingSpaces(userSeq), organism, db);
     }
 }
 

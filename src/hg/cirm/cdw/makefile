@@ -20,6 +20,7 @@ UTIL_DIRS = \
     cdwDumpManiFiles \
     cdwFakeManifestFromSubmit \
     cdwJob \
+    cdwSummary \
     cdwMakeContaminationQa \
     cdwMakeEnrichments \
     cdwMakeFileTags \
