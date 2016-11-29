@@ -3205,8 +3205,8 @@ allButtonPair on
 	shortLabel RefSeq Other
         subGroups view=aGenes
 	longLabel NCBI RefSeq other genes subset (not NM_*, NR_*, XM_*, XR_*, or YP_*)
-        idXref ncbiRefSeqLink mrnaAcc name
         priority 4
+        type bed 12 .
 
         track refGene
         release alpha
@@ -3286,6 +3286,11 @@ searchMethod fuzzy
 termRegex ..[^_].*
 dontCheck ([NX][MR]|YP)_[0-9]+(\.[0-9]+)
 searchPriority 50
+
+searchName ncbiRefSeqOther
+searchTable ncbiRefSeqOther
+searchType bed
+searchPriority 50.1
 
 searchName refSeqName2
 searchTable ncbiRefSeq
