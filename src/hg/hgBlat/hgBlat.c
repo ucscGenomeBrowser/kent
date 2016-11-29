@@ -272,7 +272,7 @@ trashDirFile(&bigPslTn, "hgBlat", "bp", ".bigPsl");
 char cmdBuffer[4096];
 safef(cmdBuffer, sizeof(cmdBuffer), "loader/pslToBigPsl %s -fa=%s stdout | sort -k1,1 -k2,2n  > %s", pslName, faName, bigPslTn.forCgi);
 system(cmdBuffer);
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -extraIndex=name -tab -as=loader/bigPsl.as -type=bed12+13  %s http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.chrom.sizes %s",
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -extraIndex=name -tab -as=loader/bigPsl.as -type=bed9+16  %s http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.chrom.sizes %s",
         bigPslTn.forCgi, db, db, outputBigBed);
 system(cmdBuffer);
 unlink(bigPslTn.forCgi);
