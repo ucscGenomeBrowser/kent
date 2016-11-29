@@ -22,10 +22,12 @@ removeTypes = set(["helix", "strand", "beta", "turn", "signal"])
 # identifers are good for local spMut tracks
 createLinks = False
 
-urls = {"var": "http://web.expasy.org/cgi-bin/variant_pages/get-sprot-variant.pl?",
-        "uniProt" : "http://www.uniprot.org/uniprot/",
-        "pubmed" : "http://www.ncbi.nlm.nih.gov/pubmed/"
-        }
+urls = {
+#"var": "http://web.expasy.org/cgi-bin/variant_pages/get-sprot-variant.pl?",
+"var": "http://www.uniprot.org/uniprot/",
+"uniProt" : "http://www.uniprot.org/uniprot/",
+"pubmed" : "http://www.ncbi.nlm.nih.gov/pubmed/"
+}
 
 # some feature types should not go into the bed file name field, but rather be replaced 
 # with the curator's comments
@@ -109,7 +111,53 @@ featTypeColors = {
 "topological domain" : "100,0,0"
 }
 
-def makeBedLine(mut, bed, isMut):
+disShortNames = {
+    "hepatocellular carcinoma" : "HepatocC",
+    "a hepatocellular carcinoma" : "HepatocC",
+    "a hepatocellular carcinoma sample" : "HepatocC",
+    "hepatocellular carcinomas" : "HepatocC",
+    "ovarian cancer" : "OvC",
+    "colon cancer" : "ColC",
+    "colorectal cancer" : "ColrectC",
+    "hepatoblastoma" : "HepatoBl",
+    "a sporadic cancer": "sporadic",
+    "sporadic cancers": "sporadic",
+    "non-small cell lung cancer cell lines": "NSCLC-CL",
+    "a colon cancer cell line":"ColC-CL"
+}
+
+def removeAnds(disNames):
+    " remove useless 'and' in disease names "
+    newNames = []
+    for name in disNames:
+        if " and " in name:
+            splitNames = name.split(" and ")
+            newNames.extend(splitNames)
+            del disCodes[disCodes.index(name)]
+            disCodes.extend(splitNames)
+        else:
+            newNames.append(name)
+    return newNames
+
+def shortenDisCodes(disCodes):
+    " some disease names are not shortened yet by UniProt. Do this now. "
+    #print "XX", disNames, disCodes
+    #assert(len(disNames)==len(disCodes))
+    newCodes = []
+    for code in disCodes:
+        if " and " in code:
+            splitCodes = code.split(" and ")
+            newCodes.append(disShortNames.get(splitCodes[0], splitCodes[0]))
+            newCodes.append(disShortNames.get(splitCodes[1], splitCodes[1]))
+        else:
+            newCodes.append(disShortNames.get(code, code))
+    return newCodes
+    #return list(set(newCodes))
+
+xxFh = open("uniprotLiftDbg.txt", "w")
+
+def makeBedLine(muts, bed, isMut):
+    mut = muts[-1]
     disStatus = set([mut.disRelated for mut in muts])
     comments = [mut.comment for mut in muts if mut.comment!=""]
     # skip if it's not disease related 
@@ -117,16 +165,21 @@ def makeBedLine(mut, bed, isMut):
         #and len(comments)==0 and mut.disease=="":
         #noInfoCount +=1
         
-    diseases = list(set([mut.disease for mut in muts if mut.disease!=""]))
-    disCodes = list(set([mut.disCode for mut in muts if mut.disCode!=""]))
+    diseases = list([mut.disease for mut in muts if mut.disease!=""])
+    disCodes = list([mut.disCode for mut in muts if mut.disCode!=""])
+    #diseases = removeAnds(diseases)
+    if len(diseases)!=0:
+        xxFh.write("%s\t%s\n" % ("|".join(diseases), "|".join(disCodes)))
+    disCodes = shortenDisCodes(disCodes)
+
     acc = muts[0].acc
     dbSnpIds = [mut.dbSnpId for mut in muts]
 
     # set the bed name field to a disease, to the mutation or something else
     if isMut and mut.origAa=="":
-        bed[3] = "%s-%s:del" % (mut.begin, mut.end)
+        bed[3] = "%s-%sdel" % (mut.begin, mut.end)
     else:
-        bed[3] = "%s->%s" % (mut.origAa, mut.mutAa)
+        bed[3] = "%s%s%s" % (mut.origAa, mut.begin, mut.mutAa)
 
     disName = ",".join(disCodes)
     if len(disName)>30:
@@ -202,7 +255,7 @@ def makeBedLine(mut, bed, isMut):
     else:
         #  just position of feature
         if int(mut.end)-int(mut.begin)==1:
-            posStr = "amino acid %s" % str(int(mut.begin)+1)
+            posStr = "amino acid %s" % str(int(mut.begin)) # show a 1-based coordinate
         else:
             posStr = "amino acids %s-%s" % (mut.begin, str(int(mut.end)-1))
         posStr += " on protein %s" % mut.acc
@@ -214,6 +267,9 @@ def makeBedLine(mut, bed, isMut):
         commentField = ",".join(diseases) + "; " + commentField
     bed.append(commentField)
     if isMut:
+        varIds = [mut.varId for mut in muts]
+        if varIds!=[""]:
+            varIds = ["%s#%s|%s" % (acc, x, x) for x in varIds] # Andrew Nightingale request that we link to UniProt, not SwissProt
         bed.append(htmlLink('var', varIds))
         dbSnpIds = [id for id in dbSnpIds if id.strip()!=""]
         bed.append(",".join(dbSnpIds))
@@ -324,6 +380,7 @@ if __name__ == '__main__':
     blackCount = 0
     noInfoCount = 0
     doneAnnots = set() # to skip overlaps: a set with (seq, start, end, name)
+    # name is sequence:start:
 
     for line in open("work/temp.lifted.bed"):
         bed = line.strip().split()
@@ -340,20 +397,19 @@ if __name__ == '__main__':
         if mut.featType in ["mutagenesis site", "sequence variant"]:
             isMut = True
             ofh = mutBed
-        elif mut.featType in ["strand","helix", "coiled-coil region", "turn", "disulfide bond", "glycosylation site"]:
+        elif mut.featType in ["strand","helix", "coiled-coil region", "turn"]:
             isMut = False
             ofh = structBed
         else:
             isMut = False
             ofh = annotBed
 
-        bedLine = makeBedLine(mut, bed, isMut)
+        bedLine = makeBedLine(muts, bed, isMut)
         # skip annotations that we most likely have covered before
-        if not isMut:
-            keyFields = tuple(bedLine.split("\t")[:4])
-            if keyFields in doneAnnots:
-                continue
-            doneAnnots.add(keyFields)
+        keyFields = tuple(bedLine.split("\t")[:4])
+        if keyFields in doneAnnots:
+            continue
+        doneAnnots.add(keyFields)
         ofh.write(bedLine)
         count += 1
 
@@ -377,8 +433,8 @@ if __name__ == '__main__':
         (asFname, chromSizesPath)
     run(cmd)
 
-    cmd = "rm -rf work"
-    run(cmd)
+    #cmd = "rm -rf work"
+    #run(cmd)
     cmd = "wc -l spMut.bed spAnnot.bed spStruct.bed"
     run(cmd)
     #print "%d features written to spMut.bed and %s.bed" % (count, outFname, outFname)

@@ -3044,8 +3044,9 @@ group phenDis
 visibility hide
 type bigBed 12 +
 itemRgb on
-urls variationId="http://web.expasy.org/variant_pages/$$.html" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls variationId="http://www.uniprot.org/uniprot/$$" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
+exonNumbers off
 noScoreFilter on
 
 track spUniprot
@@ -3055,6 +3056,7 @@ group genes
 visibility hide
 type bigBed 12 +
 itemRgb on
+exonNumbers off
 compositeTrack on
 
         track spAnnot
@@ -3068,6 +3070,7 @@ compositeTrack on
         urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOverField comments
         noScoreFilter on
+        exonNumbers off
 
         track spStruct
         shortLabel UniProt Structure
@@ -3080,6 +3083,7 @@ compositeTrack on
         urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOverField comments
         noScoreFilter on
+        exonNumbers off
 
 track ncbiRefOverlap
 shortLabel NCBI Overlaps
