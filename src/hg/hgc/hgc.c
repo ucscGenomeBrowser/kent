@@ -11933,7 +11933,7 @@ else
 
 htmlHorizontalLine();
 
-if (!sameString(tdb->track, "ncbiRefSeqPsl"))
+if (! ( sameString(tdb->track, "ncbiRefSeqPsl") || sameString(tdb->track, "ncbiRefSeqOther" ) ) )
     showGenePos(itemName, tdb);
 
 printf("<h3>Links to sequence:</h3>\n");
