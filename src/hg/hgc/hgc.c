@@ -7503,7 +7503,15 @@ if (startsWith("user", aliTable))
 	}
 
     start = cartInt(cart, "o");
-    qName = acc;
+
+    // itemIn is three words, the first two are the ss files and the third is the accession
+    char *itemIn = cloneString(acc);
+    char *words[3];
+    int numWords = chopByWhite(itemIn, words, 3);
+    if (numWords != 3)
+        errAbort("ItemIn string doesn't have three words.");
+    qName = words[2];
+
     parseSs(ss, &pslName, &faName, NULL);
     pslxFileOpen(pslName, &qt, &tt, &lf);
     isProt = (qt == gftProt);
@@ -11925,7 +11933,7 @@ else
 
 htmlHorizontalLine();
 
-if (!sameString(tdb->track, "ncbiRefSeqPsl"))
+if (! ( sameString(tdb->track, "ncbiRefSeqPsl") || sameString(tdb->track, "ncbiRefSeqOther" ) ) )
     showGenePos(itemName, tdb);
 
 printf("<h3>Links to sequence:</h3>\n");

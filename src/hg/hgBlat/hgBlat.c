@@ -272,8 +272,23 @@ trashDirFile(&bigPslTn, "hgBlat", "bp", ".bigPsl");
 char cmdBuffer[4096];
 safef(cmdBuffer, sizeof(cmdBuffer), "loader/pslToBigPsl %s -fa=%s stdout | sort -k1,1 -k2,2n  > %s", pslName, faName, bigPslTn.forCgi);
 system(cmdBuffer);
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -extraIndex=name -tab -as=loader/bigPsl.as -type=bed12+13  %s http://hgdownload.cse.ucsc.edu/goldenPath/%s/bigZips/%s.chrom.sizes %s",
-        bigPslTn.forCgi, db, db, outputBigBed);
+char buf[4096];
+char *twoBitDir;
+if (trackHubDatabase(db))
+    {
+    struct trackHubGenome *genome = trackHubGetGenome(db);
+    twoBitDir = genome->twoBitPath;
+    }
+else
+    {
+    safef(buf, sizeof(buf), "/gbdb/%s", db);
+    twoBitDir = hReplaceGbdbSeqDir(buf, db);
+    safef(buf, sizeof(buf), "%s%s.2bit", twoBitDir, db);
+    twoBitDir = buf;
+    }
+            
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed9+16  %s %s %s",
+        udcDefaultDir(), bigPslTn.forCgi, twoBitDir, outputBigBed);
 system(cmdBuffer);
 unlink(bigPslTn.forCgi);
 }

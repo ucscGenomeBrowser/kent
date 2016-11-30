@@ -1255,3 +1255,18 @@ boolean twoBitIsSequence(struct twoBitFile *tbf, char *chromName)
 {
 return (hashFindVal(tbf->hash, chromName) != NULL);
 }
+
+struct hash *twoBitChromHash(char *fileName)
+/* Build a hash of chrom names with their sizes. */
+{
+struct twoBitFile *tbf = twoBitOpen(fileName);
+struct twoBitIndex *index;
+struct hash *hash = hashNew(digitsBaseTwo(tbf->seqCount));
+for (index = tbf->indexList; index != NULL; index = index->next)
+    {
+    hashAddInt(hash, index->name, twoBitSeqSize(tbf, index->name));
+    }
+
+twoBitClose(&tbf);
+return hash;
+}

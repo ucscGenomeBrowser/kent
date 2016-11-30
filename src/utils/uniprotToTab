@@ -265,6 +265,7 @@ def strip_namespace_inplace(etree, namespace=None,remove_from_attr=True):
 
 def parseDiseases(fname):
     " parse the file humanDiseases.txt from uniprot to resolve disease IDs to disease names "
+    logging.info("Parsing %s" % fname)
     dis = {}
     for line in open(fname).read().splitlines():
         if line.startswith("ID"):
@@ -272,6 +273,7 @@ def parseDiseases(fname):
         if line.startswith("AR"):
             code = line[5:].strip(".")
             dis[code]=name
+    logging.info("read %d disease code -> disease name mappings" % len(dis))
     return dis
 
 def findSaveList(el, path, dataDict, key, attribKey=None, attribVal=None, useAttrib=None, subSubEl=None):
@@ -955,7 +957,7 @@ def parseUniprot(db, inDir, outDir, taxonIds):
         mutOf = openOutTabFile(outDir, "%s.%s.annots.tab" % (outPrefix, taxId), mutHeaders)
         outFhs[taxId] = (entryOf, refOf, mutOf)
 
-    disToName = parseDiseases(join(inDir, "humdisease.txt"))
+    disToName = parseDiseases(join(inDir, "docs", "humdisease.txt"))
     # base and variant sequence filehandles
     faFiles = openFaFiles(taxonIds, outDir, outPrefix)
     varFaFiles = openFaFiles(taxonIds, outDir, outPrefix, "var")
