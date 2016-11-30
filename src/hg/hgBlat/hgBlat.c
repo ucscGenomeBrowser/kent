@@ -287,7 +287,7 @@ else
     twoBitDir = buf;
     }
             
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed9+16  %s %s %s",
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -verbose=0 -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed9+16  %s %s %s",
         udcDefaultDir(), bigPslTn.forCgi, twoBitDir, outputBigBed);
 system(cmdBuffer);
 unlink(bigPslTn.forCgi);
@@ -527,39 +527,122 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     subChar(seq->dna, 'u', 't');
 }
 
-static char *getUnusedName(char *database, struct cart *cart)
-// Find a track name that isn't currently a custom track.
+static struct slName *namesInPsl(struct psl *psl)
+/* Find all the unique names in a list of psls. */
+{
+struct hash *hash = newHash(3);
+struct slName *nameList = NULL;
+struct slName *name;
+for(; psl; psl = psl->next)
+    {
+    if (hashLookup(hash, psl->qName) == NULL)
+        {
+        name = slNameNew(psl->qName);
+        slAddHead(&nameList, name);
+        hashStore(hash, psl->qName);
+        }
+    }
+slReverse(&nameList);
+return nameList;
+}
+
+static char *makeNameUnique(char *name, char *database, struct cart *cart)
+/* Make sure track name will create a unique custom track. */
 {
 struct slName *browserLines = NULL;
 struct customTrack *ctList = customTracksParseCart(database, cart, &browserLines, NULL);
 struct customTrack *ct;
 int count = 0;
 char buffer[4096];
+safef(buffer, sizeof buffer, "%s", name);
 
 for(;;count++)
     {
+    char *customName = customTrackTableFromLabel(buffer);
     for (ct=ctList;
          ct != NULL;
          ct=ct->next) 
         {
-        safef(buffer, sizeof buffer, "ct_BlatResults%d",  count);
-        if (startsWith(buffer, ct->tdb->track))
+        if (startsWith(customName, ct->tdb->track))
             // Found a track with this name.
             break;
         }
 
     if (ct == NULL)
         break;
+
+    safef(buffer, sizeof buffer, "%s (%d)", name, count + 1);
     }
-safef(buffer, sizeof buffer, "Blat Results (%d)",  count);
 
 return cloneString(buffer);
 }
 
+static void getCustomName(char *database, struct cart *cart, struct psl *psl, char **pName, char **pDescription)
+// Find a track name that isn't currently a custom track. Also fill in description.
+{
+struct slName *names = namesInPsl(psl);
+char shortName[4096];
+char description[4096];
+
+unsigned count = slCount(names);
+if (count == 1)
+    {
+    safef(shortName, sizeof shortName, "blat %s", names->name);
+    safef(description, sizeof description, "blat on %s",  names->name);
+    }
+else if (count == 2)
+    {
+    safef(shortName, sizeof shortName, "blat %s+%d", names->name, count - 1);
+    safef(description, sizeof description, "blat on %d queries (%s, %s)", count, names->name, names->next->name);
+    }
+else
+    {
+    safef(shortName, sizeof shortName, "blat %s+%d", names->name, count - 1);
+    safef(description, sizeof description, "blat on %d queries (%s, %s, ...)", count, names->name, names->next->name);
+    }
+
+*pName = makeNameUnique(shortName, database, cart);
+*pDescription = cloneString(description);
+}
+
+static char *outBigPsl(char *db, struct psl *pslList, char *pslFilename, char *faFilename, boolean isProt)
+// Make a bigPsl from a list of psls and return its name.
+{
+struct tempName bigBedTn;
+trashDirFile(&bigBedTn, "hgBlat", "bp", ".bb");
+makeBigPsl(pslFilename, faFilename, db, bigBedTn.forCgi);
+struct tempName customTextTn;
+trashDirFile(&customTextTn, "hgBlat", "ct", ".txt");
+FILE *fp = fopen(customTextTn.forCgi, "w");
+char* host = getenv("HTTP_HOST");
+char* reqUrl = getenv("REQUEST_URI");
+// remove everything after / in URL
+char *e = strrchr(reqUrl, '/');
+if (e) *e = 0;
+
+char *trackName = NULL;
+char *trackDescription = NULL;
+
+getCustomName(db, cart, pslList, &trackName, &trackDescription);
+char *customTextTemplate = "track type=bigPsl visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s/%s/%s name=\"%s\" description=\"%s\"\n";
+char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases"; 
+
+if (isProt)
+    extraForMismatch = "";
+fprintf(fp, customTextTemplate, host, extraForMismatch, host, reqUrl, bigBedTn.forCgi, trackName, trackDescription);
+fclose(fp);
+
+char buffer[4096];
+safef(buffer, sizeof buffer, "http://%s/%s/%s", host, reqUrl, customTextTn.forCgi);
+
+return cloneString(buffer);
+}
+    
 void blatSeq(char *userSeq, char *organism, char *database)
 /* Blat sequence user pasted in. */
 {
-boolean useBigPsl = cfgOptionBooleanDefault("useBlatBigPsl", FALSE);
+boolean doHyper = sameString(cartUsualString(cart, "output", outputList[0]), "hyperlink");;
+boolean useBigPsl = cfgOptionBooleanDefault("useBlatBigPsl", FALSE) && doHyper;
 FILE *f;
 struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
@@ -761,32 +844,16 @@ carefulClose(&f);
 
 if (useBigPsl)
     {
-    // make bigPsl
-    struct tempName bigBedTn;
-    trashDirFile(&bigBedTn, "hgBlat", "bp", ".bb");
-    makeBigPsl(pslTn.forCgi, faTn.forCgi, serve->db, bigBedTn.forCgi);
-    struct tempName customTextTn;
-    trashDirFile(&customTextTn, "hgBlat", "ct", ".txt");
-    FILE *fp = fopen(customTextTn.forCgi, "w");
-    char* host = getenv("HTTP_HOST");
-    char* reqUrl = getenv("REQUEST_URI");
-    // remove everything after / in URL
-    char *e = strrchr(reqUrl, '/');
-    if (e) *e = 0;
+    struct psl *pslList = pslLoadAll(pslTn.forCgi);
 
-    char *trackName = getUnusedName(database, cart);
-    char *customTextTemplate = "track type=bigPsl visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s/%s/%s name=\"%s\"\n";
-    char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases"; 
-
-    if (qIsProt)
-        extraForMismatch = "";
-    fprintf(fp, customTextTemplate, host, extraForMismatch, host, reqUrl, bigBedTn.forCgi, trackName);
-    fclose(fp);
-
-    char buffer[4096];
-    safef(buffer, sizeof buffer, "http://%s/%s/%s", host, reqUrl, customTextTn.forCgi);
-    showAliPlaces(pslTn.forCgi, faTn.forCgi, buffer, serve->db, qType, tType, 
-	      organism, feelingLucky);
+    if (pslList != NULL)
+        {
+        char *customTrack = outBigPsl(database, pslList, pslTn.forCgi, faTn.forCgi, qIsProt);
+        showAliPlaces(pslTn.forCgi, faTn.forCgi, customTrack, serve->db, qType, tType, 
+          organism, feelingLucky);
+        }
+    else
+        puts("<table><tr><td><hr>Sorry, no matches found<hr><td></tr></table>");
     }
 else
     {
