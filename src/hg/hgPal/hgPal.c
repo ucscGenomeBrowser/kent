@@ -31,7 +31,7 @@ char *genome;
 
 getDbAndGenome(cart, &database, &genome, NULL);
 struct sqlConnection *conn = hAllocConn(database);
-cartWebStart(cart, database, "Protein Alignments for %s %s",track,item);
+cartWebStart(cart, database, "Other Species Alignments for %s %s",track,item);
 
 /* output the option selection dialog */
 palOptions(cart, conn, addOurButtons, NULL);
