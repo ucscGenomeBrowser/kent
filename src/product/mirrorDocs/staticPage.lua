@@ -120,6 +120,7 @@ function Doc(body, metadata, variables)
   add("<ul>")
   for i, h in ipairs(headers) do
     idStr = string.lower(string.gsub(h, "%s+", "-"))
+    idStr=idStr:gsub("%b<>", "")
     add("<li><a class='toc' href='#" .. idStr .. "'>" .. h .. "</a></li>")
   end
   add("</ul>")
