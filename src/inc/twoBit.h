@@ -213,4 +213,7 @@ long long twoBitTotalSizeNoN(struct twoBitFile *tbf);
 
 boolean twoBitIsSequence(struct twoBitFile *tbf, char *chromName);
 /* Return TRUE if chromName is in 2bit file. */
+
+struct hash *twoBitChromHash(char *fileName);
+/* Build a hash of chrom names with their sizes. */
 #endif /* TWOBIT_H */
