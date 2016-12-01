@@ -206,9 +206,6 @@ slow-db.password=password
 # mysql table to do table field name checks instead of DESCRIBE
 showTableCache=tableList
 
-# deactivate the hgMirror CGI on this machine
-allowHgMirror=0
-
 # direct links to Encode PDF files back to the UCSC site
 # so the mirror does not need a copy of them
 hgEncodeVocabDocBaseUrl=http://genome.ucsc.edu
