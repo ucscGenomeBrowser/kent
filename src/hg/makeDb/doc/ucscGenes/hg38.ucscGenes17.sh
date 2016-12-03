@@ -98,6 +98,7 @@ txGeneAccession $oldGeneBed saveLastId gencode${GENCODE_VERSION}Comp.bed.gz txTo
 #endif
 
 subColumn 4 gencode${GENCODE_VERSION}Comp.bed.gz txToAcc.tab ucscGenes.bed
+#this should be -noMask
 twoBitToFa /cluster/data/$db/$db.2bit -bed=ucscGenes.bed ucscGenes.fa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 bedToPsl /cluster/data/hg38/chrom.sizes ucscGenes.bed ucscGenes.psl

@@ -1196,8 +1196,7 @@ static boolean indelAppropriate(struct trackDb *tdb)
 /* Return true if it makes sense to offer indel display options for tdb. */
 {
 return (tdb && (startsWith("psl", tdb->type) ||startsWith("bigPsl", tdb->type) || sameString("bam", tdb->type) ||
-		sameString("lrg", tdb->track)) &&
-        (cfgOptionDefault("browser.indelOptions", NULL) != NULL));
+		sameString("lrg", tdb->track)));
 }
 
 static void indelEnabledByName(struct cart *cart, struct trackDb *tdb, char *name,

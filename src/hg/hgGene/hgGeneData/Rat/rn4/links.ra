@@ -68,7 +68,7 @@ url http://www.genenetwork.org/webqtl/WebQTL.py?cmd=sch&refseq=%s&species=rat
 priority 10
 
 name palTrack
-shortLabel Protein FASTA
+shortLabel Other Species FASTA
 tables rgdGene2
 idSql select chrom,txStart+1,txEnd,name from rgdGene2 where name = '%s'
 url ../cgi-bin/hgPal?g=rgdGene2&c=%s&l=%s&r=%s&i=%s

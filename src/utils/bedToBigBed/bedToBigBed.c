@@ -16,6 +16,7 @@
 #include "sqlNum.h"
 #include "bPlusTree.h"
 #include "bigBed.h"
+#include "twoBit.h"
 
 char *version = "2.7";
 /* Version history from 2.6 on at least -
@@ -31,8 +32,10 @@ int bedN = 0;   /* number of standard bed fields */
 int bedP = 0;   /* number of bed plus fields */
 char *asFile = NULL;
 char *asText = NULL;
+char *udcDir = NULL;
 static boolean doCompress = FALSE;
 static boolean tabSep = FALSE;
+static boolean sizesIs2Bit = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -70,6 +73,8 @@ errAbort(
   "           expects white space separator.\n"
   "   -extraIndex=fieldList - If set, make an index on each field in a comma separated list\n"
   "           extraIndex=name and extraIndex=name,id are commonly used.\n"
+  "   -sizesIs2Bit  -- If set, the chrom.sizes file is assumed to be a 2bit file.\n"
+  "   -udcDir=/path/to/udcCacheDir  -- sets the UDC cache dir for caching of remote files.\n"
   , version, bbiCurrentVersion, blockSize, itemsPerSlot
   );
 }
@@ -81,7 +86,9 @@ static struct optionSpec options[] = {
    {"as", OPTION_STRING},
    {"unc", OPTION_BOOLEAN},
    {"tab", OPTION_BOOLEAN},
+   {"sizesIs2Bit", OPTION_BOOLEAN},
    {"extraIndex", OPTION_STRING},
+   {"udcDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -569,7 +576,12 @@ if (extraIndexList != NULL)
     eim = bbExIndexMakerNew(extraIndexList, as);
 
 /* Load in chromosome sizes. */
-struct hash *chromSizesHash = bbiChromSizesFromFile(chromSizes);
+struct hash *chromSizesHash = NULL;
+
+if (sizesIs2Bit)
+    chromSizesHash = twoBitChromHash(chromSizes);
+else
+    chromSizesHash = bbiChromSizesFromFile(chromSizes);
 verbose(2, "Read %d chromosomes and sizes from %s\n",  chromSizesHash->elCount, chromSizes);
 
 /* Do first pass, mostly just scanning file and counting hits per chromosome. */
@@ -801,10 +813,14 @@ blockSize = optionInt("blockSize", blockSize);
 itemsPerSlot = optionInt("itemsPerSlot", itemsPerSlot);
 asFile = optionVal("as", asFile);
 doCompress = !optionExists("unc");
+sizesIs2Bit = optionExists("sizesIs2Bit");
 extraIndex = optionVal("extraIndex", NULL);
 tabSep = optionExists("tab");
+udcDir = optionVal("udcDir", udcDefaultDir());
 if (argc != 4)
     usage();
+udcSetDefaultDir(udcDir);
+
 if (optionExists("type"))
     {
     // parse type

@@ -91,7 +91,7 @@ def parseCmdLine():
     If Seurat is not installed on your machine, install it like this:
     Rscript -e 'install.packages("devtools", repos="http://cran.rstudio.com/");
     library(devtools); source("http://bioconductor.org/biocLite.R");
-    install_github("satijalab/seurat")'
+    install_url("https://github.com/satijalab/seurat/releases/download/v1.4.0/Seurat_1.4.0.5.tgz", binary = TRUE)
 
     """)
 
@@ -1496,21 +1496,28 @@ library(methods)
 suppressWarnings(suppressMessages(library(Seurat)))
 print("Seurat: Reading data")
 nbt.data=read.table("%(seuratMatFname)s",sep="\t",header=TRUE,row.names=1)
-nbt.data=log(nbt.data+1)
+#nbt.data=log(nbt.data+1)
 nbt=new("seurat",raw.data=nbt.data)
 print("Seurat: Setup")
-nbt=setup(nbt,project="NBT",min.cells = 3,names.field = 2,names.delim = "_",min.genes = 500,is.expr=1,)
+#nbt=setup(nbt,project="NBT",min.cells = 3,names.field = 2,names.delim = "_",min.genes = 500,is.expr=1,)
+nbt=Setup(nbt,project = "NBT",min.cells = 3,names.field = 2,names.delim = "_",min.genes = 500, do.logNormalize = T, total.expr = 1e4)
 print("Seurat: Mean Variant")
+print("CIRM Warning: We are not regressing out cell cycle or mitochondrial signal yet, see http://satijalab.org/seurat/pbmc-tutorial.html")
 nbt=mean.var.plot(nbt,y.cutoff = 2,x.low.cutoff = 2,fxn.x = expMean,fxn.y = logVarDivMean)
 print("Seurat: PCA")
 nbt=pca(nbt,do.print=FALSE)
 print("Seurat: JackStraw")
 # max: changed num.replicate from 200 -> 100
 nbt=jackStraw(nbt,num.replicate = 100,do.print = FALSE) 
+
 print("Seurat: PCA Projection")
-nbt=project.pca(nbt,do.print=FALSE)
+nbt=ProjectPCA(nbt,do.print=FALSE)
+
 print("Seurat: Significant genes from PCA")
-nbt.sig.genes=pca.sig.genes(nbt,1:9,pval.cut = 1e-5,max.per.pc = 200)
+pcCount=min(ncol(nbt@pca.rot), 9)
+printf("CIRM: Using %d PCs", pcCount)
+nbt.sig.genes=PCASigGenes(nbt,1:pcCount, pval.cut = 1e-5,max.per.pc = 200)
+
 print("Seurat: PCA 2 using sign. genes from PCA 1")
 nbt=pca(nbt,pc.genes=nbt.sig.genes,do.print = FALSE)
 print("Seurat: JackStraw 2 using all sign. genes")
@@ -1883,15 +1890,15 @@ def writeCellInfo(htmlFh, cellInfo, tagLabels):
   var cellInfo = %(cellInfoJson)s;
 </script>""" % locals())
 
-def parseManifest(maniFname):
-    """ manifest is a tab-sep file,
-    typical header is "#file   meta    format  output"
-    return as dict output -> rows
-    """
-    ret = defaultdict(list)
-    for row in lineFileNextRow(maniFname):
-        ret[row.output].append(row)
-    return ret
+#def parseManifest(maniFname):
+    #""" manifest is a tab-sep file,
+    #typical header is "#file   meta    format  output"
+    #return as dict output -> rows
+    #"""
+    #ret = defaultdict(list)
+    #for row in lineFileNextRow(maniFname):
+        #ret[row.output].append(row)
+    #return ret
 
 def mustRunCmd(cmd, delOnError=None):
     " run cmd through os.system with debugging "
@@ -1926,6 +1933,14 @@ def makeCacheFname(fname, cacheDir, prefix, suffix):
     #mustRunCmd(cmd, delOnError=cacheFname)
 
 def parseAnnovar(fname, cacheDir):
+    """" parse a directory full of annoVar files. Return a dict with:
+    - varCount - number of variants in total
+    - funcCount - most common types of variant changes and their count (list of (type, count))
+    - geneChanges - dict with geneId -> list of hgvs expressions
+    - mutToCoord - dict with hgvs -> (chrom, start, end)
+   
+    This parsing is pretty slow, so a copy of the results are kept under cacheDir.
+    """
     logging.info("Parsing annovar file %s" % fname)
     cacheFname = makeCacheFname(fname, cacheDir, "annovarSummary", "json")
     if isfile(cacheFname):
@@ -1935,6 +1950,7 @@ def parseAnnovar(fname, cacheDir):
     funcCounts = Counter()
     total = 0
     symToHgvs = defaultdict(list)
+    mutToCoord = dict()
 
     for row in lineFileNextRow(fname):
         total+=1
@@ -1948,12 +1964,15 @@ def parseAnnovar(fname, cacheDir):
             fs = aaChg.split(":")
             sym = fs[0]
             protHgvs = fs[-1]
+            chromStartEnd = (row[0], row[1], row[2])
             symToHgvs[sym].append(protHgvs)
+            mutToCoord[protHgvs] = chromStartEnd
 
     summ = {}
     summ["varCount"] = total
     summ["funcCounts"] = funcCounts.most_common()
     summ["geneChanges"] = dict(symToHgvs)
+    summ["mutToCoord"] = mutToCoord
 
     logging.info("Writing cache to %s" % cacheFname)
     json.dump(summ, open(cacheFname, "wb"))
@@ -1982,7 +2001,6 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
     fnames = list(allSubFiles(annovarDir, "_multianno.txt"))
 
     sampleNames = []
-    #allGenes = set()
     allSumms = {}
     mutToSamples = defaultdict(set)
     nameToMuts = defaultdict(set) # datasetname -> set of coding mutations
@@ -2019,18 +2037,18 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
         sampleToNewMuts[sampleName] = newMuts
         allMuts.update(newMuts)
 
-    htmlFh.write("All mutations: %d" % len(allMuts))
+    htmlFh.write("Number mutations in at least one sample: %d" % len(allMuts))
 
         #if fname.endswith(".vcf.gz"):
             #runSnpEff(fname, annovarCacheDir)
             #runVai(fname, annovarCacheDir)
 
     # print intersections
-    for a, b in itertools.combinations(nameToMuts, 2):
-        shared = (nameToMuts[a]-baseLine).intersection((nameToMuts[b]-baseLine))
-        row = [a,b,len(shared)]
-        row = [str(x) for x in row]
-        print "\t".join(row)
+    #for a, b in itertools.combinations(nameToMuts, 2):
+        #shared = (nameToMuts[a]-baseLine).intersection((nameToMuts[b]-baseLine))
+        #row = [a,b,len(shared)]
+        #row = [str(x) for x in row]
+        #print "\t".join(row)
 
     sampleNames.sort()
 
@@ -2061,7 +2079,8 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
     # write the table headers
     htmlFh.write("<table style='table-layout:fixed'>\n")
     htmlFh.write("<thead><tr>\n")
-    htmlFh.write("<th style='width:100px'>Gene<br>Symbol</th>\n")
+    htmlFh.write("<th style='width:100px'>Mutation</th>\n")
+    htmlFh.write("<th style='width:50px'>Sample Count</th>\n")
     for sampleName in sampleNames:
         htmlFh.write("<th style='width:60px'>")
         htmlFh.write("%s<br>" % sampleName.replace("_", " "))
@@ -2070,7 +2089,7 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
         htmlFh.write("</th>\n")
     htmlFh.write("</tr></thead>\n")
 
-    # now write the table
+    # now create table rows with cell colors and sort them by sample count
     sampleToColor = {
     "Env" : "light-blue",
     "Ev" : "yellow",
@@ -2078,28 +2097,41 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
     "Lv" : "light-green",
     "LvL" : "light-red"
     }
+
+    rows = []
     for mutName in sorted(allMuts):
-        htmlFh.write("<tr>\n")
-        htmlFh.write("<td>%s</td>\n" % mutName)
+        row = [0, mutName] # 0 is just a placeholder for sampleCount
+        sampleCount = 0
         for sampleName in sampleNames:
-            #changeList = sampleToNewMuts[sampleName].get(mutName, [])
-            #changeList = [x.replace("p.","") for x in changeList]
             if mutName in sampleToNewMuts[sampleName]:
-                #mutLabel = "X"
-                htmlFh.write("<td style='background-color: black'></td>\n")
+                row.append("black")
+                sampleCount += 1
             else:
-                #mutLabel = ""
                 sampleType = sampleName.split("_")[0]
                 if sampleName.startswith("Lv L"):
                     sampleType = "LvL"
                 color = sampleToColor[sampleType]
-                htmlFh.write("<td style='background-color:%s'></td>\n" % color)
+                row.append(color)
+        row[0] = sampleCount
+        rows.append(row)
+
+    rows.sort(reverse=True)
+
+    for row in rows:
+        sampleCount = row[0]
+        mutName = row[1]
+        colors = row[2:]
+
+        htmlFh.write("<tr>\n")
+        if len(mutName)>20:
+            mutName = mutName[:20]+"..."
+        htmlFh.write("<td>%s</td>\n" % mutName)
+        htmlFh.write("<td>%d</td>\n" % sampleCount)
+
+        for color in colors:
+            htmlFh.write("<td style='background-color: %s'></td>\n" % color)
         htmlFh.write("</tr>\n")
     htmlFh.write("</table>\n")
-
-    #htmlFh.write("<h4>Mutations in all samples</h4>\n")
-    #for gene, mut in commonMuts:
-        #htmlFh.write("%s/%s" % (gene, mut))
 
 def pasteSummarySection(summDescFn, htmlFh):
     " insert manually generated summary section into html file "

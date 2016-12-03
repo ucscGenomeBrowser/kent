@@ -261,8 +261,8 @@ span#home-link {
 }
 
 .gbTrackDescription *:first-child {
-    padding-top: 15px;
-    margin-top: 0;
+    padding-top: 0;
+    margin-top: 15px;
 }
 
 .gbTrackDescription img {
