@@ -82,11 +82,6 @@ void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idT
     boolean withParent, int maxDepth, boolean leavesOnly);
 /* Write tag storm flattening out hierarchy so kids have all of parents tags in tab-sep format */
 
-#ifdef OLD
-char *tagStanzaVal(struct tagStanza *stanza, char *tag);
-/* Return value associated with tag in stanza or any of parent stanzas */
-#endif /* OLD */
-
 struct hash *tagStormIndex(struct tagStorm *tagStorm, char *tag);
 /* Produce a hash of stanzas containing a tag keyed by tag value */
 
@@ -154,6 +149,18 @@ struct hash *tagStormCountTagVals(struct tagStorm *tags, char *tag, char *requir
  * number of times each value is used that can be recovered with 
  * hashIntVal(hash, key).  If requiredTag is not-NULL, stanza must 
  * have that tag. */
+
+int tagStormMaxDepth(struct tagStorm *ts);
+/* Calculate deepest extent of tagStorm */
+
+int tagStormCountStanzas(struct tagStorm *ts);
+/* Return number of stanzas in storm */
+
+int tagStormCountTags(struct tagStorm *ts);
+/* Return number of stanzas in storm. Does not include expanding ancestors */
+
+int tagStormCountFields(struct tagStorm *ts);
+/* Return number of distinct tag types (fields) in storm */
 
 /** Stuff for finding tags within a stanza */
 
