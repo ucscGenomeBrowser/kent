@@ -1509,10 +1509,15 @@ nbt=pca(nbt,do.print=FALSE)
 print("Seurat: JackStraw")
 # max: changed num.replicate from 200 -> 100
 nbt=jackStraw(nbt,num.replicate = 100,do.print = FALSE) 
+
 print("Seurat: PCA Projection")
-nbt=project.pca(nbt,do.print=FALSE)
+nbt=ProjectPCA(nbt,do.print=FALSE)
+
 print("Seurat: Significant genes from PCA")
-nbt.sig.genes=pca.sig.genes(nbt,1:9,pval.cut = 1e-5,max.per.pc = 200)
+pcCount=min(ncol(nbt@pca.rot), 9)
+printf("CIRM: Using %d PCs", pcCount)
+nbt.sig.genes=PCASigGenes(nbt,1:pcCount, pval.cut = 1e-5,max.per.pc = 200)
+
 print("Seurat: PCA 2 using sign. genes from PCA 1")
 nbt=pca(nbt,pc.genes=nbt.sig.genes,do.print = FALSE)
 print("Seurat: JackStraw 2 using all sign. genes")
