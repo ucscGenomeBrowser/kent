@@ -5,6 +5,8 @@
 #include "options.h"
 #include "tagStorm.h"
 
+boolean gEmbed = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -13,12 +15,14 @@ errAbort(
   "usage:\n"
   "   tagStormToHtml in.tags out.html\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -embed - don't write beginning and end of page, just controls and tree.\n"
+  "            useful for making html to be embedded in another page.\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"embed", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -48,29 +52,32 @@ fprintf(f, "</UL>\n");
 
 void writeHtml(struct tagStorm *ts, FILE *f)
 /* Write out html page and javascript.   Most of this function is just
- * stringified output */
+ * stringified output from a html/javascript page developed previously. */
 {
 int i, maxDepth = tagStormMaxDepth(ts);
 int stanzaCount = tagStormCountStanzas(ts);
 int tagCount = tagStormCountTags(ts);
 int fieldCount = tagStormCountFields(ts);
 
+if (!gEmbed)
+    {
+    fputs(
+    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"
+    "<HTML>\n"
+    "<HEAD>\n"
+    "    <META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n"
+    , f);
+    fprintf(f, "    <TITLE>tagStorm %s</TITLE>\n", ts->fileName);
+    fputs(
+    "</HEAD>\n"
+    "<BODY>\n"
+    , f);
+    fprintf(f, "<H2>tagStorm %s</H2>\n", ts->fileName);
+    }
 fputs(
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n"
-"<HTML>\n"
-"<HEAD>\n"
-"    <META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n"
-, f);
-fprintf(f, "    <TITLE>tagStorm %s</TITLE>\n", ts->fileName);
-fputs(
-"    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css\" />\n"
-"    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
-"    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js\"></script>\n"
-"</HEAD>\n"
-"<BODY>\n"
-, f);
-fprintf(f, "<H2>tagStorm %s</H2>\n", ts->fileName);
-fputs(
+"<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css\" />\n"
+"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
+"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js\"></script>\n"
 "<div>\n"
 "<B>levels:</B> \n"
 , f);
@@ -88,9 +95,9 @@ fputs(
 "<BR><BR>\n"
 "</div>\n"
 "\n"
-"<div id=\"js_tag_tree\">\n"
+"<div id=\"ts_tree\">\n"
 , f);
-rTsWrite(ts->forest, f, 0, "<LI id=\"ts_root_1\">");
+rTsWrite(ts->forest, f, 0, "<LI id=\"ts_root\">");
 fputs(
 "</div>\n"
 "\n"
@@ -102,26 +109,31 @@ fputs(
 "    var tree;		// Points to our jsTree object\n"
 "    var root_1;	\n"
 "\n"
-"    function open_n(node, depth) {\n"
+"    function open_r(node, depth) {\n"
 "	var count = 0;\n"
 "	while (node) {\n"
 "	     if (tree.is_parent(node)) {\n"
 "	         if (depth <= 1) {\n"
 "		      tree.close_all(node);\n"
 "		 } else {\n"
-"		      open_n(tree.get_next_dom(node, false), depth-1);\n"
+"		      open_r(tree.get_next_dom(node, false), depth-1);\n"
 "		 }\n"
 "	     }\n"
 "	     node = tree.get_next_dom(node, true);\n"
 "	}\n"
 "    }\n"
 "\n"
+"    function open_n(depth) {\n"
+"        tree.open_all();\n"
+"        open_r(root_1, depth);\n"
+"    }\n"
+"\n"
 "    function init() {\n"
-"        tree_div = $('#js_tag_tree');\n"
+"        tree_div = $('#ts_tree');\n"
 "        tree_div.jstree();\n"
 "        tree = tree_div.jstree(true);\n"
-"        tree.open_all();\n"
-"        root_1 = $('#ts_root_1');\n"
+"        root_1 = $('#ts_root');\n"
+"        open_n(2);\n"
 "\n"
 ,f );
 for (i=1; i<=maxDepth; ++i)
@@ -129,7 +141,7 @@ for (i=1; i<=maxDepth; ++i)
     fprintf(f, 
     "	$('#open_%d').on('click', function () {\n"
     "	    tree.open_all();\n"
-    "	    tag_storm_tree.open_n(root_1, %d);\n"
+    "	    tag_storm_tree.open_n(%d);\n"
     "	});\n"
     "\n"
     , i, i);
@@ -151,10 +163,15 @@ fputs(
 "});\n"
 "\n"
 "</script>\n"
-"</BODY>\n"
-"</HTML>\n"
-"\n"
 , f);
+if (!gEmbed)
+    {
+    fputs(
+    "</BODY>\n"
+    "</HTML>\n"
+    "\n"
+    , f);
+    }
 }
 
 void tagStormToHtml(char *inTags, char *outHtml)
@@ -172,6 +189,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+gEmbed = optionExists("embed");
 tagStormToHtml(argv[1], argv[2]);
 return 0;
 }
