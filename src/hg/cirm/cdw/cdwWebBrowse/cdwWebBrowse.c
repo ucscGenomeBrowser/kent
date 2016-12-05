@@ -1099,40 +1099,60 @@ void doBrowseDatasets(struct sqlConnection *conn, char *tag)
 printf("<UL>\n");
 char query[PATH_LEN]; 
 sqlSafef(query, sizeof(query), "SELECT * FROM cdwDataset ORDER BY label "); 
-struct cdwDataset *iter, *cD = cdwDatasetLoadByQuery(conn, query);
+struct cdwDataset *dataset, *datasetList = cdwDatasetLoadByQuery(conn, query);
 // Go through the cdwDataset table and generate an entry for each dataset. 
-for (iter = cD; iter != NULL; iter = iter->next)
+for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
     {
-    char *label;
-    char *desc;
-    if (iter == NULL)
-        continue;
-    label = iter->label;
-    desc = iter->description;
-    char *datasetId = iter->name;
+    char *label = dataset->label;
+    char *desc = dataset->description;
+    char *datasetId = dataset->name;
+
     // Check if we have a dataset summary page in the CDW and store its ID. The file must have passed validation.  
     char summFname[8000];
     safef(summFname, sizeof(summFname), "%s/summary/index.html", datasetId);
     int fileId = cdwFileIdFromPathSuffix(conn, summFname);
+
     // If the ID exists and the user has access print a link to the page.  
-    if (fileId > 0)
+    boolean haveAccess = ((fileId > 0) && cdwCheckFileAccess(conn, fileId, user));
+    if (haveAccess)
 	{
-	if (cdwCheckFileAccess(conn, fileId, user))
-	    printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>\n", datasetId, label);
-	else // Otherwise print a label. 
-	    printf("<LI><B>%s</B><BR>\n", label);
+	printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>\n", 
+	    datasetId, label);
+	// Print out file count and descriptions. 
+	sqlSafef(query, sizeof(query), 
+	    "select count(*) from cdwFileTags where data_set_id='%s'", datasetId);  
+	long long fileCount = sqlQuickLongLong(conn, query);
+	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\"",
+		desc, datasetId, cartSidUrlString(cart)); 
+	printf(">%lld files</A>)",fileCount);
+	printf(" (<A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
+		datasetId, cartSidUrlString(cart)); 
+	printf(">metadata tree</A>)");
 	}
-    else // Otherwise print a label. 
+    else // Otherwise print a label and description. 
+	{
 	printf("<LI><B>%s</B><BR>\n", label);
-    // Print out file count and descriptions. 
-    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where data_set_id='%s'", iter->name);  
-    long long fileCount = sqlQuickLongLong(conn, query);
-    printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\"",
-	    desc, datasetId, cartSidUrlString(cart)); 
-    printf(">%lld files</A>)",fileCount);
+	printf("%s\n", desc);
+	}
     printf("</LI>\n");
     }
-cdwDatasetFree(&cD);
+}
+
+void doDataSetMetaTree(struct sqlConnection *conn)
+/* Put up meta data tree associated with data set. */
+{
+char *dataSet = cartString(cart, "cdwDataSet");
+char metaFileName[PATH_LEN];
+safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
+int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
+if (!cdwCheckFileAccess(conn, fileId, user))
+   errAbort("Unauthorized access to %s", metaFileName);
+printf("<H2>Metadata tree for %s</H2>\n", dataSet);
+char *path = cdwPathForFileId(conn, fileId);
+char command[3*PATH_LEN];
+fflush(stdout);
+safef(command, sizeof(command), "./tagStormToHtml -embed %s stdout", path);
+mustSystem(command);
 }
 
 void doBrowseFormat(struct sqlConnection *conn)
@@ -1615,6 +1635,10 @@ else if (sameString(command, "oneTag"))
 else if (sameString(command, "help"))
     {
     doHelp(conn);
+    }
+else if (sameString(command, "dataSetMetaTree"))
+    {
+    doDataSetMetaTree(conn);
     }
 else
     {
