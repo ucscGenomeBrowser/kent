@@ -1704,7 +1704,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.52");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.53");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();

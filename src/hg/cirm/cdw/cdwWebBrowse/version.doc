@@ -4,5 +4,7 @@
    - Added new Analysis pull down in place of Query to accommodate as yet blank
         joint dataset page.
    - Made it so query has tab separated value (tsv) as well as ra format output
-0.53
+0.53 Dec 4 2016
    - Added support for PNG files
+   - Added metadata link on browse/dataset page
+
