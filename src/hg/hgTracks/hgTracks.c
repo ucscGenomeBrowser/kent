@@ -9491,7 +9491,7 @@ hPrintf("<tr><td> &nbsp;10bp (1 zero)</td><td class=\"hotkey\">1</td><td></td><t
 hPrintf("<tr><td> &nbsp;100bp (2 zeroes)</td><td class=\"hotkey\">2</td><td></td><td class='hotkey'></td></tr>\n");
 hPrintf("<tr><td> &nbsp;1000bp (3 zeroes)</td><td class=\"hotkey\">3</td><td></td><td class='hotkey'></td></tr>\n");
 hPrintf("<tr><td> &nbsp;50kbp (4 zeroes)</td><td class=\"hotkey\">4</td><td></td><td class='hotkey'></td></tr>\n");
-hPrintf("<tr><td> &nbsp;100kbp (5 zoroes)</td><td class=\"hotkey\">5</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;100kbp (5 zeroes)</td><td class=\"hotkey\">5</td><td></td><td class='hotkey'></td></tr>\n");
 hPrintf("<tr><td> &nbsp;1Mbp (6 zeroes)</td><td class=\"hotkey\">6</td><td></td><td class='hotkey'></td></tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
