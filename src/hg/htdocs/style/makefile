@@ -9,7 +9,7 @@ CSS_FILES=HGStyle.css autocomplete.css blueStyle.css encodeProject.css floretSty
     jWest.css jWest.afterNiceMenu.css \
     theme-modern.css ui.dropdownchecklist.css nice_menu.css \
     encodeDataMatrix.css encodeDataSummary.css userAccounts.css \
-    encode3.css encode3Ucsc.css boostrap.min.css gb.css gbAfterMenu.css hgGtexTrackSettings.css
+    encode3.css encode3Ucsc.css bootstrap.min.css gb.css gbAfterMenu.css hgGtexTrackSettings.css
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
