@@ -832,7 +832,10 @@ function installDebian ()
 
     echo2 Installing ghostscript and imagemagick
     waitKey
-    apt-get --assume-yes install ghostscript imagemagick wget rsync
+    # ghostscript for PDF export
+    # imagemagick for the session gallery
+    # r-base-core for the gtex tracks
+    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core
 
     if [ ! -f $APACHECONF ]; then
         echo2
