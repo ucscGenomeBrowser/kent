@@ -685,7 +685,8 @@ cgiDecode(fileName, fileNameDecoded, strlen(fileName));
 
 boolean result;
 char *type = customTrackTypeFromBigFile(fileNameDecoded);
-result = (type!=NULL);
+// exclude plain VCF (as opposed to vcfTabix) from bigData treatment
+result = (type != NULL && differentString(type, "vcf"));
 
 freeMem(type);
 freeMem(fileNameDecoded);
