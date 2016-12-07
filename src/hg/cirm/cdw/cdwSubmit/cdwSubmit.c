@@ -363,6 +363,19 @@ struct tagStanza *stanza = hashFindVal(metaHash, meta);
 return tagFindVal(stanza, field);
 }
 
+static void addFileToUsersGroup(struct sqlConnection *conn, struct cdwUser *user, long long fileId)
+/* Add file to user's primary group */
+{
+if (user->primaryGroup != 0)
+    {
+    struct dyString *dy = dyStringNew(0);
+    sqlDyStringPrintf(dy, "insert into cdwGroupFile (fileId,groupId) values (%lld,%u)",
+	fileId, user->primaryGroup);
+    sqlUpdate(conn, dy->string);
+    dyStringFree(&dy);
+    }
+}
+
 int cdwFileFetch(struct sqlConnection *conn, struct cdwFile *ef, int fd, 
 	char *submitUrl, unsigned submitId, unsigned submitDirId, unsigned hostId,
 	struct cdwUser *user, struct fieldedTable *table, struct fieldedRow *row, 
@@ -410,13 +423,7 @@ dyStringPrintf(dy, "' where id=%d", ef->id);
 sqlUpdate(conn, dy->string);
 
 /* We also will add file to the group */
-if (user->primaryGroup != 0)
-    {
-    dyStringClear(dy);
-    sqlDyStringPrintf(dy, "insert into cdwGroupFile (fileId,groupId) values (%u,%u)",
-	ef->id, user->primaryGroup);
-    sqlUpdate(conn, dy->string);
-    }
+addFileToUsersGroup(conn, user, ef->id);
 
 dyStringFree(&dy);
 return ef->id;
@@ -821,7 +828,7 @@ else
 }
 
 int storeSubmissionFile(struct sqlConnection *conn,
-    char *submitFileName, int submitId, int submitDirId, int userId)
+    char *submitFileName, int submitId, int submitDirId, struct cdwUser *user, char *access)
 /* Save file to warehouse and make a record for it.  This is for tagless files,
  * just the ones that make up the submission metadata. */
 {
@@ -836,7 +843,7 @@ if (oldFileId != 0)
 
 long long size = fileSize(submitFileName);
 long long updateTime = fileModTime(submitFileName);
-int fileId = makeNewEmptyFileRecord(conn, userId, submitId, submitDirId, submitFileName, size);
+int fileId = makeNewEmptyFileRecord(conn, user->id, submitId, submitDirId, submitFileName, size);
 char cdwFile[PATH_LEN] = "", cdwPath[PATH_LEN];
 cdwMakeFileNameAndPath(fileId, submitFileName,  cdwFile, cdwPath);
 long long startUploadTime = cdwNow();
@@ -845,14 +852,27 @@ chmod(cdwPath, 0444);
 long long endUploadTime = cdwNow();
 
 char query[3*PATH_LEN];
+
+/* Figure out access variables */
+int userAccess = cdwAccessWrite;
+int groupAccess = 0;
+int allAccess = 0;
+if (sameString(access, "all"))
+    allAccess = cdwAccessRead;
+else if (sameString(access, "group"))
+    groupAccess = cdwAccessRead;
+else if (!sameString(access, "user"))
+    errAbort("Unknown access %s", access);
+
 sqlSafef(query, sizeof(query), "update cdwFile set "
 		      "  submitId=%d, submitDirId=%d,"
 		      "  cdwFileName='%s', startUploadTime=%lld, endUploadTime=%lld,"
-		      "  md5='%s', updateTime=%lld where id=%d"
+		      "  md5='%s', updateTime=%lld, userAccess=%d, groupAccess=%d, allAccess=%d where id=%d"
        , submitId, submitDirId
        , cdwFile, startUploadTime, endUploadTime
-       , md5, updateTime, fileId);
+       , md5, updateTime, userAccess, groupAccess, allAccess, fileId);
 sqlUpdate(conn, query);
+addFileToUsersGroup(conn, user, fileId);
 freeMem(md5);
 return fileId;
 }
@@ -1027,8 +1047,12 @@ safef(cmd, sizeof(cmd), "cdwBackup %scdw/db.backups/cdwSubmit.%i", getenv("CIRM"
 mustSystem(cmd); 
 
 /* Put our manifest and metadata files */
-int manifestFileId= storeSubmissionFile(conn, manifestFile, submitId, submitDirId, user->id);
-int metaFileId= storeSubmissionFile(conn, metaFile, submitId, submitDirId, user->id);
+char *access = tagFindLocalVal(tagStorm->forest, "access");
+if (access == NULL)
+    access = "group";
+
+int manifestFileId= storeSubmissionFile(conn, manifestFile, submitId, submitDirId, user, access);
+int metaFileId= storeSubmissionFile(conn, metaFile, submitId, submitDirId, user, access);
 
 struct hash *metaIdHash = storeUsedMetaTags(conn, table, metaIx, tagStorm, metaHash);
 

@@ -21,11 +21,17 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+
+void *needMem(size_t size)
+{
+errAbort("No memory for you.");
+return NULL;
+}
+
 void freen(char *input)
 /* Test something */
 {
-unsigned u = sqlUnsigned(input);
-printf("%u\n", u);
+needMem(1000);
 }
 
 int main(int argc, char *argv[])
