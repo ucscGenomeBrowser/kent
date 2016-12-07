@@ -9,7 +9,8 @@
 #include "tagStorm.h"
 #include "rql.h"
 
-boolean dry = FALSE;
+boolean clDry = FALSE;
+boolean clId = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -32,6 +33,7 @@ errAbort(
   "The way around this is to include spaces on either side of the equal\n"
   "options:\n"
   "   -dry - if set just print what we _would_ change access to.\n"
+  "   -id - if set then instead of a boolean query, just use a file ID\n"
   "example:\n"
   "    cdwChangeAccess a+r ' data_set_id=\"quakeBrainGeo\"'\n"
   "This would make all files associated with the data set quakeBrainGeo readable for all,\n"
@@ -42,6 +44,7 @@ errAbort(
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"dry", OPTION_BOOLEAN},
+   {"id", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -92,7 +95,7 @@ else
 
 char query[256];
 sqlSafef(query, sizeof(query), "update cdwFile set %s=%d where id=%lld", field, access, fileId);
-if (dry)
+if (clDry)
     {
     int uninformativePrefixLen = 9;
     verbose(1, "%s\n", query+uninformativePrefixLen);
@@ -106,42 +109,50 @@ void cdwChangeAccess(char *chmodString, char *rqlWhere)
 {
 char cWhere, cDir, cAccess;
 parseChmodString(chmodString, &cWhere, &cDir, &cAccess);
+struct sqlConnection *conn = cdwConnectReadWrite();
 
 /* Get list of all stanzas matching query */
-struct sqlConnection *conn = cdwConnectReadWrite();
-struct tagStorm *tags = cdwTagStorm(conn);
-struct dyString *rqlQuery = dyStringNew(0);
-dyStringPrintf(rqlQuery, "select accession from cdwFileTags where accession and %s", rqlWhere);
-struct slRef *ref, *matchRefList = tagStanzasMatchingQuery(tags, rqlQuery->string);
-
-/* Make one pass through mostly for early error reporting and building up 
- * hash of cdwValidFiles keyed by accession */
-struct hash *validHash = hashNew(0);
-for (ref = matchRefList; ref != NULL; ref = ref->next)
+if (clId)
     {
-    struct tagStanza *stanza = ref->val;
-    char *acc = tagFindVal(stanza, "accession");
-    if (acc != NULL)
-        {
-	struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
-	if (vf == NULL)
-	    errAbort("%s not found in cdwValidFile", acc);
-	hashAdd(validHash, acc, vf);
-	}
+    long long id = sqlLongLong(rqlWhere);
+    changeAccess(conn, id, cWhere, cDir, cAccess);
     }
-
-/* Second pass through matching list we call routine that actually adds
- * the group/file relationship. */
-for (ref = matchRefList; ref != NULL; ref = ref->next)
+else
     {
-    struct tagStanza *stanza = ref->val;
-    char *acc = tagFindVal(stanza, "accession");
-    if (acc != NULL)
-        {
-	struct cdwValidFile *vf = hashFindVal(validHash, acc);
-	if (vf != NULL)
+    struct tagStorm *tags = cdwTagStorm(conn);
+    struct dyString *rqlQuery = dyStringNew(0);
+    dyStringPrintf(rqlQuery, "select accession from cdwFileTags where accession and %s", rqlWhere);
+    struct slRef *ref, *matchRefList = tagStanzasMatchingQuery(tags, rqlQuery->string);
+
+    /* Make one pass through mostly for early error reporting and building up 
+     * hash of cdwValidFiles keyed by accession */
+    struct hash *validHash = hashNew(0);
+    for (ref = matchRefList; ref != NULL; ref = ref->next)
+	{
+	struct tagStanza *stanza = ref->val;
+	char *acc = tagFindVal(stanza, "accession");
+	if (acc != NULL)
 	    {
-	    changeAccess(conn, vf->fileId, cWhere, cDir, cAccess);
+	    struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
+	    if (vf == NULL)
+		errAbort("%s not found in cdwValidFile", acc);
+	    hashAdd(validHash, acc, vf);
+	    }
+	}
+
+    /* Second pass through matching list we call routine that actually adds
+     * the group/file relationship. */
+    for (ref = matchRefList; ref != NULL; ref = ref->next)
+	{
+	struct tagStanza *stanza = ref->val;
+	char *acc = tagFindVal(stanza, "accession");
+	if (acc != NULL)
+	    {
+	    struct cdwValidFile *vf = hashFindVal(validHash, acc);
+	    if (vf != NULL)
+		{
+		changeAccess(conn, vf->fileId, cWhere, cDir, cAccess);
+		}
 	    }
 	}
     }
@@ -153,7 +164,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-dry = optionExists("dry");
+clDry = optionExists("dry");
+clId = optionExists("id");
 cdwChangeAccess(argv[1], argv[2]);
 return 0;
 }
