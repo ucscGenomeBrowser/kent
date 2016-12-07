@@ -27,13 +27,13 @@ html primateChainNet
     subTrack primateChainNet
     spectrum on
 
-#include chainNetPanTro4.ra alpha
+include chainNetPanTro4.ra 
 include chainNetPanTro5.ra 
 
 include chainNetPanPan1.ra beta,public
 include chainNetPanPan2.ra alpha
 
-#include chainNetGorGor4.ra alpha
+include chainNetGorGor4.ra 
 include chainNetGorGor5.ra 
 
         track chainPonAbe2
