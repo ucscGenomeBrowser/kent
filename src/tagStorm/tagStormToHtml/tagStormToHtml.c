@@ -38,13 +38,16 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
 	repeatCharOut(f, '\t', depth);
-	fprintf(f, "%s%s %s\n", liLabel, pair->name, (char*)(pair->val));
-	liLabel = "<LI>";
+	fprintf(f, "%s%s %s<BR>\n", liLabel, pair->name, (char*)(pair->val));
+	liLabel = "";
 	}
     repeatCharOut(f, '\t', depth);
-    fprintf(f, "<LI>\n");
+    fprintf(f, "<BR>\n");
     if (stanza->children != NULL)
+	{
+	liLabel = "<LI>";
 	rTsWrite(stanza->children, f, depth+1, liLabel);
+	}
     }
 repeatCharOut(f, '\t', depth);
 fprintf(f, "</UL>\n");
@@ -78,6 +81,7 @@ fputs(
 "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css\" />\n"
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js\"></script>\n"
+"<style>.jstree-default .jstree-anchor { height: initial; } </style>\n"
 "<div>\n"
 "<B>levels:</B> \n"
 , f);
@@ -129,6 +133,8 @@ fputs(
 "    }\n"
 "\n"
 "    function init() {\n"
+"        $.jstree.defaults.core.themes.icons = false;\n"
+"        $.jstree.defaults.core.themes.dots = false;\n"
 "        tree_div = $('#ts_tree');\n"
 "        tree_div.jstree();\n"
 "        tree = tree_div.jstree(true);\n"
@@ -140,8 +146,7 @@ for (i=1; i<=maxDepth; ++i)
     {
     fprintf(f, 
     "	$('#open_%d').on('click', function () {\n"
-    "	    tree.open_all();\n"
-    "	    tag_storm_tree.open_n(%d);\n"
+    "	    open_n(%d);\n"
     "	});\n"
     "\n"
     , i, i);
@@ -153,7 +158,7 @@ fputs(
 "\n"
 "   }\n"
 "\n"
-"   return { init: init, open_n :open_n };\n"
+"   return { init: init};\n"
 "\n"
 "}());\n"
 "\n"

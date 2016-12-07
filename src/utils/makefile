@@ -147,25 +147,25 @@ UCSC_APPS = \
 
 SCRIPT_FILES = \
         agpToLift \
+	apacheLogParse \
         bedCollapse.pl \
+	bedFixBlockOverlaps \
+	bedOverlapMerge \
         bedSingleCover.pl \
+	bedBetween \
+	doLocusName \
+	extToolsChromeParse \
         iSync \
         lodToBedScore \
+	matrixMerge \
 	mkMafFrames.pl \
-	uniprotLift \
-	bedFixBlockOverlaps \
-	apacheLogParse \
-	extToolsChromeParse \
 	patSeqFilterBulkAndAnnotate \
-	uniprotToTab \
 	patSeqSummarizeDocs \
 	pslProtCnv \
 	pslSameGene \
-	matrixMerge \
-	bedOverlapMerge \
 	tabRepl \
-	doLocusName \
-	bedBetween
+	uniprotLift \
+	uniprotToTab 
 
 
 # List of all directories to build
