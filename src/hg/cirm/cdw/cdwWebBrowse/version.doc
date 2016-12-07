@@ -1,10 +1,13 @@
 0.52  Nov 6 2016
    - Fixed a security hole where people could mangle a URL and gain access to unauthorized files.
    - Added new help page
-   - Added new Analysis pull down in place of Query to accommodate as yet blank
-        joint dataset page.
+   - Added new Analysis pull down in place of Query to accommodate joint dataset page.
    - Made it so query has tab separated value (tsv) as well as ra format output
+   - 
 0.53 Dec 4 2016
    - Added support for PNG files
    - Added metadata link on browse/dataset page
+   - Made a joint dataset page with Quake/Kriegstein published brain data.
+0.54
+   - Added data set id to browse/dataset page
 
