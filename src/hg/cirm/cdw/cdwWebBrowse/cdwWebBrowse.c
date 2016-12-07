@@ -1093,7 +1093,7 @@ static boolean cdwCheckFileAccess(struct sqlConnection *conn, int fileId, struct
 return cdwCheckAccessFromFileId(conn, fileId, user, cdwAccessRead);
 }
 
-void doBrowseDatasets(struct sqlConnection *conn, char *tag)
+void doBrowseDatasets(struct sqlConnection *conn)
 /* Show datasets and links to dataset summary pages. */
 {
 printf("<UL>\n");
@@ -1116,8 +1116,8 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
     boolean haveAccess = ((fileId > 0) && cdwCheckFileAccess(conn, fileId, user));
     if (haveAccess)
 	{
-	printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>\n", 
-	    datasetId, label);
+	printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</A></B><BR>\n", 
+	    datasetId, label, datasetId);
 	// Print out file count and descriptions. 
 	sqlSafef(query, sizeof(query), 
 	    "select count(*) from cdwFileTags where data_set_id='%s'", datasetId);  
@@ -1131,7 +1131,7 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	}
     else // Otherwise print a label and description. 
 	{
-	printf("<LI><B>%s</B><BR>\n", label);
+	printf("<LI><B>%s (%s)</B><BR>\n", label, datasetId);
 	printf("%s\n", desc);
 	}
     printf("</LI>\n");
@@ -1618,7 +1618,7 @@ else if (sameString(command, "browseLabs"))
     }
 else if (sameString(command, "browseDataSets"))
     {
-    doBrowseDatasets(conn, "data_set_id");
+    doBrowseDatasets(conn);
     }
 else if (sameString(command, "browseFormats"))
     {
