@@ -139,11 +139,22 @@ the dataset.  If not specified, a step size of 1 is used.
 
 <P><B>Data Values</B></P>
 Wiggle track data values can be integer or real, positive or negative values.
-Chromosome positions are specified as 1-relative.  For a chromosome of length
-N, the first position is 1 and the last position is N.  Only positions
-specified have data.  Positions not specified do not have data and will not
-be graphed. All positions specified in the input data must be in numerical
+Only positions specified have data. Positions not specified do not have data and 
+will not be graphed. All positions specified in the input data must be in numerical
 order.
+
+<p><b>1-start coordinate system in use for variableStep and fixedStep</b></p>
+<p>
+For compatibility purposes, certain wigs and bigWigs are an exception
+to how coordinates are always stored ("0-start, half-open" in tables, "1-start, fully-closed"
+as positioned within the browser). BigWigs created from bedGraph are stored as 
+"0-start, half-open" just like most other data, but bigWigs created from variableStep 
+and fixedStep are an exception, stored as "1-start, fully-closed." For example, for a 
+chromosome of length N, the first position is 1 and the last position is N. For more 
+information, see this related article:
+<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/20639541/" target="_blank">
+BigWig and BigBed: enabling browsing of large distributed datasets</a>.
+</p>
 
 <P><B>Parameters for custom wiggle track definition lines</B></P>
 <P>All options are placed in a single line separated by spaces:</P>
