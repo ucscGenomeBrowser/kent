@@ -202,8 +202,11 @@
     determine display methods and options.</P>
     <P>Valid settings:</P>
     <P>
-    <A onclick="return jumpTo(this);" HREF="#">bam</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bam/cram</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
     <A onclick="return jumpTo(this);" HREF="#">vcfTabix</A>,
     <P>Detailed descriptions of each type can be found
@@ -329,17 +332,22 @@
     <BR>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBed bigWig bam vcfTabix"></span>
+<DIV class="linkDataUrl"><span class="types bigChain "></span>
+<div class="format"><code>linkDataUrl &lt;url/relativePath&gt;</code></div>
+    <P class="isRequired">Required: <span class="red">For Hubs</span></P>
+    <P>The location of a remote data file containing the chain link data.</P>
+</DIV>
+
+<DIV class="bigDataUrl"><span class="types bigBed bigChain bigMaf bigPsl bigWig bam vcfTabix"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
-    This setting is required for all data tracks in a track hub.  It is currently not
-    supported for local tracks.</P>  
+    This setting is required for all data tracks in a track hub.  </P>  
 <!-- THIS SHOULD BE FIXED for local tracks! -->
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBed, bigWig or
+    the supported remote data file formats: bam/cram, bigBed, bigChain, bigMaf, bigPsl, bigGenePred,  bigWig or
     vcfTabix.  Note that bam/cram and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
@@ -923,6 +931,40 @@
     <A HREF="../../../FAQ/FAQformat.html">FAQ</A>.</P>
 </DIV>
 
+<DIV class="bigChain_intro">
+<H3>bigChain: Genome-wide Pairwise Alignments</H3>
+    <P>
+    The bigChain format describes a pairwise alignment that allow gaps in both sequences simultaneously, just as Chain files do, but bigChain files are compressed and indexed as bigBeds. bigChain files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigChain. The resulting bigChain files are in an indexed binary format. The main advantage of the bigChain files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigChain is considerably faster than regular Chain files. The bigChain file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigChain format definitions please see the
+    <A HREF="../bigChain.html">bigChain help page</A>.</P>
+</DIV>
+
+<DIV class="bigPsl_intro">
+<H3>bigPsl: Pairwise Alignments</H3>
+    <P>
+    The bigPsl format stores alignments between two sequences, as PSL files do, but they are compressed and indexed as bigBeds. bigPsl files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigPsl. The resulting bigPsl files are in an indexed binary format. The main advantage of the bigPsl files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigPsl is considerably faster than regular PSL files. The bigPsl file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigPsl format definitions please see the
+    <A HREF="../bigPsl.html">bigPsl help page</A>.</P>
+</DIV>
+
+<DIV class="bigGenePred_intro">
+<H3>bigGenePred: Gene Annotations</H3>
+    <P>
+    The bigGenePred format stores annotation items that are a linked collection of exons, much as BED files indexed as bigBeds do, but bigGenePred has additional information about the coding frames and other gene specific information in eight additional fields.
+
+    bigGenePred files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigGenePred. The resulting bigBed files are in an indexed binary format. The main advantage of the bigBed files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigBed is considerably faster than regular BED files. The bigBed file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigGenePred format definitions please see the
+    <A HREF="../bigGenePred.html">bigGenePred help page</A>.</P>
+</DIV>
+
+<DIV class="bigMaf_intro">
+<H3>bigMaf: Mulitple Alignments</H3>
+    <P>
+        The bigMaf format stores multiple alignments in a format compatible with MAF files, which are then compressed and indexed as bigBeds. bigMaf files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigMaf. The resulting bigMaf files are in an indexed binary format. The main advantage of the bigMaf files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigMaf is considerably faster than regular MAF files. The bigMaf file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigMaf format definitions please see the
+    <A HREF="../bigMaf.html">bigMaf help page</A>.</P>
+</DIV>
+
 <DIV class="bigBed_intro">
 <H3>bigBed: Item or region tracks</H3>
     <P>Some of the most
@@ -949,6 +991,7 @@
     <P><em>Examples can be found below.</em></P>
 </DIV>
 
+
 <DIV class="bigBed"><span class="types bigBed"></span>
 <div class="format">
     <code>type bigBed &lt;3-12&gt; [+/.]</code></div>
@@ -958,6 +1001,30 @@
     additional non-standard fields, the parameter '<code>.</code>' (dot)
     must be specified if this track is meant to be configurable.</P>
     <P><em>Examples can be found below.</em></P>
+</DIV>
+
+<DIV class="bigPsl"><span class="types bigPsl"></span>
+<div class="format">
+    <code>type bigPsl</code></div>
+There are no extra options that can appear on the type bigPsl line.
+</DIV>
+
+<DIV class="bigChain"><span class="types bigChain"></span>
+<div class="format">
+    <code>type bigChain</code></div>
+There are no extra options that can appear on the type bigChain line.
+</DIV>
+
+<DIV class="bigGenePred"><span class="types bigGenePred"></span>
+<div class="format">
+    <code>type bigGenePred</code></div>
+There are no extra options that can appear on the type bigGenePred line.
+</DIV>
+
+<DIV class="bigMaf"><span class="types bigMaf"></span>
+<div class="format">
+    <code>type bigMaf</code></div>
+There are no extra options that can appear on the type bigMaf line.
 </DIV>
 
 <DIV class="bed_flavors"><span class="types bed5FloatScore bedRnaElements broadPeak coloredExon gvf ld2 narrowPeak peptideMapping"></span>
