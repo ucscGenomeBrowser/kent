@@ -20,7 +20,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Commercial users should contact kent@soe.ucsc.edu for access to other modules
-including jkOwnSrc and blat.
+including jkOwnLib and blat.
 
 Commercial users interested in the UCSC Genome Browser in particular please see
     http://genome.ucsc.edu/license/.
