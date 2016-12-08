@@ -3571,14 +3571,13 @@ var popUp = {
             $('#hgTrackUiDialog').dialog('option' , 'title' ,
                                hgTracks.trackDb[popUp.trackName].shortLabel+" Track Description");
             $('#hgTrackUiDialog').dialog('open');
-            var buttOk = $('button.ui-state-default');
-            if ($(buttOk).length === 1)
-                $(buttOk).focus();
         } else {
             $('#hgTrackUiDialog').dialog('option' , 'title' ,
                                   hgTracks.trackDb[popUp.trackName].shortLabel+" Track Settings");
             $('#hgTrackUiDialog').dialog('open');
         }
+        var buttOk = $('button.ui-state-default');
+        $(buttOk).focus();
     }
 };
 
