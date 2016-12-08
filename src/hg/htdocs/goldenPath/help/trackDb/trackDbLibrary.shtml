@@ -1622,7 +1622,7 @@ There are no extra options that can appear on the type bigMaf line.
     contain the left and right pairs of the sequence. (see
     hg/lib/encode/pairedTagAlign.as)</LI>
     <LI>If <code>ss</code> is specified then a
-    user provided a user provided blat sequence fole is looked for.</LI>
+    user-provided blat sequence is looked for.</LI>
     </UL>
 </DIV>
 
