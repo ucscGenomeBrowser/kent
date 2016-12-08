@@ -56,17 +56,6 @@ static void bfSyntax(struct blastFile *bf)
 bfError(bf, "Can't cope with BLAST output syntax");
 }
 
-static boolean isAllDigits(char *s)
-/* test if a string is all digits */
-{
-for (; *s != '\0'; s++)
-    {
-    if (!isdigit(*s))
-        return FALSE;
-    }
-return TRUE;
-}
-
 static boolean isAllDashes(char *s)
 /* test if a string is all dashes */
 {

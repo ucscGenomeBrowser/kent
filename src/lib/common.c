@@ -3467,6 +3467,18 @@ char *splitOffNumber(char *db)
 return cloneString(skipToNumeric(db));
 }
 
+boolean isAllDigits(char *s)
+/* Return TRUE if string is non-empty and contains only digits (i.e. is a nonnegative integer). */
+{
+if (isEmpty(s))
+    return FALSE;
+char c;
+while ((c = *s++) != 0)
+    if (!isdigit(c))
+        return FALSE;
+return TRUE;
+}
+
 time_t mktimeFromUtc (struct tm *t)
 /* Return time_t for tm in UTC (GMT)
  * Useful for stuff like converting to time_t the
