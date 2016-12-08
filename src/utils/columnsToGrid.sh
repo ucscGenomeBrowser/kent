@@ -20,6 +20,7 @@
 # Limitations/to do
 #################################################################################
 # I want to truncate columns, probably using something like sed 's/\(.\{1,50\}\).*/\1/' this way there's no wrapping around the terminal (in which case, columns is a better program)
+# Some users of older shells report issues. Detect if user is running bash/zsh, otherwise exit.
 
 #################################################################################
 # Configuration
