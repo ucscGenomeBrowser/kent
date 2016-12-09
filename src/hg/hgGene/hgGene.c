@@ -753,7 +753,6 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
-setUdcCacheDir();
 htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
