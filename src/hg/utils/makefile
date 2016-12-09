@@ -71,6 +71,7 @@ TEST_DIRS = \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
+	hubCheck \
 	overlapSelect \
 	pslMap \
 	pslToBigPsl \
