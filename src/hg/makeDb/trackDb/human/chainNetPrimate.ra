@@ -33,6 +33,7 @@ include chainNetPanTro5.ra
 include chainNetPanPan1.ra beta,public
 include chainNetPanPan2.ra alpha
 
+include chainNetGorGor3.ra beta,public
 include chainNetGorGor4.ra 
 include chainNetGorGor5.ra 
 
