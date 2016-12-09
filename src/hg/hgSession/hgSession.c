@@ -1540,7 +1540,6 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
-setUdcCacheDir();
 hgSession();
 cgiExitTime("hgSession", enteredMainTime);
 return 0;

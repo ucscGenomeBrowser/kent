@@ -294,7 +294,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
