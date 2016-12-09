@@ -37,17 +37,17 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     struct slPair *pair;
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
-	repeatCharOut(f, '\t', depth);
-	fprintf(f, "%s%s %s<BR>\n", liLabel, pair->name, (char*)(pair->val));
-	liLabel = "";
-	}
+        repeatCharOut(f, '\t', depth);
+        fprintf(f, "%s%s %s<BR>\n", liLabel, pair->name, (char*)(pair->val));
+        liLabel = "";
+        }
     repeatCharOut(f, '\t', depth);
     fprintf(f, "<BR>\n");
     if (stanza->children != NULL)
-	{
-	liLabel = "<LI>";
-	rTsWrite(stanza->children, f, depth+1, liLabel);
-	}
+        {
+        liLabel = "<LI>";
+        rTsWrite(stanza->children, f, depth+1, liLabel);
+        }
     }
 repeatCharOut(f, '\t', depth);
 fprintf(f, "</UL>\n");
@@ -82,7 +82,7 @@ fputs(
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js\"></script>\n"
 "<style>.jstree-default .jstree-anchor { height: initial; } </style>\n"
-"<div>\n"
+"<div id=\"ts_controls\">\n"
 "<B>levels:</B> \n"
 , f);
 for (i=1; i<=maxDepth; ++i)
@@ -109,22 +109,22 @@ fputs(
 "\n"
 "var tag_storm_tree = (function() {\n"
 "    // Effectively global vars set by init\n"
-"    var tree_div;	// Points to div we live in\n"
-"    var tree;		// Points to our jsTree object\n"
-"    var root_1;	\n"
+"    var tree_div;        // Points to div we live in\n"
+"    var tree;                // Points to our jsTree object\n"
+"    var root_1;        \n"
 "\n"
 "    function open_r(node, depth) {\n"
-"	var count = 0;\n"
-"	while (node) {\n"
-"	     if (tree.is_parent(node)) {\n"
-"	         if (depth <= 1) {\n"
-"		      tree.close_all(node);\n"
-"		 } else {\n"
-"		      open_r(tree.get_next_dom(node, false), depth-1);\n"
-"		 }\n"
-"	     }\n"
-"	     node = tree.get_next_dom(node, true);\n"
-"	}\n"
+"        var count = 0;\n"
+"        while (node) {\n"
+"             if (tree.is_parent(node)) {\n"
+"                 if (depth <= 1) {\n"
+"                      tree.close_all(node);\n"
+"                 } else {\n"
+"                      open_r(tree.get_next_dom(node, false), depth-1);\n"
+"                 }\n"
+"             }\n"
+"             node = tree.get_next_dom(node, true);\n"
+"        }\n"
 "    }\n"
 "\n"
 "    function open_n(depth) {\n"
@@ -133,29 +133,32 @@ fputs(
 "    }\n"
 "\n"
 "    function init() {\n"
-"        $.jstree.defaults.core.themes.icons = false;\n"
-"        $.jstree.defaults.core.themes.dots = false;\n"
-"        tree_div = $('#ts_tree');\n"
-"        tree_div.jstree();\n"
-"        tree = tree_div.jstree(true);\n"
-"        root_1 = $('#ts_root');\n"
-"        open_n(2);\n"
+"       if (navigator.userAgent.match(/msie|trident/i)) {\n"
+"           $('#ts_controls').hide()\n"
+"       } else {\n"
+"            $.jstree.defaults.core.themes.icons = false;\n"
+"            $.jstree.defaults.core.themes.dots = false;\n"
+"            tree_div = $('#ts_tree');\n"
+"            tree_div.jstree();\n"
+"            tree = tree_div.jstree(true);\n"
+"            root_1 = $('#ts_root');\n"
+"            open_n(2);\n"
 "\n"
 ,f );
 for (i=1; i<=maxDepth; ++i)
     {
     fprintf(f, 
-    "	$('#open_%d').on('click', function () {\n"
-    "	    open_n(%d);\n"
-    "	});\n"
+    "            $('#open_%d').on('click', function () {\n"
+    "                open_n(%d);\n"
+    "            });\n"
     "\n"
     , i, i);
     }
 fputs(
-"	$('#open_all').on('click', function () {\n"
-"	    tree.open_all();\n"
-"	});\n"
-"\n"
+"            $('#open_all').on('click', function () {\n"
+"                tree.open_all();\n"
+"            });\n"
+"        }\n"
 "   }\n"
 "\n"
 "   return { init: init};\n"
