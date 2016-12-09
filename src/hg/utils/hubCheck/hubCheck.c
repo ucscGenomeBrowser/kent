@@ -58,6 +58,7 @@ static struct optionSpec options[] = {
    {"checkSettings", OPTION_BOOLEAN},
    {"test", OPTION_BOOLEAN},
    {"udcDir", OPTION_STRING},
+   {"specHost", OPTION_STRING},
    {"cacheTime", OPTION_INT},
    {NULL, 0},
 };
@@ -468,13 +469,13 @@ if (relativeUrl != NULL)
         struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
         bbiFileClose(&bbi);
         }
-    else if (startsWithWord("bigBed", type) || startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type))
+    else if (startsWithWord("bigBed", type) || startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)|| startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type))
         {
         /* Just open and close to verify file exists and is correct type. */
         struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
         char *typeString = cloneString(type);
         nextWord(&typeString);
-        if (typeString != NULL)
+        if (startsWithWord("bigBed", type) && (typeString != NULL))
             {
             unsigned numFields = sqlUnsigned(nextWord(&typeString));
             if (numFields > bbi->fieldCount)
@@ -681,6 +682,8 @@ struct trackHubCheckOptions *checkOptions = NULL;
 AllocVar(checkOptions);
 
 checkOptions->specHost = (optionExists("test") ? "genome-test.cse.ucsc.edu" : "genome.ucsc.edu");
+checkOptions->specHost = optionVal("specHost", checkOptions->specHost);
+
 checkOptions->checkFiles = !optionExists("noTracks");
 checkOptions->checkSettings = optionExists("checkSettings");
 
