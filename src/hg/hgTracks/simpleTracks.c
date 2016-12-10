@@ -4656,6 +4656,8 @@ void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
 /* Draw generic item list.  Features must be fixed height
  * and tg->drawItemAt has to be filled in. */
 {
+withIndividualLabels = TRUE;  // set this back to default just in case someone left it false (I'm looking at you pgSnp)
+
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
 if (vis != tvDense && baseColorCanDraw(tg))
