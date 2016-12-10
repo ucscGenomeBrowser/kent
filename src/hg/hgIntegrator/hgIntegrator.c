@@ -990,7 +990,6 @@ int main(int argc, char *argv[])
  * permanently. */
 char *excludeVars[] = {DO_QUERY, CARTJSON_COMMAND, NULL,};
 cgiSpoof(&argc, argv);
-setUdcCacheDir();
 oldVars = hashNew(10);
 cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;

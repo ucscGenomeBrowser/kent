@@ -6220,10 +6220,13 @@ struct trackRef *tr;
 struct grp* grps = hLoadGrps(database);
 struct grp *grp;
 float minPriority = 100000; // something really large
+boolean foundMap = FALSE;
 
 /* build group objects from database. */
 for (grp = grps; grp != NULL; grp = grp->next)
     {
+    if (sameString(grp->name, "map"))
+        foundMap = TRUE;
     /* deal with group reordering */
     float priority = grp->priority;
     // we want to get the minimum priority over 1 (which is custom tracks)
@@ -6250,7 +6253,7 @@ for (grp = grps; grp != NULL; grp = grp->next)
 grpFreeList(&grps);
 
 double priorityInc;
-double priority;
+double priority = 1.00001;
 if (grpList)
     {
     minPriority -= 1.0;             // priority is 1-based
@@ -6272,6 +6275,21 @@ for(; grpList; grpList = grpList->next)
     slAddHead(&list, group);
     hashAdd(hash, group->name, group);
     }
+//
+// If there isn't a map group, make one and set the priority so it will be right after custom tracks
+// and hub groups.
+if (!foundMap)
+    {
+    AllocVar(group);
+    group->name = cloneString("map");
+    group->label = cloneString("Mapping and Sequencing");
+    group->defaultPriority = priority;
+    group->priority = priority;
+    group->defaultIsClosed = FALSE;
+    slAddHead(&list, group);
+    hashAdd(hash, "map", group);
+    }
+
 
 /* Loop through tracks and fill in their groups.
  * If necessary make up an unknown group. */
@@ -7930,6 +7948,7 @@ if (!hideControls)
     hWrites("Click side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
     hWrites("Drag tracks left or right to new position. ");
+    hWrites("Press \"?\" for keyboard shortcuts. ");
     hPrintf("</TD>");
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<td width='30'>&nbsp;</td>\n");
@@ -8074,11 +8093,8 @@ if (!hideControls)
             hPrintf("</td></tr></table></th>\n");
             controlGridEndRow(cg);
 
-            /* First track group that is not the custom track group (#1)
-             * or a track hub, gets the Base Position track
-             * unless it's collapsed. */
-            if (!showedRuler && !isHubTrack(group->name) &&
-		    differentString(group->name, "user") )
+            /* Base Position track goes into map group, which will always exist. */
+            if (!showedRuler && sameString(group->name, "map") )
 		{
 		char *url = trackUrl(RULER_TRACK_NAME, chromName);
 		showedRuler = TRUE;
@@ -9470,7 +9486,13 @@ if (gotExtTools)
 hPrintf("               </tr>\n");
 hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>      <td> exon view</td><td class=\"hotkey\">e then v</td>                  </tr>\n");
 hPrintf("<tr><td> zoom out 100x</td><td class=\"hotkey\">0</td>     <td> default view</td><td class=\"hotkey\">d then v</td>               </tr>\n");
-hPrintf("<tr><td>              </td><td class=\"hotkey\"> </td>     <td> view DNA</td><td class='hotkey'>v then d</td>                     </tr>\n");
+hPrintf("<tr><td> zoom to ...</td><td class=\"hotkey\"></td><td> view DNA</td><td class='hotkey'>v then d</td></tr>\n");
+hPrintf("<tr><td> &nbsp;10bp (1 zero)</td><td class=\"hotkey\">1</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;100bp (2 zeroes)</td><td class=\"hotkey\">2</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;1000bp (3 zeroes)</td><td class=\"hotkey\">3</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;50kbp (4 zeroes)</td><td class=\"hotkey\">4</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;100kbp (5 zeroes)</td><td class=\"hotkey\">5</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;1Mbp (6 zeroes)</td><td class=\"hotkey\">6</td><td></td><td class='hotkey'></td></tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");

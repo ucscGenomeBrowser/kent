@@ -1,3 +1,6 @@
+
+   kent/src/hg/liftOver/
+
 LiftOver has additional optional arguments for use with cross-species lifts:
 
    -multiple               Allow multiple output regions

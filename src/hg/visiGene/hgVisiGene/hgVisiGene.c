@@ -677,7 +677,7 @@ printf("</CENTER>");
 puts(
 "<P>Good search terms include gene symbols, authors, years, body parts,\n"
 "organisms, GenBank and UniProt accessions, Known Gene descriptive terms,\n"
-"<A HREF=\"http://genex.hgu.mrc.ac.uk/Atlas/intro.html\" \n"
+"<A HREF=\"http://www.emouseatlas.org\" \n"
 "TARGET=_blank>Theiler</A> stages for mice, and \n"
 "<A HREF=\"http://www.xenbase.org/anatomy/alldev.do\" \n"
 "TARGET=_blank>Nieuwkoop/Faber</A> stages for frogs. The wildcard characters\n"
@@ -890,7 +890,6 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 uglyTime(NULL);
 cgiSpoof(&argc, argv);
-setUdcCacheDir();
 oldCart = hashNew(0);
 if (cgiVarExists(hgpDoDownload))  /* use cgiVars -- do not commit to any cart method yet */
     {

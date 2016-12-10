@@ -119,11 +119,14 @@ in the sections below.</I>
     <LI><A HREF="#commonSettings">Common trackDb settings</A></LI>
     <LI><A HREF="#settingsByType">Settings by track type</A> &ndash; with examples
     <UL>
-        <LI><A HREF="#bigBed_-_Item_or_Region_Track_Settings">bigBed</A>:
-                                                                Item or region tracks</LI>
+        <LI><A HREF="#bam">bam/cram</A>: Compressed Sequence Alignment/Map tracks</LI>
+        <LI><A HREF="#bigBed_-_Item_or_Region_Track_Settings">bigBed</A>: Item or region tracks</LI>
+        <LI><A HREF="#bigChain_-_Pairwise_Alignments">bigChain</A>: Genome-wide Pairwise Alignments</LI>
+        <LI><A HREF="#bigGenePred_-_Gene_Annotations">bigGenePred</A>: Gene Annotations</LI>
+        <LI><A HREF="#bigMaf_-_Multiple_Alignments">bigMaf</A>: Mulitple alignments</LI>
+        <LI><A HREF="#bigPsl_-_Pairwise_Alignments">bigPsl</A>: Pairwise Alignments</LI>
         <LI><A HREF="#bigWig_-_Signal_Graphing_Track_Settings">bigWig</A>:
                                                                 Signal graphing tracks</LI>
-        <LI><A HREF="#bam">bam/cram</A>: Compressed Sequence Alignment/Map tracks</LI>
         <LI><A HREF="#vcfTabix">vcfTabix</A>: Variant Call Format</LI>
     </UL></LI>
     <LI><A HREF="#groupingTracks">Grouping tracks into sets and hierarchies</A>
@@ -273,6 +276,90 @@ in the sections below.</I>
 valid only for certain types of tracks.  Many of these tracks 
 are described below along with settings specific to their types.</P>
 
+<A name="bam"></A>
+<TABLE class="settingsTable" id="bam_-_Compressed_Alignment_Track_Settings">
+<THEAD><TR><TD><DIV ID="bam_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bam/cram - Compressed Sequence Alignment track settings</TH></TR>
+    <TR VALIGN=TOP><TD class="bam"><IMG class='toggle detail'>
+        <div class="format"><code>type bam</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="refUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">refUrl &lt;url&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataIndex"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">bigDataIndex &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR class="related1st" VALIGN=TOP><TD class="bamColorMode">
+        <A name="bamColorMode"></A><IMG class='toggle detail setD'>
+        <div class="format"><I>Related settings:</I><BR>
+            <code class="level-full">bamColorMode &lt;strand/gray/tag/off&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="bamGrayMode">
+            <A name="bamGrayMode"></A>
+            <A name="aliQualRange"></A>
+            <A name="baseQualRange"></A><IMG class='toggle detail setD'>
+        <div class="format">
+            <code class="level-full">bamGrayMode &lt;aliQual/baseQual/unpaired&gt;</code><BR>
+          <span class="aliQualRange"><code class="level-full">aliQualRange &lt;min:max&gt;</code></span><BR>
+          <span class="baseQualRange"><code class="level-full">baseQualRange &lt;min:max&gt;</code><</span></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="bamColorTag">
+        <A name="bamColorTag"></A><IMG class='toggle detail setD'>
+        <div class="format"><code class="level-full">bamColorTag &lt;XX&gt;</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="noColorTag">
+        <A name="noColorTag"></A><IMG class='toggle detail setD'>
+        <div class="format"><code class="level-full">noColorTag .</code></div>
+    </TD></TR>
+
+    <TR VALIGN=TOP><TD class="bamSkipPrintQualScore"><A name="bamSkipPrintQualScore"></A>
+        <IMG class='toggle detail'>
+        <div class="format"><code class="level-full">bamSkipPrintQualScore .</code></div>
+    </TD></TR>
+
+    <TR VALIGN=TOP><TD class="indelDoubleInsert">
+            <A name="indelDoubleInsert"></A>
+            <A name="indelQueryInsert"></A>
+            <A name="indelPolyA"></A><IMG class='toggle detail'>
+        <div class="format">
+            <span class="indelDoubleInsert"><code class="level-full">indelDoubleInsert &lt;off/on&gt;</code></span><BR>
+            <span class="indelQueryInsert"><code class="level-full">indelQueryInsert &lt;off/on&gt;</code></span><BR>
+            <span class="indelPolyA"><code class="level-full">indelPolyA &lt;off/on&gt;</code></span></div>
+    </TD></TR>
+
+    <TR VALIGN=TOP><TD class="minAliQual"><A name="minAliQual"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">minAliQual &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR class="related1st" VALIGN=TOP><TD class="pairEndsByName">
+        <A name="pairEndsByName"></A><IMG class='toggle detail setE'>
+        <div class="format"><I>Related settings:</I><BR>
+            <code class="level-full">pairEndsByName .</code></div>
+    </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="pairSearchRange">
+        <A name="pairSearchRange"></A><IMG class='toggle detail setE'>
+        <div class="format"><code class="level-full">pairSearchRange &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showNames"><A name="showNames"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">showNames &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD>
+            <P>Additional settings
+            found in the "Item or region tracks" section are also
+            available for displaying bam tags.</P>
+            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
+    </TD></TR>
+    <TR class="examples" VALIGN=TOP><TD class="bam_example"><IMG class='toggle detail'>
+        <div class="format"><B>Example of a bam track</B></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+
+
 <A name="bigBed"></A>
 <TABLE class="settingsTable" id="bigBed_-_Item_or_Region_Track_Settings">
 <THEAD><TR><TD><DIV ID="bigBed_intro" class="intro"></DIV></TD></TR></THEAD>
@@ -387,6 +474,96 @@ are described below along with settings specific to their types.</P>
 </TABLE>
 <BR><BR>
 
+<A name="bigChain"></A>
+<TABLE class="settingsTable" id="bigChain_-_Pairwise_Alignments">
+<THEAD><TR><TD><DIV ID="bigChain_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigChain - Genome-wide Pairwise Alignments
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigChain"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigChain</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="linkDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">linkDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+
+<A name="bigGenePred"></A>
+<TABLE class="settingsTable" id="bigGenePred_-_Gene_Annotations">
+<THEAD><TR><TD><DIV ID="bigGenePred_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigGenePred  - Gene Annotations
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigGenePred"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigGenePred</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="bigMaf"></A>
+<TABLE class="settingsTable" id="bigMaf_-_Multiple_Alignments">
+<THEAD><TR><TD><DIV ID="bigMaf_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigMaf - Multiple alignments
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigMaf"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigMaf</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="speciesOrder"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">speciesOrder &lt;species1&gt; [species2 &hellip;]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="frames"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">frames &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="summary"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">summary &lt;tableName/url&gt;</code></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
+<A name="bigPsl"></A>
+<TABLE class="settingsTable" id="bigPsl_-_Pairwise_Alignments">
+<THEAD><TR><TD><DIV ID="bigPsl_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;bigPsl - Pairwise Alignments
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="bigPsl"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type bigPsl</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="baseColorUseCds"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="baseColorUseSequence"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; / 
+                                hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss &gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="baseColorDefault"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">baseColorDefault &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showDiffBasesAllScales"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">showDiffBasesAllScales on</code></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
+
 <A name="bigWig">
 <TABLE class="settingsTable" id="bigWig_-_Signal_Graphing_Track_Settings">
 <THEAD><TR><TD><DIV ID="bigWig_intro" class="intro"></DIV></TD></TR></THEAD>
@@ -457,84 +634,6 @@ are described below along with settings specific to their types.</P>
 </TABLE>
 <BR><BR>
 
-<A name="bam"></A>
-<TABLE class="settingsTable" id="bam_-_Compressed_Alignment_Track_Settings">
-<THEAD><TR><TD><DIV ID="bam_intro" class="intro"></DIV></TD></TR></THEAD>
-    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
-        &nbsp;bam/cram - Compressed Sequence Alignment track settings</TH></TR>
-    <TR VALIGN=TOP><TD class="bam"><IMG class='toggle detail'>
-        <div class="format"><code>type bam</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="bigDataIndex"><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">bigDataIndex &lt;url/relativePath&gt;</code></div>
-    </TD></TR>
-    <TR class="related1st" VALIGN=TOP><TD class="bamColorMode">
-        <A name="bamColorMode"></A><IMG class='toggle detail setD'>
-        <div class="format"><I>Related settings:</I><BR>
-            <code class="level-full">bamColorMode &lt;strand/gray/tag/off&gt;</code></div>
-    </TD></TR>
-    <TR class="related" VALIGN=TOP><TD class="bamGrayMode">
-            <A name="bamGrayMode"></A>
-            <A name="aliQualRange"></A>
-            <A name="baseQualRange"></A><IMG class='toggle detail setD'>
-        <div class="format">
-            <code class="level-full">bamGrayMode &lt;aliQual/baseQual/unpaired&gt;</code><BR>
-          <span class="aliQualRange"><code class="level-full">aliQualRange &lt;min:max&gt;</code></span><BR>
-          <span class="baseQualRange"><code class="level-full">baseQualRange &lt;min:max&gt;</code><</span></div>
-    </TD></TR>
-    <TR class="related" VALIGN=TOP><TD class="bamColorTag">
-        <A name="bamColorTag"></A><IMG class='toggle detail setD'>
-        <div class="format"><code class="level-full">bamColorTag &lt;XX&gt;</code></div>
-    </TD></TR>
-    <TR class="related" VALIGN=TOP><TD class="noColorTag">
-        <A name="noColorTag"></A><IMG class='toggle detail setD'>
-        <div class="format"><code class="level-full">noColorTag .</code></div>
-    </TD></TR>
-
-    <TR VALIGN=TOP><TD class="bamSkipPrintQualScore"><A name="bamSkipPrintQualScore"></A>
-        <IMG class='toggle detail'>
-        <div class="format"><code class="level-full">bamSkipPrintQualScore .</code></div>
-    </TD></TR>
-
-    <TR VALIGN=TOP><TD class="indelDoubleInsert">
-            <A name="indelDoubleInsert"></A>
-            <A name="indelQueryInsert"></A>
-            <A name="indelPolyA"></A><IMG class='toggle detail'>
-        <div class="format">
-            <span class="indelDoubleInsert"><code class="level-full">indelDoubleInsert &lt;off/on&gt;</code></span><BR>
-            <span class="indelQueryInsert"><code class="level-full">indelQueryInsert &lt;off/on&gt;</code></span><BR>
-            <span class="indelPolyA"><code class="level-full">indelPolyA &lt;off/on&gt;</code></span></div>
-    </TD></TR>
-
-    <TR VALIGN=TOP><TD class="minAliQual"><A name="minAliQual"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">minAliQual &lt;#&gt;</code></div>
-    </TD></TR>
-    <TR class="related1st" VALIGN=TOP><TD class="pairEndsByName">
-        <A name="pairEndsByName"></A><IMG class='toggle detail setE'>
-        <div class="format"><I>Related settings:</I><BR>
-            <code class="level-full">pairEndsByName .</code></div>
-    </TD></TR>
-    <TR class="related" VALIGN=TOP><TD class="pairSearchRange">
-        <A name="pairSearchRange"></A><IMG class='toggle detail setE'>
-        <div class="format"><code class="level-full">pairSearchRange &lt;#&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="showNames"><A name="showNames"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">showNames &lt;on/off&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD>
-            <P>Additional settings
-            found in the "Item or region tracks" section are also
-            available for displaying bam tags.</P>
-            <A onclick="return jumpTo(this);" HREF="#">maxWindowToDraw</A>,
-    </TD></TR>
-    <TR class="examples" VALIGN=TOP><TD class="bam_example"><IMG class='toggle detail'>
-        <div class="format"><B>Example of a bam track</B></div>
-    </TD></TR>
-</TABLE>
-<BR><BR>
 
 <A name="vcfTabix"></A>
 <TABLE class="settingsTable" id="vcfTabix_-_Variant_Call_Format_Track_Settings">

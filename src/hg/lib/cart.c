@@ -714,6 +714,7 @@ if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
 
 if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
     htmlSuppressErrors();
+setUdcCacheDir();
 
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
@@ -749,7 +750,6 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
     {
     if (cartVarExists(cart, hgsDoOtherUser))
 	{
-	setUdcCacheDir();
 	char *otherUser = cartString(cart, hgsOtherUserName);
 	char *sessionName = cartString(cart, hgsOtherUserSessionName);
 	struct sqlConnection *conn2 = hConnectCentral();
@@ -761,7 +761,6 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	}
     else if (cartVarExists(cart, hgsDoLoadUrl))
 	{
-	setUdcCacheDir();
 	char *url = cartString(cart, hgsLoadUrlName);
 	struct lineFile *lf = netLineFileOpen(url);
 	cartLoadSettings(lf, cart, oldVars, hgsDoLoadUrl);

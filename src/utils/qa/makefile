@@ -87,6 +87,7 @@ install:
 	cp -p --remove-destination getMatrixLines.csh      ${SCRIPTS}
 	cp -p --remove-destination getMonthLastYear.csh    ${SCRIPTS}
 	cp -p --remove-destination getOrderKey.csh         ${SCRIPTS}
+	cp -p --remove-destination getPubHubContact.sh     ${SCRIPTS}
 	cp -p --remove-destination getRRdatabases.csh      ${SCRIPTS}
 	cp -p --remove-destination getRRdumpfile.csh       ${SCRIPTS}
 	cp -p --remove-destination getRRtableStatus.csh    ${SCRIPTS}

@@ -1347,7 +1347,6 @@ if (isEmpty(position))
 cartSetString(cart, hgvaRange, position);
 position = cloneString(position);
 
-setUdcCacheDir();
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);

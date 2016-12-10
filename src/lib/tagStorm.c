@@ -654,6 +654,74 @@ rTagStormCountDistinct(tags->forest, tag, uniq, required);
 return uniq;
 }
 
+static void rMaxDepth(struct tagStanza *list, int depth, int *pMaxDepth)
+/* Recursively calculate max depth */
+{
+if (list == NULL)
+    return;
+++depth;
+if (*pMaxDepth < depth) *pMaxDepth = depth;
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    rMaxDepth(stanza->children, depth, pMaxDepth);
+}
+
+int tagStormMaxDepth(struct tagStorm *ts)
+/* Calculate deepest extent of tagStorm */
+{
+int maxDepth = 0;
+rMaxDepth(ts->forest, 0, &maxDepth);
+return maxDepth;
+}
+
+static void rCountStanzas(struct tagStanza *list, int *pCount)
+/* Recursively count stanzas */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    *pCount += 1;
+    rCountStanzas(stanza->children, pCount);
+    }
+}
+
+int tagStormCountStanzas(struct tagStorm *ts)
+/* Return number of stanzas in storm */
+{
+int count = 0;
+rCountStanzas(ts->forest, &count);
+return count;
+}
+
+static void rCountTags(struct tagStanza *list, int *pCount)
+/* Return number of tags in storm */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    *pCount += slCount(stanza->tagList);
+    rCountTags(stanza->children, pCount);
+    }
+}
+
+int tagStormCountTags(struct tagStorm *ts)
+/* Return number of stanzas in storm. Does not include expanding ancestors */
+{
+int count = 0;
+rCountTags(ts->forest, &count);
+return count;
+}
+
+int tagStormCountFields(struct tagStorm *ts)
+/* Return number of distinct tag types (fields) in storm */
+{
+struct hash *hash = tagStormFieldHash(ts);
+int count = hash->elCount;
+hashFree(&hash);
+return count;
+}
+
+
 struct slPair *tagListIncludingParents(struct tagStanza *stanza)
 /* Return a list of all tags including ones defined in parents. */
 {
@@ -676,4 +744,3 @@ hashFree(&uniq);
 slReverse(&list);
 return list;
 }
-

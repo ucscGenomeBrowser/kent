@@ -112,7 +112,7 @@ char* restField(struct bigBedInterval *bb, int fieldIdx)
 if (fieldIdx==0) // we don't return the first(=name) field of bigBed
     return NULL;
 char *rest = cloneString(bb->rest);
-char *restFields[256];
+char *restFields[1024];
 int restCount = chopTabs(rest, restFields);
 char *field = NULL;
 if (fieldIdx < restCount)

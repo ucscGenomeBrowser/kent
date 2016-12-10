@@ -202,8 +202,11 @@
     determine display methods and options.</P>
     <P>Valid settings:</P>
     <P>
-    <A onclick="return jumpTo(this);" HREF="#">bam</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bam/cram</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
     <A onclick="return jumpTo(this);" HREF="#">vcfTabix</A>,
     <P>Detailed descriptions of each type can be found
@@ -329,17 +332,22 @@
     <BR>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBed bigWig bam vcfTabix"></span>
+<DIV class="linkDataUrl"><span class="types bigChain "></span>
+<div class="format"><code>linkDataUrl &lt;url/relativePath&gt;</code></div>
+    <P class="isRequired">Required: <span class="red">For Hubs</span></P>
+    <P>The location of a remote data file containing the chain link data.</P>
+</DIV>
+
+<DIV class="bigDataUrl"><span class="types bigBed bigChain bigMaf bigPsl bigWig bam vcfTabix"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
-    This setting is required for all data tracks in a track hub.  It is currently not
-    supported for local tracks.</P>  
+    This setting is required for all data tracks in a track hub.  </P>  
 <!-- THIS SHOULD BE FIXED for local tracks! -->
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBed, bigWig or
+    the supported remote data file formats: bam/cram, bigBed, bigChain, bigMaf, bigPsl, bigGenePred,  bigWig or
     vcfTabix.  Note that bam/cram and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
@@ -923,6 +931,40 @@
     <A HREF="../../../FAQ/FAQformat.html">FAQ</A>.</P>
 </DIV>
 
+<DIV class="bigChain_intro">
+<H3>bigChain: Genome-wide Pairwise Alignments</H3>
+    <P>
+    The bigChain format describes a pairwise alignment that allow gaps in both sequences simultaneously, just as Chain files do, but bigChain files are compressed and indexed as bigBeds. bigChain files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigChain. The resulting bigChain files are in an indexed binary format. The main advantage of the bigChain files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigChain is considerably faster than regular Chain files. The bigChain file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigChain format definitions please see the
+    <A HREF="../bigChain.html">bigChain help page</A>.</P>
+</DIV>
+
+<DIV class="bigPsl_intro">
+<H3>bigPsl: Pairwise Alignments</H3>
+    <P>
+    The bigPsl format stores alignments between two sequences, as PSL files do, but they are compressed and indexed as bigBeds. bigPsl files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigPsl. The resulting bigPsl files are in an indexed binary format. The main advantage of the bigPsl files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigPsl is considerably faster than regular PSL files. The bigPsl file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigPsl format definitions please see the
+    <A HREF="../bigPsl.html">bigPsl help page</A>.</P>
+</DIV>
+
+<DIV class="bigGenePred_intro">
+<H3>bigGenePred: Gene Annotations</H3>
+    <P>
+    The bigGenePred format stores annotation items that are a linked collection of exons, much as BED files indexed as bigBeds do, but bigGenePred has additional information about the coding frames and other gene specific information in eight additional fields.
+
+    bigGenePred files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigGenePred. The resulting bigBed files are in an indexed binary format. The main advantage of the bigBed files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigBed is considerably faster than regular BED files. The bigBed file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigGenePred format definitions please see the
+    <A HREF="../bigGenePred.html">bigGenePred help page</A>.</P>
+</DIV>
+
+<DIV class="bigMaf_intro">
+<H3>bigMaf: Mulitple Alignments</H3>
+    <P>
+        The bigMaf format stores multiple alignments in a format compatible with MAF files, which are then compressed and indexed as bigBeds. bigMaf files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigMaf. The resulting bigMaf files are in an indexed binary format. The main advantage of the bigMaf files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigMaf is considerably faster than regular MAF files. The bigMaf file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigMaf format definitions please see the
+    <A HREF="../bigMaf.html">bigMaf help page</A>.</P>
+</DIV>
+
 <DIV class="bigBed_intro">
 <H3>bigBed: Item or region tracks</H3>
     <P>Some of the most
@@ -949,6 +991,7 @@
     <P><em>Examples can be found below.</em></P>
 </DIV>
 
+
 <DIV class="bigBed"><span class="types bigBed"></span>
 <div class="format">
     <code>type bigBed &lt;3-12&gt; [+/.]</code></div>
@@ -958,6 +1001,30 @@
     additional non-standard fields, the parameter '<code>.</code>' (dot)
     must be specified if this track is meant to be configurable.</P>
     <P><em>Examples can be found below.</em></P>
+</DIV>
+
+<DIV class="bigPsl"><span class="types bigPsl"></span>
+<div class="format">
+    <code>type bigPsl</code></div>
+There are no extra options that can appear on the type bigPsl line.
+</DIV>
+
+<DIV class="bigChain"><span class="types bigChain"></span>
+<div class="format">
+    <code>type bigChain</code></div>
+There are no extra options that can appear on the type bigChain line.
+</DIV>
+
+<DIV class="bigGenePred"><span class="types bigGenePred"></span>
+<div class="format">
+    <code>type bigGenePred</code></div>
+There are no extra options that can appear on the type bigGenePred line.
+</DIV>
+
+<DIV class="bigMaf"><span class="types bigMaf"></span>
+<div class="format">
+    <code>type bigMaf</code></div>
+There are no extra options that can appear on the type bigMaf line.
 </DIV>
 
 <DIV class="bed_flavors"><span class="types bed5FloatScore bedRnaElements broadPeak coloredExon gvf ld2 narrowPeak peptideMapping"></span>
@@ -1471,6 +1538,12 @@
     item names.</P>
 </DIV>
 
+<DIV class="refUrl"><span class="types bam"></span>
+<div class="format"><code>refUrl &lt;url&gt;</code></div>
+    <P>See <A HREF="../cram.html">CRAM track format page</A> for a description of how to use this setting.
+
+</DIV>
+
 <DIV class="bedNameLabel"><span class="types bed bigBed"></span>
 <div class="format"><code>bedNameLabel &lt;label&gt;</code></div>
     <P>When a user clicks on a bed track item in the Browser image, 
@@ -1527,7 +1600,6 @@
 <div class="format"><I>Related settings:</I><BR>
     <code>baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; /
                         hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss &gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <!-- DONNA -- redo -->
     <P>Specifies where
     item sequence can be found (if any) so that item sequence, or
@@ -1555,13 +1627,12 @@
     contain the left and right pairs of the sequence. (see
     hg/lib/encode/pairedTagAlign.as)</LI>
     <LI>If <code>ss</code> is specified then a
-    user provided a user provided blat sequence fole is looked for.</LI>
+    user-provided blat sequence is looked for.</LI>
     </UL>
 </DIV>
 
-<DIV class="baseColorUseCds"><span class="types bed genePred psl"></span>
+<DIV class="baseColorUseCds"><span class="types bed genePred psl bigPsl"></span>
 <div class="format"><code>baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Specifies where coding sequence (CDS)
     coordinates can be found (if any) so that codons can be drawn
     when viewing a sufficiently small region.  If <code>table</code> is
@@ -1572,7 +1643,6 @@
 <DIV class="baseColorDefault"><span class="types all"></span>
 <div class="format"><code>baseColorDefault
                     &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Specifies the default drawing mode.
     The <code>itemBases</code>, <code>itemCodons</code>, <code>diffBases</code> and
     <code>diffCodons</code> options are applicable only if the track has sequence, as
@@ -1593,7 +1663,6 @@
 
 <DIV class="showDiffBasesAllScales"><span class="types all"></span>
 <div class="format"><code>showDiffBasesAllScales on</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Show base differences for all zoom levels.</P>
     <!-- DONNA -- how do you show the differences?  -->
 </DIV>
@@ -3006,15 +3075,16 @@
     <P><em>Examples can be found below.</em></P>
 </DIV>
 
-<DIV class="frames"><span class="types wigMaf"></span>
-<div class="format"><code>frames &lt;table&gt;</code></div>
-    <P>A wigMaf track can
+<DIV class="frames"><span class="types wigMaf bigMaf"></span>
+<div class="format"><code>frames &lt;table/url&gt;</code></div>
+    <P>A wigMaf or bigMaf track can
     display gene codon translation.  The reading frame may differ
     between species.  By providing the reading frames information in a
     separate table, the user can choose which frame to use when
-    viewing the data.</P>
+    viewing the data. For bigMaf the value is expected to be a bigBed, for wigMaf it should be a table.</P> 
     <P><B>Example:</B></P>
     <pre>   frames myCodonFrames</pre>
+    <pre>   frames myCodonFrames.bb</pre>
 </DIV>
 
 <DIV class="irows"><span class="types wigMaf"></span>
@@ -3126,12 +3196,13 @@
     <pre>    speciesUseFile speciesLists/conserved8Way.txt</pre>
 </DIV>
 
-<DIV class="summary"><span class="types wigMaf"></span>
-<div class="format"><code>summary &lt;tableName&gt;</code></div>
-    <P>This setting contains table name of MAF summary table. The summary
+<DIV class="summary"><span class="types wigMaf bigMaf"></span>
+<div class="format"><code>summary &lt;tableName/url&gt;</code></div>
+    <P>This setting contains a table name containing a  MAF summary table, or a url that points to a 
+    bigBed containing that information. The summary
     view is used when the browser display is zoomed out to contain a million
     or more basepairs.  A summary table is created from a multiple alignment MAF
-    file using the utility <code>hgLoadMafSummary</code>.</P>
+    file using the utility <code>hgLoadMafSummary</code>.  For bigMaf, the value is assumed to be bigBed. </P>
     <P><B>Example:</B></P>
     <pre>   summary hg17Maf8waySummary</pre>
 </DIV>

@@ -1,3 +1,5 @@
+   kent/browserbox/
+
 This directory contains the config files that are needed for the 
 Genome Browser in a box. It should be possible to convert
 a Ubuntu 14 installation into a Genome Browser in a box by copying all these

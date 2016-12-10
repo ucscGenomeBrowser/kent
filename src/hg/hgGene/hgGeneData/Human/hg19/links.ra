@@ -8,7 +8,7 @@ url https://ihg.helmholtz-muenchen.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=hg19&a
 priority 10
 
 name palTrack
-shortLabel Protein FASTA
+shortLabel Other Species FASTA
 tables multiz46way
 idSql select chrom,txStart+1,txEnd,name from knownGene where name = '%s'
 url ../cgi-bin/hgPal?g=knownGene&c=%s&l=%s&r=%s&i=%s

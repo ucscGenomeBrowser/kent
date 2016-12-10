@@ -65,13 +65,14 @@ metaFieldsOnlyOne = ['title', 'summary', "submission_date"]
 # can be changed with a command line option
 defaultSeuratAttribute = "tsneCluster"
 
-CIRMPATH = "/hive/groups/cirm"
+CIRMPATH = "/pod/pstore/"
 
 def getCirmStaticFile(relPath):
     """ make relPath relative to CIRM static data directory.
     The base path can be set with the 'CIRM' environment variable.
     """
-    return join(os.getenv("CIRM", CIRMPATH), relPath)
+    return CIRMPATH + relPath
+    #return join(os.getenv("CIRM", CIRMPATH), relPath)
 
 # === command line interface, options and help ===
 def errAbort(msg):
@@ -237,6 +238,7 @@ def writeHeader(ofh, title):
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="/js/jquery.plugins.js"></script>
+<script src="/js/cdwSummaryJs.js"></script>
 """)
     newNvd=False
     if newNvd:
@@ -762,7 +764,7 @@ def writeCacheFile(datasetId, exprMatrix, metaTabFname, addMetaTabFname, geneToT
     if metaTabFname!="none":
         sumData = addAnalysisInfo(addMetaTabFname, sumData)
 
-    if exprMatrix is not None and "cellIds" in sumData:
+    if exprMatrix is not None: # and "cellIds" in sumData:
         sumData["cellIds"] = getCommonCellIds(exprMatrix.keys(), sumData["cellInfo"].keys())
 
         sumData = addMarkerGenes(geneToTypes, exprMatrix, sumData)
@@ -1265,10 +1267,12 @@ def writePcaSection(htmlFh, matrixFname, exprMatrix, markerGenes, cellInfo, outD
 """)
 
     if not options.showAllTags:
-        for extName, intName, label in cellInfoTags:
+        for extName, intName, label in sorted(cellInfoTags):
+            if (intName == "meta"): continue
             htmlFh.write("   <option NAME='no' value='%s'>%s</option>\n" % (intName, label))
     else:
-        for tagName, _ in cellInfo.values()[0].iteritems():
+        for tagName, _ in sorted(cellInfo.values()[0].iteritems()):
+            if (tagName == "meta"): continue
             htmlFh.write("   <option NAME='no' value='%s'>%s</option>\n" % (tagName, tagName))
 
     #for extName, intName, label in cellInfoTags:
@@ -1283,62 +1287,6 @@ def writePcaSection(htmlFh, matrixFname, exprMatrix, markerGenes, cellInfo, outD
 <script>
 var pcaChart = null;
 var pcaData = %(pcaDataJson)s;
-
-function cellIdMouseOver(d) {
-    /* show a mouse over for objects that have a cellId attribute */
-    var ptIdx = d.pointIndex;
-    cellId = d.series[0].values[ptIdx].cellId;
-    lines = [];
-
-    dataMap = cellInfo[cellId];
-    for (var key in dataMap) {
-    if (dataMap.hasOwnProperty(key)) {
-        lines.push(("<b>"+ (cellTagLabels[key] || key) + "</b>: " + dataMap[key]));
-      }
-    }
-    return lines.join("<br>\\n");
-}
-
-function addPcaGraph() {
-    /* add PCA graph to DOM */
-    nv.addGraph(function() {
-
-        console.log("updating PCA start");
-        xTag = $("#xAxisSelect").val();
-        yTag = $("#yAxisSelect").val();
-        groupBy = $("#pcaGroupSelect").val();
-        console.log("PCA update: "+xTag+" "+yTag+" "+groupBy);
-        var pcsByGroup = d3.nest()
-          .key(function(d) { return cellInfo[d.cellId][groupBy] })
-          .entries(pcaData);
-
-        pcaChart = nv.models.scatterChart()
-                    .showDistX(false)    //showDist, when true, will display those little distribution lines on the axis.
-                    .showDistY(false)
-                    .showLegend(true)
-                    .x(function(d) { return d[xTag] })
-                    .y(function(d) { return d[yTag] });
-
-        pcaChart.xAxis.axisLabel(xTag);
-        pcaChart.yAxis.axisLabel(yTag);
-
-        pcaChart.tooltip.contentGenerator(cellIdMouseOver);
-        pcaChart.tooltip.headerEnabled(false);
-        //pcaChart.tooltip.fixedTop(50);
-
-        pcaChart.xAxis.tickFormat(d3.format(',f'));
-
-        pcaChart.yAxis.tickFormat(d3.format(',f'));
-
-        pcaDataElement = d3.select("#pcaChartDiv svg")
-            .datum(pcsByGroup);
-        pcaDataElement.call(pcaChart);
-
-        nv.utils.windowResize(pcaChart.update);
-
-      return pcaChart;
-    });
-}
 
 $("#xAxisSelect").val("pc1");
 $("#yAxisSelect").val("pc2");
@@ -1503,32 +1451,36 @@ print("Seurat: Setup")
 nbt=Setup(nbt,project = "NBT",min.cells = 3,names.field = 2,names.delim = "_",min.genes = 500, do.logNormalize = T, total.expr = 1e4)
 print("Seurat: Mean Variant")
 print("CIRM Warning: We are not regressing out cell cycle or mitochondrial signal yet, see http://satijalab.org/seurat/pbmc-tutorial.html")
-nbt=mean.var.plot(nbt,y.cutoff = 2,x.low.cutoff = 2,fxn.x = expMean,fxn.y = logVarDivMean)
+nbt=MeanVarPlot(nbt,y.cutoff = 2,x.low.cutoff = 2,fxn.x = expMean,fxn.y = logVarDivMean)
 print("Seurat: PCA")
-nbt=pca(nbt,do.print=FALSE)
+nbt=PCA(nbt,do.print=FALSE)
 print("Seurat: JackStraw")
 # max: changed num.replicate from 200 -> 100
-nbt=jackStraw(nbt,num.replicate = 100,do.print = FALSE) 
+nbt=JackStraw(nbt,num.replicate = 100,do.print = FALSE) 
+
 print("Seurat: PCA Projection")
-nbt=project.pca(nbt,do.print=FALSE)
+nbt=ProjectPCA(nbt,do.print=FALSE)
+
 print("Seurat: Significant genes from PCA")
-nbt.sig.genes=pca.sig.genes(nbt,1:9,pval.cut = 1e-5,max.per.pc = 200)
+pcCount=min(ncol(nbt@pca.rot), 9)
+nbt.sig.genes=PCASigGenes(nbt,1:pcCount,pval.cut = 1e-5,max.per.pc = 200)
 print("Seurat: PCA 2 using sign. genes from PCA 1")
-nbt=pca(nbt,pc.genes=nbt.sig.genes,do.print = FALSE)
+nbt=PCA(nbt,pc.genes=nbt.sig.genes,do.print = FALSE)
+
 print("Seurat: JackStraw 2 using all sign. genes")
 # max: changed num.replicate from 200 -> 100
-nbt=jackStraw(nbt,num.replicate = 100,do.print = FALSE)
+nbt=JackStraw(nbt,num.replicate = 100,do.print = FALSE)
 print("Seurat: Dimensionality Reduction")
 # max: I have decreased the number of iterations from 2000 in the example to 1500
-nbt=run_tsne(nbt,dims.use = 1:11,max_iter=1500)
+nbt=RunTSNE(nbt,dims.use = 1:11,max_iter=1500)
 
-tsne12 <- fetch.data(nbt, c("tSNE_1", "tSNE_2"))
+tsne12 <- FetchData(nbt, c("tSNE_1", "tSNE_2"))
 write.table(tsne12, "%(tsnePath)s", quote=FALSE, sep="\t", col.names=NA)
 
 print("Seurat: Cluster the tSNE data")
 clusterCount=8
-nbt=DBclust_dimension(nbt,1,2,reduction.use = "tsne",G.use = clusterCount,set.ident = TRUE)
-write.table(fetch.data(nbt,c("ident")), "%(clusterPath)s", quote=FALSE, sep="\t", col.names=NA)
+nbt=DBClustDimension(nbt,1,2,reduction.use = "tsne",G.use = clusterCount,set.ident = TRUE)
+write.table(FetchData(nbt,c("ident")), "%(clusterPath)s", quote=FALSE, sep="\t", col.names=NA)
 
 #for (i in 0:(clusterCount-1)) {
 #    print(paste("Seurat: Writing specific genes for cluster", i))
@@ -1537,7 +1489,7 @@ write.table(fetch.data(nbt,c("ident")), "%(clusterPath)s", quote=FALSE, sep="\t"
 
 # find_all_markers crashes if there is only a single cluster
 if (length(levels(nbt@ident))!=1) {
-    markers.all=find_all_markers(nbt,thresh.test = 2,test.use = "roc", do.print = TRUE)
+    markers.all=FindAllMarkers(nbt,test.use = "roc", do.print = TRUE)
     write.table(markers.all, "%(clusterGenesPath)s", quote=FALSE, sep="\t", col.names=NA)
 } else {
     file.create("%(clusterGenesPath)s"); # create empty file to signal that all is OK.
@@ -1651,10 +1603,12 @@ def writeSeuratSection(htmlFh, matrixFname, exprMatrix, cellInfo, geneToSym, tag
     # make list of attributes for drop down box
     attrList = []
     if not options.showAllTags:
-        for extName, intName, label in cellInfoTags:
+        for extName, intName, label in sorted(cellInfoTags):
+            if (intName == "meta"): continue
             attrList.append((intName, label))
     else:
         for tagName, _ in sorted(cellInfo.values()[0].iteritems()):
+            if (tagName == "meta"): continue
             tagLabel = tagLabels.get(tagName, tagName)
             attrList.append((tagName, tagLabel))
 
@@ -1679,86 +1633,6 @@ def writeSeuratSection(htmlFh, matrixFname, exprMatrix, cellInfo, geneToSym, tag
 var seuratTsnePoints = %(tsneJson)s;
 var cellToCluster = %(clusterJson)s;
 var tsneColors = %(tsneColorsJson)s;
-
-function seuratMouseOver(d) {
-    /* show a mouse over for objects that have a cellId attribute */
-    console.log("MouseOver");
-    var ptIdx = d.pointIndex;
-    cellId = d.series[0].values[ptIdx].cellId;
-    lines = [];
-    lines.push("<b>T-SNE Cluster:</b> Cluster" + cellToCluster[cellId]);
-
-    dataMap = cellInfo[cellId];
-    for (var key in dataMap) {
-    if (dataMap.hasOwnProperty(key)) {
-        lines.push(("<b>"+ (cellTagLabels[key] || key) + "</b>: " + dataMap[key]));
-      }
-    }
-    return lines.join("<br>\\n");
-}
-
-
-var tsnePointsByGroup; // easier debugging
-
-function addSeuratGraph() {
-    /* add Seurat T-SNE graph to DOM */
-    nv.addGraph(function() {
-        var groupBy = $("#tsneGroupSelect").val();
-        console.log("grouping tsne by|"+groupBy+"|");
-        if (groupBy=="tsneCluster")
-            // cluster info is stored in a separate map
-            {
-            console.log("2nd try: grouping tsne by "+groupBy);
-            tsnePointsByGroup = d3.nest()
-              .key(function(d) { return "Cluster "+cellToCluster[d.cellId] }).sortKeys(d3.ascending)
-              .entries(seuratTsnePoints);
-            console.log('group by cluster');
-            }
-        else 
-            // all other meta info is in the cellInfo map
-            tsnePointsByGroup = d3.nest()
-              .key(function(d) { cellId = d.cellId; return cellInfo[cellId][groupBy] }).sortKeys(d3.ascending)
-              .entries(seuratTsnePoints);
-
-        // if we have color info specified for this attribute, color dots 
-        if (groupBy in tsneColors) {
-            var groupColors = tsneColors[groupBy];
-            for(var groupIdx in tsnePointsByGroup) {
-                groupId = tsnePointsByGroup[groupIdx].key;
-                if (groupId in groupColors) {
-                    tsnePointsByGroup[groupIdx]['color'] = groupColors[groupId];
-                }
-            }
-        }
-
-        seuratChart = nv.models.scatterChart()
-                    .showDistX(false)    //showDist, when true, will display those little distribution lines on the axis.
-                    .showDistY(false)
-                    .showLegend(true)
-                    .x(function(d) { return d["x"] })
-                    .y(function(d) { return d["y"] });
-
-        seuratChart.xAxis.axisLabel("T-SNE 1");
-        seuratChart.yAxis.axisLabel("T-SNE 2");
-        seuratChart.xAxis.tickFormat(d3.format('.2f'));
-        seuratChart.yAxis.tickFormat(d3.format('.2f'));
-
-        seuratChart.tooltip.contentGenerator(seuratMouseOver);
-        seuratChart.scatter.dispatch.elementClick(function(e) {
-          console.log(e);
-          });
-        console.log("Added generator");
-        seuratChart.tooltip.headerEnabled(false);
-        seuratChart.tooltip.fixedTop(50);
-
-        seuratChartElement = d3.select("#seuratChartDiv svg")
-            .datum(tsnePointsByGroup);
-        seuratChartElement.call(seuratChart);
-
-        nv.utils.windowResize(seuratChart.update);
-        return seuratChart;
-    });
-}
 
 // set to a default value and add listener
 $("#tsneGroupSelect").val("%(colorBy)s");
@@ -2199,13 +2073,13 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annov
 
     # only do this part if we have rna-seq data
     if matrixFname!="none":
+        writeSeuratSection(htmlFh, matrixFname, fullExprMatrix, cellInfo, geneToSym, tagLabels, outDir)
         if not options.onlySeurat:
-            htmlFh.write("<p>Details: <a href='cellInfo.html'>Single Cell Details Table</a>\n")
-            writeTransCountSection(htmlFh, transHistJsonFname)
             htmlFh.write('''Details: <a href="heatmap.html">Expression Heatmap</a>''')
             writePcaSection(htmlFh, matrixFname, fullExprMatrix, markerGenes, cellInfo, outDir)
+            htmlFh.write("<p>Details: <a href='cellInfo.html'>Single Cell Details Table</a>\n")
+            writeTransCountSection(htmlFh, transHistJsonFname)
 
-        writeSeuratSection(htmlFh, matrixFname, fullExprMatrix, cellInfo, geneToSym, tagLabels, outDir)
 
         #if not options.onlySeurat:
             #writeCellTypeSection(htmlFh, cellTypeJsonFname)

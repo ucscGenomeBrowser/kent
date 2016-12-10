@@ -161,7 +161,7 @@ static void asdSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionSta
 annoStreamerSetRegion(vSelf, chrom, regionStart, regionEnd);
 struct annoStreamDb *self = (struct annoStreamDb *)vSelf;
 // If splitTable differs from table, use new chrom in splitTable:
-if (!sameString(self->table, self->trackTable))
+if (differentString(self->table, self->trackTable))
     {
     char newSplitTable[PATH_LEN];
     safef(newSplitTable, sizeof(newSplitTable), "%s_%s", chrom, self->trackTable);
@@ -183,7 +183,7 @@ INLINE boolean useSplitTable(struct annoStreamDb *self, struct joinerDtf *dtf)
 {
 return (sameString(dtf->database, self->db) &&
         sameString(dtf->table, self->trackTable) &&
-        !sameString(self->table, self->trackTable));
+        differentString(self->table, self->trackTable));
 }
 
 static void appendFieldList(struct annoStreamDb *self, struct dyString *query)

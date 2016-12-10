@@ -6,6 +6,7 @@ all:
 	cd jsonToTagStorm && ${MAKE}
 	cd tagStormInfo && ${MAKE}
 	cd tagStormJoinTab && ${MAKE}
+	cd tagStormToHtml && ${MAKE}
 	cd tagStormToJson && ${MAKE}
 	cd tagStormDeleteTags && ${MAKE}
 	cd tagStormRenameTags && ${MAKE}
