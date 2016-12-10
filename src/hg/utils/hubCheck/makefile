@@ -16,7 +16,7 @@ compile:: ${O}
 	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
 
 test::
-	(cd tests && ${MAKE} test)
+	(cd tests && ${MAKE} test) 2> /dev/null
 
 clean::
 	rm -f ${A}${EXE} ${O}
