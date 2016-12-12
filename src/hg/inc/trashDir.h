@@ -11,6 +11,9 @@
 void trashDirFile(struct tempName *tn, char *dirName, char *base, char *suffix);
 /*	obtain a trash file name trash/dirName/base*.suffix */
 
+void trashDirDateFile(struct tempName *tn, char *dirName, char *base, char *suffix);
+/*	obtain a trash file name trash/dirName.dayOfYear/base*.suffix */
+
 boolean trashDirReusableFile(struct tempName *tn, char *dirName, char *base, char *suffix);
 /*      obtain a resusable trash file name as trash/dirName/base.suffix
  *      returns TRUE if already exists. */

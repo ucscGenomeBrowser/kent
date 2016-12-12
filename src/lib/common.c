@@ -3555,6 +3555,15 @@ switch(tp->tm_mon)
 return days;
 }
 
+unsigned dayOfYear()
+/* Return the day of the year. */
+{ 
+time_t now = time(NULL);
+struct tm *tm = localtime(&now);
+
+return tm->tm_yday;
+}
+
 static void dateAdd(struct tm *tp,int addYears,int addMonths,int addDays)
 /* Add years,months,days to a date */
 {
