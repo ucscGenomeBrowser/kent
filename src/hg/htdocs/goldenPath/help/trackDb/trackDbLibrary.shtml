@@ -1538,6 +1538,12 @@ There are no extra options that can appear on the type bigMaf line.
     item names.</P>
 </DIV>
 
+<DIV class="refUrl"><span class="types bam"></span>
+<div class="format"><code>refUrl &lt;url&gt;</code></div>
+    <P>See <A HREF="../cram.html">CRAM track format page</A> for a description of how to use this setting.
+
+</DIV>
+
 <DIV class="bedNameLabel"><span class="types bed bigBed"></span>
 <div class="format"><code>bedNameLabel &lt;label&gt;</code></div>
     <P>When a user clicks on a bed track item in the Browser image, 
@@ -1594,7 +1600,6 @@ There are no extra options that can appear on the type bigMaf line.
 <div class="format"><I>Related settings:</I><BR>
     <code>baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; /
                         hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss &gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <!-- DONNA -- redo -->
     <P>Specifies where
     item sequence can be found (if any) so that item sequence, or
@@ -1626,9 +1631,8 @@ There are no extra options that can appear on the type bigMaf line.
     </UL>
 </DIV>
 
-<DIV class="baseColorUseCds"><span class="types bed genePred psl"></span>
+<DIV class="baseColorUseCds"><span class="types bed genePred psl bigPsl"></span>
 <div class="format"><code>baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Specifies where coding sequence (CDS)
     coordinates can be found (if any) so that codons can be drawn
     when viewing a sufficiently small region.  If <code>table</code> is
@@ -1639,7 +1643,6 @@ There are no extra options that can appear on the type bigMaf line.
 <DIV class="baseColorDefault"><span class="types all"></span>
 <div class="format"><code>baseColorDefault
                     &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Specifies the default drawing mode.
     The <code>itemBases</code>, <code>itemCodons</code>, <code>diffBases</code> and
     <code>diffCodons</code> options are applicable only if the track has sequence, as
@@ -1660,7 +1663,6 @@ There are no extra options that can appear on the type bigMaf line.
 
 <DIV class="showDiffBasesAllScales"><span class="types all"></span>
 <div class="format"><code>showDiffBasesAllScales on</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Show base differences for all zoom levels.</P>
     <!-- DONNA -- how do you show the differences?  -->
 </DIV>
@@ -3073,15 +3075,16 @@ There are no extra options that can appear on the type bigMaf line.
     <P><em>Examples can be found below.</em></P>
 </DIV>
 
-<DIV class="frames"><span class="types wigMaf"></span>
-<div class="format"><code>frames &lt;table&gt;</code></div>
-    <P>A wigMaf track can
+<DIV class="frames"><span class="types wigMaf bigMaf"></span>
+<div class="format"><code>frames &lt;table/url&gt;</code></div>
+    <P>A wigMaf or bigMaf track can
     display gene codon translation.  The reading frame may differ
     between species.  By providing the reading frames information in a
     separate table, the user can choose which frame to use when
-    viewing the data.</P>
+    viewing the data. For bigMaf the value is expected to be a bigBed, for wigMaf it should be a table.</P> 
     <P><B>Example:</B></P>
     <pre>   frames myCodonFrames</pre>
+    <pre>   frames myCodonFrames.bb</pre>
 </DIV>
 
 <DIV class="irows"><span class="types wigMaf"></span>
@@ -3193,12 +3196,13 @@ There are no extra options that can appear on the type bigMaf line.
     <pre>    speciesUseFile speciesLists/conserved8Way.txt</pre>
 </DIV>
 
-<DIV class="summary"><span class="types wigMaf"></span>
-<div class="format"><code>summary &lt;tableName&gt;</code></div>
-    <P>This setting contains table name of MAF summary table. The summary
+<DIV class="summary"><span class="types wigMaf bigMaf"></span>
+<div class="format"><code>summary &lt;tableName/url&gt;</code></div>
+    <P>This setting contains a table name containing a  MAF summary table, or a url that points to a 
+    bigBed containing that information. The summary
     view is used when the browser display is zoomed out to contain a million
     or more basepairs.  A summary table is created from a multiple alignment MAF
-    file using the utility <code>hgLoadMafSummary</code>.</P>
+    file using the utility <code>hgLoadMafSummary</code>.  For bigMaf, the value is assumed to be bigBed. </P>
     <P><B>Example:</B></P>
     <pre>   summary hg17Maf8waySummary</pre>
 </DIV>

@@ -2717,7 +2717,6 @@ boolean isCommandLine = (cgiOptionalString("cgiSpoof") != NULL);
 if (!isCommandLine)
     htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
 oldVars = hashNew(10);
-setUdcCacheDir();
 boolean startQuery = (cgiUsualString("hgva_startQuery", NULL) != NULL);
 if (startQuery)
     {

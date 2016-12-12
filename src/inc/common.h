@@ -1423,6 +1423,9 @@ boolean isSymbolString(char *s);
 boolean isNumericString(char *s);
 /* Return TRUE if string is numeric (integer or floating point) */
 
+boolean isAllDigits(char *s);
+/* Return TRUE if string is non-empty and contains only digits (i.e. is a nonnegative integer). */
+
 char *skipNumeric(char *s);
 /* Return first char of s that's not a digit */
 
