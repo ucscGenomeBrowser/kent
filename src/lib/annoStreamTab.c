@@ -82,11 +82,6 @@ lineFileReuse(self->lf);
 self->eof = TRUE;
 }
 
-INLINE boolean isAllDigits(char *s)
-{
-return (isNotEmpty(s) && countLeadingDigits(s) == strlen(s));
-}
-
 static void checkWordCountAndBin(struct annoStreamTab *self, int wordCount)
 /* Auto-detect initial bin column and set self->omitBin if autoSql doesn't have bin. */
 {

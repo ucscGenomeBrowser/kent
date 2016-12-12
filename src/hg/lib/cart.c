@@ -481,6 +481,11 @@ void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 {
 struct sqlResult *sr = NULL;
 char **row = NULL;
+/* Validate login cookies if login is enabled -- must be called before wikiLinkUserName */
+if (loginSystemEnabled())
+    {
+    loginValidateCookies(cart);
+    }
 char *userName = wikiLinkUserName();
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encSessionOwner = cgiEncodeFull(sessionOwner);
@@ -1586,6 +1591,13 @@ if (geoMirrorEnabled())
         {
         printf("Set-Cookie: redirect=%s; path=/; domain=%s; expires=%s\r\n", redirect, cgiServerName(), cookieDate());
         }
+    }
+/* Validate login cookies if login is enabled */
+if (loginSystemEnabled())
+    {
+    struct slName *newCookies = loginValidateCookies(cart), *sl;
+    for (sl = newCookies;  sl != NULL;  sl = sl->next)
+        printf("Set-Cookie: %s\r\n", sl->name);
     }
 }
 
