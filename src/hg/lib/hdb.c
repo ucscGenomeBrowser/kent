@@ -189,6 +189,8 @@ char *hgOfficialChromName(char *db, char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
+if (strlen(name) > HDB_MAX_CHROM_STRING)
+    return NULL;
 struct chromInfo *ci = NULL;
 char buf[HDB_MAX_CHROM_STRING];
 strncpy(buf, name, HDB_MAX_CHROM_STRING);
@@ -4857,7 +4859,7 @@ char *addCommasToPos(char *db, char *position)
 /* add commas to the numbers in a position
  * returns pointer to static */
 {
-static char buffer[256];
+static char buffer[4096];
 long winStart, winEnd; // long to support virtual chrom
 char *chromName;
 char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
