@@ -633,7 +633,7 @@ char *trackName = NULL;
 char *trackDescription = NULL;
 
 getCustomName(db, cart, pslList, &trackName, &trackDescription);
-char *customTextTemplate = "track type=bigPsl ctpsl_%s=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s%s/%s name=\"%s\" description=\"%s\"\n";
+char *customTextTemplate = "track type=bigPsl pslFile_%s=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s%s/%s name=\"%s\" description=\"%s\"\n";
 char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases"; 
 
 if (isProt)
