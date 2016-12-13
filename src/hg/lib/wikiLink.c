@@ -187,6 +187,38 @@ if (isNotEmpty(userName))
 return userName;
 }
 
+static boolean loginIsRemoteClient()
+/* Return TRUE if wikiHost is non-empty and not the same as this host. */
+{
+char *wikiHost = cfgOption(CFG_WIKI_HOST);
+return (isNotEmpty(wikiHost) &&
+        differentString(wikiHost, "HTTPHOST") &&
+        differentString(wikiHost, hHttpHost()));
+}
+
+static boolean idxIsValid(char *userName, uint idx)
+/* If login is local, return TRUE if idx is the same as hgcentral.gbMembers.idx for userName.
+ * If remote, just return TRUE. */
+{
+if (loginIsRemoteClient())
+    return TRUE;
+// Look up idx for userName in gbMembers and compare to idx
+struct sqlConnection *conn = hConnectCentral();
+char query[512];
+sqlSafef(query, sizeof(query), "select idx from gbMembers where userName='%s'", userName);
+uint memberIdx = (uint)sqlQuickLongLong(conn, query);
+hDisconnectCentral(&conn);
+return (idx == memberIdx);
+}
+
+static void sendNewCookies(char *userName, char *cookieSalt)
+/* Compute key from userName and cookieSalt, and add a cookie string with the new key. */
+{
+char *newKey = makeUserKey(userName, cookieSalt);
+slAddHead(&cookieStrings, wikiLinkLoggedInCookieString(0, newKey));
+slAddHead(&cookieStrings, wikiLinkUserNameCookieString(userName));
+}
+
 struct slName *loginValidateCookies()
 /* Return possibly empty list of cookie strings for the caller to set.
  * If login cookies are obsolete but (formerly) valid, the results sets updated cookies.
@@ -207,20 +239,24 @@ if (userName && (cookieIdx > 0 || isNotEmpty(cookieKey)))
             {
             authenticated = TRUE;
             }
-// BEGIN TODO: remove in Feb 2017
-        else
+        else if (cfgOptionBooleanDefault(CFG_LOGIN_ACCEPT_ANY_ID, FALSE))
             {
-            // For the first couple months, accept any value of cookieKey like we used to.
-            // It's possible for different systems to have different gbMembers.idx for the
-            // same userName, so checking gbMembers.idx would risk logging some users out
-            // every time they switch systems.
+            // Don't perform any checks on the incoming cookie.
             authenticated = TRUE;
-            // Create and store a new key, and make a cookie string with the new key.
-            char *newKey = makeUserKey(userName, cookieSalt);
-            slAddHead(&cookieStrings, wikiLinkLoggedInCookieString(cookieIdx, newKey));
-            slAddHead(&cookieStrings, wikiLinkUserNameCookieString(userName));
+            // Replace with improved cookie, in preparation for when better security is enabled.
+            sendNewCookies(userName, cookieSalt);
             }
-// END TODO: remove in Feb 2017
+// TODO: change default to FALSE in v344 Jan 2017:
+        else if (cfgOptionBooleanDefault(CFG_LOGIN_ACCEPT_IDX, TRUE) &&
+                 idxIsValid(userName, cookieIdx))
+            {
+            // Compare cookieIdx vs. gbMembers.idx (if login is local) -- a little more secure
+            // than before, but might cause some trouble if a userName has different idx values
+            // on different systems (e.g. RR vs genome-preview/genome-text).
+            authenticated = TRUE;
+            // Replace with improved cookie, in preparation for when better security is enabled.
+            sendNewCookies(userName, cookieSalt);
+            }
         }
     else
         {
