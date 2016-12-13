@@ -4296,6 +4296,12 @@ var imageV2 = {
         // This ensures that the 'go' and 'refresh' button will do so unless the chrom changes.
         $("input[value='go'],input[value='refresh']").click(function () {
             var newPos = genomePos.get().replace(/,/g,'');
+            if (newPos.length > 2000) {
+               alert("Sorry, you cannot paste identifiers or sequences with more than 2000 characters into this box.");
+               $('input[name="hgt.positionInput"]').val("");
+               return false;
+            }
+
             var newDbPos = hgTracks.lastDbPos;
             if ( ! imageV2.manyTracks() ) {
                 var newChrom = newPos.split(':')[0];
@@ -4318,7 +4324,7 @@ var imageV2 = {
             // redirect to hgBlat if the input looks like a DNA sequence
             // minimum length=19 so we do not accidentally redirect to hgBlat for a gene identifier 
             // like ATG5
-            var dnaRe = new RegExp("^([actgnACTGN]{19,})$");
+            var dnaRe = new RegExp("^(>[^\n\r ]+[\n\r ]+)?(\\s*[actgnACTGN \n\r]{19,}\\s*)$");
             if (dnaRe.test(newPos)) {
                 var blatUrl = "hgBlat?type=BLAT%27s+guess&userSeq="+newPos;
                 window.location.href = blatUrl;

@@ -4087,6 +4087,8 @@ boolean hgParseChromRangeLong(char *db, char *spec, char **retChromName,
 /* Parse something of form chrom:start-end into pieces.
  * if db != NULL then check with chromInfo for names */
 {
+if (strlen(spec) > 256)
+    return FALSE;
 boolean haveDb = (db != NULL);
 char *chrom, *start, *end;
 char buf[256];
