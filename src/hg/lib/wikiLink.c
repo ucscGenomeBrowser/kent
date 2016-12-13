@@ -187,30 +187,6 @@ if (isNotEmpty(userName))
 return userName;
 }
 
-static boolean loginIsRemoteClient()
-/* Return TRUE if wikiHost is non-empty and not the same as this host. */
-{
-char *wikiHost = cfgOption(CFG_WIKI_HOST);
-return (isNotEmpty(wikiHost) &&
-        differentString(wikiHost, "HTTPHOST") &&
-        differentString(wikiHost, hHttpHost()));
-}
-
-static boolean idxIsValid(char *userName, uint idx)
-/* If login is local, return TRUE if idx is the same as hgcentral.gbMembers.idx for userName.
- * If remote, just return TRUE. */
-{
-if (loginIsRemoteClient())
-    return TRUE;
-// Look up idx for userName in gbMembers and compare to idx
-struct sqlConnection *conn = hConnectCentral();
-char query[512];
-sqlSafef(query, sizeof(query), "select idx from gbMembers where userName='%s'", userName);
-uint memberIdx = (uint)sqlQuickLongLong(conn, query);
-hDisconnectCentral(&conn);
-return (idx == memberIdx);
-}
-
 struct slName *loginValidateCookies()
 /* Return possibly empty list of cookie strings for the caller to set.
  * If login cookies are obsolete but (formerly) valid, the results sets updated cookies.
@@ -225,7 +201,7 @@ uint cookieIdx = getCookieIdxOrKey(&cookieKey);
 char *cookieSalt = getLoginCookieSalt();
 if (userName && (cookieIdx > 0 || isNotEmpty(cookieKey)))
     {
-    if (cookieSalt)
+    if (isNotEmpty(cookieSalt))
         {
         if (cookieKey && sameString(makeUserKey(userName, cookieSalt), cookieKey))
             {
@@ -234,23 +210,22 @@ if (userName && (cookieIdx > 0 || isNotEmpty(cookieKey)))
 // BEGIN TODO: remove in Feb 2017
         else
             {
-            // For the first couple months, also accept gbMembers.idx to smooth the transition.
-            if (idxIsValid(userName, cookieIdx))
-                {
-                authenticated = TRUE;
-                // Create and store a new key, and make a cookie string with the new key.
-                char *newKey = makeUserKey(userName, cookieSalt);
-                slAddHead(&cookieStrings, wikiLinkLoggedInCookieString(cookieIdx, newKey));
-                slAddHead(&cookieStrings, wikiLinkUserNameCookieString(userName));
-                }
+            // For the first couple months, accept any value of cookieKey like we used to.
+            // It's possible for different systems to have different gbMembers.idx for the
+            // same userName, so checking gbMembers.idx would risk logging some users out
+            // every time they switch systems.
+            authenticated = TRUE;
+            // Create and store a new key, and make a cookie string with the new key.
+            char *newKey = makeUserKey(userName, cookieSalt);
+            slAddHead(&cookieStrings, wikiLinkLoggedInCookieString(cookieIdx, newKey));
+            slAddHead(&cookieStrings, wikiLinkUserNameCookieString(userName));
             }
 // END TODO: remove in Feb 2017
         }
     else
         {
-        // hg.conf doesn't specify login.cookieSalt -- check memberIdx if local,
-        // blindly accept if remote.
-        authenticated = idxIsValid(userName, cookieIdx);
+        // hg.conf doesn't specify login.cookieSalt -- no checking.
+        authenticated = TRUE;
         }
     if (!authenticated)
         {
