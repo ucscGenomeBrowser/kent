@@ -16,6 +16,8 @@
 #define CFG_LOGIN_SYSTEM_NAME "login.systemName"
 #define CFG_LOGIN_USE_HTTPS "login.https"
 #define CFG_LOGIN_COOKIE_SALT "login.cookieSalt"
+#define CFG_LOGIN_ACCEPT_ANY_ID "login.acceptAnyId"
+#define CFG_LOGIN_ACCEPT_IDX "login.acceptIdx"
 
 /* hg.conf central db parameters */
 #define CFG_CENTRAL_DOMAIN "central.domain"

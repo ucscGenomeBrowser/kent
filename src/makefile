@@ -33,9 +33,11 @@ cgi: libs
 
 cgi-alpha: libs
 	cd hg && ${MAKE} alpha
+	cd utils/bedToBigBed && ${MAKE} alpha
 
 cgi-beta: check-beta libs
 	cd hg && ${MAKE} beta
+	cd utils/bedToBigBed && ${MAKE} beta
 
 check-beta:
 	# this will fail if we are not in a beta checkout:

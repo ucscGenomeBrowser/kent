@@ -4315,6 +4315,16 @@ var imageV2 = {
                 return false;
             }
 
+            // redirect to hgBlat if the input looks like a DNA sequence
+            // minimum length=19 so we do not accidentally redirect to hgBlat for a gene identifier 
+            // like ATG5
+            var dnaRe = new RegExp("^([actgnACTGN]{19,})$");
+            if (dnaRe.test(newPos)) {
+                var blatUrl = "hgBlat?type=BLAT%27s+guess&userSeq="+newPos;
+                window.location.href = blatUrl;
+                return false;
+            }
+                
             return true;
         });
         // Have vis box changes update cart through ajax.  This helps keep page/cart in sync.
