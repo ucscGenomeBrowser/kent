@@ -1,16 +1,3 @@
-LICENSE
-
-The Genome Browser binaries and source code are freely available for
-academic, nonprofit, and personal use.  A license is required for
-commercial download and installation of most Genome Browser binaries
-and source code, with the exception of specific items in some directories
-that are freely available for all uses.  Please note the current
-license infomation with the list of specific directory permissions:
-
-   http://genome.ucsc.edu/license/
-
-=============================================================================
-
    kent/browserbox/
 
 This directory contains the config files that are needed for the 

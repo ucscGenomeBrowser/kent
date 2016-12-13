@@ -406,8 +406,7 @@ char query[4096];
 char *statusTable = getHubStatusTableName();
 
 if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
-    sqlSafef(query, sizeof(query), "insert into %s (hubUrl,firstAdded) values (\"%s\",now())",
-	statusTable, url);
+    sqlSafef(query, sizeof(query), "insert into %s (hubUrl,shortLabel,longLabel,dbCount,dbList,status,lastOkTime,lastNotOkTime,errorMessage,firstAdded) values (\"%s\",\"\",\"\",0,NULL,0,\"\",\"\",\"\",now())", statusTable, url);
 else
     sqlSafef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
 	statusTable, url);

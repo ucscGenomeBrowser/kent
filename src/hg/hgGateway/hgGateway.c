@@ -797,6 +797,8 @@ char *term = getSearchTermUpperCase();
 // Write JSON response with list of matches
 puts("Content-Type:text/javascript\n");
 
+// Before accessing hubs, intialize udc cache location from hg.conf:
+setUdcCacheDir();
 struct dbDb *dbDbList = hDbDbList();
 struct dbDbMatch *matchList = searchDbDb(dbDbList, term);
 struct aHubMatch *aHubMatchList = searchPublicHubs(dbDbList, term);
@@ -821,7 +823,6 @@ int main(int argc, char *argv[])
  * permanently. */
 char *excludeVars[] = {SEARCH_TERM, CARTJSON_COMMAND, NULL,};
 cgiSpoof(&argc, argv);
-setUdcCacheDir();
 if (cgiOptionalString(SEARCH_TERM))
     // Skip the cart for speedy searches
     lookupTerm();

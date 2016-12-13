@@ -4874,16 +4874,6 @@ else
 return buffer;
 }
 
-INLINE boolean isAllDigits(char *str)
-/* Return TRUE if every character in str is a digit. */
-{
-char *p = str;
-while (*p != '\0')
-    if (!isdigit(*p++))
-	return FALSE;
-return TRUE;
-}
-
 boolean parsePosition(char *position, char **retChrom, uint *retStart, uint *retEnd)
 /* If position is word:number-number (possibly with commas & whitespace),
  * set retChrom, retStart (subtracting 1) and retEnd, and return TRUE.

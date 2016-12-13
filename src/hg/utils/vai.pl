@@ -16,7 +16,7 @@ use strict;
 my $doQueryParam = "hgva_startQuery";
 
 # Command line option variables with default values
-my $hgVai = '/usr/local/apache/cgi-bin-angie/hgVai';
+my $hgVai = '/usr/local/apache/cgi-bin/hgVai';
 my $position = '';
 my $rsId = 0;
 my $debug = '';

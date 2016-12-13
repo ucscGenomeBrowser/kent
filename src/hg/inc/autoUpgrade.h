@@ -7,6 +7,8 @@
 #ifndef AUTOUPGRADE_H
 #define AUTOUPGRADE_H
 
+#include "jksql.h"
+
 void autoUpgradeTableAddColumn(struct sqlConnection *conn, char *tableName, char *columnName,
                                char *type, boolean notNull, char *defaultVal);
 /* Try to upgrade the table by adding column in a safe way handling success, failures

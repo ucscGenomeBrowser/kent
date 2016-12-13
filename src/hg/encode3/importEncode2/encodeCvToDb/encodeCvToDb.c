@@ -288,16 +288,6 @@ if (pair == NULL)
 return pair;
 }
 
-boolean isAllDigits(char *s)
-/* Return true if all characters in string are digits. */ 
-{
-char c;
-while ((c = *s++) != 0)
-    if (!isdigit(c))
-        return FALSE;
-return TRUE;
-}
-
 boolean isInt(char *s)
 /* Return true if it looks like an integer */
 {
