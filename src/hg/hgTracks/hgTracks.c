@@ -6555,6 +6555,8 @@ if (cgiOptionalString( "hideTracks"))
 for (track = trackList; track != NULL; track = track->next)
     {
     char *s = cartOptionalString(cart, track->track);
+    if (startsWith("hub_", track->track) && (s == NULL))
+        s = cartOptionalString(cart, trackHubSkipHubName(track->track));
     if (cgiOptionalString("hideTracks"))
 	{
         if (tdbIsSuperTrackChild(track->tdb))
