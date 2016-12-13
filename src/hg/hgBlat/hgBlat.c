@@ -633,16 +633,16 @@ char *trackName = NULL;
 char *trackDescription = NULL;
 
 getCustomName(db, cart, pslList, &trackName, &trackDescription);
-char *customTextTemplate = "track type=bigPsl pslFile_%s=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s%s/%s name=\"%s\" description=\"%s\"\n";
+char *customTextTemplate = "track type=bigPsl pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s%s/%s name=\"%s\" description=\"%s\"\n";
 char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases"; 
 
 if (isProt)
     extraForMismatch = "";
-fprintf(fp, customTextTemplate, db, bigBedTn.forCgi, host, extraForMismatch, host, reqUrl, bigBedTn.forCgi, trackName, trackDescription);
+fprintf(fp, customTextTemplate, bigBedTn.forCgi, host, extraForMismatch, host, reqUrl, bigBedTn.forCgi, trackName, trackDescription);
 fclose(fp);
 
 char buffer[4096];
-safef(buffer, sizeof buffer, "http://%s/%s/%s", host, reqUrl, customTextFile);
+safef(buffer, sizeof buffer, "http://%s%s/%s", host, reqUrl, customTextFile);
 
 return cloneString(buffer);
 }
