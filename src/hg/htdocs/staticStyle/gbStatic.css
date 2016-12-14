@@ -42,3 +42,48 @@
     font-size: 24px;    /* same as current static pages ('medium') */
 }
 
+/* Bulleted list */
+
+.gbsPage ul {
+    /* margin: 3px 30px; */
+    margin: 3px 30px 25px 30px; */
+    list-style-type: none;      /* Use custom icons instead of bullets */
+}
+
+.gbsPage li {
+    position: relative; /* from hgGateway */
+    font-size: 24px;    /* same as current static pages ('medium') */
+}
+
+.gbsPage li::before {   /* from hgGateway */
+    content: '';
+    background-color: #7E1F16;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 0.5em;
+    left: -1em;
+}
+
+.gbsPage table {
+    margin: 10px 30px 0 25px !important;        /* TODO: debug cascade */
+    font-size: 20px;
+    border: 3px solid gray;
+    border-collapse: collapse;
+}
+
+.gbsPage th, td {
+    padding: 1px 15px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+.gbsPage tr:hover {
+    background-color: #ffffe5;
+}
+
+.gbsPage th {
+    background-color: #ededed;
+    border-bottom: 2px solid gray;
+}
+    
