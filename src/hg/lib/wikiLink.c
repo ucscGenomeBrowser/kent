@@ -306,7 +306,7 @@ char *wikiLinkUserName()
 if (loginSystemEnabled())
     {
     if (! alreadyAuthenticated)
-        errAbort("wikiLinkUserName: loginValidateCookies must be called first.");
+        loginValidateCookies();
     if (authenticated)
         return cloneString(getLoginUserName());
     }
