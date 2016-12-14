@@ -21,7 +21,7 @@ if (! dirHash)
 
 if (addDate)
     {
-    safef(buffer, sizeof buffer, "%s.%d", dirName, dayOfYear());
+    safef(buffer, sizeof buffer, "%s/%03d", dirName, dayOfYear());
     dirName = buffer;
     }
 

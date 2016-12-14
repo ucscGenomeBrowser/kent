@@ -34,7 +34,7 @@
                 <LI><A HREF="#custom8">Custom annotation track troubleshooting</A>
 		<LI><A HREF="#custom9">Error 500: Internal server error</A>
                 <LI><A HREF="#custom10">Byte-range request error</A>
-		<LI><A HREF="#custom11">Error using bedToBigBed or other utilities because of header track lines</A>
+		<LI><A HREF="#custom11">BedToBigBed and other utilities fail because of custom track header lines</A>
 		</UL>
 		<A HREF="index.html">Return to FAQ Table of Contents</A>
                 <BR>
@@ -504,7 +504,7 @@
                 <!--cheap trick to get background on row to be continuous-->
                 <TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
                     <TR><TD ALIGN="left">
-                    <FONT SIZE="4"><b>&nbsp; Error when using BedToBigBed or other utilities because of header track lines</b></FONT></TD>
+                    <FONT SIZE="4"><b>&nbsp;BedToBigBed and other utilities fail because of custom track header lines</b></FONT></TD>
                     <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
                     </TD></TR>
                 </TABLE>
@@ -520,13 +520,13 @@
 			like <tt>validateFiles</tt>?&quot;
                         <P>
                         <B><FONT COLOR="#006666">Response:</FONT></B><BR>                        
-			These utilities can fail when the input includes custom track specific lines
+			These utilities can fail when the input includes custom-track-specific lines
 		        at the top of the file that are not considered part of the data.
 			Many of the custom track examples on the
 		        <a href="FAQformat.html"
 			target="_blank">File Format</a>
 			page include a &quot;<tt>track type=...</tt>&quot; line that is specific for loading the 
-                        data in the Browser. This line will cause raw data files to fail
+                        data into the Browser. This line will cause raw data files to fail
 			validation by other tools, such as <tt>bedToBigBed</tt> or <tt>validateFiles</tt>, 
                         outside of the Browser. To see an example of using <tt>bedToBigBed</tt> with 
 			correct input data types, follow this

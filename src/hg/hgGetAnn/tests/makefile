@@ -51,7 +51,7 @@ chrRangeGenePredTsvHeaders: mkdirs
 ###
 # acc, name and textual queries
 ###
-textTests: geneNameQuery geneAccQuery mrnaAccQuery keywordQuery multSameLoc
+textTests: geneNameQuery geneAccQuery mrnaAccQuery keywordQuery multSameLoc mrnaAccWhere
 
 geneNameQuery:
 	${hgGetAnn} ${DB} refGene CLOCK output/$@.gp
@@ -76,6 +76,13 @@ keywordQuery::
 multSameLoc:
 	${hgGetAnn} ${DB} refGene NM_005522 output/$@.gp
 	diff expected/$@.gp output/$@.gp
+
+
+# where clause which should work the same as mrnaAccQuery
+mrnaAccWhere:
+	${hgGetAnn} ${DB} -where='qName="AB062075"' mrna - output/$@.psl
+	diff expected/mrnaAccQuery.psl output/$@.psl
+
 
 
 clean::

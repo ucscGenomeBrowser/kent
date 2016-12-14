@@ -10,10 +10,11 @@ TDOC_DIR=goldenPath/help/trackDb/
 # when hub spec is versioned, increment version (e.g. change v0 to v1 (or v0a)), 
 #   checkin new file (e.g. trackDbHub.v1.html), and add to file list
 
-CURRENT_HUB_SPEC=v1
+CURRENT_HUB_SPEC=v2
 
 HUB_SPEC_FILES= trackDbHub.v0.html \
-		trackDbHub.v1.html
+		trackDbHub.v1.html \
+		trackDbHub.v2.html
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
