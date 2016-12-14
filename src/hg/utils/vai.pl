@@ -183,7 +183,6 @@ sub autodetectRsId($) {
     $firstLine = <$inFh>;
     chomp $firstLine; chomp $firstLine;
   }
-  close($inFh);
   if (looksLikeRsIds($firstLine)) {
     $hgVaiParams{hgva_variantIds} = rsIdStringFromInput($inFh, $firstLine);
     $hgVaiParams{hgva_variantTrack} = 'hgva_useVariantIds';
