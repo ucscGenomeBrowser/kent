@@ -1,0 +1,44 @@
+/* Genome Browser CSS for static pages
+ *      Look and feel based on hgGateway/JWestDesign and GB menu styling
+ *      This file is intended to be updateable outside of GB release cycle
+ *      (settings here should not affect CGIs).
+ *
+ * Copyright (C) 2016 The Regents of the University of California
+ */
+
+/* For conventions followed in this file, see README.txt */
+
+/* Page styling */
+.gbsPage {
+}
+
+/* Page header */
+.gbsPage h1 {
+    padding: 11px 40px;
+    /* needed to adjust margins after menu? */
+    margin: 0;
+    margin-left: -16px;
+    background-color: #eaca92;  /* gold */
+    color: black;
+    font-weight: bold;
+    /* font-weight: 500;   /* a little more subtle than bold */
+    font-size: 28px;    /* same as current static pages */
+}
+
+/* Section header */
+.gbsPage h2 {
+    padding: 6px 20px;
+    background-color: #4c759c;  /* light blue */
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+/* Contents */
+.gbsPage p {
+    margin: 10px 30px 0 25px !important;        /* TODO: debug cascade */
+    line-height: 1.3;   /* current browser pages are 1.4 (a little dense), bootstrap is 1.2 */
+                        /*   Consider changing in body styling */
+    font-size: 24px;    /* same as current static pages ('medium') */
+}
+

@@ -1,54 +1,91 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<HTML>
-<HEAD>
-	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<TITLE>UCSC Genome Browser: TITLE HERE</TITLE>
-	<LINK REL="STYLESHEET" HREF="style/HGStyle.css">
-</HEAD>
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
-<A NAME="TOP"></A>
+<!DOCTYPE html>
+<!-- template.html: Example HTML for a Genome Browser static page -->
 
+<!-- Style recommendations
+1. Capitalization: use only lowercase for HTML element names, attributes and values
+2. Quotes: Use double quotes for attribute values
+3. Whitespace: Use a new line for every block list or table element
+4. Indentation: Indent every child element 4 (or 2 spaces)
+5. Special characters: Don't use entity references (set editor to UTF-8),  except < &
+-->
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="images/title.jpg"></TH></TR>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>GB Static page template</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:700|Lato:700,700italic,300,400,400italic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../style/bootstrap.min.css">
+        <link rel="stylesheet" href="../staticStyle/gbStatic.css">
+        <link rel="stylesheet" href="../style/gb.css">
+    </head>
 
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="./cgi-bin/hgMenubar"--></TD></TR>
-<!--Content Tables------------------------------------------------------->
-<TR><TD COLSPAN=2 CELLPADDING=10>	
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp;  INSERT YOUR TITLE HERE   </b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
+    <body>
+        <!-- Blue menu bar / hotlinks -->
+        <div>
+            <!--#include virtual="cgi-bin/hgMenubar"-->
+            <!-- Override nice-menu.css styling -->
+            <link rel="stylesheet" href="../style/gbAfterMenu.css">
+            <!-- Override default home link icon -->
+            <link rel="stylesheet" href="../style/gbLogoInMenu.css">
+        </div>
 
-INSERT YOUR TEXT HERE <BR>	
-<FONT COLOR="#006666"><B> THIS IS THE COLOR I USE FOR HEADERS </B></FONT>
+        <!-- Grid layout from bootstrap.css -->
+        <div class="container-fluid">
+            <div class="gbPage">
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-	
-<!--START SECOND SECTION ------------------------------------------------------->
-<BR>
+<!-- Customize page content below here -->
 
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp;  INSERT NEXT TITLE HERE   </b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+<!-- Page header -->
+<h1>Sample Genome Browser Static Page</h1>
 
-MORE TEXT HERE <BR>	
+<!-- Page content -->
+<p>
+This is a paragraph of explanatory text.  No particular formatting. 
+(The remainder of this paragraph is just filler).
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECOND SECTION ---------------------------------------------------------->
+Follow these citation guidelines when using applications from the Genome Browser
+tool suite or data from the UCSC Genome Browser database in a research work that will
+be published in a journal or on the Internet.
+In addition to the relevant paper, please include a reference to the Genome Browser
+website in your manuscript: <a href="index.html" target=_blank>http://genome.ucsc.edu/</a>.
+Be sure to mention the release date of the genome assembly used in your work to faciliate
+the examination of your data by reviewers and the readers.
+Please do <strong>not</strong> include references to our development servers
+(such as genome-test.cse.ucsc.edu) in published links or URLs.
+</p>
 
-</TD></TR></TABLE>
-</BODY></HTML>
+<!-- Subsections -->
+<!-- In this example, two of same size, so use 6 columns of 12 total in grid -->
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Page section</h2>
+<p>
+This is one of two subsections, formatted in two equal-sized columns in the grid layout.
+(The remainder of this section is just filler).
+<!--#include virtual="indexStory.html"-->
+</p>
+    </div>
+    <div class="col-md-6">
+        <h2>Another section</h2>
+<p>
+</p>
+    </div>
+</div>
+
+<!-- Customize page content above here -->
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <!--#include virtual="inc/gbFooter.html"-->
+    </body>
+</html>
+
+<!-- Bootstrap features
+
+* data-togggle="collapse" (modal, dropdown, tab)
+	data-parent="#"
+-->

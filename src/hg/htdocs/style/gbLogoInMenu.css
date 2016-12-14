@@ -1,0 +1,19 @@
+/* Use UCSC Genome Browser 'bridge' logo as home link.
+ * Suitable for static pages and CGI's without a top banner with logo.
+ *
+ * Copyright (C) 2016 The Regents of the University of California
+ */
+
+
+/* NOTE: negative positioning compensates for indents in parent rules */
+span#home-link {
+    background-position: 0 0;
+    background-size: contain;
+    background-image: url("../images/ucscHelixLogo.png");
+    background-repeat: no-repeat;
+    top: -8px;
+    width: 84px;
+    height: 32px;
+    background-color: white;
+    margin-left: -9px;
+}
