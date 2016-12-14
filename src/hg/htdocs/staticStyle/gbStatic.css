@@ -36,7 +36,8 @@
 
 /* Contents */
 .gbsPage p {
-    margin: 10px 30px 0 25px !important;        /* TODO: debug cascade */
+    margin: 24px 30px 12px 25px !important;        /* TODO: debug cascade */
+    /*margin: 10px 30px 0 25px !important;        /* TODO: debug cascade */
     line-height: 1.3;   /* current browser pages are 1.4 (a little dense), bootstrap is 1.2 */
                         /*   Consider changing in body styling */
     font-size: 24px;    /* same as current static pages ('medium') */
