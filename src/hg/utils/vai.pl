@@ -258,6 +258,19 @@ if ($hgVaiParams{hgva_variantTrack} eq 'hgva_useVariantFileOrUrl' &&
   $hgVaiParams{hgva_variantFileOrUrl} = getcwd() . '/' . $hgVaiParams{hgva_variantFileOrUrl};
 }
 
+# If env var ALL_JOINER_FILE is not already set, try to find an all.joiner to set it to.
+if (! $ENV{ALL_JOINER_FILE})
+  {
+    if (-e "all.joiner") {
+      $ENV{ALL_JOINER_FILE} = "all.joiner";
+    } else {
+      my $hgVaiDir = dirname $hgVai;
+      my $joinerFile = $hgVaiDir . "/all.joiner";
+      if (-e $joinerFile) {
+        $ENV{ALL_JOINER_FILE} = $joinerFile};
+    }
+  }
+
 my @params = map { "$_=" . $hgVaiParams{$_} } keys %hgVaiParams;
 my $command = "$hgVai '" . join('&', @params) . "'";
 if ($debug) {
