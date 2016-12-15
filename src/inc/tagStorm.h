@@ -82,6 +82,8 @@ void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idT
     boolean withParent, int maxDepth, boolean leavesOnly);
 /* Write tag storm flattening out hierarchy so kids have all of parents tags in tab-sep format */
 
+/** Index a tag storm */
+
 struct hash *tagStormIndex(struct tagStorm *tagStorm, char *tag);
 /* Produce a hash of stanzas containing a tag keyed by tag value */
 
@@ -94,10 +96,6 @@ struct hash *tagStormIndexExtended(struct tagStorm *tagStorm, char *tag,
 /* Produce a hash of stanzas containing a tag keyed by tag value. 
  * If unique parameter is set then the tag values must all be unique
  * If inherit is set then tags set in parent stanzas will be considered too. */
-
-void tagStormUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val);
-/* Add tag to stanza in storm, replacing existing tag if any. If tag is added it's added to
- * end. */
 
 /** Stuff for constructing a tag storm a tag at a time rather than building it from file  */
 
@@ -115,7 +113,7 @@ struct tagStanza *tagStanzaNewAtEnd(struct tagStorm *tagStorm, struct tagStanza 
 
 struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, 
     char *tag, char *val);
-/* Add tag with given value to stanza */
+/* Add tag with given value to beginning of stanza */
 
 struct slPair *tagStanzaAppend(struct tagStorm *tagStorm, struct tagStanza *stanza, 
     char *tag, char *val);
@@ -132,6 +130,15 @@ void tagStanzaAddDouble(struct tagStorm *tagStorm, struct tagStanza *stanza, cha
 void tagStormReverseAll(struct tagStorm *tagStorm);
 /* Reverse order of all lists in tagStorm.  Use when all done with tagStanzaNew
  * and tagStanzaAdd (which for speed build lists backwards). */
+
+/** Stuff for editing a tagStorm */
+
+void tagStanzaUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val);
+/* Add tag to stanza in storm, replacing existing tag if any. If tag is added it's added to
+ * end. */
+
+void tagStanzaDeleteTag(struct tagStanza *stanza, char *tag);
+/* Remove a tag from a stanza */
 
 /** Information about a tag storm */
 
