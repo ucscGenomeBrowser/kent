@@ -3312,6 +3312,12 @@ boolean hIsBrowserbox()
 return (cfgOptionBooleanDefault("isGbib", FALSE));
 }
 
+boolean hIsGbic()
+/* Return TRUE if this mirror has been installed by the installation script */
+{
+return (cfgOptionBooleanDefault("isGbic", FALSE));
+}
+
 boolean hIsPreviewHost()
 /* Return TRUE if this is running on preview web-server.  The preview
  * server is a mirror of the development server provided for public
