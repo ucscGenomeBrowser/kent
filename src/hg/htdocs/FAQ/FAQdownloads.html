@@ -58,7 +58,7 @@
                 <LI><A HREF="#download22">deCODE map data</A>
                 <LI><A HREF="#download29">Direct MySQL access to data</A>
 		<LI><A HREF="#download34">Name of fourth column in BED output</A>
-		<LI><A HREF="#download35">Access the data underlying a track</A>
+		<LI><A HREF="#download36">Track data access</A>
 
 
 		</UL>
@@ -1902,7 +1902,7 @@ mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A</pre>
         </TD></TR>
     </TABLE>
 <!-- Content Table ========================================================== -->
-<A NAME="download35"></A>
+<A NAME="download36"></A>
     <!--outer table is for border purposes-->
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>
@@ -1947,7 +1947,7 @@ mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A</pre>
 			<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. 
 			The tool can also be used to obtain only features within a given range, 
 			example:
-			<pre class="code">bigBedToBed http://hgdownload.cse.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout</pre>
+			<pre>bigBedToBed http://hgdownload.cse.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout</pre>
 			</p>
 			<p>
 			<b>SNP data:</b>
@@ -1964,7 +1964,7 @@ mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A</pre>
         </TABLE>
         </TD></TR>
     </TABLE>
-
+    <BR>
     </TD><TD WIDTH=15></TD></TR>
 </TABLE>
 </BODY></HTML>
