@@ -8,9 +8,7 @@ This file contains recommended conventions for CSS files used in the Genome Brow
 
 2. Avoid use of id's to style.  
 
-3. Avoid qualifying classes by element type.
-
-4. Use CSS shortcuts when available:
+3. Use CSS shortcuts when available:
          (e.g. padding 1 value (all), 2 values (top+bottom, left+right),
                 3 (top, right+left, bottom), 4 (top, right, bottom, left) 
 

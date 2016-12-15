@@ -8,21 +8,46 @@
 
 /* For conventions followed in this file, see README.txt */
 
-/* Page styling */
+/* Colors */
+
+.gbsBlueLight{
+    background-color: #4c759c;
+}
+
+.gbsGold {
+     background-color: #eaca92;
+}
+
+.gbsGreyLight {
+    background-color: #ededed;
+}
+
+.gbsYellowLight {
+    background-color: #ffffe5;
+}
+
+.gbsRedDark {
+    background-color: #7E1F16;
+}
+
+/* Overall page styling */
+
 .gbsPage {
+    line-height: 1.3;   /* current browser pages are 1.4 (a little dense), bootstrap is 1.2 */
+    font-size: 24px;
 }
 
 /* Page header */
 .gbsPage h1 {
     padding: 11px 40px;
-    /* needed to adjust margins after menu? */
-    margin: 0;
+    /* needed to adjust margins after menu?  */
+    margin-top: 0;
     margin-left: -16px;
     background-color: #eaca92;  /* gold */
     color: black;
+    font-size: 28px;    /* same as current static pages */
     font-weight: bold;
     /* font-weight: 500;   /* a little more subtle than bold */
-    font-size: 28px;    /* same as current static pages */
 }
 
 /* Section header */
@@ -31,60 +56,54 @@
     background-color: #4c759c;  /* light blue */
     color: white;
     font-weight: bold;
-    font-size: 24px;
 }
 
 /* Contents */
 .gbsPage p {
-    margin: 24px 30px 12px 25px !important;        /* TODO: debug cascade */
-    /*margin: 10px 30px 0 25px !important;        /* TODO: debug cascade */
-    line-height: 1.3;   /* current browser pages are 1.4 (a little dense), bootstrap is 1.2 */
-                        /*   Consider changing in body styling */
-    font-size: 24px;    /* same as current static pages ('medium') */
+    margin: 24px 12px 0 24px;
 }
 
 /* Bulleted list */
 
 .gbsPage ul {
-    /* margin: 3px 30px; */
-    margin: 3px 30px 25px 30px; */
+    margin-left: 30px;
     list-style-type: none;      /* Use custom icons instead of bullets */
 }
 
 .gbsPage li {
     position: relative; /* from hgGateway */
-    font-size: 24px;    /* same as current static pages ('medium') */
 }
 
-.gbsPage li::before {   /* from hgGateway */
-    content: '';
-    background-color: #7E1F16;
-    width: 12px;
-    height: 12px;
+.gbsPage li::before {   /* square bullets, from hgGateway */
     position: absolute;
     top: 0.5em;
     left: -1em;
+    width: 12px;
+    height: 12px;
+    background-color: #7E1F16;  /* dark red */
+    content: '';
 }
 
 .gbsPage table {
-    margin: 10px 30px 0 25px !important;        /* TODO: debug cascade */
-    font-size: 20px;
     border: 3px solid gray;
     border-collapse: collapse;
+    margin-top: 10px;
+    margin-left: 24px;
+    font-size: 20px;
 }
 
 .gbsPage th, td {
-    padding: 1px 15px;
     text-align: left;
+    padding: 1px 15px;
     border-bottom: 2px solid #ddd;
 }
 
 .gbsPage tr:hover {
-    background-color: #ffffe5;
+    background-color: #ffffe5;          /* light yellow */
 }
 
 .gbsPage th {
-    background-color: #ededed;
     border-bottom: 2px solid gray;
+    background-color: #ededed;          /* light gray */
 }
     
