@@ -63,6 +63,15 @@
     margin: 24px 12px 0 24px;
 }
 
+.gbsPage code {
+    font-size: 21px;
+}
+
+.gbsPage pre {
+    margin-left: 48px;
+    line-height: normal;
+}
+
 /* Bulleted list */
 
 .gbsPage ul {
