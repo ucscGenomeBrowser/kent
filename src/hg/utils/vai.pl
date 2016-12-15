@@ -183,7 +183,6 @@ sub autodetectRsId($) {
     $firstLine = <$inFh>;
     chomp $firstLine; chomp $firstLine;
   }
-  close($inFh);
   if (looksLikeRsIds($firstLine)) {
     $hgVaiParams{hgva_variantIds} = rsIdStringFromInput($inFh, $firstLine);
     $hgVaiParams{hgva_variantTrack} = 'hgva_useVariantIds';
@@ -257,6 +256,28 @@ if ($hgVaiParams{hgva_variantTrack} eq 'hgva_useVariantFileOrUrl' &&
     $hgVaiParams{hgva_variantFileOrUrl} !~ /^(https?|ftp):\/\// &&
     $hgVaiParams{hgva_variantFileOrUrl} =~ /^[^\/]/) {
   $hgVaiParams{hgva_variantFileOrUrl} = getcwd() . '/' . $hgVaiParams{hgva_variantFileOrUrl};
+}
+
+# If env var ALL_JOINER_FILE is not already set, try to find an all.joiner to set it to.
+my $hgVaiDir = dirname $hgVai;
+if (! $ENV{ALL_JOINER_FILE}) {
+  if (-e "all.joiner") {
+    $ENV{ALL_JOINER_FILE} = "all.joiner";
+  } else {
+    my $joinerFile =  "$hgVaiDir/all.joiner";
+    if (-e $joinerFile) {
+      $ENV{ALL_JOINER_FILE} = $joinerFile};
+  }
+}
+
+# If env var HGDB_CONF is not already set, try to find an hg.conf to set it to.
+if (! $ENV{HGDB_CONF}) {
+  if (! -e "hg.conf" && ! -e $ENV{HOME}."/.hg.conf") {
+    my $hgConf = "$hgVaiDir/hg.conf";
+    if (-e $hgConf) {
+      $ENV{HGDB_CONF} = $hgConf;
+    }
+  }
 }
 
 my @params = map { "$_=" . $hgVaiParams{$_} } keys %hgVaiParams;

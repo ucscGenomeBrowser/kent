@@ -9,14 +9,21 @@
 #include "portable.h"
 #include "trashDir.h"
 
-void trashDirFile(struct tempName *tn, char *dirName, char *base, char *suffix)
+static void trashDirFileExt(struct tempName *tn, char *dirName, char *base, char *suffix, boolean addDate)
 /*	obtain a trash file name trash/dirName/base*.suffix */
 {
 static struct hash *dirHash = NULL;
 char prefix[64];
+char buffer[4096];
 
 if (! dirHash)
 	dirHash = newHash(0);
+
+if (addDate)
+    {
+    safef(buffer, sizeof buffer, "%s/%03d", dirName, dayOfYear());
+    dirName = buffer;
+    }
 
 /* already created this directory ? */
 if (! hashLookup(dirHash,dirName))
@@ -39,6 +46,19 @@ else
     safef(prefix, sizeof(prefix), "%s/%s", dirName,base);
 makeTempName(tn, prefix, suffix);
 }
+
+void trashDirFile(struct tempName *tn, char *dirName, char *base, char *suffix)
+/*	obtain a trash file name trash/dirName/base*.suffix */
+{
+trashDirFileExt(tn, dirName, base, suffix, FALSE);
+}
+
+void trashDirDateFile(struct tempName *tn, char *dirName, char *base, char *suffix)
+/*	obtain a trash file name trash/dirName.dayOfYear/base*.suffix */
+{
+trashDirFileExt(tn, dirName, base, suffix, TRUE);
+}
+
 
 boolean trashDirReusableFile(struct tempName *tn, char *dirName, char *base, char *suffix)
 /*      obtain a resusable trash file name as trash/dirName/base.suffix
