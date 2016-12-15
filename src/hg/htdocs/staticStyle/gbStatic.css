@@ -70,11 +70,11 @@
     list-style-type: none;      /* Use custom icons instead of bullets */
 }
 
-.gbsPage li {
+.gbsPage ul li {
     position: relative; /* from hgGateway */
 }
 
-.gbsPage li::before {   /* square bullets, from hgGateway */
+.gbsPage ul li::before {   /* square bullets, from hgGateway */
     position: absolute;
     top: 0.5em;
     left: -1em;
@@ -83,6 +83,15 @@
     background-color: #7E1F16;  /* dark red */
     content: '';
 }
+
+.gbsPage ol {
+    margin-left: 30px;
+    margin-top: 24px;
+}
+
+.gbsPage ol li {
+    margin-top: 10px; }
+
 
 .gbsPage table {
     border: 3px solid gray;
