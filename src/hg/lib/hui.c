@@ -391,7 +391,12 @@ void setUdcCacheDir()
 /* set the path to the udc cache dir */
 {
 if (cfgOptionBooleanDefault("udc.useLocalDiskCache", TRUE))
-    udcSetDefaultDir(cfgOptionDefault("udc.cacheDir", udcDefaultDir()));
+    {
+    char *cacheDir = getenv("UDC_CACHEDIR");
+    if (isEmpty(cacheDir))
+        cacheDir = cfgOptionDefault("udc.cacheDir", udcDefaultDir());
+    udcSetDefaultDir(cacheDir);
+    }
 else
     udcDisableCache();
 }

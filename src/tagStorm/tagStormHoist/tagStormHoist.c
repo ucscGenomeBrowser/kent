@@ -6,6 +6,7 @@
 #include "options.h"
 #include "tagStorm.h"
 
+char *clOne = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -15,12 +16,13 @@ errAbort(
   "usage:\n"
   "   tagStormHoist input output\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -one=tagName - only hoist tags of the given type\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"one", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -112,10 +114,14 @@ struct slName *tag, *tagList = tagsInAny(stanza->children);
 /* Go through list and figure out ones that are same in all children. */
 for (tag = tagList; tag != NULL; tag = tag->next)
     {
-    char *val;
-    val = allSameVal(tag->name, stanza->children);
-    if (val != NULL)
-	hoistOne(tagStorm, stanza, tag->name, val);
+    char *name = tag->name;
+    if (clOne == NULL || sameString(name, clOne))
+	{
+	char *val;
+	val = allSameVal(name, stanza->children);
+	if (val != NULL)
+	    hoistOne(tagStorm, stanza, name, val);
+	}
     }
 slFreeList(&tagList);
 }
@@ -138,6 +144,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+clOne = optionVal("one", clOne);
 tagStormHoist(argv[1], argv[2]);
 return 0;
 }
