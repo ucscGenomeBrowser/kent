@@ -75,6 +75,7 @@
 /* Bulleted list */
 
 .gbsPage ul {
+    margin-top: 8px;
     margin-left: 30px;
     list-style-type: none;      /* Use custom icons instead of bullets */
 }
