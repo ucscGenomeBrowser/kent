@@ -10,7 +10,6 @@
 #include "hgFind.h"
 #include "jksql.h"
 #include "cheapcgi.h"
-#include "dystring.h"
 
 
 void usage(char *msg)
@@ -30,7 +29,7 @@ errAbort(
     "column of the table will be not be included in the output. If the spec\n"
     "contains whitespace or shell meta-characters, it must be quoted.\n"
     "For split tables, the leading chrN_ should be omitted.  Use `mrna' or\n"
-    "`est' for mRNAs/ESTs.  If spec is an empty string, then all rows are retrieved.\n"
+    "`est' for mRNAs/ESTs.  If spec is \"-\", then all rows are retrieved.\n"
     "This will even work for split tables.\n"
     "\n"
     "Options:\n"
@@ -39,8 +38,6 @@ errAbort(
     "   -keepBin - don't exclude bin column\n"
     "   -noMatchOk - don't generated an error if nothing is found\n"
     "   -noRandom - Exclude *_random chromsomes\n"
-    "   -where=whereClause - additional clause to get a subset\n"
-    "       of the table.\n"
     "   -verbose=n - 2 is basic info, 3 prints positions found\n",
     msg);
 }
@@ -52,7 +49,6 @@ static struct optionSpec optionSpec[] = {
     {"tsvHeaders", OPTION_BOOLEAN},
     {"keepBin", OPTION_BOOLEAN},
     {"noMatchOk", OPTION_BOOLEAN},
-    {"where", OPTION_STRING},
     {"noRandom", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -61,7 +57,6 @@ boolean colHeaders;
 boolean tsvHeaders;
 boolean keepBin;
 boolean noMatchOk;
-char *whereClause;
 boolean noRandom;
 
 struct cart *cart = NULL; /* hgFind assumes this global */
@@ -222,7 +217,7 @@ struct hgPositions *findPositions(char *db, char *spec)
 struct hgPositions *positions;
 verbose(2, "begin position query: %s\n", spec);
 
-if (sameString(spec, ""))
+if (sameString(spec, "-"))
     positions = findAllChroms(db);
 else
     positions = hgPositionsFind(db, spec, NULL, "hgGetAnn", NULL, FALSE);
@@ -279,20 +274,6 @@ if (colHeaders || tsvHeaders)
     writeHeaders(db, outFh, tableInfo);
 
 return outFh;
-}
-
-char *getExtraWhereClause(void)
-/* return extra where clause to and or an empty string.  WARNING: static
- * return */
-{
-static struct dyString *buf = NULL;
-if (whereClause == NULL)
-    return "";
-if (buf == NULL)
-    buf = dyStringNew(1024);
-dyStringClear(buf);
-dyStringPrintf(buf, " AND (%s)", whereClause);
-return dyStringContents(buf);
 }
 
 void outputRow(FILE *outFh, char **row, int numCols)
@@ -372,14 +353,14 @@ int rowCnt = 0;
 if ((pos->chromStart == 0) && (pos->chromEnd >= hChromSize(db, pos->chrom)))
     {
     /* optimize full chromosome query */
-    sr = hChromQuery(conn, tableInfo->rootName, pos->chrom, whereClause, &rowOff);
+    sr = hChromQuery(conn, tableInfo->rootName, pos->chrom, NULL, &rowOff);
     }
 else
     {
     /* chromosome range query */
     sr = hRangeQuery(conn, tableInfo->rootName, pos->chrom, 
                      pos->chromStart, pos->chromEnd,
-                     whereClause, &rowOff);
+                     NULL, &rowOff);
     }
 
 rowCnt = outputRows(outFh, tableInfo, sr, NULL);
@@ -409,9 +390,8 @@ struct sqlResult *sr;
 char query[512];
 int rowCnt = 0;
 
-sqlSafef(query, sizeof(query), "select * from %s where (%s = '%s') %s",
-         realTable, tableInfo->nameField, pos->name,
-         getExtraWhereClause());
+sqlSafef(query, sizeof(query), "select * from %s where (%s = '%s')",
+      realTable, tableInfo->nameField, pos->name);
 
 sr = sqlGetResult(conn, query);
 rowCnt = outputRows(outFh, tableInfo, sr, NULL);
@@ -429,12 +409,11 @@ struct sqlResult *sr;
 char query[512];
 int rowCnt = 0;
 
-sqlSafef(query, sizeof(query), "select * from %s where (%s = '%s') and (%s = %d) and (%s = %d) %s",
-         getTableName(pos->chrom, tableInfo), 
-         tableInfo->chromField, pos->chrom,
-         tableInfo->startField, pos->chromStart, 
-         tableInfo->endField, pos->chromEnd,
-         getExtraWhereClause());
+sqlSafef(query, sizeof(query), "select * from %s where (%s = '%s') and (%s = %d) and (%s = %d)",
+      getTableName(pos->chrom, tableInfo), 
+      tableInfo->chromField, pos->chrom,
+      tableInfo->startField, pos->chromStart, 
+      tableInfo->endField, pos->chromEnd);
 
 sr = sqlGetResult(conn, query);
 rowCnt = outputRows(outFh, tableInfo, sr, pos);
@@ -549,7 +528,6 @@ colHeaders = optionExists("colHeaders");
 tsvHeaders = optionExists("tsvHeaders");
 keepBin = optionExists("keepBin");
 noMatchOk = optionExists("noMatchOk");
-whereClause = optionVal("where", NULL);
 noRandom = optionExists("noRandom");
 
 cgiSpoof(&argc, argv);
