@@ -105,7 +105,7 @@ sub checkArgs() {
     my $trimmedPos = $position;
     $trimmedPos =~ s/,//g;
     $trimmedPos =~ s/\s//g;
-    if ($trimmedPos =~ /^[^:]+:\d+-\d+$/) {
+    if ($trimmedPos =~ /^[^:]+(:\d+-\d+)?$/) {
       $position = $trimmedPos;
     } else {
       print STDERR "position argument should be like chrX:N-M (sequence name, colon,\n" .
