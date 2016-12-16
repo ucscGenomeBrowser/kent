@@ -81,6 +81,9 @@ MYSQLDBURL=http://hgwdev.soe.ucsc.edu/~max/gbInstall/mysql56Data.tgz
 # mysql/apache startup script URL, currently only for OSX
 STARTSCRIPTURL=https://raw.githubusercontent.com/maximilianh/browserInstall/master/browserStartup.sh
 
+# the -t option allows to download only the genome databases, not hgFixed/proteome/go/uniProt
+# by default, this is off, so we download hgFixed and Co. 
+ONLYGENOMES=0
 # ---- END GLOBAL DEFAULT SETTINGS ----
 
 # ---- DEFAULT CONFIG FILES ------------------
