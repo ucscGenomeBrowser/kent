@@ -989,7 +989,7 @@ for(; variant; variant = variant->next)
 	errAbort("gpFxPredEffect needs either 1 variant, or only 1 allele in all variants");
 }
 
-static struct gpFx *gpFxNoVariation(struct variant *variant, struct lm *lm)
+struct gpFx *gpFxNoVariation(struct variant *variant, struct lm *lm)
 /* Return a gpFx with SO term no_sequence_alteration, for VCF rows that aren't really variants. */
 {
 char *seq = NULL;

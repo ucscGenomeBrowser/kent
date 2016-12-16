@@ -9,6 +9,10 @@ tracks are viewable only on the machine from which they were uploaded and are
 automatically discarded 48 hours after the last time they are accessed, unless
 they are saved in a <A HREF="/goldenPath/help/hgSessionHelp.html#CTs">Session</A>. 
 Optionally, users can make custom annotations viewable by others as well.
+For a more stable option for custom annotations, we suggest 
+using <a href="hgTrackHubHelp.html" target="_blank">track hubs</a>, 
+while a third more technical option is to operate a mirror. Custom tracks work well
+for quickly displaying data, while track hubs are more configurable and permanent.
 <P>
 Custom tracks are a wonderful tool for research scientists using the Genome 
 Browser. Because space is limited in the Genome Browser track window, many 
@@ -16,11 +20,19 @@ excellent genome-wide tracks cannot be included in the standard set of tracks
 packaged with the browser.
 Other tracks of interest may be excluded from distribution because the 
 annotation track data is too specific to be of general interest or can't be 
-shared until journal publication. Many individuals and labs have contributed
-custom tracks to the Genome Browser website for use by others. To view a list 
-of these custom annotation tracks, click the 
-<A HREF="../customTracks/custTracks.html">Custom Tracks</A> link on 
-the Genome Browser home page.
+shared until journal publication. In the past, many individuals and labs have contributed
+custom tracks to the Genome Browser website for use by others. To view a list
+of these custom annotation tracks, click this
+<A HREF="../customTracks/custTracks.html">Custom Tracks</A> link. 
+Track hubs are now the preferred approach,
+where labs, consortiums, and institutions submit their hubs to be listed as
+a <a href="hgTrackHubHelp.html#View" target="_blank">Public Hub</a>.
+Track hubs are the most configurable and data persistent option for custom annotations.
+Track hubs, require remotely hosted data that is under better control for publications, and use binary 
+indexed files that are quicker as only the relevant data needed to support the view of 
+the current genomic region are transmitted rather than the entire data file. 
+See the <a href="hgTrackHubHelp.html" target="_blank">track hub help page</a> 
+for more information.
 <P>
 Custom annotation tracks are similar to standard tracks, but never become part 
 of the MySQL genome database. Each track has its own controller and persists 

@@ -227,4 +227,5 @@ searchTrix ixIxx/GCA_001632575.1_C3H_HeJ_v1.ensGene.name.ix
 html html/GCA_001632575.1_C3H_HeJ_v1.ensGene
 
 include rnaSeqData/GCA_001632575.1_C3H_HeJ_v1.trackDb.txt
+include GCA_001632575.1_C3H_HeJ_v1.cactus.trackDb.txt
 
