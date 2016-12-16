@@ -38,14 +38,14 @@ db = mm10
 ifeq (${db},mm10)
     prevDb = mm10
     grcRefAssembly = GRCm38
-    ver = M11
-    prevVer = M10
+    ver = M12
+    prevVer = M12
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGtfTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 86_38
+    ensemblVer = 87_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblVer}
-    patchSeqs = KB469740.1 KB469738.2 JH792833.1 KB469741.1 JH792826.1 KK082443.1 KB469739.1 JH792832.1 KK082442.1 JH792831.1 KB469742.1 JH792834.1 JH792827.1 KK082441.1 JH792830.1 JH792828.1 KQ030491.1 KQ030485.1 KB469738.3 KQ030495.1 KQ030490.1 KQ030488.1 KQ030496.1 KQ030489.1 KQ030493.1 KQ030486.1 KQ030484.1 KQ030494.1 KQ030487.1 KQ030497.1
+    patchSeqs = KB469740.1 KB469738.2 JH792833.1 KB469741.1 JH792826.1 KK082443.1 KB469739.1 JH792832.1 KK082442.1 JH792831.1 KB469742.1 JH792834.1 JH792827.1 KK082441.1 JH792830.1 JH792828.1 KQ030491.1 KQ030485.1 KB469738.3 KQ030495.1 KQ030490.1 KQ030488.1 KQ030496.1 KQ030489.1 KQ030493.1 KQ030486.1 KQ030484.1 KQ030494.1 KQ030487.1 KQ030497.1 KV575238.1 KV575235.1 KB469741.2 KV575234.1 KV575237.1 KV575242.1 KV575232.1 KV575236.1 KV575233.1 KQ030492.1 JH792829.1 KV575239.1 KV575241.1 KV575240.1
 else ifeq (${db},hg38)
     prevDb = hg38
     grcRefAssembly = GRCh38
@@ -336,13 +336,13 @@ ${tableTranscriptionSupportLevelData}: ${gencodeTsv}
 	touch $@
 ${gencodeTsv}: ${annotationGtf}
 	@mkdir -p $(dir $@)
-	gencodeGtfToAttrs --keepGoing ${annotationGtf} $@.${tmpExt} --tslTabOut=${tableTranscriptionSupportLevelData}.${tmpExt}
+	gencodeGxfToAttrs --keepGoing ${annotationGtf} $@.${tmpExt} --tslTabOut=${tableTranscriptionSupportLevelData}.${tmpExt}
 	mv -f ${tableTranscriptionSupportLevelData}.${tmpExt} ${tableTranscriptionSupportLevelData}
 	mv -f $@.${tmpExt} $@
 
 # check attributes so code can be updated to handle new biotypes
 checkAttrs: ${annotationGtf}
-	gencodeGtfToAttrs ${annotationGtf} /dev/null
+	gencodeGxfToAttrs ${annotationGtf} /dev/null
 
 ##
 # load tables

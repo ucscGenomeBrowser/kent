@@ -19,6 +19,7 @@ my $doQueryParam = "hgva_startQuery";
 my $hgVai = '/usr/local/apache/cgi-bin/hgVai';
 my $position = '';
 my $rsId = 0;
+my $udcCache;
 my $debug = '';
 
 # GetOpt option configuration for options that don't directly map to hgva_... CGI params,
@@ -26,6 +27,7 @@ my $debug = '';
 my %optionConfig = ('hgVai=s' => \$hgVai,
                     'position=s' => \$position,
                     'rsId' => \$rsId,
+                    'udcCache' => \$udcCache,
                     'dry-run|n|debug' => \$debug,
                     'help|h' => sub { usage(0) },
                    );
@@ -67,6 +69,8 @@ options:
   --rsId                          Attempt to match dbSNP rs# ID with variant
                                   position at the expense of performance.
                                   (default: don't attempt to match dbSNP rs# ID)
+  --udcCache=/path/to/udcCache    Path to udc cache, overriding hg.conf setting
+                                  (default: use value in hg.conf file)
 EOF
   ;
   foreach my $param (sort keys %paramOptions) {
@@ -105,7 +109,7 @@ sub checkArgs() {
     my $trimmedPos = $position;
     $trimmedPos =~ s/,//g;
     $trimmedPos =~ s/\s//g;
-    if ($trimmedPos =~ /^[^:]+:\d+-\d+$/) {
+    if ($trimmedPos =~ /^[^:]+(:\d+-\d+)?$/) {
       $position = $trimmedPos;
     } else {
       print STDERR "position argument should be like chrX:N-M (sequence name, colon,\n" .
@@ -116,8 +120,8 @@ sub checkArgs() {
 
   my $db = shift @ARGV;
   if (! $db) {
-    print STDERR "Missing first argument db.";
-    usage(-1);
+    # No args -- just show usage.
+    usage(0);
   }
   if ($db !~ /^\w+$/) {
     print STDERR "First argument must be a database identifier.\n";
@@ -183,7 +187,6 @@ sub autodetectRsId($) {
     $firstLine = <$inFh>;
     chomp $firstLine; chomp $firstLine;
   }
-  close($inFh);
   if (looksLikeRsIds($firstLine)) {
     $hgVaiParams{hgva_variantIds} = rsIdStringFromInput($inFh, $firstLine);
     $hgVaiParams{hgva_variantTrack} = 'hgva_useVariantIds';
@@ -257,6 +260,33 @@ if ($hgVaiParams{hgva_variantTrack} eq 'hgva_useVariantFileOrUrl' &&
     $hgVaiParams{hgva_variantFileOrUrl} !~ /^(https?|ftp):\/\// &&
     $hgVaiParams{hgva_variantFileOrUrl} =~ /^[^\/]/) {
   $hgVaiParams{hgva_variantFileOrUrl} = getcwd() . '/' . $hgVaiParams{hgva_variantFileOrUrl};
+}
+
+# If env var ALL_JOINER_FILE is not already set, try to find an all.joiner to set it to.
+my $hgVaiDir = dirname $hgVai;
+if (! $ENV{ALL_JOINER_FILE}) {
+  if (-e "all.joiner") {
+    $ENV{ALL_JOINER_FILE} = "all.joiner";
+  } else {
+    my $joinerFile =  "$hgVaiDir/all.joiner";
+    if (-e $joinerFile) {
+      $ENV{ALL_JOINER_FILE} = $joinerFile};
+  }
+}
+
+# If env var HGDB_CONF is not already set, try to find an hg.conf to set it to.
+if (! $ENV{HGDB_CONF}) {
+  if (! -e "hg.conf" && ! -e $ENV{HOME}."/.hg.conf") {
+    my $hgConf = "$hgVaiDir/hg.conf";
+    if (-e $hgConf) {
+      $ENV{HGDB_CONF} = $hgConf;
+    }
+  }
+}
+
+# If -udcCache arg is given, set env var UDC_CACHEDIR to its value.
+if ($udcCache) {
+  $ENV{UDC_CACHEDIR} = $udcCache;
 }
 
 my @params = map { "$_=" . $hgVaiParams{$_} } keys %hgVaiParams;

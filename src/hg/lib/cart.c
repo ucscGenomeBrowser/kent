@@ -481,11 +481,6 @@ void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 {
 struct sqlResult *sr = NULL;
 char **row = NULL;
-/* Validate login cookies if login is enabled -- must be called before wikiLinkUserName */
-if (loginSystemEnabled())
-    {
-    loginValidateCookies(cart);
-    }
 char *userName = wikiLinkUserName();
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encSessionOwner = cgiEncodeFull(sessionOwner);

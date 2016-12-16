@@ -83,7 +83,7 @@ return stanza;
 
 struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, 
     char *tag, char *val)
-/* Add tag with given value to stanza */
+/* Add tag with given value to beginning of stanza */
 {
 struct lm *lm = tagStorm->lm;
 struct slPair *pair;
@@ -96,7 +96,7 @@ return pair;
 
 struct slPair *tagStanzaAppend(struct tagStorm *tagStorm, struct tagStanza *stanza, 
     char *tag, char *val)
-/* Add tag with given value to stanza */
+/* Add tag with given value to end of stanza */
 {
 struct lm *lm = tagStorm->lm;
 struct slPair *pair;
@@ -253,21 +253,6 @@ if (tagStorm != NULL)
     *pTagStorm = NULL;
     }
 }
-
-#ifdef OLD
-char *tagStanzaVal(struct tagStanza *stanza, char *tag)
-/* Return value associated with tag in stanza or any of parent stanzas */
-{
-while (stanza != NULL)
-    {
-    char *val = slPairFindVal(stanza->tagList, tag);
-    if (val != NULL)
-         return val;
-    stanza = stanza->parent;
-    }
-return NULL;
-}
-#endif /* OLD */
 
 static void rAddIndex(struct tagStorm *tagStorm, struct tagStanza *list, 
     struct hash *hash, char *tag, char *parentVal,
@@ -517,7 +502,7 @@ rTsWriteAsFlatTab(tagStorm->forest, fieldList, f, idTag, withParent, maxDepth, 0
 carefulClose(&f);
 }
 
-void tagStormUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
+void tagStanzaUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
 /* Add tag to stanza in storm, replacing existing tag if any. If tag is added it's added to
  * end. */
 {
@@ -558,6 +543,14 @@ for (ancestor = stanza; ancestor != NULL; ancestor = ancestor->parent)
         return val;
     }
 return NULL;
+}
+
+void tagStanzaDeleteTag(struct tagStanza *stanza, char *tag)
+/* Remove a tag from a stanza */
+{
+struct slPair *p = slPairFind(stanza->tagList, tag);
+if (p != NULL)
+    slRemoveEl(&stanza->tagList, p);
 }
 
 char *tagMustFindVal(struct tagStanza *stanza, char *name)
