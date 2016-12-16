@@ -1344,7 +1344,7 @@ function downloadGenomes
     echo2
     echo2 Determining download file size... please wait...
 
-    if [ "ONLYGENOMES" == "0" ]; then
+    if [ "$ONLYGENOMES" == "0" ]; then
         MYSQLDBS="$DBS proteome uniProt go hgFixed"
     else
         MYSQLDBS="$DBS"
