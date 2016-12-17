@@ -258,3 +258,116 @@ searchMethod prefix
 searchPriority 2.31
 
 
+    track transMapAlnEnsemblV4
+    superTrack transMap pack
+    shortLabel TransMap GENCODE/Ensembl V4
+    longLabel TransMap GENCODE/Ensembl Mappings V4
+    #trackHandler bigTransMap
+    group genes
+    type bigPsl
+    priority 37.001
+    color 0,100,0
+    visibility pack
+    #transMapInfo transMapInfoEnsemblV4
+    #transMapSrc hgFixed.transMapSrcEnsemblV4
+    #transMapGene hgFixed.transMapGeneEnsemblV4
+    transMapTypeDesc UCSC Gene
+    baseColorDefault diffCodons
+    #baseColorUseCds table hgFixed.transMapGeneEnsemblV4
+    #baseColorUseSequence extFile hgFixed.transMapSeqEnsemblV4 hgFixed.transMapExtFileEnsemblV4
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+    bigDataUrl file:///hive/data/outside/transMap/V4/data/mapped/$db/$db.ensembl.transMapV4.bigPsl
+
+searchTable transMapAlnEnsemblV4
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
+    track transMapAlnRefSeqV4
+    superTrack transMap pack
+    shortLabel TransMap RefGene V4
+    longLabel TransMap RefSeq Gene Mappings V4
+    #trackHandler bigTransMap
+    group genes
+    type bigPsl
+    priority 37.003
+    color 0,100,0
+    visibility pack
+    #transMapInfo transMapInfoRefSeqV4
+    #transMapSrc hgFixed.transMapSrcRefSeqV4
+    #transMapGene hgFixed.transMapGeneRefSeqV4
+    baseColorDefault diffCodons
+    #baseColorUseCds table hgFixed.transMapGeneRefSeqV4
+    #baseColorUseSequence extFile hgFixed.transMapSeqRefSeqV4 hgFixed.transMapExtFileRefSeqV4
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+    bigDataUrl file:///hive/data/outside/transMap/V4/data/mapped/$db/$db.refseq.transMapV4.bigPsl
+
+searchTable transMapAlnRefSeqV4
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
+    track transMapAlnRnaV4
+    superTrack transMap pack
+    shortLabel TransMap RNA V4
+    longLabel TransMap GenBank RNA Mappings V4
+    #trackHandler bigTransMap
+    group genes
+    type bigPsl
+    priority 37.004
+    color 0,100,0
+    visibility pack
+    #transMapInfo transMapInfoRnaV4
+    #transMapSrc hgFixed.transMapSrcRnaV4
+    #transMapGene hgFixed.transMapGeneRnaV4
+    baseColorDefault diffCodons
+    #baseColorUseCds table hgFixed.transMapGeneRnaV4
+    #baseColorUseSequence extFile hgFixed.transMapSeqRnaV4 hgFixed.transMapExtFileRnaV4
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+    bigDataUrl file:///hive/data/outside/transMap/V4/data/mapped/$db/$db.rna.transMapV4.bigPsl
+
+searchTable transMapAlnRnaV4
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
+    track transMapAlnEstV4
+    superTrack transMap hide
+    shortLabel TransMap ESTs V4
+    longLabel TransMap  EST Mappings V4
+    #trackHandler bigTransMap
+    group genes
+    type bigPsl
+    priority 37.005
+    color 0,100,0
+    visibility hide
+    #transMapInfo transMapInfoEstV4
+    #transMapSrc hgFixed.transMapSrcEstV4
+    baseColorDefault none
+    #baseColorUseSequence extFile hgFixed.transMapSeqEstV4 hgFixed.transMapExtFileEstV4
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    bigDataUrl file:///hive/data/outside/transMap/V4/data/mapped/$db/$db.est.transMapV4.bigPsl
+
+searchTable transMapAlnEstV4
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
