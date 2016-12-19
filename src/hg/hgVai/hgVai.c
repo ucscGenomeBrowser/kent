@@ -1380,7 +1380,7 @@ void setGpVarFuncFilter(struct annoGrator *gpVarGrator)
 {
 struct annoGratorGpVarFuncFilter aggvFuncFilter;
 ZeroVar(&aggvFuncFilter);
-aggvFuncFilter.intergenic = cartUsualBoolean(cart, "hgva_include_intergenic", FALSE);
+aggvFuncFilter.intergenic = cartUsualBoolean(cart, "hgva_include_intergenic", TRUE);
 aggvFuncFilter.upDownstream = cartUsualBoolean(cart, "hgva_include_upDownstream", TRUE);
 aggvFuncFilter.nmdTranscript = cartUsualBoolean(cart, "hgva_include_nmdTranscript", TRUE);
 aggvFuncFilter.exonLoss = cartUsualBoolean(cart, "hgva_include_exonLoss", TRUE);
