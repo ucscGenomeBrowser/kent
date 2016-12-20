@@ -10,7 +10,7 @@ void usage()
 errAbort(
   "\ntagStormDeleteTags - deletes selected tags from a tagStorm file\n\n"
   "usage:\n"
-  "   tagStormDeleteTags in.tags delete.tags out.tags\n\n"
+  "   tagStormDeleteTags in.tags delete.txt out.tags\n\n"
   "where in.tags is the input tagStorm file, out.tags is the output\n"
   "file and delete.tags is a single-column text file containing the\n"
   "names of the tags to be deleted.\n"

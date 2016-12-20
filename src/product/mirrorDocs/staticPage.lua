@@ -128,7 +128,7 @@ function Doc(body, metadata, variables)
   add("<ul>")
   for i, h in ipairs(headers) do
     idStr = simplifyId(h)
-    add("<li><a class='toc' href='#" .. idStr .. "'>" .. h .. "</a></li>")
+    add("<li><b><a class='toc' href='#" .. idStr .. "'>" .. h .. "</a></b></li>")
   end
   add("</ul>")
   add("</div>")

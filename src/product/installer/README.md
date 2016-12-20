@@ -1,6 +1,6 @@
 % Genome Browser in the Cloud User Guide
 
-# **What is Genome Browser in the Cloud?**
+# What is Genome Browser in the Cloud?
 
 The Genome Browser in the Cloud (GBiC) script is a convenient script that automates the setup of a
 UCSC Genome Browser mirror, including the installation and setup of MySQL (or MariaDB) 
@@ -22,7 +22,7 @@ Other data centers (e.g. East Coast) will require a local copy of the genome ass
 requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum 
 size of a single Amazon EBS volume.
 
-# **Quick Start Instructions**
+# Quick Start Instructions
 
 Download the GBiC script from the [UCSC Genome-Browser store](https://genome-store.ucsc.edu/).
 
@@ -35,7 +35,7 @@ The `install` command downloads and configures Apache, MySQL and Ghostscript, co
 CGIs, and configures the mirror to load data remotely from UCSC. The `install` command must be
 run before any other command is used.
 
-# **How does this work?**
+# How does this work?
 
 The GBiC script downloads the Genome Browser CGIs and sets up the central MySQL database. All
 potentially destructive steps require confirmation by the user (unless the -b = 
@@ -57,7 +57,7 @@ enough to test that your setup is working. You can then use the script to downlo
 assemblies of interest to your local Genome Browser, which will make it at least 
 as fast as the UCSC site.
 
-# **The commands**
+# The commands
 
 The first argument of the script is called 'command' in the following. The first
 command that you will need is "install", it installs the browser dependencies,
@@ -141,7 +141,7 @@ If you find a bug or your Linux distribution is not supported, please contact
 More details about the Genome Browser installation are available at
 <http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;hb=HEAD;f=src/product>
  
-# **All options**
+# All options
 
 Here is the full listing of commands and options supported by the GBiC script: 
 
@@ -210,7 +210,7 @@ options:
   -h   - this help message
 ```
 
-# **Credits**
+# Credits
 * Max Haeussler for writing the script.
 * Christopher Lee for testing and QA.
 * Daniel Vera (bio.fsu.edu) for his RHEL install notes.

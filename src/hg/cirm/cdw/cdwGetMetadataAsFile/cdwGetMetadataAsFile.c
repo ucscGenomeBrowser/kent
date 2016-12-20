@@ -54,7 +54,6 @@ if (hIsPrivateHost() && userName == NULL)
 
 if (userName != NULL)
     {
-    user = cdwUserFromUserName(conn, userName);
     /* Look up email vial hgCentral table */
     struct sqlConnection *cc = hConnectCentral();
     char query[512];
