@@ -1423,6 +1423,9 @@ boolean isSymbolString(char *s);
 boolean isNumericString(char *s);
 /* Return TRUE if string is numeric (integer or floating point) */
 
+boolean isAllDigits(char *s);
+/* Return TRUE if string is non-empty and contains only digits (i.e. is a nonnegative integer). */
+
 char *skipNumeric(char *s);
 /* Return first char of s that's not a digit */
 
@@ -1506,6 +1509,9 @@ boolean dateIsOlderBy(const char *date,const char*format, time_t seconds);
 char *dateAddTo(char *date,char *format,int addYears,int addMonths,int addDays);
 /* Add years,months,days to a formatted date and returns the new date as a cloned string
 *  format is a strptime/strftime format: %F = yyyy-mm-dd */
+
+unsigned dayOfYear();
+/* Return the day of the year. */
 
 boolean haplotype(const char *name);
 /* Is this name a haplotype name ?  _hap or _alt in the name */

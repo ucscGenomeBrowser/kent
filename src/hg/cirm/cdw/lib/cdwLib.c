@@ -2232,9 +2232,24 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
+static void printQuotedTsv(char *val)
+/* Print out tab separated value inside of double quotes. Escape any existing quotes with quotes. */
+{
+putchar('"');
+char c;
+while ((c = *val++) != 0)
+    {
+    if (c == '"')
+        putchar(c);
+    putchar(c);
+    }
+putchar('"');
+}
+
 static void rMatchesToCsv(struct tagStorm *tags, struct tagStanza *list, 
     struct rqlStatement *rql, struct lm *lm)
-/* Recursively traverse stanzas on list outputting matching stanzas as a comma separated values file. */
+/* Recursively traverse stanzas on list outputting matching stanzas as 
+ * a comma separated values file. */
 {
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
@@ -2267,15 +2282,13 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 			{
 			fputs(sep, stdout);
 			sep = ",";
-			char *val = naForNull(tagFindVal(stanza, field->name));
+			char *val = emptyForNull(tagFindVal(stanza, field->name));
 			// Check for embedded comma or existing quotes
-			if (strchr(val, ',') == NULL || (val[0] == '"' && lastChar(val) == '"'))
+			if (strchr(val, ',') == NULL && strchr(val, '"') == NULL)
 			    fputs(val, stdout);
 			else
 			    {
-			    char *esc = makeQuotedString(val, '"');
-			    fputs(esc, stdout);
-			    freeMem(esc);
+			    printQuotedTsv(val);
 			    }
 			}
 		    printf("\n");

@@ -1753,8 +1753,6 @@ void hgTables()
 
 char *clade = NULL;
 
-setUdcCacheDir();
-
 oldVars = hashNew(10);
 
 /* Sometimes we output HTML and sometimes plain text; let each outputter

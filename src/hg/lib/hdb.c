@@ -189,6 +189,8 @@ char *hgOfficialChromName(char *db, char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
+if (strlen(name) > HDB_MAX_CHROM_STRING)
+    return NULL;
 struct chromInfo *ci = NULL;
 char buf[HDB_MAX_CHROM_STRING];
 strncpy(buf, name, HDB_MAX_CHROM_STRING);
@@ -3310,6 +3312,12 @@ boolean hIsBrowserbox()
 return (cfgOptionBooleanDefault("isGbib", FALSE));
 }
 
+boolean hIsGbic()
+/* Return TRUE if this mirror has been installed by the installation script */
+{
+return (cfgOptionBooleanDefault("isGbic", FALSE));
+}
+
 boolean hIsPreviewHost()
 /* Return TRUE if this is running on preview web-server.  The preview
  * server is a mirror of the development server provided for public
@@ -4087,6 +4095,8 @@ boolean hgParseChromRangeLong(char *db, char *spec, char **retChromName,
 /* Parse something of form chrom:start-end into pieces.
  * if db != NULL then check with chromInfo for names */
 {
+if (strlen(spec) > 256)
+    return FALSE;
 boolean haveDb = (db != NULL);
 char *chrom, *start, *end;
 char buf[256];
@@ -4855,7 +4865,7 @@ char *addCommasToPos(char *db, char *position)
 /* add commas to the numbers in a position
  * returns pointer to static */
 {
-static char buffer[256];
+static char buffer[4096];
 long winStart, winEnd; // long to support virtual chrom
 char *chromName;
 char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
@@ -4872,16 +4882,6 @@ if (hgParseChromRangeLong(NULL, position, &chromName, &winStart, &winEnd))
 else
     safecpy(buffer, sizeof(buffer), position);
 return buffer;
-}
-
-INLINE boolean isAllDigits(char *str)
-/* Return TRUE if every character in str is a digit. */
-{
-char *p = str;
-while (*p != '\0')
-    if (!isdigit(*p++))
-	return FALSE;
-return TRUE;
 }
 
 boolean parsePosition(char *position, char **retChrom, uint *retStart, uint *retEnd)

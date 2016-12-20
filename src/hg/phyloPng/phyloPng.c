@@ -360,7 +360,6 @@ if (userAgent && strstr(userAgent ,"MSIE"))
 	
 
 cgiSpoof(&argc, argv);
-setUdcCacheDir();
 if (argc != 1)
     usage("wrong number of args");
 

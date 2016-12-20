@@ -35,18 +35,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-boolean isAllDigits(char *s)
-/* Return TRUE if all characters in string are digits. */
-{
-char c;
-while ((c = *s++) != 0)
-    {
-    if (!isdigit(c))
-        return FALSE;
-    }
-return TRUE;
-}
-
 struct hash *rootRenameHash()
 /* Make up hash of cases where rename was more than just adding V2 or bumping the version # */
 {

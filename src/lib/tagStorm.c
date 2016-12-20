@@ -83,7 +83,7 @@ return stanza;
 
 struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, 
     char *tag, char *val)
-/* Add tag with given value to stanza */
+/* Add tag with given value to beginning of stanza */
 {
 struct lm *lm = tagStorm->lm;
 struct slPair *pair;
@@ -96,7 +96,7 @@ return pair;
 
 struct slPair *tagStanzaAppend(struct tagStorm *tagStorm, struct tagStanza *stanza, 
     char *tag, char *val)
-/* Add tag with given value to stanza */
+/* Add tag with given value to end of stanza */
 {
 struct lm *lm = tagStorm->lm;
 struct slPair *pair;
@@ -253,21 +253,6 @@ if (tagStorm != NULL)
     *pTagStorm = NULL;
     }
 }
-
-#ifdef OLD
-char *tagStanzaVal(struct tagStanza *stanza, char *tag)
-/* Return value associated with tag in stanza or any of parent stanzas */
-{
-while (stanza != NULL)
-    {
-    char *val = slPairFindVal(stanza->tagList, tag);
-    if (val != NULL)
-         return val;
-    stanza = stanza->parent;
-    }
-return NULL;
-}
-#endif /* OLD */
 
 static void rAddIndex(struct tagStorm *tagStorm, struct tagStanza *list, 
     struct hash *hash, char *tag, char *parentVal,
@@ -517,7 +502,7 @@ rTsWriteAsFlatTab(tagStorm->forest, fieldList, f, idTag, withParent, maxDepth, 0
 carefulClose(&f);
 }
 
-void tagStormUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
+void tagStanzaUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
 /* Add tag to stanza in storm, replacing existing tag if any. If tag is added it's added to
  * end. */
 {
@@ -558,6 +543,14 @@ for (ancestor = stanza; ancestor != NULL; ancestor = ancestor->parent)
         return val;
     }
 return NULL;
+}
+
+void tagStanzaDeleteTag(struct tagStanza *stanza, char *tag)
+/* Remove a tag from a stanza */
+{
+struct slPair *p = slPairFind(stanza->tagList, tag);
+if (p != NULL)
+    slRemoveEl(&stanza->tagList, p);
 }
 
 char *tagMustFindVal(struct tagStanza *stanza, char *name)
@@ -654,6 +647,74 @@ rTagStormCountDistinct(tags->forest, tag, uniq, required);
 return uniq;
 }
 
+static void rMaxDepth(struct tagStanza *list, int depth, int *pMaxDepth)
+/* Recursively calculate max depth */
+{
+if (list == NULL)
+    return;
+++depth;
+if (*pMaxDepth < depth) *pMaxDepth = depth;
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    rMaxDepth(stanza->children, depth, pMaxDepth);
+}
+
+int tagStormMaxDepth(struct tagStorm *ts)
+/* Calculate deepest extent of tagStorm */
+{
+int maxDepth = 0;
+rMaxDepth(ts->forest, 0, &maxDepth);
+return maxDepth;
+}
+
+static void rCountStanzas(struct tagStanza *list, int *pCount)
+/* Recursively count stanzas */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    *pCount += 1;
+    rCountStanzas(stanza->children, pCount);
+    }
+}
+
+int tagStormCountStanzas(struct tagStorm *ts)
+/* Return number of stanzas in storm */
+{
+int count = 0;
+rCountStanzas(ts->forest, &count);
+return count;
+}
+
+static void rCountTags(struct tagStanza *list, int *pCount)
+/* Return number of tags in storm */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    *pCount += slCount(stanza->tagList);
+    rCountTags(stanza->children, pCount);
+    }
+}
+
+int tagStormCountTags(struct tagStorm *ts)
+/* Return number of stanzas in storm. Does not include expanding ancestors */
+{
+int count = 0;
+rCountTags(ts->forest, &count);
+return count;
+}
+
+int tagStormCountFields(struct tagStorm *ts)
+/* Return number of distinct tag types (fields) in storm */
+{
+struct hash *hash = tagStormFieldHash(ts);
+int count = hash->elCount;
+hashFree(&hash);
+return count;
+}
+
+
 struct slPair *tagListIncludingParents(struct tagStanza *stanza)
 /* Return a list of all tags including ones defined in parents. */
 {
@@ -676,4 +737,3 @@ hashFree(&uniq);
 slReverse(&list);
 return list;
 }
-

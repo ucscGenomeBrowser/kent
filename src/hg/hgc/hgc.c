@@ -25287,7 +25287,7 @@ else if (sameString(track, "variome.delete"))
     doDeleteVariomeItem(item, seqName, winStart, winEnd);
 else if (sameString(track, "variome.addComments"))
     doAddVariomeComments(item, seqName, winStart, winEnd);
-else if (startsWith("transMapAln", table) || startsWith("reconTransMapAln", table))
+else if (startsWith("transMapAln", table))
     transMapClickHandler(tdb, item);
 else if (startsWith("hgcTransMapCdnaAli", table))
     {
@@ -26464,7 +26464,6 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 pushCarefulMemHandler(LIMIT_2or6GB);
 cgiSpoof(&argc,argv);
-setUdcCacheDir();
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 cgiExitTime("hgc", enteredMainTime);
 return 0;

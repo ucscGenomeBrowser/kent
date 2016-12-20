@@ -3545,7 +3545,6 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
-setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 cgiExitTime("hgTrackUi", enteredMainTime);
 return 0;

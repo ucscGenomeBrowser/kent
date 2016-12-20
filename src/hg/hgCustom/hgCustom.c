@@ -1354,7 +1354,6 @@ long enteredMainTime = clock1000();
 htmlPushEarlyHandlers();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgCustom", enteredMainTime);
 return 0;

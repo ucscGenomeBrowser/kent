@@ -1,0 +1,17 @@
+hub hub1
+shortLabel Braney Test Hub
+longLabel Braney Test Hub Number One
+genomesFile hub1.txt
+email braney@soe.ucsc.edu
+descriptionUrl hub.html
+genome hg19
+trackDb hub1.txt
+
+track track1
+shortLabel One Track
+longLabel One Track
+bigDataUrl  http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb
+group map
+priority 27
+visibility hide
+type bigBed 3

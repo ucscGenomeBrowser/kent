@@ -26,6 +26,12 @@ When to update versions:
   hub user and hub-display community.
 
 What to do to update:
+  0. You will probably be in a situation where you have gone past the moment (say v4 when on v3).
+  In this case first copy what you have that you think will be v4 from your current version.
+  For example, "cp trackDbHub.v3.html trackDbHub.v4.html".  Also edit the file to say (v4) in the text.
+  Then you can go back a step by doing a "git checkout abadcafe-last-commit-before-newstuff-efefg133 trackDbHub.v3.html"
+  This will return the v3 file to where it was before the new changes were introduced.
+
   1. In the makefile in this directory you will need to update
   CURRENT_HUB_SPEC=v#old  to be CURRENT_HUB_SPEC=v#new  (change v1 to v2)
   and change HUB_SPEC_FILES= to include the new trackDbHub.v#.html

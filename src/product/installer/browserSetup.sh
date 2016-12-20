@@ -81,6 +81,9 @@ MYSQLDBURL=http://hgwdev.soe.ucsc.edu/~max/gbInstall/mysql56Data.tgz
 # mysql/apache startup script URL, currently only for OSX
 STARTSCRIPTURL=https://raw.githubusercontent.com/maximilianh/browserInstall/master/browserStartup.sh
 
+# the -t option allows to download only the genome databases, not hgFixed/proteome/go/uniProt
+# by default, this is off, so we download hgFixed and Co. 
+ONLYGENOMES=0
 # ---- END GLOBAL DEFAULT SETTINGS ----
 
 # ---- DEFAULT CONFIG FILES ------------------
@@ -205,6 +208,10 @@ slow-db.password=password
 # if data is loaded from UCSC with slow-db, use the tableList
 # mysql table to do table field name checks instead of DESCRIBE
 showTableCache=tableList
+
+# only used for debugging right now, make it obvious that this
+# mirror has been installed by the installation script
+isGbic=on
 
 # direct links to Encode PDF files back to the UCSC site
 # so the mirror does not need a copy of them
@@ -832,7 +839,10 @@ function installDebian ()
 
     echo2 Installing ghostscript and imagemagick
     waitKey
-    apt-get --assume-yes install ghostscript imagemagick wget rsync
+    # ghostscript for PDF export
+    # imagemagick for the session gallery
+    # r-base-core for the gtex tracks
+    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core
 
     if [ ! -f $APACHECONF ]; then
         echo2
@@ -1334,7 +1344,7 @@ function downloadGenomes
     echo2
     echo2 Determining download file size... please wait...
 
-    if [ "ONLYGENOMES" == "0" ]; then
+    if [ "$ONLYGENOMES" == "0" ]; then
         MYSQLDBS="$DBS proteome uniProt go hgFixed"
     else
         MYSQLDBS="$DBS"

@@ -233,7 +233,43 @@ webSortableFieldedTable(cart, table, returnUrl, "cdwOneTag", 0, outputWrappers, 
 fieldedTableFree(&table);
 }
 
-void doOneFile(struct sqlConnection *conn)
+void generateTableRow(struct slName *list,char **row, char *idTag , char *idVal) 
+{
+struct slName *el; 
+static char *outputFields[] = {"tag", "value"};
+struct fieldedTable *table = fieldedTableNew("File Tags", outputFields,ArraySize(outputFields));
+int fieldIx = 0;
+for (el = list; el != NULL; el = el->next)
+    {
+    char *outRow[2];
+    char *val = row[fieldIx];
+    if (val != NULL)
+	{
+	outRow[0] = el->name;
+	outRow[1] = row[fieldIx];
+
+	// add a link to the accession row
+	if (sameWord(el->name, "accession"))
+	    {
+	    char link[1024];
+	    safef(link, sizeof(link), "%s <a href='cdwGetFile?acc=%s'>download</a>", outRow[1], outRow[1]);
+	    outRow[1] = cloneString(link);
+	    }
+	fieldedTableAdd(table, outRow, 2, fieldIx);
+	}
+    ++fieldIx;
+    }
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), 
+    "../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=%s&cdwFileVal=%s&%s",
+    idTag, idVal, cartSidUrlString(cart) );
+struct hash *outputWrappers = hashNew(0);
+hashAdd(outputWrappers, "tag", wrapTagField);
+webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers, NULL);
+fieldedTableFree(&table);
+}
+
+void doFileFlowchart(struct sqlConnection *conn)
 /* Put up a page with info on one file */
 {
 char *idTag = cartUsualString(cart, "cdwFileTag", "accession");
@@ -241,7 +277,33 @@ char *idVal = cartString(cart, "cdwFileVal");
 char query[512];
 sqlSafef(query, sizeof(query), "select * from cdwFileTags where %s='%s'", idTag, idVal);
 struct sqlResult *sr = sqlGetResult(conn, query);
-struct slName *el, *list = sqlResultFieldList(sr);
+struct slName  *list = sqlResultFieldList(sr);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *fileId = mustFindFieldInRow("file_id", list, row);
+    printf("Click on a box in the flow chart to navigate to that file."); 
+    makeCdwFlowchart(sqlSigned(fileId), cart);
+    printf("<a href='cdwWebBrowse?cdwCommand=oneFile");
+    printf("&%s", cartSidUrlString(cart));
+    printf("&cdwFileTag=%s", idTag);
+    printf("&cdwFileVal=%s", idVal);
+    printf("'>Remove flow chart</a>"); 
+    generateTableRow(list, row, idTag, idVal); 
+    }
+sqlFreeResult(&sr);
+}
+
+void doOneFile(struct sqlConnection *conn)
+/* Put up a page with info on one file */
+{
+struct sqlConnection *conn2 = cdwConnect();
+char *idTag = cartUsualString(cart, "cdwFileTag", "accession");
+char *idVal = cartString(cart, "cdwFileVal");
+char query[512];
+sqlSafef(query, sizeof(query), "select * from cdwFileTags where %s='%s'", idTag, idVal);
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct slName *list = sqlResultFieldList(sr);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -254,40 +316,29 @@ while ((row = sqlNextRow(sr)) != NULL)
     printLongWithCommas(stdout, size);
      
     printf("<BR>\n");
-    makeCdwFlowchart(sqlSigned(fileId), cart);
-    static char *outputFields[] = {"tag", "value"};
-    struct fieldedTable *table = fieldedTableNew("File Tags", outputFields,ArraySize(outputFields));
-    int fieldIx = 0;
-    for (el = list; el != NULL; el = el->next)
-        {
-	char *outRow[2];
-	char *val = row[fieldIx];
-	if (val != NULL)
-	    {
-	    outRow[0] = el->name;
-	    outRow[1] = row[fieldIx];
+    /* Figure out number of file inputs and outputs, and put up link to flowcharts */
+    sqlSafef(query, sizeof(query), "select stepRunId from cdwStepIn where fileId = %s", fileId);
+    int stepRunId = sqlQuickNum(conn2, query);
+    sqlSafef(query, sizeof(query), "select count(*) from cdwStepOut where stepRunId = %i", stepRunId);
+    int outFiles = sqlQuickNum(conn2, query);
 
-            // add a link to the accession row
-            if (sameWord(el->name, "accession"))
-                {
-                char link[1024];
-                safef(link, sizeof(link), "%s <a href='cdwGetFile?acc=%s'>download</a>", outRow[1], outRow[1]);
-                outRow[1] = cloneString(link);
-                }
-	    fieldedTableAdd(table, outRow, 2, fieldIx);
-	    }
-	++fieldIx;
-	}
-    char returnUrl[PATH_LEN*2];
-    safef(returnUrl, sizeof(returnUrl), 
-	"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=%s&cdwFileVal=%s&%s",
-	idTag, idVal, cartSidUrlString(cart) );
-    struct hash *outputWrappers = hashNew(0);
-    hashAdd(outputWrappers, "tag", wrapTagField);
-    webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers, NULL);
-    fieldedTableFree(&table);
+    sqlSafef(query, sizeof(query), "select stepRunId from cdwStepOut where fileId = %s", fileId);
+    stepRunId = sqlQuickNum(conn2, query);
+    sqlSafef(query, sizeof(query), "select count(*) from cdwStepIn where stepRunId = %i", stepRunId);
+    int inFiles = sqlQuickNum(conn2, query);
+    if (inFiles > 0 || outFiles > 0)
+	{
+	printf("File relationships: %d inputs, %d outputs ", inFiles, outFiles);
+	printf("<a href='cdwWebBrowse?cdwCommand=doFileFlowchart");
+	printf("&%s", cartSidUrlString(cart));
+	printf("&cdwFileTag=%s", idTag);
+	printf("&cdwFileVal=%s", idVal);
+	printf("'>flow chart</a>"); 
+	} 
+    generateTableRow(list, row, idTag, idVal); 
     }
 sqlFreeResult(&sr);
+sqlDisconnect(&conn2);
 }
 
 struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)
@@ -849,7 +900,6 @@ if (hIsPrivateHost() && userName == NULL)
 
 if (userName != NULL)
     {
-    user = cdwUserFromUserName(conn, userName);
     /* Look up email vial hgCentral table */
     struct sqlConnection *cc = hConnectCentral();
     char query[512];
@@ -1093,46 +1143,66 @@ static boolean cdwCheckFileAccess(struct sqlConnection *conn, int fileId, struct
 return cdwCheckAccessFromFileId(conn, fileId, user, cdwAccessRead);
 }
 
-void doBrowseDatasets(struct sqlConnection *conn, char *tag)
+void doBrowseDatasets(struct sqlConnection *conn)
 /* Show datasets and links to dataset summary pages. */
 {
 printf("<UL>\n");
 char query[PATH_LEN]; 
 sqlSafef(query, sizeof(query), "SELECT * FROM cdwDataset ORDER BY label "); 
-struct cdwDataset *iter, *cD = cdwDatasetLoadByQuery(conn, query);
+struct cdwDataset *dataset, *datasetList = cdwDatasetLoadByQuery(conn, query);
 // Go through the cdwDataset table and generate an entry for each dataset. 
-for (iter = cD; iter != NULL; iter = iter->next)
+for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
     {
-    char *label;
-    char *desc;
-    if (iter == NULL)
-        continue;
-    label = iter->label;
-    desc = iter->description;
-    char *datasetId = iter->name;
+    char *label = dataset->label;
+    char *desc = dataset->description;
+    char *datasetId = dataset->name;
+
     // Check if we have a dataset summary page in the CDW and store its ID. The file must have passed validation.  
     char summFname[8000];
     safef(summFname, sizeof(summFname), "%s/summary/index.html", datasetId);
     int fileId = cdwFileIdFromPathSuffix(conn, summFname);
+
     // If the ID exists and the user has access print a link to the page.  
-    if (fileId > 0)
+    boolean haveAccess = ((fileId > 0) && cdwCheckFileAccess(conn, fileId, user));
+    if (haveAccess)
 	{
-	if (cdwCheckFileAccess(conn, fileId, user))
-	    printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>\n", datasetId, label);
-	else // Otherwise print a label. 
-	    printf("<LI><B>%s</B><BR>\n", label);
+	printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</A></B><BR>\n", 
+	    datasetId, label, datasetId);
+	// Print out file count and descriptions. 
+	sqlSafef(query, sizeof(query), 
+	    "select count(*) from cdwFileTags where data_set_id='%s'", datasetId);  
+	long long fileCount = sqlQuickLongLong(conn, query);
+	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\"",
+		desc, datasetId, cartSidUrlString(cart)); 
+	printf(">%lld files</A>)",fileCount);
+	printf(" (<A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
+		datasetId, cartSidUrlString(cart)); 
+	printf(">metadata tree</A>)");
 	}
-    else // Otherwise print a label. 
-	printf("<LI><B>%s</B><BR>\n", label);
-    // Print out file count and descriptions. 
-    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where data_set_id='%s'", iter->name);  
-    long long fileCount = sqlQuickLongLong(conn, query);
-    printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\"",
-	    desc, datasetId, cartSidUrlString(cart)); 
-    printf(">%lld files</A>)",fileCount);
+    else // Otherwise print a label and description. 
+	{
+	printf("<LI><B>%s (%s)</B><BR>\n", label, datasetId);
+	printf("%s\n", desc);
+	}
     printf("</LI>\n");
     }
-cdwDatasetFree(&cD);
+}
+
+void doDataSetMetaTree(struct sqlConnection *conn)
+/* Put up meta data tree associated with data set. */
+{
+char *dataSet = cartString(cart, "cdwDataSet");
+char metaFileName[PATH_LEN];
+safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
+int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
+if (!cdwCheckFileAccess(conn, fileId, user))
+   errAbort("Unauthorized access to %s", metaFileName);
+printf("<H2>Metadata tree for %s</H2>\n", dataSet);
+char *path = cdwPathForFileId(conn, fileId);
+char command[3*PATH_LEN];
+fflush(stdout);
+safef(command, sizeof(command), "./tagStormToHtml -embed %s stdout", path);
+mustSystem(command);
 }
 
 void doBrowseFormat(struct sqlConnection *conn)
@@ -1584,6 +1654,10 @@ else if (sameString(command, "browseFiles"))
     {
     doBrowseFiles(conn);
     }
+else if (sameString(command, "doFileFlowchart"))
+    {
+    doFileFlowchart(conn);
+    }
 else if (sameString(command, "browseTracks"))
     {
     doBrowseTracks(conn);
@@ -1598,7 +1672,7 @@ else if (sameString(command, "browseLabs"))
     }
 else if (sameString(command, "browseDataSets"))
     {
-    doBrowseDatasets(conn, "data_set_id");
+    doBrowseDatasets(conn);
     }
 else if (sameString(command, "browseFormats"))
     {
@@ -1615,6 +1689,10 @@ else if (sameString(command, "oneTag"))
 else if (sameString(command, "help"))
     {
     doHelp(conn);
+    }
+else if (sameString(command, "dataSetMetaTree"))
+    {
+    doDataSetMetaTree(conn);
     }
 else
     {
@@ -1680,7 +1758,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.52");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.54");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();

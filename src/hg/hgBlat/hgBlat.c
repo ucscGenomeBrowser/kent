@@ -263,14 +263,23 @@ htmlEnd();
 
 }
 
+static char *replaceSuffix(char *input, char *newSuffix)
+/* Given a filename with a suffix, replace existing suffix with a new suffix. */
+{
+char buffer[4096];
+safecpy(buffer, sizeof buffer, input);
+char *dot = strrchr(buffer, '.');
+safecpy(dot+1, sizeof buffer - 1 - (dot - buffer), newSuffix);
+return cloneString(buffer);
+}
+
 static void makeBigPsl(char *pslName, char *faName, char *db, char *outputBigBed)
 /* Make a bigPsl with the blat results. */
 {
-struct tempName bigPslTn;
-trashDirFile(&bigPslTn, "hgBlat", "bp", ".bigPsl");
+char *bigPslFile = replaceSuffix(outputBigBed, "bigPsl");
 
 char cmdBuffer[4096];
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/pslToBigPsl %s -fa=%s stdout | sort -k1,1 -k2,2n  > %s", pslName, faName, bigPslTn.forCgi);
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/pslToBigPsl %s -fa=%s stdout | sort -k1,1 -k2,2n  > %s", pslName, faName, bigPslFile);
 system(cmdBuffer);
 char buf[4096];
 char *twoBitDir;
@@ -288,9 +297,9 @@ else
     }
             
 safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -verbose=0 -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed9+16  %s %s %s",
-        udcDefaultDir(), bigPslTn.forCgi, twoBitDir, outputBigBed);
+        udcDefaultDir(), bigPslFile, twoBitDir, outputBigBed);
 system(cmdBuffer);
-unlink(bigPslTn.forCgi);
+unlink(bigPslFile);
 }
 
 void showAliPlaces(char *pslName, char *faName, char *customText, char *database, 
@@ -609,11 +618,11 @@ static char *outBigPsl(char *db, struct psl *pslList, char *pslFilename, char *f
 // Make a bigPsl from a list of psls and return its name.
 {
 struct tempName bigBedTn;
-trashDirFile(&bigBedTn, "hgBlat", "bp", ".bb");
-makeBigPsl(pslFilename, faFilename, db, bigBedTn.forCgi);
-struct tempName customTextTn;
-trashDirFile(&customTextTn, "hgBlat", "ct", ".txt");
-FILE *fp = fopen(customTextTn.forCgi, "w");
+trashDirDateFile(&bigBedTn, "hgBlat", "bp", ".bb");
+char *bigBedFile = bigBedTn.forCgi;
+makeBigPsl(pslFilename, faFilename, db, bigBedFile);
+char *customTextFile = replaceSuffix(bigBedFile, "txt");
+FILE *fp = fopen(customTextFile, "w");
 char* host = getenv("HTTP_HOST");
 char* reqUrl = getenv("REQUEST_URI");
 // remove everything after / in URL
@@ -624,16 +633,16 @@ char *trackName = NULL;
 char *trackDescription = NULL;
 
 getCustomName(db, cart, pslList, &trackName, &trackDescription);
-char *customTextTemplate = "track type=bigPsl visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s/%s/%s name=\"%s\" description=\"%s\"\n";
+char *customTextTemplate = "track type=bigPsl pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s%s/%s name=\"%s\" description=\"%s\"\n";
 char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases"; 
 
 if (isProt)
     extraForMismatch = "";
-fprintf(fp, customTextTemplate, host, extraForMismatch, host, reqUrl, bigBedTn.forCgi, trackName, trackDescription);
+fprintf(fp, customTextTemplate, bigBedTn.forCgi, host, extraForMismatch, host, reqUrl, bigBedTn.forCgi, trackName, trackDescription);
 fclose(fp);
 
 char buffer[4096];
-safef(buffer, sizeof buffer, "http://%s/%s/%s", host, reqUrl, customTextTn.forCgi);
+safef(buffer, sizeof buffer, "http://%s%s/%s", host, reqUrl, customTextFile);
 
 return cloneString(buffer);
 }
@@ -1046,8 +1055,6 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-
-setUdcCacheDir();
 
 /* org has precedence over db when changeInfo='orgChange' */
 
