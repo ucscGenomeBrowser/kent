@@ -133,4 +133,21 @@
     border-bottom: 2px solid gray;
     background-color: #ededed;          /* light gray */
 }
-    
+
+.gbsPage img {
+    border: 1px solid black;
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+p.gbsCaption {
+    margin-top: 5px;
+}
+
+p.gbsAlignRight {
+    text-align: right;
+}
+
+img.gbsAlignRight {
+    float: right !important;
+}
