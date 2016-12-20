@@ -22,6 +22,7 @@ UTILS_APPLIST = \
 	bedExtendRanges \
 	bedToPsl \
 	bedWeedOverlapping \
+	bigMafToMaf \
 	bigPslToPsl \
 	chromGraphFromBin \
 	chromGraphToBin \
