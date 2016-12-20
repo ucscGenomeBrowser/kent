@@ -36,6 +36,7 @@ UTILS_APPLIST = \
 	gtfToGenePred \
 	hubCheck \
 	hubPublicCheck \
+	mafToBigMaf \
 	makeTableList \
 	oligoMatch \
 	overlapSelect \

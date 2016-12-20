@@ -131,6 +131,9 @@ void mafWriteStart(FILE *f, char *scoring);
 void mafWrite(FILE *f, struct mafAli *maf);
 /* Write next alignment to file. */
 
+void mafWriteDelimiter(FILE *f, struct mafAli *maf, char delimiter);
+/* Write next alignment to file using delimiter instead of newline. */
+
 void mafWriteEnd(FILE *f);
 /* Write end tag of maf file. */
 
