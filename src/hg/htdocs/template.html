@@ -35,6 +35,8 @@ Please do <strong>not</strong> include references to our development servers
 <!-- In this example, two of same size, so use 6 columns of 12 total in grid -->
 
 <div class="row">
+
+<!-- Left column -->
     <div class="col-md-6">
         <h2>Page section</h2>
         <p>
@@ -43,17 +45,44 @@ bootstrap.css, a commonly used style sheet.
 The grid contains 12 columns; column widths are specified using classes 'col-md-1' through 'col-md-12'.
 This example contains two divs, each assigned class 'col-md-6', within a 'row' div.
         </p>
+
+<!-- Preformatted code example -->
         <p>
         Here is some code:
         </p>
 <pre><code>sudo -i
 bash browserSetup.sh install</code></pre>
+
+<!-- Numbered list example -->
+        <p>
+        Here is a numbered list ('ol' and 'li' elements):
+        </p>
+        <ol>
+            <li>
+<strong>chrom</strong> - The name of the chromosome (e.g. chr3, chrY, chr2_random) or 
+scaffold (e.g. scaffold10671).
+            </li>
+            <li>
+<strong>chromStart</strong> - The starting position of the feature in the chromosome or scaffold. 
+The first base in a chromosome is numbered 0.
+            </li>
+            <li>
+<strong>chromEnd</strong> - The ending position of the feature in the chromosome or scaffold. 
+The <em>chromEnd</em> base is not included in the display of the feature. 
+For example, the first 100 bases of a chromosome are defined 
+as <em>chromStart=0, chromEnd=100</em>, and span the bases numbered 0-99.
+            </li>
+        </ol>
     </div>
+
+<!-- Right column -->
     <div class="col-md-6">
         <h2>Another section</h2>
         <p>
         Here is a bulleted list ('ul' and 'li' elements):
         </p>
+
+<!-- Bulleted list example -->
         <ul>
             <li>red</li>
             <li>white</li>
@@ -63,6 +92,8 @@ bash browserSetup.sh install</code></pre>
         <p>
         Here is a table ('table', 'tr', 'th', and 'td' elements):
         </p>
+
+<!-- Table example -->
         <table>
             <tr>
                 <th>Type</th>
@@ -82,25 +113,6 @@ bash browserSetup.sh install</code></pre>
             </tr>
         </table>
 
-        <p>
-        Here is a numbered list ('ol' and 'li' elements):
-        </p>
-        <ol>
-            <li>
-<strong>chrom</strong> - The name of the chromosome (e.g. chr3, chrY, chr2_random) or 
-scaffold (e.g. scaffold10671).
-            </li>
-            <li>
-<strong>chromStart</strong> - The starting position of the feature in the chromosome or scaffold. 
-The first base in a chromosome is numbered 0.
-            </li>
-            <li>
-<strong>chromEnd</strong> - The ending position of the feature in the chromosome or scaffold. 
-The <em>chromEnd</em> base is not included in the display of the feature. 
-For example, the first 100 bases of a chromosome are defined 
-as <em>chromStart=0, chromEnd=100</em>, and span the bases numbered 0-99.
-</li>
-        </ol>
     </div>
 </div>
 
