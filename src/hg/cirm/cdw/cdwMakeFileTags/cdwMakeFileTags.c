@@ -22,6 +22,7 @@ errAbort(
   "options:\n"
   "   -table=tableName What table to store results in, default cdwFileTags\n"
   "   -database=databaseName What database to store results in, default cdw\n"
+  "   -types=fileName Dump list of types to file\n"
   );
 }
 
@@ -29,8 +30,98 @@ errAbort(
 static struct optionSpec options[] = {
    {"table", OPTION_STRING},
    {"database", OPTION_STRING},
+   {"types", OPTION_STRING},
    {NULL, 0},
 };
+
+struct tagTypeInfo
+/* Information on a tag type */
+    {
+    struct tagTypeInfo *next;
+    char *name;		    /* Name of tag */
+    boolean isUnsigned;	    /* True if an unsigned integer */
+    boolean isInt;	    /* True if an integer */
+    boolean isNum;	    /* True if a number (real or integer) */
+    long long maxIntVal;    /* Maximum value for integer or unsigned */
+    long long minIntVal;    /* Minimum value for integer */
+    int maxChars;	    /* Maximum width of string representation */
+    char *sqlType;	    /* If non-NULL, minimum mySQL field type */
+    };
+
+struct tagTypeInfo *tagTypeInfoNew(char *name)
+/* Return initialized new tagTypeInfo */
+{
+struct tagTypeInfo *tti;
+AllocVar(tti);
+tti->name = cloneString(name);
+tti->isUnsigned = tti->isInt = tti->isNum = TRUE;
+return tti;
+}
+
+void tagTypeInfoDump(struct tagTypeInfo *list, char *fileName)
+/* Dump out types to file */
+{
+FILE *f = mustOpen(fileName, "w");
+struct tagTypeInfo *tti;
+for (tti = list; tti != NULL; tti = tti->next)
+    {
+    fprintf(f, "%s u=%d, i=%d, n=%d, min=%lld, max=%lld, chars=%d, type=\"%s\"\n", 
+	tti->name, tti->isUnsigned, tti->isInt, tti->isNum, tti->minIntVal, tti->maxIntVal, 
+	tti->maxChars, tti->sqlType);
+    }
+carefulClose(&f);
+}
+
+void tagTypeInfoAdd(struct tagTypeInfo *tti, char *val)
+/* Fold in information about val into tti. */
+{
+int len = strlen(val);
+if (len > tti->maxChars)
+     tti->maxChars = len;
+if (tti->isNum)
+    {
+    if (tti->isUnsigned)
+        {
+	if (isAllDigits(val))
+	    {
+	    long long v = sqlLongLong(val);
+	    if (v > tti->maxIntVal) tti->maxIntVal = v;
+	    return;
+	    }
+	else
+	    tti->isUnsigned = FALSE;
+	}
+    if (tti->isInt)
+        {
+	if (val[0] == '-')
+	    {
+	    if (isAllDigits(val+1))
+	        {
+		long long v = sqlLongLong(val);
+		if (v < tti->minIntVal) tti->minIntVal = v;
+		return;
+		}
+	    else
+	        tti->isInt = FALSE;
+	    }
+	else
+	    {
+	    if (isAllDigits(val))
+	        {
+		long long v = sqlLongLong(val);
+		if (v > tti->maxIntVal) tti->maxIntVal = v;
+		return;
+		}
+	    else
+	        tti->isInt = FALSE;
+	    }
+	}
+    if (!isNumericString(val))
+        tti->isNum = FALSE;
+    }
+}
+
+struct tagTypeInfo *gTtiList = NULL;
 
 static void rInfer(struct tagStanza *list, struct hash *hash)
 /* Traverse recursively updating hash with type of each field. */
@@ -43,31 +134,14 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
         {
 	char *tag = pair->name;
 	char *val = pair->val;
-	char *oldType = NULL;
-	struct hashEl *oldHel = hashLookup(hash, tag);
-	if (oldHel != NULL)
-	     oldType = oldHel->val;
-	if (isNumericString(val))
-	    {
-	    if (oldType == NULL)
-	        {
-		hashAdd(hash, tag, "float");
-		}
-	    }
-	else
-	    {
-	    int len = strlen(val);
-	    char *stringType = (len < 255 ? "string" : "lstring");
-	    if (oldType == NULL)
-	        {
-		hashAdd(hash, tag, stringType);
-		}
-	    else 
-	        {
-		if (!sameString(oldHel->val, "lstring"))
-		    oldHel->val = stringType;
-		}
-	    }
+	struct tagTypeInfo *tti = hashFindVal(hash, tag);
+	if (tti == NULL)
+	     {
+	     tti = tagTypeInfoNew(tag);
+	     hashAdd(hash, tag, tti);
+	     slAddHead(&gTtiList, tti);
+	     }
+	tagTypeInfoAdd(tti, val);
 	}
     if (stanza->children)
         rInfer(stanza->children, hash);
@@ -137,38 +211,109 @@ slSort(&fieldList, slNameCmpCase);
 struct hash *fieldHash = tagStormFieldHash(tags);
 
 /* Build up hash of column types */
-struct hash *tagType = tagStanzaInferType(tags);
+struct hash *tagTypeHash = tagStanzaInferType(tags);
 
 struct dyString *query = dyStringNew(0);
 sqlDyStringPrintf(query, "CREATE TABLE %s (", table);
 char *connector = "";
+int totalFieldWidth = 0;
 for (field = fieldList; field != NULL; field = field->next)
     {
     char *sqlType = NULL;
-    char *type = hashFindVal(tagType, field->name);
-    assert(type != NULL);
+    char sqlTypeBuf[256];
+    struct tagTypeInfo *tti = hashFindVal(tagTypeHash, field->name);
+    assert(tti != NULL);
     if (!isSymbolString(field->name))
         errAbort("Error - database needs work. Somehow symbol %s got in field list\n", field->name);
-    if (sameString(type, "string"))
-        {
-	sqlType = "varchar(255)";
+    if (tti->isUnsigned)
+	{
+	if (tti->maxIntVal <= 255)
+	    {
+	    sqlType = "tinyint unsigned";
+	    totalFieldWidth += 1;
+	    }
+	else if (tti->maxIntVal <= 65535)
+	    {
+	    sqlType = "smallint unsigned";
+	    totalFieldWidth += 2;
+	    }
+	else if (tti->maxIntVal <= 16777215)
+	    {
+	    sqlType = "mediumint unsigned";
+	    totalFieldWidth += 3;
+	    }
+	else if (tti->maxIntVal <= 4294967295L)
+	    {
+	    sqlType = "int unsigned";
+	    totalFieldWidth += 4;
+	    }
+	else 
+	    {
+	    sqlType = "bigint unsigned";
+	    totalFieldWidth += 8;
+	    }
 	}
-    else if (sameString(type, "lstring"))
+    else if (tti->isInt)
         {
-	sqlType = "longblob";
+	if (tti->minIntVal >= -128  && tti->maxIntVal <= 127)
+	    {
+	    sqlType = "tinyint";
+	    totalFieldWidth += 1;
+	    }
+	else if (tti->minIntVal >= -32768  && tti->maxIntVal <= 32767)
+	    {
+	    sqlType = "smallint";
+	    totalFieldWidth += 2;
+	    }
+	else if (tti->minIntVal >= -8388608  && tti->maxIntVal <= 8388607)
+	    {
+	    sqlType = "mediumint";
+	    totalFieldWidth += 3;
+	    }
+	else if (tti->minIntVal >= -2147483648  && tti->maxIntVal <= 2147483647)
+	    {
+	    sqlType = "int";
+	    totalFieldWidth += 4;
+	    }
+	else
+	    {
+	    sqlType = "bigint";
+	    totalFieldWidth += 8;
+	    }
 	}
-    else if (sameString(type, "float"))
+    else if (tti->isNum)
         {
 	sqlType = "double";
+	totalFieldWidth += 8;
 	}
     else
         {
-	errAbort("Unrecoginzed tag %s type in cdwMakeFileTags", type);
+	if (tti->maxChars <= 255)
+	    {
+	    safef(sqlTypeBuf, sizeof(sqlTypeBuf), "varchar(%d)", tti->maxChars);
+	    sqlType = sqlTypeBuf;
+	    totalFieldWidth += tti->maxChars + 1;
+	    }
+	else
+	    {
+	    sqlType = "longblob";
+	    totalFieldWidth += 12;   // May be 9-12, not sure how to tell.
+	    }
 	}
-
+    tti->sqlType = cloneString(sqlType);
     dyStringPrintf(query, "\n%s%s %s", connector, field->name, sqlType);
     connector = ", ";
     }
+
+int myisamLimit = 65535;
+verbose(2, "totalFieldWidth = %d, limit %d\n", totalFieldWidth, myisamLimit);
+if (totalFieldWidth > myisamLimit)   // MYISAM limit
+    {
+    errAbort("Looks like we are going to have to switch to INNODB for the cdwFileTags table, rats!");
+    }
+char *dumpName = optionVal("types", NULL);
+if (dumpName != NULL)
+    tagTypeInfoDump(gTtiList, dumpName);
 
 static char *keyFields[] =  {
     "accession",
@@ -191,19 +336,18 @@ for (i=0; i<ArraySize(keyFields); ++i)
     char *key = keyFields[i];
     if (hashLookup(fieldHash, key))
         {
-	char *type = hashFindVal(tagType, key);
-	assert(type != NULL);
-	if (sameString(type, "string"))
-	    {
-	    dyStringPrintf(query, "%sINDEX(%s(16))", connector, key);
-	    }
-	else if (sameString(type, "float"))
+	struct tagTypeInfo *tti = hashFindVal(tagTypeHash, key);
+	assert(tti != NULL);
+	if (tti->isNum)
 	    {
 	    dyStringPrintf(query, "%sINDEX(%s)", connector, key);
 	    }
 	else
 	    {
-	    errAbort("Unrecognized tag %s type in cdwMakeFileTags2", type);
+	    int indexSize = tti->maxChars;
+	    if (indexSize > 16)
+	        indexSize = 16;
+	    dyStringPrintf(query, "%sINDEX(%s(%d))", connector, key, indexSize);
 	    }
 	}
     }

@@ -296,7 +296,7 @@ html crispr
 
     track crisprRanges
     shortLabel CRISPR Regions
-    longLabel Genome regions processed to find CRISPR/Cas9 target sites (exons +/- 200bp)
+    longLabel Genome regions processed to find CRISPR/Cas9 target sites (exons +/- 200 bp)
     visibility dense
     color 110,110,110
     type bed 3
