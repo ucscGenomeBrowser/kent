@@ -38,13 +38,14 @@ struct tagTypeInfo
 /* Information on a tag type */
     {
     struct tagTypeInfo *next;
-    char *name;	/* Name of tag */
-    boolean isUnsigned;
-    boolean isInt;
-    boolean isNum;
-    long long maxIntVal;
-    long long minIntVal;
-    int maxChars;
+    char *name;		    /* Name of tag */
+    boolean isUnsigned;	    /* True if an unsigned integer */
+    boolean isInt;	    /* True if an integer */
+    boolean isNum;	    /* True if a number (real or integer) */
+    long long maxIntVal;    /* Maximum value for integer or unsigned */
+    long long minIntVal;    /* Minimum value for integer */
+    int maxChars;	    /* Maximum width of string representation */
+    char *sqlType;	    /* If non-NULL, minimum mySQL field type */
     };
 
 struct tagTypeInfo *tagTypeInfoNew(char *name)
@@ -64,9 +65,9 @@ FILE *f = mustOpen(fileName, "w");
 struct tagTypeInfo *tti;
 for (tti = list; tti != NULL; tti = tti->next)
     {
-    fprintf(f, "%s u=%d, i=%d, n=%d, max=%lld, min=%lld, chars=%d\n", 
-	tti->name, tti->isUnsigned, tti->isInt, tti->isNum, tti->maxIntVal, tti->minIntVal, 
-	tti->maxChars);
+    fprintf(f, "%s u=%d, i=%d, n=%d, min=%lld, max=%lld, chars=%d, type=\"%s\"\n", 
+	tti->name, tti->isUnsigned, tti->isInt, tti->isNum, tti->minIntVal, tti->maxIntVal, 
+	tti->maxChars, tti->sqlType);
     }
 carefulClose(&f);
 }
@@ -299,6 +300,7 @@ for (field = fieldList; field != NULL; field = field->next)
 	    totalFieldWidth += 12;   // May be 9-12, not sure how to tell.
 	    }
 	}
+    tti->sqlType = cloneString(sqlType);
     dyStringPrintf(query, "\n%s%s %s", connector, field->name, sqlType);
     connector = ", ";
     }
