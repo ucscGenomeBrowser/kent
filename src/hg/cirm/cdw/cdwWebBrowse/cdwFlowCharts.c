@@ -409,10 +409,10 @@ printf("\t\t{\n\t\td3.select(nodeList[i])\n\t\t\t.on(\"click\", function (d)\n\t
 printf("\t\t\t\tfileNameParts = d.split(\" \");"); // Find the file name (SCH000***) which is used to build the hyperlink. 
 printf("\n\t\t\t\tif (fileNameParts.length == 1)\n\t\t\t\t\t{return;}"); // This grabs the step nodes and returns before applying a bad hyperlink. 
 printf("\n\t\t\t\tif (fileNameParts[0] === \"...\")\n\t\t\t\t\t{");  // This grabs the files that start with '...'. 
-printf("\n\t\t\t\t\tvar fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[1]+\"&%s\";\n", cartSidUrlString(cart)); 
+printf("\n\t\t\t\t\tvar fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=doFileFlowchart&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[1]+\"&%s\";\n", cartSidUrlString(cart)); 
 printf("\t\t\t\t\twindow.location.href = fileLink;\n\t\t\t\t\t}\n");  
 printf("\t\t\t\telse{\n"); // This deals with the majority of nodes.  
-printf("\t\t\t\t\tvar fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[0]+\"&%s\";\n", cartSidUrlString(cart)); 
+printf("\t\t\t\t\tvar fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=doFileFlowchart&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[0]+\"&%s\";\n", cartSidUrlString(cart)); 
 printf("\t\t\t\t\twindow.location.href = fileLink;\n");
 printf("\t\t\t\t\t}\n\t\t\t\t});\n\t\t}\n\n"); 
 printf("var initialScale = 0.75;</script>\n"); 

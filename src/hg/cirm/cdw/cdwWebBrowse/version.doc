@@ -8,6 +8,6 @@
    - Added support for PNG files
    - Added metadata link on browse/dataset page
    - Made a joint dataset page with Quake/Kriegstein published brain data.
-0.54
+0.54 Dec 14 2016
    - Added data set id to browse/dataset page
-
+   - Updated flow charts to be displayed on a separate page
