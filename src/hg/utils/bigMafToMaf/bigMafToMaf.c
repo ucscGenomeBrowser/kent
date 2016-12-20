@@ -29,13 +29,13 @@ struct bbiFile *bbi = bigBedFileOpen(bigBed);
 FILE *f = mustOpen(mafFile, "w");
 fprintf(f, "##maf version=1\n");
 struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
-struct lm *lm = lmInit(0);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     int start = 0, end = chrom->size;
     int itemsLeft = 0;
     char *chromName = chrom->name;
 
+    struct lm *lm = lmInit(0);
     struct bigBedInterval  *bbList = bigBedIntervalQuery(bbi, chromName,
             start, end, itemsLeft, lm);
     
@@ -50,6 +50,8 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
                 fputc(*ptr, f);
         fputc('\n', f);
         }
+
+    lmCleanup(&lm);
     }
 }
 
