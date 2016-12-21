@@ -1575,6 +1575,9 @@ function updateBrowser {
 function addTools {
    rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/ /usr/local/bin/
    echo2 The UCSC User Tools were copied to /usr/local/bin
+   echo2 Please note that most of the tools require an .hg.conf file in the users
+   echo2 home directory. A very minimal .hg.conf file can be found here:
+   echo2 http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/minimal.hg.conf
 }
 
 # ------------ end of utility functions ----------------
