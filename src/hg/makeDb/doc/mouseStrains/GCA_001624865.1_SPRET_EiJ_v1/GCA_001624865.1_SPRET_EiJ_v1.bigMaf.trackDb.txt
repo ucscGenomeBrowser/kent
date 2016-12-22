@@ -1,0 +1,9 @@
+track bigMaf
+shortLabel bigMaf
+longLabel bigMaf long label
+type bigMaf
+visibility full
+bigDataUrl maf/SPRET_EiJ.bigMaf.bb
+summary maf/SPRET_EiJ.bigMafSummary.bb
+frames maf/SPRET_EiJ.bigMafFrames.bb
+speciesOrder mm10 129S1_SvImJ PWK_PhJ CAST_EiJ WSB_EiJ NZO_HlLtJ C57BL_6NJ NOD_ShiLtJ FVB_NJ DBA_2J CBA_J C3H_HeJ AKR_J BALB_cJ A_J LP_J rn6

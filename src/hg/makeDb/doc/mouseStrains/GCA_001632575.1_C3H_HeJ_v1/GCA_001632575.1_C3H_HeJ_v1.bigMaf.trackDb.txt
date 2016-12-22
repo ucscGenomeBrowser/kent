@@ -1,0 +1,9 @@
+track bigMaf
+shortLabel mice strains
+longLabel Cactus alignments, 17 mice strains plus rat
+type bigMaf
+visibility full
+bigDataUrl maf/C3H_HeJ.bigMaf.bb
+summary maf/C3H_HeJ.bigMafSummary.bb
+frames maf/C3H_HeJ.bigMafFrames.bb
+speciesOrder mm10 SPRET_EiJ PWK_PhJ CAST_EiJ WSB_EiJ NZO_HlLtJ C57BL_6NJ NOD_ShiLtJ FVB_NJ DBA_2J CBA_J AKR_J BALB_cJ A_J LP_J 129S1_SvImJ rn6
