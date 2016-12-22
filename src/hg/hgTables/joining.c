@@ -665,7 +665,9 @@ for (region = regionList; region != NULL; region = region->next)
                 int wordCount = sepCount + 1;
                 char *idWords[wordCount];
                 if (wordCount > 1)
-                    chopString(id, jf->separator, idWords, ArraySize(idWords));
+                    // There may or may not be a word past the final separator,
+                    // So get the real wordCount here:
+                    wordCount = chopString(id, jf->separator, idWords, ArraySize(idWords));
                 else
                     idWords[0] = id;
                 int i;
@@ -758,7 +760,7 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
 	{
 	if (jf->separator == NULL)
 	    {
-	    char *s = chopKey(jf->chopBefore, jf->chopAfter, key->name);
+	    char *s = chopKey(jf->chopBefore, jf->chopAfter, trimSpaces(key->name));
 	    if (s[0] != 0)
 		hashAdd(hash, s, jr);
 	    }
