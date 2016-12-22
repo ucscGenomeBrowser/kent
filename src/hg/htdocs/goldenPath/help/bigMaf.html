@@ -79,7 +79,7 @@ To create a bigMaf track, follow these steps:<br>
              <a href="examples/mafSummary.as">mafSummary.as</a> and 
              <a href="examples/mafFrames.as">mafFrames.as</a> files.
       </ul>
-   <li>Download the <tt>bedToBigBed</tt> program from the 
+   <li>Download the <tt>bedToBigBed</tt> and <tt>mafToBigBed</tt> programs from the 
        <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> 
        of binary utilities.
       <ul>
@@ -98,12 +98,9 @@ To create a bigMaf track, follow these steps:<br>
        database, the hg38.chrom.sizes are located at
        <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes"
        target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
-   <li>Download the <a href="examples/mafToBigMaf.awk"><tt>mafToBigMaf.awk</tt></a> script.
-   <li>Create the bigMaf file from your sorted bigMaf input file using a combination of 
-       <tt>awk</tt>, <tt>sed</tt> and the <tt>bedToBigBed</tt> utility like so: 
 <pre>
-mafToBigMaf hg38 chr22_KI270731v1_random.maf bigMaf.txt
-bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bigMaf.txt chrom.sizes bigMaf.bb
+mafToBigMaf hg38 chr22_KI270731v1_random.maf stdout | sort -k1,1 -k2,2n > bigMaf.txt
+bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bigMaf.txt hg38.chrom.sizes bigMaf.bb
 </pre>
    <li>Follow the below steps to create the binary indexed mafFrames and mafSummary files 
        to accompany your bigMaf file:
