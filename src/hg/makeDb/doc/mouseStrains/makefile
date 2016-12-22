@@ -14,9 +14,9 @@ install::
 	    rm -f /hive/data/genomes/asmHubs/hubLinks/$$D/rnaSeqData/$$D.trackDb.txt ; \
 	    cp -p $$D/rnaSeqData/$$D.trackDb.txt /hive/data/genomes/asmHubs/hubLinks/$$D/rnaSeqData/$$D.trackDb.txt ; \
 	    rm -f /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.trackDb.txt ; \
-	    rm -f /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.cactus.trackDb.txt ; \
+	    rm -f /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.bigMaf.trackDb.txt ; \
 	    cp -p $$D/$$D.trackDb.txt /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.trackDb.txt ;\
-	    cp -p $$D/$$D.cactus.trackDb.txt /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.cactus.trackDb.txt ;\
+	    cp -p $$D/$$D.bigMaf.trackDb.txt /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.bigMaf.trackDb.txt ;\
 	done
 	rm -f /hive/data/genomes/asmHubs/hubLinks/rnaSeqStar.html
 	cp -p rnaSeqStar.html /hive/data/genomes/asmHubs/hubLinks/rnaSeqStar.html
