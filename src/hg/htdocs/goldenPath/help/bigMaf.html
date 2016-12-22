@@ -102,7 +102,7 @@ To create a bigMaf track, follow these steps:<br>
    <li>Create the bigMaf file from your sorted bigMaf input file using a combination of 
        <tt>awk</tt>, <tt>sed</tt> and the <tt>bedToBigBed</tt> utility like so: 
 <pre>
-awk -f mafToBigMaf.awk chr22_KI270731v1_random.maf | sed 's/^$/d' | sed 's/hg38.//' &gt; bigMaf.txt
+mafToBigMaf hg38 chr22_KI270731v1_random.maf bigMaf.txt
 bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bigMaf.txt chrom.sizes bigMaf.bb
 </pre>
    <li>Follow the below steps to create the binary indexed mafFrames and mafSummary files 
@@ -110,12 +110,11 @@ bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bigMaf.txt chrom.sizes bigMaf.bb
 <pre>
 genePredSingleCover chr22_KI270731v1_random.gp single.gp
 genePredToMafFrames hg38 chr22_KI270731v1_random.maf bigMafFrames.txt hg38 single.gp
-awk -f mafToBigMaf.awk chr22_KI270731v1_random.maf | sed '/^$/d' | sed 's/hg38.//' &gt; bigMafFrames.txt
-bedToBigBed -type=bed4+7 -as=mafFrames.as -tab bigMafFrames.txt chrom.sizes bigMafFrames.bb
+bedToBigBed -type=bed3+8 -as=mafFrames.as -tab bigMafFrames.txt hg38.chrom.sizes bigMafFrames.bb
 
 hgLoadMafSummary -minSeqSize=1 -test hg38 bigMafSummary chr22_KI270731v1_random.maf
-cut -f 2 bigMafSummary.tab | sort -k1,1 -k2,2n &gt; bigMafSummary.bed
-bedToBigBed -type=bed3+4 -as=mafSummary.as -tab bigMafSummary.bed chrom.sizes bigMafSummary.bb
+cut -f 2- bigMafSummary.tab | sort -k1,1 -k2,2n &gt; bigMafSummary.bed
+bedToBigBed -type=bed3+4 -as=mafSummary.as -tab bigMafSummary.bed hg38.chrom.sizes bigMafSummary.bb
 </pre>
    <li>Move the newly created bigMaf file (<tt>bigMaf.bb</tt>) to an http, 
        https, or ftp location.

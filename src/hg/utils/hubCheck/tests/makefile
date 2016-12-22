@@ -10,7 +10,7 @@ one:	mkout
 	diff expected/output1.txt output/output1.txt
 
 two:	mkout
-	-${hubCheck} input/hub2.txt > output/output2.txt
+	-${hubCheck} input/hub2.txt > output/output2.txt 2> /dev/null
 	diff expected/output2.txt output/output2.txt
 
 mkout::
