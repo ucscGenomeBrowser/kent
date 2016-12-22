@@ -145,15 +145,16 @@ order.
 
 <p><b>1-start coordinate system in use for variableStep and fixedStep</b></p>
 <p>
-For compatibility purposes, certain wigs and bigWigs are an exception
-to how coordinates are always stored ("0-start, half-open" in tables, "1-start, fully-closed"
-as positioned within the browser). BigWigs created from bedGraph are stored as 
-"0-start, half-open" just like most other data, but bigWigs created from variableStep 
-and fixedStep are an exception, stored as "1-start, fully-closed." For example, for a 
-chromosome of length N, the first position is 1 and the last position is N. For more 
-information, see this related article:
+BigWig files created from the bedGraph format use &quot;0-start, half-open&quot;
+coordinates, but bigWigs that represent variableStep and fixedStep data are
+generated from wiggle files which use &quot;1-start, fully-closed&quot; coordinates. 
+For example, for a chromosome of length N, the first position is 1 and the last 
+position is N. For more information, see this related article:
 <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/20639541/" target="_blank">
-BigWig and BigBed: enabling browsing of large distributed datasets</a>.
+BigWig and BigBed: enabling browsing of large distributed datasets</a>, this 
+<a href="../../FAQ/FAQtracks.html#tracks1" target="_blank">FAQ</a>,
+or this <a href="http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/"
+target="_blank">blog</a>.
 </p>
 
 <P><B>Parameters for custom wiggle track definition lines</B></P>
