@@ -319,8 +319,9 @@ return TRUE;
 void extraUiLinks(char *db,struct trackDb *tdb)
 // Show metadata, and downloads, schema links where appropriate
 {
-boolean hasMetadata = (!tdbIsComposite(tdb) && !trackHubDatabase(db)
-                  && metadataForTable(db, tdb, NULL) != NULL);
+char *tagStormFile = trackDbSetting(tdb, "tagStorm");
+boolean hasMetadata = (tagStormFile != NULL) || (!tdbIsComposite(tdb) && !trackHubDatabase(db)
+                        && metadataForTable(db, tdb, NULL) != NULL);
 if (hasMetadata)
     printf("<b>Metadata:</b><br>%s\n", metadataAsHtmlTable(db, tdb, FALSE, FALSE));
 
