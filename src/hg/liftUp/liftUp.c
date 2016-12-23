@@ -36,7 +36,7 @@ void usage()
 {
 errAbort(
  "liftUp - change coordinates of .psl, .agp, .gap, .gl, .out, .align, .gff, .gtf\n"
- ".bscore .tab .gdup .axt .chain .net, .gp, .genepred, .wab, .bed, or .bed8 files to\n"
+ ".bscore .tab .gdup .axt .chain .net, .gp, .genepred, .wab, .bed, .bed3, or .bed8 files to\n"
  "parent coordinate system.\n"
  "\n"
  "usage:\n"
@@ -1596,6 +1596,12 @@ void liftBed(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
 liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, FALSE, 0, 0, 0, 0, 5);
 }
 
+void liftBed3(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
+/* Lift BED3, avoiding consideration of field 5 as a strand value (as with regular BED). */
+{
+liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, FALSE, 0, 0, 0, 0, -1);
+}
+
 void liftBed8(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
 /* Lift BED8, getting the thickStart, and thickEnd fields. */
 {
@@ -1790,6 +1796,12 @@ else if (endsWith(destType, ".bed"))
     rmChromPart(lifts);
     liftHash = hashLift(lifts, TRUE);
     liftBed(destFile, liftHash, sourceCount, sources);
+    }
+else if (endsWith(destType, ".bed3"))
+    {
+    rmChromPart(lifts);
+    liftHash = hashLift(lifts, TRUE);
+    liftBed3(destFile, liftHash, sourceCount, sources);
     }
 else if (endsWith(destType, ".bed8"))
     {
