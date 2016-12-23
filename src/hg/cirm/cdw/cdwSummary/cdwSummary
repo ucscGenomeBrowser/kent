@@ -95,9 +95,9 @@ def parseCmdLine():
     mysqlDatasetId it not necessary, can be any value.
 
     If Seurat is not installed on your machine, install it like this:
-    Rscript -e 'install.packages("devtools", repos="http://cran.rstudio.com/");
-    library(devtools); source("http://bioconductor.org/biocLite.R");
-    install_url("https://github.com/satijalab/seurat/releases/download/v1.4.0/Seurat_1.4.0.5.tgz", binary = TRUE)
+    Rscript -e 'install.packages("devtools", repos="http://cran.rstudio.com/"); \\
+    library(devtools); source("http://bioconductor.org/biocLite.R"); \\
+    install_url("https://github.com/satijalab/seurat/releases/download/v1.4.0/Seurat_1.4.0.5.tgz", binary = TRUE)'
 
     """)
 
@@ -340,6 +340,9 @@ def parseMarker(fname, useSyms):
     returns dict cellType -> list of gene ids
     and gene ID -> set of cell types
     """
+    if fname=="none":
+        logging.info("No marker gene list, using all genes")
+        return None, None
     logging.info("Reading marker gene list from %s" % fname)
     ifh = open(fname)
     line1 = ifh.readline()
@@ -426,7 +429,12 @@ def convTabToMarshal(matrixFname):
     #newFname = matrixFname.replace(".geneTpm.tab", "")
     logging.info("Converting %s to %s" % (matrixFname, marshFname))
     logging.info("Reading %s" % matrixFname)
-    ifh = open(matrixFname)
+
+    if matrixFname.endswith(".gz"):
+        ifh = gzip.open(matrixFname)
+    else:
+        ifh = open(matrixFname)
+
     cellNames = ifh.readline().rstrip("\n").split("\t")[1:]
     for line in ifh:
         fs = line.rstrip("\n").split("\t")
@@ -1227,7 +1235,8 @@ def writePcaSection(htmlFh, matrixFname, exprMatrix, markerGenes, cellInfo, outD
     else:
         if not exprMatrix:
             exprMatrix = parseMatrix(matrixFname)
-        markerGenes = set(markerGenes)
+        if markerGenes is not None:
+            markerGenes = set(markerGenes)
         pcaMatrix = dictToCellMatrix(exprMatrix, markerGenes)
         pcaMatrixFname = join(tmpDir, "pcaInMatrix.tab")
         writeMatrix(pcaMatrix, pcaMatrixFname)
@@ -1329,14 +1338,15 @@ def getNonZeroGenes(exprMatrix, onlyGenes):
 
     #print "allGenes", allGenes
     #print "onlyGenes", onlyGenes
-    if onlyGenes:
+    if onlyGenes is not None:
+        logging.info("Keeping only %d genes: e.g. %s..." % (len(list(onlyGenes)), list(onlyGenes)[:5]))
         allGenes = allGenes.intersection(onlyGenes)
     #print "after", allGenes
 
     allGenes = list(allGenes)
     allGenes.sort()
     logging.debug("Found %d non-zero genes in matrix" % len(allGenes))
-    assert(len(allGenes)!=0)
+    assert(len(allGenes)!=0) # no genes left to write. Probably wrong gene Ids in -s
     return allGenes
 
 def dictToGeneMatrix(exprMatrix, onlyGenes):
