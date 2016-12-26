@@ -18,6 +18,7 @@
 #include "twoBit.h"
 #include "genomeRangeTree.h"
 #include "basicBed.h"
+#include "bbiFile.h"
 #include "bigWig.h"
 #include "bigBed.h"
 #include "bamFile.h"
@@ -187,11 +188,43 @@ lmCleanup(&lm);
 }
 #endif /* OLD */
 
+static void checkBbiChroms(struct sqlConnection *conn, struct bbiFile *bbi, 
+    struct cdwAssembly *assembly)
+{
+/* Get size hash from two bit file associated with assembly */
+char *twoBitPath = cdwPathForFileId(conn, assembly->twoBitId);
+struct hash *chromHash = twoBitChromHash(twoBitPath);
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+
+/* Count up chromosomes that match.  Not all need to but at least some do. */
+int matchCount = 0;
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    int chromSize = hashIntValDefault(chromHash, chrom->name, 0);
+    if (chromSize != 0)
+        {
+	if (chromSize == chrom->size)
+	    ++matchCount;
+	else
+	    errAbort("Chromosome size mismatch: %s is %d bases in %s, %d base in %s",
+		chrom->name, (int)chrom->size, bbi->fileName, chromSize, twoBitPath);
+	}
+    }
+if (matchCount == 0)
+    errAbort("%s didn't match any chromosomes in %s", bbi->fileName, twoBitPath);
+
+/* Clean up and go home */
+bbiChromInfoFreeList(&chromList);
+hashFree(&chromHash);
+freez(&twoBitPath);
+}
+
 void makeValidBigBed( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
 	struct cdwAssembly *assembly, char *format, struct cdwValidFile *vf)
 /* Fill in fields of vf based on bigBed. */
 {
 struct bbiFile *bbi = bigBedFileOpen(path);
+checkBbiChroms(conn, bbi, assembly);
 vf->sampleCount = vf->itemCount = bigBedItemCount(bbi);
 struct bbiSummaryElement sum = bbiTotalSummary(bbi);
 vf->basesInSample = vf->basesInItems = sum.sumData;
@@ -249,6 +282,7 @@ void makeValidBigWig(struct sqlConnection *conn, char *path, struct cdwFile *ef,
 /* Fill in fields of vf based on bigWig. */
 {
 struct bbiFile *bbi = bigWigFileOpen(path);
+checkBbiChroms(conn, bbi, assembly);
 struct bbiSummaryElement sum = bbiTotalSummary(bbi);
 vf->sampleCount = vf->itemCount = vf->basesInSample = vf->basesInItems = sum.validCount;
 vf->sampleCoverage = (double)sum.validCount/assembly->baseCount;
