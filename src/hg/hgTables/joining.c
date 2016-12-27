@@ -564,7 +564,7 @@ dyStringAppend(dy, s);
 void tjLoadSome(struct region *regionList,
     struct joinedTables *joined, int fieldOffset, int keyOffset,
     char *idField, struct hash *idHash, 
-    struct slName *chopBefore, struct slName *chopAfter,
+    struct joinerField *jf,
     struct tableJoiner *tj, boolean isPositional, boolean isFirst)
 /* Load up rows. */
 {
@@ -658,16 +658,34 @@ for (region = regionList; region != NULL; region = region->next)
 		}
 	    else
 		{
-		struct hashEl *bucket;
-		id = chopKey(chopBefore, chopAfter, id);
-		for (bucket = hashLookup(idHash, id); bucket != NULL;
-		     bucket = hashLookupNext(bucket))
-		     {
-		     jr = bucket->val;
-		     jr->hitThisTable = TRUE;
-		     jrRowExpand(joined, jr, row, 
-		    	fieldOffset, fieldCount, keyOffset, keyCount);
-		     }
+                // chop id column by jf->separator if necessary
+                int sepCount = 0;
+                if (jf && isNotEmpty(jf->separator))
+                    sepCount = countChars(id, jf->separator[0]);
+                int wordCount = sepCount + 1;
+                char *idWords[wordCount];
+                if (wordCount > 1)
+                    // There may or may not be a word past the final separator,
+                    // So get the real wordCount here:
+                    wordCount = chopString(id, jf->separator, idWords, ArraySize(idWords));
+                else
+                    idWords[0] = id;
+                int i;
+                for (i = 0;  i < wordCount;  i++)
+                    {
+                    struct slName *chopBefore = jf ? jf->chopBefore : NULL;
+                    struct slName *chopAfter = jf ? jf->chopAfter : NULL;
+                    idWords[i] = chopKey(chopBefore, chopAfter, trimSpaces(idWords[i]));
+                    struct hashEl *bucket;
+                    for (bucket = hashLookup(idHash, idWords[i]); bucket != NULL;
+                         bucket = hashLookupNext(bucket))
+                        {
+                        jr = bucket->val;
+                        jr->hitThisTable = TRUE;
+                        jrRowExpand(joined, jr, row, 
+                                    fieldOffset, fieldCount, keyOffset, keyCount);
+                        }
+                    }
 		}
 	    }
 	}
@@ -703,7 +721,7 @@ char *idField = getIdField(tj->database, curTrack, tj->table, hti);
 if (idField != NULL)
     idHash = identifierHash(tj->database, tj->table);
 tjLoadSome(regionList, joined, 0, 0, 
-	idField, idHash, NULL, NULL, tj, 
+	idField, idHash, NULL, tj,
 	isPositional(tj->database, tj->table), TRUE);
 hashFree(&idHash);
 return joined;
@@ -742,7 +760,7 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
 	{
 	if (jf->separator == NULL)
 	    {
-	    char *s = chopKey(jf->chopBefore, jf->chopAfter, key->name);
+	    char *s = chopKey(jf->chopBefore, jf->chopAfter, trimSpaces(key->name));
 	    if (s[0] != 0)
 		hashAdd(hash, s, jr);
 	    }
@@ -882,7 +900,7 @@ for (route = routeList; route != NULL; route = route->next)
 	keyHash = hashKeyField(joined, keyIx, jfA);
 	tjLoadSome(regionList, joined, curFieldCount, curKeyCount,
 	    route->b->field, keyHash, 
-	    jfB->chopBefore, jfB->chopAfter, 
+	    jfB,
 	    tj, isPositional(tj->database, tj->table),  FALSE);
 	curKeyCount += slCount(tj->keysOut);
 	curFieldCount += slCount(tj->fieldList);

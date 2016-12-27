@@ -3463,6 +3463,7 @@ identifier rn4KgPrevious
 identifier knownGeneId dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
+    $kgDb.knownToRefSeq.name
     $kgDb.knownCanonToDecipher.name
     $kgDb.knownToDecipher.name
     $kgDb.knownToKeggEntrez.name
@@ -3516,7 +3517,6 @@ identifier knownGeneId dependency
     $kgDb.knownToHprd.name
     $kgDb.knownToLocusLink.name
     $kgDb.knownToPfam.name
-    $kgDb.knownToRefSeq.name
     $kgDb.knownToSuper.gene
     $kgDb.knownToTag.name
     $kgDb.knownToTreefam.name

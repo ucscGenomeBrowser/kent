@@ -241,5 +241,4 @@ searchTrix ixIxx/GCA_001624745.1_NZO_HlLtJ_v1.ensGene.name.ix
 html html/GCA_001624745.1_NZO_HlLtJ_v1.ensGene
 
 include rnaSeqData/GCA_001624745.1_NZO_HlLtJ_v1.trackDb.txt
-include GCA_001624745.1_NZO_HlLtJ_v1.cactus.trackDb.txt
-
+include GCA_001624745.1_NZO_HlLtJ_v1.bigMaf.trackDb.txt

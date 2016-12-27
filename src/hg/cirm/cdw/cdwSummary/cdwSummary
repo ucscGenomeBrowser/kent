@@ -4,9 +4,13 @@
 # information, cell type assignment charts and cell clustering")
 
 import logging, sys, optparse, gzip, marshal, json, urllib2, re, tempfile, os, math
-import string, unicodedata, itertools
+import string, unicodedata, itertools, platform
 from collections import defaultdict, Counter, namedtuple
 from os.path import join, basename, dirname, isfile, isdir, getsize
+
+# http://stackoverflow.com/questions/1447287/format-floats-with-standard-json-module
+from json import encoder
+encoder.FLOAT_REPR = lambda o: format(o, '.3f')
 
 # no need for garbage collection here
 import gc
@@ -65,14 +69,15 @@ metaFieldsOnlyOne = ['title', 'summary', "submission_date"]
 # can be changed with a command line option
 defaultSeuratAttribute = "tsneCluster"
 
-CIRMPATH = "/pod/pstore/"
-
 def getCirmStaticFile(relPath):
     """ make relPath relative to CIRM static data directory.
     The base path can be set with the 'CIRM' environment variable.
     """
-    return CIRMPATH + relPath
-    #return join(os.getenv("CIRM", CIRMPATH), relPath)
+    if platform.node()=="hgwdev":
+        CIRMPATH = "/hive/groups/cirm/"
+    else:
+        CIRMPATH = "/pod/pstore/"
+    return join(os.getenv("CIRM", CIRMPATH), relPath)
 
 # === command line interface, options and help ===
 def errAbort(msg):
@@ -111,6 +116,7 @@ def parseCmdLine():
     parser.add_option("", "--colorBy", dest="colorBy", action="store", help="attribute to color the seurat plot on by default, default is %default", default=defaultSeuratAttribute)
     parser.add_option("-S", "--onlySeurat", dest="onlySeurat", action="store_true", help="create only the seurat plot")
     parser.add_option("", "--annoDir", dest="annovarDir", action="store", help="name of directory with annovar output files of VCFs")
+    parser.add_option("", "--seuratOut", dest="seuratOut", action="store", help="write Seurat data to json file")
 
     (options, args) = parser.parse_args()
     if args==[]:
@@ -1529,6 +1535,8 @@ def parseTsneToJson(seuratToOrig, tsnePath):
     """ read the seurat tsne output and return a JSON string with a list of maps
     with attributes x, y, and cellId
     """
+    coordList = []
+
     tsneData = []
     notFoundIds = set()
     for row in lineFileNextRow(tsnePath):
@@ -1537,11 +1545,15 @@ def parseTsneToJson(seuratToOrig, tsnePath):
             notFoundIds.add(seuratId)
             continue
         cellId = seuratToOrig[seuratId]
-        tsneData.append( {"x" : float(row.tSNE_1), "y" : float(row.tSNE_2), "cellId" : cellId } )
+        x = float(row.tSNE_1)
+        y = float(row.tSNE_2)
+        tsneData.append( {"x" : x, "y" : y, "cellId" : cellId } )
+
+        coordList.append( (x, y, cellId) )
 
     if len(notFoundIds)!=0:
         logging.warn("%d cellIds were not found after seurat mapping: %s" % (len(notFoundIds), ",".join(notFoundIds)))
-    return json.dumps(tsneData)
+    return json.dumps(tsneData), coordList
 
 def parseClusters(newToOrigId, clusterPath):
     """ convert seurat tsne cluster assignment to JSON string """
@@ -1566,7 +1578,7 @@ def readColorsJson(inFname):
         ret[attrName][attrVal] = color
     return json.dumps(ret)
 
-def writeSeuratSection(htmlFh, matrixFname, exprMatrix, cellInfo, geneToSym, tagLabels, outDir):
+def writeSeuratSection(htmlFh, matrixFname, exprMatrix, cellInfo, geneToSym, tagLabels, outDir, cellInfoTagToLabel, jsonOutFname):
     """ run matrix through Seurat and add a section to html for it """
     tmpDir = makeTmpDirFor(outDir)
     seuratMatFname = join(tmpDir, "seuratInMatrix.tab")
@@ -1586,7 +1598,8 @@ def writeSeuratSection(htmlFh, matrixFname, exprMatrix, cellInfo, geneToSym, tag
         runRscript(seuratScript, seuratScriptPath)
 
     newToOrig = sanitizeForR(cellInfo)
-    tsneJson  = parseTsneToJson(newToOrig, tsnePath)
+    tsneJson, coordList  = parseTsneToJson(newToOrig, tsnePath)
+
     clusterJson = parseClusters(newToOrig, clusterPath)
 
     htmlFh.write("""<h2>Seurat T-SNE: gene list trimming and non-linear dimensional reduction</h2>""")
@@ -1643,6 +1656,55 @@ $("#tsneGroupSelect").change(addSeuratGraph);
     """ % locals())
 
     writeSeuratGenes(htmlFh, geneToSym, clusterGenesPath, 0.3, 0.5, outDir)
+    if jsonOutFname is not None:
+         writeNewJson(coordList, cellInfo, cellInfoTagToLabel, jsonOutFname)
+
+def writeNewJson(coordList, cellInfo, cellInfoTagToLabel, jsonFname):
+    " write t-SNE data in a more modern format to a separate json file "
+    logging.info("Writing Seurat data in new JSON format to %s" % jsonFname)
+    # coordinates
+    #print cellInfo
+    #print cellInfoTagToLabel
+    data = {}
+    data["coords"] = coordList
+
+    # list of fields
+    #cellInfoTags = cellInfoTagToLabel.keys()
+    fields = list(sorted(cellInfo.values()[0].keys()))
+    #for cit in tags:
+        #fields.append(cellInfoTagToLabel[cit])
+
+    # meta data - make a list
+    colVals = defaultdict(list)
+    for cellId, infoDict in cellInfo.iteritems():
+        for field in fields:
+            if field=="meta":
+                continue
+            val = infoDict[field]
+            colVals[field].append(val)
+    
+    # filter down the fields to things that make sense
+    filtFields = []
+    for field, vals in colVals.iteritems():
+        valCount = len(set(vals))
+        if valCount > 3 and not valCount==len(vals):
+            filtFields.append(field)
+
+    logging.info("Exporting %d fields to json: %s" % (len(filtFields), filtFields))
+    data["metaFields"] = filtFields
+
+    # extract these fields
+    meta = {}
+    for cellId, infoDict in cellInfo.iteritems():
+        row = []
+        for field in filtFields:
+            row.append(infoDict.get(field, ""))
+        meta[cellId] = row
+    data["meta"] = meta
+
+
+    #json.dump(data, open(jsonFname, "w"), sort_keys=True, indent=4)
+    json.dump(data, open(jsonFname, "w"))
 
 def parseSeuratGenes(clusterGenesPath, minPower=0.6):
     " parse the seurat cluster specific genes table, return dict clusterId -> list of dicts sorted by AUC "
@@ -1751,6 +1813,7 @@ def writeCellInfo(htmlFh, cellInfo, tagLabels):
         cellInfoTagToLabel[tag] = label.encode('utf8')
         
     cellInfoTagToLabel["cellId"] = "SRA ID"
+
     cellInfoLabelJson = json.dumps(cellInfoTagToLabel)
     cellInfoJson = json.dumps(cellInfo)
     htmlFh.write("""
@@ -1758,6 +1821,7 @@ def writeCellInfo(htmlFh, cellInfo, tagLabels):
   var cellTagLabels = %(cellInfoLabelJson)s;
   var cellInfo = %(cellInfoJson)s;
 </script>""" % locals())
+    return cellInfoTagToLabel
 
 #def parseManifest(maniFname):
     #""" manifest is a tab-sep file,
@@ -2006,7 +2070,7 @@ def pasteSummarySection(summDescFn, htmlFh):
     " insert manually generated summary section into html file "
     htmlFh.write(open(summDescFn).read())
 
-def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annovarDir, geneToSym, tagLabels, outDir):
+def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annovarDir, geneToSym, tagLabels, outDir, seuratOut):
     """
     write an html page and various annex .js and .css files
     to outDir. Extracted data are written to summary.tmp in outDir,
@@ -2066,14 +2130,15 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annov
     if not isfile(summDescFn):
         generateSummarySection(sumData, htmlFh)
         cellInfo = sumData["cellInfo"]
-        writeCellInfo(htmlFh, cellInfo, tagLabels)
+        cellInfoTagToLabel = writeCellInfo(htmlFh, cellInfo, tagLabels)
     else:
         pasteSummarySection(summDescFn, htmlFh)
         cellInfo = {}
+        cellInfoTagToLabel = None
 
     # only do this part if we have rna-seq data
     if matrixFname!="none":
-        writeSeuratSection(htmlFh, matrixFname, fullExprMatrix, cellInfo, geneToSym, tagLabels, outDir)
+        writeSeuratSection(htmlFh, matrixFname, fullExprMatrix, cellInfo, geneToSym, tagLabels, outDir, cellInfoTagToLabel, seuratOut)
         if not options.onlySeurat:
             htmlFh.write('''Details: <a href="heatmap.html">Expression Heatmap</a>''')
             writePcaSection(htmlFh, matrixFname, fullExprMatrix, markerGenes, cellInfo, outDir)
@@ -2123,6 +2188,6 @@ def main():
     #maniFname = options.maniFname
     annovarDir = options.annovarDir
 
-    writeDatasetPage(mysqlDatasetId, matrixFname, tagTabFname, kallistoMeta, annovarDir, geneToSym, tagLabels, outDir)
+    writeDatasetPage(mysqlDatasetId, matrixFname, tagTabFname, kallistoMeta, annovarDir, geneToSym, tagLabels, outDir, options.seuratOut)
 
 main()
