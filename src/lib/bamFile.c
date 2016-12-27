@@ -584,32 +584,6 @@ while (s < bam->data + bam->data_len)
     }
 }
 
-
-
-static void bamChromInfoFree(struct bamChromInfo **pInfo)
-/* Free up one chromInfo */
-{
-struct bamChromInfo *info = *pInfo;
-if (info != NULL)
-    {
-    freeMem(info->name);
-    freez(pInfo);
-    }
-}
-
-void bamChromInfoFreeList(struct bamChromInfo **pList)
-/* Free a list of dynamically allocated bamChromInfo's */
-{
-struct bamChromInfo *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    bamChromInfoFree(&el);
-    }
-*pList = NULL;
-}
-
 struct psl *bamToPslUnscored(const bam1_t *bam, const bam_hdr_t *hdr)
 /* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
  * no scoring info) */
