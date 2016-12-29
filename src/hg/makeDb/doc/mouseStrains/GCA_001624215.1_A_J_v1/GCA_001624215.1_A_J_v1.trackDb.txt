@@ -227,5 +227,4 @@ searchTrix ixIxx/GCA_001624215.1_A_J_v1.ensGene.name.ix
 html html/GCA_001624215.1_A_J_v1.ensGene
 
 include rnaSeqData/GCA_001624215.1_A_J_v1.trackDb.txt
-include GCA_001624215.1_A_J_v1.cactus.trackDb.txt
-
+include GCA_001624215.1_A_J_v1.bigMaf.trackDb.txt
