@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <!-- template.html: Example HTML for a Genome Browser static page -->
 
@@ -6,8 +6,8 @@
 1. Capitalization: use only lowercase for HTML element names, attributes and values
 2. Quotes: Use double quotes for attribute values
 3. Whitespace: Use a new line for every block list or table element
-4. Indentation: Indent every child element 4 (or 2 spaces)
-5. Special characters: Don't use entity references (set editor to UTF-8),  except < &
+4. Indentation: Indent every child element 2 spaces
+5. Special characters: Don't use entity references (set editor to UTF-8), except < &
 -->
 
 <!-- Page header -->
@@ -37,82 +37,79 @@ Please do <strong>not</strong> include references to our development servers
 <div class="row">
 
 <!-- Left column -->
-    <div class="col-md-6">
-        <h2>Page section</h2>
-        <p>
-This is one of two subsections, formatted as equal-sized columns via the grid layout feature of
-bootstrap.css, a commonly used style sheet.
-The grid contains 12 columns; column widths are specified using classes 'col-md-1' through 'col-md-12'.
-This example contains two divs, each assigned class 'col-md-6', within a 'row' div.
-        </p>
+  <div class="col-md-6">
+    <h2>Page section</h2>
+    <p>
+    This is one of two subsections, formatted as equal-sized columns via the grid layout feature of
+    bootstrap.css, a commonly used style sheet.
+    The grid contains 12 columns; column widths are specified using classes 'col-md-1' through 
+    'col-md-12'. This example contains two divs, each assigned class 'col-md-6', within a 'row' div.
+    </p>
 
 <!-- Preformatted code example -->
-        <p>
-        Here is some code:
-        </p>
+    <p>
+    Here is some code:
+    </p>
 <pre><code>sudo -i
 bash browserSetup.sh install</code></pre>
 
 <!-- Numbered list example -->
-        <p>
-        Here is a numbered list ('ol' and 'li' elements):
-        </p>
-        <ol>
-            <li>
-<strong>chrom</strong> - The name of the chromosome (e.g. chr3, chrY, chr2_random) or 
-scaffold (e.g. scaffold10671).
-            </li>
-            <li>
-<strong>chromStart</strong> - The starting position of the feature in the chromosome or scaffold. 
-The first base in a chromosome is numbered 0.
-            </li>
-            <li>
-<strong>chromEnd</strong> - The ending position of the feature in the chromosome or scaffold. 
-The <em>chromEnd</em> base is not included in the display of the feature. 
-For example, the first 100 bases of a chromosome are defined 
-as <em>chromStart=0, chromEnd=100</em>, and span the bases numbered 0-99.
-            </li>
-        </ol>
-    </div>
+    <p>
+    Here is a numbered list ('ol' and 'li' elements):
+    </p>
+    <ol>
+      <li>
+      <strong>chrom</strong> - The name of the chromosome (e.g. chr3, chrY, chr2_random) or 
+      scaffold (e.g. scaffold10671).</li>
+      <li>
+      <strong>chromStart</strong> - The starting position of the feature in the chromosome or 
+      scaffold.  The first base in a chromosome is numbered 0.</li>
+      <li>
+      <strong>chromEnd</strong> - The ending position of the feature in the chromosome or scaffold. 
+      The <em>chromEnd</em> base is not included in the display of the feature. 
+      For example, the first 100 bases of a chromosome are defined 
+      as <em>chromStart=0, chromEnd=100</em>, and span the bases numbered 0-99.</li>
+    </ol>
+  </div>
 
 <!-- Right column -->
-    <div class="col-md-6">
-        <h2>Another section</h2>
-        <p>
-        Here is a bulleted list ('ul' and 'li' elements):
-        </p>
+  <div class="col-md-6">
+    <h2>Another section</h2>
+    <p>
+    Here is a bulleted list ('ul' and 'li' elements):
+    </p>
 
 <!-- Bulleted list example -->
-        <ul>
-            <li>red</li>
-            <li>white</li>
-            <li>blue</li>
-        </ul>
+    <ul>
+      <li>red</li>
+      <li>white</li>
+      <li>blue</li>
+    </ul>
 
-        <p>
-        Here is a table ('table', 'tr', 'th', and 'td' elements):
-        </p>
+    <p>
+    Here is a table ('table', 'tr', 'th', and 'td' elements):
+    </p>
 
 <!-- Table example -->
-        <table>
-            <tr>
-                <th>Type</th>
-                <th>Total</th>
-            </tr>
-            <tr>
-                <td>Chromosomes</td>
-                <td>261</td>
-            </tr>
-            <tr>
-                <td>Haplotypes</td>
-                <td>261</td>
-            </tr>
-            <tr>
-                <td>Unlocalized contigs</td>
-                <td>1270</td>
-            </tr>
-        </table>
-    </div>
+    <table>
+      <tr>
+        <th>Type</th>
+        <th>Total</th>
+      </tr>
+      <tr>
+        <td>Chromosomes</td>
+        <td>261</td>
+      </tr>
+      <tr>
+        <td>Haplotypes</td>
+        <td>261</td>
+      </tr>
+      <tr>
+        <td>Unlocalized contigs</td>
+        <td>1270</td>
+      </tr>
+    </table>
+  </div>
 </div>
 
 <h2>Section with a picture and caption</h2>
@@ -123,12 +120,12 @@ To right-align the image add the 'gbsAlignRight' class.
 The caption is a 'p' element, which is assigned the 'gbsCaption' class.
 </p>
 <div class="row">
-    <div class="col-md-12">
-        <img src= "images/gbstaff16.jpg" width=499 height=299 alt="Genome Browser staff">
+  <div class="col-md-12">
+      <img src= "images/gbstaff16.jpg" width=499 height=299 alt="Genome Browser staff">
     <p class="gbsCaption">
     Browser staff in native habitat.
     </p>
-    </div>
+  </div>
 </div>
 
 <!--#include virtual="/gbPageEnd.html"-->
