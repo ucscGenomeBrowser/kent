@@ -12,7 +12,7 @@ errAbort(
   "usage:\n"
   "   tagStormDeleteTags in.tags delete.txt out.tags\n\n"
   "where in.tags is the input tagStorm file, out.tags is the output\n"
-  "file and delete.tags is a single-column text file containing the\n"
+  "file and delete.txt is a single-column text file containing the\n"
   "names of the tags to be deleted.\n"
 /*  "options:\n" */
 /*  "   -xxx=XXX\n" */
