@@ -140,6 +140,9 @@ void tagStanzaUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, cha
 void tagStanzaDeleteTag(struct tagStanza *stanza, char *tag);
 /* Remove a tag from a stanza */
 
+void tagStormRemoveEmpties(struct tagStorm *tagStorm);
+/* Remove any empty stanzas, promoting children if need be. */
+
 /** Information about a tag storm */
 
 struct slName *tagStormFieldList(struct tagStorm *tagStorm);

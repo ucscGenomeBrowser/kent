@@ -315,6 +315,11 @@ struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
     struct slPair *pair;
+    if (stanza->tagList == NULL)
+        {
+	repeatCharOut(f, '\t', depth);
+	fprintf(f, "#empty\n");
+	}
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
 	repeatCharOut(f, '\t', depth);
@@ -552,6 +557,38 @@ struct slPair *p = slPairFind(stanza->tagList, tag);
 if (p != NULL)
     slRemoveEl(&stanza->tagList, p);
 }
+
+void rRemoveEmpties(struct tagStanza **pList)
+/* Remove empty stanzas.  Replace them on list with children if any */
+{
+struct tagStanza *stanza;
+for (;;)
+    {
+    stanza = *pList;
+    if (stanza == NULL)
+        break;
+    if (stanza->children != NULL)
+        rRemoveEmpties(&stanza->children);
+    if (stanza->tagList == NULL)
+        {
+	verbose(2, "removing empty stanza with %d children and %d remaining sibs\n", 
+	    slCount(stanza->children), slCount(stanza->next));
+	*pList = slCat(stanza->children, stanza->next);
+	stanza->next = stanza->children = NULL;
+	}
+    else
+        {
+	pList = &stanza->next;
+	}
+    }
+}
+
+void tagStormRemoveEmpties(struct tagStorm *tagStorm)
+/* Remove any empty stanzas, promoting children if need be. */
+{
+rRemoveEmpties(&tagStorm->forest);
+}
+
 
 char *tagMustFindVal(struct tagStanza *stanza, char *name)
 /* Return value of tag of given name within stanza or any of it's parents. Abort if
