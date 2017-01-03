@@ -24,15 +24,15 @@ function addPcaGraph() {
         groupBy = $("#pcaGroupSelect").val();
         console.log("PCA update: "+xTag+" "+yTag+" "+groupBy);
         var pcsByGroup = d3.nest()
-          .key(function(d) { return cellInfo[d.cellId][groupBy] })
+          .key(function(d) { return cellInfo[d.cellId][groupBy];})
           .entries(pcaData);
 
         pcaChart = nv.models.scatterChart()
                     .showDistX(false)    //showDist, when true, will display those little distribution lines on the axis.
                     .showDistY(false)
                     .showLegend(true)
-                    .x(function(d) { return d[xTag] })
-                    .y(function(d) { return d[yTag] });
+                    .x(function(d) { return d[xTag]; })
+                    .y(function(d) { return d[yTag]; });
 
         pcaChart.xAxis.axisLabel(xTag);
         pcaChart.yAxis.axisLabel(yTag);
@@ -87,14 +87,14 @@ function addSeuratGraph() {
             {
             console.log("2nd try: grouping tsne by "+groupBy);
             tsnePointsByGroup = d3.nest()
-              .key(function(d) { return "Cluster "+cellToCluster[d.cellId] }).sortKeys(d3.ascending)
+              .key(function(d) { return "Cluster "+cellToCluster[d.cellId] ;}).sortKeys(d3.ascending)
               .entries(seuratTsnePoints);
             console.log('group by cluster');
             }
         else 
             // all other meta info is in the cellInfo map
             tsnePointsByGroup = d3.nest()
-              .key(function(d) { cellId = d.cellId; return cellInfo[cellId][groupBy] }).sortKeys(d3.ascending)
+              .key(function(d) { cellId = d.cellId; return cellInfo[cellId][groupBy]; }).sortKeys(d3.ascending)
               .entries(seuratTsnePoints);
 
         // if we have color info specified for this attribute, color dots 
@@ -103,7 +103,7 @@ function addSeuratGraph() {
             for(var groupIdx in tsnePointsByGroup) {
                 groupId = tsnePointsByGroup[groupIdx].key;
                 if (groupId in groupColors) {
-                    tsnePointsByGroup[groupIdx]['color'] = groupColors[groupId];
+                    tsnePointsByGroup[groupIdx].color = groupColors[groupId];
                 }
             }
         }
@@ -112,8 +112,8 @@ function addSeuratGraph() {
                     .showDistX(false)    //showDist, when true, will display those little distribution lines on the axis.
                     .showDistY(false)
                     .showLegend(true)
-                    .x(function(d) { return d["x"] })
-                    .y(function(d) { return d["y"] });
+                    .x(function(d) { return d.x; })
+                    .y(function(d) { return d.y; });
 
         seuratChart.xAxis.axisLabel("T-SNE 1");
         seuratChart.yAxis.axisLabel("T-SNE 2");

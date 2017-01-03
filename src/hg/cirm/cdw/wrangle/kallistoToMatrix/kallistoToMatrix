@@ -20,33 +20,43 @@ tpmColumnIndex = 4
 # keeps genes with only 0 values, uses more memory but then the output line count is always the same
 addZeros = False
 
+# skip format checks for gene and transcript IDs
+notEnsembl = False
+
 # === command line interface, options and help ===
 def parseArgs():
-    parser = optparse.OptionParser("""usage: %prog [options] dirName
-    outBase - collect expression counts from all abundance.tsv files,
-    given a directory containing kallisto output sub-directories.
+    parser = optparse.OptionParser("""usage: %prog [options] dirName outBase
+    collect expression counts from all abundance.tsv files,
+    given a directory containing kallisto output directories or kallisto output files.
 
     Input files that end with "*.abundance.tsv" can be located either 
     directly in dirName or one level beneath it.
 
+    If the input is directories, the directory name is the cell ID.
+    If the input is files, the part before the first dot is the cell ID.
+
     TPM transcript counts are written to <outBase>.tpm.tab
     TPM gene counts are written to <outBase>.geneTpm.tab
 
-    Also parses .log files with kallisto output and creates a .tab file
-    that contains two basic stats, number of reads per file and number of
+    Optional: Parses dirName/log/*.log files with kallisto output and creates a .tab file
+    that contains two basic stats: number of reads per file and number of
     reads mapped to transcript models, written to <outBase>.stat.tab
     Can be used for tagStormJoinTab.
+    It is assumed that the part before the first dot in the log filename
+    is the identifier of the cell. If available, the part before the
+    underscore in this filename is the name of the sample ("meta").
 
     Ctrl-c does not work for this program. Do ctrl-z and then 'kill %%'.
 
     Example:
-    kallistoToMatrix /hive/groups/cirm/submit/quake/quakeBrainGeo1/kallistoOut quakeBrainGeo1 -t 20
+    kallistoToMatrix /hive/groups/cirm/submit/quake/quakeBrainGeo1/kallistoOut quakeBrainGeo1
     """)
 
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
-    parser.add_option("-t", "--threads", dest="threads", action="store", type="int", help="number of threads to use, default %default", default=10)
+    parser.add_option("-t", "--threads", dest="threads", action="store", type="int", help="number of threads to use, default %default", default=20)
     parser.add_option("-s", "--addZeros", dest="addZeros", action="store_true", help="keep genes with only 0 values, makes sure that the matrix rowcount is always the same")
     parser.add_option("-r", "--recursive", dest="recursive", action="store_true", help="search in all subdirectories for files that end with *abundance.tsv")
+    parser.add_option("",  "--notEnsembl", dest="notEnsembl", action="store_true", help="Do not check transcript or gene identifiers for Ensembl format.")
     #parser.add_option("-g", "--geneLevel", dest="geneLevel", action="store_true", help="map transcripts to gene symbols and write the sum of all transcript TPMs into a file <outBase>.geneTpm.tab")
     parser.add_option("", "--transFile", dest="transFile", action="store", help="the text file with the mapping transcript-gene-symbol (sym is not used), one per line. default %default", default="/hive/data/outside/gencode/release_22/transToGene.tab")
     (options, args) = parser.parse_args()
@@ -135,8 +145,8 @@ def parseDict(fname, stripDot=False):
         fs = line.rstrip("\n").split()
         transId = fs[0]
         geneId = fs[1]
-        assert("T" in transId) # Ensembl transcript identifiers always have a T in them
-        assert("G" in geneId)  # Ensembl gene identifiers always have a G in them
+        assert(notEnsembl or ("T" in transId)) # Ensembl transcript identifiers always have a T in them
+        assert(notEnsembl or ("G" in geneId))  # Ensembl gene identifiers always have a G in them
         if stripDot:
             transId = transId.split('.')[0]
             geneId = geneId.split('.')[0]
@@ -243,16 +253,23 @@ def sumTransToGene(transDictList, transFile):
     
 def writeStats(inDir, outFname):
     """
-    search for all .log files in inDir. Use the basename of these files
+    search for all .log files in inDir/log. Use the basename of these files
     as the cell ID and write a .tab file that can be joined with tagStormJoinTab
     """
-    ofh = open(outFname, "w")
-    ofh.write("meta\tkallistoProcReads\tkallistoAlnReads\tkallistoEstFragLen\n")
+    logDir = join(inDir, "log")
+    if not isdir(logDir):
+        logging.info("Cannot find %s, not parsing kallisto log files" % logDir)
+        return
 
-    inFnames = glob.glob(join(inDir, "log", "*.log"))
+    ofh = open(outFname, "w")
+    #ofh.write("meta\tkallistoProcReads\tkallistoAlnReads\tkallistoEstFragLen\n")
+    ofh.write("cellId\tmeta\tprocReads\talnReads\testFragLen\n")
+
+    inFnames = glob.glob(join(logDir, "*.log"))
     print("Parsing %d logfiles and writing to %s" % (len(inFnames), outFname))
     for inFname in inFnames:
-        cellId = basename(inFname).split(".")[0].split("_")[0]
+        cellId = basename(inFname).split(".")[0]
+        meta = cellId.split("_")[0]
         # [quant] processed 1,836,518 reads, 636,766 reads pseudoaligned
         # [quant] estimated average fragment length: 251.99
         for line in open(inFname):
@@ -262,7 +279,7 @@ def writeStats(inDir, outFname):
                 alignCount = words[4].replace(",","")
             if line.startswith("[quant] estimated average fragment length:"):
                 fragLen = line.split()[5]
-        row = [cellId, readCount, alignCount, fragLen]
+        row = [cellId, meta, readCount, alignCount, fragLen]
         ofh.write("\t".join(row)+"\n")
     ofh.close()
 
@@ -274,6 +291,10 @@ def main():
     global addZeros
     if options.addZeros:
         addZeros = True
+
+    global notEnsembl
+    if options.notEnsembl:
+        notEnsembl = True
 
     transOutFname = outBase+".tpm.tab"
     statOutFname = outBase+".stat.tab"
@@ -293,7 +314,7 @@ def main():
 
     # multithreading in 4 lines
     pool = ThreadPool(threadCount)
-    results = pool.map(parseKallisto,inFnames)
+    results = pool.map(parseKallisto, inFnames)
     pool.close()
     pool.join()
 
