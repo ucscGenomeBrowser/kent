@@ -126,8 +126,6 @@ for (tag = tagList; tag != NULL; tag = tag->next)
 slFreeList(&tagList);
 }
 
-
-
 void tagStormHoist(char *input, char *output)
 /* tagStormHoist - Move tags that are shared by all siblings up a level. */
 {
@@ -135,6 +133,7 @@ struct tagStorm *tagStorm = tagStormFromFile(input);
 struct tagStanza *stanza;
 for (stanza = tagStorm->forest; stanza != NULL; stanza = stanza->next)
     rHoist(tagStorm, stanza);
+tagStormRemoveEmpties(tagStorm);
 tagStormWrite(tagStorm, output, 0);
 }
 
