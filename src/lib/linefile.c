@@ -469,7 +469,7 @@ if (lf->udcFile)
         return FALSE;
     int lineSize = strlen(line);
     lf->bytesInBuf = lineSize;
-    lf->lineIx = -1;
+    ++lf->lineIx;
     lf->lineStart = 0;
     lf->lineEnd = lineSize;
     *retStart = line;
