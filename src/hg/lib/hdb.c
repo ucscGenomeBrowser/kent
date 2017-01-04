@@ -819,7 +819,10 @@ if (trackHubDatabase(db))
         }
     return;
     }
-struct sqlConnection *conn = hAllocConnProfile(profile, db);
+struct sqlConnection *conn = hAllocConnProfileMaybe(profile, db);
+if (conn == NULL)
+    // Database does not exist, so no tables in the database exist -- leave the hash empty.
+    return;
 struct slName *allTables =  sqlListTables(conn);
 
 if (!sameString(CUSTOM_TRASH,db) && !sameString("hgFixed",db) && hCanHaveSplitTables(db))
