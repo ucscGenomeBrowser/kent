@@ -12523,4 +12523,64 @@ TMPDIR=/dev/shm
     cd /hive/data/genomes/mm10/bed/gencodeVM12
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
-##############################################################################
+############################################################################################
+# Mouse strains VCF (DONE - 2016-11-08 - Hiram)
+
+    mkdir /hive/data/genomes/mm10/bed/strainsVCF
+    cd /hive/data/genomes/mm10/bed/strainsVCF
+
+    # download files:
+wget --timestamping \
+ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.indels.dbSNP142.normed.vcf.gz.tbi
+
+wget --timestamping \
+ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz.tbi
+
+wget --timestamping \
+ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.indels.dbSNP142.normed.vcf.gz
+
+wget --timestamping \
+ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz
+
+    # change to UCSC chrom names:
+
+    zcat mgp.v5.merged.snps_all.dbSNP142.vcf.gz \
+       | sed -e "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/" \
+          > ucscNames.mgp.v5.merged.snps_all.dbSNP142.vcf
+
+    # need to fixup the chrom names in the header, extract the header:
+    grep "^#" ucscNames.mgp.v5.merged.snps_all.dbSNP142.vcf > original.header.txt
+    # copy that and edit it to fixup the names:
+    cp original.header.txt ucscNames.header.txt
+
+    # extract the lines not in the header
+    grep -v "^#" ucscNames.mgp.v5.merged.snps_all.dbSNP142.vcf > ucscNames.notHeader.txt
+
+    # put it back together:
+    cat ucscName.header.txt ucscNames.notHeader.txt > ucsc.mgpV5MergedSNPsAlldbSNP142.vcf
+
+    # tabix gzip (about 2 hours)
+    export name="ucsc.mgpV5MergedSNPsAlldbSNP142.vcf"
+    /cluster/bin/tabix-0.2.6/bgzip $name
+    /cluster/bin/tabix-0.2.6/tabix -p vcf $name.gz.tbi
+
+    # symlink to gbdb
+    mkdir /gbdb/mm10/mouseStrains
+    ln -s `pwd`/ucsc.mgpV5MergedSNPsAlldbSNP142.vcf.gz \
+          /gbdb/mm10/mouseStrains/mgpV5MergedSNPsAlldbSNP142.vcf.gz
+    ln -s `pwd`/ucsc.mgpV5MergedSNPsAlldbSNP142.vcf.gz.tbi \
+          /gbdb/mm10/mouseStrains/mgpV5MergedSNPsAlldbSNP142.vcf.gz.tbi
+
+    hgBbiDbLink mm10 strainSNPs /gbdb/mm10/mouseStrains/mgpV5MergedSNPsAlldbSNP142.vcf.gz
+
+    # trackDb entry in trackDb/mouse/mm10/trackDb.ra:
+
+track strainSNPs
+shortLabel Mouse SNPs
+longLabel Annotated SNPs from mouse strain comparison analysis
+group varRep
+type vcfTabix
+visibility hide
+hapClusterHeight 78
+
+############################################################################################
