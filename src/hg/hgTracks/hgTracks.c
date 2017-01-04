@@ -9490,11 +9490,11 @@ hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>      <td> exon vi
 hPrintf("<tr><td> zoom out 100x</td><td class=\"hotkey\">0</td>     <td> default view</td><td class=\"hotkey\">d then v</td>               </tr>\n");
 hPrintf("<tr><td> zoom to ...</td><td class=\"hotkey\"></td><td> view DNA</td><td class='hotkey'>v then d</td></tr>\n");
 hPrintf("<tr><td> &nbsp;10bp (1 zero)</td><td class=\"hotkey\">1</td><td></td><td class='hotkey'></td></tr>\n");
-hPrintf("<tr><td> &nbsp;100bp (2 zeroes)</td><td class=\"hotkey\">2</td><td></td><td class='hotkey'></td></tr>\n");
-hPrintf("<tr><td> &nbsp;1000bp (3 zeroes)</td><td class=\"hotkey\">3</td><td></td><td class='hotkey'></td></tr>\n");
-hPrintf("<tr><td> &nbsp;50kbp (4 zeroes)</td><td class=\"hotkey\">4</td><td></td><td class='hotkey'></td></tr>\n");
-hPrintf("<tr><td> &nbsp;100kbp (5 zeroes)</td><td class=\"hotkey\">5</td><td></td><td class='hotkey'></td></tr>\n");
-hPrintf("<tr><td> &nbsp;1Mbp (6 zeroes)</td><td class=\"hotkey\">6</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;100bp (2 zeros)</td><td class=\"hotkey\">2</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;1000bp (3 zeros)</td><td class=\"hotkey\">3</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;50kbp (4 zeros)</td><td class=\"hotkey\">4</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;100kbp (5 zeros)</td><td class=\"hotkey\">5</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;1Mbp (6 zeros)</td><td class=\"hotkey\">6</td><td></td><td class='hotkey'></td></tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");
