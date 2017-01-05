@@ -58,6 +58,15 @@ tti->isUnsigned = tti->isInt = tti->isNum = TRUE;
 return tti;
 }
 
+static char *tfForInt(int i)
+/* Return "T" or "F" depending on whether i is nonzero */
+{
+if (i)
+    return "T";
+else
+    return "F";
+}
+
 void tagTypeInfoDump(struct tagTypeInfo *list, char *fileName)
 /* Dump out types to file */
 {
@@ -65,8 +74,9 @@ FILE *f = mustOpen(fileName, "w");
 struct tagTypeInfo *tti;
 for (tti = list; tti != NULL; tti = tti->next)
     {
-    fprintf(f, "%s u=%d, i=%d, n=%d, min=%lld, max=%lld, chars=%d, type=\"%s\"\n", 
-	tti->name, tti->isUnsigned, tti->isInt, tti->isNum, tti->minIntVal, tti->maxIntVal, 
+    fprintf(f, "%s\tu=%s, i=%s, n=%s, min=%lld, max=%lld, chars=%d, type=\"%s\"\n", 
+	tti->name, tfForInt(tti->isUnsigned), tfForInt(tti->isInt), tfForInt(tti->isNum), 
+	tti->minIntVal, tti->maxIntVal, 
 	tti->maxChars, tti->sqlType);
     }
 carefulClose(&f);
@@ -78,10 +88,34 @@ void tagTypeInfoAdd(struct tagTypeInfo *tti, char *val)
 int len = strlen(val);
 if (len > tti->maxChars)
      tti->maxChars = len;
-if (tti->isNum)
+if (!tti->isNum)
+    return;
+if (tti->isUnsigned)
     {
-    if (tti->isUnsigned)
-        {
+    if (isAllDigits(val))
+	{
+	long long v = sqlLongLong(val);
+	if (v > tti->maxIntVal) tti->maxIntVal = v;
+	return;
+	}
+    else
+	tti->isUnsigned = FALSE;
+    }
+if (tti->isInt)
+    {
+    if (val[0] == '-')
+	{
+	if (isAllDigits(val+1))
+	    {
+	    long long v = sqlLongLong(val);
+	    if (v < tti->minIntVal) tti->minIntVal = v;
+	    return;
+	    }
+	else
+	    tti->isInt = FALSE;
+	}
+    else
+	{
 	if (isAllDigits(val))
 	    {
 	    long long v = sqlLongLong(val);
@@ -89,36 +123,11 @@ if (tti->isNum)
 	    return;
 	    }
 	else
-	    tti->isUnsigned = FALSE;
+	    tti->isInt = FALSE;
 	}
-    if (tti->isInt)
-        {
-	if (val[0] == '-')
-	    {
-	    if (isAllDigits(val+1))
-	        {
-		long long v = sqlLongLong(val);
-		if (v < tti->minIntVal) tti->minIntVal = v;
-		return;
-		}
-	    else
-	        tti->isInt = FALSE;
-	    }
-	else
-	    {
-	    if (isAllDigits(val))
-	        {
-		long long v = sqlLongLong(val);
-		if (v > tti->maxIntVal) tti->maxIntVal = v;
-		return;
-		}
-	    else
-	        tti->isInt = FALSE;
-	    }
-	}
-    if (!isNumericString(val))
-        tti->isNum = FALSE;
     }
+if (!isNumericString(val))
+    tti->isNum = FALSE;
 }
 
 struct tagTypeInfo *gTtiList = NULL;
@@ -227,22 +236,27 @@ for (field = fieldList; field != NULL; field = field->next)
         errAbort("Error - database needs work. Somehow symbol %s got in field list\n", field->name);
     if (tti->isUnsigned)
 	{
-	if (tti->maxIntVal <= 255)
+	long long maxTinyUnsigned = (1<<8)-1;    // Fits in one byte
+	long long maxSmallUnsigned = (1<<16)-1;  // Fits in two bytes
+	long long maxMediumUnsigned = (1<<24)-1; // Fits in three bytes
+	long long maxIntUnsigned = (1LL<<32)-1;  // Fits in four bytes
+
+	if (tti->maxIntVal <= maxTinyUnsigned)
 	    {
 	    sqlType = "tinyint unsigned";
 	    totalFieldWidth += 1;
 	    }
-	else if (tti->maxIntVal <= 65535)
+	else if (tti->maxIntVal <= maxSmallUnsigned)
 	    {
 	    sqlType = "smallint unsigned";
 	    totalFieldWidth += 2;
 	    }
-	else if (tti->maxIntVal <= 16777215)
+	else if (tti->maxIntVal <= maxMediumUnsigned)
 	    {
 	    sqlType = "mediumint unsigned";
 	    totalFieldWidth += 3;
 	    }
-	else if (tti->maxIntVal <= 4294967295L)
+	else if (tti->maxIntVal <= maxIntUnsigned)
 	    {
 	    sqlType = "int unsigned";
 	    totalFieldWidth += 4;
@@ -255,22 +269,26 @@ for (field = fieldList; field != NULL; field = field->next)
 	}
     else if (tti->isInt)
         {
-	if (tti->minIntVal >= -128  && tti->maxIntVal <= 127)
+	long long minTinyInt = -128, maxTinyInt = 127;  // Fits in one byte
+	long long minSmallInt = -32768, maxSmallInt = 32767; // Fits in two bytes
+	long long minMediumInt = -8388608, maxMediumInt = 8388607;  // Fits in three bytes
+	long long minInt = -2147483648LL, maxInt = 2147483647LL; // Fits in three bytes
+	if (tti->minIntVal >= minTinyInt  && tti->maxIntVal <= maxTinyInt)
 	    {
 	    sqlType = "tinyint";
 	    totalFieldWidth += 1;
 	    }
-	else if (tti->minIntVal >= -32768  && tti->maxIntVal <= 32767)
+	else if (tti->minIntVal >= minSmallInt  && tti->maxIntVal <= maxSmallInt)
 	    {
 	    sqlType = "smallint";
 	    totalFieldWidth += 2;
 	    }
-	else if (tti->minIntVal >= -8388608  && tti->maxIntVal <= 8388607)
+	else if (tti->minIntVal >= minMediumInt  && tti->maxIntVal <= maxMediumInt)
 	    {
 	    sqlType = "mediumint";
 	    totalFieldWidth += 3;
 	    }
-	else if (tti->minIntVal >= -2147483648  && tti->maxIntVal <= 2147483647)
+	else if (tti->minIntVal >= minInt  && tti->maxIntVal <= maxInt)
 	    {
 	    sqlType = "int";
 	    totalFieldWidth += 4;
