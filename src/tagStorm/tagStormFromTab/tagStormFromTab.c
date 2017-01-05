@@ -15,7 +15,7 @@ void usage()
 {
 errAbort(
   "tagStormFromTab - Create a tagStorm file from a tab-separated file where the labels are on the\n"
-  "first line, that starts with a #.\n"
+  "first line, that may start with a #.\n"
   "usage:\n"
   "   tagStormFromTab in.tab out.tags\n"
   "options:\n"
@@ -27,6 +27,7 @@ errAbort(
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"div", OPTION_STRING},
+   {"noSharp", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
