@@ -45,7 +45,6 @@ struct tagTypeInfo
     long long maxIntVal;    /* Maximum value for integer or unsigned */
     long long minIntVal;    /* Minimum value for integer */
     int maxChars;	    /* Maximum width of string representation */
-    char *sqlType;	    /* If non-NULL, minimum mySQL field type */
     };
 
 struct tagTypeInfo *tagTypeInfoNew(char *name)
@@ -56,6 +55,14 @@ AllocVar(tti);
 tti->name = cloneString(name);
 tti->isUnsigned = tti->isInt = tti->isNum = TRUE;
 return tti;
+}
+
+int tagTypeInfoCmpName(const void *va, const void *vb)
+/* Compare two tagTypeInfo's by name field */
+{
+const struct tagTypeInfo *a = *((struct tagTypeInfo **)va);
+const struct tagTypeInfo *b = *((struct tagTypeInfo **)vb);
+return strcasecmp(a->name, b->name);
 }
 
 static char *tfForInt(int i)
@@ -74,10 +81,9 @@ FILE *f = mustOpen(fileName, "w");
 struct tagTypeInfo *tti;
 for (tti = list; tti != NULL; tti = tti->next)
     {
-    fprintf(f, "%s\tu=%s, i=%s, n=%s, min=%lld, max=%lld, chars=%d, type=\"%s\"\n", 
+    fprintf(f, "%s\tu=%s, i=%s, n=%s, min=%lld, max=%lld, chars=%d\n", 
 	tti->name, tfForInt(tti->isUnsigned), tfForInt(tti->isInt), tfForInt(tti->isNum), 
-	tti->minIntVal, tti->maxIntVal, 
-	tti->maxChars, tti->sqlType);
+	tti->minIntVal, tti->maxIntVal, tti->maxChars);
     }
 carefulClose(&f);
 }
@@ -130,9 +136,7 @@ if (!isNumericString(val))
     tti->isNum = FALSE;
 }
 
-struct tagTypeInfo *gTtiList = NULL;
-
-static void rInfer(struct tagStanza *list, struct hash *hash)
+static void rInfer(struct tagStanza *list, struct hash *hash, struct tagTypeInfo **pList)
 /* Traverse recursively updating hash with type of each field. */
 {
 struct tagStanza *stanza;
@@ -148,24 +152,166 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	     {
 	     tti = tagTypeInfoNew(tag);
 	     hashAdd(hash, tag, tti);
-	     slAddHead(&gTtiList, tti);
+	     slAddHead(pList, tti);
 	     }
 	tagTypeInfoAdd(tti, val);
 	}
     if (stanza->children)
-        rInfer(stanza->children, hash);
+        rInfer(stanza->children, hash, pList);
     }
 }
 
-struct hash *tagStanzaInferType(struct tagStorm *tags)
+void tagStormInferTypeInfo(struct tagStorm *tags, 
+    struct tagTypeInfo **retList, struct hash **retHash)
 /* Go through every tag/value in storm and return a hash that is
- * keyed by tag and has one of three string values:
- *     "int", "float", "string"
- * depending on the values seen at a field. */
+ * keyed by tag and a tagTypeInfo as a value */
 {
 struct hash *hash = hashNew(0);
-rInfer(tags->forest, hash);
-return hash;
+struct tagTypeInfo *list = NULL;
+rInfer(tags->forest, hash, &list);
+slSort(&list, tagTypeInfoCmpName);
+*retList = list;
+*retHash = hash;
+}
+
+char *tagMysqlCreateString(char *tableName, struct tagTypeInfo *ttiList, struct hash *ttiHash,
+    char **keyFields, int keyFieldCount)
+/* Make a mysql create string out of ttiList/ttiHash, which is gotten from
+ * tagStormInferTypeInfo */
+{
+struct dyString *query = dyStringNew(0);
+sqlDyStringPrintf(query, "CREATE TABLE %s (", tableName);
+char *connector = "";
+int totalFieldWidth = 0;
+struct tagTypeInfo *tti;
+for (tti = ttiList; tti != NULL; tti = tti->next)
+    {
+    int fieldWidth = 0;
+    char *sqlType = NULL;
+    char sqlTypeBuf[256];
+    if (!isSymbolString(tti->name))
+        errAbort("Error - database needs work. Somehow symbol %s got in field list\n", tti->name);
+    if (tti->isUnsigned)
+	{
+	long long maxTinyUnsigned = (1<<8)-1;    // Fits in one byte
+	long long maxSmallUnsigned = (1<<16)-1;  // Fits in two bytes
+	long long maxMediumUnsigned = (1<<24)-1; // Fits in three bytes
+	long long maxIntUnsigned = (1LL<<32)-1;  // Fits in four bytes
+
+	if (tti->maxIntVal <= maxTinyUnsigned)
+	    {
+	    sqlType = "tinyint unsigned";
+	    fieldWidth = 1;
+	    }
+	else if (tti->maxIntVal <= maxSmallUnsigned)
+	    {
+	    sqlType = "smallint unsigned";
+	    fieldWidth = 2;
+	    }
+	else if (tti->maxIntVal <= maxMediumUnsigned)
+	    {
+	    sqlType = "mediumint unsigned";
+	    fieldWidth = 3;
+	    }
+	else if (tti->maxIntVal <= maxIntUnsigned)
+	    {
+	    sqlType = "int unsigned";
+	    fieldWidth = 4;
+	    }
+	else 
+	    {
+	    sqlType = "bigint unsigned";
+	    fieldWidth = 8;
+	    }
+	}
+    else if (tti->isInt)
+        {
+	long long minTinyInt = -128, maxTinyInt = 127;  // Fits in one byte
+	long long minSmallInt = -32768, maxSmallInt = 32767; // Fits in two bytes
+	long long minMediumInt = -8388608, maxMediumInt = 8388607;  // Fits in three bytes
+	long long minInt = -2147483648LL, maxInt = 2147483647LL; // Fits in three bytes
+	if (tti->minIntVal >= minTinyInt  && tti->maxIntVal <= maxTinyInt)
+	    {
+	    sqlType = "tinyint";
+	    fieldWidth = 1;
+	    }
+	else if (tti->minIntVal >= minSmallInt  && tti->maxIntVal <= maxSmallInt)
+	    {
+	    sqlType = "smallint";
+	    fieldWidth = 2;
+	    }
+	else if (tti->minIntVal >= minMediumInt  && tti->maxIntVal <= maxMediumInt)
+	    {
+	    sqlType = "mediumint";
+	    fieldWidth = 3;
+	    }
+	else if (tti->minIntVal >= minInt  && tti->maxIntVal <= maxInt)
+	    {
+	    sqlType = "int";
+	    fieldWidth = 4;
+	    }
+	else
+	    {
+	    sqlType = "bigint";
+	    fieldWidth = 8;
+	    }
+	}
+    else if (tti->isNum)
+        {
+	sqlType = "double";
+	fieldWidth = 8;
+	}
+    else
+        {
+	if (tti->maxChars <= 255)
+	    {
+	    safef(sqlTypeBuf, sizeof(sqlTypeBuf), "varchar(%d)", tti->maxChars);
+	    sqlType = sqlTypeBuf;
+	    fieldWidth = tti->maxChars + 1;
+	    }
+	else
+	    {
+	    sqlType = "longblob";
+	    fieldWidth = 12;   // May be 9-12, not sure how to tell.
+	    }
+	}
+    totalFieldWidth += fieldWidth;
+    dyStringPrintf(query, "\n%s%s %s", connector, tti->name, sqlType);
+    connector = ", ";
+    }
+
+/* Check that we don't overflow a MySQL MYISAM buffer */
+int myisamLimit = 65535;
+verbose(2, "totalFieldWidth = %d, limit %d\n", totalFieldWidth, myisamLimit);
+if (totalFieldWidth > myisamLimit)   // MYISAM limit
+    {
+    errAbort("Looks like we are going to have to switch to INNODB for the %s table, rats!",
+	tableName);
+    }
+
+
+int i;
+for (i=0; i<keyFieldCount; ++i)
+    {
+    char *key = keyFields[i];
+    struct tagTypeInfo *tti = hashFindVal(ttiHash, key);
+    if (tti != NULL)
+        {
+	if (tti->isNum)
+	    {
+	    dyStringPrintf(query, "%sINDEX(%s)", connector, key);
+	    }
+	else
+	    {
+	    int indexSize = tti->maxChars;
+	    if (indexSize > 16)
+	        indexSize = 16;
+	    dyStringPrintf(query, "%sINDEX(%s(%d))", connector, key, indexSize);
+	    }
+	}
+    }
+dyStringPrintf(query, ")");
+return dyStringCannibalize(&query);
 }
 
 void removeUnusedMetaTags(struct sqlConnection *conn)
@@ -212,127 +358,20 @@ void cdwMakeFileTags(char *database, char *table)
 struct sqlConnection *conn = cdwConnect(database);
 removeUnusedMetaTags(conn);
 
+/* Get tagStorm and make sure that all tags are unique in case insensitive way */
 struct tagStorm *tags = cdwTagStorm(conn);
-struct slName *field, *fieldList = tagStormFieldList(tags);
+struct slName *fieldList = tagStormFieldList(tags);
 ensureNamesCaseUnique(fieldList);
 
-slSort(&fieldList, slNameCmpCase);
-struct hash *fieldHash = tagStormFieldHash(tags);
-
-/* Build up hash of column types */
-struct hash *tagTypeHash = tagStanzaInferType(tags);
-
-struct dyString *query = dyStringNew(0);
-sqlDyStringPrintf(query, "CREATE TABLE %s (", table);
-char *connector = "";
-int totalFieldWidth = 0;
-for (field = fieldList; field != NULL; field = field->next)
-    {
-    char *sqlType = NULL;
-    char sqlTypeBuf[256];
-    struct tagTypeInfo *tti = hashFindVal(tagTypeHash, field->name);
-    assert(tti != NULL);
-    if (!isSymbolString(field->name))
-        errAbort("Error - database needs work. Somehow symbol %s got in field list\n", field->name);
-    if (tti->isUnsigned)
-	{
-	long long maxTinyUnsigned = (1<<8)-1;    // Fits in one byte
-	long long maxSmallUnsigned = (1<<16)-1;  // Fits in two bytes
-	long long maxMediumUnsigned = (1<<24)-1; // Fits in three bytes
-	long long maxIntUnsigned = (1LL<<32)-1;  // Fits in four bytes
-
-	if (tti->maxIntVal <= maxTinyUnsigned)
-	    {
-	    sqlType = "tinyint unsigned";
-	    totalFieldWidth += 1;
-	    }
-	else if (tti->maxIntVal <= maxSmallUnsigned)
-	    {
-	    sqlType = "smallint unsigned";
-	    totalFieldWidth += 2;
-	    }
-	else if (tti->maxIntVal <= maxMediumUnsigned)
-	    {
-	    sqlType = "mediumint unsigned";
-	    totalFieldWidth += 3;
-	    }
-	else if (tti->maxIntVal <= maxIntUnsigned)
-	    {
-	    sqlType = "int unsigned";
-	    totalFieldWidth += 4;
-	    }
-	else 
-	    {
-	    sqlType = "bigint unsigned";
-	    totalFieldWidth += 8;
-	    }
-	}
-    else if (tti->isInt)
-        {
-	long long minTinyInt = -128, maxTinyInt = 127;  // Fits in one byte
-	long long minSmallInt = -32768, maxSmallInt = 32767; // Fits in two bytes
-	long long minMediumInt = -8388608, maxMediumInt = 8388607;  // Fits in three bytes
-	long long minInt = -2147483648LL, maxInt = 2147483647LL; // Fits in three bytes
-	if (tti->minIntVal >= minTinyInt  && tti->maxIntVal <= maxTinyInt)
-	    {
-	    sqlType = "tinyint";
-	    totalFieldWidth += 1;
-	    }
-	else if (tti->minIntVal >= minSmallInt  && tti->maxIntVal <= maxSmallInt)
-	    {
-	    sqlType = "smallint";
-	    totalFieldWidth += 2;
-	    }
-	else if (tti->minIntVal >= minMediumInt  && tti->maxIntVal <= maxMediumInt)
-	    {
-	    sqlType = "mediumint";
-	    totalFieldWidth += 3;
-	    }
-	else if (tti->minIntVal >= minInt  && tti->maxIntVal <= maxInt)
-	    {
-	    sqlType = "int";
-	    totalFieldWidth += 4;
-	    }
-	else
-	    {
-	    sqlType = "bigint";
-	    totalFieldWidth += 8;
-	    }
-	}
-    else if (tti->isNum)
-        {
-	sqlType = "double";
-	totalFieldWidth += 8;
-	}
-    else
-        {
-	if (tti->maxChars <= 255)
-	    {
-	    safef(sqlTypeBuf, sizeof(sqlTypeBuf), "varchar(%d)", tti->maxChars);
-	    sqlType = sqlTypeBuf;
-	    totalFieldWidth += tti->maxChars + 1;
-	    }
-	else
-	    {
-	    sqlType = "longblob";
-	    totalFieldWidth += 12;   // May be 9-12, not sure how to tell.
-	    }
-	}
-    tti->sqlType = cloneString(sqlType);
-    dyStringPrintf(query, "\n%s%s %s", connector, field->name, sqlType);
-    connector = ", ";
-    }
-
-int myisamLimit = 65535;
-verbose(2, "totalFieldWidth = %d, limit %d\n", totalFieldWidth, myisamLimit);
-if (totalFieldWidth > myisamLimit)   // MYISAM limit
-    {
-    errAbort("Looks like we are going to have to switch to INNODB for the cdwFileTags table, rats!");
-    }
+/* Build up list and hash of column types */
+struct tagTypeInfo *ttiList = NULL;
+struct hash *ttiHash = NULL;
+tagStormInferTypeInfo(tags, &ttiList, &ttiHash);
 char *dumpName = optionVal("types", NULL);
 if (dumpName != NULL)
-    tagTypeInfoDump(gTtiList, dumpName);
+    tagTypeInfoDump(ttiList, dumpName);
 
+/* Create SQL table with key fields indexed */
 static char *keyFields[] =  {
     "accession",
     "data_set_id",
@@ -347,41 +386,21 @@ static char *keyFields[] =  {
     "submit_dir",
     "species",
 };
+char *createString = tagMysqlCreateString(table, ttiList, ttiHash, keyFields, ArraySize(keyFields));
+verbose(2, "%s\n", createString);
+sqlRemakeTable(conn, table, createString);
 
-int i;
-for (i=0; i<ArraySize(keyFields); ++i)
-    {
-    char *key = keyFields[i];
-    if (hashLookup(fieldHash, key))
-        {
-	struct tagTypeInfo *tti = hashFindVal(tagTypeHash, key);
-	assert(tti != NULL);
-	if (tti->isNum)
-	    {
-	    dyStringPrintf(query, "%sINDEX(%s)", connector, key);
-	    }
-	else
-	    {
-	    int indexSize = tti->maxChars;
-	    if (indexSize > 16)
-	        indexSize = 16;
-	    dyStringPrintf(query, "%sINDEX(%s(%d))", connector, key, indexSize);
-	    }
-	}
-    }
-dyStringPrintf(query, ")");
-verbose(2, "%s\n", query->string);
-sqlRemakeTable(conn, table, query->string);
-
+/* Do insert statements for each accessioned file in the system */
 struct slRef *stanzaList = tagStanzasMatchingQuery(tags, "select * from files where accession");
 struct slRef *stanzaRef;
+struct dyString *query = dyStringNew(0);
 for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     {
     dyStringClear(query);
     sqlDyStringPrintf(query, "insert %s (", table);
     struct tagStanza *stanza = stanzaRef->val;
     struct slPair *tag, *tagList = tagListIncludingParents(stanza);
-    connector = "";
+    char *connector = "";
     for (tag = tagList; tag != NULL; tag = tag->next)
         {
 	dyStringPrintf(query, "%s%s", connector, tag->name);
