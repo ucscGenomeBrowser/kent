@@ -44,8 +44,8 @@ endif
 
 echo
 if ($ip == "all") then
-  bottleneck -host=$bottleHost list | egrep "current"
-  bottleneck -host=$bottleHost list | grep -w -v "0" \
+  ssh qateam@hgwbeta bottleneck -host=$bottleHost list | egrep "current"
+  ssh qateam@hgwbeta bottleneck -host=$bottleHost list | grep -w -v "0" \
      | grep -v "current" | sort -nr -k5 > ipFile$$
   set allIPs=`cat ipFile$$ | awk '{print $1}'`
   cat ipFile$$
@@ -61,7 +61,6 @@ if ($ip == "all") then
   end
 else
   ssh qateam@hgwbeta bottleneck -host=$bottleHost list | egrep -w "$ip|current"
-  exit
 endif
 echo 
 
