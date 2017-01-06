@@ -25,8 +25,8 @@ errAbort(
   "    $ - string\n"
   "Integer and floating point types may be followed by the min and max allowed vals if desired\n"
   "String types may be followed by a space-separated list of allowed values.  If the values\n"
-  "themselves have spaces, they should be quoted.  Values may include * and ? wildcards\n"
-  "The tag names can also include wildcards\n"
+  "themselves have spaces, they should be quoted.  Values may include * and ? wildcards.\n"
+  "The tag names can also include wildcards.\n"
   "options:\n"
   "   -maxErr=N - maximum number of errors to report, defaults to %d\n"
   , clMaxErr);
