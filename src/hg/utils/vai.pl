@@ -27,7 +27,7 @@ my $debug = '';
 my %optionConfig = ('hgVai=s' => \$hgVai,
                     'position=s' => \$position,
                     'rsId' => \$rsId,
-                    'udcCache' => \$udcCache,
+                    'udcCache=s' => \$udcCache,
                     'dry-run|n|debug' => \$debug,
                     'help|h' => sub { usage(0) },
                    );
