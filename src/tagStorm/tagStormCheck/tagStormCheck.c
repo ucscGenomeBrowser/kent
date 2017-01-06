@@ -49,6 +49,21 @@ struct tagSchema
     struct slName *allowedVals;  // Allowed values for string types
     };
 
+char *nextWordOrString(char **pLine)
+/* Return next word unless it begins with quotes.  Othewise return chunk of text between quotes. */
+{
+char *val = nextWordRespectingQuotes(pLine);
+if (val == NULL)
+    return NULL;
+char c = val[0];
+if (c == '"' || c == '\'')
+    {
+    val += 1;
+    trimLastChar(val);
+    }
+return val;
+}
+
 struct tagSchema *tagSchemaFromFile(char *fileName)
 /* Read in a tagSchema file */
 {
@@ -88,14 +103,9 @@ while (lineFileNextReal(lf, &line))
     else if (type == '$')
         {
 	char *val;
-	while ((val = nextWordRespectingQuotes(&line)) != NULL)
+
+	while ((val = nextWordOrString(&line)) != NULL)
 	    {
-	    char c = val[0];
-	    if (c == '"' || c == '\'')
-	        {
-		val += 1;
-		trimLastChar(val);
-		}
 	    slNameAddHead(&schema->allowedVals, val);
 	    }
 	slReverse(&schema->allowedVals);
@@ -129,9 +139,12 @@ void tagStormCheck(char *schemaFile, char *tagStormFile)
 struct tagSchema *schema, *next, *schemaList = tagSchemaFromFile(schemaFile);
 struct tagSchema *wildSchemaList = NULL;
 
+/* Split up schemaList into hash and wildSchemaList.  Calculate schemaSize */
 struct hash *hash = hashNew(0);
+int schemaSize = 0;
 for (schema = schemaList; schema != NULL; schema = next)
     {
+    ++schemaSize;
     next = schema->next;
     if (anyWild(schema->name))
         slAddHead(&wildSchemaList, schema);
@@ -208,7 +221,8 @@ while (lineFileNextReal(lf, &line))
 if (gErrCount > 0)
     noWarnAbort();
 else
-    verbose(1, "No problems detected.\n");
+    verbose(1, "No problems detected in %d tag types in %d lines of %s.\n", 
+	schemaSize, lf->lineIx, lf->fileName);
 }
 
 int main(int argc, char *argv[])
