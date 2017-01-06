@@ -161,26 +161,33 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
-void tagStormInferTypeInfo(struct tagStorm *tags, 
+void tagStormInferTypeInfo(struct tagStorm *tagStorm, 
     struct tagTypeInfo **retList, struct hash **retHash)
 /* Go through every tag/value in storm and return a hash that is
  * keyed by tag and a tagTypeInfo as a value */
 {
 struct hash *hash = hashNew(0);
 struct tagTypeInfo *list = NULL;
-rInfer(tags->forest, hash, &list);
+rInfer(tagStorm->forest, hash, &list);
 slSort(&list, tagTypeInfoCmpName);
 *retList = list;
 *retHash = hash;
 }
 
-char *tagMysqlCreateString(char *tableName, struct tagTypeInfo *ttiList, struct hash *ttiHash,
-    char **keyFields, int keyFieldCount)
+void tagStormToSqlCreate(struct tagStorm *tagStorm,
+    char *tableName, struct tagTypeInfo *ttiList, struct hash *ttiHash,
+    char **keyFields, int keyFieldCount, struct dyString *createString)
 /* Make a mysql create string out of ttiList/ttiHash, which is gotten from
- * tagStormInferTypeInfo */
+ * tagStormInferTypeInfo.  Result is in createString */
 {
-struct dyString *query = dyStringNew(0);
-sqlDyStringPrintf(query, "CREATE TABLE %s (", tableName);
+/* Make sure that don't get a name collision in SQL, which is case insensitive in field
+ * names. */
+struct slName *fieldList = tagStormFieldList(tagStorm);
+ensureNamesCaseUnique(fieldList);
+slFreeList(&fieldList);
+
+/* Construct create table statement using minimal types */
+sqlDyStringPrintf(createString, "CREATE TABLE %s (", tableName);
 char *connector = "";
 int totalFieldWidth = 0;
 struct tagTypeInfo *tti;
@@ -276,7 +283,7 @@ for (tti = ttiList; tti != NULL; tti = tti->next)
 	    }
 	}
     totalFieldWidth += fieldWidth;
-    dyStringPrintf(query, "\n%s%s %s", connector, tti->name, sqlType);
+    dyStringPrintf(createString, "\n%s%s %s", connector, tti->name, sqlType);
     connector = ", ";
     }
 
@@ -289,7 +296,7 @@ if (totalFieldWidth > myisamLimit)   // MYISAM limit
 	tableName);
     }
 
-
+/* Add in the indexes. */
 int i;
 for (i=0; i<keyFieldCount; ++i)
     {
@@ -299,19 +306,20 @@ for (i=0; i<keyFieldCount; ++i)
         {
 	if (tti->isNum)
 	    {
-	    dyStringPrintf(query, "%sINDEX(%s)", connector, key);
+	    dyStringPrintf(createString, "%sINDEX(%s)", connector, key);
 	    }
 	else
 	    {
 	    int indexSize = tti->maxChars;
 	    if (indexSize > 16)
 	        indexSize = 16;
-	    dyStringPrintf(query, "%sINDEX(%s(%d))", connector, key, indexSize);
+	    dyStringPrintf(createString, "%sINDEX(%s(%d))", connector, key, indexSize);
 	    }
 	}
     }
-dyStringPrintf(query, ")");
-return dyStringCannibalize(&query);
+
+/* Close up and return result */
+dyStringPrintf(createString, ")");
 }
 
 void removeUnusedMetaTags(struct sqlConnection *conn)
@@ -352,6 +360,31 @@ if (deleteAny)
 dyStringFree(&dy);
 }
 
+void tagStanzaToSqlInsert(struct tagStanza *stanza, char *table, struct dyString *dy)
+/* Put SQL insert statement for stanza into dy. Any previous contents of dy are overwritten. */
+{
+dyStringClear(dy);
+sqlDyStringPrintf(dy, "insert %s (", table);
+struct slPair *tag, *tagList = tagListIncludingParents(stanza);
+char *connector = "";
+for (tag = tagList; tag != NULL; tag = tag->next)
+    {
+    dyStringPrintf(dy, "%s%s", connector, tag->name);
+    connector = ",";
+    }
+dyStringPrintf(dy, ") values (");
+connector = "";
+for (tag = tagList; tag != NULL; tag = tag->next)
+    {
+    char *escaped = makeEscapedString(tag->val, '"');
+    dyStringPrintf(dy, "%s\"%s\"", connector, escaped);
+    freeMem(escaped);
+    connector = ",";
+    }
+dyStringPrintf(dy, ")");
+slPairFreeList(&tagList);
+}
+
 void cdwMakeFileTags(char *database, char *table)
 /* cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.. */
 {
@@ -359,14 +392,12 @@ struct sqlConnection *conn = cdwConnect(database);
 removeUnusedMetaTags(conn);
 
 /* Get tagStorm and make sure that all tags are unique in case insensitive way */
-struct tagStorm *tags = cdwTagStorm(conn);
-struct slName *fieldList = tagStormFieldList(tags);
-ensureNamesCaseUnique(fieldList);
+struct tagStorm *tagStorm = cdwTagStorm(conn);
 
 /* Build up list and hash of column types */
 struct tagTypeInfo *ttiList = NULL;
 struct hash *ttiHash = NULL;
-tagStormInferTypeInfo(tags, &ttiList, &ttiHash);
+tagStormInferTypeInfo(tagStorm, &ttiList, &ttiHash);
 char *dumpName = optionVal("types", NULL);
 if (dumpName != NULL)
     tagTypeInfoDump(ttiList, dumpName);
@@ -386,36 +417,20 @@ static char *keyFields[] =  {
     "submit_dir",
     "species",
 };
-char *createString = tagMysqlCreateString(table, ttiList, ttiHash, keyFields, ArraySize(keyFields));
-verbose(2, "%s\n", createString);
-sqlRemakeTable(conn, table, createString);
+
+struct dyString *query = dyStringNew(0);
+tagStormToSqlCreate(tagStorm, table, ttiList, ttiHash, 
+    keyFields, ArraySize(keyFields), query);
+verbose(2, "%s\n", query->string);
+sqlRemakeTable(conn, table, query->string);
 
 /* Do insert statements for each accessioned file in the system */
-struct slRef *stanzaList = tagStanzasMatchingQuery(tags, "select * from files where accession");
+struct slRef *stanzaList = tagStanzasMatchingQuery(tagStorm, "select * from files where accession");
 struct slRef *stanzaRef;
-struct dyString *query = dyStringNew(0);
 for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     {
-    dyStringClear(query);
-    sqlDyStringPrintf(query, "insert %s (", table);
     struct tagStanza *stanza = stanzaRef->val;
-    struct slPair *tag, *tagList = tagListIncludingParents(stanza);
-    char *connector = "";
-    for (tag = tagList; tag != NULL; tag = tag->next)
-        {
-	dyStringPrintf(query, "%s%s", connector, tag->name);
-	connector = ",";
-	}
-    dyStringPrintf(query, ") values (");
-    connector = "";
-    for (tag = tagList; tag != NULL; tag = tag->next)
-        {
-	char *escaped = makeEscapedString(tag->val, '"');
-	dyStringPrintf(query, "%s\"%s\"", connector, escaped);
-	freeMem(escaped);
-	connector = ",";
-	}
-    dyStringPrintf(query, ")");
+    tagStanzaToSqlInsert(stanza, table, query);
     sqlUpdate(conn, query->string);
     }
 dyStringFree(&query);
