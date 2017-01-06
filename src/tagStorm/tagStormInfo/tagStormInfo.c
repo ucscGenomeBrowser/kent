@@ -7,10 +7,15 @@
 #include "tagStorm.h"
 #include "tagToSql.h"
 
+/* Global vars. */
+boolean anySchema;
+
 /* Command line variables. */
 boolean clCounts;
 int clVals = 0;	
 boolean clSchema = FALSE;
+boolean clLooseSchema = FALSE;
+boolean clTightSchema = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -22,7 +27,9 @@ errAbort(
   "options:\n"
   "   -counts - if set output names, use counts, and value counts of each tag\n"
   "   -vals=N - display tags and the top N values for them\n"
-  "   -schema - put a schema that will fit this tag storm in output.txt\n"
+  "   -schema=N - put a schema that will fit this tag storm in output.txt\n"
+  "   -looseSchema=N - put a less fussy schema instead\n"
+  "   -tightSchema=N - put a more fussy schema instead\n"
   );
 }
 
@@ -31,6 +38,8 @@ static struct optionSpec options[] = {
    {"counts", OPTION_BOOLEAN},
    {"vals", OPTION_INT},
    {"schema", OPTION_BOOLEAN},
+   {"tightSchema", OPTION_BOOLEAN},
+   {"looseSchema", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -124,12 +133,12 @@ long stanzaCount = 0, tagCount = 0, expandedTagCount = 0;
 rFillInStats(tags->forest, 0, tagHash, &stanzaCount, &tagCount, &expandedTagCount);
 
 /* Do we do something fancy? */
-if (clCounts || clVals > 0 || clSchema)
+if (clCounts || clVals > 0 || anySchema)
     {
     /* Set up type inference if doing schema */
     struct tagTypeInfo *ttiList = NULL;
     struct hash *ttiHash = NULL;
-    if (clSchema)
+    if (anySchema)
         tagStormInferTypeInfo(tags, &ttiList, &ttiHash);
         
     struct hashEl *el, *list = hashElListHash(tagHash);
@@ -156,47 +165,67 @@ if (clCounts || clVals > 0 || clSchema)
 	        printf("   %d\t(in %d others)\n", otherCount, slCount(valEl));
 	    slFreeList(&valList);
 	    }
-	else if (clSchema)
+	else if (anySchema)
 	    {
 	    struct tagTypeInfo *tti = hashMustFindVal(ttiHash, tagInfo->tagName);
 	    struct hashEl *valEl, *valList = hashElListHash(valHash);
 	    printf("%s ", tagInfo->tagName);
 	    if (tti->isNum)
 	        {
+		double minVal = tti->minVal, maxVal = tti->maxVal;
 		if (tti->isInt)
 		     putchar('#');
 		else 
 		     putchar('%');
-		printf(" %g %g", roundedMin(tti->minVal), roundedMax(tti->maxVal));
+		if (!clLooseSchema)
+		    {
+		    if (!clTightSchema)
+			{
+			minVal = roundedMin(minVal);
+			maxVal = roundedMax(maxVal);
+			}
+		    printf(" %g %g", minVal, maxVal);
+		    }
 		}
 	    else  /* Not numerical */
 	        {
-		int useCount = tagInfo->useCount;
-		int distinctCount = valHash->elCount;
-		double repeatRatio = (double)useCount/distinctCount;
-
 		/* Decide by a heuristic whether to make it an enum or not */
 		putchar('$');
-		if (useCount >= 8 && distinctCount <= 10 
-		    && distinctCount > 1 && repeatRatio >= 4.0)
+		if (!clLooseSchema)
 		    {
-		    slSort(&valList, hashElCmp);
-		    for (valEl = valList; valEl != NULL; valEl = valEl->next)
-		        {
-			char *val = valEl->name;
-			if (hasWhiteSpace(val))
-			    {
-			    char *quotedVal = makeQuotedString(val, '"');
-			    printf(" %s", quotedVal);
-			    freeMem(quotedVal);
-			    }
-			else
-			    printf(" %s", val);
+		    int useCount = tagInfo->useCount;
+		    int distinctCount = valHash->elCount;
+		    double repeatRatio = (double)useCount/distinctCount;
+		    int useFloor = 8, distinctCeiling = 10, distinctFloor = 1;
+		    double repeatFloor = 4.0;
+
+		    if (clTightSchema)
+			{
+			useFloor = 0;
+			repeatFloor = 0.0;
+			distinctFloor = 0;
 			}
-		    }
-		else
-		    {
-		    printf(" *");
+		    if (useCount >= useFloor && distinctCount <= distinctCeiling 
+			&& distinctCount > distinctFloor && repeatRatio >= repeatFloor)
+			{
+			slSort(&valList, hashElCmp);
+			for (valEl = valList; valEl != NULL; valEl = valEl->next)
+			    {
+			    char *val = valEl->name;
+			    if (hasWhiteSpace(val))
+				{
+				char *quotedVal = makeQuotedString(val, '"');
+				printf(" %s", quotedVal);
+				freeMem(quotedVal);
+				}
+			    else
+				printf(" %s", val);
+			    }
+			}
+		    else
+			{
+			printf(" *");
+			}
 		    }
 		}
 	    printf("\n");
@@ -236,6 +265,9 @@ if (argc != 2)
 clCounts = optionExists("counts");
 clVals = optionInt("vals", clVals);
 clSchema = optionExists("schema");
+clLooseSchema = optionExists("looseSchema");
+clTightSchema = optionExists("tightSchema");
+anySchema = (clSchema || clLooseSchema || clTightSchema);
 tagStormInfo(argv[1]);
 return 0;
 }
