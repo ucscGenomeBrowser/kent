@@ -750,6 +750,15 @@ char *hScientificName(char *database);
 /* Return NULL if unknown database */
 /* NOTE: must free returned string after use */
 
+char *hOrgShortName(char *org);
+/* Get the short name for an organism.  Returns NULL if org is NULL.
+ * WARNING: static return */
+
+char *hOrgShortForDb(char *db);
+/* look up the short organism scientific name given an organism db.
+ * WARNING: static return */
+
+
 char *hHtmlPath(char *database);
 /* Return /gbdb path name to html description for this database */
 /* Return NULL if unknown database */
