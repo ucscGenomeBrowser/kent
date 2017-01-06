@@ -7,8 +7,7 @@ donor # 0 0
 file $ *
 format $ bam fastq "tag storm"
 lab $ *
-lab_kent_disassociation_protocol $ *
-lab_kent_quality % 0 1
+lab_*_* $ *
 life_stage $ *
 map_ratio % 0 1
 organ $ brain liver
