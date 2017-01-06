@@ -16,6 +16,8 @@ struct tagTypeInfo *tti;
 AllocVar(tti);
 tti->name = cloneString(name);
 tti->isUnsigned = tti->isInt = tti->isNum = TRUE;
+tti->minVal = BIGDOUBLE;
+tti->maxVal = -BIGDOUBLE;
 return tti;
 }
 
@@ -43,9 +45,9 @@ FILE *f = mustOpen(fileName, "w");
 struct tagTypeInfo *tti;
 for (tti = list; tti != NULL; tti = tti->next)
     {
-    fprintf(f, "%s\tu=%s, i=%s, n=%s, min=%lld, max=%lld, chars=%d\n", 
+    fprintf(f, "%s\tu=%s, i=%s, n=%s, min=%g, max=%g, chars=%d\n", 
 	tti->name, tfForInt(tti->isUnsigned), tfForInt(tti->isInt), tfForInt(tti->isNum), 
-	tti->minIntVal, tti->maxIntVal, tti->maxChars);
+	tti->minVal, tti->maxVal, tti->maxChars);
     }
 carefulClose(&f);
 }
@@ -58,14 +60,25 @@ if (len > tti->maxChars)
      tti->maxChars = len;
 if (!tti->isNum)
     return;
+
+/* Convert to a double and check that it really is a double */
+char *end = NULL;
+double v = strtod(val, &end);
+if (end == val || *end != 0)	// val is not just a floating point number
+    {
+    tti->maxVal = tti->minVal = 0.0;
+    tti->isUnsigned = tti->isInt = tti->isNum = FALSE;
+    return;
+    }
+
+/* Update min and max */
+if (v > tti->maxVal) tti->maxVal = v;
+if (v < tti->minVal) tti->minVal = v;
+
 if (tti->isUnsigned)
     {
     if (isAllDigits(val))
-	{
-	long long v = sqlLongLong(val);
-	if (v > tti->maxIntVal) tti->maxIntVal = v;
 	return;
-	}
     else
 	tti->isUnsigned = FALSE;
     }
@@ -74,28 +87,18 @@ if (tti->isInt)
     if (val[0] == '-')
 	{
 	if (isAllDigits(val+1))
-	    {
-	    long long v = sqlLongLong(val);
-	    if (v < tti->minIntVal) tti->minIntVal = v;
 	    return;
-	    }
 	else
 	    tti->isInt = FALSE;
 	}
     else
 	{
 	if (isAllDigits(val))
-	    {
-	    long long v = sqlLongLong(val);
-	    if (v > tti->maxIntVal) tti->maxIntVal = v;
 	    return;
-	    }
 	else
 	    tti->isInt = FALSE;
 	}
     }
-if (!isNumericString(val))
-    tti->isNum = FALSE;
 }
 
 static void rInfer(struct tagStanza *list, struct hash *hash, struct tagTypeInfo **pList)
@@ -167,22 +170,22 @@ for (tti = ttiList; tti != NULL; tti = tti->next)
 	long long maxMediumUnsigned = (1<<24)-1; // Fits in three bytes
 	long long maxIntUnsigned = (1LL<<32)-1;  // Fits in four bytes
 
-	if (tti->maxIntVal <= maxTinyUnsigned)
+	if (tti->maxVal <= maxTinyUnsigned)
 	    {
 	    sqlType = "tinyint unsigned";
 	    fieldWidth = 1;
 	    }
-	else if (tti->maxIntVal <= maxSmallUnsigned)
+	else if (tti->maxVal <= maxSmallUnsigned)
 	    {
 	    sqlType = "smallint unsigned";
 	    fieldWidth = 2;
 	    }
-	else if (tti->maxIntVal <= maxMediumUnsigned)
+	else if (tti->maxVal <= maxMediumUnsigned)
 	    {
 	    sqlType = "mediumint unsigned";
 	    fieldWidth = 3;
 	    }
-	else if (tti->maxIntVal <= maxIntUnsigned)
+	else if (tti->maxVal <= maxIntUnsigned)
 	    {
 	    sqlType = "int unsigned";
 	    fieldWidth = 4;
@@ -199,22 +202,22 @@ for (tti = ttiList; tti != NULL; tti = tti->next)
 	long long minSmallInt = -32768, maxSmallInt = 32767; // Fits in two bytes
 	long long minMediumInt = -8388608, maxMediumInt = 8388607;  // Fits in three bytes
 	long long minInt = -2147483648LL, maxInt = 2147483647LL; // Fits in three bytes
-	if (tti->minIntVal >= minTinyInt  && tti->maxIntVal <= maxTinyInt)
+	if (tti->minVal >= minTinyInt  && tti->maxVal <= maxTinyInt)
 	    {
 	    sqlType = "tinyint";
 	    fieldWidth = 1;
 	    }
-	else if (tti->minIntVal >= minSmallInt  && tti->maxIntVal <= maxSmallInt)
+	else if (tti->minVal >= minSmallInt  && tti->maxVal <= maxSmallInt)
 	    {
 	    sqlType = "smallint";
 	    fieldWidth = 2;
 	    }
-	else if (tti->minIntVal >= minMediumInt  && tti->maxIntVal <= maxMediumInt)
+	else if (tti->minVal >= minMediumInt  && tti->maxVal <= maxMediumInt)
 	    {
 	    sqlType = "mediumint";
 	    fieldWidth = 3;
 	    }
-	else if (tti->minIntVal >= minInt  && tti->maxIntVal <= maxInt)
+	else if (tti->minVal >= minInt  && tti->maxVal <= maxInt)
 	    {
 	    sqlType = "int";
 	    fieldWidth = 4;

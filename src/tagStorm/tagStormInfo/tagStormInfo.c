@@ -5,9 +5,12 @@
 #include "obscure.h"
 #include "options.h"
 #include "tagStorm.h"
+#include "tagToSql.h"
 
-boolean doCounts;
-boolean gValCount = 0;	// Maximum number of values to output.  0 means none
+/* Command line variables. */
+boolean clCounts;
+int clVals = 0;	
+boolean clSchema = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -19,6 +22,7 @@ errAbort(
   "options:\n"
   "   -counts - if set output names, use counts, and value counts of each tag\n"
   "   -vals=N - display tags and the top N values for them\n"
+  "   -schema - put a schema that will fit this tag storm in output.txt\n"
   );
 }
 
@@ -26,6 +30,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"counts", OPTION_BOOLEAN},
    {"vals", OPTION_INT},
+   {"schema", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -84,6 +89,32 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
+double roundedMax(double val)
+/* Return number rounded up to nearest power of ten */
+{
+if (val <= 0.0)
+    return 0;
+double roundedVal = 1;
+for (;;)
+    {
+    if (val <= roundedVal)
+	break;
+    roundedVal *= 10;
+    }
+return roundedVal;
+}
+
+double roundedMin(double val)
+/* Return number that is 0, 1, or nearest negative power of 10 */
+{
+if (val < 0)
+    return -roundedMax(-val);
+if (val < 1.0)
+    return 0.0;
+else
+    return 1.0;
+}
+
 void tagStormInfo(char *inputTags)
 /* tagStormInfo - Get basic information on a tag storm. */
 {
@@ -91,22 +122,30 @@ struct tagStorm *tags = tagStormFromFile(inputTags);
 struct hash *tagHash = hashNew(0);
 long stanzaCount = 0, tagCount = 0, expandedTagCount = 0;
 rFillInStats(tags->forest, 0, tagHash, &stanzaCount, &tagCount, &expandedTagCount);
-if (doCounts || gValCount > 0)
+
+/* Do we do something fancy? */
+if (clCounts || clVals > 0 || clSchema)
     {
+    /* Set up type inference if doing schema */
+    struct tagTypeInfo *ttiList = NULL;
+    struct hash *ttiHash = NULL;
+    if (clSchema)
+        tagStormInferTypeInfo(tags, &ttiList, &ttiHash);
+        
     struct hashEl *el, *list = hashElListHash(tagHash);
     slSort(&list, hashElCmp);
     for (el = list; el != NULL; el = el->next)
         {
 	struct tagInfo *tagInfo = el->val;
 	struct hash *valHash = tagInfo->tagVals;
-	if (gValCount > 0)
+	if (clVals > 0)
 	    {
 	    struct hashEl *valEl, *valList = hashElListHash(valHash);
 	    printf("%s has %d uses with %d vals\n", tagInfo->tagName, tagInfo->useCount,
 		slCount(valList));
 	    slSort(&valList, hashElCmpIntValDesc);
 	    int soFar = 0, i;
-	    for (i=0, valEl = valList; i < gValCount && valEl != NULL; ++i, valEl = valEl->next)
+	    for (i=0, valEl = valList; i < clVals && valEl != NULL; ++i, valEl = valEl->next)
 	        {
 		int valCount = ptToInt(valEl->val);
 		soFar += valCount;
@@ -115,6 +154,52 @@ if (doCounts || gValCount > 0)
 	    int otherCount = tagInfo->useCount - soFar;
 	    if (otherCount > 0)
 	        printf("   %d\t(in %d others)\n", otherCount, slCount(valEl));
+	    slFreeList(&valList);
+	    }
+	else if (clSchema)
+	    {
+	    struct tagTypeInfo *tti = hashMustFindVal(ttiHash, tagInfo->tagName);
+	    struct hashEl *valEl, *valList = hashElListHash(valHash);
+	    printf("%s ", tagInfo->tagName);
+	    if (tti->isNum)
+	        {
+		if (tti->isInt)
+		     putchar('#');
+		else 
+		     putchar('%');
+		printf(" %g %g", roundedMin(tti->minVal), roundedMax(tti->maxVal));
+		}
+	    else  /* Not numerical */
+	        {
+		int useCount = tagInfo->useCount;
+		int distinctCount = valHash->elCount;
+		double repeatRatio = (double)useCount/distinctCount;
+
+		/* Decide by a heuristic whether to make it an enum or not */
+		putchar('$');
+		if (useCount >= 8 && distinctCount <= 10 
+		    && distinctCount > 1 && repeatRatio >= 4.0)
+		    {
+		    slSort(&valList, hashElCmp);
+		    for (valEl = valList; valEl != NULL; valEl = valEl->next)
+		        {
+			char *val = valEl->name;
+			if (hasWhiteSpace(val))
+			    {
+			    char *quotedVal = makeQuotedString(val, '"');
+			    printf(" %s", quotedVal);
+			    freeMem(quotedVal);
+			    }
+			else
+			    printf(" %s", val);
+			}
+		    }
+		else
+		    {
+		    printf(" *");
+		    }
+		}
+	    printf("\n");
 	    slFreeList(&valList);
 	    }
 	else
@@ -148,8 +233,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-doCounts = optionExists("counts");
-gValCount = optionInt("vals", gValCount);
+clCounts = optionExists("counts");
+clVals = optionInt("vals", clVals);
+clSchema = optionExists("schema");
 tagStormInfo(argv[1]);
 return 0;
 }

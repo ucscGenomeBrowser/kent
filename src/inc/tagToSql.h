@@ -16,8 +16,8 @@ struct tagTypeInfo
     boolean isUnsigned;	    /* True if an unsigned integer */
     boolean isInt;	    /* True if an integer */
     boolean isNum;	    /* True if a number (real or integer) */
-    long long maxIntVal;    /* Maximum value for integer or unsigned */
-    long long minIntVal;    /* Minimum value for integer */
+    double minVal;	    /* Min val */
+    double maxVal;	    /* Max val */
     int maxChars;	    /* Maximum width of string representation */
     };
 
