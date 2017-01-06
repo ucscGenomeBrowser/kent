@@ -14,7 +14,7 @@ set ip=""
 set chopIDs=""
 set worst=""
 set mode=""
-set bottleHost="rrnfs1"
+set bottleHost="hgnfs1"
 # host is specified in /usr/local/apache/cgi-bin/hg.conf (as bottleneck.host)
 
 if ($#argv < 1 || $#argv > 2 ) then
@@ -44,8 +44,8 @@ endif
 
 echo
 if ($ip == "all") then
-  bottleneck -host=$bottleHost list | egrep "current"
-  bottleneck -host=$bottleHost list | grep -w -v "0" \
+  ssh qateam@hgwbeta bottleneck -host=$bottleHost list | egrep "current"
+  ssh qateam@hgwbeta bottleneck -host=$bottleHost list | grep -w -v "0" \
      | grep -v "current" | sort -nr -k5 > ipFile$$
   set allIPs=`cat ipFile$$ | awk '{print $1}'`
   cat ipFile$$
@@ -60,7 +60,7 @@ if ($ip == "all") then
     echo "$address\t\t$current\t  $orgName"
   end
 else
-  bottleneck -host=$bottleHost list | egrep -w "$ip|current"
+  ssh qateam@hgwbeta bottleneck -host=$bottleHost list | egrep -w "$ip|current"
 endif
 echo 
 
