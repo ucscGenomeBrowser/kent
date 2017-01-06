@@ -66,7 +66,7 @@ struct tagStanza
 /** Read and write tag storms from/to files. */
 
 struct tagStorm *tagStormFromFile(char *fileName);
-/* Load up all tags from file.  */
+/* Load up all tags from file.  Use tagStormFree on result when done. */
 
 void tagStormFree(struct tagStorm **pTagStorm);
 /* Free up memory associated with tag storm */
@@ -82,7 +82,8 @@ void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idT
     boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal, boolean sharpLabel);
 /* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
 
-/** Index a tag storm */
+
+/** Index a tag storm and look up in an index. */
 
 struct hash *tagStormIndex(struct tagStorm *tagStorm, char *tag);
 /* Produce a hash of stanzas containing a tag keyed by tag value */
@@ -96,6 +97,12 @@ struct hash *tagStormIndexExtended(struct tagStorm *tagStorm, char *tag,
 /* Produce a hash of stanzas containing a tag keyed by tag value. 
  * If unique parameter is set then the tag values must all be unique
  * If inherit is set then tags set in parent stanzas will be considered too. */
+
+struct tagStanza *tagStanzaFindInHash(struct hash *hash, char *key);
+/* Find tag stanza that matches key in an index hash returned from tagStormUniqueIndex.
+ * Returns NULL if no such stanza in the hash.
+ * (Just a wrapper around hashFindVal.)  Do not free tagStanza that it returns. For
+ * multivalued indexes returned from tagStormIndex use hashLookup and hashLookupNext. */
 
 /** Stuff for constructing a tag storm a tag at a time rather than building it from file  */
 
@@ -179,7 +186,11 @@ struct tagStanza *tagStormQuery(struct tagStorm *tagStorm, char *fields, char *w
  * The field parameter is a comma separated list of fields that may include wildcards.  
  * For instance "*" will select all fields,  "a*,b*" will select all fields starting with 
  * an "a" or a "b." The where parameter is a Boolean expression similar to what could appear 
- * in a SQL where clause.  */
+ * in a SQL where clause.  Free up the result when you are done with tagStanzaFreeList. */
+
+void tagStanzaFreeList(struct tagStanza **pList);
+/* Free up tagStanza list from tagStormQuery. Don't try to free up stanzas from the
+ * tagStorm->forest with this though, as those are in a diffent, local, memory pool. */
 
 struct rqlStatement;  // Avoid having to include rql.h
 

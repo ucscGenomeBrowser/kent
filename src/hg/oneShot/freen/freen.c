@@ -36,6 +36,7 @@ for (result = resultList; result != NULL; result = result->next)
 	printf("%s %s\n", tag->name, (char *)tag->val);
     printf("\n");
     }
+tagStanzaFreeList(&resultList);
 }
 
 int main(int argc, char *argv[])

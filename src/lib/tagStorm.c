@@ -307,6 +307,15 @@ struct hash *tagStormUniqueIndex(struct tagStorm *tagStorm, char *tag)
 return tagStormIndexExtended(tagStorm, tag, TRUE, TRUE);
 }
 
+struct tagStanza *tagStanzaFindInHash(struct hash *hash, char *key)
+/* Find tag stanza that matches key in an index hash returned from tagStormUniqueIndex.
+ * Returns NULL if no such stanza in the hash.
+ * (Just a wrapper around hashFindVal.)  Do not free tagStanza that it returns. For
+ * multivalued indexes returned from tagStormIndex use hashLookup and hashLookupNext. */
+{
+return hashFindVal(hash, key);
+}
+
 static void rTsWrite(struct tagStanza *list, FILE *f, int maxDepth, int depth)
 /* Recursively write out list to file */
 {
@@ -806,6 +815,33 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	    }
 	}
     }
+}
+
+static void tagStanzaFree(struct tagStanza **pStanza)
+/* Free up memory associated with a tagStanza.  Use this judiciously because the
+ * stanzas inside of a tagStorm->forest or allocated with tagStanzaNew are allocated with 
+ * local memory, while this is assumes stanza is in regular memory. */
+{
+struct tagStanza *stanza;
+
+if ((stanza = *pStanza) != NULL)
+    {
+    slPairFreeList(&stanza->tagList);
+    freez(pStanza);
+    }
+}
+
+void tagStanzaFreeList(struct tagStanza **pList)
+/* Free up tagStanza list from tagStormQuery. Don't try to free up stanzas from the
+ * tagStorm->forest with this though, as those are in a diffent, local, memory pool. */
+{
+struct tagStanza *el, *next;
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    tagStanzaFree(&el);
+    }
+*pList = NULL;
 }
 
 struct tagStanza *tagStormQuery(struct tagStorm *tagStorm, char *fields, char *where)
