@@ -6556,7 +6556,14 @@ for (track = trackList; track != NULL; track = track->next)
     {
     char *s = cartOptionalString(cart, track->track);
     if (startsWith("hub_", track->track) && (s == NULL))
+        {
         s = cartOptionalString(cart, trackHubSkipHubName(track->track));
+        // if we got a generic visibility setting that applies to a hub,
+        // go ahead and set the hub specific visibility for future cart
+        // accesses
+        if (s != NULL)
+            cartSetString(cart, track->track, s);
+        }
     if (cgiOptionalString("hideTracks"))
 	{
         if (tdbIsSuperTrackChild(track->tdb))
@@ -6586,8 +6593,11 @@ for (track = trackList; track != NULL; track = track->next)
 	struct trackDb *parent = track->tdb->parent;
 	char *parentShow = NULL;
 	if (parent)
+            {
+            fprintf(stderr,"checking composite %s\n", parent->track);
 	    parentShow = cartUsualString(cart, parent->track,
 			 parent->isShow ? "show" : "hide");
+            }
 	if (!parent || sameString(parentShow, "show"))
 	    compositeTrackVis(track);
 	}
