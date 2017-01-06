@@ -6,7 +6,7 @@ L += -lm
 clean::
 	rm -fr test/out
 
-tests:
+test:
 	${MKDIR} test/out
 	rowsToCols test/in/spaced test/out/spaced
 	diff test/expected/spaced test/out/spaced
