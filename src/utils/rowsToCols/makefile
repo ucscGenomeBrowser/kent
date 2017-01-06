@@ -4,21 +4,21 @@ include $(kentSrc)/inc/userApp.mk
 L += -lm
 
 clean::
-	rm -fr test/out
+	rm -fr tests/out
 
-tests:
-	${MKDIR} test/out
-	rowsToCols test/in/spaced test/out/spaced
-	diff test/expected/spaced test/out/spaced
-	rowsToCols -varCol test/in/spacedVarious test/out/spacedVarious
-	diff test/expected/spacedVarious test/out/spacedVarious
-	rowsToCols -tab test/in/tab test/out/tab
-	diff test/expected/tab test/out/tab
-	rowsToCols -tab -varCol test/in/tabVarious test/out/tabVarious
-	diff test/expected/tabVarious test/out/tabVarious
-	rowsToCols -fs=, test/in/comma test/out/comma
-	diff test/expected/comma test/out/comma
-	rowsToCols -fs=, -varCol test/in/commaVarious test/out/commaVarious
-	diff test/expected/commaVarious test/out/commaVarious
-	rowsToCols -fixed test/in/fixed test/out/fixed
-	diff test/expected/fixed test/out/fixed
+test::
+	${MKDIR} tests/out
+	rowsToCols tests/in/spaced tests/out/spaced
+	diff tests/expected/spaced tests/out/spaced
+	rowsToCols -varCol tests/in/spacedVarious tests/out/spacedVarious
+	diff tests/expected/spacedVarious tests/out/spacedVarious
+	rowsToCols -tab tests/in/tab tests/out/tab
+	diff tests/expected/tab tests/out/tab
+	rowsToCols -tab -varCol tests/in/tabVarious tests/out/tabVarious
+	diff tests/expected/tabVarious tests/out/tabVarious
+	rowsToCols -fs=, tests/in/comma tests/out/comma
+	diff tests/expected/comma tests/out/comma
+	rowsToCols -fs=, -varCol tests/in/commaVarious tests/out/commaVarious
+	diff tests/expected/commaVarious tests/out/commaVarious
+	rowsToCols -fixed tests/in/fixed tests/out/fixed
+	diff tests/expected/fixed tests/out/fixed
