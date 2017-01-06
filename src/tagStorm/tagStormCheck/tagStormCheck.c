@@ -17,6 +17,16 @@ errAbort(
   "tagStormCheck - Check that a tagStorm conforms to a schema.\n"
   "usage:\n"
   "   tagStormCheck schema.txt tagStorm.txt\n"
+  "The format of schema.txt is one line per allowed tag, with blank lines and lines\n"
+  "starting with the # char treated as comments. Each line begins with the tag name\n"
+  "and is followed by a symbol to indicate the tag type, one of\n"
+  "    # - integer\n"
+  "    %% - floating point number\n"
+  "    $ - string\n"
+  "Integer and floating point types may be followed by the min and max allowed vals if desired\n"
+  "String types may be followed by a space-separated list of allowed values.  If the values\n"
+  "themselves have spaces, they should be quoted.  Values may include * and ? wildcards\n"
+  "The tag names can also include wildcards\n"
   "options:\n"
   "   -maxErr=N - maximum number of errors to report, defaults to %d\n"
   , clMaxErr);
@@ -103,16 +113,6 @@ slReverse(&list);
 return list;
 }
 
-struct hash *tagSchemaHashFromFile(char *fileName)
-/* Return hash full of tagSchemas keyed by name */
-{
-struct tagSchema *schema, *list = tagSchemaFromFile(fileName);
-struct hash *hash = hashNew(0);
-for (schema = list; schema != NULL; schema = schema->next)
-    hashAdd(hash, schema->name, schema);
-return hash;
-}
-
 void reportError(struct lineFile *lf, char *message, char *tag)
 /* Report error and abort if there are too many errors. */
 {
@@ -124,14 +124,44 @@ if (++gErrCount >= clMaxErr)
 void tagStormCheck(char *schemaFile, char *tagStormFile)
 /* tagStormCheck - Check that a tagStorm conforms to a schema.. */
 {
-struct hash *hash = tagSchemaHashFromFile(schemaFile);
+/* Load up schema from file.  Make a hash of all non-wildcard
+ * tags, and a list of wildcard tags. */
+struct tagSchema *schema, *next, *schemaList = tagSchemaFromFile(schemaFile);
+struct tagSchema *wildSchemaList = NULL;
+
+struct hash *hash = hashNew(0);
+for (schema = schemaList; schema != NULL; schema = next)
+    {
+    next = schema->next;
+    if (anyWild(schema->name))
+        slAddHead(&wildSchemaList, schema);
+    else
+	hashAdd(hash, schema->name, schema);
+    }
+slReverse(&wildSchemaList);
+schemaList = NULL;
+
+/* Stream through tagStorm file */
 struct lineFile *lf = lineFileOpen(tagStormFile, TRUE);
 char *line;
 while (lineFileNextReal(lf, &line))
     {
+    /* Break out tag and value */
     char *tag = nextWord(&line);
     char *val = skipLeadingSpaces(line);
+
+    /* Find schema in hash or wildSchemaList */
     struct tagSchema *schema = hashFindVal(hash, tag);
+    if (schema == NULL)
+        {
+	for (schema = wildSchemaList; schema != NULL; schema = schema->next)
+	    {
+	    if (wildMatch(schema->name, tag))
+	        break;
+	    }
+	}
+
+    /* Do checking on tag */
     if (schema == NULL)
         reportError(lf, "Unrecognized tag", tag);
     else
