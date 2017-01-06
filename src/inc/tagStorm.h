@@ -172,8 +172,27 @@ int tagStormCountTags(struct tagStorm *ts);
 int tagStormCountFields(struct tagStorm *ts);
 /* Return number of distinct tag types (fields) in storm */
 
+/** Stuff to find stanzas in a tree. */
+
+struct tagStanza *tagStormQuery(struct tagStorm *tagStorm, char *fields, char *where);
+/* Returns a list of tagStanzas that match the properties describe in  the where parameter.  
+ * The field parameter is a comma separated list of fields that may include wildcards.  
+ * For instance "*" will select all fields,  "a*,b*" will select all fields starting with 
+ * an "a" or a "b." The where parameter is a Boolean expression similar to what could appear 
+ * in a SQL where clause.  */
+
+struct rqlStatement;  // Avoid having to include rql.h
+
+boolean tagStanzaRqlMatch(struct rqlStatement *rql, struct tagStanza *stanza,
+	struct lm *lm);
+/* Return TRUE if where clause and tableList in statement evaluates true for stanza. */
+
+char *tagStanzaRqlLookupField(void *record, char *key);
+/* Lookup a field in a tagStanza for rql. */
+
 /** Stuff for finding tags within a stanza */
 
+/* Find values in a stanza */
 char *tagFindLocalVal(struct tagStanza *stanza, char *name);
 /* Return value of tag of given name within stanza, or NULL * if tag does not exist. 
  * This does *not* look at parent tags. */

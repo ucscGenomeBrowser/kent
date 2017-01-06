@@ -30,8 +30,9 @@
 #include "localmem.h"
 #include "hash.h"
 #include "ra.h"
-#include "tagStorm.h"
 #include "errAbort.h"
+#include "rql.h"
+#include "tagStorm.h"
 
 
 struct tagStorm *tagStormNew(char *name)
@@ -749,4 +750,90 @@ for (ts = stanza; ts != NULL; ts = ts->parent)
 hashFree(&uniq);
 slReverse(&list);
 return list;
+}
+
+char *tagStanzaRqlLookupField(void *record, char *key)
+/* Lookup a field in a tagStanza for rql. */
+{
+struct tagStanza *stanza = record;
+return tagFindVal(stanza, key);
+}
+
+boolean tagStanzaRqlMatch(struct rqlStatement *rql, struct tagStanza *stanza,
+	struct lm *lm)
+/* Return TRUE if where clause and tableList in statement evaluates true for stanza. */
+{
+struct rqlParse *whereClause = rql->whereClause;
+if (whereClause == NULL)
+    return TRUE;
+else
+    {
+    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, tagStanzaRqlLookupField, lm);
+    res = rqlEvalCoerceToBoolean(res);
+    return res.val.b;
+    }
+}
+
+static void rQuery(struct tagStorm *tags, struct tagStanza *list, 
+    struct rqlStatement *rql, struct lm *lm, struct tagStanza **pResultList)
+/* Recursively traverse stanzas on list. */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    if (stanza->children)
+	rQuery(tags, stanza->children, rql, lm, pResultList);
+    else    /* Just apply query to leaves */
+	{
+	if (tagStanzaRqlMatch(rql, stanza, lm))
+	    {
+	    struct tagStanza *result;
+	    AllocVar(result);
+	    struct slPair *resultTagList = NULL;
+	    struct slName *field;
+	    for (field = rql->fieldList; field != NULL; field = field->next)
+		{
+		char *val = tagFindVal(stanza, field->name);
+		if (val != NULL)
+		    {
+		    struct slPair *resultTag = slPairNew(field->name, val);
+		    slAddHead(&resultTagList, resultTag);
+		    }
+		}
+	    slReverse(&resultTagList);
+	    result->tagList = resultTagList;
+	    slAddHead(pResultList, result);
+	    }
+	}
+    }
+}
+
+struct tagStanza *tagStormQuery(struct tagStorm *tagStorm, char *fields, char *where)
+/* Returns a list of tagStanzas that match the properties describe in  the where parameter.  
+ * The field parameter is a comma separated list of fields that may include wildcards.  
+ * For instance "*" will select all fields,  "a*,b*" will select all fields starting with 
+ * an "a" or a "b." The where parameter is a Boolean expression similar to what could appear 
+ * in a SQL where clause.  Use tagStanzaFreeList to free up result when done. */
+{
+/* Construct and parse an rql statement */
+struct dyString *query = dyStringNew(0);
+dyStringPrintf(query, "select %s from tagStorm where ", fields);
+dyStringAppend(query, where);
+struct rqlStatement *rql = rqlStatementParseString(query->string);
+
+/* Expand any field names with wildcards. */
+struct slName *allFieldList = tagStormFieldList(tagStorm);
+rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
+
+/* Traverse tree applying query to build result list. */
+struct tagStanza *resultList = NULL;
+struct lm *lm = lmInit(0);
+rQuery(tagStorm, tagStorm->forest, rql, lm, &resultList);
+slReverse(&resultList);
+
+/* Clean up and go home. */
+lmCleanup(&lm);
+rqlStatementFree(&rql);
+dyStringFree(&query);
+return resultList;
 }
