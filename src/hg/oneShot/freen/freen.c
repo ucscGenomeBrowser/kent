@@ -22,16 +22,15 @@ static struct optionSpec options[] = {
 };
 
 
-void *needMem(size_t size)
-{
-errAbort("No memory for you.");
-return NULL;
-}
-
 void freen(char *input)
 /* Test something */
 {
-needMem(1000);
+struct lineFile *lf = lineFileUdcMayOpen(input, TRUE);
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    printf("%d %s\n", lf->lineIx, line);
+    }
 }
 
 int main(int argc, char *argv[])

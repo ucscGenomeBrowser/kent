@@ -401,7 +401,7 @@ carefulClose(&f);
 
 static void rTsWriteAsFlatTab(struct tagStanza *list, struct slName *fieldList,
     FILE *f, char *idTag, boolean withParent,
-     int maxDepth, int depth, boolean leavesOnly)
+     int maxDepth, int depth, boolean leavesOnly, char *nullVal)
 /* Recursively write out list to file */
 {
 if (depth > maxDepth)
@@ -444,7 +444,9 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 		{
 		if (field != fieldList)
 		    fputc('\t', f);
-		char *val = naForNull(hashFindVal(uniq, field->name));
+		char *val = hashFindVal(uniq, field->name);
+		if (val == NULL)
+		    val = nullVal;
 		fputs(val, f);
 		}
 	    fputc('\n', f);
@@ -452,50 +454,23 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	hashFree(&uniq);
 	}
 
-    rTsWriteAsFlatTab(stanza->children, fieldList, f, idTag, withParent, maxDepth, depth+1, leavesOnly);
+    rTsWriteAsFlatTab(stanza->children, fieldList, f, idTag, withParent, maxDepth, depth+1, 
+	leavesOnly, nullVal);
     }
 }
 
-static void rGetAllFields(struct tagStanza *list, struct hash *uniqHash, struct slName **pList)
-/* Recursively add all fields in tag-storm */
-{
-struct tagStanza *stanza;
-for (stanza = list; stanza != NULL; stanza = stanza->next)
-    {
-    struct slPair *pair;
-    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
-        {
-	if (hashLookup(uniqHash, pair->name) == NULL)
-	    {
-	    hashAdd(uniqHash, pair->name, pair->val);
-	    slNameAddHead(pList, pair->name);
-	    }
-	rGetAllFields(stanza->children, uniqHash, pList);
-	}
-    }
-}
-
-
-static struct slName *getAllFields(struct tagStorm *tagStorm)
-/* Return list of all fields */
-{
-struct slName *list = NULL;
-struct hash *uniqHash = hashNew(0);
-rGetAllFields(tagStorm->forest, uniqHash, &list);
-hashFree(&uniqHash);
-slReverse(&list);
-return list;
-}
- 
 void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idTag, 
-    boolean withParent, int maxDepth, boolean leavesOnly)
+    boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal, boolean sharpLabel)
 /* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
 {
 FILE *f = mustOpen(fileName, "w");
-struct slName *fieldList = getAllFields(tagStorm), *field;
+struct slName *fieldList = tagStormFieldList(tagStorm), *field;
 if (withParent && slNameFind(fieldList, "parent") == NULL)
     slNameAddHead(&fieldList, "parent");
-fputc('#', f);
+if (maxDepth == 0)
+    maxDepth = BIGNUM;
+if (sharpLabel)
+    fputc('#', f);
 for (field = fieldList; field != NULL; field = field->next)
     {
     if (field != fieldList)
@@ -503,7 +478,8 @@ for (field = fieldList; field != NULL; field = field->next)
     fprintf(f, "%s", field->name);
     }
 fputc('\n', f);
-rTsWriteAsFlatTab(tagStorm->forest, fieldList, f, idTag, withParent, maxDepth, 0, leavesOnly);
+rTsWriteAsFlatTab(tagStorm->forest, fieldList, f, idTag, withParent, maxDepth, 0, leavesOnly,
+    nullVal);
 carefulClose(&f);
 }
 

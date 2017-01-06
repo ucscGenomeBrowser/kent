@@ -2,6 +2,7 @@ lab lab_1
 assay RNA-seq
 access all
 organ brain
+user_kent_note foo on you
 
     donor 000
     age 5
@@ -160,3 +161,4 @@ organ brain
 
             file thisFile.txt
             format tag storm
+

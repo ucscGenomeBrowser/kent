@@ -40,15 +40,25 @@ then
 	runScript=$1
 elif (( $# == 2 ))
 then
-	runScript="$1"
-	base="$2"
+	# Check if outputLocation exists
+	if [[ -d $2 ]]
+	then
+		runScript="$1"
+		base="$2"
+	else
+		echo -e "Sorry, directory \"$2\" does not exist. Check spelling or create this directory and try again.\n"
+		exit 1
+	fi
 fi
 
-#If no user provided base location, then assume it's being run on dev and output to default loc.
+# If no user provided base location, then assume it's being run on dev and output to default loc.
 if [[ "$base" == "" ]]
 then
 	base="/usr/local/apache/htdocs-genecats/qa/test-results/publicHubContactInfo"
 fi
+
+# Create "hubFiles" directory in base if it doesn't exist
+mkdir -p $base/hubFiles
 
 if [[ "$runScript" == "go" ]]
 then

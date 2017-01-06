@@ -192,9 +192,8 @@ else
 char *line;
 if (!lineFileNext(lf, &line, NULL))
    errAbort("%s is empty", reportFileName);
-if (line[0] != '#')
-   errAbort("%s must start with '#' and field names on first line", reportFileName);
-line = skipLeadingSpaces(line+1);
+if (line[0] == '#')
+   line = skipLeadingSpaces(line+1);
 int fieldCount = chopByChar(line, '\t', NULL, 0);
 char *fields[fieldCount];
 chopTabs(line, fields);
