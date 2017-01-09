@@ -4,11 +4,11 @@
 #include "hash.h"
 #include "options.h"
 #include "sqlNum.h"
+#include "tagStorm.h"
 #include "errAbort.h"
 
 int clMaxErr = 10;
 int gErrCount = 0;  // Number of errors so far
-
 
 void usage()
 /* Explain usage and exit. */
@@ -141,7 +141,7 @@ slReverse(&list);
 return list;
 }
 
-void reportError(struct lineFile *lf, char *format, ...)
+void reportError(char *fileName, int startLine, char *format, ...)
 /* Report error and abort if there are too many errors. */
 {
 va_list args;
@@ -149,7 +149,114 @@ va_start(args, format);
 if (++gErrCount > clMaxErr)
     noWarnAbort();
 vaWarn(format, args);
-warn(" line %d of %s", lf->lineIx, lf->fileName);
+warn(" in stanza starting line %d of %s", startLine, fileName);
+}
+
+static void rCheck(struct tagStanza *stanzaList, char *fileName, 
+    struct slRef *wildList, struct hash *hash, struct slRef *requiredList)
+/* Recurse through tagStorm */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    struct slPair *pair;
+    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+	{
+	/* Break out tag and value */
+	char *tag = pair->name;
+	char *val = pair->val;
+
+	/* Find schema in hash or wildSchemaList */
+	struct tagSchema *schema = hashFindVal(hash, tag);
+	if (schema == NULL)
+	    {
+	    struct slRef *ref;
+	    for (ref = wildList; ref != NULL; ref = ref->next)
+		{
+		schema = ref->val;
+		if (wildMatch(schema->name, tag))
+		    break;
+		}
+	    }
+
+	/* Do checking on tag */
+	if (schema == NULL)
+	    reportError(fileName, stanza->startLineIx, "Unrecognized tag %s", tag);
+	else
+	    {
+	    char type = schema->type;
+	    if (type == '#')
+		{
+		char *end;
+		long long v = strtoll(val, &end, 10);
+		if (end == val || *end != 0)	// val is not integer
+		    reportError(fileName, stanza->startLineIx, 
+			"Non-integer value %s for %s", val, tag);
+		else if (v < schema->minVal)
+		    reportError(fileName, stanza->startLineIx, 
+			"Value %s too low for %s", val, tag);
+		else if (v > schema->maxVal)
+		     reportError(fileName, stanza->startLineIx, 
+			"Value %s too high for %s", val, tag);
+		}
+	    else if (type == '%')
+		{
+		char *end;
+		double v = strtod(val, &end);
+		if (end == val || *end != 0)	// val is not just a floating point number
+		    reportError(fileName, stanza->startLineIx, 
+			"Non-numerical value %s for %s", val, tag);
+		else if (v < schema->minVal)
+		    reportError(fileName, stanza->startLineIx, 
+			"Value %s too low for %s", val, tag);
+		else if (v > schema->maxVal)
+		    reportError(fileName, stanza->startLineIx, 
+			"Value %s too high for %s", val, tag);
+		}
+	    else
+		{
+		boolean gotMatch = FALSE;
+		struct slName *okVal;
+		for (okVal = schema->allowedVals; okVal != NULL; okVal = okVal->next)
+		    {
+		    if (wildMatch(okVal->name, val))
+			{
+			gotMatch = TRUE;
+			break;
+			}
+		    }
+		if (!gotMatch)
+		    reportError(fileName, stanza->startLineIx, 
+			"Unrecognized value '%s' for tag %s", val, tag);
+		}
+
+	    struct hash *uniqHash = schema->uniqHash;
+	    if (uniqHash != NULL)
+		{
+		if (hashLookup(uniqHash, val))
+		    reportError(fileName, stanza->startLineIx, 
+			"Non-unique value '%s' for tag %s", val, tag);
+		else
+		    hashAdd(uniqHash, val, NULL);
+		}
+	    }
+	}
+    if (stanza->children)
+	{
+	rCheck(stanza->children, fileName, wildList, hash, requiredList);
+	}
+    else
+	{
+	struct slRef *ref;
+	for (ref = requiredList; ref != NULL; ref = ref->next)
+	    {
+	    struct tagSchema *schema = ref->val;
+	    if (tagFindVal(stanza, schema->name) == NULL)
+	        reportError(fileName, stanza->startLineIx, 
+		    "Missing required '%s' tag", schema->name);
+	    }
+	}
+    }
 }
 
 void tagStormCheck(char *schemaFile, char *tagStormFile)
@@ -157,103 +264,34 @@ void tagStormCheck(char *schemaFile, char *tagStormFile)
 {
 /* Load up schema from file.  Make a hash of all non-wildcard
  * tags, and a list of wildcard tags. */
-struct tagSchema *schema, *next, *schemaList = tagSchemaFromFile(schemaFile);
-struct tagSchema *wildSchemaList = NULL;
+struct tagSchema *schema, *schemaList = tagSchemaFromFile(schemaFile);
+struct slRef *wildSchemaList = NULL, *requiredSchemaList = NULL;
 
 /* Split up schemaList into hash and wildSchemaList.  Calculate schemaSize */
 struct hash *hash = hashNew(0);
 int schemaSize = 0;
-for (schema = schemaList; schema != NULL; schema = next)
+for (schema = schemaList; schema != NULL; schema = schema->next)
     {
     ++schemaSize;
-    next = schema->next;
     if (anyWild(schema->name))
-        slAddHead(&wildSchemaList, schema);
+	{
+	refAdd(&wildSchemaList, schema);
+	}
     else
 	hashAdd(hash, schema->name, schema);
+    if (schema->required != 0)
+        refAdd(&requiredSchemaList, schema);
     }
 slReverse(&wildSchemaList);
 schemaList = NULL;
 
-/* Stream through tagStorm file */
-struct lineFile *lf = lineFileOpen(tagStormFile, TRUE);
-char *line;
-while (lineFileNextReal(lf, &line))
-    {
-    /* Break out tag and value */
-    char *tag = nextWord(&line);
-    char *val = skipLeadingSpaces(line);
+struct tagStorm *tagStorm = tagStormFromFile(tagStormFile);
+rCheck(tagStorm->forest, tagStormFile, wildSchemaList, hash, requiredSchemaList);
 
-    /* Find schema in hash or wildSchemaList */
-    struct tagSchema *schema = hashFindVal(hash, tag);
-    if (schema == NULL)
-        {
-	for (schema = wildSchemaList; schema != NULL; schema = schema->next)
-	    {
-	    if (wildMatch(schema->name, tag))
-	        break;
-	    }
-	}
-
-    /* Do checking on tag */
-    if (schema == NULL)
-        reportError(lf, "Unrecognized tag %s", tag);
-    else
-        {
-	char type = schema->type;
-	if (type == '#')
-	    {
-	    char *end;
-	    long long v = strtoll(val, &end, 10);
-	    if (end == val || *end != 0)	// val is not integer
-	        reportError(lf, "Non-integer value %s for %s", val, tag);
-	    else if (v < schema->minVal)
-	        reportError(lf, "Value %s too low for ", val, tag);
-	    else if (v > schema->maxVal)
-	         reportError(lf, "Value %s too high for ", val, tag);
-	    }
-	else if (type == '%')
-	    {
-	    char *end;
-	    double v = strtod(val, &end);
-	    if (end == val || *end != 0)	// val is not just a floating point number
-		reportError(lf, "Non-numerical value %s for ", val, tag);
-	    else if (v < schema->minVal)
-	        reportError(lf, "Value %s too low for ", val, tag);
-	    else if (v > schema->maxVal)
-	        reportError(lf, "Value %s too high for ", val, tag);
-	    }
-	else
-	    {
-	    boolean gotMatch = FALSE;
-	    struct slName *okVal;
-	    for (okVal = schema->allowedVals; okVal != NULL; okVal = okVal->next)
-	        {
-		if (wildMatch(okVal->name, val))
-		    {
-		    gotMatch = TRUE;
-		    break;
-		    }
-		}
-	    if (!gotMatch)
-	        reportError(lf, "Unrecognized value %s for tag %s", val, tag);
-	    }
-
-	struct hash *uniqHash = schema->uniqHash;
-	if (uniqHash != NULL)
-	    {
-	    if (hashLookup(uniqHash, val))
-	        reportError(lf, "Non-unique value %s for tag %s", val, tag);
-	    else
-		hashAdd(uniqHash, val, NULL);
-	    }
-	}
-    }
 if (gErrCount > 0)
     noWarnAbort();
 else
-    verbose(1, "No problems detected in %d tag types in %d lines of %s.\n", 
-	schemaSize, lf->lineIx, lf->fileName);
+    verbose(1, "No problems detected.\n");
 }
 
 int main(int argc, char *argv[])
