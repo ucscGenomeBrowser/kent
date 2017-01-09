@@ -44,9 +44,11 @@ struct tagSchema
     {
     struct tagSchema *next;
     char *name;   // Name of tag
+    char required; // ! for required, ^ for required unique at each leaf, 0 for whatever
     char type;   // # for integer, % for floating point, $ for string
     double minVal, maxVal;  // Bounds for numerical types
     struct slName *allowedVals;  // Allowed values for string types
+    struct hash *uniqHash;   // Help make sure that all values are unique
     };
 
 char *nextWordOrString(char **pLine)
@@ -72,17 +74,33 @@ char *line;
 struct tagSchema *schema, *list = NULL;
 while (lineFileNextReal(lf, &line))
     {
-    /* Parse out first two fields */
+    /* Parse out name field and optional requirement field */
     char *name = nextWord(&line);
+    char required = name[0];
+    if (required == '!' || required == '^')
+        {
+	/* Allow req char to be either next to name, or separated  by space */
+	if (name[1] != 0)
+	    name = name+1;
+	else
+	    name = nextWord(&line);
+	}
+    else
+        required = 0;
+
+    /* Parse out type field */
     char *typeString = nextWord(&line);
     if (typeString == NULL)
         errAbort("truncated line %d of %s", lf->lineIx, lf->fileName);
     char type = typeString[0];
 
-    /* Allocate schema struct and fill in first two fields. */
+    /* Allocate schema struct and fill in several fields. */
     AllocVar(schema);
     schema->name = cloneString(name);
+    schema->required = required;
     schema->type = type;
+    if (required == '^')
+        schema->uniqHash = hashNew(0);
 
     /* Parse out rest of it depending on field type */
     if (type == '#' || type == '%') // numeric
@@ -123,12 +141,15 @@ slReverse(&list);
 return list;
 }
 
-void reportError(struct lineFile *lf, char *message, char *tag)
+void reportError(struct lineFile *lf, char *format, ...)
 /* Report error and abort if there are too many errors. */
 {
-warn("%s %s line %d of %s", message, tag, lf->lineIx, lf->fileName);
-if (++gErrCount >= clMaxErr)
+va_list args;
+va_start(args, format);
+if (++gErrCount > clMaxErr)
     noWarnAbort();
+vaWarn(format, args);
+warn(" line %d of %s", lf->lineIx, lf->fileName);
 }
 
 void tagStormCheck(char *schemaFile, char *tagStormFile)
@@ -176,30 +197,31 @@ while (lineFileNextReal(lf, &line))
 
     /* Do checking on tag */
     if (schema == NULL)
-        reportError(lf, "Unrecognized tag", tag);
+        reportError(lf, "Unrecognized tag %s", tag);
     else
         {
-	if (schema->type == '#')
+	char type = schema->type;
+	if (type == '#')
 	    {
 	    char *end;
 	    long long v = strtoll(val, &end, 10);
 	    if (end == val || *end != 0)	// val is not integer
-	        reportError(lf, "Non-integer value for ", tag);
+	        reportError(lf, "Non-integer value %s for %s", val, tag);
 	    else if (v < schema->minVal)
-	        reportError(lf, "Value too low for ", tag);
+	        reportError(lf, "Value %s too low for ", val, tag);
 	    else if (v > schema->maxVal)
-	         reportError(lf, "Value too high for ", tag);
+	         reportError(lf, "Value %s too high for ", val, tag);
 	    }
-	else if (schema->type == '%')
+	else if (type == '%')
 	    {
 	    char *end;
 	    double v = strtod(val, &end);
 	    if (end == val || *end != 0)	// val is not just a floating point number
-		reportError(lf, "Non-numerical value for ", tag);
+		reportError(lf, "Non-numerical value %s for ", val, tag);
 	    else if (v < schema->minVal)
-	        reportError(lf, "Value too low for ", tag);
+	        reportError(lf, "Value %s too low for ", val, tag);
 	    else if (v > schema->maxVal)
-	        reportError(lf, "Value too high for ", tag);
+	        reportError(lf, "Value %s too high for ", val, tag);
 	    }
 	else
 	    {
@@ -214,7 +236,16 @@ while (lineFileNextReal(lf, &line))
 		    }
 		}
 	    if (!gotMatch)
-	        reportError(lf, "Unrecognized value for", tag);
+	        reportError(lf, "Unrecognized value %s for tag %s", val, tag);
+	    }
+
+	struct hash *uniqHash = schema->uniqHash;
+	if (uniqHash != NULL)
+	    {
+	    if (hashLookup(uniqHash, val))
+	        reportError(lf, "Non-unique value %s for tag %s", val, tag);
+	    else
+		hashAdd(uniqHash, val, NULL);
 	    }
 	}
     }
