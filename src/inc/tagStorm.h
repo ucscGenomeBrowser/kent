@@ -61,6 +61,7 @@ struct tagStanza
     struct tagStanza *children;	/* Pointer to eldest child. */
     struct tagStanza *parent;	/* Pointer to parent. */
     struct slPair *tagList;	/* All tags. Best not to count on the order. */
+    int startLineIx;		/* Starting line number for stanza, for error reporting */
     };
 
 /** Read and write tag storms from/to files. */

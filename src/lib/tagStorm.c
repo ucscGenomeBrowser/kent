@@ -171,6 +171,7 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     char *tag, *val;
     int stanzaIndent, tagIndent;
     lmAllocVar(lm, stanza);
+    stanza->startLineIx = lf->lineIx;
     struct slPair *pairList = NULL, *pair;
     while (raNextTagValWithIndent(lf, &tag, &val, NULL, &tagIndent))
         {
