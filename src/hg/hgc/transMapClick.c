@@ -164,6 +164,7 @@ if (bbFieldCount != BIGTRANSMAP_NUM_COLS)
              BIGTRANSMAP_NUM_COLS, bbFieldCount, fileName);
 bag->psl = pslFromBigPsl(chrom, bb, 0, NULL, NULL); 
 bag->meta = bigTransMapLoad(fields);
+bag->srcDbIsActive = hDbIsActive(bag->meta->srcDb);
 
 bigBedFileClose(&bbi);
 lmCleanup(&lm);
