@@ -45,7 +45,7 @@ class PslQa(PositionalQa):
             self.reporter.writeCommand(command)
             commandOut, commandErr, commandReturnCode = qaUtils.runCommandNoAbort(command)
             # Write output to file
-           self.reporter.fh.write(commandErr)
+            self.reporter.fh.write(commandErr)
             # Clean up intermediate item sizes file
             os.remove("%s.sizes" % self.table)
 
@@ -54,7 +54,7 @@ class PslQa(PositionalQa):
             command = ["pslCheck", "db=" + self.db, self.table]
             self.reporter.writeCommand(command)
             commandOut, commandErr, commandReturnCode = qaUtils.runCommandNoAbort(command)
-           self.reporter.fh.write(commandErr)
+            self.reporter.fh.write(commandErr)
 
         if commandReturnCode:
             self.recordError()
