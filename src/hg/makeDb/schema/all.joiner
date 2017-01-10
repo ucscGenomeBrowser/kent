@@ -3302,14 +3302,13 @@ identifier proteinAccession typeOf=genbankAccession fuzzy
     $kgDb.kgProtAlias.alias
     $kgDb.kgSpAlias.alias minCheck=0.1
     $kgDb.kgXref.protAcc
-    $gbd,$notProteinAccession.refLink.protAcc
+    hgFixed.refLink.protAcc
 
 identifier estOrMrnaAccession typeOf=genbankAccession
 "Genbank EST or mRNA accession."
-    $gbd.gbSeq.acc
-    $gbd.gbStatus.acc unique
-    $gbd.gbCdnaInfo.acc unique
-    $gbd.imageClone.acc
+    hgFixed.gbSeq.acc
+    hgFixed.gbCdnaInfo.acc unique
+    hgFixed.imageClone.acc
     $gbd,!ce2,!hg16,!hg17,!hg18,!mm7.altGraphX.mrnaRefs comma
     ce2.altGraphX.mrnaRefs comma minCheck=0.96
     hg16.altGraphX.mrnaRefs comma minCheck=0.99
@@ -3396,8 +3395,8 @@ identifier metaRefSeqId typeOf=mrnaAccession
 
 identifier refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
-    $gbd.refLink.mrnaAcc
-    $gbd.refSeqStatus.mrnaAcc minCheck=0.10
+    hgFixed.refLink.mrnaAcc
+    hgFixed.refSeqStatus.mrnaAcc minCheck=0.10
     $kgDb.kgXref.refseq exclude= minCheck=0.50
     $kgDb,!hg16,!hg17,!hg18,!mm7,!mm8,!mm9,!mm10.knownToRefSeq.value minCheck=0.98
     hg18,mm7,mm8,mm9,mm10.knownToRefSeq.value minCheck=0.96
@@ -3413,7 +3412,7 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refGene.name
     $gbd.refMrna.name
     $gbd.refSeqAli.qName
-    $gbd.refSeqSummary.mrnaAcc minCheck=0.99
+    hgFixed.refSeqSummary.mrnaAcc minCheck=0.99
     dm1.bdgpToRefSeq.value minCheck=0.9
     $dm,!dm1.flyBaseToRefSeq.value minCheck=0.92
     $mm.mrnaRefseq.mrna minCheck=0.03
@@ -3677,26 +3676,26 @@ identifier metaGbCdnas
     $metaGbd.all_est.qName
     $metaGbd.refGene.name
     $metaGbd.xenoRefGene.name
-    $metaGbd.gbMiscDiff.acc
+    hgFixed.gbMiscDiff.acc
     $metaGbd.refSeqAli.qName
     $metaGbd.xenoRefSeqAli.qName
     $metaGbd.xenoMrna.qName
     $metaGbd.xenoEst.qName
-    $metaGbd.gbWarn.acc
+    hgFixed.gbWarn.acc
 
 identifier gbCdnas
 "Connects gbCdnaInfo with mRNA/EST"
-    $gbd.gbCdnaInfo.acc
+    hgFixed.gbCdnaInfo.acc
     $gbd.all_mrna.qName
     $gbd.all_est.qName
     $gbd.refGene.name
     $gbd.xenoRefGene.name
-    $gbd.gbMiscDiff.acc
+    hgFixed.gbMiscDiff.acc
     $gbd.refSeqAli.qName
     $gbd.xenoRefSeqAli.qName
     $gbd.xenoMrna.qName
     $gbd.xenoEst.qName
-    $gbd.gbWarn.acc
+    hgFixed.gbWarn.acc
 
 identifier metaGenBankAuthor
 "Connects metaGenBank mRNA/EST and its author"
@@ -3772,77 +3771,77 @@ identifier metaGenBankTissue
 
 identifier genBankAuthor
 "Connects genBank mRNA/EST and its author"
-    $gbd.author.id
-    $gbd.gbCdnaInfo.author
+    hgFixed.author.id
+    hgFixed.gbCdnaInfo.author
 
 identifier genBankCds
 "Connects genBank mRNA/EST and its coding region (CDS)"
-    $gbd.cds.id
-    $gbd.gbCdnaInfo.cds
+    hgFixed.cds.id
+    hgFixed.gbCdnaInfo.cds
 
 identifier genBankCell
 "Connects genBank mRNA/EST and the cell type it came from"
-    $gbd.cell.id
-    $gbd.gbCdnaInfo.cell
+    hgFixed.cell.id
+    hgFixed.gbCdnaInfo.cell
 
 identifier genBankDevelopment
 "Connects genBank mRNA/EST and development stage of the organism it came from"
-    $gbd.development.id
-    $gbd.gbCdnaInfo.development
+    hgFixed.development.id
+    hgFixed.gbCdnaInfo.development
 
 identifier genBankDescription
 "Connects genBank mRNA/EST and descriptive text"
-    $gbd.description.id
-    $gbd.gbCdnaInfo.description
+    hgFixed.description.id
+    hgFixed.gbCdnaInfo.description
 
 identifier genBankGeneName
 "Connects genBank mRNA/EST and gene name"
-    $gbd.geneName.id
-    $gbd.gbCdnaInfo.geneName
-    $gbd.refLink.geneName
+    hgFixed.geneName.id
+    hgFixed.gbCdnaInfo.geneName
+    hgFixed.refLink.geneName
 
 identifier genBankKeyword
 "Connects genBank mRNA/EST and keyword"
-    $gbd.keyword.id
-    $gbd.gbCdnaInfo.keyword
+    hgFixed.keyword.id
+    hgFixed.gbCdnaInfo.keyword
 
 identifier genBankLibrary
 "Connects genBank mRNA/EST and cDNA library"
-    $gbd.library.id
-    $gbd.gbCdnaInfo.library
+    hgFixed.library.id
+    hgFixed.gbCdnaInfo.library
     $gbd,!hg17.altGraphX.mrnaLibs comma
     hg17.altGraphX.mrnaLibs comma minCheck=0.99
 
 identifier genBankMrnaClone
 "Connects genBank mRNA/EST and cDNA clone name"
-    $gbd.mrnaClone.id
-    $gbd.gbCdnaInfo.mrnaClone
+    hgFixed.mrnaClone.id
+    hgFixed.gbCdnaInfo.mrnaClone
 
 identifier genBankOrganism
 "Connects genBank mRNA/EST and organism it came from"
-    $gbd.organism.id
-    $gbd.gbCdnaInfo.organism
+    hgFixed.organism.id
+    hgFixed.gbCdnaInfo.organism
 
 identifier genBankProductName
 "Connects genBank mRNA/EST and protein product name"
-    $gbd.productName.id
-    $gbd.gbCdnaInfo.productName
-    $gbd.refLink.prodName
+    hgFixed.productName.id
+    hgFixed.gbCdnaInfo.productName
+    hgFixed.refLink.prodName
 
 identifier genBankSex
 "Connects genBank mRNA/EST and sex mRNA came from"
-    $gbd.sex.id
-    $gbd.gbCdnaInfo.sex
+    hgFixed.sex.id
+    hgFixed.gbCdnaInfo.sex
 
 identifier genBankSource
 "Connects genBank mRNA/EST and source of mRNA"
-    $gbd.source.id
-    $gbd.gbCdnaInfo.source
+    hgFixed.source.id
+    hgFixed.gbCdnaInfo.source
 
 identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
-    $gbd.tissue.id
-    $gbd.gbCdnaInfo.tissue
+    hgFixed.tissue.id
+    hgFixed.gbCdnaInfo.tissue
     $gbd.altGraphX.mrnaTissues comma
 
 # Some misc clone-oriented identifiers
@@ -3854,7 +3853,7 @@ identifier bacCloneName fuzzy
 
 identifier imageCloneId external=IMAGEConsortium fuzzy
 "An image cDNA clone ID"
-    $gbd.imageClone.imageId
+    hgFixed.imageClone.imageId
 
 identifier humanFosmidId
 "Human Fosmid (~50kb genomic sequence) clone"
@@ -3960,7 +3959,7 @@ identifier metaHugoName external=HUGO fuzzy
 
 identifier hugoName external=HUGO fuzzy
 "International Human Gene Identifier"
-    $hg.refLink.name
+    hgFixed.refLink.name
     $hg.atlasOncoGene.locusSymbol
     $hg.kgAlias.alias
     $hg.kgSpAlias.alias minCheck=0.1
@@ -3980,7 +3979,7 @@ identifier kgGeneSymbol
 identifier mouseGeneName fuzzy
 "Mouse gene name from Jackson Labs/RefSeq"
     $hg.jaxOrtholog.mouseSymbol
-    $mm.refLink.name
+    hgFixed.refLink.name
     visiGene.gene.name
 
 # Model Organism Database Identifiers
@@ -4812,7 +4811,7 @@ identifier snpException148
 
 identifier locusLinkId external=LocusLink
 "NCBI LocusLink ID"
-    $gbd.refLink.locusLinkId dupeOk
+    hgFixed.refLink.locusLinkId dupeOk
     $gbd.keggPathway.locusID minCheck=0.98
     $kgDb,!hg16,!mm8.knownToLocusLink.value minCheck=0.98
     hg16,mm8.knownToLocusLink.value minCheck=0.96
@@ -4830,7 +4829,7 @@ identifier omimAvSnpId external=OMIM
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
-    $gbd.refLink.omimId dupeOk exclude=0
+    hgFixed.refLink.omimId dupeOk exclude=0
     $hg.omimGene2.name minCheck=0.90
     $hg.omimPhenotype.omimId minCheck=0.75
     $hg.omimGeneMap.omimId minCheck=0.85
@@ -4849,7 +4848,7 @@ identifier omimGene2Id
     $hg.omimAv.omimId minCheck=0.90
     $hg.omimAvRepl.omimId minCheck=0.90
     $hg.omimPhenotype.omimId minCheck=0.75
-    $hg.refLink.omimId exclude=0 minCheck=0.98
+    hgFixed.refLink.omimId exclude=0 minCheck=0.98
     $hg.omim2gene.omimId minCheck=0.60
 
 identifier omimPhenotypeId
@@ -4982,8 +4981,8 @@ identifier extFileId
 
 identifier gbExtFileId
 "External file ID for GenBank incremental update system"
-    $gbd.gbExtFile.id
-    $gbd.gbSeq.gbExtFile minCheck=0.85
+    hgFixed.gbExtFile.id
+    hgFixed.gbSeq.gbExtFile minCheck=0.85
 
 identifier encodeRegion
 "ENCODE (extensive analysis of 1% of genome) Region"
@@ -5999,20 +5998,20 @@ type knownTo
     $sacCer.sgdToName
 
 type idName
-    $gbd.source
-    $gbd.organism
-    $gbd.library
-    $gbd.mrnaClone
-    $gbd.sex
-    $gbd.tissue
-    $gbd.development
-    $gbd.cell
-    $gbd.cds
-    $gbd.description
-    $gbd.author
-    $gbd.geneName
-    $gbd.productName
-    $gbd.keyword
+    hgFixed.source
+    hgFixed.organism
+    hgFixed.library
+    hgFixed.mrnaClone
+    hgFixed.sex
+    hgFixed.tissue
+    hgFixed.development
+    hgFixed.cell
+    hgFixed.cds
+    hgFixed.description
+    hgFixed.author
+    hgFixed.geneName
+    hgFixed.productName
+    hgFixed.keyword
 
 type blastTab
     $gbd.ceBlastTab
