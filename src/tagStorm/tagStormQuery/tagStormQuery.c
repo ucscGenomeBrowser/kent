@@ -41,14 +41,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-static char *lookupField(void *record, char *key)
-/* Lookup a field in a tagStanza. */
-{
-struct tagStanza *stanza = record;
-return tagFindVal(stanza, key);
-}
-
-boolean statementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
+boolean tagStanzaRqlMatch(struct rqlStatement *rql, struct tagStanza *stanza,
 	struct lm *lm)
 /* Return TRUE if where clause and tableList in statement evaluates true for tdb. */
 {
@@ -57,7 +50,7 @@ if (whereClause == NULL)
     return TRUE;
 else
     {
-    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, lookupField, lm);
+    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, tagStanzaRqlLookupField, lm);
     res = rqlEvalCoerceToBoolean(res);
     return res.val.b;
     }
@@ -77,7 +70,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	traverse(tags, stanza->children, rql, lm);
     else    /* Just apply query to leaves */
 	{
-	if (statementMatch(rql, stanza, lm))
+	if (tagStanzaRqlMatch(rql, stanza, lm))
 	    {
 	    ++matchCount;
 	    if (doSelect)

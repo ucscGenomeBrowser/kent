@@ -1,11 +1,11 @@
-access $ *
+!access $ *
 age # 1 10
 age_units $ *
 assay $ *
 biosample_date $ *
 donor # 0 0
-file $ *
-format $ bam fastq "tag storm"
+^file $ *
+!format $ bam fastq "tag storm"
 lab $ *
 lab_*_* $ *
 life_stage $ *
