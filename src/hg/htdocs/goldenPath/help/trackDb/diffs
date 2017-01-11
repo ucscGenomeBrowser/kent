@@ -1,0 +1,78 @@
+10,22d9
+< function getUrlVars()
+< {
+<     var vars = [], hash;
+<     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+<     for(var i = 0; i < hashes.length; i++)
+<     {
+<         hash = hashes[i].split('=');
+<         vars.push(hash[0]);
+<         vars[hash[0]] = hash[1];
+<     }
+<     return vars;
+< }
+< 
+115,130c102,105
+<             if (spec.length === 0) {
+<                 return blurb;
+<             }
+<             var code = $(spec).find('code');
+<             if (code.length === 0) {
+<                 return blurb;
+<             }
+<             var level = $(code).attr('class');
+<             if (level.length === 0) {
+<                 level = 'level-alpha';
+<             }
+<             var start = $(blurb).find('p').first();
+<             if ($(start).attr('class') !== 'level') {
+<                 $(start).before('<p class="level">Support level: ' + '<span class=' + level + '>' + 
+<                                 level.replace('level-','') + '</span></p>');
+<             }
+---
+>             var level = $(spec).find('code').attr('class');
+>             //if ($blurb.find('p.level') == 0) }
+>                 //$(blurb).find('p').prepend('<p class="level"><b>Support level:</b> ' + level + '</p>');
+>             //}
+202,213d176
+<         makePlainRow: function (aClass) {
+<             var level = 'level-alpha';
+<             var div = tdbDoc.library.lookup(aClass,false);
+<             if (div.length === 1) {
+<                 level = $(div).find('code').attr('class');
+<                 if (level.length === 0) {
+<                     level = 'level-alpha';
+<                 }
+<             }
+<             return aClass + '\t' + level.replace('level-','') + '\n';
+<         },
+< 
+220d182
+<             var level = 'level-alpha';
+222,225d183
+<                 level = $(div).find('code').attr('class');
+<                 if (level.length === 0) {
+<                     level = 'level-alpha';
+<                 }
+254,256d211
+<             return "<tr><td><A onclick='return jumpTo(this);' HREF='#'>"+aClass+"</a></td>" +
+<                         "<td class="+level+">"+level.replace('level-','')+"</span></td>" +
+<                         "<td>"+types+"</td><td>"+ best+"</td></tr>";
+257a213,214
+>             return "<tr><td><A onclick='return jumpTo(this);' HREF='#'>"+aClass+"</a></td><td>"+
+>                         types+"</td><td>"+best+"</td></tr>";
+265d221
+<             var plainTable = $('#plainToc');
+287c243
+<                     $(tocTable).prepend( "<THEAD><TR><TD colspan='4'>"+
+---
+>                     $(tocTable).prepend( "<THEAD><TR><TD colspan='3'>"+
+291d246
+<                                         "<TH>Level</TH>"+
+297,298c252
+<                         $(tocTable).append(tdbDoc.toc.makeRow(this));
+<                         $(plainTable).append(tdbDoc.toc.makePlainRow(this));
+---
+>                         $(tocTable).append( tdbDoc.toc.makeRow(this) );
+437d390
+<         $('#trackDbHub_version').text(trackDbHub_version);
