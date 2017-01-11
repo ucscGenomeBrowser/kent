@@ -146,6 +146,9 @@ if (sameString(track->tdb->type, "bigPsl"))
 
 int mouseOverIdx = bbExtraFieldIndex(bbi, mouseOverField);
 
+bbiFileClose(&bbi);
+track->bbiFile = NULL;
+
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf;
