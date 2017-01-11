@@ -10101,7 +10101,10 @@ printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
 
 /* print UCSC Genes in the reported region */
 sqlSafef(query, sizeof(query),
-      "select distinct t.name from knownCanonToDecipher t, kgXref x  where value ='%s' and x.kgId=t.name order by geneSymbol", itemName);
+      "select distinct t.name "
+      // mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
+      ", geneSymbol "
+      "from knownCanonToDecipher t, kgXref x  where value ='%s' and x.kgId=t.name order by geneSymbol", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
