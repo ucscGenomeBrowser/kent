@@ -4410,6 +4410,8 @@ struct slPair *hGetCladeOptions()
 // get only the clades that have actual active genomes
 char *query = NOSQLINJ ""
     "SELECT DISTINCT(c.name), c.label "
+    // mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
+    ", c.priority "
     "FROM %s c, %s g, %s d "
     "WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 "
     "ORDER BY c.priority";
@@ -4438,7 +4440,10 @@ if (isHubTrack(clade))
 else
     {
     struct dyString *dy =
-	sqlDyStringCreate("select distinct(d.genome) from %s d,%s g "
+	sqlDyStringCreate("select distinct(d.genome) "
+    // mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
+                          ", orderKey "
+                          "from %s d,%s g "
 			  "where d.genome=g.genome and g.clade = '%s' "
 			  "order by orderKey", dbDbTable(), genomeCladeTable(), clade);
     // Although clade and db menus have distinct values vs. labels, we actually use the
