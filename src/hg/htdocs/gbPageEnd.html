@@ -1,11 +1,14 @@
 <!-- gbPageEnd.html - Include file for GB static pages -->
 
-<!-- End container and page -->
+        <!-- End container and page -->
             </div>
         </div>
 
-<!-- Add footer -->
-        <!-- Footer -->
-        <!--#include virtual="inc/gbFooter.html"-->
+        <!-- Add footer -->
+        <!--#if expr="$GB_DOCUMENT_ROOT" -->
+            <!--#include virtual="/gbDocs/inc/gbFooter.html"-->
+        <!--#else -->
+            <!--#include virtual="/inc/gbFooter.html"-->
+        <!--#endif -->
     </body>
 </html>
