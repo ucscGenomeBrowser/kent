@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <!-- template.html: Example HTML for a Genome Browser static page -->
 
@@ -11,8 +11,14 @@
 -->
 
 <!-- Page header -->
-<!--#set var="TITLE" value="GB Static Page Template" -->
-<!--#include virtual="/gbPageStart.html"-->
+<!--#set var="title" value="GB Static Page Template" -->
+
+<!-- Boilerplate to support mirror sites with non-standard GB docs install -->
+<!--#if expr="$GB_DOCUMENT_ROOT" -->
+    <!--#include virtual="/gbDocs/gbPageStart.html" -->
+<!--#else -->
+    <!--#include virtual="/gbPageStart.html" -->
+<!--#endif -->
 
 <!-- Page content -->
 <h1>Sample Genome Browser Static Page</h1>
@@ -128,4 +134,9 @@ The caption is a 'p' element, which is assigned the 'gbsCaption' class.
   </div>
 </div>
 
-<!--#include virtual="/gbPageEnd.html"-->
+<!--#if expr="$GB_DOCUMENT_ROOT" -->
+    <!--#include virtual="/gbDocs/gbPageEnd.html" -->
+<!--#else -->
+    <!--#include virtual="/gbPageStart.html" -->
+<!--#endif -->
+
