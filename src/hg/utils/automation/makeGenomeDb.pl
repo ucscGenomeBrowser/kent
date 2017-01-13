@@ -1020,7 +1020,7 @@ sub makeDescription {
 <B>UCSC Genome Browser assembly ID:</B> $db<BR>
 <B>Sequencing/Assembly provider ID:</B> $assemblyLabel<BR>
 <B>Assembly date:</B> $assemblyDate<BR>
-<B>GenBank accession ID:</B> $genBankAccessionID<BR>
+<B>Accession ID:</B> $genBankAccessionID<BR>
 <B>NCBI Genome information:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET="_blank">
 NCBI genome/$ncbiGenomeId ($scientificName)</A><BR>
 <B>NCBI Assembly information:</B>
@@ -1345,6 +1345,7 @@ _EOF_
 $HgAutomate::git archive --remote=git://genome-source.cse.ucsc.edu/kent.git \\
   --prefix=kent/ HEAD src/hg/makeDb/trackDb/loadTracks \\
 src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
+src/hg/makeDb/trackDb/trackDb.transMap.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.primates.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.euarchontoglires.ra \\
