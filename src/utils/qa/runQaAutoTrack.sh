@@ -28,11 +28,14 @@ logTooOld=$(date --date="-6 months" +%F)
 logDir=""
 
 usage="""
-Runs script qaAutoTrack.sh for various autopushed tracks.\n
-Runs day after track is supposed to be updated for most tracks.\n\n
-usage:`basename $0` go logDirectory\n\n
-logDirectory is directory where output files are being placed by qaAutoTrack.sh.
-This script will remove files older than 6 months from that directory.
+Runs script qaAutoTrack.sh for various autopushed tracks.\nWill
+remove log files older than six months from log directory\nfor
+qaAutoTrack.sh. Log directory defaults to\n
+/usr/local/apache/htdocs-genecats/qa/test-results/qaAutoTrackLogs
+\n\n
+usage:`basename $0` go logDirectory
+\n\nlogDirectory is directory where output files are being placed\nby
+qaAutoTrack.sh if it's different that the default listed above.\n
 """
 # Print really basic usage statement
 if (( $# < 1 )) || (( $# > 2 ))
