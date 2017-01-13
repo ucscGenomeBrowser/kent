@@ -49,6 +49,12 @@ if (aa == NULL)
         char twoBitPath[HDB_MAX_PATH_STRING];
         safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
         char *path = hReplaceGbdb(twoBitPath);
+        if (!fileExists(path))
+            {
+            // if 2bit file isn't in nibOrTwoBitDir, try up one directory
+            safef(twoBitPath, sizeof(twoBitPath), "%s/../%s.2bit", nibOrTwoBitDir, db);
+            path = hReplaceGbdb(twoBitPath);
+            }
         aa = annoAssemblyNew(db, path);
         freeMem(path);
         }
