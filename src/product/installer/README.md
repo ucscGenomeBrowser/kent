@@ -1,19 +1,23 @@
-% Genome Browser in the Cloud User Guide
+% The Genome Browser in the Cloud Script User Guide
 
-# What is Genome Browser in the Cloud?
+# What is the Genome Browser in the Cloud script?
 
 The Genome Browser in the Cloud (GBiC) script is a convenient script that automates the setup of a
-UCSC Genome Browser mirror, including the installation and setup of MySQL (or MariaDB) 
-and Apache servers.
+UCSC Genome Browser mirror. The GBiC script is for users who want to setup a full mirror of the 
+UCSC Genome Browser on their server/cloud instance, rather than using the 
+[Genome Browser in a Box (GBiB)](../gbib.html) or our public website. Mirrors set up via the GBiC 
+script are similar to the GBiB in that they allow local mirroring of our data and  can run offline, 
+making them ideal for private data and custom genomes not offered at UCSC. Mirrors differ from the 
+GBiB in that they are not meant to be run on users personal machine, but rather on a server or 
+cloud, and can thus be used by many individuals at an institution, rather than a single user. 
 
-After setting up  MySQL, Apache, and Ghostscript, the GBiC script copies the Genome
-Browser CGIs onto the local machine under /usr/local/apache/. It also deactivates the default
+The script works by setting up MySQL, Apache, and Ghostscript, and then copying the Genome
+Browser CGIs onto the machine under /usr/local/apache/. It also deactivates the default
 Apache htdocs/cgi folders, so it is best run on a new machine, or at least a host that is not 
 already used as a web server. The script can also download full or partial assembly databases,
 update the CGIs, and remove temporary files (aka "trash cleaning").
 
-The GBiC script has been tested with Ubuntu 14 LTS, Centos 6, Centos 6.7, 
-Centos 7, and Fedora 20.
+The GBiC script has been tested with Ubuntu 14/16 LTS, Centos 6/6.7/7.2, and Fedora 20.
 
 It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft 
 Azure (Ubuntu). If you want to load data on the fly from UCSC, you need to select the 
@@ -28,14 +32,13 @@ Download the GBiC script from the [UCSC Genome-Browser store](https://genome-sto
 
 Run the script as root, like this:
 
-    sudo -i
-    bash browserSetup.sh install
+    sudo bash browserSetup.sh install
 
 The `install` command downloads and configures Apache, MySQL and Ghostscript, copies the Genome Browser
 CGIs, and configures the mirror to load data remotely from UCSC. The `install` command must be
 run before any other command is used.
 
-# How does this work?
+# How does the GBiC script work?
 
 The GBiC script downloads the Genome Browser CGIs and sets up the central MySQL database. All
 potentially destructive steps require confirmation by the user (unless the -b = 
@@ -57,7 +60,7 @@ enough to test that your setup is working. You can then use the script to downlo
 assemblies of interest to your local Genome Browser, which will make it at least 
 as fast as the UCSC site.
 
-# The commands
+# The GBiC script commands
 
 The first argument of the script is called 'command' in the following. The first
 command that you will need is "install", it installs the browser dependencies,
@@ -76,7 +79,7 @@ To increase performance of your Genome Browser, the script accepts the command
 `minimal`. It will download the minimal tables required for reasonable
 performance from places on the US continent and possibly others, e.g. from
 Japan. Call it like this to trade space for performance and download a few
-essential pieces of hg38:
+of the most used MySQL tables for hg38:
 
     sudo bash browserSetup.sh minimal hg38
 
@@ -94,7 +97,7 @@ you will want to disable on-the-fly loading, like so:
 
     sudo bash browserSetup.sh -o
 
-In the case of hg19, the full assembly download is ~6.5TB. Limit this
+In the case of hg19, the full assembly download is >7TB. Limit this
 to 2TB or less with the -t option: 
 
     sudo bash browserSetup.sh -t noEncode mirror hg19
@@ -107,10 +110,11 @@ script with the `update` parameter like this:
 
     sudo bash browserSetup.sh update
 
-Minimal mirrors (those that have never mirrored a full assembly) should not 
-use the update command, but rather just re-run the minimal command, as it will
-just update the minimal tables. You may want to add this command to your crontab,
-maybe run it every day, so your local tables stay in sync with UCSC:
+Minimal mirrors (those that have partially mirrored an assembly) should not 
+use the `update` command, but rather just re-run the `minimal` command, so that only the minimal
+tables are updated. For instance, if you have partially mirrored the hg19 and hg38 databases,
+You may want to add this command to your crontab, maybe run it every day, so your local 
+tables stay in sync with UCSC:
 
     sudo bash browserSetup.sh minimal hg19 hg38
 
@@ -120,7 +124,7 @@ To update only the browser software and not the data, use the
     sudo bash browserSetup.sh cgiUpdate
 
 However, software may break or not work correctly if the needed data is not available. 
-Thus in most circumstances we recommend you use the `mirror` or `update` commands instead
+Thus in most circumstances we recommend you use the `mirror`, `update`, or `minimal` commands instead
 of `cgiUpdate`.
 
 You will also want to add a cleaning command to your crontab to remove 
@@ -135,13 +139,18 @@ If you find that you need the Kent command line utilities in addition to the Gen
 
     sudo bash browserSetup.sh addTools
 
+A majority of these utilities require an .hg.conf file in the users home directory. For 
+an example .hg.conf file to use, please see the following 
+[minimal.hg.conf](http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/minimal.hg.conf)
+file.
+
 If you find a bug or your Linux distribution is not supported, please contact 
 [genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). 
 
 More details about the Genome Browser installation are available at
 <http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;hb=HEAD;f=src/product>
  
-# All options
+# All GBiC script options
 
 Here is the full listing of commands and options supported by the GBiC script: 
 
