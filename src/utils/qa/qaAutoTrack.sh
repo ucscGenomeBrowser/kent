@@ -29,6 +29,7 @@ newLogDir=""
 
 # Other variables
 currDate=$(date +%F)
+currTime=$(date +%H_%M_%S)
 output="" # holds output message
 logUrl="http://genecats.cse.ucsc.edu/qa/test-results/qaAutoTrackLogs"
 logDir="/usr/local/apache/htdocs-genecats/qa/test-results/qaAutoTrackLogs"
@@ -49,8 +50,8 @@ cat << EOF
 Usage: `basename $0` [-hbvs] [-l log dir] [-u log url] \$database \$table
 
 	Required arguments:
-	\$database	 UCSC database name, i.e. hg19 or hg38.
-	\$table		 Table name, i.e. gwasCatalog.
+	database	 UCSC database name, e.g. hg19 or hg38.
+	table		 Table name, e.g. gwasCatalog.
 
 	Optional arguments:
 	-h		 Display this help and exit
@@ -195,39 +196,30 @@ fi
 ##### Main Program #####
 
 # Set some variables based on optional input
-if [[ "$newLogDir" != "" ]] && [[ $overwriteLogUrl == false ]]
+if [[ "$newLogDir" != "" ]]
 then
 	# Set logDir if newLogDir is provided
 	logDir="$newLogDir"
-elif [[ "$newLogDir" != "" ]] && [[ $overwriteLogUrl == true ]]
-then
-	# Set both newLogDir and logUrl if newLogDir is provided and option to overwrite url is set
-	logDir="$newLogDir"
-	logUrl=$logDir
-elif [[ "$newLogDir" == "" ]] && [[ $overwriteLogUrl == true ]]
+fi
+if [[ $overwriteLogUrl == true ]]
 then
 	# Overwrite url if option is set
 	logUrl=$logDir
 fi
 
 # set currLogFile
-if [ -e "$logDir/$db.$tableName.$currDate.txt" ]
-then
-	# if currLogFile already exists, make a new one w/ current time included in name
-	currLogFile="$db.$tableName.$currDate.$(date +%H_%M_%S).txt"
-else
-	currLogFile="$db.$tableName.$currDate.txt"
-fi
+currLogFile="$db.$tableName.$currDate.$currTime.txt"
 
 # set info for prevLog
-prevLogDate=$(ls -Lt $logDir | sed -n /$db.$tableName/p | grep -v "$currDate" | head -1 | awk -F . '{print $3}')
+prevLogDate=$(ls -Lt $logDir | sed -n /$db.$tableName/p | head -1 | awk -F . '{print $3}')
+prevLogTime=$(ls -Lt $logDir | sed -n /$db.$tableName/p | head -1 | awk -F . '{print $4}')
 
 #initialize output string
 output="\n$db\n"
 
-if [ -e $logDir/$db.$tableName.$prevLogDate.txt ]
+if [ -e $logDir/$db.$tableName.$prevLogDate.$prevLogTime.txt ]
 then
-	prevLogFile="$logDir/$db.$tableName.$prevLogDate.txt"
+	prevLogFile="$logDir/$db.$tableName.$prevLogDate.$prevLogTime.txt"
 fi
 
 # Set tooOld for different tables
