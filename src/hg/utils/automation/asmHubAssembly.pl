@@ -47,7 +47,7 @@ my $ncbiAssemblyId = `grep -v "^#" $namesFile | cut -f10`;
 chomp $ncbiAssemblyId;
 my $organism = `grep -v "^#" $namesFile | cut -f5`;
 chomp $organism;
-my $partCount = `zcat $agpFile | grep -v "^#" | awk -F'\t' '\$5 != "N"' | wc -l`;
+my $partCount = `zcat $agpFile | grep -v "^#" | awk -F'\t' '\$5 != "N" && \$5 != \"U\"' | wc -l`;
 chomp $partCount;
 $partCount = &AsmHub::commify($partCount);
 
@@ -72,9 +72,9 @@ The NCBI document
 target=_blank>AGP Specification</a> describes the format of the AGP file.
 </p>
 <p>
-In dense mode, this track depicts the contigs that make up the 
-currently viewed scaffold. 
-Contig boundaries are distinguished by the use of alternating gold and brown 
+In dense mode, this track depicts the contigs that make up the
+currently viewed scaffold.
+Contig boundaries are distinguished by the use of alternating gold and brown
 coloration. Where gaps
 exist between contigs, spaces are shown between the gold and brown
 blocks.  The relative order and orientation of the contigs
@@ -85,7 +85,7 @@ This assembly has $partCount component parts, with the following principal types
 <ul>
 _EOF_
     ;
-open (GL, "zcat $agpFile | grep -v '^#' | awk -F'\t' '\$5 != \"N\"' | awk '{print \$5}' | sort | uniq -c | sort -n|") or die "can not read $asmId.agp.gz";
+open (GL, "zcat $agpFile | grep -v '^#' | awk -F'\t' '\$5 != \"N\" && \$5 != \"U\"' | awk '{print \$5}' | sort | uniq -c | sort -n|") or die "can not read $asmId.agp.gz";
 while (my $line = <GL>) {
    chomp $line;
    $line =~ s/^\s+//;
@@ -105,6 +105,7 @@ while (my $line = <GL>) {
          printf "<li>%s - %s (count: %s)</li>\n", $type, $goldTypes{$type}, &AsmHub::commify($count);
       }
    } else {
+      printf STDERR "'%s'\n", $line;
       die "asmHubAssembly.pl: missing AGP contig type definition: $type";
    }
 }
