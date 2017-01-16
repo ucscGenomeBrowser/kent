@@ -1153,6 +1153,20 @@ if (spec != NULL)
     }
 }
 
+void twoBitOutMaskBeds(struct twoBitFile *tbf, char *seqName, FILE *outF)
+/* output a series of bed3's that enumerate the number of masked bases in a sequence*/
+{
+struct twoBit *header = readTwoBitSeqHeader(tbf, seqName);
+
+int ii;
+for (ii = 0; ii < header->maskBlockCount; ++ii)
+    {
+    fprintf(outF, "%s\t%d\t%d\n", seqName, header->maskStarts[ii], header->maskStarts[ii] + header->maskSizes[ii]);
+    }
+
+twoBitFree(&header);
+}
+
 void twoBitOutNBeds(struct twoBitFile *tbf, char *seqName, FILE *outF)
 /* output a series of bed3's that enumerate the number of N's in a sequence*/
 {
