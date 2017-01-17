@@ -20,7 +20,7 @@
 <a name="blat1"></a>
 <h2>Blat vs. Blast</h2>
 <p>
-<b>What are the differences between Blat and Blast?</b> </p>
+<strong>What are the differences between Blat and Blast?</strong> </p>
 <p>
 Blat is an alignment tool like BLAST, but it is structured differently. On DNA, Blat works by 
 keeping an index of an entire genome in memory. Thus, the target database of BLAT is not a set of 
@@ -56,8 +56,8 @@ sensitivity changes by installing command line Blat on their own Linux server.</
 
 <a name="blat1b"></a>
 <h2>Blat can't find a sequence</h2>
-<p><b>I can't find a sequence with Blat although I'm sure it is in the genome. Am I doing 
-something wrong?</b> </p>
+<p><strong>I can't find a sequence with Blat although I'm sure it is in the genome. Am I doing 
+something wrong?</strong> </p>
 <p>
 First, check if you are using the correct version of the genome. For example, two versions of the 
 human genome are currently in use (called hg19 and hg38) and your sequence may be only in one of 
@@ -82,8 +82,8 @@ query. If this is not possible, the only alternative is to download the executab
 <a name="blat2"></a>
 <h2>Blat usage restrictions</h2>
 <p>
-<b>I received a warning from your Blat server informing me that I had exceeded the server use 
-limitations. Can you give me information on the UCSC Blat server use parameters?</b> </p>
+<strong>I received a warning from your Blat server informing me that I had exceeded the server use 
+limitations. Can you give me information on the UCSC Blat server use parameters?</strong> </p>
 <p>
 Due to the high demand on our Blat servers, we restrict service for users who programatically query 
 Blat or do large batch queries. Program-driven use of Blat is limited to a maximum of one hit every 
@@ -96,7 +96,7 @@ information, see <a href="#blat3">Downloading Blat source and documentation</a>.
 <a name="blat3"></a>
 <h2>Downloading Blat source and documentation</h2>
 <p>
-<b>Is the Blat source available for download? Is documentation available?</b> </p>
+<strong>Is the Blat source available for download? Is documentation available?</strong> </p>
 <p>
 Blat source and executables are freely available for academic, nonprofit and personal use. 
 Commercial licensing information is available on the <a href="http://www.kentinformatics.com" 
@@ -114,8 +114,8 @@ Documentation on Blat program specifications is available
 <a name="blat5"></a>
 <h2>Replicating web-based Blat parameters in command-line version</h2>
 <p>
-<b>I'm setting up my own Blat server and would like to use the same parameter values that the UCSC 
-web-based Blat server uses.</b> </p>
+<strong>I'm setting up my own Blat server and would like to use the same parameter values that the 
+UCSC web-based Blat server uses.</strong> </p>
 <p>
 We almost always expect there to be some small differences between the hgBlat/gfServer and the 
 stand-alone command-line blat. The best matches can be found using pslReps and pslCDnaFilter 
@@ -180,7 +180,7 @@ For more information on the parameters available for blat, gfServer, and gfClien
 <a name="blat6"></a>
 <h2>Using the <em>-ooc</em> flag</h2>
 <p>
-<b>What does the <em>-ooc</em> flag do?</b> </p>
+<strong>What does the <em>-ooc</em> flag do?</strong> </p>
 <p>
 Using any <em>-ooc</em> option in blat, such as <em>-ooc=11.ooc</em>, speeds up searches similar to 
 repeat-masking sequence. The <em>11.ooc</em> file contains sequences determined to be 
@@ -201,8 +201,8 @@ may want to run blat without the <em>11.ooc</em> file if your particular situati
 <a name="blat4"></a>
 <h2>Replicating web-based Blat percent identity and score calculations</h2>
 <p>
-<b>Using my own command-line Blat server, how can I replicate the percent identity and score 
-calculations produced by web-based Blat?</b> </p>
+<strong>Using my own command-line Blat server, how can I replicate the percent identity and score 
+calculations produced by web-based Blat?</strong> </p>
 <p>
 There is no option to command-line Blat that gives you the percent ID and the score. However, we 
 have created scripts that include the calculations: </p>
@@ -223,9 +223,9 @@ obtaining the source. </p>
 <a name="blat7"></a>
 <h2>Replicating web-based Blat &quot;I'm feeling lucky&quot; search results</h2>
 <p>
-<b>How do I generate the same search results as web-based Blat's &quot;I'm feeling lucky&quot; 
-option using command-line blat?</b> </p>
-<P>
+<strong>How do I generate the same search results as web-based Blat's &quot;I'm feeling lucky&quot; 
+option using command-line blat?</strong> </p>
+<p>
 The code for the &quot;I'm feeling lucky&quot; Blat search orders the results based on the sort 
 output option that you selected on the query page. It then returns the highest-scoring alignment of 
 the first query sequence. </p>
@@ -248,7 +248,7 @@ downloads. </p>
 <a name="blat8"></a>
 <h2>Using Blat for short sequences with maximum sensitivity</h2>
 <p>
-<b>How do I configure blat for short sequences with maximum sensitivity?</b> </p>
+<strong>How do I configure blat for short sequences with maximum sensitivity?</strong> </p>
 <p>
 Here are some guidelines for configuring standalone blat and gfServer/gfClient for these 
 conditions:</p>

@@ -75,7 +75,7 @@
 <a name="download1"></a>
 <h2>Downloading sequence and annotation data</h2>
 <p>
-<b>How do I obtain the sequence and/or annotation data for a release?</b> </p>
+<strong>How do I obtain the sequence and/or annotation data for a release?</strong> </p>
 <p> 
 Sequence and annotation data downloads are usually made available within the first week of the 
 release of a new assembly. The download directories are automatically updated nightly to 
@@ -96,18 +96,17 @@ assembly</a>. </p>
 For more information on using the UCSC DAS server, see <a href="#downloads">Downloading data from 
 the UCSC DAS server</a>. </p> 
 <p> 
-<b>To quickly download large volumes of data you can use UDR (UDT Enabled Rysnc):</b> UDR provides 
-users much faster download rates. Here is an example using UDR, once installed, to download all the 
-mouse mm9 ENCODE information that amounts to several terabytes:</p>
-<pre class="code">
-$ udr rsync -avP hgdownload.cse.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
+<strong>To quickly download large volumes of data you can use UDR (UDT Enabled Rysnc):</strong> UDR 
+provides users much faster download rates. Here is an example using UDR, once installed, to download
+all the mouse mm9 ENCODE information that amounts to several terabytes:</p>
+<pre><code>$ udr rsync -avP hgdownload.cse.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre>
 Please read more about the new UDR method <a href="../../goldenPath/newsarch.html#030315" 
 target="_blank">here</a>. </p>
 
 <a name="download35"></a>
 <h2>Metadata tables for GenBank and RefSeq moved to hgFixed database</h2>
 <p>
-<b>I can no longer find metadata tables like gbCdnaInfo for an assembly.</b> </p> 
+<strong>I can no longer find metadata tables like gbCdnaInfo for an assembly.</strong> </p> 
 <p> 
 As of June 2016, the location of metadata tables that support the GenBank and RefSeq tracks 
 (RefSeq, Other RefSeq, mRNA, EST, etc.) have been moved from directories of individual assemblies 
@@ -167,8 +166,8 @@ These tables are also accessible from: </p>
 <a name="download32"></a>
 <h2>Extracting sequence in batch from an assembly</h2>
 <p>
-<b>I have a lot of coordinates for an assembly and want to extract the corresponding sequences. 
-What is the best way to proceed? </b> </p>
+<strong>I have a lot of coordinates for an assembly and want to extract the corresponding sequences.
+What is the best way to proceed? </strong> </p>
 <p> 
 There are two ways to extract genomic sequence in batch from an assembly:</p>
 <p>
@@ -199,7 +198,7 @@ sequence. </p>
 <a name="download23"></a>
 <h2>Downloading data from the UCSC DAS server</h2>
 <p>
-<b>How do I download data using the UCSC DAS server? </b> </p>
+<strong>How do I download data using the UCSC DAS server? </strong> </p>
 <p> 
 The UCSC DAS server provides access to genome annotation data for all current assemblies featured in
 the Genome Browser. To view a list of the assemblies available from the DAS server and their base 
@@ -228,7 +227,7 @@ target=_blank>DAS specification</a>. </p>
 <a name="download27"></a>
 <h2>Downloading the UCSC Genome Browser source</h2>
 <p>
-<b>Where can I download the Genome Browser source code and executables?</b> </p>
+<strong>Where can I download the Genome Browser source code and executables?</strong> </p>
 <p> 
 The Genome Browser source code and executables are freely available for academic, nonprofit, and 
 personal use (see <a href="FAQlicense.html#license2">Licensing the Genome Browser or Blat</a> for 
@@ -241,7 +240,7 @@ Blat downloads. </p>
 <a name="download2"></a>
 <h2>Download restrictions</h2>
 <p>
-<b>Do you have restrictions on the amount of downloads one can do?</b> </p>
+<strong>Do you have restrictions on the amount of downloads one can do?</strong> </p>
 <p> 
 Generally, we'd prefer that you not hit our interactive site with programs, unless they are 
 themselves front ends for interactive sites. We can handle the traffic from all the clicks that 
@@ -254,8 +253,8 @@ documentation</a> for a copy of Blat you can run locally. </p>
 <a name="download3"></a>
 <h2>Opening .fa files</h2>
 <p>
-<b>I am trying to look at the final decoding of the human genome. How can I open the *.fa
-files?</b> </p>
+<strong>I am trying to look at the final decoding of the human genome. How can I open the *.fa
+files?</strong> </p>
 <p> 
 Microsoft Word or any program that can handle large text files will do. Some of the chromosomes 
 begin with long blocks of <em>N</em>s. You may want to search for an <em>A</em> to get past
@@ -271,8 +270,8 @@ DNA sequence to display which portions are repeats, known genes, genetic markers
 <a name="download4"></a>
 <h2>Data differences between downloaded data and browser display</h2>
 <p>
-<b>I downloaded the genome annotations from your MySQL database tables, but the mRNA locations 
-didn't match what was showing in the Genome Browser. Shouldn't they be in synch?</b> </p> 
+<strong>I downloaded the genome annotations from your MySQL database tables, but the mRNA locations 
+didn't match what was showing in the Genome Browser. Shouldn't they be in synch?</strong> </p> 
 <p> 
 Yes. The Genome Browser and Table Browser are both driven by the same underlying MySQL database. 
 Check that your downloaded tables are from the same assembly version as the one you are viewing in 
@@ -284,9 +283,9 @@ of these databases to become available in the downloads directory. </p>
 <a name="download5"></a>
 <h2>Strange characters in FASTA file</h2>
 <p>
-<b>I noticed several characters other than <em>A</em>, <em>C</em>, <em>G</em>, <em>T</em>, and 
+<strong>I noticed several characters other than <em>A</em>, <em>C</em>, <em>G</em>, <em>T</em>, and 
 <em>N</em> in my fasta file, for example <em>y</em>, <em>k</em>, <em>s</em>, etc. Is the file 
-corrupted or are these characters valid?</b> </p> 
+corrupted or are these characters valid?</strong> </p> 
 <p>
 The characters most commonly seen in sequence are <em>A</em>, <em>C</em>, <em>G</em>, <em>T</em>, 
 and <em>N</em>, but there are several other valid characters that are used in clones to indicate 
@@ -320,8 +319,8 @@ lists nucleotide symbols, including those used for ambiguity:</p>
 <a name="download6"></a>
 <h2>Selection of GenBank ESTs</h2>
 <p>
-<b>I am interested in ESTs. How do you select which ones from GenBank to display in the Genome 
-Browser?</b> </p>
+<strong>I am interested in ESTs. How do you select which ones from GenBank to display in the Genome 
+Browser?</strong> </p>
 <p>
 All ESTs in GenBank on the date of the track data freeze for the given organism are used - none are 
 discarded. When two ESTs have identical sequences, both are retained because this can be significant
@@ -353,9 +352,9 @@ Blat hit, it is not included in the track. </p>
 <a name="download7"></a>
 <h2>EST strand direction</h2>
 <p>
-<b>Could you help me with my interpretation of EST data? If the EST is taken from the minus (-) 
+<strong>Could you help me with my interpretation of EST data? If the EST is taken from the minus (-)
 strand, does this always mean that the transcript is generated on the minus strand? Are two 
-corresponding ESTs that are assigned - and + always complementary? </p> 
+corresponding ESTs that are assigned - and + always complementary? </strong></p> 
 <p>
 I want to confirm the strand assignment for two human ESTs: </p>
 <ul>
@@ -367,7 +366,7 @@ I want to confirm the strand assignment for two human ESTs: </p>
   display. 
 </ul>
 <p>
-The graphical display goes with the orientation of the gene in that location.</b></p>
+The graphical display goes with the orientation of the gene in that location.</strong></p>
 <p> 
 From the examples above, it can be seen that the strand to which an EST aligns is not necessarily 
 reflected in the direction of transcription shown by the arrows in the display. When UCSC downloads 
@@ -410,14 +409,14 @@ EST. </p>
 <a name="download12"></a>
 <h2>Chromosome M</h2>
 <p>
-<b>What is chromosome M (chrM)?</b> </p>
+<strong>What is chromosome M (chrM)?</strong> </p>
 <p>Mitochondrial DNA.</p>
 
 <a name="download13"></a>
 <h2>N characters at beginning of human chr22</h2>
 <p>
-<b>When I download human chr22 from your web site, the unzipped file contains only
-<em>N</em>s.</b> </p>
+<strong>When I download human chr22 from your web site, the unzipped file contains only
+<em>N</em>s.</strong> </p>
 <p>
 There is a large block of <em>N</em>s at the beginning and end of chr22. Search for an <em>A</em> 
 to bypass the initial group of <em>N</em>s.</p>
@@ -425,8 +424,8 @@ to bypass the initial group of <em>N</em>s.</p>
 <a name="download30"></a>
 <h2>Erroneous duplicated chrY_random region on Mouse Build 34 (mm6)</h2>
 <p>
-<b>On the mm6 assembly, I've found duplicate contigs that are placed on both chrY and chrY_random. 
-Is this intentional?</b> </p>
+<strong>On the mm6 assembly, I've found duplicate contigs that are placed on both chrY and 
+chrY_random.  Is this intentional?</strong> </p>
 <p> 
 On the mm6 assembly, chrY_random erroneously contains a region duplicated from chrY. Because NCBI 
 discovered this assembly problem after the UCSC Genome Browser was processed, we were not able to 
@@ -447,7 +446,7 @@ different names) as regions on contigs MmY_110865_34, MmY_78990_34 and NT_078925
 <a name="download25"></a>
 <h2>Mapping chimp chromosome numbers to human chromsomes numbers</h2>
 <p>
-<b>How do the chimp and human chromosome numbering schemes compare?</b> </p> 
+<strong>How do the chimp and human chromosome numbering schemes compare?</strong> </p> 
 <p> 
 The following table shows the mapping of chromosomes in the chimp draft assemblies to human 
 chromosomes. Starting with the panTro2 assembly, the numbering scheme was changed to reflect a new 
@@ -495,9 +494,9 @@ chromosomes to more closely match their human counterparts. As a result, chromos
 <a name="download28"></a>
 <h2>Converting genome coordinates between assemblies</h2>
 <p>
-<b>I've been researching a specific area of the human genome on the current assembly, and now 
+<strong>I've been researching a specific area of the human genome on the current assembly, and now 
 you've just released a new version. Is there an easy way to locate my area of interest on the new 
-assembly? </b></p>
+assembly? </strong></p>
 <p>
 You can migrate data from one assembly to another by using the <a href="../cgi-bin/hgBlat">blat</a> 
 alignment tool or by converting assembly coordinates</a>. There are two conversion tools available 
@@ -522,8 +521,8 @@ we may be able to  provide you with one. </p>
 <a name="download33"></a>
 <h2>Linking gene name with accession number</h2>
 <p>
-<b>I have the accession number for a gene and would like to link it to the gene name. Is there a 
-table that shows both pieces of information?</b> </p> 
+<strong>I have the accession number for a gene and would like to link it to the gene name. Is there 
+a table that shows both pieces of information?</strong> </p> 
 <p> 
 If you are looking at the RefSeq Genes, the <em>refFlat</em> table contains both the gene name 
 (usually a HUGO Gene Nomenclature Committee ID) and its accession number. For the Known Genes, use 
@@ -532,8 +531,8 @@ the <em>kgAlias</em> table. </p>
 <a name="download31"></a>
 <h2>Obtaining a list of Known Genes</h2>
 <p>
-<b>How can I obtain a complete list of all the genes in the UCSC Known Genes table for a particular 
-organism?</b> </p> 
+<strong>How can I obtain a complete list of all the genes in the UCSC Known Genes table for a 
+particular organism?</strong> </p> 
 <p> 
 To obtain a complete copy of the entire Known Genes data set for an organism, open the Genome 
 Browser <a href="http://hgdownload.cse.ucsc.edu/downloads.html">Downloads page</a>, jump to the 
@@ -548,7 +547,7 @@ Data for a specific region or chromosome may be obtained from the Table Browser 
 <a name="download16"></a>
 <h2>Repeat-masking data</h2>
 <p>
-<b>What version of RepeatMasker do you use on your data? Which flags do you use?</b> </p> 
+<strong>What version of RepeatMasker do you use on your data? Which flags do you use?</strong> </p> 
 <p>
 UCSC uses the latest versions of RepeatMasker and repeat libraries available on the date when the 
 assembly data is processed. RepeatMasker version information can usually be found in the README text
@@ -563,7 +562,7 @@ to extend through repeats, but not initiate in them. </p>
 <a name="download17"></a>
 <h2>Availability of repeat-masked data</h2>
 <p>
-<b>Are the repeat annotation files available for every chromosome?</b> </p> 
+<strong>Are the repeat annotation files available for every chromosome?</strong> </p> 
 <p> 
 Yes, you can obtain the repeat-masked files via the Table Browser or from the organism's annotation 
 database downloads directory. The RepeatMasker annotation tables are named chr<em>N</em>_rmsk 
@@ -573,8 +572,8 @@ named simpleRepeat.</p>
 <a name="download24"></a>
 <h2>RepeatMasker version differences - UCSC vs. RepeatMasker website</h2>
 <p>
-<b>When I run RepeatMasker independently from the RepeatMasker web server, my results vary from 
-those of UCSC.  What's the cause?</b> </p> 
+<strong>When I run RepeatMasker independently from the RepeatMasker web server, my results vary from
+those of UCSC.  What's the cause?</strong> </p> 
 <p> 
 UCSC occasionally uses updated versions of the RepeatMasker software and repeat libraries that are 
 not yet available on the RepeatMasker website (see <a href="#download16">Repeat-masking data</a> 
@@ -583,7 +582,7 @@ for more information). </p>
 <a name="download18"></a>
 <h2>Obtaining promoter sequence</h2>
 <p>
-<b>How can I fetch promoter sequence upstream of a gene?</b> </p> 
+<strong>How can I fetch promoter sequence upstream of a gene?</strong> </p> 
 <p> 
 The UCSC Genome Browser offers several ways to obtain this information, depending on your 
 requirements. </p> 
@@ -613,8 +612,8 @@ promoters for some of the human assemblies.</p>
 <a name="download19"></a>
 <h2>Data from Evolutionary Conservation Score tracks</h2>
 <p>
-<b>Where can I download the conservation score data from the Human/Mouse Evolutionary Conservation 
-Score track?</b> </p> 
+<strong>Where can I download the conservation score data from the Human/Mouse Evolutionary 
+Conservation Score track?</strong> </p> 
 <p> 
 The conservation score data are stored in a group of tables in the annotation database downloads 
 directory. The naming conventions of the tables vary among releases. In earlier assemblies, table 
@@ -626,9 +625,9 @@ bases/score interval and are used to generate the browser displays at different 
 <a name="download20"></a>
 <h2>Minus strand coordinates - axtNet</h2>
 <p>
-<b>I downloaded the axtNet alignments between the latest human and mouse assemblies.  I found that 
-some of the alignments listed in the axtNet files do not agree with what is shown in the
-browser.</b> </p> 
+<strong>I downloaded the axtNet alignments between the latest human and mouse assemblies. I found 
+that some of the alignments listed in the axtNet files do not agree with what is shown in the
+browser.</strong> </p> 
 <p> 
 Is this alignment on the minus strand? Minus strand coordinates in axt files are handled differently
 from how they are handled in the Genome Browser. To convert axt minus strand coordinates to Genome 
@@ -645,8 +644,8 @@ target=blank>genomeWiki</a>. </p>
 <a name="download21"></a>
 <h2>Mapping UCSC STS marker IDs to those of other groups</h2>
 <p>
-<b>How do I map the STS genetic marker IDs in the genome browser to the IDs assigned by other 
-groups?</b> </p> 
+<strong>How do I map the STS genetic marker IDs in the genome browser to the IDs assigned by other 
+groups?</strong> </p> 
 <p> 
 We assign our own IDs to each of the STS markers, but we also track the UniSTS IDs for each marker 
 in the downloadable stsInfo2 table. To determine the location of a specific marker, look up the 
@@ -657,7 +656,7 @@ UCSC ID 2880 and is located at chr10:240791-241019. </p>
 <a name="download22"></a>
 <h2>deCODE map data</h2>
 <p>
-<b>Where can I get more information about the deCODE map?</b> </p> 
+<strong>Where can I get more information about the deCODE map?</strong> </p> 
 <p> 
 You can obtain this information from the combination of a couple of tables. The stsMap table 
 contains the physical position of all STS markers, including those on the deCODE map. This file 
@@ -669,8 +668,8 @@ both files). </p>
 <a name="download29"></a>
 <h2>Direct MySQL access to data</h2>
 <p>
-<b>Is it possible to run SQL queries directly on the database rather than using the Table Browser 
-interface?</b> </p> 
+<strong>Is it possible to run SQL queries directly on the database rather than using the Table 
+Browser interface?</strong> </p> 
 <p> 
 Yes. See our documentation on <a href="../goldenPath/help/mysql.html">Downloading Data using 
 MySQL</a>. </p> 
@@ -683,8 +682,8 @@ mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A
 <a name="download34"></a>
 <h2>Name of fourth column in BED output</h2>
 <p>
-<b>When using the Table Browser to extract exons from a Gene track, what does the 'Name' column 
-(fourth BED column) refer to?</b> </p>
+<strong>When using the Table Browser to extract exons from a Gene track, what does the 'Name' column
+(fourth BED column) refer to?</strong> </p>
 <p> 
 The fourth column of the BED output contains a lot of information separated by underscores. For 
 example:
