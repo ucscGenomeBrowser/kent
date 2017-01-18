@@ -3,40 +3,40 @@
 # Considerations before installing a Genome Browser
 
 Like most web servers, running a Genome Browser installation at your institution,
-even for your own department, requires a Unix machine, disk space (6TB for hg19) and the
+even for your own department, requires a Unix machine, disk space (6TB for hg19), and the
 resources to update the site and underlying OS regularily.  
 You may want to consider these alternatives before embarking on a full UCSC
 Genome Browser installation directly on your server.
 
 1.  If you only want to include a genome browser view into your webpage for
     already existing genomes, you can use an &lt;iframe&gt; tag and point it to 
-    [http://genome.ucsc.edu/cgi-bin/hgRenderTracks](http://genome.ucsc.edu/cgi-bin/hgRenderTracks)
+    [http://genome.ucsc.edu/cgi-bin/hgRenderTracks](http://genome.ucsc.edu/cgi-bin/hgRenderTracks),
     which will show only the main browser graphic without any decorations.
 
-    You can use various parameters to adapt this graphic to your use case
+    You can then use various parameters to adapt this graphic to your use case
     (e.g. set position, switch on/off tracks or highlight a range with a color), 
     see our [manual pages](https://genome.ucsc.edu/goldenpath/help/customTrack.html#SHARE) for a list
     of the parameters.
     
-2.  [Assembly Hubs](https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html#Assembly): 
+2.  [Assembly Hubs](../../goldenPath/help/hgTrackHubHelp.html#Assembly): 
     Assembly Hubs allow you to prepare any FASTA file, add annotations and use
     the Genome Browser to visualize it. All you need is a webserver where you
     save the indexed genome sequence and files to annotate it, e.g. in BAM,
     bigBed or bigWig format.
     
     * Pros:
-        * no installation, no updates, no long-term UNIX support necessary
-        * stable for many years, link to the assembly hub can be put into a manuscript
-        * for commercial users, no license is required
+        * No installation, no updates, no long-term UNIX support necessary.
+        * Stable for many years, the link to the assembly hub can be put into a manuscript.
+        * For commercial users, no license is required.
     * Cons:
-        * you need access to a public webserver to store the files
-        * data is rendered at UCSC. Private data can be
+        * You need access to a public webserver to store the files.
+        * Data is rendered at UCSC. Private data can be
         password-protected and loaded through https and restricted to UCSC's
         IP address, but has to be located on the web and accessible by the
-        UCSC webserver
-        * for BLAT searches in your genome, you have to start a BLAT
-        server yourself on a Unix server 
-        * if your hub includes a high number of
+        UCSC webserver.
+        * For BLAT searches in your genome, you have to start a BLAT
+        server yourself on a Unix server.
+        * If your hub includes a high number of
         annotation files or HAL (multiple alignment) files and is located far
         from Santa Cruz, assembly hubs may be slower than a local mirror. This issue
         can be resolved by using a UCSC mirror closer to the assembly
@@ -45,7 +45,7 @@ Genome Browser installation directly on your server.
         provider which is closer to Santa Cruz or by using a content distribution network,
         where all content is mirrored and the closest location is chosen by your provider.
 
-3.  [Genome Browser in a Box](https://genome.ucsc.edu/goldenPath/help/gbib.html): 
+3.  [Genome Browser in a Box](../../goldenPath/help/gbib.html): 
     Genome Browser in a Box (GBiB) is a fully configured Virtual Machine including
     Apache and Mysql and behaves exactly like the UCSC site.
     It loads genome data from the UCSC download servers on the fly.
@@ -57,16 +57,16 @@ Genome Browser installation directly on your server.
     annotation tracks you need and use your GBiB even off-line on a laptop.
 
     * Pros:
-        * relatively simple to install: download and double-click
-        * by default, software and data updates are managed remotely by UCSC, via an update script run every two weeks
-        * best performance when rendering local BAM/bigWig/bigBed files
-        * no Unix webserver needed, runs on any OS
-        * for commercial users: easier click-through licensing compared to a full multi-seat, manual license
+        * Relatively simple to install: download and double-click.
+        * By default, software and data updates are managed remotely by UCSC, via an update script run every two weeks.
+        * Best performance when rendering local BAM/bigWig/bigBed files.
+        * No Unix webserver needed, runs on any OS.
+        * For commercial users: easier click-through licensing compared to a full multi-seat, manual license.
     * Cons:
-        * requires the free VirtualBox software or a commercial Virtualization system
-        * by default requires opening at least three outgoing ports to UCSC for Mysql, Rsync downloads 
+        * Requires the free VirtualBox software or a commercial Virtualization system.
+        * By default requires opening at least three outgoing ports to UCSC for MySQL, Rsync downloads 
           and BLAT in your firewall. Once all data is downloaded, no open ports are needed.
-        * for maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks, like a manual local installation
+        * For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks, like a manual local installation.
 
 If none of the above options really fulfill your needs, then you should consider setting up a full local mirror of the UCSC website.
 We support mirror site installations as far as our time allows and there are dozens of working mirror sites already all over the world.
@@ -77,35 +77,34 @@ and personal use. To purchase a
 license, see our [License Instructions](https://genome.ucsc.edu/license/index.html)
 or visit the [Genome Browser store](https://genome-store.ucsc.edu/). 
 
-# Installing a Genome Browser locally with the installation script
+# Installing a Genome Browser locally with the GBiC installer
 
 If you do not want to use our prepared virtual machine Genome-Browser-in-a-Box, we provide an
-[installation script](mirrorInstallScript.html) that sets up a fully functional mirror on all major Linux
+[installation program](../../goldenPath/help/gbic.html) that sets up a fully functional mirror on all major Linux
 distributions.  
 
-It has been tested on Ubuntu 14, Redhat/CentOS 6 and 7,
-Fedora 20 and on recent OSX versions.  It is preferably used on a fresh Linux
+It has been tested on Ubuntu 14/16,  RedHat/CentOS 6 and 7,
+and Fedora 20. It is preferably used on a fresh Linux
 installation, as it has to deactivate the default site config file in Apache
-and fills the Mysql directory with numerous databases.  The easiest way is to
-run the installation script in a new virtual machine. The script also works on
+and fills the MySQL directory with numerous databases.  The easiest way is to
+run the Genome Browser in the Cloud program in a new virtual machine. The program also works on
 Docker and cloud computing virtual machines, and has been tested on the ones sold by
 Amazon, Microsoft and Google.
 
-Like GBiB, the mirror installed by the script can load the annotation data either from UCSC
+Like GBiB, the mirror installed by the GBiC can load the annotation data either from UCSC
 or from a local database copy. If you load data from UCSC and use a cloud
 computing provider, it is highly advisable to run your instances in the US West
 Coast / San Francisco Bay Area or San Jose data centers, as otherwise data loading can be 
 very slow.
 
-To run the installation script, follow [its help
-page](mirrorInstallScript.html). 
+To run the installation program, please see the [GBiC user guide](../../goldenPath/help/gbic.html). 
 
 # Manual installation instructions
 
-If the installation script does not work on your linux distribution or you prefer to
+If the installation program does not work on your linux distribution or you prefer to
 make adaptations to your mirror, we also provide [step-by-step installation
 instructions](mirrorManual.html) that cover the configuration of Apache,
-Mysql, the Genome Browser CGIs, temporary file removal and other topics, like
+MySQL, the Genome Browser CGIs, temporary file removal and other topics, like
 data loading through proxies.
 
 We are also aware of these external websites that were not created by UCSC
@@ -128,8 +127,8 @@ UDR is not written or managed by UCSC. It is an open source tool created
 by the [Laboratory for Advanced Computing] at the University of Chicago.
 It has been tested to work under Linux, FreeBSD and Mac OSX, but may
 work under other UNIX variants. The source code can be obtained through
-[GitHub][UDR]. When using the installation script, the -u option will
-use UDR for all downloads.
+[GitHub][UDR]. When using the Genome Browser in the Cloud installation 
+program, the -u option will use UDR for all downloads.
 
 If you are a casual or occasional manual downloader of data, there is no
 need to change your method; continue to visit our download server to
@@ -156,7 +155,7 @@ rsync installed on your system.
 
 For your convenience, we are offering a binary distribution of UDR for
 Red Hat Enterprise Linux 6.x (or variants such as CentOS 6 or Scientific
-Linux 6). You’ll find both a 64-bit and 32-bit rpm [here].
+Linux 6). You'll find both a 64-bit and 32-bit rpm [here].
 
 Once you have a working UDR binary, either by building from source or by
 installing the rpm, you can download files from either of our our
