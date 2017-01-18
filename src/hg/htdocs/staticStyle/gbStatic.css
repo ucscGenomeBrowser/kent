@@ -66,8 +66,9 @@
 }
 
 .gbsPage code {
-    font-size: 13px;
+    font-size: 15px;
     background-color: #ededed;          /* light gray */
+    padding: 0 5px;
 }
 
 .gbsPage pre {
