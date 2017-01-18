@@ -4,37 +4,45 @@
     <head>
         <meta charset="UTF-8">
         <title>
-            <!--#echo var="title" -->
+            <!--#echo var="TITLE" -->
         </title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:700|Lato:700,700italic,300,400,400italic">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <!--#if expr="$GB_DOCUMENT_ROOT" -->
-            <!-- For non-standard GB doc installations at mirror sites:
-                1) Set Apache Alias /gbDocs to the new root directory
-                2) Use Apache SetEnv to set GB_DOCUMENT_ROOT to "on"
-            -->
-            <link rel="stylesheet" href="/gbDocs/style/bootstrap.min.css">
-            <link rel="stylesheet" href="/gbDocs/style/gb.css">
-            <link rel="stylesheet" href="/gbDocs//staticStyle/gbStatic.css">
+        <!-- Use ROOT variable set in caller to determine relative path to style sheets
+                If there's a way to use a variable here instead, do so!  -->
+        <!--#if expr="$ROOT = ." -->
+            <link rel="stylesheet" href="./style/bootstrap.min.css">
+            <link rel="stylesheet" href="./style/gb.css">
+            <link rel="stylesheet" href="./staticStyle/gbStatic.css">
+        <!--#elif expr="$ROOT = .." -->
+            <link rel="stylesheet" href="../style/bootstrap.min.css">
+            <link rel="stylesheet" href="../style/gb.css">
+            <link rel="stylesheet" href="../staticStyle/gbStatic.css">
+        <!--#elif expr="$ROOT = ../.." -->
+            <link rel="stylesheet" href="../../style/bootstrap.min.css">
+            <link rel="stylesheet" href="../../style/gb.css">
+            <link rel="stylesheet" href="../../staticStyle/gbStatic.css">
         <!--#else -->
-            <link rel="stylesheet" href="/style/bootstrap.min.css">
-            <link rel="stylesheet" href="/style/gb.css">
-            <link rel="stylesheet" href="/staticStyle/gbStatic.css">
         <!--#endif -->
     </head>
 
     <body>
         <!-- Blue menu bar / hotlinks -->
         <!--#include virtual="/cgi-bin/hgMenubar"-->
-        <!--#if expr="$GB_DOCUMENT_ROOT" -->
+        <!--#if expr="$ROOT = ." -->
             <!-- Override nice-menu.css styling -->
-            <link rel="stylesheet" href="/gbDocs/style/gbAfterMenu.css">
+            <link rel="stylesheet" href="./style/gbAfterMenu.css">
             <!-- Override default home link icon -->
-            <link rel="stylesheet" href="/gbDocs/style/gbLogoInMenu.css">
+            <link rel="stylesheet" href="./style/gbLogoInMenu.css">
+        <!--#elif expr="$ROOT = .." -->
+            <link rel="stylesheet" href="../style/gbAfterMenu.css">
+            <link rel="stylesheet" href="../style/gbLogoInMenu.css">
+        <!--#elif expr="$ROOT = ../.." -->
+            <link rel="stylesheet" href="../../style/gbAfterMenu.css">
+            <link rel="stylesheet" href="../../style/gbLogoInMenu.css">
         <!--#else -->
-            <link rel="stylesheet" href="/style/gbAfterMenu.css">
-            <link rel="stylesheet" href="/style/gbLogoInMenu.css">
         <!--#endif -->
+    </head>
 
         <!-- Grid layout from bootstrap.css -->
         <div class="container-fluid">
