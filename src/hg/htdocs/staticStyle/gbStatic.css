@@ -22,12 +22,16 @@
     background-color: #ededed;
 }
 
+.gbsGreyLighter {
+    background-color: #f5f5f5;
+}
+
 .gbsYellowLight {
     background-color: #ffffe5;
 }
 
 .gbsRedDark {
-    background-color: #7E1F16;
+    background-color: #7e1f16;
 }
 
 /* Overall page styling */
@@ -56,6 +60,14 @@
     padding: 6px 20px;
     background-color: #4c759c;  /* light blue */
     color: white;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+/* Subsection header */
+.gbsPage h3 {
+    padding: 6px 20px;
+    background-color: #f5f5f5;  /* lighter gray */
     font-size: 17px;
     font-weight: bold;
 }
