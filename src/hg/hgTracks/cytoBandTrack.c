@@ -92,6 +92,25 @@ bedLoadItem(tg, "cytoBand", (ItemLoader)cytoBandLoad);
 static void loadCytoBandsIdeo(struct track *tg)
 /* Load up cytoBandIdeo from database table to track items. */
 {
+if (tg->isBigBed)
+    { 
+    struct lm *lm = lmInit(0);
+    int start = 0;
+    int end = hChromSize(database, chromName);
+    struct bigBedInterval *bb, *bbList = bigBedSelectRange(tg, chromName, start, end, lm);
+    char *bedRow[32];
+    char startBuf[16], endBuf[16];
+
+    for (bb = bbList; bb != NULL; bb = bb->next)
+        {
+        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        struct cytoBand *bed = cytoBandLoad(bedRow);
+        slAddHead(&tg->items, bed);
+        }
+    slReverse(&tg->items);
+    lmCleanup(&lm);
+    return;
+    }
 char query[256];
 sqlSafef(query, sizeof(query),
       "select * from cytoBandIdeo where chrom like '%s'", chromName);
