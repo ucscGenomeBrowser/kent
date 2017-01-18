@@ -82,6 +82,7 @@
 .gbFooterContainer {
     background-color: #f9f9f9;
     margin-top: 20px;
+    border-top: 1px lightgray solid;
     padding: 20px;
     padding-left: 100px;
     font-size: 14px;
