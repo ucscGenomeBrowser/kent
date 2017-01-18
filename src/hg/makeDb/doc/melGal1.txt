@@ -1343,3 +1343,22 @@ TMPDIR=/dev/shm
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# LIFTOVER TO melGal5 (DONE - 2017-01-17 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/melGal1/bed/blat.melGal5.2017-01-17
+    cd /hive/data/genomes/melGal1/bed/blat.melGal5.2017-01-17
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/melGal1/jkStuff/melGal1.11.ooc \
+         melGal1 melGal5
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/melGal1/jkStuff/melGal1.11.ooc \
+         melGal1 melGal5) > doLiftOverToMelGal5.log 2>&1
+    # real    104m11.252s
+
+    # see if the liftOver menus function in the browser from melGal1 to melGal5
+
+##############################################################################
