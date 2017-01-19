@@ -244,12 +244,13 @@ for (field = allFields; field != NULL; field = field->next)
 	{
 	bestScore = score;
 	slFreeList(&partingList);
-	partingList = lockedFields;
+	partingList = predictableFields;
 	partingField = field;
 	lockedFields = NULL;
 	}
     else
-	slFreeList(&lockedFields);
+	slFreeList(&predictableFields);
+    slFreeList(&lockedFields);
     }
 *retFields = partingList;
 *retField = partingField;
