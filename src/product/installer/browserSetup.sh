@@ -1409,7 +1409,7 @@ function downloadGenomes
        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/$db
     done
 
-    if [ -z $GENBANKTBLS ]; then
+    if [ ! -z "$GENBANKTBLS" ]; then
         echo2 Downloading hgFixed tables
         for tbl in $GENBANKTBLS; do
             $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/${tbl}.* $MYSQLDIR/hgFixed/
