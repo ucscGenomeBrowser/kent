@@ -7,7 +7,7 @@ UCSC Genome Browser mirror. The GBiC program is for users who want to set up a f
 UCSC Genome Browser on their server/cloud instance, rather than using the 
 [Genome Browser in a Box (GBiB)](http://genome.ucsc.edu/goldenPath/help/gbib.html) 
 or our public website. Please see the 
-[Installation of a UCSC Genome Browser on a local machine ("mirror")](http://genome.ucsc.edu/admin/mirror.html#considerations-before-installing-a-genome-browser)
+[Installation of a UCSC Genome Browser on a local machine (mirror)](http://genome.ucsc.edu/admin/mirror.html#considerations-before-installing-a-genome-browser)
 page for a summary of installation options, including the pros and cons of using a mirror installation
 via the GBiC program vs a GBiB.
 
