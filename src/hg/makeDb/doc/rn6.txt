@@ -1492,3 +1492,736 @@ hgLoadSqlTab rn6 ensToRgd ${HOME}/kent/src/hg/lib/knownTo.sql ensToRgd.tab
 # the ensToRgd table in rn6 and use them to link to RGD.
 
 ##############################################################################
+# lastz X. tropicalis xenTro7 (DONE - 2017-01-11 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S rn6XenTro7
+    mkdir /hive/data/genomes/rn6/bed/lastzXenTro7.2017-01-11
+    cd /hive/data/genomes/rn6/bed/lastzXenTro7.2017-01-11
+
+    printf "%s\n" \
+'# Rat vs. X. tropicalis
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: X. tropicalis xenTro7
+SEQ2_DIR=/hive/data/genomes/xenTro7/xenTro7.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro7/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/rn6/bed/lastzXenTro7.2017-01-11
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    #	real    1754m46.659s  (much contention for ku resources)
+
+    cat fb.rn6.chainXenTro7Link.txt
+    #	112036484 bases of 2729860805 (4.104%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 xenTro7) \
+       > rbest.log 2>&1 &
+    #  real    1079m9.975s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/xenTro7/bed/blastz.rn6.swap
+    cd /hive/data/genomes/xenTro7/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzXenTro7.2017-01-11/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    #	real    66m47.360s
+
+    cat  fb.xenTro7.chainRn6Link.txt
+    #	108092395 bases of 1365936747 (7.913%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro7 rn6) \
+         > rbest.log 2>&1
+    # real    1027m44.180s
+
+##############################################################################
+# lastz chimp panTro5 (DONE - 2017-01-11 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S panTro5Rn6
+    mkdir /hive/data/genomes/rn6/bed/lastzPanTro5.2017-01-11
+    cd /hive/data/genomes/rn6/bed/lastzPanTro5.2017-01-11
+
+    printf "%s\n" \
+'# Rat vs. chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: chimp panTro5
+SEQ2_DIR=/hive/data/genomes/panTro5/panTro5.2bit
+SEQ2_LEN=/hive/data/genomes/panTro5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=200
+
+BASE=/hive/data/genomes/rn6/bed/lastzPanTro5.2017-01-11
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    2703m15.450s
+
+    cat fb.rn6.chainPanTro5Link.txt
+    #	1114217604 bases of 2729860805 (40.816%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 panTro5) \
+           > rbest.log 2>&1 &
+    #  real    1753m33.467s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/panTro5/bed/blastz.rn6.swap
+    cd /hive/data/genomes/panTro5/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzPanTro5.2017-01-11/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    185m16.607s
+
+    cat  fb.panTro5.chainRn6Link.txt
+    #	1107582383 bases of 3132620660 (35.356%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panTro5 rn6) \
+         > rbest.log 2>&1
+    # real    1411m22.158s
+
+##############################################################################
+# lastz opossum monDom5 (DONE - 2017-01-11 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S monDom5Rn6
+    mkdir /hive/data/genomes/rn6/bed/lastzMonDom5.2017-01-11
+    cd /hive/data/genomes/rn6/bed/lastzMonDom5.2017-01-11
+
+    printf "%s\n" \
+'# Rat vs. opossum
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: opossum monDom5
+SEQ2_DIR=/hive/data/genomes/monDom5/monDom5.2bit
+SEQ2_LEN=/hive/data/genomes/monDom5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/rn6/bed/lastzMonDom5.2017-01-11
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    #	real    2258m54.815s  (much contention for ku resources)
+
+    cat fb.rn6.chainMonDom5Link.txt
+    #	263494827 bases of 2729860805 (9.652%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 monDom5) \
+           > rbest.log 2>&1 &
+    #  real    2596m10.639s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/monDom5/bed/blastz.rn6.swap
+    cd /hive/data/genomes/monDom5/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzMonDom5.2017-01-11/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    #	real    41m5.953s
+
+    cat  fb.monDom5.chainRn6Link.txt
+    #	251790387 bases of 3501660299 (7.191%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` monDom5 rn6) \
+         > rbest.log 2>&1
+    # real    2521m59.900s
+
+##############################################################################
+# lastz rhesus rheMac8 (DONE - 2017-01-13 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S rheMac8Rn6
+    mkdir /hive/data/genomes/rn6/bed/lastzRheMac8.2017-01-13
+    cd /hive/data/genomes/rn6/bed/lastzRheMac8.2017-01-13
+
+    printf "%s\n" \
+'# Rat vs. rhesus
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: rhesus rheMac8
+SEQ2_DIR=/hive/data/genomes/rheMac8/rheMac8.2bit
+SEQ2_LEN=/hive/data/genomes/rheMac8/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=1000
+
+BASE=/hive/data/genomes/rn6/bed/lastzRheMac8.2017-01-13
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    1196m51.891s
+
+    cat fb.rn6.chainRheMac8Link.txt
+    #	1096456425 bases of 2729860805 (40.165%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 rheMac8) \
+           > rbest.log 2>&1 &
+    #  real    1569m42.488s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/rheMac8/bed/blastz.rn6.swap
+    cd /hive/data/genomes/rheMac8/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzRheMac8.2017-01-13/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    205m19.557s
+
+    cat  fb.rheMac8.chainRn6Link.txt
+    #	1051607110 bases of 3142093174 (33.468%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rheMac8 rn6) \
+         > rbest.log 2>&1
+    # real    1601m35.848s
+
+##############################################################################
+# lastz guinea pig cavPor3 (DONE - 2017-01-13 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S cavPor3Rn6
+    mkdir /hive/data/genomes/rn6/bed/lastzCavPor3.2017-01-13
+    cd /hive/data/genomes/rn6/bed/lastzCavPor3.2017-01-13
+
+    printf "%s\n" \
+'# Rat vs. guinea pig
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: guinea pig cavPor3
+SEQ2_DIR=/hive/data/genomes/cavPor3/cavPor3.2bit
+SEQ2_LEN=/hive/data/genomes/cavPor3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=15
+
+BASE=/hive/data/genomes/rn6/bed/lastzCavPor3.2017-01-13
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    742m21.264s
+
+    cat fb.rn6.chainCavPor3Link.txt
+    #	759825883 bases of 2729860805 (27.834%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 cavPor3) \
+           > rbest.log 2>&1 &
+    #  real    535m40.395s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/cavPor3/bed/blastz.rn6.swap
+    cd /hive/data/genomes/cavPor3/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzCavPor3.2017-01-13/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    54m21.781s
+
+    cat  fb.cavPor3.chainRn6Link.txt
+    #	755393931 bases of 2663369733 (28.362%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cavPor3 rn6) \
+         > rbest.log 2>&1
+    # real    564m23.551s
+
+##############################################################################
+# lastz dog canFam3 (DONE - 2017-01-13 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S canFam3Rn6
+    mkdir /hive/data/genomes/rn6/bed/lastzCanFam3.2017-01-13
+    cd /hive/data/genomes/rn6/bed/lastzCanFam3.2017-01-13
+
+    printf "%s\n" \
+'# Rat vs. dog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: dog canFam3
+SEQ2_DIR=/hive/data/genomes/canFam3/canFam3.2bit
+SEQ2_LEN=/hive/data/genomes/canFam3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=15
+
+BASE=/hive/data/genomes/rn6/bed/lastzCanFam3.2017-01-13
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    694m15.665s
+
+    cat fb.rn6.chainCanFam3Link.txt
+    #	779099966 bases of 2729860805 (28.540%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 canFam3) \
+           > rbest.log 2>&1 &
+    #  real    471m35.128s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/canFam3/bed/blastz.rn6.swap
+    cd /hive/data/genomes/canFam3/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzCanFam3.2017-01-13/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    47m17.732s
+
+    cat  fb.canFam3.chainRn6Link.txt
+    #	738483963 bases of 2392715236 (30.864%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` canFam3 rn6) \
+         > rbest.log 2>&1
+    # real    357m54.846s
+
+##############################################################################
+# lastz cow bosTau8 (DONE - 2017-01-16 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S bosTau8Rn6
+    mkdir /hive/data/genomes/rn6/bed/lastzBosTau8.2017-01-16
+    cd /hive/data/genomes/rn6/bed/lastzBosTau8.2017-01-16
+
+    printf "%s\n" \
+'# Rat vs. cow
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: cow bosTau8
+SEQ2_DIR=/hive/data/genomes/bosTau8/bosTau8.2bit
+SEQ2_LEN=/hive/data/genomes/bosTau8/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=15
+
+BASE=/hive/data/genomes/rn6/bed/lastzBosTau8.2017-01-16
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    379m56.864s
+
+    cat fb.rn6.chainBosTau8Link.txt
+    #	707100078 bases of 2729860805 (25.902%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 bosTau8) \
+           > rbest.log 2>&1 &
+    #  real    688m13.841s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/bosTau8/bed/blastz.rn6.swap
+    cd /hive/data/genomes/bosTau8/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzBosTau8.2017-01-16/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    53m51.901s
+
+    cat  fb.bosTau8.chainRn6Link.txt
+    #	671724400 bases of 2649307237 (25.355%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bosTau8 rn6) \
+         > rbest.log 2>&1
+    # real    580m38.055s
+
+##############################################################################
+# lastz panda ailMel1 (DONE - 2017-01-16 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S ailMel1Rn6
+    mkdir /hive/data/genomes/rn6/bed/lastzAilMel1.2017-01-16
+    cd /hive/data/genomes/rn6/bed/lastzAilMel1.2017-01-16
+
+    printf "%s\n" \
+'# Rat vs. panda
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: panda ailMel1
+SEQ2_DIR=/hive/data/genomes/ailMel1/ailMel1.2bit
+SEQ2_LEN=/hive/data/genomes/ailMel1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=400
+
+BASE=/hive/data/genomes/rn6/bed/lastzAilMel1.2017-01-16
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    309m30.719s
+
+    cat fb.rn6.chainAilMel1Link.txt
+    #	829980217 bases of 2729860805 (30.404%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 ailMel1) \
+           > rbest.log 2>&1 &
+    #  real    405m31.270s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/ailMel1/bed/blastz.rn6.swap
+    cd /hive/data/genomes/ailMel1/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzAilMel1.2017-01-16/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    53m19.878s
+
+    cat  fb.ailMel1.chainRn6Link.txt
+    #	780846350 bases of 2245312831 (34.777%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ailMel1 rn6) \
+         > rbest.log 2>&1
+    # real    324m22.903s
+
+##############################################################################
+# lastz prairie vole micOch1 (DONE - 2017-01-17 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S micOch1Rn6
+    mkdir /hive/data/genomes/rn6/bed/lastzMicOch1.2017-01-17
+    cd /hive/data/genomes/rn6/bed/lastzMicOch1.2017-01-17
+
+    printf "%s\n" \
+'# Rat vs. prairie vole
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: prairie vole micOch1
+SEQ2_DIR=/hive/data/genomes/micOch1/micOch1.2bit
+SEQ2_LEN=/hive/data/genomes/micOch1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/rn6/bed/lastzMicOch1.2017-01-17
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    1009m6.065s
+
+    cat fb.rn6.chainMicOch1Link.txt
+    #	1561627848 bases of 2729860805 (57.205%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 micOch1) \
+           > rbest.log 2>&1 &
+XXX - running - Wed Jan 18 08:03:54 PST 2017
+    #  real    405m31.270s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/micOch1/bed/blastz.rn6.swap
+    cd /hive/data/genomes/micOch1/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzMicOch1.2017-01-17/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+XXX - running - Wed Jan 18 08:03:54 PST 2017
+    #	real    53m19.878s
+
+    cat  fb.micOch1.chainRn6Link.txt
+    #	780846350 bases of 2245312831 (34.777%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` micOch1 rn6) \
+         > rbest.log 2>&1
+    # real    324m22.903s
+
+##############################################################################
+# lastz rabbit oryCun2 (DONE - 2017-01-17 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S oryCun2Rn6
+    mkdir /hive/data/genomes/rn6/bed/lastzOryCun2.2017-01-17
+    cd /hive/data/genomes/rn6/bed/lastzOryCun2.2017-01-17
+
+    printf "%s\n" \
+'# Rat vs. rabbit
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: rabbit oryCun2
+SEQ2_DIR=/hive/data/genomes/oryCun2/oryCun2.2bit
+SEQ2_LEN=/hive/data/genomes/oryCun2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/rn6/bed/lastzOryCun2.2017-01-17
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    722m23.231s
+
+    cat fb.rn6.chainOryCun2Link.txt
+    #	673020370 bases of 2729860805 (24.654%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 oryCun2) \
+           > rbest.log 2>&1 &
+XXX - running - Wed Jan 18 08:00:20 PST 2017
+    #  real    405m31.270s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/oryCun2/bed/blastz.rn6.swap
+    cd /hive/data/genomes/oryCun2/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzOryCun2.2017-01-17/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+XXX - running - Wed Jan 18 08:00:20 PST 2017
+    #	real    53m19.878s
+
+    cat  fb.oryCun2.chainRn6Link.txt
+    #	780846350 bases of 2245312831 (34.777%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oryCun2 rn6) \
+         > rbest.log 2>&1
+    # real    324m22.903s
+
+##############################################################################
+# lastz cat felCat8 (DONE - 2017-01-17 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S felCat8Rn6
+    mkdir /hive/data/genomes/rn6/bed/lastzFelCat8.2017-01-17
+    cd /hive/data/genomes/rn6/bed/lastzFelCat8.2017-01-17
+
+    printf "%s\n" \
+'# Rat vs. cat
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: cat felCat8
+SEQ2_DIR=/hive/data/genomes/felCat8/felCat8.2bit
+SEQ2_LEN=/hive/data/genomes/felCat8/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=1000
+
+BASE=/hive/data/genomes/rn6/bed/lastzFelCat8.2017-01-17
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    830m52.261s
+
+    cat fb.rn6.chainFelCat8Link.txt
+    #	805848215 bases of 2729860805 (29.520%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 felCat8) \
+           > rbest.log 2>&1 &
+XXX - running - Wed Jan 18 08:01:53 PST 2017
+    #  real    405m31.270s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/felCat8/bed/blastz.rn6.swap
+    cd /hive/data/genomes/felCat8/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzFelCat8.2017-01-17/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+XXX - running - Wed Jan 18 08:01:53 PST 2017
+    #	real    53m19.878s
+
+    cat  fb.felCat8.chainRn6Link.txt
+    #	780846350 bases of 2245312831 (34.777%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` felCat8 rn6) \
+         > rbest.log 2>&1
+    # real    324m22.903s
+
+##############################################################################
+# lastz turkey melGal5 (DONE - 2017-01-17 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S melGal5Rn6
+    mkdir /hive/data/genomes/rn6/bed/lastzMelGal5.2017-01-17
+    cd /hive/data/genomes/rn6/bed/lastzMelGal5.2017-01-17
+
+    printf "%s\n" \
+'# Rat vs. turkey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: turkey melGal5
+SEQ2_DIR=/hive/data/genomes/melGal5/melGal5.2bit
+SEQ2_LEN=/hive/data/genomes/melGal5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=600
+
+BASE=/hive/data/genomes/rn6/bed/lastzMelGal5.2017-01-17
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    #	real    504m54.176s
+
+    cat fb.rn6.chainMelGal5Link.txt
+    #	66617232 bases of 2729860805 (2.440%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 melGal5) \
+           > rbest.log 2>&1 &
+    #  real    312m57.146s
+    # lost the log
+
+    #	and for the swap
+    mkdir /hive/data/genomes/melGal5/bed/blastz.rn6.swap
+    cd /hive/data/genomes/melGal5/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzMelGal5.2017-01-17/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    #	real    22m31.971s
+
+    cat  fb.melGal5.chainRn6Link.txt
+    #	53668356 bases of 1093044709 (4.910%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 rn6) \
+         > rbest.log 2>&1
+XXX - running - Wed Jan 18 07:58:37 PST 2017
+    # real    324m22.903s
+
+##############################################################################

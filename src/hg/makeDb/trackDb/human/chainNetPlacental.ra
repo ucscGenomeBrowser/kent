@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Placental Chain/Net
 longLabel Non-primate Placental Mammal Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aTree_Shrew=Tree_Shrew bMouse=Mouse cRat=Rat dKangaroo=Kangaroo_Rat eGuinea=Guinea_Pig eHamster=Chinese_Hamster fSquirrel=Squirrel gRabbit=Rabbit hPika=Pika iAlpaca=Alpaca jDolphin=Dolphin kSheep=Sheep lCow=Cow mPig=Pig nHorse=Horse oWhite_Rhinoceros=White_Rhinoceros pCat=Cat qDog=Dog rPanda=Panda sMicrobat=Microbat tMegabat=Megabat uHedgehog=Hedgehog vShrew=Shrew wElephant=Elephant xRock_Hyrax=Rock_Hyrax yTenrec=Tenrec zArmadillo=Armadillo zbSloth=Sloth
+subGroup2 species Species aTree_Shrew=Tree_Shrew bLemur=Malayan_flying_lemur bMouse=Mouse cRat=Rat dKangaroo=Kangaroo_Rat eGuinea=Guinea_Pig eHamster=Chinese_Hamster fSquirrel=Squirrel gRabbit=Rabbit hPika=Pika iAlpaca=Alpaca jDolphin=Dolphin kSheep=Sheep lCow=Cow mPig=Pig nHorse=Horse oWhite_Rhinoceros=White_Rhinoceros pCat=Cat qDog=Dog rPanda=Panda sMicrobat=Microbat tMegabat=Megabat uHedgehog=Hedgehog vShrew=Shrew wElephant=Elephant xRock_Hyrax=Rock_Hyrax yTenrec=Tenrec zArmadillo=Armadillo zbSloth=Sloth
 subGroup3 clade Clade aEuarch=Euarchontoglires bLaura=Laurasiatheria cAfro=Afrotheria dXenar=Xenarthra
 dragAndDrop subTracks
 visibility hide
@@ -52,6 +52,14 @@ html placentalChainNet
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain tupBel1
         otherDb tupBel1
+
+        track chainGalVar1
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=bLemur clade=aEuarch
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain galVar1
+        otherDb galVar1
 
         track chainSpeTri1
         subTrack placentalChainNetViewchain off
@@ -243,6 +251,14 @@ include chainNetOviAri3.ra
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign tupBel1 chainTupBel1
         otherDb tupBel1
+
+        track netGalVar1
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=bLemur clade=aEuarch
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign galVar1 chainGalVar1
+        otherDb galVar1
 
 include chainNetTurTru1.ra beta,public
 include chainNetTurTru2.ra alpha

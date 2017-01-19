@@ -608,10 +608,10 @@ if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ];
   exit 255
 fi
 
-twoBitToFa \$asmId.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
-touch -r \$asmId.2bit \$asmId.faCount.txt.gz
+twoBitToFa ../\$asmId.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
+touch -r ../\$asmId.2bit \$asmId.faCount.txt.gz
 zgrep -P "^total\t" \$asmId.faCount.txt.gz > \$asmId.faCount.signature.txt
-touch -r \$asmId.2bit \$asmId.faCount.signature.txt
+touch -r ../\$asmId.2bit \$asmId.faCount.signature.txt
 _EOF_
   );
   $bossScript->execute();
@@ -680,14 +680,17 @@ sub doGatewayPage {
 
   $bossScript->add(<<_EOF_
 export asmId=$asmId
+export species=$species
 
 if [ ../download/\${asmId}_assembly_report.txt -nt \$asmId.description.html ]; then
   \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
-     ../download/\${asmId}_assembly_report.txt ../\$asmId.chrom.sizes \\
-        > \$asmId.description.html 2> \$asmId.names.tab
+     ../download/\${asmId}_assembly_report.txt ../\${asmId}.chrom.sizes \\
+        ../photo/\${species}.jpg ../photo/photoCredits.txt \\
+           > \$asmId.description.html 2> \$asmId.names.tab
   \$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
        ../\$asmId.chrom.sizes 2> \$asmId.build.stats.txt
   touch -r ../download/\${asmId}_assembly_report.txt \$asmId.description.html
+  ln -s ../photo/\${species}.jpg .
 else
   printf "# gatewayPage step previously completed\\n" 1>&2
   exit 0
@@ -982,7 +985,7 @@ if [ ../../\$asmId.unmasked.2bit -nt faSize.\$asmId.wmsk.sdust.txt ]; then
      awk '{ printf "%d bases of %d (%.3f%%) in intersection\\n", \$1, \$2, 100.0*\$1/\$2}' \\
       > fb.\$asmId.rmsk.windowmaskerSdust.txt
   rm -f not.gap.bed rmsk.bed
-  bedToBigBed -type=bed3 cleanWMask.bed \$asmId.windowMasker.bb
+  bedToBigBed -type=bed3 cleanWMask.bed ../../\$asmId.chrom.sizes \$asmId.windowMasker.bb
   gzip cleanWMask.bed
   \$HOME/kent/src/hg/utils/automation/doWindowMasker.pl -continue=cleanup -stop=cleanup -buildDir=`pwd` -dbHost=$dbHost \\
     -workhorse=$workhorse -unmaskedSeq=$buildDir/\$asmId.unmasked.2bit \$asmId
@@ -1059,7 +1062,7 @@ sub doAugustus {
 export asmId=$asmId
 
 if [ $buildDir/\$asmId.2bit -nt \$asmId.augustus.bb ]; then
-  time (/cluster/home/hiram/kent/src/hg/utils/automation/doAugustus.pl -continue=makeGp -stop=makeGp -buildDir=`pwd` -dbHost=$dbHost \\
+  time (/cluster/home/hiram/kent/src/hg/utils/automation/doAugustus.pl -stop=makeGp -buildDir=`pwd` -dbHost=$dbHost \\
     -bigClusterHub=$bigClusterHub -species=human -workhorse=$workhorse \\
     -noDbGenePredCheck -maskedSeq=$buildDir/\$asmId.2bit \$asmId) > makeDb.log 2>&1
   time (/cluster/home/hiram/kent/src/hg/utils/automation/doAugustus.pl -continue=cleanup -stop=cleanup -buildDir=`pwd` -dbHost=$dbHost \\
@@ -1086,7 +1089,7 @@ sub doTrackDb {
   $bossScript->add(<<_EOF_
 export asmId=$asmId
 
-\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId $runDir \\
+\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh $genbankRefseq \$asmId $runDir \\
    > \$asmId.trackDb.txt
 
 _EOF_

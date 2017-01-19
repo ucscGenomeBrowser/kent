@@ -36,7 +36,7 @@ endif
 
 set url1="http://"
 # set url2=".cse.ucsc.edu/cgi-bin/hgTables?hgta_doMysqlVersion=1"
-if ( $machine == genome-euro ) then
+if ( $machine == genome-euro || $machine == genome-asia ) then
   set url2=".ucsc.edu/cgi-bin/hgTables?hgta_doMetaData=1&hgta_metaVersion=1"
 else
   set url2=".cse.ucsc.edu/cgi-bin/hgTables?hgta_doMetaData=1&hgta_metaVersion=1"

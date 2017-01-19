@@ -20,7 +20,7 @@ if ( $#argv < 1 || $#argv > 3 ) then
   echo "  checks the metadata for a new assembly."
   echo
   echo "    usage:  database [machine1 machine2]"
-  echo '        (defaults to dev and beta, or use "RR".)'
+  echo '        (defaults to dev and beta, or use "hgwbeta RR".)'
   echo
   exit
 else

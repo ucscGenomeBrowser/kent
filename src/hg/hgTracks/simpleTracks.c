@@ -143,6 +143,7 @@
 #include "genbank.h"
 #include "bedTabix.h"
 #include "knetUdc.h"
+#include "trackHub.h"
 
 #define CHROM_COLORS 26
 
@@ -14355,6 +14356,8 @@ static TrackHandler lookupTrackHandler(struct trackDb *tdb)
 if (handlerHash == NULL)
     return NULL;
 TrackHandler handler = hashFindVal(handlerHash, tdb->table);
+if (handler == NULL && sameString(trackHubSkipHubName(tdb->table), "cytoBandIdeo"))
+    handler = hashFindVal(handlerHash, "cytoBandIdeo");
 // if nothing found, try the "trackHandler" statement
 if (handler == NULL)
     {

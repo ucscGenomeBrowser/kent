@@ -1334,6 +1334,7 @@ function installBrowser ()
 function downloadGenomes
 {
     DBS=$*
+    GENBANKTBLS=""
     if [ "$DBS" == "" ] ; then
         echo2 Argument error: the '"download"' command requires at least one assembly name, like hg19 or mm10.
         exit 1
@@ -1345,7 +1346,17 @@ function downloadGenomes
     echo2 Determining download file size... please wait...
 
     if [ "$ONLYGENOMES" == "0" ]; then
-        MYSQLDBS="$DBS proteome uniProt go hgFixed"
+        if [[ "$DBS" =~ hg|mm|rn3|rn4|sacCer|dm3|danRer3|ce6 ]]; then
+            echo2 Downloading $DBS plus hgFixed proteome go hgFixed
+            MYSQLDBS="$DBS proteome uniProt go hgFixed"
+        else
+            echo2 Downloading $DBS plus GenBank tables
+            MYSQLDBS="$DBS"
+            GENBANKTBLS="author cell description development gbCdnaInfo gbExtFile gbLoaded \
+                         gbMiscDiff gbSeq gbWarn geneName imageClone keyword library \
+                         mrnaClone organism productName refLink refSeqStatus \
+                         refSeqSummary sex source tissue"
+        fi
     else
         MYSQLDBS="$DBS"
     fi
@@ -1356,6 +1367,12 @@ function downloadGenomes
     for db in $MYSQLDBS; do
         rsync -avn $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ $RSYNCOPTS | grep ^'total size' | cut -d' ' -f4 | tr -d ', ' 
     done | awk '{ sum += $1 } END { print "| Required space in '$MYSQLDIR':", sum/1000000000, "GB" }'
+    
+    if [ ! -z "$GENBANKTBLS" ]; then
+        for tbl in $GENBANKTBLS; do
+            rsync -avn $HGDOWNLOAD::mysql/hgFixed/${tbl}.* $MYSQLDIR/hgFixed/ $RSYNCOPTS | grep ^'total size' | cut -d' ' -f4 | tr -d ', '
+        done | awk '{ sum += $1 } END { print "| Required space in '$MYSQLDIR'/hgFixed:", sum/1000000000, "GB" }'
+    fi
 
     for db in $DBS; do
         rsync -avn $HGDOWNLOAD::gbdb/$db/ $GBDBDIR/$db/ $RSYNCOPTS | grep ^'total size' | cut -d' ' -f4 | tr -d ','
@@ -1391,6 +1408,14 @@ function downloadGenomes
        $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ 
        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/$db
     done
+
+    if [ ! -z "$GENBANKTBLS" ]; then
+        echo2 Downloading hgFixed tables
+        for tbl in $GENBANKTBLS; do
+            $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/${tbl}.* $MYSQLDIR/hgFixed/
+        done
+        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
+    fi
 
     echo2 Downloading hgFixed.refLink, required for all RefSeq tracks
     $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 

@@ -564,7 +564,7 @@ struct track *chromIdeoTrack(struct track *trackList)
 struct track *track;
 for(track = trackList; track != NULL; track = track->next)
     {
-    if(sameString(track->track, "cytoBandIdeo"))
+    if(sameString(trackHubSkipHubName(track->track), "cytoBandIdeo"))
 	{
 	if (hTableExists(database, track->table))
 	    return track;
@@ -9421,12 +9421,12 @@ hPrintf("Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').cli
 hPrintf("Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
 hPrintf("Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
 hPrintf("Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
-hPrintf("Mousetrap.bind('1', function() { zoomTo(10);} ); \n");
-hPrintf("Mousetrap.bind('2', function() { zoomTo(100);} ); \n");
-hPrintf("Mousetrap.bind('3', function() { zoomTo(1000);} ); \n");
+hPrintf("Mousetrap.bind('1', function() { zoomTo(50);} ); \n");
+hPrintf("Mousetrap.bind('2', function() { zoomTo(500);} ); \n");
+hPrintf("Mousetrap.bind('3', function() { zoomTo(5000);} ); \n");
 hPrintf("Mousetrap.bind('4', function() { zoomTo(50000);} ); \n");
-hPrintf("Mousetrap.bind('5', function() { zoomTo(100000);} ); \n");
-hPrintf("Mousetrap.bind('6', function() { zoomTo(1000000);} ); \n");
+hPrintf("Mousetrap.bind('5', function() { zoomTo(500000);} ); \n");
+hPrintf("Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
 
 // buttons
 hPrintf("Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').click() }); \n");
@@ -9489,12 +9489,12 @@ hPrintf("               </tr>\n");
 hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>      <td> exon view</td><td class=\"hotkey\">e then v</td>                  </tr>\n");
 hPrintf("<tr><td> zoom out 100x</td><td class=\"hotkey\">0</td>     <td> default view</td><td class=\"hotkey\">d then v</td>               </tr>\n");
 hPrintf("<tr><td> zoom to ...</td><td class=\"hotkey\"></td><td> view DNA</td><td class='hotkey'>v then d</td></tr>\n");
-hPrintf("<tr><td> &nbsp;10bp (1 zero)</td><td class=\"hotkey\">1</td><td>Reset all User Settings</td><td class='hotkey'>c then r</td></tr>\n");
-hPrintf("<tr><td> &nbsp;100bp (2 zeros)</td><td class=\"hotkey\">2</td><td>Tools - BLAT</td><td class='hotkey'>t then b</td></tr>\n");
-hPrintf("<tr><td> &nbsp;1000bp (3 zeros)</td><td class=\"hotkey\">3</td><td>Tools - Table Browser</td><td class='hotkey'>t then t</td></tr>\n");
+hPrintf("<tr><td> &nbsp;50bp (1 zero)</td><td class=\"hotkey\">1</td><td>Reset all User Settings</td><td class='hotkey'>c then r</td></tr>\n");
+hPrintf("<tr><td> &nbsp;500bp (2 zeros)</td><td class=\"hotkey\">2</td><td>Tools - BLAT</td><td class='hotkey'>t then b</td></tr>\n");
+hPrintf("<tr><td> &nbsp;5000bp (3 zeros)</td><td class=\"hotkey\">3</td><td>Tools - Table Browser</td><td class='hotkey'>t then t</td></tr>\n");
 hPrintf("<tr><td> &nbsp;50kbp (4 zeros)</td><td class=\"hotkey\">4</td><td>Tools - PCR</td><td class='hotkey'>t then i</td></tr>\n");
-hPrintf("<tr><td> &nbsp;100kbp (5 zeros)</td><td class=\"hotkey\">5</td><td>My Sessions</td><td class='hotkey'>s then s</td></tr>\n");
-hPrintf("<tr><td> &nbsp;1Mbp (6 zeros)</td><td class=\"hotkey\">6</td><td>Public Sessions</td><td class='hotkey'>p then s</td></tr>\n");
+hPrintf("<tr><td> &nbsp;500kbp (5 zeros)</td><td class=\"hotkey\">5</td><td>My Sessions</td><td class='hotkey'>s then s</td></tr>\n");
+hPrintf("<tr><td> &nbsp;5Mbp (6 zeros)</td><td class=\"hotkey\">6</td><td>Public Sessions</td><td class='hotkey'>p then s</td></tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");
