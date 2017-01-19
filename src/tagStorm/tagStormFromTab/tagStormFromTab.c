@@ -36,7 +36,7 @@ struct fieldInfo
 /* Information about a field in table. */
      {
      struct fieldInfo *next;
-     char *name;    /* Field name */
+     char *name;    /* Field name. Not allocated here. */
      int ix;	    /* Field position */
      struct hash *valHash;   /* Each unique value */
      struct slRef *valList;  /* String valued list of possible values for this field */
@@ -47,9 +47,9 @@ struct lockedSet
 /* This represents a group of fields that always move together */
     {
     struct lockedSet *next;
-    char *name;	    /* Taken from name of first field */
+    char *name;	    /* Taken from name of first field. Not allocated here. */
     int ix;	    /* Position of first field in table */
-    struct fieldInfo *firstField;  /* First field in locked set. */
+    struct fieldInfo *firstField;  /* First field in locked set. Not allocated here. */
     int valCount;   /* Number of distinct values */
     double realValRatio;  /* Proportion of non-NULL values */
     struct slRef *fieldRefList;  /* Field info valued */
@@ -58,6 +58,57 @@ struct lockedSet
     struct slRef *predictedList;  /* List of lockedSets we predict */
     double partingScore;  /* How good this looks as a partitioner */
     };
+
+void fieldInfoFree(struct fieldInfo **pField)
+/* Free up memory associated with fieldInfo */
+{
+struct fieldInfo *field = *pField;
+if (field != NULL)
+    {
+    hashFree(&field->valHash);
+    slFreeList(&field->valList);
+    freez(pField);
+    }
+}
+
+void fieldInfoFreeList(struct fieldInfo **pList)
+/* Free a list of dynamically allocated fieldInfo */
+{
+struct fieldInfo *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    fieldInfoFree(&el);
+    }
+*pList = NULL;
+}
+
+
+void lockedSetFree(struct lockedSet **pSet)
+/* Free up memory associated with a locked set */
+{
+struct lockedSet *set = *pSet;
+if (set != NULL)
+    {
+    slFreeList(&set->fieldRefList);
+    slFreeList(&set->predictedList);
+    freez(pSet);
+    }
+}
+
+void lockedSetFreeList(struct lockedSet **pList)
+/* Free a list of dynamically allocated locked sets */
+{
+struct lockedSet *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    lockedSetFree(&el);
+    }
+*pList = NULL;
+}
 
 
 boolean isRealVal(char *s)
@@ -82,32 +133,6 @@ for (ref = field->valList; ref != NULL; ref = ref->next)
     }
 return TRUE;
 }
-
-void fieldInfoFree(struct fieldInfo **pField)
-/* Free information associated with a fieldInfo */
-{
-struct fieldInfo *field = *pField;
-if (field != NULL)
-    {
-    slFreeList(&field->valList);
-    hashFree(&field->valHash);
-    freez(pField);
-    }
-}
-
-void fieldInfoFreeList(struct fieldInfo **pList)
-/* Free a list of dynamically allocated fieldInfo's */
-{
-struct fieldInfo *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    fieldInfoFree(&el);
-    }
-*pList = NULL;
-}
-
 
 struct fieldInfo *fieldInfoFind(struct fieldInfo *list, char *name)
 /* Find element of given name in list. */
@@ -598,6 +623,20 @@ for (aField = fieldList; aField != NULL; aField = aField->next)
 return matrix;
 }
 
+void freePredMatrix(struct fieldedTable *table, bool ***pMatrix)
+/* Free matrix make with makePredMatrix */
+{
+bool **matrix = *pMatrix;
+if (pMatrix != NULL)
+    {
+    int fieldCount = table->fieldCount;
+    int i;
+    for (i=0; i<fieldCount; ++i)
+        freeMem(matrix[i]);
+    freez(pMatrix);
+    }
+}
+
 void dumpLockedSetList(struct lockedSet *lockedSetList)
 /* Print out info on locked sets to file */
 {
@@ -661,7 +700,11 @@ for (div = divList; div != NULL; div = div->next)
     verbose(1, "%s,", div->name);
 verbose(1, "\n");
 
-/* Return results */
+/* Clean up and return results */
+freeHash(&uniqHash);
+freePredMatrix(table, &predMatrix);
+lockedSetFreeList(&lockedSetList);
+fieldInfoFreeList(&fieldList);
 return divList;
 }
 
