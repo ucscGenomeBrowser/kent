@@ -1175,7 +1175,7 @@ function mysqlDbSetup ()
     # by default hgGateway needs an empty hg19 database, will crash otherwise
     # $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg19'
     # mm9 needs an empty hg18 database
-    # $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg18'
+    $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg18'
     
     $MYSQL -e "FLUSH PRIVILEGES;"
 }

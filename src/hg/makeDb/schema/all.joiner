@@ -6188,6 +6188,31 @@ tablesIgnored $gbd
     uwNucOccMec
     ws210Gene
     ws245Genes
+    gbCdnaInfo
+    author
+    cds
+    cell
+    description
+    development
+    gbLoaded
+    geneName
+    keyword
+    library
+    mrnaClone
+    organism
+    productName
+    sex
+    source
+    tissue
+    imageClone
+    gbSeq
+    gbExtFile
+    gbMiscDiff
+    gbWarn
+    refSeqStatus
+    refLink
+    refSeqSummary
+    gbStatus
 
 tablesIgnored $kgDb
     pbAaDist_

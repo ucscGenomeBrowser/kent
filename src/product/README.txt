@@ -58,7 +58,7 @@ Genome Browser installation directly on your server.
 
     * Pros:
         * Relatively simple to install: download and double-click.
-        * By default, software and data updates are managed remotely by UCSC, via an update script run every two weeks.
+        * By default, software and data updates are managed remotely by UCSC, via an update script run every week.
         * Best performance when rendering local BAM/bigWig/bigBed files.
         * No Unix webserver needed, runs on any OS.
         * For commercial users: easier click-through licensing compared to a full multi-seat, manual license.
@@ -69,7 +69,7 @@ Genome Browser installation directly on your server.
         * For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks, like a manual local installation.
 
 If none of the above options really fulfill your needs, then you should consider setting up a full local mirror of the UCSC website.
-We support mirror site installations as far as our time allows and there are dozens of working mirror sites already all over the world.
+We support mirror site installations as far as our time allows and there are many working mirror sites already all over the world.
 
 A license is required for commercial download and/or installation of the Genome
 Browser binaries and source code. No license is needed for academic, nonprofit,

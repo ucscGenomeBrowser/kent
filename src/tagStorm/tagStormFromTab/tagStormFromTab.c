@@ -27,7 +27,6 @@ errAbort(
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"div", OPTION_STRING},
-   {"noSharp", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -40,6 +39,29 @@ struct fieldInfo
      struct hash *valHash;   /* Each unique value */
      struct slRef *valList;  /* String valued list of possible values for this field */
      };
+
+boolean isRealVal(char *s)
+/* Return TRUE if it looks like s is a real value, that is non-NULL, non-empty, and
+ * neither n/a nor N/A */
+{
+if (s == NULL) return FALSE;
+if (s[0] == 0) return FALSE;
+if (sameString(s, "n/a") || sameString(s, "N/A"))
+    return FALSE;
+return TRUE;
+}
+
+boolean fieldAllDefined(struct fieldInfo *field)
+/* Return TRUE if field is defined for all rows of table */
+{
+struct slRef *ref;
+for (ref = field->valList; ref != NULL; ref = ref->next)
+    {
+    if (!isRealVal(ref->val))
+        return FALSE;
+    }
+return TRUE;
+}
 
 void fieldInfoFree(struct fieldInfo **pField)
 /* Free information associated with a fieldInfo */
@@ -146,6 +168,22 @@ slReverse(&fieldList);
 return fieldList;
 }
 
+struct slRef *findLockedFields(struct fieldedTable *table, struct fieldInfo *fieldList,
+    struct fieldInfo *primaryField, struct slName *exceptList)
+/* Return list of fields from fieldList that move in lock-step with primary field */
+{
+struct slRef *list = NULL;
+struct fieldInfo *field;
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    if (slNameFind(exceptList, field->name) == NULL)
+	if (aPredictsB(table, primaryField, field) && aPredictsB(table, field, primaryField))
+	    refAdd(&list, field);
+    }
+slReverse(&list);
+return list;
+}
+
 struct slRef *findPredictableFields(struct fieldedTable *table, struct fieldInfo *fieldList,
     struct fieldInfo *primaryField, struct slName *exceptList)
 /* Return list of fields from fieldList that move in lock-step with primary field */
@@ -168,11 +206,10 @@ boolean findBestParting(struct fieldedTable *table, struct fieldInfo *allFields,
  * cause the most information from table to be moved to a higher level.  All the
  * returned fields will move in lock-step. */
 {
-double bestLinesSaved = 0;
+double bestScore = 0;
 struct slRef *partingList = NULL;
 struct fieldInfo *partingField = NULL;
 int tableRows = slCount(table->rowList);
-int oldLineCount = tableRows * (table->fieldCount + 1);
 verbose(2, "Find best parting on table with %d rows and %d fields\n", tableRows, table->fieldCount);
 
 /* Of the ones that have the smallest number of values, find the set with the
@@ -180,39 +217,40 @@ verbose(2, "Find best parting on table with %d rows and %d fields\n", tableRows,
 struct fieldInfo *field;
 for (field = allFields; field != NULL; field = field->next)
     {
-    /* Get list of fields locked to this one, list includes self */
-    struct slRef *lockedFields = findPredictableFields(table, allFields, field, NULL);
-
-    /* We do some weighting to reduce the value of fields which are predictable but move slower 
-     * than we do. Indirectly this lets these form a higher level structure on top of us. */
-    double fieldValCount = field->valHash->elCount;
-    double q = 1.0/fieldValCount; 
-    double lockWeight = 0;
-    struct slRef *ref;
-    for (ref = lockedFields; ref != NULL; ref = ref->next)
-        {
-        struct fieldInfo *fi = ref->val;
-	double ratio = fi->valHash->elCount * q;
-	if (ratio > 1)
-	    ratio = 1;
-	lockWeight += ratio;
+    if (!fieldAllDefined(field))
+	{
+        verbose(2, "skipping %s, not all defined\n", field->name);
+	continue;
 	}
 
-    double varyCount = table->fieldCount - lockWeight;
-    double newLineCount = field->valHash->elCount * (1 + lockWeight) + tableRows * (1 + varyCount);
-    double linesSaved = oldLineCount - newLineCount;
-    verbose(2, "field %s, %d vals, %g locked, %g lines saved\n", field->name, 
-	field->valHash->elCount, lockWeight, linesSaved);
-    if (linesSaved > bestLinesSaved)
+    /* Get list of fields locked to this one, list includes self */
+    struct slRef *lockedFields = findLockedFields(table, allFields, field, NULL);
+    struct slRef *predictableFields = findPredictableFields(table, allFields, field, NULL);
+
+    /* Do some calcs to find out how good partitioning looks as a score.  I wish I had
+     * a more rigorous score.  This one will like fields that don't have too many values
+     * and that have other fields moving in lock step with them.  The weighing of the
+     * predictable counts tends to downplay low level over high level fields. */
+    int lockCount = slCount(lockedFields);
+    int predictableCount = slCount(predictableFields);
+    int fieldValCount = field->valHash->elCount;
+    int linesSaved = (lockCount+1) * (tableRows - fieldValCount);
+    double score = (double)linesSaved / predictableCount;
+    verbose(2, "field %s, %d vals, %d lockedCount, %d predictableCount, %g score\n", field->name, 
+	field->valHash->elCount, lockCount, predictableCount, score);
+
+    /* If score is best so far keep track of it. */
+    if (score > bestScore)
 	{
-	bestLinesSaved = linesSaved;
+	bestScore = score;
 	slFreeList(&partingList);
-	partingList = lockedFields;
+	partingList = predictableFields;
 	partingField = field;
 	lockedFields = NULL;
 	}
     else
-	slFreeList(&lockedFields);
+	slFreeList(&predictableFields);
+    slFreeList(&lockedFields);
     }
 *retFields = partingList;
 *retField = partingField;
@@ -401,6 +439,39 @@ slFreeList(&partingFields);
 fieldInfoFreeList(&allFields);
 }
 
+struct slPair *removeUnvalued(struct slPair *list)
+/* Remove unvalued stanzas (those with "" or "n/a" or "N/A" values */
+{
+struct slPair *newList = NULL;
+struct slPair *pair, *next;
+for (pair = list; pair != NULL; pair = next)
+    {
+    next = pair->next;
+    char *val = pair->val;
+    if (!(val == NULL || val[0] == 0 || sameString(val, "n/a") || sameString(val, "N/A")))
+         slAddHead(&newList, pair);
+    }
+slReverse(&newList);
+return newList;
+}
+
+void rRemoveEmptyPairs(struct tagStanza *list)
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    if (stanza->children != NULL)
+        rRemoveEmptyPairs(stanza->children);
+    stanza->tagList = removeUnvalued(stanza->tagList);
+    }
+}
+
+void removeEmptyPairs(struct tagStorm *tagStorm)
+/* Remove tags with no values */
+{
+rRemoveEmptyPairs(tagStorm->forest);
+}
+
 void tagStormFromTab(char *input, char *output)
 /* tagStormFromTab - Create a tagStorm file from a tab-separated file where the labels are on the 
  * first line, that starts with a #. */
@@ -409,6 +480,8 @@ struct fieldedTable *table = fieldedTableFromTabFile(input, input, NULL, 0);
 struct tagStorm *tagStorm = tagStormNew(input);
 rPartition(table, tagStorm, NULL, divFieldList != NULL, divFieldList);
 tagStormReverseAll(tagStorm);
+removeEmptyPairs(tagStorm);
+tagStormRemoveEmpties(tagStorm);
 tagStormWrite(tagStorm, output, 0);
 }
 
