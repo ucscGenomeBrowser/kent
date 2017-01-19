@@ -82,18 +82,12 @@
     font-weight: bold;
 }
 
-/* Contents */
+/* Paragraph */
 .gbsPage p {
     margin: 15px 12px 0 15px;
 }
 
-.gbsPage dl {
-    margin: 0 12px 0 15px;
-}
-
-.gbsPage dt {
-    margin-top: 15px;
-}
+/* Code */
 
 .gbsPage code {
     font-size: 15px;
@@ -112,6 +106,12 @@
 
 .gbsPage pre > code {
     padding: 0;
+}
+
+/* Lists */
+
+.gbsPage li {
+    margin-top: 8px;
 }
 
 /* Bulleted list */
@@ -138,21 +138,31 @@
 
 /* List without bullets */
 
-.gbsNoBullet li::before {
-    background-color: white;
+.gbsPage ul.gbsNoBullet li::before {
+    content: none;
 }
 
 /* Numbered list */
 
 .gbsPage ol {
-    margin-left: 21px;
     margin-top: 15px;
+    margin-left: 21px;
 }
 
 .gbsPage ol li {
-    margin-top: 10px; 
+    margin-left: 10px
 }
 
+/* Definition list */
+
+.gbsPage dl {
+    margin: 0 12px 0 15px;
+}
+.gbsPage dt {
+    margin-top: 15px;
+}
+
+/* Tables */
 
 .gbsPage table {
     border: 2px solid gray;
@@ -160,6 +170,10 @@
     margin-top: 10px;
     margin-left: 15px;
     font-size: 13px;
+}
+
+.gbsPage table.gbsNoBorder {
+    border: none;
 }
 
 .gbsPage th, td {
@@ -176,6 +190,8 @@
     border-bottom: 2px solid gray;
     background-color: #ededed;          /* light gray */
 }
+
+/* Images */
 
 .gbsPage img {
     border: 1px solid black;
