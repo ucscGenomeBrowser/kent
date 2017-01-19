@@ -564,7 +564,7 @@ struct track *chromIdeoTrack(struct track *trackList)
 struct track *track;
 for(track = trackList; track != NULL; track = track->next)
     {
-    if(sameString(track->track, "cytoBandIdeo"))
+    if(sameString(trackHubSkipHubName(track->track), "cytoBandIdeo"))
 	{
 	if (hTableExists(database, track->table))
 	    return track;
