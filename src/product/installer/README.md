@@ -53,7 +53,7 @@ The program also does a few smaller things, like placing symlinks, detecting
 MariaDB, deactivating SELinux, finding the right path for your Apache install
 and adapting the MySQL socket config.
 
-This will leave you with a genome browser accessible on localhost that loads its data 
+This will leave you with a Genome Browser accessible on localhost that loads its data 
 through from genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If
 you are not on the US West Coast, it will be too slow for normal use but good 
 enough to test that your setup is working. You can then use the program to download 
