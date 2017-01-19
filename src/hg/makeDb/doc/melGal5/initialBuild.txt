@@ -273,11 +273,10 @@ real    5m46.391s
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/melGal5/melGal5.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku melGal5) > do.log 2>&1
-XXX - running - Thu Jan 12 14:12:07 PST 2017
-    # real    6m59.252s
+    # real    187m20.754s
 
     cat fb.melGal5.cpgIslandExtUnmasked.txt
-    # 40554959 bases of 1218501075 (3.328%) in intersection
+    # 18554530 bases of 1093044709 (1.698%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2017-01-12 - Hiram)
@@ -286,7 +285,7 @@ XXX - running - Thu Jan 12 14:12:07 PST 2017
     makeCytoBandIdeo.csh melGal5
 
 #########################################################################
-# ucscToINSDC table/track (TDB - 2016-04-14 - Hiram)
+# ucscToINSDC table/track (DONE - 2017-01-13 - Hiram)
     # the sequence here is working for a 'refseq' assembly with a chrM
     # situation may be specific depending upon what is available in the assembly
 
@@ -295,32 +294,35 @@ XXX - running - Thu Jan 12 14:12:07 PST 2017
 
     # find accession for chrM
     grep chrM ../../melGal5.agp
-# chrM    1       16775   1       O       NC_001323.1     1       16775   +
-
-    # use that accession here:
+# chrM    1       16719   1       O       NC_010195.2     1       16719   +
+    # find the genbank accession for NC_010195.2 at Entrez nucleotide
+    # The NC_010195.2 name is the RefSeq name, the JF275060.1 is the INSDC name
     ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-        ../../refseq/GCF_*structure/Primary_Assembly NC_001323.1
+      ../../refseq/GCF_*structure/Primary_Assembly NC_010195.2
+
     awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
-    # there is no name for chrM/NC_001323.1 sequence, there is no such
-    #  sequence with an INSDC name
+
+    # extract the refseq vs. genbank names from the assembly_report
     grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
-      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $2, $1}' \
-         | sort > insdc.refseq.txt
-    # the sed \b means to match word
+      | awk '{printf "%s\t%s\n", $2, $1}'  | sort > refseq.insdc.txt
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
-    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
+    join refseq.insdc.txt ucscToINSDC.txt | tr '[ ]' '[\t]' | sort -k3 \
        | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
            > ucscToINSDC.bed
 
+    # verify chrM is correct:
+    grep chrM *.bed
+    #  chrM    0       16719   JF275060.1
+
     # should be same line counts throughout:
     wc -l *
-    # 23475 insdc.refseq.txt
-    # 23475 insdcToUcsc.txt
-    # 23475 name.coordinate.tab
-    # 23475 ucscToINSDC.bed
-    # 23475 ucscToINSDC.txt
+    # 231286 insdcToUcsc.txt
+    # 231286 name.coordinate.tab
+    # 231286 refseq.insdc.txt
+    # 231286 ucscToINSDC.bed
+    # 231286 ucscToINSDC.txt
 
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
     # 27
@@ -330,62 +332,55 @@ XXX - running - Thu Jan 12 14:12:07 PST 2017
     checkTableCoords melGal5
     # should cover %100 entirely:
     featureBits -countGaps melGal5 ucscToINSDC
-    # 1230258557 bases of 1230258557 (100.000%) in intersection
+    # 1128339136 bases of 1128339136 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TDB - 2016-04-14 - Hiram)
-    cd ~/kent/src/hg/makeDb/trackDb/chicken/melGal5
+# fixup search rule for assembly track/gold table (DONE - 2017-01-13 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/turkey/melGal5
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" melGal5 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
-  24806 AADN.1
-     47 AC.1
-    310 AC.2
-    327 AC.3
-     74 AC.4
-     20 AC.5
-      1 AC.6
-      1 NC_.1
+ 296330 ADDD.1
+      1 NC_.2
 
-    # implies a rule: '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?'
+    # implies a rule: '[AN][CD][D_][D0-9]+(\.[0-9]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" melGal5 | wc -l
-    # 25586
+    # 296331
 
     hgsql -N -e "select frag from gold;" melGal5 \
-       | egrep -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
-    # 25586
+       | egrep -e '[AN][CD][D_][D0-9]+(\.[0-9]+)?' | wc -l
+    # 296331
 
     hgsql -N -e "select frag from gold;" melGal5 \
-       | egrep -v -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
+       | egrep -v -e '[AN][CD][D_][D0-9]+(\.[0-9]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/chicken/melGal5/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?
+termRegex [AN][CD][D_][D0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
     # verify searches work in the position box
 
 ##########################################################################
-# running repeat masker (TDB - 2016-04-14 - Hiram)
+# running repeat masker (DONE - 2017-01-12,13 - Hiram)
     mkdir /hive/data/genomes/melGal5/bed/repeatMasker
     cd /hive/data/genomes/melGal5/bed/repeatMasker
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku melGal5) > do.log 2>&1
-XXX - running - Thu Jan 12 14:13:27 PST 2017
-    # real    254m18.208s
+    # real    579m2.068s
 
     cat faSize.rmsk.txt
-# 1230258557 bases (11766024 N's 1218492533 real 1016107420 upper
-#     202385113 lower) in 23475 sequences in 1 files
-# Total size: mean 52407.2 sd 2051122.3 min 200 (chrUn_NT_479312v1)
-#     max 196202544 (chr1) median 6930
-# %16.45 masked total, %16.61 masked real
+# 1128339136 bases (35294427 N's 1093044709 real 1002298675 upper
+#	90746034 lower) in 231286 sequences in 1 files
+# Total size: mean 4878.5 sd 586734.6 min 99 (chrUn_NW_011236709v1)
+#	max 190651702 (chr1) median 462
+# %8.04 masked total, %8.30 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -393,8 +388,8 @@ XXX - running - Thu Jan 12 14:13:27 PST 2017
     # CC   RELEASE 20140131;                                            *
 
     time featureBits -countGaps melGal5 rmsk
-    # 202387399 bases of 1230258557 (16.451%) in intersection
-    #  real    0m17.365s
+    # 90783449 bases of 1128339136 (8.046%) in intersection
+    # real    1m40.660s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -403,22 +398,22 @@ XXX - running - Thu Jan 12 14:13:27 PST 2017
     # faster way to get the same result:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' melGal5 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    # total 202387399.000000
-    #   real    0m6.394s
+    # total 90783449.000000
+    # real    0m4.828s
 
 ##########################################################################
-# running simple repeat (TDB - 2016-04-14 - Hiram)
+# running simple repeat (DONE - 2017-01-12 - Hiram)
 
     mkdir /hive/data/genomes/melGal5/bed/simpleRepeat
     cd /hive/data/genomes/melGal5/bed/simpleRepeat
+    # using trf409 3 here guessing smaller genome (human == 6)
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
-        melGal5) > do.log 2>&1
-XXX - running - Thu Jan 12 14:13:48 PST 2017
-    # real    148m20.217s
+        -trf409 3 melGal5) > do.log 2>&1
+    # real    195m21.418s
 
     cat fb.simpleRepeat
-    # 89675196 bases of 1218501075 (7.359%) in intersection
+    # 16065595 bases of 1093044709 (1.470%) in intersection
 
     cd /hive/data/genomes/melGal5
     # using the Window Masker result:
@@ -433,17 +428,17 @@ XXX - running - Thu Jan 12 14:13:48 PST 2017
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa melGal5.2bit stdout | faSize stdin > faSize.melGal5.2bit.txt
     cat faSize.melGal5.2bit.txt
-# 1230258557 bases (11766024 N's 1218492533 real 904905740 upper
-#    313586793 lower) in 23475 sequences in 1 files
-# Total size: mean 52407.2 sd 2051122.3 min 200 (chrUn_NT_479312v1)
-#    max 196202544 (chr1) median 6930
-# %25.49 masked total, %25.74 masked real
+# 1128339136 bases (35294427 N's 1093044709 real 851641972 upper
+#	241402737 lower) in 231286 sequences in 1 files
+# Total size: mean 4878.5 sd 586734.6 min 99 (chrUn_NW_011236709v1)
+#	max 190651702 (chr1) median 462
+# %21.39 masked total, %22.09 masked real
 
     rm /gbdb/melGal5/melGal5.2bit
     ln -s `pwd`/melGal5.2bit /gbdb/melGal5/melGal5.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TDB - 2016-04-14 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2017-01-13 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/melGal5/bed/microsat
     cd /cluster/data/melGal5/bed/microsat
@@ -452,55 +447,69 @@ XXX - running - Thu Jan 12 14:13:48 PST 2017
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed melGal5 microsat microsat.bed
-    # Read 2030 elements of size 4 from microsat.bed
+    # Read 2196 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TDB - 2016-04-14 - Hiram)
+## WINDOWMASKER (DONE - 2017-01-13 - Hiram)
 
     mkdir /hive/data/genomes/melGal5/bed/windowMasker
     cd /hive/data/genomes/melGal5/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev melGal5) > do.log 2>&1
-    # real    53m45.183s
+    # real    338m20.022s
 
     # Masking statistics
     cat faSize.melGal5.cleanWMSdust.txt
-# 1230258557 bases (11766024 N's 1218492533 real 905812271 upper
-#    312680262 lower) in 23475 sequences in 1 files
-# Total size: mean 52407.2 sd 2051122.3 min 200 (chrUn_NT_479312v1)
-#    max 196202544 (chr1) median 6930
-# %25.42 masked total, %25.66 masked real
+# 1128339136 bases (35294427 N's 1093044709 real 852254578 upper
+#	240790131 lower) in 231286 sequences in 1 files
+# Total size: mean 4878.5 sd 586734.6 min 99 (chrUn_NW_011236709v1)
+#	max 190651702 (chr1) median 462
+# %21.34 masked total, %22.03 masked real
 
     cat fb.melGal5.rmsk.windowmaskerSdust.txt
-    # 1061810183 bases of 3236224332 (32.810%) in intersection
+    # 59268571 bases of 1128339136 (5.253%) in intersection
 
 ##########################################################################
-# cpgIslands - (TDB - 2016-04-14 - Hiram)
+# run up idKeys files for ncbiRefSeq (DONE - 2017-01-16 - Hiram)
+    mkdir /hive/data/genomes/melGal5/bed/idKeys
+    cd /hive/data/genomes/melGal5/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd`  melGal5) > do.log 2>&1
+    # real    22m47.114s
+
+    cat melGal5.keySignature.txt
+    #   cea39548ec6babd2ebaf0a11fd9a2bb4
+
+##########################################################################
+# cpgIslands - (DONE - 2017-01-17 - Hiram)
     mkdir /hive/data/genomes/melGal5/bed/cpgIslands
     cd /hive/data/genomes/melGal5/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku melGal5) > do.log 2>&1
-    # real    8m27.957s
+    # real    33m2.934s
 
     cat fb.melGal5.cpgIslandExt.txt
-    # 18599973 bases of 1218501075 (1.526%) in intersection
+    # 13523953 bases of 1093044709 (1.237%) in intersection
 
 ##############################################################################
-# genscan - (TDB - 2016-04-14,05-13 - Hiram)
+# genscan - (DONE - 2017-01-17 - Hiram)
     mkdir /hive/data/genomes/melGal5/bed/genscan
     cd /hive/data/genomes/melGal5/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku melGal5) > do.log 2>&1
-    # real    84m26.041s
-# Completed: 23472 of 23475 jobs
-# Crashed: 3 jobs
-# CPU time in finished jobs:      42682s     711.36m    11.86h    0.49d  0.001 y
-# IO & Wait Time:                 60750s    1012.50m    16.88h    0.70d  0.002 y
-# Average job time:                   4s       0.07m     0.00h    0.00d
-# Longest finished job:            6418s     106.97m     1.78h    0.07d
-# Submission to last job:          7582s     126.37m     2.11h    0.09d
-    # three jobs needed to be completed with window=2000000
-    #  real    28m9.007s
+    # real    595m22.318s
+# Completed: 231285 of 231286 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      36408s     606.80m    10.11h    0.42d  0.001 y
+# IO & Wait Time:                599894s    9998.23m   166.64h    6.94d  0.019 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:            6009s     100.15m     1.67h    0.07d
+# Submission to last job:         16650s     277.50m     4.62h    0.19d
+
+    # one job completed with window=2000000
+    time ./lastRunGsBig.csh chr14 000 gtf/000/chr14.gtf pep/000/chr14.pep \
+        subopt/000/chr14.bed
+    #  real    7m41.727s
 
     # continuing:
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
@@ -518,29 +527,30 @@ XXX - running - Thu Jan 12 14:13:48 PST 2017
 
     # numerator is melGal5 gapless bases "real" as reported by:
     featureBits -noRandom -noHap melGal5 gap
-    # 11060953 bases of 1010394850 (1.095%) in intersection
+    # 17444138 bases of 954775748 (1.827%) in intersection
     #                   ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1010394850 / 2861349177 \) \* 1024
-    #  ( 1010394850 / 2861349177 ) * 1024 = 361.593172
+    calc \( 954775748 / 2861349177 \) \* 1024
+    #  ( 954775748 / 2861349177 ) * 1024 = 341.688590
 
-    # ==> use -repMatch=350 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=300 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
     cd /hive/data/genomes/melGal5
     blat melGal5.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/melGal5.11.ooc \
-        -repMatch=350
-    #   Wrote 31510 overused 11-mers to jkStuff/melGal5.11.ooc
+        -repMatch=300
+    #   Wrote 39158 overused 11-mers to jkStuff/melGal5.11.ooc
 
     #   check non-bridged gaps to see what the typical size is:
     hgsql -N \
         -e 'select * from gap where bridge="no" order by size;' melGal5 \
         | sort -k7,7nr | ave -col=7 stdin
-    # minimum gap size is 10 and produces a reasonable number of lifts
+    # all these gap sizes are 100
+    # minimum gap size is 100 and produces a reasonable number of lifts
     gapToLift -verbose=2 -minGap=10 melGal5 jkStuff/nonBridged.lft \
         -bedFile=jkStuff/nonBridged.bed
 
@@ -550,11 +560,11 @@ XXX - running - Thu Jan 12 14:13:48 PST 2017
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # #organism       mrnaCnt estCnt  refSeqCnt
-    # Gallus gallus   30510   600534  6360
+    # #organism             mrnaCnt   estCnt  refSeqCnt
+    # Meleagris gallopavo     365     17435   93
 
     # edit etc/genbank.conf to add melGal5 just before rheMac2
-# melGal5 (chicken)
+# melGal5 (turkey)
 melGal5.serverGenome = /hive/data/genomes/melGal5/melGal5.2bit
 melGal5.clusterGenome = /hive/data/genomes/melGal5/melGal5.2bit
 melGal5.ooc = /hive/data/genomes/melGal5/jkStuff/melGal5.11.ooc
@@ -573,7 +583,7 @@ melGal5.downloadDir = melGal5
 # melGal5.upstreamMaf = multiz7way
 # /hive/data/genomes/melGal4/bed/multiz7way/species.lst
 
-    git commit -m "Added melGal5; refs #17168" etc/genbank.conf
+    git commit -m "Added melGal5; refs #18656" etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
     make etc-update
@@ -582,7 +592,9 @@ melGal5.downloadDir = melGal5
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial melGal5
-    # logFile: var/build/logs/2016.04.15-09:58:43.melGal5.initalign.log
+    # var/build/logs/2017.01.17-20:34:20.melGal5.initalign.log
+XXX - running - Tue Jan 17 20:34:33 PST 2017
+
     #   real    5678m9.548s
     tail var/build/logs/2016.04.15-09:58:43.melGal5.initalign.log
     #    hgwdev 2016.04.19-08:29:59 melGal5.initalign: Succeeded: melGal5
@@ -606,18 +618,19 @@ melGal5.downloadDir = melGal5
     # add melGal5 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added melGal5 - chicken refs #17168" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added melGal5 - turkey refs #17168" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #############################################################################
-# augustus gene track (TDB - 2016-04-14 - Hiram)
+# augustus gene track (DONE - 2017-01-17 - Hiram)
 
     mkdir /hive/data/genomes/melGal5/bed/augustus
     cd /hive/data/genomes/melGal5/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=chicken -dbHost=hgwdev \
            -workhorse=hgwdev melGal5) > do.log 2>&1
+XXX - running - Tue Jan 17 10:27:55 PST 2017
 
     cat fb.melGal5.augustusGene.txt
     # 25248650 bases of 100286401 (25.177%) in intersection
@@ -657,44 +670,45 @@ melGal5.downloadDir = melGal5
     #    enrich 14.68x
 
 #########################################################################
-# LIFTOVER TO melGal4 (TDB - 2016-04-15 - Hiram)
+# LIFTOVER TO melGal1 (DONE - 2017-01-17 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/melGal5/bed/blat.melGal4.2016-04-15
-    cd /hive/data/genomes/melGal5/bed/blat.melGal4.2016-04-15
+    mkdir /hive/data/genomes/melGal5/bed/blat.melGal1.2017-01-17
+    cd /hive/data/genomes/melGal5/bed/blat.melGal1.2017-01-17
     doSameSpeciesLiftOver.pl -verbose=2 \
         -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/melGal5/jkStuff/melGal5.11.ooc \
-         melGal5 melGal4
+         melGal5 melGal1
     time (doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/melGal5/jkStuff/melGal5.11.ooc \
-         melGal5 melGal4) > doLiftOverToMelGal4.log 2>&1
-    # real    86m43.038s
+         melGal5 melGal1) > doLiftOverToMelGal1.log 2>&1
+    # real    351m53.308s
 
-    # see if the liftOver menus function in the browser from melGal5 to melGal4
+    # see if the liftOver menus function in the browser from melGal5 to melGal1
 
 #########################################################################
-#  BLATSERVERS ENTRY (TDB - 2016-04-15 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-01-17 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("melGal5", "blat1b", "17862", "1", "0"); \
+	VALUES ("melGal5", "blat1d", "17878", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("melGal5", "blat1b", "17863", "0", "1");' \
+	VALUES ("melGal5", "blat1d", "17879", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
 ## reset default position to MEPE gene (egg shell protein)
-##  (TDB - 2016-05-13 - Hiram)
+## located via blat of the chicken protein
+##  (DONE - 2017-01-17 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr4:45985744-45991655"
+    hgsql -e 'update dbDb set defaultPos="chr4:21251858-21288049"
 	where name="melGal5";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TDB - 2016-05-13 - Hiram)
+# all.joiner update, downloads and in pushQ - (TBD - 2016-05-13 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=melGal5 -tableCoverage all.joiner
@@ -730,34 +744,32 @@ melGal5.downloadDir = melGal5
     #   sizes will set properly
 
 #########################################################################
-# UCSC to RefSeq name correspondence (TDB - 2016-05-12 - Hiram)
+# UCSC to RefSeq name correspondence (TBD - 2016-05-12 - Hiram)
 
     mkdir /hive/data/genomes/melGal5/bed/ucscToRefSeq
     cd /hive/data/genomes/melGal5/bed/ucscToRefSeq
 
-    ln -s /hive/data/outside/ncbi/genomes/refseq/vertebrate_other/Gallus_gallus/all_assembly_versions/GCF_000002315.4_Gallus_gallus-5.0/GCF_000002315.4_Gallus_gallus-5.0_assembly_report.txt .
+    ln -s ../../refseq/GCF_000146605.2_Turkey_5.0_assembly_report.txt .
 
     # this assembly_report has "UCSC-style-name" in column 10
     # but it does not name anything, they are all "na"
 
     # columns 5 and 7 are the INSDC and RefSeq names
-    # chrMT fixup in the sed
-    grep -v "^#" GCF_000002315.4_Gallus_gallus-5.0_assembly_report.txt \
-      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}' |
-        sed -e 's/^na/NC_001323.1/;' | sort > insdc.refSeq.tab
+    grep -v "^#" GCF_000146605.2_Turkey_5.0_assembly_report.txt \
+      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}' \
+        | sort > insdc.refSeq.tab
 
-    # the sed fixes chrM since it doesn't have an INSDC name
     hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' \
-      melGal5 | sed -e 's/notAvailable/NC_001323.1/;' | sort  > insdc.ucsc.tab
+      melGal5 | sort  > insdc.ucsc.tab
 
     join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
        | cut -f2- > ucsc.refSeq.tab
 
     # when working perfectly, all these tab files have the same line count:
     wc -l *.tab
-#   23475 insdc.refSeq.tab
-#   23475 insdc.ucsc.tab
-#   23474 ucsc.refSeq.tab
+#	231286 insdc.refSeq.tab
+#	231286 insdc.ucsc.tab
+#	231286 ucsc.refSeq.tab
 
     export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
@@ -769,6 +781,6 @@ melGal5.downloadDir = melGal5
     checkTableCoords  melGal5 -table=ucscToRefSeq
     # should cover %100 all bases:
     featureBits -countGaps melGal5 ucscToRefSeq
-    # 1230258557 bases of 1230258557 (100.000%) in intersection
+    # 1128339136 bases of 1128339136 (100.000%) in intersection
 
 #########################################################################

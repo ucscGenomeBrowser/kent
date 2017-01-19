@@ -421,7 +421,6 @@ url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg38&species=H.
 
 include trackDb.cloneEnd.ra
 
-#include hg38Patch7.ra alpha
 include hg38Patch9.ra
 
 include knownGene.ra 
