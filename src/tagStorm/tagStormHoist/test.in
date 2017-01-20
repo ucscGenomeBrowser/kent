@@ -176,8 +176,6 @@ access group
 	    format fastq
 	    part 1
 
-    donor 003 
-
     donor 003
     age 4
     age_units weeks
