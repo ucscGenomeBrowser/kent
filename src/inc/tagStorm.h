@@ -151,6 +151,10 @@ void tagStanzaDeleteTag(struct tagStanza *stanza, char *tag);
 void tagStormRemoveEmpties(struct tagStorm *tagStorm);
 /* Remove any empty stanzas, promoting children if need be. */
 
+void tagStormHoist(struct tagStorm *tagStorm, char *selectedTag);
+/* Hoist tags that are identical in all children to parent.  If selectedTag is
+ * non-NULL, just do it for tag of that name rather than all tags. */
+
 /** Information about a tag storm */
 
 struct slName *tagStormFieldList(struct tagStorm *tagStorm);

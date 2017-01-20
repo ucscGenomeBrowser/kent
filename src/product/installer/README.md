@@ -7,7 +7,7 @@ UCSC Genome Browser mirror. The GBiC program is for users who want to set up a f
 UCSC Genome Browser on their server/cloud instance, rather than using the 
 [Genome Browser in a Box (GBiB)](http://genome.ucsc.edu/goldenPath/help/gbib.html) 
 or our public website. Please see the 
-[Installation of a UCSC Genome Browser on a local machine ("mirror")](http://genome.ucsc.edu/admin/mirror.html#considerations-before-installing-a-genome-browser)
+[Installation of a UCSC Genome Browser on a local machine (mirror)](http://genome.ucsc.edu/admin/mirror.html#considerations-before-installing-a-genome-browser)
 page for a summary of installation options, including the pros and cons of using a mirror installation
 via the GBiC program vs a GBiB.
 
@@ -53,7 +53,7 @@ The program also does a few smaller things, like placing symlinks, detecting
 MariaDB, deactivating SELinux, finding the right path for your Apache install
 and adapting the MySQL socket config.
 
-This will leave you with a genome browser accessible on localhost that loads its data 
+This will leave you with a Genome Browser accessible on localhost that loads its data 
 through from genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If
 you are not on the US West Coast, it will be too slow for normal use but good 
 enough to test that your setup is working. You can then use the program to download 
@@ -102,7 +102,7 @@ to 2TB or less with the `-t` option:
 
     sudo bash browserSetup.sh -t noEncode mirror hg19
 
-For a full list of `-t` options, see the [All options](#all-options) section  or run the 
+For a full list of `-t` options, see the [All GBiC options](#all-gbic-options) section  or run the 
 program with no arguments.
 
 When you want to update all CGIs and fully mirrored assemblies, you can call the

@@ -3,61 +3,65 @@ assay RNA-seq
 access all
 organ brain
 format fastq
-biosample_date 2015-01-00
-sex male
 life_stage embryo
 age_units weeks
-age 5
-donor 000
 
+	donor 001
+	age 6
+	sex female
+	biosample_date 2015-01-10
+	lab_kent_quality 0.04
+	lab_kent_disassociation_protocol fetal_liver_digest.pdf
+	organ liver
 
-      organ brain
-      lab_kent_disassociation_protocol fetal_brain_digest.pdf
-      lab_kent_quality 0
+		file ex00do00or02fa00.fq.gz
+		part 1
 
-         part 1
-         file ex00do00or00fa00.fq.gz
+		file ex00do00or02fa01.fq.gz
+		part 2
 
-         file ex00do00or00fa01.fq.gz
-         part 2
+		file ex00do00or02fa02.fq.gz
+		part 3
 
-         file ex00do00or00fa02.fq.gz
-         part 3
+		file ex00do00or02fa03.fq.gz
+		part 4
 
-         file ex00do00or00fa03.fq.gz
-         part 4
+	donor 000
+	age 5
+	sex male
+	biosample_date 2015-01-00
 
-      organ liver
-      lab_kent_disassociation_protocol fetal_liver_digest.pdf
-      lab_kent_quality 0.01
+		organ brain
+		lab_kent_disassociation_protocol fetal_brain_digest.pdf
+		lab_kent_quality 0
 
-         file ex00do00or01fa00.fq.gz
-         part 1
+			part 1
+			file ex00do00or00fa00.fq.gz
 
-         file ex00do00or01fa01.fq.gz
-         part 2
+			file ex00do00or00fa01.fq.gz
+			part 2
 
-         file ex00do00or01fa02.fq.gz
-         part 3
+			file ex00do00or00fa02.fq.gz
+			part 3
 
-         file ex00do00or01fa03.fq.gz
-         part 4
+			file ex00do00or00fa03.fq.gz
+			part 4
 
-      organ liver
-      lab_kent_disassociation_protocol fetal_liver_digest.pdf
-      lab_kent_quality 0.04
+		organ liver
+		lab_kent_disassociation_protocol fetal_liver_digest.pdf
+		lab_kent_quality 0.01
 
-         file ex00do00or02fa00.fq.gz
-         part 1
+			file ex00do00or01fa00.fq.gz
+			part 1
 
-         file ex00do00or02fa01.fq.gz
-         part 2
+			file ex00do00or01fa01.fq.gz
+			part 2
 
-         file ex00do00or02fa02.fq.gz
-         part 3
+			file ex00do00or01fa02.fq.gz
+			part 3
 
-         file ex00do00or02fa03.fq.gz
-         part 4
+			file ex00do00or01fa03.fq.gz
+			part 4
 
 lab lab_2
 assay RNA-seq
@@ -71,52 +75,76 @@ age_units weeks
 age 5
 donor 000
 
+	organ brain
+	lab_kent_disassociation_protocol fetal_brain_digest.pdf
+	lab_kent_quality 0
 
-      organ brain
-      lab_kent_disassociation_protocol fetal_brain_digest.pdf
-      lab_kent_quality 0
+		file ex01do00or00fa00.fq.gz
+		part 1
 
-         file ex01do00or00fa00.fq.gz
-         part 1
+		file ex01do00or00fa01.fq.gz
+		part 2
 
-         file ex01do00or00fa01.fq.gz
-         part 2
+		file ex01do00or00fa02.fq.gz
+		part 3
 
-         file ex01do00or00fa02.fq.gz
-         part 3
+		file ex01do00or00fa03.fq.gz
+		part 4
 
-         file ex01do00or00fa03.fq.gz
-         part 4
+	organ liver
+	lab_kent_disassociation_protocol fetal_liver_digest.pdf
+	lab_kent_quality 0.01
 
-      organ liver
-      lab_kent_disassociation_protocol fetal_liver_digest.pdf
-      lab_kent_quality 0.01
+		file ex01do00or01fa00.fq.gz
+		part 1
 
-         file ex01do00or01fa00.fq.gz
-         part 1
+		file ex01do00or01fa01.fq.gz
+		part 2
 
-         file ex01do00or01fa01.fq.gz
-         part 2
+		file ex01do00or01fa02.fq.gz
+		part 3
 
-         file ex01do00or01fa02.fq.gz
-         part 3
+		file ex01do00or01fa03.fq.gz
+		part 4
 
-         file ex01do00or01fa03.fq.gz
-         part 4
+	organ liver
+	lab_kent_disassociation_protocol fetal_liver_digest.pdf
+	lab_kent_quality 0.04
 
-      organ liver
-      lab_kent_disassociation_protocol fetal_liver_digest.pdf
-      lab_kent_quality 0.04
+		file ex01do00or02fa00.fq.gz
+		part 1
 
-         file ex01do00or02fa00.fq.gz
-         part 1
+		file ex01do00or02fa01.fq.gz
+		part 2
 
-         file ex01do00or02fa01.fq.gz
-         part 2
+		file ex01do00or02fa02.fq.gz
+		part 3
 
-         file ex01do00or02fa02.fq.gz
-         part 3
+		file ex01do00or02fa03.fq.gz
+		part 4
 
-         file ex01do00or02fa03.fq.gz
-         part 4
+	organ gall bladder
+	lab_kent_quality 0.05
+	part 1
+	file ex01do00or03fa00.fq.gz
+
+lab lab_3
+assay RNA-seq
+access group
+part 1
+format fastq
+biosample_date 2015-02-00
+sex female
+life_stage embryo
+age_units weeks
+age 4
+donor 003
+
+	file ex01do03or03fa00.fq.gz
+	lab_kent_quality 0.06
+	organ gall bladder
+
+	file ex01do03or03fa02.fq.gz
+	lab_kent_quality 0.07
+	organ stomach
 
