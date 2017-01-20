@@ -22,6 +22,7 @@ errAbort(
   "   -div=fields,to,divide,on - comma separated list of fields, from highest to lowest level\n"
   "                              to partition data on. Otherwise will be calculated.\n"
   "   -local - calculate fields to divide on locally and recursively rather than globally.\n"
+  "   -noHoist - don't automatically move tags to a higher level when possible.\n"
   );
 }
 
@@ -29,6 +30,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"div", OPTION_STRING},
    {"local", OPTION_BOOLEAN},
+   {"noHoist", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -643,14 +645,14 @@ void dumpLockedSetList(struct lockedSet *lockedSetList)
 struct lockedSet *set;
 for (set = lockedSetList; set != NULL; set = set->next)
      {
-     printf("%s: %d vals, %g real, %d locked, %d predicted, %d predictors, %g score\n",
+     verbose(2, "%s: %d vals, %g real, %d locked, %d predicted, %d predictors, %g score\n",
 	set->name, set->valCount, set->realValRatio, slCount(set->fieldRefList), 
 	set->predictedCount, set->predictorCount, set->partingScore);
      struct slRef *ref;
      for (ref = set->fieldRefList; ref != NULL; ref = ref->next)
          {
 	 struct fieldInfo *field = ref->val;
-	 printf("\t%s\n", field->name);
+	 verbose(2, "\t%s\n", field->name);
 	 }
      }
 }
@@ -669,8 +671,7 @@ int fieldCount = table->fieldCount;
 verbose(2, "made predMatrix of %d cells\n", fieldCount * fieldCount);
 struct lockedSet *lockedSetList = findLockedSets(rowCount, predMatrix, fieldList);
 verbose(2, "%d locked sets\n", slCount(lockedSetList));
-if (verboseLevel() >= 2)
-    dumpLockedSetList(lockedSetList);
+dumpLockedSetList(lockedSetList);
 
 /* Make up list of fields to partition on, basically starting with best scoring,
  * and going in order, but not doing ones that are predicted by previous fields */
@@ -727,6 +728,8 @@ rPartition(table, tagStorm, NULL, gDivFieldList != NULL, gDivFieldList);
 tagStormReverseAll(tagStorm);
 removeEmptyPairs(tagStorm);
 tagStormRemoveEmpties(tagStorm);
+if (!optionExists("noHoist"))
+    tagStormHoist(tagStorm, NULL);
 tagStormWrite(tagStorm, output, 0);
 }
 
