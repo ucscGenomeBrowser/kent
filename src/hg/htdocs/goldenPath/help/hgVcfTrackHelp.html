@@ -11,10 +11,12 @@ Genome Browser VCF tracks may be configured in a variety of ways to highlight di
 the displayed information. Click <a href="vcf.html" target="_blank">here</a> for more information
 on VCF custom track creation.</p>
 
-<h2>Enabling the haplotype sorting display</h2>
+<h2>Configuring the haplotype sorting display</h2>
 <p>
 If the VCF file contains genotype columns for at least two samples (four haplotypes), then a 
-haplotype sorting display can be configured. WHen this option is checked, each sample's phased 
+haplotype sorting display can be configured.</p> 
+<p>
+<strong>Enable Haplotype sorting display:</strong> When this option is checked, each sample's phased
 and/or homozygous genotypes are split into haplotypes, clustered by similarity around a central 
 variant, and sorted for display by their position in the clustering tree. The tree (or as much of 
 the tree as space allows) is drawn in the label area next to the track image. Leaf clusters, in 
@@ -24,46 +26,46 @@ reference alleles and alternate alleles of the horizontally running haplotypes. 
 the display is the same as for VCF without genotypes: a stacked bar graph of the top two alleles, 
 showing the proportion of alleles if allele counts are available. This is checked (enabled) by 
 default.</p>
-<p>These options are applicable only when enabled.</p>
+<p>
+The following options are applicable only when the haplotype sorting display is enabled:</p>
+<p> 
+<strong>Haplotype sorting order:</strong> Haplotypes are sorted using a distance function that 
+uses a central variant; differences between haplotypes are penalized with weights that decrease 
+for each successive variant away from the central variant.  By default, the median variant in 
+the window is used. By clicking on a variant in the display, you will get the option to always 
+use that variant when it is in the current view.</p>
+<p>
+<strong>Haplotype coloring scheme:</strong> There are three ways that reference and alternate 
+alleles can be colored:</p>
 <ul>
   <li>
-  <strong>Haplotype sorting order:</strong> Haplotypes are sorted using a distance function that 
-  uses a central variant; differences between haplotypes are penalized with weights that decrease 
-  for each successive variant away from the central variant.  By default, the median variant in 
-  the window is used. By clicking on a variant in the display, you will get the option to always 
-  use that variant when it is in the current view.</li>
+  By default, the reference allele is invisible and the alternate allele is black. When multiple
+  haplotypes must be combined into the same pixel row, grayscale is used to shade according to 
+  the proportions of reference and alternate alleles. The central variant has a thin purple 
+  outline. Extra pixel rows at the top and bottom show the locations of variants in case they 
+  are hard to see due when the invisible reference allele is the major allele. Variants used in 
+  clustering have purple marks in these rows; variants outside the clustered regions have black 
+  marks.</li>
   <li>
-  <strong>Haplotype coloring scheme:</strong> There are three ways that reference and alternate 
-  alleles can be colored:
-  <ul>
-    <li>
-    By default, the reference allele is invisible and the alternate allele is black. When multiple
-    haplotypes must be combined into the same pixel row, grayscale is used to shade according to 
-    the proportions of reference and alternate alleles. The central variant has a thin purple 
-    outline. Extra pixel rows at the top and bottom show the locations of variants in case they 
-    are hard to see due when the invisible reference allele is the major allele. Variants used in 
-    clustering have purple marks in these rows; variants outside the clustered regions have black 
-    marks.</li>
-    <li>
-    The reference allele is blue and the alternate allele is red. Purple indicates a mix of 
-    reference and alternate alleles. The central variant has a thick black outline.</li>
-    <li>
-    Both alleles are colored using the same color scheme as when there are no genotypes: A is 
-    red, C is blue, G is green and T is magenta. Gray indicates a mix of reference and alternate 
-    alleles. The central variant has a thick black outline.</li>
-  </ul>
-  In all coloring modes, if some alleles in a haplotype are undefined, a pale yellowish color is 
-  used for those alleles.</li>
-  <li> 
-  <strong>Haplotype clustering leaf shape:</strong> Leaf clusters are collections of identical 
-  haplotypes. By default, they are drawn as open triangles &lt;. They can also be displayed as 
-  open rectangles [.</li>
+  The reference allele is blue and the alternate allele is red. Purple indicates a mix of 
+  reference and alternate alleles. The central variant has a thick black outline.</li>
   <li>
-  <strong>Haplotype sorting display height:</strong>Height in pixels of the haplotype sorting 
-  display. If this is fewer than the number of haplotypes (2 * the number of genotype columns), 
-  some horizontal pixel rows must represent multiple haplotypes; differing haplotypes' colors 
-  will be combined according to the selected coloring scheme.</li>
+  Both alleles are colored using the same color scheme as when there are no genotypes: A is 
+  red, C is blue, G is green and T is magenta. Gray indicates a mix of reference and alternate 
+  alleles. The central variant has a thick black outline.</li>
 </ul>
+<p>
+In all coloring modes, if some alleles in a haplotype are undefined, a pale yellowish color is 
+used for those alleles.</p>
+<p> 
+<strong>Haplotype clustering leaf shape:</strong> Leaf clusters are collections of identical 
+haplotypes. By default, they are drawn as open triangles &lt;. They can also be displayed as 
+open rectangles [.</p>
+<p>
+<strong>Haplotype sorting display height:</strong>Height in pixels of the haplotype sorting 
+display. If this is fewer than the number of haplotypes (2 * the number of genotype columns), 
+some horizontal pixel rows must represent multiple haplotypes; differing haplotypes' colors 
+will be combined according to the selected coloring scheme.</p>
 
 <h2>Filtering out variants</h2>
 <p>
