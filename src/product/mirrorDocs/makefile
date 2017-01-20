@@ -12,5 +12,5 @@ user:
 	@ehoc ""
 
 doInstall:
-	pandoc -t html5 -o ${destDir}/admin/mirror.html ../README.txt --template staticPage.html -t staticPage.lue
-	pandoc -t html5 -o ${destDir}/admin/mirrorManual.html ../mirrorManual.txt --template staticPage.html -t staticPage.lue
+	pandoc -t html5 -o ${destDir}/admin/mirror.html ../README.txt --template staticPage.html -t staticPage.lua
+	pandoc -t html5 -o ${destDir}/admin/mirrorManual.html ../mirrorManual.txt --template staticPage.html -t staticPage.lua
