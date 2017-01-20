@@ -102,7 +102,7 @@ to 2TB or less with the `-t` option:
 
     sudo bash browserSetup.sh -t noEncode mirror hg19
 
-For a full list of `-t` options, see the [All options](#all-options) section  or run the 
+For a full list of `-t` options, see the [All GBiC options](#all-gbic-options) section  or run the 
 program with no arguments.
 
 When you want to update all CGIs and fully mirrored assemblies, you can call the
