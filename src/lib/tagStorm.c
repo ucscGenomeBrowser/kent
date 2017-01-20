@@ -510,11 +510,11 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
        return;
        }
     }
-/* If didn't make it then add new tag (at end) */
+/* If didn't make it then add new tag (at start) */
 lmAllocVar(lm, pair);
 pair->name = lmCloneString(lm, tag);
 pair->val = lmCloneString(lm, val);
-slAddTail(&stanza->tagList, pair);
+slAddHead(&stanza->tagList, pair);
 }
 
 char *tagFindLocalVal(struct tagStanza *stanza, char *name)
@@ -679,7 +679,18 @@ void tagStormHoist(struct tagStorm *tagStorm, char *selectedTag)
 /* Hoist tags that are identical in all children to parent.  If selectedTag is
  * non-NULL, just do it for tag of that name rather than all tags. */
 {
+/* If there is more than one highest level stanza, make a dummy empty root one to hoist into. */
 struct tagStanza *stanza;
+if (slCount(tagStorm->forest) > 1)
+    {
+    struct tagStanza *root;
+    lmAllocVar(tagStorm->lm, root);
+    for (stanza = tagStorm->forest; stanza != NULL; stanza = stanza->next)
+        stanza->parent = root;
+    root->children = tagStorm->forest;
+    tagStorm->forest = root;
+    }
+
 for (stanza = tagStorm->forest; stanza != NULL; stanza = stanza->next)
     rHoist(tagStorm, stanza, selectedTag);
 tagStormRemoveEmpties(tagStorm);
