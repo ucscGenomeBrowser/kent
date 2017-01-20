@@ -482,3 +482,13 @@ group x
     shortLabel compatibleRefGene
     longLabel refGene predictions 'compatible' in NCBI RefSeq track
     color 0,0,255
+
+searchName ncbiRefSeqProtein
+searchTable ncbiRefSeq
+searchType genePred
+searchMethod prefix
+searchDescription ncbiRefSeq protAcc search alias
+semiShortCircuit 1
+xrefTable ncbiRefSeqLink
+xrefQuery select id,protAcc from %s where protAcc like '%s%%'
+termRegex [NXY]P_[0-9]+(\.[0-9]+)?
