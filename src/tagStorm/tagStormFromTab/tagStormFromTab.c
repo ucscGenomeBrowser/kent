@@ -258,8 +258,8 @@ boolean findBestParting(struct fieldedTable *table, struct fieldInfo *allFields,
 double bestScore = 0;
 struct slRef *partingList = NULL;
 struct fieldInfo *partingField = NULL;
-int tableRows = slCount(table->rowList);
-verbose(2, "Find best parting on table with %d rows and %d fields\n", tableRows, table->fieldCount);
+verbose(2, "Find best parting on table with %d rows and %d fields\n", 
+    table->rowCount, table->fieldCount);
 
 /* Of the ones that have the smallest number of values, find the set with the
  * most fields locked together */
@@ -283,7 +283,7 @@ for (field = allFields; field != NULL; field = field->next)
     int lockCount = slCount(lockedFields);
     int predictableCount = slCount(predictableFields);
     int fieldValCount = field->valHash->elCount;
-    int linesSaved = (lockCount+1) * (tableRows - fieldValCount);
+    int linesSaved = (lockCount+1) * (table->rowCount - fieldValCount);
     double score = (double)linesSaved / predictableCount;
     verbose(2, "field %s, %d vals, %d lockedCount, %d predictableCount, %g score\n", field->name, 
 	field->valHash->elCount, lockCount, predictableCount, score);
@@ -420,7 +420,7 @@ struct fieldInfo *partingField = NULL;
 if (!doParting(table, allFields, doPrepart, prepartField, &partingFields, &partingField))
     {
     verbose(3, "leaf rPartition table of %d cols, %d rows\n", 
-	table->fieldCount, slCount(table->rowList));
+	table->fieldCount, table->rowCount);
 
     // Here is where we should output whole table... 
     struct fieldedRow *row;
@@ -437,7 +437,7 @@ if (!doParting(table, allFields, doPrepart, prepartField, &partingFields, &parti
 
 int partingFieldIx = partingField->ix;
 verbose(3, "node rPartition table of %d cols, %d rows, fieldName %s, %d locked\n", 
-    table->fieldCount, slCount(table->rowList), partingField->name, slCount(partingFields));
+    table->fieldCount, table->rowCount, partingField->name, slCount(partingFields));
 
 
 /* Scan through table once outputting constant bits into a tag-storm */
@@ -521,6 +521,43 @@ void removeEmptyPairs(struct tagStorm *tagStorm)
 rRemoveEmptyPairs(tagStorm->forest);
 }
 
+bool **makePredMatrix(struct fieldedTable *table, struct fieldInfo *fieldList)
+/* Make up matrix of aPredictsB results to avoid a relatively expensive recalculation */
+{
+int fieldCount = table->fieldCount;
+bool **matrix;
+AllocArray(matrix, fieldCount);
+struct fieldInfo *aField, *bField;
+for (aField = fieldList; aField != NULL; aField = aField->next)
+    {
+    int aIx = aField->ix;
+    bool *row;
+    AllocArray(row, fieldCount);
+    matrix[aIx] = row;
+    for (bField = fieldList; bField != NULL; bField = bField->next)
+        {
+	int bIx = bField->ix;
+	row[bIx] = aPredictsB(table, aField, bField);
+	}
+    }
+verbose(2, "made predMatrix of %d cells\n", fieldCount * fieldCount);
+return matrix;
+}
+
+void freePredMatrix(struct fieldedTable *table, bool ***pMatrix)
+/* Free matrix make with makePredMatrix */
+{
+bool **matrix = *pMatrix;
+if (pMatrix != NULL)
+    {
+    int fieldCount = table->fieldCount;
+    int i;
+    for (i=0; i<fieldCount; ++i)
+        freeMem(matrix[i]);
+    freez(pMatrix);
+    }
+}
+
 int lockedSetCmpPartingScore(const void *va, const void *vb)
 /* Compare two lockedSets based on partingScore, descending. */
 {
@@ -535,12 +572,14 @@ else
     return 0;
 }
 
-struct lockedSet *findLockedSets(double rowCount, bool **predMatrix, struct fieldInfo *fieldList)
+struct lockedSet *findLockedSets(struct fieldedTable *table, struct fieldInfo *fieldList)
 /* Find locked together fields */
 {
+bool **predMatrix = makePredMatrix(table, fieldList);
 struct lockedSet *setList = NULL;
 struct hash *usedHash = hashNew(0);
 struct fieldInfo *aField, *bField;
+double rowCount = table->rowCount;
 for (aField = fieldList; aField != NULL; aField = aField->next)
     {
     if (!hashLookup(usedHash, aField->name))
@@ -552,7 +591,7 @@ for (aField = fieldList; aField != NULL; aField = aField->next)
 	set->ix = aField->ix;
 	set->firstField = aField;
 	set->valCount = aField->valHash->elCount;
-	set->realValRatio = aField->realValCount / (double)rowCount;
+	set->realValRatio = aField->realValCount / rowCount;
 	set->fieldRefList = slRefNew(aField);
 	slAddHead(&setList, set);
 	for (bField = aField->next; bField != NULL; bField = bField->next)
@@ -591,87 +630,46 @@ for (aSet = setList; aSet != NULL; aSet = aSet->next)
 	}
     }
 
-/* Calculate score */
+/* Calculate score and sort on it. */
 for (aSet = setList; aSet != NULL; aSet = aSet->next)
     {
     int lockedCount = slCount(aSet->fieldRefList);
     double real = aSet->realValRatio;
     aSet->partingScore = real*real*(4*lockedCount + aSet->predictedCount + aSet->predictorCount)/pow(aSet->valCount, 0.5);
     }
-
 slSort(&setList, lockedSetCmpPartingScore);
+
+/* Clean up and go home. */
+freePredMatrix(table, &predMatrix);
 return setList;
 }
 
-bool **makePredMatrix(struct fieldedTable *table, struct fieldInfo *fieldList)
-/* Make up matrix of aPredictsB results to avoid a relatively expensive recalculation */
-{
-int fieldCount = table->fieldCount;
-bool **matrix;
-AllocArray(matrix, fieldCount);
-struct fieldInfo *aField, *bField;
-for (aField = fieldList; aField != NULL; aField = aField->next)
-    {
-    int aIx = aField->ix;
-    bool *row;
-    AllocArray(row, fieldCount);
-    matrix[aIx] = row;
-    for (bField = fieldList; bField != NULL; bField = bField->next)
-        {
-	int bIx = bField->ix;
-	row[bIx] = aPredictsB(table, aField, bField);
-	}
-    }
-return matrix;
-}
-
-void freePredMatrix(struct fieldedTable *table, bool ***pMatrix)
-/* Free matrix make with makePredMatrix */
-{
-bool **matrix = *pMatrix;
-if (pMatrix != NULL)
-    {
-    int fieldCount = table->fieldCount;
-    int i;
-    for (i=0; i<fieldCount; ++i)
-        freeMem(matrix[i]);
-    freez(pMatrix);
-    }
-}
-
-void dumpLockedSetList(struct lockedSet *lockedSetList)
-/* Print out info on locked sets to file */
+void dumpLockedSetList(struct lockedSet *lockedSetList, int verbosity)
+/* Print out info on locked sets to file at a given verbosity level */
 {
 struct lockedSet *set;
 for (set = lockedSetList; set != NULL; set = set->next)
      {
-     verbose(2, "%s: %d vals, %g real, %d locked, %d predicted, %d predictors, %g score\n",
+     verbose(verbosity, "%s: %d vals, %g real, %d locked, %d predicted, %d predictors, %g score\n",
 	set->name, set->valCount, set->realValRatio, slCount(set->fieldRefList), 
 	set->predictedCount, set->predictorCount, set->partingScore);
      struct slRef *ref;
      for (ref = set->fieldRefList; ref != NULL; ref = ref->next)
          {
 	 struct fieldInfo *field = ref->val;
-	 verbose(2, "\t%s\n", field->name);
+	 verbose(verbosity, "\t%s\n", field->name);
 	 }
      }
 }
 
-struct slName *findPartingDivs(struct fieldedTable *table, int rowCount)
-/* Build up info on table figuring out field relationships. */
+struct slName *findPartingDivs(struct fieldedTable *table)
+/* Build up list of fields to part table on when doing global parting */
 {
-/* Get information about fields including distinct value counts */
 struct fieldInfo *fieldList = makeFieldInfo(table);
 verbose(2, "made fieldInfo\n");
-
-/* Glom together fields that move in lockstep together, and end up with
- * a list sorted by most promising to least for parting */
-bool **predMatrix = makePredMatrix(table, fieldList);
-int fieldCount = table->fieldCount;
-verbose(2, "made predMatrix of %d cells\n", fieldCount * fieldCount);
-struct lockedSet *lockedSetList = findLockedSets(rowCount, predMatrix, fieldList);
+struct lockedSet *lockedSetList = findLockedSets(table, fieldList);
 verbose(2, "%d locked sets\n", slCount(lockedSetList));
-dumpLockedSetList(lockedSetList);
+dumpLockedSetList(lockedSetList, 2);
 
 /* Make up list of fields to partition on, basically starting with best scoring,
  * and going in order, but not doing ones that are predicted by previous fields */
@@ -703,7 +701,6 @@ verbose(1, "\n");
 
 /* Clean up and return results */
 freeHash(&uniqHash);
-freePredMatrix(table, &predMatrix);
 lockedSetFreeList(&lockedSetList);
 fieldInfoFreeList(&fieldList);
 return divList;
@@ -715,12 +712,11 @@ void tagStormFromTab(char *input, char *output)
 {
 /* Load up input as a fielded table */
 struct fieldedTable *table = fieldedTableFromTabFile(input, input, NULL, 0);
-int rowCount = slCount(table->rowList);
-verbose(1, "%s has %d fields and %d rows\n", input, table->fieldCount, rowCount);
+verbose(1, "%s has %d fields and %d rows\n", input, table->fieldCount, table->rowCount);
 
 if (gDivFieldList == NULL && !optionExists("local"))
      {
-     gDivFieldList = findPartingDivs(table, rowCount);
+     gDivFieldList = findPartingDivs(table);
      }
 
 struct tagStorm *tagStorm = tagStormNew(input);
