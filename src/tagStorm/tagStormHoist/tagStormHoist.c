@@ -6,8 +6,6 @@
 #include "options.h"
 #include "tagStorm.h"
 
-char *clOne = NULL;
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -27,7 +25,7 @@ static struct optionSpec options[] = {
 };
 
 
-boolean localTagRemove(struct tagStanza *stanza, char *tag)
+static boolean localTagRemove(struct tagStanza *stanza, char *tag)
 /* Find given variable in list and remove it. Returns TRUE if it
  * actually removed it,  FALSE if it never found it. */
 {
@@ -45,7 +43,7 @@ for (v = *ln; v != NULL; v = v->next)
 return FALSE;
 }
 
-void hoistOne(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
+static void hoistOne(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
 /* We've already determined that tag exists and has same value in all children.
  * What we do here is add it to ourselves and remove it from children. */
 {
@@ -55,7 +53,7 @@ for (child = stanza->children; child != NULL; child = child->next)
     localTagRemove(child, tag);
 }
 
-struct slName *tagsInAny(struct tagStanza *stanzaList)
+static struct slName *tagsInAny(struct tagStanza *stanzaList)
 /* Return list of variables that are used in any node in list. */
 {
 struct hash *tagHash = hashNew(6);
@@ -77,7 +75,7 @@ hashFree(&tagHash);
 return tagList;
 }
 
-char *allSameVal(char *tag, struct tagStanza *stanzaList)
+static char *allSameVal(char *tag, struct tagStanza *stanzaList)
 /* Return value of tag if it exists and is the same in each meta on list */
 {
 char *val = NULL;
@@ -98,7 +96,7 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
 return val;
 }
 
-static void rHoist(struct tagStorm *tagStorm, struct tagStanza *stanza)
+static void rHoist(struct tagStorm *tagStorm, struct tagStanza *stanza, char *selectedTag)
 /* Move tags that are the same in all children up to parent. */
 {
 /* Do depth first recursion, but get early return if we're a leaf. */
@@ -106,7 +104,7 @@ struct tagStanza *child;
 if (stanza->children == NULL)
     return;
 for (child = stanza->children; child != NULL; child = child->next)
-    rHoist(tagStorm, child);
+    rHoist(tagStorm, child, selectedTag);
 
 /* Build up list of tags used in any child. */
 struct slName *tag, *tagList = tagsInAny(stanza->children);
@@ -115,7 +113,7 @@ struct slName *tag, *tagList = tagsInAny(stanza->children);
 for (tag = tagList; tag != NULL; tag = tag->next)
     {
     char *name = tag->name;
-    if (clOne == NULL || sameString(name, clOne))
+    if (selectedTag == NULL || sameString(name, selectedTag))
 	{
 	char *val;
 	val = allSameVal(name, stanza->children);
@@ -126,14 +124,21 @@ for (tag = tagList; tag != NULL; tag = tag->next)
 slFreeList(&tagList);
 }
 
-void tagStormHoist(char *input, char *output)
+void tagStormHoist(struct tagStorm *tagStorm, char *selectedTag)
+/* Hoist tags that are identical in all children to parent.  If selectedTag is
+ * non-NULL, just do it for tag of that name rather than all tags. */
+{
+struct tagStanza *stanza;
+for (stanza = tagStorm->forest; stanza != NULL; stanza = stanza->next)
+    rHoist(tagStorm, stanza, selectedTag);
+tagStormRemoveEmpties(tagStorm);
+}
+
+void hoistFile(char *input, char *output, char *selectedTag)
 /* tagStormHoist - Move tags that are shared by all siblings up a level. */
 {
 struct tagStorm *tagStorm = tagStormFromFile(input);
-struct tagStanza *stanza;
-for (stanza = tagStorm->forest; stanza != NULL; stanza = stanza->next)
-    rHoist(tagStorm, stanza);
-tagStormRemoveEmpties(tagStorm);
+tagStormHoist(tagStorm, selectedTag);
 tagStormWrite(tagStorm, output, 0);
 }
 
@@ -143,7 +148,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-clOne = optionVal("one", clOne);
-tagStormHoist(argv[1], argv[2]);
+hoistFile(argv[1], argv[2], optionVal("one", NULL));
 return 0;
 }
