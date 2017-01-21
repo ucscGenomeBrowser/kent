@@ -651,60 +651,60 @@ if (!doParting(table, allFields, doPrepart, prepartField, &partingFields, &parti
 	for (i=0; i<table->fieldCount; ++i)
 	    tagStanzaAdd(tagStorm, stanza, table->fields[i], row->row[i]);
 	}
-    return;
     }
-
-
-int partingFieldIx = partingField->ix;
-verbose(3, "node rPartition table of %d cols, %d rows, fieldName %s, %d locked\n", 
-    table->fieldCount, table->rowCount, partingField->name, slCount(partingFields));
-
-
-/* Scan through table once outputting constant bits into a tag-storm */
-struct hash *uniq = hashNew(0);
-struct slRef *partValList = partingField->valList;
-char *partVal = NULL;
-struct fieldedRow *fieldedRow;
-for (fieldedRow = table->rowList; fieldedRow != NULL; fieldedRow = fieldedRow->next)
+else
     {
-    char **row = fieldedRow->row;
-    char *keyVal = row[partingFieldIx];
-    if (partVal == NULL || differentString(partVal, keyVal))
-        {
-	if (hashLookup(uniq, keyVal) == NULL)
+    int partingFieldIx = partingField->ix;
+    verbose(3, "node rPartition table of %d cols, %d rows, fieldName %s, %d locked\n", 
+	table->fieldCount, table->rowCount, partingField->name, slCount(partingFields));
+
+
+    /* Scan through table once outputting constant bits into a tag-storm */
+    struct hash *uniq = hashNew(0);
+    struct slRef *partValList = partingField->valList;
+    char *partVal = NULL;
+    struct fieldedRow *fieldedRow;
+    for (fieldedRow = table->rowList; fieldedRow != NULL; fieldedRow = fieldedRow->next)
+	{
+	char **row = fieldedRow->row;
+	char *keyVal = row[partingFieldIx];
+	if (partVal == NULL || differentString(partVal, keyVal))
 	    {
-	    hashAdd(uniq, keyVal, NULL);
-
-	    /* Add current values of parting field to stanza */
-	    struct tagStanza *stanza = tagStanzaNew(tagStorm, parent);
-	    struct slRef *ref;
-	    for (ref = partingFields; ref != NULL; ref = ref->next)
+	    if (hashLookup(uniq, keyVal) == NULL)
 		{
-		struct fieldInfo *field = ref->val;
-		tagStanzaAdd(tagStorm, stanza, field->name, row[field->ix]);
-		}
-	    slReverse(&stanza->tagList);
+		hashAdd(uniq, keyVal, NULL);
 
-	    /* Advance to next value */
-	    assert(partValList != NULL);
-	    partVal = partValList->val;
-	    partValList = partValList->next;
+		/* Add current values of parting field to stanza */
+		struct tagStanza *stanza = tagStanzaNew(tagStorm, parent);
+		struct slRef *ref;
+		for (ref = partingFields; ref != NULL; ref = ref->next)
+		    {
+		    struct fieldInfo *field = ref->val;
+		    tagStanzaAdd(tagStorm, stanza, field->name, row[field->ix]);
+		    }
+		slReverse(&stanza->tagList);
 
-	    /* Make subtable with nonconstant bits starting with header. */
-	    verbose(3, "parting on %s=%s\n", partingField->name, partVal);
-	    int ixTranslator[table->fieldCount];
-	    struct fieldedTable *subtable = NULL;
-	    if (makeSubtableExcluding(table, partingFieldIx, partVal,
-					partingFields, &subtable, ixTranslator))
-		{
-		rPartition(subtable, tagStorm, stanza, doPrepart, nextPrepart);
+		/* Advance to next value */
+		assert(partValList != NULL);
+		partVal = partValList->val;
+		partValList = partValList->next;
+
+		/* Make subtable with nonconstant bits starting with header. */
+		verbose(3, "parting on %s=%s\n", partingField->name, partVal);
+		int ixTranslator[table->fieldCount];
+		struct fieldedTable *subtable = NULL;
+		if (makeSubtableExcluding(table, partingFieldIx, partVal,
+					    partingFields, &subtable, ixTranslator))
+		    {
+		    rPartition(subtable, tagStorm, stanza, doPrepart, nextPrepart);
+		    }
+		fieldedTableFree(&subtable);
 		}
 	    }
+
 	}
-
+    hashFree(&uniq);
     }
-hashFree(&uniq);
-
 slFreeList(&partingFields);
 fieldInfoFreeList(&allFields);
 }
