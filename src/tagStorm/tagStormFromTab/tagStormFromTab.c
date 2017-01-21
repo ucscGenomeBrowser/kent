@@ -24,6 +24,7 @@ errAbort(
   "                              to partition data on. Otherwise will be calculated.\n"
   "   -local - calculate fields to divide on locally and recursively rather than globally.\n"
   "   -noHoist - don't automatically move tags to a higher level when possible.\n"
+  "   -keepOrder - keep field order from input file rather than alphabetizing\n"
   );
 }
 
@@ -32,6 +33,7 @@ static struct optionSpec options[] = {
    {"div", OPTION_STRING},
    {"local", OPTION_BOOLEAN},
    {"noHoist", OPTION_BOOLEAN},
+   {"keepOrder", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -682,7 +684,6 @@ else
 		    struct fieldInfo *field = ref->val;
 		    tagStanzaAdd(tagStorm, stanza, field->name, row[field->ix]);
 		    }
-		slReverse(&stanza->tagList);
 
 		/* Advance to next value */
 		assert(partValList != NULL);
@@ -750,6 +751,7 @@ static void tagStormFromTab(char *input, char *output)
 struct fieldedTable *table = fieldedTableFromTabFile(input, input, NULL, 0);
 verbose(2, "%s has %d fields and %d rows\n", input, table->fieldCount, table->rowCount);
 
+/* Possibly set up global list of partitioning fields */
 if (gDivFieldList == NULL && !optionExists("local"))
      {
      gDivFieldList = findPartingDivs(table);
@@ -758,6 +760,9 @@ if (gDivFieldList == NULL && !optionExists("local"))
 struct tagStorm *tagStorm = tagStormNew(input);
 rPartition(table, tagStorm, NULL, gDivFieldList != NULL, gDivFieldList);
 tagStormReverseAll(tagStorm);
+
+/* Make output prettier by cleaning up empty pairs and stanzas, hoisting, and ordering
+ * fields of stanzas */
 verbose(2, "cleaning up empties and hoisting\n");
 removeEmptyPairs(tagStorm);
 tagStormRemoveEmpties(tagStorm);
@@ -765,6 +770,13 @@ if (!optionExists("noHoist"))
     {
     tagStormHoist(tagStorm, NULL);
     }
+
+if (optionExists("keepOrder"))
+    tagStormOrderSort(tagStorm, table->fields, table->fieldCount);
+else
+    tagStormAlphaSort(tagStorm);
+
+/* Write out result */
 verbose(2, "writing %s\n", output);
 tagStormWrite(tagStorm, output, 0);
 }
@@ -776,7 +788,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 
-// Process command line option to drive the partitioning manually.
+/* Process command line option to drive the partitioning manually. */
 char *div = optionVal("div", NULL);
 if (div != NULL)
     gDivFieldList = slNameListFromComma(div);
