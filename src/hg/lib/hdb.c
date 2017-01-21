@@ -4420,9 +4420,7 @@ safef(queryBuf, sizeof queryBuf, query, cladeTable(),  genomeCladeTable(), dbDbT
 struct sqlConnection *conn = hConnectCentral();
 struct slPair *nativeClades = sqlQuickPairList(conn, queryBuf);
 hDisconnectCentral(&conn);
-
 struct slPair *trackHubClades = trackHubGetCladeLabels();
-
 return slCat(nativeClades, trackHubClades);
 }
 
@@ -4445,6 +4443,7 @@ else
                           ", orderKey "
                           "from %s d,%s g "
 			  "where d.genome=g.genome and g.clade = '%s' "
+                          "group by genome " // necessary since we added orderKey to SELECT list
 			  "order by orderKey", dbDbTable(), genomeCladeTable(), clade);
     // Although clade and db menus have distinct values vs. labels, we actually use the
     // same strings for values and labels in the genome menu!  So we get a plain list

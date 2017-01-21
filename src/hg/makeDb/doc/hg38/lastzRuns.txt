@@ -7970,3 +7970,75 @@ TMPDIR=/dev/shm
     # real    240m25.264s
 
 #############################################################################
+# LASTZ human/hg38 vs. turkey/melGal5 - (DONE - 2017-01-20 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzMelGal5.2017-01-20
+    cd /hive/data/genomes/hg38/bed/lastzMelGal5.2017-01-20
+
+    printf '# human vs turkey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: turkey melGal5
+SEQ2_DIR=/hive/data/genomes/melGal5/melGal5.2bit
+SEQ2_LEN=/hive/data/genomes/melGal5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzMelGal5.2017-01-20
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    190m58.492s
+
+    cat fb.hg38.chainMelGal5Link.txt
+    # 135950364 bases of 3049335806 (4.458%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 melGal5) \
+      > rbest.log 2>&1 &
+    # real    492m55.893s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melGal5/bed/blastz.hg38.swap
+    cd /hive/data/genomes/melGal5/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzMelGal5.2017-01-20/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    36m37.471s
+
+    cat fb.melGal5.chainHg38Link.txt
+    # 107549251 bases of 1093044709 (9.839%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 hg38) \
+        > rbest.log 2>&1
+    # real    456m25.214s
+
+#########################################################################

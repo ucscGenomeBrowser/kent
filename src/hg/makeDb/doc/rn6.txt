@@ -2213,7 +2213,7 @@ TMPDIR=/dev/shm' > DEF
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -chainMinScore=3000 -chainLinearGap=medium \
            -continue=syntenicNet) > synNet.log 2>&1 &
-XXX - running - Thu Jan 19 10:55:33 PST 2017
+    # real    10m40.444s
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 oryCun2) \
            > rbest.log 2>&1 &
@@ -2510,8 +2510,7 @@ TMPDIR=/dev/shm' > DEF
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 tarSyr2) \
            > rbest.log 2>&1 &
-XXX - running - Thu Jan 19 08:06:45 PST 2017
-    #  real    1569m42.488s
+    #  real    1075m22.381s
 
     #	and for the swap
     mkdir /hive/data/genomes/tarSyr2/bed/blastz.rn6.swap
@@ -2520,23 +2519,14 @@ XXX - running - Thu Jan 19 08:06:45 PST 2017
 	/hive/data/genomes/rn6/bed/lastzTarSyr2.2017-01-18/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -swap -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-XXX - running - Thu Jan 19 08:06:45 PST 2017
-    #	real    205m19.557s
+    #	real    306m57.784s
 
     cat  fb.tarSyr2.chainRn6Link.txt
-    #	1051607110 bases of 3142093174 (33.468%) in intersection
+    #	1110521625 bases of 3405755564 (32.607%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tarSyr2 rn6) \
          > rbest.log 2>&1
-    # real    1601m35.848s
-
-XXX TBD XXX
-    time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
-	/hive/data/genomes/rn6/bed/lastzTarSyr2.2017-01-18/DEF \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-        -swap -chainMinScore=3000 -chainLinearGap=medium \
-            -continue=syntenicNet) > synNet.log 2>&1 &
-XXX TBD XXX
+    # real    1247m45.887s
 
 ##############################################################################
 # lastz platypus ornAna2 (DONE - 2017-01-18 - Hiram)
@@ -2590,8 +2580,7 @@ TMPDIR=/dev/shm' > DEF
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rn6 ornAna2) \
            > rbest.log 2>&1 &
-XXX - running - Thu Jan 19 08:05:09 PST 2017
-    #  real    2596m10.639s
+    #  real    801m25.537s
 
     #	and for the swap
     mkdir /hive/data/genomes/ornAna2/bed/blastz.rn6.swap
@@ -2607,8 +2596,7 @@ XXX - running - Thu Jan 19 08:05:09 PST 2017
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ornAna2 rn6) \
          > rbest.log 2>&1 &
-XXX - running - Thu Jan 19 10:44:48 PST 2017
-    # real    2521m59.900s
+    # real    794m22.755s
 
     time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
 	/hive/data/genomes/rn6/bed/lastzOrnAna2.2017-01-18/DEF \
