@@ -155,6 +155,12 @@ void tagStormHoist(struct tagStorm *tagStorm, char *selectedTag);
 /* Hoist tags that are identical in all children to parent.  If selectedTag is
  * non-NULL, just do it for tag of that name rather than all tags. */
 
+void tagStormAlphaSort(struct tagStorm *tagStorm);
+/* Sort tags in stanza alphabetically */
+
+void tagStormOrderSort(struct tagStorm *tagStorm, char **orderFields, int orderCount);
+/* Sort tags in stanza to be in same order as orderFields input  which is orderCount long */
+
 /** Information about a tag storm */
 
 struct slName *tagStormFieldList(struct tagStorm *tagStorm);

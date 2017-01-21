@@ -696,6 +696,53 @@ for (stanza = tagStorm->forest; stanza != NULL; stanza = stanza->next)
 tagStormRemoveEmpties(tagStorm);
 }
 
+static void rSortAlpha(struct tagStanza *list)
+/* Recursively sort stanzas alphabetically */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    rSortAlpha(stanza->children);
+    slSort(&stanza->tagList, slPairCmp);
+    }
+}
+
+void tagStormAlphaSort(struct tagStorm *tagStorm)
+/* Sort tags in stanza alphabetically */
+{
+rSortAlpha(tagStorm->forest);
+}
+
+// Sadly not thread safe helper vars for sorting according to predefined order
+static char **sOrderFields;
+static int sOrderCount;
+
+static int cmpPairByOrder(const void *va, const void *vb)
+/* Compare two slPairs according to order of names in sOrderFields */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return cmpStringOrder(a->name, b->name, sOrderFields, sOrderCount);
+}
+
+static void rOrderSort(struct tagStanza *list)
+/* Recursely sort by predefined order */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    rOrderSort(stanza->children);
+    slSort(&stanza->tagList, cmpPairByOrder);
+    }
+}
+
+void tagStormOrderSort(struct tagStorm *tagStorm, char **orderFields, int orderCount)
+/* Sort tags in stanza to be in same order as orderFields input  which is orderCount long */
+{
+sOrderFields = orderFields;
+sOrderCount = orderCount;
+rOrderSort(tagStorm->forest);
+}
 
 char *tagMustFindVal(struct tagStanza *stanza, char *name)
 /* Return value of tag of given name within stanza or any of it's parents. Abort if
@@ -994,3 +1041,5 @@ rqlStatementFree(&rql);
 dyStringFree(&query);
 return resultList;
 }
+
+
