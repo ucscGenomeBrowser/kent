@@ -11,7 +11,7 @@
 
 struct slName *gDivFieldList = NULL;  // Filled in from div command line option.
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -67,7 +67,7 @@ struct lockedSet
     boolean allInt;	    /* True if all fields are int */
     };
 
-void fieldInfoFree(struct fieldInfo **pField)
+static void fieldInfoFree(struct fieldInfo **pField)
 /* Free up memory associated with fieldInfo */
 {
 struct fieldInfo *field = *pField;
@@ -80,7 +80,7 @@ if (field != NULL)
     }
 }
 
-void fieldInfoFreeList(struct fieldInfo **pList)
+static void fieldInfoFreeList(struct fieldInfo **pList)
 /* Free a list of dynamically allocated fieldInfo */
 {
 struct fieldInfo *el, *next;
@@ -93,8 +93,7 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-
-void lockedSetFree(struct lockedSet **pSet)
+static void lockedSetFree(struct lockedSet **pSet)
 /* Free up memory associated with a locked set */
 {
 struct lockedSet *set = *pSet;
@@ -107,7 +106,7 @@ if (set != NULL)
     }
 }
 
-void lockedSetFreeList(struct lockedSet **pList)
+static void lockedSetFreeList(struct lockedSet **pList)
 /* Free a list of dynamically allocated locked sets */
 {
 struct lockedSet *el, *next;
@@ -121,7 +120,7 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-boolean isDefinedVal(char *s)
+static boolean isDefinedVal(char *s)
 /* Return TRUE if it looks like s is a real value, that is non-NULL, non-empty, and
  * neither n/a nor N/A */
 {
@@ -132,19 +131,7 @@ if (sameString(s, "n/a") || sameString(s, "N/A"))
 return TRUE;
 }
 
-boolean fieldAllDefined(struct fieldInfo *field)
-/* Return TRUE if field is defined for all rows of table */
-{
-struct slRef *ref;
-for (ref = field->valList; ref != NULL; ref = ref->next)
-    {
-    if (!isDefinedVal(ref->val))
-        return FALSE;
-    }
-return TRUE;
-}
-
-struct fieldInfo *fieldInfoFind(struct fieldInfo *list, char *name)
+static struct fieldInfo *fieldInfoFind(struct fieldInfo *list, char *name)
 /* Find element of given name in list. */
 {
 struct fieldInfo *fi;
@@ -156,7 +143,7 @@ for (fi = list; fi != NULL; fi = fi->next)
 return NULL;
 }
 
-boolean aPredictsB(struct fieldedTable *table, struct fieldInfo *a, struct fieldInfo *b)
+static boolean aPredictsB(struct fieldedTable *table, struct fieldInfo *a, struct fieldInfo *b)
 /* Return TRUE if fields are locked in the sense that you can predict the value of b from the value of a */
 {
 /* A field is always locked to itself! */
@@ -195,7 +182,7 @@ hashFree(&hash);
 return arePredictable;
 }
 
-struct fieldInfo *makeFieldInfo(struct fieldedTable *table)
+static struct fieldInfo *makeFieldInfo(struct fieldedTable *table)
 /* Make list of field info for table */
 {
 struct fieldInfo *fieldList = NULL, *field;
@@ -227,7 +214,7 @@ slReverse(&fieldList);
 return fieldList;
 }
 
-bool **makePredMatrix(struct fieldedTable *table, struct fieldInfo *fieldList)
+static bool **makePredMatrix(struct fieldedTable *table, struct fieldInfo *fieldList)
 /* Make up matrix of aPredictsB results to avoid a relatively expensive recalculation */
 {
 int fieldCount = table->fieldCount;
@@ -250,7 +237,7 @@ verbose(2, "made predMatrix of %d cells\n", fieldCount * fieldCount);
 return matrix;
 }
 
-void freePredMatrix(struct fieldedTable *table, bool ***pMatrix)
+static void freePredMatrix(struct fieldedTable *table, bool ***pMatrix)
 /* Free matrix make with makePredMatrix */
 {
 bool **matrix = *pMatrix;
@@ -264,7 +251,7 @@ if (pMatrix != NULL)
     }
 }
 
-int lockedSetCmpPartingScore(const void *va, const void *vb)
+static int lockedSetCmpPartingScore(const void *va, const void *vb)
 /* Compare two lockedSets based on partingScore, descending. */
 {
 const struct lockedSet *a = *((struct lockedSet **)va);
@@ -279,7 +266,7 @@ else
 }
 
 
-int longestPredictorChainSize(struct lockedSet *set)
+static int longestPredictorChainSize(struct lockedSet *set)
 /* Recursively calculate longest chain of predictors starting with set */
 {
 struct slRef *ref;
@@ -297,7 +284,7 @@ for (ref = set->predictorList; ref != NULL; ref = ref->next)
 return longest + 1;
 }
 
-struct lockedSet *findLockedSets(struct fieldedTable *table, struct fieldInfo *fieldList)
+static struct lockedSet *findLockedSets(struct fieldedTable *table, struct fieldInfo *fieldList)
 /* Find locked together fields */
 {
 bool **predMatrix = makePredMatrix(table, fieldList);
@@ -406,7 +393,7 @@ freePredMatrix(table, &predMatrix);
 return setList;
 }
 
-void dumpLockedSetList(struct lockedSet *lockedSetList, int verbosity)
+static void dumpLockedSetList(struct lockedSet *lockedSetList, int verbosity)
 /* Print out info on locked sets to file at a given verbosity level */
 {
 struct lockedSet *set;
@@ -444,7 +431,7 @@ for (set = lockedSetList; set != NULL; set = set->next)
      }
 }
 
-struct slName *findPartingDivs(struct fieldedTable *table)
+static struct slName *findPartingDivs(struct fieldedTable *table)
 /* Build up list of fields to part table on when doing global parting */
 {
 struct fieldInfo *fieldList = makeFieldInfo(table);
@@ -488,7 +475,7 @@ fieldInfoFreeList(&fieldList);
 return divList;
 }
 
-struct slRef *findPredictableFields(struct fieldedTable *table, struct fieldInfo *fieldList,
+static struct slRef *findPredictableFields(struct fieldedTable *table, struct fieldInfo *fieldList,
     struct fieldInfo *primaryField, struct slName *exceptList)
 /* Return list of fields from fieldList that move in lock-step with primary field */
 {
@@ -504,83 +491,7 @@ slReverse(&list);
 return list;
 }
 
-#ifdef OLD
-struct slRef *findLockedFields(struct fieldedTable *table, struct fieldInfo *fieldList,
-    struct fieldInfo *primaryField, struct slName *exceptList)
-/* Return list of fields from fieldList that move in lock-step with primary field */
-{
-struct slRef *list = NULL;
-struct fieldInfo *field;
-for (field = fieldList; field != NULL; field = field->next)
-    {
-    if (slNameFind(exceptList, field->name) == NULL)
-	if (aPredictsB(table, primaryField, field) && aPredictsB(table, field, primaryField))
-	    refAdd(&list, field);
-    }
-slReverse(&list);
-return list;
-}
-
-boolean oldFindBestParting(struct fieldedTable *table, struct fieldInfo *allFields,
-    struct slRef **retFields, struct fieldInfo **retField)
-/* Return list of fields that make best partition of table so that it will
- * cause the most information from table to be moved to a higher level.  All the
- * returned fields will move in lock-step. */
-{
-double bestScore = 0;
-struct slRef *partingList = NULL;
-struct fieldInfo *partingField = NULL;
-verbose(2, "Find best parting on table with %d rows and %d fields\n", 
-    table->rowCount, table->fieldCount);
-
-/* Of the ones that have the smallest number of values, find the set with the
- * most fields locked together */
-struct fieldInfo *field;
-for (field = allFields; field != NULL; field = field->next)
-    {
-    if (!fieldAllDefined(field))
-	{
-        verbose(2, "skipping %s, not all defined\n", field->name);
-	continue;
-	}
-
-    /* Get list of fields locked to this one, list includes self */
-    struct slRef *lockedFields = findLockedFields(table, allFields, field, NULL);
-    struct slRef *predictableFields = findPredictableFields(table, allFields, field, NULL);
-
-    /* Do some calcs to find out how good partitioning looks as a score.  I wish I had
-     * a more rigorous score.  This one will like fields that don't have too many values
-     * and that have other fields moving in lock step with them.  The weighing of the
-     * predictable counts tends to downplay low level over high level fields. */
-    int lockCount = slCount(lockedFields);
-    int predictableCount = slCount(predictableFields);
-    int fieldValCount = field->valHash->elCount;
-    int linesSaved = (lockCount+1) * (table->rowCount - fieldValCount);
-    double score = (double)linesSaved / predictableCount;
-    verbose(2, "field %s, %d vals, %d lockedCount, %d predictableCount, %g score\n", field->name, 
-	field->valHash->elCount, lockCount, predictableCount, score);
-
-    /* If score is best so far keep track of it. */
-    if (score > bestScore)
-	{
-	bestScore = score;
-	slFreeList(&partingList);
-	partingList = predictableFields;
-	partingField = field;
-	lockedFields = NULL;
-	}
-    else
-	slFreeList(&predictableFields);
-    slFreeList(&lockedFields);
-    }
-*retFields = partingList;
-*retField = partingField;
-return partingList != NULL;
-}
-
-#endif /* OLD */
-
-boolean findBestParting(struct fieldedTable *table, struct fieldInfo *allFields,
+static boolean findBestParting(struct fieldedTable *table, struct fieldInfo *allFields,
     struct slRef **retFields, struct fieldInfo **retField)
 /* Return list of fields that make best partition of table so that it will
  * cause the most information from table to be moved to a higher level.  All the
@@ -612,7 +523,7 @@ lockedSetFreeList(&lockedSetList);
 return TRUE;
 }
 
-struct slRef *partOnField(struct fieldedTable *table, struct fieldInfo *allFields,
+static struct slRef *partOnField(struct fieldedTable *table, struct fieldInfo *allFields,
     char *keyName, struct slName *except, struct fieldInfo **retKeyField)
 /* Return list of all fields that covary with keyField */
 {
@@ -624,7 +535,7 @@ return findPredictableFields(table, allFields, keyField, except);
 }
 
 
-boolean doParting(struct fieldedTable *table, struct fieldInfo *allFields,
+static boolean doParting(struct fieldedTable *table, struct fieldInfo *allFields,
     boolean doPrepart, struct slName *preparting, struct slRef **retFields,
     struct fieldInfo **retField)
 /* Partition table factoring out fields that move together.  
@@ -657,7 +568,7 @@ for (ref = fieldRefList; ref != NULL; ref = ref->next)
 return FALSE;
 }
 
-boolean makeSubtableExcluding(struct fieldedTable *table, 
+static boolean makeSubtableExcluding(struct fieldedTable *table, 
     int partingFieldIx, char *partingVal,
     struct slRef *excludedFields,
     struct fieldedTable **retSubtable, int ixTranslator[])
@@ -708,8 +619,8 @@ for (row = table->rowList; row != NULL; row = row->next)
 return TRUE;
 }
 
-void rPartition(struct fieldedTable *table, struct tagStorm *tagStorm, struct tagStanza *parent,
-    boolean doPrepart, struct slName *prepartField)
+static void rPartition(struct fieldedTable *table, struct tagStorm *tagStorm, 
+    struct tagStanza *parent, boolean doPrepart, struct slName *prepartField)
 /* Recursively partition table and add to tagStorm. */
 {
 struct fieldInfo *allFields = makeFieldInfo(table);
@@ -798,7 +709,7 @@ slFreeList(&partingFields);
 fieldInfoFreeList(&allFields);
 }
 
-struct slPair *removeUnvalued(struct slPair *list)
+static struct slPair *removeUnvalued(struct slPair *list)
 /* Remove unvalued stanzas (those with "" or "n/a" or "N/A" values */
 {
 struct slPair *newList = NULL;
@@ -807,14 +718,14 @@ for (pair = list; pair != NULL; pair = next)
     {
     next = pair->next;
     char *val = pair->val;
-    if (!(val == NULL || val[0] == 0 || sameString(val, "n/a") || sameString(val, "N/A")))
+    if (isDefinedVal(val))
          slAddHead(&newList, pair);
     }
 slReverse(&newList);
 return newList;
 }
 
-void rRemoveEmptyPairs(struct tagStanza *list)
+static void rRemoveEmptyPairs(struct tagStanza *list)
 {
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
@@ -825,13 +736,13 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
-void removeEmptyPairs(struct tagStorm *tagStorm)
+static void removeEmptyPairs(struct tagStorm *tagStorm)
 /* Remove tags with no values */
 {
 rRemoveEmptyPairs(tagStorm->forest);
 }
 
-void tagStormFromTab(char *input, char *output)
+static void tagStormFromTab(char *input, char *output)
 /* tagStormFromTab - Create a tagStorm file from a tab-separated file where the labels are on the 
  * first line, that starts with a #. */
 {
