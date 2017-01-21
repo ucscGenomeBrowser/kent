@@ -7,6 +7,7 @@
 #include "options.h"
 #include "fieldedTable.h"
 #include "tagStorm.h"
+#include "tagToSql.h"
 
 struct slName *gDivFieldList = NULL;  // Filled in from div command line option.
 
@@ -43,6 +44,7 @@ struct fieldInfo
      struct hash *valHash;   /* Each unique value */
      struct slRef *valList;  /* String valued list of possible values for this field */
      int realValCount;	    /* Number of non-NULL values */
+     struct tagTypeInfo *typeInfo;  /* Information about type and range of values */
      };
 
 struct lockedSet
@@ -60,7 +62,9 @@ struct lockedSet
     int predictedCount;   /* Number of lockedSets that we predict */
     struct slRef *predictedList;  /* List of lockedSets we predict */
     int predictorChainSize;	/* Size of longest chain of predictors */
-    double partingScore;  /* How good this looks as a partitioner */
+    double partingScore;  /* How ugood this looks as a partitioner */
+    boolean allFloatingPoint;  /* True if all fields are floating point */
+    boolean allInt;	    /* True if all fields are int */
     };
 
 void fieldInfoFree(struct fieldInfo **pField)
@@ -71,6 +75,7 @@ if (field != NULL)
     {
     hashFree(&field->valHash);
     slFreeList(&field->valList);
+    tagTypeInfoFree(&field->typeInfo);
     freez(pField);
     }
 }
@@ -116,7 +121,7 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-boolean isRealVal(char *s)
+boolean isDefinedVal(char *s)
 /* Return TRUE if it looks like s is a real value, that is non-NULL, non-empty, and
  * neither n/a nor N/A */
 {
@@ -133,7 +138,7 @@ boolean fieldAllDefined(struct fieldInfo *field)
 struct slRef *ref;
 for (ref = field->valList; ref != NULL; ref = ref->next)
     {
-    if (!isRealVal(ref->val))
+    if (!isDefinedVal(ref->val))
         return FALSE;
     }
 return TRUE;
@@ -200,15 +205,17 @@ for (fieldIx=0; fieldIx < table->fieldCount; ++fieldIx)
     AllocVar(field);
     field->name = table->fields[fieldIx];
     field->ix = fieldIx;
+    field->typeInfo = tagTypeInfoNew(field->name);
     struct hash *hash = field->valHash = hashNew(0);
     struct fieldedRow *row;
     for (row = table->rowList; row != NULL; row = row->next)
         {
 	char *val = row->row[fieldIx];
-	if (isRealVal(val))
+	if (isDefinedVal(val))
 	    ++field->realValCount;
 	if (!hashLookup(hash, val))
 	    {
+	    tagTypeInfoAdd(field->typeInfo, val);
 	    refAdd(&field->valList, val);
 	    hashAdd(hash, val, NULL);
 	    }
@@ -351,13 +358,46 @@ for (aSet = setList; aSet != NULL; aSet = aSet->next)
 	}
     }
 
+/* Figure out whether all types are numerical/integer */
+for (aSet = setList; aSet != NULL; aSet = aSet->next)
+    {
+    boolean allInt = TRUE, allFloatingPoint = TRUE;
+    struct slRef *ref;
+    for (ref = aSet->fieldRefList; ref != NULL; ref = ref->next)
+        {
+	struct fieldInfo *field = ref->val;
+	struct tagTypeInfo *tti = field->typeInfo;
+	verbose(2, "%s isInt %d, isNum %d\n", field->name, tti->isInt, tti->isNum);
+	if (!tti->isInt)
+	   allInt = FALSE;
+	if (!tti->isNum)
+	   allFloatingPoint = FALSE;
+	}
+    aSet->allInt = allInt;
+    aSet->allFloatingPoint = allFloatingPoint;
+    verbose(2, "tot: %s allInt %d, allFloatingPoint %d\n", aSet->name, aSet->allInt, aSet->allFloatingPoint);
+    }
+
 /* Calculate score and sort on it. */
 for (aSet = setList; aSet != NULL; aSet = aSet->next)
     {
     int lockedCount = slCount(aSet->fieldRefList);
     double real = aSet->realValRatio;
     aSet->predictorChainSize = longestPredictorChainSize(aSet);
-    aSet->partingScore = real*real*aSet->predictorChainSize*(4*lockedCount + aSet->predictedCount + aSet->predictorCount)/pow(aSet->valCount, 0.5);
+    double partingScore = 4*lockedCount;	// Locked fields are really good!
+    partingScore += 2*aSet->predictorCount;	// Lots of predictors means we are high level
+    partingScore += aSet->predictedCount;	// Predicted things are good too
+    partingScore *= aSet->predictorChainSize;   // Long predictor chains mean high level
+    partingScore *= real*real;			// Unreal things are bad-bad
+    partingScore /= pow(aSet->valCount, 0.5);	// Lots of values not good
+    if (aSet->allFloatingPoint)
+        {
+	if (aSet->allInt)
+	    partingScore *= 0.5;		// Integers are not great to partition on
+	else
+	    partingScore *= 0.1;		// But floating point numbers are even worse
+	}
+    aSet->partingScore = partingScore;
     }
 slSort(&setList, lockedSetCmpPartingScore);
 
