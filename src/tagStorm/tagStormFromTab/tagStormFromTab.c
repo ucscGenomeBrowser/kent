@@ -56,8 +56,10 @@ struct lockedSet
     double realValRatio;  /* Proportion of non-NULL values */
     struct slRef *fieldRefList;  /* Field info valued */
     int predictorCount;   /* Number of lockedSets that can predict us */
+    struct slRef *predictorList;  /* List of lockedSets we predict */
     int predictedCount;   /* Number of lockedSets that we predict */
     struct slRef *predictedList;  /* List of lockedSets we predict */
+    int predictorChainSize;	/* Size of longest chain of predictors */
     double partingScore;  /* How good this looks as a partitioner */
     };
 
@@ -95,6 +97,7 @@ if (set != NULL)
     {
     slFreeList(&set->fieldRefList);
     slFreeList(&set->predictedList);
+    slFreeList(&set->predictorList);
     freez(pSet);
     }
 }
@@ -268,6 +271,25 @@ else
     return 0;
 }
 
+
+int longestPredictorChainSize(struct lockedSet *set)
+/* Recursively calculate longest chain of predictors starting with set */
+{
+struct slRef *ref;
+int longest = 0;
+for (ref = set->predictorList; ref != NULL; ref = ref->next)
+    {
+    struct lockedSet *nextSet = ref->val;
+    if (nextSet != set)
+	{
+	int size = longestPredictorChainSize(nextSet);
+	if (size > longest)
+	    longest = size;
+	}
+    }
+return longest + 1;
+}
+
 struct lockedSet *findLockedSets(struct fieldedTable *table, struct fieldInfo *fieldList)
 /* Find locked together fields */
 {
@@ -317,7 +339,10 @@ for (aSet = setList; aSet != NULL; aSet = aSet->next)
         {
 	int bIx = bSet->ix;
 	if (predMatrix[bIx][aIx])
+	    {
 	    ++aSet->predictorCount;
+	    refAdd(&aSet->predictorList, bSet);
+	    }
 	if (predMatrix[aIx][bIx])
 	    {
 	    ++aSet->predictedCount;
@@ -331,7 +356,8 @@ for (aSet = setList; aSet != NULL; aSet = aSet->next)
     {
     int lockedCount = slCount(aSet->fieldRefList);
     double real = aSet->realValRatio;
-    aSet->partingScore = real*real*(4*lockedCount + aSet->predictedCount + aSet->predictorCount)/pow(aSet->valCount, 0.5);
+    aSet->predictorChainSize = longestPredictorChainSize(aSet);
+    aSet->partingScore = real*real*aSet->predictorChainSize*(4*lockedCount + aSet->predictedCount + aSet->predictorCount)/pow(aSet->valCount, 0.5);
     }
 slSort(&setList, lockedSetCmpPartingScore);
 
@@ -346,15 +372,35 @@ void dumpLockedSetList(struct lockedSet *lockedSetList, int verbosity)
 struct lockedSet *set;
 for (set = lockedSetList; set != NULL; set = set->next)
      {
-     verbose(verbosity, "%s: %d vals, %g real, %d locked, %d predicted, %d predictors, %g score\n",
+     verbose(verbosity,	    
+        "%s: %d vals, %g real, %d locked, %d predicted, %d predictors, %d pChain, %g score\n",
 	set->name, set->valCount, set->realValRatio, slCount(set->fieldRefList), 
-	set->predictedCount, set->predictorCount, set->partingScore);
+	set->predictedCount, set->predictorCount, set->predictorChainSize, set->partingScore);
      struct slRef *ref;
+     verbose(verbosity, "\tlocked:");
      for (ref = set->fieldRefList; ref != NULL; ref = ref->next)
          {
 	 struct fieldInfo *field = ref->val;
-	 verbose(verbosity, "\t%s\n", field->name);
+	 if (field != set->firstField)
+	     verbose(verbosity, " %s", field->name);
 	 }
+     verbose(verbosity, "\n");
+     verbose(verbosity, "\tpredicted:");
+     for (ref = set->predictedList; ref != NULL; ref = ref->next)
+         {
+	 struct lockedSet *ls = ref->val;
+	 if (ls != set)
+	     verbose(verbosity, " %s", ls->name);
+	 }
+     verbose(verbosity, "\n");
+     verbose(verbosity, "\tpredictor:");
+     for (ref = set->predictorList; ref != NULL; ref = ref->next)
+         {
+	 struct lockedSet *ls = ref->val;
+	 if (ls != set)
+	     verbose(verbosity, " %s", ls->name);
+	 }
+     verbose(verbosity, "\n");
      }
 }
 
