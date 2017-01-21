@@ -233,7 +233,7 @@ for (aField = fieldList; aField != NULL; aField = aField->next)
 	row[bIx] = aPredictsB(table, aField, bField);
 	}
     }
-verbose(2, "made predMatrix of %d cells\n", fieldCount * fieldCount);
+verbose(3, "made predMatrix of %d cells\n", fieldCount * fieldCount);
 return matrix;
 }
 
@@ -354,7 +354,7 @@ for (aSet = setList; aSet != NULL; aSet = aSet->next)
         {
 	struct fieldInfo *field = ref->val;
 	struct tagTypeInfo *tti = field->typeInfo;
-	verbose(2, "%s isInt %d, isNum %d\n", field->name, tti->isInt, tti->isNum);
+	verbose(3, "%s isInt %d, isNum %d\n", field->name, tti->isInt, tti->isNum);
 	if (!tti->isInt)
 	   allInt = FALSE;
 	if (!tti->isNum)
@@ -362,7 +362,7 @@ for (aSet = setList; aSet != NULL; aSet = aSet->next)
 	}
     aSet->allInt = allInt;
     aSet->allFloatingPoint = allFloatingPoint;
-    verbose(2, "tot: %s allInt %d, allFloatingPoint %d\n", aSet->name, aSet->allInt, aSet->allFloatingPoint);
+    verbose(3, "tot: %s allInt %d, allFloatingPoint %d\n", aSet->name, aSet->allInt, aSet->allFloatingPoint);
     }
 
 /* Calculate score and sort on it. */
@@ -435,10 +435,10 @@ static struct slName *findPartingDivs(struct fieldedTable *table)
 /* Build up list of fields to part table on when doing global parting */
 {
 struct fieldInfo *fieldList = makeFieldInfo(table);
-verbose(2, "made fieldInfo\n");
+verbose(3, "made fieldInfo\n");
 struct lockedSet *lockedSetList = findLockedSets(table, fieldList);
-verbose(2, "%d locked sets\n", slCount(lockedSetList));
-dumpLockedSetList(lockedSetList, 2);
+verbose(3, "%d locked sets\n", slCount(lockedSetList));
+dumpLockedSetList(lockedSetList, 3);
 
 /* Make up list of fields to partition on, basically starting with best scoring,
  * and going in order, but not doing ones that are predicted by previous fields */
@@ -463,10 +463,10 @@ slReverse(&divList);
 
 /* Report our findings */
 struct slName *div;
-verbose(1, "parting on ");
+verbose(2, "parting on ");
 for (div = divList; div != NULL; div = div->next)
-    verbose(1, "%s,", div->name);
-verbose(1, "\n");
+     verbose(2, "%s,", div->name);
+verbose(2, "\n");
 
 /* Clean up and return results */
 freeHash(&uniqHash);
@@ -691,7 +691,7 @@ for (fieldedRow = table->rowList; fieldedRow != NULL; fieldedRow = fieldedRow->n
 	    partValList = partValList->next;
 
 	    /* Make subtable with nonconstant bits starting with header. */
-	    verbose(2, "parting on %s=%s\n", partingField->name, partVal);
+	    verbose(3, "parting on %s=%s\n", partingField->name, partVal);
 	    int ixTranslator[table->fieldCount];
 	    struct fieldedTable *subtable = NULL;
 	    if (makeSubtableExcluding(table, partingFieldIx, partVal,
@@ -748,7 +748,7 @@ static void tagStormFromTab(char *input, char *output)
 {
 /* Load up input as a fielded table */
 struct fieldedTable *table = fieldedTableFromTabFile(input, input, NULL, 0);
-verbose(1, "%s has %d fields and %d rows\n", input, table->fieldCount, table->rowCount);
+verbose(2, "%s has %d fields and %d rows\n", input, table->fieldCount, table->rowCount);
 
 if (gDivFieldList == NULL && !optionExists("local"))
      {
@@ -758,10 +758,14 @@ if (gDivFieldList == NULL && !optionExists("local"))
 struct tagStorm *tagStorm = tagStormNew(input);
 rPartition(table, tagStorm, NULL, gDivFieldList != NULL, gDivFieldList);
 tagStormReverseAll(tagStorm);
+verbose(2, "cleaning up empties and hoisting\n");
 removeEmptyPairs(tagStorm);
 tagStormRemoveEmpties(tagStorm);
 if (!optionExists("noHoist"))
+    {
     tagStormHoist(tagStorm, NULL);
+    }
+verbose(2, "writing %s\n", output);
 tagStormWrite(tagStorm, output, 0);
 }
 

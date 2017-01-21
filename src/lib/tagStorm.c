@@ -558,7 +558,7 @@ for (;;)
         rRemoveEmpties(&stanza->children);
     if (stanza->tagList == NULL)
         {
-	verbose(2, "removing empty stanza with %d children and %d remaining sibs\n", 
+	verbose(3, "removing empty stanza with %d children and %d remaining sibs\n", 
 	    slCount(stanza->children), slCount(stanza->next));
 	*pList = slCat(stanza->children, stanza->next);
 	stanza->next = stanza->children = NULL;
