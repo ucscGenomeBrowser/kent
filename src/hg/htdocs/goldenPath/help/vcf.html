@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<!--#set var="title" value="UCSC Genome Browser: VCF+tabix Track Format" -->
-<!--#include virtual="/gbPageStart.html"-->
+<!--#set var="TITLE" value="UCSC Genome Browser: VCF+tabix Track Format" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>VCF+tabix Track Format</h1>
 <p>
@@ -188,4 +191,9 @@ If you would like to share your VCF data track with a colleague, learn how to cr
 looking at <strong><em>Example 11</em></strong> on <a href="customTrack.html#SHARE">this</a> 
 page.</p>
 
-<!--#include virtual="/gbPageEnd.html"-->
+<!--#if expr="$GB_DOCUMENT_ROOT" -->
+    <!--#include virtual="/gbDocs/inc/gbPageEnd.html" -->
+<!--#else -->
+    <!--#include virtual="/inc/gbPageStart.html" -->
+<!--#endif -->
+

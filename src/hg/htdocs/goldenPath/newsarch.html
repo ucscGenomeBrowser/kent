@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <!--#set var="TITLE" value="UCSC Genome Browser: News Archives" -->
-<!--#include virtual="/gbPageStart.html"-->
+<!--#set var="ROOT" value=".." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>News Archives</h1>
-
 <ul>
   <li><a href="#2016">2016 News</a></li>
   <li><a href="#2015">2015 News</a></li>
@@ -8994,5 +8996,8 @@ Fasta files on chromosomes 1,8,11,12,16, 17 and 19 were affected:</p> <pre>
 <p> 
 We apologize for any inconvenience this may have caused.</p>
 
-<!--#include virtual="/gbPageEnd.html"-->
-
+<!--#if expr="$GB_DOCUMENT_ROOT" -->
+    <!--#include virtual="/gbDocs/inc/gbPageEnd.html" -->
+<!--#else -->
+    <!--#include virtual="/inc/gbPageStart.html" -->
+<!--#endif -->

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <!--#set var="TITLE" value="UCSC Genome Browser: Citing Us" -->
-<!--#include virtual="/gbPageStart.html"-->
+<!--#set var="ROOT" value="." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>Citing the UCSC Browser in a Publication or Web Page</h1>
 <p>
@@ -126,5 +129,8 @@ Genome Browser <a href="goldenPath/credits.html">Credits</a> page or on the GenB
 page for the organism. 
 </p>
 
-<!--#include virtual="/gbPageEnd.html" -->
-
+<!--#if expr="$GB_DOCUMENT_ROOT" -->
+    <!--#include virtual="/gbDocs/inc/gbPageEnd.html" -->
+<!--#else -->
+    <!--#include virtual="/inc/gbPageStart.html" -->
+<!--#endif -->
