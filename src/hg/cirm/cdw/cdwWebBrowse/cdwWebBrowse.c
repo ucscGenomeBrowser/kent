@@ -1143,6 +1143,19 @@ static boolean cdwCheckFileAccess(struct sqlConnection *conn, int fileId, struct
 return cdwCheckAccessFromFileId(conn, fileId, user, cdwAccessRead);
 }
 
+void doServeTagStorm(struct sqlConnection *conn, char *dataSet)
+/* Put up meta data tree associated with data set. */
+{
+char metaFileName[PATH_LEN];
+safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
+int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
+if (!cdwCheckFileAccess(conn, fileId, user))
+   errAbort("Unauthorized access to %s", metaFileName);
+printf(", <A HREF=\"cdwServeTagStorm?cdwDataSet=%s&%s\"",
+	dataSet, cartSidUrlString(cart)); 
+printf(">text</A>)");
+}
+
 void doBrowseDatasets(struct sqlConnection *conn)
 /* Show datasets and links to dataset summary pages. */
 {
@@ -1175,9 +1188,11 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\"",
 		desc, datasetId, cartSidUrlString(cart)); 
 	printf(">%lld files</A>)",fileCount);
-	printf(" (<A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
+	printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
 		datasetId, cartSidUrlString(cart)); 
-	printf(">metadata tree</A>)");
+	printf(">html</A>");
+	doServeTagStorm(conn, datasetId);
+
 	}
     else // Otherwise print a label and description. 
 	{
@@ -1187,6 +1202,7 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
     printf("</LI>\n");
     }
 }
+
 
 void doDataSetMetaTree(struct sqlConnection *conn)
 /* Put up meta data tree associated with data set. */
