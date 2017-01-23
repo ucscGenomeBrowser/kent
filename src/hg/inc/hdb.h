@@ -43,7 +43,7 @@ struct chromInfo;
 #define HDB_MAX_SEQS_FOR_SPLIT 100
 
 /* Statically-allocated string lengths (max supported len incl. final \0): */
-#define HDB_MAX_CHROM_STRING 32
+#define HDB_MAX_CHROM_STRING 255
 #define HDB_MAX_BAND_STRING 64
 #define HDB_MAX_FIELD_STRING 32
 #define HDB_MAX_TABLE_STRING 128
