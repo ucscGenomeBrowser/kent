@@ -7942,6 +7942,10 @@ if (tdbIsSuperTrack(tdb))
 if (cart != NULL) // cart is optional
     {
     char *cartVis = cartOptionalString(cart, tdb->track);
+    // check hub tracks for visibility settings without the hub prefix
+    if (startsWith("hub_", tdb->track) && (cartVis == NULL))
+        cartVis = cartOptionalString(cart, trackHubSkipHubName(tdb->track));
+
     if (cartVis != NULL)
         {
         vis = hTvFromString(cartVis);

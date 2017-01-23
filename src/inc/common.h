@@ -1065,7 +1065,11 @@ int ptArrayIx(void *pt, void *array, int arraySize);
 
 #define stringIx(string, array) stringArrayIx( (string), (array), ArraySize(array))
 
+int cmpStringOrder(char *a, char *b, char **orderFields, int orderCount);
+/* Compare two strings to sort in same order as orderedFields.  If strings are
+ * not in order, will sort them to be after all ordered fields, alphabetically */
 /* Some stuff that is left out of GNU .h files!? */
+
 #ifndef SEEK_SET
 #define SEEK_SET 0
 #endif

@@ -16,6 +16,8 @@ errAbort(
   "usage:\n"
   "   twoBitInfo input.2bit output.tab\n"
   "options:\n"
+  "   -maskBed instead of seq sizes, output BED records that define \n"
+  "           areas with masked sequence\n"
   "   -nBed   instead of seq sizes, output BED records that define \n"
   "           areas with N's in sequence\n"
   "   -noNs   outputs the length of each sequence, but does not count Ns \n"
@@ -31,6 +33,7 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"udcDir", OPTION_STRING},
+   {"maskBed", OPTION_BOOLEAN},
    {"nBed", OPTION_BOOLEAN},
    {"noNs", OPTION_BOOLEAN},
    {NULL, 0},
@@ -55,7 +58,9 @@ if (seqName != NULL)
     int seqCount = chopString(seqName, ",", seqArray, ArraySize(seqArray));
     for (i = 0 ; i < seqCount ; i++)
 	{
-	if (optionExists("nBed"))
+	if (optionExists("maskBed"))
+	    twoBitOutMaskBeds(tbf, seqArray[i], outFile);
+	else if (optionExists("nBed"))
 	    twoBitOutNBeds(tbf, seqArray[i], outFile);
 	else if(optionExists("noNs"))
 	    fprintf(outFile, "%s\t%d\n", seqArray[i], twoBitSeqSizeNoNs(tbf, seqArray[i]));
@@ -69,7 +74,9 @@ else
     struct twoBitIndex *index;
     for (index = tbf->indexList; index != NULL; index = index->next)
 	{
-	if (optionExists("nBed"))
+	if (optionExists("maskBed"))
+	    twoBitOutMaskBeds(tbf, index->name, outFile);
+	else if (optionExists("nBed"))
 	    twoBitOutNBeds(tbf, index->name, outFile);
 	else if(optionExists("noNs"))
 	    fprintf(outFile, "%s\t%d\n", index->name, twoBitSeqSizeNoNs(tbf, index->name));

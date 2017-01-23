@@ -61,12 +61,13 @@ struct tagStanza
     struct tagStanza *children;	/* Pointer to eldest child. */
     struct tagStanza *parent;	/* Pointer to parent. */
     struct slPair *tagList;	/* All tags. Best not to count on the order. */
+    int startLineIx;		/* Starting line number for stanza, for error reporting */
     };
 
 /** Read and write tag storms from/to files. */
 
 struct tagStorm *tagStormFromFile(char *fileName);
-/* Load up all tags from file.  */
+/* Load up all tags from file.  Use tagStormFree on result when done. */
 
 void tagStormFree(struct tagStorm **pTagStorm);
 /* Free up memory associated with tag storm */
@@ -78,11 +79,12 @@ void tagStormWriteAsFlatRa(struct tagStorm *tagStorm, char *fileName, char *idTa
     boolean withParent, int maxDepth, boolean leavesOnly);
 /* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
 
-void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idTag,
-    boolean withParent, int maxDepth, boolean leavesOnly);
-/* Write tag storm flattening out hierarchy so kids have all of parents tags in tab-sep format */
+void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idTag, 
+    boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal, boolean sharpLabel);
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
 
-/** Index a tag storm */
+
+/** Index a tag storm and look up in an index. */
 
 struct hash *tagStormIndex(struct tagStorm *tagStorm, char *tag);
 /* Produce a hash of stanzas containing a tag keyed by tag value */
@@ -96,6 +98,12 @@ struct hash *tagStormIndexExtended(struct tagStorm *tagStorm, char *tag,
 /* Produce a hash of stanzas containing a tag keyed by tag value. 
  * If unique parameter is set then the tag values must all be unique
  * If inherit is set then tags set in parent stanzas will be considered too. */
+
+struct tagStanza *tagStanzaFindInHash(struct hash *hash, char *key);
+/* Find tag stanza that matches key in an index hash returned from tagStormUniqueIndex.
+ * Returns NULL if no such stanza in the hash.
+ * (Just a wrapper around hashFindVal.)  Do not free tagStanza that it returns. For
+ * multivalued indexes returned from tagStormIndex use hashLookup and hashLookupNext. */
 
 /** Stuff for constructing a tag storm a tag at a time rather than building it from file  */
 
@@ -143,6 +151,16 @@ void tagStanzaDeleteTag(struct tagStanza *stanza, char *tag);
 void tagStormRemoveEmpties(struct tagStorm *tagStorm);
 /* Remove any empty stanzas, promoting children if need be. */
 
+void tagStormHoist(struct tagStorm *tagStorm, char *selectedTag);
+/* Hoist tags that are identical in all children to parent.  If selectedTag is
+ * non-NULL, just do it for tag of that name rather than all tags. */
+
+void tagStormAlphaSort(struct tagStorm *tagStorm);
+/* Sort tags in stanza alphabetically */
+
+void tagStormOrderSort(struct tagStorm *tagStorm, char **orderFields, int orderCount);
+/* Sort tags in stanza to be in same order as orderFields input  which is orderCount long */
+
 /** Information about a tag storm */
 
 struct slName *tagStormFieldList(struct tagStorm *tagStorm);
@@ -172,8 +190,31 @@ int tagStormCountTags(struct tagStorm *ts);
 int tagStormCountFields(struct tagStorm *ts);
 /* Return number of distinct tag types (fields) in storm */
 
+/** Stuff to find stanzas in a tree. */
+
+struct tagStanza *tagStormQuery(struct tagStorm *tagStorm, char *fields, char *where);
+/* Returns a list of tagStanzas that match the properties describe in  the where parameter.  
+ * The field parameter is a comma separated list of fields that may include wildcards.  
+ * For instance "*" will select all fields,  "a*,b*" will select all fields starting with 
+ * an "a" or a "b." The where parameter is a Boolean expression similar to what could appear 
+ * in a SQL where clause.  Free up the result when you are done with tagStanzaFreeList. */
+
+void tagStanzaFreeList(struct tagStanza **pList);
+/* Free up tagStanza list from tagStormQuery. Don't try to free up stanzas from the
+ * tagStorm->forest with this though, as those are in a diffent, local, memory pool. */
+
+struct rqlStatement;  // Avoid having to include rql.h
+
+boolean tagStanzaRqlMatch(struct rqlStatement *rql, struct tagStanza *stanza,
+	struct lm *lm);
+/* Return TRUE if where clause and tableList in statement evaluates true for stanza. */
+
+char *tagStanzaRqlLookupField(void *record, char *key);
+/* Lookup a field in a tagStanza for rql. */
+
 /** Stuff for finding tags within a stanza */
 
+/* Find values in a stanza */
 char *tagFindLocalVal(struct tagStanza *stanza, char *name);
 /* Return value of tag of given name within stanza, or NULL * if tag does not exist. 
  * This does *not* look at parent tags. */

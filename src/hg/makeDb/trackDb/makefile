@@ -111,7 +111,7 @@ DBS = \
 	macFas5 \
 	manPen1 \
 	marVir1 \
-	melGal1 \
+	melGal1 melGal5 \
 	melHap1 \
 	melInc1 melInc2 \
 	micMur1 micMur2 \

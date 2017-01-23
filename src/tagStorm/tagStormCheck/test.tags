@@ -1,0 +1,164 @@
+lab lab_1
+assay RNA-seq
+access all
+organ brain
+user_kent_note foo on you
+
+    donor 000
+    age 5
+    age_units weeks
+    life_stage embryo
+    sex male
+    biosample_date 2015-01-00
+
+        organ brain
+        lab_kent_disassociation_protocol fetal_brain_digest.pdf
+        lab_kent_quality 0
+	q -1
+
+            part 1
+	    format fastq
+            file ex00do00or00fa00.fq.gz
+	    map_ratio 0.83
+
+            file ex00do00or00fa01.fq.gz
+            format fastq
+            part 2
+	    map_ratio 0.84
+
+            file ex00do00or00fa02.fq.gz
+            format fastq
+            part 3
+	    map_ratio 0.88
+
+            file ex00do00or00fa03.fq.gz
+            format fastq
+	    map_ratio 0.88
+            part 4
+
+
+        organ liver
+        lab_kent_disassociation_protocol fetal_liver_digest.pdf
+        lab_kent_quality 0.01
+	q 1
+
+            file ex00do00or01fa00.fq.gz
+            format fastq
+            part 1
+	    map_ratio 0.90
+
+            file ex00do00or01fa01.fq.gz
+            format fastq
+            part 2
+	    map_ratio 0.91
+
+            file ex00do00or01fa02.fq.gz
+            format fastq
+            part 3
+	    map_ratio 0.90
+
+            file ex00do00or01fa03.fq.gz
+            format fastq
+            part 4
+	    map_ratio 0.92
+
+        organ liver
+        lab_kent_disassociation_protocol fetal_liver_digest.pdf
+        lab_kent_quality 0.04
+	q 3
+
+            file ex00do00or02fa00.fq.gz
+            format fastq
+            part 1
+	    map_ratio 0.90
+
+            file ex00do00or02fa01.fq.gz
+            format fastq
+            part 2
+	    map_ratio 0.93
+
+            file ex00do00or02fa02.fq.gz
+            format fastq
+            part 3
+	    map_ratio 0.92
+
+            file ex00do00or02fa03.fq.gz
+            format fastq
+            part 4
+	    map_ratio 0.93
+
+
+lab lab_2
+assay RNA-seq
+access all
+organ brain
+
+    donor 000
+    age 5
+    age_units weeks
+    life_stage embryo
+    sex male
+    biosample_date 2015-01-00
+
+        organ brain
+        lab_kent_disassociation_protocol fetal_brain_digest.pdf
+        lab_kent_quality 0
+
+            file ex01do00or00fa00.fq.gz
+            format fastq
+            part 1
+
+            file ex01do00or00fa01.fq.gz
+            format fastq
+            part 2
+
+            file ex01do00or00fa02.fq.gz
+            format fastq
+            part 3
+
+            file ex01do00or00fa03.fq.gz
+            format fastq
+            part 4
+
+        organ liver
+        lab_kent_disassociation_protocol fetal_liver_digest.pdf
+        lab_kent_quality 0.01
+
+            file ex01do00or01fa00.fq.gz
+            format fastq
+            part 1
+
+            file ex01do00or01fa01.fq.gz
+            format fastq
+            part 2
+
+            file ex01do00or01fa02.fq.gz
+            format fastq
+            part 3
+
+            file ex01do00or01fa03.fq.gz
+            format fastq
+            part 4
+
+        organ liver
+        lab_kent_disassociation_protocol fetal_liver_digest.pdf
+        lab_kent_quality 0.04
+
+            file ex01do00or02fa00.fq.gz
+            format fastq
+            part 1
+
+            file ex01do00or02fa01.fq.gz
+            format fastq
+            part 2
+
+            file ex01do00or02fa02.fq.gz
+            format fastq
+            part 3
+
+            file ex01do00or02fa03.bam
+            format bam
+
+            file thisFile.txt
+            format tag storm
+

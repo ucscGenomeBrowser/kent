@@ -1731,6 +1731,7 @@ okChars['!'] = 1;
 okChars['*'] = 1;
 okChars['@'] = 1;
 okChars['\''] = 1;  // apparently the apostrophe itself is ok
+okChars['#'] = 1;  // URI fragment, typically an anchor
 return okChars;
 }
 

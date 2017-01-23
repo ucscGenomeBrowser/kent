@@ -819,7 +819,10 @@ if (trackHubDatabase(db))
         }
     return;
     }
-struct sqlConnection *conn = hAllocConnProfile(profile, db);
+struct sqlConnection *conn = hAllocConnProfileMaybe(profile, db);
+if (conn == NULL)
+    // Database does not exist, so no tables in the database exist -- leave the hash empty.
+    return;
 struct slName *allTables =  sqlListTables(conn);
 
 if (!sameString(CUSTOM_TRASH,db) && !sameString("hgFixed",db) && hCanHaveSplitTables(db))
@@ -4407,6 +4410,8 @@ struct slPair *hGetCladeOptions()
 // get only the clades that have actual active genomes
 char *query = NOSQLINJ ""
     "SELECT DISTINCT(c.name), c.label "
+    // mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
+    ", c.priority "
     "FROM %s c, %s g, %s d "
     "WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 "
     "ORDER BY c.priority";
@@ -4415,9 +4420,7 @@ safef(queryBuf, sizeof queryBuf, query, cladeTable(),  genomeCladeTable(), dbDbT
 struct sqlConnection *conn = hConnectCentral();
 struct slPair *nativeClades = sqlQuickPairList(conn, queryBuf);
 hDisconnectCentral(&conn);
-
 struct slPair *trackHubClades = trackHubGetCladeLabels();
-
 return slCat(nativeClades, trackHubClades);
 }
 
@@ -4435,8 +4438,12 @@ if (isHubTrack(clade))
 else
     {
     struct dyString *dy =
-	sqlDyStringCreate("select distinct(d.genome) from %s d,%s g "
+	sqlDyStringCreate("select distinct(d.genome) "
+    // mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
+                          ", orderKey "
+                          "from %s d,%s g "
 			  "where d.genome=g.genome and g.clade = '%s' "
+                          "group by genome " // necessary since we added orderKey to SELECT list
 			  "order by orderKey", dbDbTable(), genomeCladeTable(), clade);
     // Although clade and db menus have distinct values vs. labels, we actually use the
     // same strings for values and labels in the genome menu!  So we get a plain list

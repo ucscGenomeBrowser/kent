@@ -77,6 +77,7 @@ table bigPsl
     uint misMatch; " Number of bases that don't match "
     uint repMatch; " Number of bases that match but are part of repeats "
     uint nCount;   " Number of 'N' bases "
+    uint seqType;    "0=empty, 1=nucleotide, 2=amino_acid"
     )
 </pre>
 
@@ -112,13 +113,13 @@ To create a bigPsl track, follow these steps:
        database, the hg38.chrom.sizes are located at
        <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes"
        target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
-   <li>Create a <tt>bed12+12</tt> bigPsl format file that has the 24 fields
+   <li>Create a <tt>bed12+13</tt> bigPsl format file that has the 25 fields
         described by a bigPsl file as described <a href="#bigPsl">here</a>.
       <ul>
-         <li>Your bigPsl file must have the extra twelve fields described in the AutoSQL file above:
+         <li>Your bigPsl file must have the extra thirteen fields described in the AutoSQL file above:
          <tt>oChromStart, oChromEnd, oStrand, oChromSize, oChromStarts, oSequence, oCDS, chromSize, 
-             match, misMatch, repMatch, nCount </tt> 
-         <li>Use the <tt>pslToBigPsl</tt> utility to create a correctly formatted <tt>bed12+12</tt> file like so:
+             match, misMatch, repMatch, nCount, seqType </tt> 
+         <li>Use the <tt>pslToBigPsl</tt> utility to create a correctly formatted <tt>bed12+13</tt> file like so:
          <br><tt>pslToBigPsl bigPsl.psl stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</tt>
          <li>Note that if you have created your own PSL file you may have corresponding FASTA 
              and CDS files that accompany it. You may provide these files as input to <tt>pslToBigPsl</tt>
@@ -127,7 +128,7 @@ To create a bigPsl track, follow these steps:
       </ul>
    <li>Create the binary indexed bigPsl file from your sorted bigPsl input file using the <tt>bedToBigBed</tt>
        utility like so: 
-       <br><tt>bedToBigBed -as=bigPsl.as -type=bed12+12 -tab bigPsl.txt chrom.sizes bigPsl.bb</tt>
+       <br><tt>bedToBigBed -as=bigPsl.as -type=bed12+13 -tab bigPsl.txt chrom.sizes bigPsl.bb</tt>
    <li>Move the newly created bigPsl file (<tt>bigPsl.bb</tt>) to an http, 
        https, or ftp location.
    <li>Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> 
@@ -183,7 +184,7 @@ and more detailed information about the alignment.
 bigPsl input file.
 
 <ul>
-  <li>Save this <tt>bed12+12</tt> <a href="examples/bigPsl.txt">bigPsl.txt</a>
+  <li>Save this <tt>bed12+13</tt> <a href="examples/bigPsl.txt">bigPsl.txt</a>
       example input file to your machine (<em>satisfies above step 4</em>).
   <li>Download the <tt>bedToBigBed</tt> <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">utility</a>
       (<em>step 2</em>).
@@ -193,7 +194,7 @@ bigPsl input file.
   <li>Save this <tt>bigPsl.as</tt> <a href="examples/bigPsl.as"> text file</a> to your machine.
   <li>Run the utility to create the bigBed output file 
       (<em>step 5</em>):<br>
-      <tt>bedToBigBed -as=bigPsl.as -type=bed12+12 -tab  bigPsl.txt hg38.chrom.sizes bigPsl.bb</tt>
+      <tt>bedToBigBed -as=bigPsl.as -type=bed12+13 -tab  bigPsl.txt hg38.chrom.sizes bigPsl.bb</tt>
   <li>Place the bigPsl file you just created (<tt>bigPsl.bb</tt>) on a 
       web-accessible server (<em>step 6</em>).
   <li>Construct a &quot;track&quot; line that points to your bigPsl file
