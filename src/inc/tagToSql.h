@@ -21,6 +21,15 @@ struct tagTypeInfo
     int maxChars;	    /* Maximum width of string representation */
     };
 
+struct tagTypeInfo *tagTypeInfoNew(char *name);
+/* Return initialized new tagTypeInfo */
+
+void tagTypeInfoFree(struct tagTypeInfo **pTti);
+/* Free up a tagTypeInfo */
+
+void tagTypeInfoAdd(struct tagTypeInfo *tti, char *val);
+/* Fold in information about val into tti. */
+
 void tagTypeInfoDump(struct tagTypeInfo *list, char *fileName);
 /* Dump out types to file */
 

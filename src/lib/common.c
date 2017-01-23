@@ -2463,6 +2463,25 @@ for (i=0; i<arraySize; ++i)
 return -1;
 }
 
+int cmpStringOrder(char *a, char *b, char **orderFields, int orderCount)
+/* Compare two strings to sort in same order as orderedFields.  If strings are
+ * not in order, will sort them to be after all ordered fields, alphabetically */
+{
+int aIx = stringArrayIx(a, orderFields, orderCount);
+int bIx = stringArrayIx(b, orderFields, orderCount);
+if (aIx < 0)	// A not in list?
+    {
+    if (bIx < 0)	// Neither in list, be alphabetical 
+	return(strcmp(a, b));
+    else		// Only b in list, move a towards end
+	return 1;       
+    }
+else if (bIx < 0)	// Only a in list, move b towards end
+    return -1;
+else
+    return aIx - bIx;   // Both in ordered list, just subtract indexes to sort
+}
+
 int ptArrayIx(void *pt, void *array, int arraySize)
 /* Return index of pt in array or -1 if not there. */
 {

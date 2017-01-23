@@ -21,7 +21,7 @@ errAbort(
   "  -cds=file.cds\n"
   "  -fa=file.fasta\n"
   "NOTE: to build bigBed:\n"
-  "   bedToBigBed -type=bed12+12 -tab -as=bigPsl.as file.bigPslInput chrom.sizes output.bb\n"
+  "   bedToBigBed -type=bed12+13 -tab -as=bigPsl.as file.bigPslInput chrom.sizes output.bb\n"
   );
 }
 

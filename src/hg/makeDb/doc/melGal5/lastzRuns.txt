@@ -1,0 +1,117 @@
+#########################################################################
+# LASTZ turkey/melGal5 vs. zebrafish - (DONE - 2017-01-19 - Hiram)
+    mkdir /hive/data/genomes/melGal5/bed/lastzDanRer10.2017-01-19
+    cd /hive/data/genomes/melGal5/bed/lastzDanRer10.2017-01-19
+
+    printf '# chicken vs. zebrafish
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: chicken melGal5
+SEQ1_DIR=/hive/data/genomes/melGal5/melGal5.2bit
+SEQ1_LEN=/hive/data/genomes/melGal5/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=200
+SEQ1_LAP=10000
+
+# QUERY: zebrafish danRer10
+SEQ2_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ2_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/melGal5/bed/lastzDanRer10.2017-01-19
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    298m19.694s
+
+    cat fb.melGal5.chainDanRer10Link.txt
+    #  26799847 bases of 1093044709 (2.452%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 danRer10) \
+          > rbest.log 2>&1 &
+    #  real    115m59.033s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/danRer10/bed/blastz.melGal5.swap
+    cd /hive/data/genomes/danRer10/bed/blastz.melGal5.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melGal5/bed/lastzDanRer10.2017-01-19/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    4m25.214s
+
+    cat fb.danRer10.chainMelGal5Link.txt
+    # 35212655 bases of 1369683683 (2.571%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer10 melGal5) \
+       > rbest.log 2>&1
+    # real    129m59.859s
+
+#########################################################################
+# LASTZ turkey/melGal5 vs. frog - (DONE - 2017-01-19 - Hiram)
+    mkdir /hive/data/genomes/melGal5/bed/lastzXenTro7.2017-01-19
+    cd /hive/data/genomes/melGal5/bed/lastzXenTro7.2017-01-19
+
+    printf '# chicken vs. frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: chicken melGal5
+SEQ1_DIR=/hive/data/genomes/melGal5/melGal5.2bit
+SEQ1_LEN=/hive/data/genomes/melGal5/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=300
+SEQ1_LAP=10000
+
+# QUERY: frog xenTro7
+SEQ2_DIR=/hive/data/genomes/xenTro7/xenTro7.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro7/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/melGal5/bed/lastzXenTro7.2017-01-19
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    319m41.125s
+
+    cat fb.melGal5.chainXenTro7Link.txt
+    #  39051789 bases of 1093044709 (3.573%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 xenTro7) \
+          > rbest.log 2>&1 &
+    #  real    202m32.347s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/xenTro7/bed/blastz.melGal5.swap
+    cd /hive/data/genomes/xenTro7/bed/blastz.melGal5.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melGal5/bed/lastzXenTro7.2017-01-19/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    5m0.297s
+
+    cat fb.xenTro7.chainMelGal5Link.txt
+    # 45799596 bases of 1365936747 (3.353%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro7 melGal5) \
+       > rbest.log 2>&1
+    # real    204m15.717s
+
+#########################################################################
