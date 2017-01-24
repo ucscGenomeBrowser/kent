@@ -1,4 +1,4 @@
-/* pslToBigPsl - converts genePred or genePredExt to bigGenePred. */
+/* pslToBigPsl - converts psl to bigPsl. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
