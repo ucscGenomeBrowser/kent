@@ -63,7 +63,7 @@ DBS = \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \
 	centromeres1 \
 	cerSim1 \
-	chiLan1 \
+	chiLan1o \
 	chlSab2 \
 	choHof1 \
 	chrPic1 chrPic2 \
