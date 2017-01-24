@@ -443,7 +443,22 @@ for (td = tdbList; td != NULL; td = td->next)
     }
 }
 
-static char *settingsFromHash(struct hash *hash)
+static char *subsituteVariables(struct hashEl *el, char *database)
+/* substitute variables where supported */
+{
+char* val = (char*)el->val;
+/* Only some attribute support variable substitution, at least for now
+ * Just leak memory when doing substitution.
+ */
+if (sameString(el->name, "bigDataUrl"))
+    {
+    val = replaceChars(val, "$db", database);
+    }
+
+return val;
+}
+
+static char *settingsFromHash(struct hash *hash, char* database)
 /* Create settings string from settings hash. */
 {
 if (hash == NULL)
@@ -455,7 +470,7 @@ else
     struct hashEl *el, *list = hashElListHash(hash);
     slSort(&list, hashElCmp);
     for (el = list; el != NULL; el = el->next)
-	dyStringPrintf(dy, "%s %s\n", el->name, (char *)el->val);
+	dyStringPrintf(dy, "%s %s\n", el->name, subsituteVariables(el, database));
     slFreeList(&list);
     ret = cloneString(dy->string);
     dyStringFree(&dy);
@@ -830,7 +845,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 	    }
 	if (td->settingsHash != NULL)
 	    {
-	    char *settings = settingsFromHash(td->settingsHash);
+	    char *settings = settingsFromHash(td->settingsHash, database);
 	    updateBigTextField(conn, trackDbName, "tableName", td->track,
 	        "settings", settings);
 	    if (showSettings)

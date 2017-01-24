@@ -488,6 +488,12 @@ int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int 
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 void doJRepeat (struct trackDb *tdb, char *repeat);
-   /* New RepeatMasker Visualization defined in joinedRmskClick.c */
+/* New RepeatMasker Visualization defined in joinedRmskClick.c */
+
+INLINE char* strOrNbsp(char* val)
+/* return val if not empty otherwise HTML entity &nbsp; */
+{
+return isEmpty(val) ? "&nbsp;" : val;
+}
 
 #endif
