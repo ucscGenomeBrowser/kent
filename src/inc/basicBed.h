@@ -40,7 +40,7 @@ struct bed
 
 #define bedKnownFields 15	/* Maximum known fields in bed */
 
-#define BB_MAX_CHROM_STRING 32  /* Maximum string length for chromosome length */
+#define BB_MAX_CHROM_STRING 255  /* Maximum string length for chromosome length */
 
 struct bed3
 /* Browser extensible data - first three fields */

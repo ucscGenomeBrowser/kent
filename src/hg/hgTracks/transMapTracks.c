@@ -89,7 +89,7 @@ if ((labelSet & useGene) && (geneConn != NULL))
 
 struct dyString *label = dyStringNew(64);
 if (labelSet & useOrgAbbrv && srcDbExists)
-    addToLabel(label, orgShortForDb(info->srcDb));
+    addToLabel(label, hOrgShortForDb(info->srcDb));
 if (labelSet & useOrgCommon && srcDbExists)
     addToLabel(label, hOrganism(info->srcDb));
 if (labelSet & useOrgDb)
@@ -161,10 +161,13 @@ void transMapRegisterTrackHandlers()
 {
 registerTrackHandler("transMap", transMapMethods);
 
+if (0)
+    { /// FIXME
 // FIXME: legacy, this can be removed once trackDb files with trackHandler
-// attributes are ushed
+// attributes are pushed
 registerTrackHandler("transMapAlnRefSeq", transMapMethods);
 registerTrackHandler("transMapAlnMRna", transMapMethods);
 registerTrackHandler("transMapAlnSplicedEst", transMapMethods);
 registerTrackHandler("transMapAlnUcscGenes", transMapMethods);
+    }
 }

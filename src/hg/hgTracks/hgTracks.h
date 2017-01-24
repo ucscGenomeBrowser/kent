@@ -1164,14 +1164,6 @@ void affyUclaNormMethods(struct track *tg);
 void cghNci60Methods(struct track *tg);
 /* set up special methods for CGH NCI60 track */
 
-char *orgShortForDb(char *db);
-/* look up the short organism name given an organism db.
- * WARNING: static return */
-
-char *orgShortName(char *org);
-/* Get the short name for an organism.  Returns NULL if org is NULL.
- * WARNING: static return */
-
 char *getOrganism(struct sqlConnection *conn, char *acc);
 /* lookup the organism for an mrna, or NULL if not found.
  * WARNING: static return */
