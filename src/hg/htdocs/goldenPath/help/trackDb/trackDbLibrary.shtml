@@ -1061,7 +1061,7 @@ There are no extra options that can appear on the type bigMaf line.
     setting.  The first color will be used for plus strand alignments
     and the second for the minus strand.  This setting is incompatible with <code>spectrum</code>
     and all items on the same strand will have the same color, regardless of the item's
-    <code>score</score>.</P>
+    <code>score</code>.</P>
     <P><B>Example:</B></P>
     <pre>   colorByStrand 255,0,0 0,0,255</pre>
     <P>Plus strand alignments will be colored red, and minus
