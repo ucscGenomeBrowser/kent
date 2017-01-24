@@ -305,7 +305,7 @@ printTrackHtml(tdb);
 transMapBagFree(&bag);
 }
 
-static struct dnaSeq *getCdnaSeq(struct trackDb *tdb, char *name)
+static struct dnaSeq *getCdnaSeqDb(struct trackDb *tdb, char *name)
 /* look up sequence name in seq and extFile tables specified
  * for base coloring. */
 {
@@ -327,11 +327,23 @@ return seq;
 void transMapShowCdnaAli(struct trackDb *tdb, char *mappedId)
 /* Show alignment for mappedId, mostly ripped off from htcCdnaAli */
 {
-struct transMapBag *bag = transMapBagLoadDb(tdb, mappedId);
+struct transMapBag *bag = NULL;
+struct dnaSeq *seq = NULL;
+if (trackDbSetting(tdb, "bigDataUrl") == NULL)
+    {
+    bag = transMapBagLoadDb(tdb, mappedId);
+    seq = getCdnaSeqDb(tdb, transMapIdToSeqId(mappedId));
+    }
+else
+    {
+    bag = transMapBagLoadBig(tdb, mappedId);
+    seq = newDnaSeq(cloneString(bag->meta->oSequence), strlen(bag->meta->oSequence),
+                    mappedId);
+    }
+
 struct genbankCds cds;
 if (isEmpty(bag->meta->oCDS) || !genbankCdsParse(bag->meta->oCDS, &cds))
     ZeroVar(&cds);  /* can't get or parse CDS, so zero it */
-struct dnaSeq *seq = getCdnaSeq(tdb, transMapIdToSeqId(mappedId));
 
 writeFramesetType();
 puts("<HTML>");
