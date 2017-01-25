@@ -41,6 +41,16 @@
 #include "transMapGene.h"
 #include "genbank.h"
 
+enum geneSrcSetType
+/* constants for source sets */
+{
+    ENSEMBL_SRC_SET,
+    REFSEQ_SRC_SET,
+    RNA_SRC_SET,
+    EST_SRC_SET,
+    UCSC_GENES_SRC_SET,
+    UNKNOWN_SRC_SET
+};
 
 struct transMapBag
 /* object contain collected information on a specific transMap mapping
@@ -48,6 +58,7 @@ struct transMapBag
 {
     struct psl *psl;              // transMap alignment
     struct bigTransMap *meta;     // bigTransMap record for metadata
+    enum geneSrcSetType srcSet;   // source data set (not owned)
     boolean srcDbIsActive;        // source database is active
 };
 
@@ -60,6 +71,22 @@ else if (sameString(gene->cds, "n/a") || sameString(gene->cds, ""))
     return "non_coding";
 else    
     return "protein_coding";
+}
+
+static enum geneSrcSetType guessGeneSrcSet(struct trackDb *tdb)
+/* guess the the source set from the table name for table
+ * based-transmap */
+{
+if (stringIn("UcscGenes", tdb->table))
+    return UCSC_GENES_SRC_SET;
+else if (stringIn("RefSeq", tdb->table))
+    return REFSEQ_SRC_SET;
+else if (stringIn("MRna", tdb->table))
+    return RNA_SRC_SET;
+else if (stringIn("SplicedEst", tdb->table))
+    return EST_SRC_SET;
+else
+    return UNKNOWN_SRC_SET;
 }
 
 static char *chainSubsetToBigStr(enum transMapInfoChainSubset cs)
@@ -130,6 +157,7 @@ char *transMapGeneTbl = trackDbSetting(tdb, transMapGeneTblSetting);
 if (transMapGeneTbl != NULL)
     gene = transMapGeneQuery(conn, transMapGeneTbl,
                              info->srcDb, transMapIdToSeqId(info->srcId));
+bag->srcSet = guessGeneSrcSet(tdb);
 bag->srcDbIsActive = hDbIsActive(info->srcDb);
 bag->meta = buildFakeBigTransMapRec(info, src, gene);
 transMapInfoFree(&info);
@@ -137,6 +165,43 @@ transMapSrcFree(&src);
 transMapGeneFree(&gene);
 hFreeConn(&conn);
 return bag;
+}
+
+static enum geneSrcSetType getGeneSrcSet(struct trackDb *tdb)
+/* get the geneSrcSetType from trackDb */
+{
+char *srcSet = trackDbRequiredSetting(tdb, "transMapSrcSet");
+if (sameString(srcSet, "ensembl"))
+    return ENSEMBL_SRC_SET;
+else if (sameString(srcSet, "refseq"))
+    return REFSEQ_SRC_SET;
+else if (sameString(srcSet, "rna"))
+    return RNA_SRC_SET;
+else if (sameString(srcSet, "est"))
+    return EST_SRC_SET;
+else
+    return UNKNOWN_SRC_SET;
+}
+
+static char *formatGeneSrcSet(enum geneSrcSetType srcSet)
+/* get display version of source set */
+{
+switch (srcSet)
+    {
+    case ENSEMBL_SRC_SET:
+        return "Ensembl";
+    case REFSEQ_SRC_SET:
+        return "RefSeq RNA";
+    case RNA_SRC_SET:
+        return "GenBank RNA";
+    case EST_SRC_SET:
+        return "GenBank EST";
+    case UCSC_GENES_SRC_SET:
+        return "UCSC Genes";
+    case UNKNOWN_SRC_SET:
+        return "Unknown";
+    }
+return "Unknown";
 }
 
 static struct transMapBag *transMapBagLoadBig(struct trackDb *tdb, char *mappedId)
@@ -164,6 +229,7 @@ if (bbFieldCount != BIGTRANSMAP_NUM_COLS)
              BIGTRANSMAP_NUM_COLS, bbFieldCount, fileName);
 bag->psl = pslFromBigPsl(chrom, bb, 0, NULL, NULL); 
 bag->meta = bigTransMapLoad(fields);
+bag->srcSet = getGeneSrcSet(tdb);
 bag->srcDbIsActive = hDbIsActive(bag->meta->srcDb);
 
 bigBedFileClose(&bbi);
@@ -184,8 +250,9 @@ if (bag != NULL)
     }
 }
 
-static void prOrgScientific(char *db)
-/* print organism and scientific name for a database. */
+static void prOrgScientificDb(char *db)
+/* print organism and scientific name for a database.
+ */
 {
 char *org = hOrganism(db);
 char *sciName = hScientificName(db);
@@ -206,7 +273,7 @@ printf("<TBODY>\n");
 
 // organism/assembly
 printf("<TR CLASS=\"transMapLeft\"><TD>Organism<TD>");
-prOrgScientific(database);
+prOrgScientificDb(database);
 printf("</TR>\n");
 printf("<TR CLASS=\"transMapLeft\"><TD>Genome<TD>%s</TR>\n", database);
 
@@ -236,12 +303,13 @@ static void displaySource(struct transMapBag *bag)
 {
 printf("<TABLE class=\"transMap\">\n");
 printf("<CAPTION>Source Alignment</CAPTION>\n");
+
 printf("<TBODY>\n");
 // organism/assembly
-printf("<TR CLASS=\"transMapLeft\"><TD>Organism<TD>");
-prOrgScientific(bag->meta->srcDb);
-printf("</TR>\n");
+printf("<TR CLASS=\"transMapLeft\"><TD>Organism<TD>%s (%s)</TR>\n",
+       bag->meta->commonName, bag->meta->scientificName);
 printf("<TR CLASS=\"transMapLeft\"><TD>Genome<TD>%s</TR>\n", bag->meta->srcDb);
+printf("<TR CLASS=\"transMapLeft\"><TD>Source<TD>%s</TR>\n", formatGeneSrcSet(bag->srcSet));
 
 // position
 printf("<TR CLASS=\"transMapLeft\"><TD>Position\n");
@@ -267,6 +335,12 @@ printf("<TR CLASS=\"transMapLeft\"><TD>Gene<TD>%s</TR>\n",
        strOrNbsp(bag->meta->geneName));
 printf("<TR CLASS=\"transMapLeft\"><TD>Gene Id<TD>%s</TR>\n",
        strOrNbsp(bag->meta->geneId));
+printf("<TR CLASS=\"transMapLeft\"><TD>Gene Type<TD>%s</TR>\n",
+       strOrNbsp(bag->meta->geneType));
+printf("<TR CLASS=\"transMapLeft\"><TD>Transcript Id<TD>%s</TR>\n",
+       transMapIdToAcc(bag->meta->name));
+printf("<TR CLASS=\"transMapLeft\"><TD>Transcript Type<TD>%s</TR>\n",
+       strOrNbsp(bag->meta->transcriptType));
 printf("<TR CLASS=\"transMapLeft\"><TD>CDS<TD>%s</TR>\n",
        strOrNbsp(bag->meta->oCDS));
 printf("</TBODY></TABLE>\n");

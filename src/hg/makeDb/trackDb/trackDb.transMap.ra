@@ -268,7 +268,7 @@ group genes
     superTrack transMapV4 pack
     shortLabel TransMap GENCODE/Ensembl V4
     longLabel TransMap GENCODE/Ensembl Mappings V4
-    #trackHandler bigTransMap
+    transMapSrcSet ensembl
     group genes
     type bigPsl
     priority 10.001
@@ -295,7 +295,7 @@ searchPriority 2.31
     superTrack transMapV4 pack
     shortLabel TransMap RefGene V4
     longLabel TransMap RefSeq Gene Mappings V4
-    #trackHandler bigTransMap
+    transMapSrcSet refseq
     group genes
     type bigPsl
     priority 10.003
@@ -321,7 +321,7 @@ searchPriority 2.31
     superTrack transMapV4 pack
     shortLabel TransMap RNA V4
     longLabel TransMap GenBank RNA Mappings V4
-    #trackHandler bigTransMap
+    transMapSrcSet rna
     group genes
     type bigPsl
     priority 10.004
@@ -346,8 +346,8 @@ searchPriority 2.31
     track transMapAlnEstV4
     superTrack transMapV4 hide
     shortLabel TransMap ESTs V4
-    longLabel TransMap  EST Mappings V4
-    #trackHandler bigTransMap
+    longLabel TransMap EST Mappings V4
+    transMapSrcSet est
     group genes
     type bigPsl
     priority 10.005
