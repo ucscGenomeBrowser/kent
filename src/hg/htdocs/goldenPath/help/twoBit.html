@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<!--#set var="title" value="UCSC Genome Browser: TwoBit Sequence Archives" -->
-<!--#include virtual="/gbPageStart.html"-->
+<!--#set var="TITLE" value="Genome Browser TwoBit Sequence" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>TwoBit Sequence Archives</h1> 
 <p>
@@ -34,4 +37,4 @@ The twoBit commands can function with the .2bit file as a URL:
 Sequence can be extracted from the .2bit file with the <code>twoBitToFa</code> command, for example:
 <pre><code>    twoBitToFa -seq=chr1 -udcDir=. http://your-website.edu/~user/genome.2bit stdout > genome.chr1.fa</code></pre></p>
 
-<!--#include virtual="/gbPageEnd.html"-->
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

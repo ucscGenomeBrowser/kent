@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<!--#set var="title" value="UCSC Genome Browser: bigBed Track Format" -->
-<!--#include virtual="/gbPageStart.html"-->
+<!--#set var="TITLE" value="Genome Browser bigBed Track Format" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>bigBed Track Format</h1> 
 <p>
@@ -231,4 +234,4 @@ BED file has data off the end of a chromosome. In this case, use the <code>bedCl
 <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">here</a> before the <code>bedToBigBed</code> 
 program. It will remove the row(s) in your input BED file that are off the end of a chromosome.</p>
 
-<!--#include virtual="/gbPageEnd.html"-->
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

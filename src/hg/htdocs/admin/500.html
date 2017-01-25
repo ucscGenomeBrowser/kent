@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="UCSC Genome Browser: Internal Server Error" -->
-<!--#include virtual="/gbPageStart.html"-->
+<!--#set var="TITLE" value="Genome Browser Error 500" -->
+<!--#set var="ROOT" value=".." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>Error 500: Internal Server Error</h1>
 <!--#if expr='"$SERVER_NAME" != /.*.ucsc.edu/ && "$SERVER_NAME" != /.*.sdsc.edu/ && "$SERVER_NAME" != /browser/'-->
@@ -44,5 +47,4 @@
   We apologize for the inconvenience.</p>
 <!--#endif -->
 
-<!--#include virtual="/gbPageEnd.html"-->
-
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
