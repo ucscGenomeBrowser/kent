@@ -14,6 +14,7 @@
 #include "mdb.h"
 #include "encode/encodeExp.h"
 #include "trackHub.h"
+#include "hubConnect.h"
 
 
 void mdbStaticLoad(char **row, struct mdb *ret)
@@ -3272,7 +3273,7 @@ const struct mdbObj *metadataForTable(char *db,struct trackDb *tdb,char *table)
 // Returns the metadata for a table.  NEVER FREE THIS STRUCT!
 {
 struct mdbObj *mdbObj = NULL;
-if (trackHubDatabase(db))
+if (isHubTrack(tdb->track))
     return metadataForTableFromTdb(tdb); // FIXME: metadata setting in TDB soon to be obsolete
 
 // See of the mdbObj was already built

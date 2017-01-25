@@ -7,6 +7,13 @@ urlLabel Entrez nucleotide:
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap
+visibility hide
+
+track intronEst override
+visibility pack
+
+track xenoRefGene override
+visibility hide
 
 searchTable gold
 shortCircuit 1

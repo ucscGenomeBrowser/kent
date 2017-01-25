@@ -179,7 +179,6 @@ html chainNet
 # micOch1 - Prairie vole - Microtus ochrogaster - rodent - glires - 1600
 ################################################################
 track chainNetMicOch1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
