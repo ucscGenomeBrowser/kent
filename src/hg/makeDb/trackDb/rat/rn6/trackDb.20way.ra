@@ -51,9 +51,9 @@ group compGeno
         longLabel 20 vertebrates Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -4.711 0.934
+        type wig -8.546 3.488
         maxHeightPixels 100:50:11
-        viewLimits -3.107:0.934
+        viewLimits -1:2
         autoScale off
         spanList 1
         windowingFunction mean
