@@ -42,6 +42,7 @@ table bigTransMap
     string transcriptType; "type of transcript"
     string chainType;  "type of chains used for mapping"
     string commonName; "common organism name"
+    string scientificName; "scientific organism name"
     string orgAbbrev;  "organism abbreviation"
     )
 

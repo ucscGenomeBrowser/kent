@@ -5,7 +5,7 @@
 #ifndef BIGTRANSMAP_H
 #define BIGTRANSMAP_H
 
-#define BIGTRANSMAP_NUM_COLS 38
+#define BIGTRANSMAP_NUM_COLS 39
 
 extern char *bigTransMapCommaSepFieldNames;
 
@@ -50,6 +50,7 @@ struct bigTransMap
     char *transcriptType;	/* type of transcript */
     char *chainType;	/* type of chains used for mapping */
     char *commonName;	/* common organism name */
+    char *scientificName;	/* scientific organism name */
     char *orgAbbrev;	/* organism abbreviation */
     };
 
