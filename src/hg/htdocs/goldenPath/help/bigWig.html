@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="UCSC Genome Browser: bigWig Track Format" -->
-<!--#include virtual="/gbPageStart.html"-->
+<!--#set var="TITLE" value="Genome Browser bigWig Format" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>bigWig Track Format</h1> 
 <p>
@@ -218,4 +221,4 @@ Summary levels are used with bigWigSummary, so some rounding errors and border c
 encountered when extracting data over relatively small regions. The bigWigAverageOverBed utility 
 uses the actual data which ensures the highest level of accuracy.</p>
 
-<!--#include virtual="/gbPageEnd.html"-->
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

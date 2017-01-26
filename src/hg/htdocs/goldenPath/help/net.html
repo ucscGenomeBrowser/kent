@@ -1,55 +1,32 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<HTML>
-<HEAD>
-	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<TITLE>UCSC Genome Browser: Net Format</TITLE>
-	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
-</HEAD>
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
-<A NAME="TOP"></A>
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Net Format" -->
+<!--#set var="ROOT" value="../.." -->
 
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
-
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../cgi-bin/hgMenubar"--></TD></TR>
-<!--Content Tables------------------------------------------------------->
-    <TR><TD COLSPAN=2 CELLPADDING=10>	
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-	    <TR><TD>	
-    	    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-		<TR><TD>	
-		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
-		    <TR><TD>
-			<FONT SIZE="4"><strong>&nbsp;  Net Format</strong></FONT>
-		    </TD></TR>
-		</TABLE>
-		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-		    <TR><TH HEIGHT=10></TH></TR>
-		    <TR><TD WIDTH=10>&nbsp;</TD><TD>
-<p>The <em>net</em> file format is used to describe the axtNet data that underlie the 
-net alignment annotations in the Genome Browser. For a detailed description of the 
-methods used to generate these data, refer to the Genome Browser description pages 
-that accompany the <a href="http://hgdownload.soe.ucsc.edu/downloads.html"> 
-downloadable net alignment tracks</a>.</p>
-<p>At the beginning of each target species chromosome,
-a &ldquo;net&rdquo; line appears with the format:
-	<FONT color="#0000FF"><pre>net chromName chromSize</FONT></pre>
-Example: 
-	<FONT color="#0000FF"><pre >net chr2L 23011544</FONT></pre>
-Where chromName is the target species chromosome name
-and chromSize is the size of that chromosome, followed by 
-the rest of the fill and gap lines. When a new target chrom starts, 
-there will be a new net line again.</p>
-<p><strong>File indentation:</strong> Line indentation level represents the 
-parent/child relationship between records and is a necessary part of the net 
-file format. Child records are indented one space from the parent, as seen in the 
-example net file below.</p>
-
-<FONT color="#0000FF">
-<pre>
-net chr2L 23011544
+<h1>Net Format</h1>
+<p>
+The <em>net</em> file format is used to describe the axtNet data that underlie the net alignment 
+annotations in the Genome Browser. For a detailed description of the methods used to generate these 
+data, refer to the Genome Browser description pages that accompany the 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloadable net alignment tracks</a>.</p>
+<p>
+At the beginning of each target species chromosome, a &quot;net&quot; line appears with the 
+format:</p> 
+<pre><code>net chromName chromSize</code></pre>
+<p>
+<em>chromName</em> is the target species chromosome name, and <em>chromSize</em> is the
+chromosome size. For example:</p> 
+<pre><code>net chr2L 23011544</code></pre>
+<p>
+Each target chromosome section in the file  starts with a net line. The net line is followed by a 
+set of &quot;fill&quot; and &quot;gap&quot; lines.</p> 
+<p>
+<strong>File indentation:</strong> Line indentation level represents the parent/child relationship 
+between records and is a necessary part of the net file format. Child records are indented one 
+space from the parent, as shown in the example net file below.</p>
+<pre><code>net chr2L 23011544
  fill 6004 3278 chrXR_group3a - 1396397 2164 id 25606 score 23114 ali 782 qDup 576 type top tN 0 qN 0 tR 36 qR 0 tTrf 0 qTrf 0
   gap 6065 2 chrXR_group3a - 1398498 0 tN 0 qN 0 tR 0 qR 0 tTrf 0 qTrf 0
   gap 6096 1485 chrXR_group3a - 1397572 897 tN 0 qN 0 tR 36 qR 0 tTrf 0 qTrf 0
@@ -73,110 +50,83 @@ net chr2L 23011544
   gap 9966 7 chrU - 5564075 0 tN 0 qN 0 tR 0 qR 0 tTrf 0 qTrf 0
   gap 10015 3 chrU - 5564030 0 tN 0 qN 0 tR 0 qR 0 tTrf 0 qTrf 0
   gap 10088 2 chrU - 5563957 0 tN 0 qN 0 tR 0 qR 0 tTrf 0 qTrf 0
-  gap 10101 8 chrU - 5563946 0 tN 0 qN 0 tR 0 qR 0 tTrf 0 qTrf 0
-</pre>
-</FONT>
-
+  gap 10101 8 chrU - 5563946 0 tN 0 qN 0 tR 0 qR 0 tTrf 0 qTrf 0 </code></pre>
 
 <h2>Field definitions</h2>
-<p>The net file consists of 7 fixed fields and a set
-of optional name/value pair fields. In the descriptions
-below, <em>target</em> refers to the reference
-species and <em>query</em> refers to the aligning
-species.</p>
+<p>
+The net file consists of 7 fixed fields and a set of optional name/value pair fields. In the 
+descriptions below, <em>target</em> refers to the reference species and <em>query</em> refers to the
+aligning species.</p>
 
-<h4 style="margin-left: 40px">Fixed fields</h4>
-	<UL style="margin-left: 80px">
-		<LI>
-		<strong><em>Class</em></strong> -- Either <em>fill</em> or 
-		<em>gap</em>.  Fill refers to a portion of a chain.
-		<LI>
-		<em><strong>Start in chromosome</em></strong> --  (target species) 
-		<LI>
-		<em><strong>Size</em></strong>  -- target species)
-		<LI>
-		<em><strong>Chromsome name</em></strong> -- (query species)
-		<LI>
-		<em><strong>Relative orientation</em></strong> -- between target 
-		and query species.
-		<LI>
-		<em><strong>Start in chromsome</em></strong> --  (query species)
-		<LI>
-		<em><strong>Size</em></strong> -- (query species)
-	</UL>
+<h3>Fixed fields</h3>
+<ul> 
+  <li> 
+  <strong><em>Class</em></strong> -- Either <em>fill</em> or <em>gap</em>. Fill refers to a portion 
+  of a chain</li> 
+  <li> 
+  <em><strong>Start in chromosome</em></strong> --  (target species)</li> 
+  <li> 
+  <em><strong>Size</em></strong>  -- target species)</li> 
+  <li> 
+  <em><strong>Chromsome name</em></strong> -- (query species)</li> 
+  <li> 
+  <em><strong>Relative orientation</em></strong> -- between target and query species</li>
+  <li> 
+  <em><strong>Start in chromsome</em></strong> --  (query species)</li> 
+  <li> 
+  <em><strong>Size</em></strong> -- (query species)</li> 
+</ul>
 
-<h4 style="margin-left: 40px">Optional fields (Name/value pairs)</h4>
+<h3>Optional fields (Name/value pairs)</h3>
+<ul> 
+  <li> 
+  <em><strong>id</strong></em> -- ID of associated chain (gapped alignment), if any.</li>  
+  <li> 
+  <em><strong>score</strong></em> -- Score of associated chain.</li>  
+  <li> 
+  <em><strong>ali</strong></em>   -- Number of bases in alignments in chain.</li>  
+  <li> 
+  <em><strong>qFar</strong></em> -- For fill that is on the same chromosome as parent, how far fill 
+  is from position predicted by parent. This helps determine if a rearrangement is local or if a 
+  duplication is tandem.</li>  
+  <li> 
+  <em><strong>qOver</strong></em> -- Number of bases overlapping with parent gap on query side. 
+  Generally, this will be near zero, except for inverts.</li>  
+  <li> 
+  <em><strong>qDup</strong></em> -- Number of bases in query region that are used twice or more in 
+  net. This helps distinguish between a rearrangement and a duplication.</li>  
+  <li> 
+  <em><strong>type</em></strong> -- One of the following values: 
+  <ul> 
+    <li> 
+    <em>top</em> -- Chain is top-level, not a gap filler.</li>  
+    <li> 
+    <em>syn</em> -- Chain is on same chromosome and in same direction as parent.</li>  
+    <li> 
+    <em>inv</em> -- Chain is on same chromosome on opposite direction from parent.</li>  
+    <li> 
+    <em>nonSyn</em> -- Chain is on a different chromosome from parent.</li>  
+  </ul> 
+  <li> 
+  <em><strong>tN</strong></em> -- Number of unsequenced bases (<em>N</em>s) on target side.</li>  
+  <li> 
+  <em><strong>qN</strong></em> -- Number of unsequenced bases on query side.</li>  
+  <li> 
+  <em><strong>tR</strong></em> -- Number of bases in RepeatMasker masked repeats on target.</li>  
+  <li> 
+  <em><strong>qR</strong></em> -- Number of bases in RepeatMasker masked repeats on query.</li>  
+  <li> 
+  <em><strong>tNewR</strong></em> -- Bases in lineage-specific repeats on target.</li>  
+  <li> 
+  <em><strong>qNewR</strong></em> -- Bases in lineage-specific repeats on query.</li>  
+  <li> 
+  <em><strong>tOldR</strong></em> -- Bases in repeats predating split on target.</li>  
+  <li> 
+  <em><strong>qOldR</strong></em> -- Bases in repeats predating split on query.</li>  
+  <li> 
+  <em><strong>tTrf</strong></em> -- Bases in trf (Tandem Repeat Finder) repeats on target.</li>  
+  <li> 
+  <em><strong>qTrf</strong></em> -- Bases in trf repeats on query.</li>  
+</ul>
 
-	<UL style="margin-left: 80px">
-		<LI>
-		<em><strong>id</strong></em> -- ID of associated chain (gapped 
-		alignment), if any.
-		<LI>
-		<em><strong>score</strong></em> -- Score of associated chain.
-		<LI>
-		<em><strong>ali</strong></em>   -- Number of bases in alignments in chain.
-		<LI>
-		<em><strong>qFar</strong></em> -- For fill that is on the same 
-		chromosome as parent, how far fill is from position 
-		predicted by parent. This helps determine if a
-       		rearrangement is local or if a duplication is tandem.
-		<LI>
-		<em><strong>qOver</strong></em> -- Number of bases overlapping 
-		with parent gap on query side.  Generally, this will 
-		be near zero, except for inverts. 
-		<LI>
-		<em><strong>qDup</strong></em> -- Number of bases in query 
-		region that are used twice or more in net. This helps
-		distinguish between a rearrangement and a duplication.
-		<LI>
-		<em><strong>type</em></strong> -- One of the following values:
-   			<UL>
-				<LI>
-				<em>top</em> -- Chain is top-level, not a gap filler.
-   				<LI>
-				<em>syn</em> -- Chain is on same chromosome and in 
-				same direction as parent.
-   				<LI>
-				<em>inv</em> -- Chain is on same chromosome on 
-				opposite direction from parent.
-				<LI>
-				<em>nonSyn</em> -- Chain is on a different chromosome 
-				from parent.
-			</UL>
-		<LI>
-		<em><strong>tN</strong></em> -- Number of unsequenced bases 
-		(<em>N</em>s) on target side.
-		<LI>
-		<em><strong>qN</strong></em> -- Number of unsequenced bases on query side.
-		<LI>
-		<em><strong>tR</strong></em> -- Number of bases in RepeatMasker 
-		masked repeats on target.
-		<LI>
-		<em><strong>qR</strong></em> -- Number of bases in RepeatMasker 
-		 masked repeats on query.
-		<LI>
-		<em><strong>tNewR</strong></em> -- Bases in lineage-specific repeats on target.
-		<LI>
-		<em><strong>qNewR</strong></em> -- Bases in lineage-specific repeats on query.
-		<LI>
-		<em><strong>tOldR</strong></em> -- Bases in repeats predating split on target.
-		<LI>
-		<em><strong>qOldR</strong></em> -- Bases in repeats predating split on query.
-		<LI>
-		<em><strong>tTrf</strong></em> -- Bases in trf (Tandem Repeat Finder) repeats 
-		on target.
-		<LI>
-		<em><strong>qTrf</strong></em> -- Bases in trf repeats on query.
-	</UL>
-	</UL>
-		    </TD><TD WIDTH=15></TD>
-		</TR>
-		</TABLE>
-	    <BR></TD></TR>
-	    </TABLE>
-	</TD></TR>
-	</TABLE>
-    </TD></TR>
-    </TABLE>
-</BODY></HTML>
-
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
