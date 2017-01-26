@@ -80,5 +80,9 @@ void barChartCategoryOutput(struct barChartCategory *el, FILE *f, char sep, char
 struct barChartCategory *barChartGetCategories(char *database, char *track);
 /* Get id, labels, colors, etc. */
 
+char *barChartGetCategoryLabel(int id, char *database, char *track);
+/* Get description for a category specified by id.  
+ * Use for single queries (o/w use barChartGetCategories) */
+
 #endif /* BARCHARTCATEGORY_H */
 

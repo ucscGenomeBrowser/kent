@@ -184,3 +184,17 @@ hFreeConn(&conn);
 return categs;
 }   
 
+char *barChartGetCategoryLabel(int id, char *database, char *track)
+/* Get description for a category specified by id.  
+ * Use for single queries (o/w use barChartGetCategories) */
+{
+char query[1024];
+struct sqlConnection *conn = hAllocConn(database);
+sqlSafef(query, sizeof(query), "select label from %sCategory where id=%d\n", 
+                track, id);
+char *label = sqlQuickString(conn, query);
+hFreeConn(&conn);
+return label;
+}
+
+

@@ -436,6 +436,9 @@ void doVcfTabixDetails(struct trackDb *tdb, char *item);
 void doVcfDetails(struct trackDb *tdb, char *item);
 /* Show details of an alignment from an uncompressed VCF file. */
 
+void doBarChartDetails(struct trackDb *tdb, char *item);
+/* Details of barChart item */
+
 void doMakeItemsDetails(struct customTrack *ct, char *itemIdString);
 /* Show details of a makeItems item. */
 
