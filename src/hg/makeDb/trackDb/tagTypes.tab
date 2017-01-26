@@ -418,6 +418,7 @@ transMapGene psl bigPsl
 transMapInfo psl bigPsl
 transMapSrc psl bigPsl
 transMapTypeDesc psl bigPsl
+transMapSrcSet psl bigPsl
 transformFunc bed bedGraph wig bigWig
 treeImage wigMaf
 txInfo genePred

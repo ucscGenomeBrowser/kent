@@ -1061,7 +1061,7 @@ There are no extra options that can appear on the type bigMaf line.
     setting.  The first color will be used for plus strand alignments
     and the second for the minus strand.  This setting is incompatible with <code>spectrum</code>
     and all items on the same strand will have the same color, regardless of the item's
-    <code>score</score>.</P>
+    <code>score</code>.</P>
     <P><B>Example:</B></P>
     <pre>   colorByStrand 255,0,0 0,0,255</pre>
     <P>Plus strand alignments will be colored red, and minus
@@ -1457,11 +1457,13 @@ There are no extra options that can appear on the type bigMaf line.
     Lower scores will be shaded in light gray by default, while higher
     scores will trend towards black.  This can be modified in a number of ways:</P>
     <UL>
+<!-- The below statement about color and altColor is not accurate and removed 1/4/17
     <LI> <code><A onclick="jumpTo(this)" HREF="#">color</A></code>
     can be used to replace gray scale with a color scale</LI>
     <LI> <code><A onclick="jumpTo(this)" HREF="#">altColor</A></code>
     with <code><A onclick="jumpTo(this)" HREF="#">color</A></code> can vary items from
     color to altColor</LI>
+-->
     <LI><code><A onclick="jumpTo(this)" HREF="#">minGrayLevel</A></code>
     can be used to set the level of the lightest shade</LI>
     <LI> <code>scoreMin</code>
@@ -1474,12 +1476,12 @@ There are no extra options that can appear on the type bigMaf line.
     scoreMin 700
     scoreMax 900
     color 0,0,128    </pre>
-    <P>In this example, the track items will be
-    displayed in blue. Items with scores less than or equal to 700 will be shown in very 
-    light blue,
-    those with scores between 700 and 900 will display in increasingly darker shades of blue, 
-    and items
-    with scores greater than or equal to 900 above will display in dark blue.</P>
+    <P>In this example, the track description will be
+    displayed in blue, but the track will remain a gray scale.
+    Items with scores less than or equal to 700 will be shown in very
+    light gray, those with scores between 700 and 900 will display
+    in increasingly darker shades of gray, and items with
+    scores greater than or equal to 900 above will display in black.</P>
 </DIV>
 
 <DIV class="searchIndex"><span class="types bed bigBed"></span>
@@ -1830,10 +1832,10 @@ There are no extra options that can appear on the type bigMaf line.
     the Browser that the user may configure this track.  The score
     filter is explicitly declared to default to 700, and the defined
     range of 100 - 1000 suggests there are no values of interest below 100. 
-    This example also colors the items blue and presents
+    This example also colors the description text blue and presents
     a spectrum or gradation of darkness based upon the score range.
-    Items with a score or 700 or less are displayed as the lightest shade of
-    blue, and items with a score of 900 or more are the darkest blue.  Finally, 
+    Items with a score or 700 or less are displayed as the lightest
+    and items with a score of 900 or more are the darkest.  Finally, 
     the <code>minGrayLevel</code> ensures that the lightest shade is visible 
     to the user.  No doubt the value of '4' was chosen after experimentation 
     with the Browser display.</P>
@@ -1879,11 +1881,11 @@ There are no extra options that can appear on the type bigMaf line.
     the Browser that the user may configure this track.  The score
     filter is explicitly declared to default to 700, and an allowable
     range for the score suggests there are no values below 100 worth
-    looking at.  This example also sets the items to blue and presents
+    looking at.  This example also sets the description text to blue and presents
     a spectrum or gradation of darkness based upon the score range.
     Items with score 700 or less are the lightest, and items with
-    score 900 or more are the darkest blue.  Finally the lightest
-    shade set to be not too light with the poorly named <code>minGrayLevel</code>
+    score 900 or more are the darkest.  Finally the lightest
+    shade is set to be not too light with the <code>minGrayLevel</code>
     setting.  No doubt 4 was chosen after experimentation to see how
     it actually looks in the Browser.</P><BR>
 </DIV>

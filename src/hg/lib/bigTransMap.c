@@ -10,7 +10,7 @@
 
 
 
-char *bigTransMapCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,reserved,blockCount,blockSizes,chromStarts,oChromStart,oChromEnd,oStrand,oChromSize,oChromStarts,oSequence,oCDS,chromSize,match,misMatch,repMatch,nCount,seqType,srcDb,srcChrom,srcChromStart,srcChromEnd,srcScore,srcAligned,geneName,geneId,geneType,transcriptType,chainType,commonName,orgAbbrev";
+char *bigTransMapCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,reserved,blockCount,blockSizes,chromStarts,oChromStart,oChromEnd,oStrand,oChromSize,oChromStarts,oSequence,oCDS,chromSize,match,misMatch,repMatch,nCount,seqType,srcDb,srcChrom,srcChromStart,srcChromEnd,srcScore,srcAligned,geneName,geneId,geneType,transcriptType,chainType,commonName,scientificName,orgAbbrev";
 
 struct bigTransMap *bigTransMapLoad(char **row)
 /* Load a bigTransMap from row fetched with select * from bigTransMap
@@ -68,7 +68,8 @@ ret->geneType = cloneString(row[33]);
 ret->transcriptType = cloneString(row[34]);
 ret->chainType = cloneString(row[35]);
 ret->commonName = cloneString(row[36]);
-ret->orgAbbrev = cloneString(row[37]);
+ret->scientificName = cloneString(row[37]);
+ret->orgAbbrev = cloneString(row[38]);
 return ret;
 }
 
@@ -78,7 +79,7 @@ struct bigTransMap *bigTransMapLoadAll(char *fileName)
 {
 struct bigTransMap *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[38];
+char *row[39];
 
 while (lineFileRow(lf, row))
     {
@@ -96,7 +97,7 @@ struct bigTransMap *bigTransMapLoadAllByChar(char *fileName, char chopper)
 {
 struct bigTransMap *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[38];
+char *row[39];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -184,6 +185,7 @@ ret->geneType = sqlStringComma(&s);
 ret->transcriptType = sqlStringComma(&s);
 ret->chainType = sqlStringComma(&s);
 ret->commonName = sqlStringComma(&s);
+ret->scientificName = sqlStringComma(&s);
 ret->orgAbbrev = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -211,6 +213,7 @@ freeMem(el->geneType);
 freeMem(el->transcriptType);
 freeMem(el->chainType);
 freeMem(el->commonName);
+freeMem(el->scientificName);
 freeMem(el->orgAbbrev);
 freez(pEl);
 }
@@ -358,6 +361,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->commonName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->scientificName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
