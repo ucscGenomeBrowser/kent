@@ -118,7 +118,7 @@
 
 .gbsPage ul {
     margin-top: 8px;
-    margin-left: 30px;
+    margin-left: 15px;
     list-style-type: none;      /* Use custom icons instead of bullets */
 }
 
@@ -146,7 +146,7 @@
 
 .gbsPage ol {
     margin-top: 15px;
-    margin-left: 21px;
+    margin-left: 6px;
 }
 
 .gbsPage ol li {
