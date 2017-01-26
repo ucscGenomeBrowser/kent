@@ -37,6 +37,7 @@ blastRef psl bigPsl
 boxedCfg *
 browserLines customTracks
 canPack *
+categoryLabel barChart
 cdnaTable psl bigPsl
 cdsDrawDefault psl bed genePred bigPsl
 cdsDrawOptions psl bigPsl

@@ -14029,6 +14029,10 @@ else if (sameWord(type, "gvf"))
     {
     gvfMethods(track);
     }
+else if (sameWord(type, "barChart"))
+    {
+    barChartMethods(track);
+    }
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);
