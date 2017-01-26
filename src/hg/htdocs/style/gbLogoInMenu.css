@@ -7,13 +7,13 @@
 
 /* NOTE: negative positioning compensates for indents in parent rules */
 span#home-link {
-    background-position: 0 0;
-    background-size: contain;
-    background-image: url("/images/ucscHelixLogo.png");
-    background-repeat: no-repeat;
-    top: -8px;
-    width: 84px;
-    height: 32px;
-    background-color: white;
-    margin-left: -9px;
+    background-position: 0 0 !important;
+    background-size: contain !important;
+    background-image: url("/images/ucscHelixLogo.png") !important;
+    background-repeat: no-repeat !important;
+    top: -8px !important;
+    width: 84px !important;
+    height: 32px !important;
+    background-color: white !important;
+    margin-left: -9px !important;
 }
