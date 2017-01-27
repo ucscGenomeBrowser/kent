@@ -22,30 +22,40 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+void rFix(struct tagStanza *list)
+/* Fix up stanza list recursively */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    struct slPair *pair;
+    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+        {
+	if (sameString(pair->name, "LibraryID"))
+	    {
+	    char *val = pair->val;
+	    subChar(val, '-', '.');
+	    }
+	}
+    rFix(stanza->children);
+    }
+}
 
-void freen(char *tagFile, char *fieldList, char *whereClause)
+void freen(char *inFile, char *outFile)
 /* Test something */
 {
-struct tagStorm *tagStorm = tagStormFromFile(tagFile);
-uglyf("Got %d in %s\n", slCount(tagStorm->forest), tagFile);
-struct tagStanza *result, *resultList = tagStormQuery(tagStorm, fieldList, whereClause);
-for (result = resultList; result != NULL; result = result->next)
-    {
-    struct slPair *tag;
-    for (tag = result->tagList; tag != NULL; tag = tag->next)
-	printf("%s %s\n", tag->name, (char *)tag->val);
-    printf("\n");
-    }
-tagStanzaFreeList(&resultList);
+struct tagStorm *tagStorm = tagStormFromFile(inFile);
+rFix(tagStorm->forest);
+tagStormWrite(tagStorm, outFile, 0);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 3)
     usage();
-freen(argv[1], argv[2], argv[3]);
+freen(argv[1], argv[2]);
 return 0;
 }
 
