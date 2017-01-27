@@ -1148,12 +1148,12 @@ void doServeTagStorm(struct sqlConnection *conn, char *dataSet)
 {
 char metaFileName[PATH_LEN];
 safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
-int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
-if (!cdwCheckFileAccess(conn, fileId, user))
-   errAbort("Unauthorized access to %s", metaFileName);
-printf(", <A HREF=\"cdwServeTagStorm?cdwDataSet=%s&%s\"",
+printf(", <A HREF=\"cdwServeTagStorm?format=text&cdwDataSet=%s&%s\"",
 	dataSet, cartSidUrlString(cart)); 
-printf(">text</A>)");
+printf(">text</A>");
+printf(", <A HREF=\"cdwServeTagStorm?format=tsv&cdwDataSet=%s&%s\"",
+	dataSet, cartSidUrlString(cart)); 
+printf(">tsv</A>)");
 }
 
 void doBrowseDatasets(struct sqlConnection *conn)
