@@ -1,5 +1,5 @@
 kentSrc = ../../../..
-include ../../../../inc/common.mk
+include ${kentSrc}/inc/common.mk
 
 #pslMap = valgrind --tool=memcheck --num-callers=25 pslMap
 pslMap = ${DESTBINDIR}/pslMap
