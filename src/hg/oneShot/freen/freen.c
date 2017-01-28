@@ -10,7 +10,6 @@
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "portable.h"
-#include "tagStorm.h"
 
 void usage()
 {
@@ -22,40 +21,34 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void rFix(struct tagStanza *list)
-/* Fix up stanza list recursively */
-{
-struct tagStanza *stanza;
-for (stanza = list; stanza != NULL; stanza = stanza->next)
-    {
-    struct slPair *pair;
-    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
-        {
-	if (sameString(pair->name, "LibraryID"))
-	    {
-	    char *val = pair->val;
-	    subChar(val, '-', '.');
-	    }
-	}
-    rFix(stanza->children);
-    }
-}
-
-void freen(char *inFile, char *outFile)
+void freen(char *inFile)
 /* Test something */
 {
-struct tagStorm *tagStorm = tagStormFromFile(inFile);
-rFix(tagStorm->forest);
-tagStormWrite(tagStorm, outFile, 0);
+short s = -1;
+unsigned short us = s;
+short maxShort = (us/2);
+short minShort = -maxShort - 1;
+printf("s = %d, us=%d\n", (int)s, (int)us);
+printf("minShort %d, maxShort %d\n", (int)minShort, (int)maxShort);
+
+long long ll = -1;
+unsigned long long ull = ll;
+printf("ll = %lld, ull=%lld\n", ll, ull);
+long long maxLongLong = ull/2;
+long long minLongLong = -maxLongLong - 1;
+printf("minLongLong %lld, maxLongLong %lld\n", minLongLong, maxLongLong);
+printf("minLongLong 0x%llx, maxLongLong 0x%llx\n", minLongLong, maxLongLong);
+printf("sizeof(int) %d, sizeof(long) %d, sizeof(long long) %d\n", 
+    (int)sizeof(int), (int)sizeof(long), (int)sizeof(long long));
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 2)
     usage();
-freen(argv[1], argv[2]);
+freen(argv[1]);
 return 0;
 }
 
