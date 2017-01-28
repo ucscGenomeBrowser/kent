@@ -200,11 +200,13 @@ for (fieldIx=0; fieldIx < table->fieldCount; ++fieldIx)
     for (row = table->rowList; row != NULL; row = row->next)
         {
 	char *val = row->row[fieldIx];
-	if (isDefinedVal(val))
+	boolean isDef = isDefinedVal(val);
+	if (isDef)
 	    ++field->realValCount;
 	if (!hashLookup(hash, val))
 	    {
-	    tagTypeInfoAdd(field->typeInfo, val);
+	    if (isDef) 
+		tagTypeInfoAdd(field->typeInfo, val);
 	    refAdd(&field->valList, val);
 	    hashAdd(hash, val, NULL);
 	    }
@@ -402,9 +404,12 @@ struct lockedSet *set;
 for (set = lockedSetList; set != NULL; set = set->next)
      {
      verbose(verbosity,	    
-        "%s: %d vals, %g real, %d locked, %d predicted, %d predictors, %d pChain, %g score\n",
+        "%s: %d vals, %g real, %d locked, %d pred me, %d iPred, %d pChain, %s, %s, %g score\n",
 	set->name, set->valCount, set->realValRatio, slCount(set->fieldRefList), 
-	set->predictedCount, set->predictorCount, set->predictorChainSize, set->partingScore);
+	set->predictedCount, set->predictorCount, set->predictorChainSize, 
+	(set->allFloatingPoint ? "num" : "!num"),
+	(set->allInt ? "int" : "!int"),
+	set->partingScore);
      struct slRef *ref;
      verbose(verbosity, "\tlocked:");
      for (ref = set->fieldRefList; ref != NULL; ref = ref->next)
