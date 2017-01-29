@@ -4,7 +4,7 @@ shortLabel Chains/Nets
 longLabel Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species s000=Mouse s001=Prairie_vole s002=Guinea_pig s003=Rabbit s004=Human s005=Chimp s006=Tarsier s007=Rhesus s008=Dog s009=Cat s010=Panda s011=Cow s012=Opossum s013=Platypus s014=X._tropicalis s015=Chicken s016=Turkey s017=Elephant_shark s018=Zebrafish
-subGroup3 clade Clade c00=glires c01=primate c02=laurasiatheria c03=sarcopterygii c04=birds c05=fish
+subGroup3 clade Clade c00=glires c01=primates c02=laurasiatheria c03=sarcopterygii c04=birds c05=fish
 dragAndDrop subTracks
 group compGeno
 visibility full
