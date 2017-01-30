@@ -1,5 +1,17 @@
 /* tagStormFromTab - Create a tagStorm file from a tab-separated file where the labels are on the 
- * first line, that starts with a #. */
+ * first line, that starts with a #. 
+ *
+ * The basic idea of this is
+ * 1) Read into into a fieldedTable structure
+ * 2) Figure out semi-magically what field to partition on
+ * 3) For each value of that field, write out a stanza that includes all fields that are 
+ *    constant for that value of the partitioning field.
+ * 4) Create a new, smaller fieldedTable that just consists of the remaining fields, 
+ *    and the rows corresponding to the stanza.
+ * 5) Recurse to 2. 
+ *
+ * The field to partition on in step 2 is either specified by the command line or
+ * calculated in findLockedSets where partingScore is set. */
 
 #include "common.h"
 #include "linefile.h"
