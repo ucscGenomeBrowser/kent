@@ -9,7 +9,7 @@
 span#home-link {
     background-position: 0 0 !important;
     background-size: contain !important;
-    background-image: url("/images/ucscHelixLogo.png") !important;
+    background-image: url("../images/ucscHelixLogo.png") !important;
     background-repeat: no-repeat !important;
     top: -8px !important;
     width: 84px !important;
