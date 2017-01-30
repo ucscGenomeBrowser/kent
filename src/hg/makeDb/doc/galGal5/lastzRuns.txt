@@ -247,8 +247,7 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 galGal5) \
        > rbest.log 2>&1
-XXX - running - Fri Jan 20 13:38:54 PST 2017
-    # real    132m33.263s
+    # real    487m51.030s
 
 #########################################################################
 # LASTZ turkey/melGal5 vs. Peregrine falcon - (DONE - 2017-01-20 - Hiram)
@@ -281,15 +280,14 @@ TMPDIR=/dev/shm
         -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Fri Jan 20 14:25:59 PST 2017
-    # real    620m42.543s
+    # real    422m43.269s
 
     cat fb.melGal5.chainFalPer1Link.txt
-    #  1029400481 bases of 1218501075 (84.481%) in intersection
+    #  854639905 bases of 1093044709 (78.189%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 falPer1) \
           > rbest.log 2>&1 &
-    #  real    312m39.922s
+    #  real    336m8.770s
 
     # and for the swap:
     mkdir /hive/data/genomes/falPer1/bed/blastz.melGal5.swap
@@ -300,15 +298,14 @@ XXX - running - Fri Jan 20 14:25:59 PST 2017
         -swap -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    284m22.838s
+    #  real    64m19.073s
 
     cat fb.falPer1.chainMelGal5Link.txt
-    # 984928299 bases of 1093044709 (90.109%) in intersection
+    # 826670414 bases of 1153404357 (71.672%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` falPer1 melGal5) \
        > rbest.log 2>&1
-XXX - running - Fri Jan 20 13:38:54 PST 2017
-    # real    132m33.263s
+    #  real    247m39.409s
 
 #########################################################################
 # LASTZ turkey/melGal5 vs. Medium ground finch - (DONE - 2017-01-20 - Hiram)
@@ -341,15 +338,14 @@ TMPDIR=/dev/shm
         -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Fri Jan 20 14:25:59 PST 2017
-    # real    620m42.543s
+    # real    403m51.968s
 
     cat fb.melGal5.chainGeoFor1Link.txt
-    #  1029400481 bases of 1218501075 (84.481%) in intersection
+    #  740714391 bases of 1093044709 (67.766%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 geoFor1) \
           > rbest.log 2>&1 &
-    #  real    312m39.922s
+    #  lost log file
 
     # and for the swap:
     mkdir /hive/data/genomes/geoFor1/bed/blastz.melGal5.swap
@@ -360,13 +356,13 @@ XXX - running - Fri Jan 20 14:25:59 PST 2017
         -swap -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    284m22.838s
+    #  real    65m39.225s
 
     cat fb.geoFor1.chainMelGal5Link.txt
-    # 984928299 bases of 1093044709 (90.109%) in intersection
+    # 725536636 bases of 1041286029 (69.677%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` geoFor1 melGal5) \
        > rbest.log 2>&1
-    # real    132m33.263s
+    # real    291m40.237s
 
 #########################################################################
