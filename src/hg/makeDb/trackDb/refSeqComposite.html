@@ -1,0 +1,147 @@
+<h2>Description</h2>
+<p>
+The NCBI RefSeq Genes composite track shows $organism protein-coding and non-protein-coding
+genes taken from the NCBI RNA reference sequences collection (RefSeq). Some tracks contain 
+coordinates provided while others contain coordinates produced from UCSC's re-alignment of
+mRNAs to the genome.
+</p>
+
+<p>
+Coordinates for annotations in the <i>UCSC RefSeq Genes</i> track may differ from those found
+in the RefSeq tracks as UCSC re-aligns RefSeq mRNAs to the genome to create the annotations.
+Sometimes these re-alignments produce different coordinates that those provided by RefSeq.
+See the <a href="#methods">Methods</a> section for more details about how these different
+tracks were created.
+</p>
+
+<p>
+Please visit the 
+<a href="http://www.ncbi.nlm.nih.gov/projects/RefSeq/update.cgi"
+target="_blank">Feedback for Gene and Reference Sequences (RefSeq)</a>
+page to make suggestions, submit additions and corrections,
+or ask for help concerning RefSeq records.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+This track is a multi-view composite track that contains differing data sets (<i>views</i>).
+Instructions for configuring multi-view tracks are
+<a href="../goldenPath/help/multiView.html">here</a>.
+To show only selected subtracks, uncheck the boxes next to the tracks that you wish to hide.
+</p>
+
+<b>Views</b> available on this track are:
+<dl>
+    <dt><i>RefSeq annotations and alignments</i></dt>
+</dl>
+<ul>
+  <li><i>RefSeq All</i> represents all curated and predicted annotations provided by RefSeq.</li>
+  <li><i>RefSeq Curated</i> is a subset of <i>RefSeq All</i> and includes only those
+	annotations whose accessions begin with NM, NR, or YP.</li>
+  <li><i>RefSeq Predicted</i> is a subset of RefSeq All and includes those annotations
+	whose accessions begin with XM or XR.</li>
+  <li><i>RefSeq Other</i> is a subset of <i>RefSeq All</i>and includes all other
+	annotations that do not fit the requirements for inclusion in the
+	<i>RefSeq Curated</i> and <i>RefSeq Predicted</i> tracks.</li>
+  <li><i>RefSeq Alignments</i> are the alignments of RefSeq mRNAs to the $organism
+	genome provided by the RefSeq group.</li>
+</ul>
+
+<dl>
+    <dt><i>UCSC annotations</i></dt>
+  <li><i>UCSC RefSeq Genes</i> represents annotations generated from UCSC's re-alignment
+	of RNAs with NM and NR accessions to the $organism genome. This track
+	was previously known as the &quot;RefSeq Genes&quot; track.</li>
+</dl>
+<ul>
+</ul>
+
+<p>
+RefSeq All, RefSeq Curated, RefSeq Predicted and UCSC RefSeq Genes tracks follow the display conventions for
+<a href="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene prediction tracks</a>.
+The color shading indicates the level of review the RefSeq record has undergone:
+predicted (light), provisional (medium), reviewed (dark). [NOT SURE IF THIS LAST SENTENCE IS STILL TRUE]
+</p>
+
+<p>
+The RefSeq Alignments track follows the display conventions for
+<a href="../goldenPath/help/hgTracksHelp.html#PSLDisplay">PSL tracks</a>.
+</p>
+
+<p>
+The item labels and codon display for features within this track can be
+configured through the controls at the top of the track description page.
+<ul>   
+<li><b>Label:</b> By default, items are labeled by gene name. Click the
+appropriate Label option to display the accession name or OMIM identifier instead of the gene
+name, show all or a subset of these labels including the gene name, OMIM identifier and
+accession names, or turn off the label completely.</li>
+<li><b>Codon coloring:</b> This track contains an optional codon coloring
+feature that allows users to quickly validate and compare gene predictions.
+To display codon colors, select the <em>genomic codons</em> option from the
+<em>Color track by codons</em> pull-down menu. For more information about this
+feature, go to the
+<a href="../goldenPath/help/hgCodonColoring.html" TARGET="_blank">
+Coloring Gene Predictions and Annotations by Codon</a> page.</li>
+<li><b>Hide non-coding genes:</b> By default, both the protein-coding and
+non-protein-coding genes are displayed. If you wish to see only the coding
+genes, click this box.</li>
+</ul>
+</p>
+
+<a name="methods"></a>
+<h2>Methods</h2>
+<p>
+Tracks contained in the RefSeq annotation and RefSeq RNA alignment views were
+created here at UCSC using data from the RefSeq project at NCBI.
+Data files were downloaded from RefSeq in GFF file format and converted to the genePred
+and PSL table formats for display here at UCSC.
+Information about their annotation pipeline can be found
+<a href="https://www.ncbi.nlm.nih.gov/genome/annotation_euk/process/"
+target="_blank">here</a>.
+</p>
+
+<p>
+The UCSC RefSeq Genes track is constructed using the same methods as our previous
+RefSeq Genes track:
+<blockquote>
+RefSeq RNAs were aligned against the human genome using BLAT. Those with an alignment of
+less than 15% were discarded. When a single RNA aligned in multiple places, the alignment
+having the highest base identity was identified. Only alignments having a base identity
+level within 0.1% of the best and at least 96% base identity with the genomic sequence were kept.
+</blockquote>
+
+<h2>Credits</h2>
+<p>
+This track was produced at UCSC from data generated by scientists worldwide and curated by the
+NCBI RefSeq project.
+</p>
+
+<h2>References</h2>
+<p>
+Kent WJ.
+<a href="http://genome.cshlp.org/content/12/4/656.full" target="_blank">
+BLAT - the BLAST-like alignment tool</a>.
+<em>Genome Res.</em> 2002 Apr;12(4):656-64.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/11932250" target="_blank">11932250</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC187518/" target="_blank">PMC187518</a>
+</p>
+
+<p>
+Pruitt KD, Brown GR, Hiatt SM, Thibaud-Nissen F, Astashyn A, Ermolaeva O, Farrell CM, Hart J,
+Landrum MJ, McGarvey KM <em>et al</em>.
+<a href="http://nar.oxfordjournals.org/content/42/D1/D756.long" target="_blank">
+RefSeq: an update on mammalian reference sequences</a>.
+<em>Nucleic Acids Res</em>. 2014 Jan;42(Database issue):D756-63.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24259432" target="_blank">24259432</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3965018/" target="_blank">PMC3965018</a>
+</p>
+
+<p>
+Pruitt KD, Tatusova T, Maglott DR.
+<a href="http://nar.oxfordjournals.org/content/33/suppl_1/D501.full" target="_blank">
+NCBI Reference Sequence (RefSeq): a curated non-redundant sequence database of genomes, transcripts and proteins</a>.
+<em>Nucleic Acids Res.</em> 2005 Jan 1;33(Database issue):D501-4.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/15608248" target="_blank">15608248</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC539979/" target="_blank">PMC539979</a>
+</p>
