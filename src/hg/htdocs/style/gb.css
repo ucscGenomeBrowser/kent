@@ -4,7 +4,17 @@
  * Copyright (C) 2016 The Regents of the University of California
  */
 
-/* Conventions used in this file are described in ../staticStyle/README.txt */
+/* Conventions:
+       Group rules by type (e.g. header, footer), then alphabetically within group,
+            unless cascade requires otherwise (overrides must be after rules they override)
+       Group properties by type (positioning, display, color, text, other)
+       Within a group, order properties logically (e.g. padding, border, margin) or alphabetically
+       Use CSS shortcuts when available (e.g. padding 1 value (all), 2 values (top+bottom, left+right),
+                        3 (top, right+left, bottom), 4 (top, right, bottom, left) 
+       Avoid use of id's to style.  
+       Avoid qualifying classes by element type.
+       Preserve whitespace, naming and case conventions below
+*/
 
 /* Colors */
 
@@ -82,7 +92,6 @@
 .gbFooterContainer {
     background-color: #f9f9f9;
     margin-top: 20px;
-    border-top: 1px lightgray solid;
     padding: 20px;
     padding-left: 100px;
     font-size: 14px;
@@ -110,6 +119,20 @@
 /* Below are rules used in hgGtexTrackSettings that are fairly generic and candidates
  * for re-use.   WARNING: at this time they are subject to change
  */
+
+/* UCSC bridge logo in menu bar */
+
+span#home-link {
+    background-position: 0 0;
+    background-size: contain;
+    background-image: url("../images/ucscHelixLogo.png");
+    background-repeat: no-repeat;
+    top: -8px;
+    width: 84px;
+    height: 32px;
+    background-color: white;
+    margin-left: -9px;
+}
 
 /* Icons */
 
@@ -236,9 +259,6 @@
     color: #003a72;
     font-size: 24px;
 }
-
-
-/* Section styling */
 
 .gbTrackDescription *:first-child {
     padding-top: 0;
