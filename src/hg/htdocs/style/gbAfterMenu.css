@@ -1,20 +1,19 @@
 /* Override nice-menu: */
 #main-menu-whole {
-    background-color: #003a72 !important;
-    font-family: Lato,Arial,Helvetica,sans-serif !important;
+    background-color: #003a72;
+    font-family: Lato,Arial,Helvetica,sans-serif;
 }
 
 span#home-link {
-    background-color: #003a72 !important;
+    background-color: #003a72;
 }
 
 ul.nice-menu a {
-    /* override lighter */
-    font-weight: normal !important;
-    font-family: Lato,Arial,Helvetica,sans-serif !important;
+    font-weight: normal;
+    font-family: Lato,Arial,Helvetica,sans-serif;
 }
 
 ul.nice-menu ul li a {
-    font-weight: normal !important;
-    font-family: Lato,Arial,Helvetica,sans-serif !important;
+    font-weight: normal;
+    font-family: Lato,Arial,Helvetica,sans-serif;
 }

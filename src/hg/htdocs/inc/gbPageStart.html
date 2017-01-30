@@ -28,19 +28,6 @@
 
     <body>
         <!-- Blue menu bar / hotlinks -->
-        <!--#if expr="$ROOT = ." -->
-            <!-- Override nice-menu.css styling -->
-            <link rel="stylesheet" href="./style/gbAfterMenu.css">
-            <!-- Override default home link icon -->
-            <link rel="stylesheet" href="./style/gbLogoInMenu.css">
-        <!--#elif expr="$ROOT = .." -->
-            <link rel="stylesheet" href="../style/gbAfterMenu.css">
-            <link rel="stylesheet" href="../style/gbLogoInMenu.css">
-        <!--#elif expr="$ROOT = ../.." -->
-            <link rel="stylesheet" href="../../style/gbAfterMenu.css">
-            <link rel="stylesheet" href="../../style/gbLogoInMenu.css">
-        <!--#else -->
-        <!--#endif -->
         <!--#include virtual="/cgi-bin/hgMenubar"-->
     </head>
 
