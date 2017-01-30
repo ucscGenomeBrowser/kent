@@ -10,7 +10,6 @@
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "portable.h"
-#include "tagStorm.h"
 
 void usage()
 {
@@ -22,30 +21,34 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-
-void freen(char *tagFile, char *fieldList, char *whereClause)
+void freen(char *inFile)
 /* Test something */
 {
-struct tagStorm *tagStorm = tagStormFromFile(tagFile);
-uglyf("Got %d in %s\n", slCount(tagStorm->forest), tagFile);
-struct tagStanza *result, *resultList = tagStormQuery(tagStorm, fieldList, whereClause);
-for (result = resultList; result != NULL; result = result->next)
-    {
-    struct slPair *tag;
-    for (tag = result->tagList; tag != NULL; tag = tag->next)
-	printf("%s %s\n", tag->name, (char *)tag->val);
-    printf("\n");
-    }
-tagStanzaFreeList(&resultList);
+short s = -1;
+unsigned short us = s;
+short maxShort = (us/2);
+short minShort = -maxShort - 1;
+printf("s = %d, us=%d\n", (int)s, (int)us);
+printf("minShort %d, maxShort %d\n", (int)minShort, (int)maxShort);
+
+long long ll = -1;
+unsigned long long ull = ll;
+printf("ll = %lld, ull=%lld\n", ll, ull);
+long long maxLongLong = ull/2;
+long long minLongLong = -maxLongLong - 1;
+printf("minLongLong %lld, maxLongLong %lld\n", minLongLong, maxLongLong);
+printf("minLongLong 0x%llx, maxLongLong 0x%llx\n", minLongLong, maxLongLong);
+printf("sizeof(int) %d, sizeof(long) %d, sizeof(long long) %d\n", 
+    (int)sizeof(int), (int)sizeof(long), (int)sizeof(long long));
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 2)
     usage();
-freen(argv[1], argv[2], argv[3]);
+freen(argv[1]);
 return 0;
 }
 

@@ -6,6 +6,7 @@
 #include "sqlNum.h"
 #include "tagStorm.h"
 #include "errAbort.h"
+#include "obscure.h"
 
 int clMaxErr = 10;
 int gErrCount = 0;  // Number of errors so far
@@ -50,21 +51,6 @@ struct tagSchema
     struct slName *allowedVals;  // Allowed values for string types
     struct hash *uniqHash;   // Help make sure that all values are unique
     };
-
-char *nextWordOrString(char **pLine)
-/* Return next word unless it begins with quotes.  Othewise return chunk of text between quotes. */
-{
-char *val = nextWordRespectingQuotes(pLine);
-if (val == NULL)
-    return NULL;
-char c = val[0];
-if (c == '"' || c == '\'')
-    {
-    val += 1;
-    trimLastChar(val);
-    }
-return val;
-}
 
 struct tagSchema *tagSchemaFromFile(char *fileName)
 /* Read in a tagSchema file */
@@ -122,7 +108,7 @@ while (lineFileNextReal(lf, &line))
         {
 	char *val;
 
-	while ((val = nextWordOrString(&line)) != NULL)
+	while ((val = nextQuotedWord(&line)) != NULL)
 	    {
 	    slNameAddHead(&schema->allowedVals, val);
 	    }
