@@ -45,16 +45,25 @@ void cdwServeTagStorm(struct sqlConnection *conn)
 /* Serve up a cirm data warehouse meta.txt tagstorm as a .txt file */ 
 {
 char *dataSet = cartString(cart, "cdwDataSet");
+char *format = cartString(cart, "format"); 
 char metaFileName[PATH_LEN];
 safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
 int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
 char *path = cdwPathForFileId(conn, fileId);
 fflush(stdout);
-struct lineFile *lf = lineFileOpen(path, TRUE);
-char *line;
-while (lineFileNext(lf, &line, NULL))
+if (strcmp(format,"tsv"))
     {
-    printf("%s\n",line); 
+    struct lineFile *lf = lineFileOpen(path, TRUE);
+    char *line;
+    while (lineFileNext(lf, &line, NULL))
+	{
+	printf("%s\n",line); 
+	}
+    }
+else{
+    char command[3*PATH_LEN];
+    safef(command, sizeof(command), "./tagStormToTab %s stdout", path);
+    mustSystem(command);
     }
 }
 

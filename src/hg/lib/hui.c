@@ -189,6 +189,8 @@ char *tagStormAsHtmlTable(char *tagStormFile, struct trackDb *tdb,boolean showLo
 /* Return a string which is an HTML table of the tags for this track. */
 {
 char *metaTag = trackDbSetting(tdb, "meta");
+if (metaTag == NULL)
+    return "";
 struct slPair *pairs = tagRepoPairs(tagStormFile, "meta", metaTag);
 
 if (pairs == NULL)
