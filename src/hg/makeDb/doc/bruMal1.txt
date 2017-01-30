@@ -463,3 +463,20 @@ XXX - ready
     hgsql qapushq < bruMal1.sql
 
 #######################################################################
+# LIFTOVER TO bruMal2 (DONE - 2015-07-08 - Hiram )
+    mkdir /hive/data/genomes/bruMal1/bed/blat.bruMal2.2015-07-08
+    cd /hive/data/genomes/bruMal1/bed/blat.bruMal2.2015-07-08
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/bruMal1/bruMal1.11.ooc -debug bruMal1 bruMal2
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/bruMal1/bruMal1.11.ooc bruMal1 bruMal2) \
+		> do.log 2>&1
+    #	real    4m9.893s
+    # verify it works on genome-test
+
+#############################################################################
