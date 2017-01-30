@@ -444,3 +444,8 @@ cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin \
     hgsql qapushq < melHap1.sql
 
 #######################################################################
+# improve common name (DONE - 2015-07-24 - Hiram)
+
+    hgsql -e 'update dbDb set organism="Root knot" where name="melHap1";' hgcentraltest
+
+#############################################################################
