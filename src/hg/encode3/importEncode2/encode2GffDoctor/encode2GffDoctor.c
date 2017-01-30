@@ -368,7 +368,7 @@ for (el = list; el != NULL; el = el->next)
 	if (val != NULL)
 	    {
 	    char *s = val;
-	    char *id = nextWordRespectingQuotes(&s);
+	    char *id = nextQuotedWord(&s);
 	    int maxSize = 200;
 	    if (strlen(id) > maxSize)
 		{

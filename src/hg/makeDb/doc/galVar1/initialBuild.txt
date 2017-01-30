@@ -483,6 +483,14 @@ galVar1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaF
     git push
     make etc-update
 
+############################################################################
+## reset default position to GULO gene (Vitamin C)
+##  (DONE - 2016-05-18 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="NW_007732982v1:59339-77043"
+	where name="galVar1";' hgcentraltest
+
 #############################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2016-04-14 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema

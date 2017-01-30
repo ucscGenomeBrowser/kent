@@ -759,7 +759,6 @@ melGal5.downloadDir = melGal5
 
     cd /hive/data/genomes/melGal5
     time (makeDownloads.pl -workhorse=hgwdev melGal5) > downloads.log 2>&1
-XXX - running - Wed Jan 18 20:17:16 PST 2017
     #  real    16m3.852s
 
     #   now ready for pushQ entry
@@ -767,10 +766,6 @@ XXX - running - Wed Jan 18 20:17:16 PST 2017
     cd /hive/data/genomes/melGal5/pushQ
     time (makePushQSql.pl melGal5) > melGal5.pushQ.sql 2> stderr.out
     #  real    7m21.629s
-
-   71 melGal5.pushQ.sql
-   43 stderr.out
-  114 total
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/melGal5/wib/gc5Base.wib

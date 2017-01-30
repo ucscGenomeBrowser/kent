@@ -2293,8 +2293,7 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` monDom5 melGal5) \
            > rbest.log 2>&1 &
-XXX - running - Thu Jan 19 22:08:38 PST 2017
-    #  real    2596m10.639s
+    #  real    862m12.231s
 
     #	and for the swap
     mkdir /hive/data/genomes/melGal5/bed/blastz.monDom5.swap
@@ -2311,7 +2310,6 @@ XXX - running - Thu Jan 19 22:08:38 PST 2017
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 monDom5) \
          > rbest.log 2>&1
-XXX - running - Fri Jan 20 07:53:55 PST 2017
-    # real    2521m59.900s
+    # real    774m18.172s
 
 ##############################################################################

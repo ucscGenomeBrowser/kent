@@ -30,7 +30,7 @@ organ brain
             format fastq
             part 4
 
-    donor 000
+    donor 003
     age 5
     age_units weeks
     life_stage embryo

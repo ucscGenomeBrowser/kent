@@ -2,6 +2,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
+#include "obscure.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
