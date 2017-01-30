@@ -2,6 +2,10 @@ include defaultPriority.ra
 
 include trackDb.chainNet.ra
 
+include trackDb.20way.ra
+
+include vertebrateChainNet.ra
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold

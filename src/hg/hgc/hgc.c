@@ -1538,7 +1538,7 @@ int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
 int start = 0;
 char *type = cloneString(tdb->type);
 char *word = nextWord(&type);
-if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred")))
+if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
@@ -3001,6 +3001,32 @@ if (showAll)
 else
     bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
 
+
+/* print out extra fields */
+boolean firstTime = TRUE;
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    char *restFields[256];
+    int restCount = chopTabs(cloneString(bb->rest), restFields);
+    if (sameString(restFields[0], item))
+        {
+        int bedSize = 25;
+        int restBedFields = bedSize - 3;
+        if (restCount > restBedFields)
+            {
+            if (firstTime)
+                {
+                printf("<B> %s Extra fields:</B><BR>", item);
+                firstTime = FALSE;
+                };
+
+            char **extraFields = (restFields + restBedFields);
+            int extraFieldCount = restCount - restBedFields;
+            int printCount = extraFieldsPrint(tdb,NULL,extraFields, extraFieldCount);
+            printCount += 0;
+            }
+        }
+    }
 
 char *bedRow[32];
 char startBuf[16], endBuf[16];

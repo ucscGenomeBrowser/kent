@@ -188,7 +188,10 @@ return dyStringCannibalize(&dyLink);
 char *tagStormAsHtmlTable(char *tagStormFile, struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
 /* Return a string which is an HTML table of the tags for this track. */
 {
-struct slPair *pairs = tagRepoPairs(tagStormFile, "track",  trackHubSkipHubName(tdb->track));
+char *metaTag = trackDbSetting(tdb, "meta");
+if (metaTag == NULL)
+    return "";
+struct slPair *pairs = tagRepoPairs(tagStormFile, "meta", metaTag);
 
 if (pairs == NULL)
     return "";
@@ -203,7 +206,7 @@ if (showShortLabel)
 
 for(; pairs; pairs = pairs->next)
     {
-    if (!isEmpty((char *)pairs->val))
+    if (!sameString(pairs->name, "meta")  && !isEmpty((char *)pairs->val))
         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td>"
                            "<td nowrap>%s</td></tr>",pairs->name, (char *)pairs->val);
     }
@@ -214,7 +217,7 @@ return dyStringCannibalize(&dyTable);
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
 // If metadata from metaDb exists, return string of html with table definition
 {
-char *tagStormFile = trackDbSetting(tdb, "tagStorm");
+char *tagStormFile = trackDbSetting(tdb, "metaDb");
 
 if (tagStormFile)
     return tagStormAsHtmlTable(tagStormFile, tdb, showLongLabel, showShortLabel);
@@ -304,9 +307,13 @@ boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
         boolean embeddedInText,boolean showLongLabel)
 // If metadata from metaTbl exists, create a link that will allow toggling it's display
 {
-const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
-if (safeObj == NULL || safeObj->vars == NULL)
-    return FALSE;
+char *tagStormFile = trackDbSetting(tdb, "metaDb");
+if (tagStormFile == NULL)
+    {
+    const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
+    if (safeObj == NULL || safeObj->vars == NULL)
+        return FALSE;
+    }
 
 printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' "
        "title='Show metadata details...'>%s<img src='../images/downBlue.png'/></A>",
@@ -319,7 +326,7 @@ return TRUE;
 void extraUiLinks(char *db,struct trackDb *tdb)
 // Show metadata, and downloads, schema links where appropriate
 {
-char *tagStormFile = trackDbSetting(tdb, "tagStorm");
+char *tagStormFile = trackDbSetting(tdb, "metaDb");
 boolean hasMetadata = (tagStormFile != NULL) || (!tdbIsComposite(tdb) && !trackHubDatabase(db)
                         && metadataForTable(db, tdb, NULL) != NULL);
 if (hasMetadata)

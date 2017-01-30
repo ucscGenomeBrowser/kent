@@ -970,6 +970,36 @@ for (ms = summaryList; ms != NULL; ms = ms->next)
     }
 }
 
+static void drawScoreOverviewBig( struct track *track,  int height,
+                               int seqStart, int seqEnd,
+                               struct hvGfx *hvg, int xOff, int yOff,
+                               int width, MgFont *font,
+                               Color color, Color altColor,
+                               enum trackVisibility vis)
+/* Draw density plot or graph for overall maf scores rather than computing
+ * by sections, for speed.  Don't actually load the mafs -- just
+ * the scored refs from the table.
+ */
+{
+struct lm *lm = lmInit(0);
+char *fileName = trackDbSetting(track->tdb, "summary");
+struct bbiFile *bbi =  bigBedFileOpen(fileName);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
+char *bedRow[7];
+char startBuf[16], endBuf[16];
+double scale = scaleForPixels(width);
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    struct mafSummary *ms;
+    ms = mafSummaryLoad(bedRow);
+    drawScore(ms->score, ms->chromStart, ms->chromEnd, seqStart, scale,
+                    hvg, xOff, yOff, height, color, vis);
+
+    }
+}
+
 static void drawScoreOverviewC(struct sqlConnection *conn,
                                char *tableName, int height,
                                int seqStart, int seqEnd,
@@ -2574,6 +2604,9 @@ if (wigTrack == NULL)
         /* use or scored refs from maf table*/
         if (differentString(track->tdb->type, "bigMaf"))
             drawScoreOverview(track->table, height, seqStart, seqEnd, hvg,
+                            xOff, yOff, width, font, color, color, scoreVis);
+        else
+            drawScoreOverviewBig(track, height, seqStart, seqEnd, hvg,
                             xOff, yOff, width, font, color, color, scoreVis);
         yOff++;
         }
