@@ -559,7 +559,7 @@ if (sortOrder != NULL)
             char extraClasses[256];
             safef(extraClasses,sizeof extraClasses,"filterTable %s",var);
             char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",
-                      extraClasses,"onchange='filterTable.filter(this);' style='font-size:.9em;'");
+                      extraClasses, "change", "filterTable.filter(this);", "font-size:.9em;", NULL);
             // Note filterBox has classes: filterBy & {var}
             if (dropDownHtml)
                 {
@@ -644,6 +644,7 @@ if (timeIt)
     uglyTime("Start table");
 // Table class=sortable
 int columnCount = 0;
+int butCount = 0;
 int restrictedColumn = 0;
 char *nowrap = (sortOrder->setting != NULL ? " nowrap":"");
       // Sort order trackDb setting found so rely on <BR> in titles for wrapping
@@ -723,9 +724,13 @@ for (;oneFile!= NULL;oneFile=oneFile->next)
         }
     assert(field != NULL);
 
-    printf("<input type='button' value='Download' onclick=\"window.location="
-           "'http://%s/goldenPath/%s/%s/%s%s/%s';\" title='Download %s ...'>",
-           server,db,ENCODE_DCC_DOWNLOADS, field, subDir, oneFile->fileName, oneFile->fileName);
+    char id[256];
+    safef(id, sizeof id, "ftpBut_%d", butCount++);
+    printf("<input type='button' id='%s' value='Download' title='Download %s ...'>", id, oneFile->fileName);
+    char javascript[1024];
+    safef(javascript, sizeof javascript, "window.location='http://%s/goldenPath/%s/%s/%s%s/%s';"
+           ,server,db,ENCODE_DCC_DOWNLOADS, field, subDir, oneFile->fileName);
+    jsOnEventById("click", id, javascript);
 
 #define SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
 #ifdef SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
@@ -848,8 +853,8 @@ printf("</TD></TR>\n");
 printf("</TFOOT></TABLE>\n");
 
 if (parentTdb == NULL)
-    printf("<script type='text/javascript'>{$(document).ready(function() {"
-           "sortTable.initialize($('table.sortable')[0],true,true);});}</script>\n");
+    jsInline("{$(document).ready(function() {"
+           "sortTable.initialize($('table.sortable')[0],true,true);});}\n");
 
 if (timeIt)
     uglyTime("Finished table");

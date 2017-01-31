@@ -2352,17 +2352,25 @@ for (haplo = hapSet->haplos, ix=0; haplo != NULL && ix < TOO_MANY_HAPS; haplo = 
             seqLen = haplo->ho->aaLen;
             }
         if (dnaView)
+	    {
             hPrintf("<TD class='" SEQUENCE_CLASS "' abbr='%08d' nowrap>"
                     "<code>%s</code></TD>", seqLen, fullSeq );
+	    }
         else if (!tripletView)
+	    {
             hPrintf("<TD class='" SEQUENCE_CLASS "' abbr='%08d' nowrap>"
-                    "<code onmousemove='alleles.positionTitle(event,this)'>%s</code></TD>",
+                    "<code id='" SEQUENCE_CLASS "_2'>%s</code></TD>",
                     seqLen, fullSeq );
+	    jsOnEventById("mousemove", SEQUENCE_CLASS "_2", "alleles.positionTitle(event,this);");
+	    }
         else // AA aligned to DNA triplets
-            hPrintf("<TD class='" SEQUENCE_CLASS "' abbr='%08d' nowrap><code>%s</code>"
-                    "<BR><code onmousemove='alleles.positionTitle(event,this)'>%s</code></TD>",
+	    {
+            hPrintf("<TD id='" SEQUENCE_CLASS "_2' class='" SEQUENCE_CLASS "' abbr='%08d' nowrap><code>%s</code>"
+                    "<BR><code id='" SEQUENCE_CLASS "_2'>%s</code></TD>",
                     seqLen, sequenceDiffsHilite(refHap->ho->dnaSeq,haplo->ho->dnaSeq,
                                                 "<B class='textAlert'>","</B>"), fullSeq);
+	    jsOnEventById("mousemove", SEQUENCE_CLASS "_2", "alleles.positionTitle(event,this);");
+	    }
         }
     hPrintf("</TR>\n");
     }
@@ -2387,9 +2395,10 @@ if (countLowInterest > 0)
                 "%d have been included.</span>\n", haploCount, TOO_MANY_HAPS);
 
     hPrintf("<BR><input type='button' id='" HAPLO_RARE_HAPS "' value='%s rare haplotypes' "
-            "onclick='alleles.rareAlleleToggle(this);' class='" TOGGLE_BUTTON "' "
+	    "class='" TOGGLE_BUTTON "' "
             "title='Show/Hide rare haplotypes that occur with a frequency of less than %g%%'>",
             (showRareHaps ? "Hide":"Show"),(minFreq * 100));
+    jsOnEventById("click", HAPLO_RARE_HAPS, "alleles.rareAlleleToggle(this);");
     }
 else
     {
@@ -2399,29 +2408,35 @@ else
 boolean distMajor =  cartUsualBoolean(cart, HAPLO_MAJOR_DIST, FALSE);
 boolean distMinor =  cartUsualBoolean(cart, HAPLO_MINOR_DIST, FALSE);
 hPrintf("<input type='button' id='" HAPLO_MAJOR_DIST "' class='" TOGGLE_BUTTON "' "
-        "value='%s populations' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
+        "value='%s populations' "
         "title='Show/Hide haplotype distribution across population groups'>",
-        (distMajor ? "Hide": "Show"),(distMajor ? "[]":"1"));
+        (distMajor ? "Hide": "Show"));
+char javascript[1024];
+safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (distMajor ? "[]":"1"));
+jsOnEventById("click", HAPLO_MAJOR_DIST, javascript);
 if (distMajor)
     {
     hPrintf("<input type='button' id='" HAPLO_MINOR_DIST "' class='" TOGGLE_BUTTON "' "
-            "value='%s' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
+            "value='%s' "
             "title='Show haplotype distribution across %s population groups'>",
             (distMinor ? "Major groups" : "1000 Genome groups"),
-            (distMinor ? "[]":"1"),
             (distMinor ? "major" : "1000 Genome"));
+    safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (distMinor ? "[]":"1"));
+    jsOnEventById("click", HAPLO_MINOR_DIST, javascript);
     }
 
 hPrintf("<input type='button' id='" HAPLO_SHOW_SCORES "' value='%s scoring' "
-        "onclick='alleles.scoresToggle(this);' class='" TOGGLE_BUTTON "' "
+	"class='" TOGGLE_BUTTON "' "
         "title='Show/Hide all haplotype scores'>\n",(showScores ? "Hide":"Show"));
+jsOnEventById("click", HAPLO_SHOW_SCORES, "alleles.scoresToggle(this);");
 
 hPrintf("&nbsp;&nbsp;<input type='button' id='reset' value='Reset to defaults' "
-        "onclick='return alleles.setAndRefresh(\""HAPLO_RESET_ALL"\",1);' "
         "class='" TOGGLE_BUTTON "' "
         "title='Reset all Gene haplotype alleles options back to default'>\n");
-//hPrintf("&nbsp;&nbsp;<a href='#' onclick='return alleles.setAndRefresh(\""HAPLO_RESET_ALL"\",1);'>"
-//        "Reset to defaults</a>\n");
+jsOnEventById("click", "reset", "return alleles.setAndRefresh('"HAPLO_RESET_ALL"',1);");
+
+//hPrintf("&nbsp;&nbsp;<a href='#' id='reset_defaults'>Reset to defaults</a>\n");
+//jsOnEventById("click", "reset_defaults", "return alleles.setAndRefresh('"HAPLO_RESET_ALL"',1);");
 }
 
 void geneAllelesTableAndControls(struct cart *cart, char *geneId,
@@ -2476,37 +2491,47 @@ else
 // Table of buttons
 hPrintf("<table BORDER=0 CELLSPACING=1 CELLPADDING=0><tr>\n");
 
+char javascript[1024];
 // Restrict to common variants
 if (!noHaps
 ||  (tooManyHaps == rareVars)) // too many and and rare or not too many and not rare
     {
     hPrintf("<td><input type='button' id='" HAPLO_RARE_VAR "' class='" TOGGLE_BUTTON "' "
             "value='%s' title='Include or Restrict to non-synonymous, common "
-            "variants with a frequency of at least %d%%' "
-            "onclick='alleles.setAndRefresh(this.id,\"%s\");'></td>\n",
+            "variants with a frequency of at least %d%%'></td>\n",
             (rareVars ? "Common variants only":"Include all variants"),
-            HAPLO_COMMON_VARIANT_MIN_PCT,(rareVars ? "[]":"1"));
+            HAPLO_COMMON_VARIANT_MIN_PCT);
+    safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (rareVars ? "[]":"1"));
+    jsOnEventById("click", HAPLO_RARE_VAR, javascript);
     }
 
 // DNA vs. AA, Full sequence
 if (!noHaps)
     {
     hPrintf("<td><input type='button' id='" HAPLO_DNA_VIEW "' class='" TOGGLE_BUTTON "' "
-            "value='Display as %s' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
+            "value='Display as %s' "
             "title='Display variants and sequence as amino acids or DNA bases'></td>\n",
-            (dnaView ? "amino acids" : "DNA bases"), (dnaView ? "[]":"1"));
+            (dnaView ? "amino acids" : "DNA bases"));
+    safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (dnaView ? "[]":"1"));
+    jsOnEventById("click", HAPLO_DNA_VIEW, javascript);
 
     hPrintf("<td><input type='button' id='" HAPLO_FULL_SEQ "' class='" TOGGLE_BUTTON "' "
-            "value='%s full sequence' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
+            "value='%s full sequence' "
             "title='Show/Hide predicted full sequence of each gene haplotype'></td>\n",
-            (fullGeneView ? "Hide" : "Show"), (fullGeneView ? "[]": "1" ));
+            (fullGeneView ? "Hide" : "Show"));
+    safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (fullGeneView ? "[]": "1" ));
+    jsOnEventById("click", HAPLO_FULL_SEQ, javascript);
 
     tripletView  = cartUsualBoolean(cart, HAPLO_TRIPLETS,FALSE);
     if (!dnaView && fullGeneView)
+	{
         hPrintf("<td><input type='button' id='" HAPLO_TRIPLETS "' class='" TOGGLE_BUTTON "' "
-                "value='%s DNA triplet code' onclick='alleles.setAndRefresh(this.id,\"%s\");' "
+                "value='%s DNA triplet code' "
                 "title='Show/Hide DNA sequence above amino acid sequence'>"
-                "</td>\n", (tripletView ? "Hide" : "Show"), (tripletView ? "[]": "1" ));
+                "</td>\n", (tripletView ? "Hide" : "Show"));
+	safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (tripletView ? "[]": "1" ));
+	jsOnEventById("click", HAPLO_TRIPLETS, javascript);
+	}
     }
 hPrintf("</tr></table>\n");
 

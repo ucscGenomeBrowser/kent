@@ -111,14 +111,15 @@ void makeRegionButton(char *val, char *selVal)
 makeRegionButtonExtraHtml(val, selVal, NULL);
 }
 
-struct grp *showGroupField(char *groupVar, char *groupScript,
+struct grp *showGroupField(char *groupVar, char *event, char *groupScript,
     struct sqlConnection *conn, boolean allTablesOk)
 /* Show group control. Returns selected group. */
 {
 struct grp *group, *groupList = fullGroupList;
 struct grp *selGroup = findSelectedGroup(groupList, groupVar);
 hPrintf("<B>group:</B>\n");
-hPrintf("<SELECT NAME=%s %s>\n", groupVar, groupScript);
+hPrintf("<SELECT NAME=%s id='%s'>\n", groupVar, groupVar);
+jsOnEventById(event,groupVar,groupScript);
 for (group = groupList; group != NULL; group = group->next)
     {
     if (allTablesOk || differentString(group->name, "allTables"))
@@ -163,7 +164,7 @@ slFreeList(&dbList);
 return selDb;
 }
 
-struct trackDb *showTrackField(struct grp *selGroup, char *trackVar, char *trackScript,
+struct trackDb *showTrackField(struct grp *selGroup, char *trackVar, char *event, char *trackScript,
                                boolean disableNoGenome)
 /* Show track control. Returns selected track. */
 {
@@ -175,7 +176,8 @@ if (sameString(selGroup->name, "allTables"))
     char *selDb = findSelDb();
     struct slName *dbList = getDbListForGenome(), *db;
     hPrintf("<B>database:</B>\n");
-    hPrintf("<SELECT NAME=%s %s>\n", trackVar, trackScript);
+    hPrintf("<SELECT NAME=\"%s\" id='%s'>\n", trackVar, trackVar);
+    jsOnEventById(event, trackVar, trackScript);
     for (db = dbList; db != NULL; db = db->next)
 	{
 	hPrintf(" <OPTION VALUE=%s%s>%s\n", db->name,
@@ -188,7 +190,8 @@ else
     {
     boolean allTracks = sameString(selGroup->name, "allTracks");
     hPrintf("<B>track:</B>\n");
-    hPrintf("<SELECT NAME=\"%s\" %s>\n", trackVar, trackScript);
+    hPrintf("<SELECT NAME=\"%s\" id='%s'>\n", trackVar, trackVar);
+    jsOnEventById(event, trackVar, trackScript);
     if (allTracks)
         {
 	selTrack = findSelectedTrack(fullTrackList, NULL, trackVar);
@@ -304,7 +307,8 @@ if (!slNameInListUseCase(nameList, selTable))
 
 /* Print out label and drop-down list. */
 hPrintf("<B>table: </B>");
-hPrintf("<SELECT NAME=\"%s\" %s>\n", varName, onChangeTable());
+hPrintf("<SELECT NAME=\"%s\" id='%s'>\n", varName, varName);
+jsOnEventById("change", varName, onChangeTable());
 struct trackDb *selTdb = NULL;
 for (name = nameList; name != NULL; name = name->next)
     {
@@ -389,27 +393,26 @@ if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
     hPrintf(" Send output to ");
     struct dyString *dy = dyStringNew(256);
     dyStringAppend(dy, 
-	"onclick=\"document.getElementById('checkboxGreat').checked=false;");
+	"document.getElementById('checkboxGreat').checked=false;");
     if (isGenomeSpaceEnabled())
 	dyStringAppend(dy, 
 	      	  "document.getElementById('checkboxGenomeSpace').checked=false;");
     dyStringAppend(dy, 
-	      	  "return true;\"");
-    cgiMakeCheckBoxIdAndJS("sendToGalaxy", doGalaxy(),
-        "checkboxGalaxy", dy->string);
+	      	  "return true;");
+    cgiMakeCheckBoxWithId("sendToGalaxy", doGalaxy(), "checkboxGalaxy");
+    jsOnEventById("click", "checkboxGalaxy", dy->string);
     hPrintf("<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A>\n");
     nbSpaces(2);
-    cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
-        "checkboxGreat",
-        "onclick=\"return onSelectGreat();\"");
+    cgiMakeCheckBoxWithId("sendToGreat", doGreat(), "checkboxGreat");
+    jsOnEventById("click", "checkboxGreat", "return onSelectGreat();");
     hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
     if (isGenomeSpaceEnabled())
 	{
 	nbSpaces(2);
-	cgiMakeCheckBoxIdAndJS("sendToGenomeSpace", doGenomeSpace(),
-	    "checkboxGenomeSpace",
-	    "onclick=\"document.getElementById('checkboxGreat').checked=false;"
-		      "document.getElementById('checkboxGalaxy').checked=false; return true;\"");
+	cgiMakeCheckBoxWithId("sendToGenomeSpace", doGenomeSpace(), "checkboxGenomeSpace");
+	jsOnEventById("click", "checkboxGenomeSpace", 
+	    "document.getElementById('checkboxGreat').checked=false;"
+	    "document.getElementById('checkboxGalaxy').checked=false; return true;");
 	hPrintf(" <A HREF=\"http://www.genomespace.org\" target=_BLANK>GenomeSpace</A>");
 	}
     }
@@ -533,28 +536,28 @@ hPrintf("<TABLE BORDER=0>\n");
     if (gotClade)
         {
         hPrintf("<TR><TD><B>clade:</B>\n");
-        printCladeListHtml(hGenome(database), onChangeClade());
+        printCladeListHtml(hGenome(database), "change", onChangeClade());
         nbSpaces(3);
         hPrintf("<B>genome:</B>\n");
-        printGenomeListForCladeHtml(database, onChangeOrg());
+        printGenomeListForCladeHtml(database, "change", onChangeOrg());
         }
     else
         {
         hPrintf("<TR><TD><B>genome:</B>\n");
-        printGenomeListHtml(database, onChangeOrg());
+        printGenomeListHtml(database, "change", onChangeOrg());
         }
     nbSpaces(3);
     hPrintf("<B>assembly:</B>\n");
-    printAssemblyListHtml(database, onChangeDb());
+    printAssemblyListHtml(database, "change", onChangeDb());
     hPrintf("</TD></TR>\n");
     }
 
 /* Print group and track line. */
     {
     hPrintf("<TR><TD>");
-    selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn, hAllowAllTables());
+    selGroup = showGroupField(hgtaGroup, "change", onChangeGroupOrTrack(), conn, hAllowAllTables());
     nbSpaces(3);
-    curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack(), FALSE);
+    curTrack = showTrackField(selGroup, hgtaTrack, "change", onChangeGroupOrTrack(), FALSE);
     nbSpaces(3);
     boolean hasCustomTracks = FALSE;
     struct trackDb *t;
@@ -566,12 +569,12 @@ hPrintf("<TABLE BORDER=0>\n");
             break;
             }
         }
-    hOnClickButton("document.customTrackForm.submit();return false;",
+    hOnClickButton("showMainCtlTbl_Ct", "document.customTrackForm.submit();return false;",
                    hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
 
     hPrintf(" ");
     if (hubConnectTableExists())
-	hOnClickButton("document.trackHubForm.submit();return false;", "track hubs");
+	hOnClickButton("showMainCtlTbl_Hub", "document.trackHubForm.submit();return false;", "track hubs");
 
     hPrintf("</TD></TR>\n");
     }
@@ -663,8 +666,10 @@ if (isPositional)
 	}
     makeRegionButton(hgtaRegionTypeRange, regionType);
     hPrintf("&nbsp;position&nbsp;");
-    hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=26 VALUE=\"%s\" onFocus=\"%s\">\n",
-    	hgtaRange, range, jsRadioUpdate(hgtaRegionType, "regionType", "range"));
+    hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" id='%s' SIZE=26 VALUE=\"%s\">\n",
+    	hgtaRange, hgtaRange, range);
+    jsOnEventById("focus", hgtaRange, 
+	jsRadioUpdate(hgtaRegionType, "regionType", "range"));
     cgiMakeButton(hgtaDoLookupPosition, "lookup");
     hPrintf("&nbsp;");
     if (userRegionsFileName() != NULL)
@@ -938,29 +943,36 @@ hPrintf(
    , getGenomeSpaceText()
    );
 
-hPrintf("<script type=\"text/javascript\">\n");
 // When GREAT is selected, disable the other checkboxes and force output to BED
-hPrintf("function onSelectGreat() {\n");
-hPrintf("document.getElementById('checkboxGalaxy').checked=false;\n");
+struct dyString *js = dyStringNew(1024);
+dyStringPrintf(js,
+    "function onSelectGreat() {\n"
+    " document.getElementById('checkboxGalaxy').checked=false;\n");
 if (isGenomeSpaceEnabled())
-    hPrintf("document.getElementById('checkboxGenomeSpace').checked=false;\n");
-hPrintf("document.getElementById('outBed').selected=true;\n");
-hPrintf("return true;\n");
-hPrintf("}\n");
+    dyStringPrintf(js,
+    " document.getElementById('checkboxGenomeSpace').checked=false;\n");
+dyStringPrintf(js,
+    " document.getElementById('outBed').selected=true;\n"
+    " return true;\n"
+    "}\n");
+jsInline(js->string);
+
 // Disable/enable noGenome tracks depending on whether region is genome.
-hPrintf("function maybeDisableNoGenome() {\n"
-        "   var regionTypeSelected = $('input[name=\"hgta_regionType\"]:checked').val();\n"
-        "   var regionIsGenome = (regionTypeSelected === 'genome');\n"
-        "   var $noGenomeOptions = $('select[name=\"hgta_track\"] option.hgtaNoGenome');\n"
-        "   $noGenomeOptions.attr('disabled', regionIsGenome)\n"
-        "                   .css('color', regionIsGenome ? '' : 'black');\n"
-        "}\n"
-        "$(document).ready(function() {\n"
-        // once when the page loads, and every time the user changes the region type:
-        "    maybeDisableNoGenome();\n"
-        "    $('input[name=\"hgta_regionType\"]').change(maybeDisableNoGenome);\n"
-        "});\n"
-        "</script>\n");
+dyStringClear(js);
+dyStringPrintf(js,
+    "function maybeDisableNoGenome() {\n"
+    "   var regionTypeSelected = $('input[name=\"hgta_regionType\"]:checked').val();\n"
+    "   var regionIsGenome = (regionTypeSelected === 'genome');\n"
+    "   var $noGenomeOptions = $('select[name=\"hgta_track\"] option.hgtaNoGenome');\n"
+    "   $noGenomeOptions.attr('disabled', regionIsGenome)\n"
+    "                   .css('color', regionIsGenome ? '' : 'black');\n"
+    "}\n"
+    "$(document).ready(function() {\n"
+    // once when the page loads, and every time the user changes the region type:
+    "    maybeDisableNoGenome();\n"
+    "    $('input[name=\"hgta_regionType\"]').change(maybeDisableNoGenome);\n"
+    "});\n");
+jsInline(js->string);
 
 /* Main form. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",

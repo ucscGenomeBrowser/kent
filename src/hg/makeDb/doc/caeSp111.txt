@@ -332,4 +332,11 @@ caeSp111.perChromTables = no
 
     hgsql -e 'update dbDb set organism="C. tropicalis" where name="caeSp111";' hgcentraltest
 
+    hgsql -e 'update dbDb set genome="C. tropicalis" where genome="C. sp. 11 ju1373";' hgcentraltest
+    hgsql -e 'select * from genomeClade where genome="C. sp. 11 ju1373";' hgcentraltest
+
+    hgsql -e 'select * from defaultDb where name="caeSp111";' hgcentraltest
+    hgsql -e 'update defaultDb set genome="C. tropicalis" where name="caeSp111";' hgcentraltest
+
+
 ############################################################################

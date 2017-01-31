@@ -129,7 +129,7 @@ scientificName: Microtus ochrogaster
      hgsql -e 'update dbDb set description="Oct. 2012 (MicOch1.0/micOch1)" where name="micOch1";' hgcentraltest
 
 #############################################################################
-# setup UCSC named files (TBD - 2017-01-11,12 - Hiram)
+# setup UCSC named files (DONE - 2016-06-07 - Hiram)
 
     mkdir /hive/data/genomes/micOch1/ucsc
     cd /hive/data/genomes/micOch1/ucsc
@@ -524,7 +524,7 @@ searchPriority 8
         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-01-17,18 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-01-25 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -610,62 +610,27 @@ micOch1.downloadDir = micOch1
     # 52632496 bases of 2104321675 (2.501%) in intersection
 
 #########################################################################
-# ncbiRefSeq (TBD - 2016-05-13 - Hiram)
-
-    mkdir /hive/data/genomes/micOch1/bed/ncbiRefSeq
-    cd /hive/data/genomes/micOch1/bed/ncbiRefSeq
-    # running step wise as this script is still under development
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 micOch1) > download.log 2>&1
-    # real    16m29.536s
-
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 micOch1) > process.log 2>&1
-    # real    3m58.858s
-
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 micOch1) > load.log 2>&1
-    # real    0m33.205s
-
-    cat fb.ncbiRefSeq.micOch1.txt
-    #  82563006 bases of 1218501075 (6.776%) in intersection
-
-    featureBits -enrichment micOch1 refGene ncbiRefSeq 
-    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
-    #    enrich 14.68x
-
-#########################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-01-17 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-01-26 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("micOch1", "blat1d", "17878", "1", "0"); \
+	VALUES ("micOch1", "blat1d", "17880", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("micOch1", "blat1d", "17879", "0", "1");' \
+	VALUES ("micOch1", "blat1d", "17881", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to MEPE gene (egg shell protein)
-## located via blat of the chicken protein
-##  (TBD - 2017-01-17 - Hiram)
+## reset default position to GULO gene (vitamin C)
+##  (DONE - 2017-01-30 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr4:21251858-21288049"
+    hgsql -e 'update dbDb set defaultPos="chr17:12364220-12405863"
 	where name="micOch1";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2016-05-13 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-01-30 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=micOch1 -tableCoverage all.joiner
@@ -674,17 +639,13 @@ micOch1.downloadDir = micOch1
 
     cd /hive/data/genomes/micOch1
     time (makeDownloads.pl -workhorse=hgwdev micOch1) > downloads.log 2>&1
-    #  real    16m3.852s
+    #  real    22m13.021s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/micOch1/pushQ
     cd /hive/data/genomes/micOch1/pushQ
     time (makePushQSql.pl micOch1) > micOch1.pushQ.sql 2> stderr.out
-    #  real    7m21.629s
-
-   71 micOch1.pushQ.sql
-   43 stderr.out
-  114 total
+    #  real    3m48.613s
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/micOch1/wib/gc5Base.wib

@@ -9,6 +9,7 @@
 #include "cart.h"
 #include "cdwLib.h" 
 #include "obscure.h"
+#include "cheapcgi.h"
 
 struct slRow
 // A linked list of slInt's, each slRow holds all the id's for a given row.  
@@ -259,7 +260,7 @@ if (cSI != NULL)
 return count; 
 }
 
-static void printFileRowToAnalysisRow(struct sqlConnection *conn, struct slInt *fileRow, struct slInt *stepRow, int filesPerRow)
+static void printFileRowToAnalysisRow(struct sqlConnection *conn, struct dyString *dy, struct slInt *fileRow, struct slInt *stepRow, int filesPerRow)
 /* Take an analysis row and connect it to the output files, there may be multiple analysis steps in the analysis row. */
 {
 char query[1024];
@@ -293,17 +294,17 @@ for (stepIter = stepRow; stepIter != NULL; stepIter = stepIter->next)
 	// Handle overflow. 
 	if (fileCount  == filesPerRow)
 	    {
-	    printf("g.setEdge(\"... %s %i\",", stripFilePath(cF->cdwFileName), getSiblingCount(conn, fileIter->val));
-	    printf("\"%s\", ""{label:\"\"});\n", cSD->name);	
+	    dyStringPrintf(dy,"g.setEdge(\"... %s %i\",", stripFilePath(cF->cdwFileName), getSiblingCount(conn, fileIter->val));
+	    dyStringPrintf(dy,"\"%s\", ""{label:\"\"});\n", cSD->name);	
 	    break;
 	    }	
-	printf("g.setEdge(\"%s\",", stripFilePath(cF->cdwFileName)); // The file. 
-	printf("\"%s\", ""{label:\"\"});\n", cSD->name);  // The step. 
+	dyStringPrintf(dy,"g.setEdge(\"%s\",", stripFilePath(cF->cdwFileName)); // The file. 
+	dyStringPrintf(dy,"\"%s\", ""{label:\"\"});\n", cSD->name);  // The step. 
 	}
     }
 }
 
-static void printAnalysisStepToFileRow(struct sqlConnection *conn, struct slInt *fileRow, int stepId, int filesPerRow)
+static void printAnalysisStepToFileRow(struct sqlConnection *conn, struct dyString *dy, struct slInt *fileRow, int stepId, int filesPerRow)
 // For a single analysis step, identify the output files and write the links from the analysis step to the output files. 
 {
 char query[1024]; 
@@ -332,19 +333,19 @@ for (file = fileRow; file != NULL; file = file->next)
     
     if (count == filesPerRow)
 	{
-	printf("g.setEdge(\"%s\", \"... %s %i\", {label:\"\"});\n", cSD->name, stripFilePath(cF->cdwFileName), getSiblingCount(conn, file->val));
+	dyStringPrintf(dy,"g.setEdge(\"%s\", \"... %s %i\", {label:\"\"});\n", cSD->name, stripFilePath(cF->cdwFileName), getSiblingCount(conn, file->val));
 	break;
 	}
 
-    printf("g.setEdge(\"%s\", \"%s\", {label:\"\"});\n", cSD->name, stripFilePath(cF->cdwFileName));
+    dyStringPrintf(dy,"g.setEdge(\"%s\", \"%s\", {label:\"\"});\n", cSD->name, stripFilePath(cF->cdwFileName));
     }
 }
 
 
-static void printStates(int filesPerRow, struct sqlConnection *conn)
+static void printStates(int filesPerRow, struct sqlConnection *conn, struct dyString *dy)
 {
 // Define all the nodes, this sets the visual node name
-printf("var states = [");
+dyStringPrintf(dy,"var states = [");
 char query[1024];
 struct slRow *fileRow, *stepRow=gSteps->next;
 // For each file in the file row generate a box for it.
@@ -376,10 +377,10 @@ for (fileRow = gFiles->next; fileRow != NULL; fileRow=fileRow->next)
 		struct cdwFile *cF = cdwFileLoadByQuery(conn, query);
 		if (inCount == filesPerRow)
 		    {
-		    printf("\"... %s %i\",", stripFilePath(cF->cdwFileName), getSiblingCount(conn, item->val));
+		    dyStringPrintf(dy,"\"... %s %i\",", stripFilePath(cF->cdwFileName), getSiblingCount(conn, item->val));
 		    break;
 		    }
-		printf("\"%s\",", stripFilePath(cF->cdwFileName));
+		dyStringPrintf(dy,"\"%s\",", stripFilePath(cF->cdwFileName));
 		}
 	    sqlSafef(query, sizeof(query), "select * from cdwStepOut where fileId='%i' and stepRunId = '%i'", item->val, step->val); 
 	    struct cdwStepOut *cSO2 = cdwStepOutLoadByQuery(conn, query); 
@@ -394,10 +395,10 @@ for (fileRow = gFiles->next; fileRow != NULL; fileRow=fileRow->next)
 		struct cdwFile *cF = cdwFileLoadByQuery(conn, query);
 		if (outCount == filesPerRow)
 		    {
-		    printf("\"... %s %i\",", stripFilePath(cF->cdwFileName), getSiblingCount(conn, item->val));
+		    dyStringPrintf(dy,"\"... %s %i\",", stripFilePath(cF->cdwFileName), getSiblingCount(conn, item->val));
 		    break;
 		    }
-		printf("\"%s\",", stripFilePath(cF->cdwFileName));
+		dyStringPrintf(dy,"\"%s\",", stripFilePath(cF->cdwFileName));
 		
 		}
 	    }
@@ -417,15 +418,15 @@ for (row = stepRow; row != NULL; row = row->next)
 	struct cdwStepRun *cSR = cdwStepRunLoadByQuery(conn,query); 
 	sqlSafef(query, sizeof(query), "select * from cdwStepDef where id = '%i'", cSR->stepDef); 
 	struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query); 
-	printf("\"%s\"", cSD->name);
+	dyStringPrintf(dy,"\"%s\"", cSD->name);
 	if (step->next != NULL) 
-	    printf(","); 
+	    dyStringPrintf(dy,","); 
 	}
     if (row->next != NULL)
-	printf(","); 
+	dyStringPrintf(dy,","); 
     }
-printf("];\n"); 
-printf("states.forEach(function(state) { g.setNode(state, { label: state }); });\n");
+dyStringPrintf(dy,"];\n"); 
+dyStringPrintf(dy,"states.forEach(function(state) { g.setNode(state, { label: state }); });\n");
 }
 
 static void printToDagreD3(struct sqlConnection *conn, int fileId, struct slRow *files, struct slRow *gSteps, int filesPerRow, struct cart *cart)
@@ -446,10 +447,11 @@ printf(".edgePath path {\n\tstroke: #333;\n\tfill: #333;\n\tstroke-width: 1.5px;
 // width and focus on height. 
 int height = (slCount(files) + slCount(gSteps) - 2) * 80;
 printf("</style>\n<svg width=5000 height=%i>\n<g/>\n</svg>\n", height);
-printf("<script id=\"js\">\n");
-printf("var g = new dagreD3.graphlib.Graph().setGraph({});\n");  
 
-printStates(filesPerRow, conn);
+struct dyString *dy = dyStringNew(4096);
+dyStringPrintf(dy,"var g = new dagreD3.graphlib.Graph().setGraph({});\n");  
+
+printStates(filesPerRow, conn, dy);
 
 // Define the step's as 'ellipses' so they look different, css definition of elipse is above. 
 stepRow = gSteps->next; 
@@ -463,30 +465,30 @@ for (outerIter = gSteps; outerIter != NULL; outerIter = outerIter->next) // Loop
 	struct cdwStepRun *cSR = cdwStepRunLoadByQuery(conn,query); 
 	sqlSafef(query, sizeof(query), "select * from cdwStepDef where id = '%i'", cSR->stepDef); 
 	struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query); 
-	printf("g.setNode(\"%s\", {shape:\"ellipse\"});\n", cSD->name ); 
+	dyStringPrintf(dy,"g.setNode(\"%s\", {shape:\"ellipse\"});\n", cSD->name ); 
 	}
     }
-printf("\n"); 
+dyStringPrintf(dy,"\n"); 
 
 stepRow = gSteps->next; 
 for (fileRow = files->next; fileRow != NULL; fileRow=fileRow->next)
     {
     // Print links from a file row to an analysis row, there may be multiple unique analysis pipelines
-    printFileRowToAnalysisRow(conn, fileRow->fileList, stepRow->fileList, filesPerRow);  
+    printFileRowToAnalysisRow(conn, dy, fileRow->fileList, stepRow->fileList, filesPerRow);  
     if (fileRow->next != NULL) // If there is another fileRow there is another step row 
 	{
 	struct slInt *iter; 
 	for (iter = stepRow->fileList; iter != NULL; iter = iter->next)
 	    {
 	    // Print step to next row 
-	    printAnalysisStepToFileRow(conn, fileRow->next->fileList, iter->val, filesPerRow);
+	    printAnalysisStepToFileRow(conn, dy, fileRow->next->fileList, iter->val, filesPerRow);
 	    }
 	stepRow = stepRow->next; 
 	}
 	
     if (stepRow == NULL) break;
     }
-printf("\ng.nodes().forEach(function(v) \n{ \n\tvar node = g.node(v); \n\tnode.rx = node.ry = 5; \n}); \n");
+dyStringPrintf(dy,"\ng.nodes().forEach(function(v) \n{ \n\tvar node = g.node(v); \n\tnode.rx = node.ry = 5; \n}); \n");
 
 
 /* Color the node that is being selected */ 
@@ -495,34 +497,35 @@ sqlSafef(query, sizeof(query), "select * from cdwFile where id= '%i'", fileId);
 struct cdwFile *cF = cdwFileLoadByQuery(conn,query);
 if (gLocation > 4 )
     {
-    printf("g.node('... %s %i').style = \"fill: #7f7\";\n", stripFilePath(cF->cdwFileName), getSiblingCount(conn, fileId)); 
+    dyStringPrintf(dy,"g.node('... %s %i').style = \"fill: #7f7\";\n", stripFilePath(cF->cdwFileName), getSiblingCount(conn, fileId)); 
     }
 else
-    printf("g.node('%s').style = \"fill: #7f7\";\n", stripFilePath(cF->cdwFileName)); 
+    dyStringPrintf(dy,"g.node('%s').style = \"fill: #7f7\";\n", stripFilePath(cF->cdwFileName)); 
   
 
-
-printf("var svg = d3.select(\"svg\"), inner = svg.select(\"g\");\nvar render = new dagreD3.render();\nrender(inner, g);\n");
+dyStringPrintf(dy,"var svg = d3.select(\"svg\"), inner = svg.select(\"g\");\nvar render = new dagreD3.render();\nrender(inner, g);\n");
 // Add hyperlinking to the nodes, first build a list of all nodes and find its length.
-printf("var nodeList = d3.select(inner.select(\"g.output\").select(\"g.nodes\").selectAll(\"g.node\"))[0][0][0];\n"); 
-printf("var nodeListLen = d3.select(inner.select(\"g.output\").select(\"g.nodes\").selectAll(\"g.node\"))[0][0][0].length;\n");
+dyStringPrintf(dy,"var nodeList = d3.select(inner.select(\"g.output\").select(\"g.nodes\").selectAll(\"g.node\"))[0][0][0];\n"); 
+dyStringPrintf(dy,"var nodeListLen = d3.select(inner.select(\"g.output\").select(\"g.nodes\").selectAll(\"g.node\"))[0][0][0].length;\n");
 // Use a for loop to traverse the list of nodes, for each node attach a hyperlink to the 'on click' function . 
-printf("for (i = 0; i < nodeListLen; i++)\n"); 
-printf("\t\t{\n\t\td3.select(nodeList[i])\n\t\t\t.on(\"click\", function (d)\n\t\t\t\t{\n"); // Define an on click event. 
-printf("\t\t\t\tfileNameParts = d.split(\" \");\n"); // Find the file name (SCH000***) which is used to build the hyperlink. 
-printf("\t\t\t\tfileNameExt = d.split(\".\");"); // Find the file name (SCH000***) which is used to build the hyperlink. 
-printf("\n\t\t\t\tif (fileNameExt.length > 1)");
-printf("\n\t\t\t\t\t{if (fileNameParts.length == 1)");
-printf("\n\t\t\t\t\t{var fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=doFileFlowchart&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[0]+\"&%s\";}\n", cartSidUrlString(cart)); 
-//printf("\n\t\t\t\t\t{return;}"); // This grabs the step nodes and returns before applying a bad hyperlink. 
-printf("\n\t\t\t\tif (fileNameParts[0] === \"...\")\n\t\t\t\t\t{");  // This grabs the files that start with '...'. 
-printf("\n\t\t\t\t\tvar fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=doFileFlowchart&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[1]+\"&%s\";\n", cartSidUrlString(cart)); 
-printf("\t\t\t\t\twindow.location.href = fileLink;\n\t\t\t\t\t}\n");  
-printf("\t\t\t\telse{\n"); // This deals with the majority of nodes.  
-printf("\t\t\t\t\tvar fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=doFileFlowchart&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[0]+\"&%s\";\n", cartSidUrlString(cart)); 
-printf("\t\t\t\t\twindow.location.href = fileLink;\n");
-printf("\t\t\t\t\t}}\n\t\t\t\t});\n\t\t}\n\n"); 
-printf("var initialScale = 0.75;</script>\n"); 
+dyStringPrintf(dy,"for (i = 0; i < nodeListLen; i++)\n"); 
+dyStringPrintf(dy,"\t\t{\n\t\td3.select(nodeList[i])\n\t\t\t.on(\"click\", function (d)\n\t\t\t\t{\n"); // Define an on click event. 
+dyStringPrintf(dy,"\t\t\t\tfileNameParts = d.split(\" \");\n"); // Find the file name (SCH000***) which is used to build the hyperlink. 
+dyStringPrintf(dy,"\t\t\t\tfileNameExt = d.split(\".\");"); // Find the file name (SCH000***) which is used to build the hyperlink. 
+dyStringPrintf(dy,"\n\t\t\t\tif (fileNameExt.length > 1)");
+dyStringPrintf(dy,"\n\t\t\t\t\t{if (fileNameParts.length == 1)");
+dyStringPrintf(dy,"\n\t\t\t\t\t{var fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=doFileFlowchart&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[0]+\"&%s\";}\n", cartSidUrlString(cart)); 
+//dyStringPrintf(dy,"\n\t\t\t\t\t{return;}"); // This grabs the step nodes and returns before applying a bad hyperlink. 
+dyStringPrintf(dy,"\n\t\t\t\tif (fileNameParts[0] === \"...\")\n\t\t\t\t\t{");  // This grabs the files that start with '...'. 
+dyStringPrintf(dy,"\n\t\t\t\t\tvar fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=doFileFlowchart&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[1]+\"&%s\";\n", cartSidUrlString(cart)); 
+dyStringPrintf(dy,"\t\t\t\t\twindow.location.href = fileLink;\n\t\t\t\t\t}\n");  
+dyStringPrintf(dy,"\t\t\t\telse{\n"); // This deals with the majority of nodes.  
+dyStringPrintf(dy,"\t\t\t\t\tvar fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=doFileFlowchart&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[0]+\"&%s\";\n", cartSidUrlString(cart)); 
+dyStringPrintf(dy,"\t\t\t\t\twindow.location.href = fileLink;\n");
+dyStringPrintf(dy,"\t\t\t\t\t}}\n\t\t\t\t});\n\t\t}\n\n"); 
+dyStringPrintf(dy,"var initialScale = 0.75;</script>\n"); 
+jsInline(dy->string);
+dyStringFree(&dy);
 }
 
 void makeCdwFlowchart(int fileId, struct cart *cart)

@@ -81,31 +81,34 @@ for (currAssembly = supportedAssemblies; currAssembly != NULL; currAssembly = cu
 
 if (invalidAssembly)
     {
-	slReverse(&supportedAssemblies);
-	currAssembly = supportedAssemblies;
-	struct dyString* dy = dyStringNew(0);
+    slReverse(&supportedAssemblies);
+    currAssembly = supportedAssemblies;
+    struct dyString* dy = dyStringNew(0);
+    addAssemblyToSupportedList(dy, currAssembly->name);
+
+    currAssembly = currAssembly->next;
+    while (currAssembly != NULL)
+	{
+	dyStringAppend(dy, ", ");
+	if (currAssembly->next == NULL)
+	    dyStringAppend(dy, "and ");
 	addAssemblyToSupportedList(dy, currAssembly->name);
-
 	currAssembly = currAssembly->next;
-	while (currAssembly != NULL)
-		{
-		dyStringAppend(dy, ", ");
-		if (currAssembly->next == NULL)
-			dyStringAppend(dy, "and ");
-		addAssemblyToSupportedList(dy, currAssembly->name);
-		currAssembly = currAssembly->next;
-		}
+	}
 
-    hPrintf("<script type='text/javascript'>\n");
-    hPrintf("function logSpecies() {\n");
-    hPrintf("try {\n");
-    hPrintf("var r = new XMLHttpRequest();\n");
-    hPrintf("r.open('GET', 'http://great.stanford.edu/public/cgi-bin/logSpecies.php?species=%s');\n", database);
-    hPrintf("r.send(null);\n");
-    hPrintf("} catch (err) { }\n");
-    hPrintf("}\n");
-    hPrintf("window.onload = logSpecies;\n");
-    hPrintf("</script>\n");
+    char javascript[1024];
+    safef(javascript, sizeof javascript,	    
+    "function logSpecies() {\n"
+    " try {\n"
+    "  var r = new XMLHttpRequest();\n"
+    "  r.open('GET', 'http://great.stanford.edu/public/cgi-bin/logSpecies.php?species=%s');\n"
+    "  r.send(null);\n"
+    " } catch (err) { }\n"
+    "}\n"
+    "window.onload = logSpecies;\n"
+    , database);
+    jsInline(javascript);
+
     errAbort("GREAT only supports the %s assemblies."
     "\nPlease go back and ensure that one of those assemblies is chosen.",
 	dyStringContents(dy));

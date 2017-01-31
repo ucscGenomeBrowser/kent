@@ -44,9 +44,12 @@ if (! jsInited)
     puts("<INPUT TYPE=HIDDEN NAME=\"jsh_pageVertPos\" VALUE=0>");
     int pos = cgiOptionalInt("jsh_pageVertPos", 0);
     if (pos > 0)
-	printf("<script language=\"javascript\">"
-	       "window.onload = function () { window.scrollTo(0, %d); }"
-	       "</script>\n", pos);
+	{
+	char javascript[1024];
+	safef(javascript, sizeof javascript,
+	       "window.onload = function () { window.scrollTo(0, %d); }", pos);
+	jsInline(javascript);
+	}
     jsInited = TRUE;
     jsIncludeFile("jsHelper.js", NULL);
     }
@@ -56,14 +59,13 @@ struct dyString *jsOnChangeStart()
 /* Start up an onChange string */
 {
 struct dyString *dy = dyStringNew(1024);
-dyStringAppend(dy, "onChange=\"");
 return dy;
 }
 
 char *jsOnChangeEnd(struct dyString **pDy)
 /* Finish up javascript onChange command. */
 {
-dyStringAppend(*pDy, "document.hiddenForm.submit();\"");
+dyStringAppend(*pDy, "document.hiddenForm.submit();");
 return dyStringCannibalize(pDy);
 }
 
@@ -87,9 +89,10 @@ void jsTrackingVar(char *jsVar, char *val)
 /* Emit a little Javascript to keep track of a variable.
  * This helps especially with radio buttons. */
 {
-hPrintf("<SCRIPT>\n");
-hPrintf("var %s='%s';\n", jsVar, val);
-hPrintf("</SCRIPT>\n");
+char javascript[256];
+safef(javascript, sizeof javascript, 
+    "var %s='%s';\n", jsVar, val);
+jsInline(javascript);
 }
 
 void jsMakeTrackingRadioButtonExtraHtml(char *cgiVar, char *jsVar,
@@ -97,11 +100,13 @@ void jsMakeTrackingRadioButtonExtraHtml(char *cgiVar, char *jsVar,
 /* Make a radio button with extra HTML attributes that also sets tracking variable
  * in javascript. */
 {
-hPrintf("<INPUT TYPE=RADIO NAME=\"%s\"", cgiVar);
+hPrintf("<INPUT TYPE=RADIO NAME='%s' ID='%s'", cgiVar, cgiVar);
 hPrintf(" VALUE=\"%s\"", val);
 if (isNotEmpty(extraHtml))
     hPrintf(" %s", extraHtml);
-hPrintf(" onClick=\"%s='%s';\"", jsVar, val);
+char javascript[1024];
+safef(javascript, sizeof javascript, "%s='%s';", jsVar, val);
+jsOnEventById("click", cgiVar, javascript);
 if (sameString(val, selVal))
     hPrintf(" CHECKED");
 hPrintf(">");
@@ -122,11 +127,15 @@ void jsMakeTrackingCheckBox(struct cart *cart,
 {
 char buf[256];
 boolean oldVal = cartUsualBoolean(cart, cgiVar, usualVal);
-hPrintf("<SCRIPT>var %s=%d;</SCRIPT>\n", jsVar, oldVal);
-hPrintf("<INPUT TYPE=CHECKBOX NAME=%s VALUE=1", cgiVar);
+char javascript[1024];
+safef(javascript, sizeof javascript,
+    "var %s=%d;", jsVar, oldVal);
+jsInline(javascript);
+hPrintf("<INPUT TYPE=CHECKBOX NAME='%s' ID='%s' VALUE=1", cgiVar, cgiVar);
 if (oldVal)
     hPrintf(" CHECKED");
-hPrintf(" onClick=\"%s=(%s+1)%%2;\"", jsVar, jsVar);
+safef(javascript, sizeof javascript, "%s=(%s+1)%%2;", jsVar, jsVar);
+jsOnEventById("click", cgiVar, javascript);
 hPrintf(">");
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), cgiVar);
 cgiMakeHiddenVar(buf, "0");
@@ -173,6 +182,7 @@ char *jsSetVerticalPosition(char *form)
 if (! jsInited)
     errAbort("jsSetVerticalPosition: jsInit must be called first.");
 static char vertPosSet[2048];
+//TODO XSS filter
 safef(vertPosSet, sizeof(vertPosSet),
       "document.%s.jsh_pageVertPos.value = f_scrollTop(); ", form);
 return vertPosSet;
@@ -182,11 +192,13 @@ void jsMakeCheckboxGroupSetClearButton(char *buttonVar, boolean isSet)
 /* Make a button for setting or clearing a set of checkboxes with the same name.
  * Uses only javascript to change the checkboxes, no resubmit. */
 {
+char id[256];
 char javascript[256];
 safef(javascript, sizeof(javascript), "var list = document.getElementsByName('%s'); "
       "for (var ix = 0; ix < list.length; ix++) {list[ix].checked = %s}", buttonVar,
       isSet ? "true" : "false");
-cgiMakeOnClickButton(javascript, isSet ? JS_SET_ALL_BUTTON_LABEL : JS_CLEAR_ALL_BUTTON_LABEL);
+safef(id, sizeof id, "%s_grpSetClrBut", buttonVar);
+cgiMakeOnClickButton(id, javascript, isSet ? JS_SET_ALL_BUTTON_LABEL : JS_CLEAR_ALL_BUTTON_LABEL);
 }
 
 void jsMakeSetClearContainer()
@@ -413,12 +425,16 @@ printf("<TD colspan=2 style='text-align:left;'>\n");
 printf("<input type='hidden' name='%s' id='%s' value='%s'>\n",
        collapseGroupVar, collapseGroupVar, isOpen ? "0" : "1");
 char *buttonImage = (isOpen ? "../images/remove_sm.gif" : "../images/add_sm.gif");
+char id[256];
+char javascript[1024];
+safef(id, sizeof id, "%s_button", section);
+safef(javascript, sizeof javascript, "return setTableRowVisibility(this, '%s', '%s.section', 'section', true);", 
+       section, track);
 printf("<IMG height='18' width='18' "
-       "onclick=\"return setTableRowVisibility(this, '%s', '%s.section', 'section', true);\" "
-       "id='%s_button' src='%s' alt='%s' title='%s this section' class='bigBlue'"
+       "id='%s' src='%s' alt='%s' title='%s this section' class='bigBlue'"
        " style='cursor:pointer;'>\n",
-       section, track,
-       section, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
+       id, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
+jsOnEventById("click", id, javascript);
 if (oldStyle || fontSize == NULL)
     printf("&nbsp;%s</TD></TR>\n", sectionTitle);
 else
@@ -466,7 +482,8 @@ void jsReloadOnBackButton(struct cart *cart)
 // http://siphon9.net/loune/2009/07/detecting-the-back-or-refresh-button-click/
 // Yes, I know this along with every other inline <script> here belongs in a .js module
 {
-printf("<script>\n"
+char javascript[2048];
+safef(javascript, sizeof javascript, 
        "document.write(\"<form style='display: none'><input name='__detectback' id='__detectback' "
        "value=''></form>\");\n"
        "function checkPageBackOrRefresh() {\n"
@@ -489,7 +506,8 @@ printf("<script>\n"
        "    } \n"
        "  } "
        "};\n"
-       "</script>\n", cartSidUrlString(cart), cgiScriptName(), cartSidUrlString(cart));
+       , cartSidUrlString(cart), cgiScriptName(), cartSidUrlString(cart));
+jsInline(javascript);
 }
 
 static char *makeIndentBuf(int indentLevel)
@@ -503,7 +521,7 @@ indentBuf[indentLevel] = 0;
 return indentBuf;
 }
 
-static void jsonPrintRecurse(struct jsonElement *ele, int indentLevel)
+static void jsonDyStringPrintRecurse(struct dyString *dy, struct jsonElement *ele, int indentLevel)
 {
 if (indentLevel >= -1) // Note that < -1 will result in no indenting
     indentLevel++;
@@ -519,7 +537,7 @@ switch (ele->type)
     {
     case jsonObject:
         {
-        hPrintf("{%s",nl);
+        dyStringPrintf(dy,"{%s",nl);
         if(hashNumEntries(ele->val.jeHash))
             {
             struct hashEl *el, *list = hashElListHash(ele->val.jeHash);
@@ -527,54 +545,54 @@ switch (ele->type)
             for (el = list; el != NULL; el = el->next)
                 {
                 struct jsonElement *val = el->val;
-                hPrintf("%s%s\"%s\": ", indentBuf, tab, el->name);
-                jsonPrintRecurse(val, indentLevel);
-                hPrintf("%s%s", el->next == NULL ? "" : ",",nl);
+                dyStringPrintf(dy,"%s%s\"%s\": ", indentBuf, tab, el->name);
+                jsonDyStringPrintRecurse(dy, val, indentLevel);
+                dyStringPrintf(dy,"%s%s", el->next == NULL ? "" : ",",nl);
                 }
             hashElFreeList(&list);
             }
-        hPrintf("%s}", indentBuf);
+        dyStringPrintf(dy,"%s}", indentBuf);
         break;
         }
     case jsonList:
         {
         struct slRef *el;
-        hPrintf("[%s",nl);
+        dyStringPrintf(dy,"[%s",nl);
         if(ele->val.jeList)
             {
             for (el = ele->val.jeList; el != NULL; el = el->next)
                 {
                 struct jsonElement *val = el->val;
-                hPrintf("%s%s", indentBuf,tab);
-                jsonPrintRecurse(val, indentLevel);
-                hPrintf("%s%s", el->next == NULL ? "" : ",",nl);
+                dyStringPrintf(dy,"%s%s", indentBuf,tab);
+                jsonDyStringPrintRecurse(dy, val, indentLevel);
+                dyStringPrintf(dy,"%s%s", el->next == NULL ? "" : ",",nl);
                 }
             }
-        hPrintf("%s]", indentBuf);
+        dyStringPrintf(dy,"%s]", indentBuf);
         break;
         }
     case jsonString:
         {
-        hPrintf("\"%s\"", jsonStringEscape(ele->val.jeString));
+        dyStringPrintf(dy,"\"%s\"", jsonStringEscape(ele->val.jeString));
         break;
         }
     case jsonBoolean:
         {
-        hPrintf("%s", ele->val.jeBoolean ? "true" : "false");
+        dyStringPrintf(dy,"%s", ele->val.jeBoolean ? "true" : "false");
         break;
         }
     case jsonNumber:
         {
         char buf[256];
         safef(buf, sizeof(buf), "%ld", ele->val.jeNumber);
-        hPrintf("%s", buf);
+        dyStringPrintf(dy,"%s", buf);
         break;
         }
     case jsonDouble:
         {
         char buf[256];
         safef(buf, sizeof(buf), "%g", ele->val.jeDouble);
-        hPrintf("%s", buf);
+        dyStringPrintf(dy,"%s", buf);
         break;
         }
     default:
@@ -587,26 +605,35 @@ if (indentLevel >= 0)
     freez(&indentBuf);
 }
 
-void jsonPrint(struct jsonElement *json, char *name, int indentLevel)
+void jsonDyStringPrint(struct dyString *dy, struct jsonElement *json, char *name, int indentLevel)
+// dyStringPrint out a jsonElement, indentLevel -1 means no indenting
 {
-// print out a jsonElement, indentLevel -1 means no indenting
 
 char *indentBuf = makeIndentBuf(indentLevel);
 if(name != NULL)
     {
     if (indentLevel >= 0 )
-        hPrintf("// START %s\n%s", name, indentBuf);
-    hPrintf("var %s = ", name);
+        dyStringPrintf(dy, "// START %s\n%s", name, indentBuf);
+    dyStringPrintf(dy, "var %s = ", name);
     }
-jsonPrintRecurse(json, (indentLevel - 1)); // will increment back to indentLevel
+jsonDyStringPrintRecurse(dy, json, (indentLevel - 1)); // will increment back to indentLevel
 if(name != NULL)
     {
-    hPrintf("%s;\n", indentBuf);
+    dyStringPrintf(dy, "%s;\n", indentBuf);
     if (indentLevel >= 0 )
-        hPrintf("// END %s\n", name);
+        dyStringPrintf(dy, "// END %s\n", name);
     }
 if (indentLevel >= 0)
     freez(&indentBuf);
+}
+
+void jsonPrint(struct jsonElement *json, char *name, int indentLevel)
+// print out a jsonElement, indentLevel -1 means no indenting
+{
+struct dyString *dy = dyStringNew(1024);
+jsonDyStringPrint(dy, json, name, indentLevel);
+hPrintf("%s", dy->string);
+dyStringFree(&dy);
 }
 
 void jsonErrPrintf(struct dyString *ds, char *format, ...)

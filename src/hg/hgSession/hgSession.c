@@ -273,7 +273,8 @@ boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
 /* DataTables configuration: only allow ordering on session name, creation date, and database.
  * https://datatables.net/reference/option/columnDefs */
-printf ("<script type=\"text/javascript\">"
+char javascript[1024];
+safef(javascript, sizeof javascript, 
         "if (theClient.isIePre11() === false)\n{\n"
         "$(document).ready(function () {\n"
         "    $('#sessionTable').DataTable({\"columnDefs\": [{\"orderable\":false, \"targets\":[0,4,5,6,7,8]}],\n"
@@ -284,7 +285,8 @@ printf ("<script type=\"text/javascript\">"
         "                                 });\n"
         "} );\n"
         "}\n"
-        "</script>\n", jsDataTableStateSave(hgSessionPrefix), jsDataTableStateLoad(hgSessionPrefix, cart));
+        , jsDataTableStateSave(hgSessionPrefix), jsDataTableStateLoad(hgSessionPrefix, cart));
+jsInline(javascript);
 
 printf("<H3>My Sessions</H3>\n");
 printf("<div style=\"max-width:1024px\">");
@@ -368,12 +370,13 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
-    cgiMakeCheckBoxJS(buf, shared>0, "onchange=\"console.log('new status' + this.checked); document.mainForm.submit();\"");
+    cgiMakeCheckBoxWithId(buf, shared>0, buf);
+    jsOnEventById("change",buf,"console.log('new status' + this.checked); document.mainForm.submit();");
 
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsGalleryPrefix, encSessionName);
-    cgiMakeCheckBoxFourWay(buf, inGallery, shared>0, NULL, NULL,
-        "onchange=\"document.mainForm.submit();\"");
+    cgiMakeCheckBoxFourWay(buf, inGallery, shared>0, buf, NULL, NULL);
+    jsOnEventById("change", buf, "document.mainForm.submit();");
 
     link = getSessionEmailLink(encUserName, encSessionName);
     printf("</td><td align=center>%s</td></tr>", link);
@@ -426,9 +429,8 @@ if (savedSessionsSupported)
 
 printf("<TABLE BORDERWIDTH=0>\n");
 printf("<TR><TD colspan=2>Use settings from a local file:</TD>\n");
-printf("<TD><INPUT TYPE=FILE NAME=\"%s\" "
-       "onkeypress=\"return noSubmitOnEnter(event);\">\n",
-       hgsLoadLocalFileName);
+printf("<TD><INPUT TYPE=FILE NAME=\"%s\" id='%s'>\n", hgsLoadLocalFileName,  hgsLoadLocalFileName);
+jsOnEventById("keypress", hgsLoadLocalFileName,"return noSubmitOnEnter(event);");
 printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoLoadLocal, "submit");
 printf("</TD></TR>\n");
@@ -509,7 +511,7 @@ printf("file type returned: ");
 cgiMakeDropListFull(hgsSaveLocalFileCompress,
 	textOutCompressMenu, textOutCompressValues, textOutCompressMenuSize,
 	cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone),
-	NULL);
+	NULL, NULL);
 printf("</TD><TD>");
 printf("&nbsp;");
 cgiMakeButton(hgsDoSaveLocal, "submit");
@@ -955,37 +957,50 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   "<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=%s>"
 		   "<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">"
 		   "Session Name: "
-		   "<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\" "
-		   "onChange=\"{%s}\" onKeypress=\"{%s}\">\n",
+		   "<INPUT TYPE=TEXT NAME=\"%s\" id='%s' SIZE=%d VALUE=\"%s\" >\n",
 		   sessionName, hgSessionName(),
 		   cartSessionVarName(cart), cartSessionId(cart), hgsOldSessionName, sessionName,
-		   hgsNewSessionName, 32, sessionName, highlightAccChanges, highlightAccChanges);
+		   hgsNewSessionName, hgsNewSessionName, 32, sessionName);
+    jsOnEventById("change"  , hgsNewSessionName, highlightAccChanges);
+    jsOnEventById("keypress", hgsNewSessionName, highlightAccChanges);
+
     dyStringPrintf(dyMessage,
 		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"use\">"
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"delete\" "
-		   "onClick=\"" confirmDeleteFormat "\">"
+		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" id='%s%s' VALUE=\"delete\">"
 		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT ID=\"%s\" NAME=\"%s\" VALUE=\"accept changes\">"
 		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"cancel\"> "
 		   "<BR>\n",
-		   hgsLoadPrefix, encSessionName, hgsDeletePrefix, encSessionName,
-		   encSessionName, hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
+		   hgsLoadPrefix, encSessionName, 
+		   hgsDeletePrefix, encSessionName, hgsDeletePrefix, encSessionName,
+		   hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
+    char id[256];
+    safef(id, sizeof id, "%s%s", hgsDeletePrefix, encSessionName);
+    char javascript[1024];
+    safef(javascript, sizeof javascript, confirmDeleteFormat, encSessionName);
+    jsOnEventById("click", id, javascript);
+
     dyStringPrintf(dyMessage,
 		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
-		   "onChange=\"{%s %s}\" onClick=\"{%s %s}\" id=\"detailsSharedCheckbox\">\n"
+		   "id=\"detailsSharedCheckbox\">\n"
 		   "<INPUT TYPE=HIDDEN NAME=\"%s%s%s\" VALUE=0><BR>\n",
 		   hgsSharePrefix, encSessionName, (shared>0 ? " CHECKED" : ""),
-		   highlightAccChanges, toggleGalleryDisable, highlightAccChanges, toggleGalleryDisable,
 		   cgiBooleanShadowPrefix(), hgsSharePrefix, encSessionName);
+    safef(javascript, sizeof javascript, "{%s %s}", highlightAccChanges, toggleGalleryDisable);
+    jsOnEventById("change", "detailsSharedCheckbox", javascript);
+    safef(javascript, sizeof javascript, "{%s %s}", highlightAccChanges, toggleGalleryDisable);
+    jsOnEventById("click" , "detailsSharedCheckbox", javascript);
 
     dyStringPrintf(dyMessage,
 		   "List in Public Sessions? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
-		   "onChange=\"{%s}\" onClick=\"{%s}\" id=\"detailsGalleryCheckbox\">\n"
+		   "id=\"detailsGalleryCheckbox\">\n"
 		   "<INPUT TYPE=HIDDEN NAME=\"%s%s%s\" VALUE=0><BR>\n",
 		   hgsGalleryPrefix, encSessionName, (shared>=2 ? " CHECKED" : ""),
-		   highlightAccChanges, highlightAccChanges,
 		   cgiBooleanShadowPrefix(), hgsGalleryPrefix, encSessionName);
+    jsOnEventById("change", "detailsGalleryCheckbox", highlightAccChanges);
+    jsOnEventById("click" , "detailsGalleryCheckbox", highlightAccChanges);
+    
     /* Set initial disabled state of the gallery checkbox */
-    dyStringPrintf(dyMessage, "\n<script>\n%s\n</script>\n", toggleGalleryDisable);
+    jsInline(toggleGalleryDisable);
     dyStringPrintf(dyMessage,
 		   "Created on %s.<BR>\n", firstUse);
     /* Print custom track counts per assembly */
@@ -1003,10 +1018,12 @@ if ((row = sqlNextRow(sr)) != NULL)
         description = replaceChars(description, "\\__ESC__", "\\");
         dyStringPrintf(dyMessage,
             "Description:<BR>\n"
-            "<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d "
-            "onChange=\"%s\" onKeypress=\"%s\">%s</TEXTAREA><BR>\n",
-            hgsNewSessionDescription, 5, 80,
-            highlightAccChanges, highlightAccChanges, description);
+            "<TEXTAREA NAME=\"%s\" id='%s' ROWS=%d COLS=%d "
+            ">%s</TEXTAREA><BR>\n",
+            hgsNewSessionDescription, hgsNewSessionDescription, 5, 80,
+            description);
+	    jsOnEventById("change"   , hgsNewSessionDescription, highlightAccChanges);
+	    jsOnEventById("keypress" , hgsNewSessionDescription, highlightAccChanges);
         }
     dyStringAppend(dyMessage, "</FORM>\n");
     sqlFreeResult(&sr);

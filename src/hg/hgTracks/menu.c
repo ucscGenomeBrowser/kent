@@ -195,13 +195,17 @@ for(i = 0, link = links; link != NULL; i++, link = link->next)
 
     if (!isEmpty(link->name))
         {
-        dyStringPrintf(menuHtml, "<a href='%s' ", link->url);
+        dyStringPrintf(menuHtml, "<a href='%s'", link->url);
         if (link->mouseOver)
-            dyStringPrintf(menuHtml, "title='%s' ", link->mouseOver); 
+            dyStringPrintf(menuHtml, " title='%s'", link->mouseOver); 
         if (link->onClick)
-            dyStringPrintf(menuHtml, "onclick=\"%s\" ", link->onClick); 
-        dyStringPrintf(menuHtml, "id='%s'%s>%s</a>\n", link->id, 
-            link->external ? " TARGET='_blank'" : "", encodedName);
+	    {
+	    jsOnEventById("click", link->id, link->onClick);
+	    }
+        dyStringPrintf(menuHtml, " id='%s'", link->id);
+	if (link->external)
+	    dyStringAppend(menuHtml, " TARGET='_blank'");
+        dyStringPrintf(menuHtml, ">%s</a>\n", encodedName);
         }
     if (!isEmpty(link->shortcut))
         dyStringPrintf(menuHtml, "<span class='shortcut'>%s</span>", link->shortcut);

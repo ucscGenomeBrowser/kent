@@ -204,25 +204,25 @@ char *hStringFromTv(enum trackVisibility vis);
 #define TV_DROPDOWN_STYLE "width: 70px"
 
 void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
-                                     boolean canPack, char *class, char *visOnly, char *extra);
+                                     boolean canPack, char *class, char *visOnly, struct slPair *events);
 /* Make track visibility drop down for varName with style class,
 	and potentially limited to visOnly */
 #define hTvDropDownClassVisOnly(varName,vis,canPack,class,visOnly) \
         hTvDropDownClassVisOnlyAndExtra(varName,vis,canPack,class,visOnly,NULL)
 
 void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boolean canPack,
-                                    char *class,char *javascript);
+                                    char *class, struct slPair *events);
 /* Make track visibility drop down for varName with style class and javascript */
 #define hTvDropDownClass(varName,vis,canPack,class) \
-        hTvDropDownClassWithJavascript((varName),(vis),(canPack),(class),"")
+        hTvDropDownClassWithJavascript((varName),(vis),(canPack),(class),NULL)
 #define hTvDropDownWithJavascript(varName,vis,canPack,javascript) \
         hTvDropDownClassWithJavascript((varName),(vis),(canPack),"normalText",(javascript))
 #define hTvDropDown(varName,vis,canPack) \
-        hTvDropDownClassWithJavascript((varName),(vis),(canPack),"normalText","")
+        hTvDropDownClassWithJavascript((varName),(vis),(canPack),"normalText",NULL)
 
 #define SUPERTRACK_DEFAULT_VIS  "hide"
 
-void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, char *extra);
+void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, struct slPair *events);
 #define hideShowDropDown(varName,show,class) \
         hideShowDropDownWithClassAndExtra(varName,show,class,NULL)
 /* Make hide/show dropdown for varName */
@@ -961,7 +961,7 @@ boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
 /* If metadata from metaTbl exists, create a link that will allow toggling it's display */
 
 boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
-                                    int visibleChild,char *extra);
+                                    int visibleChild, struct slPair *events);
 /* Displays hide/show dropdown for supertrack.
  * Set visibleChild to indicate whether 'show' should be grayed
  * out to indicate that no supertrack members are visible:

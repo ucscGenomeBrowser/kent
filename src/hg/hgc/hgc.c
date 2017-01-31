@@ -275,10 +275,6 @@ void printLines(FILE *f, char *s, int lineSize);
 
 char mousedb[] = "mm3";
 
-/* JavaScript to automatically submit the form when certain values are
- * changed. */
-char *onChangeAssemblyText = "onchange=\"document.orgForm.submit();\"";
-
 #define NUMTRACKS 9
 int prevColor[NUMTRACKS]; /* used to optimize color change html commands */
 int currentColor[NUMTRACKS]; /* used to optimize color change html commands */
@@ -7200,6 +7196,7 @@ for (i=1; i<=blockCount; ++i)
 	    bodyTn.forCgi, i, i);
     }
 fprintf(index, "<A HREF=\"../%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+htmEnd(index);
 fclose(index);
 chmod(indexTn.forCgi, 0666);
 
@@ -22975,6 +22972,7 @@ for (i=1; i<=blockCount; ++i)
 	    bodyTn.forCgi, i, i);
     }
 fprintf(index, "<A HREF=\"../%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+htmEnd(index);
 fclose(index);
 chmod(indexTn.forCgi, 0666);
 

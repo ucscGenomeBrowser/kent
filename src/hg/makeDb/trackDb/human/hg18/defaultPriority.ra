@@ -5,20 +5,7 @@ bigGeneDataUrl /gbdb/hg18/knownGene.bb
 priority 1
 
 track refGene override
-release beta,public
 priority 2
-
-track refSeqComposite override
-release alpha
-priority 2
-
-    track ncbiRefGenesView override
-    release alpha
-    parent refSeqComposite on
-
-        track refGene override
-        release alpha
-        parent ncbiRefGenesView on
 
 # mRNA and EST
 

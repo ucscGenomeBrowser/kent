@@ -1812,7 +1812,11 @@ if (slice->parentImg && slice->parentImg->file != NULL)
     else if (slice->parentImg->title != NULL)
         hPrintf("' title='%s'", attributeEncode(slice->parentImg->title) );// Adds image wide title
     if (slice->type==stData || slice->type==stCenter)
-        hPrintf(" ondrag='{return false;}'");
+	{
+	char id[256];
+	safef(id, sizeof id, "img_%s", name);
+	jsOnEventById("drag", id, "return false;");
+	}
     hPrintf(">");
     }
 else
