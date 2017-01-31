@@ -2,11 +2,12 @@ kentSrc = ../..
 include ../../inc/common.mk
 include install.mk
 
-SUBDIRS= external model react
+#SUBDIRS= external model react
+SUBDIRS= 
 include subdirs.mk
 
 # UCSC js files must pass jshint
-UCSC_JS_FILES=ajax.js alleles.js autocomplete.js edwPersona.js \
+UCSC_JS_FILES=ajax.js alleles.js autocomplete.js barChart.js edwPersona.js \
     hgCustom.js hgGateway.js hgGtexTrackSettings.js hgHubConnect.js hgTracks.js \
     hgVarAnnogrator.js hui.js jsHelper.js utils.js ddcl.js subCfg.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js d3.dendrograms.js \

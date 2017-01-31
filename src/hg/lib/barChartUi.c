@@ -118,7 +118,7 @@ char buf[512];
 puts("<b>Log10 transform:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSFORM_DEFAULT);
-safef(buf, sizeof buf, "onchange='barChartTransformChanged(\"%s\")'", track);
+safef(buf, sizeof buf, "onchange='barChartUiTransformChanged(\"%s\")'", track);
 cgiMakeCheckBoxJS(cartVar, isLogTransform, buf);
 }
 
@@ -147,9 +147,10 @@ void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char 
                         char *title, boolean boxed)
 /* Bar chart track type */
 {
+
+jsIncludeFile("barChart.js", NULL);
 if (cartVarExists(cart, "ajax"))
     isPopup = TRUE;
-
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 printf("\n<table id=barChartControls style='font-size:%d%%' %s>\n<tr><td>", 
         isPopup ? 75 : 100, boxed ?" width='100%'":"");
