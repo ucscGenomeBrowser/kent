@@ -172,8 +172,12 @@
     font-size: 13px;
 }
 
-.gbsPage table.gbsNoBorder {
+table.gbsNoBorder {
     border: none;
+}
+
+table.gbsCenterText td {
+    text-align: center;
 }
 
 .gbsPage th, td {
