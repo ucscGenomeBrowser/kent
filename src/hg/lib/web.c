@@ -448,13 +448,13 @@ if (hgGateway)
     {
     printf(
         #include "jWestHeader.h"
-               , title, title);
+               , csp, title);
     }
 else
     {
     printf(
         #include "gbHeader.h"
-               , title);
+               , csp, title);
     }
 if (doBanner)
     {
