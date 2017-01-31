@@ -375,7 +375,7 @@ if (isNotEmpty(dbDbTree))
     printf("<script src=\"%s\"></script>\n", dbDbTree);
 
 // Main JS for hgGateway:
-puts("<script src=\"../js/hgGateway.js\"></script>");
+jsIncludeFile("hgGateway.js", NULL);
 
 webIncludeFile("inc/jWestFooter.html");
 
