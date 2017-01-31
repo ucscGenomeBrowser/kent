@@ -5,7 +5,7 @@
 "     so use \"%%\" not single percent when editing the html. -->\n"
 "\n"
 "  <head>\n"
-"    %s\n"  
+"    %s"  
 "    <meta http-equiv=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n"
 "    <meta name=\"description\" content=\"UCSC Genome Browser\">\n"
 "    <meta name=\"keywords\" content=\"genome, genome browser, human genome, genome assembly, Blat, UCSC, bioinformatics, gene prediction, SNP, SNPs, EST, mRNA, mouse genome, rat genome, chicken genome, chimp genome, dog genome, fruitfly genome, zebrafish genome, xenopus, frog genome, rhesus, opossum, danio rerio genome, drosophila, fugu, yeast, ciona,  comparative genomics, human variation, hapMap\">\n"
