@@ -7,50 +7,61 @@
 
 <h1>Frequently Asked Questions: Data File Formats</h1>
 <p> 
-<strong>General formats:</strong></p>
-<ul>
-  <li><a href="../goldenPath/help/axt.html">Axt format</a> </li>
-  <li><a href="#format5.1">BAM format</a> </li>
-  <li><a href="#format1">BED format</a> </li>
-  <li><a href="#format1.7">BED detail format</a> </li>
-  <li><a href="#format1.8">bedGraph format</a> </li>
-  <li><a href="#format1.5">bigBed format</a> </li>
-  <li><a href="#format9.1">bigGenePred table format</a> </li>
-  <li><a href="#format9.2">bigPsl table format</a> </li>
-  <li><a href="#format9.3">bigMaf table format</a> </li>
-  <li><a href="#format9.4">bigChain table format</a> </li>
-  <li><a href="#format6.1">bigWig format</a> </li>
-  <li><a href="../goldenPath/help/chain.html">Chain format</a> </li>
-  <li><a href="#format5.2">CRAM format</a> </li>
-  <li><a href="#format9">GenePred table format</a> </li>
-  <li><a href="#format3">GFF format</a> </li>
-  <li><a href="#format4">GTF format</a> </li>
-  <li><a href="#format20">HAL format</a> </li>
-  <li><a href="#format5">MAF format</a> </li>
-  <li><a href="#format6.5">Microarray format</a> </li>
-  <li><a href="../goldenPath/help/net.html">Net format</a> </li>
-  <li><a href="#format10">Personal Genome SNP format</a> </li>
-  <li><a href="#format2">PSL format</a> </li>
-  <li><a href="#format10.1">VCF format</a> </li>
-  <li><a href="#format6">WIG format</a> </li>
-</ul>
+<h2>Topics</h2>
+<h6>General formats</strong></h6>
+<div class="row">
+  <!-- Left column -->
+  <div class="col-md-6">
+    <ul>
+      <li><a href="../goldenPath/help/axt.html">Axt format</a></li>
+      <li><a href="#format5.1">BAM format</a></li>
+      <li><a href="#format1">BED format</a></li>
+      <li><a href="#format1.7">BED detail format</a></li>
+      <li><a href="#format1.8">bedGraph format</a></li>
+      <li><a href="#format1.5">bigBed format</a></li>
+      <li><a href="#format9.1">bigGenePred table format</a></li>
+      <li><a href="#format9.2">bigPsl table format</a></li>
+      <li><a href="#format9.3">bigMaf table format</a></li>
+      <li><a href="#format9.4">bigChain table format</a></li>
+      <li><a href="#format6.1">bigWig format</a></li>
+      <li><a href="../goldenPath/help/chain.html">Chain format</a></li>
+    </ul>
+  </div>
+  <!-- Right column -->
+  <div class="col-md-6">
+    <ul>
+      <li><a href="#format5.2">CRAM format</a></li>
+      <li><a href="#format9">GenePred table format</a></li>
+      <li><a href="#format3">GFF format</a></li>
+      <li><a href="#format4">GTF format</a></li>
+      <li><a href="#format20">HAL format</a></li>
+      <li><a href="#format5">MAF format</a></li>
+      <li><a href="#format6.5">Microarray format</a></li>
+      <li><a href="../goldenPath/help/net.html">Net format</a></li>
+      <li><a href="#format10">Personal Genome SNP format</a></li>
+      <li><a href="#format2">PSL format</a></li>
+      <li><a href="#format10.1">VCF format</a></li>
+      <li><a href="#format6">WIG format</a></li>
+    </ul>
+  </div>
+</div>
 <a name="ENCODE"></a>
-<p><strong> ENCODE-specific formats:</strong></p>
+<h6>ENCODE-specific formats</h6>
 <ul>
-  <li><a href="#format13">ENCODE broadPeak format</a> </li>
-  <li><a href="#format14">ENCODE gappedPeak format</a> </li>
-  <li><a href="#format12">ENCODE narrowPeak format</a> </li>
-  <li><a href="#format16">ENCODE pairedTagAlign format</a> </li>
-  <li><a href="#format17">ENCODE peptideMapping format</a> </li>
-  <li><a href="#format11">ENCODE RNA elements format</a> </li>
-  <li><a href="#format15">ENCODE tagAlign format</a> </li>
+  <li><a href="#format13">ENCODE broadPeak format</a></li>
+  <li><a href="#format14">ENCODE gappedPeak format</a></li>
+  <li><a href="#format12">ENCODE narrowPeak format</a></li>
+  <li><a href="#format16">ENCODE pairedTagAlign format</a></li>
+  <li><a href="#format17">ENCODE peptideMapping format</a></li>
+  <li><a href="#format11">ENCODE RNA elements format</a></li>
+  <li><a href="#format15">ENCODE tagAlign format</a></li>
 </ul>
-<p><strong>Download only formats:</strong></p>
+<h6>Download-only formats</h6>
 <ul>
-  <li><a href="#format7">.2bit format</a> </li>
-  <li><a href="#format18">.fasta format</a> </li>
-  <li><a href="#format19">.fastQ format</a> </li>
-  <li><a href="#format8">.nib format</a> </li>
+  <li><a href="#format7">.2bit format</a></li>
+  <li><a href="#format18">.fasta format</a></li>
+  <li><a href="#format19">.fastQ format</a></li>
+  <li><a href="#format8">.nib format</a></li>
 </ul>
 <p> 
 <a href="index.html">Return to FAQ Table of Contents</a></p>
@@ -106,27 +117,31 @@ The first three required BED fields are: </p>
   gray in which this feature is displayed (higher numbers = darker gray). This table shows the 
   Genome Browser's translation of BED score values into shades of gray:
   <table>
-    <tr><td>shade</td>
-        <td style="background-color: #e2e2e2">&nbsp;</td>
-        <td style="background-color: #c6c6c6">&nbsp;</td>
-        <td style="background-color: #aaaaaa">&nbsp;</td>
-        <td style="background-color: #8d8d8d">&nbsp;</td>
-        <td style="background-color: #717171">&nbsp;</td>
-        <td style="background-color: #555555">&nbsp;</td>
-        <td style="background-color: #383838">&nbsp;</td>
-        <td style="background-color: #1c1c1c">&nbsp;</td>
-        <td style="background-color: #000000">&nbsp;</td></tr>
-    <tr><td>score in range&nbsp;&nbsp;</td>
-        <td>&le; 166</td>
-        <td>167-277</td>
-        <td>278-388</td>
-        <td>389-499</td>
-        <td>500-611</td>
-        <td>612-722</td>
-        <td>723-833</td>
-        <td>834-944</td>
-        <td>&ge; 945</td></tr>
-    </table>
+    <tr>
+      <td>shade</td>
+      <td style="background-color: #e2e2e2">&nbsp;</td>
+      <td style="background-color: #c6c6c6">&nbsp;</td>
+      <td style="background-color: #aaaaaa">&nbsp;</td>
+      <td style="background-color: #8d8d8d">&nbsp;</td>
+      <td style="background-color: #717171">&nbsp;</td>
+      <td style="background-color: #555555">&nbsp;</td>
+      <td style="background-color: #383838">&nbsp;</td>
+      <td style="background-color: #1c1c1c">&nbsp;</td>
+      <td style="background-color: #000000">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>score in range&nbsp;&nbsp;</td>
+      <td>&le; 166</td>
+      <td>167-277</td>
+      <td>278-388</td>
+      <td>389-499</td>
+      <td>500-611</td>
+      <td>612-722</td>
+      <td>723-833</td>
+      <td>834-944</td>
+      <td>&ge; 945</td>
+    </tr>
+  </table>
   <li>
   <strong>strand</strong> - Defines the strand. Either "." (=no strand) or "+" or "-".</li>
   <li>
@@ -253,8 +268,7 @@ chr11&#09;5246919&#09;5246920&#09;Hb_North_York&#09;2619&#09;Hemoglobin variant
 chr11&#09;5255660&#09;5255661&#09;HBD c.1 G>A&#09;2659&#09;delta0 thalassemia
 chr11&#09;5247945&#09;5247946&#09;Hb Sheffield&#09;2672&#09;Hemoglobin variant
 chr11&#09;5255415&#09;5255416&#09;Hb A2-Lyon&#09;2676&#09;Hemoglobin variant
-chr11&#09;5248234&#09;5248235&#09;Hb Aix-les-Bains&#09;2677&#09;Hemoglobin variant
-</code></pre>
+chr11&#09;5248234&#09;5248235&#09;Hb Aix-les-Bains&#09;2677&#09;Hemoglobin variant </code></pre>
 
 <a name="format1.8"></a>
 <h2>bedGraph format</h2>
@@ -366,8 +380,7 @@ Minus strand:
      qStart=4 
      qEnd=56 
      blockSizes=20,18 
-     qStarts=5,39   
-</code></pre>
+     qStarts=5,39 </code></pre>
 <p>
 Essentially, the minus strand <em>blockSizes</em> and <em>qStarts</em> are what you would get if 
 you reverse-complemented the query. However, the <em>qStart</em> and <em>qEnd</em> are not reversed.
@@ -404,10 +417,10 @@ query (AA) and target (NA), so a single field cannot represent both. A choice wa
 to report the blockSizes field in amino acids since it is a protein query.</p>
 <p>
 To find the size of a target exon in nucleic acids, use the formula:
-<pre><code>blockSizes[exonNumber]*3</code></pre>.
+<pre><code>blockSizes[exonNumber]*3</code></pre>
 <p>
 Or, to find the end position of a target exon, use the formula:</p> 
-<pre><code>tStarts[exonNumber] + (blockSizes[exonNumber]*3)</code></pre>.
+<pre><code>tStarts[exonNumber] + (blockSizes[exonNumber]*3)</code></pre>
 
 <a name="format3"></a>
 <h2>GFF format</h2>
@@ -611,13 +624,13 @@ The &quot;a&quot; is followed by name=value pairs. There are no required name=va
 currently defined variables are: </p> 
 <ul> 
   <li> 
-  score -- Optional. Floating point score. If this is present, it is good practice to also define 
-  scoring in the first line.</li> 
+  <strong>score</strong> -- Optional. Floating point score. If this is present, it is good practice 
+  to also define scoring in the first line.</li> 
   <li> 
-  pass -- Optional. Positive integer value. For programs that do multiple pass alignments such as 
-  blastz, this shows which pass this alignment came from. Typically, pass 1 will find the strongest 
-  alignments genome-wide, and pass 2 will find weaker alignments between two first-pass 
-  alignments.</li>
+  <strong>pass</strong> -- Optional. Positive integer value. For programs that do multiple pass 
+  alignments such as blastz, this shows which pass this alignment came from. Typically, pass 1 will 
+  find the strongest alignments genome-wide, and pass 2 will find weaker alignments between two 
+  first-pass alignments.</li>
 </ul> 
 <p> 
 <strong>Lines starting with &quot;s&quot; -- a sequence within an alignment block</strong></p>
@@ -632,25 +645,28 @@ The &quot;s&quot; lines have the following fields which are defined by position 
 name=value pairs.</p> 
 <ul> 
   <li> 
-  src -- The name of one of the source sequences for the alignment. For sequences that are 
-  resident in a browser assembly, the form 'database.chromosome' allows automatic creation of links 
-  to other assemblies. Non-browser sequences are typically reference by the species name alone.</li>
+  <strong>src</strong> -- The name of one of the source sequences for the alignment. For sequences 
+  that are resident in a browser assembly, the form 'database.chromosome' allows automatic creation 
+  of links to other assemblies. Non-browser sequences are typically reference by the species name 
+  alone.</li>
   <li> 
-  start -- The start of the aligning region in the source sequence. This is a zero-based number. If 
-  the strand field is &quot;-&quot; then this is the start relative to the reverse-complemented 
-  source sequence (see <a href="http://genomewiki.ucsc.edu/index.php/Coordinate_Transforms" 
-  target=blank>Coordinate Transforms</a>). </li> 
+  <strong>start</strong> -- The start of the aligning region in the source sequence. This is a 
+  zero-based number. If the strand field is &quot;-&quot; then this is the start relative to the 
+  reverse-complemented source sequence (see 
+  <a href="http://genomewiki.ucsc.edu/index.php/Coordinate_Transforms" target=blank>Coordinate 
+  Transforms</a>).</li> 
   <li> 
-  size -- The size of the aligning region in the source sequence. This number is equal to the number
-  of non-dash characters in the alignment text field below.</li>          
+  <strong>size</strong> -- The size of the aligning region in the source sequence. This number is 
+  equal to the number of non-dash characters in the alignment text field below.</li>          
   <li> 
-  strand -- Either &quot;+&quot; or &quot;-&quot;. If &quot;-&quot;, then the alignment is to the 
-  reverse-complemented source.</li> 
+  <strong>strand</strong> -- Either &quot;+&quot; or &quot;-&quot;. If &quot;-&quot;, then the 
+  alignment is to the reverse-complemented source.</li> 
   <li> 
-  srcSize -- The size of the entire source sequence, not just the parts involved in the 
-  alignment.</li>
-  <li> text -- The nucleotides (or amino acids) in the alignment and any insertions (dashes) as 
-  well.</li> 
+  <strong>srcSize</strong> -- The size of the entire source sequence, not just the parts involved in
+  the alignment.</li>
+  <li> 
+  <strong>text</strong> -- The nucleotides (or amino acids) in the alignment and any insertions 
+  (dashes) as well.</li> 
 </ul>          
 <p> 
 <strong>Lines starting with &quot;i&quot; -- information about what's happening before and after 
@@ -665,38 +681,39 @@ The &quot;i&quot; lines contain information about the context of the sequence li
 preceeding them. The following fields are defined by position rather than name=value pairs:</p> 
 <ul> 
   <li>
-  src -- The name of the source sequence for the alignment. Should be the same as the &quot;s&quot; 
-  line immediately above this line.</li>             
+  <strong>src</strong> -- The name of the source sequence for the alignment. Should be the same as 
+  the &quot;s&quot; line immediately above this line.</li>             
   <li>
-  leftStatus -- A character that specifies the relationship between the sequence in this block 
-  and the sequence that appears in the previous block.</li> 
+  <strong>leftStatus</strong> -- A character that specifies the relationship between the sequence in
+  this block and the sequence that appears in the previous block.</li> 
   <li>
-  leftCount -- Usually the number of bases in the aligning species between the start of this 
-  alignment and the end of the previous one.</li>                          
+  <strong>leftCount</strong> -- Usually the number of bases in the aligning species between the 
+  start of this alignment and the end of the previous one.</li>                          
   <li>
-  rightStatus -- A character that specifies the relationship between the sequence in this block and 
-  the sequence that appears in the subsequent block.</li>
+  <strong>rightStatus</strong> -- A character that specifies the relationship between the sequence 
+  in this block and the sequence that appears in the subsequent block.</li>
   <li>
-  rightCount -- Usually the number of bases in the aligning species between the end of this 
-  alignment and the start of the next one.</li> 
+  <strong>rightCount</strong> -- Usually the number of bases in the aligning species between the end
+  of this alignment and the start of the next one.</li> 
 </ul> 
 <p> 
 The status characters can be one of the following values: </p>
 <ul>                          
   <li>
-  C -- the sequence before or after is contiguous with this block.</li> 
+  <strong>C</strong> -- the sequence before or after is contiguous with this block.</li> 
   <li>
-  I -- there are bases between the bases in this block and the one before or after it.</li> 
+  <strong>I</strong> -- there are bases between the bases in this block and the one before or after 
+  it.</li> 
   <li>
-  N -- this is the first sequence from this src chrom or scaffold.</li> 
+  <strong>N</strong> -- this is the first sequence from this src chrom or scaffold.</li> 
   <li>
-  n -- this is the first sequence from this src chrom or scaffold but it is bridged by another 
-  alignment from a different chrom or scaffold.</li>                          
+  <strong>n</strong> -- this is the first sequence from this src chrom or scaffold but it is bridged
+  by another alignment from a different chrom or scaffold.</li>                          
   <li>
-  M -- there is missing data before or after this block (Ns in the sequence).</li>  
+  <strong>M</strong> -- there is missing data before or after this block (Ns in the sequence).</li> 
   <li>
-  T -- the sequence in this block has been used before in a previous block (likely a tandem 
-  duplication)</li> 
+  <strong>T</strong> -- the sequence in this block has been used before in a previous block (likely 
+  a tandem duplication)</li> 
 </ul>                        
 <p> 
 <strong>Lines starting with &quot;e&quot; -- information about empty parts of the alignment
@@ -709,42 +726,45 @@ block is bridged by a chain that connects blocks before and after this block. Th
 are defined by position rather than name=value pairs.</p> 
 <ul>                          
   <li>
-  src -- The name of one of the source sequences for the alignment.</li>                          
+  <strong>src</strong> -- The name of one of the source sequences for the alignment.</li>
   <li>
-  start -- The start of the non-aligning region in the source sequence. This is a zero-based number.
-  If the strand field is &quot;-&quot; then this is the start relative to the reverse-complemented 
-  source sequence (see <a href="http://genomewiki.ucsc.edu/index.php/Coordinate_Transforms" 
-  target=blank>Coordinate Transforms</a>).</li>
+  <strong>start</strong> -- The start of the non-aligning region in the source sequence. This is a 
+  zero-based number. If the strand field is &quot;-&quot; then this is the start relative to the 
+  reverse-complemented source sequence (see 
+  <a href="http://genomewiki.ucsc.edu/index.php/Coordinate_Transforms" target=blank>Coordinate 
+  Transforms</a>).</li>
   <li>
-  size -- The size in base pairs of the non-aligning region in the source sequence.</li>
+  <strong>size</strong> -- The size in base pairs of the non-aligning region in the source 
+  sequence.</li>
   <li>
-  strand -- Either &quot;+&quot; or &quot;-&quot;. If &quot;-&quot;, then the alignment is to the 
-  reverse-complemented source.</li> 
+  <strong>strand</strong> -- Either &quot;+&quot; or &quot;-&quot;. If &quot;-&quot;, then the 
+  alignment is to the reverse-complemented source.</li> 
   <li>
-  srcSize -- The size of the entire source sequence, not just the parts involved in the alignment; 
-  alignment and any insertions (dashes) as well.</li> 
+  <strong>srcSize</strong> -- The size of the entire source sequence, not just the parts involved in
+  the alignment; alignment and any insertions (dashes) as well.</li> 
   <li>
-  status -- A character that specifies the relationship between the non-aligning sequence in this 
-  block and the sequence that appears in the previous and subsequent blocks.</li> 
+  <strong>status</strong> -- A character that specifies the relationship between the non-aligning 
+  sequence in this block and the sequence that appears in the previous and subsequent blocks.</li> 
 </ul>
 <p>
 The status character can be one of the following values:</p> 
 <ul>                          
   <li>
-  C -- the sequence before and after is contiguous implying that this region was either deleted in 
-  the source or inserted in the reference sequence. The browser draws a single line or a 
-  &quot;-&quot; in base mode in these blocks.</li>  
+  <strong>C</strong> -- the sequence before and after is contiguous implying that this region was 
+  either deleted in the source or inserted in the reference sequence. The browser draws a single 
+  line or a &quot;-&quot; in base mode in these blocks.</li>  
   <li>
-  I -- there are non-aligning bases in the source species between chained alignment blocks before 
-  and after this block. The browser shows a double line or &quot;=&quot; in base mode.</li>  
+  <strong>I</strong> -- there are non-aligning bases in the source species between chained alignment
+  blocks before and after this block. The browser shows a double line or &quot;=&quot; in base 
+  mode.</li>  
   <li>
-  M -- there are non-aligning bases in the source and more than 90% of them are Ns in the source. 
-  The browser shows a pale yellow bar.</li>                        
+  <strong>M</strong> -- there are non-aligning bases in the source and more than 90% of them are Ns 
+  in the source. The browser shows a pale yellow bar.</li>                        
   <li>
-  n -- there are non-aligning bases in the source and the next aligning block starts in a new 
-  chromosome or scaffold that is bridged by a chain between still other blocks. The browser shows 
-  either a single line or a double line based on how many bases are in the gap between the bridging 
-  alignments.</li>
+  <strong>n</strong> -- there are non-aligning bases in the source and the next aligning block 
+  starts in a new chromosome or scaffold that is bridged by a chain between still other blocks. The 
+  browser shows either a single line or a double line based on how many bases are in the gap between
+  the bridging alignments.</li>
 </ul>
 <p>
 <strong>Lines starting with &quot;q&quot; -- information about the quality of each aligned base for 
@@ -760,14 +780,14 @@ the quality of each aligned base for the species with a single character of 0-9 
 fields are defined by position rather than name=value pairs:</p> 
 <ul>
   <li>
-  src -- The name of the source sequence for the alignment. Should be the same as the &quot;s&quot; 
-  line immediately preceding this line.</li>             
+  <strong>src</strong> -- The name of the source sequence for the alignment. Should be the same as 
+  the &quot;s&quot; line immediately preceding this line.</li>             
   <li>
-  value -- A MAF quality value corresponding to the aligning nucleotide acid in the preceding 
-  &quot;s&quot; line. Insertions (dashes) in the preceding &quot;s&quot; line are represented by 
-  dashes in the &quot;q&quot; line as well. The quality value can be &quot;F&quot; (finished 
-  sequence) or a number derived from the actual quality scores (which range from 0-97) or the 
-  manually assigned score of 98. These numeric values are calculated as: </p>
+  <strong>value</strong> -- A MAF quality value corresponding to the aligning nucleotide acid in the
+  preceding &quot;s&quot; line. Insertions (dashes) in the preceding &quot;s&quot; line are 
+  represented by dashes in the &quot;q&quot; line as well. The quality value can be &quot;F&quot; 
+  (finished sequence) or a number derived from the actual quality scores (which range from 0-97) or 
+  the manually assigned score of 98. These numeric values are calculated as:</p>
   <pre><code>MAF quality value = min( floor(actual quality value/5), 9 )</code></pre>
   <p> 
   This results in the following mapping:</p> 
@@ -907,13 +927,15 @@ format. The file contains masking information as well as the DNA itself.</p>
 The file begins with a 16-byte header containing the following fields:</p>
 <ul>
   <li>
-  signature - the number 0x1A412743 in the architecture of the machine that created the file</li>
+  <strong>signature</strong> - the number 0x1A412743 in the architecture of the machine that created
+  the file</li>
   <li>
-  version - zero for now. Readers should abort if they see a version number higher than 0.</li>
+  <strong>version</strong> - zero for now. Readers should abort if they see a version number higher 
+  than 0.</li>
   <li>
-  sequenceCount - the number of sequences in the file.</li>  
+  <strong>sequenceCount</strong> - the number of sequences in the file.</li>  
   <li>
-  reserved - always zero for now</li>
+  <strong>reserved</strong> - always zero for now</li>
 </ul>
 <p>
 All fields are 32 bits unless noted. If the signature value is not as given, the reader program 
@@ -925,39 +947,41 @@ The header is followed by a file index, which contains one entry for each sequen
 contains three fields:</p>
 <ul>
   <li>
-  nameSize - a byte containing the length of the name field</li>
+  <strong>nameSize</strong> - a byte containing the length of the name field</li>
   <li>
-  name - the sequence name itself, of variable length depending on nameSize</li>
+  <strong>name</strong> - the sequence name itself, of variable length depending on nameSize</li>
   <li>
-  offset - the 32-bit offset of the sequence data relative to the start of the file</li>
+  <strong>offset</strong> - the 32-bit offset of the sequence data relative to the start of the 
+  file</li>
 </ul>
 <p>
 The index is followed by the sequence records, which contain nine fields:</p>
 <ul>
   <li>
-  dnaSize - number of bases of DNA in the sequence</li>
+  <strong>dnaSize</strong> - number of bases of DNA in the sequence</li>
   <li>
-  nBlockCount - the number of blocks of Ns in the file (representing unknown sequence)</li>
+  <strong>nBlockCount</strong> - the number of blocks of Ns in the file (representing unknown 
+  sequence)</li>
   <li>
-  nBlockStarts - an array of length nBlockCount of 32 bit integers indicating the starting position 
-  of a block of Ns </li>
+  <strong>nBlockStarts</strong> - an array of length nBlockCount of 32 bit integers indicating the 
+  starting position of a block of Ns</li>
   <li>
-  nBlockSizes - an array of length nBlockCount of 32 bit integers indicating the length of a block 
-  of Ns</li>
+  <strong>nBlockSizes</strong> - an array of length nBlockCount of 32 bit integers indicating the 
+  length of a block of Ns</li>
   <li>
-  maskBlockCount - the number of masked (lower-case) blocks</li>
+  <strong>maskBlockCount</strong> - the number of masked (lower-case) blocks</li>
   <li>
-  maskBlockStarts - an array of length maskBlockCount of 32 bit integers indicating the starting 
-  position of a masked block</li>
+  <strong>maskBlockStarts</strong> - an array of length maskBlockCount of 32 bit integers indicating
+  the starting position of a masked block</li>
   <li>
-  maskBlockSizes - an array of length maskBlockCount of 32 bit integers indicating the length of a 
-  masked block</li>
+  <strong>maskBlockSizes</strong> - an array of length maskBlockCount of 32 bit integers indicating 
+  the length of a masked block</li>
   <li>
-  reserved - always zero for now</li>
+  <strong>reserved</strong> - always zero for now</li>
   <li>
-  packedDna - the DNA packed to two bits per base, represented as so: T - 00, C - 01, A - 10, 
-  G - 11. The first base is in the most significant 2-bit byte; the last base is in the least 
-  significant 2 bits. For example, the sequence TCAG is represented as 00011011. </li>
+  <strong>packedDna</strong> - the DNA packed to two bits per base, represented as so: T - 00, 
+  C - 01, A - 10, G - 11. The first base is in the most significant 2-bit byte; the last base is in 
+  the least significant 2 bits. For example, the sequence TCAG is represented as 00011011.</li>
 </ul>
 <p>
 For a complete definition of all fields in the twoBit format, see 
@@ -1467,15 +1491,15 @@ to the genome, with information that is appropriate for assessing the confidence
 </ol>
 
 <a name="format18"></a>
-<h2>Fasta Format</h2>
+<h2>Fasta format</h2>
 <p>
-<a href="http://genetics.bwh.harvard.edu/pph/FASTA.html" 
-target=_blank>http://genetics.bwh.harvard.edu/pph/FASTA.html</a></p>
+Click <a href="http://genetics.bwh.harvard.edu/pph/FASTA.html" target="_blank">here</a> for 
+information about fasta format.</p>
 
 <a name="format19"></a>
-<h2>FastQ Format</h2>
+<h2>FastQ format</h2>
 <p> 
-<a href="http://maq.sourceforge.net/fastq.shtml" 
-target=_blank>http://maq.sourceforge.net/fastq.shtml</a></p>
+Click <a href="http://maq.sourceforge.net/fastq.shtml" target="_blank">here</a> for information
+about fastq format.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
