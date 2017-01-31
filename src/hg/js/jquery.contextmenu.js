@@ -101,7 +101,7 @@
 		
 		// Create an iframe object to go behind the menu
 		createIframe: function() {
-		    return $('<iframe frameborder="0" tabindex="-1" src="javascript:false" style="display:block;position:absolute;z-index:-1;filter:Alpha(Opacity=0);"/>');
+		    return $('<iframe frameborder="0" tabindex="-1" src="#" style="display:block;position:absolute;z-index:-1;filter:Alpha(Opacity=0);"/>');
 		},
 		
 		// Accept an Array representing a menu structure and turn it into HTML

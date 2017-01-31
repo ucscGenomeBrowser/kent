@@ -169,8 +169,9 @@ if (list != NULL)
     dyStringPrintf(js, "document.usForm.%s.options", us->listDisplayVar);
     dyStringPrintf(js, "[document.usForm.%s.selectedIndex].value;", us->listDisplayVar);
 
-    hPrintf("<SELECT NAME=\"%s\" SIZE=%d onchange=\"%s\">",
-    	us->listDisplayVar, slCount(list), js->string);
+    hPrintf("<SELECT id='%s' NAME=\"%s\" SIZE=%d>",
+    	us->listDisplayVar, us->listDisplayVar, slCount(list));  // TODO XSS Filter GALT
+    jsOnEventById("change", us->listDisplayVar, js->string);
     printLabelList(us, list);
     hPrintf("</SELECT>\n");
 

@@ -352,8 +352,9 @@ char buf[512];
 puts("<b>Log10 transform:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
-safef(buf, sizeof buf, "onchange='gtexTransformChanged(\"%s\")'", track);
-cgiMakeCheckBoxJS(cartVar, isLogTransform, buf);
+safef(buf, sizeof buf, "gtexTransformChanged('%s');", track);
+cgiMakeCheckBoxWithId(cartVar, isLogTransform, cartVar);
+jsOnEventById("change", cartVar, buf);
 }
 
 void gtexGeneUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
@@ -414,11 +415,11 @@ printf("<div><b>Samples:</b>&nbsp;");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SAMPLES);
 char *selected = cartCgiUsualString(cart, cartVar, GTEX_SAMPLES_DEFAULT); 
 boolean isAllSamples = sameString(selected, GTEX_SAMPLES_ALL);
-safef(buf, sizeof buf, "onchange='gtexSamplesChanged(\"%s\")'", track);
+safef(buf, sizeof buf, "gtexSamplesChanged(\"%s\");", track);
 char *command = buf;
-cgiMakeOnClickRadioButton(cartVar, GTEX_SAMPLES_ALL, isAllSamples, command);
+cgiMakeOnEventRadioButtonWithClass(cartVar, GTEX_SAMPLES_ALL, isAllSamples, NULL, "change", command);
 printf("All\n");
-cgiMakeOnClickRadioButton(cartVar, GTEX_SAMPLES_COMPARE_SEX, !isAllSamples, command);
+cgiMakeOnEventRadioButtonWithClass(cartVar, GTEX_SAMPLES_COMPARE_SEX, !isAllSamples, NULL, "change", command);
 printf("Compare by gender\n");
 printf("</div>");
 

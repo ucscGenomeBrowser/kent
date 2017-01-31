@@ -27,6 +27,12 @@
 /* globals dbDbTree, activeGenomes, surveyLink, surveyLabel, surveyLabelImage, cart */
 /* globals calculateHgTracksWidth */ // function is defined in utils.js
 
+window.hgsid = '';
+window.activeGenomes = {};
+window.surveyLink=null;
+window.surveyLabel=null;
+window.surveyLabelImage=null;
+
 
 function svgCreateEl(type, config) {
     // Helper function for creating a new SVG element and initializing its
@@ -81,8 +87,6 @@ var speciesTree = (function() {
                 paddingRight: 5,
                 paddingBottom: 5,
                 branchPadding: 2,
-                onClickSpeciesName: 'console.log',
-                onClickHubName:     'console.log',
                 trackHubsUrl: '',
                 containerWidth: 370
               };
@@ -137,12 +141,16 @@ var speciesTree = (function() {
 
     function addSpeciesLabel(svg, label, taxId, sciName, y) {
         // Add a species label to svg at y offset
-        var onClickString = cfg.onClickSpeciesName + '(' + taxId + ')';
         var text = svgCreateEl('text', { x: cfg.labelRightX, y: y,
+                                         id: 'textEl_' + taxId,
                                          name: 'textEl_' + taxId,
                                          title: sciName,
-                                         textContent: label,
-                                         onclick: onClickString });
+                                         textContent: label
+			       	});
+	// CSP2 will not allow setAttribute with events like onclick,
+        // no matter whether the value is string or function.
+        text.onclick = function(){hgGateway.onClickSpeciesLabel(taxId);};
+
         svg.appendChild(text);
     }
 
@@ -285,17 +293,13 @@ var speciesTree = (function() {
         var label = hub.shortLabel + ' (' + hub.assemblyCount + ')';
         // There are a bunch of hub properties to pass to the onClick handler;
         // too bad we can't pass a bound function but instead must build a string:
-        var onClickString = cfg.onClickHubName + '(' +
-                            doubleQuote(hub.hubUrl) + ', ' +
-                            hub.taxId + ', ' +
-                            doubleQuote(hub.defaultDb) + ', ' +
-                            doubleQuote(hub.name) +
-                            ')';
         var text = svgCreateEl('text', { x: cfg.labelRightX, y: y,
                                          textContent: label,
+                                         id: 'textEl_' + hub.name,
                                          name: 'textEl_' + hub.name,
-                                         onclick: onClickString,
-                                         title: hub.longLabel });
+                                         title: hub.longLabel
+				     });
+	text.onclick = function() {hgGateway.onClickHubName(hub.hubUrl, hub.taxId, hub.defaultDb, hub.name);};
         svg.appendChild(text);
     }
 
@@ -783,7 +787,7 @@ var hgGateway = (function() {
     // This holds everything we need to know to draw the page: taxId, db, hubs, description etc.
     var uiState = {};
     // This is used to check whether a taxId is found in activeGenomes:
-    var activeTaxIds = _.invert(activeGenomes);
+    var activeTaxIds = [];  // gets set in init() now;
     // This is dbDbTree after pruning -- null if dbDbTree has no children left
     var prunedDbDbTree = null;
     // This keeps track of which gene the user has selected most recently from autocomplete.
@@ -1152,9 +1156,7 @@ var hgGateway = (function() {
                 // Draw the phylogenetic tree and do layout adjustments
                 svg = document.getElementById('speciesTree');
                 spTree = speciesTree.draw(svg, dbDbTree, uiState.hubs,
-                                          { onClickSpeciesName: 'hgGateway.onClickSpeciesLabel',
-                                            onClickHubName: 'hgGateway.onClickHubName',
-                                            hgHubConnectUrl: 'hgHubConnect?hgsid=' + window.hgsid,
+                                          { hgHubConnectUrl: 'hgHubConnect?hgsid=' + window.hgsid,
                                             containerWidth: $('#speciesPicker').width()
                                             });
                 setSpeciesPickerSizes(spTree.width, spTree.height);
@@ -1648,6 +1650,7 @@ var hgGateway = (function() {
         // Get state from cart
         cart.send({ getUiState: {} }, handleRefreshState);
         cart.flush();
+	activeTaxIds = _.invert(activeGenomes);
         // Prune inactive genomes from dbDbTree.
         if (window.dbDbTree) {
             prunedDbDbTree = dbDbTree;
@@ -1687,4 +1690,3 @@ var hgGateway = (function() {
 
 }()); // hgGateway
 
-hgGateway.init();

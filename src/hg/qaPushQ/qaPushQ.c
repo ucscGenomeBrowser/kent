@@ -3115,7 +3115,8 @@ printf("B - click to lower to bottom priority.<br>\n");
 printf("<br>\n");
 printf("Queue Id - click to edit or see the details page for the record.<br>\n");
 printf("<br>\n");
-printf("<a href=\"javascript:window.close();\" >CLOSE</a> <br>\n");
+printf("<a href='#' id='closeIt'>CLOSE</a> <br>\n");
+jsOnEventById("click", "closeIt", "window.close();");
 }
 
 
@@ -3162,7 +3163,8 @@ printf("bounce button - press to bounce from priority A, the QA queue, to B, the
 printf("transfer button - press to transfer the pushQ entry to another queue.<br>\n");
 printf("lock - press lock to lock the record and edit it.  When in edit mode, make your changes and submit.  Do not leave the record locked.<br>\n");
 printf("<br>\n");
-printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n");
+printf("<a href='#' id='closeIt'>CLOSE</a> <br>\n");
+jsOnEventById("click", "closeIt", "window.close();");
 }
 
 
@@ -3188,7 +3190,8 @@ printf("RETURN - click to return to the details/edit page.<br>\n");
 printf("Set Size As - click to set size to that found, and return to the details/edit page. Saves typing. Be sure to press submit to save changes.<br>\n");
 printf("<br>\n");
 printf("<br>\n");
-printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n");
+printf("<a href='#' id='closeIt'>CLOSE</a> <br>\n");
+jsOnEventById("click", "closeIt", "window.close();");
 }
 
 void checkConn2()
@@ -3580,7 +3583,8 @@ else
     printf("Error reading %s: %d<br>\n",rlPath,page->status->status);
     }
 printf("<br>\n");
-printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n");
+printf("<a href='#' id='closeIt'>CLOSE</a> <br>\n");
+jsOnEventById("click", "closeIt", "window.close();");
 
 htmlPageFree(&page);
 

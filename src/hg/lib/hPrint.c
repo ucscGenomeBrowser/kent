@@ -114,11 +114,11 @@ if (!suppressHtml)
     cgiMakeButtonWithOnClick(name, label, msg, onClick);
 }
 
-void hOnClickButton(char *command, char *label)
+void hOnClickButton(char *id, char *command, char *label)
 /* Write out push button if not suppressed. */
 {
 if (!suppressHtml)
-    cgiMakeOnClickButton(command, label);
+    cgiMakeOnClickButton(id, command, label);
 }
 
 void hTextVar(char *varName, char *initialVal, int charSize)

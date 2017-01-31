@@ -208,7 +208,7 @@ puts(
     " document.orgForm.wp_good.value = document.mainForm.wp_good.value; "
 #define ORGFORM_RESET_DB " document.orgForm.db.value = 0; "
 #define ORGFORM_RESET_TARGET " document.orgForm.wp_target.value = \"\"; "
-#define ORGFORM_SUBMIT " document.orgForm.submit();'";
+#define ORGFORM_SUBMIT " document.orgForm.submit();"
 
 
 void showGenomes(char *genome, struct pcrServer *serverList)
@@ -216,12 +216,16 @@ void showGenomes(char *genome, struct pcrServer *serverList)
 {
 struct hash *uniqHash = hashNew(8);
 struct pcrServer *server;
-char *onChangeText = "onchange='" ORGFORM_KEEP_PARAMS ORGFORM_KEEP_ORG
+char *onChangeText = 
+    ORGFORM_KEEP_PARAMS 
+    ORGFORM_KEEP_ORG
     ORGFORM_RESET_DB
     ORGFORM_RESET_TARGET
-    ORGFORM_SUBMIT;
+    ORGFORM_SUBMIT 
+    ;
 
-printf("<SELECT NAME=\"org\" %s>\n", onChangeText);
+printf("<SELECT NAME=\"org\" id='org'>\n");
+jsOnEventById("change", "org", onChangeText);
 for (server = serverList; server != NULL; server = server->next)
     {
     if (!hashLookup(uniqHash, server->genome))
@@ -241,12 +245,17 @@ void showAssemblies(char *genome, char *db, struct pcrServer *serverList,
 /* Put up drop-down list with assemblies on it. */
 {
 struct pcrServer *server;
-char *onChangeText = "onchange='" ORGFORM_KEEP_PARAMS ORGFORM_KEEP_ORG
+char *onChangeText =
+    ORGFORM_KEEP_PARAMS 
+    ORGFORM_KEEP_ORG
     ORGFORM_KEEP_DB
     ORGFORM_RESET_TARGET
-    ORGFORM_SUBMIT;
+    ORGFORM_SUBMIT 
+    ;
 
-printf("<SELECT NAME=\"db\"%s>\n", submitOnClick ? onChangeText : "");
+printf("<SELECT NAME=\"db\" id='db'>\n");
+if (submitOnClick)
+    jsOnEventById("change", "db", onChangeText);
 for (server = serverList; server != NULL; server = server->next)
     {
     if (sameWord(genome, server->genome))

@@ -33,8 +33,8 @@ if (!extToolsEnabled())
     return;
 struct extTool *extTools = readExtToolRa("extTools.ra");
 struct extTool *et;
-hPuts("<script>\n");
-hPuts("extTools = [\n");
+struct dyString *dy = dyStringNew(1024);
+dyStringAppend(dy, "extTools = [\n");
 for(et = extTools; et != NULL; et = et->next)
     {
     if (et->dbs!=NULL)
@@ -50,13 +50,15 @@ for(et = extTools; et != NULL; et = et->next)
     char* tool = jsonStringEscape(et->tool);
     char* shortLabel = jsonStringEscape(et->shortLabel);
     char* longLabel = jsonStringEscape(et->longLabel);
-    hPrintf("    ['%s', '%s', '%s', %d]", tool, shortLabel, longLabel, et->maxSize);
+    dyStringPrintf(dy, "    ['%s', '%s', '%s', %d]", tool, shortLabel, longLabel, et->maxSize);
     if (et->next)
-        hPuts(",");
-    hPuts("\n");
+        dyStringAppend(dy, ",");
+    dyStringAppend(dy, "\n");
     }
-hPuts("];\n");
-hPuts("</script>\n");
+dyStringAppend(dy, "];\n");
+
+jsInline(dy->string);
+dyStringFree(&dy);
 
 }
 
@@ -167,8 +169,11 @@ for (et = extTools; et != NULL; et = et->next)
 if (et==NULL)
     errAbort("No configuration found for tool %s", tool);
 
+
 // construct an invisible CGI form with the given parameters
-printf("<html><body>\n");
+printf("<html>\n<head>\n");
+generateCspMetaHeader(stdout);
+printf("</head>\n<body>\n");
 
 if (debug)
     printf("Target URL: %s<p>", et->url);
@@ -288,6 +293,12 @@ else if (!submitDone)
 printf("</form>\n");
 // a little javascript that clicks the submit button
 if (!debug)
-    printf("<script>document.getElementById(\"redirForm\").submit();</script>\n");
+    {
+    struct dyString *dy = dyStringNew(256);
+    dyStringPrintf(dy, "document.getElementById(\"redirForm\").submit();");
+    jsInline(dy->string);
+    dyStringFree(&dy);
+    }
+jsInlineFinish();
 printf("</body></html>\n");
 }

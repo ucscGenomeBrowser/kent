@@ -674,16 +674,41 @@ function setTableRowVisibility(button, prefix, hiddenPrefix, titleDesc, doAjax)
     return retval;
 }
 
+function getNonce()
+{   // Gets nonce value from page meta header
+var content = $("meta[http-equiv='Content-Security-Policy']").attr("content");
+if (!content)
+    return "";
+// parse nonce like 'nonce-JDPiW8odQkiav4UCeXsa34ElFm7o'
+var sectionBegin = "'nonce-";
+var sectionEnd   = "'";
+var ix = content.indexOf(sectionBegin);
+if (ix < 0)
+    return "";
+content = content.substring(ix+sectionBegin.length);
+ix = content.indexOf(sectionEnd);
+if (ix < 0)
+    return "";
+content = content.substring(0,ix);
+return content;
+}
+
 function warnBoxJsSetup()
 {   // Sets up warnBox if not already established.  This is duplicated from htmshell.c
+    // alert("warnBoxJsSetup() called"); // DEBUG REMOVE GALT TODO Nonce?
     var html = "";
     html += "<center>";
     html += "<div id='warnBox' style='display:none;'>";
     html += "<CENTER><B id='warnHead'></B></CENTER>";
     html += "<UL id='warnList'></UL>";
-    html += "<CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER>";
+    html += "<CENTER><button id='warnOK'></button></CENTER>";
     html += "</div></center>";
 
+
+    // GALT TODO either add nonce or move the showWarnBox and hideWarnBox to some universal javascript 
+    //   file that is always included. Or consider if we can just dynamically define the functions
+    //   right here inside this function?  maybe prepend function names with "window." to (re)define the global functions.
+    //  maybe something like window.showWarnBox = function(){stuff here}; 
     html += "<script type='text/javascript'>";
     html += "function showWarnBox() {";
     html += "document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';";
@@ -694,13 +719,16 @@ function warnBoxJsSetup()
     html += "}";
     html += "function hideWarnBox() {";
     html += "var warnBox=document.getElementById('warnBox');";
-    html += "warnBox.style.display='none';warnBox.innerHTML='';";
+    html += "warnBox.style.display='none';";
+    html += "var warnList=document.getElementById('warnList');";
+    html += "warnList.innerHTML='';";
     html += "var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);";
     html += "if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }";
     html += "}";
     html += "</script>";
 
     $('body').prepend(html);
+    document.getElementById('warnOK').onclick = function() {hideWarnBox();return false;};
 }
 
 function warn(msg)
@@ -1426,18 +1454,62 @@ function stripHgErrors(returnedHtml, whatWeDid)
     return cleanHtml;
 }
 
-function stripJsFiles(returnedHtml,debug)
+function stripJsFiles(returnedHtml, debug, whatWeDid)
 { // strips javascript files from html returned by ajax
     var cleanHtml = returnedHtml;
     var shlurpPattern=/<script type=\'text\/javascript\' SRC\=\'.*\'\><\/script\>/gi;
-    if (debug) {
+    if (debug || whatWeDid) {
         var jsFiles = cleanHtml.match(shlurpPattern);
-        if (jsFiles && jsFiles.length > 0)
-            alert("jsFiles:'"+jsFiles+"'\n---------------\n"+cleanHtml); // warn() interprets html
+        if (jsFiles && jsFiles.length > 0) {
+	    if (debug)
+		alert("jsFiles:'"+jsFiles+"'\n---------------\n"+cleanHtml); // warn() interprets html
+	    if (whatWeDid)
+		whatWeDid.jsFiles = jsFiles;
+	}
     }
     cleanHtml = cleanHtml.replace(shlurpPattern,"");
 
     return cleanHtml;
+}
+
+function stripCspHeader(returnedHtml, debug, whatWeDid)
+{ // strips CSP Header from html returned by ajax
+    var cleanHtml = returnedHtml;
+    var shlurpPattern=/<meta http-equiv=\'Content-Security-Policy\' content=".*"\>/i;
+    if (debug || whatWeDid) {
+        var csp = cleanHtml.match(shlurpPattern);
+        if (csp && csp.length > 0) {
+	    if (debug)
+		alert("csp:'"+csp+"'\n---------------\n"+cleanHtml); // warn() interprets html
+	    if (whatWeDid)
+		whatWeDid.csp = csp[0];
+	}
+    }
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
+
+    return cleanHtml;
+}
+
+function stripNonce(returnedHtml, debug)
+{ // strips nonce from returned ajax page
+    var cleanHtml = returnedHtml;
+    var csp = {};
+    stripCspHeader(returnedHtml, debug, csp);
+    var content = csp.csp;
+    if (!content)
+	return "";
+    // parse nonce like 'nonce-JDPiW8odQkiav4UCeXsa34ElFm7o'
+    var sectionBegin = "'nonce-";
+    var sectionEnd   = "'";
+    var ix = content.indexOf(sectionBegin);
+    if (ix < 0)
+	return "";
+    content = content.substring(ix+sectionBegin.length);
+    ix = content.indexOf(sectionEnd);
+    if (ix < 0)
+	return "";
+    content = content.substring(0,ix);
+    return content;
 }
 
 function stripCssFiles(returnedHtml,debug)
@@ -1454,15 +1526,101 @@ function stripCssFiles(returnedHtml,debug)
     return cleanHtml;
 }
 
+function stripJsNonce(returnedHtml, nonce, debug)
+{ // strips and returns embedded javascript from html returned by ajax with nonce
+    var results=[];
+    var content = returnedHtml;
+    var sectionBegin = "<script type='text/javascript' nonce='"+nonce+"'>";
+    var sectionEnd   = "</script>";
+    var lastIx = 0;
+    var ix = content.indexOf(sectionBegin, lastIx);
+    if (ix < 0)
+	return results;
+    ix += sectionBegin.length;
+    var ex = content.indexOf(sectionEnd, ix);
+    if (ex < 0)
+	return results;
+    var jsNonce = content.substring(ix,ex);
+    if (debug)
+	alert("jsNonce:'"+jsNonce);
+    results.push(jsNonce);
+    lastIx = ex;
+    ex += sectionEnd.length;
+    return results;
+}
+
+function charsAreHex(s)
+// are all the chars found hex?
+{
+    var hexChars = "01234566789abcdefABCDEF";
+    var d = false;
+    var i = 0;
+    if (s) {
+	d = true;
+	while (i < s.length) {
+	    if (hexChars.indexOf(s.charAt(i++)) < 0)
+		d = false;
+	}
+    }
+    return d;
+}
+
+function nonAlphaNumericHexDecodeText(s, prefix, postfix)
+// For html tag attributes, it decodes non-alphanumeric characters
+// with <prefix>HH<postfix> hex codes.
+// Decoding happens in-place, changing the input string s.
+// prefix must not be empty string or null, but postfix can be empty string.
+// Because the decoded string is always equal to or shorter than the input string,
+// the decoding is just done in-place modifying the input string.
+// Accepts upper and lower case values in entities.
+//
+{
+var d = ""; 
+var pfxLen = prefix.length;
+var postLen = postfix.length;
+var i = 0;
+if (s) {
+    while (i < s.length) {
+	var matched = false;
+	if (i+pfxLen+postLen+2 <= s.length) {
+	    var pre = s.substr(i, pfxLen).toLowerCase();
+	    if (pre === prefix) {
+		var post = s.substr(i+pfxLen+2, postLen).toLowerCase();
+		if (post === postfix) {
+		    var hex = s.substr(i+pfxLen, 2);
+		    if (charsAreHex(hex)) {
+			d = d + String.fromCharCode(parseInt(hex,16));
+			i += pfxLen + 2 + postLen;
+			matched = true;
+		    }
+		}
+	    }
+	}
+	if (!matched)
+	    d = d + s.charAt(i++);
+	}
+}
+return d;
+}
+
+
+function jsDecode(s)
+// For JS string values decode "\xHH" 
+{
+return nonAlphaNumericHexDecodeText(s, "\\x", "");
+}
+
+
 function stripJsEmbedded(returnedHtml, debug, whatWeDid)
 { // strips embedded javascript from html returned by ajax
   // NOTE: any warnBox style errors will be put into the warnBox
   // If whatWeDid !== null, we use it to return info about
   // what we stripped out and processed (current just warnMsg).
     var cleanHtml = returnedHtml;
+    
     // embedded javascript?
     while (cleanHtml.length > 0) {
-        var begPattern = /<script type=\'text\/javascript\'\>/i;
+        var begPattern = /<script.*\>/i;
         var endPattern = /<\/script\>/i;
         var bounds = bindings.outside(begPattern,endPattern,cleanHtml);
         if (bounds.start === -1)
@@ -1474,6 +1632,7 @@ function stripJsEmbedded(returnedHtml, debug, whatWeDid)
         } else {
             var warnMsg = bindings.insideOut('<li>','</li>',cleanHtml,bounds.start,bounds.stop);
             if (warnMsg.length > 0) {
+                warnMsg = jsDecode(warnMsg);
                 warn(warnMsg);
                 if (whatWeDid)
                     whatWeDid.warnMsg = warnMsg;

@@ -23,14 +23,14 @@
 #define ITEM_SCORE_DEFAULT "1000"
 #define ADD_ITEM_COMMENT_DEFAULT "add comments"
 
-static char *colorMenuJS = "onchange=\"updateColorSelectBox();\" style=\"width:8em;\"";
-
 static void colorMenuOutput()
 /* the item color pull-down menu in the create item form */
 {
 hPrintf("<INPUT NAME=\"colorPullDown\" VALUE=\"\" SIZE=1 STYLE=\"display:none;\" >\n");
 
-hPrintf("<SELECT NAME=\"%s\" style=\"width:8em; background-color:#000000;\" %s>\n", NEW_ITEM_COLOR, colorMenuJS);
+hPrintf("<SELECT NAME=\"%s\" id='%s' style=\"width:8em; background-color:#000000;\">\n"
+    , NEW_ITEM_COLOR, NEW_ITEM_COLOR);
+jsOnEventById("change", NEW_ITEM_COLOR, "updateColorSelectBox();");
 hPrintf("<OPTION SELECTED VALUE = \"#000000\" style=\"background-color:#000000;\" >black</OPTION>\n");
 hPrintf("<OPTION value = \"#0000ff\" style=\"background-color:#0000ff;\" >blue</OPTION>\n");
 hPrintf("<OPTION VALUE = \"#9600c8\" style=\"background-color:#9600c8;\" >purple</OPTION>\n");

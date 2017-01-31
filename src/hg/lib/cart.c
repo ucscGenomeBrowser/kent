@@ -1381,7 +1381,7 @@ if (asTable)
     if (width<100)
         width = 100;
     cgiMakeTextVarWithExtraHtml(hel->name, val, width,
-                                "onchange='setCartVar(this.name,this.value);'");
+                                "change", "setCartVar(this.name,this.value);");
     printf("</TD></TR>\n");
     }
 else
@@ -1653,11 +1653,13 @@ static void cartErrorCatcher(void (*doMiddle)(struct cart *cart),
                              struct cart *cart)
 /* Wrap error catcher around call to do middle. */
 {
-int status = setjmp(htmlRecover);
 pushAbortHandler(htmlAbort);
 hDumpStackPushAbortHandler();
+int status = setjmp(htmlRecover);
 if (status == 0)
+    {
     doMiddle(cart);
+    }
 hDumpStackPopAbortHandler();
 popAbortHandler();
 }

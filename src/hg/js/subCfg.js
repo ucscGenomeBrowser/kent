@@ -853,11 +853,11 @@ var subCfg = { // subtrack config module.
             $(compObjs).each(function (i) {
                 if (this.type !== 'hidden') {
                     // DEBUG -------------
-                    if (this.id && this.id.length > 0
-                    && $(this).hasClass('filterBy') === false
-                    && $(this).hasClass('filterComp') === false)
-                        warn('DEBUG: Unexpected control with name ['+this.name + '], and id #'+
-                                                                                           this.id);
+                    //if (this.id && this.id.length > 0
+                    //&& $(this).hasClass('filterBy') === false
+                    //&& $(this).hasClass('filterComp') === false)
+                    //    warn('DEBUG: Unexpected control with name ['+this.name + '], and id #'+ this.id);
+
                     $(this).change(function (e) {
                         subCfg.markChange(e,this);
                         subCfg.propagateSetting(this);
