@@ -2,8 +2,7 @@ kentSrc = ../..
 include ../../inc/common.mk
 include install.mk
 
-#SUBDIRS= external model react
-SUBDIRS= 
+SUBDIRS= external model react
 include subdirs.mk
 
 # UCSC js files must pass jshint
