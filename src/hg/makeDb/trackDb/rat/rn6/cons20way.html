@@ -30,8 +30,8 @@ It considers not just each individual alignment column, but also its
 flanking columns.  By contrast, phyloP separately measures conservation at
 individual columns, ignoring the effects of their neighbors.  As a
 consequence, the phyloP plots have a less smooth appearance than the
-phastCons plots, with more "texture" at individual sites.  The two methods
-have different strengths and weaknesses.  PhastCons is sensitive to "runs"
+phastCons plots, with more &quot;texture&quot; at individual sites.  The two methods
+have different strengths and weaknesses.  PhastCons is sensitive to &quot;runs&quot;
 of conserved sites, and is therefore effective for picking out conserved
 elements.  PhyloP, on the other hand, is more appropriate for evaluating
 signatures of selection at particular nucleotides or classes of nucleotides
@@ -299,7 +299,7 @@ one site to the next (Felsenstein and Churchill 1996, Yang 1995, Siepel and
 Haussler 2005).  PhastCons uses a two-state phylo-HMM, with a state for
 conserved regions and a state for non-conserved regions.  The value plotted
 at each site is the posterior probability that the corresponding alignment
-column was "generated" by the conserved state of the phylo-HMM.  These
+column was &quot;generated&quot; by the conserved state of the phylo-HMM.  These
 scores reflect the phylogeny (including branch lengths) of the species in
 question, a continuous-time Markov model of the nucleotide substitution
 process, and a tendency for conservation levels to be autocorrelated along
@@ -335,15 +335,15 @@ CONACC).
 The conserved elements were predicted by running phastCons with the
 --most-conserved (aka --viterbi) option.  The predicted elements are
 segments of the alignment
-that are likely to have been "generated" by the conserved state of the
+that are likely to have been &quot;generated&quot; by the conserved state of the
 phylo-HMM. Each element is assigned a log-odds score equal to its log
 probability under the conserved model minus its log probability under the
-non-conserved model. The "score" field associated with this track contains
+non-conserved model. The &quot;score&quot; field associated with this track contains
 transformed log-odds scores, taking values between 0 and 1000. (The scores
 are transformed using a monotonic function of the form a * log(x) + b.) The
-raw log odds scores are retained in the "name" field and can be seen on the
+raw log odds scores are retained in the &quot;name&quot; field and can be seen on the
 details page or in the browser when the track's display mode is set to
-"pack" or "full".
+&quot;pack&quot; or &quot;full&quot;.
 </p>
 
 <h2>Credits</h2>
