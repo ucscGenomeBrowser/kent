@@ -51,10 +51,10 @@ struct hash *oldVars = NULL;
 /* Copies selected value from the Original Assembly pulldown to a hidden form
 */
 char *onChange = 
-"onchange=\"document.mainForm."
+"document.mainForm."
 HGLFT_REFRESHONLY_VAR
 ".value = 1;"
-"document.mainForm.submit();\"";
+"document.mainForm.submit();";
 
 char *chainStringVal(struct liftOverChain *chain)
 /* keep the last chain in memory in this format */
@@ -103,13 +103,13 @@ cgiSimpleTableRowStart();
 /* genome */
 cgiSimpleTableFieldStart();
 dbList = hGetLiftOverFromDatabases();
-printSomeGenomeListHtmlNamed(HGLFT_FROMORG_VAR, chain->fromDb, dbList, onChange);
+printSomeGenomeListHtmlNamed(HGLFT_FROMORG_VAR, chain->fromDb, dbList, "change", onChange);
 cgiTableFieldEnd();
 
 /* from assembly */
 cgiSimpleTableFieldStart();
 printAllAssemblyListHtmlParm(chain->fromDb, dbList, HGLFT_FROMDB_VAR, 
-			     TRUE, onChange);
+			     TRUE, "change", onChange);
 cgiTableFieldEnd();
 
 /* to assembly */
@@ -117,11 +117,11 @@ cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 dbDbFreeList(&dbList);
 dbList = hGetLiftOverToDatabases(chain->fromDb);
-printLiftOverGenomeList(HGLFT_TOORG_VAR, chain->toDb, dbList, onChange);
+printLiftOverGenomeList(HGLFT_TOORG_VAR, chain->toDb, dbList, "change", onChange);
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
-printAllAssemblyListHtmlParm(chain->toDb, dbList, HGLFT_TODB_VAR, TRUE, "");
+printAllAssemblyListHtmlParm(chain->toDb, dbList, HGLFT_TODB_VAR, TRUE, NULL, NULL);
 cgiTableFieldEnd();
 
 cgiTableRowEnd();

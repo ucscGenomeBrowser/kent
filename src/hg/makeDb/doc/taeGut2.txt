@@ -897,5 +897,6 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 taeGut2) \
            > rbest.log 2>&1
+    # real    354m40.975s
 
 ############################################################################

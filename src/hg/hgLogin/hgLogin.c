@@ -24,6 +24,7 @@
 #include "gbMembers.h"
 #include "versionInfo.h"
 #include "mailViaPipe.h"
+#include "dystring.h"
 
 /* ---- Global variables. ---- */
 char msg[4096] = "";
@@ -327,26 +328,22 @@ void returnToURL(int delay)
 /* delay for delay mill-seconds then return to the "returnto" URL */
 {
 char *returnURL = getReturnToURL();
-hPrintf(
-    "<script  language=\"JavaScript\">\n"
-    "<!-- "
-    "\n"
+char javascript[1024];
+safef(javascript, sizeof javascript,
+    "function afterDelay() {window.location = '%s';}\n"
     "window.setTimeout(afterDelay, %d);\n"
-    "function afterDelay() {\n"
-    "window.location =\"%s\";\n}"
-    "\n//-->\n"
-    "</script>", delay, returnURL);
+    , returnURL, delay);
+jsInline(javascript);
 }
 
 static void redirectToLoginPage(char *paramStr)
 /* redirect to hgLogin page with given parameter string */
 {
-hPrintf("<script  language=\"JavaScript\">\n"
-    "<!-- \n"
-    "window.location =\"%s?%s\""
-    "//-->"
-    "\n"
-    "</script>", hgLoginUrl, paramStr);
+char javascript[1024];
+safef(javascript, sizeof javascript,
+    "window.location ='%s?%s'"
+    , hgLoginUrl, paramStr);
+jsInline(javascript);
 }
     
 void  displayActMailSuccess()
@@ -456,12 +453,11 @@ if (result == -1)
     }
 else
     {
-    hPrintf("<script  language=\"JavaScript\">\n"
-        "<!-- \n"
-        "window.location =\"%s?hgLogin.do.displayMailSuccess=1\""
-        "//-->"
-        "\n"
-        "</script>", hgLoginUrl);
+    char javascript[1024];
+    safef(javascript, sizeof javascript,
+        "window.location = '%s?hgLogin.do.displayMailSuccess=1'"
+        , hgLoginUrl);
+    jsInline(javascript);
     }
 }
 
@@ -522,12 +518,11 @@ if (result == -1)
     }
 else
     {
-    hPrintf("<script  language=\"JavaScript\">\n"
-        "<!-- \n"
-        "window.location =\"%s?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
-        "//-->"
-        "\n"
-        "</script>", hgLoginUrl, username);
+    char javascript[1024];
+    safef(javascript, sizeof javascript,
+        "window.location = '%s?hgLogin.do.displayMailSuccessPwd=1&user=%s'"
+        , hgLoginUrl, username);
+    jsInline(javascript);
     }
 }
 
@@ -551,23 +546,17 @@ void displayAccHelpPage(struct sqlConnection *conn)
 char *email = cartUsualString(cart, "hgLogin_email", "");
 char *username = cartUsualString(cart, "hgLogin_userName", "");
 
-hPrintf("<script  language=\"JavaScript\">\n"
-    "<!-- "
-    "\n"
+jsInline(
     "function toggle(value){\n"
-    "if(value=='showE')\n"
-    "{\n"
+    "if(value=='showE'){\n"
     " document.getElementById('usernameBox').style.display='none';\n"
     " document.getElementById('emailAddrBox').style.display='inline';\n"
     " } else {\n"
     " document.getElementById('usernameBox').style.display='inline';\n"
     " document.getElementById('emailAddrBox').style.display='none';\n"
+    " }\n"
     "}\n"
-    "}\n"
-    "//-->"
-    "\n"
-    "</script>"
-    "\n");
+    );
 hPrintf("<div id=\"accountHelpBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>%s</h2>"
@@ -579,9 +568,9 @@ hPrintf("<h3>Having trouble signing in?</h3>"
     "<p><span style='color:red;'>%s</span><p>"
     "\n", hgLoginUrl, errMsg ? errMsg : "");
 hPrintf("<div class=\"inputGroup\">"
-    "<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"password\" id=\"password\" onclick=\"toggle('showU');\">"
+    "<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"password\" id=\"password\">"
     "<label for=\"password\" class=\"radioLabel\">I forgot my <b>password</b>. Send me a new one.</label></div>"
-    "<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"username\" id=\"username\"  onclick=\"toggle('showE');\">"
+    "<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"username\" id=\"username\">"
     "<label for=\"username\" class=\"radioLabel\">I forgot my <b>username</b>. Please email it to me.</label></div>"
     "\n"
     "</div>"
@@ -602,6 +591,8 @@ hPrintf("<div class=\"inputGroup\" id=\"usernameBox\" style=\"display: none;\">"
     "</div>"
     "</form>"
     "</div><!-- END - accountHelpBox -->", username, email, getReturnToURL());
+jsOnEventById("click", "password", "toggle('showU');");
+jsOnEventById("click", "username", "toggle('showE');");
 cartSaveSession(cart);
 }
 
@@ -1170,12 +1161,13 @@ hPrintf(
     "<span style='color:red;'></span>"
     "\n");
 /* Set cookies */
-hPrintf("<script language=\"JavaScript\">"
+struct dyString *javascript = dyStringNew(1024);
+dyStringPrintf(javascript,
         " document.write(\"Login successful, setting cookies now...\");");
 struct slName *newCookies = loginLoginUser(userName, idx), *sl;
 for (sl = newCookies;  sl != NULL;  sl = sl->next)
-    hPrintf(" document.cookie = '%s';", sl->name);
-hPrintf(" </script>\n");
+    dyStringPrintf(javascript, " document.cookie = '%s';", sl->name);
+jsInline(javascript->string);
 cartRemove(cart,"hgLogin_userName");
 returnToURL(150);
 }
@@ -1254,11 +1246,11 @@ hPrintf(
     "</p>"
     "<span style='color:red;'></span>"
     "\n");
-hPrintf("<script language=\"JavaScript\">");
+struct dyString *javascript = dyStringNew(1024);
 struct slName *newCookies = loginLogoutUser(), *sl;
 for (sl = newCookies;  sl != NULL;  sl = sl->next)
-    hPrintf(" document.cookie = '%s';", sl->name);
-hPrintf("</script>\n");
+    dyStringPrintf(javascript, " document.cookie = '%s';", sl->name);
+jsInline(javascript->string);
 /* return to "returnto" URL */
 returnToURL(150);
 }

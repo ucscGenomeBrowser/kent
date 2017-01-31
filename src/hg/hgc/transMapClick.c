@@ -117,6 +117,7 @@ static struct bigTransMap *buildFakeBigTransMapRec(struct transMapInfo *info,
 struct bigTransMap *bigTransMap;
 AllocVar(bigTransMap);
 bigTransMap->seqType = 1;
+bigTransMap->name = cloneString(src->id);
 bigTransMap->srcDb = cloneString(src->db);
 bigTransMap->srcChrom = cloneString(src->chrom);
 bigTransMap->srcChromStart = src->chromStart;
@@ -127,6 +128,7 @@ if (gene != NULL)
     {
     bigTransMap->geneName = cloneString(gene->geneName);
     bigTransMap->geneId = cloneString(gene->geneId);
+    bigTransMap->oCDS = cloneString(gene->cds);
     }
 bigTransMap->geneType = cloneString(guessTranscriptType(gene)); // set for ESTs
 bigTransMap->transcriptType = cloneString(guessTranscriptType(gene));
@@ -134,6 +136,9 @@ bigTransMap->chainType = cloneString(chainSubsetToBigStr(info->chainSubset));
 bigTransMap->commonName = hOrganism(info->srcDb);
 if (bigTransMap->commonName == NULL)
     bigTransMap->commonName = cloneString("");
+bigTransMap->scientificName = hScientificName(info->srcDb);
+if (bigTransMap->scientificName == NULL)
+    bigTransMap->scientificName = cloneString("");
 bigTransMap->orgAbbrev = cloneString(emptyForNull(hOrgShortForDb(info->srcDb)));
 return bigTransMap;
 }

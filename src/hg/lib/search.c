@@ -70,14 +70,14 @@ for (ix=0;ix<count;ix++)
 return fileTypes;
 }
 
-char *fileFormatSelectHtml(char *name, char *selected, char *extraHtml)
+char *fileFormatSelectHtml(char *name, char *selected, char *event, char *javascript, char *style)
 // returns an allocated string of HTML for the fileType select drop down
 {
 struct slPair *fileTypes = fileFormatSearchWhiteList();
 if (slCount(fileTypes) > 0)
     {
     char *dropDownHtml = cgiMakeSingleSelectDropList(name,fileTypes,selected,
-                                                     ANYLABEL,NULL,extraHtml);
+                                                     ANYLABEL, NULL, event, javascript, style, NULL);
     slPairFreeList(&fileTypes);
     return dropDownHtml;
     }
@@ -199,28 +199,36 @@ for (;mdbSelect != NULL; mdbSelect = mdbSelect->next)
     char buf[256];
     char *dropDownHtml = NULL;
 
-    #define PLUS_MINUS_BUTTON "<input type='button' id='%sButton%d' value='%c' " \
-                              "style='font-size:.7em;' title='%s' " \
-                              "onclick='findTracks.mdbSelectPlusMinus(this,%d)'>"
-    #define ADD_PM_BUTTON(type,num,value) \
-            dyStringPrintf(output,PLUS_MINUS_BUTTON, (type), (num), (value), \
-                           ((value) == '+' ? "add another row after":"delete"), (num))
+    char id[256];
+    char javascript[1024];
 
+    #define PLUS_MINUS_BUTTON "<input type='button' id='%s' value='%c' " \
+                              "style='font-size:.7em;' title='%s'>"
+    #define PLUS_MINUS_BUTTON_JS "findTracks.mdbSelectPlusMinus(this,%d);"
+    #define ADD_PM_BUTTON(type,num,value) \
+	    safef(id, sizeof id, "%sButton%d", (type), (num)); \
+            dyStringPrintf(output,PLUS_MINUS_BUTTON, id, (value), \
+                           ((value) == '+' ? "add another row after":"delete")); \
+	    safef(javascript, sizeof javascript, PLUS_MINUS_BUTTON_JS, (num)); \
+	    jsOnEventById("click", id, javascript);
+	    
     dyStringAppend(output,"<tr valign='top' class='mdbSelect'><td nowrap>\n");
     row++;
 
     if (slCount(mdbSelects) > 2 || row > 2)
-        ADD_PM_BUTTON("minus", row, '-');
+	{
+        ADD_PM_BUTTON("minus", row, '-')
+	}
     else
         dyStringAppend(output,"&nbsp;");
-    ADD_PM_BUTTON("plus", row, '+');
+    ADD_PM_BUTTON("plus", row, '+')
 
     dyStringAppend(output,"</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
     safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, row);
 
     // Left side select of vars
     dropDownHtml = cgiMakeSingleSelectDropList(buf, mdbVars,mdbSelect->name, NULL,"mdbVar",
-                             "style='font-size:.9em;' onchange='findTracks.mdbVarChanged(this);'");
+    	"change", "findTracks.mdbVarChanged(this);", "font-size:.9em;", NULL);
     if (dropDownHtml)
         {
         dyStringAppend(output,dropDownHtml);
@@ -243,8 +251,8 @@ for (;mdbSelect != NULL; mdbSelect = mdbSelect->next)
             {
             char *dropDownHtml = cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),
                                                 buf, pairs,mdbSelect->val, ANYLABEL,"mdbVal",
-                                                "style='min-width:200px; font-size:.9em;' "
-                                                "onchange='findTracks.mdbValChanged(this);'");
+                                                "change", "findTracks.mdbValChanged(this);",
+                                                "min-width:200px; font-size:.9em;", NULL);
             if (dropDownHtml)
                 {
                 dyStringAppend(output,dropDownHtml);
@@ -258,21 +266,23 @@ for (;mdbSelect != NULL; mdbSelect = mdbSelect->next)
         dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; "
                               "white-space:nowrap;'>contains</td>\n<td nowrap id='%s' "
                               "style='max-width:600px;'>\n",row,buf);
-        dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal freeText' "
-                              "style='max-width:310px; width:310px; font-size:.9em;' "
-                              "onchange='findTracks.mdbVarChanged(true);'>\n",
-                              buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
+	safef(id, sizeof id, "%i_change", row);
+        dyStringPrintf(output,"<input type='text' name='%s' id='%s' value='%s' class='mdbVal freeText' "
+                              "style='max-width:310px; width:310px; font-size:.9em;'>\n",
+                              buf,id,(mdbSelect->val ? (char *)mdbSelect->val: ""));
+	jsOnEventById("change", id, "findTracks.mdbVarChanged(true);");
         }
     else if (searchBy == cvSearchByWildList)
         {
         dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; "
                               "white-space:nowrap;'>is among</td>\n<td nowrap id='%s' "
                               "style='max-width:600px;'>\n",row,buf);
-        dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal wildList' "
+	safef(id, sizeof id, "%i_change", row);
+        dyStringPrintf(output,"<input type='text' name='%s' id='%s' value='%s' class='mdbVal wildList' "
                               "title='enter comma separated list of values' "
-                              "style='max-width:310px; width:310px; font-size:.9em;' "
-                              "onchange='findTracks.mdbVarChanged(true);'>\n",
-                              buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
+                              "style='max-width:310px; width:310px; font-size:.9em;'>\n",
+                              buf,id,(mdbSelect->val ? (char *)mdbSelect->val: ""));
+	jsOnEventById("change", id, "findTracks.mdbVarChanged(true);");
         }
     //else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
     //    {

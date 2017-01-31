@@ -878,12 +878,13 @@ printf("Search <input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\" size=60>"
     varName, varName, varVal);
 printf("&nbsp;");
 printf("<img src=\"../images/magnify.png\">\n");
-printf("<script>\n");
-printf("$(function () {\n");
-printf("  $('#%s').watermark(\"type in words or starts of words to find specific %s\");\n", 
+char javascript[1024];
+safef(javascript, sizeof javascript,
+    "$(function () {\n"
+    "  $('#%s').watermark(\"type in words or starts of words to find specific %s\");\n" 
+    "});\n",
     varName, itemPlural);
-printf("});\n");
-printf("</script>\n");
+jsInline(javascript);
 return varVal;
 }
 
@@ -1022,11 +1023,11 @@ cgiMakeSubmitButton();
 printf("</FORM>\n");
 
 
-puts("<script>\n");
-puts("$('.scriptButton').change( function() {$('#urlListDoc').hide(); $('#scriptDoc').show()} )");
-puts("$('.urlListButton').change( function() {$('#urlListDoc').show(); $('#scriptDoc').hide()} )");
-puts("</script>\n");
-
+jsInline 
+    (
+    "$('.scriptButton').change( function() {$('#urlListDoc').hide(); $('#scriptDoc').show()} )"
+    "$('.urlListButton').change( function() {$('#urlListDoc').show(); $('#scriptDoc').hide()} )"
+    );
 puts("<div id='urlListDoc'>\n");
 puts("When you click 'submit', a text file with the URLs of the files will get downloaded.\n");
 puts("The URLs are valid for one week.<p>\n");
@@ -1472,27 +1473,29 @@ void drawPrettyPieGraph(struct slPair *data, char *id, char *title, char *subtit
 /* Draw a pretty pie graph using D3. Import D3 and D3pie before use. */
 {
 // Some D3 administrative stuff, the title, subtitle, sizing etc. 
-printf("<script>\nvar pie = new d3pie(\"%s\", {\n\"header\": {", id);
+struct dyString *dy = dyStringNew(1024);
+
+dyStringPrintf(dy,"var pie = new d3pie(\"%s\", {\n\"header\": {", id);
 if (title != NULL)
     {
-    printf("\"title\": { \"text\": \"%s\",", title);
-    printf("\"fontSize\": 16,");
-    printf("\"font\": \"open sans\",},");
+    dyStringPrintf(dy,"\"title\": { \"text\": \"%s\",", title);
+    dyStringPrintf(dy,"\"fontSize\": 16,");
+    dyStringPrintf(dy,"\"font\": \"open sans\",},");
     }
 if (subtitle != NULL)
     {
-    printf("\"subtitle\": { \"text\": \"%s\",", subtitle);
-    printf("\"color\": \"#999999\",");
-    printf("\"fontSize\": 10,");
-    printf("\"font\": \"open sans\",},");
+    dyStringPrintf(dy,"\"subtitle\": { \"text\": \"%s\",", subtitle);
+    dyStringPrintf(dy,"\"color\": \"#999999\",");
+    dyStringPrintf(dy,"\"fontSize\": 10,");
+    dyStringPrintf(dy,"\"font\": \"open sans\",},");
     }
-printf("\"titleSubtitlePadding\":9 },\n");
-printf("\"footer\": {\"color\": \"#999999\",");
-printf("\"fontSize\": 10,");
-printf("\"font\": \"open sans\",");
-printf("\"location\": \"bottom-left\",},\n");
-printf("\"size\": { \"canvasWidth\": 270, \"canvasHeight\": 220},\n");
-printf("\"data\": { \"sortOrder\": \"value-desc\", \"content\": [\n");
+dyStringPrintf(dy,"\"titleSubtitlePadding\":9 },\n");
+dyStringPrintf(dy,"\"footer\": {\"color\": \"#999999\",");
+dyStringPrintf(dy,"\"fontSize\": 10,");
+dyStringPrintf(dy,"\"font\": \"open sans\",");
+dyStringPrintf(dy,"\"location\": \"bottom-left\",},\n");
+dyStringPrintf(dy,"\"size\": { \"canvasWidth\": 270, \"canvasHeight\": 220},\n");
+dyStringPrintf(dy,"\"data\": { \"sortOrder\": \"value-desc\", \"content\": [\n");
 struct slPair *start = NULL;
 float colorOffset = 1;
 int totalFields =  slCount(data);
@@ -1501,28 +1504,28 @@ for (start=data; start!=NULL; start=start->next)
     float currentColor = colorOffset/totalFields;
     struct rgbColor color = saturatedRainbowAtPos(currentColor);
     char *temp = start->val;
-    printf("\t{\"label\": \"%s\",\n\t\"value\": %s,\n\t\"color\": \"rgb(%i,%i,%i)\"}", 
+    dyStringPrintf(dy,"\t{\"label\": \"%s\",\n\t\"value\": %s,\n\t\"color\": \"rgb(%i,%i,%i)\"}", 
 	start->name, temp, color.r, color.b, color.g);
     if (start->next!=NULL) 
-	printf(",\n");
+	dyStringPrintf(dy,",\n");
     ++colorOffset;
     }
-printf("]},\n\"labels\": {");
-printf("\"outer\":{\"pieDistance\":20},");
-printf("\"inner\":{\"hideWhenLessThanPercentage\":5},");
-printf("\"mainLabel\":{\"fontSize\":11},");
-printf("\"percentage\":{\"color\":\"#ffffff\", \"decimalPlaces\": 0},");
-printf("\"value\":{\"color\":\"#adadad\", \"fontSize\":11},");
-printf("\"lines\":{\"enabled\":true},},\n");
-printf("\"effects\":{\"pullOutSegmentOnClick\":{");
-printf("\"effect\": \"linear\",");
-printf("\"speed\": 400,");
-printf("\"size\": 8}},\n");
-printf("\"misc\":{\"gradient\":{");
-printf("\"enabled\": true,");
-printf("\"percentage\": 100}}});");
-printf("</script>\n");
-
+dyStringPrintf(dy,"]},\n\"labels\": {");
+dyStringPrintf(dy,"\"outer\":{\"pieDistance\":20},");
+dyStringPrintf(dy,"\"inner\":{\"hideWhenLessThanPercentage\":5},");
+dyStringPrintf(dy,"\"mainLabel\":{\"fontSize\":11},");
+dyStringPrintf(dy,"\"percentage\":{\"color\":\"#ffffff\", \"decimalPlaces\": 0},");
+dyStringPrintf(dy,"\"value\":{\"color\":\"#adadad\", \"fontSize\":11},");
+dyStringPrintf(dy,"\"lines\":{\"enabled\":true},},\n");
+dyStringPrintf(dy,"\"effects\":{\"pullOutSegmentOnClick\":{");
+dyStringPrintf(dy,"\"effect\": \"linear\",");
+dyStringPrintf(dy,"\"speed\": 400,");
+dyStringPrintf(dy,"\"size\": 8}},\n");
+dyStringPrintf(dy,"\"misc\":{\"gradient\":{");
+dyStringPrintf(dy,"\"enabled\": true,");
+dyStringPrintf(dy,"\"percentage\": 100}}});");
+jsInline(dy->string);
+dyStringFree(&dy);
 }
 
 void pieOnTag(struct sqlConnection *conn, char *tag, char *divId)

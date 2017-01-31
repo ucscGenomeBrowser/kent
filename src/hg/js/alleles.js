@@ -31,6 +31,12 @@ var alleles = (function()
     function update(content, status)
     { // Update the geneAlleles section based upon ajax request
         hideLoadingImage(this.loadingId);  // Do this first
+
+	var pageNonce = getNonce();
+
+	var ajaxNonce = stripNonce(content, false);
+    
+	var jsNonce = stripJsNonce(content, ajaxNonce, false);// DEBUG msg with true
         
         var geneAlleles = $('div#' + sectionName);
         if (geneAlleles.length > 0) {
@@ -49,9 +55,20 @@ var alleles = (function()
                 cleanHtml = cleanHtml.substring(0,ix + sectionEnd.length);
 
             if (cleanHtml.length > 0) {
+
                 ajaxUpdates++;
                 $(geneAlleles[0]).html( cleanHtml );
                 hiliteRemove();
+
+		// append ajax js blocks with nonce
+		for (i=0; i<jsNonce.length; ++i) {
+		    var sTag = document.createElement("script");
+		    sTag.type = "text/javascript";
+		    sTag.text = jsNonce[i];
+		    sTag.setAttribute('nonce', pageNonce); // CSP2 Requires
+		    document.head.appendChild(sTag);
+		}		
+
                 alleles.initialize();  // Must have prefix, since ajax call
             }
         }
@@ -231,7 +248,7 @@ var alleles = (function()
         // DNA view or AA view?
         var spans;
         var dnaView = $('input#'+sectionName+'_dnaView');
-        if (dnaView && $(dnaView).val().indexOf('DNA') === -1) {
+        if (dnaView.length !== 0 && $(dnaView).val().indexOf('DNA') === -1) {
             spans = $('table#alleles').find('TH.seq').find('B');
         } else { // AA view
             spans = $('table#alleles').find('TH.seq').find('span');

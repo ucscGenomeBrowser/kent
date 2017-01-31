@@ -1,5 +1,17 @@
 /* tagStormFromTab - Create a tagStorm file from a tab-separated file where the labels are on the 
- * first line, that starts with a #. */
+ * first line, that starts with a #. 
+ *
+ * The basic idea of this is
+ * 1) Read into into a fieldedTable structure
+ * 2) Figure out semi-magically what field to partition on
+ * 3) For each value of that field, write out a stanza that includes all fields that are 
+ *    constant for that value of the partitioning field.
+ * 4) Create a new, smaller fieldedTable that just consists of the remaining fields, 
+ *    and the rows corresponding to the stanza.
+ * 5) Recurse to 2. 
+ *
+ * The field to partition on in step 2 is either specified by the command line or
+ * calculated in findLockedSets where partingScore is set. */
 
 #include "common.h"
 #include "linefile.h"
@@ -200,11 +212,13 @@ for (fieldIx=0; fieldIx < table->fieldCount; ++fieldIx)
     for (row = table->rowList; row != NULL; row = row->next)
         {
 	char *val = row->row[fieldIx];
-	if (isDefinedVal(val))
+	boolean isDef = isDefinedVal(val);
+	if (isDef)
 	    ++field->realValCount;
 	if (!hashLookup(hash, val))
 	    {
-	    tagTypeInfoAdd(field->typeInfo, val);
+	    if (isDef) 
+		tagTypeInfoAdd(field->typeInfo, val);
 	    refAdd(&field->valList, val);
 	    hashAdd(hash, val, NULL);
 	    }
@@ -402,9 +416,12 @@ struct lockedSet *set;
 for (set = lockedSetList; set != NULL; set = set->next)
      {
      verbose(verbosity,	    
-        "%s: %d vals, %g real, %d locked, %d predicted, %d predictors, %d pChain, %g score\n",
+        "%s: %d vals, %g real, %d locked, %d pred me, %d iPred, %d pChain, %s, %s, %g score\n",
 	set->name, set->valCount, set->realValRatio, slCount(set->fieldRefList), 
-	set->predictedCount, set->predictorCount, set->predictorChainSize, set->partingScore);
+	set->predictedCount, set->predictorCount, set->predictorChainSize, 
+	(set->allFloatingPoint ? "num" : "!num"),
+	(set->allInt ? "int" : "!int"),
+	set->partingScore);
      struct slRef *ref;
      verbose(verbosity, "\tlocked:");
      for (ref = set->fieldRefList; ref != NULL; ref = ref->next)

@@ -370,6 +370,27 @@ else
     }
 }
 
+struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes)
+/* Return list of unique words found by parsing string delimited by whitespace.
+ * If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] will yield 2 slNames no quotes */
+{
+struct slName *list = NULL;
+char *word = NULL;
+while (text != NULL)
+    {
+    if (respectQuotes)
+        word = nextQuotedWord(&text);
+    else
+        word = nextWord(&text);
+    if (word)
+        slNameStore(&list, word);
+    else
+        break;
+    }
+slReverse(&list);
+return list;
+}
+
 void escCopy(char *in, char *out, char toEscape, char escape)
 /* Copy in to out, escaping as needed.  Out better be big enough. 
  * (Worst case is strlen(in)*2 + 1.) */

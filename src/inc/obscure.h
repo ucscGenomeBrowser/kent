@@ -90,6 +90,10 @@ char *nextQuotedWord(char **pLine);
  * to point past word that is returned. Does not return
  * quotes. */
 
+struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes);
+/* Return list of unique words found by parsing string delimited by whitespace.
+ * If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] will yield 2 slNames no quotes */
+
 char *makeQuotedString(char *in, char quoteChar);
 /* Create a string surrounded by quoteChar, with internal
  * quoteChars escaped.  freeMem result when done. */

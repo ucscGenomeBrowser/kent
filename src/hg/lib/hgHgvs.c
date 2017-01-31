@@ -1023,8 +1023,8 @@ else if (*retEnd < 0)
     {
     // Even the end coord is upstream of coding transcript -- make a negative "downstream"
     // for adjusting end.
-    *retDownstreamBases = *retEnd;
-    *retEnd = 0;
+    *retEnd += *retUpstreamBases;
+    *retDownstreamBases = -*retUpstreamBases;
     }
 else
     *retDownstreamBases = 0;

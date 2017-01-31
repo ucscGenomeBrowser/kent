@@ -802,37 +802,6 @@ slReverse(&list);
 return list;
 }
 
-struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes)
-// Return list of unique words found by parsing string delimited by whitespace.
-// If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] will yield 2 slNames no quotes
-{
-struct slName *list = NULL;
-char *word = NULL;
-while (text != NULL)
-    {
-    if (respectQuotes)
-        {
-        word = nextWordRespectingQuotes(&text);
-        if (word != NULL)
-            {
-            if (word[0] == '"')
-                stripChar(word, '"');
-            else if (word[0] == '\'')
-                stripChar(word, '\'');
-            }
-        }
-    else
-        word = nextWord(&text);
-    if (word)
-        slNameStore(&list, word);
-    else
-        break;
-    }
-
-slReverse(&list);
-return list;
-}
-
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize)
 /* Return list of slNames from an array of strings of length arraySize.
  * If a string in the array is NULL, the array will be treated as
@@ -2325,35 +2294,6 @@ s = skipLeadingSpaces(s);
 if (s[0] == 0)
     return NULL;
 e = skipToSpaces(s);
-if (e != NULL)
-    *e++ = 0;
-*pLine = e;
-return s;
-}
-
-char *nextWordRespectingQuotes(char **pLine)
-// return next word but respects single or double quotes surrounding sets of words.
-{
-char *s = *pLine, *e;
-if (s == NULL || s[0] == 0)
-    return NULL;
-s = skipLeadingSpaces(s);
-if (s[0] == 0)
-    return NULL;
-if (s[0] == '"')
-    {
-    e = skipBeyondDelimit(s+1,'"');
-    if (e != NULL && !isspace(e[0]))
-        e = skipToSpaces(s);
-    }
-else if (s[0] == '\'')
-    {
-    e = skipBeyondDelimit(s+1,'\'');
-    if (e != NULL && !isspace(e[0]))
-        e = skipToSpaces(s);
-    }
-else
-    e = skipToSpaces(s);
 if (e != NULL)
     *e++ = 0;
 *pLine = e;

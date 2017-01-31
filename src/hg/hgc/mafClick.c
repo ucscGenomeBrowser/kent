@@ -22,7 +22,7 @@
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
-static char *autoSubmit = "onchange=\"document.gpForm.submit();\"";
+static char *autoSubmit = "document.gpForm.submit();";
 
 static void blueCapWrite(FILE *f, char *s, int size, char *r)
 /* Write capital letters in blue. */
@@ -720,14 +720,14 @@ else
 	cgiContinueHiddenVar("r");
 	printf("Capitalize ");
         cgiMakeDropListFull(codeVarName, codeAll, codeAll,
-	    ArraySize(codeAll), codeVarVal, autoSubmit);
+	    ArraySize(codeAll), codeVarVal, "change", autoSubmit);
 	printf("exons based on ");
         capTrack = genePredDropDown(cart, trackHash,
                                        "gpForm", "hgc.multiCapTrack");
 #endif
 	printf("show ");
         cgiMakeDropListFull(showVarName, showAll, showAll,
-	    ArraySize(showAll), showVarVal, autoSubmit);
+	    ArraySize(showAll), showVarVal, "change", autoSubmit);
 	printf("bases");
 	printf("<BR>\n");
 	printf("</FORM>\n");

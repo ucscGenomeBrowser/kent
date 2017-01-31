@@ -18,20 +18,7 @@ track xenoRefGene override
 priority 3
 
 track refGene override
-release beta,public
 priority 4
-
-track refSeqComposite override
-release alpha
-priority 4
-
-    track ncbiRefGenesView override
-    release alpha
-    parent refSeqComposite on
-
-        track refGene override
-        release alpha
-        parent ncbiRefGenesView on
 
 # mRNA and EST
 

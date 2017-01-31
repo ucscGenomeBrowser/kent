@@ -40,7 +40,7 @@ boolean isSearchTracksSupported(char *database, struct cart *cart);
 struct slPair *fileFormatSearchWhiteList(void);
 // Gets the whitelist of approved file formats that is allowed for search
 
-char *fileFormatSelectHtml(char *name, char *selected, char *extraHtml);
+char *fileFormatSelectHtml(char *name, char *selected, char *event, char *javascript, char *style);
 // returns an allocated string of HTML for the fileType select drop down
 
 struct slPair *mdbSelectPairs(struct cart *cart, struct slPair *mdbVars);

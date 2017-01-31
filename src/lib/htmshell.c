@@ -552,6 +552,8 @@ if (htmlWarnBoxSetUpAlready)
     return;
 htmlWarnBoxSetUpAlready=TRUE;
 
+// NOTE: There is a duplicate of this function in hg/js/utils.js
+
 // NOTE: Making both IE and FF work is almost impossible.  Currently, in IE, if the message
 // is forced to the top (calling this routine after <BODY> then the box is not resizable
 // (dynamically adjusting to its contents). But if this setup is done later in the page
@@ -561,28 +563,52 @@ htmlWarnBoxSetUpAlready=TRUE;
 //      "var app=navigator.appName.substr(0,9); "
 //      "if(app == 'Microsoft') {warnBox.style.display='';} 
 //       else {warnBox.style.display=''; warnBox.style.width='auto';}"
-fprintf(f, "<script type='text/javascript'>\n");
-fprintf(f, "document.write(\"<center>"
+struct dyString *dy = dyStringNew(2048);
+//fprintf(f, "<center>"
+            //"<CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER>"
+
+// NEW TEST ATTEMPT DEBUG GALT
+// Simply emit the html now.  // Seems to be working fine on Chrome so far.
+fprintf(f,"<center>"
             "<div id='warnBox' style='display:none;'>"
             "<CENTER><B id='warnHead'></B></CENTER>"
             "<UL id='warnList'></UL>"
-            "<CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER>"
+            "<CENTER><button id='warnOK'></button></CENTER>"
+            "</div></center>\n");
+
+/* ORIGINAL DYNAMIC WAY
+dyStringPrintf(dy,"document.write(\"<center>"
+            "<div id='warnBox' style='display:none;'>"
+            "<CENTER><B id='warnHead'></B></CENTER>"
+            "<UL id='warnList'></UL>"
+            "<CENTER><button id='warnOK'></button></CENTER>"
             "</div></center>\");\n");
-fprintf(f,"function showWarnBox() {"
+*/
+
+dyStringPrintf(dy,"function showWarnBox() {"
             "document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';"
             "var warnBox=document.getElementById('warnBox');"
             "warnBox.style.display=''; warnBox.style.width='65%%';"
             "document.getElementById('warnHead').innerHTML='Warning/Error(s):';"
             "window.scrollTo(0, 0);"
           "}\n");
-fprintf(f,"function hideWarnBox() {"
+dyStringPrintf(dy,"function hideWarnBox() {"
             "var warnBox=document.getElementById('warnBox');"
-            "warnBox.style.display='none';warnBox.innerHTML='';"
-            "var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);"
+            "warnBox.style.display='none';"
+            "var warnList=document.getElementById('warnList');"
+	    "warnList.innerHTML='';"
+            "var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);"  
+// TODO GALT maybe just looking at the last 20 characters of the html page is no longer enough
+// because the final js inline trash temp gets emitted. Looks like it is 93 characters long.
             "if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }"
           "}\n"); // Note OK button goes to prev page when this page is interrupted by the error.
-fprintf(f,"window.onunload = function(){}; // Trick to avoid FF back button issue.\n");
-fprintf(f,"</script>\n");
+// Added by Galt
+dyStringPrintf(dy,"document.getElementById('warnOK').onclick = function() {hideWarnBox();return false;};\n");
+//dyStringPrintf(dy,"$('#warnOK').click(function() {hideWarnBox();return false;});\n");  // jquery version
+dyStringPrintf(dy,"window.onunload = function(){}; // Trick to avoid FF back button issue.\n");
+
+jsInline(dy->string);
+dyStringFree(&dy);
 }
 
 void htmlVaWarn(char *format, va_list args)
@@ -610,10 +636,16 @@ char *warningBR = htmlWarnEncode(warning);
 // and keeps js-encodings in events like onmouseover="stuff %s|js| stuff" secure.
 char *jsEncodedMessage = javascriptEncode (warningBR); 
 freeMem(warningBR);
-printf("<script type='text/javascript'>{showWarnBox();"
-	"var warnList=document.getElementById('warnList');"
-	"warnList.innerHTML += '<li>%s</li>';}</script><!-- ERROR -->\n", jsEncodedMessage); 
-				     // NOTE that "--ERROR --" is needed at the end of this print!!
+struct dyString *dy = dyStringNew(2048);
+dyStringPrintf(dy,
+    "showWarnBox();"
+    "var warnList=document.getElementById('warnList');"
+    "warnList.innerHTML += '<li>%s</li>';\n", jsEncodedMessage);
+jsInline(dy->string);  
+// TODO GALT does --ERROR -- tag still work?
+printf("<!-- ERROR -->\n");
+// NOTE that "--ERROR --" is needed at the end of this print!!
+dyStringFree(&dy);
 freeMem(jsEncodedMessage);
 
 /* Log useful CGI info to stderr */
@@ -807,6 +839,215 @@ if (gotBgColor)
 fputs(">\n",f);
 }
 
+//--- NONCE and CSP routines -------------
+
+#include "base64.h"
+// copied from cartDb::cartDbMakeRandomKey()
+char *makeRandomKey(int numBits)
+/* Generate base64 encoding of a random key of at least size numBits returning string to be freed when done */
+{
+int numBytes = (numBits + 7) / 8;  // round up to nearest whole byte.
+numBytes = ((numBytes+2)/3)*3;  // round up to the nearest multiple of 3 to avoid equals-char padding in base64 output
+FILE *f = mustOpen("/dev/urandom", "r");   // open random system device for read-only access.
+char *binaryString = needMem(numBytes);
+mustRead(f, binaryString, numBytes);
+carefulClose(&f);
+char * result = base64Encode(binaryString, numBytes); // converts 3 binary bytes into 4 printable characters
+int len = strlen(result);
+memSwapChar(result, len, '+', 'A'); // replace + and / with characters that are URL-friendly.
+memSwapChar(result, len, '/', 'a');
+freeMem(binaryString);
+return result;
+}
+
+char *nonce = NULL;
+
+char *getNonce()
+/* make nonce one-use-per-page */
+{
+if (!nonce)
+    {
+    nonce = makeRandomKey(128+33); // at least 128 bits of protection, 33 for the world population size.
+    }
+return nonce;
+}
+
+char *getNoncePolicy()
+/* get nonce policy clause */
+{
+char nonceClause[1024];
+safef(nonceClause, sizeof nonceClause, "'nonce-%s'", getNonce());
+return cloneString(nonceClause);
+}
+
+/* CSP2 Usage Notes
+One can add js scripts to a DOM dynamically.
+It is critical to use script.setAttribute('nonce', pageNonce);
+instead of script.nonce = pageNonce; because nonce is an html attribute,
+not a javascript attribute.  In places where this is used (like alleles.js)
+we should mark this with CSP2 comment because someday CSP3 will automatically
+be able to pass the nonce to script children and the command will no longer be 
+needed.
+ */
+
+/* CSP3 Usage Notes
+(NOT IN USE YET).
+We almost went with CSP3 even though it is very new at this time (2017-01-26).
+It has one important new script-src directive 'strict-dynamic' which does 3
+things:
+
+First, the word "strict" means that it only uses nonces -- the whitelist of sites and paths
+is completely ignored. When we adopt it someday we will need to go through
+our source code and add the nonce='random' to our non-inline js script includes.
+There are probably only a few dozen places in the code that do this and it should
+be easy. The reason that whitelists can be a big problem is that they are brittle,
+can grow to be very large and unweildy and hard to maintain. Furthermore, an 
+entire large portal often has other stuff there which hackers can exploit and which
+you were not intending to authorize. If the whitelisted site has jsonp endpoints,
+redirection-scripts, AugustusJS, and other fancy js frameworks, or even old jquery includes with bugs,
+then there are exploits that whitelists do not protect against.
+
+Second, the word "dynamic" in the directive means that it dynamically delegates trust authorization
+to other scripts, so that whatever stuff libraries include are automaically trusted recursively. 
+Non-inline script libraries, both local and off-site will require nonces alike.
+
+Third, the final thing that 'strict-dynamic' does is that
+when a nonced-script dynamically adds a script to the DOM dynamically with createElement('script')
+and document.head.appendChild(script);, the nonce value is added automatically,
+unlike CSP2.  'script-dynamic' specifically encourages such DOM dynamic additions
+while discouraging more dangerous methods which require raw html string parsing followed by eval such as
+innerHTML and document.write.
+
+These changes are aimed at making CSP more user-friendly and deployable.
+
+So to deploy CSP3 is fairly easy from a code-change point of view. Just add 'strict-dynamic'
+to the CSP policy and add some nonces to the js library include lines.  But we do not 
+accrue that much value from it over CSP2 at this time. Plus, because there is currently
+no easy way to tell which CSP level a browser supports, and we have no huge whitelist at this time,
+there is not much benefit.  Also with CSP2, they gave us the trick of using 'unsafe-inline' together
+with 'nonce=random' so that CSP1 would have no enforcement, but would at least run without errors
+and allow inline js, while CSP2 DOES have nonce-protected inline js.  BUT They did not create
+any equivalent policy for backwards compatibility that would likewise disable enforcement in CSP2 browsers
+while enabling full enforcement in CSP3 browsers.  Without that trick we are basically stuck
+with a CSP2 level policy until basically nearly all browsers have CSP3. This could take several years,
+even though Chrome and FF already support CSP3 and even MS Edge will have it soon.
+I contacted the designers of 'strict-dynamic', but it was too late to change CSP3.
+*/
+
+
+char *getCspPolicyString()
+/* get the policy string */
+{
+// example "default-src 'self'; child-src 'none'; object-src 'none'"
+struct dyString *policy = dyStringNew(1024);
+dyStringAppend(policy, "default-src *;");
+
+/* more secure method not used yet 
+dyStringAppend(policy, "default-src 'self';");
+
+dyStringAppend(policy, "  child-src 'self';");
+*/
+
+dyStringAppend(policy, " script-src 'self'");
+// Trick for backwards compatibility with browsers that understand CSP1 but not nonces (CSP2).
+dyStringAppend(policy, " 'unsafe-inline'");
+// For browsers that DO understand nonces and CSP2, they ignore 'unsafe-inline' in script if nonce is present.
+char *noncePolicy=getNoncePolicy();
+dyStringPrintf(policy, " %s", noncePolicy);
+freeMem(noncePolicy);
+dyStringAppend(policy, " code.jquery.com");          // used by hgIntegrator jsHelper and others
+dyStringAppend(policy, " www.google-analytics.com"); // used by google analytics
+// cirm cdw lib and web browse
+dyStringAppend(policy, " cpettitt.github.io/project/dagre-d3/latest/dagre-d3.js");
+dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js");
+dyStringAppend(policy, " login.persona.org/include.js");
+// expMatrix
+dyStringAppend(policy, " ajax.googleapis.com/ajax");
+dyStringAppend(policy, " maxcdn.bootstrapcdn.com/bootstrap");
+dyStringAppend(policy, " d3js.org/d3.v3.min.js");
+// jsHelper
+dyStringAppend(policy, " cdn.datatables.net");
+
+dyStringAppend(policy, ";");
+
+
+dyStringAppend(policy, " style-src * 'unsafe-inline';");
+
+/* more secure method not used yet 
+dyStringAppend(policy, " style-src 'self' 'unsafe-inline'");
+dyStringAppend(policy, " code.jquery.com");          // used by hgIntegrator
+dyStringAppend(policy, " netdna.bootstrapcdn.com");  // used by hgIntegrator
+dyStringAppend(policy, " fonts.googleapis.com");    // used by hgGateway
+dyStringAppend(policy, " maxcdn.bootstrapcdn.com"); // used by hgGateway
+dyStringAppend(policy, ";");
+*/
+
+// The data: protocol is used by popular browser extensions.
+// It seems to be safe and it is too bad that it must be explicitly included.
+dyStringAppend(policy, " font-src * data:;");
+
+/* more secure method not used yet 
+dyStringAppend(policy, " font-src 'self'");
+dyStringAppend(policy, " netdna.bootstrapcdn.com");  // used by hgIntegrator
+dyStringAppend(policy, " maxcdn.bootstrapcdn.com"); // used by hgGateway
+dyStringAppend(policy, " fonts.gstatic.com");       // used by hgGateway
+dyStringAppend(policy, ";");
+
+dyStringAppend(policy, " object-src 'none';");
+
+*/
+
+dyStringAppend(policy, " img-src * data:;");  
+
+/* more secure method not used yet 
+dyStringAppend(policy, " img-src 'self'");
+// used by hgGene for modbaseimages in hg/hgc/lowelab.c hg/protein/lib/domains.c hg/hgGene/domains.c
+dyStringAppend(policy, " modbase.compbio.ucsf.edu");  
+dyStringAppend(policy, " hgwdev.cse.ucsc.edu"); // used by visiGene
+dyStringAppend(policy, " genome.ucsc.edu"); // used by visiGene
+dyStringAppend(policy, " code.jquery.com");          // used by hgIntegrator
+dyStringAppend(policy, " www.google-analytics.com"); // used by google analytics
+dyStringAppend(policy, " stats.g.doubleclick.net"); // used by google analytics
+dyStringAppend(policy, ";");
+*/
+return dyStringCannibalize(&policy);
+}
+
+char *getCspMetaString(char *policy)
+/* get the policy string as an html header meta tag */
+{
+char meta[1024];
+safef(meta, sizeof meta, "<meta http-equiv='Content-Security-Policy' content=\"%s\">\n", policy); 
+// use double quotes around policy because it contains single-quoted values.
+return cloneString(meta);
+}
+
+char *getCspMetaResponseHeader(char *policy)
+/* get the policy string as an html response header */
+{
+char response[4096];
+safef(response, sizeof response, "Content-Security-Policy: %s\n", policy); 
+return cloneString(response);
+}
+
+char *getCspMetaHeader()
+/* return meta CSP header string */
+{
+char *policy = getCspPolicyString();
+char *meta = getCspMetaString(policy);
+freeMem(policy);
+return meta;
+}
+
+void generateCspMetaHeader(FILE *f)
+/* generate meta CSP header */
+{
+char *meta = getCspMetaHeader();
+fputs(meta, f);
+freeMem(meta);
+}
+
+
 void _htmStartWithHead(FILE *f, char *head, char *title, boolean printDocType, int dirDepth)
 /* Write out bits of header that both stand-alone .htmls
  * and CGI returned .htmls need, including optional head info */
@@ -826,8 +1067,13 @@ if (printDocType)
     // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
 #endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     }
-fputs("<HTML>", f);
-htmlFprintf(f,"<HEAD>\n%s|none|<TITLE>%s</TITLE>\n", head, title); // TODO "head" var. not XSS safe
+fputs("<HTML>\n", f);
+fputs("<HEAD>\n", f);
+// CSP header
+generateCspMetaHeader(f);
+
+fputs(head, f); // TODO "head" var. not XSS safe
+htmlFprintf(f,"<TITLE>%s</TITLE>\n", title); 
 if (endsWith(title,"Login - UCSC Genome Browser")) 
     fprintf(f,"\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n");
 fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
@@ -875,6 +1121,8 @@ _htmStartWithHead(f, "", title, TRUE, dirDepth);
 /* Write the end of an html file */
 void htmEnd(FILE *f)
 {
+if (f == stdout)  // not html for a frame of a frameset
+    jsInlineFinish();
 fputs("\n</BODY>\n</HTML>\n", f);
 }
 

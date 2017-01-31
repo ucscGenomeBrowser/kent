@@ -490,6 +490,31 @@ var genomePos = {
         return false;
     },
 
+
+    inlineJs : "",
+
+    getInlineJs: function (response, status)
+    {
+	//alert("genomePos.getInlineJs called!"); // DEBUG REMOVE
+        genomePos.inlineJs = response;
+    },
+
+    fetchInlineJs: function (url)
+    {   // code to fetch temp file with inline js in it.  // OBSOLETE CSP1
+        $.ajax({
+                type: "GET",
+                async: false, // wait for result
+                url: url,
+                dataType: "html",
+                trueSuccess: genomePos.getInlineJs,
+                success: catchErrorOrDispatch,
+                error: errorHandler,
+                cache: false
+            });
+        return genomePos.inlineJs;
+    },
+
+
     convertedVirtCoords : {chromStart : -1, chromEnd : -1},
 
     handleConvertChromPosToVirtCoords: function (response, status)
@@ -3099,8 +3124,10 @@ function showExtToolDialog() {
             if ((maxSize===0) || (winSize < maxSize))
                 {
                 var url = "hgTracks?hgsid="+getHgsid()+"&hgt.redirectTool="+toolId;
-                var onclick = "$('#extToolDialog').dialog('close');";
-                htmlLines.push("<li><a onclick="+'"'+onclick+'"'+"id='extToolLink' target='_BLANK' href='"+url+"'>"+shortLabel+"</a>: <small>"+longLabel+"</small></li>");
+                //var onclick = "$('#extToolDialog').dialog('close');";
+                //htmlLines.push("<li><a onclick="+'"'+onclick+'"'+"id='extToolLink' target='_BLANK' href='"+url+"'>"+shortLabel+"</a>: <small>"+longLabel+"</small></li>");
+		// onclick js code moved to jsInline
+                htmlLines.push("<li><a class='extToolLink2' target='_BLANK' href='"+url+"'>"+shortLabel+"</a>: <small>"+longLabel+"</small></li>");
                 }
             else
                 {
@@ -3116,6 +3143,9 @@ function showExtToolDialog() {
             title = hgTracks.nonVirtPosition;
         title += " on another website";
         $("body").append("<div id='extToolDialog' title='"+title+"'><p>" + content + "</p>");
+
+	// GALT 
+	$('a.extToolLink2').click(function(){$('#extToolDialog').dialog('close');});
 
         // copied from the hgTrackUi function below
         var popMaxHeight = ($(window).height() - 40);
@@ -3188,7 +3218,7 @@ var popUpHgt = {
     },
 
     uiDialogOk: function (popObj)
-    {   // When hgTracks Cfg popup closes with ok, then update cart and refresh parts of page
+    {   // When popup closes with ok
 
     },
 
@@ -3200,12 +3230,14 @@ var popUpHgt = {
         response = response.replace(/<a /ig, "<a target='_blank' ");
 
         var cleanHtml = response;
+        cleanHtml = stripCspHeader(cleanHtml,false); // DEBUG msg with true
         cleanHtml = stripJsFiles(cleanHtml,false);   // DEBUG msg with true
         cleanHtml = stripCssFiles(cleanHtml,false);  // DEBUG msg with true
         cleanHtml = stripJsEmbedded(cleanHtml,false);// DEBUG msg with true
         cleanHtml = stripMainMenu(cleanHtml,false);  // DEBUG msg with true
 
         $('#hgTracksDialog').html("<div id='pop' style='font-size:.9em;'>"+ cleanHtml +"</div>");
+
 
         // Strategy for popups with js:
         // - jsFiles and CSS should not be included in html.  Here they are shluped out.
@@ -3288,8 +3320,9 @@ function showHotkeyHelp() {
 // A function to add an entry for the keyboard help dialog box to the menubar 
 // and add text that indicates the shortcuts to many static menubar items as suggested by good old IBM CUA/SAA
 function addKeyboardHelpEntries() {
-    var html = '<li><a title="List all possible keyboard shortcuts" href="javascript:showHotkeyHelp()">Keyboard Shortcuts</a><span class="shortcut">?</span></li>';
+    var html = '<li><a id="keybShorts" title="List all possible keyboard shortcuts" href="#">Keyboard Shortcuts</a><span class="shortcut">?</span></li>';
     $('#help .last').before(html);
+    $("#keybShorts").onclick = function(){showHotKeyHelp(); return false;};
 
     html = '<span class="shortcut">s s</span>';
     $('#sessionsMenuLink').after(html);
@@ -3467,13 +3500,16 @@ var popUp = {
     {
     // Take html from hgTrackUi and put it up as a modal dialog.
 
+	//alert("Got here popUp.uiDialog"); // DEBUG REMOVE GALT
+
         // make sure all links (e.g. help links) open up in a new window
         response = response.replace(/<a /ig, "<a target='_blank' ");
 
         var cleanHtml = response;
-        cleanHtml = stripJsFiles(cleanHtml,true);   // DEBUG msg with true
-        cleanHtml = stripCssFiles(cleanHtml,true);  // DEBUG msg with true
-        cleanHtml = stripJsEmbedded(cleanHtml,true);// DEBUG msg with true
+        cleanHtml = stripJsFiles(cleanHtml,false);   // DEBUG msg with true
+        cleanHtml = stripCssFiles(cleanHtml,false);  // DEBUG msg with true
+        cleanHtml = stripJsEmbedded(cleanHtml,false);// DEBUG msg with true
+	//alert(cleanHtml);  // DEBUG REMOVE
         $('#hgTrackUiDialog').html("<div id='pop' style='font-size:.9em;'>"+ cleanHtml +"</div>");
 
         // Strategy for popups with js:
@@ -3911,7 +3947,41 @@ var imageV2 = {
 
         // update local hgTracks.trackDb to reflect possible side-effects of ajax request.
 
+	// alert("response=["+response+"]");  // DEBUG GALT REMOVE
+
         var newJson = scrapeVariable(response, "hgTracks");
+
+	// added by GALT for CSP/XSS
+        if (!newJson) {
+	    // OLD CSP1 way not using now?
+            var strippedJsFiles = {};
+            stripJsFiles(response, false, strippedJsFiles);
+	    //alert(strippedJsFiles.toSource()); // DEBUG GALT FF ONLY
+	    //alert("strippedJsFiles.jsFiles="+strippedJsFiles.jsFiles+"");  // DEBUG GALT REMOVE
+	    var inlinePath = "";
+	    var i, len;
+	    if (strippedJsFiles.jsFiles) {		
+		for (i = 0, len = strippedJsFiles.jsFiles.length; i < len; ++i) {
+		    //alert(strippedJsFiles.jsFiles[i]); // DEBUG REMOVE
+		    var srcPattern="<script type='text/javascript' SRC='(.*)'></script>";
+		    var reg = new RegExp(srcPattern);
+		    var a = reg.exec(strippedJsFiles.jsFiles[i]);
+		    if (a && a[1]) {
+			if (a[1].match("inline")) {
+			    inlinePath = a[1];
+			    //alert("SRC found: "+a[1]);  // DEBUG REMOVE
+			}
+		    }
+		}
+	    }
+	    if (inlinePath !== "") {
+		//alert("inlinePath found: "+inlinePath); // DEBUG REMOVE
+		var js = genomePos.fetchInlineJs(inlinePath);
+		//alert(js); // DEBUG REMOVE
+		response += ("<script type='text/javascript'>"+js+"</script>");
+		newJson = scrapeVariable(response, "hgTracks");
+	    }
+	}
 
         //alert(JSON.stringify(newJson)); // DEBUG Example
 

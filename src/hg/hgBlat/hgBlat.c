@@ -257,7 +257,10 @@ safef(url, sizeof(url), "%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s",
 /* Odd it appears that we've already printed the Content-Typ:text/html line
    but I can't figure out where... */
 htmStart(stdout, "Redirecting"); 
-printf("<script>location.replace('%s');</script>", url);
+char javascript[1024];
+safef(javascript, sizeof javascript,
+    "location.replace('%s');", url);
+jsInline(javascript);
 printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>", url);
 htmlEnd();
 
@@ -882,9 +885,9 @@ void askForSeq(char *organism, char *db)
 findServer(db, FALSE);
 
 /* JavaScript to update form when org changes */
-char *onChangeText = "onchange=\""
+char *onChangeText = ""
     "document.mainForm.changeInfo.value='orgChange';"
-    "document.mainForm.submit();\"";
+    "document.mainForm.submit();";
 
 char *userSeq = NULL;
 
@@ -903,7 +906,7 @@ printf("<TD ALIGN=CENTER>Output type:</TD>");
 printf("<TD ALIGN=CENTER>&nbsp</TD>");
 printf("</TR>\n<TR>\n");
 printf("<TD ALIGN=CENTER>\n");
-printBlatGenomeListHtml(db, onChangeText);
+printBlatGenomeListHtml(db, "change", onChangeText);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
 printBlatAssemblyListHtml(db);

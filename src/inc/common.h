@@ -114,8 +114,9 @@
 #define signed32 int	      /* Wants to be signed 32 bits. */
 #define bits8 unsigned char   /* Wants to be unsigned 8 bits. */
 
-#define BIGNUM 0x3fffffff	/* A really big number */
+#define BIGNUM 0x3fffffff	/* A really big number but most subtraction won't cause overflow */
 #define BIGDOUBLE 1.7E+308	/* Close to biggest double-precision number */
+#define BIGLONGLONG 0x3fffffffffffffff /* A really big long long value safe for a subtraction */
 
 #define LIMIT_2or8GB (2147483647 * ((sizeof(size_t)/4)*(sizeof(size_t)/4)))
 /*      == 2 Gb for 32 bit machines, 8 Gb for 64 bit machines */
@@ -576,10 +577,6 @@ struct slName *slNameListFromString(char *s, char delimiter);
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
 
-struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes);
-// Return list of unique words found by parsing string delimited by whitespace.
-// If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] will yield 2 slNames no quotes
-
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
 /* Return list of slNames from an array of strings of length arraySize.
  * If a string in the array is NULL, the array will be treated as
@@ -1018,9 +1015,6 @@ char *lastWordInLine(char *line);
 char *nextWord(char **pLine);
 /* Return next word in *pLine and advance *pLine to next
  * word. Returns NULL when no more words. */
-
-char *nextWordRespectingQuotes(char **pLine);
-// return next word but respects single or double quotes surrounding sets of words.
 
 char *cloneFirstWord(char *line);
 /* Clone first word in line */
