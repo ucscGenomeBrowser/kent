@@ -9,6 +9,7 @@
 #include "trackDb.h"
 #include "jsHelper.h"
 #include "hCommon.h"
+#include "rainbow.h"
 #include "barChartCategory.h"
 #include "barChartUi.h"
 
@@ -18,9 +19,9 @@ static boolean isPopup = FALSE;
 /* Convenience functions for category filter controls */
 
 
-static char *makeCategoryLabel(struct barChartCategory *categ)
-{
+char *makeCategoryLabel(struct barChartCategory *categ)
 /* Display category color and label */
+{
 char buf[256];
 safef(buf, sizeof(buf), "<td class='bcColorPatch' bgcolor=%X></td>"
                         "<td>&nbsp;%s</td>", 
@@ -38,6 +39,8 @@ struct categorySelect
 
 static void makeGroupCheckboxes(char *name, char *title, struct categorySelect *selects)
 {
+//TODO: select this based on #categories
+#define TABLE_COLUMNS 1
 if (title != NULL)
     printf("<tr><td colspan=10><i><b>%s</b></i></td></tr><tr>\n", title);
 int count = slCount(selects);
@@ -49,7 +52,7 @@ for (i=0, sel = selects; sel != NULL; sel = sel->next, i++)
     categArray[i] = sel;
 int col=0;
 int row=0;
-int tableColumns=3;
+int tableColumns=1;
 for (i=0; i<count; i++)
     {
     int j = row + col*(count/tableColumns+1);
@@ -85,7 +88,7 @@ struct hash *checkHash = hashNew(0);
 struct slName *sel;
 for (sel = checked; sel != NULL; sel = sel->next)
     hashAdd(checkHash, sel->name, sel->name);
-puts("<table borderwidth=0 cellspacing=4><tr>");
+puts("<table borderwidth=0 cellpadding=1 cellspacing=4><tr>");
 struct categorySelect *catSel;
 struct barChartCategory *categ;
 struct categorySelect *all = NULL;
@@ -143,6 +146,75 @@ cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
 printf("<span class='%s'> (range 0-%d)</span>\n", buf, round(barChartUiMaxMedianScore()));
 }
 
+char *barChartUiGetLabel(char *database, struct trackDb *tdb)
+/* Get label for category list */
+{
+return trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_CATEGORY_LABEL, 
+                                        BAR_CHART_CATEGORY_LABEL_DEFAULT);
+}
+
+struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)
+/* Get category colors and descriptions.  If barChartLabel setting contains label list, assign rainbow colors.
+ * O/w look for a table naed track+Category, and use labels and colors there */
+{
+static struct barChartCategory *categs;
+
+if (categs != NULL)
+    return categs;
+
+char *words[BAR_CHART_MAX_CATEGORIES];
+char *labels = trackDbSettingClosestToHome(tdb, BAR_CHART_CATEGORY_LABELS);
+struct barChartCategory *categ = NULL;
+
+if (!labels)
+    {
+    categs = barChartGetCategories(database, tdb->table);
+    }
+else
+    {
+    int count = chopLine(cloneString(labels), words);
+    struct rgbColor *rainbow = getRainbow(&saturatedRainbowAtPos, count);
+    int i;
+    char buf[6];
+    for (i=0; i<count; i++)
+        {
+        AllocVar(categ);
+        categ->id = i;
+        safef(buf, sizeof buf, "%d", i);
+        categ->name = cloneString(buf);
+        categ->label = words[i];
+        categ->color = ((rainbow[i].r & 0xff)<<16) + 
+                        ((rainbow[i].g & 0xff)<<8) + 
+                        ((rainbow[i].b & 0xff));
+        slAddHead(&categs, categ);
+        }
+    slReverse(&categs);
+    }
+return categs;
+}
+
+struct barChartCategory *barChartUiGetCategoryById(int id, char *database, 
+                                                        struct trackDb *tdb)
+/* Get category info by id */
+{
+struct barChartCategory *categ;
+struct barChartCategory *categs = barChartUiGetCategories(database, tdb);
+// TODO: consider making this more efficient
+for (categ = categs; categ != NULL; categ = categ->next)
+    if (categ->id == id)
+        return categ;
+return NULL;
+}
+
+char *barChartUiGetCategoryLabelById(int id, char *database, struct trackDb *tdb)
+/* Get label for a category id */
+{
+struct barChartCategory *categ = barChartUiGetCategoryById(id, database, tdb);
+if (categ == NULL)
+    return "Unknown";
+return categ->label;
+}
+
 void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track, 
                         char *title, boolean boxed)
 /* Bar chart track type */
@@ -183,11 +255,10 @@ printf("</p>");
 
 /* Category filter */
 printf("<br>");
-// TODO: 
-#define BAR_CHART_CATEGORY_LABEL        "categoryLabel"
-#define BAR_CHART_CATEGORY_LABEL_DEFAULT        "Categories"
 char *categoryLabel =  trackDbSettingClosestToHomeOrDefault(tdb, 
-                                BAR_CHART_CATEGORY_LABEL, BAR_CHART_CATEGORY_LABEL_DEFAULT);
+                    BAR_CHART_CATEGORY_LABEL, BAR_CHART_CATEGORY_LABEL_DEFAULT);
+char *db = cartString(cart, "db");
+struct barChartCategory *categs = barChartUiGetCategories(db, tdb);
 printf("<div><b>%s:</b>\n", categoryLabel);
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_CATEGORY_SELECT);
 if (isPopup)
@@ -202,8 +273,6 @@ else
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
     }
 printf("</div>");
-char *db = cartString(cart, "db");
-struct barChartCategory *categs = barChartGetCategories(db, track);
 struct slName *selectedValues = NULL;
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, BAR_CHART_CATEGORY_SELECT))
     selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, BAR_CHART_CATEGORY_SELECT);
