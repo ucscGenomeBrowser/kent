@@ -13840,6 +13840,8 @@ else if (sameWord(type, "bigGenePred"))
     wordCount++;
     words[1] = "12";
     bigBedMethods(track, tdb, wordCount, words);
+    track->itemColor   = bigGenePredColor;
+    track->itemNameColor = bigGenePredColor;
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }

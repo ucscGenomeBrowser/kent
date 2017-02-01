@@ -25007,7 +25007,10 @@ void doSnakeClick(struct trackDb *tdb, char *itemName)
 /* Put up page for snakes. */
 {
 struct trackDb *parentTdb = trackDbTopLevelSelfOrParent(tdb);
-char *otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
+char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
+if (otherSpecies == NULL)
+    otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
+
 char *hubName = cloneString(database);
 char otherDb[4096];
 char *qName = cartOptionalString(cart, "qName");

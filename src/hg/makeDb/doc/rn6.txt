@@ -3049,7 +3049,7 @@ done >> multiz20way.maf
     rm multiz20way*.tab
 
 ##############################################################################
-# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2017-01-22 - Hiram)
+# GAP ANNOTATE MULTIZ20WAY MAF AND LOAD TABLES (DONE - 2017-01-22 - Hiram)
     # mafAddIRows has to be run on single chromosome maf files, it does not
     #	function correctly when more than one reference sequence
     #	are in a single file.  Need to split of the maf file into individual
@@ -3167,7 +3167,7 @@ done >> rn6.20way.maf
     rm multiz20way*.tab
 
 ######################################################################
-# MULTIZ7WAY MAF FRAMES (DONE - 2017-01-22 - Hiram)
+# MULTIZ20WAY MAF FRAMES (DONE - 2017-01-22 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/rn6/bed/multiz20way/frames
     cd /hive/data/genomes/rn6/bed/multiz20way/frames
