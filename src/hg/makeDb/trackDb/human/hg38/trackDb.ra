@@ -493,11 +493,24 @@ xrefTable ncbiRefSeqLink
 xrefQuery select id,protAcc from %s where protAcc like '%s%%'
 termRegex [NXY]P_[0-9]+(\.[0-9]+)?
 
-# test for new track type
-#track gtexBarChart
-#type barChart
-#shortLabel GTEx Bar Chart
-#longLabel GTEx Gene Expression in barChart track format
-#categoryLabel   Tissues
-#group expression
-#spectrum on
+# tests for new track type
+track gtexBarChart
+type barChart
+shortLabel GTEx Bar Chart
+longLabel GTEx Gene Expression in barChart track format
+barChartLabel Tissues
+group expression
+spectrum on
+
+track gtexBrain
+#type barChart 0 370000 RPKM
+type barChart
+barChartLabel Brain Regions
+barChartBars \
+    Amygdala Anterior_cingulate_cortex Caudate_basal_ganglia Cerebellar_hemisphere \
+    Cerebellum Cortex Frontal_cortex Hippocampus Hypothalamus Nucleus_accumbens \
+    Putamen_basal_ganglia Spinal_cord Substantia_nigra
+shortLabel GTEx Brain
+longLabel GTEx Brain Gene Expression in barChart track format
+group expression
+spectrum on

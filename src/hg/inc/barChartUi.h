@@ -24,8 +24,16 @@
 #define BAR_CHART_MAX_LIMIT_DEFAULT          300
 /* TODO: Get default from trackDb ? */
 
+/* Category (bar) info */
+#define BAR_CHART_MAX_CATEGORIES        100
+
 /* Category filter */
 #define BAR_CHART_CATEGORY_SELECT      "categories"
+
+/* Labels for categories */
+#define BAR_CHART_CATEGORY_LABELS        "barChartBars"
+#define BAR_CHART_CATEGORY_LABEL         "barChartLabel"
+#define BAR_CHART_CATEGORY_LABEL_DEFAULT        "Categories"
 
 /* Suppress whiteout behind graph (to show highlight and blue lines) */
 #define BAR_CHART_NO_WHITEOUT         "noWhiteout"
@@ -51,5 +59,20 @@ void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char 
 
 double barChartUiMaxMedianScore();
 /* Max median score, for scaling */
+
+struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb);
+/* Get category colors and descriptions.  
+ * If barChartLabel setting contains label list, assign rainbow colors.
+ * O/w look for a table naed track+Category, and use labels and colors there */
+
+struct barChartCategory *barChartUiGetCategoryById(int id, char *database, 
+                                                        struct trackDb *tdb);
+/* Get category info by id */
+
+char *barChartUiGetCategoryLabelById(int id, char *database, struct trackDb *tdb);
+/* Get label for a category id */
+
+char *barChartUiGetLabel(char *database, struct trackDb *tdb);
+/* Get label for category list */
 
 #endif /* BAR_CHARTUI_H */

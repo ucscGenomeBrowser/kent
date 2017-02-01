@@ -41,6 +41,8 @@ hFreeConn(&conn);
 return barChart;
 }
 
+#define BAR_CHART_UNITS_DEFAULT "Value"
+
 void doBarChartDetails(struct trackDb *tdb, char *item)
 /* Details of barChart item */
 {
@@ -54,7 +56,7 @@ genericHeader(tdb, item);
 int categId;
 float highLevel = barChartHighestValue(barChart, &categId);
 printf("<b>Highest value: </b> %0.2f in %s<br>\n", 
-                highLevel, barChartGetCategoryLabel(categId, database, tdb->table));
+                highLevel, barChartUiGetCategoryLabelById(categId, database, tdb));
 printf("<b>Total all values: </b> %0.2f<br>\n", barChartTotalValue(barChart));
 printf("<b>Score: </b> %d<br>\n", barChart->score); 
 printf("<b>Genomic position: "

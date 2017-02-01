@@ -8,7 +8,6 @@
 #include "bed.h"
 #include "hvGfx.h"
 #include "spaceSaver.h"
-#include "rainbow.h"
 #include "barChartBed.h"
 #include "barChartCategory.h"
 #include "barChartUi.h"
@@ -35,38 +34,39 @@ struct barChartItem
 
 /***********************************************/
 /* Cache category info */
+/* TODO: multi-thread caching by track name */
 
-struct barChartCategory *getCategories(char *track)
+struct barChartCategory *getCategories(struct track *tg)
 /* Get and cache category info */
 {
 static struct barChartCategory *categs = NULL;
 
 if (!categs)
-    categs = barChartGetCategories(database, track);
+    categs = barChartUiGetCategories(database, tg->tdb);
 return categs;
 }
 
-int getCategoryCount(char *track)
+int getCategoryCount(struct track *tg)
 /* Get and cache the number of categories */
 {
 static int categCount = 0;
 
 if (!categCount)
-    categCount = slCount(getCategories(track));
+    categCount = slCount(getCategories(tg));
 return categCount;
 }
 
 /* TODO: Do we need names ? */
 
-char *getCategoryName(char *track, int id)
+char *getCategoryName(struct track *tg, int id)
 /* Get category name from id, cacheing */
 {
 static char **categNames = NULL;
 struct barChartCategory *categ;
-int count = getCategoryCount(track);
+int count = getCategoryCount(tg);
 if (!categNames)
     {
-    struct barChartCategory *categs = getCategories(track);
+    struct barChartCategory *categs = getCategories(tg);
     AllocArray(categNames, count);
     for (categ = categs; categ != NULL; categ = categ->next)
         categNames[categ->id] = cloneString(categ->name);
@@ -76,15 +76,15 @@ if (id >= count)
 return categNames[id];
 }
 
-char *getCategoryLabel(char *track, int id)
+char *getCategoryLabel(struct track *tg, int id)
 /* Get category descriptive label from id, cacheing */
 {
 static char **categLabels = NULL;
 struct barChartCategory *categ;
-int count = getCategoryCount(track);
+int count = getCategoryCount(tg);
 if (!categLabels)
     {
-    struct barChartCategory *categs = getCategories(track);
+    struct barChartCategory *categs = getCategories(tg);
     AllocArray(categLabels, count);
     for (categ = categs; categ != NULL; categ = categ->next)
         categLabels[categ->id] = cloneString(categ->label);
@@ -94,10 +94,10 @@ if (id >= count)
 return categLabels[id];
 }
 
-struct rgbColor *getCategoryColors(char *track)
+struct rgbColor *getCategoryColors(struct track *tg)
 /* Get RGB colors from category table */
 {
-struct barChartCategory *categs = getCategories(track);
+struct barChartCategory *categs = getCategories(tg);
 struct barChartCategory *categ = NULL;
 int count = slCount(categs);
 struct rgbColor *colors;
@@ -151,7 +151,7 @@ static void filterCategories(struct track *tg)
 {
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 struct barChartCategory *categ = NULL;
-extras->categories = getCategories(tg->table);
+extras->categories = getCategories(tg);
 extras->categoryFilter = hashNew(0);
 if (cartListVarExistsAnyLevel(cart, tg->tdb, FALSE, BAR_CHART_CATEGORY_SELECT))
     {
@@ -250,24 +250,8 @@ struct barChartItem *itemInfo = NULL, *list = NULL;
 struct barChartBed *bed = (struct barChartBed *)tg->items;
 
 /* Load category colors */
-#ifdef COLOR_SCHEME
-char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, BAR_CHART_COLORS, 
-                        BAR_CHART_COLORS_DEFAULT);
-#else
-char *colorScheme = BAR_CHART_COLORS_DEFAULT;
-#endif
-if (sameString(colorScheme, BAR_CHART_COLORS_USER))
-    {
-    extras->colors = getCategoryColors(tg->table);
-    }
-else
-    {
-    if (bed)
-	{
-	int expCount = bed->expCount;
-	extras->colors = getRainbow(&saturatedRainbowAtPos, expCount);
-	}
-    }
+extras->colors = getCategoryColors(tg);
+
 filterCategories(tg);
 
 while (bed != NULL)
@@ -406,7 +390,7 @@ int expCount = bed->expCount;
 double expScore;
 for (i=0; i<expCount; i++)
     {
-    if (!filterCategory(tg, getCategoryName(tg->table, i)))
+    if (!filterCategory(tg, getCategoryName(tg, i)))
         continue;
     expScore = bed->expScores[i];
     maxExp = max(maxExp, expScore);
@@ -664,7 +648,7 @@ int x1 = insideX;
 
 
 // add maps to category bars
-struct barChartCategory *categs = getCategories(tg->table);
+struct barChartCategory *categs = getCategories(tg);
 struct barChartCategory *categ = NULL;
 int barWidth = barChartBarWidth();
 int padding = barChartPadding();
