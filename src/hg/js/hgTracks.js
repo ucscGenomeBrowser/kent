@@ -3500,7 +3500,13 @@ var popUp = {
     {
     // Take html from hgTrackUi and put it up as a modal dialog.
 
-	//alert("Got here popUp.uiDialog"); // DEBUG REMOVE GALT
+	var pageNonce = getNonce();
+	alert('pageNonce='+pageNonce);  // DEBUG REMOVE
+
+	var ajaxNonce = stripNonce(response, false);
+	alert('ajaxNonce='+ajaxNonce);  // DEBUG REMOVE
+    
+	var jsNonce = stripJsNonce(response, ajaxNonce, false);// DEBUG msg with true
 
         // make sure all links (e.g. help links) open up in a new window
         response = response.replace(/<a /ig, "<a target='_blank' ");
@@ -3511,6 +3517,19 @@ var popUp = {
         cleanHtml = stripJsEmbedded(cleanHtml,false);// DEBUG msg with true
 	//alert(cleanHtml);  // DEBUG REMOVE
         $('#hgTrackUiDialog').html("<div id='pop' style='font-size:.9em;'>"+ cleanHtml +"</div>");
+
+	// append ajax js blocks with nonce
+	var i;
+	for (i=0; i<jsNonce.length; ++i) {
+	    var sTag = document.createElement("script");
+	    sTag.type = "text/javascript";
+	    sTag.text = jsNonce[i];
+	    sTag.setAttribute('nonce', pageNonce); // CSP2 Requires
+
+	    alert("about to call appendChild on:\n"+jsNonce[i]);
+
+	    document.head.appendChild(sTag);
+	}		
 
         // Strategy for popups with js:
         // - jsFiles and CSS should not be included in html.  Here they are shluped out.

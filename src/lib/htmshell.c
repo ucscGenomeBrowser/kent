@@ -1023,7 +1023,7 @@ return cloneString(meta);
 }
 
 char *getCspMetaResponseHeader(char *policy)
-/* get the policy string as an html response header */
+/* get the policy string as an http response header */
 {
 char response[4096];
 safef(response, sizeof response, "Content-Security-Policy: %s\n", policy); 

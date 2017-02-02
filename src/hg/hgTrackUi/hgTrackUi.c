@@ -3517,8 +3517,11 @@ char *title = (tdbIsSuper(tdb) ? "Super-track Settings" :
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html
+    // still need CSP2 header for security
+    printf("%s", getCspMetaHeader());
     trackUi(tdb, tdbList, ct, TRUE);
     cartRemove(cart,"ajax");
+    jsInlineFinish();
     }
 else
     {
