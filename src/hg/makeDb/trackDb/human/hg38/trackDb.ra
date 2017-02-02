@@ -514,3 +514,13 @@ semiShortCircuit 1
 xrefTable ncbiRefSeqLink
 xrefQuery select id,protAcc from %s where protAcc like '%s%%'
 termRegex [NXY]P_[0-9]+(\.[0-9]+)?
+
+searchName ncbiRefSeqMrna
+searchTable ncbiRefSeq
+searchType genePred
+searchMethod prefix
+searchDescription ncbiRefSeq mrnaAcc search alias
+semiShortCircuit 1
+xrefTable ncbiRefSeqLink
+xrefQuery select id,mrnaAcc from %s where mrnaAcc like '%s%%'
+termRegex ([NX][MR]|YP)_[0-9]+(\.[0-9]+)?
