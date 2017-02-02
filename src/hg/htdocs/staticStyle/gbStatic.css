@@ -197,10 +197,19 @@ table.gbsCenterText td {
 
 /* Images */
 
+/* large images, e.g. figures, photos */
+
 .gbsPage img {
     border: 1px solid black;
     margin-left: 15px;
     margin-top: 10px;
+}
+
+/* small embedded image, e.g. for special characters or symbols */
+
+img.gbsInlineImg {
+    border: 0;
+    margin: 0;
 }
 
 p.gbsCaption {
