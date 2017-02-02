@@ -63,10 +63,11 @@ mkdir -p $base/hubFiles
 if [[ "$runScript" == "go" ]]
 then
 	contactFile="$base/publicHubContact.html"
+
 	# Check if old contact file exists and if it does move it to archive file
 	if [ -e $contactFile ]
 	then
-		mv $contactFile $contactFile.old
+		mv $contactFile $contactFile.old.temp
 	fi
 
 	# Make header for html file
@@ -99,7 +100,7 @@ then
 			# we want to use the last email we have as contact email
 			if [[ $email == "" ]] && [ -e $contactFile.old ]
 			then
-				email=$(grep "$url" $contactFile.old | awk '{print $4" "$5}')
+				email=$(grep "$url" $contactFile.old.temp | awk '{print $4" "$5}')
 			fi
 		fi
 
@@ -110,6 +111,22 @@ then
 		echo -e "$hubLink $email<br>" >> $contactFile
 	
 	done<<<"$(hgsql -h genome-centdb -Ne "select hubUrl,shortLabel from hubPublic" hgcentral)"
+	# Get line counts for current/old contact info files
+	lineCountNew=$(wc -l $contactFile | cut -d " " -f 1)
+	lineCountOld=$(wc -l $contactFile.old.temp | cut -d " " -f 1)
+	lineDiff=$(expr $lineCountNew - $lineCountOld)
+	# find absolute value of line diff
+	absLineDiff=$([ $lineDiff -lt 0 ] && echo $((-$lineDiff)) || echo $lineDiff)
+	# Check if line diff is >5 lines
+	if [ $(echo "$absLineDiff >= 5" | bc) -ne 0 ]
+	then
+		echo "Error: New contact file seems to be missing many entries from old file."
+		echo "       Something may have failed while running. Try running again to"
+		echo "       see if that helps."
+		exit 1
+	else
+		mv $contactFile.old.temp $contactFile.old
+	fi
 else
 	echo -e "Error: \"$1\" is not a valid input. Please see the usage message.\n\n"
 	echo -e $usage
