@@ -124,13 +124,3 @@ searchTable ncbiRefSeq
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name2 like '%s%%'
 searchPriority 50.1
-
-searchName ncbiRefSeqMrna
-searchTable ncbiRefSeq
-searchType genePred
-searchMethod prefix
-searchDescription ncbiRefSeq mrnaAcc search alias
-semiShortCircuit 1
-xrefTable ncbiRefSeqLink
-xrefQuery select id,mrnaAcc from %s where mrnaAcc like '%s%%'
-termRegex [NX][MR]_[0-9]+(\.[0-9]+)?

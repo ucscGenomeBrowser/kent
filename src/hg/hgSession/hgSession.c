@@ -273,7 +273,7 @@ boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
 /* DataTables configuration: only allow ordering on session name, creation date, and database.
  * https://datatables.net/reference/option/columnDefs */
-char javascript[1024];
+char javascript[16*1024];
 safef(javascript, sizeof javascript, 
         "if (theClient.isIePre11() === false)\n{\n"
         "$(document).ready(function () {\n"
