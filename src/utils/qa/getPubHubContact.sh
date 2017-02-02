@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # quit if something within the script fails
-#set -beEu -o pipefail
+set -beEu -o pipefail
 source `which qaConfig.bash`
 umask 002
 
