@@ -6,66 +6,48 @@
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>Frequently Asked Questions: Genome Browser Tracks</h1> 
+
+<h2>Topics</h2>
 <ul>
-  <li>
-  <a href="#tracks0">List of tracks available for a specific assembly</a></li>
-  <li>
-  <a href="#tracks1">Database/browser start coordinates differ by 1 base</a></li>
-  <li>
-  <a href="#tracks2">mRNA associated results</a></li>
-  <li>
-  <a href="#tracks3">Correspondence of Genome Browser mRNA positions to those of OMIM genes</a></li>
-  <li>
-  <a href="#tracks4">Position changes of features</a></li>
-  <li>
-  <a href="#tracks6">Evaluating possible alternative splices</a></li>
-  <li>
-  <a href="#tracks7">Matching exons and protein sequence</a></li>
-  <li>
-  <a href="#tracks9">Cause of duplicated gene</a></li>
-  <li>
-  <a href="#tracks11">Protein doesn't begin with methionine</a></li>
-  <li>
-  <a href="#tracks12">Doing an orthology track analysis of a protein</a></li>
-  <li>
-  <a href="#tracks13">Overlap SNPs vs. random SNPs</a></li>
-  <li>
-  <a href="#tracks14">Quality benchmarks for predicted genes</a></li>
-  <li>
-  <a href="#tracks15">Display conventions for gene prediction tracks</a></li>
-  <li>
-  <a href="#tracks16">Viewing detailed displays in conservation tracks</a></li>
-  <li>
-  <a href="#tracks17">Negative strand coordinates in PSL files</a></li>
-  <li>
-  <a href="#tracks18">Inconsistency in stop codon treatment in GTF tracks</a></li>
-  <li>
-  <a href="#tracks19">Obtaining clones referenced in Genome Browser</a></li>
-  <li>
-  <a href="#tracks20">Locating centromeres and telomeres</a></li>
-  <li>
-  <a href="#tracks21">Determining the table name for an annotation track</a></li>
+  <li><a class="toc" href="#tracks0">List of tracks available for a specific assembly</a></li>
+  <li><a class="toc" href="#tracks1">Database/browser start coordinates differ by 1 base</a></li>
+  <li><a class="toc" href="#tracks2">mRNA associated results</a></li>
+  <li><a class="toc" href="#tracks3">Correspondence of Genome Browser mRNA positions to those of 
+  OMIM genes</a></li>
+  <li><a class="toc" href="#tracks4">Position changes of features</a></li>
+  <li><a class="toc" href="#tracks6">Evaluating possible alternative splices</a></li>
+  <li><a class="toc" href="#tracks7">Matching exons and protein sequence</a></li>
+  <li><a class="toc" href="#tracks9">Cause of duplicated gene</a></li>
+  <li><a class="toc" href="#tracks11">Protein doesn't begin with methionine</a></li>
+  <li><a class="toc" href="#tracks12">Doing an orthology track analysis of a protein</a></li>
+  <li><a class="toc" href="#tracks13">Overlap SNPs vs. random SNPs</a></li>
+  <li><a class="toc" href="#tracks14">Quality benchmarks for predicted genes</a></li>
+  <li><a class="toc" href="#tracks15">Display conventions for gene prediction tracks</a></li>
+  <li><a class="toc" href="#tracks16">Viewing detailed displays in conservation tracks</a></li>
+  <li><a class="toc" href="#tracks17">Negative strand coordinates in PSL files</a></li>
+  <li><a class="toc" href="#tracks18">Inconsistency in stop codon treatment in GTF tracks</a></li>
+  <li><a class="toc" href="#tracks19">Obtaining clones referenced in Genome Browser</a></li>
+  <li><a class="toc" href="#tracks20">Locating centromeres and telomeres</a></li>
+  <li><a class="toc" href="#tracks21">Determining the table name for an annotation track</a></li>
 </ul>
 <p>
 <a href="index.html">Return to FAQ Table of Contents</a></p>
 
 <a name="tracks0"></a>
 <h2>List of tracks available for a specific assembly</h2>
-<p>
-<strong>How can I find out which tracks have been released for the assembly in which I'm
-interested?</strong></p> 
+<h6>How can I find out which tracks have been released for the assembly in which I'm 
+interested?</h6>
 <p> 
-The <a href="/goldenPath/releaseLog.html" target=_blank>Release Log</a> contains lists of the 
+The <a href="/goldenPath/releaseLog.html" target="_blank">Release Log</a> contains lists of the 
 published tracks and release dates for the current set of genome assemblies available on our site. 
 It also shows version information for the assemblies of other species used in comparative genomics 
 tracks.</p>
 
 <a name="tracks1"></a>
 <h2>Database/browser start coordinates differ by 1 base</h2>
-<p>
-<strong>I am confused about the start coordinates for items in the refGene table. It looks like you 
+<h6>I am confused about the start coordinates for items in the refGene table. It looks like you 
 need to add &quot;1&quot; to the starting point in order to get the same start coordinate as is 
-shown by the Genome Browser. Why is this the case?</strong></p>
+shown by the Genome Browser. Why is this the case?</h6>
 <p> 
 Our internal database representations of coordinates always have a zero-based start and a one-based 
 end. We add 1 to the start before displaying coordinates in the Genome Browser. Therefore, they 
@@ -88,11 +70,10 @@ is 0-based.</p>
 
 <a name="tracks2"></a>
 <h2>mRNA associated results</h2>
-<p>
-<strong>Someties when I type in the name of a gene -- e.g. DAO (D aminoacid oxidase) -- the Genome 
+<h6>Someties when I type in the name of a gene -- e.g. DAO (D aminoacid oxidase) -- the Genome 
 Browser returns a list that includes the gene entry on the assembly, but also contains links to 
 several other genes and aligned mRNAs. What is the relationship between my gene of interest and 
-these results?</strong></p> 
+these results?</h6>
 <p>
 The gene search results are obtained from scanning the RefSeq and Known Genes tracks, which are 
 typically based on non-redundant relatively high quality mRNAs. A small fraction of RefSeqs are 
@@ -109,9 +90,8 @@ gene or may serve as a source of information on the gene.</p>
 
 <a name="tracks3"></a>
 <h2>Correspondence of Genome Browser mRNA positions to those of OMIM genes</h2>
-<p>
-<strong>If I do a Genome Browser search for an mRNA sequence using its GenBank accession number, 
-will I always get the same cytogenetic location as that given by OMIM for the gene?</strong></p> 
+<h6>If I do a Genome Browser search for an mRNA sequence using its GenBank accession number, 
+will I always get the same cytogenetic location as that given by OMIM for the gene?</h6>
 <p> 
 Not always. Sometimes the Genome Browser will return more than one location when there are recent 
 duplication or assembly problems in the human genome. In these cases, usually one of the locations 
@@ -123,9 +103,8 @@ sites do match.</p>
 
 <a name="tracks4"></a>
 <h2>Position changes of features</h2>
-<p>
-<strong>Yesterday I was looking at a contig in a specific location, and today the location has 
-changed. What happened?</strong></p> 
+<h6>Yesterday I was looking at a contig in a specific location, and today the location has 
+changed. What happened?</h6>
 <p> 
 Check that you are using the same assembly version that you were using yesterday. Features may 
 change positions within a genome between releases, particularly if they are located in an area of 
@@ -134,9 +113,8 @@ between assemblies</a> for more information.</p>
 
 <a name="tracks6"></a>
 <h2>Evaluating possible alternative splices</h2>
-<p>
-<strong>When you view results from the Genome Browser, how do you determine whether the alternative 
-splice is real or if it is a sequencing artifact?</strong></p> 
+<h6>When you view results from the Genome Browser, how do you determine whether the alternative 
+splice is real or if it is a sequencing artifact?</h6>
 <p> 
 It's a very good idea to click into the alignment and check that it looks clean at a detailed level 
 and that the splice sites are reasonable. If you have an alternate exon, it is also good to Blat 
@@ -148,10 +126,9 @@ checks, the next step is to do some RT-PCR in the lab.</p>
 
 <a name="tracks7"></a>
 <h2>Matching exons and protein sequence</h2>
-<p>
-<strong>I am working with alternatively spliced forms of an enzyme. How can I use the database to 
+<h6>I am working with alternatively spliced forms of an enzyme. How can I use the database to 
 identify exons and exactly match them to protein databases (i.e. identify the exons based on a 
-protein sequence and vice versa)?</strong></p> 
+protein sequence and vice versa)?</h6>
 <p> 
 If you have a protein sequence, you can use <a href="../cgi-bin/hgBlat">Blat</a> to align your 
 sequence to the desired genome. In the ACTIONS column on the Blat search results page, click the 
@@ -167,9 +144,8 @@ to doublecheck the results using NCBI BLAST.</p>
 
 <a name="tracks9"></a>
 <h2>Cause of duplicated gene</h2>
-<p>
-<strong>I have found a gene that has two identical copies on different chromosomes within the 
-Genome Browser. Is this possible?</strong></p> 
+<h6>I have found a gene that has two identical copies on different chromosomes within the 
+Genome Browser. Is this possible?</h6>
 <p> 
 One of the copies may be an artifactual duplication resulting from unavoidable compromises in the 
 assembly process. However, there do exist very recent authentic duplication events. Frequently these
@@ -185,10 +161,9 @@ the mRNA against a more recent assembly may provide another line of evidence.</p
 
 <a name="tracks11"></a>
 <h2>Protein doesn't begin with methionine</h2>
-<p>
-<strong>I am looking at a human protein that the Genome Browser associates with a particular gene. 
+<h6>I am looking at a human protein that the Genome Browser associates with a particular gene. 
 According to the Genome Browser, its amino acid sequence doesn't start with M (methionine). I 
-thought nuclear-encoded human proteins always began with methionine?</strong></p> 
+thought nuclear-encoded human proteins always began with methionine?</h6>
 <p> 
 The UCSC genome browser uses translated mRNA data exactly as supplied to GenBank by the original 
 sequencing authors. Any errors at GenBank propagate through many other databases and tools. To work 
@@ -205,11 +180,10 @@ sequence.</p>
 
 <a name="tracks12"></a>
 <h2>Doing an orthology track analysis of a protein</h2>
-<p>
-<strong>I am working on a lipase called hormone-sensitve lipase (HSL) gene ID NM_010719. I am trying
+<h6>I am working on a lipase called hormone-sensitve lipase (HSL) gene ID NM_010719. I am trying
 to see if there is any protein that has the same domain organization as HSL. Will doing an orthology
 track of the protein help me to get an answer? How do I do the orthology track
-analysis?</strong></p> 
+analysis?</h6>
 <p> 
 You can accomplish this by using Blat and the Genome Browser Superfamily track. Blat the protein 
 sequence from the NCBI RefSeq record, then choose the choose the Browser display option to view your
@@ -223,9 +197,8 @@ lipase in which you're interested.</p>
 
 <a name="tracks13"></a>
 <h2>Overlap SNPs vs. random SNPs</h2>
-<p>
-<strong>Some assemblies have tracks for both overlap SNPs (snpNIH) and random SNPs (snpTsc). Where 
-are these defined? Where do you get your SNP data?</strong></p>
+<h6>Some assemblies have tracks for both overlap SNPs (snpNIH) and random SNPs (snpTsc). Where 
+are these defined? Where do you get your SNP data?</h6>
 <p> 
 You can obtain detailed information about any track from its associated description page (opened by 
 clicking on the mini-button to the left of the displayed track). Click the &quot;View table 
@@ -242,23 +215,22 @@ perhaps normalize them further by the number of reads actually read in that regi
 a SNP to use as a marker, both sets are valuable.</p>  
 <p> 
 The SNP tracks are third party tracks. The snpTsc data are obtained from the 
-<a href="http://snp.cshl.org/" target=_blank>SNP Consortium</a> and the random SNP data are obtained
-from <a href="http://www.ncbi.nlm.nih.gov/SNP/" target=_blank>dbSNP</a>. Both  accession types start
-with <em>rs</em>, e.g. rs792507. The dispersal of the two types of SNPs may be viewed anywhere in 
-the Genome Browser. They are disjoint as sets, but otherwise fully interdigitated.</p> 
+<a href="http://snp.cshl.org/" target="_blank">SNP Consortium</a> and the random SNP data are 
+obtained from <a href="http://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a>. Both accession 
+types start with <em>rs</em>, e.g. rs792507. The dispersal of the two types of SNPs may be viewed 
+anywhere in the Genome Browser. They are disjoint as sets, but otherwise fully interdigitated.</p> 
 
 <a name="tracks14"></a>
 <h2>Quality benchmarks for predicted genes</h2>
-<p>
-<strong>Do you offer any benchmarks of quality and quantity of known and predicted genes shown in 
+<h6>Do you offer any benchmarks of quality and quantity of known and predicted genes shown in 
 the Acembly, Ensembl, Genscan, Fgenesh++, Twinscan, and TIGR Gene Index gene prediction
-tracks?</strong></p> 
+tracks?</h6>
 <p> 
 These tracks are contributed by institutional programs outside of UCSC. You can access links to 
 their home pages and relevant publications from the description pages associated with the tracks 
 (which can be viewed by clicking on the grey mini-button to the left of the track). You may also 
 obtain supplemental information from the <a href="../goldenPath/help/hgTracksHelp.html">Users 
-Guide</a> and the <a href="../goldenPath/credits.html" target=_blank>Credits page</a>. Methods and 
+Guide</a> and the <a href="../goldenPath/credits.html" target="_blank">Credits page</a>. Methods and
 quality checks are often described in greater detail there. No uniform benchmarking system exists. 
 Finished chromosomes are commonly used, but even here the experimental work continues today on 
 delineating genes.</p> 
@@ -278,9 +250,8 @@ journal articles of exceptional thoroughness. UCSC does not currently maintain s
 
 <a name="tracks15"></a>
 <h2>Display conventions for gene prediction tracks</h2>
-<p>
-<strong>What is the significance of the thinner blocks displayed at the beginning and end of a gene 
-in the browser?</strong></p> 
+<h6>What is the significance of the thinner blocks displayed at the beginning and end of a gene 
+in the browser?</h6>
 <p> 
 The varying thickness of features in the Genome Browser gene tracks denotes the various structural 
 features of a gene, such as exons, introns, and untranslated regions (UTRs). The thickest parts of 
@@ -297,9 +268,8 @@ the <a href="../goldenPath/help/hgTracksHelp.html">User's Guide</a>.</p>
 
 <a name="tracks16"></a>
 <h2>Viewing detailed displays in conservation tracks</h2>
-<p>
-<strong>When I click on a region in the Human/Mouse Evolutionary Conservation Score track, it 
-doesn't give me detailed information.</strong></p> 
+<h6>When I click on a region in the Human/Mouse Evolutionary Conservation Score track, it 
+doesn't give me detailed information.</h6>
 <p> 
 The track is defaulting to dense display mode because the size of the track's displayed region is 
 too large.  Unfortunately, this particular track doesn't have good visual cues to show you when 
@@ -308,10 +278,9 @@ should be able to display the details page.</p>
 
 <a name="tracks17"></a>
 <h2>Negative strand coordinates in PSL files</h2>
-<p>
-<strong>I've noticed that the blatFugu table has two characters representing the strand. Also, I've 
+<h6>I've noticed that the blatFugu table has two characters representing the strand. Also, I've 
 noticed that the starting/ending positions of the blocks don't fall within the start/end positions 
-of the chromosome target.</strong></p> 
+of the chromosome target.</h6>
 <p> 
 When the second character in the strand is &quot;-&quot;, the coordinates of the comma-separated 
 list of tStarts are reverse-complemented relative to tStart, much as qStarts behave when the first 
@@ -319,16 +288,15 @@ letter in the strand is &quot;-&quot;.</p>
 
 <a name="tracks18"></a>
 <h2>Inconsistency in stop codon treatment in GTF tracks</h2>
-<p>
-<strong>I've been doing some comparative gene set analysis using the gene annotation tracks and I 
+<h6>I've been doing some comparative gene set analysis using the gene annotation tracks and I 
 believe I have run into an inconsistency in the way that stop codons are treated in the annotations.
 Looking at the Human June 2002 assembly, the annotations for Ensembl, Twinscan, SGP, and Geneid 
 appear to exclude the stop codon in the coding region coordinates. All of the other gene annotation 
 sets include the stop codon as part of the coding region. My guess is that this inconsistency is the
 result of the gene sets being imported from different file formats. The 
-<a href="http://mblab.wustl.edu/GTF2.html" target=_blank>GTF2 format</a> does not include the stop 
+<a href="http://mblab.wustl.edu/GTF2.html" target="_blank">GTF2 format</a> does not include the stop
 codon in the terminal exon, while the GenBank format does, and the GFF format does not specify what 
-to do.</strong></p> 
+to do.</h6>
 <p> 
 Your guess is correct. We haven't gotten around to fixing this situation. A while ago, the
 Twinscan group made a GTF validator. It interpreted the stop codon as <em>not</em> part of the 
@@ -339,9 +307,8 @@ codons to the way that Twinscan does it, hence the discrepancy.</p>
 
 <a name="tracks19"></a>
 <h2>Obtaining clones referenced in Genome Browser</h2>
-<p>
-<strong>Is it possible to purchase the chromosome clones referenced in the Genome 
-Browser?</strong></p> 
+<h6>Is it possible to purchase the chromosome clones referenced in the Genome 
+Browser?</h6>
 <p> 
 You can find further information about a specific clone by clicking on the clone name link on the 
 details page for the item. This links to the NCBI Clone Registry website, which lists extensive 
@@ -349,9 +316,8 @@ details about the clone, including distributor information.</p>
 
 <a name="tracks20"></a>
 <h2>Locating centromeres and telomeres</h2>
-<p>
-<strong>How do I find the positions of the centromeres and telomeres in a particular
-assembly?</strong></p> 
+<h6>How do I find the positions of the centromeres and telomeres in a particular
+assembly?</h6>
 <p> 
 This information can be found in the &quot;gap&quot; database table.  Use the Table Browser to 
 extract it. To do this, select your assembly and the gap table, then click the &quot;
@@ -361,9 +327,8 @@ filter Create&quot; button. Set the &quot;type&quot; field to <code>centromere t
 
 <a name="tracks21"></a>
 <h2>Determining the table name for an annotation track</h2>
-<p>
-<strong>How do I find the name of the database table that contains the data for a particular 
-annotation track?</strong></p> 
+<h6>How do I find the name of the database table that contains the data for a particular 
+annotation track?</h6>
 <p> 
 Each annotation track in the Genome Browser has one or more database tables associated with it. To 
 find the name of the primary table, navigate to the schema page. You will find the schema page by 

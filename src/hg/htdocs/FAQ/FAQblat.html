@@ -6,24 +6,26 @@
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>Frequently Asked Questions: Blat</h1>
+
+<h2>Topics</h2>
 <ul>
-  <li><a href="#blat1">Blat vs. Blast</a>
-  <li><a href="#blat1b">Blat cannot find a sequence</a>
-  <li><a href="#blat2">Blat use restrictions</a>
-  <li><a href="#blat3">Downloading Blat source and documentation</a>
-  <li><a href="#blat5">Replicating web-based Blat parameters in command-line version</a>
-  <li><a href="#blat6">Using the <em>-ooc</em> flag</a>
-  <li><a href="#blat4">Replicating web-based Blat percent identity and score calculations</a>
-  <li><a href="#blat7">Replicating web-based Blat &quot;I'm feeling lucky&quot; search results</a> 
-  <li><a href="#blat8">Using Blat for short sequences with maximum sensitivity</a> 
+  <li><a href="#blat1">Blat vs. Blast</a></li>
+  <li><a href="#blat1b">Blat cannot find a sequence</a></li>
+  <li><a href="#blat2">Blat use restrictions</a></li>
+  <li><a href="#blat3">Downloading Blat source and documentation</a></li>
+  <li><a href="#blat5">Replicating web-based Blat parameters in command-line version</a></li>
+  <li><a href="#blat6">Using the <em>-ooc</em> flag</a></li>
+  <li><a href="#blat4">Replicating web-based Blat percent identity and score calculations</a></li>
+  <li><a href="#blat7">Replicating web-based Blat &quot;I'm feeling lucky&quot; search 
+  results</a></li>
+  <li><a href="#blat8">Using Blat for short sequences with maximum sensitivity</a></li>
 </ul>
 <p>
-  <a href="index.html">Return to FAQ Table of Contents</a>
+<a href="index.html">Return to FAQ Table of Contents</a>
 
 <a name="blat1"></a>
 <h2>Blat vs. Blast</h2>
-<p>
-<strong>What are the differences between Blat and Blast?</strong> </p>
+<h6>What are the differences between Blat and Blast?</h6>
 <p>
 Blat is an alignment tool like BLAST, but it is structured differently. On DNA, Blat works by 
 keeping an index of an entire genome in memory. Thus, the target database of BLAT is not a set of 
@@ -45,12 +47,18 @@ psi-BLAST at NCBI can find much more remote matches.</p>
 <p>
 From a practical standpoint, Blat has several advantages over BLAST:</p> 
 <ul>
-  <li>speed (no queues, response in seconds) at the price of lesser homology depth </li>
-  <li>the ability to submit a long list of simultaneous queries in fasta format </li>
-  <li>five convenient output sort options </li>
-  <li>a direct link into the UCSC browser </li>
-  <li>alignment block details in natural genomic order </li>
-  <li>an option to launch the alignment later as part of a custom track </li>
+  <li>
+  speed (no queues, response in seconds) at the price of lesser homology depth</li>
+  <li>
+  the ability to submit a long list of simultaneous queries in fasta format</li>
+  <li>
+  five convenient output sort options</li>
+  <li>
+  a direct link into the UCSC browser</li>
+  <li>
+  alignment block details in natural genomic order</li>
+  <li>
+  an option to launch the alignment later as part of a custom track</li>
 </ul>
 <p>
 Blat is commonly used to look up the location of a sequence in the genome or determine the exon 
@@ -59,17 +67,17 @@ sensitivity changes by installing command line Blat on their own Linux server.</
 
 <a name="blat1b"></a>
 <h2>Blat can't find a sequence</h2>
-<p><strong>I can't find a sequence with Blat although I'm sure it is in the genome. Am I doing 
-something wrong?</strong> </p>
+<h6>I can't find a sequence with Blat although I'm sure it is in the genome. Am I doing 
+something wrong?</h6>
 <p>
 First, check if you are using the correct version of the genome. For example, two versions of the 
 human genome are currently in use (called hg19 and hg38) and your sequence may be only in one of 
-them. Many published articles do not specify the version so trying a few may be necessary. </p>
+them. Many published articles do not specify the version so trying a few may be necessary.</p>
 <p>
 Very short sequences that go over a splice site in a cDNA sequence can't be found, as they are not 
 in the genome. QPCR primers are a typical example. For these cases, try using 
 <a href="../cgi-bin/hgPcr">In-Silico PCR</a> and selecting a gene set as the target. In general, 
-the In-Silico PCR tool is more sensitive and should be preferred for pairs of primers. </p>
+the In-Silico PCR tool is more sensitive and should be preferred for pairs of primers.</p>
 <p>
 If you have verified that you are using the correct genome and that the sequence is indeed there, 
 for example by using the "Short match" track, the problem may be a result of Blat's query-masking. 
@@ -80,45 +88,42 @@ sequences in repeats.</p>
 To find these matches using the online version of Blat, you can add more flanking sequence to your 
 query. If this is not possible, the only alternative is to download the executables of Blat and the 
 .2bit file of a genome to your own machine and use blat on the command line. See 
-<a href="#blat3">Downloading Blat source and documentation</a> for more information. </p>
+<a href="#blat3">Downloading Blat source and documentation</a> for more information.</p>
 
 <a name="blat2"></a>
 <h2>Blat usage restrictions</h2>
-<p>
-<strong>I received a warning from your Blat server informing me that I had exceeded the server use 
-limitations. Can you give me information on the UCSC Blat server use parameters?</strong> </p>
+<h6>I received a warning from your Blat server informing me that I had exceeded the server use 
+limitations. Can you give me information on the UCSC Blat server use parameters?</h6>
 <p>
 Due to the high demand on our Blat servers, we restrict service for users who programatically query 
 Blat or do large batch queries. Program-driven use of Blat is limited to a maximum of one hit every 
 15 seconds and no more than 5,000 hits per day. Please limit batch queries to 25 sequences
-or less. </p> 
+or less.</p> 
 <p>
 For users with high-volume Blat demands, we recommend downloading Blat for local use. For more 
-information, see <a href="#blat3">Downloading Blat source and documentation</a>.
+information, see <a href="#blat3">Downloading Blat source and documentation</a>.</p>
 
 <a name="blat3"></a>
 <h2>Downloading Blat source and documentation</h2>
-<p>
-<strong>Is the Blat source available for download? Is documentation available?</strong> </p>
+<h6>Is the Blat source available for download? Is documentation available?</h6>
 <p>
 Blat source and executables are freely available for academic, nonprofit and personal use. 
 Commercial licensing information is available on the <a href="http://www.kentinformatics.com" 
-target=_blank>Kent Informatics website</a>.  </p>
+target="_blank">Kent Informatics website</a>.</p>
 <p>
 Blat source may be downloaded from 
 <a href="http://www.soe.ucsc.edu/~kent/src">http://www.soe.ucsc.edu/~kent</a> (look for the 
 blatSrc* zip file with the most recent date). For Blat executables, go to 
 <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">http://hgdownload.cse.ucsc.edu/admin/exe/</a> 
-and choose your machine type. </p>
+and choose your machine type.</p>
 <p>
 Documentation on Blat program specifications is available 
-<a href="../goldenPath/help/blatSpec.html">here</a>. </p>
+<a href="../goldenPath/help/blatSpec.html">here</a>.</p>
 
 <a name="blat5"></a>
 <h2>Replicating web-based Blat parameters in command-line version</h2>
-<p>
-<strong>I'm setting up my own Blat server and would like to use the same parameter values that the 
-UCSC web-based Blat server uses.</strong> </p>
+<h6>I'm setting up my own Blat server and would like to use the same parameter values that the 
+UCSC web-based Blat server uses.</h6> 
 <p>
 We almost always expect there to be some small differences between the hgBlat/gfServer and the 
 stand-alone command-line blat. The best matches can be found using pslReps and pslCDnaFilter 
@@ -129,129 +134,126 @@ filtering parameters make the most sense for the experiment or analysis. Often t
 be different and more stringent than those of the web-based blat. With that in mind, use the 
 following settings to replicate the search results of the web-based blat:</p>
 <p>
-<em>faToTwoBit</em>: </p>
+<em>faToTwoBit</em>:</p>
 <ul>
-  <li>Use soft masking.
+  <li>Use soft masking.</li>
 </ul>
 <p>
 <em>gfServer</em> (this is how the UCSC web-based blat servers are configured):
 <ul>
   <li>
   blat server (capable of PCR):<br>
-  &nbsp;&nbsp;&nbsp;<tt>gfServer start blatMachine portX -stepSize=5 -log=untrans.log 
-  database.2bit</tt> </li>
+  &nbsp;&nbsp;&nbsp;<code>gfServer start blatMachine portX -stepSize=5 -log=untrans.log 
+  database.2bit</code></li>
   <li>
   translated blat server:<br>
-  &nbsp;&nbsp;&nbsp;<tt>gfServer start blatMachine portY -trans -mask -log=trans.log 
-  database.2bit</tt> </li>
+  &nbsp;&nbsp;&nbsp;<code>gfServer start blatMachine portY -trans -mask -log=trans.log 
+  database.2bit</code> </li>
 </ul>
 <p>For enabling DNA/DNA and DNA/RNA matches, only the host, port and twoBit files are needed. The 
 same port is used for both untranslated blat (gfClient) and PCR (webPcr). You'll need a separate 
 blat server on a separate port to enable translated blat (protein searches or translated searches 
-in protein-space).  </p>
+in protein-space).</p>
 <p>
-<em>gfClient</em>: </p>
+<em>gfClient</em>:</p>
 <ul>
   <Li>Set <em>-minScore=0</em> and <em>-minIdentity=0</em>. This will result in some low-scoring, 
   generally spurious hits, but for interactive use it's sufficiently easy to ignore them (because 
-  results are sorted by score) and sometimes the low-scoring hits come in handy. </li>
+  results are sorted by score) and sometimes the low-scoring hits come in handy.</li>
 </ul>
 <p>
-<em>standalone blat</em>: </p>
+<em>standalone blat</em>:</p>
 <ul>
   <li>blat search:<br>
-  &nbsp;&nbsp;&nbsp;<tt>blat -stepSize=5 -repMatch=2253 -minScore=0 -minIdentity=0 
-  database.2bit query.fa output.psl </tt><br>
+  &nbsp;&nbsp;&nbsp;<code>blat -stepSize=5 -repMatch=2253 -minScore=0 -minIdentity=0 
+  database.2bit query.fa output.psl </code><br>
 </ul>
 <p>
-Notes on repMatch: </p>
+Notes on repMatch:</p>
 <ul>
   <li>
-  The default setting for gfServer dna matches is: repMatch = 1024 * (tileSize/stepSize). </li>
+  The default setting for gfServer dna matches is: repMatch = 1024 * (tileSize/stepSize).</li>
   <li>
-  The default setting for blat dna matches is: repMatch = 1024 (if tileSize=11). </li>
+  The default setting for blat dna matches is: repMatch = 1024 (if tileSize=11).</li>
   <Li>To get command-line results that are equivalent to web-based results, repMatch must be 
-  specified when using blat. </li>
+  specified when using blat.</li>
 </ul>
 <p>
 For more information about how to replicate the score and percent identity matches displayed by our 
-web-based blat, please see <a href="../FAQ/FAQblat.html#blat4">this blat FAQ</a>. </p>
+web-based blat, please see <a href="../FAQ/FAQblat.html#blat4">this blat FAQ</a>.</p>
 <p>
 For more information on the parameters available for blat, gfServer, and gfClient, see the 
-<a href="../goldenPath/help/blatSpec.html">blat specifications</a>. </p>
+<a href="../goldenPath/help/blatSpec.html">blat specifications</a>.</p>
 
 <a name="blat6"></a>
 <h2>Using the <em>-ooc</em> flag</h2>
-<p>
-<strong>What does the <em>-ooc</em> flag do?</strong> </p>
+<h6>What does the <em>-ooc</em> flag do?</h6>
 <p>
 Using any <em>-ooc</em> option in blat, such as <em>-ooc=11.ooc</em>, speeds up searches similar to 
 repeat-masking sequence. The <em>11.ooc</em> file contains sequences determined to be 
 over-represented in the genome sequence. To improve search speed, these sequences are not used when 
 seeding an alignment against the genome. For reasonably sized sequences, this will not create a 
-problem and will significantly reduce processing time. </p>
+problem and will significantly reduce processing time.</p>
 <p>
 By not using the <em>11.ooc</em> file, you will increase alignment time, but will also slightly 
 increase sensitivity. This may be important if you are aligning shorter sequences or sequences of 
 poor quality. For example, if a particular sequence consists primarily of sequences in the 
 <em>11.ooc</em> file, it will never be seeded correctly for an alignment if the <em>-ooc</em> flag 
-is used. </p>
+is used.</p>
 <p>
 In summary, if you are not finding certain sequences and can afford the extra processing time, you 
-may want to run blat without the <em>11.ooc</em> file if your particular situation warrants its use.
-</p>
+may want to run blat without the <em>11.ooc</em> file if your particular situation warrants its 
+use.</p>
 
 <a name="blat4"></a>
 <h2>Replicating web-based Blat percent identity and score calculations</h2>
-<p>
-<strong>Using my own command-line Blat server, how can I replicate the percent identity and score 
-calculations produced by web-based Blat?</strong> </p>
+<h6>Using my own command-line Blat server, how can I replicate the percent identity and score 
+calculations produced by web-based Blat?</h6>
 <p>
 There is no option to command-line Blat that gives you the percent ID and the score. However, we 
 have created scripts that include the calculations: </p>
 <ul>
   <li>
   View the perl script from the source tree: 
-  <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/utils/pslScore/pslScore.pl"><tt>pslScore.pl</tt></a> <li>
+  <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/utils/pslScore/pslScore.pl"><code>pslScore.pl</code></a><li>
   <li>
   View the corresponding C program:
-  <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/utils/pslScore/pslScore.c"><tt>pslScore.c</tt></a>
-  and associated library functions <tt>pslScore</tt> and <tt>pslCalcMilliBad</tt> in   
-  <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/lib/psl.c"><tt>psl.c</tt></a> </li>
+  <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/utils/pslScore/pslScore.c"><code>pslScore.c</code></a>
+  and associated library functions <code>pslScore</code> and <code>pslCalcMilliBad</code> in   
+  <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/lib/psl.c"><code>psl.c</code></a></li>
 </ul>
 <p>
 See our <a href="FAQlicense.html">FAQ</a> on source code licensing and downloads for information on 
-obtaining the source. </p>
+obtaining the source.</p>
 
 <a name="blat7"></a>
 <h2>Replicating web-based Blat &quot;I'm feeling lucky&quot; search results</h2>
-<p>
-<strong>How do I generate the same search results as web-based Blat's &quot;I'm feeling lucky&quot; 
-option using command-line blat?</strong> </p>
+<h6>How do I generate the same search results as web-based Blat's &quot;I'm feeling lucky&quot; 
+option using command-line blat?</strong> </h6>
 <p>
 The code for the &quot;I'm feeling lucky&quot; Blat search orders the results based on the sort 
 output option that you selected on the query page. It then returns the highest-scoring alignment of 
-the first query sequence. </p>
+the first query sequence.</p>
 <p>
 If you are sorting results by &quot;query, start&quot; or &quot;chrom, start&quot;, generating the 
 &quot;I'm feeling lucky&quot; result is straightforward: sort the output file by these columns, then
-select the top result. </p>
+select the top result.</p>
 <p>
 To replicate any of the sort options involving score, you first must calculate the score for each 
 result in your PSL output file, then sort the results by score or other combination (<em>e.g.</em> 
 &quot;query, score&quot; and &quot;chrom, score&quot;). See the section on 
 <a href="#blat4">Replicating web-based Blat percent identity and score calculations</a> for 
-information on calculating the score. </p>
+information on calculating the score.</p>
 <p>
-Alternatively, you can try filtering your Blat PSL output using either the <tt>pslReps</tt> or 
-<tt>pslCDnaFilter</tt> program available in the Genome Browser source code. For information on 
+Alternatively, you can try filtering your Blat PSL output using either the
+<code>pslReps</code> or 
+<code>pslCDnaFilter</code> program available in the Genome Browser source code. For information on 
 obtaining the source code, see our <a href="FAQlicense.html">FAQ</a> on source code licensing and 
-downloads. </p>
+downloads.</p>
 
 <a name="blat8"></a>
 <h2>Using Blat for short sequences with maximum sensitivity</h2>
-<p>
-<strong>How do I configure blat for short sequences with maximum sensitivity?</strong> </p>
+<h6>How do I configure blat for short sequences with maximum sensitivity?</h6> 
 <p>
 Here are some guidelines for configuring standalone blat and gfServer/gfClient for these 
 conditions:</p>
@@ -268,28 +270,28 @@ conditions:</p>
   Note: There is also a &quot;minimum lucky size&quot; for hits. This is the smallest possible hit 
   that BLAT can find. This minimum lucky size can be calculated using the formula: <em>stepSize</em>
   + <em>tileSize</em>. For example, if we use a <em>tileSize</em> of 11 and <em>stepSize</em> of 5, 
-  hits smaller than 16 bases won't be reported. </li>
+  hits smaller than 16 bases won't be reported.</li>
   <li>
-  Try using <em>-fine</em>. </li>
+  Try using <em>-fine</em>.</li>
   <li>
   Use a large value for <em>repMatch</em> (e.g. <em>-repMatch</em> = 1000000) to reduce the chance 
-  of a tile being marked as over-used. </li>
+  of a tile being marked as over-used.</li>
   <li>
-  Do not use an <em>.ooc</em> file. </li>
+  Do not use an <em>.ooc</em> file.</li>
   <li>
-  Do not use <em>-fastMap</em>. </li>
+  Do not use <em>-fastMap</em>.</li>
   <li>
-  Do not use masking command-line options. </li>
+  Do not use masking command-line options.</li>
 </ul>
 <p>
 The above changes will make BLAT more sensitive, but will also slow the speed and increase the 
 memory usage. It may be necessary to process one chromosome at a time to reduce the memory 
-requirements.  </p>
+requirements.</p>
 <p>
 A note on filtering output: increasing the <em>-minScore</em> parameter value beyond one-half of 
-the query size has no further effect.  Therefore, use either the <tt>pslReps</tt> or 
-<tt>pslCDnaFilter</tt> program available in the Genome Browser source code to filter for the size, 
+the query size has no further effect.  Therefore, use either the <code>pslReps</code> or 
+<code>pslCDnaFilter</code> program available in the Genome Browser source code to filter for the size, 
 score, coverage, or quality desired. For information on obtaining the source code, see our 
-<a href="FAQlicense.html">FAQ</a> on source code licensing and downloads. </p>
+<a href="FAQlicense.html">FAQ</a> on source code licensing and downloads.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
