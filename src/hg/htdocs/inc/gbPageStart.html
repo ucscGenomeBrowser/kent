@@ -8,8 +8,12 @@
         </title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:700|Lato:700,700italic,300,400,400italic">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <!-- Use ROOT variable set in caller to determine relative path to style sheets
-                If there's a way to use a variable here instead, do so!  -->
+
+        <!-- Redirects don't forward ROOT, so can't determine relative paths -->
+        <!--#if expr="$REDIRECT_GB_DOCUMENT_ROOT=on" -->
+            <base href="/">
+        <!--#endif -->
+        <!-- Use ROOT variable set in caller to determine relative path to style sheets -->
         <!--#if expr="$ROOT = ." -->
             <link rel="stylesheet" href="./style/bootstrap.min.css">
             <link rel="stylesheet" href="./style/gb.css">
@@ -29,7 +33,6 @@
     <body>
         <!-- Blue menu bar / hotlinks -->
         <!--#include virtual="/cgi-bin/hgMenubar"-->
-    </head>
 
         <!-- Grid layout from bootstrap.css -->
         <div class="container-fluid">
