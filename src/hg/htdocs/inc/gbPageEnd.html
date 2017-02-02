@@ -6,5 +6,11 @@
 
         <!-- Add footer -->
         <!--#include virtual="gbFooter.html"-->
+
+        <!-- 3rd level of relative links fail so force to absolute -->
+        <!-- Can fix this with a CGI (later) -->
+        <!--#if expr="$DOCUMENT_URI = /\/goldenPath\/help\/*/" -->
+            <base href="/">
+        <!--#endif -->
     </body>
 </html>
