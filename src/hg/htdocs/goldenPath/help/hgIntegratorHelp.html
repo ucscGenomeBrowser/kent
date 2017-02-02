@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="Data Integrator" -->
+<!--#set var="TITLE" value="Genome Browser FAQ" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>Data Integrator User's Guide</h1>
+
+<h2>Contents</h2>
 <ul> 
   <li><a class="toc" href="#Intro">Introduction</a></li> 
   <li><a class="toc" href="#GetStarted">Getting Started: Performing a Simple Query</a></li> 
@@ -13,8 +15,8 @@
   <li><a class="toc" href="#Overlap">Computing Item Overlap</a></li> 
   <li><a class="toc" href="#OutputConfig">Configuring Output</a></li>
 </ul>
-<p> 
 <form name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">          
+<p> 
   Search the Genome Browser help pages: &nbsp;
   <input type="hidden" name="q" value="">
   <input type="hidden" name="num" value="10">
@@ -115,7 +117,9 @@ that group.</p>
   Clicking the "View table schema" link opens a new web browser tab with the Table Browser's schema 
   page which describes the data fields.</li>  
 </ul> 
-<img style="border: 1px solid black; display: block;" src="../../images/hgIntegratorAddTrack.png"> 
+<p>
+<img src="../../images/hgIntegratorAddTrack.png" alt="hgIntegrator Add Track" width="702" 
+height="65"></p>
 <p>
 After selecting your track from the drop-down menus, click <button type="button">Add</button>. You 
 may add up to five tracks.  Some tracks are not available when the region is set to 
@@ -154,7 +158,9 @@ Items in your selected tracks are output based on their overlap with items in yo
 The primary track is the one that shows up first in the list of your chosen data sources. In the 
 following example, UCSC Genes would be the primary track and items would be output based on their 
 overlap with items in UCSC Genes:</p> 
-<img style="border: 1px solid black; display: block;" src="../../images/hgIntegratorDataSourceConfig.png"> 
+<p>
+<img src="../../images/hgIntegratorDataSourceConfig.png" alt="hgIntegrator Configure Data
+Sources" width="628" height="131"></p> 
 <p>
 The order of your selected tracks also affects the order of fields in your output. Fields from 
 tracks that are higher up in the <strong>Configure Data Sources</strong> box will show up before 
@@ -180,7 +186,9 @@ the item is computed. This means that introns and gaps in the item are also cons
 computing overlap. This is an improvement upon the Table Browser which only computed overlap with 
 exons. For example, let's consider the following situation using the UCSC Genes and DNase Clusters 
 tracks:</p> 
-<img style="border: 1px solid black; display: block;" src="../../images/hgIntegratorHgTracksExample.png"> 
+<p>
+<img src="../../images/hgIntegratorHgTracksExample.png" alt="hgIntegrator hgTracks Example" 
+width="787" height="88"></p> 
 <p> 
 If we were using the Data Integrator to find the DNase peaks that overlapped with the gene in the 
 UCSC Genes track, we would get all of the visible peaks in our output.</p> 
@@ -198,7 +206,9 @@ set of fields to include in the output. After selecting and configuring your dat
 described in the <a href="#DataSources">Selecting Data Sources</a> section, click 
 <button type="button">Choose fields...</button> to begin configuring your output. After clicking 
 the button, a pop-up with all the fields from your selected tables will appear:</p> 
-<img style="border: 1px solid black; display: block;" src="../../images/hgIntegratorFieldsConfig.png"> 
+<p>
+<img src="../../images/hgIntegratorFieldsConfig.png" alt="hgIntegrator Choose Fields" width="574" 
+height="353"></p>
 <p>
 Uncheck the box next to the field name to exclude it from the output; check the box if you change 
 your mind and want to include it. You can quickly select or deselect all of the fields by clicking 
@@ -211,7 +221,10 @@ transcript status, or other descriptive information. You can select fields from 
 related tables for each of your selected tracks. After clicking <button type="button">Choose 
 fields...</button>, you should see a section labeled &quot;Related tables&quot; below each track. 
 This drop-down menu allows you to select and add related tables to your output.</p> 
-<img style="border: 1px solid black; display: block;" src="../../images/hgIntegratorRelatedTablesAnnouncement.png"> 
+<p>
+<img src="../../images/hgIntegratorRelatedTablesAnnouncement.png" alt="hgIntegrator
+"hgIntegrator Related Tables" width="684"
+height="418"></p> 
 <p> 
 Note that not all tracks in the Genome Browser database will have related tables. Also, some tables 
 may be unavailable when region is set to <strong>genome</strong> due to the data provider'
@@ -238,7 +251,9 @@ adds fields of the <em>nth</em> matching item from each secondary track. If ther
 secondary tracks, then their items will appear together in a row of output whether or not they 
 overlap each other. For example, note how items overlap (or not) in the three tracks A, B and C in 
 the image below:</p>
-<img style="border: 1px solid black; display: block;" src="../../images/hgIntegratorHgTracksExample2.png"> 
+<p>
+<img src="../../images/hgIntegratorHgTracksExample2.png" alt="hgIntegrator hgTracks Example
+2" width="731" height="102"></p> 
 <p> 
 Two items from track B (B1, B2) overlap the primary item (A). Three items from track C (C1, C2, C3) 
 overlap the primary item (A). The Data Integrator prints 3 rows of output.  B1 and C1, although they

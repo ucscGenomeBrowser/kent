@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="UCSC Genome Browser: Session Gallery" -->
-<!--#include virtual="/gbPageStart.html"-->
+<!--#set var="TITLE" value="Genome Browser Session Gallery" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>Session Gallery</h1>
 <ul> 
@@ -422,14 +425,14 @@ content.</p>
 When you want to share information in the browser in a more permanent fashion you should create a 
 session and share the resulting URL. From the Session page, copy the link that says 
 &quot;Browser&quot; with a right-click. The URL should look something like the following:</p>
-<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>hgS_doOtherUser=submit&hgS_otherUserName=</b>sessionGallery<b>&hgS_otherUserSessionName=</b>hg19_watsonKriek</code></pre>
+<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?<strong>hgS_doOtherUser=submit&hgS_otherUserName=</strong>sessionGallery<strong>&hgS_otherUserSessionName=</strong>hg19_watsonKriek</code></pre>
 <p>
 In the above case a user name was created called <code>sessionGallery</code> and a session was 
 created called <code>hg19_watsonKriek</code>. This more stable link is the best way to share 
 information, with the only further improvement being to locally download your session file and then 
 remotely share it from your own private collection in an internet accessible location using the
 <code><strong>hgS_loadUrlName=</strong></code> option. For example seen in this link:</p>
-<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>hgS_doLoadUrl=submit&hgS_loadUrlName=</b>http://genome.ucsc.edu/goldenPath/help/examples/sessions/encodeDemonstration</code></pre>
+<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?<strong>hgS_doLoadUrl=submit&hgS_loadUrlName=</strong>http://genome.ucsc.edu/goldenPath/help/examples/sessions/encodeDemonstration</code></pre>
 
 <a name="customTracks"></a>
 <h3>Custom Track caveats</h3>
@@ -438,8 +441,8 @@ We have changed our policy about the persistence of session data including custo
 sessions. In the past saved sessions were only committed to persist for four months after the last 
 access and custom tracks in sessions were subject to persist for at least 48 hours after the last 
 time they were viewed. We have now moved to not remove session data, unless deleted, and to not 
-remove custom tracks in sessions. However, <b>please note that the UCSC Genome Browser is not a data
-storage service</b>, so you will want to keep backups of all your custom tracks on a local 
+remove custom tracks in sessions. However, <strong>please note that the UCSC Genome Browser is not a
+data storage service</strong>, so you will want to keep backups of all your custom tracks on a local
 machine, just in case there is a possible loss of data due to unforeseen circumstances.</p>
 <p>
 For mirrors, when loading sessions that contain custom data from custom tracks or hubs an
@@ -461,4 +464,4 @@ to &quot;Output type: psl no header&quot; and then paste the results into the cu
 page, perhaps giving a top line such as <code>track name=&quot;blat&quot;
 description=&quot;My BLAT results for X,Y,Z&quot;</code> to describe it.</p>
 
-<!--#include virtual="/gbPageEnd.html"-->
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

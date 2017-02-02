@@ -8,19 +8,20 @@
 <h1>axt Alignment Format</h1> 
 <p> 
 <em>axt</em> alignment files are produced from Blastz, an alignment tool available from 
-<a href="http://www.bx.psu.edu/miller_lab/" target=_blank>Webb Miller's lab</a> at Penn State 
+<a href="http://www.bx.psu.edu/miller_lab/" target="_blank">Webb Miller's lab</a> at Penn State 
 University. The axtNet and axtChain alignments are produced by processing the alignment files with 
 additional utilities written by Jim Kent at UCSC.</p>
 <p>
 <strong><em>Example:</em></strong><br> 
 The following segment from an axt file shows the first 2 sets of alignments of the human assembly 
-(the aligning assembly) to mouse chromsome 19 (the primary assembly). <pre><code>  0 chr19 3001012 3001075 chr11 70568380 70568443 - 3500
-  TCAGCTCATAAATCACCTCCTGCCACAAGCCTGGCCTGGTCCCAGGAGAGTGTCCAGGCTCAGA
-  TCTGTTCATAAACCACCTGCCATGACAAGCCTGGCCTGTTCCCAAGACAATGTCCAGGCTCAGA
+(the aligning assembly) to mouse chromsome 19 (the primary assembly). 
+<pre><code>0 chr19 3001012 3001075 chr11 70568380 70568443 - 3500
+TCAGCTCATAAATCACCTCCTGCCACAAGCCTGGCCTGGTCCCAGGAGAGTGTCCAGGCTCAGA
+TCTGTTCATAAACCACCTGCCATGACAAGCCTGGCCTGTTCCCAAGACAATGTCCAGGCTCAGA
 
-  1 chr19 3008279 3008357 chr11 70573976 70574054 - 3900
-  CACAATCTTCACATTGAGATCCTGAGTTGCTGATCAGAATGGAAGGCTGAGCTAAGATGAGCGACGAGGCAATGTCACA
-  CACAGTCTTCACATTGAGGTACCAAGTTGTGGATCAGAATGGAAAGCTAGGCTATGATGAGGGACAGTGCGCTGTCACA</code></pre>
+chr19 3008279 3008357 chr11 70573976 70574054 - 3900
+CACAATCTTCACATTGAGATCCTGAGTTGCTGATCAGAATGGAAGGCTGAGCTAAGATGAGCGACGAGGCAATGTCACA
+CACAGTCTTCACATTGAGGTACCAAGTTGTGGATCAGAATGGAAAGCTAGGCTATGATGAGGGACAGTGCGCTGTCACA</code></pre>
 
 <p>
 <strong>Structure</strong></p> 
@@ -56,8 +57,8 @@ of 9 required fields:
   organisms.See the README.txt file in the alignments directory for scoring information specific to 
   a pair of alignments.</li> 
 </ul> 
-<p><strong>Sequence lines</strong><pre><code>  TCAGCTCATAAATCACCTCCTGCCACAAGCCTGGCCTGGTCCCAGGAGAGTGTCCAGGCTCAGA
-  TCTGTTCATAAACCACCTGCCATGACAAGCCTGGCCTGTTCCCAAGACAATGTCCAGGCTCAGA</code></pre> 
+<p><strong>Sequence lines</strong><pre><code>TCAGCTCATAAATCACCTCCTGCCACAAGCCTGGCCTGGTCCCAGGAGAGTGTCCAGGCTCAGA
+TCTGTTCATAAACCACCTGCCATGACAAGCCTGGCCTGTTCCCAAGACAATGTCCAGGCTCAGA</code></pre> 
 <p>
 The sequence lines contain the sequence of the primary assembly (line 2) and aligning assembly 
 (line 3) with inserts. Repeats are indicated by lower-case letters.</p>
