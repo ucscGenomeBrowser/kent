@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="UCSC Genome Browser: Citing Us" -->
-<!--#include virtual="/gbPageStart.html"-->
+<!--#set var="TITLE" value="Genome Browser bigPsl Track Format" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>bigPsl Track Format</h1> 
 <p>
@@ -178,12 +181,12 @@ In this example, you will create your own bigPsl file from an existing bigPsl in
   (see <em>step 8</em>).</li>
 </ul>
 
-<h2>Sharing Your Data with Others</h2>
+<h2>Sharing your data with others</h2>
 <p>
 If you would like to share your bigPsl data track with a colleague, learn how to create a URL by 
 looking at <em>Example 11</em> on <a href="customTrack.html#SHARE">this</a> page.</p>
 
-<h2>Extracting Data from the bigPsl Format</h2>
+<h2>Extracting data from the bigPsl format</h2>
 <p>
 Since the bigPsl files are an extension of bigBed files, which are indexed binary files, they can 
 be difficult to extract data from. We have developed the following programs, all of which are 
@@ -210,4 +213,4 @@ program <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">here</a> before the
 <code>bedToBigBed</code> program. It will remove the row(s) in your input BED file that are off the 
 end of a chromosome.</p>
 
-<!--#include virtual="/gbPageEnd.html"-->
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

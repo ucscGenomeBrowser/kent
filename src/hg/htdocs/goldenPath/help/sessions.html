@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="UCSC Genome Browser: Session Gallery" -->
-<!--#include virtual="/gbPageStart.html"-->
+<!--#set var="TITLE" value="Genome Browser Session Gallery" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>Session Gallery</h1>
 <ul> 
@@ -23,17 +26,17 @@
 
 <!-- Session Gallery -->
 <a name="Gallery"></a>
-<h2>Session Gallery</h2>
+<h2>Session gallery</h2>
 
 <!-- Topic Division --> 
 <a name="dna"></a>
-<h3>DNA/Codon View</h3>
+<h3>DNA/codon view</h3>
 
 <!-- Session INFO: This comes from an educational collection: 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
 <p>
-<strong>Examples of Stop Codons in the hg19 Assembly</strong></p>
+<strong>Examples of stop codons in the hg19 assembly</strong></p>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.stopCodons"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.stopCodons.png"></center></a>
@@ -179,7 +182,7 @@ src="../../images/session.hg19.chimp3.png"></center></a></p>
 
 <!-- Topic Division -->
 <a name="snp"></a>
-<h3>SNPs and Disease</h3>
+<h3>SNPs and disease</h3>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
@@ -259,7 +262,7 @@ and loss of copies and a rare genetic disorder when some genes are deleted or un
 
 <!-- Topic Division -->
 <a name="tfbs"></a>
-<h3>Expression/Regulation: TFBS/RNA-seq/ChIP-seq</h3>
+<h3>Expression/regulation: TFBS/RNA-seq/ChIP-seq</h3>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
@@ -344,7 +347,7 @@ where this data indicates this factor binds at this location. And similarly belo
 
 <!-- Topic Division -->
 <a name="mlq"></a>
-<h3>Mailing List Support</h3>
+<h3>Mailing list support</h3>
 
 <!-- Session INFO: This comes from the ENCODE index.html -->
 <p>
@@ -384,10 +387,10 @@ in the  section titled &quot;mRNA/Genome Alignments&quot; one can see the alignm
 the genome and find the dots <code>aga..agt</code> indicating a deletion.</p>
 
 <a name="more"</a>
-<h2>More Information about Sessions</h2>
+<h2>More information about sessions</h2>
 
 <a name="What"></a>
-<h3>What is a Session?</h3>
+<h3>What is a session?</h3>
 <p>
 A <a href="hgSessionHelp.html" target="_blank">session</a> is a specific set of track combinations, 
 that can include custom tracks allowing snapshots of browser activities. Multiple sessions may be 
@@ -396,7 +399,7 @@ Follow these links to learn how to <a href="hgSessionHelp.html#Create" target="_
 and <a href="hgSessionHelp.html#Share" target="_blank">share</a> sessions.</p>
 
 <a name="What2"></a>
-<h3>What is the Session Gallery?</h3>
+<h3>What is the session gallery?</h3>
 <p>
 The Session Gallery is a collection of track views that help highlight viewing different topics in 
 the browser. The sessions in the Session Gallery were created in the browser and then saved to a 
@@ -422,14 +425,14 @@ content.</p>
 When you want to share information in the browser in a more permanent fashion you should create a 
 session and share the resulting URL. From the Session page, copy the link that says 
 &quot;Browser&quot; with a right-click. The URL should look something like the following:</p>
-<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>hgS_doOtherUser=submit&hgS_otherUserName=</b>sessionGallery<b>&hgS_otherUserSessionName=</b>hg19_watsonKriek</code></pre>
+<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?<strong>hgS_doOtherUser=submit&hgS_otherUserName=</strong>sessionGallery<strong>&hgS_otherUserSessionName=</strong>hg19_watsonKriek</code></pre>
 <p>
 In the above case a user name was created called <code>sessionGallery</code> and a session was 
 created called <code>hg19_watsonKriek</code>. This more stable link is the best way to share 
 information, with the only further improvement being to locally download your session file and then 
 remotely share it from your own private collection in an internet accessible location using the
 <code><strong>hgS_loadUrlName=</strong></code> option. For example seen in this link:</p>
-<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>hgS_doLoadUrl=submit&hgS_loadUrlName=</b>http://genome.ucsc.edu/goldenPath/help/examples/sessions/encodeDemonstration</code></pre>
+<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?<strong>hgS_doLoadUrl=submit&hgS_loadUrlName=</strong>http://genome.ucsc.edu/goldenPath/help/examples/sessions/encodeDemonstration</code></pre>
 
 <a name="customTracks"></a>
 <h3>Custom Track caveats</h3>
@@ -438,8 +441,8 @@ We have changed our policy about the persistence of session data including custo
 sessions. In the past saved sessions were only committed to persist for four months after the last 
 access and custom tracks in sessions were subject to persist for at least 48 hours after the last 
 time they were viewed. We have now moved to not remove session data, unless deleted, and to not 
-remove custom tracks in sessions. However, <b>please note that the UCSC Genome Browser is not a data
-storage service</b>, so you will want to keep backups of all your custom tracks on a local 
+remove custom tracks in sessions. However, <strong>please note that the UCSC Genome Browser is not a
+data storage service</strong>, so you will want to keep backups of all your custom tracks on a local
 machine, just in case there is a possible loss of data due to unforeseen circumstances.</p>
 <p>
 For mirrors, when loading sessions that contain custom data from custom tracks or hubs an
@@ -461,4 +464,4 @@ to &quot;Output type: psl no header&quot; and then paste the results into the cu
 page, perhaps giving a top line such as <code>track name=&quot;blat&quot;
 description=&quot;My BLAT results for X,Y,Z&quot;</code> to describe it.</p>
 
-<!--#include virtual="/gbPageEnd.html"-->
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

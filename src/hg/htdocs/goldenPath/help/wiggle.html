@@ -21,12 +21,12 @@ compression means that there is a minor loss of precision when data is exported 
 Table Browser). The <a href='bedgraph.html'>bedGraph</a> format should be used if it is important to
 retain exact data when exporting.</p>
 
-<h2>General Structure</h2>
+<h2>General structure</h2>
 <p> 
-Wiggle format is line-oriented. For wiggle custom tracks, <b>the first line must be a 
+Wiggle format is line-oriented. For wiggle custom tracks, <strong>the first line must be a 
 <a href="customTrack.html#TRACK" target="_blank">track definition line</a>  (<em>i.e.</em>, track 
-type=wiggle_0)</b>, which designates the track as a wiggle track and adds a number of options for
-controlling the default display.</p>
+type=wiggle_0)</strong>, which designates the track as a wiggle track and adds a number of options 
+for controlling the default display.</p>
 <p>
 Wiggle format is composed of declaration lines and data lines, and require a separate wiggle track 
 definition line. There are two options for formatting wiggle data: <strong>variableStep</strong> 
@@ -105,7 +105,7 @@ dataset. If no span is specified, the default span of 1 is used. As the name sug
 wiggles require the same size step throughout the dataset. If not specified, a step size of 1 is 
 used.</p>
 
-<h2>Data Values</h2>
+<h2>Data values</h2>
 <p>
 Wiggle track data values can be integer or real, positive or negative values. Only positions 
 specified have data. Positions not specified do not have data and will not be graphed. All positions
