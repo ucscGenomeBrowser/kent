@@ -1611,7 +1611,22 @@ return nonAlphaNumericHexDecodeText(s, "\\x", "");
 
 
 function stripJsEmbedded(returnedHtml, debug, whatWeDid)
-{ // strips embedded javascript from html returned by ajax
+{ 
+  // GALT NOTE: this may have been mostly obsoleted by CSP2 changes.
+  // There were 3 or 4 places in the code that even in production
+  // had called this function stripJsEmbedded with debug=true, which means that
+  // if any script tag blocks are present, they would be seen and shown
+  // to the user.  This probably was because if these blocks were found
+  // simply adding them to the div html from the ajax callback would result in 
+  // their being ignored by the browser. It seems to be a security feature of browsers.
+  // Meanwhile however inline event handlers in the html worked and were allowed.
+  // So this was just a way to warn developers that their script blocks would have been ignored
+  // and have no effect. I think this concern no longer applies after my CSP2 changes
+  // because it is able to pull in all the js, whether from event handlers or what would
+  // have been individual script blocks in the old days, and adds it to
+  // the page with a nonce and appendChild.
+  //
+  // strips embedded javascript from html returned by ajax
   // NOTE: any warnBox style errors will be put into the warnBox
   // If whatWeDid !== null, we use it to return info about
   // what we stripped out and processed (current just warnMsg).

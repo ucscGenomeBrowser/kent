@@ -1,4 +1,4 @@
-// subCfg the subtrack Configureation module (scm) for hgTrackUi
+// subCfg the subtrack Configuration module (scm) for hgTrackUi
 //
 // This module is for subtrack level config embedded dialogs in hgTrackUi.
 // Subtrack config dialogs are embedded in the subtrack table and get populated when first
@@ -503,13 +503,21 @@ var subCfg = { // subtrack config module.
 
     cfgFill: function (content, status)
     { // Finishes the population of a subtrack cfg.  Called by ajax return.
+
+	var pageNonce = getNonce();
+
+	var ajaxNonce = stripNonce(content, false);
+    
+	var jsNonce = stripJsNonce(content, ajaxNonce, false);// DEBUG msg with true
+        
         var ix;
         var cfg = subCfg.currentCfg;
         subCfg.currentCfg = undefined;
         var cleanHtml = content;
         cleanHtml = stripJsFiles(cleanHtml,true);   // DEBUG msg with true
         cleanHtml = stripCssFiles(cleanHtml,true);  // DEBUG msg with true
-        cleanHtml = stripJsEmbedded(cleanHtml,true);// DEBUG msg with true
+	// Obsoleted by CSP2 nonce js?
+        //cleanHtml = stripJsEmbedded(cleanHtml,true);// DEBUG msg with true 
         if (subCfg.visIndependent) {
             ix = cleanHtml.indexOf('</SELECT>');
             if (ix > 0)
@@ -536,6 +544,16 @@ var subCfg = { // subtrack config module.
         cleanHtml = "<div class='blueBox' style='background-color:#FFF9D2; padding:0.5em 1em 1em;'>"
                     + cleanHtml + "</div>";
         $(cfg).html(cleanHtml);
+
+	// append ajax js blocks with nonce
+	for (i=0; i<jsNonce.length; ++i) {
+	    var sTag = document.createElement("script");
+	    sTag.type = "text/javascript";
+	    sTag.text = jsNonce[i];
+	    sTag.setAttribute('nonce', pageNonce); // CSP2 Requires
+	    document.head.appendChild(sTag);
+	    }		
+
         $(cfg).addClass('filled');
         var boxWithin = $(cfg).find('.blueBox');
         if (boxWithin.length > 1)
