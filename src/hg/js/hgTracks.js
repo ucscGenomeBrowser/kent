@@ -491,30 +491,6 @@ var genomePos = {
     },
 
 
-    inlineJs : "",
-
-    getInlineJs: function (response, status)
-    {
-	//alert("genomePos.getInlineJs called!"); // DEBUG REMOVE
-        genomePos.inlineJs = response;
-    },
-
-    fetchInlineJs: function (url)
-    {   // code to fetch temp file with inline js in it.  // OBSOLETE CSP1
-        $.ajax({
-                type: "GET",
-                async: false, // wait for result
-                url: url,
-                dataType: "html",
-                trueSuccess: genomePos.getInlineJs,
-                success: catchErrorOrDispatch,
-                error: errorHandler,
-                cache: false
-            });
-        return genomePos.inlineJs;
-    },
-
-
     convertedVirtCoords : {chromStart : -1, chromEnd : -1},
 
     handleConvertChromPosToVirtCoords: function (response, status)
@@ -3501,10 +3477,8 @@ var popUp = {
     // Take html from hgTrackUi and put it up as a modal dialog.
 
 	var pageNonce = getNonce();
-	alert('pageNonce='+pageNonce);  // DEBUG REMOVE
 
 	var ajaxNonce = stripNonce(response, false);
-	alert('ajaxNonce='+ajaxNonce);  // DEBUG REMOVE
     
 	var jsNonce = stripJsNonce(response, ajaxNonce, false);// DEBUG msg with true
 
@@ -3525,9 +3499,6 @@ var popUp = {
 	    sTag.type = "text/javascript";
 	    sTag.text = jsNonce[i];
 	    sTag.setAttribute('nonce', pageNonce); // CSP2 Requires
-
-	    alert("about to call appendChild on:\n"+jsNonce[i]);
-
 	    document.head.appendChild(sTag);
 	}		
 
@@ -3966,41 +3937,7 @@ var imageV2 = {
 
         // update local hgTracks.trackDb to reflect possible side-effects of ajax request.
 
-	// alert("response=["+response+"]");  // DEBUG GALT REMOVE
-
         var newJson = scrapeVariable(response, "hgTracks");
-
-	// added by GALT for CSP/XSS
-        if (!newJson) {
-	    // OLD CSP1 way not using now?
-            var strippedJsFiles = {};
-            stripJsFiles(response, false, strippedJsFiles);
-	    //alert(strippedJsFiles.toSource()); // DEBUG GALT FF ONLY
-	    //alert("strippedJsFiles.jsFiles="+strippedJsFiles.jsFiles+"");  // DEBUG GALT REMOVE
-	    var inlinePath = "";
-	    var i, len;
-	    if (strippedJsFiles.jsFiles) {		
-		for (i = 0, len = strippedJsFiles.jsFiles.length; i < len; ++i) {
-		    //alert(strippedJsFiles.jsFiles[i]); // DEBUG REMOVE
-		    var srcPattern="<script type='text/javascript' SRC='(.*)'></script>";
-		    var reg = new RegExp(srcPattern);
-		    var a = reg.exec(strippedJsFiles.jsFiles[i]);
-		    if (a && a[1]) {
-			if (a[1].match("inline")) {
-			    inlinePath = a[1];
-			    //alert("SRC found: "+a[1]);  // DEBUG REMOVE
-			}
-		    }
-		}
-	    }
-	    if (inlinePath !== "") {
-		//alert("inlinePath found: "+inlinePath); // DEBUG REMOVE
-		var js = genomePos.fetchInlineJs(inlinePath);
-		//alert(js); // DEBUG REMOVE
-		response += ("<script type='text/javascript'>"+js+"</script>");
-		newJson = scrapeVariable(response, "hgTracks");
-	    }
-	}
 
         //alert(JSON.stringify(newJson)); // DEBUG Example
 
