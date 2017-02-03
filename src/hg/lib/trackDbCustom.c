@@ -649,6 +649,8 @@ if(startsWith("wigMaf", type) || startsWith("bigMaf", type))
     cType = cfgWigMaf;
 else if(startsWith("wig", type))
     cType = cfgWig;
+else if(startsWith("bigBed", type))
+    cType = cfgBigBed;
 else if(startsWith("bigGenePred", type))
     cType = cfgGenePred;
 else if(startsWith("bigWig", type))

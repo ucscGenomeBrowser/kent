@@ -6141,6 +6141,7 @@ if (hTableExists(database, "kgXref"))
         kgE->name = dyStringCannibalize(&name);
         kgE->hgg_prot = lf->extra;
         lf->extra = kgE;
+        lf->label = kgE->name;
 	}
     }
 hFreeConn(&conn);

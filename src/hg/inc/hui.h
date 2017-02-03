@@ -1036,6 +1036,9 @@ void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb);
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
 /* UI for the wiggle track */
 
+void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
+/* Put up a choice for labels. */
+
 #define NO_SCORE_FILTER  "noScoreFilter"
 #define  SCORE_FILTER      "scoreFilter"
 #define SIGNAL_FILTER      "signalFilter"
@@ -1132,7 +1135,7 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
                      boolean boxed);
 // Put up UI for filtering wgEnocde peaks based on score, Pval and Qval
 
-void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+void genePredCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 // Put up genePred-specific controls
 
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
