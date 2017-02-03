@@ -1,0 +1,93 @@
+############################################################################
+# DBSNP B147 / SNP147 (DONE 2/3/17 jcasper)
+    # RedMine #16847
+    screen
+    mkdir -p /hive/data/outside/dbSNP/147/chicken_galGal5
+    cd /hive/data/outside/dbSNP/147/chicken_galGal5
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (chicken_9031 in this case).
+    # Then click into that directory and look for file names like
+    #    b(1[0-9][0-9])_
+    # -- use the first num for build setting in config.ra
+    # has B128 as its most recent build.
+    # The buildAssembly setting in config.ra is empty because dbSNP stopped including
+    # that in file names.
+    # Had to fetch
+    # ftp://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/All/GCF_000003055.6.assembly.txt
+    # manually and install it in the config file because NCBI's FTP server
+    # appears to be having some problems with providing the right header
+    # information (curl and wget on our server complain about it, anyway).
+    cp /hive/data/genomes/galGal5/refseq/GCF_000002315.4_Gallus_gallus-5.0_assembly_report.txt .
+    cat > config.ra <<EOF
+db galGal5
+build 147
+buildAssembly
+orgDir chicken_9031
+refAssemblyLabel Gallus_gallus-5.0
+ncbiAssemblyReportFile GCF_000002315.4_Gallus_gallus-5.0_assembly_report.txt
+EOF
+
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
+#*** 23439 lines of b147_ContigInfo.bcp.gz contained contig names that
+#*** could not be mapped to chrom.size via their GenBank contig mappings; see
+#*** /hive/data/outside/dbSNP/147/chicken_galGal5/cantLiftUpSeqNames.txt .
+#
+#*** You must account for all 23870 contig_acc values in config.ra,
+#*** using the liftUp and/or ignoreDbSnpContigsFile settings (see -help output).
+#*** Check the auto-generated suggested.lft to see if it covers all
+#*** 23870 contigs; if it does, add 'liftUp suggested.lft' to config.ra.
+#*** Then run again with -continue=loadDbSnp
+
+    cat cantLiftUpSeqNames.txt
+#unlocalized-scaffold (no chr1_AADN04000798v1_random or chr1_AADN04000798_random in chrom.sizes) NT_456096   chr1
+#unlocalized-scaffold (no chr1_AADN04000799v1_random or chr1_AADN04000799_random in chrom.sizes) NT_456097   chr1
+#...
+
+    # Some trial and error is always required to get the config.ra just right.
+    # This time, it turns out that the UCSC contig names for unplaced and
+    # unlocalized scaffolds are based on the RefSeq names instead of GenBank contig
+    # names, which the script doesn't expect.  Time to generate some additional liftUp lines.
+    # genLift.pl is as follows:
+    #    while ($refName = <STDIN>)
+    #    {
+    #        chomp($refName);
+    #        $ucscLine = `grep $refName /hive/data/genomes/galGal5/chrom.sizes`;
+    #        chomp($ucscLine);
+    #        ($ucscName, $size) = split /\t/, $ucscLine;
+    #        printf ("0\t%s\t%s\t%s\t%s\t+\n", $refName, $size, $ucscName, $size);
+    #    }
+    awk '{print $(NF-1)}' cantLiftUpSeqNames.txt | perl genLift.pl > supplemental.lft
+    cat suggested.lft supplemental.lft > all.lft
+
+    cat >> config.ra <<EOF
+liftUp all.lft
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >> do.log 2>&1 &
+    tail -f do.log
+
+# *** All done!
+#
+# This is a bit disingenuous.  There was a further problem, which was that (at
+# the time of this build, anyway), once dbSNP maps SNPs to a contig, they
+# continue mapping to the contig in that orientation.  This holds even if a
+# later assembly has that contig in reversed orientation on an assembled
+# chromosome.  This build was the first time where we encountered an assembly
+# for which that mattered - a number of contigs were reversed in the galGal5
+# assembly from how dbSNP mapped to them.  doDbSnp.pl was not equipped to
+# handle the situation, and a few changes had to be made to support it.
+#
+# Furthermore, there was a second problem where it turns out that dbSNP was
+# mistakenly providing coordinates on assembled chromosomes (the phys_pos_from field)
+# for SNPs on unlocalized scaffolds.  The snpNcbiToUcsc program had to be briefly
+# modified to ignore those values.
+
+    zcat snp147.bed.gz \
+    | ~/kent/src/hg/utils/automation/categorizeSnps.pl
+#Mult:     73129
+#Common:   18675
+#Flagged:  0
+#leftover: 20951514
+    # 18,675 SNPs out of ~21M that meet the threshold for Common... that's
+    # pretty sparse.  Not worth pushing out as a separate subtrack.
+
+

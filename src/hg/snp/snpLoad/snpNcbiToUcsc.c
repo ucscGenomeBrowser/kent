@@ -1138,8 +1138,14 @@ void checkNcbiChrStart(int ncbiChrStart)
 {
 if (ncbiChrStart != -1 && !strstr(chr, "_hap") &&
     ncbiChrStart != chrStart)
-    writeError("chromStart (%d) does not match phys_pos_from (%d).",
-	       chrStart, ncbiChrStart);
+    {
+    /* If NCBI's start matches our end, guess that the track item was lifted from a reversed contig */
+    if (ncbiChrStart == chrEnd)
+        warn("Warning: rs%d, chromStart (%d) does not match phys_pos_from (%d), but chromEnd does.  This is possibly due to a reversed contig, so not marking as an error.", rsId, chrStart, ncbiChrStart);
+    else 
+        writeError("chromStart (%d) does not match phys_pos_from (%d).",
+	            chrStart, ncbiChrStart);
+    }
 }
 
 void adjustCoords(struct lineFile *lf, int locTypeNum, char *locType,
