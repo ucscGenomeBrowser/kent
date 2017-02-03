@@ -695,7 +695,6 @@ return content;
 
 function warnBoxJsSetup()
 {   // Sets up warnBox if not already established.  This is duplicated from htmshell.c
-    // alert("warnBoxJsSetup() called"); // DEBUG REMOVE GALT TODO Nonce?
     var html = "";
     html += "<center>";
     html += "<div id='warnBox' style='display:none;'>";
