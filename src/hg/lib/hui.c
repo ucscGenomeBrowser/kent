@@ -4049,7 +4049,7 @@ case cfgWig:        wigCfgUi(cart,tdb,prefix,title,boxed);
 		    break;
 case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
 		    break;
-case cfgGenePred:   genePredCfgUi(cart,tdb,prefix,title,boxed);
+case cfgGenePred:   genePredCfgUi(db, cart,tdb,prefix,title,boxed);
 		    break;
 case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed, NULL);
 		    break;
@@ -4066,6 +4066,8 @@ case cfgLong:       longRangeCfgUi(cart, tdb, prefix, title, boxed);
 case cfgSnake:      snakeCfgUi(cart, tdb, prefix, title, boxed);
 		    break;
 case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
+		    break;
+case cfgBigBed:     labelCfgUi(db, cart, tdb);
 		    break;
 default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			 cType);
@@ -5798,6 +5800,30 @@ printf("<br><br>");
 filterByChromCfgUi(cart,tdb);
 }
 
+void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb)
+/* If there is a labelFields for a bigBed, this routine is called to put up the label options. */
+{
+char *labelFields = trackDbSettingClosestToHome(tdb, "labelFields");
+if (labelFields == NULL)
+    return;
+
+struct slName *thisLabel, *labelIds = slNameListFromComma(labelFields);
+struct asObject *as = asForDb(tdb, db);  
+char varName[1024];
+
+printf("<B>Label:</B> ");
+for(thisLabel = labelIds; thisLabel; thisLabel = thisLabel->next)
+    {
+    struct asColumn *col = asColumnFind(as, thisLabel->name);
+
+    safef(varName, sizeof(varName), "%s.label.%s", tdb->track, thisLabel->name);
+    boolean option = cartUsualBoolean(cart, varName, thisLabel==labelIds);
+    cgiMakeCheckBox(varName, option);
+    printf(" %s&nbsp;&nbsp;&nbsp;", col->comment);
+
+    }
+}
+
 void pslCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,
               boolean boxed)
 /* Put up UI for psl tracks */
@@ -5807,6 +5833,8 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 char *typeLine = cloneString(tdb->type);
 char *words[8];
 int wordCount = wordCount = chopLine(typeLine, words);
+if (sameString(tdb->type, "bigPsl"))
+    labelCfgUi(db, cart, tdb);
 if (wordCount == 3 && sameWord(words[1], "xeno"))
     crossSpeciesCfgUi(cart,tdb);
 baseColorDropLists(cart, tdb, name);
@@ -6170,7 +6198,7 @@ if (opened)
     }
 }
 
-void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
+void genePredCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up gencode-specific controls */
 {
 char varName[64];
@@ -6178,6 +6206,7 @@ boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *geneLabel = cartUsualStringClosestToHome(cart, tdb,parentLevel, "label", "gene");
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
+labelCfgUi(db, cart, tdb);
 if (sameString(name, "acembly"))
     {
     char *acemblyClass = cartUsualStringClosestToHome(cart,tdb,parentLevel,"type",
