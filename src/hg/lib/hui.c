@@ -4040,6 +4040,9 @@ case cfgBedScore:
 		    char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
 		    int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
 		    scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
+
+                    if(startsWith("bigBed", tdb->type))
+                        labelCfgUi(db, cart, tdb);
 		    }
 		    break;
 case cfgPeak:
@@ -4066,8 +4069,6 @@ case cfgLong:       longRangeCfgUi(cart, tdb, prefix, title, boxed);
 case cfgSnake:      snakeCfgUi(cart, tdb, prefix, title, boxed);
 		    break;
 case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
-		    break;
-case cfgBigBed:     labelCfgUi(db, cart, tdb);
 		    break;
 default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			 cType);
