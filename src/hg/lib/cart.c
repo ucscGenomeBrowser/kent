@@ -1670,7 +1670,7 @@ void cartEarlyWarningHandler(char *format, va_list args)
 static boolean initted = FALSE;
 va_list argscp;
 va_copy(argscp, args);
-if (!initted)
+if (!initted && !cgiOptionalString("ajax"))
     {
     htmStart(stdout, "Early Error");
     initted = TRUE;

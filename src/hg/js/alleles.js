@@ -32,16 +32,13 @@ var alleles = (function()
     { // Update the geneAlleles section based upon ajax request
         hideLoadingImage(this.loadingId);  // Do this first
 
-	var pageNonce = getNonce();
-
-	var ajaxNonce = stripNonce(content, false);
-    
-	var jsNonce = stripJsNonce(content, ajaxNonce, false);// DEBUG msg with true
         
         var geneAlleles = $('div#' + sectionName);
         if (geneAlleles.length > 0) {
             
             var cleanHtml = content;
+	    var nonceJs = {};
+	    cleanHtml = stripCSPAndNonceJs(cleanHtml, false, nonceJs); // DEBUG msg with true
             //cleanHtml = stripJsFiles(cleanHtml,true);   // DEBUG msg with true
             //cleanHtml = stripCssFiles(cleanHtml,true);  // DEBUG msg with true
             //cleanHtml = stripJsEmbedded(cleanHtml,true);// DEBUG msg with true
@@ -60,14 +57,7 @@ var alleles = (function()
                 $(geneAlleles[0]).html( cleanHtml );
                 hiliteRemove();
 
-		// append ajax js blocks with nonce
-		for (i=0; i<jsNonce.length; ++i) {
-		    var sTag = document.createElement("script");
-		    sTag.type = "text/javascript";
-		    sTag.text = jsNonce[i];
-		    sTag.setAttribute('nonce', pageNonce); // CSP2 Requires
-		    document.head.appendChild(sTag);
-		}		
+		appendNonceJsToPage(nonceJs);
 
                 alleles.initialize();  // Must have prefix, since ajax call
             }
