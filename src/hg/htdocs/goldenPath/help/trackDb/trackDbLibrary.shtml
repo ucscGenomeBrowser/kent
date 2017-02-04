@@ -3657,6 +3657,12 @@ There are no extra options that can appear on the type bigMaf line.
     </P>
 </DIV>
 
+<DIV class="labelFields"><span class="types bigBed bigGenePred bigPsl"></span>
+<div class="format"><code>labelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
+    <P>A list of fields from the bigBed based file that can be used as a label.
+    </P>
+</DIV>
+
 <DIV class="showSnpWidth"><span class="types halSnake"></span>
 <div class="format"><code>showSnpWidth &lt;<EM>integer</EM>&gt;</code></div>
     <P>The maximum width (in bases) of a window where the halSnake will show SNPs between the reference and the other species.
