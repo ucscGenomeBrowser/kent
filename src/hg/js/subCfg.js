@@ -504,20 +504,17 @@ var subCfg = { // subtrack config module.
     cfgFill: function (content, status)
     { // Finishes the population of a subtrack cfg.  Called by ajax return.
 
-	var pageNonce = getNonce();
-
-	var ajaxNonce = stripNonce(content, false);
-    
-	var jsNonce = stripJsNonce(content, ajaxNonce, false);// DEBUG msg with true
-        
         var ix;
         var cfg = subCfg.currentCfg;
         subCfg.currentCfg = undefined;
         var cleanHtml = content;
         cleanHtml = stripJsFiles(cleanHtml,true);   // DEBUG msg with true
         cleanHtml = stripCssFiles(cleanHtml,true);  // DEBUG msg with true
-	// Obsoleted by CSP2 nonce js?
+	// Obsoleted by CSP2 nonce js? 
         //cleanHtml = stripJsEmbedded(cleanHtml,true);// DEBUG msg with true 
+	var nonceJs = {};
+	cleanHtml = stripCSPAndNonceJs(cleanHtml, false, nonceJs); // DEBUG msg with true
+
         if (subCfg.visIndependent) {
             ix = cleanHtml.indexOf('</SELECT>');
             if (ix > 0)
@@ -536,30 +533,22 @@ var subCfg = { // subtrack config module.
             if (ix > 0)                            // Excludes vis!
                 cleanHtml = cleanHtml.substring(ix+'<B>Display&nbsp;mode:&nbsp;</B>'.length);
         }
-            //cleanHtml = cleanHtml.substring(ix);
         ix = cleanHtml.indexOf('</FORM>'); // start of form already chipped off
         if (ix > 0)
             cleanHtml = cleanHtml.substring(0,ix - 1);
 
         cleanHtml = "<div class='blueBox' style='background-color:#FFF9D2; padding:0.5em 1em 1em;'>"
                     + cleanHtml + "</div>";
+
         $(cfg).html(cleanHtml);
 
-	// append ajax js blocks with nonce
-	for (i=0; i<jsNonce.length; ++i) {
-	    var sTag = document.createElement("script");
-	    sTag.type = "text/javascript";
-	    sTag.text = jsNonce[i];
-	    sTag.setAttribute('nonce', pageNonce); // CSP2 Requires
-	    document.head.appendChild(sTag);
-	    }		
+	appendNonceJsToPage(nonceJs);
 
         $(cfg).addClass('filled');
         var boxWithin = $(cfg).find('.blueBox');
         if (boxWithin.length > 1)
             $(boxWithin[1]).removeClass('blueBox');
 
-        //$(cfg).html("<div style='font-size:.9em;'>" + cleanHtml + "</div>");
         var subObjs = $(cfg).find('input,select').filter("[name]");
         if (subObjs.length === 0) {
             warn('DEBUG: Did not find controls for cfg: ' + cfg.id);

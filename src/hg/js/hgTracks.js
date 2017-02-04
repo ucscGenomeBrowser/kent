@@ -3209,10 +3209,15 @@ var popUpHgt = {
         cleanHtml = stripCspHeader(cleanHtml,false); // DEBUG msg with true
         cleanHtml = stripJsFiles(cleanHtml,false);   // DEBUG msg with true
         cleanHtml = stripCssFiles(cleanHtml,false);  // DEBUG msg with true
-        cleanHtml = stripJsEmbedded(cleanHtml,false);// DEBUG msg with true
+        //cleanHtml = stripJsEmbedded(cleanHtml,false);// DEBUG msg with true // Obsolete by CSP2?
+        var nonceJs = {};
+        cleanHtml = stripCSPAndNonceJs(cleanHtml, false, nonceJs); // DEBUG msg with true
+
         cleanHtml = stripMainMenu(cleanHtml,false);  // DEBUG msg with true
 
         $('#hgTracksDialog').html("<div id='pop' style='font-size:.9em;'>"+ cleanHtml +"</div>");
+
+        appendNonceJsToPage(nonceJs);
 
 
         // Strategy for popups with js:
@@ -3476,31 +3481,20 @@ var popUp = {
     {
     // Take html from hgTrackUi and put it up as a modal dialog.
 
-	var pageNonce = getNonce();
-
-	var ajaxNonce = stripNonce(response, false);
-    
-	var jsNonce = stripJsNonce(response, ajaxNonce, false);// DEBUG msg with true
-
         // make sure all links (e.g. help links) open up in a new window
         response = response.replace(/<a /ig, "<a target='_blank' ");
 
         var cleanHtml = response;
         cleanHtml = stripJsFiles(cleanHtml,false);   // DEBUG msg with true
         cleanHtml = stripCssFiles(cleanHtml,false);  // DEBUG msg with true
-        cleanHtml = stripJsEmbedded(cleanHtml,false);// DEBUG msg with true
+        //cleanHtml = stripJsEmbedded(cleanHtml,false);// DEBUG msg with true // OBSOLETE BY CSP2?
+	var nonceJs = {};
+	cleanHtml = stripCSPAndNonceJs(cleanHtml, false, nonceJs); // DEBUG msg with true
+
 	//alert(cleanHtml);  // DEBUG REMOVE
         $('#hgTrackUiDialog').html("<div id='pop' style='font-size:.9em;'>"+ cleanHtml +"</div>");
 
-	// append ajax js blocks with nonce
-	var i;
-	for (i=0; i<jsNonce.length; ++i) {
-	    var sTag = document.createElement("script");
-	    sTag.type = "text/javascript";
-	    sTag.text = jsNonce[i];
-	    sTag.setAttribute('nonce', pageNonce); // CSP2 Requires
-	    document.head.appendChild(sTag);
-	}		
+	appendNonceJsToPage(nonceJs);
 
         // Strategy for popups with js:
         // - jsFiles and CSS should not be included in html.  Here they are shluped out.
