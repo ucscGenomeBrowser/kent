@@ -1055,6 +1055,64 @@ type bed 6 +
 trackHandler snp125
 codingAnnotations snp148CodingDbSnp,
 
+track snp147Common
+shortLabel Common SNPs(147)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 147) Found in >= 1% of Samples
+group varRep
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp147Seq
+snpExceptionDesc snp147ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+codingAnnotations snp147CodingDbSnp,
+
+track snp147Flagged
+shortLabel Flagged SNPs(147)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 147) Flagged by dbSNP as Clinically Assoc
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp147Seq
+snpExceptionDesc snp147ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+trackHandler snp125
+codingAnnotations snp147CodingDbSnp,
+
+track snp147Mult
+shortLabel Mult. SNPs(147)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 147) That Map to Multiple Genomic Loci
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp147Seq
+snpExceptionDesc snp147ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+codingAnnotations snp147CodingDbSnp,
+
+track snp147
+shortLabel All SNPs(147)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 147)
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+codingAnnotations snp147CodingDbSnp,
+
 track snp139Common
 shortLabel Common SNPs(139)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 139) Found in >= 1% of Samples
@@ -2156,6 +2214,38 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9878
+padding 250
+
+searchTable snp147Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9846
+padding 250
+
+searchTable snp147Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9847
+padding 250
+
+searchTable snp147Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9848
+padding 250
+
+searchTable snp147
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.953
 padding 250
 
 searchTable snp148Common
