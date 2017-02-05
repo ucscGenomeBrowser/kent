@@ -5815,13 +5815,17 @@ char varName[1024];
 printf("<B>Label:</B> ");
 for(thisLabel = labelIds; thisLabel; thisLabel = thisLabel->next)
     {
-    struct asColumn *col = asColumnFind(as, thisLabel->name);
+    char *trimLabel = trimSpaces(thisLabel->name);
+    struct asColumn *col = asColumnFind(as, trimLabel);
 
-    safef(varName, sizeof(varName), "%s.label.%s", tdb->track, thisLabel->name);
+    if (col == NULL)
+        errAbort("cannot find field named '%s' in as file '%s'",
+            trimLabel, as->name);
+
+    safef(varName, sizeof(varName), "%s.label.%s", tdb->track, trimLabel);
     boolean option = cartUsualBoolean(cart, varName, thisLabel==labelIds);
     cgiMakeCheckBox(varName, option);
     printf(" %s&nbsp;&nbsp;&nbsp;", col->comment);
-
     }
 }
 

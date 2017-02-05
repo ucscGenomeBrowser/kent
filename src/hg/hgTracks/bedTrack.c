@@ -65,11 +65,15 @@ else
 
     for(thisLabel = labelIds; thisLabel; thisLabel = thisLabel->next)
         {
-        char *str = hashFindVal(labelHash,thisLabel->name);
+        char *trimLabel = trimSpaces(thisLabel->name);
+        char *str = hashFindVal(labelHash, trimLabel);
         
         if ((str != NULL) && sameString(str, "1"))
             {
-            unsigned colNum = asColumnFindIx(as->columnList, thisLabel->name);
+            unsigned colNum = asColumnFindIx(as->columnList, trimLabel);
+            if (colNum == -1)
+                errAbort("cannot find field named '%s' in as file '%s'", 
+                    trimLabel, as->name);
 
             // put this column number in the list of columns to use to make label
             slAddHead(&track->labelColumns, slIntNew(colNum));
