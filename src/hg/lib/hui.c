@@ -1157,7 +1157,7 @@ else if (gotCds)
     {
     char buf[256];
     char *disabled = NULL;
-    safef(buf, sizeof(buf), "onchange='codonColoringChanged(\"%s\")'", name);
+    safef(buf, sizeof(buf), "codonColoringChanged('%s');", name);
     puts("<P><B>Color track by codons:</B>");
     cgiMakeDropListFull(var, baseColorDrawGenomicOptionLabels,
 			baseColorDrawGenomicOptionValues,
