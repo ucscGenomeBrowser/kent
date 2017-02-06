@@ -125,6 +125,9 @@ return field;
 char *makeLabel(struct track *track,  struct bigBedInterval *bb)
 // Build a label for a bigBedTrack from the requested label fields.
 {
+char *labelSeparator = trackDbSettingClosestToHome(track->tdb, "labelSeparator");
+if (labelSeparator == NULL)
+    labelSeparator = "/";
 char *restFields[256];
 chopTabs(cloneString(bb->rest), restFields);
 struct dyString *dy = newDyString(128);
@@ -133,7 +136,7 @@ struct slInt *labelInt = track->labelColumns;
 for(; labelInt; labelInt = labelInt->next)
     {
     if (!firstTime)
-        dyStringPrintf(dy, "/");
+        dyStringAppend(dy, labelSeparator);
 
     dyStringPrintf(dy, "%s", restFields[labelInt->val - 3]);
     firstTime = FALSE;

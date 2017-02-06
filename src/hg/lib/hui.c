@@ -1157,7 +1157,7 @@ else if (gotCds)
     {
     char buf[256];
     char *disabled = NULL;
-    safef(buf, sizeof(buf), "onchange='codonColoringChanged(\"%s\")'", name);
+    safef(buf, sizeof(buf), "codonColoringChanged('%s');", name);
     puts("<P><B>Color track by codons:</B>");
     cgiMakeDropListFull(var, baseColorDrawGenomicOptionLabels,
 			baseColorDrawGenomicOptionValues,
@@ -5801,30 +5801,62 @@ printf("<br><br>");
 filterByChromCfgUi(cart,tdb);
 }
 
+struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as)
+/* Build up a hash of a list of fields in an AS file. */
+{
+struct slPair *list = NULL;
+char *fields = trackDbSettingClosestToHome(tdb, trackDbVar);
+
+if (fields != NULL)
+    {
+    struct slName *thisField, *fieldList = slNameListFromComma(fields);
+    for(thisField = fieldList; thisField; thisField = thisField->next)
+        {
+        char *trimLabel = trimSpaces(thisField->name);
+        unsigned colNum = asColumnFindIx(as->columnList, trimLabel);
+        if (colNum == -1)
+            errAbort("cannot find field named '%s' in as file '%s'", 
+                trimLabel, as->name);
+
+        slAddHead(&list, slPairNew(trimLabel, NULL + colNum));
+        }
+    }
+
+slReverse(&list);
+return list;
+}
+
 void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb)
 /* If there is a labelFields for a bigBed, this routine is called to put up the label options. */
 {
-char *labelFields = trackDbSettingClosestToHome(tdb, "labelFields");
-if (labelFields == NULL)
-    return;
-
-struct slName *thisLabel, *labelIds = slNameListFromComma(labelFields);
 struct asObject *as = asForDb(tdb, db);  
+struct slPair *labelList = buildFieldList(tdb, "labelFields",  as);
+struct slPair *defaultLabelList = buildFieldList(tdb, "defaultLabelFields",  as);
 char varName[1024];
 
+if (labelList == NULL)
+    return;
+
 printf("<B>Label:</B> ");
-for(thisLabel = labelIds; thisLabel; thisLabel = thisLabel->next)
+struct slPair *thisLabel = labelList;
+for(; thisLabel; thisLabel = thisLabel->next)
     {
-    char *trimLabel = trimSpaces(thisLabel->name);
-    struct asColumn *col = asColumnFind(as, trimLabel);
+    safef(varName, sizeof(varName), "%s.label.%s", tdb->track, thisLabel->name);
+    boolean isDefault = FALSE;
+    if (defaultLabelList == NULL)
+        isDefault = (thisLabel == labelList);
+    else
+        isDefault = (slPairFind(defaultLabelList, thisLabel->name) != NULL);
 
-    if (col == NULL)
-        errAbort("cannot find field named '%s' in as file '%s'",
-            trimLabel, as->name);
-
-    safef(varName, sizeof(varName), "%s.label.%s", tdb->track, trimLabel);
-    boolean option = cartUsualBoolean(cart, varName, thisLabel==labelIds);
+    boolean option = cartUsualBoolean(cart, varName, isDefault);
     cgiMakeCheckBox(varName, option);
+
+    // find comment for the column listed
+    struct asColumn *col = as->columnList;
+    unsigned num = ptToInt(thisLabel->val);
+    for(; col && num--; col = col->next)
+        ;
+    assert(col);
     printf(" %s&nbsp;&nbsp;&nbsp;", col->comment);
     }
 }
