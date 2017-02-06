@@ -1,0 +1,219 @@
+#########################################################################
+# LASTZ bonobo/panPan2 Gorilla/gorGor4 - (DONE - 2016-08-08 - Hiram)
+    mkdir /hive/data/genomes/panPan2/bed/lastzGorGor4.2016-08-08
+    cd /hive/data/genomes/panPan2/bed/lastzGorGor4.2016-08-08
+
+    printf '# bonobo vs. gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_L=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: bonobo panPan2
+SEQ1_DIR=/hive/data/genomes/panPan2/panPan2.2bit
+SEQ1_LEN=/hive/data/genomes/panPan2/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# QUERY: Gorilla gorGor4
+SEQ2_DIR=/hive/data/genomes/gorGor4/gorGor4.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor4/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panPan2/bed/lastzGorGor4.2016-08-08
+TMPDIR=/dev/shm
+' > DEF
+
+    # this did not work with chainMinScore=3000, too many chains
+    # to fix this required using a masked version of both genomes that
+    # combined windowMasker with rmsk and trf see gorGor5 below
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    2714m9.663s
+    XXX having trouble with netToAxt, too many chains
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -continue=load -syntenicNet) > load.log 2>&1
+
+    cat fb.panPan2.chainGorGor4Link.txt
+    # 2826289232 bases of 3049335806 (92.685%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panPan2 panPan2) \
+      > rbest.log 2>&1 &
+    # real    184m43.685s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panPan2/bed/blastz.panPan2.swap
+    cd /hive/data/genomes/panPan2/bed/blastz.panPan2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panPan2/bed/lastzGorGor4.2016-08-08/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    127m16.000s
+
+    cat fb.panPan2.chainHg38Link.txt
+    # 2664377492 bases of 2725937399 (97.742%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panPan2 panPan2) \
+       > rbest.log 2>&1
+    # real    42m41.291s
+
+#########################################################################
+# LASTZ bonobo/panPan2 chimp/panTro4 - (DONE - 2016-05-26 - Hiram)
+    mkdir /hive/data/genomes/panPan2/bed/lastzPanTro4.2016-05-26
+    cd /hive/data/genomes/panPan2/bed/lastzPanTro4.2016-05-26
+
+    printf '# bonobo vs. chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_L=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: bonobo panPan2
+SEQ1_DIR=/hive/data/genomes/panPan2/panPan2.2bit
+SEQ1_LEN=/hive/data/genomes/panPan2/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# QUERY: chimp panTro4
+SEQ2_DIR=/hive/data/genomes/panTro4/panTro4.2bit
+SEQ2_LEN=/hive/data/genomes/panTro4/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panPan2/bed/lastzPanTro4.2016-05-26
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    262m32.079s
+
+    cat fb.panPan2.chainPanTro4Link.txt
+    # 2621514266 bases of 2725937399 (96.169%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panPan2 panTro4) \
+      > rbest.log 2>&1 &
+    # real    122m35.914s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panTro4/bed/blastz.panPan2.swap
+    cd /hive/data/genomes/panTro4/bed/blastz.panPan2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panPan2/bed/lastzPanTro4.2016-05-26/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    93m55.041s
+
+    cat fb.panTro4.chainPanPan2Link.txt
+    # 2713578197 bases of 2902338967 (93.496%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panTro4 panPan2) \
+       > rbest.log 2>&1
+    # real    155m54.606s
+
+#########################################################################
+# LASTZ bonobo/panPan2 Gorilla/gorGor5 - (DONE - 2017-02-01 - Hiram)
+    mkdir /hive/data/genomes/panPan2/bed/lastzGorGor5.2017-02-01
+    cd /hive/data/genomes/panPan2/bed/lastzGorGor5.2017-02-01
+
+    printf '# bonobo vs. gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_L=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: bonobo panPan2
+SEQ1_DIR=/hive/data/genomes/panPan2/panPan2.wmRmsk.2bit
+SEQ1_LEN=/hive/data/genomes/panPan2/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=70
+SEQ1_LAP=10000
+
+# QUERY: Gorilla gorGor5
+SEQ2_DIR=/hive/data/genomes/gorGor5/gorGor5.wmRmsk.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor5/chrom.sizes
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=40
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panPan2/bed/lastzGorGor5.2017-02-01
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+
+    cat fb.panPan2.chainGorGor5Link.txt
+    # 2643924215 bases of 2725937399 (96.991%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panPan2 gorGor5) \
+      > rbest.log 2>&1 &
+    # real    93m41.569s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/gorGor5/bed/blastz.gorGor5.swap
+    cd /hive/data/genomes/gorGor5/bed/blastz.panPan2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panPan2/bed/lastzGorGor5.2017-02-01/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    94m21.716s
+
+    cat fb.gorGor5.chainPanPan2Link.txt
+    # 2693122804 bases of 3080431298 (87.427%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` gorGor5 panPan2) \
+       > rbest.log 2>&1
+    # real    112m29.058s
+
+#########################################################################
