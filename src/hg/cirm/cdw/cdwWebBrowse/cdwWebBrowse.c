@@ -1793,7 +1793,7 @@ localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.54");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
-printf("</BODY></HTML>\n");
+webEnd(); 
 }
 
 
