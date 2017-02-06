@@ -13,6 +13,7 @@
 #include "hgTracks.h"
 #include "cds.h"
 #include "bedTabix.h"
+#include "obscure.h"
 
 #define SEQ_DELIM '~'
 
@@ -35,48 +36,57 @@ return ret;
 static void calculateLabelFields(struct track *track)
 /* Figure out which fields are available to label a bigBed track. */
 {
-char *labelFields = trackDbSettingClosestToHome(track->tdb, "labelFields");
+struct bbiFile *bbi = fetchBbiForTrack(track);
+struct asObject *as = bigBedAsOrDefault(bbi);
+struct slPair *labelList = buildFieldList(track->tdb, "labelFields",  as);
 
-if (labelFields == NULL)
+if (labelList == NULL)
     {
-    // if there is a name, use it by default, otherwise no label by default 
+    // There is no labelFields entry in the trackDb.
+    // If there is a name, use it by default, otherwise no label by default 
     if (track->bedSize > 3)
         slAddHead(&track->labelColumns, slIntNew(3));
     }
 else
     {
-    char cartVar[1024];
     // what has the user said to use as a label
+    char cartVar[1024];
     safef(cartVar, sizeof cartVar, "%s.label", track->tdb->track);
     struct hashEl *labelEl = cartFindPrefix(cart, cartVar);
-    struct hash *labelHash = newHash(5);
-    struct slName *thisLabel, *labelIds = slNameListFromComma(labelFields);
+    struct hash *onHash = newHash(4);
 
     // fill hash with fields that should be used for labels
     if (labelEl == NULL) 
-        hashAdd(labelHash, labelIds->name, "1");
+        {
+        // there are no cart variables, so look for defaults
+        struct slPair *defaultLabelList = buildFieldList(track->tdb, "defaultLabelFields",  as);
+        if (defaultLabelList != NULL)
+            {
+            for(; defaultLabelList; defaultLabelList = defaultLabelList->next)
+                hashStore(onHash, defaultLabelList->name);
+            }
+        else
+            // no default list, use first entry in labelFields as default
+            hashStore(onHash, labelList->name);
+        }
     else
         {
+        // use cart variables to fill in onHash
         for(; labelEl; labelEl = labelEl->next)
-            hashAdd(labelHash, &labelEl->name[strlen(cartVar) + 1], labelEl->val);
+            {
+            if (sameString((char *)labelEl->val, "1"))
+                hashStore(onHash, &labelEl->name[strlen(cartVar) + 1]);
+            }
         }
 
-    struct asObject *as = asForDb(track->tdb, database);
-
-    for(thisLabel = labelIds; thisLabel; thisLabel = thisLabel->next)
+    struct slPair *thisLabel = labelList;
+    for(; thisLabel; thisLabel = thisLabel->next)
         {
-        char *trimLabel = trimSpaces(thisLabel->name);
-        char *str = hashFindVal(labelHash, trimLabel);
         
-        if ((str != NULL) && sameString(str, "1"))
+        if (hashLookup(onHash, thisLabel->name))
             {
-            unsigned colNum = asColumnFindIx(as->columnList, trimLabel);
-            if (colNum == -1)
-                errAbort("cannot find field named '%s' in as file '%s'", 
-                    trimLabel, as->name);
-
             // put this column number in the list of columns to use to make label
-            slAddHead(&track->labelColumns, slIntNew(colNum));
+            slAddHead(&track->labelColumns, slIntNew(ptToInt(thisLabel->val)));
             }
         }
     slReverse(&track->labelColumns);

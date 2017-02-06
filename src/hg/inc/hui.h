@@ -1427,4 +1427,6 @@ char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* 
     int winEnd, char *track, boolean encode);
 /* replace $$ in url with idInUrl. Supports many other wildchards */
 
+struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as);
+/* Build up a hash of a list of fields in an AS file. */
 #endif /* HUI_H */
