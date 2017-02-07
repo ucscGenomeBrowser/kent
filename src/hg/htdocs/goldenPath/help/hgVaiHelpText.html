@@ -1,439 +1,473 @@
 <!-- This file is included in hgVai's "Using the Variant Annotation Integrator" section. -->
 <!-- HREF paths are relative to cgi-bin, not goldenPath/help. -->
 
-<!DOCTYPE html>
-<!--#set var="TITLE" value="Genome Browser VAI" -->
-<!--#set var="ROOT" value="../.." -->
-
-<!-- Relative paths to support mirror sites with non-standard GB docs install -->
-<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
-
 <a name="intro"></a>
 <h2>Introduction</h2>
-<p>
-The Variant Annotation Integrator (VAI) is a research tool for associating annotations from the 
-UCSC database with your uploaded set of variant calls. It uses gene annotations to predict 
-functional effects of variants on transcripts. For example, a variant might be located in the coding
-sequence of one transcript, but in the intron of an alternatively spliced transcript of the same 
-gene; the VAI will return the predicted functional effect for each transcript. The VAI can 
-optionally add several other types of relevant information: the dbSNP identifier if the variant is 
-found in <a href="http://www.ncbi.nlm.nih.gov/projects/SNP/" target="_blank">dbSNP</a>, protein 
-damage scores for missense variants from the <a href="https://sites.google.com/site/jpopgen/dbNSFP"
-target="_blank">Database of Non-synonymous Functional Predictions (dbNSFP)</a>, and conservation 
-scores computed from multi-species alignments. The VAI can optionally filter results to retain only 
-specific functional effect categories, variant properties and multi-species conservation status.</p>
-<br>
-<div class='warn-note' style='border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;'>
-  <p>
-  <span style='font-weight: bold; color: #c70000;'>NOTE:</span><br>
-  The VAI is only a research tool, meant to be used by those who have been properly trained in the 
-  interpretation of genetic data, and should never be used to make any kind of medical decision. We 
-  urge users seeking information about a personal medical or genetic condition to consult with a 
-  qualified physician for diagnosis and for answers to personal questions.</p>
-</div><br>
+<P>
+The Variant Annotation Integrator (VAI) is a research tool for associating
+annotations from the UCSC database with your uploaded set of variant calls.
+It uses gene annotations to predict functional effects of variants on transcripts.
+For example, a variant might be located in the coding sequence
+of one transcript, but in the intron of an alternatively spliced transcript
+of the same gene; the VAI will return the predicted functional effect
+for each transcript.  The VAI can optionally add several other
+types of relevant information: the dbSNP identifier if the variant
+is found in
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/SNP/"
+TARGET=_BLANK>dbSNP</A>,
+protein damage scores for missense variants from the
+<A HREF="https://sites.google.com/site/jpopgen/dbNSFP"
+TARGET=_BLANK>Database of Non-synonymous Functional Predictions (dbNSFP)</A>,
+and conservation scores computed from multi-species alignments.
+The VAI can optionally filter results to retain only specific functional
+effect categories, variant properties and multi-species conservation status.
+</P>
+
+<div class='warn-note' style='border: 2px solid #9e5900; padding: 5px 20px;
+     background-color: #ffe9cc;'>
+<p><span style='font-weight: bold; color: #c70000;'>NOTE:</span><br>
+The VAI is only a research tool, meant to be used by those who have been
+properly trained in the interpretation of genetic data,
+and should never be used to make any kind of medical decision.
+We urge users seeking information about a personal medical or genetic
+condition to consult with a qualified physician for diagnosis and for
+answers to personal questions.
+</p></div><BR>
 
 <a name="variantCalls"></a>
 <h2>Submitting your variant calls</h2>
-<p>
+<P>
 In order to use the VAI, you must provide variant calls in either the
-<a href="../../FAQ/FAQformat.html#format10" target="_blank">Personal Genome SNP (pgSnp)</a> or
-<a href="../goldenPath/help/vcf.html" target="_blank">VCF</a> format. pgSnp-formatted variants may 
-be uploaded as a <a href="../goldenPath/help/hgTracksHelp.html#CustomTracks" target="_blank">Custom 
-Track</a>. Compressed and indexed VCF files must be on a web server (HTTP, HTTPS or FTP) and 
-configured as Custom Tracks, or if you happen to have a 
-<a href="../goldenPath/help/hgTrackHubHelp.html" target="_blank">Track Hub</a>, as hub tracks.</p>
+<A HREF="../../FAQ/FAQformat.html#format10" TARGET=_BLANK>Personal Genome SNP (pgSnp)</A> or
+<A HREF="../goldenPath/help/vcf.html" TARGET=_BLANK>VCF</A> format.
+pgSnp-formatted variants may be uploaded as a
+<A HREF="../goldenPath/help/hgTracksHelp.html#CustomTracks"
+TARGET=_BLANK>Custom Track</A>.
+Compressed and indexed VCF files must be on a web server (HTTP, HTTPS or FTP)
+and configured as Custom Tracks, or if you happen to have a
+<A HREF="../goldenPath/help/hgTrackHubHelp.html" TARGET=_BLANK>Track Hub</A>,
+as hub tracks.
+</P>
 
 <a name="genes"></a>
 <h2>Protein-coding gene transcript effect predictions</h2>
-<p>
-Any gene prediction track in the UCSC Genome Browser database or in a track hub can be selected as 
-the VAI's source of transcript annotations for prediction of functional effects.
-<a href="http://sequenceontology.org/" target="_blank">Sequence Ontology (SO)</a> terms are used to 
-describe the effect of each variant on genes in terms of transcript structure as follows:</p>
-<table>
-  <tr>
-    <th>SO term</th>
-    <th>description</th>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001628"
-    target="_blank">intergenic_variant</a></td>
-    <td>A sequence variant located in the intergenic region, between genes.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001631"
-    target="_blank">upstream_gene_variant</a></td>
-    <td>A sequence variant located 5' of a gene. (VAI searches within 5,000 bases.)</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001632"
-    target="_blank">downstream_gene_variant</a></td>
-    <td>A sequence variant located 3' of a gene. (VAI searches within 5,000 bases.)</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001623"
-    target="_blank">5_prime_Utr_variant</a></td>
-    <td>A variant located in the 5' untranslated region (Utr) of a gene.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001624"
-    target="_blank">3_prime_Utr_variant</a></td>
-    <td>A variant located in the 3' untranslated region (Utr) of a gene.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001819"
-    target="_blank">synonymous_variant</a></td>
-    <td>A sequence variant where there is no resulting change to the encoded amino acid.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001583"
-    target="_blank">missense_variant</a></td>
-    <td>A sequence variant, that changes one or more bases, resulting in a different amino acid 
-    sequence but where the length is preserved.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001821"
-    target="_blank">inframe_insertion</a></td>
-    <td>An inframe non synonymous variant that inserts bases into in the coding sequence.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001822"
-    target="_blank">inframe_deletion</a></td>
-    <td>An inframe non synonymous variant that deletes bases from the coding sequence.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001589"
-    target="_blank">frameshift_variant</a></td>
-    <td>A sequence variant which causes a disruption of the translational reading frame, because the
-    number of nucleotides inserted or deleted is not a multiple of three.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001582"
-    target="_blank">initiator_codon_variant</a></td>
-    <td>A codon variant that changes at least one base of the first codon of a transcript.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001626"
-    target="_blank">incomplete_terminal_codon_variant</a></td>
-    <td>A sequence variant where at least one base of the final codon of an incompletely annotated 
-    transcript is changed.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001578"
-    target="_blank">stop_lost</a></td>
-    <td>A sequence variant where at least one base of the terminator codon (stop) is changed, 
-    resulting in an elongated transcript.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001567"
-    target="_blank">stop_retained_variant</a></td>
-    <td>A sequence variant where at least one base in the terminator codon is changed, but the 
-    terminator remains.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001572"
-    target="_blank">exon_loss</a></td>
-    <td>A sequence variant whereby an exon is lost from the transcript. (VAI assigns this term when 
-    an entire exon is deleted.)</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001587"
-    target="_blank">stop_gained</a></td> 
-    <td>A sequence variant whereby at least one base of a codon is changed, resulting in a premature
-    stop codon, leading to a shortened transcript.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001621"
-    target="_blank">NMD_transcript_variant</a></td>
-    <td>A variant in a transcript that is already the target of nonsense-mediated decay (NMD), i.e. 
-    stop codon is not in last exon nor within 50 bases of the end of the second-to-last exon.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001627"
-    target="_blank">intron_variant</a></td>
-    <td>A transcript variant occurring within an intron.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001575"
-    target="_blank">splice_donor_variant</a></td>
-    <td>A splice variant that changes the 2-base region at the 5' end of an intron.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001574"
-    target="_blank">splice_acceptor_variant</a></td>
-    <td>A splice variant that changes the 2 base region at the 3' end of an intron.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001630"
-    target="_blank">splice_region_variant</a></td>
-    <td>A sequence variant in which a change has occurred within the region of the splice site, 
-    either within 1-3 bases of the exon or 3-8 bases of the intron.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001577"
-    target="_blank">complex_transcript_variant</a></td>
-    <td>A transcript variant with a complex insertion or deletion (indel) that spans an exon/intron 
-    border or a coding sequence/Utr border.</td>
-  </tr>
-  <tr>
-    <td><a href="http://sequenceontology.org/browser/current_release/term/SO:0001792"
-    target="_blank">non_coding_exon_variant</a></td>
-    <td>A sequence variant that changes exon sequence of a non-coding gene.</td>
-  </tr>
-</table>
+<P>
+Any gene prediction track in the UCSC Genome Browser database or in a track hub
+can be selected as the VAI's source of transcript annotations for prediction
+of functional effects.
+<A HREF="http://sequenceontology.org/"
+TARGET=_BLANK>Sequence Ontology (SO)</A> terms are used to describe the effect
+of each variant on genes in terms of transcript structure as follows:
+<TABLE class='stdTbl'>
+<TR><TH>SO term</TH><TH>description</TH></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001628"
+TARGET=_BLANK>intergenic_variant</A></TD>
+<TD>A sequence variant located in the intergenic region, between genes.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001631"
+TARGET=_BLANK>upstream_gene_variant</A></TD>
+<TD>A sequence variant located 5' of a gene. (VAI searches within 5,000 bases.)</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001632"
+TARGET=_BLANK>downstream_gene_variant</A></TD>
+<TD>A sequence variant located 3' of a gene. (VAI searches within 5,000 bases.)</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001623"
+TARGET=_BLANK>5_prime_UTR_variant</A></TD>
+<TD>A variant located in the 5' untranslated region (UTR) of a gene.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001624"
+TARGET=_BLANK>3_prime_UTR_variant</A></TD>
+<TD>A variant located in the 3' untranslated region (UTR) of a gene.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001819"
+TARGET=_BLANK>synonymous_variant</A></TD>
+<TD>A sequence variant where there is no resulting change to the encoded amino acid.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001583"
+TARGET=_BLANK>missense_variant</A></TD>
+<TD>A sequence variant, that changes one or more bases, resulting in a
+different amino acid sequence but where the length is preserved.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001821"
+TARGET=_BLANK>inframe_insertion</A></TD>
+<TD>An inframe non synonymous variant that inserts bases into in the coding sequence.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001822"
+TARGET=_BLANK>inframe_deletion</A></TD>
+<TD>An inframe non synonymous variant that deletes bases from the coding sequence.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001589"
+TARGET=_BLANK>frameshift_variant</A></TD>
+<TD>A sequence variant which causes a disruption of the translational
+reading frame, because the number of nucleotides inserted or deleted is not
+a multiple of three.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001582"
+TARGET=_BLANK>initiator_codon_variant</A></TD>
+<TD>A codon variant that changes at least one base of the first codon of a transcript.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001626"
+TARGET=_BLANK>incomplete_terminal_codon_variant</A></TD>
+<TD>A sequence variant where at least one base of the final codon of an
+incompletely annotated transcript is changed.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001578"
+TARGET=_BLANK>stop_lost</A></TD>
+<TD>A sequence variant where at least one base of the terminator codon
+(stop) is changed, resulting in an elongated transcript.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001567"
+TARGET=_BLANK>stop_retained_variant</A></TD>
+<TD>A sequence variant where at least one base in the terminator codon is
+changed, but the terminator remains.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001572"
+TARGET=_BLANK>exon_loss</A></TD>
+<TD>A sequence variant whereby an exon is lost from the transcript.
+(VAI assigns this term when an entire exon is deleted.)</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001587"
+TARGET=_BLANK>stop_gained</A></TD>
+<TD>A sequence variant whereby at least one base of a codon is changed,
+resulting in a premature stop codon, leading to a shortened transcript.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001621"
+TARGET=_BLANK>NMD_transcript_variant</A></TD>
+<TD>A variant in a transcript that is already the target of nonsense-mediated decay (NMD),
+i.e. stop codon is not in last exon nor within 50 bases of the end of the second-to-last
+exon.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001627"
+TARGET=_BLANK>intron_variant</A></TD>
+<TD>A transcript variant occurring within an intron.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001575"
+TARGET=_BLANK>splice_donor_variant</A></TD>
+<TD>A splice variant that changes the 2-base region at the 5' end of an intron.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001574"
+TARGET=_BLANK>splice_acceptor_variant</A></TD>
+<TD>A splice variant that changes the 2 base region at the 3' end of an intron.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001630"
+TARGET=_BLANK>splice_region_variant</A></TD>
+<TD>A sequence variant in which a change has occurred within the region
+of the splice site, either within 1-3 bases of the exon or 3-8 bases of
+the intron.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001577"
+TARGET=_BLANK>complex_transcript_variant</A></TD>
+<TD>A transcript variant with a complex insertion or deletion (indel) that
+spans an exon/intron border or a coding sequence/UTR border.</TD></TR>
+<TR><TD><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001792"
+TARGET=_BLANK>non_coding_exon_variant</A></TD>
+<TD>A sequence variant that changes exon sequence of a non-coding gene.</TD></TR>
+</TABLE>
+</P>
 
 <a name="moreSources"></a>
 <h2>Optional annotations</h2>
-<p>
 In addition to protein-coding genes, some genome assemblies offer other sources of
-annotations that can be included in the output for each variant.</p>
+annotations that can be included in the output for each variant.
 
 <a name="dbNSFP"></a>
 <h3>Database of Non-synonymous Functional Predictions (dbNSFP)</h3>
-<p>
-dbNSFP annotations are available only for hg19/GRCh37 (dbNSFP release 2.0) and hg38/GRCh38 
-(release 3.1a). <a href="https://sites.google.com/site/jpopgen/dbNSFP" target="_blank">dbNSFP</a> 
-(<a href="http://onlinelibrary.wiley.com/doi/10.1002/humu.21517/abstract" target="_blank">Liu 
-<em>et al.</em> 2011</a>) provides pre-computed scores and predictions of functional significance 
-from a variety of tools. Every possible coding change to transcripts in
-<a href="http://www.gencodegenes.org/" target="_blank">GENCODE</a> (for hg19: release 9, Ensembl 64,
-Dec. 2011; for hg38, release 22, Ensembl 79, Mar. 2015) gene predictions has been evaluated. dbNSFP 
-includes only single-nucleotide missense changes; its data do not apply to indels, multi-nucleotide 
-variants, non-coding or synonymous changes.</p>
-<p>
-dbNSFP provides scores and predictions from several tools that use various machine learning 
-techniques to estimate the likelihood that a single-nucleotide missense variant would damage a 
-protein's structure and function:</p>
-<ul>
-  <li>
-  <strong><a href="http://sift.bii.a-star.edu.sg/" target="_blank">SIFT (Sorting Intolerant From 
-  Tolerant)</a></strong> uses sequence homology and the physical properties of amino acids to 
-  predict whether an amino acid substitution affects protein function. Scores less than 0.05 are 
-  classified as Damaging (&quot;D&quot; in output); higher scores are classified as Tolerated 
-  (&quot;T&quot;). (<a href="http://www.ncbi.nlm.nih.gov/pubmed/12824425" target="_blank">Ng and 
-  Henikoff, 2003</a>)</li>
-  <li>
-  <strong><a href="http://genetics.bwh.harvard.edu/pph2/" target="_blank">PolyPhen-2 (Polymorphism 
-  Phenotyping v2)</a></strong> applies a naive Bayes classifier using several sequence-based and 
-  structure-based predictive features including refined multi-species alignments. PolyPhen-2 was 
-  trained on two datasets, and dbNSFP provides scores for both. The HumDiv training set is intended 
-  for evaluating rare alleles potentially involved in complex phenotypes, for example in genome-wide
-  association studies (GWAS). Predictions are derived from scores, with these ranges for HumDiv: 
-  &quot;probably damaging&quot; (&quot;D&quot;) for scores in [0.957, 1]; &quot;possibly 
-  damaging&quot; (&quot;P&quot;) for scores in [0.453, 0.956]; &quot;benign&quot; (&quot;B&quot;) 
-  for scores in [0, 0.452]. HumVar is intended for studies of Mendelian diseases, for which 
-  mutations with drastic effects must be sorted out from abundant mildly deleterious variants. 
-  Predictions are derived from scores, with these ranges for HumDiv: &quot;probably damaging&quot; 
-  (&quot;D&quot;) for scores in [0.909, 1]; &quot;possibly damaging&quot; (&quot;P&quot;) for scores
-  in [0.447, 0.908]; &quot;benign&quot; (&quot;B&quot;) for scores in [0, 0.446]. 
-  (<a href="http://www.ncbi.nlm.nih.gov/pubmed/20354512" target="_blank">Adzhubei <em>et al.</em>, 
-  2010</a>)</li>
-  <li>
-  <strong><a href="http://www.mutationtaster.org/" target="_blank">MutationTaster</a></strong> 
-  applies a naive Bayes classifier trained on a large dataset (&gt;390,000 known disease mutations 
-  from HGMD Professional and &gt;6,800,000 presumably harmless SNP and Indel polymorphisms from the 
-  1000 Genomes Project). Variants that cause a premature stop codon resulting in nonsense-mediated 
-  decay (NMD), as well as variants marked as probable-pathogenic or pathogenic in ClinVar, are 
-  automatically presumed to be disease-causing (&quot;A&quot;). Variants with all three genotypes 
-  present in HapMap or with at least 4 heterozygous genotypes in 1000 Genomes are automatically 
-  presumed to be harmless polymorphisms (&quot;P&quot;). Variants not automatically determined to be
-  disease-causing or polymorphic are predicted to be &quot;disease-causing&quot; (&quot;D&quot;) or 
-  polymorphisms (&quot;N&quot;) by the classifier. Probability scores close to 1 indicate high 
-  &quot;security&quot; of the prediction; probabilities close to 0 for an automatic prediction 
-  (&quot;A&quot; or &quot;P&quot;) can indicate that the classifier predicted a different outcome. 
-  (<a href="http://www.ncbi.nlm.nih.gov/pubmed/20676075" target="_blank">Schwarz <em>et al.</em>, 
-  2010</a>)</li>
-  <li>
-  <strong><a href="http://mutationassessor.org/" target="_blank">MutationAssessor</a></strong> uses 
-  sequence homologs grouped into families and sub-families by combinatorial entropy formalism to 
-  compute a Functional Impact Score (FIS). It is intended for use in cancer studies, in which both 
-  gain of function and loss of function are important; the authors also identify a third category, 
-  &quot;switch of function.&quot; A prediction of &quot;high&quot; or &quot;medium&quot; indicates 
-  that the variant probably has some functional impact, while &quot;low&quot; or &quot;neutral&quot;
-  indicate that the variant is probably function-neutral. 
-  (<a href="http://www.ncbi.nlm.nih.gov/pubmed/21727090" target="_blank">Reva <em>et al.</em>, 
-  2011</a>)</li>
-  <li>
-  <strong><a href="http://www.genetics.wustl.edu/jflab/lrt_query.html" target="_blank">LRT 
-  (Likelihood Ratio Test)</a></strong> uses comparative genomics to identify variants that disrupt 
-  highly conserved amino acids. Variants are predicted to be deleterious (&quot;D&quot;), neutral 
-  (&quot;N&quot;) or unknown (&quot;U&quot;). (<a href="http://www.ncbi.nlm.nih.gov/pubmed/19602639"
-  target="_blank">Chun and Fay, 2009</a>)</li>
-  <li>
-  <strong><a href="http://karchinlab.org/apps/appVest.html" target="_blank">VEST (Variant Effect 
-  Scoring Tool)</a></strong> (available only for hg38/GRCh38) uses a classifier that was trained 
-  with ~45,000 disease mutations from HGMD and ~45,000 high frequency missense variants (putatively 
-  neutral) from the Exome Sequencing Project. (<a href="http://www.ncbi.nlm.nih.gov/pubmed/23819870"
-  target="_blank">Carter <em>et al.</em>, 2013</a>)</li>
-</ul>
-<p>
-In addition, dbNSFP provides <a href="http://www.ebi.ac.uk/interpro/" target="_blank">InterPro</a> 
-protein domains where available (<a href="http://www.ncbi.nlm.nih.gov/pubmed/22096229" 
-target="_blank">Hunter <em>et al.</em>, 2012</a>) and two measures of conservation computed by
-<a href="http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html" target="_blank">GERP++</a> 
-(<a href="http://www.ncbi.nlm.nih.gov/pubmed/21152010" target="_blank">Davydov <em>et al.</em>, 
-2010</a>).</p>
+dbNSFP annotations are available only for hg19/GRCh37 (dbNSFP release 2.0) and
+hg38/GRCh38 (release 3.1a).
+<A HREF="https://sites.google.com/site/jpopgen/dbNSFP" TARGET=_BLANK>dbNSFP</A>
+(<A HREF="http://onlinelibrary.wiley.com/doi/10.1002/humu.21517/abstract"
+TARGET=_BLANK>Liu <em>et al.</em> 2011</A>)
+provides pre-computed scores and predictions of functional
+significance from a variety of tools.  Every possible coding change to
+transcripts in
+<A HREF="http://www.gencodegenes.org/" TARGET=_BLANK>GENCODE</A>
+(for hg19: release 9, Ensembl 64, Dec. 2011;
+ for hg38, release 22, Ensembl 79, Mar. 2015)
+gene predictions has been evaluated.
+dbNSFP includes only single-nucleotide missense changes;
+its data do not apply to indels, multi-nucleotide variants,
+non-coding or synonymous changes.
+</P>
+<P>
+dbNSFP provides scores and predictions from several tools that use various
+machine learning techniques to estimate the likelihood that a single-nucleotide
+missense variant would damage a protein's structure and function:
+<UL>
+<LI><B><A HREF="http://sift.bii.a-star.edu.sg/"
+    TARGET=_BLANK>SIFT (Sorting Intolerant From Tolerant)</A></B>
+    uses sequence homology and the physical properties of amino acids
+    to predict whether an amino acid substitution affects protein function.
+    Scores less than 0.05 are classified as Damaging (&quot;D&quot; in output);
+    higher scores are classified as Tolerated (&quot;T&quot;).
+    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/12824425"
+    TARGET=_BLANK>Ng and Henikoff, 2003</A>)
+    </LI>
+<LI><B><A HREF="http://genetics.bwh.harvard.edu/pph2/"
+    TARGET=_BLANK>PolyPhen-2 (Polymorphism Phenotyping v2)</A></B>
+    applies a naive Bayes classifier using
+    several sequence-based and structure-based predictive features
+    including refined multi-species alignments.
+    PolyPhen-2 was trained on two datasets, and dbNSFP provides
+    scores for both.
+    The HumDiv training set is intended for evaluating rare alleles
+    potentially involved in complex phenotypes, for example in
+    genome-wide association studies (GWAS).
+    Predictions are derived from scores, with these ranges for HumDiv:
+    &quot;probably damaging&quot; (&quot;D&quot;) for scores in [0.957, 1];
+    &quot;possibly damaging&quot; (&quot;P&quot;) for scores in [0.453, 0.956];
+    &quot;benign&quot; (&quot;B&quot;) for scores in [0, 0.452].
+    HumVar is intended for studies of Mendelian diseases, for which
+    mutations with drastic effects must be sorted out from abundant
+    mildly deleterious variants.
+    Predictions are derived from scores, with these ranges for HumDiv:
+    &quot;probably damaging&quot; (&quot;D&quot;) for scores in [0.909, 1];
+    &quot;possibly damaging&quot; (&quot;P&quot;) for scores in [0.447, 0.908];
+    &quot;benign&quot; (&quot;B&quot;) for scores in [0, 0.446].
+    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/20354512"
+    TARGET=_BLANK>Adzhubei <em>et al.</em>, 2010</A>)
+    </LI>
+<LI><B><A HREF="http://www.mutationtaster.org/"
+    TARGET=_BLANK>MutationTaster</A></B> applies a naive Bayes classifier
+    trained on a large dataset
+    (&gt;390,000 known disease mutations from HGMD Professional and
+    &gt;6,800,000 presumably harmless SNP and Indel polymorphisms
+    from the 1000 Genomes Project).
+    Variants that cause a premature stop codon resulting in
+    nonsense-mediated decay (NMD), as well as
+    variants marked as probable-pathogenic or pathogenic in
+    ClinVar,
+    are automatically presumed to be disease-causing (&quot;A&quot;).
+    Variants with all three genotypes present in HapMap or with
+    at least 4 heterozygous genotypes in 1000 Genomes are automatically
+    presumed to be harmless polymorphisms (&quot;P&quot;).
+    Variants not automatically determined to be disease-causing or polymorphic
+    are predicted to be &quot;disease-causing&quot; (&quot;D&quot;) or
+    polymorphisms (&quot;N&quot;) by the classifier.
+    Probability scores close to 1 indicate high &quot;security&quot; of
+    the prediction; probabilities close to 0 for an automatic prediction
+    (&quot;A&quot; or &quot;P&quot;)
+    can indicate that the classifier predicted a different outcome.
+    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/20676075"
+    TARGET=_BLANK>Schwarz <em>et al.</em>, 2010</A>)
+    </LI>
+<LI><B><A HREF="http://mutationassessor.org/"
+    TARGET=_BLANK>MutationAssessor</A></B>
+    uses sequence homologs grouped into families and sub-families by
+    combinatorial entropy formalism to compute a Functional Impact Score
+    (FIS).  It is intended for use in cancer studies, in which both gain
+    of function and loss of function are important; the authors also
+    identify a third category, &quot;switch of function.&quot;
+    A prediction of &quot;high&quot; or &quot;medium&quot; indicates that the
+    variant probably has some functional impact, while &quot;low&quot; or
+    &quot;neutral&quot; indicate that the variant is probably function-neutral.
+    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/21727090"
+    TARGET=_BLANK>Reva <em>et al.</em>, 2011</A>)
+    </LI>
+<LI><B><A HREF="http://www.genetics.wustl.edu/jflab/lrt_query.html"
+    TARGET=_BLANK>LRT (Likelihood Ratio Test)</A></B>
+    uses comparative genomics to identify variants that disrupt highly conserved
+    amino acids.
+    Variants are predicted to be deleterious (&quot;D&quot;), neutral (&quot;N&quot;)
+    or unknown (&quot;U&quot;).
+    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/19602639"
+    TARGET=_BLANK>Chun and Fay, 2009</A>)
+    </LI>
+<LI><B><A HREF="http://karchinlab.org/apps/appVest.html"
+    TARGET=_BLANK>VEST (Variant Effect Scoring Tool)</A></B>
+    (available only for hg38/GRCh38)
+    uses a classifier that was trained with ~45,000 disease mutations from HGMD
+    and ~45,000 high frequency missense variants (putatively neutral) from the
+    Exome Sequencing Project.
+    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/23819870"
+    TARGET=_BLANK>Carter <em>et al.</em>, 2013</A>)
+</LI>
+</UL>
+</P>
+<P>
+In addition, dbNSFP provides
+<A HREF="http://www.ebi.ac.uk/interpro/"
+TARGET=_BLANK>InterPro</A> protein domains where available
+(<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/22096229"
+TARGET=_BLANK>Hunter <em>et al.</em>, 2012</A>) and two measures
+of conservation computed by
+<A HREF="http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html"
+TARGET=_BLANK>GERP++</A>
+(<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/21152010"
+TARGET=_BLANK>Davydov <em>et al.</em>, 2010</A>).
+</P>
 
 <a name="txStatus"></a>
 <h3>Transcript status</h3>
-<p>
-Some of the gene prediction tracks have additional annotations to indicate the amount or quality of 
-supporting evidence for each transcript. When the track selected in the &quot;Select Genes&quot; 
-section has such annotations, these can be enabled under &quot;Transcript Status&quot; The options 
-depend on which gene prediction track is selected.</p>
-<ul>
-  <li>
-  <strong>GENCODE tags:</strong> when GENCODE Genes are selected in the &quot;Select Genes&quot; 
-  section, any <a href="http://www.gencodegenes.org/gencode_tags.html" target="_blank">GENCODE 
-  tags</a> associated with a transcript can be added to output.</li>
-  <li>
-  <strong>RefSeq status:</strong> when RefSeq Genes are selected in the &quot;Select Genes&quot; 
-  section, the transcript's 
-  <a href="http://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes" 
-  target="_blank">status</a> can be included in output.</li>
-  <li>
-  <strong>Canonical UCSC transcripts:</strong> when UCSC Genes (labeled GENCODE V22 in hg38/GRCh38) 
-  are selected in the "Select Genes" section, the flag &quot;CANONICAL=YES&quot; is added when the 
-  transcript has been chosen as &quot;canonical&quot; (see the &quot;Related Data&quot; section of 
-  the <a href="hgTrackUi?g=knownGene&hgsid=$hgsid">UCSC Genes track description</a>).</li>
-</ul>
+<P>
+  Some of the gene prediction tracks have additional annotations
+  to indicate the amount or quality of supporting evidence for each transcript.
+  When the track selected in the "Select Genes" section has such annotations,
+  these can be enabled under "Transcript Status".  The options depend on which
+  gene prediction track is selected.
+  <ul>
+    <li><b>GENCODE tags:</b>
+      when GENCODE Genes are selected in the "Select Genes" section,
+      any
+      <A HREF="http://www.gencodegenes.org/gencode_tags.html"
+         TARGET=_BLANK>GENCODE tags</A> associated with a transcript can be added to output.
+    </li>
+    <li><b>RefSeq status:</b>
+      when RefSeq Genes are selected in the "Select Genes" section,
+      the transcript's
+      <A HREF="http://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes"
+         TARGET=_BLANK>status</A> can be included in output.
+    </li>
+    <li><b>Canonical UCSC transcripts:</b>
+      when UCSC Genes (labeled GENCODE V22 in hg38/GRCh38)
+      are selected in the "Select Genes" section,
+      the flag "CANONICAL=YES" is added when the transcript
+      has been chosen as "canonical" (see the "Related Data" section of the
+      <A HREF="hgTrackUi?g=knownGene&hgsid=$hgsid">UCSC Genes track description</A>).
+    </li>
+  </ul>
+</P>
 
 <a name="knownVar"></a>
 <h3>Known variation</h3>
-<p>
-If the selected genome assembly has a SNPs track (derived from 
-<a href="http://www.ncbi.nlm.nih.gov/projects/SNP/" target="_blank">dbSNP</a>), when a variant has 
-the same start and end coordinates as a variant in dbSNP, the VAI includes the reference SNP (rs#) 
-identifier in the output. Currently, the VAI does not compare alleles due to the frequency of strand
-anomalies in dbSNP.</p>
+<P>
+If the selected genome assembly has a SNPs track (derived from
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_BLANK>dbSNP</A>),
+when a variant has the same start and end coordinates as a variant in
+dbSNP,
+the VAI includes the reference SNP (rs#) identifier in the output.
+Currently, the VAI does not compare alleles due to the frequency of strand
+anomalies in dbSNP.
+</P>
 
 <a name="cons"></a>
 <h3>Conservation</h3>
-<p>
-If the selected genome assembly has a Conservation track with phyloP scores and/or phastCons scores 
-and conserved elements, those can be included in the output. Both phastCons and phyloP are part of 
-the <a href="http://compgen.bscb.cornell.edu/phast/" target="_blank">PHAST</a> package; see the 
-Conservation track description in the Genome Browser for more details.</p>
+<P>
+If the selected genome assembly has a Conservation track with phyloP scores
+and/or phastCons scores and conserved elements,
+those can be included in the output.
+Both phastCons and phyloP are part of the
+<A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
+PHAST</A> package;
+see the Conservation track description in the Genome Browser
+for more details.
+</P>
+
 
 <a name="filters"></a>
 <h2>Filters</h2>
-<p>
-The volume of unrestricted output can be quite large, making it difficult to identify variants of 
-particular interest. Several filters can be applied to keep only those variants that have specific 
-properties.</p>
+<P>
+The volume of unrestricted output can be quite large,
+making it difficult to identify variants of particular interest.
+Several filters can be applied to keep only those variants
+that have specific properties.
+</P>
 
 <a name="filterFuncRole"></a>
 <h3>Functional role</h3>
-<p>
-By default, all variants are included in the output regardless of predicted functional effect. If 
-you would like to keep only variants that have a particular type of effect, you can uncheck the 
-checkboxes of other effect types. The detailed functional effect predictions are categorized as 
-follows:</p>
-<ul>
-  <li>
-  <strong>intergenic:</strong> 
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001628"
-  target="_blank">intergenic_variant</a></li>
-  <li>
-  <strong>upstream/downstream of gene:</strong> 
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001631"
-  target="_blank">upstream_gene_variant</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001632"
-  target="_blank">downstream_gene_variant</a></li>
-  <li>
-  <strong>5' or 3' UTR:</strong> 
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001623"
-  target="_blank">5_prime_UTR_variant</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001624"
-  target="_blank">3_prime_UTR_variant</a></li>
-  <li>
-  <strong>CDS - synonymous coding change:</strong>
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001819"
-  target="_blank">synonymous_variant</a></li>
-  <li>
-  <strong>CDS - non-synonymous (missense, stop gain/loss, frameshift etc):</strong>
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001583"
-  target="_blank">missense_variant</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001821"
-  targetargetNK>inframe_insertion</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001822"
-  target="_blank">inframe_deletion</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001589"
-  target="_blank">frameshift_variant</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001582"
-  target="_blank">initiator_codon_variant</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001626"
-  target="_blank">incomplete_terminal_codon_variant</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001578"
-  target="_blank">stop_lost</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001567"
-  target="_blank">stop_retained_variant</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001587"
-  target="_blank">stop_gained</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001621"
-  target="_blank">NMD_transcript_variant</a>
-  </li>
-  <li>
-  <strong>intron:</strong>
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001627"
-  target="_blank">intron_variant</a></li>
-  <li>
-  <strong>splice site or splice region:</strong>
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001575"
-  target="_blank">splice_donor_variant</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001574"
-  target="_blank">splice_acceptor_variant</a>,
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001630"
-  target="_blank">splice_region_variant</a></li>
-  <li>
-  <strong>exon of non-coding gene:</strong>
-  <a href="http://sequenceontology.org/browser/current_release/term/SO:0001792"
-  target="_blank">non_coding_exon_variant</a></li>
-</ul>
+<P>
+By default, all variants are included in the output regardless of
+predicted functional effect.  If you would like to keep only variants
+that have a particular type of effect, you can uncheck the checkboxes
+of other effect types.
+The detailed functional effect predictions are categorized as follows:
+<UL>
+<LI><B>intergenic:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001628"
+    TARGET=_BLANK>intergenic_variant</A></LI>
+<LI><B>upstream/downstream of gene:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001631"
+    TARGET=_BLANK>upstream_gene_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001632"
+    TARGET=_BLANK>downstream_gene_variant</A>
+    </LI>
+<LI><B>5' or 3' UTR:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001623"
+    TARGET=_BLANK>5_prime_UTR_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001624"
+    TARGET=_BLANK>3_prime_UTR_variant</A>
+    </LI>
+<LI><B>CDS - synonymous coding change:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001819"
+TARGET=_BLANK>synonymous_variant</A>
+    </LI>
+<LI><B>CDS - non-synonymous (missense, stop gain/loss, frameshift etc):</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001583"
+    TARGET=_BLANK>missense_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001821"
+    TARGET=_BLANK>inframe_insertion</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001822"
+    TARGET=_BLANK>inframe_deletion</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001589"
+    TARGET=_BLANK>frameshift_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001582"
+    TARGET=_BLANK>initiator_codon_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001626"
+    TARGET=_BLANK>incomplete_terminal_codon_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001578"
+    TARGET=_BLANK>stop_lost</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001567"
+    TARGET=_BLANK>stop_retained_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001587"
+    TARGET=_BLANK>stop_gained</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001621"
+    TARGET=_BLANK>NMD_transcript_variant</A>
+    </LI>
+<LI><B>intron:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001627"
+    TARGET=_BLANK>intron_variant</A>
+    </LI>
+<LI><B>splice site or splice region:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001575"
+    TARGET=_BLANK>splice_donor_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001574"
+    TARGET=_BLANK>splice_acceptor_variant</A>,
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001630"
+    TARGET=_BLANK>splice_region_variant</A>
+    </LI>
+<LI><B>exon of non-coding gene:</B>
+    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001792"
+    TARGET=_BLANK>non_coding_exon_variant</A>
+    </LI>
+</UL>
+</P>
 
 <a name="filterKnownVar"></a>
 <h3>Known variation</h3>
-<p>
-(applicable only to assemblies that have &quot;Common SNPs&quot; and &quot;Mult SNPs&quot; tracks)
-By default, all variants appear in output regardless of overlap with known dbSNP variants that map 
-to multiple locations (a possible red flag), or that have a global minor allele frequency (MAF) of 
-1% or higher. Those categories of known variants can be used to exclude overlapping variants from 
-output by unchecking the corresponding checkbox.</p>
+<P>
+(applicable only to assemblies that have &quot;Common SNPs&quot; and
+&quot;Mult SNPs&quot; tracks)
+By default, all variants appear in output regardless of overlap with known
+dbSNP variants that map to multiple locations (a possible red flag),
+or that have a global minor allele frequency (MAF) of 1% or higher.
+Those categories of known variants can be used to exclude overlapping variants
+from output by unchecking the corresponding checkbox.
+</P>
 
 <a name="filterCons"></a>
 <h3>Conservation</h3>
-<p>
-(applicable only to assemblies that have &quot;Conservation&quot; tracks) If desired, output can be 
-restricted to only those variants that overlap conserved elements computed by phastCons.</p>
+<P>
+(applicable only to assemblies that have &quot;Conservation&quot; tracks)
+If desired, output can be restricted to only those variants that overlap
+conserved elements computed by phastCons.
+</P>
+
+
 
 <a name="output"></a>
 <h2>Output format</h2>
-<p>
-Currently, the VAI produces output comparable to Ensembl's 
-<a href="http://www.ensembl.org/info/docs/tools/vep/index.html" target=""_blank">Variant Effect 
-Predictor (VEP)</a>, in either tab-separated text format or HTML. Columns are described 
-<a href="http://www.ensembl.org/info/docs/tools/vep/vep_formats.html#output" 
-target="_blank">here</a>. When text output is selected, entering an output file name causes output 
-to be saved in a local file instead of appearing in the browser, optionally compressed by gzip 
-(compression reduces file size and network traffic, which results in faster downloads). When HTML is
-selected, output always appears in the browser window and the output file name is ignored.</p>
+<P>
+Currently, the VAI produces output comparable to Ensembl's
+<a href="http://www.ensembl.org/info/docs/tools/vep/index.html"
+target="_blank">Variant Effect Predictor (VEP)</a>, in either tab-separated
+text format or HTML.
+Columns are described
+<a href="http://www.ensembl.org/info/docs/tools/vep/vep_formats.html#output"
+target="_blank">here</a>.
+When text output is selected, entering an output file name causes output to
+be saved in a local file instead of appearing in the browser, optionally
+compressed by gzip (compression reduces file size and network traffic,
+which results in faster downloads).
+When HTML is selected, output always appears in the browser window and the
+output file name is ignored.
+</P>
 
 <a name="acknowledgements"></a>
-<h2>Acknowledgments</h2>
+<h2>Acknowledgements</h2>
 <p>
-Anyone familiar with Ensembl's <a href="http://www.ensembl.org/info/docs/tools/vep/index.html"
-target="_blank">Variant Effect Predictor (VEP)</a> will doubtless notice similarities in options and
-interface. In collaboration with our colleagues at Ensembl, we have made an effort to limit the 
-differences between the tools by using Sequence Ontology terms to describe variants' functional 
-effects and by creating a &quot;VEP&quot; output format. Any bugs in the VAI, however, are in the 
-VAI only.</p>
+Anyone familiar with Ensembl's
+<a href="http://www.ensembl.org/info/docs/tools/vep/index.html"
+target="_blank">Variant Effect Predictor (VEP)</a> will doubtless notice
+similarities in options and interface. In collaboration with our colleagues
+at Ensembl, we have made an effort to limit the differences between the tools
+by using Sequence Ontology terms to describe variants' functional effects and
+by creating a &quot;VEP&quot; output format.
+Any bugs in the VAI, however, are in the VAI only.
+</P>
 
 <!--
 <h2>Future plans</h2>
-<p>
-Advanced interface in which sources of data and filtering methods are completely configurable; VCF 
-output; more input types.</p>
+<P>
+advanced interface in which sources of data and filtering methods
+are completely configurable; VCF output; more input types.
+</P>
 -->
-
-<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
- 
