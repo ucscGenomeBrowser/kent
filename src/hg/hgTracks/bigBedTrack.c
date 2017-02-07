@@ -216,7 +216,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     }
 lmCleanup(&lm);
 
-track->itemName = bigLfItemName;
+if (!trackDbSettingClosestToHomeOn(track->tdb, "linkIdInName"))
+    track->itemName = bigLfItemName;
 }
 
 

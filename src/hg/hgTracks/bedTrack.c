@@ -47,6 +47,8 @@ if (labelList == NULL)
     if (track->bedSize > 3)
         slAddHead(&track->labelColumns, slIntNew(3));
     }
+else if (sameString(labelList->name, "none"))
+    return;  // no label
 else
     {
     // what has the user said to use as a label
@@ -164,17 +166,21 @@ else if (tg->isBigBed)
     if (scoreFilter)
 	minScore = atoi(scoreFilter);
 
-    tg->itemName = bigBedItemName;
-    calculateLabelFields(tg);
-    for (bb = bbList; bb != NULL; bb = bb->next)
+    if (!trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
+        tg->itemName = bigBedItemName;
+    else
         {
-        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-        bed = loader(bedRow);
-        bed->label = makeLabel(tg, bb);
-        if (scoreFilter == NULL || bed->score >= minScore)
-            slAddHead(&list, bed);
+        calculateLabelFields(tg);
+        for (bb = bbList; bb != NULL; bb = bb->next)
+            {
+            bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+            bed = loader(bedRow);
+            bed->label = makeLabel(tg, bb);
+            if (scoreFilter == NULL || bed->score >= minScore)
+                slAddHead(&list, bed);
+            }
+        lmCleanup(&lm);
         }
-    lmCleanup(&lm);
     }
 else
     {
