@@ -1,102 +1,69 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-  <HEAD>
-    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-    <META name="description" content="UCSC Genome Browser">
-    <META name="keywords" content="genome, genome browser, genome assembly, Blat, UCSC, license, bioinformatics, gene prediction, SNP, EST, mRNA">
-    <TITLE>UCSC Genome Browser: Git Access to Browser Code </TITLE>
-    <LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
-  </HEAD>
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Git Access" -->
+<!--#set var="ROOT" value=".." -->
 
-  <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
-  <A NAME="TOP"></A>
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-    <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-      <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
+<h1>Access Browser Code Using Git</h1> 
+<p> 
+<strong>Install Git:</strong><br> 
+Install Git software version 1.6.2.2 or later. See the Git Community Handbook 
+<a href="http://book.git-scm.com/2_installing_git.html" target="_blank">installation</a> and 
+<a href="http://book.git-scm.com/2_setup_and_initialization.html" target="_blank">setup</a> 
+instructions, as well as our <a href="http://genomewiki.ucsc.edu/index.php/Installing_git" 
+target="_blank">Installing git</a> Genomewiki page.</p> 
+<p> 
+<strong>Start an initial Git local repository:</strong></p> 
+<pre><code>$ git clone git://genome-source.cse.ucsc.edu/kent.git</code></pre>
+<p>Or, if a firewall prevents git daemon port 9418, use: 
+<pre><code>$ git clone http://genome-source.cse.ucsc.edu/kent.git</code></pre> 
+<p>
+The kent source tree will be imported to the current working directory in a directory named 
+./kent/.</p> 
+<p> 
+<strong>Track the beta branch at UCSC repository:</strong><br> 
+Most users want to use the beta branch, which has tested, released versions of the browser. To 
+create a beta <a href="http://book.git-scm.com/4_tracking_branches.html" target="_blank">tracking 
+branch</a>: 
+<pre><code>$ cd kent
+$ git checkout -t -b beta origin/beta</code></pre> 
+<p>
+The <em>-b</em> creates a local branch with the name &quot;beta&quot;, and checks it out.<br> 
+The <em>-t</em> makes it a tracking branch, so that &quot;git pull&quot; pulls in updates from 
+<em>origin/beta</em>, the &quot;real&quot; beta branch in our public central read-only 
+repository.</p> 
+<p> 
+<strong>To get the latest UCSC release:</strong><br> 
+Type this command From anywhere within the kent source tree:</p> 
+<pre><code>$ git pull</code></pre> 
+<p> 
+<strong>To view the source via gitweb:</strong><br> 
+Browse to <a href="http://genome-source.cse.ucsc.edu/gitweb/" 
+target="_blank">http://genome-source.cse.ucsc.edu/gitweb/</a>.</p> 
+<p> 
+<strong>To construct a permanent URL to our source code files:</strong><br> 
+1. Boilerplate URL base:</p> 
+<pre><code>http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;hb=HEAD;f=</code></pre>
+<p>
+2. Add the path/file as the f parameter:</p>
+<pre><code>src/makefile</code></pre> 
+<p>
+<strong><em>Example:</em></strong> 
+<pre><code><a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;hb=HEAD;f=src/makefile" 
+target="_blank">http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;hb=HEAD;f=src/makefile</a></code></pre> 
+<p> 
+<strong>Updates:</strong><br> 
+UCSC generally updates the origin/beta branch every three weeks. If you are updating database 
+tables for a mirror site, we recommend that you update the source at the same time, as source code 
+is sometimes modified to include operations on new columns that have been added to database 
+tables.</p> 
+<p> 
+See also: the README files in the source tree directory <em>src/product/README.*</em>. For 
+instructions on keeping local tracks separate from UCSC Genome Browser tracks, see 
+<em>src/product/README.trackDb</em>.</p> 
+<p> 
+For comments or questions, contact 
+<a href="mailto:&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du">&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du</a>.</p>
 
-      <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../cgi-bin/hgMenubar"--></TD></TR>
-
-
-<!--Content Tables------------------------------------------------------->
- 
-     <TR><TD CELLPADDING=10>
-        <TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1>
-           <TR><TD>
-             <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
-               <TR><TD><FONT SIZE="4"><b>&nbsp; Access Browser Code Using Git</b></FONT>
-                 </TD></TR>
-              </TABLE>
-              <table bgcolor="#fffee8" cellpadding="0" width="100%">
-                <tbody><tr><th height="10"></th></tr>
-                <tr><td width="10">&nbsp;</td><td>
-		  <p>
-		  <b>Install Git:</b><br> 
-                     Install Git software version 1.6.2.2 or later.  See the Git
-		     Community Handbook
-		     <A HREF="http://book.git-scm.com/2_installing_git.html"
-		     TARGET=_blank>installation</A> and 
-		     <A HREF="http://book.git-scm.com/2_setup_and_initialization.html"
-		     TARGET=_blank>setup</A> instructions, as well as our
-                     <A HREF="http://genomewiki.ucsc.edu/index.php/Installing_git" 
-                     TARGET=_blank>Installing git</A> Genomewiki page.</p>
-		  <p>
-		  <b>Start an initial Git local repository: </b><br><br>
-                  <tt>$ git clone git://genome-source.cse.ucsc.edu/kent.git</tt><br><br>
-                      or, if a firewall prevents git daemon port 9418, use:<br><br>
-                  <tt>$ git clone http://genome-source.cse.ucsc.edu/kent.git</tt><br><br> 
-                     The kent source tree will be imported to the current working directory
-		     in a directory named ./kent/.</p>
-		  <p>
-  		  <b>Track the beta branch at UCSC repository:</b><br> 
-                     Most users want to use the beta branch, which has tested, released 
-                     versions of the browser. To create a beta 
-		     <A HREF="http://book.git-scm.com/4_tracking_branches.html"
-		     TARGET=_blank>tracking branch</A>:<br><br>
-                 <tt>$ cd kent</tt><br>
-                 <tt>$ git checkout -t -b beta origin/beta</tt><br><br>
-		     The -b creates a local branch with name &quot;beta&quot;, and checks it out.<br>
-		     The -t makes it a tracking branch, so that 'git pull' brings in updates
-		     from origin/beta, the &quot;real&quot; beta branch in our public central
-		     read-only repository.<br>
-		     </p>
-		  <p>
-	          <b>To get the latest UCSC release:</b><br> 
-		   From anywhere within the kent source tree:<br><br>
-                  <tt>$ git pull</tt></p>
-                  <p>
-                  <b>To view the source via gitweb:</b><br>
-                   Browse to <a href="http://genome-source.cse.ucsc.edu/gitweb/"
-                   target="_blank">http://genome-source.cse.ucsc.edu/gitweb/</a>.</p>
-                  <p>
-                  <b>To construct a permanent URL to our source code files:</b><br>
-                   1. Boilerplate URL base:
-                      <blockquote><tt>http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;hb=HEAD;f=</tt></blockquote>
-                   2. Add the path/file as the f parameter: <blockquote><tt>src/makefile</tt></blockquote>
-                   <b><em>Example:</em></b>
-                   <tt><a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;hb=HEAD;f=src/makefile"
-                   target="_blank">http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;hb=HEAD;f=src/makefile</a></tt>
-		  <p>
-	          <b>Updates:</b><br> 
-                   UCSC generally updates the origin/beta branch every three weeks. If you
-		   are updating database tables for a mirror site, we recommend that you
-		   update the source at the same time, as source code is sometimes
-		   modified to include operations on new columns that have been added to 
-		   database tables.</p>
-		  <p>
-		   See also: the README files in the source tree directory
-		   <em>src/product/README.*</em>. For instructions on keeping local tracks
-                   separate from UCSC Genome Browser tracks, see 
-		   <em>src/product/README.trackDb</em>.</p>
-
-		  <hr>
-		  <em>Should you have any comments or questions, contact
-		  <A HREF="mailto:&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du">&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du</A>.<BR>
-		   Last Modified: 2012-01-24 - 24 January 2012</em>
-                 </TD><TD WIDTH=15></TD></TR>
-               </TABLE>
-             <BR></TD></TR>
-           </TABLE>
-        </TD></TR>
-    </TABLE>
-  </BODY>
-</HTML>
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

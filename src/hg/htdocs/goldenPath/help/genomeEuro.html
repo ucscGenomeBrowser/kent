@@ -1,126 +1,72 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-	<title>UCSC Genome Browser: Using genome-euro</title>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<link rel="stylesheet" href="/style/HGStyle.css">
-</head>
-<body class="oldStaticPage">
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Supported Mirrors" -->
+<!--#set var="ROOT" value="../.." -->
 
-<div class="header">
-	<img src="../../images/title.jpg" alt="UCSC Genome Bioinformatics">
-</div><!-- .header -->
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<div class="nav">
-<!--#include virtual="../../cgi-bin/hgMenubar"-->
-</div><!-- .nav -->
-
-<div class="content">
-<div class="section">
+<h1>Using a Supported Mirror Site</h1> 
+<p> 
+The UCSC Genome Browser hosts the following official mirror sites: the European mirror 
+(genome-euro), located at the <a href="http://www.cebitec.uni-bielefeld.de/" 
+target="_blank">Universit&auml;t Bielefeld Center for Biotechnology</aP in Bielefeld, Germany and 
+the Asian mirror (genome-asia), located at the <a href="http://www.yokohama.riken.jp/english/" 
+target="_blank">RIKEN Yokohama Campus</a>, Japan.</p> 
+<p> 
+These mirror sites are administered by UCSC and are meant to be alternate, faster access points for 
+those Browser users who are geographically closer to central Europe or Asia than to the western 
+United States.</p> 
+<p> 
+When users navigate to the U.S. server home page (and conversely, when U.S. users navigate to the 
+European or Asian server) and click the &quot;Genomes&quot; menu item, they will receive a 
+notification at the top of the window that they have been redirected to the more 
+geographically appropriate server. At this point, one of two things can happen:</p> 
+<ol> 
+  <li>
+  The user may choose to remain on the redirected server and proceed normally.</li> 
+  <li>
+  The user may click the provided link back to the original server. When this occurs, a cookie is 
+  created in the user's Internet browser remembering this choice and in the future, no automatic 
+  redirection will occur.</li> 
+</ol> 
+<p> 
+The user may also manually select a server at any time by mousing over the "Mirrors" menu item, 
+illustrated below. Note that manually selecting a server will also create a cookie that will 
+disable automatic redirection. Automatic redirection can be re-enabled by clearing cookies.</p> 
+<p> 
+<img src="../../images/server_selector.jpg"></p> 
+<p>
+Many thanks to our colleagues at the Universit&auml;t Bielefeld Center for Biotechnology for hosting
+genome-euro, and at RIKEN for hosting genome-asia.</p>
 	
-	<h1>Using an Official Mirror Site</h1>
-	  
-    <div class="sectionContent">
+<a name="sessions"></a> 
+<h2>About Saved Sessions and Custom Tracks on Official Mirror Sites</h2> 
+<p> 
+When genome-euro was first activated in 2013, the genome-euro Saved Sessions database was an 
+identical copy of the Saved Sessions database from the U.S. server, so Saved Session data were the 
+same on the two servers, except for custom tracks. After the initial activation of genome-euro, 
+however, the Saved Sessions between the two servers began to diverge.  New Saved Sessions or 
+modifications to existing Saved Sessions are NOT copied from one server to the other, so a new 
+Saved Session created on either server will NOT be available on the other. This is also the case on 
+genome-asia (activated in 2016). Saved Sessions can be moved from one server to the other by saving 
+them to a file and reloading the file using &quot;Save current settings to a local file:&quot; and 
+&quot;Use settings from a local file:&quot; features on the 
+<a href = "../../cgi-bin/hgSession">Sessions</a> page</p> 
+<p> 
+Custom Track data, including those Custom Tracks belonging to Saved Sessions, are NOT copied from 
+the U.S. server to mirror sites. Any Custom Tracks that exist on either the U.S. server or a mirror 
+site will need to be manually downloaded via the Table Browser or otherwise manually recreated if 
+users would like them to be present on the other.</p> 
+<p> 
+Once Custom Tracks are loaded onto a mirror site, a Saved Session may be re-saved under the same 
+name to reconstitute the original session with all associated Custom Tracks.</p> 
+<p> 
+If you would like your custom data to be easily available on an official mirror site and the UCSC 
+Genome Browser site, we highly recommend creating a <a href="hgTrackHubHelp.html" 
+target_="blank">Track Hub</a>.</p> 
+<p> 
+A track hub has the benefit of being hosted on your site allowing more control, ensuring data 
+persistence, minimizing upload time to the browser, simplifying sharing of data, and optimizing 
+track functionality.</p>
 
-                <p>
-                The UCSC Genome Browser hosts the following official mirror sites:
-		the European mirror (genome-euro), located at the 
-		<a href="http://www.cebitec.uni-bielefeld.de/" target="_blank">
-		Universit&auml;t Bielefeld Center for Biotechnology in Bielefeld, Germany</a>
-		and the Asian mirror (genome-asia), located at the 
-		<a href="http://www.yokohama.riken.jp/english/" target="_blank">
-		RIKEN Yokohama Campus</a>, Japan.
-		</p>
-		<p>
-		These mirror sites are administered by UCSC and are meant to be alternate, 
-		faster access points for those Browser users who are geographically 
-		closer to central Europe or Asia than to the western United States.
-                </p>
-
-                <p>
-                When users navigate to the U.S. server home page (and conversely, when U.S. 
-		users navigate to the European or Asian server) and click the "Genomes" 
-		menu item, they will receive a notification at the top of the window that 
-		they have been redirected to the more geographically-appropriate server. 
-		At this point, one of two things can happen:
-		</p>
-
-                <ol>
-                  <li>The user may choose to remain on the redirected server and proceed normally.</li>
-                  <li>The user may click the provided link back to the original server. When this occurs, a
-                      cookie is created in the user's Internet browser remembering this choice and in the
-                      future, no automatic redirection will occur.</li>
-                </ol>
-
-                <p>
-                The user may also manually select a server at any time by mousing over the "Mirrors" menu item,
-                illustrated below.  Note that manually selecting a server will also create a cookie that will
-                disable automatic redirection. Automatic redirection can be re-enabled by clearing cookies.
-                </p>
-
-                <p>
-                <center><img src="../../images/server_selector.jpg"></center>
-                </p>
-
-                <p>
-		Many thanks to our colleagues at the Universit&auml;t Bielefeld Center for
-		Biotechnology for hosting genome-euro, and at RIKEN for hosting genome-asia.
-                </p>
-	
-    </div><!-- .sectionContent --> 
-</div><!-- .section -->
-
-<div class="section">
-<a name="sessions"></a>
-
-        <h1>About Saved Sessions and Custom Tracks on Official Mirror Sites</h1>
-
-    <div class="sectionContent">
-
-                <p>
-                When genome-euro was first activated in 2013, the genome-euro 
-		Saved Sessions database was an identical copy of the Saved Sessions 
-		database from the U.S. server, so Saved Session data were the same on the 
-		two servers, except for custom tracks. After the initial activation of genome-euro, 
-		however, the Saved Sessions between the two servers began to diverge. 
-		New Saved Sessions or modifications to existing Saved Sessions are NOT 
-		copied from one server to the other, so a new Saved Session created on 
-		either server will NOT be available on the other. This is also the case on 
-		genome-asia (activated in 2016). Saved Sessions can be moved from one server 
-		to the other by saving them to a file and reloading the file using "Save current 
-		settings to a local file:" and "Use settings from a local file:" features
-		on the <A HREF = "../../cgi-bin/hgSession">Sessions</A> page
-                </p>
-
-                <p>
-		Custom Track data, including those Custom Tracks belonging to Saved Sessions, 
-		are NOT copied from the U.S. server to mirror sites. Any Custom Tracks 
-		that exist on either the U.S. server or a mirror site will need to be 
-		manually downloaded via the Table Browser or otherwise manually recreated 
-		if users would like them to be present on the other.
-                </p>
-
-                <p>
-		Once Custom Tracks are loaded onto a mirror site, a Saved Session may be 
-		re-saved under the same name to reconstitute the original session with 
-		all associated Custom Tracks.
-                </p>
-
-                <p>
-		If you would like your custom data to be easily available on an official 
-		mirror site and the UCSC Genome Browser site, we highly recommend creating a
-                <a href="hgTrackHubHelp.html" target_="blank">Track Hub</a>.
-                </p>
-
-                <p>
-                A track hub has the benefit of being hosted on your site allowing more control, ensuring data persistence,
-                minimizing upload time to the browser, simplifying sharing of data, and optimizing track functionality.
-                </p>
-
-    </div><!-- .sectionContent -->
-</div><!-- .section -->
-
-</div><!-- .content -->
-</body>
-</html>
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
