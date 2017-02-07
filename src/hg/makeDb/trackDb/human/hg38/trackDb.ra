@@ -485,42 +485,42 @@ group x
     longLabel refGene predictions 'compatible' in NCBI RefSeq track
     color 0,0,255
 
-searchName ncbiRefSeqProtein
-searchTable ncbiRefSeq
-searchType genePred
-searchMethod prefix
-searchDescription ncbiRefSeq protAcc search alias
-semiShortCircuit 1
-xrefTable ncbiRefSeqLink
-xrefQuery select id,protAcc from %s where protAcc like '%s%%'
-termRegex [NXY]P_[0-9]+(\.[0-9]+)?
-
 searchName ncbiRefSeqCurated
+searchPriority 3.27201
 searchTable ncbiRefSeqCurated
 searchType genePred
 searchMethod prefix
 searchDescription ncbiRefSeq protAcc search alias
-semiShortCircuit 1
 xrefTable ncbiRefSeqLink
 xrefQuery select id,protAcc from %s where protAcc like '%s%%'
 termRegex [NXY]P_[0-9]+(\.[0-9]+)?
 
 searchName ncbiRefSeqPredicted
 searchTable ncbiRefSeqPredicted
+searchPriority 3.27202
 searchType genePred
 searchMethod prefix
 searchDescription ncbiRefSeq protAcc search alias
-semiShortCircuit 1
 xrefTable ncbiRefSeqLink
 xrefQuery select id,protAcc from %s where protAcc like '%s%%'
 termRegex [NXY]P_[0-9]+(\.[0-9]+)?
 
 searchName ncbiRefSeqMrna
+searchPriority 3.27203
 searchTable ncbiRefSeq
 searchType genePred
 searchMethod prefix
 searchDescription ncbiRefSeq mrnaAcc search alias
-semiShortCircuit 1
 xrefTable ncbiRefSeqLink
 xrefQuery select id,mrnaAcc from %s where mrnaAcc like '%s%%'
 termRegex ([NX][MR]|YP)_[0-9]+(\.[0-9]+)?
+
+searchName ncbiRefSeqProtein
+searchPriority 3.27204
+searchTable ncbiRefSeq
+searchType genePred
+searchMethod prefix
+searchDescription ncbiRefSeq protAcc search alias
+xrefTable ncbiRefSeqLink
+xrefQuery select id,protAcc from %s where protAcc like '%s%%'
+termRegex [NXY]P_[0-9]+(\.[0-9]+)?
