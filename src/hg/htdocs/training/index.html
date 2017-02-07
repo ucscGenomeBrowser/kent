@@ -1,237 +1,195 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<HTML>
-<HEAD>
-	<META HTTP-EQUIV="Content-Type">
-        <META http-equiv="Content-Script-Type">
-        <META name="description" content="UCSC Genome Browser FAQ">
-        <META name="keywords" content="genome, genome browser, genome assembly, UCSC, bioinformatics, sequence, gene prediction, SNP, EST, mRNA">
-	<TITLE>UCSC Genome Bioinformatics: Training</TITLE>
-	<LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
-</HEAD>
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
-<A NAME="TOP"></A>
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Training" -->
+<!--#set var="ROOT" value=".." -->
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
-
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../cgi-bin/hgMenubar"--></TD></TR>
-
-<!--Content Tables------------------------------------------------------->
-<TR><TD COLSPAN=2 CELLPADDING=10>
-<!--outer table is for border purposes-->
-  <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
-   <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
-    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
-      <TR><TD> <FONT SIZE="4"><b>&nbsp; Getting Help with the UCSC Genome Browser</b></FONT>
-      </TD></TR></TABLE>
-       <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-       <TR><TD WIDTH=10>&nbsp;</TD><TD>
-
-         <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-         <TR><TD WIDTH=5>&nbsp;</TD><TD>
-           <div class="warn-note" style="border: 2px solid #9e5900; padding: 5px 20px; background-color: #e8ebf7;">
-           <p><span style="font-weight: bold; color: #c70000;"> <b><A HREF = "http://bit.ly/ucscTraining"
-           TARGET = _BLANK>Host</A> a Genome Browser Workshop!</b>
-           &nbsp;           &nbsp;           &nbsp;           
-           <A HREF = "trainingMap.html">Map</A>
-           </span><br></p>
-
-           <p>
-           Do you have a sneaking suspicion that there is a lot more to the Genome
-           Browser than you have been using?
-           Timeslots are available to host a Genome Browser workshop at your 
-           institution. Thanks to the funding support of NHGRI,
-           we offer hands-on Genome Browser training onsite at your institution, 
-           tailored to your audience's level of expertise.
-           </p>
-           <p>
-           For more information or to submit a request to host a workshop,
-           please visit <a href="http://bit.ly/ucscTraining" target="_blank">our signup</a>.
-           </p>
-           <p>
-           <p><span style="font-weight: bold; color: #c70000;"> <b>Can't host? </b> </span>
-           &nbsp;           &nbsp;           &nbsp;           Catch one of our trainings in your area:
-           </p>
-           <p>
-           <TABLE CELLPADDING = 3 BORDER = 0 >
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 
-            <TR><TD VALIGN = TOP WIDTH = 180>February 6, 2017 </TD>
-              <TD> Catholic University of Korea, Seoul.
-              </TD></TR>
+<h1>Getting Help with the UCSC Genome Browser</h1> 
+<div class="warn-note" style="border:2px solid #9e5900;padding:5px 20px;background-color:#e8ebf7;">
+  <p>
+  <span style="font-weight:bold;color:#c70000;"><strong><a href="http://bit.ly/ucscTraining" 
+  target="_blank">Host</a> a Genome Browser 
+  Workshop!</strong> &nbsp;&nbsp;&nbsp; <a href="trainingMap.html">Map</a></span></p> 
+  <p> 
+  Do you suspect that there is a lot more to the Genome Browser than you have been using? Timeslots 
+  are available to host a Genome Browser workshop at your institution. Thanks to the funding support
+  of NHGRI, we are able to offer hands-on Genome Browser training onsite at your institution, 
+  tailored to your audience's level of expertise.</p> 
+  <p> 
+  For more information or to submit a request to host a workshop, please visit our
+  <a href="http://bit.ly/ucscTraining" target="_blank">sign-up page</a>.</p> 
+  <p><span style="font-weight:bold;color:#c70000;"><strong>Can't host?</strong></span>&nbsp;Catch one of our training sessions in your area:</p> 
+  <table class="gbsNoBorder">
+    <tr>
+      <td valign=top width=180>February 6, 2017</td><td>Catholic University of Korea, Seoul.</td>
+    </tr>
+    <tr>
+      <td valign=top width=180>February 7, 2017</td><td>KT Education Center, Daejeon, Korea.</td>
+    </tr>
+    <tr>
+      <td valign=top width=180>February 9-10, 2017</td><td> Korean Genome Organization (KOGO) Winter
+      Symposium, Vivaldi Park/Resort, Hongcheon.</td>
+    </tr>
+    <tr>
+      <td valign=top width=180>February 16-17, 2017</td><td>Icahn School of Medicine, Mt. Sinai Hess
+       Center for Science and Medicine, New York. Contact: Andrew Sharp 
+      (<a href="mailto:&#97;nd&#114;e&#119;.&#115;&#104;&#97;&#114;&#112;&#64;&#109;ss&#109;.&#101;&#100;&#117;">&#97;nd&#114;e&#119;.&#115;&#104;&#97;&#114;&#112;&#64;&#109;ss&#109;.&#101;&#100;&#117;</a>)</td> 
+      <!-- above address is andrew dot sharp at mssm dot edu -->
+    </tr>
+    <tr>
+      <td>February 21-22, 2017</td><td>Regeneron Pharmaceuticals, Inc. Tarrytown, NY. [full]</td>
+    </tr>
+    <tr>
+      <td>April 19, 2017</td><td>Howard University
+      <a href="http://healthsciences.howard.edu/education/colleges/pharmacy/" 
+      target="_blank">College of Pharmacy</a>, Washington, DC. Contact: X. Simon Wang 
+      (<a href="mailto:&#120;ia&#110;&#103;.&#119;&#97;&#110;&#103;&#64;&#104;&#111;&#119;a&#114;&#100;.e&#100;&#117;">&#120;ia&#110;&#103;.&#119;&#97;&#110;&#103;&#64;&#104;&#111;&#119;a&#114;&#100;.e&#100;&#117;</a>)</td>
+      <!-- above address is xiang.wang at howard.edu -->
+    </tr>
+    <tr>
+      <td>April 20-21, 2017</td><td>University of Virginia, <a href="http://www.hsl.virginia.edu" 
+      target="_blank">Claude Moore Health Sciences Library</a>, <a href="http://cphg.virginia.edu/" 
+      target="_blank">Center for Public Health Genomics</a>, and 
+      <a href="https://cancer.uvahealth.com/" target="_blank">Cancer Center</a>, Charlottesville. 
+      [full]</td>
+    </tr>
+<!-- staged for later 
+    <tr>
+      <td>May 27, 2017</td><td>European Society of Human Genetics 
+      (<a href="https://2017.eshg.org/index.php/programme/2017-05-27/" target="_blank">ESHG</a>), 
+      Copenhagen</td>
+    </tr>
+    https://2017.eshg.org/index.php/programme/w04-ucsc-genome-browser/
+    <tr> 
+      <td>June 20-21, 2017</td><td>University of Texas, San Antonio (<a href="" 
+      target="_blank">xxxx</a>)</td>
+    </tr>
+    -->
+  </table>
+</div>
 
-            <TR><TD VALIGN = TOP WIDTH = 180>February 7, 2017 </TD>
-              <TD> KT Education Center, Daejeon, Korea.
-              </TD></TR>
+<h2>Online training and tutorials</h2>
 
-            <TR><TD VALIGN = TOP WIDTH = 180>February 9-10, 2017 </TD>
-              <TD> Korean Genome Organization (KOGO) Winter Symposium, Vivaldi Park/Resort, Hongcheon.
-              </TD></TR>
+<h3><a href="vids/index.html">Videos</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+<a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos" target="_blank">YouTube 
+channel</a></h3>
+<ul>
+  <li>
+  Finding a <a href="https://www.youtube.com/watch?feature=player_detailpage&v=RjB_N1GpT0U" 
+  target="_blank">list of genes</a> in a region.</li>
+  <li>
+  Finding <a href = "https://www.youtube.com/watch?v=gK8B6sjzhmM&list=UUQnUJepyNOw0p8s2otX4RYQ" 
+  target="_blank">exon numbers</a>.</li>
+  <li>
+  Finding <a href = "https://www.youtube.com/watch?v=Y_cQ3JkhsUQ&list=UUQnUJepyNOw0p8s2otX4RYQ" 
+  target="_blank">SNPs in a gene</a>.</li>
+  <li>
+  Finding <a href = "https://www.youtube.com/watch?v=ZqxlBF3vqhY&list=UUQnUJepyNOw0p8s2otX4RYQ" 
+  target="_blank">SNPs upstream</a> from a gene.</li>
+  <li>
+  Find <a href = "https://www.youtube.com/watch?v=RQZ4EeYS6Zk" 
+  target="_blank">which tables belong to a data track</a>.</li>
+  <li>
+  Identifying <a href="https://www.youtube.com/watch?v=bLnfD799AZw" 
+  target="_blank">codon numbers</a> in a gene.</li>
+  <li>
+  Obtaining <a href="https://www.youtube.com/watch?v=6JoUqM1iKxQ" 
+  target="_blank">exon coordinates and sequences</a>.</li>
+  <li>
+  <a href="https://www.youtube.com/watch?v=mNEJBOkf_Gk" 
+  target="_blank">Exon-only</a> display mode (Multi-Region View).</li>
+  <li>
+  How-to: Genome Browser <A HREF="https://www.youtube.com/watch?v=5zc9sqd4SD4" 
+  target="_blank">Gateway</a>.</li>
+  <li>
+  Viewing <a href="https://www.youtube.com/watch?v=0lKYdqQus0I" 
+  target="_blank">alternate haplotypes</a> (Multi-Region View).</li>
+</ul>
 
-            <TR><TD VALIGN = TOP WIDTH = 180>February 16-17, 2017</TD>
-              <TD>Icahn School of Medicine, Mt. Sinai Hess Center for Science and
-              Medicine, New York.  Contact: Andrew Sharp
-               (<A HREF="mailto:&#97;nd&#114;e&#119;.&#115;&#104;&#97;&#114;&#112;&#64;&#109;ss&#109;.&#101;&#100;&#117;">&#97;nd&#114;e&#119;.&#115;&#104;&#97;&#114;&#112;&#64;&#109;ss&#109;.&#101;&#100;&#117;</A>)
-              <!-- above address is andrew dot sharp at mssm dot edu -->
-              </TD></TR>
+<h3>Other content produced at UCSC</h3>
+<ul>
+  <li>
+  See a collection of interesting Browser views in our 
+  <a href="../goldenPath/help/sessions.html#Gallery">Session Gallery</a></li>
+  <li>
+  Nature: <a href="http://www.nature.com/scitable/ebooks/guide-to-the-ucsc-genome-browser-16569863" 
+  target="_blank">Guide to the UCSC Genome Browser</a></li>
+  <li>
+  <a href="ucscGeneFishing.pdf" target="_blank">Fishing for genes in the UCSC Browser (pdf)</a></li>
+  <li>
+  <a href="http://bib.oxfordjournals.org/content/14/2/144.full" target="_blank">The UCSC genome 
+  browser and associated tools</a></li>
+  <li>
+  <a href="http://www.ncbi.nlm.nih.gov/pubmed/18514479" target="_blank">UCSC genome browser 
+  tutorial</a></li>
+  <li>
+  <a href="ashg2009" >Step-by-step tutorial presented at ASHG 2009 annual meeting</a> - basic 
+  browser navigation and functionality in the context of interpreting clinical genetics
+  reports.</li>
+  <li>
+  <a href="http://genomewiki.ucsc.edu/index.php/ABRF2010_Tutorial">Step-by-step tutorial presented 
+  at ABRF 2010 annual meeting</A> - how to convert files and display high-throughput sequencing 
+  results.</li>
+  <li>
+  <a href="ashg2014">Step-by-step tutorial presented at ASHG 2014 annual meeting</a> - includes 
+  Custom Tracks and Table Browser queries with and without filters.</li>
+</ul>
 
-            <TR><TD VALIGN = TOP WIDTH = 180>February 21-22, 2017 </TD>
-              <TD> Regeneron Pharmaceuticals, Inc. Tarrytown, NY. [ full ]
-              </TD></TR>
+<h3>External resources</h3>
+<ul>
+  <li>
+  <a href="http://www.openhelix.com/ucsc" 
+  target=_blank>Open Helix tutorial and training materials</a></li>
+  <li>
+  <a href="http://www.lifescied.org/cgi/content/full/9/2/98" 
+  target=_blank>Teaching bioinformatics and neuroinformatics by using free web-based tools</a> - 
+  student-level tutorial that demonstrates the combined use of several major bioinformatic tools 
+  (including the UCSC Genome Browser) in answering a series of related research questions</li>
+</ul>
 
-            <TR><TD VALIGN = TOP WIDTH = 180>April 19, 2017 </TD>
-             <TD> Howard University <A HREF =
-             "http://healthsciences.howard.edu/education/colleges/pharmacy/"
-             TARGET = _BLANK>College of Pharmacy</A>, Washington, DC. Contact:
-             X. Simon Wang
-             (<A HREF="mailto:&#120;ia&#110;&#103;.&#119;&#97;&#110;&#103;&#64;&#104;&#111;&#119;a&#114;&#100;.e&#100;&#117;">&#120;ia&#110;&#103;.&#119;&#97;&#110;&#103;&#64;&#104;&#111;&#119;a&#114;&#100;.e&#100;&#117;</A>)
-<!-- above address is xiang.wang at howard.edu -->
-              </TD></TR>
+<h2>User's guides for tools in the Genome Browser</h2>
+<ul>
+  <li>
+  <a href="../goldenPath/help/hgTracksHelp.html#CustomTracks">Custom Tracks</a></li>
+  <li>
+  <a href="../goldenPath/help/hgTracksHelp.html">Genome Browser</a></li>
+  <li>
+  <a href="../goldenPath/help/hgGenomeHelp.html">Genome Graphs</a></li>
+  <li>
+  <a href="../goldenPath/help/hgNearHelp.html">Gene Sorter</a></li>
+  <li>
+  <a href="../goldenPath/help/hgSessionHelp.html">Sessions</a></li>
+  <li>
+  <a href="../goldenPath/help/hgTablesHelp.html">Table Browser</a></li>
+  <li>
+  <a href="../goldenPath/help/hgTrackHubHelp.html">Track Hubs</a></li> 
+</ul>
 
-            <TR><TD VALIGN = TOP WIDTH = 180>April 20-21, 2017 </TD>
-             <TD> University of Virginia, <A HREF = "http://www.hsl.virginia.edu"
-                 TARGET = _BLANK>Claude Moore Health Sciences Library</A>,
-                 <A HREF = "http://cphg.virginia.edu/" TARGET = _BLANK>Center for
-                 Public Health Genomics</A>, and <A HREF = "https://cancer.uvahealth.com/"
-                 TARGET = _BLANK>Cancer Center</A>, Charlottesville. [ full ]
-              </TD></TR>
+<h2>Contact and mailing list information</h2> 
+<ul>
+  <li>
+  <a href="../contacts.html">Genome Browser contact information</a></li>
+  <li>
+  <a href="http://groups.google.com/a/soe.ucsc.edu/group/genome?hl=en">Genome Browser mailing 
+  list</a> (interactive discussion forum)</li>
+</ul>
 
-<!-- staged for later
-            <TR><TD VALIGN = TOP WIDTH = 180>May 27, 2017 </TD>
-              <TD> European Society of Human Genetics (<A HREF =
-               "https://2017.eshg.org/index.php/programme/2017-05-27/"
-              TARGET = BLANK>ESHG</A>), Copenhagen
-              </TD></TR>
-https://2017.eshg.org/index.php/programme/w04-ucsc-genome-browser/
+<h2>Mirroring and source code</h2> 
+<ul>
+  <li>
+  <a href="../mirror.html">Genome Browser mirror sites</a></li>
+  <li>
+  <a href="../FAQ/FAQlicense.html#license3">Obtaining the Genome Browser source code</a></li>
+</ul>
 
-            <TR><TD VALIGN = TOP WIDTH = 180>June 20-21, 2017 </TD>
-              <TD> University of Texas, San Antonio   (<A HREF =
-               ""
-              TARGET = BLANK>xxxx</A>)
-              </TD></TR>
--->
+<h2>Associated publications and announcements</h2>
+<ul>
+  <li>
+  <a href="../goldenPath/pubs.html">Selected Genome Browser publications</a>
+  <li>
+  <a href="../goldenPath/newsarch.html">Genome Browser news archives</a>
+</ul>
 
-           </TABLE>
-           </P>
-           </div>
-
-         <BR>
-         <B>Online Training and Tutorials:</B>
-         <BLOCKQUOTE>
-
-         <B> &nbsp; &nbsp; <a href = "vids/index.html">Videos</a> !
-            &nbsp; &nbsp; <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos" 
-               target="_blank">YouTube Channel</A>              </B>
-          <UL>
-	   <li>Finding a <a href = "https://www.youtube.com/watch?feature=player_detailpage&v=RjB_N1GpT0U"
-               TARGET = _BLANK>list of genes</a> in a region.
-
-	   <li>Finding   <a href = "https://www.youtube.com/watch?v=gK8B6sjzhmM&list=UUQnUJepyNOw0p8s2otX4RYQ"
-               TARGET = _BLANK>exon numbers</a>.
-
-	   <li>Finding   <a href = "https://www.youtube.com/watch?v=Y_cQ3JkhsUQ&list=UUQnUJepyNOw0p8s2otX4RYQ"
-               TARGET = _BLANK>SNPs in a gene</a>.
-
-	   <li>Finding   <a href = "https://www.youtube.com/watch?v=ZqxlBF3vqhY&list=UUQnUJepyNOw0p8s2otX4RYQ"
-               TARGET = _BLANK>SNPs upstream</a> from a gene.
-
-	   <li>Find <a href = "https://www.youtube.com/watch?v=RQZ4EeYS6Zk"
-               TARGET = _BLANK>which tables belong to a data track</a>.</li>
-
-           <li>Identifying <a href="https://www.youtube.com/watch?v=bLnfD799AZw"
-               TARGET = _BLANK>codon numbers</a> in a gene.</li>
-
-           <li>Obtaining <a href="https://www.youtube.com/watch?v=6JoUqM1iKxQ"
-               TARGET = _BLANK>exon coordinates and sequences</a>.</li>
-
-           <li><a href="https://www.youtube.com/watch?v=mNEJBOkf_Gk"
-               TARGET = _BLANK>Exon-only</a> display mode (Multi-Region View).</li>
-
-           <li>How-to:  Genome Browser <A HREF="https://www.youtube.com/watch?v=5zc9sqd4SD4" 
-               TARGET = _BLANK>Gateway</a>.</li>
-
-           <li>Viewing <a href="https://www.youtube.com/watch?v=0lKYdqQus0I" 
-               TARGET = _BLANK>alternate haplotypes</a> (Multi-Region View).</li>
-
-          </UL>
-
-         <B>Other Content Produced at UCSC              </B>
-          <ul>
-	   <li>See a collection of interesting Browser views in our
-               <A HREF = "../goldenPath/help/sessions.html#Gallery">Session Gallery</A>
-	   <li>Nature: <a href="http://www.nature.com/scitable/ebooks/guide-to-the-ucsc-genome-browser-16569863"
-	       target="_blank">Guide to the UCSC Genome Browser</a>
-           <li><a href="ucscGeneFishing.pdf" target="_blank">Fishing for genes in the UCSC Browser (pdf)</a>
-	   <li><a href="http://bib.oxfordjournals.org/content/14/2/144.full"
-               target = "_blank">The UCSC genome browser and associated tools</a>
-	   <li><a href="http://www.ncbi.nlm.nih.gov/pubmed/18514479"
-               target = "_blank">UCSC genome browser tutorial</a>
-	   <li><A HREF="ashg2009" >Step-by-step tutorial presented at ASHG 2009 annual meeting</A>
-              - basic browser navigation and functionality in the context of interpreting clinical genetics
-              reports.
-	   <li><A HREF="http://genomewiki.ucsc.edu/index.php/ABRF2010_Tutorial" >Step-by-step tutorial
-              presented at ABRF 2010 annual meeting</A> - how to convert files and display
-              high-throughput sequencing results.
-           <li><A HREF="ashg2014">Step-by-step tutorial presented at ASHG 2014 annual meeting</A> -
-              includes Custom Tracks and Table Browser queries with and without filters.
-
-          </ul>
-
-         <B>External                      </B>
-          <UL>
-           <LI><A HREF="http://www.openhelix.com/ucsc" TARGET=_blank>Open Helix tutorial and training materials</A>
-
-	   <LI><A HREF="http://www.lifescied.org/cgi/content/full/9/2/98"
-	      TARGET=_blank>Teaching bioinformatics and neuroinformatics by
-	      using free web-based tools</A> - student-level tutorial that
-	      demonstrates the combined use of several major bioinformatic tools
-	      (including the UCSC Genome Browser) in answering a series of
-	      related research questions
-          </UL>
-         </BLOCKQUOTE>
-
-         <B>User's Guides for Tools in the Genome Browser:</B>
-               <BR>&nbsp;
-          <TABLE>
-            <TR><TD>
-	      <UL>
-    	        <LI><A HREF="../goldenPath/help/hgTracksHelp.html#CustomTracks">Custom Tracks</A>
-    	        <LI><A HREF="../goldenPath/help/hgTracksHelp.html">Genome Browser</A>
-    	        <LI><A HREF="../goldenPath/help/hgGenomeHelp.html">Genome Graphs</A>
-    	        <LI><A HREF="../goldenPath/help/hgNearHelp.html">Gene Sorter</A>
-              </UL>
-            </TD><TD>
-            </TD><TD>
-               <BR>&nbsp;
-            </TD><TD>
-            </TD><TD>
-              <UL>
-    	        <LI><A HREF="../goldenPath/help/hgSessionHelp.html">Sessions</A>
-    	        <LI><A HREF="../goldenPath/help/hgTablesHelp.html">Table Browser</A>
-    	        <LI><a href="../goldenPath/help/hgTrackHubHelp.html">Track Hubs</A>
-                <BR>&nbsp;
-              </UL>
-            </TD></TR>
-           </TABLE>
-         <B>Contacting Us and Mailing Lists:</B>
-          <UL>
-	   <LI><A HREF="../contacts.html">Genome Browser contact information</A>
-	   <LI><A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome?hl=en">Genome Browser mailing list<A> (interactive discussion forum)
-	  </UL>
-         <B>Mirror Sites and Source Code:</B>
-          <UL>
-	   <LI><A HREF="../mirror.html">Genome Browser mirror sites</A>
-	   <LI><A HREF="../FAQ/FAQlicense.html#license3">Obtaining the Genome Browser source code</A>
-          </UL>
-         <B>Associated Publications and Documents:</B>
-          <UL>
-	   <LI><A HREF="../goldenPath/pubs.html">UCSC Genome Bioinformatics Group publications</A>
-	   <LI><A HREF="../goldenPath/newsarch.html">News archives</A>
-          </UL>
-
-		</TD></TR></TABLE>
-            </TD><TD WIDTH=15></TD></TR></TABLE>
-        <br></TD></TR></TABLE>
-    </TD></TR></TABLE>
-</TD></TR></TABLE>
-
-</BODY></HTML>
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

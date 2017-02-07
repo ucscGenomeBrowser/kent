@@ -1,143 +1,78 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
-   "http://www.w3.org/TR/html4/loose.dtd"><HTML>
-<HEAD>
-	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<TITLE>Motif Display Help</TITLE>
-	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
-</HEAD>
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Motif Display" -->
+<!--#set var="ROOT" value="../.." -->
 
-<BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#330066">
-<A NAME="TOP"></A>
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg" alt="title"></TH></TR>
+<h1>Motif Display Help Page</h1>
+<p> 
+A motif is a predominant <a href="http://en.wikipedia.org/wiki/Regulatory_sequence" 
+target="_blank">regulatory sequence</a> theme associated with a specific transcription factor. This 
+collection of common sites can be represented by a 
+<a href="http://en.wikipedia.org/wiki/Consensus_sequence" target="_blank">consensus sequence</a>, 
+where a lower-case base, for example, signifies a lower degree of frequency compared to an 
+upper-case base. A more accurate display is a 
+<a href="http://en.wikipedia.org/wiki/Position_weight_matrix" 
+target="_blank">position weight matrix</a> (PWM), which gives the probability of each base 
+numerically. A motif can also be displayed graphically as a 
+<a href="http://en.wikipedia.org/wiki/Sequence_logo" target="_blank">sequence logo</a>, where the 
+height of each letter is proportional to its frequency at that particular position, but the total 
+height represents the <a href="http://en.wikipedia.org/wiki/Mutual_information" 
+target="_blank">mutual information</a> content. All three methods convey the same underlying 
+information, numerically displayed in the PWM.</p> 
+<img src="../../images/motifExampleETS1.png" alt="Motif example" height="400"><br>
+<p>
+<font size="-1">Example ETS1 info from hg19 at chr10:69644211-69644221</font></p>
+<p> 
+<strong>This Occurrence line:</strong> This line represents the assembly's sequence, 
+<em>from the strand the motif matched</em>. This sequence is the only line referring to the 
+underlying assembly. The sequence logo, motif consensus, and numerical table are instead all 
+generated from the underlying PWM.</p> 
+<p>
+<strong>Motif Consensus line:</strong> The <em>motif consensus</em> line uses the 
+following scheme to indicate strength of the highest-probability base for each column in the motif: 
+<table border="1"> 
+  <tr>
+    <th>Weight</th><th>Display Convention</th> 
+    <th>&#09;&#09;&#09;&#09;Example</th></tr> 
+  <tr>
+    <td>.90 - 1.0</td><td>upper-case bold</td> 
+    <td><strong>ACGT</strong></td></tr> 
+  <tr>
+    <td>.75 - .89</td><td>upper-case normal</td> 
+    <td>ACGT</td></tr> 
+  <tr>
+    <td>.50 - .74</td><td>lower-case normal</td> 
+    <td>acgt</td></tr> 
+  <tr>
+    <td>.40 - .49</td><td>lower-case grayed</td> 
+    <td>acgt</td></tr> 
+  <tr>
+    <td>.00 - .39</td><td>lower-case grayed</td> 
+    <td>.</td></tr> 
+</table> 
+<p>
+<strong>Position Weight Matrix (PWM):</strong> Each row of the PWM represents a base, and each 
+column represents the relative frequency of the base occurring for that position.</p> 
+<p>
+<strong>Sequence Logo:</strong> A <a href="http://compbio.umbc.edu/Documents/Sequence_logo.pdf" 
+target="_blank">sequence logo</a> is a stack of letters at each position, where the relative sizes 
+of the letters to each other represents their frequency in the sequence. The total height of the 
+stack of letters reflects the mutual information content at the position, in bits.</p>
 
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../cgi-bin/hgMenubar"--></TD></TR>
-<!-- ========== Content Tables ================================ -->  
-<!--
-    <TD CELLPADDING=10 ROWSPAN=2 VALIGN="top">
--->
-    <TR><TD ROWSPAN=2 VALIGN="top">	
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-	    <TR><TD>	
-    		<TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-		    <TR><TD>	
-			<TABLE BGCOLOR="#D9E4F8" WIDTH="100%">
-			    <TR><TD>
-			    <FONT SIZE="4"><B>&nbsp;Motif Display Help Page</B></FONT> 
-			    </TD></TR>
-			</TABLE>
-			<TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
-			    <TR><TH HEIGHT=10></TH></TR>
-			    <TR><TD WIDTH=10>&nbsp;</TD><TD> 
-                                A motif is a predominant
-                                <a href="http://en.wikipedia.org/wiki/Regulatory_sequence" target="_blank">regulatory sequence</a>
-                                theme associated with a specific transcription
-                                factor. This collection of common sites can be represented by a
-                                <a href="http://en.wikipedia.org/wiki/Consensus_sequence" target="_blank">consensus sequence</a>,
-                                where a lower-case base, for example, signifies a
-                                lower degree of frequency compared to an
-                                upper-case base. A more accurate display is a 
-                                <a href="http://en.wikipedia.org/wiki/Position_weight_matrix" target="_blank">position weight matrix</a>
-                                (PWM), which gives the
-                                probability of each base numerically. A motif can
-                                also be displayed graphically as a
-                                <a href="http://en.wikipedia.org/wiki/Sequence_logo" target="_blank">sequence logo</a>,
-                                where the height of each letter is proportional to
-                                its frequency at that particular position, but the
-                                total height represents the
-                                <a href="http://en.wikipedia.org/wiki/Mutual_information"
-                                   target="_blank">mutual information</a> content.
-                                All three methods convey the
-                                same underlying information,
-                                numerically displayed in the PWM.
-				<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>
-			 	    <TR><TH HEIGHT=10></TH></TR>
-				    <TR><TD>
-				        <UL>
-                                          <p>
-                                            <table><tr>
-                                                <td><img border="1" src="../../images/motifExampleETS1.png" alt="" height="400"></td>
-                                              </tr><tr>
-                                                <td><font size="-1">Example ETS1 info from hg19 at chr10:69644211-69644221</font></td>
-                                          </tr></table></p>
-                                          <p>
-				  	    <LI><b>&quot;This Occurrence&quot; Line</b>
-                                              <p>
-                                                This line represents the assembly's sequence,
-                                                <em>from the strand the motif matched</em>.
-                                                This sequence is the only line referring to the underlying assembly.
-                                                The sequence logo, motif consensus, and numerical table
-                                                are instead all generated from the underlying PWM.
-                                              </p>
-				  	    <LI><b>&quot;Motif Consensus&quot; Line</b>
-                                              <p>
-                                               <p>
-                                                 The <em>motif consensus</em> line uses the following scheme to indicate
-                                                 strength of the highest-probability base for each column in the motif:
-                                                 <table>
-                                                   <tr><td>Weight</td><td>Display Convention</td>
-                                                     <td>&nbsp;&nbsp;&#09;&#09;&#09;&#09;Example</td></tr>
-                                                   <tr><td>.90 - 1.0</td><td>&nbsp;&nbsp;upper-case bold</td>
-                                                     <td><b>&nbsp;&nbsp;ACGT</b></td></tr>
-                                                   <tr><td>.75 - .89</td><td>&nbsp;&nbsp;upper-case normal</td>
-                                                     <td>&nbsp;&nbsp;ACGT</td></tr>
-                                                   <tr><td>.50 - .74</td><td>&nbsp;&nbsp;lower-case normal</td>
-                                                     <td>&nbsp;&nbsp;acgt</td></tr>
-                                                   <tr><td>.40 - .49</td><td>&nbsp;&nbsp;lower-case grayed</td>
-                                                     <td>&nbsp;&nbsp;acgt</td></tr>
-                                                   <tr><td>.00 - .39</td><td>&nbsp;&nbsp;lower-case grayed</td>
-                                                     <td>&nbsp;&nbsp;.</td></tr>
-                                                 </table>
-                                               </p>
-				  	    <LI><b>Position Weight Matrix (PWM)</b>
-                                              <p>
-                                                Each row of the PWM represents a base, and each column represents
-                                                the relative frequency of the base occurring for that position.
-                                              </p>
-                                              
-				  	    <LI><b>Sequence Logo</b>
-                                              <p>
-                                                A <a href="http://compbio.umbc.edu/Documents/Sequence_logo.pdf"
-                                                     target="_blank">sequence logo<a/>
-                                                  is a stack of letters at each position, where the relative
-                                                  sizes of the letters to each other represents their frequency in the sequence.
-                                                  The total height of the stack of letters reflects the
-                                                  mutual information content at the position, in bits.
-                                              </p>
-				      </UL></TD>
-				    </TR>
-				</TABLE>
-                                <p>
-                                <p>
-                                <B><FONT COLOR="#006666" SIZE=4> Resources and References: </FONT></B>
-                                <p>
-                                  Schneider TD, Stephens RM.
-                                  <a href="http://www.ncbi.nlm.nih.gov/pubmed/2172928" target="_blank">
-                                    Sequence logos: a new way to display consensus sequences</a>.
-                                  <em>Nucleic Acids Res</em>. 1990 Oct 25;18(20):6097-100.
-                                  PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/2172928" target="_blank">2172928</a>; PMC: 
-                                  <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC332411" target="_blank">PMC332411</a>
-                                </p>
+<h2>Resources and references</h2> 
+<p> 
+Schneider TD, Stephens RM. <a href="http://www.ncbi.nlm.nih.gov/pubmed/2172928" 
+target="_blank">Sequence logos: a new way to display consensus sequences</a>. <em>Nucleic Acids 
+Res</em>. 1990 Oct 25;18(20):6097-100.  PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/2172928" 
+target="_blank">2172928</a>; PMC: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC332411" 
+target="_blank">PMC332411</a></p> 
+<p> 
+Stormo GD. 
+<a href="http://bioinformatics.oxfordjournals.org/cgi/pmidlookup?view=long&amp;pmid=10812473" 
+target="_blank">DNA binding sites: representation and discovery</a>.  <em>Bioinformatics</em>. 
+2000 Jan;16(1):16-23. PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/10812473" 
+target="_blank">10812473</a></p>
 
-                                <p>
-                                  Stormo GD.
-                                  <a href="http://bioinformatics.oxfordjournals.org/cgi/pmidlookup?view=long&amp;pmid=10812473"
-                                     target="_blank">
-                                    DNA binding sites: representation and discovery</a>.
-                                  <em>Bioinformatics</em>. 2000 Jan;16(1):16-23.
-                                  PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/10812473" target="_blank">10812473</a>
-                                </p>
-
-				</TD>
-				<TD WIDTH=15></TD>
-			    </TR>
-			</TABLE>
-	 	    <BR></TD></TR>
-		</TABLE>
-	    </TD></TR>
-	</TABLE>
-
-</BODY></HTML>
-
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
