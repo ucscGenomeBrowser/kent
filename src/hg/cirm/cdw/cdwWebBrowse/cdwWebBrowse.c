@@ -1760,6 +1760,7 @@ void localWebStartWrapper(char *titleString)
     puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" "
              "\"http://www.w3.org/TR/html4/strict.dtd\">");
     puts("<HTML><HEAD>\n");
+    puts(getCspMetaHeader());
     webPragmasEtc();
     printf("<TITLE>%s</TITLE>\n", titleString);
     webIncludeResourceFile("HGStyle.css");
@@ -1793,6 +1794,7 @@ localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.54");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
+jsInlineFinish(); 
 printf("</BODY></HTML>\n");
 }
 
