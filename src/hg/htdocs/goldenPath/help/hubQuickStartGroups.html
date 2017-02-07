@@ -1,241 +1,176 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN"
-          "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>Quick Start Guide to Track Hub Groupings</title>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link rel="stylesheet" href="/style/HGStyle.css">
-</head>
-<body class="oldStaticPage">
-<div class="header">
-<img src="../../images/title.jpg" alt="UCSC Genome Bioinformatics">
-</div><!-- .header -->
-<div class="nav">
-<!--#include virtual="../../cgi-bin/hgMenubar"-->
-</div><!-- .nav -->
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Track Hub Groups Quick Start" -->
+<!--#set var="ROOT" value="../.." -->
 
-<div class="content"> <!-- start of page content -->
-<div class="section">
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
 <h1>Quick Start Guide to Organizing Track Hubs into Groupings</h1> 
-<div class="sectionContent">
 <p>
 Track hubs allow for displaying many tracks, therefore organizing your tracks using
 <a href="trackDb/trackDbHub.html#groupingTracks" target="_blank">grouping settings</a>
 will help your users find related information. Below is a basic example hub illustrating 
 the use of <a href="trackDb/trackDbHub.html#multiWig" target="_blank">container multiWig</a>,
 <a href="trackDb/trackDbHub.html#Composite_Track_Settings" target="_blank">compositeTrack on</a>,
-and <a href="trackDb/trackDbHub.html#superTrack" target="_blank">superTrack on</a> lines.
-</p>
+and <a href="trackDb/trackDbHub.html#superTrack" target="_blank">superTrack on</a> lines.</p>
 <p>
-<ul>
-<b>STEP 1:</b> In a publicly-accessible directory, copy the hub.txt, genomes.txt,
-trackDb.txt, and examplePage.html files using the following command:<br>
+<strong>STEP 1:</strong> In a publicly-accessible directory, copy the hub.txt, genomes.txt,
+trackDb.txt, and examplePage.html files using the following command:</p>
+<pre><code>wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/ </code></pre>
 <p>
-<tt>wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/
-</tt>
-</p>
-<ul>Alternatively, <em>if you do not have wget installed</em>, use curl:</br>
-<tt>curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hub.txt<br>
+Alternatively, <em>if you do not have wget installed</em>, use curl:</p> 
+<pre><code>curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hub.txt
 curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/genomes.txt<br>
-mkdir hg19<br>
-cd hg19<br>
-curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/trackDb.txt<br>
-curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/examplePage.html<br>
-</tt>
+mkdir hg19
+cd hg19
+curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/trackDb.txt
+curl -O
+http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/examplePage.html </code></pre>
 <p>
-If you do not have curl, you can use a text editor and
-directly recreate the above three files.
-</p>
-</ul>
+If you do not have curl, you can use a text editor and directly recreate the above three files.</p>
 <p>
-<b>STEP 2:</b> Paste your hub.txt link (<tt>http://yourURL/hub.txt</tt>) into the
-<a href="../../cgi-bin/hgHubConnect" target="_blank">My Hubs</a>
-tab of the Track Data Hubs page, then click the "Genome Browser" link from the top bar.
-Alternatively build a URL that will directly load your hub in hgTracks:
-</p>
-<tt>
-http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://yourURL/hub.txt
-</tt>
+<strong>STEP 2:</strong> Paste your hub.txt link (<code>http://yourURL/hub.txt</code>) into the
+<a href="../../cgi-bin/hgHubConnect" target="_blank">My Hubs</a> tab of the Track Data Hubs page, 
+then click the &quot;Genome Browser&quot; link from the top bar. Alternatively build a URL that will
+directly load your hub in hgTracks:</p>
+<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://yourURL/hub.txt</code></pre>
 <p>
 The URL should work the same as using the original data just copied:
 <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hub.txt"
-target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hub.txt</a>
-</p>
+target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hub.txt</a></p>
 <p>
-<b>STEP 3:</b> Congratulations! Your hub should display! 
-</p>
-<p>If you are having problems, be sure all your files and the hg19 directory are
-publicly-accessible. For hubs to work, your server must also accept byte-ranges.
-You can check using the following command to verify "<tt>Accept-Ranges: bytes</tt>"
-displays:<br>
-<tt>curl -I http://yourURL/hub.txt</tt>
-</p>
-</ul>
-<b><font color="#006666" size=4>The Three Types of Track Groupings</font></b>
-<ul>
-<li><b><a href="#multiWig">Understanding multiWig tracks</a></b>
-<li><b><a href="#composite">Understanding composite tracks</a></b>
-<li><b><a href="#superTrack">Understanding super-tracks</a></b>
+<strong>STEP 3:</strong> Congratulations! Your hub should display!</p>
 <p>
-Now that you have the hub copied from above, start to edit
-some of the trackDb.txt settings to understand how they work.
-Read more about <a href="trackDb/trackDbHub.html"
-target="_blank">trackDb settings</a> in the definition document.
-Note that the Browser waits 300 seconds before checking for 
-any changes to these files. <b>When editing hub.txt, genomes.txt, trackDb.txt, and
-related hub files shorten this delay by adding <tt>udcTimeout=1</tt> to your URL.</b>
-For more information, please see the <a href="hgTrackHubHelp.html#Debug"
-target="_blank">Debugging and Updating Track Hubs</a> section of the
-<a href="hgTrackHubHelp.html" target="_blank">Track Hub User Guide</a>.
-For more detailed instructions on setting up a hub, please see the
-<a href="hgTrackHubHelp.html#Setup" target="_blank">Setting Up Your Own Track Hub</a>
+If you are having problems, be sure all your files and the hg19 directory are publicly accessible. 
+For hubs to work, your server must also accept byte-ranges. You can check using the following 
+command to verify &quot;Accept-Ranges: bytes&quot; displays:</p>
+<pre><code>curl -I http://yourURL/hub.txt</code></pre> 
+
+<h2>The three types of track groupings</h2>
+<p>
+Now that you have the hub copied from above, start to edit some of the trackDb.txt settings to 
+understand how they work. Read more about <a href="trackDb/trackDbHub.html"
+target="_blank">trackDb settings</a> in the definition document. Note that the Browser waits 5 
+minutes before checking for any changes to these files. <strong>When editing hub.txt, genomes.txt, 
+trackDb.txt, and related hub files shorten this delay by adding <code>udcTimeout=1</code> to your 
+URL.</strong> For more information, please see the <a href="hgTrackHubHelp.html#Debug"
+target="_blank">Debugging and Updating Track Hubs</a> section of the <a href="hgTrackHubHelp.html" 
+target="_blank">Track Hub User Guide</a>. For more detailed instructions on setting up a hub, please
+see the <a href="hgTrackHubHelp.html#Setup" target="_blank">Setting Up Your Own Track Hub</a>
 section of the Track Hub User Guide.
-</ul>
-<b><font color="#006666" size=4> Resources: </font></b>
 <ul>
-<li><b><a href="hgTrackHubHelp.html" target="_blank">Track Hub User Guide</a></b> 
-<li><b><a href="trackDb/trackDbHub.html"
-target="_blank">Track Database (trackDb) Definition Document</a></b> 
-<li><b><a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs"
-target="_blank">Assembly Hubs Wiki</a></b>
-<li><b><a href="http://genomewiki.ucsc.edu/index.php/Public_Hub_Guidelines"
-target="_blank">Public Hub Guidelines Wiki</a></b>
-<li><b><a href="hubQuickStart.html"
-target="_blank">Basic Hub Quick Start Guide</a></b>
-<li><b><a href="hubQuickStartAssembly.html"
-target="_blank">Assembly Hub Quick Start Guide</a></b>
+  <li><strong><a href="#multiWig">Understanding multiWig tracks</a></strong>
+  <li><strong><a href="#composite">Understanding composite tracks</a></strong>
+  <li><strong><a href="#superTrack">Understanding super-tracks</a></strong>
 </ul>
-</div> <!-- end sectionContent-->
-</div> <!-- end section-->
+
+<h2>Resources</h2>
+<ul>
+  <li>
+  <strong><a href="hgTrackHubHelp.html" target="_blank">Track Hub User Guide</a></strong></li> 
+  <li>
+  <strong><a href="trackDb/trackDbHub.html" target="_blank">Track Database (trackDb) Definition 
+  Document</a></strong></li> 
+  <li>
+  <strong><a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs" target="_blank">Assembly 
+  Hubs Wiki</a></strong></li>
+  <li>
+  <strong><a href="http://genomewiki.ucsc.edu/index.php/Public_Hub_Guidelines"
+  target="_blank">Public Hub Guidelines Wiki</a></strong></li>
+  <li>
+  <strong><a href="hubQuickStart.html" target="_blank">Basic Hub Quick Start Guide</a></strong></li>
+  <li>
+  <strong><a href="hubQuickStartAssembly.html" target="_blank">Assembly Hub Quick Start 
+  Guide</a></strong></li>
+</ul>
 
 <!-- ========== multiWig tracks ============================== -->
 
-<a name="multiWig"></a><br>
-<div class="section">
-<h1>Understanding multiWig tracks</h1>
-<div class="sectionContent">
-<blockquote><tt>
-<b>track</b> <em>multiWigUniqueTrackName</em> <br>
-<b>type</b> <em>bigWig</em><br>
-<b>container</b> <em>multiWig</em><br>
-<b>aggregate</b> <em>transparentOverlay</em><br>
-<b>showSubtrackColorOnUi</b> <em>on</em><br>
-<b>maxHeightPixels</b> <em>500:100:8</em><br>
-...<br>
-<ul>
-<b>track</b> <em>uniqueNameWithoutSpaces</em> <br>
-<b>type</b> <em>bigWig</em><br>
-<b>parent</b> <em>multiWigUniqueTrackName</em> <br>
-<b>color</b> <em>255,0,0</em><br>
-</ul>
-</tt>
-</blockquote>
-A multiWig starts with a few related bigWig files that you want to display together.
-The <tt><b>container</b> <em>multiWig</em></tt> line allows for this track
-to be later referenced as <tt><b>parent</b> <em>multiWigUniqueTrackName</em></tt>
-in each of the related bigWig files. The <tt><b>aggregate</b>
-<em>transparentOverlay</em></tt> line defines the way the multiWigs should
-appear with options being <tt>transparentOverlay/stacked/solidOverlay</tt>.
-The <tt><b>showSubtrackColorOnUi</b> <em>on</em></tt> line shows the track colors
-on the  track setting page and the <tt><b>maxHeightPixels</b> <em>500:100:8</em></tt>
+<a name="multiWig"></a>
+<h2>Understanding multiWig tracks</h2>
+<pre><code><strong>track</strong> <em>multiWigUniqueTrackName</em>
+<strong>type</strong> <em>bigWig</em>
+<strong>container</strong> <em>multiWig</em>
+<strong>aggregate</strong> <em>transparentOverlay</em>
+<strong>showSubtrackColorOnUi</strong> <em>on</em>
+<strong>maxHeightPixels</strong> <em>500:100:8</em>
+...
+    <strong>track</strong> <em>uniqueNameWithoutSpaces</em>
+    <strong>type</strong> <em>bigWig</em>
+    <strong>parent</strong> <em>multiWigUniqueTrackName</em>
+    <strong>color</strong> <em>255,0,0</em> </code></pre>
+<p>
+A multiWig starts with a few related bigWig files that you want to display together. The 
+<code><strong>container</strong> multiWig</code> line allows for this track to be later 
+referenced as <code><strong>parent</strong> multiWigUniqueTrackName</code> in each of the related 
+bigWig files. The <code><strong>aggregate</strong> transparentOverlay</code> line defines the way 
+the multiWigs should appear with options being <code>transparentOverlay/stacked/solidOverlay</code>.
+The <code><strong>showSubtrackColorOnUi</strong> on</code> line shows the track colors on the  track
+setting page and the <code><strong>maxHeightPixels</strong> <em>500:100:8</em></code>
 sets the maximum (500), default (100), and minimum (8) pixel heights for the track.
-Read <a href="trackDb/trackDbHub.html#multiWig"
-target="_blank">all about multiWigs here</a>. See an
+Read <a href="trackDb/trackDbHub.html#multiWig" target="_blank">all about multiWigs here</a>. See an
 <a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/trackDb.txt"
-target="_blank">example trackDb.txt</a>.
-</p>
-</div> <!--- sectionContent -->
-</div> <!--- section-->
+target="_blank">example trackDb.txt</a>.</p>
 
 <!-- ========== composite tracks  ============================== -->
 
-<a name="composite"></a><br>
-<div class="section">
-<h1>Understanding composite tracks</h1>
-<div class="sectionContent">
+<a name="composite"></a>
+<h2>Understanding composite tracks</h2>
 <p>
-<blockquote><tt>
-<b>track</b> <em>uniqueCompositeTrackName</em> <br>
-<b>compositeTrack</b> <em>on</em><br>
-...<br>
-<ul>
-<b>track</b> <em>uniqueNameWithoutSpaces</em> <br>
-<b>parent</b> <em>uniqueCompositeTrackName on</em> <br>
-...<br>
-<b>track</b> <em>newUniqueNameWithoutSpaces</em> <br>
-<b>parent</b> <em>uniqueCompositeTrackName off</em> <br>
-</ul>
-</tt>
-</blockquote>
-</p>
-A composite track starts with related files, usually all of the same type,
-that you want to group and display together (referred to as "subtracks").
-The <tt><b>compositeTrack</b> <em>on</em></tt>
-line defines the parent track that will be later referenced as
-<tt><b>parent</b> <em>uniqueCompositeTrackName off</em></tt> in each
-subtrack's stanza. Either &quot;on&quot or &quot;off&quot; can be used to
-set a subtrack to be displayed or not displayed by default. Composite tracks
-can be broken apart further to group very similar tracks with the trackDb
-use of <a href="trackDb/trackDbHub.html#subGroups"
-target="_blank">subGroups</a> and <a href="trackDb/trackDbHub.html#view"
-target="_blank">views</a>, not demonstrated here.
-Read <a href="trackDb/trackDbHub.html#Composite_Track_Settings"
-target="_blank">all about composite tracks here</a>.
-See an <a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/trackDb.txt"
-target="_blank">example trackDb.txt</a>.
-</p>
-</div> <!--- sectionContent --->
-</div> <!--- section -->
+<pre><code><strong>track</strong> <em>uniqueCompositeTrackName</em>
+<strong>compositeTrack</strong> <em>on</em>
+...
+    <strong>track</strong> <em>uniqueNameWithoutSpaces</em>
+    <strong>parent</strong> <em>uniqueCompositeTrackName on</em>
+    ...
+    <strong>track</strong> <em>newUniqueNameWithoutSpaces</em>
+    <strong>parent</strong> <em>uniqueCompositeTrackName off</em> </code></pre>
+<p>
+A composite track starts with related files, usually all of the same type, that you want to group 
+and display together (referred to as &quot;subtracks&quot;). The 
+<code><strong>compositeTrack</strong> on</code> line defines the parent track that will be later 
+referenced as <code><strong>parent</strong> uniqueCompositeTrackName off</code> in each subtrack's 
+stanza. Either &quot;on&quot or &quot;off&quot; can be used to set a subtrack to be displayed or not
+displayed by default. Composite tracks can be broken apart further to group very similar tracks with
+the trackDb use of <a href="trackDb/trackDbHub.html#subGroups" target="_blank">subGroups</a> and 
+<a href="trackDb/trackDbHub.html#view" target="_blank">views</a>, not demonstrated here. Read 
+<a href="trackDb/trackDbHub.html#Composite_Track_Settings" target="_blank">all about composite 
+tracks here</a>. See an 
+<a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/trackDb.txt"
+target="_blank">example trackDb.txt</a>.</p>
 
 <!-- ========== super-tracks  ==================== -->
 
 <a name="superTrack"></a><br>
-<div class="section">
-<h1>Understanding super-tracks</h1>
-<div class="sectionContent">
+<h2>Understanding super-tracks</h2>
+<pre><code><strong>track</strong> <em>uniqueSuperTrackName</em>
+<strong>superTrack</strong> <em>on show</em>
+...
+    <strong>track</strong> <em>uniqueNameWithoutSpaces</em>
+    <strong>parent</strong> <em>uniqueSuperTrackName</em>
+    ...
+    <strong>track</strong> <em>newUniqueNameWithoutSpaces</em>
+    <strong>parent</strong> <em>uniqueSuperTrackName</em>
+    ...
+    <strong>track</strong> <em>uniqueCompositeTrackNameInSuperTrack</em>
+    <strong>compositeTrack</strong> <em>on</em>
+    <strong>parent</strong> <em>uniqueSuperTrackName</em>
+    ...
+<strong>track</strong> <em>uniqueNameWithoutSpaces</em>
+<strong>parent</strong> <em>uniqueCompositeTrackNameInSuperTrack on</em>
+...
+<strong>track</strong> <em>newUniqueNameWithoutSpaces</em>
+<strong>parent</strong> <em>uniqueCompositeTrackNameInSuperTrack off</em> </code></pre>
 <p>
-<blockquote><tt>
-<b>track</b> <em>uniqueSuperTrackName</em> <br>
-<b>superTrack</b> <em>on show</em><br>
-...<br>
-<ul>
-<b>track</b> <em>uniqueNameWithoutSpaces</em> <br>
-<b>parent</b> <em>uniqueSuperTrackName</em> <br>
-...<br>
-<b>track</b> <em>newUniqueNameWithoutSpaces</em> <br>
-<b>parent</b> <em>uniqueSuperTrackName</em> <br>
-...<br>
-<b>track</b> <em>uniqueCompositeTrackNameInSuperTrack</em> <br>
-<b>compositeTrack</b> <em>on</em><br>
-<b>parent</b> <em>uniqueSuperTrackName</em> <br>
-...<br>
-<ul>
-<b>track</b> <em>uniqueNameWithoutSpaces</em> <br>
-<b>parent</b> <em>uniqueCompositeTrackNameInSuperTrack on</em> <br>
-...<br>
-<b>track</b> <em>newUniqueNameWithoutSpaces</em> <br>
-<b>parent</b> <em>uniqueCompositeTrackNameInSuperTrack off</em> <br>
-</ul>
-</ul>
-</tt>
-</blockquote>
-</p>
-<p>
-A super-track starts with several different types of track data that you want
-to group together in a high level folder. Super-tracks can contain composite
-tracks and container multiWigs, but not vice versa. 
-The <tt><b>superTrack</b> <em>on show</em></tt> line allows for this track
-to be later referenced as <tt><b>parent</b> <em>uniqueSuperTrackName</em></tt>
-in each of the children subtracks (note how it is only required for 
-direct children, and not for subtracks contained in a composite inside 
-the super-track). The &quot;show&quot; is optional and sets the super-track
-to display by default. Read <a href="trackDb/trackDbHub.html#superTrack"
-target="_blank">all about super-tracks here</a>.
-See an <a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/trackDb.txt"
-target="_blank">example trackDb.txt</a>.
-</p>
-</div> <!--- sectionContent -->
-</div> <!--- section --->
+A super-track starts with several different types of track data that you want to group together in 
+a high level folder. Super-tracks can contain composite tracks and container multiWigs, but not vice
+versa. The <code><strong>superTrack</strong> on show</code> line allows for this track to be later 
+referenced as <code><strong>parent</strong> uniqueSuperTrackName</code> in each of the children 
+subtracks (note how it is only required for direct children, and not for subtracks contained in a 
+composite inside the super-track). The &quot;show&quot; is optional and sets the super-track to 
+display by default. Read <a href="trackDb/trackDbHub.html#superTrack" target="_blank">all about 
+super-tracks here</a>. See an 
+<a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/trackDb.txt"
+target="_blank">example trackDb.txt</a>.</p>
 
-</div> <!--  end content-->
-</body></html>
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

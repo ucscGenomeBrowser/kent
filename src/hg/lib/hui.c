@@ -5804,22 +5804,25 @@ filterByChromCfgUi(cart,tdb);
 struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as)
 /* Build up a hash of a list of fields in an AS file. */
 {
-struct slPair *list = NULL;
 char *fields = trackDbSettingClosestToHome(tdb, trackDbVar);
 
-if (fields != NULL)
-    {
-    struct slName *thisField, *fieldList = slNameListFromComma(fields);
-    for(thisField = fieldList; thisField; thisField = thisField->next)
-        {
-        char *trimLabel = trimSpaces(thisField->name);
-        unsigned colNum = asColumnFindIx(as->columnList, trimLabel);
-        if (colNum == -1)
-            errAbort("cannot find field named '%s' in as file '%s'", 
-                trimLabel, as->name);
+if (fields == NULL)
+    return NULL;
 
-        slAddHead(&list, slPairNew(trimLabel, NULL + colNum));
-        }
+if (sameString(fields, "none"))
+    return slPairNew("none", NULL);
+
+struct slPair *list = NULL;
+struct slName *thisField, *fieldList = slNameListFromComma(fields);
+for(thisField = fieldList; thisField; thisField = thisField->next)
+    {
+    char *trimLabel = trimSpaces(thisField->name);
+    unsigned colNum = asColumnFindIx(as->columnList, trimLabel);
+    if (colNum == -1)
+        errAbort("cannot find field named '%s' in AS file '%s'", 
+            trimLabel, as->name);
+
+    slAddHead(&list, slPairNew(trimLabel, NULL + colNum));
     }
 
 slReverse(&list);
@@ -5829,12 +5832,15 @@ return list;
 void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb)
 /* If there is a labelFields for a bigBed, this routine is called to put up the label options. */
 {
+if (trackDbSettingClosestToHomeOn(tdb, "linkIdInName"))
+    return;
+
 struct asObject *as = asForDb(tdb, db);  
 struct slPair *labelList = buildFieldList(tdb, "labelFields",  as);
 struct slPair *defaultLabelList = buildFieldList(tdb, "defaultLabelFields",  as);
 char varName[1024];
 
-if (labelList == NULL)
+if ((labelList == NULL) || sameString(labelList->name, "none"))
     return;
 
 printf("<B>Label:</B> ");
@@ -5845,6 +5851,8 @@ for(; thisLabel; thisLabel = thisLabel->next)
     boolean isDefault = FALSE;
     if (defaultLabelList == NULL)
         isDefault = (thisLabel == labelList);
+    else if (sameString(defaultLabelList->name, "none"))
+        isDefault = FALSE;
     else
         isDefault = (slPairFind(defaultLabelList, thisLabel->name) != NULL);
 
