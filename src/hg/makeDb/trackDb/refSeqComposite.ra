@@ -5,7 +5,7 @@ shortLabel NCBI RefSeq
 longLabel RefSeq gene predictions from NCBI
 group genes
 visibility pack
-color 16,93,235
+color 12,12,120
 type genePred
 dragAndDrop subTracks
 noInherit on
