@@ -278,6 +278,16 @@ slReverse(&listOut);
 return listOut;
 }
 
+static char *joinerFilePath()
+/* Return the location of all.joiner - default is ./all.joiner but a different file
+ * can be substituted using environment variable ALL_JOINER_FILE */
+{
+char *joinerFile = getenv("ALL_JOINER_FILE");
+if (isEmpty(joinerFile))
+    joinerFile = JOINER_FILE;
+return joinerFile;
+}
+
 static void asdInitBaselineQuery(struct annoStreamDb *self)
 /* Build a dy SQL query with no position constraints (select ... from ...)
  * possibly including joins and filters if specified (where ...). */
@@ -287,7 +297,7 @@ if (self->relatedDtfList)
     struct joinerDtf *outputFieldList = slCat(joinerDtfCloneList(self->mainTableDtfList),
                                               joinerDtfCloneList(self->relatedDtfList));
     if (self->joiner == NULL)
-        self->joiner = joinerRead(JOINER_FILE);
+        self->joiner = joinerRead(joinerFilePath());
     int expectedRows = sqlRowCount(self->conn, self->table);
     self->joinMixer = joinMixerNew(self->joiner, self->db, self->table, outputFieldList,
                                    expectedRows, self->naForMissing);

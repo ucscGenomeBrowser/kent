@@ -867,7 +867,7 @@ struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, 64*1024*10
 struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
 lineFileClose(&lf);
 
-char *tagStormName = hashFindVal(genome->settingsHash, "tagStorm");
+char *tagStormName = hashFindVal(genome->settingsHash, "metaDb");
 char *absStormName  = NULL;
 if (tagStormName)
     absStormName  = trackHubRelativeUrl(hub->url, tagStormName);
@@ -878,7 +878,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     expandBigDataUrl(hub, genome, tdb);
     if  (absStormName)
-        hashReplace(tdb->settingsHash, "tagStorm", absStormName);
+        hashReplace(tdb->settingsHash, "metaDb", absStormName);
     }
 
 validateTracks(hub, genome, tdbList);

@@ -112,18 +112,26 @@ specified have data. Positions not specified do not have data and will not be gr
 specified in the input data must be in numerical order.</p>
 <p>
 <strong>1-start coordinate system in use for variableStep and fixedStep</strong><br>
-For compatibility purposes, certain wigs and bigWigs are an exception to how coordinates are always 
-stored (&quot;0-start, half-open&quot; in tables, &quot;1-start, fully-closed&quot; as positioned 
-within the browser). BigWigs created from bedGraph are stored as &quot;0-start, half-open&quot; 
-just like most other data, but bigWigs created from variableStep and fixedStep are an exception, 
-stored as &quot;1-start, fully-closed.&quot; For example, for a chromosome of length N, the first 
+BigWig files created from bedGraph format use &quot;0-start, half-open&quot; coordinates, but
+bigWigs that represent variableStep and fixedStep data are generated from wiggle files that
+use "1-start, fully-closed" coordinates. 
+For example, for a chromosome of length N, the first 
 position is 1 and the last position is N. For more information, see:
-<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/20639541/" target="_blank">BigWig and 
-BigBed: enabling browsing of large distributed datasets</a>.</p>
+<ul>
+  <li>
+  <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/20639541/" target="_blank">BigWig and 
+  BigBed: enabling browsing of large distributed datasets</a> (<em>Bioinformatics</em>)</li>
+  <li>
+  <a href="../../FAQ/FAQtracks.html#tracks1">Database/browser start coordinates differ by 1
+  base</a> (Genome Browser FAQ)</li>
+  <li>
+  <a href="http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/"
+  target="_blank">The UCSC Genome Browser Coordinate Counting Systems</a> (Genome Browser blog)</li>
+</ul>
 <p>
-<strong>Parameters for custom wiggle track definition lines</strong><br
+<strong>Parameters for custom wiggle track definition lines</strong><br>
 All options are placed in a single line separated by spaces (line breaks are inserted in the
-following example for display purposes):</p> 
+following example to facilitate readability):</p> 
 <pre><code><strong>track type</strong>=wiggle_0 <strong>name</strong>=<em>track_label</em>
 <strong>description=</strong><em>center_label</em>
 <strong>visibility=</strong><em>display_mode</em> <strong>color=</strong><em>r,g,b</em>

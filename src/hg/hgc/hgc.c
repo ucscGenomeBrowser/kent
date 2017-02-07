@@ -275,10 +275,6 @@ void printLines(FILE *f, char *s, int lineSize);
 
 char mousedb[] = "mm3";
 
-/* JavaScript to automatically submit the form when certain values are
- * changed. */
-char *onChangeAssemblyText = "onchange=\"document.orgForm.submit();\"";
-
 #define NUMTRACKS 9
 int prevColor[NUMTRACKS]; /* used to optimize color change html commands */
 int currentColor[NUMTRACKS]; /* used to optimize color change html commands */
@@ -1538,7 +1534,7 @@ int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
 int start = 0;
 char *type = cloneString(tdb->type);
 char *word = nextWord(&type);
-if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred")))
+if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
@@ -3001,6 +2997,32 @@ if (showAll)
 else
     bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
 
+
+/* print out extra fields */
+boolean firstTime = TRUE;
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    char *restFields[256];
+    int restCount = chopTabs(cloneString(bb->rest), restFields);
+    if (sameString(restFields[0], item))
+        {
+        int bedSize = 25;
+        int restBedFields = bedSize - 3;
+        if (restCount > restBedFields)
+            {
+            if (firstTime)
+                {
+                printf("<B> %s Extra fields:</B><BR>", item);
+                firstTime = FALSE;
+                };
+
+            char **extraFields = (restFields + restBedFields);
+            int extraFieldCount = restCount - restBedFields;
+            int printCount = extraFieldsPrint(tdb,NULL,extraFields, extraFieldCount);
+            printCount += 0;
+            }
+        }
+    }
 
 char *bedRow[32];
 char startBuf[16], endBuf[16];
@@ -7174,6 +7196,7 @@ for (i=1; i<=blockCount; ++i)
 	    bodyTn.forCgi, i, i);
     }
 fprintf(index, "<A HREF=\"../%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+htmEnd(index);
 fclose(index);
 chmod(indexTn.forCgi, 0666);
 
@@ -10101,7 +10124,10 @@ printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
 
 /* print UCSC Genes in the reported region */
 sqlSafef(query, sizeof(query),
-      "select distinct t.name from knownCanonToDecipher t, kgXref x  where value ='%s' and x.kgId=t.name order by geneSymbol", itemName);
+      "select distinct t.name "
+      // mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
+      ", geneSymbol "
+      "from knownCanonToDecipher t, kgXref x  where value ='%s' and x.kgId=t.name order by geneSymbol", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -22946,6 +22972,7 @@ for (i=1; i<=blockCount; ++i)
 	    bodyTn.forCgi, i, i);
     }
 fprintf(index, "<A HREF=\"../%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+htmEnd(index);
 fclose(index);
 chmod(indexTn.forCgi, 0666);
 
@@ -24980,7 +25007,10 @@ void doSnakeClick(struct trackDb *tdb, char *itemName)
 /* Put up page for snakes. */
 {
 struct trackDb *parentTdb = trackDbTopLevelSelfOrParent(tdb);
-char *otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
+char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
+if (otherSpecies == NULL)
+    otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
+
 char *hubName = cloneString(database);
 char otherDb[4096];
 char *qName = cartOptionalString(cart, "qName");
@@ -25287,7 +25317,7 @@ else if (sameString(track, "variome.delete"))
     doDeleteVariomeItem(item, seqName, winStart, winEnd);
 else if (sameString(track, "variome.addComments"))
     doAddVariomeComments(item, seqName, winStart, winEnd);
-else if (startsWith("transMapAln", table) || startsWith("reconTransMapAln", table))
+else if (startsWith("transMapAln", table))
     transMapClickHandler(tdb, item);
 else if (startsWith("hgcTransMapCdnaAli", table))
     {

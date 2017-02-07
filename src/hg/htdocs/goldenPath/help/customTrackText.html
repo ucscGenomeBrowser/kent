@@ -7,19 +7,28 @@ possible for users to upload their own annotation data for temporary display in 
 custom annotation tracks are viewable only on the machine from which they were uploaded and are 
 automatically discarded 48 hours after the last time they are accessed, unless they are saved in a 
 <a href="/goldenPath/help/hgSessionHelp.html#CTs">Session</a>. Optionally, users can make custom 
-annotations viewable by others as well.</p>
+annotations viewable by others as well. For a more stable option for custom annotations, we suggest
+using <a href="hgTrackHubHelp.html" target="_blank">track hubs</a>. A third, more technical, option is to operate a mirror. Custom tracks work well for quickly displaying data, while track hubs are 
+more configurable and permanent.</p>
 <p>
 Custom tracks are a wonderful tool for research scientists using the Genome Browser. Because space 
 is limited in the Genome Browser track window, many excellent genome-wide tracks cannot be included 
 in the standard set of tracks packaged with the browser. Other tracks of interest may be excluded 
 from distribution because the annotation track data is too specific to be of general interest or 
-can't be shared until journal publication. Many individuals and labs have contributed custom tracks 
-to the Genome Browser website for use by others. To view a list of these custom annotation tracks, click the <a href="../customTracks/custTracks.html">Custom Tracks</a> link on the Genome Browser home
-page.</p>
+can't be shared until journal publication. In the past, many individuals and labs contributed custom
+tracks to the Genome Browser website for use by others. To view a list of these custom annotation 
+tracks, click <a href="../customTracks/custTracks.html">here</a>.</p>
+<p>
+Track hubs are now the preferred approach for viewing and sharing data on the Browser. Labs, 
+consortia, and institutions submit their hubs to be listed as a <a href="hgTrackHubHelp.html#View" 
+target="_blank">Public Hub</a>. Track hubs require remotely hosted data. They use binary index 
+files which allow the browser to quickly access only what is relevant for the current region being 
+viewed in the browser. See the <a href="hgTrackHubHelp.html" target="_blank">track hub help 
+page</a> for more information.</p>
 <p> 
 Custom annotation tracks are similar to standard tracks, but never become part of the MySQL genome 
 database. Each track has its own controller and persists even when not displayed in the Genome 
-Browser window, e.g. if the position changes to a range that no longer includes the track. 
+Browser window, e.g., if the position changes to a range that no longer includes the track. 
 Typically, custom annotation tracks are aligned under corresponding genomic sequence, but they can 
 also be completely unrelated to the data. For example, a track can be displayed under a long 
 sequence consisting of millions of <em>N</em>s.</p>
@@ -95,7 +104,6 @@ chr22   20100700 20100900</code></pre>
 <p>
 Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/ct_example1.txt" 
 target="_blank">here</a> to view this track in the Genome Browser.</p>
-
 <p>
 <strong><em>Example #2:</em></strong><br>
 Here is an example of an annotation file that defines 2 separate annotation tracks in BED format. 
@@ -230,11 +238,12 @@ multiple genome assemblies.</p>
 To load a custom track into the Genome Browser:</p>
 <p>
 <strong>Step 1. Open the Add Custom Tracks page</strong><br>
-Click the &quot;add custom tracks&quot; button on the Genome Browser 
-<a href="../../cgi-bin/hgGateway">Gateway page</a>. (Note: if one or more tracks have already been 
-uploaded during the current Browser session, additional tracks may be loaded on the Manage Custom 
-Tracks page. In this case, the button on the Gateway page will be labeled &quot;manage custom 
-tracks&quot; and will automatically direct you to the track management page. See 
+Select the top blue bar &quot;My Data&quot; menu and click <a href="../../cgi-bin/hgCustom">Custom 
+Tracks</a>. Or, when browsing tracks, click the &quot;add custom tracks&quot; button below the 
+<a href="../../cgi-bin/hgTracks">Genome Browser</a>. (Note: if one or more tracks have already
+been uploaded during the current Browser session, additional tracks may be loaded on the Manage 
+Custom Tracks page. In this case, the button on the Browser page will be labeled &quot;manage 
+custom tracks&quot; and will automatically direct you to the track management page. See 
 <a href="#MANAGE_CT">Displaying and Managing Custom Tracks</a> for more information.)</p>
 <p>
 <strong>Step 2. Load the custom track data</strong><br>
@@ -341,18 +350,20 @@ The following track information is displayed in the Manage Custom Tracks table:<
   <strong>Name: </strong> a hyperlink to the Update Custom Track page where you can update your 
   track configuration and data.</li>
   <li>
-  <strong>Description: </strong>the value of the "description" attribute from the track line, if 
-  present. If no description is included in the input file, this field contains the track name.</li>
+  <strong>Description: </strong>the value of the &quot;description&quot; attribute from the track 
+  line, if present. If no description is included in the input file, this field contains the track 
+  name.</li>
   <li>
   <strong>Type: </strong>the track type, determined by the Browser based on the format of the 
   data.</li>  
   <li>
-  <strong>Doc: </strong>displays "Y" (Yes) if a description page has been uploaded for the track; 
-  otherwise the field is blank.</li> 
+  <strong>Doc: </strong>displays &quot;Y&quot; (Yes) if a description page has been uploaded for the
+  track; otherwise the field is blank.</li> 
   <li>
   <strong>Items: </strong>the number of data items in the custom track file. An item count is not 
   displayed for tracks lacking individual items (e.g. wiggle format data).</li> 
-  <li><strong>Pos: </strong>the default chromosomal position defined by the track file in either the
+  <li>
+  <strong>Pos: </strong>the default chromosomal position defined by the track file in either the
   browser line &quot;position&quot; attribute or the first data line. Click this link to open the 
   Genome Browser or Table Browser at the specified position (Note: only the chromosome name is shown
   in this column). The Pos column remains blank if the track lacks individual items (e.g. wiggle 
@@ -418,22 +429,20 @@ is uploaded. Each line defines one display attribute. Browser lines consist of t
 <pre><code>browser attribute_name attribute_value(s)</code></pre>
 
 <p>
-For example, if the browser line <tt>browser position chr22:1-20000</tt> is included in the 
+For example, if the browser line <code>browser position chr22:1-20000</code> is included in the 
 annotation file, the Genome Browser window will initially display the first 20000 bases of chr 
 22.</p>
 <p>
 The following browser line attribute name/value options are available. The value 
-<em>track_name</em> must be set to the name of the primary table on which the the track is based. 
-To identify this table, open up the <a href="../../cgi-bin/hgTables" 
-target="_blank">Table Browser</a>, select the correct genome assembly, then select the track name 
-from the <em>track</em> list. The <em>table</em> list will show the primary table. Alternatively, 
-the primary table name can be obtained from a mouseover on the track name in the track control 
-section.</p>
+<em>track_primary_table_name</em> must be set to the name of the primary table on which the the 
+track is based. You can find instructions on how to find this table name in the video 
+&quot;<a href="../../training/vids/index.html#vid06" target="_blank">How do I learn which tables 
+belong to a data track on the UCSC Genome Browser?</a>&quot;.</p>
 <p>
-Note that composite track subtracks are not valid <em>track_name</em> values. To find the symbolic 
-name of a composite track, look in the <em>tableName</em> field in the <em>trackDb</em> table, or 
-mouseover the track name in the track control section. It is not possible to display only a subset
-of the subtracks at this time.</p>
+Note that composite track subtracks are not valid <em>track_primary_table_name</em> values. To find 
+the symbolic name of a composite track, look in the <em>tableName</em> field in the <em>trackDb</em>
+table, or mouse over the track name in the track control section. It is not possible to display only
+a subset of the subtracks at this time.</p>
 <ul>
   <li>
   <strong>position <<em>position</em>></strong> - Determines the part of the genome that the Genome 

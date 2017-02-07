@@ -1,21 +1,6 @@
 kentSrc = ../../..
-include ${kentSrc}/inc/localEnvironment.mk
-include ${kentSrc}/inc/common.mk
-
-MYLIBDIR = ${kentSrc}/lib/$(MACHTYPE)
-MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
-L += -lm -lz
-
 A = pslMap
-O = pslMap.o
-
-all: ${BINDIR}/pslMap
-
-
-${BINDIR}/${A}${EXE}: ${O} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
-	@rm -f usage.msg
+include ${kentSrc}/inc/userApp.mk
 
 pslMap.o: usage.msg
 
@@ -25,11 +10,5 @@ usage.msg: usage.txt
 	${STRINGIFY} $< >> $@.tmp
 	mv -f $@.tmp $@
 
-compile:: ${BINDIR}/${A}${EXE}
-
-test:: compile
-	(cd tests && ${MAKE} test)
-
 clean::
-	rm -f ${A} ${O} usage.msg
-	(cd tests && ${MAKE} clean)
+	rm -f usage.msg

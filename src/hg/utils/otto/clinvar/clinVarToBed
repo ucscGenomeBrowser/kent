@@ -139,7 +139,7 @@ def parseVariationAlleleFile(varFname):
 def parseHgvsFile(hgvsFname):
     " return dict: allele Id -> (hgvs coding, hgvs protein) "
     logging.info("Parsing %s" % hgvsFname)
-    expHead	= "#Symbol	GeneID	VariationID	AlleleID	Type	Assembly	NucleotideExpression	NucleotideChange	ProteinExpression	ProteinChange"
+    expHead	= "#Symbol	GeneID	VariationID	AlleleID	Type	Assembly	NucleotideExpression	NucleotideChange	ProteinExpression	ProteinChange	UsedForNaming	Submitted	OnRefSeqGene"
     allToHgvs = {}
     foundHead = False
     for line in gzip.open(hgvsFname):

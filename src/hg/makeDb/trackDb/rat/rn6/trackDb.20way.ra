@@ -1,0 +1,102 @@
+track cons20way
+compositeTrack on
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (20 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+
+    track cons20wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons20way
+
+        track multiz20way
+        subTrack cons20wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 20 Vertebrates
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz20waySummary
+        frames multiz20wayFrames
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault rn6
+        speciesGroups Vertebrate
+        sGroup_Vertebrate mm10 micOch1 cavPor3 oryCun2 hg38 panTro5 rheMac8 tarSyr2 canFam3 ailMel1 felCat8 bosTau8 monDom5 ornAna2 galGal5 melGal5 xenTro7 danRer10 calMil1
+        itemFirstCharCase noChange
+        treeImage phylo/rn6_20way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons20wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons20way
+    viewLimits -3:0.5
+    viewLimitsMax -4.611:0.934
+
+        track phyloP20way
+        subTrack cons20wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel 20 Vertebrates Cons
+        longLabel 20 vertebrates Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -8.546 3.488
+        maxHeightPixels 100:50:11
+        viewLimits -1:2
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons20wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons20way
+
+        track phastCons20way
+        subTrack cons20wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel 20 Vertebrates Cons
+        longLabel 20 vertebrates conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons20wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons20way
+
+        track phastConsElements20way
+        subTrack cons20wayViewelements on
+        subGroups view=elements
+        shortLabel 20 Vertebrates El
+        longLabel 20 vertebrates Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

@@ -13,7 +13,6 @@
 #include "hash.h"
 #include "localmem.h"
 #include "options.h"
-#include "bamFile.h"
 #include "hmmstats.h"
 #include "bamFile.h"
 #include "md5.h"

@@ -219,6 +219,7 @@ itemRgb bedDetail bedGraph bed bedLogR bigBed
 lfPslTable bed
 linesAt chromGraph
 linkIdInName bed bigBed
+labelFields bigBed bigPsl bigGenePred
 labelOnFeature bed bigBed
 longLabel *
 longlabel genePred
@@ -418,6 +419,7 @@ transMapGene psl bigPsl
 transMapInfo psl bigPsl
 transMapSrc psl bigPsl
 transMapTypeDesc psl bigPsl
+transMapSrcSet psl bigPsl
 transformFunc bed bedGraph wig bigWig
 treeImage wigMaf
 txInfo genePred

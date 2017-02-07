@@ -317,6 +317,8 @@ char *cdwAllowedTags[] = {
     "seq_library_prep",
     "seq_sample",
     "sorting",
+    "sorting_protocol",
+    "subcellular_localization",
     "species",
     "species_source_common_name",
     "sra_run",
@@ -524,6 +526,17 @@ char *strain[] =
 "Sftpc-Cre-ER-T2A-rtta -/- teto-GFP-H2B +/-",
 "Aqp5-Cre-ER +/- mtmg-tdTomato -/-",
 };
+char *subcellular_localization[] =
+{
+"cytoplasm",
+"monosome",
+"polysome",
+"light polysome",
+"heavy polysome",
+"membrane",
+"insoluble",
+"nucleus",
+};
 char *immunoprecipitation_target[] =
 {
 "H3K4Me1",
@@ -545,6 +558,8 @@ hashAdd(hash, "fluidics_chip", makeStringHash(fluidics_chip, ArraySize(fluidics_
 hashAdd(hash, "assay_platform", makeStringHash(assay_platform, ArraySize(assay_platform)));
 hashAdd(hash, "species", makeStringHash(species, ArraySize(species)));
 hashAdd(hash, "strain", makeStringHash(strain, ArraySize(strain)));
+hashAdd(hash, "subcellular_localization", 
+    makeStringHash(subcellular_localization, ArraySize(subcellular_localization)));
 hashAdd(hash, "immunoprecipitation_target", 
     makeStringHash(immunoprecipitation_target, ArraySize(immunoprecipitation_target)));
 return hash;

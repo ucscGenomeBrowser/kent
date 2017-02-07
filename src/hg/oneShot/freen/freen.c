@@ -21,17 +21,25 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-
-void *needMem(size_t size)
-{
-errAbort("No memory for you.");
-return NULL;
-}
-
-void freen(char *input)
+void freen(char *inFile)
 /* Test something */
 {
-needMem(1000);
+short s = -1;
+unsigned short us = s;
+short maxShort = (us/2);
+short minShort = -maxShort - 1;
+printf("s = %d, us=%d\n", (int)s, (int)us);
+printf("minShort %d, maxShort %d\n", (int)minShort, (int)maxShort);
+
+long long ll = -1;
+unsigned long long ull = ll;
+printf("ll = %lld, ull=%lld\n", ll, ull);
+long long maxLongLong = ull/2;
+long long minLongLong = -maxLongLong - 1;
+printf("minLongLong %lld, maxLongLong %lld\n", minLongLong, maxLongLong);
+printf("minLongLong 0x%llx, maxLongLong 0x%llx\n", minLongLong, maxLongLong);
+printf("sizeof(int) %d, sizeof(long) %d, sizeof(long long) %d\n", 
+    (int)sizeof(int), (int)sizeof(long), (int)sizeof(long long));
 }
 
 int main(int argc, char *argv[])

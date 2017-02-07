@@ -1115,26 +1115,43 @@ for (jf = js->fieldList; jf != NULL; jf = jf->next)
 return NULL;
 }
 
+static char *skipPrefix(char *prefix, char *string)
+/* If string starts with prefix, return a pointer into string just past the prefix;
+ * otherwise just return string.  Do not free result. */
+{
+if (startsWith(prefix, string))
+    return string + strlen(prefix);
+else
+    return string;
+}
+
+static boolean wildExists(char *database, char *table)
+/* Do a SQL wildcard search for table in database. */
+{
+boolean exists = FALSE;
+struct sqlConnection *conn = hAllocConnMaybe(database);
+if (conn != NULL)
+    exists = sqlTableWildExists(conn, table);
+hFreeConn(&conn);
+return exists;
+}
+
 static boolean tableExists(char *database, char *table, char *splitPrefix)
 /* Return TRUE if database and table exist.  If splitPrefix is given,
  * check for existence with and without it. */
 {
-struct sqlConnection *conn = hAllocConnMaybe(database);
-if (conn == NULL)
-    return FALSE;
 char t2[1024];
 if (isNotEmpty(splitPrefix))
     safef(t2, sizeof(t2), "%s%s", splitPrefix, table);
 else
     safef(t2, sizeof(t2), "%s", table);
-boolean hasSqlWildcard = (strchr(t2, '%') || strchr(t2, '_'));
-boolean exists = hasSqlWildcard ? sqlTableWildExists(conn, t2) : hTableExists(database, t2);
+boolean hasSqlWildcard = (strchr(t2, '%') || strchr(skipPrefix("all_", t2), '_'));
+boolean exists = hasSqlWildcard ? wildExists(database, t2) : hTableExists(database, t2);
 if (!exists && isNotEmpty(splitPrefix))
     {
     hasSqlWildcard = (strchr(table, '%') || strchr(table, '_'));
-    exists = hasSqlWildcard ? sqlTableWildExists(conn, table) : hTableExists(database, table);
+    exists = hasSqlWildcard ? wildExists(database, table) : hTableExists(database, table);
     }
-hFreeConn(&conn);
 return exists;
 }
 

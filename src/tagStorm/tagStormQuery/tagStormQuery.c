@@ -12,10 +12,27 @@ void usage()
 {
 errAbort(
   "tagStormQuery - Find stanzas in tag storm based on SQL-like query.\n"
+  "Only select statements are allowed.  No joins are allowed. Sql functions are also\n"
+  "not allowed except for count(*).  The * is allowed in the field list in a more general way \n"
+  "than SQL, but otherwise it is a subset of SQL\n"
   "usage:\n"
   "   tagStormQuery 'query'\n"
-  "options:\n"
-  "   -xxx=XXX\n"
+  "examples:\n"
+  "   tagStormQuery 'select name,number from tagStorm.txt where number > 100'\n"
+  "       This will print out the name and number fields where the number field is over 100\n"
+  "       from stanzas in the file tagStorm.txt\n" 
+  "   tagStormQuery 'select n*,m* from tagStorm.txt where number != 0'\n"
+  "       This will print out all fields starting with 'n' or 'm' where number is non-zero\n"
+  "   tagStormQuery 'select * from tagStorm.txt where name'\n"
+  "       This prints out all fields in stanzas where name is defined\n"
+  "   tagStormQuery 'select a,b,c from tagStorm.txt'\n"
+  "       This prints out the a,b, and c fields from tagStorm.txt\n"
+  "   tagStormQuery 'select count(*) from tagStorm.txt where name and not number'\n"
+  "       Print out number of stanzas where name is defined but number is not\n"
+  "   tagStormQuery 'select * from tagStorm.txt where name like \"%%Smith\"'\n"
+  "       Print out everything from stanzas where name tag ends in \"Smith\"'\n"
+  "   tagStormQuery 'select * from tagStorm.txt where number=1 or number=2'\n"
+  "       Print out all fields where number is one or two\n"
   );
 }
 
@@ -24,14 +41,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-static char *lookupField(void *record, char *key)
-/* Lookup a field in a tagStanza. */
-{
-struct tagStanza *stanza = record;
-return tagFindVal(stanza, key);
-}
-
-boolean statementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
+boolean tagStanzaRqlMatch(struct rqlStatement *rql, struct tagStanza *stanza,
 	struct lm *lm)
 /* Return TRUE if where clause and tableList in statement evaluates true for tdb. */
 {
@@ -40,7 +50,7 @@ if (whereClause == NULL)
     return TRUE;
 else
     {
-    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, lookupField, lm);
+    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, tagStanzaRqlLookupField, lm);
     res = rqlEvalCoerceToBoolean(res);
     return res.val.b;
     }
@@ -60,7 +70,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	traverse(tags, stanza->children, rql, lm);
     else    /* Just apply query to leaves */
 	{
-	if (statementMatch(rql, stanza, lm))
+	if (tagStanzaRqlMatch(rql, stanza, lm))
 	    {
 	    ++matchCount;
 	    if (doSelect)

@@ -6,7 +6,11 @@ use warnings;
 my $argc = scalar(@ARGV);
 
 sub usage() {
-  printf STDERR "usage: prepConfig.pl <db> <clade> <trackDbDir> ./refseq/*_assembly_report.txt\n";
+  printf STDERR "usage: prepConfig.pl <db> <clade> <trackDbDir> ./refseq/*_assembly_report.txt\n\n";
+  printf STDERR "also expects to find photoReference.txt file in this directory\n";
+  printf STDERR " with two lines:\n";
+  printf STDERR "photoCreditURL xxx\n";
+  printf STDERR "photoCreditName xxx\n\n";
   printf STDERR "must specify a <db> UCSC database id\n";
   printf STDERR "where clade is one of:\n";
   print STDERR `hgsql -N -e 'select name from clade order by priority;' hgcentraltest | xargs echo | fold -s -w 60 | sed -e 's/^/# /;'`;
@@ -37,7 +41,7 @@ my $mitoChr2Acc = $asmReport;
 $mitoChr2Acc =~ s/_assembly_report.txt//;
 $mitoChr2Acc .= "_assembly_structure/non-nuclear/assembled_chromosomes/chr2acc";
 
-my @monthNumber = qw( Zero Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+my @monthNumber = qw( Zero Jan. Feb. Mar. Apr. May Jun. Jul. Aug. Sep. Oct. Nov. Dec. );
 my $asmDate = "notFound";
 my $asmName = "notFound";
 my $sciName = "notFound";
@@ -46,6 +50,7 @@ my $submitter = "notFound";
 my $genBankAccessionID = "notFound";
 my $taxId = "notFound";
 my $ncbiBioProject = "notFound";
+my $ncbiBioSample = "notFound";
 my $ncbiGenomeId = "notFound";
 my $ncbiAssemblyId = "notFound";
 my $genomeCladePriority = "notFound";
@@ -54,9 +59,9 @@ open (FH, "<$asmReport") or die "can not read $asmReport";
 while (my $line = <FH>) {
   chomp $line;
   $line =~ s///g;
-  if ($line =~ m/^#\s+Assembly name:/) {
+  if ($line =~ m/^#\s+Assembly name:/i) {
     $asmName = $line;
-    $asmName =~ s/.*y name:\s+//;
+    $asmName =~ s/.*y name:\s+//i;
     $ncbiAssemblyId = `wget -O /dev/stdout "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=assembly&term=$asmName" 2> /dev/null | grep "<Id>" | head -1 | sed -e 's/[<>Id/]//g;'`;
     chomp $ncbiAssemblyId;
   } elsif ($line =~ m/^#\s+Organism name:/) {
@@ -69,10 +74,6 @@ while (my $line = <FH>) {
     $sciName = $line;
     $sciName =~ s/.*m name:\s+//;
     $sciName =~ s/\s+\(.*//;
-#    my $searchTerm = $sciName;
-#    $searchTerm =~ s/ /%20/g;
-#    $ncbiGenomeId = `wget -O /dev/stdout "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=$searchTerm" 2> /dev/null | grep "<Id>" |  sed -e 's/[<>Id/]//g;'`;
-    chomp $ncbiGenomeId;
   } elsif ($line =~ m/^#\s+Date:/) {
     $asmDate = $line;
     $asmDate =~ s/.*Date:\s+//;
@@ -81,13 +82,16 @@ while (my $line = <FH>) {
   } elsif ($line =~ m/^#\s+Submitter:/) {
     $submitter = $line;
     $submitter =~ s/.*Submitter:\s+//;
-  } elsif ($line =~ m/^#\s+RefSeq assembly accession:/) {
+  } elsif ($line =~ m/^#\s+RefSeq assembly accession:/i) {
     $genBankAccessionID = $line;
-    $genBankAccessionID =~ s/.*accession:\s+//;
+    $genBankAccessionID =~ s/.*ccession:\s+//;
     $genBankAccessionID =~ s/ .*//;
   } elsif ($line =~ m/^#\s+Taxid:/) {
     $taxId = $line;
     $taxId =~ s/.*Taxid:\s+//;
+  } elsif ($line =~ m/^#\s+BioSample:/) {
+    $ncbiBioSample = $line;
+    $ncbiBioSample =~ s/.*BioSample:\s+//;
   } elsif ($line =~ m/^#\s+BioProject:/) {
     $ncbiBioProject = $line;
     $ncbiBioProject =~ s/.*BioProject:\s+//;
@@ -126,6 +130,13 @@ if ( $genomeCladeExists != 1 ) {
   chomp $genomeCladePriority;
 }
 
+if ($ncbiGenomeId eq "notFound") {
+  my $searchTerm = $sciName;
+  $searchTerm =~ s/ /+/g;
+  $ncbiGenomeId = `wget -O /dev/stdout "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=$searchTerm" 2> /dev/null | grep "<Id>" |  sed -e 's/[<>Id/]//g;'`;
+  chomp $ncbiGenomeId;
+}
+
 printf "# config parameters for makeGenomeDb.pl:\n";
 printf "db %s\n", $db;
 printf "clade %s\n", $clade;
@@ -156,5 +167,6 @@ printf "ncbiGenomeId %s\n", $ncbiGenomeId;
 printf "ncbiAssemblyId %s\n", $ncbiAssemblyId;
 printf "ncbiAssemblyName %s\n", $asmName;
 printf "ncbiBioProject %s\n", $ncbiBioProject;
+printf "ncbiBioSample %s\n", $ncbiBioSample;
 printf "genBankAccessionID %s\n", $genBankAccessionID;
 printf "taxId %s\n", $taxId;

@@ -22,6 +22,7 @@ UTILS_APPLIST = \
 	bedExtendRanges \
 	bedToPsl \
 	bedWeedOverlapping \
+	bigMafToMaf \
 	bigPslToPsl \
 	chromGraphFromBin \
 	chromGraphToBin \
@@ -36,12 +37,14 @@ UTILS_APPLIST = \
 	gtfToGenePred \
 	hubCheck \
 	hubPublicCheck \
+	mafToBigMaf \
 	makeTableList \
 	oligoMatch \
 	overlapSelect \
 	positionalTblCheck \
 	pslToBigPsl \
 	pslMap \
+	pslMapPostChain \
 	tdbQuery \
 	transMapPslToGenePred \
 	twoBitMask

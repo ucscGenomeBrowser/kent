@@ -3,7 +3,34 @@ assay RNA-seq
 access all
 organ brain
 
-    donor 000
+    donor 001
+    age 6
+    age_units weeks
+    life_stage embryo
+    sex female
+    biosample_date 2015-01-10
+
+        organ liver
+        lab_kent_disassociation_protocol fetal_liver_digest.pdf
+        lab_kent_quality 0.04
+
+            file ex00do00or02fa00.fq.gz
+            format fastq
+            part 1
+
+            file ex00do00or02fa01.fq.gz
+            format fastq
+            part 2
+
+            file ex00do00or02fa02.fq.gz
+            format fastq
+            part 3
+
+            file ex00do00or02fa03.fq.gz
+            format fastq
+            part 4
+
+    donor 003
     age 5
     age_units weeks
     life_stage embryo
@@ -50,27 +77,6 @@ organ brain
             file ex00do00or01fa03.fq.gz
             format fastq
             part 4
-
-        organ liver
-        lab_kent_disassociation_protocol fetal_liver_digest.pdf
-        lab_kent_quality 0.04
-
-            file ex00do00or02fa00.fq.gz
-            format fastq
-            part 1
-
-            file ex00do00or02fa01.fq.gz
-            format fastq
-            part 2
-
-            file ex00do00or02fa02.fq.gz
-            format fastq
-            part 3
-
-            file ex00do00or02fa03.fq.gz
-            format fastq
-            part 4
-
 
 lab lab_2
 assay RNA-seq
@@ -143,4 +149,49 @@ organ brain
             file ex01do00or02fa03.fq.gz
             format fastq
             part 4
+
+	organ gall bladder
+        lab_kent_quality 0.05
+
+            file ex01do00or03fa00.fq.gz
+            format fastq
+            part 1
+
+
+lab lab_3
+assay RNA-seq
+access group
+
+    donor 003
+    age 4
+    age_units weeks
+    life_stage embryo
+    sex female
+    biosample_date 2015-02-00
+
+	organ gall bladder
+	lab_kent_quality 0.06
+
+	    file ex01do03or03fa00.fq.gz
+	    format fastq
+	    part 1
+
+    donor 003
+    age 4
+    age_units weeks
+    life_stage embryo
+    sex female
+    biosample_date 2015-02-00
+
+	organ stomach
+	lab_kent_quality 0.07
+
+	    file ex01do03or03fa02.fq.gz
+	    format fastq
+	    part 1
+
+
+
+
+
 

@@ -11,8 +11,14 @@ strainList = GCA_001624185.1_129S1_SvImJ_v1 GCA_001624215.1_A_J_v1 \
 install::
 	@for D in ${strainList}; do \
 	    echo $$D ; \
-	    rm -f /hive/data/genomes/asmHubs/hubLinks/$$D/html/rnaSeqStar.html ; \
-	    cp -p rnaSeqStar.html /hive/data/genomes/asmHubs/hubLinks/$$D/html/rnaSeqStar.html ; \
 	    rm -f /hive/data/genomes/asmHubs/hubLinks/$$D/rnaSeqData/$$D.trackDb.txt ; \
 	    cp -p $$D/rnaSeqData/$$D.trackDb.txt /hive/data/genomes/asmHubs/hubLinks/$$D/rnaSeqData/$$D.trackDb.txt ; \
+	    rm -f /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.trackDb.txt ; \
+	    rm -f /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.bigMaf.trackDb.txt ; \
+	    cp -p $$D/$$D.trackDb.txt /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.trackDb.txt ;\
+	    cp -p $$D/$$D.bigMaf.trackDb.txt /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.bigMaf.trackDb.txt ;\
 	done
+	rm -f /hive/data/genomes/asmHubs/hubLinks/rnaSeqStar.html
+	cp -p rnaSeqStar.html /hive/data/genomes/asmHubs/hubLinks/rnaSeqStar.html
+	rm -f /hive/data/genomes/asmHubs/hubLinks/mouseStrains.html
+	cp -p mouseStrains.html /hive/data/genomes/asmHubs/hubLinks/mouseStrains.html

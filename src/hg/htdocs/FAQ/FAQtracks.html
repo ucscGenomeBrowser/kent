@@ -55,9 +55,7 @@ appear as one-based start, one-based end in the graphical display. The refGene.t
 database file, and consequently is based on the internal representation.</p> 
 <p> 
 We use this particular internal representation because it simplifies coordinate arithmetic, i.e. it 
-eliminates the need to add or subtract 1 at every step. Unfortunately, it does create some confusion
-when the internal representation is exposed or when we forget to add 1 before displaying a start 
-coordinate. However, it saves us from much trickier bugs. If you use a database dump file but would 
+eliminates the need to add or subtract 1 at every step. If you use a database dump file but would 
 prefer to see the one-based start coordinates, you will always need to add 1 to each start 
 coordinate.</p> 
 <p> 
@@ -67,6 +65,10 @@ browser will assume it is 0-based. You can see this both in our liftOver utility
 bar, by entering the same numbers in position or BED format and observing the results. Similarly, 
 any data returned by the browser in position format is 1-based, while data returned in BED format 
 is 0-based.</p>  
+<p> 
+For a detailed explanation, please see our blog entry for the 
+<a href="http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/"
+target="_blank">UCSC Genome Browser coordinate counting systems</a>.</p>
 
 <a name="tracks2"></a>
 <h2>mRNA associated results</h2>

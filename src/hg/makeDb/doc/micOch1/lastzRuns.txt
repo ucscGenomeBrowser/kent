@@ -1,0 +1,78 @@
+#########################################################################
+# LASTZ prarie vole/micOch1 vs. Chinese hamster - (DONE - 2014-05-18 - Hiram)
+    mkdir /hive/data/genomes/micOch1/bed/lastzCriGri1.2014-05-18
+    cd /hive/data/genomes/micOch1/bed/lastzCriGri1.2014-05-18
+
+    printf '# Praire vole vs. Chinese hamster
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/micOch1.criGri1/micOch1.criGri1.tuning.top400.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_M=50
+BLASTZ_O=400
+BLASTZ_E=30
+
+BLASTZ_T=2
+BLASTZ_X=1000
+BLASTZ_Y=3400
+BLASTZ_K=3000
+BLASTZ_L=3000
+BLASTZ_Q=/hive/data/genomes/micOch1/bed/lastzCriGri1.2014-05-27/micOch1.criGri1.tuning.Q.txt
+#       A     C     G     T
+# A   100  -177   -63  -166
+# C  -177    95  -183   -63
+# G   -63  -183    95  -177
+# T  -166   -63  -177   100
+
+# TARGET: Praire vole micOch1
+SEQ1_DIR=/hive/data/genomes/micOch1/micOch1.wmTrf.2bit
+SEQ1_LEN=/hive/data/genomes/micOch1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=200
+
+# QUERY: Chinese hamster criGri1
+SEQ2_DIR=/hive/data/genomes/criGri1/criGri1.wmTrf.2bit
+SEQ2_LEN=/hive/data/genomes/criGri1/chrom.sizes
+SEQ2_CHUNK=5000000
+SEQ2_LAP=0
+SEQ2_LIMIT=600
+
+BASE=/hive/data/genomes/micOch1/bed/lastzCriGri1.2014-05-27
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl \
+      -verbose=2 `pwd`/DEF \
+         -chainMinScore=5000 -chainLinearGap=medium \
+            -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+             -syntenicNet) > do.log 2>&1
+    # real    415m37.964s
+
+    cat fb.micOch1.chainCriGri1Link.txt
+    #  1589566722 bases of 2104321675 (75.538%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` micOch1 criGri1) \
+          > rbest.log 2>&1 &
+    #  real    68m5.404s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/criGri1/bed/blastz.micOch1.swap
+    cd /hive/data/genomes/criGri1/bed/blastz.micOch1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/micOch1/bed/lastzCriGri1.2014-05-27/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #	real    140m58.824s
+
+    cat fb.criGri1.chainMicOch1Link.txt
+    # 1624868863 bases of 2301325917 (70.606%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` criGri1 micOch1) \
+       > rbest.log 2>&1
+    # real    392m21.459s
+
+#########################################################################
+

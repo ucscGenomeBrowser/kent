@@ -1,4 +1,4 @@
-// subCfg the subtrack Configureation module (scm) for hgTrackUi
+// subCfg the subtrack Configuration module (scm) for hgTrackUi
 //
 // This module is for subtrack level config embedded dialogs in hgTrackUi.
 // Subtrack config dialogs are embedded in the subtrack table and get populated when first
@@ -503,13 +503,18 @@ var subCfg = { // subtrack config module.
 
     cfgFill: function (content, status)
     { // Finishes the population of a subtrack cfg.  Called by ajax return.
+
         var ix;
         var cfg = subCfg.currentCfg;
         subCfg.currentCfg = undefined;
         var cleanHtml = content;
         cleanHtml = stripJsFiles(cleanHtml,true);   // DEBUG msg with true
         cleanHtml = stripCssFiles(cleanHtml,true);  // DEBUG msg with true
-        cleanHtml = stripJsEmbedded(cleanHtml,true);// DEBUG msg with true
+	// Obsoleted by CSP2 nonce js? 
+        //cleanHtml = stripJsEmbedded(cleanHtml,true);// DEBUG msg with true 
+	var nonceJs = {};
+	cleanHtml = stripCSPAndNonceJs(cleanHtml, false, nonceJs); // DEBUG msg with true
+
         if (subCfg.visIndependent) {
             ix = cleanHtml.indexOf('</SELECT>');
             if (ix > 0)
@@ -528,20 +533,22 @@ var subCfg = { // subtrack config module.
             if (ix > 0)                            // Excludes vis!
                 cleanHtml = cleanHtml.substring(ix+'<B>Display&nbsp;mode:&nbsp;</B>'.length);
         }
-            //cleanHtml = cleanHtml.substring(ix);
         ix = cleanHtml.indexOf('</FORM>'); // start of form already chipped off
         if (ix > 0)
             cleanHtml = cleanHtml.substring(0,ix - 1);
 
         cleanHtml = "<div class='blueBox' style='background-color:#FFF9D2; padding:0.5em 1em 1em;'>"
                     + cleanHtml + "</div>";
+
         $(cfg).html(cleanHtml);
+
+	appendNonceJsToPage(nonceJs);
+
         $(cfg).addClass('filled');
         var boxWithin = $(cfg).find('.blueBox');
         if (boxWithin.length > 1)
             $(boxWithin[1]).removeClass('blueBox');
 
-        //$(cfg).html("<div style='font-size:.9em;'>" + cleanHtml + "</div>");
         var subObjs = $(cfg).find('input,select').filter("[name]");
         if (subObjs.length === 0) {
             warn('DEBUG: Did not find controls for cfg: ' + cfg.id);
@@ -853,11 +860,11 @@ var subCfg = { // subtrack config module.
             $(compObjs).each(function (i) {
                 if (this.type !== 'hidden') {
                     // DEBUG -------------
-                    if (this.id && this.id.length > 0
-                    && $(this).hasClass('filterBy') === false
-                    && $(this).hasClass('filterComp') === false)
-                        warn('DEBUG: Unexpected control with name ['+this.name + '], and id #'+
-                                                                                           this.id);
+                    //if (this.id && this.id.length > 0
+                    //&& $(this).hasClass('filterBy') === false
+                    //&& $(this).hasClass('filterComp') === false)
+                    //    warn('DEBUG: Unexpected control with name ['+this.name + '], and id #'+ this.id);
+
                     $(this).change(function (e) {
                         subCfg.markChange(e,this);
                         subCfg.propagateSetting(this);

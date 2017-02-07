@@ -189,6 +189,8 @@ char *hgOfficialChromName(char *db, char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
+if (strlen(name) > HDB_MAX_CHROM_STRING)
+    return NULL;
 struct chromInfo *ci = NULL;
 char buf[HDB_MAX_CHROM_STRING];
 strncpy(buf, name, HDB_MAX_CHROM_STRING);
@@ -817,7 +819,10 @@ if (trackHubDatabase(db))
         }
     return;
     }
-struct sqlConnection *conn = hAllocConnProfile(profile, db);
+struct sqlConnection *conn = hAllocConnProfileMaybe(profile, db);
+if (conn == NULL)
+    // Database does not exist, so no tables in the database exist -- leave the hash empty.
+    return;
 struct slName *allTables =  sqlListTables(conn);
 
 if (!sameString(CUSTOM_TRASH,db) && !sameString("hgFixed",db) && hCanHaveSplitTables(db))
@@ -2503,6 +2508,32 @@ char *hScientificName(char *database)
 return hDbDbOptionalField(database, "scientificName");
 }
 
+char *hOrgShortName(char *org)
+/* Get the short name for an organism.  Returns NULL if org is NULL.
+ * WARNING: static return */
+{
+static int maxOrgSize = 7;
+static char orgNameBuf[128];
+if (org == NULL)
+    return NULL;
+strncpy(orgNameBuf, org, sizeof(orgNameBuf)-1);
+orgNameBuf[sizeof(orgNameBuf)-1] = '\0';
+char *shortOrg = firstWordInLine(orgNameBuf);
+if (strlen(shortOrg) > maxOrgSize)
+    shortOrg[maxOrgSize] = '\0';
+return shortOrg;
+}
+
+char *hOrgShortForDb(char *db)
+/* look up the short organism scientific name given an organism db.
+ * WARNING: static return */
+{
+char *org = hScientificName(db);
+char *shortOrg = hOrgShortName(org);
+freeMem(org);
+return shortOrg;
+}
+
 char *hHtmlPath(char *database)
 /* Return /gbdb path name to html description for this database */
 /* Return NULL if unknown database */
@@ -3308,6 +3339,12 @@ boolean hIsBrowserbox()
 /* Return TRUE if this is the browserbox virtual machine */
 {
 return (cfgOptionBooleanDefault("isGbib", FALSE));
+}
+
+boolean hIsGbic()
+/* Return TRUE if this mirror has been installed by the installation script */
+{
+return (cfgOptionBooleanDefault("isGbic", FALSE));
 }
 
 boolean hIsPreviewHost()
@@ -4399,6 +4436,8 @@ struct slPair *hGetCladeOptions()
 // get only the clades that have actual active genomes
 char *query = NOSQLINJ ""
     "SELECT DISTINCT(c.name), c.label "
+    // mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
+    ", c.priority "
     "FROM %s c, %s g, %s d "
     "WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 "
     "ORDER BY c.priority";
@@ -4407,9 +4446,7 @@ safef(queryBuf, sizeof queryBuf, query, cladeTable(),  genomeCladeTable(), dbDbT
 struct sqlConnection *conn = hConnectCentral();
 struct slPair *nativeClades = sqlQuickPairList(conn, queryBuf);
 hDisconnectCentral(&conn);
-
 struct slPair *trackHubClades = trackHubGetCladeLabels();
-
 return slCat(nativeClades, trackHubClades);
 }
 
@@ -4427,8 +4464,12 @@ if (isHubTrack(clade))
 else
     {
     struct dyString *dy =
-	sqlDyStringCreate("select distinct(d.genome) from %s d,%s g "
+	sqlDyStringCreate("select distinct(d.genome) "
+    // mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
+                          ", orderKey "
+                          "from %s d,%s g "
 			  "where d.genome=g.genome and g.clade = '%s' "
+                          "group by genome " // necessary since we added orderKey to SELECT list
 			  "order by orderKey", dbDbTable(), genomeCladeTable(), clade);
     // Although clade and db menus have distinct values vs. labels, we actually use the
     // same strings for values and labels in the genome menu!  So we get a plain list
@@ -4857,7 +4898,7 @@ char *addCommasToPos(char *db, char *position)
 /* add commas to the numbers in a position
  * returns pointer to static */
 {
-static char buffer[256];
+static char buffer[4096];
 long winStart, winEnd; // long to support virtual chrom
 char *chromName;
 char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */

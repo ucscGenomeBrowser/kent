@@ -320,7 +320,7 @@ var tdbDoc = {
         else
             tdbDoc.toc.excludeClasses = [];
         if (timeout > 0)
-            setTimeout('tdbDoc.toc.assemble();',timeout);
+            setTimeout(tdbDoc.toc.assemble, timeout);
         else
             tdbDoc.toc.assemble();
     },

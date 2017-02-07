@@ -1,3 +1,5 @@
+include ../../refSeqComposite.ra
+
 track coriellDelDup override
 origAssembly hg19 
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19" 
@@ -421,8 +423,7 @@ url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg38&species=H.
 
 include trackDb.cloneEnd.ra
 
-include hg38Patch7.ra beta,public
-include hg38Patch9.ra alpha
+include hg38Patch9.ra
 
 include knownGene.ra 
 
@@ -483,3 +484,43 @@ group x
     shortLabel compatibleRefGene
     longLabel refGene predictions 'compatible' in NCBI RefSeq track
     color 0,0,255
+
+searchName ncbiRefSeqProtein
+searchTable ncbiRefSeq
+searchType genePred
+searchMethod prefix
+searchDescription ncbiRefSeq protAcc search alias
+semiShortCircuit 1
+xrefTable ncbiRefSeqLink
+xrefQuery select id,protAcc from %s where protAcc like '%s%%'
+termRegex [NXY]P_[0-9]+(\.[0-9]+)?
+
+searchName ncbiRefSeqCurated
+searchTable ncbiRefSeqCurated
+searchType genePred
+searchMethod prefix
+searchDescription ncbiRefSeq protAcc search alias
+semiShortCircuit 1
+xrefTable ncbiRefSeqLink
+xrefQuery select id,protAcc from %s where protAcc like '%s%%'
+termRegex [NXY]P_[0-9]+(\.[0-9]+)?
+
+searchName ncbiRefSeqPredicted
+searchTable ncbiRefSeqPredicted
+searchType genePred
+searchMethod prefix
+searchDescription ncbiRefSeq protAcc search alias
+semiShortCircuit 1
+xrefTable ncbiRefSeqLink
+xrefQuery select id,protAcc from %s where protAcc like '%s%%'
+termRegex [NXY]P_[0-9]+(\.[0-9]+)?
+
+searchName ncbiRefSeqMrna
+searchTable ncbiRefSeq
+searchType genePred
+searchMethod prefix
+searchDescription ncbiRefSeq mrnaAcc search alias
+semiShortCircuit 1
+xrefTable ncbiRefSeqLink
+xrefQuery select id,mrnaAcc from %s where mrnaAcc like '%s%%'
+termRegex ([NX][MR]|YP)_[0-9]+(\.[0-9]+)?

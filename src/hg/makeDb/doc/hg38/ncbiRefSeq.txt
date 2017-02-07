@@ -3,6 +3,39 @@
 # This file describes the construction of NCBI RefSeq track
 
 #########################################################################
+# ncbiRefSeq.p8 Genes (DONE - 2016-08-18 - Hiram)
+
+    mkdir /hive/data/genomes/hg38/bed/ncbiRefSeq.p8
+    cd /hive/data/genomes/hg38/bed/ncbiRefSeq.p8
+
+    # running step wise as this script is still under development
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.34_GRCh38.p8 hg38) > download.log 2>&1
+    # real    12m35.601s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.34_GRCh38.p8 hg38) > process.log 2>&1
+    # real    14m18.953s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Homo_sapiens \
+      GCF_000001405.34_GRCh38.p8 hg38) > load.log 2>&1
+    # real    0m59.189s
+
+    cat fb.ncbiRefSeq.hg38.txt
+    #  141131948 bases of 3049335806 (4.628%) in intersection
+
+#############################################################################
+
+#########################################################################
 # ncbiRefSeq.p7 Genes (DONE - 2016-05-20 - Hiram)
 
     mkdir /hive/data/genomes/hg38/bed/ncbiRefSeq.p7
@@ -157,10 +190,12 @@ hgLoadGenePred -genePredExt hg38 ncbiRefSeqOther other.gp
 genePredCheck -db=hg38 ncbiRefSeqOther
 # checked: 5682 failed: 0
 
-# and the bigPsl file:
-mkdir -p /gbdb/hg38/bbi/ncbiRefSeq
-ln -s `pwd`/${asmName}.hg38.bigPsl.bb /gbdb/hg38/bbi/ncbiRefSeqBigPsl.bb
-hgBbiDbLink hg38 ncbiRefSeqBigPsl /gbdb/hg38/bbi/ncbiRefSeqBigPsl.bb
+########## early experiment, not used later
+# # and the bigPsl file:
+# mkdir -p /gbdb/hg38/bbi/ncbiRefSeq
+# ln -s `pwd`/${asmName}.hg38.bigPsl.bb /gbdb/hg38/bbi/ncbiRefSeqBigPsl.bb
+# hgBbiDbLink hg38 ncbiRefSeqBigPsl /gbdb/hg38/bbi/ncbiRefSeqBigPsl.bb
+########## early experiment, not used later
 
 #############################################################################
 

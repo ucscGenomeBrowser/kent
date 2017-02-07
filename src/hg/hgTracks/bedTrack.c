@@ -32,6 +32,57 @@ ret->name = cloneString(buf);
 return ret;
 }
 
+static void calculateLabelFields(struct track *track)
+/* Figure out which fields are available to label a bigBed track. */
+{
+char *labelFields = trackDbSettingClosestToHome(track->tdb, "labelFields");
+
+if (labelFields == NULL)
+    {
+    // if there is a name, use it by default, otherwise no label by default 
+    if (track->bedSize > 3)
+        slAddHead(&track->labelColumns, slIntNew(3));
+    }
+else
+    {
+    char cartVar[1024];
+    // what has the user said to use as a label
+    safef(cartVar, sizeof cartVar, "%s.label", track->tdb->track);
+    struct hashEl *labelEl = cartFindPrefix(cart, cartVar);
+    struct hash *labelHash = newHash(5);
+    struct slName *thisLabel, *labelIds = slNameListFromComma(labelFields);
+
+    // fill hash with fields that should be used for labels
+    if (labelEl == NULL) 
+        hashAdd(labelHash, labelIds->name, "1");
+    else
+        {
+        for(; labelEl; labelEl = labelEl->next)
+            hashAdd(labelHash, &labelEl->name[strlen(cartVar) + 1], labelEl->val);
+        }
+
+    struct asObject *as = asForDb(track->tdb, database);
+
+    for(thisLabel = labelIds; thisLabel; thisLabel = thisLabel->next)
+        {
+        char *trimLabel = trimSpaces(thisLabel->name);
+        char *str = hashFindVal(labelHash, trimLabel);
+        
+        if ((str != NULL) && sameString(str, "1"))
+            {
+            unsigned colNum = asColumnFindIx(as->columnList, trimLabel);
+            if (colNum == -1)
+                errAbort("cannot find field named '%s' in as file '%s'", 
+                    trimLabel, as->name);
+
+            // put this column number in the list of columns to use to make label
+            slAddHead(&track->labelColumns, slIntNew(colNum));
+            }
+        }
+    slReverse(&track->labelColumns);
+    }
+}
+
 void loadSimpleBed(struct track *tg)
 /* Load the items in one track - just move beds in
  * window... */
@@ -103,13 +154,16 @@ else if (tg->isBigBed)
     if (scoreFilter)
 	minScore = atoi(scoreFilter);
 
+    tg->itemName = bigBedItemName;
+    calculateLabelFields(tg);
     for (bb = bbList; bb != NULL; bb = bb->next)
-	{
-	bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-	bed = loader(bedRow);
-	if (scoreFilter == NULL || bed->score >= minScore)
-	    slAddHead(&list, bed);
-	}
+        {
+        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        bed = loader(bedRow);
+        bed->label = makeLabel(tg, bb);
+        if (scoreFilter == NULL || bed->score >= minScore)
+            slAddHead(&list, bed);
+        }
     lmCleanup(&lm);
     }
 else
@@ -453,6 +507,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
+    calculateLabelFields(tg);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 12, &lfList);
     }

@@ -1268,6 +1268,7 @@ cat run.time
 # Longest finished job:             764s      12.73m     0.21h    0.01d
 # Submission to last job:         14274s     237.90m     3.96h    0.17d
 
+#  NEXT TIME USE hg38 method with pvalue included
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cat << '_EOF_' > makePfamRa.awk
 /^NAME/ {print}

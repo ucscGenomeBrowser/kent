@@ -233,7 +233,43 @@ webSortableFieldedTable(cart, table, returnUrl, "cdwOneTag", 0, outputWrappers, 
 fieldedTableFree(&table);
 }
 
-void doOneFile(struct sqlConnection *conn)
+void generateTableRow(struct slName *list,char **row, char *idTag , char *idVal) 
+{
+struct slName *el; 
+static char *outputFields[] = {"tag", "value"};
+struct fieldedTable *table = fieldedTableNew("File Tags", outputFields,ArraySize(outputFields));
+int fieldIx = 0;
+for (el = list; el != NULL; el = el->next)
+    {
+    char *outRow[2];
+    char *val = row[fieldIx];
+    if (val != NULL)
+	{
+	outRow[0] = el->name;
+	outRow[1] = row[fieldIx];
+
+	// add a link to the accession row
+	if (sameWord(el->name, "accession"))
+	    {
+	    char link[1024];
+	    safef(link, sizeof(link), "%s <a href='cdwGetFile?acc=%s'>download</a>", outRow[1], outRow[1]);
+	    outRow[1] = cloneString(link);
+	    }
+	fieldedTableAdd(table, outRow, 2, fieldIx);
+	}
+    ++fieldIx;
+    }
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), 
+    "../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=%s&cdwFileVal=%s&%s",
+    idTag, idVal, cartSidUrlString(cart) );
+struct hash *outputWrappers = hashNew(0);
+hashAdd(outputWrappers, "tag", wrapTagField);
+webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers, NULL);
+fieldedTableFree(&table);
+}
+
+void doFileFlowchart(struct sqlConnection *conn)
 /* Put up a page with info on one file */
 {
 char *idTag = cartUsualString(cart, "cdwFileTag", "accession");
@@ -241,7 +277,33 @@ char *idVal = cartString(cart, "cdwFileVal");
 char query[512];
 sqlSafef(query, sizeof(query), "select * from cdwFileTags where %s='%s'", idTag, idVal);
 struct sqlResult *sr = sqlGetResult(conn, query);
-struct slName *el, *list = sqlResultFieldList(sr);
+struct slName  *list = sqlResultFieldList(sr);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *fileId = mustFindFieldInRow("file_id", list, row);
+    printf("Click on a box in the flow chart to navigate to that file."); 
+    makeCdwFlowchart(sqlSigned(fileId), cart);
+    printf("<a href='cdwWebBrowse?cdwCommand=oneFile");
+    printf("&%s", cartSidUrlString(cart));
+    printf("&cdwFileTag=%s", idTag);
+    printf("&cdwFileVal=%s", idVal);
+    printf("'>Remove flow chart</a>"); 
+    generateTableRow(list, row, idTag, idVal); 
+    }
+sqlFreeResult(&sr);
+}
+
+void doOneFile(struct sqlConnection *conn)
+/* Put up a page with info on one file */
+{
+struct sqlConnection *conn2 = cdwConnect();
+char *idTag = cartUsualString(cart, "cdwFileTag", "accession");
+char *idVal = cartString(cart, "cdwFileVal");
+char query[512];
+sqlSafef(query, sizeof(query), "select * from cdwFileTags where %s='%s'", idTag, idVal);
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct slName *list = sqlResultFieldList(sr);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -254,40 +316,29 @@ while ((row = sqlNextRow(sr)) != NULL)
     printLongWithCommas(stdout, size);
      
     printf("<BR>\n");
-    makeCdwFlowchart(sqlSigned(fileId), cart);
-    static char *outputFields[] = {"tag", "value"};
-    struct fieldedTable *table = fieldedTableNew("File Tags", outputFields,ArraySize(outputFields));
-    int fieldIx = 0;
-    for (el = list; el != NULL; el = el->next)
-        {
-	char *outRow[2];
-	char *val = row[fieldIx];
-	if (val != NULL)
-	    {
-	    outRow[0] = el->name;
-	    outRow[1] = row[fieldIx];
+    /* Figure out number of file inputs and outputs, and put up link to flowcharts */
+    sqlSafef(query, sizeof(query), "select stepRunId from cdwStepIn where fileId = %s", fileId);
+    int stepRunId = sqlQuickNum(conn2, query);
+    sqlSafef(query, sizeof(query), "select count(*) from cdwStepOut where stepRunId = %i", stepRunId);
+    int outFiles = sqlQuickNum(conn2, query);
 
-            // add a link to the accession row
-            if (sameWord(el->name, "accession"))
-                {
-                char link[1024];
-                safef(link, sizeof(link), "%s <a href='cdwGetFile?acc=%s'>download</a>", outRow[1], outRow[1]);
-                outRow[1] = cloneString(link);
-                }
-	    fieldedTableAdd(table, outRow, 2, fieldIx);
-	    }
-	++fieldIx;
-	}
-    char returnUrl[PATH_LEN*2];
-    safef(returnUrl, sizeof(returnUrl), 
-	"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=%s&cdwFileVal=%s&%s",
-	idTag, idVal, cartSidUrlString(cart) );
-    struct hash *outputWrappers = hashNew(0);
-    hashAdd(outputWrappers, "tag", wrapTagField);
-    webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers, NULL);
-    fieldedTableFree(&table);
+    sqlSafef(query, sizeof(query), "select stepRunId from cdwStepOut where fileId = %s", fileId);
+    stepRunId = sqlQuickNum(conn2, query);
+    sqlSafef(query, sizeof(query), "select count(*) from cdwStepIn where stepRunId = %i", stepRunId);
+    int inFiles = sqlQuickNum(conn2, query);
+    if (inFiles > 0 || outFiles > 0)
+	{
+	printf("File relationships: %d inputs, %d outputs ", inFiles, outFiles);
+	printf("<a href='cdwWebBrowse?cdwCommand=doFileFlowchart");
+	printf("&%s", cartSidUrlString(cart));
+	printf("&cdwFileTag=%s", idTag);
+	printf("&cdwFileVal=%s", idVal);
+	printf("'>flow chart</a>"); 
+	} 
+    generateTableRow(list, row, idTag, idVal); 
     }
 sqlFreeResult(&sr);
+sqlDisconnect(&conn2);
 }
 
 struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)
@@ -827,12 +878,13 @@ printf("Search <input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\" size=60>"
     varName, varName, varVal);
 printf("&nbsp;");
 printf("<img src=\"../images/magnify.png\">\n");
-printf("<script>\n");
-printf("$(function () {\n");
-printf("  $('#%s').watermark(\"type in words or starts of words to find specific %s\");\n", 
+char javascript[1024];
+safef(javascript, sizeof javascript,
+    "$(function () {\n"
+    "  $('#%s').watermark(\"type in words or starts of words to find specific %s\");\n" 
+    "});\n",
     varName, itemPlural);
-printf("});\n");
-printf("</script>\n");
+jsInline(javascript);
 return varVal;
 }
 
@@ -849,7 +901,6 @@ if (hIsPrivateHost() && userName == NULL)
 
 if (userName != NULL)
     {
-    user = cdwUserFromUserName(conn, userName);
     /* Look up email vial hgCentral table */
     struct sqlConnection *cc = hConnectCentral();
     char query[512];
@@ -972,11 +1023,11 @@ cgiMakeSubmitButton();
 printf("</FORM>\n");
 
 
-puts("<script>\n");
-puts("$('.scriptButton').change( function() {$('#urlListDoc').hide(); $('#scriptDoc').show()} )");
-puts("$('.urlListButton').change( function() {$('#urlListDoc').show(); $('#scriptDoc').hide()} )");
-puts("</script>\n");
-
+jsInline 
+    (
+    "$('.scriptButton').change( function() {$('#urlListDoc').hide(); $('#scriptDoc').show()} )"
+    "$('.urlListButton').change( function() {$('#urlListDoc').show(); $('#scriptDoc').hide()} )"
+    );
 puts("<div id='urlListDoc'>\n");
 puts("When you click 'submit', a text file with the URLs of the files will get downloaded.\n");
 puts("The URLs are valid for one week.<p>\n");
@@ -1093,6 +1144,19 @@ static boolean cdwCheckFileAccess(struct sqlConnection *conn, int fileId, struct
 return cdwCheckAccessFromFileId(conn, fileId, user, cdwAccessRead);
 }
 
+void doServeTagStorm(struct sqlConnection *conn, char *dataSet)
+/* Put up meta data tree associated with data set. */
+{
+char metaFileName[PATH_LEN];
+safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
+printf(", <A HREF=\"cdwServeTagStorm?format=text&cdwDataSet=%s&%s\"",
+	dataSet, cartSidUrlString(cart)); 
+printf(">text</A>");
+printf(", <A HREF=\"cdwServeTagStorm?format=tsv&cdwDataSet=%s&%s\"",
+	dataSet, cartSidUrlString(cart)); 
+printf(">tsv</A>)");
+}
+
 void doBrowseDatasets(struct sqlConnection *conn)
 /* Show datasets and links to dataset summary pages. */
 {
@@ -1125,9 +1189,11 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\"",
 		desc, datasetId, cartSidUrlString(cart)); 
 	printf(">%lld files</A>)",fileCount);
-	printf(" (<A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
+	printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
 		datasetId, cartSidUrlString(cart)); 
-	printf(">metadata tree</A>)");
+	printf(">html</A>");
+	doServeTagStorm(conn, datasetId);
+
 	}
     else // Otherwise print a label and description. 
 	{
@@ -1137,6 +1203,7 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
     printf("</LI>\n");
     }
 }
+
 
 void doDataSetMetaTree(struct sqlConnection *conn)
 /* Put up meta data tree associated with data set. */
@@ -1406,27 +1473,29 @@ void drawPrettyPieGraph(struct slPair *data, char *id, char *title, char *subtit
 /* Draw a pretty pie graph using D3. Import D3 and D3pie before use. */
 {
 // Some D3 administrative stuff, the title, subtitle, sizing etc. 
-printf("<script>\nvar pie = new d3pie(\"%s\", {\n\"header\": {", id);
+struct dyString *dy = dyStringNew(1024);
+
+dyStringPrintf(dy,"var pie = new d3pie(\"%s\", {\n\"header\": {", id);
 if (title != NULL)
     {
-    printf("\"title\": { \"text\": \"%s\",", title);
-    printf("\"fontSize\": 16,");
-    printf("\"font\": \"open sans\",},");
+    dyStringPrintf(dy,"\"title\": { \"text\": \"%s\",", title);
+    dyStringPrintf(dy,"\"fontSize\": 16,");
+    dyStringPrintf(dy,"\"font\": \"open sans\",},");
     }
 if (subtitle != NULL)
     {
-    printf("\"subtitle\": { \"text\": \"%s\",", subtitle);
-    printf("\"color\": \"#999999\",");
-    printf("\"fontSize\": 10,");
-    printf("\"font\": \"open sans\",},");
+    dyStringPrintf(dy,"\"subtitle\": { \"text\": \"%s\",", subtitle);
+    dyStringPrintf(dy,"\"color\": \"#999999\",");
+    dyStringPrintf(dy,"\"fontSize\": 10,");
+    dyStringPrintf(dy,"\"font\": \"open sans\",},");
     }
-printf("\"titleSubtitlePadding\":9 },\n");
-printf("\"footer\": {\"color\": \"#999999\",");
-printf("\"fontSize\": 10,");
-printf("\"font\": \"open sans\",");
-printf("\"location\": \"bottom-left\",},\n");
-printf("\"size\": { \"canvasWidth\": 270, \"canvasHeight\": 220},\n");
-printf("\"data\": { \"sortOrder\": \"value-desc\", \"content\": [\n");
+dyStringPrintf(dy,"\"titleSubtitlePadding\":9 },\n");
+dyStringPrintf(dy,"\"footer\": {\"color\": \"#999999\",");
+dyStringPrintf(dy,"\"fontSize\": 10,");
+dyStringPrintf(dy,"\"font\": \"open sans\",");
+dyStringPrintf(dy,"\"location\": \"bottom-left\",},\n");
+dyStringPrintf(dy,"\"size\": { \"canvasWidth\": 270, \"canvasHeight\": 220},\n");
+dyStringPrintf(dy,"\"data\": { \"sortOrder\": \"value-desc\", \"content\": [\n");
 struct slPair *start = NULL;
 float colorOffset = 1;
 int totalFields =  slCount(data);
@@ -1435,28 +1504,28 @@ for (start=data; start!=NULL; start=start->next)
     float currentColor = colorOffset/totalFields;
     struct rgbColor color = saturatedRainbowAtPos(currentColor);
     char *temp = start->val;
-    printf("\t{\"label\": \"%s\",\n\t\"value\": %s,\n\t\"color\": \"rgb(%i,%i,%i)\"}", 
+    dyStringPrintf(dy,"\t{\"label\": \"%s\",\n\t\"value\": %s,\n\t\"color\": \"rgb(%i,%i,%i)\"}", 
 	start->name, temp, color.r, color.b, color.g);
     if (start->next!=NULL) 
-	printf(",\n");
+	dyStringPrintf(dy,",\n");
     ++colorOffset;
     }
-printf("]},\n\"labels\": {");
-printf("\"outer\":{\"pieDistance\":20},");
-printf("\"inner\":{\"hideWhenLessThanPercentage\":5},");
-printf("\"mainLabel\":{\"fontSize\":11},");
-printf("\"percentage\":{\"color\":\"#ffffff\", \"decimalPlaces\": 0},");
-printf("\"value\":{\"color\":\"#adadad\", \"fontSize\":11},");
-printf("\"lines\":{\"enabled\":true},},\n");
-printf("\"effects\":{\"pullOutSegmentOnClick\":{");
-printf("\"effect\": \"linear\",");
-printf("\"speed\": 400,");
-printf("\"size\": 8}},\n");
-printf("\"misc\":{\"gradient\":{");
-printf("\"enabled\": true,");
-printf("\"percentage\": 100}}});");
-printf("</script>\n");
-
+dyStringPrintf(dy,"]},\n\"labels\": {");
+dyStringPrintf(dy,"\"outer\":{\"pieDistance\":20},");
+dyStringPrintf(dy,"\"inner\":{\"hideWhenLessThanPercentage\":5},");
+dyStringPrintf(dy,"\"mainLabel\":{\"fontSize\":11},");
+dyStringPrintf(dy,"\"percentage\":{\"color\":\"#ffffff\", \"decimalPlaces\": 0},");
+dyStringPrintf(dy,"\"value\":{\"color\":\"#adadad\", \"fontSize\":11},");
+dyStringPrintf(dy,"\"lines\":{\"enabled\":true},},\n");
+dyStringPrintf(dy,"\"effects\":{\"pullOutSegmentOnClick\":{");
+dyStringPrintf(dy,"\"effect\": \"linear\",");
+dyStringPrintf(dy,"\"speed\": 400,");
+dyStringPrintf(dy,"\"size\": 8}},\n");
+dyStringPrintf(dy,"\"misc\":{\"gradient\":{");
+dyStringPrintf(dy,"\"enabled\": true,");
+dyStringPrintf(dy,"\"percentage\": 100}}});");
+jsInline(dy->string);
+dyStringFree(&dy);
 }
 
 void pieOnTag(struct sqlConnection *conn, char *tag, char *divId)
@@ -1604,6 +1673,10 @@ else if (sameString(command, "browseFiles"))
     {
     doBrowseFiles(conn);
     }
+else if (sameString(command, "doFileFlowchart"))
+    {
+    doFileFlowchart(conn);
+    }
 else if (sameString(command, "browseTracks"))
     {
     doBrowseTracks(conn);
@@ -1704,7 +1777,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.53");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.54");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();

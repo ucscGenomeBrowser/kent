@@ -140,7 +140,7 @@ return cartVarExists(cart, hgtaCorrelateTrack);
 static char *onChangeEnd(struct dyString **pDy)
 /* Finish up javascript onChange command. */
 {
-dyStringAppend(*pDy, "document.hiddenForm.submit();\"");
+dyStringAppend(*pDy, "document.hiddenForm.submit();");
 return dyStringCannibalize(pDy);
 }
 
@@ -280,7 +280,8 @@ if (sameString(selGroup->name, "allTables") && hAllowAllTables())
     char *selDb = findSelDb();
     struct slName *dbList = getDbListForGenome(), *db;
     hPrintf("<B>database:</B>\n");
-    hPrintf("<SELECT NAME=%s %s>\n", trackVar, trackScript);
+    hPrintf("<SELECT NAME=%s id='%s'>\n", trackVar, trackVar);
+    jsOnEventById("change", trackVar, trackScript);
     for (db = dbList; db != NULL; db = db->next)
 	{
 	hPrintf(" <OPTION VALUE=%s%s>%s\n", db->name,
@@ -293,7 +294,8 @@ else
     {
     boolean allTracks = sameString(selGroup->name, "allTracks");
     hPrintf("<B>track:</B>\n");
-    hPrintf("<SELECT NAME=%s %s>\n", trackVar, trackScript);
+    hPrintf("<SELECT NAME=%s id='%s'>\n", trackVar, trackVar);
+    jsOnEventById("change", trackVar, trackScript);
     if (allTracks)
         {
 	selTrack = findSelectedTrack(limitedTrackList, NULL, trackVar);
@@ -512,7 +514,8 @@ struct grp *selGroup = findSelectedGroup(groupList, groupVar);
 /*	findSelectedGroup() returns the first one on the list if no match */
 
 hPrintf("<B>group:</B>\n");
-hPrintf("<SELECT NAME=%s %s>\n", groupVar, groupScript);
+hPrintf("<SELECT NAME=%s id='%s'>\n", groupVar, groupVar);
+jsOnEventById("change",groupVar,groupScript);
 for (group = groupList; group != NULL; group = group->next)
     {
     hPrintf(" <OPTION VALUE=%s%s>%s\n", group->name,

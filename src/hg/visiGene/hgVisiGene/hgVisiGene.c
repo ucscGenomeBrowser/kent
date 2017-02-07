@@ -236,7 +236,6 @@ if (imageCount > 0)
 "    <DIV"
 "    ID='perspClip'"
 "    STYLE='position:absolute;left:-1000px;top:-1000px;z-index:2;visibility:visible;overflow:hidden!important;'"
-"         onmouseover='this.style.left=\"-1000px\";' "
 "    >"
 "    <DIV"
 "    ID='perspective'"
@@ -247,6 +246,7 @@ if (imageCount > 0)
 "    </DIV>"
 "    </DIV>"
     );
+    jsOnEventById("mouseover", "perspClip", "this.style.left=\"-1000px\";");
     printf("<TABLE>\n");
     printf("<TR><TD><B>");
     printf("%d images match<BR>\n", imageCount);
@@ -325,11 +325,9 @@ int w = 0, h = 0;
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
 
-puts(
-"<script type=\"text/JavaScript\">"
+jsInline(
 "document.getElementsByTagName('html')[0].style.height=\"100%\";"
 "document.getElementsByTagName('body')[0].style.height=\"100%\";"
-"</script>"
 );
 
 if (!visiGeneImageSize(conn, imageId, &w, &h))
@@ -426,15 +424,15 @@ printf("</TD>");
 printf("<TD>");
 printf("Zoom: ");
 printf(
-"<INPUT TYPE=SUBMIT NAME=\"hgp_zmOut\" VALUE=\" out \""
-" onclick=\"parent.image.bigImg.zoomer('out');return false;\"> "
-"<INPUT TYPE=SUBMIT NAME=\"hgp_zmIn\" VALUE=\" in \""
-" onclick=\"parent.image.bigImg.zoomer('in');return false;\"> "
-"<INPUT TYPE=SUBMIT NAME=\"hgp_zmFull\" VALUE=\" full \""
-" onclick=\"parent.image.bigImg.zoomer('full');return false;\"> "
-"<INPUT TYPE=SUBMIT NAME=\"hgp_zmFit\" VALUE=\" fit \""
-" onclick=\"parent.image.bigImg.zoomer('fit');return false;\"> "
+"<INPUT TYPE=SUBMIT NAME='hgp_zmOut'  id='hgp_zmOut'  VALUE=' out ' > "
+"<INPUT TYPE=SUBMIT NAME='hgp_zmIn'   id='hgp_zmIn'   VALUE=' in '  > "
+"<INPUT TYPE=SUBMIT NAME='hgp_zmFull' id='hgp_zmFull' VALUE=' full '> "
+"<INPUT TYPE=SUBMIT NAME='hgp_zmFit'  id='hgp_zmFit'  VALUE=' fit ' > "
 "\n");
+jsOnEventById("click","hgp_zmOut" ,"parent.image.bigImg.zoomer('out'); return false;");
+jsOnEventById("click","hgp_zmIn"  ,"parent.image.bigImg.zoomer('in');  return false;");
+jsOnEventById("click","hgp_zmFull","parent.image.bigImg.zoomer('full');return false;");
+jsOnEventById("click","hgp_zmFit" ,"parent.image.bigImg.zoomer('fit'); return false;");
 printf("</TD>");
 
 printf("<TD ALIGN=Right>");

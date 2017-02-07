@@ -17,6 +17,9 @@ but drupal.js required for nicemenus.js to work */
 
 var Drupal = Drupal || { 'settings': {}, 'behaviors': {}, 'themes': {}, 'locale': {} };
 
+// moved from globalNavBar.inc to here
+jQuery.extend(Drupal.settings, { "basePath": "/", "nice_menus_options": { "delay": 800, "speed": 1 }, "thickbox": { "close": "Close", "next": "Next \x3e", "prev": "\x3c Prev", "esc_key": "or Esc Key", "next_close": "Next / Close on last", "image_count": "Image !current of !total" }, "custom_search": { "form_target": "_self", "solr": 0 } });
+
 /**
  * Set the variable that indicates if JavaScript behaviors should be applied
  */
@@ -205,7 +208,7 @@ Drupal.parseJson = function (data) {
   if ((data.substring(0, 1) != '{') && (data.substring(0, 1) != '[')) {
     return { status: 0, data: data.length ? data : Drupal.t('Unspecified error') };
   }
-  return eval('(' + data + ');');
+  return JSON.parse(data);
 };
 
 /**
@@ -502,9 +505,6 @@ if (typeof jQuery.browser == 'undefined') {
 	});
 
 })(jQuery);
-
-
-
 
 
 

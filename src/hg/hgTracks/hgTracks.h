@@ -279,6 +279,8 @@ struct track
     int (*nonPropPixelWidth)(struct track *tg, void *item);
     /* Return the width in pixels of the non-proportional part of track, e.g. gtexGene graphic */
 
+
+    struct slInt *labelColumns; /* The columns in a bigBed that can be used for labels. */
     };
 
 struct window  // window in multiwindow image
@@ -383,6 +385,7 @@ struct linkedFeatures
     struct hal_target_dupe_list_t *dupeList;
 #endif
     boolean isBigGenePred;
+    char *label;                        /* Label for bigBeds. */
     };
 
 struct linkedFeaturesSeries
@@ -825,6 +828,15 @@ void bigBedAddLinkedFeaturesFromExt(struct track *track,
 #define bigBedAddLinkedFeaturesFrom(track, chrom, start, end, scoreMin, scoreMax, useItemRgb, fieldCount, pLfList) \
     bigBedAddLinkedFeaturesFromExt(track, chrom, start, end, scoreMin, scoreMax, useItemRgb, fieldCount, pLfList, min(BIGBEDMAXIMUMITEMS, maximumTrackItems(track))) 
 
+char *bigBedItemName(struct track *tg, void *item) ;
+// return label for simple beds
+
+char *bigLfItemName(struct track *tg, void *item);
+// return label for linked features
+
+char *makeLabel(struct track *track,  struct bigBedInterval *bb);
+// Build a label for a bigBedTrack from the requested label fields.
+//
 boolean canDrawBigBedDense(struct track *tg);
 /* Return TRUE if conditions are such that can do the fast bigBed dense data fetch and
  * draw. */
@@ -1163,14 +1175,6 @@ void affyUclaNormMethods(struct track *tg);
 
 void cghNci60Methods(struct track *tg);
 /* set up special methods for CGH NCI60 track */
-
-char *orgShortForDb(char *db);
-/* look up the short organism name given an organism db.
- * WARNING: static return */
-
-char *orgShortName(char *org);
-/* Get the short name for an organism.  Returns NULL if org is NULL.
- * WARNING: static return */
 
 char *getOrganism(struct sqlConnection *conn, char *acc);
 /* lookup the organism for an mrna, or NULL if not found.

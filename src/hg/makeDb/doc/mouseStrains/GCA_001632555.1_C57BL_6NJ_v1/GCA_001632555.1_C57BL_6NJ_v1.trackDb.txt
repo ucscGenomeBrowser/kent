@@ -227,4 +227,4 @@ searchTrix ixIxx/GCA_001632555.1_C57BL_6NJ_v1.ensGene.name.ix
 html html/GCA_001632555.1_C57BL_6NJ_v1.ensGene
 
 include rnaSeqData/GCA_001632555.1_C57BL_6NJ_v1.trackDb.txt
-
+include GCA_001632555.1_C57BL_6NJ_v1.bigMaf.trackDb.txt

@@ -94,7 +94,7 @@ Autocompleter.Base.prototype = {
       new Insertion.After(this.update, 
        '<iframe id="' + this.update.id + '_iefix" '+
        'style="display:none;position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);" ' +
-       'src="javascript:false;" frameborder="0" scrolling="no"></iframe>');
+       'src="#" frameborder="0" scrolling="no"></iframe>');
       this.iefix = $(this.update.id+'_iefix');
     }
     if(this.iefix) setTimeout(this.fixIEOverlapping.bind(this), 50);

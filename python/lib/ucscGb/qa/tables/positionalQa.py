@@ -1,4 +1,3 @@
-import subprocess
 import re
 import math
 
@@ -104,9 +103,9 @@ class PositionalQa(TableQa):
             self.reporter.beginStep(self.db, self.table, "positionalTblCheck")
             command = ["positionalTblCheck", self.db, self.table]
             self.reporter.writeCommand(command)
-            p = subprocess.Popen(command, stdout=self.reporter.fh, stderr=self.reporter.fh)
-            p.wait()
-            if p.returncode:
+            commandOut, commandErr, commandReturnCode = qaUtils.runCommandNoAbort(command)
+            self.reporter.fh.write(commandErr)
+            if commandReturnCode:
                 self.recordError()
             else:
                 self.recordPass()
@@ -117,9 +116,9 @@ class PositionalQa(TableQa):
         self.reporter.beginStep(self.db, self.table, "checkTableCoords")
         command = ["checkTableCoords", self.db, self.table]
         self.reporter.writeCommand(command)
-        p = subprocess.Popen(command, stdout=self.reporter.fh, stderr=self.reporter.fh)
-        p.wait()
-        if p.returncode:
+        commandOut, commandErr, commandReturnCode = qaUtils.runCommandNoAbort(command)
+        self.reporter.fh.write(commandErr)
+        if commandReturnCode:
             self.recordError()
         else:
             self.recordPass()
@@ -244,9 +243,7 @@ class PositionalQa(TableQa):
         Adds output to sumRow and records commands and results in reporter."""
         rbCommand = ["runBits.csh", self.db, self.table, "checkUnbridged"]
         self.reporter.writeCommand(rbCommand)
-        # qaUtils.runCommand not used here because stderr needs to be redirected to stdout
-        p = subprocess.Popen(rbCommand, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        rbOut, rbErr = p.communicate()
+        rbOut = qaUtils.runCommandMergedOutErr(rbCommand)
         self.reporter.writeLine(str(rbOut))
         # extract featureBits + featureBits gap results from rubBits output
         matches = re.findall('[0-9].*[\%\)]', rbOut)

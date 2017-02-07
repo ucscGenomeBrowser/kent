@@ -64,4 +64,7 @@ char *firstAltAllele(struct allele *alleles);
  * to calculate any consequence.  When allele doesn't really matter, just use the
  * first alternate allele that is given. */
 
+struct gpFx *gpFxNoVariation(struct variant *variant, struct lm *lm);
+/* Return a gpFx with SO term no_sequence_alteration, for VCF rows that aren't really variants. */
+
 #endif /* GPFX_H */

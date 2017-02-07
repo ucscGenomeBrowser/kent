@@ -43,7 +43,7 @@ struct chromInfo;
 #define HDB_MAX_SEQS_FOR_SPLIT 100
 
 /* Statically-allocated string lengths (max supported len incl. final \0): */
-#define HDB_MAX_CHROM_STRING 32
+#define HDB_MAX_CHROM_STRING 255
 #define HDB_MAX_BAND_STRING 64
 #define HDB_MAX_FIELD_STRING 32
 #define HDB_MAX_TABLE_STRING 128
@@ -466,6 +466,9 @@ boolean hIsBetaHost(void);
 boolean hIsBrowserbox();
 /* Return TRUE if this is the browserbox virtual machine */
 
+boolean hIsGbic();
+/* Return TRUE if this mirror has been installed by the installation script */
+
 boolean hIsPreviewHost(void);
 /* Return TRUE if this is running on preview web-server.  The preview
  * server is a mirror of the development server provided for public
@@ -746,6 +749,15 @@ char *hScientificName(char *database);
 /* Return scientific name for organism represented by this database */
 /* Return NULL if unknown database */
 /* NOTE: must free returned string after use */
+
+char *hOrgShortName(char *org);
+/* Get the short name for an organism.  Returns NULL if org is NULL.
+ * WARNING: static return */
+
+char *hOrgShortForDb(char *db);
+/* look up the short organism scientific name given an organism db.
+ * WARNING: static return */
+
 
 char *hHtmlPath(char *database);
 /* Return /gbdb path name to html description for this database */

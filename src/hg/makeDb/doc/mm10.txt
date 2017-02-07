@@ -12496,7 +12496,7 @@ TMPDIR=/dev/shm
     (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
 
     ##  gencode-cmp.tsv- check to see if sizes make sense
-    
+
     ## Copy and update trackDb files from previous release.
     ## Change version and use lower priority so it sorts to top of
     ## super track page.  Follow instructions in ra file to ensure
@@ -12523,4 +12523,126 @@ TMPDIR=/dev/shm
     cd /hive/data/genomes/mm10/bed/gencodeVM12
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
-##############################################################################
+############################################################################################
+# Mouse strains VCF (DONE - 2016-11-08 - Hiram)
+
+    mkdir /hive/data/genomes/mm10/bed/strainsVCF
+    cd /hive/data/genomes/mm10/bed/strainsVCF
+
+    # download files:
+wget --timestamping \
+ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.indels.dbSNP142.normed.vcf.gz.tbi
+
+wget --timestamping \
+ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz.tbi
+
+wget --timestamping \
+ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.indels.dbSNP142.normed.vcf.gz
+
+wget --timestamping \
+ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz
+
+    # change to UCSC chrom names:
+
+    zcat mgp.v5.merged.snps_all.dbSNP142.vcf.gz \
+       | sed -e "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/" \
+          > ucscNames.mgp.v5.merged.snps_all.dbSNP142.vcf
+
+    # need to fixup the chrom names in the header, extract the header:
+    grep "^#" ucscNames.mgp.v5.merged.snps_all.dbSNP142.vcf > original.header.txt
+    # copy that and edit it to fixup the names:
+    cp original.header.txt ucscNames.header.txt
+
+    # extract the lines not in the header
+    grep -v "^#" ucscNames.mgp.v5.merged.snps_all.dbSNP142.vcf > ucscNames.notHeader.txt
+
+    # put it back together:
+    cat ucscName.header.txt ucscNames.notHeader.txt > ucsc.mgpV5MergedSNPsAlldbSNP142.vcf
+
+    # tabix gzip (about 2 hours)
+    export name="ucsc.mgpV5MergedSNPsAlldbSNP142.vcf"
+    /cluster/bin/tabix-0.2.6/bgzip $name
+    /cluster/bin/tabix-0.2.6/tabix -p vcf $name.gz.tbi
+
+    # symlink to gbdb
+    mkdir /gbdb/mm10/mouseStrains
+    ln -s `pwd`/ucsc.mgpV5MergedSNPsAlldbSNP142.vcf.gz \
+          /gbdb/mm10/mouseStrains/mgpV5MergedSNPsAlldbSNP142.vcf.gz
+    ln -s `pwd`/ucsc.mgpV5MergedSNPsAlldbSNP142.vcf.gz.tbi \
+          /gbdb/mm10/mouseStrains/mgpV5MergedSNPsAlldbSNP142.vcf.gz.tbi
+
+    hgBbiDbLink mm10 strainSNPs /gbdb/mm10/mouseStrains/mgpV5MergedSNPsAlldbSNP142.vcf.gz
+
+    # trackDb entry in trackDb/mouse/mm10/trackDb.ra:
+
+track strainSNPs
+shortLabel Mouse SNPs
+longLabel Annotated SNPs from mouse strain comparison analysis
+group varRep
+type vcfTabix
+visibility hide
+hapClusterHeight 78
+
+#############################################################################
+# lastz turkey melGal5 (DONE - 2017-01-19 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10MelGal5
+    mkdir /hive/data/genomes/mm10/bed/lastzMelGal5.2017-01-19
+    cd /hive/data/genomes/mm10/bed/lastzMelGal5.2017-01-19
+
+    printf '# Mouse vs. turkey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: turkey melGal5
+SEQ2_DIR=/hive/data/genomes/melGal5/melGal5.2bit
+SEQ2_LEN=/hive/data/genomes/melGal5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=300
+
+BASE=/hive/data/genomes/mm10/bed/lastzMelGal5.2017-01-19
+TMPDIR=/dev/shm
+' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    #	real    160m46.030s
+
+    cat fb.mm10.chainMelGal5Link.txt
+    #	94675126 bases of 2652783500 (3.569%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 melGal5) \
+           > rbest.log 2>&1 &
+    # real    379m35.317s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/melGal5/bed/blastz.mm10.swap
+    cd /hive/data/genomes/melGal5/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/mm10/bed/lastzMelGal5.2017-01-19/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    #	real    31m37.466s
+
+    cat  fb.melGal5.chainMm10Link.txt
+    #	81470789 bases of 1093044709 (7.454%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 mm10) \
+           > rbest.log 2>&1
+    # real    356m16.099s
+
+#############################################################################

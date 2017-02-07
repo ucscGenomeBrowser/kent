@@ -217,4 +217,4 @@ searchTrix ixIxx/GCA_001624865.1_SPRET_EiJ_v1.ensGene.name.ix
 html html/GCA_001624865.1_SPRET_EiJ_v1.ensGene
 
 include rnaSeqData/GCA_001624865.1_SPRET_EiJ_v1.trackDb.txt
-
+include GCA_001624865.1_SPRET_EiJ_v1.bigMaf.trackDb.txt

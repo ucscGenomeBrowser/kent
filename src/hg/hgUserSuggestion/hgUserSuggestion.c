@@ -156,7 +156,8 @@ void printMainForm()
 /* Create the main suggestion form */
 {
 hPrintf(
-    "     <FORM ACTION=\"../cgi-bin/hgUserSuggestion?do.suggestSendMail=1\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\" onLoad=\"document.forms.mainForm.name.focus()\">\n");
+    "     <FORM  ACTION=\"../cgi-bin/hgUserSuggestion?do.suggestSendMail=1\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\" id='mainForm'>\n");
+jsOnEventById("load","mainForm","document.forms.mainForm.name.focus();");
 hPrintf(
     "<H2>User Suggestion Form</H2>\n"
     "<P>If you have ideas about how we can improve the value of the Genome Browser to your research, "
@@ -192,17 +193,17 @@ hPrintf(
     "         </p>\n");
 hPrintf(
     "      <div class=\"formControls\">\n"
-    "        <input id=\"sendButton\" type=\"button\" value=\"Send\" onclick=\"submitform()\"/> \n"
+    "        <input id=\"sendButton\" type=\"button\" value=\"Send\"> \n"
     "        <input type=\"reset\" name=\"suggestClear\" value=\"Clear\" class=\"largeButton\"> \n"
     "      </div>\n"
     "      \n"
     "     </FORM>\n\n");
+jsOnEventById("click","sendButton","submitform();");
 }
 void printValidateScript()
 /* javascript to validate form inputs */
 {
-hPrintf(  
-    "    <script type=\"text/javascript\">\n"
+jsInline(  
     "    function validateMainForm(theform)\n"
     "    {\n"
     "    var x=theform.suggestName.value;\n"
@@ -211,8 +212,7 @@ hPrintf(
     "      alert(\"Name field must be filled out\");\n"
     "      theform.suggestName.focus() ;\n"
     "      return false;\n"
-    "      }\n");
-hPrintf(
+    "      }\n"
     "    var y=theform.suggestEmail.value;\n"
     "    if (y==null || y==\"\")\n"
     "      {\n"
@@ -239,8 +239,7 @@ hPrintf(
     "      alert(\"Email addresses do not match, please re-enter.\");\n"
     "      theform.suggestCfmEmail.focus();\n"
     "      return false;\n"
-    "      }\n");
-hPrintf(
+    "      }\n"
     "    var y=theform.suggestSummary.value;\n"
     "    if (y==null || y==\"\")\n"
     "      {\n"
@@ -249,8 +248,7 @@ hPrintf(
     "      return false;\n"
     "      }          \n"
     "    return true; \n"
-    "    }");
-hPrintf(
+    "    }"
     "    function validateMailAddr(x)\n"
     "    {\n"
     "    var atpos=x.indexOf(\"@\");\n"
@@ -261,14 +259,13 @@ hPrintf(
     "      } \n"
     "    return true;\n"
     "    }\n"
-    "    </script><br />\n\n");
+    );
 }
 
 void printCheckCaptchaScript()
 /* javascript to check CAPTCHA code */
 {
-hPrintf( 
-    " <script type=\"text/javascript\">\n"
+jsInline( 
     " // The Simple JavaScript CAPTCHA Generator code is copied from typicalwhiner.com/190/simple-javascript-captcha-generator \n"
     "         function checkCaptcha(theform){\n"
     "                 var why = \"\";\n"
@@ -287,8 +284,7 @@ hPrintf(
     "                         return false;\n"
     "                 }\n"
     "            return true;\n"
-    "         }\n\n");
-hPrintf(
+    "         }\n\n"
     "         var a = Math.ceil(Math.random() * 9)+ '';\n"
     "         var b = Math.ceil(Math.random() * 9)+ '';\n"
     "         var c = Math.ceil(Math.random() * 9)+ '';\n"
@@ -296,8 +292,7 @@ hPrintf(
     "         var e = Math.ceil(Math.random() * 9)+ '';\n\n"
     "         var code = a + b + c + d + e;\n"
     "         document.getElementById(\"txtCaptcha\").value = code;\n"
-    "         document.getElementById(\"txtCaptchaDiv\").innerHTML = code;\n\n");
-hPrintf(
+    "         document.getElementById(\"txtCaptchaDiv\").innerHTML = code;\n\n"
     " function ValidCaptcha(){\n"
     "         var str1 = removeSpaces(document.getElementById('txtCaptcha').value);\n"
     "         var str2 = removeSpaces(document.getElementById('txtInput').value);\n"
@@ -306,19 +301,17 @@ hPrintf(
     "         } else {\n"
     "                 return false;\n"
     "         }\n"
-    " }\n\n");
-hPrintf(
+    " }\n\n"
     " function removeSpaces(string){\n"
     "         return string.split(' ').join('');\n"
     " }\n"
-    " </script><br />\n\n");
+    );
 }
 
 void printSubmitFormScript()
 /* javascript to submit form */
 {
-hPrintf(
-    "     <script type=\"text/javascript\">\n"
+jsInline(
     "     function submitform()\n"
     "     {\n"
     "      if ( validateMainForm(document.forms[\"mainForm\"]) && checkCaptcha(document.forms[\"mainForm\"]))\n"
@@ -326,7 +319,7 @@ hPrintf(
     "          document.forms[\"mainForm\"].submit();\n"
     "        }\n"
     "     }\n"
-    "     </script>\n\n");
+    );
 }
 
 void printSuggestionConfirmed(char *summary, char * refID, char *userAddr, char *adminAddr, char *details)
@@ -360,8 +353,9 @@ hPrintf(
 hPrintf(
     "<p>"
     "The form is invalid. Please correct it and "
-    "<a href=\"javascript: history.go(-1)\">submit</a> again.</p>"
+    "<a id='goBack' >submit</a> again.</p>"
     );
+jsOnEventById("click", "goBack", "history.go(-1)");
 }
 
 void printInvalidCategory(char *invalidCategory)
@@ -372,8 +366,9 @@ hPrintf(
 hPrintf(
     "<p>"
     "The category \"%s\" is invalid. Please correct it and "
-    "<a href=\"javascript: history.go(-1)\">submit</a> again.</p>",
+    "<a id='goBack'>submit</a> again.</p>",
     invalidCategory);
+jsOnEventById("click", "goBack", "history.go(-1)");
 }
 
 void printInvalidEmailAddr(char *invalidEmailAddr)
@@ -384,8 +379,9 @@ hPrintf(
 hPrintf(
     "<p>"
     "The email address \"%s\" is invalid. Please correct it and "
-    "<a href=\"javascript: history.go(-1)\">submit</a> again.</p>",
+    "<a id='goBack'>submit</a> again.</p>",
     invalidEmailAddr);
+jsOnEventById("click", "goBack", "history.go(-1)");
 }
 
 void sendSuggestionBack(char *sName, char *sEmail, char *sCategory, char *sSummary, char *sDetails, char *suggestID)

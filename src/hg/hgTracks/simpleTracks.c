@@ -143,6 +143,7 @@
 #include "genbank.h"
 #include "bedTabix.h"
 #include "knetUdc.h"
+#include "trackHub.h"
 
 #define CHROM_COLORS 26
 
@@ -6140,6 +6141,7 @@ if (hTableExists(database, "kgXref"))
         kgE->name = dyStringCannibalize(&name);
         kgE->hgg_prot = lf->extra;
         lf->extra = kgE;
+        lf->label = kgE->name;
 	}
     }
 hFreeConn(&conn);
@@ -6757,32 +6759,6 @@ tg->drawItemAt  = rgdQtlDrawAt;
 tg->drawName    = TRUE;
 }
 
-char *orgShortName(char *org)
-/* Get the short name for an organism.  Returns NULL if org is NULL.
- * WARNING: static return */
-{
-static int maxOrgSize = 7;
-static char orgNameBuf[128];
-if (org == NULL)
-    return NULL;
-strncpy(orgNameBuf, org, sizeof(orgNameBuf)-1);
-orgNameBuf[sizeof(orgNameBuf)-1] = '\0';
-char *shortOrg = firstWordInLine(orgNameBuf);
-if (strlen(shortOrg) > maxOrgSize)
-    shortOrg[maxOrgSize] = '\0';
-return shortOrg;
-}
-
-char *orgShortForDb(char *db)
-/* look up the short organism scientific name given an organism db.
- * WARNING: static return */
-{
-char *org = hScientificName(db);
-char *shortOrg = orgShortName(org);
-freeMem(org);
-return shortOrg;
-}
-
 char *getOrganism(struct sqlConnection *conn, char *acc)
 /* lookup the organism for an mrna, or NULL if not found */
 {
@@ -6811,7 +6787,7 @@ char *getOrganismShort(struct sqlConnection *conn, char *acc)
  * only return the genus, and only the first seven letters of that.
  * WARNING: static return */
 {
-return orgShortName(getOrganism(conn, acc));
+return hOrgShortName(getOrganism(conn, acc));
 }
 
 char *getGeneName(struct sqlConnection *conn, char *acc)
@@ -13865,6 +13841,8 @@ else if (sameWord(type, "bigGenePred"))
     wordCount++;
     words[1] = "12";
     bigBedMethods(track, tdb, wordCount, words);
+    track->itemColor   = bigGenePredColor;
+    track->itemNameColor = bigGenePredColor;
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
@@ -14355,6 +14333,8 @@ static TrackHandler lookupTrackHandler(struct trackDb *tdb)
 if (handlerHash == NULL)
     return NULL;
 TrackHandler handler = hashFindVal(handlerHash, tdb->table);
+if (handler == NULL && sameString(trackHubSkipHubName(tdb->table), "cytoBandIdeo"))
+    handler = hashFindVal(handlerHash, "cytoBandIdeo");
 // if nothing found, try the "trackHandler" statement
 if (handler == NULL)
     {

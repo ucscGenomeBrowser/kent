@@ -50,7 +50,7 @@ void tagStormReformat(char *input, char *output)
 {
 struct tagStorm *tagStorm = tagStormFromFile(input);
 if (tab)
-    tagStormWriteAsFlatTab(tagStorm, output, idTag, withParent, maxDepth, leaves);
+    tagStormWriteAsFlatTab(tagStorm, output, idTag, withParent, maxDepth, leaves, "n/a", TRUE);
 else if (flatten)
     tagStormWriteAsFlatRa(tagStorm, output, idTag, withParent, maxDepth, leaves);
 else

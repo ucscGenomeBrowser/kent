@@ -63,7 +63,7 @@ DBS = \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \
 	centromeres1 \
 	cerSim1 \
-	chiLan1 \
+	chiLan1o \
 	chlSab2 \
 	choHof1 \
 	chrPic1 chrPic2 \
@@ -111,10 +111,11 @@ DBS = \
 	macFas5 \
 	manPen1 \
 	marVir1 \
-	melGal1 \
+	melGal1 melGal5 \
 	melHap1 \
 	melInc1 melInc2 \
 	micMur1 micMur2 \
+	micOch1 \
 	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 mm10Patch4 \
 	monDom1 monDom4 monDom5 \
 	musFur1 \

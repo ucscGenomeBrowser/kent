@@ -23,14 +23,14 @@ currently viewing is locally cached as a &quot;sparse file&quot;.</p>
 The following AutoSQL definition is used for bigMaf multiple alignment files. This is the 
 <a href="examples/bigMaf.as"><code>bigMaf.as</code></a> file defined by the <code>-as</code> option 
 when using <code>bedToBigBed</code>.</p>
-<pre><code>  table bedMaf
-  "Bed3 with MAF block"
-      (
-      string chrom;      "Reference sequence chromosome or scaffold"
-      uint   chromStart; "Start position in chromosome"
-      uint   chromEnd;   "End position in chromosome"
-      lstring mafBlock;  "MAF block"
-      ) </code></pre>
+<pre><code>table bedMaf
+"Bed3 with MAF block"
+    (
+    string chrom;      "Reference sequence chromosome or scaffold"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    lstring mafBlock;  "MAF block"
+    ) </code></pre>
 <p>
 Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory; somewhere on the
 order of 1.25 times more RAM than the uncompressed BED input file.</p>
@@ -38,9 +38,9 @@ order of 1.25 times more RAM than the uncompressed BED input file.</p>
 To create a bigMaf track, follow these steps:
 <ol>
   <li>
-  If you already have a MAF file you would like to convert to a bigMaf, skip to <em>Step 3</em>, 
-  otherwise download the example <a href="examples/chr22_KI270731v1_random.maf">MAF file</a> for the
-  Human GRCh38(hg38) assembly.</li>
+  If you already have a MAF file you would like to convert to a bigMaf, skip to <em>Step 3</em>; 
+  otherwise, download the example <a href="examples/chr22_KI270731v1_random.maf">MAF file</a> for 
+  the Human GRCh38(hg38) assembly.</li>
   <ul>
     <li>
     If you would like to include optional reading frame and block summary information with our 
@@ -58,7 +58,7 @@ To create a bigMaf track, follow these steps:
     <a href="examples/mafFrames.as">mafFrames.as</a> files.</li> 
   </ul>
   <li>
-  Download the <code>bedToBigBed</code> program from the 
+  Download the <code>bedToBigBed</code> and <code>mafToBigBed</code> programs from the 
   <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary utilities.</li>
   <ul>
     <li>
@@ -75,32 +75,25 @@ To create a bigMaf track, follow these steps:
   <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
   data set&quot; for any assembly). For example, for the hg38 database, the hg38.chrom.sizes are 
   located at <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
-  target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</li>
-  <li>
-  Download the <a href="examples/mafToBigMaf.awk"><code>mafToBigMaf.awk</code></a> script.</li>
-  <li>
-  Create the bigMaf file from your sorted bigMaf input file using a combination of 
-  <code>awk</code>, <code>sed</code> and the <code>bedToBigBed</code> utility like so: 
-<pre><code>  awk -f mafToBigMaf.awk chr22_KI270731v1_random.maf | sed 's/^$/d' | sed 's/hg38.//' &gt; bigMaf.txt
-  bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bigMaf.txt chrom.sizes bigMaf.bb </code></pre></li>
+  target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
+<pre><code>mafToBigMaf hg38 chr22_KI270731v1_random.maf stdout | sort -k1,1 -k2,2n > bigMaf.txt
+bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bigMaf.txt hg38.chrom.sizes bigMaf.bb </code></pre></li>
   <li>
   Follow the below steps to create the binary indexed mafFrames and mafSummary files to accompany 
   your bigMaf file: 
-<pre><code>  genePredSingleCover chr22_KI270731v1_random.gp single.gp
-  genePredToMafFrames hg38 chr22_KI270731v1_random.maf bigMafFrames.txt hg38 single.gp
-  awk -f mafToBigMaf.awk chr22_KI270731v1_random.maf | sed '/^$/d' | sed 's/hg38.//' &gt; bigMafFrames.txt
-  bedToBigBed -type=bed4+7 -as=mafFrames.as -tab bigMafFrames.txt chrom.sizes bigMafFrames.bb
+<pre><code>genePredSingleCover chr22_KI270731v1_random.gp single.gp
+genePredToMafFrames hg38 chr22_KI270731v1_random.maf bigMafFrames.txt hg38 single.gp
+bedToBigBed -type=bed3+8 -as=mafFrames.as -tab bigMafFrames.txt hg38.chrom.sizes bigMafFrames.bb
 
-  hgLoadMafSummary -minSeqSize=1 -test hg38 bigMafSummary chr22_KI270731v1_random.maf
-  cut -f 2 bigMafSummary.tab | sort -k1,1 -k2,2n &gt; bigMafSummary.bed
-  bedToBigBed -type=bed3+4 -as=mafSummary.as -tab bigMafSummary.bed chrom.sizes bigMafSummary.bb </code></pre></li>
+hgLoadMafSummary -minSeqSize=1 -test hg38 bigMafSummary chr22_KI270731v1_random.maf
+cut -f 2 bigMafSummary.tab | sort -k1,1 -k2,2n &gt; bigMafSummary.bed
+bedToBigBed -type=bed3+4 -as=mafSummary.as -tab bigMafSummary.bed hg38.chrom.sizes bigMafSummary.bb </code></pre></li>
   <li>
   Move the newly created bigMaf file (<code>bigMaf.bb</code>) to an http, https, or ftp
   location.</li> 
   <ul> 
     <li>
-    If you generated the <code>bigMafSummary.bb</code> and/or <code>bigMafFrames.bb</code> files, 
-    they will also need to be in a web accessible location, likely in the same location as 
+    If you generated the <code>bigMafSummary.bb</code> and/or <code>bigMafFrames.bb</code> files, they will also need to be in a web accessible location, likely in the same location as 
     <code>bigMaf.bb</code>.</li> 
   </ul>
   <li>
@@ -108,8 +101,8 @@ To create a bigMaf track, follow these steps:
   <a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed 
   <a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic 
   version of the &quot;track&quot; line will look something like this:
-<pre><code>  track type=bigMaf name="My Big MAF" description="A Multiple Alignment"
-  bigDataUrl=http://myorg.edu/mylab/bigMaf.bb</code></pre></li>
+<pre><code>track type=bigMaf name="My Big MAF" description="A Multiple Alignment"
+bigDataUrl=http://myorg.edu/mylab/bigMaf.bb</code></pre></li>
   <li>
   Paste this custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom 
   track</a> management page.</li>
@@ -124,10 +117,10 @@ In this example, you will use an existing bigMaf file to create a bigMaf custom 
 that contains data on the hg38 assembly has been placed on our http server. You can create a custom 
 track using this bigMaf file by constructing a &quot;track&quot; line that references this file like
 so:</p>
-<pre><code>  track type=bigMaf name=&quot;bigMaf Example One&quot; 
-  description=&quot;A bigMaf file&quot; 
-  bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb
-  frames=http://genome.ucsc.edu/goldenPath/help/examples/bigMafFrames.bb</code></pre>
+<pre><code>track type=bigMaf name=&quot;bigMaf Example One&quot; 
+description=&quot;A bigMaf file&quot; 
+bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb
+frames=http://genome.ucsc.edu/goldenPath/help/examples/bigMafFrames.bb</code></pre>
 <p>
 Paste the above &quot;track&quot; line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom 
 track</a> management page for the human assembly hg38 (Dec. 2013), then press the <em>submit</em> 
@@ -138,8 +131,7 @@ will allow specifying the order of sequences.</p>
 <p>
 Custom tracks can also be loaded via one URL line. The below link loads the same bigMaf track, but 
 includes parameters on the URL line:</p>
-<pre>
-<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random&hgct_customText=track%20type=bigMaf%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb%20visibility=pack%20frames=http://genome.ucsc.edu/goldenPath/help/examples/bigMafFrames.bb"
+<pre><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random&hgct_customText=track%20type=bigMaf%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb%20visibility=pack%20frames=http://genome.ucsc.edu/goldenPath/help/examples/bigMafFrames.bb"
 target="_blank"><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random&hgct_customText=track%20type=bigMaf%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb%20visibility=pack</code></a></pre>
 <p>
 With this example bigMaf loaded, click into an alignment from the track. Note that the details page 
@@ -165,7 +157,7 @@ In this example, you will create your own bigMaf file from an existing bigMaf in
   <li>
   Use the <code>bedToBigBed</code> utility to create the binary indexed MAF file (<em>completes 
   step 6</em>):
-<pre><code>  bedToBigBed -type=bed3+1 -tab -as=bigMaf.as bigMaf.txt hg38.chrom.sizes bigMaf.bb</code></pre></li>
+<pre><code>bedToBigBed -type=bed3+1 -tab -as=bigMaf.as bigMaf.txt hg38.chrom.sizes bigMaf.bb</code></pre></li>
   <li>
   Place the bigMaf file you just created (<code>bigMaf.bb</code>) on a web-accessible server 
   (<em>step 8</em>).</li>

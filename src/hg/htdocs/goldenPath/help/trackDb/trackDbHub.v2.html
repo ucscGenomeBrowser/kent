@@ -127,6 +127,7 @@ in the sections below.</I>
         <LI><A HREF="#bigPsl_-_Pairwise_Alignments">bigPsl</A>: Pairwise Alignments</LI>
         <LI><A HREF="#bigWig_-_Signal_Graphing_Track_Settings">bigWig</A>:
                                                                 Signal graphing tracks</LI>
+        <LI><A HREF="#halSnake">halSnake</A>: HAL Snake Format</LI>
         <LI><A HREF="#vcfTabix">vcfTabix</A>: Variant Call Format</LI>
     </UL></LI>
     <LI><A HREF="#groupingTracks">Grouping tracks into sets and hierarchies</A>
@@ -174,7 +175,7 @@ in the sections below.</I>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="html"><A name="html"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">html</code></div>
+        <div class="format"><code class="level-base">html</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="visibility"><A name="visibility"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-base">visibility</code></div>
@@ -192,7 +193,7 @@ in the sections below.</I>
         <div class="format"><code class="level-base">color &lt;red,green,blue&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="priority"><A name="priority"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">priority &lt;float&gt;</code></div>
+        <div class="format"><code class="level-base">priority &lt;float&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="altColor"><A name="altColor"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">altColor &lt;red,green,blue&gt;</code></div>
@@ -205,7 +206,7 @@ in the sections below.</I>
     </TD></TR>
     <TR VALIGN=TOP><TD class="darkerLabels"><A name="darkerLabels"></A><IMG class='toggle detail'>
         <div class="format">
-                <code class="level-new">darkerLabels on</code><BR>
+                <code class="level-full">darkerLabels on</code><BR>
         </div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="dataVersion"><A name="dataVersion"></A><IMG class='toggle detail'>
@@ -222,7 +223,7 @@ in the sections below.</I>
         <div class="format"><code class="level-full">iframeOptions &lt;string&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="mouseOverField"><A name="mouseOverField"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">mouseOverField &lt;fieldName&gt;</code></div>
+        <div class="format"><code class="level-full">mouseOverField &lt;fieldName&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="otherDb"><A name="otherDb"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">otherDb &lt;otherDb&gt;</code></div>
@@ -244,19 +245,19 @@ in the sections below.</I>
     </TD></TR>
     <TR VALIGN=TOP><TD class="skipEmptyFields"><A name="skipEmptyFields"></A><IMG class='toggle detail'>
         <div class="format">
-                <code class="level-new">skipEmptyFields on</code><BR>
+                <code class="level-full">skipEmptyFields on</code><BR>
         </div>
     </TD></TR>
 
     <TR VALIGN=TOP><TD class="skipFields"><A name="skipFields"></A><IMG class='toggle detail'>
         <div class="format">
-                <code class="level-new">skipFields fieldName1,fieldName2 ...</code><BR>
+                <code class="level-full">skipFields fieldName1,fieldName2 ...</code><BR>
         </div>
     </TD></TR>
 
     <TR VALIGN=TOP><TD class="sepFields"><A name="sepFields"></A><IMG class='toggle detail'>
         <div class="format">
-                <code class="level-new">sepFields fieldName1,fieldName2 ...</code><BR>
+                <code class="level-full">sepFields fieldName1,fieldName2 ...</code><BR>
         </div>
     </TD></TR>
 
@@ -377,7 +378,7 @@ are described below along with settings specific to their types.</P>
         <div class="format"><code class="level-base">itemRgb on</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="colorByStrand"><A name="colorByStrand"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">colorByStrand &lt;red,green,blue&gt;
+        <div class="format"><code class="level-base">colorByStrand &lt;red,green,blue&gt;
                                             &lt;red,green,blue&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="denseCoverage"><A name="denseCoverage"></A><IMG class='toggle detail'>
@@ -418,7 +419,7 @@ are described below along with settings specific to their types.</P>
             <A name="scoreMax"></A>
             <A name="scoreMin"></A><IMG class='toggle detail'>
         <div class="format">
-            <code class="level-full">spectrum on</code><BR>
+            <code class="level-base">spectrum on</code><BR>
             <span class="scoreMax"><code class="level-full">scoreMax &lt;integer&gt;</code></span><BR>
             <span class="scoreMin"><code class="level-full">scoreMin &lt;integer&gt;</code></span></div>
     </TD></TR>
@@ -430,6 +431,9 @@ are described below along with settings specific to their types.</P>
     </TD></TR>
     <TR VALIGN=TOP><TD class="searchTrix"><A name="searchTrix"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">searchTrix &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="labelFields"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">labelFields &lt;fieldName[,fieldName]&gt;</code></div>
     </TD></TR>
 </TABLE>
 
@@ -461,7 +465,7 @@ are described below along with settings specific to their types.</P>
             <span class="prevExonText"><code class="level-full">prevExonText &lt;str&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="scoreLabel"><A name="scoreLabel"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">scoreLabel &lt;label&gt;</code></div>
+        <div class="format"><code class="level-full">scoreLabel &lt;label&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="showTopScorers">
         <A name="showTopScorers"></A><IMG class='toggle detail'>
@@ -488,7 +492,7 @@ are described below along with settings specific to their types.</P>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="linkDataUrl"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">linkDataUrl &lt;url/relativePath&gt;</code></div>
+        <div class="format"><code class="level-full">linkDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -507,6 +511,9 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="labelFields"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">labelFields &lt;fieldName[,fieldName]&gt;</code></div>
+    </TD></TR>
 </TABLE>
 <BR><BR>
 
@@ -524,13 +531,13 @@ are described below along with settings specific to their types.</P>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="speciesOrder"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">speciesOrder &lt;species1&gt; [species2 &hellip;]</code></div>
+        <div class="format"><code class="level-full">speciesOrder &lt;species1&gt; [species2 &hellip;]</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="frames"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">frames &lt;url/relativePath&gt;</code></div>
+        <div class="format"><code class="level-full">frames &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="summary"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">summary &lt;tableName/url&gt;</code></div>
+        <div class="format"><code class="level-full">summary &lt;tableName/url&gt;</code></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -549,17 +556,20 @@ are described below along with settings specific to their types.</P>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="baseColorUseCds"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
+        <div class="format"><code class="level-full">baseColorUseCds &lt;given/table &lt;table&gt;&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="baseColorUseSequence"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; / 
+        <div class="format"><code class="level-full">baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; / 
                                 hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss &gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="baseColorDefault"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">baseColorDefault &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt</code></div>
+        <div class="format"><code class="level-full">baseColorDefault &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="showDiffBasesAllScales"><IMG class='toggle detail'>
-        <div class="format"><code class="level-required">showDiffBasesAllScales on</code></div>
+        <div class="format"><code class="level-full">showDiffBasesAllScales on</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="labelFields"><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">labelFields &lt;fieldName[,fieldName]&gt;</code></div>
     </TD></TR>
 </TABLE>
 <BR><BR>
@@ -575,7 +585,7 @@ are described below along with settings specific to their types.</P>
             <code>type bigWig &lt;#&gt; &lt;#&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="autoScale"><A name="autoScale"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">autoScale &lt;off/on&gt;</code></div>
+        <div class="format"><code class="level-base">autoScale &lt;off/on&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="maxHeightPixels">
         <A name="maxHeightPixels"></A><IMG class='toggle detail'>
@@ -634,6 +644,27 @@ are described below along with settings specific to their types.</P>
 </TABLE>
 <BR><BR>
 
+<A name="halSnake"></A>
+<TABLE class="settingsTable" id="halSnake_-_Multiple_Alignments">
+<THEAD><TR><TD><DIV ID="halSnake_intro" class="intro"></DIV></TD></TR></THEAD>
+    <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>
+        &nbsp;halSnake - Genome-wide Multiple Alignments
+    </TH></TR>
+    <TR VALIGN=TOP><TD class="halSnake"><IMG class='toggle detail'>
+        <div class="format">
+            <code>type halSnake</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showSnpWidth"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">showSnpWidth &lt;integer&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="otherSpecies"><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">otherSpecies &lt;otherSpecies&gt;</code></div>
+    </TD></TR>
+</TABLE>
+<BR><BR>
 
 <A name="vcfTabix"></A>
 <TABLE class="settingsTable" id="vcfTabix_-_Variant_Call_Format_Track_Settings">

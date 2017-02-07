@@ -510,8 +510,11 @@ for (pair = secSnips; pair != NULL; pair = pair->next)
     if (snipCount>2) 
         {
         if (i==0)
+	    {
             // alternative to "more": <img src=\"../images/add_sm.gif\">
-            printf("<A class=\"showSnips\" href=\"#\" onclick=\"$(this).nextUntil('.shownSnips').slideToggle(); return false;\">more</A><BR><DIV class=\"hiddenSnips\" style=\"display:none\">");
+            printf("<A id='snowSnips_more' class=\"showSnips\" href=\"#\" >more</A><BR><DIV class=\"hiddenSnips\" style=\"display:none\">");
+	    jsOnEventById("click", "snowSnips_more", "$(this).nextUntil('.shownSnips').slideToggle(); return false;");
+	    }
         if (i==snipCount-2)
             printf("</DIV><div class=\"shownSnips\"></div>");
         }

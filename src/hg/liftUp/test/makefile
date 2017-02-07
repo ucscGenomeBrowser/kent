@@ -6,7 +6,8 @@ liftUp = ${DESTBINDIR}/liftUp
 all: test
 
 test: chainQ chainT netQ netT genePred pslRc \
-	 missingWarn missingCarry missingDrop  missingError bed8 bed8version
+	 missingWarn missingCarry missingDrop  missingError bed8 bed8version \
+	 bed3Strand
 
 chainQ: output
 	${liftUp} -chainQ output/testOutQ.chain \
@@ -88,6 +89,10 @@ bed8: output
 bed8version: output
 	${liftUp} -type=.bed8 -ignoreVersions output/$@.bed input/contigNoVer.lft error input/bed8contig.bed
 	diff expected/bed8.bed output/$@.bed
+
+bed3Strand: output
+	${liftUp} -type=.bed3 output/$@.bed input/contigRevStrand.lft error input/bed8contig.bed
+	diff expected/bed3Strand.bed output/$@.bed
 
 output:
 	${MKDIR} output

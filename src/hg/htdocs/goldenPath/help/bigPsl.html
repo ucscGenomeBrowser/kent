@@ -57,8 +57,8 @@ an example of bigPsl input. -->
       uint misMatch; " Number of bases that don't match "
       uint repMatch; " Number of bases that match but are part of repeats "
       uint nCount;   " Number of 'N' bases "
+      uint seqType;   " 0=empty, 1=nucleotide, 2=amino_acid"
       ) </code></pre>
-
 <p>
 Note that the oStrand field is an indicator of whether or not the stored psl needs to be reverse 
 complemented before output or display. This is due to the need for the bigPsl file to have reference
@@ -92,15 +92,15 @@ To create a bigPsl track, follow these steps:</p>
   located at <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
   target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</li> 
   <li>
-  Create a <code>bed12+12</code> bigPsl format file that has the 24 fields described by a bigPsl 
+  Create a <code>bed12+13</code> bigPsl format file that has the 25 fields described by a bigPsl 
   file as described <a href="#bigPsl">here</a>.</li>
   <ul>
     <li>
-    Your bigPsl file must have the extra twelve fields described in the AutoSQL file above: 
+    Your bigPsl file must have the extra thirteen fields described in the AutoSQL file above: 
     <code>oChromStart, oChromEnd, oStrand, oChromSize, oChromStarts, oSequence, oCDS, chromSize, 
-    match, misMatch, repMatch, nCount </code> 
+    match, misMatch, repMatch, nCount, seqType </code> 
     <li>
-    Use the <code>pslToBigPsl</code> utility to create a correctly formatted <code>bed12+12</code> 
+    Use the <code>pslToBigPsl</code> utility to create a correctly formatted <code>bed12+13</code> 
     file like so: <pre><code>  pslToBigPsl bigPsl.psl stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</code></pre></li>
     <li>
     Note that if you have created your own PSL file you may have corresponding FASTA and CDS files 
@@ -111,7 +111,7 @@ To create a bigPsl track, follow these steps:</p>
   <li>
   Create the binary indexed bigPsl file from your sorted bigPsl input file using the 
   <code>bedToBigBed</code> utility like so: 
-  <pre><code>  bedToBigBed -as=bigPsl.as -type=bed12+12 -tab bigPsl.txt chrom.sizes bigPsl.bb</code></pre></li>
+  <pre><code>  bedToBigBed -as=bigPsl.as -type=bed12+13 -tab bigPsl.txt chrom.sizes bigPsl.bb</code></pre></li>
   <li>
   Move the newly created bigPsl file (<code>bigPsl.bb</code>) to an http, https, or ftp 
   location.</li>
@@ -158,7 +158,7 @@ browser position of the alignment and more detailed information about the alignm
 In this example, you will create your own bigPsl file from an existing bigPsl input file.</p>
 <ul>
   <li>
-  Save this <code>bed12+12</code> <a href="examples/bigPsl.txt">bigPsl.txt</a> example input file to
+  Save this <code>bed12+13</code> <a href="examples/bigPsl.txt">bigPsl.txt</a> example input file to
   your machine (<em>satisfies above step 4</em>).</li>
   <li>
   Download the <code>bedToBigBed</code> 
@@ -170,7 +170,7 @@ In this example, you will create your own bigPsl file from an existing bigPsl in
   Save this <code>bigPsl.as</code> <a href="examples/bigPsl.as"> text file</a> to your machine.</li>
   <li>
   Run the utility to create the bigBed output file (<em>step 5</em>):
-<pre><code>  bedToBigBed -as=bigPsl.as -type=bed12+12 -tab  bigPsl.txt hg38.chrom.sizes bigPsl.bb</code></pre></li>
+<pre><code>  bedToBigBed -as=bigPsl.as -type=bed12+13 -tab  bigPsl.txt hg38.chrom.sizes bigPsl.bb</code></pre></li>
   <li>
   Place the bigPsl file you just created (<code>bigPsl.bb</code>) on a web-accessible server 
   (<em>step 6</em>).</li>

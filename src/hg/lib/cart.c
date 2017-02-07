@@ -481,11 +481,6 @@ void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 {
 struct sqlResult *sr = NULL;
 char **row = NULL;
-/* Validate login cookies if login is enabled -- must be called before wikiLinkUserName */
-if (loginSystemEnabled())
-    {
-    loginValidateCookies(cart);
-    }
 char *userName = wikiLinkUserName();
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encSessionOwner = cgiEncodeFull(sessionOwner);
@@ -1386,7 +1381,7 @@ if (asTable)
     if (width<100)
         width = 100;
     cgiMakeTextVarWithExtraHtml(hel->name, val, width,
-                                "onchange='setCartVar(this.name,this.value);'");
+                                "change", "setCartVar(this.name,this.value);");
     printf("</TD></TR>\n");
     }
 else
@@ -1658,11 +1653,13 @@ static void cartErrorCatcher(void (*doMiddle)(struct cart *cart),
                              struct cart *cart)
 /* Wrap error catcher around call to do middle. */
 {
-int status = setjmp(htmlRecover);
 pushAbortHandler(htmlAbort);
 hDumpStackPushAbortHandler();
+int status = setjmp(htmlRecover);
 if (status == 0)
+    {
     doMiddle(cart);
+    }
 hDumpStackPopAbortHandler();
 popAbortHandler();
 }
@@ -1673,7 +1670,7 @@ void cartEarlyWarningHandler(char *format, va_list args)
 static boolean initted = FALSE;
 va_list argscp;
 va_copy(argscp, args);
-if (!initted)
+if (!initted && !cgiOptionalString("ajax"))
     {
     htmStart(stdout, "Early Error");
     initted = TRUE;
