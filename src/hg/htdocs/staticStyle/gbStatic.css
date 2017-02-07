@@ -128,7 +128,7 @@
 
 .gbsPage ul li::before {   /* square bullets, from hgGateway */
     position: absolute;
-    top: 0.5em;
+    top: 0.4em;
     left: -1em;
     width: 8px;
     height: 8px;
