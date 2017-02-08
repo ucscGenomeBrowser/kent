@@ -160,14 +160,8 @@ void transMapRegisterTrackHandlers()
 /* register track handlers for transMap tracks */
 {
 registerTrackHandler("transMap", transMapMethods);
-
-if (0)
-    { /// FIXME
-// FIXME: legacy, this can be removed once trackDb files with trackHandler
-// attributes are pushed
 registerTrackHandler("transMapAlnRefSeq", transMapMethods);
 registerTrackHandler("transMapAlnMRna", transMapMethods);
 registerTrackHandler("transMapAlnSplicedEst", transMapMethods);
 registerTrackHandler("transMapAlnUcscGenes", transMapMethods);
-    }
 }
