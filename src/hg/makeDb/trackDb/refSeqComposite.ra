@@ -5,7 +5,6 @@ shortLabel NCBI RefSeq
 longLabel RefSeq gene predictions from NCBI
 group genes
 visibility pack
-color 12,12,120
 type genePred
 dragAndDrop subTracks
 noInherit on
@@ -16,7 +15,6 @@ allButtonPair on
     release alpha
     shortLabel NCBI RefSeq genes and alignments
     view aNcbiRefSeq
-    color 16,93,235
     parent refSeqComposite on
     configurable on
     baseColorUseCds given
@@ -25,6 +23,7 @@ allButtonPair on
 	track ncbiRefSeq
         release alpha
         parent ncbiRefSeqView off
+        color 12,12,120
         shortLabel RefSeq All
         subGroups view=aNcbiRefSeq
         longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, and YP_*)
@@ -32,6 +31,7 @@ allButtonPair on
         priority 1
 
 	track ncbiRefSeqCurated
+        color 12,12,120
         release alpha
         parent ncbiRefSeqView off
 	shortLabel RefSeq Curated
@@ -41,6 +41,7 @@ allButtonPair on
         priority 2
 
 	track ncbiRefSeqPredicted
+        color 109,109,174
         release alpha
         parent ncbiRefSeqView off
 	shortLabel RefSeq Predicted
@@ -51,6 +52,7 @@ allButtonPair on
 
 	track ncbiRefSeqOther
         release alpha
+        color 32,32,32
         parent ncbiRefSeqView off
 	shortLabel RefSeq Other
         subGroups view=aNcbiRefSeq
@@ -77,7 +79,7 @@ allButtonPair on
         baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
         baseColorUseCds table ncbiRefSeqCds
         idXref ncbiRefSeqLink mrnaAcc name
-        color 48,168,219
+        color 16,64,32
         pepTable ncbiRefSeqPepTable
 
     track ucscRefSeqView
