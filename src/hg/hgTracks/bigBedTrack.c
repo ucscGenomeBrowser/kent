@@ -125,7 +125,7 @@ return field;
 char *makeLabel(struct track *track,  struct bigBedInterval *bb)
 // Build a label for a bigBedTrack from the requested label fields.
 {
-char *labelSeparator = trackDbSettingClosestToHome(track->tdb, "labelSeparator");
+char *labelSeparator = stripEnclosingDoubleQuotes(trackDbSettingClosestToHome(track->tdb, "labelSeparator"));
 if (labelSeparator == NULL)
     labelSeparator = "/";
 char *restFields[256];
