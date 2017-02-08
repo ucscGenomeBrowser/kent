@@ -10,7 +10,7 @@
 
 
 
-char *bigTransMapCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,reserved,blockCount,blockSizes,chromStarts,oChromStart,oChromEnd,oStrand,oChromSize,oChromStarts,oSequence,oCDS,chromSize,match,misMatch,repMatch,nCount,seqType,srcDb,srcChrom,srcChromStart,srcChromEnd,srcScore,srcAligned,geneName,geneId,geneType,transcriptType,chainType,commonName,scientificName,orgAbbrev";
+char *bigTransMapCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,reserved,blockCount,blockSizes,chromStarts,oChromStart,oChromEnd,oStrand,oChromSize,oChromStarts,oSequence,oCDS,chromSize,match,misMatch,repMatch,nCount,seqType,srcDb,srcTransId,srcChrom,srcChromStart,srcChromEnd,srcScore,srcAligned,geneName,geneId,geneType,transcriptType,chainType,commonName,scientificName,orgAbbrev";
 
 struct bigTransMap *bigTransMapLoad(char **row)
 /* Load a bigTransMap from row fetched with select * from bigTransMap
@@ -57,19 +57,20 @@ ret->repMatch = sqlUnsigned(row[22]);
 ret->nCount = sqlUnsigned(row[23]);
 ret->seqType = sqlUnsigned(row[24]);
 ret->srcDb = cloneString(row[25]);
-ret->srcChrom = cloneString(row[26]);
-ret->srcChromStart = sqlUnsigned(row[27]);
-ret->srcChromEnd = sqlUnsigned(row[28]);
-ret->srcScore = sqlUnsigned(row[29]);
-ret->srcAligned = sqlUnsigned(row[30]);
-ret->geneName = cloneString(row[31]);
-ret->geneId = cloneString(row[32]);
-ret->geneType = cloneString(row[33]);
-ret->transcriptType = cloneString(row[34]);
-ret->chainType = cloneString(row[35]);
-ret->commonName = cloneString(row[36]);
-ret->scientificName = cloneString(row[37]);
-ret->orgAbbrev = cloneString(row[38]);
+ret->srcTransId = cloneString(row[26]);
+ret->srcChrom = cloneString(row[27]);
+ret->srcChromStart = sqlUnsigned(row[28]);
+ret->srcChromEnd = sqlUnsigned(row[29]);
+ret->srcScore = sqlUnsigned(row[30]);
+ret->srcAligned = sqlUnsigned(row[31]);
+ret->geneName = cloneString(row[32]);
+ret->geneId = cloneString(row[33]);
+ret->geneType = cloneString(row[34]);
+ret->transcriptType = cloneString(row[35]);
+ret->chainType = cloneString(row[36]);
+ret->commonName = cloneString(row[37]);
+ret->scientificName = cloneString(row[38]);
+ret->orgAbbrev = cloneString(row[39]);
 return ret;
 }
 
@@ -79,7 +80,7 @@ struct bigTransMap *bigTransMapLoadAll(char *fileName)
 {
 struct bigTransMap *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[39];
+char *row[40];
 
 while (lineFileRow(lf, row))
     {
@@ -97,7 +98,7 @@ struct bigTransMap *bigTransMapLoadAllByChar(char *fileName, char chopper)
 {
 struct bigTransMap *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[39];
+char *row[40];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -174,6 +175,7 @@ ret->repMatch = sqlUnsignedComma(&s);
 ret->nCount = sqlUnsignedComma(&s);
 ret->seqType = sqlUnsignedComma(&s);
 ret->srcDb = sqlStringComma(&s);
+ret->srcTransId = sqlStringComma(&s);
 ret->srcChrom = sqlStringComma(&s);
 ret->srcChromStart = sqlUnsignedComma(&s);
 ret->srcChromEnd = sqlUnsignedComma(&s);
@@ -206,6 +208,7 @@ freeMem(el->oChromStarts);
 freeMem(el->oSequence);
 freeMem(el->oCDS);
 freeMem(el->srcDb);
+freeMem(el->srcTransId);
 freeMem(el->srcChrom);
 freeMem(el->geneName);
 freeMem(el->geneId);
@@ -325,6 +328,10 @@ fprintf(f, "%u", el->seqType);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->srcDb);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->srcTransId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

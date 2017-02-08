@@ -5,7 +5,7 @@
 #ifndef BIGTRANSMAP_H
 #define BIGTRANSMAP_H
 
-#define BIGTRANSMAP_NUM_COLS 39
+#define BIGTRANSMAP_NUM_COLS 40
 
 extern char *bigTransMapCommaSepFieldNames;
 
@@ -16,7 +16,7 @@ struct bigTransMap
     char *chrom;	/* Reference sequence chromosome or scaffold */
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
-    char *name;	/* Name or ID of item, ideally both human readable and unique */
+    char *name;	/* alignment Id */
     unsigned score;	/* Score (0-1000), faction identity * 1000 */
     char strand[2];	/* + or - indicates whether the query aligns to the + or - strand on the reference */
     unsigned thickStart;	/* Start of where display should be thick (start codon) */
@@ -38,19 +38,20 @@ struct bigTransMap
     unsigned repMatch;	/*  Number of bases that match but are part of repeats  */
     unsigned nCount;	/*  Number of 'N' bases  */
     unsigned seqType;	/* 0=empty, 1=nucleotide, 2=amino_acid */
-    char *srcDb;	/* source organism database names */
-    char *srcChrom;	/* source organism chromosome name */
+    char *srcDb;	/* source database */
+    char *srcTransId;	/* source transcript id */
+    char *srcChrom;	/* source chromosome */
     unsigned srcChromStart;	/* start position in source chromosome */
     unsigned srcChromEnd;	/* end position in source chromosome */
     unsigned srcScore;	/* source source (faction identity * 1000) */
     unsigned srcAligned;	/* fraction of source aligned (faction identity * 1000) */
     char *geneName;	/* gene name */
-    char *geneId;	/* gene identifier */
-    char *geneType;	/* type of gene */
-    char *transcriptType;	/* type of transcript */
+    char *geneId;	/* gene id */
+    char *geneType;	/* gene type */
+    char *transcriptType;	/* transcript type */
     char *chainType;	/* type of chains used for mapping */
-    char *commonName;	/* common organism name */
-    char *scientificName;	/* scientific organism name */
+    char *commonName;	/* common name */
+    char *scientificName;	/* scientific name */
     char *orgAbbrev;	/* organism abbreviation */
     };
 

@@ -282,8 +282,9 @@ group genes
     showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
     showCdsMaxZoom 10000.0
-    labelFields commonName,orgAbbrev,name,geneName,geneId,geneType,transcriptType
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName,geneId,geneType,transcriptType
     defaultLabelFields orgAbbrev,geneName
+    labelSeparator " "
     bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.ensembl.transMapV4.bigPsl
 
 searchTable transMapAlnEnsemblV4
@@ -311,8 +312,9 @@ searchPriority 2.31
     showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
     showCdsMaxZoom 10000.0
-    labelFields commonName,orgAbbrev,name,geneName,geneId
-    defaultLabelFields orgAbbrev,geneName,transcriptType
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName,geneId
+    defaultLabelFields orgAbbrev,geneName
+    labelSeparator " "
     bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.refseq.transMapV4.bigPsl
 
 searchTable transMapAlnRefSeqV4
@@ -340,8 +342,9 @@ searchPriority 2.31
     showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
     showCdsMaxZoom 10000.0
-    labelFields commonName,orgAbbrev,name,geneName
-    defaultLabelFields orgAbbrev,name
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName
+    defaultLabelFields orgAbbrev,srcTransId
+    labelSeparator " "
     bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.rna.transMapV4.bigPsl
 
 searchTable transMapAlnRnaV4
@@ -366,8 +369,9 @@ searchPriority 2.31
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    labelFields commonName,orgAbbrev,name
-    defaultLabelFields orgAbbrev,name
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name
+    defaultLabelFields orgAbbrev,srcTransId
+    labelSeparator " "
     bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.est.transMapV4.bigPsl
 
 searchTable transMapAlnEstV4
