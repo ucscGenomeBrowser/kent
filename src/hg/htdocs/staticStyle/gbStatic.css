@@ -128,7 +128,7 @@
 
 .gbsPage ul li::before {   /* square bullets, from hgGateway */
     position: absolute;
-    top: 0.5em;
+    top: 0.4em;
     left: -1em;
     width: 8px;
     height: 8px;
@@ -263,4 +263,13 @@ ul.nice-menu a {
 ul.nice-menu ul li a {
     font-weight: normal !important;
     font-family: Lato,Arial,Helvetica,sans-serif !important;
+}
+
+/* Override (for now -- until gb.css can be updated in a release cycle */
+
+.gbDonateButton {
+    margin-top: 3px;
+    width: initial;
+    height: initial;
+    padding: 5px 20px;
 }

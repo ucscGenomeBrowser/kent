@@ -452,7 +452,7 @@ char* val = (char*)el->val;
  */
 if (sameString(el->name, "bigDataUrl"))
     {
-    val = replaceChars(val, "$db", database);
+    val = replaceChars(val, "$D", database);
     }
 
 return val;
