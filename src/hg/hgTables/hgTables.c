@@ -235,6 +235,8 @@ void textOpen()
 {
 hgBotDelayNoWarn();  // delay but suppress warning at 10-20 sec delay level because this is not html output.
 char *fileName = cartUsualString(cart, hgtaOutFileName, "");
+// Don't allow '/' in fileName -- textOutInit interprets that as indicating a local file on disk
+subChar(fileName, '/', '_');
 char *compressType = cartUsualString(cart, hgtaCompressType,
 				     textOutCompressNone);
 
