@@ -36,6 +36,7 @@ struct bed
     int expCount;	/* Experiment count */
     int *expIds;		/* Comma separated list of Experiment ids */
     float *expScores;	/* Comma separated list of Experiment scores. */
+    char *label;        /* Label to use on element if bigBed. */
     };
 
 #define bedKnownFields 15	/* Maximum known fields in bed */

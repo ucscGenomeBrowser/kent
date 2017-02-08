@@ -17,22 +17,22 @@ static char *abbreviatedBandName(struct cytoBand *band,
 /* Return a string abbreviated enough to fit into space. */
 {
 int textWidth;
-static char string[32];
+static char string[1024];
 
 /* If have enough space, return original chromosome/band. */
-sprintf(string, "%s%s", (isDmel ? "" : skipChr(band->chrom)), band->name);
+safef(string, sizeof string, "%s%s", (isDmel ? "" : skipChr(band->chrom)), band->name);
 textWidth = mgFontStringWidth(font, string);
 if (textWidth <= width)
     return string;
 
 /* Try leaving off chromosome  */
-sprintf(string, "%s", band->name);
+safef(string, sizeof string, "%s", band->name);
 textWidth = mgFontStringWidth(font, string);
 if (textWidth <= width)
     return string;
 
 /* Try leaving off initial letter */
-sprintf(string, "%s", band->name+1);
+safef(string, sizeof string, "%s", band->name+1);
 textWidth = mgFontStringWidth(font, string);
 if (textWidth <= width)
     return string;

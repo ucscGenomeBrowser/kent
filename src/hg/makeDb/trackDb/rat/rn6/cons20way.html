@@ -30,8 +30,8 @@ It considers not just each individual alignment column, but also its
 flanking columns.  By contrast, phyloP separately measures conservation at
 individual columns, ignoring the effects of their neighbors.  As a
 consequence, the phyloP plots have a less smooth appearance than the
-phastCons plots, with more "texture" at individual sites.  The two methods
-have different strengths and weaknesses.  PhastCons is sensitive to "runs"
+phastCons plots, with more &quot;texture&quot; at individual sites.  The two methods
+have different strengths and weaknesses.  PhastCons is sensitive to &quot;runs&quot;
 of conserved sites, and is therefore effective for picking out conserved
 elements.  PhyloP, on the other hand, is more appropriate for evaluating
 signatures of selection at particular nucleotides or classes of nucleotides
@@ -299,7 +299,7 @@ one site to the next (Felsenstein and Churchill 1996, Yang 1995, Siepel and
 Haussler 2005).  PhastCons uses a two-state phylo-HMM, with a state for
 conserved regions and a state for non-conserved regions.  The value plotted
 at each site is the posterior probability that the corresponding alignment
-column was "generated" by the conserved state of the phylo-HMM.  These
+column was &quot;generated&quot; by the conserved state of the phylo-HMM.  These
 scores reflect the phylogeny (including branch lengths) of the species in
 question, a continuous-time Markov model of the nucleotide substitution
 process, and a tendency for conservation levels to be autocorrelated along
@@ -335,15 +335,15 @@ CONACC).
 The conserved elements were predicted by running phastCons with the
 --most-conserved (aka --viterbi) option.  The predicted elements are
 segments of the alignment
-that are likely to have been "generated" by the conserved state of the
+that are likely to have been &quot;generated&quot; by the conserved state of the
 phylo-HMM. Each element is assigned a log-odds score equal to its log
 probability under the conserved model minus its log probability under the
-non-conserved model. The "score" field associated with this track contains
+non-conserved model. The &quot;score&quot; field associated with this track contains
 transformed log-odds scores, taking values between 0 and 1000. (The scores
 are transformed using a monotonic function of the form a * log(x) + b.) The
-raw log odds scores are retained in the "name" field and can be seen on the
+raw log odds scores are retained in the &quot;name&quot; field and can be seen on the
 details page or in the browser when the track's display mode is set to
-"pack" or "full".
+&quot;pack&quot; or &quot;full&quot;.
 </p>
 
 <h2>Credits</h2>
@@ -438,20 +438,21 @@ PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/15060014" target="_blank">1506
 href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC383317/" target="_blank">PMC383317</a>
 </p>
 
-<p>
-Harris RS.
-<a href="http://www.bx.psu.edu/~rsharris/rsharris_phd_thesis_2007.pdf"
-target="_blank">Improved pairwise alignment of genomic DNA</a>.
-<em>Ph.D. Thesis</em>. Pennsylvania State University, USA. 2007.
-</p>
 
-<h3>Blastz:</h3>
+<h3>Lastz (formerly Blastz):</h3>
 <p>
 Chiaromonte F, Yap VB, Miller W.
 <a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
 target="_blank">Scoring pairwise genomic sequence alignments</a>.
 <em>Pac Symp Biocomput</em>. 2002:115-26.
 PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+</p>
+
+<p>
+Harris RS.
+<a href="http://www.bx.psu.edu/~rsharris/rsharris_phd_thesis_2007.pdf"
+target="_blank">Improved pairwise alignment of genomic DNA</a>.
+<em>Ph.D. Thesis</em>. Pennsylvania State University, USA. 2007.
 </p>
 
 <p>
@@ -462,4 +463,14 @@ target="_blank">Human-mouse alignments with BLASTZ</a>.
 <em>Genome Res</em>. 2003 Jan;13(1):103-7.
 PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
 href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
+</p>
+
+<h3>Phylogenetic Tree:</h3>
+<p>
+Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
+Ryder OA, Stanhope MJ, de Jong WW, Springer MS.
+<a href="http://www.sciencemag.org/content/294/5550/2348.abstract"
+target="_blank">Resolution of the early placental mammal radiation using Bayesian phylogenetics</a>.
+<em>Science</em>. 2001 Dec 14;294(5550):2348-51.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/11743200" target="_blank">11743200</a>
 </p>

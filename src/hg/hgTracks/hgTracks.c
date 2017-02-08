@@ -670,9 +670,9 @@ else
 //  updating the warning-insertion target name.
 if(doIdeo)
     {
-    char startBand[16];
-    char endBand[16];
-    char title[64];  // was 32
+    char startBand[1024];
+    char endBand[1024];
+    char title[1024];
     startBand[0] = endBand[0] = '\0';
     fillInStartEndBands(ideoTrack, startBand, endBand, sizeof(startBand));
     /* Start up client side map. */

@@ -1882,8 +1882,9 @@ wigOption(cart, tdb->track, tdb->shortLabel, tdb);
 }
 
 void transMapUI(struct trackDb *tdb)
-/* Put up transMap-specific controls */
+/* Put up transMap-specific controls for table-based transMap */
 {
+// FIXME: this can be deleted once table-based transMap is no longer supported.
 printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "orgCommon", "common name", FALSE);
 labelMakeCheckBox(tdb, "orgAbbrv", "organism abbreviation", FALSE);
@@ -2894,7 +2895,7 @@ else if (sameString(track, "xenoRefGene")
      ||  sameString(track, "ncbiGene")
      ||  sameString(track, "refGene"))
     refGeneUI(tdb);
-else if (startsWith("transMapAln", track))
+else if (startsWith("transMapAln", track) && (trackDbSetting(tdb, "bigDataUrl") == NULL))
     transMapUI(tdb);
 else if (sameString(track, "rgdGene2"))
     rgdGene2UI(tdb);
@@ -3029,6 +3030,8 @@ else if (tdb->type != NULL)
         expRatioCtUi(tdb);
     else if (startsWithWord("factorSource",tdb->type))
         factorSourceUi(database,tdb);
+    else if (startsWithWord("bigBed",tdb->type))
+        labelCfgUi(database, cart, tdb);
     }
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
@@ -3517,8 +3520,11 @@ char *title = (tdbIsSuper(tdb) ? "Super-track Settings" :
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html
+    // still need CSP2 header for security
+    printf("%s", getCspMetaHeader());
     trackUi(tdb, tdbList, ct, TRUE);
     cartRemove(cart,"ajax");
+    jsInlineFinish();
     }
 else
     {

@@ -32,6 +32,7 @@
 #include "jsHelper.h"
 #include "wikiLink.h"
 #include "cdwFlowCharts.h"
+#include "cdwStep.h"
 
 /* Global vars */
 struct cart *cart;	// User variables saved from click to click
@@ -317,10 +318,14 @@ while ((row = sqlNextRow(sr)) != NULL)
      
     printf("<BR>\n");
     /* Figure out number of file inputs and outputs, and put up link to flowcharts */
-    sqlSafef(query, sizeof(query), "select stepRunId from cdwStepIn where fileId = %s", fileId);
-    int stepRunId = sqlQuickNum(conn2, query);
-    sqlSafef(query, sizeof(query), "select count(*) from cdwStepOut where stepRunId = %i", stepRunId);
-    int outFiles = sqlQuickNum(conn2, query);
+    sqlSafef(query, sizeof(query), "select * from cdwStepIn where fileId = %s", fileId);
+    struct cdwStepIn *cSI = cdwStepInLoadByQuery(conn2, query), *stepIter;
+    int outFiles = 0, stepRunId;  
+    for (stepIter = cSI; stepIter != NULL; stepIter=stepIter->next)
+	{
+	sqlSafef(query, sizeof(query), "select count(*) from cdwStepOut where stepRunId = %i", stepIter->stepRunId);
+	outFiles += sqlQuickNum(conn2, query);
+	}
 
     sqlSafef(query, sizeof(query), "select stepRunId from cdwStepOut where fileId = %s", fileId);
     stepRunId = sqlQuickNum(conn2, query);
@@ -1202,6 +1207,7 @@ for (dataset = datasetList; dataset != NULL; dataset = dataset->next)
 	}
     printf("</LI>\n");
     }
+cdwDatasetFree(&datasetList);
 }
 
 
@@ -1358,60 +1364,66 @@ cdwPrintMatchingStanzas(rqlQuery->string, limit, tags, format);
 printf("</TT></PRE>\n");
 }
 
-void doAnalysisJointPages(struct sqlConnection *conn, char *tag)
-/* show datasets and links to dataset summary pages. */
+void doAnalysisJointPages(struct sqlConnection *conn)
+/* Show datasets and links to dataset summary pages. */
 {
 printf("<UL>\n");
 char query[PATH_LEN]; 
-sqlSafef(query, sizeof(query), "select * from cdwJointDataset"); 
-struct cdwJointDataset *iter, *cJD = cdwJointDatasetLoadByQuery(conn, query);
-
-for (iter = cJD; iter != NULL; iter = iter->next)
+sqlSafef(query, sizeof(query), "SELECT * FROM cdwJointDataset ORDER BY label ");
+struct cdwJointDataset *jointDataset, *datasetList = cdwJointDatasetLoadByQuery(conn, query);
+// Go through the cdwDataset table and generate an entry for each dataset. 
+for (jointDataset = datasetList; jointDataset != NULL; jointDataset = jointDataset->next)
     {
-    char *label;
-    char *desc;
-    if (iter == NULL)
-        continue;
-    label = iter->label;
-    desc = iter->description;
+    char *label = jointDataset->label;
+    char *desc = jointDataset->description;
+    char *datasetId = jointDataset->name;
 
-    char *datasetId = iter->name;
-
-    // Check if we have a dataset summary page in the CDW
+    // Check if we have a dataset summary page in the CDW and store its ID. The file must have passed validation.  
     char summFname[8000];
     safef(summFname, sizeof(summFname), "%s/summary/index.html", datasetId);
-    // Store a non zero file id if there is a summary page.  
     int fileId = cdwFileIdFromPathSuffix(conn, summFname);
-    printf("<LI>\n");
-    // If the user has permission and the file exists print a link to it.
-    
-    if (fileId > 0)
+    // If the ID exists and the user has access print a link to the page.  
+    boolean haveAccess = ((fileId > 0) && cdwCheckFileAccess(conn, fileId, user));
+    if (haveAccess)
 	{
-	if (cdwCheckFileAccess(conn, fileId, user)) 
-	    printf("<B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>\n", datasetId, label);
-	else
-	    printf("<B>%s</B><BR>\n", label); 
+	printf("<LI><B><A href=\"cdwGetFile/%s/summary/index.html\">%s (%s)</A></B><BR>\n", 
+	    datasetId, label, datasetId);
+	// Print out file count and descriptions. 
+	sqlSafef(query, sizeof(query), 
+	    "select count(*) from cdwFileTags where data_set_id='%s'", datasetId);  
+	//long long fileCount = sqlQuickLongLong(conn, query);
+	printf("%s", desc); 
+	printf(" (metadata: <A HREF=\"cdwWebBrowse?cdwCommand=dataSetMetaTree&cdwDataSet=%s&%s\"",
+		datasetId, cartSidUrlString(cart)); 
+	printf(">html</A>");
+	doServeTagStorm(conn, datasetId);
+	    
+	struct slName *dataset, *dataSetNames=charSepToSlNames(jointDataset->childrenNames, *",");
+	printf("("); 
+	int totFileCount = 0; 
+	// Go through each sub dataset, print a link into the search files and count total files.  
+	for (dataset = dataSetNames; dataset != NULL; dataset=dataset->next)
+	    {
+	    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where data_set_id='%s'", dataset->name); 
+	    totFileCount += sqlQuickNum(conn, query); 
+	    printf("<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%s",
+			    dataset->name, cartSidUrlString(cart), dataset->name);
+	    if (dataset->next != NULL) printf(",");
+	    
+	    printf("</A>\n"); 
 	}
-    else // Otherwise print a label. 
-	printf("<B>%s</B><BR>\n", label);
-   
-    struct slName *dataset, *dataSetNames=charSepToSlNames(iter->childrenNames, *",");
-    printf("%s (", desc); 
-    long long fileCount = 0; 
-    // Go through each sub dataset, print a link into the search files and count total files.  
-    for (dataset = dataSetNames; dataset != NULL; dataset=dataset->next)
+    printf(") (Total files: %i)",totFileCount); 
+    printf("</LI>\n");
+
+	}
+    else // Otherwise print a label and description. 
 	{
-	sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where data_set_id='%s'", dataset->name); 
-	fileCount += sqlQuickLongLong(conn, query); 
-	printf("<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%s",
-			dataset->name, cartSidUrlString(cart), dataset->name);
-	if (dataset->next != NULL) printf(",");
-	printf("</A>\n"); 
+	printf("<LI><B>%s (%s)</B><BR>\n", label, datasetId);
+	printf("%s\n", desc);
 	}
-    printf(") (Total files: %lld)",fileCount); 
     printf("</LI>\n");
     }
-cdwJointDatasetFree(&cJD);
+cdwJointDatasetFree(&datasetList);
 }
 
 void tagSummaryRow(struct fieldedTable *table, struct sqlConnection *conn, char *tag)
@@ -1663,7 +1675,7 @@ else if (sameString(command, "analysisQuery"))
     }
 else if (sameString(command, "analysisJointPages"))
     {
-    doAnalysisJointPages(conn, "data_set_id");
+    doAnalysisJointPages(conn);
     }
 else if (sameString(command, "downloadFiles"))
     {
@@ -1748,6 +1760,7 @@ void localWebStartWrapper(char *titleString)
     puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" "
              "\"http://www.w3.org/TR/html4/strict.dtd\">");
     puts("<HTML><HEAD>\n");
+    puts(getCspMetaHeader());
     webPragmasEtc();
     printf("<TITLE>%s</TITLE>\n", titleString);
     webIncludeResourceFile("HGStyle.css");
@@ -1781,6 +1794,7 @@ localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.54");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
+jsInlineFinish(); 
 printf("</BODY></HTML>\n");
 }
 

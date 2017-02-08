@@ -2999,7 +2999,6 @@ else
 
 
 /* print out extra fields */
-boolean firstTime = TRUE;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     char *restFields[256];
@@ -3010,12 +3009,6 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         int restBedFields = bedSize - 3;
         if (restCount > restBedFields)
             {
-            if (firstTime)
-                {
-                printf("<B> %s Extra fields:</B><BR>", item);
-                firstTime = FALSE;
-                };
-
             char **extraFields = (restFields + restBedFields);
             int extraFieldCount = restCount - restBedFields;
             int printCount = extraFieldsPrint(tdb,NULL,extraFields, extraFieldCount);
@@ -25007,7 +25000,10 @@ void doSnakeClick(struct trackDb *tdb, char *itemName)
 /* Put up page for snakes. */
 {
 struct trackDb *parentTdb = trackDbTopLevelSelfOrParent(tdb);
-char *otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
+char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
+if (otherSpecies == NULL)
+    otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
+
 char *hubName = cloneString(database);
 char otherDb[4096];
 char *qName = cartOptionalString(cart, "qName");

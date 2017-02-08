@@ -1157,7 +1157,7 @@ else if (gotCds)
     {
     char buf[256];
     char *disabled = NULL;
-    safef(buf, sizeof(buf), "onchange='codonColoringChanged(\"%s\")'", name);
+    safef(buf, sizeof(buf), "codonColoringChanged('%s');", name);
     puts("<P><B>Color track by codons:</B>");
     cgiMakeDropListFull(var, baseColorDrawGenomicOptionLabels,
 			baseColorDrawGenomicOptionValues,
@@ -4040,6 +4040,9 @@ case cfgBedScore:
 		    char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
 		    int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
 		    scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
+
+                    if(startsWith("bigBed", tdb->type))
+                        labelCfgUi(db, cart, tdb);
 		    }
 		    break;
 case cfgPeak:
@@ -4049,7 +4052,7 @@ case cfgWig:        wigCfgUi(cart,tdb,prefix,title,boxed);
 		    break;
 case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
 		    break;
-case cfgGenePred:   genePredCfgUi(cart,tdb,prefix,title,boxed);
+case cfgGenePred:   genePredCfgUi(db, cart,tdb,prefix,title,boxed);
 		    break;
 case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed, NULL);
 		    break;
@@ -5798,6 +5801,74 @@ printf("<br><br>");
 filterByChromCfgUi(cart,tdb);
 }
 
+struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as)
+/* Build up a hash of a list of fields in an AS file. */
+{
+char *fields = trackDbSettingClosestToHome(tdb, trackDbVar);
+
+if (fields == NULL)
+    return NULL;
+
+if (sameString(fields, "none"))
+    return slPairNew("none", NULL);
+
+struct slPair *list = NULL;
+struct slName *thisField, *fieldList = slNameListFromComma(fields);
+for(thisField = fieldList; thisField; thisField = thisField->next)
+    {
+    char *trimLabel = trimSpaces(thisField->name);
+    unsigned colNum = asColumnFindIx(as->columnList, trimLabel);
+    if (colNum == -1)
+        errAbort("cannot find field named '%s' in AS file '%s'", 
+            trimLabel, as->name);
+
+    slAddHead(&list, slPairNew(trimLabel, NULL + colNum));
+    }
+
+slReverse(&list);
+return list;
+}
+
+void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb)
+/* If there is a labelFields for a bigBed, this routine is called to put up the label options. */
+{
+if (trackDbSettingClosestToHomeOn(tdb, "linkIdInName"))
+    return;
+
+struct asObject *as = asForDb(tdb, db);  
+struct slPair *labelList = buildFieldList(tdb, "labelFields",  as);
+struct slPair *defaultLabelList = buildFieldList(tdb, "defaultLabelFields",  as);
+char varName[1024];
+
+if ((labelList == NULL) || sameString(labelList->name, "none"))
+    return;
+
+printf("<B>Label:</B> ");
+struct slPair *thisLabel = labelList;
+for(; thisLabel; thisLabel = thisLabel->next)
+    {
+    safef(varName, sizeof(varName), "%s.label.%s", tdb->track, thisLabel->name);
+    boolean isDefault = FALSE;
+    if (defaultLabelList == NULL)
+        isDefault = (thisLabel == labelList);
+    else if (sameString(defaultLabelList->name, "none"))
+        isDefault = FALSE;
+    else
+        isDefault = (slPairFind(defaultLabelList, thisLabel->name) != NULL);
+
+    boolean option = cartUsualBoolean(cart, varName, isDefault);
+    cgiMakeCheckBox(varName, option);
+
+    // find comment for the column listed
+    struct asColumn *col = as->columnList;
+    unsigned num = ptToInt(thisLabel->val);
+    for(; col && num--; col = col->next)
+        ;
+    assert(col);
+    printf(" %s&nbsp;&nbsp;&nbsp;", col->comment);
+    }
+}
+
 void pslCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,
               boolean boxed)
 /* Put up UI for psl tracks */
@@ -5807,6 +5878,8 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 char *typeLine = cloneString(tdb->type);
 char *words[8];
 int wordCount = wordCount = chopLine(typeLine, words);
+if (sameString(tdb->type, "bigPsl"))
+    labelCfgUi(db, cart, tdb);
 if (wordCount == 3 && sameWord(words[1], "xeno"))
     crossSpeciesCfgUi(cart,tdb);
 baseColorDropLists(cart, tdb, name);
@@ -6170,7 +6243,7 @@ if (opened)
     }
 }
 
-void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
+void genePredCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up gencode-specific controls */
 {
 char varName[64];
@@ -6178,6 +6251,7 @@ boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *geneLabel = cartUsualStringClosestToHome(cart, tdb,parentLevel, "label", "gene");
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
+labelCfgUi(db, cart, tdb);
 if (sameString(name, "acembly"))
     {
     char *acemblyClass = cartUsualStringClosestToHome(cart,tdb,parentLevel,"type",

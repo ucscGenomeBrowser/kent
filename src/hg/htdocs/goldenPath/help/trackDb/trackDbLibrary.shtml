@@ -353,6 +353,10 @@
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
     <A onclick="jumpTo(this)" HREF="#">bigDataIndex</A> is used.
+    All occurrences of the  string <code>$D</code> in the URL will be
+    substituted with the genome assembly database name.  This allows a
+    trackDb entry to be used with for multiple assemblies.  <code>$D</code>
+    substitution is not implement for track hubs.
 
     </P> <P><B>Example:</B></P>
     <pre>   bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb</pre>
@@ -3654,6 +3658,12 @@ There are no extra options that can appear on the type bigMaf line.
     (i.e. the lines drawn to denote groups of identical local haplotypes):
     <code>triangle</code> for the <B>&lt;</B> shape (default), <code>rectangle</code>
     for the <B>[</B> shape.
+    </P>
+</DIV>
+
+<DIV class="labelFields"><span class="types bigBed bigGenePred bigPsl"></span>
+<div class="format"><code>labelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
+    <P>A list of fields from the bigBed based file that can be used as a label.
     </P>
 </DIV>
 

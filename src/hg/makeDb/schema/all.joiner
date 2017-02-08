@@ -3496,7 +3496,6 @@ identifier knownGeneId dependency
     $kgDb.mouseLandscapeDistance.target minCheck=0.94
     $hg.gladHumESDistance.query
     $hg.gladHumESDistance.target
-    $kgDb.keggPathway.kgID
     $kgDb.kgAlias.kgID
     $kgDb.kgProtAlias.kgID
     $kgDb.kgSpAlias.kgID
@@ -3535,6 +3534,7 @@ identifier knownGeneId dependency
     $kgDb3.knownGenePep.name
     $kgDb3,!hg38.knownCanonical.protein exclude=
     $kgDb3.kgProtMap2.qName
+    $kgDb.keggPathway.kgID
     $hg.humanHprdP2P.query
     $hg.humanHprdP2P.target
     $hg.humanVidalP2P.query

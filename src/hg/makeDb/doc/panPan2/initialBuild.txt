@@ -321,6 +321,21 @@ taxId 9597
     featureBits -countGaps panPan2 ucscToINSDC
     # 3286643896 bases of 3286643896 (100.000%) in intersection
 
+    join -1 2 <(sort -k2 ucscToINSDC.txt) insdc.refseq.txt | tr '[ ]' '[\t]' \
+      | sort -k2 | join -2 2 name.coordinate.tab - |  tr '[ ]' '[\t]' \
+        | cut -f1-4 > ucscToRefSeq.bed
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 20
+    # use the 20 in this sed
+    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab panPan2 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    checkTableCoords  panPan2 -table=ucscToRefSeq
+    # should cover %100 all bases:
+    featureBits -countGaps panPan2 ucscToRefSeq
+    # 3286643896 bases of 3286643896 (100.000%) in intersection
+
 #########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2016-04-19 - Hiram)
 
@@ -580,27 +595,44 @@ panPan2.genbank.est.native.load = no
 
     # verify this functions in the genome browser from panPan2 to panPan1
 
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-02-06 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("panPan2", "blat1c", "17884", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("panPan2", "blat1c", "17885", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+
 ##############################################################################
-# set default position to FOXP2 gene displays  (DONE - 2016-05-24 - Hiram)
+# set default position to FOXP2 gene displays  (DONE - 2017-02-06 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="chr7:119036070-119363606" where name="panPan2";' \
+'update dbDb set defaultPos="chr7:119267067-119359255" where name="panPan2";' \
 	hgcentraltest
 
 ##############################################################################
-# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Steve)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-02-06 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
-    joinerCheck -database=panPan2 -keys all.joiner
     joinerCheck -database=panPan2 -tableCoverage all.joiner
     joinerCheck -database=panPan2 -times all.joiner
+    joinerCheck -database=panPan2 -keys all.joiner
 
     cd /hive/data/genomes/panPan2
-    makeDownloads.pl panPan2 > do.log 2>&1
+    time (makeDownloads.pl panPan2) > downloads.log 2>&1
+    # real    20m55.262s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/panPan2/pushQ
     cd /hive/data/genomes/panPan2/pushQ
-    makePushQSql.pl panPan2 > panPan2.pushQ.sql 2> stderr.out
+    time (makePushQSql.pl panPan2) > panPan2.pushQ.sql 2> stderr.out
+    # real    3m46.855s
+
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/panPan2/wib/gc5Base.wib
     # WARNING: hgwdev does not have /gbdb/panPan2/wib/quality.wib
@@ -609,10 +641,9 @@ panPan2.genbank.est.native.load = no
     # WARNING: panPan2 does not have extFile
 
     #   copy it to hgwbeta
-    scp -p panPan2.pushQ.sql qateam@hgwbeta:/tmp
-    ssh hgwbeta
-    cd /tmp
-    hgsql qapushq < panPan2.pushQ.sql
+    #   copy it to hgwbeta
+    scp -p panPan2.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/panPan2.pushQ.sql"
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
 

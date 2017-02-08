@@ -11,6 +11,8 @@
 // Typical usage (note: ImModel includes convenient wrapper methods, use those instead
 // if you're subclassing ImModel):
 //
+// The CGI-generated HTML should include an inline script that sets window.hgsid.
+//
 // In model's initialize():
 //     cart.setCgi('hgMyCgi');
 //     cart.send({ getMyInitialState: {} });
@@ -37,9 +39,6 @@ var cart = (function() {
     'use strict';
 
     // Private variables:
-
-    // The CGI-generated HTML should include an inline script that sets window.hgsid:
-    var hgsid = window.hgsid || '0';
 
     var cgiBinUrl = '../cgi-bin/';
     // cart.setCgi(name) sets this to cgiBinUrl + name, and must be called before sending requests:
@@ -108,7 +107,7 @@ var cart = (function() {
         // encoded commandObjNoCgiVar (if non-empty).
         // Throws [message, badValue] if something is not as expected.
         var reqObj = {};
-        reqObj.hgsid = hgsid;
+        reqObj.hgsid = window.hgsid;
         if (commandObjNoCgiVar) {
             reqObj.cjCmd = JSON.stringify(commandObjNoCgiVar);
         }

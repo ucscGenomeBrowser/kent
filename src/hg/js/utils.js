@@ -674,7 +674,7 @@ function setTableRowVisibility(button, prefix, hiddenPrefix, titleDesc, doAjax)
     return retval;
 }
 
-function getNonce()
+function getNonce(debug)
 {   // Gets nonce value from page meta header
 var content = $("meta[http-equiv='Content-Security-Policy']").attr("content");
 if (!content)
@@ -690,12 +690,13 @@ ix = content.indexOf(sectionEnd);
 if (ix < 0)
     return "";
 content = content.substring(0,ix);
+if (debug)
+    alert('page nonce='+content);
 return content;
 }
 
 function warnBoxJsSetup()
 {   // Sets up warnBox if not already established.  This is duplicated from htmshell.c
-    // alert("warnBoxJsSetup() called"); // DEBUG REMOVE GALT TODO Nonce?
     var html = "";
     html += "<center>";
     html += "<div id='warnBox' style='display:none;'>";
@@ -1439,11 +1440,14 @@ function stripHgErrors(returnedHtml, whatWeDid)
     // If whatWeDid !== null, we use it to return info about what we stripped out and
     // processed (current just warnMsg).
     var cleanHtml = returnedHtml;
+    var begToken = '<!-- HGERROR-START -->';
+    var endToken = '<!-- HGERROR-END -->';
     while (cleanHtml.length > 0) {
-        var bounds = bindings.outside('<!-- HGERROR-START -->','<!-- HGERROR-END -->',cleanHtml);
+        var bounds = bindings.outside(begToken,endToken,cleanHtml);
         if (bounds.start === -1)
             break;
-        var warnMsg = bindings.insideOut('<P>','</P>',cleanHtml,bounds.start,bounds.stop);
+        // OLD WAY var warnMsg = bindings.insideOut('<P>','</P>',cleanHtml,bounds.start,bounds.stop);
+	var warnMsg = cleanHtml.slice(bounds.start+begToken.length,bounds.stop-endToken.length);
         if (warnMsg.length > 0) {
             warn(warnMsg);
             if (whatWeDid)
@@ -1472,30 +1476,24 @@ function stripJsFiles(returnedHtml, debug, whatWeDid)
     return cleanHtml;
 }
 
-function stripCspHeader(returnedHtml, debug, whatWeDid)
+function stripCspHeader(html, debug, whatWeDid)
 { // strips CSP Header from html returned by ajax
-    var cleanHtml = returnedHtml;
     var shlurpPattern=/<meta http-equiv=\'Content-Security-Policy\' content=".*"\>/i;
     if (debug || whatWeDid) {
-        var csp = cleanHtml.match(shlurpPattern);
+        var csp = html.match(shlurpPattern);
         if (csp && csp.length > 0) {
 	    if (debug)
-		alert("csp:'"+csp+"'\n---------------\n"+cleanHtml); // warn() interprets html
+		alert("csp:'"+csp+"'\n---------------\n"+html); // warn() interprets html
 	    if (whatWeDid)
 		whatWeDid.csp = csp[0];
 	}
     }
-    cleanHtml = cleanHtml.replace(shlurpPattern,"");
-
-    return cleanHtml;
+    return html.replace(shlurpPattern,""); // Clean CSP meta tag.
 }
 
-function stripNonce(returnedHtml, debug)
-{ // strips nonce from returned ajax page
-    var cleanHtml = returnedHtml;
-    var csp = {};
-    stripCspHeader(returnedHtml, debug, csp);
-    var content = csp.csp;
+function parseNonce(content, debug)
+{ // parse nonce from returned ajax page csp header
+
     if (!content)
 	return "";
     // parse nonce like 'nonce-JDPiW8odQkiav4UCeXsa34ElFm7o'
@@ -1509,6 +1507,8 @@ function stripNonce(returnedHtml, debug)
     if (ix < 0)
 	return "";
     content = content.substring(0,ix);
+    if (debug)
+	alert('ajax nonce='+content);
     return content;
 }
 
@@ -1526,27 +1526,37 @@ function stripCssFiles(returnedHtml,debug)
     return cleanHtml;
 }
 
-function stripJsNonce(returnedHtml, nonce, debug)
-{ // strips and returns embedded javascript from html returned by ajax with nonce
+function stripJsNonce(html, nonce, debug, whatWeDid)
+{ // Strips and returns embedded javascript from html returned by ajax with nonce
     var results=[];
-    var content = returnedHtml;
+    var content = "";
     var sectionBegin = "<script type='text/javascript' nonce='"+nonce+"'>";
     var sectionEnd   = "</script>";
     var lastIx = 0;
-    var ix = content.indexOf(sectionBegin, lastIx);
-    if (ix < 0)
-	return results;
-    ix += sectionBegin.length;
-    var ex = content.indexOf(sectionEnd, ix);
-    if (ex < 0)
-	return results;
-    var jsNonce = content.substring(ix,ex);
-    if (debug)
-	alert("jsNonce:'"+jsNonce);
-    results.push(jsNonce);
-    lastIx = ex;
-    ex += sectionEnd.length;
-    return results;
+    while (1) {
+	var ix = html.indexOf(sectionBegin, lastIx);
+	if (ix < 0)
+	    break;
+	var ix2 = ix + sectionBegin.length;
+	var ex = html.indexOf(sectionEnd, ix2);
+	if (ex < 0)
+	    break;
+	content += html.substring(lastIx,ix);
+	var jsNonce = html.substring(ix2,ex);
+	if (debug)
+	    alert("jsNonce:"+jsNonce);
+	results.push(jsNonce);
+	lastIx = ex + sectionEnd.length;
+	}
+    // grab the last piece.
+    content += html.substring(lastIx);
+
+    //return results;
+    if (whatWeDid)
+	whatWeDid.js = results;
+
+    return content;
+
 }
 
 function charsAreHex(s)
@@ -1575,44 +1585,98 @@ function nonAlphaNumericHexDecodeText(s, prefix, postfix)
 // Accepts upper and lower case values in entities.
 //
 {
-var d = ""; 
-var pfxLen = prefix.length;
-var postLen = postfix.length;
-var i = 0;
-if (s) {
-    while (i < s.length) {
-	var matched = false;
-	if (i+pfxLen+postLen+2 <= s.length) {
-	    var pre = s.substr(i, pfxLen).toLowerCase();
-	    if (pre === prefix) {
-		var post = s.substr(i+pfxLen+2, postLen).toLowerCase();
-		if (post === postfix) {
-		    var hex = s.substr(i+pfxLen, 2);
-		    if (charsAreHex(hex)) {
-			d = d + String.fromCharCode(parseInt(hex,16));
-			i += pfxLen + 2 + postLen;
-			matched = true;
+    var d = ""; 
+    var pfxLen = prefix.length;
+    var postLen = postfix.length;
+    var i = 0;
+    if (s) {
+	while (i < s.length) {
+	    var matched = false;
+	    if (i+pfxLen+postLen+2 <= s.length) {
+		var pre = s.substr(i, pfxLen).toLowerCase();
+		if (pre === prefix) {
+		    var post = s.substr(i+pfxLen+2, postLen).toLowerCase();
+		    if (post === postfix) {
+			var hex = s.substr(i+pfxLen, 2);
+			if (charsAreHex(hex)) {
+			    d = d + String.fromCharCode(parseInt(hex,16));
+			    i += pfxLen + 2 + postLen;
+			    matched = true;
+			}
 		    }
 		}
 	    }
-	}
-	if (!matched)
-	    d = d + s.charAt(i++);
-	}
-}
-return d;
+	    if (!matched)
+		d = d + s.charAt(i++);
+	    }
+    }
+    return d;
 }
 
 
 function jsDecode(s)
 // For JS string values decode "\xHH" 
 {
-return nonAlphaNumericHexDecodeText(s, "\\x", "");
+    return nonAlphaNumericHexDecodeText(s, "\\x", "");
 }
 
 
+function stripCSPAndNonceJs(content,  debug, whatWeDid)
+// Strip CSP Header and script blocks with the ajax nonce.
+{
+
+    var pageNonce = getNonce(debug);
+
+    var csp = {};
+    content = stripCspHeader(content, debug, csp);
+
+    var ajaxNonce = parseNonce(csp.csp, debug);
+	
+    var jsBlocks = {};
+    content = stripJsNonce(content, ajaxNonce, debug, jsBlocks);
+
+    if (whatWeDid) {
+	whatWeDid.pageNonce = pageNonce;
+	whatWeDid.ajaxNonce = ajaxNonce;  // Not in use yet.
+	whatWeDid.js = jsBlocks.js;
+    }
+
+    return stripHgErrors(content, whatWeDid); // Certain early errors are not called via warnBox
+	
+}
+
+function appendNonceJsToPage(jsNonce)
+// Append ajax js blocks with nonce.
+// Create jsNonce by calling stripCSPAndNonceJs.
+// Call this after ajax html content has been added to the page/DOM.
+{
+    var i;
+    for (i=0; i<jsNonce.js.length; ++i) {
+	var sTag = document.createElement("script");
+	sTag.type = "text/javascript";
+	sTag.text = jsNonce.js[i];
+	sTag.setAttribute('nonce', jsNonce.pageNonce); // CSP2 Requires
+	document.head.appendChild(sTag);
+    }		
+}
+
 function stripJsEmbedded(returnedHtml, debug, whatWeDid)
-{ // strips embedded javascript from html returned by ajax
+{ 
+  // GALT NOTE: this may have been mostly obsoleted by CSP2 changes.
+  // There were 3 or 4 places in the code that even in production
+  // had called this function stripJsEmbedded with debug=true, which means that
+  // if any script tag blocks are present, they would be seen and shown
+  // to the user.  This probably was because if these blocks were found
+  // simply adding them to the div html from the ajax callback would result in 
+  // their being ignored by the browser. It seems to be a security feature of browsers.
+  // Meanwhile however inline event handlers in the html worked and were allowed.
+  // So this was just a way to warn developers that their script blocks would have been ignored
+  // and have no effect. I think this concern no longer applies after my CSP2 changes
+  // because it is able to pull in all the js, whether from event handlers or what would
+  // have been individual script blocks in the old days, and adds it to
+  // the page with a nonce and appendChild.
+  //
+  // strips embedded javascript from html returned by ajax
   // NOTE: any warnBox style errors will be put into the warnBox
   // If whatWeDid !== null, we use it to return info about
   // what we stripped out and processed (current just warnMsg).

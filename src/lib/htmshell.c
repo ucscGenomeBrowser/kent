@@ -49,14 +49,18 @@ void htmlVaEncodeErrorText(char *format, va_list args)
 va_list argscp;
 va_copy(argscp, args);
 char warning[1024];
-int sz = vaHtmlSafefNoAbort(warning, sizeof(warning), format, args, TRUE, FALSE);
-if (sz < 0)
-    {
-    safecpy(warning, sizeof(warning), "Low level error in htmlSafef. See error logs for details.");
-    vfprintf(stderr, format, args);
-    fprintf(stderr, "\n");
-    fflush(stderr);
-    }
+
+struct dyString *ds = newDyString(1024);
+vaHtmlDyStringPrintf(ds, format, args);
+int n = ds->stringSize;
+int nLimit = sizeof(warning) - 1;
+if (ds->stringSize > nLimit)
+    n = nLimit;
+safencpy(warning, sizeof warning, ds->string, n);
+if (ds->stringSize > nLimit)
+    strcpy(warning+n-5,"[...]");  // indicated trucation
+freeDyString(&ds);
+
 fprintf(stdout, "%s\n", warning);
 /* write warning/error message to stderr so they get logged. */
 vfprintf(stderr, format, argscp);
@@ -620,11 +624,16 @@ htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
 char warning[1024];
 
 // html-encode arguments to fight XSS
-int sz = vaHtmlSafefNoAbort(warning, sizeof(warning), format, args, TRUE, FALSE);
-if (sz < 0)
-    {
-    safecpy(warning, sizeof(warning), "Low level error in htmlSafef. See error logs for details.");
-    }
+struct dyString *ds = newDyString(1024);
+vaHtmlDyStringPrintf(ds, format, args);
+int n = ds->stringSize;
+int nLimit = sizeof(warning) - 1;
+if (ds->stringSize > nLimit)
+    n = nLimit;
+safencpy(warning, sizeof warning, ds->string, n);
+if (ds->stringSize > nLimit)
+    strcpy(warning+n-5,"[...]"); // show truncation
+freeDyString(&ds);
 
 // Replace newlines with BR tag
 char *warningBR = htmlWarnEncode(warning); 
@@ -1023,7 +1032,7 @@ return cloneString(meta);
 }
 
 char *getCspMetaResponseHeader(char *policy)
-/* get the policy string as an html response header */
+/* get the policy string as an http response header */
 {
 char response[4096];
 safef(response, sizeof response, "Content-Security-Policy: %s\n", policy); 
