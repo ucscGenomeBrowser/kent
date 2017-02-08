@@ -1882,8 +1882,9 @@ wigOption(cart, tdb->track, tdb->shortLabel, tdb);
 }
 
 void transMapUI(struct trackDb *tdb)
-/* Put up transMap-specific controls */
+/* Put up transMap-specific controls for table-based transMap */
 {
+// FIXME: this can be deleted once table-based transMap is no longer supported.
 printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "orgCommon", "common name", FALSE);
 labelMakeCheckBox(tdb, "orgAbbrv", "organism abbreviation", FALSE);
@@ -2894,7 +2895,7 @@ else if (sameString(track, "xenoRefGene")
      ||  sameString(track, "ncbiGene")
      ||  sameString(track, "refGene"))
     refGeneUI(tdb);
-else if (startsWith("transMapAln", track))
+else if (startsWith("transMapAln", track) && (trackDbSetting(tdb, "bigDataUrl") == NULL))
     transMapUI(tdb);
 else if (sameString(track, "rgdGene2"))
     rgdGene2UI(tdb);

@@ -17,7 +17,6 @@ group genes
     transMapInfo transMapInfoUcscGenes
     transMapSrc hgFixed.transMapSrcUcscGenes
     transMapGene hgFixed.transMapGeneUcscGenes
-    transMapTypeDesc UCSC Gene
     baseColorDefault diffCodons
     baseColorUseCds table hgFixed.transMapGeneUcscGenes
     baseColorUseSequence extFile hgFixed.transMapSeqUcscGenes hgFixed.transMapExtFileUcscGenes
@@ -132,7 +131,6 @@ group genes
     transMapInfo transMapInfoEnsemblV3
     transMapSrc hgFixed.transMapSrcEnsemblV3
     transMapGene hgFixed.transMapGeneEnsemblV3
-    transMapTypeDesc UCSC Gene
     baseColorDefault diffCodons
     baseColorUseCds table hgFixed.transMapGeneEnsemblV3
     baseColorUseSequence extFile hgFixed.transMapSeqEnsemblV3 hgFixed.transMapExtFileEnsemblV3
@@ -161,7 +159,6 @@ searchPriority 2.31
     transMapInfo transMapInfoUcscGenesV3
     transMapSrc hgFixed.transMapSrcUcscGenesV3
     transMapGene hgFixed.transMapGeneUcscGenesV3
-    transMapTypeDesc UCSC Gene
     baseColorDefault diffCodons
     baseColorUseCds table hgFixed.transMapGeneUcscGenesV3
     baseColorUseSequence extFile hgFixed.transMapSeqUcscGenesV3 hgFixed.transMapExtFileUcscGenesV3
@@ -259,12 +256,14 @@ searchPriority 2.31
 
 
 track transMapV4
+release alpha
 superTrack on
 shortLabel TransMap V4
 longLabel TransMap Alignments V4
 group genes
 
     track transMapAlnEnsemblV4
+    release alpha
     superTrack transMapV4 pack
     shortLabel TransMap GENCODE/Ensembl V4
     longLabel TransMap GENCODE/Ensembl Mappings V4
@@ -274,9 +273,8 @@ group genes
     priority 10.001
     color 0,100,0
     visibility pack
-    transMapTypeDesc UCSC Gene
     baseColorDefault diffCodons
-    #baseColorUseCds table hgFixed.transMapGeneEnsemblV4
+    baseColorUseCds given
     baseColorUseSequence lfExtra
     indelDoubleInsert on
     indelQueryInsert on
@@ -284,7 +282,9 @@ group genes
     showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
     showCdsMaxZoom 10000.0
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$db/$db.ensembl.transMapV4.bigPsl
+    labelFields commonName,orgAbbrev,name,geneName,geneId,geneType,transcriptType
+    defaultLabelFields orgAbbrev,geneName
+    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.ensembl.transMapV4.bigPsl
 
 searchTable transMapAlnEnsemblV4
 searchType psl
@@ -292,6 +292,7 @@ searchMethod prefix
 searchPriority 2.31
 
     track transMapAlnRefSeqV4
+    release alpha
     superTrack transMapV4 pack
     shortLabel TransMap RefGene V4
     longLabel TransMap RefSeq Gene Mappings V4
@@ -302,7 +303,7 @@ searchPriority 2.31
     color 0,100,0
     visibility pack
     baseColorDefault diffCodons
-    #baseColorUseCds table hgFixed.transMapGeneRefSeqV4
+    baseColorUseCds given
     baseColorUseSequence lfExtra
     indelDoubleInsert on
     indelQueryInsert on
@@ -310,7 +311,9 @@ searchPriority 2.31
     showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
     showCdsMaxZoom 10000.0
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$db/$db.refseq.transMapV4.bigPsl
+    labelFields commonName,orgAbbrev,name,geneName,geneId
+    defaultLabelFields orgAbbrev,geneName,transcriptType
+    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.refseq.transMapV4.bigPsl
 
 searchTable transMapAlnRefSeqV4
 searchType psl
@@ -318,6 +321,7 @@ searchMethod prefix
 searchPriority 2.31
 
     track transMapAlnRnaV4
+    release alpha
     superTrack transMapV4 pack
     shortLabel TransMap RNA V4
     longLabel TransMap GenBank RNA Mappings V4
@@ -328,7 +332,7 @@ searchPriority 2.31
     color 0,100,0
     visibility pack
     baseColorDefault diffCodons
-    #baseColorUseCds table hgFixed.transMapGeneRnaV4
+    baseColorUseCds given
     baseColorUseSequence lfExtra
     indelDoubleInsert on
     indelQueryInsert on
@@ -336,7 +340,9 @@ searchPriority 2.31
     showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
     showCdsMaxZoom 10000.0
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$db/$db.rna.transMapV4.bigPsl
+    labelFields commonName,orgAbbrev,name,geneName
+    defaultLabelFields orgAbbrev,name
+    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.rna.transMapV4.bigPsl
 
 searchTable transMapAlnRnaV4
 searchType psl
@@ -344,6 +350,7 @@ searchMethod prefix
 searchPriority 2.31
 
     track transMapAlnEstV4
+    release alpha
     superTrack transMapV4 hide
     shortLabel TransMap ESTs V4
     longLabel TransMap EST Mappings V4
@@ -359,7 +366,9 @@ searchPriority 2.31
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$db/$db.est.transMapV4.bigPsl
+    labelFields commonName,orgAbbrev,name
+    defaultLabelFields orgAbbrev,name
+    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.est.transMapV4.bigPsl
 
 searchTable transMapAlnEstV4
 searchType psl
