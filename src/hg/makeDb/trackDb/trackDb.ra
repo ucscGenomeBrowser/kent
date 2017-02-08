@@ -12,7 +12,7 @@ include trackDb.chainNet.sarcopterygii.ra
 include trackDb.chainNet.fish.ra
 include trackDb.chainNet.insects.ra
 
-include trackDb.transMap.ra
+include trackDb.transMap.ra alpha
 
 include trackDb.nt.ra
 include trackDb.genbank.ra 
