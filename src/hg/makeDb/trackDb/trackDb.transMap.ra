@@ -285,7 +285,7 @@ group genes
     labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName,geneId,geneType,transcriptType
     defaultLabelFields orgAbbrev,geneName
     labelSeparator " "
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.ensembl.transMapV4.bigPsl
+    bigDataUrl /gbdb/$D/transMap/V4/$D.ensembl.transMapV4.bigPsl
 
 searchTable transMapAlnEnsemblV4
 searchType psl
@@ -315,7 +315,7 @@ searchPriority 2.31
     labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName,geneId
     defaultLabelFields orgAbbrev,geneName
     labelSeparator " "
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.refseq.transMapV4.bigPsl
+    bigDataUrl /gbdb/$D/transMap/V4/$D.refseq.transMapV4.bigPsl
 
 searchTable transMapAlnRefSeqV4
 searchType psl
@@ -345,7 +345,7 @@ searchPriority 2.31
     labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName
     defaultLabelFields orgAbbrev,srcTransId
     labelSeparator " "
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.rna.transMapV4.bigPsl
+    bigDataUrl /gbdb/$D/transMap/V4/$D.rna.transMapV4.bigPsl
 
 searchTable transMapAlnRnaV4
 searchType psl
@@ -372,7 +372,7 @@ searchPriority 2.31
     labelFields commonName,orgAbbrev,srcDb,srcTransId,name
     defaultLabelFields orgAbbrev,srcTransId
     labelSeparator " "
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.est.transMapV4.bigPsl
+    bigDataUrl /gbdb/$D/transMap/V4/$D.est.transMapV4.bigPsl
 
 searchTable transMapAlnEstV4
 searchType psl
