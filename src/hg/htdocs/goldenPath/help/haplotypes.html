@@ -121,13 +121,29 @@ which are always shown as they appear on the positive ('+' or "forward") strand.
   title='Show/Hide predicted full sequence of each gene haplotype' onclick='return false;'>
   hides the full sequence view completely.</p>
   <p>
-  <span style='background-color:#CCFFAA;'>Green vertical highlights</span> accentuate the
+
+<!-- NOTE: these colors are used in lib/haplotypes.c.  Should be in shared stylesheet -->
+<style>
+.gbsHaploGreen{
+  background-color: #ccffaa;
+}
+
+.gbsHaploBlue{
+  background-color: #ccffff;
+}
+
+.gbsHaploRedText {
+  color: #dc143c;
+}
+</style>
+
+  <span class='gbsHaploGreen'>Green vertical highlights</span> accentuate the
   variant sites within the full sequence.</p>
   <p>
-  <strong class='textAlert'>Bold red letters</strong> mark the effects of variation. Synonymous 
+  <span class='gbsHaploRedText'><strong>Bold red letters</strong></span> mark the effects of variation. Synonymous 
   changes are only evident when DNA bases are displayed.</p>
   <p>
-  <span style='background-color:#CCFFFF;'>Blue vertical highlights</span> show a variant that
+  <span class='gbsHaploBlue'>Blue vertical highlights</span> show a variant that
   has been sorted on by clicking its column header.  Sorting on a variant can be used to quickly
   locate one site out of many in the full sequence view.</p>
   <p>
