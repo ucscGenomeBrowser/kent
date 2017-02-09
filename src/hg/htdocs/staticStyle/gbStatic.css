@@ -150,7 +150,7 @@
 }
 
 .gbsPage ol li {
-    margin-left: 10px
+    margin-left: 10px;
 }
 
 /* Definition list */
@@ -161,6 +161,12 @@
 .gbsPage dt {
     margin-top: 15px;
 }
+
+/* Consider using this to reduce indents on lists within lists
+.gbsPage li li {
+    margin-left: -15px;
+}
+*/
 
 /* Tables */
 
