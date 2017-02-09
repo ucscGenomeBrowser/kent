@@ -25508,10 +25508,13 @@ else if (sameWord(table, "knownGene"))
 else if (sameWord(table, "ncbiRefSeq") ||
          sameWord(table, "ncbiRefSeqPsl") ||
          sameWord(table, "ncbiRefSeqCurated") ||
-         sameWord(table, "ncbiRefSeqPredicted") ||
-         sameWord(table, "ncbiRefSeqOther") )
+         sameWord(table, "ncbiRefSeqPredicted") )
     {
     doNcbiRefSeq(tdb, item);
+    }
+else if (sameWord(table, "ncbiRefSeqOther") )
+    {
+    genericClickHandler(tdb, item, NULL);
     }
 else if (sameWord(table, "refGene") )
     {
