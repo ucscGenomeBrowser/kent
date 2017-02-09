@@ -222,6 +222,8 @@ p.gbsCaption {
     margin-top: 5px;
 }
 
+/* TODO: remove these two -- we should use bootstrap class text-right in wrapper element instead */
+
 p.gbsAlignRight {
     text-align: right;
 }
