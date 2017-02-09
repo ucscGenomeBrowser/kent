@@ -343,6 +343,34 @@ safef(name, sizeof(name), "%s_%s_%x_%x",
 return name;
 }
 
+char *getTempDir(void)
+/* get temporary directory to use for programs.  This first checks TMPDIR environment
+ * variable, then /data/tmp, /scratch/tmp, /var/tmp, /tmp.  Return is static and
+ * only set of first call */
+{
+static char *checkTmpDirs[] = {"/data/tmp", "/scratch/tmp", "/var/tmp", "/tmp", NULL};
+
+static char* tmpDir = NULL;
+if (tmpDir == NULL)
+    {
+    tmpDir = getenv("TMPDIR");
+    if (tmpDir != NULL)
+        tmpDir = cloneString(tmpDir);  // make sure it's stable
+    else
+        {
+        int i;
+        for (i = 0; (checkTmpDirs[i] != NULL) && (tmpDir == NULL); i++)
+            {
+            if (fileSize(checkTmpDirs[i]) >= 0)
+                tmpDir = checkTmpDirs[i];
+            }
+        }
+    }
+if (tmpDir == NULL)
+    errAbort("BUG: can't find a tmp directory");
+return tmpDir;
+}
+
 char *rTempName(char *dir, char *base, char *suffix)
 /* Make a temp name that's almost certainly unique. */
 {
