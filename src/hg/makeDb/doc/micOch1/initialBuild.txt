@@ -314,7 +314,7 @@ scientificName: Microtus ochrogaster
        | egrep -v -e 'AHZW[0-9]+(\.[0-9]+)?' | wc -l
     # 0
 
-    # hence, add to trackDb/chicken/micOch1/trackDb.ra
+    # hence, add to trackDb/micOch/micOch1/trackDb.ra
 searchTable gold
 shortCircuit 1
 termRegex AHZW[0-9]+(\.[0-9]+)?
@@ -602,7 +602,7 @@ micOch1.downloadDir = micOch1
     mkdir /hive/data/genomes/micOch1/bed/augustus
     cd /hive/data/genomes/micOch1/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
-        -species=chicken -dbHost=hgwdev \
+        -species=human -dbHost=hgwdev \
            -workhorse=hgwdev micOch1) > do.log 2>&1
     # real    170m55.747s
 
