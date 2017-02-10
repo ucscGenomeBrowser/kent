@@ -25014,11 +25014,6 @@ char *qTrack = cartString(cart, "g");
 if(isHubTrack(qTrack) && ! trackHubDatabase(database))
     hubName = cloneString(qTrack);
 
-struct hash *dbAliasHash = NULL;  // create later when needed
-char * dbAliasList = trackDbSetting(tdb, "dbAliasList");
-if (dbAliasList)
-    dbAliasHash = hashFromString(dbAliasList);
-
 /* current mouse strain hal file has incorrect chrom names */
 char *aliasQName = qName;
 // aliasQName = "chr1";  // temporarily make this work for the mouse hal
@@ -25033,14 +25028,6 @@ else
     {
     safef(otherDb, sizeof otherDb, "%s", otherSpecies);
     }
-
-if (dbAliasHash)
-   {
-   char *otherDbName = trackHubSkipHubName(otherDb);
-   struct hashEl* alias = hashLookup(dbAliasHash, otherDbName);
-   if (alias)
-      safef(otherDb, sizeof otherDb, "%s", (char *)alias->val);
-   }
 
 char headerText[256];
 safef(headerText, sizeof headerText, "reference: %s, query: %s\n", trackHubSkipHubName(database), trackHubSkipHubName(otherDb) );
