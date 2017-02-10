@@ -63,6 +63,16 @@ puts(
 puts("<div class='gbmCredit'>Credit: jwestdesign</div>\n");
 }
 
+static void printGoButton()
+{
+puts(
+"           <div class='gbButtonGoContainer' title='Go to the Genome Browser'>\n"
+"               <div class='gbButtonGo'>GO</div>\n"
+"               <i class='gbIconGo fa fa-play fa-2x'></i>\n"
+"           </div>\n"
+);
+}
+
 static void printVisSelect(struct trackDb *tdb)
 /* Track visibility dropdown */
 {
@@ -93,11 +103,12 @@ char *track = tdb->track;
 puts(
 "        <!-- Configuration panel -->\n"
 "        <div class='row gbSectionBanner'>\n"
-"            <div class='col-md-10'>Configuration</div>\n"
-"            <div class='col-md-2 text-right'>\n");
+"            <div class='col-md-8'>Configuration</div>\n"
+"            <div class='col-md-4 gbButtonContainer text-right'>\n");
 
 /* Track vis dropdown */
 printVisSelect(tdb);
+printGoButton();
 puts(
 "            </div>\n"
 "        </div>\n");
