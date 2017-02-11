@@ -9,7 +9,6 @@ visibility full
 dragAndDrop subTracks
 searchIndex name
 searchTrix ixIxx/GCA_001624185.1_129S1_SvImJ_v1.chromAlias.ix
-dbAliasList C57B6J=mm10 rn6=rn6
 html html/mouseStrains
 
     track snakeA_J
