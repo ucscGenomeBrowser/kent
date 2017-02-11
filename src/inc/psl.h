@@ -338,5 +338,9 @@ return psl->tStarts[blkIdx] + psl->blockSizes[blkIdx];
 struct psl* pslClone(struct psl *psl);
 /* clone a psl */
 
+extern char *pslSortList[5];
+
+void pslSortListByVar(struct psl **pslList, char *sort);
+/* Sort a list of psls using the method definied in the sort string. */
 #endif /* PSL_H */
 
