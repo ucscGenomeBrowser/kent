@@ -20,7 +20,6 @@ genes</a></h6>
 <h6><a href="#tracks9">Cause of duplicated gene</a></h6>
 <h6><a href="#tracks11">Protein doesn't begin with methionine</a></h6>
 <h6><a href="#tracks12">Doing an orthology track analysis of a protein</a></h6>
-<h6><a href="#tracks13">Overlap SNPs vs. random SNPs</a></h6>
 <h6><a href="#tracks14">Quality benchmarks for predicted genes</a></h6>
 <h6><a href="#tracks15">Display conventions for gene prediction tracks</a></h6>
 <h6><a href="#tracks16">Viewing detailed displays in conservation tracks</a></h6>
@@ -196,31 +195,6 @@ Superfamily link on the details page that displays. This will open a browser for
 site. Click &quot;alpha/beta-Hydrolases&quot; to open the Structural Classification of Proteins 
 (SCOP) page. There you will find multiple families listed under this Superfamily, including the 
 lipase in which you're interested.</p>
-
-<a name="tracks13"></a>
-<h2>Overlap SNPs vs. random SNPs</h2>
-<h6>Some assemblies have tracks for both overlap SNPs (snpNIH) and random SNPs (snpTsc). Where 
-are these defined? Where do you get your SNP data?</h6>
-<p> 
-You can obtain detailed information about any track from its associated description page (opened by 
-clicking on the mini-button to the left of the displayed track). Click the &quot;View table 
-schema&quot; link on the description page to display the schema and other information for the 
-primary table underlying the annotation track.</p> 
-<p> 
-The SNP tracks show single nucleotide polymorphisms, which are single nucleotide positions in the 
-genomic sequence for which two or more alternative alleles are present at appreciable frequency 
-(traditionally  at least 1%) in the human population. The Overlap SNPs occur only where two clones 
-of different haplotypes overlap. These SNPs can be useful in confirming the assembly of putative 
-overlaps. Random SNPs are the results of a large number of reads taken from random positions in the 
-genome. If you're trying to estimate the rate of variation in a region, you'd use the TSC reads and 
-perhaps normalize them further by the number of reads actually read in that region. If you just want
-a SNP to use as a marker, both sets are valuable.</p>  
-<p> 
-The SNP tracks are third party tracks. The snpTsc data are obtained from the 
-<a href="http://snp.cshl.org/" target="_blank">SNP Consortium</a> and the random SNP data are 
-obtained from <a href="http://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a>. Both accession 
-types start with <em>rs</em>, e.g. rs792507. The dispersal of the two types of SNPs may be viewed 
-anywhere in the Genome Browser. They are disjoint as sets, but otherwise fully interdigitated.</p> 
 
 <a name="tracks14"></a>
 <h2>Quality benchmarks for predicted genes</h2>
