@@ -1829,7 +1829,7 @@ void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
 cgiMakeOnKeypressTextVar(varName, initialVal, charSize, NULL);
 }
 
-void cgiMakeTextVarWithExtraHtml(char *varName, char *initialVal, int width, char *event, char *javascript)
+void cgiMakeTextVarWithJs(char *varName, char *initialVal, int width, char *event, char *javascript)
 /* Make a text control filled with initial value. */
 {
 if (initialVal == NULL)

@@ -6858,7 +6858,7 @@ if (trackDbSettingClosestToHome(tdb, "noColorTag") == NULL)
     sel2 = cartOrTdbString(cart, tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
     safef(onChange, sizeof(onChange), UPDATE_RADIO_FORMAT_JS,
 	  cartVarName, BAM_COLOR_MODE_TAG);
-    cgiMakeTextVarWithExtraHtml(cartVarName2, sel2, 30, "keypress", onChange);
+    cgiMakeTextVarWithJs(cartVarName2, sel2, 30, "keypress", onChange);
     printf("<BR>\n");
     }
 cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_OFF, sameString(selected, BAM_COLOR_MODE_OFF));

@@ -1380,7 +1380,7 @@ if (asTable)
     int width=(strlen(val)+1)*8;
     if (width<100)
         width = 100;
-    cgiMakeTextVarWithExtraHtml(hel->name, val, width,
+    cgiMakeTextVarWithJs(hel->name, val, width,
                                 "change", "setCartVar(this.name,this.value);");
     printf("</TD></TR>\n");
     }
