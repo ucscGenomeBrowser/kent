@@ -362,6 +362,7 @@ void gtexGeneUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
 {
 char cartVar[1024];
 char buf[512];
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
 safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
 printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
