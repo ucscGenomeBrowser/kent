@@ -16,6 +16,7 @@
 #include "htmshell.h"
 #include "errAbort.h"
 #include "dnautil.h"
+#include "base64.h"
 
 
 jmp_buf htmlRecover;
@@ -850,8 +851,6 @@ fputs(">\n",f);
 
 //--- NONCE and CSP routines -------------
 
-#include "base64.h"
-// copied from cartDb::cartDbMakeRandomKey()
 char *makeRandomKey(int numBits)
 /* Generate base64 encoding of a random key of at least size numBits returning string to be freed when done */
 {
