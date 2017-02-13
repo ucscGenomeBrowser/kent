@@ -280,11 +280,12 @@ sqlSafef(query, sizeof(query), "select * from cdwFileTags where %s='%s'", idTag,
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct slName  *list = sqlResultFieldList(sr);
 char **row;
+struct dyString *dy = dyStringNew(1024); 
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *fileId = mustFindFieldInRow("file_id", list, row);
     printf("Click on a box in the flow chart to navigate to that file."); 
-    makeCdwFlowchart(sqlSigned(fileId), cart);
+    dy = makeCdwFlowchart(sqlSigned(fileId), cart);
     printf("<a href='cdwWebBrowse?cdwCommand=oneFile");
     printf("&%s", cartSidUrlString(cart));
     printf("&cdwFileTag=%s", idTag);
@@ -292,6 +293,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("'>Remove flow chart</a>"); 
     generateTableRow(list, row, idTag, idVal); 
     }
+jsInline(dy->string);
+dyStringFree(&dy); 
 sqlFreeResult(&sr);
 }
 
@@ -1775,6 +1778,7 @@ void localWebStartWrapper(char *titleString)
     jsIncludeFile("ajax.js", NULL);
     jsIncludeFile("d3pie.min.js", NULL);
     printf("<script src=\"//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js\"></script>");
+    printf("<script src=\"http://cpettitt.github.io/project/dagre-d3/latest/dagre-d3.js\"></script>\n");
     printf("</HEAD>\n");
     printBodyTag(stdout);
     }

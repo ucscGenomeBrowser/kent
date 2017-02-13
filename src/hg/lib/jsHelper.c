@@ -100,13 +100,15 @@ void jsMakeTrackingRadioButtonExtraHtml(char *cgiVar, char *jsVar,
 /* Make a radio button with extra HTML attributes that also sets tracking variable
  * in javascript. */
 {
-hPrintf("<INPUT TYPE=RADIO NAME='%s' ID='%s'", cgiVar, cgiVar);
+char id[256];
+safef(id, sizeof id, "%s_%s", cgiVar, val);
+hPrintf("<INPUT TYPE=RADIO NAME='%s' ID='%s'", cgiVar, id);
 hPrintf(" VALUE=\"%s\"", val);
 if (isNotEmpty(extraHtml))
     hPrintf(" %s", extraHtml);
 char javascript[1024];
 safef(javascript, sizeof javascript, "%s='%s';", jsVar, val);
-jsOnEventById("click", cgiVar, javascript);
+jsOnEventById("click", id, javascript);
 if (sameString(val, selVal))
     hPrintf(" CHECKED");
 hPrintf(">");

@@ -1,0 +1,362 @@
+#########################################################################
+# SWAP lastz zebrafish danRer10 (DONE - 2015-09-18 - Hiram)
+    # the primary alignment on mm10
+    cd /hive/data/genomes/mm10/bed/lastzDanRer10.2015-09-11
+    cat fb.mm10.chainDanRer10Link.txt
+    #	73464192 bases of 2652783500 (2.769%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/danRer10/bed/blastz.mm10.swap
+    cd /hive/data/genomes/danRer10/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzDanRer10.2015-09-11/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #	real    16m8.387s
+
+    cat  fb.danRer10.chainMm10Link.txt
+    #	71611488 bases of 1369683683 (5.228%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` danRer10 mm10) > rbest.log 2>&1
+    #    real    7m34.259s
+
+#########################################################################
+# LASTZ Xenopus xenTro7 (DONE - 2017-02-09 - Hiram)
+    mkdir /hive/data/genomes/danRer10/bed/lastzXenTro7.2017-02-09
+    cd /hive/data/genomes/danRer10/bed/lastzXenTro7.2017-02-09
+
+    printf '# zebrafish vs. X. tropicalis
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer10
+SEQ1_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ1_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: X. tropicalis xenTro7
+SEQ2_DIR=/hive/data/genomes/xenTro7/xenTro7.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro7/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/danRer10/bed/lastzXenTro7.2017-02-09
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+            -bigClusterHub=ku) > do.log 2>&1
+    #	lost tty connection
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+            -continue=cat -bigClusterHub=ku) > cat.log 2>&1
+    # real    136m6.704s
+
+    cat fb.danRer10.chainXenTro7Link.txt
+    #	90862965 bases of 1369683683 (6.634%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer10 xenTro7) \
+          > rbest.log 2>&1 &
+    # real    387m16.949s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/xenTro7/bed/blastz.danRer10.swap
+    cd /hive/data/genomes/xenTro7/bed/blastz.danRer10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer10/bed/lastzXenTro7.2017-02-09/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-syntenicNet -swap) > swap.log 2>&1
+    #	real    30m3.142s
+
+    cat fb.xenTro7.chainDanRer10Link.txt
+    #	96433154 bases of 1365936747 (7.060%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro7 danRer10) \
+          > rbest.log 2>&1
+    # real    408m19.596s
+
+########################################################################
+# LASTZ green spotted puffer tetNig2 (DONE - 2017-02-09 - Hiram)
+    screen -S danRer10TetNig2
+    mkdir /hive/data/genomes/danRer10/bed/lastzTetNig2.2017-02-09
+    cd /hive/data/genomes/danRer10/bed/lastzTetNig2.2017-02-09
+
+    printf '# zebrafish vs. green spotted puffer
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+BLASTZ_H=2000
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer10
+SEQ1_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ1_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: green spotted puffer tetNig2
+SEQ2_DIR=/hive/data/genomes/tetNig2/tetNig2.2bit
+SEQ2_LEN=/hive/data/genomes/tetNig2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=1
+
+BASE=/hive/data/genomes/danRer10/bed/lastzTetNig2.2017-02-09
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=2000 -chainLinearGap=medium \
+          -syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+            -bigClusterHub=ku) > do.log 2>&1
+    #	real    97m22.745s
+
+    cat fb.danRer10.chainTetNig2Link.txt
+    #	83044644 bases of 1369683683 (6.063%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer10 tetNig2) \
+          > rbest.log 2>&1 &
+    # real    254m45.837s
+
+    mkdir /hive/data/genomes/tetNig2/bed/blastz.danRer10.swap
+    cd /hive/data/genomes/tetNig2/bed/blastz.danRer10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer10/bed/lastzTetNig2.2017-02-09/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-swap) > swap.log 2>&1
+    #	real    6m59.881s
+
+    cat fb.tetNig2.chainDanRer10Link.txt
+    #	70573446 bases of 302314788 (23.344%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tetNig2 danRer10) \
+          > rbest.log 2>&1
+    # real    228m19.188s
+
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer10/bed/lastzTetNig2.2017-02-09/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-continue=syntenicNet -syntenicNet -swap) > synNet.log 2>&1
+    # real    0m43.708s
+
+########################################################################
+# LASTZ fugu fr3 (DONE - 2017-02-09 - Hiram)
+    screen -S danRer10Fr3
+    mkdir /hive/data/genomes/danRer10/bed/lastzFr3.2017-02-09
+    cd /hive/data/genomes/danRer10/bed/lastzFr3.2017-02-09
+
+    printf '# zebrafish vs. fugu
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+BLASTZ_H=2000
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer10
+SEQ1_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ1_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=6
+
+# QUERY: fugu fr3
+SEQ2_DIR=/hive/data/genomes/fr3/fr3.2bit
+SEQ2_LEN=/hive/data/genomes/fr3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/danRer10/bed/lastzFr3.2017-02-09
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=2000 -chainLinearGap=medium \
+          -syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+            -bigClusterHub=ku) > do.log 2>&1
+    #	real    133m18.224s
+
+    cat fb.danRer10.chainFr3Link.txt
+    #	96978660 bases of 1369683683 (7.080%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer10 fr3) \
+          > rbest.log 2>&1 &
+    # real    200m15.132s
+
+    mkdir /hive/data/genomes/fr3/bed/blastz.danRer10.swap
+    cd /hive/data/genomes/fr3/bed/blastz.danRer10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer10/bed/lastzFr3.2017-02-09/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-syntenicNet -swap) > swap.log 2>&1
+    #	real    9m31.601s
+
+    cat fb.fr3.chainDanRer10Link.txt
+    #	79663999 bases of 350961831 (22.699%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` fr3 danRer10) \
+          > rbest.log 2>&1
+    # real    181m55.550s
+
+########################################################################
+# LASTZ medaka oryLat2 (DONE - 2017-02-09 - Hiram)
+    screen -S oryLat2DanRer10
+    mkdir /hive/data/genomes/danRer10/bed/lastzOryLat2.2017-02-09
+    cd /hive/data/genomes/danRer10/bed/lastzOryLat2.2017-02-09
+
+    printf '# zebrafish vs. medaka
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+BLASTZ_H=2000
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer10
+SEQ1_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ1_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=6
+
+# QUERY: medaka oryLat2
+SEQ2_DIR=/hive/data/genomes/oryLat2/oryLat2.2bit
+SEQ2_LEN=/hive/data/genomes/oryLat2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/danRer10/bed/lastzOryLat2.2017-02-09
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=2000 -chainLinearGap=medium \
+          -syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+            -bigClusterHub=ku) > do.log 2>&1
+    #	real    202m52.634s
+
+    cat fb.danRer10.chainOryLat2Link.txt
+    #	132042172 bases of 1369683683 (9.640%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer10 oryLat2) \
+          > rbest.log 2>&1 &
+    # real    388m46.359s
+
+    mkdir /hive/data/genomes/oryLat2/bed/blastz.danRer10.swap
+    cd /hive/data/genomes/oryLat2/bed/blastz.danRer10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer10/bed/lastzOryLat2.2017-02-09/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-syntenicNet -swap) > swap.log 2>&1
+    #	real    18m21.238s
+
+    cat fb.oryLat2.chainDanRer10Link.txt
+    #	123853592 bases of 700386597 (17.684%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oryLat2 danRer10) \
+          > rbest.log 2>&1
+    # real    370m26.030s
+
+########################################################################
+# LASTZ stickleback gasAcu1 (DONE - 2017-02-09 - Hiram)
+    screen -S gasAcu1DanRer10
+    mkdir /hive/data/genomes/danRer10/bed/lastzGasAcu1.2017-02-09
+    cd /hive/data/genomes/danRer10/bed/lastzGasAcu1.2017-02-09
+
+    printf '# zebrafish vs. stickleback
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+BLASTZ_H=2000
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer10
+SEQ1_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ1_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=6
+
+# QUERY: stickleback gasAcu1
+#  30,000,000 is enough to work with the biggest chrom as one item
+SEQ2_DIR=/hive/data/genomes/gasAcu1/gasAcu1.2bit
+SEQ2_LEN=/hive/data/genomes/gasAcu1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/danRer10/bed/lastzGasAcu1.2017-02-09
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=2000 -chainLinearGap=medium \
+          -syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+            -bigClusterHub=ku) > do.log 2>&1
+    #	real    766m31.436s
+
+    cat fb.danRer10.chainGasAcu1Link.txt
+    #	134422269 bases of 1369683683 (9.814%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer10 gasAcu1) \
+          > rbest.log 2>&1 &
+    # real    466m55.498s
+
+    mkdir /hive/data/genomes/gasAcu1/bed/blastz.danRer10.swap
+    cd /hive/data/genomes/gasAcu1/bed/blastz.danRer10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer10/bed/lastzGasAcu1.2017-02-09/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-syntenicNet -swap) > swap.log 2>&1
+    #	real    26m37.898s
+
+    cat fb.gasAcu1.chainDanRer10Link.txt
+    #	123076224 bases of 446627861 (27.557%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` gasAcu1 danRer10) \
+          > rbest.log 2>&1
+    # real    441m12.898s
+
+########################################################################

@@ -5,19 +5,19 @@
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<h1>Downloading Data: Use Rsync</h1>
+<h1>Downloading data</h1>
 
-<h2>Rsync</h2>
+<h2>Rsync (recommended method)</h2>
 <p>
 We recommend that you download data via rsync using the command line, especially for large 
 files.</p>
 <p> 
 For example, when downloading ENCODE files to your present directory (./), use an expression such 
 as:</p> 
-<pre><code>    $ rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile ./</code></pre> 
+<pre><code>$ rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile ./</code></pre> 
 <p> 
 To download the entire directory (note the trailing slash), use an expression such as:</p>
-<pre><code>    $ rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/ ./</code></pre> 
+<pre><code>$ rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/ ./</code></pre> 
 <p>
 To obtain a file's location (URL) to use with 
 rsync (<em>rsync://hgdownload.cse.ucsc.edu/...</em>), navigate in your browser to our FTP site at 
@@ -26,7 +26,7 @@ downloads page at <a href="http://hgdownload.cse.ucsc.edu/"
 target="_blank">http://hgdownload.cse.ucsc.edu/downloads.html</a>, and look for your file of 
 interest. To learn more about rsync's options, type &quot;man rsync" on the command line.</p>
 
-<h4>Downloading from a Web Browser</h4>
+<h2>Downloading from a web browser</h2>
 <p> 
 If you are not comfortable using the command line, you can download your file via FTP in your 
 browser at <a href="ftp://hgdownload.cse.ucsc.edu/goldenPath" 
@@ -39,26 +39,25 @@ bigBed, bigWig, BAM, VCF, etc.).  Also, Safari does not support FTP inside the b
 enter a FTP URL in Safari, you may have to select &quot;Guest&quot; and click submit to log in 
 before a FTP file system will open in a window on your desktop.</p> 
 
-<h4>FTP from the Command Line</h4> 
+<h2>FTP from the command line</h2> 
 <p>
-We <em><strong>do not encourage FTP versus rsync</strong></em>. However, here are the command line 
-steps for FTP: 
-</p><pre><code>    $ ftp hgdownload.cse.ucsc.edu
-    Name: anonymous
-    Password: &lt;your email address&gt;
-    ftp&gt; cd goldenPath
-    ftp&gt; cd &lt;assembly name&gt; (e.g., hg19)
-    ftp&gt; cd &lt;data directory&gt; (e.g., liftOver)</code></pre> 
+<em><strong>We do not encourage the use of FTP for downloading large data files</strong></em>. 
+Rsync is a more efficient and convenient transport mechanism, and is therefore quicker and easier to
+use for downloading our data files. However, here are the command line steps for FTP, should you 
+chooose to use it: 
+</p><pre><code>$ ftp hgdownload.cse.ucsc.edu
+Name: anonymous
+Password: &lt;your email address&gt;
+ftp&gt; cd goldenPath
+ftp&gt; cd &lt;assembly name&gt; (e.g., hg19)
+ftp&gt; cd &lt;data directory&gt; (e.g., liftOver)</code></pre> 
 <p>
 To download multiple files from the UNIX ftp command line, use the &quot;mget&quot; command. You may
 want to use the <code>prompt</code> command to toggle the interactive mode if you do not want to be
 prompted for each file that you download.</p>
-<pre><code>    ftp&gt; mget [filename1] [filename2] ...</code></pre>
+<pre><code>ftp&gt; mget [filename1] [filename2] ...</code></pre>
 <p>
 Or to download all the files in the directory:</p>
-<pre><code>    ftp&gt; mget -a</code></pre> 
-<p>
-Note that rsync will be much easier and quicker than using FTP. Rsync is a much more efficient and 
-convenient transport mechanism.</p>
+<pre><code>ftp&gt; mget -a</code></pre> 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
