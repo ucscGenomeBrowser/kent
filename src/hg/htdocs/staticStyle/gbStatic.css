@@ -80,6 +80,11 @@
     font-weight: bold;
 }
 
+.gbsPage hr {
+    margin-left: 16px;
+    border-style: inset;
+}
+
 /* Paragraph title */
 
 .gbsPage h6 {
