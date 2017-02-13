@@ -6,37 +6,31 @@
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>Session Gallery</h1>
-<ul> 
-  <li><a class="toc" href="#Gallery">Session Gallery</a></li>
-  <ul>
-    <li><a class="toc" href="#dna">DNA/Codon View</a></li>
-    <li><a class="toc" href="#evolution">Evolution</a></li>
-    <li><a class="toc" href="#snp">SNPs and Disease</a></li>
-    <li><a class="toc" href="#tfbs">Expression/Regulation: TFBS/RNA-seq/ChIP-seq</a></li>
-    <li><a class="toc" href="#mlq">Mailing List Support</a></li>
-  </ul>
-  <li><a class="toc" href="#more">More Information about Sessions</a></li>
-  <ul>
-    <li><a class="toc" href="#What">What is a Session?</a></li>
-    <li><a class="toc" href="#What2">What is the Session Gallery?</a></li>
-    <li><a class="toc" href="#links">Don't copy that link -- make a Session!</a></li>
-    <li><a class="toc" href="#customTracks">Custom Track Caveats</a></li>
-  </ul>
+
+<h6><a class="toc" href="#Gallery">Session Gallery</a></h6>
+<ul>
+  <li><a href="#dna"><strong>DNA/Codon View</strong></a></li>
+  <li><a href="#evolution"><strong>Evolution</strong></a></li>
+  <li><a href="#snp"><strong>SNPs and Disease</strong></a></li>
+  <li><a href="#tfbs"><strong>Expression/Regulation: TFBS/RNA-seq/ChIP-seq</strong></a></li>
+  <li><a href="#mlq"><strong>Mailing List Support</strong></a></li>
+</ul>
+<h6><a href="#more">More Information about Sessions</a></h6>
+<ul>
+  <li><a href="#What"><strong>What is a Session?</strong></a></li>
+  <li><a href="#What2"><strong>What is the Session Gallery?</strong></a></li>
+  <li><a href="#links"><strong>Don't copy that link -- make a Session!</strong></a></li>
+  <li><a href="#customTracks"><strong>Custom Track Caveats</strong></a></li>
 </ul>
 
-<!-- Session Gallery -->
 <a name="Gallery"></a>
-<h2>Session gallery</h2>
-
-<!-- Topic Division --> 
 <a name="dna"></a>
-<h3>DNA/codon view</h3>
+<h2>DNA/codon view</h2>
 
 <!-- Session INFO: This comes from an educational collection: 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
-<p>
-<strong>Examples of stop codons in the hg19 assembly</strong></p>
+<h3>Examples of stop codons in the hg19 assembly</strong></h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.stopCodons"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.stopCodons.png"></center></a>
@@ -46,13 +40,11 @@ different stop codons, displayed in red in the browser. Note that the three tran
 terminate near the right side of the screen are in a different frame from the transcript that 
 terminates near the left side. The three potential reading frames through the region can be seen at 
 the top of the graphic. Only one of the three is free of stop codons throughout this range.</p>
-<hr>
 
 <!-- Session INFO: This comes from our wiki: 
      http://genomewiki.cse.ucsc.edu/index.php/Genome_Browser_Session_Gallery 
 -->
-<p>
-<strong>Premature Stop in the hg18 Reference Assembly</strong></p>
+<h3>Premature Stop in the hg18 Reference Assembly</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/hg18.stop"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg18.stop.png"></center></a>
@@ -77,13 +69,11 @@ previous reference assembly has been replaced by a G, giving the reference a glu
 no longer prematurely truncates the predicted transcript. The SNP at this location, rs4940595, now 
 indicates the G > T transversion in the reverse direction from previously, indicating a premature 
 stop at this location for the T allele.</p>
-<hr>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
-<p>
-<strong>Examples of Start Codons in the hg19 Assembly</strong></p>
+<h3>Examples of Start Codons in the hg19 Assembly</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.startCodon"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.startCodon.png"></center></a>
@@ -95,13 +85,11 @@ target="_blank">a start codon on the reverse strand</a>. By clicking the &quot;r
 below the browser one can
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.reverseStart2"
 target="_blank">flip the view</a>.</p>
-<hr>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
-<p>
-<strong>Examples of Split Codons in the hg19 Assembly</strong></p>
+<h3>Examples of Split Codons in the hg19 Assembly</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.split"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.split.png"></center></a>
@@ -117,13 +105,11 @@ src="../../images/session.hg19.split2.png"></center></a>
 Using the multi-region exon-only feature available under the top blue menu bar and View selecting
 &quot;Multi-Region&quot; you can remove introns adjusting padding down to just one base (or none) 
 to more clearly see the split codon above.</p>
-<hr>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
-<p>
-<strong>Examples of Different Codon Numbering in the hg19 Assembly</strong></p>
+<h3>Examples of Different Codon Numbering in the hg19 Assembly</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.codonNums"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.codonNums.png"></center></a>
@@ -133,17 +119,15 @@ numbering reflecting different isoforms and that it is important to use caution 
 codon numbers in the literature. Here is an additional view of the region zoomed out 300x to display
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.codonNums2"
 target="_blank">the alternate splicing</a>.</p>
-<hr>
 
 <!-- Topic Division -->
 <a name="evolution"></a>
-<h3>Evolution</h3>
+<h2>Evolution</h2>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
-<p>
-<strong>Examples of Codon Wobble in the hg19 Assembly</strong></p>
+<h3>Examples of Codon Wobble in the hg19 Assembly</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.wobble"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.wobble.png"></center></a>
@@ -154,13 +138,11 @@ through evolution with V > I > F amino acids and K > R substitutions. Here is an
 session displaying
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.wobble2"
 target="_blank">wobble</a>.</p>
-<hr>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
-<p>
-<strong>Examples of Evolution in the hg19 Assembly</strong></p>
+<h3>Examples of Evolution in the hg19 Assembly</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.chimp.png"></center></a>
@@ -178,17 +160,15 @@ hg19 (chr2:126,645,017-138,651,416) coincide with the centromere in the Chimp ch
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp3"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.chimp3.png"></center></a></p>
-<hr>
 
 <!-- Topic Division -->
 <a name="snp"></a>
-<h3>SNPs and disease</h3>
+<h2>SNPs and disease</h2>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
-<p>
-<strong>Examples of SNP coloring and ABO variant details in the hg19 Assembly</strong></p>
+<h3>Examples of SNP coloring and ABO variant details in the hg19 Assembly</h3>
 <div class="sectionContent">
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.SNPcolor"
 target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.SNPcolor.png"></center></a>
@@ -204,13 +184,11 @@ nucleotide and AA sequences.</p>
 <a href="http://genome.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc004cda.1&hgg_prot=P16442&hgg_chrom=chr9&hgg_start=136130562&hgg_end=136150630&hgg_type=knownGene&db=hg19#geneAlleles"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/aboVariantDetails.png"></center></a>
-<hr>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
-<p>
-<strong>Examples of OMIM allelic variants in the hg19 Assembly</strong></p>
+<h3>Examples of OMIM allelic variants in the hg19 Assembly</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.OMIM"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.OMIM.png"></center></a>
@@ -224,13 +202,11 @@ In the above and this zoomed in session you can
 target="_blank">mouseover OMIM variants to access details</a> such as OMIM Allelic Variant 
 136350.0021 in the far right to see &quot;PRO366LEU,rs121909641:HYPOGONADOTROPIC HYPOGONADISM 2
 WITH ANOSMIA, SUSCEPTIBILITY TO&quot; to learn additional information about each variant.</p>
-<hr>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
-<p>
-<strong>Examples of CAG Repeats in Huntingtin in the hg19 Assembly</strong>
+<h3>Examples of CAG Repeats in Huntingtin in the hg19 Assembly</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.CAGrepeat"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.CAGrepeat.png"></center></a>
@@ -238,13 +214,11 @@ src="../../images/session.hg19.CAGrepeat.png"></center></a>
 The above session uses the <a href="../../cgi-bin/hgTrackUi?db=hg19&g=oligoMatch"
 target="_blank">Short Match Track</a> to display matches of &quot;cagcagcagcagcagcag&quot; repeats 
 in a polyglutamine region (Note Qs) of the gene HTT, Huntingtin, linked to Huntington's disease.</p>
-<hr>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
-<p>
-<strong>Examples of Segmental Duplications in the hg19 Assembly</strong></p>
+<h3>Examples of Segmental Duplications in the hg19 Assembly</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.segDup"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.segDup.png"></center></a>
@@ -258,17 +232,15 @@ Another example featuring the Segmental Dups track is the
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.segDup2"
 target="_blank">15q11 Prader-Willi region</a> in which same-chromosome duplications lead to gain
 and loss of copies and a rare genetic disorder when some genes are deleted or unexpressed.</p>
-<hr>
 
 <!-- Topic Division -->
 <a name="tfbs"></a>
-<h3>Expression/regulation: TFBS/RNA-seq/ChIP-seq</h3>
+<h2>Expression/regulation: TFBS/RNA-seq/ChIP-seq</h2>
 
 <!-- Session INFO: This comes from 
      https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html 
 -->
-<p>
-<strong>Microarray Probset data in the hg19 Assembly</strong></p>
+<h3>Microarray Probset data in the hg19 Assembly</strong></h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.microArray"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.microArray.png"></center></a>
@@ -276,11 +248,9 @@ src="../../images/session.hg19.microArray.png"></center></a>
 The above session uses the <a href="../../cgi-bin/hgTrackUi?db=hg19&g=genotypeArrays"
 target="_blank">Microarray Probesets</a> track to display Affymetrix, Agilent, and Illumina probe 
 information.</p>
-<hr>
 
 <!-- Session INFO: This comes from the ENCODE index.html -->
-<p>
-<strong>View ENCODE data (2003 - 2012) in the UCSC Genome Browser</strong>
+<h3>View ENCODE data (2003 - 2012) in the UCSC Genome Browser</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/encodeDemonstration"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/encode/browser.png"></center></a>
@@ -288,10 +258,8 @@ src="../../images/encode/browser.png"></center></a>
 The above session highlights some key integrated track data from the ENCODE project including
 GENCODE gene sets, Transcription Levels by RNA-seq, H3K27Ac histone mark, DNaseI Hypersensitivity, 
 ChIP-seq Transcription Factor binding sites, and Genome Segmentations.</p>
-<hr>
 
-<p>
-<strong>Example search of enhancer information around the gene TNFAIP3</strong></p>
+<h3>Example search of enhancer information around the gene TNFAIP3</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.enhancer"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.enhancer.png"></center></a>
@@ -305,10 +273,8 @@ modification of histone proteins is suggestive of enhancer and other regulatory 
 Investigating where RNA-seq signals overlap with Transcription Factor Binding upstream of
 TNFAIP3 transcription would appear to indicate possible eRNA locations and the segmentation track 
 displays possible Strong and Weak Enhancers as calculated by the ChromHMM and Segway programs.</p>
-<hr>
 
-<p>
-<strong>Example of how DNaseI Hypersensitivity Clusters track represents multiple experiments</strong>
+<h3>Example of how DNaseI Hypersensitivity Clusters track represents multiple experiments</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.Dnase"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.Dnase.png"></center></a>
@@ -319,11 +285,8 @@ generated.
 target="_blank">The response</a> explains that the clusters track represents the combining and
 filtering of multiple DNaseI Hypersensitivity Uniform Peaks tracks in an attempt to summarize
 multiple individual experiments, which also can be viewed individually in the browser.</p>
-<hr>
 
-<p>
-<strong>Example of how the Transcription Factor ChIP Track is generated from multiple
-experiments</strong></p>
+<h3>Example of how the Transcription Factor ChIP Track is generated from multiple experiments</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.TFBScluster"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.TFBScluster.png"></center></a>
@@ -343,15 +306,13 @@ processed scores were used to create the cluster score given to the MYC cluster.
 factor, you can also click the JUN factors and you will see there is only one observed cell type 
 where this data indicates this factor binds at this location. And similarly below, you will see the 
 &quot;Uniform... Jun&quot; tracks that contributed to the clusters track.</p>
-<hr>
 
 <!-- Topic Division -->
 <a name="mlq"></a>
-<h3>Mailing list support</h3>
+<h2>Mailing list support</h2>
 
 <!-- Session INFO: This comes from the ENCODE index.html -->
-<p>
-<strong>Example of displaying repeats in the hg19 Assembly</strong></p>
+<h3>Example of displaying repeats in the hg19 Assembly</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.AluY"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg19.AluY.png"></center></a>
@@ -361,10 +322,8 @@ The user could not find the Alu repeat, and
 <a href="https://groups.google.com/a/soe.ucsc.edu/d/msg/genome/_X1bURBW8ho/TRs18-kez2AJ"
 target="_blank">the response</a> was to aid the user in turning on the RepeatMasker track
 where information on repeats, such as the AluY element desired, is contained.</p>
-<hr>
 
-<p>
-<strong>Example of refGene exonFrames coming from mRNA</strong></p>
+<h3>Example of refGene exonFrames coming from mRNA</h3>
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg38.refGeneFrame"
 target="_blank"><center><img width="70%" height="70%" 
 src="../../images/session.hg38.refGeneFrame.png"></center></a>

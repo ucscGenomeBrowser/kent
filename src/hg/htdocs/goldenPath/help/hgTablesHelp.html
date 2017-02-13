@@ -8,44 +8,48 @@
 <h1>Table Browser User's Guide </h1>
 
 <h2>Contents</h2> 
+
+<h6><a href="#Introduction">Introduction</a></h6> 
+<h6><a href="#Tables">About the Table Browser databases and tables</a></h6> 
 <ul> 
-  <li><a class="toc" href="#Introduction">Introduction</a></li> 
-  <li><a class="toc" href="#Tables">About the Table Browser databases and tables</a></li> 
-  <ul> 
-    <li><a class="toc" href="#NonPositional">Non-positional tables</a></li> 
-    <li><a class="toc" href="#Positional">Position-oriented tables</a></li> 
-  </ul 
-  <li><a class="toc" href="#GettingStarted">Getting started - simple queries</a></li> 
-  <ul> 
-    <li><a class="toc" href="#PositionQuery">Simple position-based query</a></li> 
-    <li><a class="toc" href="#BatchQuery">Batch query using identifiers</a></li> 
-  </ul> 
-  <li><a class="toc" href="#Filter">Filtering output by constraining field values</a></li> 
-  <ul> 
-    <li><a class="toc" href="#FilterSingle">Filtering on fields from a single table</a></li> 
-    <li><a class="toc" href="#FilterMultiple">Filtering on fields from multiple tables</a></li> 
-    <li><a class="toc" href="#FilterConstraints">Filter constraints</a></li> 
-  </ul> 
-  <li><a class="toc" href="#Intersection">Intersecting data from multiple tables</a></li> 
-  <ul> 
-    <li><a class="toc" href="#SimpleIntersection">Intersecting data from two tables</a></li> 
-    <li><a class="toc" href="#MultiIntersection">Intersecting data from multiple tables</a></li> 
-    <li><a class="toc" href="#IntersectionOptions">Intersection options</a></li> 
-  </ul> 
-  <li><a class="toc" href="#Correlation">Correlating data from two tables</a></li> 
-  <li><a class="toc" href="#OutputFormats">Output dormats</a></li> 
-  <ul> 
-    <li><a class="toc" href="#AllFields">Displaying all fields in a table</a></li> 
-    <li><a class="toc" href="#SelectedFields">Displaying selected fields from one or more tables</a></li>
-    <li><a class="toc" href="#Sequence">Displaying sequence (FASTA) data</a></li> 
-    <li><a class="toc" href="#FASTA">Displaying CDS FASTA alignments</a></li> 
-    <li><a class="toc" href="#GTF_BED">Saving query results in GTF or BED format</a></li> 
-    <li><a class="toc" href="#SaveFile">Saving data to a file</a></li> 
-    <li><a class="toc" href="#CustomTrack">Saving data as a custom track</a></li> 
-    <li><a class="toc" href="#Hyperlink">Displaying query results as Genome Browser hyperlinks</a></li> 
-    <li><a class="toc" href="#SummaryStats">Displaying a statistical summary of query data</a></li> 
-  </ul> 
-</ul>
+  <li><a href="#NonPositional"><strong>Non-positional tables</strong></a></li> 
+  <li><a href="#Positional"><strong>Position-oriented tables</strong></a></li> 
+</ul> 
+<h6><a href="#GettingStarted">Getting started - simple queries</a></h6> 
+<ul> 
+  <li><a href="#PositionQuery"><strong>Simple position-based query</strong></a></li> 
+  <li><a href="#BatchQuery"><strong>Batch query using identifiers</strong></a></li> 
+</ul> 
+<h6><a href="#Filter">Filtering output by constraining field values</a></h6> 
+<ul> 
+  <li><a href="#FilterSingle"><strong>Filtering on fields from a single table</strong></a></li> 
+  <li><a href="#FilterMultiple"><strong>Filtering on fields from multiple tables</strong></a></li> 
+  <li><a href="#FilterConstraints"><strong>Filter constraints</strong></a></li> 
+</ul> 
+<h6><a href="#Intersection">Intersecting data from multiple tables</a></h6> 
+<ul> 
+  <li><a href="#SimpleIntersection"><strong>Intersecting data from two tables</strong></a></li> 
+  <li><a href="#MultiIntersection"><strong>Intersecting data from multiple tables</strong></a></li> 
+  <li><a href="#IntersectionOptions"><strong>Intersection options</strong></a></li> 
+</ul> 
+<h6><a href="#Correlation">Correlating data from two tables</a></h6> 
+<h6><a href="#OutputFormats">Output dormats</a></h6> 
+<ul> 
+  <li><a href="#AllFields"><strong>Displaying all fields in a table</strong></a></li> 
+  <li><a href="#SelectedFields"><strong>Displaying selected fields from one or more 
+  tables</strong></a></li>
+  <li><a href="#Sequence"><strong>Displaying sequence (FASTA) data</strong></a></li> 
+  <li><a href="#FASTA"><strong>Displaying CDS FASTA alignments</strong></a></li> 
+  <li><a href="#GTF_BED"><strong>Saving query results in GTF or BED format</strong></a></li> 
+  <li><a href="#SaveFile"><strong>Saving data to a file</strong></a></li> 
+  <li><a href="#CustomTrack"><strong>Saving data as a custom track</strong></a></li> 
+  <li><a href="#Hyperlink"><strong>Displaying query results as Genome Browser
+  hyperlinks</strong></a></li> 
+  <li><a href="#SummaryStats"><strong>Displaying a statistical summary of query 
+  data</strong></a></li> 
+</ul> 
+<hr>
+
 <form name="googleForm1" method="get" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';"> 
   <p>
   Search the Genome Browser help pages: &nbsp; 
@@ -64,6 +68,7 @@ Helix tutorial and training materials</a>.</p>
 
 <!-- ====Introduction======================== -->
 <a name="Introduction"></a> 
+<h2>Introduction</h2>
 <p> 
 The Table Browser provides a powerful and flexible graphical interface for querying and manipulating
 the Genome Browser annotation tables. Because the Table Browser uses the same database as the Genome

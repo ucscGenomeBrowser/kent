@@ -34,6 +34,13 @@
     background-color: #7e1f16;
 }
 
+/* Text styling */
+
+.gbsWarningText {
+    color: red;
+    font-weight: bold;
+}
+
 /* Overall page styling */
 
 .gbsPage {
@@ -277,7 +284,7 @@ ul.nice-menu ul li a {
 
 .gbDonateButton {
     margin-top: 3px;
-    width: initial;
-    height: initial;
+    width: auto;
+    height: auto;
     padding: 5px 20px;
 }
