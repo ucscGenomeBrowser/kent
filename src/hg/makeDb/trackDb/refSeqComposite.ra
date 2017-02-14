@@ -10,6 +10,7 @@ dragAndDrop subTracks
 noInherit on
 subGroup1 view Views aNcbiRefSeq=NCBI_RefSeq zUcscRefSeq=UCSC_RefSeq
 allButtonPair on
+priority 2
 
     track ncbiRefSeqView
     release alpha
@@ -33,7 +34,7 @@ allButtonPair on
 	track ncbiRefSeqCurated
         color 12,12,120
         release alpha
-        parent ncbiRefSeqView off
+        parent ncbiRefSeqView on
 	shortLabel RefSeq Curated
         subGroups view=aNcbiRefSeq
 	longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, and YP_*)
@@ -79,7 +80,7 @@ allButtonPair on
         baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
         baseColorUseCds table ncbiRefSeqCds
         idXref ncbiRefSeqLink mrnaAcc name
-        color 16,64,32
+        color 0,0,0
         pepTable ncbiRefSeqPepTable
 
     track ucscRefSeqView
@@ -90,7 +91,7 @@ allButtonPair on
 
         track refGene override
         release alpha
-	parent ucscRefSeqView on
+	parent ucscRefSeqView off
         shortLabel UCSC RefSeq
         longLabel UCSC annotations of RefSeq RNAs (NM_* and NR_*)
         subGroups view=zUcscRefSeq
