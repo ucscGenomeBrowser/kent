@@ -370,6 +370,7 @@ puts(
 "</div>");
 
 // Initialize illustration display and handle mouseover and clicks
+puts("<script type='text/javascript' src='../js/utils.js'></script>");
 puts("<script type='text/javascript' src='../js/hgGtexTrackSettings.js'></script>");
 
 webIncludeFile("inc/gbFooter.html");

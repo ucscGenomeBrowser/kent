@@ -19,6 +19,9 @@
 
 #include "dystring.h"
 
+char *makeRandomKey(int numBits);
+/* Generate base64 encoding of a random key of at least size numBits returning string to be freed when done */
+
 void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure);
 /* create a cookie with the given stats */
 
