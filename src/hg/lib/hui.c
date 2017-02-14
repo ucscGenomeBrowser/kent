@@ -6470,7 +6470,7 @@ struct hash *offHash = NULL;
 if (defaultOffSpecies)
     {
     offHash = newHash(5);
-    DEFAULT_BUTTON( "id", "default_pw","cb_maf_","_maf_")  // DEBUG RESTORE
+    DEFAULT_BUTTON( "id", "default_pw","cb_maf_","_maf_")
     int wordCt = chopLine(defaultOffSpecies, words);
     defaultOffSpeciesCnt = wordCt;
 
