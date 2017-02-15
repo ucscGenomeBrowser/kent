@@ -853,8 +853,8 @@ printf("</TD></TR>\n");
 printf("</TFOOT></TABLE>\n");
 
 if (parentTdb == NULL)
-    jsInline("{$(document).ready(function() {"
-           "sortTable.initialize($('table.sortable')[0],true,true);});}\n");
+    jsInline("$(document).ready(function() {"
+           "sortTable.initialize($('table.sortable')[0],true,true);});\n");
 
 if (timeIt)
     uglyTime("Finished table");

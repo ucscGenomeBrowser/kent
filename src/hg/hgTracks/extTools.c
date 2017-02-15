@@ -295,7 +295,7 @@ printf("</form>\n");
 if (!debug)
     {
     struct dyString *dy = dyStringNew(256);
-    dyStringPrintf(dy, "document.getElementById(\"redirForm\").submit();");
+    dyStringPrintf(dy, "document.getElementById(\"redirForm\").submit();\n");
     jsInline(dy->string);
     dyStringFree(&dy);
     }
