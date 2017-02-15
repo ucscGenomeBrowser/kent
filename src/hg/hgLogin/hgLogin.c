@@ -330,8 +330,7 @@ void returnToURL(int delay)
 char *returnURL = getReturnToURL();
 char javascript[1024];
 safef(javascript, sizeof javascript,
-    "function afterDelay() {window.location = '%s';}\n"
-    "window.setTimeout(afterDelay, %d);\n"
+    "setTimeout(function(){location='%s';}, %d);\n"
     , returnURL, delay);
 jsInline(javascript);
 }
@@ -341,7 +340,7 @@ static void redirectToLoginPage(char *paramStr)
 {
 char javascript[1024];
 safef(javascript, sizeof javascript,
-    "window.location ='%s?%s'"
+    "window.location ='%s?%s';\n"
     , hgLoginUrl, paramStr);
 jsInline(javascript);
 }
@@ -396,7 +395,7 @@ hPrintf(
   "have been sent to that address.<BR><BR>"
     "  If <B>%s</B> is not your registered email address, you will not receive an email."
     " If you can't find the message we sent you, please contact %s for help.</p>", sendMailTo, sendMailTo, returnAddr);
-hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>",
+hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>\n",
         hgLoginUrl);
 cartRemove(cart, "hgLogin_helpWith");
 cartRemove(cart, "hgLogin_email");
@@ -425,7 +424,7 @@ if (sameString(returnAddr, "NOEMAIL"))
     "genome-www@soe.ucsc.edu. As this is a mirror website not managed by UCSC, please "
     "specify the address of the mirror in your email.</p>");
 
-hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>",
+hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>\n",
         hgLoginUrl);
 cartRemove(cart, "hgLogin_helpWith");
 cartRemove(cart, "hgLogin_email");
@@ -455,7 +454,7 @@ else
     {
     char javascript[1024];
     safef(javascript, sizeof javascript,
-        "window.location = '%s?hgLogin.do.displayMailSuccess=1'"
+        "window.location = '%s?hgLogin.do.displayMailSuccess=1';\n"
         , hgLoginUrl);
     jsInline(javascript);
     }
@@ -520,7 +519,7 @@ else
     {
     char javascript[1024];
     safef(javascript, sizeof javascript,
-        "window.location = '%s?hgLogin.do.displayMailSuccessPwd=1&user=%s'"
+        "window.location = '%s?hgLogin.do.displayMailSuccessPwd=1&user=%s';\n"
         , hgLoginUrl, username);
     jsInline(javascript);
     }
