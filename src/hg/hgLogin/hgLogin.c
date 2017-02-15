@@ -328,22 +328,18 @@ void returnToURL(int delay)
 /* delay for delay mill-seconds then return to the "returnto" URL */
 {
 char *returnURL = getReturnToURL();
-char javascript[1024];
-safef(javascript, sizeof javascript,
+jsInlineF(
     "function afterDelay() {window.location = '%s';}\n"
     "window.setTimeout(afterDelay, %d);\n"
     , returnURL, delay);
-jsInline(javascript);
 }
 
 static void redirectToLoginPage(char *paramStr)
 /* redirect to hgLogin page with given parameter string */
 {
-char javascript[1024];
-safef(javascript, sizeof javascript,
+jsInlineF(
     "window.location ='%s?%s'"
     , hgLoginUrl, paramStr);
-jsInline(javascript);
 }
     
 void  displayActMailSuccess()
@@ -453,11 +449,9 @@ if (result == -1)
     }
 else
     {
-    char javascript[1024];
-    safef(javascript, sizeof javascript,
+    jsInlineF(
         "window.location = '%s?hgLogin.do.displayMailSuccess=1'"
         , hgLoginUrl);
-    jsInline(javascript);
     }
 }
 
@@ -518,11 +512,9 @@ if (result == -1)
     }
 else
     {
-    char javascript[1024];
-    safef(javascript, sizeof javascript,
+    jsInlineF(
         "window.location = '%s?hgLogin.do.displayMailSuccessPwd=1&user=%s'"
         , hgLoginUrl, username);
-    jsInline(javascript);
     }
 }
 

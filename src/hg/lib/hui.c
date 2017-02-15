@@ -4953,10 +4953,8 @@ if (hashFindVal(tdb->settingsHash, WINDOWINGFUNCTION) == NULL)
 wigCfgUi(cart,tdb,name,title,TRUE);
 tdb->type = origType;
 printf("</DIV>\n\n");
-char javascript[1024];
-safef(javascript, sizeof javascript, "$(\"input[name='%s']\").click( function() { $('#densGraphOptions').toggle();} );\n"
+jsInlineF("$(\"input[name='%s']\").click( function() { $('#densGraphOptions').toggle();} );\n"
     , varName); // XSS FILTER?
-jsInline(javascript);
 }
 
 void wiggleScaleDropDownJavascript(char *name)
@@ -5140,10 +5138,8 @@ else
 
 // add a little javascript call to make sure we don't get whiskers with stacks in multiwigs
 
-char javascript[1024];
-safef(javascript, sizeof javascript, "$(function () { multiWigSetupOnChange('%s'); });\n", name);
 if (didAggregate)
-    jsInline(javascript);
+    jsInlineF("$(function () { multiWigSetupOnChange('%s'); });\n", name);
 
 cfgEndBox(boxed);
 }

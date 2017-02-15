@@ -273,8 +273,7 @@ boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
 /* DataTables configuration: only allow ordering on session name, creation date, and database.
  * https://datatables.net/reference/option/columnDefs */
-struct dyString *javascript = dyStringNew(4096);
-dyStringPrintf(javascript,
+jsInlineF(
         "if (theClient.isIePre11() === false)\n{\n"
         "$(document).ready(function () {\n"
         "    $('#sessionTable').DataTable({\"columnDefs\": [{\"orderable\":false, \"targets\":[0,4,5,6,7,8]}],\n"
@@ -286,7 +285,6 @@ dyStringPrintf(javascript,
         "} );\n"
         "}\n"
         , jsDataTableStateSave(hgSessionPrefix), jsDataTableStateLoad(hgSessionPrefix, cart));
-jsInline(javascript->string);
 
 printf("<H3>My Sessions</H3>\n");
 printf("<div style=\"max-width:1024px\">");

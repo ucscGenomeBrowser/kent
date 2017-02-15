@@ -228,10 +228,7 @@ safef(url, sizeof(url), "%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s",
 /* Odd it appears that we've already printed the Content-Typ:text/html line
    but I can't figure out where... */
 htmStart(stdout, "Redirecting"); 
-char javascript[1024];
-safef(javascript, sizeof javascript,
-    "location.replace('%s');", url);
-jsInline(javascript);
+jsInlineF("location.replace('%s');", url);
 printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>", url);
 htmlEnd();
 

@@ -45,10 +45,7 @@ if (! jsInited)
     int pos = cgiOptionalInt("jsh_pageVertPos", 0);
     if (pos > 0)
 	{
-	char javascript[1024];
-	safef(javascript, sizeof javascript,
-	       "window.onload = function () { window.scrollTo(0, %d); }", pos);
-	jsInline(javascript);
+	jsInlineF("window.onload = function () { window.scrollTo(0, %d); }", pos);
 	}
     jsInited = TRUE;
     jsIncludeFile("jsHelper.js", NULL);
@@ -89,10 +86,7 @@ void jsTrackingVar(char *jsVar, char *val)
 /* Emit a little Javascript to keep track of a variable.
  * This helps especially with radio buttons. */
 {
-char javascript[256];
-safef(javascript, sizeof javascript, 
-    "var %s='%s';\n", jsVar, val);
-jsInline(javascript);
+jsInlineF("var %s='%s';\n", jsVar, val);
 }
 
 void jsMakeTrackingRadioButtonExtraHtml(char *cgiVar, char *jsVar,
@@ -476,8 +470,7 @@ void jsReloadOnBackButton(struct cart *cart)
 // http://siphon9.net/loune/2009/07/detecting-the-back-or-refresh-button-click/
 // Yes, I know this along with every other inline <script> here belongs in a .js module
 {
-char javascript[2048];
-safef(javascript, sizeof javascript, 
+jsInlineF(
        "document.write(\"<form style='display: none'><input name='__detectback' id='__detectback' "
        "value=''></form>\");\n"
        "function checkPageBackOrRefresh() {\n"
@@ -501,7 +494,6 @@ safef(javascript, sizeof javascript,
        "  } "
        "};\n"
        , cartSidUrlString(cart), cgiScriptName(), cartSidUrlString(cart));
-jsInline(javascript);
 }
 
 static char *makeIndentBuf(int indentLevel)

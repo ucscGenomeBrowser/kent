@@ -2260,14 +2260,13 @@ void oligoMatchUi(struct trackDb *tdb)
 {
 char *oligo = cartUsualString(cart, oligoMatchVar, oligoMatchDefault);
 puts("<P><B>Short (2-30 base) sequence:</B>");
-char *javascript = 
+jsInline(
 "function packTrack()\n"
 "{\n"
 "var box = jQuery('select[name$=oligoMatch]');\n"
 "if (box.val()=='hide')\n"
 "    box.val('pack');\n"
-"}\n";
-jsInline(javascript);
+"}\n");
 printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">", 
     oligoMatchVar, oligoMatchVar, 45, oligo);
 jsOnEventById("input", oligoMatchVar, "packTrack();");
