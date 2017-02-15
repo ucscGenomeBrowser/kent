@@ -24,7 +24,8 @@ The following tests are run:
   pslCheck
 
 The following statistics are recorded: 
-  featureBits
+  featureBits (via runBits.csh)
+  Overlap with gaps (including unbridged via runBits.csh)
   item count per chromosome stats
 
   creates 2 files:  outFile.summary, outFile.log
@@ -76,20 +77,25 @@ def runTests(db, tableList, reporter, sumTable):
 def writeSummaryFile(sumTable, sumFile):
     sumFile.write(sumTable.tabSeparated())
 
-args = parseCommandLine()
-tableList = args.table
-db = args.db
-outFile = args.outFile
-checkTablesReceived(tableList, outFile)
-checkTablesExist(db, tableList)
+def main():
+    """Main function of qaGbTracks. Runs all of the other functions of the program."""
+    args = parseCommandLine()
+    tableList = args.table
+    db = args.db
+    outFile = args.outFile
+    checkTablesReceived(tableList, outFile)
+    checkTablesExist(db, tableList)
 
-logFile = open(outFile + ".log", "w")
-sumFile = open(outFile + ".summary", "w")
-reporter = reporter.Reporter(logFile)
-sumTable = summary.SumTable()
+    logFile = open(outFile + ".log", "w")
+    sumFile = open(outFile + ".summary", "w")
+    myReporter = reporter.Reporter(logFile)
+    sumTable = summary.SumTable()
 
-runTests(db, tableList, reporter, sumTable)
-writeSummaryFile(sumTable, sumFile)
+    runTests(db, tableList, myReporter, sumTable)
+    writeSummaryFile(sumTable, sumFile)
 
-logFile.close()
-sumFile.close()
+    logFile.close()
+    sumFile.close()
+
+if __name__ == "__main__":
+    main()

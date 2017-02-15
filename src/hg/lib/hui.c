@@ -4869,7 +4869,7 @@ if (slCount(subtrackRefList) > 5)
     puts("&nbsp;&nbsp;&nbsp;&nbsp;<span class='subCBcount'></span>");
 puts("<P>");
 if (!primarySubtrack)
-    jsInline("matInitializeMatrix();");
+    jsInline("matInitializeMatrix();\n");
 }
 
 static void makeAddClearButtonPair(char *idPrefix, char *class,char *separator)

@@ -45,7 +45,7 @@ if (! jsInited)
     int pos = cgiOptionalInt("jsh_pageVertPos", 0);
     if (pos > 0)
 	{
-	jsInlineF("window.onload = function () { window.scrollTo(0, %d); }", pos);
+	jsInlineF("window.onload = function () { window.scrollTo(0, %d); }\n", pos);
 	}
     jsInited = TRUE;
     jsIncludeFile("jsHelper.js", NULL);
@@ -121,7 +121,7 @@ void jsMakeTrackingCheckBox(struct cart *cart,
 {
 char buf[256];
 boolean oldVal = cartUsualBoolean(cart, cgiVar, usualVal);
-jsInlineF("var %s=%d;", jsVar, oldVal);
+jsInlineF("var %s=%d;\n", jsVar, oldVal);
 hPrintf("<INPUT TYPE=CHECKBOX NAME='%s' ID='%s' VALUE=1", cgiVar, cgiVar);
 if (oldVal)
     hPrintf(" CHECKED");

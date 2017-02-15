@@ -399,7 +399,7 @@
     over the <code>dense</code> and <code>full</code> modes. By default, these tracks will
     not offer the <code>squish</code> and <code>pack</code> vilibility settings.
     Nevertheless, you can make your track offer
-    these visibilility choices by turning canPack on.  Note: subtracks
+    these visibility choices by turning canPack on.  Note: subtracks
     of composites will always offer all five choices.</P>
     <P><B>Example:</B></P>
     <pre>   canPack on</pre>

@@ -168,19 +168,17 @@ else if (tg->isBigBed)
 
     if (!trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
         tg->itemName = bigBedItemName;
-    else
+
+    calculateLabelFields(tg);
+    for (bb = bbList; bb != NULL; bb = bb->next)
         {
-        calculateLabelFields(tg);
-        for (bb = bbList; bb != NULL; bb = bb->next)
-            {
-            bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-            bed = loader(bedRow);
-            bed->label = makeLabel(tg, bb);
-            if (scoreFilter == NULL || bed->score >= minScore)
-                slAddHead(&list, bed);
-            }
-        lmCleanup(&lm);
+        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        bed = loader(bedRow);
+        bed->label = makeLabel(tg, bb);
+        if (scoreFilter == NULL || bed->score >= minScore)
+            slAddHead(&list, bed);
         }
+    lmCleanup(&lm);
     }
 else
     {

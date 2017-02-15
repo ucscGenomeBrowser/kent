@@ -294,7 +294,7 @@ printf("</form>\n");
 // a little javascript that clicks the submit button
 if (!debug)
     {
-    jsInline("document.getElementById(\"redirForm\").submit();");
+    jsInline("document.getElementById(\"redirForm\").submit();\n");
     }
 jsInlineFinish();
 printf("</body></html>\n");

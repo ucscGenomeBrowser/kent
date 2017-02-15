@@ -397,7 +397,7 @@ while ((bufRead = fread(&buffer, 1, S3UPBUFSIZE, f)) > 0)
 	    "</FORM>\n"
 	    , hgtaDoMainPage);
 	jsOnEventById("click", "Refresh", "window.location=window.location;return false;");
-	jsInline("setTimeout(function(){location = location;},5000);");
+	jsInline("setTimeout(function(){location = location;},5000);\n");
 
 	htmlClose();
 	fflush(stdout);
@@ -647,7 +647,7 @@ printf("<FORM ACTION=\"/cgi-bin/hgTables\" METHOD=GET>\n"
 	"</FORM>\n"
 	, hgtaDoMainPage);
 jsOnEventById("click", "Refresh", "window.location=window.location;return false;");
-jsInline("setTimeout(function(){location = location;},5000);");
+jsInline("setTimeout(function(){location = location;},5000);\n");
 
 htmlClose();
 fflush(stdout);
