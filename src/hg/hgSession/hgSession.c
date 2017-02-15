@@ -975,9 +975,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
     char id[256];
     safef(id, sizeof id, "%s%s", hgsDeletePrefix, encSessionName);
-    char javascript[1024];
-    safef(javascript, sizeof javascript, confirmDeleteFormat, encSessionName);
-    jsOnEventById("click", id, javascript);
+    jsOnEventByIdF("click", id, confirmDeleteFormat, encSessionName);
 
     dyStringPrintf(dyMessage,
 		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
@@ -985,10 +983,8 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   "<INPUT TYPE=HIDDEN NAME=\"%s%s%s\" VALUE=0><BR>\n",
 		   hgsSharePrefix, encSessionName, (shared>0 ? " CHECKED" : ""),
 		   cgiBooleanShadowPrefix(), hgsSharePrefix, encSessionName);
-    safef(javascript, sizeof javascript, "{%s %s}", highlightAccChanges, toggleGalleryDisable);
-    jsOnEventById("change", "detailsSharedCheckbox", javascript);
-    safef(javascript, sizeof javascript, "{%s %s}", highlightAccChanges, toggleGalleryDisable);
-    jsOnEventById("click" , "detailsSharedCheckbox", javascript);
+    jsOnEventByIdF("change", "detailsSharedCheckbox", "{%s %s}", highlightAccChanges, toggleGalleryDisable);
+    jsOnEventByIdF("click" , "detailsSharedCheckbox", "{%s %s}", highlightAccChanges, toggleGalleryDisable);
 
     dyStringPrintf(dyMessage,
 		   "List in Public Sessions? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "

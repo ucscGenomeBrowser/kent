@@ -727,10 +727,8 @@ for (;oneFile!= NULL;oneFile=oneFile->next)
     char id[256];
     safef(id, sizeof id, "ftpBut_%d", butCount++);
     printf("<input type='button' id='%s' value='Download' title='Download %s ...'>", id, oneFile->fileName);
-    char javascript[1024];
-    safef(javascript, sizeof javascript, "window.location='http://%s/goldenPath/%s/%s/%s%s/%s';"
+    jsOnEventByIdF("click", id, "window.location='http://%s/goldenPath/%s/%s/%s%s/%s';"
            ,server,db,ENCODE_DCC_DOWNLOADS, field, subDir, oneFile->fileName);
-    jsOnEventById("click", id, javascript);
 
 #define SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
 #ifdef SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS

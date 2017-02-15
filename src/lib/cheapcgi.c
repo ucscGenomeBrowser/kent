@@ -1903,10 +1903,8 @@ if (width < 65)
 
 printf("<INPUT TYPE=TEXT class='inputBox' name='%s' id='%s' style='width: %dpx' value=%d",
        varName,varName,width,initialVal);
-char javascript[1024];
-safef(javascript, sizeof javascript, "return validateInt(this,%s,%s);",
+jsOnEventByIdF("change", varName, "return validateInt(this,%s,%s);",
        (min ? min : "\"null\""),(max ? max : "\"null\""));
-jsOnEventById("change", varName, javascript);
 if (title)
     printf(" title='%s'",title);
 printf(">\n");
@@ -1981,10 +1979,8 @@ if (width < 65)
 
 printf("<INPUT TYPE=TEXT class='inputBox' name='%s' id='%s' style='width: %dpx' value=%g",
        varName,varName,width,initialVal);
-char javascript[1024];
-safef(javascript, sizeof javascript, "return validateFloat(this,%s,%s);",
+jsOnEventByIdF("change", varName, "return validateFloat(this,%s,%s);",
        (min ? min : "\"null\""),(max ? max : "\"null\""));
-jsOnEventById("change", varName, javascript);
 if (title)
     printf(" title='%s'",title);
 printf(">\n");

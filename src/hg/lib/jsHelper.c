@@ -106,9 +106,7 @@ hPrintf("<INPUT TYPE=RADIO NAME='%s' ID='%s'", cgiVar, id);
 hPrintf(" VALUE=\"%s\"", val);
 if (isNotEmpty(extraHtml))
     hPrintf(" %s", extraHtml);
-char javascript[1024];
-safef(javascript, sizeof javascript, "%s='%s';", jsVar, val);
-jsOnEventById("click", id, javascript);
+jsOnEventByIdF("click", id, "%s='%s';", jsVar, val);
 if (sameString(val, selVal))
     hPrintf(" CHECKED");
 hPrintf(">");
@@ -129,16 +127,12 @@ void jsMakeTrackingCheckBox(struct cart *cart,
 {
 char buf[256];
 boolean oldVal = cartUsualBoolean(cart, cgiVar, usualVal);
-char javascript[1024];
-safef(javascript, sizeof javascript,
-    "var %s=%d;", jsVar, oldVal);
-jsInline(javascript);
+jsInlineF("var %s=%d;", jsVar, oldVal);
 hPrintf("<INPUT TYPE=CHECKBOX NAME='%s' ID='%s' VALUE=1", cgiVar, cgiVar);
 if (oldVal)
     hPrintf(" CHECKED");
-safef(javascript, sizeof javascript, "%s=(%s+1)%%2;", jsVar, jsVar);
-jsOnEventById("click", cgiVar, javascript);
 hPrintf(">");
+jsOnEventByIdF("click", cgiVar, "%s=(%s+1)%%2;", jsVar, jsVar);
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), cgiVar);
 cgiMakeHiddenVar(buf, "0");
 }
@@ -428,15 +422,13 @@ printf("<input type='hidden' name='%s' id='%s' value='%s'>\n",
        collapseGroupVar, collapseGroupVar, isOpen ? "0" : "1");
 char *buttonImage = (isOpen ? "../images/remove_sm.gif" : "../images/add_sm.gif");
 char id[256];
-char javascript[1024];
 safef(id, sizeof id, "%s_button", section);
-safef(javascript, sizeof javascript, "return setTableRowVisibility(this, '%s', '%s.section', 'section', true);", 
-       section, track);
 printf("<IMG height='18' width='18' "
        "id='%s' src='%s' alt='%s' title='%s this section' class='bigBlue'"
        " style='cursor:pointer;'>\n",
        id, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
-jsOnEventById("click", id, javascript);
+jsOnEventByIdF("click", id, "return setTableRowVisibility(this, '%s', '%s.section', 'section', true);", 
+       section, track);
 if (oldStyle || fontSize == NULL)
     printf("&nbsp;%s</TD></TR>\n", sectionTitle);
 else

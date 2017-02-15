@@ -61,21 +61,18 @@
 #define DEFAULT_BUTTON(nameOrId,anc,beg,contains) \
     printf(DEF_BUTTON,(anc),"defaults_sm.png","default"); \
     safef(id, sizeof id, "btn_%s", (anc)); \
-    safef(javascript, sizeof javascript, DEF_BUTTON_JS,(nameOrId),(beg),(contains),(nameOrId),(beg),(contains)); \
-    jsOnEventById("click", id, javascript);
+    jsOnEventByIdF("click", id, DEF_BUTTON_JS,(nameOrId),(beg),(contains),(nameOrId),(beg),(contains)); 
 
 #define PM_BUTTON  "<IMG height=18 width=18 id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\">\n"
 #define PM_BUTTON_JS  "setCheckBoxesThatContain('%s',%s,true,'%s','','%s');"
 #define PLUS_BUTTON(nameOrId,anc,beg,contains) \
     printf(PM_BUTTON, (anc), "add_sm.gif",   "+"); \
     safef(id, sizeof id, "btn_%s", (anc)); \
-    safef(javascript, sizeof javascript, PM_BUTTON_JS, (nameOrId),"true", (beg),(contains)); \
-    jsOnEventById("click", id, javascript);
+    jsOnEventByIdF("click", id, PM_BUTTON_JS, (nameOrId),"true", (beg),(contains)); 
 #define MINUS_BUTTON(nameOrId,anc,beg,contains) \
     printf(PM_BUTTON, (anc), "remove_sm.gif", "-"); \
     safef(id, sizeof id, "btn_%s", (anc)); \
-    safef(javascript, sizeof javascript, PM_BUTTON_JS, (nameOrId),"false", (beg),(contains)); \
-    jsOnEventById("click", id, javascript);
+    jsOnEventByIdF("click", id, PM_BUTTON_JS, (nameOrId),"false", (beg),(contains)); 
 
 boolean isEncode2(char *database)
 // Return true for ENCODE2 assemblies
@@ -330,10 +327,8 @@ safef(id, sizeof id, "div_%s_link", tdb->track);
 printf("%s<A id='%s' HREF='#a_meta_%s' "
    "title='Show metadata details...'>%s<img src='../images/downBlue.png'/></A>",
    (embeddedInText?"&nbsp;":"<P>"),id,tdb->track, (title?title:""));
-char javascript[1024];
-safef(javascript, sizeof javascript, "return metadataShowHide(\"%s\",%s,true);", 
+jsOnEventByIdF("click", id, "return metadataShowHide(\"%s\",%s,true);", 
     tdb->track, showLongLabel?"true":"false");
-jsOnEventById("click", id, javascript);
 printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->track, metadataAsHtmlTable(db,tdb,showLongLabel,FALSE));
 return TRUE;
 }
@@ -4561,9 +4556,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	printf(SUBTRACK_CFG_VIS,subtrack->track,classList,hStringFromTv(vis));
 	char id[256];
 	safef(id, sizeof id, "%s_faux", subtrack->track);
-	char javascript[1024];
-	safef(javascript, sizeof javascript, "return subCfg.replaceWithVis(this,\"%s\",true);", subtrack->track);
-	jsOnEventById("click", id, javascript);
+	jsOnEventByIdF("click", id, "return subCfg.replaceWithVis(this,\"%s\",true);", subtrack->track);
 	
 	if (cType != cfgNone)  // make a wrench
 	    {
@@ -4571,8 +4564,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	    #define SUBTRACK_CFG_WRENCH "<span id='%s' class='clickable%s' " \
 					"title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
 	    printf(SUBTRACK_CFG_WRENCH,id,(visibleCB ? "":" disabled"));
-	    safef(javascript, sizeof javascript, "return subCfg.cfgToggle(this,\"%s\");", subtrack->track);
-	    jsOnEventById("click", id, javascript);
+	    jsOnEventByIdF("click", id, "return subCfg.cfgToggle(this,\"%s\");", subtrack->track);
 	    }
 	}
     printf("</TD>");
@@ -6459,7 +6451,6 @@ puts("\n<P><B>Species selection:</B>&nbsp;");
 
 cgiContinueHiddenVar("g");
 char id[256];
-char javascript[1024];
 PLUS_BUTTON( "id", "plus_pw","cb_maf_","_maf_")
 MINUS_BUTTON("id","minus_pw","cb_maf_","_maf_")
 
@@ -7395,17 +7386,15 @@ for (ix=dimA;ix<membersForAll->dimMax;ix++)
             assert(membersForAll->members[ix]->subtrackList[aIx]->val != NULL);
             printf("<TH align=left nowrap>");
             char objName[SMALLBUF];
-            char javascript[JBUFSIZE];
             char other[JBUFSIZE];
             boolean alreadySet=FALSE;
             if (membersForAll->members[ix]->selected != NULL)
                 alreadySet = membersForAll->members[ix]->selected[aIx];
             safef(objName, sizeof(objName), "%s.mat_%s_dim%c_cb",parentTdb->track,
                   membersForAll->members[ix]->tags[aIx],membersForAll->letters[ix]);
-            safef(javascript,sizeof(javascript), "matCbClick(this);");
 	    safef(other, sizeof other, "class='matCB abc %s'", membersForAll->members[ix]->tags[aIx]);
             cgiMakeCheckBoxIdAndMore(objName,alreadySet,objName,other);
-	    jsOnEventById("click", objName, javascript);
+	    jsOnEventById("click", objName, "matCbClick(this);");
             printf("%s",compositeLabelWithVocabLink(db,parentTdb,
                    membersForAll->members[ix]->subtrackList[aIx]->val,
                    membersForAll->members[ix]->groupTag,
@@ -7546,15 +7535,14 @@ for (dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
     printf("<TD align='left'><B>%s:</B><BR>\n",
            labelWithVocabLinkForMultiples(db,parentTdb,membersForAll->members[dimIx]));
 
-    #define FILTER_COMPOSITE_FORMAT "<SELECT id='%s' name='%s.filterComp.%s' %s " \
-                                    "style='display: none; font-size:.8em;' " \
-                                    "class='filterComp'><BR>\n"
-    #define FILTER_COMPOSITE_FORMAT_JS "filterCompositeSelectionChanged(this);"
     safef(id, sizeof id, "fc%d",dimIx); 
-    printf(FILTER_COMPOSITE_FORMAT,id,parentTdb->track,membersForAll->members[dimIx]->groupTag,
-           "multiple");
-    safef(javascript, sizeof javascript, FILTER_COMPOSITE_FORMAT_JS);
-    jsOnEventById("change", id, javascript);
+    printf(
+      "<SELECT id='%s' name='%s.filterComp.%s' %s " 
+      "style='display: none; font-size:.8em;' " 
+      "class='filterComp'><BR>\n" 
+	,id,parentTdb->track,membersForAll->members[dimIx]->groupTag,
+       "multiple");
+    jsOnEventById("change", id, "filterCompositeSelectionChanged(this);");
 
 
     // DO we support anything besides multi?
@@ -7823,16 +7811,13 @@ if (dimensionsExist(parentTdb))
 #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 id='%s' src='../images/%s'>"
 #define PM_BUTTON_GLOBAL_JS "matSubCBsCheck(%s);"
 char id[256];
-char javascript[1024];
 safef(id, sizeof id, "btn_plus_all"); 
-safef(javascript, sizeof javascript, PM_BUTTON_GLOBAL_JS, "true");
 printf(PM_BUTTON_GLOBAL, id, "add_sm.gif");
-jsOnEventById("click", id, javascript);
+jsOnEventByIdF("click", id, PM_BUTTON_GLOBAL_JS, "true");
 
 safef(id, sizeof id, "btn_minus_all"); 
-safef(javascript, sizeof javascript, PM_BUTTON_GLOBAL_JS, "false");
 printf(PM_BUTTON_GLOBAL, id, "remove_sm.gif");
-jsOnEventById("click", id, javascript);
+jsOnEventByIdF("click", id, PM_BUTTON_GLOBAL_JS, "false");
 
 puts("&nbsp;<B>Select all subtracks</B><BR>");
 return TRUE;
