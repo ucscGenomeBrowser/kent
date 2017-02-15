@@ -65,6 +65,16 @@ jsInlineInit(); // init if needed
 dyStringAppend(jsInlineLines, javascript);
 }
 
+void jsInlineF(char *format, ...)
+/* Add javascript text to output file or memory structure */
+{
+jsInlineInit(); // init if needed
+va_list args;
+va_start(args, format);
+dyStringVaPrintf(jsInlineLines, format, args);
+va_end(args);
+}
+
 boolean jsInlineFinishCalled = FALSE;
 
 void jsInlineFinish()
@@ -208,10 +218,19 @@ void jsOnEventById(char *event, char *idText, char *jsText)
 /* Add js mapping for inline event */
 {
 checkValidEvent(event);
-struct dyString *javascript = dyStringNew(1024);  // TODO XSS Filter the idText?
-dyStringPrintf(javascript, "document.getElementById('%s').on%s = function() {%s};\n", idText, event, jsText);
-jsInline(javascript->string);
-dyStringFree(&javascript);
+jsInlineF("document.getElementById('%s').on%s = function() {%s};\n", idText, event, jsText);
+}
+
+void jsOnEventByIdF(char *event, char *idText, char *format, ...)
+/* Add js mapping for inline event */
+{
+checkValidEvent(event);
+jsInlineF("document.getElementById('%s').on%s = function() {", idText, event);
+va_list args;
+va_start(args, format);
+dyStringVaPrintf(jsInlineLines, format, args);
+va_end(args);
+jsInlineF("};\n");
 }
 
 
@@ -1849,7 +1868,7 @@ void cgiMakeIntVarWithExtra(char *varName, int initialVal, int maxDigits, char *
 /* Make a text control filled with initial value and optional extra HTML.  */
 {
 if (maxDigits == 0) maxDigits = 4;
-htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE=%d %s|none|>", // TODO XSS extra
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE=%d %s|none|>", // TODO XSS risk in extra
                 varName, maxDigits, initialVal, extra ? extra : "");
 }
 
