@@ -272,6 +272,7 @@ group genes
     type bigPsl
     priority 10.001
     color 0,100,0
+    canPack on
     visibility pack
     baseColorDefault diffCodons
     baseColorUseCds given
@@ -302,6 +303,7 @@ searchPriority 2.31
     type bigPsl
     priority 10.003
     color 0,100,0
+    canPack on
     visibility pack
     baseColorDefault diffCodons
     baseColorUseCds given
@@ -332,6 +334,7 @@ searchPriority 2.31
     type bigPsl
     priority 10.004
     color 0,100,0
+    canPack on
     visibility pack
     baseColorDefault diffCodons
     baseColorUseCds given
@@ -362,6 +365,7 @@ searchPriority 2.31
     type bigPsl
     priority 10.005
     color 0,100,0
+    canPack on
     visibility hide
     baseColorDefault none
     baseColorUseSequence lfExtra
