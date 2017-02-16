@@ -44,6 +44,7 @@ UTILS_APPLIST = \
 	positionalTblCheck \
 	pslToBigPsl \
 	pslMap \
+	pslMapPostChain \
 	tdbQuery \
 	transMapPslToGenePred \
 	twoBitMask

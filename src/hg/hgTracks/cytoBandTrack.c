@@ -225,7 +225,6 @@ struct cytoBand *cb = item;
 x = hvGfxAdjXW(hvg, x, width);
 
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-hPrintf("onclick='return false;' ");
 hPrintf("HREF=\"#\" class='cytoBand'");
 mapStatusMessage("%s %s:%d-%d", (cb->name==NULL?"":cb->name),cb->chrom, cb->chromStart+1, cb->chromEnd);
 hPrintf(">\n");

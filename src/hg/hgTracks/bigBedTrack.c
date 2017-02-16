@@ -122,6 +122,28 @@ return field;
 }
 
 
+char *makeLabel(struct track *track,  struct bigBedInterval *bb)
+// Build a label for a bigBedTrack from the requested label fields.
+{
+char *labelSeparator = stripEnclosingDoubleQuotes(trackDbSettingClosestToHome(track->tdb, "labelSeparator"));
+if (labelSeparator == NULL)
+    labelSeparator = "/";
+char *restFields[256];
+chopTabs(cloneString(bb->rest), restFields);
+struct dyString *dy = newDyString(128);
+boolean firstTime = TRUE;
+struct slInt *labelInt = track->labelColumns;
+for(; labelInt; labelInt = labelInt->next)
+    {
+    if (!firstTime)
+        dyStringAppend(dy, labelSeparator);
+
+    dyStringPrintf(dy, "%s", restFields[labelInt->val - 3]);
+    firstTime = FALSE;
+    }
+return dyStringCannibalize(&dy);
+}
+
 void bigBedAddLinkedFeaturesFromExt(struct track *track,
 	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb,
 	int fieldCount, struct linkedFeatures **pLfList, int maxItems)
@@ -178,6 +200,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	    scoreMin, scoreMax, useItemRgb);
 	}
 
+    lf->label = makeLabel(track,  bb);
     if (sameString(track->tdb->type, "bigGenePred") || startsWith("genePred", track->tdb->type))
         {
         struct genePred  *gp = lf->original = genePredFromBigGenePred(chromName, bb); 
@@ -192,6 +215,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	slAddHead(pLfList, lf);
     }
 lmCleanup(&lm);
+
+if (!trackDbSettingClosestToHomeOn(track->tdb, "linkIdInName"))
+    track->itemName = bigLfItemName;
 }
 
 
@@ -245,6 +271,22 @@ if (summary)
 	}
     }
 freez(&tg->summary);
+}
+
+char *bigBedItemName(struct track *tg, void *item)
+// return label for simple beds
+{
+struct bed *bed = (struct bed *)item;
+
+return bed->label;
+}
+
+char *bigLfItemName(struct track *tg, void *item)
+// return label for linked features
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+
+return lf->label;
 }
 
 void bigBedMethods(struct track *track, struct trackDb *tdb, 

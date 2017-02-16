@@ -1,6 +1,6 @@
 track cons20way
 compositeTrack on
-shortLabel 20-way Vertebrates
+shortLabel Conservation
 longLabel Multiz Alignment & Conservation (20 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
@@ -30,7 +30,7 @@ group compGeno
         type wigMaf 0.0 1.0
         speciesCodonDefault rn6
         speciesGroups Vertebrate
-        sGroup_Vertebrate mm10 micOch1 cavPor3 hg38 panTro5 tarSyr2 rheMac8 canFam3 oryCun2 felCat8 ailMel1 bosTau8 monDom5 ornAna2 xenTro7 galGal5 melGal5 calMil1 danRer10
+        sGroup_Vertebrate mm10 micOch1 cavPor3 oryCun2 hg38 panTro5 rheMac8 tarSyr2 canFam3 ailMel1 felCat8 bosTau8 monDom5 ornAna2 galGal5 melGal5 xenTro7 danRer10 calMil1
         itemFirstCharCase noChange
         treeImage phylo/rn6_20way.png
         priority 100

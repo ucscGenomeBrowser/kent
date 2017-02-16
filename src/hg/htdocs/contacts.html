@@ -1,219 +1,166 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<HTML>
-<HEAD>
-	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-    <meta http-equiv="Content-Script-Type" content="text/javascript">
-	<TITLE>UCSC Genome Browser: Contact Information</TITLE>
-	<LINK REL="STYLESHEET" HREF="style/HGStyle.css">
-	<script type="text/javascript" src="/js/jquery.js"></script>
-	<script type="text/javascript" src="/js/staticDoc.js"></script>
-</HEAD>
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
-<A NAME="TOP"></A>
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Contacts" -->
+<!--#set var="ROOT" value="." -->
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="images/title.jpg"></TH></TR>
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="./cgi-bin/hgMenubar"--></TD></TR>
+<h1>Contact Us</h1>
 
-<!--Content Tables------------------------------------------------------->
-        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="1" CELLSPACING="0" CELLPADDING="1">
-        <TR><TD>
-            <TABLE BGCOLOR="#D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%>
-                <TR><TD><FONT SIZE="4"><B>&nbsp; Contact us</B></FONT>
-                </TD></TR>
-            </TABLE>
-            <TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
-                <TR><TD WIDTH=10></TD><TD>
+<div class="row">
+  <!-- Left column -->
+  <div class="col-md-6">
+     <p>
+     UCSC Genome Informatics Group<br>
+     UCSC Genomics Institute
+     CBSE/ITI, 501D Engineering II Building<br>
+     University of California, Santa Cruz<br>
+     1156 High Street<br>
+     Santa Cruz, CA 95064</p>
+     <p>
+     <a href="http://cbse.soe.ucsc.edu/directions" target="_blank">Directions</a></p>
+     </p>
+     <p>
+       <a href="http://www.twitter.com/GenomeBrowser" target="_blank">
+         <img class='gbsInlineImg' src="http://twitter-badges.s3.amazonaws.com/t_small-a.png" 
+           alt="Follow GenomeBrowser on Twitter"></a> 
+     </p>
+  </div>
+  <!-- Right column -->
+  <div class="col-md-6">
+    <!-- Display staff image in righthand corner -->
+    <img src= "images/gbstaff16.jpg" width=499 height=299 alt="Genome Browser staff">
+    <p class="gbsCaption">
+    Browser staff in native habitat.</p>
+  </div>
+</div>
 
-		    <!-- Display staff image in righthand corner -->
-                    <TABLE ALIGN=RIGHT>
-		        <TR><TD ALIGN=RIGHT WIDTH=500 HEIGHT=300>
-		            <IMG SRC = "images/gbstaff16.jpg" WIDTH=499 HEIGHT=299
-		            ALT="Genome Browser staff">
-                        </TD></TR>
-                        <TR><TD ALIGN=RIGHT>
-                        </TD></TR>
-		    </TABLE>
+<h2>Genome Browser inquiries</h2>
+<!--#if expr='"$SERVER_NAME" != /.*.ucsc.edu/ && "$SERVER_NAME" != /.*.sdsc.edu/ 
+&& "$SERVER_NAME" != /browser/'-->
+<!-- 'browser' = GBiB -->
+<p>
+<strong>This website <em><!--#echo var="HTTP_HOST" --></em> is a &quot;mirror&quot; not run by
+UCSC.</strong> Please try to contact the person who manages this mirror with questions.</p>
+<p> 
+<strong>If you mail the UCSC mailing list, please include this mirror's address 
+<em>http://<!--#echo var="HTTP_HOST" --></em> with any questions.</strong></p>
+<!--#else -->
+<!--#endif -->
+<p>
+Before posting a question, we strongly encourage you to search our mailing list archives, our 
+website, and our wiki for the answer. To expedite technical support, questions and problem reports 
+must adhere to our <a href="FAQ/FAQmaillist.html">technical support guidelines</a>. 
+PLoS Computational Biology has published a good set of 
+<a href="http://www.ploscompbiol.org/article/info:doi%2F10.1371%2Fjournal.pcbi.1002202"
+target="_blank">guidelines</a> for seeking online scientific help. In particular, when sending us a 
+specific browser screenshot, we recommend that you use our <a href="cgi-bin/hgSession">Session</a> 
+tool to create a link that fully captures the browser settings. Be sure to removed the 
+&quot;hgsid&quot; parameter and setting from any URL sent to us, as this can cause your personal 
+settings to change unexpectedly.</p>
+<p>
+<strong><font color="red">Questions and comments submitted to the Genome Browser forums are publicly
+accessible and searchable. Please do not post confidential information to our public 
+forums.</font></strong></p>
+<form name="googleForm1" 
+  method="GET" action="http://www.google.com/search" 
+  onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/';">
+  <p>Search the Genome Browser website: &nbsp;
+  <input type="hidden" name="q" value="">
+  <input type="hidden" name="num" value="10">
+  <input type="hidden" name="filter" value="0">
+  <input type=text name=qq size=30 maxlength=255 value="">
+  <input type="submit" value="Submit"></p>
+</form>
+<form name="googleForm4" 
+  method="GET" action="http://www.google.com/search" 
+  onSubmit="document.googleForm4.q.value=document.googleForm4.qq.value+'   site:genomewiki.ucsc.edu/index.php';">
+  <p>Search the Genome Browser Wiki Site: &nbsp;
+  <input type="hidden" name="q" value="">
+  <input type="hidden" name="num" value="10">
+  <input type="hidden" name="filter" value="0">
+  <input type=text name=qq size=30 maxlength=255 value="">
+  <input type="submit" value="Submit"></p>
+</form>
+<hr>
+<p>
+<strong>Website and data questions: </strong>
+<a href="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;">&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;</a><br>
+<!-- above address is genome at soe.ucsc.edu -->
+<em>Publicly searchable, interactive discussion forum for questions about the UCSC Genome Browser 
+software, annotation database, genome assemblies, bug reports and release cycles (high 
+volume).</em><br> 	
+[<a href="http://groups.google.com/a/soe.ucsc.edu/group/genome?hl=en" target="_blank">Subscribe</a>]
+&nbsp;[<a href="mailto:genome+unsubscribe@soe.ucsc.edu">Unsubscribe</a>] 
+&nbsp;[<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">Search the genome archives</a>]</p>
 
-	  	    <P>
-		    UCSC Genome Informatics Group<BR>
-		    Center for Biomolecular Science & Engineering<BR>
-		    CBSE/ITI, 501D Engineering II Building<BR>
-		    University of California, Santa Cruz<BR>
-		    1156 High Street<BR>
-		    Santa Cruz, CA 95064<BR>
-		    <BR>
-		    <A HREF="http://cbse.soe.ucsc.edu/directions" TARGET=_blank>Directions</A><BR>
-		    <BR>
-                    <A HREF="http://www.twitter.com/GenomeBrowser" 
-		    target="_blank"><img src="http://twitter-badges.s3.amazonaws.com/t_small-a.png" 
-		    alt="Follow GenomeBrowser on Twitter"></A> 
-		    <BR><BR>
-                </TD><TD WIDTH=15></TD></TR>
-            </TABLE>
-        </TD></TR>
-    </TABLE>
-    <BR>
+<a name="followup"></a>
+<p>
+<strong>Comments and suggestions: </strong>
+<a href="cgi-bin/hgUserSuggestion">Suggestion Box</a><br>
+<em>Private forum for suggesting new tracks, utilities, and other features for the Genome 
+  Browser.</em></p>
 
-        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="1" CELLSPACING="0" CELLPADDING="1">
-        <TR><TD>
-            <TABLE BGCOLOR="#D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%>
-                <TR><TD><FONT SIZE="4"><B>&nbsp; Genome Browser inquiries</b></FONT>
-                </TD></TR>
-            </TABLE>
-            <TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
-                <TR><TD WIDTH=10></TD><TD>
-		    <P>
-
-                    <!--#if expr='"$SERVER_NAME" != /.*.ucsc.edu/ && "$SERVER_NAME"
-                    != /.*.sdsc.edu/ && "$SERVER_NAME" != /browser/'-->
-                    <!-- 'browser' = GBiB -->
-                    <B>This website <EM><!--#echo var="HTTP_HOST" --></EM> is a "mirror" not run by UCSC.</B><BR>
-                    Please try to contact the person that manages this mirror with questions.</BR>
-                    <P>
-                    <B>If you mail the UCSC mailing list, please include this mirror's address
-                    <EM>http://<!--#echo var="HTTP_HOST" --></EM> with any questions.</B>
-                    </P>
-                    <!--#else -->
-                    <!--#endif -->
-
-        	    Before posting a question, we strongly encourage you to search our mailing list 
-		    archives, our website, and our wiki for the answer. To expedite technical 
-		    support, questions and problem reports must adhere to our 
-		    <A HREF="FAQ/FAQmaillist.html">technical support guidelines</A>. 
-		    PLoS Computational Biology has published a good set of 
-		    <A HREF="http://www.ploscompbiol.org/article/info:doi%2F10.1371%2Fjournal.pcbi.1002202"
-		    TARGET="_blank">guidelines</A> for seeking online scientific help.
-		    In particular, when sending us a specific browser screenshot, we recommend 
-		    that you use our <a href="cgi-bin/hgSession">Session</a> tool to create 
-		    a link that fully captures the browser settings. Be sure to removed the
-		    &quot;hgsid&quot; parameter and setting from any URL sent to us, as this can 
-		    cause your personal settings to change unexpectedly. </P>
-		    <P>
-		    <B><FONT color="red">Unless otherwise noted, questions and comments submitted to
-		    the Genome Browser forums are publicly accessible and searchable. Please
-		    do not post confidential information to our public forums.</FONT></B>
-		    <P>
-		    <FORM name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/';">
-		    Search the Genome Browser website: &nbsp;
-		    <input type="hidden" name="q" value="">
-		    <input type="hidden" name="num" value="10">
-		    <input type="hidden" name="filter" value="0">
-		    <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
-		    <input TYPE="submit" VALUE="Submit">
-		    </FORM>
-		    <FORM name="googleForm4" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm4.q.value=document.googleForm4.qq.value+'   site:genomewiki.ucsc.edu/index.php';">
-		    Search the Genome Browser Wiki Site: &nbsp;
-		    <input type="hidden" name="q" value="">
-		    <input type="hidden" name="num" value="10">
-		    <input type="hidden" name="filter" value="0">
-		    <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
-		    <input TYPE="submit" VALUE="Submit">
-		    </FORM>
-	    	    </P>
-		    <P>
-		    <HR>
-		    <B>Website and data questions: </B>
-		    <A HREF="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;">&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;</A><BR>
-        	    <!-- above address is genome at soe.ucsc.edu -->
-		    <em>Publicly searchable, interactive discussion forum for questions about the 
-		    UCSC Genome Browser software, annotation database, genome assemblies, bug 
-		    reports and release cycles (high volume).</em><BR> 	
-		    [<A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome?hl=en"
-		    TARGET=_blank>Subscribe</A>]
-		    &nbsp;[<A HREF="mailto:genome+unsubscribe@soe.ucsc.edu">Unsubscribe</A>] 
-		    &nbsp;[<A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
-		    TARGET=_blank>Search the genome archives</A>]
-
-		    <P>
-		    <a name="followup"></a>
-		    <B>Comments and suggestions: </B>
-		    <A HREF="cgi-bin/hgUserSuggestion">Suggestion Box</A><BR>
-		    <em>Private forum for suggesting new tracks, utilities, and other features for 
-		    the Genome Browser.</em>
-
-		    <P>
-		    <A NAME="mirror"></A>
-		    <B>Mirror and source code questions: </B>
-		    <A HREF="mailto:&#103;en&#111;&#109;e&#45;&#109;&#105;&#114;&#114;&#111;&#114;&#64;&#115;&#111;&#101;.u&#99;&#115;c.e&#100;&#117;">&#103;en&#111;&#109;e&#45;&#109;&#105;&#114;&#114;&#111;&#114;&#64;&#115;&#111;&#101;.u&#99;&#115;c.e&#100;&#117;</A><BR>
-		    <!-- above address is genome-mirror at soe.ucsc.edu -->
-		    <em>Publicly searchable, interactive discussion forum for questions about the 
-		    setup and maintenance of Genome Browser mirrors. Commercial use of the source 
-		    code and binaries requires a <A HREF="license/index.html">license</A>.</em><BR>
-		    [<A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome-mirror?hl=en"
-		    TARGET=_blank>Subscribe</A>] 
-		    &nbsp;[<A HREF="mailto:genome-mirror+unsubscribe@soe.ucsc.edu">Unsubscribe</A>] 
-        	    &nbsp;[<A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome-mirror"
-		    TARGET=_blank>Search the genome-mirror archives</A>]
-		    &nbsp;[<A HREF="admin/mirror.html">Set up a mirror</A>]
-		    &nbsp;[<A HREF="mirror.html">Mirror list</A>] 
-
-		    <P>
-		    <B>Server and website access problems:</B>
-		    <A HREF="mailto:&#103;&#101;&#110;o&#109;&#101;-&#119;&#119;&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.e&#100;&#117;">&#103;&#101;&#110;o&#109;&#101;-&#119;&#119;&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.e&#100;&#117;</A><BR>
-		    <!-- above address is genome-www at soe.ucsc.edu -->
-		    <em>Private forum for reporting server errors or other problems accessing the 
-		    UCSC Genome Browser or BLAT servers. 
+<a name="mirror"></a>
+<p>
+<strong>Mirror and source code questions: </strong>
+<a href="mailto:&#103;en&#111;&#109;e&#45;&#109;&#105;&#114;&#114;&#111;&#114;&#64;&#115;&#111;&#101;.u&#99;&#115;c.e&#100;&#117;">&#103;en&#111;&#109;e&#45;&#109;&#105;&#114;&#114;&#111;&#114;&#64;&#115;&#111;&#101;.u&#99;&#115;c.e&#100;&#117;</a><br>
+<!-- above address is genome-mirror at soe.ucsc.edu -->
+<em>Publicly searchable, interactive discussion forum for questions about the setup and 
+maintenance of Genome Browser mirrors. Commercial use of the source code and binaries requires a 
+<a href="license/index.html">license</a>.</em><br>
+[<a href="http://groups.google.com/a/soe.ucsc.edu/group/genome-mirror?hl=en"
+target="_blank">Subscribe</a>] 
+&nbsp;[<a href="mailto:genome-mirror+unsubscribe@soe.ucsc.edu">Unsubscribe</a>] 
+&nbsp;[<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome-mirror"
+target="_blank">Search the genome-mirror archives</a>]
+&nbsp;[<a href="admin/mirror.html">Set up a mirror</a>]
+&nbsp;[<a href="mirror.html">Mirror list</a>]</p> 
+<p>
+<strong>Server and website access problems:</strong>
+<a href="mailto:&#103;&#101;&#110;o&#109;&#101;-&#119;&#119;&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.e&#100;&#117;">&#103;&#101;&#110;o&#109;&#101;-&#119;&#119;&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.e&#100;&#117;</a><br>
+<!-- above address is genome-www at soe.ucsc.edu -->
+<em>Private forum for reporting server errors or other problems accessing the UCSC Genome Browser 
+or BLAT servers. 
 <!--
-		    Regular weekly maintenance of the Genome 
-		    Browser database occurs on Sunday afternoons between the hours of 2:00 - 3:00 
-		    p.m. Pacific Time. Although we allocate an hour for this maintenance, the actual
-		    down time is usually only a few minutes.  
+Regular weekly maintenance of the Genome Browser database occurs on Sunday afternoons between the 
+hours of 2:00 - 3:00 p.m. Pacific Time. Although we allocate an hour for this maintenance, the 
+actual down time is usually only a few minutes.  
 -->
-		    Scheduled service interruptions for system maintenance are 
-		    posted to the genome-announce forum and our twitter feed.</em>
+Scheduled service interruptions for system maintenance are posted to the genome-announce forum 
+and our twitter feed.</em></p>
 
-		    <P>
-		    <B>Genome Browser announcements: </B><BR>
-		    <em>Notifications from the Genome Browser project team about new software and 
-		    data releases, and other items of interest to Genome Browser users (low 
-		    volume). </em><BR>
-		    [<A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome-announce?hl=en"
-		    TARGET=_blank>Subscribe</A>] 
-		    &nbsp;[<A HREF="mailto:genome-announce+unsubscribe@soe.ucsc.edu">Unsubscribe</A>] 
-        	    &nbsp;[<A HREF ="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome-announce" 
-		    TARGET=_blank>Search the genome-announce archives</A>]
+<p>
+<strong>Genome Browser announcements: </strong><br>
+<em>Notifications from the Genome Browser project team about new software and data releases, and 
+other items of interest to Genome Browser users (low volume). </em><br>
+[<a href="http://groups.google.com/a/soe.ucsc.edu/group/genome-announce?hl=en"
+target="_blank">Subscribe</a>] 
+&nbsp;[<a href="mailto:genome-announce+unsubscribe@soe.ucsc.edu">Unsubscribe</a>] 
+&nbsp;[<a href ="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome-announce" 
+target="_blank">Search the genome-announce archives</a>]</p>
 
-                    <P>
-                    <B>Genome Browser Training Program: </B>
-		    <A HREF="mailto:&#117;cs&#99;&#103;&#98;&#116;r&#97;&#105;&#110;&#105;&#110;&#103;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;du">&#117;cs&#99;&#103;&#98;&#116;r&#97;&#105;&#110;&#105;&#110;&#103;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;du</A><BR>
-		    <!-- above address is ucscgbtraining at soe.ucsc.edu -->
-                    <em>For information about our newly expanded on-site training program, email our
-                    training department or visit 
-                    <a href="http://bit.ly/ucscTraining" target="_blank">our signup page</a>.</em>
-		    <BR><BR>
-                </TD><TD WIDTH=15></TD></TR>
-            </TABLE>
-        </TD></TR>
-    </TABLE>
-    <BR>
+<p>
+<strong>Genome Browser Training Program: </strong>
+<a href="mailto:&#117;cs&#99;&#103;&#98;&#116;r&#97;&#105;&#110;&#105;&#110;&#103;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;du">&#117;cs&#99;&#103;&#98;&#116;r&#97;&#105;&#110;&#105;&#110;&#103;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;du</a><br>
+<!-- above address is ucscgbtraining at soe.ucsc.edu -->
+<em>For information about our newly expanded on-site training program, email our training 
+department or visit <a href="http://bit.ly/ucscTraining" target="_blank">our signup 
+page</a>.</em></p>
 
-        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="1" CELLSPACING="0" CELLPADDING="1">
-        <TR><TD>
-            <TABLE BGCOLOR="#D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%>
-                <TR><TD><FONT SIZE="4"><B>&nbsp; Commercial licensing inquiries</B></FONT>
-                </TD></TR>
-            </TABLE>
-            <TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
-                <TR><TD WIDTH=10></TD><TD>
-		    <P>
-		    <B>Genome Browser: </B>
-		    <A HREF="mailto:&#103;&#101;&#110;o&#109;&#101;-&#119;&#119;&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.e&#100;&#117;">&#103;&#101;&#110;o&#109;&#101;-&#119;&#119;&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.e&#100;&#117;</A><BR>
-		    <!-- above address is genome-www at soe.ucsc.edu -->
-		    <em>Private forum for licensing questions. For more information about licensing
-		    the Genome Browser software, see the 
-		    <A HREF="license/">software licensing requirements</A>. </em>
-		    <P>
-		    <B>Blat and In-Silico PCR: </B> 
-		    <A HREF="mailto:&#107;&#101;&#110;t&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;&#100;u">&#107;&#101;&#110;t&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;&#100;u</A><BR>
-	    	    <!-- above address is kent at soe.ucsc.edu -->
-		    <em>See the <A HREF="http://www.kentinformatics.com" 
-		    TARGET=_blank>Kent Informatics</A> web site for more information.</em>
-		    <BR><BR>
-                </TD><TD WIDTH=15></TD></TR>
-            </TABLE>
-        </TD></TR>
-    </TABLE><BR>
-    </TD></TR></TABLE>
-</BODY></HTML>
+<h2>Commercial licensing inquiries</h2>
+<p>
+<strong>Genome Browser: </strong>
+<a href="mailto:&#103;&#101;&#110;o&#109;&#101;-&#119;&#119;&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.e&#100;&#117;">&#103;&#101;&#110;o&#109;&#101;-&#119;&#119;&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.e&#100;&#117;</a><br>
+<!-- nclude virtual="/gbPageEnd.html"-->above address is genome-www at soe.ucsc.edu -->
+<em>Private forum for licensing questions. For more information about licensing the Genome Browser
+software, see the <a href="license/">software licensing requirements</a>. </em></p>
+<p>
+<strong>Blat and In-Silico PCR: </strong> 
+<a href="mailto:&#107;&#101;&#110;t&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;&#100;u">&#107;&#101;&#110;t&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;&#100;u</a><br>
+<!-- above address is kent at soe.ucsc.edu -->
+<em>See the <a href="http://www.kentinformatics.com" 
+target="_blank">Kent Informatics</a> web site for more information.</em></p>
 
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

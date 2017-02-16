@@ -6141,6 +6141,7 @@ if (hTableExists(database, "kgXref"))
         kgE->name = dyStringCannibalize(&name);
         kgE->hgg_prot = lf->extra;
         lf->extra = kgE;
+        lf->label = kgE->name;
 	}
     }
 hFreeConn(&conn);
@@ -13840,6 +13841,8 @@ else if (sameWord(type, "bigGenePred"))
     wordCount++;
     words[1] = "12";
     bigBedMethods(track, tdb, wordCount, words);
+    track->itemColor   = bigGenePredColor;
+    track->itemNameColor = bigGenePredColor;
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }

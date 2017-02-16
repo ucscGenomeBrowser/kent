@@ -299,18 +299,6 @@ track refGene override
 release beta,public
 visibility pack
 
-track refSeqComposite override
-release alpha
-visibility pack
-
-    track ncbiRefGenesView override
-    release alpha
-    parent refSeqComposite on
-
-        track refGene override
-        release alpha
-        parent ncbiRefGenesView on
-
 track nscanGene override
 visibility dense
 

@@ -452,7 +452,7 @@ char* val = (char*)el->val;
  */
 if (sameString(el->name, "bigDataUrl"))
     {
-    val = replaceChars(val, "$db", database);
+    val = replaceChars(val, "$D", database);
     }
 
 return val;
@@ -781,8 +781,7 @@ void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char
 /* hgTrackDb - Create trackDb table from text files. */
 {
 struct trackDb *td;
-char tab[PATH_LEN];
-safef(tab, sizeof(tab), "%s.tab", trackDbName);
+char *tab = rTempName(getTempDir(), trackDbName, ".tab");
 
 struct trackDb *tdbList = buildTrackDb(org, database, hgRoot, strict);
 tdbList = flatten(tdbList);
@@ -867,6 +866,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
     sqlDisconnect(&conn);
     verbose(1, "Loaded database %s\n", database);
     }
+    unlink(tab);
 }
 
 unsigned getReleaseBit(char *release)

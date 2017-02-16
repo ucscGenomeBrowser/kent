@@ -1,92 +1,50 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-  <HEAD>
-    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-    <META name="description" content="UCSC Genome Browser">
-    <META name="keywords" content="genome, genome browser, genome assembly, Blat, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA">
-    <TITLE>UCSC Genome Browser: Internal Server Error</TITLE>
-    <LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
-  </HEAD>
-  <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
-  <A NAME="TOP"></A>
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Error 500" -->
+<!--#set var="ROOT" value=".." -->
 
-    <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-      <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../cgi-bin/hgMenubar"--></TD></TR>
-
-<!--Content Table------------------------------------------------------->
-      <TR><TD COLSPAN=2 CELLPADDING=10>
-        <!--outer table is for border purposes-->
-        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-	  <TR><TD>
-	    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-	      <TR><TD>
-	        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
-	          <TR><TD>
-                    <FONT SIZE="4"><b>&nbsp;   Error 500: Internal Server Error</FONT>
-                  </TD></TR>
-	        </TABLE>
-                <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-	          <TR><TH HEIGHT=10></TH></TR>
-	          <TR><TD WIDTH=10>&nbsp;</TD><TD>
+<h1>Error 500: Internal Server Error</h1>
 <!--#if expr='"$SERVER_NAME" != /.*.ucsc.edu/ && "$SERVER_NAME" != /.*.sdsc.edu/ && "$SERVER_NAME" != /browser/'-->
 <!-- 'browser' = GBiB -->
-<P>
-The page you requested resulted in a server problem on this system.
-<P> 
-<P>
-<B>This website <!--#echo var="HTTP_HOST" --> is a "mirror" not run by UCSC.</B><BR>
-You might want to contact the person that manages this server and tell them about the error.
-If you are unable to resolve it, you can contact support for Genome Browser mirror websites at
-<A HREF="mailto:&#103;&#101;&#110;&#111;&#109;e&#45;m&#105;&#114;&#114;&#111;r&#64;&#115;&#111;&#101;.u&#99;&#115;&#99;.e&#100;&#117;">&#103;&#101;&#110;&#111;&#109;e&#45;m&#105;&#114;&#114;&#111;r&#64;&#115;&#111;&#101;.
-u&#99;&#115;&#99;.e&#100;&#117;</A>. Please include this mirror's address "http://<!--#echo var="HTTP_HOST" -->" in the email.
-</P>
-<!-- above address is genome-mirror at soe.ucsc.edu -->
-<P>
-		    If you are unable to access commonly-used features on our 
-		    website, it is possible that you may need to reset your 
-		    Genome Browser with the following URL: 
-		    <A HREF="../cgi-bin/cartReset">http://<!--#echo var="HTTP_HOST" -->/cgi-bin/cartReset</A>.
-		    This will replace your stored settings with the default 
-		    configuration and will return your Browser to the state 
-		    it was in when you first accessed it.
- 		    <P>
- 		    We apologize for the inconvenience.
-</P>
-<!--#else -->
-	 	    <P>
- 		    The page you requested resulted in a server problem on our
-		    systems.
-		    <P> 
- 		    We hate this type of error immensely and we're sure that 
-		    you do as well.  While we have logged it and rapidly 
-		    pursue any problems on our systems, sometimes extra 
-		    information from the user can pinpoint the cause of the 
-		    problem for us and help us prevent it in the future.  If 
-		    you have information that you would like to provide about 
-		    what led to the error, please email us at 
-		    <A HREF="mailto:&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;">&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;</A>.
-		    <!-- above address is genome-www at soe.ucsc.edu -->
- 		    <P>
-		    If you are unable to access commonly-used features on our 
-		    website, it is possible that you may need to reset your 
-		    Genome Browser with the following URL: 
-		    <A HREF="../cgi-bin/cartReset">http://genome.ucsc.edu/cgi-bin/cartReset</A>.
-		    This will replace your stored settings with the default 
-		    configuration and will return your Browser to the state 
-		    it was in when you first accessed it.
- 		    <P>
- 		    We apologize for the inconvenience.
+  <p>
+  The page you requested resulted in a server problem on this system.</p>
+  <p> 
+  <strong>This website <!--#echo var="HTTP_HOST" --> is a &quot;mirror&quot; not managed by 
+  UCSC.</strong> You may want to contact the person who manages this server with information about 
+  this error. If you are unable to resolve the problem, you can contact support for Genome Browser 
+  mirror websites at
+  <a href="mailto:&#103;&#101;&#110;&#111;&#109;e&#45;m&#105;&#114;&#114;&#111;r&#64;&#115;&#111;&#101;.u&#99;&#115;&#99;.e&#100;&#117;">&#103;&#101;&#110;&#111;&#109;e&#45;m&#105;&#114;&#114;&#111;r&#64;&#115;&#111;&#101;.u&#99;&#115;&#99;.e&#100;&#117;</a>. Please include this mirror's address 
+  "http://<!--#echo var="HTTP_HOST" -->" in the email.</p>
+  <!-- above address is genome-mirror at soe.ucsc.edu -->
+  <p> 
+  If you are unable to access commonly used features on our website, it is possible that you may 
+  need to reset your Genome Browser with the following URL: 
+  <a href="../cgi-bin/cartReset">http://<!--#echo var="HTTP_HOST" -->/cgi-bin/cartReset</a>. This 
+  will
+  replace your stored settings with the default configuration and will return your browser to the 
+  state it was in when you first accessed it.</p>
+  <p> 
+  We apologize for the inconvenience.</p>
+<!--#else --> 
+  <p> 
+  The page you requested resulted in a server problem on our systems.</p> 
+  <p> 
+  We hate this type of error immensely and we're sure that you do as well! While we log
+  and rapidly pursue any problems on our systems, sometimes extra information from the user can 
+  pinpoint the cause of the problem and help us prevent a recurrence in the future. If you would
+  like to provide information about what led to the error, please email us at 
+  <a href="mailto:&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;">&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;</a>. 
+  <!-- above address is genome-www at soe.ucsc.edu --> 
+  <p> 
+  If you are unable to access commonly used features on our website, it is possible that you may 
+  need to reset your Genome Browser with the following URL: 
+  <a href="../cgi-bin/cartReset">http://genome.ucsc.edu/cgi-bin/cartReset</a>. This will replace 
+  your stored settings with the default configuration and will return your browser to the state it 
+  was in when you first accessed it.</p>  
+  <p> 
+  We apologize for the inconvenience.</p>
 <!--#endif -->
 
-                  </TD><TD WIDTH=15></TD></TR>
-	        </TABLE>
-              <BR></TD></TR>
-	    </TABLE>
-          </TD></TR>
-        </TABLE>
-      </TD></TR>
-    </TABLE>
-  </BODY>
-</HTML>
-
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

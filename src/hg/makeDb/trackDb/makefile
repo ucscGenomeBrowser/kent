@@ -190,13 +190,12 @@ DATA_TRIX = /data/trix
 ALPHA_MACHINE = hgwdev.cse.ucsc.edu
 BETA_MACHINE = qateam@hgwbeta.cse.ucsc.edu
 
-update: #clean
-	./loadTracks ${EXTRA} trackDb_${USER} hgFindSpec_${USER} ${DBS}
-	./checkMetaDb alpha metaDb_${USER} ${DBS}
+update: ${DBS:%=%_update}
 	${MKDIR} ${CGI_BIN}-${USER}/encode
-# no more cv.ra copy 2014-10-21
-# 	rm -f ${CGI_BIN}-${USER}/encode/cv.ra
-#	cp -p cv/alpha/cv.ra  ${CGI_BIN}-${USER}/encode
+%_update:
+	./loadTracks ${EXTRA} trackDb_${USER} hgFindSpec_${USER} $*
+	./checkMetaDb alpha metaDb_${USER} $*
+
 #  if you want to test track search tool with your own trix file
 #	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb_${USER}.{ixx,ix}}
 #	HGDB_TRACKDB=trackDb_${USER} ${BUILD_TRIX} trackDb_${USER} metaDb_${USER} ${CGI_BIN}-${USER}/encode/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
@@ -205,33 +204,44 @@ update: #clean
 
 alpha: clean
 	${GIT} pull
-	./loadTracks ${EXTRA} -release=alpha trackDb hgFindSpec ${DBS}
-	./checkMetaDb alpha metaDb ${DBS}
 	${MKDIR} ${CGI_BIN}/encode
-#	rm -f ${CGI_BIN}/encode/cv.ra
-#	cp -p cv/alpha/cv.ra ${CGI_BIN}/encode
-	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb.{ixx,ix}}
-	HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/alpha/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
-	./makeTrixLinks trackDb ${HIVE_TRIX} ${DBS}
+	${MAKE} alpha_all
+
+alpha_all: ${DBS:%=%_alpha}
+
+%_alpha:
+	./loadTracks ${EXTRA} -release=alpha trackDb hgFindSpec $*
+	./checkMetaDb alpha metaDb $*
+	rm -f ${HIVE_TRIX}/$*_trackDb.{ixx,ix}}
+	HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/alpha/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
+	./makeTrixLinks trackDb ${HIVE_TRIX} $*
 
 onbeta:	/cluster/home/${USER}/.hg.conf.beta
 
 beta: onbeta clean 
 	${GIT} pull
+	${MAKE} beta_all
+
+beta_all: ${DBS:%=%_beta}
+
+%_beta:
 	# now do loads on hgwbeta
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec ${DBS}
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb beta metaDb ${DBS}
-#	rsync -a cv/beta/cv.ra ${BETA_MACHINE}:${CGI_BIN}/encode/cv.ra
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} ${DBS}
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb beta metaDb $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
 	# now make files for hgwdev-beta (we share the tables with hgwbeta)
-#	rsync -a cv/beta/cv.ra ${CGI_BIN}-beta/encode/cv.ra
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
 
 public: onbeta clean
 	${GIT} pull
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public ${DBS}
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb public metaDb_public ${DBS}
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ${BUILD_TRIX} trackDb_public metaDb_public cv/public/cv.ra ${BETA_MACHINE} ${DATA_TRIX} ${DBS}
+	${MAKE} public_all
+
+public_all: ${DBS:%=%_public}
+
+%_public:
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb public metaDb_public $*
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ${BUILD_TRIX} trackDb_public metaDb_public cv/public/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
 
 # this will fail if we are not in a beta checkout:
 checkbeta:

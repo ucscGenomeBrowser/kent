@@ -25,3 +25,73 @@
     # real    278m9.306s
 
 #############################################################################
+# chimp/rheMac2 <-> Chlorocebus sabaeus/Green monkey Lastz run (DONE - 2015-01-28 - Brian)
+    screen -S chlSab2RheMac2  # use a screen to manage this longish running job
+    mkdir /hive/data/genomes/chlSab2/bed/lastzRheMac2.2015-01-28
+    cd /hive/data/genomes/chlSab2/bed/lastzRheMac2.2015-01-28
+
+    # always set the BLASTZ program so we know what version was used
+    printf "# vervet vs macaca mulatta
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+# and place those items here
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/hive/data/genomes/chlSab2/chlSab2.2bit
+SEQ1_LEN=/hive/data/genomes/chlSab2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Macaca Mulatta RheMac2
+SEQ2_DIR=/scratch/data/rheMac2/rheMac2.2bit
+SEQ2_LEN=/scratch/data/rheMac2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/chlSab2/bed/lastzRheMac2.2015-01-28
+TMPDIR=/scratch/tmp
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > do.log 2>&1
+    # Elapsed time: 346m35s
+
+    cat fb.hg38.chainChlSab2Link.txt
+    # 2480180858 bases of 2752019208 (90.122%) in intersection
+
+    # filter with doRecipBest.pl
+    doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg38 chlSab2
+    # about 45 minutes
+
+    # running the swap
+    mkdir /hive/data/genomes/rheMac2/bed/blastz.chlSab2.swap
+    cd /hive/data/genomes/rheMac2/bed/blastz.chlSab2.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/chlSab2/bed/lastzRheMac2.2015-01-28/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+XXX - running - Wed Sep 28 10:01:36 PDT 2016
+    # Elapsed time: 88m48s
+
+    cat fb.chlSab2.chainHg38Link.txt
+    # 2429053010 bases of 2752019208 (88.264%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        chlSab2 hg38) > rbest.log 2>&1
+    # real    240m25.264s
+
+#############################################################################

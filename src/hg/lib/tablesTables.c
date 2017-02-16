@@ -55,33 +55,35 @@ printf("&GT;min or &LT;max are allowed in numerical fields.<BR>\n");
 static void printSuggestScript(char *id, struct slName *suggestList)
 /* Print out a little javascript to wrap auto-suggester around control with given ID */
 {
-printf("<script>\n");
-printf("$(document).ready(function() {\n");
-printf("  $('#%s').autocomplete({\n", id);
-printf("    delay: 100,\n");
-printf("    minLength: 0,\n");
-printf("    source: [");
+struct dyString *dy = dyStringNew(256);
+dyStringPrintf(dy,"$(document).ready(function() {\n");
+dyStringPrintf(dy,"  $('#%s').autocomplete({\n", id);
+dyStringPrintf(dy,"    delay: 100,\n");
+dyStringPrintf(dy,"    minLength: 0,\n");
+dyStringPrintf(dy,"    source: [");
 char *separator = "";
 struct slName *suggest;
 for (suggest = suggestList; suggest != NULL; suggest = suggest->next)
     {
-    printf("%s\"%s\"", separator, suggest->name);
+    dyStringPrintf(dy,"%s\"%s\"", separator, suggest->name);
     separator = ",";
     }
-printf("]\n");
-printf("    });\n");
-printf("});\n");
-printf("</script>\n");
+dyStringPrintf(dy,"]\n");
+dyStringPrintf(dy,"    });\n");
+dyStringPrintf(dy,"});\n");
+jsInline(dy->string);
+dyStringFree(&dy);
 }
 
 static void printWatermark(char *id, char *watermark)
 /* Print light text filter prompt as watermark. */
 {
-printf("<script>\n");
-printf("$(function() {\n");
-printf("  $('#%s').watermark(\"%s\");\n", id, watermark);
-printf("});\n");
-printf("</script>\n");
+char javascript[1024];
+safef(javascript, sizeof javascript,
+"$(function() {\n"
+"  $('#%s').watermark(\"%s\");\n"
+"});\n", id, watermark);
+jsInline(javascript);
 }
 
 static void showTableFilterControlRow(struct fieldedTable *table, struct cart *cart, 

@@ -103,22 +103,29 @@ if (strlen(genomesShort)==strlen(genomesString))
     }
 else
     {
+    char id[256];
+    char javascript[1024];
     safef(tempHtml, sizeof tempHtml, 
-	"<span id=Short%d "
-	"onclick=\"javascript:"
+	"<span id=Short%d>[+]&nbsp;%s...</span>"
+	"<span id=Full%d style=\"display:none\">[-]<br>%s</span>"
+	, row, genomesShort 
+	, row, genomesString);
+
+    safef(id, sizeof id, "Short%d", row);
+    safef(javascript, sizeof javascript,
 	"document.getElementById('Short%d').style.display='none';"
 	"document.getElementById('Full%d').style.display='inline';"
-	"return false;\">[+]&nbsp;%s...</span>"
+	"return false;"
+	, row, row);
+    jsOnEventById("click", id, javascript);
 
-	"<span id=Full%d "
-	"style=\"display:none\" "
-	"onclick=\"javascript:"
+    safef(id, sizeof id, "Full%d", row);
+    safef(javascript, sizeof javascript,
 	"document.getElementById('Full%d').style.display='none';"
 	"document.getElementById('Short%d').style.display='inline';"
-	"return false;\">[-]<br>%s</span>"
-
-	, row, row, row, genomesShort 
-	, row, row, row, genomesString);
+	"return false;"
+	, row, row);
+    jsOnEventById("click", id, javascript);
     }
 ourPrintCell(tempHtml);
 //ourPrintCell(removeLastComma( dyStringCannibalize(&dy)));
@@ -152,15 +159,20 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> \n"
     "<table id=\"unlistedHubsTable\"> \n"
     "<thead><tr> \n"
 	"<th colspan=\"6\" id=\"addHubBar\"><label for=\"hubUrl\">URL:</label> \n"
-	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\""
+	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\" "
 	    "type=\"text\" size=\"65\"> \n"
-	"<input name=\"hubAddButton\""
-	    "onClick=\"hubText.value=$.trim(hubText.value);if(validateUrl($('#hubUrl').val())) { "
-	    "document.addHubForm.elements['hubUrl'].value=hubText.value;"
-		"document.addHubForm.submit();return true;} else { return false;}\" "
+	"<input name=\"hubAddButton\" id='hubAddButton' "
 		"class=\"hubField\" type=\"button\" value=\"Add Hub\">\n"
 	"</th> \n"
     "</tr> \n");
+jsOnEventById("click", "hubAddButton", 
+    "var hubText = document.getElementById('hubUrl');"
+    "hubText.value=$.trim(hubText.value);"
+    "if(validateUrl($('#hubUrl').val())) { "
+    " document.addHubForm.elements['hubUrl'].value=hubText.value;"
+    " document.addHubForm.submit(); return true; } "
+    "else { return false; }"
+    );
 
 // count up the number of unlisted hubs we currently have
 int unlistedHubCount = 0;
@@ -201,6 +213,8 @@ printf(
 // start first row
 printf("<tbody>");
 
+char id[256];
+char javascript[1024];
 int count = 0;
 for(hub = unlistedHubList; hub; hub = hub->next)
     {
@@ -216,11 +230,13 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     puts("<tr>");
 
     ourCellStart();
-    printf("<input name=\"hubDisconnectButton\""
-	"onClick="
-	"\" document.disconnectHubForm.elements['hubId'].value= '%d';"
-	"document.disconnectHubForm.submit();return true;\" "
-	"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", hub->id);
+    safef(id, sizeof id, "hubDisconnectButton%d", count);
+    printf("<input name=\"hubDisconnectButton\" id='%s' "
+	"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", id);
+    safef(javascript, sizeof javascript,
+	"document.disconnectHubForm.elements['hubId'].value='%d';"
+	"document.disconnectHubForm.submit(); return true;", hub->id);
+    jsOnEventById("click", id, javascript);
     ourCellEnd();
 
     if (hub->trackHub != NULL)
@@ -237,12 +253,15 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	    "<a TARGET=_BLANK href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug Help</a>\n", 
 	    hub->errorMessage);
 	
+	safef(id, sizeof id, "hubClearButton%d", count);
 	// give people a chance to clear the error 
-	printf("<input name=\"hubClearButton\""
-	    "onClick=\"document.resetHubForm.elements['hubCheckUrl'].value='%s';"
-		"document.resetHubForm.submit();return true;\" "
+	printf("<input name=\"hubClearButton\"  id='%s' "
 		"class=\"hubButton\" type=\"button\" value=\"Retry Hub\">"
-		, hub->hubUrl);
+		, id);
+	safef(javascript, sizeof javascript,
+	    "document.resetHubForm.elements['hubCheckUrl'].value='%s';"
+	    "document.resetHubForm.submit(); return true;", hub->hubUrl);
+	jsOnEventById("click", id, javascript);
 	ourCellEnd();
 	}
     else if (hub->trackHub != NULL)
@@ -315,13 +334,13 @@ printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
 if (haveTrixFile)
     {
     puts("Enter search terms to find in public track hub description pages:<BR>"
-	"<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\""
+	"<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\" "
 	"type=\"text\" size=\"65\"> \n"
-	"<input name=\"hubSearchButton\""
-	    "onClick="
-		"\" document.searchHubForm.elements['hubSearchTerms'].value=hubSearchTerms.value;"
-		"document.searchHubForm.submit();return true;\" "
+	"<input name=\"hubSearchButton\" id='hubSearchButton' "
 	    "class=\"hubField\" type=\"button\" value=\"Search Public Hubs\">\n");
+    jsOnEventById("click", "hubSearchButton",
+	"document.searchHubForm.elements['hubSearchTerms'].value=$('#hubSearchTerms').val();"
+	"document.searchHubForm.submit();return true;");
     puts("<BR><BR>\n");
     }
 
@@ -329,11 +348,11 @@ if (haveTrixFile)
 if (haveTrixFile && !isEmpty(hubSearchTerms))
     {
     printf("Displayed list <B>restricted by search terms:</B> %s\n", hubSearchTerms);
-    puts("<input name=\"hubDeleteSearchButton\""
-	"onClick="
-	"\" document.searchHubForm.elements['hubSearchTerms'].value=\'\';"
-	"document.searchHubForm.submit();return true;\" "
+    puts("<input name=\"hubDeleteSearchButton\" id='hubDeleteSearchButton' "
 	"class=\"hubField\" type=\"button\" value=\"Show All Hubs\">\n");
+    jsOnEventById("click", "hubDeleteSearchButton",
+	"document.searchHubForm.elements['hubSearchTerms'].value='';"
+	"document.searchHubForm.submit();return true;");
     puts("<BR><BR>\n");
 
     strLower(cleanSearchTerms);
@@ -357,6 +376,8 @@ struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 int count = 0;
 boolean gotAnyRows = FALSE;
+char jsId[256];
+char javascript[1024];
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ++count;
@@ -396,11 +417,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	char hubName[32];
 	safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
 	if (cartUsualBoolean(cart, hubName, FALSE))
-	    printf("<input name=\"hubDisconnectButton\""
-		"onClick="
-		"\" document.disconnectHubForm.elements['hubId'].value= '%d';"
-		"document.disconnectHubForm.submit();return true;\" "
-		"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", id);
+	    {
+	    safef(jsId, sizeof jsId, "hubDisconnectButton%d", count);
+	    printf("<input name=\"hubDisconnectButton\" id='%s' "
+		"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", jsId);
+	    safef(javascript, sizeof javascript,
+		"document.disconnectHubForm.elements['hubId'].value= '%d';"
+		"document.disconnectHubForm.submit();return true;", id);
+	    jsOnEventById("click", jsId, javascript);
+	    }
 	else
 	    {
 	    // get first name off of list of supported databases
@@ -415,12 +440,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 		name = cloneString(buffer);
 		}
 
-	    printf("<input name=\"hubConnectButton\""
-	    "onClick="
-		"\" document.connectHubForm.elements['hubUrl'].value= '%s';"
+	    safef(jsId, sizeof jsId, "hubConnectButton%d", count);
+	    printf("<input name=\"hubConnectButton\" id='%s' "
+		"class=\"hubButton\" type=\"button\" value=\"Connect\">\n", jsId);
+	    safef(javascript, sizeof javascript,
+		"document.connectHubForm.elements['hubUrl'].value= '%s';"
 		"document.connectHubForm.elements['db'].value= '%s';"
-		"document.connectHubForm.submit();return true;\" "
-		"class=\"hubButton\" type=\"button\" value=\"Connect\">\n", url,name);
+		"document.connectHubForm.submit();return true;", url,name);
+	    jsOnEventById("click", jsId, javascript);
 	    }
 
 	ourCellEnd();
@@ -443,12 +470,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("<span class=\"hubError\">ERROR: %s </span>"
 	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug Help</a>", 
 	    errorMessage);
+	safef(jsId, sizeof jsId, "hubClearButton%d", count);
 	printf(
-	"<input name=\"hubClearButton\""
-	    "onClick=\"document.resetHubForm.elements['hubCheckUrl'].value='%s';"
-		"document.resetHubForm.submit();return true;\" "
+	"<input name=\"hubClearButton\" id='%s' "
 		"class=\"hubButton\" type=\"button\" value=\"Retry Hub\">"
-		, url);
+		, jsId);
+	safef(javascript, sizeof javascript,
+	    "document.resetHubForm.elements['hubCheckUrl'].value='%s';"
+	    "document.resetHubForm.submit();return true;", url);
+	jsOnEventById("click", jsId, javascript);
 	ourCellEnd();
 	}
 
@@ -736,8 +766,8 @@ printf("</div>");
 
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 
-printf("</div>\n");
 puts("</FORM>");
+printf("</div>\n");
 cartWebEnd();
 }
 

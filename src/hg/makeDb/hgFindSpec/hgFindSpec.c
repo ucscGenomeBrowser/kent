@@ -282,8 +282,7 @@ struct hash *uniqHash = newHash(8);
 struct hash *htmlHash = newHash(8);
 struct hgFindSpec *hfsList = NULL, *hfs;
 char rootDir[512], orgDir[512], asmDir[512];
-char tab[512];
-snprintf(tab, sizeof(tab), "%s.tab", hgFindSpecName);
+char *tab = rTempName(getTempDir(), hgFindSpecName, ".tab");
 
 /* Create track list from hgRoot and hgRoot/org and hgRoot/org/assembly 
  * ra format database. */
@@ -341,6 +340,7 @@ if (verboseLevel() > 0)
     if (verboseLevel() > 0)
 	printf("Loaded database %s\n", database);
     }
+    unlink(tab);
 }
 
 void adjustTrackDbName(char *hgFindSpecName)

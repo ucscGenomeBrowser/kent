@@ -3049,7 +3049,7 @@ done >> multiz20way.maf
     rm multiz20way*.tab
 
 ##############################################################################
-# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2017-01-22 - Hiram)
+# GAP ANNOTATE MULTIZ20WAY MAF AND LOAD TABLES (DONE - 2017-01-22 - Hiram)
     # mafAddIRows has to be run on single chromosome maf files, it does not
     #	function correctly when more than one reference sequence
     #	are in a single file.  Need to split of the maf file into individual
@@ -3167,7 +3167,7 @@ done >> rn6.20way.maf
     rm multiz20way*.tab
 
 ######################################################################
-# MULTIZ7WAY MAF FRAMES (DONE - 2017-01-22 - Hiram)
+# MULTIZ20WAY MAF FRAMES (DONE - 2017-01-22 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/rn6/bed/multiz20way/frames
     cd /hive/data/genomes/rn6/bed/multiz20way/frames
@@ -4254,5 +4254,52 @@ done
 
     # when you view the first one you enter, it will have links to the
     # missing two.
+
+############################################################################
+# composite chainNet trackDb (DONE - 2017-01-27 - Hiram)
+
+    cd ~/kent/src/hg/makeDb/trackDb/rat/rn6
+
+    printf 'mm10
+micOch1
+cavPor3
+oryCun2
+' > glires.list
+
+    printf 'hg38
+panTro5
+tarSyr2
+rheMac8
+' > primates.list
+
+    printf 'canFam3
+felCat8
+ailMel1
+bosTau8
+' > laurasiatheria.list
+
+    printf 'monDom5
+ornAna2
+xenTro7
+' > sarcopterygii.list
+
+    printf 'galGal5
+melGal5
+' > birds.list
+
+    printf 'calMil1
+danRer10' > fish.list
+
+    $HOME/kent/src/hg/utils/phyloTrees/chainNetCompositeTrackDb.pl \
+       vertebrate glires.list primates.list \
+          laurasiatheria.list sarcopterygii.list birds.list fish.list \
+              > vertebrateChainNet.ra
+
+    # edit that result to fixup the shortLabel, longLabel and default
+    # visibilities desired on some of the tracks
+
+    # insert this line in the trackDb.ra to get it included:
+
+    include vertebrateChainNet.ra
 
 ############################################################################

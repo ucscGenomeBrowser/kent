@@ -140,7 +140,7 @@ return outCount;
 static char *onChangeEnd(struct dyString **pDy)
 /* Finish up javascript onChange command. */
 {
-dyStringAppend(*pDy, "document.hiddenForm.submit();\"");
+dyStringAppend(*pDy, "document.hiddenForm.submit();");
 return dyStringCannibalize(pDy);
 }
 
@@ -148,7 +148,6 @@ static struct dyString *onChangeStart()
 /* Start up a javascript onChange command */
 {
 struct dyString *dy = dyStringNew(1024);
-dyStringAppend(dy, "onChange=\"");
 jsDropDownCarryOver(dy, hgtaCGIGeneMafTable);
 jsTrackedVarCarryOver(dy, hgtaCGIGeneExons, hgtaJSGeneExons);
 jsTrackedVarCarryOver(dy, hgtaCGIGeneNoTrans, hgtaJSGeneNoTrans);
@@ -241,7 +240,7 @@ for(; list; list = list->next)
 
 printf("<B>MAF table: </B>\n");
 cgiMakeDropListFull(hgtaCGIGeneMafTable, tables, tables,
-    count , mafTable, onChangeGenome());
+    count , mafTable, "change", onChangeGenome());
 
 return mafTable;
 }

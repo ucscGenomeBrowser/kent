@@ -87,6 +87,15 @@ void urlDecode(char *s);
 void htmlMemDeath();
 /* Complain about lack of memory and abort.  */
 
+char *getNonce();
+/* make nonce one-use-per-page */
+
+char *getCspMetaHeader();
+/* return meta CSP header string */
+
+void generateCspMetaHeader(FILE *f);
+/* Generate Meta CSP Header */
+
 void htmlStart(char *title);
 /* Write the start of a cgi-generated html file */
 

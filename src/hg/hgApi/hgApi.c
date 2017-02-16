@@ -123,8 +123,8 @@ else if (startsWith(METADATA_VALUE_PREFIX, cmd))
                 char *dropDownHtml =
                                 cgiMakeSelectDropList((searchBy == cvSearchByMultiSelect),
                                                       name, pairs, NULL, ANYLABEL, "mdbVal",
-                                                      "style='min-width: 200px; font-size: .9em;' "
-                                                      "onchange='findTracksMdbValChanged(this);'");
+                                                      "change", "findTracksMdbValChanged(this);",
+                                                      "min-width: 200px; font-size: .9em;", NULL);
                 if (dropDownHtml)
                     {
                     dyStringAppend(output,dropDownHtml);
@@ -135,16 +135,16 @@ else if (startsWith(METADATA_VALUE_PREFIX, cmd))
             }
         else if (searchBy == cvSearchByFreeText)
             {
-            dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal freeText' "
-                           "onchange='findTracksMdbValChanged(this);' style='max-width:310px; "
-                           "width:310px; font-size:.9em;'>", name);
+            dyStringPrintf(output,"<input type='text' name='%s' id='%s' value='' class='mdbVal freeText' "
+			   "style='max-width:310px; width:310px; font-size:.9em;'>", name, name);
+	    jsOnEventById("change", name, "findTracksMdbValChanged(this);");
             }
         else if (searchBy == cvSearchByWildList)
             {
-            dyStringPrintf(output,"<input type='text' name='%s' value='' class='mdbVal wildList' "
+            dyStringPrintf(output,"<input type='text' name='%s' id='%s' value='' class='mdbVal wildList' "
                            "title='enter comma separated list of values' "
-                           "onchange='findTracksMdbValChanged(this);' style='max-width:310px; "
-                           "width:310px; font-size:.9em;'>", name);
+			   "style='max-width:310px; width:310px; font-size:.9em;'>", name, name);
+	    jsOnEventById("change", name, "findTracksMdbValChanged(this);");
             }
         else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
             {

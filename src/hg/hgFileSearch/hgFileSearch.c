@@ -2,6 +2,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
+#include "obscure.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
@@ -232,14 +233,15 @@ printf("<div id='simpleTab' style='max-width:inherit;'>\n");
 
 printf("<table id='simpleTable' style='width:100%%; font-size:.9em;'><tr><td colspan='2'>");
 printf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' "
-       "style='max-width:1000px; width:100%%;' onkeyup='findTracks.searchButtonsEnable(true);'>\n",
+       "style='max-width:1000px; width:100%%;'>\n",
        TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : descSearch);
+jsOnEventById("keyup", "simpleSearch", "findTracks.searchButtonsEnable(true);");
 
 printf("</td></tr><td style='max-height:4px;'></td></tr></table>");
 printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n",
        FILE_SEARCH);
-printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' "
-       "onclick='findTracks.clear();'>\n");
+printf("<input type='button' name='clear' id='clear' value='clear' class='clear' style='font-size:.8em;'>\n");
+jsOnEventById("click","clear","findTracks.clear();");
 printf("<input type='submit' name='submit' value='cancel' class='cancel' "
        "style='font-size:.8em;'>\n");
 printf("</div>\n");
@@ -256,8 +258,9 @@ printf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
 printf("<td align='right'>contains</td>\n");
 printf("<td colspan='%d'>", cols - 4);
 printf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' "
-       "onkeyup='findTracks.searchButtonsEnable(true);' style='min-width:326px; font-size:.9em;'>",
+       "style='min-width:326px; font-size:.9em;'>",
        TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
+jsOnEventById("keyup", "nameSearch", "findTracks.searchButtonsEnable(true);"); 
 printf("</td></tr>\n");
 
 // Description contains
@@ -266,9 +269,9 @@ printf("<td><b style='max-width:100px;'>Description:</b></td>");
 printf("<td align='right'>contains</td>\n");
 printf("<td colspan='%d'>", cols - 4);
 printf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' "
-       "onkeyup='findTracks.searchButtonsEnable(true);' style='max-width:536px; "
-       "width:536px; font-size:.9em;'>",
+       "style='max-width:536px; width:536px; font-size:.9em;'>",
        TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
+jsOnEventById("keyup", "descSearch", "findTracks.searchButtonsEnable(true);");
 printf("</td></tr>\n");
 
 // Set up Group dropdown
@@ -292,8 +295,8 @@ printf("<td><b style='max-width:100px;'>Group:</b></td>");
 printf("<td align='right'>is</td>\n");
 printf("<td colspan='%d'>", cols - 4);
 char *groupSearch = cartOptionalString(cart, TRACK_SEARCH_ON_GROUP);
-cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, 
-                    "class='groupSearch' style='min-width:40%; font-size:.9em;'");
+cgiMakeDropListFullExt(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, 
+    NULL, NULL, "min-width:40%; font-size:.9em;", "groupSearch");
 printf("</td></tr>\n");
 
 // Track Type is (drop down)
@@ -302,7 +305,7 @@ printf("<td nowrap><b style='max-width:100px;'>Data Format:</b></td>");
 printf("<td align='right'>is</td>\n");
 printf("<td colspan='%d'>", cols - 4);
 char *dropDownHtml = fileFormatSelectHtml(FILE_SEARCH_ON_FILETYPE,fileTypeSearch,
-                                          "style='min-width:40%; font-size:.9em;'");
+                                          NULL, NULL, "min-width:40%; font-size:.9em;");
 if (dropDownHtml)
     {
     puts(dropDownHtml);
@@ -328,8 +331,8 @@ if (metaDbExists)
 printf("</table>\n");
 printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", 
        FILE_SEARCH);
-printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' "
-       "onclick='findTracks.clear();'>\n");
+printf("<input type='button' name='clear' id='clear' value='clear' class='clear' style='font-size:.8em;'>\n");
+jsOnEventById("click", "clear", "findTracks.clear();");
 printf("<input type='submit' name='submit' value='cancel' class='cancel' "
        "style='font-size:.8em;'>\n");
 printf("</div>\n");
@@ -447,8 +450,8 @@ jsIncludeFile("utils.js",NULL);
 
 // This line is needed to get the multi-selects initialized
 jsIncludeFile("ddcl.js",NULL);
-printf("<script type='text/javascript'>$(document).ready(function() "
-       "{ findTracks.updateMdbHelp(0); });</script>\n");
+jsInline("$(document).ready(function() "
+       "{ findTracks.updateMdbHelp(0); });\n");
 
 doFileSearch(db,organism,cart,tdbList);
 

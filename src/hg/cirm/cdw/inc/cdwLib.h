@@ -498,4 +498,8 @@ char *cdwLocalMenuBar(struct cart *cart, boolean makeAbsolute);
 
 char *fileExtFromFormat(char *format);
 /* return file extension given the cdwFile format as defined in cdwValid.c. Result has to be freed */
+
+void printMatchingStanzas(char *rqlQuery, int limit, struct tagStorm *tags, char *format);
+/* Show stanzas that match query */
+
 #endif /* CDWLIB_H */

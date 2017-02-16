@@ -70,10 +70,13 @@ return tagInfo;
 }
 
 void rFillInStats(struct tagStanza *list, int expansion, struct hash *tagHash,
-    long *retStanzaCount, long *retTagCount, long *retExpandedCount)
+    long *retStanzaCount, long *retTagCount, long *retExpandedCount, 
+    int depth, int *retMaxDepth)
 /* Recursively traverse stanza tree filling in values */
 {
 struct tagStanza *stanza;
+if (++depth > *retMaxDepth)
+    *retMaxDepth = depth;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
     *retStanzaCount += 1;
@@ -93,8 +96,9 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	tagInfoAdd(tagInfo, pair->val);
 	}
     *retTagCount += stanzaSize;
-    rFillInStats(stanza->children, expansion + stanzaSize, tagHash,
-	retStanzaCount, retTagCount, retExpandedCount);
+    if (stanza->children != NULL)
+	rFillInStats(stanza->children, expansion + stanzaSize, tagHash,
+	    retStanzaCount, retTagCount, retExpandedCount, depth, retMaxDepth);
     }
 }
 
@@ -130,7 +134,8 @@ void tagStormInfo(char *inputTags)
 struct tagStorm *tags = tagStormFromFile(inputTags);
 struct hash *tagHash = hashNew(0);
 long stanzaCount = 0, tagCount = 0, expandedTagCount = 0;
-rFillInStats(tags->forest, 0, tagHash, &stanzaCount, &tagCount, &expandedTagCount);
+int maxDepth = 0;
+rFillInStats(tags->forest, 0, tagHash, &stanzaCount, &tagCount, &expandedTagCount, 0, &maxDepth);
 
 /* Do we do something fancy? */
 if (clCounts || clVals > 0 || anySchema)
@@ -184,7 +189,10 @@ if (clCounts || clVals > 0 || anySchema)
 			minVal = roundedMin(minVal);
 			maxVal = roundedMax(maxVal);
 			}
-		    printf(" %g %g", minVal, maxVal);
+		    if (tti->isInt)
+			printf(" %lld %lld", (long long)floor(minVal), (long long)ceil(maxVal));
+		    else
+			printf(" %g %g", minVal, maxVal);
 		    }
 		}
 	    else  /* Not numerical */
@@ -240,6 +248,7 @@ if (clCounts || clVals > 0 || anySchema)
 else
     {
     printf("stanzas\t%ld\n", stanzaCount);
+    printf("depth\t%d\n", maxDepth);
     printf("tags\t%ld\n", tagCount);
     printf("storm\t%ld\n", expandedTagCount);
     printf("types\t%d\n", tagHash->elCount);

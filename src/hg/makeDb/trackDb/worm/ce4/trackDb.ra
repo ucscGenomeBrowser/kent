@@ -309,20 +309,7 @@ urlLabel TROMER database detail:
 #Overrides from visibility.ra
 
 track refGene override
-release beta,public
 visibility hide
-
-track refSeqComposite override
-release alpha
-visibility hide
-
-    track ncbiRefGenesView override
-    release alpha
-    parent refSeqComposite on
-
-        track refGene override
-        release alpha
-        parent ncbiRefGenesView on
 
 track rmsk override
 visibility hide

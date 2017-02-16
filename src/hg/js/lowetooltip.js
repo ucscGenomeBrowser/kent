@@ -117,7 +117,7 @@ function hidetip(event)
     {
     resettip(event.target);
     }
-    //setTimeout("tracks.live('mouseout', hidetip)", 100);
+    //setTimeout(function(){tracks.live('mouseout', hidetip)}, 100);
     return false;
 }
 
@@ -144,7 +144,7 @@ function getajaxtooltip(event)
             cache: true
     });
     //tracks.die('mouseover', showtip);
-    //setTimeout("tracks.live('mouseover', showtip)", 100);
+    //setTimeout(function(){tracks.live('mouseover', showtip)}, 100);
     return false;
     
 }

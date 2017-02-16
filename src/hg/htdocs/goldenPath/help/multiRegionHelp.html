@@ -1,443 +1,329 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-	<title>Multi-Region Display Help Guide - UCSC Genome Browser</title>
-        <meta name="description" content="Multi-Region Display">
-        <meta name="keywords" content="genome, genome data, data integrator, table browser, genome browser, genome assembly, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA, multi region">
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<link rel="stylesheet" href="/style/HGStyle.css">
-</head>
-<body class="oldStaticPage">
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Multi-Region" -->
+<!--#set var="ROOT" value="../.." -->
 
-<div class="header">
-	<img src="../../images/title.jpg" alt="UCSC Genome Bioinformatics">
-</div><!-- .header -->
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<div class="nav">
-<!--#include virtual="../../cgi-bin/hgMenubar"-->
-</div><!-- .nav -->
-
-<div class="content">
-
-<div class="section">
 <h1>Multi-Region Display Help</h1>
-<div class="sectionContent">
-<p><b>Table of Contents:</b>
-<td>
-  <ul><b>
-    <li><a class="toc" href="#Intro">Introduction</a>
-    <li><a class="toc" href="#GetStarted">Getting Started With The Multi-Region View</a>
-    <li><a class="toc" href="#About">About The Multi-Region Modes</a>
-    <ul>
-       <li><a class="toc" href="#ExonOnly">Exon Only</a>
-       <li><a class="toc" href="#GeneOnly">Gene Only</a>
-       <li><a class="toc" href="#CustomRegions">Custom Regions</a>
-       <li><a class="toc" href="#Haplotype">Haplotype View</a>    
-    </ul>
-    <li><a class="toc" href="#Examples">Examples</a>
-  </b></ul>
-</td>
-                <P>
-                <FORM name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">          
-                Search the Genome Browser help pages: &nbsp;
-                <input type="hidden" name="q" value="">
-                <input type="hidden" name="num" value="10">
-                <input type="hidden" name="filter" value="0">
-                <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
-                <input TYPE="submit" VALUE="Submit">
-                </FORM>
-                </p><p>
-                <A HREF="../../contacts.html">Questions and feedback are welcome</A>.
 
-</div><!-- .sectionContent -->
-</div><!-- .section -->
+<h2>Contents</h2>
 
+<h6><a href="#Intro">Introduction</strong></a></h6>
+<h6><a href="#GetStarted">Getting started with Multi-Region View</a></h6>
+<h6><a href="#About">About the Multi-Region modes</a></h6>
+<ul>
+  <li><a href="#ExonOnly"><strong>Exon only</strong></a></li>
+  <li><a href="#GeneOnly"><strong>Gene only</strong></a></li>
+  <li><a href="#CustomRegions"><strong>Custom regions</strong></a></li>
+  <li><a href="#Haplotype"><strong>Haplotype view</strong></a></li>    
+</ul>
+<h6><a href="#Examples">Examples</a></h6>
+<hr>
+<form name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">          
+<p> 
+  Search the Genome Browser help pages: &nbsp;
+  <input type="hidden" name="q" value=""> 
+  <input type="hidden" name="num" value="10"> 
+  <input type="hidden" name="filter" value="0"> 
+  <input type=text name=qq size=30 maxlength=255 value=""> 
+  <input type="submit" value="Submit"> 
+</form> 
+</p>
+<p><a href="../../contacts.html">Questions and feedback are welcome</a>.
 
 <a name="Intro"></a>	
-<div class="section">
-	<h1>Introduction</h1>
-	<div class="sectionContent">
-	   <p>
-           The multi-region display allows users to &quot;slice&quot; 
-           their track viewing experience into a variety of different modes that focus the 
-	   display on certain features: exon-only, gene-only, or user-defined BED coordinates. 
-	   Only the portions of track annotations that fall within these displayed regions are 
-	   shown; extraneous intergenic, intronic and otherwise unwanted regions are hidden from 
-	   view.
+<h2>Introduction</h2> 
+<p> 
+The multi-region display allows users to &quot;slice&quot; their track viewing experience into a 
+variety of different modes that focus the display on certain features: exon-only, gene-only, or 
+user-defined BED coordinates. Only the portions of track annotations that fall within these 
+displayed regions are shown; extraneous intergenic, intronic and otherwise unwanted regions are 
+hidden from view.</p> 
+<p> 
+For human assemblies hg17 and later, the multi-region view also supports the replacement of a 
+section of the reference genome with an alternate haplotype chromosome. This allows the user to view
+annotations upstream and downstream of the haplotype sequence, and visualize the haplotype in the 
+general context of the reference chromosome.</p> 
+<p> 
+Using the multi-region display, one can:
+<ul> 
+  <li>
+  Show all SNPs that fall within exons (exon-only view).</li>  
+  <li>
+  Show only the genes on a chromosome (gene-only view).</li> 
+  <li>
+  Display the same chromosomal position on either side of a gene in order to model a repeat region 
+  (using a BED file with custom regions).</li>  
+  <li>
+  See how an alternate haplotype fits onto its chromosome (alternate haplotype view).</li> 
+</ul>
         
-           <p>
-           For human assemblies hg17 and later, the multi-region view also
-           supports the replacement of a section of the reference genome with an alternate 
-           haplotype chromosome. This allows the user to view annotations upstream and
-           downstream of the haplotype sequence, and visualize the haplotype in the
-           general context of the reference chromosome. 
-           
-           <p>
-           Using the multi-region display, one can:<br>
-              <ul>
-                 <li>Show all SNPs that fall within exons (exon-only view). 
-                 <li>Show only the genes on a chromosome (gene-only view).
-                 <li>Display the same chromosomal position on either side of a gene in order 
-                     to model a repeat region (using a BED file with custom regions).
-                 <li>See how an alternate haplotype fits onto its chromosome (alternate haplotype 
-		     view).
-              </ul>
-        
-	</div><!-- .sectionContent --> 
-</div><!-- .section -->
-
-<a name="GetStarted"></a>
-<div class="section">
-	<h1>Getting Started With The Multi-Region View</h1>
-	<div class="sectionContent">
-	<p>
-        Follow these steps to activate and configure multi-region view in the Genome Browser.
-        
-	<p>
-	<b>Step 1. Pick a genome assembly and region</b><br>
-              Open the Genome Browser tracks display to a region of
-	 	interest within a standard genome assembly, or open a custom region within an
-	 	assembly hub. 
-        <p>
-	<b>Step 2. Open the multi-region view configuration window</b><br>
-           Click <button type="button">multi-region</button> under the tracks display 
-           to open the multi-region configuration window. 
-           <p>
-           <img style="border: 1px solid black; display: block;"
-                src="../../images/MultiRegionButton.png">
-        <p>
-        <b>Step 3. Configure the multi-region view</b><br>
-           By default, the <b>Exit multi-region mode</b> button is selected. 
-           This button returns the display to the traditional view.
-	   <ul>
-	      <li>To activate a multi-region view, click one of these options: <br>
-              <table cellpadding=15>
-                <tr><td>
-                    <ul>
-                       <li><b>Show exons using</b> -- display only the exonic regions
-                       <li><b>Show genes using</b> -- display only those regions with gene
-                       annotations in the specified genes track
-                       <li><b>Custom regions from BED URL</b> -- display only those regions
-                       listed in a specified BED file
-                       <li><b>Show one alternate haplotype</b> -- display the specified
-			alternate haplotype in place on the reference chromosome (human assemblies 
-			hg17 and later only)
-                    </ul>
-              </td>
-              <td>
-                 <img style="border: 1px solid black; display: block;"
-                       src="../../images/MultiRegionConfigurationWindow.png">
-              </td></tr>
-              </table>
-              <li>To quickly enter exon-only mode without configuring the padding option, use
-              the keyboard shortcut &quot;e v&quot;. 
-	      <li>Click the <b>Highlight alternating regions in multi-region view</b> box 
-              to color alternating slices in blue. (optional)
-	      <li>Click submit to save your changes and return to the Genome Browser tracks
-              display.
-	</ul>
-	<p>
-        <img style="margin: auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionMouseHighlighted.png">
-        <p style="text-align: center">Screenshot of the <b>exon-only</b> view with alternating 
-	regions highlighted.
-        <p>
-        <b>Navigation and display</b><br>
-        With a few exceptions, most browser navigation and display features function the same in 
-	both multi-region and single-chromosome modes, including zooming in and out, reversing and 
-	resizing the view, highlighting and zooming to a selected region, and track search.
-	Searching and zooming conventions differ when displaying custom BED regions. 
-        See <a href="#CustomRegions">About Custom Regions</a> for more information. 
+<a name="GetStarted"></a> 
+<h2>Getting started With Multi-Region view</h2> 
+<p> 
+Follow these steps to activate and configure multi-region view in the Genome Browser.</p> 
+<p> 
+<strong>Step 1. Pick a genome assembly and region</strong><br> 
+Open the Genome Browser tracks display to a region of interest within a standard genome assembly, or
+open a custom region within an assembly hub.</p> 
+<p> 
+<strong>Step 2. Open the multi-region view configuration window</strong><br> 
+Click <button type="button">multi-region</button> under the tracks display to open the multi-region 
+configuration window.</p> 
+<p> 
+<img src="../../images/MultiRegionButton.png" alt="Multi-Region button" width="799"
+height="201"></p> 
+<p> 
+<strong>Step 3. Configure the multi-region view</strong><br> 
+By default, the <strong>Exit multi-region mode</strong> button is selected. This button returns the 
+display to the traditional view.</p>  
+<p>
+<img src="../../images/MultiRegionConfigurationWindow.png" alt="Configure Multi-Region view" 
+width="650" height="267"> </p>
+<p>
+To activate a multi-region view, click one of these options:</p> 
+<ul> 
+  <li> 
+  <strong>Show exons using</strong> -- display only the exonic regions (keyboard shortcut: 
+  &quot;e v&quot;)</li>
+  <li> 
+  <strong>Show genes using</strong> -- display only those regions with gene annotations in the 
+  specified genes track</li> 
+  <li> 
+  <strong>Custom regions from BED URL</strong> -- display only those regions listed in a specified 
+  BED file</li> 
+  <li> 
+  <strong>Show one alternate haplotype</strong> -- display the specified alternate haplotype in 
+  place on the reference chromosome (human assemblies hg17 and later only)</li> 
+  <li>
+  (Optional) Select <strong>Highlight alternating regions in multi-region view</strong> to color 
+  alternating slices in blue.</li> 
+</ul>
+<p> 
+Click  <button type="button">submit</button> to save your changes and return to the Genome Browser tracks display.</p>
+<p>
+Here is a view of the Genome Browser with the &quot;Show exons&quot; and &quot;Highlight alternating
+regions&quot; options selected:</p> 
+<p>
+<img src="../../images/MultiRegionMouseHighlighted.png" alt="Exon-only screenshot" width="950"
+height="380"></p>
+<p> 
+<strong>Navigation and display</strong><br> 
+With a few exceptions, most browser navigation and display features function the same in both 
+multi-region and single-chromosome modes, including zooming in and out, reversing and resizing the 
+view, highlighting and zooming to a selected region, and track search. Searching and zooming 
+conventions differ when displaying custom BED regions. See <a href="#CustomRegions">About Custom 
+Regions</a> for more information.</p> 
          
-    </div><!-- .sectionContent --> 
-</div><!-- .section -->
+<a name="About"></a> 
+<h2>About the Multi-Region modes</h2> 
 
-<a name="About"></a>
-<div class="section">
-        <h1>About The Multi-Region Modes</h1>
-        <div class="sectionContent">
+<a name="ExonOnly"></a> 
+<h3>Exon-only mode</h3>
+<p> 
+The exon-only view shows only those bases and annotations that fall within an exon or padding 
+region. Bases and alignments within intronic and intergenic regions are removed from the
+display.</p> 
+<p> 
+The exon-only view &quot;virtual chromosome&quot; is constructed of all the exons present in the 
+gene track specified in the multi-region configuration window. Exon &quot;slices&quot; are visually 
+separated by blocks of intronic or intergenic bases, the size of which are set by the padding field.
+This designates the padding on both sides of an exon, and therefore is additive, e.g., a padding 
+size of 6 will result in a 12-base space between exon slices:</p> 
+<p>
+<img src="../../images/MultiRegionExonPadding.png" alt="Multi-Region padding" width="950"
+height="171"> </p> 
+<p> 
+If the gene track used to compute the slicing is a 
+<a href="./trackDb/trackDbDoc.html#superTrack">super track</a> or contains other transcripts, only 
+the longest exon will be used to determine slicing, regardless of whether or not they are in the same transcript. See <a href="#Example1">Example 1</a> for more information.  
 
-        <a name="ExonOnly"></a>
-        <p>
-        <b>Exon-Only Mode</b><br>
-	<p>
-        The exon-only view shows only those bases and annotations that fall within an exon or 
-	padding region. Bases and alignments within intronic and intergenic regions are removed 
-	from the display. 
- 
-        <p>
-        The exon-only view &quot;virtual chromosome&quot; is constructed of all the exons 
-	present in the gene track specified in the multi-region configuration window. Exon 
-	&quot;slices&quot; are visually separated by blocks of intronic or intergenic bases,
-	the size of which are set by the padding field.
-        This designates the padding on both sides of an exon, and therefore is additive,
-        e.g. a padding size of 6 will result in a 12-base space between exon slices:
-        <p>
-        <img style="margin:auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionExonPadding.png">
+<a name="GeneOnly"></a> 
+<h3>Gene-only mode</h3> 
+<p> 
+The gene-only view displays the bases and annotations that fall within the coordinates of a gene, 
+but hides all of the intergenic bases except those used for padding 
+(<a href="#Example2">Example 2</a>). As with exon-only mode, the padding field sets the number of 
+intergenic bases displayed to visually separate each gene slice.</p> 
+<p> 
+Because genes and alternate transcripts often overlap by a few bases, the windows created by the 
+gene-only (and exon-only) mode may sometimes merge together. Reducing the number of padding bases 
+may increase the number of alternate regions by allowing less intergenic space between genes. 
+However, this overlap is a common feature for most of the Genome Browser gene sets, and should be 
+no cause for concern.</p> 
+
+<a name="CustomRegions"></a> 
+<h3>Custom regions mode</h3> 
+<p> 
+The custom regions mode allows user-specific modeling of genomic regions using a 
+<a href="../../FAQ/FAQformat.html#format1">BED</a> file. Typically when a BED file is loaded into 
+the browser, the entries are displayed in the tracks window in order of chromosomal location, 
+regardless of the order in the file. When the multi-region view option is selected, the BED file 
+entries are displayed in the same order they appear in the file. This feature can be used to 
+manipulate the display of other annotations in the browser window, for example to duplicate a 
+display region, reorder the exon display within a gene, or display regions from 2 different 
+chromosomes side-by-side. <a href="#Example3">Example 3</a> demonstrates the importance of ordering 
+entries within a file.</p> 
+<p> 
+Although all types of BED files are supported, only the information from BED 3 or BED 12 files is 
+relevant to the display. Like BED custom tracks, comments are supported in the BED files used by 
+multi-region mode. Comments are included at the top of the BED file, preceded by &quot;#&quot;. The 
+supported comments are:</p> 
+<ul>
+  <li>
+  <strong>#database:</strong> The genome assembly database for which the BED file is intended. If 
+  the file is loaded onto a different assembly, the custom regions mode will not work.</li>
+  <li>
+  <strong>#shortDesc:</strong> (Optional) A short description of the custom region, displayed next 
+  to the chromosome ideogram.</li>
+  <li>
+  <strong>#padding:</strong> Sets the size of the padding on either side of a BED entry in the 
+  browser tracks window.</li>
+</ul>
+<p> 
+Here is an example of a BED3 file with comments:</p>
+<pre><code>#database hg38
+#shortDesc Example of a short description
+#padding 6
+chr1 pos1 pos2
+chr2 pos1 pos2 </code></pre> 
+<p> 
+The Genome Browser search mechanism functions differently when using custom BED regions in 
+multi-region view. When searching for a term or position, the browser first searches for the term 
+within the BED-defined regions. If the item is found, the browser display will shift to that 
+location.</p> 
+<p>
+If the term is not found within the BED-defined regions, but is found elsewhere, the browser
+will display a message asking if you would like to return to a default view at that
+location. If you prefer to return to your custom region instead, click 
+<button type="button">OK</button>. Otherwise, click &quot;here&quot; to return to the default 
+view. </p> 
+<p>
+<img src="../../images/MultiRegionBEDSearchRedirectMessage.png" alt="Multi-Region search
+redirect" width="691" height="97"></p>
+<p> 
+If the term is not found at all in the assembly, an error message will display.</p>  
+<p> 
+When scrolling or zooming while viewing regions from a custom BED URL, the range is restricted to 
+the BED-defined regions. Although you can still zoom in to single base resolution, the outward zoom 
+is limited to the extent of the defined regions.  Scrolling upstream and downstream is also limited 
+to the BED-defined range.</p> 
+
+<a name="Haplotype"></a> 
+<h3>Haplotype mode</h3> 
+<p> 
+An additional viewing mode is available on human assemblies hg17 and later: showing an alternative 
+haplotype placed in its chromosomal context (<a href="#Example5">Example 5</a>). The haplotype is 
+specified by entering its ID in the form <em>chr_name_alt</em> in the configuration window. To view 
+the list of haplotype IDs for a given assembly, go to 
+<code>http://hgdownload.soe.ucsc.edu/goldenPath/<strong>$db</strong>/bigZips/<strong>$db</strong>.chrom.sizes</code>, 
+where <strong><code>$db</code></strong> is the human assembly name (e.g., hg38, hg19, hg18 or 
+hg17).</p>  
+<p> 
+Alternatively, haplotypes can be viewed using the <strong>Alt Map...</strong> track in the Mapping 
+and Sequencing group. Open the track and navigate to the haplotype of interest in the track window. 
+Click on the haplotype to display its details page, then click the link <strong>Show this alternate 
+haplotype placed on its chromosome</strong>.</p>
         
-        <p>
-        If the gene track used to compute the slicing is a 
-        <a href="./trackDb/trackDbDoc.html#superTrack">super track</a> 
-        or contains other transcripts, only the longest exon will be used to determine
-        slicing, regardless of whether or not they are in the same transcript. See 
-        <a href="#Example1">Example 1</a> for more information. 
-        
-        <a name="GeneOnly"></a>
-  	<p>
-        <b>Gene-Only Mode</b><br>
-	<p>
-        The gene-only view displays the bases and annotations that fall within the
-        coordinates of a gene, but hides all of the intergenic bases except those used for
-        padding (<a href="#Example2">Example 2</a>).  As with exon-only mode, the padding field 
-	sets the number of intergenic bases displayed to visually separate each gene slice. 
-
-	<p>
-	Because genes and alternate transcripts often
-        overlap by a few bases, the windows created by the gene-only (and exon-only) mode may 
-	sometimes merge
-        together. Reducing the number of padding bases may increase the number of alternate
-        regions by allowing less intergenic space between genes. However, this overlap is a common
-        feature for most of the Genome Browser gene sets, and should be no cause for concern.
-        
-        <a name="CustomRegions"></a>
-        <p>
-        <b>Custom Regions Mode</b></br>
-	<p>
-        The custom regions mode allows user-specific modeling of 
-        genomic regions using a <a href="../../FAQ/FAQformat.html#format1">BED</a> 
-	file. Typically when a BED file is loaded into the
-        browser, the entries are displayed in the tracks window in order of
-        chromosomal location, regardless of the order in the file. When the
-        multi-region view option is selected, the BED file entries are displayed in the same
-        order they appear in the file. This feature can be used to manipulate the
-        display of other annotations in the browser window, for example to duplicate a display
-        region, reorder the exon display within a gene, or display regions from 2 different
-        chromosomes side-by-side. <a href="#Example3">Example 3</a> demonstrates the importance of 
-	ordering entries within a file. 
-
-        <p>
-        Although all types of BED files are supported, only the information from BED 3 or BED 12
-        files is relevant to the display. 
-        Like BED custom tracks, comments are supported in the BED files used by multi-region
-        mode. Comments are included at the top of the BED file, preceded by &quot;#&quot;. The 
-	supported comments are: 
-        <br>
-        <table style="margin-left:40px">
-          <tr>
-	    <td style="vertical-align:top">
-	      database:
-            </td><td style="vertical-align:top">
-	      The genome assembly database for which the BED file is intended. If the file is 
-	      loaded onto a different assembly, the custom regions mode will not work.
-	    </td>
-	  </tr><tr>
-            <td style="vertical-align:top">shortDesc:
-	    </td><td style="vertical-align:top">
-	      (Optional) A short description of the custom region, displayed next to the chromosome 
-	      ideogram.
-	    </td>
-	  </tr>
-	  <tr>
-            <td style="vertical-align:top">
-	      padding:
-	    </td><td style="vertical-align:top">
-	      Sets the size of the padding on either side of a BED entry in the browser tracks 
-	      window. 
-	    </td>
-          </tr>
-        </table>
-	<br>
-        Here is an example of a BED3 file with comments:<br>
-        <pre>
-      #database hg38
-      #shortDesc Example of a short description
-      #padding 6
-      chr1 pos1 pos2
-      chr2 pos1 pos2
-        </pre>
-
-        <p>
-        The Genome Browser search mechanism functions differently when using custom BED
-        regions in multi-region view. When searching for a term or position, the browser first 
-	searches for the term within the BED-defined regions. If the item is found, the 
-        browser display will shift to that location. 
-        <table>
-        <tr><td>
-           If the term is not found within the BED-defined regions, but is found elsewhere,
-           this message will ask if you would like to return to a default view at that location.
-           If you prefer to return to your custom region instead, click 
-	   <button type="button">OK</button>.
-        </td>
-        <td> 
-           <img style="margin: auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionBEDSearchRedirectMessage.png">
-        </td></tr>
-        </table>
-        <p>
-        If the term is not found at all in the assembly, an error message will display.
-        <p>
-        When scrolling or zooming while viewing regions from a custom BED URL, the range is 
-	restricted to the BED-defined regions. Although you can still zoom in
-        to single base resolution, the outward zoom is limited to the extent of the defined regions.
-        Scrolling upstream and downstream is also limited to the BED-defined range.
-
-        <a name="Haplotype"></a>
-        <p>
-        <b>Haplotype Mode</b><br>
-	<p>
-        An additional viewing mode is available on human assemblies hg17 and later: 
-        showing an alternative haplotype placed in its chromosomal context 
-	(<a href="#Example5">Example 5</a>). The haplotype is
-	specified by entering its ID in the form <em>chr_name_alt</em> in the configuration window.
-        To view the list of haplotype IDs for a given assembly, navigate to 
-        http://hgdownload.soe.ucsc.edu/goldenPath/<b>$db</b>/bigZips/<b>$db</b>.chrom.sizes, where 
-	<b>$db</b> is the human assembly name (e.g. hg38, hg19, hg18 or hg17). 
-        
-        <p>
-        Alternatively, haplotypes can be viewed using the <b>Alt Map...</b> track in the
-        Mapping and Sequencing group. Open the track and navigate to the haplotype of
-        interest in the track window. Click on the haplotype to display its details page, then 
-	click the link <b>Show this alternate haplotype placed on its chromosome</b>.
-        
-	</div><!-- .sectionContent --> 
-</div><!-- .section -->
-
-
 <a name="Examples"></a>
-<div class="section">
-<h1>Examples</h1>       
-        <div class="sectionContent">
-        <p>
-        <a name="Example1"></a>
-        <b>Example 1. Exon-only mode</b><br>
-        <p>
-        This screenshot shows the exon-only view for the SOD1 gene in human assembly hg38. 
-        The 3rd &quot;exon&quot; from the left falls within the intron of the actual SOD1 gene, 
-        but is shown as an exon because it is part of the GENCODE v22 super-track.
-        
-        <p>
-        <img style="margin:auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionSOD1.png">
-        <p>
-        Click 
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/exonOnlySession.txt">
-        here</a> to view this example in the Genome Browser. To quickly exit multi-region 
-        mode and return to the default single chromosome view, use the keyboard shortcut 
-        &quot;d v&quot;.
-        
-        <p>
-        <a name="Example2"></a>
-        <b>Example 2. Gene-only mode</b><br>
-        
-        <p>
-        This example illustrates how intergenic regions are removed from the default browser
-	tracks view in gene-only mode. The displayed region of the X chromosome on the human hg19 
-	assembly consists of three genes (DKC1, MPP1, and F8) with varying amounts of intergenic 
-	space separating them. The first screenshot shows the standard browser display of
-	the gene track in &quot;single chromosome&quot; view. Compare it with the second
-	screenshot, which shows the same region in gene-only mode with the padding set to 6.
-        
-        <p>
-        <img style="margin:auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionXDefault.png">
+<h2>Examples</h2>       
 
-        <p>
-        
-        <p>
-        <img style="margin:auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionXGeneOnly.png">
-        
-        <p>
-        Click 
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/geneOnlySession.txt">
-        here</a> to view this example in the Genome Browser. To quickly exit multi-region 
-        mode and return to the default single chromosome view, use the keyboard shortcut 
-        &quot;d v&quot;.
-        
-        <p>
-        <a name="Example3"></a>
-        <b>Example 3. Custom Regions from BED file</b><br>
-        <p>
-        Here is an example <a href="../help/examples/mm10multiRegionexample.txt">BED file</a> for 
-        mm10 that contains a list of exon positions for the Pax9 gene. If this file is
-        loaded into the browser as a custom track <em>without</em> turning on multi-region
-        mode, the blocks display in order of genomic position, not in the order they are specified 
-	in the file:
-        
-        <p>
-        <img style="margin: auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionBEDFileInOrder.png">
-        
-        <p>
-        However, if multi-region mode is turned on after loading a custom track, the blocks
-        display in the order they are listed in the BED file, rather than in genomic
-        position order. This in turn affects the display order of other features in this
-        view, in this case the display order of the exons in Pax9. This feature
-        can be used to manipulate the display of other annotations, for example to 
-        allow the visualization of centromeric regions or
-        viewing the same gene twice within the same window to compare 
-        annotations in a separate region.
-        <p>
-        <img style="margin: auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionBEDFileOutOrder.png">
- 
-        <p>
-        Click
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/bed3Session.txt">
-        here</a> to view this example in the Genome Browser. To quickly exit multi-region 
-        mode and return to the default single chromosome view, use the keyboard shortcut 
-        &quot;d v&quot;.
-        
-        <p>
-        <a name="Example4"></a>
-        <b>Example 4. BED12</b><br>
-        <p>
-        The following 
-	<a href="../help/examples/bed12formultregion.txt">BED file</a>
-        utilizes BED12 format to display two regions from two different chromosomes, chromosome
-        22 and chromosome 21, side-by-side in the browser tracks window, along with human genes 
-	POTEH, CECR2, USP25 and CHODL. 
-        <pre>
-     chr22 15690026 17558149 chr22 960 + 15690026 17558149 0 2 31497,81057, 0,1787066
-     chr21 15730025 18267373 chr21 960 + 15730025 18267373 0 2 148887,22540, 0,2514808
-        </pre>
-        
-        <img style="margin: auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionBED12Example.png">
-        <p>
-        The multi-region display utilizes the data in the blockStarts and blockSizes fields of 
-        the BED file to draw its regions, allowing for even more customization of 
-        the Genome Browser display. 
-        
-        <p>
-        Click 
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/bed12Session.txt">
-        here</a> to view this example in the Genome Browser. To quickly exit multi-region 
-        mode and return to the default single chromosome view, use the keyboard shortcut 
-        &quot;d v&quot;.
-        
-        <p>
-        <a name="Example5"></a>
-        <b>Example 5. Haplotype</b><br>
-        
-        <p>
-        This example shows how the human hg38 haplotype chr1_KI270762v1_alt fits onto chromosome 1.
-        Note that annotations from the standard browser display do not extend into or out of the 
-	haplotype region, since haplotypes are annotated separately from regular chromosomes. 
-        <p>
-        <img style="margin:auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionHaplotypeView.png">
-        
-        <p>
-        Click 
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/haplotypeSession.txt">
-        here</a> to view this example in the Genome Browser. To quickly exit multi-region 
-        mode and return to the default single chromosome view, use the keyboard shortcut 
-        &quot;d v&quot;.
-	</div><!-- .sectionContent --> 
-</div><!-- .section -->
+<a name="Example1"></a> 
+<h3>Example 1. Exon-only mode</h3> 
+<p> 
+This screenshot shows the exon-only view for the SOD1 gene in human assembly hg38. The third
+&quot;exon&quot; from the left falls within the intron of the actual SOD1 gene, but is shown as an 
+exon because it is part of the GENCODE v22 super-track.</p>  
+<p>
+<img src="../../images/MultiRegionSOD1.png" alt="Screenshot of exon-only mode" width="950"
+height="257"></p> 
+<p> 
+Click <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/exonOnlySession.txt">here</a> 
+to view this example in the Genome Browser. To quickly exit multi-region mode and return to
+the default single chromosome view, use the keyboard shortcut &quot;d v&quot;.</p> 
 
-</body>
-</html>
+<a name="Example2"></a> 
+<h3>Example 2. Gene-only mode</h3> 
+<p> 
+This example illustrates how intergenic regions are removed from the default browser tracks view in 
+gene-only mode. The displayed region of the X chromosome on the human hg19 assembly consists of 
+three genes (DKC1, MPP1, and F8) with varying amounts of intergenic space separating them. The first
+screenshot shows the standard browser display of the gene track in &quot;single chromosome&quot; 
+view. Compare it with the second screenshot, which shows the same region in gene-only mode with the 
+padding set to 6. (Click 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/geneOnlySession.txt">here</a> 
+to view this example in the Genome Browser.)</p>  
+<p>
+<img src="../../images/MultiRegionXDefault.png" alt="Genome Browser default gene track"
+width="950" height="238"></p>
+<p> 
+<img src="../../images/MultiRegionXGeneOnly.png" alt="Multi-Region gene-only view"
+width="950"
+height="247"> </p>
+<p> 
+To quickly exit multi-region mode and return to the default single chromosome view, use the 
+keyboard shortcut &quot;d v&quot;.</p> 
+
+<a name="Example3"></a> 
+<h3>Example 3. Custom regions from BED file</h3> 
+<p> 
+Here is an example <a href="../help/examples/mm10multiRegionexample.txt">BED file</a> for mm10 that 
+contains a list of exon positions for the Pax9 gene. If this file is loaded into the browser as a 
+custom track <em>without</em> turning on multi-region mode, the blocks display in order of genomic 
+position, not in the order they are specified in the file:</p> 
+<p>
+<img src="../../images/MultiRegionBEDFileInOrder.png" alt="Genome Browser default gene display"
+width="950" height="94"></p> 
+<p> 
+However, if multi-region mode is turned on after loading a custom track, the blocks display in the 
+order they are listed in the BED file, rather than in genomic position order. This in turn affects 
+the display order of other features in this view, in this case the display order of the exons in 
+Pax9. This feature can be used to manipulate the display of other annotations, for example to allow 
+the visualization of centromeric regions or viewing the same gene twice within the same window to 
+compare annotations in a separate region.</p> 
+<p>
+<img src="../../images/MultiRegionBEDFileOutOrder.png" alt="Multi-Region bed custom output" 
+width="950" height="94"></p> 
+<p> 
+Click
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/bed3Session.txt">here</a> 
+to view this example in the Genome Browser. To quickly exit multi-region mode and return to the 
+default single chromosome view, use the keyboard shortcut &quot;d v&quot;. 
+
+<a name="Example4"></a> 
+<h3>Example 4. BED12</h3> 
+<p> 
+The following <a href="../help/examples/bed12formultregion.txt">BED file</a> utilizes BED12 format 
+to display two regions from two different chromosomes, chromosome 22 and chromosome 21, side-by-side
+in the browser tracks window, along with human genes POTEH, CECR2, USP25 and CHODL.</p>  
+<pre><code>chr22 15690026 17558149 chr22 960 + 15690026 17558149 0 2 31497,81057, 0,1787066
+chr21 15730025 18267373 chr21 960 + 15730025 18267373 0 2 148887,22540, 0,2514808</code></pre>
+<p>    
+<img src="../../images/MultiRegionBED12Example.png" alt="Multi-Region BED12 example"
+width="881" height="344"></p> 
+<p> 
+The multi-region display utilizes the data in the blockStarts and blockSizes fields of the BED file 
+to draw its regions, allowing for even more customization of the Genome Browser display.</p> 
+<p> 
+Click 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/bed12Session.txt">here</a> 
+to view this example in the Genome Browser. To quickly exit multi-region mode and return to the 
+default single chromosome view, use the keyboard shortcut &quot;d v&quot;.</p> 
+
+<a name="Example5"></a> 
+<h3>Example 5. Haplotype</h3> 
+<p> 
+This example shows how the human hg38 haplotype chr1_KI270762v1_alt fits onto chromosome 1. Note 
+that annotations from the standard browser display do not extend into or out of the haplotype 
+region, since haplotypes are annotated separately from regular chromosomes.</p>  
+<p>
+<img src="../../images/MultiRegionHaplotypeView.png" alt="Multi-Region haplotype view"
+width="881" height="344"></p> 
+<p> 
+Click 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/haplotypeSession.txt">here</a> 
+to view this example in the Genome Browser. To quickly exit multi-region mode and return to the 
+default single chromosome view, use the keyboard shortcut &quot;d v&quot;.</p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
