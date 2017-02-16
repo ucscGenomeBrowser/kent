@@ -218,14 +218,14 @@ void jsOnEventById(char *eventName, char *idText, char *jsText)
 /* Add js mapping for inline event */
 {
 checkValidEvent(eventName);
-jsInlineF("document.getElementById('%s').on%s = function(event) {%s};\n", idText, eventName, jsText);
+jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; %s};\n", idText, eventName, jsText);
 }
 
 void jsOnEventByIdF(char *eventName, char *idText, char *format, ...)
 /* Add js mapping for inline event */
 {
 checkValidEvent(eventName);
-jsInlineF("document.getElementById('%s').on%s = function(event) {", idText, eventName);
+jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; ", idText, eventName);
 va_list args;
 va_start(args, format);
 dyStringVaPrintf(jsInlineLines, format, args);
