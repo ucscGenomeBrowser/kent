@@ -494,22 +494,23 @@ xrefQuery select id,protAcc from %s where protAcc like '%s%%'
 termRegex [NXY]P_[0-9]+(\.[0-9]+)?
 
 # tests for new track type
-track gtexBarChart
-type barChart
-shortLabel GTEx Bar Chart
-longLabel GTEx Gene Expression in barChart track format
-barChartLabel Tissues
-group expression
-spectrum on
+#track gtexBarChart
+#type barChart
+#shortLabel GTEx Bar Chart
+#longLabel GTEx Gene Expression in barChart track format
+#barChartLabel Tissues
+#group expression
+#spectrum on
 
 track gtexBrain
-#type barChart 0 370000 RPKM
 type barChart
+#barChartRange 0 370000 RPKM
 barChartLabel Brain Regions
 barChartBars \
     Amygdala Anterior_cingulate_cortex Caudate_basal_ganglia Cerebellar_hemisphere \
     Cerebellum Cortex Frontal_cortex Hippocampus Hypothalamus Nucleus_accumbens \
     Putamen_basal_ganglia Spinal_cord Substantia_nigra
+#barChartColors
 shortLabel GTEx Brain
 longLabel GTEx Brain Gene Expression in barChart track format
 group expression
