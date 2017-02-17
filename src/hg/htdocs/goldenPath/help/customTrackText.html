@@ -433,10 +433,16 @@ For example, if the browser line <code>browser position chr22:1-20000</code> is 
 annotation file, the Genome Browser window will initially display the first 20000 bases of chr 
 22.</p>
 <p>
-The following browser line attribute name/value options are available. The value 
-<em>track_primary_table_name</em> must be set to the name of the primary table on which the the 
-track is based. You can find instructions on how to find this table name in the video 
-&quot;<a href="../../training/vids/index.html#vid06" target="_blank">How do I learn which tables 
+The following browser line attribute name/value options are available. The value
+<em>track_primary_table_name</em> must be set to the name of the primary table on which the
+track is based. To identify this table, open up the
+<A HREF="../../cgi-bin/hgTables" TARGET=_blank>Table Browser</A>,
+select the correct genome assembly, then select the track name from the
+<em>track</em> list. The <em>table</em> list will show the primary table.
+Alternatively, the primary table name can be obtained from a mouseover on the
+track name in the track control section.
+You can also find instructions on how to find this table name in the video
+&quot;<a href="../../training/vids/index.html#vid06" target="_blank">How do I learn which tables
 belong to a data track on the UCSC Genome Browser?</a>&quot;.</p>
 <p>
 Note that composite track subtracks are not valid <em>track_primary_table_name</em> values. To find 
