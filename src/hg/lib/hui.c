@@ -5862,6 +5862,8 @@ if (trackDbSettingClosestToHomeOn(tdb, "linkIdInName"))
     return;
 
 struct asObject *as = asForDb(tdb, db);  
+if (as == NULL)
+    return;
 struct slPair *labelList = buildFieldList(tdb, "labelFields",  as);
 struct slPair *defaultLabelList = buildFieldList(tdb, "defaultLabelFields",  as);
 char varName[1024];
@@ -8641,6 +8643,8 @@ struct asObject *asObj = NULL;
 if (tdbIsBigBed(tdb))
     {
     char *fileName = hReplaceGbdb(tdbBigFileName(conn, tdb));
+    if (fileName == NULL)
+        return NULL;
     asObj = bigBedFileAsObjOrDefault(fileName);
     freeMem(fileName);
     }
