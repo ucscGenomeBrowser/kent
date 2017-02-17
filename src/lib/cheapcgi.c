@@ -214,18 +214,18 @@ if (!findJsEvent(event))
 freeMem (event);
 }
 
-void jsOnEventById(char *event, char *idText, char *jsText)
+void jsOnEventById(char *eventName, char *idText, char *jsText)
 /* Add js mapping for inline event */
 {
-checkValidEvent(event);
-jsInlineF("document.getElementById('%s').on%s = function() {%s};\n", idText, event, jsText);
+checkValidEvent(eventName);
+jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; %s};\n", idText, eventName, jsText);
 }
 
-void jsOnEventByIdF(char *event, char *idText, char *format, ...)
+void jsOnEventByIdF(char *eventName, char *idText, char *format, ...)
 /* Add js mapping for inline event */
 {
-checkValidEvent(event);
-jsInlineF("document.getElementById('%s').on%s = function() {", idText, event);
+checkValidEvent(eventName);
+jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; ", idText, eventName);
 va_list args;
 va_start(args, format);
 dyStringVaPrintf(jsInlineLines, format, args);
@@ -1507,8 +1507,8 @@ cgiMakeOnClickButton(id, javascript, " Clear  ");
 void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
 /* Make 'submit' type button. Display msg on mouseover, if present*/
 {
-printf("<input type='submit' name='%s' value='%s'",
-        name, value);
+printf("<input type='submit' name='%s' id='%s' value='%s'",
+        name, name, value);
 if (msg)
     printf(" title='%s'", msg);
 printf(">");

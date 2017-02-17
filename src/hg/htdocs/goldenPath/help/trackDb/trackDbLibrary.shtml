@@ -3674,7 +3674,7 @@ There are no extra options that can appear on the type bigMaf line.
 </DIV>
 
 <DIV class="labelSeparator"><span class="types bigBed bigGenePred bigPsl"></span>
-<div class="format"><code>labelFields &lt;<EM>text</EM>&gt;</code></div>
+<div class="format"><code>labelSeparator &lt;<EM>text</EM>&gt;</code></div>
     <P>One or more characters to use as the field separator between multiple labels.  A slash (/) by default, this string can have double quotes around it if it should have white spaces in it.
     </P>
 </DIV>
