@@ -138,7 +138,21 @@ for(; labelInt; labelInt = labelInt->next)
     if (!firstTime)
         dyStringAppend(dy, labelSeparator);
 
-    dyStringPrintf(dy, "%s", restFields[labelInt->val - 3]);
+    switch(labelInt->val)
+        {
+        case 0:
+            dyStringAppend(dy, chromName);
+            break;
+        case 1:
+            dyStringPrintf(dy, "%d", bb->start);
+            break;
+        case 2:
+            dyStringPrintf(dy, "%d", bb->end);
+            break;
+        default:
+            dyStringPrintf(dy, "%s", restFields[labelInt->val - 3]);
+            break;
+        }
     firstTime = FALSE;
     }
 return dyStringCannibalize(&dy);
