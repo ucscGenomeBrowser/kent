@@ -670,7 +670,7 @@ bits64 zoomIndexOffsets[bbiMaxZoomLevels];
 int zoomLevels = 0;
 if (bedCount > 0)
     {
-    bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
+    zoomLevels = bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
 	bedWriteReducedOnceReturnReducedTwice, fieldCount,
 	doCompress, indexOffset - dataOffset, 
 	usageList, resTryCount, resScales, resSizes, 

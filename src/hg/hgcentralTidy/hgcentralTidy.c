@@ -531,11 +531,6 @@ conn = sqlConnectRemote(host, user, password, database);
 verbose(1, "Cleaning database %s.%s\n", host, database);
 verbose(1, "chunkWait=%d chunkSize=%d\n", chunkWait, chunkSize);
 
-// DEBUG
-//uglyf("using sessionDbGalt\n");fflush(stdout);
-//uglyf("using userDbGalt\n");fflush(stdout);
-//uglyf("actual record delete disabled temporarily for testing reproducibility\n");fflush(stdout);
-
 //sessionDbTableName = "sessionDbGalt";
 
 //userDbTableName = "userDbGalt";
@@ -546,8 +541,6 @@ if (!purgeTable || sameString(purgeTable,sessionDbTableName))
       squealed = TRUE;
     }
 
-//uglyf("WARNING user table cleaning NOT PERFORMED for testing.\n");fflush(stdout);
-// DEBUG RESTORE
 if (!purgeTable || sameString(purgeTable,userDbTableName))
     {
     if (cleanTable(userDbTableName))

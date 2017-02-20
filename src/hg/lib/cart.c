@@ -252,7 +252,7 @@ if (!cdb)
 	{
 	if (cartDbUseSessionKey())
 	    {
-	    sessionKey = cartDbMakeRandomKey(128+33); // at least 128 bits of protection, 33 for the world population size.
+	    sessionKey = makeRandomKey(128+33); // at least 128 bits of protection, 33 for the world population size.
 	    }
 	sqlDyStringPrintf(query, ",'%s'", sessionKey);
 	}
@@ -1380,7 +1380,7 @@ if (asTable)
     int width=(strlen(val)+1)*8;
     if (width<100)
         width = 100;
-    cgiMakeTextVarWithExtraHtml(hel->name, val, width,
+    cgiMakeTextVarWithJs(hel->name, val, width,
                                 "change", "setCartVar(this.name,this.value);");
     printf("</TD></TR>\n");
     }

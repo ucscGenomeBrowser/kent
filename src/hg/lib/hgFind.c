@@ -2603,7 +2603,7 @@ static boolean findBigBed(char *db, struct hgFindSpec *hfs, char *spec,
 {
 struct trackDb *tdb = tdbFindOrCreate(db, NULL, hfs->searchTable);
 
-return findBigBedPosInTdbList(db, tdb, spec, hgp);
+return findBigBedPosInTdbList(db, tdb, spec, hgp, hfs);
 }
 
 static boolean searchSpecial(char *db, struct hgFindSpec *hfs, char *term, int limitResults,
@@ -2724,30 +2724,6 @@ slReverse(&xrefList);
 if (xrefList == NULL && hgFindSpecSetting(hfs, "searchBoth") != NULL)
     xrefList = slPairNew(cloneString(""), cloneString(term));
 return(xrefList);
-}
-
-
-int vatruncatef(char *buf, int size, char *format, va_list args)
-/* Like vasafef, but truncates the formatted string instead of barfing on 
- * overflow. */
-{
-char *truncStr = " [truncated]";
-int sz = vsnprintf(buf, size, format, args);
-/* note that some version return -1 if too small */
-if ((sz < 0) || (sz >= size))
-    strncpy(buf + size - 1 - strlen(truncStr), truncStr, strlen(truncStr));
-buf[size-1] = 0;
-return sz;
-}
-
-void truncatef(char *buf, int size, char *format, ...)
-/* Like safef, but truncates the formatted string instead of barfing on 
- * overflow. */
-{
-va_list args;
-va_start(args, format);
-vatruncatef(buf, size, format, args);  // ignore returned size
-va_end(args);
 }
 
 static boolean doQuery(char *db, struct hgFindSpec *hfs, char *xrefTerm, char *term,

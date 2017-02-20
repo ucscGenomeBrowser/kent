@@ -1033,8 +1033,8 @@ printf("</FORM>\n");
 
 jsInline 
     (
-    "$('.scriptButton').change( function() {$('#urlListDoc').hide(); $('#scriptDoc').show()} )"
-    "$('.urlListButton').change( function() {$('#urlListDoc').show(); $('#scriptDoc').hide()} )"
+    "$('.scriptButton').change( function() {$('#urlListDoc').hide(); $('#scriptDoc').show()} );\n"
+    "$('.urlListButton').change( function() {$('#urlListDoc').show(); $('#scriptDoc').hide()} );\n"
     );
 puts("<div id='urlListDoc'>\n");
 puts("When you click 'submit', a text file with the URLs of the files will get downloaded.\n");

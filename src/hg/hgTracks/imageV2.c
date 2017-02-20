@@ -1102,9 +1102,8 @@ if (hIsPrivateHost())
     {
     int leftX, topY, rightX, bottomY;
     imgTrackCoordinates(imgTrack, &leftX, &topY, &rightX, &bottomY);
-    //if (topLeftY < topY || bottomRightY > bottomY) 
     // TODO for sideLabels=0, many track item maps are extending down 1 pixel too far. EXISTING BUG.
-    if (topLeftY < topY || bottomRightY > (bottomY + 1))  // DEBUG RESTORE GALT Ignoring problem for now.
+    if (topLeftY < topY || bottomRightY > (bottomY + 1))  // Ignoring problem for now by using + 1.
         {
         char * name = (imgTrack->name != NULL ? imgTrack->name
                                               : imgTrack->tdb != NULL ? imgTrack->tdb->track

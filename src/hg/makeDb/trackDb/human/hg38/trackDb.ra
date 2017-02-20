@@ -519,7 +519,7 @@ searchPriority 2.07202
 searchType genePred
 semiShortCircuit 1
 searchMethod prefix
-termRegex (X[MR]|YP)_[0-9]+(\.[0-9]+)
+termRegex (N[MR]|YP)_[0-9]+(\.[0-9]+)
 
 searchName ncbiRefSeqPredicted
 searchTable ncbiRefSeqPredicted

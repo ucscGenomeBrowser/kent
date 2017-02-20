@@ -230,9 +230,9 @@ safef(url, sizeof(url), "%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s",
 htmStart(stdout, "Redirecting"); 
 char javascript[1024];
 safef(javascript, sizeof javascript,
-    "location.replace('%s');", url);
+    "location.replace('%s');\n", url);
 jsInline(javascript);
-printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>", url);
+printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>\n", url);
 htmlEnd();
 
 }

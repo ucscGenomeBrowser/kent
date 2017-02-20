@@ -47,7 +47,7 @@ if (! jsInited)
 	{
 	char javascript[1024];
 	safef(javascript, sizeof javascript,
-	       "window.onload = function () { window.scrollTo(0, %d); }", pos);
+	       "window.onload = function () { window.scrollTo(0, %d); }\n", pos);
 	jsInline(javascript);
 	}
     jsInited = TRUE;
@@ -131,7 +131,7 @@ char buf[256];
 boolean oldVal = cartUsualBoolean(cart, cgiVar, usualVal);
 char javascript[1024];
 safef(javascript, sizeof javascript,
-    "var %s=%d;", jsVar, oldVal);
+    "var %s=%d;\n", jsVar, oldVal);
 jsInline(javascript);
 hPrintf("<INPUT TYPE=CHECKBOX NAME='%s' ID='%s' VALUE=1", cgiVar, cgiVar);
 if (oldVal)

@@ -61,7 +61,7 @@ void dyStringPrintf(struct dyString *ds, char *format, ...)
 #ifdef __GNUC__
 __attribute__((format(printf, 2, 3)))
 #endif
-    ;
+;
 
 struct dyString *dyStringCreate(char *format, ...)
 /*  Create a dyString with a printf style initial content */
