@@ -11,12 +11,14 @@ chainLinearGap medium
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetRn4 override
+shortLabel $o_db Chain/Net
 priority 210.3
 chainMinScore 3000
 chainLinearGap medium
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetRn5 override
+shortLabel $o_db Chain/Net
 priority 210.3
 chainMinScore 3000
 chainLinearGap medium
@@ -29,12 +31,14 @@ chainLinearGap medium
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetMm9 override
+shortLabel $o_db Chain/Net
 priority 220.3
 chainMinScore 3000
 chainLinearGap medium
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetOryCun1 override
+shortLabel $o_db Chain/Net
 priority 260.3
 chainMinScore 3000
 chainLinearGap medium
@@ -59,12 +63,14 @@ chainLinearGap medium
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetHg18 override
+shortLabel $o_db Chain/Net
 priority 370.3
 chainMinScore 3000
 chainLinearGap medium
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetHg19 override
+shortLabel $o_db Chain/Net
 priority 370.3
 chainMinScore 3000
 chainLinearGap medium
