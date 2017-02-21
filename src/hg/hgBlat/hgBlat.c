@@ -326,6 +326,8 @@ else
         printf("<INPUT TYPE=\"hidden\" name=\"l\" value=\"%d\" />\n",psl->tStart);
         printf("<INPUT TYPE=\"hidden\" name=\"r\" value=\"%d\" />\n",psl->tEnd);
         printf("<INPUT TYPE=\"hidden\" name=\"%s\" value=\"%s\" />\n",  cartSessionVarName(), cartSessionId(cart));
+        if (pslIsProtein(psl))
+            printf("<INPUT TYPE=\"hidden\" name=\"isProt\" value=\"on\" />\n");
 
         printf("Build a custom track with these results. ");
         printf("<INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Do It\">\n");
