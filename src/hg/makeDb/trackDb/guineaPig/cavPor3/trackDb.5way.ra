@@ -4,10 +4,10 @@ shortLabel 5-way Mammal
 longLabel Multiz Alignment & Conservation (5 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
-visibility hide
+visibility pack
 priority 1
 type bed 4
-group x
+group compGeno
 
     track cons5wayViewalign
     shortLabel Multiz Alignments
