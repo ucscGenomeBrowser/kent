@@ -8090,11 +8090,9 @@ if (!hideControls)
             hPrintf("<IMG class='toggleButton'"
                     " id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
                     group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-	    char jsText[256];
-	    safef(jsText, sizeof jsText, "return vis.toggleForGroup(this, '%s');", group->name);
 	    char idText[256];
 	    safef(idText, sizeof idText, "%s_button", group->name);
-	    jsOnEventById("click", idText, jsText);
+	    jsOnEventByIdF("click", idText, "return vis.toggleForGroup(this, '%s');", group->name);
 
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
@@ -8102,11 +8100,10 @@ if (!hideControls)
 		{
                 hPrintf("<input name=\"hubDisconnectButton\" id='hub_disconn'"
                     "type=\"button\" value=\"disconnect\">\n");
-		safef(jsText, sizeof jsText, 
+		jsOnEventByIdF("click", "hub_disconn", 
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;",
 		    &group->name[sizeof hubTrackPrefix - 1]);
-		jsOnEventById("click", "hub_disconn", jsText);
 		}
 
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "

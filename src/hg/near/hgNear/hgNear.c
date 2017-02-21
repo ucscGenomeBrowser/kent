@@ -1068,14 +1068,11 @@ slReverse(&orgList);
 
 /* Make genome drop-down. */
 hPrintf("genome ");
-hPrintf("<SELECT id='org_sel' NAME=\"%s\" ", orgVarName);
-char javascript[1024];
-safef(javascript, sizeof javascript,
+hPrintf("<SELECT id='org_sel' NAME=\"%s\">\n", orgVarName);
+jsOnEventById("change", "org_sel", 
   "document.orgForm.org.value=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
   "document.orgForm.db.value=0;"
   "document.orgForm.submit();");
-jsOnEventById("change", "org_sel", javascript);
-hPrintf(">\n");
 for (org = orgList; org != NULL; org = org->next)
     {
     struct dbDb *db = org->val;
@@ -1089,12 +1086,10 @@ hPrintf("</SELECT>");
 
 /* Make assembly drop-down. */
 hPrintf(" assembly ");
-hPrintf("<SELECT id='db_sel' NAME=\"%s\" ", dbVarName);
-safef(javascript, sizeof javascript,
+hPrintf("<SELECT id='db_sel' NAME=\"%s\">\n", dbVarName);
+jsOnEventById("change", "db_sel",
   "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value;"
   "document.orgForm.submit();");
-jsOnEventById("change", "db_sel", javascript);
-hPrintf(">\n");
 for (as = asList; as != NULL; as = as->next)
     {
     struct dbDb *db = as->val;
@@ -1134,7 +1129,6 @@ static void mainControlPanel(struct genePos *gp,
 	struct order *curOrd, struct order *ordList)
 /* Make control panel. */
 {
-char javascript[1024];
 controlPanelStart();
 
 makeGenomeAssemblyControls();
@@ -1166,15 +1160,13 @@ hPrintf("</TD></TR>\n<TR><TD>");
     hPrintf("\">");
     hPrintf("sort by");
     hPrintf("</A> ");
-    hPrintf("<SELECT id='sort_sel' NAME=\"%s\"", orderVarName);
-    safef(javascript, sizeof javascript,
+    hPrintf("<SELECT id='sort_sel' NAME=\"%s\">\n", orderVarName);
+    jsOnEventByIdF("change", "sort_sel",
 	"document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value;"
       	"document.orgForm.submit();",
 	orderVarName,  // XSS Filter GALT TODO
 	orderVarName,
 	orderVarName);
-    jsOnEventById("change", "sort_sel", javascript);
-    hPrintf(">\n");
     for (ord = ordList; ord != NULL; ord = ord->next)
         {
 	hPrintf("<OPTION VALUE=\"%s\"", ord->name);
@@ -1202,15 +1194,13 @@ hPrintf("</TD></TR>\n<TR><TD>");
     int i = 0;
 
     hPrintf(" display ");
-    hPrintf("<SELECT id='display_sel' NAME=\"%s\"", countVarName);
-    safef(javascript, sizeof javascript,
+    hPrintf("<SELECT id='display_sel' NAME=\"%s\">\n", countVarName);
+    jsOnEventByIdF("change", "display_sel", 
 	"document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value;"
       	"document.orgForm.submit();",
 	countVarName,
 	countVarName,
 	countVarName);
-    jsOnEventById("change", "display_sel", javascript);
-    hPrintf(">\n");
     for (i = 0; i < ArraySize(menu); ++i)
       {
 	hPrintf("<OPTION VALUE=\"%s\"", menu[i]);

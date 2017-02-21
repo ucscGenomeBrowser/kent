@@ -142,8 +142,7 @@ struct galleryEntry *thisSession = galList;
 /* Hide the orderable columns and disable ordering on the visible columns
  * https://datatables.net/reference/option/columnDefs for more info.
  * Then set up the ordering drop-down menu */
-struct dyString *javascript = newDyString(1024);
-dyStringPrintf(javascript, 
+jsInlineF(
    "$(document).ready(function () {\n"
     "    $('#sessionTable').DataTable({\"columnDefs\": [{\"visible\":false, \"targets\":[2,3]},\n"
     "                                                   {\"orderable\":false, \"targets\":[0,1]}\n"
@@ -175,8 +174,6 @@ dyStringPrintf(javascript,
     "    }\n"
     "});\n",
     jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart));
-jsInline(javascript->string);
-dyStringFree(&javascript);
 
 jsInline(
    "function changeSort() {\n"
@@ -271,10 +268,7 @@ char *db = cartUsualString(cart, "db", hDefaultDb());
 cartWebStart(cart, db, "Public Sessions");
 
 /* Not in a form; can't use cartSaveSession() to set up an hgsid input */
-char javascript[1024];
-safef(javascript, sizeof javascript,
-"var common = {hgsid:\"%s\"};\n", cartSessionId(cart));
-jsInline(javascript);
+jsInlineF("var common = {hgsid:\"%s\"};\n", cartSessionId(cart));
 
 jsIncludeDataTablesLibs();
 

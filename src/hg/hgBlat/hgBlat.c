@@ -228,10 +228,7 @@ safef(url, sizeof(url), "%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s",
 /* Odd it appears that we've already printed the Content-Typ:text/html line
    but I can't figure out where... */
 htmStart(stdout, "Redirecting"); 
-char javascript[1024];
-safef(javascript, sizeof javascript,
-    "location.replace('%s');\n", url);
-jsInline(javascript);
+jsInlineF("location.replace('%s');\n", url);
 printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>\n", url);
 htmlEnd();
 
@@ -320,19 +317,29 @@ else
         char *trackDescription = NULL;
         getCustomName(database, cart, pslList, &trackName, &trackDescription);
         psl = pslList;
-        printf("<A HREF=\"%s?o=%d&t=%d&trackName=%s&trackDescription=%s&g=buildBigPsl&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">",       
-                hgcUrl, psl->tStart, psl->tEnd,cgiEncode(trackName), cgiEncode(trackDescription), pslName, cgiEncode(faName), psl->qName,  psl->tName,    
-                psl->tStart, psl->tEnd, database, uiState);
+        printf( "<DIV STYLE=\"display:block; float:left\"><TABLE><FORM ACTION=\"%s\"  METHOD=\"POST\" NAME=\"customTrackForm\">\n", hgcUrl);
+        printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
+        printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",psl->tEnd);
+        printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
+        printf("<INPUT TYPE=\"hidden\" name=\"i\" value=\"%s %s %s\" />\n",pslName,faName,psl->qName);
+        printf("<INPUT TYPE=\"hidden\" name=\"c\" value=\"%s\" />\n",psl->tName);
+        printf("<INPUT TYPE=\"hidden\" name=\"l\" value=\"%d\" />\n",psl->tStart);
+        printf("<INPUT TYPE=\"hidden\" name=\"r\" value=\"%d\" />\n",psl->tEnd);
+        printf("<INPUT TYPE=\"hidden\" name=\"%s\" value=\"%s\" />\n",  cartSessionVarName(), cartSessionId(cart));
 
-        //printf( 
-        //"<FORM ACTION=\"../cgi-bin/hgc\" METHOD=\"GET\" NAME=\"mainForm\">\n");
-        printf("<P>Build a custom track with these results.  Track will be called %s </A>", trackDescription);
-        //printf("Description: %s\n", trackDescription);
-        //printf("<INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Do It\">\n");
-        //printf("</FORM>");
+        printf("Build a custom track with these results. ");
+        printf("<INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Do It\">\n");
+        printf("<TABLE><TR>Custom track name:");
+        cgiMakeTextVar( "trackName", trackName, 30);
+        printf("</TD></TR>");
+
+        printf("<TR>Custom track description:");
+        cgiMakeTextVar( "trackDescription", trackDescription,50);
+        printf("</TD></TR></TABLE>");
+        printf("</FORM></TT></DIV>");
         }
 
-    printf("<DIV STYLE=\"display:block; float:left\"><TT><PRE>");
+    printf("<DIV STYLE=\"display:block; float:left\"><TABLE><PRE>");
     printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END      SPAN\n");
     printf("---------------------------------------------------------------------------------------------------\n");
     for (psl = pslList; psl != NULL; psl = psl->next)
