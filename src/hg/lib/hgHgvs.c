@@ -167,7 +167,7 @@
 
 // Pseudo-HGVS in common usage
 // Sometimes users give an NM_ accession, but a protein change.
-#define pseudoHgvsNMPDotSubstExp "^" versionedRefSeqNMExp "[: p.]+" hgvsAminoAcidSubstExp
+#define pseudoHgvsNMPDotSubstExp "^" versionedRefSeqNMExp "[ :]+p?\\.?" hgvsAminoAcidSubstExp
 // substring numbering:
 //      0.....................................................  whole matching string
 //      1...............                                        acc & optional dot version
@@ -178,7 +178,7 @@
 //                                           6......            1-based position
 //                                                     7......  replacement sequence
 
-#define pseudoHgvsNMPDotRangeExp "^" versionedRefSeqNMExp "[: p.]+" hgvsAaRangeExp
+#define pseudoHgvsNMPDotRangeExp "^" versionedRefSeqNMExp "[ :]+p?\\.?" hgvsAaRangeExp
 // substring numbering:
 //      0.....................................................  whole matching string
 //      1...............                                        acc & optional dot version
@@ -193,14 +193,14 @@
 //                                                      10....  change description
 
 // Common: gene symbol followed by space and/or punctuation followed by protein change
-#define pseudoHgvsGeneSymbolProtSubstExp "^" geneSymbolExp "[: p.]+" hgvsAminoAcidSubstExp
+#define pseudoHgvsGeneSymbolProtSubstExp "^" geneSymbolExp "[ :]+p?\\.?" hgvsAminoAcidSubstExp
 //      0.....................................................  whole matching string
 //      1...................                                    gene symbol
 //                                   2.....                     original sequence
 //                                           3......            1-based position
 //                                                     4......  replacement sequence
 
-#define pseudoHgvsGeneSymbolProtRangeExp "^" geneSymbolExp "[: p.]+" hgvsAaRangeExp
+#define pseudoHgvsGeneSymbolProtRangeExp "^" geneSymbolExp "[ :]+p?\\.?" hgvsAaRangeExp
 //      0.....................................................  whole matching string
 //      1...................                                    gene symbol
 //                                 2...                         original start AA
@@ -211,7 +211,7 @@
 //                                                       7.....  change description
 
 // As above but omitting the protein change
-#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp "[: p.]+" posIntExp
+#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp "[ :]+p?\\.?" posIntExp
 //      0..........................                             whole matching string
 //      1...................                                    gene symbol
 //                           2.....                             1-based position

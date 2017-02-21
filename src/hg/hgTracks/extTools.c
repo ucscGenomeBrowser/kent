@@ -294,10 +294,7 @@ printf("</form>\n");
 // a little javascript that clicks the submit button
 if (!debug)
     {
-    struct dyString *dy = dyStringNew(256);
-    dyStringPrintf(dy, "document.getElementById(\"redirForm\").submit();\n");
-    jsInline(dy->string);
-    dyStringFree(&dy);
+    jsInline("document.getElementById(\"redirForm\").submit();\n");
     }
 jsInlineFinish();
 printf("</body></html>\n");

@@ -944,22 +944,19 @@ hPrintf(
    );
 
 // When GREAT is selected, disable the other checkboxes and force output to BED
-struct dyString *js = dyStringNew(1024);
-dyStringPrintf(js,
+jsInline(
     "function onSelectGreat() {\n"
     " document.getElementById('checkboxGalaxy').checked=false;\n");
 if (isGenomeSpaceEnabled())
-    dyStringPrintf(js,
+    jsInline(
     " document.getElementById('checkboxGenomeSpace').checked=false;\n");
-dyStringPrintf(js,
+jsInline(
     " document.getElementById('outBed').selected=true;\n"
     " return true;\n"
     "}\n");
-jsInline(js->string);
 
 // Disable/enable noGenome tracks depending on whether region is genome.
-dyStringClear(js);
-dyStringPrintf(js,
+jsInline(
     "function maybeDisableNoGenome() {\n"
     "   var regionTypeSelected = $('input[name=\"hgta_regionType\"]:checked').val();\n"
     "   var regionIsGenome = (regionTypeSelected === 'genome');\n"
@@ -972,7 +969,6 @@ dyStringPrintf(js,
     "    maybeDisableNoGenome();\n"
     "    $('input[name=\"hgta_regionType\"]').change(maybeDisableNoGenome);\n"
     "});\n");
-jsInline(js->string);
 
 /* Main form. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",
