@@ -78,12 +78,10 @@ dyStringFree(&dy);
 static void printWatermark(char *id, char *watermark)
 /* Print light text filter prompt as watermark. */
 {
-char javascript[1024];
-safef(javascript, sizeof javascript,
+jsInlineF(
 "$(function() {\n"
 "  $('#%s').watermark(\"%s\");\n"
 "});\n", id, watermark);
-jsInline(javascript);
 }
 
 static void showTableFilterControlRow(struct fieldedTable *table, struct cart *cart, 

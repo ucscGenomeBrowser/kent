@@ -96,18 +96,16 @@ if (invalidAssembly)
 	currAssembly = currAssembly->next;
 	}
 
-    char javascript[1024];
-    safef(javascript, sizeof javascript,	    
-    "function logSpecies() {\n"
-    " try {\n"
-    "  var r = new XMLHttpRequest();\n"
-    "  r.open('GET', 'http://great.stanford.edu/public/cgi-bin/logSpecies.php?species=%s');\n"
-    "  r.send(null);\n"
-    " } catch (err) { }\n"
-    "}\n"
-    "window.onload = logSpecies;\n"
-    , database);
-    jsInline(javascript);
+    jsInlineF(
+	"function logSpecies() {\n"
+	" try {\n"
+	"  var r = new XMLHttpRequest();\n"
+	"  r.open('GET', 'http://great.stanford.edu/public/cgi-bin/logSpecies.php?species=%s');\n"
+	"  r.send(null);\n"
+	" } catch (err) { }\n"
+	"}\n"
+	"window.onload = logSpecies;\n"
+	, database);
 
     errAbort("GREAT only supports the %s assemblies."
     "\nPlease go back and ensure that one of those assemblies is chosen.",

@@ -253,9 +253,7 @@ puts(
 static void onclickJumpToTop(char *id)
 /* CSP-safe click handler arrows that cause scroll to top */
 {
-char javascript[1024];
-safef(javascript, sizeof javascript, "$('html,body').scrollTop(0);");
-jsOnEventById("click", id, javascript);
+jsOnEventById("click", id, "$('html,body').scrollTop(0);");
 }
 
 static void printDataInfo(char *db, struct trackDb *tdb)
