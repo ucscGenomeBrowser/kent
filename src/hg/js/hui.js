@@ -1144,7 +1144,9 @@ var superT = {
 
     childChecked: function (cb,defaultVis)
     {
-        var sel = $('select[name="' + cb.id + '"]');
+	var name = cb.id;
+	name = name.substring(0, name.length - "_check".length); 
+        var sel = $('select[name="' + name + '"]');
         if (sel && sel.length === 1) {
             sel = sel[0];
             var selIx = parseInt($(sel).attr('selectedIndex'));
@@ -1179,7 +1181,7 @@ var superT = {
             superT.topVis(true);
         }
         if (val === undefined || val === null) { // onchange event only
-            var cb = $('input#'+sel.name);
+            var cb = $('input#'+sel.name+'_check');
             if (cb && cb.length === 1) {
                 cb = cb[0];
                 $(cb).attr('checked',(selIx > 0));
