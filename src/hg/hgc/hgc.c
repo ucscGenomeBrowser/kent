@@ -25196,10 +25196,10 @@ if (e) *e = 0;
 e = strchr(reqUrl+1, '/');
 if (e) *e = 0;
 
+boolean isProt = cgiOptionalString("isProt") != NULL;
 char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on  pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s%s/%s name=\"%s\" description=\"%s\"\n";  
 char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases";
   
-boolean isProt = FALSE;
 if (isProt)
     extraForMismatch = "";
 char buffer[4096];

@@ -104,7 +104,6 @@ if (strlen(genomesShort)==strlen(genomesString))
 else
     {
     char id[256];
-    char javascript[1024];
     safef(tempHtml, sizeof tempHtml, 
 	"<span id=Short%d>[+]&nbsp;%s...</span>"
 	"<span id=Full%d style=\"display:none\">[-]<br>%s</span>"
@@ -112,20 +111,18 @@ else
 	, row, genomesString);
 
     safef(id, sizeof id, "Short%d", row);
-    safef(javascript, sizeof javascript,
+    jsOnEventByIdF("click", id,
 	"document.getElementById('Short%d').style.display='none';"
 	"document.getElementById('Full%d').style.display='inline';"
 	"return false;"
 	, row, row);
-    jsOnEventById("click", id, javascript);
 
     safef(id, sizeof id, "Full%d", row);
-    safef(javascript, sizeof javascript,
+    jsOnEventByIdF("click", id, 
 	"document.getElementById('Full%d').style.display='none';"
 	"document.getElementById('Short%d').style.display='inline';"
 	"return false;"
 	, row, row);
-    jsOnEventById("click", id, javascript);
     }
 ourPrintCell(tempHtml);
 //ourPrintCell(removeLastComma( dyStringCannibalize(&dy)));
@@ -214,7 +211,6 @@ printf(
 printf("<tbody>");
 
 char id[256];
-char javascript[1024];
 int count = 0;
 for(hub = unlistedHubList; hub; hub = hub->next)
     {
@@ -233,10 +229,9 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     safef(id, sizeof id, "hubDisconnectButton%d", count);
     printf("<input name=\"hubDisconnectButton\" id='%s' "
 	"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", id);
-    safef(javascript, sizeof javascript,
+    jsOnEventByIdF("click", id, 
 	"document.disconnectHubForm.elements['hubId'].value='%d';"
 	"document.disconnectHubForm.submit(); return true;", hub->id);
-    jsOnEventById("click", id, javascript);
     ourCellEnd();
 
     if (hub->trackHub != NULL)
@@ -258,10 +253,9 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	printf("<input name=\"hubClearButton\"  id='%s' "
 		"class=\"hubButton\" type=\"button\" value=\"Retry Hub\">"
 		, id);
-	safef(javascript, sizeof javascript,
+	jsOnEventByIdF("click", id,
 	    "document.resetHubForm.elements['hubCheckUrl'].value='%s';"
 	    "document.resetHubForm.submit(); return true;", hub->hubUrl);
-	jsOnEventById("click", id, javascript);
 	ourCellEnd();
 	}
     else if (hub->trackHub != NULL)
@@ -377,7 +371,6 @@ char **row;
 int count = 0;
 boolean gotAnyRows = FALSE;
 char jsId[256];
-char javascript[1024];
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ++count;
@@ -421,10 +414,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    safef(jsId, sizeof jsId, "hubDisconnectButton%d", count);
 	    printf("<input name=\"hubDisconnectButton\" id='%s' "
 		"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", jsId);
-	    safef(javascript, sizeof javascript,
+	    jsOnEventByIdF("click", jsId, 
 		"document.disconnectHubForm.elements['hubId'].value= '%d';"
 		"document.disconnectHubForm.submit();return true;", id);
-	    jsOnEventById("click", jsId, javascript);
 	    }
 	else
 	    {
@@ -443,11 +435,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    safef(jsId, sizeof jsId, "hubConnectButton%d", count);
 	    printf("<input name=\"hubConnectButton\" id='%s' "
 		"class=\"hubButton\" type=\"button\" value=\"Connect\">\n", jsId);
-	    safef(javascript, sizeof javascript,
+	    jsOnEventByIdF("click", jsId, 
 		"document.connectHubForm.elements['hubUrl'].value= '%s';"
 		"document.connectHubForm.elements['db'].value= '%s';"
 		"document.connectHubForm.submit();return true;", url,name);
-	    jsOnEventById("click", jsId, javascript);
 	    }
 
 	ourCellEnd();
@@ -475,10 +466,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	"<input name=\"hubClearButton\" id='%s' "
 		"class=\"hubButton\" type=\"button\" value=\"Retry Hub\">"
 		, jsId);
-	safef(javascript, sizeof javascript,
+	jsOnEventByIdF("click", jsId, 
 	    "document.resetHubForm.elements['hubCheckUrl'].value='%s';"
 	    "document.resetHubForm.submit();return true;", url);
-	jsOnEventById("click", jsId, javascript);
 	ourCellEnd();
 	}
 

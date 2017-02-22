@@ -65,6 +65,16 @@ jsInlineInit(); // init if needed
 dyStringAppend(jsInlineLines, javascript);
 }
 
+void jsInlineF(char *format, ...)
+/* Add javascript text to output file or memory structure */
+{
+jsInlineInit(); // init if needed
+va_list args;
+va_start(args, format);
+dyStringVaPrintf(jsInlineLines, format, args);
+va_end(args);
+}
+
 boolean jsInlineFinishCalled = FALSE;
 
 void jsInlineFinish()
@@ -204,14 +214,23 @@ if (!findJsEvent(event))
 freeMem (event);
 }
 
-void jsOnEventById(char *event, char *idText, char *jsText)
+void jsOnEventById(char *eventName, char *idText, char *jsText)
 /* Add js mapping for inline event */
 {
-checkValidEvent(event);
-struct dyString *javascript = dyStringNew(1024);  // TODO XSS Filter the idText?
-dyStringPrintf(javascript, "document.getElementById('%s').on%s = function() {%s};\n", idText, event, jsText);
-jsInline(javascript->string);
-dyStringFree(&javascript);
+checkValidEvent(eventName);
+jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; %s};\n", idText, eventName, jsText);
+}
+
+void jsOnEventByIdF(char *eventName, char *idText, char *format, ...)
+/* Add js mapping for inline event */
+{
+checkValidEvent(eventName);
+jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; ", idText, eventName);
+va_list args;
+va_start(args, format);
+dyStringVaPrintf(jsInlineLines, format, args);
+va_end(args);
+jsInlineF("};\n");
 }
 
 
@@ -1488,8 +1507,8 @@ cgiMakeOnClickButton(id, javascript, " Clear  ");
 void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
 /* Make 'submit' type button. Display msg on mouseover, if present*/
 {
-printf("<input type='submit' name='%s' value='%s'",
-        name, value);
+printf("<input type='submit' name='%s' id='%s' value='%s'",
+        name, name, value);
 if (msg)
     printf(" title='%s'", msg);
 printf(">");
@@ -1849,7 +1868,7 @@ void cgiMakeIntVarWithExtra(char *varName, int initialVal, int maxDigits, char *
 /* Make a text control filled with initial value and optional extra HTML.  */
 {
 if (maxDigits == 0) maxDigits = 4;
-htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE=%d %s|none|>", // TODO XSS extra
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE=%d %s|none|>", // TODO XSS risk in extra
                 varName, maxDigits, initialVal, extra ? extra : "");
 }
 
@@ -1884,10 +1903,8 @@ if (width < 65)
 
 printf("<INPUT TYPE=TEXT class='inputBox' name='%s' id='%s' style='width: %dpx' value=%d",
        varName,varName,width,initialVal);
-char javascript[1024];
-safef(javascript, sizeof javascript, "return validateInt(this,%s,%s);",
+jsOnEventByIdF("change", varName, "return validateInt(this,%s,%s);",
        (min ? min : "\"null\""),(max ? max : "\"null\""));
-jsOnEventById("change", varName, javascript);
 if (title)
     printf(" title='%s'",title);
 printf(">\n");
@@ -1962,10 +1979,8 @@ if (width < 65)
 
 printf("<INPUT TYPE=TEXT class='inputBox' name='%s' id='%s' style='width: %dpx' value=%g",
        varName,varName,width,initialVal);
-char javascript[1024];
-safef(javascript, sizeof javascript, "return validateFloat(this,%s,%s);",
+jsOnEventByIdF("change", varName, "return validateFloat(this,%s,%s);",
        (min ? min : "\"null\""),(max ? max : "\"null\""));
-jsOnEventById("change", varName, javascript);
 if (title)
     printf(" title='%s'",title);
 printf(">\n");

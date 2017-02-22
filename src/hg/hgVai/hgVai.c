@@ -327,11 +327,7 @@ printf("</select>\n");
 char shadowVar[1024];
 safef(shadowVar, sizeof(shadowVar), "%s%s", cgiMultListShadowPrefix(), cartVar);
 cgiMakeHiddenVar(shadowVar, "1");
-//
-char javascript[1024];
-safef(javascript, sizeof javascript,
-    "$(document).ready(function(){ ddcl.setup($('#%s')[0]); });\n", cartVar);
-jsInline(javascript);
+jsInlineF("$(document).ready(function(){ ddcl.setup($('#%s')[0]); });\n", cartVar);
 }
 
 void printFilterOptions(struct trackDb *tdb)
@@ -357,8 +353,7 @@ if (sameString(tdb->type, "factorSource"))
 	   cartVar, defaultScore);
     // The dimensions of ui-dropdownchecklist multiselects are not correct when
     // the item is hidden.  So, when this filter section is made visible, reinit them.
-    char javascript[1024];
-    safef(javascript, sizeof javascript,
+    jsInlineF(
 	   "$(function(){\n"
 	   "$('tr[id^=\"%s-\"]').bind('show',\n"
 	   "  function(jqev) { \n"
@@ -368,7 +363,6 @@ if (sameString(tdb->type, "factorSource"))
 	   "  });\n"
 	   "});\n"
 	   , sectionName);
-    jsInline(javascript);
     puts("</TABLE>");
     endCollapsibleSection();
     }
@@ -1309,11 +1303,9 @@ jsInit();
 webIncludeResourceFile("jquery-ui.css");
 webIncludeResourceFile("ui.dropdownchecklist.css");
 boolean alreadyAgreed = cartUsualBoolean(cart, "hgva_agreedToDisclaimer", FALSE);
-char javascript[1024];
-safef(javascript, sizeof javascript,
+jsInlineF(
     "$(document).ready(function() { hgva.disclaimer.init(%s, hgva.userClickedAgree); });\n"
     , alreadyAgreed ? "true" : "false");
-jsInline(javascript);
 addSomeCss();
 printAssemblySection();
 

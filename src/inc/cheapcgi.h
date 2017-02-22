@@ -22,8 +22,22 @@ void jsInlineFinish();
 void jsInline(char *javascript);
 /* Add text to output file or memory structure */
 
+void jsInlineF(char *format, ...)
+/* Add javascript text to output file or memory structure */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
+
 void jsOnEventById(char *event, char *idText, char *jsText);
 /* Add js mapping for inline event */
+
+void jsOnEventByIdF(char *event, char *idText, char *format, ...)
+/* Add js mapping for inline event */
+#if defined(__GNUC__)
+__attribute__((format(printf, 3, 4)))
+#endif
+;
 
 void jsInlineReset();  
 /* used by genomeSpace to repeatedly output multiple pages to stdout */
