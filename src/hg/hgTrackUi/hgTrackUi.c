@@ -2761,11 +2761,10 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         enum trackVisibility tv =
                 hTvFromString(cartUsualString(cart, tdb->track,hStringFromTv(tdb->visibility)));
         // Don't use cheapCgi code... no name and no boolshad... just js
+	safef(id, sizeof id, "%s_check", tdb->track);
         printf("<INPUT TYPE=CHECKBOX id='%s'%s>",
-               tdb->track, (tv != tvHide?" CHECKED":""));
-	safef(id, sizeof id, "%s", tdb->track);
+               id, (tv != tvHide?" CHECKED":""));
 	jsOnEventById("change", id, "superT.childChecked(this);");
-
 
         safef(javascript, sizeof(javascript), "superT.selChanged(this)");
         struct slPair *event = slPairNew("change", cloneString(javascript));
