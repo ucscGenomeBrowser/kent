@@ -1229,6 +1229,8 @@ if (!fileExists(dyStringContents(realFileName)))
 long mtime = fileModTime(dyStringContents(realFileName));
 struct dyString *linkWithTimestamp;
 
+linkWithTimestamp = dyStringCreate("%s/%s%s?v=%ld", dyStringContents(fullDirName), baseName, extension, mtime);
+/*
 char *scriptName = cgiScriptName();
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -1252,6 +1254,7 @@ if (hIsBrowserbox() && !fileExists(dyStringContents(linkWithTimestamp)))
 if (!fileExists(dyStringContents(linkWithTimestamp)))
         errAbort("Cannot find correct version of file '%s'; this is due to an installation "
         "error\n\nError details: %s does not exist", fileName, dyStringContents(linkWithTimestamp));
+*/
 
 // Free up all that extra memory
 dyStringFree(&realFileName);
