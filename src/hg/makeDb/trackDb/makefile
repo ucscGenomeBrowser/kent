@@ -109,6 +109,7 @@ DBS = \
 	loxAfr1 loxAfr2 loxAfr3 \
 	macEug1 macEug2 \
 	macFas5 \
+	macNem1 \
 	manPen1 \
 	marVir1 \
 	melGal1 melGal5 \
