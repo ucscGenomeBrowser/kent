@@ -1,4 +1,5 @@
 track chainNetChiLan1 override
+release alpha
 priority 205.30
 matrix 16 97,-162,-37,-160,-162,100,-173,-37,-37,-173,100,-162,-160,-37,-162,97
 chainMinScore 5000
