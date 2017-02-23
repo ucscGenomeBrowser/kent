@@ -129,7 +129,8 @@ char *labelSeparator = stripEnclosingDoubleQuotes(trackDbSettingClosestToHome(tr
 if (labelSeparator == NULL)
     labelSeparator = "/";
 char *restFields[256];
-chopTabs(cloneString(bb->rest), restFields);
+if (bb->rest != NULL)
+    chopTabs(cloneString(bb->rest), restFields);
 struct dyString *dy = newDyString(128);
 boolean firstTime = TRUE;
 struct slInt *labelInt = track->labelColumns;
