@@ -359,10 +359,10 @@ dyStringPrintf(dy, "hgGateway.init();\n");
 jsInline(dy->string);
 dyStringFree(&dy);
 
-puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/lodash.3.10.0.compat.min.js\"></script>");
-puts("<script src=\"../js/cart.js\"></script>");
+jsIncludeFile("es5-shim.4.0.3.min.js", NULL);
+jsIncludeFile("es5-sham.4.0.3.min.js", NULL);
+jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
+jsIncludeFile("cart.js", NULL);
 
 webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("jquery-ui.js", NULL);
@@ -370,7 +370,8 @@ jsIncludeFile("jquery.watermarkinput.js", NULL);
 jsIncludeFile("utils.js",NULL);
 
 // Phylogenetic tree .js file, produced by dbDbTaxonomy.pl:
-char *dbDbTree = cfgOptionDefault("hgGateway.dbDbTaxonomy", "../js/dbDbTaxonomy.js");
+char *defaultDbDbTree = webTimeStampedLinkToResource("dbDbTaxonomy.js", FALSE);
+char *dbDbTree = cfgOptionDefault("hgGateway.dbDbTaxonomy", defaultDbDbTree);
 if (isNotEmpty(dbDbTree))
     printf("<script src=\"%s\"></script>\n", dbDbTree);
 
