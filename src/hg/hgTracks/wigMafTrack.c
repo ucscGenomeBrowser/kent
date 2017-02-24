@@ -983,6 +983,8 @@ static void drawScoreOverviewBig( struct track *track,  int height,
 {
 struct lm *lm = lmInit(0);
 char *fileName = trackDbSetting(track->tdb, "summary");
+if (fileName == NULL)
+    return;
 struct bbiFile *bbi =  bigBedFileOpen(fileName);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
 char *bedRow[7];
