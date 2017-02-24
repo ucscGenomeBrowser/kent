@@ -723,6 +723,7 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	if (varName == NULL)
 	    {
 	    if (!htmlTagAttributeVal(page, tag, "ONCHANGE", NULL)
+	     && !htmlTagAttributeVal(page, tag, "ID", NULL)
 	        && !sameWord(type, "SUBMIT") && !sameWord(type, "CLEAR")
 	    	&& !sameWord(type, "BUTTON") && !sameWord(type, "RESET")
 		&& !sameWord(type, "IMAGE"))
