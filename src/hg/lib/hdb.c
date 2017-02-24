@@ -2508,6 +2508,32 @@ char *hScientificName(char *database)
 return hDbDbOptionalField(database, "scientificName");
 }
 
+char *hOrgShortName(char *org)
+/* Get the short name for an organism.  Returns NULL if org is NULL.
+ * WARNING: static return */
+{
+static int maxOrgSize = 7;
+static char orgNameBuf[128];
+if (org == NULL)
+    return NULL;
+strncpy(orgNameBuf, org, sizeof(orgNameBuf)-1);
+orgNameBuf[sizeof(orgNameBuf)-1] = '\0';
+char *shortOrg = firstWordInLine(orgNameBuf);
+if (strlen(shortOrg) > maxOrgSize)
+    shortOrg[maxOrgSize] = '\0';
+return shortOrg;
+}
+
+char *hOrgShortForDb(char *db)
+/* look up the short organism scientific name given an organism db.
+ * WARNING: static return */
+{
+char *org = hScientificName(db);
+char *shortOrg = hOrgShortName(org);
+freeMem(org);
+return shortOrg;
+}
+
 char *hHtmlPath(char *database)
 /* Return /gbdb path name to html description for this database */
 /* Return NULL if unknown database */
@@ -4420,9 +4446,7 @@ safef(queryBuf, sizeof queryBuf, query, cladeTable(),  genomeCladeTable(), dbDbT
 struct sqlConnection *conn = hConnectCentral();
 struct slPair *nativeClades = sqlQuickPairList(conn, queryBuf);
 hDisconnectCentral(&conn);
-
 struct slPair *trackHubClades = trackHubGetCladeLabels();
-
 return slCat(nativeClades, trackHubClades);
 }
 
@@ -4445,6 +4469,7 @@ else
                           ", orderKey "
                           "from %s d,%s g "
 			  "where d.genome=g.genome and g.clade = '%s' "
+                          "group by genome " // necessary since we added orderKey to SELECT list
 			  "order by orderKey", dbDbTable(), genomeCladeTable(), clade);
     // Although clade and db menus have distinct values vs. labels, we actually use the
     // same strings for values and labels in the genome menu!  So we get a plain list

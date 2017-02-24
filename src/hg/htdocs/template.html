@@ -1,54 +1,177 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<HTML>
-<HEAD>
-	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<TITLE>UCSC Genome Browser: TITLE HERE</TITLE>
-	<LINK REL="STYLESHEET" HREF="style/HGStyle.css">
-</HEAD>
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
-<A NAME="TOP"></A>
+<!DOCTYPE html>
+
+<!-- template.html: Example HTML for a Genome Browser static page -->
+
+<!-- Style recommendations
+1. Capitalization: use only lowercase for HTML element names, attributes and values
+2. Quotes: Use double quotes for attribute values
+3. Whitespace: Use a new line for every block list or table element
+4. Indentation: Indent every child element 2 spaces
+5. Special characters: Don't use entity references (set editor to UTF-8), except < &
+6. Limit lines to a maximum of 100 characters
+-->
+
+<!-- Page header -->
+<!--#set var="TITLE" value="UCSC Genome Browser: Document Styles" -->
+<!--#set var="ROOT" value="." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<!-- Page content -->
+<h1>Sample Genome Browser Static Page (h1)</h1>
+<p>
+This is a standard paragraph (&quot;p&quot; tag) of explanatory text.
+The next part of the page demonstrates how to create a multi-column layout 
+using the grid layout feature of bootstrap.css, a widely used stylesheet which is now 
+included in the browser static pages.</p>
+
+<!-- Sections -->
+<!-- In this example, two of same size, so use 6 columns of 12 total in grid -->
+
+<div class="row">
+
+<!-- Left column -->
+  <div class="col-md-6">
+    <h2>Page section (h2)</h2>
+    <p>
+    This is one of two subsections, formatted as equal-sized columns.
+    The bootstrap grid contains 12 columns; column widths are specified using 
+    classes &quot;col-md-1&quot; through &quot;col-md-12&quot;. 
+    This example contains two divs, each assigned class &quot;col-md-6&quot;, within a 
+    &quot;row&quot; div.</p>
+    <p>
+    NOTE: The two columns are displayed only on wide screens. On small screens, the sections will 
+    be stacked vertically (a feature of bootstrap responsive layout).</p>
 
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="images/title.jpg"></TH></TR>
+    <h3>Subsection (h3)</h3>
+    <p>
+    This is the next level, a subsection. Use an &quot;h3&quot; tag for this. To structure content
+    below this level use a list, table, or titled paragraph:</p>
 
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="./cgi-bin/hgMenubar"--></TD></TR>
-<!--Content Tables------------------------------------------------------->
-<TR><TD COLSPAN=2 CELLPADDING=10>	
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp;  INSERT YOUR TITLE HERE   </b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
+    <h6>Titled paragraph</h6>
+    <p>
+    Use the &quot;h6&quot; tag at any level in the section hierarchy to precede a paragraph with a 
+    bolded title.</p>
 
-INSERT YOUR TEXT HERE <BR>	
-<FONT COLOR="#006666"><B> THIS IS THE COLOR I USE FOR HEADERS </B></FONT>
+    <h3>Lists</h3>
+    <p>
+    The description of lists below is formatted as an HTML definition list. Use this format when 
+    defining terms or phrases.  (You will not see this much in our current pages -- instead, this 
+    type of text was usually styled ad-hoc using &quot;strong&quot; and &quot;br&quot; tags).</p>
+    <dl>
+      <dt>Definition list</dt>
+      <dd>
+      Use the &quot;dl&quot; tag to enclose the full list, then &quot;dt&quot; for each item term, 
+      and &quot;dd&quot; for each item definition.</dd>
+      <dt>Bulleted list</dt>
+      Use the &quot;ul&quot; (unordered list tag) to enclose the full list, then &quot;li&quot; for 
+      each list item.
+      <dd>
+      <dd>
+      <dt>Numbered list</dt>
+      <dd>
+      Use the &quot;ol&quot; (ordered list) tag to enclose the full list, then &quot;li&quot; for 
+      each list item.
+      </dd>
+    </dl>
+  </div>
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-	
-<!--START SECOND SECTION ------------------------------------------------------->
-<BR>
+<!-- Right column -->
+  <div class="col-md-6">
+    <h2>Another section</h2>
 
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp;  INSERT NEXT TITLE HERE   </b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+<!-- Subsections -->
+      <h3>List Examples</h3>
+        <p>
+        Here is a bulleted list (&quot;ul&quot; and &quot;li&quot; elements). To suppress the bullet
+        add the class &quot;gbsNoBullet&quot; to the &quot;ul&quot; tag.</p>
+<!-- Bulleted list example -->
+      <ul>
+        <li>red</li>
+        <li>white</li>
+        <li>blue</li>
+      </ul>
 
-MORE TEXT HERE <BR>	
+<!-- Numbered list example -->
+    <p>
+    Here is a numbered list (&quot;ol&quot; and &quot;li&quot; elements):
+    </p>
+    <ol>
+      <li>
+      <strong>chrom</strong> - The name of the chromosome (e.g. chr3, chrY, chr2_random) or 
+      scaffold (e.g. scaffold10671).</li>
+      <li>
+      <strong>chromStart</strong> - The starting position of the feature in the chromosome or 
+      scaffold.  The first base in a chromosome is numbered 0.</li>
+      <li>
+      <strong>chromEnd</strong> - The ending position of the feature in the chromosome or scaffold. 
+      The <em>chromEnd</em> base is not included in the display of the feature. 
+      For example, the first 100 bases of a chromosome are defined 
+      as <em>chromStart=0, chromEnd=100</em>, and span the bases numbered 0-99.</li>
+    </ol>
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECOND SECTION ---------------------------------------------------------->
+    <h3>Tables</h3>
+    <p>
+    Here is a table (&quot;table&quot;, &quot;tr&quot;, &quot;th&quot;, and &quot;td&quot; 
+    elements):</p>
 
-</TD></TR></TABLE>
-</BODY></HTML>
+<!-- Table example -->
+    <table>
+      <tr>
+        <th>Type</th>
+        <th>Total</th>
+      </tr>
+      <tr>
+        <td>Chromosomes</td>
+        <td>261</td>
+      </tr>
+      <tr>
+        <td>Haplotypes</td>
+        <td>261</td>
+      </tr>
+      <tr>
+        <td>Unlocalized contigs</td>
+        <td>1270</td>
+      </tr>
+    </table>
+    <p>
+    To horizontally center the text in each table cell, add the class &quot;gbsCenterText&quot; to 
+    the table element.</p>
+
+<!-- Preformatted code example -->
+    <h3>Code</h3>
+    <p>
+    Here is some code in a preformatted section (&quot;pre&quot; and &quot;code&quot; tags):</p>
+
+<pre><code>sudo -i
+bash browserSetup.sh install</code></pre>
+
+    <p>
+    And here is some text with a <code>bit of code</code> embedded (just the &quot;code&quot; 
+    tag).</p>
+
+  </div> <!-- end column -->
+</div>   <!-- end row -->
+
+<h2>Section with a picture and caption</h2>
+<p>
+Use the &quot;img&quot; tag to include the picture file, which is typically in .jpg or .png format.
+Images should normally have their &quot;width&quot; and &quot;height' attributes set in the
+&quot;img&quot; element. 
+The caption is a &quot;p&quot; element, which is assigned the &quot;gbsCaption&quot; class.
+To center the image, wrap it in a 'div' or 'p' element, and add the
+bootstrap &quot;text-center&quot; class to the wrapper element (also adding to a caption if present).
+</p>
+<p>
+In the special case where an image is used as a character/symbol embedded inline in
+a paragraph, add the class &quot;gbsInlineImg&quot; to the image tag, i.e. here's the wrench 
+(<img class="gbsInlineImg" src="images/wrench.png">).</p>
+<p class='text-center'>
+  <img class='text-center' src="images/gbstaff16.jpg" alt="Genome Browser staff" width="499" height="299"> 
+  <p class='gbsCaption text-center'>Browser staff in native habitat.</p>
+</p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
+

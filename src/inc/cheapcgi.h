@@ -13,6 +13,37 @@
 #include "hash.h"
 #endif
 
+
+//============ javascript inline-separation routines ===============
+
+void jsInlineFinish();
+/* finish outputting accumulated inline javascript */
+
+void jsInline(char *javascript);
+/* Add text to output file or memory structure */
+
+void jsInlineF(char *format, ...)
+/* Add javascript text to output file or memory structure */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
+
+void jsOnEventById(char *event, char *idText, char *jsText);
+/* Add js mapping for inline event */
+
+void jsOnEventByIdF(char *event, char *idText, char *format, ...)
+/* Add js mapping for inline event */
+#if defined(__GNUC__)
+__attribute__((format(printf, 3, 4)))
+#endif
+;
+
+void jsInlineReset();  
+/* used by genomeSpace to repeatedly output multiple pages to stdout */
+
+//============ END of javascript inline-separation routines ===============
+
 #define COLOR_BG_DEFAULT         "#FFFEE8"
 #define COLOR_BG_ALTDEFAULT      "#FFF9D2"
 #define COLOR_BG_DEFAULT_DARKER  "#FCECC0"
@@ -243,7 +274,7 @@ void cgiMakeButtonWithOnClick(char *name, char *value, char *msg, char *onClick)
 void cgiMakeButton(char *name, char *value);
 /* Make 'submit' type button. */
 
-void cgiMakeOnClickButton(char *command, char *value);
+void cgiMakeOnClickButton(char *id, char *command, char *value);
 /* Make 'push' type button with client side onClick (java)script. */
 
 void cgiMakeOnClickSubmitButton(char *command, char *name, char *value);
@@ -258,12 +289,12 @@ void cgiMakeRadioButton(char *name, char *value, boolean checked);
  * same name but different values.   The default selection should be
  * sent with checked on. */
 
-void cgiMakeOnClickRadioButton(char *name, char *value, boolean checked,
-                                        char *command);
-/* Make radio type button with onClick command.
+void cgiMakeOnEventRadioButtonWithClass(char *name, char *value, boolean checked,
+    char *class, char *event, char *command);
+/* Make radio type button with an event and an optional class attribute.
  *  A group of radio buttons should have the
  * same name but different values.   The default selection should be
- * sent with checked on. */
+ * sent with checked on. If class is non-null it is included. */
 
 void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id);
 /* Make check box - can be called directly, though it was originally meant
@@ -289,6 +320,9 @@ void cgiMakeCheckBoxEnabled(char *name, boolean checked, boolean enabled);
 void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript);
 /* Make check box with ID and javascript. */
 
+void cgiMakeCheckBoxIdAndMore(char *name, boolean checked, char *id, char *moreHtml);
+/* Make check box with ID and extra (non-javascript) html. */
+
 void cgiMakeCheckBoxFourWay(char *name, boolean checked, boolean enabled, char *id, 
                             char *classes, char *moreHtml);
 /* Make check box - with fourWay functionality (checked/unchecked by enabled/disabled
@@ -305,7 +339,7 @@ void cgiMakeTextVar(char *varName, char *initialVal, int charSize);
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
 
-void cgiMakeTextVarWithExtraHtml(char *varName, char *initialVal, int width, char *extra);
+void cgiMakeTextVarWithJs(char *varName, char *initialVal, int width, char *event, char *javascript);
 /* Make a text control filled with initial value. */
 
 void cgiMakeOnKeypressTextVar(char *varName, char *initialVal, int charSize,
@@ -359,7 +393,7 @@ void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
 
 void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
                                                 int menuSize, char *checked, char *class,
-                                                char *style,char *javascript);
+                                                char *style, struct slPair *events);
 /* Make a drop-down list with names, text class, style and javascript. */
 
 void cgiMakeDropListClassWithStyle(char *name, char *menu[],
@@ -371,7 +405,13 @@ void cgiMakeDropListWithVals(char *name, char *menu[], char *values[],
 /* Make a drop-down list with names and values. In this case checked
  * corresponds to a value, not a menu. */
 
-void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize, char *checked, char *extraAttribs);
+void cgiMakeDropListFullExt(char *name, char *menu[], char *values[],
+                         int menuSize, char *checked, char *event, char *javascript, char *style, char *class);
+/* Make a drop-down list with names and values.
+ * Optionally include values for style and class */
+
+void cgiMakeDropListFull(char *name, char *menu[], char *values[],
+                         int menuSize, char *checked, char *event, char *javascript);
 /* Make a drop-down list with names and values. */
 
 void cgiDropDownWithTextValsAndExtra(char *name, char *text[], char *values[],
@@ -379,7 +419,7 @@ void cgiDropDownWithTextValsAndExtra(char *name, char *text[], char *values[],
 /* Make a drop-down list with both text and values. */
 
 char *cgiMakeSelectDropList(boolean multiple, char *name, struct slPair *valsAndLabels,
-                            char *selected, char *anyAll,char *extraClasses, char *extraHtml);
+     char *selected, char *anyAll,char *extraClasses, char *event, char *javascript, char *style, char *id);
 // Returns allocated string of HTML defining a drop-down select
 // (if multiple, REQUIRES ui-dropdownchecklist.js)
 // valsAndLabels: val (pair->name) must be filled in but label (pair->val) may be NULL.
@@ -387,14 +427,14 @@ char *cgiMakeSelectDropList(boolean multiple, char *name, struct slPair *valsAnd
 //           If null and anyAll not NULL, that will be selected
 // anyAll: if not NULL is the string for an initial option. It can contain val and label,
 //         delimited by a comma
-// extraHtml: if not NULL contains id, javascript calls and style.
-//            It does NOT contain class definitions
-#define cgiMakeMultiSelectDropList(name,valsAndLabels,selected,anyAll,extraClasses,extraHtml) \
+// event: click, etc.
+// javacript: what to execute when the event happens.
+#define cgiMakeMultiSelectDropList(name,valsAndLabels,selected,anyAll,extraClasses,event,javascript,style,id) \
         cgiMakeSelectDropList(TRUE,(name),(valsAndLabels),(selected),(anyAll),\
-                              (extraClasses),(extraHtml))
-#define cgiMakeSingleSelectDropList(name,valsAndLabels,selected,anyAll,extraClasses,extraHtml) \
+                              (extraClasses),(event),(javascript),(style),(id))
+#define cgiMakeSingleSelectDropList(name,valsAndLabels,selected,anyAll,extraClasses,event,javascript,style,id) \
         cgiMakeSelectDropList(FALSE,(name),(valsAndLabels),(selected),(anyAll),\
-                              (extraClasses),(extraHtml))
+                              (extraClasses),(event),(javascript),(style),(id))
 
 void cgiMakeMultList(char *name, char *menu[], int menuSize, struct slName *checked, int length);
 /* Make a list of names which can have multiple selections.

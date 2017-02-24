@@ -854,13 +854,13 @@ if (list != NULL)
     printf("<TABLE><TR>");
     printf("<TD>");
     modBaseAnchor(spAcc);
-    printf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s\"></A></TD>", spAcc);
+    printf("\n<IMG SRC=\"https://modbase.compbio.ucsf.edu/modbase-cgi/image/modbase.jpg?database_id=%s\"></A></TD>", spAcc);
     printf("<TD>");
     modBaseAnchor(spAcc);
-    printf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=x&degree=90\"></A></TD>", spAcc);
+    printf("\n<IMG SRC=\"https://modbase.compbio.ucsf.edu/modbase-cgi/image/modbase.jpg?database_id=%s&axis=x&degree=90\"></A></TD>", spAcc);
     printf("<TD>");
     modBaseAnchor(spAcc);
-    printf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=y&degree=90\"></A></TD>", spAcc);
+    printf("\n<IMG SRC=\"https://modbase.compbio.ucsf.edu/modbase-cgi/image/modbase.jpg?database_id=%s&axis=y&degree=90\"></A></TD>", spAcc);
     printf("</TR><TR>\n");
     printf("<TD ALIGN=CENTER>Front</TD>");
     printf("<TD ALIGN=CENTER>Top</TD>");

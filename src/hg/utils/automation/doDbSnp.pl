@@ -23,6 +23,7 @@ my $stepper = new HgStepManager(
       { name => 'load',       func => \&loadTables },
       { name => 'filter',     func => \&filterTables },
       { name => 'coding',     func => \&codingDbSnp },
+      { name => 'bigBed',     func => \&bigBed },
     ]
 			       );
 
@@ -83,6 +84,7 @@ Automates our processing of dbSNP files into our snpNNN track:
     load:       Load snpNNN* tables into our database.
     filter:     Extract Common, Mult and Flagged sets (may be empty).
     coding:     Process dbSNP's functional annotations into snpNNNCodingDbSnp.
+    bigBed:     Create a bed4 bigBed for use by hgVai.
 To see detailed information about what should appear in config.ra,
 run \"$base -help\".
 ";
@@ -542,7 +544,8 @@ sub tryToMakeLiftUpFromContigInfo {
   my ($missingCount, $liftUpCount) = (0, 0);
   while (<$CI>) {
     chomp;  my @w = split("\t");
-    my ($contig, $chr, $chromStart, $chromEnd, $groupTerm) = ($w[2], $w[5], $w[6], $w[7], $w[10]);
+    my ($contig, $chr, $chromStart, $chromEnd, $orient, $groupTerm) = ($w[2], $w[5], $w[6], $w[7], $w[8], $w[10]);
+    my $strand = $orient eq "1" ? "-" : "+";
     if ($chromStart ne "") {
       $chr = "chrM" if ($chr eq "MT");
       if (! exists $chromSizes->{$chr}) {
@@ -557,7 +560,7 @@ sub tryToMakeLiftUpFromContigInfo {
       }
       my $oldSize = $chromEnd+1 - $chromStart;
       my $newSize = $chromSizes->{$chr};
-      print $LU join("\t", $chromStart, $contig, $oldSize, $chr, $newSize) . "\n";
+      print $LU join("\t", $chromStart, $contig, $oldSize, $chr, $newSize, $strand) . "\n";
       $liftUpCount++;
     } elsif ($groupTerm eq 'PATCHES') {
       $chr = "no chr" if (! $chr);
@@ -573,7 +576,7 @@ sub tryToMakeLiftUpFromContigInfo {
       } else {
         $ucscSeqName = "chrUn_" . $acc . "v" . $accVersion;
       }
-      print $LU join("\t", 0, $contig, $size, $ucscSeqName, $size) . "\n";
+      print $LU join("\t", 0, $contig, $size, $ucscSeqName, $size, $strand) . "\n";
       $liftUpCount++;
     } else {
       $chr = "no chr" if (! $chr);
@@ -702,7 +705,8 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
 	} else {
 	  # Yay!  We found a mapping.  Let this be the common case.
 	  my $size = $chromSizes->{$ucscName};
-	  print $LU join("\t", 0, $rsaTrimmed, $size, $ucscName, $size) . "\n";
+      my $strand = "+";
+	  print $LU join("\t", 0, $rsaTrimmed, $size, $ucscName, $size, $strand) . "\n";
 	  $liftUpCount++;
 	}
       } else {
@@ -896,6 +900,7 @@ sub loadDbSnp {
     echo \$tmpDir > $runDir/workingDir
 
     # load dbSNP database tables into local mysql
+    hgsql -e 'drop database if exists $tmpDb'
     hgsql -e 'create database $tmpDb'
     hgsql $tmpDb < $runDir/schema/table.sql
 
@@ -916,7 +921,8 @@ sub loadDbSnp {
                       'select count(*) from $ContigInfo where orient != 0;'`
     if (\$badCount > 0) then
       echo "found \$badCount contigs in $ContigInfo with orient != 0"
-      exit 1
+      echo "Going to try continuing anyway, marking those as - strand in the lift spec"
+    #  exit 1
     endif
 
     # $ContigLoc is huge, and we want only the reference contig mappings.
@@ -994,8 +1000,8 @@ sub addToDbSnp {
   my $whatItDoes =
 "It pre-processes functional annotations into a new table $tmpDb.ucscFunc,
 pre-processes submitted snp submitter handles into a new table
-$tmpDb.ucscHandles,
-and extracts info from fasta headers into a new table $tmpDb.ucscGnl.";
+$tmpDb.ucscHandles, and extracts info from fasta headers into a new table
+$tmpDb.ucscGnl.";
 
   my $bossScript = new HgRemoteScript("$runDir/addToDbSnp.csh",
 				      $workhorse, $runDir, $whatItDoes, $CONFIG);
@@ -1190,9 +1196,14 @@ in $snpBase.";
     cd \$tmpDir
 
     # Big leftie join to bring together all of the columns that we want in $snpBase,
-    # using all of the available joining info:
-    hgsql $tmpDb -NBe \\
-     'SELECT ci.contig_acc, cl.asn_from, cl.asn_to, cl.snp_id, cl.orientation, cl.allele, \\
+    # using all of the available joining info.  asn_to is incremented in the select
+    # output (for 0-based, half-open coords) so that liftUp works properly on reversed
+    # contigs; the compensatory subtraction is executed after liftUp happens below.  Without
+    # BED 6 formated input, liftUp is unable to adjust the strand correctly, so that is also
+    # handled in the select:
+     hgsql $tmpDb -NBe \\
+     'SELECT ci.contig_acc, cl.asn_from, cl.asn_to+1, cl.snp_id, \\
+             if (ci.orient = 1, 1 - cl.orientation, cl.orientation), cl.allele, \\
              ug.observed, ug.molType, ug.class, \\
              s.validation_status, s.avg_heterozygosity, s.het_se, \\
              uf.fxn_class, cl.loc_type, mi.weight, cl.phys_pos_from, \\
@@ -1219,23 +1230,24 @@ in $snpBase.";
 #*** probably send warning to file instead of stderr, since we want to add to endNotes:
     $catOrGrepOutMito ucscNcbiSnp.ctg.bed \\
     | awk -F"\\t" 'BEGIN{OFS="\\t";} \\
-           \$2 == \$3 && \$14 == 1 {\$14=2; \\
+           \$2 == \$3 - 1 && \$14 == 1 {\$14=2; \\
                                  if (numTweaked < 10) {print \$4 > "/dev/stderr";} \\
                                  numTweaked++;}  {print;} \\
            END{print numTweaked, "single-base, locType=range, tweaked locType" > "/dev/stderr";}' \\
 _EOF_
 		  );
+
   if ($liftUp) {
     # If liftUp is a relative path, prepend $runDir/
     $liftUp = "$runDir/$liftUp" if ($liftUp !~ /^\//);
     $bossScript->add(<<_EOF_
-    | liftUp ucscNcbiSnp.bed \\
-        $liftUp warn stdin
+    | liftUp -type=.bed3 stdout $liftUp warn stdin \\
+        | tawk '{\$3 -= 1; print;}' > ucscNcbiSnp.bed 
 _EOF_
 		    );
   } else {
     $bossScript->add(<<_EOF_
-      > ucscNcbiSnp.bed
+    | tawk '{\$3 -= 1; print;}' > ucscNcbiSnp.bed
 _EOF_
 		    );
   }
@@ -1449,7 +1461,7 @@ sub codingDbSnp {
     cut -f 6 ncbiFuncAnnotationsFixed.txt \\
     | sort -n | uniq -c
     $Bin/collectNcbiFuncAnnotations.pl ncbiFuncAnnotationsFixed.txt \\
-    | liftUp ${snpBase}CodingDbSnp.bed $liftUp warn stdin
+    | liftUp -type=.bed3 ${snpBase}CodingDbSnp.bed $liftUp warn stdin
     hgLoadBed $db ${snpBase}CodingDbSnp -sqlTable=\$HOME/kent/src/hg/lib/snp125Coding.sql \\
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \\
       ${snpBase}CodingDbSnp.bed
@@ -1458,6 +1470,49 @@ _EOF_
   $bossScript->execute();
 } # codingDbSnp
 
+
+#########################################################################
+# * step: bigBed [dbHost]
+
+sub bigBed {
+  my $runDir = "$assemblyDir";
+  my $whatItDoes = "It creates a bed4 bigBed file of SNP positions for use by hgVai.";
+  my $bossScript = new HgRemoteScript("$runDir/bigBed.csh",
+				      $dbHost, $runDir, $whatItDoes, $CONFIG);
+  my $chromSizes = "$HgAutomate::clusterData/$db/chrom.sizes";
+  if (! -e $chromSizes) {
+    die "*** Can't find file $chromSizes, so can't create bigBed file";
+  }
+  my $destDir = "$HgAutomate::gbdb/$db/vai";
+  $bossScript->add(<<_EOF_
+    #*** HgAutomate should probably have a sub that generates these lines:
+    if (-d /data/tmp) then
+      setenv TMPDIR /data/tmp
+    else
+      if (-d /tmp) then
+        setenv TMPDIR /tmp
+      else
+        echo "Can't find TMPDIR"
+        exit 1
+      endif
+    endif
+
+    # Make bigBed with just the first 4 columns of the snp table
+    zcat $snpBase.bed.gz \\
+    | cut -f 1-4 \\
+    | sort -k1,1 -k2,2n \\
+      > \$TMPDIR/$db.$snpBase.bed4
+    bedToBigBed \$TMPDIR/$db.$snpBase.bed4 $chromSizes $snpBase.bed4.bb
+    # Install in location that hgVai will check:
+    mkdir -p $destDir
+    rm -f $destDir/$snpBase.bed4.bb
+    ln -s `pwd`/$snpBase.bed4.bb $destDir/
+    # Clean up
+    rm \$TMPDIR/$db.$snpBase.bed4
+_EOF_
+  );
+  $bossScript->execute();
+} # bigBed
 
 #########################################################################
 # main

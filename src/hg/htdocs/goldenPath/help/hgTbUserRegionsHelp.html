@@ -1,25 +1,16 @@
-<P>
-Region definitions are ordinary 3- or 4-field bed file format.  For example:
-</P>
-<PRE>
-#  comment lines can be included starting with the # symbol
+<p>
+Region definitions are ordinary 3- or 4-field bed file format. For example:</p>
+<pre>#  comment lines can be included starting with the # symbol
 chrX   151073054   151173000
 chrX   151183000   151190000  optionalRegionName
 chrX   151283000   151290000
-chrX   151383000   151390000
-</PRE>
-
-<P>
-There is a limit of 1,000 defined regions.  Using the upload
-file function will replace any existing regions.  The fourth
-field, name, is optional and for notation purposes only, it is
-not used in the table browser.  These are 0-relative coordinates,
-first base on a chromosome is 0.
-</P>
-<P>
+chrX   151383000   151390000 </pre>
+<p>
+There is a limit of 1,000 defined regions. Using the upload file function will replace any existing 
+regions. The fourth field, name, is optional and for notation purposes only; it is not used in the 
+Table Browser. These are 0-relative coordinates, i.e. the first base on a chromosome is at
+position 0.</p>
+<p>
 Coordinates can also be entered in the form:
-<PRE>
-chrX:151,283,001-151,290,000  optionalRegionName
-</PRE>
-These are 1-relative coordinates, first base on a chromosome is 1.
-</P>
+<pre>chrX:151,283,001-151,290,000  optionalRegionName </pre>
+These are 1-relative coordinates, i.e. the first base on a chromosome is at position 1.</p>

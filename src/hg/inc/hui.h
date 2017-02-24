@@ -204,25 +204,25 @@ char *hStringFromTv(enum trackVisibility vis);
 #define TV_DROPDOWN_STYLE "width: 70px"
 
 void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
-                                     boolean canPack, char *class, char *visOnly, char *extra);
+                                     boolean canPack, char *class, char *visOnly, struct slPair *events);
 /* Make track visibility drop down for varName with style class,
 	and potentially limited to visOnly */
 #define hTvDropDownClassVisOnly(varName,vis,canPack,class,visOnly) \
         hTvDropDownClassVisOnlyAndExtra(varName,vis,canPack,class,visOnly,NULL)
 
 void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boolean canPack,
-                                    char *class,char *javascript);
+                                    char *class, struct slPair *events);
 /* Make track visibility drop down for varName with style class and javascript */
 #define hTvDropDownClass(varName,vis,canPack,class) \
-        hTvDropDownClassWithJavascript((varName),(vis),(canPack),(class),"")
+        hTvDropDownClassWithJavascript((varName),(vis),(canPack),(class),NULL)
 #define hTvDropDownWithJavascript(varName,vis,canPack,javascript) \
         hTvDropDownClassWithJavascript((varName),(vis),(canPack),"normalText",(javascript))
 #define hTvDropDown(varName,vis,canPack) \
-        hTvDropDownClassWithJavascript((varName),(vis),(canPack),"normalText","")
+        hTvDropDownClassWithJavascript((varName),(vis),(canPack),"normalText",NULL)
 
 #define SUPERTRACK_DEFAULT_VIS  "hide"
 
-void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, char *extra);
+void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, struct slPair *events);
 #define hideShowDropDown(varName,show,class) \
         hideShowDropDownWithClassAndExtra(varName,show,class,NULL)
 /* Make hide/show dropdown for varName */
@@ -961,7 +961,7 @@ boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
 /* If metadata from metaTbl exists, create a link that will allow toggling it's display */
 
 boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
-                                    int visibleChild,char *extra);
+                                    int visibleChild, struct slPair *events);
 /* Displays hide/show dropdown for supertrack.
  * Set visibleChild to indicate whether 'show' should be grayed
  * out to indicate that no supertrack members are visible:
@@ -1035,6 +1035,9 @@ void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb);
 
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
 /* UI for the wiggle track */
+
+void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
+/* Put up a choice for labels. */
 
 #define NO_SCORE_FILTER  "noScoreFilter"
 #define  SCORE_FILTER      "scoreFilter"
@@ -1132,7 +1135,7 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
                      boolean boxed);
 // Put up UI for filtering wgEnocde peaks based on score, Pval and Qval
 
-void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+void genePredCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 // Put up genePred-specific controls
 
 void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title, boolean boxed, char *db);
@@ -1424,4 +1427,6 @@ char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* 
     int winEnd, char *track, boolean encode);
 /* replace $$ in url with idInUrl. Supports many other wildchards */
 
+struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as);
+/* Build up a hash of a list of fields in an AS file. */
 #endif /* HUI_H */

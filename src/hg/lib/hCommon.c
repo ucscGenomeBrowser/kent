@@ -341,7 +341,7 @@ static void hDumpStackAbortHandler()
 if (!stackDumpDisabled)
     {
     stackDumpDisabled = TRUE;
-    popWarnHandler(); // remove us from the stack
+    popAbortHandler(); // remove us from the stack
     dumpStack("\nStack dump:");
     // continue with next abort handler
     noWarnAbort();
@@ -371,7 +371,7 @@ if (hDumpStackEnabled())
     }
 }
 
-void hDumpStackPopAbortHandler(void)
+void hDumpStackPopAbortHandler()
 /* pop the stack dump abort handler from the stack if it's enabled */
 {
 if (hDumpStackEnabled() && !stackDumpDisabled)

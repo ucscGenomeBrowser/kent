@@ -1209,11 +1209,6 @@ void halSnakeLoadItems(struct track *tg)
 unsigned showSnpWidth = cartOrTdbInt(cart, tg->tdb, 
     SNAKE_SHOW_SNP_WIDTH, SNAKE_DEFAULT_SHOW_SNP_WIDTH);
 
-struct hash *dbAliasHash = NULL;  // create later when needed
-char * dbAliasList = trackDbSetting(tg->tdb, "dbAliasList");
-if (dbAliasList)
-    dbAliasHash = hashFromString(dbAliasList);
-
 char * chromAlias = NULL;	// create later when needed
 char * chromAliasFile = trackDbSetting(tg->tdb, "searchTrix");
 if (chromAliasFile)
@@ -1246,12 +1241,6 @@ if (errCatchStart(errCatch))
     safef(codeVarName, sizeof codeVarName, "%s.coalescent", tg->tdb->track);
     char *coalescent = cartOptionalString(cart, codeVarName);
     char *otherDbName = trackHubSkipHubName(database);
-    if (dbAliasHash)
-       {
-       struct hashEl* alias = hashLookup(dbAliasHash, otherDbName);
-       if (alias)
-          otherDbName = cloneString((char *)alias->val);
-       }
     struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, otherDbName, aliasName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies, coalescent, &errString);
 
     // did we get any blocks from HAL

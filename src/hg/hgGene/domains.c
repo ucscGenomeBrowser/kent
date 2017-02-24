@@ -210,13 +210,13 @@ if (list != NULL)
     hPrintf("<TABLE><TR>");
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);
-    hPrintf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s\"></A></TD>", swissProtAcc);
+    hPrintf("\n<IMG SRC=\"https://modbase.compbio.ucsf.edu/modbase-cgi/image/modbase.jpg?database_id=%s\"></A></TD>", swissProtAcc);
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);
-    hPrintf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=x&degree=90\"></A></TD>", swissProtAcc);
+    hPrintf("\n<IMG SRC=\"https://modbase.compbio.ucsf.edu/modbase-cgi/image/modbase.jpg?database_id=%s&axis=x&degree=90\"></A></TD>", swissProtAcc);
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);
-    hPrintf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=y&degree=90\"></A></TD>", swissProtAcc);
+    hPrintf("\n<IMG SRC=\"https://modbase.compbio.ucsf.edu/modbase-cgi/image/modbase.jpg?database_id=%s&axis=y&degree=90\"></A></TD>", swissProtAcc);
     hPrintf("</TR><TR>\n");
     hPrintf("<TD ALIGN=CENTER>Front</TD>");
     hPrintf("<TD ALIGN=CENTER>Top</TD>");

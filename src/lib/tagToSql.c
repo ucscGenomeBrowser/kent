@@ -9,7 +9,7 @@
 #include "tagStorm.h"
 #include "tagToSql.h"
 
-static struct tagTypeInfo *tagTypeInfoNew(char *name)
+struct tagTypeInfo *tagTypeInfoNew(char *name)
 /* Return initialized new tagTypeInfo */
 {
 struct tagTypeInfo *tti;
@@ -19,6 +19,17 @@ tti->isUnsigned = tti->isInt = tti->isNum = TRUE;
 tti->minVal = BIGDOUBLE;
 tti->maxVal = -BIGDOUBLE;
 return tti;
+}
+
+void tagTypeInfoFree(struct tagTypeInfo **pTti)
+/* Free up a tagTypeInfo */
+{
+struct tagTypeInfo *tti = *pTti;
+if (tti != NULL)
+    {
+    freeMem(tti->name);
+    freez(pTti);
+    }
 }
 
 static int tagTypeInfoCmpName(const void *va, const void *vb)
@@ -52,7 +63,7 @@ for (tti = list; tti != NULL; tti = tti->next)
 carefulClose(&f);
 }
 
-static void tagTypeInfoAdd(struct tagTypeInfo *tti, char *val)
+void tagTypeInfoAdd(struct tagTypeInfo *tti, char *val)
 /* Fold in information about val into tti. */
 {
 int len = strlen(val);

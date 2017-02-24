@@ -564,7 +564,7 @@ struct track *chromIdeoTrack(struct track *trackList)
 struct track *track;
 for(track = trackList; track != NULL; track = track->next)
     {
-    if(sameString(track->track, "cytoBandIdeo"))
+    if(sameString(trackHubSkipHubName(track->track), "cytoBandIdeo"))
 	{
 	if (hTableExists(database, track->table))
 	    return track;
@@ -670,9 +670,9 @@ else
 //  updating the warning-insertion target name.
 if(doIdeo)
     {
-    char startBand[16];
-    char endBand[16];
-    char title[64];  // was 32
+    char startBand[1024];
+    char endBand[1024];
+    char title[1024];
     startBand[0] = endBand[0] = '\0';
     fillInStartEndBands(ideoTrack, startBand, endBand, sizeof(startBand));
     /* Start up client side map. */
@@ -726,7 +726,10 @@ if(doIdeo)
     hvGfxClose(&hvg);
     /* Finish map. */
     if (!psOutput)
+	{
         hPrintf("</MAP>\n");
+	jsInline("$('area.cytoBand').click(function(){return false;});\n");
+	}
     }
 
 // create an empty hidden-map place holder which can change dynamically with ajax callbacks.
@@ -4609,7 +4612,7 @@ for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatT
             warn("Image is over %s pixels high (%d pix) at the following track which is now "
                  "hidden:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
                  (flatTrack->next != NULL ?
-                      "<BR>Additional tracks may have also been hidden at this zoom level." : ""));
+                      "\nAdditional tracks may have also been hidden at this zoom level." : ""));
         safeHeight = FALSE;
 	struct track *winTrack;
 	for(winTrack=track;winTrack;winTrack=winTrack->nextWindow)
@@ -6471,6 +6474,7 @@ else
         paddedLabel[i+1] = label[i];
     }
 hButtonWithOnClick(var, paddedLabel, NULL, "return imageV2.navigateButtonClick(this);");
+// TODO GALT could consider trying to give these all the same class and then attach handlers at the class level.
 }
 
 void limitSuperTrackVis(struct track *track)
@@ -7225,6 +7229,8 @@ if (sharedErrMsg)
     }
 }
 
+
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -7806,11 +7812,11 @@ if (!hideControls)
 	char buf[256];
 	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
 	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
-	    char *javascript = "onchange=\"document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
+	    char *javascript = "document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;";
 	    if (containsStringNoCase(database, "zoo"))
 		{
 		hPuts("Organism ");
-		printAssemblyListHtmlExtra(database, javascript);
+		printAssemblyListHtmlExtra(database, "change", javascript);
 		}
 
 	if (virtualSingleChrom()) // DISGUISE VMODE
@@ -7982,16 +7988,17 @@ if (!hideControls)
         }
 
     hPrintf(" ");
-    hPrintf("<INPUT TYPE='button' VALUE='%s' onClick='document.customTrackForm.submit();"
-            "return false;' title='%s'>",
+    hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
             hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
             hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
+    jsOnEventById("click", "ct_add", "document.customTrackForm.submit();return false;");
 
     hPrintf(" ");
     if (hubConnectTableExists())
         {
-        hPrintf("<INPUT TYPE='button' VALUE='track hubs' onClick='document.trackHubForm.submit();"
+        hPrintf("<INPUT TYPE='button' id='th_form' VALUE='track hubs'"
                 "return false;' title='Import tracks from hubs'>");
+	jsOnEventById("click", "th_form", "document.trackHubForm.submit();");
         hPrintf(" ");
         }
 
@@ -8079,17 +8086,26 @@ if (!hideControls)
 
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-            hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this, '%s');\" "
-                    "id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
-                    group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+
+            hPrintf("<IMG class='toggleButton'"
+                    " id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
+                    group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+	    char idText[256];
+	    safef(idText, sizeof idText, "%s_button", group->name);
+	    jsOnEventByIdF("click", idText, "return vis.toggleForGroup(this, '%s');", group->name);
+
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
             if (isHubTrack(group->name))
-                hPrintf("<input name=\"hubDisconnectButton\""
-                    "onClick="
-                    "\" document.disconnectHubForm.elements['hubId'].value= '%s';"
-                    "document.disconnectHubForm.submit();return true;\" "
-                    "type=\"button\" value=\"disconnect\">\n", &group->name[sizeof hubTrackPrefix - 1]);
+		{
+                hPrintf("<input name=\"hubDisconnectButton\" id='hub_disconn'"
+                    "type=\"button\" value=\"disconnect\">\n");
+		jsOnEventByIdF("click", "hub_disconn", 
+                    "document.disconnectHubForm.elements['hubId'].value='%s';"
+                    "document.disconnectHubForm.submit();return true;",
+		    &group->name[sizeof hubTrackPrefix - 1]);
+		}
+
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
                     "title='Update image with your changes'>\n");
             hPrintf("</td></tr></table></th>\n");
@@ -8722,9 +8738,11 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
 	jsonForConvert = newJsonObject(newHash(8));
 	jsonObjectAdd(jsonForConvert, "virtWinStart", newJsonNumber(virtWinStart));
 	jsonObjectAdd(jsonForConvert, "virtWinEnd", newJsonNumber(virtWinEnd));
-	hPrintf("<script type='text/javascript'>\n");
-	jsonPrint((struct jsonElement *) jsonForConvert, "convertChromToVirtChrom", 0);
-	hPrintf("</script>\n");
+
+	struct dyString *dy = dyStringNew(1024);
+	jsonDyStringPrint(dy, (struct jsonElement *) jsonForConvert, "convertChromToVirtChrom", 0);
+	jsInline(dy->string);
+	dyStringFree(&dy);
 	}
     return;
     }
@@ -9398,75 +9416,81 @@ cgiVarExcludeExcept(except);
 void setupHotkeys(boolean gotExtTools)
 /* setup keyboard shortcuts and a help dialog for it */
 {
+struct dyString *dy = dyStringNew(1024);
 // wire the keyboard hotkeys
-hPrintf("<script type='text/javascript'>\n");
+
 // left
-hPrintf("Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').click(); return false; }); \n");
-hPrintf("Mousetrap.bind('j', function() { $('input[name=\"hgt.left2\"]').click() }); \n");
-hPrintf("Mousetrap.bind('J', function() { $('input[name=\"hgt.left3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('j', function() { $('input[name=\"hgt.left2\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('J', function() { $('input[name=\"hgt.left3\"]').click() }); \n");
 
 // right
-hPrintf("Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').click(); return false; }); \n");
-hPrintf("Mousetrap.bind('l', function() { $('input[name=\"hgt.right2\"]').click() }); \n");
-hPrintf("Mousetrap.bind('L', function() { $('input[name=\"hgt.right3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('l', function() { $('input[name=\"hgt.right2\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('L', function() { $('input[name=\"hgt.right3\"]').click() }); \n");
 
 // zoom in
-hPrintf("Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').click(); return false; }); \n");
-hPrintf("Mousetrap.bind('i', function() { $('input[name=\"hgt.in2\"]').click() }); \n");
-hPrintf("Mousetrap.bind('I', function() { $('input[name=\"hgt.in3\"]').click() }); \n");
-hPrintf("Mousetrap.bind('b', function() { $('input[name=\"hgt.inBase\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('i', function() { $('input[name=\"hgt.in2\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('I', function() { $('input[name=\"hgt.in3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('b', function() { $('input[name=\"hgt.inBase\"]').click() }); \n");
 
 // zoom out
-hPrintf("Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
-hPrintf("Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
-hPrintf("Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
-hPrintf("Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
-hPrintf("Mousetrap.bind('1', function() { zoomTo(50);} ); \n");
-hPrintf("Mousetrap.bind('2', function() { zoomTo(500);} ); \n");
-hPrintf("Mousetrap.bind('3', function() { zoomTo(5000);} ); \n");
-hPrintf("Mousetrap.bind('4', function() { zoomTo(50000);} ); \n");
-hPrintf("Mousetrap.bind('5', function() { zoomTo(500000);} ); \n");
-hPrintf("Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('1', function() { zoomTo(50);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('2', function() { zoomTo(500);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('3', function() { zoomTo(5000);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('4', function() { zoomTo(50000);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('5', function() { zoomTo(500000);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
 
 // buttons
-hPrintf("Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').click() }); \n");
-hPrintf("Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').click() }); \n");
-hPrintf("Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').click() }); \n");
-hPrintf("Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').click() }); \n");
-hPrintf("Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').click() }); \n");
-hPrintf("Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
-hPrintf("Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
-hPrintf("Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
-hPrintf("Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
-hPrintf("Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
-hPrintf("Mousetrap.bind('v d', gotoGetDnaPage); \n");
+dyStringPrintf(dy,"Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('v d', gotoGetDnaPage); \n");
 
 // focus
-hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
-hPrintf("Mousetrap.bind('?', showHotkeyHelp);\n");
+dyStringPrintf(dy,"Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
+dyStringPrintf(dy,"Mousetrap.bind('?', showHotkeyHelp);\n");
 
 // menu
 if (gotExtTools)
-    hPrintf("Mousetrap.bind('s t', showExtToolDialog); \n");
+    dyStringPrintf(dy,"Mousetrap.bind('s t', showExtToolDialog); \n");
 
 // multi-region views
-hPrintf("Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtModeType=exonMostly'; });  \n",
+dyStringPrintf(dy,"Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtModeType=exonMostly'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
-hPrintf("Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; });  \n",
+dyStringPrintf(dy,"Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
 // links to a few tools
-hPrintf("Mousetrap.bind('t b', function() { $('#blatMenuLink')[0].click()});\n");
-hPrintf("Mousetrap.bind('t i', function() { $('#ispMenuLink')[0].click()});\n");
-hPrintf("Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink')[0].click()});\n");
-hPrintf("Mousetrap.bind('c r', function() { $('#cartResetMenuLink')[0].click()});\n");
-hPrintf("Mousetrap.bind('s s', function() { $('#sessionsMenuLink')[0].click()});\n");
-hPrintf("Mousetrap.bind('p s', function() { $('#publicSessionsMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('t b', function() { $('#blatMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('t i', function() { $('#ispMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('c r', function() { $('#cartResetMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('s s', function() { $('#sessionsMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('p s', function() { $('#publicSessionsMenuLink')[0].click()});\n");
 
 // also add an entry to the help menu that shows the keyboard shortcut help dialog
-hPrintf("$(document).ready(addKeyboardHelpEntries);");
+dyStringPrintf(dy,"$(document).ready(addKeyboardHelpEntries);\n");
 
-hPrintf("</script>\n");
+jsInline(dy->string);
+dyStringFree(&dy);
 
 // help dialog
 hPrintf("<div style=\"display:none\" id=\"hotkeyHelp\" title=\"Keyboard shortcuts\">\n");
@@ -9698,9 +9722,11 @@ if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(dat
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));
 jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 	      newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));
-hPrintf("<script type='text/javascript'>\n");
-jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
-hPrintf("</script>\n");
+
+struct dyString *dy = dyStringNew(1024);
+jsonDyStringPrint(dy, (struct jsonElement *) jsonForClient, "hgTracks", 0);
+jsInline(dy->string);
+dyStringFree(&dy);
 
 boolean gotExtTools = extToolsEnabled();
 setupHotkeys(gotExtTools);
@@ -9717,6 +9743,5 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"performance.   To clear this variable, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
     }
-
 }
 

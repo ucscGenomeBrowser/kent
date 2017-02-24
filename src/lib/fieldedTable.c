@@ -61,6 +61,7 @@ for (i=0; i<rowSize; ++i)
 /* Add it to end of list using cursor to avoid slReverse hassles. */
 *(table->cursor) = fr;
 table->cursor = &fr->next;
+table->rowCount += 1;
 
 return fr;
 }

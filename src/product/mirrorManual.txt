@@ -278,7 +278,7 @@ Confirm the following:
 
     Educational and non-profit institutions are allowed to use
     blat free of charge.  Commercial installations of the browser
-    require a license for blat.  See also: <http://www.genomeblat.com/>
+    require a license for blat.  See also: <http://kentinformatics.com/index.html>
     and: <http://genome.ucsc.edu/license/>
     In the source tree: src/gfServer/README.blat
 

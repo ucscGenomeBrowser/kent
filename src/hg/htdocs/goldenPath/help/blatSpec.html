@@ -1,947 +1,678 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<HTML>
-<HEAD>
-	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<TITLE>UCSC Genome Browser: Blat Specification and User's Guide</TITLE>
-	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
-</HEAD>
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
-<A NAME="TOP"></A>
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Blat Spec and User's Guide" -->
+<!--#set var="ROOT" value="../.." -->
 
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
+<h1>Blat Suite Program Specifications and User Guide</h1> 
+<p> 
+Blat produces two major classes of alignments: 
+<ul> 
+  <li> 
+  at the DNA level between two sequences that are of 95% or greater identity, but which may include 
+  large inserts.</li> 
+  <li> 
+  at the protein or translated DNA level between sequences that are of 80% or greater identity and 
+  may also include large inserts.</li> 
+</ul>
+<p> 
+The output of blat is flexible. By default, it is a simple tab-delimited file that describes the 
+alignment, but which does not include the sequence of the alignment itself. Alternatively, blat can produce output compatible with <a href="http://blast.ncbi.nlm.nih.gov/Blast.cgi" 
+target="_blank">BLAST</a> or <a href="http://www.ebi.ac.uk/Tools/sss/wublast/" 
+target="_blank">WU-BLAST</a>, as well as several other formats.</p> 
+<p> 
+The main programs in the blat suite are: 
+<ul> 
+  <li> 
+  <a href="#gfServerUsage">gfServer</a> &ndash; a server that maintains an index of the genome in 
+  memory and uses the index to quickly find regions with high levels of sequence similarity to a 
+  query sequence.</li>  
+  <li> 
+  <a href="#gfClientUsage">gfClient</a> &ndash; a program that queries gfServer over the network and
+  does a detailed alignment of the query sequence with regions found by gfServer.</li>  
+  <li> 
+  <a href="#blatUsage">blat</a> &ndash; client and server combined into a single program, first 
+  building the index, then using the index, and then exiting.</li>  
+  <li> 
+  <a href="#webBlatUsage">webBlat</a> &ndash; a web-based version of gfClient that presents the 
+  alignments in an interactive fashion.</li>  
+</ul> 
+<p> 
+Building an index of the genome typically takes 10 or 15 minutes. For interactive applications, it 
+is typical to use gfServer to build a whole-genome index. gfClient or webBlat can then align a 
+single query within a few seconds. When aligning a large number of sequences in a batch mode, it may
+be more efficient to use blat, particularly if it is run on a cluster of computers. Each blat run is
+typically done against a single chromosome, but with a large number of query sequences.</p> 
+<p> 
+Other programs in the blat suite are: 
+<ul> 
+  <li> 
+  <a href="#pslSortUsage">pslSort</a> &ndash; combines and sorts the output of multiple blat runs. 
+  The blat default output format is <a href="../../FAQ/FAQformat.html#format2">psl</a>.</li> 
+  <li> 
+  <a href="#pslRepsUsage">pslReps</a> &ndash; selects the best alignments for a particular query 
+  sequence, using a &quot;near best in genome&quot; approach.</li> 
+  <li> 
+  <a href="#pslPrettyUsage">pslPretty</a> &ndash; converts alignments from psl format, which is a 
+  tab-delimited format that does not include the bases themselves, to a more readable alignment 
+  format.</li>  
+  <li> 
+  <a href="#faToTwoBitUsage">faToTwoBit</a> &ndash; converts 
+  <a href="http://genetics.bwh.harvard.edu/pph/FASTA.html" target="_blank">fasta</a> format sequence
+  files to the dense, randomly accessible <a href="../../FAQ/FAQformat.html#format7">.2bit</a> 
+  format that gfClient can use.</li> 
+  <li> 
+  <a href="#twoBitToFaUsage">twoBitToFa</a> &ndash; converts from .2bit format back to fasta
+  format.</li>
+  <li> 
+  <a href="#faToNibUsage">faToNib</a> &ndash; converts from fasta to the somewhat less dense, 
+  randomly accessible <a href="../../FAQ/FAQformat.html#format8">.nib</a> format that predated .2bit
+  format. Note that each .nib file can contain only a single sequence.</li>  
+  <li> 
+  <a href="#nibFragUsage">nibFrag</a> &ndash; converts portions of a .nib file back to fasta 
+  format.</li>
+</ul> 
+<p> 
+Usage details for each of the above programs are described in the sections below. For all programs 
+except webBlat, the usage options may also be viewed by typing the name of the program (without 
+arguments) on the UNIX command line.</p> 
+<p> 
+The gfServer program requires approximately 1 byte of memory for every 3 bases in the genome it is 
+indexing in DNA mode, and 1.5 bytes for each unmasked base in translated mode. The blat program 
+requires approximately 2 bytes of memory for each base in the genome in DNA mode, and 3 bytes of 
+memory for each base in translated mode. The other programs use relatively little memory.</p> 
+<p> 
+You may also be interested in the following programs that are not part of the blat suite: 
+<ul> 
+  <li> 
+  in-silico PCR &ndash; quickly finds the sequence between two primers. This includes webPCR, an 
+  interface similar to webBlat.</li>  
+  <li> 
+  <a href="http://genome.ucsc.edu">Genome Browser</a> &ndash; displays annotations as a series of 
+  tracks on top of the genome.</li>  
+</ul> 
+<p> 
+All of the above software and source code are freely available from the University of California 
+Santa Cruz for academic and non-commercial use. A license is required for commercial use. For blat 
+licensing, contact <a href="http://www.kentinformatics.com/" target="_blank">Kent Informatics</a>. 
+All other licensing is handled by the <a href="../../license/">UCSC Genome Browser project</a>.</p>
 
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../cgi-bin/hgMenubar"--></TD></TR>
-
-<!--Content Tables------------------------------------------------------->
-<TR><TD COLSPAN=2 CELLPADDING=10>	
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; Blat Suite Program Specifications and User Guide</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-	<p>
-	Blat produces two major classes of alignments: 
-	  <ul>
-	    <li>
-	    at the DNA level between two sequences that are of 95% or greater identity, but which 
-	    may include large inserts.
-	    <li>
-	    at the protein or translated DNA level between sequences that are of 80% or greater 
-	    identity and may also include large inserts. 
-	  </ul>
-	The output of blat is flexible. By default, it is a simple tab-delimited file that describes
-	the alignment, but which does not include the sequence of the alignment itself. 
-	Alternatively, blat can produce output compatible with 
-	<a href="http://blast.ncbi.nlm.nih.gov/Blast.cgi" target="_blank">BLAST</a> 
-	or <a href="http://www.ebi.ac.uk/Tools/sss/wublast/" target="_blank">WU-BLAST</a>, 
-	as well as several other formats.</p>
-	<p>
-	The main programs in the blat suite are:
-	  <ul>
-	    <li>
-	    <a href="#gfServerUsage">gfServer</a> &ndash; 
-	    a server that maintains an index of the genome in memory and uses the index to quickly 
-	    find regions with high levels of sequence similarity to a query sequence.
-	    <li>
-	    <a href="#gfClientUsage">gfClient</a> &ndash; 
-	    a program that queries gfServer over the network and does a
-	    detailed alignment of the query sequence with regions found by gfServer.
-	    <li>
-	    <a href="#blatUsage">blat</a> &ndash; 
-	    client and server combined into a single program, first building the
-	    index, then using the index, and then exiting.
-	    <li>
-	    <a href="#webBlatUsage">webBlat</a> &ndash; 
-	    a web-based version of gfClient that presents the alignments in an
-	    interactive fashion.
-	  </ul>
-	</p>
-	<p>
-	Building an index of the genome typically takes 10 or 15 minutes. For interactive
-	applications, it is typical to use gfServer to build a whole-genome index. gfClient or
-	webBlat can then align a single query within a few seconds. When aligning a large
-	number of sequences in a batch mode, it may be more efficient to use blat, particularly 
-	if it is run on a cluster of computers. Each blat run is typically done against a single 
-	chromosome, but with a large number of query sequences.</p>
-	<p>
-	Other programs in the blat suite are:
-	  <ul>
-	    <li>
-	    <a href="#pslSortUsage">pslSort</a> &ndash; 
-	    combines and sorts the output of multiple blat runs. The blat default
-	    output format is <a href="../../FAQ/FAQformat.html#format2">psl</a>.
-	    <li>
-	    <a href="#pslRepsUsage">pslReps</a> &ndash; 
-	    selects the best alignments for a particular query sequence, using a
-	    &quot;near best in genome&quot; approach.
-	    <li>
-	    <a href="#pslPrettyUsage">pslPretty</a> &ndash; 
-	    converts alignments from psl format, which is a tab-delimited
-	    format that does not include the bases themselves, to a more readable alignment format.
-	    <li>
-	    <a href="#faToTwoBitUsage">faToTwoBit</a> &ndash; 
-	    converts <a href="http://genetics.bwh.harvard.edu/pph/FASTA.html"
-	    target="_blank">fasta</a> format sequence files to the dense, randomly accessible
-	    <a href="../../FAQ/FAQformat.html#format7">.2bit</a> format that gfClient can use.
-	    <li>
-	    <a href="#twoBitToFaUsage">twoBitToFa</a> &ndash; 
-	    converts from .2bit format back to fasta format.
-	    <li>
-	    <a href="#faToNibUsage">faToNib</a> &ndash; 
-	    converts from fasta to the somewhat less dense, randomly accessible
-	    <a href="../../FAQ/FAQformat.html#format8">.nib</a> format that predated .2bit format. 
-	    Note that each .nib file can contain only a single sequence.
-	    <li>
-	    <a href="#nibFragUsage">nibFrag</a> &ndash; 
-	    converts portions of a .nib file back to fasta format.
-	  </ul>
-	</p>
-	<p>
-	Usage details for each of the above programs are described in the
-	sections below. For all programs except webBlat, the usage options may also be viewed by 
-	typing the name of the program (without arguments) on the UNIX command line. </p>
-	<p>
-	The gfServer program requires approximately 1 byte of memory for every 3 bases in the genome
-	it is indexing in DNA mode, and 1.5 bytes for each unmasked base in translated mode. The 
-	blat program requires approximately 2 bytes of memory for each base in the genome in DNA 
-	mode, and 3 bytes of memory for each base in translated mode. The other programs use 
-	relatively little memory.</p>
-	<p>
-	You may also be interested in the following programs that are not part of the blat
-	suite:
-	  <ul>
-	    <li>
-	    in-silico PCR &ndash; quickly finds the 
-	    sequence between two primers. This includes webPCR, an interface similar to webBlat. 
-	    <li>
-	    <a href="http://genome.ucsc.edu">Genome Browser</a> &ndash; displays annotations as a 
-	    series of tracks on top of the genome. 
-	  </ul></p>
-	<p>
-	All of the above software and source code are freely available from the University of 
-	California Santa Cruz for academic and non-commercial use. A license is required for 
-	commercial use.  For blat licensing, contact <a href="http://www.kentinformatics.com/" 
-	target="_blank">Kent Informatics</a>. All other licensing is handled by the 
-	<a href="../../license/">UCSC Genome Browser project</a>.
-	</p>
-
-<!-- <FONT COLOR="#006666"><B> THIS IS THE COLOR I USE FOR HEADERS </B></FONT> -->
-
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-	
-<!--START NEXT SECTION ------------------------------------------------------->
-<BR>
-	<A NAME="blatUsage"></A>
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; blat</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-	<p>
-	<b>blat</b> &ndash; Standalone blat sequence search command line tool.</p>
-	<p>
-	<pre> 
+<a name="blatUsage"></a>
+<h2>blat</h2> 
+<p>
+<strong>blat</strong> &ndash; Standalone blat sequence search command line tool.</p> 
+<p>
 Usage:</p>
-   blat database query [-ooc=11.ooc] output.psl
+<pre><code>blat database query [-ooc=11.ooc] output.psl</code></pre>
+<p>
+Where:</p>
+<pre><code>database and query are each either a .fa, .nib, or .2bit file, or a list of these files, one file 
+name per line. 
 
-Where:
-   database and query are each either a .fa, .nib, or .2bit file, or a list of these files, one file
-   name per line.
+-ooc=11.ooc tells the program to load over-occurring 11-mers from an external file. This will 
+increase the speed by a factor of 40 in many cases, but is not required.
 
-   -ooc=11.ooc tells the program to load over-occurring 11-mers from an external file. This will 
-   increase the speed by a factor of 40 in many cases, but is not required.
+output.psl is the output file.
 
-   output.psl is the output file.
+Subranges of .nib and .2bit files may be specified using the syntax:
+   /path/file.nib:seqid:start-end
+or
+   /path/file.2bit:seqid:start-end
+or
+   /path/file.nib:start-end
 
-   Subranges of .nib and .2bit files may be specified using the syntax:
-      /path/file.nib:seqid:start-end
-   or
-      /path/file.2bit:seqid:start-end
-   or
-      /path/file.nib:start-end
+With the second form, a sequence id of file:start-end is used.</code></pre>
 
-   With the second form, a sequence id of file:start-end is used.
+<p>
+Options:</p>
+<pre><code>-t=type                Database type, one of:
+                          dna - (default) DNA sequence
+                          prot - protein sequence
+                          dnax - DNA sequence translated in six frames to protein
 
-Options:
-   -t=type                Database type, one of:
-                             dna - (default) DNA sequence
-                             prot - protein sequence
-                             dnax - DNA sequence translated in six frames to protein
+-q=type                Query type, one of:
+                          dna - DNA sequence
+                          rna - RNA sequence
+                          prot - protein sequence
+                          dnax - DNA sequence translated in six frames to protein
+                          rnax - DNA sequence translated in three frames to protein
 
-   -q=type                Query type, one of:
-                             dna - DNA sequence
-                             rna - RNA sequence
-                             prot - protein sequence
-                             dnax - DNA sequence translated in six frames to protein
-                             rnax - DNA sequence translated in three frames to protein
+-prot                  Synonymous with -t=prot -q=prot
 
-   -prot                  Synonymous with -t=prot -q=prot
+-ooc=N.ooc             Use overused tile file N.ooc. N should correspond to the tileSize.
 
-   -ooc=N.ooc             Use overused tile file N.ooc. N should correspond to the tileSize.
+-tileSize=N            Sets the size of match that triggers an alignment. Usually between 8 and 12. 
+                       Default is 11 for DNA and 5 for protein.
 
-   -tileSize=N            Sets the size of match that triggers an alignment. Usually between 8 and 
-			  12. Default is 11 for DNA and 5 for protein.
+-stepSize=N            Spacing between tiles. Default is tileSize.
 
-   -stepSize=N            Spacing between tiles. Default is tileSize.
+-oneOff=N              If set to 1, this allows one mismatch in tile and still triggers an 
+                       alignment. Default is 0.
 
-   -oneOff=N              If set to 1, this allows one mismatch in tile and still triggers an 
-			  alignment. Default is 0.
+-minMatch=N            Sets the number of tile matches. Usually set from 2 to 4.  Default is 2 for 
+                       nucleotide, 1 for protein.
 
-   -minMatch=N            Sets the number of tile matches. Usually set from 2 to 4.  Default is 2 
-			  for nucleotide, 1 for protein.
+-minScore=N            Sets minimum score. This is the matches minus the mismatches minus some sort 
+                       of gap penalty. Default is 30.
 
-   -minScore=N            Sets minimum score. This is the matches minus the mismatches minus some 
-			  sort of gap penalty. Default is 30.
+-minIdentity=N         Sets minimum sequence identity (in percent). Default is 90 for nucleotide 
+                       searches, 25 for protein or translated protein searches.
 
-   -minIdentity=N         Sets minimum sequence identity (in percent). Default is 90 for nucleotide 
-			  searches, 25 for protein or translated protein searches.
+-maxGap=N              Sets the size of maximum gap between tiles in a clump. Usually set from 0 to 
+                       3. Default is 2. Relevant only for minMatch > 1.
 
-   -maxGap=N              Sets the size of maximum gap between tiles in a clump. Usually set from 0 
-			  to 3. Default is 2. Relevant only for minMatch > 1.
+-noHead                Suppresses .psl header (so it's just a tab-separated file).
 
-   -noHead                Suppresses .psl header (so it's just a tab-separated file).
+-makeOoc=N.ooc         Makes overused tile file. Target must be complete genome.
 
-   -makeOoc=N.ooc         Makes overused tile file. Target must be complete genome.
+-repMatch=N            Sets the number of repetitions of a tile allowed before it is marked as 
+                       overused. Typically this is 256 for tileSize 12, 1024 for tile size 11, 
+                       4096 for tile size 10. Default is 1024. Typically needed only with makeOoc. 
+                       Also affected by stepSize: when stepSize is halved, repMatch is doubled to 
+                       compensate.
 
-   -repMatch=N            Sets the number of repetitions of a tile allowed before it is marked as 
-			  overused. Typically this is 256 for tileSize 12, 1024 for tile size 11, 
-			  4096 for tile size 10. Default is 1024. Typically needed only with 
-			  makeOoc. Also affected by stepSize: when stepSize is halved, repMatch is 
-			  doubled to compensate.
-
-   -mask=type             Masks out repeats. Alignments won't be started in masked region but may 
-			  extend through it in nucleotide searches. Masked areas are ignored 
-			  entirely in protein or translated searches. Types are:
+-mask=type             Masks out repeats. Alignments won't be started in masked region but may 
+                       extend through it in nucleotide searches. Masked areas are ignored entirely 
+                       in protein or translated searches. Types are:
                              lower - masks out lower-cased sequence
                              upper - masks out upper-cased sequence
                              out - masks according to database.out RepeatMasker .out file
                              file.out - masks database according to RepeatMasker file.out
 
-   -qMask=type            Masks out repeats in query sequence. Similar to -mask above but for query 
-			  rather than target sequence.
+-qMask=type            Masks out repeats in query sequence. Similar to -mask above but for query 
+                       rather than target sequence.
 
-   -repeats=type          Type is same as mask types above. Repeat bases will not be masked in any 
-			  way, but matches in repeat areas will be reported separately from matches 
-			  in other areas in the psl output.
+-repeats=type          Type is same as mask types above. Repeat bases will not be masked in any way,
+                       but matches in repeat areas will be reported separately from matches in other
+                       areas in the psl output.
 
-   -minRepDivergence=NN   Minimum percent divergence of repeats to allow them to be unmasked. 
-			  Default is 15. Relevant only for masking using RepeatMasker .out files.
+-minRepDivergence=NN   Minimum percent divergence of repeats to allow them to be unmasked. Default 
+                       is 15. Relevant only for masking using RepeatMasker .out files.
 
-   -dots=N                Outputs a dot every N sequences to show program's progress.
+-dots=N                Outputs a dot every N sequences to show program's progress.
 
-   -trimT                 Trims leading poly-T.
+-trimT                 Trims leading poly-T.
 
-   -noTrimA               Don't trim trailing poly-A.
+-noTrimA               Don't trim trailing poly-A.
 
-   -trimHardA             Removes poly-A tail from qSize as well as alignments in psl output.
+-trimHardA             Removes poly-A tail from qSize as well as alignments in psl output.
 
-   -fastMap               Run for fast DNA/DNA remapping, not allowing introns and requiring high 
-			  %ID.
+-fastMap               Run for fast DNA/DNA remapping, not allowing introns and requiring high %ID.
 
-   -out=type              Controls output file format, one of:
-                              psl - (Default) tab-separated format, no sequence
-                              pslx - tab separated format with sequence
-                              axt - blastz-associated axt format
-                              maf - multiz-associated maf format
-                              sim4 - similar to sim4 format
-                              wublast - similar to wublast format
-                              blast - similar to NCBI blast format
-                              blast8 - NCBI blast tabular format
-                              blast9 - NCBI blast tabular format with comments
+-out=type              Controls output file format, one of:
+                           psl - (Default) tab-separated format, no sequence
+                           pslx - tab separated format with sequence
+                           axt - blastz-associated axt format
+                           maf - multiz-associated maf format
+                           sim4 - similar to sim4 format
+                           wublast - similar to wublast format
+                           blast - similar to NCBI blast format
+                           blast8 - NCBI blast tabular format
+                           blast9 - NCBI blast tabular format with comments
 
-   -fine                  For high-quality mRNAs, looks harder for small initial and terminal exons.
-			  Not recommended for ESTs.
+-fine                  For high-quality mRNAs, looks harder for small initial and terminal exons. 
+                       Not recommended for ESTs.
 
-   -maxIntron=N           Sets maximum intron size. Default is 750000.
+-maxIntron=N           Sets maximum intron size. Default is 750000.
 
-   -extendThroughN        Allows extension of alignment through large blocks of Ns.
-	</pre>
-	<p>
-	<b>Blat settings for common usage scenarios:</b>
-	  <ul>
-	    <li>
-	    Mapping ESTs to the genome within the same species:<BR>
-<pre>
-   -ooc=11.ooc
-</pre>
-	    <li>
-	    Mapping full length mRNAs to the genome in the same species:<BR>
-<pre>
-   -ooc=11.ooc -fine -q=rna
-</pre>
-	    <li>
-	    Mapping ESTs to the genome across species:<BR>
-<pre>
-   -q=dnax -t=dnax
-</pre>
-	    <li>
-	    Mapping mRNA to the genome across species:<BR>
-<pre>
-   -q=rnax -t=dnax
-</pre>
-	    <li>
-	    Mapping proteins to the genome:<BR>
-<pre>
-   -q=prot -t=dnax
-</pre>
-	    <li>
-	    Mapping DNA to DNA in the same species:<BR>
-<pre>
-   -ooc=11.ooc -fastMap
-</pre>
-	    <li>
-	    Mapping DNA from one species to another species (the query side of the alignment
-should be split into chunks of 25 KB or less for best performance):<BR>
-<pre>
-   -q=dnax -t=dnax
-</pre>
-	  </ul>
-	</p>
-
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECTION ---------------------------------------------------------->
-
-<!--START NEXT SECTION ------------------------------------------------------->
-<BR>
-	<A NAME="gfServerUsage"></A>
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; gfServer</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+-extendThroughN        Allows extension of alignment through large blocks of Ns. </code></pre>
 	
-	<p>
-	<b>gfServer</b> &ndash; Make a server to quickly find where DNA occurs in genome.
+<h3>Blat settings for common usage scenarios:</h3>
+<p> 
+Mapping ESTs to the genome within the same species: <code>-ooc=11.ooc</code></p>
+<p> 
+Mapping full length mRNAs to the genome in the same species: 
+<code>-ooc=11.ooc -fine -q=rna</code></p> 
+<p> 
+Mapping ESTs to the genome across species: <code>-q=dnax -t=dnax</code></p> 
+<p> 
+Mapping mRNA to the genome across species: <code>-q=rnax -t=dnax</code></p> 
+<p> 
+Mapping proteins to the genome: <code>-q=prot -t=dnax</code></p> 
+<p> 
+Mapping DNA to DNA in the same species: <code>-ooc=11.ooc -fastMap</code></p> 
+<p> 
+Mapping DNA from one species to another species: <code>-q=dnax -t=dnax</code><br>
+Note that the query side of the alignment should be split into chunks of 25 KB or less for best 
+performance.</p>
 
-	<pre> 
-Usage:
-   To set up a server:
-      gfServer start host port file(s) where files are in .nib or .2bit format
+<a name="gfServerUsage"></a>
+<h2>gfServer</h2> 
+<p> 
+<strong>gfServer</strong> &ndash; Make a server to quickly find where DNA occurs in genome.</p> 
+<p> 
+Usage:</p>
+<pre><code>To set up a server:
+   gfServer start host port file(s) where files are in .nib or .2bit format
 
-   To remove a server:
-      gfServer stop host port
+To remove a server:
+   gfServer stop host port
 
-   To query a server with DNA sequence:
-      gfServer query host port probe.fa
+To query a server with DNA sequence:
+   gfServer query host port probe.fa
 
-   To query a server with protein sequence:
-      gfServer protQuery host port probe.fa
+To query a server with protein sequence:
+   gfServer protQuery host port probe.fa
 
-   To query a server with translated DNA sequence:
-      gfServer transQuery host port probe.fa
+To query a server with translated DNA sequence:
+   gfServer transQuery host port probe.fa
 
-   To query server with PCR primers
-      gfServer pcr host port fPrimer rPrimer maxDistance
+To query server with PCR primers
+   gfServer pcr host port fPrimer rPrimer maxDistance
 
-   To process 1 probe fa file against .nib format genome (not starting server):
-      gfServer direct probe.fa file(s).nib
+To process 1 probe fa file against .nib format genome (not starting server):
+   gfServer direct probe.fa file(s).nib
 
-   To test pcr without starting server:
-      gfServer pcrDirect fPrimer rPrimer file(s).nib
+To test pcr without starting server:
+   gfServer pcrDirect fPrimer rPrimer file(s).nib
 
-   To figure out usage level:
-      gfServer status host port
+To figure out usage level:
+   gfServer status host port
 
-   To get input file list:
-      gfServer files host port
+To get input file list:
+   gfServer files host port</code></pre>
         
-Options:
-   -tileSize=N            Size of n-mers to index. Default is 11 for nucleotides, 4 for proteins 
-			  (or translated nucleotides).
+<p>
+Options:</p>
+<pre><code>-tileSize=N            Size of n-mers to index. Default is 11 for nucleotides, 4 for proteins 
+                       (or translated nucleotides).
 
-   -stepSize=N            Spacing between tiles. Default is tileSize.
+-stepSize=N            Spacing between tiles. Default is tileSize.
 
-   -minMatch=N            Number of n-mer matches that triggers detailed alignment. Default is 2 for
-			  nucleotides, 3 for proteins.
+-minMatch=N            Number of n-mer matches that triggers detailed alignment. Default is 2 for 
+                       nucleotides, 3 for proteins.
 
-   -maxGap=N              Number of insertions or deletions allowed between n-mers. Default is 2 for
-		  	  nucleotides, 0 for proteins.
+-maxGap=N              Number of insertions or deletions allowed between n-mers. Default is 2 for 
+                       nucleotides, 0 for proteins.
 
-   -trans                 Translate database to protein in 6 frames. Note: when using this option, 
-			  it is best to run on RepeatMasked data.
+-trans                 Translate database to protein in 6 frames. Note: when using this option, it 
+                       is best to run on RepeatMasked data.
 
-   -log=logFile           Keep a log file that records server requests.
+-log=logFile           Keep a log file that records server requests.
 
-   -seqLog                Include sequences in log file (not logged with -syslog).
+-seqLog                Include sequences in log file (not logged with -syslog).
 
-   -syslog                Log to syslog.
+-syslog                Log to syslog.
 
-   -logFacility=facility  Log to the specified syslog facility. Default is local0.
+-logFacility=facility  Log to the specified syslog facility. Default is local0.
 
-   -mask                  Use masking from .nib file.
+-mask                  Use masking from .nib file.
 
-   -repMatch=N            Number of occurrences of a tile (n-mer) that triggers repeat-masking of 
-			  the tile. Default is 1024.
+-repMatch=N            Number of occurrences of a tile (n-mer) that triggers repeat-masking of the 
+                       tile. Default is 1024.
 
-   -maxDnaHits=N          Maximum number of hits sent from the server for a DNA query. Default is 
-			  100.
+-maxDnaHits=N          Maximum number of hits sent from the server for a DNA query. Default is 100.
 
-   -maxTransHits=N        Maximum number of hits sent from the server for a translated query. 
-		  	  Default is 200.
+-maxTransHits=N        Maximum number of hits sent from the server for a translated query. Default 
+                       is 200.
 
-   -maxNtSize=N           Maximum size of untranslated DNA query sequence. Default is 40000.
+-maxNtSize=N           Maximum size of untranslated DNA query sequence. Default is 40000.
 
-   -maxAaSize=N           Maximum size of protein or translated DNA queries. Default is 8000.
+-maxAaSize=N           Maximum size of protein or translated DNA queries. Default is 8000.
 
-   -canStop               If set, a quit message will actually take down the server.
-	</pre>
+-canStop               If set, a quit message will actually take down the server. </code></pre>
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECTION ---------------------------------------------------------->
+<a name="gfClientUsage"></a>
+<h2>gfClient</h2> 
+<p> 
+<strong>gfClient</strong> &ndash; A client for the genomic finding program that produces a .psl 
+file.</p>
+<p>
+Usage:</p>
+<pre><code>gfClient host port seqDir in.fa out.psl</code></pre>
+<p>
+Where:</p>
+<pre><code>host is the name of the machine running the gfServer.
 
-<!--START NEXT SECTION ------------------------------------------------------->
-<BR>
-	<A NAME="gfClientUsage"></A>
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; gfClient</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-	<p>
-	<b>gfClient</b> &ndash; A client for the genomic finding program that produces a .psl file.
+port is the same port used for the gfServer.
 
-	<pre> 
-Usage:
-   gfClient host port seqDir in.fa out.psl
+seqDir is the path of the .nib or .2bit files relative to the current dir. Note: these are needed
+by the client as well as the server.
 
-Where:
-   host is the name of the machine running the gfServer.
+in.fa is a fasta format file. May contain multiple records.
 
-   port is the same port used for the gfServer.
+out.psl is the output file.</code></pre>
+<p>
+Options:</p>
+<pre><code>-t=type          Database type, one of:
+                    dna - (Default) DNA sequence
+                    prot - protein sequence
+                    dnax - DNA sequence translated in six frames to protein
 
-   seqDir is the path of the .nib or .2bit files relative to the current dir. Note: these are needed
-   by the client as well as the server.
+-q=type          Query type, one of:
+                    dna - DNA sequence
+                    rna - RNA sequence
+                    prot - protein sequence
+                    dnax - DNA sequence translated in six frames to protein
+                    rnax - DNA sequence translated in three frames to protein
 
-   in.fa is a fasta format file. May contain multiple records.
+-prot            Synonymous with -d=prot -q=prot
 
-   out.psl is the output file.
+-dots=N          Outputs a dot every N query sequences.
 
-Options:
-   -t=type          Database type, one of:
-                       dna - (Default) DNA sequence
-                       prot - protein sequence
-                       dnax - DNA sequence translated in six frames to protein
+-nohead          Suppresses psl header.
 
-   -q=type          Query type, one of:
-                       dna - DNA sequence
-                       rna - RNA sequence
-                       prot - protein sequence
-                       dnax - DNA sequence translated in six frames to protein
-                       rnax - DNA sequence translated in three frames to protein
-
-   -prot            Synonymous with -d=prot -q=prot
-
-   -dots=N          Outputs a dot every N query sequences.
-
-   -nohead          Suppresses psl header.
-
-   -minScore=N      Sets minimum score. This is twice the matches minus the mismatches and minus a 
+-minScore=N      Sets minimum score. This is twice the matches minus the mismatches and minus a 
 		    gap penalty. Default is 30.
 
-   -minIdentity=N   Sets minimum sequence identity (in percent). Default is 90 for nucleotide 
-		    searches, 25 for protein or translated protein searches.
+-minIdentity=N   Sets minimum sequence identity (in percent). Default is 90 for nucleotide searches,
+                 25 for protein or translated protein searches.
 
-   -out=type        Controls output file format, one of:
-                       psl - (Default) tab-separated format without actual sequence
-                       pslx - tab-separated format with sequence
-                       axt - blastz-associated axt format
-                       maf - multiz-associated maf format
-                       sim4 - similar to sim4 format
-                       wublast - similar to wublast format
-                       blast - similar to NCBI blast format
-                       blast8- NCBI blast tabular format
-                       blast9 - NCBI blast tabular format with comments
+-out=type        Controls output file format, one of:
+                    psl - (Default) tab-separated format without actual sequence
+                    pslx - tab-separated format with sequence
+                    axt - blastz-associated axt format
+                    maf - multiz-associated maf format
+                    sim4 - similar to sim4 format
+                    wublast - similar to wublast format
+                    blast - similar to NCBI blast format
+                    blast8- NCBI blast tabular format
+                    blast9 - NCBI blast tabular format with comments
 
-   -maxIntron=N     Sets maximum intron size. Default is 750000.
-	</pre>
+-maxIntron=N     Sets maximum intron size. Default is 750000. </code></pre>
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECTION ---------------------------------------------------------->
+<a name="faToTwoBitUsage"></a> 
+<h2>faToTwoBit</h2> 
+<p> 
+<strong>faToTwoBit</strong> &ndash; Convert DNA from fasta to .2bit format.</p> 
+<p>
+Usage:</p>
+<pre><code>faToTwoBit in.fa [in2.fa in3.fa ...] out.2bit</code></pre>
+<p>
+Options:</p>
+<pre><code>-noMask          Ignore lower-case masking in fa file.
 
-<!--START NEXT SECTION ------------------------------------------------------->
-<BR>
-	<A NAME="faToTwoBitUsage"></A>
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; faToTwoBit</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-	<p>
-	<b>faToTwoBit</b> &ndash; Convert DNA from fasta to .2bit format.
-	<pre> 
-Usage:
-   faToTwoBit in.fa [in2.fa in3.fa ...] out.2bit
+-stripVersion    Strip off version number after &quot;.&quot; for GenBank accessions.
 
-Options:
-   -noMask          Ignore lower-case masking in fa file.
+-ignoreDups      Convert only first sequence if there are duplicate sequence names. Use 
+                 &quot;twoBitDup&quot; to find duplicate sequences.</code></pre>
 
-   -stripVersion    Strip off version number after &quot;.&quot; for GenBank accessions.
+<a name="twoBitToFaUsage"></a>
+<h2>twoBitToFa</h2> 
+<p> 
+<strong>twoBitToFa</strong> &ndash; Convert all or part of .2bit file to fasta format.</p>
+<p>
+Usage:</p>
+<pre><code>twoBitToFa input.2bit output.fa</code></pre>
+<p>
+Options:</p>
+<pre><code>-seq=name               Restrict this to just one sequence.
 
-   -ignoreDups      Convert only first sequence if there are duplicate sequence names. Use 
-		    &quot;twoBitDup&quot; to find duplicate sequences.
-	</pre>
+-start=X                Start at given position in sequence (zero-based).
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECTION ---------------------------------------------------------->
+-end=X                  End at given position in sequence (non-inclusive).
 
-<!--START NEXT SECTION ------------------------------------------------------->
-<BR>
-	<A NAME="twoBitToFaUsage"></A>
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; twoBitToFa</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-	<p>
-	<b>twoBitToFa</b> &ndash; Convert all or part of .2bit file to fasta format.
-	<pre> 
-Usage:
-   twoBitToFa input.2bit output.fa
+-seqList=file           File containing list of the desired sequence names in the format 
+                        seqSpec[:start-end], e.g. chr1 or chr1:0-189, where coordinates are 
+                        half-open zero-based, i.e. [start,end).
 
-Options:
-   -seq=name               Restrict this to just one sequence.
+-noMask                 Convert sequence to all upper-case.
 
-   -start=X                Start at given position in sequence (zero-based).
+-bpt=index.bpt          Use bpt index instead of the built-in one.
 
-   -end=X                  End at given position in sequence (non-inclusive).
+-bed=input.bed          Grab sequences specified by input.bed. Will exclude introns.
 
-   -seqList=file           File containing list of the desired sequence names in the format 
-			   seqSpec[:start-end], e.g. chr1 or chr1:0-189, where coordinates are 
-			   half-open zero-based, i.e. [start,end).
+-bedPos                 With -bed, to use chrom:start-end as the fasta ID in output.fa.
 
-   -noMask                 Convert sequence to all upper-case.
-
-   -bpt=index.bpt          Use bpt index instead of the built-in one.
-
-   -bed=input.bed          Grab sequences specified by input.bed. Will exclude introns.
-
-   -bedPos                 With -bed, to use chrom:start-end as the fasta ID in output.fa.
-
-   -udcDir=/dir/to/cache   Location of cache for remote bigBeds and bigwigs.
-
-Sequence and range may also be specified as part of the input file name using the syntax:
-      /path/input.2bit:name
+-udcDir=/dir/to/cache   Location of cache for remote bigBeds and bigwigs.</code></pre>
+<p>
+Sequence and range may also be specified as part of the input file name using the syntax:</p>
+<pre><code>/path/input.2bit:name
    or
-      /path/input.2bit:name
+/path/input.2bit:name
    or
-      /path/input.2bit:name:start-end
-	</pre>
+/path/input.2bit:name:start-end </code></pre>
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECTION ---------------------------------------------------------->
+<a name="faToNibUsage"></a>
+<h2>faToNib</h2> 
+<p> 
+<strong>faToNib</strong> &ndash; Convert from .fa to .nib format.</p>
+<p>
+Usage:</p> 
+<pre><code>faToNib [options] in.fa out.nib</code></pre>
+<p>
+Options:</p>
+<pre><code>-softMask   Create nib that soft-masks lower-case sequence.
 
-<!--START NEXT SECTION ------------------------------------------------------->
-<BR>
-	<A NAME="faToNibUsage"></A>
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; faToNib</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-	<p>
-	<b>faToNib</b> &ndash; Convert from .fa to .nib format.
-	<pre> 
-Usage:
-   faToNib [options] in.fa out.nib
+-hardMask   Create nib that hard-masks lower-case sequence.</code></pre>
 
-Options:
-   -softMask   Create nib that soft-masks lower-case sequence.
+<a name="nibFragUsage"></a>
+<h2>nibFrag</h2> 
+<p> 
+<strong>nibFrag</strong> &ndash; Extract part of a .nib file as .fa, with all bases and gaps 
+lower-case by default.</p>
+<p>
+Usage:</p> 
+<pre><code>nibFrag [options] file.nib start end strand out.fa</code></pre>
+<p>
+Where:</p>
+<pre><code>strand is + (plus) or m (minus)</code></pre>
+<p>
+Options:</p>
+<pre><code>-masked         Use lower-case characters for bases meant to be masked out.
 
-   -hardMask   Create nib that hard-masks lower-case sequence.
-	</pre>
+-hardMasked     Use upper-case characters for bases that are not masked out, and Ns for masked-out bases.
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECTION ---------------------------------------------------------->
+-upper          Use upper-case characters for all bases.
 
-<!--START NEXT SECTION ------------------------------------------------------->
-<BR>
-	<A NAME="nibFragUsage"></A>
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; nibFrag</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-	<p>
-	<b>nibFrag</b> &ndash; Extract part of a .nib file as .fa, with all bases and gaps 
-	lower-case by default.
-	<pre> 
-Usage:
-   nibFrag [options] file.nib start end strand out.fa
+-name=name      Use given name after '>' in output sequence.
 
-Where: 
-   strand is + (plus) or m (minus)
+-dbHeader=db    Add full database info to the header, with or without -name option.
 
-Options:
-   -masked         Use lower-case characters for bases meant to be masked out.
+-tbaHeader=db   Format header for compatibility with tba, takes database name as argument.</code></pre>
 
-   -hardMasked     Use upper-case characters for bases that are not masked out, and Ns for 
-		   masked-out bases.
+<a name="pslPrettyUsage"></a>
+<h2>pslPretty</h2> 
+<p> 
+<strong>pslPretty</strong> &ndash; Convert PSL to human-readable output</p>
+<p>
+Usage:</p>
+<pre><code>pslPretty in.psl target.lst query.lst pretty.out</code></pre>
+<p>
+Options:</p>
+<pre><code>-axt              Save in axt format.
 
-   -upper          Use upper-case characters for all bases.
+-dot=N            Output a dot every N records.
 
-   -name=name      Use given name after '>' in output sequence.
+-long             Don't abbreviate long inserts.
 
-   -dbHeader=db    Add full database info to the header, with or without -name option.
+-check=fileName   Output alignment checks to filename.</code></pre> 
+<p> 
+To improve performance, a .psl file containing multiple targets should be sorted by target. The 
+target and query lists can be .fasta, .2bit, or .nib files, or a list of these files, one per 
+line. </p>
 
-   -tbaHeader=db   Format header for compatibility with tba, takes database name as argument.
-	</pre>
+<a name="pslSortUsage"></a>
+<h2>pslSort</h2> 
+<p> 
+<strong>pslSort</strong> &ndash; Merge and sort psCluster .psl output files.</p> 
+<p>
+Usage:</p>
+<pre><code>To sort all of the .psl files in the &quot;inDirs&quot; directories in two stages: first into temporary files in tempDir, and then into outFile: 
+    pslSort dirs[1|2] outFile tempDir inDir(s)
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECTION ---------------------------------------------------------->
+The device on tempDir must have sufficient space, typically 15-20 gigabytes if processing a whole genome.
 
+To sort a genome-to-genome alignment, reflecting the alignments across the diagonal: 
+    pslSort g2g[1|2] outFile tempDir inDir(s)
 
-<!--START NEXT SECTION ------------------------------------------------------->
-<BR>
-	<A NAME="pslPrettyUsage"></A>
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; pslPretty</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-	<p>
-	<b>pslPretty</b> &ndash; Convert PSL to human-readable output
-	<pre> 
-Usage:
-   pslPretty in.psl target.lst query.lst pretty.out
+Appending [1|2] to the &quot;dirs&quot; or &quot;g2g&quot; option limits the program to only the 
+first or second pass of the sort.</code></pre>
+<p>
+Options:</p>
+<pre><code>-nohead     Suppress the psl header.
 
-Options:
-   -axt              Save in axt format.
+-verbose=N  Set verbosity level, higher for more output. Default is 1.</code></pre>
+<p> 
+Note: pslSort will run out of memory on extremely large files. It may be preferable to use this 
+UNIX command in these situations:  
+<pre><code>sort -k 10 *.psl > sorted.psl</code></pre>
+<p> 
+In this case, remove the header lines from the .psl input file using the &quot;-noHead&quot; option 
+to blat before using the UNIX sort command.</p>
 
-   -dot=N            Output a dot every N records.
+<a name="pslRepsUsage"></a>
+<h2>pslReps</h2> 
+<p> 
+<strong>pslReps</strong> &ndash; Analyze repeats and generate genome-wide best alignments from a 
+sorted set of local alignments.</p>
+<p>
+Usage:</p> 
+<pre><code>pslReps in.psl out.psl out.psr</code></pre>
+<p>
+Where:</p>
+<pre><code>in.psl is an alignment file generated by psLayout and sorted by pslSort
 
-   -long             Don't abbreviate long inserts.
+out.psl is the best alignment output
 
-   -check=fileName   Output alignment checks to filename.
-	</pre>
-	<p>
-	To improve performance, a .psl file containing multiple targets should be sorted by target.
-	The target and query lists can be .fasta, .2bit, or .nib files, or a list of these
-	files, one per line. </p>
+out.psr contains repeat info</code></pre>
+<p>
+Options:</p>
+<pre><code>-nohead            Suppress psl header.
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECTION ---------------------------------------------------------->
+-ignoreSize        Reduce weighing in favor of larger alignments.
 
-<!--START NEXT SECTION ------------------------------------------------------->
-<BR>
-	<A NAME="pslSortUsage"></A>
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; pslSort</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-	<p>
-	<b>pslSort</b> &ndash; Merge and sort psCluster .psl output files.
-	<pre> 
-Usage:
-   To sort all of the .psl files in the &quot;inDirs&quot; directories in two stages: first into 
-   temporary files in tempDir, and then into outFile: 
-      pslSort dirs[1|2] outFile tempDir inDir(s)
+-noIntrons         Don't penalize for not having introns when calculating size factor.
 
-      The device on tempDir must have sufficient space, typically 15-20 gigabytes if processing a 
-      whole genome.
+-singleHit         Takes single best hit, not splitting into parts.
 
-   To sort a genome-to-genome alignment, reflecting the alignments across the diagonal: 
-      pslSort g2g[1|2] outFile tempDir inDir(s)
+-minCover=0.N      Minimum coverage to output. Default is 0.
 
-      Appending [1|2] to the &quot;dirs&quot; or &quot;g2g&quot; option limits the program to only 
-      the first or second pass of the sort.
+-ignoreNs          Ignore Ns when calculating minCover.
 
-Options:
-   -nohead     Suppress the psl header.
+-minAli=0.N        Minimum alignment ratio. Default is 0.93.
 
-   -verbose=N  Set verbosity level, higher for more output. Default is 1.
-	</pre>
-	<p>
-	Note: pslSort will run out of memory on extremely large files. It may be preferable to use
-	the following UNIX command in these situations:  
-	<pre>
-    sort -k 10 *.psl > sorted.psl
-	</pre>
-	In this case, remove the header lines from the .psl input file using the
-	&quot;-noHead&quot; option to blat before using the UNIX sort command.</p>
+-nearTop=0.N       Amount of deviation from top allowed to be taken. Default is 0.01.
 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECTION ---------------------------------------------------------->
+-minNearTopSize=N  Minimum size of alignment that is near top for alignment to be kept. Default 30.
 
-<!--START NEXT SECTION ------------------------------------------------------->
-<BR>
-	<A NAME="pslRepsUsage"></A>
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; pslReps</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-	<p>
-	<b>pslReps</b> &ndash; Analyze repeats and generate genome-wide best alignments from a 
-	sorted set of local alignments.
-	<pre> 
-Usage:
-   pslReps in.psl out.psl out.psr
+-coverQSizes=file  Tab separate file with effective query sizes. When used with -minCover, this 
+                   allows polyAs to be excluded from the coverage calculation.</code></pre>
 
-Where 
-   in.psl is an alignment file generated by psLayout and sorted by pslSort
+<a name="webBlatUsage"></a>
+<h2>Setting up WebBlat</h2> 
+<p> 
+<strong>Installing webBlat</strong></p> 
+<p> 
+Installing a web-based blat server involves four major steps:</p> 
+<ol> 
+  <li> 
+  Create the sequence databases.</li> 
+  <li> 
+  Run the gfServer program to create in-memory indexes of the databases.</li>  
+  <li>
+  Edit the webBlat.cfg file to set the machine and port that the gfServer(s) are running on, and to 
+  optionally customize the webBlat appearance for users.</li>  
+  <li>
+  Copy the webBlat executable and webBlat.cfg to a directory where the web server can execute 
+  webBlat as a cgi.</li>  
+</ol> 
+<p> 
+<strong>Creating sequence databases</strong></p> 
+<p> 
+Create databases with the program faToTwoBit. Typically, a separate database is created for each 
+genome being indexed. Each database can contain up to four billion bases of sequence in an unlimited
+number of records. The databases for webPcr and webBlat are identical.</p>
+<p> 
+The input to faToTwoBit is one or more fasta format files, each of which can contain multiple 
+records. If the sequence contains repeat sequences, as is the case with vertebrates and many plants,
+the repeat sequences can be represented in lower-case and the other sequence in upper-case. The 
+gfServer program can then be configured to ignore the repeat sequences. The output of faToTwoBit is 
+a file that is designed for fast random access and efficient storage. The output file stores four 
+bases per byte, and uses a small amount of additional space to store the case of the DNA and to keep
+track of blocks of Ns in the input. Other ambiguity codes in the input sequence, such as Y and U, 
+will be converted to N.</p> 
+<p> 
+Here is an example of how a typical installation might create a mouse and a human genome
+database:</p> 
+<pre><code>cd /data/genomes
+mkdir twoBit
+faToTwoBit human/hg19/*.fa  twoBit/hg19.2bit
+faToTwoBit mouse/mm10/*.fa  twoBit/mm10.2bit </code></pre> 
+<p> 
+It is not necessary to put all of the databases in the same directory, but it can simplify 
+bookkeeping. The databases can use the older blat format, .nib, instead of the .2bit format. The 
+.nib format packs only two bases per byte, and handles only one record per .nib file.</p> 
+<p> 
+<strong>Creating in-memory indexes with gfServer</strong></p> 
+<p> 
+The gfServer program creates an in-memory index of a nucleotide sequence database that can be used 
+for translated or untranslated searches. Translated indexes enable protein-based blat queries and 
+use approximately two bytes per unmasked base in the database. Untranslated indexes are used for 
+nucleotide-based blat queries and the in-silico PCR utility. A normal blat index uses approximately 
+one-quarter of a byte per base. For blat on smaller (primer-sized) queries or for in-silico PCR, it 
+is recommended that you use a more thorough index that requires one-half of a byte per base. The 
+gfServer program is memory intensive but typically does not require a lot of CPU power. With 
+sufficient memory, multiple gfServers can be run on the same machine.</p> 
+<p> 
+Here is an example of a typical installation:</p> 
+<pre><code>ssh bigRamMachine
+cd /data/genomes/twoBit
+gfServer start bigRamMachine 17779 hg19.2bit &
+gfServer -trans -mask start bigRamMachine 17778 hg19.2bit & </code></pre> 
+<p> 
+The &quot;trans&quot; flag creates a translated index. It requires approximately 15 minutes to build
+an untranslated index and 45 minutes to build a translated index.</p> 
+<p> 
+To build an untranslated index to be shared with in-silico PCR:</p> 
+<pre><code>gfServer -stepSize=5 bigRamMachine 17779 hg19.2bit & </code></pre> 
+<p> 
+This index will be slightly more sensitive with blat, particularly for small query sequences.</p> 
+<p> 
+<strong>Editing the webBlat.cfg file</strong></p> 
+<p> 
+The webBlat.cfg file tells the webBlat program where to look for gfServers and sequence. The basic 
+format of the .cfg file is line-oriented. The first word of each line is a command, and lines that 
+are blank or start with &quot;#&quot; are ignored. The webBlat.cfg and webPcr.cfg files are similar.
+The webBlat.cfg commands are:</p> 
+<ul> 
+  <li> 
+  gfServer &ndash; defines the host and port on which the (untranslated) gfServer is running, the 
+  associated sequence directory, and the name of the database to display on the web page.</li>  
+  <li> 
+  gfServerTrans &ndash; defines the location of a translated server.</li>  
+  <li> 
+  background &ndash; (optional) defines the background image (if any) to display on the web 
+  page.</li>  
+  <li> 
+  company &ndash; (optional) defines the company name to display on the web page.</li>  
+  <li> 
+  tempDir &ndash; specifies where to put temporary files. This path is relative to the directory 
+  where the web server executes CGI scripts. It is recommended that an automated mechanism, such as 
+  a cron job, be put in place to periodically remove files that haven't been recently accessed.</li>
+</ul> 
+<p> 
+The background and company commands are optional. The webBlat.cfg file must have at least one valid 
+gfServer or gfServerTrans line, and a tempDir line.</p> 
+<p> 
+Here is an example of a webBlat.cfg file that you might find for a typical webBlat installation:</p>
+<pre><code>company Awesome Research Amalgamated
+background /images/dnaPaper.jpg
+gfServerTrans bigRamMachine 17778 /data/genomes/twoBit/hg19.2bit Human Genome
+gfServer bigRamMachine 17779 /data/genomes/twoBit/hg19.2bit Human Genome
+gfServerTrans mouseServer 17780 /data/genomes/twoBit/mm10.2bit Mouse Genome
+gfServer mouseServer 17781 /data/genomes/twoBit/mm10.2bit Mouse Genome
+tempDir ../trash </code></pre> 
+<p> 
+<strong>Locating webBlat</strong></p> 
+<p> 
+The details of this step vary highly among web servers. Unless you are administering your own 
+computer, you will likely have to ask your local system administrators for help with this part of 
+the webBlat installation. Here is an example of a typical installation of Apache:</p> 
+<pre><code>ssh webServer
+cd kent/webBlat
+cp webBlat webBlat.cfg /usr/local/apache/cgi-bin/
+mkdir /usr/local/apache/trash
+chmod 777 /usr/local/apache/trash </code></pre> 
+<p> 
+In the above example, the executable and configuration file reside in the directory kent/webBlat/. 
+The program will create some files in the trash directory. It is advisable to periodically remove 
+old files from this directory.</p> 
+<p> 
+Here is an example of an installation on Mac OS X:</p> 
+<pre><code>cp webBlat webBlat.cfg /Library/WebServer/CGI-Executables/
+mkdir /Library/WebServer/trash
+chmod 777 /Library/WebServer/trash </code></pre>
 
-   out.psl is the best alignment output
-
-   out.psr contains repeat info
-
-Options:
-   -nohead            Suppress psl header.
-
-   -ignoreSize        Reduce weighing in favor of larger alignments.
-
-   -noIntrons         Don't penalize for not having introns when calculating size factor.
-
-   -singleHit         Takes single best hit, not splitting into parts.
-
-   -minCover=0.N      Minimum coverage to output. Default is 0.
-
-   -ignoreNs          Ignore Ns when calculating minCover.
-
-   -minAli=0.N        Minimum alignment ratio. Default is 0.93.
-
-   -nearTop=0.N       Amount of deviation from top allowed to be taken. Default is 0.01.
-
-   -minNearTopSize=N  Minimum size of alignment that is near top for alignment to be kept. Default 
-		      30.
-
-   -coverQSizes=file  Tab separate file with effective query sizes. When used with -minCover, this 
-		      allows polyAs to be excluded from the coverage calculation.
-	</pre>
-
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECTION ---------------------------------------------------------->
-
-<!--START NEXT SECTION ------------------------------------------------------->
-<BR>
-	<A NAME="webBlatUsage"></A>
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp; Setting up WebBlat</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-	<p>
-	<b>Installing webBlat</b></p>
-	<p>
-	Installing a web-based blat server involves four major steps:
-	  <ol>
-	    <li>
-	    Create the sequence databases.
-	    <li>
-	    Run the gfServer program to create in-memory indexes of the databases.
-	    <li>
-	    Edit the webBlat.cfg file to set the machine and port that the gfServer(s) are
-  	    running on, and to optionally customize the webBlat appearance for users. 
-	    <li>
-	    Copy the webBlat executable and webBlat.cfg to a directory where the web server can
-	    execute webBlat as a cgi.
-	  </ol>
-	</p>
-	<b>Creating sequence databases</b></p>
-	<p>
-	Create databases with the program faToTwoBit. Typically, a separate database is created for
-	each genome being indexed. Each database can contain up to four billion bases of sequence in
-	an unlimited number of records. The databases for webPcr and webBlat are identical.</p>
-	<p>
-	The input to faToTwoBit is one or more fasta format files, each of which can contain
-	multiple records.  If the sequence contains repeat sequences, as is the case with
-	vertebrates and many plants, the repeat sequences can be represented in lower-case and the
-	other sequence in upper-case. The gfServer program can then be configured to ignore the
-	repeat sequences. The output of faToTwoBit is a file that is designed for fast random access
-	and efficient storage. The output file stores four bases per byte, and uses a small amount
-	of additional space to store the case of the DNA and to keep track of blocks of Ns in the 
-	input. Other ambiguity codes in the input sequence, such as Y and U, will be converted to N.
-	</p>
-	<p>
-	Here is an example of how a typical installation might create a mouse and a human genome
-	database:
-	<pre>
-    cd /data/genomes
-    mkdir twoBit
-    faToTwoBit human/hg19/*.fa  twoBit/hg19.2bit
-    faToTwoBit mouse/mm10/*.fa  twoBit/mm10.2bit
-	</pre>
-	</p
-	<p>
-	It is not necessary to put all of the databases in the same directory, but it can simplify
-	bookkeeping. The databases can use the older blat format, .nib, instead of the .2bit format.
-	The .nib format packs only two bases per byte, and handles only one record per .nib file.  
-	</p>
-	<p>
-	<b>Creating in-memory indexes with gfServer</b></p>
-	<p>
-	The gfServer program creates an in-memory index of a nucleotide sequence database that can
-	be used for translated or untranslated searches. Translated indexes enable protein-based
-	blat queries and use approximately two bytes per unmasked base in the database. Untranslated
-	indexes are used for nucleotide-based blat queries and the in-silico PCR utility. A normal
-	blat index uses approximately one-quarter of a byte per base. For blat on smaller
-	(primer-sized) queries or for in-silico PCR, it is recommended that you use a more thorough
-	index that requires one-half of a byte per base. The gfServer program is memory intensive
-	but typically does not require a lot of CPU power. With sufficient memory, multiple
-	gfServers can be run on the same machine.</p>
-	<p>
-	Here is an example of a typical installation:
-	<pre>
-    ssh bigRamMachine
-    cd /data/genomes/twoBit
-    gfServer start bigRamMachine 17779 hg19.2bit &
-    gfServer -trans -mask start bigRamMachine 17778 hg19.2bit &
-	</pre>
-	</p>
-	<p>
-	The &quot;trans&quot; flag creates a translated index. It requires approximately 15 minutes
-	to build an untranslated index and 45 minutes to build a translated index.</p>
-	<p>
-	To build an untranslated index to be shared with in-silico PCR:
-	<pre>
-    gfServer -stepSize=5 bigRamMachine 17779 hg19.2bit &
-	</pre>
-	<p>
-	This index will be slightly more sensitive with blat, particularly for small query
-	sequences.</p>
-	<p>
-	<b>Editing the webBlat.cfg file</b></p>
-	<p>
-	The webBlat.cfg file tells the webBlat program where to look for gfServers and sequence. The
-	basic format of the .cfg file is line-oriented. The first word of each line is a command,
-	and lines that are blank or start with &quot;#&quot; are ignored. The webBlat.cfg and
-	webPcr.cfg files are similar. The webBlat.cfg commands are:
-	  <ul>
-	    <li>
-	    gfServer &ndash; defines the host and port on which the (untranslated) gfServer is 
-	    running, the associated sequence directory, and the name of the database to display on 
-	    the web page.
-	    <li>
-	    gfServerTrans &ndash; defines the location of a translated server.
-	    <li>
-	    background &ndash; (optional) defines the background image (if any) to display on the 
-	    web page.
-	    <li>
-	    company &ndash; (optional) defines the company name to display on the web page.
-	    <li>
-	    tempDir &ndash; specifies where to put temporary files. This path is relative to the
-	    directory where the web server executes CGI scripts. It is recommended that an automated
-	    mechanism, such as a cron job, be put in place to periodically remove files that haven't
-	    been recently accessed.
-	  </ul></p>
-	<p>
-	The background and company commands are optional. The webBlat.cfg file must have at least
-	one valid gfServer or gfServerTrans line, and a tempDir line.</p>
-	<p>
-	Here is an example of a webBlat.cfg file that you might find for a typical webBlat
-	installation:
-	<pre>
-    company Awesome Research Amalgamated
-    background /images/dnaPaper.jpg
-    gfServerTrans bigRamMachine 17778 /data/genomes/twoBit/hg19.2bit Human Genome
-    gfServer bigRamMachine 17779 /data/genomes/twoBit/hg19.2bit Human Genome
-    gfServerTrans mouseServer 17780 /data/genomes/twoBit/mm10.2bit Mouse Genome
-    gfServer mouseServer 17781 /data/genomes/twoBit/mm10.2bit Mouse Genome
-    tempDir ../trash
-	</pre>
-	</p>
-	<p>
-	<b>Locating webBlat</b></p>
-	<p>
-	The details of this step vary highly among web servers. Unless you are administering your
-	own computer, you will likely have to ask your local system administrators for help with
-	this part of the webBlat installation. Here is an example of a typical installation of
-	Apache:
-	<pre>
-     ssh webServer
-     cd kent/webBlat
-     cp webBlat webBlat.cfg /usr/local/apache/cgi-bin/
-     mkdir /usr/local/apache/trash
-     chmod 777 /usr/local/apache/trash
-	</pre>
-	</p>
-	<p>
-	In the above example, the executable and configuration file reside in the directory
-	kent/webBlat/. The program will create some files in the trash directory. It is advisable to
-	periodically remove old files from this directory.</p>
-	<p>
-	Here is an example of an installation on Mac OS X:
-	<pre>
-     cp webBlat webBlat.cfg /Library/WebServer/CGI-Executables/
-     mkdir /Library/WebServer/trash
-     chmod 777 /Library/WebServer/trash
-	</pre>
-	</p>
-
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-<!-- END SECTION ---------------------------------------------------------->
-
-</TD></TR></TABLE>
-</BODY></HTML>
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

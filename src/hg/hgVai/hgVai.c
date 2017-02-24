@@ -158,8 +158,8 @@ void printRegionListHtml(char *db)
  * Unlike hgTables, don't bother with ENCODE pilot regions -- unless someone misses it.
  * Return the selected region type. */
 {
-printf("<SELECT ID='"hgvaRegionType"' NAME='"hgvaRegionType"' "
-       "onchange=\"hgva.changeRegion();\">\n");
+printf("<SELECT ID='"hgvaRegionType"' NAME='"hgvaRegionType"'>\n");
+jsOnEventById("change", hgvaRegionType, "hgva.changeRegion();");
 printOption(hgvaRegionTypeGenome, regionType, "genome");
 printOption(hgvaRegionTypeRange, regionType, "position or search term");
 printf("</SELECT>");
@@ -191,11 +191,11 @@ void printCtAndHubButtons()
 {
 boolean hasCustomTracks = customTracksExist(cart, NULL);
 puts("<div style='padding-top: 5px; padding-bottom: 5px'>");
-hOnClickButton("document.customTrackForm.submit(); return false;",
+hOnClickButton("prtCtHub_CtBut", "document.customTrackForm.submit(); return false;",
 	       hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
 printf(" ");
 if (hubConnectTableExists())
-    hOnClickButton("document.trackHubForm.submit(); return false;", "track hubs");
+    hOnClickButton("prtCtHub_TrkHub", "document.trackHubForm.submit(); return false;", "track hubs");
 nbSpaces(3);
 printf("To reset <B>all</B> user cart settings (including custom tracks), \n"
        "<A HREF=\"cartReset?destination=%s\">click here</A>.\n",
@@ -210,17 +210,17 @@ boolean gotClade = hGotClade();
 if (gotClade)
     {
     topLabelSpansStart("clade");
-    printCladeListHtml(genome, onChangeClade());
+    printCladeListHtml(genome, "change", onChangeClade());
     topLabelSpansEnd();
     }
 topLabelSpansStart("genome");
 if (gotClade)
-    printGenomeListForCladeHtml(database, onChangeOrg());
+    printGenomeListForCladeHtml(database, "change", onChangeOrg());
 else
-    printGenomeListHtml(database, onChangeOrg());
+    printGenomeListHtml(database, "change", onChangeOrg());
 topLabelSpansEnd();
 topLabelSpansStart("assembly");
-printAssemblyListHtml(database, onChangeDb());
+printAssemblyListHtml(database, "change", onChangeDb());
 topLabelSpansEnd();
 puts("<BR>");
 topLabelSpansStart("region to annotate");
@@ -327,7 +327,7 @@ printf("</select>\n");
 char shadowVar[1024];
 safef(shadowVar, sizeof(shadowVar), "%s%s", cgiMultListShadowPrefix(), cartVar);
 cgiMakeHiddenVar(shadowVar, "1");
-//printf("<script>$(document).ready(function(){ ddcl.setup($('#%s')[0]); });</script>\n", cartVar);
+jsInlineF("$(document).ready(function(){ ddcl.setup($('#%s')[0]); });\n", cartVar);
 }
 
 void printFilterOptions(struct trackDb *tdb)
@@ -353,16 +353,16 @@ if (sameString(tdb->type, "factorSource"))
 	   cartVar, defaultScore);
     // The dimensions of ui-dropdownchecklist multiselects are not correct when
     // the item is hidden.  So, when this filter section is made visible, reinit them.
-    printf("<script>\n"
-	   "$(function(){"
-	   "$('tr[id^=\"%s-\"]').bind('show',"
+    jsInlineF(
+	   "$(function(){\n"
+	   "$('tr[id^=\"%s-\"]').bind('show',\n"
 	   "  function(jqev) { \n"
 	   "    var $multisels = $(jqev.target).find('.filterBy');\n"
 	   "    var multiselElList = $multisels.each(function(ix, el){ return el; });\n"
 	   "    ddcl.reinit(multiselElList);"
 	   "  });\n"
-	   "});"
-	   "</script>\n", sectionName);
+	   "});\n"
+	   , sectionName);
     puts("</TABLE>");
     endCollapsibleSection();
     }
@@ -458,12 +458,12 @@ if (varTrackList == NULL)
     {
     printf("Your session doesn't have any custom tracks or hub tracks in " PGSNP_OR_VCF
            " format.\n");
-    hOnClickButton("return hgva.goToAddCustomTrack();",
+    hOnClickButton("selVar_AddPgpVcfCt", "return hgva.goToAddCustomTrack();",
                    "add pgSnp or VCF custom track");
     if (hubConnectTableExists())
         {
         nbSpaces(2);
-        hOnClickButton("document.trackHubForm.submit(); return false;", "add track hub");
+        hOnClickButton("selVar_AddTrkHub", "document.trackHubForm.submit(); return false;", "add track hub");
         }
     puts("<BR>");
     }
@@ -473,8 +473,8 @@ else if (slCount(varTrackList) > 1)
            PGSNP_OR_VCF " format, please select the one you wish to annotate:<BR>\n");
     }
 printf("<B>variants: </B>");
-printf("<SELECT ID='hgva_variantTrack' NAME='hgva_variantTrack' "
-       "onchange=\"hgva.changeVariantSource();\">\n");
+printf("<SELECT ID='hgva_variantTrack' NAME='hgva_variantTrack'>\n");
+jsOnEventById("change", "hgva_variantTrack", "hgva.changeVariantSource();");
 char *selected = cartUsualString(cart, "hgva_variantTrack", "");
 struct slRef *ref;
 for (ref = varTrackList;  ref != NULL;  ref = ref->next)
@@ -543,8 +543,8 @@ char *selected = cartUsualString(cart, "hgva_geneTrack", firstTrack);
 
 if (gotGP)
     {
-    printf("<SELECT ID='hgva_geneTrack' NAME='hgva_geneTrack' "
-           "onchange=\"hgva.changeGeneSource();\">\n");
+    printf("<SELECT ID='hgva_geneTrack' NAME='hgva_geneTrack'>\n");
+    jsOnEventById("change", "hgva_geneTrack", "hgva.changeGeneSource();");
     struct slRef *ref;
     for (ref = trackRefList;  ref != NULL;  ref = ref->next)
 	{
@@ -1213,9 +1213,9 @@ else
 	{
 	printf("<TR><TD></TD><TD>");
 	struct trackDb *tdb = ref->val;
-	cgiMakeOnClickRadioButton("hgva_require_consEl_track", tdb->track,
+	cgiMakeOnEventRadioButtonWithClass("hgva_require_consEl_track", tdb->track,
 				  sameString(tdb->track, selected),
-	  "onclick=\"setCheckboxList('hgva_require_consEl', true);\"");
+	  NULL, "click", "setCheckboxList('hgva_require_consEl', true);");
 	printf("%s</TD></TR>\n", tdb->longLabel);
 	}
     puts("</TABLE>");
@@ -1272,7 +1272,7 @@ puts("This tool is for research use only. While this tool is open to the "
 puts("</div><BR>");
 printf("<div><img id='loadingImg' src='../images/loading.gif' />\n");
 printf("<span id='loadingMsg'></span></div>\n");
-cgiMakeOnClickButton("hgva.submitQueryIfDisclaimerAgreed();", "Get results");
+cgiMakeOnClickButton("subDisclmAgrd","hgva.submitQueryIfDisclaimerAgreed();", "Get results");
 puts("<BR><BR>");
 }
 
@@ -1303,9 +1303,9 @@ jsInit();
 webIncludeResourceFile("jquery-ui.css");
 webIncludeResourceFile("ui.dropdownchecklist.css");
 boolean alreadyAgreed = cartUsualBoolean(cart, "hgva_agreedToDisclaimer", FALSE);
-printf("<script>\n"
-       "$(document).ready(function() { hgva.disclaimer.init(%s, hgva.userClickedAgree); });\n"
-       "</script>\n", alreadyAgreed ? "true" : "false");
+jsInlineF(
+    "$(document).ready(function() { hgva.disclaimer.init(%s, hgva.userClickedAgree); });\n"
+    , alreadyAgreed ? "true" : "false");
 addSomeCss();
 printAssemblySection();
 

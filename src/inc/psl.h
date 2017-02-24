@@ -157,6 +157,12 @@ int pslCmpQuery(const void *va, const void *vb);
 int pslCmpTarget(const void *va, const void *vb);
 /* Compare to sort based on target. */
 
+int pslCmpTargetStart(const void *va, const void *vb);
+/* Compare to sort based on target start. */
+
+int pslCmpTargetScore(const void *va, const void *vb);
+/* Compare to sort based on target then score. */
+
 int pslCmpTargetAndStrand(const void *va, const void *vb);
 /* Compare to sort based on target, strand,  tStart. */
 
@@ -338,5 +344,9 @@ return psl->tStarts[blkIdx] + psl->blockSizes[blkIdx];
 struct psl* pslClone(struct psl *psl);
 /* clone a psl */
 
+extern char *pslSortList[5];
+
+void pslSortListByVar(struct psl **pslList, char *sort);
+/* Sort a list of psls using the method definied in the sort string. */
 #endif /* PSL_H */
 

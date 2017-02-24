@@ -1175,7 +1175,7 @@ function mysqlDbSetup ()
     # by default hgGateway needs an empty hg19 database, will crash otherwise
     # $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg19'
     # mm9 needs an empty hg18 database
-    # $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg18'
+    $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg18'
     
     $MYSQL -e "FLUSH PRIVILEGES;"
 }
@@ -1409,7 +1409,7 @@ function downloadGenomes
        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/$db
     done
 
-    if [ -z $GENBANKTBLS ]; then
+    if [ ! -z "$GENBANKTBLS" ]; then
         echo2 Downloading hgFixed tables
         for tbl in $GENBANKTBLS; do
             $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/${tbl}.* $MYSQLDIR/hgFixed/

@@ -697,8 +697,7 @@ cgiMakeDropListClassWithStyle(name, ddOpMenu, ddOpMenuSize,
                               cartUsualString(cart, name, ddOpMenu[0]),"normalText","width: 76px");
 hPrintf("</TD><TD>match </TD><TD>\n");
 name = filterPatternVarName(db, table, field);
-cgiMakeTextVarWithExtraHtml(name, cartUsualString(cart, name, "*"),140,NULL);
-//cgiMakeTextVar(name, cartUsualString(cart, name, "*"), 20);
+cgiMakeTextVarWithJs(name, cartUsualString(cart, name, "*"),140,NULL,NULL);
 if (logOp == NULL)
     logOp = "";
 hPrintf("&nbsp;%s </TD></TR>\n", logOp);

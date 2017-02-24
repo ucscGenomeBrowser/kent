@@ -92,6 +92,25 @@ bedLoadItem(tg, "cytoBand", (ItemLoader)cytoBandLoad);
 static void loadCytoBandsIdeo(struct track *tg)
 /* Load up cytoBandIdeo from database table to track items. */
 {
+if (tg->isBigBed)
+    { 
+    struct lm *lm = lmInit(0);
+    int start = 0;
+    int end = hChromSize(database, chromName);
+    struct bigBedInterval *bb, *bbList = bigBedSelectRange(tg, chromName, start, end, lm);
+    char *bedRow[32];
+    char startBuf[16], endBuf[16];
+
+    for (bb = bbList; bb != NULL; bb = bb->next)
+        {
+        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        struct cytoBand *bed = cytoBandLoad(bedRow);
+        slAddHead(&tg->items, bed);
+        }
+    slReverse(&tg->items);
+    lmCleanup(&lm);
+    return;
+    }
 char query[256];
 sqlSafef(query, sizeof(query),
       "select * from cytoBandIdeo where chrom like '%s'", chromName);
@@ -206,7 +225,6 @@ struct cytoBand *cb = item;
 x = hvGfxAdjXW(hvg, x, width);
 
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-hPrintf("onclick='return false;' ");
 hPrintf("HREF=\"#\" class='cytoBand'");
 mapStatusMessage("%s %s:%d-%d", (cb->name==NULL?"":cb->name),cb->chrom, cb->chromStart+1, cb->chromEnd);
 hPrintf(">\n");

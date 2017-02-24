@@ -12,7 +12,7 @@
 mkdir ~/kent/src/hg/makeDb/doc/melGal5
 cd ~/kent/src/hg/makeDb/doc/melGal5
 
-sed -e 's/galGal/melGal/g; s/GalGal/MelGal/g; s/DONE/TDB/g;' \
+sed -e 's/galGal/melGal/g; s/GalGal/MelGal/g; s/DONE/TBD/g;' \
        ../galGal5/initialBuild.txt > initialBuild.txt
 
 mkdir /hive/data/genomes/melGal5/refseq
@@ -335,6 +335,46 @@ real    5m46.391s
     # 1128339136 bases of 1128339136 (100.000%) in intersection
 
 #########################################################################
+# UCSC to RefSeq name correspondence (DONE - 2017-01-17 - Hiram)
+
+    mkdir /hive/data/genomes/melGal5/bed/ucscToRefSeq
+    cd /hive/data/genomes/melGal5/bed/ucscToRefSeq
+
+    ln -s ../../refseq/GCF_000146605.2_Turkey_5.0_assembly_report.txt .
+
+    # this assembly_report has "UCSC-style-name" in column 10
+    # but it does not name anything, they are all "na"
+
+    # columns 5 and 7 are the INSDC and RefSeq names
+    grep -v "^#" GCF_000146605.2_Turkey_5.0_assembly_report.txt \
+      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}' \
+        | sort > insdc.refSeq.tab
+
+    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' \
+      melGal5 | sort  > insdc.ucsc.tab
+
+    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
+       | cut -f2- > ucsc.refSeq.tab
+
+    # when working perfectly, all these tab files have the same line count:
+    wc -l *.tab
+#	231286 insdc.refSeq.tab
+#	231286 insdc.ucsc.tab
+#	231286 ucsc.refSeq.tab
+
+    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  27
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab melGal5 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+
+    checkTableCoords  melGal5 -table=ucscToRefSeq
+    # should cover %100 all bases:
+    featureBits -countGaps melGal5 ucscToRefSeq
+    # 1128339136 bases of 1128339136 (100.000%) in intersection
+
+#########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2017-01-13 - Hiram)
     cd ~/kent/src/hg/makeDb/trackDb/turkey/melGal5
     # preview prefixes and suffixes:
@@ -514,16 +554,16 @@ searchPriority 8
     # continuing:
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -continue=makeBed -bigClusterHub=ku melGal5) > makeBed.log 2>&1
-    # real    3m28.728s
+    # real    18m5.464s
 
     cat fb.melGal5.genscan.txt
-    # 27936393 bases of 1218501075 (2.293%) in intersection
+    # 25993392 bases of 1093044709 (2.378%) in intersection
 
     cat fb.melGal5.genscanSubopt.txt
-    # 28748140 bases of 1218501075 (2.359%) in intersection
+    # 26390637 bases of 1093044709 (2.414%) in intersection
 
 #########################################################################
-# Create kluster run files (TDB - 2016-04-14 - Hiram)
+# Create kluster run files (DONE - 2017-01-17 - Hiram)
 
     # numerator is melGal5 gapless bases "real" as reported by:
     featureBits -noRandom -noHap melGal5 gap
@@ -555,7 +595,7 @@ searchPriority 8
         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TDB - 2016-04-15,19 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-01-17,18 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -593,12 +633,12 @@ melGal5.downloadDir = melGal5
 
     time ./bin/gbAlignStep -initial melGal5
     # var/build/logs/2017.01.17-20:34:20.melGal5.initalign.log
-XXX - running - Tue Jan 17 20:34:33 PST 2017
 
-    #   real    5678m9.548s
-    tail var/build/logs/2016.04.15-09:58:43.melGal5.initalign.log
-    #    hgwdev 2016.04.19-08:29:59 melGal5.initalign: Succeeded: melGal5
-    #    hgwdev 2016.04.19-08:36:52 melGal5.initalign: finish
+    #   real    842m48.790s
+
+    tail var/build/logs/2017.01.17-20:34:20.melGal5.initalign.log
+    #    hgwdev 2017.01.18-10:35:41 melGal5.initalign: Succeeded: melGal5
+    #    hgwdev 2017.01.18-10:37:08 melGal5.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.melGal5
@@ -607,10 +647,12 @@ XXX - running - Tue Jan 17 20:34:33 PST 2017
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad melGal5
-    # var/dbload/hgwdev/logs/2016.04.19-08:38:37.melGal5.dbload.log
-    #  real    195m36.119s
+    # logFile: var/dbload/hgwdev/logs/2017.01.18-15:59:18.melGal5.dbload.log
+    #  real    18m6.466s
+
+    tail -1 var/dbload/hgwdev/logs/2017.01.18-15:59:18.melGal5.dbload.log
     tail -1 var/dbload/hgwdev/logs/2016.04.19-08:38:37.melGal5.dbload.log
-    #  hgwdev 2016.04.19-11:54:13 melGal5.dbload: finish
+    #  hgwdev 2017.01.18-16:17:24 melGal5.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -618,7 +660,7 @@ XXX - running - Tue Jan 17 20:34:33 PST 2017
     # add melGal5 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added melGal5 - turkey refs #17168" etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding melGal5 to the update alignments refs #18656' etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -630,13 +672,13 @@ XXX - running - Tue Jan 17 20:34:33 PST 2017
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=chicken -dbHost=hgwdev \
            -workhorse=hgwdev melGal5) > do.log 2>&1
-XXX - running - Tue Jan 17 10:27:55 PST 2017
+    # real    112m43.348s
 
     cat fb.melGal5.augustusGene.txt
-    # 25248650 bases of 100286401 (25.177%) in intersection
+    # 26102693 bases of 1093044709 (2.388%) in intersection
 
 #########################################################################
-# ncbiRefSeq (TDB - 2016-05-13 - Hiram)
+# ncbiRefSeq (TBD - 2016-05-13 - Hiram)
 
     mkdir /hive/data/genomes/melGal5/bed/ncbiRefSeq
     cd /hive/data/genomes/melGal5/bed/ncbiRefSeq
@@ -716,18 +758,14 @@ XXX - running - Tue Jan 17 10:27:55 PST 2017
     joinerCheck -database=melGal5 -keys all.joiner
 
     cd /hive/data/genomes/melGal5
-    time (makeDownloads.pl melGal5) > downloads.log 2>&1
-    #  real    27m1.207s
+    time (makeDownloads.pl -workhorse=hgwdev melGal5) > downloads.log 2>&1
+    #  real    16m3.852s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/melGal5/pushQ
     cd /hive/data/genomes/melGal5/pushQ
     time (makePushQSql.pl melGal5) > melGal5.pushQ.sql 2> stderr.out
     #  real    7m21.629s
-
-   71 melGal5.pushQ.sql
-   43 stderr.out
-  114 total
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/melGal5/wib/gc5Base.wib
@@ -742,45 +780,5 @@ XXX - running - Tue Jan 17 10:27:55 PST 2017
 
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
-
-#########################################################################
-# UCSC to RefSeq name correspondence (TBD - 2016-05-12 - Hiram)
-
-    mkdir /hive/data/genomes/melGal5/bed/ucscToRefSeq
-    cd /hive/data/genomes/melGal5/bed/ucscToRefSeq
-
-    ln -s ../../refseq/GCF_000146605.2_Turkey_5.0_assembly_report.txt .
-
-    # this assembly_report has "UCSC-style-name" in column 10
-    # but it does not name anything, they are all "na"
-
-    # columns 5 and 7 are the INSDC and RefSeq names
-    grep -v "^#" GCF_000146605.2_Turkey_5.0_assembly_report.txt \
-      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}' \
-        | sort > insdc.refSeq.tab
-
-    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' \
-      melGal5 | sort  > insdc.ucsc.tab
-
-    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
-       | cut -f2- > ucsc.refSeq.tab
-
-    # when working perfectly, all these tab files have the same line count:
-    wc -l *.tab
-#	231286 insdc.refSeq.tab
-#	231286 insdc.ucsc.tab
-#	231286 ucsc.refSeq.tab
-
-    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
-    echo $chrSize
-    #  27
-    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
-       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
-    hgLoadSqlTab melGal5 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
-
-    checkTableCoords  melGal5 -table=ucscToRefSeq
-    # should cover %100 all bases:
-    featureBits -countGaps melGal5 ucscToRefSeq
-    # 1128339136 bases of 1128339136 (100.000%) in intersection
 
 #########################################################################

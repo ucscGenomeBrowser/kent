@@ -18,7 +18,7 @@ Genome Browser installation directly on your server.
     see our [manual pages](https://genome.ucsc.edu/goldenpath/help/customTrack.html#SHARE) for a list
     of the parameters.
     
-2.  [Assembly Hubs](../../goldenPath/help/hgTrackHubHelp.html#Assembly): 
+2.  [Assembly Hubs](https://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html#Assembly): 
     Assembly Hubs allow you to prepare any FASTA file, add annotations and use
     the Genome Browser to visualize it. All you need is a webserver where you
     save the indexed genome sequence and files to annotate it, e.g. in BAM,
@@ -45,7 +45,7 @@ Genome Browser installation directly on your server.
         provider which is closer to Santa Cruz or by using a content distribution network,
         where all content is mirrored and the closest location is chosen by your provider.
 
-3.  [Genome Browser in a Box](../../goldenPath/help/gbib.html): 
+3.  [Genome Browser in a Box](https://genome.ucsc.edu/goldenPath/help/gbib.html): 
     Genome Browser in a Box (GBiB) is a fully configured Virtual Machine including
     Apache and Mysql and behaves exactly like the UCSC site.
     It loads genome data from the UCSC download servers on the fly.
@@ -58,7 +58,7 @@ Genome Browser installation directly on your server.
 
     * Pros:
         * Relatively simple to install: download and double-click.
-        * By default, software and data updates are managed remotely by UCSC, via an update script run every two weeks.
+        * By default, software and data updates are managed remotely by UCSC, via an update script run every week.
         * Best performance when rendering local BAM/bigWig/bigBed files.
         * No Unix webserver needed, runs on any OS.
         * For commercial users: easier click-through licensing compared to a full multi-seat, manual license.
@@ -69,7 +69,7 @@ Genome Browser installation directly on your server.
         * For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks, like a manual local installation.
 
 If none of the above options really fulfill your needs, then you should consider setting up a full local mirror of the UCSC website.
-We support mirror site installations as far as our time allows and there are dozens of working mirror sites already all over the world.
+We support mirror site installations as far as our time allows and there are many working mirror sites already all over the world.
 
 A license is required for commercial download and/or installation of the Genome
 Browser binaries and source code. No license is needed for academic, nonprofit,
@@ -80,7 +80,7 @@ or visit the [Genome Browser store](https://genome-store.ucsc.edu/).
 # Installing a Genome Browser locally with the GBiC installer
 
 If you do not want to use our prepared virtual machine Genome-Browser-in-a-Box, we provide an
-[installation program](../../goldenPath/help/gbic.html) that sets up a fully functional mirror on all major Linux
+[installation program](https://genome.ucsc.edu/goldenPath/help/gbic.html) that sets up a fully functional mirror on all major Linux
 distributions.  
 
 It has been tested on Ubuntu 14/16,  RedHat/CentOS 6 and 7,
@@ -97,7 +97,7 @@ computing provider, it is highly advisable to run your instances in the US West
 Coast / San Francisco Bay Area or San Jose data centers, as otherwise data loading can be 
 very slow.
 
-To run the installation program, please see the [GBiC user guide](../../goldenPath/help/gbic.html). 
+To run the installation program, please see the [GBiC user guide](https://genome.ucsc.edu/goldenPath/help/gbic.html). 
 
 # Manual installation instructions
 

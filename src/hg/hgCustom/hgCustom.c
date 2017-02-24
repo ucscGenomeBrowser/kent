@@ -90,10 +90,12 @@ struct customTrack *ctList = NULL;
 void makeClearButton(char *field)
 /* UI button that clears a text field */
 {
+char id[256];
+safef(id, sizeof id, "%s_clear", field);
 char javascript[1024];
 safef(javascript, sizeof javascript,
         "document.mainForm.%s.value = '';", field);
-cgiMakeOnClickButton(javascript, "&nbsp;Clear&nbsp;");
+cgiMakeOnClickButton(id, javascript, "&nbsp;Clear&nbsp;");
 }
 
 void addIntro()
@@ -157,17 +159,18 @@ jsIncludeFile("ajax.js", NULL);
 
 /* main form */
 printf("<FORM ACTION=\"%s\" METHOD=\"%s\" "
-    " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\" onsubmit=\"$('input[name=Submit]').attr('disabled', 'disabled');\" >\n",
+    " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\" id='mainForm'>\n",
     hgCustomName(), cartUsualString(cart, "formMethod", "POST"));
+jsOnEventById("submit", "mainForm", "$('input[name=Submit]').attr('disabled', 'disabled');");
 cartSaveSession(cart);
 
 if (!isUpdateForm)
     {
     /* Print clade, genome and assembly  */
     /* NOTE: this uses an additional, hidden form (orgForm), below */
-    char *onChangeDb = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
-    char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
-    char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();\"";
+    char *onChangeDb = "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();";
+    char *onChangeOrg = "document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();";
+    char *onChangeClade = "document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();";
 
     if (hIsGsidServer())
         {
@@ -179,19 +182,19 @@ if (!isUpdateForm)
     if (gotClade)
         {
         puts("<TR><TD>clade\n");
-        printCladeListHtml(hOrganism(database), onChangeClade);
+        printCladeListHtml(hOrganism(database), "change", onChangeClade);
         puts("&nbsp;&nbsp;&nbsp;");
         puts("genome\n");
-        printGenomeListForCladeHtml(database, onChangeOrg);
+        printGenomeListForCladeHtml(database, "change", onChangeOrg);
         }
     else
         {
         puts("<TR><TD>genome\n");
-        printGenomeListHtml(database, onChangeOrg);
+        printGenomeListHtml(database, "change", onChangeOrg);
         }
     puts("&nbsp;&nbsp;&nbsp;");
     puts("assembly\n");
-    printAssemblyListHtml(database, onChangeDb);
+    printAssemblyListHtml(database, "change", onChangeDb);
     char *description = hFreezeFromDb(database);
     if ((description != NULL) && ! stringIn(database, description))
 	{
@@ -509,7 +512,7 @@ if (updateCt)
     }
 
 cgiTableRowEnd();
-
+int butCount=0;
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     /* Name  field */
@@ -568,7 +571,10 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	{
 	if (ct->networkErrMsg)
 	    {
-	    printf("\n<TD><A href=\"javascript:void(0)\" onClick=\"alert('%s')\">Show</A></TD>\n",
+	    char id[256];
+	    safef(id, sizeof id, "_%d", butCount);
+	    printf("\n<TD><A href='#' id='%s'>Show</A></TD>\n", id);
+	    jsOnEventByIdF("click", id, "alert('%s');return false;",
 		javaScriptLiteralEncode(ct->networkErrMsg));
 	    }
 	else
@@ -670,9 +676,8 @@ if (pos)
     cgiMakeHiddenVar("position", pos);
 printf("view in ");
 // Construct a menu of destination CGIs
-char *extraHtml = "id=\"navSelect\" "
-    "onChange=\"var newVal = $('#navSelect').val(); $('#navForm').attr('action', newVal);\"";
-puts(cgiMakeSingleSelectDropList(hgCtNavDest, valsAndLabels, selected, NULL, NULL, extraHtml));
+puts(cgiMakeSingleSelectDropList(hgCtNavDest, valsAndLabels, selected, NULL, NULL,
+ "change", "var newVal = $('#navSelect').val(); $('#navForm').attr('action', newVal);", NULL, "navSelect"));
 cgiMakeButton("submit", "go");
 puts("</FORM>");
 }
@@ -714,15 +719,15 @@ cartSaveSession(cart);
 if (assemblyMenu)
     {
     /* Print clade, genome and assembly  */
-    char *onChangeDb = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
-    char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
+    char *onChangeDb = "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();";
+    char *onChangeOrg = "document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();";
 
     puts("<TABLE BORDER=0>\n");
     puts("<TR><TD>genome\n");
-    printSomeGenomeListHtml(database, dbList, onChangeOrg);
+    printSomeGenomeListHtml(database, dbList, "change", onChangeOrg);
     puts("&nbsp;&nbsp;&nbsp;");
     puts("assembly\n");
-    printSomeAssemblyListHtml(database, dbList, onChangeDb);
+    printSomeAssemblyListHtml(database, dbList, "change", onChangeDb);
     puts("&nbsp;&nbsp;&nbsp;");
     printf("[%s]", database);
     puts("</TD></TR></TABLE><P>\n");
@@ -784,12 +789,15 @@ puts("</TD></TR>");
 /* button to add custom tracks */
 puts("<TR><TD>");
 printf("<INPUT TYPE=SUBMIT NAME=\"addTracksButton\" ID=\"addTracksButton\" VALUE=\"%s\" "
-       "STYLE=\"margin-top: 5px\" "
-       // This submits mainForm with a hidden input that tells hgCustom to show add tracks page:
-       "onClick='var $form = $(form[name=\"mainForm\"]); "
-                "$form.append(\"<input name=\\\"%s\\\" type=\\\"hidden\\\">\"); "
-                "$form.submit();' >\n",
-       "add custom tracks", hgCtDoAdd);
+       "STYLE=\"margin-top: 5px\" >\n",
+       "add custom tracks");
+// This submits mainForm with a hidden input that tells hgCustom to show add tracks page:
+jsOnEventByIdF("click", "addTracksButton", 
+	"var $form = $(\"form[name='mainForm']\"); "
+	"$form.append(\"<input name='%s' type='hidden'>\"); "
+	"$form.submit();"
+	, hgCtDoAdd);
+
 puts("</TD></TR>");
 
 puts("</TABLE>");
@@ -800,16 +808,16 @@ cgiTableEnd();
 
 
 // This vertically aligns the 'add tracks' button with the other-CGI select
-puts("<SCRIPT>");
-puts("function fitUnder($el1, $el2) { "
-     "  var off1 = $el1.offset(); "
-     "  var off2 = $el2.offset(); "
-     "  off2.left = off1.left; "
-     "  $el2.offset(off2);"
-     "  $el2.width($el1.width()); "
-     "};");
-puts("$(document).ready(function () { fitUnder($('#navSelect'), $('#addTracksButton')); });");
-puts("</SCRIPT>");
+jsInline(
+    "function fitUnder($el1, $el2) { "
+    "  var off1 = $el1.offset(); "
+    "  var off2 = $el2.offset(); "
+    "  off2.left = off1.left; "
+    "  $el2.offset(off2);"
+    "  $el2.width($el1.width()); "
+    "};"
+    "$(document).ready(function () { fitUnder($('#navSelect'), $('#addTracksButton')); });\n"
+);
 
 cartSetString(cart, "hgta_group", "user");
 }

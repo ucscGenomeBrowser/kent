@@ -1,146 +1,62 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<HTML>
-<HEAD>
-	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-        <META name="description" content="UCSC Genome Browser FAQ">
-        <META name="keywords" content="genome, genome browser, genome assembly, UCSC, bioinformatics, sequence, gene prediction, SNP, EST, mRNA">
-	<TITLE>UCSC Genome Bioinformatics: FAQ</TITLE>
-	<LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
-</HEAD>
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
-<A NAME="TOP"></A>
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser FAQ" -->
+<!--#set var="ROOT" value=".." -->
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../cgi-bin/hgMenubar"--></TD></TR>
-<!--Content Tables------------------------------------------------------->
-<TR><TD COLSPAN=2 CELLPADDING=10>
-    <!--outer table is for border purposes-->
-    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
-        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
-            <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
-                <TR><TD> <FONT SIZE="4"><b>&nbsp;   Frequently Asked Questions: Genome Browser Mailing List</b></FONT>
-                </TD></TR></TABLE>
-            <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-                <TR><TD>&nbsp;</TD><TD>
-		<UL>
-                <LI><A HREF="#how1">How to post a question to the mailing list</A>
-                <LI><A HREF="#how2">How to view previous questions in the mailing list</A>
-		</UL>
-		<P>
-		<A HREF="index.html">Return to FAQ Table of Contents</A>
-		<BR>
-            </TD><TD WIDTH=15></TD></TR></TABLE><BR>
-        </TD></TR></TABLE>
-    </TD></TR></TABLE>
-<BR>
+<h1>Frequently Asked Questions: Genome Browser Mailing List</h1>
 
-<!--Content Table------------------------------------------------------------>
-<A NAME="how1"></A>
-    <!--outer table is for border purposes-->        
-    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-        <TR><TD>            
-        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
-	        <TR><TD>                
-	        <!--cheap trick to get background on row to be continuous-->
-	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
-		    <TR><TD ALIGN="left">
-	   	    <FONT SIZE="4"><b>&nbsp; How to post a question to the mailing list</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
-	            </TD></TR>
-  	        </TABLE>                
-	        </TD></TR>
-  	    </TABLE>                
-   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-	        <TR><TH HEIGHT=10></TH></TR>
-                <TR><TD WIDTH=10>&nbsp;</TD>
-		    <TD>
-	            <P>
-			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
-			"How do I post a question to the Genome Browser mailing list?"
-			<P>
-			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			If you are unable to find the answer to your question after searching the 
-			<A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">
-			Genome Browser mailing list</A>, 
-                        please feel free to submit your question to 
-  			<A HREF="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;">&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;</A>.
-                        <!-- above address is genome at soe.ucsc.edu -->
-			<b><font color="red">Messages sent to this address will be posted to the moderated genome
-                        mailing list, which is also archived on a SEARCHABLE PUBLIC 
-			<a HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome">Google Groups forum</a></font></b>. 
- 
-			You may review <a href="http://www.ploscompbiol.org/article/info:doi%2F10.1371%2Fjournal.pcbi.1002202" TARGET="_BLANK">this</a> 
-			PLoS Comp Bio editorial for a few guidelines before posting questions to the mailing list. When submitting a 
-                        question, please include the following information:<BR>
+<h2>Topics</h2>
 
-                        <UL>
-                            <LI>The name of the assembly (e.g. &ldquo;hg19&rdquo;, or &ldquo;human 
-                            &ndash; Feb. 2009&rdquo;)</LI>
-                            <LI>The name of the track (e.g. &ldquo;RefSeq Genes&rdquo;)</LI>
-                            <LI>The exact location you are viewing (e.g. chr7:127,471,196-127,495,720)</LI>
-                        </UL>
+<h6><a href="#how1">How to post a question to the mailing list</a></h6>
+<h6><a href="#how2">How to view previous questions in the mailing list</a></h6>
+<hr>
+<p>
+<a href="index.html">Return to FAQ Table of Contents</a></p>
 
-                        And if the problem seems to be one of display, please include:<BR>
+<a name="how1"></a>
+<h2>How to contact our mailing list</h2>
+<h6>How do I post a question to the Genome Browser mailing list?</h6> 
+<p>
+If you are unable to find the answer to your question after searching the 
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">Genome Browser mailing 
+list</a>, please feel free to submit your question to 
+<a href="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;">&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;</a>.
+<!-- above address is genome at soe.ucsc.edu -->
+<strong><span class="gbsWarnText">Messages sent to this address will be posted to the moderated genome mailing list, which is 
+also archived on a searchable public</span> 
+<a HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome">Google Groups forum</a></strong>.</p>
+<p>
+PLoS Comp Bio has published an 
+<a href="http://www.ploscompbiol.org/article/info:doi%2F10.1371%2Fjournal.pcbi.1002202"
+target="_blank">editorial</a> offering guidelines for composing mailing list questions. When 
+submitting a question, please include the following information:</p>
+<ul>
+  <li>
+  The name of the assembly (e.g. &ldquo;hg19&rdquo;, or &ldquo;human &ndash; Feb. 2009&rdquo;)</li>
+  <li>
+  The name of the track (e.g. &ldquo;RefSeq Genes&rdquo;)</li>
+  <li>
+  The exact location you are viewing (e.g. chr7:127,471,196-127,495,720)</li>
+</ul>
+<p>
+If the problem appears to be display-related, please include:</p>
+<ul>
+  <li>
+  The name and version of the web browser you are using (e.g. Internet Explorer 8)</li>
+  <li>
+  The name and version of your operating system (e.g. Windows 7)</li>
+  <li>
+  The sequence of items you clicked on to reach the problem</li>
+</ul>
 
-                        <UL>
-                             <LI>The name and version of the web browser you are using (e.g.
-                             Internet Explorer 8)</LI>
-                             <LI>The name and version of your operating system (e.g. Windows 7)</LI>
-                             <LI>The series of items you clicked on to reach the problem</LI>
-                        </UL>
+<a name="how2"></a>
+<h2>How to view previous questions in the mailing list</h2>
+<h6>How do I view questions &amp; answers in the Genome Browser mailing list?</h6>
+<p>
+All of the questions and answers posted to the mailing list are archived and available for 
+searching. You can view all of the archived questions &amp; answers 
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">here</a>.</p>
 
-		    </TD><TD WIDTH=15></TD>
-		</TR>
-	    </TABLE>
-	    <br></TD></TR>
-	</TABLE>
-	</TD></TR>
-    </TABLE>
-<BR>
-
-<A NAME="how2"></A>
-    <!--outer table is for border purposes-->
-    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-        <TR><TD>
-        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-            <TR><TD>
-            <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
-                <TR><TD>
-                <!--cheap trick to get background on row to be continuous-->
-                <TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
-                    <TR><TD ALIGN="left">
-                    <FONT SIZE="4"><b>&nbsp; How to view previous questions in the mailing list</b></FONT></TD>
-                    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
-                    </TD></TR>
-                </TABLE>
-                </TD></TR>
-            </TABLE>
-            <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-                <TR><TH HEIGHT=10></TH></TR>
-                <TR><TD WIDTH=10>&nbsp;</TD>
-                    <TD>
-                    <P>
-                        <B><FONT COLOR="#006666">Question: </FONT></B><BR>
-                        "How do I view questions &amp; answers in the Genome Browser mailing list?"
-                        <P>
-                        <B><FONT COLOR="#006666">Response:</FONT></B><BR>
-                         All of the questions and answers posted to the mailing
-                         list are archived and available for searching. You can
-                         view all of the archived questions &amp; answers 
-                         <A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">
-                         here</A>.<BR>
-  
-                    </TD><TD WIDTH=15></TD>
-                </TR>
-            </TABLE>
-            <br></TD></TR>
-        </TABLE>
-        </TD></TR>
-    </TABLE>
-<BR>
-
-</BODY></HTML>
-
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

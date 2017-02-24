@@ -6,20 +6,7 @@
 # If this priority changes, please change it here and there as well
 
 track refGene override
-release beta,public
 priority 2
-
-track refSeqComposite override
-release alpha
-priority 2
-
-    track ncbiRefGenesView override
-    release alpha
-    parent refSeqComposite on
-
-        track refGene override
-        release alpha
-        parent ncbiRefGenesView on
 
 # Phenotype and Literature
 

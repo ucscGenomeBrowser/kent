@@ -510,11 +510,11 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
        return;
        }
     }
-/* If didn't make it then add new tag (at end) */
+/* If didn't make it then add new tag (at start) */
 lmAllocVar(lm, pair);
 pair->name = lmCloneString(lm, tag);
 pair->val = lmCloneString(lm, val);
-slAddTail(&stanza->tagList, pair);
+slAddHead(&stanza->tagList, pair);
 }
 
 char *tagFindLocalVal(struct tagStanza *stanza, char *name)
@@ -558,7 +558,7 @@ for (;;)
         rRemoveEmpties(&stanza->children);
     if (stanza->tagList == NULL)
         {
-	verbose(2, "removing empty stanza with %d children and %d remaining sibs\n", 
+	verbose(3, "removing empty stanza with %d children and %d remaining sibs\n", 
 	    slCount(stanza->children), slCount(stanza->next));
 	*pList = slCat(stanza->children, stanza->next);
 	stanza->next = stanza->children = NULL;
@@ -576,6 +576,173 @@ void tagStormRemoveEmpties(struct tagStorm *tagStorm)
 rRemoveEmpties(&tagStorm->forest);
 }
 
+static boolean localTagRemove(struct tagStanza *stanza, char *tag)
+/* Find given variable in list and remove it. Returns TRUE if it
+ * actually removed it,  FALSE if it never found it. */
+{
+struct slPair **ln = &stanza->tagList;
+struct slPair *v;
+for (v = *ln; v != NULL; v = v->next)
+    {
+    if (sameString(v->name, tag))
+        {
+	*ln = v->next;
+	return TRUE;
+	}
+    ln = &v->next;
+    }
+return FALSE;
+}
+
+static void hoistOne(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
+/* We've already determined that tag exists and has same value in all children.
+ * What we do here is add it to ourselves and remove it from children. */
+{
+tagStanzaUpdateTag(tagStorm, stanza, tag, val);
+struct tagStanza *child;
+for (child = stanza->children; child != NULL; child = child->next)
+    localTagRemove(child, tag);
+}
+
+static struct slName *tagsInAny(struct tagStanza *stanzaList)
+/* Return list of variables that are used in any node in list. */
+{
+struct hash *tagHash = hashNew(6);
+struct slName *tag, *tagList = NULL;
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    struct slPair *v;
+    for (v = stanza->tagList; v != NULL; v = v->next)
+        {
+	if (!hashLookup(tagHash, v->name))
+	    {
+	    tag = slNameAddHead(&tagList, v->name);
+	    hashAdd(tagHash, tag->name, tag);
+	    }
+	}
+    }
+hashFree(&tagHash);
+return tagList;
+}
+
+static char *allSameVal(char *tag, struct tagStanza *stanzaList)
+/* Return value of tag if it exists and is the same in each meta on list */
+{
+char *val = NULL;
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    char *oneVal = slPairFindVal(stanza->tagList, tag);
+    if (oneVal == NULL)
+        return NULL;
+    if (val == NULL)
+        val = oneVal;
+    else
+        {
+	if (!sameString(oneVal, val))
+	    return NULL;
+	}
+    }
+return val;
+}
+
+static void rHoist(struct tagStorm *tagStorm, struct tagStanza *stanza, char *selectedTag)
+/* Move tags that are the same in all children up to parent. */
+{
+/* Do depth first recursion, but get early return if we're a leaf. */
+struct tagStanza *child;
+if (stanza->children == NULL)
+    return;
+for (child = stanza->children; child != NULL; child = child->next)
+    rHoist(tagStorm, child, selectedTag);
+
+/* Build up list of tags used in any child. */
+struct slName *tag, *tagList = tagsInAny(stanza->children);
+
+/* Go through list and figure out ones that are same in all children. */
+for (tag = tagList; tag != NULL; tag = tag->next)
+    {
+    char *name = tag->name;
+    if (selectedTag == NULL || sameString(name, selectedTag))
+	{
+	char *val;
+	val = allSameVal(name, stanza->children);
+	if (val != NULL)
+	    hoistOne(tagStorm, stanza, name, val);
+	}
+    }
+slFreeList(&tagList);
+}
+
+void tagStormHoist(struct tagStorm *tagStorm, char *selectedTag)
+/* Hoist tags that are identical in all children to parent.  If selectedTag is
+ * non-NULL, just do it for tag of that name rather than all tags. */
+{
+/* If there is more than one highest level stanza, make a dummy empty root one to hoist into. */
+struct tagStanza *stanza;
+if (slCount(tagStorm->forest) > 1)
+    {
+    struct tagStanza *root;
+    lmAllocVar(tagStorm->lm, root);
+    for (stanza = tagStorm->forest; stanza != NULL; stanza = stanza->next)
+        stanza->parent = root;
+    root->children = tagStorm->forest;
+    tagStorm->forest = root;
+    }
+
+for (stanza = tagStorm->forest; stanza != NULL; stanza = stanza->next)
+    rHoist(tagStorm, stanza, selectedTag);
+tagStormRemoveEmpties(tagStorm);
+}
+
+static void rSortAlpha(struct tagStanza *list)
+/* Recursively sort stanzas alphabetically */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    rSortAlpha(stanza->children);
+    slSort(&stanza->tagList, slPairCmp);
+    }
+}
+
+void tagStormAlphaSort(struct tagStorm *tagStorm)
+/* Sort tags in stanza alphabetically */
+{
+rSortAlpha(tagStorm->forest);
+}
+
+// Sadly not thread safe helper vars for sorting according to predefined order
+static char **sOrderFields;
+static int sOrderCount;
+
+static int cmpPairByOrder(const void *va, const void *vb)
+/* Compare two slPairs according to order of names in sOrderFields */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return cmpStringOrder(a->name, b->name, sOrderFields, sOrderCount);
+}
+
+static void rOrderSort(struct tagStanza *list)
+/* Recursely sort by predefined order */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    rOrderSort(stanza->children);
+    slSort(&stanza->tagList, cmpPairByOrder);
+    }
+}
+
+void tagStormOrderSort(struct tagStorm *tagStorm, char **orderFields, int orderCount)
+/* Sort tags in stanza to be in same order as orderFields input  which is orderCount long */
+{
+sOrderFields = orderFields;
+sOrderCount = orderCount;
+rOrderSort(tagStorm->forest);
+}
 
 char *tagMustFindVal(struct tagStanza *stanza, char *name)
 /* Return value of tag of given name within stanza or any of it's parents. Abort if
@@ -874,3 +1041,5 @@ rqlStatementFree(&rql);
 dyStringFree(&query);
 return resultList;
 }
+
+

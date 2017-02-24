@@ -1068,12 +1068,11 @@ slReverse(&orgList);
 
 /* Make genome drop-down. */
 hPrintf("genome ");
-hPrintf("<SELECT NAME=\"%s\" ", orgVarName);
-hPrintf("onchange='%s'",
+hPrintf("<SELECT id='org_sel' NAME=\"%s\">\n", orgVarName);
+jsOnEventById("change", "org_sel", 
   "document.orgForm.org.value=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
   "document.orgForm.db.value=0;"
   "document.orgForm.submit();");
-hPrintf(">\n");
 for (org = orgList; org != NULL; org = org->next)
     {
     struct dbDb *db = org->val;
@@ -1087,11 +1086,10 @@ hPrintf("</SELECT>");
 
 /* Make assembly drop-down. */
 hPrintf(" assembly ");
-hPrintf("<SELECT NAME=\"%s\" ", dbVarName);
-hPrintf("onchange='%s'",
+hPrintf("<SELECT id='db_sel' NAME=\"%s\">\n", dbVarName);
+jsOnEventById("change", "db_sel",
   "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value;"
   "document.orgForm.submit();");
-hPrintf(">\n");
 for (as = asList; as != NULL; as = as->next)
     {
     struct dbDb *db = as->val;
@@ -1162,15 +1160,13 @@ hPrintf("</TD></TR>\n<TR><TD>");
     hPrintf("\">");
     hPrintf("sort by");
     hPrintf("</A> ");
-    hPrintf("<SELECT NAME=\"%s\"", orderVarName);
-    hPrintf(" onchange=\""
+    hPrintf("<SELECT id='sort_sel' NAME=\"%s\">\n", orderVarName);
+    jsOnEventByIdF("change", "sort_sel",
 	"document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value;"
-      	"document.orgForm.submit();"
-	"\"",
-	orderVarName,
+      	"document.orgForm.submit();",
+	orderVarName,  // XSS Filter GALT TODO
 	orderVarName,
 	orderVarName);
-    hPrintf(">\n");
     for (ord = ordList; ord != NULL; ord = ord->next)
         {
 	hPrintf("<OPTION VALUE=\"%s\"", ord->name);
@@ -1198,15 +1194,13 @@ hPrintf("</TD></TR>\n<TR><TD>");
     int i = 0;
 
     hPrintf(" display ");
-    hPrintf("<SELECT NAME=\"%s\"", countVarName);
-    hPrintf(" onchange=\""
+    hPrintf("<SELECT id='display_sel' NAME=\"%s\">\n", countVarName);
+    jsOnEventByIdF("change", "display_sel", 
 	"document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value;"
-      	"document.orgForm.submit();"
-	"\"",
+      	"document.orgForm.submit();",
 	countVarName,
 	countVarName,
 	countVarName);
-    hPrintf(">\n");
     for (i = 0; i < ArraySize(menu); ++i)
       {
 	hPrintf("<OPTION VALUE=\"%s\"", menu[i]);

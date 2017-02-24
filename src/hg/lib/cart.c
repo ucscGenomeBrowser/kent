@@ -252,7 +252,7 @@ if (!cdb)
 	{
 	if (cartDbUseSessionKey())
 	    {
-	    sessionKey = cartDbMakeRandomKey(128+33); // at least 128 bits of protection, 33 for the world population size.
+	    sessionKey = makeRandomKey(128+33); // at least 128 bits of protection, 33 for the world population size.
 	    }
 	sqlDyStringPrintf(query, ",'%s'", sessionKey);
 	}
@@ -1380,8 +1380,8 @@ if (asTable)
     int width=(strlen(val)+1)*8;
     if (width<100)
         width = 100;
-    cgiMakeTextVarWithExtraHtml(hel->name, val, width,
-                                "onchange='setCartVar(this.name,this.value);'");
+    cgiMakeTextVarWithJs(hel->name, val, width,
+                                "change", "setCartVar(this.name,this.value);");
     printf("</TD></TR>\n");
     }
 else
@@ -1653,11 +1653,13 @@ static void cartErrorCatcher(void (*doMiddle)(struct cart *cart),
                              struct cart *cart)
 /* Wrap error catcher around call to do middle. */
 {
-int status = setjmp(htmlRecover);
 pushAbortHandler(htmlAbort);
 hDumpStackPushAbortHandler();
+int status = setjmp(htmlRecover);
 if (status == 0)
+    {
     doMiddle(cart);
+    }
 hDumpStackPopAbortHandler();
 popAbortHandler();
 }
@@ -1668,7 +1670,7 @@ void cartEarlyWarningHandler(char *format, va_list args)
 static boolean initted = FALSE;
 va_list argscp;
 va_copy(argscp, args);
-if (!initted)
+if (!initted && !cgiOptionalString("ajax"))
     {
     htmStart(stdout, "Early Error");
     initted = TRUE;

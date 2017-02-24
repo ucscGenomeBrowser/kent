@@ -2250,3 +2250,66 @@ wait
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# lastz opossum melGal5 (DONE - 2017-01-19 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S melGal5MonDom5
+    mkdir /hive/data/genomes/monDom5/bed/lastzMelGal5.2017-01-19
+    cd /hive/data/genomes/monDom5/bed/lastzMelGal5.2017-01-19
+
+    printf '# Rat vs. opossum
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Rat MonDom5
+SEQ1_DIR=/hive/data/genomes/monDom5/monDom5.2bit
+SEQ1_LEN=/hive/data/genomes/monDom5/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: opossum melGal5
+SEQ2_DIR=/hive/data/genomes/melGal5/melGal5.2bit
+SEQ2_LEN=/hive/data/genomes/melGal5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/monDom5/bed/lastzMelGal5.2017-01-19
+TMPDIR=/dev/shm
+' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    #  real    339m33.879s
+
+    cat fb.monDom5.chainMelGal5Link.txt
+    #	79481412 bases of 3501660299 (2.270%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` monDom5 melGal5) \
+           > rbest.log 2>&1 &
+    #  real    862m12.231s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/melGal5/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/melGal5/bed/blastz.monDom5.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/monDom5/bed/lastzMelGal5.2017-01-19/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
+          > swap.log 2>&1
+    #	real    31m12.858s
+
+    cat  fb.melGal5.chainMonDom5Link.txt
+    #	68370000 bases of 1093044709 (6.255%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 monDom5) \
+         > rbest.log 2>&1
+    # real    774m18.172s
+
+##############################################################################
