@@ -272,6 +272,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
+    calculateLabelFields(tg);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 9, &lfList);
     }
@@ -322,6 +323,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
+    calculateLabelFields(tg);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 8, &lfList);
     }
