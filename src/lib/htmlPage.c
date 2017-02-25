@@ -1667,7 +1667,26 @@ static char *bodyNesters[] =
 static char *headNesters[] =
 /* Nesting tags that appear in header. */
 {
-    "TITLE", "DIV", "SCRIPT"
+    "TITLE", "SCRIPT"
+};
+
+static char *singleTons[] =
+/* Tags which do not have closing tags. */
+{
+"AREA",
+"BASE",
+"BR",
+"COL",
+"COMMAND",
+"EMBED",
+"FRAME",  // not in html5
+"HR",
+"IMG",
+"INPUT",
+"LINK",
+"META",
+"PARAM",
+"SOURCE"
 };
 
 static struct htmlTag *validateBody(struct htmlPage *page, struct htmlTag *startTag)
@@ -1732,6 +1751,8 @@ okChars['!'] = 1;
 okChars['*'] = 1;
 okChars['@'] = 1;
 okChars['\''] = 1;  // apparently the apostrophe itself is ok
+okChars['|'] = 1;   // apparently the google uses pipe char
+okChars[','] = 1;   // apparently the google uses comma char
 okChars['#'] = 1;  // URI fragment, typically an anchor
 return okChars;
 }
@@ -1866,3 +1887,54 @@ if (contentType == NULL || startsWith("text/html", contentType))
     }
 }
 
+void htmlPageStrictTagNestCheck(struct htmlPage *page)
+/* Do strict tag nesting check.  Aborts if there is a problem. */
+{
+struct htmlTag *tag;
+/* To simplify things upper case all tag names. */
+for (tag = page->tags; tag != NULL; tag = tag->next)
+    touppers(tag->name);
+
+/* Add singleton tags to hash. */
+struct hash *hash = hashNew(8);
+int i;
+int nesterCount=ArraySize(singleTons);
+for (i=0; i<nesterCount; ++i)
+    hashAdd(hash, singleTons[i], NULL);
+
+struct slName *tagStack = NULL;
+for (tag = page->tags; tag != NULL; tag = tag->next)
+    {
+    if (startsWith("/", tag->name))
+	{
+	if (hashLookup(hash, tag->name+1))
+	    tagAbort(page, tag, "Tag %s closing tag not allowed for singleton tags.", tag->name);
+	if (!sameString("P", tag->name+1))
+	    {
+	    if (!tagStack)
+		tagAbort(page, tag, "No tags still left on stack. Closing tag %s has no corresponding open tag.", tag->name);
+	    struct slName *top = slPopHead(&tagStack);
+	    // flush LI tags still on stack when /UL or /OL encountered
+	    // since the missing /LI tags are usually tolerated. 
+	    while ((sameString(tag->name, "/UL") || sameString(tag->name, "/OL")) && sameString(top->name,"LI"))
+		{
+		tagWarn(page, tag, "Closing tag %s found. LI tag on stack. Missing /LI tag. Please fix. Continuing.", tag->name);
+		top = slPopHead(&tagStack);
+		}
+	    if (!sameString(top->name,tag->name+1))
+		{
+		tagAbort(page, tag, "Closing tag %s found, tag %s at top of stack.", tag->name, top->name);
+		}
+	    }
+	}
+    else
+	{
+	if (!hashLookup(hash, tag->name) && !sameString("P", tag->name))
+	    {
+	    slAddHead(&tagStack, slNameNew(tag->name));
+	    }	    
+	}	    
+    }
+if (tagStack)
+    errAbort("Some tags still left on stack. Open tag %s missing its closing tag.", tagStack->name);
+}

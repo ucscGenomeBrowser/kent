@@ -206,6 +206,9 @@ void htmlPageFormOrAbort(struct htmlPage *page);
 void htmlPageValidateOrAbort(struct htmlPage *page);
 /* Do some basic validations.  Aborts if there is a problem. */
 
+void htmlPageStrictTagNestCheck(struct htmlPage *page);
+/* Do strict tag nesting check.  Aborts if there is a problem. */
+
 char *htmlSlurpWithCookies(char *url, struct htmlCookie *cookies);
 /* Send get message to url with cookies, and return full response as
  * a dyString.  This is not parsed or validated, and includes http
