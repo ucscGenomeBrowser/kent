@@ -27,6 +27,7 @@ struct galleryEntry
     struct galleryEntry *next;
     char *userName;
     char *realName;
+    char *userIdx;
     char *sessionName;
     char *settings;
     char *db;
@@ -59,13 +60,17 @@ AllocVar(ret);
 ret->realName = cloneString(row[0]);
 ret->userName = cloneString(row[1]);
 cgiDecodeFull(ret->userName, ret->userName, strlen(ret->userName));
+ret->userIdx = cloneString(row[2]);
 ret->sessionName = cloneString(row[3]);
 cgiDecodeFull(ret->sessionName, ret->sessionName, strlen(ret->sessionName));
 ret->sessionUrl = dyStringCreate("hgS_doOtherUser=submit&hgS_otherUserName=%s&hgS_otherUserSessionName=%s", row[1], row[3]);
 
-ret->imgPath = sessionThumbnailFilePath(row[2], row[3], row[7]);
+char *userIdentifier = sessionThumbnailGetUserIdentifier(row[1], ret->userIdx);
+
+fprintf(stderr, "User %s, id %s, ident %s\n", row[1], row[2], userIdentifier);
+ret->imgPath = sessionThumbnailFilePath(userIdentifier, row[3], row[7]);
 if (fileExists(ret->imgPath))
-    ret->imgUri = sessionThumbnailFileUri(row[2], row[3], row[7]);
+    ret->imgUri = sessionThumbnailFileUri(userIdentifier, row[3], row[7]);
 else
     ret->imgUri = NULL;
 ret->useCount = sqlUnsignedLong(row[4]);

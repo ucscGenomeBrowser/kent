@@ -826,8 +826,6 @@ int thumbnailAdd(char *encUserName, char *encSessionName, struct sqlConnection *
  * thread); the return value is 0 if a message was added to dyMessage, otherwise it's 1. */
 {
 char query[4096];
-char **row;
-struct sqlResult *sr;
 
 char *suppressConvert = cfgOption("sessionThumbnail.suppress");
 if (suppressConvert != NULL && sameString(suppressConvert, "on"))
@@ -852,16 +850,13 @@ if (convertTestResult != 0)
     }
 
 sqlSafef(query, sizeof(query),
-    "select m.idx, n.firstUse from gbMembers m join namedSessionDb n on m.userName = n.userName "
-    "where m.userName = \"%s\" and n.sessionName = \"%s\"",
+    "select firstUse from namedSessionDb where userName = \"%s\" and sessionName = \"%s\"",
     encUserName, encSessionName);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row == NULL)
-    errAbort("cannot add session to gallery; user %s, session %s",
-        encUserName, encSessionName);
-
-char *destFile = sessionThumbnailFilePath(row[0], encSessionName, row[1]);
+char *firstUse = sqlNeedQuickString(conn, query);
+sqlSafef(query, sizeof(query), "select idx from gbMembers where userName = '%s'", encUserName);
+char *userIdx = sqlQuickString(conn, query);
+char *userIdentifier = sessionThumbnailGetUserIdentifier(encUserName, userIdx);
+char *destFile = sessionThumbnailFilePath(userIdentifier, encSessionName, firstUse);
 if (destFile != NULL)
     {
     struct dyString *hgTracksUrl = dyStringNew(0);
@@ -874,7 +869,6 @@ if (destFile != NULL)
     char **cmdsImg[] = {renderCmd, convertCmd, NULL};
     pipelineOpen(cmdsImg, pipelineWrite, "/dev/null", NULL);
     }
-sqlFreeResult(&sr);
 return 1;
 }
 
@@ -883,22 +877,16 @@ void thumbnailRemove(char *encUserName, char *encSessionName, struct sqlConnecti
 /* Unlink thumbnail image for the gallery.  Leaks memory from a generated filename string. */
 {
 char query[4096];
-char **row;
-struct sqlResult *sr;
 sqlSafef(query, sizeof(query),
-    "select m.idx, n.firstUse from gbMembers m join namedSessionDb n on m.userName = n.userName "
-    "where m.userName = \"%s\" and n.sessionName = \"%s\"",
+    "select firstUse from namedSessionDb where userName = \"%s\" and sessionName = \"%s\"",
     encUserName, encSessionName);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row == NULL)
-    errAbort("cannot remove session from gallery; user %s, session %s",
-        encUserName, encSessionName);
-
-char *filePath = sessionThumbnailFilePath(row[0], encSessionName, row[1]);
+char *firstUse = sqlNeedQuickString(conn, query);
+sqlSafef(query, sizeof(query), "select idx from gbMembers where userName = '%s'", encUserName);
+char *userIdx = sqlQuickString(conn, query);
+char *userIdentifier = sessionThumbnailGetUserIdentifier(encUserName, userIdx);
+char *filePath = sessionThumbnailFilePath(userIdentifier, encSessionName, firstUse);
 if (filePath != NULL)
     unlink(filePath);
-sqlFreeResult(&sr);
 }
 
 char *doSessionDetail(char *userName, char *sessionName)
