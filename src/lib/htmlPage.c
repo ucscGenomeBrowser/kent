@@ -490,6 +490,19 @@ if (val == NULL)
 return val;
 }
 
+boolean isSelfClosingTag(struct htmlTag *tag)
+/* Return strue if last attributes' name is "/" 
+ * Self-closing tags are used with html5 and SGV */
+{
+struct htmlAttribute *att = tag->attributes;
+if (!att)
+    return FALSE;
+while (att->next) att = att->next;
+if (sameString(att->name,"/"))
+    return TRUE;
+return FALSE;
+}
+
 static struct htmlTag *htmlTagScan(char *html, char *dupe)
 /* Scan HTML for tags and return a list of them. 
  * Html is the text to scan, and dupe is a copy of it
@@ -1689,6 +1702,18 @@ static char *singleTons[] =
 "SOURCE"
 };
 
+static char *selfClosers[] =
+/* Tags which can be optionally self-closing in html5 or SVG. */
+{
+"CIRCLE",   // SVG
+"ELLIPSE",  // SVG
+"LINE",     // SVG
+"PATH",     // SVG
+"POLYGON",  // SVG
+"POLYLINE", // SVG
+"RECT"      // SVG
+};
+
 static struct htmlTag *validateBody(struct htmlPage *page, struct htmlTag *startTag)
 /* Go through tags from current position (just past <BODY>)
  * up to and including </BODY> and check some things. */
@@ -1896,18 +1921,24 @@ for (tag = page->tags; tag != NULL; tag = tag->next)
     touppers(tag->name);
 
 /* Add singleton tags to hash. */
-struct hash *hash = hashNew(8);
+struct hash *singleTonHash = hashNew(8);
 int i;
-int nesterCount=ArraySize(singleTons);
-for (i=0; i<nesterCount; ++i)
-    hashAdd(hash, singleTons[i], NULL);
+int count=ArraySize(singleTons);
+for (i=0; i<count; ++i)
+    hashAdd(singleTonHash, singleTons[i], NULL);
+
+/* Add selfCloser tags to hash. */
+struct hash *selfCloserHash = hashNew(8);
+count=ArraySize(selfClosers);
+for (i=0; i<count; ++i)
+    hashAdd(selfCloserHash, selfClosers[i], NULL);
 
 struct slName *tagStack = NULL;
 for (tag = page->tags; tag != NULL; tag = tag->next)
     {
     if (startsWith("/", tag->name))
 	{
-	if (hashLookup(hash, tag->name+1))
+	if (hashLookup(singleTonHash, tag->name+1))
 	    tagAbort(page, tag, "Tag %s closing tag not allowed for singleton tags.", tag->name);
 	if (!sameString("P", tag->name+1))
 	    {
@@ -1929,7 +1960,10 @@ for (tag = page->tags; tag != NULL; tag = tag->next)
 	}
     else
 	{
-	if (!hashLookup(hash, tag->name) && !sameString("P", tag->name))
+	if (
+	    ! hashLookup(singleTonHash, tag->name) 
+	 && !(hashLookup(selfCloserHash, tag->name) && isSelfClosingTag(tag))
+         && ! sameString("P", tag->name))
 	    {
 	    slAddHead(&tagStack, slNameNew(tag->name));
 	    }	    

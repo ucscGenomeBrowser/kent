@@ -247,5 +247,9 @@ struct htmlPage *htmlPageForwardedNoAbort(char *url, struct htmlCookie *cookies)
 struct htmlTag *findNextMatchingTag(struct htmlTag *list, char *name);
 /* Return first tag in list that is of type name or NULL if not found. */
 
+boolean isSelfClosingTag(struct htmlTag *tag);
+/* Return strue if last attributes' name is "/" 
+ * Self-closing tags are used with html5 and SGV */
+
 #endif /* HTMLPAGE_H */
 
