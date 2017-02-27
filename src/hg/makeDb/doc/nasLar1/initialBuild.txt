@@ -571,3 +571,16 @@ nasLar1.upstreamGeneTbl = refGene
     #   sizes will set properly
 
 #########################################################################
+#  augustusGene track (DONE - 28 May 2015 - Hiram)
+
+    mkdir /hive/data/genomes/nasLar1/bed/augustus
+    cd /hive/data/genomes/nasLar1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev nasLar1) > do.log 2>&1
+    # real    363m35.928s
+
+    cat fb.nasLar1.augustusGene.txt
+    # 35116222 bases of 2398172200 (1.464%) in intersection
+
+#############################################################################
