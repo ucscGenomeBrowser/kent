@@ -46,7 +46,8 @@ TMPDIR=/dev/shm
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
     # real    2714m9.663s
-    XXX having trouble with netToAxt, too many chains
+    # XXX  having trouble with netToAxt, too many chains, gave up on this,
+    # the gorGor5 worked OK
     time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
