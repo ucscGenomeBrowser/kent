@@ -1,4 +1,4 @@
-include ../../refSeqComposite.ra
+include ../../refSeqComposite.ra alpha,beta
 
 track coriellDelDup override
 origAssembly hg19 
