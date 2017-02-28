@@ -3,7 +3,7 @@
 The NCBI RefSeq Genes composite track shows $organism protein-coding and non-protein-coding
 genes taken from the NCBI RNA reference sequences collection (RefSeq). All subtracks use
 coordinates provided by RefSeq, except for the <em>UCSC RefSeq</em>, which UCSC produces by 
-realigning the RefSeq mRNAs to the genome. This realignment may result in occasional differences 
+realigning the RefSeq RNAs to the genome. This realignment may result in occasional differences
 between the annotation coordinates provided by UCSC and NCBI. See the 
 <a href="#methods">Methods</a> section for more details about how the different tracks were 
 created. </p>
@@ -38,7 +38,7 @@ The views available for this track include:
     do not fit the requirements for inclusion in the <em>RefSeq Curated</em> or the 
     <em>RefSeq Predicted</em> tracks.</li>
     <li>
-    <em>RefSeq Alignments</em> &ndash; alignments of RefSeq mRNAs to the $organism genome provided 
+    <em>RefSeq Alignments</em> &ndash; alignments of RefSeq RNAs to the $organism genome provided
     by the RefSeq group.</li>
   </ul>
 </dl>
@@ -135,11 +135,23 @@ The genePred format tracks can also be downloaded into GTF format using the
 <tt>genePredToGtf</tt> utility, available from the
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a> on the UCSC downloads 
 server. The utility can be run from the command line like so:</p>
-<pre><code>genePredToGtf $db ncbiRefSeqPredicted ncbiRefSeqPredicted.gtf</code></pre>
+<tt>genePredToGtf $db ncbiRefSeqPredicted ncbiRefSeqPredicted.gtf</tt>
 <p>
 Note that using genePredToGtf in this manner accesses our public MySQL server, and you therefore 
 must set up your hg.conf as described on the MySQL page linked near the beginning of the Data Access
 section.</p>
+<p>
+The annotations in the RefSeq Other track are stored in a
+<a href="../../goldenPath/help/bigBed.html">bigBed</a> file, <tt>ncbiRefSeqOther.bb</tt>,
+that can be obtained from our downloads server
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/ncbiRefSeq/ncbiRefSeqOther.bb">here</a>.
+Individual regions or the whole set of genome-wide annotations can be obtained using our tool
+<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as a precompiled
+binary for your system from the utilities directory linked above. For example, to extract only
+annotations in a given region, you could use the following command:</p>
+<p>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/ncbiRefSeqOther.bb
+-chrom=chr16 -start=34990190 -end=36727467 stdout</tt></p>
 <p>
 A file in containing the RNA sequences in <a href="http://genetics.bwh.harvard.edu/pph/FASTA.html" 
 target="_blank">FASTA</a> format for all items in the <em>RefSeq All</em>, <em>RefSeq Curated</em>, 
