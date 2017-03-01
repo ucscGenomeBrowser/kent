@@ -250,24 +250,24 @@ void jsIncludeReactLibs()
  * and our own model libs, React mixins and components. */
 {
 // We need a module system... webpack?
-puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/lodash.3.10.0.compat.min.js\"></script>");
+jsIncludeFile("es5-shim.4.0.3.min.js", NULL);
+jsIncludeFile("es5-sham.4.0.3.min.js", NULL);
+jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
 puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
 puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
-puts("<script src=\"../js/react-with-addons-0.12.2.min.js\"></script>");
-puts("<script src=\"../js/immutable.3.7.4.min.js\"></script>");
-puts("<script src=\"../js/jquery.bifrost.1.0.1.min.js\"></script>");
-puts("<script src=\"../js/BackboneExtend.js\"></script>");
-puts("<script src=\"../js/cart.js\"></script>");
-puts("<script src=\"../js/ImModel.js\"></script>");
-puts("<script src=\"../js/CladeOrgDbMixin.js\"></script>");
-puts("<script src=\"../js/PositionSearchMixin.js\"></script>");
-puts("<script src=\"../js/UserRegionsMixin.js\"></script>");
-puts("<script src=\"../js/PathUpdate.js\"></script>");
-puts("<script src=\"../js/PathUpdateOptional.js\"></script>");
-puts("<script src=\"../js/ImmutableUpdate.js\"></script>");
-puts("<script src=\"../js/reactLibBundle.js\"></script>");
+jsIncludeFile("react-with-addons-0.12.2.min.js", NULL);
+jsIncludeFile("immutable.3.7.4.min.js", NULL);
+jsIncludeFile("jquery.bifrost.1.0.1.min.js", NULL);
+jsIncludeFile("BackboneExtend.js", NULL);
+jsIncludeFile("cart.js", NULL);
+jsIncludeFile("ImModel.js", NULL);
+jsIncludeFile("CladeOrgDbMixin.js", NULL);
+jsIncludeFile("PositionSearchMixin.js", NULL);
+jsIncludeFile("UserRegionsMixin.js", NULL);
+jsIncludeFile("PathUpdate.js", NULL);
+jsIncludeFile("PathUpdateOptional.js", NULL);
+jsIncludeFile("ImmutableUpdate.js", NULL);
+jsIncludeFile("reactLibBundle.js", NULL);
 }
 
 void jsIncludeDataTablesLibs()

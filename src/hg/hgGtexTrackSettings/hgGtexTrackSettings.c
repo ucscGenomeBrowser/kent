@@ -11,6 +11,7 @@
 #include "web.h"
 #include "hCommon.h"
 #include "hui.h"
+#include "jsHelper.h"
 #include "gtexUi.h"
 #include "gtexInfo.h"
 #include "gtexTissue.h"
@@ -368,8 +369,8 @@ puts(
 "</div>");
 
 // Initialize illustration display and handle mouseover and clicks
-puts("<script type='text/javascript' src='../js/utils.js'></script>");
-puts("<script type='text/javascript' src='../js/hgGtexTrackSettings.js'></script>");
+jsIncludeFile("utils.js", NULL);
+jsIncludeFile("hgGtexTrackSettings.js", NULL);
 
 webIncludeFile("inc/gbFooter.html");
 webEndJWest();

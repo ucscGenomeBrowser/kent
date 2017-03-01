@@ -179,8 +179,8 @@ puts("<div id=\"appContainer\">Loading...</div>");
 printf("<script>window.%s='%s';</script>\n", cartSessionVarName(), cartSessionId(cart));
 
 jsIncludeReactLibs();
-puts("<script src=\"../js/reactHgChooseDb.js\"></script>");
-puts("<script src=\"../js/hgChooseDbModel.js\"></script>");
+jsIncludeFile("reactHgChooseDb.js", NULL);
+jsIncludeFile("hgChooseDbModel.js", NULL);
 
 // Invisible form for jumping to hgTracks
 printf("\n<form action=\"%s\" method=%s id='mainForm'>\n",
