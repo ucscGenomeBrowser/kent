@@ -144,6 +144,7 @@ static char *balAcuNames[] = {"Balaenoptera acutorostrata", "Balaenoptera acutor
 static char *calMilNames[] = {"Callorhinchus milii", NULL};
 static char *criGriNames[] = {"Cricetulus griseus", NULL};
 static char *nasLarNames[] = {"Nasalis larvatus", NULL};
+static char *rhiBieNames[] = {"Rhinopithecus bieti", NULL};
 static char *rhiRoxNames[] = {"Rhinopithecus roxellana", NULL};
 static char *aquChrNames[] = {"Aquila chrysaetos canadensis", NULL};
 static char *nanParNames[] = {"Nanorana parkeri", "Nanorana pleskei", "Nanorana yunnanensis", NULL};
@@ -271,6 +272,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"calMil", calMilNames},
     {"criGri", criGriNames},
     {"nasLar", nasLarNames},
+    {"rhiBie", rhiBieNames},
     {"rhiRox", rhiRoxNames},
     {"aquChr", aquChrNames},
     {"nanPar", nanParNames},
