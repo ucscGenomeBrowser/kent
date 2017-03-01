@@ -159,9 +159,12 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
 	    struct slRef *ref;
 	    for (ref = wildList; ref != NULL; ref = ref->next)
 		{
-		schema = ref->val;
-		if (wildMatch(schema->name, tag))
+		struct tagSchema *s = ref->val;
+		if (wildMatch(s->name, tag))
+		    {
+		    schema = s;
 		    break;
+		    }
 		}
 	    }
 
