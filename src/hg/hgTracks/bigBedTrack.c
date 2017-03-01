@@ -151,6 +151,7 @@ for(; labelInt; labelInt = labelInt->next)
             dyStringPrintf(dy, "%d", bb->end);
             break;
         default:
+            assert(bb->rest != NULL);
             dyStringPrintf(dy, "%s", restFields[labelInt->val - 3]);
             break;
         }
