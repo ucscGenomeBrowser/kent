@@ -9154,8 +9154,10 @@ for (i = 0;  prefixes[i] != NULL;  i++)
 /* perhaps a contig name of some other prefix */
 if (NULL == skipped && scaffoldPrefixes == prefixes)
     {
-    skipped = cloneString(name);
+    skipped = cloneString(name); /* will be memory leak */
     chopSuffixAt(skipped, 'v');  /* remove the vNN version, usually v1 */
+    chopSuffixAt(skipped, '.');  /* remove the vNN version, could be .1 */
+    chopSuffixAt(skipped, ' ');  /* chain names have blank+N */
     eraseNonDigits(skipped);  /* strip characters, leave digits only */
     if (0 == strlen(skipped))  /* if none left, did not work */
        skipped = NULL;
