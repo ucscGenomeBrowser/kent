@@ -1,5 +1,4 @@
 track refSeqComposite
-release alpha
 compositeTrack on
 shortLabel NCBI RefSeq
 longLabel RefSeq gene predictions from NCBI
@@ -13,7 +12,6 @@ allButtonPair on
 priority 2
 
     track ncbiRefSeqView
-    release alpha
     shortLabel NCBI RefSeq genes and alignments
     view aNcbiRefSeq
     parent refSeqComposite on
@@ -21,7 +19,6 @@ priority 2
     baseColorDefault genomicCodons
 
 	track ncbiRefSeq
-        release alpha
         parent ncbiRefSeqView off
         color 12,12,120
         shortLabel RefSeq All
@@ -33,7 +30,6 @@ priority 2
 
 	track ncbiRefSeqCurated
         color 12,12,120
-        release alpha
         parent ncbiRefSeqView on
 	shortLabel RefSeq Curated
         subGroups view=aNcbiRefSeq
@@ -44,7 +40,6 @@ priority 2
 
 	track ncbiRefSeqPredicted
         color 109,109,174
-        release alpha
         parent ncbiRefSeqView off
 	shortLabel RefSeq Predicted
         subGroups view=aNcbiRefSeq
@@ -54,7 +49,6 @@ priority 2
         priority 3
 
 	track ncbiRefSeqOther
-        release alpha
         color 32,32,32
         parent ncbiRefSeqView off
 	shortLabel RefSeq Other
@@ -66,7 +60,6 @@ priority 2
         type bigBed 12
 
 	track ncbiRefSeqPsl
-        release alpha
         priority 5
 	parent ncbiRefSeqView off
 	shortLabel RefSeq Alignments
@@ -88,13 +81,11 @@ priority 2
         pepTable ncbiRefSeqPepTable
 
     track ucscRefSeqView
-    release alpha
     parent refSeqComposite off
     shortLabel UCSC RefSeq Genes
     view zUcscRefSeq
 
         track refGene override
-        release alpha
 	parent ucscRefSeqView off
         shortLabel UCSC RefSeq
         longLabel UCSC annotations of RefSeq RNAs (NM_* and NR_*)

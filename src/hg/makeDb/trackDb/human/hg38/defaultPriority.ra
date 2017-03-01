@@ -15,7 +15,7 @@ priority 1
 #priority 1
 
 track refGene override
-release beta,public
+release public
 visibility pack
 priority 2
 

@@ -337,6 +337,23 @@ taxId 9597
     # 3286643896 bases of 3286643896 (100.000%) in intersection
 
 #########################################################################
+# add chromAlias table (DONE - 2017-02-27 - Hiram)
+
+    mkdir /hive/data/genomes/panPan2/bed/chromAlias
+    cd /hive/data/genomes/panPan2/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' panPan2 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' panPan2 \
+        > ucsc.genbank.tab
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > panPan2.chromAlias.tab
+
+    hgLoadSqlTab panPan2 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        panPan2.chromAlias.tab
+
+#########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2016-04-19 - Hiram)
 
     cd ~/kent/src/hg/makeDb/trackDb/bonobo/panPan2

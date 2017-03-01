@@ -1,4 +1,4 @@
-include ../../refSeqComposite.ra
+include ../../refSeqComposite.ra alpha
 
 # chainNet tracks
 include trackDb.gliresChainNet.ra
