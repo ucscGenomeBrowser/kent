@@ -506,7 +506,11 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
     {
     if (sameString(pair->name, tag))
        {
-       pair->val = lmCloneString(lm, val);
+       if (!sameString(pair->val, val))
+	   {
+	   verbose(3, "Updating %s from '%s' to '%s'\n", pair->name, (char *)pair->val, val);
+	   pair->val = lmCloneString(lm, val);
+	   }
        return;
        }
     }
@@ -514,7 +518,7 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
 lmAllocVar(lm, pair);
 pair->name = lmCloneString(lm, tag);
 pair->val = lmCloneString(lm, val);
-slAddHead(&stanza->tagList, pair);
+slAddTail(&stanza->tagList, pair);
 }
 
 char *tagFindLocalVal(struct tagStanza *stanza, char *name)

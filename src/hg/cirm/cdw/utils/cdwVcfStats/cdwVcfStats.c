@@ -118,9 +118,6 @@ double minDp = 0, maxDp = 0, sumDp = 0, sumSquareDp = 0;
 long long countPass=0;
 long long haveFilterCount=0;
 long long snpCount = 0;
-#ifdef OLD_SLOW_WAY
-long long phasedCount = 0, haploidCount = 0, totalGenotypes = 0;
-#endif /* OLD_SLOW_WAY */
 
 struct vcfRecord *rec;
 vcfFileMakeReusePool(vcf, 64*1024);
@@ -179,19 +176,6 @@ while ((rec = vcfNextRecord(vcf)) != NULL)
 		}
 	    }
 	}
-#ifdef OLD_SLOW_WAY
-    vcfParseGenotypes(rec);
-    int genoIx;
-    for (genoIx=0; genoIx<vcf->genotypeCount; ++genoIx)
-        {
-	struct vcfGenotype *g = &rec->genotypes[genoIx];
-	++totalGenotypes;
-	if (g->isPhased)
-	    ++phasedCount;
-	if (g->isHaploid)
-	    ++haploidCount;
-	}
-#endif /* OLD_SLOW_WAY */
 
     /* Every now and then free up some memory */
     if (++inBatchIx >= batchSize)
@@ -217,16 +201,6 @@ if (itemCount > 0)
 
 fprintf(f, "sumOfSizes %lld\n", sumOfSizes);
 fprintf(f, "basesCovered %lld\n", basesCovered);
-
-#ifdef OLD_SLOW_WAY
-if (totalGenotypes > 0)
-    {
-    fprintf(f, "phasedCount %lld\n", phasedCount);
-    fprintf(f, "phasedRatio %g\n", (double)phasedCount/totalGenotypes);
-    fprintf(f, "haploidCount %lld\n", haploidCount);
-    fprintf(f, "haploidRatio %g\n", (double)haploidCount/totalGenotypes);
-    }
-#endif /* OLD_SLOW_WAY */
 
 fprintf(f, "xBasesCovered %lld\n", chromCoverage(grt, "chrX"));
 fprintf(f, "yBasesCovered %lld\n", chromCoverage(grt, "chrY"));
