@@ -27,9 +27,9 @@ errAbort(
   "options:\n"
   "   -counts - if set output names, use counts, and value counts of each tag\n"
   "   -vals=N - display tags and the top N values for them\n"
-  "   -schema=N - put a schema that will fit this tag storm in output.txt\n"
-  "   -looseSchema=N - put a less fussy schema instead\n"
-  "   -tightSchema=N - put a more fussy schema instead\n"
+  "   -schema - put a schema that will fit this tag storm in output.txt\n"
+  "   -looseSchema - put a less fussy schema instead\n"
+  "   -tightSchema - put a more fussy schema instead\n"
   );
 }
 
