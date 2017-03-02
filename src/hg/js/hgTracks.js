@@ -1061,7 +1061,8 @@ var dragSelect = {
             $("body").append("<div id='dragSelectDialog'><span id='dragSelectPosition'></span>" + 
                              "<p><input type='checkbox' id='disableDragHighlight'>" + 
                              "Don't show this dialog again and always zoom.<BR>" + 
-                             "(Re-enable highlight via the 'configure' menu at any time.)</p>");
+                             "(Re-enable highlight via the 'configure' menu at any time.)</p>"+ 
+                             "Using the keyboard, you can highlight the current position with 'm then a' and clear all highlights with 'm then c'.<p>");
             dragSelectDialog = $("#dragSelectDialog")[0];
         }
         if (hgTracks.windows) {
