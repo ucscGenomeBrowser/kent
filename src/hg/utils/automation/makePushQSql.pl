@@ -142,9 +142,10 @@ sub getInfrastructureEntry {
 
   # Look for the usual set of files on $dbHost:
   my $SameSpecies = ucfirst($db);  $SameSpecies =~ s/\d+$//;
+  # 2017-03-02 - remove gc5Base.wib quality.wib quality.bw
+  #              rarely, if ever, used any more
   my @gbdbFiles = map {"$HgAutomate::gbdb/$db/$_"}
-    ("$db.2bit", 'html/description.html', "wib/gc5Base.wib", "wib/quality.wib",
-     "bbi/gc5BaseBw/gc5Base.bw", "bbi/qualityBw/quality.bw", "liftOver/${db}To$SameSpecies*");
+    ("$db.2bit", 'html/description.html', "bbi/gc5BaseBw/gc5Base.bw", "liftOver/${db}To$SameSpecies*");
   my @goldenPathFiles = map {"$HgAutomate::goldenPath/$db/$_"}
     (qw( bigZips/* database/* chromosomes/* ),
      "liftOver/${db}To$SameSpecies*");
@@ -164,7 +165,7 @@ sub getInfrastructureEntry {
   $entry{'files'} = join('\r\n', @files);
 
   # Look for infrastructure tables in allTables hash:
-  foreach my $t qw( chromInfo grp seq extFile hgFindSpec trackDb history
+  foreach my $t qw( chromAlias chromInfo grp seq extFile hgFindSpec trackDb history
 		    tableDescriptions ) {
     if (defined $allTables->{$t}) {
       $entry{'tables'} .= "$t ";
@@ -464,10 +465,10 @@ sub getTrackEntries {
   return \@entries;
 } # getTrackEntries
 
-my @expectedTables = qw( augustusGene chromInfo cpgIslandExt
-cpgIslandExtUnmasked cytoBandIdeo gap genscan gold grp hgFindSpec
+my @expectedTables = qw( augustusGene chromAlias chromInfo cpgIslandExt
+cpgIslandExtUnmasked cytoBandIdeo gap gc5BaseBw genscan gold grp hgFindSpec
 microsat nestedRepeats rmsk simpleRepeat tableDescriptions trackDb
-ucscToINSDC windowmaskerSdust );
+ucscToINSDC ucscToRefSeq windowmaskerSdust );
 
 # verify the standard set of tables exist
 sub verifyExpectedTables {
