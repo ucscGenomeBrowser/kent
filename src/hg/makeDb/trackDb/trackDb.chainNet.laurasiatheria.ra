@@ -710,7 +710,6 @@ html chainNet
 # musFur1 - Ferret  - Mustela putorius furo - mammal - carnivora - 2430
 ################################################################
 track chainNetMusFur1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
