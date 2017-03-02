@@ -237,6 +237,8 @@ hgBotDelayNoWarn();  // delay but suppress warning at 10-20 sec delay level beca
 char *fileName = cartUsualString(cart, hgtaOutFileName, "");
 // Don't allow '/' in fileName -- textOutInit interprets that as indicating a local file on disk
 subChar(fileName, '/', '_');
+// Don't allow ',' in fileName -- results in HTTP response header syntax error.
+subChar(fileName, ',', '.');
 char *compressType = cartUsualString(cart, hgtaCompressType,
 				     textOutCompressNone);
 
@@ -1823,11 +1825,9 @@ if (doGenomeSpace())
 
 	htmlOpen("Uploading Output to GenomeSpace");
 
-	char javascript[1024];
-	safef(javascript, sizeof javascript,
+	jsInlineF(
 	    "setTimeout(function(){location = 'hgTables?backgroundStatus=%s';},2000);\n", // was 10000?
 	    cgiEncode(workUrl));
-	jsInline(javascript);
 	htmlClose();
 	fflush(stdout);
 

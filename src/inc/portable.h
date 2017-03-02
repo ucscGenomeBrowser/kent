@@ -80,6 +80,11 @@ void sleep1000(int milli);
 long clock1();
 /* A 1 hz clock. */
 
+char *getTempDir(void);
+/* get temporary directory to use for programs.  This first checks TMPDIR environment
+ * variable, then /data/tmp, /scratch/tmp, /var/tmp, /tmp.  Return is static and
+ * only set of first call */
+
 char *rTempName(char *dir, char *base, char *suffix);
 /* Make a temp name that's almost certainly unique. */
 

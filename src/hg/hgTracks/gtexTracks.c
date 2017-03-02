@@ -883,8 +883,6 @@ if (isMax)
     height= gtexMaxGraphHeight() + gtexGeneMargin() + gtexGeneModelHeight(extras) + extra;
     return height;
     }
-if (item == NULL)
-    return 0;
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 
 if (geneInfo->height != 0)
@@ -903,13 +901,6 @@ if (isComparison)
 height = topGraphHeight + bottomGraphHeight + gtexGeneMargin() + 
                 gtexGeneModelHeight(extras);
 return height;
-}
-
-//DEBUG RESTORE? static 
-int gtexGeneMaxHeight(struct track *tg)
-/* Maximum height in pixels of a gene graph */
-{
-return gtexGeneItemHeightOptionalMax(tg, NULL, TRUE);
 }
 
 static int gtexGeneItemHeight(struct track *tg, void *item)
@@ -1107,7 +1098,6 @@ else if (vis == tvSquish)
 else if ((vis == tvPack) || (vis == tvFull))
     {
     // layout -- initially as fixed height
-    //heightPer = gtexGeneMaxHeight(tg);  // TODO KATE THIS MAY BE OBSOLETE
     heightPer = tl.fontHeight;
     lineHeight=heightPer;
     }

@@ -28,6 +28,7 @@ Connect to the MySQL server using the command:</p>
 The <em>-A</em> flag is optional but is recommended for speed.</p> 
 <p>
 Once connected to the database, you may use a wide range of MySQL commands to query the database. 
+
 <!-- As a courtesy to others, <strong>please observe the following guidelines when using the
 database:</strong> --> </p>
 
@@ -42,7 +43,7 @@ database:</strong> --> </p>
   <li>
   Attachments by local mirror sites are prohibited.</li> 
 </ul>
-	
+
 <h2>Using the MySQL server with our utilities</h2> 
 <p>
 The MySQL database can also be used by the numerous utilities in the 
@@ -57,9 +58,20 @@ central.db=hgcentral
 central.host=genome-mysql.cse.ucsc.edu
 central.user=genomep
 central.password=password </code></pre> 
+
+<p>
+If you have set up your .hg.conf file as above, you can use the <code>hgsql</code> utility,
+available from our downloads server in the
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities setction</a>,
+to access the public MySQL server. The benefit of using the <code> hgsql</code> command is that
+you don't have to include the username or password as part of your command. You only need to
+specifcy the host:</p>
+<p><pre><code>hgsql -h genome-mysql.cse.ucsc.edu</code></pre></p>
+
 <p>
 If you prefer a graphical user interface (GUI) to the UCSC database tables, use the 
-<a href="../../cgi-bin/hgTables">Table Browser</a>.</p> 
+<a href="../../cgi-bin/hgTables">Table Browser</a>.</p>
+
 <p>
 System problems should be reported to 
 <a href="mailto:&#103;&#101;&#110;&#111;&#109;&#101;&#45;w&#119;w&#64;&#115;&#111;&#101;.&#117;cs&#99;.&#101;&#100;&#117;"> &#103;&#101;&#110;&#111;&#109;&#101;&#45;w&#119;w&#64;&#115;&#111;&#101;.&#117;cs&#99;.&#101;&#100;&#117;</a>.
@@ -67,9 +79,9 @@ System problems should be reported to
 Send questions regarding the database contents or queries to 
 <a href="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;e.&#117;&#99;&#115;&#99;.e&#100;u"> &#103;&#101;n&#111;m&#101;&#64;&#115;&#111;e.&#117;&#99;&#115;&#99;.e&#100;u</a>.
 <!-- above address is genome at soe.ucsc.edu -->
-<strong>Messages sent to this address will be posted to the moderated genome mailing list, which is 
-archived on a SEARCHABLE PUBLIC 
+<strong><span class="gbsWarnText">Messages sent to this address will be posted to the moderated genome mailing list, which is 
+archived on a SEARCHABLE, PUBLIC 
 <a HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">Google Groups
-forum</a></strong>.</p>
+forum</a></span></strong>.</p>
       
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

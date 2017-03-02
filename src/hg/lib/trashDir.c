@@ -13,7 +13,7 @@ static void trashDirFileExt(struct tempName *tn, char *dirName, char *base, char
 /*	obtain a trash file name trash/dirName/base*.suffix */
 {
 static struct hash *dirHash = NULL;
-char prefix[64];
+char prefix[128];
 char buffer[4096];
 
 if (! dirHash)

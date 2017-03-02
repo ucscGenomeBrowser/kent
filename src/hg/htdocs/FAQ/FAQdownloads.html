@@ -8,43 +8,41 @@
 <h1>Frequently Asked Questions: Data and Downloads</h1>
 
 <h2>Topics</h2>
-<ul>
-  <li><a class="toc" href="#download1">Downloading sequence and annotation data</a></li>
-  <li><a class="toc" href="#download35">Metadata tables for GenBank and RefSeq moved to hgFixed database</a></li>
-  <li><a class="toc" href="#download32">Extracting sequence in batch from an assembly</a></li>
-  <li><a class="toc" href="#download23">Downloading data from the UCSC DAS server</a></li>
-  <li><a class="toc" href="#download27">Downloading the UCSC Genome Browser source</a></li>
-  <li><a class="toc" href="#download2">Download restrictions</a></li>
-  <li><a class="toc" href="#download3">Opening .fa files</a></li>
-  <li><a class="toc" href="#download4">Data differences between downloaded data and browser display</a></li>
-  <li><a class="toc" href="#download5">Strange characters in FASTA file</a></li>
-  <li><a class="toc" href="#download6">Selection of GenBank ESTs</a></li>
-  <li><a class="toc" href="#download7">EST strand direction</a></li>
-  <li><a class="toc" href="#download8">Missing RefSeq ID</a></li>
-  <li><a class="toc" href="#download9">Finished vs. draft segments</a></li>
-  <li><a class="toc" href="#download10">chrN_random tables</a></li>
-  <li><a class="toc" href="#download11">Chromosome Un</a></li>
-  <li><a class="toc" href="#download12">Chromosome M</a></li>
-  <li><a class="toc" href="#download13">N characters at beginning of human chr22</a></li>
-  <li><a class="toc" href="#download30">Erroneous duplicated chrY_random region on Mouse Build 34 (mm6)</a></li>
-  <li><a class="toc" href="#download25">Mapping chimp chromosome numbers to human chromosomes numbers</a></li>
-  <li><a class="toc" href="#download28">Converting genome coordinates between assemblies</a></li>
-  <li><a class="toc" href="#download33">Linking gene name with accession number</a></li>
-  <li><a class="toc" href="#download31">Obtaining a list of Known Genes</a></li>
-  <li><a class="toc" href="#download16">Repeat-masking data</a></li>
-  <li><a class="toc" href="#download17">Availability of repeat-masked data</a></li>
-  <li><a class="toc" href="#download24">RepeatMasker version differences - UCSC vs. Repeatmasker 
-  website</a></li> 
-  <li><a class="toc" href="#download18">Obtaining promoter sequence</a></li>
-  <li><a class="toc" href="#download19">Data from Evolutionary Conservation Score tracks</a></li>
-  <li><a class="toc" href="#download20">Minus strand coordinates - axtNet files</a></li>
-  <li><a class="toc" href="#download21">Mapping UCSC STS marker IDS to those of other 
-  groups</a></li>
-  <li><a class="toc" href="#download22">deCODE map data</a></li>
-  <li><a class="toc" href="#download29">Direct MySQL access to data</a></li>
-  <li><a class="toc" href="#download34">Name of fourth column in BED output</a></li>
-  <li><a class="toc" href="#download36">Track data access</a></li>
-</ul>
+
+<h6><a href="#download1">Downloading sequence and annotation data</a></h6>
+<h6><a href="#download35">Metadata tables for GenBank and RefSeq moved to hgFixed database</a></h6>
+<h6><a href="#download32">Extracting sequence in batch from an assembly</a></h6>
+<h6><a href="#download23">Downloading data from the UCSC DAS server</a></h6>
+<h6><a href="#download27">Downloading the UCSC Genome Browser source</a></h6>
+<h6><a href="#download2">Download restrictions</a></h6>
+<h6><a href="#download3">Opening .fa files</a></h6>
+<h6><a href="#download4">Data differences between downloaded data and browser display</a></h6>
+<h6><a href="#download5">Strange characters in FASTA file</a></h6>
+<h6><a href="#download6">Selection of GenBank ESTs</a></h6>
+<h6><a href="#download7">EST strand direction</a></h6>
+<h6><a href="#download8">Missing RefSeq ID</a></h6>
+<h6><a href="#download9">Finished vs. draft segments</a></h6>
+<h6><a href="#download10">chrN_random tables</a></h6>
+<h6><a href="#download11">Chromosome Un</a></h6>
+<h6><a href="#download12">Chromosome M</a></h6>
+<h6><a href="#download13">N characters at beginning of human chr22</a></h6>
+<h6><a href="#download30">Erroneous duplicated chrY_random region on Mouse Build 34 (mm6)</a></h6>
+<h6><a href="#download25">Mapping chimp chromosome numbers to human chromosomes numbers</a></h6>
+<h6><a href="#download28">Converting genome coordinates between assemblies</a></h6>
+<h6><a href="#download33">Linking gene name with accession number</a></h6>
+<h6><a href="#download31">Obtaining a list of Known Genes</a></h6>
+<h6><a href="#download16">Repeat-masking data</a></h6>
+<h6><a href="#download17">Availability of repeat-masked data</a></h6>
+<h6><a href="#download24">RepeatMasker version differences - UCSC vs. Repeatmasker website</a></h6> 
+<h6><a href="#download18">Obtaining promoter sequence</a></h6>
+<h6><a href="#download19">Data from Evolutionary Conservation Score tracks</a></h6>
+<h6><a href="#download20">Minus strand coordinates - axtNet files</a></h6>
+<h6><a href="#download21">Mapping UCSC STS marker IDS to those of other groups</a></h6>
+<h6><a href="#download22">deCODE map data</a></h6>
+<h6><a href="#download29">Direct MySQL access to data</a></h6>
+<h6><a href="#download34">Name of fourth column in BED output</a></h6>
+<h6><a href="#download36">Track data access</a></h6>
+<hr>
 <p>
 <a href="index.html">Return to FAQ Table of Contents</a></p>
 
@@ -367,6 +365,63 @@ The sign of this calculated intronOrientation field (stored in the estOrientInfo
 orientation of the transcript relative to the EST. Therefore, if intronOrientation is positive, 
 then the EST appears in the display with the arrows pointing in the same direction as the
 EST.</p>
+
+<a name="download8"></a>
+<h2>Missing RefSeq ID</h2>
+<h6>Why isn't my refseq ID in your database?</h6> 
+<p> 
+It may have been added after we last downloaded data from GenBank, or it may have been replaced or 
+removed. You can check the submission date and status of an accession on the 
+<a href="http://www.ncbi.nlm.nih.gov:80/entrez/" target="_blank">NCBI Entrez Nucleotide
+site</a>.</p>
+
+<a name="download9"></a>
+<h2>Finished vs. draft segments</h2>
+<h6>Do chr<em>N</em>.fa tables contain both finished and draft segments? If so, how do you 
+determine which segments are finished?</h6> 
+<p> 
+Yes, these tables contain both finished and draft segments. Use the corresponding 
+chr<em>N</em>_gold table to look them up. The quality of the draft varies. In general, the larger 
+the contig it is in, the better the quality. The quality of the last 500 bases on either end of a 
+contig tends to be lower than that of the rest of the contig.  
+<p> 
+How do you determine the accuracy? The base-calling program <a href="http://www.phrap.org/" 
+target="_blank">Phred</a> analyzes the traces from the sequencing machines and assigns a quality 
+score to these. These quality scores are used by the <a href="http://www.phrap.org/" 
+target="_blank">Phrap</a> assembly program, which gives quality scores for the bases on the assembly
+as well.</p>
+
+<a name="download10"></a>
+<h2>chrN_random tables</h2>
+<h6>What are the chr<em>N</em>_random_[table] files in the human assembly? Why are they called 
+random? Is there something biologically random about the sequence in these tables or are they just 
+not placed within their given chromosomes?</h6>
+<p> 
+In the past, these tables contained data related to sequence that is known to be in a particular 
+chromosome, but could not be reliably ordered within the current sequence.</p> 
+<p> 
+Starting with the Apr. 2003 human assembly, these tables also include data for sequence that is not 
+in a finished state, but whose location in the chromosome is known, in addition to the unordered 
+sequence.  Because this sequence is not quite finished, it could not be included in the main 
+&quot;finished&quot; ordered and oriented section of the chromosome.</p>  
+<p> 
+Also, in a very few cases in the Apr. 2003 assembly, the random files contain data related to 
+sequence for alternative haplotypes. This is present primarily in chr6, where we have included two 
+alternative versions of the MHC region in chr6_random. There are a few clones in other chromosomes 
+that also correspond to a different haplotype. Because the primary reference sequence can only 
+display a single haplotype, these alternatives were included in random files. In subsequent 
+assemblies, these regions have been moved into separate files (<em>e.g.</em> chr6_hla_hap1).</p>
+
+<a name="download11"></a>
+<h2>Chromosome Un</h2>
+<h6>What is chrUn?</h6> 
+<p> 
+ChrUn contains clone contigs that cannot be confidently placed on a specific chromosome. For the 
+chr<em>N</em>_random and chrUn_random files, we essentially just concatenate together all the 
+contigs into short pseudo-chromosomes. The coordinates of these are fairly arbitrary, although the 
+relative positions of the coordinates are good within a contig. You can find more information about 
+the data organization and format on the <a href="../goldenPath/datorg.html">Data Organization and 
+Format</a> page.</p>
 
 <a name="download12"></a>
 <h2>Chromosome M</h2>

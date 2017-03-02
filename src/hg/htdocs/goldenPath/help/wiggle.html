@@ -32,8 +32,9 @@ Wiggle format is composed of declaration lines and data lines, and require a sep
 definition line. There are two options for formatting wiggle data: <strong>variableStep</strong> 
 and <strong>fixedStep</strong>. These formats were developed to allow the file to be written as 
 compactly as possible.</p>
+
+<h3>variableStep format</h3>
 <p>
-<strong>variableStep</strong><br> 
 This format is used for data with irregular intervals between new data points, and is the more 
 commonly used wiggle format. After the wiggle track definition line, variableStep begins with a 
 declaration line and is followed by two columns containing chromosome positions and data values:
@@ -69,8 +70,9 @@ displaying data that is quite dense. The variableStep format, in particular, bec
 inefficient when there are only a few data points per 1,024 bases. If variableStep data points 
 (<em>i.e.</em>, chromStarts) are greater than about 100 bases apart, it is advisable to use 
 <a href="bedgraph.html" target="_blank">BedGraph</a> format.</p>
-<p> 
-<strong>fixedStep</strong><br> 
+
+<h3>fixedStep format</h3>
+<p>
 This format is used for data with regular intervals between new data values and is the more compact 
 wiggle format. After the wiggle track definition line, fixedStep begins with a declaration line and 
 is followed by a single column of data values: 
@@ -110,8 +112,9 @@ used.</p>
 Wiggle track data values can be integer or real, positive or negative values. Only positions 
 specified have data. Positions not specified do not have data and will not be graphed. All positions
 specified in the input data must be in numerical order.</p>
+
+<h3>1-start coordinate system in use for variableStep and fixedStep</h3>
 <p>
-<strong>1-start coordinate system in use for variableStep and fixedStep</strong><br>
 BigWig files created from bedGraph format use &quot;0-start, half-open&quot; coordinates, but
 bigWigs that represent variableStep and fixedStep data are generated from wiggle files that
 use "1-start, fully-closed" coordinates. 
@@ -128,8 +131,9 @@ position is 1 and the last position is N. For more information, see:
   <a href="http://genome.ucsc.edu/blog/the-ucsc-genome-browser-coordinate-counting-systems/"
   target="_blank">The UCSC Genome Browser Coordinate Counting Systems</a> (Genome Browser blog)</li>
 </ul>
+
+<h3>Parameters for custom wiggle track definition lines</h3>
 <p>
-<strong>Parameters for custom wiggle track definition lines</strong><br>
 All options are placed in a single line separated by spaces (line breaks are inserted in the
 following example to facilitate readability):</p> 
 <pre><code><strong>track type</strong>=wiggle_0 <strong>name</strong>=<em>track_label</em>

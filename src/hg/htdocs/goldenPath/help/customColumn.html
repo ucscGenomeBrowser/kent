@@ -68,17 +68,18 @@ End removed section -->
   <li>
   <strong>search</strong> - When the atribute is set to one of the following values, column data may
   be searched using the Gene Sorter <em>search</em> text box. Rows containing matches will be moved 
-  to the top of the display.</li> 
-  <ul> 
+  to the top of the display. By default, no search criterion is set. </li> 
+  <ul class="gbsNoBullet"> 
     <li>
-    <em>exact</em> - matches only if the text entered in the position search box exactly matches the
-    column data text.</li> 
+    <strong><em>exact</em></strong> - matches only if the text entered in the position search box 
+    exactly matches the column data text.</li> 
     <li>
-    <em>prefix</em> - matches if search text exactly matches the initial part of the column data 
-    text.</li> 
-    <li><em>fuzzy</em> - matches if search text matches any portion of the column data text.</li> 
+    <strong><em>prefix</em></strong> - matches if search text exactly matches the initial part of 
+    the column data text.</li> 
+    <li><strong><em>fuzzy</em></strong> - matches if search text matches any portion of the column 
+    data text.</li> 
   </ul> 
-  By default, no search criterion is set.  <li><strong>idLookup</strong> - When set, this attribute 
+  <li><strong>idLookup</strong> - When set, this attribute 
   specifies the standard column that should be used to link key values to the Gene Sorter display.  
   For example, if <em>idLookup</em> is set to <em>refSeq</em>, a custom column data row containing 
   the key <em>NM_024014</em> will display on the same row as the RefSeq row containing 

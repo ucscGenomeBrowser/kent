@@ -44,7 +44,6 @@ struct serverTable
    };
 
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
-char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
 #ifdef LOWELAB
@@ -215,35 +214,7 @@ while ((c = *s++) != 0)
 return TRUE;
 }
 
-int cmpChrom(char *a, char *b)
-/* Compare two chromosomes. */
-{
-return cmpStringsWithEmbeddedNumbers(a, b);
-}
 
-
-
-int pslCmpTargetScore(const void *va, const void *vb)
-/* Compare to sort based on target then score. */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-int diff = cmpChrom(a->tName, b->tName);
-if (diff == 0)
-    diff = pslScore(b) - pslScore(a);
-return diff;
-}
-
-int pslCmpTargetStart(const void *va, const void *vb)
-/* Compare to sort based on target start. */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-int diff = cmpChrom(a->tName, b->tName);
-if (diff == 0)
-    diff = a->tStart - b->tStart;
-return diff;
-}
 
 void printLuckyRedirect(char *browserUrl, struct psl *psl, char *database, char *pslName, 
 			char *faName, char *uiState, char *unhideTrack)
@@ -257,59 +228,22 @@ safef(url, sizeof(url), "%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s%s",
 /* Odd it appears that we've already printed the Content-Typ:text/html line
    but I can't figure out where... */
 htmStart(stdout, "Redirecting"); 
-char javascript[1024];
-safef(javascript, sizeof javascript,
-    "location.replace('%s');", url);
-jsInline(javascript);
-printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>", url);
+jsInlineF("location.replace('%s');\n", url);
+printf("<noscript>No javascript support:<br>Click <a href='%s'>here</a> for browser.</noscript>\n", url);
 htmlEnd();
 
 }
 
-static char *replaceSuffix(char *input, char *newSuffix)
-/* Given a filename with a suffix, replace existing suffix with a new suffix. */
-{
-char buffer[4096];
-safecpy(buffer, sizeof buffer, input);
-char *dot = strrchr(buffer, '.');
-safecpy(dot+1, sizeof buffer - 1 - (dot - buffer), newSuffix);
-return cloneString(buffer);
-}
 
-static void makeBigPsl(char *pslName, char *faName, char *db, char *outputBigBed)
-/* Make a bigPsl with the blat results. */
-{
-char *bigPslFile = replaceSuffix(outputBigBed, "bigPsl");
-
-char cmdBuffer[4096];
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/pslToBigPsl %s -fa=%s stdout | sort -k1,1 -k2,2n  > %s", pslName, faName, bigPslFile);
-system(cmdBuffer);
-char buf[4096];
-char *twoBitDir;
-if (trackHubDatabase(db))
-    {
-    struct trackHubGenome *genome = trackHubGetGenome(db);
-    twoBitDir = genome->twoBitPath;
-    }
-else
-    {
-    safef(buf, sizeof(buf), "/gbdb/%s", db);
-    twoBitDir = hReplaceGbdbSeqDir(buf, db);
-    safef(buf, sizeof(buf), "%s%s.2bit", twoBitDir, db);
-    twoBitDir = buf;
-    }
-            
-safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -verbose=0 -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed9+16  %s %s %s",
-        udcDefaultDir(), bigPslFile, twoBitDir, outputBigBed);
-system(cmdBuffer);
-unlink(bigPslFile);
-}
+/* forward declaration to reduce churn */
+static void getCustomName(char *database, struct cart *cart, struct psl *psl, char **pName, char **pDescription);
 
 void showAliPlaces(char *pslName, char *faName, char *customText, char *database, 
            enum gfType qType, enum gfType tType, 
            char *organism, boolean feelingLucky)
 /* Show all the places that align. */
 {
+boolean useBigPsl = cfgOptionBooleanDefault("useBlatBigPsl", FALSE);
 struct lineFile *lf = pslFileOpen(pslName);
 struct psl *pslList = NULL, *psl;
 char *browserUrl = hgTracksName();
@@ -317,7 +251,7 @@ char *hgcUrl = hgcName();
 char uiState[64];
 char *vis;
 char unhideTrack[64];
-char *sort = cartUsualString(cart, "sort", sortList[0]);
+char *sort = cartUsualString(cart, "sort", pslSortList[0]);
 char *output = cartUsualString(cart, "output", outputList[0]);
 boolean pslOut = startsWith("psl", output);
 boolean isStraightNuc = (qType == gftRna || qType == gftDna);
@@ -345,30 +279,8 @@ if (pslList == NULL)
     return;
     }
 
-if (sameString(sort, "query,start"))
-    {
-    slSort(&pslList, pslCmpQuery);
-    }
-else if (sameString(sort, "query,score"))
-    {
-    slSort(&pslList, pslCmpQueryScore);
-    }
-else if (sameString(sort, "score"))
-    {
-    slSort(&pslList, pslCmpScore);
-    }
-else if (sameString(sort, "chrom,start"))
-    {
-    slSort(&pslList, pslCmpTargetStart);
-    }
-else if (sameString(sort, "chrom,score"))
-    {
-    slSort(&pslList, pslCmpTargetScore);
-    }
-else
-    {
-    slSort(&pslList, pslCmpQueryScore);
-    }
+pslSortListByVar(&pslList, sort);
+
 if(feelingLucky)
     {
     /* If we found something jump browser to there. */
@@ -399,7 +311,36 @@ else
     if (posStr != NULL)
         printf("<P>Go back to <A HREF=\"%s\">%s</A> on the Genome Browser.</P>\n", browserUrl, posStr);
 
-    printf("<DIV STYLE=\"display:block; float:left\"><TT><PRE>");
+    if (useBigPsl)
+        {
+        char *trackName = NULL;
+        char *trackDescription = NULL;
+        getCustomName(database, cart, pslList, &trackName, &trackDescription);
+        psl = pslList;
+        printf( "<DIV STYLE=\"display:block;\"><TABLE><FORM ACTION=\"%s\"  METHOD=\"POST\" NAME=\"customTrackForm\">\n", hgcUrl);
+        printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
+        printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",psl->tEnd);
+        printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
+        printf("<INPUT TYPE=\"hidden\" name=\"i\" value=\"%s %s %s\" />\n",pslName,faName,psl->qName);
+        printf("<INPUT TYPE=\"hidden\" name=\"c\" value=\"%s\" />\n",psl->tName);
+        printf("<INPUT TYPE=\"hidden\" name=\"l\" value=\"%d\" />\n",psl->tStart);
+        printf("<INPUT TYPE=\"hidden\" name=\"r\" value=\"%d\" />\n",psl->tEnd);
+        printf("<INPUT TYPE=\"hidden\" name=\"%s\" value=\"%s\" />\n",  cartSessionVarName(), cartSessionId(cart));
+        if (pslIsProtein(psl))
+            printf("<INPUT TYPE=\"hidden\" name=\"isProt\" value=\"on\" />\n");
+
+        printf("<TABLE><TR>Custom track name: ");
+        cgiMakeTextVar( "trackName", trackName, 30);
+        printf("</TD></TR>");
+
+        printf("<TR> Custom track description: ");
+        cgiMakeTextVar( "trackDescription", trackDescription,50);
+        printf("</TD></TR>");
+        printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Build a custom track with these results\"></TD></TR>\n");
+        printf("</FORM></TT></DIV>");
+        }
+
+    printf("<DIV STYLE=\"display:block;\"><TABLE><PRE>");
     printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END      SPAN\n");
     printf("---------------------------------------------------------------------------------------------------\n");
     for (psl = pslList; psl != NULL; psl = psl->next)
@@ -617,44 +558,9 @@ else
 *pDescription = cloneString(description);
 }
 
-static char *outBigPsl(char *db, struct psl *pslList, char *pslFilename, char *faFilename, boolean isProt)
-// Make a bigPsl from a list of psls and return its name.
-{
-struct tempName bigBedTn;
-trashDirDateFile(&bigBedTn, "hgBlat", "bp", ".bb");
-char *bigBedFile = bigBedTn.forCgi;
-makeBigPsl(pslFilename, faFilename, db, bigBedFile);
-char *customTextFile = replaceSuffix(bigBedFile, "txt");
-FILE *fp = fopen(customTextFile, "w");
-char* host = getenv("HTTP_HOST");
-char* reqUrl = getenv("REQUEST_URI");
-// remove everything after / in URL
-char *e = strrchr(reqUrl, '/');
-if (e) *e = 0;
-
-char *trackName = NULL;
-char *trackDescription = NULL;
-
-getCustomName(db, cart, pslList, &trackName, &trackDescription);
-char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on  pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s%s/%s name=\"%s\" description=\"%s\"\n";
-char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases"; 
-
-if (isProt)
-    extraForMismatch = "";
-fprintf(fp, customTextTemplate, bigBedTn.forCgi, host, extraForMismatch, host, reqUrl, bigBedTn.forCgi, trackName, trackDescription);
-fclose(fp);
-
-char buffer[4096];
-safef(buffer, sizeof buffer, "http://%s%s/%s", host, reqUrl, customTextFile);
-
-return cloneString(buffer);
-}
-    
 void blatSeq(char *userSeq, char *organism, char *database)
 /* Blat sequence user pasted in. */
 {
-boolean doHyper = sameString(cartUsualString(cart, "output", outputList[0]), "hyperlink");;
-boolean useBigPsl = cfgOptionBooleanDefault("useBlatBigPsl", FALSE) && doHyper;
 FILE *f;
 struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
@@ -854,24 +760,8 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     }
 carefulClose(&f);
 
-if (useBigPsl)
-    {
-    struct psl *pslList = pslLoadAll(pslTn.forCgi);
-
-    if (pslList != NULL)
-        {
-        char *customTrack = outBigPsl(database, pslList, pslTn.forCgi, faTn.forCgi, qIsProt);
-        showAliPlaces(pslTn.forCgi, faTn.forCgi, customTrack, serve->db, qType, tType, 
-          organism, feelingLucky);
-        }
-    else
-        puts("<table><tr><td><hr>Sorry, no matches found<hr><td></tr></table>");
-    }
-else
-    {
-    showAliPlaces(pslTn.forCgi, faTn.forCgi, NULL, serve->db, qType, tType, 
-                  organism, feelingLucky);
-    }
+showAliPlaces(pslTn.forCgi, faTn.forCgi, NULL, serve->db, qType, tType, 
+              organism, feelingLucky);
 if(!feelingLucky)
     cartWebEnd();
 gfFileCacheFree(&tFileCache);
@@ -915,7 +805,7 @@ printf("<TD ALIGN=CENTER>\n");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
-cgiMakeDropList("sort", sortList, ArraySize(sortList), cartOptionalString(cart, "sort"));
+cgiMakeDropList("sort", pslSortList, ArraySize(pslSortList), cartOptionalString(cart, "sort"));
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
 cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"));

@@ -41,6 +41,7 @@ errAbort(
   "             (Just one level of recursion)\n"
   "   submit - submit first form in page if any using 'GET' method\n"
   "   validate - do some basic validations including TABLE/TR/TD nesting\n"
+  "   strictTagNestCheck - check tags are correctly nested\n"
   "options:\n"
   "   cookies=cookie.txt - Cookies is a two column file\n"
   "           containing <cookieName><space><value><newLine>\n"
@@ -361,6 +362,11 @@ else /* Do everything that requires full parsing. */
     else if (sameString(command, "validate"))
 	{
 	htmlPageValidateOrAbort(page);	
+	verbose(1, "ok\n");
+	}
+    else if (sameString(command, "strictTagNestCheck"))
+	{
+	htmlPageStrictTagNestCheck(page);	
 	verbose(1, "ok\n");
 	}
     else if (sameString(command, "checkLinks"))

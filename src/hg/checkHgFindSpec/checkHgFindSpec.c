@@ -88,7 +88,7 @@ for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
 	tablesExist |= hTableExists(database, hfs->xrefTable);
     if (matches && tablesExist)
 	{
-	verbose(1, "SHORT-CIRCUIT %s\n", hfs->searchName);
+	verbose(1, "SHORT-CIRCUIT %s %f\n", hfs->searchName, hfs->searchPriority);
 	}
     else if (matches)
 	{
@@ -116,7 +116,7 @@ for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
 	tablesExist |= hTableExists(database, hfs->xrefTable);
     if (matches && tablesExist)
 	{
-	verbose(1, "ADDITIVE %s\n", hfs->searchName);
+	verbose(1, "ADDITIVE %s %f\n", hfs->searchName, hfs->searchPriority);
 	}
     else if (matches)
 	{

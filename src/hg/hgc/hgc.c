@@ -256,6 +256,7 @@
 #include "aveStats.h"
 #include "trix.h"
 #include "bPlusTree.h"
+#include "customFactory.h"
 
 static char *rootDir = "hgcData";
 
@@ -2981,17 +2982,30 @@ if (start == end)
     ivEnd++;
     }  
 
+boolean showEvery = sameString(item, "PrintAllSequences");
 boolean showAll = trackDbSettingOn(tdb, "showAll");
 unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-struct bigBedInterval *bb, *bbList;
+struct bigBedInterval *bb, *bbList = NULL;
 
 // If showAll is on, show all alignments with this qName, not just the
 // selected one.
-if (showAll)
+if (showEvery)
+    {
+    struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+    for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+        {
+        char *chromName = chrom->name;
+        int start = 0, end = chrom->size;
+        int itemsLeft = 0;  // Zero actually means no limit.... 
+        struct bigBedInterval *intervalList = bigBedIntervalQuery(bbi, chromName,
+            start, end, itemsLeft, lm);
+        slCat(&bbList, intervalList);
+        }
+    }
+else if (showAll)
     {
     int fieldIx;
     struct bptFile *bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
-    struct lm *lm = lmInit(0);
     bbList = bigBedNameQuery(bbi, bpt, fieldIx, item, lm);
     }
 else
@@ -3029,15 +3043,21 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
     lastChromId=bb->chromId;
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, 4);
-    if (sameString(bedRow[3], item))
+    if (showEvery || sameString(bedRow[3], item))
 	{
         struct psl *psl= pslFromBigPsl(chromName, bb, seqTypeField, NULL, NULL);
         slAddHead(&pslList, psl);
 	}
     }
 
-printf("<H3>%s/Genomic Alignments</H3>", item);
-if (pslIsProtein(pslList))
+char *sort = cartUsualString(cart, "sort", pslSortList[0]);
+pslSortListByVar(&pslList, sort);
+
+if (showEvery)
+    printf("<H3>Genomic Alignments</H3>");
+else
+    printf("<H3>%s/Genomic Alignments</H3>", item);
+if (showEvery || pslIsProtein(pslList))
     printAlignmentsSimple(pslList, start, "htcBigPslAli", tdb->table, item);
 else
     printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow",
@@ -5880,8 +5900,9 @@ int aliCount = slCount(pslList);
 boolean isClicked;
 if (pslList == NULL || tableName == NULL)
     return;
+boolean showEvery = sameString(itemIn, "PrintAllSequences");
 
-if (aliCount > 1)
+if (!showEvery && (aliCount > 1))
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
 printf("<PRE><TT>");
@@ -5897,10 +5918,13 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	if (isPslToPrintByClick(psl, startFirst, isClicked))
 	    {
             char otherString[512];
+            char *qName = itemIn;
+            if (sameString(itemIn, "PrintAllSequences"))
+                qName = psl->qName;
 	    safef(otherString, sizeof(otherString), "%d&aliTable=%s", psl->tStart, tableName);
             printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
-	    hgcAnchorWindow(hgcCommand, itemIn, psl->tStart, psl->tEnd,  otherString, psl->tName);
+	    hgcAnchorWindow(hgcCommand, qName, psl->tStart, psl->tEnd,  otherString, psl->tName);
 	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d</A>",
 		   psl->match + psl->misMatch + psl->repMatch,
 		   100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
@@ -25014,11 +25038,6 @@ char *qTrack = cartString(cart, "g");
 if(isHubTrack(qTrack) && ! trackHubDatabase(database))
     hubName = cloneString(qTrack);
 
-struct hash *dbAliasHash = NULL;  // create later when needed
-char * dbAliasList = trackDbSetting(tdb, "dbAliasList");
-if (dbAliasList)
-    dbAliasHash = hashFromString(dbAliasList);
-
 /* current mouse strain hal file has incorrect chrom names */
 char *aliasQName = qName;
 // aliasQName = "chr1";  // temporarily make this work for the mouse hal
@@ -25033,14 +25052,6 @@ else
     {
     safef(otherDb, sizeof otherDb, "%s", otherSpecies);
     }
-
-if (dbAliasHash)
-   {
-   char *otherDbName = trackHubSkipHubName(otherDb);
-   struct hashEl* alias = hashLookup(dbAliasHash, otherDbName);
-   if (alias)
-      safef(otherDb, sizeof otherDb, "%s", (char *)alias->val);
-   }
 
 char headerText[256];
 safef(headerText, sizeof headerText, "reference: %s, query: %s\n", trackHubSkipHubName(database), trackHubSkipHubName(otherDb) );
@@ -25121,6 +25132,87 @@ while (*c != 0)
     c++;
     i++;
     }
+}
+
+static char *replaceSuffix(char *input, char *newSuffix)
+/* Given a filename with a suffix, replace existing suffix with a new suffix. */
+{
+char buffer[4096];
+safecpy(buffer, sizeof buffer, input);
+char *dot = strrchr(buffer, '.');
+safecpy(dot+1, sizeof buffer - 1 - (dot - buffer), newSuffix);
+return cloneString(buffer);
+}
+
+static void makeBigPsl(char *pslName, char *faName, char *db, char *outputBigBed)
+/* Make a bigPsl with the blat results. */
+{
+char *bigPslFile = replaceSuffix(outputBigBed, "bigPsl");
+
+char cmdBuffer[4096];
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/pslToBigPsl %s -fa=%s stdout | sort -k1,1 -k2,2n  > %s", pslName, faName, bigPslFile);  
+system(cmdBuffer);
+char buf[4096];
+char *twoBitDir;
+if (trackHubDatabase(db))
+    {
+    struct trackHubGenome *genome = trackHubGetGenome(db);
+    twoBitDir = genome->twoBitPath;
+    }
+else
+    {
+    safef(buf, sizeof(buf), "/gbdb/%s", db);
+    twoBitDir = hReplaceGbdbSeqDir(buf, db);
+    safef(buf, sizeof(buf), "%s%s.2bit", twoBitDir, db);
+    twoBitDir = buf;
+    }
+
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -verbose=0 -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed9+16  %s %s %s",  
+        udcDefaultDir(), bigPslFile, twoBitDir, outputBigBed);
+system(cmdBuffer);
+unlink(bigPslFile);
+}
+
+static void buildBigPsl(char *fileNames)
+/* Build a custom track with a bigPsl file out of blat results.
+ * Bring up the bigPsl detail page with all the alignments. */
+{
+char *trackName = cartString(cart, "trackName");
+char *trackDescription = cartString(cart, "trackDescription");
+char *pslName, *faName, *qName;
+parseSs(fileNames, &pslName, &faName, &qName);
+
+struct tempName bigBedTn;
+trashDirDateFile(&bigBedTn, "hgBlat", "bp", ".bb");
+char *bigBedFile = bigBedTn.forCgi;
+makeBigPsl(pslName, faName, database, bigBedFile);
+
+char* host = getenv("HTTP_HOST");
+char* reqUrl = cloneString(getenv("REQUEST_URI"));
+// delete arguements to the url
+char *e = strchr(reqUrl+1, '?');
+if (e) *e = 0;
+// remove the cgi name
+e = strchr(reqUrl+1, '/');
+if (e) *e = 0;
+
+boolean isProt = cgiOptionalString("isProt") != NULL;
+char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on  pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s%s/%s name=\"%s\" description=\"%s\"\n";  
+char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases";
+  
+if (isProt)
+    extraForMismatch = "";
+char buffer[4096];
+safef(buffer, sizeof buffer, customTextTemplate, bigBedTn.forCgi, host, extraForMismatch, host, reqUrl, bigBedTn.forCgi, trackName, trackDescription);
+
+struct customTrack *ctList = getCtList();
+struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL);
+theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
+
+customTracksSaveCart(database, cart, theCtList);
+
+cartSetString(cart, "i", "PrintAllSequences");
+hgCustom(newCts->tdb->track, NULL);
 }
 
 void doMiddle()
@@ -25277,6 +25369,10 @@ else if (sameWord(table, "htcGetDna3"))
 else if (sameWord(table, "htcGetDnaExtended1"))
     {
     doGetDnaExtended1();
+    }
+else if (sameWord(table, "buildBigPsl"))
+    {
+    buildBigPsl(item);
     }
 else if (sameWord(table, "htcListItemsAssayed"))
     {
@@ -25508,10 +25604,13 @@ else if (sameWord(table, "knownGene"))
 else if (sameWord(table, "ncbiRefSeq") ||
          sameWord(table, "ncbiRefSeqPsl") ||
          sameWord(table, "ncbiRefSeqCurated") ||
-         sameWord(table, "ncbiRefSeqPredicted") ||
-         sameWord(table, "ncbiRefSeqOther") )
+         sameWord(table, "ncbiRefSeqPredicted") )
     {
     doNcbiRefSeq(tdb, item);
+    }
+else if (sameWord(table, "ncbiRefSeqOther") )
+    {
+    genericClickHandler(tdb, item, NULL);
     }
 else if (sameWord(table, "refGene") )
     {

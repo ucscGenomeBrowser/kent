@@ -74,7 +74,6 @@ dataVersion *
 dateSubmitted bedGraph bed
 dateUnrestricted bed
 db *
-dbAliasList bed halSnake
 dbProfile *
 dbTrackType customTracks
 detailsTabUrls bigBed bigGenePred bigPsl

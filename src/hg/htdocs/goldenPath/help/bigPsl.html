@@ -26,39 +26,39 @@ when using <code>bedToBigBed</code>.
 <!--Click this <a href="examples/bigPsl.txt"><code>bigPsl.txt</code></a> file for
 an example of bigPsl input. -->
 </p>
-<pre><code>  table bigPsl
-  "bigPsl pairwise alignment"  
-      ( 
-      string chrom;       "Reference sequence chromosome or scaffold"
-      uint   chromStart;  "Start position in chromosome"
-      uint   chromEnd;    "End position in chromosome"
-      string name;        "Name or ID of item, ideally both human readable and unique"
-      uint score;         "Score (0-1000)"
-      char[1] strand;     "+ or - indicates whether the query aligns to the + or - strand on the reference"
-      uint thickStart;    "Start of where display should be thick (start codon)"
-      uint thickEnd;      "End of where display should be thick (stop codon)"
-      uint reserved;       "RGB value (use R,G,B string in input file)"
-      int blockCount;     "Number of blocks"
-      int[blockCount] blockSizes; "Comma separated list of block sizes"
-      int[blockCount] chromStarts; "Start positions relative to chromStart"
+<pre><code>table bigPsl
+"bigPsl pairwise alignment"  
+    ( 
+    string chrom;       "Reference sequence chromosome or scaffold"
+    uint   chromStart;  "Start position in chromosome"
+    uint   chromEnd;    "End position in chromosome"
+    string name;        "Name or ID of item, ideally both human readable and unique"
+    uint score;         "Score (0-1000)"
+    char[1] strand;     "+ or - indicates whether the query aligns to the + or - strand on the reference"
+    uint thickStart;    "Start of where display should be thick (start codon)"
+    uint thickEnd;      "End of where display should be thick (stop codon)"
+    uint reserved;       "RGB value (use R,G,B string in input file)"
+    int blockCount;     "Number of blocks"
+    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Start positions relative to chromStart"
 
-      uint    oChromStart;"Start position in other chromosome"
-      uint    oChromEnd;  "End position in other chromosome"
-      char[1] oStrand;    "+ or -, - means that psl was reversed into BED-compatible coordinates" 
-      uint    oChromSize; "Size of other chromosome."
-      int[blockCount] oChromStarts; "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+    uint    oChromStart;"Start position in other chromosome"
+    uint    oChromEnd;  "End position in other chromosome"
+    char[1] oStrand;    "+ or -, - means that psl was reversed into BED-compatible coordinates" 
+    uint    oChromSize; "Size of other chromosome."
+    int[blockCount] oChromStarts; "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
     
-      lstring  oSequence;  "Sequence on other chrom (or edit list, or empty)"
-      string   oCDS;       "CDS in NCBI format"
+    lstring  oSequence;  "Sequence on other chrom (or empty)"
+    string   oCDS;       "CDS in NCBI format"
   
-      uint    chromSize;"Size of target chromosome"
+    uint    chromSize;"Size of target chromosome"
   
-      uint match;        "Number of bases matched."
-      uint misMatch; " Number of bases that don't match "
-      uint repMatch; " Number of bases that match but are part of repeats "
-      uint nCount;   " Number of 'N' bases "
-      uint seqType;   " 0=empty, 1=nucleotide, 2=amino_acid"
-      ) </code></pre>
+    uint match;        "Number of bases matched."
+    uint misMatch; " Number of bases that don't match "
+    uint repMatch; " Number of bases that match but are part of repeats "
+    uint nCount;   " Number of 'N' bases "
+    uint seqType;   " 0=empty, 1=nucleotide, 2=amino_acid"
+    ) </code></pre>
 <p>
 Note that the oStrand field is an indicator of whether or not the stored psl needs to be reverse 
 complemented before output or display. This is due to the need for the bigPsl file to have reference
@@ -101,17 +101,17 @@ To create a bigPsl track, follow these steps:</p>
     match, misMatch, repMatch, nCount, seqType </code> 
     <li>
     Use the <code>pslToBigPsl</code> utility to create a correctly formatted <code>bed12+13</code> 
-    file like so: <pre><code>  pslToBigPsl bigPsl.psl stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</code></pre></li>
+    file like so: <pre><code>pslToBigPsl bigPsl.psl stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</code></pre></li>
     <li>
     Note that if you have created your own PSL file you may have corresponding FASTA and CDS files 
     that accompany it. You may provide these files as input to <code>pslToBigPsl</code> to generate 
     a more informative final bigPsl file: 
-    <pre><code>  pslToBigPsl bigPsl.psl -cds=bigPsl.cds -fa=bigPsl.fa stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</code></pre></li>
+    <pre><code>pslToBigPsl bigPsl.psl -cds=bigPsl.cds -fa=bigPsl.fa stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</code></pre></li>
   </ul>
   <li>
   Create the binary indexed bigPsl file from your sorted bigPsl input file using the 
   <code>bedToBigBed</code> utility like so: 
-  <pre><code>  bedToBigBed -as=bigPsl.as -type=bed12+13 -tab bigPsl.txt chrom.sizes bigPsl.bb</code></pre></li>
+  <pre><code>bedToBigBed -as=bigPsl.as -type=bed12+13 -tab bigPsl.txt chrom.sizes bigPsl.bb</code></pre></li>
   <li>
   Move the newly created bigPsl file (<code>bigPsl.bb</code>) to an http, https, or ftp 
   location.</li>
@@ -120,7 +120,7 @@ To create a bigPsl track, follow these steps:</p>
   <a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed 
   <a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic 
   version of the &quot;track&quot; line will look something like this:
-<pre><code>  track type=bigPsl name="My Big Psl" description="Some mRNAs Discovered from Data from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigPsl.bb</code></pre></li>
+<pre><code>track type=bigPsl name="My Big Psl" description="Some mRNAs Discovered from Data from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigPsl.bb</code></pre></li>
   <li>
   Paste this custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom 
   track</a> management page.</li>
@@ -135,9 +135,7 @@ In this example, you will use an existing bigPsl file to create a bigPsl custom 
 that contains data on the hg38 assembly has been placed on our http server. You can create a custom 
 track using this bigPsl file by constructing a &quot;track&quot; line that references this file like
 so:</p>
-<pre><code>  track type=bigPsl name=&quot;bigPsl Example One&quot; 
-  description=&quot;A bigPsl file&quot; 
-  bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb</code></pre>
+<pre><code>track type=bigPsl name=&quot;bigPsl Example One&quot; description=&quot;A bigPsl file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb</code></pre>
 <p>
 Paste the above &quot;track&quot; line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom 
 track</a> management page for the human assembly hg38, then press the &quot;submit&quot;
@@ -145,8 +143,7 @@ button.</p>
 <p>
 Custom tracks can also be loaded via one URL line.  The below link loads the same bigPsl track, but 
 includes parameters on the URL line:</p>
-<pre>
-  <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr1:10000-200000&hgct_customText=track%20type=bigPsl%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb%20visibility=pack"
+<pre><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr1:10000-200000&hgct_customText=track%20type=bigPsl%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb%20visibility=pack"
 target="_blank"><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr1:10000-200000&hgct_customText=track%20type=bigPsl%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb%20visibility=pack</code></a></pre>
 <p>
 With this example bigPsl loaded, click into an item from the track. Note how the details page 
@@ -170,7 +167,7 @@ In this example, you will create your own bigPsl file from an existing bigPsl in
   Save this <code>bigPsl.as</code> <a href="examples/bigPsl.as"> text file</a> to your machine.</li>
   <li>
   Run the utility to create the bigBed output file (<em>step 5</em>):
-<pre><code>  bedToBigBed -as=bigPsl.as -type=bed12+13 -tab  bigPsl.txt hg38.chrom.sizes bigPsl.bb</code></pre></li>
+<pre><code>bedToBigBed -as=bigPsl.as -type=bed12+13 -tab  bigPsl.txt hg38.chrom.sizes bigPsl.bb</code></pre></li>
   <li>
   Place the bigPsl file you just created (<code>bigPsl.bb</code>) on a web-accessible server 
   (<em>step 6</em>).</li>

@@ -3,7 +3,7 @@
 This track shows regions of transcription factor binding derived from a large collection
 of ChIP-seq experiments performed by the ENCODE project, together with DNA binding motifs 
 identified within these regions by the ENCODE
-<a target=_blank href="http://www.factorbook.org/mediawiki/index.php/Welcome_to_factorbook">Factorbook</a> repository.</p>
+<a target="_blank" href="http://www.factorbook.org/mediawiki/index.php/Welcome_to_factorbook">Factorbook</a> repository.</p>
 <p>
 Transcription factors (TFs) are proteins that bind to DNA and interact with RNA polymerases to
 regulate gene expression.  Some TFs contain a DNA binding domain and can bind directly to 
@@ -116,6 +116,21 @@ For convenience, the
 file downloads directory</a>
 for this track also contains a BED file,
 <em>wgEncodeRegTfbsClusteredWithCellsV3</em>, that lists each cluster with the cluster score followed by a comma-separated list of cell types.
+</p>
+<p>
+The <a target=_blank
+href="http://www.factorbook.org/mediawiki/index.php/Welcome_to_factorbook">Factorbook</a>
+motif positions that display as green boxes on the track come from an additional table
+called <em>factorbookMotifPos</em>, and are supported by additional metadata tables such as
+<em>factorbookMotifCanonical</em> that connects different terms used
+for the same factor (RELA &lt;--&gt; NFKB1), and <em>factorbookGeneAlias</em>
+that connects terms to the the link used at factorbook.org (EGR1 &lt;--&gt;
+<a href="http://v1.factorbook.org/mediawiki/index.php/EGR-1" target="_blank">EGR-1</a>),
+and lastly a position weight matrix table, <em>factorbookMotifPwm</em>, used in
+building the graphical sequence logo for each motif on the item details page.
+These tables are available on our <a href="/goldenPath/help/mysql.html"
+target="_blank">public MySQL server</a> and as files on our
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/" target="_blank">download server</a>.
 </p>
 
 <h2>Credits</h2>

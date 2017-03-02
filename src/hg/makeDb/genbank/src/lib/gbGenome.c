@@ -46,6 +46,7 @@ static char *ponAbeNames[] = {"Pongo abelii", "Pongo pygmaeus",
 		"Pongo pygmaeus pygmaeus", "Pongo pygmaeus abelii", NULL};
 static char *rheMacNames[] = {"Macaca mulatta", NULL};
 static char *macFasNames[] = {"Macaca fascicularis", NULL};
+static char *macNemNames[] = {"Macaca nemestrina", NULL};
 static char *monDomNames[] = {"Monodelphis domestica", NULL};
 static char *galGalNames[] = {"Gallus gallus", "Gallus sp.", NULL};
 static char *ceNames[] = {"Caenorhabditis elegans", NULL};
@@ -143,6 +144,7 @@ static char *balAcuNames[] = {"Balaenoptera acutorostrata", "Balaenoptera acutor
 static char *calMilNames[] = {"Callorhinchus milii", NULL};
 static char *criGriNames[] = {"Cricetulus griseus", NULL};
 static char *nasLarNames[] = {"Nasalis larvatus", NULL};
+static char *rhiBieNames[] = {"Rhinopithecus bieti", NULL};
 static char *rhiRoxNames[] = {"Rhinopithecus roxellana", NULL};
 static char *aquChrNames[] = {"Aquila chrysaetos canadensis", NULL};
 static char *nanParNames[] = {"Nanorana parkeri", "Nanorana pleskei", "Nanorana yunnanensis", NULL};
@@ -175,6 +177,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"ponAbe", ponAbeNames},
     {"rheMac", rheMacNames},
     {"macFas", macFasNames},
+    {"macNem", macNemNames},
     {"monDom", monDomNames},
     {"galGal", galGalNames},
     {"ce", ceNames},
@@ -269,6 +272,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"calMil", calMilNames},
     {"criGri", criGriNames},
     {"nasLar", nasLarNames},
+    {"rhiBie", rhiBieNames},
     {"rhiRox", rhiRoxNames},
     {"aquChr", aquChrNames},
     {"nanPar", nanParNames},

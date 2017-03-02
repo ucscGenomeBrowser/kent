@@ -272,6 +272,7 @@ group genes
     type bigPsl
     priority 10.001
     color 0,100,0
+    canPack on
     visibility pack
     baseColorDefault diffCodons
     baseColorUseCds given
@@ -282,9 +283,10 @@ group genes
     showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
     showCdsMaxZoom 10000.0
-    labelFields commonName,orgAbbrev,name,geneName,geneId,geneType,transcriptType
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName,geneId,geneType,transcriptType
     defaultLabelFields orgAbbrev,geneName
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.ensembl.transMapV4.bigPsl
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V4/$D.ensembl.transMapV4.bigPsl
 
 searchTable transMapAlnEnsemblV4
 searchType psl
@@ -301,6 +303,7 @@ searchPriority 2.31
     type bigPsl
     priority 10.003
     color 0,100,0
+    canPack on
     visibility pack
     baseColorDefault diffCodons
     baseColorUseCds given
@@ -311,9 +314,10 @@ searchPriority 2.31
     showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
     showCdsMaxZoom 10000.0
-    labelFields commonName,orgAbbrev,name,geneName,geneId
-    defaultLabelFields orgAbbrev,geneName,transcriptType
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.refseq.transMapV4.bigPsl
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName,geneId
+    defaultLabelFields orgAbbrev,geneName
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V4/$D.refseq.transMapV4.bigPsl
 
 searchTable transMapAlnRefSeqV4
 searchType psl
@@ -330,6 +334,7 @@ searchPriority 2.31
     type bigPsl
     priority 10.004
     color 0,100,0
+    canPack on
     visibility pack
     baseColorDefault diffCodons
     baseColorUseCds given
@@ -340,9 +345,10 @@ searchPriority 2.31
     showDiffBasesMaxZoom 10000.0
     showCdsAllScales .
     showCdsMaxZoom 10000.0
-    labelFields commonName,orgAbbrev,name,geneName
-    defaultLabelFields orgAbbrev,name
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.rna.transMapV4.bigPsl
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName
+    defaultLabelFields orgAbbrev,srcTransId
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V4/$D.rna.transMapV4.bigPsl
 
 searchTable transMapAlnRnaV4
 searchType psl
@@ -359,6 +365,7 @@ searchPriority 2.31
     type bigPsl
     priority 10.005
     color 0,100,0
+    canPack on
     visibility hide
     baseColorDefault none
     baseColorUseSequence lfExtra
@@ -366,9 +373,10 @@ searchPriority 2.31
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 10000.0
-    labelFields commonName,orgAbbrev,name
-    defaultLabelFields orgAbbrev,name
-    bigDataUrl http://hgwdev.soe.ucsc.edu/~markd/transMap/V4/data/mapped/$D/$D.est.transMapV4.bigPsl
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name
+    defaultLabelFields orgAbbrev,srcTransId
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V4/$D.est.transMapV4.bigPsl
 
 searchTable transMapAlnEstV4
 searchType psl

@@ -6,17 +6,16 @@
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
 <h1>Genome Browser in the Cloud User's Guide</h1>
-<p>
+
 <h2>Contents</h2>
-<ul>
-  <li><a class="toc" href="#what-is-the-genome-browser-in-the-cloud">What is the Genome Browser in 
-  the Cloud?</a></li>
-  <li><a class="toc" href="#quick-start-instructions">Quick Start instructions</a></li>
-  <li><a class="toc" href="#how-does-the-gbic-program-work">How does the GBiC program work?</a></li>
-  <li><a class="toc" href="#the-gbic-commands">The GBiC commands</a></li>
-  <li><a class="toc" href="#all-gbic-options">All GBiC options</a></li>
-  <li><a class="toc" href="#credits">Credits</a></li>
-</ul>
+
+<h6><a href="#what-is-the-genome-browser-in-the-cloud">What is the Genome Browser in the 
+Cloud?</a></h6>
+<h6><a href="#quick-start-instructions">Quick Start instructions</a></h6>
+<h6><a href="#how-does-the-gbic-program-work">How does the GBiC program work?</a></h6>
+<h6><a href="#the-gbic-commands">The GBiC commands</a></h6>
+<h6><a href="#all-gbic-options">All GBiC options</a></h6>
+<h6><a href="#credits">Credits</a></h6>
 
 <a name="what-is-the-genome-browser-in-the-cloud"></a>
 <h2>What is Genome Browser in the Cloud?</h2>
@@ -24,7 +23,7 @@
 The Genome Browser in the Cloud (GBiC) program is a convenient tool that automates the setup of a
 UCSC Genome Browser mirror. The GBiC program is for users who want to set up a full mirror of the
 UCSC Genome Browser on their server/cloud instance, rather than using 
-<a href="http://genome.ucsc.edu/goldenPath/help/gbib.html" target="_blank">Genome Browser in a 
+<a href="../help/gbib.html" target="_blank">Genome Browser in a 
 Box</a> (GBiB) or our public website. Please see the
 <a href="http://genome.ucsc.edu/admin/mirror.html#considerations-before-installing-a-genome-browser"
 target="_blank">Installation of a UCSC Genome Browser on a local machine (mirror)</a> page for a 
@@ -49,7 +48,7 @@ size of a single Amazon EBS volume.</p>
 <h2>Quick Start instructions</h2>
 <p>
 Download the GBiC program from the <a href="https://genome-store.ucsc.edu/" target="_blank">UCSC 
-Genome-Browser store</a>.</p>
+Genome Browser store</a>.</p>
 <p>
 Run the program as root, like this:</p>
 <pre><code>sudo bash browserSetup.sh install</code></pre>
@@ -57,6 +56,12 @@ Run the program as root, like this:</p>
 The <code>install</code> command downloads and configures Apache, MySQL and Ghostscript, copies the 
 Genome Browser CGIs, and configures the mirror to load data remotely from UCSC. The 
 <code>install</code> command must be run before any other command is used.</p>
+
+<p>For an installation demonstration, see the <a href="https://www.youtube.com/watch?v=dcJERBVnjio"
+target="_blank">Genome Browser in the Cloud (GBiC) Introduction</a> video.</p>
+
+<p>For mirror-specific help, please contact the Mirror Forum as listed on our <a href="../../contacts.html" 
+target="_blank">contact page</a>.</p>
 
 <a name="how-does-the-gbic-program-work"></a>
 <h2>How does the GBiC program work?</h2>

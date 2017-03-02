@@ -66,51 +66,6 @@ for (i=0; i<ArraySize(protQueryMenu); ++i)
 return FALSE;
 }
 
-int cmpSeqName(char *a, char *b)
-/* Compare two sequence names likely to be of form prefix followed by a number. */
-{
-char cA, cB;
-int cSame = countSame(a, b);
-
-a += cSame;
-b += cSame;
-cA = *a;
-cB = *b;
-if (isdigit(cA))
-    {
-    if (isdigit(cB))
-       return atoi(a) - atoi(b);
-    else
-       return -1;
-    }
-else if (isdigit(cB))
-    return 1;
-else
-    return strcmp(a, b);
-}
-
-int pslCmpTargetScore(const void *va, const void *vb)
-/* Compare to sort based on target then score. */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-int diff = cmpSeqName(a->tName, b->tName);
-if (diff == 0)
-    diff = pslScore(b) - pslScore(a);
-return diff;
-}
-
-int pslCmpTargetStart(const void *va, const void *vb)
-/* Compare to sort based on target start. */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-int diff = cmpSeqName(a->tName, b->tName);
-if (diff == 0)
-    diff = a->tStart - b->tStart;
-return diff;
-}
-
 char *skipFile(char *fileSeq)
 /* Skip over file: */
 {

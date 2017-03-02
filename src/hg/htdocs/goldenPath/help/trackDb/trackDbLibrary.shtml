@@ -399,7 +399,7 @@
     over the <code>dense</code> and <code>full</code> modes. By default, these tracks will
     not offer the <code>squish</code> and <code>pack</code> vilibility settings.
     Nevertheless, you can make your track offer
-    these visibilility choices by turning canPack on.  Note: subtracks
+    these visibility choices by turning canPack on.  Note: subtracks
     of composites will always offer all five choices.</P>
     <P><B>Example:</B></P>
     <pre>   canPack on</pre>
@@ -3663,7 +3663,19 @@ There are no extra options that can appear on the type bigMaf line.
 
 <DIV class="labelFields"><span class="types bigBed bigGenePred bigPsl"></span>
 <div class="format"><code>labelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
-    <P>A list of fields from the bigBed based file that can be used as a label.
+    <P>A list of fields from the bigBed based file that can be used as a label. The special value <B>none</B> can be specified if no labels are desired.
+    </P>
+</DIV>
+
+<DIV class="defaultLabelFields"><span class="types bigBed bigGenePred bigPsl"></span>
+<div class="format"><code>defaultLabelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
+    <P>A list of fields from the bigBed based file that should be used as a label by default.  Only applicable if <B>labelFields</B> is set.  If <B>defaultLabelFields</B> is not specified, the first field in labelFields is used as the default. The special value <B>none</B> can be specified if no label should be the default.
+    </P>
+</DIV>
+
+<DIV class="labelSeparator"><span class="types bigBed bigGenePred bigPsl"></span>
+<div class="format"><code>labelSeparator &lt;<EM>text</EM>&gt;</code></div>
+    <P>One or more characters to use as the field separator between multiple labels.  A slash (/) by default, this string can have double quotes around it if it should have white spaces in it.
     </P>
 </DIV>
 

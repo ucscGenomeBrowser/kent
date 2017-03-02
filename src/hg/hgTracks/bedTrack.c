@@ -58,33 +58,32 @@ else
     struct hash *onHash = newHash(4);
 
     // fill hash with fields that should be used for labels
-    if (labelEl == NULL) 
+    // first turn on all the fields that are in defaultLabelFields
+    struct slPair *defaultLabelList = buildFieldList(track->tdb, "defaultLabelFields",  as);
+    if (defaultLabelList != NULL)
         {
-        // there are no cart variables, so look for defaults
-        struct slPair *defaultLabelList = buildFieldList(track->tdb, "defaultLabelFields",  as);
-        if (defaultLabelList != NULL)
-            {
-            for(; defaultLabelList; defaultLabelList = defaultLabelList->next)
-                hashStore(onHash, defaultLabelList->name);
-            }
-        else
-            // no default list, use first entry in labelFields as default
-            hashStore(onHash, labelList->name);
+        for(; defaultLabelList; defaultLabelList = defaultLabelList->next)
+            hashStore(onHash, defaultLabelList->name);
         }
     else
+        // no default list, use first entry in labelFields as default
+        hashStore(onHash, labelList->name);
+
+    // use cart variables to tweak the default-on hash
+    for(; labelEl; labelEl = labelEl->next)
         {
-        // use cart variables to fill in onHash
-        for(; labelEl; labelEl = labelEl->next)
-            {
-            if (sameString((char *)labelEl->val, "1"))
-                hashStore(onHash, &labelEl->name[strlen(cartVar) + 1]);
-            }
+        /* the field name is after the <trackName>.label string */
+        char *fieldName = &labelEl->name[strlen(cartVar) + 1];
+
+        if (sameString((char *)labelEl->val, "1"))
+            hashStore(onHash, fieldName);
+        else if (sameString((char *)labelEl->val, "0"))
+            hashRemove(onHash, fieldName);
         }
 
     struct slPair *thisLabel = labelList;
     for(; thisLabel; thisLabel = thisLabel->next)
         {
-        
         if (hashLookup(onHash, thisLabel->name))
             {
             // put this column number in the list of columns to use to make label
@@ -168,19 +167,17 @@ else if (tg->isBigBed)
 
     if (!trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
         tg->itemName = bigBedItemName;
-    else
+
+    calculateLabelFields(tg);
+    for (bb = bbList; bb != NULL; bb = bb->next)
         {
-        calculateLabelFields(tg);
-        for (bb = bbList; bb != NULL; bb = bb->next)
-            {
-            bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-            bed = loader(bedRow);
-            bed->label = makeLabel(tg, bb);
-            if (scoreFilter == NULL || bed->score >= minScore)
-                slAddHead(&list, bed);
-            }
-        lmCleanup(&lm);
+        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        bed = loader(bedRow);
+        bed->label = makeLabel(tg, bb);
+        if (scoreFilter == NULL || bed->score >= minScore)
+            slAddHead(&list, bed);
         }
+    lmCleanup(&lm);
     }
 else
     {
@@ -275,6 +272,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
+    calculateLabelFields(tg);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 9, &lfList);
     }
@@ -325,6 +323,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
+    calculateLabelFields(tg);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 8, &lfList);
     }

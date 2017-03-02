@@ -12646,3 +12646,131 @@ TMPDIR=/dev/shm
     # real    356m16.099s
 
 #############################################################################
+# LASTZ mouse/mm10 Pig-tailed macaque/macNem1 - (DONE - 2017-02-28 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzMacNem1.2017-02-28
+    cd /hive/data/genomes/mm10/bed/lastzMacNem1.2017-02-28
+
+    printf '# mouse vs Pig-tailed macaque
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# QUERY: Pig-tailed macaque macNem1
+SEQ2_DIR=/hive/data/genomes/macNem1/macNem1.2bit
+SEQ2_LEN=/hive/data/genomes/macNem1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzMacNem1.2017-02-28
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #  real    370m19.213s
+
+    cat fb.mm10.chainMacNem1Link.txt
+    # 918083212 bases of 2652783500 (34.608%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 macNem1) \
+      > rbest.log 2>&1 &
+    # real    344m11.369s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/macNem1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/macNem1/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzMacNem1.2017-02-28/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    65m14.074s
+
+    cat fb.macNem1.chainMm10Link.txt
+    # 905682728 bases of 2838503083 (31.907%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` macNem1 mm10) \
+       > rbest.log 2>&1
+    # real    321m2.285s
+
+#############################################################################
+# LASTZ mouse/mm10 Angolan colobus/colAng1 - (DONE - 2017-02-28 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzColAng1.2017-02-28
+    cd /hive/data/genomes/mm10/bed/lastzColAng1.2017-02-28
+
+    printf '# mouse vs Angolan colobus
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# QUERY: Angolan colobus colAng1
+SEQ2_DIR=/hive/data/genomes/colAng1/colAng1.2bit
+SEQ2_LEN=/hive/data/genomes/colAng1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzColAng1.2017-02-28
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #  real    376m8.949s
+
+    cat fb.mm10.chainColAng1Link.txt
+    # 902325064 bases of 2652783500 (34.014%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 colAng1) \
+      > rbest.log 2>&1 &
+    # real    343m38.692s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/colAng1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/colAng1/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzColAng1.2017-02-28/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    62m44.125s
+
+    cat fb.colAng1.chainMm10Link.txt
+    # 885418780 bases of 2679973137 (33.038%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` colAng1 mm10) \
+       > rbest.log 2>&1
+    # real    296m19.689s
+
+#############################################################################
