@@ -710,7 +710,6 @@ html chainNet
 # musFur1 - Ferret  - Mustela putorius furo - mammal - carnivora - 2430
 ################################################################
 track chainNetMusFur1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -733,7 +732,6 @@ spectrum on
 html chainNet
 
     track chainNetMusFur1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -741,7 +739,6 @@ html chainNet
     spectrum on
 
         track chainMusFur1
-        release alpha
         parent chainNetMusFur1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -750,14 +747,12 @@ html chainNet
         html chainNet
 
     track chainNetMusFur1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetMusFur1
 
         track netMusFur1
-        release alpha
         parent chainNetMusFur1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net

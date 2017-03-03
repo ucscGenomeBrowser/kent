@@ -317,7 +317,7 @@ else
         char *trackDescription = NULL;
         getCustomName(database, cart, pslList, &trackName, &trackDescription);
         psl = pslList;
-        printf( "<DIV STYLE=\"display:block; float:left\"><TABLE><FORM ACTION=\"%s\"  METHOD=\"POST\" NAME=\"customTrackForm\">\n", hgcUrl);
+        printf( "<DIV STYLE=\"display:block;\"><TABLE><FORM ACTION=\"%s\"  METHOD=\"POST\" NAME=\"customTrackForm\">\n", hgcUrl);
         printf("<INPUT TYPE=\"hidden\" name=\"o\" value=\"%d\" />\n",psl->tStart);
         printf("<INPUT TYPE=\"hidden\" name=\"t\" value=\"%d\" />\n",psl->tEnd);
         printf("<INPUT TYPE=\"hidden\" name=\"g\" value=\"%s\" />\n","buildBigPsl");
@@ -329,19 +329,18 @@ else
         if (pslIsProtein(psl))
             printf("<INPUT TYPE=\"hidden\" name=\"isProt\" value=\"on\" />\n");
 
-        printf("Build a custom track with these results. ");
-        printf("<INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Do It\">\n");
-        printf("<TABLE><TR>Custom track name:");
+        printf("<TABLE><TR>Custom track name: ");
         cgiMakeTextVar( "trackName", trackName, 30);
         printf("</TD></TR>");
 
-        printf("<TR>Custom track description:");
+        printf("<TR> Custom track description: ");
         cgiMakeTextVar( "trackDescription", trackDescription,50);
-        printf("</TD></TR></TABLE>");
+        printf("</TD></TR>");
+        printf("<TR><TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Build a custom track with these results\"></TD></TR>\n");
         printf("</FORM></TT></DIV>");
         }
 
-    printf("<DIV STYLE=\"display:block; float:left\"><TABLE><PRE>");
+    printf("<DIV STYLE=\"display:block;\"><TABLE><PRE>");
     printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END      SPAN\n");
     printf("---------------------------------------------------------------------------------------------------\n");
     for (psl = pslList; psl != NULL; psl = psl->next)

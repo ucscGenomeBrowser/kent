@@ -9464,6 +9464,11 @@ dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refres
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('v d', gotoGetDnaPage); \n");
 
+// highlight
+dyStringPrintf(dy,"Mousetrap.bind('h c', function() { highlightCurrentPosition('clear'); }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('h m', function() { highlightCurrentPosition('add'); }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('h n', function() { highlightCurrentPosition('new'); }); \n");
+
 // focus
 dyStringPrintf(dy,"Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
 dyStringPrintf(dy,"Mousetrap.bind('?', showHotkeyHelp);\n");

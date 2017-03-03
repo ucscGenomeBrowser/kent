@@ -61,7 +61,6 @@ html chainNet
 # sarHar1 - Tasmanian devil - Sarcophilus harrisii - mammal - mammal - 3590
 ################################################################
 track chainNetSarHar1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -84,7 +83,6 @@ spectrum on
 html chainNet
 
     track chainNetSarHar1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -92,7 +90,6 @@ html chainNet
     spectrum on
 
         track chainSarHar1
-        release alpha
         parent chainNetSarHar1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -101,14 +98,12 @@ html chainNet
         html chainNet
 
     track chainNetSarHar1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetSarHar1
 
         track netSarHar1
-        release alpha
         parent chainNetSarHar1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
