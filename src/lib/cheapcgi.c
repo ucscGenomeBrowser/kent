@@ -2030,9 +2030,9 @@ if ((int)max != NO_VALUE)
 cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,maxStr);
 }
 
-void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
+void cgiMakeDropListClassWithIdStyleAndJavascript(char *name, char *id, char *menu[],
         int menuSize, char *checked, char *class, char *style, struct slPair *events)
-/* Make a drop-down list with names, text class, style and javascript. */
+/* Make a drop-down list with name, id, text class, style and javascript. */
 {
 int i;
 char *selString;
@@ -2040,15 +2040,18 @@ if (checked == NULL) checked = menu[0];
 printf("<SELECT");
 if (name)
     printf(" NAME='%s'", name);
+if (events && !id)  // use name as id
+    id = name;
+if (id)
+    printf(" id='%s'", id);
 if (class)
     printf(" class='%s'", class);
 if (events)
     {
-    printf(" id='%s'", name);
     struct slPair *e;
     for(e = events; e; e = e->next)
 	{
-	jsOnEventById(e->name, name, e->val);
+	jsOnEventById(e->name, id, e->val);
 	}    
     }
 if (style)
@@ -2063,6 +2066,13 @@ for (i=0; i<menuSize; ++i)
     printf("<OPTION%s>%s</OPTION>\n", selString, menu[i]);
     }
 printf("</SELECT>\n");
+}
+
+void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
+        int menuSize, char *checked, char *class, char *style, struct slPair *events)
+/* Make a drop-down list with names, text class, style and javascript. */
+{
+cgiMakeDropListClassWithIdStyleAndJavascript(name,NULL,menu,menuSize,checked,class,style,events);
 }
 
 void cgiMakeDropListClassWithStyle(char *name, char *menu[],

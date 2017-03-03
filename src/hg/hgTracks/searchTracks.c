@@ -324,8 +324,9 @@ return tracks;
 }
 
 #define MAX_FOUND_TRACKS 100
-static void findTracksPageLinks(int tracksFound, int startFrom)
+static void findTracksPageLinks(int tracksFound, int startFrom, int instance)
 {
+char id[256];
 if (tracksFound <= MAX_FOUND_TRACKS)
     return;
 
@@ -341,16 +342,18 @@ hPrintf("<span><em style='font-size:.9em;'>Listing %d - %d of %d tracks</em>&nbs
 // << and <
 if (startFrom >= MAX_FOUND_TRACKS)
     {
-    hPrintf("<a href='../cgi-bin/hgTracks?%s=Search&%s=0' id='ftpl1' title='First page of found tracks'"
+    safef(id, sizeof id, "ftpl%d-first", instance);
+    hPrintf("<a href='../cgi-bin/hgTracks?%s=Search&%s=0' id='%s' title='First page of found tracks'"
 	    ">&#171;</a>&nbsp;",
-            TRACK_SEARCH,TRACK_SEARCH_PAGER);
-    jsOnEventByIdF("click", "ftpl1", "return findTracks.page(\"%s\",0);", TRACK_SEARCH_PAGER);
+            TRACK_SEARCH,TRACK_SEARCH_PAGER,id);
+    jsOnEventByIdF("click", id, "return findTracks.page(\"%s\",0);", TRACK_SEARCH_PAGER);
 
+    safef(id, sizeof id, "ftpl%d-prev", instance);
     willStartAt = startFrom - MAX_FOUND_TRACKS;
-    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='ftpl2' "
+    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='%s' "
 	"title='Previous page of found tracks'>&#139;</a>&nbsp;",
-            TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt);
-    jsOnEventByIdF("click", "ftpl2", "return findTracks.page(\"%s\",%d);", TRACK_SEARCH_PAGER,willStartAt);
+            TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,id);
+    jsOnEventByIdF("click", id, "return findTracks.page(\"%s\",%d);", TRACK_SEARCH_PAGER,willStartAt);
     }
 
 // page number links
@@ -363,16 +366,17 @@ if (thisPage < 1)
     thisPage = 1;
 for (;thisPage <= lastPage && thisPage <= curPage + 3; thisPage++)
     {
+    safef(id, sizeof id, "ftpl%d-%d", instance, thisPage);
     if (thisPage != curPage)
         {
         willStartAt = ((thisPage - 1) * MAX_FOUND_TRACKS);
         endAt = willStartAt+ MAX_FOUND_TRACKS;
         if (endAt > tracksFound)
             endAt = tracksFound;
-        hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='ftpl3' "
+        hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='%s' "
 		"title='Page %d (%d - %d) tracks'>%d</a>&nbsp;",
-                TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,thisPage,willStartAt+1,endAt,thisPage);
-	jsOnEventByIdF("click", "ftpl3", "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
+                TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,id,thisPage,willStartAt+1,endAt,thisPage);
+	jsOnEventByIdF("click", id, "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
         }
     else
         hPrintf("&nbsp;<em style='color:%s;'>%d</em>&nbsp;",COLOR_DARKGREY,thisPage);
@@ -381,19 +385,21 @@ for (;thisPage <= lastPage && thisPage <= curPage + 3; thisPage++)
 // > and >>
 if ((startFrom + MAX_FOUND_TRACKS) < tracksFound)
     {
+    safef(id, sizeof id, "ftpl%d-next", instance);
     willStartAt = startFrom + MAX_FOUND_TRACKS;
-    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='ftpl4' "
+    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='%s' "
 	"title='Next page of found tracks'>&#155;</a>&nbsp;",
-	TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt);
-    jsOnEventByIdF("click", "ftpl4", "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
+	TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,id);
+    jsOnEventByIdF("click", id, "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
 	    
+    safef(id, sizeof id, "ftpl%d-last", instance);
     willStartAt =  tracksFound - (tracksFound % MAX_FOUND_TRACKS);
     if (willStartAt == tracksFound)
         willStartAt -= MAX_FOUND_TRACKS;
-    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='ftpl5' title='Last page of found tracks' "
+    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='%s' title='Last page of found tracks' "
 	    ">&#187;</a></span>\n",
-            TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt);
-    jsOnEventByIdF("click", "ftpl5", "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
+            TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,id);
+    jsOnEventByIdF("click", id, "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
     }
 }
 
@@ -437,7 +443,7 @@ else
                 }
             }
         hPrintf("</td><td align='right' valign='bottom'>\n");
-        findTracksPageLinks(tracksFound,startFrom);
+        findTracksPageLinks(tracksFound,startFrom,0);
         hPrintf("</td></tr>\n");
         }
 
@@ -519,18 +525,18 @@ else
         // Setup the visibility drop down
         #define VIS_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s' VALUE='%s'>"
         hPrintf(VIS_HIDDEN_VAR,track->track,CART_VAR_EMPTY); // All tracks get vis hidden var
+	
+	safef(id, sizeof id, "%s_id", track->track); // XSS Filter?
+	safef(javascript, sizeof javascript, "findTracks.changeVis(this);");
+	struct slPair *event = slPairNew("change", cloneString(javascript));
         if (tdbIsFolder(track->tdb))
             {
-	    safef(javascript, sizeof javascript, "findTracks.changeVis(this);");
-            struct slPair *event = slPairNew("change", cloneString(javascript));
-            hideShowDropDownWithClassAndExtra(track->track, (track->visibility != tvHide),
+            hideShowDropDownWithClassAndExtra(track->track, id, (track->visibility != tvHide),
                                               "normalText visDD", event);
             }
         else
             {
-	    safef(javascript, sizeof javascript, "findTracks.changeVis(this);");
-            struct slPair *event = slPairNew("change", cloneString(javascript));
-            hTvDropDownClassWithJavascript(NULL, track->visibility,track->canPack,
+            hTvDropDownClassWithJavascript(NULL, id, track->visibility,track->canPack,
                                            "normalText seenVis",event);
             }
 
@@ -578,7 +584,7 @@ else
     if (tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("</td><td align='right' valign='top'>\n");
-        findTracksPageLinks(tracksFound,startFrom);
+        findTracksPageLinks(tracksFound,startFrom,1);
         hPrintf("</td></tr>\n");
         }
     hPrintf("</table>\n");
