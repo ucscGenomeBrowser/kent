@@ -614,7 +614,7 @@ char *hStringFromTv(enum trackVisibility vis)
 return hTvStrings[vis];
 }
 
-void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boolean canPack,
+void hTvDropDownClassWithJavascript(char *varName, char *id, enum trackVisibility vis, boolean canPack,
 				char *class, struct slPair *events)
 // Make track visibility drop down for varName with style class
 {
@@ -634,11 +634,11 @@ static char *pack[] =
     };
 static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
 if (canPack)
-    cgiMakeDropListClassWithStyleAndJavascript(varName, pack, ArraySize(pack),
+    cgiMakeDropListClassWithIdStyleAndJavascript(varName, id, pack, ArraySize(pack),
 					   pack[packIx[vis]], class, TV_DROPDOWN_STYLE,
 					   events);
 else
-    cgiMakeDropListClassWithStyleAndJavascript(varName, noPack, ArraySize(noPack),
+    cgiMakeDropListClassWithIdStyleAndJavascript(varName, id, noPack, ArraySize(noPack),
 					   noPack[vis], class, TV_DROPDOWN_STYLE, events);
 }
 
@@ -712,7 +712,7 @@ else
     }
 }
 
-void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, struct slPair *events)
+void hideShowDropDownWithClassAndExtra(char *varName, char * id, boolean show, char *class, struct slPair *events)
 // Make hide/show dropdown for varName
 {
 static char *hideShow[] =
@@ -720,7 +720,7 @@ static char *hideShow[] =
     "hide",
     "show"
     };
-cgiMakeDropListClassWithStyleAndJavascript(varName, hideShow, ArraySize(hideShow),
+cgiMakeDropListClassWithIdStyleAndJavascript(varName, id, hideShow, ArraySize(hideShow),
 				       hideShow[show], class, TV_DROPDOWN_STYLE, events);
 }
 
@@ -7021,7 +7021,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
 
         printf("<TD>");
         safef(classes, sizeof(classes), "viewDD normalText %s", membersOfView->tags[ix]);
-        hTvDropDownClassWithJavascript(varName, tv, parentTdb->canPack, classes, events);
+        hTvDropDownClassWithJavascript(varName, NULL, tv, parentTdb->canPack, classes, events);
         puts(" &nbsp; &nbsp; &nbsp;</TD>");
         }
     }
@@ -8058,7 +8058,7 @@ if (show && (visibleChild == -1))
             visibleChild = 1;
         }
     }
-hideShowDropDownWithClassAndExtra(tdb->track, show, (show && visibleChild) ?
+hideShowDropDownWithClassAndExtra(tdb->track, NULL, show, (show && visibleChild) ?
                                   "normalText visDD" : "hiddenText visDD", events);
 return TRUE;
 }

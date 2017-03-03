@@ -391,6 +391,10 @@ void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
 /* Make a drop-down list with names.
  * uses style "normalText" */
 
+void cgiMakeDropListClassWithIdStyleAndJavascript(char *name, char *id, char *menu[],
+        int menuSize, char *checked, char *class, char *style, struct slPair *events);
+/* Make a drop-down list with name, id, text class, style and javascript. */
+
 void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
                                                 int menuSize, char *checked, char *class,
                                                 char *style, struct slPair *events);

@@ -210,21 +210,21 @@ void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
 #define hTvDropDownClassVisOnly(varName,vis,canPack,class,visOnly) \
         hTvDropDownClassVisOnlyAndExtra(varName,vis,canPack,class,visOnly,NULL)
 
-void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boolean canPack,
+void hTvDropDownClassWithJavascript(char *varName, char *id, enum trackVisibility vis, boolean canPack,
                                     char *class, struct slPair *events);
 /* Make track visibility drop down for varName with style class and javascript */
 #define hTvDropDownClass(varName,vis,canPack,class) \
-        hTvDropDownClassWithJavascript((varName),(vis),(canPack),(class),NULL)
+        hTvDropDownClassWithJavascript((varName),NULL,(vis),(canPack),(class),NULL)
 #define hTvDropDownWithJavascript(varName,vis,canPack,javascript) \
-        hTvDropDownClassWithJavascript((varName),(vis),(canPack),"normalText",(javascript))
+        hTvDropDownClassWithJavascript((varName),NULL,(vis),(canPack),"normalText",(javascript))
 #define hTvDropDown(varName,vis,canPack) \
-        hTvDropDownClassWithJavascript((varName),(vis),(canPack),"normalText",NULL)
+        hTvDropDownClassWithJavascript((varName),NULL,(vis),(canPack),"normalText",NULL)
 
 #define SUPERTRACK_DEFAULT_VIS  "hide"
 
-void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, struct slPair *events);
+void hideShowDropDownWithClassAndExtra(char *varName, char *id, boolean show, char *class, struct slPair *events);
 #define hideShowDropDown(varName,show,class) \
-        hideShowDropDownWithClassAndExtra(varName,show,class,NULL)
+        hideShowDropDownWithClassAndExtra(varName,NULL,show,class,NULL)
 /* Make hide/show dropdown for varName */
 
 /****** Some stuff for stsMap related controls *******/
