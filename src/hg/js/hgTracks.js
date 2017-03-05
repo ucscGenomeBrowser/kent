@@ -1000,14 +1000,15 @@ var dragSelect = {
     highlightThisRegion: function(newPosition, doAdd)
     // set highlighting newPosition in server-side cart and apply the highlighting in local UI.
     {
+        var hlColor = '#1ff3f0';
         var pos = parsePosition(newPosition);
         var start = pos.start;
         var end = pos.end;
-        var newHighlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + '#77cccc';
+        var newHighlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + hlColor;
         newHighlight = imageV2.disguiseHighlight(newHighlight);
         var oldHighlight = hgTracks.highlight;
-        if (doAdd===undefined || doAdd===false || oldHighlight==="") {
-            // overwrite the old highlight position
+        if (oldHighlight===undefined || doAdd===undefined || doAdd===false || oldHighlight==="") {
+            // just set/overwrite the old highlight position, this used to be the default
             hgTracks.highlight = newHighlight;
         }
         else {
@@ -1044,7 +1045,7 @@ var dragSelect = {
                 }
             }
             if (nonVirtChrom !== "")
-                cartSettings.nonVirtHighlight = getDb() + '.' + nonVirtChrom + ':' + nonVirtStart + '-' + (nonVirtEnd+1) + '#AAFFFF';
+                cartSettings.nonVirtHighlight = getDb() + '.' + nonVirtChrom + ':' + nonVirtStart + '-' + (nonVirtEnd+1) + hlColor;
         } else if (hgTracks.windows && hgTracks.virtualSingleChrom) {
                 cartSettings.nonVirtHighlight = hgTracks.highlight;
         }
@@ -1062,7 +1063,7 @@ var dragSelect = {
                              "<p><input type='checkbox' id='disableDragHighlight'>" + 
                              "Don't show this dialog again and always zoom.<BR>" + 
                              "(Re-enable highlight via the 'configure' menu at any time.)</p>"+ 
-                             "Using the keyboard, you can highlight the current position with 'm then a' and clear all highlights with 'm then c'.<p>");
+                             "Using the keyboard, you can highlight the current range with 'h then m' (mark) and clear all highlights with 'h then c'. Type '?' to show the other shortcuts.<p>");
             dragSelectDialog = $("#dragSelectDialog")[0];
         }
         if (hgTracks.windows) {

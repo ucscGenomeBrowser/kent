@@ -9467,7 +9467,7 @@ dyStringPrintf(dy,"Mousetrap.bind('v d', gotoGetDnaPage); \n");
 // highlight
 dyStringPrintf(dy,"Mousetrap.bind('h c', function() { highlightCurrentPosition('clear'); }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('h m', function() { highlightCurrentPosition('add'); }); \n");
-dyStringPrintf(dy,"Mousetrap.bind('h n', function() { highlightCurrentPosition('new'); }); \n");
+//dyStringPrintf(dy,"Mousetrap.bind('h n', function() { highlightCurrentPosition('new'); }); \n"); superfluos as it is just hc + hm?
 
 // focus
 dyStringPrintf(dy,"Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
@@ -9499,7 +9499,7 @@ dyStringFree(&dy);
 
 // help dialog
 hPrintf("<div style=\"display:none\" id=\"hotkeyHelp\" title=\"Keyboard shortcuts\">\n");
-hPrintf("<table style=\"width:580px; border-color:#666666; border-collapse:collapse\">\n");
+hPrintf("<table style=\"width:600px; border-color:#666666; border-collapse:collapse\">\n");
 hPrintf("<tr><td style=\"width:18ch\">left 10&#37;</td><td width=\"auto\" class=\"hotkey\">ctrl+j</td>  <td style=\"width:24ch\"> track search</td><td class=\"hotkey\">t then s</td>               </tr>\n"); // percent sign
 hPrintf("<tr><td> left 1/2 screen</td><td class=\"hotkey\">j</td>   <td> default tracks</td><td class=\"hotkey\">d then t</td>             </tr>\n");
 hPrintf("<tr><td> left one screen</td><td class=\"hotkey\">J</td>   <td> default order</td><td class=\"hotkey\">d then o</td>              </tr>\n");
@@ -9524,6 +9524,7 @@ hPrintf("<tr><td> &nbsp;5000bp (3 zeros)</td><td class=\"hotkey\">3</td><td>Tool
 hPrintf("<tr><td> &nbsp;50kbp (4 zeros)</td><td class=\"hotkey\">4</td><td>Tools - PCR</td><td class='hotkey'>t then i</td></tr>\n");
 hPrintf("<tr><td> &nbsp;500kbp (5 zeros)</td><td class=\"hotkey\">5</td><td>My Sessions</td><td class='hotkey'>s then s</td></tr>\n");
 hPrintf("<tr><td> &nbsp;5Mbp (6 zeros)</td><td class=\"hotkey\">6</td><td>Public Sessions</td><td class='hotkey'>p then s</td></tr>\n");
+hPrintf("<tr><td>Highlight all (mark)</td><td class=\"hotkey\">h then m</td><td>Clear all Highlights</td><td class='hotkey'>h then c</td></tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");
