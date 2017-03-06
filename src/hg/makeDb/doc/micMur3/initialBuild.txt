@@ -242,11 +242,10 @@ taxId 30608
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/micMur3/micMur3.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku micMur3) > do.log 2>&1
-XXX - running - Thu Mar  2 14:10:08 PST 2017
-    # real    17m31.456s
+    # real    7m9.382s
 
     cat fb.micMur3.cpgIslandExtUnmasked.txt
-    # 35321721 bases of 2977074741 (1.186%) in intersection
+    # 63732015 bases of 2386321975 (2.671%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2017-03-02 - Hiram)
@@ -397,15 +396,14 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku micMur3) > do.log 2>&1
-XXX - running - Thu Mar  2 14:11:08 PST 2017
-    # real    662m1.726s
+    # real    603m18.086s
 
     cat faSize.rmsk.txt
-# 2977074741 bases (175194759 N's 2801879982 real 1394937761 upper
-#	1406942221 lower) in 105031 sequences in 1 files
-# Total size: mean 28344.7 sd 282016.5 min 200 (NW_016906396v1)
-#	max 14887386 (NW_016806642v1) median 912
-# %47.26 masked total, %50.21 masked real
+# 2487409138 bases (101087241 N's 2386321897 real 1403005122 upper
+#	983316775 lower) in 7678 sequences in 1 files
+# Total size: mean 323965.8 sd 5602567.1 min 60 (chrUn_NW_017971431v1)
+#	max 159902609 (chr8) median 3315
+# %39.53 masked total, %41.21 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -413,8 +411,8 @@ XXX - running - Thu Mar  2 14:11:08 PST 2017
     # CC   RELEASE 20140131;                                            *
 
     time featureBits -countGaps micMur3 rmsk
-    #	1407426392 bases of 2977074741 (47.275%) in intersection
-    #   real    2m3.210s
+    #	983557115 bases of 2487409138 (39.541%) in intersection
+    #	real    0m40.666s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -423,8 +421,8 @@ XXX - running - Thu Mar  2 14:11:08 PST 2017
     # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' micMur3 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    #	total 1407426392.000000
-    #   real    0m41.063s
+    #	total 983557115.000000
+    #	real    0m29.004s
 
 ##########################################################################
 # running simple repeat (DONE - 2017-03-02 - Hiram)
@@ -435,11 +433,11 @@ XXX - running - Thu Mar  2 14:11:08 PST 2017
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409 6 micMur3) > do.log 2>&1
-XXX - running - Thu Mar  2 14:11:28 PST 2017
-    # real    64m29.232s
+    # real    9m56.837s
 
     cat fb.simpleRepeat
-    # 73021659 bases of 2977074741 (2.453%) in intersection
+    # 36504869 bases of 2386321975 (1.530%) in intersection
+
 
     # adding this trfMask to the other masking
     cd /hive/data/genomes/micMur3
@@ -456,18 +454,18 @@ XXX - running - Thu Mar  2 14:11:28 PST 2017
 
     twoBitToFa micMur3.2bit stdout | faSize stdin > faSize.micMur3.2bit.txt
     cat faSize.micMur3.2bit.txt
-# 2977074741 bases (175194759 N's 2801879982 real 1393352740 upper
-#	1408527242 lower) in 105031 sequences in 1 files
-# Total size: mean 28344.7 sd 282016.5 min 200 (NW_016906396v1)
-#	max 14887386 (NW_016806642v1) median 912
-# %47.31 masked total, %50.27 masked real
+# 2487409138 bases (101087241 N's 2386321897 real 1401452057 upper
+#	984869840 lower) in 7678 sequences in 1 files
+# Total size: mean 323965.8 sd 5602567.1 min 60 (chrUn_NW_017971431v1)
+#	max 159902609 (chr8) median 3315
+# %39.59 masked total, %41.27 masked real
 
     # reset the symlink
     rm /gbdb/micMur3/micMur3.2bit
     ln -s `pwd`/micMur3.2bit /gbdb/micMur3/micMur3.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2017-02-28 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2017-03-02 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/micMur3/bed/microsat
     cd /cluster/data/micMur3/bed/microsat
@@ -476,163 +474,249 @@ XXX - running - Thu Mar  2 14:11:28 PST 2017
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed micMur3 microsat microsat.bed
-    # Read 31859 elements of size 4 from microsat.bed
+    # Read 28013 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2017-03-01 - Hiram)
+## WINDOWMASKER (DONE - 2017-03-03 - Hiram)
 
     mkdir /hive/data/genomes/micMur3/bed/windowMasker
     cd /hive/data/genomes/micMur3/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev micMur3) > do.log 2>&1
-    # real    260m40.754s
+    # real    177m39.332s
 
     # Masking statistics
     cat faSize.micMur3.cleanWMSdust.txt
-# 2977074741 bases (175194759 N's 2801879982 real 1782047365 upper
-#	1019832617 lower) in 105031 sequences in 1 files
-# Total size: mean 28344.7 sd 282016.5 min 200 (NW_016906396v1)
-#	max 14887386 (NW_016806642v1) median 912
-# %34.26 masked total, %36.40 masked real
+# 2487409138 bases (101087241 N's 2386321897 real 1638833772 upper
+#	747488125 lower) in 7678 sequences in 1 files
+# Total size: mean 323965.8 sd 5602567.1 min 60 (chrUn_NW_017971431v1)
+#	max 159902609 (chr8) median 3315
+# %30.05 masked total, %31.32 masked real
 
     cat fb.micMur3.rmsk.windowmaskerSdust.txt
-    # 784491226 bases of 2977074741 (26.351%) in intersection
+    # 474901533 bases of 2487409138 (19.092%) in intersection
 
 ##########################################################################
-# run up idKeys files for ncbiRefSeq (TBD - 2017-03-01 - Hiram)
+# run up idKeys files for ncbiRefSeq (DONE - 2017-03-03 - Hiram)
     mkdir /hive/data/genomes/micMur3/bed/idKeys
     cd /hive/data/genomes/micMur3/bed/idKeys
 
     time (doIdKeys.pl -buildDir=`pwd`  micMur3) > do.log 2>&1 &
-    # real    45m57.080s
+    # real    180m9.149s
 
     cat micMur3.keySignature.txt
-    #   ad94c2baecdb85a63bd9285d42161b91
+    #   591eccd7f439191e0ef7dcd523963ffb
 
 ##########################################################################
-# cpgIslands - (TBD - 2017-03-01 - Hiram)
+# cpgIslands - (DONE - 2017-03-03 - Hiram)
     mkdir /hive/data/genomes/micMur3/bed/cpgIslands
     cd /hive/data/genomes/micMur3/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku micMur3) > do.log 2>&1 &
-    # real    14m4.248s
+    # real    47m4.574s
 
     cat fb.micMur3.cpgIslandExt.txt
-    # 20309988 bases of 2977074741 (0.682%) in intersection
+    # 52667927 bases of 2386321975 (2.207%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2017-03-01 - Hiram)
+# genscan - (DONE - 2017-03-03 - Hiram)
     mkdir /hive/data/genomes/micMur3/bed/genscan
     cd /hive/data/genomes/micMur3/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku micMur3) > do.log 2>&1 &
     # real    64m46.377s
 
+    # three jobs need window size 2000000, one tiny contig would produce
+    # nothing
+
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku micMur3) > makeBed.log 2>&1 &
+    # real    1m26.537s
+
     cat fb.micMur3.genscan.txt
-    # 52459334 bases of 2977074741 (1.762%) in intersection
+    # 61853048 bases of 2386321975 (2.592%) in intersection
 
     cat fb.micMur3.genscanSubopt.txt
-    # 53805481 bases of 2977074741 (1.807%) in intersection
+    # 53556163 bases of 2386321975 (2.244%) in intersection
 
 #############################################################################
-# augustus gene track (dONE - 2017-03-01 - Hiram)
+# augustus gene track (DONE - 2017-03-04 - Hiram)
 
     mkdir /hive/data/genomes/micMur3/bed/augustus
     cd /hive/data/genomes/micMur3/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev -workhorse=hgwdev micMur3) > do.log 2>&1 &
-    # reel    104m18.398s
+    # real    827m10.603s
 
     cat fb.micMur3.augustusGene.txt
-    # 47275232 bases of 2977074741 (1.588%) in intersection
+    # 54243824 bases of 2386321975 (2.273%) in intersection
+
+#############################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2017-03-03 - Hiram)
+
+    # original alignment
+
+    cd /hive/data/genomes/hg38/bed/lastzMicMur3.2017-03-03
+    cat fb.hg38.chainMicMur3Link.txt
+    # 906521007 bases of 3049335806 (29.728%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/micMur3/bed/blastz.hg38.swap
+    cd /hive/data/genomes/micMur3/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzMicMur3.2017-03-03/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    42m21.629s
+
+    cat fb.micMur3.chainHg38Link.txt
+    # 880636728 bases of 2386321975 (36.904%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` micMur3 hg38) \
+      > rbest.log 2>&1
+    # real    296m23.384s
 
 #########################################################################
-# Create kluster run files (TBD - 2017-03-01 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2017-03-03 - Hiram)
+
+    # original alignment
+
+    cd /hive/data/genomes/mm10/bed/lastzMicMur3.2017-03-03
+    cat fb.mm10.chainMicMur3Link.txt
+    # 907817373 bases of 2652783500 (34.221%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 micMur3) \
+      > rbest.log 2>&1 &
+    # real    522m5.587s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/micMur3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/micMur3/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzMicMur3.2017-03-03/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    71m4.702s
+
+    cat fb.micMur3.chainMm10Link.txt
+    # 905011854 bases of 2386321975 (37.925%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` micMur3 mm10) \
+       > rbest.log 2>&1
+XXX - running - Sun Mar  5 08:21:58 PST 2017
+    # real    296m19.689s
+
+#############################################################################
+# Create kluster run files (DONE - 2017-03-03 - Hiram)
 
     # numerator is micMur3 gapless bases "real" as reported by:
     featureBits -noRandom -noHap micMur3 gap
-    # 0 bases of 2977074741 (0.000%) in intersection
-    #               ^^^
+    # 89972347 bases of 2349758284 (3.829%) in intersection
+    #                   ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2977074741 / 2861349177 \) \* 1024
-    #  ( 2977074741 / 2861349177 ) * 1024 = 1065.415070
+    calc \( 2349758284 / 2861349177 \) \* 1024
+    #  ( 2349758284 / 2861349177 ) * 1024 = 840.915363
 
-    # ==> use -repMatch=1000 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
     cd /hive/data/genomes/micMur3
     blat micMur3.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/micMur3.11.ooc \
-        -repMatch=1000
-    #   Wrote 25834 overused 11-mers to jkStuff/micMur3.11.ooc
+        -repMatch=800
+    #   Wrote 26993 overused 11-mers to jkStuff/micMur3.11.ooc
 
     #   check non-bridged gaps to see what the typical size is:
     hgsql -N \
         -e 'select * from gap where bridge="no" order by size;' micMur3 \
         | sort -k7,7nr | ave -col=7 stdin
-    # there are no gaps at all in this assembly
+    # there are no non-bridged gaps in this assembly
 
     # # all these gap sizes are 100
     # # minimum gap size is 100 and produces a reasonable number of lifts
     # gapToLift -verbose=2 -minGap=10 micMur3 jkStuff/nonBridged.lft \
     #    -bedFile=jkStuff/nonBridged.bed
 
+#########################################################################
+# LIFTOVER TO micMur1 (DONE - 2017-03-03 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/micMur3/bed/blat.micMur1.2017-03-03
+    cd /hive/data/genomes/micMur3/bed/blat.micMur1.2017-03-03
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/micMur3/jkStuff/micMur3.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         micMur3 micMur1) > do.log 2>&1
+    # real    1569m40.174s
+
+    # verify the convert link on the test browser is now active from micMur2 to
+    # micMur1
+
+#########################################################################
+# LIFTOVER TO micMur2 (DONE - 2017-03-03 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/micMur3/bed/blat.micMur2.2017-03-03
+    cd /hive/data/genomes/micMur3/bed/blat.micMur2.2017-03-03
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/micMur3/jkStuff/micMur3.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         micMur3 micMur2) > do.log 2>&1
+    # real    1326m15.222s
+
+    # verify the convert link on the test browser is now active from micMur2 to
+    # micMur1
+
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-01-17,18 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-03-05 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism             mrnaCnt   estCnt  refSeqCnt
-    # Rhinopithecus bieti     9       0       0
+    # Microcebus murinus      99      0       18
 
     # edit etc/genbank.conf to add micMur3 just before macFas5
-# micMur3 - Rhinopithecus bieti - black snub-nosed monkey taxId 61621
+# micMur3 (Mouse lemur)
 micMur3.serverGenome = /hive/data/genomes/micMur3/micMur3.2bit
 micMur3.clusterGenome = /hive/data/genomes/micMur3/micMur3.2bit
 micMur3.ooc = /hive/data/genomes/micMur3/jkStuff/micMur3.11.ooc
 micMur3.lift = no
 micMur3.perChromTables = no
-micMur3.downloadDir = micMur3
-micMur3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-micMur3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
-micMur3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
-micMur3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
-micMur3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+micMur3.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+micMur3.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+micMur3.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+micMur3.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+micMur3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+micMur3.refseq.mrna.native.load = no
+micMur3.refseq.mrna.xeno.load = yes
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
-# defaults are fine: genbank.mrna.native refseq.mrna.native refseq.mrna.xeno yes
-# and genbank.est.native
-# micMur3.upstreamGeneTbl = refGene
-# micMur3.upstreamMaf = multiz7way
-# /hive/data/genomes/melGal4/bed/multiz7way/species.lst
+# the defaults: genbank.mrna.native.load, yes genbank.est.native.load yes
+# refseq.mrna.native.load yes, refseq.mrna.xeno.load yes
+# there are no native est
+micMur3.genbank.est.native.load = no
+micMur3.downloadDir = micMur3
 
-    git commit -m "Added micMur3; refs #18927" etc/genbank.conf
+
+    git commit -m 'adding micMur3 Mouse lemur refs #18984' etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
     make etc-update
 
-    # also add to src/lib/gbGenome.c
-#	static char *rhiBieNames[] = {"Macaca nemestrina", NULL};
-#	{"rhiBie", rhiBieNames},
-
-    git commit -m "Added micMur3; refs #18958" src/lib/gbGenome.c
-    make install-server
-
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial micMur3
-    # logFile: var/build/logs/2017.03.01-15:36:07.micMur3.initalign.log
-XXX - running - Wed Mar  1 15:36:16 PST 2017
-XXX - there are problems, waiting for the go signal
+    # logFile: var/build/logs/2017.03.05-06:50:23.micMur3.initalign.log
+    #   about 13 hours
 
-    #   real    842m48.790s
-
-    tail var/build/logs/2017.01.17-20:34:20.micMur3.initalign.log
-    #    hgwdev 2017.01.18-10:35:41 micMur3.initalign: Succeeded: micMur3
-    #    hgwdev 2017.01.18-10:37:08 micMur3.initalign: finish
+    tail -2 var/build/logs/2017.03.05-06:50:23.micMur3.initalign.log
+    #	hgwdev 2017.03.05-19:11:13 micMur3.initalign: Succeeded: micMur3
+    #	hgwdev 2017.03.05-19:11:50 micMur3.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.micMur3
@@ -641,12 +725,11 @@ XXX - there are problems, waiting for the go signal
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad micMur3
-    # logFile: var/dbload/hgwdev/logs/2017.01.18-15:59:18.micMur3.dbload.log
-    #  real    18m6.466s
+    # logFile: var/dbload/hgwdev/logs/2017.03.05-19:53:15.micMur3.dbload.log
+    #  about 13 minutes
 
-    tail -1 var/dbload/hgwdev/logs/2017.01.18-15:59:18.micMur3.dbload.log
-    tail -1 var/dbload/hgwdev/logs/2016.04.19-08:38:37.micMur3.dbload.log
-    #  hgwdev 2017.01.18-16:17:24 micMur3.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2017.03.05-19:53:15.micMur3.dbload.log
+    #  hgwdev 2017.03.05-20:06:56 micMur3.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -654,7 +737,7 @@ XXX - there are problems, waiting for the go signal
     # add micMur3 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding micMur3 to the update alignments refs #18656' etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding micMur3 to the update alignments refs #18984' etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -714,7 +797,7 @@ XXX - there are problems, waiting for the go signal
 	where name="micMur3";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2016-05-13 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-03-06 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=micMur3 -tableCoverage all.joiner
@@ -723,7 +806,7 @@ XXX - there are problems, waiting for the go signal
 
     cd /hive/data/genomes/micMur3
     time (makeDownloads.pl -workhorse=hgwdev micMur3) > downloads.log 2>&1
-    #  real    16m3.852s
+    #  real    22m35.669s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/micMur3/pushQ
@@ -744,5 +827,16 @@ XXX - there are problems, waiting for the go signal
 
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
+
+#########################################################################
+# fix common name
+   hgsql -e 'update dbDb set organism="Mouse lemur" where name="micMur3";' \
+     hgcentraltest
+   hgsql -e 'update dbDb set genome="Mouse lemur" where name="micMur3";' \
+     hgcentraltest
+   hgsql -e 'delete from genomeClade where genome="Gray mouse lemur";' \
+     hgcentraltest
+   hgsql -e 'delete from defaultDb where genome="Gray mouse lemur";' \
+     hgcentraltest
 
 #########################################################################

@@ -1129,7 +1129,7 @@ var dragSelect = {
                         }
                         $(this).dialog("close");
                     },
-                    "New Highlight": function() {
+                    "Single Highlight": function() {
                         // Clear old highlight and Highlight selection
                         $(imageV2.imgTbl).imgAreaSelect({hide:true});
                         if ($("#disableDragHighlight").attr('checked'))
