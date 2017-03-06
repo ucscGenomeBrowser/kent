@@ -190,7 +190,8 @@ static void gotCcdsValidate(struct hash *infoCcds, struct hash *geneCcds)
 {
 int errCnt = 0;
 
-errCnt += gotCcdsCheck("ccdsInfo", infoCcds, "ccdsGene", geneCcds);
+// allow ccdsInfo to have entries that aren't in ccdsGene
+//errCnt += gotCcdsCheck("ccdsInfo", infoCcds, "ccdsGene", geneCcds);
 errCnt += gotCcdsCheck("ccdsGene", geneCcds, "ccdsInfo", infoCcds);
 if (errCnt > 0)
     errAbort("Error: mismatch between CCDS ids added to ccdsInfo and ccdsGene tables");

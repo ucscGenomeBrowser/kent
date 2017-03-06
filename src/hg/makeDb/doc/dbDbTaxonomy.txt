@@ -41,16 +41,18 @@
     # Use full-line uniq instead of sort -k -u because we want to find lines that have
     # the same genome, just different taxIds.
     cut -f 1,3 dbDb.taxId.alphSort.txt | uniq \
-    | egrep -v 'Venter|hg19Haplotypes|tarInv|Mm10haps' \
-    | sed -re 's/^9555\tBaboon$/9555\tBaboon (anubis)/; \
-               s/^9562\tBaboon$/9562\tBaboon (hamadryas)/;' \
-    | sort -k2 \
-    | uniq \
-      > taxIdGenome.txt
+| egrep -v 'GRCh38.p|GRCm38.p|GRCh37.p|Venter|hg19Haplotypes|tarInv|Mm10haps' \
+| egrep -v 'Catarrhini|Euarchontoglires|Eutheria|Glires|Laurasiatheria' \
+    | sed -re 's/^9555\tBaboon$/9555\tBaboon (anubis)/;
+               s/^9562\tBaboon$/9562\tBaboon (hamadryas)/;
+               s/Zaire ebolavirus/Ebola virus/;' \
+    | sort -k2 | uniq  > taxIdGenome.txt
 
     # Look in taxIdGenome.rr.txt for cases of same genome value, different species
-    # (aside from Baboon).
-    less taxIdGenome.txt
+    # (aside from Baboon).  Example failure:
+    cut -f1 taxIdGenome.txt | sort | uniq -c | sort -rn | head
+      2 186538
+    # That was two names for the same thing: Zaire ebolavirus == Ebola virus
 
     # Run a script to create the Javascript file:
     ~/kent/src/hg/utils/dbDbTaxonomy.pl taxIdGenome.txt nodes.dmp names.dmp \
