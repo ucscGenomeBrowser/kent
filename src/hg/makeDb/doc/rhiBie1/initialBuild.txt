@@ -540,7 +540,7 @@ searchPriority 8
     #    -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-01-17,18 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-03-05 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -583,15 +583,12 @@ rhiBie1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDna
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial rhiBie1
-    # logFile: var/build/logs/2017.03.01-15:36:07.rhiBie1.initalign.log
-XXX - running - Wed Mar  1 15:36:16 PST 2017
-XXX - there are problems, waiting for the go signal
+    # logFile: var/build/logs/2017.03.05-06:48:55.rhiBie1.initalign.log
+    #   about 13 hours
 
-    #   real    842m48.790s
-
-    tail var/build/logs/2017.01.17-20:34:20.rhiBie1.initalign.log
-    #    hgwdev 2017.01.18-10:35:41 rhiBie1.initalign: Succeeded: rhiBie1
-    #    hgwdev 2017.01.18-10:37:08 rhiBie1.initalign: finish
+    tail -2 2017.03.05-06:48:55.rhiBie1.initalign.log
+    #	hgwdev 2017.03.05-19:28:21 rhiBie1.initalign: Succeeded: rhiBie1
+    #	hgwdev 2017.03.05-19:28:53 rhiBie1.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.rhiBie1
@@ -600,12 +597,11 @@ XXX - there are problems, waiting for the go signal
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad rhiBie1
-    # logFile: var/dbload/hgwdev/logs/2017.01.18-15:59:18.rhiBie1.dbload.log
-    #  real    18m6.466s
+    # logFile: var/dbload/hgwdev/logs/2017.03.05-19:52:47.rhiBie1.dbload.log
+    #  about 21 minutes
 
-    tail -1 var/dbload/hgwdev/logs/2017.01.18-15:59:18.rhiBie1.dbload.log
-    tail -1 var/dbload/hgwdev/logs/2016.04.19-08:38:37.rhiBie1.dbload.log
-    #  hgwdev 2017.01.18-16:17:24 rhiBie1.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2017.03.05-19:52:47.rhiBie1.dbload.log
+    #	hgwdev 2017.03.05-20:13:03 rhiBie1.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -613,7 +609,7 @@ XXX - there are problems, waiting for the go signal
     # add rhiBie1 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding rhiBie1 to the update alignments refs #18656' etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding rhiBie1 to the update alignments refs #18958' etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -673,7 +669,7 @@ XXX - there are problems, waiting for the go signal
 	where name="rhiBie1";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2016-05-13 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-03-06 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=rhiBie1 -tableCoverage all.joiner
@@ -682,20 +678,18 @@ XXX - there are problems, waiting for the go signal
 
     cd /hive/data/genomes/rhiBie1
     time (makeDownloads.pl -workhorse=hgwdev rhiBie1) > downloads.log 2>&1
-    #  real    16m3.852s
+    #  real    24m57.372s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/rhiBie1/pushQ
     cd /hive/data/genomes/rhiBie1/pushQ
     time (makePushQSql.pl rhiBie1) > rhiBie1.pushQ.sql 2> stderr.out
-    #  real    7m21.629s
+    #  real    11m29.572s
 
     #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: hgwdev does not have /gbdb/rhiBie1/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/rhiBie1/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/rhiBie1/bbi/quality.bw
-    # WARNING: rhiBie1 does not have seq
-    # WARNING: rhiBie1 does not have extFile
+    #	WARNING: rhiBie1 does not have seq
+    #	WARNING: rhiBie1 does not have extFile
+    #	WARNING: rhiBie1 does not have estOrientInfo
 
     #   copy it to hgwbeta
     scp -p rhiBie1.pushQ.sql qateam@hgwbeta:/tmp/
