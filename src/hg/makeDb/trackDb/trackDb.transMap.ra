@@ -262,7 +262,7 @@ shortLabel TransMap V4
 longLabel TransMap Alignments V4
 group genes
 
-    track transMapAlnEnsemblV4
+    track transMapEnsemblV4
     release alpha
     superTrack transMapV4 pack
     shortLabel TransMap GENCODE/Ensembl V4
@@ -288,12 +288,12 @@ group genes
     labelSeparator " "
     bigDataUrl /gbdb/$D/transMap/V4/$D.ensembl.transMapV4.bigPsl
 
-searchTable transMapAlnEnsemblV4
+searchTable transMapEnsemblV4
 searchType psl
 searchMethod prefix
 searchPriority 2.31
 
-    track transMapAlnRefSeqV4
+    track transMapRefSeqV4
     release alpha
     superTrack transMapV4 pack
     shortLabel TransMap RefGene V4
@@ -319,12 +319,12 @@ searchPriority 2.31
     labelSeparator " "
     bigDataUrl /gbdb/$D/transMap/V4/$D.refseq.transMapV4.bigPsl
 
-searchTable transMapAlnRefSeqV4
+searchTable transMapRefSeqV4
 searchType psl
 searchMethod prefix
 searchPriority 2.31
 
-    track transMapAlnRnaV4
+    track transMapRnaV4
     release alpha
     superTrack transMapV4 pack
     shortLabel TransMap RNA V4
@@ -350,12 +350,12 @@ searchPriority 2.31
     labelSeparator " "
     bigDataUrl /gbdb/$D/transMap/V4/$D.rna.transMapV4.bigPsl
 
-searchTable transMapAlnRnaV4
+searchTable transMapRnaV4
 searchType psl
 searchMethod prefix
 searchPriority 2.31
 
-    track transMapAlnEstV4
+    track transMapEstV4
     release alpha
     superTrack transMapV4 hide
     shortLabel TransMap ESTs V4
@@ -378,7 +378,7 @@ searchPriority 2.31
     labelSeparator " "
     bigDataUrl /gbdb/$D/transMap/V4/$D.est.transMapV4.bigPsl
 
-searchTable transMapAlnEstV4
+searchTable transMapEstV4
 searchType psl
 searchMethod prefix
 searchPriority 2.31
