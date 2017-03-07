@@ -787,21 +787,16 @@ if (didSessionLoad)
 
 if (newDatabase != NULL)
     {
-    char *cartDb = cartOptionalString(cart, "db");
-
-    if ((cartDb == NULL) || differentString(cartDb, newDatabase))
+    // this is some magic to use the defaultPosition and reset cart variables
+    if (oldVars)
         {
-        // this is some magic to use the defaultPosition and reset cart variables
-        if (oldVars)
-            {
-            struct hashEl *hel;
-            if ((hel = hashLookup(oldVars,"db")) != NULL)
-                hel->val = "none";
-            else
-                hashAdd(oldVars, "db", "none");
-            }
-        cartSetString(cart,"db", newDatabase);
+        struct hashEl *hel;
+        if ((hel = hashLookup(oldVars,"db")) != NULL)
+            hel->val = "none";
+        else
+            hashAdd(oldVars, "db", "none");
         }
+    cartSetString(cart,"db", newDatabase);
     }
 
 if (exclude != NULL)
