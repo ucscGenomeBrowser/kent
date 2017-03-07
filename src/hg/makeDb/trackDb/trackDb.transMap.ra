@@ -287,11 +287,10 @@ group genes
     defaultLabelFields orgAbbrev,geneName
     labelSeparator " "
     bigDataUrl /gbdb/$D/transMap/V4/$D.ensembl.transMapV4.bigPsl
+    searchIndex name,srcTransId,geneName,geneId
 
 searchTable transMapEnsemblV4
-searchType psl
-searchMethod prefix
-searchPriority 2.31
+searchType bigPsl
 
     track transMapRefSeqV4
     release alpha
@@ -318,11 +317,10 @@ searchPriority 2.31
     defaultLabelFields orgAbbrev,geneName
     labelSeparator " "
     bigDataUrl /gbdb/$D/transMap/V4/$D.refseq.transMapV4.bigPsl
+    searchIndex name,srcTransId,geneName,geneId
 
 searchTable transMapRefSeqV4
-searchType psl
-searchMethod prefix
-searchPriority 2.31
+searchType bigPsl
 
     track transMapRnaV4
     release alpha
@@ -349,11 +347,10 @@ searchPriority 2.31
     defaultLabelFields orgAbbrev,srcTransId
     labelSeparator " "
     bigDataUrl /gbdb/$D/transMap/V4/$D.rna.transMapV4.bigPsl
+    searchIndex name,srcTransId,geneName
 
 searchTable transMapRnaV4
-searchType psl
-searchMethod prefix
-searchPriority 2.31
+searchType bigPsl
 
     track transMapEstV4
     release alpha
@@ -377,10 +374,7 @@ searchPriority 2.31
     defaultLabelFields orgAbbrev,srcTransId
     labelSeparator " "
     bigDataUrl /gbdb/$D/transMap/V4/$D.est.transMapV4.bigPsl
+    searchIndex name,srcTransId
 
 searchTable transMapEstV4
-searchType psl
-searchMethod prefix
-searchPriority 2.31
-
-
+searchType bigPsl

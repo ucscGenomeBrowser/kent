@@ -2597,6 +2597,14 @@ if (relativeFlag)
 }
 #endif
 
+static boolean isBigFileFind(struct hgFindSpec *hfs)
+/* is this a find on a big* file? */
+{
+return sameString(hfs->searchType, "bigBed")
+    || sameString(hfs->searchType, "bigPsl")
+    || sameString(hfs->searchType, "bigGenePred");
+}
+
 static boolean findBigBed(char *db, struct hgFindSpec *hfs, char *spec,
 			    struct hgPositions *hgp)
 /* Look up items in bigBed  */
@@ -2634,7 +2642,7 @@ else if (sameString(hfs->searchType, "refGene"))
     {
     found = findRefGenes(db, hfs, term, hgp);
     }
-else if (sameString(hfs->searchType, "bigBed"))
+else if (isBigFileFind(hfs))
     {
     found = findBigBed(db, hfs, term, hgp);
     }
@@ -2843,7 +2851,8 @@ if (strlen(term)<2 && !
 if (isNotEmpty(hfs->termRegex) && ! regexMatchNoCase(term, hfs->termRegex))
     return(FALSE);
 
-if (!(sameString(hfs->searchType, "mrnaKeyword") || sameString(hfs->searchType, "mrnaAcc") ))
+if ((!(sameString(hfs->searchType, "mrnaKeyword") || sameString(hfs->searchType, "mrnaAcc")))
+    && !isBigFileFind(hfs))
     {
     if (! hTableOrSplitExists(db, hfs->searchTable))
         return(FALSE);
