@@ -8087,23 +8087,24 @@ if (!hideControls)
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
 
-            hPrintf("<IMG class='toggleButton'"
-                    " id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
-                    group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
 	    char idText[256];
 	    safef(idText, sizeof idText, "%s_button", group->name);
+            hPrintf("<IMG class='toggleButton'"
+                    " id='%s' src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
+                    idText, indicatorImg, indicator,isOpen?"Collapse":"Expand");
 	    jsOnEventByIdF("click", idText, "return vis.toggleForGroup(this, '%s');", group->name);
 
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
             if (isHubTrack(group->name))
 		{
-                hPrintf("<input name=\"hubDisconnectButton\" id='hub_disconn'"
-                    "type=\"button\" value=\"disconnect\">\n");
-		jsOnEventByIdF("click", "hub_disconn", 
+		safef(idText, sizeof idText, "%s_disconn", group->name);
+                hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
+                    " type=\"button\" value=\"disconnect\">\n", idText);
+		jsOnEventByIdF("click", idText,
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;",
-		    &group->name[sizeof hubTrackPrefix - 1]);
+		    group->name + strlen(hubTrackPrefix));
 		}
 
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
