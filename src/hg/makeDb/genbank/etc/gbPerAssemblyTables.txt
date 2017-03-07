@@ -25,3 +25,7 @@
 ^mgcUnpickedEst$
 ^orfeomeMrna$
 ^orfeomeGenes$
+^ccdsGene$
+^ccdsInfo$
+^ccdsNotes$
+^ccdsKgMap$
