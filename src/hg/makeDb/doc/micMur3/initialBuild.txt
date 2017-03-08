@@ -607,8 +607,7 @@ searchPriority 8
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` micMur3 mm10) \
        > rbest.log 2>&1
-XXX - running - Sun Mar  5 08:21:58 PST 2017
-    # real    296m19.689s
+    # real    508m58.716s
 
 #############################################################################
 # Create kluster run files (DONE - 2017-03-03 - Hiram)
