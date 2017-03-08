@@ -473,7 +473,7 @@ if (navBar)
     {
     puts(navBar);
     // Override nice-menu.css's menu background and fonts:
-    puts("<link rel='stylesheet' href='../style/gbAfterMenu.css'>");
+    webIncludeResourceFile("gbAfterMenu.css");
     }
 webHeadAlreadyOutputed = TRUE;
 errAbortSetDoContentType(FALSE);
