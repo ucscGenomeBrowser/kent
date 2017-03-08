@@ -23,7 +23,8 @@ struct gencodeQuery
     int supportLevelCol;                    // support level column if joined for highlighting, or -1 
     int transcriptTypeCol;                  // transcript type column if joined for highlighting, or -1 
     int transcriptSourceCol;                // transcript source column if joined for method highlighting, or -1 
-    int tagCol;                             // tag column if joined for method highlighting, or -1 
+    int tagCol;                             // tag column if joined for method highlighting, or -1
+    boolean isFiltered;                     // are there filters on the query?
     filterBy_t *supportLevelHighlight;      // choices for support level highlighting if not NULL
     filterBy_t *transcriptTypeHighlight;    // choices for transcript type highlighting if not NULL
     filterBy_t *transcriptMethodHighlight;  // choices for transcript method highlighting if not NULL
@@ -233,6 +234,7 @@ else if (startsWith("attrs.", filterBy->column))
     filterByAttrsQuery(tg, filterBy, gencodeQuery);
 else
     errAbort("gencodeFilterByQuery: don't know how to filter on column \"%s\"", filterBy->column);
+gencodeQuery->isFiltered = TRUE;
 }
 
 static void gencodeFilterBySetQuery(struct track *tg, struct gencodeQuery *gencodeQuery)
@@ -496,6 +498,14 @@ highlightByGetColor(row, gencodeQuery, highlightColor, lf);
 return lf;
 }
 
+static void labelTrackAsFiltered(struct track *tg)
+/* add text to track long label to indicate filter is active */
+{
+char *oldLabel = tg->longLabel;
+tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+freeMem(oldLabel);
+}
+
 static void loadGencodeGenePreds(struct track *tg)
 /* Load genePreds in window info linked feature, with filtering, etc. */
 {
@@ -509,7 +519,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&lfList, loadGencodeGenePred(tg, gencodeQuery, row, highlightColor));
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-gencodeQueryFree(&gencodeQuery);
 
 if (tg->visibility != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
@@ -517,6 +526,10 @@ else
     slReverse(&lfList);
 tg->items = lfList;
 genePredAssignConfiguredName(tg);
+
+if (gencodeQuery->isFiltered)
+    labelTrackAsFiltered(tg);
+gencodeQueryFree(&gencodeQuery);
 }
 
 static char *gencodeGeneName(struct track *tg, void *item)
