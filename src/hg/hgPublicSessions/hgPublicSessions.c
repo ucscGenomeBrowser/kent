@@ -67,7 +67,6 @@ ret->sessionUrl = dyStringCreate("hgS_doOtherUser=submit&hgS_otherUserName=%s&hg
 
 char *userIdentifier = sessionThumbnailGetUserIdentifier(row[1], ret->userIdx);
 
-fprintf(stderr, "User %s, id %s, ident %s\n", row[1], row[2], userIdentifier);
 ret->imgPath = sessionThumbnailFilePath(userIdentifier, row[3], row[7]);
 if (fileExists(ret->imgPath))
     ret->imgUri = sessionThumbnailFileUri(userIdentifier, row[3], row[7]);
