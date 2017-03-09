@@ -420,7 +420,7 @@ chainCart = (struct cartOptions *) tg->extraUiData;
 optionChrStr = skipLeadingSpaces(cartUsualStringClosestToHome(cart, tg->tdb,
     FALSE, "chromFilter", "All"));
 
-if (differentWord("All",optionChrStr))
+if (strlen(optionChrStr) > 0 && differentWord("All",optionChrStr))
     {
     safef(extraWhere, sizeof(extraWhere),
             "qName = \"%s\" and score > %d",optionChrStr,
