@@ -772,6 +772,7 @@ else
     char *type = requiredSetting(hub, genome, tdb, "type");
     if (!(startsWithWord("bigWig", type) ||
           startsWithWord("bigBed", type) ||
+          startsWithWord("pslSnake", type) ||
 #ifdef USE_HAL
           startsWithWord("halSnake", type) ||
 #endif

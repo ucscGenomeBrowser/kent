@@ -432,6 +432,7 @@ if (!IS_KNOWN(track->remoteDataSource))
     //    }
     if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type) ||
 	startsWithWord("halSnake",track->tdb->type) ||
+	startsWithWord("pslSnake",track->tdb->type) ||
 	startsWithWord("bigPsl",track->tdb->type) ||
 	startsWithWord("bigGenePred",track->tdb->type) ||
 	startsWithWord("bigChain",track->tdb->type) ||
