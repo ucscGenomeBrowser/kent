@@ -133,7 +133,7 @@ DBS = \
 	ornAna1 ornAna2 \
 	oryCun1 oryCun2 \
 	oryLat1 oryLat2 \
-	otoGar1 otoGar3 tupBel1\
+	otoGar1 otoGar3 \
 	oviAri1 oviAri3 \
 	oxyTri2 \
 	panPan1 panPan2 \
@@ -169,6 +169,8 @@ DBS = \
 	triMan1 \
 	triSpi1 \
 	triSui1 \
+	tupBel1 \
+	tupChi1 \
 	turTru1 turTru2 \
 	venter1 \
 	vicPac1 vicPac2 \

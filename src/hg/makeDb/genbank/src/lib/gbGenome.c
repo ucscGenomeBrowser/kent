@@ -139,6 +139,7 @@ static char *sorAraNames[] = {"Sorex araneus", "Sorex cinereus", "Sorex palustri
 static char *speTriNames[] = {"Spermophilus tridecemlineatus", "Ictidomys tridecemlineatus", NULL};
 static char *tarSyrNames[] = {"Tarsius syrichta", NULL};
 static char *tupBelNames[] = {"Tupaia belangeri", NULL};
+static char *tupChiNames[] = {"Tupaia chinensis", NULL};
 static char *vicPacNames[] = {"Vicugna pacos", NULL};
 static char *balAcuNames[] = {"Balaenoptera acutorostrata", "Balaenoptera acutorostrata scammoni", "Balaenoptera borealis", "Balaenoptera brydei", "Balaenoptera edeni", "Balaenoptera omurai", "Balaenoptera physalus", NULL};
 static char *calMilNames[] = {"Callorhinchus milii", NULL};
@@ -267,6 +268,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"speTri", speTriNames},
     {"tarSyr", tarSyrNames},
     {"tupBel", tupBelNames},
+    {"tupChi", tupChiNames},
     {"vicPac", vicPacNames},
     {"balAcu", balAcuNames},
     {"calMil", calMilNames},
