@@ -1370,7 +1370,7 @@ return fileNameRewrite;
 void textOpen()
 /* Start serving up plain text, possibly via a pipeline to gzip. */
 {
-char *fileName = cartUsualString(cart, "hgva_outFile", "");
+char *fileName = textOutSanitizeHttpFileName(cartUsualString(cart, "hgva_outFile", ""));
 char *compressType = cartUsualString(cart, "hgva_compressType", textOutCompressGzip);
 compressPipeline = textOutInit(fileName, compressType, NULL);
 }

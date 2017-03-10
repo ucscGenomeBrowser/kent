@@ -1201,7 +1201,7 @@ void doSaveLocal()
 /* Output current settings to be saved as a file on the user's machine.
  * Return a message confirming what we did. */
 {
-char *fileName = trimSpaces(cartString(cart, hgsSaveLocalFileName));
+char *fileName = textOutSanitizeHttpFileName(cartString(cart, hgsSaveLocalFileName));
 char *compressType = cartString(cart, hgsSaveLocalFileCompress);
 struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 

@@ -618,6 +618,7 @@ if (outFileOptions)
     if (doFile)
         {
         fileName = jsonOptionalStringField(outFileOptions, "fileName", "hgIntegratorResults");
+        fileName = textOutSanitizeHttpFileName(fileName);
         boolean doGzip = jsonOptionalBooleanField(outFileOptions, "doGzip", FALSE);
         if (doGzip)
             compressType = textOutCompressGzip;
