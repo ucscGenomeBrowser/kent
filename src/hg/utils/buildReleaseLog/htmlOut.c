@@ -45,7 +45,6 @@ AllocVar(new);
 new->heading = cloneString(heading);
 new->anchor = cloneString(anchor);
 new->blockText = dyStringNew(0);
-dyStringPrintf(new->blockText, "<p>\n");
 return new;
 }
 
@@ -63,12 +62,15 @@ freez(bPtr);
 }
 
 
-void htmlOutAddBlockContent(struct htmlOutBlock *block, char *text)
+void htmlOutAddBlockContent(struct htmlOutBlock *block, char *format, ...)
 /* Append to the text for with this block of HTML content */
 {
-if (text == NULL)
+if (format == NULL)
     return;
-dyStringPrintf(block->blockText, "%s", text);
+va_list args;
+va_start(args, format);
+dyStringVaPrintf(block->blockText, format, args);
+va_end(args);
 }
 
 
@@ -90,9 +92,8 @@ if (block->heading != NULL)
     mustWrite(file->file, "\n", strlen("\n"));
     }
 char *content = dyStringContents(block->blockText);
-if (content != NULL)
+if ((content != NULL) && (strlen(content) > 0))
     {
     mustWrite(file->file, content, strlen(content));
-    mustWrite(file->file, "\n</p>\n", strlen("\n</p>\n"));
     }
 }

@@ -28,7 +28,7 @@ struct htmlOutBlock *htmlOutNewBlock(char *heading, char *anchor);
 void htmlOutFreeBlock(struct htmlOutBlock **bPtr);
 /* Free the memory associated with an HTML block and zero the pointer */
 
-void htmlOutAddBlockContent(struct htmlOutBlock *block, char *text);
+void htmlOutAddBlockContent(struct htmlOutBlock *block, char *format, ...);
 /* Append to the text for with this block of HTML content */
 
 void htmlOutWriteBlock(struct htmlOutFile *file, struct htmlOutBlock *block);

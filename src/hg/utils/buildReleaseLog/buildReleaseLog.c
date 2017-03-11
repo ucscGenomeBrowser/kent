@@ -280,16 +280,18 @@ void prettyPrintout(char *filename, struct hash *customFields, struct trackEntry
 {
 struct htmlOutFile *output = htmlOutNewFile(filename,
         "Data Releases: Tracks, Tables, and Assemblies", "..");
-char textString[4096];
 
 struct htmlOutBlock *heading = htmlOutNewBlock(
         "<h1>Data Releases: Tracks, Tables, and Assemblies</strong></h1>", NULL);
 htmlOutAddBlockContent(heading,
+        "<p>\n"
         "This page contains track and table release information for the "
-        "following genome assemblies:");
+        "following genome assemblies:\n"
+        "</p>\n");
 htmlOutWriteBlock(output, heading);
 
 struct htmlOutBlock *toc = htmlOutNewBlock(NULL, NULL);
+htmlOutAddBlockContent(toc, "<p>\n");
 htmlOutAddBlockContent(toc, "<div class='row'><div class='col-md-6'><ul>\n");
 if (tenMostRecent != NULL)
     htmlOutAddBlockContent(toc,
@@ -303,40 +305,34 @@ while (thisAssembly != NULL)
     {
     if (displayedCount == assemblyCount/2)
         htmlOutAddBlockContent(toc, "</ul></div>\n<div class='col-md-6'><ul>\n");
-    char assemblyString[4096];
-    safef(assemblyString, sizeof(assemblyString),
-            "<li><a href='#%s'>%s %s(%s)</a></li>\n", thisAssembly->ucscName,
+    htmlOutAddBlockContent(toc, "<li><a href='#%s'>%s %s(%s)</a></li>\n", thisAssembly->ucscName,
             thisAssembly->organism, thisAssembly->description, thisAssembly->ucscName);
-    htmlOutAddBlockContent(toc, assemblyString);
     thisAssembly = thisAssembly->next;
     displayedCount++;
     }
 htmlOutAddBlockContent(toc, "</ul></div></div>\n</p>\n");
 if (oldLogFilename != NULL)
     {
-    char oldLogString[4096];
-    safef(oldLogString, sizeof(oldLogString),
-            "<p>\n"
-            "For older log entries, please see <a href=\"%s\">this page</a>.\n"
-            "</p>\n", oldLogFilename);
-    htmlOutAddBlockContent(toc, oldLogString);
+    htmlOutAddBlockContent(toc, "<p>\n"
+                                "For older log entries, please see <a href=\"%s\">this page</a>.\n"
+                                "</p>\n", oldLogFilename);
     }
 htmlOutAddBlockContent(toc, "<p>\n");
 time_t t = time(NULL);
 struct tm *tmpTm = localtime(&t);
 char date[1024];
 strftime(date, sizeof(date), "%d %b %Y", tmpTm);
-safef(textString, sizeof(textString),
+htmlOutAddBlockContent(toc, 
         "<em>Last updated %s. <a href='http://genome.ucsc.edu/contacts.html'>Inquiries and "
-        "feedback welcome</a>.</em>\n", date);
-htmlOutAddBlockContent(toc, textString);
+        "feedback welcome</a>.</em>\n</p>\n", date);
 htmlOutWriteBlock(output, toc);
 
 if (tenMostRecent != NULL)
     {
     struct htmlOutBlock *mostRecent = htmlOutNewBlock("<h2>10 Latest Changes (all assemblies)</h2>",
             "latest");
-    htmlOutAddBlockContent(mostRecent, "<table>\n<tbody>\n<tr>\n"
+    htmlOutAddBlockContent(mostRecent, "<p>\n"
+                                       "<table>\n<tbody>\n<tr>\n"
                                        "<th>Track Name</th>\n"
                                        "<th>Assembly</th>\n"
                                        "</tr>\n");
@@ -347,50 +343,49 @@ if (tenMostRecent != NULL)
         char *assemblyString = slNameListToString(ticketCF->assemblies, ' ');
         if ((ticketCF->releaseUrl != NULL) && (strlen(ticketCF->releaseUrl) > 0))
             {
-            safef(textString, sizeof(textString),
+            htmlOutAddBlockContent(mostRecent, 
                     "<tr><td><a href='%s'>%s</a></td> <td>%s</td></tr>\n",
                     ticketCF->releaseUrl, ticketCF->releaseText, assemblyString);
-            htmlOutAddBlockContent(mostRecent, textString);
             }
         else
             {
-            safef(textString, sizeof(textString), "<tr><td>%s</td> <td>%s</td></tr>\n",
+            htmlOutAddBlockContent(mostRecent, "<tr><td>%s</td> <td>%s</td></tr>\n",
                 ticketCF->releaseText, assemblyString);
-            htmlOutAddBlockContent(mostRecent, textString);
             }
         thisTrack = thisTrack->next;
         }
-    htmlOutAddBlockContent(mostRecent, "</tbody></table>\n");
+    htmlOutAddBlockContent(mostRecent, "</tbody></table>\n</p>\n");
     htmlOutWriteBlock(output, mostRecent);
     }
 
 thisAssembly = fullList;
 while (thisAssembly != NULL)
     {
-    safef(textString, sizeof(textString), "<h2>%s %s (%s, %s)</h2>", thisAssembly->organism,
+    char headingText[4096];
+    safef(headingText, sizeof(headingText), "<h2>%s %s (%s, %s)</h2>", thisAssembly->organism,
             thisAssembly->description, thisAssembly->ucscName, thisAssembly->sourceName);
-    struct htmlOutBlock *assemblyContent = htmlOutNewBlock(textString, thisAssembly->ucscName);
-    htmlOutAddBlockContent(assemblyContent, "<table>\n<tbody>\n<tr>\n"
-                                           "<th>Track Name</th>\n"
-                                           "</tr>\n");
+    struct htmlOutBlock *assemblyContent = htmlOutNewBlock(headingText, thisAssembly->ucscName);
+    htmlOutAddBlockContent(assemblyContent, "<p>\n"
+                                            "<table>\n<tbody>\n<tr>\n"
+                                            "<th>Track Name</th>\n"
+                                            "</tr>\n");
     struct trackEntry *thisTrack = thisAssembly->tracks;
     while (thisTrack != NULL)
         {
         struct ticketCustomFields *ticketCF = hashFindVal(customFields, thisTrack->ticketId);
         if ((ticketCF->releaseUrl != NULL) && (strlen(ticketCF->releaseUrl) > 0))
             {
-            safef(textString, sizeof(textString), "<tr><td><a href='%s'>%s</a></td></tr>\n",
+            htmlOutAddBlockContent(assemblyContent, "<tr><td><a href='%s'>%s</a></td></tr>\n",
                     ticketCF->releaseUrl, ticketCF->releaseText);
-            htmlOutAddBlockContent(assemblyContent, textString);
             }
         else
             {
-            safef(textString, sizeof(textString), "<tr><td>%s</td></tr>\n", ticketCF->releaseText);
-            htmlOutAddBlockContent(assemblyContent, textString);
+            htmlOutAddBlockContent(assemblyContent, "<tr><td>%s</td></tr>\n",
+                    ticketCF->releaseText);
             }
         thisTrack = thisTrack->next;
         }
-    htmlOutAddBlockContent(assemblyContent, "</tbody></table>\n");
+    htmlOutAddBlockContent(assemblyContent, "</tbody></table>\n</p>\n");
     htmlOutWriteBlock(output, assemblyContent);
     htmlOutFreeBlock(&assemblyContent);
     thisAssembly = thisAssembly->next;
