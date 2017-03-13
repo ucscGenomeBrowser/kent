@@ -13925,13 +13925,13 @@ else if (sameWord(type, "bam"))
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
+#ifdef USE_HAL
 else if (sameWord(type, "pslSnake"))
     {
     halSnakeMethods(track, tdb, wordCount, words);
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
-#ifdef USE_HAL
 else if (sameWord(type, "halSnake"))
     {
     halSnakeMethods(track, tdb, wordCount, words);
