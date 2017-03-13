@@ -498,14 +498,6 @@ highlightByGetColor(row, gencodeQuery, highlightColor, lf);
 return lf;
 }
 
-static void labelTrackAsFiltered(struct track *tg)
-/* add text to track long label to indicate filter is active */
-{
-char *oldLabel = tg->longLabel;
-tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
-freeMem(oldLabel);
-}
-
 static void loadGencodeGenePreds(struct track *tg)
 /* Load genePreds in window info linked feature, with filtering, etc. */
 {
