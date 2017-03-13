@@ -9753,3 +9753,11 @@ if (cartOptionalString(cart, "udcTimeout"))
     }
 }
 
+void labelTrackAsFiltered(struct track *tg)
+/* add text to track long label to indicate filter is active */
+{
+char *oldLabel = tg->longLabel;
+tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+freeMem(oldLabel);
+}
+

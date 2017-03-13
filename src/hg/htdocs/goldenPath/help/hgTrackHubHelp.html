@@ -734,7 +734,7 @@ file integrity checks will also speed up hubCheck.</p>
 <p>
 Here is an example of some of the errors you might see if your hub includes
 unsupported settings:</p>
-<pre><code>$ hubCheck -checkSettings http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSetting/hub.txt
+<pre><code>$ hubCheck -checkSettings http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSettings/hub.txt
 Found 1 problem:
 Setting 'ensemblAssemblyName' is unknown/unsupported
 </pre></code>
@@ -767,7 +767,7 @@ if you knew that a setting called &quot;ensemblAssemblyName&quot; was supported 
 hubs by Ensembl, you could create a single line file that included  the setting
 &quot;ensemblAssemblyName&quot;. Then, when you want to check a hub that includes these extra
 trackDb settings, you would then specify this extra settings file on the command line:</p>
-<pre><code>$ hubCheck  -checkSettings -extra=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSetting/myExtraSettings.txt http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSetting/hub.txt
+<pre><code>$ hubCheck  -checkSettings -extra=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSettings/myExtraSettings.txt http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSettings/hub.txt
 </code></pre>
 <p>
 (Note: The settings listed here in the &quot;extra&quot; file are
