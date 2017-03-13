@@ -17,6 +17,7 @@ use HgRemoteScript;
 use vars @HgAutomate::commonOptionVars;
 use vars qw/
   $opt_noGenbank
+  $opt_redmineList
   /;
 
 # Option defaults:
@@ -35,6 +36,9 @@ options:
 ";
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost);
   print STDERR "    -noGenbank		  Add this if db does not have GenBank tables.\n";
+  print STDERR "    -redmineList	  write list files to redmine.db.file.list\n";
+  print STDERR "    			  and redmine.db.table.list\n";
+  print STDERR "    			  and redmine.db.releaseLog.txt\n";
   print STDERR "
 Prints (to stdout) SQL commands for creation of a new push queue for db
 and the addition of an Initial Release entry in the main push queue.
@@ -49,6 +53,7 @@ push queue guidance when in doubt.
 # Globals:
 my ($db);
 my ($sql, $prefixPattern, @wigTables, @netODbs);
+my ($redmineFileList, $redmineTableList, $redmineReleaseLog);
 my %noPush = ( 'bacEndPairsBad' => 1,
 	       'bacEndPairsLong' => 1,
 	       'genscanSubopt' => 1,
@@ -58,13 +63,13 @@ sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgAutomate::commonOptionSpec,
 		      'noGenbank',
+		      'redmineList',
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
   &HgAutomate::processCommonOptions();
   $dbHost = $opt_dbHost if ($opt_dbHost);
 } # checkOptions
-
 
 # hash of hashes, chromInfoDb key is db, hash ref key is chrom name
 my %chromInfoDb = ();
@@ -163,6 +168,7 @@ sub getInfrastructureEntry {
     }
   }
   $entry{'files'} = join('\r\n', @files);
+  $entry{'redmineFiles'} = join("\n", @files);
 
   # Look for infrastructure tables in allTables hash:
   foreach my $t qw( chromAlias chromInfo grp seq extFile hgFindSpec trackDb history
@@ -233,6 +239,7 @@ sub getGenbankEntry {
   $entry{'priority'} = 1;
   $entry{'tables'} = join(' ', @genbankTablesInDb);
   $entry{'files'} = '';
+  $entry{'redmineFiles'} = '';
   return \%entry;
 } # getGenbankEntry
 
@@ -353,6 +360,7 @@ sub getTrackEntries {
       $entry{'priority'} = $priority;
       $entry{'tables'} = $table . $otherTables;
       $entry{'files'} = "";
+      $entry{'redmineFiles'} = "";
       if ($type =~ /^chain ?/) {
 	$entry{'tables'} .= " ${table}Link";
 	my $net = $table;
@@ -375,6 +383,7 @@ sub getTrackEntries {
 	       "$HgAutomate::gbdb/$db/liftOver/$over") {
 	      if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
 		$entry{'files'} .= $downloads . '\r\n';
+		$entry{'redmineFiles'} .= $downloads . "\n";
 	      } else {
 		&HgAutomate::verbose(0, "WARNING: $dbHost does not have " .
 				     "chain/net download $downloads !\n");
@@ -392,8 +401,10 @@ sub getTrackEntries {
 	  my $png = "$HgAutomate::images/phylo/${db}_$1.png";
 	  if (&HgAutomate::machineHasFile($dbHost, $gif)) {
 	    $entry{'files'} .= $gif . '\r\n';
+	    $entry{'redmineFiles'} .= $gif . "\n";
 	  } elsif (&HgAutomate::machineHasFile($dbHost, $png)) {
 	    $entry{'files'} .= $png . '\r\n';
+	    $entry{'redmineFiles'} .= $png . "\n";
 	  } else {
 	    &HgAutomate::verbose(0, "WARNING: $dbHost does not have phyloPng-" .
 				    "generated $gif (or png) for $table.\n");
@@ -419,6 +430,7 @@ sub getTrackEntries {
 	  my $downloads = "$HgAutomate::goldenPath/$db/vs$ODb/*";
 	  if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
 	    $entry{'files'} = $downloads;
+	    $entry{'redmineFiles'} = $downloads;
 	  } else {
 	    &HgAutomate::verbose(1, "WARNING: $dbHost does not have $downloads\n");
 	  }
@@ -560,6 +572,11 @@ sub printEntry($$$$) {
 INSERT INTO $db VALUES ('$idStr','','A',$rank,'$date','Y','$entry->{shortLabel}','$localDb','$entry->{tables}','','$entry->{files}',$size,'$dbHost','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','$releaseLog','','','');
 _EOF_
   ;
+  if ($opt_redmineList) {
+     printf $redmineTableList "%s\n", $entry->{tables} if (length($entry->{tables}));
+     printf $redmineFileList "%s\n", $entry->{redmineFiles} if (length($entry->{redmineFiles}));
+     printf $redmineReleaseLog "%s\n", $entry->{shortLabel} if (length($entry->{shortLabel}));
+  }
 } # printEntry
 
 
@@ -584,6 +601,7 @@ sub printSwaps($) {
     $tableList =~ s/ +$//;
     $entry{'tables'} = $tableList;
     $entry{'files'} = "";
+    $entry{'redmineFiles'} = "";
     my $over = "${oDb}To$Db.over.chain.gz";
     my $axtNet = "$HgAutomate::goldenPath/$oDb/vs$Db/axtNet/*";
     if (! &HgAutomate::machineHasFile($dbHost, $axtNet)) {
@@ -597,6 +615,7 @@ sub printSwaps($) {
        "$HgAutomate::gbdb/$oDb/liftOver/$over") {
 	  if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
 	    $entry{'files'} .= $downloads . '\r\n';
+	    $entry{'redmineFiles'} .= $downloads . "\n";
 	  } else {
 	    &HgAutomate::verbose(0, "WARNING: $dbHost:$oDb does not have " .
 			     "chain/net download $downloads !\n");
@@ -730,6 +749,14 @@ _EOF_
 
 &usage(1) if (scalar(@ARGV) != 1);
 ($db) = @ARGV;
+
+if ($opt_redmineList) {
+  open $redmineFileList, '|-', "sort -u | sed -e '/^\$/d' > redmine.$db.file.list" or die "can not write to redmine.$db.file.list";
+  open $redmineTableList, '|-', "tr '[ ]' '[\n]' | sort -u | sed -e '/^\$/d' > redmine.$db.table.list" or die "can not write to redmine.$db.table.list";
+  open $redmineReleaseLog, '|-', "egrep -v 'supporting tables|Genbank-process tracks' | sort -u > redmine.$db.releaseLog.txt" or die "can not write to redmine.$db.releaseLog.txt";
+  printf STDERR "# writing redmine listings to\n";
+  printf STDERR "# redmine.$db.file.list\n# redmine.$db.table.list\n# redmine.$db.releaseLog.txt\n";
+}
 
 $sql = "$HgAutomate::runSSH $dbHost hgsql -N $db";
 
