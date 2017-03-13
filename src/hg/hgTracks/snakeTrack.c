@@ -1229,6 +1229,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     unsigned *size = psl->blockSizes;
     int ii;
 
+    if ((seq != NULL) && (psl->strand[0] == '-'))
+        reverseComplement(seq, strlen(seq));
     for(ii = 0; ii < psl->blockCount; ii++)
         {
         struct hal_block_t *block;
