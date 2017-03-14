@@ -19,18 +19,24 @@ char buffer[4096];
 if (! dirHash)
 	dirHash = newHash(0);
 
-if (addDate)
-    {
-    safef(buffer, sizeof buffer, "%s/%03d", dirName, dayOfYear());
-    dirName = buffer;
-    }
-
 /* already created this directory ? */
 if (! hashLookup(dirHash,dirName))
     {
     hashAddInt(dirHash, dirName, 1);	/* remember, been here, done that */
     mkdirTrashDirectory(dirName);
     }
+
+if (addDate)
+    {
+    safef(buffer, sizeof buffer, "%s/%03d", dirName, dayOfYear());
+    dirName = buffer;
+    if (! hashLookup(dirHash,dirName))
+        {
+        hashAddInt(dirHash, dirName, 1);	/* remember, been here, done that */
+        mkdirTrashDirectory(dirName);
+        }
+    }
+
 /* no need to duplicate the _ at the end of base, makeTempName is going
  *	to add _ to the given base, some CGIs pass "base_"
  */
