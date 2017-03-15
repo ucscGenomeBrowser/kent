@@ -2081,15 +2081,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 void chainColorUi(struct trackDb *tdb)
 /* UI for the chain tracks */
 {
-boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 boolean compositeTrack = tdbIsComposite(tdb);
 
 if (compositeTrack)
     return;	// configuration taken care of by hCompositeUi() later
-else if (normScoreAvailable)
-    chainCfgUi(database, cart, tdb, tdb->track, NULL, FALSE, chromosome);
 else
-    crossSpeciesCfgUi(cart,tdb);
+    chainCfgUi(database, cart, tdb, tdb->track, NULL, FALSE, chromosome);
 }
 
 void chromGraphUi(struct trackDb *tdb)

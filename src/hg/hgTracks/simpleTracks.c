@@ -4476,7 +4476,7 @@ for (pixel=0; pixel<insideWidth; ++pixel)
     // add any fraction of the count that's only partially in this pixel
     double lastFrac = endReal - endUns;
     double lastSum = lastFrac * counts[endUns];
-    if (lastFrac > 0.0)
+    if ((lastFrac > 0.0) && (endUns < size))
 	{
 	if (max < counts[endUns])
 	    max = counts[endUns];
@@ -4508,7 +4508,13 @@ static void genericDrawItemsWiggle(struct track *tg, int seqStart, int seqEnd,
                                        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a list of linked features into a wiggle. */
 {
+struct wigCartOptions *wigCart = tg->wigCartData;
 struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(insideWidth);
+struct trackDb *tdb = tg->tdb;
+if (hashFindVal(tdb->settingsHash, AUTOSCALE) == NULL)
+    wigCart->autoScale =  wiggleScaleAuto;
+if (hashFindVal(tdb->settingsHash, WINDOWINGFUNCTION) == NULL)
+    wigCart->windowingFunction = wiggleWindowingMax;
 unsigned *counts = countOverlaps(tg);
 
 countsToPixels(counts, pre);
