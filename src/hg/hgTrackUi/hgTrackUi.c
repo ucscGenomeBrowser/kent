@@ -48,6 +48,7 @@
 #include "trackVersion.h"
 #include "gtexUi.h"
 #include "genbank.h"
+#include "botDelay.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -2165,7 +2166,7 @@ puts("<P><B>Zoom factor:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 puts("<P><B>Motifs to highlight:&nbsp;</B>");
 cgiMakeTextVar(BASE_MOTIFS, motifString, 20);
-puts("&nbsp;(Comma separated list, i.e.: GT,AG for splice sites)");
+puts("&nbsp;(Comma separated list, e.g.: GT,AG for splice sites)");
 puts("<P>");
 cgiMakeCheckBox(MOTIF_COMPLEMENT, complementsToo);
 puts("&nbsp;<B>Show reverse complements of motifs also</B>");
@@ -3461,6 +3462,9 @@ struct trackDb *tdb = NULL;
 char *track;
 struct customTrack *ct = NULL, *ctList = NULL;
 char *ignored;
+
+hgBotDelayFrac(0.25);
+
 cart = theCart;
 track = cartString(cart, "g");
 getDbAndGenome(cart, &database, &ignored, NULL);

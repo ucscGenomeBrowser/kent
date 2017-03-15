@@ -4161,6 +4161,20 @@ if (container == NULL && wordCount > 0)
         headerItem = NULL;
     }
 
+// doNcbiRefSeq
+if (sameWord(tdb->table, "ncbiRefSeqOther"))
+    {
+    struct dyString *dy = newDyString(1024);
+    dyStringPrintf(dy, "%s", item);
+
+    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+        dyStringPrintf(dy, "- Release %s\n", trackVersion->version);
+
+    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
+    headerItem = cloneString("ncbiRefSeqOther");
+    }
+
 /* Print header. */
 genericHeader(tdb, headerItem);
 

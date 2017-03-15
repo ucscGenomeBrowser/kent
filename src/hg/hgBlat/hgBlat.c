@@ -697,8 +697,8 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     {
     printf(" "); fflush(stdout);  /* prevent apache cgi timeout by outputting something */
     oneSize = realSeqSize(seq, !isTx);
-    if ((seqCount&1) == 0)	// Call bot delay every 2nd time starting with first time
-	hgBotDelay();
+    // Impose half the usual bot delay per sequence
+	hgBotDelayFrac(0.5);
     if (++seqCount > maxSeqCount)
         {
 	warn("More than 25 input sequences, stopping at %s.",

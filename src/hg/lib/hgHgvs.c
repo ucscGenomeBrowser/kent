@@ -1992,13 +1992,20 @@ return row;
 
 struct vcfRow *hgvsToVcfRow(char *db, char *term, boolean doLeftShift, struct dyString *dyError)
 /* Convert HGVS to a row of VCF suitable for sorting & printing.  If unable, return NULL and
- * put the reason in dyError. */
+ * put the reason in dyError.  Protein terms are ambiguous at the nucleotide level so they are
+ * not supported at this point. */
 {
 struct vcfRow *row = NULL;
 struct hgvsVariant *hgvs = hgvsParseTerm(term);
 if (!hgvs)
     {
     dyStringPrintf(dyError, "Unable to parse '%s' as HGVS", term);
+    return NULL;
+    }
+else if (hgvs->type == hgvstProtein)
+    {
+    dyStringPrintf(dyError, "HGVS protein changes such as '%s' are ambiguous at the nucleotide "
+                   "level, so not supported", term);
     return NULL;
     }
 struct dyString *dyWarn = dyStringNew(0);
@@ -2011,8 +2018,6 @@ if (!mapping)
     }
 else
     {
-    // TODO: Support protein!
-    //#*** Check if it's nucleotide?  
     struct hgvsChange *changeList = hgvsParseNucleotideChange(hgvs->changes, hgvs->type,
                                                               dyWarn);
     if (dyStringIsNotEmpty(dyWarn))

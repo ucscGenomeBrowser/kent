@@ -229,6 +229,7 @@ void vcfRowTabOutList(FILE *f, struct vcfRow *rowList);
 
 struct vcfRow *hgvsToVcfRow(char *db, char *term, boolean doLeftShift, struct dyString *dyError);
 /* Convert HGVS to a row of VCF suitable for sorting & printing.  If unable, return NULL and
- * put the reason in dyError. */
+ * put the reason in dyError.  Protein terms are ambiguous at the nucleotide level so they are
+ * not supported at this point. */
 
 #endif /* HGHGVS_H */
