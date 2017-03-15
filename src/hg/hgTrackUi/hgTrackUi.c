@@ -48,6 +48,7 @@
 #include "trackVersion.h"
 #include "gtexUi.h"
 #include "genbank.h"
+#include "botDelay.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -3464,6 +3465,9 @@ struct trackDb *tdb = NULL;
 char *track;
 struct customTrack *ct = NULL, *ctList = NULL;
 char *ignored;
+
+hgBotDelayFrac(0.25);
+
 cart = theCart;
 track = cartString(cart, "g");
 getDbAndGenome(cart, &database, &ignored, NULL);
