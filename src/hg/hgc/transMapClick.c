@@ -320,9 +320,9 @@ printf("<TR CLASS=\"transMapLeft\"><TD>Source<TD>%s</TR>\n", formatGeneSrcSet(ba
 printf("<TR CLASS=\"transMapLeft\"><TD>Position\n");
 printf("<TD CLASS=\"transMapNoWrap\">");
 if (bag->srcDbIsActive)
-    printf("<A HREF=\"%s&db=%s&position=%s:%d-%d\" target=_blank>"
+    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\" target=_blank>"
            "%s:%d-%d</A>",
-           hgTracksPathAndSettings(), bag->meta->srcDb,
+           hgTracksName(), bag->meta->srcDb,
            bag->meta->srcChrom, bag->meta->srcChromStart, bag->meta->srcChromEnd,
            bag->meta->srcChrom, bag->meta->srcChromStart, bag->meta->srcChromEnd);
 else
