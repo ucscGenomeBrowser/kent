@@ -25193,7 +25193,7 @@ char* reqUrl = cloneString(getenv("REQUEST_URI"));
 char *e = strchr(reqUrl+1, '?');
 if (e) *e = 0;
 // remove the cgi name
-e = strchr(reqUrl+1, '/');
+e = strrchr(reqUrl, '/');
 if (e) *e = 0;
 
 boolean isProt = cgiOptionalString("isProt") != NULL;
