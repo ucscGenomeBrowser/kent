@@ -22,12 +22,12 @@ html ratChainNet
     track vertebrateChainNetViewchain
     shortLabel Chains
     view chain
-    visibility hide
+    visibility pack
     subTrack vertebrateChainNet
     spectrum on
 
         track chainMm10
-        subTrack vertebrateChainNetViewchain off
+        subTrack vertebrateChainNetViewchain on
         subGroups view=chain species=s000 clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -59,7 +59,7 @@ html ratChainNet
         otherDb oryCun2
 
         track chainHg38
-        subTrack vertebrateChainNetViewchain off
+        subTrack vertebrateChainNetViewchain on
         subGroups view=chain species=s004 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -181,7 +181,7 @@ html ratChainNet
     track vertebrateChainNetViewnet
     shortLabel Nets
     view net
-    visibility hide
+    visibility dense
     subTrack vertebrateChainNet
 
         track netMm10
@@ -281,7 +281,7 @@ html ratChainNet
         otherDb bosTau8
 
         track netMonDom5
-        subTrack vertebrateChainNetViewnet on
+        subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s012 clade=c03
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -329,7 +329,7 @@ html ratChainNet
         otherDb calMil1
 
         track netDanRer10
-        subTrack vertebrateChainNetViewnet on
+        subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s018 clade=c05
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
