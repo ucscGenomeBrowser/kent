@@ -7301,7 +7301,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
     struct bed *bed = bedLoadN(bedRow, 12);
-    if (sameString(bed->name, acc))
+    if (sameString(bed->name, acc) && (bb->start == start) && (bb->end == end))
 	{
 	bb->next = NULL;
 	break;
