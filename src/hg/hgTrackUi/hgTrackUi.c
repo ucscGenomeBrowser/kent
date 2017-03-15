@@ -2169,7 +2169,7 @@ puts("<P><B>Zoom factor:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 puts("<P><B>Motifs to highlight:&nbsp;</B>");
 cgiMakeTextVar(BASE_MOTIFS, motifString, 20);
-puts("&nbsp;(Comma separated list, i.e.: GT,AG for splice sites)");
+puts("&nbsp;(Comma separated list, e.g.: GT,AG for splice sites)");
 puts("<P>");
 cgiMakeCheckBox(MOTIF_COMPLEMENT, complementsToo);
 puts("&nbsp;<B>Show reverse complements of motifs also</B>");
