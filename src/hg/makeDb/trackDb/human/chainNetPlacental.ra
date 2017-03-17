@@ -200,7 +200,7 @@ include chainNetEchTel2.ra
 
 include chainNetRn4.ra beta,public
 # include chainNetRn5.ra beta,public
-include chainNetRn6.ra alpha
+include chainNetRn6.ra 
 
         track chainSorAra2
         subTrack placentalChainNetViewchain off
