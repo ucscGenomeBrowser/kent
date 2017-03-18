@@ -127,7 +127,7 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
 	else
 	    safef(buf, sizeof(buf), "%s", hfs->searchTable);
 	description = cloneString(buf);
-	posList1 = doTrixSearch(trixFile, indexList, fileName, term, description);
+	posList1 = doTrixSearch(hReplaceGbdb(trixFile), indexList, fileName, term, description);
 	}
 
     // now search for the raw id's
