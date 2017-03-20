@@ -1062,7 +1062,7 @@ else
 }
 
 
-int connectNpu(struct netParsedUrl npu, char *url)
+int connectNpu(struct netParsedUrl npu, char *url, boolean noProxy)
 /* Connect using NetParsedUrl. */
 {
 int sd = -1;
@@ -1072,7 +1072,7 @@ if (sameString(npu.protocol, "http"))
     }
 else if (sameString(npu.protocol, "https"))
     {
-    sd = netConnectHttps(npu.host, atoi(npu.port));
+    sd = netConnectHttps(npu.host, atoi(npu.port), noProxy);
     }
 else
     {
@@ -1096,6 +1096,22 @@ if (!sameString(npu.user,""))
     }
 }
 
+boolean checkNoProxy(char *host)
+/* See if host endsWith element on no_proxy list. Elements are comma-separated. */
+{
+char *list = cloneString(getenv("no_proxy"));
+if (!list)
+    return FALSE;
+replaceChar(list, ',', ' ');
+char *word;
+while((word=nextWord(&list)))
+    {
+    if (endsWith(host, word))
+	return TRUE;
+    }
+return FALSE;
+}
+
 int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *optionalHeader)
 /* Parse URL, connect to associated server on port, and send most of
  * the request to the server.  If specified in the url send user name
@@ -1113,16 +1129,23 @@ int sd = -1;
 /* Parse the URL and connect. */
 netParseUrl(url, &npu);
 
+boolean noProxy = checkNoProxy(npu.host);
 char *proxyUrl = getenv("http_proxy");
-
+if (sameString(npu.protocol, "https"))
+    proxyUrl = NULL;
+if (noProxy)
+    proxyUrl = NULL;
 if (proxyUrl)
     {
     netParseUrl(proxyUrl, &pxy);
-    sd = connectNpu(pxy, url);
+    if (!sameString(pxy.protocol, "http"))
+	errAbort("Unknown proxy protocol %s in %s.", pxy.protocol, proxyUrl);
+    sd = connectNpu(pxy, url, noProxy);
+    verbose(2, "%s via proxy %s\n", url, proxyUrl);
     }
 else
     {
-    sd = connectNpu(npu, url);
+    sd = connectNpu(npu, url, noProxy);
     }
 if (sd < 0)
     return -1;

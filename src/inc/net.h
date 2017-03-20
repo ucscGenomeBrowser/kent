@@ -210,6 +210,12 @@ int netOpenHttpExt(char *url, char *method, char *optionalHeader);
 /* Return a file handle that will read the url.  optionalHeader
  * may by NULL or may contain cookies and other info. */
 
+void setAuthorization(struct netParsedUrl npu, char *authHeader, struct dyString *dy);
+/* Set the specified authorization header with BASIC auth base64-encoded user and password */
+
+boolean checkNoProxy(char *host);
+/* See if host endsWith element on no_proxy list. */
+
 int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *optionalHeader);
 /* Parse URL, connect to associated server on port, and send most of
  * the request to the server.  If specified in the url send user name
