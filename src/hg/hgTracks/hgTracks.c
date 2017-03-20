@@ -9540,7 +9540,7 @@ measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTi
 if (measureTiming)
     measureTime("Startup");
 
-hgBotDelay();
+hgBotDelayFrac(0.25); /* Impose a quarter of the standard CGI penalty */
 if (measureTiming)
     measureTime("Bottleneck delay");
 

@@ -157,6 +157,9 @@ sub getInfrastructureEntry {
   my $sciUnderscore = &HgAutomate::getSpecies($dbHost, $db);
   $sciUnderscore =~ s/ /_/g;
   my $gatewayPhoto = "$HgAutomate::images/$sciUnderscore.jpg";
+  if (! &HgAutomate::machineHasFile($dbHost, $gatewayPhoto)) {
+     $gatewayPhoto = "$HgAutomate::images/$sciUnderscore.gif";
+  }
   my @files = ();
   foreach my $f (@gbdbFiles, @goldenPathFiles, $gatewayPhoto) {
     if (&HgAutomate::machineHasFile($dbHost, $f)) {
@@ -738,6 +741,19 @@ _EOF_
   &HgAutomate::verbose(1, "\n");
 }
 
+sub startReleaseLog($$) {
+  my ($localDb, $outFile) = @_;
+  open my $fh, '>', "$outFile" or die "can not write to $outFile";
+  my $configRa = "/hive/data/genomes/$localDb/$localDb.config.ra";
+  my $shortLabel = `grep 'assemblyShortLabel' $configRa | sed -e 's/^[^ \\t]\\+[ \t]//;'`;
+  my $assemblyLabel = `grep 'assemblyLabel' $configRa | sed -e 's/^[^ \\t]\\+[ \t]//;'`;
+  my $ncbiProject = `grep 'ncbiBioProject' $configRa | sed -e 's/^[^ \\t]\\+[ \t]//;'`;
+  my $genBankAccessionID = `grep 'genBankAccessionID' $configRa | sed -e 's/^[^ \\t]\\+[ \t]//;'`;
+  chomp $shortLabel; chomp $assemblyLabel; chomp $ncbiProject;
+  chomp $genBankAccessionID;
+  printf $fh "Initial %s release (using %s %s (NCBI project %d, %s)\n", $localDb, $assemblyLabel, $shortLabel, $ncbiProject, $genBankAccessionID;
+  close $fh;
+}	# sub startReleaseLog($$)
 
 #########################################################################
 # main
@@ -753,7 +769,8 @@ _EOF_
 if ($opt_redmineList) {
   open $redmineFileList, '|-', "sort -u | sed -e '/^\$/d' > redmine.$db.file.list" or die "can not write to redmine.$db.file.list";
   open $redmineTableList, '|-', "tr '[ ]' '[\n]' | sort -u | sed -e '/^\$/d' > redmine.$db.table.list" or die "can not write to redmine.$db.table.list";
-  open $redmineReleaseLog, '|-', "egrep -v 'supporting tables|Genbank-process tracks' | sort -u > redmine.$db.releaseLog.txt" or die "can not write to redmine.$db.releaseLog.txt";
+  &startReleaseLog($db, "redmine.$db.releaseLog.txt");
+  open $redmineReleaseLog, '|-', "egrep -v 'supporting tables|Genbank-process tracks' | sort -u >> redmine.$db.releaseLog.txt" or die "can not write to redmine.$db.releaseLog.txt";
   printf STDERR "# writing redmine listings to\n";
   printf STDERR "# redmine.$db.file.list\n# redmine.$db.table.list\n# redmine.$db.releaseLog.txt\n";
 }
@@ -764,3 +781,6 @@ $sql = "$HgAutomate::runSSH $dbHost hgsql -N $db";
 
 &adviseDeveloper();
 
+close $redmineFileList;
+close $redmineTableList;
+close $redmineReleaseLog;
