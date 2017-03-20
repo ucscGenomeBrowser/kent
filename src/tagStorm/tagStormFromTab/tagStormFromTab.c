@@ -2,16 +2,20 @@
  * first line, that starts with a #. 
  *
  * The basic idea of this is
- * 1) Read into into a fieldedTable structure
- * 2) Figure out semi-magically what field to partition on
+ * 1) Read into into a fieldedTable structure.
+ * 2) Figure out semi-magically what field to partition on.
  * 3) For each value of that field, write out a stanza that includes all fields that are 
  *    constant for that value of the partitioning field.
  * 4) Create a new, smaller fieldedTable that just consists of the remaining fields, 
  *    and the rows corresponding to the stanza.
  * 5) Recurse to 2. 
  *
- * The field to partition on in step 2 is either specified by the command line or
- * calculated in findLockedSets where partingScore is set. */
+ * The field to partition on in step 2 is either specified by the command line with the
+ * -div= option, or calculated in findLockedSets() where partingScore is set. The current
+ * partingScore algorithm (the third version) prefers fields with relatively few values,
+ * ideally non-numerical,  with lots of fields that move in sync with it, and where it leaves
+ * open further parting by other fields.  This further partability is calculated in the
+ * longestPredictorChainSize() function. */
 
 #include "common.h"
 #include "linefile.h"

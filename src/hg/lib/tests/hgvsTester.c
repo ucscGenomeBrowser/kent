@@ -49,11 +49,12 @@ while (lineFileNext(lf, &line, NULL))
         printf("# Failed to parse '%s' as HGVS\n", term);
     else
         {
-        struct bed3 *region = hgvsMapToGenome(db, hgvs, NULL);
+        struct bed *region = hgvsMapToGenome(db, hgvs, NULL);
         if (region == NULL)
             printf("# Failed to map '%s' to %s assembly\n", term, db);
         else
-            printf("%s\t%d\t%d\t%s\n", region->chrom, region->chromStart, region->chromEnd, term);
+            printf("%s\t%d\t%d\t%s\t0\t%c\n",
+                   region->chrom, region->chromStart, region->chromEnd, term, region->strand[0]);
         }
     }
 lineFileClose(&lf);

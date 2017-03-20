@@ -82,13 +82,13 @@ html vertebrateChainNet
         type chain taeGut1
         otherDb taeGut1
 
-        track chainMelGal1
+        track chainMelGal5
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=hTurkey clade=bAves
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain melGal1
-        otherDb melGal1
+        type chain melGal5
+        otherDb melGal5
 
         track chainAnoCar2
         subTrack vertebrateChainNetViewchain off
@@ -250,13 +250,13 @@ include chainNetGalGal5.ra
         type netAlign taeGut1 chainTaeGut1
         otherDb taeGut1
 
-        track netMelGal1
+        track netMelGal5
         subTrack vertebrateChainNetViewnet off
         subGroups view=net species=hTurkey clade=bAves
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign melGal1 chainMelGal1
-        otherDb melGal1
+        type netAlign melGal5 chainMelGal5
+        otherDb melGal5
 
         track netAnoCar2
         subTrack vertebrateChainNetViewnet on

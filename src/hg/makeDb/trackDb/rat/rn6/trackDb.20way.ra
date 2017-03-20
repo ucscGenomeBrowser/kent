@@ -47,7 +47,7 @@ group compGeno
         track phyloP20way
         subTrack cons20wayViewphyloP on
         subGroups view=phyloP
-        shortLabel 20 Vertebrates Cons
+        shortLabel Cons 20 Verts
         longLabel 20 vertebrates Basewise Conservation by PhyloP
         noInherit on
         configurable on
@@ -65,13 +65,13 @@ group compGeno
     track cons20wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
-    visibility full
+    visibility hide
     subTrack cons20way
 
         track phastCons20way
         subTrack cons20wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 20 Vertebrates Cons
+        shortLabel Cons 20 Verts
         longLabel 20 vertebrates conservation by PhastCons
         noInherit on
         configurable on
@@ -88,7 +88,7 @@ group compGeno
     track cons20wayViewelements
     shortLabel Conserved Elements
     view elements
-    visibility dense
+    visibility hide
     subTrack cons20way
 
         track phastConsElements20way

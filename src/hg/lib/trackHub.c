@@ -773,6 +773,7 @@ else
     if (!(startsWithWord("bigWig", type) ||
           startsWithWord("bigBed", type) ||
 #ifdef USE_HAL
+          startsWithWord("pslSnake", type) ||
           startsWithWord("halSnake", type) ||
 #endif
           startsWithWord("vcfTabix", type) ||
@@ -1074,7 +1075,7 @@ if (trackHubDatabase(db))
 else
     tdbList = hubCollectTracks(db, NULL);
 
-findBigBedPosInTdbList(db, tdbList, term, hgp);
+findBigBedPosInTdbList(db, tdbList, term, hgp, NULL);
 }
 
 boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort)

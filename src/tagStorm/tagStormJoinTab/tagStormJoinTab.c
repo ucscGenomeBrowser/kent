@@ -17,7 +17,8 @@ errAbort(
   "   tagStormJoinTab tag in.tab in.tags out.tags\n"
   "Where 'tag' is the field to join on.\n"
   "options:\n"
-  "   -append=Append the new information to the stanza in which the key is found rather than creating a new child stanza\n"
+  "   -append=Append the new information to the stanza in which the key is found rather than\n"
+  "           creating a new child stanza.  This will update the tag if it already exists.\n"
   );
 }
 
@@ -55,9 +56,9 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
     for (hel = hashLookup(hash, joinVal); hel != NULL; hel = hashLookupNext(hel))
         {
 	struct tagStanza *parent = hel->val;
-	struct tagStanza *stanza = tagStanzaNew(tags, parent);
-	// char *temp = parent->tagList->name;
-	// uglyf("this is the hashEl name %s this is the value %s \n", hel->name, temp);
+	struct tagStanza *stanza = NULL;
+	if (!clAppend)
+	    stanza = tagStanzaNew(tags, parent);
 	int i;
 	for (i=0; i<table->fieldCount; ++i)
 	    {
@@ -68,7 +69,7 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 		    {
 		    if (clAppend)
 		        {
-			tagStanzaAppend(tags,hel->val,table->fields[i], val);
+			tagStanzaUpdateTag(tags, parent, table->fields[i], val);
 			}
 		    else
 		        {
@@ -77,7 +78,8 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 		    }
 		}
 	    }
-	slReverse(&stanza->tagList);
+	if (stanza != NULL)
+	    slReverse(&stanza->tagList);
 	}
     }
 

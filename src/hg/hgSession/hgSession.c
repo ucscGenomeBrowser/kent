@@ -273,8 +273,7 @@ boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
 /* DataTables configuration: only allow ordering on session name, creation date, and database.
  * https://datatables.net/reference/option/columnDefs */
-struct dyString *javascript = dyStringNew(4096);
-dyStringPrintf(javascript,
+jsInlineF(
         "if (theClient.isIePre11() === false)\n{\n"
         "$(document).ready(function () {\n"
         "    $('#sessionTable').DataTable({\"columnDefs\": [{\"orderable\":false, \"targets\":[0,4,5,6,7,8]}],\n"
@@ -286,7 +285,6 @@ dyStringPrintf(javascript,
         "} );\n"
         "}\n"
         , jsDataTableStateSave(hgSessionPrefix), jsDataTableStateLoad(hgSessionPrefix, cart));
-jsInline(javascript->string);
 
 printf("<H3>My Sessions</H3>\n");
 printf("<div style=\"max-width:1024px\">");
@@ -828,8 +826,6 @@ int thumbnailAdd(char *encUserName, char *encSessionName, struct sqlConnection *
  * thread); the return value is 0 if a message was added to dyMessage, otherwise it's 1. */
 {
 char query[4096];
-char **row;
-struct sqlResult *sr;
 
 char *suppressConvert = cfgOption("sessionThumbnail.suppress");
 if (suppressConvert != NULL && sameString(suppressConvert, "on"))
@@ -854,16 +850,13 @@ if (convertTestResult != 0)
     }
 
 sqlSafef(query, sizeof(query),
-    "select m.idx, n.firstUse from gbMembers m join namedSessionDb n on m.userName = n.userName "
-    "where m.userName = \"%s\" and n.sessionName = \"%s\"",
+    "select firstUse from namedSessionDb where userName = \"%s\" and sessionName = \"%s\"",
     encUserName, encSessionName);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row == NULL)
-    errAbort("cannot add session to gallery; user %s, session %s",
-        encUserName, encSessionName);
-
-char *destFile = sessionThumbnailFilePath(row[0], encSessionName, row[1]);
+char *firstUse = sqlNeedQuickString(conn, query);
+sqlSafef(query, sizeof(query), "select idx from gbMembers where userName = '%s'", encUserName);
+char *userIdx = sqlQuickString(conn, query);
+char *userIdentifier = sessionThumbnailGetUserIdentifier(encUserName, userIdx);
+char *destFile = sessionThumbnailFilePath(userIdentifier, encSessionName, firstUse);
 if (destFile != NULL)
     {
     struct dyString *hgTracksUrl = dyStringNew(0);
@@ -876,7 +869,6 @@ if (destFile != NULL)
     char **cmdsImg[] = {renderCmd, convertCmd, NULL};
     pipelineOpen(cmdsImg, pipelineWrite, "/dev/null", NULL);
     }
-sqlFreeResult(&sr);
 return 1;
 }
 
@@ -885,22 +877,16 @@ void thumbnailRemove(char *encUserName, char *encSessionName, struct sqlConnecti
 /* Unlink thumbnail image for the gallery.  Leaks memory from a generated filename string. */
 {
 char query[4096];
-char **row;
-struct sqlResult *sr;
 sqlSafef(query, sizeof(query),
-    "select m.idx, n.firstUse from gbMembers m join namedSessionDb n on m.userName = n.userName "
-    "where m.userName = \"%s\" and n.sessionName = \"%s\"",
+    "select firstUse from namedSessionDb where userName = \"%s\" and sessionName = \"%s\"",
     encUserName, encSessionName);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row == NULL)
-    errAbort("cannot remove session from gallery; user %s, session %s",
-        encUserName, encSessionName);
-
-char *filePath = sessionThumbnailFilePath(row[0], encSessionName, row[1]);
+char *firstUse = sqlNeedQuickString(conn, query);
+sqlSafef(query, sizeof(query), "select idx from gbMembers where userName = '%s'", encUserName);
+char *userIdx = sqlQuickString(conn, query);
+char *userIdentifier = sessionThumbnailGetUserIdentifier(encUserName, userIdx);
+char *filePath = sessionThumbnailFilePath(userIdentifier, encSessionName, firstUse);
 if (filePath != NULL)
     unlink(filePath);
-sqlFreeResult(&sr);
 }
 
 char *doSessionDetail(char *userName, char *sessionName)
@@ -975,9 +961,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
     char id[256];
     safef(id, sizeof id, "%s%s", hgsDeletePrefix, encSessionName);
-    char javascript[1024];
-    safef(javascript, sizeof javascript, confirmDeleteFormat, encSessionName);
-    jsOnEventById("click", id, javascript);
+    jsOnEventByIdF("click", id, confirmDeleteFormat, encSessionName);
 
     dyStringPrintf(dyMessage,
 		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
@@ -985,10 +969,8 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   "<INPUT TYPE=HIDDEN NAME=\"%s%s%s\" VALUE=0><BR>\n",
 		   hgsSharePrefix, encSessionName, (shared>0 ? " CHECKED" : ""),
 		   cgiBooleanShadowPrefix(), hgsSharePrefix, encSessionName);
-    safef(javascript, sizeof javascript, "{%s %s}", highlightAccChanges, toggleGalleryDisable);
-    jsOnEventById("change", "detailsSharedCheckbox", javascript);
-    safef(javascript, sizeof javascript, "{%s %s}", highlightAccChanges, toggleGalleryDisable);
-    jsOnEventById("click" , "detailsSharedCheckbox", javascript);
+    jsOnEventByIdF("change", "detailsSharedCheckbox", "{%s %s}", highlightAccChanges, toggleGalleryDisable);
+    jsOnEventByIdF("click" , "detailsSharedCheckbox", "{%s %s}", highlightAccChanges, toggleGalleryDisable);
 
     dyStringPrintf(dyMessage,
 		   "List in Public Sessions? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
@@ -1219,7 +1201,7 @@ void doSaveLocal()
 /* Output current settings to be saved as a file on the user's machine.
  * Return a message confirming what we did. */
 {
-char *fileName = trimSpaces(cartString(cart, hgsSaveLocalFileName));
+char *fileName = textOutSanitizeHttpFileName(cartString(cart, hgsSaveLocalFileName));
 char *compressType = cartString(cart, hgsSaveLocalFileCompress);
 struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 

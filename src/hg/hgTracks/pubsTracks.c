@@ -299,9 +299,7 @@ else
     {
     // put together an "extra" query to hExtendedRangeQuery that removes articles
     // without the keywords specified in hgTrackUi
-    char *oldLabel = tg->longLabel;
-    tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
-    freeMem(oldLabel);
+    labelTrackAsFiltered(tg);
 
     char **row;
     struct linkedFeatures *lfList = NULL;

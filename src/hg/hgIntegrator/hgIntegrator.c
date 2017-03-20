@@ -618,6 +618,7 @@ if (outFileOptions)
     if (doFile)
         {
         fileName = jsonOptionalStringField(outFileOptions, "fileName", "hgIntegratorResults");
+        fileName = textOutSanitizeHttpFileName(fileName);
         boolean doGzip = jsonOptionalBooleanField(outFileOptions, "doGzip", FALSE);
         if (doGzip)
             compressType = textOutCompressGzip;
@@ -951,8 +952,8 @@ safef(javascript, sizeof javascript,
 printf("<script type='text/javascript' nonce='%s'>\n%s</script>\n", getNonce(), javascript);
 
 jsIncludeReactLibs();
-puts("<script src=\"../js/reactHgIntegrator.js\"></script>");
-puts("<script src=\"../js/hgIntegratorModel.js\"></script>");
+jsIncludeFile("reactHgIntegrator.js", NULL);
+jsIncludeFile("hgIntegratorModel.js", NULL);
 
 // Invisible form for submitting a query
 printf("\n<form action=\"%s\" method=%s id='queryForm'>\n",

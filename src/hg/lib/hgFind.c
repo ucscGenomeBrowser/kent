@@ -2597,13 +2597,21 @@ if (relativeFlag)
 }
 #endif
 
+static boolean isBigFileFind(struct hgFindSpec *hfs)
+/* is this a find on a big* file? */
+{
+return sameString(hfs->searchType, "bigBed")
+    || sameString(hfs->searchType, "bigPsl")
+    || sameString(hfs->searchType, "bigGenePred");
+}
+
 static boolean findBigBed(char *db, struct hgFindSpec *hfs, char *spec,
 			    struct hgPositions *hgp)
 /* Look up items in bigBed  */
 {
 struct trackDb *tdb = tdbFindOrCreate(db, NULL, hfs->searchTable);
 
-return findBigBedPosInTdbList(db, tdb, spec, hgp);
+return findBigBedPosInTdbList(db, tdb, spec, hgp, hfs);
 }
 
 static boolean searchSpecial(char *db, struct hgFindSpec *hfs, char *term, int limitResults,
@@ -2634,7 +2642,7 @@ else if (sameString(hfs->searchType, "refGene"))
     {
     found = findRefGenes(db, hfs, term, hgp);
     }
-else if (sameString(hfs->searchType, "bigBed"))
+else if (isBigFileFind(hfs))
     {
     found = findBigBed(db, hfs, term, hgp);
     }
@@ -2724,30 +2732,6 @@ slReverse(&xrefList);
 if (xrefList == NULL && hgFindSpecSetting(hfs, "searchBoth") != NULL)
     xrefList = slPairNew(cloneString(""), cloneString(term));
 return(xrefList);
-}
-
-
-int vatruncatef(char *buf, int size, char *format, va_list args)
-/* Like vasafef, but truncates the formatted string instead of barfing on 
- * overflow. */
-{
-char *truncStr = " [truncated]";
-int sz = vsnprintf(buf, size, format, args);
-/* note that some version return -1 if too small */
-if ((sz < 0) || (sz >= size))
-    strncpy(buf + size - 1 - strlen(truncStr), truncStr, strlen(truncStr));
-buf[size-1] = 0;
-return sz;
-}
-
-void truncatef(char *buf, int size, char *format, ...)
-/* Like safef, but truncates the formatted string instead of barfing on 
- * overflow. */
-{
-va_list args;
-va_start(args, format);
-vatruncatef(buf, size, format, args);  // ignore returned size
-va_end(args);
 }
 
 static boolean doQuery(char *db, struct hgFindSpec *hfs, char *xrefTerm, char *term,
@@ -2867,7 +2851,8 @@ if (strlen(term)<2 && !
 if (isNotEmpty(hfs->termRegex) && ! regexMatchNoCase(term, hfs->termRegex))
     return(FALSE);
 
-if (!(sameString(hfs->searchType, "mrnaKeyword") || sameString(hfs->searchType, "mrnaAcc") ))
+if ((!(sameString(hfs->searchType, "mrnaKeyword") || sameString(hfs->searchType, "mrnaAcc")))
+    && !isBigFileFind(hfs))
     {
     if (! hTableOrSplitExists(db, hfs->searchTable))
         return(FALSE);
@@ -3053,15 +3038,6 @@ if (foundIt)
 return foundIt;
 }
 
-static int getDotVersion(char *acc)
-/* If acc ends with a .version, return the version, else 0. */
-{
-char *p = strchr(acc, '.');
-if (p)
-    return atoi(p+1);
-return 0;
-}
-
 static boolean matchesHgvs(char *db, char *term, struct hgPositions *hgp)
 /* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature */
 /* See http://varnomen.hgvs.org/ */
@@ -3072,47 +3048,26 @@ if (hgvs == NULL)
     hgvs = hgvsParsePseudoHgvs(db, term);
 if (hgvs)
     {
-    char *foundAcc = NULL, *diffRefAllele = NULL;
-    int foundVersion = 0;
-    boolean coordsOk = hgvsValidate(db, hgvs, &foundAcc, &foundVersion, &diffRefAllele);
-    if (foundAcc == NULL)
-        warn("Can't find accession for HGVS term '%s'", term);
-    else
+    struct dyString *dyWarn = dyStringNew(0);
+    char *pslTable = NULL;
+    struct bed *mapping = hgvsValidateAndMap(hgvs, db, term, dyWarn, &pslTable);
+    if (dyStringLen(dyWarn) > 0)
+        warn("%s", dyStringContents(dyWarn));
+    if (mapping)
         {
-        int hgvsVersion = getDotVersion(hgvs->seqAcc);
-        char foundAccWithV[strlen(foundAcc)+20];
-        if (foundVersion)
-            safef(foundAccWithV, sizeof(foundAccWithV), "%s.%d", foundAcc, foundVersion);
+        int padding = 5;
+        char *trackTable;
+        if (isEmpty(pslTable))
+            trackTable = "chromInfo";
+        else if (startsWith("lrg", pslTable))
+            trackTable = "lrgTranscriptAli";
         else
-            safecpy(foundAccWithV, sizeof(foundAccWithV), foundAcc);
-        if (hgvsVersion && hgvsVersion != foundVersion)
-            warn("HGVS term '%s' is based on %s but UCSC has version %s",
-                 term, hgvs->seqAcc, foundAccWithV);
-        if (! coordsOk)
-            warn("HGVS term '%s' has coordinates outside the bounds of %s", term, foundAccWithV);
-        else if (diffRefAllele != NULL)
-            warn ("HGVS term '%s' reference value does not match %s value '%s'",
-                  term, foundAccWithV, diffRefAllele);
-        if (coordsOk)
-            {
-            char *pslTable = NULL;
-            struct bed3 *mapping = hgvsMapToGenome(db, hgvs, &pslTable);
-            if (mapping)
-                {
-                int padding = 5;
-                char *trackTable;
-                if (isEmpty(pslTable))
-                    trackTable = "chromInfo";
-                else if (startsWith("lrg", pslTable))
-                    trackTable = "lrgTranscriptAli";
-                else
-                    trackTable = "refGene";
-                singlePos(hgp, "HGVS", NULL, trackTable, term, "",
-                          mapping->chrom, mapping->chromStart-padding, mapping->chromEnd+padding);
-                foundIt = TRUE;
-                }
-            }
+            trackTable = "refGene";
+        singlePos(hgp, "HGVS", NULL, trackTable, term, "",
+                  mapping->chrom, mapping->chromStart-padding, mapping->chromEnd+padding);
+        foundIt = TRUE;
         }
+    dyStringFree(&dyWarn);
     }
 return foundIt;
 }

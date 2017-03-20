@@ -11,6 +11,7 @@
 #include "web.h"
 #include "hCommon.h"
 #include "hui.h"
+#include "jsHelper.h"
 #include "gtexUi.h"
 #include "gtexInfo.h"
 #include "gtexTissue.h"
@@ -253,9 +254,7 @@ puts(
 static void onclickJumpToTop(char *id)
 /* CSP-safe click handler arrows that cause scroll to top */
 {
-char javascript[1024];
-safef(javascript, sizeof javascript, "$('html,body').scrollTop(0);");
-jsOnEventById("click", id, javascript);
+jsOnEventById("click", id, "$('html,body').scrollTop(0);");
 }
 
 static void printDataInfo(char *db, struct trackDb *tdb)
@@ -371,8 +370,8 @@ puts(
 "</div>");
 
 // Initialize illustration display and handle mouseover and clicks
-puts("<script type='text/javascript' src='../js/utils.js'></script>");
-puts("<script type='text/javascript' src='../js/hgGtexTrackSettings.js'></script>");
+jsIncludeFile("utils.js", NULL);
+jsIncludeFile("hgGtexTrackSettings.js", NULL);
 
 webIncludeFile("inc/gbFooter.html");
 webEndJWest();

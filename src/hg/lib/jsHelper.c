@@ -45,10 +45,7 @@ if (! jsInited)
     int pos = cgiOptionalInt("jsh_pageVertPos", 0);
     if (pos > 0)
 	{
-	char javascript[1024];
-	safef(javascript, sizeof javascript,
-	       "window.onload = function () { window.scrollTo(0, %d); }", pos);
-	jsInline(javascript);
+	jsInlineF("window.onload = function () { window.scrollTo(0, %d); }\n", pos);
 	}
     jsInited = TRUE;
     jsIncludeFile("jsHelper.js", NULL);
@@ -89,10 +86,7 @@ void jsTrackingVar(char *jsVar, char *val)
 /* Emit a little Javascript to keep track of a variable.
  * This helps especially with radio buttons. */
 {
-char javascript[256];
-safef(javascript, sizeof javascript, 
-    "var %s='%s';\n", jsVar, val);
-jsInline(javascript);
+jsInlineF("var %s='%s';\n", jsVar, val);
 }
 
 void jsMakeTrackingRadioButtonExtraHtml(char *cgiVar, char *jsVar,
@@ -106,9 +100,7 @@ hPrintf("<INPUT TYPE=RADIO NAME='%s' ID='%s'", cgiVar, id);
 hPrintf(" VALUE=\"%s\"", val);
 if (isNotEmpty(extraHtml))
     hPrintf(" %s", extraHtml);
-char javascript[1024];
-safef(javascript, sizeof javascript, "%s='%s';", jsVar, val);
-jsOnEventById("click", id, javascript);
+jsOnEventByIdF("click", id, "%s='%s';", jsVar, val);
 if (sameString(val, selVal))
     hPrintf(" CHECKED");
 hPrintf(">");
@@ -129,16 +121,12 @@ void jsMakeTrackingCheckBox(struct cart *cart,
 {
 char buf[256];
 boolean oldVal = cartUsualBoolean(cart, cgiVar, usualVal);
-char javascript[1024];
-safef(javascript, sizeof javascript,
-    "var %s=%d;", jsVar, oldVal);
-jsInline(javascript);
+jsInlineF("var %s=%d;\n", jsVar, oldVal);
 hPrintf("<INPUT TYPE=CHECKBOX NAME='%s' ID='%s' VALUE=1", cgiVar, cgiVar);
 if (oldVal)
     hPrintf(" CHECKED");
-safef(javascript, sizeof javascript, "%s=(%s+1)%%2;", jsVar, jsVar);
-jsOnEventById("click", cgiVar, javascript);
 hPrintf(">");
+jsOnEventByIdF("click", cgiVar, "%s=(%s+1)%%2;", jsVar, jsVar);
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), cgiVar);
 cgiMakeHiddenVar(buf, "0");
 }
@@ -199,7 +187,7 @@ char javascript[256];
 safef(javascript, sizeof(javascript), "var list = document.getElementsByName('%s'); "
       "for (var ix = 0; ix < list.length; ix++) {list[ix].checked = %s}", buttonVar,
       isSet ? "true" : "false");
-safef(id, sizeof id, "%s_grpSetClrBut", buttonVar);
+safef(id, sizeof id, "%s_grp%sBut", buttonVar, isSet ? "Set" : "Clr");
 cgiMakeOnClickButton(id, javascript, isSet ? JS_SET_ALL_BUTTON_LABEL : JS_CLEAR_ALL_BUTTON_LABEL);
 }
 
@@ -262,24 +250,24 @@ void jsIncludeReactLibs()
  * and our own model libs, React mixins and components. */
 {
 // We need a module system... webpack?
-puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/lodash.3.10.0.compat.min.js\"></script>");
+jsIncludeFile("es5-shim.4.0.3.min.js", NULL);
+jsIncludeFile("es5-sham.4.0.3.min.js", NULL);
+jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
 puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
 puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
-puts("<script src=\"../js/react-with-addons-0.12.2.min.js\"></script>");
-puts("<script src=\"../js/immutable.3.7.4.min.js\"></script>");
-puts("<script src=\"../js/jquery.bifrost.1.0.1.min.js\"></script>");
-puts("<script src=\"../js/BackboneExtend.js\"></script>");
-puts("<script src=\"../js/cart.js\"></script>");
-puts("<script src=\"../js/ImModel.js\"></script>");
-puts("<script src=\"../js/CladeOrgDbMixin.js\"></script>");
-puts("<script src=\"../js/PositionSearchMixin.js\"></script>");
-puts("<script src=\"../js/UserRegionsMixin.js\"></script>");
-puts("<script src=\"../js/PathUpdate.js\"></script>");
-puts("<script src=\"../js/PathUpdateOptional.js\"></script>");
-puts("<script src=\"../js/ImmutableUpdate.js\"></script>");
-puts("<script src=\"../js/reactLibBundle.js\"></script>");
+jsIncludeFile("react-with-addons-0.12.2.min.js", NULL);
+jsIncludeFile("immutable.3.7.4.min.js", NULL);
+jsIncludeFile("jquery.bifrost.1.0.1.min.js", NULL);
+jsIncludeFile("BackboneExtend.js", NULL);
+jsIncludeFile("cart.js", NULL);
+jsIncludeFile("ImModel.js", NULL);
+jsIncludeFile("CladeOrgDbMixin.js", NULL);
+jsIncludeFile("PositionSearchMixin.js", NULL);
+jsIncludeFile("UserRegionsMixin.js", NULL);
+jsIncludeFile("PathUpdate.js", NULL);
+jsIncludeFile("PathUpdateOptional.js", NULL);
+jsIncludeFile("ImmutableUpdate.js", NULL);
+jsIncludeFile("reactLibBundle.js", NULL);
 }
 
 void jsIncludeDataTablesLibs()
@@ -428,15 +416,13 @@ printf("<input type='hidden' name='%s' id='%s' value='%s'>\n",
        collapseGroupVar, collapseGroupVar, isOpen ? "0" : "1");
 char *buttonImage = (isOpen ? "../images/remove_sm.gif" : "../images/add_sm.gif");
 char id[256];
-char javascript[1024];
 safef(id, sizeof id, "%s_button", section);
-safef(javascript, sizeof javascript, "return setTableRowVisibility(this, '%s', '%s.section', 'section', true);", 
-       section, track);
 printf("<IMG height='18' width='18' "
        "id='%s' src='%s' alt='%s' title='%s this section' class='bigBlue'"
        " style='cursor:pointer;'>\n",
        id, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
-jsOnEventById("click", id, javascript);
+jsOnEventByIdF("click", id, "return setTableRowVisibility(this, '%s', '%s.section', 'section', true);", 
+       section, track);
 if (oldStyle || fontSize == NULL)
     printf("&nbsp;%s</TD></TR>\n", sectionTitle);
 else
@@ -484,8 +470,7 @@ void jsReloadOnBackButton(struct cart *cart)
 // http://siphon9.net/loune/2009/07/detecting-the-back-or-refresh-button-click/
 // Yes, I know this along with every other inline <script> here belongs in a .js module
 {
-char javascript[2048];
-safef(javascript, sizeof javascript, 
+jsInlineF(
        "document.write(\"<form style='display: none'><input name='__detectback' id='__detectback' "
        "value=''></form>\");\n"
        "function checkPageBackOrRefresh() {\n"
@@ -509,7 +494,6 @@ safef(javascript, sizeof javascript,
        "  } "
        "};\n"
        , cartSidUrlString(cart), cgiScriptName(), cartSidUrlString(cart));
-jsInline(javascript);
 }
 
 static char *makeIndentBuf(int indentLevel)

@@ -164,13 +164,13 @@ if ($initialBuild) {
     }
     $initialDb = $databases[0];
     if (!defined($workDir)) {
-        $workDir = "work/initial.$initialDb/align";
+        $workDir = "/hive/data/outside/genbank/work/initial.$initialDb/align";
     }
 }
 
 # figure out workDir.
 if (!defined($workDir)) {
-    $workDir = "work/align";
+    $workDir = "/hive/data/outside/genbank/work/align";
 }
 if (!isAbs($workDir)) {
     # make relative to clusterRootDir

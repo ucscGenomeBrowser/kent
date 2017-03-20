@@ -23,7 +23,10 @@ errAbort(
   "This will output the selected three fields from the file where the lab starts with myLab\n"
   "    tabQuery select file,data from manifest.tsv where lab='myLab'\n"
   "This will output the selected two fields where the lab field is exactly myLab.\n"
-  "This will output the file and date fields from the manifest.tsv file\n"
+  "    tabQuery select * from manifest.tsv where lab='myLab'\n"
+  "This will output all fields where the lab field is exactly myLab.\n"
+  "    tabQuery select a*,b* from manifest.tsv where lab='myLab'\n"
+  "This will output all fields starting with a or b where the lab field is exactly myLab.\n"
   "    tabQuery select count(*) from manifest.tsv where type='fastq' and size < 1000\n"
   "This will count the number of records where type is fastq and size less than 1000\n"
   );
@@ -73,7 +76,20 @@ for (i=0; i<gTable->fieldCount; ++i)
 struct slName *field;
 for (field = rql->fieldList; field != NULL; field = field->next)
     if (!hashLookup(gFieldHash, field->name))
-        errAbort("field %s doesn't exist in %s", field->name, tabFile);
+	{
+	if (!anyWild(field->name))
+	    errAbort("field %s doesn't exist in %s", field->name, tabFile);
+	}
+
+/* Make list of fields as opposed to array  */
+struct slName *allFieldList = NULL;
+for (i=0; i<gTable->fieldCount; ++i)
+    slNameAddHead(&allFieldList, gTable->fields[i]);
+slReverse(&allFieldList);
+
+/* Expand any field names with wildcards. */
+rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
+
 
 /* Print out label row. */
 if (!doCount)

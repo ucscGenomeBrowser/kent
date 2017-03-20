@@ -1,0 +1,84 @@
+track chainNetLepWed1 override
+priority 196.30
+release alpha
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 100,-163,-54,-134,-163,86,-162,-54,-54,-162,86,-163,-134,-54,-163,100
+
+track chainNetOdoRosDiv1 override
+priority 197.30
+release alpha
+chainLinearGap medium
+chainMinScore 5000
+matrix 16 100,-163,-53,-137,-163,85,-164,-53,-53,-164,85,-163,-137,-53,-163,100
+
+track chainNetMusFur1 override
+priority 198.30
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 100,-155,-44,-152,-155,85,-151,-44,-44,-151,85,-155,-152,-44,-155,100
+
+track chainNetCanFam2 override
+priority 200.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetFelCatV17e override
+priority 210.3
+release alpha
+
+track chainNetFelCat4 override
+priority 210.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetRn6 override
+priority 330.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetRn4 override
+priority 330.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetRn5 override
+priority 330.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetMm10 override
+priority 340.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetMm9 override
+priority 340.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetHg19 override
+priority 470.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetHg38 override
+priority 470.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 74,-117,-23,-133,-117,100,-112,-23,-23,-112,100,-117,-133,-23,-117,74
+
+track chainNetMonDom5 override
+priority 540.3
+chainLinearGap loose
+chainMinScore 5000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+

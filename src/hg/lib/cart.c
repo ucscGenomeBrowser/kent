@@ -252,7 +252,7 @@ if (!cdb)
 	{
 	if (cartDbUseSessionKey())
 	    {
-	    sessionKey = cartDbMakeRandomKey(128+33); // at least 128 bits of protection, 33 for the world population size.
+	    sessionKey = makeRandomKey(128+33); // at least 128 bits of protection, 33 for the world population size.
 	    }
 	sqlDyStringPrintf(query, ",'%s'", sessionKey);
 	}
@@ -787,16 +787,21 @@ if (didSessionLoad)
 
 if (newDatabase != NULL)
     {
-    // this is some magic to use the defaultPosition and reset cart variables
-    if (oldVars)
+    char *cartDb = cartOptionalString(cart, "db");
+
+    if ((cartDb == NULL) || differentString(cartDb, newDatabase))
         {
-        struct hashEl *hel;
-        if ((hel = hashLookup(oldVars,"db")) != NULL)
-            hel->val = "none";
-        else
-            hashAdd(oldVars, "db", "none");
+        // this is some magic to use the defaultPosition and reset cart variables
+        if (oldVars)
+            {
+            struct hashEl *hel;
+            if ((hel = hashLookup(oldVars,"db")) != NULL)
+                hel->val = "none";
+            else
+                hashAdd(oldVars, "db", "none");
+            }
+        cartSetString(cart,"db", newDatabase);
         }
-    cartSetString(cart,"db", newDatabase);
     }
 
 if (exclude != NULL)
@@ -1380,7 +1385,7 @@ if (asTable)
     int width=(strlen(val)+1)*8;
     if (width<100)
         width = 100;
-    cgiMakeTextVarWithExtraHtml(hel->name, val, width,
+    cgiMakeTextVarWithJs(hel->name, val, width,
                                 "change", "setCartVar(this.name,this.value);");
     printf("</TD></TR>\n");
     }

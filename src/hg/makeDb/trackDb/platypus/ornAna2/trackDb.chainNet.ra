@@ -1,0 +1,12 @@
+track chainNetRn6 override
+priority 410.3
+chainLinearGap loose
+chainMinScore 5000
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+track chainNetHg38 override
+priority 550.3
+chainLinearGap loose
+chainMinScore 5000
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+

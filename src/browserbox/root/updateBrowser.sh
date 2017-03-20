@@ -330,6 +330,11 @@ fi
 # is rsync'ed later, otherwise gbib is really slow, refs #17842
 touch /data/mysql/hgFixed/refSeqStatus.MYI /data/mysql/hgFixed/refSeqStatus.MYD /data/mysql/hgFixed/refSeqStatus.frm 
 touch /data/mysql/hgFixed/refLink.MYI /data/mysql/hgFixed/refLink.MYD /data/mysql/hgFixed/refLink.frm 
+
+# Jan 2017: hgVai does not work if /data/mysql/hg19/wgEncodeRegTfbsClusteredInputsV3 is not present, so force this 
+# table into the rsync, refs #18778
+touch /data/mysql/hg19/wgEncodeRegTfbsClusteredInputsV3.{frm,MRI,MYD}
+
 # we can now remove the old tables
 rm -f /data/mysql/hg19/refSeqStatus*
 

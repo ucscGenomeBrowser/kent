@@ -57,7 +57,8 @@ collectGmonOut = False
 gmonOutDir = "profiles"
 
 gbSetupPath()
-gbBlatPath = gbAbsBinDir() + "/gbBlat"
+#gbBlatPath = gbAbsBinDir() + "/gbBlat"
+gbBlatPath =  "/hive/data/outside/genbank/bin/gbBlat"
 
 cmdOpts = None
 

@@ -17,6 +17,7 @@
 <h6><a href="#Search">Setting up track item search</a></h6>
 <h6><a href="#Session">Displaying Track Hubs by URL and in sessions</a></h6>
 <h6><a href="#Register">Registering a Track Hub with UCSC</a></h6>
+<h6><a href="#Compatibility">Testing hub compatibility between genome browsers</a></h6>
 <hr>
 <p>
 <strong>Additional resources</strong></p> 
@@ -563,10 +564,33 @@ file name should correspond to the symbolic name of the top-level track in the c
 <!-- ========== Debugging and Updating Track Hubs ============================== -->
 <a name="Debug"></a>
 <h2>Debugging and updating Track Hubs</strong></h2>
+
+<h3>Changing udcTimeout to debug hub display</h3>
+<p>
+As part of the track hub mechanism, UCSC caches data from the hub on the local server. The hub
+utility periodically checks the time stamps on the hub files, and downloads them again only if they
+have a time stamp newer than the UCSC one. For performance reasons, UCSC checks the time stamps
+every 300 seconds, which can result in a 5-minute delay between the time a hub file is updated and
+the change appears on the Genome Browser. Hub providers can work around this delay by inserting the
+CGI variable <em><strong>udcTimeout=1</strong></em> into the Genome Browser URL, which will reduce
+the delay to one second. To add this variable, open the Genome Browser tracks page and zoom or
+scroll the image to display a full browser URL in which the CGI variables visible. Insert the CGI
+variable just after the &quot;hgTracks&quot; portion of the URL so that it reads
+<em>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>udcTimeout=1&</b></em> (with the remainder of the URL
+following the ampersand). To restore the default timeout, a warning message will appear on hgTracks
+with a link to clear the udcTimeout variable.</p>
+
+<h3>Check hub settings using hubCheck utility</h3>
 <p>
 It is a good practice to run the command-line utility <em>hubCheck</em> on your track hub when you 
-first bring it online and whenever you make significant changes. This utility checks that the files 
-in the hub are correctly formatted.</p>
+first bring it online and whenever you make significant changes. This utility by default checks
+that the files in the hub are correctly formatted, but it can also be configured to check a few
+other things including that various trackDb settings are correctly spelled and that they are
+supported by the UCSC Genome Browser. You can read more about using hubCheck to check the
+compatibility of your hub with other genome browsers <a href="#Compatibility"</a>below</a>.
+
+<p>
+Here is the usage statement for the hubCheck utility:
 <pre><code>hubCheck - Check a track data hub for integrity.
 usage:
    hubCheck http://yourHost/yourDir/hub.txt
@@ -581,28 +605,10 @@ options:
    -noTracks             - don't check remote files for tracks, just trackDb (faster)
    -udcDir=/dir/to/cache - place to put cache for remote bigBeds and bigWigs </code></pre>
 <p>
-Use the -checkSettings option to verify the trackDb.txt file settings are correct, and the -level 
-and -extra options to customize the check (e.g. for best portability). To list all settings with 
-support level, use the -settings option with no argument. The -noTracks option can be useful to 
-speed up settings checks.</p>
-<p>
 Note that you will have to use the udcDir if /tmp/udcCache is not writable on your machine.</p>
 <p>
 The hubCheck program is available from the UCSC downloads server at 
 <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">http://hgdownload.cse.ucsc.edu/admin/exe/</a>.</p>
-<p>
-As part of the track hub mechanism, UCSC caches data from the hub on the local server. The hub 
-utility periodically checks the time stamps on the hub files, and downloads them again only if they 
-have a time stamp newer than the UCSC one. For performance reasons, UCSC checks the time stamps 
-every 300 seconds, which can result in a 5-minute delay between the time a hub file is updated and 
-the change appears on the Genome Browser. Hub providers can work around this delay by inserting the 
-CGI variable <em><strong>udcTimeout=1</strong></em> into the Genome Browser URL, which will reduce 
-the delay to one second. To add this variable, open the Genome Browser tracks page and zoom or 
-scroll the image to display a full browser URL in which the CGI variables visible. Insert the CGI 
-variable just after the &quot;hgTracks&quot; portion of the URL so that it reads 
-<em>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>udcTimeout=1&</b></em> (with the remainder of the URL
-following the ampersand). To restore the default timeout, a warning message will appear on hgTracks 
-with a link to clear the udcTimeout variable.</p>
 
 <!-- ========== Setting Up Track Item Search ============================== -->
 <a name="Search"></a>
@@ -679,5 +685,97 @@ Alternatively, you can share your track hub with selected colleagues by providin
 needed to load your hub via the My Hubs tab.</p>
 <!--Note: Probably should add a blurb about (lack of) security here. Maybe just expand this section 
 to be about sharing hub data.-->
+
+<!-- ======== Testing hub compatibility between genome browsers ============== -->
+<a name="Compatibility"></a>
+<h2>Testing hub compatibility between genome browsers</h2>
+<p>
+Due to the growth in popularity of the track hub format, other genome browsers have
+begun supporting the UCSC track hub format. The hubCheck utility can be used to check
+the compatibility of your hub with the UCSC Genome Browser and other genome browsers.
+The following examples describe various settings that may be useful to you as you test
+this compatibility.</p>
+
+<p>
+<strong><em>Example 1:</em></strong> Listing the trackDb settings and their support levels
+and filtering them by support level.</p>
+<p>
+You can see all of the currently supported trackDb settings and their support level in
+the UCSC Genome Browser by running hubCheck with the &quot;-settings&quot; option:</p>
+<pre><code>$ hubCheck -settings
+</code></pre>
+<p>
+You can filter the displayed settings by support level by using the &quot;-level=&quot;
+option followed by the maximum level you wanted displayed. For example,
+to show only the required settings:</p>
+<pre><code>$ hubCheck -settings -level=required
+</code></pre>
+<p>
+Or, to show settings at both the required and base support levels:</p>
+<pre><code>$ hubCheck -settings -level=base
+</code></pre>
+<p>
+When you use the &quot;-level&quot; option to declare a support level, it includes
+the level that you define plus every level above it. This hierarchy of the different support
+levels is defined at the beginning of the
+<a href="trackDb/trackDbHub.html">Track Database Definition document</a>.</p>
+
+<p>
+<strong><em>Example 2:</em></strong> Checking your trackDb settings against the settings and support levels
+provided by the UCSC Genome Browser.</p>
+<p>
+The &quot;-checkSettings&quot; option can be used check the settings in your hub's trackDb file
+against those provided by the UCSC Genome Browser on the Track Database definition page.
+This does not check to see that all of these settings are properly used, but checks to see
+that they are supported by the Genome Browser. For example, to fully run hubCheck on your hub:</p>
+<pre><code>$ hubCheck -checkSettings http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt
+</code></pre>
+<p>
+If you are just looking to check the compatibility of your hub and not the integrity of your files,
+you can use the &quot;-noTracks&quot; option to just check setting compatibility. Skipping these
+file integrity checks will also speed up hubCheck.</p>
+<p>
+Here is an example of some of the errors you might see if your hub includes
+unsupported settings:</p>
+<pre><code>$ hubCheck -checkSettings http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSettings/hub.txt
+Found 1 problem:
+Setting 'ensemblAssemblyName' is unknown/unsupported
+</pre></code>
+<p>
+If you want to check the settings used in your hub against those at a particular support level
+and higher, you can also use the &quot;-level=&quot; setting here as well. For example:</p>
+<pre><code>$ hubCheck -checkSettings -level=base http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hub.txt
+</code></pre>
+<p>
+The resulting list of problems reported by hubCheck are settings beyond the base support level and are
+less likely to be supported at other genome browsers, as not all external browsers support
+the full list of UCSC settings.</p>
+<p>
+We will periodically increment the version number for our trackDb settings
+as large numbers of settings are added, updated or (rarely) removed. Using just the
+&quot;-checkSettings&quot; option will check your trackDb settings against those defined in
+the most recent version of the Track Database definition page. However, if you want to
+check your settings against an older version of these settings, you can use the
+&quot;-version=&quot; option. For example, if you wanted to check your hub against version one
+of our trackDb settings:</p>
+<pre><code>$ hubCheck -checkSettings -version=v1 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hub.txt
+</code></pre>
+
+<p>
+<strong><em>Example 3:</em></strong> Checking your settings against those provided by UCSC and another
+source, such as Ensembl.</p>
+<p>
+If you want to check the settings in your hub against those supported by other genome browsers,
+you will first need to create a single-column file that lists each non-UCSC setting and then
+use the &quot;-extra=&quot; option to specify this file when running hubCheck. For example,
+if you knew that a setting called &quot;ensemblAssemblyName&quot; was supported for use in track
+hubs by Ensembl, you could create a single line file that included  the setting
+&quot;ensemblAssemblyName&quot;. Then, when you want to check a hub that includes these extra
+trackDb settings, you would then specify this extra settings file on the command line:</p>
+<pre><code>$ hubCheck  -checkSettings -extra=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSettings/myExtraSettings.txt http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSettings/hub.txt
+</code></pre>
+<p>
+(Note: The settings listed here in the &quot;extra&quot; file are
+just examples and do not represent real trackDb variables for hubs at Ensembl.)
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

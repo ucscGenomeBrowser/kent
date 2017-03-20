@@ -235,6 +235,14 @@ html chainNet
         type chain rn4
         otherDb rn4
 
+        track chainRn5
+        subTrack legacyChainNetViewchain on
+        subGroups view=chain species=mRat clade=eEuarch
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rn5
+        otherDb rn5
+
         track chainEchTel1
         subTrack legacyChainNetViewchain on
         subGroups view=chain species=zhTenrec clade=gAfro
@@ -306,6 +314,7 @@ html chainNet
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain petMar1
         otherDb petMar1
+        
 
     track legacyChainNetViewnet
     shortLabel Nets
@@ -521,6 +530,14 @@ html chainNet
         type netAlign rn4 chainRn4
         otherDb rn4
 
+        track netRn5
+        subTrack legacyChainNetViewnet on 
+        subGroups view=net species=mRat clade=eEuarch
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign rn5 chainRn5
+        otherDb rn5
+
         track netEchTel1
         subTrack legacyChainNetViewnet on
         subGroups view=net species=zhTenrec clade=gAfro
@@ -592,3 +609,4 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign petMar1 chainPetMar1
         otherDb petMar1
+

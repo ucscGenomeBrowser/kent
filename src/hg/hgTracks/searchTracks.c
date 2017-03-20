@@ -324,8 +324,9 @@ return tracks;
 }
 
 #define MAX_FOUND_TRACKS 100
-static void findTracksPageLinks(int tracksFound, int startFrom)
+static void findTracksPageLinks(int tracksFound, int startFrom, int instance)
 {
+char id[256];
 if (tracksFound <= MAX_FOUND_TRACKS)
     return;
 
@@ -338,22 +339,21 @@ if (endAt > tracksFound)
 hPrintf("<span><em style='font-size:.9em;'>Listing %d - %d of %d tracks</em>&nbsp;&nbsp;&nbsp;",
         startFrom+1,endAt,tracksFound);
 
-char javascript[1024];
 // << and <
 if (startFrom >= MAX_FOUND_TRACKS)
     {
-    hPrintf("<a href='../cgi-bin/hgTracks?%s=Search&%s=0' id='ftpl1' title='First page of found tracks'"
+    safef(id, sizeof id, "ftpl%d-first", instance);
+    hPrintf("<a href='../cgi-bin/hgTracks?%s=Search&%s=0' id='%s' title='First page of found tracks'"
 	    ">&#171;</a>&nbsp;",
-            TRACK_SEARCH,TRACK_SEARCH_PAGER);
-    safef(javascript, sizeof javascript, "return findTracks.page(\"%s\",0);", TRACK_SEARCH_PAGER);
-    jsOnEventById("click", "ftpl1", javascript);
+            TRACK_SEARCH,TRACK_SEARCH_PAGER,id);
+    jsOnEventByIdF("click", id, "return findTracks.page(\"%s\",0);", TRACK_SEARCH_PAGER);
 
+    safef(id, sizeof id, "ftpl%d-prev", instance);
     willStartAt = startFrom - MAX_FOUND_TRACKS;
-    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='ftpl2' "
+    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='%s' "
 	"title='Previous page of found tracks'>&#139;</a>&nbsp;",
-            TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt);
-    safef(javascript, sizeof javascript, "return findTracks.page(\"%s\",%d);", TRACK_SEARCH_PAGER,willStartAt);
-    jsOnEventById("click", "ftpl2", javascript);
+            TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,id);
+    jsOnEventByIdF("click", id, "return findTracks.page(\"%s\",%d);", TRACK_SEARCH_PAGER,willStartAt);
     }
 
 // page number links
@@ -366,17 +366,17 @@ if (thisPage < 1)
     thisPage = 1;
 for (;thisPage <= lastPage && thisPage <= curPage + 3; thisPage++)
     {
+    safef(id, sizeof id, "ftpl%d-%d", instance, thisPage);
     if (thisPage != curPage)
         {
         willStartAt = ((thisPage - 1) * MAX_FOUND_TRACKS);
         endAt = willStartAt+ MAX_FOUND_TRACKS;
         if (endAt > tracksFound)
             endAt = tracksFound;
-        hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='ftpl3' "
+        hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='%s' "
 		"title='Page %d (%d - %d) tracks'>%d</a>&nbsp;",
-                TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,thisPage,willStartAt+1,endAt,thisPage);
-	safef(javascript, sizeof javascript, "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
-	jsOnEventById("click", "ftpl3", javascript);
+                TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,id,thisPage,willStartAt+1,endAt,thisPage);
+	jsOnEventByIdF("click", id, "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
         }
     else
         hPrintf("&nbsp;<em style='color:%s;'>%d</em>&nbsp;",COLOR_DARKGREY,thisPage);
@@ -385,21 +385,21 @@ for (;thisPage <= lastPage && thisPage <= curPage + 3; thisPage++)
 // > and >>
 if ((startFrom + MAX_FOUND_TRACKS) < tracksFound)
     {
+    safef(id, sizeof id, "ftpl%d-next", instance);
     willStartAt = startFrom + MAX_FOUND_TRACKS;
-    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='ftpl4' "
+    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='%s' "
 	"title='Next page of found tracks'>&#155;</a>&nbsp;",
-	TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt);
-    safef(javascript, sizeof javascript, "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
-    jsOnEventById("click", "ftpl4", javascript);
+	TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,id);
+    jsOnEventByIdF("click", id, "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
 	    
+    safef(id, sizeof id, "ftpl%d-last", instance);
     willStartAt =  tracksFound - (tracksFound % MAX_FOUND_TRACKS);
     if (willStartAt == tracksFound)
         willStartAt -= MAX_FOUND_TRACKS;
-    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='ftpl5' title='Last page of found tracks' "
+    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' id='%s' title='Last page of found tracks' "
 	    ">&#187;</a></span>\n",
-            TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt);
-    safef(javascript, sizeof javascript, "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
-    jsOnEventById("click", "ftpl5", javascript);
+            TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,id);
+    jsOnEventByIdF("click", id, "return findTracks.page(\"%s\",%d);",TRACK_SEARCH_PAGER,willStartAt);
     }
 }
 
@@ -443,7 +443,7 @@ else
                 }
             }
         hPrintf("</td><td align='right' valign='bottom'>\n");
-        findTracksPageLinks(tracksFound,startFrom);
+        findTracksPageLinks(tracksFound,startFrom,0);
         hPrintf("</td></tr>\n");
         }
 
@@ -457,10 +457,8 @@ else
             "id='btn_%s' src='../images/%s' title='%s all found tracks'>"
     hPrintf(PM_BUTTON,"plus_all",   "add_sm.gif",  "Select");
     hPrintf(PM_BUTTON,"minus_all","remove_sm.gif","Unselect");
-    safef(javascript, sizeof javascript, "return findTracks.checkAllWithWait(true);");  
-    jsOnEventById("click", "btn_plus_all", javascript);
-    safef(javascript, sizeof javascript, "return findTracks.checkAllWithWait(false);");  
-    jsOnEventById("click", "btn_minus_all", javascript);
+    jsOnEventById("click", "btn_plus_all", "return findTracks.checkAllWithWait(true);");  
+    jsOnEventById("click", "btn_minus_all", "return findTracks.checkAllWithWait(false);");  
     hPrintf("</td><td><b>Visibility</b></td><td colspan=2>&nbsp;&nbsp;<b>Track Name</b>\n");
 
     // Sort options?
@@ -521,25 +519,24 @@ else
         #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel_id' VALUE='on' class='selCb' %s>"
         hPrintf(CB_SEEN,track->track,(checked ? " CHECKED" : ""));
 	safef(id, sizeof id, "%s_sel_id", track->track); // XSS Filter?
-	safef(javascript, sizeof javascript, "findTracks.clickedOne(this,true);");  
-	jsOnEventById("click", id, javascript);
+	jsOnEventById("click", id, "findTracks.clickedOne(this,true);");  
         hPrintf("</td><td>\n");
 
         // Setup the visibility drop down
         #define VIS_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s' VALUE='%s'>"
         hPrintf(VIS_HIDDEN_VAR,track->track,CART_VAR_EMPTY); // All tracks get vis hidden var
+	
+	safef(id, sizeof id, "%s_id", track->track); // XSS Filter?
+	safef(javascript, sizeof javascript, "findTracks.changeVis(this);");
+	struct slPair *event = slPairNew("change", cloneString(javascript));
         if (tdbIsFolder(track->tdb))
             {
-	    safef(javascript, sizeof javascript, "findTracks.changeVis(this);");
-            struct slPair *event = slPairNew("change", cloneString(javascript));
-            hideShowDropDownWithClassAndExtra(track->track, (track->visibility != tvHide),
+            hideShowDropDownWithClassAndExtra(track->track, id, (track->visibility != tvHide),
                                               "normalText visDD", event);
             }
         else
             {
-	    safef(javascript, sizeof javascript, "findTracks.changeVis(this);");
-            struct slPair *event = slPairNew("change", cloneString(javascript));
-            hTvDropDownClassWithJavascript(NULL, track->visibility,track->canPack,
+            hTvDropDownClassWithJavascript(NULL, id, track->visibility,track->canPack,
                                            "normalText seenVis",event);
             }
 
@@ -551,8 +548,7 @@ else
                     "id='%s_confSet' title='Configure this track container...' "
                     ">&nbsp;", track->track);
 	    safef(id, sizeof id, "%s_confSet", track->track); // XSS Filter?
-	    safef(javascript, sizeof javascript, "findTracks.configSet(\"%s\");", track->track);  
-	    jsOnEventById("click", id, javascript);
+	    jsOnEventByIdF("click", id, "findTracks.configSet(\"%s\");", track->track);  
             }
 //#define SHOW_PARENT_FOLDER
 #ifdef SHOW_PARENT_FOLDER
@@ -573,8 +569,7 @@ else
                 "href='%s' title='Display track details'>%s</a></td>\n",
                 track->track, trackUrl(track->track, NULL), track->shortLabel);
 	safef(id, sizeof id, "%s_dispFndTrk", track->track);
-	safef(javascript, sizeof javascript, "popUp.hgTrackUi('%s',true); return false;", track->track);
-	jsOnEventById("click", id, javascript);
+	jsOnEventByIdF("click", id, "popUp.hgTrackUi('%s',true); return false;", track->track);
         hPrintf("<td>%s", track->longLabel);
         compositeMetadataToggle(database, track->tdb, NULL, TRUE, FALSE);
         hPrintf("</td></tr>\n");
@@ -589,7 +584,7 @@ else
     if (tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("</td><td align='right' valign='top'>\n");
-        findTracksPageLinks(tracksFound,startFrom);
+        findTracksPageLinks(tracksFound,startFrom,1);
         hPrintf("</td></tr>\n");
         }
     hPrintf("</table>\n");
@@ -612,7 +607,6 @@ hPrintf("</div>"); // This div allows the clear button to empty it
 
 void doSearchTracks(struct group *groupList)
 {
-char javascript[1024];
 webIncludeResourceFile("ui.dropdownchecklist.css");
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 // This line is needed to get the multi-selects initialized
@@ -698,8 +692,7 @@ hPrintf("<table id='simpleTable' style='width:100%%; font-size:.9em;'><tr><td co
 hPrintf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' "
         "style='max-width:1000px; width:100%%;'>\n",
         TRACK_SEARCH_SIMPLE,simpleEntry == NULL ? "" : simpleEntry);
-safef(javascript, sizeof javascript, "findTracks.searchButtonsEnable(true);");
-jsOnEventById("keyup", "simpleSearch", javascript);
+jsOnEventById("keyup", "simpleSearch", "findTracks.searchButtonsEnable(true);");
 
 hPrintf("</td></tr><td style='max-height:4px;'></td></tr></table>");
 //hPrintf("</td></tr></table>");
@@ -707,8 +700,7 @@ hPrintf("<input type='submit' name='%s' id='searchSubmit' value='search' "
         "style='font-size:.8em;'>\n", TRACK_SEARCH);
 hPrintf("<input type='button'id='doSTClear1' name='clear' value='clear' class='clear' "
         "style='font-size:.8em;'>\n");
-safef(javascript, sizeof javascript, "findTracks.clear();");
-jsOnEventById("click", "doSTClear1", javascript);
+jsOnEventById("click", "doSTClear1", "findTracks.clear();");
 hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' "
         "style='font-size:.8em;'>\n");
 hPrintf("</div>\n");
@@ -726,8 +718,7 @@ hPrintf("<td colspan='%d'>", cols - 4);
 hPrintf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' "
         "style='min-width:326px; font-size:.9em;'>",
         TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
-safef(javascript, sizeof javascript, "findTracks.searchButtonsEnable(true);");
-jsOnEventById("keyup", "nameSearch", javascript);
+jsOnEventById("keyup", "nameSearch", "findTracks.searchButtonsEnable(true);");
 hPrintf("</td></tr>\n");
 
 // Description contains
@@ -738,8 +729,7 @@ hPrintf("<td colspan='%d'>", cols - 4);
 hPrintf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' "
         "style='max-width:536px; width:536px; font-size:.9em;'>",
         TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
-safef(javascript, sizeof javascript, "findTracks.searchButtonsEnable(true);");
-jsOnEventById("keyup", "descSearch", javascript);
+jsOnEventById("keyup", "descSearch", "findTracks.searchButtonsEnable(true);");
 hPrintf("</td></tr>\n");
 
 hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
@@ -782,8 +772,7 @@ hPrintf("<input type='submit' name='%s' id='searchSubmit' value='search' "
         "style='font-size:.8em;'>\n", TRACK_SEARCH);
 hPrintf("<input type='button' id='doSTClear2' name='clear' value='clear' class='clear' "
         "style='font-size:.8em;'>\n");
-safef(javascript, sizeof javascript, "findTracks.clear();");
-jsOnEventById("click", "doSTClear2", javascript);
+jsOnEventById("click", "doSTClear2", "findTracks.clear();");
 hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' "
         "style='font-size:.8em;'>\n");
 //hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");

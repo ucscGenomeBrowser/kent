@@ -2411,9 +2411,7 @@ hPrintf("<input type='button' id='" HAPLO_MAJOR_DIST "' class='" TOGGLE_BUTTON "
         "value='%s populations' "
         "title='Show/Hide haplotype distribution across population groups'>",
         (distMajor ? "Hide": "Show"));
-char javascript[1024];
-safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (distMajor ? "[]":"1"));
-jsOnEventById("click", HAPLO_MAJOR_DIST, javascript);
+jsOnEventByIdF("click", HAPLO_MAJOR_DIST, "alleles.setAndRefresh(this.id,'%s');", (distMajor ? "[]":"1"));
 if (distMajor)
     {
     hPrintf("<input type='button' id='" HAPLO_MINOR_DIST "' class='" TOGGLE_BUTTON "' "
@@ -2421,8 +2419,7 @@ if (distMajor)
             "title='Show haplotype distribution across %s population groups'>",
             (distMinor ? "Major groups" : "1000 Genome groups"),
             (distMinor ? "major" : "1000 Genome"));
-    safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (distMinor ? "[]":"1"));
-    jsOnEventById("click", HAPLO_MINOR_DIST, javascript);
+    jsOnEventByIdF("click", HAPLO_MINOR_DIST, "alleles.setAndRefresh(this.id,'%s');", (distMinor ? "[]":"1"));
     }
 
 hPrintf("<input type='button' id='" HAPLO_SHOW_SCORES "' value='%s scoring' "
@@ -2435,8 +2432,6 @@ hPrintf("&nbsp;&nbsp;<input type='button' id='reset' value='Reset to defaults' "
         "title='Reset all Gene haplotype alleles options back to default'>\n");
 jsOnEventById("click", "reset", "return alleles.setAndRefresh('"HAPLO_RESET_ALL"',1);");
 
-//hPrintf("&nbsp;&nbsp;<a href='#' id='reset_defaults'>Reset to defaults</a>\n");
-//jsOnEventById("click", "reset_defaults", "return alleles.setAndRefresh('"HAPLO_RESET_ALL"',1);");
 }
 
 void geneAllelesTableAndControls(struct cart *cart, char *geneId,
@@ -2491,7 +2486,6 @@ else
 // Table of buttons
 hPrintf("<table BORDER=0 CELLSPACING=1 CELLPADDING=0><tr>\n");
 
-char javascript[1024];
 // Restrict to common variants
 if (!noHaps
 ||  (tooManyHaps == rareVars)) // too many and and rare or not too many and not rare
@@ -2501,8 +2495,7 @@ if (!noHaps
             "variants with a frequency of at least %d%%'></td>\n",
             (rareVars ? "Common variants only":"Include all variants"),
             HAPLO_COMMON_VARIANT_MIN_PCT);
-    safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (rareVars ? "[]":"1"));
-    jsOnEventById("click", HAPLO_RARE_VAR, javascript);
+    jsOnEventByIdF("click", HAPLO_RARE_VAR, "alleles.setAndRefresh(this.id,'%s');", (rareVars ? "[]":"1"));
     }
 
 // DNA vs. AA, Full sequence
@@ -2512,15 +2505,13 @@ if (!noHaps)
             "value='Display as %s' "
             "title='Display variants and sequence as amino acids or DNA bases'></td>\n",
             (dnaView ? "amino acids" : "DNA bases"));
-    safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (dnaView ? "[]":"1"));
-    jsOnEventById("click", HAPLO_DNA_VIEW, javascript);
+    jsOnEventByIdF("click", HAPLO_DNA_VIEW, "alleles.setAndRefresh(this.id,'%s');", (dnaView ? "[]":"1"));
 
     hPrintf("<td><input type='button' id='" HAPLO_FULL_SEQ "' class='" TOGGLE_BUTTON "' "
             "value='%s full sequence' "
             "title='Show/Hide predicted full sequence of each gene haplotype'></td>\n",
             (fullGeneView ? "Hide" : "Show"));
-    safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (fullGeneView ? "[]": "1" ));
-    jsOnEventById("click", HAPLO_FULL_SEQ, javascript);
+    jsOnEventByIdF("click", HAPLO_FULL_SEQ, "alleles.setAndRefresh(this.id,'%s');", (fullGeneView ? "[]": "1" ));
 
     tripletView  = cartUsualBoolean(cart, HAPLO_TRIPLETS,FALSE);
     if (!dnaView && fullGeneView)
@@ -2529,8 +2520,7 @@ if (!noHaps)
                 "value='%s DNA triplet code' "
                 "title='Show/Hide DNA sequence above amino acid sequence'>"
                 "</td>\n", (tripletView ? "Hide" : "Show"));
-	safef(javascript, sizeof javascript, "alleles.setAndRefresh(this.id,'%s');", (tripletView ? "[]": "1" ));
-	jsOnEventById("click", HAPLO_TRIPLETS, javascript);
+	jsOnEventByIdF("click", HAPLO_TRIPLETS, "alleles.setAndRefresh(this.id,'%s');", (tripletView ? "[]": "1" ));
 	}
     }
 hPrintf("</tr></table>\n");

@@ -14,11 +14,6 @@ priority 1
 #track knownGene override
 #priority 1
 
-track refGene override
-release beta,public
-visibility pack
-priority 2
-
 #Phenotype and Literature
 
 track omimAvSnp override

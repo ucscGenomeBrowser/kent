@@ -26,6 +26,7 @@
 #include "trix.h"
 
 #include "halBlockViz.h"
+#include "bigPsl.h"
 
 // this is the number of pixels used by the target self-align bar
 #define DUP_LINE_HEIGHT	4
@@ -1004,7 +1005,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 
 	// get the reference sequence
 	char *refDna;
-	if (isHalSnake)
+        if (isHalSnake && differentString(tg->tdb->type, "pslSnake"))
 	    {
 	    refDna = sf->tSequence;
 	    }
@@ -1201,6 +1202,56 @@ if (tsList)
 return name;
 }
 
+static struct hal_block_results_t *pslSnakeBlocks(char *fileName, struct track *track, char *chrom, unsigned start, unsigned end, unsigned int maxItems)
+/* create HAL-like blocks from a bigPsl file. */
+{
+struct hal_block_results_t *head;
+
+AllocVar(head);
+
+struct lm *lm = lmInit(0);
+//struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, start, end, lm, maxItems);
+struct bigBedInterval *bb, *bbList = bigBedSelectRangeExt(track, chrom, 0, hChromSize(database,chromName), lm, maxItems);
+
+struct bbiFile *bbi = fetchBbiForTrack(track);
+int seqTypeField =  0;
+if (sameString(track->tdb->type, "bigPsl"))
+    {
+    seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+    }
+bbiFileClose(&bbi);
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    char *seq, *cds;
+    struct psl *psl = pslFromBigPsl(chromName, bb, seqTypeField,  &seq, &cds); 
+    unsigned *targetStart = psl->tStarts;
+    unsigned *queryStart = psl->qStarts;
+    unsigned *size = psl->blockSizes;
+    int ii;
+
+    if ((seq != NULL) && (psl->strand[0] == '-'))
+        reverseComplement(seq, strlen(seq));
+    for(ii = 0; ii < psl->blockCount; ii++)
+        {
+        struct hal_block_t *block;
+        AllocVar(block);
+        slAddHead(&head->mappedBlocks, block);
+
+        block->qChrom = psl->qName;
+        block->tStart = *targetStart++;
+        block->qStart = *queryStart++;
+        block->size = *size++;
+        block->strand = psl->strand[0];
+        block->qSequence = &seq[block->qStart];
+
+        if (block->strand == '-')
+            block->qStart = psl->qSize - block->qStart;
+        }
+    }
+
+return head;
+}
+
 void halSnakeLoadItems(struct track *tg)
 // load up a snake from a HAL file.   This code is called in threads
 // so *no* use of globals please. All but full snakes are read into a single
@@ -1221,16 +1272,25 @@ if (chromAlias)
           aliasName = chromAlias;
    }
 
+boolean isPsl = sameString(tg->tdb->type, "pslSnake");
+
 // if we have a network error we want to put out a message about it
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
-    char *errString;
-    int handle = halOpenLOD(fileName, &errString);
-    if (handle < 0)
-	warn("HAL open error: %s\n", errString);
+    char *errString = "empty";
+    int handle = -1;
+    if (!isPsl)
+        {
+        handle = halOpenLOD(fileName, &errString);
+        if (handle < 0)
+            {
+            errAbort("HAL open error: %s\n", errString);
+            goto out;
+            }
+        }
     boolean isPackOrFull = (tg->visibility == tvFull) || 
 	(tg->visibility == tvPack);
     hal_dup_type_t dupMode =  (isPackOrFull) ? HAL_QUERY_AND_TARGET_DUPS :
@@ -1241,14 +1301,21 @@ if (errCatchStart(errCatch))
     safef(codeVarName, sizeof codeVarName, "%s.coalescent", tg->tdb->track);
     char *coalescent = cartOptionalString(cart, codeVarName);
     char *otherDbName = trackHubSkipHubName(database);
-    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, otherDbName, aliasName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies, coalescent, &errString);
+    struct hal_block_results_t *head = NULL;
+    if (isPsl)
+        {
+        head = pslSnakeBlocks(fileName, tg, chromName, winStart, winEnd, 10000000);
+        }
+    else 
+        {
+        head = halGetBlocksInTargetRange(handle, otherSpecies, otherDbName, aliasName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies, coalescent, &errString);
+        }
 
     // did we get any blocks from HAL
     if (head == NULL)
 	{
-	warn("HAL get blocks error: %s\n", errString);
-	errCatchEnd(errCatch);
-	return;
+	errAbort("HAL get blocks error: %s\n", errString);
+	goto out;
 	}
     struct hal_block_t* cur = head->mappedBlocks;
     struct linkedFeatures *lf = NULL;
@@ -1361,6 +1428,8 @@ if (errCatchStart(errCatch))
 
     tg->items = lfList;
     }
+
+out:
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {

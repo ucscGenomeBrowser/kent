@@ -14,6 +14,7 @@
 #include "cartTrackDb.h"
 #include "genbank.h"
 #include "hgConfig.h"
+#include "hgHgvs.h"
 #include "hui.h"
 #include "grp.h"
 #include "hCommon.h"
@@ -65,16 +66,25 @@ char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", NULL,};
 #define hgvaRegionTypeGenome "genome"
 #define hgvaRegionTypeRange "range"
 #define hgvaPositionContainer "positionContainer"
+#define hgvsTrashSubDir "hgv"
+// auto-generated variants as input
 #define hgvaSampleVariants "hgva_internally_generated_sample_variants"
 #define hgvaSampleVariantsLabel "Artificial Example Variants"
+// dbSNP rsIDs as variant inputs:
 #define hgvaUseVariantIds "hgva_useVariantIds"
 #define hgvaVariantIdsLabel "Variant Identifiers"
 #define hgvaVariantIds "hgva_variantIds"
 #define hgvaUseVariantFileOrUrl "hgva_useVariantFileOrUrl"
-#define hgvaVariantFileOrUrlLabel "from file"
+#define hgvaVariantPasteContainer "variantPasteContainer"
+// A local file or URL as variant input:
+#define hgvaVariantFileOrUrlLabel "from file or URL"
 #define hgvaVariantFileOrUrl "hgva_variantFileOrUrl"
 #define hgvaVariantFileOrUrlType "hgva_variantFileOrUrlType"
-#define hgvaVariantPasteContainer "variantPasteContainer"
+// HGVS terms as variant inputs:
+#define hgvaUseHgvs "hgva_useHgvs"
+#define hgvaHgvsLabel "HGVS terms"
+#define hgvaHgvs "hgva_hgvs"
+#define hgvaHgvsPasteContainer "hgvsPasteContainer"
 
 void addSomeCss()
 /*#*** This should go in a .css file of course. */
@@ -327,11 +337,7 @@ printf("</select>\n");
 char shadowVar[1024];
 safef(shadowVar, sizeof(shadowVar), "%s%s", cgiMultListShadowPrefix(), cartVar);
 cgiMakeHiddenVar(shadowVar, "1");
-//
-char javascript[1024];
-safef(javascript, sizeof javascript,
-    "$(document).ready(function(){ ddcl.setup($('#%s')[0]); });\n", cartVar);
-jsInline(javascript);
+jsInlineF("$(document).ready(function(){ ddcl.setup($('#%s')[0]); });\n", cartVar);
 }
 
 void printFilterOptions(struct trackDb *tdb)
@@ -357,8 +363,7 @@ if (sameString(tdb->type, "factorSource"))
 	   cartVar, defaultScore);
     // The dimensions of ui-dropdownchecklist multiselects are not correct when
     // the item is hidden.  So, when this filter section is made visible, reinit them.
-    char javascript[1024];
-    safef(javascript, sizeof javascript,
+    jsInlineF(
 	   "$(function(){\n"
 	   "$('tr[id^=\"%s-\"]').bind('show',\n"
 	   "  function(jqev) { \n"
@@ -368,7 +373,6 @@ if (sameString(tdb->type, "factorSource"))
 	   "  });\n"
 	   "});\n"
 	   , sectionName);
-    jsInline(javascript);
     puts("</TABLE>");
     endCollapsibleSection();
     }
@@ -489,10 +493,19 @@ for (ref = varTrackList;  ref != NULL;  ref = ref->next)
     printOption(tdb->track, selected, tdb->longLabel);
     }
 printOption(hgvaSampleVariants, selected, hgvaSampleVariantsLabel);
+printOption(hgvaUseHgvs, selected, hgvaHgvsLabel);
 boolean hasSnps = (hFindLatestSnpTable(database, NULL) != NULL);
 if (hasSnps)
     printOption(hgvaUseVariantIds, selected, hgvaVariantIdsLabel);
 printf("</SELECT><BR>\n");
+
+printf("<div id='"hgvaHgvsPasteContainer"'%s>\n",
+       differentString(selected, hgvaUseHgvs) ? " style='display: none;'" : "");
+printf("Enter HGVS terms: one term per line; blank lines and comment lines beginning with '#' "
+       "are ignored.<BR>\n");
+char *oldPasted = cartUsualString(cart, hgvaHgvs, "");
+cgiMakeTextArea(hgvaHgvs, oldPasted, 10, 70);
+puts("</div>");
 
 if (hasSnps)
     {
@@ -1309,11 +1322,9 @@ jsInit();
 webIncludeResourceFile("jquery-ui.css");
 webIncludeResourceFile("ui.dropdownchecklist.css");
 boolean alreadyAgreed = cartUsualBoolean(cart, "hgva_agreedToDisclaimer", FALSE);
-char javascript[1024];
-safef(javascript, sizeof javascript,
+jsInlineF(
     "$(document).ready(function() { hgva.disclaimer.init(%s, hgva.userClickedAgree); });\n"
     , alreadyAgreed ? "true" : "false");
-jsInline(javascript);
 addSomeCss();
 printAssemblySection();
 
@@ -1378,7 +1389,7 @@ return fileNameRewrite;
 void textOpen()
 /* Start serving up plain text, possibly via a pipeline to gzip. */
 {
-char *fileName = cartUsualString(cart, "hgva_outFile", "");
+char *fileName = textOutSanitizeHttpFileName(cartUsualString(cart, "hgva_outFile", ""));
 char *compressType = cartUsualString(cart, "hgva_compressType", textOutCompressGzip);
 compressPipeline = textOutInit(fileName, compressType, NULL);
 }
@@ -1767,20 +1778,32 @@ static char *sampleVariantsPath(struct annoAssembly *assembly, char *geneTrack)
 char *chrom = NULL;
 uint start = 0, end = 0;
 getCartPosOrDie(&chrom, &start, &end);
-char *subDir = "hgv";
-mkdirTrashDirectory(subDir);
+mkdirTrashDirectory(hgvsTrashSubDir);
 struct dyString *dy = dyStringCreate("%s/%s/%s_%s_%s_%u-%u.vcf",
-				     trashDir(), subDir, assembly->name, geneTrack,
+				     trashDir(), hgvsTrashSubDir, assembly->name, geneTrack,
 				     chrom, start, end);
 return dyStringCannibalize(&dy);
 }
 
-static void writeMinimalVcfHeader(FILE *f, char *db)
-/* Write header for VCF with no meaningful qual, filter, info or genotype data. */
+static char *makeMinimalVcfHeader(char *db, char *headerDefs)
+/* Return a string containing a simple no-genotypes VCF header.  db must be non-NULL.
+ * headerDefs can be NULL or empty or line(s) starting with '##' and ending w/'\n' */
 {
-fputs("##fileformat=VCFv4.1\n", f);
-fprintf(f, "##reference=%s\n", db);
-fputs("#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n", f);
+struct dyString *dy = dyStringCreate("##fileformat=VCFv4.2\n"
+                                     "##reference=%s\n"
+                                     "%s"
+                                     "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n",
+                                     db, (headerDefs ? headerDefs : ""));
+return dyStringCannibalize(&dy);
+}
+
+static void writeMinimalVcfHeader(FILE *f, char *db, char *headerDefs)
+/* Write header for VCF with no genotype data. db must be non-NULL.
+ * headerDefs can be NULL or empty or line(s) starting with '##' and ending w/'\n' */
+{
+char *headerString = makeMinimalVcfHeader(db, headerDefs);
+fputs(headerString, f);
+freeMem(headerString);
 }
 
 static void mutateBase(char *pBase)
@@ -1996,7 +2019,7 @@ if (! fileExists(sampleFile) || forceRebuild)
     boolean gotCoding = FALSE, gotNonCoding = FALSE;
     struct genePred *gpList = genesFromPosition(geneStream, isBig, &gotCoding, &gotNonCoding);
     FILE *f = mustOpen(sampleFile, "w");
-    writeMinimalVcfHeader(f, assembly->name);
+    writeMinimalVcfHeader(f, assembly->name, NULL);
     if (gpList == NULL)
 	{
 	warn("Unable to find any gene transcripts in '%s' (%s)",
@@ -2042,14 +2065,13 @@ if (! fileExists(sampleFile) || forceRebuild)
 return annoStreamVcfNew(sampleFile, NULL, FALSE, assembly, maxOutRows);
 }
 
-static char *variantIdPath(struct annoAssembly *assembly, char *variantIds)
-/* Use the md5sum of the user's pasted/uploaded variants to make a hopefully
- * unique trash filename. */
+static char *md5TrashPath(struct annoAssembly *assembly, char *string)
+/* Use the md5sum of a string to make a hopefully unique trash filename. */
 {
-char *md5sum = md5HexForString(variantIds);
-char *subDir = "hgv";
-mkdirTrashDirectory(subDir);
-struct dyString *dy = dyStringCreate("%s/%s/%s_%s.vcf", trashDir(), subDir, assembly->name, md5sum);
+char *md5sum = md5HexForString(string);
+mkdirTrashDirectory(hgvsTrashSubDir);
+struct dyString *dy = dyStringCreate("%s/%s/%s_%s.vcf", trashDir(), hgvsTrashSubDir,
+                                     assembly->name, md5sum);
 return dyStringCannibalize(&dy);
 }
 
@@ -2357,7 +2379,7 @@ static struct annoStreamer *makeVariantIdStreamer(struct annoAssembly *assembly,
 {
 // Hash variant text to get trash filename.  Use if exists, otherwise build it.
 char *variantIds = cartString(cart, hgvaVariantIds);
-char *varFile = variantIdPath(assembly, variantIds);
+char *varFile = md5TrashPath(assembly, variantIds);
 boolean forceRebuild = cartUsualBoolean(cart, "hgva_rebuildVariantIds", FALSE);
 if (! fileExists(varFile) || forceRebuild)
     {
@@ -2365,11 +2387,90 @@ if (! fileExists(varFile) || forceRebuild)
 //#*** If no variants were recognized, we should probably show main page with a warning.
     adjustRangeForVariants(varList, pChrom, pStart, pEnd);
     FILE *f = mustOpen(varFile, "w");
-    writeMinimalVcfHeader(f, assembly->name);
+    writeMinimalVcfHeader(f, assembly->name, NULL);
     struct vcfRecord *var;
     for (var = varList;  var != NULL;  var = var->next)
 	writeMinimalVcfRow(f, var);
     carefulClose(&f);
+    }
+return annoStreamVcfNew(varFile, NULL, FALSE, assembly, maxOutRows);
+}
+
+static struct vcfRecord *parseHgvs(struct vcfFile *vcff, struct annoAssembly *assembly,
+                                   char *hgvsTerms, struct slName **pCommentList)
+/* Return a sorted list of vcfRecords . */
+{
+struct vcfRecord *recList = NULL;
+struct slName *failedTerms = NULL;
+struct dyString *dyError = dyStringNew(0);
+struct lineFile *lf = lineFileOnString("user-provided HGVS terms", TRUE, cloneString(hgvsTerms));
+char *term = NULL;
+while (lineFileNextReal(lf, &term))
+    {
+    eraseTrailingSpaces(term);
+    dyStringClear(dyError);
+    struct vcfRow *vcfRow = hgvsToVcfRow(assembly->name, term, FALSE, dyError);
+    if (vcfRow)
+        {
+        char *row[8];
+        row[0] = vcfRow->chrom;
+        char posStr[64];
+        safef(posStr, sizeof(posStr), "%d", vcfRow->pos);
+        row[1] = posStr;
+        row[2] = vcfRow->id;
+        row[3] = vcfRow->ref;
+        row[4] = vcfRow->alt;
+        row[5] = ".";
+        row[6] = vcfRow->filter;
+        row[7] = vcfRow->info;
+        slAddHead(&recList, vcfRecordFromRow(vcff, row));
+        }
+    else
+	slNameAddHead(&failedTerms, dyStringContents(dyError));
+    }
+if (failedTerms != NULL)
+    {
+    slReverse(&failedTerms);
+    char *firstUnknownIds = firstNCommaSep(failedTerms, 5);
+    struct dyString *dy = dyStringCreate("%d HGVS terms could not be parsed and/or mapped to %s, "
+                                         "e.g. %s",
+					 slCount(failedTerms), assembly->name, firstUnknownIds);
+    slAddTail(pCommentList, slNameNew(dy->string));
+    freeMem(firstUnknownIds);
+    dyStringFree(&dy);
+    }
+slSort(&recList, vcfRecordCmp);
+slNameFreeList(&failedTerms);
+dyStringFree(&dyError);
+lineFileClose(&lf);
+return recList;
+}
+
+static struct annoStreamer *makeHgvsStreamer(struct annoAssembly *assembly, int maxOutRows,
+                                             char **pChrom, uint *pStart, uint *pEnd,
+                                             struct slName **pCommentList)
+/* Translate user's pasted/uploaded variant IDs into minimal VCF if possible.
+ * Return a VCF streamer for those., and if the current search position is too narrow
+ * to include all of the variants, widen it as necessary. */
+{
+// Hash HGVS input to get trash filename.  Use if exists, otherwise build it.
+char *hgvsTerms = cartString(cart, hgvaHgvs);
+char *varFile = md5TrashPath(assembly, hgvsTerms);
+boolean forceRebuild = cartUsualBoolean(cart, "hgva_rebuildHgvs", FALSE);
+if (! fileExists(varFile) || forceRebuild)
+    {
+    char *headerString = makeMinimalVcfHeader(assembly->name, HGVS_VCF_HEADER_DEFS);
+    struct vcfFile *vcff = vcfFileFromHeader("hgVaiHgvs", headerString, VCF_IGNORE_ERRS);
+    struct vcfRecord *varList = parseHgvs(vcff, assembly, hgvsTerms, pCommentList);
+//#*** If no HGVS terms could be mapped, we should probably show main page with a warning.
+    adjustRangeForVariants(varList, pChrom, pStart, pEnd);
+    FILE *f = mustOpen(varFile, "w");
+    writeMinimalVcfHeader(f, assembly->name, HGVS_VCF_HEADER_DEFS);
+    struct vcfRecord *var;
+    for (var = varList;  var != NULL;  var = var->next)
+	writeMinimalVcfRow(f, var);
+    carefulClose(&f);
+    vcfFileFree(&vcff);
     }
 return annoStreamVcfNew(varFile, NULL, FALSE, assembly, maxOutRows);
 }
@@ -2619,6 +2720,11 @@ else if (sameString(variantTrack, hgvaUseVariantIds))
     // Override search position if cart position doesn't include all variants:
     primary = makeVariantIdStreamer(assembly, maxVarRows, &chrom, &start, &end, &commentList);
     primaryLongLabel = hgvaVariantIdsLabel;
+    }
+else if (sameString(variantTrack, hgvaUseHgvs))
+    {
+    primary = makeHgvsStreamer(assembly, maxVarRows, &chrom, &start, &end, &commentList);
+    primaryLongLabel = hgvaHgvsLabel;
     }
 else if (sameString(variantTrack, hgvaUseVariantFileOrUrl))
     {
