@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Placental Chain/Net
 longLabel Placental Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aMegabat=Megabat bMicrobat=Microbat cPanda=Panda dDog=Dog eCat=Cat fHedgehog=Hedgehog gShrew=Shrew hWhite_Rhinoceros=White_Rhinoceros iHorse=Horse jBison=Bison jCow=Cow kSheep=Sheep lDolphin=Dolphin mAlpaca=Alpaca nPig=Pig oSloth=Sloth pArmadillo=Armadillo qTenrec=Tenrec rManatee=Manatee sRHyrax=Rock_hyrax tElephant=Elephant
+subGroup2 species Species aMegabat=Megabat bMicrobat=Microbat cPanda=Panda dDog=Dog eCat=Cat fHedgehog=Hedgehog gShrew=Shrew hPangolin=Pangolin hWhite_Rhinoceros=White_Rhinoceros iHorse=Horse jBison=Bison jCow=Cow kSheep=Sheep lDolphin=Dolphin mAlpaca=Alpaca nPig=Pig oSloth=Sloth pArmadillo=Armadillo qTenrec=Tenrec rManatee=Manatee sRHyrax=Rock_hyrax tElephant=Elephant
 subGroup3 clade Clade aAfro=Afrotheria bXena=Xenarthra cLaura=Laurasiatheria dInsect=Insectivora eCarn=Carnivora fChir=Chiroptera
 dragAndDrop subTracks
 visibility hide
@@ -65,6 +65,14 @@ html chainNet
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain felCat5
         otherDb felCat5
+
+        track chainManPen1
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=hPangolin clade=cLaura
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain manPen1
+        otherDb manPen1
 
         track chainCerSim1
         subTrack placentalChainNetViewchain off
@@ -239,6 +247,14 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign felCat5 chainFelCat5
         otherDb felCat5
+
+        track netManPen1
+        subTrack placentalChainNetViewnet off
+        subGroups view=net species=hPangolin clade=cLaura
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign manPen1 chainManPen1
+        otherDb manPen1
 
         track netCerSim1
         subTrack placentalChainNetViewnet off
