@@ -7,6 +7,7 @@
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "hdb.h"
+#include "errCatch.h"
 
 static struct hgPos *bigBedIntervalListToHgPositions(struct bbiFile *bbi, char *term, struct bigBedInterval *intervalList, char *description)
 /* Given an open bigBed file, and an interval list, return a pointer to a list of hgPos structures. */
@@ -39,16 +40,26 @@ return posList;
 static struct hgPos *getPosFromBigBed(char *bigDataUrl, char *indexField, char *term, char *description)
 /* Given a bigBed file with a search index, check for term. */
 {
-struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
-int fieldIx;
-struct bptFile *bpt = bigBedOpenExtraIndex(bbi, indexField, &fieldIx);
-struct lm *lm = lmInit(0);
-struct bigBedInterval *intervalList;
-intervalList = bigBedNameQuery(bbi, bpt, fieldIx, term, lm);
+struct errCatch *errCatch = errCatchNew();
+struct hgPos *posList = NULL;
+if (errCatchStart(errCatch))
+    {
+    struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
+    int fieldIx;
+    struct bptFile *bpt = bigBedOpenExtraIndex(bbi, indexField, &fieldIx);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *intervalList;
+    intervalList = bigBedNameQuery(bbi, bpt, fieldIx, term, lm);
 
-struct hgPos *posList = bigBedIntervalListToHgPositions(bbi, term, 
-    intervalList, description);
-bbiFileClose(&bbi);
+    posList = bigBedIntervalListToHgPositions(bbi, term, 
+        intervalList, description);
+    bbiFileClose(&bbi);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError) 
+    // we fail silently if bigBed is missing
+    return NULL;
+
 return posList;
 }
 

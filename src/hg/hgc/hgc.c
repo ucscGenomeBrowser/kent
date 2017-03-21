@@ -25202,22 +25202,15 @@ char *bigBedFile = bigBedTn.forCgi;
 makeBigPsl(pslName, faName, database, bigBedFile);
 
 char* host = getenv("HTTP_HOST");
-char* reqUrl = cloneString(getenv("REQUEST_URI"));
-// delete arguements to the url
-char *e = strchr(reqUrl+1, '?');
-if (e) *e = 0;
-// remove the cgi name
-e = strrchr(reqUrl, '/');
-if (e) *e = 0;
 
 boolean isProt = cgiOptionalString("isProt") != NULL;
-char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on  pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s%s/%s name=\"%s\" description=\"%s\"\n";  
+char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on  pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\"\n";  
 char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases";
   
 if (isProt)
     extraForMismatch = "";
 char buffer[4096];
-safef(buffer, sizeof buffer, customTextTemplate, bigBedTn.forCgi, host, extraForMismatch, host, reqUrl, bigBedTn.forCgi, trackName, trackDescription);
+safef(buffer, sizeof buffer, customTextTemplate, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
 
 struct customTrack *ctList = getCtList();
 struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL);
