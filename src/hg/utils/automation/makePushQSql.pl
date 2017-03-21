@@ -178,6 +178,7 @@ sub getInfrastructureEntry {
 		    tableDescriptions ) {
     if (defined $allTables->{$t}) {
       $entry{'tables'} .= "$t ";
+      $entry{'redmineTables'} .= "$db.$t ";
       delete $allTables->{$t};
       &HgAutomate::verbose(3, "Deleted $t\n");
     } else {
@@ -212,9 +213,11 @@ sub getGenbankEntry {
     estOrientInfo gbMiscDiff gbWarn mrnaOrientInfo
     );
   my @genbankTablesInDb = ();
+  my @redmineGenbankTablesInDb = ();
   foreach my $t (@genbankTrackTables) {
     if (defined $allTables->{$t}) {
       push @genbankTablesInDb, $t;
+      push @redmineGenbankTablesInDb, "$db.$t";
       delete $allTables->{$t};
       &HgAutomate::verbose(3, "Deleted $t\n");
     }
@@ -223,6 +226,7 @@ sub getGenbankEntry {
     foreach my $t (@genbankRequiredTables) {
       if (defined $allTables->{$t}) {
 	push @genbankTablesInDb, $t;
+	push @redmineGenbankTablesInDb, "$db.$t";
 	delete $allTables->{$t};
       } else {
 	die "\nERROR: $db does not have required genbank table $t\n\n";
@@ -231,6 +235,7 @@ sub getGenbankEntry {
     foreach my $t (@genbankHelpfulTables) {
       if (defined $allTables->{$t}) {
 	push @genbankTablesInDb, $t;
+	push @redmineGenbankTablesInDb, "$db.$t";
 	delete $allTables->{$t};
       } else {
 	&HgAutomate::verbose(1, "WARNING: $db does not have $t\n");
@@ -241,6 +246,7 @@ sub getGenbankEntry {
   $entry{'shortLabel'} = 'Genbank-process tracks and supporting tables';
   $entry{'priority'} = 1;
   $entry{'tables'} = join(' ', @genbankTablesInDb);
+  $entry{'redmineTables'} = join(" ", @redmineGenbankTablesInDb);
   $entry{'files'} = '';
   $entry{'redmineFiles'} = '';
   return \%entry;
@@ -362,16 +368,22 @@ sub getTrackEntries {
       $entry{'shortLabel'} = $shortLabel;
       $entry{'priority'} = $priority;
       $entry{'tables'} = $table . $otherTables;
+      $entry{'redmineTables'} = "$db.$table";
+      if (length($otherTables)) {
+          $entry{'redmineTables'} .= "$db.$otherTables";
+      }
       $entry{'files'} = "";
       $entry{'redmineFiles'} = "";
       if ($type =~ /^chain ?/) {
 	$entry{'tables'} .= " ${table}Link";
+	$entry{'redmineTables'} .= " $db.${table}Link";
 	my $net = $table;
 	$net =~ s/^.*chain/net/;
 	# Lump in nets with chains, when we find them.
 	if (defined $allTables->{$net}) {
 	  &HgAutomate::verbose(2, "Lumping $net in with $table\n");
 	  $entry{'tables'} .= " $net";
+	  $entry{'redmineTables'} .= " $db.$net";
 	  $entry{'shortLabel'} .= " and Net";
 	  if ($net =~ /^net(\w+)/) {
 	    my $ODb = $1;
@@ -468,6 +480,7 @@ sub getTrackEntries {
       my (undef, undef, undef, $otherDb, $otherTrack, undef) = split("\t");
       if ($otherDb && $otherDb eq $db && defined $trackEntries{$otherTrack}) {
 	$trackEntries{$otherTrack}->{'tables'} .= " $table";
+	$trackEntries{$otherTrack}->{'redmineTables'} .= " $otherDb.$table";
 	delete $allTables->{$table};
 &HgAutomate::verbose(3, "Deleted $table\n");
 	last;
@@ -576,7 +589,7 @@ INSERT INTO $db VALUES ('$idStr','','A',$rank,'$date','Y','$entry->{shortLabel}'
 _EOF_
   ;
   if ($opt_redmineList) {
-     printf $redmineTableList "%s\n", $entry->{tables} if (length($entry->{tables}));
+     printf $redmineTableList "%s\n", $entry->{redmineTables} if (length($entry->{redmineTables}));
      printf $redmineFileList "%s\n", $entry->{redmineFiles} if (length($entry->{redmineFiles}));
      printf $redmineReleaseLog "%s\n", $entry->{shortLabel} if (length($entry->{shortLabel}));
   }
@@ -595,14 +608,17 @@ sub printSwaps($) {
     $entry{'shortLabel'} = "$oO Chain/Net";
     $entry{'priority'} = 1;
     my $tableList = "";
+    my $redmineTables = "";
     my $dbTables = &getAllTables($oDb);
     foreach my $table (sort keys %{$dbTables}) {
 	if ($table =~ m/$checkChain/ || $table =~ m/$checkNet/) {
 	    $tableList .= "$table ";
+	    $redmineTables .= "$oDb.$table ";
 	}
     }
     $tableList =~ s/ +$//;
     $entry{'tables'} = $tableList;
+    $entry{'redmineTables'} = $redmineTables;
     $entry{'files'} = "";
     $entry{'redmineFiles'} = "";
     my $over = "${oDb}To$Db.over.chain.gz";
