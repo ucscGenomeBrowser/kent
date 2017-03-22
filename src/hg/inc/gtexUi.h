@@ -11,7 +11,7 @@
 
 /* Color scheme from GTEX papers and portal */
 #define GTEX_COLORS_GTEX                "gtex"
-#define GTEX_COLORS_DEFAULT             GTEX_COLORS_RAINBOW
+#define GTEX_COLORS_DEFAULT             GTEX_COLORS_GTEX
 
 /* Data transform */
     // WARNING: this also appears in JS

@@ -48,7 +48,11 @@ struct gtexGeneExtras
     char *graphType;            /* Additional info about graph (e.g. type of comparison graph */
     struct rgbColor *colors;    /* Color palette for tissues */
     boolean doLogTransform;     /* Log10(x+1) */
-    struct gtexTissue *tissues; /* Cache tissue names, descriptions */
+    struct gtexTissue *tissues; /* Tissue names, descriptions */
+    int tissueCount;            /* Tissue count - derived from above */
+    char **tissueNames;         /* Tissue names by id - derived from above */
+    char **tissueLabels;        /* Tissue labels by id - derived from above */
+    char **tissueDescriptions;  /* Tissue descriptions by id - derived from above */
     struct hash *tissueFilter;  /* For filter. NULL out excluded tissues */
     };
 
@@ -119,79 +123,80 @@ return statusColors.unknown;
 /***********************************************/
 /* Cache tissue info */
 
-struct gtexTissue *getTissues(char *version)
+struct gtexTissue *getTissues(struct track *tg, char *version)
 /* Get and cache tissue metadata from database */
 {
-static struct gtexTissue *gtexTissues = NULL;
-
-if (!gtexTissues)
-    gtexTissues = gtexGetTissues(version);
-return gtexTissues;
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+if (!extras->tissues)
+    extras->tissues = gtexGetTissues(version);
+return extras->tissues;
 }
 
-int getTissueCount(char *version)
+int getTissueCount(struct track *tg, char *version)
 /* Get and cache the number of tissues in GTEx tissue table */
 {
-static int tissueCount = 0;
-
-if (!tissueCount)
-    tissueCount = slCount(getTissues(version));
-return tissueCount;
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+if (!extras->tissueCount)
+    extras->tissueCount = slCount(getTissues(tg, version));
+return extras->tissueCount;
 }
 
-char *getTissueName(int id, char *version)
+char *getTissueName(struct track *tg, int id, char *version)
 /* Get tissue name from id, cacheing */
 {
-static char **tissueNames = NULL;
 struct gtexTissue *tissue;
-int count = getTissueCount(version);
-if (!tissueNames)
+int count = getTissueCount(tg, version);
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+if (!extras->tissueNames)
     {
-    struct gtexTissue *tissues = getTissues(version);
-    AllocArray(tissueNames, count);
+    struct gtexTissue *tissues = getTissues(tg, version);
+    AllocArray(extras->tissueNames, count);
     for (tissue = tissues; tissue != NULL; tissue = tissue->next)
-        tissueNames[tissue->id] = cloneString(tissue->name);
+        extras->tissueNames[tissue->id] = cloneString(tissue->name);
     }
 if (id >= count)
     errAbort("GTEx tissue table problem: can't find id %d\n", id);
-return tissueNames[id];
+return extras->tissueNames[id];
 }
 
-char *getTissueDescription(int id, char *version)
+char *getTissueDescription(struct track *tg, int id, char *version)
 /* Get tissue description from id, cacheing */
 {
-static char **tissueDescriptions = NULL;
 struct gtexTissue *tissue;
-int count = getTissueCount(version);
-if (!tissueDescriptions)
+int count = getTissueCount(tg, version);
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+if (!extras->tissueDescriptions)
     {
-    struct gtexTissue *tissues = getTissues(version);
-    AllocArray(tissueDescriptions, count);
+    struct gtexTissue *tissues = getTissues(tg, version);
+    AllocArray(extras->tissueDescriptions, count);
     for (tissue = tissues; tissue != NULL; tissue = tissue->next)
-        tissueDescriptions[tissue->id] = cloneString(tissue->description);
+        extras->tissueDescriptions[tissue->id] = cloneString(tissue->description);
     }
 if (id >= count)
     errAbort("GTEx tissue table problem: can't find id %d\n", id);
-return tissueDescriptions[id];
+return extras->tissueDescriptions[id];
 }
 
-struct rgbColor *getGtexTissueColors(char *version)
+struct rgbColor *getGtexTissueColors(struct track *tg, char *version)
 /* Get RGB colors from tissue table */
 {
-struct gtexTissue *tissues = getTissues(version);
+struct gtexTissue *tissues = getTissues(tg, version);
 struct gtexTissue *tissue = NULL;
-int count = slCount(tissues);
-struct rgbColor *colors;
-AllocArray(colors, count);
-int i = 0;
-for (tissue = tissues; tissue != NULL; tissue = tissue->next)
+int count = getTissueCount(tg, version);
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+if (!extras->colors)
     {
-    // TODO: reconcile 
-    colors[i] = (struct rgbColor){.r=COLOR_32_BLUE(tissue->color), .g=COLOR_32_GREEN(tissue->color), .b=COLOR_32_RED(tissue->color)};
-    //colors[i] = mgColorIxToRgb(NULL, tissue->color);
-    i++;
+    AllocArray(extras->colors, count);
+    int i = 0;
+    for (tissue = tissues; tissue != NULL; tissue = tissue->next)
+        {
+        // TODO: reconcile 
+        extras->colors[i] = (struct rgbColor){.r=COLOR_32_BLUE(tissue->color), .g=COLOR_32_GREEN(tissue->color), .b=COLOR_32_RED(tissue->color)};
+        //colors[i] = mgColorIxToRgb(NULL, tissue->color);
+        i++;
+        }
     }
-return colors;
+return extras->colors;
 }
 
 /*****************************************************************/
@@ -218,11 +223,12 @@ hFreeConn(&conn);
 return modelHash;
 }
 
-static void loadComputedMedians(struct gtexGeneInfo *geneInfo, struct gtexGeneExtras *extras)
+static void loadComputedMedians(struct track *tg, struct gtexGeneInfo *geneInfo)
 /* Compute medians based on graph type.  Returns a list of 2 for comparison graph types */
 {
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
 int expCount = geneBed->expCount;
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 if (extras->isComparison)
     {
     // create two score hashes, one for each sample subset
@@ -260,10 +266,10 @@ if (extras->isComparison)
         {
         //medians1[i] = -1, medians2[i] = -1;       // mark missing tissues ?
         struct slDouble *scores;
-        scores = hashFindVal(scoreHash1, getTissueName(i, extras->version));
+        scores = hashFindVal(scoreHash1, getTissueName(tg, i, extras->version));
         if (scores)
             medians1[i] = slDoubleMedian(scores);
-        scores = hashFindVal(scoreHash2, getTissueName(i, extras->version));
+        scores = hashFindVal(scoreHash2, getTissueName(tg, i, extras->version));
         if (scores)
             medians2[i] = slDoubleMedian(scores);
         }
@@ -321,7 +327,7 @@ static void filterTissues(struct track *tg)
 {
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 struct gtexTissue *tis = NULL;
-extras->tissues = getTissues(extras->version);
+extras->tissues = getTissues(tg, extras->version);
 extras->tissueFilter = hashNew(0);
 if (cartListVarExistsAnyLevel(cart, tg->tdb, FALSE, GTEX_TISSUE_SELECT))
     {
@@ -444,9 +450,10 @@ char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COLO
 #else
 char *colorScheme = GTEX_COLORS_DEFAULT;
 #endif
+
 if (sameString(colorScheme, GTEX_COLORS_GTEX))
     {
-    extras->colors = getGtexTissueColors(extras->version);
+    extras->colors = getGtexTissueColors(tg, extras->version);
     }
 else
     {
@@ -515,7 +522,7 @@ while (geneBed != NULL)
 
     if (extras->isComparison && (tg->visibility == tvFull || tg->visibility == tvPack))
         // compute medians based on configuration (comparisons, and later, filters)
-        loadComputedMedians(geneInfo, extras);
+        loadComputedMedians(tg, geneInfo);
     geneInfo->height = gtexGeneItemHeight(tg, geneInfo);
 
     }
@@ -663,7 +670,7 @@ int expCount = geneBed->expCount;
 double expScore;
 for (i=0; i<expCount; i++)
     {
-    if (!filterTissue(tg, getTissueName(i, extras->version)))
+    if (!filterTissue(tg, getTissueName(tg, i, extras->version)))
         continue;
     if (doTop)
         expScore = (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
@@ -974,7 +981,7 @@ if (tg->limitedVis == tvSquish)
     int tisId = maxTissueForGene(geneBed);
     char *maxTissue = "";
     if (tisId > 1)
-        maxTissue = getTissueDescription(tisId, extras->version);
+        maxTissue = getTissueDescription(tg, tisId, extras->version);
     char buf[128];
     safef(buf, sizeof buf, "%s %s", geneBed->name, maxTissue);
     int x1, x2;
@@ -991,7 +998,7 @@ int x1 = insideX;
 
 
 // add maps to tissue bars in expresion graph
-struct gtexTissue *tissues = getTissues(extras->version);
+struct gtexTissue *tissues = getTissues(tg, extras->version);
 struct gtexTissue *tissue = NULL;
 int barWidth = gtexBarWidth();
 int padding = gtexGraphPadding();

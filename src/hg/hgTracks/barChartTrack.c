@@ -18,9 +18,12 @@ struct barChartTrack
     {
     boolean noWhiteout;         /* Suppress whiteout of graph background (allow highlight, blue lines) */
     double maxMedian;           /* Maximum median across all categories */
-    struct rgbColor *colors;    /* Colors  for all categories */
     boolean doLogTransform;     /* Log10(x+1) */
-    struct barChartCategory *categories; /* Cache category names, colors */
+    struct barChartCategory *categories; /* Category names, colors, etc. */
+    int categCount;             /* Count of categories - derived from above */
+    char **categNames;          /* Category names  - derived from above */
+    char **categLabels;         /* Category labels  - derived from above */
+    struct rgbColor *colors;    /* Colors  for all categories */
     struct hash *categoryFilter;  /* NULL out excluded factors */
     };
 
@@ -33,27 +36,24 @@ struct barChartItem
     };
 
 /***********************************************/
-/* Cache category info */
-/* TODO: multi-thread caching by track name */
+/* Organize category info */
 
 struct barChartCategory *getCategories(struct track *tg)
 /* Get and cache category info */
 {
-static struct barChartCategory *categs = NULL;
-
-if (!categs)
-    categs = barChartUiGetCategories(database, tg->tdb);
-return categs;
+struct barChartTrack *info = (struct barChartTrack *)tg->extraUiData;
+if (info->categories == NULL)
+    info->categories = barChartUiGetCategories(database, tg->tdb);
+return info->categories;
 }
 
 int getCategoryCount(struct track *tg)
 /* Get and cache the number of categories */
 {
-static int categCount = 0;
-
-if (!categCount)
-    categCount = slCount(getCategories(tg));
-return categCount;
+struct barChartTrack *info = (struct barChartTrack *)tg->extraUiData;
+if (info->categCount == 0)
+    info->categCount = slCount(getCategories(tg));
+return info->categCount;
 }
 
 /* TODO: Do we need names ? */
@@ -61,37 +61,37 @@ return categCount;
 char *getCategoryName(struct track *tg, int id)
 /* Get category name from id, cacheing */
 {
-static char **categNames = NULL;
 struct barChartCategory *categ;
 int count = getCategoryCount(tg);
-if (!categNames)
+struct barChartTrack *info = (struct barChartTrack *)tg->extraUiData;
+if (!info->categNames)
     {
     struct barChartCategory *categs = getCategories(tg);
-    AllocArray(categNames, count);
+    AllocArray(info->categNames, count);
     for (categ = categs; categ != NULL; categ = categ->next)
-        categNames[categ->id] = cloneString(categ->name);
+        info->categNames[categ->id] = cloneString(categ->name);
     }
 if (id >= count)
     errAbort("Bar chart track: can't find id %d\n", id);
-return categNames[id];
+return info->categNames[id];
 }
 
 char *getCategoryLabel(struct track *tg, int id)
 /* Get category descriptive label from id, cacheing */
 {
-static char **categLabels = NULL;
+struct barChartTrack *info = (struct barChartTrack *)tg->extraUiData;
 struct barChartCategory *categ;
 int count = getCategoryCount(tg);
-if (!categLabels)
+if (!info->categLabels)
     {
     struct barChartCategory *categs = getCategories(tg);
-    AllocArray(categLabels, count);
+    AllocArray(info->categLabels, count);
     for (categ = categs; categ != NULL; categ = categ->next)
-        categLabels[categ->id] = cloneString(categ->label);
+        info->categLabels[categ->id] = cloneString(categ->label);
     }
 if (id >= count)
     errAbort("Bar chart track: can't find id %d\n", id);
-return categLabels[id];
+return info->categLabels[id];
 }
 
 struct rgbColor *getCategoryColors(struct track *tg)
@@ -100,17 +100,20 @@ struct rgbColor *getCategoryColors(struct track *tg)
 struct barChartCategory *categs = getCategories(tg);
 struct barChartCategory *categ = NULL;
 int count = slCount(categs);
-struct rgbColor *colors;
-AllocArray(colors, count);
-int i = 0;
-for (categ = categs; categ != NULL; categ = categ->next)
+struct barChartTrack *info = (struct barChartTrack *)tg->extraUiData;
+if (!info->colors)
     {
-    // TODO: reconcile 
-    colors[i] = (struct rgbColor){.r=COLOR_32_BLUE(categ->color), .g=COLOR_32_GREEN(categ->color), .b=COLOR_32_RED(categ->color)};
-    //colors[i] = mgColorIxToRgb(NULL, categ->color);
-    i++;
+    AllocArray(info->colors, count);
+    int i = 0;
+    for (categ = categs; categ != NULL; categ = categ->next)
+        {
+        // TODO: reconcile 
+        info->colors[i] = (struct rgbColor){.r=COLOR_32_BLUE(categ->color), .g=COLOR_32_GREEN(categ->color), .b=COLOR_32_RED(categ->color)};
+        //colors[i] = mgColorIxToRgb(NULL, categ->color);
+        i++;
+        }
     }
-return colors;
+return info->colors;
 }
 
 /*****************************************************************/
