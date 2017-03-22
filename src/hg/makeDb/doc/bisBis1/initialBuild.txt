@@ -560,7 +560,28 @@ termRegex [JN][PC][Y_][T0][0-9]+(\.1)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
-#########################################################################
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-03-22 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("bisBis1", "blat1b", "17876", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("bisBis1", "blat1b", "17877", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to Bos taurus casein kinase 1 alpha 1 CSNK1A1
+##     gene (a milk production gene)
+##  (DONE - 2017-03-22 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="KN265006v1:10821934-10865801"
+	where name="bisBis1";' hgcentraltest
+
+############################################################################
 # all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output

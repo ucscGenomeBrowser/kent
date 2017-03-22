@@ -532,7 +532,27 @@ nanPar1.genbank.est.native.loadDesc = no
     git push
     make etc-update
 
-#########################################################################
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-03-22 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("nanPar1", "blat1b", "17874", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("nanPar1", "blat1b", "17875", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MAOA gene (Monoamine Oxidase A from monDom5)
+##  (DONE - 2017-03-22 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="KN906736v1:655217-696237"
+	where name="nanPar1";' hgcentraltest
+
+############################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2015-06-22 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
