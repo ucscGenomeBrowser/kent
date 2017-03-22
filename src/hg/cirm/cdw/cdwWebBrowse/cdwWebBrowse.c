@@ -1160,7 +1160,10 @@ printf(", <A HREF=\"cdwServeTagStorm?format=text&cdwDataSet=%s&%s\"",
 printf(">text</A>");
 printf(", <A HREF=\"cdwServeTagStorm?format=tsv&cdwDataSet=%s&%s\"",
 	dataSet, cartSidUrlString(cart)); 
-printf(">tsv</A>)");
+printf(">tsv</A>");
+printf(", <A HREF=\"cdwServeTagStorm?format=csv&cdwDataSet=%s&%s\"",
+	dataSet, cartSidUrlString(cart)); 
+printf(">csv</A>)"); 
 }
 
 void doBrowseDatasets(struct sqlConnection *conn)
