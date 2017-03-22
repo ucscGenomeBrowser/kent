@@ -68,7 +68,8 @@ safecpy(ret->strand, sizeof(ret->strand), row[5]);
 {
 int sizeOne;
 sqlFloatDynamicArray(row[7], &ret->expScores, &sizeOne);
-assert(sizeOne == ret->expCount);
+if (sizeOne != ret->expCount)
+    errAbort("Bad record in barChart track: '%s' has missing category values", ret->name);
 }
 return ret;
 }
