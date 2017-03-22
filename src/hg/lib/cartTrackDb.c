@@ -18,7 +18,7 @@
 static boolean useAC = FALSE;
 static struct slRef *accessControlTrackRefList = NULL;
 
-static struct trackDb *getFullTrackList(struct cart *cart, char *db, struct grp **pHubGroups, cartDbIncludeFunc func)
+static struct trackDb *getFullTrackList(struct cart *cart, char *db, struct grp **pHubGroups)
 {
 struct trackDb *list = hTrackDb(db);
 struct customTrack *ctList, *ct;
@@ -36,10 +36,6 @@ for (tdb = list;  tdb != NULL;  tdb = nextTdb)
         // It needs to be rewritten to make tdbRef structures for the lists it creates here!
         continue;
         }
-
-    fprintf(stderr,"BRfunc %p\n", func);
-    if (( func != NULL) && !func(tdb))
-        continue;
 
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
     if (useAC && tbOff != NULL &&
@@ -158,8 +154,8 @@ hashFree(&groupsInDatabase);
 return groupList;
 }
 
-void cartTrackDbInitExt(struct cart *cart, struct trackDb **retFullTrackList,
-                     struct grp **retFullGroupList, boolean useAccessControl, cartDbIncludeFunc func)
+void cartTrackDbInit(struct cart *cart, struct trackDb **retFullTrackList,
+                     struct grp **retFullGroupList, boolean useAccessControl)
 /* Get lists of all tracks and of groups that actually have tracks in them.
  * If useAccessControl, exclude tracks with 'tableBrowser off' nor tables listed
  * in the table tableAccessControl. */
@@ -167,8 +163,7 @@ void cartTrackDbInitExt(struct cart *cart, struct trackDb **retFullTrackList,
 char *db = cartString(cart, "db");
 useAC = useAccessControl;
 struct grp *hubGrpList = NULL;
-fprintf(stderr, "BRwtf %p\n",func);
-struct trackDb *fullTrackList = getFullTrackList(cart, db, &hubGrpList, func);
+struct trackDb *fullTrackList = getFullTrackList(cart, db, &hubGrpList);
 boolean allTablesOk = hAllowAllTables() && !trackHubDatabase(db);
 struct grp *fullGroupList = makeGroupList(db, fullTrackList, &hubGrpList, allTablesOk);
 if (retFullTrackList != NULL)
@@ -176,16 +171,6 @@ if (retFullTrackList != NULL)
 if (retFullGroupList != NULL)
     *retFullGroupList = fullGroupList;
 }
-
-void cartTrackDbInit(struct cart *cart, struct trackDb **retFullTrackList,
-                     struct grp **retFullGroupList, boolean useAccessControl)
-/* Get lists of all tracks and of groups that actually have tracks in them.
- * If useAccessControl, exclude tracks with 'tableBrowser off' nor tables listed
- * in the table tableAccessControl. */
-{ 
-cartTrackDbInitExt(cart, retFullTrackList, retFullGroupList, useAccessControl, NULL);
-}
-
 
 static char *chopAtFirstDot(char *string)
 /* Terminate string at first '.' if found.  Return string for convenience. */
