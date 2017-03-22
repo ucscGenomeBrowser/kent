@@ -1,3 +1,6 @@
+/* Copyright (C) 2017 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* sqlReserved - stuff to identify SQL reserved words. */
 
 #include "common.h"
