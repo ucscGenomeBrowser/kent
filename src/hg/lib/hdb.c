@@ -3606,7 +3606,7 @@ else
 	if (!sameString(fields,"*"))
 	    sqlCkIl(fields);
         sqlDyStringPrintf(query, "select %-s from %s where %s='%s'",
-		fields, rootTable, hti->chromField, chrom);
+		fields, hti->rootName, hti->chromField, chrom);
 	if (extraWhere != NULL)
 	    dyStringPrintf(query, " and (%s)", extraWhere);
 	}

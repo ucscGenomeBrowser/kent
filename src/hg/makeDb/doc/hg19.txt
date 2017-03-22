@@ -25076,6 +25076,11 @@ TMPDIR=/dev/shm
     cd /hive/data/genomes/micOch1/bed
     ln -s blastz.hg19.swap lastz.hg19
 
+    # rbest catch up 2017-03-16
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        micOch1 hg19) > rbest.log 2>&1
+    # real    375m5.044s
+
 #########################################################################
 # lastz southern platyfish xipMac1 (DONE - 2013-08-27 - Hiram)
     # establish a screen to control this job with a name to indicate what it is

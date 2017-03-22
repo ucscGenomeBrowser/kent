@@ -7,7 +7,7 @@ subGroup2 species Species s000=Mouse s001=Prairie_vole s002=Guinea_pig s003=Rabb
 subGroup3 clade Clade c00=glires c01=primates c02=laurasiatheria c03=sarcopterygii c04=birds c05=fish
 dragAndDrop subTracks
 group compGeno
-visibility full
+visibility hide
 noInherit on
 color 0,0,0
 altColor 255,255,0
@@ -27,7 +27,7 @@ html ratChainNet
     spectrum on
 
         track chainMm10
-        subTrack vertebrateChainNetViewchain off
+        subTrack vertebrateChainNetViewchain on
         subGroups view=chain species=s000 clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -59,7 +59,7 @@ html ratChainNet
         otherDb oryCun2
 
         track chainHg38
-        subTrack vertebrateChainNetViewchain off
+        subTrack vertebrateChainNetViewchain on
         subGroups view=chain species=s004 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -281,7 +281,7 @@ html ratChainNet
         otherDb bosTau8
 
         track netMonDom5
-        subTrack vertebrateChainNetViewnet on
+        subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s012 clade=c03
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -329,7 +329,7 @@ html ratChainNet
         otherDb calMil1
 
         track netDanRer10
-        subTrack vertebrateChainNetViewnet on
+        subTrack vertebrateChainNetViewnet off
         subGroups view=net species=s018 clade=c05
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net

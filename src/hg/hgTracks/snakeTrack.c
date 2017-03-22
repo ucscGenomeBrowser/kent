@@ -1229,6 +1229,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     unsigned *size = psl->blockSizes;
     int ii;
 
+    if ((seq != NULL) && (psl->strand[0] == '-'))
+        reverseComplement(seq, strlen(seq));
     for(ii = 0; ii < psl->blockCount; ii++)
         {
         struct hal_block_t *block;
@@ -1278,13 +1280,16 @@ if (errCatchStart(errCatch))
     {
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
-    char *errString;
+    char *errString = "empty";
     int handle = -1;
     if (!isPsl)
         {
-        int handle = halOpenLOD(fileName, &errString);
+        handle = halOpenLOD(fileName, &errString);
         if (handle < 0)
-            warn("HAL open error: %s\n", errString);
+            {
+            errAbort("HAL open error: %s\n", errString);
+            goto out;
+            }
         }
     boolean isPackOrFull = (tg->visibility == tvFull) || 
 	(tg->visibility == tvPack);
@@ -1309,9 +1314,8 @@ if (errCatchStart(errCatch))
     // did we get any blocks from HAL
     if (head == NULL)
 	{
-	warn("HAL get blocks error: %s\n", errString);
-	errCatchEnd(errCatch);
-	return;
+	errAbort("HAL get blocks error: %s\n", errString);
+	goto out;
 	}
     struct hal_block_t* cur = head->mappedBlocks;
     struct linkedFeatures *lf = NULL;
@@ -1424,6 +1428,8 @@ if (errCatchStart(errCatch))
 
     tg->items = lfList;
     }
+
+out:
 errCatchEnd(errCatch);
 if (errCatch->gotError)
     {

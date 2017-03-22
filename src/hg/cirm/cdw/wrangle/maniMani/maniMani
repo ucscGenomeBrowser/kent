@@ -150,14 +150,18 @@ def insertoToStepRunAndStepIn(db, startManiDict, startManiHeader, options):
             #query = "select id from cdwFile where submitFileName = '%s'" % (row[fileCol])
             tags = key
             if (options.startMetaColumn is not "meta"): tags = row[metaCol].translate(trans) 
-            query = "select id from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%(row[fileCol],tags)
+            query = "select id from cdwFile where submitFileName = '%s' and tags like '%%%s%%' order by id desc"%(row[fileCol],tags)
             if (options.verbose): print(query)
             cur.execute(query)
             fileId = 0 # This will hold the fileId. 
             result = cur.fetchall()
-            assert(len(result) == 1) # This SQL query is supposed to be unique!
+            if(len(result) > 1): # This SQL query is supposed to be unique!
+                if (options.verbose): print ("This query did not return a unique value, there is likely something off with the database. %s " %(query))
+            firstLine = True
             for line in result:
-                fileId = line[0]
+                if firstLine:
+                    fileId = line[0]
+                    break
 
             # Verify that the file has the same submission dir
             query = ("select submitDirId from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%
@@ -210,24 +214,32 @@ def insertToStepOut(db, endManiDict, endManiHeader, startToEndDict, options):
             cur = db.cursor()
             tags = key
             if (options.endMetaColumn is not "meta"): tags = row[metaCol].translate(trans) 
-            query = "select id from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%(row[fileCol],tags)
+            query = "select id from cdwFile where submitFileName = '%s' and tags like '%%%s%%' order by id desc"%(row[fileCol],tags)
             cur.execute(query)
             if (options.verbose): print (query)
             result = cur.fetchall()
+            if(len(result) > 1): # This SQL query is supposed to be unique!
+                if (options.verbose): print ("This query did not return a unique value, there is likely something off with the database. %s " %(query))
+            firstLine = True
             for line in result:
-                fileId = line[0]
-            assert(len(result) == 1) # This SQL query is supposed to be unique!
+                if firstLine:
+                    fileId = line[0]
+                    break
             
             # Verify that the file has the same submission dir
-            query = ("select submitDirId from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%
+            query = ("select submitDirId from cdwFile where submitFileName = '%s' and tags like '%%%s%%' order by id desc"%
                             (row[fileCol], tags))
             if (options.verbose): print(query)
             cur = db.cursor()
             cur.execute(query)
             result = cur.fetchall()
-            assert(len(result) == 1) 
+            if(len(result) > 1): # This SQL query is supposed to be unique!
+                if (options.verbose): print ("This query did not return a unique value, there is likely something off with the database. %s " %(query))
+            firstLine = True
             for line in result:
-                assert(line[0] == submitDirId)
+                if firstLine:
+                    fileId = line[0]
+                    break
 
             # Verify the file is valid by mapping over to cdwValidFile 
             query = "select id from cdwValidFile where fileId ='%s'" %(fileId)

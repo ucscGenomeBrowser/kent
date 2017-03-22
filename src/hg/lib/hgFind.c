@@ -3038,15 +3038,6 @@ if (foundIt)
 return foundIt;
 }
 
-static int getDotVersion(char *acc)
-/* If acc ends with a .version, return the version, else 0. */
-{
-char *p = strchr(acc, '.');
-if (p)
-    return atoi(p+1);
-return 0;
-}
-
 static boolean matchesHgvs(char *db, char *term, struct hgPositions *hgp)
 /* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature */
 /* See http://varnomen.hgvs.org/ */
@@ -3057,47 +3048,26 @@ if (hgvs == NULL)
     hgvs = hgvsParsePseudoHgvs(db, term);
 if (hgvs)
     {
-    char *foundAcc = NULL, *diffRefAllele = NULL;
-    int foundVersion = 0;
-    boolean coordsOk = hgvsValidate(db, hgvs, &foundAcc, &foundVersion, &diffRefAllele);
-    if (foundAcc == NULL)
-        warn("Can't find accession for HGVS term '%s'", term);
-    else
+    struct dyString *dyWarn = dyStringNew(0);
+    char *pslTable = NULL;
+    struct bed *mapping = hgvsValidateAndMap(hgvs, db, term, dyWarn, &pslTable);
+    if (dyStringLen(dyWarn) > 0)
+        warn("%s", dyStringContents(dyWarn));
+    if (mapping)
         {
-        int hgvsVersion = getDotVersion(hgvs->seqAcc);
-        char foundAccWithV[strlen(foundAcc)+20];
-        if (foundVersion)
-            safef(foundAccWithV, sizeof(foundAccWithV), "%s.%d", foundAcc, foundVersion);
+        int padding = 5;
+        char *trackTable;
+        if (isEmpty(pslTable))
+            trackTable = "chromInfo";
+        else if (startsWith("lrg", pslTable))
+            trackTable = "lrgTranscriptAli";
         else
-            safecpy(foundAccWithV, sizeof(foundAccWithV), foundAcc);
-        if (hgvsVersion && hgvsVersion != foundVersion)
-            warn("HGVS term '%s' is based on %s but UCSC has version %s",
-                 term, hgvs->seqAcc, foundAccWithV);
-        if (! coordsOk)
-            warn("HGVS term '%s' has coordinates outside the bounds of %s", term, foundAccWithV);
-        else if (diffRefAllele != NULL)
-            warn ("HGVS term '%s' reference value does not match %s value '%s'",
-                  term, foundAccWithV, diffRefAllele);
-        if (coordsOk)
-            {
-            char *pslTable = NULL;
-            struct bed3 *mapping = hgvsMapToGenome(db, hgvs, &pslTable);
-            if (mapping)
-                {
-                int padding = 5;
-                char *trackTable;
-                if (isEmpty(pslTable))
-                    trackTable = "chromInfo";
-                else if (startsWith("lrg", pslTable))
-                    trackTable = "lrgTranscriptAli";
-                else
-                    trackTable = "refGene";
-                singlePos(hgp, "HGVS", NULL, trackTable, term, "",
-                          mapping->chrom, mapping->chromStart-padding, mapping->chromEnd+padding);
-                foundIt = TRUE;
-                }
-            }
+            trackTable = "refGene";
+        singlePos(hgp, "HGVS", NULL, trackTable, term, "",
+                  mapping->chrom, mapping->chromStart-padding, mapping->chromEnd+padding);
+        foundIt = TRUE;
         }
+    dyStringFree(&dyWarn);
     }
 return foundIt;
 }

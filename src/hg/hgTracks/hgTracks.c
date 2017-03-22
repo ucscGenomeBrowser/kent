@@ -9540,7 +9540,7 @@ measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTi
 if (measureTiming)
     measureTime("Startup");
 
-hgBotDelay();
+hgBotDelayFrac(0.25); /* Impose a quarter of the standard CGI penalty */
 if (measureTiming)
     measureTime("Bottleneck delay");
 
@@ -9751,5 +9751,13 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"performance.   To clear this variable, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
     }
+}
+
+void labelTrackAsFiltered(struct track *tg)
+/* add text to track long label to indicate filter is active */
+{
+char *oldLabel = tg->longLabel;
+tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+freeMem(oldLabel);
 }
 

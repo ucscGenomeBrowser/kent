@@ -17,7 +17,7 @@
 <h6><a href="#Search">Setting up track item search</a></h6>
 <h6><a href="#Session">Displaying Track Hubs by URL and in sessions</a></h6>
 <h6><a href="#Register">Registering a Track Hub with UCSC</a></h6>
-<h6><a href="#Compatibility">Testing hub compatibility with between genome browsers</a></h6>
+<h6><a href="#Compatibility">Testing hub compatibility between genome browsers</a></h6>
 <hr>
 <p>
 <strong>Additional resources</strong></p> 
@@ -696,8 +696,9 @@ the compatibility of your hub with the UCSC Genome Browser and other genome brow
 The following examples describe various settings that may be useful to you as you test
 this compatibility.</p>
 
-<h4>Example 1: Listing the trackDb settings and their support levels
-and filtering them by support level.</h4>
+<p>
+<strong><em>Example 1:</em></strong> Listing the trackDb settings and their support levels
+and filtering them by support level.</p>
 <p>
 You can see all of the currently supported trackDb settings and their support level in
 the UCSC Genome Browser by running hubCheck with the &quot;-settings&quot; option:</p>
@@ -715,11 +716,13 @@ Or, to show settings at both the required and base support levels:</p>
 </code></pre>
 <p>
 When you use the &quot;-level&quot; option to declare a support level, it includes
-the level that you define plus every level above it. This heirarchy of the different support
-levels is defined at the beginning of the Track Database Definition document.</p>
+the level that you define plus every level above it. This hierarchy of the different support
+levels is defined at the beginning of the
+<a href="trackDb/trackDbHub.html">Track Database Definition document</a>.</p>
 
-<h4>Example 2: Checking your trackDb settings against the settings and support levels
-provided by the UCSC Genome Browser</h4>
+<p>
+<strong><em>Example 2:</em></strong> Checking your trackDb settings against the settings and support levels
+provided by the UCSC Genome Browser.</p>
 <p>
 The &quot;-checkSettings&quot; option can be used check the settings in your hub's trackDb file
 against those provided by the UCSC Genome Browser on the Track Database definition page.
@@ -728,13 +731,13 @@ that they are supported by the Genome Browser. For example, to fully run hubChec
 <pre><code>$ hubCheck -checkSettings http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt
 </code></pre>
 <p>
-If you are just looking to check the compatibility of your hub and not the inegrity of your files,
+If you are just looking to check the compatibility of your hub and not the integrity of your files,
 you can use the &quot;-noTracks&quot; option to just check setting compatibility. Skipping these
 file integrity checks will also speed up hubCheck.</p>
 <p>
 Here is an example of some of the errors you might see if your hub includes
 unsupported settings:</p>
-<pre><code>$ hubCheck -checkSettings http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSetting/hub.txt
+<pre><code>$ hubCheck -checkSettings http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSettings/hub.txt
 Found 1 problem:
 Setting 'ensemblAssemblyName' is unknown/unsupported
 </pre></code>
@@ -757,8 +760,10 @@ check your settings against an older version of these settings, you can use the
 of our trackDb settings:</p>
 <pre><code>$ hubCheck -checkSettings -version=v1 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hub.txt
 </code></pre>
-<h4>Example 3: Checking your settings against those provided by UCSC and another
-source, such as Ensembl</h4>
+
+<p>
+<strong><em>Example 3:</em></strong> Checking your settings against those provided by UCSC and another
+source, such as Ensembl.</p>
 <p>
 If you want to check the settings in your hub against those supported by other genome browsers,
 you will first need to create a single-column file that lists each non-UCSC setting and then
@@ -767,7 +772,7 @@ if you knew that a setting called &quot;ensemblAssemblyName&quot; was supported 
 hubs by Ensembl, you could create a single line file that included  the setting
 &quot;ensemblAssemblyName&quot;. Then, when you want to check a hub that includes these extra
 trackDb settings, you would then specify this extra settings file on the command line:</p>
-<pre><code>$ hubCheck  -checkSettings -extra=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSetting/myExtraSettings.txt http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSetting/hub.txt
+<pre><code>$ hubCheck  -checkSettings -extra=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSettings/myExtraSettings.txt http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubCheckUnsupportedSettings/hub.txt
 </code></pre>
 <p>
 (Note: The settings listed here in the &quot;extra&quot; file are

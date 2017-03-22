@@ -12,7 +12,7 @@
 
 int port = 17776;	/* Default bottleneck port. */
 char *host = "localhost";   /* Default host. */
-int penalty = 150;	    /* Penalty in milliseconds per access. */
+int penalty = 75;	    /* Penalty in milliseconds per access. */
 int recovery = 10;	    /* Recovery in milliseconds per second. */
 char *subnet = NULL;        /* Subnet as dotted quads. */
 
@@ -24,8 +24,9 @@ errAbort(
   "usage:\n"
   "   bottleneck start\n"
   "Start up bottleneck server\n"
-  "   bottleneck query ip-address [count]\n"
-  "Ask bottleneck server how long to wait to service ip-address\n"
+  "   bottleneck query ip-address [count] [fraction]\n"
+  "Ask bottleneck server how long to wait to service ip-address after imposing\n"
+  "the specified fraction of the access penalty (default of 1.0)\n"
   "   bottleneck list\n"
   "List accessing sites\n"
   "   bottleneck set ip-address milliseconds\n"
@@ -37,11 +38,10 @@ errAbort(
   "   -penalty=N - Penalty (in milliseconds) for each access, default %d\n"
   "   -recovery=N - Amount to recover (in milliseconds) for each second\n"
   "                 between accesses.  Default %d\n"
-  "Note penalty and recovery if moved from defaults should balance\n"
-  "At the default settings an equilibrium will be achieved when queries\n"
-  "are spaced 15 seconds apart.  The maximum delay should thus be 15 seconds\n"
-  "It will take 25 minutes of idleness for the maximum delay to decay back to\n"
-  "zero.\n"
+  "Note: penalty and recovery if moved from defaults should balance\n"
+  "At the default settings, an equilibrium will be achieved when queries\n"
+  "are spaced 7.5 seconds apart.  At the default decay value, an accumulated\n"
+  "delay of 15 seconds will take 25 minutes of idleness to decay back to zero.\n"
   , port, host, penalty, recovery
   );
 }
@@ -86,14 +86,14 @@ if (tracker == NULL)
 return tracker;
 }
 
-int calcDelay(struct tracker *tracker)
+int calcDelay(struct tracker *tracker, double fraction)
 /* Figure out recommended delay. */
 {
 int timeDiff = now - tracker->lastAccess;
 int delay;
 if (timeDiff < 0)
     timeDiff = 0;
-delay = tracker->curDelay + penalty - timeDiff*recovery;
+delay = tracker->curDelay + (int)(fraction*penalty) - timeDiff*recovery;
 if (delay < 0)
     delay = 0;
 return delay;
@@ -112,7 +112,7 @@ for (tracker = trackerList; tracker != NULL; tracker = tracker->next)
     timeDiff = now - tracker->lastAccess;
     safef(buf, sizeof(buf), "%s\t%d\t%d\t%d\t%d", 
     	tracker->name, tracker->accessCount, timeDiff, 
-	tracker->maxDelay, calcDelay(tracker));
+	tracker->maxDelay, calcDelay(tracker, 1.0));
     if (!netSendString(socket, buf))
         break;
     }
@@ -189,9 +189,14 @@ for (;;)
 	    }
 	else
 	    {
-	    tracker = trackerForIp(s);
+        char *ip = nextWord(&s);
+        char *fraction = nextWord(&s);
+	    tracker = trackerForIp(ip);
 	    tracker->accessCount += 1;
-	    tracker->curDelay = calcDelay(tracker);
+        if (fraction != NULL)
+	        tracker->curDelay = calcDelay(tracker, atof(fraction));
+        else
+            tracker->curDelay = calcDelay(tracker, 1.0);
 	    if (tracker->maxDelay < tracker->curDelay)
 	        tracker->maxDelay = tracker->curDelay;
 	    tracker->lastAccess = now;
@@ -218,16 +223,18 @@ if (fork() == 0)
     }
 }
 
-void queryServer(char *ip, int count)
+void queryServer(char *ip, int count, double fraction)
 /* Query bottleneck server - just for testing.
  * Main query is over ip port. */
 {
 int i;
+char sendString[256];
+safef(sendString, sizeof(sendString), "%s %f", ip, fraction);
 for (i=0; i<count; ++i)
     {
     int socket = netMustConnect(host, port);
     char buf[256], *s;
-    netSendString(socket, ip);
+    netSendString(socket, sendString);
     s = netGetString(socket, buf);
     if (s == NULL)
         errAbort("Shut out by bottleneck server %s:%d", host, port);
@@ -245,7 +252,6 @@ safef(buf, sizeof(buf), "?set %s %s", ip, millis);
 netSendString(socket, buf);
 close(socket);
 }
-
 
 void listAll()
 /* Ask server for info on all IP addresses. */
@@ -287,7 +293,10 @@ else if (sameString(command, "query"))
     int count = 1;
     if (argc > 3)
 	count = atoi(argv[3]);
-    queryServer(argv[2], count);
+    double fraction = 1.0;
+    if (argc > 4)
+    fraction = atof(argv[4]);
+    queryServer(argv[2], count, fraction);
     }
 else if (sameString(command, "list"))
     {

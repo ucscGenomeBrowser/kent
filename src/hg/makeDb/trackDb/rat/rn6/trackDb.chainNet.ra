@@ -4,7 +4,6 @@ priority 210.3
 chainMinScore 5000
 chainLinearGap medium
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-visibility pack
 
 track chainNetMicOch1 override
 priority 215.31

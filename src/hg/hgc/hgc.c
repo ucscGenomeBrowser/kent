@@ -4161,6 +4161,20 @@ if (container == NULL && wordCount > 0)
         headerItem = NULL;
     }
 
+// doNcbiRefSeq
+if (sameWord(tdb->table, "ncbiRefSeqOther"))
+    {
+    struct dyString *dy = newDyString(1024);
+    dyStringPrintf(dy, "%s", item);
+
+    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+        dyStringPrintf(dy, "- Release %s\n", trackVersion->version);
+
+    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
+    headerItem = cloneString("ncbiRefSeqOther");
+    }
+
 /* Print header. */
 genericHeader(tdb, headerItem);
 
@@ -7301,7 +7315,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
     struct bed *bed = bedLoadN(bedRow, 12);
-    if (sameString(bed->name, acc))
+    if (sameString(bed->name, acc) && (bb->start == start) && (bb->end == end))
 	{
 	bb->next = NULL;
 	break;
@@ -25188,22 +25202,15 @@ char *bigBedFile = bigBedTn.forCgi;
 makeBigPsl(pslName, faName, database, bigBedFile);
 
 char* host = getenv("HTTP_HOST");
-char* reqUrl = cloneString(getenv("REQUEST_URI"));
-// delete arguements to the url
-char *e = strchr(reqUrl+1, '?');
-if (e) *e = 0;
-// remove the cgi name
-e = strchr(reqUrl+1, '/');
-if (e) *e = 0;
 
 boolean isProt = cgiOptionalString("isProt") != NULL;
-char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on  pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=http://%s%s/%s name=\"%s\" description=\"%s\"\n";  
+char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on  pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\"\n";  
 char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases";
   
 if (isProt)
     extraForMismatch = "";
 char buffer[4096];
-safef(buffer, sizeof buffer, customTextTemplate, bigBedTn.forCgi, host, extraForMismatch, host, reqUrl, bigBedTn.forCgi, trackName, trackDescription);
+safef(buffer, sizeof buffer, customTextTemplate, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
 
 struct customTrack *ctList = getCtList();
 struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL);
@@ -25406,7 +25413,7 @@ else if (sameString(track, "variome.delete"))
     doDeleteVariomeItem(item, seqName, winStart, winEnd);
 else if (sameString(track, "variome.addComments"))
     doAddVariomeComments(item, seqName, winStart, winEnd);
-else if (startsWith("transMapAln", table))
+else if (startsWith("transMap", table))
     transMapClickHandler(tdb, item);
 else if (startsWith("hgcTransMapCdnaAli", table))
     {

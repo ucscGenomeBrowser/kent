@@ -7,207 +7,226 @@
 
 <h1>bigPsl Track Format</h1> 
 <p>
-The bigPsl format stores alignments between two sequences, as 
-<a href="../../FAQ/FAQformat.html#format2">PSL</a> files do, but they are compressed and indexed as 
-bigBeds. bigPsl files are created using the program <code>bedToBigBed</code> with a special AutoSQL 
-file that defines the fields of the bigPsl. The resulting bigPsl files are in an indexed binary 
-format. The main advantage of the bigPsl files is that only portions of the files needed to display 
-a particular region are transferred to UCSC. So for large data sets, bigPsl is considerably faster 
-than regular PSL files.  The bigPsl file remains on your web accessible server (http, https, or 
-ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are 
-currently viewing is locally cached as a &quot;sparse file&quot;.</p>
+<p>
+The bigPsl format stores alignments between two sequences just as 
+<a href="../../FAQ/FAQformat.html#format2">PSL</a> files do; however, bigPsl files are compressed 
+and indexed as bigBeds. PSL files are converted to bigPsl files using the program 
+<code>bedToBigBed</code>, run with the <code>-as</code> option to pull in a special 
+<a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a> (<em>.as</em>) file 
+that defines the fields of the bigPsl.</p>
+<p>
+The bigPsl files are in an indexed binary format. The main advantage of this format is that only 
+those portions of the file needed to display a particular region are transferred to the Genome 
+Browser server. Because of this, bigPsl files have considerably faster display performance than 
+regular PSL files when working with large data sets. The bigPsl file remains on your local 
+web-accessible server (http, https or ftp), not on the UCSC server, and only the portion needed for 
+the currently displayed chromosomal position is locally cached as a &quot;sparse file&quot;.</p>
 
 <a name=bigPsl></a>
-<h2>Big PSL</h2>
+<h2>bigPSL format definition</h2>
 <p>
-The following AutoSQL definition is used for bigPsl gene prediction files. This is the 
-<a href="examples/bigPsl.as"><code>bigPsl.as</code></a> file defined by the <code>-as</code> option 
-when using <code>bedToBigBed</code>.
+The following autoSql definition is used to specify bigPsl alignment files. This
+definition, contained in the file <a href="examples/bigPsl.as"><em>bigPsl.as</em></a>, is pulled in 
+when the <code>bedToBigBed</code> utility is run with the <code>-as=bigPsl.as</code> option.</p> 
 <!--Click this <a href="examples/bigPsl.txt"><code>bigPsl.txt</code></a> file for
 an example of bigPsl input. -->
-</p>
 <pre><code>table bigPsl
 "bigPsl pairwise alignment"  
     ( 
-    string chrom;       "Reference sequence chromosome or scaffold"
-    uint   chromStart;  "Start position in chromosome"
-    uint   chromEnd;    "End position in chromosome"
-    string name;        "Name or ID of item, ideally both human readable and unique"
-    uint score;         "Score (0-1000)"
-    char[1] strand;     "+ or - indicates whether the query aligns to the + or - strand on the reference"
-    uint thickStart;    "Start of where display should be thick (start codon)"
-    uint thickEnd;      "End of where display should be thick (stop codon)"
-    uint reserved;       "RGB value (use R,G,B string in input file)"
-    int blockCount;     "Number of blocks"
+    string chrom;       	"Reference sequence chromosome or scaffold"
+    uint   chromStart;  	"Start position in chromosome"
+    uint   chromEnd;    	"End position in chromosome"
+    string name;        	"Name or ID of item, ideally both human readable and unique"
+    uint score;         	"Score (0-1000)"
+    char[1] strand;     	"+ or - indicates whether the query aligns to the + or - strand on the reference"
+    uint thickStart;    	"Start of where display should be thick (start codon)"
+    uint thickEnd;      	"End of where display should be thick (stop codon)"
+    uint reserved;       	"RGB value (use R,G,B string in input file)"
+    int blockCount;     	"Number of blocks"
     int[blockCount] blockSizes; "Comma separated list of block sizes"
-    int[blockCount] chromStarts; "Start positions relative to chromStart"
+    int[blockCount] chromStarts;"Start positions relative to chromStart"
 
-    uint    oChromStart;"Start position in other chromosome"
-    uint    oChromEnd;  "End position in other chromosome"
-    char[1] oStrand;    "+ or -, - means that psl was reversed into BED-compatible coordinates" 
-    uint    oChromSize; "Size of other chromosome."
-    int[blockCount] oChromStarts; "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
+    uint    oChromStart;	"Start position in other chromosome"
+    uint    oChromEnd;  	"End position in other chromosome"
+    char[1] oStrand;    	"+ or -, - means that psl was reversed into BED-compatible coordinates" 
+    uint    oChromSize; 	"Size of other chromosome."
+    int[blockCount] oChromStarts;"Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
     
-    lstring  oSequence;  "Sequence on other chrom (or empty)"
-    string   oCDS;       "CDS in NCBI format"
+    lstring  oSequence;  	"Sequence on other chrom (or empty)"
+    string   oCDS;       	"CDS in NCBI format"
   
-    uint    chromSize;"Size of target chromosome"
+    uint    chromSize;		"Size of target chromosome"
   
-    uint match;        "Number of bases matched."
-    uint misMatch; " Number of bases that don't match "
-    uint repMatch; " Number of bases that match but are part of repeats "
-    uint nCount;   " Number of 'N' bases "
-    uint seqType;   " 0=empty, 1=nucleotide, 2=amino_acid"
+    uint match;        		"Number of bases matched."
+    uint misMatch; 		"Number of bases that don't match "
+    uint repMatch; 		"Number of bases that match but are part of repeats "
+    uint nCount;   		"Number of 'N' bases "
+    uint seqType;   		"0=empty, 1=nucleotide, 2=amino_acid"
     ) </code></pre>
 <p>
-Note that the oStrand field is an indicator of whether or not the stored psl needs to be reverse 
-complemented before output or display. This is due to the need for the bigPsl file to have reference
-coordinates on the positive strand which is a requirement of the BED format. The strand field 
-indicates whether the positions in oChromStarts are listed from the beginning (+) or the end of the 
-chromosome (-).</p>
+The value of the <code>oStrand</code> field indicates whether or not the stored psl data should be
+reverse-complemented before it is outputted or displayed. This is necessary because the bigPsl file 
+stores reference coordinates on the positive strand, as required by the BED format. The 
+<code>strand</code> field indicates whether the positions in <code>oChromStarts</code> are listed 
+from the chromosome beginning (+) or end (-).</p>
 <p>
-Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory; somewhere on the
-order of 1.25 times more RAM than the uncompressed BED input file.</p>
+Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory: approximately 
+25% more RAM than the uncompressed BED input file.</p>
+
+<h2>Creating a bigPsl track</h2>
 <p>
 To create a bigPsl track, follow these steps:</p>
+<p> 
+<strong>Step 1.</strong>
+If you already have a PSL file created using BLAT or another tool, skip to <em>Step 2</em>. 
+Otherwise, download the example PSL file <a href="examples/bigPsl.psl"><em>bigPsl.psl</em></a> for 
+the human GRCh38/hg38 assembly. You will also want to download the files 
+<a href="examples/bigPsl.fa"><em>bigPsl.fa</em></a> and 
+<a href="examples/bigPsl.cds"><em>bigPsl.cds</em></a> if you 
+would like to use the alternate options described in <em>Step 4</em>, below.</p>
+<p>
+<strong>Step 2.</strong> 
+Download the <code>bedToBigBed</code> and <code>pslToBigPsl</code> programs from the
+<a href="http://hgdownload.cse.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<p>
+<strong>Step 3.</strong> 
+Use the <code>fetchChromSizes</code> script from the 
+<a href="http://hgdownload.cse.ucsc.edu/admin/exe/">same directory</a> to create a
+<em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg38). 
+Alternatively, you can download the <em>chrom.sizes</em> file for any assembly hosted at UCSC from 
+our <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
+data set&quot; for any assembly). For example, the <em>hg38.chrom.sizes</em> file for the hg38 
+database is located at 
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
+target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</p>
+<p>
+<strong>Step 4.</strong>  
+Use the <code>pslToBigPsl</code> utility to create a bigPsl file in bed12+13 format that contains 
+the 25 fields described in the bigPsl format definition <a href="#bigPsl">above</a>. The file must 
+include the 13 extra fields: <code>oChromStart</code>, 
+<code>oChromEnd</code>, <code>oStrand</code>, <code>oChromSize</code>, <code>oChromStarts</code>, 
+<code>oSequence</code>, <code>oCDS</code>, <code>chromSize</code>, <code>match</code>, 
+<code>misMatch</code>, <code>repMatch</code>, <code>nCount</code>, and <code>seqType</code>.</p> 
+<pre><code>pslToBigPsl bigPsl.psl stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</code></pre>
+<p>
+If you are using your own PSL file, you may have corresponding FASTA and CDS files that accompany
+it. You can provide these files as input to <code>pslToBigPsl</code> to generate a more informative 
+bigPsl file:</p> 
+<pre><code>pslToBigPsl bigPsl.psl -cds=bigPsl.cds -fa=bigPsl.fa stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</code></pre>
+<p>
+<strong>Step 5.</strong>  
+Create the binary indexed bigPsl file from your sorted bigPsl input file using the 
+<code>bedToBigBed</code> utility:</p> 
+<pre><code>bedToBigBed -as=bigPsl.as -type=bed12+13 -tab bigPsl.txt chrom.sizes bigPsl.bb</code></pre>
+<p>
+<strong>Step 6.</strong> 
+Move the newly created bigPsl file (<em>bigPsl.bb</em>) to a web-accessible http, https, or ftp 
+location.</p>
+<p>
+<strong>Step 7.</strong> 
+Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
+<a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed 
+<a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic 
+version of the track line will look something like this:</p>
+<pre><code>track type=bigPsl name="My Big Psl" description="Some mRNAs Discovered from Data from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigPsl.bb</code></pre>
+<p>
+<strong>Step 8.</strong> 
+Paste the custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom 
+track management page</a>.</p>
+<p>
+The <code>bedToBigBed</code> program can be run with several additional options. For a full list of 
+the available options, type <code>bedToBigBed</code> (with no arguments) on the command line to 
+display the usage message. </p>
+
+<h2>Examples</h2>
+
+<h3>Example #1</h3>
+<p>
+In this example, you will create a bigPsl custom track using an existing bigPsl file,
+<em>bigPsl.bb</em>, located on the UCSC Genome Browser http server. This file contains data for 
+the hg38 assembly.</p>
+<p>
+To create a custom track using this bigPsl file:
 <ol>
-  <li>If you already have a PSL file, perhaps from using BLAT or other tools, skip to <em>step 2</em>, otherwise
-       download the example <a href="examples/bigPsl.psl">PSL file</a> for the Human GRCh38/hg38 assembly.
-  <ul>
-    <li>
-    You may also want to download the <a href="examples/bigPsl.fa">bigPsl.fa</a> and 
-    <a href="examples/bigPsl.cds">bigPsl.cds</a> files if you would like to use the alternate 
-    options in <em>step 4</em>.</li>
-  </ul>
   <li>
-  Download the <code>bedToBigBed</code> and <code>pslToBigPsl</code> programs from the
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary utilities.</li>
+  Construct a track line that references the file:</p>
+  <pre><code>track type=bigPsl name=&quot;bigPsl Example One&quot; description=&quot;A bigPsl file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb</code></pre></li>
   <li>
-  Use the <code>fetchChromSizes</code> script from the same 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> to create a chrom.sizes file for
-  the UCSC database you are working with (e.g., hg38). Alternatively, you can download the 
-  chrom.sizes file for any assembly hosted at UCSC from our 
-  <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
-  data set&quot; for any assembly). For example, for the hg38 database, the hg38.chrom.sizes are 
-  located at <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
-  target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</li> 
+  Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
+  page</a> for the human assembly hg38. </li>
   <li>
-  Create a <code>bed12+13</code> bigPsl format file that has the 25 fields described by a bigPsl 
-  file as described <a href="#bigPsl">here</a>.</li>
-  <ul>
-    <li>
-    Your bigPsl file must have the extra thirteen fields described in the AutoSQL file above: 
-    <code>oChromStart, oChromEnd, oStrand, oChromSize, oChromStarts, oSequence, oCDS, chromSize, 
-    match, misMatch, repMatch, nCount, seqType </code> 
-    <li>
-    Use the <code>pslToBigPsl</code> utility to create a correctly formatted <code>bed12+13</code> 
-    file like so: <pre><code>pslToBigPsl bigPsl.psl stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</code></pre></li>
-    <li>
-    Note that if you have created your own PSL file you may have corresponding FASTA and CDS files 
-    that accompany it. You may provide these files as input to <code>pslToBigPsl</code> to generate 
-    a more informative final bigPsl file: 
-    <pre><code>pslToBigPsl bigPsl.psl -cds=bigPsl.cds -fa=bigPsl.fa stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</code></pre></li>
-  </ul>
-  <li>
-  Create the binary indexed bigPsl file from your sorted bigPsl input file using the 
-  <code>bedToBigBed</code> utility like so: 
-  <pre><code>bedToBigBed -as=bigPsl.as -type=bed12+13 -tab bigPsl.txt chrom.sizes bigPsl.bb</code></pre></li>
-  <li>
-  Move the newly created bigPsl file (<code>bigPsl.bb</code>) to an http, https, or ftp 
-  location.</li>
-  <li>
-  Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
-  <a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed 
-  <a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic 
-  version of the &quot;track&quot; line will look something like this:
-<pre><code>track type=bigPsl name="My Big Psl" description="Some mRNAs Discovered from Data from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigPsl.bb</code></pre></li>
-  <li>
-  Paste this custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom 
-  track</a> management page.</li>
+  Click the &quot;submit&quot; button.</li> 
 </ol>
 <p>
-The <code>bedToBigBed</code> program can also be run with several additional options. Run 
-<code>bedToBigBed</code> with no arguments to view a full list of the available options.</p>
-<p>
-<h2>Example #1</h2>
-<p>
-In this example, you will use an existing bigPsl file to create a bigPsl custom track. A bigPsl file
-that contains data on the hg38 assembly has been placed on our http server. You can create a custom 
-track using this bigPsl file by constructing a &quot;track&quot; line that references this file like
-so:</p>
-<pre><code>track type=bigPsl name=&quot;bigPsl Example One&quot; description=&quot;A bigPsl file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb</code></pre>
-<p>
-Paste the above &quot;track&quot; line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom 
-track</a> management page for the human assembly hg38, then press the &quot;submit&quot;
-button.</p>
-<p>
-Custom tracks can also be loaded via one URL line.  The below link loads the same bigPsl track, but 
-includes parameters on the URL line:</p>
+Custom tracks can also be loaded via one URL line. The link below loads the same bigPsl track, and 
+sets additional display parameters in the URL:</p>
 <pre><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr1:10000-200000&hgct_customText=track%20type=bigPsl%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb%20visibility=pack"
 target="_blank"><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr1:10000-200000&hgct_customText=track%20type=bigPsl%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb%20visibility=pack</code></a></pre>
 <p>
-With this example bigPsl loaded, click into an item from the track. Note how the details page 
-displays information about the alignment, similar to PSL tracks, as well as links to display the 
-browser position of the alignment and more detailed information about the alignment.</p>
+After this example bigPsl is loaded in the Genome Browser, click on a track item in the
+Genome Browser's track display. Note that the details page displays information about the alignment,
+similar that which is available for PSL tracks, as well as links that display the browser position 
+of the alignment and other detailed information about the alignment.</p>
 
 <h2>Example #2</h2>
 <p>
 In this example, you will create your own bigPsl file from an existing bigPsl input file.</p>
-<ul>
+<ol>
   <li>
-  Save this <code>bed12+13</code> <a href="examples/bigPsl.txt">bigPsl.txt</a> example input file to
-  your machine (<em>satisfies above step 4</em>).</li>
+  Save the example bed12+13 file <a href="examples/bigPsl.txt"><em>bigPsl.txt</em></a> to your 
+  computer (<em>Step 4</em> in <em>Creating a bigPsl track</em>, above</em>).</li>
   <li>
-  Download the <code>bedToBigBed</code> 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">utility</a> (<em>step 2</em>).</li>
+  Download the 
+  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/"><code>bedToBigBed</code> utility</a> 
+  (<em>Step 2</em>, above).</li>
   <li>
-  Save this <code>hg38.chrom.sizes</code> <a href="hg38.chrom.sizes">text file</a> to your machine. 
-  It contains the chrom.sizes for the human (hg38) assembly (<em>step 3</em>).</li>
+  Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer. 
+  This file contains the chrom.sizes for the human (hg38) assembly (<em>Step 3</em>, above).</li>
   <li>
-  Save this <code>bigPsl.as</code> <a href="examples/bigPsl.as"> text file</a> to your machine.</li>
+  Save the autoSql file <a href="examples/bigPsl.as"><em>bigPsl.as</em></a> to your computer.</li>
   <li>
-  Run the utility to create the bigBed output file (<em>step 5</em>):
+  Run the <code>bedToBigBed</code> utility to create the bigPsl output file (<em>Step 5</em>, 
+  above):
 <pre><code>bedToBigBed -as=bigPsl.as -type=bed12+13 -tab  bigPsl.txt hg38.chrom.sizes bigPsl.bb</code></pre></li>
   <li>
-  Place the bigPsl file you just created (<code>bigPsl.bb</code>) on a web-accessible server 
-  (<em>step 6</em>).</li>
+  Place the newly created bigPsl file (<em>bigPsl.bb</em>) on a web-accessible server 
+  (<em>Step 6</em>, above).</li>
   <li>
-  Construct a &quot;track&quot; line that points to your bigPsl file (see <em>step 7</em>).</li>
+  Construct a track line that points to the bigPsl file (<em>Step 7</em>, above).</li>
   <li>
   Create the custom track on the human assembly hg38 (Dec. 2013), and view it in the Genome Browser 
-  (see <em>step 8</em>).</li>
-</ul>
+  (<em>Step 8, above</em>).</li>
+</ol>
 
 <h2>Sharing your data with others</h2>
 <p>
 If you would like to share your bigPsl data track with a colleague, learn how to create a URL by 
-looking at <em>Example 11</em> on <a href="customTrack.html#SHARE">this</a> page.</p>
+looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
 
 <h2>Extracting data from the bigPsl format</h2>
 <p>
-Since the bigPsl files are an extension of bigBed files, which are indexed binary files, they can 
-be difficult to extract data from. We have developed the following programs, all of which are 
-available from the <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary
-utilities.</p>
+Because bigPsl files are an extension of bigBed files, which are indexed binary files, it can 
+be difficult to extract data from them. UCSC has developed the following programs to assist
+in working with bigBed formats, available from the 
+<a href="http://hgdownload.cse.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <ul>
   <li>
-  <code>bigBedToBed</code> &mdash; this program converts a bigBed file to ASCII BED format.</li>
+  <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
   <li>
-  <code>bigBedSummary</code> &mdash; this program extracts summary information from a bigBed 
-  file.</li>
+  <code>bigBedSummary</code> &mdash; extracts summary information from a bigBed file.</li>
   <li>
-  <code>bigBedInfo</code> &mdash; this program prints out information about a bigBed file.</li>
+  <code>bigBedInfo</code> &mdash; prints out information about a bigBed file.</li>
 </ul>
 <p>
-As with all UCSC Genome Browser programs, simply type the program name at the command line with no 
-parameters to see the usage statement.</p>
+As with all UCSC Genome Browser programs, simply type the program name (with no parameters) at the 
+command line to view the usage statement.</p>
 
 <h2>Troubleshooting</h2>
 <p>
-If you encounter an error when you run the <code>bedToBigBed</code> program, it may be because your 
-input bigPsl file has data off the end of a chromosome. In this case, use the <code>bedClip</code> 
-program <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">here</a> before the 
-<code>bedToBigBed</code> program. It will remove the row(s) in your input BED file that are off the 
-end of a chromosome.</p>
+If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
+file for data coordinates that extend past the the end of the chromosome. If these are present, run 
+the <code>bedClip</code> program 
+(<a href="http://hgdownload.cse.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
+row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
