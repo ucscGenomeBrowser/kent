@@ -10,6 +10,7 @@
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "portable.h"
+#include "obscure.h"
 
 void usage()
 {
@@ -21,25 +22,81 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+char *sqlReservedWords[] =
+    {
+    "ACCESSIBLE", "ADD", "ALL", "ALTER", "ANALYZE", "AND", "AS", "ASC",
+    "ASENSITIVE", "BEFORE", "BETWEEN", "BIGINT", "BINARY", "BLOB", "BOTH", "BY",
+    "CALL", "CASCADE", "CASE", "CHANGE", "CHAR", "CHARACTER", "CHECK", "COLLATE",
+    "COLUMN", "CONDITION", "CONSTRAINT", "CONTINUE", "CONVERT", "CREATE", "CROSS", "CURRENT_DATE",
+    "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "CURSOR", "DATABASE", "DATABASES", 
+    "DAY_HOUR", "DAY_MICROSECOND", "DAY_MINUTE", "DAY_SECOND", "DEC", "DECIMAL",
+    "DECLARE", "DEFAULT", "DELAYED", "DELETE", "DESC", "DESCRIBE", "DETERMINISTIC", "DISTINCT",
+    "DISTINCTROW", "DIV", "DOUBLE", "DROP", "DUAL", "EACH", "ELSE", "ELSEIF",
+    "ENCLOSED", "ESCAPED", "EXISTS", "EXIT", "EXPLAIN", "FALSE", "FETCH", "FLOAT",
+    "FLOAT4", "FLOAT8", "FOR", "FORCE", "FOREIGN", "FROM", "FULLTEXT", "GRANT",
+    "GROUP", "HAVING", "HIGH_PRIORITY", "HOUR_MICROSECOND", "HOUR_MINUTE", "HOUR_SECOND", "IF", 
+    "IGNORE", "IN", "INDEX", "INFILE", "INNER", "INOUT", "INSENSITIVE", "INSERT",
+    "INT", "INT1", "INT2", "INT3", "INT4", "INT8", "INTEGER", "INTERVAL",
+    "INTO", "IS", "ITERATE", "JOIN", "KEY", "KEYS", "KILL", "LEADING",
+    "LEAVE", "LEFT", "LIKE", "LIMIT", "LINEAR", "LINES", "LOAD", "LOCALTIME",
+    "LOCALTIMESTAMP", "LOCK", "LONG", "LONGBLOB", "LONGTEXT", "LOOP", "LOW_PRIORITY", 
+    "MASTER_SSL_VERIFY_SERVER_CERT", "MATCH", "MAXVALUE", "MEDIUMBLOB", "MEDIUMINT",
+    "MEDIUMTEXT", "MIDDLEINT", "MINUTE_MICROSECOND", "MINUTE_SECOND", "MOD", "MODIFIES", "NATURAL",
+    "NOT", "NO_WRITE_TO_BINLOG", "NULL", "NUMERIC", "ON", "OPTIMIZE", "OPTION",
+    "OPTIONALLY", "OR", "ORDER", "OUT", "OUTER", "OUTFILE", "PRECISION", "PRIMARY",
+    "PROCEDURE", "PURGE", "RANGE", "READ", "READS", "READ_WRITE", "REAL", "REFERENCES",
+    "REGEXP", "RELEASE", "RENAME", "REPEAT", "REPLACE", "REQUIRE", "RESIGNAL", "RESTRICT",
+    "RETURN", "REVOKE", "RIGHT", "RLIKE", "SCHEMA", "SCHEMAS", "SECOND_MICROSECOND", "SELECT",
+    "SENSITIVE", "SEPARATOR", "SET", "SHOW", "SIGNAL", "SMALLINT", "SPATIAL", "SPECIFIC",
+    "SQL", "SQLEXCEPTION", "SQLSTATE", "SQLWARNING", "SQL_BIG_RESULT", "SQL_CALC_FOUND_ROWS",
+    "SQL_SMALL_RESULT", "SSL", "STARTING", "STRAIGHT_JOIN", "TABLE", "TERMINATED",
+    "THEN", "TINYBLOB", "TINYINT", "TINYTEXT", "TO", "TRAILING", "TRIGGER", "TRUE",
+    "UNDO", "UNION", "UNIQUE", "UNLOCK", "UNSIGNED", "UPDATE", "USAGE", "USE", "USING", 
+    "UTC_DATE", "UTC_TIME", "UTC_TIMESTAMP", "VALUES", "VARBINARY", "VARCHAR", "VARCHARACTER",
+    "VARYING", "WHEN", "WHERE", "WHILE", "WITH", "WRITE", "XOR", "YEAR_MONTH", "ZEROFILL"
+    };
+
+struct hash *makeSqlReservedHash()
+/* Make up a hash of all mySQL reserved words in upper case.  Use with
+ * isSqlReserved.  Free with hashFree() */
+{
+int i;
+struct hash *hash = hashNew(0);
+int count = ArraySize(sqlReservedWords);
+for (i=0; i<count; ++i)
+    hashAdd(hash, sqlReservedWords[i], NULL);
+return hash;
+}
+
+boolean isSqlReserved(struct hash *sqlReservedHash, char *s)
+/* Return TRUE if s is a reserved symbol for mySQL.*/
+{
+return hashLookupUpperCase(sqlReservedHash, s) != NULL;
+}
+
+
 void freen(char *inFile)
 /* Test something */
 {
-short s = -1;
-unsigned short us = s;
-short maxShort = (us/2);
-short minShort = -maxShort - 1;
-printf("s = %d, us=%d\n", (int)s, (int)us);
-printf("minShort %d, maxShort %d\n", (int)minShort, (int)maxShort);
+int wordCount = 0;
+char *wordBuf;
+char **words;
+readAllWords(inFile, &words, &wordCount, &wordBuf);
 
-long long ll = -1;
-unsigned long long ull = ll;
-printf("ll = %lld, ull=%lld\n", ll, ull);
-long long maxLongLong = ull/2;
-long long minLongLong = -maxLongLong - 1;
-printf("minLongLong %lld, maxLongLong %lld\n", minLongLong, maxLongLong);
-printf("minLongLong 0x%llx, maxLongLong 0x%llx\n", minLongLong, maxLongLong);
-printf("sizeof(int) %d, sizeof(long) %d, sizeof(long long) %d\n", 
-    (int)sizeof(int), (int)sizeof(long), (int)sizeof(long long));
+struct hash *sqlReservedHash = makeSqlReservedHash();
+int is = 0, isNot = 0;
+int i;
+for (i=0; i<wordCount; ++i)
+    {
+    if (isSqlReserved(sqlReservedHash, words[i]))
+	{
+	uglyf("%s is reserved\n", words[i]);
+        ++is;
+	}
+    else
+        ++isNot;
+    }
+printf("%d reserved, %d not\n", is, isNot);
 }
 
 int main(int argc, char *argv[])
