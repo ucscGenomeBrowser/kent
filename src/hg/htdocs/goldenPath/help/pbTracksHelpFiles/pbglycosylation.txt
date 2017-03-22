@@ -1,3 +1,0 @@
-<!------------Description---------->
-This track shows predicted glycosylation sites within the
-protein, represented by red blocks displayed below the center line. 

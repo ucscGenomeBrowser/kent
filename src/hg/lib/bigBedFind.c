@@ -131,13 +131,16 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
     // if there is a trix file, use it to search for the term
     if (trixFile != NULL)
 	{
-	char buf[2048];
 	char *description = NULL;
-	if (hfs && isNotEmpty(hfs->searchDescription))
-	    truncatef(buf, sizeof(buf), "%s", hfs->searchDescription);
-	else
-	    safef(buf, sizeof(buf), "%s", hfs->searchTable);
-	description = cloneString(buf);
+	if (hfs)
+            {
+            char buf[2048];
+            if (isNotEmpty(hfs->searchDescription))
+                truncatef(buf, sizeof(buf), "%s", hfs->searchDescription);
+            else
+                safef(buf, sizeof(buf), "%s", hfs->searchTable);
+            description = cloneString(buf);
+            }
 	posList1 = doTrixSearch(hReplaceGbdb(trixFile), indexList, fileName, term, description);
 	}
 
