@@ -406,9 +406,6 @@ knetFile *khttp_parse_url(const char *fn, const char *mode)
 	if (*q == ':') *q++ = 0;
 	// get http_proxy
 	proxy = getenv("http_proxy");
-	if (checkNoProxy(fp->http_host))
-	    proxy = NULL;
-/* See if host endsWith element on no_proxy list. */
 	// set ->host, ->port and ->path
 	if (proxy == 0) {
 		fp->host = strdup(fp->http_host); // when there is no proxy, server name is identical to http_host name.
