@@ -21,3 +21,9 @@ boolean cartTrackDbIsNoGenome(char *db, char *table);
 struct slName *cartTrackDbTablesForTrack(char *db, struct trackDb *track, boolean useJoiner);
 /* Return list of all tables associated with track.  If useJoiner, the result can include
  * non-positional tables that are related to track by all.joiner. */
+
+
+typedef boolean (*cartDbIncludeFunc)(struct trackDb *tdb);
+
+void cartTrackDbInitExt(struct cart *cart, struct trackDb **retFullTrackList,
+                     struct grp **retFullGroupList, boolean useAccessControl, cartDbIncludeFunc func);
