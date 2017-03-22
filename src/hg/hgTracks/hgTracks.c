@@ -4315,6 +4315,7 @@ if (
 || sameWord(type, "gvf")
 || sameWord(type, "narrowPeak")
 || sameWord(type, "psl")
+|| sameWord(type, "barChart")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
 ) 
