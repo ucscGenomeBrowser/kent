@@ -12,6 +12,9 @@
 #include "barChartCategory.h"
 #include "barChartUi.h"
 
+// If a category contributes more than this percentage, its color is displayed in squish mode
+// Could be a trackDb setting
+#define SPECIFICITY_THRESHOLD   10
 
 struct barChartTrack
 /* Track info */
@@ -19,6 +22,7 @@ struct barChartTrack
     boolean noWhiteout;         /* Suppress whiteout of graph background (allow highlight, blue lines) */
     double maxMedian;           /* Maximum median across all categories */
     boolean doLogTransform;     /* Log10(x+1) */
+    char *unit;                /* Units for category values (e.g. RPKM) */
     struct barChartCategory *categories; /* Category names, colors, etc. */
     int categCount;             /* Count of categories - derived from above */
     char **categNames;          /* Category names  - derived from above */
@@ -218,8 +222,7 @@ static Color barChartItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 //      Also maybe trackDb setting
 {
 struct barChartBed *bed = (struct barChartBed *)item;
-int threshold = 10;
-int id = maxCategoryForItem(bed, threshold);
+int id = maxCategoryForItem(bed, SPECIFICITY_THRESHOLD);
 if (id < 0)
     return MG_BLACK;
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
@@ -243,6 +246,7 @@ extras->doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, BAR
 extras->maxMedian = barChartUiMaxMedianScore();
 extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, BAR_CHART_NO_WHITEOUT,
                                                         BAR_CHART_NO_WHITEOUT_DEFAULT);
+extras->unit = trackDbSettingClosestToHomeOrDefault(tg->tdb, BAR_CHART_UNIT, "");
 
 /* Get bed (names and all-sample category median scores) in range */
 char *filter = getScoreFilterClause(cart, tg->tdb, NULL);
@@ -290,15 +294,16 @@ tg->items = list;
 #define MARGIN_WIDTH 1
 
 
-static int barChartBarWidth()
+static int barChartBarWidth(struct track *tg)
 {
 long winSize = virtWinBaseCount;
+int scale = (getCategoryCount(tg) < 15 ? 2 : 1);
 if (winSize < WIN_MAX_GRAPH)
-    return MAX_BAR_WIDTH;
+    return MAX_BAR_WIDTH * scale;
 else if (winSize < WIN_MED_GRAPH)
-    return MED_BAR_WIDTH;
+    return MED_BAR_WIDTH * scale;
 else
-    return MIN_BAR_WIDTH;
+    return MIN_BAR_WIDTH * scale;
 }
 
 static int barChartModelHeight(struct barChartTrack *extras)
@@ -332,7 +337,7 @@ else
 static int barChartWidth(struct track *tg, struct barChartItem *itemInfo)
 /* Width of bar chart in pixels */
 {
-int barWidth = barChartBarWidth();
+int barWidth = barChartBarWidth(tg);
 int padding = barChartPadding();
 int count = filteredCategoryCount(tg);
 return (barWidth * count) + (padding * (count-1)) + 2;
@@ -489,7 +494,7 @@ if (!extras->noWhiteout)
 
 struct rgbColor lineColor = {.r=0};
 int lineColorIx = hvGfxFindColorIx(hvg, lineColor.r, lineColor.g, lineColor.b);
-int barWidth = barChartBarWidth();
+int barWidth = barChartBarWidth(tg);
 int graphPadding = barChartPadding();
 char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, BAR_CHART_COLORS, 
                         BAR_CHART_COLORS_DEFAULT);
@@ -575,22 +580,14 @@ int height = barChartItemHeightOptionalMax(tg, item, FALSE);
 return height;
 }
 
-#ifdef LATER
-static char *barChartText(struct barChartCategory *categ, double expScore, 
-                                        boolean doLogTransform, char *qualifier)
-/* Construct mouseover text for chart */
+static char *barChartMapText(struct track *tg, struct barChartCategory *categ, double expScore)
+/* Construct mouseover text for a chart bar */
 {
 static char buf[128];
-doLogTransform = FALSE; // for now, always display expression level on graph as raw RPKM
-// TODO: Add units from trackDb
-safef(buf, sizeof(buf), "%s (%.1f %s%s%s)", categ->label, 
-                                doLogTransform ? log10(expScore+1.0) : expScore,
-                                qualifier != NULL ? qualifier : "",
-                                qualifier != NULL ? " " : "",
-                                doLogTransform ? "log " : "");
+struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
+safef(buf, sizeof(buf), "%s (%.1f %s)", categ->label, expScore, extras->unit);
 return buf;
 }
-#endif
 
 static int barChartItemStart(struct track *tg, void *item)
 /* Return end chromosome coordinate of item, including graph */
@@ -610,13 +607,22 @@ int graphWidth = barChartWidth(tg, itemInfo);
 return max(bed->chromEnd, max(winStart, bed->chromStart) + graphWidth/scale);
 }
 
-#ifdef MAP_ITEM
-
-// TODO: implement
+static void getItemX(int start, int end, int *x1, int *x2)
+/* Return startX, endX based on item coordinates and current window */
+// Residual (largely replaced by drawScaledBox -- still used by gene model bmap box
+{
+int s = max(start, winStart);
+int e = min(end, winEnd);
+double scale = scaleForWindow(insideWidth, winStart, winEnd);
+assert(x1);
+*x1 = round((double)((int)s-winStart)*scale + insideX);
+assert(x2);
+*x2 = round((double)((int)e-winStart)*scale + insideX);
+}
 
 static void barChartMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
                         char *mapItemName, int start, int end, int x, int y, int width, int height)
-/* Create a map box on gene model and label, and one for each category (bar in the graph) in
+/* Create a map box on item and label, and one for each category (bar in the graph) in
  * pack or full mode.  Just single map for squish/dense modes */
 {
 if (tg->limitedVis == tvDense)
@@ -624,23 +630,23 @@ if (tg->limitedVis == tvDense)
     genericMapItem(tg, hvg, item, itemName, itemName, start, end, x, y, width, height);
     return;
     }
-struct barChartItebarChartItem *itemInfo = item;
-struct barChartBed *bed = (struct barChartBed *)itemInfo->bed;
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
-int geneStart = bed->chromStart;
-int geneEnd = bed->chromEnd;
+struct barChartItem *itemInfo = (struct barChartItem *)item;
+struct barChartBed *bed = (struct barChartBed *)itemInfo->bed;
+int itemStart = bed->chromStart;
+int itemEnd = bed->chromEnd;
 if (tg->limitedVis == tvSquish)
     {
-    int tisId = maxTissueForGene(bed);
-    char *maxTissue = "";
-    if (tisId > 1)
-        maxTissue = getTissueDescription(tisId);
+    int categId = maxCategoryForItem(bed, SPECIFICITY_THRESHOLD);
+    char *maxCateg = "";
+    if (categId > 1)
+        maxCateg = getCategoryLabel(tg, categId);
     char buf[128];
-    safef(buf, sizeof buf, "%s %s", bed->name, maxTissue);
+    safef(buf, sizeof buf, "%s %s", bed->name, maxCateg);
     int x1, x2;
-    getItemX(geneStart, geneEnd, &x1, &x2);
+    getItemX(itemStart, itemEnd, &x1, &x2);
     int width = max(1, x2-x1);
-    mapBoxHc(hvg, geneStart, geneEnd, x1, y, width, height, 
+    mapBoxHc(hvg, itemStart, itemEnd, x1, y, width, height, 
                  tg->track, mapItemName, buf);
     return;
     }
@@ -649,11 +655,10 @@ topGraphHeight = max(topGraphHeight, tl.fontHeight);        // label
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
 int x1 = insideX;
 
-
 // add maps to category bars
 struct barChartCategory *categs = getCategories(tg);
 struct barChartCategory *categ = NULL;
-int barWidth = barChartBarWidth();
+int barWidth = barChartBarWidth(tg);
 int padding = barChartPadding();
 double maxMedian = ((struct barChartTrack *)tg->extraUiData)->maxMedian;
 
@@ -666,20 +671,22 @@ x1 = insideX + graphX;
 
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
                                 BAR_CHART_MAX_LIMIT, BAR_CHART_MAX_LIMIT_DEFAULT);
+int i = 0;
 for (categ = categs; categ != NULL; categ = categ->next, i++)
     {
-    if (!filterTissue(tg, categ->name))
+    if (!filterCategory(tg, categ->name))
         continue;
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, maxMedian, viewMax, 
                                         barChartMaxHeight(), extras->doLogTransform);
-    char *qualifier = NULL;
-    mapBoxHc(hvg, geneStart, geneEnd, x1, yZero-height, barWidth, height, tg->track, mapItemName,  
-                barChartText(categ, expScore, extras->doLogTransform, qualifier));
+    mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, barWidth, height, tg->track, mapItemName,  
+                barChartMapText(tg, categ, expScore));
     x1 = x1 + barWidth + padding;
     }
 
-// add map boxes with description to gene model
+#ifdef ITEM_NAME_MAP
+// Maybe later
+// add map boxes with item name to item
 if (itemInfo->geneModel && itemInfo->description)
     {
     // perhaps these are just start, end ?
@@ -700,9 +707,8 @@ if (itemInfo->geneModel && itemInfo->description)
     mapBoxHc(hvg, geneStart, geneEnd, x1, y+itemHeight-geneModelHeight-3, w, geneModelHeight,
                         tg->track, mapItemName, itemInfo->description);
     } 
-}
-
 #endif
+}
 
 /* This is lifted nearly wholesale from gtexGene track.  Could be shared */
 
@@ -805,8 +811,7 @@ tg->canPack = TRUE;
 tg->drawItemAt = barChartDrawAt;
 tg->preDrawItems = barChartPreDrawItems;
 tg->loadItems = barChartLoadItems;
-// TODO: restore when implemented;
-//tg->mapItem = barChartMapItem;
+tg->mapItem = barChartMapItem;
 tg->itemName = barChartItemName;
 tg->mapItemName = barChartItemName;
 tg->itemHeight = barChartItemHeight;

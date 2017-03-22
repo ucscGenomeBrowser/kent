@@ -35,6 +35,9 @@
 #define BAR_CHART_CATEGORY_LABEL         "barChartLabel"
 #define BAR_CHART_CATEGORY_LABEL_DEFAULT        "Categories"
 
+/* Units to display on bar mouseover */
+#define BAR_CHART_UNIT                   "barChartUnit"
+
 /* Suppress whiteout behind graph (to show highlight and blue lines) */
 #define BAR_CHART_NO_WHITEOUT         "noWhiteout"
 #define BAR_CHART_NO_WHITEOUT_DEFAULT        FALSE
