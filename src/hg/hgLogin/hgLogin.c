@@ -308,6 +308,17 @@ do
 return (count >= 1);
 }
 
+struct dyString *getLoginCookieJS(char *userName, uint idx)
+/* returns javascript statements that set the cookies associated with
+ * logging in as a particular user */
+{
+struct dyString *result = dyStringNew(1024);
+struct slName *newCookies = loginLoginUser(userName, idx), *sl;
+for (sl = newCookies;  sl != NULL;  sl = sl->next)
+    dyStringPrintf(result, " document.cookie = '%s';", sl->name);
+return result; 
+}
+
 char *getReturnToURL()
 /* get URL from cart var returnto; if empty, make URL to hgSession on login host.  */
 {
@@ -337,7 +348,7 @@ static void redirectToLoginPage(char *paramStr)
 /* redirect to hgLogin page with given parameter string */
 {
 jsInlineF(
-    "window.location ='%s?%s'\n"
+    "window.location ='%s?%s';\n"
     , hgLoginUrl, paramStr);
 }
     
@@ -449,7 +460,7 @@ if (result == -1)
 else
     {
     jsInlineF(
-        "window.location = '%s?hgLogin.do.displayMailSuccess=1'\n"
+        "window.location = '%s?hgLogin.do.displayMailSuccess=1';\n"
         , hgLoginUrl);
     }
 }
@@ -512,7 +523,7 @@ if (result == -1)
 else
     {
     jsInlineF(
-        "window.location = '%s?hgLogin.do.displayMailSuccessPwd=1&user=%s'\n"
+        "window.location = '%s?hgLogin.do.displayMailSuccessPwd=1&user=%s';\n"
         , hgLoginUrl, username);
     }
 }
@@ -874,6 +885,10 @@ hPrintf(
 cartRemove(cart, "hgLogin_password");
 cartRemove(cart, "hgLogin_newPassword1");
 cartRemove(cart, "hgLogin_newPassword2");
+sqlSafef(query,sizeof(query),"SELECT * FROM gbMembers WHERE userName='%s'", user);
+struct gbMembers *m = gbMembersLoadByQuery(conn, query);
+struct dyString *cookieJS = getLoginCookieJS(user, m->idx);
+jsInline(cookieJS->string);
 returnToURL(150);
 }
 
@@ -1155,10 +1170,9 @@ hPrintf(
 struct dyString *javascript = dyStringNew(1024);
 dyStringPrintf(javascript,
         " document.write(\"Login successful, setting cookies now...\");");
-struct slName *newCookies = loginLoginUser(userName, idx), *sl;
-for (sl = newCookies;  sl != NULL;  sl = sl->next)
-    dyStringPrintf(javascript, " document.cookie = '%s';", sl->name);
 jsInline(javascript->string);
+struct dyString *cookieJS = getLoginCookieJS(userName, idx);
+jsInline(cookieJS->string);
 cartRemove(cart,"hgLogin_userName");
 returnToURL(150);
 }
