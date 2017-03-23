@@ -11,7 +11,11 @@ var HgIntegratorModel = ImModel.extend({
     maxDataSources: 5,
     maxRelatedTables: 4,
     tdbFields: 'track,table,shortLabel,parent,subtracks,noGenome',
-    excludeTypes: 'bam,wigMaf,maf',
+    excludeTypes: 'altGraphX,bam,bed,bed5FloatScore,bed5FloatScoreWithFdr' +
+    'bed6FloatScore,bedDetail,bedGraph,bedLogR,bedlogR,'+
+    'bigBed,bigGenePred,bigPsl,broadPeak,chain,chromGraph,customTracks,encodeFiveC,expRatio, '+
+    'factorSource,genePred,genepred,gvf,halSnake,interaction,joinedRmsk,maf,narrowPeak,netAlign,'+
+    'peptideMapping,pgSnp,psl,rmsk,vcf,vcfTabix,wig,wigMaf,wigMafProt',
 
     // Cart variables
     querySpecVar: 'hgi_querySpec',

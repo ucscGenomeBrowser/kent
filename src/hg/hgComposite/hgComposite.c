@@ -34,6 +34,7 @@
 #include "web.h"
 #include "annoFormatTab.h"
 #include "annoGratorQuery.h"
+#include "trashDir.h"
 
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
@@ -65,6 +66,17 @@ writeCartVar(cj, UI_CHOICES);
 jsonWriteObjectEnd(cj->jw);
 }
 
+#ifdef NOTNOW
+boolean includeFunc(struct trackDb *tdb)
+{
+char *type  = trackDbSetting(tdb, "type");
+fprintf(stderr,"BRtype is %s\n", type);
+if (startsWith("wig", type) || startsWith("bigWig", type))
+    return TRUE;
+return FALSE;
+}
+#endif
+
 static struct trackDb *getFullTrackList(struct cart *cart)
 /* It can take a long time to load trackDb, hubs etc, so cache it in case multiple
  * handlers need it.
@@ -75,7 +87,6 @@ static struct trackDb *fullTrackList = NULL;
 static struct grp *fullGroupList = NULL;
 if (fullTrackList == NULL)
     cartTrackDbInit(cart, &fullTrackList, &fullGroupList, /* useAccessControl= */TRUE);
-
 
 return fullTrackList;
 }
@@ -608,6 +619,7 @@ cartJsonRegisterHandler(cj, "getUserRegions", getUserRegions);
 cartJsonExecute(cj);
 }
 
+#ifdef NTONWO
 static struct pipeline *configTextOut(struct jsonElement *queryObj, int *pSavedStdout)
 // Set up a textOut pipeline according to output file options in queryObj.
 {
@@ -628,6 +640,7 @@ if (outFileOptions)
     }
 return textOutInit(fileName, compressType, pSavedStdout);
 }
+#endif
 
 #ifdef NOTNOW
 static struct annoFormatter *makeTabFormatter(struct jsonElement *queryObj)
@@ -874,6 +887,20 @@ return regionList;
 }
 #endif
 
+void outTdb(FILE *f, struct trackDb *tdb)
+{
+struct hashCookie cookie = hashFirst(tdb->settingsHash);
+struct hashEl *hel;
+fprintf(f, "track %s\n", tdb->track);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "color"))
+        fprintf(f, "%s %s\n", hel->name, (char *)hel->val);
+    }
+fprintf(f, "parent multiWigTest1\n");
+fprintf(f, "\n");
+}
+
 void doQuery()
 /* Execute a query that has been built up by the UI. */
 {
@@ -896,26 +923,69 @@ struct slRef *dataSources = jsonListVal(jsonFindNamedField(queryObj, "queryObj",
                                         "dataSources");
 // Get trackDb, assembly and regionList.
 struct trackDb *fullTrackList = getFullTrackList(cart);
-char *db = cartString(cart, "db");
+char *db = cloneString(cartString(cart, "db"));
 initGenbankTableNames(db);
 //struct annoAssembly *assembly = hAnnoGetAssembly(db);
 //char regionDesc[PATH_LEN];
 //struct bed4 *regionList = getRegionList(db, dataSources, fullTrackList,
                                         //regionDesc, sizeof(regionDesc));
 // Set up output.
-int savedStdout = -1;
-struct pipeline *textOutPipe = configTextOut(queryObj, &savedStdout);
-webStartText();
+//int savedStdout = -1;
+//struct pipeline *textOutPipe = configTextOut(queryObj, &savedStdout);
+webStartWrapperDetailedNoArgs(cart, trackHubSkipHubName(db),
+                              "", "Composite Builder",
+                              TRUE, FALSE, TRUE, TRUE);
+//webStartText();
 // Print a simple output header
 //time_t now = time(NULL);
+struct tempName hubTn;
+trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
+char *hubName = hubTn.forCgi;
+char *hubFile = strrchr(hubName, '/') + 1;
+FILE *f = mustOpen(hubName, "w");
+
 struct slRef *dsRef;
+fprintf(f,"hub hub1\n\
+shortLabel Braney Test Hub\n\
+longLabel Braney Test Hub Number One\n\
+genomesFile %s\n\
+email braney@soe.ucsc.edu\n\
+descriptionUrl hub.html\n\n", hubFile);
+fprintf(f,"genome %s\n\
+trackDb %s\n\n", db, hubFile);
+
+fprintf(f,"track multiWigTest1\n \
+shortLabel multiWigTest 1\n \
+aggregate none\n \
+longLabel multiWigTest\n \
+container multiWig\n \
+type bigWig 0 10000\n \
+viewLimits 0:50\n \
+visibility full\n\n");
+
 for (dsRef = dataSources;  dsRef != NULL;  dsRef = dsRef->next)
     {
     struct jsonElement *dsObj = dsRef->val;
     struct trackDb *tdb = tdbForDataSource(dsObj, db, fullTrackList);
-    printf("%s\n", tdb->track);
+    outTdb(f,tdb);
     }
+fclose(f);
 
+
+int redirDelay = 3;
+printf( "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s?%s&hubUrl=http://hgwdev.cse.ucsc.edu/trash/%s\">",
+          redirDelay,"../cgi-bin/hgTracks",cartSidUrlString(cart), hubName);
+          //char headerText[4096];
+          //safef(headerText, sizeof(headerText), "Hub Connect Successful");
+          //cartWebStart(cart, NULL, "%s", headerText);
+//printf( "<a HREF=%s?%s&hubUrl=http://hgwdev.cse.ucsc.edu/trash/%s\"> Click here</A>",
+ //         "../cgi-bin/hgTracks",cartSidUrlString(cart), hubName);
+                          
+                          printf("You will be automatically redirected to the hgTrack page.  Hub http://hgwdev.cse.ucsc.edu/trash/%s\n ",hubName);
+                              //"(<A HREF=\"../cgi-bin/hgGateway?%s\">%s</A>) in %d seconds.<BR><BR>",
+                                        //cartSidUrlString(cart),trackHubSkipHubName(database),redirDelay);
+
+//cartWebEnd();
 #ifdef NOTNO
 printf("# hgComposite: database=%s region=%s %s", db, regionDesc, ctime(&now));
 // Make an annoFormatter to print output.
@@ -939,7 +1009,7 @@ for (region = regionList;  region != NULL;  region = region->next)
     }
 
 #endif
-textOutClose(&textOutPipe, &savedStdout);
+//textOutClose(&textOutPipe, &savedStdout);
 }
 
 
@@ -1016,6 +1086,7 @@ long enteredMainTime = clock1000();
 char *excludeVars[] = {DO_QUERY, CARTJSON_COMMAND, NULL,};
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
+//cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgComposite", enteredMainTime);
 return 0;
