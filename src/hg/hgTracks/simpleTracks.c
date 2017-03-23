@@ -4511,9 +4511,13 @@ static void genericDrawItemsWiggle(struct track *tg, int seqStart, int seqEnd,
 struct wigCartOptions *wigCart = tg->wigCartData;
 struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(insideWidth);
 struct trackDb *tdb = tg->tdb;
-if (hashFindVal(tdb->settingsHash, AUTOSCALE) == NULL)
+boolean parentLevel = isNameAtParentLevel(tdb,tdb->track);
+
+char *autoScale = cartOptionalStringClosestToHome(cart, tdb, parentLevel, AUTOSCALE);
+if (autoScale == NULL)
     wigCart->autoScale =  wiggleScaleAuto;
-if (hashFindVal(tdb->settingsHash, WINDOWINGFUNCTION) == NULL)
+char *windowingFunction = cartOptionalStringClosestToHome(cart, tdb, parentLevel, WINDOWINGFUNCTION);
+if (windowingFunction == NULL)
     wigCart->windowingFunction = wiggleWindowingMax;
 unsigned *counts = countOverlaps(tg);
 
