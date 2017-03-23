@@ -1169,28 +1169,34 @@ tracks, see src/product/README.trackDb.</p>
 <h1 id="proxy-support">Proxy support</h1>
 <div class='sectionContent'>
 
-<p>net.c now has support for http(s) proxy servers
+<p>
+net.c now has support for http(s) proxy servers
 which may be required by some installations
 to get through the firewall to external resources
 such as (but not limited to) for example
-bigWig or bigBed data via custom track bigDataUrl.</p>
+bigWig or bigBed data via custom track bigDataUrl.
+</p>
 
-<p>One must add the setting &quot;httpProxy&quot; to hg.conf</p>
+<p>One must add the setting &quot;httpProxy&quot; and &quot;httpsProxy&quot; to hg.conf</p>
 
-<pre><code>httpProxy=http://someProxyServer:443/</code></pre>
+<pre><code>httpProxy=http://someProxyServer:3128/</code></pre>
+<pre><code>httpsProxy=http://someProxyServer:3128/</code></pre>
 
 <p>If the proxy server requires BASIC authentication</p>
 
-<pre><code>httpProxy=http://user:password@someProxyServer:443/</code></pre>
+<pre><code>httpProxy=http://user:password@someProxyServer:3128/</code></pre>
+<pre><code>httpsProxy=http://user:password@someProxyServer:3128/</code></pre>
 
 <p>where user and password may need URL-encoding
 if they contain special characters such as
 &quot;:&quot; and &quot;@&quot;.</p>
 
-<p>The proxy support does not distinguish between
-local and foreign destinations. All http(s)
-URLs that are being accessed go through the proxy
-server, if it is enabled.</p>
+<p>
+If you wish to exclude domains from proxying,
+create a comma-separated list of domain-suffixes.
+If a domain ends with an entry from this list, the proxy will be skipped.
+</p>
+<pre><code>noProxy=ucsc.edu,mit.edu,localhost,127.0.0.1</code></pre>
 
 </div></div>
 <div class='section' id='adding-tracks-to-the-browser'>

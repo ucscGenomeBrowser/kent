@@ -4,15 +4,15 @@ to get through the firewall to external resources
 such as (but not limited to) for example 
 bigWig or bigBed data via custom track bigDataUrl.
 
-One must add the setting "httpProxy" and httpsProxy to hg.conf
+One must add the setting "httpProxy" and "httpsProxy" to hg.conf
 
-httpProxy=http://someProxyServer:8080
-httpsProxy=http://someProxyServer:8080
+httpProxy=http://someProxyServer:3128
+httpsProxy=http://someProxyServer:3128
 
 If the proxy server requires BASIC authentication
 
-httpProxy=http://user:password@someProxyServer:8080
-httpsProxy=http://user:password@someProxyServer:8080
+httpProxy=http://user:password@someProxyServer:3128
+httpsProxy=http://user:password@someProxyServer:3128
 
 where user and password may need URL-encoding
 if they contain special characters such as
@@ -22,11 +22,10 @@ If you wish to exclude domains from proxying,
 create a comma-separated list of domain-suffixes.  
 If a domain ends with an entry from this list, the proxy will be skipped.
 
-noProxy=ucsc.edu,mit.edu
+noProxy=ucsc.edu,mit.edu,localhost,127.0.0.1
 
-
-(The httpProxy and httpsProxy URLs should use http protocol, not https.
-One reason for this is that https sessions would end up doubly-encoded.)
+The httpProxy and httpsProxy URLs should use http protocol, not https.
+One reason for this is that https sessions would end up doubly-encoded.
 
 net.c also responds to environment variables http_proxy and https_proxy and no_proxy.
 
