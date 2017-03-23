@@ -1620,6 +1620,9 @@ if (httpProxy)
 char *httpsProxy = cfgOption("httpsProxy");
 if (httpsProxy)
     setenv("https_proxy", httpsProxy, TRUE);
+char *ftpProxy = cfgOption("ftpProxy");
+if (ftpProxy)
+    setenv("ftp_proxy", ftpProxy, TRUE);
 char *noProxy = cfgOption("noProxy");
 if (noProxy)
     setenv("no_proxy", noProxy, TRUE);

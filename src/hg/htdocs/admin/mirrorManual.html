@@ -1177,15 +1177,16 @@ such as (but not limited to) for example
 bigWig or bigBed data via custom track bigDataUrl.
 </p>
 
-<p>One must add the setting &quot;httpProxy&quot; and &quot;httpsProxy&quot; to hg.conf</p>
+<p>One may add the settings &quot;httpProxy&quot;, &quot;httpsProxy&quot; and &quot;ftpProxy&quot; to hg.conf</p>
 
-<pre><code>httpProxy=http://someProxyServer:3128/</code></pre>
-<pre><code>httpsProxy=http://someProxyServer:3128/</code></pre>
+<pre><code>httpProxy=http://someProxyServer:3128</code></pre>
+<pre><code>httpsProxy=http://someProxyServer:3128</code></pre>
+<pre><code>ftpProxy=http://127.0.0.1:2121</code></pre>
 
 <p>If the proxy server requires BASIC authentication</p>
 
-<pre><code>httpProxy=http://user:password@someProxyServer:3128/</code></pre>
-<pre><code>httpsProxy=http://user:password@someProxyServer:3128/</code></pre>
+<pre><code>httpProxy=http://user:password@someProxyServer:3128</code></pre>
+<pre><code>httpsProxy=http://user:password@someProxyServer:3128</code></pre>
 
 <p>where user and password may need URL-encoding
 if they contain special characters such as

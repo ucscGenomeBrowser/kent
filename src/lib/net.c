@@ -956,7 +956,7 @@ return NULL;
 }
 
 static int netGetOpenFtpSockets(char *url, int *retCtrlSd)
-/* Return a socket descriptor for url data (url can end in ";byterange:start-end",
+/* Return a socket descriptor for url data (url can end in ";byterange:start-end)",
  * or -1 if error.
  * If retCtrlSd is non-null, keep the control socket alive and set *retCtrlSd.
  * Otherwise, create a pipe and fork to keep control socket alive in the child 
@@ -966,10 +966,32 @@ char cmd[256];
 
 /* Parse the URL and connect. */
 struct netParsedUrl npu;
+struct netParsedUrl pxy;
 netParseUrl(url, &npu);
 if (!sameString(npu.protocol, "ftp"))
     errAbort("netGetOpenFtpSockets: url (%s) is not for ftp.", url);
-int sd = openFtpControlSocket(npu.host, atoi(npu.port), npu.user, npu.password);
+
+boolean noProxy = checkNoProxy(npu.host);
+char *proxyUrl = getenv("ftp_proxy");
+if (noProxy)
+    proxyUrl = NULL;
+
+int sd = -1;
+if (proxyUrl)
+    {
+    netParseUrl(proxyUrl, &pxy);
+    if (!sameString(pxy.protocol, "ftp"))
+        errAbort("Unknown proxy protocol %s in %s.", pxy.protocol, proxyUrl);
+    char proxyUser[4096];
+    safef(proxyUser, sizeof proxyUser, "%s@%s:%s", npu.user, npu.host, npu.port);
+    sd = openFtpControlSocket(pxy.host, atoi(pxy.port), proxyUser, npu.password);
+    verbose(2, "%s as %s via proxy %s\n", url, proxyUser, proxyUrl);
+    }
+else
+    {
+    sd = openFtpControlSocket(npu.host, atoi(npu.port), npu.user, npu.password);
+    }
+
 if (sd == -1)
     return -1;
 
@@ -995,7 +1017,11 @@ if (npu.byteRangeStart != -1)
 safef(cmd,sizeof(cmd),"%s %s\r\n",((npu.file[strlen(npu.file)-1]) == '/') ? "LIST" : "RETR", npu.file);
 sendFtpCommandOnly(sd, cmd);
 
-int sdata = netConnect(npu.host, parsePasvPort(rs->string));
+int sdata = -1;
+if (proxyUrl)
+    sdata = netConnect(pxy.host, parsePasvPort(rs->string));
+else
+    sdata = netConnect(npu.host, parsePasvPort(rs->string));
 dyStringFree(&rs);
 if (sdata < 0)
     {
@@ -1037,7 +1063,7 @@ else
     {
     /* Because some FTP servers will kill the data connection
      * as soon as the control connection closes,
-     * we have to develop a workaround using a partner process. */
+     * we have to develop a workaround using a partner thread. */
     fflush(stdin);
     fflush(stdout);
     fflush(stderr);

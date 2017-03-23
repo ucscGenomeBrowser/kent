@@ -685,15 +685,16 @@ your personal track and session settings and mirrored tracks.</p>
 <strong>Problem:</strong> I need proxy support for my files to load.</p>
 <p>
 <em>Solution:</em> Proxy servers may be required by some installations to get through a firewall. 
-You can add the settings <code>httpProxy</code> and/or <code>httpsProxy</code> to hg.conf.local at
+You can add the settings <code>httpProxy</code>, <code>httpsProxy</code> and <code>ftpProxy</code> to hg.conf.local at
 /usr/local/apache/cgi-bin/hg.conf.local:</p>
-<pre><code>httpProxy=http://someProxyServer:3128/</code></pre>
-<pre><code>httpsProxy=http://someProxyServer:3128/</code></pre>
+<pre><code>httpProxy=http://someProxyServer:3128</code></pre>
+<pre><code>httpsProxy=http://someProxyServer:3128</code></pre>
+<pre><code>ftpProxy=ftp://127.0.0.1:2121</code></pre>
 <p>
 If the proxy server requires BASIC authentication, then the line in hg.conf.local should look like
 this:</p>
-<pre><code>httpProxy=http://user:password@someProxyServer:3128/</code></pre>
-<pre><code>httpsProxy=http://user:password@someProxyServer:3128/</code></pre>
+<pre><code>httpProxy=http://user:password@someProxyServer:3128</code></pre>
+<pre><code>httpsProxy=http://user:password@someProxyServer:3128</code></pre>
 <p>
 If there are domains or domain-suffices that should not be proxied, use <code>noProxy</code>.
 <pre><code>noProxy=ucsc.edu,mit.edu,localhost,127.0.0.1</code></pre>
