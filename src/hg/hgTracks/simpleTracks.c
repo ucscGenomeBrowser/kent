@@ -749,9 +749,7 @@ if (doWiggle)
         // fake the trackDb range for this auto-wiggle
         int wordCount = 3;
         char *words[3];
-        words[0] = "wig";
-        words[1] = "0";
-        words[2] = "127";
+        words[0] = "bedGraph";
 	wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words );
 	tg->wigCartData = (void *) wigCart;
 	}
