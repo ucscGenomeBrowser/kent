@@ -1611,9 +1611,18 @@ struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
 if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
     initSigHandlers(hDumpStackEnabled());
-char *httpProxy = cfgOption("httpProxy");  /* most cgis call this routine */
+/* Proxy Settings 
+ * Most cgis call this routine
+ * net.c cannot see the cart, pass the value through env var */
+char *httpProxy = cfgOption("httpProxy");  
 if (httpProxy)
-    setenv("http_proxy", httpProxy, TRUE);   /* net.c cannot see the cart, pass the value through env var */
+    setenv("http_proxy", httpProxy, TRUE);
+char *httpsProxy = cfgOption("httpsProxy");
+if (httpsProxy)
+    setenv("https_proxy", httpsProxy, TRUE);
+char *noProxy = cfgOption("noProxy");
+if (noProxy)
+    setenv("no_proxy", noProxy, TRUE);
 return cart;
 }
 

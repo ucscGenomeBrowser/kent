@@ -43,18 +43,9 @@ if (aa == NULL)
         }
     else
         {
-        char *nibOrTwoBitDir = hDbDbNibPath(db);
-        if (nibOrTwoBitDir == NULL)
-            errAbort("Can't find .2bit for db '%s'", db);
         char twoBitPath[HDB_MAX_PATH_STRING];
-        safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
+        safef(twoBitPath, sizeof(twoBitPath), "/gbdb/%s/%s.2bit", db, db);
         char *path = hReplaceGbdb(twoBitPath);
-        if (!fileExists(path))
-            {
-            // if 2bit file isn't in nibOrTwoBitDir, try up one directory
-            safef(twoBitPath, sizeof(twoBitPath), "%s/../%s.2bit", nibOrTwoBitDir, db);
-            path = hReplaceGbdb(twoBitPath);
-            }
         aa = annoAssemblyNew(db, path);
         freeMem(path);
         }

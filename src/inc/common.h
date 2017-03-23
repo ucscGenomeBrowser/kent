@@ -872,6 +872,9 @@ char *strLower(char *s);
 #define tolowers(s) (void)strLower(s)
 /* Convert entire string to lower case */
 
+void replaceChar(char *s, char old, char new);
+/* Repace one char with another. Modifies original string. */
+
 char *replaceChars(char *string, char *oldStr, char *newStr);
 /*
   Replaces the old with the new.
