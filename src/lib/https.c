@@ -101,7 +101,7 @@ if (params->noProxy)
 char *connectHost;
 int connectPort;
 
-BIO *sbio, *ssbio;
+BIO *sbio=NULL, *ssbio=NULL;
 SSL_CTX *ctx;
 SSL *ssl;
 
