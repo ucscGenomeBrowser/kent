@@ -190,7 +190,8 @@ if (sbio == NULL)
     xerr("BIO_new_socket() failed");
     goto cleanup;
     }
-if ((ssbio = BIO_new_ssl(ctx, 1)) == NULL) 
+ssbio = BIO_new_ssl(ctx, 1);
+if (ssbio == NULL) 
     {
     xerr("BIO_new_ssl() failed");
     goto cleanup;
