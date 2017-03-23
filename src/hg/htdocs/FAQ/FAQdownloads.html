@@ -804,18 +804,18 @@ can <a href="../contacts.html">contact us</a> for more information.</p>
 Currently, the <a href="../cgi-bin/hgTables">Table Browser</a> option to output as
 <a href="../FAQ/FAQformat.html#format4">GTF</a> is limited, and in some cases, may contain bugs.
 For now, the best method to obtain GTF output is to convert genePred to GTF using the
-command-line utility, genePredToGtf.</p>
+command-line utility, <code>genePredToGtf</code>.</p>
 <p>
             <a href="../FAQ/FAQformat#format9">GenePred</a> (short for Gene Predictions) is a table
 format commonly used for gene tracks in the UCSC Genome Browser where each transcript has a single
 row. Tables are not stored in GTF as it would require many rows to describe a single transcript
-since each gene feature (i.e., exon) requires a separate line. The genePredToGtf command-line
-utility can be used to convert genePred to GTF. Download the genePredToGtf operating-specific
+since each gene feature (i.e., exon) requires a separate line. The <code>genePredToGtf</code> command-line
+utility can be used to convert genePred to GTF. Download the <code>genePredToGtf</code> operating-specific
 command-line utility from the
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a>.</p>
 <p>
 Please see the <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format"> Genes in GTF
-or GFF Format wiki page</a> for examples and various methods for conversion. The genePredToGtf
+or GFF Format wiki page</a> for examples and various methods for conversion. The <code>genePredToGtf</code>
 utility can convert files from several sources, such as Table Browser output from a genePred table,
 a local downloaded gene set table like refGene.txt, or from querying
 <a href="../goldenpath/help/mysql.html">public MySQL tables.</a></p>

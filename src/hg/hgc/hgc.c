@@ -10084,6 +10084,11 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
 
+/* So far, we can just remove "chr" from UCSC chrom names to get DECIPHER names */
+char *decipherChrom = chrom;
+if (startsWithNoCase("chr", decipherChrom))
+    decipherChrom += 3;
+
 printf("<H3>Patient %s </H3>", itemName);
 
 /* print phenotypes and other information, if available */
@@ -10091,7 +10096,8 @@ if (sqlFieldIndex(conn, "decipherRaw", "phenotypes") >= 0)
     {
     sqlSafef(query, sizeof(query),
         "select phenotypes, mean_ratio, inheritance, pathogenicity, contribution "
-        "from decipherRaw where id = '%s'", itemName);
+        "from decipherRaw where id = '%s' and chr = '%s' and start = %d and end = %d",
+        itemName, decipherChrom, start+1, end);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if ((row != NULL) && strlen(row[0]) >= 1)
