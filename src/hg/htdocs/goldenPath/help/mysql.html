@@ -8,7 +8,7 @@
 <h1>Downloading Data using MySQL</h1>
 
 <p>
-We have a MySQL database for public access at <strong>genome-mysql.cse.ucsc.edu</strong>.</p> 
+We have a MySQL database for public access at <strong>genome-mysql.soe.ucsc.edu</strong>.</p> 
 <p>
 This server allows MySQL access to the same set of data currently available on our public
 Genome Browser site. The data are synchronized weekly with the main databases on our public site.
@@ -23,7 +23,7 @@ version of the <a href="http://dev.mysql.com/downloads/mysql/5.0.html" target="_
 clients</a>.</p>
 <p>
 Connect to the MySQL server using the command:</p> 
-<pre><code>mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A</code></pre> 
+<pre><code>mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A</code></pre> 
 <p>
 The <em>-A</em> flag is optional but is recommended for speed.</p> 
 <p>
@@ -51,11 +51,11 @@ The MySQL database can also be used by the numerous utilities in the
 tree. Some of these utilities require a password, so you will need to add the following 
 specifications to your $HOME/.hg.conf file (remember to chmod your .hg.conf file to 600 
 permissions):</p> 
-<pre><code>db.host=genome-mysql.cse.ucsc.edu
+<pre><code>db.host=genome-mysql.soe.ucsc.edu
 db.user=genomep
 db.password=password
 central.db=hgcentral
-central.host=genome-mysql.cse.ucsc.edu
+central.host=genome-mysql.soe.ucsc.edu
 central.user=genomep
 central.password=password </code></pre> 
 
@@ -66,7 +66,7 @@ available from our downloads server in the
 to access the public MySQL server. The benefit of using the <code> hgsql</code> command is that
 you don't have to include the username or password as part of your command. You only need to
 specifcy the host:</p>
-<p><pre><code>hgsql -h genome-mysql.cse.ucsc.edu</code></pre></p>
+<p><pre><code>hgsql -h genome-mysql.soe.ucsc.edu</code></pre></p>
 
 <p>
 If you prefer a graphical user interface (GUI) to the UCSC database tables, use the 
