@@ -143,7 +143,12 @@ if (proxyUrl)
     {
     netParseUrl(proxyUrl, &pxy);
     if (!sameString(pxy.protocol, "http"))
-	errAbort("Unknown proxy protocol %s in %s.", pxy.protocol, proxyUrl);
+	{
+	char s[256];	
+	safef(s, sizeof s, "Unknown proxy protocol %s in %s. Should be http.", pxy.protocol, proxyUrl);
+	xerr(s);
+	goto cleanup;
+	}
     connectHost = pxy.host;
     connectPort = atoi(pxy.port);
     }
