@@ -68,11 +68,11 @@ Download these autoSql files needed by <code>bedToBigBed</code>:
 <p>
 <strong>Step 3.</strong> 
 Download the <code>bedToBigBed</code> and <code>hgLoadChain</code> programs from the UCSC
-<a href="http://hgdownload.cse.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <p>
 <strong>Step 4.</strong> 
 Use the <code>fetchChromSizes</code> script from the 
-<a href="http://hgdownload.cse.ucsc.edu/admin/exe/">same directory</a> to create a 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create a 
 <em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg38). 
 Alternatively, you can download the 
 <em>chrom.sizes</em> file for any assembly hosted at UCSC from our 
@@ -159,7 +159,7 @@ In this example, you will create your own bigChain file from an existing chain i
   above).</li>
   <li>
   Download the <code>bedToBigBed</code> and <code>hgLoadChain</code> 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">utilities</a> (<em>Step 3</em>, above).</li>
+  <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities</a> (<em>Step 3</em>, above).</li>
   <li>
   Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer. This
   file contains the chrom.sizes for the human hg38 assembly (<em>Step 4</em>, above).</li>
@@ -186,7 +186,7 @@ looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
 Because the bigChain files are an extension of bigBed files, which are indexed binary files, it can 
 be difficult to extract data from them. UCSC has developed the following programs to assist
 in working with bigBed formats, available from the 
-<a href="http://hgdownload.cse.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <ul>
   <li>
   <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
@@ -204,7 +204,7 @@ command line to view the usage statement.</p>
 If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
 file for data coordinates that extend past the the end of the chromosome. If these are present, run 
 the <code>bedClip</code> program 
-(<a href="http://hgdownload.cse.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
+(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
 row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
