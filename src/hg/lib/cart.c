@@ -1605,14 +1605,10 @@ struct cart *cartForSession(char *cookieName, char **exclude,
                             struct hash *oldVars)
 /* This gets the cart without writing any HTTP lines at all to stdout. */
 {
-char *hguid = getCookieId(cookieName);
-char *hgsid = getSessionId();
-struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
-cartExclude(cart, sessionVar);
+/* Most cgis call this routine */
 if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
     initSigHandlers(hDumpStackEnabled());
 /* Proxy Settings 
- * Most cgis call this routine
  * net.c cannot see the cart, pass the value through env var */
 char *httpProxy = cfgOption("httpProxy");  
 if (httpProxy)
@@ -1628,7 +1624,12 @@ if (noProxy)
     setenv("no_proxy", noProxy, TRUE);
 char *logProxy = cfgOption("logProxy");
 if (logProxy)
-    setenv("log_proxy", noProxy, TRUE);
+    setenv("log_proxy", logProxy, TRUE);
+
+char *hguid = getCookieId(cookieName);
+char *hgsid = getSessionId();
+struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
+cartExclude(cart, sessionVar);
 return cart;
 }
 
