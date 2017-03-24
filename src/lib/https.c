@@ -161,7 +161,9 @@ if (fd == -1)
 
 if (proxyUrl)
     {
-    verbose(2, "CONNECT %s:%d HTTP/1.0 via %s:%d\n", params->hostName, params->port, connectHost,connectPort);
+    char *logProxy = getenv("log_proxy");
+    if (sameOk(logProxy,"on"))
+	verbose(1, "CONNECT %s:%d HTTP/1.0 via %s:%d\n", params->hostName, params->port, connectHost,connectPort);
     struct dyString *dy = newDyString(512);
     dyStringPrintf(dy, "CONNECT %s:%d HTTP/1.0\r\n", params->hostName, params->port);
     setAuthorization(pxy, "Proxy-Authorization", dy);

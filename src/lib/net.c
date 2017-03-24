@@ -181,7 +181,7 @@ if (res < 0)
                 // Check the value returned...
                 if (valOpt)
                     {
-                    warn("Error in TCP non-blocking connect() %d - %s", valOpt, strerror(valOpt));
+                    warn("Error in TCP non-blocking connect() %d - %s. Host %s port %d.", valOpt, strerror(valOpt), hostName, port);
                     close(sd);
                     return -1;
                     }
@@ -981,11 +981,13 @@ if (proxyUrl)
     {
     netParseUrl(proxyUrl, &pxy);
     if (!sameString(pxy.protocol, "ftp"))
-        errAbort("Unknown proxy protocol %s in %s.", pxy.protocol, proxyUrl);
+        errAbort("Unknown proxy protocol %s in %s. Should be ftp.", pxy.protocol, proxyUrl);
     char proxyUser[4096];
     safef(proxyUser, sizeof proxyUser, "%s@%s:%s", npu.user, npu.host, npu.port);
     sd = openFtpControlSocket(pxy.host, atoi(pxy.port), proxyUser, npu.password);
-    verbose(2, "%s as %s via proxy %s\n", url, proxyUser, proxyUrl);
+    char *logProxy = getenv("log_proxy");
+    if (sameOk(logProxy,"on"))
+	verbose(1, "%s as %s via proxy %s\n", url, proxyUser, proxyUrl);
     }
 else
     {
@@ -1167,7 +1169,9 @@ if (proxyUrl)
     if (!sameString(pxy.protocol, "http"))
 	errAbort("Unknown proxy protocol %s in %s.", pxy.protocol, proxyUrl);
     sd = connectNpu(pxy, url, noProxy);
-    verbose(2, "%s via proxy %s\n", url, proxyUrl);
+    char *logProxy = getenv("log_proxy");
+    if (sameOk(logProxy,"on"))
+	verbose(1, "%s via proxy %s\n", url, proxyUrl);
     }
 else
     {

@@ -1626,6 +1626,9 @@ if (ftpProxy)
 char *noProxy = cfgOption("noProxy");
 if (noProxy)
     setenv("no_proxy", noProxy, TRUE);
+char *logProxy = cfgOption("logProxy");
+if (logProxy)
+    setenv("log_proxy", noProxy, TRUE);
 return cart;
 }
 
