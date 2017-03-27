@@ -115,7 +115,6 @@ function Doc(body, metadata, variables)
   -- print("meta")
   -- tprint(metadata)
 
-  -- add("<div class='section'>")
 
   if metadata["title"] then
     add("<h1>" .. metadata["title"] .. "</h1>")
@@ -123,16 +122,11 @@ function Doc(body, metadata, variables)
     add("<h1>No title defined in document, first line must be % mytitle </h1>")
   end
 
-  --add("<div class='sectionContent'>")
   add("<h2>Contents</h2>")
-  -- add("<ul>")
   for i, h in ipairs(headers) do
     idStr = simplifyId(h)
     add("<h6><a href='#" .. idStr .. "'>" .. h .. "</a></h6>")
   end
-  -- add("</ul>")
-  -- add("</div>")
-  -- add("</div>")
   -- ucsc change end
 
   add(body)
@@ -282,15 +276,10 @@ function Header(lev, s, attr)
 
     idStr = simplifyId(s)
 
-    -- if headerOpen then
-    --   table.insert(lines, "</div></div>")
-    -- end
-
     table.insert(headers, s)
 
     table.insert(lines, "<a name='" .. idStr .. "'></a>")
     table.insert(lines, "<h2>"  .. s .. "</h2>")
-    -- table.insert(lines, "<div class='sectionContent'>")
     headerOpen = true
 
   else
