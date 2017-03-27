@@ -14,6 +14,7 @@
 #include "barChartUi.h"
 
 /* Restrict features on right-click (popup) version */
+/* FIXME: NOT STATIC */
 static boolean isPopup = FALSE;
 
 /* Convenience functions for category filter controls */
@@ -157,11 +158,7 @@ struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb 
 /* Get category colors and descriptions.  If barChartLabel setting contains label list, assign rainbow colors.
  * O/w look for a table naed track+Category, and use labels and colors there */
 {
-static struct barChartCategory *categs;
-
-if (categs != NULL)
-    return categs;
-
+struct barChartCategory *categs = NULL;
 char *words[BAR_CHART_MAX_CATEGORIES];
 char *labels = trackDbSettingClosestToHome(tdb, BAR_CHART_CATEGORY_LABELS);
 struct barChartCategory *categ = NULL;
