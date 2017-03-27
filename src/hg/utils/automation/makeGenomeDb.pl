@@ -1348,6 +1348,7 @@ src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
 src/hg/makeDb/trackDb/trackDb.transMap.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.primates.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.other.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.euarchontoglires.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.laurasiatheria.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.afrotheria.ra \\
