@@ -484,7 +484,7 @@ while (TRUE)
     {
     hash = newHash(0);
     status = netUrlHead(url, hash);
-    if (status == 200)
+    if (status == 200 || status == 403)
 	break;
     if (status != 301 && status != 302)  
 	return FALSE;
