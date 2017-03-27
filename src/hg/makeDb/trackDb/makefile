@@ -174,7 +174,7 @@ DBS = \
 	turTru1 turTru2 \
 	venter1 \
 	vicPac1 vicPac2 \
-	xenTro1 xenTro2 xenTro3 xenTro7
+	xenTro1 xenTro2 xenTro3 xenTro7 xenTro9
 
 GSID_DBS = \
 	hiv1 vax004 hivgne8 hivmn hivmn1 hivmn2 hivgne8v2 hivVax003Vax004
