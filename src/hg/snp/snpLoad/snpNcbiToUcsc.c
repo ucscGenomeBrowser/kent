@@ -1142,6 +1142,11 @@ if (ncbiChrStart != -1 && !strstr(chr, "_hap") &&
     /* If NCBI's start matches our end, guess that the track item was lifted from a reversed contig */
     if (ncbiChrStart == chrEnd)
         warn("Warning: rs%d, chromStart (%d) does not match phys_pos_from (%d), but chromEnd does.  This is possibly due to a reversed contig, so not marking as an error.", rsId, chrStart, ncbiChrStart);
+    else if (startsWith("chrUn", chr) || endsWith(chr, "_random") || endsWith(chr, "_alt"))
+        // As of b149 human, some random/alt contigs were given phys_pos_from coords that look
+        // like chromosome not contig -- don't remove them from snp149, just warn.
+        warn("Warning: rs%d, chromStart (%d) does not match phys_pos_from (%d) on unplaced %s",
+             rsId, chrStart, ncbiChrStart, chr);
     else 
         writeError("chromStart (%d) does not match phys_pos_from (%d).",
 	            chrStart, ncbiChrStart);
@@ -1166,21 +1171,33 @@ else if (sameString(locType, "between"))
     /* dbSNP insertions have end=start+1 -- 2 bases long in their 0-based,
      * fully-closed coords.  We increment start so end=start -- 0 bases long
      * in our 0-based, half-open coords. */
-    chrStart++;
-    if (chrEnd != chrStart)
-	{
-	chrStart--;
-	writeError("Unexpected coords for locType \"%s\" (%d) -- "
-		   "expected NCBI's chrEnd = chrStart+1, got start=%d, end=%d.",
-		   locType, locTypeNum, chrStart, chrEnd);
-	// as of snp135, when we're here, usually locType is incorrect and coords
-	// is plain old 0-based fully-closed... adjust chrEnd accordingly to avoid a
-	// later error that is just a side-effect of this one.
-	chrEnd++;
-	}
-    else if (! sameString(refNCBI, "-") && refNcbiLen != 2)
-	writeError("Unexpected refNCBI \"%s\" for locType \"%s\" (%d) -- "
-		   "expected \"-\" or 2 bases", refNCBI, locType, locTypeNum);
+    // As of snp149, some of the insertions now have the 0-based fully-closed position of
+    // the base before the insertion instead of the 2-base region around it.
+    if (chrEnd == chrStart)
+        {
+        warn("Expected NCBI's chrEnd=chrStart+1 for locType \"between\" but got chrEnd=chrStart. "
+             "Treating that as the base to the left of the insertion.");
+        chrStart++;
+        chrEnd = chrStart;
+        }
+    else
+        {
+        chrStart++;
+        if (chrEnd != chrStart)
+            {
+            chrStart--;
+            writeError("Unexpected coords for locType \"%s\" (%d) -- "
+                       "expected NCBI's chrEnd = chrStart+1, got start=%d, end=%d.",
+                       locType, locTypeNum, chrStart, chrEnd);
+            // as of snp135, when we're here, usually locType is incorrect and coords
+            // is plain old 0-based fully-closed... adjust chrEnd accordingly to avoid a
+            // later error that is just a side-effect of this one.
+            chrEnd++;
+            }
+        else if (! sameString(refNCBI, "-") && refNcbiLen != 2)
+            writeError("Unexpected refNCBI \"%s\" for locType \"%s\" (%d) -- "
+                       "expected \"-\" or 2 bases", refNCBI, locType, locTypeNum);
+        }
     }
 else if (sameString(locType, "exact"))
     {
