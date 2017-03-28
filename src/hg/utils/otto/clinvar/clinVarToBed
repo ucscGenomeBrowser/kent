@@ -199,6 +199,50 @@ def accListToHtml(inStr):
         newParts.append(newPart)
     return ", ".join(newParts)
 
+def reviewStatusToHtmlStars(reviewStatus):
+    """
+    In email from Donna maglott@ncbi.nlm.nih.gov mapping is like this:
+        1-criteria provided, conflicting interpretations
+        2-criteria provided, multiple submitters, no conflicts
+        1-criteria provided, single submitter
+        0-no assertion criteria provided
+        0-no assertion for the individual variant
+        0-no assertion provided
+        4-practice guideline
+        3-reviewed by expert panel
+
+    given the review status, return an html string with the correct number of black stars
+    """
+    revStatus = reviewStatus.strip().lower().replace(" ", "")
+    starCount = None
+
+    if revStatus=="criteriaprovided,conflictinginterpretations":
+        starCount = 1
+    if revStatus=="criteriaprovided,multiplesubmitters,noconflicts":
+        starCount = 2
+    if revStatus=="criteriaprovided,singlesubmitter":
+        starCount = 1
+    if revStatus == "practiceguideline":
+        starCount = 4
+    if revStatus == "reviewedbyexpertpanel":
+        starCount = 3
+    if "noassertion" in revStatus:
+        starCount = 0
+
+    if starCount == None:
+        print "Illegal review status: %s" % revStatus
+        assert(False)
+
+    emptyStarCount = 4-starCount
+
+    htmlList = ["&#9733;"]*starCount 
+    htmlList.extend( ["&#9734;"]*emptyStarCount )
+
+    htmlStr = "".join(htmlList)
+    htmlStr += "&nbsp;&nbsp;<small>based on: %s</small>" % reviewStatus
+
+    return htmlStr
+
 # ----------- MAIN --------------
 if args==[] and not options.auto:
     parser.print_help()
@@ -366,11 +410,13 @@ for line in ifh:
 
     phenotypeIds = accListToHtml(phenotypeIds)
 
+    starRatingHtml = reviewStatusToHtmlStars(reviewStatus)
+
     row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
-        name, clinSign, allType, geneStr,
+        name, clinSign, starRatingHtml, allType, geneStr,
         snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeList, phenotypeIds, origin, assembly, cytogenetic,
-        reviewStatus, hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds]
+        hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds]
 
     # replace clinvar's placeholders with real empty fields
     newRow = []
