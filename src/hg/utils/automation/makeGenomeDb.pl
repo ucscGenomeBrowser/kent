@@ -1028,7 +1028,7 @@ NCBI genome/$ncbiGenomeId ($scientificName)</A><BR>
 NCBI assembly/$ncbiAssemblyId ($assemblyLabel)</A><BR>
 
 <B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A>
-<B>BioSample information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioSample" TARGET="_blank"> NCBI Biosample: $ncbiBioSample</A>
+<B>BioSample information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample" TARGET="_blank"> NCBI Biosample: $ncbiBioSample</A>
 </P>
 <HR>
 <P>
@@ -1348,6 +1348,7 @@ src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
 src/hg/makeDb/trackDb/trackDb.transMap.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.primates.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.other.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.euarchontoglires.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.laurasiatheria.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.afrotheria.ra \\
