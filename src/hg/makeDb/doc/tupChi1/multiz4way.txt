@@ -1103,62 +1103,61 @@ sleep 4
     #	encode those files into wiggle data
     time (zcat downloads/phyloP4way.wigFix.gz \
 	| wigEncode stdin phyloP4way.wig phyloP4way.wib)
-XXX - running - Tue Mar 28 08:40:16 PDT 2017
-    # Converted stdin, upper limit 0.83, lower limit -2.60
-    #    real    9m4.543s
+    # Converted stdin, upper limit 0.48, lower limit -2.91
+    # real    7m27.578s
 
     du -hsc *.wi?
-    # 1.8G    phyloP4way.wib
-    # 279M    phyloP4way.wig
+    # 1.5G    phyloP4way.wib
+    # 284M    phyloP4way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP4way.wib /gbdb/tupChi1/multiz4way/phyloP4way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/tupChi1/multiz4way tupChi1 \
 	phyloP4way phyloP4way.wig
-    # real    0m30.869s
+    # real    0m34.676s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh tupChi1 phyloP4way
 # db.table      min max mean count sumData
-# tupChi1.phyloP4way  -2.599 0.833 0.0612084 1910088593 1.16914e+08
+# tupChi1.phyloP4way      -2.913 0.476 -0.0925405 1597890632 -1.4787e+08
 #       stdDev viewLimits
-#     0.611659 viewLimits=-2.599:0.833
+#     0.631158 viewLimits=-2.913:0.476
 
-    #	that range is: 0.833+2.599 = 3.432 for hBinSize=0.003432
+    #	that range is: 0.476+2.913 = 3.389 for hBinSize=0.003389
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
-	-hBinSize=0.003432 -hBinCount=1000 -hMinVal=-2.559 -verbose=2 \
+	-hBinSize=0.003389 -hBinCount=1000 -hMinVal=-2.913 -verbose=2 \
 	    -db=tupChi1 phyloP4way > histogram.data 2>&1
-    # real    4m20.444s
+    # real    2m37.794s
 
     # find the Y range for the 2:5 graph
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
       | sed -e 's/^/# /;'
-# Q1 0.000087
-# median 0.000381
-# Q3 0.001361
-# average 0.001112
+# Q1 0.000053
+# median 0.000167
+# Q3 0.000663
+# average 0.001337
 # min 0.000000
-# max 0.032088
-# count 899
-# total 0.999990
-# standard deviation 0.002165
+# max 0.136823
+# count 748
+# total 0.999999
+# standard deviation 0.007009
 
     # find the X range for the 2:5 graph
     grep "^[0-9]" histogram.data | ave -col=2 stdin \
       | sed -e 's/^/# /;'
-# Q1 -1.773070
-# median -1.004300
-# Q3 -0.228672
-# average -0.962349
-# min -2.559000
-# max 0.831816
-# count 899
-# total -865.151612
-# standard deviation 0.954068
+# Q1 -1.979335
+# median -1.345585
+# Q3 -0.711844
+# average -1.311897
+# min -2.913000
+# max 0.455666
+# count 748
+# total -981.299078
+# standard deviation 0.856840
 
     #	create plot of histogram:
     printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
@@ -1174,8 +1173,8 @@ set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
 set xtics
-set xrange [-2.6:0.85]
-set yrange [0:0.033]
+set xrange [-3:0.46]
+set yrange [0:0.04]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
@@ -1255,7 +1254,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     rm -rf exonAA exonNuc
 
 #############################################################################
-# construct download files for 4-way (DONE - 2016-05-11 - Hiram)
+# construct download files for 4-way (DONE - 2017-03-28 - Hiram)
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/tupChi1/multiz4way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/tupChi1/phastCons4way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/tupChi1/phyloP4way
@@ -1264,19 +1263,19 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     mkdir multiz4way phastCons4way phyloP4way
     cd multiz4way
     time cp -p ../../anno/tupChi1.4way.maf .
-    #   real    0m21.607s
+    #   real    0m15.628s
 
-    # -rw-rw-r-- 1 13063560432 May  4 10:33 tupChi1.4way.maf
+    # -rw-rw-r-- 1 9321834217 Mar 27 10:12 tupChi1.4way.maf
 
     du -hsc *
-    #  13G     tupChi1.4way.maf
+    #  8.7G    tupChi1.4way.maf
 
     time gzip *.maf
-    #   real    40m20.076s
 
-    # -rw-rw-r-- 1 3142755006 May  4 10:33 tupChi1.4way.maf.gz
+    # -rw-rw-r-- 1 2409820297 Mar 27 10:12 tupChi1.4way.maf.gz
+
     du -hsc *.maf.gz
-    #  3.0G    tupChi1.4way.maf.gz
+    #  2.3G    tupChi1.4way.maf.gz
 
     grep TREE ../../4d/all.mod | awk '{print $NF}' \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
@@ -1310,7 +1309,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     time md5sum *.gz *.mod *.bw > md5sum.txt
     #   real    0m20.354s
 
-    # obtain the README.txt from cavPor3/phastCons4way and update for this
+    # obtain the README.txt from galVar1/phastCons5way and update for this
     #   situation
     ln -s `pwd`/* \
       /usr/local/apache/htdocs-hgdownload/goldenPath/tupChi1/phastCons4way
