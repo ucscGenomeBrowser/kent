@@ -3726,7 +3726,10 @@ if (bigDataUrl != NULL)
         }
     }
 else
+    {
+    tdb->table = trackHubSkipHubName(tdb->table);
     return (hTableForTrack(database, tdb->table) != NULL);
+    }
 }
 
 static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,

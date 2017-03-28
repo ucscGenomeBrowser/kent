@@ -62,6 +62,10 @@ char *trackHubRelativeUrl(char *hubUrl, char *path)
 if (hasProtocol(path))
     return cloneString(path);
 
+/* If the path is in /gbdb, don't muck with it */
+if (startsWith("/gbdb", path))
+    return cloneString(path);
+
 /* If it's a remote hub, let html path expander handle it. */
 if (hasProtocol(hubUrl))
     return expandUrlOnBase(hubUrl, path);
@@ -492,6 +496,8 @@ struct hash *ra;
 while ((ra = raNextRecord(lf)) != NULL)
     {
     // allow that trackDb+hub+genome is in one single file
+    if (hashFindVal(ra, "hub"))
+        continue;
     if (hashFindVal(ra, "track"))
         break;
 
@@ -770,25 +776,31 @@ else
     {
     /* Check type field. */
     char *type = requiredSetting(hub, genome, tdb, "type");
-    if (!(startsWithWord("bigWig", type) ||
-          startsWithWord("bigBed", type) ||
-#ifdef USE_HAL
-          startsWithWord("pslSnake", type) ||
-          startsWithWord("halSnake", type) ||
-#endif
-          startsWithWord("vcfTabix", type) ||
-          startsWithWord("bigPsl", type) ||
-          startsWithWord("bigMaf", type) ||
-          startsWithWord("longTabix", type) ||
-          startsWithWord("bigGenePred", type) ||
-          startsWithWord("bigChain", type) ||
-          startsWithWord("bam", type)))
-	{
-	errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
-	    hub->url, genome->name, tdb->track);
-	}
+    if (startsWithWord("wig", type))
+        {
+        }
+    else
+        {
+        if (!(startsWithWord("bigWig", type) ||
+              startsWithWord("bigBed", type) ||
+    #ifdef USE_HAL
+              startsWithWord("pslSnake", type) ||
+              startsWithWord("halSnake", type) ||
+    #endif
+              startsWithWord("vcfTabix", type) ||
+              startsWithWord("bigPsl", type) ||
+              startsWithWord("bigMaf", type) ||
+              startsWithWord("longTabix", type) ||
+              startsWithWord("bigGenePred", type) ||
+              startsWithWord("bigChain", type) ||
+              startsWithWord("bam", type)))
+            {
+            errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
+                hub->url, genome->name, tdb->track);
+            }
 
-    requiredSetting(hub, genome, tdb, "bigDataUrl");
+        requiredSetting(hub, genome, tdb, "bigDataUrl");
+        }
     }
 }
 

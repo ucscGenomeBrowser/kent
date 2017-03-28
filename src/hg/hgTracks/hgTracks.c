@@ -8099,6 +8099,12 @@ if (!hideControls)
             hPrintf("</td><td style='text-align:right;'>\n");
             if (isHubTrack(group->name))
 		{
+                if (strstr(group->label, "Composite"))
+                    {
+                    safef(idText, sizeof idText, "%s_edit", group->name);
+                    hPrintf("<input name=\"hubEditButton\" id='%s'"
+                        " type=\"button\" value=\"edit\">\n", idText);
+                    }
 		safef(idText, sizeof idText, "%s_disconn", group->name);
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
                     " type=\"button\" value=\"disconnect\">\n", idText);

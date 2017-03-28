@@ -887,8 +887,31 @@ return regionList;
 }
 #endif
 
-void outTdb(FILE *f, struct trackDb *tdb)
+static int snakePalette2[] =
 {
+0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5, 0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5
+};
+
+
+static char *getSqlBigWig(char *db, struct trackDb *tdb)
+{
+struct sqlConnection *conn = hAllocConn(db);
+
+char buffer[4096];
+
+safef(buffer, sizeof buffer, "NOSQLINJ select fileName from %s", tdb->table);
+return sqlQuickString(conn, buffer);
+}
+
+void outTdb(char *db, FILE *f, struct trackDb *tdb, char *parent, unsigned int color)
+{
+char *dataUrl = NULL;
+char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+if (bigDataUrl == NULL)
+    {
+    if (startsWith("bigWig", tdb->type))
+        dataUrl = getSqlBigWig(db, tdb);
+    }
 struct hashCookie cookie = hashFirst(tdb->settingsHash);
 struct hashEl *hel;
 fprintf(f, "track %s\n", tdb->track);
@@ -897,7 +920,13 @@ while ((hel = hashNext(&cookie)) != NULL)
     if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "color"))
         fprintf(f, "%s %s\n", hel->name, (char *)hel->val);
     }
-fprintf(f, "parent multiWigTest1\n");
+if (bigDataUrl == NULL)
+    {
+    if (dataUrl != NULL)
+        fprintf(f, "bigDataUrl %s\n", dataUrl);
+    }
+fprintf(f, "parent %s\n",parent);
+fprintf(f, "color %d,%d,%d\n", (color >> 16) & 0xff,(color >> 8) & 0xff,color & 0xff);
 fprintf(f, "\n");
 }
 
@@ -946,28 +975,34 @@ FILE *f = mustOpen(hubName, "w");
 
 struct slRef *dsRef;
 fprintf(f,"hub hub1\n\
-shortLabel Braney Test Hub\n\
-longLabel Braney Test Hub Number One\n\
+shortLabel User Composite\n\
+longLabel User Composite\n\
 genomesFile %s\n\
 email braney@soe.ucsc.edu\n\
 descriptionUrl hub.html\n\n", hubFile);
 fprintf(f,"genome %s\n\
 trackDb %s\n\n", db, hubFile);
 
-fprintf(f,"track multiWigTest1\n \
-shortLabel multiWigTest 1\n \
-aggregate none\n \
-longLabel multiWigTest\n \
+char *parent = "multiWig";
+char *shortLabel = "multiWig";
+char *longLabel = "multiWig";
+fprintf(f,"track %s\n \
+shortLabel %s\n \
+aggregate stacked\n \
+longLabel %s\n \
 container multiWig\n \
-type bigWig 0 10000\n \
-viewLimits 0:50\n \
-visibility full\n\n");
+type wig \n \
+visibility full\n\n", parent, shortLabel, longLabel);
 
+int useColor = 0;
 for (dsRef = dataSources;  dsRef != NULL;  dsRef = dsRef->next)
     {
     struct jsonElement *dsObj = dsRef->val;
     struct trackDb *tdb = tdbForDataSource(dsObj, db, fullTrackList);
-    outTdb(f,tdb);
+    outTdb(db, f,tdb, parent, snakePalette2[useColor]);
+    useColor++;
+    if (useColor == (sizeof snakePalette2 / sizeof(int)))
+        useColor = 0;
     }
 fclose(f);
 
