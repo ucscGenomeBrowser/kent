@@ -24,7 +24,7 @@ char *makeCategoryLabel(struct barChartCategory *categ)
 /* Display category color and label */
 {
 char buf[256];
-safef(buf, sizeof(buf), "<td class='bcColorPatch' bgcolor=%X></td>"
+safef(buf, sizeof(buf), "<td class='bcColorPatch' bgcolor=#%06x></td>"
                         "<td>&nbsp;%s</td>", 
                                 categ->color, categ->label);
 return(cloneString(buf));
@@ -67,7 +67,8 @@ for (i=0; i<count; i++)
     if (!isPopup)
         {
         printf("<td><input type=checkbox name=\"%s\" value=\"%s\" %s></td>" "<td>%s</td>\n",
-               name, categArray[j]->name, categArray[j]->checked ? "checked" : "", categArray[j]->label);
+                name, categArray[j]->name, categArray[j]->checked ? "checked" : "", 
+                categArray[j]->label);
         }
     col++;
     }

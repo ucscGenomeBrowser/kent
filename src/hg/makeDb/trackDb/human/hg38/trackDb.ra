@@ -570,14 +570,46 @@ termRegex [NXY]P_[0-9]+(\.[0-9]+)?
 
 track gtexBrain
 type barChart
-#barChartRange 0 370000 RPKM
+barChartRange 0 370000
+barChartUnit RPKM
 barChartLabel Brain Regions
+#barChartBars \
+    #Amygdala Anterior_cingulate_cortex Caudate_basal_ganglia Cerebellar_hemisphere \
+    #Cerebellum Cortex Frontal_cortex Hippocampus Hypothalamus Nucleus_accumbens \
+    #Putamen_basal_ganglia Spinal_cord Substantia_nigra
 barChartBars \
-    Amygdala Anterior_cingulate_cortex Caudate_basal_ganglia Cerebellar_hemisphere \
-    Cerebellum Cortex Frontal_cortex Hippocampus Hypothalamus Nucleus_accumbens \
-    Putamen_basal_ganglia Spinal_cord Substantia_nigra
+    brainAmygdala brainAnCinCortex brainCaudate brainCerebelHemi brainCerebellum brainCortex \
+    brainFrontCortex brainHippocampus brainHypothalamus brainNucAccumbens brainPutamen \
+    brainSpinalcord brainSubstanNigra
 #barChartColors
 shortLabel GTEx Brain
 longLabel GTEx Brain Gene Expression in barChart track format
 group expression
 spectrum on
+
+track quakeBrain
+type barChart
+#barChartRange 0 370000
+barChartUnit TPM
+barChartLabel Brain cell types
+barChartBars \
+        OPC astrocytes endothelial microglia neurons oligodendrocytes
+#barChartColors
+shortLabel Quake Brain
+longLabel Quake Brain Gene Expression in barChart track format
+group expression
+spectrum on
+
+track tcgaTranscriptExpression
+type barChart
+barChartLabel Cancer types
+barChartUnit TPM
+barChartBars \
+        ACC BLCA BRCA CESC CHOL CNTL COAD DLBC ESCA GBM HNSC KICH \
+        KIRC KIRP LGG LIHC LUAD LUSC MESO OV PAAD PCPG PRAD READ  \
+        SARC SKCM STAD TGCT THCA THYM UCEC UCS UVM
+shortLabel TCGA
+longLabel TCGA transcript expression in barChart track format
+group expression
+spectrum on
+
