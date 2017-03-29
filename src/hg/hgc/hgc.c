@@ -4169,9 +4169,9 @@ if (sameWord(tdb->table, "ncbiRefSeqOther"))
 
     struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
     if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-        dyStringPrintf(dy, "- Release %s\n", trackVersion->version);
+        dyStringPrintf(dy, " - Release %s", trackVersion->version);
 
-    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
+    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, dyStringCannibalize(&dy));
     headerItem = cloneString("ncbiRefSeqOther");
     }
 
