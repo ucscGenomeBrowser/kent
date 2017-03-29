@@ -1294,30 +1294,14 @@ return netUrlHeadExt(url, "HEAD", hash);
 }
 
 
-long long netUrlSizeByRangeResponse(char *url)
-/* Use byteRange as a work-around alternate method to get file size (content-length).  
- * Return negative number if can't get. */
+int netUrlFakeHeadByGet(char *url, struct hash *hash)
+/* Use GET with byteRange as an alternate method to HEAD. 
+ * Return status. */
 {
-long long retVal = -1;
 char rangeUrl[MAXURLSIZE];
 safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=0-0", url);
-struct hash *hash = newHash(0);
 int status = netUrlHeadExt(rangeUrl, "GET", hash);
-if (status == 206)
-    { 
-    char *rangeString = hashFindValUpperCase(hash, "Content-Range:");
-    if (rangeString)
-	{
- 	/* input pattern: Content-Range: bytes 0-99/2738262 */
-	char *slash = strchr(rangeString,'/');
-	if (slash)
-	    {
-	    retVal = atoll(slash+1);
-	    }
-	}
-    }
-hashFree(&hash);
-return retVal;
+return status;
 }
 
 
