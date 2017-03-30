@@ -12,7 +12,7 @@ source `which qaConfig.csh`
 
 set tablelist=""
 set db=""
-set dot=( '. ' '. ' '. ' '. ' '. ' '.')
+set dot=( '. ' '. ' '. ' '. ' '. ' '. ')
 set first=""
 set second=""
 set third=""
