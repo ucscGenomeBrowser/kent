@@ -174,6 +174,7 @@ DBS = \
 	turTru1 turTru2 \
 	venter1 \
 	vicPac1 vicPac2 \
+	xenLae2 \
 	xenTro1 xenTro2 xenTro3 xenTro7 xenTro9
 
 GSID_DBS = \

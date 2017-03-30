@@ -21,7 +21,7 @@ removeTmpName = None
 baseLogDir = "/hive/data/inside/wwwstats/RR"
 
 # years to analyze
-years = ["2009", "2010", "2011", "2012", "2013", "2014"]
+years = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017"]
 
 # list of servers to analyze
 # change these for debugging or if need to focus on single servers
@@ -162,10 +162,13 @@ def printBest(ofh, counts, topX=100000):
         ofh.write("%s\t%s\n" % (name, count))
 
 def isBot(agent):
+    " you can find most of these by looking for accesses to robots.txt "
     a = agent.lower()
     if "google." in a or "yahoo." in a or "bing." in a or "baidu." in a \
             or "bot" in a or "spider" in a or "slurp" in a or "crawler" in a or \
             "Commons-HttpClient" in a or "HTTPGrab" in a or "internal dummy" in a or \
+            "Daum" in agent or "ltx71" in agent or "python-request" in agent or \
+            "Scout" in agent or "Riddler" in agent or "wget" in agent or \
             a.startswith("google") or a.startswith("yahoo") or a.startswith("bing"):
         return True
     else:
@@ -272,7 +275,7 @@ def inOutTab(outDir):
             for inFname in inFnames:
                 # access_log.20130317.gz
                 day =os.path.basename(inFname).split(".")[1]
-                outFname = "%s_%s.flag" % (day, servName) # this is just an empty flag file, job writes to <day>_<server>_<realWeekDate>.tab.gz
+                outFname = "%s_%s.botIps.txt" % (day, servName) # this is also used a flag file. job writes most data to <day>_<server>_<realWeekDate>.tab.gz
                 outFname = join(outDir, outFname)
                 fnames.append ( (inFname, outFname) )
 
@@ -713,18 +716,19 @@ def plot(mergeDir, htmlDir):
         ofh.close()
         logging.info("Wrote %s" % outName)
 
-def apacheToTab(inFname, outFlagFname):
-    " parse apache log file to tab file. outFlagFname is something like 20130420_hgw4.flag, write output to 20130420_hgw4_<realDate>.tab.gz "
+def apacheToTab(inFname, outBotIpsFname):
+    " parse apache log file to tab file. outBotIpsFname is something like 20130420_hgw4.botIps, write output to 20130420_hgw4_<realDate>.tab.gz "
     logging.info("Parsing %s" % inFname)
     if inFname.endswith(".gz"):
         ifh = gzip.open(inFname)
     else:
         ifh = open(inFname)
 
-    baseOut = outFlagFname.replace(".flag","")
+    baseOut = outBotIpsFname.replace(".botIps.txt","")
     fileHandles = {} # cache the file handles
 
     count = 0
+    botIps = set()
     for row in csv.reader(ifh, delimiter = " ", escapechar='\\'):
         # parse apache log line
         count += 1
@@ -741,6 +745,7 @@ def apacheToTab(inFname, outFlagFname):
         # skip if it's a bot
         if isBot(log.agent):
             #botCounts[a.agent]+=1
+            botIps.add(log.ip)
             logging.debug("%s is a bot" % log.agent)
             continue 
 
@@ -756,8 +761,10 @@ def apacheToTab(inFname, outFlagFname):
         ofh.write("\t".join(log))
         ofh.write("\n")
         
-
-    open(outFlagFname, "w") # just create an empty flag file
+    ofh = open(outBotIpsFname, "w")
+    for ip in botIps:
+        ofh.write("%s\n" % ip)
+    ofh.close()
 
 def catFiles(inFnames, outFname):
     " cat all inFnames to outFname, taking care of header lines "
