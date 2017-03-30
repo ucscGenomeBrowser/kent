@@ -29,6 +29,9 @@ scoreNames = ["fusi", "crisprScan", "doench", "oof"]
 # drsc = same as housden score
 skipScores = ["mh", "guideId", "chariRaw", "wang", "chariRank", "ssc", "housden", "wuCrispr", "finalGc6", "finalGg"]
 
+# at the moment, we only handle the three-bp PAM NGG
+PAMLEN = 3
+
 def parseRanks(fusiPercFname):
     " parse tab sep file with two columsn and return dict col1 -> col2 "
     ret = {}
@@ -67,7 +70,7 @@ def rewriteBed(inFname, specScores, effScores, otOffsetPath, dataDir):
         chrom, start, end, nameSeqPam, _, strand = line.rstrip("\n").split("\t")
 
         # make sure to remove duplicate lines from guides.bed
-        idx = chrom+start
+        idx = chrom+start+strand
         if idx in donePos:
             continue
         donePos.add(idx)
@@ -158,7 +161,18 @@ def rewriteBed(inFname, specScores, effScores, otOffsetPath, dataDir):
         score = str(max(0, specScore)) # bigBed does not allow neg. score values
 
         offset = otOffsets.get(seq, "0")
-        row = [chrom, start, end, "", score, strand, start, end,
+
+        # extend features as suggested by Chris Lee in ticket
+        if strand=="+":
+            thickStart = start
+            thickEnd = end
+            end = str(int(end) + PAMLEN)
+        else:
+            thickStart = start
+            thickEnd = end
+            start = str(int(start) - PAMLEN)
+
+        row = [chrom, start, end, "", score, strand, thickStart, thickEnd,
                 color, altColor, specColor, seq, pam, scoreDesc]
 
         row.extend([fusi, moreno, doench, oof])
