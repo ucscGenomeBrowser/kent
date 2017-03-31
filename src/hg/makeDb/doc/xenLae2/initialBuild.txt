@@ -626,36 +626,6 @@ searchPriority 8
     #    -bedFile=jkStuff/nonBridged.bed
 
 #########################################################################
-# LIFTOVER TO xenTro7 (TBD - 2017-03-28 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/xenLae2/bed/blat.xenTro7.2017-03-27
-    cd /hive/data/genomes/xenLae2/bed/blat.xenTro7.2017-03-27
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/xenLae2/jkStuff/xenLae2.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         xenLae2 xenTro7) > do.log 2>&1
-XXX - running - Tue Mar 28 08:26:29 PDT 2017
-    # real    1569m40.174s
-
-    # verify the convert link on the test browser is now active from xenLae2 to
-    # xenTro7
-
-#########################################################################
-# LIFTOVER TO xenTro3 (TBD - 2017-03-28 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/xenLae2/bed/blat.xenTro3.2017-03-28
-    cd /hive/data/genomes/xenLae2/bed/blat.xenTro3.2017-03-28
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/xenLae2/jkStuff/xenLae2.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         xenLae2 xenTro3) > do.log 2>&1
-XXX - running - Tue Mar 28 08:37:40 PDT 2017
-    # real    1326m15.222s
-
-    # verify the convert link on the test browser is now active from xenLae2 to
-    # xenTro3
-
-########################################################################
 # GENBANK AUTO UPDATE (TBD - 2017-03-05 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
