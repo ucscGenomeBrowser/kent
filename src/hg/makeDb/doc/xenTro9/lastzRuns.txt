@@ -1,0 +1,56 @@
+#########################################################################
+# Tibetan frog/nanPar1 Lastz run  (DONE - 2017-03-30 - Hiram)
+    mkdir /hive/data/genomes/xenTro9/bed/lastzNanPar1.2017-03-30
+    cd /hive/data/genomes/xenTro9/bed/lastzNanPar1.2017-03-30
+
+    printf '# X. tropicalis vs. Nanorana parkeri - Tibetan frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: X. tropicalis xenTro9
+SEQ1_DIR=/hive/data/genomes/xenTro9/xenTro9.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro9/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Nanorana parkeri - Tibetan frog - nanPar1
+SEQ2_DIR=/hive/data/genomes/nanPar1/nanPar1.2bit
+SEQ2_LEN=/hive/data/genomes/nanPar1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/xenTro9/bed/lastzNanPar1.2017-03-30
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -workhorse=hgwdev -smallClusterHub=ku \
+          -bigClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real    282m18.989s
+
+    cat fb.xenTro9.chainNanPar1Link.txt
+    #  112048590 bases of 1369865365 (8.180%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 nanPar1) \
+	> rbest.log 2>&1 &
+XXX - running - Fri Mar 31 00:05:12 PDT 2017
+    # real    4m57.676s
+
+
+    # running the swap
+    mkdir /hive/data/genomes/nanPar1/bed/blastz.xenTro9.swap
+    cd /hive/data/genomes/nanPar1/bed/blastz.xenTro9.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/xenTro9/bed/lastzNanPar1.2017-03-30/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+XXX - running - Fri Mar 31 00:05:55 PDT 2017
+    #   real    22m50.311s
+
+    cat fb.nanPar1.chainXenTro9Link.txt
+    #    121183837 bases of 1977771384 (6.127%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` nanPar1 xenTro9) > rbest.log 2>&1
+    #  real    6m53.584s
+
+#########################################################################

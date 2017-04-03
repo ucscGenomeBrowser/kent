@@ -545,16 +545,17 @@ o
     #    -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-03-05 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-03-09 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism             mrnaCnt   estCnt  refSeqCnt
-    # Rhinopithecus bieti     9       0       0
+    # Tupaia chinensis        50514   1       17
 
     # edit etc/genbank.conf to add tupChi1 just before macFas5
-# tupChi1 - Rhinopithecus bieti - black snub-nosed monkey taxId 61621
+
+# tupChi1 (Chinese shrew)
 tupChi1.serverGenome = /hive/data/genomes/tupChi1/tupChi1.2bit
 tupChi1.clusterGenome = /hive/data/genomes/tupChi1/tupChi1.2bit
 tupChi1.ooc = /hive/data/genomes/tupChi1/jkStuff/tupChi1.11.ooc
@@ -567,33 +568,30 @@ tupChi1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDn
 tupChi1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
 tupChi1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
-# defaults are fine: genbank.mrna.native refseq.mrna.native refseq.mrna.xeno yes
-# and genbank.est.native
-# tupChi1.upstreamGeneTbl = refGene
-# tupChi1.upstreamMaf = multiz7way
-# /hive/data/genomes/melGal4/bed/multiz7way/species.lst
+# the defaults: genbank.mrna.native.load, yes genbank.est.native.load yes
+# refseq.mrna.native.load yes, refseq.mrna.xeno.load yes
 
-    git commit -m "Added tupChi1; refs #18927" etc/genbank.conf
+    git commit -m "Added tupChi1; refs #10146" etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
     make etc-update
 
     # also add to src/lib/gbGenome.c
-#	static char *tupChiNames[] = {"Macaca nemestrina", NULL};
+#	static char *tupChiNames[] = {"Tupaia chinensis", NULL};
 #	{"tupChi", tupChiNames},
 
-    git commit -m "Added tupChi1; refs #18958" src/lib/gbGenome.c
+    git commit -m "Added tupChi1 refs #10146" src/lib/gbGenome.c
     make install-server
 
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial tupChi1
-    # logFile: var/build/logs/2017.03.05-06:48:55.tupChi1.initalign.log
-    #   about 13 hours
+    # logFile: var/build/logs/2017.03.09-13:19:25.tupChi1.initalign.log
+    #   about 4 hours
 
     tail -2 2017.03.05-06:48:55.tupChi1.initalign.log
-    #	hgwdev 2017.03.05-19:28:21 tupChi1.initalign: Succeeded: tupChi1
-    #	hgwdev 2017.03.05-19:28:53 tupChi1.initalign: finish
+    #    hgwdev 2017.03.09-17:21:30 tupChi1.initalign: Succeeded: tupChi1
+    #    hgwdev 2017.03.09-17:22:19 tupChi1.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.tupChi1
@@ -602,11 +600,11 @@ tupChi1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDna
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad tupChi1
-    # logFile: var/dbload/hgwdev/logs/2017.03.05-19:52:47.tupChi1.dbload.log
-    #  about 21 minutes
+    # logFile: var/dbload/hgwdev/logs/2017.03.09-17:42:50.tupChi1.dbload.log
+    #  real    18m8.811s
 
-    tail -1 var/dbload/hgwdev/logs/2017.03.05-19:52:47.tupChi1.dbload.log
-    #	hgwdev 2017.03.05-20:13:03 tupChi1.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2017.03.09-17:42:50.tupChi1.dbload.log
+    #	hgwdev 2017.03.09-18:00:59 tupChi1.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -614,7 +612,7 @@ tupChi1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDna
     # add tupChi1 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding tupChi1 to the update alignments refs #18958' etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding tupChi1 to the update alignments refs #10146' etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -653,14 +651,14 @@ tupChi1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDna
     #    enrich 14.68x
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-01-17 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-03-10 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("tupChi1", "blat1d", "17878", "1", "0"); \
+	VALUES ("tupChi1", "blat1c", "17886", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("tupChi1", "blat1d", "17879", "0", "1");' \
+	VALUES ("tupChi1", "blat1c", "17887", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 

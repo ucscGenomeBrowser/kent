@@ -4169,9 +4169,9 @@ if (sameWord(tdb->table, "ncbiRefSeqOther"))
 
     struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
     if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-        dyStringPrintf(dy, "- Release %s\n", trackVersion->version);
+        dyStringPrintf(dy, " - Release %s", trackVersion->version);
 
-    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, item);
+    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, dyStringCannibalize(&dy));
     headerItem = cloneString("ncbiRefSeqOther");
     }
 
@@ -10084,6 +10084,11 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
 
+/* So far, we can just remove "chr" from UCSC chrom names to get DECIPHER names */
+char *decipherChrom = chrom;
+if (startsWithNoCase("chr", decipherChrom))
+    decipherChrom += 3;
+
 printf("<H3>Patient %s </H3>", itemName);
 
 /* print phenotypes and other information, if available */
@@ -10091,7 +10096,8 @@ if (sqlFieldIndex(conn, "decipherRaw", "phenotypes") >= 0)
     {
     sqlSafef(query, sizeof(query),
         "select phenotypes, mean_ratio, inheritance, pathogenicity, contribution "
-        "from decipherRaw where id = '%s'", itemName);
+        "from decipherRaw where id = '%s' and chr = '%s' and start = %d and end = %d",
+        itemName, decipherChrom, start+1, end);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if ((row != NULL) && strlen(row[0]) >= 1)
@@ -25204,7 +25210,7 @@ makeBigPsl(pslName, faName, database, bigBedFile);
 char* host = getenv("HTTP_HOST");
 
 boolean isProt = cgiOptionalString("isProt") != NULL;
-char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on  pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\"\n";  
+char *customTextTemplate = "track type=bigPsl pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\"\n";  
 char *extraForMismatch = "showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases";
   
 if (isProt)

@@ -13082,3 +13082,132 @@ TMPDIR=/dev/shm
     # real    445m5.636s
 
 ############################################################################
+# lastz frog xenTro9 (DONE - 2017-03-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10XenTro9
+    mkdir /hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29
+    cd /hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29
+
+    printf '# Mouse vs. frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+
+# QUERY: frog xenTro9
+SEQ2_DIR=/hive/data/genomes/xenTro9/xenTro9.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro9/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) \
+              > do.log 2>&1 &
+    #	real    806m23.459s
+
+    cat fb.mm10.chainXenTro9Link.txt
+    #	87053836 bases of 2652783500 (3.282%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 xenTro9) \
+         > rbest.log 2>&1 &
+    # real    617m41.376s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/xenTro9/bed/blastz.mm10.swap
+    cd /hive/data/genomes/xenTro9/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
+	> swap.log 2>&1 &
+    #	real    25m54.516s
+
+    cat fb.xenTro9.chainMm10Link.txt
+    #	90150612 bases of 1369865365 (6.581%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 mm10) \
+         > rbest.log 2>&1 &
+    # real    597m52.740s
+
+#########################################################################
+# lastz frog xenLae2 (DONE - 2017-03-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10XenLae2
+    mkdir /hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29
+    cd /hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29
+
+    printf '# Mouse vs. frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+
+# QUERY: frog xenLae2
+SEQ2_DIR=/hive/data/genomes/xenLae2/xenLae2.2bit
+SEQ2_LEN=/hive/data/genomes/xenLae2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=300
+
+BASE=/hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) \
+              > do.log 2>&1 &
+    #	real    1044m10.115s
+
+    cat fb.mm10.chainXenLae2Link.txt
+    #	82272699 bases of 2652783500 (3.101%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 xenLae2) \
+         > rbest.log 2>&1 &
+XXX - running - Fri Mar 31 00:02:21 PDT 2017
+
+    #	and for the swap
+    mkdir /hive/data/genomes/xenLae2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/xenLae2/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    #	real    26m14.884s
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29/DEF \
+        -continue=syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+	-bigClusterHub=ku -syntenicNet -swap -chainMinScore=5000 \
+	-chainLinearGap=loose) > syntenicNet.log 2>&1 &
+    # real    1m52.642s
+
+    cat  fb.xenLae2.chainMm10Link.txt
+    #	116001603 bases of 2408724787 (4.816%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenLae2 mm10) \
+         > rbest.log 2>&1 &
+XXX - running - Fri Mar 31 00:02:21 PDT 2017
+
+#########################################################################

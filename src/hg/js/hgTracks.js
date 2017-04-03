@@ -3321,7 +3321,7 @@ function showHotkeyHelp() {
 function addKeyboardHelpEntries() {
     var html = '<li><a id="keybShorts" title="List all possible keyboard shortcuts" href="#">Keyboard Shortcuts</a><span class="shortcut">?</span></li>';
     $('#help .last').before(html);
-    $("#keybShorts").onclick = function(){showHotKeyHelp(); return false;};
+    $("#keybShorts").click( function(){showHotkeyHelp();} );
 
     html = '<span class="shortcut">s s</span>';
     $('#sessionsMenuLink').after(html);

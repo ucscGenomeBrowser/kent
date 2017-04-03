@@ -1,175 +1,243 @@
-<!DOCTYPE html>
-<!--#set var="TITLE" value="GBiC" -->
+<!DOCTYPE HTML>
+<!--#set var="TITLE" value="GBIC" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<h1>Genome Browser in the Cloud User's Guide</h1>
 
+
+<h1>Genome Browser in the Cloud User&#39;s Guide</h1>
 <h2>Contents</h2>
-
-<h6><a href="#what-is-the-genome-browser-in-the-cloud">What is the Genome Browser in the 
-Cloud?</a></h6>
-<h6><a href="#quick-start-instructions">Quick Start instructions</a></h6>
-<h6><a href="#how-does-the-gbic-program-work">How does the GBiC program work?</a></h6>
-<h6><a href="#the-gbic-commands">The GBiC commands</a></h6>
-<h6><a href="#all-gbic-options">All GBiC options</a></h6>
-<h6><a href="#credits">Credits</a></h6>
-
-<a name="what-is-the-genome-browser-in-the-cloud"></a>
+<h6><a href='#what-is-genome-browser-in-the-cloud'>What is Genome Browser in the Cloud?</a></h6>
+<h6><a href='#quick-start-instructions'>Quick Start Instructions</a></h6>
+<h6><a href='#how-does-the-gbic-program-work'>How does the GBiC program work?</a></h6>
+<h6><a href='#gbic-commands'>GBiC commands</a></h6>
+<h6><a href='#all-gbic-options'>All GBiC options</a></h6>
+<h6><a href='#credits'>Credits</a></h6>
+<a name='what-is-genome-browser-in-the-cloud'></a>
 <h2>What is Genome Browser in the Cloud?</h2>
+
 <p>
 The Genome Browser in the Cloud (GBiC) program is a convenient tool that automates the setup of a
 UCSC Genome Browser mirror. The GBiC program is for users who want to set up a full mirror of the
-UCSC Genome Browser on their server/cloud instance, rather than using 
-<a href="../help/gbib.html" target="_blank">Genome Browser in a 
-Box</a> (GBiB) or our public website. Please see the
-<a href="http://genome.ucsc.edu/admin/mirror.html#considerations-before-installing-a-genome-browser"
-target="_blank">Installation of a UCSC Genome Browser on a local machine (mirror)</a> page for a 
-summary of installation options, including the pros and cons of using a mirror installation
-via the GBiC program vs. using GBiB.</p>
+UCSC Genome Browser on their server/cloud instance, rather than using
+<a href='gbib.html' title=''>Genome Browser in a Box</a> (GBIB)
+or our public website. Please see the
+<a href='../../admin/mirror.html#considerations-before-installing-a-genome-browser' title=''>Installation of a UCSC Genome Browser on a local machine (mirror)</a>
+page for a summary of installation options, including the pros and cons of using a mirror installation
+via the GBiC program vs. using GBiB.
+</p>
+
 <p>
 The program works by setting up MySQL, Apache, and Ghostscript, and then copying the Genome
-Browser CGIs onto the machine under <code>/usr/local/apache/</code>. Because it also deactivates the
-default Apache htdocs/cgi folders, it is best run on a new machine, or at least a host that is not
+Browser CGIs onto the machine under <code>/usr/local/apache/</code>. Because It also deactivates the default
+Apache htdocs/cgi folders, it is best run on a new machine, or at least a host that is not
 already used as a web server. The tool can also download full or partial assembly databases,
-update the Genome Browser CGIs, and remove temporary files (aka &quot;trash cleaning&quot;).</p>
-<p>
-The GBiC program has been tested with Ubuntu 14/16 LTS, Centos 6/6.7/7.2, and Fedora 20. It has also
-been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft
-Azure (Ubuntu). If you want to load data on the fly from UCSC, you must select the data 
-centers &quot;US West (N. California)&quot; (Amazon) or &quot;West US&quot; (Microsoft) for best 
-performance. Other data centers (e.g., East Coast) will require a local copy of the genome assembly,
-which requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum
-size of a single Amazon EBS volume.</p>
+update the Genome Browser CGIs, and remove temporary files (aka &quot;trash cleaning&quot;).
+</p>
 
-<a name="quick-start-instructions"></a>
-<h2>Quick Start instructions</h2>
 <p>
-Download the GBiC program from the <a href="https://genome-store.ucsc.edu/" target="_blank">UCSC 
-Genome Browser store</a>.</p>
+The GBiC program has been tested with Ubuntu 14/16 LTS, Centos 6/6.7/7.2, and Fedora 20.
+</p>
+
 <p>
-Run the program as root, like this:</p>
+It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft
+Azure (Ubuntu). If you want to load data on the fly from UCSC, you need to select the
+data centers &quot;US West (N. California)&quot; (Amazon) or &quot;West US&quot; (Microsoft) for best performance.
+Other data centers (e.g. East Coast) will require a local copy of the genome assembly, which
+requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum
+size of a single Amazon EBS volume.
+</p>
+
+<a name='quick-start-instructions'></a>
+<h2>Quick Start Instructions</h2>
+
+<p>
+Download the GBiC program from the <a href='https://genome-store.ucsc.edu/' title=''>UCSC Genome Browser store</a>.
+</p>
+
+<p>
+Run the program as root, like this:
+</p>
+
 <pre><code>sudo bash browserSetup.sh install</code></pre>
+
 <p>
-The <code>install</code> command downloads and configures Apache, MySQL and Ghostscript, copies the 
-Genome Browser CGIs, and configures the mirror to load data remotely from UCSC. The 
-<code>install</code> command must be run before any other command is used.</p>
+The <code>install</code> command downloads and configures Apache, MySQL and Ghostscript, copies the Genome Browser
+CGIs, and configures the mirror to load data remotely from UCSC. The <code>install</code> command must be
+run before any other command is used.
+</p>
 
-<p>For an installation demonstration, see the <a href="https://www.youtube.com/watch?v=dcJERBVnjio"
-target="_blank">Genome Browser in the Cloud (GBiC) Introduction</a> video.</p>
+<p>
+For an installation demonstration, see the <a href='https://www.youtube.com/watch?v=dcJERBVnjio' title=''>Genome Browser in the Cloud (GBiC) Introduction</a>
+video.
+</p>
 
-<p>For mirror-specific help, please contact the Mirror Forum as listed on our <a href="../../contacts.html" 
-target="_blank">contact page</a>.</p>
+<p>
+For mirror-specific help, please contact the Mirror Forum as listed on our <a href='../../contacts.html' title=''>contact page</a>.
+</p>
 
-<a name="how-does-the-gbic-program-work"></a>
+<a name='how-does-the-gbic-program-work'></a>
 <h2>How does the GBiC program work?</h2>
+
 <p>
 The GBiC program downloads the Genome Browser CGIs and sets up the central MySQL database. All
-potentially destructive steps require confirmation by the user (unless the <code>-b</code> 
-batch mode option is specified).</p>
-<p>
-In particular, MySQL and Apache are installed and set up with the right package manager (yum or 
-apt-get). A default random password is set for the MySQL root user and added to the 
-<code>~/.my.cnf</code> file of the Unix root account. If you have already set up MySQL, you
-must create the <code>~/.my.cnf</code> file. The program will detect this and create a template file
-for you. The program also performs some minor tasks such as placing symlinks, detecting MariaDB, 
-deactivating SELinux, finding the correct path for your Apache install and adapting the MySQL 
-socket config.</p>
-<p>
-This will result in a Genome Browser accessible on localhost that loads its data through 
-genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If your geographic location
-is not on the US West Coast, the performance will be too slow for normal use, though
-sufficient to test that the setup is functional. You can then use the program to download
-assemblies of interest to your local Genome Browser, which will result in performance at least
-as fast as the UCSC site.</p>
+potentially destructive steps require confirmation by the user (unless the <code>-b</code>
+batch mode option is specified).
+</p>
 
-<a name="the-gbic-commands"></a>
+<p>
+In particular, MySQL and Apache are installed and set up with the right package
+manager (yum or apt-get). A default random password is set for the
+MySQL root user and added to the <code>~/.my.cnf</code> file of the Unix root account.
+If you have already set up MySQL, you must create the
+<code>~/.my.cnf</code> file. The program will detect this and create a template file for you.
+The program also performs some minor tasks such as placing symlinks, detecting
+MariaDB, deactivating SELinux, finding the correct path for your Apache install
+and adapting the MySQL socket config.
+</p>
+
+<p>
+This will result in a Genome Browser accessible on localhost that loads its data
+through genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If
+your geographic location is not on the US West Coast, the performance will be too slow for normal
+use, though sufficient to test that the setup is functional. You can then use the program to download
+assemblies of interest to your local Genome Browser, which will result in performance at least
+as fast as the UCSC site.
+</p>
+
+<a name='gbic-commands'></a>
 <h2>GBiC commands</h2>
+
 <p>
-The first argument of the program is called <code>command</code> in the following section of this 
-document. The first command that you will need is <code>install</code>, which installs the Genome 
-Browser dependencies, binary files and basic MySQL infrastructure:</p>
+The first argument of the program is called <code>command</code> in the following section of this document.
+The first command that you will need is <code>install</code>, which installs the Genome Browser dependencies,
+binary files and basic MySQL infrastructure:
+</p>
+
 <pre><code>sudo bash browserSetup.sh install</code></pre>
+
 <p>
-There are a number of options supported by the GBiC program. In all cases, options must be specified
-before the command.</p>
+There are a number of options supported by the GBiC program. In all cases, options must
+be specified before the command.
+</p>
+
 <p>
-The following example correctly specifies the batch mode option to the program:</p>
+The following example correctly specifies the batch mode option to the program:
+</p>
+
 <pre><code>sudo bash browserSetup.sh -b install</code></pre>
+
 <p>
 To improve the performance of your Genome Browser, the program accepts the command
-<code>minimal</code>. It will download the minimal tables required for reasonable performance from 
-places in the US and possibly others, e.g., from Japan. Call it like this to trade space for 
-performance and download a few of the most used MySQL tables for hg38:</p>
+<code>minimal</code>. It will download the minimal tables required for reasonable
+performance from places in the US and possibly others, e.g., from
+Japan. Call it like this to trade space for performance and download a few
+of the most used MySQL tables for hg38:
+</p>
+
 <pre><code>sudo bash browserSetup.sh minimal hg38</code></pre>
+
 <p>
-If the Genome Browser is still too slow, you will have to mirror all tables of a genome assembly. 
-By default, rsync is used for the download. Alternatively you can use UDR, a UDP-based fast transfer
-protocol (option: <code>-u</code>).</p>
+If the Genome Browser is still too slow, you will have to mirror all tables of a
+genome assembly. By default, rsync is used for the download. Alternatively you can use
+UDR, a UDP-based fast transfer protocol (option: <code>-u</code>).
+</p>
+
 <pre><code>sudo bash browserSetup.sh -u mirror hg38</code></pre>
+
 <p>
-A successful run of <code>mirror</code> will also cut the connection to UCSC: no tables or files are
-downloaded on-the-fly anymore from the UCSC servers. To change the remote on-the-fly loading, 
-specify the option <code>-o</code> (offline) or <code>-f</code> (on-the-fly). If you are
-planning to keep sensitive data on your mirror, you will want to disable on-the-fly loading, like 
-so:</p>
+A successful run of <code>mirror</code> will also cut the connection to UCSC: no tables
+or files are downloaded on-the-fly anymore from the UCSC servers. To change
+the remote on-the-fly loading, specify the option <code>-o</code> (offline) or
+<code>-f</code> (on-the-fly). If you are planning to keep sensitive data on your mirror,
+you will want to disable on-the-fly loading, like so:
+</p>
+
 <pre><code>sudo bash browserSetup.sh -o</code></pre>
+
 <p>
-The full assembly download for hg19 is &gt;7TB. Limit this to 2TB or less with the <code>-t</code> 
-option:</p>
+The full assembly download for hg19 is &gt;7TB. Limit this
+to 2TB or less with the <code>-t</code> option:
+</p>
+
 <pre><code>sudo bash browserSetup.sh -t noEncode mirror hg19</code></pre>
+
 <p>
-For a full list of <code>-t</code> options, see the <a href="#all-gbic-options" target="_blank">All 
-GBiC options</a> section or run the program with no arguments.</p>
+For a full list of <code>-t</code> options, see the <a href='#all-gbic-options' title=''>All GBiC options</a> section or run the
+program with no arguments.
+</p>
+
 <p>
-To update all CGIs and fully mirrored assemblies, call the tool with the <code>update</code> 
-parameter like this:</p>
+To update all CGIs and fully mirrored assemblies, call the
+tool with the <code>update</code> parameter like this:
+</p>
+
 <pre><code>sudo bash browserSetup.sh update</code></pre>
+
 <p>
-Minimal mirror sites (those that have partially mirrored an assembly) should not use the 
-<code>update</code> command, but rather just rerun the <code>minimal</code> command, so that only 
-the minimal tables are updated. For instance, if you have partially mirrored the hg19 and hg38 
-databases, you may want to add this command to your crontab, perhaps running it every day,
-to keep your local tables in sync with those at UCSC:</p>
+Minimal mirror sites (those that have partially mirrored an assembly) should not
+use the <code>update</code> command, but rather just rerun the <code>minimal</code> command, so that only the minimal
+tables are updated. For instance, if you have partially mirrored the hg19 and hg38 databases,
+you may want to add this command to your crontab, perhaps running it every day, to keep your local
+tables in sync with those at UCSC:
+</p>
+
 <pre><code>sudo bash browserSetup.sh minimal hg19 hg38</code></pre>
+
 <p>
-To update only the Genome Browser software and not the data, use the <code>cgiUpdate</code> 
-command:</p>
+To update only the Genome Browser software and not the data, use the
+<code>cgiUpdate</code> command:
+</p>
+
 <pre><code>sudo bash browserSetup.sh cgiUpdate</code></pre>
+
 <p>
-Software may break or not work correctly if the necessary data is not available. Thus in most 
-circumstances we recommend you use the <code>mirror</code>, <code>update</code>, or 
-<code>minimal</code> commands instead of <code>cgiUpdate</code>.</p>
+Software may break or not work correctly if the necessary data is not available.
+Thus in most circumstances we recommend you use the <code>mirror</code>, <code>update</code>, or <code>minimal</code> commands instead
+of <code>cgiUpdate</code>.
+</p>
+
 <p>
-You will also want to add a cleaning command to your crontab to remove the temporary files that are 
-created during normal Genome Browser usage. These accumulate in <code>/usr/local/apache/trash</code>
-and can quickly consume significant space. A command like this should be added to your crontab 
-file:</p>
+You will also want to add a cleaning command to your crontab to remove
+the temporary files that are created during normal Genome Browser usage. These accumulate
+in <code>/usr/local/apache/trash</code> and can quickly consume significant space. A command like
+this should be added to your crontab file:
+</p>
+
 <pre><code>sudo bash browserSetup.sh clean</code></pre>
+
 <p>
 If you find that you need the Kent command line utilities in addition to the Genome Browser, the
-<code>addTools</code> command will install all the utilities into <code>/usr/local/bin</code>:</p>
+<code>addTools</code> command will install all the utilities into <code>/usr/local/bin</code>:
+</p>
+
 <pre><code>sudo bash browserSetup.sh addTools</code></pre>
+
 <p>
 A majority of these utilities require an <code>.hg.conf</code> file in the users home directory. For
-an example of a minimal <code>.hg.conf</code> file, click 
-<a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/minimal.hg.conf"
-target="_blank">here</a>.
+an example of a minimal <code>.hg.conf</code> file, click
+<a href='http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/minimal.hg.conf' title=''>here</a>.
+</p>
+
 <p>
 If you find a bug, or if your Linux distribution is not supported, please contact
-<a href="mailto:&#58&#103&#101&#110&#111&#109&#101&#45&#109&#105&#114&#114&#111&#114&#64&#115&#111&#101&#46&#117&#99&#115&#99&#46&#101&#100&#117" 
-target="_blank">&#103&#101&#110&#111&#109&#101&#45&#109&#105&#114&#114&#111&#114&#64&#115&#111&#101&#46&#117&#99&#115&#99&#46&#101&#100&#117</a>.</p>
-<p>
-More details about the Genome Browser installation are available 
-<a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;hb=HEAD;f=src/product"
-target="_blank">here</a>.</p>
+<a href='mailto:&#58&#103&#101&#110&#111&#109&#101&#45&#109&#105&#114&#114&#111&#114&#64&#115&#111&#101&#46&#117&#99&#115&#99&#46&#101&#100&#117' title=''>&#103&#101&#110&#111&#109&#101&#45&#109&#105&#114&#114&#111&#114&#64&#115&#111&#101&#46&#117&#99&#115&#99&#46&#101&#100&#117</a>.
+</p>
 
-<a name="all-gbic-options"></a>
-<h2>All GBiC options</h2>
 <p>
-Here is the full listing of commands and options supported by the GBiC program:</p>
+More details about the Genome Browser installation are available
+<a href='http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;hb=HEAD;f=src/product' title=''>here</a>.
+</p>
+
+<a name='all-gbic-options'></a>
+<h2>All GBiC options</h2>
+
+<p>
+Here is the full listing of commands and options supported by the GBiC program:
+</p>
+
 <pre><code>browserSetup.sh [options] [command] [assemblyList] - UCSC genome browser install script
 
 command is one of:
@@ -207,9 +275,9 @@ examples:
   bash browserSetup.sh cgiUpdate   - update the Genome Browser CGI programs
   bash browserSetup.sh clean       -  remove temporary files older than one day
 
-All options must precede the command.
+All options have to precede the command.
 
-Options:
+options:
   -a   - use alternative download server at SDSC
   -b   - batch mode, do not prompt for key presses
   -t   - only download track selection, requires a value.
@@ -233,20 +301,15 @@ Options:
          unless an assembly has been provided during install
   -h   - this help message</code></pre>
 
-<a name="credits"></a>
+<a name='credits'></a>
 <h2>Credits</h2>
+
 <ul>
-  <li>
-  Max Haeussler for writing the program.</li>
-  <li>
-  Christopher Lee for testing and QA.</li>
-  <li>
-  Daniel Vera (bio.fsu.edu) for his RHEL install notes.</li>
-  <li>
-  Bruce O&#39;Neill, Malcolm Cook for feedback.</li>
+<li>Max Haeussler for writing the program.</li>
+<li>Christopher Lee for testing and QA.</li>
+<li>Daniel Vera (bio.fsu.edu) for his RHEL install notes.</li>
+<li>Bruce O&#39;Neill, Malcolm Cook for feedback.</li>
 </ul>
 
 
-</div><!-- .content -->
-</body>
-</html>
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

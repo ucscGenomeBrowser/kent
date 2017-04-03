@@ -1,19 +1,19 @@
-% The Genome Browser in the Cloud User Guide
+% Genome Browser in the Cloud User's Guide
 
-# What is the Genome Browser in the Cloud?
+# What is Genome Browser in the Cloud?
 
 The Genome Browser in the Cloud (GBiC) program is a convenient tool that automates the setup of a
 UCSC Genome Browser mirror. The GBiC program is for users who want to set up a full mirror of the 
-UCSC Genome Browser on their server/cloud instance, rather than using the 
-[Genome Browser in a Box (GBiB)](http://genome.ucsc.edu/goldenPath/help/gbib.html) 
+UCSC Genome Browser on their server/cloud instance, rather than using 
+[Genome Browser in a Box](gbib.html) (GBIB) 
 or our public website. Please see the 
-[Installation of a UCSC Genome Browser on a local machine (mirror)](http://genome.ucsc.edu/admin/mirror.html#considerations-before-installing-a-genome-browser)
+[Installation of a UCSC Genome Browser on a local machine (mirror)](../../admin/mirror.html#considerations-before-installing-a-genome-browser)
 page for a summary of installation options, including the pros and cons of using a mirror installation
-via the GBiC program vs a GBiB.
+via the GBiC program vs. using GBiB.
 
 The program works by setting up MySQL, Apache, and Ghostscript, and then copying the Genome
-Browser CGIs onto the machine under `/usr/local/apache/`. It also deactivates the default
-Apache htdocs/cgi folders, so it is best run on a new machine, or at least a host that is not 
+Browser CGIs onto the machine under `/usr/local/apache/`. Because It also deactivates the default
+Apache htdocs/cgi folders, it is best run on a new machine, or at least a host that is not 
 already used as a web server. The tool can also download full or partial assembly databases,
 update the Genome Browser CGIs, and remove temporary files (aka "trash cleaning").
 
@@ -28,7 +28,7 @@ size of a single Amazon EBS volume.
 
 # Quick Start Instructions
 
-Download the GBiC program from the [UCSC Genome-Browser store](https://genome-store.ucsc.edu/).
+Download the GBiC program from the [UCSC Genome Browser store](https://genome-store.ucsc.edu/).
 
 Run the program as root, like this:
 
@@ -38,32 +38,37 @@ The `install` command downloads and configures Apache, MySQL and Ghostscript, co
 CGIs, and configures the mirror to load data remotely from UCSC. The `install` command must be
 run before any other command is used.
 
+For an installation demonstration, see the [Genome Browser in the Cloud (GBiC) Introduction](https://www.youtube.com/watch?v=dcJERBVnjio)
+video.
+
+For mirror-specific help, please contact the Mirror Forum as listed on our [contact page](../../contacts.html).
+
 # How does the GBiC program work?
 
 The GBiC program downloads the Genome Browser CGIs and sets up the central MySQL database. All
-potentially destructive steps require confirmation by the user (unless the `-b` = 
+potentially destructive steps require confirmation by the user (unless the `-b`
 batch mode option is specified).
 
 In particular, MySQL and Apache are installed and set up with the right package
 manager (yum or apt-get). A default random password is set for the
 MySQL root user and added to the `~/.my.cnf` file of the Unix root account. 
-If you have already set up MySQL, you will need to create the file
-`~/.my.cnf`. The program will detect this and create a template file for you.
-The program also does a few smaller things, like placing symlinks, detecting
-MariaDB, deactivating SELinux, finding the right path for your Apache install
+If you have already set up MySQL, you must create the 
+`~/.my.cnf` file. The program will detect this and create a template file for you.
+The program also performs some minor tasks such as placing symlinks, detecting
+MariaDB, deactivating SELinux, finding the correct path for your Apache install
 and adapting the MySQL socket config.
 
-This will leave you with a Genome Browser accessible on localhost that loads its data 
-through from genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If
-you are not on the US West Coast, it will be too slow for normal use but good 
-enough to test that your setup is working. You can then use the program to download 
-assemblies of interest to your local Genome Browser, which will make it at least 
+This will result in a Genome Browser accessible on localhost that loads its data 
+through genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If
+your geographic location is not on the US West Coast, the performance will be too slow for normal 
+use, though sufficient to test that the setup is functional. You can then use the program to download 
+assemblies of interest to your local Genome Browser, which will result in performance at least 
 as fast as the UCSC site.
 
-# The GBiC commands
+# GBiC commands
 
 The first argument of the program is called `command` in the following section of this document. 
-The first command that you will need is `install`, it installs the Genome Browser dependencies,
+The first command that you will need is `install`, which installs the Genome Browser dependencies,
 binary files and basic MySQL infrastructure:
 
     sudo bash browserSetup.sh install
@@ -75,15 +80,15 @@ The following example correctly specifies the batch mode option to the program:
 
     sudo bash browserSetup.sh -b install
 
-To increase the performance of your Genome Browser, the program accepts the command
+To improve the performance of your Genome Browser, the program accepts the command
 `minimal`. It will download the minimal tables required for reasonable
-performance from places in the US and possibly others, e.g. from
+performance from places in the US and possibly others, e.g., from
 Japan. Call it like this to trade space for performance and download a few
 of the most used MySQL tables for hg38:
 
     sudo bash browserSetup.sh minimal hg38
 
-If the Genome Browser is still too slow then you will need to mirror all tables of a 
+If the Genome Browser is still too slow, you will have to mirror all tables of a 
 genome assembly. By default, rsync is used for the download.  Alternatively you can use
 UDR, a UDP-based fast transfer protocol (option: `-u`). 
 
@@ -92,12 +97,12 @@ UDR, a UDP-based fast transfer protocol (option: `-u`).
 A successful run of `mirror` will also cut the connection to UCSC: no tables
 or files are downloaded on-the-fly anymore from the UCSC servers. To change
 the remote on-the-fly loading, specify the option `-o` (offline) or 
-`-f` (on-the-fly). If you are planning on keeping sensitive data on your mirror,
+`-f` (on-the-fly). If you are planning to keep sensitive data on your mirror,
 you will want to disable on-the-fly loading, like so:
 
     sudo bash browserSetup.sh -o
 
-In the case of hg19, the full assembly download is >7TB. Limit this
+The full assembly download for hg19 is >7TB. Limit this
 to 2TB or less with the `-t` option: 
 
     sudo bash browserSetup.sh -t noEncode mirror hg19
@@ -105,16 +110,16 @@ to 2TB or less with the `-t` option:
 For a full list of `-t` options, see the [All GBiC options](#all-gbic-options) section  or run the 
 program with no arguments.
 
-When you want to update all CGIs and fully mirrored assemblies, you can call the
+To update all CGIs and fully mirrored assemblies, call the
 tool with the `update` parameter like this: 
 
     sudo bash browserSetup.sh update
 
-Minimal mirrors (those that have partially mirrored an assembly) should not 
-use the `update` command, but rather just re-run the `minimal` command, so that only the minimal
+Minimal mirror sites (those that have partially mirrored an assembly) should not 
+use the `update` command, but rather just rerun the `minimal` command, so that only the minimal
 tables are updated. For instance, if you have partially mirrored the hg19 and hg38 databases,
-you may want to add this command to your crontab, perhaps running it every day, so your local 
-tables stay in sync with those UCSC:
+you may want to add this command to your crontab, perhaps running it every day, to keep your local 
+tables in sync with those at UCSC:
 
     sudo bash browserSetup.sh minimal hg19 hg38
 
@@ -123,13 +128,13 @@ To update only the Genome Browser software and not the data, use the
 
     sudo bash browserSetup.sh cgiUpdate
 
-However, software may break or not work correctly if the needed data is not available. 
+Software may break or not work correctly if the necessary data is not available. 
 Thus in most circumstances we recommend you use the `mirror`, `update`, or `minimal` commands instead
 of `cgiUpdate`.
 
 You will also want to add a cleaning command to your crontab to remove 
-the temporary files that are created during normal Genome Browser usage. They accumulate
-in `/usr/local/apache/trash` and can quickly take up a lot of space. A command like
+the temporary files that are created during normal Genome Browser usage. These accumulate
+in `/usr/local/apache/trash` and can quickly consume significant space. A command like
 this should be added to your crontab file:
 
     sudo bash browserSetup.sh clean
@@ -140,15 +145,14 @@ If you find that you need the Kent command line utilities in addition to the Gen
     sudo bash browserSetup.sh addTools
 
 A majority of these utilities require an `.hg.conf` file in the users home directory. For 
-an example `.hg.conf` file to use, please see the following 
-[minimal.hg.conf](http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/minimal.hg.conf)
-file.
+an example of a minimal `.hg.conf` file, click
+[here](http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/minimal.hg.conf).
 
-If you find a bug or your Linux distribution is not supported, please contact 
+If you find a bug, or if your Linux distribution is not supported, please contact 
 [genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). 
 
-More details about the Genome Browser installation are available at
-<http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;hb=HEAD;f=src/product>
+More details about the Genome Browser installation are available 
+[here](http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;hb=HEAD;f=src/product).
  
 # All GBiC options
 

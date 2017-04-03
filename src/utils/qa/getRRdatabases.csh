@@ -9,7 +9,7 @@ source `which qaConfig.csh`
 ################################
 
 set databases=""
-set rootpath="/cluster/data/genbank/var/tblstats"  # mark's TABLE STATUS dump
+set rootpath="/hive/data/outside/genbank/var/tblstats" # mark's TABLE STATUS dump
 set mach1=""
 set dirname1=""
 set machpath1=""
