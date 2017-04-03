@@ -117,24 +117,6 @@ if (!initialized)
 return useSessionKey;
 }
 
-char *cartDbMakeRandomKey(int numBits)
-/* Generate base64 encoding of a random key of at least size numBits returning string to be freed when done */
-{
-int numBytes = (numBits + 7) / 8;  // round up to nearest whole byte.
-numBytes = ((numBytes+2)/3)*3;  // round up to the nearest multiple of 3 to avoid equals-char padding in base64 output
-FILE *f = mustOpen("/dev/urandom", "r");   // open random system device for read-only access.
-char *binaryString = needMem(numBytes);
-mustRead(f, binaryString, numBytes); 
-carefulClose(&f);
-char * result = base64Encode(binaryString, numBytes); // converts 3 binary bytes into 4 printable characters
-int len = strlen(result);
-memSwapChar(result, len, '+', 'A'); // replace + and / with characters that are URL-friendly.
-memSwapChar(result, len, '/', 'a');
-freeMem(binaryString);
-return result;
-}
-
-
 void cartDbSecureId(char *buf, int bufSize, struct cartDb *cartDb)
 /* Return combined string of session id plus sessionKey in buf if turned on.*/
 {

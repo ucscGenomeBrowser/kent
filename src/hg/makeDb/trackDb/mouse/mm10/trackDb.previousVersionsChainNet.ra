@@ -34,6 +34,14 @@ html chainNet
         type chain rn4
         otherDb rn4
 
+        track chainRn5
+        subTrack previousVersionsChainNetViewchain on
+        subGroups view=chain species=aRat clade=aRodent
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rn5
+        otherDb rn5
+
         track chainHetGla1
         subTrack previousVersionsChainNetViewchain off
         subGroups view=chain species=bNMRat clade=aRodent
@@ -159,6 +167,14 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rn4 chainRn4
         otherDb rn4
+
+        track netRn5
+        subTrack previousVersionsChainNetViewnet on
+        subGroups view=net species=aRat clade=aRodent
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign rn4 chainRn5
+        otherDb rn5
 
         track netHetGla1
         subTrack previousVersionsChainNetViewnet off

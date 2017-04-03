@@ -16,13 +16,11 @@ Below is also a section about starting <a href="#blatGbib">GBiB Assembly Hubs</a
 <p>
 <strong>STEP 1:</strong> In a publicly accessible directory, copy this <em>Arabidopsis thaliana</em>
 plant assembly hub, which includes an araTha1.2bit file, using the following wget command:</p>
-<pre><code>wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3
-http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/</code></pre>
+<pre><code>wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/</code></pre>
 <p>
 Alternatively, <strong>if you do not have wget installed,</strong> you can curl these files 
 individually.  Perform the curl -O option in the location you wish to copy the files:</p>
-<pre><code>curl -O
-http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</code></pre>
+<pre><code>curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</code></pre>
 <p>
 <em>If you use curl</eM>, be sure to recreate the structure with matching araTha1 and araTha1/bbi 
 directories. Double check you have all the files by looking here: 
@@ -43,8 +41,7 @@ http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.re
 </code>
 <p>
 This URL should work the same as using the original data just copied:</p>
-<pre><code>
-<a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt"
+<pre><code><a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt"
 target="_blank">http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&<strong>hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</strong></a> </code></pre>
 <p>
 <strong>STEP 3:</strong> Congratulations! Your assembly hub should display!</p>
@@ -130,9 +127,9 @@ target="_blank">here</a>, and please note the uppercase &quot;B&quot; in transBl
 information, see the &quot;Adding BLAT servers&quot; section of the 
 <a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs#Adding_BLAT_servers" 
 target="_blank">Assembly Hub Wiki</a>. The 
-<a href="http://hgdownload.cse.ucsc.edu/downloads.html#source_downloads" target="_blank">Source 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads" target="_blank">Source 
 Downloads</a> page offers access to utilities with pre-compiled binaries such as gfServer found in 
-a blat/ directory for your machine type <a href="http://hgdownload.cse.ucsc.edu/admin/exe/" 
+a blat/ directory for your machine type <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" 
 target="_blank">here</a> and further <a href="blatSpec.html" target="_blank">blat documentation 
 here</a>. Please note that because the <code>-mask</code> option in the above <code>17777 
 -trans</code> gfServer option will mask all lower-case sequence from being matched, you may not 
@@ -143,7 +140,7 @@ that some institutions have firewalls that will prevent the browser from sending
 in which case you may need to request your admins add this IP range as exceptions that are not
 limited: <code>128.114.119.*</code> That will cover the U.S. genome.ucsc.edu site. In case you may
 wish the requests to work from our European Mirror genome-euro.ucsc.edu site, you would want to
-include <code>129.70.40.120</code> also to the exception list.</p>
+include <code>129.70.40.99</code> also to the exception list.</p>
 
 <!-- ========== blat assembly hub GBiB ============================== -->
 
@@ -162,8 +159,7 @@ into your GBiB:
 <p>
 <strong>STEP 3.</strong> Navigate to the GBiB's folders directory and use sudo to wget this assembly
 hub:</p>
-<pre><code>sudo wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3
-http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/</code></pre>
+<pre><code>sudo wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/</code></pre>
 <p>
 <strong>STEP 4.</strong> You now have all the required files on your local machine and can load this
 plant assembly hub by using this URL and selecting it under the &quot;group&quot; category where
@@ -178,8 +174,7 @@ and installation of the Blat and In-Silico PCR software may be licensed through
 <p>
 You can obtain just the gfServer utility on your GBiB with the following command that will create a 
 bin directory and install the tool.</p>
-<pre><code>mkdir ~/bin -p; rsync -avP
-hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/blat/gfServer ~/bin/</code></pre>
+<pre><code>mkdir ~/bin -p; rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/blat/gfServer ~/bin/</code></pre>
 <p>
 The GBiB also includes a tool you can run on the commandline to download an entire suite of tools 
 including gfServer: <code>gbibAddTools</code></p>

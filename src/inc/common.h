@@ -845,9 +845,9 @@ boolean sqlMatchLike(char *wildCard, char *string);
 boolean anyWild(const char *string);
 /* Return TRUE if any wild card characters in string. */
 
-struct slName *wildExpandList(struct slName *allList, struct slName *wildList, 
+struct slName *wildExpandList(struct slName *allList, struct slName *wildList,
     boolean abortMissing);
-/* Wild list is a list of names, possibly including * and ? wildcard characters.  This 
+/* Wild list is a list of names, possibly including * and ? wildcard characters.  This
  * function returns names taken from allList that match patterns in wildList.  Works much
  * like wildcard expansion over a file system but expands over allList instead. */
 
@@ -871,6 +871,9 @@ char *strUpper(char *s);
 char *strLower(char *s);
 #define tolowers(s) (void)strLower(s)
 /* Convert entire string to lower case */
+
+void replaceChar(char *s, char old, char new);
+/* Repace one char with another. Modifies original string. */
 
 char *replaceChars(char *string, char *oldStr, char *newStr);
 /*
@@ -1026,7 +1029,7 @@ char *nextTabWord(char **pLine);
 /* Return next tab-separated word. */
 
 char *cloneFirstWordByDelimiterNoSkip(char *line,char delimit);
-/* Returns a cloned first word, not harming the memory passed in. 
+/* Returns a cloned first word, not harming the memory passed in.
  * Does not skip leading white space.*/
 
 char *cloneFirstWordByDelimiter(char *line,char delimit);
@@ -1362,6 +1365,14 @@ char *strstrNoCase(char *haystack, char *needle);
 int vasafef(char* buffer, int bufSize, char *format, va_list args);
 /* Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. */
+
+int vatruncatef(char *buf, int size, char *format, va_list args);
+/* Like vasafef, but truncates the formatted string instead of barfing on
+ * overflow. */
+
+void truncatef(char *buf, int size, char *format, ...);
+/* Like safef, but truncates the formatted string instead of barfing on
+ * overflow. */
 
 int safef(char* buffer, int bufSize, char *format, ...)
 /* Format string to buffer, vsprintf style, only with buffer overflow

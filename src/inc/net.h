@@ -169,9 +169,9 @@ int netUrlHead(char *url, struct hash *hash);
  * lines with upper cased keywords for case-insensitive lookup, 
  * including hopefully CONTENT-TYPE: . */
 
-long long netUrlSizeByRangeResponse(char *url);
-/* Use byteRange as a work-around alternate method to get file size (content-length).  
- * Return negative number if can't get. */
+int netUrlFakeHeadByGet(char *url, struct hash *hash);
+/* Use GET with byteRange as an alternate method to HEAD. 
+ * Return status. */
 
 struct lineFile *netLineFileOpen(char *url);
 /* Return a lineFile attached to url.  This one
@@ -209,6 +209,12 @@ void netHttpGet(struct lineFile *lf, struct netParsedUrl *npu,
 int netOpenHttpExt(char *url, char *method, char *optionalHeader);
 /* Return a file handle that will read the url.  optionalHeader
  * may by NULL or may contain cookies and other info. */
+
+void setAuthorization(struct netParsedUrl npu, char *authHeader, struct dyString *dy);
+/* Set the specified authorization header with BASIC auth base64-encoded user and password */
+
+boolean checkNoProxy(char *host);
+/* See if host endsWith element on no_proxy list. */
 
 int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *optionalHeader);
 /* Parse URL, connect to associated server on port, and send most of

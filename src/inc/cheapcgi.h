@@ -22,8 +22,22 @@ void jsInlineFinish();
 void jsInline(char *javascript);
 /* Add text to output file or memory structure */
 
+void jsInlineF(char *format, ...)
+/* Add javascript text to output file or memory structure */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
+
 void jsOnEventById(char *event, char *idText, char *jsText);
 /* Add js mapping for inline event */
+
+void jsOnEventByIdF(char *event, char *idText, char *format, ...)
+/* Add js mapping for inline event */
+#if defined(__GNUC__)
+__attribute__((format(printf, 3, 4)))
+#endif
+;
 
 void jsInlineReset();  
 /* used by genomeSpace to repeatedly output multiple pages to stdout */
@@ -325,7 +339,7 @@ void cgiMakeTextVar(char *varName, char *initialVal, int charSize);
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
 
-void cgiMakeTextVarWithExtraHtml(char *varName, char *initialVal, int width, char *event, char *javascript);
+void cgiMakeTextVarWithJs(char *varName, char *initialVal, int width, char *event, char *javascript);
 /* Make a text control filled with initial value. */
 
 void cgiMakeOnKeypressTextVar(char *varName, char *initialVal, int charSize,
@@ -376,6 +390,10 @@ void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked,
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
 /* Make a drop-down list with names.
  * uses style "normalText" */
+
+void cgiMakeDropListClassWithIdStyleAndJavascript(char *name, char *id, char *menu[],
+        int menuSize, char *checked, char *class, char *style, struct slPair *events);
+/* Make a drop-down list with name, id, text class, style and javascript. */
 
 void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
                                                 int menuSize, char *checked, char *class,

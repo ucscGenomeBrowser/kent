@@ -348,13 +348,11 @@ void gtexGeneUiLogTransform(struct cart *cart, char *track, struct trackDb *tdb)
 /* Checkbox to select log-transformed RPKM values */
 {
 char cartVar[1024];
-char buf[512];
 puts("<b>Log10 transform:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
-safef(buf, sizeof buf, "gtexTransformChanged('%s');", track);
 cgiMakeCheckBoxWithId(cartVar, isLogTransform, cartVar);
-jsOnEventById("change", cartVar, buf);
+jsOnEventByIdF("change", cartVar, "gtexTransformChanged('%s');", track);
 }
 
 void gtexGeneUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
@@ -362,6 +360,7 @@ void gtexGeneUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
 {
 char cartVar[1024];
 char buf[512];
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
 safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
 printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);

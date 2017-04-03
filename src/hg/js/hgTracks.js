@@ -997,14 +997,24 @@ var dragSelect = {
         return true;
     },
 
-    highlightThisRegion: function(newPosition)
+    highlightThisRegion: function(newPosition, doAdd)
     // set highlighting newPosition in server-side cart and apply the highlighting in local UI.
     {
+        var hlColor = '#1ff3f0';
         var pos = parsePosition(newPosition);
         var start = pos.start;
         var end = pos.end;
-        hgTracks.highlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + '#AAFFFF';
-        hgTracks.highlight = imageV2.disguiseHighlight(hgTracks.highlight);
+        var newHighlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + hlColor;
+        newHighlight = imageV2.disguiseHighlight(newHighlight);
+        var oldHighlight = hgTracks.highlight;
+        if (oldHighlight===undefined || doAdd===undefined || doAdd===false || oldHighlight==="") {
+            // just set/overwrite the old highlight position, this used to be the default
+            hgTracks.highlight = newHighlight;
+        }
+        else {
+            // add to the end of a |-separated list
+            hgTracks.highlight = oldHighlight+"|"+newHighlight;
+        }
         // we include enableHighlightingDialog because it may have been changed by the dialog
         var cartSettings = {             'highlight': hgTracks.highlight, 
                           'enableHighlightingDialog': hgTracks.enableHighlightingDialog ? 1 : 0 };
@@ -1035,7 +1045,7 @@ var dragSelect = {
                 }
             }
             if (nonVirtChrom !== "")
-                cartSettings.nonVirtHighlight = getDb() + '.' + nonVirtChrom + ':' + nonVirtStart + '-' + (nonVirtEnd+1) + '#AAFFFF';
+                cartSettings.nonVirtHighlight = getDb() + '.' + nonVirtChrom + ':' + nonVirtStart + '-' + (nonVirtEnd+1) + hlColor;
         } else if (hgTracks.windows && hgTracks.virtualSingleChrom) {
                 cartSettings.nonVirtHighlight = hgTracks.highlight;
         }
@@ -1052,7 +1062,8 @@ var dragSelect = {
             $("body").append("<div id='dragSelectDialog'><span id='dragSelectPosition'></span>" + 
                              "<p><input type='checkbox' id='disableDragHighlight'>" + 
                              "Don't show this dialog again and always zoom.<BR>" + 
-                             "(Re-enable highlight via the 'configure' menu at any time.)</p>");
+                             "(Re-enable highlight via the 'configure' menu at any time.)</p>"+ 
+                             "Using the keyboard, you can highlight the current range with 'h then m' (mark) and clear all highlights with 'h then c'. Type '?' to show the other shortcuts.<p>");
             dragSelectDialog = $("#dragSelectDialog")[0];
         }
         if (hgTracks.windows) {
@@ -1095,7 +1106,7 @@ var dragSelect = {
                 resizable: false,
                 autoOpen: false,
                 revertToOriginalPos: true,
-                minWidth: 400,
+                minWidth: 450,
                 buttons: {  
                     "Zoom In": function() {
                         // Zoom to selection
@@ -1118,12 +1129,19 @@ var dragSelect = {
                         }
                         $(this).dialog("close");
                     },
-                    "Highlight": function() {
-                        // Highlight selection
+                    "Single Highlight": function() {
+                        // Clear old highlight and Highlight selection
                         $(imageV2.imgTbl).imgAreaSelect({hide:true});
                         if ($("#disableDragHighlight").attr('checked'))
                             hgTracks.enableHighlightingDialog = false;
-                        dragSelect.highlightThisRegion(newPosition);
+                        dragSelect.highlightThisRegion(newPosition, false);
+                        $(this).dialog("close");
+                    },
+                    "Add Highlight": function() {
+                        // Highlight selection
+                        if ($("#disableDragHighlight").attr('checked'))
+                            hgTracks.enableHighlightingDialog = false;
+                        dragSelect.highlightThisRegion(newPosition, true);
                         $(this).dialog("close");
                     },
                     "Cancel": function() {
@@ -3303,7 +3321,7 @@ function showHotkeyHelp() {
 function addKeyboardHelpEntries() {
     var html = '<li><a id="keybShorts" title="List all possible keyboard shortcuts" href="#">Keyboard Shortcuts</a><span class="shortcut">?</span></li>';
     $('#help .last').before(html);
-    $("#keybShorts").onclick = function(){showHotKeyHelp(); return false;};
+    $("#keybShorts").click( function(){showHotkeyHelp();} );
 
     html = '<span class="shortcut">s s</span>';
     $('#sessionsMenuLink').after(html);
@@ -3364,6 +3382,21 @@ function zoomTo(zoomSize) {
     if (hgTracks.virtualSingleChrom && (newPos.search("virt:")===0))
         newPos = genomePos.disguisePosition(newPosition); // DISGUISE?
     imageV2.navigateInPlace("position="+newPos, null, true);
+}
+
+// A function for the keyboard shortcuts "highlight add/clear/new"
+function highlightCurrentPosition(mode) {
+    var pos = genomePos.get();
+    if (mode=="new")
+        dragSelect.highlightThisRegion(pos, false);
+    else if (mode=="add")
+        dragSelect.highlightThisRegion(pos, true);
+    else {
+        hgTracks.highlight = "";
+        var cartSettings = {'highlight': ""};
+        cart.setVarsObj(cartSettings);
+        imageV2.highlightRegion();
+    }
 }
 
   //////////////////////////////////

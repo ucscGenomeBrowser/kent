@@ -109,12 +109,13 @@ DBS = \
 	loxAfr1 loxAfr2 loxAfr3 \
 	macEug1 macEug2 \
 	macFas5 \
+	macNem1 \
 	manPen1 \
 	marVir1 \
 	melGal1 melGal5 \
 	melHap1 \
 	melInc1 melInc2 \
-	micMur1 micMur2 \
+	micMur1 micMur2 micMur3 \
 	micOch1 \
 	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 mm10Patch4 \
 	monDom1 monDom4 monDom5 \
@@ -132,7 +133,7 @@ DBS = \
 	ornAna1 ornAna2 \
 	oryCun1 oryCun2 \
 	oryLat1 oryLat2 \
-	otoGar1 otoGar3 tupBel1\
+	otoGar1 otoGar3 \
 	oviAri1 oviAri3 \
 	oxyTri2 \
 	panPan1 panPan2 \
@@ -148,6 +149,7 @@ DBS = \
 	pteVam1 tarSyr1 tarSyr2 \
 	repeats2 \
 	rheMac2 rheMac3 rheMac7 rheMac8 \
+	rhiBie1 \
 	rhiRox1 \
 	rn3 rn4 rn5 rn6 \
 	rouAeg1 \
@@ -167,10 +169,13 @@ DBS = \
 	triMan1 \
 	triSpi1 \
 	triSui1 \
+	tupBel1 \
+	tupChi1 \
 	turTru1 turTru2 \
 	venter1 \
 	vicPac1 vicPac2 \
-	xenTro1 xenTro2 xenTro3 xenTro7
+	xenLae2 \
+	xenTro1 xenTro2 xenTro3 xenTro7 xenTro9
 
 GSID_DBS = \
 	hiv1 vax004 hivgne8 hivmn hivmn1 hivmn2 hivgne8v2 hivVax003Vax004

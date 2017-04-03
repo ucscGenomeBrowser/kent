@@ -1,4 +1,4 @@
-import os
+import tempfile
 
 from ucscGb.qa.tables.positionalQa import PositionalQa
 from ucscGb.qa import qaUtils
@@ -28,26 +28,25 @@ class PslQa(PositionalQa):
                 # Extract sizes from named seq table
                 sizesOut = qaUtils.callHgsql(self.db, "select acc, size from " + tdbOut[2])
 
-            # Write itemSizes to file
-            itemSizes = open("%s.sizes" % self.table, 'w')
+            # Write itemSizes to tempfile
+            itemSizesTemp = tempfile.NamedTemporaryFile(mode='w')
+            itemSizes = open(itemSizesTemp.name, 'w')
             itemSizes.write(sizesOut)
             itemSizes.close()
-            # Check if $db.sizes file exists
-            if not os.path.isfile("%s.chrom.sizes" % self.db):
-                # If it doens't exist, get chrom sizes from chromInfo
-                chromSizesOut = qaUtils.callHgsql(self.db, "select * from chromInfo")
-                chromSizes = open("%s.chrom.sizes" % self.db, 'w')
-                chromSizes.write(chromSizesOut)
-                chromSizes.close()
+            # Write chromSizes to tempfile
+            chromSizesTemp = tempfile.NamedTemporaryFile(mode='w')
+            chromSizesOut = qaUtils.callHgsql(self.db, "select chrom,size from chromInfo")
+            chromSizes = open(chromSizesTemp.name, 'w')
+            chromSizes.write(chromSizesOut)
+            chromSizes.close()
+
             # Run more in-depth version of pslCheck
-            command = ("pslCheck", "-querySizes=%s.sizes" % self.table ,\
-                    "-targetSizes=%s.chrom.sizes" % self.db, "-db=" + self.db, self.table)
+            command = ("pslCheck", "-querySizes=" + itemSizesTemp.name ,\
+                    "-targetSizes=" + chromSizesTemp.name, "-db=" + self.db, self.table)
             self.reporter.writeCommand(command)
             commandOut, commandErr, commandReturnCode = qaUtils.runCommandNoAbort(command)
             # Write output to file
             self.reporter.fh.write(commandErr)
-            # Clean up intermediate item sizes file
-            os.remove("%s.sizes" % self.table)
 
         # For everything else, use generic set of steps
         else:

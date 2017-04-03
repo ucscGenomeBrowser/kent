@@ -19,6 +19,7 @@ my $stepper = new HgStepManager(
       { name => 'loadDbSnp',  func => \&loadDbSnp },
       { name => 'addToDbSnp', func => \&addToDbSnp },
       { name => 'bigJoin',    func => \&bigJoin },
+      { name => 'catFasta',   func => \&catFasta },
       { name => 'translate',  func => \&translate },
       { name => 'load',       func => \&loadTables },
       { name => 'filter',     func => \&filterTables },
@@ -79,6 +80,7 @@ Automates our processing of dbSNP files into our snpNNN track:
     bigJoin:    Run a large left-join query to extract the columns from
                 various dbSNP tables into our snpNNN columns and lift from
                 contigs up to chroms if necessary.
+    catFasta:   Concatenate all flanking sequence files into one giant file.
     translate:  Run snpNcbiToUcsc on the join output to perform final checks
                 and conversion of numeric codes into strings.
     load:       Load snpNNN* tables into our database.
@@ -389,7 +391,7 @@ cd $assemblyDir/rs_fasta
 $wget ftp://ftp.ncbi.nih.gov/snp/organisms/$orgDir/rs_fasta/\\*.gz
 
 # Make all files group writeable so others can update them if necessary
-find $buildDir -user \$USER -not -perm -660 | xargs chmod ug+w
+find $buildDir -user \$USER -not -perm -660 | xargs --no-run-if-empty chmod ug+w
 
 # Extract the set of assembly labels in case we need to exclude any.
 zcat $assemblyDir/data/$ContigInfo.bcp.gz | cut -f $groupLabelCol | uniq | sort -u \\
@@ -1293,6 +1295,48 @@ _EOF_
 
 
 #########################################################################
+# * step: catFasta [fileServer]
+
+sub catFasta {
+  my $runDir = "$assemblyDir";
+  my $tmpDb = $db . $snpBase;
+  my $whatItDoes =
+"It concatenates flanking sequence fasta files into one giant indexed file.";
+  my $bossScript = new HgRemoteScript("$runDir/catFasta.csh",
+				      $fileServer, $runDir, $whatItDoes, $CONFIG);
+  $bossScript->add(<<_EOF_
+    set tmpDir = `cat $runDir/workingDir`
+    cd \$tmpDir
+
+    # Make one big fasta file.
+#*** It's a monster: 23G for hg19 snp132, 39G for hg38 snp149!  Can we split by hashing rsId?
+#*** Can't use 2bit because it doesn't preserve the line structure that shows which base is
+#*** the variant base between the two flanks.
+    zcat $runDir/rs_fasta/rs_ch*.fas.gz \\
+    | perl -wpe 's/^>gnl\\|dbSNP\\|(rs\\d+) .*/>\$1/ || ! /^>/ || die;' \\
+      > $snpBase.fa
+    # Use hgLoadSeq to generate .tab output for sequence file offsets,
+    # and keep only the columns that we need: acc and file_offset.
+    # Convert to snpSeq table format and remove duplicates.
+    hgLoadSeq -test placeholder $snpBase.fa
+    cut -f 2,6 seq.tab \\
+    | sort -k1,1 -u \\
+      > ${snpBase}Seq.tab
+    rm seq.tab
+
+    # Compress (where possible -- not .fa unfortunately) and copy results back to
+    # $runDir
+    gzip ${snpBase}Seq.tab
+    cp -p ${snpBase}Seq.tab.gz $snpBase.fa $runDir/
+    rm ${snpBase}Seq.tab.gz $snpBase.fa
+_EOF_
+    );
+
+  $bossScript->execute();
+} # catFasta
+
+
+#########################################################################
 # * step: translate [workhorse]
 
 sub translate {
@@ -1300,7 +1344,6 @@ sub translate {
   my $tmpDb = $db . $snpBase;
   my $whatItDoes =
 "It runs snpNcbiToUcsc to make final $snpBase.* files for loading,
-concatenates flanking sequence fasta files into one giant indexed file,
 cleans up intermediate files and moves results from the temporary
 working directory to $runDir.";
 
@@ -1326,23 +1369,9 @@ working directory to $runDir.";
 #*** add output to endNotes:
     wc -l ${snpBase}*
 
-    # Make one big fasta file.
-#*** It's a monster: 23G for hg19 snp132!  Can we split by hashing rsId?
-    zcat $runDir/rs_fasta/rs_ch*.fas.gz \\
-    | perl -wpe 's/^>gnl\\|dbSNP\\|(rs\\d+) .*/>\$1/ || ! /^>/ || die;' \\
-      > $snpBase.fa
-    # Use hgLoadSeq to generate .tab output for sequence file offsets,
-    # and keep only the columns that we need: acc and file_offset.
-    # Translate to snpSeq table format and remove duplicates.
-    hgLoadSeq -test placeholder $snpBase.fa
-    cut -f 2,6 seq.tab \\
-    | sort -k1,1 -u \\
-      > ${snpBase}Seq.tab
-    rm seq.tab
-
-# Compress (where possible -- not .fa unfortunately) and copy results back to
+# Compress and copy results back to
 # $runDir
-gzip *.txt *.bed *.tab
+gzip *.txt *.bed
 cp -p * $runDir/
 rm \$tmpDir/*
 

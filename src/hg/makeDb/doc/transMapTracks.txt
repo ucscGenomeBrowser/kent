@@ -57,4 +57,44 @@ General steps for setup, only done once:
 
 
    # request push of tracks
+   # note: was never made public
+##############################################################################################
+# TransMap V4 tracks (2017-02-10 markd)
+##
+  - This is the build using bigTransMap format (derived from bigPsl), not
+    mysql tracks.
+    Build code is here:
+       /cluster/home/markd/compbio/repos/git/transMap.git
+    which also requires
+      /cluster/home/markd/compbio/repos/git/pycbio.git
+      git@github.com:diekhans/pipettor.git
+
+  - Build process:
+    tmdir=~/compbio/projs/transMap/transMap-dev
+    mkdir -p  /hive/data/outside/transMap/V4/logs
+    pushd /hive/data/outside/transMap/V4
+    (time nice ${tmdir}/bin/luigiTransMap --workers=32 --logConfFile=${tmdir}/etc/logging.conf ${tmdir}/etc/transMapBuildConf.py) >&logs/2017-01-12.log &
+    # takes maybe 10-14 hours,  at the end, check for parasol jobs
+    # that are lost (using one or two stranglers for a few batches), then do
+    para stop -batch=/the/batch/name
+    para push -batch=/the/batch/name
+    # now wait for luigiTransMap to complete.  Must manually check log, as
+    # current luigi doesn't exit non-zero if there were errors
+
+  # create symlinks to /gbdb for bigPsl files
+    ${tmdir}/bin/linkToGbdb  ${tmdir}/etc/transMapBuildConf.py
+
+  # add trackDb entries at top level by editing:
+    src/hg/makeDb/trackDb/trackDb.transMap.ra 
+  # create push lists for databases and gbdb files for genomes on hgwbeta:
+    ${tmdir}/bin/mkPushList ${tmdir}/etc/transMapBuildConf.py db.push.lst gbdb.push.lst
+
+  # and creating the following html files:
+    transMapV4.html
+    transMapEnsemblV4.html
+    transMapEstV4.html
+    transMapRefseqV4.html
+    transMapRnaV4.html
+
+
 ##############################################################################################

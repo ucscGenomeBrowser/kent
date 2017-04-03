@@ -27,6 +27,7 @@ struct galleryEntry
     struct galleryEntry *next;
     char *userName;
     char *realName;
+    char *userIdx;
     char *sessionName;
     char *settings;
     char *db;
@@ -59,13 +60,16 @@ AllocVar(ret);
 ret->realName = cloneString(row[0]);
 ret->userName = cloneString(row[1]);
 cgiDecodeFull(ret->userName, ret->userName, strlen(ret->userName));
+ret->userIdx = cloneString(row[2]);
 ret->sessionName = cloneString(row[3]);
 cgiDecodeFull(ret->sessionName, ret->sessionName, strlen(ret->sessionName));
 ret->sessionUrl = dyStringCreate("hgS_doOtherUser=submit&hgS_otherUserName=%s&hgS_otherUserSessionName=%s", row[1], row[3]);
 
-ret->imgPath = sessionThumbnailFilePath(row[2], row[3], row[7]);
+char *userIdentifier = sessionThumbnailGetUserIdentifier(row[1], ret->userIdx);
+
+ret->imgPath = sessionThumbnailFilePath(userIdentifier, row[3], row[7]);
 if (fileExists(ret->imgPath))
-    ret->imgUri = sessionThumbnailFileUri(row[2], row[3], row[7]);
+    ret->imgUri = sessionThumbnailFileUri(userIdentifier, row[3], row[7]);
 else
     ret->imgUri = NULL;
 ret->useCount = sqlUnsignedLong(row[4]);
@@ -142,8 +146,7 @@ struct galleryEntry *thisSession = galList;
 /* Hide the orderable columns and disable ordering on the visible columns
  * https://datatables.net/reference/option/columnDefs for more info.
  * Then set up the ordering drop-down menu */
-struct dyString *javascript = newDyString(1024);
-dyStringPrintf(javascript, 
+jsInlineF(
    "$(document).ready(function () {\n"
     "    $('#sessionTable').DataTable({\"columnDefs\": [{\"visible\":false, \"targets\":[2,3]},\n"
     "                                                   {\"orderable\":false, \"targets\":[0,1]}\n"
@@ -175,8 +178,6 @@ dyStringPrintf(javascript,
     "    }\n"
     "});\n",
     jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart));
-jsInline(javascript->string);
-dyStringFree(&javascript);
 
 jsInline(
    "function changeSort() {\n"
@@ -271,10 +272,7 @@ char *db = cartUsualString(cart, "db", hDefaultDb());
 cartWebStart(cart, db, "Public Sessions");
 
 /* Not in a form; can't use cartSaveSession() to set up an hgsid input */
-char javascript[1024];
-safef(javascript, sizeof javascript,
-"var common = {hgsid:\"%s\"};\n", cartSessionId(cart));
-jsInline(javascript);
+jsInlineF("var common = {hgsid:\"%s\"};\n", cartSessionId(cart));
 
 jsIncludeDataTablesLibs();
 

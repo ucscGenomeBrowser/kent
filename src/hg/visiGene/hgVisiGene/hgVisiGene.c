@@ -326,8 +326,8 @@ htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
 
 jsInline(
-"document.getElementsByTagName('html')[0].style.height=\"100%\";"
-"document.getElementsByTagName('body')[0].style.height=\"100%\";"
+"document.getElementsByTagName('html')[0].style.height=\"100%\";\n"
+"document.getElementsByTagName('body')[0].style.height=\"100%\";\n"
 );
 
 if (!visiGeneImageSize(conn, imageId, &w, &h))

@@ -74,10 +74,11 @@ latCha1
 loxAfr3
 macEug2
 macFas5
+macNem1
 manPen1
 melGal5
 melUnd1
-micMur2
+micMur3
 micOch1
 monDom5
 musFur1
@@ -121,9 +122,10 @@ tarSyr2
 tetNig2
 triMan1
 tupBel1
+tupChi1
 turTru2
 vicPac2
-xenTro7
+xenTro9
 #
 # this is the beginning of the list of secondary assemblies
 #
@@ -180,6 +182,7 @@ loxAfr1
 macEug1
 melGal1
 micMur1
+micMur2
 mm9
 mm8
 mm7
@@ -201,6 +204,7 @@ petMar1
 priPac1
 rheMac3
 rheMac2
+rhiBie1
 rhiRox1
 rn4
 rn3
@@ -214,6 +218,7 @@ taeGut1
 tarSyr1
 tetNig1
 vicPac1
+xenTro7
 xenTro3
 xenTro2
 xenTro1

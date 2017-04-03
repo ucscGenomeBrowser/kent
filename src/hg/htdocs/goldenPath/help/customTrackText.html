@@ -433,10 +433,16 @@ For example, if the browser line <code>browser position chr22:1-20000</code> is 
 annotation file, the Genome Browser window will initially display the first 20000 bases of chr 
 22.</p>
 <p>
-The following browser line attribute name/value options are available. The value 
-<em>track_primary_table_name</em> must be set to the name of the primary table on which the the 
-track is based. You can find instructions on how to find this table name in the video 
-&quot;<a href="../../training/vids/index.html#vid06" target="_blank">How do I learn which tables 
+The following browser line attribute name/value options are available. The value
+<em>track_primary_table_name</em> must be set to the name of the primary table on which the
+track is based. To identify this table, open up the
+<A HREF="../../cgi-bin/hgTables" TARGET=_blank>Table Browser</A>,
+select the correct genome assembly, then select the track name from the
+<em>track</em> list. The <em>table</em> list will show the primary table.
+Alternatively, the primary table name can be obtained from a mouseover on the
+track name in the track control section.
+You can also find instructions on how to find this table name in the video
+&quot;<a href="../../training/vids/index.html#vid06" target="_blank">How do I learn which tables
 belong to a data track on the UCSC Genome Browser?</a>&quot;.</p>
 <p>
 Note that composite track subtracks are not valid <em>track_primary_table_name</em> values. To find 
@@ -475,8 +481,8 @@ a subset of the subtracks at this time.</p>
   <li>
   <strong>squish all</strong> - Displays all tracks in squish mode. See NOTE for &quot;dense 
   all&quot;.</li>
-  <li><
-  strong>squish &lt;<em>track_primary_table_name(s)</em>&gt;</strong> - Displays the specified 
+  <li>
+  <strong>squish &lt;<em>track_primary_table_name(s)</em>&gt;</strong> - Displays the specified 
   tracks in squish mode. Symbolic names must be used. Multiple track names should be
   space-separated.</li> 
   <li>
@@ -817,6 +823,7 @@ create a new file that contains the
 <a href="/goldenPath/help/customTrack.html#TRACK">track lines</a> to each file that will be 
 included. To submit this custom set of tracks, merely use the URL to this new file.</p>
 
+<a name="TROUBLE"></a>
 <h2>Troubleshooting annotation display problems</h2>
 <p>
 Occasionally users encounter problems when uploading annotation files to the Genome Browser. In 
@@ -827,8 +834,8 @@ data, please contact
 <a href="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;">&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;</a> 
 <!-- above address is genome at soe.ucsc.edu -->
 for further assistance. 
-<strong>Messages sent to this address will be posted to the moderated genome mailing list, which is 
-archived on a SEARCHABLE, PUBLIC 
+<strong><span class="gbsWarnText">Messages sent to this address will be posted to the moderated genome mailing list, which is 
+archived on a SEARCHABLE, PUBLIC</span>
 <a HREF="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">Google Groups 
 forum</a></strong>.</p>
 <p>

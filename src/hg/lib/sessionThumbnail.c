@@ -9,21 +9,23 @@
 #include "hash.h"
 #include "trashDir.h"
 #include "hgConfig.h"
+#include "md5.h"
 
 #define IMGDIR_OPTION "sessionThumbnail.imgDir"
 #define WEBPATH_OPTION "sessionThumbnail.webPath"
 
-void sessionBuildThumbnailFilePaths(struct tempName *thumbnailPath, char *userIdx,
+void sessionBuildThumbnailFilePaths(struct tempName *thumbnailPath, char *userIdentifier,
                                   char *encSessionName, char *firstUse)
 /* Populate thumbnailPath with paths to the thumbnail image for the specified session.
  * The basename of the thumbnail image is based on several pieces of data on the session:
- * userIdx is a presumed unique ID suitable for being part of a filename,
+ * userIdentifier is an ID for the user that is suitable for being part of a filename and
+ * presumed to be unique,
  * encSessionName is the cgi-encoded session name,
  * and firstUse is the mysql-formatted time string for the session's creation date.
  * Leaks memory via a dyString. */
 {
 struct dyString *base = dyStringCreate("hgPS_%s_%u_%ld",
-    userIdx, hashString(encSessionName), dateToSeconds(firstUse, "%Y-%m-%d %T"));
+    userIdentifier, hashString(encSessionName), dateToSeconds(firstUse, "%Y-%m-%d %T"));
 char *imgDir = cfgOption(IMGDIR_OPTION);
 char *webPath = cfgOption(WEBPATH_OPTION);
 if (imgDir != NULL && webPath != NULL)
@@ -46,22 +48,35 @@ else
     trashDirReusableFile(thumbnailPath, "hgPS", dyStringContents(base), ".png");
 }
 
-char *sessionThumbnailFilePath(char *userIdx, char *encSessionName,
+char *sessionThumbnailFilePath(char *userIdentifier, char *encSessionName,
                                char *firstUse)
 /* Returns the path to the thumbnail image of the specified session as seen by CGIs.
  * Result must be freed. */
 {
 struct tempName thumbnailPath;
-sessionBuildThumbnailFilePaths(&thumbnailPath, userIdx, encSessionName, firstUse);
+sessionBuildThumbnailFilePaths(&thumbnailPath, userIdentifier, encSessionName, firstUse);
 return cloneString(thumbnailPath.forCgi);
 }
 
-char *sessionThumbnailFileUri(char *userIdx, char *encSessionName,
+char *sessionThumbnailFileUri(char *userIdentifier, char *encSessionName,
                               char *firstUse)
 /* Returns the path to the thumbnail image of the specified session as seen by web viewers.
  * Result must be freed. */
 {
 struct tempName thumbnailPath;
-sessionBuildThumbnailFilePaths(&thumbnailPath, userIdx, encSessionName, firstUse);
+sessionBuildThumbnailFilePaths(&thumbnailPath, userIdentifier, encSessionName, firstUse);
 return cloneString(thumbnailPath.forHtml);
+}
+
+
+char *sessionThumbnailGetUserIdentifier(char *userName, char *userIdx)
+{
+/* If the user index is NULL (e.g., because the authentication server is
+ *  remote and it couldn't be retrieved), fake a unique identifier with an md5sum.
+ *  Be nice to just go straight to the md5sum, but must be backwards compatible with
+ *  thumbnails generated with the old identifier strings. */
+if (userIdx != NULL)
+    return cloneString(userIdx);
+else
+    return md5HexForString(userName);
 }

@@ -308,6 +308,17 @@ do
 return (count >= 1);
 }
 
+struct dyString *getLoginCookieJS(char *userName, uint idx)
+/* returns javascript statements that set the cookies associated with
+ * logging in as a particular user */
+{
+struct dyString *result = dyStringNew(1024);
+struct slName *newCookies = loginLoginUser(userName, idx), *sl;
+for (sl = newCookies;  sl != NULL;  sl = sl->next)
+    dyStringPrintf(result, " document.cookie = '%s';", sl->name);
+return result; 
+}
+
 char *getReturnToURL()
 /* get URL from cart var returnto; if empty, make URL to hgSession on login host.  */
 {
@@ -328,22 +339,17 @@ void returnToURL(int delay)
 /* delay for delay mill-seconds then return to the "returnto" URL */
 {
 char *returnURL = getReturnToURL();
-char javascript[1024];
-safef(javascript, sizeof javascript,
-    "function afterDelay() {window.location = '%s';}\n"
-    "window.setTimeout(afterDelay, %d);\n"
+jsInlineF(
+    "setTimeout(function(){location='%s';}, %d);\n"
     , returnURL, delay);
-jsInline(javascript);
 }
 
 static void redirectToLoginPage(char *paramStr)
 /* redirect to hgLogin page with given parameter string */
 {
-char javascript[1024];
-safef(javascript, sizeof javascript,
-    "window.location ='%s?%s'"
+jsInlineF(
+    "window.location ='%s?%s';\n"
     , hgLoginUrl, paramStr);
-jsInline(javascript);
 }
     
 void  displayActMailSuccess()
@@ -396,7 +402,7 @@ hPrintf(
   "have been sent to that address.<BR><BR>"
     "  If <B>%s</B> is not your registered email address, you will not receive an email."
     " If you can't find the message we sent you, please contact %s for help.</p>", sendMailTo, sendMailTo, returnAddr);
-hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>",
+hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>\n",
         hgLoginUrl);
 cartRemove(cart, "hgLogin_helpWith");
 cartRemove(cart, "hgLogin_email");
@@ -425,7 +431,7 @@ if (sameString(returnAddr, "NOEMAIL"))
     "genome-www@soe.ucsc.edu. As this is a mirror website not managed by UCSC, please "
     "specify the address of the mirror in your email.</p>");
 
-hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>",
+hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>\n",
         hgLoginUrl);
 cartRemove(cart, "hgLogin_helpWith");
 cartRemove(cart, "hgLogin_email");
@@ -453,11 +459,9 @@ if (result == -1)
     }
 else
     {
-    char javascript[1024];
-    safef(javascript, sizeof javascript,
-        "window.location = '%s?hgLogin.do.displayMailSuccess=1'"
+    jsInlineF(
+        "window.location = '%s?hgLogin.do.displayMailSuccess=1';\n"
         , hgLoginUrl);
-    jsInline(javascript);
     }
 }
 
@@ -518,11 +522,9 @@ if (result == -1)
     }
 else
     {
-    char javascript[1024];
-    safef(javascript, sizeof javascript,
-        "window.location = '%s?hgLogin.do.displayMailSuccessPwd=1&user=%s'"
+    jsInlineF(
+        "window.location = '%s?hgLogin.do.displayMailSuccessPwd=1&user=%s';\n"
         , hgLoginUrl, username);
-    jsInline(javascript);
     }
 }
 
@@ -883,6 +885,10 @@ hPrintf(
 cartRemove(cart, "hgLogin_password");
 cartRemove(cart, "hgLogin_newPassword1");
 cartRemove(cart, "hgLogin_newPassword2");
+sqlSafef(query,sizeof(query),"SELECT * FROM gbMembers WHERE userName='%s'", user);
+struct gbMembers *m = gbMembersLoadByQuery(conn, query);
+struct dyString *cookieJS = getLoginCookieJS(user, m->idx);
+jsInline(cookieJS->string);
 returnToURL(150);
 }
 
@@ -1164,10 +1170,9 @@ hPrintf(
 struct dyString *javascript = dyStringNew(1024);
 dyStringPrintf(javascript,
         " document.write(\"Login successful, setting cookies now...\");");
-struct slName *newCookies = loginLoginUser(userName, idx), *sl;
-for (sl = newCookies;  sl != NULL;  sl = sl->next)
-    dyStringPrintf(javascript, " document.cookie = '%s';", sl->name);
 jsInline(javascript->string);
+struct dyString *cookieJS = getLoginCookieJS(userName, idx);
+jsInline(cookieJS->string);
 cartRemove(cart,"hgLogin_userName");
 returnToURL(150);
 }

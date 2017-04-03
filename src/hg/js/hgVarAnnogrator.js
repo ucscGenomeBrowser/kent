@@ -379,11 +379,13 @@ var hgva = // result of invoking:
 	changeVariantSource: function()
 	{
 	    var newVal = $('select[name="hgva_variantTrack"]').val();
+	    $('#variantPasteContainer').hide();
+	    $('#hgvsPasteContainer').hide();
 	    if (newVal === 'hgva_useVariantIds') {
 		$('#variantPasteContainer').show().focus();
-	    } else {
-		$('#variantPasteContainer').hide();
-	    }
+	    } else if (newVal === "hgva_useHgvs") {
+                $('#hgvsPasteContainer').show().focus();
+            }
 	    setCartVar("hgva_variantTrack", newVal);
 	},
 

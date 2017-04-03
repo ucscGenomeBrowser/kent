@@ -116,15 +116,13 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
             collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
-    hPrintf("<IMG class='toggleButton' "
-            "id='%s_togBut' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
-            group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-    char jsText[256];
-    // TODO XSS filter group->name
-    safef(jsText, sizeof jsText, "return vis.toggleForGroup(this,'%s');", group->name);
     char idText[256];
     safef(idText, sizeof idText, "%s_togBut", group->name);
-    jsOnEventById("click", idText, jsText);
+    hPrintf("<IMG class='toggleButton' "
+            "id='%s' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
+            idText, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+    // TODO XSS filter group->name
+    jsOnEventByIdF("click", idText, "return vis.toggleForGroup(this,'%s');", group->name);
 
     hPrintf("<B>&nbsp;%s</B> ", group->label);
     hPrintf("&nbsp;&nbsp;&nbsp;");
@@ -134,6 +132,8 @@ for (group = groupList; group != NULL; group = group->next)
             "title='Hide all tracks in this groups'>",
 	    configHideAll, idText, "hide all");
     // TODO XSS filter configGroupTarget
+    char jsText[256]; 
+    // used several times
     safef(jsText, sizeof jsText, "document.mainForm.%s.value='%s'; %s",
 	    configGroupTarget, group->name, jsSetVerticalPosition("mainForm"));
     jsOnEventById("click", idText, jsText);

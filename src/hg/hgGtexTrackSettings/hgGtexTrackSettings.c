@@ -11,6 +11,7 @@
 #include "web.h"
 #include "hCommon.h"
 #include "hui.h"
+#include "jsHelper.h"
 #include "gtexUi.h"
 #include "gtexInfo.h"
 #include "gtexTissue.h"
@@ -257,7 +258,14 @@ puts(
 printBodyMap();
 puts(
 "        </div>\n"
-"    </div>\n");
+"    </div>\n"
+);
+}
+
+static void onclickJumpToTop(char *id)
+/* CSP-safe click handler arrows that cause scroll to top */
+{
+jsOnEventById("click", id, "$('html,body').scrollTop(0);");
 }
 
 static void printDataInfo(char *db, struct trackDb *tdb)
@@ -267,9 +275,15 @@ puts(
 "    <div class='row gbSectionBanner'>\n"
 "        <div class='col-md-11'>Data Information</div>\n"
 "        <div class='col-md-1'>\n"
-// TODO: move click handler to JS
-"            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" "
-"                class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n"
+);
+#define DATA_INFO_JUMP_ARROW_ID    "hgGtexDataInfo_jumpArrow"
+printf(
+"            <i id='%s' title='Jump to top of page' \n"
+"               class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n",
+DATA_INFO_JUMP_ARROW_ID
+);
+onclickJumpToTop(DATA_INFO_JUMP_ARROW_ID);
+puts(
 "       </div>\n"
 "    </div>\n"
 );
@@ -296,8 +310,15 @@ puts(
 "    <div class='row gbSectionBanner'>\n"
 "        <div class='col-md-11'>Track Description</div>\n"
 "        <div class='col-md-1'>\n"
-"            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" "
-"               class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n"
+);
+#define TRACK_INFO_JUMP_ARROW_ID    "hgGtexTrackInfo_jumpArrow"
+printf(
+"            <i id='%s' title='Jump to top of page' \n"
+"               class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n",
+TRACK_INFO_JUMP_ARROW_ID
+);
+onclickJumpToTop(TRACK_INFO_JUMP_ARROW_ID);
+puts(
 "       </div>\n"
 "    </div>\n"
 "    <div class='row gbTrackDescriptionPanel'>\n"
@@ -359,7 +380,8 @@ puts(
 "</div>");
 
 // Initialize illustration display and handle mouseover and clicks
-puts("<script type='text/javascript' src='../js/hgGtexTrackSettings.js'></script>");
+jsIncludeFile("utils.js", NULL);
+jsIncludeFile("hgGtexTrackSettings.js", NULL);
 
 webIncludeFile("inc/gbFooter.html");
 webEndJWest();

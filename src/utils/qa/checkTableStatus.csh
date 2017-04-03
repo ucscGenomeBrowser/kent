@@ -10,8 +10,8 @@ source `which qaConfig.csh`
 ################################
 
 echo "TABLE STATUS files were last dumped:"
-echo " hgwdev: `ls -1 /cluster/data/genbank/var/tblstats/hgwdev | tail -1`"
-echo "hgwbeta: `ls -1 /cluster/data/genbank/var/tblstats/hgwbeta | tail -1`"
-echo "     rr: `ls -1 /cluster/data/genbank/var/tblstats/$tblStatusDumps | tail -1`"
+echo " hgwdev: `ls -1 /hive/data/outside/genbank/var/tblstats/hgwdev | tail -1`"
+echo "hgwbeta: `ls -1 /hive/data/outside/genbank/var/tblstats/hgwbeta | tail -1`"
+echo "     rr: `ls -1 /hive/data/outside/genbank/var/tblstats/$tblStatusDumps | tail -1`"
 echo 
 

@@ -15,6 +15,8 @@ boolean tab = FALSE;
 boolean leaves = FALSE;
 char *idTag = NULL;
 int maxDepth = BIGNUM;
+char *sortOn = NULL;
+boolean sort = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -30,6 +32,8 @@ errAbort(
   "   -tab   If set will be output in tab-separated format\n"
   "   -flatten If set output all fields in each record\n"
   "   -leaves If set will only output nodes with no children\n"
+  "   -sort Sort tags within stanzas\n"
+  "   -sortOn=fieldA,fieldB,fieldC - sort tags within stanzas with fields A, B, & C before others\n"
   );
 }
 
@@ -41,6 +45,8 @@ static struct optionSpec options[] = {
    {"flatten", OPTION_BOOLEAN},
    {"tab", OPTION_BOOLEAN},
    {"leaves", OPTION_BOOLEAN},
+   {"sort", OPTION_BOOLEAN},
+   {"sortOn", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -49,6 +55,15 @@ void tagStormReformat(char *input, char *output)
 /* Write input to output with possibly some conversions */
 {
 struct tagStorm *tagStorm = tagStormFromFile(input);
+if (sort)
+    tagStormAlphaSort(tagStorm);
+if (sortOn != NULL)
+    {
+    int fieldCount = chopByChar(sortOn, ',', NULL, 0);
+    char *fields[fieldCount];
+    chopByChar(sortOn, ',', fields, fieldCount);
+    tagStormOrderSort(tagStorm, fields, fieldCount);
+    }
 if (tab)
     tagStormWriteAsFlatTab(tagStorm, output, idTag, withParent, maxDepth, leaves, "n/a", TRUE);
 else if (flatten)
@@ -69,6 +84,8 @@ withParent = optionExists("withParent");
 flatten = optionExists("flatten");
 tab = optionExists("tab");
 leaves = optionExists("leaves");
+sort = optionExists("sort");
+sortOn = optionVal("sortOn", sortOn);
 if (withParent && !idTag)
     errAbort("Please specify idTag option if using withParent option");
 maxDepth = optionInt("maxDepth", maxDepth);

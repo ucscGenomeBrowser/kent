@@ -46,6 +46,7 @@ static char *ponAbeNames[] = {"Pongo abelii", "Pongo pygmaeus",
 		"Pongo pygmaeus pygmaeus", "Pongo pygmaeus abelii", NULL};
 static char *rheMacNames[] = {"Macaca mulatta", NULL};
 static char *macFasNames[] = {"Macaca fascicularis", NULL};
+static char *macNemNames[] = {"Macaca nemestrina", NULL};
 static char *monDomNames[] = {"Monodelphis domestica", NULL};
 static char *galGalNames[] = {"Gallus gallus", "Gallus sp.", NULL};
 static char *ceNames[] = {"Caenorhabditis elegans", NULL};
@@ -89,6 +90,7 @@ static char *triCasNames[] = {"Tribolium castaneum", NULL};
 static char *tetNigNames[] = {"Tetraodon nigroviridis", NULL};
 static char *bisBisNames[] = {"Bison bison", "Bison bison bison", NULL};
 static char *bosTauNames[] = {"Bos taurus", NULL};
+static char *xenLaeNames[] = {"Xenopus laevis"};
 static char *xenTroNames[] = {"Xenopus tropicalis", 
                               "Xenopus (Silurana) tropicalis", NULL};
 static char *anoCarNames[] = {"Anolis carolinensis", NULL};
@@ -138,11 +140,13 @@ static char *sorAraNames[] = {"Sorex araneus", "Sorex cinereus", "Sorex palustri
 static char *speTriNames[] = {"Spermophilus tridecemlineatus", "Ictidomys tridecemlineatus", NULL};
 static char *tarSyrNames[] = {"Tarsius syrichta", NULL};
 static char *tupBelNames[] = {"Tupaia belangeri", NULL};
+static char *tupChiNames[] = {"Tupaia chinensis", NULL};
 static char *vicPacNames[] = {"Vicugna pacos", NULL};
 static char *balAcuNames[] = {"Balaenoptera acutorostrata", "Balaenoptera acutorostrata scammoni", "Balaenoptera borealis", "Balaenoptera brydei", "Balaenoptera edeni", "Balaenoptera omurai", "Balaenoptera physalus", NULL};
 static char *calMilNames[] = {"Callorhinchus milii", NULL};
 static char *criGriNames[] = {"Cricetulus griseus", NULL};
 static char *nasLarNames[] = {"Nasalis larvatus", NULL};
+static char *rhiBieNames[] = {"Rhinopithecus bieti", NULL};
 static char *rhiRoxNames[] = {"Rhinopithecus roxellana", NULL};
 static char *aquChrNames[] = {"Aquila chrysaetos canadensis", NULL};
 static char *nanParNames[] = {"Nanorana parkeri", "Nanorana pleskei", "Nanorana yunnanensis", NULL};
@@ -175,6 +179,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"ponAbe", ponAbeNames},
     {"rheMac", rheMacNames},
     {"macFas", macFasNames},
+    {"macNem", macNemNames},
     {"monDom", monDomNames},
     {"galGal", galGalNames},
     {"ce", ceNames},
@@ -220,6 +225,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"tetNig", tetNigNames},
     {"bisBis", bisBisNames},
     {"bosTau", bosTauNames},
+    {"xenLae", xenLaeNames},
     {"xenTro", xenTroNames},
     {"anoCar", anoCarNames},
     {"poeRet", poeRetNames},
@@ -264,11 +270,13 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"speTri", speTriNames},
     {"tarSyr", tarSyrNames},
     {"tupBel", tupBelNames},
+    {"tupChi", tupChiNames},
     {"vicPac", vicPacNames},
     {"balAcu", balAcuNames},
     {"calMil", calMilNames},
     {"criGri", criGriNames},
     {"nasLar", nasLarNames},
+    {"rhiBie", rhiBieNames},
     {"rhiRox", rhiRoxNames},
     {"aquChr", aquChrNames},
     {"nanPar", nanParNames},

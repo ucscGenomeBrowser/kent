@@ -528,8 +528,18 @@ vcff->headerString = dyStringCannibalize(&dyHeader);
 return vcff;
 }
 
+struct vcfFile *vcfFileFromHeader(char *name, char *headerString, int maxErr)
+/* Parse the VCF header string into a vcfFile object with no rows.
+ * name is for error reporting.
+ * If maxErr is non-negative then continue to parse until maxErr+1 errors have been found.
+ * A maxErr less than zero does not stop and reports all errors.
+ * Set maxErr to VCF_IGNORE_ERRS for silence. */
+{
+struct lineFile *lf = lineFileOnString(name, TRUE, cloneString(headerString));
+return vcfFileHeaderFromLineFile(lf, maxErr);
+}
 
-#define VCF_MAX_INFO 512
+#define VCF_MAX_INFO (4*1024)
 
 static void parseRefAndAlt(struct vcfFile *vcff, struct vcfRecord *record, char *ref, char *alt)
 /* Make an array of alleles, ref first, from the REF and comma-sep'd ALT columns.
@@ -1474,4 +1484,84 @@ for (i = 0;  i < alCount;  i++)
 	dyStringAppendN(dy, allele, strlen(allele)-trimmedBases);
     }
 return dy->string;
+}
+
+static void vcfWriteWordArrayWithSep(FILE *f, int count, char **words, char sep)
+/* Write words joined by sep to f (or, if count is zero, ".").  */
+{
+if (count < 1)
+    fputc('.', f);
+else
+    {
+    fputs(words[0], f);
+    int i;
+    for (i = 1;  i < count;  i++)
+        {
+        fputc(sep, f);
+        fputs(words[i], f);
+        }
+    }
+}
+
+static void vcfWriteInfo(FILE *f, struct vcfRecord *rec)
+/* Write rec->infoElements to f. */
+{
+if (rec->infoCount < 1)
+    fputc('.', f);
+else
+    {
+    int i, j;
+    for (i = 0;  i < rec->infoCount;  i++)
+        {
+        struct vcfInfoElement *info = &(rec->infoElements[i]);
+        enum vcfInfoType type = typeForInfoKey(rec->file, info->key);
+        if (i > 0)
+            fputc(';', f);
+        fputs(info->key, f);
+        for (j = 0;  j < info->count;  j++)
+            {
+            union vcfDatum datum = info->values[j];
+            switch (type)
+                {
+                case vcfInfoInteger:
+                    fprintf(f, "=%d", datum.datInt);
+                    break;
+                case vcfInfoFloat:
+                    fprintf(f, "=%lf", datum.datFloat);
+                    break;
+                case vcfInfoFlag:
+                    // Flag key might have a value in older VCFs e.g. 3.2's DB=0, DB=1
+                    if (isNotEmpty(datum.datString))
+                        fprintf(f, "=%s", datum.datString);
+                    break;
+                case vcfInfoCharacter:
+                    fprintf(f, "%c", datum.datChar);
+                    break;
+                case vcfInfoString:
+                    fputc('=', f);
+                    if (isNotEmpty(datum.datString))
+                        fputs(datum.datString, f);
+                    break;
+                default:
+                    vcfFileErr(rec->file, "invalid vcfInfoType (uninitialized?) %d", type);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void vcfRecordWriteNoGt(FILE *f, struct vcfRecord *rec)
+/* Write the first 8 columns of VCF rec to f.  Genotype data will be ignored if present. */
+{
+fprintf(f, "%s\t%d\t%s\t%s\t", rec->chrom, rec->chromStart+1, rec->name, rec->alleles[0]);
+// Alternate alleles start at [1]
+vcfWriteWordArrayWithSep(f, rec->alleleCount-1, &(rec->alleles[1]), ',');
+fputc('\t', f);
+fputs(rec->qual, f);
+fputc('\t', f);
+vcfWriteWordArrayWithSep(f, rec->filterCount, rec->filters, ';');
+fputc('\t', f);
+vcfWriteInfo(f, rec);
+fputc('\n', f);
 }

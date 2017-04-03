@@ -280,11 +280,12 @@ sqlSafef(query, sizeof(query), "select * from cdwFileTags where %s='%s'", idTag,
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct slName  *list = sqlResultFieldList(sr);
 char **row;
+struct dyString *dy = dyStringNew(1024); 
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *fileId = mustFindFieldInRow("file_id", list, row);
     printf("Click on a box in the flow chart to navigate to that file."); 
-    makeCdwFlowchart(sqlSigned(fileId), cart);
+    dy = makeCdwFlowchart(sqlSigned(fileId), cart);
     printf("<a href='cdwWebBrowse?cdwCommand=oneFile");
     printf("&%s", cartSidUrlString(cart));
     printf("&cdwFileTag=%s", idTag);
@@ -292,6 +293,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("'>Remove flow chart</a>"); 
     generateTableRow(list, row, idTag, idVal); 
     }
+jsInline(dy->string);
+dyStringFree(&dy); 
 sqlFreeResult(&sr);
 }
 
@@ -834,7 +837,7 @@ if (!sqlTableExists(conn, "cdwDownloadToken"))
 	 "userId int NOT NULL, createTime datetime DEFAULT NOW())");
      sqlUpdate(conn, query);
      }
-char *token = cartDbMakeRandomKey(80);
+char *token = makeRandomKey(80);
 sqlSafef(query, sizeof(query), "INSERT INTO cdwDownloadToken (token, userId) VALUES ('%s', %d)", token, user->id);
 sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
@@ -883,13 +886,11 @@ printf("Search <input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\" size=60>"
     varName, varName, varVal);
 printf("&nbsp;");
 printf("<img src=\"../images/magnify.png\">\n");
-char javascript[1024];
-safef(javascript, sizeof javascript,
+jsInlineF(
     "$(function () {\n"
     "  $('#%s').watermark(\"type in words or starts of words to find specific %s\");\n" 
     "});\n",
     varName, itemPlural);
-jsInline(javascript);
 return varVal;
 }
 
@@ -1030,8 +1031,8 @@ printf("</FORM>\n");
 
 jsInline 
     (
-    "$('.scriptButton').change( function() {$('#urlListDoc').hide(); $('#scriptDoc').show()} )"
-    "$('.urlListButton').change( function() {$('#urlListDoc').show(); $('#scriptDoc').hide()} )"
+    "$('.scriptButton').change( function() {$('#urlListDoc').hide(); $('#scriptDoc').show()} );\n"
+    "$('.urlListButton').change( function() {$('#urlListDoc').show(); $('#scriptDoc').hide()} );\n"
     );
 puts("<div id='urlListDoc'>\n");
 puts("When you click 'submit', a text file with the URLs of the files will get downloaded.\n");
@@ -1159,7 +1160,10 @@ printf(", <A HREF=\"cdwServeTagStorm?format=text&cdwDataSet=%s&%s\"",
 printf(">text</A>");
 printf(", <A HREF=\"cdwServeTagStorm?format=tsv&cdwDataSet=%s&%s\"",
 	dataSet, cartSidUrlString(cart)); 
-printf(">tsv</A>)");
+printf(">tsv</A>");
+printf(", <A HREF=\"cdwServeTagStorm?format=csv&cdwDataSet=%s&%s\"",
+	dataSet, cartSidUrlString(cart)); 
+printf(">csv</A>)"); 
 }
 
 void doBrowseDatasets(struct sqlConnection *conn)
@@ -1775,6 +1779,7 @@ void localWebStartWrapper(char *titleString)
     jsIncludeFile("ajax.js", NULL);
     jsIncludeFile("d3pie.min.js", NULL);
     printf("<script src=\"//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js\"></script>");
+    printf("<script src=\"http://cpettitt.github.io/project/dagre-d3/latest/dagre-d3.js\"></script>\n");
     printf("</HEAD>\n");
     printBodyTag(stdout);
     }

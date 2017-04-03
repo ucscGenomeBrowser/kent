@@ -473,7 +473,7 @@ if (navBar)
     {
     puts(navBar);
     // Override nice-menu.css's menu background and fonts:
-    puts("<link rel='stylesheet' href='../style/gbAfterMenu.css'>");
+    webIncludeResourceFile("gbAfterMenu.css");
     }
 webHeadAlreadyOutputed = TRUE;
 errAbortSetDoContentType(FALSE);
@@ -1229,29 +1229,7 @@ if (!fileExists(dyStringContents(realFileName)))
 long mtime = fileModTime(dyStringContents(realFileName));
 struct dyString *linkWithTimestamp;
 
-char *scriptName = cgiScriptName();
-if (scriptName == NULL)
-    scriptName = cloneString("");
-boolean nonVersionedLinks = FALSE;
-if (endsWith(scriptName, "qaPushQ"))
-    nonVersionedLinks = TRUE;
-if (nonVersionedLinks)
-    linkWithTimestamp = dyStringCreate("%s/%s%s", dyStringContents(fullDirName), baseName, extension);
-else if ((cfgOption("versionStamped") == NULL) &&  (hIsPreviewHost() || hIsPrivateHost()))
-    linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
-else
-    linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);
-
-if (hIsBrowserbox() && !fileExists(dyStringContents(linkWithTimestamp)))
-    // on the browserbox, both alpha and beta binaries can run 
-    {
-    linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), 
-        baseName, mtime, extension);
-    }
-
-if (!fileExists(dyStringContents(linkWithTimestamp)))
-        errAbort("Cannot find correct version of file '%s'; this is due to an installation "
-        "error\n\nError details: %s does not exist", fileName, dyStringContents(linkWithTimestamp));
+linkWithTimestamp = dyStringCreate("%s/%s%s?v=%ld", dyStringContents(fullDirName), baseName, extension, mtime);
 
 // Free up all that extra memory
 dyStringFree(&realFileName);

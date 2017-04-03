@@ -1589,6 +1589,20 @@ for (;;)
 return s;
 }
 
+void replaceChar(char *s, char old, char new)
+/* Repace one char with another. Modifies original string. */
+{
+if (!s)
+    return;
+char c;
+while((c=*s))
+    {
+    if (c == old)
+       *s = new;	
+    ++s;
+    }
+}
+
 char *replaceChars(char *string, char *old, char *new)
 /*
   Replaces the old with the new. The old and new string need not be of equal size
@@ -1816,7 +1830,7 @@ int countSeparatedItems(char *string, char separator)
 int count = 0;
 char c, lastC = 0;
 while ((c = *string++) != 0)
-    {   
+    {
     if (c == separator)
        ++count;
     lastC = c;
@@ -1905,8 +1919,8 @@ return count;
  * return the number of strings that it *would*
  * chop. This splits the string.
  * GOTCHA: since multiple separators are skipped
- * and treated as one, it is impossible to parse 
- * a list with an empty string. 
+ * and treated as one, it is impossible to parse
+ * a list with an empty string.
  * e.g. cat\t\tdog returns only cat and dog but no empty string */
 int chopString(char *in, char *sep, char *outArray[], int outSize)
 {
@@ -1934,7 +1948,7 @@ return recordCount;
 }
 
 int chopByWhite(char *in, char *outArray[], int outSize)
-/* Like chopString, but specialized for white space separators. 
+/* Like chopString, but specialized for white space separators.
  * See the GOTCHA in chopString */
 {
 int recordCount = 0;
@@ -1975,7 +1989,7 @@ return recordCount;
 
 int chopByWhiteRespectDoubleQuotes(char *in, char *outArray[], int outSize)
 // NOTE: this routine does not do what this comment says.  It did not ever remove quotes due to
-// a coding error so I took out the code that pretended to be doing this.  
+// a coding error so I took out the code that pretended to be doing this.
 /* Like chopString, but specialized for white space separators.
  * Further, any doubleQuotes (") are respected.
  * If doubleQuote is encloses whole string, then they are removed:
@@ -2411,10 +2425,10 @@ int aIx = stringArrayIx(a, orderFields, orderCount);
 int bIx = stringArrayIx(b, orderFields, orderCount);
 if (aIx < 0)	// A not in list?
     {
-    if (bIx < 0)	// Neither in list, be alphabetical 
+    if (bIx < 0)	// Neither in list, be alphabetical
 	return(strcmp(a, b));
     else		// Only b in list, move a towards end
-	return 1;       
+	return 1;
     }
 else if (bIx < 0)	// Only a in list, move b towards end
     return -1;
@@ -2638,7 +2652,7 @@ if (result < size)
     {
     if (result < 0)
 	errnoAbort("mustWriteFd: write failed");
-    else 
+    else
         errAbort("mustWriteFd only wrote %lld of %lld bytes. Likely the disk is full.",
 	    (long long)result, (long long)size);
     }
@@ -3223,6 +3237,29 @@ if(p==NULL) return NULL;
 return p-q+haystack;
 }
 
+int vatruncatef(char *buf, int size, char *format, va_list args)
+/* Like vasafef, but truncates the formatted string instead of barfing on
+ * overflow. */
+{
+char *truncStr = " [truncated]";
+int sz = vsnprintf(buf, size, format, args);
+/* note that some version return -1 if too small */
+if ((sz < 0) || (sz >= size))
+    strncpy(buf + size - 1 - strlen(truncStr), truncStr, strlen(truncStr));
+buf[size-1] = 0;
+return sz;
+}
+
+void truncatef(char *buf, int size, char *format, ...)
+/* Like safef, but truncates the formatted string instead of barfing on
+ * overflow. */
+{
+va_list args;
+va_start(args, format);
+vatruncatef(buf, size, format, args);  // ignore returned size
+va_end(args);
+}
+
 int vasafef(char* buffer, int bufSize, char *format, va_list args)
 /* Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. */
@@ -3516,7 +3553,7 @@ return days;
 
 unsigned dayOfYear()
 /* Return the day of the year. */
-{ 
+{
 time_t now = time(NULL);
 struct tm *tm = localtime(&now);
 

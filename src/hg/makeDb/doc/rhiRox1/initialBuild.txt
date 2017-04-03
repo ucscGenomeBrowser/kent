@@ -562,3 +562,29 @@ searchPriority 8
     #   sizes will set properly
 
 #########################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-02-21 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rhiRox1", "blat1b", "17872", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rhiRox1", "blat1b", "17873", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# augustus gene track (DONE - 2015-05-28 - Hiram)
+
+    mkdir /hive/data/genomes/melGal5/bed/augustus
+    cd /hive/data/genomes/melGal5/bed/augustus
+
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev rhiRox1) > do.log 2>&1
+    # real    159m20.318s
+
+    cat fb.rhiRox1.augustusGene.txt
+    # 47747665 bases of 2856044136 (1.672%) in intersection
+
+#########################################################################

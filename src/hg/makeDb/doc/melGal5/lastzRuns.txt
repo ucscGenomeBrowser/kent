@@ -7,7 +7,7 @@
 BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
 BLASTZ_M=254
 
-# TARGET: chicken melGal5
+# TARGET: turkey melGal5
 SEQ1_DIR=/hive/data/genomes/melGal5/melGal5.2bit
 SEQ1_LEN=/hive/data/genomes/melGal5/chrom.sizes
 SEQ1_CHUNK=20000000
@@ -65,7 +65,7 @@ TMPDIR=/dev/shm
 BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
 BLASTZ_M=254
 
-# TARGET: chicken melGal5
+# TARGET: turkey melGal5
 SEQ1_DIR=/hive/data/genomes/melGal5/melGal5.2bit
 SEQ1_LEN=/hive/data/genomes/melGal5/chrom.sizes
 SEQ1_CHUNK=20000000

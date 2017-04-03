@@ -37,9 +37,6 @@ void cartDbSecureId(char *buf, int bufSize, struct cartDb *cartDb);
 unsigned int cartDbParseId(char *id, char **pSessionKey);
 /* Parse out and return just the numeric id from the id_sessionKey string. */
 
-char *cartDbMakeRandomKey(int numBits);
-/* Generate base64 encoding of a random key of at least size numBits returning string to be freed when done */
-
 void cartDbStaticLoad(char **row, struct cartDb *ret);
 /* Load a row from cartDb table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

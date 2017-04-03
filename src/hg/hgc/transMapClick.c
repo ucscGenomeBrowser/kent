@@ -362,6 +362,10 @@ printAlignmentsSimple(bag->psl, start, "hgcTransMapCdnaAli", tdb->table, bag->ps
 void transMapClickHandler(struct trackDb *tdb, char *mappedId)
 /* Handle click on a transMap tracks */
 {
+if (tdb == NULL)
+    errAbort("transMapClickHandler called without trackDb");
+if (mappedId == NULL)
+    errAbort("transMapClickHandler called without mappedId");
 struct transMapBag *bag = (trackDbSetting(tdb, "bigDataUrl") == NULL)
     ? transMapBagLoadDb(tdb, mappedId)
     : transMapBagLoadBig(tdb, mappedId);
@@ -406,6 +410,10 @@ return seq;
 void transMapShowCdnaAli(struct trackDb *tdb, char *mappedId)
 /* Show alignment for mappedId, mostly ripped off from htcCdnaAli */
 {
+if (tdb == NULL)
+    errAbort("transMapShowCdnaAli called without trackDb");
+if (mappedId == NULL)
+    errAbort("transMapShowCdnaAli called without mappedId");
 struct transMapBag *bag = NULL;
 struct dnaSeq *seq = NULL;
 if (trackDbSetting(tdb, "bigDataUrl") == NULL)

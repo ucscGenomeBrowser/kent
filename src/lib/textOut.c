@@ -194,3 +194,14 @@ if (saveStdout)
     }
 }
 
+char *textOutSanitizeHttpFileName(char *fileName)
+/* Replace troublesome characters in a fileName for HTTP download entered by the user,
+ * such as '/' which textOutInit interprets as implying a local file and ',' which
+ * messes up the HTTP response header syntax. */
+{
+char *sanitized = cloneString(skipLeadingSpaces(fileName));
+eraseTrailingSpaces(sanitized);
+subChar(sanitized, '/', '_');
+subChar(sanitized, ',', '.');
+return sanitized;
+}

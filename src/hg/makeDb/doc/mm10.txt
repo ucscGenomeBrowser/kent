@@ -12646,3 +12646,568 @@ TMPDIR=/dev/shm
     # real    356m16.099s
 
 #############################################################################
+# LASTZ mouse/mm10 Pig-tailed macaque/macNem1 - (DONE - 2017-02-28 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzMacNem1.2017-02-28
+    cd /hive/data/genomes/mm10/bed/lastzMacNem1.2017-02-28
+
+    printf '# mouse vs Pig-tailed macaque
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# QUERY: Pig-tailed macaque macNem1
+SEQ2_DIR=/hive/data/genomes/macNem1/macNem1.2bit
+SEQ2_LEN=/hive/data/genomes/macNem1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzMacNem1.2017-02-28
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #  real    370m19.213s
+
+    cat fb.mm10.chainMacNem1Link.txt
+    # 918083212 bases of 2652783500 (34.608%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 macNem1) \
+      > rbest.log 2>&1 &
+    # real    344m11.369s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/macNem1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/macNem1/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzMacNem1.2017-02-28/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    65m14.074s
+
+    cat fb.macNem1.chainMm10Link.txt
+    # 905682728 bases of 2838503083 (31.907%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` macNem1 mm10) \
+       > rbest.log 2>&1
+    # real    321m2.285s
+
+#############################################################################
+# LASTZ mouse/mm10 Angolan colobus/colAng1 - (DONE - 2017-02-28 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzColAng1.2017-02-28
+    cd /hive/data/genomes/mm10/bed/lastzColAng1.2017-02-28
+
+    printf '# mouse vs Angolan colobus
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# QUERY: Angolan colobus colAng1
+SEQ2_DIR=/hive/data/genomes/colAng1/colAng1.2bit
+SEQ2_LEN=/hive/data/genomes/colAng1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzColAng1.2017-02-28
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #  real    376m8.949s
+
+    cat fb.mm10.chainColAng1Link.txt
+    # 902325064 bases of 2652783500 (34.014%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 colAng1) \
+      > rbest.log 2>&1 &
+    # real    343m38.692s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/colAng1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/colAng1/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzColAng1.2017-02-28/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    62m44.125s
+
+    cat fb.colAng1.chainMm10Link.txt
+    # 885418780 bases of 2679973137 (33.038%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` colAng1 mm10) \
+       > rbest.log 2>&1
+    # real    296m19.689s
+
+#############################################################################
+# LASTZ mouse/mm10 Gray mouse lemur/micMur3 - (DONE - 2017-03-03 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzMicMur3.2017-03-03
+    cd /hive/data/genomes/mm10/bed/lastzMicMur3.2017-03-03
+
+    printf '# mouse vs Gray mouse lemur
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=4
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# QUERY: Gray mouse lemur micMur3
+SEQ2_DIR=/hive/data/genomes/micMur3/micMur3.2bit
+SEQ2_LEN=/hive/data/genomes/micMur3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzMicMur3.2017-03-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #  real    2192m13.661s
+
+    cat fb.mm10.chainMicMur3Link.txt
+    # 907817373 bases of 2652783500 (34.221%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 micMur3) \
+      > rbest.log 2>&1 &
+    # real    522m5.587s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/micMur3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/micMur3/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzMicMur3.2017-03-03/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    71m4.702s
+
+    cat fb.micMur3.chainMm10Link.txt
+    # 905011854 bases of 2386321975 (37.925%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` micMur3 mm10) \
+       > rbest.log 2>&1
+    # real    508m58.716s
+
+#############################################################################
+# LASTZ mouse/mm10 Gray mouse lemur/tupChi1 - (DONE - 2017-03-09 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzTupChi1.2017-03-09
+    cd /hive/data/genomes/mm10/bed/lastzTupChi1.2017-03-09
+
+    printf '# mouse vs Chinese tree shrew
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=4
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# QUERY: Chinese tree shrew tupChi1
+SEQ2_DIR=/hive/data/genomes/tupChi1/tupChi1.2bit
+SEQ2_LEN=/hive/data/genomes/tupChi1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzTupChi1.2017-03-09
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #  real    224m24.608s
+
+    cat fb.mm10.chainTupChi1Link.txt
+    #  683463709 bases of 2652783500 (25.764%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 tupChi1) \
+      > rbest.log 2>&1 &
+    # real    385m2.239s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/tupChi1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/tupChi1/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzTupChi1.2017-03-09/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    71m4.702s
+
+    cat fb.tupChi1.chainMm10Link.txt
+    # 708757944 bases of 2706389135 (26.188%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tupChi1 mm10) \
+       > rbest.log 2>&1
+    # real    508m10.564s
+
+#############################################################################
+# LASTZ mouse/mm10 Chinese pangolin/manPen1 - (DONE - 2017-03-15 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzManPen1.2017-03-15
+    cd /hive/data/genomes/mm10/bed/lastzManPen1.2017-03-15
+
+    printf '# Mouse vs. Chinese softshell turtle
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Chinese pangolin manPen1
+SEQ2_DIR=/hive/data/genomes/manPen1/manPen1.2bit
+SEQ2_LEN=/hive/data/genomes/manPen1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=180
+
+BASE=/hive/data/genomes/mm10/bed/lastzManPen1.2017-03-15
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    #  real    404m9.925s
+
+    cat fb.mm10.chainManPen1Link.txt
+    #  724400544 bases of 2652783500 (27.307%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 manPen1) \
+      > rbest.log 2>&1 &
+    # real    499m21.668s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/manPen1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/manPen1/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 -swap \
+        /hive/data/genomes/mm10/bed/lastzManPen1.2017-03-15/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > swap.log 2>&1
+    #  real    71m4.702s
+
+    cat fb.manPen1.chainMm10Link.txt
+    # 710179682 bases of 1999066070 (35.526%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` manPen1 mm10) \
+       > rbest.log 2>&1
+    # real    495m7.361s
+
+#############################################################################
+# LASTZ mouse/mm10 vs. Golden eagle/aquChr2 - (DONE - 2017-03-16 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzAquChr2.2017-03-16
+    cd /hive/data/genomes/mm10/bed/lastzAquChr2.2017-03-16
+
+    printf "# Mouse vs. Golden eagle
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Golden eagle aquChr2
+SEQ2_DIR=/hive/data/genomes/aquChr2/aquChr2.2bit
+SEQ2_LEN=/hive/data/genomes/aquChr2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm10/bed/lastzAquChr2.2017-03-16
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    217m29.467s
+
+    cat fb.mm10.chainAquChr2Link.txt
+    # 105013175 bases of 2652783500 (3.959%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 aquChr2) \
+         > rbest.log 2>&1 &
+    # real    196m24.435s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/aquChr2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/aquChr2/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzAquChr2.2017-03-16/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    9m16.569s
+
+    cat fb.aquChr2.chainMm10Link.txt
+    # 89023131 bases of 1180019022 (7.544%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` aquChr2 mm10) \
+         > rbest.log 2>&1
+    # real    132m43.886s
+
+#########################################################################
+# LASTZ bison bisBis1 (DONE - 2017-03-17 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzBisBis1.2017-03-17
+    cd /hive/data/genomes/mm10/bed/lastzBisBis1.2017-03-17
+
+    printf '# Mouse vs. Bison
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Mouse mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: bison bisBis1
+SEQ2_DIR=/hive/data/genomes/bisBis1/bisBis1.2bit
+SEQ2_LEN=/hive/data/genomes/bisBis1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=900
+
+BASE=/hive/data/genomes/mm10/bed/lastzBisBis1.2017-03-17
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    # real    576m23.128s
+
+    cat fb.mm10.chainBisBis1Link.txt
+    # 688337604 bases of 2652783500 (25.948%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 bisBis1) \
+         > rbest.log 2>&1 &
+    # real    430m48.078s
+
+    #   and the swap
+    mkdir /hive/data/genomes/bisBis1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/bisBis1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm10/bed/lastzBisBis1.2017-03-17/DEF \
+        -swap -syntenicNet  \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #   real    169m28.369s
+
+    cat fb.bisBis1.chainMm10Link.txt
+    # 682104798 bases of 2757854331 (24.733%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bisBis1 mm10) \
+         > rbest.log 2>&1
+    # real    445m5.636s
+
+############################################################################
+# lastz frog xenTro9 (DONE - 2017-03-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10XenTro9
+    mkdir /hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29
+    cd /hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29
+
+    printf '# Mouse vs. frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+
+# QUERY: frog xenTro9
+SEQ2_DIR=/hive/data/genomes/xenTro9/xenTro9.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro9/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) \
+              > do.log 2>&1 &
+    #	real    806m23.459s
+
+    cat fb.mm10.chainXenTro9Link.txt
+    #	87053836 bases of 2652783500 (3.282%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 xenTro9) \
+         > rbest.log 2>&1 &
+    # real    617m41.376s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/xenTro9/bed/blastz.mm10.swap
+    cd /hive/data/genomes/xenTro9/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
+	> swap.log 2>&1 &
+    #	real    25m54.516s
+
+    cat fb.xenTro9.chainMm10Link.txt
+    #	90150612 bases of 1369865365 (6.581%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 mm10) \
+         > rbest.log 2>&1 &
+    # real    597m52.740s
+
+#########################################################################
+# lastz frog xenLae2 (DONE - 2017-03-29 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10XenLae2
+    mkdir /hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29
+    cd /hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29
+
+    printf '# Mouse vs. frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+
+# QUERY: frog xenLae2
+SEQ2_DIR=/hive/data/genomes/xenLae2/xenLae2.2bit
+SEQ2_LEN=/hive/data/genomes/xenLae2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=300
+
+BASE=/hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) \
+              > do.log 2>&1 &
+    #	real    1044m10.115s
+
+    cat fb.mm10.chainXenLae2Link.txt
+    #	82272699 bases of 2652783500 (3.101%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 xenLae2) \
+         > rbest.log 2>&1 &
+XXX - running - Fri Mar 31 00:02:21 PDT 2017
+
+    #	and for the swap
+    mkdir /hive/data/genomes/xenLae2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/xenLae2/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    #	real    26m14.884s
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29/DEF \
+        -continue=syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+	-bigClusterHub=ku -syntenicNet -swap -chainMinScore=5000 \
+	-chainLinearGap=loose) > syntenicNet.log 2>&1 &
+    # real    1m52.642s
+
+    cat  fb.xenLae2.chainMm10Link.txt
+    #	116001603 bases of 2408724787 (4.816%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenLae2 mm10) \
+         > rbest.log 2>&1 &
+XXX - running - Fri Mar 31 00:02:21 PDT 2017
+
+#########################################################################
