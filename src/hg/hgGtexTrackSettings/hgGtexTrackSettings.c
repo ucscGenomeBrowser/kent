@@ -20,6 +20,28 @@
 struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
 
+static void printGoButton()
+/* HTML for GO button and 'play' icon */
+{
+puts(
+"           <div class='gbButtonGoContainer text-right' title='Go to the Genome Browser'>\n"
+"               <div class='gbButtonGo'>GO</div>\n"
+"               <i class='gbIconGo fa fa-play fa-2x'></i>\n"
+"           </div>\n"
+);
+}
+
+static void printBodyMap()
+/* Include BodyMap SVG in HTML */
+{
+puts(
+"        <!-- Body Map panel -->\n"
+"           <object id='bodyMapSvg' type='image/svg+xml' data='/images/gtexBodyMap.svg'>\n"
+"               GTEx Body Map illustration not found\n"
+"           </object>\n");
+puts("<div class='gbmCredit'>Credit: jwestdesign</div>\n");
+}
+
 static void printTrackHeader(char *db, struct trackDb *tdb)
 /* Print top banner with track labels */
 // TODO: Try to simplify layout
@@ -46,31 +68,11 @@ puts(
 "               </span></a>\n"
 "       </div>\n"
 "       <div class='col-md-2 text-right'>\n"
-"           <div class='gbButtonGoContainer' title='Go to the Genome Browser'>\n"
-"               <div class='gbButtonGo'>GO</div>\n"
-"               <i class='gbIconGo fa fa-play fa-2x'></i>\n"
-"           </div>\n"
+);
+printGoButton();
+puts(
 "       </div>\n"
-"   </div>\n");
-}
-
-static void printBodyMap()
-{
-puts(
-"        <!-- Body Map panel -->\n"
-"           <object id='bodyMapSvg' type='image/svg+xml' data='/images/gtexBodyMap.svg'>\n"
-"               GTEx Body Map illustration not found\n"
-"           </object>\n");
-puts("<div class='gbmCredit'>Credit: jwestdesign</div>\n");
-}
-
-static void printGoButton()
-{
-puts(
-"           <div class='gbButtonGoContainer' title='Go to the Genome Browser'>\n"
-"               <div class='gbButtonGo'>GO</div>\n"
-"               <i class='gbIconGo fa fa-play fa-2x'></i>\n"
-"           </div>\n"
+"   </div>\n"
 );
 }
 
@@ -105,7 +107,7 @@ puts(
 "        <!-- Configuration panel -->\n"
 "        <div class='row gbSectionBanner'>\n"
 "            <div class='col-md-8'>Configuration</div>\n"
-"            <div class='col-md-4 gbButtonContainer text-right'>\n");
+"            <div class='col-md-4 text-right'>\n");
 
 /* Track vis dropdown */
 printVisSelect(tdb);
@@ -182,7 +184,7 @@ puts(
  "  <div class='col-md-7 gbSectionInfo'>\n"
  "      Click label below or in Body Map to set or clear a tissue\n"
  "  </div>\n"
- "  <div class='col-md-4 gbButtonContainer'>\n"
+ "  <div class='col-md-4 gbButtonContainer text-right'>\n"
  "      <div id='setAll' class='gbButtonSetClear gbButton'>set all</div>\n"
  "      <div id='clearAll' class='gbButtonSetClear gbButton'>clear all</div>\n"
  "  </div>\n"

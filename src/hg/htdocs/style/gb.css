@@ -193,10 +193,6 @@ span#home-link {
     cursor: pointer;
 }
 
-.gbButtonGo:hover {
-    font-weight: bold;
-}
-
 .gbButtonSetClear {
     width: 5em; /* fixed width for 'set all' and 'clear all' */
 }
@@ -212,6 +208,7 @@ span#home-link {
     font-size: 14px;
     font-weight: normal;
     border-radius: 3px;
+    cursor: pointer;
 }
 
 /* Track UI
