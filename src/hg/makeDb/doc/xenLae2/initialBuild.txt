@@ -167,7 +167,7 @@ taxId 8355
     # bash syntax here
     mitoAcc=`grep "^# mitoAcc" ../xenLae2.config.ra | awk '{print $NF}'`
     printf "# mitoAcc %s\n" "$mitoAcc"
-# mitoAcc NC_006839.1
+# mitoAcc NC_001573.1
 
     zcat \
   ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
@@ -233,11 +233,10 @@ taxId 8355
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/xenLae2/xenLae2.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku xenLae2) > do.log 2>&1
-XXX - running - Tue Mar 28 20:32:24 PDT 2017
-    # real    41m47.778s
+    # real    25m59.275s
 
     cat fb.xenLae2.cpgIslandExtUnmasked.txt
-    # 14956579 bases of 1369865365 (1.092%) in intersection
+    # 25514118 bases of 2408724787 (1.059%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2017-03-28 - Hiram)
@@ -246,7 +245,7 @@ XXX - running - Tue Mar 28 20:32:24 PDT 2017
     makeCytoBandIdeo.csh xenLae2
 
 #########################################################################
-# ucscToINSDC and ucscToRefSeq table/track (TBD - 2017-03-27 - Hiram)
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2017-03-30 - Hiram)
     # the sequence here is working for a 'refseq' assembly
     # beware of a chrM situation may be specific depending upon what is
     # available in the assembly
@@ -256,19 +255,19 @@ XXX - running - Tue Mar 28 20:32:24 PDT 2017
 
     # find accession for chrM
     grep chrM ../../xenLae2.agp
-# chrM    1       17610   1       O       NC_006839.1     1       17610   +
+# chrM    1       17553   1       O       NC_001573.1     1       17553   +
 
-    # find the genbank accession for NC_006839.1 at Entrez nucleotide
-    # The NC_006839.1 name is the RefSeq name, the genbank name is: AY789013.1
-    # the assembly_report does not have this AY name since the chrM sequence
+    # find the genbank accession for NC_001573.1 at Entrez nucleotide
+    # The NC_001573.1 name is the RefSeq name, the genbank name is: M10217.1
+    # the assembly_report does not have this M name since the chrM sequence
     # is not in the genbank assembly:
-    grep NC_006839.1 ../../refseq/GCF*v2_assembly_report.txt
-# MT      assembled-molecule      MT      Mitochondrion   na      <>      NC_006839.1     non-nuclear     17610   chrM
+    grep NC_001573.1 ../../refseq/GCF*v2_assembly_report.txt
+# MT      assembled-molecule      MT      Mitochondrion   na      <>      NC_001573.1     non-nuclear     17553   na
 
     # if there is a chrM, use its INSDC name as a second argument:
     # this is a RefSeq assembly, use the chrM refSeq name:
     ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-      ../../refseq/GCF_*structure/Primary_Assembly NC_028718.1
+      ../../refseq/GCF_*structure/Primary_Assembly NC_001573.1
 
     # this is actually ucscToRefSeq since this is a RefSeq assembly
     sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
@@ -280,7 +279,7 @@ XXX - running - Tue Mar 28 20:32:24 PDT 2017
     # extract the refseq vs. genbank names from the assembly_report
     # columns 5 and 7 are the INSDC and RefSeq names
     grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
-      | awk '{printf "%s\t%s\n", $2, $1}' | sed -e 's/na/AY789013.1/' \
+      | awk '{printf "%s\t%s\n", $2, $1}' | sed -e 's/na/M10217.1/' \
           | sort > refseq.insdc.txt
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
@@ -288,34 +287,29 @@ XXX - running - Tue Mar 28 20:32:24 PDT 2017
     join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
        | join -2 3 ucsc.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
            > ucscToRefSeq.bed
-    printf "chrM\t0\t17610\tNC_006839.1\n" >> ucscToRefSeq.bed
 
     join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
        | join -2 3 ucsc.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
            > ucscToINSDC.bed
-    printf "chrM\t0\t17610\tAY789013.1\n" >> ucscToINSDC.bed
 
     # verify chrM is correct:
     grep chrM *.bed
-    # ucscToINSDC.bed:chrM    AY789013.1
-    # ucscToRefSeq.bed:chrM   NC_006839.1
-
+    #	ucscToINSDC.bed:chrM    0       17553   M10217.1
+    #	ucscToRefSeq.bed:chrM   0       17553   NC_001573.1
 
     # should be same line counts throughout:
-    # in this case one is missing in the final result due to the duplicate
-    # contig being removed
     wc -l *
-    #	6822 refSeqToUcsc.txt
-    #	6822 refseq.insdc.txt
-    #	6822 ucsc.coordinate.tab
-    #	6822 ucscToINSDC.bed
-    #	6822 ucscToRefSeq.bed
-    #	6822 ucscToRefSeq.txt
+    #	108033 refSeqToUcsc.txt
+    #	108033 refseq.insdc.txt
+    #	108033 ucsc.coordinate.tab
+    #	108033 ucscToINSDC.bed
+    #	108033 ucscToRefSeq.bed
+    #	108033 ucscToRefSeq.txt
 
     export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
     # 20
-    # use the 25 in this sed
+    # use the 20 in this sed
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab xenLae2 ucscToINSDC stdin ucscToINSDC.bed
     # should be the same for ucscToRefSeq:
@@ -330,13 +324,13 @@ XXX - running - Tue Mar 28 20:32:24 PDT 2017
     checkTableCoords xenLae2
     # each should cover %100 entirely:
     featureBits -countGaps xenLae2 ucscToINSDC
-    # 1440398454 bases of 1440398454 (100.000%) in intersection
+    # 2718433805 bases of 2718433805 (100.000%) in intersection
 
     featureBits -countGaps xenLae2 ucscToRefSeq
-    # 1440398454 bases of 1440398454 (100.000%) in intersection
+    # 2718433805 bases of 2718433805 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2017-03-02 - Hiram)
+# add chromAlias table (DONE - 2017-03-30 - Hiram)
 
     mkdir /hive/data/genomes/xenLae2/bed/chromAlias
     cd /hive/data/genomes/xenLae2/bed/chromAlias
@@ -353,33 +347,33 @@ XXX - running - Tue Mar 28 20:32:24 PDT 2017
         xenLae2.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (DONE - 2017-03-28 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2017-03-30 - Hiram)
     cd ~/kent/src/hg/makeDb/trackDb/xenTro/xenLae2
 
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" xenLae2 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
-#  61329 AAMC.1
-#      1 NC_.1
+#  324060 LYTH.1
+#       1 NC_.1
 
-    # implies a rule: '[AN][AC][M_][C0-9]+(\.[0-9]+)?'
+    # implies a rule: '[LN][CY][T_][H0-9]+(\.[0-9]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" xenLae2 | wc -l
-    # 61330
+    # 324061
 
     hgsql -N -e "select frag from gold;" xenLae2 \
-       | egrep -e '[AN][AC][M_][C0-9]+(\.[0-9]+)?' | wc -l
-    # 61330
+       | egrep -e '[LN][CY][T_][H0-9]+(\.[0-9]+)?' | wc -l
+    # 324061
 
     hgsql -N -e "select frag from gold;" xenLae2 \
-       | egrep -v -e '[AN][AC][M_][C0-9]+(\.[0-9]+)?' | wc -l
+       | egrep -v -e '[LN][CY][T_][H0-9]+(\.[0-9]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/chicken/xenLae2/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [AN][AC][M_][C0-9]+(\.[0-9]+)?
+termRegex [LN][CY][T_][H0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -493,110 +487,95 @@ searchPriority 8
     # 280390601 bases of 2718433805 (10.314%) in intersection
 
 ##########################################################################
-# run up idKeys files for ncbiRefSeq (TBD - 2017-03-28 - Hiram)
+# run up idKeys files for ncbiRefSeq (DONE - 2017-03-30 - Hiram)
     mkdir /hive/data/genomes/xenLae2/bed/idKeys
     cd /hive/data/genomes/xenLae2/bed/idKeys
 
     time (doIdKeys.pl -buildDir=`pwd`  xenLae2) > do.log 2>&1 &
-XXX - running - Tue Mar 28 08:18:42 PDT 2017
-    # real    180m9.149s
+    # real    81m30.344s
 
     cat xenLae2.keySignature.txt
-    #   591eccd7f439191e0ef7dcd523963ffb
+    #   c4fea4971ed2f6afd8f2180d9cbebf03
 
 ##########################################################################
-# cpgIslands - (TBD - 2017-03-28 - Hiram)
+# cpgIslands - (DONE - 2017-03-29 - Hiram)
     mkdir /hive/data/genomes/xenLae2/bed/cpgIslands
     cd /hive/data/genomes/xenLae2/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku xenLae2) > do.log 2>&1 &
-XXX - running - Tue Mar 28 08:18:42 PDT 2017
-    # real    47m4.574s
+    # real    20m39.583s
 
     cat fb.xenLae2.cpgIslandExt.txt
-    # 52667927 bases of 2386321975 (2.207%) in intersection
+    # 4222160 bases of 2408724787 (0.175%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2017-03-28 - Hiram)
+# genscan - (DONE - 2017-03-29 - Hiram)
     mkdir /hive/data/genomes/xenLae2/bed/genscan
     cd /hive/data/genomes/xenLae2/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku xenLae2) > do.log 2>&1 &
-XXX - running - Tue Mar 28 08:19:10 PDT 2017
-    # real    64m46.377s
-
-    # three jobs need window size 2000000, one tiny contig would produce
-    # nothing
-
-    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
-      -continue=makeBed -bigClusterHub=ku xenLae2) > makeBed.log 2>&1 &
-    # real    1m26.537s
+    # real    244m58.113s
 
     cat fb.xenLae2.genscan.txt
-    # 61853048 bases of 2386321975 (2.592%) in intersection
+    # 58126492 bases of 2408724787 (2.413%) in intersection
 
     cat fb.xenLae2.genscanSubopt.txt
-    # 53556163 bases of 2386321975 (2.244%) in intersection
+    # 56170972 bases of 2408724787 (2.332%) in intersection
 
 #############################################################################
-# augustus gene track (TBD - 2017-03-28 - Hiram)
+# augustus gene track (DONE - 2017-03-29 - Hiram)
 
     mkdir /hive/data/genomes/xenLae2/bed/augustus
     cd /hive/data/genomes/xenLae2/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
      -species=chicken -dbHost=hgwdev -workhorse=hgwdev xenLae2) > do.log 2>&1 &
-    # real    827m10.603s
+    # real    200m38.406s
 
     cat fb.xenLae2.augustusGene.txt
-    # 54243824 bases of 2386321975 (2.273%) in intersection
+    # 59344395 bases of 2408724787 (2.464%) in intersection
 
 #############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2017-03-03 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2017-03-30 - Hiram)
 
     # original alignment
-
-    cd /hive/data/genomes/hg38/bed/lastzXenLae2.2017-03-03
+    cd /hive/data/genomes/hg38/bed/lastzXenLae2.2017-03-29
     cat fb.hg38.chainXenLae2Link.txt
-    # 906521007 bases of 3049335806 (29.728%) in intersection
+    # 97526523 bases of 3049335806 (3.198%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/xenLae2/bed/blastz.hg38.swap
     cd /hive/data/genomes/xenLae2/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzXenLae2.2017-03-03/DEF \
-        -swap -chainMinScore=3000 -chainLinearGap=medium \
+      /hive/data/genomes/hg38/bed/lastzXenLae2.2017-03-29/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
     #  real    42m21.629s
 
     cat fb.xenLae2.chainHg38Link.txt
-    # 880636728 bases of 2386321975 (36.904%) in intersection
+    # 114726989 bases of 2408724787 (4.763%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenLae2 hg38) \
       > rbest.log 2>&1
     # real    296m23.384s
 
 #########################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2017-03-03 - Hiram)
+# lastz/chain/net swap mouse/mm10 (TBD - 2017-03-30 - Hiram)
 
     # original alignment
 
-    cd /hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-03
+    cd /hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29
     cat fb.mm10.chainXenLae2Link.txt
-    # 907817373 bases of 2652783500 (34.221%) in intersection
-
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 xenLae2) \
-      > rbest.log 2>&1 &
-    # real    522m5.587s
+    # 82272699 bases of 2652783500 (3.101%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/xenLae2/bed/blastz.mm10.swap
     cd /hive/data/genomes/xenLae2/bed/blastz.mm10.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-03/DEF \
-        -swap -chainMinScore=3000 -chainLinearGap=medium \
+      /hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
     #  real    71m4.702s
@@ -609,26 +588,28 @@ XXX - running - Tue Mar 28 08:19:10 PDT 2017
     # real    508m58.716s
 
 #############################################################################
-# Create kluster run files (TBD - 2017-03-28 - Hiram)
+# Create kluster run files (DONE - 2017-03-29 - Hiram)
 
     # numerator is xenLae2 gapless bases "real" as reported by:
     featureBits -noRandom -noHap xenLae2 gap
-    # 45444714 bases of 1227082306 (3.703%) in intersection
-    #                   ^^^
+    # 276189979 bases of 2231632100 (12.376%) in intersection
+    #                    ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1227082306 / 2861349177 \) \* 1024
-    #  ( 1227082306 / 2861349177 ) * 1024 = 439.139792
+    calc \( 2231632100 / 2861349177 \) \* 1024
+    #  ( 2231632100 / 2861349177 ) * 1024 = 798.641176
 
-    # ==> use -repMatch=500 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
     #   and rounded up to nearest 100
     cd /hive/data/genomes/xenLae2
     blat xenLae2.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/xenLae2.11.ooc \
-        -repMatch=500
+        -repMatch=800
+    # Wrote 39757 overused 11-mers to jkStuff/xenLae2.11.ooc
+    # xenTro9 was:
     #   Wrote 31375 overused 11-mers to jkStuff/xenLae2.11.ooc
     # xenTro7 was:
     #   Wrote 31229 overused 11-mers to jkStuff/xenTro7.11.ooc
@@ -645,46 +626,16 @@ XXX - running - Tue Mar 28 08:19:10 PDT 2017
     #    -bedFile=jkStuff/nonBridged.bed
 
 #########################################################################
-# LIFTOVER TO xenTro7 (TBD - 2017-03-28 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/xenLae2/bed/blat.xenTro7.2017-03-27
-    cd /hive/data/genomes/xenLae2/bed/blat.xenTro7.2017-03-27
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/xenLae2/jkStuff/xenLae2.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         xenLae2 xenTro7) > do.log 2>&1
-XXX - running - Tue Mar 28 08:26:29 PDT 2017
-    # real    1569m40.174s
-
-    # verify the convert link on the test browser is now active from xenLae2 to
-    # xenTro7
-
-#########################################################################
-# LIFTOVER TO xenTro3 (TBD - 2017-03-28 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/xenLae2/bed/blat.xenTro3.2017-03-28
-    cd /hive/data/genomes/xenLae2/bed/blat.xenTro3.2017-03-28
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/xenLae2/jkStuff/xenLae2.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         xenLae2 xenTro3) > do.log 2>&1
-XXX - running - Tue Mar 28 08:37:40 PDT 2017
-    # real    1326m15.222s
-
-    # verify the convert link on the test browser is now active from xenLae2 to
-    # xenTro3
-
-########################################################################
 # GENBANK AUTO UPDATE (TBD - 2017-03-05 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # #organism             mrnaCnt   estCnt  refSeqCnt
-    # Xenopus tropicalis      18478   1271480 8612
+    # organism      mrnaCnt   estCnt  refSeqCnt
+    # Xenopus laevis  20030   694634  11007
 
     # edit etc/genbank.conf to add xenLae2 just before macFas5
-# xenLae2 'Xenopus tropicalis' 11 chroms + 6811 contigs
+# xenLae2 'Xenopus laevis' 19 chroms + 108014 contigs
 xenLae2.serverGenome = /hive/data/genomes/xenLae2/xenLae2.2bit
 xenLae2.clusterGenome = /hive/data/genomes/xenLae2/xenLae2.2bit
 xenLae2.ooc = /hive/data/genomes/xenLae2/jkStuff/xenLae2.11.ooc
@@ -701,19 +652,23 @@ xenLae2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
 # defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
 # genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
 # refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
-# xenTro7.upstreamGeneTbl = ensGene
-# xenTro7.upstreamMaf = multiz9way /hive/data/genomes/xenTro7/bed/multiz9way/species.list
+# xenLae2.upstreamGeneTbl = ensGene
+# xenLae2.upstreamMaf = multiz9way /hive/data/genomes/xenTro7/bed/multiz9way/species.list
 
-    git commit -m 'adding xenLae2 X, tropicalis refs #19151' etc/genbank.conf
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added xenLae Xenopus laevis refs #17435" \
+         etc/genbank.conf src/lib/gbGenome.c
     git push
-    # update /cluster/data/genbank/:
+    # update /cluster/data/genbank/etc/:
     make etc-update
+    # update /cluster/data/genbank/bin/:
+    make install-server
 
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial xenLae2
-    # logFile: var/build/logs/2017.03.28-10:19:21.xenLae2.initalign.log
-XXX - running - Tue Mar 28 10:19:36 PDT 2017
+    # logFile: var/build/logs/2017.03.30-16:25:11.xenLae2.initalign.log
+XXX - running - Thu Mar 30 16:25:21 PDT 2017
     #   about 13 hours
 
     tail -2 var/build/logs/2017.03.05-06:50:23.xenLae2.initalign.log
@@ -778,14 +733,14 @@ XXX - running - Tue Mar 28 10:19:36 PDT 2017
     #    enrich 14.68x
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-03-07 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-03-30 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("xenLae2", "blat1d", "17882", "1", "0"); \
+	VALUES ("xenLae2", "blat1c", "17888", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("xenLae2", "blat1d", "17883", "0", "1");' \
+	VALUES ("xenLae2", "blat1c", "17889", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 

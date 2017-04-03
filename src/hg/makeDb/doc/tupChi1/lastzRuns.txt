@@ -1,0 +1,207 @@
+#############################################################################
+# LASTZ Malayan flying lemur/galVar1 - (DONE - 2017-03-09 - Hiram)
+    mkdir /hive/data/genomes/tupChi1/bed/lastzGalVar1.2017-03-09
+    cd /hive/data/genomes/tupChi1/bed/lastzGalVar1.2017-03-09
+
+    printf '#  Chinese tree shrew vs Malayan flying lemur
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254 
+
+# TARGET: Chinese tree shrew tupChi1
+SEQ1_DIR=/hive/data/genomes/tupChi1/tupChi1.2bit
+SEQ1_LEN=/hive/data/genomes/tupChi1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=1000
+SEQ1_LAP=10000
+
+# TARGET:  Malayan flying lemur galVar1
+SEQ2_DIR=/hive/data/genomes/galVar1/galVar1.2bit
+SEQ2_LEN=/hive/data/genomes/galVar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=800
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/tupChi1/bed/lastzGalVar1.2017-03-09
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    440m32.995s
+
+    cat fb.tupChi1.chainGalVar1Link.txt
+    # 1414140103 bases of 2706389135 (52.252%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tupChi1 galVar1) \
+          > rbest.log 2>&1 &
+    # real    81m49.289s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/galVar1/bed/blastz.tupChi1.swap
+    cd /hive/data/genomes/galVar1/bed/blastz.tupChi1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 -swap \
+    /hive/data/genomes/tupChi1/bed/lastzGalVar1.2017-03-09/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    320m48.042s
+
+    cat fb.galVar1.chainTupChi1Link.txt
+    # 1491449851 bases of 2802917674 (53.211%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` galVar1 tupChi1) \
+      > rbest.log 2>&1
+    # real    146m1.658s
+
+#########################################################################
+# swap lastz/chain/net (DONE - 2017-03-09 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzTupChi1.2017-03-09
+
+    cat fb.mm10.chainTupChi1Link.txt
+    #  683463709 bases of 2652783500 (25.764%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/tupChi1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/tupChi1/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzTupChi1.2017-03-09/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    71m4.702s
+
+    cat fb.tupChi1.chainMm10Link.txt
+    # 708757944 bases of 2706389135 (26.188%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tupChi1 mm10) \
+       > rbest.log 2>&1
+    # real    508m10.564s
+
+#############################################################################
+# swap lastz/chain/net hg19/human (DONE - 2013-07-07 - Hiram)
+    # original alignment
+    /hive/data/genomes/hg19/bed/lastzTupChi1.2013-07-05
+
+    cat fb.hg19.chainTupChi1Link.txt
+    #   1348933101 bases of 2897316137 (46.558%) in intersection
+
+    # running the swap
+    mkdir /hive/data/genomes/tupChi1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/tupChi1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzTupChi1.2013-07-05/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -syntenicNet > swap.log 2>&1
+    #  real    118m8.921s
+
+    cat fb.tupChi1.chainHg19Link.txt
+    #  1360938926 bases of 2706389135 (50.286%) in intersection
+
+    cd /hive/data/genomes/tupChi1/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
+    doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tupChi1 hg19
+    # real    745m37.336s
+
+#########################################################################
+# swap lastz/chain/net hg38/human (DONE - 2015-02-17 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzTupChi1.2015-02-17
+    cat fb.hg38.chainTupChi1Link.txt
+    # 1379994626 bases of 3049335806 (45.256%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/tupChi1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/tupChi1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzTupChi1.2015-02-17/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    119m54.935s
+
+    cat fb.tupChi1.chainHg38Link.txt
+    # 1362665822 bases of 2706389135 (50.350%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` tupChi1 hg38) > rbest.log 2>&1
+    # real    43m38.032s
+
+#########################################################################
+# lastz/chain/net tupBel1/tree shrew (DONE - 2017-03-07 - Hiram)
+    mkdir /hive/data/genomes/tupChi1/bed/lastzTupBel1.2017-03-07
+    cd /hive/data/genomes/tupChi1/bed/lastzTupBel1.2017-03-07
+
+    printf '# Chinese tree shrew vs. tree shrew
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Chinese tree shrew tupChi1 hg38
+SEQ1_DIR=/hive/data/genomes/tupChi1/tupChi1.2bit
+SEQ1_LEN=/hive/data/genomes/tupChi1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=300
+SEQ1_LAP=10000
+
+# QUERY: tree shrew tupBel1
+SEQ2_DIR=/hive/data/genomes/tupBel1/tupBel1.2bit
+SEQ2_LEN=/hive/data/genomes/tupBel1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=1000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/tupChi1/bed/lastzTupBel1.2017-03-07
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # failed during chaining due to 10 Gb process memory limit
+    # real    226m29.056s
+
+    # finish last chain job on hgwdev with plenty of memory
+    time ./chain.csh part124.lst chain/part124.lst.chain
+    # real    287m42.860s
+
+    # continuing:
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku \
+            -bigClusterHub=ku -syntenicNet \
+              -continue=chainMerge) > chainMerge.log 2>&1
+    # real    648m50.732s
+
+    cat fb.tupChi1.chainTupBel1Link.txt
+    # 2141976820 bases of 2706389135 (79.145%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tupChi1 galVar1) \
+          > rbest.log 2>&1 &
+    # real    real    81m58.778s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/tupBel1/bed/blastz.tupChi1.swap
+    cd /hive/data/genomes/tupBel1/bed/blastz.tupChi1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 -swap \
+    /hive/data/genomes/tupChi1/bed/lastzGalVar1.2017-03-09/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    925m18.998s
+
+    cat fb.tupBel1.chainTupChi1Link.txt
+    # 2098821387 bases of 2137225476 (98.203%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tupBel1 tupChi1) \
+      > rbest.log 2>&1
+    # real    188m5.418s
+
+#########################################################################
