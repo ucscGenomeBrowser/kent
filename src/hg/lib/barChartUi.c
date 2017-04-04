@@ -117,14 +117,14 @@ cgiMakeHiddenVar(buf, "0");
 
 void barChartUiLogTransform(struct cart *cart, char *track, struct trackDb *tdb)
 /* Checkbox to select log-transformed RPKM values */
+/* NOTE: this code from gtexUi.c.  Consider sharing. */
 {
 char cartVar[1024];
-char buf[512];
-puts("<b>Log10 transform:</b>\n");
+puts("<b>Log10(x+1) transform:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSFORM_DEFAULT);
-safef(buf, sizeof buf, "onchange='barChartUiTransformChanged(\"%s\")'", track);
-cgiMakeCheckBoxJS(cartVar, isLogTransform, buf);
+cgiMakeCheckBoxWithId(cartVar, isLogTransform, cartVar);
+jsOnEventByIdF("change", cartVar, "barChartUiTransformChanged('%s');", track);
 }
 
 double barChartUiMaxMedianScore()
@@ -136,16 +136,19 @@ return 10000;
 
 void barChartUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
 /* Set viewing limits if log transform not checked */
+/* NOTE: this code from gtexUi.c.  Consider sharing. */
 {
 char cartVar[1024];
 char buf[512];
+safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSFORM_DEFAULT);
 safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
 printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_MAX_LIMIT);
 int viewMax = cartCgiUsualInt(cart, cartVar, BAR_CHART_MAX_LIMIT_DEFAULT);
 cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
-printf("<span class='%s'> (range 0-%d)</span>\n", buf, round(barChartUiMaxMedianScore()));
+char *unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
+printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit, round(barChartUiMaxMedianScore()));
 }
 
 char *barChartUiGetLabel(char *database, struct trackDb *tdb)
