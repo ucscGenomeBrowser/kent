@@ -123,6 +123,11 @@ errAbort(
   "such files as well as actual database tables.  To count the bits\n"
   "used in dir/chrN_something*.bed you'd do:\n"
   "   featureBits database dir/_something.bed\n"
+  "NB: by default, featureBits omits gap regions from its calculation of the total\n"
+  "number of bases.  This requires a connecting to a database server using credentials\n"
+  "from a .hg.conf file (or similar).  If such a connection is not available, you will\n"
+  "need to specify -countGaps (which skips the database connection) in addition to\n"
+  "providing all tables as files or directories.\n"
   );
 }
 
