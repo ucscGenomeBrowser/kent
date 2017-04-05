@@ -9104,6 +9104,12 @@ if (cartUsualBoolean(cart, "hgt.psOutput", FALSE))
     handlePostscript();
 else
     doTrackForm(NULL, NULL);
+
+boolean gotExtTools = extToolsEnabled();
+setupHotkeys(gotExtTools);
+if (gotExtTools)
+    printExtMenuData();
+
 }
 
 void chromInfoTotalRow(int count, long long total)
@@ -9626,11 +9632,13 @@ if(!trackImgOnly)
         }
     jsIncludeFile("autocomplete.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
+    jsIncludeFile("spectrum.min.js", NULL);
 
 #ifdef LOWELAB
     jsIncludeFile("lowetooltip.js", NULL);
 #endif///def LOWELAB
 
+    webIncludeResourceFile("spectrum.min.css");
     webIncludeResourceFile("jquery-ui.css");
     if (!searching)     // NOT doing search
         {
@@ -9741,11 +9749,6 @@ struct dyString *dy = dyStringNew(1024);
 jsonDyStringPrint(dy, (struct jsonElement *) jsonForClient, "hgTracks", 0);
 jsInline(dy->string);
 dyStringFree(&dy);
-
-boolean gotExtTools = extToolsEnabled();
-setupHotkeys(gotExtTools);
-if (gotExtTools)
-    printExtMenuData();
 
 if (measureTiming)
     measureTime("Time at end of doMiddle, next up cart write");

@@ -165,7 +165,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
                 if (options.autoHide)
                     $a.add($o).hide();
 
-                options.onSelectEnd(img, selection);
+                options.onSelectEnd(img, selection, event);
 
                 jQuery(document).unbind('mousemove', selectingMouseMove);
                 $border2.mousemove(areaMouseMove);
@@ -180,7 +180,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
             jQuery(document).mousemove(movingMouseMove)
                 .one('mouseup', function (event) {
                     selection.event = event;
-                    options.onSelectEnd(img, selection);
+                    options.onSelectEnd(img, selection, event);
 
                     jQuery(document).unbind('mousemove', movingMouseMove);
                 });
@@ -327,7 +327,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
                     }
                 }
             }
-            found = found || event.shiftKey;
+            found = found || event.shiftKey || event.metaKey || event.altKey || event.ctrlKey;
             if(!found) {
                 return false;
             }
@@ -351,7 +351,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
             if (options.autoHide || (selection.width * selection.height == 0))
                 $a.add($o).hide();
 
-            options.onSelectEnd(img, selection);
+            options.onSelectEnd(img, selection, event);
 
             //$o.css('cursor', ""); // Not even necessary
             //$a.css('cursor', "");
@@ -373,7 +373,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
         selection.y1 = selection.y2 = selY(startY = y1 = y2 = evY(event));
 
         options.onSelectChange(img, selection);
-        options.onSelectEnd(img, selection);
+        options.onSelectEnd(img, selection, event);
     }
 
     function imgMouseDown(event)
