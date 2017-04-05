@@ -1619,5 +1619,7 @@ struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis);
 void labelTrackAsFiltered(struct track *tg);
 /* add text to track long label to indicate filter is active */
 
+void setupHotkeys(boolean gotExtTools);
+/* setup keyboard shortcuts and a help dialog for it */
 #endif /* HGTRACKS_H */
 
