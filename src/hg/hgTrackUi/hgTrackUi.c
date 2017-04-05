@@ -871,7 +871,7 @@ if (tdbIsComposite(tdb))
 	if (hTableExists(database, subTdb->table))
 	    {
 	    safef(var, sizeof(var), "%s_inv", subTdb->track);
-	    cgiMakeCheckBoxJS(var, cartUsualBoolean(cart, var, ldInvDefault),
+	    cgiMakeCheckBoxMore(var, cartUsualBoolean(cart, var, ldInvDefault),
 			      "class='subtrackInCompositeUi'");
 	    printf("&nbsp;Invert display for %s<BR>&nbsp;&nbsp;\n",
 		   subTdb->longLabel);

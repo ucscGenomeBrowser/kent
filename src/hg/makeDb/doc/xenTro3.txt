@@ -2112,6 +2112,20 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s blastz.rn5.swap lastz.rn5
 
 #########################################################################
+# LIFTOVER TO xenTro9 (DONE - 2017-03-28 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/xenTro3/bed/blat.xenTro9.2017-03-28
+    cd /hive/data/genomes/xenTro3/bed/blat.xenTro9.2017-03-28
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/xenTro3/jkStuff/xenTro3.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         xenTro3 xenTro9) > do.log 2>&1
+    # real    1061m39.820s
+
+    # verify the convert link on the test browser is now active from xenTro3 to
+    # xenTro9
+
+#########################################################################
 # LIFTOVER TO xenTro7 (DONE - 2015-03-17 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/xenTro3/bed/blat.xenTro7.2015-03-17

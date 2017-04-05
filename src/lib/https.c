@@ -493,7 +493,7 @@ return params->sv[0];
 #include "common.h"
 #include "errAbort.h"
 
-int netConnectHttps(char *hostName, int port)
+int netConnectHttps(char *hostName, int port, boolean noProxy)
 /* Start https connection with server or die. */
 {
 errAbort("No openssl available in netConnectHttps for %s : %d", hostName, port);

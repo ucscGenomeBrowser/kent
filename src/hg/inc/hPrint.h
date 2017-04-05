@@ -71,9 +71,6 @@ void hDoubleVar(char *varName, double initialVal, int maxDigits);
 void hCheckBox(char *varName, boolean checked);
 /* Make check box if not suppressed. */
 
-void hCheckBoxJS(char *varName, boolean checked, char *javascript);
-/* Make check box if not suppressed, with javascript. */
-
 void hDropList(char *name, char *menu[], int menuSize, char *checked);
 /* Make a drop-down list with names if not suppressed. */
 
