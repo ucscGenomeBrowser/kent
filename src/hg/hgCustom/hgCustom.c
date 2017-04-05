@@ -584,7 +584,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     printf("<TD COLSPAN=%d ALIGN=CENTER>", showAllButtons ? 2 : 1);
     safef(buf, sizeof(buf), "%s_%s", hgCtDeletePrefix,
             ct->tdb->track);
-    cgiMakeCheckBoxJS(buf, setAllDelete, "class='deleteCheckbox'");
+    cgiMakeCheckBoxMore(buf, setAllDelete, "class='deleteCheckbox'");
     puts("</TD>");
 
     /* Update checkboxes */
@@ -595,9 +595,9 @@ for (ct = ctList; ct != NULL; ct = ct->next)
                 ct->tdb->track);
         if ((dataUrl = ctDataUrl(ct)) != NULL)
             {
-            char js[2048];
-            safef(js, sizeof(js), "class='updateCheckbox' title='refresh data from: %s'", dataUrl);
-            cgiMakeCheckBoxJS(buf, setAllUpdate, js);
+            char more[2048];
+            safef(more, sizeof(more), "class='updateCheckbox' title='refresh data from: %s'", dataUrl);
+            cgiMakeCheckBoxMore(buf, setAllUpdate, more);
             }
         else
             puts("&nbsp;");

@@ -25,28 +25,6 @@
 // can be either added back to the end of the html page with a nonce or sha hashid,
 // or it can be saved to a temp file in trash and then included as a non-inline, off-page .js.
 
-// TODO make other versions that capture the output to a temp file.
-
-/* OBSOLETE
-// Auto-increment. This helps create unique ids for easily connecting inline js with the html element.
-
-int autoInc = 0;
-int getAutoInc()
-// Get auto-incrementing value.
-{
-return autoInc++;
-}
-
-char *getAutoIncId()
-// Generate an automatically incrementing html id attribute value.
-// For cases where the element is not given any id, generate a unique id automatically. 
-{
-char autoId[32];
-safef(autoId, sizeof autoId, "auto%d", getAutoInc());
-return cloneString(autoId);
-}
-END OBSOLETE */
-
 struct dyString *jsInlineLines = NULL;
 
 void jsInlineInit()
@@ -83,7 +61,7 @@ void jsInlineFinish()
 if (jsInlineFinishCalled)
     {
     // jsInlineFinish can be called multiple times when generating framesets or genomeSpace.
-    warn("jsInlineFinish() called already.");  // TODO GALT
+    warn("jsInlineFinish() called already.");
     }
 jsInlineInit(); // init if needed
 printf("<script type='text/javascript' nonce='%s'>\n%s</script>\n", getNonce(), jsInlineLines->string);
@@ -1741,18 +1719,10 @@ void cgiMakeCheckBoxEnabled(char *name, boolean checked, boolean enabled)
 cgiMakeCheckBox2Bool(name, checked, enabled, NULL, NULL);
 }
 
-// TODO hopefully make this OBSOLETE
-void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript)
-/* Make check box with javascript. */
+void cgiMakeCheckBoxMore(char *name, boolean checked, char *moreHtml)
+/* Make check box with moreHtml. */
 {
-cgiMakeCheckBox2Bool(name,checked,TRUE,NULL,javascript);
-}
-
-// TODO hopefully make this OBSOLETE
-void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript)
-/* Make check box with ID and javascript. */
-{
-cgiMakeCheckBox2Bool(name,checked,TRUE,id,javascript);
+cgiMakeCheckBox2Bool(name,checked,TRUE,NULL,moreHtml);
 }
 
 void cgiMakeCheckBoxIdAndMore(char *name, boolean checked, char *id, char *moreHtml)
