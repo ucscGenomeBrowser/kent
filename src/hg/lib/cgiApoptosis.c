@@ -114,6 +114,8 @@ if (scriptName && ip)  /* will not be true from command line execution */
             char *browserName = "browser.v";
             if (hIsBrowserbox())
                 browserName = "browserbox.v";
+            if (hIsGbic())
+                browserName = "browserGbic.v";
 
 	    safef(url, sizeof(url), "%s%s%s%s%s%s%s", "http://",
 	"genomewiki.", "ucsc.edu/", "cgi-bin/useCount?", "version=", browserName,
