@@ -204,7 +204,7 @@ else if (sameString(type, "vcf"))
 else if (sameString(type, "bigWig"))
     streamer = annoStreamBigWigNew(fileOrUrl, assembly);
 else if (sameString(type, "pgSnp"))
-    streamer = annoStreamTabNew(fileOrUrl, assembly, pgSnpFileAsObj());
+    streamer = annoStreamTabNew(fileOrUrl, assembly, pgSnpFileAsObj(), maxOutRows);
 else if (sameString(type, "bam"))
     errAbort("Sorry, BAM is not yet supported");
 else
