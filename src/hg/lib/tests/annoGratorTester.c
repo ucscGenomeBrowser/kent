@@ -73,7 +73,7 @@ else if (endsWith(info->tableFileUrl, ".bb"))
     }
 else
     {
-    streamer = annoStreamTabNew(info->tableFileUrl, info->assembly, info->asObj);
+    streamer = annoStreamTabNew(info->tableFileUrl, info->assembly, info->asObj, BIGNUM);
     }
 return streamer;
 }
