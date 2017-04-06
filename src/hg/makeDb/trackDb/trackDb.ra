@@ -11,6 +11,7 @@ include trackDb.chainNet.birds.ra
 include trackDb.chainNet.sarcopterygii.ra
 include trackDb.chainNet.fish.ra
 include trackDb.chainNet.insects.ra
+include trackDb.chainNet.other.ra
 
 include trackDb.transMap.ra
 
@@ -1104,7 +1105,7 @@ track snp147
 shortLabel All SNPs(147)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 147)
 group varRep
-visibility hide
+visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 defaultGeneTracks knownGene

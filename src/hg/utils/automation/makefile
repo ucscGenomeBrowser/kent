@@ -18,20 +18,24 @@ LIB_FILES = \
 	AsmHub.pm
 
 SCRIPT_FILES = \
+	asmHubAllGaps.pl \
 	asmHubAssembly.pl \
-	asmHubGatewayPage.pl \
-	asmHubRmsk.pl \
+	asmHubAugustusGene.pl \
 	asmHubCpG.pl \
+	asmHubEnsGene.pl \
+	asmHubGap.pl \
+	asmHubGatewayPage.pl \
 	asmHubGc5Percent.pl \
 	asmHubHtml.pl \
-	asmHubTrackDb.sh \
-	asmHubGap.pl \
-	asmHubSimpleRepeat.pl \
 	asmHubRepeatMasker.sh \
+	asmHubRmsk.pl \
+	asmHubSimpleRepeat.pl \
+	asmHubTrackDb.sh \
 	asmHubWindowMasker.pl \
 	blastz-make-joblist \
 	blastz-normalizeLav \
 	blastz-run-ucsc \
+	doAssemblyHub.pl \
 	doAugustus.pl \
 	doBlastzChainNet.pl \
 	doCpgIslands.pl \

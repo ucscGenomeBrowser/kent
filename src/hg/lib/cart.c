@@ -1605,15 +1605,31 @@ struct cart *cartForSession(char *cookieName, char **exclude,
                             struct hash *oldVars)
 /* This gets the cart without writing any HTTP lines at all to stdout. */
 {
+/* Most cgis call this routine */
+if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
+    initSigHandlers(hDumpStackEnabled());
+/* Proxy Settings 
+ * net.c cannot see the cart, pass the value through env var */
+char *httpProxy = cfgOption("httpProxy");  
+if (httpProxy)
+    setenv("http_proxy", httpProxy, TRUE);
+char *httpsProxy = cfgOption("httpsProxy");
+if (httpsProxy)
+    setenv("https_proxy", httpsProxy, TRUE);
+char *ftpProxy = cfgOption("ftpProxy");
+if (ftpProxy)
+    setenv("ftp_proxy", ftpProxy, TRUE);
+char *noProxy = cfgOption("noProxy");
+if (noProxy)
+    setenv("no_proxy", noProxy, TRUE);
+char *logProxy = cfgOption("logProxy");
+if (logProxy)
+    setenv("log_proxy", logProxy, TRUE);
+
 char *hguid = getCookieId(cookieName);
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
-if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
-    initSigHandlers(hDumpStackEnabled());
-char *httpProxy = cfgOption("httpProxy");  /* most cgis call this routine */
-if (httpProxy)
-    setenv("http_proxy", httpProxy, TRUE);   /* net.c cannot see the cart, pass the value through env var */
 return cart;
 }
 

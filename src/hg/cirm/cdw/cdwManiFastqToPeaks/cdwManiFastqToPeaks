@@ -1,0 +1,139 @@
+#!/usr/bin/env python2.7
+# cdwManiFastqToPeaks
+"""
+Take a maniFastq file list and generate a series of MACS2 commands, assumes that the manifest
+has a control_association, control_type and chip-seq assay.  Generates three subfile command lists
+named fastqToSam, samToBam and bamToPeaks, the output file will be a script that calls these
+three sub scripts.  
+"""
+import os
+import sys
+import collections
+import argparse
+
+# import the UCSC kent python library
+sys.path.append(os.path.dirname(__file__))
+import common
+import tempfile
+
+def parseArgs(args):
+    """
+    Parse the command line arguments.
+    """
+    parser= argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("inputManiFile",
+        help = " The input file. ",
+        type = argparse.FileType("r"))
+    parser.add_argument ("inputMetaFile",
+        help = " The input file. ",
+        type = argparse.FileType("r"))
+    parser.add_argument ("outputFile",
+        help = " The output file. ",
+        type =argparse.FileType("w"))
+    parser.add_argument ("--indexFile",
+        help = " The index file. ", 
+        action = "store")
+    parser.add_argument ("--softwarePath",
+        help = " The software path. ", 
+        action = "store")
+    if (len(sys.argv) == 1):
+        parser.print_help()
+        exit(1)
+    parser.set_defaults(indexFile = "/data/cirm/valData/hg38/bwaData/hg38.fa")
+    parser.set_defaults(softwarePath = "~kent/bin/x86_64/")
+    options = parser.parse_args()
+    return options
+
+def main(args):
+    """
+    Initialized options and calls other functions.
+    """
+    options = parseArgs(args)
+    intermediateFile = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)
+    finalFile = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)
+    trueFinal = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)
+    tFile = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)
+    tFile2 = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)
+    
+    
+    cmd = "~kent/bin/x86_64/tagStormQuery \"select meta,control_association,control_type,assay,immunoprecipitation_target from " + options.inputMetaFile.name + " where assay like '%ChIP-seq'\" > " + intermediateFile.name
+    os.system(cmd)
+    cmd = "tagStormJoinTab meta " + options.inputManiFile.name + " " + intermediateFile.name + " " + finalFile.name 
+    os.system(cmd)
+    cmd = "tagStormToTab " + finalFile.name + " " + trueFinal.name 
+    os.system(cmd)
+    cmd = "head -1 " + trueFinal.name + " > " + tFile.name
+    os.system(cmd)
+    cmd = "cat " + trueFinal.name + " | sed '1D' | sort -k 2 > " + tFile2.name
+    os.system(cmd)
+    
+    headerLine = True
+    firstLine = True
+    secondLine = True
+    metaFiles = []
+    fastqToSam = open("fastqToSam", "w")
+    samToBam = open("samToBam", "w")
+    bamToPeaks = open("bamToPeaks", "w")
+    fastqToSam.write("#!/bin/bash -ex\n")
+    samToBam.write("#!/bin/bash -ex\n")
+    bamToPeaks.write("#!/bin/bash -ex\n")
+    for line in tFile:
+        splitLine = line.strip("#").strip("\n").split("\t")
+        if headerLine:
+            headerLine = False
+            metaCol = splitLine.index("meta")
+            assayCol = splitLine.index("assay")
+            fileCol = splitLine.index("file")
+            control_typeCol = splitLine.index("control_type")
+            continue
+
+    for line in tFile2:
+        splitLine = line.strip("#").strip("\n").split("\t")
+        
+        if firstLine:
+            firstLine = False
+            controlMeta = splitLine[metaCol]
+            metaFiles.append(splitLine[fileCol])
+            meta = splitLine[metaCol]
+            assay = splitLine[assayCol]
+            continue
+        
+        if splitLine[metaCol] == meta:
+            metaFiles.append(splitLine[fileCol])
+        else: 
+            fastqToSam.write(options.softwarePath+"bwa mem " + options.indexFile + " ")
+            fastqToSam.write(" ".join(metaFiles) + " > " + meta + ".sam\n")
+            samToBam.write(options.softwarePath+"samtools view -bS " + meta + ".sam > " + meta + ".bam\n");
+            if (meta != controlMeta):
+                bamToPeaks.write("macs2 callpeak -t " + meta + ".bam -c ")
+                bamToPeaks.write(controlMeta + ".bam --outdir " + meta + " --name " + meta)
+                if ("broad" in assay):
+                    bamToPeaks.write(" --broad -g hs --broad-cutoff 0.1\n")
+                else:
+                    bamToPeaks.write(" BAM -g hs -n test -B -q 0.01\n")
+            assay = splitLine[assayCol]
+            meta = splitLine[metaCol]
+            metaFiles = []
+            metaFiles.append(splitLine[fileCol])
+        
+        if "input" in splitLine[control_typeCol]:
+            controlMeta = splitLine[metaCol]
+        
+    fastqToSam.write(options.softwarePath+"bwa mem " + options.indexFile + " ")
+    fastqToSam.write(" ".join(metaFiles) + " > " + meta + ".sam\n")
+    samToBam.write(options.softwarePath+"samtools view -bS " + meta + ".sam > " + meta + ".bam\n");
+    bamToPeaks.write("macs2 callpeak -t " + meta + ".bam -c ")
+    bamToPeaks.write(controlMeta + ".bam --outdir " + meta + " --name " + meta)
+    if ("broad" in splitLine[assayCol]):
+        bamToPeaks.write(" --broad -g hs --broad-cutoff 0.1\n")
+    else:
+        bamToPeaks.write(" BAM -g hs -n test -B -q 0.01\n")
+
+    os.system("chmod 755 fastqToSam")
+    os.system("chmod 755 samToBam")
+    os.system("chmod 755 bamToPeaks")
+    options.outputFile.write("#!/bin/bash -ex\n./fastqToSam\n./samToBam\n./bamToPeaks\n")
+    os.system("chmod 755 " + options.outputFile.name)
+
+if __name__ == "__main__" : 
+    sys.exit(main(sys.argv))

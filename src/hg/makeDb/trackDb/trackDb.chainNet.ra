@@ -3982,6 +3982,58 @@ html chainNet
         type netAlign oviAri1 chainOviAri1
         html chainNet
 
+track chainNetBisBis1
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 240
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb bisBis1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetBisBis1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetBisBis1
+    spectrum on
+
+        track chainBisBis1
+        parent chainNetBisBis1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bisBis1
+        html chainNet
+
+    track chainNetBisBis1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetBisBis1
+
+        track netBisBis1
+        parent chainNetBisBis1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign bisBis1 chainBisBis1
+        html chainNet
+
+
 track chainNetBosTau8
 compositeTrack on
 shortLabel $o_Organism Chain/Net
@@ -4696,6 +4748,57 @@ html chainNet
         type netAlign felCat3 chainFelCat3
         html chainNet
 
+track chainNetManPen1
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 435.3
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb manPen1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetManPen1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetManPen1
+    spectrum on
+
+        track chainManPen1
+        parent chainNetManPen1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain manPen1
+        html chainNet
+
+    track chainNetManPen1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetManPen1
+
+        track netManPen1
+        parent chainNetManPen1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign manPen1 chainManPen1
+        html chainNet
+
 track chainNetCerSim1
 compositeTrack on
 shortLabel $o_Organism Chain/Net
@@ -4746,7 +4849,6 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign cerSim1 chainCerSim1
         html chainNet
-
 
 track chainNetMicMur2
 compositeTrack on

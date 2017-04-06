@@ -181,7 +181,7 @@ if (res < 0)
                 // Check the value returned...
                 if (valOpt)
                     {
-                    warn("Error in TCP non-blocking connect() %d - %s", valOpt, strerror(valOpt));
+                    warn("Error in TCP non-blocking connect() %d - %s. Host %s port %d.", valOpt, strerror(valOpt), hostName, port);
                     close(sd);
                     return -1;
                     }
@@ -956,7 +956,7 @@ return NULL;
 }
 
 static int netGetOpenFtpSockets(char *url, int *retCtrlSd)
-/* Return a socket descriptor for url data (url can end in ";byterange:start-end",
+/* Return a socket descriptor for url data (url can end in ";byterange:start-end)",
  * or -1 if error.
  * If retCtrlSd is non-null, keep the control socket alive and set *retCtrlSd.
  * Otherwise, create a pipe and fork to keep control socket alive in the child 
@@ -966,10 +966,34 @@ char cmd[256];
 
 /* Parse the URL and connect. */
 struct netParsedUrl npu;
+struct netParsedUrl pxy;
 netParseUrl(url, &npu);
 if (!sameString(npu.protocol, "ftp"))
     errAbort("netGetOpenFtpSockets: url (%s) is not for ftp.", url);
-int sd = openFtpControlSocket(npu.host, atoi(npu.port), npu.user, npu.password);
+
+boolean noProxy = checkNoProxy(npu.host);
+char *proxyUrl = getenv("ftp_proxy");
+if (noProxy)
+    proxyUrl = NULL;
+
+int sd = -1;
+if (proxyUrl)
+    {
+    netParseUrl(proxyUrl, &pxy);
+    if (!sameString(pxy.protocol, "ftp"))
+        errAbort("Unknown proxy protocol %s in %s. Should be ftp.", pxy.protocol, proxyUrl);
+    char proxyUser[4096];
+    safef(proxyUser, sizeof proxyUser, "%s@%s:%s", npu.user, npu.host, npu.port);
+    sd = openFtpControlSocket(pxy.host, atoi(pxy.port), proxyUser, npu.password);
+    char *logProxy = getenv("log_proxy");
+    if (sameOk(logProxy,"on"))
+	verbose(1, "%s as %s via proxy %s\n", url, proxyUser, proxyUrl);
+    }
+else
+    {
+    sd = openFtpControlSocket(npu.host, atoi(npu.port), npu.user, npu.password);
+    }
+
 if (sd == -1)
     return -1;
 
@@ -995,7 +1019,11 @@ if (npu.byteRangeStart != -1)
 safef(cmd,sizeof(cmd),"%s %s\r\n",((npu.file[strlen(npu.file)-1]) == '/') ? "LIST" : "RETR", npu.file);
 sendFtpCommandOnly(sd, cmd);
 
-int sdata = netConnect(npu.host, parsePasvPort(rs->string));
+int sdata = -1;
+if (proxyUrl)
+    sdata = netConnect(pxy.host, parsePasvPort(rs->string));
+else
+    sdata = netConnect(npu.host, parsePasvPort(rs->string));
 dyStringFree(&rs);
 if (sdata < 0)
     {
@@ -1037,7 +1065,7 @@ else
     {
     /* Because some FTP servers will kill the data connection
      * as soon as the control connection closes,
-     * we have to develop a workaround using a partner process. */
+     * we have to develop a workaround using a partner thread. */
     fflush(stdin);
     fflush(stdout);
     fflush(stderr);
@@ -1062,7 +1090,7 @@ else
 }
 
 
-int connectNpu(struct netParsedUrl npu, char *url)
+int connectNpu(struct netParsedUrl npu, char *url, boolean noProxy)
 /* Connect using NetParsedUrl. */
 {
 int sd = -1;
@@ -1072,7 +1100,7 @@ if (sameString(npu.protocol, "http"))
     }
 else if (sameString(npu.protocol, "https"))
     {
-    sd = netConnectHttps(npu.host, atoi(npu.port));
+    sd = netConnectHttps(npu.host, atoi(npu.port), noProxy);
     }
 else
     {
@@ -1096,6 +1124,22 @@ if (!sameString(npu.user,""))
     }
 }
 
+boolean checkNoProxy(char *host)
+/* See if host endsWith element on no_proxy list. Elements are comma-separated. */
+{
+char *list = cloneString(getenv("no_proxy"));
+if (!list)
+    return FALSE;
+replaceChar(list, ',', ' ');
+char *word;
+while((word=nextWord(&list)))
+    {
+    if (endsWith(host, word))
+	return TRUE;
+    }
+return FALSE;
+}
+
 int netHttpConnect(char *url, char *method, char *protocol, char *agent, char *optionalHeader)
 /* Parse URL, connect to associated server on port, and send most of
  * the request to the server.  If specified in the url send user name
@@ -1113,16 +1157,25 @@ int sd = -1;
 /* Parse the URL and connect. */
 netParseUrl(url, &npu);
 
+boolean noProxy = checkNoProxy(npu.host);
 char *proxyUrl = getenv("http_proxy");
-
+if (sameString(npu.protocol, "https"))
+    proxyUrl = NULL;
+if (noProxy)
+    proxyUrl = NULL;
 if (proxyUrl)
     {
     netParseUrl(proxyUrl, &pxy);
-    sd = connectNpu(pxy, url);
+    if (!sameString(pxy.protocol, "http"))
+	errAbort("Unknown proxy protocol %s in %s.", pxy.protocol, proxyUrl);
+    sd = connectNpu(pxy, url, noProxy);
+    char *logProxy = getenv("log_proxy");
+    if (sameOk(logProxy,"on"))
+	verbose(1, "%s via proxy %s\n", url, proxyUrl);
     }
 else
     {
-    sd = connectNpu(npu, url);
+    sd = connectNpu(npu, url, noProxy);
     }
 if (sd < 0)
     return -1;
@@ -1241,30 +1294,14 @@ return netUrlHeadExt(url, "HEAD", hash);
 }
 
 
-long long netUrlSizeByRangeResponse(char *url)
-/* Use byteRange as a work-around alternate method to get file size (content-length).  
- * Return negative number if can't get. */
+int netUrlFakeHeadByGet(char *url, struct hash *hash)
+/* Use GET with byteRange as an alternate method to HEAD. 
+ * Return status. */
 {
-long long retVal = -1;
 char rangeUrl[MAXURLSIZE];
 safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=0-0", url);
-struct hash *hash = newHash(0);
 int status = netUrlHeadExt(rangeUrl, "GET", hash);
-if (status == 206)
-    { 
-    char *rangeString = hashFindValUpperCase(hash, "Content-Range:");
-    if (rangeString)
-	{
- 	/* input pattern: Content-Range: bytes 0-99/2738262 */
-	char *slash = strchr(rangeString,'/');
-	if (slash)
-	    {
-	    retVal = atoll(slash+1);
-	    }
-	}
-    }
-hashFree(&hash);
-return retVal;
+return status;
 }
 
 

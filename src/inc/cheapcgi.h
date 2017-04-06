@@ -311,14 +311,11 @@ void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg);
 void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id);
 /* Make check box, which includes an ID. */
 
-void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript);
-/* Make check box with javascript */
+void cgiMakeCheckBoxMore(char *name, boolean checked, char *moreHtml);
+/* Make check box with moreHtml */
 
 void cgiMakeCheckBoxEnabled(char *name, boolean checked, boolean enabled);
 /* Make check box, optionally enabled/disabled. */
-
-void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript);
-/* Make check box with ID and javascript. */
 
 void cgiMakeCheckBoxIdAndMore(char *name, boolean checked, char *id, char *moreHtml);
 /* Make check box with ID and extra (non-javascript) html. */

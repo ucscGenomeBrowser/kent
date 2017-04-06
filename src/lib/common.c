@@ -1589,6 +1589,20 @@ for (;;)
 return s;
 }
 
+void replaceChar(char *s, char old, char new)
+/* Repace one char with another. Modifies original string. */
+{
+if (!s)
+    return;
+char c;
+while((c=*s))
+    {
+    if (c == old)
+       *s = new;	
+    ++s;
+    }
+}
+
 char *replaceChars(char *string, char *old, char *new)
 /*
   Replaces the old with the new. The old and new string need not be of equal size

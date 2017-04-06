@@ -2008,6 +2008,10 @@ if ((startsWith("http://", url)
    || startsWith("ftp://", url)))
 return TRUE;
 
+// we allow bigDataUrl's to point to trash
+if (startsWith(trashDir(), url))
+    return TRUE;
+
 char *prefix = cfgOption("udc.localDir");
 if (prefix == NULL)
     {

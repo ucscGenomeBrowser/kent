@@ -523,34 +523,59 @@ manPen1.perChromTables = no
     # 1192725744 bases of 1192725744 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (DONE - 2015-03-10 - Hiram)
-    hgsql -N -e "select frag from gold;" manPen1 | sort | head -1
-JPYT01000001.1
+# fixup search rule for assembly track/gold table (DONT - 2017-03-28 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/pangolin/manPen1
 
-    hgsql -N -e "select frag from gold;" manPen1 | sort | tail -2
-JPYT01792165.1
-NC_012346.1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" manPen1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
+#  230927 JPTV.1
+#       1 NC_
 
-    # verify this rule will find them all or eliminate them all:
+    # implies a rule: '[JN][CP][T_][V0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" manPen1 | wc -l
-    # 792166
+    # 230928
 
     hgsql -N -e "select frag from gold;" manPen1 \
-       | egrep -e '[JN][PC][Y_][T0][0-9]+(\.1)?' | wc -l
-    # 792166
+       | egrep -e '[JN][CP][T_][V0-9]+(\.[0-9]+)?' | wc -l
+    # 230928
 
     hgsql -N -e "select frag from gold;" manPen1 \
-       | egrep -v -e '[JN][PC][Y_][T0][0-9]+(\.1)?' | wc -l
+       | egrep -v -e '[JN][CP][T_][V0-9]+(\.[0-9]+)?' | wc -l
     # 0
 
-    # hence, add to trackDb/tarsier/manPen1/trackDb.ra
+    # hence, add to trackDb/chicken/manPen1/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [JN][PC][Y_][T0][0-9]+(\.1)?
+termRegex [JN][CP][T_][V0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
-#########################################################################
+    # verify searches work in the position box
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-03-22 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("manPen1", "blat1b", "17878", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("manPen1", "blat1b", "17879", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MAOA gene (Monoamine Oxidase A from monDom5)
+##  (DONE - 2017-03-22 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="KN007563:109071-158662"
+	where name="manPen1";' hgcentraltest
+
+############################################################################
 # all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output

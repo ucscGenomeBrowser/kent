@@ -149,13 +149,6 @@ if (!suppressHtml)
     cgiMakeCheckBox(varName, checked);
 }
 
-void hCheckBoxJS(char *varName, boolean checked, char *javascript)
-/* Make check box if not suppressed, with javascript. */
-{
-if (!suppressHtml)
-    cgiMakeCheckBoxJS(varName, checked, javascript);
-}
-
 void hDropListClassWithStyle(char *name, char *menu[], int menuSize, 
                                 char *checked, char *class, char *style)
 /* Make a drop-down list with names if not suppressed, 

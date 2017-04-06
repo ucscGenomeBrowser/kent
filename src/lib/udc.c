@@ -36,7 +36,9 @@
 #include "udc.h"
 #include "hex.h"
 #include <dirent.h>
+#ifdef USE_SSL
 #include <openssl/sha.h>
+#endif
 
 /* The stdio stream we'll use to output statistics on file i/o.  Off by default. */
 FILE *udcLogStream = NULL;
@@ -483,8 +485,10 @@ int status;
 while (TRUE)
     {
     hash = newHash(0);
-    status = netUrlHead(url, hash);
-    if (status == 200)
+    // Avoiding HEAD makes it easier to work with HIPPAA compliant signed AmazonS3 URLs.
+    // In part because the URL generated for GET cannot be used with HEAD.
+    status = netUrlFakeHeadByGet(url, hash);
+    if (status == 206)
 	break;
     if (status != 301 && status != 302)  
 	return FALSE;
@@ -500,21 +504,15 @@ while (TRUE)
     hashFree(&hash);
     }
 
-char *sizeString = hashFindValUpperCase(hash, "Content-Length:");
-if (sizeString == NULL)
+char *rangeString = hashFindValUpperCase(hash, "Content-Range:");
+if (rangeString)
     {
-    /* try to get remote file size by an alternate method */
-    long long retSize = netUrlSizeByRangeResponse(url);
-    if (retSize < 0)
+    /* input pattern: Content-Range: bytes 0-99/2738262 */
+    char *slash = strchr(rangeString,'/');
+    if (slash)
 	{
-    	hashFree(&hash);
-	errAbort("No Content-Length: returned in header for %s, can't proceed, sorry", url);
+	retInfo->size = atoll(slash+1);
 	}
-    retInfo->size = retSize;
-    }
-else
-    {
-    retInfo->size = atoll(sizeString);
     }
 
 char *lastModString = hashFindValUpperCase(hash, "Last-Modified:");
@@ -529,6 +527,7 @@ if (lastModString == NULL)
 	errAbort("No Last-Modified: or Date: returned in header for %s, can't proceed, sorry", url);
 	}
     }
+
 struct tm tm;
 time_t t;
 // Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT
