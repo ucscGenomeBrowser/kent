@@ -1807,6 +1807,7 @@ else
     mainPageAfterOpen(conn);
     hFreeConn(&conn);
     webPopErrHandlers();
+    htmlClose();
     }
 
 textOutClose(&compressPipeline, &saveStdout);

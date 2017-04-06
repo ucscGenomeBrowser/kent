@@ -551,17 +551,17 @@ searchPriority 8
         -swap -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    42m21.629s
+    #  real    28m54.570s
 
     cat fb.xenLae2.chainHg38Link.txt
     # 114726989 bases of 2408724787 (4.763%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenLae2 hg38) \
       > rbest.log 2>&1
-    # real    296m23.384s
+    # real    712m34.326s
 
 #########################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2017-03-30 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2017-03-30 - Hiram)
 
     # original alignment
 
@@ -574,18 +574,24 @@ searchPriority 8
     cd /hive/data/genomes/xenLae2/bed/blastz.mm10.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    71m4.702s
+	/hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    #	real    26m14.884s
+    # forgot the syntenicNet
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzXenLae2.2017-03-29/DEF \
+        -continue=syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+	-bigClusterHub=ku -syntenicNet -swap -chainMinScore=5000 \
+	-chainLinearGap=loose) > syntenicNet.log 2>&1 &
+    # real    1m52.642s
 
     cat fb.xenLae2.chainMm10Link.txt
-    # 905011854 bases of 2386321975 (37.925%) in intersection
+    # 116001603 bases of 2408724787 (4.816%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenLae2 mm10) \
        > rbest.log 2>&1
-    # real    508m58.716s
+    # real    746m4.542s
 
 #############################################################################
 # Create kluster run files (DONE - 2017-03-29 - Hiram)
@@ -626,7 +632,7 @@ searchPriority 8
     #    -bedFile=jkStuff/nonBridged.bed
 
 #########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-03-05 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-04-05 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -667,13 +673,13 @@ xenLae2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial xenLae2
-    # logFile: var/build/logs/2017.03.30-16:25:11.xenLae2.initalign.log
-XXX - running - Thu Mar 30 16:25:21 PDT 2017
-    #   about 13 hours
+    # logFile: var/build/logs/2017.04.03-15:27:22.xenLae2.initalign.log
+    # real    1307m39.971s
 
-    tail -2 var/build/logs/2017.03.05-06:50:23.xenLae2.initalign.log
-    #	hgwdev 2017.03.05-19:11:13 xenLae2.initalign: Succeeded: xenLae2
-    #	hgwdev 2017.03.05-19:11:50 xenLae2.initalign: finish
+
+    tail -2 var/build/logs/2017.04.03-15:27:22.xenLae2.initalign.log
+# hgwdev 2017.04.04-13:14:01 xenLae2.initalign: Succeeded: xenLae2
+# hgwdev 2017.04.04-13:15:02 xenLae2.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.xenLae2
@@ -682,11 +688,11 @@ XXX - running - Thu Mar 30 16:25:21 PDT 2017
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad xenLae2
-    # logFile: var/dbload/hgwdev/logs/2017.03.05-19:53:15.xenLae2.dbload.log
-    #  about 13 minutes
+    # logFile: var/dbload/hgwdev/logs/2017.04.04-13:15:52.xenLae2.dbload.log
+    #  real    174m9.891s
 
-    tail -1 var/dbload/hgwdev/logs/2017.03.05-19:53:15.xenLae2.dbload.log
-    #  hgwdev 2017.03.05-20:06:56 xenLae2.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2017.04.04-13:15:52.xenLae2.dbload.log
+    #  hgwdev 2017.04.04-16:10:02 xenLae2.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -694,7 +700,7 @@ XXX - running - Thu Mar 30 16:25:21 PDT 2017
     # add xenLae2 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding xenLae2 to the update alignments refs #18984' etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding xenLae2 to the update alignments refs #17435' etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -745,11 +751,11 @@ XXX - running - Thu Mar 30 16:25:21 PDT 2017
     #	test it with some sequence
 
 ############################################################################
-## reset default position to same as micMur2
-##  (TBD - 2017-03-07 - Hiram)
+## reset default position to same region as xenTro9
+##  (DONE - 2017-04-05 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr17:30720951-30776185"
+    hgsql -e 'update dbDb set defaultPos="chr9_10L:104687822-104704936"
 	where name="xenLae2";' hgcentraltest
 
 #########################################################################

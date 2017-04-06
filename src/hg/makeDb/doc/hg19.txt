@@ -31876,7 +31876,7 @@ EOF
 
 
 ##############################################################################
-# SNP149 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (IN PROGRESS 3/24/17 angie)
+# SNP149 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 3/24/17 angie)
     # Redmine #17209
     screen -S ortho -t ortho
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 149 -debug
@@ -31884,12 +31884,11 @@ EOF
     cd /hive/data/genomes/hg19/bed/snp149Ortho.2017-03-24
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 149 \
       >>& do.log & tail -f do.log
-#TODO
 # *** All done!
 
 
 ##############################################################################
-# SNPMASKED SEQUENCE FOR SNP149 (IN PROGRESS 3/24/17 angie)
+# SNPMASKED SEQUENCE FOR SNP149 (DONE 3/24/17 angie)
     # Redmine #17209
     screen -S mask -t mask
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 149 -debug
@@ -31897,7 +31896,6 @@ EOF
     cd /hive/data/genomes/hg19/snp149Mask.2017-03-24
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 149 \
       >>& do.log & tail -f do.log
-#TODO
 # *** All done!
 
 

@@ -13186,7 +13186,7 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 xenLae2) \
          > rbest.log 2>&1 &
-XXX - running - Fri Mar 31 00:02:21 PDT 2017
+    # real    656m46.337s
 
     #	and for the swap
     mkdir /hive/data/genomes/xenLae2/bed/blastz.mm10.swap
@@ -13208,6 +13208,6 @@ XXX - running - Fri Mar 31 00:02:21 PDT 2017
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenLae2 mm10) \
          > rbest.log 2>&1 &
-XXX - running - Fri Mar 31 00:02:21 PDT 2017
+    # real    746m4.542s
 
 #########################################################################

@@ -1,5 +1,6 @@
 
 track chainNetXenTro7 override
+visibility squish
 priority 200.3
 chainLinearGap loose
 chainMinScore 1000

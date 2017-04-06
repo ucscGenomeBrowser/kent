@@ -61,7 +61,7 @@ var suggestBox = {
         var lastSelected = null; // this is the last value entered by the user via a suggestion (used to distinguish manual entry in the same field)
         var waterMark;
         if (assemblySupportsGeneSuggest) {
-            waterMark = "enter position, gene symbol or search terms";
+            waterMark = "enter position, gene symbol, HGVS or search terms";
         } else {
             waterMark = "enter position or search terms";
         }
