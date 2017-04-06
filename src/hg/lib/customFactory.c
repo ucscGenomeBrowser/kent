@@ -2105,7 +2105,26 @@ static struct customFactory bigWigFactory =
     bigWigLoader,
     };
 
+static boolean barChartRecognizer(struct customFactory *fac,
+        struct customPp *cpp, char *type,
+        struct customTrack *track)
+/* Return TRUE if looks like we're handling a barChart track */
+{
+return sameOk(type, fac->name);
+}
+
+struct customFactory barChartFactory =
+/* Factory for barChart tracks */
+    {
+    NULL,
+    "barChart",
+    barChartRecognizer,
+    bedLoader,
+    };
+
 /*** Big Bed Factory - for big client-side BED tracks ***/
+
+// KRR FIX ?
 
 static boolean bigMafRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
@@ -2126,7 +2145,7 @@ return (sameType(type, "bigChain"));
 static boolean longTabixRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
-/* Return TRUE if looks like we're handling a bigPsl track */
+/* Return TRUE if looks like we're handling a longTabix track */
 {
 return (sameType(type, "longTabix"));
 }
@@ -2134,7 +2153,7 @@ return (sameType(type, "longTabix"));
 static boolean bedTabixRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
-/* Return TRUE if looks like we're handling a bigPsl track */
+/* Return TRUE if looks like we're handling a bedTabix track */
 {
 return (sameType(type, "bedTabix"));
 }
@@ -2145,6 +2164,14 @@ static boolean bigPslRecognizer(struct customFactory *fac,
 /* Return TRUE if looks like we're handling a bigPsl track */
 {
 return (sameType(type, "bigPsl"));
+}
+
+static boolean bigBarChartRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigBarChart track */
+{
+return (sameType(type, "bigBarChart"));
 }
 
 static boolean bigGenePredRecognizer(struct customFactory *fac,
@@ -2158,7 +2185,7 @@ return (sameType(type, "bigGenePred"));
 static boolean bigBedRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
-/* Return TRUE if looks like we're handling a wig track */
+/* Return TRUE if looks like we're handling a bigBed track */
 {
 return (sameType(type, "bigBed"));
 }
@@ -2247,7 +2274,7 @@ return track;
 }
 
 static struct customFactory longTabixFactory =
-/* Factory for bigMaf tracks */
+/* Factory for longTabix tracks */
     {
     NULL,
     "longTabix",
@@ -2256,7 +2283,7 @@ static struct customFactory longTabixFactory =
     };
 
 static struct customFactory bedTabixFactory =
-/* Factory for bigMaf tracks */
+/* Factory for bedTabix tracks */
     {
     NULL,
     "bedTabix",
@@ -2291,6 +2318,15 @@ static struct customFactory bigGenePredFactory =
     bigBedLoader,
     };
 
+static struct customFactory bigBarChartFactory =
+/* Factory for bigBarChart tracks */
+    {
+    NULL,
+    "bigBarChart",
+    bigBarChartRecognizer,
+// KRR TODO: custom loader
+    bigBedLoader,
+    };
 
 static struct customFactory bigBedFactory =
 /* Factory for bigBed tracks */
@@ -2781,6 +2817,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &vcfTabixFactory);
     slAddTail(&factoryList, &makeItemsFactory);
     slAddTail(&factoryList, &bigDataOopsFactory);
+    slAddTail(&factoryList, &bigBarChartFactory);
     }
 }
 

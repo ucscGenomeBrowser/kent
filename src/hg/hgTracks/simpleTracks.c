@@ -7792,6 +7792,7 @@ static void bedLoadItemByQueryWhere(struct track *tg, char *table, char *query,
 /* Generic itg->item loader, adding extra clause to hgRangeQuery if query is NULL
  * and extraWhere is not NULL */
 {
+// KATE TODO: Add bigBed query ?
 struct sqlConnection *conn = hAllocConn(database);
 int rowOffset = 0;
 struct sqlResult *sr = NULL;
@@ -7832,7 +7833,6 @@ void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
 {
 bedLoadItemByQuery(tg, table, NULL, loader);
 }
-
 
 void atomDrawSimpleAt(struct track *tg, void *item,
                       struct hvGfx *hvg, int xOff, int y,
@@ -13823,6 +13823,12 @@ else if (sameWord(type, "bigMaf"))
     track->isBigBed = TRUE;
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "bigBarChart"))
+    {
+    tdb->canPack = TRUE;
+    track->isBigBed = TRUE;
+    barChartMethods(track);
     }
 else if (sameWord(type, "bigPsl"))
     {

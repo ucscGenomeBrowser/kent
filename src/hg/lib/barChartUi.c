@@ -222,9 +222,13 @@ void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char 
 {
 
 jsIncludeFile("barChart.js", NULL);
+// FIXME: isPopup can't be global
 if (cartVarExists(cart, "ajax"))
     isPopup = TRUE;
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+// KRR FIX: another candidate for table lookup ?
+if (startsWith("big", tdb->type))
+    labelCfgUi(database, cart, tdb);
 printf("\n<table id=barChartControls style='font-size:%d%%' %s>\n<tr><td>", 
         isPopup ? 75 : 100, boxed ?" width='100%'":"");
 

@@ -8,6 +8,7 @@
 #include "bed.h"
 #include "hvGfx.h"
 #include "spaceSaver.h"
+#include "hubConnect.h"
 #include "barChartBed.h"
 #include "barChartCategory.h"
 #include "barChartUi.h"
@@ -249,8 +250,7 @@ extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, BAR_CHA
 extras->unit = trackDbSettingClosestToHomeOrDefault(tg->tdb, BAR_CHART_UNIT, "");
 
 /* Get bed (names and all-sample category median scores) in range */
-char *filter = getScoreFilterClause(cart, tg->tdb, NULL);
-bedLoadItemWhere(tg, tg->table, filter, (ItemLoader)barChartBedLoad);
+loadSimpleBedWithLoader(tg, (bedItemLoader)barChartBedLoad);
 
 /* Create itemInfo items with BED and geneModels */
 struct barChartItem *itemInfo = NULL, *list = NULL;
@@ -806,6 +806,8 @@ return bed->name;
 void barChartMethods(struct track *tg)
 /* Bar Chart track type: draw fixed width chart of colored bars over a BED item */
 {
+// TODO: derive this from AS or trackDb ?
+tg->bedSize = 8;
 bedMethods(tg);
 tg->canPack = TRUE;
 tg->drawItemAt = barChartDrawAt;

@@ -17,20 +17,42 @@
 #include "barChartSample.h"
 #include "barChartUi.h"
 
-static struct barChartBed *getBarChart(char *item, char *chrom, int start, int end, char *track)
-/* Retrieve barChart BED item from the main track table */
+// TODO: Consider moving these to lib/{barChartBed,bigBarChart}.c
+
+static struct barChartBed *getBarChartFromFile(char *item, char *chrom, int start, int end, 
+                                                        char *file)
+/* Retrieve barChart BED item from big file */
+{
+struct bbiFile *bbi = bigBedFileOpen(file);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    char startBuf[16], endBuf[16];
+    char *bedRow[32];
+    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    struct barChartBed *barChart = barChartBedLoad(bedRow);
+    if (sameString(barChart->name, item))
+        return barChart;
+    }
+return NULL;
+}
+
+static struct barChartBed *getBarChartFromTable(char *item, char *chrom, int start, int end, 
+                                                        char *table)
+/* Retrieve barChart BED item from track table */
 {
 struct barChartBed *barChart = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 char **row;
 char query[512];
 struct sqlResult *sr;
-if (sqlTableExists(conn, track))
+if (sqlTableExists(conn, table))
     {
     sqlSafef(query, sizeof query, 
                 "SELECT * FROM %s WHERE name='%s'"
                     "AND chrom='%s' AND chromStart=%d AND chromEnd=%d", 
-                                track, item, chrom, start, end);
+                                table, item, chrom, start, end);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -40,6 +62,19 @@ if (sqlTableExists(conn, track))
     sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
+return barChart;
+}
+
+static struct barChartBed *getBarChart(char *item, char *chrom, int start, int end, 
+                                                        struct trackDb *tdb)
+/* Retrieve barChart BED item from track */
+{
+struct barChartBed *barChart = NULL;
+char *file = trackDbSetting(tdb, "bigDataUrl");
+if (file != NULL)
+    barChart = getBarChartFromFile(item, chrom, start, end, file);
+else
+    barChart = getBarChartFromTable(item, chrom, start, end, tdb->table);
 return barChart;
 }
 
@@ -154,7 +189,7 @@ void doBarChartDetails(struct trackDb *tdb, char *item)
 {
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-struct barChartBed *chartItem = getBarChart(item, seqName, start, end, tdb->table);
+struct barChartBed *chartItem = getBarChart(item, seqName, start, end, tdb);
 if (chartItem == NULL)
     errAbort("Can't find item %s in barChart table %s\n", item, tdb->table);
 

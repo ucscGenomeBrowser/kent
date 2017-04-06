@@ -26560,7 +26560,8 @@ else if (tdb != NULL && startsWithWord("vcf", tdb->type))
     {
     doVcfDetails(tdb, item);
     }
-else if (tdb != NULL && sameWord("barChart", tdb->type))
+else if (tdb != NULL && 
+        (startsWithWord("barChart", tdb->type) || startsWithWord("bigBarChart", tdb->type)))
     {
     doBarChartDetails(tdb, item);
     }

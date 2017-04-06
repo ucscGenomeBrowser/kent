@@ -215,10 +215,12 @@ static boolean packableType(char *type)
 {
 char *t = cloneString(type);
 char *s = firstWordInLine(t);
+// KRR FIX - lookup bigs from table
 boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bed", s) || sameString("genePred", s) ||
 		   sameString("bigBed", s) || sameString("makeItems", s) ||
 		   sameString("bigMaf", s) || sameString("bigGenePred", s) || 
+		   sameString("bigBarChart", s) || sameString("bigGenePred", s) || 
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
                    sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
@@ -712,7 +714,7 @@ else if (sameWord("vcfTabix",type) || sameWord("vcf", type))
     cType = cfgVcf;
 else if (sameWord("halSnake",type))
     cType = cfgSnake;
-else if (sameWord("barChart",type))
+else if (sameWord("barChart", type) || sameWord("bigBarChart", type))
     cType = cfgBarChart;
 // TODO: Only these are configurable so far
 
