@@ -3186,6 +3186,23 @@ var rightClick = {
             }
             // Add view image at end
             o = {};
+            o[ " Sort by expression level "] = {
+                onclick: function(menuItemClicked, menuObject) {
+                    rightClick.hit(menuItemClicked, menuObject, "viewImg");
+                    return true; }
+            };
+            menu.push(o);
+
+            o = {};
+            o[ " Sort by similarity "] = {
+                onclick: function(menuItemClicked, menuObject) {
+                    rightClick.hit(menuItemClicked, menuObject, "viewImg");
+                    return true; }
+            };
+            menu.push(o);
+
+
+            o = {};
             o[rightClick.makeImgTag("eye.png") + " View image"] = {
                 onclick: function(menuItemClicked, menuObject) {
                     rightClick.hit(menuItemClicked, menuObject, "viewImg");

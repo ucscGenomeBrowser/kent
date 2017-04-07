@@ -191,6 +191,10 @@ var AddDataSource = React.createClass({
             <div>
               <div className='boldText sectionRow'>
                 Add Data Source
+              <div className='sectionRow'>
+                <input type='button' value='Add all visibile wiggles' 
+                onClick={this.onGetOutput} />
+              </div>
               </div>
               <LabeledSelectRow descriptors={addDsInfo.get('menus')}
                                 path={path.concat('addDsMenuSelect')}

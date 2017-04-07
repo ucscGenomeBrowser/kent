@@ -5472,8 +5472,8 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
         tdbSortPrioritiesFromCart(cart, &(tdb->subtracks));
 	if (trackDbLocalSetting(tdb, "compositeTrack"))
-	    makeCompositeTrack(track, tdb);
-	else if (trackDbLocalSetting(tdb, "container"))
+	    makeCompositeTrack(track, tdb); 
+        else if (trackDbLocalSetting(tdb, "container"))
 	    makeContainerTrack(track, tdb);
         }
     else
@@ -8095,8 +8095,21 @@ if (!hideControls)
                     idText, indicatorImg, indicator,isOpen?"Collapse":"Expand");
 	    jsOnEventByIdF("click", idText, "return vis.toggleForGroup(this, '%s');", group->name);
 
+            if (isHubTrack(group->name))
+		{
+                if (strstr(group->label, "Composite"))
+                    {
+                    hPrintf("</td><td style='text-align:left;'>\n");
+                    safef(idText, sizeof idText, "%s_sortExpression", group->name);
+                    hPrintf("<input name=\"hubSortExpButton\" id='%s'"
+                        " type=\"button\" value=\"sort by expression\">\n", idText);
+                    safef(idText, sizeof idText, "%s_edit", group->name);
+                    hPrintf("<input name=\"hubSortSimButton\" id='%s'"
+                        " type=\"button\" value=\"sort by similarity\">\n", idText);
+                    }
+                }
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
-            hPrintf("</td><td style='text-align:right;'>\n");
+            hPrintf("</td><td style='text-align:left;'>\n");
             if (isHubTrack(group->name))
 		{
                 if (strstr(group->label, "Composite"))
