@@ -194,7 +194,7 @@ md5sum.txt - checksums of files in this directory
 ------------------------------------------------------------------
 If you plan to download a large file or multiple files from this
 directory, we recommend that you use ftp rather than downloading the
-files via our website. To do so, ftp to hgdownload.cse.ucsc.edu
+files via our website. To do so, ftp to hgdownload.soe.ucsc.edu
 [username: anonymous, password: your email address], then cd to the
 directory goldenPath/$db/bigZips. To download multiple files, use
 the "mget" command:
@@ -206,17 +206,17 @@ the "mget" command:
 Alternate methods to ftp access.
 
 Using an rsync command to download the entire directory:
-    rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/snp${buildNum}Mask/ .
+    rsync -avzP rsync://hgdownload.soe.ucsc.edu/goldenPath/$db/snp${buildNum}Mask/ .
 For a single file, e.g. chr1.subst.fa.gz
     rsync -avzP \
-        rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/snp${buildNum}Mask/chr1.subst.fa.gz .
+        rsync://hgdownload.soe.ucsc.edu/goldenPath/$db/snp${buildNum}Mask/chr1.subst.fa.gz .
 
 Or with wget, all files:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/snp${buildNum}Mask/*'
+        'ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/snp${buildNum}Mask/*'
 With wget, a single file:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/snp${buildNum}Mask/chr1.subst.fa.gz' \
+        'ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/snp${buildNum}Mask/chr1.subst.fa.gz' \
         -O chr1.subst.fa.gz
 
 To uncompress the fa.gz files:
