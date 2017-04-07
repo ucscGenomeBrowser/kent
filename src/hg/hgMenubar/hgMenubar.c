@@ -41,6 +41,8 @@ char *newPath = makeRelativePath(pagePath, cgiContainerPath);
 
 char *newHref = catTwoStrings("href=\"", newPath);
 
+printf("Content-Type:text-html\r\n\r\n");
+
 if (sameString(filePath, NAVBAR_INC_PATH))
     printIncludes(newPath);
 
