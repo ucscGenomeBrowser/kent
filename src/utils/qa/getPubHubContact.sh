@@ -91,7 +91,6 @@ then
 		# If email is empty, then wget failed or hub is down
 		if [[ $email == "" ]]
 		then
-			echo "here2"
 			# Attempt to get hub.txt file w/ curl
 			curl --retry 5 $url -o $hubFile  &> /dev/null || true
 			# Extract email from hub.txt file we saved
