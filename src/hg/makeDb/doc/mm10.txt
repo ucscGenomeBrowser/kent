@@ -13211,3 +13211,74 @@ TMPDIR=/dev/shm
     # real    746m4.542s
 
 #########################################################################
+# lastz turtle chrPic2 (DONE - 2017-04-05 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10ChrPic2
+    mkdir /hive/data/genomes/mm10/bed/lastzChrPic2.2017-04-05
+    cd /hive/data/genomes/mm10/bed/lastzChrPic2.2017-04-05
+
+    printf '# Mouse vs. turtle
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: turtle chrPic2
+SEQ2_DIR=/hive/data/genomes/chrPic2/chrPic2.2bit
+SEQ2_LEN=/hive/data/genomes/chrPic2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=300
+
+BASE=/hive/data/genomes/mm10/bed/lastzChrPic2.2017-04-05
+TMPDIR=/dev/shm
+' > DEF
+
+     time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1 &
+    #	real    865m16.816s
+
+    # ku difficulties due to /dev/shm/ being full, continuing:
+     time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+     -continue=cat -chainMinScore=5000 -chainLinearGap=loose) > cat.log 2>&1 &
+    # real    13m13.959s
+
+    # one big chain causing trouble, continuing:
+     time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+     -continue=chainMerge -chainMinScore=5000 -chainLinearGap=loose) > chainMerge.log 2>&1 &
+    # real    11m47.232s
+
+    cat fb.mm10.chainChrPic2Link.txt
+    #	112560591 bases of 2652783500 (4.243%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 chrPic2) \
+         > rbest.log 2>&1 &
+    # real    114m27.445s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/chrPic2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/chrPic2/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzChrPic2.2017-04-05/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #	real    12m2.676s
+
+    cat  fb.chrPic2.chainMm10Link.txt
+    #	106063993 bases of 2173204089 (4.881%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` chrPic2 mm10) \
+         > rbest.log 2>&1 &
+    # real    110m9.546s
+
+#########################################################################

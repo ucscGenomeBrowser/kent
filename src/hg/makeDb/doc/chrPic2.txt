@@ -562,3 +562,27 @@ searchPriority 8
     # note: this rule is already in trackDb/turtle/trackDb.ra
 
 #########################################################################
+# lastz chainNet swap mm10/mouse (DONE - 2017-04-06 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/mm10/bed/lastzChrPic2.2017-04-05
+    cat fb.mm10.chainChrPic2Link.txt
+    #	112560591 bases of 2652783500 (4.243%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/chrPic2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/chrPic2/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzChrPic2.2017-04-05/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #	real    12m2.676s
+
+    cat  fb.chrPic2.chainMm10Link.txt
+    #	106063993 bases of 2173204089 (4.881%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` chrPic2 mm10) \
+         > rbest.log 2>&1 &
+    # real    110m9.546s
+
+#########################################################################

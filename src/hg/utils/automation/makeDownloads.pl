@@ -648,7 +648,7 @@ table schema" link on the configuration page for each track.
 ---------------------------------------------------------------
 If you plan to download a large file or multiple files from this
 directory, we recommend you use ftp rather than downloading the files
-via our website. To do so, ftp to hgdownload.cse.ucsc.edu, then go to
+via our website. To do so, ftp to hgdownload.soe.ucsc.edu, then go to
 the directory goldenPath/$db/database/. To download multiple
 files, use the "mget" command:
 
@@ -659,17 +659,17 @@ files, use the "mget" command:
 Alternate methods to ftp access.
 
 Using an rsync command to download the entire directory:
-    rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/database/ .
+    rsync -avzP rsync://hgdownload.soe.ucsc.edu/goldenPath/$db/database/ .
 For a single file, e.g. gc5Base.txt.gz
     rsync -avzP \
-        rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/database/gc5Base.txt.gz .
+        rsync://hgdownload.soe.ucsc.edu/goldenPath/$db/database/gc5Base.txt.gz .
 
 Or with wget, all files:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/database/*'
+        'ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/database/*'
 With wget, a single file:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/database/gc5Base.txt.gz' \
+        'ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/database/gc5Base.txt.gz' \
         -O gc5Base.txt.gz
 
 To uncompress the *.txt.gz files:
@@ -736,7 +736,7 @@ $db.2bit - contains the complete $organism/$db genome sequence
     from the kent src tree), can be used to extract .fa file(s) from
     this file.  A pre-compiled version of the command line tool can be
     found at:
-        http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/
+        http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/
     See also:
         http://genome.ucsc.edu/admin/git.html
 	http://genome.ucsc.edu/admin/jk-install.html
@@ -880,7 +880,7 @@ _EOF_
 ------------------------------------------------------------------
 If you plan to download a large file or multiple files from this
 directory, we recommend that you use ftp rather than downloading the
-files via our website. To do so, ftp to hgdownload.cse.ucsc.edu
+files via our website. To do so, ftp to hgdownload.soe.ucsc.edu
 [username: anonymous, password: your email address], then cd to the
 directory goldenPath/$db/bigZips. To download multiple files, use
 the "mget" command:
@@ -892,17 +892,17 @@ the "mget" command:
 Alternate methods to ftp access.
 
 Using an rsync command to download the entire directory:
-    rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/ .
+    rsync -avzP rsync://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/ .
 For a single file, e.g. chromFa.tar.gz
     rsync -avzP \
-        rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/chromFa.tar.gz .
+        rsync://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/chromFa.tar.gz .
 
 Or with wget, all files:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/*'
+        'ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/*'
 With wget, a single file:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/chromFa.tar.gz' \
+        'ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/chromFa.tar.gz' \
         -O chromFa.tar.gz
 
 To unpack the *.tar.gz files:
@@ -953,7 +953,7 @@ _EOF_
 ------------------------------------------------------------------
 If you plan to download a large file or multiple files from this
 directory, we recommend that you use ftp rather than downloading the
-files via our website. To do so, ftp to hgdownload.cse.ucsc.edu, then
+files via our website. To do so, ftp to hgdownload.soe.ucsc.edu, then
 go to the directory goldenPath/$db/chromosomes. To download multiple
 files, use the "mget" command:
 
@@ -964,17 +964,17 @@ files, use the "mget" command:
 Alternate methods to ftp access.
 
 Using an rsync command to download the entire directory:
-    rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/ .
+    rsync -avzP rsync://hgdownload.soe.ucsc.edu/goldenPath/$db/chromosomes/ .
 For a single file, e.g. chrM.fa.gz
     rsync -avzP \
-        rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/chrM.fa.gz .
+        rsync://hgdownload.soe.ucsc.edu/goldenPath/$db/chromosomes/chrM.fa.gz .
 
 Or with wget, all files:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/*'
+        'ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/chromosomes/*'
 With wget, a single file:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/chromosomes/chrM.fa.gz' \
+        'ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/chromosomes/chrM.fa.gz' \
         -O chrM.fa.gz
 
 To uncompress the fa.gz files:
@@ -997,7 +997,7 @@ This directory contains the data files required as input to the
 liftOver utility. This tool -- which requires a Linux platform --
 allows the mass conversion of coordinates from one assembly to
 another. The executable file for the utility can be downloaded from
-http://hgdownload.cse.ucsc.edu/admin/exe/
+http://hgdownload.soe.ucsc.edu/admin/exe/
 
 The file names reflect the assembly conversion data contained within
 in the format <db1>To<Db2>.over.chain.gz. For example, a file named
@@ -1009,7 +1009,7 @@ please send a request to the genome mailing list
 
 To download a large file or multiple files from this directory,
 we recommend that you use ftp rather than downloading the files via our
-website. To do so, ftp to hgdownload.cse.ucsc.edu (user: anonymous),
+website. To do so, ftp to hgdownload.soe.ucsc.edu (user: anonymous),
 then cd to goldenPath/$db/liftOver.  To download multiple files,
 use the "mget" command:
 
@@ -1025,18 +1025,18 @@ restrictions regarding data use for these assemblies.
 Alternate methods to ftp access.
 
 Using an rsync command to download the entire directory:
-    rsync -avzP rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/ .
+    rsync -avzP rsync://hgdownload.soe.ucsc.edu/goldenPath/$db/liftOver/ .
 For a single file, e.g. ${db}ToHg19.over.chain.gz
     rsync -avzP \
-        rsync://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg19.over.chain.gz .
+        rsync://hgdownload.soe.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg19.over.chain.gz .
     (Hg19 is merely an example here, not necessarily existing.)
 
 Or with wget, all files:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/*'
+        'ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/liftOver/*'
 With wget, a single file:
     wget --timestamping \
-        'ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg19.over.chain.gz' \
+        'ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/liftOver/${db}ToHg19.over.chain.gz' \
         -O ${db}ToHg19.over.chain.gz
 
 To uncompress the *.chain.gz files:
@@ -1287,7 +1287,7 @@ _EOF_
 if ($stopStep eq 'install') {
 &HgAutomate::verbose(1, <<_EOF_
  *** Please take a look at the downloads for $db using a web browser.
- *** The downloads url is: http://hgdownload-test.cse.ucsc.edu/goldenPath/$db.
+ *** The downloads url is: http://hgdownload-test.soe.ucsc.edu/goldenPath/$db.
  *** Edit each README.txt to resolve any notes marked with "***":
      $topDir/goldenPath/database/README.txt
      $topDir/goldenPath/bigZips/README.txt

@@ -14,6 +14,7 @@ sub usage() {
   printf STDERR "output is to stdout, redirect to file: > description.html\n";
   printf STDERR "photoCredits.txt is a two line tag<tab>string file:\n";
   printf STDERR "tags: photoCreditURL and photoCreditName\n";
+  printf STDERR "use string 'noPhoto' for image and credits when no photo\n";
   exit 255;
 }
 
@@ -103,44 +104,47 @@ if ( ! -s $chromSizes ) {
   printf STDERR "ERROR: can not find '$chromSizes'\n";
   usage;
 }
-if ( ! -s $jpgImage ) {
-  printf STDERR "ERROR: can not find '$jpgImage'\n";
-  usage;
-}
-if ( ! -s $photoCredits ) {
-  printf STDERR "ERROR: can not find '$photoCredits'\n";
-  usage;
+if ($jpgImage ne "noPhoto") {
+  if ( ! -s $jpgImage ) {
+    printf STDERR "ERROR: can not find '$jpgImage'\n";
+    usage;
+  }
+  if ( ! -s $photoCredits ) {
+    printf STDERR "ERROR: can not find '$photoCredits'\n";
+    usage;
+  }
 }
 
 my $photoCreditURL = "";
 my $photoCreditName = "";
-
-printf STDERR "# reading $photoCredits\n";
-open (FH, "<$photoCredits") or die "can not read $photoCredits";
-while (my $line = <FH>) {
-  chomp $line;
-  next if ($line =~ m/^#/);
-  next if (length($line) < 2);
-  my ($tag, $value) = split('\t', $line);
-  if ($tag =~ m/photoCreditURL/) {
-    $photoCreditURL = $value;
-  } elsif ($tag =~ m/photoCreditName/) {
-    $photoCreditName = $value;
-  }
-}
-close (FH);
-
 my $imageSize = "";
 my $imageName = "";
 my $imageWidth = 0;
 my $imageHeight = 0;
 my $imageWidthBorder = 15;
 
-if ( -s $jpgImage ) {
-  $imageSize = `identify $jpgImage | awk '{print \$3}'`;
-  chomp $imageSize;
-  ($imageWidth, $imageHeight) = split('x', $imageSize);
-  $imageName = basename($jpgImage);
+if ($jpgImage ne "noPhoto") {
+  printf STDERR "# reading $photoCredits\n";
+  open (FH, "<$photoCredits") or die "can not read $photoCredits";
+  while (my $line = <FH>) {
+    chomp $line;
+    next if ($line =~ m/^#/);
+    next if (length($line) < 2);
+    my ($tag, $value) = split('\t', $line);
+    if ($tag =~ m/photoCreditURL/) {
+      $photoCreditURL = $value;
+    } elsif ($tag =~ m/photoCreditName/) {
+      $photoCreditName = $value;
+    }
+  }
+  close (FH);
+
+  if ( -s $jpgImage ) {
+    $imageSize = `identify $jpgImage | awk '{print \$3}'`;
+    chomp $imageSize;
+    ($imageWidth, $imageHeight) = split('x', $imageSize);
+    $imageName = basename($jpgImage);
+  }
 }
 
 # transform this path name into a chrom.sizes reference
@@ -308,7 +312,7 @@ To download these data, issue this <em>wget</em> command:
 <pre>
 wget --timestamping -m -nH -x --cut-dirs=5 -e robots=off -np -k \\
    --reject \"index.html*\" -P \"$asmId\" \\
-       http://genome-test.cse.ucsc.edu/hubs/ncbiAssemblies/$asmId/
+       http://genome-test.soe.ucsc.edu/hubs/ncbiAssemblies/$asmId/
 </pre>
 to download the files for this assembly,<br>
 creating the local directory: \"$asmId\"<br>
