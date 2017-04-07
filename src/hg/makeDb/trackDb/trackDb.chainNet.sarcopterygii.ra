@@ -435,7 +435,6 @@ spectrum on
 html chainNet
 
     track chainNetNanPar1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -443,7 +442,6 @@ html chainNet
     spectrum on
 
         track chainNanPar1
-        release alpha
         parent chainNetNanPar1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -452,14 +450,12 @@ html chainNet
         html chainNet
 
     track chainNetNanPar1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetNanPar1
 
         track netNanPar1
-        release alpha
         parent chainNetNanPar1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -609,7 +605,6 @@ spectrum on
 html chainNet
 
     track chainNetXenTro7Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -617,7 +612,6 @@ html chainNet
     spectrum on
 
         track chainXenTro7
-        release alpha
         parent chainNetXenTro7Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -626,14 +620,12 @@ html chainNet
         html chainNet
 
     track chainNetXenTro7Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetXenTro7
 
         track netXenTro7
-        release alpha
         parent chainNetXenTro7Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
