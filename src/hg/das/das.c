@@ -20,7 +20,7 @@
 #include "bed.h"
 #include "genePred.h"
 #include "trackTable.h"
-
+#include "botDelay.h"
 
 
 /* Including the count in the types response can be very slow for large
@@ -75,6 +75,20 @@ else
     return '0';
 }
 
+
+void sendHogMessage(char *hogHost)
+{
+dasHead(DAS_OK, TRUE);
+printf("Your host, %s, has been sending too many requests lately and is "
+       "unfairly loading our site, impacting performance for other users. "
+       "Please contact genome@cse.ucsc.edu to ask that your site "
+       "be reenabled.  Also, please consider downloading sequence and/or "
+       "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
+       hogHost);
+exit(0);
+}
+
+
 void blockHog(char *hogHost, char *hogAddr)
 /* Compare host/addr to those of an abusive client that we want to block. */
 {
@@ -83,14 +97,7 @@ char *raddr = getenv("REMOTE_ADDR");
 if ((rhost != NULL && sameWord(rhost, hogHost)) ||
     (raddr != NULL && sameWord(raddr, hogAddr)))
     {
-    dasHead(DAS_OK, TRUE);
-    printf("Your host, %s, has been sending too many requests lately and is "
-	   "unfairly loading our site, impacting performance for other users. "
-	   "Please contact genome@cse.ucsc.edu to ask that your site "
-	   "be reenabled.  Also, please consider downloading sequence and/or "
-	   "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
-	   hogHost);
-    exit(0);
+    sendHogMessage(hogHost);
     }
 }
 
@@ -1089,6 +1096,14 @@ if (argc == 2)
 #if 0
    blockHog("pix39.systemsbiology.net", "198.107.152.39");
 #endif
+
+int delay = hgBotDelayTimeFrac(0.03);
+if (delay > 2000)
+    {
+    char *hogHost = getenv("REMOTE_ADDR");
+    sendHogMessage(hogHost);
+    }
+sleep1000(delay);
 das(path);
 return 0;
 }
