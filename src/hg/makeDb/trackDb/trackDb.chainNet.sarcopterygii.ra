@@ -2,7 +2,6 @@
 # chrPic2 - Painted turtle - Chrysemys picta bellii - vertebrate - testudines - taxId: 8478
 ################################################################
 track chainNetChrPic2
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -25,7 +24,6 @@ spectrum on
 html chainNet
 
     track chainNetChrPic2Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -33,7 +31,6 @@ html chainNet
     spectrum on
 
         track chainChrPic2
-        release alpha
         parent chainNetChrPic2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -42,14 +39,12 @@ html chainNet
         html chainNet
 
     track chainNetChrPic2Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetChrPic2
 
         track netChrPic2
-        release alpha
         parent chainNetChrPic2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
