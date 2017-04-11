@@ -1107,7 +1107,7 @@ var dragSelect = {
                              "&nbsp;&nbsp;<a href='#' id='hlReset'>Reset</a></p>" + 
                              "<input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
                              "<span style='border:solid 1px #DDDDDD; padding:3px;display:inline-block' id='hlNotShowAgainMsg'>Don't show this again and always zoom with shift.<br>" + 
-                             "Re-enable via the 'configure' menu</span></p>"+ 
+                             "Re-enable via 'View - Configure Browser' (<tt>c then f</tt>)</span></p>"+ 
                              "Selected chromosome position: <span id='dragSelectPosition'></span>");
             dragSelectDialog = $("#dragSelectDialog")[0];
             // reset value
