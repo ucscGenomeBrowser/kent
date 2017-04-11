@@ -797,8 +797,16 @@ if (vis == tvSquish || vis == tvDense)
     }
 }
 
+static char *barChartMapItemName(struct track *tg, void *item)
+/* Return item name for click handler */
+{
+struct barChartItem *chartItem = (struct barChartItem *)item;
+struct bed *bed = (struct bed *)chartItem->bed;
+return bed->name;
+}
+
 static char *barChartItemName(struct track *tg, void *item)
-/* Return item name */
+/* Return item name for labeling */
 {
 struct barChartItem *chartItem = (struct barChartItem *)item;
 struct bed *bed = (struct bed *)chartItem->bed;
@@ -819,7 +827,7 @@ tg->preDrawItems = barChartPreDrawItems;
 tg->loadItems = barChartLoadItems;
 tg->mapItem = barChartMapItem;
 tg->itemName = barChartItemName;
-tg->mapItemName = barChartItemName;
+tg->mapItemName = barChartMapItemName;
 tg->itemHeight = barChartItemHeight;
 tg->itemStart = barChartItemStart;
 tg->itemEnd = barChartItemEnd;
