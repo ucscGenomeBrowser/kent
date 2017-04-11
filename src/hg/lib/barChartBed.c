@@ -12,45 +12,6 @@
 
 char *barChartBedCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,expCount,expScores";
 
-struct barChartBed *barChartBedLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all barChartBed from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with barChartBedFreeList(). */
-{
-struct barChartBed *list = NULL, *el;
-struct sqlResult *sr;
-char **row;
-
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = barChartBedLoad(row);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-return list;
-}
-
-void barChartBedSaveToDb(struct sqlConnection *conn, struct barChartBed *el, char *tableName, int updateSize)
-/* Save barChartBed as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. This function automatically escapes quoted strings for mysql. */
-{
-struct dyString *update = newDyString(updateSize);
-char  *expScoresArray;
-expScoresArray = sqlFloatArrayToString(el->expScores, el->expCount);
-sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,'%s')", 
-	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->expCount,  expScoresArray );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&expScoresArray);
-}
-
 struct barChartBed *barChartBedLoad(char **row)
 /* Load a barChartBed from row fetched with select * from barChartBed
  * from database.  Dispose of this with barChartBedFree(). */
@@ -68,8 +29,7 @@ safecpy(ret->strand, sizeof(ret->strand), row[5]);
 {
 int sizeOne;
 sqlFloatDynamicArray(row[7], &ret->expScores, &sizeOne);
-if (sizeOne != ret->expCount)
-    errAbort("Bad record in barChart track: '%s' has missing category values", ret->name);
+assert(sizeOne == ret->expCount);
 }
 return ret;
 }
@@ -205,6 +165,8 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+#include "basicBed.h"
+
 void barChartBedCreateTable(struct sqlConnection *conn, char *table)
 /* Create barChart format table of given name. */
 {
@@ -227,7 +189,29 @@ sqlSafef(query, sizeof(query),
 sqlRemakeTable(conn, table, query);
 }
 
-float barChartTotalValue(struct barChartBed *bed)
+struct bed *barChartSimpleBedLoad(char **row)
+/* Load a bed from row containing barChart bed fields. 
+ * This is reuses autoSql barChartBedLoad, but with a full-size bed.
+ Dispose of this with bedFree() */
+{
+struct bed *ret;
+AllocVar(ret);
+ret->expCount = sqlUnsigned(row[6]);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
+{
+int sizeOne;
+sqlFloatDynamicArray(row[7], &ret->expScores, &sizeOne);
+assert(sizeOne == ret->expCount);
+}
+return ret;
+}
+
+float barChartTotalValue(struct bed *bed)
 /* Return total of all category values */
 {
 int i;
@@ -237,7 +221,7 @@ for (i=0; i<bed->expCount; i++)
 return sum;
 }
 
-float barChartHighestValue(struct barChartBed *bed, int *categIdRet)
+float barChartMaxValue(struct bed *bed, int *categIdRet)
 /* Return value and id of category with highest value for this item */
 {
 int i;
@@ -254,3 +238,4 @@ for (i=0; i<bed->expCount; i++)
     }
 return maxScore;
 }
+

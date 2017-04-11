@@ -8,5 +8,5 @@ table barChartBed
     uint   score;       "Score from 0-1000; derived from total median all categories (log-transformed and scaled)"
     char[1] strand;     "+ or - for strand"
     uint expCount;      "Number of categories"
-    float[expCount] expScores; "Comma separated list of category values"
+    float[expCount]      expScores; "Comma separated list of category values"
     )

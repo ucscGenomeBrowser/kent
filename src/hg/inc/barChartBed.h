@@ -10,8 +10,6 @@
 
 extern char *barChartBedCommaSepFieldNames;
 
-// TODO: add fields for description and unique identifier/name
-
 struct barChartBed
 /* BED6+ with additional fields for category count and values */
     {
@@ -19,7 +17,7 @@ struct barChartBed
     char *chrom;	/* Reference sequence chromosome or scaffold */
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
-    char *name;	        /* Item identifier */
+    char *name;	/* Item identifier */
     unsigned score;	/* Score from 0-1000; derived from total median all categories (log-transformed and scaled) */
     char strand[2];	/* + or - for strand */
     unsigned expCount;	/* Number of categories */
@@ -82,10 +80,15 @@ void barChartBedOutput(struct barChartBed *el, FILE *f, char sep, char lastSep);
 void barChartBedCreateTable(struct sqlConnection *conn, char *table);
 /* Create barChart format table of given name. */
 
-float barChartTotalValue(struct barChartBed *bed);
+struct bed *barChartSimpleBedLoad(char **row);
+/* Load a bed from row containing barChart bed fields. 
+ * This is reuses autoSql barChartBedLoad, but with a full-size bed.
+ Dispose of this with bedFree() */
+
+float barChartTotalValue(struct bed *bed);
 /* Return total of all category values */
 
-float barChartHighestValue(struct barChartBed *bed, int *categIdRet);
+float barChartMaxValue(struct bed *bed, int *categIdRet);
 /* Return value and id of category with highest value for this item */
 
 #endif /* BARCHARTBED_H */

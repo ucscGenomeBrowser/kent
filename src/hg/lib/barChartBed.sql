@@ -11,7 +11,7 @@ CREATE TABLE barChartBed (
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	        # Item identifier
-    score int unsigned not null,	# Score from 0-1000
+    score int unsigned not null,	# Score from 0-1000; derived from total median all categories (log-transformed and scaled)
     strand char(1) not null,	        # + or - for strand
     expCount int unsigned not null,	# Number of categories
     expScores longblob not null,	# Comma separated list of category values

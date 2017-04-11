@@ -36,7 +36,7 @@ struct barChartItem
 /* BED item plus computed values for display */
     {
     struct barChartItem *next;  /* Next in singly linked list */
-    struct barChartBed *bed;    /* Item coords, name, exp count and values */
+    struct bed *bed;            /* Item coords, name, exp count and values */
     int height;                 /* Item height in pixels */
     };
 
@@ -192,7 +192,7 @@ struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 return (hashLookup(extras->categoryFilter, name) != NULL);
 }
 
-static int maxCategoryForItem(struct barChartBed *bed, int threshold)
+static int maxCategoryForItem(struct bed *bed, int threshold)
 /* Return id of highest valued category for an item, if significantly higher than median.
  * If none are over threshold, return -1 */
 {
@@ -222,7 +222,7 @@ static Color barChartItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 // TODO: Need a good function here to pick threshold from category count. 
 //      Also maybe trackDb setting
 {
-struct barChartBed *bed = (struct barChartBed *)item;
+struct bed *bed = (struct bed *)item;
 int id = maxCategoryForItem(bed, SPECIFICITY_THRESHOLD);
 if (id < 0)
     return MG_BLACK;
@@ -250,11 +250,11 @@ extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, BAR_CHA
 extras->unit = trackDbSettingClosestToHomeOrDefault(tg->tdb, BAR_CHART_UNIT, "");
 
 /* Get bed (names and all-sample category median scores) in range */
-loadSimpleBedWithLoader(tg, (bedItemLoader)barChartBedLoad);
+loadSimpleBedWithLoader(tg, (bedItemLoader)barChartSimpleBedLoad);
 
 /* Create itemInfo items with BED and geneModels */
 struct barChartItem *itemInfo = NULL, *list = NULL;
-struct barChartBed *bed = (struct barChartBed *)tg->items;
+struct bed *bed = (struct bed *)tg->items;
 
 /* Load category colors */
 extras->colors = getCategoryColors(tg);
@@ -343,7 +343,7 @@ int count = filteredCategoryCount(tg);
 return (barWidth * count) + (padding * (count-1)) + 2;
 }
 
-static int barChartX(struct barChartBed *bed)
+static int barChartX(struct bed *bed)
 /* Locate chart on X, relative to viewport. */
 {
 int start = max(bed->chromStart, winStart);
@@ -390,7 +390,7 @@ return valToHeight(useVal, useMax, barChartMaxHeight(), doLogTransform);
 static int barChartHeight(struct track *tg, struct barChartItem *itemInfo)
 /* Determine height in pixels of graph.  This will be the box for category with highest value */
 {
-struct barChartBed *bed = (struct barChartBed *)itemInfo->bed;
+struct bed *bed = (struct bed *)itemInfo->bed;
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 int i;
 double maxExp = 0.0;
@@ -433,7 +433,7 @@ static void barChartDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int 
 {
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 struct barChartItem *itemInfo = (struct barChartItem *)item;
-struct barChartBed *bed = (struct barChartBed *)itemInfo->bed;
+struct bed *bed = (struct bed *)itemInfo->bed;
 if (vis == tvDense)
     {
     bedDrawSimpleAt(tg, bed, hvg, xOff, y, scale, font, MG_WHITE, vis);     // color ignored (using grayscale)
@@ -479,7 +479,7 @@ if (vis != tvFull && vis != tvPack)
     return;
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 struct barChartItem *itemInfo = (struct barChartItem *)item;
-struct barChartBed *bed = (struct barChartBed *)itemInfo->bed;
+struct bed *bed = (struct bed *)itemInfo->bed;
 int topGraphHeight = barChartHeight(tg, itemInfo);
 topGraphHeight = max(topGraphHeight, tl.fontHeight);
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
@@ -512,12 +512,14 @@ for (i=0, categ=extras->categories; i<expCount; i++, categ=categ->next)
     if (!filterCategory(tg, categ->name))
         continue;
     struct rgbColor fillColor = extras->colors[i];
+/*
+    // brighten colors a bit so they'll be more visible at this scale
+    // TODO: think about doing this
     if (barWidth == 1 && sameString(colorScheme, BAR_CHART_COLORS_USER))
         {
-        // brighten colors a bit so they'll be more visible at this scale
-        // TODO: think about doing this
-        //fillColor = barChartBrightenColor(fillColor);
+        fillColor = barChartBrightenColor(fillColor);
         }
+*/
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, maxMedian, viewMax, 
@@ -593,7 +595,7 @@ static int barChartItemStart(struct track *tg, void *item)
 /* Return end chromosome coordinate of item, including graph */
 {
 struct barChartItem *itemInfo = (struct barChartItem *)item;
-struct barChartBed *bed = (struct barChartBed *)itemInfo->bed;
+struct bed *bed = (struct bed *)itemInfo->bed;
 return bed->chromStart;
 }
 
@@ -601,7 +603,7 @@ static int barChartItemEnd(struct track *tg, void *item)
 /* Return end chromosome coordinate of item, including graph */
 {
 struct barChartItem *itemInfo = (struct barChartItem *)item;
-struct barChartBed *bed = (struct barChartBed *)itemInfo->bed;
+struct bed *bed = (struct bed *)itemInfo->bed;
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
 int graphWidth = barChartWidth(tg, itemInfo);
 return max(bed->chromEnd, max(winStart, bed->chromStart) + graphWidth/scale);
@@ -632,7 +634,7 @@ if (tg->limitedVis == tvDense)
     }
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 struct barChartItem *itemInfo = (struct barChartItem *)item;
-struct barChartBed *bed = (struct barChartBed *)itemInfo->bed;
+struct bed *bed = (struct bed *)itemInfo->bed;
 int itemStart = bed->chromStart;
 int itemEnd = bed->chromEnd;
 if (tg->limitedVis == tvSquish)
@@ -799,7 +801,9 @@ static char *barChartItemName(struct track *tg, void *item)
 /* Return item name */
 {
 struct barChartItem *chartItem = (struct barChartItem *)item;
-struct barChartBed *bed = (struct barChartBed *)chartItem->bed;
+struct bed *bed = (struct bed *)chartItem->bed;
+if (tg->isBigBed)
+    return bigBedItemName(tg, bed);
 return bed->name;
 }
 

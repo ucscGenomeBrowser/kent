@@ -19,7 +19,7 @@
 
 // TODO: Consider moving these to lib/{barChartBed,bigBarChart}.c
 
-static struct barChartBed *getBarChartFromFile(char *item, char *chrom, int start, int end, 
+static struct bed *getBarChartFromFile(char *item, char *chrom, int start, int end, 
                                                         char *file)
 /* Retrieve barChart BED item from big file */
 {
@@ -31,18 +31,18 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     char startBuf[16], endBuf[16];
     char *bedRow[32];
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    struct barChartBed *barChart = barChartBedLoad(bedRow);
+    struct bed *barChart = barChartSimpleBedLoad(bedRow);
     if (sameString(barChart->name, item))
         return barChart;
     }
 return NULL;
 }
 
-static struct barChartBed *getBarChartFromTable(char *item, char *chrom, int start, int end, 
+static struct bed *getBarChartFromTable(char *item, char *chrom, int start, int end, 
                                                         char *table)
 /* Retrieve barChart BED item from track table */
 {
-struct barChartBed *barChart = NULL;
+struct bed *barChart = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 char **row;
 char query[512];
@@ -57,7 +57,7 @@ if (sqlTableExists(conn, table))
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-        barChart = barChartBedLoad(row);
+        barChart = barChartSimpleBedLoad(row);
         }
     sqlFreeResult(&sr);
     }
@@ -65,11 +65,11 @@ hFreeConn(&conn);
 return barChart;
 }
 
-static struct barChartBed *getBarChart(char *item, char *chrom, int start, int end, 
+static struct bed *getBarChart(char *item, char *chrom, int start, int end, 
                                                         struct trackDb *tdb)
 /* Retrieve barChart BED item from track */
 {
-struct barChartBed *barChart = NULL;
+struct bed *barChart = NULL;
 char *file = trackDbSetting(tdb, "bigDataUrl");
 if (file != NULL)
     barChart = getBarChartFromFile(item, chrom, start, end, file);
@@ -184,18 +184,17 @@ if (ret == 0)
 }
 
 void doBarChartDetails(struct trackDb *tdb, char *item)
-
 /* Details of barChart item */
 {
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-struct barChartBed *chartItem = getBarChart(item, seqName, start, end, tdb);
+struct bed *chartItem = getBarChart(item, seqName, start, end, tdb);
 if (chartItem == NULL)
     errAbort("Can't find item %s in barChart table %s\n", item, tdb->table);
 
 genericHeader(tdb, item);
 int categId;
-float highLevel = barChartHighestValue(chartItem, &categId);
+float highLevel = barChartMaxValue(chartItem, &categId);
 char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 printf("<b>Maximum value: </b> %0.2f %s in %s<br>\n", 
                 highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
