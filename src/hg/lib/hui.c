@@ -47,6 +47,7 @@
 #include "htmlPage.h"
 #include "longRange.h"
 #include "tagRepo.h"
+#include "fieldedTable.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -192,6 +193,56 @@ freeMem(encValue);
 return dyStringCannibalize(&dyLink);
 }
 
+char *tabSepMetaAsHtmlTable(char *tabSepMeta, struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
+/* Return a string which is an HTML table of the tags for this track which are stored as a fielded table. */
+{
+// If there's no file, there's no data.
+if (tabSepMeta == NULL)
+    return "";
+
+// If the trackDb entry doesn't have a foreign key, there's no data.
+char *metaTag = trackDbSetting(tdb, "meta");
+if (metaTag == NULL)
+    return "";
+
+static char *cachedTableName = NULL;
+static struct hash *cachedHash = NULL;
+static struct fieldedTable *cachedTable = NULL;
+
+// Cache this table because there's a good chance we'll get called again with it.
+if ((cachedTableName == NULL) || differentString(tabSepMeta, cachedTableName))
+    {
+    char *requiredFields[] = {"meta"};
+    cachedTable = fieldedTableFromTabFile(tabSepMeta, NULL, requiredFields, sizeof requiredFields / sizeof (char *));
+    cachedHash = fieldedTableUniqueIndex(cachedTable, requiredFields[0]);
+    cachedTableName = cloneString(tabSepMeta);
+    }
+
+// Look for this tag in the metadata.
+struct fieldedRow *fr = hashFindVal(cachedHash, metaTag);
+if (fr == NULL)
+    return "";
+
+struct dyString *dyTable = dyStringCreate("<table style='display:inline-table;'>");
+if (showLongLabel)
+    dyStringPrintf(dyTable,"<tr valign='bottom'><td colspan=2 nowrap>%s</td></tr>",tdb->longLabel);
+if (showShortLabel)
+    dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>shortLabel:</i></td>"
+			   "<td nowrap>%s</td></tr>",tdb->shortLabel);
+
+int ii;
+for(ii=0; ii < cachedTable->fieldCount; ii++)
+    {
+    char *fieldName = cachedTable->fields[ii];
+    char *fieldVal = fr->row[ii];
+    if (!sameString(fieldName, "meta")  && !isEmpty(fieldVal))
+        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td>"
+                           "<td nowrap>%s</td></tr>",fieldName, fieldVal);
+    }
+dyStringAppend(dyTable,"</table>");
+return dyStringCannibalize(&dyTable);
+}
+
 char *tagStormAsHtmlTable(char *tagStormFile, struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
 /* Return a string which is an HTML table of the tags for this track. */
 {
@@ -224,6 +275,11 @@ return dyStringCannibalize(&dyTable);
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
 // If metadata from metaDb exists, return string of html with table definition
 {
+char *tabSepMeta = trackDbSetting(tdb, "metaTab");
+
+if (tabSepMeta)
+    return tabSepMetaAsHtmlTable(tabSepMeta, tdb, showLongLabel, showShortLabel);
+
 char *tagStormFile = trackDbSetting(tdb, "metaDb");
 
 if (tagStormFile)
@@ -314,8 +370,8 @@ boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
     boolean embeddedInText,boolean showLongLabel)
 // If metadata from metaTbl exists, create a link that will allow toggling it's display
 {
-char *tagStormFile = trackDbSetting(tdb, "metaDb");
-if (tagStormFile == NULL)
+boolean hasMetaInHub = (trackDbSetting(tdb, "metaDb") != NULL) ||  (trackDbSetting(tdb, "metaTab") != NULL);
+if (!hasMetaInHub)
     {
     const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
     if (safeObj == NULL || safeObj->vars == NULL)
@@ -337,7 +393,8 @@ void extraUiLinks(char *db,struct trackDb *tdb)
 // Show metadata, and downloads, schema links where appropriate
 {
 char *tagStormFile = trackDbSetting(tdb, "metaDb");
-boolean hasMetadata = (tagStormFile != NULL) || (!tdbIsComposite(tdb) && !trackHubDatabase(db)
+char *tabSepFile = trackDbSetting(tdb, "metaTab");
+boolean hasMetadata = (tagStormFile != NULL) || (tabSepFile != NULL) || (!tdbIsComposite(tdb) && !trackHubDatabase(db)
                         && metadataForTable(db, tdb, NULL) != NULL);
 if (hasMetadata)
     printf("<b>Metadata:</b><br>%s\n", metadataAsHtmlTable(db, tdb, FALSE, FALSE));

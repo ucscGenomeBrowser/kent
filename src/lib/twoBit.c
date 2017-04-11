@@ -52,6 +52,11 @@ static bits32 udcReadBits32Wrap(void *f, boolean isSwapped)
 return udcReadBits32((struct udcFile *)f, isSwapped);
 }
 
+static bits64 udcReadBits64Wrap(void *f, boolean isSwapped)
+{
+return udcReadBits64((struct udcFile *)f, isSwapped);
+}
+
 static boolean udcFastReadStringWrap(void *f, char buf[256])
 {
 return udcFastReadString((struct udcFile *)f, buf);
@@ -88,6 +93,11 @@ static bits32 readBits32Wrap(void *f, boolean isSwapped)
 return readBits32((FILE *)f, isSwapped);
 }
 
+static bits64 readBits64Wrap(void *f, boolean isSwapped)
+{
+return readBits64((FILE *)f, isSwapped);
+}
+
 static boolean fastReadStringWrap(void *f, char buf[256])
 {
 return fastReadString((FILE *)f, buf);
@@ -104,6 +114,7 @@ if (useUdc)
     tbf->ourSeek = udcSeekWrap;
     tbf->ourTell = udcTellWrap;
     tbf->ourReadBits32 = udcReadBits32Wrap;
+    tbf->ourReadBits64 = udcReadBits64Wrap;
     tbf->ourFastReadString = udcFastReadStringWrap;
     tbf->ourClose = udcFileCloseWrap;
     tbf->ourMustRead = udcMustReadWrap;
@@ -114,6 +125,7 @@ else
     tbf->ourSeek = seekWrap;
     tbf->ourTell = tellWrap;
     tbf->ourReadBits32 = readBits32Wrap;
+    tbf->ourReadBits64 = readBits64Wrap;
     tbf->ourFastReadString = fastReadStringWrap;
     tbf->ourClose = fileCloseWrap;
     tbf->ourMustRead = mustReadWrap;
@@ -323,15 +335,19 @@ writeOne(f, twoBit->reserved);
 mustWrite(f, twoBit->data, packedSize(twoBit->size));
 }
 
-void twoBitWriteHeader(struct twoBit *twoBitList, FILE *f)
+void twoBitWriteHeaderExt(struct twoBit *twoBitList, FILE *f, boolean useLong)
 /* Write out header portion of twoBit file, including initial
- * index */
+ * index. If useLong is True, use 64 bit quantities for the index offsets to support >4Gb assemblies */
 {
 bits32 sig = twoBitSig;
 bits32 version = 0;
+if (useLong)
+    version = 1;
+
 bits32 seqCount = slCount(twoBitList);
 bits32 reserved = 0;
 bits32 offset = 0;
+bits64 longOffset = 0;
 struct twoBit *twoBit;
 long long counter = 0; /* check for 32 bit overflow */
 
@@ -344,13 +360,16 @@ writeOne(f, reserved);
 /* Figure out location of first byte past index.
  * Each index entry contains 4 bytes of offset information
  * and the name of the sequence, which is variable length. */
-offset = sizeof(sig) + sizeof(version) + sizeof(seqCount) + sizeof(reserved);
+longOffset = offset = sizeof(sig) + sizeof(version) + sizeof(seqCount) + sizeof(reserved);
 for (twoBit = twoBitList; twoBit != NULL; twoBit = twoBit->next)
     {
     int nameLen = strlen(twoBit->name);
     if (nameLen > 255)
         errAbort("name %s too long", twoBit->name);
-    offset += nameLen + 1 + sizeof(bits32);
+    if (useLong)
+        longOffset += nameLen + 1 + sizeof(bits64);
+    else
+        offset += nameLen + 1 + sizeof(bits32);
     }
 
 /* Write out index. */
@@ -358,15 +377,30 @@ for (twoBit = twoBitList; twoBit != NULL; twoBit = twoBit->next)
     {
     int size = twoBitSizeInFile(twoBit);
     writeString(f, twoBit->name);
-    writeOne(f, offset);
-    offset += size;
+    if (useLong)
+        {
+        writeOne(f, longOffset);
+        longOffset += size;
+        }
+    else
+        {
+        writeOne(f, offset);
+        offset += size;
+        }
     counter += (long long)size;
-    if (counter > UINT_MAX )
+    if (!useLong && (counter > UINT_MAX ))
         errAbort("Error in faToTwoBit, index overflow at %s. The 2bit format "
                 "does not support indexes larger than %dGb, \n"
-                "please split up into smaller files.\n", 
+                "please split up into smaller files, or use -long option.\n", 
                 twoBit->name, UINT_MAX/1000000000);
     }
+}
+
+void twoBitWriteHeader(struct twoBit *twoBitList, FILE *f)
+/* Write out header portion of twoBit file, including initial
+ * index */
+{
+twoBitWriteHeaderExt(twoBitList, f, FALSE);
 }
 
 void twoBitClose(struct twoBitFile **pTbf)
@@ -434,9 +468,9 @@ if (!twoBitSigRead(tbf, &isSwapped))
 tbf->isSwapped = isSwapped;
 tbf->fileName = cloneString(fileName);
 tbf->version = (*tbf->ourReadBits32)(tbf->f, isSwapped);
-if (tbf->version != 0)
+if ((tbf->version != 0) && (tbf->version != 1))
     {
-    errAbort("Can only handle version 0 of this file. This is version %d",
+    errAbort("Can only handle version 0 or version 1 of this file. This is version %d",
     	(int)tbf->version);
     }
 tbf->seqCount = (*tbf->ourReadBits32)(tbf->f, isSwapped);
@@ -467,7 +501,10 @@ for (i=0; i<tbf->seqCount; ++i)
     if (!(*tbf->ourFastReadString)(f, name))
         errAbort("%s is truncated", fileName);
     lmAllocVar(hash->lm, index);
-    index->offset = (*tbf->ourReadBits32)(f, isSwapped);
+    if (tbf->version == 1)
+        index->offset = (*tbf->ourReadBits64)(f, isSwapped);
+    else
+        index->offset = (*tbf->ourReadBits32)(f, isSwapped);
     hashAddSaveName(hash, name, index, &index->name);
     slAddHead(&tbf->indexList, index);
     }

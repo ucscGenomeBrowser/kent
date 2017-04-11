@@ -2217,3 +2217,29 @@ close (FH);
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# lastz chainNet swap xenTro9/frog X. tropicalis (DONE - 2017-04-06 - Hiram)
+
+    # the original alignment
+    cd /hive/data/genomes/xenTro9/bed/lastzAnoCar2.2017-04-05
+    cat fb.xenTro9.chainAnoCar2Link.txt
+    #	81880572 bases of 1369865365 (5.977%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/anoCar2/bed/blastz.xenTro9.swap
+    cd /hive/data/genomes/anoCar2/bed/blastz.xenTro9.swap
+    time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/xenTro9/bed/lastzAnoCar2.2017-04-05/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #	real    13m27.766s
+
+    cat  fb.anoCar2.chainXenTro9Link.txt
+    #	81559444 bases of 1701353770 (4.794%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` anoCar2 xenTro9) \
+	> rbest.log 2>&1 &
+    # real    336m10.154s
+
+#########################################################################

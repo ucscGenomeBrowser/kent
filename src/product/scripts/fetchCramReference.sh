@@ -94,8 +94,11 @@ xargs -I % -n 1 -P 5 sh -c \
         rm -f "${PENDING}/%" "${PENDING}/%.try*" ||
         echo "Internal server error: Please contact system administrator" > ${ERRORDIR}/%
     else
-        # Download failed - increment try count
+        # Download failed, record wget error message
         echo "$WGETOUT" | tr "\n" "\t" > "${ERRORDIR}/%"
+    fi
+    # On error, increment try count
+    if [ -e "${ERRORDIR}/% ]
         OLDTRY=$(find "${PENDING}" -maxdepth 1 -type f -name "%.try*" -print -quit)
         if [[ "${OLDTRY}" == "" ]]
         then

@@ -20,6 +20,8 @@ errAbort(
   "usage:\n"
   "   faToTwoBit in.fa [in2.fa in3.fa ...] out.2bit\n"
   "options:\n"
+  "   -long          use 64-bit offsets for index.   Allow for twoBit to contain more than 4Gb of sequence. \n"
+  "                  NOT COMPATIBLE WITH OLDER CODE.\n"
   "   -noMask        Ignore lower-case masking in fa file.\n"
   "   -stripVersion  Strip off version number after '.' for GenBank accessions.\n"
   "   -ignoreDups    Convert first sequence only if there are duplicate sequence\n"
@@ -30,11 +32,13 @@ errAbort(
 boolean noMask = FALSE;
 boolean stripVersion = FALSE;
 boolean ignoreDups = FALSE;
+boolean useLong = FALSE;
 
 static struct optionSpec options[] = {
    {"noMask", OPTION_BOOLEAN},
    {"stripVersion", OPTION_BOOLEAN},
    {"ignoreDups", OPTION_BOOLEAN},
+   {"long", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -108,7 +112,7 @@ for (i=0; i<inFileCount; ++i)
     }
 slReverse(&twoBitList);
 f = mustOpen(outFile, "wb");
-twoBitWriteHeader(twoBitList, f);
+twoBitWriteHeaderExt(twoBitList, f, useLong);
 for (twoBit = twoBitList; twoBit != NULL; twoBit = twoBit->next)
     {
     twoBitWriteOne(twoBit, f);
@@ -125,6 +129,7 @@ if (argc < 3)
 noMask = optionExists("noMask");
 stripVersion = optionExists("stripVersion");
 ignoreDups = optionExists("ignoreDups");
+useLong = optionExists("long");
 dnaUtilOpen();
 faToTwoBit(argv+1, argc-2, argv[argc-1]);
 return 0;

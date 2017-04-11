@@ -182,6 +182,11 @@ hgBotDelayExt(TRUE, fraction);
 }
 
 int hgBotDelayTime()
+{
+return hgBotDelayTimeFrac(1.0);
+}
+
+int hgBotDelayTimeFrac(double fraction)
 /* Get suggested delay time from cgi using the standard penalty. */
 {
 char *ip = getenv("REMOTE_ADDR");
@@ -191,7 +196,7 @@ char *port = cfgOption("bottleneck.port");
 int delay = 0;
 if (host != NULL && port != NULL && ip != NULL)
     {
-    char *botCheckString = getBotCheckString(ip, 1.0);    
+    char *botCheckString = getBotCheckString(ip, fraction);
     delay = botDelayTime(host, atoi(port), botCheckString);
     freeMem(botCheckString);
     }
