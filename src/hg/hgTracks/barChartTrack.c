@@ -38,6 +38,7 @@ struct barChartItem
     struct barChartItem *next;  /* Next in singly linked list */
     struct bed *bed;            /* Item coords, name, exp count and values */
     int height;                 /* Item height in pixels */
+    // TODO: add chartWidth so it's just computed once
     };
 
 /***********************************************/
@@ -637,6 +638,7 @@ struct barChartItem *itemInfo = (struct barChartItem *)item;
 struct bed *bed = (struct bed *)itemInfo->bed;
 int itemStart = bed->chromStart;
 int itemEnd = bed->chromEnd;
+int x1, x2;
 if (tg->limitedVis == tvSquish)
     {
     int categId = maxCategoryForItem(bed, SPECIFICITY_THRESHOLD);
@@ -645,7 +647,6 @@ if (tg->limitedVis == tvSquish)
         maxCateg = getCategoryLabel(tg, categId);
     char buf[128];
     safef(buf, sizeof buf, "%s %s", bed->name, maxCateg);
-    int x1, x2;
     getItemX(itemStart, itemEnd, &x1, &x2);
     int width = max(1, x2-x1);
     mapBoxHc(hvg, itemStart, itemEnd, x1, y, width, height, 
@@ -655,7 +656,22 @@ if (tg->limitedVis == tvSquish)
 int topGraphHeight = barChartHeight(tg, itemInfo);
 topGraphHeight = max(topGraphHeight, tl.fontHeight);        // label
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
-int x1 = insideX;
+
+// add map box to item label
+
+int labelWidth = mgFontStringWidth(tl.font, itemName);
+getItemX(start, end, &x1, &x2);
+if (x1-labelWidth <= insideX)
+    labelWidth = 0;
+// map over label
+int itemHeight = itemInfo->height;
+mapBoxHc(hvg, start, end, x1-labelWidth, y, labelWidth, itemHeight-3, 
+                    tg->track, mapItemName, itemName);
+// map over background of chart
+// TODO: more efficient
+int graphWidth = barChartWidth(tg, itemInfo);
+mapBoxHc(hvg, start, end, x1, y, graphWidth, itemHeight-3,
+                    tg->track, mapItemName, itemName);
 
 // add maps to category bars
 struct barChartCategory *categs = getCategories(tg);
@@ -676,8 +692,8 @@ double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE,
 int i = 0;
 for (categ = categs; categ != NULL; categ = categ->next, i++)
     {
-    if (!filterCategory(tg, categ->name))
-        continue;
+if (!filterCategory(tg, categ->name))
+    continue;
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, maxMedian, viewMax, 
                                         barChartMaxHeight(), extras->doLogTransform);
@@ -686,30 +702,6 @@ for (categ = categs; categ != NULL; categ = categ->next, i++)
     x1 = x1 + barWidth + padding;
     }
 
-#ifdef ITEM_NAME_MAP
-// Maybe later
-// add map boxes with item name to item
-if (itemInfo->geneModel && itemInfo->description)
-    {
-    // perhaps these are just start, end ?
-    int itemStart = itemInfo->geneModel->txStart;
-    int itemEnd = barChartItemEnd(tg, item);
-    int x1, x2;
-    getItemX(itemStart, itemEnd, &x1, &x2);
-    int w = x2-x1;
-    int labelWidth = mgFontStringWidth(tl.font, itemName);
-    if (x1-labelWidth <= insideX)
-        labelWidth = 0;
-    // map over label
-    int itemHeight = itemInfo->height;
-    mapBoxHc(hvg, geneStart, geneEnd, x1-labelWidth, y, labelWidth, itemHeight-3, 
-                        tg->track, mapItemName, itemInfo->description);
-    // map over gene model (extending to end of item)
-    int geneModelHeight = barChartModelHeight(extras);
-    mapBoxHc(hvg, geneStart, geneEnd, x1, y+itemHeight-geneModelHeight-3, w, geneModelHeight,
-                        tg->track, mapItemName, itemInfo->description);
-    } 
-#endif
 }
 
 /* This is lifted nearly wholesale from gtexGene track.  Could be shared */
