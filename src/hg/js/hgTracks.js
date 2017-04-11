@@ -1094,9 +1094,9 @@ var dragSelect = {
         if (!dragSelectDialog) {
             $("body").append("<div id='dragSelectDialog'>" + 
                              "<p><ul>"+
-                             "<li>Hold <b>Shift+drag</b> to show this dialog or zoom" +
-                             "<li>Hold <b>Alt+drag</b> to add a highlight (no dialog)" +
-                             "<li>Hold <b>Ctrl+drag</b> or <b>Cmd+drag</b> to zoom (no dialog)" +
+                             "<li>Hold <b>Shift+drag</b> to show this dialog" +
+                             "<li>Hold <b>Alt+drag</b> to add a highlight" +
+                             "<li>Hold <b>Ctrl+drag</b> (Windows) or <b>Cmd+drag</b> (Mac) to zoom" +
                              "<li>To cancel, press <tt>Esc</tt> anytime or drag mouse outside image" +
                              "<li>Highlight the current position with <tt>h then m</tt>" +
                              "<li>Clear all highlights with View - Clear Highlights or <tt>h then c</tt>" +
