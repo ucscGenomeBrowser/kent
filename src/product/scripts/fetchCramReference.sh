@@ -98,7 +98,7 @@ xargs -I % -n 1 -P 5 sh -c \
         echo "$WGETOUT" | tr "\n" "\t" > "${ERRORDIR}/%"
     fi
     # On error, increment try count
-    if [ -e "${ERRORDIR}/% ]
+    if [ -e "${ERRORDIR}/%" ]
         OLDTRY=$(find "${PENDING}" -maxdepth 1 -type f -name "%.try*" -print -quit)
         if [[ "${OLDTRY}" == "" ]]
         then
