@@ -649,10 +649,9 @@ twoBit->data = needLargeMem(packByteCount);
 return twoBit;
 }
 
-struct twoBit *twoBitFromFile(char *fileName)
+struct twoBit *twoBitFromOpenFile(struct twoBitFile *tbf)
 /* Get twoBit list of all sequences in twoBit file. */
 {
-struct twoBitFile *tbf = twoBitOpen(fileName);
 struct twoBitIndex *index;
 struct twoBit *twoBitList = NULL;
 
@@ -666,6 +665,15 @@ twoBitClose(&tbf);
 slReverse(&twoBitList);
 return twoBitList;
 }
+
+struct twoBit *twoBitFromFile(char *fileName)
+/* Get twoBit list of all sequences in already open twoBit file. */
+{
+struct twoBitFile *tbf = twoBitOpen(fileName);
+
+return twoBitFromOpenFile(tbf);
+}
+
 
 void twoBitFree(struct twoBit **pTwoBit)
 /* Free up a two bit structure. */
