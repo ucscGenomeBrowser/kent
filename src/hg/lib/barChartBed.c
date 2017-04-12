@@ -10,7 +10,46 @@
 
 
 
-char *barChartBedCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,expCount,expScores";
+char *barChartBedCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,expCount,expScores,_dataOffset,_dataLen";
+
+struct barChartBed *barChartBedLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all barChartBed from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with barChartBedFreeList(). */
+{
+struct barChartBed *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = barChartBedLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void barChartBedSaveToDb(struct sqlConnection *conn, struct barChartBed *el, char *tableName, int updateSize)
+/* Save barChartBed as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+char  *expScoresArray;
+expScoresArray = sqlFloatArrayToString(el->expScores, el->expCount);
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,'%s',%lld,%d)", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->expCount,  expScoresArray ,  el->_dataOffset,  el->_dataLen);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&expScoresArray);
+}
 
 struct barChartBed *barChartBedLoad(char **row)
 /* Load a barChartBed from row fetched with select * from barChartBed
@@ -31,6 +70,8 @@ int sizeOne;
 sqlFloatDynamicArray(row[7], &ret->expScores, &sizeOne);
 assert(sizeOne == ret->expCount);
 }
+ret->_dataOffset = sqlLongLong(row[8]);
+ret->_dataLen = sqlSigned(row[9]);
 return ret;
 }
 
@@ -40,7 +81,7 @@ struct barChartBed *barChartBedLoadAll(char *fileName)
 {
 struct barChartBed *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -58,7 +99,7 @@ struct barChartBed *barChartBedLoadAllByChar(char *fileName, char chopper)
 {
 struct barChartBed *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -97,6 +138,8 @@ for (i=0; i<ret->expCount; ++i)
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
+ret->_dataOffset = sqlLongLongComma(&s);
+ret->_dataLen = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -160,10 +203,15 @@ for (i=0; i<el->expCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 }
+fputc(sep,f);
+fprintf(f, "%lld", el->_dataOffset);
+fputc(sep,f);
+fprintf(f, "%d", el->_dataLen);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
 
 #include "basicBed.h"
 
@@ -174,16 +222,18 @@ char query[1024];
 
 sqlSafef(query, sizeof(query),
 "CREATE TABLE %s (\n"
-"   chrom varchar(255) not null,	# Reference sequence chromosome or scaffold\n"
-"   chromStart int unsigned not null,	# Start position in chromosome\n"
-"   chromEnd int unsigned not null,	# End position in chromosome\n"
-"   name varchar(255) not null,	# Unique identifier\n"
-"   score int unsigned not null,	# Score from 0-1000\n"
-"   strand char(1) not null,	# + or - for strand\n"
-"   expCount int unsigned not null,	# Number of experiment values\n"
-"   expScores longblob not null,	# Comma separated list of experiment scores\n"
-          "#Indices\n"
-"   PRIMARY KEY(name)\n"
+"   chrom varchar(255) not null,        # Reference sequence chromosome or scaffold\n"
+"   chromStart int unsigned not null,   # Start position in chromosome\n"
+"   chromEnd int unsigned not null,     # End position in chromosome\n"
+"   name varchar(255) not null,         # Identifier\n"
+"   score int unsigned not null,        # Score from 0-1000\n"
+"   strand char(1) not null,            # + or - for strand\n"
+"   expCount int unsigned not null,     # Number of experiment values\n"
+"   expScores longblob not null,        # Comma separated list of experiment scores\n"
+"   _dataOffset bigint not null,        # Offset of sample data in data matrix file, for boxplot on details page\n"
+"   _dataLen int not null,              # Length of sample data row in data matrix file\n"
+"   INDEX(name),\n"
+"   INDEX(chrom(20), chromStart)\n"
 ")\n",
     table);
 sqlRemakeTable(conn, table, query);
@@ -211,7 +261,37 @@ assert(sizeOne == ret->expCount);
 return ret;
 }
 
-float barChartTotalValue(struct bed *bed)
+
+struct barChartBed *barChartBedLoadOptionalOffsets(char **row, boolean hasOffsets)
+/* Load a barChartBed from row fetched with select * from barChartBed
+ * from database or file.  Also supports schema lacking file offet and length for details.
+.  Dispose of this with barChartBedFree(). */
+{
+struct barChartBed *ret;
+
+AllocVar(ret);
+ret->expCount = sqlUnsigned(row[6]);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
+{
+int sizeOne;
+sqlFloatDynamicArray(row[7], &ret->expScores, &sizeOne);
+assert(sizeOne == ret->expCount);
+}
+if (hasOffsets)
+    {
+    ret->_dataOffset = sqlLongLong(row[8]);
+    ret->_dataLen = sqlSigned(row[9]);
+    }
+return ret;
+}
+
+
+float barChartTotalValue(struct barChartBed *bed)
 /* Return total of all category values */
 {
 int i;
@@ -221,7 +301,7 @@ for (i=0; i<bed->expCount; i++)
 return sum;
 }
 
-float barChartMaxValue(struct bed *bed, int *categIdRet)
+float barChartMaxValue(struct barChartBed *bed, int *categIdRet)
 /* Return value and id of category with highest value for this item */
 {
 int i;
@@ -238,4 +318,6 @@ for (i=0; i<bed->expCount; i++)
     }
 return maxScore;
 }
+
+
 
