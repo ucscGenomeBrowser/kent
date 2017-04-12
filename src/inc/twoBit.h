@@ -79,6 +79,10 @@ struct twoBitSeqSpec
                                  * 0 if not a subsequence */
 };
 
+struct twoBit *twoBitFromOpenFile(struct twoBitFile *tbf);
+/* Read in header and index.  
+ * Squawk and die if there is a problem. */
+
 struct twoBitFile *twoBitOpen(char *fileName);
 /* Open file, read in header and index.  
  * Squawk and die if there is a problem. */

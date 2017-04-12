@@ -40,15 +40,16 @@ static struct optionSpec options[] = {
 };
 
 
-struct twoBit *slurpInput(char *inName, struct hash *tbHash,
-			  struct hash *bitmapHash)
+struct twoBitFile *slurpInput(char *inName, struct hash *tbHash,
+			  struct hash *bitmapHash, struct twoBit **list)
 /* Read .2bit file inName into memory and return list of twoBit items.
  * Populate tbHash with twoBit items, and bitmapHash with bitmaps for
  * easy masking.  Both are hashed by twoBit sequence name. */
 {
 struct twoBit *twoBitList = NULL;
 struct twoBit *twoBit = NULL;
-twoBitList = twoBitFromFile(inName);
+struct twoBitFile *tbf = twoBitOpen(inName);
+*list =  twoBitList = twoBitFromOpenFile(tbf);
 /* Free and clear the masking data (unless -add).  Hash twoBits by name. */
 for (twoBit = twoBitList;  twoBit != NULL;  twoBit = twoBit->next)
     {
@@ -70,7 +71,7 @@ for (twoBit = twoBitList;  twoBit != NULL;  twoBit = twoBit->next)
     hashAddUnique(tbHash, twoBit->name, twoBit);
     hashAddUnique(bitmapHash, twoBit->name, bits);
     }
-return twoBitList;
+return tbf;
 }
 
 
@@ -233,6 +234,7 @@ struct hash *tbHash = hashNew(20);
 struct hash *bitmapHash = hashNew(20);
 struct twoBit *twoBitList = NULL;
 struct twoBit *twoBit = NULL;
+struct twoBitFile *twoBitFile = NULL;
 FILE *f = NULL;
 
 if (! twoBitIsFile(inName))
@@ -243,7 +245,7 @@ if (! twoBitIsFile(inName))
 	errAbort("Input %s does not look like a proper .2bit file.", inName);
     }
 
-twoBitList = slurpInput(inName, tbHash, bitmapHash);
+twoBitFile = slurpInput(inName, tbHash, bitmapHash, &twoBitList);
 
 /* Read mask data into bitmapHash, store it in twoBits: */
 if ((type && endsWith(type, "bed")) || endsWith(maskName, ".bed"))
@@ -255,7 +257,7 @@ else
 
 /* Create a new .2bit file, write it out from twoBits. */
 f = mustOpen(outName, "wb");
-twoBitWriteHeader(twoBitList, f);
+twoBitWriteHeaderExt(twoBitList, f, twoBitFile->version == 1);
 for (twoBit = twoBitList; twoBit != NULL; twoBit = twoBit->next)
     {
     twoBitWriteOne(twoBit, f);
