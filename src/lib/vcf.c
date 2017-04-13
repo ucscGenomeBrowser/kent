@@ -1475,13 +1475,16 @@ int trimmedBases = countIdenticalBasesRight(alleles, alCount);
 dyStringClear(dy);
 for (i = 0;  i < alCount;  i++)
     {
-    if (i > 0)
-	dyStringAppendC(dy, '/');
     char *allele = alleles[i];
-    if (allele[trimmedBases] == '\0')
-	dyStringAppendC(dy, '-');
-    else
-	dyStringAppendN(dy, allele, strlen(allele)-trimmedBases);
+    if (!sameString(allele, "."))
+        {
+        if (i > 0)
+            dyStringAppendC(dy, '/');
+        if (allele[trimmedBases] == '\0')
+            dyStringAppendC(dy, '-');
+        else
+            dyStringAppendN(dy, allele, strlen(allele)-trimmedBases);
+        }
     }
 return dy->string;
 }
