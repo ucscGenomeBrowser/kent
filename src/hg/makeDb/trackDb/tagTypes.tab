@@ -178,7 +178,7 @@ hapClusterTreeAngle vcf vcfTabix
 hapClusterHeight vcf vcfTabix
 hapmapPhase bed
 hgGene genePred
-hgsid bed genePred
+hgsid bed genePred bigBed
 highlightBy genePred
 highlightColor genePred
 hoverMetadata wig bigWig
