@@ -33,7 +33,10 @@
 /* Labels for categories */
 #define BAR_CHART_CATEGORY_LABELS        "barChartBars"
 #define BAR_CHART_CATEGORY_LABEL         "barChartLabel"
-#define BAR_CHART_CATEGORY_LABEL_DEFAULT        "Categories"
+#define BAR_CHART_CATEGORY_LABEL_DEFAULT "Categories"
+
+/* Colors for categories */
+#define BAR_CHART_CATEGORY_COLORS        "barChartColors"
 
 /* Units to display on bar mouseover */
 #define BAR_CHART_UNIT                   "barChartUnit"

@@ -10,6 +10,7 @@
 #include "jsHelper.h"
 #include "hCommon.h"
 #include "rainbow.h"
+#include "htmlColor.h"
 #include "barChartCategory.h"
 #include "barChartUi.h"
 
@@ -159,22 +160,35 @@ return trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_CATEGORY_LABEL,
 }
 
 struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)
-/* Get category colors and descriptions.  If barChartLabel setting contains label list, assign rainbow colors.
- * O/w look for a table naed track+Category, and use labels and colors there */
+/* Get category colors and descriptions.  Use barChartColors setting if present.
+   If not, if there is a barChartBars setting, assign rainbow colors.
+ * O/w look for a table naed track+Category, and use labels and colors there 
+ * TODO: Consider removing table code */
 {
 struct barChartCategory *categs = NULL;
 char *words[BAR_CHART_MAX_CATEGORIES];
+char *colorWords[BAR_CHART_MAX_CATEGORIES];
 char *labels = trackDbSettingClosestToHome(tdb, BAR_CHART_CATEGORY_LABELS);
+char *colors = trackDbSettingClosestToHome(tdb, BAR_CHART_CATEGORY_COLORS);
 struct barChartCategory *categ = NULL;
 
-if (!labels)
+if (labels == NULL)
     {
     categs = barChartGetCategories(database, tdb->table);
     }
 else
     {
+    struct rgbColor *rainbow;
     int count = chopLine(cloneString(labels), words);
-    struct rgbColor *rainbow = getRainbow(&saturatedRainbowAtPos, count);
+    if (colors == NULL)
+        rainbow = getRainbow(&saturatedRainbowAtPos, count);
+    else
+        {
+        int colorCount = chopLine(cloneString(colors), colorWords);
+        if (colorCount != count)
+            warn("barChart track %s mismatch between label (%d)  and color (%d) settings", 
+                    tdb->track, count, colorCount);
+        }
     int i;
     char buf[6];
     for (i=0; i<count; i++)
@@ -184,9 +198,21 @@ else
         safef(buf, sizeof buf, "%d", i);
         categ->name = cloneString(buf);
         categ->label = words[i];
-        categ->color = ((rainbow[i].r & 0xff)<<16) + 
+        if (colors)
+            {
+            unsigned rgb;
+            if (htmlColorForName(colorWords[i], &rgb))
+                categ->color = rgb;
+            else
+                warn("barChart track %s unknown color %s. Must be one of %s\n",
+                        tdb->track, colorWords[i], slNameListToString(htmlColorNames(),','));
+            }
+        else
+            {
+            categ->color = ((rainbow[i].r & 0xff)<<16) + 
                         ((rainbow[i].g & 0xff)<<8) + 
                         ((rainbow[i].b & 0xff));
+            }
         slAddHead(&categs, categ);
         }
     slReverse(&categs);
