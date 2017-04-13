@@ -67,6 +67,22 @@ for (i=0; i<count; i++)
 return FALSE;
 }
 
+boolean htmlColorForCode(char *code, unsigned *value)
+/* Convert value to decimal and return true if code is valid #NNNNNN hex code */
+{
+if (*code == '\\')
+    code++;
+if (*code != '#' || strlen(code) != 7) 
+    return FALSE;
+char *end;
+unsigned ret = (unsigned)strtol(&code[1], &end, 16);
+if (value != NULL)
+    *value = ret;
+if (*end == '\0')
+    return TRUE;
+return FALSE;
+}
+
 boolean htmlColorExists(char *name)
 /* Determine if color name is one of the defined HTML basic set */
 {

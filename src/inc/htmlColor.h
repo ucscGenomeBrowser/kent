@@ -18,5 +18,8 @@ struct slName *htmlColorNames();
 boolean htmlColorForName(char *name, unsigned *value);
 /* Lookup color for name.  Return false if not a valid color name */
 
+boolean htmlColorForCode(char *code, unsigned *value);
+/* Convert value to decimal and return true if code is valid #NNNNNN hex code */
+
 #endif
 
