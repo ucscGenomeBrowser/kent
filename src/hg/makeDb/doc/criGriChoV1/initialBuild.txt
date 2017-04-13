@@ -222,11 +222,10 @@ taxId 10029
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/criGriChoV1/criGriChoV1.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku criGriChoV1) > do.log 2>&1
-XXX - running - Tue Apr 11 13:38:49 PDT 2017
-    # real    41m47.778s
+    # real    23m21.863s
 
     cat fb.criGriChoV1.cpgIslandExtUnmasked.txt
-    # 14956579 bases of 1369865365 (1.092%) in intersection
+    # 6108135 bases of 2318132242 (0.263%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2017-04-11 - Hiram)
@@ -383,15 +382,17 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku criGriChoV1) > do.log 2>&1 &
-XXX - running - Tue Apr 11 13:39:55 PDT 2017
-    # real    462m52.098s
+    # there were difficulties with some jobs, they appeared to be making
+    # no progress after several days.  They were killed on their ku nodes
+    # and allowed to continue.  They then finished normally.
+    # real    2066m40.189s
 
     cat faSize.rmsk.txt
-# 1440398454 bases (70533089 N's 1369865365 real 899399454 upper
-#	470465911 lower) in 6822 sequences in 1 files
-# Total size: mean 211140.2 sd 5118536.3 min 226 (chrUn_NW_016690147v1)
-#	max 194866763 (chr1) median 4812
-# %32.66 masked total, %34.34 masked real
+# 2399786748 bases (81654506 N's 2318132242 real 1661086119 upper
+#	657046123 lower) in 109152 sequences in 1 files
+# Total size: mean 21985.7 sd 185816.1 min 200 (NW_003722730v1)
+#	max 8779783 (NW_003613580v1) median 503
+# %27.38 masked total, %28.34 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -399,8 +400,8 @@ XXX - running - Tue Apr 11 13:39:55 PDT 2017
     # CC   RELEASE 20140131;                                            *
 
     time featureBits -countGaps criGriChoV1 rmsk
-    #	471365620 bases of 1440398454 (32.725%) in intersection
-    #	real    0m20.783s
+    #	658545363 bases of 2399786748 (27.442%) in intersection
+    #	real    0m59.195s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -409,8 +410,8 @@ XXX - running - Tue Apr 11 13:39:55 PDT 2017
     # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' criGriChoV1 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    #	total 471365620.000000
-    #	real    0m16.203s
+    #	total 658545363.000000
+    #	real    0m30.646s
 
 ##########################################################################
 # running simple repeat (DONE - 2017-04-11 - Hiram)
@@ -426,33 +427,48 @@ XXX - running - Tue Apr 11 13:39:55 PDT 2017
     cat fb.simpleRepeat
     # 118499828 bases of 1369865365 (8.650%) in intersection
 
+    # in this case, and given previous experience with criGri1,
+    # is isn't good enough to use just RM or WM, they need to
+    # be added together.
+
     # adding this trfMask to the other masking
     cd /hive/data/genomes/criGriChoV1
 
-    # when using the Window Masker result:
-#    twoBitMask bed/windowMasker/criGriChoV1.cleanWMSdust.2bit \
-#       -add bed/simpleRepeat/trfMask.bed  criGriChoV1.2bit
-    #   you can safely ignore the warning about fields >= 13
 
     # when using Rmsk results, add to rmsk after it is done:
     twoBitMask criGriChoV1.rmsk.2bit \
-        -add bed/simpleRepeat/trfMask.bed criGriChoV1.2bit
+        -add bed/simpleRepeat/trfMask.bed criGriChoV1.rmsk.trf.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa criGriChoV1.rmsk.trf.2bit stdout | faSize stdin
+# 2399786748 bases (81654506 N's 2318132242 real 1659593917 upper
+#	658538325 lower) in 109152 sequences in 1 files
+# Total size: mean 21985.7 sd 185816.1 min 200 (NW_003722730v1)
+#	max 8779783 (NW_003613580v1) median 503
+# %27.44 masked total, %28.41 masked real
+
+    # adding the Window Masker result:
+    twoBitMask criGriChoV1.rmsk.trf.2bit \
+	-type=.bed -add bed/windowMasker/cleanWMask.bed.gz criGriChoV1.2bit
     #   you can safely ignore the warning about fields >= 13
 
-    twoBitToFa criGriChoV1.2bit stdout | faSize stdin > faSize.criGriChoV1.2bit.txt
+    twoBitMask -type=.bed bed/windowMasker/criGriChoV1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  criGriChoV1.WM.trf.2bit
+
+    twoBitToFa criGriChoV1.2bit stdout \
+	| faSize stdin > faSize.criGriChoV1.2bit.txt
     cat faSize.criGriChoV1.2bit.txt
-# 1440398454 bases (70533089 N's 1369865365 real 898405355 upper
-#	471460010 lower) in 6822 sequences in 1 files
-# Total size: mean 211140.2 sd 5118536.3 min 226 (chrUn_NW_016690147v1)
-#	max 194866763 (chr1) median 4812
-# %32.73 masked total, %34.42 masked real
+# 2399786748 bases (81654506 N's 2318132242 real 1302163828 upper
+#	1015968414 lower) in 109152 sequences in 1 files
+# Total size: mean 21985.7 sd 185816.1 min 200 (NW_003722730v1)
+#	max 8779783 (NW_003613580v1) median 503
+# %42.34 masked total, %43.83 masked real
 
     # reset the symlink
     rm /gbdb/criGriChoV1/criGriChoV1.2bit
     ln -s `pwd`/criGriChoV1.2bit /gbdb/criGriChoV1/criGriChoV1.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2017-03-27 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2017-04-11 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/criGriChoV1/bed/microsat
     cd /cluster/data/criGriChoV1/bed/microsat
@@ -461,57 +477,73 @@ XXX - running - Tue Apr 11 13:39:55 PDT 2017
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed criGriChoV1 microsat microsat.bed
-    # Read 13167 elements of size 4 from microsat.bed
+    # Read 213828 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2017-03-27 - Hiram)
+## WINDOWMASKER (DONE - 2017-04-11 - Hiram)
 
     mkdir /hive/data/genomes/criGriChoV1/bed/windowMasker
     cd /hive/data/genomes/criGriChoV1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev criGriChoV1) > do.log 2>&1
-    # real    129m31.454s
+    # real    299m17.427s
+
+    # finished before RepeatMasker, failed on featureBits rmsk, so finish
+    # this off
+
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=cleanup -dbHost=hgwdev criGriChoV1) > cleanup.log 2>&1
 
     # Masking statistics
     cat faSize.criGriChoV1.cleanWMSdust.txt
-# 1440398454 bases (70533089 N's 1369865365 real 830396076 upper
-#	539469289 lower) in 6822 sequences in 1 files
-# Total size: mean 211140.2 sd 5118536.3 min 226 (chrUn_NW_016690147v1)
-#	max 194866763 (chr1) median 4812
-# %37.45 masked total, %39.38 masked real
-
+# 2399786748 bases (81654506 N's 2318132242 real 1597264069 upper
+#	720868173 lower) in 109152 sequences in 1 files
+# Total size: mean 21985.7 sd 185816.1 min 200 (NW_003722730v1)
+#	max 8779783 (NW_003613580v1) median 503
+# %30.04 masked total, %31.10 masked real
 
     cat fb.criGriChoV1.rmsk.windowmaskerSdust.txt
-    # 361644174 bases of 1440398454 (25.107%) in intersection
+    # 362147143 bases of 2399786748 (15.091%) in intersection
+
+    # check to see what the addition together would be
+    # for rmsk and WM:
+    featureBits -or -countGaps criGriChoV1 rmsk windowmaskerSdust \
+	> fb.criGriChoV1.rmsk+windowmaskerSdust.txt 2>&1
+
+    cat fb.criGriChoV1.rmsk+windowmaskerSdust.txt
+    # 1017266393 bases of 2399786748 (42.390%) in intersection
 
 ##########################################################################
-# run up idKeys files for ncbiRefSeq (TBD - 2017-03-28 - Hiram)
+# run up idKeys files for ncbiRefSeq (DONE - 2017-04-13 - Hiram)
     mkdir /hive/data/genomes/criGriChoV1/bed/idKeys
     cd /hive/data/genomes/criGriChoV1/bed/idKeys
 
     time (doIdKeys.pl -buildDir=`pwd`  criGriChoV1) > do.log 2>&1 &
+XXX - running - Thu Apr 13 10:26:22 PDT 2017
     # real    12m20.939s
 
     cat criGriChoV1.keySignature.txt
     #   8ae219619932349bebc17364408bf9d0
 
 ##########################################################################
-# cpgIslands - (TBD - 2017-03-28 - Hiram)
+# cpgIslands - (DONE - 2017-04-13 - Hiram)
     mkdir /hive/data/genomes/criGriChoV1/bed/cpgIslands
     cd /hive/data/genomes/criGriChoV1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku criGriChoV1) > do.log 2>&1 &
+XXX - running - Thu Apr 13 10:26:22 PDT 2017
     # real    3m28.088s
 
     cat fb.criGriChoV1.cpgIslandExt.txt
     # 4735284 bases of 1369865365 (0.346%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2017-03-28 - Hiram)
+# genscan - (DONE - 2017-04-13 - Hiram)
     mkdir /hive/data/genomes/criGriChoV1/bed/genscan
     cd /hive/data/genomes/criGriChoV1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku criGriChoV1) > do.log 2>&1 &
+XXX - running - Thu Apr 13 10:26:22 PDT 2017
     # real    105m32.304s
 
     cat fb.criGriChoV1.genscan.txt
@@ -522,12 +554,13 @@ XXX - running - Tue Apr 11 13:39:55 PDT 2017
 
 
 #############################################################################
-# augustus gene track (TBD - 2017-03-28 - Hiram)
+# augustus gene track (DONE - 2017-04-13 - Hiram)
 
     mkdir /hive/data/genomes/criGriChoV1/bed/augustus
     cd /hive/data/genomes/criGriChoV1/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
-     -species=chicken -dbHost=hgwdev -workhorse=hgwdev criGriChoV1) > do.log 2>&1 &
+    -species=human -dbHost=hgwdev -workhorse=hgwdev criGriChoV1) > do.log 2>&1 &
+XXX - running - Thu Apr 13 10:26:22 PDT 2017
     # real    79m25.311s
 
     cat fb.criGriChoV1.augustusGene.txt
@@ -585,36 +618,41 @@ XXX - running - Tue Apr 11 13:39:55 PDT 2017
     #	real    597m52.740s
 
 #############################################################################
-# Create kluster run files (TBD - 2017-03-28 - Hiram)
+# Create kluster run files (DONE - 2017-04-13 - Hiram)
 
     # numerator is criGriChoV1 gapless bases "real" as reported by:
     featureBits -noRandom -noHap criGriChoV1 gap
-    # 45444714 bases of 1227082306 (3.703%) in intersection
+    # 81654506 bases of 2318132242 (3.522%) in intersection
     #                   ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1227082306 / 2861349177 \) \* 1024
-    #  ( 1227082306 / 2861349177 ) * 1024 = 439.139792
+    calc \( 2318132242 / 2861349177 \) \* 1024
+    #  ( 2318132242 / 2861349177 ) * 1024 = 829.597253
 
-    # ==> use -repMatch=500 according to size scaled down from 1024 for human.
-    #   and rounded up to nearest 100
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 100
     cd /hive/data/genomes/criGriChoV1
     blat criGriChoV1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/criGriChoV1.11.ooc \
-        -repMatch=500
-    #   Wrote 31375 overused 11-mers to jkStuff/criGriChoV1.11.ooc
+        -repMatch=800
+    #   Wrote 24542 overused 11-mers to jkStuff/criGriChoV1.11.ooc
     # criGri1 was:
-    #   Wrote 31229 overused 11-mers to jkStuff/xenTro7.11.ooc
+    #	Wrote 21108 overused 11-mers to jkStuff/criGri1.11.ooc
 
     #   check non-bridged gaps to see what the typical size is:
+    # there are no non-bridged gaps in this assembly:
+    hgsql -N -e 'select bridge from gap;' criGriChoV1 | sort | uniq -c
+    #	156635 yes
+
+    # if there are, scan their sizes:
     hgsql -N \
         -e 'select * from gap where bridge="no" order by size;' criGriChoV1 \
         | sort -k7,7nr | ave -col=7 stdin
-    # there are no non-bridged gaps in this assembly
 
+    # and make a gap lift file for genbank
     # # all these gap sizes are 100
     # # minimum gap size is 100 and produces a reasonable number of lifts
     # gapToLift -verbose=2 -minGap=10 criGriChoV1 jkStuff/nonBridged.lft \
@@ -655,30 +693,31 @@ XXX - running - Tue Apr 11 13:39:55 PDT 2017
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism             mrnaCnt   estCnt  refSeqCnt
-    # Xenopus tropicalis      18478   1271480 8612
+    # Cricetulus griseus      90138   12      345
 
-    # edit etc/genbank.conf to add criGriChoV1 just before macFas5
-# criGriChoV1 'Xenopus tropicalis' 11 chroms + 6811 contigs
+# Organism name:  Cricetulus griseus (Chinese hamster)
+
+    # edit etc/genbank.conf to add criGriChoV1 just before criGri1
+# criGriChoV1 (Cricetulus griseus - Chinese hamster ovary cell line CHO-K1)
 criGriChoV1.serverGenome = /hive/data/genomes/criGriChoV1/criGriChoV1.2bit
 criGriChoV1.clusterGenome = /hive/data/genomes/criGriChoV1/criGriChoV1.2bit
 criGriChoV1.ooc = /hive/data/genomes/criGriChoV1/jkStuff/criGriChoV1.11.ooc
 criGriChoV1.lift = no
-criGriChoV1.perChromTables = no
 criGriChoV1.downloadDir = criGriChoV1
-# criGriChoV1.mgc = yes
-criGriChoV1.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
-criGriChoV1.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
-criGriChoV1.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
-criGriChoV1.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
-criGriChoV1.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+criGriChoV1.perChromTables = no
+criGriChoV1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+criGriChoV1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+criGriChoV1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+criGriChoV1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+criGriChoV1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
 # defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
 # genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
 # refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
-# xenTro7.upstreamGeneTbl = ensGene
-# xenTro7.upstreamMaf = multiz9way /hive/data/genomes/xenTro7/bed/multiz9way/species.list
+# criGriChoV1.upstreamGeneTbl = ensGene
+# criGriChoV1.upstreamMaf = multiz9way /hive/data/genomes/criGriChoV1/bed/multiz9way/species.list
 
-    git commit -m 'adding criGriChoV1 X, tropicalis refs #19151' etc/genbank.conf
+    git commit -m 'adding criGriChoV1 Cricetulus griseus - Chinese hamster ovary cell line CHO-K1 refs #19228' etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
     make etc-update
@@ -686,10 +725,11 @@ criGriChoV1.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.ps
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial criGriChoV1
-    # logFile: var/build/logs/2017.03.28-10:19:21.criGriChoV1.initalign.log
+    # logFile: var/build/logs/2017.04.13-10:50:30.criGriChoV1.initalign.log
+XXX - running - Thu Apr 13 10:50:42 PDT 2017
     #   real    424m59.280s
 
-    tail -2 var/build/logs/2017.03.28-10:19:21.criGriChoV1.initalign.log
+    tail -2 var/build/logs/2017.04.13-10:50:30.criGriChoV1.initalign.log
     #	hgwdev 2017.03.28-17:22:09 criGriChoV1.initalign: Succeeded: criGriChoV1
     #   hgwdev 2017.03.28-17:24:20 criGriChoV1.initalign: finish
 
