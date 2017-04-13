@@ -1,12 +1,14 @@
 table barChartBed
-"BED6+ with additional fields for category count and values
+"BED6+4 with additional fields for category count and median values, and sample matrix fields"
     (
     string chrom;       "Reference sequence chromosome or scaffold"
     uint   chromStart;  "Start position in chromosome"
     uint   chromEnd;    "End position in chromosome"
-    string name;        "Item identifier"
-    uint   score;       "Score from 0-1000; derived from total median all categories (log-transformed and scaled)"
-    char[1] strand;     "+ or - for strand"
+    string name;        "Name or ID of item, ideally both human readable and unique"
+    uint   score;       "Score from 0-1000; typically derived from total of median value from all categories"
+    char[1] strand;     "+ or - for strand. Use . if not applicable"
     uint expCount;      "Number of categories"
-    float[expCount]      expScores; "Comma separated list of category values"
+    float[expCount] expScores; "Comma separated list of category values"
+    bigint _dataOffset;  "Offset of sample data in data matrix file, for boxplot on details page."
+    int _dataLen;        "Length of sample data row in data matrix file.
     )
