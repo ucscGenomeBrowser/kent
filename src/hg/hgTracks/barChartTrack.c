@@ -667,11 +667,6 @@ if (x1-labelWidth <= insideX)
 int itemHeight = itemInfo->height;
 mapBoxHc(hvg, start, end, x1-labelWidth, y, labelWidth, itemHeight-3, 
                     tg->track, mapItemName, itemName);
-// map over background of chart
-// TODO: more efficient
-int graphWidth = barChartWidth(tg, itemInfo);
-mapBoxHc(hvg, start, end, x1, y, graphWidth, itemHeight-3,
-                    tg->track, mapItemName, itemName);
 
 // add maps to category bars
 struct barChartCategory *categs = getCategories(tg);
@@ -702,6 +697,12 @@ if (!filterCategory(tg, categ->name))
     x1 = x1 + barWidth + padding;
     }
 
+// map over background of chart
+// TODO: more efficient
+int graphWidth = barChartWidth(tg, itemInfo);
+getItemX(start, end, &x1, &x2);
+mapBoxHc(hvg, start, end, x1, y, graphWidth, itemHeight-3,
+                    tg->track, mapItemName, itemName);
 }
 
 /* This is lifted nearly wholesale from gtexGene track.  Could be shared */
