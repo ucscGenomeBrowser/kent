@@ -26,7 +26,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     fq.o fuzzyShow.o \
     gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \
-    hacTree.o hash.o hex.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
+    hacTree.o hash.o hex.o histogram.o hmmPfamParse.o hmmstats.o htmlColor.o htmlPage.o htmshell.o \
     hmac.o https.o intExp.o intValTree.o internet.o itsa.o iupac.o \
     jointalign.o jpegSize.o jsonParse.o jsonWrite.o \
     keys.o knetUdc.o kxTok.o linefile.o lineFileOnBigBed.o localmem.o log.o longToList.o \
