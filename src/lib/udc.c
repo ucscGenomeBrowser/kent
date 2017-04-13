@@ -482,21 +482,32 @@ verbose(4, "checking http remote info on %s\n", url);
 int redirectCount = 0;
 struct hash *hash;
 int status;
+char *sizeString = NULL;
 while (TRUE)
     {
     hash = newHash(0);
-    // Avoiding HEAD makes it easier to work with HIPPAA compliant signed AmazonS3 URLs.
-    // In part because the URL generated for GET cannot be used with HEAD.
-    status = netUrlFakeHeadByGet(url, hash);
-    if (status == 206)
+    status = netUrlHead(url, hash);
+    sizeString = hashFindValUpperCase(hash, "Content-Length:");
+    if (status == 200 && sizeString)
 	break;
+    if (status == 403 || (status==200 && !sizeString))
+	{ 
+	// Avoiding HEAD makes it work with HIPPAA compliant signed AmazonS3 URLs.
+	// The signed URL generated for GET cannot be used with HEAD.
+	// There are also a few sites which support byte-ranges but do not return Content-Length with HEAD.
+	hashFree(&hash);
+	hash = newHash(0);
+	status = netUrlFakeHeadByGet(url, hash);
+	if (status == 206) 
+	    break;
+	}
     if (status != 301 && status != 302)  
 	return FALSE;
     ++redirectCount;
     if (redirectCount > 5)
 	{
 	warn("code %d redirects: exceeded limit of 5 redirects, %s", status, url);
-	return  FALSE;
+	return FALSE;
 	}
     char *newUrl = hashFindValUpperCase(hash, "Location:");
     retInfo->ci.redirUrl = cloneString(newUrl);
@@ -504,15 +515,48 @@ while (TRUE)
     hashFree(&hash);
     }
 
-char *rangeString = hashFindValUpperCase(hash, "Content-Range:");
-if (rangeString)
+char *sizeHeader = NULL;
+if (status == 200)
     {
-    /* input pattern: Content-Range: bytes 0-99/2738262 */
-    char *slash = strchr(rangeString,'/');
-    if (slash)
+    sizeHeader = "Content-Length:";
+    // input pattern: Content-Length: 2738262
+    }
+if (status == 206)
+    {
+    sizeHeader = "Content-Range:";
+    // input pattern: Content-Range: bytes 0-99/2738262
+    }
+
+sizeString = hashFindValUpperCase(hash, sizeHeader);
+if (sizeString)
+    {
+    char *parseString = sizeString;
+    if (status == 206)
 	{
-	retInfo->size = atoll(slash+1);
+	parseString = strchr(sizeString, '/');
+	if (!parseString)
+	    {
+	    warn("Header value %s is missing '/' in %s in response for url %s", 
+		sizeString, sizeHeader, url);
+	    return FALSE;
+	    }
+	++parseString; // skip past slash
 	}
+    if (parseString)
+	{
+	retInfo->size = atoll(parseString);
+	}
+    else
+	{
+	warn("Header value %s is missing or invalid in %s in response for url %s", 
+	    sizeString, sizeHeader, url);
+	return FALSE;
+	}
+    }
+else
+    {
+    warn("Response is missing required header %s for url %s", sizeHeader, url);
+    return FALSE;
     }
 
 char *lastModString = hashFindValUpperCase(hash, "Last-Modified:");
