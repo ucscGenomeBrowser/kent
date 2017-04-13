@@ -201,11 +201,18 @@ else
         if (colors)
             {
             unsigned rgb;
-            if (htmlColorForName(colorWords[i], &rgb))
+            char *color = colorWords[i];
+            if (htmlColorForCode(color, &rgb))
+                {
                 categ->color = rgb;
+                }
+            else if (htmlColorForName(color, &rgb))
+                {
+                categ->color = rgb;
+                }
             else
                 warn("barChart track %s unknown color %s. Must be one of %s\n",
-                        tdb->track, colorWords[i], slNameListToString(htmlColorNames(),','));
+                        tdb->track, color, slNameListToString(htmlColorNames(),','));
             }
         else
             {
