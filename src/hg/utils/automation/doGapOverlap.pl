@@ -65,7 +65,7 @@ _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 						'workhorse' => $defaultWorkhorse,
-						'bigClusterHub' => '',
+						'bigClusterHub' => $bigClusterHub,
 						'smallClusterHub' => '');
   print STDERR "
 Automates UCSC's build of gapOverlap track.  Steps:
@@ -104,6 +104,8 @@ sub checkOptions {
   &HgAutomate::processCommonOptions();
   my $err = $stepper->processOptions();
   usage(1) if ($err);
+  $workhorse = $opt_workhorse if ($opt_workhorse);
+  $bigClusterHub = $opt_bigClusterHub if ($opt_bigClusterHub);
   $dbHost = $opt_dbHost if ($opt_dbHost);
 }
 
@@ -113,9 +115,9 @@ sub doPartition {
   my $runDir = "$buildDir";
 
   # First, make sure we're starting clean.
-  if ( ! $opt_debug && ( -s "$runDir/partition.bash" ) ) {
+  if ( ! $opt_debug && ( -s "$runDir/runOne" ) ) {
     die "partition: looks like this was run successfully already " .
-      "(directory db/bed/gapOverlap exists).  Either run with -continue blat or some later " .
+      "(file db/bed/gapOverlap/runOne exists).  Either run with -continue blat or some later " .
         "stage, or move aside/remove $runDir and run again.\n";
   }
 
@@ -130,21 +132,22 @@ export db=$db
 $Bin/nBedToEnds.pl $twoBit | gzip -c > \$db.pairedEnds.tab.gz
 export count=`zcat \$db.pairedEnds.tab.gz | wc -l`
 if [ "\$count" -lt 1 ]; then
-   touch \$db.gapOverlaps.bed
+   touch \$db.gapOverlap.bed
    exit 0
 fi
+
 mkdir -p blatPairs
-if [ "\$count" -lt 10000 ]; then
- zcat \$db.pairedEnds.tab.gz \\
-  | split --suffix-length=1 --lines=1000 --numeric-suffixes - blatPairs/blatList
-  mkdir psl
-  printf '#LOOP
-runOne blatPairs\$(file1) {check out exists psl/\$(file1).psl
+
+printf '#LOOP
+runOne blatPairs/\$(path1) {check out exists psl/\$(path1).psl}
 #ENDLOOP
 ' > template
-  printf '#!/bin/bash
+
+printf '#!/bin/bash
 listIn=\$1
 resultFile=\$2
+resultDir=`dirname \$resultFile`
+mkdir -p \$resultDir
 cat \$listIn | tr "[\\t]" "[ ]" | while read sequencePair
 do
 withDb=`echo \$sequencePair | sed -e "s#^#$twoBit:#; s# # $twoBit:#;"`
@@ -152,6 +155,12 @@ blat \$withDb -q=dna -minIdentity=95 -repMatch=10 -noHead stdout \\
    | awk -F"\\t" "\\\$1 > 0 && \\\$2 == 0 && \\\$12 == 0 && \\\$17 == \\\$15 && \\\$18 == 1"
 done > \$resultFile
 ' > runOne
+
+mkdir psl
+
+if [ "\$count" -lt 10000 ]; then
+ zcat \$db.pairedEnds.tab.gz \\
+  | split --suffix-length=1 --lines=1000 --numeric-suffixes - blatPairs/blatList
   cd blatPairs
   find . -type f | grep blatList | sed -e 's#^./##;' > pair.list
   exit 0
@@ -182,24 +191,37 @@ _EOF_
 # * step: blat [bigClusterHub]
 sub doBlat {
   my $runDir = "$buildDir";
+  my $paraHub = $bigClusterHub;
 
   # First, make sure we're starting clean.
-  if ( ! $opt_debug && ( -s "$runDir/blat.bash" ) ) {
-    die "doPartition looks like this was run successfully already " .
-      "(directory db/bed/idKeys exists).  Either run with -continue blat or some later " .
+  if ( ! $opt_debug && ( -s "$runDir/run.time" ) ) {
+    die "doBlat looks like this was run successfully already " .
+      "(file db/bed/gapOverlap/run.time exists).  Either run with -continue load or some later " .
         "stage, or move aside/remove $runDir and run again.\n";
   }
 
+  # Verify partition step has completed
+  if ( ! $opt_debug && ( ! -s "$runDir/template" ) ) {
+    die "doBlat looks like partition step has not been competed, " .
+      "file db/bed/gapOverlap/template does not exists. run with: -continue partition to perform required step.\n";
+  }
+
+  # already have this done, could be empty file from partition step
+  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed" ) );
+  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed.gz" ) );
+
   &HgAutomate::mustMkdir($runDir);
 
-  my $whatItDoes = "Set up paired list of sequences to blat.";
+  my $whatItDoes = "Run blat on the paired sequences.";
   my $bossScript = newBash HgRemoteScript("$runDir/blat.bash",
-		$workhorse, $runDir, $whatItDoes);
+		$paraHub, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-template csh commands
+chmod +x runOne
+$HgAutomate::gensub2 blatPairs/pair.list single template jobList
+$HgAutomate::paraRun
 _EOF_
-  );
+    );
   $bossScript->execute();
 } # doBlat
 
@@ -210,19 +232,33 @@ sub doLoad {
 
   # First, make sure we're starting clean.
   if ( ! $opt_debug && ( -s "$runDir/loadUp.bash" ) ) {
-    die "doPartition looks like this was run successfully already " .
-      "(directory db/bed/idKeys exists).  Either run with -continue blat or some later " .
-        "stage, or move aside/remove $runDir and run again.\n";
+    die "doLoad looks like this was run successfully already, " .
+      "file db/bed/loadUp.bash exists.  Can run with: -continue cleanup " .
+        "to complete this procedure.\n";
   }
+
+  # already have this done, could be empty file from partition step
+  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed" ) );
+  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed.gz" ) );
 
   &HgAutomate::mustMkdir($runDir);
 
-  my $whatItDoes = "Set up paired list of sequences to blat.";
+  my $whatItDoes = "Collect psl results, load gapOverlap table if results exist.";
   my $bossScript = newBash HgRemoteScript("$runDir/loadUp.bash",
 		$workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-template csh commands
+pslCat -nohead -dir psl | gzip -c > $db.gapOverlap.psl.gz
+count=`zcat $db.gapOverlap.psl.gz | wc -l`
+if [ "\$count" -lt 1 ]; then
+   printf "No PSL results found, no items to load.  Successful procedure.\\n"
+   touch $db.gapOverlap.bed
+   exit 0
+fi
+zcat $db.gapOverlap.psl.gz | $Bin/overlapPslToBed.pl stdin > $db.gapOverlap.bed
+hgLoadBed -type=bed12 $db gapOverlap $db.gapOverlap.bed
+checkTableCoords $db gapOverlap
+featureBits -countGaps $db gapOverlap > fb.$db.gapOverlap.txt 2>&1
 _EOF_
   );
   $bossScript->execute();
@@ -232,14 +268,12 @@ _EOF_
 # * step: cleanup [workhorse]
 sub doCleanup {
   my $runDir = "$buildDir";
-  my $whatItDoes = "It cleans up or compresses intermediate files.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
+  my $whatItDoes = "Clean up and/or compress intermediate files.";
+  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $workhorse,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -rf run.template/raw/
-rm -rf templateOtherBigTempFilesOrDirectories
-gzip template
+rm -fr psl blatPairs
+gzip $db.gapOverlap.bed
 _EOF_
   );
   $bossScript->execute();
