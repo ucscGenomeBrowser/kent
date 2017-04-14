@@ -36,6 +36,10 @@ while (my $line = <FH>) {
 }
 close (FH);
 
+my $nameEmail = `grep -v "^#" codeSummariesBackTo.txt | tail -1`;
+chomp $nameEmail;
+my ($name, $email) = split('\t', $nameEmail);
+
 my $victimList = join(' ', sort @victims);
 open (FH, "|mail -r $returnEmail -s 'Code summaries for v$branchNN are expected from....' $buildMeisterEmail") or die "can not run mail command";
 printf FH "%s\n", $victimList;
@@ -53,9 +57,9 @@ foreach my $victim (sort keys %victimEmail) {
        printf STDERR "# sending email to $toAddr\n";
        open (SH, "| /usr/sbin/sendmail -t -oi") or die "can not run sendmail";
        printf SH "To: %s\n", $toAddr;
-       printf SH "From: \"Brian Lee\" <brianlee\@soe.ucsc.edu>\n";
+       printf SH "From: \"%s\" <%s>\n", $name, $email;
        printf SH "Subject: Code summaries are due for %s\n", $victim;
-       printf SH "Cc: \"Brian Lee\" <brianlee\@soe.ucsc.edu>\n";
+       printf SH "Cc: \"%s\" <%s>\n", $name, $email;
        printf SH "\n";
        print SH `./summaryEmail.sh $victim`;
   }
