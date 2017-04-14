@@ -94,37 +94,21 @@ else
     }
 }
 
-void loadSimpleBed(struct track *tg)
-/* Load the items in one track - just move beds in
- * window... */
+char *bedName(struct track *tg, void *item);
+
+void loadSimpleBedWithLoader(struct track *tg, bedItemLoader loader)
+/* Load the items in one track using specified loader - just move beds in window... */
 {
-struct bed *(*loader)(char **row);
 struct bed *bed, *list = NULL;
 char **row;
 int rowOffset;
 char *words[3];
 int wordCt;
 char query[128];
-char *setting = NULL;
 bool doScoreCtFilter = FALSE;
 int scoreFilterCt = 0;
+char *setting;
 char *topTable = NULL;
-
-if (tg->bedSize <= 3)
-    loader = bedLoad3;
-else if (tg->bedSize == 4)
-    loader = bedLoad;
-else if (tg->bedSize == 5)
-    loader = bedLoad5;
-else
-    loader = bedLoad6;
-
-// pairedTagAlign loader is required for base coloring using sequence from seq1 & seq2
-// after removing optional bin column, this loader assumes seq1 and seq2 are in
-// row[6] and row[7] respectively of the sql result.
-if ((setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE))
-	&& sameString(setting, "seq1Seq2"))
-    loader = bedLoadPairedTagAlign;
 
 /* limit to a specified count of top scoring items.
  * If this is selected, it overrides selecting item by specified score */
@@ -165,7 +149,7 @@ else if (tg->isBigBed)
     if (scoreFilter)
 	minScore = atoi(scoreFilter);
 
-    if (!trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
+     if (tg->itemName == bedName && !trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
         tg->itemName = bigBedItemName;
 
     calculateLabelFields(tg);
@@ -218,6 +202,30 @@ if (doScoreCtFilter)
     }
 slReverse(&list);
 tg->items = list;
+}
+
+void loadSimpleBed(struct track *tg)
+/* Load the items in one track - just move beds in
+ * window... */
+{
+struct bed *(*loader)(char **row);
+if (tg->bedSize <= 3)
+    loader = bedLoad3;
+else if (tg->bedSize == 4)
+    loader = bedLoad;
+else if (tg->bedSize == 5)
+    loader = bedLoad5;
+else
+    loader = bedLoad6;
+
+char *setting = NULL;
+// pairedTagAlign loader is required for base coloring using sequence from seq1 & seq2
+// after removing optional bin column, this loader assumes seq1 and seq2 are in
+// row[6] and row[7] respectively of the sql result.
+if ((setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE))
+	&& sameString(setting, "seq1Seq2"))
+    loader = bedLoadPairedTagAlign;
+loadSimpleBedWithLoader(tg, loader);
 }
 
 void bed8To12(struct bed *bed)
