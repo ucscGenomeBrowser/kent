@@ -200,7 +200,7 @@ jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {ev
 }
 
 void jsOnEventByIdF(char *eventName, char *idText, char *format, ...)
-/* Add js mapping for inline event */
+/* Add js mapping for inline event with printf formatting */
 {
 checkValidEvent(eventName);
 jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; ", idText, eventName);

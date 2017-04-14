@@ -47,6 +47,8 @@
 #include "htmlPage.h"
 #include "longRange.h"
 #include "tagRepo.h"
+#include "fieldedTable.h"
+#include "barChartUi.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -4090,7 +4092,9 @@ switch(cType)
     case cfgSnake:      snakeCfgUi(cart, tdb, prefix, title, boxed);
 			break;
     case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
-			break;
+                        break;
+    case cfgBarChart:   barChartCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
 			break;
@@ -8644,6 +8648,8 @@ else if (sameWord("bedDetail", tdb->type))
     asObj = bedDetailAsObj();
 else if (sameWord("pgSnp", tdb->type))
     asObj = pgSnpAsObj();
+else if (sameWord("barChart", tdb->type))
+    asObj = asParseText(barChartAutoSqlString);
 else
     asObj = asFromTableDescriptions(conn, tdb->table);
 return asObj;

@@ -7,7 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgc
 
-O = $A.o bamClick.o bigBedClick.o dbRIP.o ccdsClick.o cgapSageClick.o encodeClick.o expClick.o \
+O = $A.o bamClick.o barChartClick.o bigBedClick.o dbRIP.o ccdsClick.o cgapSageClick.o \
+	encodeClick.o expClick.o \
 	gencodeClick.o gtexClick.o gvfClick.o hgdpClick.o \
 	lowelab.o lrgClick.o \
 	mafClick.o makeItemsClick.o mgcClick.o \

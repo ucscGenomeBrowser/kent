@@ -438,7 +438,7 @@ safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.reset=on", uiVars);
 appendLinkWithShortcut(&links, buf, "Default Tracks", "defaultTracksMenuLink", "Show only default tracks", "d t", FALSE, FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars);
 appendLinkWithShortcut(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", "Re-order tracks to be in default order", "d o", FALSE, FALSE);
-appendLinkWithOnclick(&links, "#", "Remove all highlights", "cleaerHighlightLink", "Remove all active highlights", "highlightCurrentPosition('clear'); $('ul.nice-menu li ul').hide();", "h c", FALSE, FALSE);
+appendLinkWithOnclick(&links, "#", "Remove all highlights", "cleaerHighlightLink", "Remove all highlights on all genomes", "highlightCurrentPosition('clear'); $('ul.nice-menu li ul').hide();", "h c", FALSE, FALSE);
 appendLinkWithShortcut(&links, "../cgi-bin/cartReset", "Reset All User Settings", "cartResetMenuLink", "Clear user data, e.g. active tracks, track configuration, custom data, ...", "c r", FALSE, FALSE);
 
 struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul>\n");

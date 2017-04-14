@@ -775,6 +775,7 @@ if (tdb->subtracks != NULL)
 else
     {
     /* Check type field. */
+    // KRR FIX: table lookup
     char *type = requiredSetting(hub, genome, tdb, "type");
     if (startsWithWord("wig", type))
         {
@@ -793,6 +794,7 @@ else
               startsWithWord("longTabix", type) ||
               startsWithWord("bigGenePred", type) ||
               startsWithWord("bigChain", type) ||
+              startsWithWord("bigBarChart", type) ||
               startsWithWord("bam", type)))
             {
             errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
