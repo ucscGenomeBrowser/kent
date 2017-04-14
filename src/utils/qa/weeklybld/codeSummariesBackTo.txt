@@ -1,0 +1,4 @@
+# name<tab>emailAddr
+# only one name uncommented at any time
+# Ann Zweig	ann@soe.ucsc.edu
+Brian Lee	brianlee@soe.ucsc.edu
