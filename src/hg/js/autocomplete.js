@@ -61,7 +61,13 @@ var suggestBox = {
         var lastSelected = null; // this is the last value entered by the user via a suggestion (used to distinguish manual entry in the same field)
         var waterMark;
         if (assemblySupportsGeneSuggest) {
-            waterMark = "enter position, gene symbol, HGVS or search terms";
+            if (db.match(/^hg[0-9]+/)) {
+                // Mention HGVS variant notation for human assemblies only, although it should work
+                // with any assembly that has refGene or ncbiRefSeq.
+                waterMark = "enter position, gene symbol, HGVS or search terms";
+            } else {
+                waterMark = "enter position, gene symbol or search terms";
+            }
         } else {
             waterMark = "enter position or search terms";
         }
