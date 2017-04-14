@@ -193,6 +193,10 @@ sub doBlat {
   my $runDir = "$buildDir";
   my $paraHub = $bigClusterHub;
 
+  # already have this done, could be empty file from partition step
+  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed" ) );
+  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed.gz" ) );
+
   # First, make sure we're starting clean.
   if ( ! $opt_debug && ( -s "$runDir/run.time" ) ) {
     die "doBlat looks like this was run successfully already " .
@@ -205,10 +209,6 @@ sub doBlat {
     die "doBlat looks like partition step has not been competed, " .
       "file db/bed/gapOverlap/template does not exists. run with: -continue partition to perform required step.\n";
   }
-
-  # already have this done, could be empty file from partition step
-  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed" ) );
-  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed.gz" ) );
 
   &HgAutomate::mustMkdir($runDir);
 
@@ -230,16 +230,16 @@ _EOF_
 sub doLoad {
   my $runDir = "$buildDir";
 
+  # already have this done, could be empty file from partition step
+  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed" ) );
+  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed.gz" ) );
+
   # First, make sure we're starting clean.
   if ( ! $opt_debug && ( -s "$runDir/loadUp.bash" ) ) {
     die "doLoad looks like this was run successfully already, " .
       "file db/bed/loadUp.bash exists.  Can run with: -continue cleanup " .
         "to complete this procedure.\n";
   }
-
-  # already have this done, could be empty file from partition step
-  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed" ) );
-  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed.gz" ) );
 
   &HgAutomate::mustMkdir($runDir);
 
