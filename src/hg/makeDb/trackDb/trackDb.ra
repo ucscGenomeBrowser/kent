@@ -2959,9 +2959,9 @@ searchMethod fuzzy
 termRegex g[0-9]+(\.t[0-9]+)?
 searchPriority 50
 
-track contigOverlaps
-shortLabel Contig Overlaps
-longLabel Identical contig ends on each side of a gap
+track gapOverlap
+shortLabel Gap Overlaps
+longLabel Exactly identical sequence on each side of a gap
 group map
 visibility hide
 type bed 12
