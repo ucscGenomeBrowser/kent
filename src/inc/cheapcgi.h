@@ -33,7 +33,7 @@ void jsOnEventById(char *event, char *idText, char *jsText);
 /* Add js mapping for inline event */
 
 void jsOnEventByIdF(char *event, char *idText, char *format, ...)
-/* Add js mapping for inline event */
+/* Add js mapping for inline event with printf formatting */
 #if defined(__GNUC__)
 __attribute__((format(printf, 3, 4)))
 #endif

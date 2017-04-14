@@ -24,6 +24,10 @@ autoTranslate genePred
 bamColorMode bam
 bamGrayMode bam
 bamSkipPrintQualScore bam
+barChartLabel barChart
+barChartRange barChart
+barChartUnit barChart
+barChartBars barChart
 baseColorDefault *
 baseColorTickColor bed bigBed
 baseColorUseCds bed psl genePred bigPsl
@@ -178,7 +182,7 @@ hapClusterTreeAngle vcf vcfTabix
 hapClusterHeight vcf vcfTabix
 hapmapPhase bed
 hgGene genePred
-hgsid bed genePred
+hgsid bed genePred bigBed
 highlightBy genePred
 highlightColor genePred
 hoverMetadata wig bigWig
