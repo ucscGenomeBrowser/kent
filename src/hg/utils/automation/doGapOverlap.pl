@@ -248,7 +248,7 @@ sub doLoad {
 		$workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-pslCat -nohead -dir psl | gzip -c > $db.gapOverlap.psl.gz
+find ./psl -type f | grep "\.psl\$" | gzip -c > $db.gapOverlap.psl.gz
 count=`zcat $db.gapOverlap.psl.gz | wc -l`
 if [ "\$count" -lt 1 ]; then
    printf "No PSL results found, no items to load.  Successful procedure.\\n"
