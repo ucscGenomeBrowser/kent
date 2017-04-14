@@ -178,7 +178,7 @@ if (labels == NULL)
     }
 else
     {
-    struct rgbColor *rainbow;
+    struct rgbColor *rainbow = NULL;
     int count = chopLine(cloneString(labels), words);
     if (colors == NULL)
         rainbow = getRainbow(&saturatedRainbowAtPos, count);
