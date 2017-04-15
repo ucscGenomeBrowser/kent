@@ -974,17 +974,18 @@ var dragSelect = {
     areaSelector:    null, // formerly "imgAreaSelect". jQuery element used for imgAreaSelect
     originalCursor:  null,
     startTime:       null,
+    escPressed :     false,  // flag is set when user presses Escape
 
     selectStart: function (img, selection)
     {
         initVars();
+        dragSelect.escPressed = false;
         if (rightClick.menu) {
             rightClick.menu.hide();
         }
         var now = new Date();
         dragSelect.startTime = now.getTime();
         posting.blockMapClicks();
-
     },
 
     selectChange: function (img, selection)
@@ -1255,9 +1256,11 @@ var dragSelect = {
 
     selectEnd: function (img, selection, event)
     {
+        if (dragSelect.escPressed)
+            return false;
         var now = new Date();
         var doIt = false;
-        var rulerClicked = selection.y1 <= hgTracks.rulerClickHeight;
+        var rulerClicked = selection.y1 <= hgTracks.rulerClickHeight; // = drag on base position track (no shift)
         if (dragSelect.originalCursor)
             jQuery('body').css('cursor', dragSelect.originalCursor);
         // ignore releases outside of the image rectangle (allowing a 10 pixel slop)
@@ -1265,7 +1268,7 @@ var dragSelect = {
             // ignore single clicks that aren't in the top of the image
             // (this happens b/c the clickClipHeight test in dragSelect.selectStart
             // doesn't occur when the user single clicks).
-            doIt = dragSelect.startTime !== null || rulerClicked;
+            doIt = (dragSelect.startTime !== null || rulerClicked);
         }
 
         if (doIt) {
@@ -1340,7 +1343,7 @@ var dragSelect = {
             $(document).keyup(function(e){
                 if(e.keyCode === 27) {
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
-                    dragSelect.startTime = null;
+                    dragSelect.escPressed = true;
                 }
             });
 
