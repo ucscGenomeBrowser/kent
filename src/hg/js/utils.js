@@ -1350,6 +1350,11 @@ function gtexTransformChanged(name)
     maxTextLabel.toggleClass("disabled", isLogChecked ? true : false);
 }
 
+function barChartUiTransformChanged(name) {
+// Disable view limits settings if log transform enabled
+    gtexTransformChanged(name);
+}
+
 function gtexSamplesChanged(name)
 { // Disable and comparison controls if all samples selected
 
