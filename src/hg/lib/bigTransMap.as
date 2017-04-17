@@ -35,8 +35,8 @@ table bigTransMap
     string srcChrom;  "source chromosome"
     uint srcChromStart; "start position in source chromosome"
     uint srcChromEnd; "end position in source chromosome"
-    uint srcScore;    "source source (faction identity * 1000)
-    uint srcAligned;   "fraction of source aligned (faction identity * 1000)
+    uint srcIdent;    "source score (fraction identity * 1000)
+    uint srcAligned;   "fraction of source transcript aligned (fraction aligned * 1000)
     string geneName;  "gene name"
     string geneId;  "gene id"
     string geneType; "gene type"
