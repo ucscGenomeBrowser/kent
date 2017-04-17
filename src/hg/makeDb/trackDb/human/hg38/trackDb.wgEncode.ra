@@ -13,5 +13,6 @@ include wgEncodeGencodeV22.ra
 include wgEncodeGencodeV23.ra
 include wgEncodeGencodeV24.ra
 include wgEncodeGencodeV25.ra
+include wgEncodeGencodeV26.ra
 
 include wgEncodeReg.ra
