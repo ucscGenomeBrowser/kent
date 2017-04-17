@@ -1236,11 +1236,10 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
     rm -r split fold err batch.bak
 
 # Make pfam run.  Actual cluster run is about 6 hours.
-# TODO:  Should grab newest Pfam, but for the moment, use what we have
-# mkdir -p /hive/data/outside/pfam/Pfam26.0
-# cd /hive/data/outside/pfam/Pfam26.0
-# wget ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz
-# gunzip Pfam-A.hmm.gz
+mkdir -p /hive/data/outside/pfam/Pfam31.0
+cd /hive/data/outside/pfam/Pfam31.0
+wget ftp://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz
+gunzip Pfam-A.hmm.gz
 #set pfamScratch = $scratchDir/pfamBR
 #ssh $cpuFarm mkdir -p $pfamScratch
 #ssh $cpuFarm cp /hive/data/outside/pfam/Pfam26.0/Pfam-A.hmm $pfamScratch
@@ -1254,16 +1253,15 @@ mkdir -p result
 ls -1 splitProt > prot.list
 # /hive/data/outside/pfam/hmmpfam -E 0.1 /hive/data/outside/pfam/Pfam26.0/Pfam-A.hmm 
 cat << '_EOF_' > doPfam
-#!/bin/csh -ef
-/hive/data/outside/pfam/hmmpfam -E 0.1 /hive/data/outside/pfam/current/Pfam_fs \
-	splitProt/$1 > /scratch/tmp/$2.pf
-mv /scratch/tmp/$2.pf $3
+#!/bin/csh -ef  
+/hive/data/outside/pfam/Pfam29.0/PfamScan/hmmer-3.1b2-linux-intel-x86_64/binaries/hmmsearch   --domtblout /scratch/tmp/pfam.$2.pf --noali -o /dev/null -E 0.1 /hive/data/outside/pfam/Pfam31.0/Pfam-A.hmm     splitProt/$1 
+mv /scratch/tmp/pfam.$2.pf $3
 '_EOF_'
     # << happy emacs
 chmod +x doPfam
 cat << '_EOF_' > template
 #LOOP
-doPfam $(path1) $(root1) {check out line+ result/$(root1).pf}
+./doPfam $(path1) $(root1) {check out line+ result/$(root1).pf}
 #ENDLOOP
 '_EOF_'
 gensub2 prot.list single template jobList
@@ -1273,35 +1271,33 @@ ssh $cpuFarm "cd $dir/pfam; para time > run.time"
 cat run.time
 
 # Completed: 9670 of 9670 jobs
-# CPU time in finished jobs:    3694141s   61569.02m  1026.15h   42.76d  0.117 y
-# IO & Wait Time:               5072797s   84546.61m  1409.11h   58.71d  0.161 y
-# Average job time:                 907s      15.11m     0.25h    0.01d
-# Longest finished job:            4930s      82.17m     1.37h    0.06d
-# Submission to last job:         23906s     398.43m     6.64h    0.28d
+# CPU time in finished jobs:    2470667s   41177.79m   686.30h   28.60d  0.078 y
+# IO & Wait Time:                659066s   10984.43m   183.07h    7.63d  0.021 y
+# Average job time:                 324s       5.39m     0.09h    0.00d
+# Longest finished job:             663s      11.05m     0.18h    0.01d
+# Submission to last job:         49263s     821.05m    13.68h    0.57d
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cat << '_EOF_' > makePfamRa.awk
 /^NAME/ {print}
 /^ACC/ {print}
-/^DESC/ {print; printf("\n");}
+/^DESC/ {print}
+/^TC/ {print $1,$3; printf("\n");}
 '_EOF_'
-awk -f makePfamRa.awk  /hive/data/outside/pfam/current/Pfam_fs > pfamDesc.ra
-raToTab -cols=ACC,NAME,DESC pfamDesc.ra stdout | \
-   awk -F '\t' '{printf("%s\t%s\t%s\n", gensub(/\.[0-9]+/, "", "g", $1), $2, $3);}' > pfamDesc.tab
+awk -f makePfamRa.awk  /hive/data/outside/pfam/Pfam31.0/Pfam-A.hmm  > pfamDesc.ra
+raToTab -cols=ACC,NAME,DESC,TC pfamDesc.ra stdout |  awk -F '\t' '{printf("%s\t%s\t%s\t%g\n", $1, $2, $3, $4);}' | sort > pfamDesc.tab
 
 # Convert output to tab-separated file. 
 cd $dir/pfam
-catDir result | hmmPfamToTab -eValCol stdin ucscPfam.tab
+catDir result | sed '/^#/d' > allResults.tab
+awk 'BEGIN {OFS="\t"} { print $5,$1,$18-1,$19,$4,$14}' allResults.tab | sort > allUcscPfam.tab
+join  -t $'\t' -j 1  allUcscPfam.tab pfamDesc.tab | tawk '{if ($6 > $9) print $2, $3, $4, $5, $6, $1}' > ucscPfam.tab
 cd $dir
 
 # Convert output to knownToPfam table
-awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
-	pfam/pfamDesc.tab > sub.tab
-cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
-rm -f sub.tab
-hgLoadSqlTab $tempDb knownToPfam $kent/src/hg/lib/knownTo.sql knownToPfam.tab
-hgLoadSqlTab $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
-hgsql $tempDb -e "delete k from knownToPfam k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
+tawk '{print $1, gensub(/\.[0-9]+/, "", "g", $6)}' pfam/ucscPfam.tab | sort -u > knownToPfam.tab
+hgLoadSqlTab -notOnServer $tempDb knownToPfam $kent/src/hg/lib/knownTo.sql knownToPfam.tab
+tawk '{print gensub(/\.[0-9]+/, "", "g", $1), $2, $3}' pfam/pfamDesc.tab| hgLoadSqlTab -notOnServer $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql stdin
 
 cd $dir/pfam
 genePredToFakePsl hg19 knownGene knownGene.psl cdsOut.tab

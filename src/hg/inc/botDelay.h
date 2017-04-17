@@ -29,5 +29,9 @@ void hgBotDelayNoWarnFrac(double fraction);
 /* Like hgBotDelayNoWarn, but imposes a fraction of the standard access penalty */
 
 int hgBotDelayTime();
-/* Get suggested delay time from cgi. */
+/* Get suggested delay time from cgi using the standard penalty. */
+
+int hgBotDelayTimeFrac(double fraction);
+/* Get suggested delay time from cgi using the specified fraction of the standard penalty. */
+
 

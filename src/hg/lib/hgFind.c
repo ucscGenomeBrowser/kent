@@ -2599,9 +2599,11 @@ if (relativeFlag)
 
 static boolean isBigFileFind(struct hgFindSpec *hfs)
 /* is this a find on a big* file? */
+// KRR TODOO: replace with table lookup  (same as tdbIsBIgBed) in trackDb.h ?
 {
 return sameString(hfs->searchType, "bigBed")
     || sameString(hfs->searchType, "bigPsl")
+    || sameString(hfs->searchType, "bigBarChart")
     || sameString(hfs->searchType, "bigGenePred");
 }
 
@@ -2734,6 +2736,28 @@ if (xrefList == NULL && hgFindSpecSetting(hfs, "searchBoth") != NULL)
 return(xrefList);
 }
 
+static void addHighlight(struct cart *cart, char *db, char *chrom, unsigned start, unsigned end)
+/* Add the given region to the cart variable highlight. */
+{
+char *color = "fcfcac";
+struct dyString *dy = dyStringCreate("%s.%s:%u-%u#%s", db, chrom, start+1, end, color);
+char *existing = cartOptionalString(cart, "highlight");
+if (isEmpty(existing))
+    cartSetString(cart, "highlight", dyStringContents(dy));
+else
+    {
+    // Don't add region if it is already in the existing highlight setting.
+    char *alreadyIn = strstr(existing, dyStringContents(dy));
+    if (!alreadyIn ||
+        !(alreadyIn[dyStringLen(dy)] == '|' || alreadyIn[dyStringLen(dy)] == '\0'))
+        {
+        dyStringPrintf(dy, "|%s", existing);
+        cartSetString(cart, "highlight", dyStringContents(dy));
+        }
+    }
+dyStringFree(&dy);
+}
+
 static boolean doQuery(char *db, struct hgFindSpec *hfs, char *xrefTerm, char *term,
 		       struct hgPositions *hgp,
 		       boolean relativeFlag, int relStart, int relEnd,
@@ -2811,6 +2835,8 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 	    }
 	else if (padding > 0 && !multiTerm)
 	    {
+            // highlight the item bases to distinguish from padding
+            addHighlight(cart, db, pos->chrom, pos->chromStart, pos->chromEnd);
 	    int chromSize = hChromSize(db, pos->chrom);
 	    pos->chromStart -= padding;
 	    pos->chromEnd   += padding;
@@ -3038,7 +3064,7 @@ if (foundIt)
 return foundIt;
 }
 
-static boolean matchesHgvs(char *db, char *term, struct hgPositions *hgp)
+static boolean matchesHgvs(struct cart *cart, char *db, char *term, struct hgPositions *hgp)
 /* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature */
 /* See http://varnomen.hgvs.org/ */
 {
@@ -3065,6 +3091,8 @@ if (hgvs)
             trackTable = "refGene";
         singlePos(hgp, "HGVS", NULL, trackTable, term, "",
                   mapping->chrom, mapping->chromStart-padding, mapping->chromEnd+padding);
+        // highlight the mapped bases to distinguish from padding
+        addHighlight(cart, db, mapping->chrom, mapping->chromStart, mapping->chromEnd);
         foundIt = TRUE;
         }
     dyStringFree(&dyWarn);
@@ -3173,7 +3201,7 @@ if (hgOfficialChromName(db, term) != NULL) // this mangles the term
     singlePos(hgp, "Chromosome Range", NULL, "chromInfo", originalTerm,
 	      "", chrom, start, end);
     }
-else if (!matchesHgvs(db, term, hgp))
+else if (!matchesHgvs(cart, db, term, hgp))
     {
     struct hgFindSpec *shortList = NULL, *longList = NULL;
     struct hgFindSpec *hfs;

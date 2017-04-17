@@ -417,6 +417,7 @@ freeMem(encodedMapName);
 return(cloneString(buf));
 }
 
+//KATE FIX: Remove this
 #ifdef REMOTE_TRACK_AJAX_CALLBACK
 static boolean trackUsesRemoteData(struct track *track)
 /* returns TRUE is this track has a remote datasource */
@@ -4315,6 +4316,7 @@ if (
 || sameWord(type, "gvf")
 || sameWord(type, "narrowPeak")
 || sameWord(type, "psl")
+|| sameWord(type, "barChart")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
 ) 
@@ -5852,7 +5854,8 @@ else if (sameString(type, "bigWig"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain"))
+// KATE FIX: from table
+else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain") || sameString(type, "bigBarChart"))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
@@ -5867,6 +5870,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameStr
 	safef(typeBuf, sizeof(typeBuf), "bigMaf");
     else if (sameString(type, "bigPsl"))
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
+    else if (sameString(type, "bigBarChart"))
+	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
     else
 	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
     tdb->type = cloneString(typeBuf);
@@ -6815,6 +6820,7 @@ struct paraFetchData
 static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
+// KATE FIX
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
 return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bigBed"  , track->tdb->type)

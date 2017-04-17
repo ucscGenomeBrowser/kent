@@ -9,7 +9,8 @@ import logging, sys, optparse, gzip, gc
 from collections import defaultdict
 from os.path import join, basename, dirname, isfile, isdir, splitext
 import os, marshal, glob
-from multiprocessing.dummy import Pool as ThreadPool
+from multiprocessing.dummy import Pool
+import time
 
 # no garbage collection needed in here
 gc.disable()
@@ -53,11 +54,11 @@ def parseArgs():
     """)
 
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
-    parser.add_option("-t", "--threads", dest="threads", action="store", type="int", help="number of threads to use, default %default", default=20)
+    parser.add_option("-t", "--threads", dest="threads", action="store", type="int", help="number of threads to use, default %default", default=30)
     parser.add_option("-s", "--addZeros", dest="addZeros", action="store_true", help="keep genes with only 0 values, makes sure that the matrix rowcount is always the same")
     parser.add_option("-r", "--recursive", dest="recursive", action="store_true", help="search in all subdirectories for files that end with *abundance.tsv")
     parser.add_option("",  "--notEnsembl", dest="notEnsembl", action="store_true", help="Do not check transcript or gene identifiers for Ensembl format.")
-    #parser.add_option("-g", "--geneLevel", dest="geneLevel", action="store_true", help="map transcripts to gene symbols and write the sum of all transcript TPMs into a file <outBase>.geneTpm.tab")
+    parser.add_option("", "--sym", dest="addSymbols", action="store_true", help="append symbols after gene ID, separate with '/'")
     parser.add_option("", "--transFile", dest="transFile", action="store", help="the text file with the mapping transcript-gene-symbol (sym is not used), one per line. default %default", default="/hive/data/outside/gencode/release_22/transToGene.tab")
     (options, args) = parser.parse_args()
     if args==[]:
@@ -131,8 +132,10 @@ def parseKallisto(fname):
         d[fs[0]] = float(fs[tpmColumnIndex])
     return d
         
-def parseDict(fname, stripDot=False):
-    " open (gzip) file with key-val one per line and return as dict "
+def parseGenes(fname, doAddSyms, stripDot=False):
+    """ open (gzip) file with key-val one per line and return as dict 
+    if doAddSyms is true, append the symbol to the gene ID
+    """
     if fname.endswith(".gz"):
         ifh = gzip.open(fname)
     else:
@@ -145,12 +148,14 @@ def parseDict(fname, stripDot=False):
         fs = line.rstrip("\n").split()
         transId = fs[0]
         geneId = fs[1]
+        sym = fs[2]
         assert(notEnsembl or ("T" in transId)) # Ensembl transcript identifiers always have a T in them
         assert(notEnsembl or ("G" in geneId))  # Ensembl gene identifiers always have a G in them
         if stripDot:
             transId = transId.split('.')[0]
             geneId = geneId.split('.')[0]
-        ret[transId]=geneId
+        assert("/" not in sym)
+        ret[transId] = geneId+"/"+sym
     return ret
         
 def outputBigMatrix(cellNames, results, outFname, isGene=False):
@@ -166,7 +171,7 @@ def outputBigMatrix(cellNames, results, outFname, isGene=False):
     else:
         ofh.write("#transcript\t%s\n" % "\t".join(cellNames))
     
-    # create a sorted list of all transcript names
+    # create a sorted list of all transcript or gene IDs
     logging.info("Getting transcript IDs")
     allTrans = set()
     for res in results:
@@ -189,7 +194,7 @@ def outputBigMatrix(cellNames, results, outFname, isGene=False):
     # it's a lot easier and faster to parse, at least for python scripts
     # can be read from python with a single line:
     # matrix = marshal.load(open("data.tab.marshal"))
-    # matrix is then a nested hash: cellName -> transcript -> count
+    # matrix is then a nested hash: cellName -> transcriptID or geneID -> count
     binPath = outFname+".marshal"
     logging.info("Writing %s" % binPath)
     allData = {}
@@ -226,12 +231,12 @@ def outputBigMatrix(cellNames, results, outFname, isGene=False):
         #ofh.write("\n")
     #ofh.close()
     
-def sumTransToGene(transDictList, transFile):
+def sumTransToGene(transDictList, transFile, doAddSyms):
     """ given a list of dict transcript -> tpm, and a map transcript -> gene,
     map all transcripts to genes and return a list of gene -> sum of tpms
     If we have no gene ID, drop the transcript entirely.
     """
-    transToGene = parseDict(transFile, stripDot=True)
+    transToGene = parseGenes(transFile, doAddSyms, stripDot=True)
     logging.info("Mapping %d transcript IDs to gene IDs" % len(transToGene))
 
     newRes = []
@@ -313,17 +318,44 @@ def main():
     logging.info("Using %d threads to parse input files" % threadCount)
 
     # multithreading in 4 lines
-    pool = ThreadPool(threadCount)
-    results = pool.map(parseKallisto, inFnames)
+    pool = Pool()
+    # chunksize=1 lowers performance but means that the progress status is accurate
+    results = pool.map_async(parseKallisto, inFnames, chunksize=1) 
+    #results = pool.map(parseKallisto, inFnames)
+
+    # copied from https://gist.github.com/ekrause/e30739befdd4ab7b661d
+    # this hack makes the async_map respond to ^C interrupts
+    #try:
+        #pool.get(0xFFFF)
+        #monitor_thread.join()
+
+    #except KeyboardInterrupt:
+        #print 'parent received control-c'
+        #exit()
+
+
+    while not results.ready():
+        print("jobs left: {}".format(results._number_left))
+        time.sleep(1)
+
     pool.close()
     pool.join()
+    results = results.get()
 
     logging.info("Done reading input files.")
 
     outputBigMatrix(cellNames, results, transOutFname)
 
     geneOutFname = outBase+".geneTpm.tab"
-    results = sumTransToGene(results, options.transFile)
+    results = sumTransToGene(results, options.transFile, options.addSymbols)
+
     outputBigMatrix(cellNames, results, geneOutFname, isGene=True)
+
+    logFh = open(outBase+".log", "w")
+    logFh.write("inputDir\t%s\n" % inDir)
+    logFh.write("geneModelFname\t%s\n" % options.transFile)
+    logFh.write("addZeros\t%s\n" % options.addZeros)
+    logFh.close()
+    logging.info("Wrote parameters to %s" % logFh.name)
 
 main()

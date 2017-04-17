@@ -476,27 +476,52 @@ return total;
 
 boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
 /* Gets size and last modified time of URL
- * and returns status of HEAD GET. */
+ * and returns status of HEAD or GET byterange 0-0. */
 {
 verbose(4, "checking http remote info on %s\n", url);
 int redirectCount = 0;
 struct hash *hash;
 int status;
+char *sizeString = NULL;
+/*
+ For caching, sites should support byte-range and last-modified.
+ However, several groups including ENCODE have made sites that use CGIs to 
+ dynamically generate hub text files such as hub.txt, genome.txt, trackDb.txt.
+ Byte-range and last-modified are difficult to support for this case,
+ so they do without them, effectively defeat caching. Every 5 minutes (udcTimeout),
+ they get re-downloaded, even when the data has not changed.  
+*/
 while (TRUE)
     {
     hash = newHash(0);
-    // Avoiding HEAD makes it easier to work with HIPPAA compliant signed AmazonS3 URLs.
-    // In part because the URL generated for GET cannot be used with HEAD.
-    status = netUrlFakeHeadByGet(url, hash);
-    if (status == 206)
+    status = netUrlHead(url, hash);
+    sizeString = hashFindValUpperCase(hash, "Content-Length:");
+    if (status == 200 && sizeString)
 	break;
-    if (status != 301 && status != 302)  
+    /*
+    Using HEAD with HIPPAA-compliant signed AmazonS3 URLs generates 403.
+    The signed URL generated for GET cannot be used with HEAD.
+    Instead call GET with byterange=0-0 in netUrlFakeHeadByGet().
+    This supplies both size via Content-Range response header,
+    as well as Last-Modified header which is important for caching.
+    There are also sites which support byte-ranges 
+    but they do not return Content-Length with HEAD.
+    */
+    if (status == 403 || (status==200 && !sizeString))
+	{ 
+	hashFree(&hash);
+	hash = newHash(0);
+	status = netUrlFakeHeadByGet(url, hash);
+	if (status == 206) 
+	    break;
+	}
+    if (status != 301 && status != 302)
 	return FALSE;
     ++redirectCount;
     if (redirectCount > 5)
 	{
 	warn("code %d redirects: exceeded limit of 5 redirects, %s", status, url);
-	return  FALSE;
+	return FALSE;
 	}
     char *newUrl = hashFindValUpperCase(hash, "Location:");
     retInfo->ci.redirUrl = cloneString(newUrl);
@@ -504,15 +529,48 @@ while (TRUE)
     hashFree(&hash);
     }
 
-char *rangeString = hashFindValUpperCase(hash, "Content-Range:");
-if (rangeString)
+char *sizeHeader = NULL;
+if (status == 200)
     {
-    /* input pattern: Content-Range: bytes 0-99/2738262 */
-    char *slash = strchr(rangeString,'/');
-    if (slash)
+    sizeHeader = "Content-Length:";
+    // input pattern: Content-Length: 2738262
+    }
+if (status == 206)
+    {
+    sizeHeader = "Content-Range:";
+    // input pattern: Content-Range: bytes 0-99/2738262
+    }
+
+sizeString = hashFindValUpperCase(hash, sizeHeader);
+if (sizeString)
+    {
+    char *parseString = sizeString;
+    if (status == 206)
 	{
-	retInfo->size = atoll(slash+1);
+	parseString = strchr(sizeString, '/');
+	if (!parseString)
+	    {
+	    warn("Header value %s is missing '/' in %s in response for url %s", 
+		sizeString, sizeHeader, url);
+	    return FALSE;
+	    }
+	++parseString; // skip past slash
 	}
+    if (parseString)
+	{
+	retInfo->size = atoll(parseString);
+	}
+    else
+	{
+	warn("Header value %s is missing or invalid in %s in response for url %s", 
+	    sizeString, sizeHeader, url);
+	return FALSE;
+	}
+    }
+else
+    {
+    warn("Response is missing required header %s for url %s", sizeHeader, url);
+    return FALSE;
     }
 
 char *lastModString = hashFindValUpperCase(hash, "Last-Modified:");

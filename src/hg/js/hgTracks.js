@@ -974,17 +974,18 @@ var dragSelect = {
     areaSelector:    null, // formerly "imgAreaSelect". jQuery element used for imgAreaSelect
     originalCursor:  null,
     startTime:       null,
+    escPressed :     false,  // flag is set when user presses Escape
 
     selectStart: function (img, selection)
     {
         initVars();
+        dragSelect.escPressed = false;
         if (rightClick.menu) {
             rightClick.menu.hide();
         }
         var now = new Date();
         dragSelect.startTime = now.getTime();
         posting.blockMapClicks();
-
     },
 
     selectChange: function (img, selection)
@@ -1094,9 +1095,9 @@ var dragSelect = {
         if (!dragSelectDialog) {
             $("body").append("<div id='dragSelectDialog'>" + 
                              "<p><ul>"+
-                             "<li>Hold <b>Shift+drag</b> to show this dialog or zoom" +
-                             "<li>Hold <b>Alt+drag</b> to add a highlight (no dialog)" +
-                             "<li>Hold <b>Ctrl+drag</b> or <b>Cmd+drag</b> to zoom (no dialog)" +
+                             "<li>Hold <b>Shift+drag</b> to show this dialog" +
+                             "<li>Hold <b>Alt+drag</b> to add a highlight" +
+                             "<li>Hold <b>Ctrl+drag</b> (Windows) or <b>Cmd+drag</b> (Mac) to zoom" +
                              "<li>To cancel, press <tt>Esc</tt> anytime or drag mouse outside image" +
                              "<li>Highlight the current position with <tt>h then m</tt>" +
                              "<li>Clear all highlights with View - Clear Highlights or <tt>h then c</tt>" +
@@ -1107,7 +1108,7 @@ var dragSelect = {
                              "&nbsp;&nbsp;<a href='#' id='hlReset'>Reset</a></p>" + 
                              "<input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
                              "<span style='border:solid 1px #DDDDDD; padding:3px;display:inline-block' id='hlNotShowAgainMsg'>Don't show this again and always zoom with shift.<br>" + 
-                             "Re-enable via the 'configure' menu</span></p>"+ 
+                             "Re-enable via 'View - Configure Browser' (<tt>c then f</tt>)</span></p>"+ 
                              "Selected chromosome position: <span id='dragSelectPosition'></span>");
             dragSelectDialog = $("#dragSelectDialog")[0];
             // reset value
@@ -1257,15 +1258,17 @@ var dragSelect = {
     {
         var now = new Date();
         var doIt = false;
-        var rulerClicked = selection.y1 <= hgTracks.rulerClickHeight;
+        var rulerClicked = selection.y1 <= hgTracks.rulerClickHeight; // = drag on base position track (no shift)
         if (dragSelect.originalCursor)
             jQuery('body').css('cursor', dragSelect.originalCursor);
+        if (dragSelect.escPressed)
+            return false;
         // ignore releases outside of the image rectangle (allowing a 10 pixel slop)
         if (genomePos.check(img, selection)) {
             // ignore single clicks that aren't in the top of the image
             // (this happens b/c the clickClipHeight test in dragSelect.selectStart
             // doesn't occur when the user single clicks).
-            doIt = dragSelect.startTime !== null || rulerClicked;
+            doIt = (dragSelect.startTime !== null || rulerClicked);
         }
 
         if (doIt) {
@@ -1340,7 +1343,7 @@ var dragSelect = {
             $(document).keyup(function(e){
                 if(e.keyCode === 27) {
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
-                    dragSelect.startTime = null;
+                    dragSelect.escPressed = true;
                 }
             });
 
@@ -3199,8 +3202,10 @@ var rightClick = {
             beforeShow: function(e) {
                 // console.log(mapItems[rightClick.selectedMenuItem]);
                 rightClick.selectedMenuItem = rightClick.findMapItem(e);
-                // some right-click functions need to know the clicked chrom position
-                var xDiff = e.clientX - imageV2.imgTbl[0].getBoundingClientRect().left; // current position - position of table
+                
+                // find the highlight that was clicked
+                var imageX = (imageV2.imgTbl[0].getBoundingClientRect().left) + imageV2.LEFTADD;
+                var xDiff = (e.clientX) - imageX;
                 var clickPos = genomePos.pixelsToBases(img, xDiff, xDiff+1, hgTracks.winStart, hgTracks.winEnd);
                 rightClick.clickedHighlightIdx = dragSelect.findHighlightIdxForPos(clickPos);
 
@@ -3770,6 +3775,9 @@ var imageV2 = {
     mapIsUpdateable:true,
     lastTrack:      null,   // formerly (lastMapItem) this is used to try to keep what the
                             // last track the cursor passed.
+
+    LEFTADD: 3,             // when going from pixels to chrom coords, these 3 pixels
+                            // are somehow used for "borders or cgi item calc ?" (original comment)
 
     markAsDirtyPage: function ()
     {   // Page is marked as dirty so that the back-button knows page doesn't match cart
@@ -4398,7 +4406,7 @@ var imageV2 = {
                 &&  pos.start <= hgTracks.imgBoxPortalEnd && pos.end >= hgTracks.imgBoxPortalStart) {
                     var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart;
                     var portal = $('#imgTbl td.tdData')[0];
-                    var leftPixels = $(portal).offset().left + 3; // 3 for borders and cgi item calcs ??
+                    var leftPixels = $(portal).offset().left + imageV2.LEFTADD;
                     var pixelsPerBase = ($(portal).width() - 2) / portalWidthBases;
                     var clippedStartBases = Math.max(pos.start, hgTracks.imgBoxPortalStart);
                     var clippedEndBases = Math.min(pos.end, hgTracks.imgBoxPortalEnd);

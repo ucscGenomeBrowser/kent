@@ -10,6 +10,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "fieldedTable.h"
+#include "net.h"
 
 struct fieldedTable *fieldedTableNew(char *name, char **fields, int fieldCount)
 /* Create a new empty fieldedTable with given name, often a file name. */
@@ -173,7 +174,7 @@ struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *reportFileNam
  * We do know the remote file exists at least, because we just copied it. */
 {
 /* Open file with fileName */
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = netLineFileOpen(fileName);
 
 /* Substitute in reportFileName for error reporting */
 if (reportFileName != NULL)

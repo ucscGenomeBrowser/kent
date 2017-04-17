@@ -94,7 +94,7 @@
 	<li class="even"><a href="../staff.html">Staff</a></li>
 	<li class="odd"><a href="../contacts.html">Contact Us</a></li>
 	<li class="even"><a href="../conditions.html">Conditions of Use</a></li>
-	<li class="odd"><a href="https://ucscgenomics.soe.ucsc.edu/contact/" TARGET="_blank">Jobs</a></li>
+	<li class="odd"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
 	<li class="even last"><a href="../license/">Licenses</a></li>
 </ul>
 </li>

@@ -769,6 +769,7 @@ if (tdb->subtracks != NULL)
 else
     {
     /* Check type field. */
+    // KRR FIX: table lookup
     char *type = requiredSetting(hub, genome, tdb, "type");
     if (!(startsWithWord("bigWig", type) ||
           startsWithWord("bigBed", type) ||
@@ -782,11 +783,12 @@ else
           startsWithWord("longTabix", type) ||
           startsWithWord("bigGenePred", type) ||
           startsWithWord("bigChain", type) ||
+          startsWithWord("bigBarChart", type) ||
           startsWithWord("bam", type)))
-	{
-	errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
-	    hub->url, genome->name, tdb->track);
-	}
+        {
+        errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
+            hub->url, genome->name, tdb->track);
+        }
 
     requiredSetting(hub, genome, tdb, "bigDataUrl");
     }
@@ -868,6 +870,11 @@ struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, 64*1024*10
 struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
 lineFileClose(&lf);
 
+char *tabMetaName = hashFindVal(genome->settingsHash, "metaTab");
+char *absTabName  = NULL;
+if (tabMetaName)
+    absTabName  = trackHubRelativeUrl(hub->url, tabMetaName);
+
 char *tagStormName = hashFindVal(genome->settingsHash, "metaDb");
 char *absStormName  = NULL;
 if (tagStormName)
@@ -880,6 +887,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     expandBigDataUrl(hub, genome, tdb);
     if  (absStormName)
         hashReplace(tdb->settingsHash, "metaDb", absStormName);
+    if  (absTabName)
+        hashReplace(tdb->settingsHash, "metaTab", absTabName);
     }
 
 validateTracks(hub, genome, tdbList);
