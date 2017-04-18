@@ -3012,6 +3012,15 @@ var rightClick = {
                             } else {
                                 displayItemFunctions = true;
                             }
+                            // For barChart mouseovers, replace title (which may be a category 
+                            // name+value) with item name
+                            if (rec.type.indexOf("barChart") === 0
+                            || rec.type.indexOf("bigBarChart") === 0) {
+                                a = /i=([^&]+)/.exec(href);
+                                if (a && a[1]) {
+                                    title = a[1];
+                                }
+                            }
                         }
                         if (isHgc && href.indexOf('g=gtexGene') !== -1) {
                             // For GTEx gene mouseovers, replace title (which may be a tissue name) with 
