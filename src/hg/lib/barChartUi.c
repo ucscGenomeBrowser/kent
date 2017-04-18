@@ -252,7 +252,6 @@ void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char 
 /* Bar chart track type */
 {
 
-jsIncludeFile("barChart.js", NULL);
 // FIXME: isPopup can't be global
 if (cartVarExists(cart, "ajax"))
     isPopup = TRUE;
@@ -275,19 +274,6 @@ barChartUiLogTransform(cart, track, tdb);
 puts("&nbsp;&nbsp;");
 barChartUiViewLimits(cart, track, tdb);
 puts("</div>");
-
-/* Color scheme */
-#ifdef COLOR_SCHEME
-printf("<p><b>Category colors:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_COLORS);
-selected = cartCgiUsualString(cart, cartVar, BAR_CHART_COLORS_DEFAULT); 
-boolean isUserColors = sameString(selected, BAR_CHART_COLORS_USER);
-cgiMakeRadioButton(cartVar, BAR_CHART_COLORS_USER, isUserColors);
-printf("Defined\n");
-cgiMakeRadioButton(cartVar, BAR_CHART_COLORS_RAINBOW, !isUserColors);
-printf("Rainbow\n");
-printf("</p>");
-#endif
 
 /* Category filter */
 printf("<br>");

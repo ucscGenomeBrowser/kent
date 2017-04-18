@@ -625,7 +625,7 @@ static void showSchemaHub(char *db, char *table)
 struct trackDb *tdb = hashMustFindVal(fullTableToTdbHash, table);
 hubConnectAddDescription(db, tdb);
 char *type = cloneFirstWord(tdb->type);
-if (sameString(type, "bigBed"))
+if (tdbIsBigBed(tdb))
     showSchemaBigBed(table, tdb);
 else if (sameString(type, "longTabix"))
     showSchemaLongTabix(table, tdb);

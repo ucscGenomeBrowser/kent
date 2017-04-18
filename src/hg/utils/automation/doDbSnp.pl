@@ -1371,7 +1371,7 @@ working directory to $runDir.";
 
 # Compress and copy results back to
 # $runDir
-gzip *.txt *.bed
+gzip *.txt *.bed *.tab
 cp -p * $runDir/
 rm \$tmpDir/*
 

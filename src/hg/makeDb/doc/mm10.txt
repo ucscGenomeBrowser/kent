@@ -13282,3 +13282,31 @@ TMPDIR=/dev/shm
     # real    110m9.546s
 
 #########################################################################
+2017-04-16: import of UCSC GENCODE group processing of GENCODE VM13 (markd)
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM13
+    pushd /hive/data/genomes/mm10/bed/gencodeVM13
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    ##  gencode-cmp.tsv check to see if sizes make sense
+
+    # generate trackDb and joiner blurb
+    pushd kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M13 88 'March 2017'
+
+    # edit human/mm10/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=mm10
+
+    # Update human/mm10/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit  all.joiner to add ~/tmp/gencodeVM13.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm10/bed/gencodeVM13
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
+
+    # commit all
+##############################################################################
