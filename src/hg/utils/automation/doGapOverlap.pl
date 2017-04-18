@@ -90,7 +90,7 @@ Assumptions:
 # Command line args: db
 my ($db);
 # Other:
-my ($buildDir, $secondsStart, $secondsEnd);
+my ($buildDir, $secondsStart, $secondsEnd, $dbExists);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -210,9 +210,7 @@ sub doBlat {
       "file db/bed/gapOverlap/template does not exists. run with: -continue partition to perform required step.\n";
   }
 
-  &HgAutomate::mustMkdir($runDir);
-
-  my $whatItDoes = "Run blat on the paired sequences.";
+  my $whatItDoes = "Run blat on the paired sequences, collect results.";
   my $bossScript = newBash HgRemoteScript("$runDir/blat.bash",
 		$paraHub, $runDir, $whatItDoes);
 
@@ -220,6 +218,17 @@ sub doBlat {
 chmod +x runOne
 $HgAutomate::gensub2 blatPairs/pair.list single template jobList
 $HgAutomate::paraRun
+
+find ./psl -type f | grep "\.psl\$" | xargs cat | gzip -c > $db.gapOverlap.psl.gz
+count=`zcat $db.gapOverlap.psl.gz | wc -l`
+if [ "\$count" -lt 1 ]; then
+   printf "No PSL results found, no items to load.  Successful procedure.\\n"
+   touch $db.gapOverlap.bed
+   exit 0
+fi
+zcat $db.gapOverlap.psl.gz | $Bin/overlapPslToBed.pl stdin | sort -k1,1 -k2,2n > $db.gapOverlap.bed
+twoBitInfo $twoBit stdout | sort -k2nr > $db.chrom.sizes
+bedToBigBed -type=bed12 $db.gapOverlap.bed $db.chrom.sizes $db.gapOverlap.bb
 _EOF_
     );
   $bossScript->execute();
@@ -230,9 +239,8 @@ _EOF_
 sub doLoad {
   my $runDir = "$buildDir";
 
-  # already have this done, could be empty file from partition step
-  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed" ) );
-  return if ( ! $opt_debug && ( -e "$runDir/$db.gapOverlap.bed.gz" ) );
+  # nothing to do here if db does not exist:
+  return if ( ! $opt_debug && ! $dbExists );
 
   # First, make sure we're starting clean.
   if ( ! $opt_debug && ( -s "$runDir/loadUp.bash" ) ) {
@@ -240,22 +248,17 @@ sub doLoad {
       "file db/bed/loadUp.bash exists.  Can run with: -continue cleanup " .
         "to complete this procedure.\n";
   }
+  # And, must have something to load
+  if ( ! $opt_debug && ( -s "$runDir/$db.gapOverlap.bed" ) ) {
+    die "doLoad does not find result from blat run: $db.gapOverlap.bed, " .
+      "Can run with: -continue blat or check why blat run was empty.\n";
+  }
 
-  &HgAutomate::mustMkdir($runDir);
-
-  my $whatItDoes = "Collect psl results, load gapOverlap table if results exist.";
+  my $whatItDoes = "load gapOverlap table if results and database exist.";
   my $bossScript = newBash HgRemoteScript("$runDir/loadUp.bash",
 		$workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-find ./psl -type f | grep "\.psl\$" | xargs cat | gzip -c > $db.gapOverlap.psl.gz
-count=`zcat $db.gapOverlap.psl.gz | wc -l`
-if [ "\$count" -lt 1 ]; then
-   printf "No PSL results found, no items to load.  Successful procedure.\\n"
-   touch $db.gapOverlap.bed
-   exit 0
-fi
-zcat $db.gapOverlap.psl.gz | $Bin/overlapPslToBed.pl stdin > $db.gapOverlap.bed
 hgLoadBed -type=bed12 $db gapOverlap $db.gapOverlap.bed
 checkTableCoords $db gapOverlap
 featureBits -countGaps $db gapOverlap > fb.$db.gapOverlap.txt 2>&1
@@ -272,7 +275,7 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $workhorse,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -fr psl blatPairs
+rm -fr psl blatPairs $db.chrom.sizes
 gzip $db.gapOverlap.bed
 _EOF_
   );
@@ -302,6 +305,10 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/gapOverlap";
 $twoBit = $opt_twoBit ? $opt_twoBit :
   "$HgAutomate::clusterData/$db/$db.2bit";
+
+# may be working on a 2bit file that does not have a database browser
+$dbExists = 0;
+$dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $db));
 
 # Do everything.
 $stepper->execute();
