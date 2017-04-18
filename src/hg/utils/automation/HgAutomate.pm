@@ -31,7 +31,7 @@ use File::Basename;
       ),
     # General-purpose utility routines:
     qw( checkCleanSlate checkExistsUnlessDebug closeStdin
-	getAssemblyInfo getSpecies machineHasFile
+	getAssemblyInfo getSpecies machineHasFile databaseExists
 	makeGsub mustMkdir mustOpen nfsNoodge run verbose
       ),
     # Hardcoded paths/commands/constants:
@@ -629,6 +629,15 @@ sub machineHasFile {
   my $count = `$HgAutomate::runSSH $mach ls -1 $file 2>>/dev/null | wc -l`;
   chomp $count;
   return $count + 0;
+}
+
+sub databaseExists {
+  my ($dbHost, $db) = @_;
+  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
+  my $query = "show databases like \"$db\";";
+  my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;
+  chomp $line;
+  return length($line);     # will be zero if not existing, >0 if exists
 }
 
 sub makeGsub {
