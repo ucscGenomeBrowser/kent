@@ -4,15 +4,17 @@ track chainNetPanTro1 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetPonAbe2 override
+priority 24
 chainMinScore 3000
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetRheMac2 override
+priority 28
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetCalJac1 override
 shortLabel $o_Organism Chain/Net
-priority 260.3
+priority 20
 chainMinScore 3000
 
 	track chainCalJac1 override
@@ -40,6 +42,7 @@ shortLabel $o_db Chain/Net
     shortLabel $o_db Net
 
 track chainNetRn4 override
+priority 27
 chainMinScore 1000
 
 track chainNetGalGal2 override
@@ -64,10 +67,70 @@ shortLabel $o_db Chain/Net
     shortLabel $o_db Net
 
 track chainNetOrnAna1 override
+priority 26
 chainMinScore 1000
 
 track chainNetGasAcu1 override
+priority 30
 chainMinScore 2000
 
 track chainNetFr2 override
+priority 14
 chainMinScore 2000
+
+track chainNetBosTau4 override
+priority 7
+
+track chainNetFelCat3 override
+priority 8
+
+track chainNetGalGal3 override
+priority 9
+
+track chainNetPanTro2 override
+priority 10
+
+track chainNetCanFam2 override
+priority 12
+
+track chainNetCavPor3 override
+priority 15
+
+track chainNetEquCab1 override
+priority 16
+
+track chainNetPetMar1 override
+priority 17
+
+track chainNetBraFlo1 override
+priority 18
+
+track chainNetAnoCar1 override
+priority 19
+
+track chainNetOryLat2 override
+priority 21
+
+track chainNetMm9 override
+priority 22
+
+track chainNetMonDom4 override
+priority 23
+
+track chainNetStrPur2 override
+priority 29
+
+track chainNetEchTel1 override
+priority 31
+
+track chainNetTetNig1 override
+priority 32
+
+track chainNetXenTro2 override
+priority 34
+
+track chainNetTaeGut1 override
+priority 35
+
+track chainNetDanRer5 override
+priority 36

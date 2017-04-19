@@ -570,10 +570,10 @@ searchPriority 8
 	-ooc=/hive/data/genomes/criGriChoV1/jkStuff/criGriChoV1.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          criGriChoV1 criGri1) > do.log 2>&1 &
-    # real    589m50.449s
+    # real    1589m33.139s
 
-    # verify the convert link on the test browser is now active from xenTro3 to
-    # criGri1
+    # verify the convert link on the test browser is now active
+    # from criGriChoV1 to criGri1
 
 #############################################################################
 # lastz/chain/net swap human/hg38 (DONE - 2017-04-13 - Hiram)
@@ -665,35 +665,7 @@ searchPriority 8
     #    -bedFile=jkStuff/nonBridged.bed
 
 #########################################################################
-# LIFTOVER TO criGri1 (TBD - 2017-04-19 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/criGriChoV1/bed/blat.criGri1.2017-04-19
-    cd /hive/data/genomes/criGriChoV1/bed/blat.criGri1.2017-04-19
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/criGriChoV1/jkStuff/criGriChoV1.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         criGriChoV1 criGri1) > do.log 2>&1
-    # real    407m17.792s
-
-    # verify the convert link on the test browser is now active from criGriChoV1 to
-    # xenTro7
-
-#########################################################################
-# LIFTOVER TO xenTro3 (TBD - 2017-03-28 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/criGriChoV1/bed/blat.xenTro3.2017-03-28
-    cd /hive/data/genomes/criGriChoV1/bed/blat.xenTro3.2017-03-28
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/criGriChoV1/jkStuff/criGriChoV1.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         criGriChoV1 xenTro3) > do.log 2>&1
-    # real    422m44.841s
-
-    # verify the convert link on the test browser is now active from criGriChoV1 to
-    # xenTro3
-
-########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-03-28 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-04-13 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -746,13 +718,10 @@ criGriChoV1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.ps
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad criGriChoV1
     # logFile: var/dbload/hgwdev/logs/2017.04.19-10:31:05.criGriChoV1.dbload.log
-XXX - running - Wed Apr 19 10:31:29 PDT 2017
-
     #  real    30m42.283s
 
     tail -1 var/dbload/hgwdev/logs/2017.04.19-10:31:05.criGriChoV1.dbload.log
-
-    #  hgwdev 2017.03.28-18:39:24 criGriChoV1.dbload: finish
+    # hgwdev 2017.04.19-10:49:44 criGriChoV1.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -760,7 +729,7 @@ XXX - running - Wed Apr 19 10:31:29 PDT 2017
     # add criGriChoV1 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding criGriChoV1 to the update alignments refs #19151' etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding criGriChoV1 to the update alignments refs #19228' etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -799,23 +768,23 @@ XXX - running - Wed Apr 19 10:31:29 PDT 2017
     #    enrich 14.68x
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-03-29 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-04-19 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("criGriChoV1", "blat1d", "17884", "1", "0"); \
+	VALUES ("criGriChoV1", "blat1a", "17872", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("criGriChoV1", "blat1d", "17885", "0", "1");' \
+	VALUES ("criGriChoV1", "blat1a", "17873", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to same as xenTro7
-##  (TBD - 2017-03-29 - Hiram)
+## set default position to SRC gene sequence from human protein blat
+##  (DONE - 2017-04-19 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr9:15945953-15959305"
+    hgsql -e 'update dbDb set defaultPos="NW_003613641v1:1277445-1295702"
 	where name="criGriChoV1";' hgcentraltest
 
 #########################################################################
