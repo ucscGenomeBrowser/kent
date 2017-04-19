@@ -15,7 +15,6 @@
 #include "barChartUi.h"
 
 /* Restrict features on right-click (popup) version */
-/* FIXME: NOT STATIC */
 static boolean isPopup = FALSE;
 
 /* Convenience functions for category filter controls */
@@ -41,7 +40,6 @@ struct categorySelect
 
 static void makeGroupCheckboxes(char *name, char *title, struct categorySelect *selects)
 {
-//TODO: select this based on #categories
 #define TABLE_COLUMNS 1
 if (title != NULL)
     printf("<tr><td colspan=10><i><b>%s</b></i></td></tr><tr>\n", title);
@@ -82,7 +80,6 @@ printf("</tr><tr><td></td></tr>\n");
 static void makeCategoryCheckboxes(char *name, struct barChartCategory *categs, 
                                         struct slName *checked)
 {
-// TODO: use style sheet!
 puts("<style>\n");
 puts(".bcColorPatch { padding: 0 10px; }\n");
 puts("</style>\n");
@@ -131,7 +128,6 @@ jsOnEventByIdF("change", cartVar, "barChartUiTransformChanged('%s');", track);
 double barChartUiMaxMedianScore()
 /* Max median score, for scaling */
 {
-//TODO: get from trackDb
 return 10000;
 }
 
@@ -163,7 +159,7 @@ struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb 
 /* Get category colors and descriptions.  Use barChartColors setting if present.
    If not, if there is a barChartBars setting, assign rainbow colors.
  * O/w look for a table naed track+Category, and use labels and colors there 
- * TODO: Consider removing table code */
+ */
 {
 struct barChartCategory *categs = NULL;
 char *words[BAR_CHART_MAX_CATEGORIES];
@@ -231,7 +227,6 @@ struct barChartCategory *barChartUiGetCategoryById(int id, char *database,
 {
 struct barChartCategory *categ;
 struct barChartCategory *categs = barChartUiGetCategories(database, tdb);
-// TODO: consider making this more efficient
 for (categ = categs; categ != NULL; categ = categ->next)
     if (categ->id == id)
         return categ;
@@ -251,12 +246,9 @@ void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char 
                         char *title, boolean boxed)
 /* Bar chart track type */
 {
-
-// FIXME: isPopup can't be global
 if (cartVarExists(cart, "ajax"))
     isPopup = TRUE;
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
-// KRR FIX: another candidate for table lookup ?
 if (startsWith("big", tdb->type))
     labelCfgUi(database, cart, tdb);
 printf("\n<table id=barChartControls style='font-size:%d%%' %s>\n<tr><td>", 

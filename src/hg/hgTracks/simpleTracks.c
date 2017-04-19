@@ -7802,7 +7802,6 @@ static void bedLoadItemByQueryWhere(struct track *tg, char *table, char *query,
 /* Generic itg->item loader, adding extra clause to hgRangeQuery if query is NULL
  * and extraWhere is not NULL */
 {
-// KATE TODO: Add bigBed query ?
 struct sqlConnection *conn = hAllocConn(database);
 int rowOffset = 0;
 struct sqlResult *sr = NULL;

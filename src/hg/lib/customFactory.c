@@ -2128,8 +2128,6 @@ struct customFactory barChartFactory =
 
 /*** Big Bed Factory - for big client-side BED tracks ***/
 
-// KRR FIX ?
-
 static boolean bigMafRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2328,7 +2326,6 @@ static struct customFactory bigBarChartFactory =
     NULL,
     "bigBarChart",
     bigBarChartRecognizer,
-// KRR TODO: custom loader
     bigBedLoader,
     };
 

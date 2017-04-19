@@ -38,7 +38,6 @@ struct barChartItem
     struct barChartItem *next;  /* Next in singly linked list */
     struct bed *bed;            /* Item coords, name, exp count and values */
     int height;                 /* Item height in pixels */
-    // TODO: add chartWidth so it's just computed once
     };
 
 /***********************************************/
@@ -61,8 +60,6 @@ if (info->categCount == 0)
     info->categCount = slCount(getCategories(tg));
 return info->categCount;
 }
-
-/* TODO: Do we need names ? */
 
 char *getCategoryName(struct track *tg, int id)
 /* Get category name from id, cacheing */
@@ -113,9 +110,7 @@ if (!info->colors)
     int i = 0;
     for (categ = categs; categ != NULL; categ = categ->next)
         {
-        // TODO: reconcile 
         info->colors[i] = (struct rgbColor){.r=COLOR_32_BLUE(categ->color), .g=COLOR_32_GREEN(categ->color), .b=COLOR_32_RED(categ->color)};
-        //colors[i] = mgColorIxToRgb(NULL, categ->color);
         i++;
         }
     }
@@ -135,9 +130,7 @@ static int barChartBoxModelHeight()
 /* Height of indicator box drawn under graph to show gene extent */
 {
 long winSize = virtWinBaseCount;
-//FIXME: dupes!!
 
-// TODO: trackDb settings ?
 #define WIN_MAX_GRAPH 50000
 #define WIN_MED_GRAPH 500000
 
@@ -220,8 +213,6 @@ return maxNum;
 
 static Color barChartItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* A bit of category-specific coloring in squish mode only, on bed item */
-// TODO: Need a good function here to pick threshold from category count. 
-//      Also maybe trackDb setting
 {
 struct bed *bed = (struct bed *)item;
 int id = maxCategoryForItem(bed, SPECIFICITY_THRESHOLD);
@@ -406,7 +397,6 @@ for (i=0; i<expCount; i++)
     }
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
                                 BAR_CHART_MAX_LIMIT, BAR_CHART_MAX_LIMIT_DEFAULT);
-// TODO: add trackDb settings for MAX_LIMIT values ?
 double maxMedian = ((struct barChartTrack *)tg->extraUiData)->maxMedian;
 return valToClippedHeight(maxExp, maxMedian, viewMax, barChartMaxHeight(), extras->doLogTransform);
 }
@@ -513,14 +503,6 @@ for (i=0, categ=extras->categories; i<expCount; i++, categ=categ->next)
     if (!filterCategory(tg, categ->name))
         continue;
     struct rgbColor fillColor = extras->colors[i];
-/*
-    // brighten colors a bit so they'll be more visible at this scale
-    // TODO: think about doing this
-    if (barWidth == 1 && sameString(colorScheme, BAR_CHART_COLORS_USER))
-        {
-        fillColor = barChartBrightenColor(fillColor);
-        }
-*/
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = bed->expScores[i];
     int height = valToClippedHeight(expScore, maxMedian, viewMax, 
@@ -698,7 +680,6 @@ if (!filterCategory(tg, categ->name))
     }
 
 // map over background of chart
-// TODO: more efficient
 int graphWidth = barChartWidth(tg, itemInfo);
 getItemX(start, end, &x1, &x2);
 mapBoxHc(hvg, start, end, x1, y, graphWidth, itemHeight-3,
@@ -811,7 +792,6 @@ return bed->name;
 void barChartMethods(struct track *tg)
 /* Bar Chart track type: draw fixed width chart of colored bars over a BED item */
 {
-// TODO: derive this from AS or trackDb ?
 tg->bedSize = 8;
 bedMethods(tg);
 tg->canPack = TRUE;
