@@ -157,6 +157,14 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
 	char *tag = pair->name;
 	char *val = pair->val;
 
+	/* Make sure val exists and is non-empty */
+	if (isEmpty(val))
+	    {
+	    reportError(fileName, stanza->startLineIx, 
+		"%s tag has no value", tag);
+	    continue;
+	    }
+
 	/* Check against SQL reserved words */
 	if (gReservedHash != NULL)
 	    {
