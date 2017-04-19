@@ -80,14 +80,8 @@ if (sqlTableExists(conn, table))
                                 table, item, chrom, start, end);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
-    // TODO: Fix or retire
-    /*
-    boolean hasOffsets = sqlColumnExists(conn, table, BARCHART_OFFSET_COLUMN);
-    */
-
     if (row != NULL)
         {
-        // TODO: Fix or retire
         barChart = barChartBedLoadOptionalOffsets(row, FALSE);
         }
     sqlFreeResult(&sr);
@@ -141,7 +135,6 @@ chopByWhite(header, samples, wordCt);
 
 // Get data values
 // Format: id, category, extras
-// TODO: check data types for offset & len
 bits64 offset = (bits64)bed->_dataOffset;
 bits64 size = (bits64)bed->_dataLen;
 udcSeek(f, offset);
@@ -169,7 +162,6 @@ for (i=1; i<wordCt; i++)
     else if (hashLookup(categoryHash, categ))
         {
         AllocVar(data);
-        // TODO: try w/o clone
         data->sample = cloneString(sample);
         data->category = cloneString(categ);
         data->value = sqlDouble(vals[i]);
@@ -205,7 +197,6 @@ static struct barChartItemData *getSampleValsFromTable(struct trackDb *tdb,
                                                         struct hash *categoryHash,
                                                         struct barChartBed *bed)
 /* Get data values for this item (locus) from all samples */
-// TODO: Consider retiring table-based version.  Use files instead, like hub version
 {
 char *table = NULL;
 struct sqlConnection *conn = getConnectionAndTable(tdb, "Data", &table);

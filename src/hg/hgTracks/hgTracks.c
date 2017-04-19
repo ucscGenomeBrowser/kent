@@ -417,7 +417,6 @@ freeMem(encodedMapName);
 return(cloneString(buf));
 }
 
-//KATE FIX: Remove this
 #ifdef REMOTE_TRACK_AJAX_CALLBACK
 static boolean trackUsesRemoteData(struct track *track)
 /* returns TRUE is this track has a remote datasource */
@@ -5854,7 +5853,6 @@ else if (sameString(type, "bigWig"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
-// KATE FIX: from table
 else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain") || sameString(type, "bigBarChart"))
     {
     struct bbiFile *bbi = ct->bbiFile;
@@ -6820,7 +6818,6 @@ struct paraFetchData
 static boolean isTrackForParallelLoad(struct track *track)
 /* Is this a track that should be loaded in parallel ? */
 {
-// KATE FIX
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
 return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bigBed"  , track->tdb->type)
