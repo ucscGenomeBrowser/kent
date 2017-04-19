@@ -647,7 +647,7 @@ if (x1-labelWidth <= insideX)
     labelWidth = 0;
 // map over label
 int itemHeight = itemInfo->height;
-mapBoxHc(hvg, start, end, x1-labelWidth, y, labelWidth, itemHeight-3, 
+mapBoxHc(hvg, itemStart, itemEnd, x1-labelWidth, y, labelWidth, itemHeight-3, 
                     tg->track, mapItemName, itemName);
 
 // add maps to category bars
@@ -682,7 +682,7 @@ if (!filterCategory(tg, categ->name))
 // map over background of chart
 int graphWidth = barChartWidth(tg, itemInfo);
 getItemX(start, end, &x1, &x2);
-mapBoxHc(hvg, start, end, x1, y, graphWidth, itemHeight-3,
+mapBoxHc(hvg, itemStart, itemEnd, x1, y, graphWidth, itemHeight-3,
                     tg->track, mapItemName, itemName);
 }
 
