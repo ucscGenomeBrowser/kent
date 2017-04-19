@@ -21,8 +21,7 @@
 /* Viewing limits */
     // WARNING: this also appears in JS
 #define BAR_CHART_MAX_LIMIT                  "maxLimit"
-#define BAR_CHART_MAX_LIMIT_DEFAULT          300
-/* TODO: Get default from trackDb ? */
+#define BAR_CHART_MAX_LIMIT_DEFAULT          50
 
 /* Category (bar) info */
 #define BAR_CHART_MAX_CATEGORIES        100
