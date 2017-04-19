@@ -113,14 +113,14 @@ searchMethod prefix
 searchPriority 2.31
 
 track transMapV4
-release alpha
+release alpha,beta
 superTrack on
 shortLabel TransMap
 longLabel TransMap Alignments
 group genes
 
     track transMapEnsemblV4
-    release alpha
+    release alpha,beta
     superTrack transMapV4 pack
     shortLabel TransMap Ensembl
     longLabel TransMap Ensembl Mappings
@@ -150,7 +150,7 @@ searchTable transMapEnsemblV4
 searchType bigPsl
 
     track transMapRefSeqV4
-    release alpha
+    release alpha,beta
     superTrack transMapV4 pack
     shortLabel TransMap RefGene
     longLabel TransMap RefSeq Gene Mappings
@@ -180,7 +180,7 @@ searchTable transMapRefSeqV4
 searchType bigPsl
 
     track transMapRnaV4
-    release alpha
+    release alpha,beta
     superTrack transMapV4 pack
     shortLabel TransMap RNA
     longLabel TransMap GenBank RNA Mappings
@@ -210,7 +210,7 @@ searchTable transMapRnaV4
 searchType bigPsl
 
     track transMapEstV4
-    release alpha
+    release alpha,beta
     superTrack transMapV4 hide
     shortLabel TransMap ESTs
     longLabel TransMap EST Mappings
