@@ -749,9 +749,7 @@ if (doWiggle)
         // fake the trackDb range for this auto-wiggle
         int wordCount = 3;
         char *words[3];
-        words[0] = "wig";
-        words[1] = "0";
-        words[2] = "127";
+        words[0] = "bedGraph";
 	wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words );
 	tg->wigCartData = (void *) wigCart;
 	}
@@ -4476,7 +4474,7 @@ for (pixel=0; pixel<insideWidth; ++pixel)
     // add any fraction of the count that's only partially in this pixel
     double lastFrac = endReal - endUns;
     double lastSum = lastFrac * counts[endUns];
-    if (lastFrac > 0.0)
+    if ((lastFrac > 0.0) && (endUns < size))
 	{
 	if (max < counts[endUns])
 	    max = counts[endUns];
@@ -4508,7 +4506,17 @@ static void genericDrawItemsWiggle(struct track *tg, int seqStart, int seqEnd,
                                        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a list of linked features into a wiggle. */
 {
+struct wigCartOptions *wigCart = tg->wigCartData;
 struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(insideWidth);
+struct trackDb *tdb = tg->tdb;
+boolean parentLevel = isNameAtParentLevel(tdb,tdb->track);
+
+char *autoScale = cartOptionalStringClosestToHome(cart, tdb, parentLevel, AUTOSCALE);
+if (autoScale == NULL)
+    wigCart->autoScale =  wiggleScaleAuto;
+char *windowingFunction = cartOptionalStringClosestToHome(cart, tdb, parentLevel, WINDOWINGFUNCTION);
+if (windowingFunction == NULL)
+    wigCart->windowingFunction = wiggleWindowingMax;
 unsigned *counts = countOverlaps(tg);
 
 countsToPixels(counts, pre);
@@ -6602,6 +6610,11 @@ char query[256];
 char cond_str[256];
 char *decipherId = NULL;
 
+/* So far, we can just remove "chr" from UCSC chrom names to get DECIPHER names */
+char *decipherChrom = bed->chrom;
+if (startsWithNoCase("chr", bed->chrom))
+    decipherChrom += 3;
+
 /* color scheme:
 	RED:	If the entry is a deletion (mean ratio < 0)
 	BLUE:	If the entry is a duplication (mean ratio > 0)
@@ -6613,8 +6626,9 @@ if (decipherId != NULL)
     if (hTableExists(database, "decipherRaw"))
         {
         sqlSafef(query, sizeof(query),
-              "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d",
-	      decipherId, bed->chromStart+1, bed->chromEnd);
+              "select mean_ratio > 0 from decipherRaw where id = '%s' and "
+              "chr = '%s' and start = %d and end = %d",
+	          decipherId, decipherChrom, bed->chromStart+1, bed->chromEnd);
 	sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
             {
@@ -6632,7 +6646,9 @@ if (decipherId != NULL)
            (which is a problem to be fixed by DECIPHER */
 
         sqlSafef(query, sizeof(query),
-	       "select mean_ratio = 0 from decipherRaw where id = '%s'", decipherId);
+	       "select mean_ratio = 0 from decipherRaw where id = '%s' and "
+           "chr = '%s' and start = %d and end = %d",
+           decipherId, decipherChrom, bed->chromStart+1, bed->chromEnd);
         sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
             {
@@ -7826,7 +7842,6 @@ void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
 {
 bedLoadItemByQuery(tg, table, NULL, loader);
 }
-
 
 void atomDrawSimpleAt(struct track *tg, void *item,
                       struct hvGfx *hvg, int xOff, int y,
@@ -13818,6 +13833,12 @@ else if (sameWord(type, "bigMaf"))
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
+else if (sameWord(type, "bigBarChart"))
+    {
+    tdb->canPack = TRUE;
+    track->isBigBed = TRUE;
+    barChartMethods(track);
+    }
 else if (sameWord(type, "bigPsl"))
     {
     tdb->canPack = TRUE;
@@ -13926,6 +13947,12 @@ else if (sameWord(type, "bam"))
         track->loadItems = dontLoadItems;
     }
 #ifdef USE_HAL
+else if (sameWord(type, "pslSnake"))
+    {
+    halSnakeMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
 else if (sameWord(type, "halSnake"))
     {
     halSnakeMethods(track, tdb, wordCount, words);
@@ -14033,6 +14060,10 @@ else if (sameWord(type, "interaction"))
 else if (sameWord(type, "gvf"))
     {
     gvfMethods(track);
+    }
+else if (sameWord(type, "barChart"))
+    {
+    barChartMethods(track);
     }
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))

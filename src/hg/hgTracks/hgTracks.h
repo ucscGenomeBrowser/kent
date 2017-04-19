@@ -781,6 +781,8 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 
 typedef struct slList *(*ItemLoader)(char **row);
 
+typedef struct bed *(*bedItemLoader)(char **row);
+
 void bedLoadItemByQuery(struct track *tg, char *table, char *query, ItemLoader loader);
 /* Generic tg->item loader. If query is NULL use generic hRangeQuery(). */
 
@@ -863,8 +865,10 @@ void loadSimpleBedAsLinkedFeaturesPerBase(struct track *tg);
 /* bed list not freed as pointer to it is stored in 'original' field */
 
 void loadSimpleBed(struct track *tg);
-/* Load the items in one track - just move beds in
- * window... */
+/* Load the items in one track - just move beds in window... */
+
+void loadSimpleBedWithLoader(struct track *tg, bedItemLoader loader);
+/* Load the items in one track using specified loader - just move beds in window... */
 
 void loadBed8(struct track *tg);
 /* Convert bed 8 info in window to linked feature. */
@@ -1516,6 +1520,9 @@ void lrgMethods(struct track *tg);
 void peptideAtlasMethods(struct track *tg);
 /* PeptideAtlas (bed 12+) handlers */
 
+void barChartMethods(struct track *tg);
+/* Bar Chart track type: draw fixed width chart of colored bars over a BED item */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
@@ -1616,5 +1623,10 @@ void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xO
 struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis);
 /* Find SpaceSaver in list. Return spaceSaver found or NULL. */
 
+void labelTrackAsFiltered(struct track *tg);
+/* add text to track long label to indicate filter is active */
+
+void setupHotkeys(boolean gotExtTools);
+/* setup keyboard shortcuts and a help dialog for it */
 #endif /* HGTRACKS_H */
 

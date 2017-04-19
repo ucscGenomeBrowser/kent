@@ -26,7 +26,7 @@ struct twoBitIndex
     {
     struct twoBitIndex *next;	/* Next in list. */
     char *name;			/* Name - allocated in hash */
-    bits32 offset;		/* Offset in file. */
+    bits64 offset;		/* Offset in file. */
     };
 
 struct twoBitFile
@@ -56,6 +56,7 @@ struct twoBitFile
     void (*ourSeekCur)(void *file, bits64 offset);
     bits64 (*ourTell)(void *file);
     bits32 (*ourReadBits32)(void *f, boolean isSwapped);
+    bits64 (*ourReadBits64)(void *f, boolean isSwapped);
     void (*ourClose)(void *pFile);
     boolean (*ourFastReadString)(void *f, char buf[256]);
     void (*ourMustRead)(void *file, void *buf, size_t size);
@@ -77,6 +78,10 @@ struct twoBitSeqSpec
     bits32 end;                /* end of subsequence;
                                  * 0 if not a subsequence */
 };
+
+struct twoBit *twoBitFromOpenFile(struct twoBitFile *tbf);
+/* Read in header and index.  
+ * Squawk and die if there is a problem. */
 
 struct twoBitFile *twoBitOpen(char *fileName);
 /* Open file, read in header and index.  
@@ -153,6 +158,10 @@ void twoBitWriteOne(struct twoBit *twoBit, FILE *f);
 void twoBitWriteHeader(struct twoBit *twoBitList, FILE *f);
 /* Write out header portion of twoBit file, including initial
  * index */
+
+void twoBitWriteHeaderExt(struct twoBit *twoBitList, FILE *f, boolean useLong);
+/* Write out header portion of twoBit file, including initial
+ * index. If useLong is True, use 64 bit quantities for the index offsets to support >4Gb assemblies */
 
 boolean twoBitIsFile(char *fileName);
 /* Return TRUE if file is in .2bit format. */

@@ -421,6 +421,90 @@ bisBis1.genbank.est.native.loadDesc = no
     make etc-update
 
 #########################################################################
+# ucscToRefSeq table/track (DONE - 2017-03-14 - Hiram)
+    mkdir /hive/data/genomes/bisBis1/bed/ucscToRefSeq
+    cd /hive/data/genomes/bisBis1/bed/ucscToRefSeq
+
+    # there are far fewer contigs in the refSeq assembly than the genbank
+
+    # this one has a chrM
+    grep chrM ../../bisBis1.agp
+# chrM    1       16319   1902    F       NC_012346.1     1       16319   +
+
+    # lookup NC_012346.1 at NCBI Entrez to find the INSDC name: EU177871.1
+
+    cut -f1 ../../chrom.sizes | grep -v chrM | sed -e 's/v1//;' \
+       | awk '{printf "%sv1\t%s.1\n", $1, $1}' | sort > ucscToINSDC.txt
+    printf "chrM\tEU177871.1\n" >> ucscToINSDC.txt
+
+    # run up idKeys on the refseq assembly, then join them:
+
+    join refseqKeys/bisBis1RefSeq.idKeys.txt ../idKeys/bisBis1.idKeys.txt \
+       | awk '{printf "%s\t%s\n", $3,$2}' | sort > ucscToRefSeq.tab
+
+    join ucsc.coordinate.tab ucscToRefSeq.tab \
+      | awk '{printf "%s\t%d\t%d\t%s\n", $1,$2,$3,$4}' | sort > ucscToRefSeq.bed
+
+    # the existing ucscToINSDC track has an incorrect name for chrM,
+    # reload it with the correct name
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > ucsc.coordinate.tab
+
+    join ucsc.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+       | sort > ucscToINSDC.bed
+
+    # this UCSC assembly is missing the RefSeq chrM sequence:
+    wc -l *.tab *.txt *.bed
+#   450182 ucsc.coordinate.tab
+#   128431 ucscToRefSeq.tab
+#   450182 insdcToUcsc.txt
+#   450182 ucscToINSDC.txt
+#   450182 ucscToINSDC.bed
+#   128431 ucscToRefSeq.bed
+
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  14
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab bisBis1 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  14
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToINSDC.sql
+    hgLoadSqlTab bisBis1 ucscToINSDC ./ucscToINSDC.sql ucscToINSDC.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords bisBis1
+    # each should cover %100 entirely:
+    featureBits -countGaps bisBis1 ucscToINSDC
+    # 2953622319 bases of 2953622319 (100.000%) in intersection
+
+    # this one does not cover everything
+    featureBits -countGaps bisBis1 ucscToRefSeq
+    # 2828031685 bases of 2953622319 (95.748%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2017-03-13 - Hiram)
+
+    mkdir /hive/data/genomes/bisBis1/bed/chromAlias
+    cd /hive/data/genomes/bisBis1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' bisBis1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' bisBis1 \
+        > ucsc.genbank.tab
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > bisBis1.chromAlias.tab
+
+    hgLoadSqlTab bisBis1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        bisBis1.chromAlias.tab
+
+#########################################################################
 # ucscToINSDC table/track (DONE - 2015-03-10 - Hiram)
     mkdir /hive/data/genomes/bisBis1/bed/ucscToINSDC
     cd /hive/data/genomes/bisBis1/bed/ucscToINSDC
@@ -476,7 +560,28 @@ termRegex [JN][PC][Y_][T0][0-9]+(\.1)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
-#########################################################################
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-03-22 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("bisBis1", "blat1b", "17876", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("bisBis1", "blat1b", "17877", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to Bos taurus casein kinase 1 alpha 1 CSNK1A1
+##     gene (a milk production gene)
+##  (DONE - 2017-03-22 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="KN265006v1:10821934-10865801"
+	where name="bisBis1";' hgcentraltest
+
+############################################################################
 # all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output

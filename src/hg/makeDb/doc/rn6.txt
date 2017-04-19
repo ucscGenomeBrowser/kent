@@ -413,6 +413,50 @@ close (FH);
     cd /hive/data/genomes/rn6/bed/cytoBand
     makeCytoBandIdeo.csh rn6
 
+#########################################################################
+##  CYTOBAND - ideogram track (DONE - 2017-03-15 - Hiram)
+    mkdir /hive/data/genomes/rn6/bed/cytoBand
+    cd /hive/data/genomes/rn6/bed/cytoBand
+    # fetch the ideogram file:
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/pub/gdp/ideogram_10116_GCF_000000225.4_NA_V1 ./
+
+    # Create bed file
+    $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl \
+       ideogram_10116_GCF_000000225.4_NA_V1
+
+    # add in the default bands for all other chroms:
+    egrep "_|chrM" firstTrack/rn6.cytoBand \
+      | awk '{printf "%s\t%s\t%d\t%d\t%s\n", $1,$1,$2,$3,$4}' \
+        | sed -e 's/^chr[nUXY0-9]\+_//; s/v1_random/.1/;' \
+         | awk '{printf "%s\t%d\t%d\t\t%s\n", $2,$3,$4,$5}' >> cytoBand.bed
+
+    ## can now verify before load:
+    $HOME/kent/src/utils/ncbi/cytoBandVerify.pl
+    #	everything checks out OK on 953 chroms
+
+    # these chrom names are too long for the SQL keys:
+ cut -f1 cytoBand.bed | sort -u | awk '{print length($0)}' | sort -rn | head -1
+#   27
+    sed -e 's/12/27/;' $HOME/kent/src/hg/lib/cytoBand.sql \
+        > cytoBand.sql
+
+    # Load the bed file
+    hgLoadBed -tab -noBin -sqlTable=cytoBand.sql rn6 cytoBand cytoBand.bed
+    #   Read 1179 elements of size 5 from cytoBand.bed
+
+    # Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # The cytoBandIdeo is just a replicate of the cytoBand track.
+    hgsql -e "CREATE TABLE cytoBandIdeo SELECT * FROM cytoBand;" rn6
+
+    checkTableCoords rn6 cytoBand
+    checkTableCoords rn6 cytoBandIdeo
+
+    # should cover %100
+    featureBits -countGaps rn6 cytoBand
+    # 2870182909 bases of 2870182909 (100.000%) in intersection
+    featureBits -countGaps rn6 cytoBandIdeo
+    # 2870182909 bases of 2870182909 (100.000%) in intersection
+
 ##########################################################################
 ## WINDOWMASKER (DONE - 2014-07-09 - Hiram)
     mkdir /hive/data/genomes/rn6/bed/windowMasker

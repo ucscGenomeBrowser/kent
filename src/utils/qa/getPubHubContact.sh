@@ -83,24 +83,24 @@ then
 
 		# Make name for hub.txt output file that includes hub shortLabel
 		hubFile="$base/hubFiles/$label.hub.txt"
-		wget -t 5 -O $hubFile $url &> /dev/null
+		wget -t 5 -O $hubFile $url &> /dev/null || true
 
 		# Extract email from hub.txt file we saved
-		email=$(egrep "^email" $hubFile)
+		email=$(egrep "^email" $hubFile) || true
 
 		# If email is empty, then wget failed or hub is down
 		if [[ $email == "" ]]
 		then
 			# Attempt to get hub.txt file w/ curl
-			curl --retry 5 $url -o $hubFile  &> /dev/null
+			curl --retry 5 $url -o $hubFile  &> /dev/null || true
 			# Extract email from hub.txt file we saved
-			email=$(grep "^email" $hubFile)
+			email=$(grep "^email" $hubFile) || true
 
 			# If email is still empty, hub is likely down and
 			# we want to use the last email we have as contact email
 			if [[ $email == "" ]] && [ -e $contactFile.old ]
 			then
-				email=$(grep "$url" $contactFile.old.temp | awk '{print $4" "$5}')
+				email=$(grep "$url" $contactFile.old.temp | awk '{print $4" "$5}') || true
 			fi
 		fi
 

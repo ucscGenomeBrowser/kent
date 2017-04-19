@@ -125,7 +125,7 @@ def insertoToStepRunAndStepIn(db, startManiDict, startManiHeader, options):
     if (cdwStepRunId == None): cdwStepRunId = 0
 
     # Go through the start manifest file, each key is a meta tag and each value 
-    # is a list of lists. 
+    # is a list of files. 
     for key, value in startManiDict.iteritems():
         # Insert the step into cdwStepRun.
         stepCmd = ("insert into cdwStepRun (stepDef, stepVersion) values (%i, '%s')"%(options.stepDef, options.stepVersion))
@@ -146,27 +146,29 @@ def insertoToStepRunAndStepIn(db, startManiDict, startManiHeader, options):
         # Iterate over all rows (input files) that have this meta tag. 
         for row in value: 
             cur = db.cursor()
-            # Assume that submit file name+meta form a unique field and can be used to grab a file id 
-            #query = "select id from cdwFile where submitFileName = '%s'" % (row[fileCol])
             tags = key
             if (options.startMetaColumn is not "meta"): tags = row[metaCol].translate(trans) 
-            query = "select id from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%(row[fileCol],tags)
+            query = "select id from cdwFile where submitFileName = '%s' order by id desc" %(row[fileCol])
             if (options.verbose): print(query)
             cur.execute(query)
             fileId = 0 # This will hold the fileId. 
             result = cur.fetchall()
-            assert(len(result) == 1) # This SQL query is supposed to be unique!
+            if(len(result) > 1): # This SQL query is supposed to be unique!
+                if (options.verbose): 
+                    print ("This query did not return a unique value, there is likely something" + \
+                            " off with the database. %s " %(query))
+            firstLine = True
             for line in result:
-                fileId = line[0]
+                if firstLine:
+                    fileId = line[0]
+                    break
 
             # Verify that the file has the same submission dir
-            query = ("select submitDirId from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%
-                            (row[fileCol], tags))
+            query = "select submitDirId from cdwFile where submitFileName = '"+ row[fileCol]+"'"
             if (options.verbose): print(query)
             cur = db.cursor()
             cur.execute(query)
             result = cur.fetchall()
-            assert(len(result) == 1) 
             for line in result:
                 assert(line[0] == submitDirId)
            
@@ -187,7 +189,6 @@ def insertoToStepRunAndStepIn(db, startManiDict, startManiHeader, options):
             options.outputFile.write(query+";\n")
             if (options.verbose): print (query) 
             cur.close()
-
     return startToEndDict
 
 def insertToStepOut(db, endManiDict, endManiHeader, startToEndDict, options): 
@@ -210,22 +211,32 @@ def insertToStepOut(db, endManiDict, endManiHeader, startToEndDict, options):
             cur = db.cursor()
             tags = key
             if (options.endMetaColumn is not "meta"): tags = row[metaCol].translate(trans) 
-            query = "select id from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%(row[fileCol],tags)
+            query = "select id from cdwFile where submitFileName = '%s'order by id desc" %(row[fileCol])
             cur.execute(query)
             if (options.verbose): print (query)
             result = cur.fetchall()
+            if(len(result) > 1): # This SQL query is supposed to be unique!
+                if (options.verbose): 
+                    print ("This query did not return a unique value, there is likely something " + \
+                            "off with the database. %s " %(query))
+            firstLine = True
             for line in result:
-                fileId = line[0]
-            assert(len(result) == 1) # This SQL query is supposed to be unique!
+                if firstLine:
+                    fileId = line[0]
+                    break
             
             # Verify that the file has the same submission dir
-            query = ("select submitDirId from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%
-                            (row[fileCol], tags))
+            query = ("select submitDirId from cdwFile where submitFileName = '%s' order by id desc"%
+                            (row[fileCol]))
             if (options.verbose): print(query)
             cur = db.cursor()
             cur.execute(query)
             result = cur.fetchall()
-            assert(len(result) == 1) 
+            if(len(result) > 1): # This SQL query is supposed to be unique!
+                if (options.verbose): 
+                    print ("This query did not return a unique value, there is likely something " + \
+                            "off with the database. %s " %(query))
+            firstLine = True
             for line in result:
                 assert(line[0] == submitDirId)
 
@@ -289,8 +300,8 @@ def main(args):
     startManiDict = readManiToDict(options.startMani, startIndexCol)    
     endManiDict = readManiToDict(options.endMani, endIndexCol)
 
+    # All files should share the same submission directory. 
     myPick = random.choice(startManiDict.keys())
-
     query = ("select submitDirId from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%
                     (startManiDict[myPick][0][0], myPick))
     if (options.verbose): print(query)
@@ -298,10 +309,8 @@ def main(args):
     cur.execute(query)
     result = cur.fetchall()
     cur.close()
-    assert(len(result) == 1) 
     for line in result:
         submitDirId = line[0]
-    
     
     # Generate the insert commands.
     startToEndDict = insertoToStepRunAndStepIn(db, startManiDict, startManiHeader, options)

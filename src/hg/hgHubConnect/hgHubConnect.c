@@ -26,6 +26,7 @@
 #include "obscure.h"
 #include "hgConfig.h"
 #include "trix.h"
+#include "net.h"
 
 
 struct cart *cart;	/* The user's ui state. */
@@ -316,10 +317,13 @@ return urlSearchHash;
 static boolean outputPublicTable(struct sqlConnection *conn, char *publicTable, char *statusTable, struct hash **pHash)
 /* Put up the list of public hubs and other controls for the page. */
 {
-char *trixFile = cfgOptionEnvDefault("HUBSEARCHTRIXFILE", "hubSearchTrixFile", "/gbdb/hubs/public.ix");
+char *trixFile = hReplaceGbdb(cfgOptionEnvDefault("HUBSEARCHTRIXFILE", "hubSearchTrixFile", "/gbdb/hubs/public.ix"));
 char *hubSearchTerms = cartOptionalString(cart, hgHubSearchTerms);
 char *cleanSearchTerms = cloneString(hubSearchTerms);
-boolean haveTrixFile = fileExists(trixFile);
+int trixFd = netUrlOpen(trixFile);
+boolean haveTrixFile = (trixFd != -1);
+if (haveTrixFile)
+    close(trixFd);
 struct hash *urlSearchHash = NULL;
 
 printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
@@ -556,7 +560,7 @@ hPrintf("You will be automatically redirected to the gateway page for this hub's
 struct trackHub *tHub = hub->trackHub;
 if (tHub->email != NULL)
     {
-    hPrintf("<B>This hub is provided courtesy of <A HREF=\"mailto:%s\">%s</A>.</B>. Please contact them with any questions.", tHub->email, tHub->email);
+    hPrintf("<B>This hub is provided courtesy of <A HREF=\"mailto:%s\">%s</A>.</B> Please contact them with any questions.", tHub->email, tHub->email);
     }
 
 hPrintf("<BR><BR>");

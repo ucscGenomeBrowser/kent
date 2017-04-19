@@ -47,6 +47,8 @@
 #include "htmlPage.h"
 #include "longRange.h"
 #include "tagRepo.h"
+#include "fieldedTable.h"
+#include "barChartUi.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -192,6 +194,56 @@ freeMem(encValue);
 return dyStringCannibalize(&dyLink);
 }
 
+char *tabSepMetaAsHtmlTable(char *tabSepMeta, struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
+/* Return a string which is an HTML table of the tags for this track which are stored as a fielded table. */
+{
+// If there's no file, there's no data.
+if (tabSepMeta == NULL)
+    return "";
+
+// If the trackDb entry doesn't have a foreign key, there's no data.
+char *metaTag = trackDbSetting(tdb, "meta");
+if (metaTag == NULL)
+    return "";
+
+static char *cachedTableName = NULL;
+static struct hash *cachedHash = NULL;
+static struct fieldedTable *cachedTable = NULL;
+
+// Cache this table because there's a good chance we'll get called again with it.
+if ((cachedTableName == NULL) || differentString(tabSepMeta, cachedTableName))
+    {
+    char *requiredFields[] = {"meta"};
+    cachedTable = fieldedTableFromTabFile(tabSepMeta, NULL, requiredFields, sizeof requiredFields / sizeof (char *));
+    cachedHash = fieldedTableUniqueIndex(cachedTable, requiredFields[0]);
+    cachedTableName = cloneString(tabSepMeta);
+    }
+
+// Look for this tag in the metadata.
+struct fieldedRow *fr = hashFindVal(cachedHash, metaTag);
+if (fr == NULL)
+    return "";
+
+struct dyString *dyTable = dyStringCreate("<table style='display:inline-table;'>");
+if (showLongLabel)
+    dyStringPrintf(dyTable,"<tr valign='bottom'><td colspan=2 nowrap>%s</td></tr>",tdb->longLabel);
+if (showShortLabel)
+    dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>shortLabel:</i></td>"
+			   "<td nowrap>%s</td></tr>",tdb->shortLabel);
+
+int ii;
+for(ii=0; ii < cachedTable->fieldCount; ii++)
+    {
+    char *fieldName = cachedTable->fields[ii];
+    char *fieldVal = fr->row[ii];
+    if (!sameString(fieldName, "meta")  && !isEmpty(fieldVal))
+        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td>"
+                           "<td nowrap>%s</td></tr>",fieldName, fieldVal);
+    }
+dyStringAppend(dyTable,"</table>");
+return dyStringCannibalize(&dyTable);
+}
+
 char *tagStormAsHtmlTable(char *tagStormFile, struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
 /* Return a string which is an HTML table of the tags for this track. */
 {
@@ -224,6 +276,11 @@ return dyStringCannibalize(&dyTable);
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
 // If metadata from metaDb exists, return string of html with table definition
 {
+char *tabSepMeta = trackDbSetting(tdb, "metaTab");
+
+if (tabSepMeta)
+    return tabSepMetaAsHtmlTable(tabSepMeta, tdb, showLongLabel, showShortLabel);
+
 char *tagStormFile = trackDbSetting(tdb, "metaDb");
 
 if (tagStormFile)
@@ -314,8 +371,8 @@ boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
     boolean embeddedInText,boolean showLongLabel)
 // If metadata from metaTbl exists, create a link that will allow toggling it's display
 {
-char *tagStormFile = trackDbSetting(tdb, "metaDb");
-if (tagStormFile == NULL)
+boolean hasMetaInHub = (trackDbSetting(tdb, "metaDb") != NULL) ||  (trackDbSetting(tdb, "metaTab") != NULL);
+if (!hasMetaInHub)
     {
     const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
     if (safeObj == NULL || safeObj->vars == NULL)
@@ -337,7 +394,8 @@ void extraUiLinks(char *db,struct trackDb *tdb)
 // Show metadata, and downloads, schema links where appropriate
 {
 char *tagStormFile = trackDbSetting(tdb, "metaDb");
-boolean hasMetadata = (tagStormFile != NULL) || (!tdbIsComposite(tdb) && !trackHubDatabase(db)
+char *tabSepFile = trackDbSetting(tdb, "metaTab");
+boolean hasMetadata = (tagStormFile != NULL) || (tabSepFile != NULL) || (!tdbIsComposite(tdb) && !trackHubDatabase(db)
                         && metadataForTable(db, tdb, NULL) != NULL);
 if (hasMetadata)
     printf("<b>Metadata:</b><br>%s\n", metadataAsHtmlTable(db, tdb, FALSE, FALSE));
@@ -614,7 +672,7 @@ char *hStringFromTv(enum trackVisibility vis)
 return hTvStrings[vis];
 }
 
-void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boolean canPack,
+void hTvDropDownClassWithJavascript(char *varName, char *id, enum trackVisibility vis, boolean canPack,
 				char *class, struct slPair *events)
 // Make track visibility drop down for varName with style class
 {
@@ -634,11 +692,11 @@ static char *pack[] =
     };
 static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
 if (canPack)
-    cgiMakeDropListClassWithStyleAndJavascript(varName, pack, ArraySize(pack),
+    cgiMakeDropListClassWithIdStyleAndJavascript(varName, id, pack, ArraySize(pack),
 					   pack[packIx[vis]], class, TV_DROPDOWN_STYLE,
 					   events);
 else
-    cgiMakeDropListClassWithStyleAndJavascript(varName, noPack, ArraySize(noPack),
+    cgiMakeDropListClassWithIdStyleAndJavascript(varName, id, noPack, ArraySize(noPack),
 					   noPack[vis], class, TV_DROPDOWN_STYLE, events);
 }
 
@@ -712,7 +770,7 @@ else
     }
 }
 
-void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, struct slPair *events)
+void hideShowDropDownWithClassAndExtra(char *varName, char * id, boolean show, char *class, struct slPair *events)
 // Make hide/show dropdown for varName
 {
 static char *hideShow[] =
@@ -720,7 +778,7 @@ static char *hideShow[] =
     "hide",
     "show"
     };
-cgiMakeDropListClassWithStyleAndJavascript(varName, hideShow, ArraySize(hideShow),
+cgiMakeDropListClassWithIdStyleAndJavascript(varName, id, hideShow, ArraySize(hideShow),
 				       hideShow[show], class, TV_DROPDOWN_STYLE, events);
 }
 
@@ -1173,7 +1231,7 @@ else if (gotCds)
         disabled = "disabled";
     printf("<br /><b><span id='%sCodonNumberingLabel' %s>Show codon numbering</b>:</span>\n", 
                 name, curOpt == baseColorDrawOff ? "class='disabled'" : "");
-    cgiMakeCheckBoxJS(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE), disabled);
+    cgiMakeCheckBoxMore(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE), disabled);
     }
 else if (gotSeq)
     {
@@ -4090,7 +4148,9 @@ switch(cType)
     case cfgSnake:      snakeCfgUi(cart, tdb, prefix, title, boxed);
 			break;
     case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
-			break;
+                        break;
+    case cfgBarChart:   barChartCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
 			break;
@@ -7021,7 +7081,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
 
         printf("<TD>");
         safef(classes, sizeof(classes), "viewDD normalText %s", membersOfView->tags[ix]);
-        hTvDropDownClassWithJavascript(varName, tv, parentTdb->canPack, classes, events);
+        hTvDropDownClassWithJavascript(varName, NULL, tv, parentTdb->canPack, classes, events);
         puts(" &nbsp; &nbsp; &nbsp;</TD>");
         }
     }
@@ -8058,7 +8118,7 @@ if (show && (visibleChild == -1))
             visibleChild = 1;
         }
     }
-hideShowDropDownWithClassAndExtra(tdb->track, show, (show && visibleChild) ?
+hideShowDropDownWithClassAndExtra(tdb->track, NULL, show, (show && visibleChild) ?
                                   "normalText visDD" : "hiddenText visDD", events);
 return TRUE;
 }
@@ -8644,6 +8704,8 @@ else if (sameWord("bedDetail", tdb->type))
     asObj = bedDetailAsObj();
 else if (sameWord("pgSnp", tdb->type))
     asObj = pgSnpAsObj();
+else if (sameWord("barChart", tdb->type))
+    asObj = asParseText(barChartAutoSqlString);
 else
     asObj = asFromTableDescriptions(conn, tdb->table);
 return asObj;

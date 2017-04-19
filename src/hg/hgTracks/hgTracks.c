@@ -432,6 +432,7 @@ if (!IS_KNOWN(track->remoteDataSource))
     //    }
     if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type) ||
 	startsWithWord("halSnake",track->tdb->type) ||
+	startsWithWord("pslSnake",track->tdb->type) ||
 	startsWithWord("bigPsl",track->tdb->type) ||
 	startsWithWord("bigGenePred",track->tdb->type) ||
 	startsWithWord("bigChain",track->tdb->type) ||
@@ -4314,6 +4315,7 @@ if (
 || sameWord(type, "gvf")
 || sameWord(type, "narrowPeak")
 || sameWord(type, "psl")
+|| sameWord(type, "barChart")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
 ) 
@@ -5851,7 +5853,7 @@ else if (sameString(type, "bigWig"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain"))
+else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain") || sameString(type, "bigBarChart"))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
@@ -5866,6 +5868,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameStr
 	safef(typeBuf, sizeof(typeBuf), "bigMaf");
     else if (sameString(type, "bigPsl"))
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
+    else if (sameString(type, "bigBarChart"))
+	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
     else
 	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
     tdb->type = cloneString(typeBuf);
@@ -8087,23 +8091,24 @@ if (!hideControls)
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
 
-            hPrintf("<IMG class='toggleButton'"
-                    " id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
-                    group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
 	    char idText[256];
 	    safef(idText, sizeof idText, "%s_button", group->name);
+            hPrintf("<IMG class='toggleButton'"
+                    " id='%s' src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
+                    idText, indicatorImg, indicator,isOpen?"Collapse":"Expand");
 	    jsOnEventByIdF("click", idText, "return vis.toggleForGroup(this, '%s');", group->name);
 
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
             if (isHubTrack(group->name))
 		{
-                hPrintf("<input name=\"hubDisconnectButton\" id='hub_disconn'"
-                    "type=\"button\" value=\"disconnect\">\n");
-		jsOnEventByIdF("click", "hub_disconn", 
+		safef(idText, sizeof idText, "%s_disconn", group->name);
+                hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
+                    " type=\"button\" value=\"disconnect\">\n", idText);
+		jsOnEventByIdF("click", idText,
                     "document.disconnectHubForm.elements['hubId'].value='%s';"
                     "document.disconnectHubForm.submit();return true;",
-		    &group->name[sizeof hubTrackPrefix - 1]);
+		    group->name + strlen(hubTrackPrefix));
 		}
 
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
@@ -9096,6 +9101,12 @@ if (cartUsualBoolean(cart, "hgt.psOutput", FALSE))
     handlePostscript();
 else
     doTrackForm(NULL, NULL);
+
+boolean gotExtTools = extToolsEnabled();
+setupHotkeys(gotExtTools);
+if (gotExtTools)
+    printExtMenuData();
+
 }
 
 void chromInfoTotalRow(int count, long long total)
@@ -9464,6 +9475,11 @@ dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refres
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('v d', gotoGetDnaPage); \n");
 
+// highlight
+dyStringPrintf(dy,"Mousetrap.bind('h c', function() { highlightCurrentPosition('clear'); }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('h m', function() { highlightCurrentPosition('add'); }); \n");
+//dyStringPrintf(dy,"Mousetrap.bind('h n', function() { highlightCurrentPosition('new'); }); \n"); superfluos as it is just hc + hm?
+
 // focus
 dyStringPrintf(dy,"Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
 dyStringPrintf(dy,"Mousetrap.bind('?', showHotkeyHelp);\n");
@@ -9494,7 +9510,7 @@ dyStringFree(&dy);
 
 // help dialog
 hPrintf("<div style=\"display:none\" id=\"hotkeyHelp\" title=\"Keyboard shortcuts\">\n");
-hPrintf("<table style=\"width:580px; border-color:#666666; border-collapse:collapse\">\n");
+hPrintf("<table style=\"width:600px; border-color:#666666; border-collapse:collapse\">\n");
 hPrintf("<tr><td style=\"width:18ch\">left 10&#37;</td><td width=\"auto\" class=\"hotkey\">ctrl+j</td>  <td style=\"width:24ch\"> track search</td><td class=\"hotkey\">t then s</td>               </tr>\n"); // percent sign
 hPrintf("<tr><td> left 1/2 screen</td><td class=\"hotkey\">j</td>   <td> default tracks</td><td class=\"hotkey\">d then t</td>             </tr>\n");
 hPrintf("<tr><td> left one screen</td><td class=\"hotkey\">J</td>   <td> default order</td><td class=\"hotkey\">d then o</td>              </tr>\n");
@@ -9519,6 +9535,7 @@ hPrintf("<tr><td> &nbsp;5000bp (3 zeros)</td><td class=\"hotkey\">3</td><td>Tool
 hPrintf("<tr><td> &nbsp;50kbp (4 zeros)</td><td class=\"hotkey\">4</td><td>Tools - PCR</td><td class='hotkey'>t then i</td></tr>\n");
 hPrintf("<tr><td> &nbsp;500kbp (5 zeros)</td><td class=\"hotkey\">5</td><td>My Sessions</td><td class='hotkey'>s then s</td></tr>\n");
 hPrintf("<tr><td> &nbsp;5Mbp (6 zeros)</td><td class=\"hotkey\">6</td><td>Public Sessions</td><td class='hotkey'>p then s</td></tr>\n");
+hPrintf("<tr><td>Highlight all (mark)</td><td class=\"hotkey\">h then m</td><td>Clear all Highlights</td><td class='hotkey'>h then c</td></tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");
@@ -9532,7 +9549,7 @@ measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTi
 if (measureTiming)
     measureTime("Startup");
 
-hgBotDelay();
+hgBotDelayFrac(0.25); /* Impose a quarter of the standard CGI penalty */
 if (measureTiming)
     measureTime("Bottleneck delay");
 
@@ -9612,11 +9629,13 @@ if(!trackImgOnly)
         }
     jsIncludeFile("autocomplete.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
+    jsIncludeFile("spectrum.min.js", NULL);
 
 #ifdef LOWELAB
     jsIncludeFile("lowetooltip.js", NULL);
 #endif///def LOWELAB
 
+    webIncludeResourceFile("spectrum.min.css");
     webIncludeResourceFile("jquery-ui.css");
     if (!searching)     // NOT doing search
         {
@@ -9728,11 +9747,6 @@ jsonDyStringPrint(dy, (struct jsonElement *) jsonForClient, "hgTracks", 0);
 jsInline(dy->string);
 dyStringFree(&dy);
 
-boolean gotExtTools = extToolsEnabled();
-setupHotkeys(gotExtTools);
-if (gotExtTools)
-    printExtMenuData();
-
 if (measureTiming)
     measureTime("Time at end of doMiddle, next up cart write");
 
@@ -9743,5 +9757,13 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"performance.   To clear this variable, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
     }
+}
+
+void labelTrackAsFiltered(struct track *tg)
+/* add text to track long label to indicate filter is active */
+{
+char *oldLabel = tg->longLabel;
+tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+freeMem(oldLabel);
 }
 

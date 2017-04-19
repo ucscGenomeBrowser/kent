@@ -259,33 +259,33 @@ taxId 336983
     # 2970124662 bases of 2970124662 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2016-06-02 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2017-02-01 - Hiram)
 
-    cd ~/kent/src/hg/makeDb/trackDb/whale/colAng1
+    cd ~/kent/src/hg/makeDb/trackDb/oldWorldMonkeys/colAng1
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" colAng1 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
-# 80099 ANOL.1
-#     1 NC_.1
+#  197124 JYKR.1
 
-    # implies a search rule of: '[ACLNO_]+[0-9]+(\.[0-9]+)?'
+    # implies a search rule of: 'JYKR[0-9]+(\.[0-9]+)?'
 
     # verify this rule will find them all or eliminate them all:
     hgsql -N -e "select frag from gold;" colAng1 | wc -l
-    # 80100
+    # 197124
 
     hgsql -N -e "select frag from gold;" colAng1 \
-       | egrep -e '[ACLNO_]+[0-9]+(\.[0-9]+)?' | wc -l
-    # 80100
+       | egrep -e 'JYKR[0-9]+(\.[0-9]+)?' | wc -l
+    # 197124
 
     hgsql -N -e "select frag from gold;" colAng1 \
+       | egrep -v -e 'JYKR[0-9]+(\.[0-9]+)?' | wc -l
        | egrep -v -e '[ACLNO_]+[0-9]+(\.[0-9]+)?' | wc -l
     # 0
 
-    # hence, add to trackDb/rhesus/colAng1/trackDb.ra
+    # hence, add to trackDb/oldWorldMonkeys/colAng1/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [ACLNO_]+[0-9]+(\.[0-9]+)?
+termRegex JYKR[0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -298,7 +298,6 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku colAng1) > do.log 2>&1
-XXX - running - Wed Jun 15 11:15:23 PDT 2016
     # real    971m47.129s
 
 
@@ -514,41 +513,39 @@ XXX - running - Wed Jun 15 11:15:23 PDT 2016
 #         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2016-06-02 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-02-01 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism     mrnaCnt estCnt  refSeqCnt
-    # Orcinus orca    26      0       20
+    # Colobus angolensis      1       0       0
+    # Colobus angolensis palliatus    1       0       3
+    # Colobus guereza 36      3       0
+    # Colobus guereza kikuyuensis     2       0       0
 
     # Edit src/lib/gbGenome.c to add new species
 
     # edit etc/genbank.conf to add colAng1 just after balAcu1
 
-# colAng1 (killer whale)
+# colAng1 (Colobus angolensis palliatus) (13,124 contigs, 86.6X coverage)
 colAng1.serverGenome = /hive/data/genomes/colAng1/colAng1.2bit
 colAng1.clusterGenome = /hive/data/genomes/colAng1/colAng1.2bit
 colAng1.ooc = /hive/data/genomes/colAng1/jkStuff/colAng1.11.ooc
 colAng1.lift = no
-colAng1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
-colAng1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
-colAng1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
-colAng1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
-colAng1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
-colAng1.refseq.mrna.native.load = no
-colAng1.refseq.mrna.xeno.load = yes
-colAng1.genbank.mrna.xeno.load = no
-colAng1.genbank.est.native.load = no
-colAng1.genbank.mrna.native.load = no
-colAng1.genbank.mrna.native.loadDesc = no
-colAng1.downloadDir = colAng1
 colAng1.perChromTables = no
-# refseq.mrna native and xeno are default yes
-# genbank.mrna and genbank.est native are default yes, the xeno is default no
-colAng1.genbank.est.native.load = no
+colAng1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+colAng1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+colAng1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+colAng1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+colAng1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+colAng1.downloadDir = colAng1
+# default yes refseq.mrna.native refseq.mrna.xeno genbank.mrna.native
+# default yes genbank.est.native
+# default no genbank.mrna.xeno genbank.est.xeno
+# colAng1.upstreamGeneTbl = ncbiGene
 
-    git commit -m "Added colAng - Orcinus orca (killer whale) refs #17425" etc/genbank.conf src/lib/gbGenome.c
+    git commit -m "Added colAng - Colobus angolensis palliatus - refs #17545" etc/genbank.conf src/lib/gbGenome.c
     git push
     # update /cluster/data/genbank/:
     make etc-update
@@ -558,12 +555,13 @@ colAng1.genbank.est.native.load = no
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial colAng1
-    # logFile: var/build/logs/2016.06.01-11:32:53.colAng1.initalign.log
-    #   real    167m43.804s
+    # logFile: var/build/logs/2016.10.25-10:48:28.colAng1.initalign.log
 
-     tail -2 var/build/logs/2016.06.01-11:32:53.colAng1.initalign.log
-# hgwdev 2016.06.01-14:18:58 colAng1.initalign: Succeeded: colAng1
-# hgwdev 2016.06.01-14:20:36 colAng1.initalign: finish
+    tail -2 var/build/logs/2016.10.25-10:48:28.colAng1.initalign.log
+# hgwdev 2016.10.26-19:04:18 colAng1.initalign: Succeeded: colAng1
+# hgwdev 2016.10.26-19:05:15 colAng1.initalign: finish
+
+    #   approximately 1,936 minutes == 32.3 hours
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.colAng1
@@ -572,10 +570,12 @@ colAng1.genbank.est.native.load = no
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad colAng1
-    # logFile: var/dbload/hgwdev/logs/2016.06.02-10:36:16.colAng1.dbload.log
-    # real    5m35.289s
-    tail -1 var/dbload/hgwdev/logs/2016.06.02-10:36:16.colAng1.dbload.log
-# hgwdev 2016.06.02-10:41:51 colAng1.dbload: finish
+    # logFile: var/dbload/hgwdev/logs/2017.02.01-11:42:06.colAng1.dbload.log
+
+    # real    119m13.047s
+
+    tail -1 var/dbload/hgwdev/logs/2017.02.01-11:42:06.colAng1.dbload.log
+# hgwdev 2017.02.01-13:41:19 colAng1.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -583,24 +583,77 @@ colAng1.genbank.est.native.load = no
     # add colAng1 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added colAng1 - killer whale - Orcinus orca - refs #17425" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added colAng1 - Angolan colobus - Colobus angolensis palliatus - refs #17545" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #############################################################################
-# augustus gene track (TBD - 2016-06-01 - Hiram)
+# augustus gene track (DONE - 2017-02-01 - Hiram)
 
     mkdir /hive/data/genomes/colAng1/bed/augustus
     cd /hive/data/genomes/colAng1/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev colAng1) > do.log 2>&1
-    # real    153m58.477s
+    # real    103m43.099s
 
     cat fb.colAng1.augustusGene.txt
-    # 47282944 bases of 2249582125 (2.102%) in intersection
+    # 45199098 bases of 2679973137 (1.687%) in intersection
 
-#########################################################################
+#############################################################################
+# chainNet swap from human/hg38 (DONE - 2017-02-27 - Hiram)
+
+    # alignment on hg38
+    cd /hive/data/genomes/hg38/bed/lastzColAng1.2017-02-27
+    cat fb.hg38.chainColAng1Link.txt
+    # 2489504237 bases of 3049335806 (81.641%) in intersection
+
+    # running the swap
+    mkdir /hive/data/genomes/colAng1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/colAng1/bed/blastz.hg38.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg38/bed/lastzColAng1.2017-02-27/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    80m23.924s
+
+    cat fb.colAng1.chainHg38Link.txt
+    # 2355021477 bases of 2679973137 (87.875%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        colAng1 hg38) > rbest.log 2>&1
+    # real    224m29.002s
+
+#############################################################################
+# swap chainNet from mm10 (DONE - 2017-03-01 - Hiram)
+    # since this is a new assembly, add the chainNet definitions to
+    # trackDb
+
+    # the original results
+    cd /hive/data/genomes/mm10/bed/lastzColAng1.2017-02-28
+    cat fb.mm10.chainColAng1Link.txt
+    # 902325064 bases of 2652783500 (34.014%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/colAng1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/colAng1/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzColAng1.2017-02-28/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    62m44.125s
+
+    cat fb.colAng1.chainMm10Link.txt
+    # 885418780 bases of 2679973137 (33.038%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` colAng1 mm10) \
+       > rbest.log 2>&1
+    # real    296m19.689s
+
+#############################################################################
 #  BLATSERVERS ENTRY (TBD - 2016-06-02 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
@@ -614,13 +667,13 @@ colAng1.genbank.est.native.load = no
 
 ############################################################################
 ## default position to casein beta (CSN2) gene (milk production)
-#                                 (TBD - 2016-06-02 - Hiram)
+#                                 (DONE - 2017-02-27 - Hiram)
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="NW_004438441v1:339887-349875"
+    hgsql -e 'update dbDb set defaultPos="NW_012120710v1:924956-934903"
 	where name="colAng1";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-02-03 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=colAng1 -tableCoverage all.joiner
@@ -634,7 +687,7 @@ colAng1.genbank.est.native.load = no
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/colAng1/pushQ
     cd /hive/data/genomes/colAng1/pushQ
-    time makePushQSql.pl colAng1 > colAng1.pushQ.sql 2> stderr.out
+    time (makePushQSql.pl colAng1) > colAng1.pushQ.sql 2> stderr.out
     #   real    11m56.179s
 
     #   check for errors in stderr.out, some are OK, e.g.:

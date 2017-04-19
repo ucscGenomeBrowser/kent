@@ -7,218 +7,233 @@
 
 <h1>bigWig Track Format</h1> 
 <p>
-The bigWig format is for display of dense, continuous data that will be displayed in the Genome 
-Browser as a graph. BigWig files are created initially from <a href="wiggle.html">wiggle</a> (wig) 
-type files, using the program <code>wigToBigWig</code>. The resulting bigWig files are in an 
-indexed binary format. The main advantage of the bigWig files is that only the portions of the files
-needed to display a particular region are transferred to UCSC, so for large data sets bigWig is 
-considerably faster than regular wiggle files. The bigWig file remains on your web accessible server
-(http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal 
-position you are currently viewing is locally cached as a &quot;sparse file&quot;.</p>
+The bigWig format is useful for dense, continuous data that will be displayed in the Genome 
+Browser as a graph. BigWig files are created from <a href="wiggle.html">wiggle</a> (wig) 
+type files using the program <code>wigToBigWig</code>.</p>
 <p>
-Wiggle data must be continuous and the elements must be equally sized. If your data is sparse or 
-contains elements of varying size, use the <a href="bedgraph.html">bedGraph</a> format instead of 
+The bigWig files are in an indexed binary format. The main advantage of this format is that only 
+those portions of the file needed to display a particular region are transferred to the Genome 
+Browser server. Because of this, bigWig files have considerably faster display performance than 
+regular wiggle files when working with large data sets. The bigWig file remains on your local 
+web-accessible server (http, https or ftp), not on the UCSC server, and only the portion needed for 
+the currently displayed chromosomal position is locally cached as a &quot;sparse file&quot;.</p>
+<p>
+Wiggle data must be continuous and consist of equally sized elements. If your data is sparse or 
+contains elements of varying sizes, use the <a href="bedgraph.html">bedGraph</a> format instead of 
 the wiggle format. If you have a very large bedGraph data set, you can convert it to the bigWig 
 format using the <code>bedGraphToBigWig</code> program. For details, see <a href="#Ex3">Example 
-Three</a> below.</p>
-<p>
-See <a href="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format" 
-target="_blank">this page</a> for help in selecting a graphing track data format that is most 
+#3</a> below. Refer to 
+<a href="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format" 
+target="_blank">this wiki page</a> for help in selecting the graphing track data format most 
 approriate for the type of data you have.</p>
 <p>
-Please note that the <code>wigToBigWig</code> utility uses a lot of memory; somewhere on the order 
-of 1.5 times more memory than the uncompressed wiggle input file. We recommend that as you run the 
-program you monitor your memory usage by using the <code>top</code> command. The 
-<code>bedGraphToBigWig</code> utility uses somewhere on the order of 1/4 times more RAM than the 
-uncompressed bedGraph input file.</p>
+Note that the <code>wigToBigWig</code> utility uses a substantial amount of memory: approximately 
+50% more memory than that of the uncompressed wiggle input file. While running the 
+<code>wigToBigWig</code> utility, we recommend that you monitor the system's memory usage
+with the <code>top</code> command. The <code>bedGraphToBigWig</code> utility uses about 25%
+more RAM than the uncompressed bedGraph input file.</p>
+
+<h2>Creating a bigWig track</h2>
 <p>
 To create a bigWig track from a wiggle file, follow these steps:<p>
+<strong>Step 1.</strong> 
+Create a wig format file following the directions <a href="wiggle.html">here</a>. When converting a 
+wig file to a bigWig file, you are limited to one track of data in your input file; therefore,
+you must create a separate wig file for each data track. 
+<p>
+<strong>Step 2.</strong> 
+Remove any existing &quot;track&quot; or &quot;browser&quot; lines from your wig file so that it 
+contains only data.</p>
+<p> 
+<strong>Step 3.</strong> 
+Download the <code>wigToBigWig</code> program from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<p> 
+<strong>Step 4.</strong> 
+Use the <code>fetchChromSizes</code> script from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create the 
+<em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg19).</p> 
+<p> 
+<strong>Step 5.</strong> 
+Use the <code>wigToBigWig</code> utility to create the bigWig file from your wig file:</p> 
+<pre><code><strong>wigToBigWig</strong> input.wig chrom.sizes myBigWig.bw</code></pre>
+<p>
+Note that the wigToBigWig program also accepts gzipped wig input files.</p> 
+<p> 
+<strong>Step 6.</strong> 
+Move the newly created bigWig file (<em>myBigWig.bw</em>) to a web-accessible http, https, or ftp
+location.</p>
+<p> 
+<strong>Step 7.</strong> 
+If the file name ends with a <em>.bigWig</em> or <em>.bw</em> suffix, you can paste the URL directly
+into the <a href="../../cgi-bin/hgCustom">custom track management page</a>, click 
+&quot;submit&quot; and view the file as a track in the Genome Browser. By default, the file name 
+will be used to name the track. To configure the track label or other visualization options, you 
+must create a <a href="hgTracksHelp.html#TRACK">track line</a>, as shown in <em>Step 8</em>.</p>
+<p> 
+<strong>Step 8.</strong> 
+Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single track line. The
+most basic version of the track line will look something like this:</p>
+<pre><code>track type=bigWig name="My Big Wig" description="A Graph of Data from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigWig.bw</code></pre>
+<p> 
+Paste the custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom track 
+management page</a>.</p>
+<p>
+<a name="optional"></a>
+The <code>wigToBigWig</code> program can be run with several optional parameters, including:
+<pre>
+  <strong>autoScale         </strong><em>&lt;on|off&gt;                            </em> # default is on
+  <strong>alwaysZero        </strong><em>&lt;on|off&gt;                            </em> # default is off
+  <strong>gridDefault       </strong><em>&lt;on|off&gt;                            </em> # default is off
+  <strong>maxHeightPixels   </strong><em>&lt;max:default:min&gt;                   </em> # default is 128:128:11
+  <strong>graphType         </strong><em>&lt;bar|points&gt;                        </em> # default is bar
+  <strong>viewLimits        </strong><em>&lt;lower:upper&gt;                       </em> # default is range found in data
+  <strong>viewLimitsMax     </strong><em>&lt;lower:upper&gt;                       </em> # suggested bounds of viewLimits, but not enforced
+  <strong>yLineMark         </strong><em>&lt;real-value&gt;                        </em> # default is 0.0
+  <strong>yLineOnOff        </strong><em>&lt;on|off&gt;                            </em> # default is off
+  <strong>windowingFunction </strong><em>&lt;mean+whiskers|maximum|mean|minimum&gt;</em> # default is maximum, mean+whiskers is recommended
+  <strong>smoothingWindow   </strong><em>&lt;off|[2-16]&gt;                        </em> # default is off
+  <strong>transformFunc     </strong><em>&lt;NONE|LOG&gt;                          </em> # default is NONE</pre>
+<p>
+For further information on custom bigWig track settings, see the 
+<a href="trackDb/trackDbDoc.html#wig_-_Signal_Graphing_Track_Settings">Track Database Definition 
+Document</a>. For more information on how bigWig settings are used in native Genome Browser tracks, 
+see the <a href="hgWiggleTrackHelp.html">Configuring graph-based tracks</a> page.</p>
+
+<h2>Examples</h2>
+
+<h3>Example #1</h3>
+<p>
+In this example, you create a bigWig custom track using an existing bigWig file on the UCSC
+http server. The file contains data that spans chromosome 21 on the hg19 assembly. 
+<p>
+To create a custom track using this bigWig file:
+<ol>
+  <li>
+  Paste the URL <code>http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw</code> onto 
+  the <a href="../../cgi-bin/hgCustom">custom track management page</a> for the human assembly 
+  hg19 (Feb.  2009).</li> 
+  <li>
+  Click the &quot;submit&quot; button. </li>
+  <li>
+  On the next page that displays, click the &quot;chr21&quot; link in the custom track listing to 
+  view the bigWig track at position chr21:33,031,597-33,041,570 in the Genome Browser. </li>
+</ol>
+<p>
+Alternatively, you can customize the track display by including track and browser lines that define 
+certain parameters: </p>
 <ol>
   <li> 
-  Create a wig format file following the directions <a href="wiggle.html">here</a>. Note that when 
-  converting a wig file to a bigWig file, you are limited to one track of data in your input file; 
-  you must create a separate wig file for each data track. Note that this is the file that is 
-  referred to as <code>input.wig</code> in <em>step 5</em> below.</li>
-  <li> 
-  Remove any existing track or browser lines from your wig file so that it contains only data.</li>
-  <li> 
-  Download the <code>wigToBigWig</code> program from the 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary utilities.</li>
-  <li> 
-  Use the <code>fetchChromSizes</code> script from the same 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> to create the chrom.sizes file 
-  for the UCSC database you are working with (e.g., hg19). Note that this is the file that is 
-  referred to as <code>chrom.sizes</code> in <em>step 5</em> below.</li>
-  <li> 
-  Create the bigWig file from your wig file using the <code>wigToBigWig</code> utility like so: 
-  <pre><code>  <strong>wigToBigWig</strong> input.wig chrom.sizes myBigWig.bw</code></pre><br>
-  (Note that the wigToBigWig program also accepts a gzipped wig input file.)</li> 
-  <li> 
-  Move the newly created bigWig file (<code>myBigWig.bw</code>) to a http, https, or ftp
-  location.</li>
-  <li> 
-  If the file URL ends with .bigWig or .bw, you can paste the URL directly into the 
-  <a href="../../cgi-bin/hgCustom">custom track</a> management page, click submit and view in the 
-  Genome Browser. The track name will then be the name of the file. If you want to configure the 
-  track label or other visualisation options, you will need to create a 
-  <a href="hgTracksHelp.html#TRACK">track line</a>, as shown below.</li>
-  <li> 
-  Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
-  <a href="hgTracksHelp.html#TRACK">track line</a>. The most basic version of the track line will 
-  look something like this:
-  <pre><code>  track type=bigWig name="My Big Wig" description="A Graph of Data from My Lab"
-  bigDataUrl=http://myorg.edu/mylab/myBigWig.bw</code></pre></li>
-  <p>
-  <a name="optional"></a>
-  Optional values can include:
-  <pre>
-  <strong>autoScale         </strong><I>&lt;on|off&gt;                            </I> # default is on
-  <strong>alwaysZero        </strong><I>&lt;on|off&gt;                            </I> # default is off
-  <strong>gridDefault       </strong><I>&lt;on|off&gt;                            </I> # default is off
-  <strong>maxHeightPixels   </strong><I>&lt;max:default:min&gt;                   </I> # default is 128:128:11
-  <strong>graphType         </strong><I>&lt;bar|points&gt;                        </I> # default is bar
-  <strong>viewLimits        </strong><I>&lt;lower:upper&gt;                       </I> # default is range found in data
-  <strong>viewLimitsMax     </strong><I>&lt;lower:upper&gt;                       </I> # suggested bounds of viewLimits, but not enforced
-  <strong>yLineMark         </strong><I>&lt;real-value&gt;                        </I> # default is 0.0
-  <strong>yLineOnOff        </strong><I>&lt;on|off&gt;                            </I> # default is off
-  <strong>windowingFunction </strong><I>&lt;mean+whiskers|maximum|mean|minimum&gt;</I> # default is maximum, mean+whiskers is recommended
-  <strong>smoothingWindow   </strong><I>&lt;off|[2-16]&gt;                        </I> # default is off
-  <strong>transformFunc     </strong><I>&lt;NONE|LOG&gt;                          </I> # default is NONE</pre>
-  <p>
-  For further information on custom bigWig track settings, see the 
-  <a href="trackDb/trackDbDoc.html#wig_-_Signal_Graphing_Track_Settings">Track Database Definition 
-  Document</a>. For further information on how bigWig settings are used in native Browser tracks, 
-  see the <a href="hgWiggleTrackHelp.html">Configuring graph-based tracks</a> page.</li>
-  <li> 
-  Paste this custom track line into the text box in the <a href="../../cgi-bin/hgCustom">custom 
-  track</a> management page.</li>
+  Construct a track line that references the <em>bigWigExample.bw</em> file:
+  <pre><code>track type=bigWig name=&quot;Example One&quot; description=&quot;A bigWig file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw</code></pre></li>
+  <li>
+  Include the following browser line to ensure that the custom track opens at the correct 
+  position:
+  <pre><code>browser position chr21:33,031,597-33,041,570</code></pre></li>
+  <li>
+  Paste the browser and track lines onto the <a href="../../cgi-bin/hgCustom">custom track
+  management page</a> for the human assembly hg19 (Feb.  2009), click the &quot;submit&quot; button,
+  then click the &quot;chr21&quot; link in the custom track listing to view the bigWig track in the 
+  Genome Browser.</li>
 </ol>
 
-<h2>Example #1</h2>
-<p>
-In this example, you will use an existing bigWig file to create a bigWig custom track. A bigWig file
-that spans chromosome 21 on the hg19 assembly has been placed on our http server. You can create a 
-custom track using this bigWig file by pasting the URL 
-<code>http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw</code> into the 
-<a href="../../cgi-bin/hgCustom">custom track</a> management page for the human assembly hg19 (Feb. 
-2009), then press the <em>submit</em> button. On the following page, press the <em>chr21</em> link 
-in the custom track listing to view the bigWig track at position chr21:33,031,597-33,041,570 in the 
-Genome Browser.</p>
-<p>
-Alternatively, you can construct a &quot;track&quot; line that references this file like so:</p>
-<pre><code>  track type=bigWig name=&quot;Example One&quot; 
-  description=&quot;A bigWig file&quot; 
-  bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw</code></pre>
-<p>
-Include the following &quot;browser&quot; line to ensure that the custom track opens at the correct 
-position:</p>
-<pre><code>  browser position chr21:33,031,597-33,041,570</code></pre>
-<p>
-Paste the &quot;browser&quot; line and &quot;track&quot; line into the 
-<a href="../../cgi-bin/hgCustom">custom track</a> management page for the human assembly hg19 (Feb. 
-2009), then press the <em>submit</em> button. On the following page, press the <em>chr21</em> link 
-in the custom track listing to view the bigWig track in the Genome Browser.</p>
-
-<h2>Example #2</h2>
+<h3>Example #2</h3>
 <p>
 In this example, you will create your own bigWig file from an existing wiggle file.</p>
-<ul>
+<ol>
   <li> 
-  Save this <a href="examples/wigVarStepExample.gz">wiggle file</a> to your machine (this satisfies 
-  <em>steps 1</em> and <em>2</em> above).</li>
+  Save <a href="examples/wigVarStepExample.gz">this wiggle file</a> to your computer 
+  (<em>Steps 1</em> and <em>2</em> in <em>Creating a bigWig format track</em>, above).</li>
   <li> 
-  Save this <a href="hg19.chrom.sizes">text file</a> to your machine. It contains the chrom.sizes 
-  for the human (hg19) assembly (this satisfies <em>step 4</em> above).</li>
+  Save the file <a href="hg19.chrom.sizes"><em>hg19.chrom.sizes</em></a> to your computer.  This 
+  file contains the chrom.sizes for the human (hg19) assembly (<em>Step 4</em>, above).</li>
   <li> 
-  Download the <code>wigToBigWig</code> utility (see <em>step 3</em>).</li> 
+  Download the <code>wigToBigWig</code> utility (<em>step 3</em>, above).</li> 
   <li> 
-  Run the utility to create the bigWig output file (see <em>step 5</em>):<br>
-  <code><strong>  wigToBigWig</strong> wigVarStepExample.gz hg19.chrom.sizes
-myBigWig.bw</code></li>
+  Run the utility to create the bigWig output file (<em>step 5</em>, above):
+  <pre><code><strong>wigToBigWig</strong> wigVarStepExample.gz hg19.chrom.sizes myBigWig.bw</code></li>
   <li> 
-  Place the bigWig file you just created (<code>myBigWig.bw</code>) on a web-accessible server 
-  (see <em>step 6</em>).</li>
+  Place the newly created bigWig file (<em>myBigWig.bw</em>) on a web-accessible server 
+  (<em>step 6</em>, above).</li>
   <li> 
-  Paste the URL to the file into the custom track entry form or construct a &quot;track&quot; line 
-  that points to your bigWig file (see <em>step 7</em>).</li>
+  Paste the URL of the bigWig file into the custom track entry form, or construct a track line that 
+  points to your bigWig file (<em>step 7</em>, above).</li>
   <li> 
   Create the custom track on the human assembly hg19 (Feb. 2009), and view it in the Genome Browser 
-  (see <em>step 8</em>). Note that the original wiggle file spans only chromsome 21.</li>
-</ul>
+  (<em>step 8</em>, above). Note that the original wiggle file spans only chromsome 21.</li>
+</ol>
 
 <a name=Ex3></a>
-<h2>Example #3</h2>
+<h3>Example #3</h3>
 <p>
 To create a bigWig track from a bedGraph file, follow these steps:</p>
 <ol>
   <li> 
-  Create a bedGraph format file following the directions <a href="bedgraph.html">here</a>. Note that
-  when converting a bedGraph file to a bigWig file, you are limited to one track of data in your 
-  input file; you must create a separate bedGraph file for each data track. Note that this is the 
-  file that is referred to as <code>in.bedGraph</code> in <em>step 5</em> below.</li>
+  Create a bedGraph format file following the directions <a href="bedgraph.html">here</a>. When 
+  converting a bedGraph file to a bigWig file, you are limited to one track of data in your input 
+  file; therefore, you must create a separate bedGraph file for each data track.</li> 
   <li> 
   Remove any existing track or browser lines from your bedGraph file so that it contains only 
   data.</li>
   <li> 
   Download the <code>bedGraphToBigWig</code> program from the 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary utilities.</li>
+  <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</li>
   <li> 
-  Use the <code>fetchChromSizes</code> script from the same 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> to create the chrom.sizes file 
-  for the UCSC database you are working with (e.g., hg19). Note that this is the file that is 
-  referred to as <code>chrom.sizes</code> in <em>step 5</em> below.</li>
+  Use the <code>fetchChromSizes</code> script from the 
+  <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create the 
+  <em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg19). </li>
   <li> 
-  Create the bigWig file from your bedGraph file using the <code>bedGraphToBigWig</code> utility 
-  like so:
-  <pre><code><strong>  bedGraphToBigWig</strong> in.bedGraph chrom.sizes myBigWig.bw</code></pre><br>
-  (Note that the bedGraphToBigWig program <strong>DOES NOT</strong> accept a gzipped bedGraph input 
-  file.)</li>
+  Use the <code>bedGraphToBigWig</code> utility to create a bigWig file from your bedGraph file:
+  <pre><code><strong>bedGraphToBigWig</strong> in.bedGraph chrom.sizes myBigWig.bw</code></pre>
+  (Note that the bedGraphToBigWig program <strong>DOES NOT</strong> accept gzipped bedGraph input 
+  files.)</li>
   <li> 
-  Move the newly created bigWig file (<code>myBigWig.bw</code>) to a http, https, or ftp 
-  location.</li>
+  Move the newly created bigWig file (<code>myBigWig.bw</code>) to a web-accessible http, https, or 
+  ftp location.</li>
   <li> 
   Paste the URL into the custom track entry form or construct a 
   <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
   <a href="hgTracksHelp.html#TRACK">track line</a>.</li>
   <li> 
-  Paste this custom track line into the text box in the <a href="../../cgi-bin/hgCustom">custom 
-  track</a> management page.</li>
+  Paste the custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom 
+  track management page</a>.</li>
 </ol>
 
-<h2>Sharing Your Data with Others</h2>
+<h2>Sharing your data with others</h2>
 <p>
 If you would like to share your bigWig data track with a colleague, learn how to create a URL by 
-looking at <em>Example 11</em> on <a href="customTrack.html#SHARE">this</a> page.</p>
+looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
 
-<h2>Extracting Data from the bigWig Format</h2>
+<h2>Extracting data from the bigWig format</h2>
 <p>
-Because the bigWig files are indexed binary files, they can be difficult to extract data from. 
-Consequently, we have developed the following two programs, both of which are available from the 
-<a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary utilities.
+Because bigWig files are indexed binary files, it can be difficult to extract data from them. 
+UCSC has developed the following programs to assist in working with these files, available from 
+the <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.
 <ul>
   <li>
-  <code>bigWigToBedGraph</code> &mdash; this program converts a bigWig file to ASCII 
+  <code>bigWigToBedGraph</code> &mdash; converts a bigWig file to ASCII 
   <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format1.8">bedGraph</a> format.</li>
   <li>
-  <code>bigWigToWig</code> &mdash; this program converts a bigWig file to 
+  <code>bigWigToWig</code> &mdash; converts a bigWig file to 
   <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format6">wig</a> format.</li>
   <li>
-  <code>bigWigSummary</code> &mdash; this program extracts summary information from a bigWig 
-  file.</li>
+  <code>bigWigSummary</code> &mdash; extracts summary information from a bigWig file.</li>
   <li>
-  <code>bigWigAverageOverBed</code> &mdash; this program computes the average score of a bigWig over
+  <code>bigWigAverageOverBed</code> &mdash; computes the average score of a bigWig over
   each bed, which may have introns.</li>
   <li>
-  <code>bigWigInfo</code> &mdash; this program prints out information about a bigWig file.</li>
+  <code>bigWigInfo</code> &mdash; prints out information about a bigWig file.</li>
 </ul>
 <p>
-These utilities accept paths to files or alternatively URLs to file. As with all UCSC Genome Browserprograms, simply type the program name at the command line with no parameters to see the usage 
-statement.</p>
+These utilities accept either file path names or URLs to files as input. As with all UCSC Genome 
+Browser programs, simply type the program name (with no parameters) on the command line to view the 
+usage statement.</p>
 <p>
-In some cases, bigWigSummary and bigWigAverageOverBed will produce very similar results, but in 
-other cases, the results may differ. This is due to differences in how the utilities handle data. 
-Summary levels are used with bigWigSummary, so some rounding errors and border conditions are 
-encountered when extracting data over relatively small regions. The bigWigAverageOverBed utility 
-uses the actual data which ensures the highest level of accuracy.</p>
+In some cases, <code>bigWigSummary</code> and <code>bigWigAverageOverBed</code> will produce very 
+similar results, but in other cases, the results may differ. This is due to data-handling 
+differences between the two programs. Summary levels are used with <code>bigWigSummary</code>; 
+therefore, some rounding errors and border conditions are encountered when extracting data over 
+relatively small regions. In contrast, the <code>bigWigAverageOverBed</code> utility uses the actual
+data, which ensures the highest level of accuracy.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

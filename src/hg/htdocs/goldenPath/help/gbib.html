@@ -98,13 +98,13 @@ GBiB will run on most modern PCs and major operating systems that meet these bas
   Your network firewall must allow outgoing connections to the following servers and ports:
   <ul>
     <li>
-    Port 3306 on genome-mysql.cse.ucsc.edu (128.114.119.174), used by MySQL to load tracks not 
+    Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174), used by MySQL to load tracks not 
     local to your computer</li>
     <li>
-    TCP port 873 on hgdownload.cse.ucsc.edu (128.114.119.163), used by rsync to download track 
+    TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163), used by rsync to download track 
     data</li>
     <li>
-    TCP port 80 on hgdownload.cse.ucsc.edu (128.114.119.163), used to download html descriptions on 
+    TCP port 80 on hgdownload.soe.ucsc.edu (128.114.119.163), used to download html descriptions on 
     the fly</li>
   </ul></li>
 </ul>
@@ -627,7 +627,7 @@ resolve this problem:</p>
 </ol>
 <p>
 <strong>Genome Browser Error:</strong> &quot;<em>Couldn't connect to database hg19 on 
-genome-mysql.cse.ucsc.edu as genomep.</em>&quot;
+genome-mysql.soe.ucsc.edu as genomep.</em>&quot;
 <p>
 <em>Solution 1:</em> This indicates that the virtual machine could not connect to the UCSC MySQL 
 server. This error can be caused by a change of the IP address (e.g. on a wifi connection) that has 
@@ -685,13 +685,19 @@ your personal track and session settings and mirrored tracks.</p>
 <strong>Problem:</strong> I need proxy support for my files to load.</p>
 <p>
 <em>Solution:</em> Proxy servers may be required by some installations to get through a firewall. 
-You can add the setting <code>httpProxy</code> to hg.conf.local at
+You can add the settings <code>httpProxy</code>, <code>httpsProxy</code> and <code>ftpProxy</code> to hg.conf.local at
 /usr/local/apache/cgi-bin/hg.conf.local:</p>
-<pre><code>httpProxy=http://someProxyServer:443/</code></pre>
+<pre><code>httpProxy=http://someProxyServer:3128</code></pre>
+<pre><code>httpsProxy=http://someProxyServer:3128</code></pre>
+<pre><code>ftpProxy=ftp://127.0.0.1:2121</code></pre>
 <p>
 If the proxy server requires BASIC authentication, then the line in hg.conf.local should look like
 this:</p>
-<pre><code>httpProxy=http://user:password@someProxyServer:443/</code></pre>
+<pre><code>httpProxy=http://user:password@someProxyServer:3128</code></pre>
+<pre><code>httpsProxy=http://user:password@someProxyServer:3128</code></pre>
+<p>
+If there are domains or domain-suffices that should not be proxied, use <code>noProxy</code>.
+<pre><code>noProxy=ucsc.edu,mit.edu,localhost,127.0.0.1</code></pre>
 <p>
 The file /usr/local/apache/cgi-bin/hg.conf should already include a line like <code>include
 hg.conf.local</code> to incorporate the changes in hg.conf.local.</p>

@@ -7,231 +7,249 @@
 
 <h1>bigBed Track Format</h1> 
 <p>
-The bigBed format stores annotation items that can either be simple, or a linked collection of 
+The bigBed format stores annotation items that can be either a simple or a linked collection of 
 exons, much as <a href="../../FAQ/FAQformat.html#format1">BED</a> files do. BigBed files are created
-initially from BED type files, using the program <code>bedToBigBed</code>. The resulting bigBed 
-files are in an indexed binary format. The main advantage of the bigBed files is that only the 
-portions of the files needed to display a particular region are transferred to UCSC, so for large 
-data sets bigBed is considerably faster than regular BED files. The bigBed file remains on your 
-web-accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed
-for the chromosomal position you are currently viewing is locally cached as a 
-&quot;sparse file&quot;.</p>
+from BED type files using the program <code>bedToBigBed</code>. The resulting bigBed 
+files are in an indexed binary format. The main advantage of the bigBed files is that only
+those portions of the files needed to display a particular region are transferred to the Genome 
+Browser server. Because of this, bigBed has considerably faster display performance than
+regular BED when working with large data sets. The bigBed file remains on your local web-accessible 
+server (http, https, or ftp), not on the UCSC server, and only the portion that is needed for the 
+currently displayed chromosomal position is locally cached as a "sparse file".</p>
 <p>
-Additional indices can be created for the items in a bigBed file. These indices can be used to 
-support item search in track hubs. See <a href="#Ex3">Example 3</a> for an example of how to build 
-an additional index.</p>
+Additional indices can be created for the items in a bigBed file to support item search in track 
+hubs. See <a href="#Ex3">Example #3</a> below for an example of how to build an additional 
+index.</p>
 <p>
 See <a href="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format" 
-target="_blank">this page</a> for help in selecting a graphing track data format that is most 
+target="_blank">this wiki page</a> for help in selecting the graphing track data format that is most
 approriate for your type of data.</p>
 <p>
-Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory;
+Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory:
 approximately 25% more RAM than the uncompressed BED input file.</p>
 <p>
-To create a bigBed track, follow these steps:<p>
-<ol>
-  <li> 
-  Create a BED format file following the directions 
-  <a href="../../FAQ/FAQformat.html#format1">here</a>.  
-  <ul>
-    <li> 
-    When converting a BED file to a bigBed file, you are limited to one track of data in your input 
-    file; you must create a separate BED file for each data track.</li>
-    <li> 
-    Your BED file must be sorted by chrom then chromStart. You can use the UNIX sort command to do 
-    this: <code>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</code></li>
-    <li> 
-    This is the file that is referred to as <code>input.bed</code> in 
-    <strong><em>step 5</em></strong> below.</li>
-  </ul>
-  <li> 
-  Remove any existing &quot;track&quot; or &quot;browser&quot; lines from your BED file so that it 
-  contains only data.</li>
-  <li> 
-  Download the <code>bedToBigBed</code> program from the 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary utilities.</li>
-  <li> 
-  Use the <code>fetchChromSizes</code> script from the same 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> 
-  to create the chrom.sizes file for the UCSC database you are working with (e.g., hg19). Note that 
-  this is the file that is referred to as <code>chrom.sizes</code> in 
-  <strong><em>step 5</em></strong> below.</li>
-  <li> 
-  Create the bigBed file from your sorted BED file using the <code>bedToBigBed</code>
-  utility like so: 
-  <pre><code>    <strong>bedToBigBed</strong> input.bed chrom.sizes myBigBed.bb</code></pref></li>
-  <li> 
-  Move the newly created bigBed file (<code>myBigBed.bb</code>) to a http, https, or ftp
-  location.</li>
-  <li> 
-  If the file URL ends with .bigBed or .bb, you can paste the URL directly into the 
-  <a href="../../cgi-bin/hgCustom">custom track</a> management page, click submit and view in the 
-  Genome Browser. The track name will then be the name of the file. If you want to configure the 
-  track name and descriptions, you will need to create a 
-  <a href="hgTracksHelp.html#TRACK">track line</a>, as shown below.</li>
-  <li> 
-  Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
-  <a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed
-  <a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic 
-  version of the &quot;track&quot; line will look something like this:
-  <pre><code>    <strong>track type=</strong>bigBed <strong>name=</strong>"My Big Bed" <strong>description=</strong>"A Graph of Data from My Lab" <strong>bigDataUrl=</strong>http://myorg.edu/mylab/myBigBed.bb</code></pre></li>
-  <li> 
-  Paste this custom track line into the text box in the 
-  <a href="../../cgi-bin/hgCustom">custom track</a> management page.</li>
-</ol>
+
+<h2>Creating a bigBed track</h2>
 <p>
-The <code>bedToBigBed</code> program can also be run with several additional options. Some of them, 
-like the <code>-as</code> and <code>-type</code> options, are used in examples below. A full list of
-the available options can be seen by running <code>bedToBigBed</code> by itself with no arguments 
+To create a bigBed track, follow these steps:<p>
+<p>
+<strong>Step 1.</strong>
+Create a BED format file following the directions 
+<a href="../../FAQ/FAQformat.html#format1">here</a>. When converting a BED file to a bigBed file, 
+you are limited to one track of data in your input file; therefore, you must create a separate BED 
+file for each data track. Your BED file must be sorted first on the <code>chrom</code> field, and 
+secondarily on the <code>chromStart</code> field. You can use the following UNIX <code>sort</code> 
+command to do this: </p>
+<pre><code>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</code></pre>
+<p> 
+<strong>Step 2.</strong>
+Remove any existing &quot;track&quot; or &quot;browser&quot; lines from your BED file so that it 
+contains only data.</p>
+<p> 
+<strong>Step 3.</strong>
+Download the <code>bedToBigBed</code> program from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<p> 
+<strong>Step 4.</strong>
+Use the <code>fetchChromSizes</code> script from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> 
+to create the <em>chrom.sizes</em> file for the UCSC database you are working with (e.g., hg19).</p>
+<p> 
+<strong>Step 5.</strong>
+Use the <code>bedToBigBed</code> utility to create a bigBed file from your sorted BED file, using 
+the <em>input.bed</em> file and <em>chrom.sizes</em> files created in <em>Steps 1</em> and
+<em>4</em>:</p> 
+<pre><code><strong>bedToBigBed</strong> input.bed chrom.sizes myBigBed.bb</code></pre>
+<p>
+<strong>Step 6.</strong>
+Move the newly created bigBed file (<em>myBigBed.bb</em>) to a web-accessible http, https, or 
+ftp location.</p>
+<p> 
+<strong>Step 7.</strong>
+If the file name ends with a <em>.bigBed</em> or <em>.bb</em> suffix, you can paste the URL of the 
+file directly into the 
+<a href="../../cgi-bin/hgCustom">custom track</a> management page, click &quot;submit&quot; and 
+view the file as a track in the Genome Browser. By default, the file name will be used to name the track. To configure the track 
+name and descriptions, you must create a &quot;<a href="hgTracksHelp.html#TRACK">track 
+line</a>&quot;, as shown in <em>Step 8</em>.</p>
+<p> 
+<strong>Step 8.</strong>
+Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single track line. 
+Note that any of the track attributes listed
+<a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic 
+version of the track line will look something like this:</p>
+<pre><code><strong>track type=</strong>bigBed <strong>name=</strong>"My Big Bed" <strong>description=</strong>"A Graph of Data from My Lab" <strong>bigDataUrl=</strong>http://myorg.edu/mylab/myBigBed.bb</code></pre>
+<p> 
+Paste this custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom 
+track</a> management page.</p>
+<p>
+The <code>bedToBigBed</code> program can be run with several additional options. Some of these,
+such as the <code>-as</code> and <code>-type</code> options, are used in examples below. For a full 
+list of the available options, type <code>bedToBigBed</code> (with no arguments) on the command line
 to display the usage message.</p>
 
+<h2>Examples</h2>
 <h3>Example #1</h3>
 <p>
-In this example, you will use an existing bigBed file to create a bigBed custom track. A bigBed file
-that contains data on chromosome 21 on the hg19 assembly has been placed on our http server.<p>
+In this example, you will create a bigBed custom track using an existing bigBed file,
+<em>bigBedExample.bb</em>, on the UCSC http server. This file contains chromosome 21 data on the 
+human hg19 assembly.</p>
 <p>
-You can create a custom track using this bigBed file by pasting the URL 
-<code>http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</code> into the 
-<a href="../../cgi-bin/hgCustom">custom track</a> management page, clicking submit and clicking the 
-<em>chr21</em> link in the custom track listing.</p>
+To create a custom track using this bigBed file:</p>
+<ol>
+  <li>
+  Paste the URL <code>http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</code> into 
+  the <a href="../../cgi-bin/hgCustom">custom track</a> management page for the human assembly 
+  hg19 (Feb.  2009).</li> 
+  <li>
+  Click the &quot;submit&quot; button. </li>
+  <li>
+  On the next page that displays, click the &quot;chr21&quot; link in the custom track listing to 
+  view the bigBed track in the Genome Browser. </li>
+</ol>
 <p>
-Alternatively, you can construct a &quot;track&quot; line that references this file like so:</p>
-<pre><code>    track type=bigBed name=&quot;bigBed Example One&quot; description=&quot;A bigBed file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</code></pre>
-<p>
-Include the following &quot;browser&quot; line to ensure that the custom track opens at the correct 
-position:</p><pre><code>    browser position chr21:33,031,597-33,041,570</code></pre>
-<p>
-Paste the &quot;browser&quot; line and &quot;track&quot; line into the 
-<a href="../../cgi-bin/hgCustom">custom track</a> management page for the human assembly hg19 (Feb. 
-2009), then press the <em>submit</em> button. On the following page, press the <em>chr21</em> link 
-in the custom track listing to view the bigBed track in the Genome Browser.</p>
+Alternatively, you can customize the track display by including track and browser lines that define 
+certain parameters: </p>
+<ol>
+  <li> 
+  Construct a track line that references the <em>bigBedExample.bb</em> file:
+<pre><code>track type=bigBed name=&quot;bigBed Example One&quot; description=&quot;A bigBed file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</code></pre></li>
+  <li>
+  Include the following browser line to ensure that the custom track opens at the correct 
+  position:
+  <pre><code>browser position chr21:33,031,597-33,041,570</code></pre></li>
+  <li>
+  Paste the browser and track lines into the <a href="../../cgi-bin/hgCustom">custom track</a> 
+  management page, click the &quot;submit&quot; button, then click the &quot;chr21&quot; link in the
+  custom track listing to view the bigBed track in the Genome Browser.</li>
+</ol>
 
 <h3>Example #2</h3>
 <p>
 In this example, you will create your own bigBed file from an existing bed file.</p>
 <ol>
   <li> 
-  Save this <a href="examples/bedExample.txt">BED file</a> to your machine (this satisfies 
-  <em><strong>steps 1</strong></em> and <em><strong>2</strong></em> above).</li>  
+  Save the BED file <a href="examples/bedExample.txt"><em>bedExample.txt</em></a> to your computer 
+  (<em>Steps 1</em> and <em>2</em> in <em>Creating a bigBed track</em>, above).</li>  
   <li> 
-  Save this <a href="hg19.chrom.sizes">text file</a> to your machine. It contains the chrom.sizes 
-  for the human (hg19) assembly (this satisfies <strong><em>step 4</em></strong> above).</li>
+  Save the file <a href="hg19.chrom.sizes"><em>hg19.chrom.sizes</em></a> to your computer. It 
+  contains the chrom.sizes data for the human (hg19) assembly (<em>Step 4</em>, above).</li>
   <li> 
-  Download the <code>bedToBigBed</code> utility (see <strong><em>step 3</em></strong>).</li> 
+  Download the <code>bedToBigBed</code> utility (<em>Step 3</em>, above).</li> 
   <li> 
-  Run the utility to create the bigBed output file (see <strong><em>step 5</em></strong>):<pre><code>    <strong>bedToBigBed</strong> bedExample.txt hg19.chrom.sizes myBigBed.bb</code></pre></li>
+  Run the utility to create the bigBed output file (<em>Step 5</em>, above):
+<pre><code><strong>bedToBigBed</strong> bedExample.txt hg19.chrom.sizes myBigBed.bb</code></pre></li>
   <li> 
-  Place the bigBed file you just created (<code>myBigBed.bb</code>) on a web-accessible server (see 
-  <strong><em>step 6</em></strong>).</li>
+  Place the bigBed file you just created (<em>myBigBed.bb</em>) on a web-accessible server 
+  (<em>Step 6</em>, above).</li>
   <li> 
-  Paste the URL itself into the Custom Tracks entry form or construct a &quot;track&quot; line that 
-  points to your bigBed file (see <strong><em>step 7</em></strong>).</li>
+  Paste the URL itself into the Custom Tracks entry form or construct a track line that 
+  points to your bigBed file (<em>Step 7</em>, above).</li>
   <li> 
   Create the custom track on the human assembly hg19 (Feb. 2009), and view it in the Genome Browser 
-  (see <strong><em>step 8</em></strong>). Note that the original BED file contains data on only 
-  chromsome 21.</li>
+  (<em>Step 8</em>, above). Note that the original BED file contains data on chromsome 21 only.</li>
 </ol>
 
 <a name=Ex3></a>
 <h3>Example #3</h3>
 <p>
-In this example, you will create your own bigBed file from a fully-featured existing BED file that 
-contains the standard BED fields up to and including the color field (field 9), plus two additional 
-non-standard fields (two alternate names for each item in the file). BigBed files can store extra 
-fields in addition to the <a href="../../FAQ/FAQformat.html#format1">predefined BED fields</a>. If 
-you add extra fields to your bigBed file, you must include a <code>.as</code> (AutoSQL) format file 
-describing the fields. See <a href="http://www.linuxjournal.com/article/5949" target="_blank">this 
-paper</a> for information on AutoSQL. There are several sample <code>.as</code> files 
-<a href="http://genome-test.cse.ucsc.edu/~kent/src/unzipped/hg/lib/">here</a>. This example also 
-demonstrates how to create extra indices on the name field, and the first of the extra fields to be 
-used for track item search.</p>
+In this example, you will create your own bigBed file from a fully featured existing BED file that 
+contains the standard BED fields up to and including the <em>color</em> field (field 9), plus two 
+additional non-standard fields (two alternate names for each item in the file). BigBed files can 
+store extra fields in addition to the <a href="../../FAQ/FAQformat.html#format1">predefined BED 
+fields</a>. If you add extra fields to your bigBed file, you must include an AutoSQL format
+(<em>.as</em>) file describing the fields. For more information on AutoSql, see 
+<a href="http://www.linuxjournal.com/article/5949" target="_blank">Kent and Brumbaugh, 2002</a>, as 
+well as examples of <em>.as</em> files in 
+<a href="http://genome-test.cse.ucsc.edu/~kent/src/unzipped/hg/lib/">this directory</a>. 
+This example also demonstrates how to create extra indices on the name field, and the first of the 
+extra fields to be used for track item search.</p>
 <ol>
   <li> 
-  Save this <a href="examples/bedExample2.bed">BED file</a> to your machine (this satisfies 
-  <strong><em>steps 1</em></strong> and <strong><em>2</em></strong> above).</li>
+  Save the BED file <a href="examples/bedExample2.bed"><em>bedExample2.bed</em></a> to your computer
+  (<em>Steps 1</em> and <em>2</em> in <em>Creating a bigBed track</em>, above).</li>
   <li> 
-  Save this <a href="hg18.chrom.sizes">text file</a> to your machine. It contains the chrom.sizes 
-  for the human (hg18) assembly (this satisfies <strong><em>step 4</em></strong> above).</li>
+  Save the file <a href="hg18.chrom.sizes"><em>hg18.chrom.sizes</em></a> to your computer. This file
+  contains the chrom.sizes for the human (hg18) assembly (<em>Step 4</em>, above).</li>
   <li> 
-  Save this <a href="examples/bedExample2.as">.as file</a> to your machine. The <code>.as</code> 
-  file contains a description of the fields in the BED file. This is required when the BED file 
-  contains a field for color.</li>  
+  Save the AutoSQL file <a href="examples/bedExample2.as"><em>bedExample2.as</em></a> to your 
+  computer. This file contains descriptions of the BED fields, and is required when the BED file 
+  contains a <em>color</em> field.</li>  
   <li> 
-  Download the <code>bedToBigBed</code> utility (see <strong><em>step 3</em></strong>).</li>
+  Download the <code>bedToBigBed</code> utility (<em>Step 3</em>, above).</li>
   <li> 
-  Run the utility to create the bigBed output file with an index on the name field and the first 
-  extra field: (see <strong><em>step 5</em></strong>):
-  <pre><code>    bedToBigBed -as=bedExample2.as -type=bed9+2 -extraIndex=name,geneSymbol bedExample2.bed hg18.chrom.sizes myBigBed2.bb</code></pre></li>
+  Run the utility to create a bigBed output file with an index on the name field and the first 
+  extra field: (<em>Step 5</em>, above):
+  <pre><code>bedToBigBed -as=bedExample2.as -type=bed9+2 -extraIndex=name,geneSymbol bedExample2.bed hg18.chrom.sizes myBigBed2.bb</code></pre></li>
   <li> 
-  Place the bigBed file you just created (<code>myBigBed2.bb</code>) on a web-accessible server 
-  (see <strong><em>step 6</em></strong>).</li>
+  Place the bigBed file you just created (<em>myBigBed2.bb</em>) on a web-accessible server 
+  (<em>Step 6</em>, above).</li>
   <li> 
-  Paste the URL itself into the custom tracks entry form or construct a &quot;track&quot; line that 
-  points to your bigBed file (see <strong><em>step 7</em></strong>). Because this bigBed file 
-  includes a field for color, you must include the 
-  <a href="../../FAQ/FAQformat.html#format1"><code>itemRgb</code></a> attribute in the 
-  &quot;track&quot; line. It will look somewhat similar to this (note that you must insert the 
-  correct URL to your bigBed file):
-  <pre><code>    track type=bigBed name="bigBed Example Three" description="A bigBed File with Color and two Extra Fields" itemRgb="On" bigDataUrl=http://yourWebAddress/myBigBed2.bb</code></pre></li>
+  Paste the URL of the file into the custom tracks entry form, or alternatively construct a track 
+  line that points to your bigBed file (<em>Step 7</em>, above). Because this bigBed file includes a
+  field for color, you must include the 
+  <a href="../../FAQ/FAQformat.html#format1"><code>itemRgb</code></a> attribute in the track line. 
+  It will look somewhat similar to this (note that you must insert the URL specific to your own 
+  bigBed file):
+  <pre><code>track type=bigBed name="bigBed Example Three" description="A bigBed File with Color and two Extra Fields" itemRgb="On" bigDataUrl=http://yourWebAddress/myBigBed2.bb</code></pre></li>
   <li> 
   Create the custom track on the human assembly hg18 (Mar. 2006), and view it in the Genome Browser 
-  (see <strong><em>step 8</em></strong>). Note that the original BED file contains data only on 
-  chromsome 7.</li>
+  (<em>step 8</em>, above). Note that the original BED file contains data on chromsome 7 only.</li>
   <li> 
-  If you are using the bigBed file in a track hub, then you can use the additional indices for track
-  item searches. See the setting "searchIndex" in the 
+  If you are using the bigBed file in a track hub, you can use the additional indices for track
+  item searches. See the setting &quot;searchIndex&quot; in the 
   <a href="trackDb/trackDbHub.html#searchIndex">Track Database Definition Document</a> for more 
-  information. For example, if you ran your bedToBigBed with the option of 
-  &quot;extraIndex=name&quot; you will only be able to search on the name field by adding the 
-  following line, &quot;searchIndex name&quot; to the stanza about your bigBed in the hub's 
-  trackDb.txt file.</li>
+  information. For example, if you run the <code>bedToBigBed</code> utility with the option 
+  <code>-extraIndex=name</code>, you will be able to search on the &quot;name&quot; field by adding 
+  the line <code>searchIndex name</code> to the stanza about your bigBed in the hub's 
+  <em>trackDb.txt</em> file.</li>
   <li>
-  Extra fields can contain text for the mouse over or labels (if the BED name field is needed for 
-  something that is not the label), see the trackDb settings 
-  <a href="trackDb/trackDbHub.html#mouseOverField">mouseOverField</a> and 
-  <a href="trackDb/trackDbHub.html#labelField">labelField</a>. 
+  Extra fields can contain text for labels or for display with mouseover (if the BED
+  &quot;name&quot; field is needed for something that is not the label). See the trackDb settings 
+  &quot;<a href="trackDb/trackDbHub.html#mouseOverField">mouseOverField</a>&quot; and 
+  &quot;<a href="trackDb/trackDbHub.html#labelField">labelField</a>&quot; for more information.</li>
   <li>
   When you click on features, the contents of all extra fields are shown as a table. You can modify 
   the layout of the resulting page with the trackDb settings 
-  <a href="trackDb/trackDbHub.html#skipFields">skipFields</a>, 
-  <a href="trackDb/trackDbHub.html#sepFields">sepFields</a>, 
-  <a href="trackDb/trackDbHub.html#skipEmptyFields">skipEmptyFields</a> and transform text fields 
-  into links with the <a href="trackDb/trackDbHub.html#urls">urls</a> trackDb setting.</li>
+  &quot;<a href="trackDb/trackDbHub.html#skipFields">skipFields</a>&quot;, 
+  &quot;<a href="trackDb/trackDbHub.html#sepFields">sepFields</a>&quot; 
+  and &quot;<a href="trackDb/trackDbHub.html#skipEmptyFields">skipEmptyFields</a>&quot;, and 
+  transform text fields into links with the 
+  &quot;<a href="trackDb/trackDbHub.html#urls">urls</a>&quot; trackDb setting.</li>
   <li>
-  Extra fields that start with the character "_" are reserved for internal use (special display 
-  code) and their contents are not shown on the details page.</li>
+  Extra fields that start with the character &quot;_&quot; are reserved for internal use (special 
+  display code); their contents are not shown on the details page.</li>
 </ol>
 
-<h3>Sharing Your Data with Others</h3>
+<h2>Sharing Your Data with Others</h2>
 <p>
 If you would like to share your bigBed data track with a colleague, learn how to create a URL by 
-looking at <strong><em>Example 11</em></strong> on <a href="customTrack.html#SHARE">this</a> 
-page.</p>
+looking at Example #11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
 
-<h3>Extracting Data from the bigBed Format</h3>
+<h2>Extracting Data from the bigBed Format</h2>
 <p>
-Because the bigBed files are indexed binary files, they can be difficult to extract data from. 
-Consequently, we have developed the following two programs, both of which are available from the 
-<a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary utilities.</p>
+Because the bigBed files are indexed binary files, it can be difficult to extract data from them. 
+UCSC has developed the following programs to assist in working with bigBed formats, available from 
+the <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>:</p>
 <ul>
   <li>
-  <code>bigBedToBed</code> &mdash; this program converts a bigBed file to ASCII BED format.</li>
+  <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
   <li>
-  <code>bigBedSummary</code> &mdash; this program extracts summary information from a bigBed 
-  file.</li>
+  <code>bigBedSummary</code> &mdash; extracts summary information from a bigBed file.</li>
   <li>
-  <code>bigBedInfo</code> &mdash; this program prints out information about a bigBed file.</li>
+  <code>bigBedInfo</code> &mdash; prints out information about a bigBed file.</li>
 </ul>
 <p>
-These programs accept file names as input or alternatively also URLs to files. As with all UCSC 
-Genome Browser programs, simply type the program name at the command line with no parameters to see 
-the usage statement.</p>
+These programs accept either file names or URLs to files as input. As with all UCSC 
+Genome Browser programs, simply type the program name (with no parameters) on the command line to 
+view the usage statement.</p>
 
-<h3>Troubleshooting</h3>
+<h2>Troubleshooting</h2>
 <p>
-If you get an error when you run the <code>bedToBigBed</code> program, it may be because your input 
-BED file has data off the end of a chromosome. In this case, use the <code>bedClip</code> program 
-<a href="http://hgdownload.cse.ucsc.edu/admin/exe/">here</a> before the <code>bedToBigBed</code> 
-program. It will remove the row(s) in your input BED file that are off the end of a chromosome.</p>
+If you get an error when you run the <code>bedToBigBed</code> program, check your input BED file for
+data coordinates that extend past the end of the chromosome. If these are present, run the 
+<code>bedClip</code> program
+(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic 
+row(s) in your input BED file before using the <code>bedToBigBed</code> program. 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

@@ -122,7 +122,7 @@ bigTransMap->srcDb = cloneString(src->db);
 bigTransMap->srcChrom = cloneString(src->chrom);
 bigTransMap->srcChromStart = src->chromStart;
 bigTransMap->srcChromEnd = src->chromEnd;
-bigTransMap->srcScore = (int)(1000.0*src->ident);
+bigTransMap->srcIdent = (int)(1000.0*src->ident);
 bigTransMap->srcAligned = (int)(1000.0*src->aligned);
 if (gene != NULL)
     {
@@ -331,7 +331,7 @@ printf("</TR>\n");
 
 // % identity and % aligned, values stored as 1000*fraction ident
 printf("<TR CLASS=\"transMapLeft\"><TD>Identity<TD>%0.1f%%</TR>\n",
-       bag->meta->srcScore/10.0);
+       bag->meta->srcIdent/10.0);
 printf("<TR CLASS=\"transMapLeft\"><TD>Aligned<TD>%0.1f%%</TR>\n",
        bag->meta->srcAligned/10.0);
 
@@ -362,6 +362,10 @@ printAlignmentsSimple(bag->psl, start, "hgcTransMapCdnaAli", tdb->table, bag->ps
 void transMapClickHandler(struct trackDb *tdb, char *mappedId)
 /* Handle click on a transMap tracks */
 {
+if (tdb == NULL)
+    errAbort("transMapClickHandler called without trackDb");
+if (mappedId == NULL)
+    errAbort("transMapClickHandler called without mappedId");
 struct transMapBag *bag = (trackDbSetting(tdb, "bigDataUrl") == NULL)
     ? transMapBagLoadDb(tdb, mappedId)
     : transMapBagLoadBig(tdb, mappedId);
@@ -406,6 +410,10 @@ return seq;
 void transMapShowCdnaAli(struct trackDb *tdb, char *mappedId)
 /* Show alignment for mappedId, mostly ripped off from htcCdnaAli */
 {
+if (tdb == NULL)
+    errAbort("transMapShowCdnaAli called without trackDb");
+if (mappedId == NULL)
+    errAbort("transMapShowCdnaAli called without mappedId");
 struct transMapBag *bag = NULL;
 struct dnaSeq *seq = NULL;
 if (trackDbSetting(tdb, "bigDataUrl") == NULL)

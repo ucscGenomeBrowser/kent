@@ -26,13 +26,13 @@ html chainNet
     subTrack gliresChainNet
     spectrum on
 
-        track chainRn5
+        track chainRn6
         subTrack gliresChainNetViewchain on
         subGroups view=chain species=aRat clade=aRodent
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain rn5
-        otherDb rn5
+        type chain rn6
+        otherDb rn6
 
         track chainSpeTri2
         subTrack gliresChainNetViewchain off
@@ -89,13 +89,13 @@ html chainNet
     visibility dense
     subTrack gliresChainNet
 
-        track netRn5
+        track netRn6
         subTrack gliresChainNetViewnet on
         subGroups view=net species=aRat clade=aRodent
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign rn5 chainRn5
-        otherDb rn5
+        type netAlign rn6 chainRn6
+        otherDb rn6
 
         track netSpeTri2
         subTrack gliresChainNetViewnet off

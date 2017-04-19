@@ -14,25 +14,25 @@ files.</p>
 <p> 
 For example, when downloading ENCODE files to your present directory (./), use an expression such 
 as:</p> 
-<pre><code>$ rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile ./</code></pre> 
+<pre><code>$ rsync -a -P rsync://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/wgEncodeFile ./</code></pre> 
 <p> 
 To download the entire directory (note the trailing slash), use an expression such as:</p>
-<pre><code>$ rsync -a -P rsync://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/ ./</code></pre> 
+<pre><code>$ rsync -a -P rsync://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeDir/ ./</code></pre> 
 <p>
 To obtain a file's location (URL) to use with 
-rsync (<em>rsync://hgdownload.cse.ucsc.edu/...</em>), navigate in your browser to our FTP site at 
-<a href="ftp://hgdownload.cse.ucsc.edu/" target="_blank">ftp://hgdownload.cse.ucsc.edu/</a> or our 
-downloads page at <a href="http://hgdownload.cse.ucsc.edu/" 
-target="_blank">http://hgdownload.cse.ucsc.edu/downloads.html</a>, and look for your file of 
+rsync (<em>rsync://hgdownload.soe.ucsc.edu/...</em>), navigate in your browser to our FTP site at 
+<a href="ftp://hgdownload.soe.ucsc.edu/" target="_blank">ftp://hgdownload.soe.ucsc.edu/</a> or our 
+downloads page at <a href="http://hgdownload.soe.ucsc.edu/" 
+target="_blank">http://hgdownload.soe.ucsc.edu/downloads.html</a>, and look for your file of 
 interest. To learn more about rsync's options, type &quot;man rsync" on the command line.</p>
 
 <h2>Downloading from a web browser</h2>
 <p> 
 If you are not comfortable using the command line, you can download your file via FTP in your 
-browser at <a href="ftp://hgdownload.cse.ucsc.edu/goldenPath" 
-target="_blank">ftp://hgdownload.cse.ucsc.edu/goldenPath</a>, or from our downloads page at  
-<a href="http://hgdownload.cse.ucsc.edu/" 
-target="_blank">http://hgdownload.cse.ucsc.edu/downloads.html</a>.</p> 
+browser at <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath" 
+target="_blank">ftp://hgdownload.soe.ucsc.edu/goldenPath</a>, or from our downloads page at  
+<a href="http://hgdownload.soe.ucsc.edu/" 
+target="_blank">http://hgdownload.soe.ucsc.edu/downloads.html</a>.</p> 
 <p> 
 However, downloading via your browser will be very slow or may even time out for large files (i.e., 
 bigBed, bigWig, BAM, VCF, etc.).  Also, Safari does not support FTP inside the browser. When you 
@@ -45,7 +45,7 @@ before a FTP file system will open in a window on your desktop.</p>
 Rsync is a more efficient and convenient transport mechanism, and is therefore quicker and easier to
 use for downloading our data files. However, here are the command line steps for FTP, should you 
 chooose to use it: 
-</p><pre><code>$ ftp hgdownload.cse.ucsc.edu
+</p><pre><code>$ ftp hgdownload.soe.ucsc.edu
 Name: anonymous
 Password: &lt;your email address&gt;
 ftp&gt; cd goldenPath

@@ -71,11 +71,12 @@ struct sqlResult *sr;
 char **row;
 struct sqlConnection *conn = NULL;
 
-if (*pLfList == NULL || mud == NULL)
+if (mud == NULL)
     return;
 
 /* First make a quick pass through to see if we actually have
- * to do the filter. */
+ * to do the filter. do this even if there are no items so 
+ * track can be labeled as filtered. */
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
     fil->pattern = cartUsualStringClosestToHome(cart, tg->tdb,FALSE,fil->suffix, "");
@@ -83,6 +84,9 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
         anyFilter = TRUE;
     }
 if (!anyFilter)
+    return;
+labelTrackAsFiltered(tg);
+if (*pLfList == NULL)
     return;
 
 type = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, mud->filterTypeSuffix, "red");

@@ -91,12 +91,26 @@ char *dyStringCannibalize(struct dyString **pDy);
 #define dyStringLen(ds) ds->stringSize
 /* return raw string length. */
 
+#define dyStringIsEmpty(ds) (ds->stringSize == 0)
+/* Return TRUE if dyString is empty. */
+
+#define dyStringIsNotEmpty(ds) (ds->stringSize > 0)
+/* Return TRUE if dyString is not empty. */
+
 void dyStringResize(struct dyString *ds, int newSize);
 /* resize a string, if the string expands, blanks are appended */
 
 void dyStringQuoteString(struct dyString *dy, char quotChar, char *text);
 /* Append quotChar-quoted text (with any internal occurrences of quotChar
  * \-escaped) onto end of dy. */
+
+INLINE void dyStringAppendSep(struct dyString *dy, char *sep)
+/* If dy is not empty then append sep; otherwise leave it empty.  For building up lists without
+ * a separator at the end. */
+{
+if (dyStringIsNotEmpty(dy))
+    dyStringAppend(dy, sep);
+}
 
 #endif /* DYSTRING_H */
 

@@ -43,18 +43,9 @@ if (aa == NULL)
         }
     else
         {
-        char *nibOrTwoBitDir = hDbDbNibPath(db);
-        if (nibOrTwoBitDir == NULL)
-            errAbort("Can't find .2bit for db '%s'", db);
         char twoBitPath[HDB_MAX_PATH_STRING];
-        safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
+        safef(twoBitPath, sizeof(twoBitPath), "/gbdb/%s/%s.2bit", db, db);
         char *path = hReplaceGbdb(twoBitPath);
-        if (!fileExists(path))
-            {
-            // if 2bit file isn't in nibOrTwoBitDir, try up one directory
-            safef(twoBitPath, sizeof(twoBitPath), "%s/../%s.2bit", nibOrTwoBitDir, db);
-            path = hReplaceGbdb(twoBitPath);
-            }
         aa = annoAssemblyNew(db, path);
         freeMem(path);
         }
@@ -213,7 +204,7 @@ else if (sameString(type, "vcf"))
 else if (sameString(type, "bigWig"))
     streamer = annoStreamBigWigNew(fileOrUrl, assembly);
 else if (sameString(type, "pgSnp"))
-    streamer = annoStreamTabNew(fileOrUrl, assembly, pgSnpFileAsObj());
+    streamer = annoStreamTabNew(fileOrUrl, assembly, pgSnpFileAsObj(), maxOutRows);
 else if (sameString(type, "bam"))
     errAbort("Sorry, BAM is not yet supported");
 else

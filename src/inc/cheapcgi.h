@@ -33,7 +33,7 @@ void jsOnEventById(char *event, char *idText, char *jsText);
 /* Add js mapping for inline event */
 
 void jsOnEventByIdF(char *event, char *idText, char *format, ...)
-/* Add js mapping for inline event */
+/* Add js mapping for inline event with printf formatting */
 #if defined(__GNUC__)
 __attribute__((format(printf, 3, 4)))
 #endif
@@ -311,14 +311,11 @@ void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg);
 void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id);
 /* Make check box, which includes an ID. */
 
-void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript);
-/* Make check box with javascript */
+void cgiMakeCheckBoxMore(char *name, boolean checked, char *moreHtml);
+/* Make check box with moreHtml */
 
 void cgiMakeCheckBoxEnabled(char *name, boolean checked, boolean enabled);
 /* Make check box, optionally enabled/disabled. */
-
-void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript);
-/* Make check box with ID and javascript. */
 
 void cgiMakeCheckBoxIdAndMore(char *name, boolean checked, char *id, char *moreHtml);
 /* Make check box with ID and extra (non-javascript) html. */
@@ -390,6 +387,10 @@ void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked,
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
 /* Make a drop-down list with names.
  * uses style "normalText" */
+
+void cgiMakeDropListClassWithIdStyleAndJavascript(char *name, char *id, char *menu[],
+        int menuSize, char *checked, char *class, char *style, struct slPair *events);
+/* Make a drop-down list with name, id, text class, style and javascript. */
 
 void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
                                                 int menuSize, char *checked, char *class,

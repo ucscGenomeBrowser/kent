@@ -189,6 +189,13 @@ switch (type)
 struct vcfFile *vcfFileNew();
 /* Return a new, empty vcfFile object. */
 
+struct vcfFile *vcfFileFromHeader(char *name, char *headerString, int maxErr);
+/* Parse the VCF header string into a vcfFile object with no rows.
+ * name is for error reporting.
+ * If maxErr is non-negative then continue to parse until maxErr+1 errors have been found.
+ * A maxErr less than zero does not stop and reports all errors.
+ * Set maxErr to VCF_IGNORE_ERRS for silence. */
+
 struct vcfFile *vcfFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
 			       int maxErr, int maxRecords, boolean parseAll);
 /* Open fileOrUrl and parse VCF header; return NULL if unable.
@@ -305,5 +312,8 @@ char *vcfGetSlashSepAllelesFromWords(char **words, struct dyString *dy);
 /* Overwrite dy with a /-separated allele string from VCF words,
  * skipping the extra initial base that VCF requires for indel alleles if necessary.
  * Return dy->string for convenience. */
+
+void vcfRecordWriteNoGt(FILE *f, struct vcfRecord *rec);
+/* Write the first 8 columns of VCF rec to f.  Genotype data will be ignored if present. */
 
 #endif // vcf_h

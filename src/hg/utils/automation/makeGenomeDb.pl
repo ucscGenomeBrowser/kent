@@ -1027,8 +1027,8 @@ NCBI genome/$ncbiGenomeId ($scientificName)</A><BR>
 <A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId" TARGET="_blank">
 NCBI assembly/$ncbiAssemblyId ($assemblyLabel)</A><BR>
 
-<B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A>
-<B>BioSample information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioSample" TARGET="_blank"> NCBI Biosample: $ncbiBioSample</A>
+<B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A><BR>
+<B>BioSample information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample" TARGET="_blank"> NCBI Biosample: $ncbiBioSample</A>
 </P>
 <HR>
 <P>
@@ -1057,8 +1057,8 @@ to find Genome Browser tracks that match specific selection criteria.
 <B>Download sequence and annotation data:</B>
 <UL>
 <LI><A HREF="../goldenPath/help/ftp.html">Using rsync</A> (recommended)
-<LI><A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/">Using FTP</A>
-<LI><A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#$anchorRoot">Using HTTP</A>
+<LI><A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/">Using FTP</A>
+<LI><A HREF="http://hgdownload.soe.ucsc.edu/downloads.html#$anchorRoot">Using HTTP</A>
 <LI><A HREF="../goldenPath/credits.html#${anchorRoot}_use">Data use conditions and
 restrictions</A>
 <LI><A HREF="../goldenPath/credits.html#${anchorRoot}_credits">Acknowledgments</A>
@@ -1137,7 +1137,7 @@ TARGET="_blank">specific information about this assembly</A>.
 </P>
 <P>
 The definition of the gaps in this assembly is from the
-<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/$db.agp.gz"
+<A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/$db.agp.gz"
 TARGET=_blank>AGP file</A> delivered with the sequence.  The NCBI document
 <A HREF="https://www.ncbi.nlm.nih.gov/assembly/agp/AGP_Specification/"
 TARGET=_blank>AGP Specification</A> describes the format of the AGP file.
@@ -1239,7 +1239,7 @@ TARGET="_blank">specific information about this assembly</A>.
 </P>
 <P>
 The definition of this assembly is from the
-<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/$db.agp.gz"
+<A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/$db/bigZips/$db.agp.gz"
 TARGET=_blank>AGP file</A> delivered with the sequence.  The NCBI document
 <A HREF="https://www.ncbi.nlm.nih.gov/assembly/agp/AGP_Specification/"
 TARGET=_blank>AGP Specification</A> describes the format of the AGP file.
@@ -1342,12 +1342,13 @@ _EOF_
 
   $bossScript->add(<<_EOF_
 # These directories are necessary for running make in trackDb:
-$HgAutomate::git archive --remote=git://genome-source.cse.ucsc.edu/kent.git \\
+$HgAutomate::git archive --remote=git://genome-source.soe.ucsc.edu/kent.git \\
   --prefix=kent/ HEAD src/hg/makeDb/trackDb/loadTracks \\
 src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
 src/hg/makeDb/trackDb/trackDb.transMap.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.primates.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.other.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.euarchontoglires.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.laurasiatheria.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.afrotheria.ra \\

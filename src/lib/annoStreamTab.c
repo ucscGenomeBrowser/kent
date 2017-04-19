@@ -21,6 +21,8 @@ struct annoStreamTab
     int fileWordCount;			// Number of columns in file including bin
     boolean eof;			// Set when we have reached end of file.
     boolean omitBin;			// 1 if file has bin and autoSql doesn't have bin
+    boolean useMaxOutRows;		// TRUE if maxOutRows passed to annoStreamTabNew is > 0
+    int maxOutRows;			// Maximum number of rows we can output.
     };
 
 static struct lineFile *astLFOpen(char *fileOrUrl)
@@ -199,6 +201,12 @@ while (annoFilterRowFails(vSelf->filters, words, vSelf->numCols, &rightFail))
     if (words == NULL)
 	return NULL;
     }
+if (self->useMaxOutRows)
+    {
+    self->maxOutRows--;
+    if (self->maxOutRows <= 0)
+        self->eof = TRUE;
+    }
 char *chrom = words[self->chromIx];
 uint chromStart = sqlUnsigned(words[self->startIx]);
 uint chromEnd = sqlUnsigned(words[self->endIx]);
@@ -227,9 +235,11 @@ annoStreamerFree(pVSelf);
 }
 
 struct annoStreamer *annoStreamTabNew(char *fileOrUrl, struct annoAssembly *aa,
-				      struct asObject *asObj)
+				      struct asObject *asObj, int maxOutRows)
 /* Create an annoStreamer (subclass) object from a tab-separated text file/URL
- * whose columns are described by asObj (possibly excepting bin column at beginning). */
+ * whose columns are described by asObj (possibly excepting bin column at beginning).
+ * If maxOutRows is greater than 0 then it is an upper limit on the number of rows
+ * that the streamer will produce. */
 {
 struct lineFile *lf = astLFOpen(fileOrUrl);
 struct annoStreamTab *self = NULL;
@@ -244,6 +254,8 @@ AllocArray(self->asWords, streamer->numCols);
 self->lf = lf;
 self->eof = FALSE;
 self->fileOrUrl = cloneString(fileOrUrl);
+self->maxOutRows = maxOutRows;
+self->useMaxOutRows = (maxOutRows > 0);
 if (!astInitBed3Fields(self))
     errAbort("annoStreamTabNew: can't figure out which fields of %s to use as "
 	     "{chrom, chromStart, chromEnd}.", fileOrUrl);

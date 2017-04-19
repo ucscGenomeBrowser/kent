@@ -1149,10 +1149,10 @@ assemblies.
 <p>
 The command-line version of liftOver offers the increased flexibility and performance gained by 
 running the tool on your local server. This utility requires access to a Linux platform. The 
-executable file may be downloaded <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">here</a>.
+executable file may be downloaded <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">here</a>.
 Command-line liftOver requires a UCSC-generated <em>over.chain</em> file as input. Pre-generated 
 files for a given assembly can be accessed from the assembly's &quot;LiftOver files&quot; link on 
-the <a href="http://hgdownload.cse.ucsc.edu/downloads.html">Downloads</a> page. If the desired 
+the <a href="http://hgdownload.soe.ucsc.edu/downloads.html">Downloads</a> page. If the desired 
 conversion file is not listed, send a request to the <a href="../../contacts.html">genome mailing 
 list</a> and we may be able to generate one for you.</p> 
 
@@ -1173,22 +1173,22 @@ Genome data can be downloaded in different ways:</p>
   <li>
   <strong>Via rsync:</strong> The UCSC Genome Bioinformatics hgdownload site contains download 
   directories for all genome versions currently accessible in the Genome Browser. The rsync command 
-  <code>rsync -a -P rsync://hgdownload.cse.ucsc.edu/path/file ./</code> can quickly and efficiently 
+  <code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/path/file ./</code> can quickly and efficiently 
   download large files to your current directory (./). To download an entire directory (note the 
   trailing slash), you would use an expression such as 
-  <code>rsync -a -P rsync://hgdownload.cse.ucsc.edu/directory/ ./</code> For more information please
+  <code>rsync -a -P rsync://hgdownload.soe.ucsc.edu/directory/ ./</code> For more information please
   click <a href="../help/ftp.html" target="_blank">here</a>.</li>  
   <li>
   <strong>Via ftp:</strong> The UCSC Genome Bioinformatics ftp site contains download directories 
   for all genome versions currently accessible in the Genome Browser. The ftp command 
-  <code>ftp://hgdownload.cse.ucsc.edu/goldenPath/</code> will take you to a directory that contains 
+  <code>ftp://hgdownload.soe.ucsc.edu/goldenPath/</code> will take you to a directory that contains 
   the genome download directories. This download method is not recommended if you plan to download 
   a large file or multiple files from a single directory compared to rsync (see above). You can, 
   however, use the <em>mget</em> command to download multiple files: mget <em>filename1 
   filename2</em>, or mget -a (to download all the files in the directory).</li>
   <li> 
   <strong>Via the Downloads link:</strong> Click the 
-  <a href="http://hgdownload.cse.ucsc.edu/downloads.html" target="_blank">Downloads</a> link on the 
+  <a href="http://hgdownload.soe.ucsc.edu/downloads.html" target="_blank">Downloads</a> link on the 
   left side bar on the UCSC Genome Bioinformatics home page to display a list of all database 
   directories available for download. If the data you wish to download pre-dates the assembly 
   versions listed, look for the data on our <a href="http://hgdownload.soe.ucsc.edu/downloads.html" 

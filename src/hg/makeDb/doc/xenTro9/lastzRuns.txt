@@ -1,0 +1,314 @@
+#########################################################################
+# Tibetan frog/nanPar1 Lastz run  (DONE - 2017-03-30 - Hiram)
+    mkdir /hive/data/genomes/xenTro9/bed/lastzNanPar1.2017-03-30
+    cd /hive/data/genomes/xenTro9/bed/lastzNanPar1.2017-03-30
+
+    printf '# X. tropicalis vs. Nanorana parkeri - Tibetan frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: X. tropicalis xenTro9
+SEQ1_DIR=/hive/data/genomes/xenTro9/xenTro9.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro9/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Nanorana parkeri - Tibetan frog - nanPar1
+SEQ2_DIR=/hive/data/genomes/nanPar1/nanPar1.2bit
+SEQ2_LEN=/hive/data/genomes/nanPar1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/xenTro9/bed/lastzNanPar1.2017-03-30
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -workhorse=hgwdev -smallClusterHub=ku \
+          -bigClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real    282m18.989s
+
+    cat fb.xenTro9.chainNanPar1Link.txt
+    #  112048590 bases of 1369865365 (8.180%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 nanPar1) \
+	> rbest.log 2>&1 &
+    # real    300m19.432s
+
+
+    # running the swap
+    mkdir /hive/data/genomes/nanPar1/bed/blastz.xenTro9.swap
+    cd /hive/data/genomes/nanPar1/bed/blastz.xenTro9.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/xenTro9/bed/lastzNanPar1.2017-03-30/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    #   real    28m46.600s
+
+    cat fb.nanPar1.chainXenTro9Link.txt
+    #    132516087 bases of 1977771384 (6.700%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` nanPar1 xenTro9) \            > rbest.log 2>&1
+    #  real    282m18.000s
+
+#########################################################################
+# African clawed frog/xenLae2 Lastz run  (DONE - 2017-04-03 - Hiram)
+    mkdir /hive/data/genomes/xenTro9/bed/lastzXenLae2.2017-04-03
+    cd /hive/data/genomes/xenTro9/bed/lastzXenLae2.2017-04-03
+
+    printf '# X. tropicalis vs. Xenopus laevis - African clawed frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: X. tropicalis xenTro9
+SEQ1_DIR=/hive/data/genomes/xenTro9/xenTro9.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro9/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LAP=100
+
+# QUERY: Xenopus laevis - African clawed frog - xenLae2
+SEQ2_DIR=/hive/data/genomes/xenLae2/xenLae2.2bit
+SEQ2_LEN=/hive/data/genomes/xenLae2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/xenTro9/bed/lastzXenLae2.2017-04-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -workhorse=hgwdev -smallClusterHub=ku \
+          -bigClusterHub=ku -syntenicNet) > do.log 2>&1 &
+    # real    4062m36.015s
+
+    cat fb.xenTro9.chainXenLae2Link.txt
+    #  751739555 bases of 1369865365 (54.877%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 xenLae2) \
+	> rbest.log 2>&1 &
+XXX - running - Thu Apr  6 13:31:31 PDT 2017
+    # real    300m19.432s
+
+    # running the swap
+    mkdir /hive/data/genomes/xenLae2/bed/blastz.xenTro9.swap
+    cd /hive/data/genomes/xenLae2/bed/blastz.xenTro9.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/xenTro9/bed/lastzXenLae2.2017-04-03/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+XXX - running - Thu Apr  6 13:31:31 PDT 2017
+    #   real    28m46.600s
+
+    cat fb.xenLae2.chainXenTro9Link.txt
+    #    132516087 bases of 1977771384 (6.700%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenLae2 xenTro9) \            > rbest.log 2>&1
+    #  real    6m53.584s
+
+#########################################################################
+# chicken/galGal5 Lastz run  (DONE - 2017-04-03 - Hiram)
+    mkdir /hive/data/genomes/xenTro9/bed/lastzGalGal5.2017-04-03
+    cd /hive/data/genomes/xenTro9/bed/lastzGalGal5.2017-04-03
+
+    printf '# X. tropicalis vs. Gallus gallus - chicken
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: X. tropicalis xenTro9
+SEQ1_DIR=/hive/data/genomes/xenTro9/xenTro9.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro9/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LAP=60
+
+# QUERY: Gallus gallus - chicken - galGal5
+SEQ2_DIR=/hive/data/genomes/galGal5/galGal5.2bit
+SEQ2_LEN=/hive/data/genomes/galGal5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=150
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/xenTro9/bed/lastzGalGal5.2017-04-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -workhorse=hgwdev -smallClusterHub=ku \
+          -bigClusterHub=ku -syntenicNet) > do.log 2>&1 &
+    # real    396m38.255s
+
+    cat fb.xenTro9.chainGalGal5Link.txt
+    #  46401638 bases of 1369865365 (3.387%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 galGal5) \
+	> rbest.log 2>&1 &
+    # real    114m37.105s
+
+    # running the swap
+    mkdir /hive/data/genomes/galGal5/bed/blastz.xenTro9.swap
+    cd /hive/data/genomes/galGal5/bed/blastz.xenTro9.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/xenTro9/bed/lastzGalGal5.2017-04-03/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    #   real    5m52.831s
+
+    cat fb.galGal5.chainXenTro9Link.txt
+    #    43878853 bases of 1218501075 (3.601%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` galGal5 xenTro9) \            > rbest.log 2>&1
+    #  real    104m18.820s
+
+#########################################################################
+# fugu/fr3 Lastz run  (DONE - 2017-04-05 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S xenTro9Fr3
+    mkdir /hive/data/genomes/xenTro9/bed/lastzFr3.2017-04-05
+    cd /hive/data/genomes/xenTro9/bed/lastzFr3.2017-04-05
+
+    printf '# X. tropicalis vs. fugu
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: X. tropicalis xenTro9
+SEQ1_DIR=/hive/data/genomes/xenTro9/xenTro9.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro9/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LAP=60
+
+# QUERY: fugu fr3
+SEQ2_DIR=/scratch/data/fr3/fr3.2bit
+SEQ2_LEN=/scratch/data/fr3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/xenTro9/bed/lastzFr3.2017-04-05
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1 &
+    #	real    325m13.323s
+
+    cat fb.xenTro9.chainFr3Link.txt
+    #	51743020 bases of 1369865365 (3.777%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 fr3) \
+	> rbest.log 2>&1 &
+    # real    166m45.209s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/fr3/bed/blastz.xenTro9.swap
+    cd /hive/data/genomes/fr3/bed/blastz.xenTro9.swap
+    time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/xenTro9/bed/lastzFr3.2017-04-05/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #	real    17m36.964s
+
+    cat  fb.fr3.chainXenTro9Link.txt
+    #	44999785 bases of 350961831 (12.822%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` fr3 xenTro9) \
+	> rbest.log 2>&1 &
+    # real    161m34.026s
+
+#########################################################################
+# lizard/anoCar2 Lastz run  (DONE - 2017-04-05 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S xenTro9AnoCar2
+    mkdir /hive/data/genomes/xenTro9/bed/lastzAnoCar2.2017-04-05
+    cd /hive/data/genomes/xenTro9/bed/lastzAnoCar2.2017-04-05
+
+    printf '# X. tropicalis vs. lizard
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: X. tropicalis xenTro9
+SEQ1_DIR=/hive/data/genomes/xenTro9/xenTro9.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro9/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LAP=60
+
+# QUERY: lizard anoCar2
+SEQ2_DIR=/hive/data/genomes/anoCar2/anoCar2.2bit
+SEQ2_LEN=/hive/data/genomes/anoCar2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/xenTro9/bed/lastzAnoCar2.2017-04-05
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1 &
+    #	real    616m35.354s
+
+    # problem chaining, continuing:
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -continue=chainMerge -syntenicNet -chainMinScore=5000 \
+        -chainLinearGap=loose) > chainMerge.log 2>&1 &
+    # real    16m23.381s
+
+    cat fb.xenTro9.chainAnoCar2Link.txt
+    #	81880572 bases of 1369865365 (5.977%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 anoCar2) \
+	> rbest.log 2>&1 &
+    # real    325m58.349s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/anoCar2/bed/blastz.xenTro9.swap
+    cd /hive/data/genomes/anoCar2/bed/blastz.xenTro9.swap
+    time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/xenTro9/bed/lastzAnoCar2.2017-04-05/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #	real    13m27.766s
+
+    cat  fb.anoCar2.chainXenTro9Link.txt
+    #	81559444 bases of 1701353770 (4.794%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` anoCar2 xenTro9) \
+	> rbest.log 2>&1 &
+    # real    336m10.154s
+
+#########################################################################
+# lastz chainNet swap canFam3/dog (DONE - 2017-04-06 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/canFam3/bed/lastzXenTro9.2017-04-05
+    cat fb.canFam3.chainXenTro9Link.txt
+    #	73335538 bases of 2392715236 (3.065%) in intersection
+
+    # and the swap
+
+    mkdir /hive/data/genomes/xenTro9/bed/blastz.canFam3.swap
+    cd /hive/data/genomes/xenTro9/bed/blastz.canFam3.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/canFam3/bed/lastzXenTro9.2017-04-05/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    # real    11m49.432s
+
+    cat fb.xenTro9.chainCanFam3Link.txt
+    #	45357837 bases of 1369865365 (3.311%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 canFam3) \
+      > rbest.log 2>&1
+    # real    131m41.477s
+
+##############################################################################

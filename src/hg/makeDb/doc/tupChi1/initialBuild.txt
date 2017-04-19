@@ -1,0 +1,704 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the tupChi1
+
+#########################################################################
+# obtain photograph:  (DONE - 2007-02-20 - Hiram)
+
+# going to re-use the tupBel1 photograph
+
+cd /hive/data/genomes/tupChi1
+# establish photoReference.txt
+printf 'photoCreditURL\thttp://commons.wikimedia.org/wiki/File:Tupaia_belangeri.JPEG
+photoCreditName\tWikiMedia Commons: Jonathan Beilby\n' > photoReference.txt
+
+#########################################################################
+#  Initial steps (DONE - 2013-02-26 - Hiram)
+
+# this is a catch-up procedure.  This minimal browser was constructed
+# quickly in 2013
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/tupChi1
+cd ~/kent/src/hg/makeDb/doc/tupChi1
+
+# best to use a most recent document since it has the latest features and
+# procedures:
+sed -e 's/rhiBie/tupChi/g; s/RhiBie/TupChi/g; s/DONE/TBD/g;' \
+    ../rhiBie1/initialBuild.txt > initialBuild.txt
+
+mkdir /hive/data/genomes/tupChi1/genbank
+cd /hive/data/genomes/tupChi1/genbank
+
+# this was done with the older hierarchy:
+
+rsync  -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Tupaia_chinensis/TupChi_1.0/ ./
+
+sent 219 bytes  received 1043861189 bytes  3177660.30 bytes/sec
+total size is 1043732280  speedup is 1.00
+
+# appears to be a scaffold-only assembly:
+faSize Primary_Assembly//unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+# 2846580235 bases (140191100 N's 2706389135 real 2706389135 upper 0 lower)
+#	in 50750 sequences in 1 files
+# Total size: mean 56090.3 sd 501058.6 min 200 (gi|444524349|gb|KB360401.1|)
+#	max 19269909 (gi|444728026|gb|KB320563.1|) median 444
+# %0.00 masked total, %0.00 masked real
+
+
+# this information is from the top of tupChi1/genbank/ASSEMBLY_INFO
+# DATE:   31-Jan-2013
+# ORGANISM:       Tupaia chinensis
+# TAXID:  246437
+# ASSEMBLY LONG NAME:     TupChi_1.0
+# ASSEMBLY SHORT NAME:    TupChi_1.0
+# ASSEMBLY SUBMITTER:     BGI
+# ASSEMBLY TYPE:  Haploid
+# NUMBER OF ASSEMBLY-UNITS:       1
+# ASSEMBLY ACCESSION:     GCA_000334495.1
+# FTP-RELEASE DATE: 07-Feb-2013
+
+
+# this information is from the top of
+#	tupChi1/refseq/GCF_000334495.1_TupChi_1.0_assembly_report.txt
+
+# Assembly name:  TupChi_1.0
+# Organism name:  Tupaia chinensis (Chinese tree shrew)
+# Sex:  male
+# Taxid:          246437
+# BioSample:      SAMN01084043
+# BioProject:     PRJNA221634
+# Submitter:      BGI
+# Date:           2013-1-31
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    ALAR01
+# Assembly method: SOAPdenovo v. 1.05
+# Genome coverage: 80x
+# Sequencing technology: Illumina HiSeq 2000
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000334495.1
+# RefSeq assembly accession: GCF_000334495.1
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000334505.1      GCF_000334505.1 Primary Assembly
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2017-03-08)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/tupChi1
+    ~/kent/src/hg/utils/automation/prepConfig.pl tupChi1 mammal \
+         treeShrew ./refseq/*_assembly_report.txt
+
+    # verify it looks sane, fixed the genBankAccessionID to match the
+    # genbank ID, not the RefSeq ID, and set orderKey to what it is
+    cat tupChi1.config.ra
+# config parameters for makeGenomeDb.pl:
+db tupChi1
+clade mammal
+scientificName Tupaia chinensis
+commonName Chinese tree shrew
+assemblyDate Jan. 2013
+assemblyLabel BGI
+assemblyShortLabel TupChi_1.0
+orderKey 3365
+mitoAcc notFound
+fastaFiles /hive/data/genomes/tupChi1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/tupChi1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir treeShrew
+photoCreditURL  http://commons.wikimedia.org/wiki/File:Tupaia_belangeri.JPEG
+photoCreditName WikiMedia Commons: Jonathan Beilby
+ncbiGenomeId 13028
+ncbiAssemblyId 531728
+ncbiAssemblyName TupChi_1.0
+ncbiBioProject 221634
+ncbiBioSample SAMN01084043
+genBankAccessionID GCA_000334495.1
+taxId 246437
+
+#############################################################################
+# setup UCSC named files (DONE - 2017-03-25 - Hiram)
+
+    mkdir /hive/data/genomes/tupChi1/ucsc
+    cd /hive/data/genomes/tupChi1/ucsc
+
+    # this previous process merely removed the .1 from all the accessions
+
+    zcat \
+| ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| sed -e 's/\.1\t/\t/;' > tupChi1.ucsc.agp
+
+    zcat \
+../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+	| sed -e 's/^>gi.*gb./>/; s/\.1. Tupaia.*//;' | gzip -c \
+	> tupChi1.ucsc.fa.gz
+
+    # verify fasta and AGPs agree
+    time faToTwoBit tupChi1.ucsc.fa.gz test.2bit
+
+    checkAgpAndFa tupChi1.ucsc.agp test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 2846580235 bases (140191100 N's 2706389135 real 2706389135 upper 0 lower)
+#	in 50750 sequences in 1 files
+# Total size: mean 56090.3 sd 501058.6 min 200 (KB360401)
+#	max 19269909 (KB320563) median 444
+
+    # same numbers as above, minus the one contig (205 bases)
+# 2846580235 bases (140191100 N's 2706389135 real 2706389135 upper 0 lower)
+#	in 50750 sequences in 1 files
+# Total size: mean 56090.3 sd 501058.6 min 200 (gi|444524349|gb|KB360401.1|)
+#	max 19269909 (gi|444728026|gb|KB320563.1|) median 444
+
+    # no longer need these temporary 2bit files
+    rm refseq.2bit unplaced.2bit test.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2013-03-25 - Hiram)
+
+    # these procedures were done manually, the script was not used
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp tupChi1.config.ra) > agp.log 2>&1
+    # real    3m32.248s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db tupChi1.config.ra) > db.log 2>&1
+    # real    23m23.025s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add tupChi1 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/tupChi1
+    ln -s `pwd`/tupChi1.unmasked.2bit /gbdb/tupChi1/tupChi1.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-07-16 - Hiram)
+    mkdir /hive/data/genomes/tupChi1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/tupChi1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/tupChi1/tupChi1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku tupChi1) > do.log 2>&1
+    # real    38m7.138s
+
+    cat fb.tupChi1.cpgIslandExtUnmasked.txt
+    # 41084726 bases of 2706389135 (1.518%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-03-08 - Hiram)
+    mkdir /hive/data/genomes/tupChi1/bed/cytoBand
+    cd /hive/data/genomes/tupChi1/bed/cytoBand
+    makeCytoBandIdeo.csh tupChi1
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2017-03-08 - Hiram)
+    # the sequence here is working for a 'genbank' assembly
+    # beware of a chrM situation may be specific depending upon what is
+    # available in the assembly
+
+    mkdir /hive/data/genomes/tupChi1/bed/ucscToINSDC
+    cd /hive/data/genomes/tupChi1/bed/ucscToINSDC
+
+    # normal script doesn't work here, manually fairly simple:
+
+    cut -f1 ../../chrom.sizes | awk '{printf "%s\t%s.1\n", $1, $1}' \
+       | sort > ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+
+    # extract the refseq vs. genbank names from the assembly_report
+    # columns 5 and 7 are the INSDC and RefSeq names
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | awk '{printf "%s\t%s\n", $2, $1}' | sort > refseq.insdc.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > ucsc.coordinate.tab
+
+    sort -k2 refseq.insdc.txt \
+       | join -1 2 -2 2 - ucscToINSDC.txt  | sort -k3 \
+         | join -2 3 ucsc.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+              > ucscToINSDC.bed
+
+    sort -k2 refseq.insdc.txt \
+       | join -1 2 -2 2 - ucscToINSDC.txt  | sort -k3 \
+         | join -2 3 ucsc.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+              > ucscToRefSeq.bed
+    # should be same line counts throughout:
+    # in this case one is missing in the final result due to the duplicate
+    # contig being removed
+    wc -l *
+#	50750 insdcToUcsc.txt
+#	50750 refseq.insdc.txt
+#	50750 ucsc.coordinate.tab
+#	50750 ucscToINSDC.bed
+#	50750 ucscToINSDC.txt
+#	50750 ucscToRefSeq.bed
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 8
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab tupChi1 ucscToINSDC stdin ucscToINSDC.bed
+    # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  14
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab tupChi1 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords tupChi1
+    # each should cover %100 entirely:
+    featureBits -countGaps tupChi1 ucscToINSDC
+    # 2846580235 bases of 2846580235 (100.000%) in intersection
+
+    featureBits -countGaps tupChi1 ucscToRefSeq
+    # 2846580235 bases of 2846580235 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2016-09-13 - Hiram)
+
+    mkdir /hive/data/genomes/tupChi1/bed/chromAlias
+    cd /hive/data/genomes/tupChi1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' tupChi1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' tupChi1 \
+        > ucsc.genbank.tab
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > tupChi1.chromAlias.tab
+
+    hgLoadSqlTab tupChi1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        tupChi1.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2017-03-08 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/rhinopithecus/tupChi1
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" tupChi1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+  242445 ALAR.1
+
+    # implies a rule: 'ALAR[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" tupChi1 | wc -l
+    # 242445
+
+    hgsql -N -e "select frag from gold;" tupChi1 \
+       | egrep -e 'ALAR[0-9]+(\.[0-9]+)?' | wc -l
+    # 242445
+
+    hgsql -N -e "select frag from gold;" tupChi1 \
+       | egrep -v -e 'ALAR[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/tupChi1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex ALAR[0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2013-04-16 - Hiram)
+    mkdir /hive/data/genomes/tupChi1/bed/repeatMasker
+    cd /hive/data/genomes/tupChi1/bed/repeatMasker
+o
+    doRepeatMasker.pl -buildDir=`pwd` -stop=mask \
+      -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+      -species  "Tupaia chinensis" -useRMBlastn \
+      -smallClusterHub=encodek tupChi1
+    # Elapsed time: 320m12s
+
+
+    cat faSize.rmsk.txt
+# 2846580235 bases (140191100 N's 2706389135 real 2112282279 upper
+#	594106856 lower) in 50750 sequences in 1 files
+# Total size: mean 56090.3 sd 501058.6 min 200 (KB360401)
+#	max 19269909 (KB320563) median 444
+# %20.87 masked total, %21.95 masked real
+
+    egrep -i "versi|relea" mask.log
+    # RepeatMasker version open-4.0.0
+    #    January 10 2013 (open-4-0-0) version of RepeatMasker
+    # CC   RELEASE 20120418;                                            *
+
+    time featureBits -countGaps tupChi1 rmsk
+    #   594515212 bases of 2846580235 (20.885%) in intersection
+    #   real    1m5.558s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' tupChi1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    #	total 594515212.000000
+    #   real    0m34.661s
+
+    # catching up some stuff that was not originally done
+    time doRepeatMasker.pl -buildDir=`pwd` -stop=install -continue=install \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+      -species  "Tupaia chinensis" -useRMBlastn \
+      -smallClusterHub=ku tupChi1 -debug
+    # edit that doLoad.bash to eliminate the load of rmsk table, but
+    # allow it to do all the other tasks
+
+    time (./doLoad.bash) > doLoad.log 2>&1
+    # real    2m58.024s
+
+    time (doRepeatMasker.pl -buildDir=`pwd` -continue=cleanup \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+      -species  "Tupaia chinensis" -useRMBlastn \
+      -smallClusterHub=ku tupChi1) > cleanup.log 2>&1
+    # real    9m38.260s
+
+##########################################################################
+# running simple repeat (DONE - 2013-04-14 - Hiram)
+
+    mkdir /hive/data/genomes/tupChi1/bed/simpleRepeat
+    cd /hive/data/genomes/tupChi1/bed/simpleRepeat
+
+    time doSimpleRepeat.pl -buildDir=`pwd` \
+      -smallClusterHub=swarm -workhorse=hgwdev -stop=filter \
+         tupChi1 > filter.log 2>&1
+    # real    23m19.327s
+
+    # need to catch up with undone steps:
+    doSimpleRepeat.pl -buildDir=`pwd` \
+      -smallClusterHub=ku -workhorse=hgwdev -stop=load \
+         -continue=load -debug tupChi1
+    # edit the doLoad.csh to remove the hgLoad command, allow the featureBits
+
+    cat fb.simpleRepeat
+    # 118057864 bases of 2706389135 (4.362%) in intersection
+
+    time (doSimpleRepeat.pl -buildDir=`pwd` \
+      -smallClusterHub=ku -workhorse=hgwdev \
+         -continue=cleanup tupChi1) > cleanup.log 2>&1
+
+    # adding this trfMask to the other masking
+    cd /hive/data/genomes/tupChi1
+
+    # when using the Window Masker result:
+    twoBitMask bed/windowMasker/tupChi1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  tupChi1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # when using Rmsk results, add to rmsk after it is done:
+#    twoBitMask tupChi1.rmsk.2bit \
+#        -add bed/simpleRepeat/trfMask.bed tupChi1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa tupChi1.2bit stdout | faSize stdin > faSize.tupChi1.2bit.txt
+    cat faSize.tupChi1.2bit.txt
+# 2846580235 bases (140191100 N's 2706389135 real 1623275627 upper
+#	1083113508 lower) in 50750 sequences in 1 files
+# Total size: mean 56090.3 sd 501058.6 min 200 (KB360401)
+#	max 19269909 (KB320563) median 444
+# %38.05 masked total, %40.02 masked real
+
+    # reset the symlink
+    rm /gbdb/tupChi1/tupChi1.2bit
+    ln -s `pwd`/tupChi1.2bit /gbdb/tupChi1/tupChi1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-03-08 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/tupChi1/bed/microsat
+    cd /hive/data/genomes/tupChi1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed tupChi1 microsat microsat.bed
+    # Read 75464 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2013-04-16 - Hiram)
+
+    mkdir /hive/data/genomes/tupChi1/bed/windowMasker
+    cd /hive/data/genomes/tupChi1/bed/windowMasker
+    time doWindowMasker.pl -stop=twobit -buildDir=`pwd` \
+       -workhorse=hgwdev tupChi1 > twobit.log 2>&1
+    # real    187m29.301s
+
+    # Masking statistics
+    cat faSize.tupChi1.cleanWMSdust.txt
+# 2846580235 bases (140191100 N's 2706389135 real 1623675807 upper
+#	1082713328 lower) in 50750 sequences in 1 files
+# Total size: mean 56090.3 sd 501058.6 min 200 (KB360401)
+#	max 19269909 (KB320563) median 444
+# %38.04 masked total, %40.01 masked real
+
+    # there is noting in the load that hasn't already been done
+    doWindowMasker.pl -stop=load -buildDir=`pwd` \
+       -debug -continue=load -workhorse=hgwdev tupChi1
+
+     featureBits -countGaps tupChi1 rmsk windowmaskerSdust \
+            > fb.tupChi1.rmsk.windowmaskerSdust.txt 2>&1
+    cat fb.tupChi1.rmsk.windowmaskerSdust.txt
+    # 275112679 bases of 2846580235 (9.665%) in intersection
+
+##########################################################################
+# run up idKeys files for ncbiRefSeq (DONE - 2016-05-06 - Hiram)
+    mkdir /hive/data/genomes/tupChi1/bed/idKeys
+    cd /hive/data/genomes/tupChi1/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd`  tupChi1) > do.log 2>&1 &
+    # real    23m54.611s
+
+    cat tupChi1.keySignature.txt
+    #   27aeb5bf402d8bca898fa163fa113c73
+
+##########################################################################
+# cpgIslands - (DONE - 2013-11-25 - Hiram)
+    mkdir /hive/data/genomes/tupChi1/bed/cpgIslands
+    cd /hive/data/genomes/tupChi1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku tupChi1) > do.log 2>&1 &
+    #  Elapsed time: 26m52s
+
+    cat fb.tupChi1.cpgIslandExt.txt
+    # 28673313 bases of 2706389135 (1.059%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2013-09-10 - Hiram)
+    mkdir /hive/data/genomes/tupChi1/bed/genscan
+    cd /hive/data/genomes/tupChi1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku tupChi1) > do.log 2>&1 &
+    # Elapsed time: 155m3s
+
+    cat fb.tupChi1.genscan.txt
+    # 43982227 bases of 2706389135 (1.625%) in intersection
+
+    cat fb.tupChi1.genscanSubopt.txt
+    # 53805481 bases of 2977074741 (1.807%) in intersection
+
+#############################################################################
+# augustus gene track (DONE - 2017-03-01 - Hiram)
+
+    mkdir /hive/data/genomes/tupChi1/bed/augustus
+    cd /hive/data/genomes/tupChi1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev -workhorse=hgwdev tupChi1) > do.log 2>&1 &
+    # reel    104m18.398s
+
+    cat fb.tupChi1.augustusGene.txt
+    # 47275232 bases of 2977074741 (1.588%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2017-03-08 - Hiram)
+
+    # numerator is tupChi1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap tupChi1 gap
+    # 140191100 bases of 2706389135 (5.180%) in intersection
+    #                    ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2706389135 / 2861349177 \) \* 1024
+    #  ( 2706389135 / 2861349177 ) * 1024 = 968.543964
+
+    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/tupChi1
+    blat tupChi1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/tupChi1.11.ooc \
+        -repMatch=900
+    #   Wrote 32705 overused 11-mers to jkStuff/tupChi1.11.ooc
+
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' tupChi1 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # there are no non-bridged gaps in this assembly
+
+    # # all these gap sizes are 100
+    # # minimum gap size is 100 and produces a reasonable number of lifts
+    # gapToLift -verbose=2 -minGap=10 tupChi1 jkStuff/nonBridged.lft \
+    #    -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2017-03-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism             mrnaCnt   estCnt  refSeqCnt
+    # Tupaia chinensis        50514   1       17
+
+    # edit etc/genbank.conf to add tupChi1 just before macFas5
+
+# tupChi1 (Chinese shrew)
+tupChi1.serverGenome = /hive/data/genomes/tupChi1/tupChi1.2bit
+tupChi1.clusterGenome = /hive/data/genomes/tupChi1/tupChi1.2bit
+tupChi1.ooc = /hive/data/genomes/tupChi1/jkStuff/tupChi1.11.ooc
+tupChi1.lift = no
+tupChi1.perChromTables = no
+tupChi1.downloadDir = tupChi1
+tupChi1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+tupChi1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+tupChi1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+tupChi1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+tupChi1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# the defaults: genbank.mrna.native.load, yes genbank.est.native.load yes
+# refseq.mrna.native.load yes, refseq.mrna.xeno.load yes
+
+    git commit -m "Added tupChi1; refs #10146" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # also add to src/lib/gbGenome.c
+#	static char *tupChiNames[] = {"Tupaia chinensis", NULL};
+#	{"tupChi", tupChiNames},
+
+    git commit -m "Added tupChi1 refs #10146" src/lib/gbGenome.c
+    make install-server
+
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial tupChi1
+    # logFile: var/build/logs/2017.03.09-13:19:25.tupChi1.initalign.log
+    #   about 4 hours
+
+    tail -2 2017.03.05-06:48:55.tupChi1.initalign.log
+    #    hgwdev 2017.03.09-17:21:30 tupChi1.initalign: Succeeded: tupChi1
+    #    hgwdev 2017.03.09-17:22:19 tupChi1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.tupChi1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad tupChi1
+    # logFile: var/dbload/hgwdev/logs/2017.03.09-17:42:50.tupChi1.dbload.log
+    #  real    18m8.811s
+
+    tail -1 var/dbload/hgwdev/logs/2017.03.09-17:42:50.tupChi1.dbload.log
+    #	hgwdev 2017.03.09-18:00:59 tupChi1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add tupChi1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding tupChi1 to the update alignments refs #10146' etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# ncbiRefSeq (TBD - 2016-05-13 - Hiram)
+
+    mkdir /hive/data/genomes/tupChi1/bed/ncbiRefSeq
+    cd /hive/data/genomes/tupChi1/bed/ncbiRefSeq
+    # running step wise as this script is still under development
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 tupChi1) > download.log 2>&1
+    # real    16m29.536s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 tupChi1) > process.log 2>&1
+    # real    3m58.858s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 tupChi1) > load.log 2>&1
+    # real    0m33.205s
+
+    cat fb.ncbiRefSeq.tupChi1.txt
+    #  82563006 bases of 1218501075 (6.776%) in intersection
+
+    featureBits -enrichment tupChi1 refGene ncbiRefSeq 
+    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
+    #    enrich 14.68x
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-03-10 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("tupChi1", "blat1c", "17886", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("tupChi1", "blat1c", "17887", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MEPE gene (egg shell protein)
+## located via blat of the chicken protein
+##  (TBD - 2017-01-17 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr4:21251858-21288049"
+	where name="tupChi1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2017-03-06 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=tupChi1 -tableCoverage all.joiner
+    joinerCheck -database=tupChi1 -times all.joiner
+    joinerCheck -database=tupChi1 -keys all.joiner
+
+    cd /hive/data/genomes/tupChi1
+    time (makeDownloads.pl -workhorse=hgwdev tupChi1) > downloads.log 2>&1
+    #  real    24m57.372s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/tupChi1/pushQ
+    cd /hive/data/genomes/tupChi1/pushQ
+    time (makePushQSql.pl tupChi1) > tupChi1.pushQ.sql 2> stderr.out
+    #  real    11m29.572s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    #	WARNING: tupChi1 does not have seq
+    #	WARNING: tupChi1 does not have extFile
+    #	WARNING: tupChi1 does not have estOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p tupChi1.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/tupChi1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

@@ -604,6 +604,20 @@ searchPriority 8
     # verify the convert link on the test browser is now active from xenTro7 to
     # xenTro3
 
+##############################################################################
+# LIFTOVER TO xenTro9 (DONE - 2017-03-28 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/xenTro7/bed/blat.xenTro9.2017-03-28
+    cd /hive/data/genomes/xenTro7/bed/blat.xenTro9.2017-03-28
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/xenTro7/jkStuff/xenTro7.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         xenTro7 xenTro9) > do.log 2>&1
+    # real    488m42.323s
+
+    # verify the convert link on the test browser is now active from xenTro7 to
+    # xenTro9
+
 #########################################################################
 # Tibetan frog/nanPar1 Lastz run  (DONE - 2015-03-24 - Hiram)
     screen -S nanPar1    # use screen to manage this long running job

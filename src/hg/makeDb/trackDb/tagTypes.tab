@@ -24,6 +24,10 @@ autoTranslate genePred
 bamColorMode bam
 bamGrayMode bam
 bamSkipPrintQualScore bam
+barChartLabel barChart
+barChartRange barChart
+barChartUnit barChart
+barChartBars barChart
 baseColorDefault *
 baseColorTickColor bed bigBed
 baseColorUseCds bed psl genePred bigPsl
@@ -178,7 +182,7 @@ hapClusterTreeAngle vcf vcfTabix
 hapClusterHeight vcf vcfTabix
 hapmapPhase bed
 hgGene genePred
-hgsid bed genePred
+hgsid bed genePred bigBed
 highlightBy genePred
 highlightColor genePred
 hoverMetadata wig bigWig
@@ -350,8 +354,8 @@ scoreFilterMax bed bedlogR peptideMapping bigBed
 scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed
 scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed
 scoreLabel bed bigBed bigPsl bigGenePred
-searchIndex bigBed
-searchTrix bigBed
+searchIndex bigBed bigPsl bigGenePred
+searchTrix bigBed bigPsl bigGenePred
 selectSubject psl bigPsl
 seqTable bed
 settingsByView *

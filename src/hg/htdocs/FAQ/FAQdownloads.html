@@ -42,6 +42,7 @@
 <h6><a href="#download29">Direct MySQL access to data</a></h6>
 <h6><a href="#download34">Name of fourth column in BED output</a></h6>
 <h6><a href="#download36">Track data access</a></h6>
+<h6><a href="#download37">Known issues with Table Browser GTF output</a></h6>
 <hr>
 <p>
 <a href="index.html">Return to FAQ Table of Contents</a></p>
@@ -59,20 +60,20 @@ server</a>, but we recommend using rsync, which has the advantage of starting up
 after a failure, when run again. Please see the previous link for examples.</p> 
 <p>
 You can also download data from our 
-<a href="http://hgdownload.cse.ucsc.edu/downloads.html">Downloads</a> page or our 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html">Downloads</a> page or our 
 <a href="../cgi-bin/das/dsn" target="_blank">DAS server</a>. To download a specific subset of the 
 data or to configure the output format of the data, use the 
 <a href="../cgi-bin/hgTables">Table Browser</a>. For information on extracting a large set of 
 sequences from an assembly, see	<a href="#download32">Extracting sequence in batch from an 
 assembly</a>.</p> 
 <p>
-For more information on using the UCSC DAS server, see <a href="#downloads">Downloading data from 
+For more information on using the UCSC DAS server, see <a href="#download23">Downloading data from 
 the UCSC DAS server</a>.</p> 
 <p> 
 <strong>To quickly download large volumes of data you can use UDR (UDT Enabled Rysnc):</strong> UDR 
 provides users much faster download rates. Here is an example using UDR, once installed, to download
 all the mouse mm9 ENCODE information that amounts to several terabytes:</p>
-<pre><code>$ udr rsync -avP hgdownload.cse.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre>
+<pre><code>$ udr rsync -avP hgdownload.soe.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</code></pre>
 <p>
 Please read more about the new UDR method <a href="../../goldenPath/newsarch.html#030315" 
 target="_blank">here</a>.</p>
@@ -86,7 +87,7 @@ As of June 2016, the location of metadata tables that support the GenBank and Re
 to one global database, hgFixed.</p> 
 <p>
 The tables below (previously found per assembly) can now be downloaded from the 
-<a href="http://hgdownload.cse.ucsc.edu/goldenPath/hgFixed/database/">hgFixed database</a>:</p>
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hgFixed/database/">hgFixed database</a>:</p>
 
 <!-- 3-column layout -->
 <div class="row">
@@ -150,12 +151,12 @@ What is the best way to proceed? </h6>
 There are two ways to extract genomic sequence in batch from an assembly:</p>
 <p>
 A. Download the appropriate fasta files from our 
-<a href="ftp://hgdownload.cse.ucsc.edu/goldenPath/">ftp server</a> and extract sequence data using 
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/">ftp server</a> and extract sequence data using 
 your own tools or the tools from our source tree. This is the recommended method when you have very 
 large sequence datasets or will be extracting data frequently. Sequence data for most assemblies is 
 located in the assembly's &quot;chromosomes&quot; subdirectory on the downloads server. For example,
 the sequence for human assembly hg17 can be found in 
-<a href="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg17/chromosomes/">ftp://hgdownload.cse.ucsc.edu/goldenPath/hg17/chromosomes/</a>.  
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg17/chromosomes/">ftp://hgdownload.soe.ucsc.edu/goldenPath/hg17/chromosomes/</a>.  
 You'll find instructions for obtaining our source programs and utilities 
 <a href="FAQlicense.html#license3">here</a>. Some programs that you may find useful are nibFrag and 
 twoBitToFa, as well as other fa* programs. To obtain usage information about most programs, execute 
@@ -205,7 +206,7 @@ target="_blank">DAS specification</a>.</p>
 The Genome Browser source code and executables are freely available for academic, nonprofit, and 
 personal use (see <a href="FAQlicense.html#license2">Licensing the Genome Browser or Blat</a> for 
 commerical licensing requirements). The latest version of the source code may be downloaded 
-<a href="http://hgdownload.cse.ucsc.edu/admin/jksrc.zip">here</a>.</p> 
+<a href="http://hgdownload.soe.ucsc.edu/admin/jksrc.zip">here</a>.</p> 
 <p>
 See <a href="FAQblat.html#blat3">Downloading Blat source and documentation</a> for information on 
 Blat downloads.</p>
@@ -581,10 +582,10 @@ conversions.</p>
 If you wish to update a large number of coordinates to a different assembly and have access to a 
 Linux platform, you may find it useful to try the command-line version of the LiftOver tool. The 
 executable file for this utility can be downloaded 
-<a href="http://hgdownload.cse.ucsc.edu/admin/exe/" target="_blank">here</a>. LiftOver requires a 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">here</a>. LiftOver requires a 
 UCSC-generated <em>over.chain</em> file as input. Pre-generated files are available for selected 
 assemblies from the 
-<a href="http://hgdownload.cse.ucsc.edu/downloads.html#liftover">Downloads</a> page. If the desired 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#liftover">Downloads</a> page. If the desired 
 file is not available, send a request to the <a href="../contacts.html">genome mailing list</a> and 
 we may be able to  provide you with one.</p>
 
@@ -603,7 +604,7 @@ the <em>kgAlias</em> table.</p>
 particular organism?</h6>
 <p> 
 To obtain a complete copy of the entire Known Genes data set for an organism, open the Genome 
-Browser <a href="http://hgdownload.cse.ucsc.edu/downloads.html">Downloads page</a>, jump to the 
+Browser <a href="http://hgdownload.soe.ucsc.edu/downloads.html">Downloads page</a>, jump to the 
 section specific to the organism, click the Annotation database link in that section, then click the
 link for the <em>knownGene.txt.gz</em> table.</p> 
 <p>
@@ -618,7 +619,7 @@ Data for a specific region or chromosome may be obtained from the Table Browser 
 <p>
 UCSC uses the latest versions of RepeatMasker and repeat libraries available on the date when the 
 assembly data is processed. RepeatMasker version information can usually be found in the README text
-for the assembly's bigZips <a href="http://hgdownload.cse.ucsc.edu/downloads.html">downloads</a> 
+for the assembly's bigZips <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> 
 directory.</p> 
 <p>
 Masking is done using the RepeatMasker <em>-s</em> flag. For mouse repeats, we also use 
@@ -651,7 +652,7 @@ for more information).</p>
 The UCSC Genome Browser offers several ways to obtain this information, depending on your 
 requirements.</p> 
 <p>
-The Genome Browser <a href="http://hgdownload.cse.ucsc.edu/downloads.html">downloads site</a> 
+The Genome Browser <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads site</a> 
 provides prepackaged downloads of 1000 bp, 2000 bp, and 5000 bp upstream sequence for RefSeq genes 
 that have a coding portion and annotated 5' and 3' UTRs. You can obtain these from the bigZips 
 downloads directory for the assembly of interest.</p> 
@@ -732,7 +733,7 @@ Yes. See our documentation on <a href="../goldenPath/help/mysql.html">Downloadin
 MySQL</a>.</p> 
 <p>
 Connect to the MySQL server using the command:</p>
-<pre><code>mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A </code></pre>
+<pre><code>mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A </code></pre>
 
 <a name="download34"></a>
 <h2>Name of fourth column in BED output</h2>
@@ -790,10 +791,33 @@ compiled from the source code or downloaded as a precompiled binary for your sys
 for downloading source code and binaries can be found 
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool can 
 also be used to obtain only features within a given range, example:</p> 
-<pre><code>bigBedToBed http://hgdownload.cse.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
+<pre><code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
 <p> 
 <strong>SNP data:</strong> If queries against the SNP table on our public MySQL server or on your 
 own MySQL installation are slow, then they can be sped up by using the &quot;bin&quot; field; you 
 can <a href="../contacts.html">contact us</a> for more information.</p>
+
+<a name="download37"></a>
+<h2>Obtaining GTF (Gene Transfer Format)</h2>
+<h6>Known issues with Table Browser GTF output: What is the best method for obtaining GTF output?</h6>
+<p>
+Currently, the <a href="../cgi-bin/hgTables">Table Browser</a> option to output as
+<a href="../FAQ/FAQformat.html#format4">GTF</a> is limited, and in some cases, may contain bugs.
+For now, the best method to obtain GTF output is to convert genePred to GTF using the
+command-line utility, <code>genePredToGtf</code>.</p>
+<p>
+            <a href="../FAQ/FAQformat#format9">GenePred</a> (short for Gene Predictions) is a table
+format commonly used for gene tracks in the UCSC Genome Browser where each transcript has a single
+row. Tables are not stored in GTF as it would require many rows to describe a single transcript
+since each gene feature (i.e., exon) requires a separate line. The <code>genePredToGtf</code> command-line
+utility can be used to convert genePred to GTF. Download the <code>genePredToGtf</code> operating-specific
+command-line utility from the
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a>.</p>
+<p>
+Please see the <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format"> Genes in GTF
+or GFF Format wiki page</a> for examples and various methods for conversion. The <code>genePredToGtf</code>
+utility can convert files from several sources, such as Table Browser output from a genePred table,
+a local downloaded gene set table like refGene.txt, or from querying
+<a href="../goldenpath/help/mysql.html">public MySQL tables.</a></p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

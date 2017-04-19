@@ -8,21 +8,27 @@
 <h1>bigMaf Track Format</h1>
 <p>
 The bigMaf format stores multiple alignments in a format compatible with 
-<a href="../../FAQ/FAQformat.html#format5">MAF</a> files, which are then compressed and indexed as 
-bigBeds. bigMaf files are created using the program <code>bedToBigBed</code> with a special AutoSQL 
-file that defines the fields of the bigMaf. The resulting bigMaf files are in an indexed binary 
-format. The main advantage of the bigMaf files is that only portions of the files needed to display 
-a particular region are transferred to UCSC. So for large data sets, bigMaf is considerably faster 
-than regular MAF files. The bigMaf file remains on your web accessible server (http, https, or ftp),
-not on the UCSC server. Only the portion that is needed for the chromosomal position you are 
-currently viewing is locally cached as a &quot;sparse file&quot;.</p>
+<a href="../../FAQ/FAQformat.html#format5">MAF</a> files, which is then compressed and indexed as a
+bigBed.</p>
+<p>
+The bigMaf files are created using the program <code>bedToBigBed</code>, run with the 
+<code>-as</code> option to pull in a special <a href="http://www.linuxjournal.com/article/5949" 
+target="_blank">autoSql</a> (<em>.as</em>) file that defines the fields of the bigMaf.</p>
+<p>
+The bigMaf files are in an indexed binary format. The main advantage of this format is that only 
+those portions of the file needed to display a particular region are transferred to the Genome 
+Browser server. Because of this, bigMaf files have considerably faster display performance than 
+regular MAF files when working with large data sets. The bigMaf file remains on your local 
+web-accessible server (http, https or ftp), not on the UCSC server, and only the portion needed for 
+the currently displayed chromosomal position is locally cached as a &quot;sparse file&quot;.</p>
 
 <a name=bigMaf></a>
-<h2>Big MAF</h2>
+<h2>bigMaf file definition</h2>
 <p>
-The following AutoSQL definition is used for bigMaf multiple alignment files. This is the 
-<a href="examples/bigMaf.as"><code>bigMaf.as</code></a> file defined by the <code>-as</code> option 
-when using <code>bedToBigBed</code>.</p>
+The following autoSql definition is used to specify bigMaf multiple alignment files. This
+definition, contained in the file <a href="examples/bigMaf.as"><em>bigMaf.as</em></a>, is 
+pulled in when the <code>bedToBigBed</code> utility is run with the <code>-as=bigMaf.as</code> 
+option. </p>
 <pre><code>table bedMaf
 "Bed3 with MAF block"
     (
@@ -32,170 +38,178 @@ when using <code>bedToBigBed</code>.</p>
     lstring mafBlock;  "MAF block"
     ) </code></pre>
 <p>
-Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory; somewhere on the
-order of 1.25 times more RAM than the uncompressed BED input file.</p>
+Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory: approximately 
+25% more RAM than the uncompressed BED input file.</p>
+
+<h2>Creating a bigMaf track</h2>
 <p>
 To create a bigMaf track, follow these steps:
-<ol>
-  <li>
-  If you already have a MAF file you would like to convert to a bigMaf, skip to <em>Step 3</em>; 
-  otherwise, download the example <a href="examples/chr22_KI270731v1_random.maf">MAF file</a> for 
-  the Human GRCh38(hg38) assembly.</li>
-  <ul>
-    <li>
-    If you would like to include optional reading frame and block summary information with our 
-    example MAF file, please download the 
-    <a href="examples/chr22_KI270731v1_random.gp">chr22_KI270731v1_random.gp</a> GenePred file.</li>
-  </ul>
-  <li>
-  Download the AutoSQL files needed by <code>bedToBigBed</code>:
-  <ul>
-    <li>
-    <a href="examples/bigMaf.as">bigMaf.as</a></li>
-    <li>
-    If you would like to include optional frame summary and information with your bigMaf file, you 
-    will also want to download the <a href="examples/mafSummary.as">mafSummary.as</a> and 
-    <a href="examples/mafFrames.as">mafFrames.as</a> files.</li> 
-  </ul>
-  <li>
-  Download the <code>bedToBigBed</code> and <code>mafToBigBed</code> programs from the 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary utilities.</li>
-  <ul>
-    <li>
-    If you would like to generate the optional frame and summary files for your multiple alignment, 
-    also download the <code>hgLoadMafSummary</code>, <code>genePredSingleCover</code>, and 
-    <code>genePredToMafFrames</code> programs from the same 
-    <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a>.</li> 
-  </ul>
-  <li>
-  Use the <code>fetchChromSizes</code> script from the same 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> to create a chrom.sizes file for
-  the UCSC database you are working with (e.g., hg38). Alternatively, you can download the 
-  chrom.sizes file for any assembly hosted at UCSC from our 
-  <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
-  data set&quot; for any assembly). For example, for the hg38 database, the hg38.chrom.sizes are 
-  located at <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
-  target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
+<p>
+<strong>Step 1.</strong> 
+If you already have a MAF file you would like to convert to a bigMaf, skip to <em>Step 3</em>.
+Otherwise, download <a href="examples/chr22_KI270731v1_random.maf">this example 
+MAF file</a> for the human GRCh38 (hg38) assembly.</p>
+<p>
+<strong>Step 2.</strong> 
+If you would like to include optional reading frame and block summary information, download the 
+<a href="examples/chr22_KI270731v1_random.gp">chr22_KI270731v1_random.gp</a> genePred file.</p>
+<p>
+<strong>Step 3.</strong> 
+Download the autoSql file <em><a href="examples/bigMaf.as">bigMaf.as</a></em> needed by 
+<code>bedToBigBed</code>. If you have opted to include the optional frame summary and information 
+with your bigMaf file, you must also download the autoSql files 
+<a href="examples/mafSummary.as">mafSummary.as</a> and 
+<a href="examples/mafFrames.as">mafFrames.as</a> files.</p> 
+<p>
+<strong>Step 4.</strong> 
+Download the <code>bedToBigBed</code> and <code>mafToBigMaf</code> programs from the UCSC
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>. If you have 
+opted to generate the optional frame and summary files for your multiple alignment, you must also 
+download the <code>hgLoadMafSummary</code>, <code>genePredSingleCover</code>, and 
+<code>genePredToMafFrames</code> programs from the same 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">directory</a>.</p> 
+<p>
+<strong>Step 5.</strong> 
+Use the <code>fetchChromSizes</code> script from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create a 
+<em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg38). 
+Alternatively, you can download the 
+<em>chrom.sizes</em> file for any assembly hosted at UCSC from our 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
+data set&quot; for any assembly). For example, the <em>hg38.chrom.sizes</em> file for the hg38 
+database is located at 
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
+target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</p>
 <pre><code>mafToBigMaf hg38 chr22_KI270731v1_random.maf stdout | sort -k1,1 -k2,2n > bigMaf.txt
-bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bigMaf.txt hg38.chrom.sizes bigMaf.bb </code></pre></li>
-  <li>
-  Follow the below steps to create the binary indexed mafFrames and mafSummary files to accompany 
-  your bigMaf file: 
+bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bigMaf.txt hg38.chrom.sizes bigMaf.bb </code></pre>
+<p>
+<strong>Step 6.</strong> 
+Follow the below steps to create the binary indexed mafFrames and mafSummary files to accompany 
+your bigMaf file:</p> 
 <pre><code>genePredSingleCover chr22_KI270731v1_random.gp single.gp
 genePredToMafFrames hg38 chr22_KI270731v1_random.maf bigMafFrames.txt hg38 single.gp
 bedToBigBed -type=bed3+8 -as=mafFrames.as -tab bigMafFrames.txt hg38.chrom.sizes bigMafFrames.bb
 
 hgLoadMafSummary -minSeqSize=1 -test hg38 bigMafSummary chr22_KI270731v1_random.maf
 cut -f 2 bigMafSummary.tab | sort -k1,1 -k2,2n &gt; bigMafSummary.bed
-bedToBigBed -type=bed3+4 -as=mafSummary.as -tab bigMafSummary.bed hg38.chrom.sizes bigMafSummary.bb </code></pre></li>
+bedToBigBed -type=bed3+4 -as=mafSummary.as -tab bigMafSummary.bed hg38.chrom.sizes bigMafSummary.bb </code></pre>
+<p>
+<strong>Step 7.</strong> 
+Move the newly created bigMaf file (<em>bigMaf.bb</em>) to a web-accessible http, https or ftp 
+location. If you generated the <em>bigMafSummary.bb</em> and/or <em>bigMafFrames.bb</em> files, 
+move those to a web accessible location, likely same location as the <em>bigMaf.bb</em> file.</p> 
+<p>
+<strong>Step 8.</strong> 
+Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
+<a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed 
+<a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic
+version of the track line will look something like this:</p>
+<pre><code>track type=bigMaf name="My Big MAF" description="A Multiple Alignment" bigDataUrl=http://myorg.edu/mylab/bigMaf.bb</code></pre>
+<p>
+<strong>Step 9.</strong> 
+Paste the custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom track 
+management page</a>.</p>
+<p>
+The <code>bedToBigBed</code> program can be run with several additional options. For a full
+list of the available options, type <code>bedToBigBed</code> (with no arguments) on the command line
+to display the usage message. </p>
+
+<h2>Examples</h2>
+
+<h3>Example #1</h3>
+<p>
+In this example, you will create a bigMaf custom track using an existing bigMaf file,
+<em>bigMaf.bb</em>, located on the UCSC Genome Browser http server. This file contains data for 
+the hg38 assembly.</p>
+<p>
+To create a custom track using this bigMaf file: 
+<ol>
   <li>
-  Move the newly created bigMaf file (<code>bigMaf.bb</code>) to an http, https, or ftp
-  location.</li> 
-  <ul> 
-    <li>
-    If you generated the <code>bigMafSummary.bb</code> and/or <code>bigMafFrames.bb</code> files, they will also need to be in a web accessible location, likely in the same location as 
-    <code>bigMaf.bb</code>.</li> 
-  </ul>
+  Construct a track line that references the file:</p>
+  <pre><code>track type=bigMaf name=&quot;bigMaf Example One&quot; description=&quot;A bigMaf file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb frames=http://genome.ucsc.edu/goldenPath/help/examples/bigMafFrames.bb</code></pre>
   <li>
-  Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
-  <a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed 
-  <a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic 
-  version of the &quot;track&quot; line will look something like this:
-<pre><code>track type=bigMaf name="My Big MAF" description="A Multiple Alignment"
-bigDataUrl=http://myorg.edu/mylab/bigMaf.bb</code></pre></li>
+  Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
+  page</a> for the human assembly hg38 (Dec. 2013).</li> 
   <li>
-  Paste this custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom 
-  track</a> management page.</li>
+  Click the &quot;submit&quot; button.</li>
 </ol>
 <p>
-The <code>bedToBigBed</code> program can also be run with several additional options. Run 
-<code>bedToBigBed</code> with no arguments to view a full list of available options.</p>
-
-<h2>Example #1</h2>
+Note that additional track line options exist that are specific to the 
+<a href="../../FAQ/FAQformat.html#format5">MAF format</a>. For instance, adding the parameter 
+setting <code>speciesOrder=&quot;panTro4 rheMac3 mm10 rn5 canFam3 monDom5&quot;</code> to the above 
+example will specify the order of sequences by species.</p>
 <p>
-In this example, you will use an existing bigMaf file to create a bigMaf custom track. A bigMaf file
-that contains data on the hg38 assembly has been placed on our http server. You can create a custom 
-track using this bigMaf file by constructing a &quot;track&quot; line that references this file like
-so:</p>
-<pre><code>track type=bigMaf name=&quot;bigMaf Example One&quot; 
-description=&quot;A bigMaf file&quot; 
-bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb
-frames=http://genome.ucsc.edu/goldenPath/help/examples/bigMafFrames.bb</code></pre>
+Custom tracks can also be loaded via one URL line. 
+<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random&hgct_customText=track%20type=bigMaf%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb%20visibility=pack%20frames=http://genome.ucsc.edu/goldenPath/help/examples/bigMafFrames.bb"
+target="_blank">This link</a> loads the same <em>bigMaf.bb</em> track and sets additional display 
+parameters in the URL:</p>
+<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random&hgct_customText=track%20type=bigMaf%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb%20visibility=pack</code></a></code></pre>
 <p>
-Paste the above &quot;track&quot; line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom 
-track</a> management page for the human assembly hg38 (Dec. 2013), then press the <em>submit</em> 
-button. Please note that additional track line options exist that are specific for the 
-<a href="../../FAQ/FAQformat.html#format5">MAF format</a>. For instance, adding 
-<code>speciesOrder=&quot;panTro4 rheMac3 mm10 rn5 canFam3 monDom5&quot;</code> to the above example 
-will allow specifying the order of sequences.</p>
-<p>
-Custom tracks can also be loaded via one URL line. The below link loads the same bigMaf track, but 
-includes parameters on the URL line:</p>
-<pre><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random&hgct_customText=track%20type=bigMaf%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb%20visibility=pack%20frames=http://genome.ucsc.edu/goldenPath/help/examples/bigMafFrames.bb"
-target="_blank"><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random&hgct_customText=track%20type=bigMaf%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigMaf.bb%20visibility=pack</code></a></pre>
-<p>
-With this example bigMaf loaded, click into an alignment from the track. Note that the details page 
-has information about the individual alignments, similar to the details page of a standard MAF 
-track.</p>
+After this example bigMaf is loaded in the Genome Browser, click into an alignment on the browser's 
+track display. Note that the details page displays information about the individual alignments, 
+similar to that which is available for a standard MAF track.</p>
 
 <h2>Example #2</h2>
 <p>
-In this example, you will create your own bigMaf file from an existing bigMaf input file.</p>
-<ul>
+In this example, you will create a bigMaf file from an existing bigMaf input file, 
+<em>bigMaf.txt</em>, located on the UCSC Genome Browser http server.</p>
+<ol>
   <li>
-  Save this <code>bed3+1</code> <a href="examples/bigMaf.txt">bigMaf.txt</a> example input file to 
-  your machine (<em>satisfies the first part of the above step 6</em>).</li>
+  Save the bed3+1 example file, <a href="examples/bigMaf.txt"><em>bigMaf.txt</em></a>, to your 
+  computer (<em>Step 6</em>, above).</li>
   <li>
-  Save this <code>bigMaf.as</code> <a href="examples/bigMaf.as"> text file</a> to your machine 
-  (<em>Step 2</em>).</li>
+  Save the autoSql file <a href="examples/bigMaf.as"><em>bigMaf.as</em></a> to your computer 
+  (<em>Step 3</em>, above).</li>
   <li>
-  Download the <code>bedToBigBed</code> 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">utility</a> (<em>step 3</em>).</li>
+  Download the 
+  <a href="http://hgdownload.soe.ucsc.edu/admin/exe/"><code>bedToBigBed</code> utility</a> 
+ (<em>Step 4</em>, above).</li>
   <li>
-  Save this <code>hg38.chrom.sizes</code> <a href="hg38.chrom.sizes">text file</a> to your machine. 
-  It contains the chrom.sizes for the human (hg38) assembly (<em>step 4</em>).</li>
+  Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer. 
+  This file contains the chrom.sizes for the human (hg38) assembly (<em>Step 5</em>, above).</li>
   <li>
-  Use the <code>bedToBigBed</code> utility to create the binary indexed MAF file (<em>completes 
-  step 6</em>):
+  Run the <code>bedToBigBed</code> utility to create a binary indexed MAF file (<em>Step 6</em>,
+  above):
 <pre><code>bedToBigBed -type=bed3+1 -tab -as=bigMaf.as bigMaf.txt hg38.chrom.sizes bigMaf.bb</code></pre></li>
   <li>
-  Place the bigMaf file you just created (<code>bigMaf.bb</code>) on a web-accessible server 
-  (<em>step 8</em>).</li>
+  Move the newly created bigMaf file (<em>bigMaf.bb</em>) to a web-accessible location (<em>Step 
+  7</em>, above).</li>
   <li>
-  Construct a &quot;track&quot; line that points to your bigMaf file (see <em>step 9</em>).</li>
+  Construct a track line that points to the bigMaf file (<em>Step 8</em>, above).</li>
   <li>
   Create the custom track on the human assembly hg38 (Dec. 2013), and view it in the Genome Browser 
-  (see <em>step 10</em>).</li>
-</ul>
+  (<em>step 9</em>, above).</li>
+</ol>
 
 <h2>Sharing your data with others</h2>
 <p>
 If you would like to share your bigMaf data track with a colleague, learn how to create a URL by 
-looking at <strong><em>Example 11</em></strong> on <a href="customTrack.html#SHARE">this</a> 
-page.</p>
+looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
 
 <h2>Extracting data from the bigMaf format</h2>
 <p>
-Since the bigMaf files are an extension of bigBed files, which are indexed binary files, they can be
-difficult to extract data from.  We have developed the following programs, all of which are 
-available from the <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary 
-utilities.</p>
+Because bigMaf files are an extension of bigBed files, which are indexed binary files, it can 
+be difficult to extract data from them. UCSC has developed the following programs to assist
+in working with bigBed formats, available from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <ul>
-  <li><code>bigBedToBed</code> &mdash; this program converts a bigBed file to ASCII BED format.</li>
-  <li><code>bigBedSummary</code> &mdash; this program extracts summary information from a bigBed 
-  file.</li>
-  <li><code>bigBedInfo</code> &mdash; this program prints out information about a bigBed file.</li>
+  <li>
+  <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
+  <li>
+  <code>bigBedSummary</code> &mdash; extracts summary information from a bigBed file.</li>
+  <li>
+  <code>bigBedInfo</code> &mdash; prints out information about a bigBed file.</li>
 </ul>
 <p>
-As with all UCSC Genome Browser programs, simply type the program name at the command line with no 
-parameters to see the usage statement.</p>
+As with all UCSC Genome Browser programs, simply type the program name (with no parameters) at the 
+command line to view the usage statement.</p>
 
 <h2>Troubleshooting</h2>
 <p>
-If you encounter an error when you run the <code>bedToBigBed</code> program, it may be because your 
-input bigMaf file has data off the end of a chromosome. In this case, use the <code>bedClip</code> 
-program <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">here</a> before the 
-<code>bedToBigBed</code> program. It will remove the row(s) in your input BED file that are off the 
-end of a chromosome.</p>
+If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
+file for data coordinates that extend past the the end of the chromosome. If these are present, run 
+the <code>bedClip</code> program 
+(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
+row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

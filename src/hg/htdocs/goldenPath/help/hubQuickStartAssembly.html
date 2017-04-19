@@ -60,7 +60,7 @@ your own original fasta files. Read more about <a href="trackDb/trackDbHub.html"
 target="_blank">trackDb settings</a> in the definition document.</p>
 <p>
 This assembly hub is a an abbreviated version of a larger plant assembly Public Hub.  You can 
-explore the larger hub structure <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/Plants/" 
+explore the larger hub structure <a href="http://genome-test.soe.ucsc.edu/~hiram/hubs/Plants/" 
 target="_blank">here</a>.</p>
 <p>
 Please note that the Browser waits 5 minutes before checking for any changes to these files. 
@@ -127,20 +127,20 @@ target="_blank">here</a>, and please note the uppercase &quot;B&quot; in transBl
 information, see the &quot;Adding BLAT servers&quot; section of the 
 <a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs#Adding_BLAT_servers" 
 target="_blank">Assembly Hub Wiki</a>. The 
-<a href="http://hgdownload.cse.ucsc.edu/downloads.html#source_downloads" target="_blank">Source 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads" target="_blank">Source 
 Downloads</a> page offers access to utilities with pre-compiled binaries such as gfServer found in 
-a blat/ directory for your machine type <a href="http://hgdownload.cse.ucsc.edu/admin/exe/" 
+a blat/ directory for your machine type <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" 
 target="_blank">here</a> and further <a href="blatSpec.html" target="_blank">blat documentation 
 here</a>. Please note that because the <code>-mask</code> option in the above <code>17777 
 -trans</code> gfServer option will mask all lower-case sequence from being matched, you may not 
 wish to include it. See the above blat links and gfServer usage statement for more information.</p>
 <p>
-If you are having trouble with your blat servers connecting to the browser, it may help to know
-that some institutions have firewalls that will prevent the browser from sending multiple inquiries,
-in which case you may need to request your admins add this IP range as exceptions that are not
-limited: <code>128.114.119.*</code> That will cover the U.S. genome.ucsc.edu site. In case you may
-wish the requests to work from our European Mirror genome-euro.ucsc.edu site, you would want to
-include <code>129.70.40.120</code> also to the exception list.</p>
+If you have trouble connecting your blat servers with the browser, check if your institution has a 
+firewall that prevents the browser from sending multiple inquiries. If this is the case, ask your 
+systems administrator to add the IP range <code>128.114.119.*</code> as an exception that is not 
+limited. This will allow connections with the U.S.-based genome.ucsc.edu
+site. To enable requests for the Genome Browser's Europe-based mirror site (genome-euro.ucsc.edu), 
+the IP range <code>129.70.40.99</code> should be added to the exception list.</p>
 
 <!-- ========== blat assembly hub GBiB ============================== -->
 
@@ -174,7 +174,7 @@ and installation of the Blat and In-Silico PCR software may be licensed through
 <p>
 You can obtain just the gfServer utility on your GBiB with the following command that will create a 
 bin directory and install the tool.</p>
-<pre><code>mkdir ~/bin -p; rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/blat/gfServer ~/bin/</code></pre>
+<pre><code>mkdir ~/bin -p; rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/blat/gfServer ~/bin/</code></pre>
 <p>
 The GBiB also includes a tool you can run on the commandline to download an entire suite of tools 
 including gfServer: <code>gbibAddTools</code></p>

@@ -8,22 +8,27 @@
 <h1>bigChain Track Format</h1>
 <p>
 The bigChain format describes a pairwise alignment that allow gaps in both sequences simultaneously,
-just as <a href="chain.html">Chain</a> files do, but bigChain files are compressed and indexed as 
-bigBeds. bigChain files are created using the program <code>bedToBigBed</code> with a special 
-AutoSQL file that defines the fields of the bigChain. The resulting bigChain files are in an indexed
-binary format. The main advantage of the bigChain files is that only portions of the files needed to
-display a particular region are transferred to UCSC. So for large data sets, bigChain is 
-considerably faster than regular Chain files.  The bigChain file remains on your web accessible 
-server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the 
-chromosomal position you are currently viewing is locally cached as a &quot;sparse file&quot;.</p>
+just as <a href="chain.html">chain</a> files do; however, bigChain files are compressed and indexed 
+as bigBeds. Chain files are converted to bigChain files using the program <code>bedToBigBed</code>, 
+run with the <code>-as</code> option to pull in a special 
+<a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a> (<em>.as</em>) file 
+that defines the fields of the bigChain.</p>
+<p>
+The bigChain files are in an indexed binary format. The main advantage of this format is that only 
+those portions of the file needed to display a particular region are transferred to the Genome 
+Browser server. Because of this, bigChain files have considerably faster display performance than 
+regular chain files when working with large data sets. The bigChain file remains on your local 
+web-accessible server (http, https or ftp), not on the UCSC server, and only the portion needed for 
+the currently displayed chromosomal position is locally cached as a &quot;sparse file&quot;.</p>
 
 <a name=bigChain></a>
-<h3>Big Chain</h3>
+<h2>bigChain format definition</h2>
 <p>
-The following AutoSQL definition is used for bigChain pairwise alignment files. This is the 
-<a href="examples/bigChain.as"><code>bigChain.as</code></a> file defined by the <code>-as</code> 
-option when using <code>bedToBigBed</code>.
-<!--Click this <A href="examples/bigChain.txt"><code>bed6+6</code></A> file for an example of 
+The following autoSql definition is used to specify bigChain pairwise alignment files. This
+definition, contained in the file <a href="examples/bigChain.as"><em>bigChain.as</em></a>, will be 
+pulled in when the <code>bedToBigBed</code> utility is run with the <code>-as=bigChain.as</code> 
+option. 
+<!--Click this <a href="examples/bigChain.txt"><code>bed6+6</code></A> file for an example of 
 bigChain input. -->
 </p>
 <pre><code>    table bigChain
@@ -42,154 +47,164 @@ bigChain input. -->
         uint qEnd;          "end of alignment on query sequence"
         uint chainScore;    "score from chain"
         )</code></pre>
-
 <p>
-Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory;
-approximately 25% more RAM than the uncompressed BED input file.</p>
+Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory: approximately 
+25% more RAM than the uncompressed BED input file.</p>
+<p>
+
+<h2>Creating a bigChain track</h2>
 <p>
 To create a bigChain track, follow these steps:</p>
-<ol>
-  <li>
-  If you already have a Chain file you would like to convert to a bigChain, skip to <em>Step 3</em>,
-  otherwise download the example 
-  <a href="examples/chr22_KI270731v1_random.hg38.mm10.rbest.chain">Chain file</a> for the Human 
-  GRCh38(hg38) assembly.</li>
-  <li> 
-  Download the AutoSQL files needed by <code>bedToBigBed</code>: 
-  <a href="examples/bigChain.as">bigChain.as</a> and 
-  <a href="examples/bigLink.as">bigLink.as</a></li>
-  <li>
-  Download the <code>bedToBigBed</code> and <code>hgLoadChain</code> programs from the 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary utilities.</li>
-  <li>
-  Use the <code>fetchChromSizes</code> script from the same 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> to create a chrom.sizes file for
-  the UCSC database you are working with (e.g., hg38). Alternatively, you can download the 
-  chrom.sizes file for any assembly hosted at UCSC from our 
-  <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
-  data set&quot; for any assembly). For example, for the hg38 database the hg38.chrom.sizes are 
-  located at <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
-  target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</li>
-  <li>
-  Generate the <code>chain.tab</code> and <code>link.tab</code> files needed to create the bigChain 
-  file with the <code>hgLoadChain</code> utility: 
-  <pre><code>    hgLoadChain -noBin -test hg38 bigChain chr22_KI2707731v1_random.hg38.mm10.rbest.chain</code></pre></li>
-  <li>
-  Create the bigChain file from your input file using a combination of <code>sed</code>, 
-  <code>awk</code> and the <code>bedToBigBed</code> utility: 
-  <pre><code>    sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' &gt; chr22_KI270731v1_random.hg38.mm10.rbest.bigChain
-    bedToBigBed -type=bed6+6 -as=bigChain.as -tab chr22_KI270731v1_random.hg38.mm10.rbest.bigChain hg38.chrom.sizes bigChain.bb</code></pre></li> 
-  <li>
-  You must also create a binary indexed link file along with your bigChain file in order to display 
-  your data in the browser. Use the following commands to generate a link file:</p>
-  <pre><code>    awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n &gt; bigChain.bigLink bedToBigBed -type=bed4+1 -as=bigLink.as -tab bigChain.bigLink hg38.chrom.sizes bigChain.link.bb </code></pre></li>
-   <li>
-   Move the newly created bigChain and bigLink files (<code>bigChain.bb</code> and 
-   <code>bigChain.link.bb</code>) to an http, https, or ftp location.</li>
-   <li>
-   Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
-   <a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed 
-   <a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic
-   version of the &quot;track&quot; line will look something like this:
-   <pre><code>     track type=bigChain name="My Big Chain"  bigDataUrl=http://myorg.edu/mylab/bigChain.bb linkDataUrl=http://myorg.edu/mylab/bigChain.link.bb </code></pre></li>
-   <li> 
-   Paste this custom track line into the text box on the 
-   <a href="../../cgi-bin/hgCustom">custom track</a> management page.</li>
-</ol>
 <p>
-The <code>bedToBigBed</code> program can also be run with several additional options. Run 
-<code>bedToBigBed</code> with no arguments to view a ful list of available options.</p>
+<strong>Step 1.</strong> 
+If you already have a chain file you would like to convert to a bigChain, skip to <em>Step 3</em>.
+Otherwise download <a href="examples/chr22_KI270731v1_random.hg38.mm10.rbest.chain">this example 
+chain file</a> for the human GRCh38 (hg38) assembly.</p>
+<p>
+<strong>Step 2.</strong> 
+Download these autoSql files needed by <code>bedToBigBed</code>: 
+<em><a href="examples/bigChain.as">bigChain.as</a></em> and 
+<em><a href="examples/bigLink.as">bigLink.as</a></em>.</p>
+<p>
+<strong>Step 3.</strong> 
+Download the <code>bedToBigBed</code> and <code>hgLoadChain</code> programs from the UCSC
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<p>
+<strong>Step 4.</strong> 
+Use the <code>fetchChromSizes</code> script from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create a 
+<em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg38). 
+Alternatively, you can download the 
+<em>chrom.sizes</em> file for any assembly hosted at UCSC from our 
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
+data set&quot; for any assembly). For example, the <em>hg38.chrom.sizes</em> file for the hg38 
+database is located at 
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
+target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</p>
+<p>
+<strong>Step 5.</strong> 
+Use the <code>hgLoadChain</code> utility to generate the <em>chain.tab</em> and <em>link.tab</em> 
+files needed to create the bigChain file:</p> 
+<pre><code>hgLoadChain -noBin -test hg38 bigChain chr22_KI2707731v1_random.hg38.mm10.rbest.chain</code></pre>
+<p>
+<strong>Step 6.</strong> 
+Create the bigChain file from your input chain file using a combination of <code>sed</code>, 
+<code>awk</code> and the <code>bedToBigBed</code> utility: 
+<pre><code>sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7, $9, $10, $1}' &gt; chr22_KI270731v1_random.hg38.mm10.rbest.bigChain
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chr22_KI270731v1_random.hg38.mm10.rbest.bigChain hg38.chrom.sizes bigChain.bb</code></pre></p> 
+<p>
+<strong>Step 7.</strong> 
+To display your date in the Genome Browser, you must also create a binary indexed link file to 
+accompany your bigChain file:</p> 
+<pre><code>awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n &gt; bigChain.bigLink bedToBigBed -type=bed4+1 -as=bigLink.as -tab bigChain.bigLink hg38.chrom.sizes bigChain.link.bb </code></pre>
+<p>
+<strong>Step 8.</strong> 
+Move the newly created bigChain (<em>bigChain.bb</em>) and bigLink (<em>bigChain.link.bb</em>)
+files to a web-accessible http, https or ftp location.</p>
+<p>
+<strong>Step 9.</strong> 
+Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
+<a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed 
+<a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The most basic
+version of the track line will look something like this:</p>
+<pre><code>track type=bigChain name="My Big Chain" bigDataUrl=http://myorg.edu/mylab/bigChain.bb linkDataUrl=http://myorg.edu/mylab/bigChain.link.bb </code></pre>
+<p>
+<strong>Step 10.</strong> 
+Paste the custom track line into the text box on the 
+<a href="../../cgi-bin/hgCustom">custom track management page</a>.</p>
+<p>
+The <code>bedToBigBed</code> program can be run with several additional options. For a full
+list of the available options, type <code>bedToBigBed</code> (with no arguments) on the command line
+to display the usage message. </p>
 
+<h2>Examples</h2>
 <h3>Example #1</h3>
 <p>
-In this example, you will use an existing bigChain file to create a bigChain custom track. A 
-bigChain file that contains data on the hg38 assembly has been placed on our http server. You can 
-create a custom track using this bigChain file by constructing a &quot;track&quot; line that 
-references this file:</p>
-<pre><code>    track type=bigChain name=&quot;bigChain Example One&quot; description=&quot;A bigChain file&quot; 
-    bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.bb
-    linkDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.link.bb</code></pre>
+In this example, you will create a bigChain custom track using an existing bigChain file,
+<em>bigChain.bb</em>, located on the UCSC Genome Browser http server. This file contains data for 
+the hg38 assembly.</p>
 <p>
-Paste the above &quot;track&quot; line (removing the line breaks)into the 
-<a href="../../cgi-bin/hgCustom?db=hg38">custom track</a> management page for the human assembly 
-hg38 (Dec. 2013), then press the &quot;submit&quot; button.</p>
+To create a custom track using this bigChain file: 
+<ol>
+  <li>
+  Construct a track line that references the file:</p>
+  <pre><code>track type=bigChain name=&quot;bigChain Example One&quot; description=&quot;A bigChain file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.bb linkDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.link.bb</code></pre></li>
+  <li>
+  Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
+  page</a> for the human assembly hg38 (Dec. 2013).</li> 
+  <li>
+  Click the &quot;submit&quot; button.</li>
+</ol>
 <p>
 <!-- FIX ME -->
-Custom tracks can also be loaded via one URL line. <a
-href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random&hgct_customText=track%20type=bigChain%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.bb%20linkDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.link.bb%20visibility=pack"
-target="_blank">This link</a> loads the same bigChain track, but includes parameters on the URL 
-line (line breaks have been inserted for readability):</p>
-<pre><code>    http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random
-    &hgct_customText=track%20type=bigChain%20name=Example
-    %20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.bb
-    %20linkDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.link.bb%20visibility=pack</a></code></pre>
+Custom tracks can also be loaded via one URL line. 
+<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random&hgct_customText=track%20type=bigChain%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.bb%20linkDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.link.bb%20visibility=pack"
+target="_blank">This link</a> loads the same <em>bigChain.bb</em> track and sets additional display parameters in the URL:</p>
+<pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr22_KI270731v1_random &hgct_customText=track%20type=bigChain%20name=Example %20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.bb %20linkDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.link.bb%20visibility=pack</a></code></pre>
 <p>
-With this example bigChain loaded, click into a chain from the track. Note that the details page 
-displays information about the individual chains, similar to a standard chain track.</p>
+After this example bigChain is loaded in the Genome Browser, click into a chain on the browser's 
+track display. Note that the details page displays information about the individual chains, similar 
+to that which is available for a standard chain track.</p>
 
 <h3>Example #2</h3>
 <p>
-In this example, you will create your own bigChain file from an existing bigChain input file.</p>
-<ul>
+In this example, you will create your own bigChain file from an existing chain input file.</p>
+<ol>
   <li>
-  Save this <a href="examples/chr22_KI270731v1_random.hg38.mm10.rbest.chain">Chain file</a> to your 
-  machine (satisfies <strong><em>step 1</em></strong> above).</li>
+  Save <a href="examples/chr22_KI270731v1_random.hg38.mm10.rbest.chain">this chain file</a> to your 
+  computer (<em>Step 1</em> in <em>Creating a bigChain track</em>, above).</li>
   <li>
-  Save these <a href="examples/bigChain.as"><code>bigChain.as</code></a> and 
-  <a href="examples/bigLink.as"><code>bigLink.as</code></a> files to your machine 
-  (<strong><em>Step 2</em></strong>).</li>
+  Save the autoSql files <a href="examples/bigChain.as"><em>bigChain.as</em></a> and 
+  <a href="examples/bigLink.as"><em>bigLink.as</em></a> to your computer (<em>Step 2</em>, 
+  above).</li>
   <li>
   Download the <code>bedToBigBed</code> and <code>hgLoadChain</code> 
-  <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">utilities</a> 
-  (<strong><em>step 3</em></strong>).</li>
+  <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities</a> (<em>Step 3</em>, above).</li>
   <li>
-  Save this <code>hg38.chrom.sizes</code> <a href="hg38.chrom.sizes">text file</a> to your machine. 
-  It contains the chrom.sizes for the human (hg38) assembly (<strong><em>step 4</em></strong>).</li>
+  Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer. This
+  file contains the chrom.sizes for the human hg38 assembly (<em>Step 4</em>, above).</li>
   <li>
-  As in <strong><em>steps 5-7</em></strong> above, run the utilities to create the bigChain and 
-  bigLink output files.</li> 
+  Run the utilities in <em>Steps 5-7</em>, above, to create the bigChain and bigLink output 
+  files. </li> 
   <li>
-  Place the bigChain and bigLink files you just created (<code>bigChain.bb</code> and 
-  <code>bigChain.link.bb</code>) on a web-accessible server (<strong><em>step 8</em></strong>).</li>
+  Place the newly created bigChain (<em>bigChain.bb</em>) and and bigLink 
+  (<em>bigChain.link.bb</em>) files on a web-accessible server (<em>Step 8</em>).</li>
   <li>
-  Construct a &quot;track&quot; line that points to your bigChain file (see 
-  <strong><em>step 9</em></strong>).</li>
+  Construct a track line that points to the bigChain file (<em>Step 9</em>, above).</li>
   <li>
   Create the custom track on the human assembly hg38 (Dec. 2013), and view it in the Genome Browser 
-  (see <strong><em>step 10</em></strong>).</li>
-</ul>
+  (<em>Step 10</em>, above).</li>
+</ol>
 
-<h3>Sharing Your Data with Others</h3>
+<h2>Sharing your data with others</h2>
 <p>
 If you would like to share your bigChain data track with a colleague, learn how to create a URL by 
-looking at <strong><em>Example 11</em></strong> on <a href="customTrack.html#SHARE">this
-page</a>.</p>
+looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
 
-<h3>Extracting Data from the bigChain Format</h3>
+<h2>Extracting data from the bigChain format</h2>
 <p>
-Since the bigChain files are an extension of bigBed files, which are indexed binary files, they can 
-be difficult to extract data from. We have developed the following programs, all of which are 
-available from the <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary
-utilities.</p>
+Because the bigChain files are an extension of bigBed files, which are indexed binary files, it can 
+be difficult to extract data from them. UCSC has developed the following programs to assist
+in working with bigBed formats, available from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
 <ul>
   <li>
-  <strong><code>bigBedToBed</code></strong> &mdash; this program converts a bigBed file to ASCII BED format.</li>
+  <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
   <li>
-  <strong><code>bigBedSummary</code></strong> &mdash; this program extracts summary information from a bigBed 
-  file.</li>
+  <code>bigBedSummary</code> &mdash; extracts summary information from a bigBed file.</li>
   <li>
-  <strong><code>bigBedInfo</code></strong> &mdash; this program prints out information about a bigBed file.</li>
+  <code>bigBedInfo</code> &mdash; prints out information about a bigBed file.</li>
 </ul>
 <p>
-As with all UCSC Genome Browser programs, simply type the program name at the command line with no 
-parameters to see the usage statement.</p>
+As with all UCSC Genome Browser programs, simply type the program name (with no parameters) at the 
+command line to view the usage statement.</p>
 
-<h3>Troubleshooting</h3>
+<h2>Troubleshooting</h2>
 <p>
-If you encounter an error when you run the <code>bedToBigBed</code> program, it may be because 
-your input bigChain file has data off the end of a chromosome. In this case, use the 
-<code>bedClip</code> program <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">here</a> before the
-<code>bedToBigBed</code> program. It will remove the row(s) in your input BED file that are off the 
-end of a chromosome.</p>
+If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
+file for data coordinates that extend past the the end of the chromosome. If these are present, run 
+the <code>bedClip</code> program 
+(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
+row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

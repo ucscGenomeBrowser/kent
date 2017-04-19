@@ -187,7 +187,7 @@ char javascript[256];
 safef(javascript, sizeof(javascript), "var list = document.getElementsByName('%s'); "
       "for (var ix = 0; ix < list.length; ix++) {list[ix].checked = %s}", buttonVar,
       isSet ? "true" : "false");
-safef(id, sizeof id, "%s_grpSetClrBut", buttonVar);
+safef(id, sizeof id, "%s_grp%sBut", buttonVar, isSet ? "Set" : "Clr");
 cgiMakeOnClickButton(id, javascript, isSet ? JS_SET_ALL_BUTTON_LABEL : JS_CLEAR_ALL_BUTTON_LABEL);
 }
 

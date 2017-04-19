@@ -219,6 +219,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bed", s) || sameString("genePred", s) ||
 		   sameString("bigBed", s) || sameString("makeItems", s) ||
 		   sameString("bigMaf", s) || sameString("bigGenePred", s) || 
+		   sameString("bigBarChart", s) || sameString("bigGenePred", s) || 
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
                    sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
@@ -226,7 +227,8 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
 		   sameString("bed8Attrs", s) || sameString("gvf", s) ||
 		   sameString("vcfTabix", s) || sameString("vcf", s) || sameString("pgSnp", s) ||
 		   sameString("narrowPeak", s) || sameString("broadPeak", s) || 
-                   sameString("peptideMapping", s));
+                   sameString("peptideMapping", s) || sameString("barChart", s)
+                   );
 freeMem(t);
 return canPack;
 }
@@ -711,6 +713,8 @@ else if (sameWord("vcfTabix",type) || sameWord("vcf", type))
     cType = cfgVcf;
 else if (sameWord("halSnake",type))
     cType = cfgSnake;
+else if (sameWord("barChart", type) || sameWord("bigBarChart", type))
+    cType = cfgBarChart;
 // TODO: Only these are configurable so far
 
 if (cType == cfgNone && warnIfNecessary)

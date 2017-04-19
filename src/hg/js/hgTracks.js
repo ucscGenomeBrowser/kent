@@ -969,13 +969,17 @@ var vis = {
 ////////////////////////////////////////////////////////////
 var dragSelect = {
 
+    hlColorDefault: '#aaedff', // default highlight color, if nothing specified
+    hlColor :       '#aaedff', // current highlight color
     areaSelector:    null, // formerly "imgAreaSelect". jQuery element used for imgAreaSelect
     originalCursor:  null,
     startTime:       null,
+    escPressed :     false,  // flag is set when user presses Escape
 
     selectStart: function (img, selection)
     {
         initVars();
+        dragSelect.escPressed = false;
         if (rightClick.menu) {
             rightClick.menu.hide();
         }
@@ -997,14 +1001,51 @@ var dragSelect = {
         return true;
     },
 
-    highlightThisRegion: function(newPosition)
+    findHighlightIdxForPos : function(findPos) {
+        // return the index of the highlight string e.g. hg19.chrom1:123-345#AABBDCC that includes a chrom range findPos
+        // mostly copied from highlightRegion()
+        var currDb = getDb();
+        if (hgTracks.highlight) {
+            var hlArray = hgTracks.highlight.split("|"); // support multiple highlight items
+            for (var i = 0; i < hlArray.length; i++) {
+                hlString = hlArray[i];
+                pos = parsePositionWithDb(hlString);
+                imageV2.undisguiseHighlight(pos);
+
+                if (!pos) 
+                    continue; // ignore invalid position strings
+                pos.start--;
+
+                if (pos.chrom === hgTracks.chromName && pos.db === currDb
+                &&  pos.start <= findPos.chromStart && pos.end >= findPos.chromEnd) {
+                    return i;
+                }
+            }
+        }
+        return null;
+    },
+
+    highlightThisRegion: function(newPosition, doAdd, hlColor)
     // set highlighting newPosition in server-side cart and apply the highlighting in local UI.
     {
+        var hlColorName = hlColor; // js convention: do not assign to argument variables
+        if (hlColor==="" || hlColor===null || hlColor===undefined)
+            hlColorName = dragSelect.hlColor;
+
         var pos = parsePosition(newPosition);
         var start = pos.start;
         var end = pos.end;
-        hgTracks.highlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + '#AAFFFF';
-        hgTracks.highlight = imageV2.disguiseHighlight(hgTracks.highlight);
+        var newHighlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + hlColorName;
+        newHighlight = imageV2.disguiseHighlight(newHighlight);
+        var oldHighlight = hgTracks.highlight;
+        if (oldHighlight===undefined || doAdd===undefined || doAdd===false || oldHighlight==="") {
+            // just set/overwrite the old highlight position, this used to be the default
+            hgTracks.highlight = newHighlight;
+        }
+        else {
+            // add to the end of a |-separated list
+            hgTracks.highlight = oldHighlight+"|"+newHighlight;
+        }
         // we include enableHighlightingDialog because it may have been changed by the dialog
         var cartSettings = {             'highlight': hgTracks.highlight, 
                           'enableHighlightingDialog': hgTracks.enableHighlightingDialog ? 1 : 0 };
@@ -1035,7 +1076,7 @@ var dragSelect = {
                 }
             }
             if (nonVirtChrom !== "")
-                cartSettings.nonVirtHighlight = getDb() + '.' + nonVirtChrom + ':' + nonVirtStart + '-' + (nonVirtEnd+1) + '#AAFFFF';
+                cartSettings.nonVirtHighlight = getDb() + '.' + nonVirtChrom + ':' + nonVirtStart + '-' + (nonVirtEnd+1) + hlColorName;
         } else if (hgTracks.windows && hgTracks.virtualSingleChrom) {
                 cartSettings.nonVirtHighlight = hgTracks.highlight;
         }
@@ -1047,14 +1088,58 @@ var dragSelect = {
     selectionEndDialog: function (newPosition)
     // Let user choose between zoom-in and highlighting.
     {   
+        // if the user hit Escape just before, do not show this dialog
+        if (dragSelect.startTime===null)
+            return;
         var dragSelectDialog = $("#dragSelectDialog")[0];
         if (!dragSelectDialog) {
-            $("body").append("<div id='dragSelectDialog'><span id='dragSelectPosition'></span>" + 
-                             "<p><input type='checkbox' id='disableDragHighlight'>" + 
-                             "Don't show this dialog again and always zoom.<BR>" + 
-                             "(Re-enable highlight via the 'configure' menu at any time.)</p>");
+            $("body").append("<div id='dragSelectDialog'>" + 
+                             "<p><ul>"+
+                             "<li>Hold <b>Shift+drag</b> to show this dialog" +
+                             "<li>Hold <b>Alt+drag</b> to add a highlight" +
+                             "<li>Hold <b>Ctrl+drag</b> (Windows) or <b>Cmd+drag</b> (Mac) to zoom" +
+                             "<li>To cancel, press <tt>Esc</tt> anytime or drag mouse outside image" +
+                             "<li>Highlight the current position with <tt>h then m</tt>" +
+                             "<li>Clear all highlights with View - Clear Highlights or <tt>h then c</tt>" +
+                             "</ul></p>" +
+                             "<p>Highlight color: <input type='text' style='width:70px' id='hlColorInput' value='"+dragSelect.hlColor+"'>" +
+                             //"<span id='hlColorBox' style='width:20px'></span>" + 
+                             "&nbsp;&nbsp;<input id='hlColorPicker'>" + 
+                             "&nbsp;&nbsp;<a href='#' id='hlReset'>Reset</a></p>" + 
+                             "<input style='float:left' type='checkbox' id='disableDragHighlight'>" + 
+                             "<span style='border:solid 1px #DDDDDD; padding:3px;display:inline-block' id='hlNotShowAgainMsg'>Don't show this again and always zoom with shift.<br>" + 
+                             "Re-enable via 'View - Configure Browser' (<tt>c then f</tt>)</span></p>"+ 
+                             "Selected chromosome position: <span id='dragSelectPosition'></span>");
             dragSelectDialog = $("#dragSelectDialog")[0];
+            // reset value
+            $('#hlReset').click(function() { 
+                $('#hlColorInput').val(dragSelect.hlColorDefault);
+                $("#hlColorPicker").spectrum("set", dragSelect.hlColorDefault);
+            });
+            // allow to click checkbox by clicking on the label
+            $('#hlNotShowAgainMsg').click(function() { $('#disableDragHighlight').click();});
+            // click "add highlight" when enter is pressed in color input box
+            $("#hlColorInput").keyup(function(event){
+                if(event.keyCode == 13){
+                    $(".ui-dialog-buttonset button:nth-child(3)").click();
+                }
+            });
+            // activate the color picker
+            var opt = {
+                hideAfterPaletteSelect : true,
+                color : $('#hlColorInput').val(),
+                showPalette: true,
+                showInput: true,
+                preferredFormat: "hex",
+                change: function() { var color = $("#hlColorPicker").spectrum("get"); $('#hlColorInput').val(color); },
+                };
+            $("#hlColorPicker").spectrum(opt);
+            // update the color picker if you change the input box
+            $("#hlColorInput").change(function(){ $("#hlColorPicker").spectrum("set", $('#hlColorInput').val()); });
         }
+
+        $("#hlColorPicker").spectrum("set", $('#hlColorInput').val());
+
         if (hgTracks.windows) {
             var i,len;
             var newerPosition = newPosition;
@@ -1095,7 +1180,7 @@ var dragSelect = {
                 resizable: false,
                 autoOpen: false,
                 revertToOriginalPos: true,
-                minWidth: 400,
+                minWidth: 500,
                 buttons: {  
                     "Zoom In": function() {
                         // Zoom to selection
@@ -1118,12 +1203,21 @@ var dragSelect = {
                         }
                         $(this).dialog("close");
                     },
-                    "Highlight": function() {
-                        // Highlight selection
+                    "Single Highlight": function() {
+                        // Clear old highlight and Highlight selection
                         $(imageV2.imgTbl).imgAreaSelect({hide:true});
                         if ($("#disableDragHighlight").attr('checked'))
                             hgTracks.enableHighlightingDialog = false;
-                        dragSelect.highlightThisRegion(newPosition);
+                        dragSelect.hlColor = $("#hlColorInput").val();
+                        dragSelect.highlightThisRegion(newPosition, false);
+                        $(this).dialog("close");
+                    },
+                    "Add Highlight": function() {
+                        // Highlight selection
+                        if ($("#disableDragHighlight").attr('checked'))
+                            hgTracks.enableHighlightingDialog = false;
+                        dragSelect.hlColor = $("#hlColorInput").val();
+                        dragSelect.highlightThisRegion(newPosition, true);
                         $(this).dialog("close");
                     },
                     "Cancel": function() {
@@ -1145,24 +1239,38 @@ var dragSelect = {
                     else
                         $(this).hide();
                     $('body').css('cursor', ''); // Occasionally wait cursor got left behind
+                    $("#hlColorPicker").spectrum("hide");
                 }
         });
         $(dragSelectDialog).dialog('open');
+        
+        // put the cursor into the input field
+        // we are not doing this for now - default behavior was to zoom when enter was pressed
+        // so people may still expect that "enter" on the dialog will zoom.
+        //var el = $("#hlColorInput")[0];
+        //el.selectionStart = 0;
+        //el.selectionEnd = el.value.length;
+        //el.focus();
+
     },
 
-    selectEnd: function (img, selection)
+    selectEnd: function (img, selection, event)
     {
         var now = new Date();
         var doIt = false;
+        var rulerClicked = selection.y1 <= hgTracks.rulerClickHeight; // = drag on base position track (no shift)
         if (dragSelect.originalCursor)
             jQuery('body').css('cursor', dragSelect.originalCursor);
+        if (dragSelect.escPressed)
+            return false;
         // ignore releases outside of the image rectangle (allowing a 10 pixel slop)
         if (genomePos.check(img, selection)) {
             // ignore single clicks that aren't in the top of the image
             // (this happens b/c the clickClipHeight test in dragSelect.selectStart
             // doesn't occur when the user single clicks).
-            doIt = dragSelect.startTime !== null || selection.y1 <= hgTracks.rulerClickHeight;
+            doIt = (dragSelect.startTime !== null || rulerClicked);
         }
+
         if (doIt) {
             // dragSelect.startTime is null if mouse has never been moved
             var singleClick = (  (selection.x2 === selection.x1)
@@ -1170,29 +1278,37 @@ var dragSelect = {
                               || (now.getTime() - dragSelect.startTime) < 100);
             var newPosition = genomePos.update(img, selection, singleClick);
             if (newPosition) {
-                if (hgTracks.enableHighlightingDialog)
-                    dragSelect.selectionEndDialog(newPosition);
-                else {
+                if (event.altKey) {
+                    // with the alt-key, only highlight the region, do not zoom
+                    dragSelect.highlightThisRegion(newPosition, true);
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
-                    if (imageV2.inPlaceUpdate) {
-                        if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
-                            newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
+                } else {
+                    if (hgTracks.enableHighlightingDialog && !(event.metaKey || event.ctrlKey))
+                        // don't show the dialog if: clicked on ruler, if dialog deactivated or meta/ctrl was pressed
+                        dragSelect.selectionEndDialog(newPosition);
+                    else {
+                        // in every other case, show the dialog
+                        $(imageV2.imgTbl).imgAreaSelect({hide:true});
+                        if (imageV2.inPlaceUpdate) {
+                            if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+                                newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
+                            }
+                            imageV2.navigateInPlace("position=" + newPosition, null, true);
+                        } else {
+                            jQuery('body').css('cursor', 'wait');
+                            document.TrackHeaderForm.submit();
                         }
-                        imageV2.navigateInPlace("position=" + newPosition, null, true);
-                    } else {
-                        jQuery('body').css('cursor', 'wait');
-                        document.TrackHeaderForm.submit();
                     }
                 }
+            } else {
+                $(imageV2.imgTbl).imgAreaSelect({hide:true});
+                genomePos.revertToOriginalPos();
             }
-        } else {
-            $(imageV2.imgTbl).imgAreaSelect({hide:true});
-            genomePos.revertToOriginalPos();
+            dragSelect.startTime = null;
+            // blockMapClicks/allowMapClicks() is necessary if selectEnd was over a map item.
+            setTimeout(posting.allowMapClicks,50);
+            return true;
         }
-        dragSelect.startTime = null;
-        // blockMapClicks/allowMapClicks() is necessary if selectEnd was over a map item.
-        setTimeout(posting.allowMapClicks,50);
-        return true;
     },
 
     load: function (firstTime)
@@ -1200,6 +1316,7 @@ var dragSelect = {
         var imgHeight = 0;
         if (imageV2.enabled)
             imgHeight = imageV2.imgTbl.innerHeight() - 1; // last little bit makes border look ok
+        
 
         // No longer disable without ruler, because shift-drag still works
         if (typeof(hgTracks) !== "undefined") {
@@ -1220,6 +1337,22 @@ var dragSelect = {
                 movable:         false,
                 clickClipHeight: heights
             }));
+
+            // remove any ongoing drag-selects when the esc key is pressed anywhere for this document
+            // This allows to abort zooming / highlighting
+            $(document).keyup(function(e){
+                if(e.keyCode === 27) {
+                    $(imageV2.imgTbl).imgAreaSelect({hide:true});
+                    dragSelect.escPressed = true;
+                }
+            });
+
+            // hide and redraw all current highlights when the browser window is resized
+            $(window).resize(function() {
+                $(imageV2.imgTbl).imgAreaSelect({hide:true});
+                imageV2.highlightRegion();
+            });
+
         }
     }
 };
@@ -1980,7 +2113,7 @@ jQuery.fn.panImages = function(){
         panAdjustHeight(prevX);
 
         pan.mousedown(function(e){
-             if (e.which > 1 || e.button > 1 || e.shiftKey)
+             if (e.which > 1 || e.button > 1 || e.shiftKey || e.metaKey || e.altKey || e.ctrlKey)
                  return true;
             if (mouseIsDown === false) {
                 if (rightClick.menu) {
@@ -2283,6 +2416,7 @@ var rightClick = {
     floatingMenuItem: null,
     currentMapItem:   null,
     supportZoomCodon: false,  // turns on experimental feature (currently only in larry's tree).
+    clickedHighlightIdx : null,  // the index (0,1,...) of the highlight item that overlaps the last right-click
 
     makeMapItem: function (id)
     {   // Create a dummy mapItem on the fly
@@ -2445,7 +2579,7 @@ var rightClick = {
                             if (result.chromStart != -1)
                                 {
                                 var newPos2 = hgTracks.chromName+":"+(result.chromStart+1)+"-"+result.chromEnd;
-                                dragSelect.highlightThisRegion(newPos2);
+                                dragSelect.highlightThisRegion(newPos2, true, dragSelect.hlColorDefault);
                                 }
 
                         } else {
@@ -2454,7 +2588,7 @@ var rightClick = {
                                 newChrom = hgTracks.windows[0].chromName;
                             }
                             var newPos3 = newChrom+":"+(parseInt(chromStart))+"-"+parseInt(chromEnd);
-                            dragSelect.highlightThisRegion(newPos3);
+                            dragSelect.highlightThisRegion(newPos3, true, dragSelect.hlColorDefault);
                         }
                     } else {
                         var newPosition = genomePos.setByCoordinates(chrom, chromStart, chromEnd);
@@ -2647,8 +2781,8 @@ var rightClick = {
                 }
             }
         } else if (cmd === 'jumpToHighlight') { // If highlight exists for this assembly, jump to it
-            if (hgTracks.highlight) {
-                var newPos = parsePositionWithDb(hgTracks.highlight);
+            if (hgTracks.highlight && rightClick.clickedHighlightIdx!==null) {
+                var newPos = parsePositionWithDb(hgTracks.highlight.split("|")[rightClick.clickedHighlightIdx]);
                 if (newPos && newPos.db === getDb()) {
                     if ( $('#highlightItem').length === 0) { // not visible? jump to it
                         var curPos = parsePosition(genomePos.get());
@@ -2668,10 +2802,15 @@ var rightClick = {
                     }
                 }
             }
+
         } else if (cmd === 'removeHighlight') {
-            hgTracks.highlight = null;
-            cart.setVarsObj({ 'highlight': '[]' });
+
+            var highlights = hgTracks.highlight.split("|");
+            highlights.splice(rightClick.clickedHighlightIdx, 1); // splice = remove element from array
+            hgTracks.highlight = highlights.join("|");
+            cart.setVarsObj({'highlight' : hgTracks.highlight});
             imageV2.highlightRegion();
+
         } else {   // if ( cmd in 'hide','dense','squish','pack','full','show' )
             // Change visibility settings:
             //
@@ -2873,6 +3012,15 @@ var rightClick = {
                             } else {
                                 displayItemFunctions = true;
                             }
+                            // For barChart mouseovers, replace title (which may be a category 
+                            // name+value) with item name
+                            if (rec.type.indexOf("barChart") === 0
+                            || rec.type.indexOf("bigBarChart") === 0) {
+                                a = /i=([^&]+)/.exec(href);
+                                if (a && a[1]) {
+                                    title = a[1];
+                                }
+                            }
                         }
                         if (isHgc && href.indexOf('g=gtexGene') !== -1) {
                             // For GTEx gene mouseovers, replace title (which may be a tissue name) with 
@@ -3028,19 +3176,20 @@ var rightClick = {
             }
 
             menu.push($.contextMenu.separator);
-            if (hgTracks.highlight) {
+            if (hgTracks.highlight && rightClick.clickedHighlightIdx!==null) {
+
                 if (hgTracks.highlight.search(getDb() + '.') === 0) {
                     var currentlySeen = ($('#highlightItem').length > 0); 
                     o = {};
                     // Jumps to highlight when not currently seen in image
-                    var text = (currentlySeen ? " Zoom" : " Jump") + " to highlighted region";
+                    var text = (currentlySeen ? " Zoom" : " Jump") + " to highlight";
                     o[rightClick.makeImgTag("highlightZoom.png") + text] = {
                         onclick: rightClick.makeHitCallback('jumpToHighlight')
                     };
 
                     if ( currentlySeen ) {   // Remove only when seen
                         o[rightClick.makeImgTag("highlightRemove.png") + 
-                                                                   " Remove highlighting"] = {
+                                                                   " Remove highlight"] = {
                             onclick: rightClick.makeHitCallback('removeHighlight')
                         };
                     }
@@ -3062,6 +3211,13 @@ var rightClick = {
             beforeShow: function(e) {
                 // console.log(mapItems[rightClick.selectedMenuItem]);
                 rightClick.selectedMenuItem = rightClick.findMapItem(e);
+                
+                // find the highlight that was clicked
+                var imageX = (imageV2.imgTbl[0].getBoundingClientRect().left) + imageV2.LEFTADD;
+                var xDiff = (e.clientX) - imageX;
+                var clickPos = genomePos.pixelsToBases(img, xDiff, xDiff+1, hgTracks.winStart, hgTracks.winEnd);
+                rightClick.clickedHighlightIdx = dragSelect.findHighlightIdxForPos(clickPos);
+
                 // XXXX? posting.blockUseMap = true;
                 return true;
             },
@@ -3303,7 +3459,7 @@ function showHotkeyHelp() {
 function addKeyboardHelpEntries() {
     var html = '<li><a id="keybShorts" title="List all possible keyboard shortcuts" href="#">Keyboard Shortcuts</a><span class="shortcut">?</span></li>';
     $('#help .last').before(html);
-    $("#keybShorts").onclick = function(){showHotKeyHelp(); return false;};
+    $("#keybShorts").click( function(){showHotkeyHelp();} );
 
     html = '<span class="shortcut">s s</span>';
     $('#sessionsMenuLink').after(html);
@@ -3364,6 +3520,21 @@ function zoomTo(zoomSize) {
     if (hgTracks.virtualSingleChrom && (newPos.search("virt:")===0))
         newPos = genomePos.disguisePosition(newPosition); // DISGUISE?
     imageV2.navigateInPlace("position="+newPos, null, true);
+}
+
+// A function for the keyboard shortcuts "highlight add/clear/new"
+function highlightCurrentPosition(mode) {
+    var pos = genomePos.get();
+    if (mode=="new")
+        dragSelect.highlightThisRegion(pos, false);
+    else if (mode=="add")
+        dragSelect.highlightThisRegion(pos, true);
+    else {
+        hgTracks.highlight = "";
+        var cartSettings = {'highlight': ""};
+        cart.setVarsObj(cartSettings);
+        imageV2.highlightRegion();
+    }
 }
 
   //////////////////////////////////
@@ -3613,6 +3784,9 @@ var imageV2 = {
     mapIsUpdateable:true,
     lastTrack:      null,   // formerly (lastMapItem) this is used to try to keep what the
                             // last track the cursor passed.
+
+    LEFTADD: 3,             // when going from pixels to chrom coords, these 3 pixels
+                            // are somehow used for "borders or cgi item calc ?" (original comment)
 
     markAsDirtyPage: function ()
     {   // Page is marked as dirty so that the back-button knows page doesn't match cart
@@ -4222,7 +4396,7 @@ var imageV2 = {
     // highlight vertical region in imgTbl based on hgTracks.highlight (#709).
     {
         var pos;
-        var hexColor = '#FFAAAA';
+        var hexColor = dragSelect.hlColorDefault;
         $('.highlightItem').remove();
         if (hgTracks.highlight) {
             var hlArray = hgTracks.highlight.split("|"); // support multiple highlight items
@@ -4241,7 +4415,7 @@ var imageV2 = {
                 &&  pos.start <= hgTracks.imgBoxPortalEnd && pos.end >= hgTracks.imgBoxPortalStart) {
                     var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart;
                     var portal = $('#imgTbl td.tdData')[0];
-                    var leftPixels = $(portal).offset().left + 3; // 3 for borders and cgi item calcs ??
+                    var leftPixels = $(portal).offset().left + imageV2.LEFTADD;
                     var pixelsPerBase = ($(portal).width() - 2) / portalWidthBases;
                     var clippedStartBases = Math.max(pos.start, hgTracks.imgBoxPortalStart);
                     var clippedEndBases = Math.min(pos.end, hgTracks.imgBoxPortalEnd);

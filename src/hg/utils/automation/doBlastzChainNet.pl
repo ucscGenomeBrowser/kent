@@ -1363,7 +1363,7 @@ All programs run after blastz were written by Jim Kent at UCSC.
 ----------------------------------------------------------------
 If you plan to download a large file or multiple files from this directory,
 we recommend you use ftp rather than downloading the files via our website.
-To do so, ftp to hgdownload.cse.ucsc.edu, then go to the directory
+To do so, ftp to hgdownload.soe.ucsc.edu, then go to the directory
 goldenPath/$tDb/vs$QDb/. To download multiple files, use the \"mget\"
 command:
 

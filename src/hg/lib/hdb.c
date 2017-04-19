@@ -3488,6 +3488,7 @@ struct hTableInfo *hti = hFindTableInfoWithConn(conn, chrom, rootTable);
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(1024);
 char *table = NULL;
+char fullTable[HDB_MAX_TABLE_STRING];
 int rowOffset = 0;
 
 if (fields == NULL) fields = "*";
@@ -3502,7 +3503,6 @@ else
     sqlDyStringPrintf(query, "select %-s from ", fields);
     if (hti->isSplit)
 	{
-	char fullTable[HDB_MAX_TABLE_STRING];
 	safef(fullTable, sizeof(fullTable), "%s_%s", chrom, rootTable);
 	if (!hTableExists(db, fullTable))
 	     warn("%s doesn't exist", fullTable);
@@ -3514,7 +3514,7 @@ else
 	}
     else
         {
-	table = rootTable;
+	table = hti->rootName;
 	sqlDyStringPrintf(query, "%s where %s='%s' and ",
 	    table, hti->chromField, chrom);
 	}
@@ -3606,7 +3606,7 @@ else
 	if (!sameString(fields,"*"))
 	    sqlCkIl(fields);
         sqlDyStringPrintf(query, "select %-s from %s where %s='%s'",
-		fields, rootTable, hti->chromField, chrom);
+		fields, hti->rootName, hti->chromField, chrom);
 	if (extraWhere != NULL)
 	    dyStringPrintf(query, " and (%s)", extraWhere);
 	}

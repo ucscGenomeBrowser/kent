@@ -333,19 +333,24 @@ puts("<!--hTableEnd-->");
 }
 
 static boolean stackDumpDisabled = FALSE;  // prevent accidental recursion or undesired dumps
+static boolean hDumpAbortCalled = FALSE;
 
 static void hDumpStackAbortHandler()
 /* abort handle that prints stack dump then invokes the previous abort
  * handler on the stack. */
 {
-if (!stackDumpDisabled)
+if (stackDumpDisabled)
     {
-    stackDumpDisabled = TRUE;
-    popAbortHandler(); // remove us from the stack
-    dumpStack("\nStack dump:");
-    // continue with next abort handler
-    noWarnAbort();
+    stackDumpDisabled = FALSE;
     }
+else
+    {
+    dumpStack("\nStack dump:");
+    }
+hDumpAbortCalled = TRUE;
+popAbortHandler(); // remove us from the stack 
+// continue with next abort handler
+noWarnAbort();
 }
 
 boolean hDumpStackEnabled(void)
@@ -374,8 +379,9 @@ if (hDumpStackEnabled())
 void hDumpStackPopAbortHandler()
 /* pop the stack dump abort handler from the stack if it's enabled */
 {
-if (hDumpStackEnabled() && !stackDumpDisabled)
+if (hDumpStackEnabled() && !hDumpAbortCalled)
     popAbortHandler();
+hDumpAbortCalled = FALSE;
 }
 
 void hVaUserAbort(char *format, va_list args)
