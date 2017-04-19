@@ -33,10 +33,13 @@ load: clean
 	 ${hgLoadPsl} -noHistory test -table=$${TEST}Bad  input/$${TEST}Bad.psl -verbose=0 ; \
 	done
 
-mkdirs:
+# If mkdirs is done in parallel with load, load's clean dependency can race with mkdirs,
+# so ensure that mkdirs happens after load:
+mkdirs: load
 	mkdir -p output
 
-run: load mkdirs ${TESTS}
+run: mkdirs
+	${MAKE} ${TESTS}
 
 ${TESTS}:
 	${CTC} test ${@}Good
