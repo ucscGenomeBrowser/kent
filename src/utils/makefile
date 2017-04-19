@@ -64,7 +64,6 @@ UTILS_APPLIST = \
 	faToTwoBit \
 	faTrans \
 	findMotif \
-	gitTools \
 	headRest \
 	htmlCheck \
 	newProg \
@@ -124,6 +123,7 @@ UCSC_APPS = \
 	faTrimRead \
 	fixCr \
 	gapSplit \
+	gitTools \
 	gffPeek \
 	git-reports \
 	htmlPics \
