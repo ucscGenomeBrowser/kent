@@ -1344,7 +1344,7 @@ function gtexTransformChanged(name)
     var isLogChecked = logCheckbox.attr('checked');
 
     // enable/disable view limits
-    var maxTextbox = $("input[name='" + name + ".maxLimit']");
+    var maxTextbox = $("input[name='" + name + ".maxViewLimit']");
     maxTextbox.attr('disabled', isLogChecked);
     var maxTextLabel = $("." + name + "ViewLimitsMaxLabel");
     maxTextLabel.toggleClass("disabled", isLogChecked ? true : false);

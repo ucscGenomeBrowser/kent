@@ -234,12 +234,13 @@ struct barChartTrack *extras;
 AllocVar(extras);
 tg->extraUiData = extras;
 
-extras->doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, BAR_CHART_LOG_TRANSFORM, 
+struct trackDb *tdb = tg->tdb;
+extras->doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_LOG_TRANSFORM, 
                                                 BAR_CHART_LOG_TRANSFORM_DEFAULT);
-extras->maxMedian = barChartUiMaxMedianScore();
-extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, BAR_CHART_NO_WHITEOUT,
+extras->maxMedian = barChartUiMaxMedianScore(tdb);
+extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_NO_WHITEOUT,
                                                         BAR_CHART_NO_WHITEOUT_DEFAULT);
-extras->unit = trackDbSettingClosestToHomeOrDefault(tg->tdb, BAR_CHART_UNIT, "");
+extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 
 /* Get bed (names and all-sample category median scores) in range */
 loadSimpleBedWithLoader(tg, (bedItemLoader)barChartSimpleBedLoad);
@@ -396,7 +397,7 @@ for (i=0; i<expCount; i++)
     maxExp = max(maxExp, expScore);
     }
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
-                                BAR_CHART_MAX_LIMIT, BAR_CHART_MAX_LIMIT_DEFAULT);
+                                BAR_CHART_MAX_VIEW_LIMIT, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
 double maxMedian = ((struct barChartTrack *)tg->extraUiData)->maxMedian;
 return valToClippedHeight(maxExp, maxMedian, viewMax, barChartMaxHeight(), extras->doLogTransform);
 }
@@ -493,7 +494,7 @@ Color clipColor = MG_MAGENTA;
 
 // draw bar graph
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
-                                BAR_CHART_MAX_LIMIT, BAR_CHART_MAX_LIMIT_DEFAULT);
+                                BAR_CHART_MAX_VIEW_LIMIT, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
 double maxMedian = ((struct barChartTrack *)tg->extraUiData)->maxMedian;
 int i;
 int expCount = bed->expCount;
@@ -665,7 +666,7 @@ if (graphX < 0)
 x1 = insideX + graphX;
 
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
-                                BAR_CHART_MAX_LIMIT, BAR_CHART_MAX_LIMIT_DEFAULT);
+                                BAR_CHART_MAX_VIEW_LIMIT, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
 int i = 0;
 for (categ = categs; categ != NULL; categ = categ->next, i++)
     {

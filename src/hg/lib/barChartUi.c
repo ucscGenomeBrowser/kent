@@ -125,10 +125,17 @@ cgiMakeCheckBoxWithId(cartVar, isLogTransform, cartVar);
 jsOnEventByIdF("change", cartVar, "barChartUiTransformChanged('%s');", track);
 }
 
-double barChartUiMaxMedianScore()
+double barChartUiMaxMedianScore(struct trackDb *tdb)
 /* Max median score, for scaling */
 {
-return 10000;
+char *setting = trackDbSettingClosestToHome(tdb, BAR_CHART_MAX_LIMIT);
+if (setting != NULL)
+    {
+    double max = sqlDouble(setting);
+    if (max > 0.0)
+        return max;
+    }
+return BAR_CHART_MAX_LIMIT_DEFAULT;
 }
 
 void barChartUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
@@ -141,11 +148,12 @@ safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSFORM_DEFAULT);
 safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
 printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
-safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_MAX_LIMIT);
-int viewMax = cartCgiUsualInt(cart, cartVar, BAR_CHART_MAX_LIMIT_DEFAULT);
+safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_MAX_VIEW_LIMIT);
+int viewMax = cartCgiUsualInt(cart, cartVar, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
 cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
 char *unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
-printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit, round(barChartUiMaxMedianScore()));
+printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit, 
+                                round(barChartUiMaxMedianScore(tdb)));
 }
 
 char *barChartUiGetLabel(char *database, struct trackDb *tdb)
