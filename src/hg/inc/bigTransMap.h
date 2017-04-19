@@ -43,8 +43,8 @@ struct bigTransMap
     char *srcChrom;	/* source chromosome */
     unsigned srcChromStart;	/* start position in source chromosome */
     unsigned srcChromEnd;	/* end position in source chromosome */
-    unsigned srcScore;	/* source source (faction identity * 1000) */
-    unsigned srcAligned;	/* fraction of source aligned (faction identity * 1000) */
+    unsigned srcIdent;	/* source score (fraction identity * 1000) */
+    unsigned srcAligned;	/* fraction of source transcript aligned (fraction aligned * 1000) */
     char *geneName;	/* gene name */
     char *geneId;	/* gene id */
     char *geneType;	/* gene type */

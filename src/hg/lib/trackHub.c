@@ -769,7 +769,6 @@ if (tdb->subtracks != NULL)
 else
     {
     /* Check type field. */
-    // KRR FIX: table lookup
     char *type = requiredSetting(hub, genome, tdb, "type");
     if (!(startsWithWord("bigWig", type) ||
           startsWithWord("bigBed", type) ||

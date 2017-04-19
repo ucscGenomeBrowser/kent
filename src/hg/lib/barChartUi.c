@@ -15,7 +15,6 @@
 #include "barChartUi.h"
 
 /* Restrict features on right-click (popup) version */
-/* FIXME: NOT STATIC */
 static boolean isPopup = FALSE;
 
 /* Convenience functions for category filter controls */
@@ -41,7 +40,6 @@ struct categorySelect
 
 static void makeGroupCheckboxes(char *name, char *title, struct categorySelect *selects)
 {
-//TODO: select this based on #categories
 #define TABLE_COLUMNS 1
 if (title != NULL)
     printf("<tr><td colspan=10><i><b>%s</b></i></td></tr><tr>\n", title);
@@ -82,7 +80,6 @@ printf("</tr><tr><td></td></tr>\n");
 static void makeCategoryCheckboxes(char *name, struct barChartCategory *categs, 
                                         struct slName *checked)
 {
-// TODO: use style sheet!
 puts("<style>\n");
 puts(".bcColorPatch { padding: 0 10px; }\n");
 puts("</style>\n");
@@ -128,11 +125,17 @@ cgiMakeCheckBoxWithId(cartVar, isLogTransform, cartVar);
 jsOnEventByIdF("change", cartVar, "barChartUiTransformChanged('%s');", track);
 }
 
-double barChartUiMaxMedianScore()
+double barChartUiMaxMedianScore(struct trackDb *tdb)
 /* Max median score, for scaling */
 {
-//TODO: get from trackDb
-return 10000;
+char *setting = trackDbSettingClosestToHome(tdb, BAR_CHART_MAX_LIMIT);
+if (setting != NULL)
+    {
+    double max = sqlDouble(setting);
+    if (max > 0.0)
+        return max;
+    }
+return BAR_CHART_MAX_LIMIT_DEFAULT;
 }
 
 void barChartUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
@@ -145,11 +148,12 @@ safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSFORM_DEFAULT);
 safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
 printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
-safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_MAX_LIMIT);
-int viewMax = cartCgiUsualInt(cart, cartVar, BAR_CHART_MAX_LIMIT_DEFAULT);
+safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_MAX_VIEW_LIMIT);
+int viewMax = cartCgiUsualInt(cart, cartVar, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
 cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
 char *unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
-printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit, round(barChartUiMaxMedianScore()));
+printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit, 
+                                round(barChartUiMaxMedianScore(tdb)));
 }
 
 char *barChartUiGetLabel(char *database, struct trackDb *tdb)
@@ -163,7 +167,7 @@ struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb 
 /* Get category colors and descriptions.  Use barChartColors setting if present.
    If not, if there is a barChartBars setting, assign rainbow colors.
  * O/w look for a table naed track+Category, and use labels and colors there 
- * TODO: Consider removing table code */
+ */
 {
 struct barChartCategory *categs = NULL;
 char *words[BAR_CHART_MAX_CATEGORIES];
@@ -231,7 +235,6 @@ struct barChartCategory *barChartUiGetCategoryById(int id, char *database,
 {
 struct barChartCategory *categ;
 struct barChartCategory *categs = barChartUiGetCategories(database, tdb);
-// TODO: consider making this more efficient
 for (categ = categs; categ != NULL; categ = categ->next)
     if (categ->id == id)
         return categ;
@@ -251,13 +254,9 @@ void barChartCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char 
                         char *title, boolean boxed)
 /* Bar chart track type */
 {
-
-jsIncludeFile("barChart.js", NULL);
-// FIXME: isPopup can't be global
 if (cartVarExists(cart, "ajax"))
     isPopup = TRUE;
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
-// KRR FIX: another candidate for table lookup ?
 if (startsWith("big", tdb->type))
     labelCfgUi(database, cart, tdb);
 printf("\n<table id=barChartControls style='font-size:%d%%' %s>\n<tr><td>", 
@@ -275,19 +274,6 @@ barChartUiLogTransform(cart, track, tdb);
 puts("&nbsp;&nbsp;");
 barChartUiViewLimits(cart, track, tdb);
 puts("</div>");
-
-/* Color scheme */
-#ifdef COLOR_SCHEME
-printf("<p><b>Category colors:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_COLORS);
-selected = cartCgiUsualString(cart, cartVar, BAR_CHART_COLORS_DEFAULT); 
-boolean isUserColors = sameString(selected, BAR_CHART_COLORS_USER);
-cgiMakeRadioButton(cartVar, BAR_CHART_COLORS_USER, isUserColors);
-printf("Defined\n");
-cgiMakeRadioButton(cartVar, BAR_CHART_COLORS_RAINBOW, !isUserColors);
-printf("Rainbow\n");
-printf("</p>");
-#endif
 
 /* Category filter */
 printf("<br>");

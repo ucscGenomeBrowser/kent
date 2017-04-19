@@ -10,7 +10,7 @@
 
 
 
-char *bigTransMapCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,reserved,blockCount,blockSizes,chromStarts,oChromStart,oChromEnd,oStrand,oChromSize,oChromStarts,oSequence,oCDS,chromSize,match,misMatch,repMatch,nCount,seqType,srcDb,srcTransId,srcChrom,srcChromStart,srcChromEnd,srcScore,srcAligned,geneName,geneId,geneType,transcriptType,chainType,commonName,scientificName,orgAbbrev";
+char *bigTransMapCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,reserved,blockCount,blockSizes,chromStarts,oChromStart,oChromEnd,oStrand,oChromSize,oChromStarts,oSequence,oCDS,chromSize,match,misMatch,repMatch,nCount,seqType,srcDb,srcTransId,srcChrom,srcChromStart,srcChromEnd,srcIdent,srcAligned,geneName,geneId,geneType,transcriptType,chainType,commonName,scientificName,orgAbbrev";
 
 struct bigTransMap *bigTransMapLoad(char **row)
 /* Load a bigTransMap from row fetched with select * from bigTransMap
@@ -61,7 +61,7 @@ ret->srcTransId = cloneString(row[26]);
 ret->srcChrom = cloneString(row[27]);
 ret->srcChromStart = sqlUnsigned(row[28]);
 ret->srcChromEnd = sqlUnsigned(row[29]);
-ret->srcScore = sqlUnsigned(row[30]);
+ret->srcIdent = sqlUnsigned(row[30]);
 ret->srcAligned = sqlUnsigned(row[31]);
 ret->geneName = cloneString(row[32]);
 ret->geneId = cloneString(row[33]);
@@ -179,7 +179,7 @@ ret->srcTransId = sqlStringComma(&s);
 ret->srcChrom = sqlStringComma(&s);
 ret->srcChromStart = sqlUnsignedComma(&s);
 ret->srcChromEnd = sqlUnsignedComma(&s);
-ret->srcScore = sqlUnsignedComma(&s);
+ret->srcIdent = sqlUnsignedComma(&s);
 ret->srcAligned = sqlUnsignedComma(&s);
 ret->geneName = sqlStringComma(&s);
 ret->geneId = sqlStringComma(&s);
@@ -342,7 +342,7 @@ fprintf(f, "%u", el->srcChromStart);
 fputc(sep,f);
 fprintf(f, "%u", el->srcChromEnd);
 fputc(sep,f);
-fprintf(f, "%u", el->srcScore);
+fprintf(f, "%u", el->srcIdent);
 fputc(sep,f);
 fprintf(f, "%u", el->srcAligned);
 fputc(sep,f);

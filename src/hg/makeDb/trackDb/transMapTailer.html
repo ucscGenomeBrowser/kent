@@ -69,6 +69,34 @@ that multiple TransMap mappings are usually the result of tandem duplications, w
 chains are identified as syntenic.
 </P>
 
+<h2>Data Access</h2>
+
+<p>
+The raw data for these tracks can be accessed interactively through the
+<a href="hgTables">Table Browser</a> or the
+<a href="hgIntegrator">Data Integrator</a>.
+For automated analysis, the annotations are stored in
+<a href="../goldenPath/help/bigPsl.html">bigPsl</a> files (containing a
+number of extra columns) and can be downloaded from our
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/transMap/V4/">download server</a>.
+The files are associated with these tracks in the following way:
+<ul>
+<li>TransMap Ensembl - <tt>$db.ensembl.transMapV4.bigPsl</tt></li>
+<li>TransMap RefGene - <tt>$db.refseq.transMapV4.bigPsl</tt></li>
+<li>TransMap RNA - <tt>$db.rna.transMapV4.bigPsl</tt></li>
+<li>TransMap ESTs - <tt>$db.est.transMapV4.bigPsl</tt></li>
+</ul>
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt> which can be compiled from the source code or downloaded as
+a precompiled binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain only features within a given range, for example:
+<p><tt>
+bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/transMap/V4/$db.refseq.transMapV4.bigPsl
+-chrom=chr6 -start=0 -end=1000000 stdout
+</tt>
+
 <H2>Credits</H2>
 
 <P>

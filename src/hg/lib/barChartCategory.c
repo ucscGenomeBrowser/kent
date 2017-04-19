@@ -175,7 +175,6 @@ fputc(lastSep,f);
 struct barChartCategory *barChartGetCategories(char *database, char *track)
 /* Get id, labels, colors, etc. */
 {
-// TODO: Get from config file
 char query[1024];
 struct sqlConnection *conn = hAllocConn(database);
 sqlSafef(query, sizeof(query), "select * from %sCategory order by id", track);
