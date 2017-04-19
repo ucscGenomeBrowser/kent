@@ -5,11 +5,11 @@ visibility pack
 colorByStrand 150,100,30 230,170,40
 color 150,100,30
 altColor 230,170,40
-bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.assembly.bb
+bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.assembly.bb
 type bigBed 6
-html html/GCA_001624775.1_PWK_PhJ_v1.assembly
+html html/GCA_001624865.1_SPRET_EiJ_v1.assembly
 searchIndex name
-searchTrix ixIxx/GCA_001624775.1_PWK_PhJ_v1.assembly.ix
+searchTrix ixIxx/GCA_001624865.1_SPRET_EiJ_v1.assembly.ix
 url http://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel NCBI Nucleotide database
 group map
@@ -19,10 +19,10 @@ longLabel AGP gap
 shortLabel Gap (AGP defined)
 visibility dense
 color 0,0,0
-bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.gap.bb
+bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.gap.bb
 type bigBed 4
 group map
-html html/GCA_001624775.1_PWK_PhJ_v1.gap
+html html/GCA_001624865.1_SPRET_EiJ_v1.gap
 
 track gc5Base
 shortLabel GC Percent
@@ -38,8 +38,8 @@ color 0,0,0
 altColor 128,128,128
 viewLimits 30:70
 type bigWig 0 100
-bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.gc5Base.bw
-html html/GCA_001624775.1_PWK_PhJ_v1.gc5Base
+bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.gc5Base.bw
+html html/GCA_001624865.1_SPRET_EiJ_v1.gc5Base
 
 track repeatMasker
 compositeTrack on
@@ -49,7 +49,7 @@ group varRep
 visibility dense
 type bed 3 .
 noInherit on
-html html/GCA_001624775.1_PWK_PhJ_v1.repeatMasker
+html html/GCA_001624865.1_SPRET_EiJ_v1.repeatMasker
 
     track repeatMaskerSINE
     parent repeatMasker
@@ -60,7 +60,7 @@ html html/GCA_001624775.1_PWK_PhJ_v1.repeatMasker
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.rmsk.SINE.bb
+    bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.rmsk.SINE.bb
 
     track repeatMaskerLINE
     parent repeatMasker
@@ -71,7 +71,7 @@ html html/GCA_001624775.1_PWK_PhJ_v1.repeatMasker
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.rmsk.LINE.bb
+    bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.rmsk.LINE.bb
 
     track repeatMaskerLTR
     parent repeatMasker
@@ -82,7 +82,7 @@ html html/GCA_001624775.1_PWK_PhJ_v1.repeatMasker
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.rmsk.LTR.bb
+    bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.rmsk.LTR.bb
 
     track repeatMaskerDNA
     parent repeatMasker
@@ -93,7 +93,7 @@ html html/GCA_001624775.1_PWK_PhJ_v1.repeatMasker
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.rmsk.DNA.bb
+    bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.rmsk.DNA.bb
 
     track repeatMaskerSimple
     parent repeatMasker
@@ -104,7 +104,7 @@ html html/GCA_001624775.1_PWK_PhJ_v1.repeatMasker
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.rmsk.Simple.bb
+    bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.rmsk.Simple.bb
 
     track repeatMaskerLowComplexity
     parent repeatMasker
@@ -115,7 +115,7 @@ html html/GCA_001624775.1_PWK_PhJ_v1.repeatMasker
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.rmsk.Low_complexity.bb
+    bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.rmsk.Low_complexity.bb
 
     track repeatMaskerSatellite
     parent repeatMasker
@@ -126,7 +126,7 @@ html html/GCA_001624775.1_PWK_PhJ_v1.repeatMasker
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.rmsk.Satellite.bb
+    bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.rmsk.Satellite.bb
 
     track repeatMaskerRNA
     parent repeatMasker
@@ -137,7 +137,7 @@ html html/GCA_001624775.1_PWK_PhJ_v1.repeatMasker
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.rmsk.RNA.bb
+    bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.rmsk.RNA.bb
 
     track repeatMaskerOther
     parent repeatMasker
@@ -148,7 +148,7 @@ html html/GCA_001624775.1_PWK_PhJ_v1.repeatMasker
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.rmsk.Other.bb
+    bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.rmsk.Other.bb
 
 track simpleRepeat
 shortLabel Simple Repeats
@@ -156,8 +156,8 @@ longLabel Simple Tandem Repeats by TRF
 group varRep
 visibility dense
 type bigBed 4 +
-bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.simpleRepeat.bb
-html html/GCA_001624775.1_PWK_PhJ_v1.simpleRepeat
+bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.simpleRepeat.bb
+html html/GCA_001624865.1_SPRET_EiJ_v1.simpleRepeat
 
 track cpgIslands
 compositeTrack on
@@ -167,7 +167,7 @@ group regulation
 visibility pack
 type bed 3 .
 noInherit on
-html html/GCA_001624775.1_PWK_PhJ_v1.cpgIslands
+html html/GCA_001624865.1_SPRET_EiJ_v1.cpgIslands
 
     track cpgIslandExt
     parent cpgIslands
@@ -175,7 +175,7 @@ html html/GCA_001624775.1_PWK_PhJ_v1.cpgIslands
     longLabel CpG Islands (Islands < 300 Bases are Light Green)
     priority 1
     type bigBed 4 +
-    bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.cpgIslandExt.bb
+    bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.cpgIslandExt.bb
 
     track cpgIslandExtUnmasked
     parent cpgIslands
@@ -183,7 +183,7 @@ html html/GCA_001624775.1_PWK_PhJ_v1.cpgIslands
     longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
     priority 2
     type bigBed 4 +
-    bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.cpgIslandExtUnmasked.bb
+    bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.cpgIslandExtUnmasked.bb
 
 track windowMasker
 shortLabel WM + SDust
@@ -191,8 +191,8 @@ longLabel Genomic Intervals Masked by WindowMasker + SDust
 group varRep
 visibility dense
 type bigBed 3
-bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.windowMasker.bb
-html html/GCA_001624775.1_PWK_PhJ_v1.windowMasker
+bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.windowMasker.bb
+html html/GCA_001624865.1_SPRET_EiJ_v1.windowMasker
 
 track allGaps
 shortLabel All Gaps
@@ -200,18 +200,8 @@ longLabel All gaps of unknown nucleotides (N's), including AGP annotated gaps
 group map
 visibility dense
 type bigBed 3
-bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.allGaps.bb
-html html/GCA_001624775.1_PWK_PhJ_v1.allGaps
-
-track augustus
-shortLabel Augustus
-longLabel Augustus Gene Predictions
-group genes
-visibility dense
-color 180,0,0
-type bigGenePred
-bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.augustus.bb
-html html/GCA_001624775.1_PWK_PhJ_v1.augustus
+bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.allGaps.bb
+html html/GCA_001624865.1_SPRET_EiJ_v1.allGaps
 
 track gapOverlap
 shortLabel Gap Overlaps
@@ -219,8 +209,8 @@ longLabel Exactly identical sequence on each side of a gap
 group map
 visibility hide
 type bigBed 12 .
-bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.gapOverlap.bb
-html html/GCA_001624775.1_PWK_PhJ_v1.gapOverlap
+bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.gapOverlap.bb
+html html/GCA_001624865.1_SPRET_EiJ_v1.gapOverlap
 
 track ensGene
 shortLabel Ensembl genes
@@ -230,10 +220,10 @@ priority 40
 visibility pack
 color 150,0,0
 type bigBed 12 .
-bigDataUrl bbi/GCA_001624775.1_PWK_PhJ_v1.ensGene.bb
+bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.ensGene.bb
 searchIndex name
-searchTrix ixIxx/GCA_001624775.1_PWK_PhJ_v1.ensGene.name.ix
-html html/GCA_001624775.1_PWK_PhJ_v1.ensGene
+searchTrix ixIxx/GCA_001624865.1_SPRET_EiJ_v1.ensGene.name.ix
+html html/GCA_001624865.1_SPRET_EiJ_v1.ensGene
 
-include rnaSeqData/GCA_001624775.1_PWK_PhJ_v1.trackDb.txt
-include GCA_001624775.1_PWK_PhJ_v1.bigMaf.trackDb.txt
+include rnaSeqData/GCA_001624865.1_SPRET_EiJ_v1.trackDb.txt
+
