@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "common.h"
 #include "obscure.h"
+#include "portable.h"
 #include "gitSha1.h"
 
 void manual_way(char *filename, unsigned char hash[20])
@@ -101,18 +102,20 @@ int main(int argc, char** argv)
 	errAbort("must specfy file to use for sha1 has on commandline.");
     char* filename = argv[1];
 
-    unsigned char hash[20];
-    manual_way(filename, hash);   
+    printf("Library filename way:\n");
+    long thisTime = 0, lastTime = 0;
+    lastTime = clock1();
+    char *hex = sha1HexForFile(filename);
+    thisTime = clock1();
+    printf("%s  %s elapsed time in seconds: %ld\n\n", hex, filename, (thisTime - lastTime));
 
     printf("Manual filename way:\n");
+    unsigned char hash[20];
+    manual_way(filename, hash);   
     int i;
     for (i=0; i<sizeof(hash); i++)
         printf("%02x",*(hash+i));
     printf("  %s\n\n", filename);
-
-    printf("Library filename way:\n");
-    char *hex = sha1HexForFile(filename);
-    printf("%s  %s\n\n", hex, filename);
 
     printf("Library string way:\n");
     hex = string_way(filename);
