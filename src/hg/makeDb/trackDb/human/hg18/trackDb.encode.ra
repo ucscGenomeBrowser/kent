@@ -4,3 +4,11 @@ include trackDb.encodeChip.ra
 include trackDb.encodeChrom.ra
 include trackDb.encodeCompAndVar.ra
 
+track encodeUcsdChipSuper override
+priority 2
+
+track encodeStanfordChipSuper override
+priority 4
+
+track encodeUtexChipSuper override
+priority 7
