@@ -1,3 +1,6 @@
+/* Copyright (C) 2017 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* tagToSql - convert tagStorm to a SQL table.  See src/tagStorm/tagStormToTab/tagStormToTab.c
  * for how to use this. */
 
@@ -6,6 +9,7 @@
 #include "dystring.h"
 #include "sqlNum.h"
 #include "obscure.h"
+#include "sqlReserved.h"
 #include "tagStorm.h"
 #include "tagToSql.h"
 
@@ -162,6 +166,9 @@ struct slName *fieldList = tagStormFieldList(tagStorm);
 ensureNamesCaseUnique(fieldList);
 slFreeList(&fieldList);
 
+/* Keep track of SQL reserved words */
+struct hash *reservedHash = sqlReservedHash();
+
 /* Construct create table statement using minimal types */
 dyStringPrintf(createString, "CREATE TABLE %s (", tableName);
 char *connector = "";
@@ -174,6 +181,8 @@ for (tti = ttiList; tti != NULL; tti = tti->next)
     char sqlTypeBuf[256];
     if (!isSymbolString(tti->name))
         errAbort("Error - database needs work. Somehow symbol %s got in field list\n", tti->name);
+    if (sqlReservedCheck(reservedHash, tti->name))
+        errAbort("Error - field '%s' is a SQL reserved word", tti->name);
     if (tti->isUnsigned)
 	{
 	long long maxTinyUnsigned = (1<<8)-1;    // Fits in one byte
@@ -294,8 +303,11 @@ for (i=0; i<keyFieldCount; ++i)
 	}
     }
 
-/* Close up and return result */
+/* Close up */
 dyStringPrintf(createString, ")");
+
+/* Clean up */
+hashFree(&reservedHash);
 }
 
 void tagStanzaToSqlInsert(struct tagStanza *stanza, char *table, struct dyString *dy)

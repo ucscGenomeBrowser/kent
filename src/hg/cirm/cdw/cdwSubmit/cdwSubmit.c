@@ -734,10 +734,6 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
 	{
 	cdwValidateTagName(pair->name);
-	if (justTest)	// ugly - will do this outside of test soon
-	    {
-	    cdwValidateTagVal(pair->name, pair->val);
-	    }
 	}
     rCheckTagValid(tagStorm, stanza->children);
     }
