@@ -519,11 +519,10 @@ searchPriority 8
     cd /hive/data/genomes/criGriChoV1/bed/idKeys
 
     time (doIdKeys.pl -buildDir=`pwd`  criGriChoV1) > do.log 2>&1 &
-XXX - running - Thu Apr 13 10:26:22 PDT 2017
-    # real    12m20.939s
+    # real    45m2.374s
 
     cat criGriChoV1.keySignature.txt
-    #   8ae219619932349bebc17364408bf9d0
+    #   832a66e945d9edd075787c256aedfae0
 
 ##########################################################################
 # cpgIslands - (DONE - 2017-04-13 - Hiram)
@@ -531,11 +530,10 @@ XXX - running - Thu Apr 13 10:26:22 PDT 2017
     cd /hive/data/genomes/criGriChoV1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku criGriChoV1) > do.log 2>&1 &
-XXX - running - Thu Apr 13 10:26:22 PDT 2017
-    # real    3m28.088s
+    # real    10m43.281s
 
     cat fb.criGriChoV1.cpgIslandExt.txt
-    # 4735284 bases of 1369865365 (0.346%) in intersection
+    # 4837862 bases of 2318132242 (0.209%) in intersection
 
 ##############################################################################
 # genscan - (DONE - 2017-04-13 - Hiram)
@@ -543,15 +541,13 @@ XXX - running - Thu Apr 13 10:26:22 PDT 2017
     cd /hive/data/genomes/criGriChoV1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku criGriChoV1) > do.log 2>&1 &
-XXX - running - Thu Apr 13 10:26:22 PDT 2017
-    # real    105m32.304s
+    # real    65m50.006s
 
     cat fb.criGriChoV1.genscan.txt
-    # 49227165 bases of 1369865365 (3.594%) in intersection
+    # 31211644 bases of 2318132242 (1.346%) in intersection
 
     cat fb.criGriChoV1.genscanSubopt.txt
-    # 37665356 bases of 1369865365 (2.750%) in intersection
-
+    # 37035688 bases of 2318132242 (1.598%) in intersection
 
 #############################################################################
 # augustus gene track (DONE - 2017-04-13 - Hiram)
@@ -560,64 +556,74 @@ XXX - running - Thu Apr 13 10:26:22 PDT 2017
     cd /hive/data/genomes/criGriChoV1/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
     -species=human -dbHost=hgwdev -workhorse=hgwdev criGriChoV1) > do.log 2>&1 &
-XXX - running - Thu Apr 13 10:26:22 PDT 2017
-    # real    79m25.311s
+    # real    72m23.671s
 
     cat fb.criGriChoV1.augustusGene.txt
-    # 38938672 bases of 1369865365 (2.843%) in intersection
+    # 29811614 bases of 2318132242 (1.286%) in intersection
 
+#########################################################################
+# LIFTOVER TO criGri1 (DONE - 2017-04-13 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/criGriChoV1/bed/blat.criGri1.2017-04-13
+    cd /hive/data/genomes/criGriChoV1/bed/blat.criGri1.2017-04-13
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/criGriChoV1/jkStuff/criGriChoV1.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         criGriChoV1 criGri1) > do.log 2>&1 &
+    # real    1589m33.139s
+
+    # verify the convert link on the test browser is now active
+    # from criGriChoV1 to criGri1
 
 #############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2017-03-30 - Hiram)
-    # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzCriGriChoV1.2017-03-29
+# lastz/chain/net swap human/hg38 (DONE - 2017-04-13 - Hiram)
 
+    # original alignment
     cat fb.hg38.chainCriGriChoV1Link.txt
-    # 117720401 bases of 3049335806 (3.861%) in intersection
+    # 973293331 bases of 3049335806 (31.918%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/criGriChoV1/bed/blastz.hg38.swap
     cd /hive/data/genomes/criGriChoV1/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzCriGriChoV1.2017-03-29/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
+      /hive/data/genomes/hg38/bed/lastzCriGriChoV1.2017-04-13/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    61m0.707s
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    91m19.847s
 
     cat fb.criGriChoV1.chainHg38Link.txt
-    # 108900066 bases of 1369865365 (7.950%) in intersection
+    # 935724011 bases of 2318132242 (40.365%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` criGriChoV1 hg38) \
-       > rbest.log 2>&1
-    # real    749m24.229s
+       > rbest.log 2>&1 &
+    # real    436m55.979s
 
 #############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2017-03-30 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2017-04-13 - Hiram)
 
-    cd /hive/data/genomes/mm10/bed/lastzCriGriChoV1.2017-03-29
+    # original alignment
     cat fb.mm10.chainCriGriChoV1Link.txt
-    #	87053836 bases of 2652783500 (3.282%) in intersection
+    #	1553371182 bases of 2652783500 (58.556%) in intersection
 
-    #	and for the swap
     mkdir /hive/data/genomes/criGriChoV1/bed/blastz.mm10.swap
     cd /hive/data/genomes/criGriChoV1/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzCriGriChoV1.2017-03-29/DEF \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-        -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
-	> swap.log 2>&1 &
-    #	real    53m19.485s
+	/hive/data/genomes/mm10/bed/lastzCriGriChoV1.2017-04-13/DEF \
+	-noDbNameCheck -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    157m21.977s
 
-    cat  fb.criGriChoV1.chainMm10Link.txt
-    #	90150612 bases of 1369865365 (6.581%) in intersection
+    cat fb.criGriChoV1.chainMm10Link.txt
+    #	1513594461 bases of 2318132242 (65.294%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` criGriChoV1 mm10) \
-         > rbest.log 2>&1 &
-    #	real    597m52.740s
+    time (doRecipBest.pl -workhorse=hgwdev criGriChoV1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    769m8.998s
 
-#############################################################################
+##############################################################################
 # Create kluster run files (DONE - 2017-04-13 - Hiram)
 
     # numerator is criGriChoV1 gapless bases "real" as reported by:
@@ -659,35 +665,7 @@ XXX - running - Thu Apr 13 10:26:22 PDT 2017
     #    -bedFile=jkStuff/nonBridged.bed
 
 #########################################################################
-# LIFTOVER TO xenTro7 (TBD - 2017-03-28 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/criGriChoV1/bed/blat.xenTro7.2017-03-27
-    cd /hive/data/genomes/criGriChoV1/bed/blat.xenTro7.2017-03-27
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/criGriChoV1/jkStuff/criGriChoV1.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         criGriChoV1 xenTro7) > do.log 2>&1
-    # real    407m17.792s
-
-    # verify the convert link on the test browser is now active from criGriChoV1 to
-    # xenTro7
-
-#########################################################################
-# LIFTOVER TO xenTro3 (TBD - 2017-03-28 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/criGriChoV1/bed/blat.xenTro3.2017-03-28
-    cd /hive/data/genomes/criGriChoV1/bed/blat.xenTro3.2017-03-28
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/criGriChoV1/jkStuff/criGriChoV1.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         criGriChoV1 xenTro3) > do.log 2>&1
-    # real    422m44.841s
-
-    # verify the convert link on the test browser is now active from criGriChoV1 to
-    # xenTro3
-
-########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-03-28 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-04-13 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -726,12 +704,11 @@ criGriChoV1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.ps
 
     time ./bin/gbAlignStep -initial criGriChoV1
     # logFile: var/build/logs/2017.04.13-10:50:30.criGriChoV1.initalign.log
-XXX - running - Thu Apr 13 10:50:42 PDT 2017
-    #   real    424m59.280s
+    #   real    1744m57.359s
 
     tail -2 var/build/logs/2017.04.13-10:50:30.criGriChoV1.initalign.log
-    #	hgwdev 2017.03.28-17:22:09 criGriChoV1.initalign: Succeeded: criGriChoV1
-    #   hgwdev 2017.03.28-17:24:20 criGriChoV1.initalign: finish
+    #	hgwdev 2017.04.14-15:54:57 criGriChoV1.initalign: Succeeded: criGriChoV1
+    #	hgwdev 2017.04.14-15:55:28 criGriChoV1.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.criGriChoV1
@@ -740,11 +717,11 @@ XXX - running - Thu Apr 13 10:50:42 PDT 2017
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad criGriChoV1
-    # logFile: var/dbload/hgwdev/logs/2017.03.28-18:08:41.criGriChoV1.dbload.log
+    # logFile: var/dbload/hgwdev/logs/2017.04.19-10:31:05.criGriChoV1.dbload.log
     #  real    30m42.283s
 
-    tail -1 var/dbload/hgwdev/logs/2017.03.28-18:08:41.criGriChoV1.dbload.log
-    #  hgwdev 2017.03.28-18:39:24 criGriChoV1.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2017.04.19-10:31:05.criGriChoV1.dbload.log
+    # hgwdev 2017.04.19-10:49:44 criGriChoV1.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -752,7 +729,7 @@ XXX - running - Thu Apr 13 10:50:42 PDT 2017
     # add criGriChoV1 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding criGriChoV1 to the update alignments refs #19151' etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding criGriChoV1 to the update alignments refs #19228' etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -791,23 +768,23 @@ XXX - running - Thu Apr 13 10:50:42 PDT 2017
     #    enrich 14.68x
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-03-29 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-04-19 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("criGriChoV1", "blat1d", "17884", "1", "0"); \
+	VALUES ("criGriChoV1", "blat1a", "17872", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("criGriChoV1", "blat1d", "17885", "0", "1");' \
+	VALUES ("criGriChoV1", "blat1a", "17873", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to same as xenTro7
-##  (TBD - 2017-03-29 - Hiram)
+## set default position to SRC gene sequence from human protein blat
+##  (DONE - 2017-04-19 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr9:15945953-15959305"
+    hgsql -e 'update dbDb set defaultPos="NW_003613641v1:1277445-1295702"
 	where name="criGriChoV1";' hgcentraltest
 
 #########################################################################

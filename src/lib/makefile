@@ -24,7 +24,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     font/mgTimes10.o font/mgTimes12.o font/mgTimes14.o font/mgTimes18.o \
     font/mgTimes24.o font/mgTimes34.o font/mgTimes8.o font/mgMenlo12.o \
     fq.o fuzzyShow.o \
-    gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
+    gapCalc.o gdf.o gemfont.o genomeRangeTree.o gitSha1.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \
     hacTree.o hash.o hex.o histogram.o hmmPfamParse.o hmmstats.o htmlColor.o htmlPage.o htmshell.o \
     hmac.o https.o intExp.o intValTree.o internet.o itsa.o iupac.o \

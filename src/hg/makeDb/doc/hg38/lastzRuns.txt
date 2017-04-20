@@ -8877,3 +8877,66 @@ TMPDIR=/dev/shm
     # real    712m34.326s
 
 #########################################################################
+# LASTZ human/hg38 vs. Chinese hamster CHO-K1 cell line/criGriChoV1
+#	(DONE - 2017-04-13 - Hiram)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzCriGriChoV1.2017-04-13
+    cd /hive/data/genomes/hg38/bed/lastzCriGriChoV1.2017-04-13
+
+    printf '# human vs Chinese hamster ovary CHO-K1 cell line
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# QUERY: Chinese hamster ovary CHO-K1 cell line criGriChoV1
+SEQ2_DIR=/hive/data/genomes/criGriChoV1/criGriChoV1.2bit
+SEQ2_LEN=/hive/data/genomes/criGriChoV1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzCriGriChoV1.2017-04-13
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > do.log 2>&1
+    # real    3327m39.074s
+
+    cat fb.hg38.chainCriGriChoV1Link.txt
+    # 973293331 bases of 3049335806 (31.918%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 criGriChoV1) \
+       > rbest.log 2>&1 &
+    # real    408m18.202s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/criGriChoV1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/criGriChoV1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzCriGriChoV1.2017-04-13/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    91m19.847s
+
+    cat fb.criGriChoV1.chainHg38Link.txt
+    # 935724011 bases of 2318132242 (40.365%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` criGriChoV1 hg38) \
+       > rbest.log 2>&1 &
+    # real    436m55.979s
+
+#########################################################################

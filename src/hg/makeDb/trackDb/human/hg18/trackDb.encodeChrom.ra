@@ -4,7 +4,7 @@ track encodeBUORChID
 shortLabel BU ORChID
 longLabel Boston University ORChID 2007 (OH Radical Cleavage Intensity Database)
 group encodeChrom
-priority 60.0
+priority 1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type wig -0.98 1.64
 spanList 1
@@ -22,7 +22,7 @@ compositeTrack on
 shortLabel Duke/NHGRI DNase
 longLabel Duke/NHGRI DNaseI Hypersensitivity
 group encodeChrom
-priority 61.1
+priority 2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -229,7 +229,7 @@ subGroup1 group Group raw=DNase-chip_Raw pval=DNase-chip_Pval mpss=MPSS
         shortLabel UW DNase
         longLabel UW DNaseI Hypersensitivity
         group encodeChrom
-        priority 66.05
+        priority 5
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeUWRegulomeBase
@@ -403,3 +403,8 @@ origAssembly hg17
     type bed5FloatScore
     priority 2
 
+track encodeUncFaire override
+priority 3
+
+track encodeUvaDnaRepSuper override
+priority 4

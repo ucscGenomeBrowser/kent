@@ -17,6 +17,7 @@ maxHeightPixels 100:40:11
 autoScale Off
 windowingFunction mean
 group compGeno
+priority 4
 visibility hide
 altColor 70,130,70
 color 0,90,20
@@ -76,6 +77,7 @@ maxHeightPixels 100:40:11
 autoScale Off
 windowingFunction mean
 group compGeno
+priority 5
 visibility hide
 color 0, 10, 100
 altColor 0,90,10
@@ -94,6 +96,7 @@ compositeTrack on
 shortLabel 28-Way Most Cons
 longLabel PhastCons Conserved Elements, 28-way Vertebrate Multiz Alignment
 group compGeno
+priority 6
 visibility hide
 exonArrows off
 showTopScorers 200
@@ -117,6 +120,7 @@ track multiz17way
 shortLabel 17-Way Cons
 longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
 group compGeno
+priority 2
 visibility hide
 color 0, 10, 100
 altColor 0,90,10
@@ -142,6 +146,7 @@ track phastConsElements17way
 shortLabel 17-Way Most Cons
 longLabel PhastCons Conserved Elements, 17-way Vertebrate Multiz Alignment
 group compGeno
+priority 3
 visibility hide
 exonArrows off
 showTopScorers 200
@@ -183,6 +188,7 @@ track consIndelsHgMmCanFam
 shortLabel Cons Indels MmCf
 longLabel Indel-based Conservation for human hg18, mouse mm8 and dog canFam2
 group compGeno
+priority 11
 visibility hide
 useScore 1
 color 0, 60, 120
@@ -3722,6 +3728,7 @@ shortLabel Evo Cpg
 longLabel Weizmann Evolutionary CpG Islands
 visibility hide
 group compGeno
+priority 13
 type bed 9 .
 noScoreFilter .
 itemRgb on
@@ -3795,3 +3802,11 @@ track sibTxGraph override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg18&species=H.+sapiens&tromer=$$
 
 include defaultPriority.ra
+
+track phastBias override
+group compGeno
+priority 25
+
+track ecoresTetNig1 override
+group compGeno
+priority 33
