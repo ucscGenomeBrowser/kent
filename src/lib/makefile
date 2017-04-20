@@ -24,7 +24,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     font/mgTimes10.o font/mgTimes12.o font/mgTimes14.o font/mgTimes18.o \
     font/mgTimes24.o font/mgTimes34.o font/mgTimes8.o font/mgMenlo12.o \
     fq.o fuzzyShow.o \
-    gapCalc.o gdf.o gemfont.o genomeRangeTree.o gitSha1.o \
+    gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \
     hacTree.o hash.o hex.o histogram.o hmmPfamParse.o hmmstats.o htmlColor.o htmlPage.o htmshell.o \
     hmac.o https.o intExp.o intValTree.o internet.o itsa.o iupac.o \
@@ -41,9 +41,9 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     ra.o rainbow.o raToStruct.o rbTree.o rangeTree.o regexHelper.o repMask.o \
     rle.o rnautil.o rqlEval.o rqlParse.o rudp.o \
     scoreWindow.o seg.o seqOut.o seqStats.o servBrcMcw.o servCrunx.o \
-    servcis.o servcl.o servmsII.o servpws.o shaRes.o slog.o snof.o \
+    servcis.o servcl.o servmsII.o servpws.o sha1.o shaRes.o slog.o snof.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
-    splatAli.o sqlList.o sqlNum.o subText.o sufa.o sufx.o synQueue.o \
+    splatAli.o sqlList.o sqlNum.o sqlReserved.o subText.o sufa.o sufx.o synQueue.o \
     tabRow.o tagStorm.o tagToSql.o textOut.o tokenizer.o trix.o twoBit.o \
     udc.o vcf.o vcfBits.o vGfx.o vPng.o verbose.o \
     wildcmp.o wormdna.o \

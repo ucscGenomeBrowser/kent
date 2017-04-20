@@ -194,8 +194,13 @@ else
 char *line;
 if (!lineFileNext(lf, &line, NULL))
    errAbort("%s is empty", reportFileName);
+boolean startsSharp = FALSE;
 if (line[0] == '#')
+   {
    line = skipLeadingSpaces(line+1);
+   startsSharp = TRUE;
+   }
+   
 int fieldCount = chopByChar(line, '\t', NULL, 0);
 char *fields[fieldCount];
 chopTabs(line, fields);
@@ -212,6 +217,7 @@ for (i = 0; i < requiredCount; ++i)
 
 /* Create fieldedTable . */
 struct fieldedTable *table = fieldedTableNew(reportFileName, fields, fieldCount);
+table->startsSharp = startsSharp;
 while (lineFileRowTab(lf, fields))
     {
     fieldedTableAdd(table, fields, fieldCount, lf->lineIx);
