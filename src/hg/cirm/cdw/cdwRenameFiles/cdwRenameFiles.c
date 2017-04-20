@@ -14,14 +14,14 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "cdwRenameFiles - Rename files' submitted name both in database and manifest.\n"
+  "cdwRenameFiles - Rename files' submitted name both database, manifest, and file system.\n"
   "usage:\n"
   "   cdwRenameFiles rename.tab manifest.txt\n"
   "where:\n"
   "   rename.tab is a two column tab or space separated files with old file name in\n"
   "              one column and current file name in the other\n"
   "   manifest.txt is the manifest file with the old name in it. It will be rewritten with new\n"
-  "opions:\n"
+  "options:\n"
   "   -dry - only do test run, don't alter database or file\n"
   );
 }
