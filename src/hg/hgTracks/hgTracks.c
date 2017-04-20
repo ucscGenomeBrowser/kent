@@ -4301,6 +4301,7 @@ wordCount = chopLine(cloneString(typeLine), words);
 if (wordCount <= 0)
     return FALSE;
 type = words[0];
+// NOTE: if type is missing here, full mode fails to return an hgTracks object
 if (
 (  sameWord(type, "bed")
 || sameWord(type, "bed5FloatScore")
@@ -4316,6 +4317,7 @@ if (
 || sameWord(type, "narrowPeak")
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
+|| sameWord(type, "bigBarChart")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
 ) 

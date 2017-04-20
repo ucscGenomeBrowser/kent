@@ -6,7 +6,7 @@
 	shortLabel Affy ChIP
 	longLabel Affymetrix ChIP-chip
 	group encodeChip
-	priority 43.0
+	priority 1
 	chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 # other entries for this supertrack are up-level
@@ -107,7 +107,7 @@ dataVersion ENCODE Oct 2005 Freeze
         shortLabel Sanger ChIP-chip
         longLabel Sanger ChIP-chip (histones H3,H4 ab in GM06990, K562, HeLa, HFL-1, MOLT4, and PTR8 cells) 
         group encodeChip
-        priority 54.0
+        priority 3
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeSangerChip
@@ -729,7 +729,7 @@ origAssembly hg17
         shortLabel UC Davis ChIP
         longLabel UC Davis ChIP-chip NimbleGen (E2F1, c-Myc, TAF, POLII)
         group encodeChip
-        priority 56.0
+        priority 5
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeUCDavisChip
@@ -1058,7 +1058,7 @@ dataVersion ENCODE Oct 2005 Freeze, Oct 2006
         shortLabel Uppsala ChIP
         longLabel Uppsala University, Sweden ChIP-chip
         group encodeChip
-        priority 61
+        priority 6
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeUppsalaChip
@@ -1184,7 +1184,7 @@ origAssembly hg17
         shortLabel Yale ChIP
         longLabel Yale ChIP-chip
         group encodeChip
-        priority 65.0
+        priority 8
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeYaleChIPSTAT1Pval

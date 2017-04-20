@@ -3,13 +3,6 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doGapOverlap.pl instead.
 
-
-# HOW TO USE THIS TEMPLATE:
-# 1. Global-replace doTemplate.pl with your actual script name.
-# 2. Search for template and replace each instance with something appropriate.
-#    Add steps and subroutines as needed.  Other do*.pl or make*.pl may have
-#    useful example code -- this is just a skeleton.
-
 use Getopt::Long;
 use warnings;
 use strict;
@@ -259,9 +252,12 @@ sub doLoad {
 		$workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-hgLoadBed -type=bed12 $db gapOverlap $db.gapOverlap.bed
-checkTableCoords $db gapOverlap
-featureBits -countGaps $db gapOverlap > fb.$db.gapOverlap.txt 2>&1
+# do not load empty files
+if [ -s $db.gapOverlap.bed ]; then
+  hgLoadBed -type=bed12 $db gapOverlap $db.gapOverlap.bed
+  checkTableCoords $db gapOverlap
+  featureBits -countGaps $db gapOverlap > fb.$db.gapOverlap.txt 2>&1
+fi
 _EOF_
   );
   $bossScript->execute();
