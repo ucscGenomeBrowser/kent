@@ -57,17 +57,8 @@ struct cdwBedType *cdwBedTypeFind(char *name);
 struct cdwBedType *cdwBedTypeMayFind(char *name);
 /* Return cdwBedType of given name, just return NULL if not found. */
 
-extern char *cdwAllowedTags[];
-
-struct hash *cdwAllowedTagsHash();
-/* Get hash of all allowed tags */
-
 void cdwValidateTagName(char *tag);
 /* Make sure that tag is one of the allowed ones. */
-
-void cdwValidateTagVal(char *tag, char *val);
-/* Make sure that tag is one of the allowed ones and that
- * val is compatible */
 
 struct slPair *cdwFormatList();
 /* Return list of formats.  The name of the list items are the format names.
