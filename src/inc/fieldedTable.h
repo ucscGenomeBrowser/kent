@@ -24,6 +24,7 @@ struct fieldedTable
     struct fieldedRow *rowList;  /* list of parsed out fields. */
     struct fieldedRow **cursor;  /* Pointer to where we add next item to list. */
     int rowCount;   /* Number of rows. */
+    boolean startsSharp;  /* Whether first line starts with a # char */
     };
 
 struct fieldedTable *fieldedTableNew(char *name, char **fields, int fieldCount);
