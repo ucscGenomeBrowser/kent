@@ -81,5 +81,5 @@ end
 
 echo "\n\nEnd All `date`" >> $log
 
-mail -s "$log results" $USER@soe.ucsc.edu < $log
+mail -s "$log results" $USER@ucsc.edu < $log
 
