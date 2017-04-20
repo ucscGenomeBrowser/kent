@@ -259,9 +259,12 @@ sub doLoad {
 		$workhorse, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-hgLoadBed -type=bed12 $db gapOverlap $db.gapOverlap.bed
-checkTableCoords $db gapOverlap
-featureBits -countGaps $db gapOverlap > fb.$db.gapOverlap.txt 2>&1
+# do not load empty files
+if [ -s $db.gapOverlap.bed ]; then
+  hgLoadBed -type=bed12 $db gapOverlap $db.gapOverlap.bed
+  checkTableCoords $db gapOverlap
+  featureBits -countGaps $db gapOverlap > fb.$db.gapOverlap.txt 2>&1
+fi
 _EOF_
   );
   $bossScript->execute();

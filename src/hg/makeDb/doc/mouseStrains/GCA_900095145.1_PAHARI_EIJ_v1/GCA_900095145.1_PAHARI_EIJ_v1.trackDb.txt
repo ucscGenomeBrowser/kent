@@ -1,0 +1,224 @@
+track assembly
+longLabel Assembly
+shortLabel Assembly
+visibility pack
+colorByStrand 150,100,30 230,170,40
+color 150,100,30
+altColor 230,170,40
+bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.assembly.bb
+type bigBed 6
+html html/GCA_900095145.1_PAHARI_EIJ_v1.assembly
+searchIndex name
+searchTrix ixIxx/GCA_900095145.1_PAHARI_EIJ_v1.assembly.ix
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel NCBI Nucleotide database
+group map
+
+track gap
+longLabel AGP gap
+shortLabel Gap (AGP defined)
+visibility dense
+color 0,0,0
+bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.gap.bb
+type bigBed 4
+group map
+html html/GCA_900095145.1_PAHARI_EIJ_v1.gap
+
+track gc5Base
+shortLabel GC Percent
+longLabel GC Percent in 5-Base Windows
+group map
+visibility full
+autoScale Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,0,0
+altColor 128,128,128
+viewLimits 30:70
+type bigWig 0 100
+bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.gc5Base.bw
+html html/GCA_900095145.1_PAHARI_EIJ_v1.gc5Base
+
+track repeatMasker
+compositeTrack on
+shortLabel RepeatMasker
+longLabel Repeating Elements by RepeatMasker
+group varRep
+visibility dense
+type bed 3 .
+noInherit on
+html html/GCA_900095145.1_PAHARI_EIJ_v1.repeatMasker
+
+    track repeatMaskerSINE
+    parent repeatMasker
+    shortLabel SINE
+    longLabel SINE Repeating Elements by RepeatMasker
+    priority 1
+    spectrum on
+    maxWindowToDraw 10000000
+    colorByStrand 50,50,150 150,50,50
+    type bigBed 6 +
+    bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.rmsk.SINE.bb
+
+    track repeatMaskerLINE
+    parent repeatMasker
+    shortLabel LINE
+    longLabel LINE Repeating Elements by RepeatMasker
+    priority 2
+    spectrum on
+    maxWindowToDraw 10000000
+    colorByStrand 50,50,150 150,50,50
+    type bigBed 6 +
+    bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.rmsk.LINE.bb
+
+    track repeatMaskerLTR
+    parent repeatMasker
+    shortLabel LTR
+    longLabel LTR Repeating Elements by RepeatMasker
+    priority 3
+    spectrum on
+    maxWindowToDraw 10000000
+    colorByStrand 50,50,150 150,50,50
+    type bigBed 6 +
+    bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.rmsk.LTR.bb
+
+    track repeatMaskerDNA
+    parent repeatMasker
+    shortLabel DNA
+    longLabel DNA Repeating Elements by RepeatMasker
+    priority 4
+    spectrum on
+    maxWindowToDraw 10000000
+    colorByStrand 50,50,150 150,50,50
+    type bigBed 6 +
+    bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.rmsk.DNA.bb
+
+    track repeatMaskerSimple
+    parent repeatMasker
+    shortLabel Simple
+    longLabel Simple Repeating Elements by RepeatMasker
+    priority 5
+    spectrum on
+    maxWindowToDraw 10000000
+    colorByStrand 50,50,150 150,50,50
+    type bigBed 6 +
+    bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.rmsk.Simple.bb
+
+    track repeatMaskerLowComplexity
+    parent repeatMasker
+    shortLabel Low Complexity
+    longLabel Low Complexity Repeating Elements by RepeatMasker
+    priority 6
+    spectrum on
+    maxWindowToDraw 10000000
+    colorByStrand 50,50,150 150,50,50
+    type bigBed 6 +
+    bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.rmsk.Low_complexity.bb
+
+    track repeatMaskerSatellite
+    parent repeatMasker
+    shortLabel Satellite
+    longLabel Satellite Repeating Elements by RepeatMasker
+    priority 7
+    spectrum on
+    maxWindowToDraw 10000000
+    colorByStrand 50,50,150 150,50,50
+    type bigBed 6 +
+    bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.rmsk.Satellite.bb
+
+    track repeatMaskerRNA
+    parent repeatMasker
+    shortLabel RNA
+    longLabel RNA Repeating Elements by RepeatMasker
+    priority 8
+    spectrum on
+    maxWindowToDraw 10000000
+    colorByStrand 50,50,150 150,50,50
+    type bigBed 6 +
+    bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.rmsk.RNA.bb
+
+    track repeatMaskerOther
+    parent repeatMasker
+    shortLabel Other
+    longLabel Other Repeating Elements by RepeatMasker
+    priority 9
+    spectrum on
+    maxWindowToDraw 10000000
+    colorByStrand 50,50,150 150,50,50
+    type bigBed 6 +
+    bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.rmsk.Other.bb
+
+track simpleRepeat
+shortLabel Simple Repeats
+longLabel Simple Tandem Repeats by TRF
+group varRep
+visibility dense
+type bigBed 4 +
+bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.simpleRepeat.bb
+html html/GCA_900095145.1_PAHARI_EIJ_v1.simpleRepeat
+
+track cpgIslands
+compositeTrack on
+shortLabel CpG Islands
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+group regulation
+visibility pack
+type bed 3 .
+noInherit on
+html html/GCA_900095145.1_PAHARI_EIJ_v1.cpgIslands
+
+    track cpgIslandExt
+    parent cpgIslands
+    shortLabel CpG Islands
+    longLabel CpG Islands (Islands < 300 Bases are Light Green)
+    priority 1
+    type bigBed 4 +
+    bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.cpgIslandExt.bb
+
+    track cpgIslandExtUnmasked
+    parent cpgIslands
+    shortLabel Unmasked CpG
+    longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
+    priority 2
+    type bigBed 4 +
+    bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.cpgIslandExtUnmasked.bb
+
+track windowMasker
+shortLabel WM + SDust
+longLabel Genomic Intervals Masked by WindowMasker + SDust
+group varRep
+visibility dense
+type bigBed 3
+bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.windowMasker.bb
+html html/GCA_900095145.1_PAHARI_EIJ_v1.windowMasker
+
+track allGaps
+shortLabel All Gaps
+longLabel All gaps of unknown nucleotides (N's), including AGP annotated gaps
+group map
+visibility dense
+type bigBed 3
+bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.allGaps.bb
+html html/GCA_900095145.1_PAHARI_EIJ_v1.allGaps
+
+track augustus
+shortLabel Augustus
+longLabel Augustus Gene Predictions
+group genes
+visibility dense
+color 180,0,0
+type bigGenePred
+bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.augustus.bb
+html html/GCA_900095145.1_PAHARI_EIJ_v1.augustus
+
+track gapOverlap
+shortLabel Gap Overlaps
+longLabel Exactly identical sequence on each side of a gap
+group map
+visibility hide
+type bigBed 12 .
+bigDataUrl bbi/GCA_900095145.1_PAHARI_EIJ_v1.gapOverlap.bb
+html html/GCA_900095145.1_PAHARI_EIJ_v1.gapOverlap
+
