@@ -213,6 +213,15 @@ type bigGenePred
 bigDataUrl bbi/GCA_001624535.1_FVB_NJ_v1.augustus.bb
 html html/GCA_001624535.1_FVB_NJ_v1.augustus
 
+track gapOverlap
+shortLabel Gap Overlaps
+longLabel Exactly identical sequence on each side of a gap
+group map
+visibility hide
+type bigBed 12 .
+bigDataUrl bbi/GCA_001624535.1_FVB_NJ_v1.gapOverlap.bb
+html html/GCA_001624535.1_FVB_NJ_v1.gapOverlap
+
 track ensGene
 shortLabel Ensembl genes
 longLabel Ensembl genes v86
