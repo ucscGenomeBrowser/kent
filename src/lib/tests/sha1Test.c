@@ -1,26 +1,45 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <stddef.h>
 #include "common.h"
+#include "errAbort.h"
 #include "obscure.h"
 #include "portable.h"
-#include "gitSha1.h"
+#include "sha1.h"
+
+static char *test_data[] = {
+    "abc",
+    "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
+    "A million repetitions of 'a'"};
+static char *test_results[] = {
+    "A9993E36 4706816A BA3E2571 7850C26C 9CD0D89D",
+    "84983E44 1C3BD26E BAAE4AA1 F95129E5 E54670F1",
+    "34AA973C D4C4DAA4 F61EEB2B DBAD2731 6534016F"};
+
+/* ==== UCSC Genome Browser tests ========== */
 
 void manual_way(char *filename, unsigned char hash[20])
 /* generate sha1 manually the hard way. */
 {
 FILE *fp = fopen (filename, "r");
-if (!fp) errAbort("missing file %s", filename);
+if (!fp) 
+    {
+    printf("missing file %s\n", filename);
+    exit(1);
+    }
 
 #define BS 4096 /* match coreutils */
 
-blk_SHA_CTX ctx;
-blk_SHA1_Init(&ctx);
+SHA1_CTX ctx;
+SHA1_Init(&ctx);
 size_t nr;
 char buf[BS];
 while ((nr=fread_unlocked(buf, 1, sizeof(buf), fp)))
-    blk_SHA1_Update(&ctx, buf, nr);
+    SHA1_Update(&ctx, (const uint8_t*)buf, nr);
 
-blk_SHA1_Final(hash, &ctx);
+SHA1_Final(&ctx, hash);
 }
 
 char *string_way(char *filename)
@@ -65,17 +84,17 @@ off_t fs = fileSize(filename);
 char prefix[1024];
 safef(prefix, sizeof prefix, "blob %llu", (unsigned long long)fs);
 
-blk_SHA_CTX ctx;
-blk_SHA1_Init(&ctx);
+SHA1_CTX ctx;
+SHA1_Init(&ctx);
 
-blk_SHA1_Update(&ctx, prefix, strlen(prefix)+1);
+SHA1_Update(&ctx, (const uint8_t*)prefix, strlen(prefix)+1);
 
 size_t nr;
 char buf[BS];
 while ((nr=fread_unlocked(buf, 1, sizeof(buf), fp)))
-    blk_SHA1_Update(&ctx, buf, nr);
+    SHA1_Update(&ctx, (const uint8_t*)buf, nr);
 
-blk_SHA1_Final(hash, &ctx);
+SHA1_Final(&ctx, hash);
 return sha1ToHex(hash);
 }
 
@@ -96,11 +115,71 @@ size_t bufSize = 0;
 return sha1HexForBuf(buf, bufSize);
 }
 
+
+void digest_to_hex(const uint8_t digest[SHA1_DIGEST_SIZE], char *output)
+{
+    int i,j;
+    char *c = output;
+
+    for (i = 0; i < SHA1_DIGEST_SIZE/4; i++) {
+        for (j = 0; j < 4; j++) {
+            sprintf(c,"%02X", digest[i*4+j]);
+            c += 2;
+        }
+        sprintf(c, " ");
+        c += 1;
+    }
+    *(c - 1) = '\0';
+}
+
 int main(int argc, char** argv)
 {
-    if (argc != 2) 
-	errAbort("must specfy file to use for sha1 has on commandline.");
-    char* filename = argv[1];
+    int k;
+    SHA1_CTX context;
+    uint8_t digest[20];
+    char output[80];
+
+    fprintf(stdout, "verifying SHA-1 implementation... ");
+
+    for (k = 0; k < 2; k++){
+        SHA1_Init(&context);
+        SHA1_Update(&context, (uint8_t*)test_data[k], strlen(test_data[k]));
+        SHA1_Final(&context, digest);
+	digest_to_hex(digest, output);
+
+        if (strcmp(output, test_results[k])) {
+            fprintf(stdout, "FAIL\n");
+            fprintf(stderr,"* hash of \"%s\" incorrect:\n", test_data[k]);
+            fprintf(stderr,"\t%s returned\n", output);
+            fprintf(stderr,"\t%s is correct\n", test_results[k]);
+            return (1);
+        }
+    }
+    /* million 'a' vector we feed separately */
+    SHA1_Init(&context);
+    for (k = 0; k < 1000000; k++)
+        SHA1_Update(&context, (uint8_t*)"a", 1);
+    SHA1_Final(&context, digest);
+    digest_to_hex(digest, output);
+    if (strcmp(output, test_results[2])) {
+        fprintf(stdout, "FAIL\n");
+        fprintf(stderr,"* hash of \"%s\" incorrect:\n", test_data[2]);
+        fprintf(stderr,"\t%s returned\n", output);
+        fprintf(stderr,"\t%s is correct\n", test_results[2]);
+        return (1);
+    }
+
+    /* success */
+    fprintf(stdout, "ok\n");
+
+
+    if (argc < 2)
+	{
+	printf("must specify filename on commandline.\n");
+	exit(1);
+	}
+
+    char *filename = argv[1];
 
     printf("Library filename way:\n");
     long thisTime = 0, lastTime = 0;
@@ -136,7 +215,7 @@ int main(int argc, char** argv)
     hex = string_empty();
     printf("%s  %s\n\n", hex, "empty-string");
 
-    return 0;
-}
 
+    return(0);
+}
 
