@@ -3,13 +3,6 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doGapOverlap.pl instead.
 
-
-# HOW TO USE THIS TEMPLATE:
-# 1. Global-replace doTemplate.pl with your actual script name.
-# 2. Search for template and replace each instance with something appropriate.
-#    Add steps and subroutines as needed.  Other do*.pl or make*.pl may have
-#    useful example code -- this is just a skeleton.
-
 use Getopt::Long;
 use warnings;
 use strict;
