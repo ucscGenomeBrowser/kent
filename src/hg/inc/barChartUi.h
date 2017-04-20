@@ -18,11 +18,12 @@
 #define BAR_CHART_LOG_TRANSFORM              "logTransform"
 #define BAR_CHART_LOG_TRANSFORM_DEFAULT      TRUE
 
-/* Viewing limits */
-    // WARNING: this also appears in JS
+/* Data range and viewing limits */
 #define BAR_CHART_MAX_LIMIT                  "maxLimit"
-#define BAR_CHART_MAX_LIMIT_DEFAULT          300
-/* TODO: Get default from trackDb ? */
+#define BAR_CHART_MAX_LIMIT_DEFAULT          10000
+    // WARNING: this also appears in JS
+#define BAR_CHART_MAX_VIEW_LIMIT             "maxViewLimit"
+#define BAR_CHART_MAX_VIEW_LIMIT_DEFAULT     50
 
 /* Category (bar) info */
 #define BAR_CHART_MAX_CATEGORIES        100

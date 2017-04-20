@@ -1,0 +1,6 @@
+# thisDir /hive/data/genomes/asmHubs/genbank/vertebrate_mammalian/Mus_pahari/GCA_900095145.1_PAHARI_EIJ_v1/html
+# ftpName genbank/vertebrate_mammalian/Mus_pahari/GCA_900095145.1_PAHARI_EIJ_v1
+#taxId	commonName	submitter	asmName	orgName	bioSample	asmType	asmLevel	asmDate	asmAccession
+10093	Gairdner's shrewmouse	EBI	PAHARI_EIJ_v1	Mus pahari 	SAMEA3367645	haploid	Chromosome	11 Jan 2017	GCA_900095145.1
+# reading chrom.sizes file:
+#	'../GCA_900095145.1_PAHARI_EIJ_v1.chrom.sizes'

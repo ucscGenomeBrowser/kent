@@ -215,7 +215,6 @@ static boolean packableType(char *type)
 {
 char *t = cloneString(type);
 char *s = firstWordInLine(t);
-// KRR FIX - lookup bigs from table
 boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bed", s) || sameString("genePred", s) ||
 		   sameString("bigBed", s) || sameString("makeItems", s) ||
