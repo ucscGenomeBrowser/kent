@@ -1,9 +1,7 @@
 #!/usr/bin/env python2.7
 # expMatrixToBarchartBed
 """
-Generate a barChart bed6+2 file from a matrix, meta data, and coordinates. A bed file for each
-sample type in the meta data file will be made in the directory where the script is run. These
-bed files will be names <sample type>.bed and are bed6 format. 
+Generate a barChart bed6+4 file from a matrix, meta data, and coordinates.
 """
 import os
 import sys
