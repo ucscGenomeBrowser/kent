@@ -2,7 +2,6 @@
 
 track gold override
 html gold
-priority 1
 
 # track hg38ContigDiff override
 # priority 2
