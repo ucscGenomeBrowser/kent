@@ -24,10 +24,12 @@ autoTranslate genePred
 bamColorMode bam
 bamGrayMode bam
 bamSkipPrintQualScore bam
-barChartLabel barChart
-barChartRange barChart
-barChartUnit barChart
 barChartBars barChart
+barChartColors barChart
+barChartDataUrl barChart
+barChartLabel barChart
+barChartSampleUrl barChart
+barChartUnit barChart
 baseColorDefault *
 baseColorTickColor bed bigBed
 baseColorUseCds bed psl genePred bigPsl

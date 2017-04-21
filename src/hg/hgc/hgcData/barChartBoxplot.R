@@ -54,9 +54,10 @@ exprPlot <- boxplot(value ~ categoryFactor, data=df, ylab=yLabel, ylim=yLimit,
 y1 <- par("usr")[3]
 size <- .8
 adjust <- .4*abs(y1)
-text(-.5, y1 + adjust, "N=", cex=size)
+text(.4, y1 + adjust, "N=", cex=size)
+
+# draw labels twice (once in color, once in black) to make light colors readable
 text(1:count, y1 + adjust, exprPlot$n, cex=size, col="black")
-# draw text twice (once in color, once in black) to make light colors readable
 text(1:count, y1 + adjust, exprPlot$n, cex=size, col=colorsHex)
 
 # add X axis labels at 45 degree angle
