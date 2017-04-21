@@ -53,10 +53,22 @@ struct hash *maniHash = fieldedTableUniqueIndex(maniTable, "file");
 /* Load in rename file and do one pass to make sure everything exists and is kosher */
 struct slPair *mv, *mvList = slPairTwoColumnFile(renameFile);
 verbose(1, "Got %d files to rename in %s\n", slCount(mvList), renameFile);
+struct hash *dirHash = hashNew(0);
 for (mv = mvList; mv != NULL; mv = mv->next)
     {
     char *oldName = mv->name;
     char *newName = mv->val;
+    char newDir[PATH_LEN];
+    splitPath(newName, newDir, NULL, NULL);
+    if (!isEmpty(newDir))
+       {
+       if (!hashLookup(dirHash, newDir))
+           {
+	   if (!clDry)
+	       makeDir(newDir);
+	   hashAdd(dirHash, newDir, NULL);
+	   }
+       }
     verbose(2, "checking %s->%s\n", oldName, newName);
     if (sameString(oldName, newName))
         errAbort("Can't rename %s to itself", oldName);
