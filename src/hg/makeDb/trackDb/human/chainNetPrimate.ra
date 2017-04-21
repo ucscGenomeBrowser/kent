@@ -7,7 +7,7 @@ subGroup2 species Species aaChimp=Chimp abBonobo=Bonobo acGorilla=Gorilla adOran
 subGroup3 clade Clade aaHominidae=Hominidae abHylobatidae=Hylobatidae acCercopithecinae=Cercopithecinae adCebidae=Cebidae aeHaplorrhini=Haplorrhini afStrepsirrhini=Strepsirrhini
 dragAndDrop subTracks
 visibility hide
-priority 103
+priority 8
 group compGeno
 noInherit on
 color 0,0,0

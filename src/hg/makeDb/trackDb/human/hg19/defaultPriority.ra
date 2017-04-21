@@ -20,7 +20,7 @@ track mrna override
 priority 1
 
 track intronEst override
-priority 2
+priority 12
 visibility hide
 
 # Regulation

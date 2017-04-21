@@ -19,7 +19,7 @@ fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 noInherit on
-priority 0
+priority 20
 type bed 3
 wgEncode 1
 html wgEncodeRikenCage.release4
