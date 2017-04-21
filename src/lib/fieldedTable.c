@@ -228,6 +228,39 @@ lineFileClose(&lf);
 return table;
 }
 
+void fieldedTableToTabFile(struct fieldedTable *table, char *fileName)
+/* Write out a fielded table back to file */
+{
+FILE *f = mustOpen(fileName, "w");
+
+/* Write out header row with optional leading # */
+if (table->startsSharp)
+    fputc('#', f);
+int i;
+fputs(table->fields[0], f);
+for (i=1; i<table->fieldCount; ++i)
+    {
+    fputc('\t', f);
+    fputs(table->fields[i], f);
+    }
+fputc('\n', f);
+
+/* Write out rest. */
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    fputs(fr->row[0], f);
+    for (i=1; i<table->fieldCount; ++i)
+	{
+	fputc('\t', f);
+	fputs(fr->row[i], f);
+	}
+    fputc('\n', f);
+    }
+
+carefulClose(&f);
+}
+
 int fieldedTableMustFindFieldIx(struct fieldedTable *table, char *field)
 /* Find index of field in table's row.  Abort if field not found. */
 {
