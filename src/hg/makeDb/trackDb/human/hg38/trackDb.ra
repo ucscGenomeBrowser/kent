@@ -30,14 +30,19 @@ visibility hide
 
 track windowmaskerSdust override
 group rep
+priority 8
 
 track nestedRepeats override
 group rep
+priority 2
 
 track simpleRepeat override
 group rep
+priority 7
 
 track rmskJoinedBaseline override
+group rep
+priority 4
 visibility hide
 
 track stsMap override
@@ -139,6 +144,7 @@ type bed 4
 track chainSelf override
 longLabel $Organism Chained Self Alignments
 group rep
+priority 6
 chainColor Normalized Score
 matrixHeader A, C, G, T
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -434,6 +440,7 @@ snpSeqFile /gbdb/hg38/snp/snp144.fa
 
 track genomicSuperDups override
 group rep
+priority 5
 
 track sibGene override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg38&query_str=$$
@@ -461,6 +468,7 @@ include trackDb.145way.ra alpha
 
 track microsat override
 group rep
+priority 3
 
 searchTable sgpGene
 searchType genePred
