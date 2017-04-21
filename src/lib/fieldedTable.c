@@ -194,8 +194,13 @@ else
 char *line;
 if (!lineFileNext(lf, &line, NULL))
    errAbort("%s is empty", reportFileName);
+boolean startsSharp = FALSE;
 if (line[0] == '#')
+   {
    line = skipLeadingSpaces(line+1);
+   startsSharp = TRUE;
+   }
+   
 int fieldCount = chopByChar(line, '\t', NULL, 0);
 char *fields[fieldCount];
 chopTabs(line, fields);
@@ -212,6 +217,7 @@ for (i = 0; i < requiredCount; ++i)
 
 /* Create fieldedTable . */
 struct fieldedTable *table = fieldedTableNew(reportFileName, fields, fieldCount);
+table->startsSharp = startsSharp;
 while (lineFileRowTab(lf, fields))
     {
     fieldedTableAdd(table, fields, fieldCount, lf->lineIx);
@@ -220,6 +226,39 @@ while (lineFileRowTab(lf, fields))
 /* Clean up and go home. */
 lineFileClose(&lf);
 return table;
+}
+
+void fieldedTableToTabFile(struct fieldedTable *table, char *fileName)
+/* Write out a fielded table back to file */
+{
+FILE *f = mustOpen(fileName, "w");
+
+/* Write out header row with optional leading # */
+if (table->startsSharp)
+    fputc('#', f);
+int i;
+fputs(table->fields[0], f);
+for (i=1; i<table->fieldCount; ++i)
+    {
+    fputc('\t', f);
+    fputs(table->fields[i], f);
+    }
+fputc('\n', f);
+
+/* Write out rest. */
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    fputs(fr->row[0], f);
+    for (i=1; i<table->fieldCount; ++i)
+	{
+	fputc('\t', f);
+	fputs(fr->row[i], f);
+	}
+    fputc('\n', f);
+    }
+
+carefulClose(&f);
 }
 
 int fieldedTableMustFindFieldIx(struct fieldedTable *table, char *field)

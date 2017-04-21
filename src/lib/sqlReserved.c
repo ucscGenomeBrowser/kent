@@ -1,27 +1,13 @@
-/* freen - My Pet Freen. */
-
-/* Copyright (C) 2014 The Regents of the University of California 
+/* Copyright (C) 2017 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
+/* sqlReserved - stuff to identify SQL reserved words. */
+
 #include "common.h"
-#include "linefile.h"
 #include "hash.h"
-#include "options.h"
-#include "cheapcgi.h"
-#include "jksql.h"
-#include "portable.h"
-#include "obscure.h"
+#include "sqlReserved.h"
 
-void usage()
-{
-errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen input\n");
-}
-
-static struct optionSpec options[] = {
-   {NULL, 0},
-};
-
+/* Array of all SQL reserved words according to MySQL docs in March 2017 */
 char *sqlReservedWords[] =
     {
     "ACCESSIBLE", "ADD", "ALL", "ALTER", "ANALYZE", "AND", "AS", "ASC",
@@ -56,9 +42,12 @@ char *sqlReservedWords[] =
     "VARYING", "WHEN", "WHERE", "WHILE", "WITH", "WRITE", "XOR", "YEAR_MONTH", "ZEROFILL"
     };
 
-struct hash *makeSqlReservedHash()
+/* Size of sqlReservedWord array */
+int sqlReservedWordCount = ArraySize(sqlReservedWords);
+
+struct hash *sqlReservedHash()
 /* Make up a hash of all mySQL reserved words in upper case.  Use with
- * isSqlReserved.  Free with hashFree() */
+ * sqlReservedCheck().  Free with hashFree() */
 {
 int i;
 struct hash *hash = hashNew(0);
@@ -68,44 +57,9 @@ for (i=0; i<count; ++i)
 return hash;
 }
 
-boolean isSqlReserved(struct hash *sqlReservedHash, char *s)
-/* Return TRUE if s is a reserved symbol for mySQL.*/
+boolean sqlReservedCheck(struct hash *sqlReservedHash, char *s)
+/* Return TRUE if s is a reserved symbol for mySQL. */
 {
 return hashLookupUpperCase(sqlReservedHash, s) != NULL;
-}
-
-
-void freen(char *inFile)
-/* Test something */
-{
-int wordCount = 0;
-char *wordBuf;
-char **words;
-readAllWords(inFile, &words, &wordCount, &wordBuf);
-
-struct hash *sqlReservedHash = makeSqlReservedHash();
-int is = 0, isNot = 0;
-int i;
-for (i=0; i<wordCount; ++i)
-    {
-    if (isSqlReserved(sqlReservedHash, words[i]))
-	{
-	uglyf("%s is reserved\n", words[i]);
-        ++is;
-	}
-    else
-        ++isNot;
-    }
-printf("%d reserved, %d not\n", is, isNot);
-}
-
-int main(int argc, char *argv[])
-/* Process command line. */
-{
-optionInit(&argc, argv, options);
-if (argc != 2)
-    usage();
-freen(argv[1]);
-return 0;
 }
 

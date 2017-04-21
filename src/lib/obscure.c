@@ -165,6 +165,19 @@ lineFileClose(&lf);
 return hash;
 }
 
+struct slPair *slPairTwoColumnFile(char *fileName)
+/* Read in a two column file into an slPair list */
+{
+char *row[2];
+struct slPair *list = NULL;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+while (lineFileRow(lf, row))
+    slPairAdd(&list, row[0], cloneString(row[1]));
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
 struct slName *readAllLines(char *fileName)
 /* Read all lines of file into a list.  (Removes trailing carriage return.) */
 {

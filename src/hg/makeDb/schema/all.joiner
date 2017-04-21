@@ -269,13 +269,13 @@ identifier UniProtId external=UniProt
      proteome.spOldNew.oldDisplayId minCheck=0.3
      proteome.spDisease.displayID minCheck=0.9
      go.goaPart.dbObjectSymbol minCheck=0.95
-     $gbd.dupSpMrna.proteinID minCheck=0.80
-     $gbd.dupSpMrna.dupProteinID minCheck=0.50
-     $kgDb2.kgProtAlias.displayID minCheck=0.80
-     $kgDb2.kgSpAlias.alias minCheck=0.20
-     $kgDb2.kgXref.spDisplayID minCheck=0.80
+     $gbd,!rn4.dupSpMrna.proteinID minCheck=0.80
+     $gbd,!rn4.dupSpMrna.dupProteinID minCheck=0.50
+     $kgDb2,!rn4.kgProtAlias.displayID minCheck=0.80
+     $kgDb2,!rn4.kgSpAlias.alias minCheck=0.20
+     $kgDb2,!rn4.kgXref.spDisplayID minCheck=0.80
      $kgDb3.kgXref.spDisplayID minCheck=0.50 exclude=
-     $kgDb2.knownCanonical.protein minCheck=0.80
+     $kgDb2,!rn4.knownCanonical.protein minCheck=0.80
      $gbd.spMrna.spID minCheck=0.80 exclude=
      dm1.bdgpSwissProt.spSymbol minCheck=0.80
      dm1.flyBaseSwissProt.spSymbol minCheck=0.80
@@ -309,10 +309,10 @@ identifier UniProtAccession external=UniProt
      proteome.uniProtAlias.acc minCheck=0.9
      proteome.spReactomeId.spID minCheck=0.9
      proteome.spReactomeEvent.spID minCheck=0.9
-     $kgDb2.kgProtAlias.alias  minCheck=0.2
-     $kgDb2.kgSpAlias.spID  minCheck=0.2
-     $kgDb2.kgProtMap.qName minCheck=0.9
-     $kgDb2.kgXref.spID minCheck=0.9
+     $kgDb2,!rn4.kgProtAlias.alias  minCheck=0.2
+     $kgDb2,!rn4.kgSpAlias.spID  minCheck=0.2
+     $kgDb2,!rn4.kgProtMap.qName minCheck=0.9
+     $kgDb2,!rn4.kgXref.spID minCheck=0.9
      $kgDb3.kgSpAlias.spID minCheck=0.50 exclude=
      $kgDb3.kgXref.spID minCheck=0.50 exclude=
      $ce.sangerCanonical.protein minCheck=0.8
@@ -3277,13 +3277,13 @@ identifier affyMOE430
 identifier affyRAE230
 "Affymetrix Rat RAE230 chip identifiers"
     $rn.affyRAE230.qName dupeOk
-    $rn.knownToRAE230.value
+    $rn,!rn4.knownToRAE230.value
     $rn.rgdGene2ToRAE230.value
 
 identifier affyU34A
 "Affymetrix Rat U34A chip identifiers"
     $rn.affyU34A.qName dupeOk
-    $rn.knownToU34A.value
+    $rn,!rn4.knownToU34A.value
     $rn.rgdGene2ToU34A.value
 
 identifier illuminaWG6
@@ -3649,8 +3649,6 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
     hg18.dupSpMrna.mrnaID minCheck=0.20
     hg18.dupSpMrna.dupMrnaID minCheck=0.70
-    rn4.dupSpMrna.mrnaID minCheck=0.15
-    rn4.dupSpMrna.dupMrnaID minCheck=0.60
 
 identifier mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
@@ -3808,7 +3806,7 @@ identifier knownGeneId dependency
     $kgDb.pPsiBlast.kgId1
     $kgDb.pPsiBlast.kgId2
     $ccdsDb.ccdsKgMap.geneId
-    $kgDb2.knownGenePep.name full
+    $kgDb2,!rn4.knownGenePep.name full
     $kgDb3.knownGenePep.name
     $kgDb3,!hg38.knownCanonical.protein exclude=
     $kgDb3.kgProtMap2.qName

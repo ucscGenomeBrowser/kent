@@ -49,11 +49,15 @@ UTILS_APPLIST = \
 	transMapPslToGenePred \
 	twoBitMask
 
+USER_APP_SCRIPTS = \
+	vai.pl
+
 SCRIPT_FILES = \
 	dbNsfpToBed.pl \
 	dumpDb.pl \
 	mergeOverlapBed4.pl \
-	mergeSortedBed3Plus.pl
+	mergeSortedBed3Plus.pl \
+	${USER_APP_SCRIPTS}
 
 # List of directories to build of interest only at UCSC
 DIRS = ${buildRefresh} \
@@ -90,9 +94,13 @@ utils: $(APPS:%=%.utils)
 %.utils:
 	cd $* && echo $* && $(MAKE)
 
-userApps: $(UTILS_APPLIST:%=%.userApp)
+userApps: $(UTILS_APPLIST:%=%.userApp) $(USER_APP_SCRIPTS:%=%.userAppScript)
 %.userApp:
 	cd $* && echo $* && $(MAKE)
+%.userAppScript:
+	chmod +x $*
+	rm -f ${DESTDIR}${BINDIR}/$*
+	cp -p $* ${DESTDIR}${BINDIR}/$*
 
 scripts: $(SCRIPT_FILES:%=%.scripts)
 %.scripts:

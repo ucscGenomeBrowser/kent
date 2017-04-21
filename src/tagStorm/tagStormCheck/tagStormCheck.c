@@ -4,12 +4,16 @@
 #include "hash.h"
 #include "options.h"
 #include "sqlNum.h"
+#include "sqlReserved.h"
 #include "tagStorm.h"
 #include "errAbort.h"
 #include "obscure.h"
 
 int clMaxErr = 10;
+boolean clSqlSymbols = FALSE;
+
 int gErrCount = 0;  // Number of errors so far
+struct hash *gReservedHash = NULL;  // SQL reserved words here
 
 void usage()
 /* Explain usage and exit. */
@@ -30,13 +34,14 @@ errAbort(
   "The tag names can also include wildcards.\n"
   "options:\n"
   "   -maxErr=N - maximum number of errors to report, defaults to %d\n"
+  "   -sqlSymbols - if set, this will tolerate SQL reserved words in tag names\n"
   , clMaxErr);
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"maxErr", OPTION_INT},
-   {"ignore", OPTION_STRING},
+   {"sqlSymbols", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -151,6 +156,25 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
 	/* Break out tag and value */
 	char *tag = pair->name;
 	char *val = pair->val;
+
+	/* Make sure val exists and is non-empty */
+	if (isEmpty(val))
+	    {
+	    reportError(fileName, stanza->startLineIx, 
+		"%s tag has no value", tag);
+	    continue;
+	    }
+
+	/* Check against SQL reserved words */
+	if (gReservedHash != NULL)
+	    {
+	    if (sqlReservedCheck(gReservedHash, tag))
+	        {
+		reportError(fileName, stanza->startLineIx, 
+		    "%s in tag name is a SQL reserved word", tag);
+		continue;
+		}
+	    }
 
 	/* Find schema in hash or wildSchemaList */
 	struct tagSchema *schema = hashFindVal(hash, tag);
@@ -290,6 +314,9 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 clMaxErr = optionInt("maxErr", clMaxErr);
+clSqlSymbols = optionExists("sqlSymbols");
+if (!clSqlSymbols)
+    gReservedHash = sqlReservedHash();
 tagStormCheck(argv[1], argv[2]);
 return 0;
 }
