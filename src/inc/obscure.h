@@ -142,6 +142,9 @@ struct hash *hashNameIntFile(char *fileName);
 struct hash *hashTwoColumnFile(char *fileName);
 /* Given a two column file (key, value) return a hash. */
 
+struct slPair *slPairTwoColumnFile(char *fileName);
+/* Read in a two column file into an slPair list */
+
 void shuffleArrayOfChars(char *array, int arraySize);
 /* Shuffle array of characters of given size given number of times. */
 

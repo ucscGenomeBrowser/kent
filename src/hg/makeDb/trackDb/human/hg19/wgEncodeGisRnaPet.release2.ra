@@ -16,7 +16,7 @@ fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract
 sortOrder cellType=+ localization=+ cloned=+ view=+ rank=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-priority 0
+priority 13
 type bed 3
 noInherit on
 wgEncode 1

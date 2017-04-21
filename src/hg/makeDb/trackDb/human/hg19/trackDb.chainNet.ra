@@ -5,3 +5,6 @@ include ../chainNetFelCat5.ra
 
 track chainNetOryCun2 override
 shortLabel $o_db Chain/Net
+
+track chainNetMelGal1 override
+priority 9

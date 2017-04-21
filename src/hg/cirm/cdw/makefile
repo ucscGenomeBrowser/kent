@@ -33,6 +33,7 @@ UTIL_DIRS = \
     cdwReallyRemoveFiles \
     cdwReallyRemoveDataset \
     cdwRenameFiles \
+    cdwRenameDataset \
     cdwRetryJob \
     cdwRunDaemon \
     cdwRunOnIds \
