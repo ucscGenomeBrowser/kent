@@ -32,52 +32,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct slPair *slPairTwoColumnFile(char *fileName)
-/* Read in a two column file into an slPair list */
-{
-char *row[2];
-struct slPair *list = NULL;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-while (lineFileRow(lf, row))
-    slPairAdd(&list, row[0], cloneString(row[1]));
-lineFileClose(&lf);
-slReverse(&list);
-return list;
-}
-
-void fieldedTableToTabFile(struct fieldedTable *table, char *fileName)
-/* Write out a fielded table back to file */
-{
-FILE *f = mustOpen(fileName, "w");
-
-/* Write out header row with optional leading # */
-if (table->startsSharp)
-    fputc('#', f);
-int i;
-fputs(table->fields[0], f);
-for (i=1; i<table->fieldCount; ++i)
-    {
-    fputc('\t', f);
-    fputs(table->fields[i], f);
-    }
-fputc('\n', f);
-
-/* Write out rest. */
-struct fieldedRow *fr;
-for (fr = table->rowList; fr != NULL; fr = fr->next)
-    {
-    fputs(fr->row[0], f);
-    for (i=1; i<table->fieldCount; ++i)
-	{
-	fputc('\t', f);
-	fputs(fr->row[i], f);
-	}
-    fputc('\n', f);
-    }
-
-carefulClose(&f);
-}
-
 void cdwRenameFiles(char *renameFile, char *maniFile)
 /* cdwRenameFiles - Rename files submitted name. */
 {
@@ -93,7 +47,7 @@ if (submitDirId == 0)
 char *requiredFields[] = {"file",} ;
 struct fieldedTable *maniTable = fieldedTableFromTabFile(maniFile, maniFile, requiredFields, 
     ArraySize(requiredFields));
-int fileIx = stringArrayIx("file", maniTable->fields, maniTable->fieldCount);
+int fileIx = fieldedTableMustFindFieldIx(maniTable, "file");
 struct hash *maniHash = fieldedTableUniqueIndex(maniTable, "file");
 
 /* Load in rename file and do one pass to make sure everything exists and is kosher */
