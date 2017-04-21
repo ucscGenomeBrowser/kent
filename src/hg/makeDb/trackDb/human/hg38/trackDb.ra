@@ -101,7 +101,6 @@ track hg38ContigDiff
 shortLabel Hg19 Diff
 longLabel Contigs New to GRCh38/(hg38), Not Carried Forward from GRCh37/(hg19)
 visibility hide
-priority 2
 group map
 type bed 9 .
 scoreFilterByRange on
@@ -325,7 +324,6 @@ shortLabel RetroGenes V9
 longLabel Retroposed Genes V9, Including Pseudogenes
 group genes
 type psl
-priority 37.14
 color 20,0,250
 visibility hide
 ucscRetroInfo ucscRetroInfo9
