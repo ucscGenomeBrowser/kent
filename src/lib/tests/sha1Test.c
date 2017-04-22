@@ -36,7 +36,7 @@ SHA1_CTX ctx;
 SHA1_Init(&ctx);
 size_t nr;
 char buf[BS];
-while ((nr=fread_unlocked(buf, 1, sizeof(buf), fp)))
+while ((nr=fread(buf, 1, sizeof(buf), fp)))
     SHA1_Update(&ctx, (const uint8_t*)buf, nr);
 
 SHA1_Final(&ctx, hash);
@@ -91,7 +91,7 @@ SHA1_Update(&ctx, (const uint8_t*)prefix, strlen(prefix)+1);
 
 size_t nr;
 char buf[BS];
-while ((nr=fread_unlocked(buf, 1, sizeof(buf), fp)))
+while ((nr=fread(buf, 1, sizeof(buf), fp)))
     SHA1_Update(&ctx, (const uint8_t*)buf, nr);
 
 SHA1_Final(&ctx, hash);
