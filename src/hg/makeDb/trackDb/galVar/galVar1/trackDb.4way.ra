@@ -1,7 +1,7 @@
-track cons5way
+track cons4way
 compositeTrack on
-shortLabel 5-way Mammal
-longLabel Multiz Alignment & Conservation (5 Species)
+shortLabel 4-way Mammal
+longLabel Multiz Alignment & Conservation (4 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full
@@ -9,46 +9,46 @@ priority 1
 type bed 4
 group compGeno
 
-    track cons5wayViewalign
+    track cons4wayViewalign
     shortLabel Multiz Alignments
     view align
     visibility pack
     viewUi on
-    subTrack cons5way
+    subTrack cons4way
 
-        track multiz5way
-        subTrack cons5wayViewalign on
+        track multiz4way
+        subTrack cons4wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 5 Mammals
+        longLabel Multiz Alignments of 4 Mammals
         subGroups view=align
         noInherit on
         irows on
-        summary multiz5waySummary
-        frames multiz5wayFrames
+        summary multiz4waySummary
+        frames multiz4wayFrames
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
         speciesCodonDefault galVar1
         speciesGroups Mammal
-        sGroup_Mammal tupBel1 hg38 mm10 cavPor3
+        sGroup_Mammal tupChi1 hg38 mm10
         itemFirstCharCase noChange
-        treeImage phylo/galVar1_5way.png
+        treeImage phylo/galVar1_4way.png
         priority 100
 
     # PhyloP conservation
-    track cons5wayViewphyloP
+    track cons4wayViewphyloP
     shortLabel Basewise Conservation (phyloP)
     view phyloP
     visibility full
-    subTrack cons5way
+    subTrack cons4way
     viewLimits -3:0.5
     viewLimitsMax -4.611:0.934
 
-        track phyloP5way
-        subTrack cons5wayViewphyloP on
+        track phyloP4way
+        subTrack cons4wayViewphyloP on
         subGroups view=phyloP
-        shortLabel 5 Mammals Cons
-        longLabel 5 mammal Basewise Conservation by PhyloP
+        shortLabel 4 Mammals Cons
+        longLabel 4 mammal Basewise Conservation by PhyloP
         noInherit on
         configurable on
         type wig -4.711 0.934
@@ -62,17 +62,17 @@ group compGeno
         priority 4
 
     # phastCons conservation
-    track cons5wayViewphastcons
+    track cons4wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
     visibility full
-    subTrack cons5way
+    subTrack cons4way
 
-        track phastCons5way
-        subTrack cons5wayViewphastcons on
+        track phastCons4way
+        subTrack cons4wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 5 Mammals Cons
-        longLabel 5 mammals conservation by PhastCons
+        shortLabel 4 Mammals Cons
+        longLabel 4 mammals conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -85,18 +85,18 @@ group compGeno
         priority 13
 
     # Conserved Elements (Most Conserved)
-    track cons5wayViewelements
+    track cons4wayViewelements
     shortLabel Conserved Elements
     view elements
     visibility dense
-    subTrack cons5way
+    subTrack cons4way
 
-        track phastConsElements5way
-        subTrack cons5wayViewelements on
+        track phastConsElements4way
+        subTrack cons4wayViewelements on
         subGroups view=elements
-        shortLabel 5 Mammals El
-        longLabel 5 mammals Conserved Elements
+        shortLabel 4 Mammals El
+        longLabel 4 mammals Conserved Elements
         noInherit on
         color 110,10,40
-        type bed 5 .
+        type bed 4 .
         priority 23
