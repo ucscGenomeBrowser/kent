@@ -44,7 +44,7 @@ group compGeno
     viewLimits -2:0.5
     viewLimitsMax -2.306:0.719
 
-        track phyloP4way
+        track tupChi1PhyloP4way
         subTrack cons4wayViewphyloP on
         subGroups view=phyloP
         shortLabel 4 Mammals Cons
