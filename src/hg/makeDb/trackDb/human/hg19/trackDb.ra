@@ -566,9 +566,9 @@ group map
 visibility hide
 type bed 4 +
 
-track msr2
-shortLabel Pathways
-longLabel Pathways and Protein Interactions
+track interactions
+shortLabel Protein Interactions
+longLabel Protein Interactions from Curated Databases and Text-Mining
 group pub
 visibility hide
 type bigBed 4
@@ -577,6 +577,7 @@ release alpha
 directUrl hgcGeneGraph?gene=%s
 labelOnFeature on
 linkIdInName on
+hgsid on
 
 track pubsDev
 shortLabel Publications Beta
