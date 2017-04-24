@@ -212,8 +212,9 @@ static struct barChartItemData *getSampleValsFromTable(struct trackDb *tdb,
 {
 char *table = NULL;
 struct sqlConnection *conn = getConnectionAndTable(tdb, "Data", &table);
+if (conn == NULL)
+    return NULL;
 struct barChartData *val, *vals = barChartDataLoadForLocus(conn, table, bed->name);
-hFreeConn(&conn);
 
 // Get category for samples 
 conn = getConnectionAndTable(tdb, "Sample", &table);
