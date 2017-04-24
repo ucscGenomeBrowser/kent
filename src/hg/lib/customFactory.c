@@ -3636,19 +3636,6 @@ struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean 
 return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FALSE);
 }
 
-static boolean readAndIgnore(char *fileName)
-/* Read a byte from fileName, so its access time is updated. */
-{
-boolean ret = FALSE;
-char buf[256];
-FILE *f = fopen(fileName, "r");
-if ( f && (fread(buf, 1, 1, f) == 1 ) )
-    ret = TRUE;
-if (f)
-    fclose(f);
-return ret;
-}
-
 static boolean testFileSettings(struct trackDb *tdb, char *ctFileName)
 /* Return TRUE unless tdb has a setting that ends in File but doesn't
  * specify an existing local file.  */
