@@ -317,6 +317,7 @@ safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s 
 int ret = system(cmd);
 if (ret == 0)
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
+warn("Error creating boxplot from sample data");
 }
 
 void doBarChartDetails(struct trackDb *tdb, char *item)
@@ -331,7 +332,7 @@ if (chartItem == NULL)
 genericHeader(tdb, item);
 int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
-char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
+char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
 printf("<b>Maximum value: </b> %0.2f %s in %s<br>\n", 
                 highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
 printf("<b>Total all values: </b> %0.2f<br>\n", barChartTotalValue(chartItem));
