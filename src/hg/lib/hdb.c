@@ -3711,6 +3711,7 @@ boolean trackDataAccessible(char *database, struct trackDb *tdb)
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 if (bigDataUrl != NULL)
     {
+    bigDataUrl = replaceChars(bigDataUrl, "$D", database);
     if (hasProtocol(bigDataUrl))
         return TRUE;
     else
