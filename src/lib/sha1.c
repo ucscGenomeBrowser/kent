@@ -7,15 +7,13 @@ http://svn.ghostscript.com/jbig2dec/trunk/sha1.c
 
 #include <stdio.h>
 #include <string.h>
-#include <stdint.h>
-#include <stddef.h>
 
 #include "common.h"
 #include "hex.h"
 #include "errAbort.h"
 #include "sha1.h"
 
-void SHA1_Transform(uint32_t state[5], const uint8_t buffer[64]);
+void SHA1_Transform(bits32 state[5], const bits8 buffer[64]);
 
 #define rol(value, bits) (((value) << (bits)) | ((value) >> (32 - (bits))))
 
@@ -40,17 +38,17 @@ void SHA1_Transform(uint32_t state[5], const uint8_t buffer[64]);
 
 
 /* Hash a single 512-bit block. This is the core of the algorithm. */
-void SHA1_Transform(uint32_t state[5], const uint8_t buffer[64])
+void SHA1_Transform(bits32 state[5], const bits8 buffer[64])
 {
-    uint32_t a, b, c, d, e;
+    bits32 a, b, c, d, e;
     typedef union {
-        uint8_t c[64];
-        uint32_t l[16];
+        bits8 c[64];
+        bits32 l[16];
     } CHAR64LONG16;
     CHAR64LONG16* block;
 
 #ifdef SHA1HANDSOFF
-    static uint8_t workspace[64];
+    static bits8 workspace[64];
     block = (CHAR64LONG16*)workspace;
     memcpy(block, buffer, 64);
 #else
@@ -112,7 +110,7 @@ void SHA1_Init(SHA1_CTX* context)
 
 
 /* Run your data through this. */
-void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
+void SHA1_Update(SHA1_CTX* context, const bits8* data, const size_t len)
 {
     size_t i, j;
 
@@ -134,22 +132,22 @@ void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
 
 
 /* Add padding and return the message digest. */
-void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
+void SHA1_Final(SHA1_CTX* context, bits8 digest[SHA1_DIGEST_SIZE])
 {
-    uint32_t i;
-    uint8_t  finalcount[8];
+    bits32 i;
+    bits8  finalcount[8];
 
     for (i = 0; i < 8; i++) {
         finalcount[i] = (unsigned char)((context->count[(i >= 4 ? 0 : 1)]
          >> ((3-(i & 3)) * 8) ) & 255);  /* Endian independent */
     }
-    SHA1_Update(context, (uint8_t *)"\200", 1);
+    SHA1_Update(context, (bits8 *)"\200", 1);
     while ((context->count[0] & 504) != 448) {
-        SHA1_Update(context, (uint8_t *)"\0", 1);
+        SHA1_Update(context, (bits8 *)"\0", 1);
     }
     SHA1_Update(context, finalcount, 8);  /* Should cause a SHA1_Transform() */
     for (i = 0; i < SHA1_DIGEST_SIZE; i++) {
-        digest[i] = (uint8_t)
+        digest[i] = (bits8)
          ((context->state[i>>2] >> ((3-(i & 3)) * 8) ) & 255);
     }
 
@@ -191,10 +189,10 @@ if (!fp) errAbort("missing file %s", fileName);
 SHA1_CTX ctx;
 SHA1_Init(&ctx);
 size_t nr;
-char buf[BS];
-while ((nr=fread_unlocked(buf, 1, sizeof(buf), fp)))
+unsigned char buf[BS];
+while ((nr=fread(buf, 1, sizeof(buf), fp)))
     { 
-    SHA1_Update(&ctx, (const uint8_t*)buf, nr);
+    SHA1_Update(&ctx, buf, nr);
     };
 SHA1_Final(&ctx, hash);
 }
@@ -219,7 +217,7 @@ while (remaining > 0)
     int bufSize = BS;
     if (bufSize > remaining)
 	bufSize = remaining;
-    SHA1_Update(&ctx, (const uint8_t*)buffer, bufSize);
+    SHA1_Update(&ctx, (unsigned char*)buffer, bufSize);
     buffer += bufSize;
     remaining -= bufSize;
     }

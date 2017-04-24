@@ -1486,7 +1486,8 @@ while(TRUE)
 		{
 		if (sameString(code, "200"))
 		    warn("Byte-range request was ignored by server. ");
-		warn("Expected Partial Content 206. %s: %s %s", url, code, line);
+		warn("Expected Partial Content 206. %s: %s %s. rangeStart=%llu rangeEnd=%llu", 
+		    url, code, line, (unsigned long long)byteRangeStart, (unsigned long long)byteRangeEnd);
 		return FALSE;
 		}
 	    }

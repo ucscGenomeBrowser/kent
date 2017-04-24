@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <stddef.h>
 #include "common.h"
 #include "errAbort.h"
 #include "obscure.h"
@@ -35,9 +33,9 @@ if (!fp)
 SHA1_CTX ctx;
 SHA1_Init(&ctx);
 size_t nr;
-char buf[BS];
-while ((nr=fread_unlocked(buf, 1, sizeof(buf), fp)))
-    SHA1_Update(&ctx, (const uint8_t*)buf, nr);
+unsigned char buf[BS];
+while ((nr=fread(buf, 1, sizeof(buf), fp)))
+    SHA1_Update(&ctx, buf, nr);
 
 SHA1_Final(&ctx, hash);
 }
@@ -87,12 +85,12 @@ safef(prefix, sizeof prefix, "blob %llu", (unsigned long long)fs);
 SHA1_CTX ctx;
 SHA1_Init(&ctx);
 
-SHA1_Update(&ctx, (const uint8_t*)prefix, strlen(prefix)+1);
+SHA1_Update(&ctx, (unsigned char *)prefix, strlen(prefix)+1);
 
 size_t nr;
-char buf[BS];
-while ((nr=fread_unlocked(buf, 1, sizeof(buf), fp)))
-    SHA1_Update(&ctx, (const uint8_t*)buf, nr);
+unsigned char buf[BS];
+while ((nr=fread(buf, 1, sizeof(buf), fp)))
+    SHA1_Update(&ctx, buf, nr);
 
 SHA1_Final(&ctx, hash);
 return sha1ToHex(hash);
@@ -116,7 +114,7 @@ return sha1HexForBuf(buf, bufSize);
 }
 
 
-void digest_to_hex(const uint8_t digest[SHA1_DIGEST_SIZE], char *output)
+void digest_to_hex(const bits8 digest[SHA1_DIGEST_SIZE], char *output)
 {
     int i,j;
     char *c = output;
@@ -136,14 +134,14 @@ int main(int argc, char** argv)
 {
     int k;
     SHA1_CTX context;
-    uint8_t digest[20];
+    bits8 digest[20];
     char output[80];
 
     fprintf(stdout, "verifying SHA-1 implementation... ");
 
     for (k = 0; k < 2; k++){
         SHA1_Init(&context);
-        SHA1_Update(&context, (uint8_t*)test_data[k], strlen(test_data[k]));
+        SHA1_Update(&context, (bits8*)test_data[k], strlen(test_data[k]));
         SHA1_Final(&context, digest);
 	digest_to_hex(digest, output);
 
@@ -158,7 +156,7 @@ int main(int argc, char** argv)
     /* million 'a' vector we feed separately */
     SHA1_Init(&context);
     for (k = 0; k < 1000000; k++)
-        SHA1_Update(&context, (uint8_t*)"a", 1);
+        SHA1_Update(&context, (bits8*)"a", 1);
     SHA1_Final(&context, digest);
     digest_to_hex(digest, output);
     if (strcmp(output, test_results[2])) {

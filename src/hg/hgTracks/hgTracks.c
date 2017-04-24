@@ -70,6 +70,7 @@
 #include "bigWarn.h"
 #include "wigCommon.h"
 #include "knetUdc.h"
+#include "sha1.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -3910,29 +3911,178 @@ slReverse(&virtRegionList);
 
 }
 
+void checkmultiRegionsBedInput()
+/* Check if multiRegionsBedInput needs processing.
+ * If BED submitted, see if it has changed, and if so, save it to trash
+ * and update cart and global vars. Uses sha1 hash for faster change check. */
+{
+enum custRgnType { empty, url, trashFile };
+enum custRgnType oldType = empty;
+enum custRgnType newType = empty;
+
+// OLD input
+
+char *newMultiRegionsBedUrl = NULL;
+multiRegionsBedUrl = cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
+char multiRegionsBedUrlSha1Name[1024];
+safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", multiRegionsBedUrl);
+if (!multiRegionsBedUrl)
+    {
+    multiRegionsBedUrl = "";
+    cartSetString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
+    }
+if (sameString(multiRegionsBedUrl,""))
+    oldType = empty;
+else if (strstr(multiRegionsBedUrl,"://"))
+    oldType = url;
+else 
+    oldType = trashFile;
+if ((oldType == trashFile) && !(fileExists(multiRegionsBedUrl) && fileExists(multiRegionsBedUrlSha1Name)))
+    {  // if the trash files no longer exists, reset to empty string default value.
+    multiRegionsBedUrl = "";
+    cartSetString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
+    oldType = empty;
+    }
+
+// NEW input
+
+char *multiRegionsBedInput = cartOptionalString(cart, "multiRegionsBedInput");
+if (!multiRegionsBedInput)
+    return;
+
+// create cleaned up dyString from input.
+// remove blank lines, trim leading and trailing spaces, change CRLF from TEXTAREA input to LF.
+struct dyString *dyInput = dyStringNew(1024);
+char *input = cloneString(multiRegionsBedInput);  // make a copy, linefile modifies
+struct lineFile *lf = lineFileOnString("multiRegionsBedInput", TRUE, input);
+char *line;
+int lineSize;
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    line = trimSpaces(line);
+    if (sameString(line, "")) // skip blank lines
+	continue;
+    dyStringAppend(dyInput,line);
+    dyStringAppend(dyInput,"\n");
+    }
+lineFileClose(&lf);
+
+// test multiRegionsBedInput. empty? url? trashFile?
+input = cloneString(dyInput->string);  // make a copy, linefile modifies
+lf = lineFileOnString("multiRegionsBedInput", TRUE, input);
+int lineCount = 0;
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    ++lineCount;
+    if (lineCount==1 && 
+	(startsWithNoCase("http://" ,line)
+      || startsWithNoCase("https://",line)
+      || startsWithNoCase("ftp://"  ,line)))
+	{
+	// new value is a URL. set vars and cart.
+	newMultiRegionsBedUrl = cloneString(line);
+	newType = url;
+	}
+    break;
+    }
+lineFileClose(&lf);
+if (newType != url)
+    {
+    if (lineCount == 0)  // there are no non-blank lines
+	{	
+	newMultiRegionsBedUrl = "";
+	newType = empty;
+	}
+    else
+	newType = trashFile;
+    }
+
+char *newSha1 = NULL;
+if (newType==trashFile)
+    {
+    // calculate sha1 checksum on new input.
+    newSha1 = sha1HexForString(dyInput->string);
+    }
+
+// compare input sha1 to trashFile sha1 to see if same
+boolean filesAreSame = FALSE;
+if (oldType==trashFile && newType==trashFile)
+    {
+    lf = lineFileMayOpen(multiRegionsBedUrlSha1Name, TRUE);
+    while (lineFileNext(lf, &line, &lineSize))
+	{
+	if (sameString(line, newSha1))
+	    filesAreSame = TRUE;
+	}
+    lineFileClose(&lf);
+    }
+
+// save new trashFile unless no changes.
+if (newType==trashFile && (!(oldType==trashFile && filesAreSame) ))
+    {
+    struct tempName bedTn;
+    trashDirFile(&bedTn, "hgt", "custRgn", ".bed");
+    FILE *f = mustOpen(bedTn.forCgi, "w");
+    mustWrite(f, dyInput->string, dyInput->stringSize);
+    carefulClose(&f);
+    // new value is a trash file. 
+    newMultiRegionsBedUrl = cloneString(bedTn.forCgi);
+    // save new input sha1 to trash file.
+    safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", bedTn.forCgi);
+    f = mustOpen(multiRegionsBedUrlSha1Name, "w");
+    mustWrite(f, newSha1, strlen(newSha1));
+    carefulClose(&f);
+    }
+
+dyStringFree(&dyInput);
+
+// if new value, set vars and cart
+if (newMultiRegionsBedUrl)
+    {
+    multiRegionsBedUrl = newMultiRegionsBedUrl;
+    cartSetString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
+    }
+cartRemove(cart, "multiRegionsBedInput");
+}
+
+
 boolean initVirtRegionsFromBedUrl(time_t *bedDateTime)
 /* Read custom regions from BED URL */
 {
 multiRegionsBedUrl = cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
 int bedPadding = 0; // default no padding
-// TODO add some checks for db change? save in cart var?
 if (sameString(multiRegionsBedUrl,""))
     {
-    warn("No BED URL specified.");
+    warn("No BED or BED URL specified.");
     return FALSE;
     }
-if (!strstr(multiRegionsBedUrl,"://"))
+
+struct lineFile *lf = NULL;
+if (strstr(multiRegionsBedUrl,"://"))
     {
-    warn("No protocol specified in BED URL %s", multiRegionsBedUrl);
-    return FALSE;
+    lf = lineFileUdcMayOpen(multiRegionsBedUrl, FALSE);
+    if (!lf)
+	{
+	warn("Unable to open [%s] with udc", multiRegionsBedUrl);
+	return FALSE;
+	}
+    *bedDateTime = udcTimeFromCache(multiRegionsBedUrl, NULL);
     }
-struct lineFile *lf = lineFileUdcMayOpen(multiRegionsBedUrl, FALSE);
-if (!lf)
+else
     {
-    warn("Unable to open [%s] with udc", multiRegionsBedUrl);
-    return FALSE;
+    lf = lineFileMayOpen(multiRegionsBedUrl, TRUE);
+    if (!lf)
+	{
+	warn("BED custom regions file [%s] not found.", multiRegionsBedUrl);
+	return FALSE;
+	}
+    *bedDateTime = 0;
+    // touch corresponding .sha1 file to save it from trash cleaner.
+    char multiRegionsBedUrlSha1Name[1024];
+    safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", multiRegionsBedUrl);
+    if (fileExists(multiRegionsBedUrlSha1Name))
+	maybeTouchFile(multiRegionsBedUrlSha1Name);	
     }
-*bedDateTime = udcTimeFromCache(multiRegionsBedUrl, NULL);
 char *line;
 int lineSize;
 int expectedFieldCount = -1;
@@ -4077,6 +4227,8 @@ if (saveBoth)
 boolean initRegionList()
 /* initialize window list */
 {
+
+checkmultiRegionsBedInput();
 
 struct virtRegion *v;
 virtRegionList = NULL;
