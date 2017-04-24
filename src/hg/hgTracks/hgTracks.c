@@ -4081,7 +4081,7 @@ else
     char multiRegionsBedUrlSha1Name[1024];
     safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", multiRegionsBedUrl);
     if (fileExists(multiRegionsBedUrlSha1Name))
-	maybeTouchFile(multiRegionsBedUrlSha1Name);	
+	readAndIgnore(multiRegionsBedUrlSha1Name);	
     }
 char *line;
 int lineSize;

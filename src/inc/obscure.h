@@ -200,4 +200,7 @@ boolean endsWithWordComma(char *string, char *word);
 void ensureNamesCaseUnique(struct slName *fieldList);
 /* Ensure that there would be no name conflicts in fieldList if all fields were lower-cased. */
 
+boolean readAndIgnore(char *fileName);
+/* Read a byte from fileName, so its access time is updated. */
+
 #endif /* OBSCURE_H */

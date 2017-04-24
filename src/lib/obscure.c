@@ -906,3 +906,17 @@ for (field = fieldList; field != NULL; field = field->next)
 hashFree(&hash);
 }
 
+boolean readAndIgnore(char *fileName)
+/* Read a byte from fileName, so its access time is updated. */
+{
+boolean ret = FALSE;
+char buf[256];
+FILE *f = fopen(fileName, "r");
+if ( f && (fread(buf, 1, 1, f) == 1 ) )
+    ret = TRUE;
+if (f)
+    fclose(f);
+return ret;
+}
+
+
