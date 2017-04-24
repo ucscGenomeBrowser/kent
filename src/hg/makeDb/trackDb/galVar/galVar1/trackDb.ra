@@ -24,4 +24,6 @@ searchPriority 8
 
 include trackDb.5way.ra
 
+include trackDb.4way.ra
+
 include trackDb.chainNet.ra
