@@ -1,4 +1,5 @@
-/* trixContextIndex - Index in.txt file used with ixIxx to produce a two column file with symbol name and file offset for that line.. */
+/* trixContextIndex - Index in.txt file used with ixIxx to produce a two column file with symbol name 
+ * and file offset for that line.. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,7 +9,8 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "trixContextIndex - Index in.txt file used with ixIxx to produce a two column file with symbol name and file offset for that line.\n"
+  "trixContextIndex - Index in.txt file used with ixIxx to produce a two column file with symbol\n"
+  "name and file offset for that line.\n"
   "usage:\n"
   "   trixContextIndex in.txt out.tab\n"
   "options:\n"
@@ -22,7 +24,8 @@ static struct optionSpec options[] = {
 };
 
 void trixContextIndex(char *input, char *output)
-/* trixContextIndex - Index in.txt file used with ixIxx to produce a two column file with symbol name and file offset for that line.. */
+/* trixContextIndex - Index in.txt file used with ixIxx to produce a two column file with symbol name 
+ * and file offset for that line.. */
 {
 struct lineFile *lf = lineFileOpen(input, TRUE);
 FILE *f = mustOpen(output, "w");
