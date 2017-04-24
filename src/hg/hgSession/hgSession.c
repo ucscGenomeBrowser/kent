@@ -835,7 +835,7 @@ char *convertPath = cfgOption("sessionThumbnail.convertPath");
 if (convertPath == NULL)
     convertPath = cloneString("convert");
 char convertTestCmd[4096];
-safef(convertTestCmd, sizeof(convertTestCmd), "which %s >& /dev/null", convertPath);
+safef(convertTestCmd, sizeof(convertTestCmd), "which %s > /dev/null", convertPath);
 int convertTestResult = system(convertTestCmd);
 if (convertTestResult != 0)
     {
