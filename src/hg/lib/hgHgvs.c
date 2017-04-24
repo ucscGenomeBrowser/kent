@@ -1137,6 +1137,65 @@ psl->tStarts[0] = psl->tStart;
 return psl;
 }
 
+static struct psl *pslDelFromCoord(struct psl *txAli, int tStart, struct psl *variantPsl)
+/* Return a PSL with same target and query as txAli, but as a deletion at offset tStart:
+ * two zero-length blocks surrounding no target and query = variantPsl's target coords. */
+{
+struct psl *del;
+AllocVar(del);
+del->tName = cloneString(txAli->tName);
+del->tSize = txAli->tSize;
+safecpy(del->strand, sizeof(del->strand), txAli->strand);
+del->tStart = del->tEnd = tStart;
+del->qName = cloneString(txAli->qName);
+del->qStart = variantPsl->tStart;
+del->qEnd = variantPsl->tEnd;
+del->blockCount = 2;
+AllocArray(del->blockSizes, del->blockCount);
+AllocArray(del->qStarts, del->blockCount);
+AllocArray(del->tStarts, del->blockCount);
+// I wonder if zero-length blockSizes would trigger crashes somewhere...
+del->blockSizes[0] = del->blockSizes[1] = 0;
+del->tStarts[0] = del->tStarts[1] = del->tStart;
+del->qStarts[0] = del->qStart;
+del->qStarts[1] = del->qEnd;
+return del;
+}
+
+
+static struct psl *mapToDeletion(struct psl *variantPsl, struct psl *txAli)
+/* If the variant falls on a transcript base that is deleted in the reference genome,
+ * return the deletion coords (pslTransMap returns NULL), otherwise return NULL. */
+{
+// variant start and end coords, in transcript coords:
+int vStart = variantPsl->tStart;
+int vEnd = variantPsl->tEnd;
+// If txAli->strand is '-', reverse coords
+if (txAli->strand[0] == '-')
+    {
+    vStart = variantPsl->tSize - variantPsl->tEnd;
+    vEnd = variantPsl->tSize - variantPsl->tStart;
+    }
+if (vEnd < txAli->qStart)
+    return pslDelFromCoord(txAli, txAli->qStart, variantPsl);
+else if (vStart > txAli->qEnd)
+    return pslDelFromCoord(txAli, txAli->qEnd, variantPsl);
+int i;
+for (i = 0;  i < txAli->blockCount - 1;  i++)
+    {
+    int qBlockEnd = txAli->qStarts[i] + txAli->blockSizes[i];
+    int qNextBlockStart = txAli->qStarts[i+1];
+    int tBlockEnd = txAli->tStarts[i] + txAli->blockSizes[i];
+    int tNextBlockStart = txAli->tStarts[i+1];
+    if (vStart >= qBlockEnd && vEnd <= qNextBlockStart &&
+        tBlockEnd == tNextBlockStart)
+        return pslDelFromCoord(txAli, tBlockEnd, variantPsl);
+    }
+// Not contained in a deletion from reference genome (txAli target) -- return NULL.
+return NULL;
+}
+
+
 static struct psl *mapPsl(char *db, struct hgvsVariant *hgvs, char *pslTable, char *acc,
                           struct genbankCds *cds, int *retUpstream, int *retDownstream)
 /* If acc is found in pslTable, use pslTransMap to map hgvs onto the genome. */
@@ -1156,6 +1215,11 @@ if (sr && (row = sqlNextRow(sr)))
     struct psl *variantPsl = pslFromHgvsNuc(hgvs, acc, txAli->qSize, txAli->qEnd, cds,
                                             retUpstream, retDownstream);
     mappedToGenome = pslTransMap(pslTransMapNoOpts, variantPsl, txAli);
+    // If there is a deletion in the genome / insertion in the transcript then pslTransMap cannot
+    // map those bases to the genome.  In that case take a harder look and return the deletion
+    // coords.
+    if (mappedToGenome == NULL)
+        mappedToGenome = mapToDeletion(variantPsl, txAli);
     pslFree(&variantPsl);
     pslFree(&txAli);
     }
