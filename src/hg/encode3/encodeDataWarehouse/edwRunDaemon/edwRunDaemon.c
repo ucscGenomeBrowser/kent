@@ -213,7 +213,7 @@ else
 }
 
 
-void readAndIgnore(int fd, int byteCount)
+void edwReadAndIgnore(int fd, int byteCount)
 /* Read byteCount from fd, and just throw it away.  We are just using named pipe
  * as a synchronization device is why. */
 {
@@ -241,7 +241,7 @@ void syncWithTimeout(int fd, long long microsecs)
 int bytesReady = netWaitForData(fd, microsecs);
 if (bytesReady > 0)
     {
-    readAndIgnore(fd, bytesReady);
+    edwReadAndIgnore(fd, bytesReady);
     }
 }
 
