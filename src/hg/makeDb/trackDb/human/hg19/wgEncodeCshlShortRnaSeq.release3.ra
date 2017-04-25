@@ -17,7 +17,7 @@ fileSortOrder cell=Cell_Line localization=Localization protocol=Protocol view=Vi
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 noInherit on
-priority 0
+priority 9
 type bed 3
 wgEncode 1
 html wgEncodeCshlShortRnaSeq.release3

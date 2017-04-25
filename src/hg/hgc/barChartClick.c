@@ -8,8 +8,10 @@
 #include "hdb.h"
 #include "hvGfx.h"
 #include "trashDir.h"
-#include "hgc.h"
 #include "hCommon.h"
+#include "hui.h"
+#include "asParse.h"
+#include "hgc.h"
 
 #include "barChartBed.h"
 #include "barChartCategory.h"
@@ -44,10 +46,21 @@ for (i=0; i<wordCt; i++)
 return categoryHash;
 }
 
-static struct barChartBed *getBarChartFromFile(char *item, char *chrom, int start, int end, 
-                                                char *file)
+static struct barChartBed *getBarChartFromFile(struct trackDb *tdb, char *file, 
+                                                char *item, char *chrom, int start, int end)
 /* Retrieve barChart BED item from big file */
 {
+struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+struct asObject *as = NULL;
+boolean hasOffsets = TRUE;
+if (conn != NULL)
+    {
+    as = asForTdb(conn, tdb);
+    hasOffsets = (
+        asColumnFind(as, BARCHART_OFFSET_COLUMN) != NULL && 
+        asColumnFind(as, BARCHART_LEN_COLUMN) != NULL);
+    hFreeConn(&conn);
+    }
 struct bbiFile *bbi = bigBedFileOpen(file);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
@@ -56,24 +69,28 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     char startBuf[16], endBuf[16];
     char *row[32];
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, ArraySize(row));
-    struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, TRUE);
+    struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
     if (sameString(barChart->name, item))
         return barChart;
     }
 return NULL;
 }
 
-static struct barChartBed *getBarChartFromTable(char *item, char *chrom, int start, int end, 
-                                                char *table)
+static struct barChartBed *getBarChartFromTable(struct trackDb *tdb, char *table, 
+                                                char *item, char *chrom, int start, int end)
 /* Retrieve barChart BED item from track table */
 {
-struct barChartBed *barChart = NULL;
 struct sqlConnection *conn = hAllocConn(database);
+if (conn == NULL)
+    return NULL;
+struct barChartBed *barChart = NULL;
 char **row;
 char query[512];
 struct sqlResult *sr;
 if (sqlTableExists(conn, table))
     {
+    boolean hasOffsets = (sqlColumnExists(conn, table, BARCHART_OFFSET_COLUMN) &&
+                         sqlColumnExists(conn, table, BARCHART_LEN_COLUMN));
     sqlSafef(query, sizeof query, 
                 "SELECT * FROM %s WHERE name='%s'"
                     "AND chrom='%s' AND chromStart=%d AND chromEnd=%d", 
@@ -82,7 +99,7 @@ if (sqlTableExists(conn, table))
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-        barChart = barChartBedLoadOptionalOffsets(row, FALSE);
+        barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
         }
     sqlFreeResult(&sr);
     }
@@ -90,16 +107,15 @@ hFreeConn(&conn);
 return barChart;
 }
 
-static struct barChartBed *getBarChart(char *item, char *chrom, int start, int end, 
-                                        struct trackDb *tdb)
+static struct barChartBed *getBarChart(struct trackDb *tdb, char *item, char *chrom, int start, int end)
 /* Retrieve barChart BED item from track */
 {
 struct barChartBed *barChart = NULL;
 char *file = trackDbSetting(tdb, "bigDataUrl");
 if (file != NULL)
-    barChart = getBarChartFromFile(item, chrom, start, end, file);
+    barChart = getBarChartFromFile(tdb, file, item, chrom, start, end);
 else
-    barChart = getBarChartFromTable(item, chrom, start, end, tdb->table);
+    barChart = getBarChartFromTable(tdb, tdb->table, item, chrom, start, end);
 return barChart;
 }
 
@@ -153,7 +169,7 @@ udcFileClose(&f);
 // Construct list of sample data with category
 struct barChartItemData *sampleVals = NULL, *data = NULL;
 int i;
-for (i=1; i<wordCt; i++)
+for (i=1; i<wordCt && samples[i] != NULL; i++)
     {
     char *sample = samples[i];
     char *categ = (char *)hashFindVal(sampleHash, sample);
@@ -200,8 +216,9 @@ static struct barChartItemData *getSampleValsFromTable(struct trackDb *tdb,
 {
 char *table = NULL;
 struct sqlConnection *conn = getConnectionAndTable(tdb, "Data", &table);
+if (conn == NULL)
+    return NULL;
 struct barChartData *val, *vals = barChartDataLoadForLocus(conn, table, bed->name);
-hFreeConn(&conn);
 
 // Get category for samples 
 conn = getConnectionAndTable(tdb, "Sample", &table);
@@ -304,6 +321,8 @@ safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s 
 int ret = system(cmd);
 if (ret == 0)
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
+else
+    warn("Error creating boxplot from sample data");
 }
 
 void doBarChartDetails(struct trackDb *tdb, char *item)
@@ -311,14 +330,14 @@ void doBarChartDetails(struct trackDb *tdb, char *item)
 {
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-struct barChartBed *chartItem = getBarChart(item, seqName, start, end, tdb);
+struct barChartBed *chartItem = getBarChart(tdb, item, seqName, start, end);
 if (chartItem == NULL)
     errAbort("Can't find item %s in barChart table/file %s\n", item, tdb->table);
 
 genericHeader(tdb, item);
 int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
-char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
+char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
 printf("<b>Maximum value: </b> %0.2f %s in %s<br>\n", 
                 highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
 printf("<b>Total all values: </b> %0.2f<br>\n", barChartTotalValue(chartItem));

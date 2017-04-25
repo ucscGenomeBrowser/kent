@@ -639,8 +639,31 @@ if (conn && sqlTableExists(conn,"knownCanonical"))
 hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "customUrl", sameWord("customUrl", virtModeType));
 hPrintf("</TD><TD>");
-hPrintf("Custom regions from BED URL: ");
-hTextVar("multiRegionsBedUrl", cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl), 60);
+hPrintf("Enter Custom regions as BED, or a URL to them:<br>");
+//OLDWAY  GALT TODO REMOVE 
+//hTextVar("multiRegionsBedUrl", cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl), 60);
+multiRegionsBedUrl = cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
+struct dyString *dyMultiRegionsBedInput = dyStringNew(256);
+if (strstr(multiRegionsBedUrl,"://"))
+    {
+    dyStringAppend(dyMultiRegionsBedInput, multiRegionsBedUrl);
+    }
+else
+    {
+    if (fileExists(multiRegionsBedUrl))
+	{
+	struct lineFile *lf = lineFileMayOpen(multiRegionsBedUrl, TRUE);
+	char *line;
+	int lineSize;
+	while (lineFileNext(lf, &line, &lineSize))
+	    {
+	    dyStringPrintf(dyMultiRegionsBedInput, "%s\n", line);
+	    }
+	lineFileClose(&lf);
+	}
+    }
+hPrintf("<TEXTAREA NAME='multiRegionsBedInput' ID='multiRegionsBedInput' rows='4' cols='60'>%s</TEXTAREA>",
+    dyMultiRegionsBedInput->string);
 hPrintf("</TD></TR>\n");
 
 

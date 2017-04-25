@@ -167,7 +167,8 @@ SCRIPT_FILES = \
 	tabRepl \
 	uniprotLift \
 	uniprotToTab \
-	bedJoinTabOffset
+	bedJoinTabOffset \
+	expMatrixToBarchartBed \
 
 
 # List of all directories to build

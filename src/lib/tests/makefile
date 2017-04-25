@@ -12,9 +12,9 @@ MYLIBS = ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
-    mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gitSha1Test gff3Test \
+    mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest sha1Test gff3Test \
     ${TABIX_TESTS} hacTreeTest testSumDoubles
-	rm -r output fetchUrlTest gitSha1Test
+	rm -r output fetchUrlTest sha1Test
 	@echo tested all
 
 
@@ -234,8 +234,8 @@ miniBlat:  mkdirs miniBlat.o ${MYLIBS}
 fetchUrlTest:  mkdirs fetchUrlTest.o ${MYLIBS}
 	${CC} ${COPT} -o fetchUrlTest fetchUrlTest.o ${MYLIBS} ${L}
 
-gitSha1Test:  mkdirs gitSha1Test.o ${MYLIBS}
-	${CC} ${COPT} -o gitSha1Test gitSha1Test.o ${MYLIBS} ${L}
+sha1Test:  mkdirs sha1Test.o ${MYLIBS}
+	${CC} ${COPT} -o sha1Test sha1Test.o ${MYLIBS} ${L}
 
 ##
 # gff3 tests

@@ -60,6 +60,7 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track HInvGeneMrna override
+priority 4
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -232,6 +233,7 @@ xrefQuery select ucscRetroInfo7.name, geneSymbol from %s where geneSymbol like '
 searchPriority 3.53
 
 track illuminaProbes override
+priority 17
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -245,11 +247,13 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track pgSnp override
+priority 12
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 #not all have been lifted, do at subtrack level after adding new
 
 track sestanBrainAtlas override
+priority 21
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -856,36 +860,47 @@ track genomicSuperDups override
 group rep
 
 track snp141Flagged override
+priority 11.5
 snpSeqFile /gbdb/hg19/snp/snp141.fa
 
 track snp141Common override
+priority 7.4
 snpSeqFile /gbdb/hg19/snp/snp141.fa
 
 track snp141 override
+priority 6.5
 snpSeqFile /gbdb/hg19/snp/snp141.fa
 
 track snp142Mult override
+priority 17.4
 snpSeqFile /gbdb/hg19/snp/snp142.fa
 
 track snp142Flagged override
+priority 11.4
 snpSeqFile /gbdb/hg19/snp/snp142.fa
 
 track snp142Common override
+priority 7.3
 snpSeqFile /gbdb/hg19/snp/snp142.fa
 
 track snp142 override
+priority 6.4
 snpSeqFile /gbdb/hg19/snp/snp142.fa
 
 track snp144Mult override
+priority 17.3
 snpSeqFile /gbdb/hg19/snp/snp144.fa
 
 track snp144Flagged override
+priority 11.3
 snpSeqFile /gbdb/hg19/snp/snp144.fa
 
 track snp144Common override
+priority 7.2
 snpSeqFile /gbdb/hg19/snp/snp144.fa
 
 track snp144 override
+priority 6.3
 snpSeqFile /gbdb/hg19/snp/snp144.fa
 
 track snp137Common override
@@ -900,6 +915,7 @@ track snp138Flagged
 shortLabel Flagged SNPs(138)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Flagged by dbSNP as Clinically Assoc
 group varRep
+priority 11.6
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -918,6 +934,7 @@ codingAnnotations snp138CodingDbSnp,
 #codingAnnoLabel_snp138CodingDbSnp dbSNP
 
 track snp138Mult override
+priority 17.5
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
 chimpDb panTro4
@@ -926,6 +943,7 @@ macaqueDb rheMac3
 hapmapPhase III
 
 track snp138 override
+priority 6.6
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
 chimpDb panTro4
@@ -934,6 +952,7 @@ macaqueDb rheMac3
 hapmapPhase III
 
 track snp138Common override
+priority 7.5
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
 chimpDb panTro4
@@ -1086,6 +1105,7 @@ snpSeqFile /gbdb/hg18/snp/snp130.fa
 origAssembly hg18
 
 track hapmapSnps override
+priority 15
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 longLabel HapMap SNPs (rel27, merged Phase II + Phase III genotypes)
@@ -1264,6 +1284,7 @@ shortLabel 1000G Ph1 Vars
 longLabel 1000 Genomes Phase 1 Integrated Variant Calls: SNVs, Indels, SVs
 type vcfTabix
 group varRep
+priority 3
 visibility hide
 maxWindowToDraw 5000000
 showHardyWeinberg on
@@ -1276,6 +1297,7 @@ longLabel 1000 Genomes Project Phase 1 Paired-end Accessible Regions
 type bigBed 3
 visibility hide
 group varRep
+priority 2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
 
     track tgpPhase1AccessibilityPilotCriteria
@@ -1299,6 +1321,7 @@ shortLabel 1000G Ph3 Vars
 longLabel 1000 Genomes Phase 3 Integrated Variant Calls: SNVs, Indels, SVs
 type vcfTabix
 group varRep
+priority 5
 visibility hide
 maxWindowToDraw 5000000
 showHardyWeinberg on
@@ -1311,6 +1334,7 @@ longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions
 type bigBed 3
 visibility hide
 group varRep
+priority 4
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
 
     track tgpPhase3AccessibilityPilotCriteria
@@ -1332,6 +1356,7 @@ shortLabel EVS Variants
 longLabel NHLBI GO Exome Sequencing Project (ESP) - Variants from 6,503 Exomes
 type vcfTabix
 group varRep
+priority 9
 visibility hide
 maxWindowToDraw 5000000
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
@@ -1343,6 +1368,7 @@ compositeTrack on
 shortLabel ExAC
 longLabel Exome Aggregation Consortium (ExAC) Variants and Calling Regions
 group varRep
+priority 10
 dataVersion release 0.3
 type bed 3
 
@@ -1468,6 +1494,7 @@ html gc5Base
 track affyExonArray
 compositeTrack on
 group expression
+priority 1
 shortLabel Affy Exon Array
 longLabel Affymetrix $Organism Exon Array Probes and Probesets
 subGroup1 view Views v1Probeset=Probeset v2Probe=Probe
@@ -1611,6 +1638,7 @@ shortLabel Evo Cpg
 longLabel Weizmann Evolutionary CpG Islands
 visibility hide
 group compGeno
+priority 4
 type bed 9 .
 noScoreFilter .
 itemRgb on
@@ -1672,6 +1700,7 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track cgapSage override
+priority 2
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -1680,6 +1709,7 @@ track consIndelsHgMmCanFam
 shortLabel Cons Indels MmCf
 longLabel Indel-based Conservation for Human hg19, Mouse mm8 and Dog canFam2
 group compGeno
+priority 3
 visibility hide
 useScore 1
 color 0, 60, 120
@@ -1699,6 +1729,7 @@ compositeTrack on
 shortLabel Poly(A)
 longLabel Poly(A) Sites, Both Reported and Predicted
 group rna
+priority 9
 visibility hide
 noInherit on
 type bed 3 .
@@ -1733,6 +1764,7 @@ compositeTrack on
 shortLabel PolyA-Seq
 longLabel Poly(A)-sequencing from Merck Research Laboratories
 group rna
+priority 10
 subGroup1 view Views Signal=Signal 
 subGroup2 tissType Tissue_Type Kidney=Kidney Brain=Brain Liver=Liver MaqcBrain1=MAQC_Brain_1 MaqcBrain2=MAQC_Brain_2 MaqcUhr1=MAQC_UHR_1 MaqcUhr2=MAQC_UHR_2 Muscle=Muscle Testis=Testis
 subGroup3 strand Strand fwd=Forward rev=Reverse
@@ -1905,6 +1937,7 @@ shortLabel SNP/CNV Arrays
 longLabel Microarray Probesets
 compositeTrack on
 group varRep
+priority 18
 visibility hide
 noScoreFilter .
 noInherit on
@@ -2129,6 +2162,7 @@ track allHg19RS_BW
 shortLabel GERP
 longLabel GERP Scores for Mammalian Alignments
 group compGeno
+priority 5
 visibility hide
 type bigWig -15 7
 autoScale on
@@ -2294,6 +2328,7 @@ url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg1
 urlLabel SIB link:
 
 track sibTxGraph override
+priority 11
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg19&species=H.+sapiens&tromer=$$
 
 searchTable affyCytoScan
@@ -2305,6 +2340,7 @@ searchPriority 50
 padding 250
 
 track qPcrPrimers override
+priority 19
 url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_by_line.cgi?$$
 urlLabel Click here for primer details:
 
@@ -2380,6 +2416,7 @@ type bed 12
 url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
 urlLabel Link to PeptideAtlas:
 group expression
+priority 18
 spectrum on
 minGrayLevel 4
 scoreMax 51
@@ -2391,6 +2428,7 @@ release alpha
 html peptideAtlas
 superTrack on
 group expression
+priority 18
 shortLabel PeptideAtlas
 longLabel Peptide sequences identified by tandem MS from PeptideAtlas
 
@@ -2465,6 +2503,110 @@ group rep
 
 track pubsBingBlat override
 group phenDis
+
+track rnaCluster override
+group rna
+priority 3
+
+track est override
+group rna
+priority 5
+
+track darned override
+group rna
+priority 6
+
+track xenoEst override
+group rna
+priority 7
+
+track xenoMrna override
+group rna
+priority 8
+
+track uniGene_3 override
+group rna
+priority 13
+
+track affyGnf1h override
+group expression
+priority 2
+
+track affyU95 override
+group expression
+priority 4
+
+track affyU133 override
+group expression
+priority 5
+
+track affyU133Plus2 override
+group expression
+priority 6
+
+track allenBrainAli override
+group expression
+priority 7
+
+track burgeRnaSeqGemMapperAlign override
+group expression
+priority 8
+
+track gnfAtlas2 override
+group expression
+priority 14
+
+track gtexGene override
+group expression
+priority 15
+
+track gwipsvizRiboseq override
+group expression
+priority 16
+
+track phastBias override
+group compGeno
+priority 6
+
+track snp147Flagged override
+group varRep
+priority 11.1
+
+track snp147Mult override
+group varRep
+priority 17.1
+
+track snp147Common override
+group varRep
+priority 1
+
+track snp147 override
+group varRep
+priority 6.1
+
+track snp146Mult override
+group varRep
+priority 17.2
+
+track snp146Flagged override
+group varRep
+priority 11.2
+
+track snp146 override
+group varRep
+priority 6.2
+
+track snp146Common override
+group varRep
+priority 7.1
+
+track dgvPlus override
+group varRep
+priority 8
+
+track hgdpGeo override
+group varRep
+priority 16
 
 # override to use hg19 specific html page
 track crispr override

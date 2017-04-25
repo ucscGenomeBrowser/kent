@@ -16,7 +16,7 @@ sortOrder cellType=+ localization=+ rnaExtract=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 noInherit on
-priority 0
+priority 3
 type bed 3
 wgEncode 1
 origAssembly hg18

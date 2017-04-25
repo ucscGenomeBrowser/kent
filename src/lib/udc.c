@@ -203,7 +203,7 @@ return fread(buf, size, nmemb, stream);
 }
 
 
-static void readAndIgnore(struct ioStats *ioStats, int sd, bits64 size)
+static void udcReadAndIgnore(struct ioStats *ioStats, int sd, bits64 size)
 /* Read size bytes from sd and return. */
 {
 static char *buf = NULL;
@@ -215,12 +215,12 @@ while (remaining > 0)
     bits64 chunkSize = min(remaining, udcBlockSize);
     ssize_t rd = ourRead(ioStats, sd, buf, chunkSize);
     if (rd < 0)
-	errnoAbort("readAndIgnore: error reading socket after %lld bytes", total);
+	errnoAbort("udcReadAndIgnore: error reading socket after %lld bytes", total);
     remaining -= rd;
     total += rd;
     }
 if (total < size)
-    errAbort("readAndIgnore: got EOF at %lld bytes (wanted %lld)", total, size);
+    errAbort("udcReadAndIgnore: got EOF at %lld bytes (wanted %lld)", total, size);
 }
 
 static int connInfoGetSocket(struct udcFile *file, char *url, bits64 offset, int size)
@@ -235,7 +235,7 @@ if (ci != NULL && ci->socket > 0 && ci->offset != offset)
     if (skipSize > 0 && skipSize <= MAX_SKIP_TO_SAVE_RECONNECT)
 	{
 	verbose(4, "!! skipping %lld bytes @%lld to avoid reconnect\n", skipSize, ci->offset);
-	readAndIgnore(&file->ios.net, ci->socket, skipSize);
+	udcReadAndIgnore(&file->ios.net, ci->socket, skipSize);
 	ci->offset = offset;
         file->ios.numReuse++;
 	}
@@ -479,6 +479,12 @@ boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
  * and returns status of HEAD or GET byterange 0-0. */
 {
 verbose(4, "checking http remote info on %s\n", url);
+boolean byteRangeUsed = (strstr(url,";byterange=") != NULL);
+if (byteRangeUsed) // URLs passed into here should not have byterange.
+    {
+    warn("Unexpected byterange use in udcInfoViaHttp [%s]", url);
+    dumpStack("Unexpected byterange use in udcInfoViaHttp [%s]", url);
+    }
 int redirectCount = 0;
 struct hash *hash;
 int status;
