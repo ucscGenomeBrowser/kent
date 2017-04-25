@@ -33,8 +33,9 @@ set db=$argv[1]
 set bamFile=$argv[2]
 set bedgraphFile=$argv[3]
 
-bedtools bamtobed -i $bamFile | awk '{print "chr"$1, "\t"$2, "\t"$3, "\t"$4, "\t"$5, "\t"$6}' \
-  | sed s/chrMT/chrM/ | sort > $bamFile.bed 
+bedtools bamtobed -split -i $bamFile \
+  | awk '{print "chr"$1, "\t"$2, "\t"$3, "\t"$4, "\t"$5, "\t"$6}' \
+  | sed s/chrMT/chrM/ | sort -k1,1 -k2,2n > $bamFile.bed
 if ( $#argv == 4 ) then
   if ( $argv[4] == "splitByStrand" ) then
    awk '{if ($6 == "+") print $1, "\t"$2, "\t"$3, "\t"$4, "\t"$5, "\t"$6}' $bamFile.bed \
