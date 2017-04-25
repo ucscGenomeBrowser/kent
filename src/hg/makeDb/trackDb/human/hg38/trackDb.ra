@@ -633,6 +633,39 @@ spectrum on
 barChartDataUrl /gbdb/hgFixed/human/expMatrix/tcga.tpm.tab
 barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaSamples.tsv
 
+track tcgaTranscriptExpression3
+release alpha
+type bigBarChart
+maxLimit 8000
+barChartLabel Cancer types
+barChartUnit TPM
+# Get the barChartLabels from the last line in the bed file.
+barChartBars \
+                Thymoma Colon_adenocarcinoma Controls Testicular_Germ_Cell_Tumors \
+                Kidney_renal_papillary_cell_carcinoma Lung_adenocarcinoma \
+                Brain_Lower_Grade_Glioma Adrenocortical_carcinoma \
+                Glioblastoma_multiforme Mesothelioma Ovarian_serous_cystadenocarcinoma \
+                Prostate_adenocarcinoma Pancreatic_adenocarcinoma \
+                Uterine_Corpus_Endometrioid_Carcinoma Uterine_Carcinosarcoma \
+                Lung_squamous_cell_carcinoma Thyroid_carcinoma Esophageal_carcinoma \
+                Kidney_renal_clear_cell_carcinoma Pheochromocytoma_and_Paraganglioma \
+                Skin_Cutaneous_Melanoma Breast_invasive_carcinoma \
+                Liver_hepatocellular_carcinoma \
+                Cervical_squamous_cell_carcinoma_and_endocervical_adenocarcinoma \
+                Stomach_adenocarcinoma Cholangiocarcinoma Kidney_Chromophobe \
+                Lymphoid_Neoplasm_Diffuse_Large_B-cell_Lymphoma Rectum_adenocarcinoma \
+                Sarcoma Bladder_Urothelial_Carcinoma Uveal_Melanoma \
+                Head_and_Neck_squamous_cell_carcinoma
+barChartDataUrl /gbdb/hgFixed/human/expMatrix/tcgaMatrix.tsv
+barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaSamples.tsv
+shortLabel TCGA3
+longLabel TCGA transcript expression in barChart track format
+defaultLabelFields gene
+labelFields gene, name
+group expression
+spectrum on
+bigDataUrl /gbdb/hgFixed/human/expMatrix/tcgaTranscriptExpression3.bb
+
 track snp147Mult override
 group varRep
 priority 6.1
