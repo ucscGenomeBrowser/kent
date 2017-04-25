@@ -15,6 +15,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include "errCatch.h"
+#include "obscure.h"
 
 #define savedSessionTable "namedSessionDb"
 
@@ -272,8 +273,33 @@ while (isNotEmpty(namePt))
 	if (thisGotLiveCT)
 	    verbose(4, "Found live custom track: %s\n", dataPt);
 	}
+    else if (sameString(namePt, "multiRegionsBedUrl"))
+	{
+	// touch corresponding multi-region custom regions .bed and .sha1 files to save them from trash cleaner.
+	boolean mrBedUrlExpired = FALSE;
+	char multiRegionsBedUrlSha1Name[1024];
+	safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", dataPt);
+        if (!sameString(dataPt,"") && !strstr(dataPt,"://"))
+	    {  // should have a bed file in trash and a sha1 for quick change detection
+	    if (fileExists(dataPt) && fileExists(multiRegionsBedUrlSha1Name))
+		{
+		readAndIgnore(dataPt);
+		verbose(4, "setting multiRegionsBedUrl: %s\n", dataPt);
+		readAndIgnore(multiRegionsBedUrlSha1Name);
+		verbose(4, "setting multiRegionsBedUrl: %s\n", multiRegionsBedUrlSha1Name);
+		}
+	    else
+		{
+		mrBedUrlExpired = TRUE;
+		}
+	    }
+	if (!mrBedUrlExpired)
+	    dyStringAppend(newContents, oneSetting->string);
+	}
     else
+	{
 	dyStringAppend(newContents, oneSetting->string);
+	}
     namePt = nextNamePt;
     }
 if (newContents->stringSize != contentLength) 
