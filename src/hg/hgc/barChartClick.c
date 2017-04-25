@@ -80,13 +80,17 @@ static struct barChartBed *getBarChartFromTable(struct trackDb *tdb, char *table
                                                 char *item, char *chrom, int start, int end)
 /* Retrieve barChart BED item from track table */
 {
-struct barChartBed *barChart = NULL;
 struct sqlConnection *conn = hAllocConn(database);
+if (conn == NULL)
+    return NULL;
+struct barChartBed *barChart = NULL;
 char **row;
 char query[512];
 struct sqlResult *sr;
 if (sqlTableExists(conn, table))
     {
+    boolean hasOffsets = (sqlColumnExists(conn, table, BARCHART_OFFSET_COLUMN) &&
+                         sqlColumnExists(conn, table, BARCHART_LEN_COLUMN));
     sqlSafef(query, sizeof query, 
                 "SELECT * FROM %s WHERE name='%s'"
                     "AND chrom='%s' AND chromStart=%d AND chromEnd=%d", 
@@ -95,7 +99,7 @@ if (sqlTableExists(conn, table))
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-        barChart = barChartBedLoadOptionalOffsets(row, FALSE);
+        barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
         }
     sqlFreeResult(&sr);
     }
@@ -165,7 +169,7 @@ udcFileClose(&f);
 // Construct list of sample data with category
 struct barChartItemData *sampleVals = NULL, *data = NULL;
 int i;
-for (i=1; i<wordCt; i++)
+for (i=1; i<wordCt && samples[i] != NULL; i++)
     {
     char *sample = samples[i];
     char *categ = (char *)hashFindVal(sampleHash, sample);
@@ -317,7 +321,8 @@ safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s 
 int ret = system(cmd);
 if (ret == 0)
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
-warn("Error creating boxplot from sample data");
+else
+    warn("Error creating boxplot from sample data");
 }
 
 void doBarChartDetails(struct trackDb *tdb, char *item)

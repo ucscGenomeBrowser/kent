@@ -617,19 +617,21 @@ longLabel Quake Brain Gene Expression in barChart track format
 group expression
 spectrum on
 
-track tcgaTranscriptExpression
+track tcgaTranscriptExpression2
 release alpha
 type barChart
 barChartLabel Cancer types
 barChartUnit TPM
 barChartBars \
-        ACC BLCA BRCA CESC CHOL CNTL COAD DLBC ESCA GBM HNSC KICH \
-        KIRC KIRP LGG LIHC LUAD LUSC MESO OV PAAD PCPG PRAD READ  \
-        SARC SKCM STAD TGCT THCA THYM UCEC UCS UVM
-shortLabel TCGA
-longLabel TCGA transcript expression in barChart track format
+                ESCA ACC DLBC READ GBM PCPG BLCA UCEC THCA STAD CESC UCS THYM LIHC CHOL \
+                HNSC UVM SKCM COAD PAAD TGCT LUSC CNTL MESO KIRC SARC KIRP LGG PRAD LUAD \
+                BRCA OV KICH
+shortLabel TCGA 2
+longLabel TCGA transcript expression in barChart track format with details
 group expression
 spectrum on
+barChartDataUrl /gbdb/hgFixed/human/expMatrix/tcga.tpm.tab
+barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaSamples.tsv
 
 track snp147Mult override
 group varRep
