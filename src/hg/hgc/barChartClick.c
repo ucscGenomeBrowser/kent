@@ -338,9 +338,9 @@ genericHeader(tdb, item);
 int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
 char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
-printf("<b>Maximum value: </b> %0.2f %s in %s<br>\n", 
+printf("<b>Maximum median value: </b> %0.2f %s in %s<br>\n", 
                 highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
-printf("<b>Total all values: </b> %0.2f<br>\n", barChartTotalValue(chartItem));
+printf("<b>Total all medians: </b> %0.2f %s<br>\n", barChartTotalValue(chartItem), units);
 printf("<b>Score: </b> %d<br>\n", chartItem->score); 
 printf("<b>Genomic position: "
                 "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 

@@ -59,7 +59,7 @@ faSize G*_1.0_genomic.fna.gz
 #	max 8779783 (NW_003613580.1) median 503
 # %29.51 masked total, %30.55 masked real
 
-# this information is from the top of 
+# this information is from the top of
 #    criGriChoV1/refseq/GCF_000223135.1_CriGri_1.0_assembly_report.txt
 
 # Assembly name:  CriGri_1.0
@@ -348,7 +348,7 @@ taxId 10029
 
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" criGriChoV1 \
-      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
 #  265786 AFTD.1
 #       1 NC_.1
 
@@ -576,6 +576,44 @@ searchPriority 8
     # from criGriChoV1 to criGri1
 
 #############################################################################
+# SWAP lastz/chain/net criGriChoV1 (DONE - 2017-04-24 - Hiram)
+
+    # this is in addition to the blat liftOver result, not to
+    # replace that result, but just to get this chainNet track on the
+    # browser which the blat liftOver does not create.
+
+    # alignment to criGri1
+    cd /hive/data/genomes/criGri1/bed/lastzCriGriChoV1.2017-04-19
+
+    cat fb.criGri1.chainCriGriChoV1Link.txt
+    # 2258183039 bases of 2301325917 (98.125%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/criGriChoV1/bed/blastz.criGri1.swap
+    cd /hive/data/genomes/criGriChoV1/bed/blastz.criGri1.swap
+
+    # stop at 'load' to avoid changing liftOver (already done with blat)
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/criGri1/bed/lastzCriGriChoV1.2017-04-19/DEF \
+        -swap -chainMinScore=1000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -stop=load -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    258m32.140s
+
+    cat fb.criGriChoV1.chainCriGri1Link.txt
+    # 2274544087 bases of 2318132242 (98.120%) in intersection
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/criGri1/bed/lastzCriGriChoV1.2017-04-19/DEF -debug \
+        -continue=download -swap -chainMinScore=1000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -stop=download -noDbNameCheck -syntenicNet) > download.log 2>&1
+
+  time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` criGriChoV1 criGri1) \
+       > rbest.log 2>&1 &
+    # real    83m10.946s
+
+#############################################################################
 # lastz/chain/net swap human/hg38 (DONE - 2017-04-13 - Hiram)
 
     # original alignment
@@ -763,7 +801,7 @@ criGriChoV1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.ps
     cat fb.ncbiRefSeq.criGriChoV1.txt
     #  82563006 bases of 1218501075 (6.776%) in intersection
 
-    featureBits -enrichment criGriChoV1 refGene ncbiRefSeq 
+    featureBits -enrichment criGriChoV1 refGene ncbiRefSeq
     # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
     #    enrich 14.68x
 
@@ -788,7 +826,7 @@ criGriChoV1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.ps
 	where name="criGriChoV1";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-03-06 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-04-25 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=criGriChoV1 -tableCoverage all.joiner
@@ -802,7 +840,8 @@ criGriChoV1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.ps
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/criGriChoV1/pushQ
     cd /hive/data/genomes/criGriChoV1/pushQ
-    time (makePushQSql.pl criGriChoV1) > criGriChoV1.pushQ.sql 2> stderr.out
+    time (makePushQSql.pl -redmineList criGriChoV1) \
+          > criGriChoV1.pushQ.sql 2> stderr.out
     #  real    7m21.629s
 
     #   check for errors in stderr.out, some are OK, e.g.:
@@ -812,11 +851,8 @@ criGriChoV1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.ps
     # WARNING: criGriChoV1 does not have seq
     # WARNING: criGriChoV1 does not have extFile
 
-    #   copy it to hgwbeta
-    scp -p criGriChoV1.pushQ.sql qateam@hgwbeta:/tmp/
-    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/criGriChoV1.pushQ.sql"
 
-    #   in that pushQ entry walk through each entry and see if the
-    #   sizes will set properly
+    # enter the path names to the redmine listings in the redmine issue
+    # refs 19228
 
 #########################################################################
