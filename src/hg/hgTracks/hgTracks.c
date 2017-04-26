@@ -70,7 +70,7 @@
 #include "bigWarn.h"
 #include "wigCommon.h"
 #include "knetUdc.h"
-#include "sha1.h"
+#include "rSha1.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -4001,7 +4001,7 @@ char *newSha1 = NULL;
 if (newType==trashFile)
     {
     // calculate sha1 checksum on new input.
-    newSha1 = sha1HexForString(dyInput->string);
+    newSha1 = rSha1HexForString(dyInput->string);
     }
 
 // compare input sha1 to trashFile sha1 to see if same
