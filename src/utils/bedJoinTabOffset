@@ -53,7 +53,10 @@ def tabOffsets(fnames, keyCol):
         for line, start, end in iterLineOffsets(open(fname, "rb")):
             if keyCol==0:
                 # most common case: saves a bit of time by not building a huge list
-                key, restLine = string.split(line, "\t", 1)
+                fields = string.split(line, "\t", 1)
+                if len(fields)==1:
+                    raise Exception("file %s does not seem to be a tab-separated file" % fname)
+                key, restLine = fields
             else:
                 key = line.rstrip("\n").split("\t")[keyCol]
 

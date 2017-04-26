@@ -179,7 +179,7 @@ display according to several attributes:
       </UL>
       <span style="color: #0000ff; font-weight: bold;">Non-coding (ncRNA):</span>
       (<A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001619"
-      TARGET=_BLANK>nc_transcript_variant</A>) are always covered blue.
+      TARGET=_BLANK>nc_transcript_variant</A>) are always colored blue.
     </LI>
     <LI>
       <A name="MolType"></A>
@@ -313,18 +313,14 @@ display according to several attributes:
            single-base substitutions.</LI>
       </UL>
     </LI>
-    <LI>
+     <LI>
       <A name="Weight"></A>
-      <B>Weight</B>: Alignment quality assigned by dbSNP<BR>
-      <UL>
-      <LI>Weight can be 0, 1, 2, 3 or 10.</LI>
-      <LI>Weight = 1 are the highest quality alignments.</LI>
-      <LI>Weight = 0 and weight = 10 are excluded from the data set.</LI>
-      <LI>A filter on maximum weight value is supported, which defaults to 1
-        on all tracks except the Mult. SNPs track, which defaults to 3.</LI>
-      </UL>
+      <B>Weight</B>: Alignment quality assigned by dbSNP. Before dbSNP build
+        147, weight had values 1, 2 or 3, with 1 being the highest quality
+        (mapped to a single genomic location). As of dbSNP build 147, dbSNP
+        now releases only the variants with weight 1.
     </LI>
-    <LI>
+     <LI>
       <A name="Submitters"></A>
       <B>Submitter handles</B>: These are short, single-word identifiers of
       labs or consortia that submitted SNPs that were clustered into this

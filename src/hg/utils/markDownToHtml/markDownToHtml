@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ $1 == "" ]]; then
+        echo $0: converts markdown to UCSC static page
+        echo syntax: $0 inputMarkDownFile outputHtmlFile
+        exit 0
+fi
+
+toolDir=~/kent/src/hg/utils/markDownToHtml/
+pandoc -t html5 $1 -o $2 --template ${toolDir}/staticPage.html -t ${toolDir}/staticPage.lua
+chmod a+x $2
