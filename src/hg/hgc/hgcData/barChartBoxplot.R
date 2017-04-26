@@ -23,6 +23,7 @@ colorDf = read.table(colorFile, sep="\t", header=TRUE)
 colorsHex <- paste("#",as.character(as.hexmode(colorDf$color)), sep="")
 
 # draw graph
+# adjust X label height based on length of labels
 # TODO: scale by number of categories ?
 png(file=outFile, width=1070, height=600)
 # res=72 is default
@@ -31,7 +32,15 @@ darkgray <- "#737373"
 
 # plot with customized margins, symbol and line styles and colors, in the style of
 # GTEx gene expression plots (based on GTEx Portal at the Broad)
-par(mar=c(12,4,3,1) + 0.1, mgp=c(2,1,0), font.main=1)
+
+# adjust margins based on max label size
+marBottom <- 10;
+marLeft <- 4;
+if (max(nchar(labels)) > 20) {
+    marBottom <- 16;
+    marLeft <- 5;
+}
+par(mar=c(marBottom,marLeft,3,1) + 0.1, mgp=c(2,1,0), font.main=1)
 yLabel <- units
 max <- max(df$value)
 yLimit <- c(-(max*.02), max+ (max*.03))
@@ -56,11 +65,11 @@ size <- .8
 adjust <- .4*abs(y1)
 text(.4, y1 + adjust, "N=", cex=size)
 
-# draw labels twice (once in color, once in black) to make light colors readable
+# draw sample count twice (once in color, once in black) to make light colors readable
 text(1:count, y1 + adjust, exprPlot$n, cex=size, col="black")
 text(1:count, y1 + adjust, exprPlot$n, cex=size, col=colorsHex)
 
-# add X axis labels at 45 degree angle
+# add sample (X axis) labels at 45 degree angle
 rot <- 45
 size <- 1
 adjust <- .7*abs(y1)
