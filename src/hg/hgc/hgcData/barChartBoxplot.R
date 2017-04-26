@@ -36,7 +36,7 @@ darkgray <- "#737373"
 # adjust margins based on max label size
 marBottom <- 10;
 marLeft <- 4;
-if (max(nchar(labels)) > 20) {
+if (max(nchar(labels)) > 30) {
     marBottom <- 16;
     marLeft <- 5;
 }
