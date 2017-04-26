@@ -83,6 +83,7 @@ void barChartBedOutput(struct barChartBed *el, FILE *f, char sep, char lastSep);
 #include "basicBed.h"
 
 #define BARCHART_OFFSET_COLUMN "_dataOffset"
+#define BARCHART_LEN_COLUMN "_dataLen"
 
 void barChartBedCreateTable(struct sqlConnection *conn, char *table);
 /* Create barChart format table of given name. */
