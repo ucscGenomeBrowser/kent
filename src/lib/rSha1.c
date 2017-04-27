@@ -3,7 +3,7 @@ By Steve Reid <sreid@sea-to-sky.net>
 100% Public Domain
 http://svn.ghostscript.com/jbig2dec/trunk/sha1.c
 */
-#define SHA1HANDSOFF    /* Copies data before messing with it. */
+#define RSHA1HANDSOFF    /* Copies data before messing with it. */
 
 #include <stdio.h>
 #include <string.h>
@@ -11,9 +11,9 @@ http://svn.ghostscript.com/jbig2dec/trunk/sha1.c
 #include "common.h"
 #include "hex.h"
 #include "errAbort.h"
-#include "sha1.h"
+#include "rSha1.h"
 
-void SHA1_Transform(bits32 state[5], const bits8 buffer[64]);
+void RSHA1_Transform(bits32 state[5], const bits8 buffer[64]);
 
 #define rol(value, bits) (((value) << (bits)) | ((value) >> (32 - (bits))))
 
@@ -38,7 +38,7 @@ void SHA1_Transform(bits32 state[5], const bits8 buffer[64]);
 
 
 /* Hash a single 512-bit block. This is the core of the algorithm. */
-void SHA1_Transform(bits32 state[5], const bits8 buffer[64])
+void RSHA1_Transform(bits32 state[5], const bits8 buffer[64])
 {
     bits32 a, b, c, d, e;
     typedef union {
@@ -47,7 +47,7 @@ void SHA1_Transform(bits32 state[5], const bits8 buffer[64])
     } CHAR64LONG16;
     CHAR64LONG16* block;
 
-#ifdef SHA1HANDSOFF
+#ifdef RSHA1HANDSOFF
     static bits8 workspace[64];
     block = (CHAR64LONG16*)workspace;
     memcpy(block, buffer, 64);
@@ -97,7 +97,7 @@ void SHA1_Transform(bits32 state[5], const bits8 buffer[64])
 
 
 /* SHA1Init - Initialize new context */
-void SHA1_Init(SHA1_CTX* context)
+void RSHA1_Init(RSHA1_CTX* context)
 {
     /* SHA1 initialization constants */
     context->state[0] = 0x67452301;
@@ -110,7 +110,7 @@ void SHA1_Init(SHA1_CTX* context)
 
 
 /* Run your data through this. */
-void SHA1_Update(SHA1_CTX* context, const bits8* data, const size_t len)
+void RSHA1_Update(RSHA1_CTX* context, const bits8* data, const size_t len)
 {
     size_t i, j;
 
@@ -119,9 +119,9 @@ void SHA1_Update(SHA1_CTX* context, const bits8* data, const size_t len)
     context->count[1] += (len >> 29);
     if ((j + len) > 63) {
         memcpy(&context->buffer[j], data, (i = 64-j));
-        SHA1_Transform(context->state, context->buffer);
+        RSHA1_Transform(context->state, context->buffer);
         for ( ; i + 63 < len; i += 64) {
-            SHA1_Transform(context->state, data + i);
+            RSHA1_Transform(context->state, data + i);
         }
         j = 0;
     }
@@ -132,7 +132,7 @@ void SHA1_Update(SHA1_CTX* context, const bits8* data, const size_t len)
 
 
 /* Add padding and return the message digest. */
-void SHA1_Final(SHA1_CTX* context, bits8 digest[SHA1_DIGEST_SIZE])
+void RSHA1_Final(RSHA1_CTX* context, bits8 digest[RSHA1_DIGEST_SIZE])
 {
     bits32 i;
     bits8  finalcount[8];
@@ -141,12 +141,12 @@ void SHA1_Final(SHA1_CTX* context, bits8 digest[SHA1_DIGEST_SIZE])
         finalcount[i] = (unsigned char)((context->count[(i >= 4 ? 0 : 1)]
          >> ((3-(i & 3)) * 8) ) & 255);  /* Endian independent */
     }
-    SHA1_Update(context, (bits8 *)"\200", 1);
+    RSHA1_Update(context, (bits8 *)"\200", 1);
     while ((context->count[0] & 504) != 448) {
-        SHA1_Update(context, (bits8 *)"\0", 1);
+        RSHA1_Update(context, (bits8 *)"\0", 1);
     }
-    SHA1_Update(context, finalcount, 8);  /* Should cause a SHA1_Transform() */
-    for (i = 0; i < SHA1_DIGEST_SIZE; i++) {
+    RSHA1_Update(context, finalcount, 8);  /* Should cause a RSHA1_Transform() */
+    for (i = 0; i < RSHA1_DIGEST_SIZE; i++) {
         digest[i] = (bits8)
          ((context->state[i>>2] >> ((3-(i & 3)) * 8) ) & 255);
     }
@@ -158,15 +158,15 @@ void SHA1_Final(SHA1_CTX* context, bits8 digest[SHA1_DIGEST_SIZE])
     memset(context->count, 0, 8);
     memset(finalcount, 0, 8);	/* SWR */
 
-#ifdef SHA1HANDSOFF  /* make SHA1Transform overwrite its own static vars */
-    SHA1_Transform(context->state, context->buffer);
+#ifdef RSHA1HANDSOFF  /* make RSHA1Transform overwrite its own static vars */
+    RSHA1_Transform(context->state, context->buffer);
 #endif
 }
 
 /* ==================== Routines added by UCSC genome browser ========================= */
 
 
-char *sha1ToHex(unsigned char hash[20])
+char *rSha1ToHex(unsigned char hash[20])
 /* Convert binary representation of sha1 to hex string. Do a freeMem on result when done. */
 {
 int hexSize = 20*2;
@@ -180,61 +180,61 @@ return cloneString(hex);
 }
 
 
-void sha1ForFile(char *fileName, unsigned char hash[20])
+void rSha1ForFile(char *fileName, unsigned char hash[20])
 /* Make sha1 hash from file */
 {
 FILE *fp = fopen (fileName, "r");
 if (!fp) errAbort("missing file %s", fileName);
 #define BS 4096 /* match coreutils */
-SHA1_CTX ctx;
-SHA1_Init(&ctx);
+RSHA1_CTX ctx;
+RSHA1_Init(&ctx);
 size_t nr;
 unsigned char buf[BS];
 while ((nr=fread(buf, 1, sizeof(buf), fp)))
     { 
-    SHA1_Update(&ctx, buf, nr);
+    RSHA1_Update(&ctx, buf, nr);
     };
-SHA1_Final(&ctx, hash);
+RSHA1_Final(&ctx, hash);
 }
 
-char *sha1HexForFile(char *fileName)
+char *rSha1HexForFile(char *fileName)
 /* Return Sha1 as Hex string */
 {
 unsigned char hash[20];
-sha1ForFile(fileName, hash);
-return sha1ToHex(hash);
+rSha1ForFile(fileName, hash);
+return rSha1ToHex(hash);
 }
 
-void sha1ForBuf(char *buffer, size_t bufSize, unsigned char hash[20])
+void rSha1ForBuf(char *buffer, size_t bufSize, unsigned char hash[20])
 /* Return sha1 hash of buffer. */
 {
 #define BS 4096 /* match coreutils */
-SHA1_CTX ctx;
-SHA1_Init(&ctx);
+RSHA1_CTX ctx;
+RSHA1_Init(&ctx);
 size_t remaining = bufSize;
 while (remaining > 0)
     {
     int bufSize = BS;
     if (bufSize > remaining)
 	bufSize = remaining;
-    SHA1_Update(&ctx, (unsigned char*)buffer, bufSize);
+    RSHA1_Update(&ctx, (unsigned char*)buffer, bufSize);
     buffer += bufSize;
     remaining -= bufSize;
     }
-SHA1_Final(&ctx, hash);
+RSHA1_Final(&ctx, hash);
 }
 
-char *sha1HexForBuf(char *buf, size_t bufSize)
+char *rSha1HexForBuf(char *buf, size_t bufSize)
 /* Return Sha1 as Hex string */
 {
 unsigned char hash[20];
-sha1ForBuf(buf, bufSize, hash);
-return sha1ToHex(hash);
+rSha1ForBuf(buf, bufSize, hash);
+return rSha1ToHex(hash);
 }
 
-char *sha1HexForString(char *string)
+char *rSha1HexForString(char *string)
 /* Return sha sum of zero-terminated string. */
 {
-return sha1HexForBuf(string, strlen(string));
+return rSha1HexForBuf(string, strlen(string));
 }
 
