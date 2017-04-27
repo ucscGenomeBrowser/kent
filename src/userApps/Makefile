@@ -10,7 +10,6 @@ export MACHTYPE = local
 export CGI_BIN = ${DESTDIR}/cgi-bin
 export DOCUMENTROOT = ${DESTDIR}/htdocs
 export SCRIPTS = ${DESTDIR}/scripts
-export USE_SSL = 1
 export NOSQLTEST = 1
 
 all:  utils
@@ -48,7 +47,6 @@ export MACHTYPE = ${MACHTYPE}\n\
 export CGI_BIN = ${CGI_BIN}\n\
 export DOCUMENTROOT = ${DOCUMENTROOT}\n\
 export SCRIPTS = ${SCRIPTS}\n\
-export USE_SSL = 1\n\
 export NOSQLTEST = 1\n" > kent/src/inc/localEnvironment.mk
 
 update: clean userApps

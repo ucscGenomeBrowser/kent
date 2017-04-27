@@ -70,7 +70,8 @@
 #include "bigWarn.h"
 #include "wigCommon.h"
 #include "knetUdc.h"
-#include "rSha1.h"
+#include "hex.h"
+#include <openssl/sha.h>
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -3997,11 +3998,13 @@ if (newType != url)
 	newType = trashFile;
     }
 
-char *newSha1 = NULL;
+char newSha1[(SHA_DIGEST_LENGTH + 1) * 2];
 if (newType==trashFile)
     {
     // calculate sha1 checksum on new input.
-    newSha1 = rSha1HexForString(dyInput->string);
+    unsigned char hash[SHA_DIGEST_LENGTH];
+    SHA1((const unsigned char *)dyInput->string, dyInput->stringSize, hash);
+    hexBinaryString(hash, SHA_DIGEST_LENGTH, newSha1, (SHA_DIGEST_LENGTH + 1) * 2);
     }
 
 // compare input sha1 to trashFile sha1 to see if same

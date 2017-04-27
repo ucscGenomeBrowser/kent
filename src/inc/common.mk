@@ -36,12 +36,6 @@ endif
 ifeq (${SSLDIR},)
   SSLDIR = /usr/include/openssl
 endif
-ifeq (${USE_SSL},)
-  ifneq ($(wildcard ${SSLDIR}),)
-     USE_SSL=1
-  endif
-endif
-
 
 # autodetect UCSC installation of hal:
 ifeq (${HALDIR},)
@@ -61,20 +55,17 @@ endif
 
 
 # libssl: disabled by default
-ifeq (${USE_SSL},1)
-    ifneq (${SSL_DIR}, "/usr/include/openssl")
-      ifneq ($(UNAME_S),Darwin)
-        L+=-L${SSL_DIR}/lib
-      endif
-        HG_INC+=-I${SSL_DIR}/include
-    endif
-    # on hgwdev, already using the static library with mysqllient.
-    ifeq (${FULLWARN},hgwdev)
-       L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5
-    else
-       L+=-lssl -lcrypto
-    endif
-    HG_DEFS+=-DUSE_SSL
+ifneq (${SSL_DIR}, "/usr/include/openssl")
+  ifneq ($(UNAME_S),Darwin)
+    L+=-L${SSL_DIR}/lib
+  endif
+    HG_INC+=-I${SSL_DIR}/include
+endif
+# on hgwdev, already using the static library with mysqllient.
+ifeq (${FULLWARN},hgwdev)
+   L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5
+else
+   L+=-lssl -lcrypto
 endif
 
 # autodetect where png is installed

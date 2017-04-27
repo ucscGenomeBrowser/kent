@@ -553,7 +553,6 @@ function setupCgiOsx ()
     export MYSQLINC=$APACHEDIR/ext/include
     export MYSQLLIBS="/$APACHEDIR/ext/lib/libmysqlclient.a -lz -lc++"
     export SSLDIR=$APACHEDIR/ext/include
-    export USE_SSL=1 
     export PNGLIB=$APACHEDIR/ext/lib/libpng.a 
     # careful - PNGINCL is the only option that requires the -I prefix
     export PNGINCL=-I$APACHEDIR/ext/include
