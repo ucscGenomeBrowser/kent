@@ -31,7 +31,7 @@ errAbort(
 "and end fields in the file, normScore is a factor to multiply score by to get it into the\n"
 "0-1000 range, and the dim# labels are the labels in each dimension.\n"
 "for example\n"
-"   simpleReg.bed 0 1 2 4 aCell aFactor\n"
+"   simpleReg.bed 0 1 2 4 10.7234 aCell aFactor\n"
 "options:\n"
 "   -dims=N - number of dimensions in data.  Would be 2 for cell-line + antibody. Default %d\n"
 "   -scoreScale=0.N - scale score by this factor. Default %g\n"
