@@ -3,8 +3,6 @@
 /* Copyright (C) 2012 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
-#ifdef USE_SSL
-
 #include "openssl/ssl.h"
 #include "openssl/err.h"
 
@@ -487,17 +485,3 @@ return params->sv[0];
 
 }
 
-#else
-
-#include <stdarg.h>
-#include "common.h"
-#include "errAbort.h"
-
-int netConnectHttps(char *hostName, int port, boolean noProxy)
-/* Start https connection with server or die. */
-{
-errAbort("No openssl available in netConnectHttps for %s : %d", hostName, port);
-return -1;   /* will never get to here, make compiler happy */
-}
-
-#endif
