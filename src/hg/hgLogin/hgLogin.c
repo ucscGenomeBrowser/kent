@@ -84,7 +84,6 @@ else
 }
 
 /* ---- password functions depend on optionally installed openssl lib ---- */
-#ifdef USE_SSL
 #include <openssl/md5.h>
 
 void cryptWikiWay(char *password, char *salt, char* result)
@@ -158,31 +157,6 @@ for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     }
 return cloneString(tokenMD5);
 }
-
-#else // --------- no USE_SSL ==> errAbort with message that openssl is required --------------
-
-#define NEED_OPENSSL "kent/src must be recompiled with openssl libs and USE_SSL=1 in order for this to work."
-
-void encryptPWD(char *password, char *salt, char *buf, int bufsize)
-/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
-{
-errAbort(NEED_OPENSSL);
-}
-
-void encryptNewPwd(char *password, char *buf, int bufsize)
-/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
-{
-errAbort(NEED_OPENSSL);
-}
-
-char *generateTokenMD5(char *token)
-/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
-{
-errAbort(NEED_OPENSSL);
-return NULL; // Compiler doesn't know that we never get here.
-}
-
-#endif//ndef USE_SSL
 
 void findSalt(char *encPassword, char *salt, int saltSize)
 /* find the salt part from the password field */

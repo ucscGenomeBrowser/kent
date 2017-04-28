@@ -1,7 +1,7 @@
 #	"$Id: trackDb.chainNet.ra,v 1.19 2010/02/09 19:40:18 kuhn Exp $";
 
 track chainNetPanTro1 override
-priority 3
+priority 4
 shortLabel $o_Organism Chain/Net
 chainMinScore 1000
 chainLinearGap loose
@@ -16,17 +16,17 @@ shortLabel $o_db Chain/Net
     shortLabel $o_db Net
 
 track chainNetRheMac2 override
-priority 14
+priority 5
 chainLinearGap medium
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetRn4 override
-priority 13
+priority 6
 chainMinScore 1000
 
 track chainNetBosTau2 override
 shortLabel $o_Organism Chain/Net
-priority 6
+priority 10
 
     track chainBosTau2 override
     shortLabel $o_Organism Chain
@@ -36,7 +36,7 @@ priority 6
 
 track chainNetMm7 override
 shortLabel $o_Organism Chain/Net
-priority 12
+priority 7
 
 	track chainMm7 override
 	shortLabel $o_Organism Chain
@@ -59,13 +59,13 @@ shortLabel $o_db Chain/Net
     shortLabel $o_db Net
 
 track chainNetTetNig1 override
-priority 15
+priority 18
 chainMinScore 1000
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetXenTro1 override
 shortLabel $o_Organism Chain/Net
-priority 17
+priority 14
 chainMinScore 1000
 
     track chainXenTro1 override
@@ -76,7 +76,7 @@ chainMinScore 1000
 
 track chainNetDanRer3 override
 shortLabel $o_Organism Chain/Net
-priority 18
+priority 15
 
 	track chainDanRer3 override
 	shortLabel $o_Organism Chain
@@ -85,11 +85,11 @@ priority 18
 	shortLabel $o_Organism Net
 
 track chainNetFr1 override
-priority 10
+priority 17
 shortLabel $o_Organism Chain/Net
 
 track chainNetGalGal2 override
-priority 2
+priority 13
 
 track chainNetMonDom1 override
-priority 12.1
+priority 12
