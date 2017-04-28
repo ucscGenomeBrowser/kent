@@ -36,10 +36,15 @@ from collections import defaultdict, namedtuple
 from os.path import *
 
 # import the UCSC-specific library
-sys.path.append("pylib")
-from hgLib import cgiArgs, cgiSetup, cgiString, printContentType, printMenuBar, \
-        sqlConnect, sqlQuery, errAbort, cfgOption, runCmd, cgiGetAll, printHgcHeader, \
-        printHgcSection, webStartGbNoBanner, htmlPageEnd, hConnectCentral, sqlTableExists
+sys.path.append("pyLib")
+try:
+    from hgLib import cgiArgs, cgiSetup, cgiString, printContentType, printMenuBar, \
+            sqlConnect, sqlQuery, errAbort, cfgOption, runCmd, cgiGetAll, printHgcHeader, \
+            printHgcSection, webStartGbNoBanner, htmlPageEnd, hConnectCentral, sqlTableExists
+except:
+    print("Content-type: text/html\n")
+    print("Cannot find the directory cgi-bin/pyLib in Apache. This is an installation error.")
+    print("All all parts of cgi-bin installed? Did you do 'make' in kent/src/hg/pyLib?")
 
 # not using feedback button for now. Fan would have liked it, but not sure how we can write
 # to any form of database.
@@ -577,17 +582,47 @@ def minResToThick(count):
         thick = 2
     return thick
 
+def which(binPath):
+    " find full path of binary "
+    import distutils.spawn
+    return distutils.spawn.find_executable(binPath)
+
 def runDot(fname, alg, format="png"):
     " run dot and return tuple outFname, outMapFname "
     outFname = splitext(fname)[0]+"."+format
     outMap = splitext(fname)[0]+".map"
     binPath = cfgOption("graphvizPath", "dot")
-    #cmd = "%s -Gdpi=96 -Gsize=12,5 -Gratio=fill -K%s %s -T%s -o %s" % (binPath, alg, fname, format, outFname)
+
+    if which(binPath) is None:
+        print("Could not find the command %s<p>" % binPath)
+        print("This usually means that on this UCSC Genome Browser, GraphViz is not installed.")
+        print("To install GraphViz, ask the Administrator of this server to run one of the following commands:<br>")
+        print("<tt>sudo apt-get install graphviz</tt><br>")
+        print("<tt>sudo wget http://www.graphviz.org/graphviz-rhel.repo -o /etc/yum/repos.d/graphviz.rhel.repo; sudo yum install graphviz*</tt><br>")
+        print("<p>")
+        print("Alternatively, you can compile GraphViz from source and specify the full path to 'dot' with the option 'graphvizPath' in cgi-bin/hg.conf.")
+        exit(0)
+
     cmd = [binPath, "-Gdpi=96", "-Gsize=12,5", "-Gratio=fill", "-K"+alg, "-T"+format, fname, "-o",outFname]
     # create a html map for png format
     if format=="png":
         cmd.extend(["-Tcmapx", "-o", outMap])
-    runCmd(cmd)
+    ret = runCmd(cmd, mustRun=False)
+
+    if ret!=0:
+        print("Could not run the command '%s'. <br>" % "".join(cmd))
+        print("This means that on this UCSC Genome Browser Installation too old.")
+        print("To update GraphViz to a more recent version, ask the Administrator of this ")
+        print("server to try running one of these commands:<br>")
+        print("<tt>sudo apt-get install graphviz</tt><br>")
+        print("<tt>sudo wget http://www.graphviz.org/graphviz-rhel.repo -o ")
+        print("/etc/yum/repos.d/graphviz.rhel.repo;")
+        print("sudo yum install graphviz*</tt><br>")
+        print("<p>")
+        print("If this does not work, you may have to compile GraphViz from source and")
+        print("specify the 'dot' binary with the option graphvizPath cgi-bin/hg.conf.")
+        exit(0)
+
     return outFname, outMap
 
 def dictToDot(d):
