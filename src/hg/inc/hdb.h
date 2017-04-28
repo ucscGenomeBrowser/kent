@@ -965,8 +965,8 @@ char *defaultDbTable();
 char *genomeCladeTable();
 /* Return the name of the genomeClade table. */
 
-char *hFindLatestSnpTable(char *db, char *suffix);
-/* Return the name of the 'snp1__<suffix>' table with the highest build number, if any.
+struct trackDb *hFindLatestSnpTrack(char *db, char *suffix, struct trackDb **pFullTrackList);
+/* Return the 'snpNNN<suffix>' track with the highest build number, if any.
  * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
 
 char *hFindLatestSnpTableConn(struct sqlConnection *conn, char *suffix);
