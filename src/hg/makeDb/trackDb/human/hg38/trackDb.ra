@@ -22,6 +22,9 @@ track fosEndPairs override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
+track interactions override
+directUrl hgGeneGraph?db=hg38&gene=%s
+
 include trackDb.wgEncode.ra
 
 track par override
