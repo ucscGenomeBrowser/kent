@@ -14,7 +14,7 @@
 
 # Non-standard imports. They need to be installed on the machine. 
 # We provide a pre-compiled library as part of our cgi-bin distribution as a
-# fallback in the "pylib" directory. The idea of having pylib be the last
+# fallback in the "pyLib" directory. The idea of having pyLib be the last
 # directory in sys.path is that the system MySQLdb takes precedence.
 try:
     import MySQLdb
@@ -25,7 +25,8 @@ except:
 
 # Imports from the Python 2.7 standard library
 # Minimize global imports. Each library import can take up to 20msecs.
-import os, cgi, sys
+import os, cgi, sys, logging
+
 from os.path import join, isfile, normpath, abspath, dirname
 from collections import namedtuple
 
@@ -285,6 +286,7 @@ def hgBotDelay():
     It does not use the hgsid, currently it always uses the IP address.
     Using the hgsid makes little sense. It is more lenient than that C version.
     """
+    import time
     if "DOCUMENT_ROOT" not in os.environ: # skip if not called from Apache
         return
     global hgConf
@@ -301,6 +303,7 @@ def hgBotDelay():
 
 def parseRa(text):
     " Parse ra-style string and return as dict name -> value "
+    import string
     lines = text.split("\n")
     data = dict()
     for l in lines:
@@ -317,7 +320,7 @@ def lineFileNextRow(inFile):
     Cannot parse headers with non-alpha characters and fields that are not ASCII. Code
     for these cases is commented out, for performance reasons.
     """
-
+    import gzip, string
     if isinstance(inFile, str):
         if inFile.endswith(".gz"):
             fh = gzip.open(inFile, 'rb')
@@ -361,6 +364,7 @@ def lineFileNextRow(inFile):
 def parseDict(fname):
     """ Parse text file in format key<tab>value<newline> and return as dict key->val.
     Does not abort on duplicate keys, for performance reasons. """
+    import gzip
     d = {}
 
     if fname.endswith(".gz"):
