@@ -176,7 +176,10 @@ SCRIPT_FILES = \
 	ggMsrToTab \
 	ggPidToTab \
 	ggPpiToTab \
-	ggSpfToTab
+	ggSpfToTab \
+	bedNamePickFirst \
+	bedBestTranscript
+
 
 
 # List of all directories to build
