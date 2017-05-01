@@ -343,8 +343,11 @@ if (chartItem == NULL)
     errAbort("Can't find item %s in barChart table/file %s\n", item, tdb->table);
 
 genericHeader(tdb, item);
+// TODO: Get name and name2 fields from .as for bigBed
 printf("<b>%s: </b>%s<br>\n", trackDbSettingClosestToHomeOrDefault(tdb, "bedNameLabel", "Item"),
         chartItem->name);
+if (differentString(chartItem->name2, ""))
+    printf("<b>Alternative name: </b> %s<br>\n", chartItem->name2);
 int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
 char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
