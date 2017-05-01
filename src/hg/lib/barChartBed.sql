@@ -11,11 +11,12 @@ CREATE TABLE barChartBed (
     name varchar(255) not null,	# Name or ID of item, ideally both human readable and unique
     score int unsigned not null,	# Score from 0-1000, typically derived from total of median value from all categories
     strand char(1) not null,	# + or - for strand. Use . if not applicable
+    name2 varchar(255) not null,	# Alternative name for item
     expCount int unsigned not null,	# Number of categories
     expScores longblob not null,	# Comma separated list of category values
-    _dataOffset bigint not null,	# Offset of sample data in data matrix file, for boxplot on details page.
-    _dataLen int not null,	# Length of sample data row in data matrix file.
-    gene varchar(255) not null,	# Hugo gene name associated with the transcript.
+    _dataOffset bigint not null,	# Offset of sample data in data matrix file, for boxplot on details page
+    _dataLen int not null,	        # Length of sample data row in data matrix file
               #Indices
-    PRIMARY KEY(chrom)
+    INDEX(name),
+    INDEX(chrom(20), chromStart)
 );

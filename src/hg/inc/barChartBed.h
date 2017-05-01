@@ -6,24 +6,25 @@
 #define BARCHARTBED_H
 
 #include "jksql.h"
-#define BARCHARTBED_NUM_COLS 10
+#define BARCHARTBED_NUM_COLS 11
 
 extern char *barChartBedCommaSepFieldNames;
 
 struct barChartBed
-/* BED6+4 with additional fields for category count and median values, and sample matrix fields */
+/* BED6+5 with additional fields for category count and median values, and sample matrix fields */
     {
     struct barChartBed *next;  /* Next in singly linked list. */
     char *chrom;	/* Reference sequence chromosome or scaffold */
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name or ID of item, ideally both human readable and unique */
-    unsigned score;	/* Score from 0-1000; typically derived from total of median value from all categories */
+    unsigned score;	/* Score from 0-1000, typically derived from total of median value from all categories */
     char strand[2];	/* + or - for strand. Use . if not applicable */
+    char *name2;	/* Alternative name for item */
     unsigned expCount;	/* Number of categories */
     float *expScores;	/* Comma separated list of category values */
-    long long _dataOffset;	/* Offset of sample data in data matrix file, for boxplot on details page. */
-    int _dataLen;	/* Length of sample data row in data matrix file. */
+    long long _dataOffset;	/* Offset of sample data in data matrix file, for boxplot on details page */
+    int _dataLen;	/* Length of sample data row in data matrix file */
     };
 
 struct barChartBed *barChartBedLoadByQuery(struct sqlConnection *conn, char *query);
@@ -79,7 +80,6 @@ void barChartBedOutput(struct barChartBed *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-
 #include "basicBed.h"
 
 #define BARCHART_OFFSET_COLUMN "_dataOffset"
@@ -99,13 +99,11 @@ struct barChartBed *barChartBedLoadOptionalOffsets(char **row, boolean hasOffset
  * from database or file.  Also supports schema lacking file offet and length for details.
 .  Dispose of this with barChartBedFree(). */
 
-
 float barChartTotalValue(struct barChartBed *bed);
 /* Return total of all category values */
 
 float barChartMaxValue(struct barChartBed *bed, int *categIdRet);
 /* Return value and id of category with highest value for this item */
-
 
 #endif /* BARCHARTBED_H */
 
