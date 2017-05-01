@@ -250,29 +250,29 @@ TMPDIR=/dev/shm
     # real    487m51.030s
 
 #########################################################################
-# LASTZ turkey/melGal5 vs. Peregrine falcon - (DONE - 2017-01-20 - Hiram)
-    mkdir /hive/data/genomes/melGal5/bed/lastzFalPer1.2017-01-20
-    cd /hive/data/genomes/melGal5/bed/lastzFalPer1.2017-01-20
+# LASTZ Golden eagle/aquChr2 vs. chicken/galGal5 - (DONE - 2017-03-17 - Hiram)
+    mkdir /hive/data/genomes/galGal5/bed/lastzAquChr2.2017-03-17
+    cd /hive/data/genomes/galGal5/bed/lastzAquChr2.2017-03-17
 
-    printf '# turkey vs. Peregrine falcon
+    printf '# Golden eagle vs. chicken
 BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
 BLASTZ_M=254
 
-# TARGET: turkey melGal5
-SEQ1_DIR=/hive/data/genomes/melGal5/melGal5.2bit
-SEQ1_LEN=/hive/data/genomes/melGal5/chrom.sizes
+# TARGET: chicken galGal5
+SEQ1_DIR=/hive/data/genomes/galGal5/galGal5.2bit
+SEQ1_LEN=/hive/data/genomes/galGal5/chrom.sizes
 SEQ1_CHUNK=20000000
-SEQ1_LIMIT=400
+SEQ1_LIMIT=50
 SEQ1_LAP=10000
 
-# QUERY: Peregrine falcon falPer1
-SEQ2_DIR=/hive/data/genomes/falPer1/falPer1.2bit
-SEQ2_LEN=/hive/data/genomes/falPer1/chrom.sizes
+# QUERY: Golden eagle aquChr2
+SEQ2_DIR=/hive/data/genomes/aquChr2/aquChr2.2bit
+SEQ2_LEN=/hive/data/genomes/aquChr2/chrom.sizes
 SEQ2_CHUNK=20000000
 SEQ2_LAP=0
-SEQ2_LIMIT=80
+SEQ2_LIMIT=20
 
-BASE=/hive/data/genomes/melGal5/bed/lastzFalPer1.2017-01-20
+BASE=/hive/data/genomes/galGal5/bed/lastzAquChr2.2017-03-17
 TMPDIR=/dev/shm
 ' > DEF
 
@@ -280,89 +280,31 @@ TMPDIR=/dev/shm
         -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-    # real    422m43.269s
+    # real    181m2.296s
 
-    cat fb.melGal5.chainFalPer1Link.txt
-    #  854639905 bases of 1093044709 (78.189%) in intersection
+    cat fb.galGal5.chainAquChr2Link.txt
+    #  919609897 bases of 1218501075 (75.471%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 falPer1) \
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` galGal5 aquChr2) \
           > rbest.log 2>&1 &
-    #  real    336m8.770s
+    #  real    183m23.066s
 
     # and for the swap:
-    mkdir /hive/data/genomes/falPer1/bed/blastz.melGal5.swap
-    cd /hive/data/genomes/falPer1/bed/blastz.melGal5.swap
+    mkdir /hive/data/genomes/aquChr2/bed/blastz.galGal5.swap
+    cd /hive/data/genomes/aquChr2/bed/blastz.galGal5.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/melGal5/bed/lastzFalPer1.2017-01-20/DEF \
+      /hive/data/genomes/galGal5/bed/lastzAquChr2.2017-03-17/DEF \
         -swap -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    64m19.073s
+    #  real    60m38.086s
 
-    cat fb.falPer1.chainMelGal5Link.txt
-    # 826670414 bases of 1153404357 (71.672%) in intersection
+    cat fb.aquChr2.chainGalGal5Link.txt
+    # 854022282 bases of 1180019022 (72.374%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` falPer1 melGal5) \
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` aquChr2 galGal5) \
        > rbest.log 2>&1
-    #  real    247m39.409s
-
-#########################################################################
-# LASTZ turkey/melGal5 vs. Medium ground finch - (DONE - 2017-01-20 - Hiram)
-    mkdir /hive/data/genomes/melGal5/bed/lastzGeoFor1.2017-01-20
-    cd /hive/data/genomes/melGal5/bed/lastzGeoFor1.2017-01-20
-
-    printf '# turkey vs. Medium ground finch
-BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
-BLASTZ_M=254
-
-# TARGET: turkey melGal5
-SEQ1_DIR=/hive/data/genomes/melGal5/melGal5.2bit
-SEQ1_LEN=/hive/data/genomes/melGal5/chrom.sizes
-SEQ1_CHUNK=20000000
-SEQ1_LIMIT=400
-SEQ1_LAP=10000
-
-# QUERY: Medium ground finch geoFor1
-SEQ2_DIR=/hive/data/genomes/geoFor1/geoFor1.2bit
-SEQ2_LEN=/hive/data/genomes/geoFor1/chrom.sizes
-SEQ2_CHUNK=20000000
-SEQ2_LAP=0
-SEQ2_LIMIT=80
-
-BASE=/hive/data/genomes/melGal5/bed/lastzGeoFor1.2017-01-20
-TMPDIR=/dev/shm
-' > DEF
-
-    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
-        -chainMinScore=5000 -chainLinearGap=loose \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > do.log 2>&1
-    # real    403m51.968s
-
-    cat fb.melGal5.chainGeoFor1Link.txt
-    #  740714391 bases of 1093044709 (67.766%) in intersection
-
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 geoFor1) \
-          > rbest.log 2>&1 &
-    #  lost log file
-
-    # and for the swap:
-    mkdir /hive/data/genomes/geoFor1/bed/blastz.melGal5.swap
-    cd /hive/data/genomes/geoFor1/bed/blastz.melGal5.swap
-
-    time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/melGal5/bed/lastzGeoFor1.2017-01-20/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    65m39.225s
-
-    cat fb.geoFor1.chainMelGal5Link.txt
-    # 725536636 bases of 1041286029 (69.677%) in intersection
-
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` geoFor1 melGal5) \
-       > rbest.log 2>&1
-    # real    291m40.237s
+    # real    167m4.022s
 
 #########################################################################
