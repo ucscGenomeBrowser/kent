@@ -85,6 +85,10 @@ void barChartBedOutput(struct barChartBed *el, FILE *f, char sep, char lastSep);
 #define BARCHART_OFFSET_COLUMN "_dataOffset"
 #define BARCHART_LEN_COLUMN "_dataLen"
 
+// indexes in .as file for standard barChartBed.  Use to find comparable fields in custom .as's
+#define BARCHART_NAME_COLUMN_IX         3
+#define BARCHART_NAME2_COLUMN_IX        6
+
 void barChartBedCreateTable(struct sqlConnection *conn, char *table);
 /* Create barChart format table of given name. */
 
