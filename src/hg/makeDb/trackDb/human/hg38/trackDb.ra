@@ -599,6 +599,7 @@ type barChart
 maxLimit 370000
 barChartUnit RPKM
 barChartLabel Brain Regions
+barChartMetric median
 barChartBars \
     brainAmygdala brainAnCinCortex brainCaudate brainCerebelHemi brainCerebellum brainCortex \
     brainFrontCortex brainHippocampus brainHypothalamus brainNucAccumbens brainPutamen \
@@ -661,6 +662,7 @@ barChartBars \
                 Head_and_Neck_squamous_cell_carcinoma
 barChartDataUrl /gbdb/hgFixed/human/expMatrix/tcgaMatrix.tsv
 barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaSamples.tsv
+bedNameLabel Transcript
 shortLabel TCGA3
 longLabel TCGA transcript expression in barChart track format
 defaultLabelFields gene

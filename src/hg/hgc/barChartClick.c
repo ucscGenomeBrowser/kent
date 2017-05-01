@@ -335,18 +335,22 @@ if (chartItem == NULL)
     errAbort("Can't find item %s in barChart table/file %s\n", item, tdb->table);
 
 genericHeader(tdb, item);
+printf("<b>%s: </b>%s<br>\n", trackDbSettingClosestToHomeOrDefault(tdb, "bedNameLabel", "Item"),
+        chartItem->name);
 int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
 char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
-printf("<b>Maximum median value: </b> %0.2f %s in %s<br>\n", 
-                highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
-printf("<b>Total all medians: </b> %0.2f %s<br>\n", barChartTotalValue(chartItem), units);
+char *metric = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_METRIC, "");
+printf("<b>Total all %s values: </b> %0.2f %s<br>\n", metric, barChartTotalValue(chartItem), units);
+printf("<b>Maximum %s value: </b> %0.2f %s in %s<br>\n", 
+                metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
 printf("<b>Score: </b> %d<br>\n", chartItem->score); 
 printf("<b>Genomic position: "
                 "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
                     database, hgTracksPathAndSettings(), database, 
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd,
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd);
+printf("<b>Strand: </b> %s\n", chartItem->strand); 
 struct barChartItemData *vals = getSampleVals(tdb, chartItem);
 if (vals != NULL)
     {
