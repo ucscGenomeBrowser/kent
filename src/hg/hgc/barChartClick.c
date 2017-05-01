@@ -120,14 +120,13 @@ return barChart;
 }
 
 static struct barChartItemData *getSampleValsFromFile(struct trackDb *tdb, 
-                                                        struct hash *categoryHash,
-                                                        struct barChartBed *bed)
+                        struct hash *categoryHash, struct barChartBed *bed, 
+                        char *dataFile, char *sampleFile)
 /* Get all data values in a file for this item (locus) */
 {
 // Get sample categories from sample file
 // Format: id, category, extras
-char *url = trackDbSetting(tdb, "barChartSampleUrl");
-struct lineFile *lf = udcWrapShortLineFile(url, NULL, 0);
+struct lineFile *lf = udcWrapShortLineFile(sampleFile, NULL, 0);
 struct hash *sampleHash = hashNew(0);
 char *words[2];
 int sampleCt = 0;
@@ -139,8 +138,7 @@ while (lineFileChopNext(lf, words, sizeof words))
 lineFileClose(&lf);
 
 // Open matrix file
-url = trackDbSetting(tdb, "barChartDataUrl");
-struct udcFile *f = udcFileOpen(url, NULL);
+struct udcFile *f = udcFileOpen(dataFile, NULL);
 
 // Get header line with sample ids
 char *header = udcReadLine(f);
@@ -252,14 +250,24 @@ for (val = vals; val != NULL; val = val->next)
 return sampleVals;
 }
 
-static struct barChartItemData *getSampleVals(struct trackDb *tdb, struct barChartBed *chartItem)
+static struct barChartItemData *getSampleVals(struct trackDb *tdb, struct barChartBed *chartItem,
+                                                char **retMatrixUrl, char **retSampleUrl)
 /* Get data values for this item (locus) from all samples */
 {
 struct barChartItemData *vals = NULL;
-char *file = trackDbSetting(tdb, "barChartDataUrl");
+char *dataFile = trackDbSetting(tdb, "barChartDataUrl");
 struct hash *categoryHash = getTrackCategories(tdb);
-if (file != NULL)
-    vals = getSampleValsFromFile(tdb, categoryHash, chartItem);
+if (dataFile != NULL)
+    {
+    char *sampleFile = trackDbSetting(tdb, "barChartSampleUrl");
+    if (sampleFile == NULL)
+        return NULL;
+    if (retMatrixUrl != NULL)
+        *retMatrixUrl = dataFile;
+    if (retSampleUrl != NULL)
+        *retSampleUrl = sampleFile;
+    vals = getSampleValsFromFile(tdb, categoryHash, chartItem, dataFile, sampleFile);
+    }
 else
     vals = getSampleValsFromTable(tdb, categoryHash, chartItem);
 return vals;
@@ -351,7 +359,8 @@ printf("<b>Genomic position: "
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd,
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd);
 printf("<b>Strand: </b> %s\n", chartItem->strand); 
-struct barChartItemData *vals = getSampleVals(tdb, chartItem);
+char *matrixUrl = NULL, *sampleUrl = NULL;
+struct barChartItemData *vals = getSampleVals(tdb, chartItem, &matrixUrl, &sampleUrl);
 if (vals != NULL)
     {
     // Print boxplot
@@ -359,6 +368,9 @@ if (vals != NULL)
     char *df = makeDataFrame(tdb->table, vals);
     char *colorFile = makeColorFile(tdb);
     printBoxplot(df, item, units, colorFile);
+    if (matrixUrl != NULL)
+        printf("<br>View <a href='%s'>data matrix</a> and <a href='%s'>sample file</a>\n", 
+                matrixUrl, sampleUrl);
     }
 puts("<br>");
 printTrackHtml(tdb);
