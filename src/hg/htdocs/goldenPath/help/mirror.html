@@ -90,7 +90,7 @@ where all content is mirrored and the closest location is chosen by your provide
 <p>
 <a href='https://genome.ucsc.edu/goldenPath/help/gbib.html' title=''>Genome Browser in a Box</a> (GBiB):
 is a fully configured virtual machine that includes
-Apache and Mysql, and has behavior identifical to the UCSC website.
+Apache and MySQL, and has behavior identical to the UCSC website.
 GBiB loads genome data from the UCSC download servers on the fly.
 Website and data updates are applied automatically every two weeks. By default, GBiB
 uses the VirtualBox virtualization software, so it can be run on any
@@ -197,9 +197,9 @@ unusual platforms.
 <h2>Using UDR to speed up downloads</h2>
 
 <p>
-<a href='https://github.com/LabAdvComp/UDR' title=''>UDR</a> (UDT Enabled Rsync) is a download protocol that is very efficent
-at sending large amounts of data over long distances. UDR utilizes rsync
-as the transport mechanism, but sends the data over the UDT protocol.
+<a href='https://github.com/LabAdvComp/UDR' title=''>UDR</a> (UDT Enabled Rsync) is a download 
+protocol that is very efficient at sending large amounts of data over long distances. UDR utilizes 
+rsync as the transport mechanism, but sends the data over the UDT protocol.
 UDR is not written or managed by UCSC. It is an open source tool created
 by the <a href='http://www.labcomputing.org/' title=''>Laboratory for Advanced Computing</a> at the University of Chicago.
 It has been tested under Linux, FreeBSD and Mac OSX, but may
@@ -216,7 +216,7 @@ primarily to facilitate quick downloads of huge amounts of data over long distan
 </p>
 
 <p>
-With typical TCP-based protocols like http, ftp, and rsync, the tranfer speed
+With typical TCP-based protocols like http, ftp, and rsync, the transfer speed
 slows as the distance between the download source and destination increases.
 Protocols like UDT/UDR allow for many UDP packets to be
 sent in batch, thus allowing for much higher transmission speeds over long
