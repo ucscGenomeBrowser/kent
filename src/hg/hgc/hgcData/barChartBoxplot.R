@@ -13,6 +13,8 @@ colorFile <- args[3]
 dataFile <- args[4]
 outFile <- args[5]
 
+name2 <- args[6]
+
 df <- read.table(dataFile, sep="\t", header=TRUE)
 labels <- names(table(df$category))
 count <- length(labels)
@@ -44,8 +46,11 @@ par(mar=c(marBottom,marLeft,3,1) + 0.1, mgp=c(2,1,0), font.main=1)
 yLabel <- units
 max <- max(df$value)
 yLimit <- c(-(max*.02), max+ (max*.03))
+title <- locus
+if (name2 != "n/a")
+    title <- paste(locus, " (", name2, ")", sep="")
 exprPlot <- boxplot(value ~ categoryFactor, data=df, ylab=yLabel, ylim=yLimit,
-                        main=locus,
+                        main=title,
                         col=colorsHex, border=c(darkgray),
                         # medians
                         medcol="black", medlwd=2,
