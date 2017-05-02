@@ -46,6 +46,7 @@
 #include "vcf.h"
 #include "htmshell.h"
 #include "bigBedFind.h"
+#include "customComposite.h"
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
@@ -492,6 +493,8 @@ struct hash *ra;
 while ((ra = raNextRecord(lf)) != NULL)
     {
     // allow that trackDb+hub+genome is in one single file
+    if (hashFindVal(ra, "hub"))
+        continue;
     if (hashFindVal(ra, "track"))
         break;
 
@@ -770,26 +773,29 @@ else
     {
     /* Check type field. */
     char *type = requiredSetting(hub, genome, tdb, "type");
-    if (!(startsWithWord("bigWig", type) ||
-          startsWithWord("bigBed", type) ||
-#ifdef USE_HAL
-          startsWithWord("pslSnake", type) ||
-          startsWithWord("halSnake", type) ||
-#endif
-          startsWithWord("vcfTabix", type) ||
-          startsWithWord("bigPsl", type) ||
-          startsWithWord("bigMaf", type) ||
-          startsWithWord("longTabix", type) ||
-          startsWithWord("bigGenePred", type) ||
-          startsWithWord("bigChain", type) ||
-          startsWithWord("bigBarChart", type) ||
-          startsWithWord("bam", type)))
+    if (!( isCustomComposite(tdb) && startsWithWord("wig", type)))
         {
-        errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
-            hub->url, genome->name, tdb->track);
-        }
+        if (!(startsWithWord("bigWig", type) ||
+              startsWithWord("bigBed", type) ||
+#ifdef USE_HAL
+              startsWithWord("pslSnake", type) ||
+              startsWithWord("halSnake", type) ||
+#endif
+              startsWithWord("vcfTabix", type) ||
+              startsWithWord("bigPsl", type) ||
+              startsWithWord("bigMaf", type) ||
+              startsWithWord("longTabix", type) ||
+              startsWithWord("bigGenePred", type) ||
+              startsWithWord("bigChain", type) ||
+              startsWithWord("bigBarChart", type) ||
+              startsWithWord("bam", type)))
+            {
+            errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
+                hub->url, genome->name, tdb->track);
+            }
 
-    requiredSetting(hub, genome, tdb, "bigDataUrl");
+        requiredSetting(hub, genome, tdb, "bigDataUrl");
+        }
     }
 }
 
