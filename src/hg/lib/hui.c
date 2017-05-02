@@ -49,6 +49,7 @@
 #include "tagRepo.h"
 #include "fieldedTable.h"
 #include "barChartUi.h"
+#include "customComposite.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -1764,6 +1765,26 @@ void wiggleGraphDropDown(char *var, char *curVal)
 cgiMakeDropList(var, wiggleGraphOptions, ArraySize(wiggleGraphOptions), curVal);
 }
 
+static char *aggregateExtraLabels[] =
+{
+"none",
+"transparent",
+"solid",
+"stacked",
+"add",
+"subtract",
+};
+
+static char *aggregateExtraValues[] =
+{
+WIG_AGGREGATE_NONE,
+WIG_AGGREGATE_TRANSPARENT,
+WIG_AGGREGATE_SOLID,
+WIG_AGGREGATE_STACKED,
+WIG_AGGREGATE_ADD,
+WIG_AGGREGATE_SUBSTRACT,
+};
+
 static char *aggregateLabels[] =
 {
 "none",
@@ -1789,10 +1810,17 @@ return aggregateValues[x];
 enum wiggleAggregateFunctionEnum wiggleAggregateFunctionStringToEnum(char *string)
 /* Convert from string to enum representation. */
 {
-int x = stringIx(string, aggregateValues);
+int x = stringIx(string, aggregateExtraValues);
 if (x < 0)
     errAbort("hui::wiggleAggregateFunctionStringToEnum() - Unknown option %s", string);
 return x;
+}
+
+void aggregateExtraDropDown(char *var, char *curVal)
+/* Make drop down menu for aggregate plus strategy */
+{
+cgiMakeDropListFull(var, aggregateExtraLabels, aggregateExtraValues,
+    ArraySize(aggregateExtraValues), curVal, NULL, NULL);
 }
 
 void aggregateDropDown(char *var, char *curVal)
@@ -5109,7 +5137,10 @@ if (parentLevel)
         char *aggregateVal = cartOrTdbString(cart, tdb->parent, "aggregate", NULL);
         printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
         safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
-        aggregateDropDown(option, aggregateVal);
+        if (isCustomComposite(tdb))
+            aggregateExtraDropDown(option, aggregateVal);
+        else
+            aggregateDropDown(option, aggregateVal);
         puts("</td></TR>");
 
 	if (sameString(aggregateVal, WIG_AGGREGATE_STACKED)  &&
