@@ -42,6 +42,9 @@
 /* Units to display on bar mouseover */
 #define BAR_CHART_UNIT                   "barChartUnit"
 
+/* Measurement type -- e.g. 'median'. Shown as part of label on details page. Default is "" */
+#define BAR_CHART_METRIC                 "barChartMetric"
+
 /* Suppress whiteout behind graph (to show highlight and blue lines) */
 #define BAR_CHART_NO_WHITEOUT         "noWhiteout"
 #define BAR_CHART_NO_WHITEOUT_DEFAULT        FALSE

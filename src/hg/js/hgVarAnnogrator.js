@@ -510,7 +510,10 @@ var hgva = // result of invoking:
 
 	submitQuery: function()
 	{
-	    loadingImage.run();
+            // Show loading image and message -- unless downloading to a file
+            if (! $('#hgva_outFile').val()) {
+	        loadingImage.run();
+            }
 	    var startQueryHiddenInput = '<INPUT TYPE=HIDDEN NAME="hgva_startQuery" VALUE="1">';
 	    $("#mainForm").append(startQueryHiddenInput).submit();
 	},

@@ -679,7 +679,7 @@ for (i=0; i<expCount; i++)
     maxExp = max(maxExp, expScore);
     }
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
-                                GTEX_MAX_LIMIT, GTEX_MAX_LIMIT_DEFAULT);
+                                GTEX_MAX_VIEW_LIMIT, GTEX_MAX_VIEW_LIMIT_DEFAULT);
 double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
 return valToClippedHeight(maxExp, maxMedian, viewMax, gtexMaxGraphHeight(), extras->doLogTransform);
 }
@@ -799,7 +799,7 @@ if (geneInfo->medians2)
 
 // draw bar graph
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
-                                GTEX_MAX_LIMIT, GTEX_MAX_LIMIT_DEFAULT);
+                                GTEX_MAX_VIEW_LIMIT, GTEX_MAX_VIEW_LIMIT_DEFAULT);
 double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
 int i;
 int expCount = geneBed->expCount;
@@ -1019,7 +1019,7 @@ if (geneInfo->medians2)
 int i = 0;
 
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
-                                GTEX_MAX_LIMIT, GTEX_MAX_LIMIT_DEFAULT);
+                                GTEX_MAX_VIEW_LIMIT, GTEX_MAX_VIEW_LIMIT_DEFAULT);
 for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     {
     if (!filterTissue(tg, tissue->name))

@@ -2743,3 +2743,30 @@ wait
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# swap lastz/chainNet from melGal5 turkey (DONE - 2017-01-20 - Hiram)
+
+    # alignment geoFor1 on melGal5
+    cat fb.melGal5.chainGeoFor1Link.txt
+    #  740714391 bases of 1093044709 (67.766%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/geoFor1/bed/blastz.melGal5.swap
+    cd /hive/data/genomes/geoFor1/bed/blastz.melGal5.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melGal5/bed/lastzGeoFor1.2017-01-20/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    65m39.225s
+
+    cat fb.geoFor1.chainMelGal5Link.txt
+    # 725536636 bases of 1041286029 (69.677%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` geoFor1 melGal5) \
+       > rbest.log 2>&1
+    # real    291m40.237s
+
+#########################################################################

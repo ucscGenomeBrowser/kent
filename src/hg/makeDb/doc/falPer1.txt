@@ -71,3 +71,30 @@ TMPDIR=/dev/shm
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# swap lastz/chainNet from melGal5 (DONE - 2017-01-20 - Hiram)
+
+    # alignment falPer1 on melGal5:
+    cat fb.melGal5.chainFalPer1Link.txt
+    #  854639905 bases of 1093044709 (78.189%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/falPer1/bed/blastz.melGal5.swap
+    cd /hive/data/genomes/falPer1/bed/blastz.melGal5.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melGal5/bed/lastzFalPer1.2017-01-20/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    64m19.073s
+
+    cat fb.falPer1.chainMelGal5Link.txt
+    # 826670414 bases of 1153404357 (71.672%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` falPer1 melGal5) \
+       > rbest.log 2>&1
+    #  real    247m39.409s
+
+#########################################################################

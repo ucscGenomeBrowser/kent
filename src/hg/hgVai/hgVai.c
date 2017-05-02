@@ -494,7 +494,9 @@ for (ref = varTrackList;  ref != NULL;  ref = ref->next)
     }
 printOption(hgvaSampleVariants, selected, hgvaSampleVariantsLabel);
 printOption(hgvaUseHgvs, selected, hgvaHgvsLabel);
-boolean hasSnps = (hFindLatestSnpTable(database, NULL) != NULL);
+struct trackDb *snpTdb = hFindLatestSnpTrack(database, NULL, &fullTrackList);
+// We can convert rsIds from snpNNN tables (but not ancient "snp" - no refUCSC column) into VCF
+boolean hasSnps = (snpTdb != NULL && differentString(snpTdb->table, "snp"));
 if (hasSnps)
     printOption(hgvaUseVariantIds, selected, hgvaVariantIdsLabel);
 printf("</SELECT><BR>\n");
@@ -725,13 +727,13 @@ boolean findSnpBed4(char *suffix, char **retFileName, struct trackDb **retTdb)
 /* If we can find the latest snpNNNsuffix table, or better yet a bigBed file for it (faster),
  * set the appropriate ret* and return TRUE, otherwise return FALSE. */
 {
-char *table = hFindLatestSnpTable(database, suffix);
-if (table == NULL)
+struct trackDb *tdb = hFindLatestSnpTrack(database, suffix, &fullTrackList);
+if (tdb == NULL)
     return FALSE;
 boolean foundIt = FALSE;
 // Do we happen to have a bigBed version?  Better yet, bed4 only for current uses:
 char origFileName[HDB_MAX_PATH_STRING];
-safef(origFileName, sizeof(origFileName), "/gbdb/%s/vai/%s.bed4.bb", database, table);
+safef(origFileName, sizeof(origFileName), "/gbdb/%s/vai/%s.bed4.bb", database, tdb->table);
 char* fileName = hReplaceGbdb(origFileName);
 if (fileExists(fileName))
     {
@@ -743,7 +745,7 @@ else
     {
     // Not bed4; try just .bb:
     freez(&fileName);
-    safef(origFileName, sizeof(origFileName), "/gbdb/%s/vai/%s.bb", database, table);
+    safef(origFileName, sizeof(origFileName), "/gbdb/%s/vai/%s.bb", database, tdb->table);
     fileName = hReplaceGbdb(origFileName);
     if (fileExists(fileName))
 	{
@@ -752,16 +754,11 @@ else
 	foundIt = TRUE;
 	}
     }
-if (foundIt && retTdb == NULL)
-    return TRUE;
-struct trackDb *tdb = tdbForTrack(database, table, &fullTrackList);
-if (tdb != NULL)
-    {
-    if (retTdb != NULL)
-	*retTdb = tdb;
-    return TRUE;
-    }
-return foundIt;
+if (retTdb == NULL)
+    return foundIt;
+else
+    *retTdb = tdb;
+return TRUE;
 }
 
 void selectDbSnp(boolean gotSnp)
@@ -2193,14 +2190,14 @@ static void rsIdsToVcfRecords(struct annoAssembly *assembly, struct slName *rsId
 {
 if (rsIds == NULL)
     return;
-char *table = hFindLatestSnpTable(database, NULL);
-if (table == NULL)
+struct trackDb *tdb = hFindLatestSnpTrack(database, NULL, &fullTrackList);
+if (tdb == NULL)
     return;
 struct sqlConnection *conn = hAllocConn(assembly->name);
 // Build a 'name in (...)' query, and build a hash of IDs so we can test whether all were found
 struct dyString *dq = sqlDyStringCreate("select chrom, chromStart, chromEnd, name, strand, "
 					"refUCSC, observed from %s where name in (",
-					table);
+					tdb->table);
 struct hash *idHash = hashNew(0);
 struct slName *id;
 for (id = rsIds;  id != NULL;  id = id->next)
