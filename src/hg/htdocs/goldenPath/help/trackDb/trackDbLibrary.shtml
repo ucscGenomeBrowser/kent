@@ -4266,10 +4266,10 @@ for each cell associated with the particular TF binding location.</P>
 
 <!-- - - - - - - - bigBarChart settings - - - - - - - -->
 <DIV class="bigBarChart_intro">
-<H3>bigBarChart: Bar charts of categorical variables displayed on genomic regions</H3>
+<H3>bigBarChart: Bar charts of variables displayed on genomic regions</H3>
     <P>
-    The bigBarChart format stores values of a set of categorical variables for each genomic region 
-in the file.  The bigBarChart files are created using the program bedToBigBed with a special 
+    The bigBarChart format stores values of a set of variables for each genomic region 
+in the file.  BigBarChart files are created using the program bedToBigBed with a special 
 AutoSQL file that defines the fields.  The resulting files are in an indexed binary format
 that supports efficient remote access, so the file can be hosted on your web accessible server
 and displayed at UCSC.
@@ -4286,6 +4286,13 @@ For the complete bigBarChart format definitions please see the
 <DIV class="barChartLabel"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartLabel &lt;label&gt;</code></div>
     <P>This setting provides a label for the category selection list.</p>
+    </P>
+</DIV>
+
+<DIV class="barChartMetric"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartMetric &lt;metric&gt;</code></div>
+    <P>This setting provides a label for details page information about the barChart values presented.
+        These are typically summary values, derived from many samples (often the median value).</p>
     </P>
 </DIV>
 
@@ -4341,6 +4348,7 @@ barChartDataUrl file.  Used for generating a box plot on the details page.
     maxLimit 8000
     barChartUnit RPKM
     barChartLabel Brain Regions
+    barChartMetric median
     barChartBars Amygdala Cerebellum Cortex Hippocampus
     barChartColors #ff0000 green maroon navy
     shortLabel Brain RNA
