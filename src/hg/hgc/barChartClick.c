@@ -289,12 +289,10 @@ FILE *f = fopen(dfTn.forCgi, "w");
 if (f == NULL)
     errAbort("can't create temp file %s", dfTn.forCgi);
 fprintf(f, "sample\tcategory\tvalue\n");
-int i = 0;
 struct barChartItemData *val;
 for (val = vals; val != NULL; val = val->next)
     {
-    // NOTE: don't actually need sample ID here -- just use a unique int
-    fprintf(f, "%d\t%s\t%0.3f\n", i++, val->category, val->value);
+    fprintf(f, "%s\t%s\t%0.3f\n", val->sample, val->category, val->value);
     }
 fclose(f);
 return cloneString(dfTn.forCgi);
@@ -395,9 +393,12 @@ if (vals != NULL)
     char *df = makeDataFrame(tdb->table, vals);
     char *colorFile = makeColorFile(tdb);
     printBoxplot(df, item, chartItem->name2, units, colorFile);
+/*
     if (matrixUrl != NULL)
         printf("<br>View <a href='%s'>data matrix</a> and <a href='%s'>sample file</a>\n", 
                 matrixUrl, sampleUrl);
+*/
+    printf("<br><a href='%s'>View data for all samples</a>\n", df); 
     }
 puts("<br>");
 printTrackHtml(tdb);
