@@ -1,4 +1,10 @@
 
+track chainNetAquChr2 override
+priority 211.69
+chainLinearGap loose
+chainMinScore 5000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
 track chainNetPelSin1 override
 priority 214.98
 chainMinScore 5000

@@ -73,6 +73,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     char *row[32];
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, ArraySize(row));
     struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
+    if (barChart == NULL)
+        continue;
     if (sameString(barChart->name, item))
         return barChart;
     }
@@ -393,14 +395,8 @@ if (vals != NULL)
     char *df = makeDataFrame(tdb->table, vals);
     char *colorFile = makeColorFile(tdb);
     printBoxplot(df, item, chartItem->name2, units, colorFile);
-/*
-    if (matrixUrl != NULL)
-        printf("<br>View <a href='%s'>data matrix</a> and <a href='%s'>sample file</a>\n", 
-                matrixUrl, sampleUrl);
-*/
     printf("<br><a href='%s'>View data for all samples</a>\n", df); 
     }
 puts("<br>");
-printTrackHtml(tdb);
 }
 
