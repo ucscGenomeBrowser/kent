@@ -1363,35 +1363,8 @@ XXX - working - Tue May  2 15:26:42 PDT 2017
     ln -s `pwd`/* \
       /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro9/phyloP11way
 
-    ###########################################################################
-    ## create upstream refGene maf files
-    cd /hive/data/genomes/xenTro9/bed/multiz11way/downloads/multiz11way
-    # bash script
-#!/bin/sh
-export geneTbl="refGene"
-for S in 1000 2000 5000
-do
-    echo "making upstream${S}.maf"
-    featureBits xenTro9 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
-        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
-        | /cluster/bin/$MACHTYPE/mafFrags xenTro9 multiz11way \
-                stdin stdout \
-                -orgs=/hive/data/genomes/xenTro9/bed/multiz11way/species.list \
-        | gzip -c > upstream${S}.${geneTbl}.maf.gz
-    echo "done upstream${S}.${geneTbl}.maf.gz"
-done
-    #   real    82m21.917s
-
-    md5sum upstream*.gz >> md5sum.txt
-
-    # some other symlinks were already made above
-    # obtain the README.txt from geoFor1/multiz11way and update for this
-    #   situation
-    ln -s `pwd`/upstream*.gz README.txt \
-        /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro9/multiz11way
-
 #############################################################################
-# hgPal downloads (TBD - 2015-04-15 - Hiram)
+# hgPal downloads (DONE - 2017-05-02 - Hiram)
 #   FASTA from 11-way for knownGene, refGene and knownCanonical
 
     ssh hgwdev
@@ -1426,21 +1399,20 @@ done
     echo "wait" >> $gp.jobs
 
     time (sh -x ./$gp.jobs) > $gp.jobs.log 2>&1
-XXX - running - Tue May  2 16:04:54 PDT 2017
-    # real    175m50.376s
+    # real    2m17.534s
 
     export mz=multiz11way
     export gp=refGene
     time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonAA.fa.gz
-    # real    10m29.500s
+    # real    0m14.462s
 
     time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    15m9.974s
+    #   real    0m30.113s
 
-  # -rw-rw-r--   1 611281544 Apr 15 20:37 refGene.multiz11way.exonAA.fa.gz
-  # -rw-rw-r--   1 955571425 Apr 15 21:06 refGene.multiz11way.exonNuc.fa.gz
+    # -rw-rw-r-- 1 17767900 May  2 16:46 refGene.multiz11way.exonAA.fa.gz
+    # -rw-rw-r-- 1 30143558 May  2 16:47 refGene.multiz11way.exonNuc.fa.gz
 
     export mz=multiz11way
     export gp=refGene
@@ -1455,7 +1427,7 @@ XXX - running - Tue May  2 16:04:54 PDT 2017
     rm -rf exonAA exonNuc
 
 #############################################################################
-# wiki page for 11-way (TBD - 2015-04-15 - Hiram)
+# wiki page for 11-way (DONE - 2017-05-02 - Hiram)
     mkdir /hive/users/hiram/bigWays/xenTro9.11way
     cd /hive/users/hiram/bigWays
     echo "xenTro9" > xenTro9.11way/ordered.list
@@ -1478,9 +1450,9 @@ XXX - running - Tue May  2 16:04:54 PDT 2017
     ./defCheck.pl xenTro9 11way
 
     # this constructs the html pages in xenTro9.11way/:
-# -rw-rw-r-- 1 10741 Apr 15 21:19 XenTro9_11-way_conservation_alignment.html
-# -rw-rw-r-- 1 14047 Apr 15 21:20 XenTro9_11-way_Genome_size_statistics.html
-# -rw-rw-r-- 1  8040 Apr 15 21:20 XenTro9_11-way_conservation_lastz_parameters.html
+# -rw-rw-r-- 1 6247 May  2 17:07 XenTro9_11-way_conservation_alignment.html
+# -rw-rw-r-- 1 8411 May  2 17:09 XenTro9_11-way_Genome_size_statistics.html
+# -rw-rw-r-- 1 5033 May  2 17:10 XenTro9_11-way_conservation_lastz_parameters.html
 
     # add those pages to the genomewiki.  Their page names are the
     # names of the .html files without the .html:
