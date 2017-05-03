@@ -64,7 +64,7 @@ static char *echTelNames[] = {"Echinops telfairi", NULL};
 static char *oryCunNames[] = {"Oryctolagus cuniculus", NULL};
 static char *cavPorNames[] = {"Cavia porcellus", NULL};
 static char *loxAfrNames[] = {"Loxodonta africana", NULL};
-static char *macEugNames[] = {"Macropus eugenii", NULL};
+static char *macEugNames[] = {"Macropus eugenii", "Notamacropus eugenii", NULL};
 static char *triManNames[] = {"Trichechus manatus",
 				"Trichechus manatus latirostris", NULL};
 static char *dasNovNames[] = {"Dasypus novemcinctus", NULL};
