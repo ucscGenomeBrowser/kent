@@ -640,8 +640,6 @@ hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "customUrl", sameWord("customUrl", virtModeType));
 hPrintf("</TD><TD>");
 hPrintf("Enter Custom regions as BED, or a URL to them:<br>");
-//OLDWAY  GALT TODO REMOVE 
-//hTextVar("multiRegionsBedUrl", cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl), 60);
 multiRegionsBedUrl = cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
 struct dyString *dyMultiRegionsBedInput = dyStringNew(256);
 if (strstr(multiRegionsBedUrl,"://"))
@@ -662,7 +660,7 @@ else
 	lineFileClose(&lf);
 	}
     }
-hPrintf("<TEXTAREA NAME='multiRegionsBedInput' ID='multiRegionsBedInput' rows='4' cols='60'>%s</TEXTAREA>",
+hPrintf("<TEXTAREA NAME='multiRegionsBedInput' ID='multiRegionsBedInput' rows='4' cols='58' style='white-space: pre;'>%s</TEXTAREA>",
     dyMultiRegionsBedInput->string);
 hPrintf("</TD></TR>\n");
 
