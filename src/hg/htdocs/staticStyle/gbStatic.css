@@ -99,6 +99,11 @@
     margin: 15px 12px 0 15px;
 }
 
+/* Link */
+.gbsPage a {
+     font-weight: bold;
+}
+
 /* Code */
 
 .gbsPage code {
