@@ -4139,7 +4139,19 @@ while (lineFileNext(lf, &line, &lineSize))
     AllocVar(bed);
     // All fields are standard BED fields, no bedplus fields supported at this time.
     // note: this function does not validate chrom name or end beyond chrom size
-    loadAndValidateBed(row, numFields, numFields+0, lf, bed, NULL, TRUE);
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	loadAndValidateBed(row, numFields, numFields+0, lf, bed, NULL, TRUE); // can errAbort
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	warn("%s", errCatch->message->string);
+	return FALSE;
+	}
+    errCatchFree(&errCatch);
+
     bed->chrom=cloneString(bed->chrom);  // loadAndValidateBed does not do it for speed. but bedFree needs it.
 
     struct chromInfo *ci = hGetChromInfo(database, bed->chrom);
