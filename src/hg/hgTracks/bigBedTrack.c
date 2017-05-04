@@ -219,9 +219,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     lf->label = makeLabel(track,  bb);
     if (sameString(track->tdb->type, "bigGenePred") || startsWith("genePred", track->tdb->type))
         {
-        struct genePred  *gp = lf->original = genePredFromBigGenePred(chromName, bb); 
-        lf->extra = gp->name2;
-        lf->isBigGenePred = TRUE;
+        lf->original = genePredFromBigGenePred(chromName, bb); 
         }
 
     char* mouseOver = restField(bb, mouseOverIdx);

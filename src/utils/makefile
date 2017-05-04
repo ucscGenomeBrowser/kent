@@ -97,7 +97,7 @@ UTILS_APPLIST = \
 	toLower \
 	toUpper \
 	twoBitDup \
-        twoBitInfo \
+	twoBitInfo \
 	twoBitToFa \
 	wigCorrelate \
 	wigToBigWig \
@@ -146,18 +146,22 @@ UCSC_APPS = \
 
 # list of scripts to install
 
+USER_APP_SCRIPTS = \
+	bedJoinTabOffset \
+	expMatrixToBarchartBed
+
 SCRIPT_FILES = \
-        agpToLift \
+	agpToLift \
 	apacheLogParse \
-        bedCollapse.pl \
+	bedCollapse.pl \
 	bedFixBlockOverlaps \
 	bedOverlapMerge \
-        bedSingleCover.pl \
+	bedSingleCover.pl \
 	bedBetween \
 	doLocusName \
 	extToolsChromeParse \
-        iSync \
-        lodToBedScore \
+	iSync \
+	lodToBedScore \
 	matrixMerge \
 	mkMafFrames.pl \
 	patSeqFilterBulkAndAnnotate \
@@ -167,8 +171,6 @@ SCRIPT_FILES = \
 	tabRepl \
 	uniprotLift \
 	uniprotToTab \
-	bedJoinTabOffset \
-	expMatrixToBarchartBed \
 	ggTables \
 	ggGeneClasses \
 	ggGpmlToTag \
@@ -178,9 +180,9 @@ SCRIPT_FILES = \
 	ggPpiToTab \
 	ggSpfToTab \
 	bedNamePickFirst \
-	bedBestTranscript
-
-
+	bedBestTranscript \
+	genePredToBed \
+	${USER_APP_SCRIPTS}
 
 # List of all directories to build
 
@@ -198,22 +200,38 @@ all: $(ALL_APPS:%=%.all)
 # here, but there is a directory by that name, and thus it always exists
 # and so the target does nothing.
 
-userAppsB: $(UTILS_APPLIST:%=%.userApps)
+userAppsB: $(UTILS_APPLIST:%=%.userApp) $(USER_APP_SCRIPTS:%=%.userAppScript)
 
-%.userApps:
+%.userApp:
 	cd $* && echo $* && $(MAKE)
 
+%.userAppScript:
+	@rm -f ${DESTDIR}${BINDIR}/$*
+	@if test -d $* ; \
+	then \
+	    chmod +x $*/$*; \
+	    echo cp -p $*/$* ${DESTDIR}${BINDIR}; \
+	    cp -p $*/$* ${DESTDIR}${BINDIR}; \
+	else \
+	    chmod +x $*; \
+	    echo cp -p $*/$* ${DESTDIR}${BINDIR}; \
+	    cp -p $* ${DESTDIR}${BINDIR}/$*; \
+	fi
+
 scripts: $(SCRIPT_FILES:%=%.scripts)
-	chmod +x genePredToBed/genePredToBed;
-	rm -f ${SCRIPTS}/genePredToBed;
-	echo cp -p genePredToBed/genePredToBed ${SCRIPTS};
-	@cp -p genePredToBed/genePredToBed ${SCRIPTS};
 
 %.scripts:
-	chmod +x $*
-	rm -f ${SCRIPTS}/$*
-	echo cp -p $* ${SCRIPTS}
-	cp -p $* ${SCRIPTS}
+	@rm -f ${SCRIPTS}/$*
+	@if test -d $* ; \
+	then \
+	    chmod +x $*/$*; \
+	    echo cp -p $*/$* ${SCRIPTS}; \
+	    cp -p $*/$* ${SCRIPTS}; \
+	else \
+	    chmod +x $*; \
+	    echo cp -p $* ${SCRIPTS}; \
+	    cp -p $* ${SCRIPTS}; \
+	fi
 
 testAll: $(ALL_APPS:%=%.testAll)
 
