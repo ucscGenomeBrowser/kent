@@ -3356,6 +3356,26 @@ noScoreFilter on
     parent clinvar
     priority 2
 
+track interactions
+shortLabel Protein Interactions
+longLabel Protein Interactions from Curated Databases and Text-Mining
+group pub
+visibility hide
+type bigBed 9
+itemRgb on
+exonNumbers off
+noScoreFilter on
+release alpha
+# draw the name field directly over the feature
+labelOnFeature on
+# linkIdInName means that the first part of the "name" field (space-separated) is the ID used for the %s parameter in directUrl
+directUrl hgGeneGraph?db=hg19&gene=%s
+# split off everything after the first space for the directUrl linkout
+linkIdInName on
+# always add the hgsid to the directUrl, default is off
+hgsid on
+bigDataUrl /gbdb/$D/bbi/interactions.bb
+
 searchName cosmicId
 searchTable cosmic
 searchMethod exact

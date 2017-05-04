@@ -23,7 +23,7 @@ index.</p>
 <p>
 See <a href="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format" 
 target="_blank">this wiki page</a> for help in selecting the graphing track data format that is most
-approriate for your type of data.</p>
+appropriate for your type of data.</p>
 <p>
 Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory:
 approximately 25% more RAM than the uncompressed BED input file.</p>
@@ -147,7 +147,8 @@ In this example, you will create your own bigBed file from an existing bed file.
   points to your bigBed file (<em>Step 7</em>, above).</li>
   <li> 
   Create the custom track on the human assembly hg19 (Feb. 2009), and view it in the Genome Browser 
-  (<em>Step 8</em>, above). Note that the original BED file contains data on chromsome 21 only.</li>
+  (<em>Step 8</em>, above). Note that the original BED file contains data on chromosome 21 
+  only.</li>
 </ol>
 
 <a name=Ex3></a>
@@ -157,11 +158,11 @@ In this example, you will create your own bigBed file from a fully featured exis
 contains the standard BED fields up to and including the <em>color</em> field (field 9), plus two 
 additional non-standard fields (two alternate names for each item in the file). BigBed files can 
 store extra fields in addition to the <a href="../../FAQ/FAQformat.html#format1">predefined BED 
-fields</a>. If you add extra fields to your bigBed file, you must include an AutoSQL format
+fields</a>. If you add extra fields to your bigBed file, you must include an AutoSql format
 (<em>.as</em>) file describing the fields. For more information on AutoSql, see 
 <a href="http://www.linuxjournal.com/article/5949" target="_blank">Kent and Brumbaugh, 2002</a>, as 
 well as examples of <em>.as</em> files in 
-<a href="http://genome-test.cse.ucsc.edu/~kent/src/unzipped/hg/lib/">this directory</a>. 
+<a href="http://genome-test.soe.ucsc.edu/~kent/src/unzipped/hg/lib/">this directory</a>. 
 This example also demonstrates how to create extra indices on the name field, and the first of the 
 extra fields to be used for track item search.</p>
 <ol>
@@ -172,7 +173,7 @@ extra fields to be used for track item search.</p>
   Save the file <a href="hg18.chrom.sizes"><em>hg18.chrom.sizes</em></a> to your computer. This file
   contains the chrom.sizes for the human (hg18) assembly (<em>Step 4</em>, above).</li>
   <li> 
-  Save the AutoSQL file <a href="examples/bedExample2.as"><em>bedExample2.as</em></a> to your 
+  Save the AutoSql file <a href="examples/bedExample2.as"><em>bedExample2.as</em></a> to your 
   computer. This file contains descriptions of the BED fields, and is required when the BED file 
   contains a <em>color</em> field.</li>  
   <li> 
@@ -194,7 +195,7 @@ extra fields to be used for track item search.</p>
   <pre><code>track type=bigBed name="bigBed Example Three" description="A bigBed File with Color and two Extra Fields" itemRgb="On" bigDataUrl=http://yourWebAddress/myBigBed2.bb</code></pre></li>
   <li> 
   Create the custom track on the human assembly hg18 (Mar. 2006), and view it in the Genome Browser 
-  (<em>step 8</em>, above). Note that the original BED file contains data on chromsome 7 only.</li>
+  (<em>step 8</em>, above). Note that the original BED file contains data on chromosome 7 only.</li>
   <li> 
   If you are using the bigBed file in a track hub, you can use the additional indices for track
   item searches. See the setting &quot;searchIndex&quot; in the 

@@ -6147,7 +6147,7 @@ if (hTableExists(database, "kgXref"))
             }
         /* should this be a hash instead? */
         kgE->name = dyStringCannibalize(&name);
-        kgE->hgg_prot = lf->extra;
+        kgE->hgg_prot = gp->name2;
         lf->extra = kgE;
         lf->label = kgE->name;
 	}
@@ -6213,6 +6213,9 @@ tg->parallelLoading = TRUE;  // set so bigBed code will look at bigDataUrl
 bigBedAddLinkedFeaturesFromExt(tg, chromName, winStart, winEnd,
       scoreMin, scoreMax, TRUE, 12, &lfList, BIGBEDMAXIMUMITEMS);
 slReverse(&lfList);
+struct linkedFeatures *lf = lfList;
+for(;lf;lf = lf->next)
+    lf->isBigGenePred = TRUE;
 struct linkedFeatures *newList = lfList;
 
 if (isGencode)
@@ -13864,8 +13867,6 @@ else if (sameWord(type, "bigGenePred"))
     wordCount++;
     words[1] = "12";
     bigBedMethods(track, tdb, wordCount, words);
-    track->itemColor   = bigGenePredColor;
-    track->itemNameColor = bigGenePredColor;
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }

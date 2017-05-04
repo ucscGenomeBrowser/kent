@@ -1,5 +1,5 @@
 # Boxplot of data values by category (bar in barChart)
-#       usage:   Rscript barChartBoxplot.R itemName units colorFile dataFile outFile
+#       usage:   Rscript barChartBoxplot.R itemName units colorFile dataFile outFile altName
 # where:
 #       colorFile is a tab-sep file in the format: category hex-color
 #       dataFile is a tab-sep file, with a header and row for each sample in the format:
@@ -13,14 +13,17 @@ colorFile <- args[3]
 dataFile <- args[4]
 outFile <- args[5]
 
-df <- read.table(dataFile, sep="\t", header=TRUE)
-labels <- names(table(df$category))
-count <- length(labels)
-categoryFactor <- df$category
+name2 <- args[6]
 
 # read colors file
 colorDf = read.table(colorFile, sep="\t", header=TRUE)
 colorsHex <- paste("#",as.character(as.hexmode(colorDf$color)), sep="")
+
+# order categories as in colors file
+df <- read.table(dataFile, sep="\t", header=TRUE)
+df$category <- ordered(df$category, levels=colorDf$category)
+labels <- names(table(df$category))
+count <- length(labels)
 
 # draw graph
 # adjust X label height based on length of labels
@@ -44,8 +47,11 @@ par(mar=c(marBottom,marLeft,3,1) + 0.1, mgp=c(2,1,0), font.main=1)
 yLabel <- units
 max <- max(df$value)
 yLimit <- c(-(max*.02), max+ (max*.03))
-exprPlot <- boxplot(value ~ categoryFactor, data=df, ylab=yLabel, ylim=yLimit,
-                        main=locus,
+title <- locus
+if (name2 != "n/a")
+    title <- paste(locus, " (", name2, ")", sep="")
+exprPlot <- boxplot(value ~ df$category, data=df, ylab=yLabel, ylim=yLimit,
+                        main=title,
                         col=colorsHex, border=c(darkgray),
                         # medians
                         medcol="black", medlwd=2,
@@ -55,7 +61,6 @@ exprPlot <- boxplot(value ~ categoryFactor, data=df, ylab=yLabel, ylim=yLimit,
                         whisklty=1, whiskcol=gray, 
                         # 'staples'
                         staplecol=gray, staplecex=1.3, staplewex=.8,
-                        #staplecol=gray, staplecex=1.3, staplewex=.8)
                         # erase X axis labels (add later rotated)
                         names=rep(c(""), count))
 

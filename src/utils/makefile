@@ -168,7 +168,18 @@ SCRIPT_FILES = \
 	uniprotLift \
 	uniprotToTab \
 	bedJoinTabOffset \
-	expMatrixToBarchartBed
+	expMatrixToBarchartBed \
+	ggTables \
+	ggGeneClasses \
+	ggGpmlToTag \
+	ggKgmlToTab \
+	ggMsrToTab \
+	ggPidToTab \
+	ggPpiToTab \
+	ggSpfToTab \
+	bedNamePickFirst \
+	bedBestTranscript
+
 
 
 # List of all directories to build

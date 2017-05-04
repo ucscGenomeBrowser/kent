@@ -72,6 +72,7 @@
 #include "knetUdc.h"
 #include "hex.h"
 #include <openssl/sha.h>
+#include "customComposite.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -4537,6 +4538,38 @@ setGlobalsFromWindow(windows); // first window
 flatTrack->maxHeight = maxHeight;
 }
 
+static boolean isCompositeInAggregate(struct track *track)
+// Check to see if this is a custom composite in aggregate mode.
+{
+if (!isCustomComposite(track->tdb))
+    return FALSE;
+
+char *aggregateVal = cartOrTdbString(cart, track->tdb, "aggregate", NULL);
+if ((aggregateVal == NULL) || sameString(aggregateVal, "none"))
+    return FALSE;
+
+struct track *subtrack = NULL;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (isSubtrackVisible(subtrack))
+        break;
+    }
+if (subtrack == NULL)
+    return FALSE;
+
+multiWigContainerMethods(track);
+struct wigCartOptions *wigCart = wigCartOptionsNew(cart, track->tdb, 0, NULL);
+track->wigCartData = (void *) wigCart;
+//track->lineHeight = wigCart->defaultHeight;
+wigCart->isMultiWig = TRUE;
+wigCart->autoScale = wiggleScaleAuto;
+//wigCart->defaultHeight = track->lineHeight;
+//struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, wigCart, hvg);
+//tg->wigGraphOutput = wgo;
+
+return TRUE;
+}
+
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
@@ -4727,14 +4760,19 @@ for (track = trackList; track != NULL; track = track->next)
     if (tdbIsComposite(track->tdb))
         {
         struct track *subtrack;
-        for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        if (isCompositeInAggregate(track))
+            flatTracksAdd(&flatTracks,track,cart);
+        else
             {
-            if (!isSubtrackVisible(subtrack))
-                continue;
-
-	    if (!isLimitedVisHiddenForAllWindows(subtrack))
+            for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 {
-                flatTracksAdd(&flatTracks,subtrack,cart);
+                if (!isSubtrackVisible(subtrack))
+                    continue;
+
+                if (!isLimitedVisHiddenForAllWindows(subtrack))
+                    {
+                    flatTracksAdd(&flatTracks,subtrack,cart);
+                    }
                 }
             }
         }

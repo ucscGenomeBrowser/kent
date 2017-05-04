@@ -44,6 +44,77 @@
 
 <!-- ============= 2017 archived news ============= -->
 <a name="2017"></a>
+<!-- staging blat custom tracks announcement
+<a name="050417"></a>
+<h2>May 3, 2017 New BLAT custom track feature</h2>
+<p>
+We are excited to announce the release of a long awaited feature: the ability to save  BLAT 
+search results as a Genome Browser custom track. Now, after running a BLAT search, you can save
+your results as a bigPsl custom track with the click of a button. You can even configure the
+name and description of the track to your liking!</p>
+
+<p>These custom tracks display and function exactly the same as the BLAT results track of old 
+(with a slight coloring difference for amino acid searches), except that they will stick around 
+when saved in a session, just like any other custom track. That means you can now send you 
+colleagues a session of your BLAT searches and they will still be able to see them weeks later!</p>
+
+<p>Thanks to Brian Raney for the implementation this feature.</p>
+-->
+<a name="050317"></a>
+<h2>May 3, 2017 Highlighting Feature Enhanced for Genome Browsers</h2>
+<p>
+In <a href="../goldenPath/newsarch.html#030414" target="_blank">
+March of 2014, a new highlight feature was released</a>, allowing an option to 
+drag-and-select a single highlight color in genome browsers. This highlighting feature 
+has been enhanced with new additions, as displayed on the "Drag-and-select" menu that 
+appears when conducting &quot;shift+drag&quot; or &quot;click-drag&quot; within the genome browser 
+(for example, when zooming into a region). </p>
+<p>
+Main features in drag-and-select menu:</p>
+	<ul>
+		<li>
+		Use shift+drag or click-drag to enable the new "Drag-and-select" 
+		dialog box menu.</li>
+		<li>
+		In the menu, a checkbox controls behavior for drag-and-select; you 
+		can hide the menu and always zoom with shift+select. If selected, re-enable 
+		via 'View - Configure Browser' (keyboard shortcut: c then f).</li>
+		<li>
+		A &quot;color picker&quot; option allows for easy color selection of each highlight; 
+		you can also create multiple highlights (each with various colors if 
+		desired).</li>
+		<li>
+		Hold Shift+drag to show the menu (orc click+drag).</li>
+		<li>
+		Hold Alt+drag to add a highlight (without displaying the menu).</li>
+		<li>
+		Hold Ctrl+drag (Windows) or Cmd+drag (Mac) to zoom (without displaying the 
+		menu).</li>
+		<li>
+		To cancel, press Esc anytime or drag mouse outside image.</li>
+		<li>
+		Highlight the current position with the keyboard shortcut &quot;h then 
+		m.&quot;</li>
+		<li>
+		Clear all highlights with View - Clear Highlights (or keyboard shortcut
+		h then c), or simply right-click on a highlight to remove all highlights.</li>
+	</ul>
+<p>
+In the genome browser, there are also options for right-clicking:</p>
+	<ul>
+		<li>
+		Remove highlighting</li>
+		<li>
+		Zoom in to a highlighted region</li>
+		</li>
+		<li>
+		Highlight a gene - right-click on the gene (e.g., SOD1) and select
+		&quot;Highlight SOD1&quot;</li>
+	</ul>
+
+<img src="../images/highlightScreenshot2017.png" alt="Highlight screenshot" width="899"
+height="602"></p>
+
 <a name="042117"></a>
 <h2>Apr. 21, 2017 &nbsp;&nbsp; New Genome Browser available for Chinese pangolin!</h2>
 <p>
@@ -1431,7 +1502,7 @@ We are pleased to announce that the UCSC Genome Browser now supports data in big
 bigGenePred format stores annotation items that are a linked collection of exons, much as BED files 
 do, but bigGenePred has additional information about the coding frames and other gene specific 
 information. bigGenePred files are created initially from BED-type files with some extra fields, 
-using the program bedToBigBed with a special AutoSQL file that defines the fields of the 
+using the program bedToBigBed with a special AutoSql file that defines the fields of the 
 bigGenePred. The resulting bigBed files are in xed binary format. The advantage of these bigBed 
 files is that only portions of the files needed to display a particular region are transferred to 
 UCSC. So for large data sets, bigBed is considerably faster than regular BED files.</p>
@@ -1657,7 +1728,7 @@ funding support of NHGRI, we offer hands-on Genome Browser training onsite at yo
 tailored to your audience's level of expertise.</p>
 <p>
 For more information or to submit a request to host a workshop, please visit 
-<a href="http://bit.ly/ucscTraining" target="_blank">our signup</a>.</p>
+<a href="http://bit.ly/ucscTraining" target="_blank">our sign-up page</a>.</p>
 
 <a name="012315"></a>
 <h2>Jan. 23, 2015 &nbsp;&nbsp; Genome Browser YouTube channel</h2>
@@ -5093,7 +5164,7 @@ We'd like to introduce the Archaeal Genome Browser Database, a visualization too
 repository for archaeal functional genomics data. This resource was developed by the 
 <a href="http://lowelab.ucsc.edu/" target="_blank">Lowe Lab</a> in the UCSC Biomolecular Engineering
 Department, with key assistance from the UCSC Genome Browser team. The Archaeal Genome Browser 
-Database home page can be accessed via the <a href="http://archaea.cse.ucsc.edu/" 
+Database home page can be accessed via the <a href="http://archaea.soe.ucsc.edu/" 
 target="_blank">Archaeal Genomes</a> menu link on the Genome Browser home page.</p> 
 <p> 
 Currently there are more than 50 completed archaeal genomes, the least studied domain of life. 
@@ -5361,7 +5432,7 @@ browser track groups.</p>
 <p> 
 For more information about the hg18 ENCODE data migration, see the News section on the UCSC 
 <a href="../ENCODE/">ENCODE portal page</a> and the UCSC 
-<a href="http://genomewiki.cse.ucsc.edu/index.php/ENCODE_Hg18_Migration" 
+<a href="http://genomewiki.soe.ucsc.edu/index.php/ENCODE_Hg18_Migration" 
 target="_blank">genomeWiki</a>.</p>
 
 <a name="082207b"></a>
@@ -8418,13 +8489,13 @@ Tables link in the left sidebar.</p>
 <h2>May 23, 2003 &nbsp;&nbsp; SARS Coronavirus TOR2 draft assembly available</h2> 
 <p> 
 [NOTE: The SARS assembly is no longer available on our public site, but may be accessed on our test 
-server, <a href="http://genome-test.cse.ucsc.edu">genome-test.cse.ucsc.edu</a>.]</p> 
+server, <a href="http://genome-test.soe.ucsc.edu">genome-test.soe.ucsc.edu</a>.]</p> 
 <p> 
 Today we'd like to announce the release of a genome browser and BLAT server for the SARS coronavirus
 TOR2 draft assembly. The browser - which is based on sequence deposited into GenBank as of Apr. 14, 
 2003 - provides seven annotations showing gene predictions, locations of putative proteins, and 
 viral mRNA and protein alignments. Of particular note are the protein structure analysis and 
-predictions, determined by using the <a href="http://www.cse.ucsc.edu/research/compbio/sam.html" 
+predictions, determined by using the <a href="http://www.soe.ucsc.edu/research/compbio/sam.html" 
 target="_blank">Sequence Alignment and Modeling (SAM) T02</a> tool. </p> 
 <p> 
 This browser marks a departure from our usual collection of vertebrate genomes. Its inception was 

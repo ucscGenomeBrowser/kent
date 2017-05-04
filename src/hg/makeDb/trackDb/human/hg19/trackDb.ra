@@ -570,19 +570,6 @@ group map
 visibility hide
 type bed 4 +
 
-track interactions
-shortLabel Protein Interactions
-longLabel Protein Interactions from Curated Databases and Text-Mining
-group pub
-visibility hide
-type bigBed 4
-noScoreFilter on
-release alpha
-directUrl hgcGeneGraph?gene=%s
-labelOnFeature on
-linkIdInName on
-hgsid on
-
 track pubsDev
 shortLabel Publications Beta
 longLabel Publications: Textmining of Publications, Beta Version
@@ -649,6 +636,9 @@ noInherit on
     #visibility hide
     #type bed 5
     #release alpha
+
+track interactions override
+directUrl hgGeneGraph?db=hg19&gene=%s
 
 track snpedia
 shortLabel SNPedia

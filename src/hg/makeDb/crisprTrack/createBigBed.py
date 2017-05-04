@@ -232,8 +232,8 @@ def readEffScores(masks):
     return effScores
 
 # format of specScores.tab, I'm not using headers to save time
-guideSeqField = 1
-specScoreField = 2
+guideSeqField = 0
+specScoreField = 1
 
 def readSpecScores(inMask):
     " read specificity scores and return as 20mer -> score (int) "
@@ -242,9 +242,8 @@ def readSpecScores(inMask):
     for fname in glob.glob(inMask):
         print "parsing %s" % fname
         for line in open(fname):
-            if line=="\n" or line.startswith("guideId"):
+            if line=="\n" or line.startswith("targetSeq"):
                 continue
-                
             fs = line.rstrip("\n").split()
             guideSeq = fs[guideSeqField]
             specScore = fs[specScoreField]

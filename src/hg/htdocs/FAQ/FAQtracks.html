@@ -9,25 +9,27 @@
 
 <h2>Topics</h2>
 
-<h6><a href="#tracks0">List of tracks available for a specific assembly</a></h6>
-<h6><a href="#tracks1">Database/browser start coordinates differ by 1 base</a></h6>
-<h6><a href="#tracks2">mRNA associated results</a></h6>
-<h6><a href="#tracks3">Correspondence of Genome Browser mRNA positions to those of OMIM 
-genes</a></h6>
-<h6><a href="#tracks4">Position changes of features</a></h6>
-<h6><a href="#tracks6">Evaluating possible alternative splices</a></h6>
-<h6><a href="#tracks7">Matching exons and protein sequence</a></h6>
-<h6><a href="#tracks9">Cause of duplicated gene</a></h6>
-<h6><a href="#tracks11">Protein doesn't begin with methionine</a></h6>
-<h6><a href="#tracks12">Doing an orthology track analysis of a protein</a></h6>
-<h6><a href="#tracks14">Quality benchmarks for predicted genes</a></h6>
-<h6><a href="#tracks15">Display conventions for gene prediction tracks</a></h6>
-<h6><a href="#tracks16">Viewing detailed displays in conservation tracks</a></h6>
-<h6><a href="#tracks17">Negative strand coordinates in PSL files</a></h6>
-<h6><a href="#tracks18">Inconsistency in stop codon treatment in GTF tracks</a></h6>
-<h6><a href="#tracks19">Obtaining clones referenced in Genome Browser</a></h6>
-<h6><a href="#tracks20">Locating centromeres and telomeres</a></h6>
-<h6><a href="#tracks21">Determining the table name for an annotation track</a></h6>
+<ul>
+<li><a href="#tracks0">List of tracks available for a specific assembly</a></li>
+<li><a href="#tracks1">Database/browser start coordinates differ by 1 base</a></li>
+<li><a href="#tracks2">mRNA associated results</a></li>
+<li><a href="#tracks3">Correspondence of Genome Browser mRNA positions to those of OMIM 
+genes</a></li>
+<li><a href="#tracks4">Position changes of features</a></li>
+<li><a href="#tracks6">Evaluating possible alternative splices</a></li>
+<li><a href="#tracks7">Matching exons and protein sequence</a></li>
+<li><a href="#tracks9">Cause of duplicated gene</a></li>
+<li><a href="#tracks11">Protein doesn't begin with methionine</a></li>
+<li><a href="#tracks12">Doing an orthology track analysis of a protein</a></li>
+<li><a href="#tracks14">Quality benchmarks for predicted genes</a></li>
+<li><a href="#tracks15">Display conventions for gene prediction tracks</a></li>
+<li><a href="#tracks16">Viewing detailed displays in conservation tracks</a></li>
+<li><a href="#tracks17">Negative strand coordinates in PSL files</a></li>
+<li><a href="#tracks18">Inconsistency in stop codon treatment in GTF tracks</a></li>
+<li><a href="#tracks19">Obtaining clones referenced in Genome Browser</a></li>
+<li><a href="#tracks20">Locating centromeres and telomeres</a></li>
+<li><a href="#tracks21">Determining the table name for an annotation track</a></li>
+</ul>
 <hr>
 <p>
 <a href="index.html">Return to FAQ Table of Contents</a></p>
@@ -71,7 +73,7 @@ target="_blank">UCSC Genome Browser coordinate counting systems</a>.</p>
 
 <a name="tracks2"></a>
 <h2>mRNA associated results</h2>
-<h6>Someties when I type in the name of a gene -- e.g. DAO (D aminoacid oxidase) -- the Genome 
+<h6>Sometimes when I type in the name of a gene -- e.g. DAO (D aminoacid oxidase) -- the Genome 
 Browser returns a list that includes the gene entry on the assembly, but also contains links to 
 several other genes and aligned mRNAs. What is the relationship between my gene of interest and 
 these results?</h6>
@@ -98,7 +100,7 @@ Not always. Sometimes the Genome Browser will return more than one location when
 duplication or assembly problems in the human genome. In these cases, usually one of the locations 
 will agree with OMIM. In a few rare instances involving not-quite-so-recent duplications in the 
 genome, UCSC will attempt to assign it uniquely, but OMIM will think it belongs someplace just under
-our threshhold. A Blat search of the cDNA is very informative in these cases. In rare cases, UCSC 
+our threshold. A Blat search of the cDNA is very informative in these cases. In rare cases, UCSC 
 or NCBI may have made a data processing error. For the vast majority of cases, however, the two 
 sites do match.</p>
 
@@ -134,7 +136,7 @@ protein sequence and vice versa)?</h6>
 If you have a protein sequence, you can use <a href="../cgi-bin/hgBlat">Blat</a> to align your 
 sequence to the desired genome. In the ACTIONS column on the Blat search results page, click the 
 details link to view details of exons blocks. Alternatively, click the browser link to display the 
-search results in the Genome Brower. Look for instances in which a gene from the Blat query track 
+search results in the Genome Browser. Look for instances in which a gene from the Blat query track 
 aligns exactly or very similarly to an entry in the Known Genes track. Click on the entry to display
 details about the gene. The SWISS-PROT link on the details page will lead you to more details about 
 this protein.</p>
@@ -173,7 +175,7 @@ any unusual finding.</p>
 <p> 
 To further investigate this example, you may want to use Blat or BLAST to recover other close 
 members of this gene family. By using comparative alignment, you may discover that the 5' UTR in the
-mRNA for this protein was likely misintepreted as coding sequence and that the protein begins with 
+mRNA for this protein was likely misinterpreted as coding sequence and that the protein begins with 
 methionine as expected. The error may also be caused by an underlying mRNA in GenBank that stops 
 short of the initiator methionine. In this case, you could use ESTs, other mRNAs, and Blat or BLAST 
 of paralogs against unfinished genome sequence to extend the mRNA to a more plausible full-length 
@@ -181,7 +183,7 @@ sequence.</p>
 
 <a name="tracks12"></a>
 <h2>Doing an orthology track analysis of a protein</h2>
-<h6>I am working on a lipase called hormone-sensitve lipase (HSL) gene ID NM_010719. I am trying
+<h6>I am working on a lipase called hormone-sensitive lipase (HSL) gene ID NM_010719. I am trying
 to see if there is any protein that has the same domain organization as HSL. Will doing an orthology
 track of the protein help me to get an answer? How do I do the orthology track
 analysis?</h6>
@@ -276,7 +278,7 @@ to do.</h6>
 <p> 
 Your guess is correct. We haven't gotten around to fixing this situation. A while ago, the
 Twinscan group made a GTF validator. It interpreted the stop codon as <em>not</em> part of the 
-coding region. Prior to that, all GFF and GTF annnotations that we received did include the stop 
+coding region. Prior to that, all GFF and GTF annotations that we received did include the stop 
 codon as part of the coding region; therefore, we didn't have special code in our database to 
 enforce it. In response to the validator, Ensembl, SGP and Geneid switched their handling of stop 
 codons to the way that Twinscan does it, hence the discrepancy.</p>
