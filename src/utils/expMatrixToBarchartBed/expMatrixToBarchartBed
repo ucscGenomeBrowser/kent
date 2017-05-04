@@ -18,14 +18,13 @@ def parseArgs(args):
                 "the matrix, the second is the grouping (cell type, tissue, etc)",
         type = argparse.FileType("r"))
     parser.add_argument ("matrixFile",
-            help = " The input matrix file, the first row should start with a hashtag, e.g. #." + \
-                "the samples in the first row should exactly match the ones in " + \
+            help = " The input matrix file. The samples in the first row should exactly match the ones in " + \
                 "the metaFile. The labels (ex ENST*****) in the first column should exactly match " + \
                 "the ones in the coordinate file.",
         type = argparse.FileType("r"))
     parser.add_argument ("coordinateMap",
-        help = " Six column no header,  maps the column labels from the matrix to coordinates. Tab " + \
-                "separated; label, chr, strand, start coord, end coord, gene name. ",
+        help = " Bed5+1 format. File that maps the column labels from the matrix to coordinates. Tab " + \
+                "separated; chr, start coord, end coord, label, strand, gene name. ",
         action = "store")
     parser.add_argument ("outputFile",
         help = " The output file. ",
