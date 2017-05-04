@@ -41,8 +41,8 @@ group compGeno
     view phyloP
     visibility full
     subTrack cons11way
-    viewLimits -3:0.5
-    viewLimitsMax -4.611:0.934
+    viewLimits -2:1
+    viewLimitsMax -3.475:2.548
 
         track phyloP11way
         subTrack cons11wayViewphyloP on
@@ -51,9 +51,9 @@ group compGeno
         longLabel 11 vertebrate Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -4.711 0.934
+        type wig -3.475 2.548
         maxHeightPixels 100:50:11
-        viewLimits -3.107:0.934
+        viewLimits -2:1
         autoScale off
         spanList 1
         windowingFunction mean
