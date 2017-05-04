@@ -1523,6 +1523,9 @@ void peptideAtlasMethods(struct track *tg);
 void barChartMethods(struct track *tg);
 /* Bar Chart track type: draw fixed width chart of colored bars over a BED item */
 
+void barChartCtMethods(struct track *tg);
+/* Bar Chart track methods for custom track */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */

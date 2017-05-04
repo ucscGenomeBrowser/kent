@@ -6222,6 +6222,12 @@ else if (sameString(type, "pgSnp"))
     //tg->mapItemName = ctMapItemName;
     tg->customPt = ct;
     }
+else if (sameString(type, "barChart"))
+    {
+    tg = trackFromTrackDb(tdb);
+    barChartCtMethods(tg);
+    tg->customPt = ct;
+    }
 else
     {
     errAbort("Unrecognized custom track type %s", type);
