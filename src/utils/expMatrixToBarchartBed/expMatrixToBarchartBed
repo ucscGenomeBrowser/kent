@@ -33,8 +33,11 @@ def parseArgs(args):
     # Optional arguments.  
     parser.add_argument ("--groupOrderFile",
         help = " Optional file to define the group order, list the groups in a single column in " + \
-                "the order desired. ",
+                "the order desired. The default ordering is alphabetical.",
         action = "store")
+    parser.add_argument ("--useMean",
+    help = " Calculate the group values using mean rather than median.",
+    action = "store_true")
     parser.add_argument ("--verbose",
     help = " Show runtime messages.",
     action = "store_true")
@@ -93,7 +96,7 @@ def floatRound(inFloat):
                 result += char
     return result
 
-def condenseMatrixIntoBedCols(matrix, groupOrder, sampleToGroup, validTpms, bedLikeFile):
+def condenseMatrixIntoBedCols(matrix, groupOrder, sampleToGroup, validTpms, bedLikeFile, useMean):
     """
     Take an expression matrix and a dictionary that maps the samples to groups. 
     Go through the expression matrix and calculate the average for each group, outputting
@@ -142,20 +145,30 @@ def condenseMatrixIntoBedCols(matrix, groupOrder, sampleToGroup, validTpms, bedL
             if firstCol:
                 firstCol = False
                 continue 
-            # First time this group is seen, add it to the groupCounts dict. 
-            if (groupAverages.get(columnToGroup[count]) == None):
-                groupAverages.setdefault(columnToGroup[count], [float(col)])
-                groupCounts.setdefault(columnToGroup[count], 1)
-            # This group has already been seen, update the TPM average.  
+            if (useMean): 
+                # First time this group is seen, add it to the groupCounts dict. 
+                if (groupAverages.get(columnToGroup[count]) == None):
+                    groupAverages.setdefault(columnToGroup[count], float(col))
+                    groupCounts.setdefault(columnToGroup[count], 1)
+                # This group has already been seen, update the TPM average.  
+                else:
+                    groupCounts[columnToGroup[count]] += 1 
+                    # Average calculation
+                    normal = float(groupCounts[columnToGroup[count]])
+                    newTpm = (float(col) * (1/normal)) 
+                    oldTpm = (((normal - 1) / normal) * groupAverages[columnToGroup[count]])
+                    groupAverages[columnToGroup[count]] = newTpm + oldTpm 
             else:
-                groupCounts[columnToGroup[count]] += 1 
-                # Median preparation
-                groupAverages[columnToGroup[count]].append(float(col))
-                # Average calculation
-                #normal = float(groupCounts[columnToGroup[count]])
-                #newTpm = (float(col) * (1/normal)) 
-                #oldTpm = (((normal - 1) / normal) * groupAverages[columnToGroup[count]])
-                #groupAverages[columnToGroup[count]] = newTpm + oldTpm 
+                # First time this group is seen, add it to the groupCounts dict. 
+                if (groupAverages.get(columnToGroup[count]) == None):
+                    groupAverages.setdefault(columnToGroup[count], [float(col)])
+                    groupCounts.setdefault(columnToGroup[count], 1)
+                # This group has already been seen, update the TPM average.  
+                else:
+                    groupCounts[columnToGroup[count]] += 1 
+                    # Median preparation
+                    groupAverages[columnToGroup[count]].append(float(col))
+
             count += 1
        
         # Store some information on the bed file. Most important is the groupOrder. 
@@ -180,16 +193,23 @@ def condenseMatrixIntoBedCols(matrix, groupOrder, sampleToGroup, validTpms, bedL
         if (groupOrder is not None):
             for group in open(groupOrder, "r"): 
                 # Averages
-                #value = groupAverages[group.strip("\n")]
-                value = median(groupAverages[group.strip("\n")])
+                if (useMean):
+                    value = groupAverages[group.strip("\n")]
+                else:
+                    value = median(groupAverages[group.strip("\n")])
                 bedLine = bedLine + "," + floatRound(str(value))
                 count += 1.0
                 fullAverage += value
         else: 
             for key, value in sorted(groupAverages.iteritems()): 
-                bedLine = bedLine + "," + floatRound(str(median(value)))
+                if (useMean):
+                    bedLine = bedLine + "," + floatRound(str(value))
+                    fullAverage += value
+                else:
+                    bedLine = bedLine + "," + floatRound(str(median(value)))
+                    fullAverage += median(value)
+                
                 count += 1.0
-                fullAverage += median(value)
         # Create what will be columns 5, 7 and 8 of the final bed. 
         bedLine = str(fullAverage/count) + "\t" + str(int(count)) +  "\t" + bedLine[1:] + "\n"
         # If the fullAverage tpm is greater than 0 then consider it in the validTpm list. 
@@ -226,7 +246,8 @@ def expMatrixToBarchartBed(options):
 
     # Go through the matrix and condense it into a bed like file. Populate
     # the validTpms array and the bedInfo string.  
-    bedInfo = condenseMatrixIntoBedCols(options.matrixFile, options.groupOrderFile, sampleToGroup, validTpms, bedLikeFile)
+    bedInfo = condenseMatrixIntoBedCols(options.matrixFile, options.groupOrderFile, sampleToGroup, \
+                    validTpms, bedLikeFile, options.useMean)
     # Find the number which divides the list of non 0 TPM scores into ten blocks. 
     tpmMedian = sorted(validTpms)
     blockSizes = len(tpmMedian)/10
