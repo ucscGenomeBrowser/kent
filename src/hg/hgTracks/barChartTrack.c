@@ -813,3 +813,8 @@ tg->nonPropDrawItemAt = barChartNonPropDrawAt;
 tg->nonPropPixelWidth = barChartNonPropPixelWidth;
 }
 
+void barChartCtMethods(struct track *tg)
+/* Bar Chart track methods for custom track */
+{
+barChartMethods(tg);
+}
