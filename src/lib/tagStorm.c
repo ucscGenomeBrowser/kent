@@ -1,3 +1,6 @@
+/* Copyright (C) 2017 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* tagStorm - stuff to parse and interpret a genome-hub metadata.txt file, which is in 
  * a hierarchical ra format.  That is something like:
  *     cellLine HELA
@@ -30,8 +33,9 @@
 #include "localmem.h"
 #include "hash.h"
 #include "ra.h"
-#include "tagStorm.h"
 #include "errAbort.h"
+#include "rql.h"
+#include "tagStorm.h"
 
 
 struct tagStorm *tagStormNew(char *name)
@@ -83,7 +87,7 @@ return stanza;
 
 struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, 
     char *tag, char *val)
-/* Add tag with given value to stanza */
+/* Add tag with given value to beginning of stanza */
 {
 struct lm *lm = tagStorm->lm;
 struct slPair *pair;
@@ -96,7 +100,7 @@ return pair;
 
 struct slPair *tagStanzaAppend(struct tagStorm *tagStorm, struct tagStanza *stanza, 
     char *tag, char *val)
-/* Add tag with given value to stanza */
+/* Add tag with given value to end of stanza */
 {
 struct lm *lm = tagStorm->lm;
 struct slPair *pair;
@@ -170,6 +174,7 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     char *tag, *val;
     int stanzaIndent, tagIndent;
     lmAllocVar(lm, stanza);
+    stanza->startLineIx = lf->lineIx;
     struct slPair *pairList = NULL, *pair;
     while (raNextTagValWithIndent(lf, &tag, &val, NULL, &tagIndent))
         {
@@ -254,21 +259,6 @@ if (tagStorm != NULL)
     }
 }
 
-#ifdef OLD
-char *tagStanzaVal(struct tagStanza *stanza, char *tag)
-/* Return value associated with tag in stanza or any of parent stanzas */
-{
-while (stanza != NULL)
-    {
-    char *val = slPairFindVal(stanza->tagList, tag);
-    if (val != NULL)
-         return val;
-    stanza = stanza->parent;
-    }
-return NULL;
-}
-#endif /* OLD */
-
 static void rAddIndex(struct tagStorm *tagStorm, struct tagStanza *list, 
     struct hash *hash, char *tag, char *parentVal,
     boolean unique, boolean inherit)
@@ -321,6 +311,15 @@ struct hash *tagStormUniqueIndex(struct tagStorm *tagStorm, char *tag)
 return tagStormIndexExtended(tagStorm, tag, TRUE, TRUE);
 }
 
+struct tagStanza *tagStanzaFindInHash(struct hash *hash, char *key)
+/* Find tag stanza that matches key in an index hash returned from tagStormUniqueIndex.
+ * Returns NULL if no such stanza in the hash.
+ * (Just a wrapper around hashFindVal.)  Do not free tagStanza that it returns. For
+ * multivalued indexes returned from tagStormIndex use hashLookup and hashLookupNext. */
+{
+return hashFindVal(hash, key);
+}
+
 static void rTsWrite(struct tagStanza *list, FILE *f, int maxDepth, int depth)
 /* Recursively write out list to file */
 {
@@ -330,6 +329,11 @@ struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
     struct slPair *pair;
+    if (stanza->tagList == NULL)
+        {
+	repeatCharOut(f, '\t', depth);
+	fprintf(f, "#empty\n");
+	}
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
 	repeatCharOut(f, '\t', depth);
@@ -411,7 +415,7 @@ carefulClose(&f);
 
 static void rTsWriteAsFlatTab(struct tagStanza *list, struct slName *fieldList,
     FILE *f, char *idTag, boolean withParent,
-     int maxDepth, int depth, boolean leavesOnly)
+     int maxDepth, int depth, boolean leavesOnly, char *nullVal)
 /* Recursively write out list to file */
 {
 if (depth > maxDepth)
@@ -454,7 +458,9 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 		{
 		if (field != fieldList)
 		    fputc('\t', f);
-		char *val = naForNull(hashFindVal(uniq, field->name));
+		char *val = hashFindVal(uniq, field->name);
+		if (val == NULL)
+		    val = nullVal;
 		fputs(val, f);
 		}
 	    fputc('\n', f);
@@ -462,50 +468,23 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	hashFree(&uniq);
 	}
 
-    rTsWriteAsFlatTab(stanza->children, fieldList, f, idTag, withParent, maxDepth, depth+1, leavesOnly);
+    rTsWriteAsFlatTab(stanza->children, fieldList, f, idTag, withParent, maxDepth, depth+1, 
+	leavesOnly, nullVal);
     }
 }
 
-static void rGetAllFields(struct tagStanza *list, struct hash *uniqHash, struct slName **pList)
-/* Recursively add all fields in tag-storm */
-{
-struct tagStanza *stanza;
-for (stanza = list; stanza != NULL; stanza = stanza->next)
-    {
-    struct slPair *pair;
-    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
-        {
-	if (hashLookup(uniqHash, pair->name) == NULL)
-	    {
-	    hashAdd(uniqHash, pair->name, pair->val);
-	    slNameAddHead(pList, pair->name);
-	    }
-	rGetAllFields(stanza->children, uniqHash, pList);
-	}
-    }
-}
-
-
-static struct slName *getAllFields(struct tagStorm *tagStorm)
-/* Return list of all fields */
-{
-struct slName *list = NULL;
-struct hash *uniqHash = hashNew(0);
-rGetAllFields(tagStorm->forest, uniqHash, &list);
-hashFree(&uniqHash);
-slReverse(&list);
-return list;
-}
- 
 void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idTag, 
-    boolean withParent, int maxDepth, boolean leavesOnly)
+    boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal, boolean sharpLabel)
 /* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
 {
 FILE *f = mustOpen(fileName, "w");
-struct slName *fieldList = getAllFields(tagStorm), *field;
+struct slName *fieldList = tagStormFieldList(tagStorm), *field;
 if (withParent && slNameFind(fieldList, "parent") == NULL)
     slNameAddHead(&fieldList, "parent");
-fputc('#', f);
+if (maxDepth == 0)
+    maxDepth = BIGNUM;
+if (sharpLabel)
+    fputc('#', f);
 for (field = fieldList; field != NULL; field = field->next)
     {
     if (field != fieldList)
@@ -513,11 +492,12 @@ for (field = fieldList; field != NULL; field = field->next)
     fprintf(f, "%s", field->name);
     }
 fputc('\n', f);
-rTsWriteAsFlatTab(tagStorm->forest, fieldList, f, idTag, withParent, maxDepth, 0, leavesOnly);
+rTsWriteAsFlatTab(tagStorm->forest, fieldList, f, idTag, withParent, maxDepth, 0, leavesOnly,
+    nullVal);
 carefulClose(&f);
 }
 
-void tagStormUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
+void tagStanzaUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
 /* Add tag to stanza in storm, replacing existing tag if any. If tag is added it's added to
  * end. */
 {
@@ -529,11 +509,15 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
     {
     if (sameString(pair->name, tag))
        {
-       pair->val = lmCloneString(lm, val);
+       if (!sameString(pair->val, val))
+	   {
+	   verbose(3, "Updating %s from '%s' to '%s'\n", pair->name, (char *)pair->val, val);
+	   pair->val = lmCloneString(lm, val);
+	   }
        return;
        }
     }
-/* If didn't make it then add new tag (at end) */
+/* If didn't make it then add new tag (at start) */
 lmAllocVar(lm, pair);
 pair->name = lmCloneString(lm, tag);
 pair->val = lmCloneString(lm, val);
@@ -558,6 +542,213 @@ for (ancestor = stanza; ancestor != NULL; ancestor = ancestor->parent)
         return val;
     }
 return NULL;
+}
+
+void tagStanzaDeleteTag(struct tagStanza *stanza, char *tag)
+/* Remove a tag from a stanza */
+{
+struct slPair *p = slPairFind(stanza->tagList, tag);
+if (p != NULL)
+    slRemoveEl(&stanza->tagList, p);
+}
+
+void rRemoveEmpties(struct tagStanza **pList)
+/* Remove empty stanzas.  Replace them on list with children if any */
+{
+struct tagStanza *stanza;
+for (;;)
+    {
+    stanza = *pList;
+    if (stanza == NULL)
+        break;
+    if (stanza->children != NULL)
+        rRemoveEmpties(&stanza->children);
+    if (stanza->tagList == NULL)
+        {
+	verbose(3, "removing empty stanza with %d children and %d remaining sibs\n", 
+	    slCount(stanza->children), slCount(stanza->next));
+	*pList = slCat(stanza->children, stanza->next);
+	stanza->next = stanza->children = NULL;
+	}
+    else
+        {
+	pList = &stanza->next;
+	}
+    }
+}
+
+void tagStormRemoveEmpties(struct tagStorm *tagStorm)
+/* Remove any empty stanzas, promoting children if need be. */
+{
+rRemoveEmpties(&tagStorm->forest);
+}
+
+static boolean localTagRemove(struct tagStanza *stanza, char *tag)
+/* Find given variable in list and remove it. Returns TRUE if it
+ * actually removed it,  FALSE if it never found it. */
+{
+struct slPair **ln = &stanza->tagList;
+struct slPair *v;
+for (v = *ln; v != NULL; v = v->next)
+    {
+    if (sameString(v->name, tag))
+        {
+	*ln = v->next;
+	return TRUE;
+	}
+    ln = &v->next;
+    }
+return FALSE;
+}
+
+static void hoistOne(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
+/* We've already determined that tag exists and has same value in all children.
+ * What we do here is add it to ourselves and remove it from children. */
+{
+tagStanzaUpdateTag(tagStorm, stanza, tag, val);
+struct tagStanza *child;
+for (child = stanza->children; child != NULL; child = child->next)
+    localTagRemove(child, tag);
+}
+
+static struct slName *tagsInAny(struct tagStanza *stanzaList)
+/* Return list of variables that are used in any node in list. */
+{
+struct hash *tagHash = hashNew(6);
+struct slName *tag, *tagList = NULL;
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    struct slPair *v;
+    for (v = stanza->tagList; v != NULL; v = v->next)
+        {
+	if (!hashLookup(tagHash, v->name))
+	    {
+	    tag = slNameAddHead(&tagList, v->name);
+	    hashAdd(tagHash, tag->name, tag);
+	    }
+	}
+    }
+hashFree(&tagHash);
+return tagList;
+}
+
+static char *allSameVal(char *tag, struct tagStanza *stanzaList)
+/* Return value of tag if it exists and is the same in each meta on list */
+{
+char *val = NULL;
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    char *oneVal = slPairFindVal(stanza->tagList, tag);
+    if (oneVal == NULL)
+        return NULL;
+    if (val == NULL)
+        val = oneVal;
+    else
+        {
+	if (!sameString(oneVal, val))
+	    return NULL;
+	}
+    }
+return val;
+}
+
+static void rHoist(struct tagStorm *tagStorm, struct tagStanza *stanza, char *selectedTag)
+/* Move tags that are the same in all children up to parent. */
+{
+/* Do depth first recursion, but get early return if we're a leaf. */
+struct tagStanza *child;
+if (stanza->children == NULL)
+    return;
+for (child = stanza->children; child != NULL; child = child->next)
+    rHoist(tagStorm, child, selectedTag);
+
+/* Build up list of tags used in any child. */
+struct slName *tag, *tagList = tagsInAny(stanza->children);
+
+/* Go through list and figure out ones that are same in all children. */
+for (tag = tagList; tag != NULL; tag = tag->next)
+    {
+    char *name = tag->name;
+    if (selectedTag == NULL || sameString(name, selectedTag))
+	{
+	char *val;
+	val = allSameVal(name, stanza->children);
+	if (val != NULL)
+	    hoistOne(tagStorm, stanza, name, val);
+	}
+    }
+slFreeList(&tagList);
+}
+
+void tagStormHoist(struct tagStorm *tagStorm, char *selectedTag)
+/* Hoist tags that are identical in all children to parent.  If selectedTag is
+ * non-NULL, just do it for tag of that name rather than all tags. */
+{
+/* If there is more than one highest level stanza, make a dummy empty root one to hoist into. */
+struct tagStanza *stanza;
+if (slCount(tagStorm->forest) > 1)
+    {
+    struct tagStanza *root;
+    lmAllocVar(tagStorm->lm, root);
+    for (stanza = tagStorm->forest; stanza != NULL; stanza = stanza->next)
+        stanza->parent = root;
+    root->children = tagStorm->forest;
+    tagStorm->forest = root;
+    }
+
+for (stanza = tagStorm->forest; stanza != NULL; stanza = stanza->next)
+    rHoist(tagStorm, stanza, selectedTag);
+tagStormRemoveEmpties(tagStorm);
+}
+
+static void rSortAlpha(struct tagStanza *list)
+/* Recursively sort stanzas alphabetically */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    rSortAlpha(stanza->children);
+    slSort(&stanza->tagList, slPairCmp);
+    }
+}
+
+void tagStormAlphaSort(struct tagStorm *tagStorm)
+/* Sort tags in stanza alphabetically */
+{
+rSortAlpha(tagStorm->forest);
+}
+
+// Sadly not thread safe helper vars for sorting according to predefined order
+static char **sOrderFields;
+static int sOrderCount;
+
+static int cmpPairByOrder(const void *va, const void *vb)
+/* Compare two slPairs according to order of names in sOrderFields */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return cmpStringOrder(a->name, b->name, sOrderFields, sOrderCount);
+}
+
+static void rOrderSort(struct tagStanza *list)
+/* Recursely sort by predefined order */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    rOrderSort(stanza->children);
+    slSort(&stanza->tagList, cmpPairByOrder);
+    }
+}
+
+void tagStormOrderSort(struct tagStorm *tagStorm, char **orderFields, int orderCount)
+/* Sort tags in stanza to be in same order as orderFields input  which is orderCount long */
+{
+sOrderFields = orderFields;
+sOrderCount = orderCount;
+rOrderSort(tagStorm->forest);
 }
 
 char *tagMustFindVal(struct tagStanza *stanza, char *name)
@@ -744,3 +935,118 @@ hashFree(&uniq);
 slReverse(&list);
 return list;
 }
+
+char *tagStanzaRqlLookupField(void *record, char *key)
+/* Lookup a field in a tagStanza for rql. */
+{
+struct tagStanza *stanza = record;
+return tagFindVal(stanza, key);
+}
+
+boolean tagStanzaRqlMatch(struct rqlStatement *rql, struct tagStanza *stanza,
+	struct lm *lm)
+/* Return TRUE if where clause and tableList in statement evaluates true for stanza. */
+{
+struct rqlParse *whereClause = rql->whereClause;
+if (whereClause == NULL)
+    return TRUE;
+else
+    {
+    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, tagStanzaRqlLookupField, lm);
+    res = rqlEvalCoerceToBoolean(res);
+    return res.val.b;
+    }
+}
+
+static void rQuery(struct tagStorm *tags, struct tagStanza *list, 
+    struct rqlStatement *rql, struct lm *lm, struct tagStanza **pResultList)
+/* Recursively traverse stanzas on list. */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    if (stanza->children)
+	rQuery(tags, stanza->children, rql, lm, pResultList);
+    else    /* Just apply query to leaves */
+	{
+	if (tagStanzaRqlMatch(rql, stanza, lm))
+	    {
+	    struct tagStanza *result;
+	    AllocVar(result);
+	    struct slPair *resultTagList = NULL;
+	    struct slName *field;
+	    for (field = rql->fieldList; field != NULL; field = field->next)
+		{
+		char *val = tagFindVal(stanza, field->name);
+		if (val != NULL)
+		    {
+		    struct slPair *resultTag = slPairNew(field->name, val);
+		    slAddHead(&resultTagList, resultTag);
+		    }
+		}
+	    slReverse(&resultTagList);
+	    result->tagList = resultTagList;
+	    slAddHead(pResultList, result);
+	    }
+	}
+    }
+}
+
+static void tagStanzaFree(struct tagStanza **pStanza)
+/* Free up memory associated with a tagStanza.  Use this judiciously because the
+ * stanzas inside of a tagStorm->forest or allocated with tagStanzaNew are allocated with 
+ * local memory, while this is assumes stanza is in regular memory. */
+{
+struct tagStanza *stanza;
+
+if ((stanza = *pStanza) != NULL)
+    {
+    slPairFreeList(&stanza->tagList);
+    freez(pStanza);
+    }
+}
+
+void tagStanzaFreeList(struct tagStanza **pList)
+/* Free up tagStanza list from tagStormQuery. Don't try to free up stanzas from the
+ * tagStorm->forest with this though, as those are in a diffent, local, memory pool. */
+{
+struct tagStanza *el, *next;
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    tagStanzaFree(&el);
+    }
+*pList = NULL;
+}
+
+struct tagStanza *tagStormQuery(struct tagStorm *tagStorm, char *fields, char *where)
+/* Returns a list of tagStanzas that match the properties describe in  the where parameter.  
+ * The field parameter is a comma separated list of fields that may include wildcards.  
+ * For instance "*" will select all fields,  "a*,b*" will select all fields starting with 
+ * an "a" or a "b." The where parameter is a Boolean expression similar to what could appear 
+ * in a SQL where clause.  Use tagStanzaFreeList to free up result when done. */
+{
+/* Construct and parse an rql statement */
+struct dyString *query = dyStringNew(0);
+dyStringPrintf(query, "select %s from tagStorm where ", fields);
+dyStringAppend(query, where);
+struct rqlStatement *rql = rqlStatementParseString(query->string);
+
+/* Expand any field names with wildcards. */
+struct slName *allFieldList = tagStormFieldList(tagStorm);
+rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
+
+/* Traverse tree applying query to build result list. */
+struct tagStanza *resultList = NULL;
+struct lm *lm = lmInit(0);
+rQuery(tagStorm, tagStorm->forest, rql, lm, &resultList);
+slReverse(&resultList);
+
+/* Clean up and go home. */
+lmCleanup(&lm);
+rqlStatementFree(&rql);
+dyStringFree(&query);
+return resultList;
+}
+
+

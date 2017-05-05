@@ -33,7 +33,7 @@
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
-/* flag that tell if text CGI header hsa been outputed */
+/* flag that tell if text CGI header has been outputed */
 boolean webInTextMode = FALSE;
 
 struct hash *includedResourceFiles = NULL;
@@ -55,6 +55,8 @@ puts("\n");
 
 void softAbort()
 {
+if (!webInTextMode)
+    webEnd();
 exit(0);
 }
 
@@ -177,6 +179,7 @@ if (withHtmlHeader)
 	"<HTML>" "\n"
 	"<HEAD>" "\n"
 	);
+    generateCspMetaHeader(stdout);
     printf("\t%s\n", headerText);
     webPragmasEtc();
 
@@ -206,6 +209,15 @@ if (withHtmlHeader)
     htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
     puts(commonCssStyles());
     }
+
+/* Put up the hot links bar. */
+
+char *menuStr = menuBar(theCart, db);
+if(menuStr)
+    {
+    puts(menuStr);
+    }
+
 webStartSectionTables();
 
 if (withLogo)
@@ -224,14 +236,6 @@ if (withLogo)
 	}
     puts("</TH></TR>" "\n"
          "" "\n" );
-    }
-
-/* Put up the hot links bar. */
-
-char *menuStr = menuBar(theCart, db);
-if(menuStr)
-    {
-    puts(menuStr);
     }
 
 if(!skipSectionHeader)
@@ -425,6 +429,7 @@ if(!webInTextMode)
 #ifndef GBROWSE
     googleAnalytics();
 #endif /* GBROWSE */
+    jsInlineFinish();
     puts( "</BODY></HTML>");
     webPopErrHandlers();
     }
@@ -437,17 +442,19 @@ static void webStartGbOptionalBanner(struct cart *cart, char *db, char *title, b
  */
 {
 puts("Content-type:text/html\n");
+
+char *csp = getCspMetaHeader();
 if (hgGateway)
     {
     printf(
         #include "jWestHeader.h"
-               , title);
+               , csp, title);
     }
 else
     {
     printf(
         #include "gbHeader.h"
-               , title);
+               , csp, title);
     }
 if (doBanner)
     {
@@ -455,6 +462,8 @@ if (doBanner)
         #include "jWestBanner.h"
           , title);
     }
+freeMem(csp);
+
 webPushErrHandlersCartDb(cart, db);
 htmlWarnBoxSetup(stdout);
 
@@ -464,7 +473,7 @@ if (navBar)
     {
     puts(navBar);
     // Override nice-menu.css's menu background and fonts:
-    puts("<link rel='stylesheet' href='../style/gbAfterMenu.css'>");
+    webIncludeResourceFile("gbAfterMenu.css");
     }
 webHeadAlreadyOutputed = TRUE;
 errAbortSetDoContentType(FALSE);
@@ -480,6 +489,7 @@ void webEndGb()
 /* End HTML that was started with webStartJWest. */
 {
 googleAnalytics();
+jsInlineFinish();
 puts("</body></html>");
 webPopErrHandlers();
 }
@@ -546,7 +556,7 @@ va_end(args);
 exit(0);
 }
 
-void printCladeListHtml(char *genome, char *onChangeText)
+void printCladeListHtml(char *genome, char *event, char *javascript)
 /* Make an HTML select input listing the clades. */
 {
 char **row = NULL;
@@ -559,7 +569,12 @@ int numClades = 0;
 struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
 // get only the clades that have actual active genomes
 char query[4096];
-safef(query, sizeof query, NOSQLINJ "SELECT DISTINCT(c.name), c.label FROM %s c, %s g, %s d WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 ORDER BY c.priority", cladeTable(),genomeCladeTable(), dbDbTable());
+sqlSafef(query, sizeof query, "SELECT DISTINCT(c.name), c.label "
+         // mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
+         ", c.priority "
+         "FROM %s c, %s g, %s d WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 "
+         "ORDER BY c.priority",
+         cladeTable(), genomeCladeTable(), dbDbTable());
 struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -588,11 +603,11 @@ for(; names; names = names->next)
     }
 
 cgiMakeDropListFull(cladeCgiName, labels, clades, numClades,
-                    defaultLabel, onChangeText);
+                    defaultLabel, event, javascript);
 }
 
 static void printSomeGenomeListHtmlNamedMaybeCheck(char *customOrgCgiName,
-	 char *db, struct dbDb *dbList, char *onChangeText, boolean doCheck)
+	 char *db, struct dbDb *dbList, char *event, char *javascript, boolean doCheck)
 /* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * param db - a database whose genome will be the default genome.
@@ -624,76 +639,76 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 
 cgiName = (customOrgCgiName != NULL) ? customOrgCgiName : orgCgiName;
 cgiMakeDropListFull(cgiName, orgList, values, numGenomes,
-                    selGenome, onChangeText);
+                    selGenome, event, javascript);
 hashFree(&hash);
 }
 
-void printSomeGenomeListHtmlNamed(char *customOrgCgiName, char *db, struct dbDb *dbList, char *onChangeText)
+void printSomeGenomeListHtmlNamed(char *customOrgCgiName, char *db, struct dbDb *dbList, char *event, char *javascript)
 /* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * param db - a database whose genome will be the default genome.
  *                       If NULL, no default selection.
- * param onChangeText - Optional (can be NULL) text to pass in
- *                              any onChange javascript. */
+ * param event e.g. "change"
+ *   javascript - Optional (can be NULL) onEvent javascript. */
 {
 return printSomeGenomeListHtmlNamedMaybeCheck(customOrgCgiName, db, dbList,
-					      onChangeText, TRUE);
+					      event, javascript, TRUE);
 }
 
 void printLiftOverGenomeList(char *customOrgCgiName, char *db,
-			     struct dbDb *dbList, char *onChangeText)
+			     struct dbDb *dbList, char *event, char *javascript)
 /* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * Databases in dbList do not have to exist.
  * param db - a database whose genome will be the default genome.
  *                       If NULL, no default selection.
- * param onChangeText - Optional (can be NULL) text to pass in
- *                              any onChange javascript. */
+ * param event e.g. "change"
+ *   javascript - Optional (can be NULL) onEvent javascript. */
 {
 return printSomeGenomeListHtmlNamedMaybeCheck(customOrgCgiName, db, dbList,
-					      onChangeText, FALSE);
+					      event, javascript, FALSE);
 }
 
-void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText)
+void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *event, char *javascript)
 /* Prints the dropdown list using the orgCgiName */
 {
-printSomeGenomeListHtmlNamed(NULL, db, dbList, onChangeText);
+printSomeGenomeListHtmlNamed(NULL, db, dbList, event, javascript);
 }
 
-void printGenomeListHtml(char *db, char *onChangeText)
+void printGenomeListHtml(char *db, char *event, char *javascript)
 /* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * param db - a database whose genome will be the default genome.
  *                       If NULL, no default selection.
- * param onChangeText - Optional (can be NULL) text to pass in
- *                              any onChange javascript. */
+ * param event e.g. "change"
+ *   javascript - Optional (can be NULL) onEvent javascript. */
 {
-printSomeGenomeListHtml(db, hGetIndexedDatabases(), onChangeText);
+printSomeGenomeListHtml(db, hGetIndexedDatabases(), event, javascript);
 }
 
-void printBlatGenomeListHtml(char *db, char *onChangeText)
+void printBlatGenomeListHtml(char *db, char *event, char *javascript)
 /* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * param db - a database whose genome will be the default genome.
  *                       If NULL, no default selection.
- * param onChangeText - Optional (can be NULL) text to pass in
- *                              any onChange javascript. */
+ * param event e.g. "change"
+ *   javascript - Optional (can be NULL) onEvent javascript. */
 {
-printSomeGenomeListHtml(db, hGetBlatIndexedDatabases(), onChangeText);
+printSomeGenomeListHtml(db, hGetBlatIndexedDatabases(), event, javascript);
 }
 
 
-void printGenomeListForCladeHtml(char *db, char *onChangeText)
+void printGenomeListForCladeHtml(char *db, char *event, char *javascript)
 /* Prints to stdout the HTML to render a dropdown list containing
  * a list of the possible genomes from selOrganism's clade to choose from.
  * selOrganism is the default for the select.
  */
 {
-printSomeGenomeListHtml(db, hGetIndexedDatabasesForClade(db), onChangeText);
+printSomeGenomeListHtml(db, hGetIndexedDatabasesForClade(db), event, javascript);
 }
 
 void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList,
-                            char *dbCgi, bool allowInactive, char *javascript)
+                            char *dbCgi, bool allowInactive, char *event, char *javascript)
 /* Prints to stdout the HTML to render a dropdown list containing the list
  * of assemblies for the current genome to choose from.  By default,
  * this includes only active assemblies with a database (with the
@@ -742,11 +757,11 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 
     }
 cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies,
-                                selAssembly, javascript);
+                                selAssembly, event, javascript);
 }
 
 void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList,
-                                        char *dbCgi, char *javascript)
+                                        char *dbCgi, char *event, char *javascript)
 /* Find all the assemblies from the list that are active.
  * Prints to stdout the HTML to render a dropdown list containing the list
  * of the possible assemblies to choose from.
@@ -754,18 +769,18 @@ void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList,
  *    If NULL, no default selection.  */
 {
 
-    printAllAssemblyListHtmlParm(db, dbList, dbCgi, TRUE, javascript);
+    printAllAssemblyListHtmlParm(db, dbList, dbCgi, TRUE, event, javascript);
 }
 
-void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript)
+void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *event, char *javascript)
 /* Find all assemblies from the list that are active, and print
  * HTML to render dropdown list
  * param db - default assembly.  If NULL, no default selection */
 {
-printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
+printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, event, javascript);
 }
 
-void printAssemblyListHtml(char *db, char *javascript)
+void printAssemblyListHtml(char *db, char *event, char *javascript)
 /* Find all the assemblies that pertain to the selected genome
  * Prints to stdout the HTML to render a dropdown list containing
  * a list of the possible assemblies to choose from.
@@ -773,10 +788,10 @@ void printAssemblyListHtml(char *db, char *javascript)
  * If NULL, no default selection.  */
 {
 struct dbDb *dbList = hGetIndexedDatabases();
-printSomeAssemblyListHtml(db, dbList, javascript);
+printSomeAssemblyListHtml(db, dbList, event, javascript);
 }
 
-void printAssemblyListHtmlExtra(char *db, char *javascript)
+void printAssemblyListHtmlExtra(char *db, char *event, char *javascript)
 {
 /* Find all the assemblies that pertain to the selected genome
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
@@ -786,7 +801,7 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 struct dbDb *dbList = hGetIndexedDatabases();
-printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
+printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, event, javascript);
 }
 
 void printBlatAssemblyListHtml(char *db)
@@ -799,7 +814,7 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 struct dbDb *dbList = hGetBlatIndexedDatabases();
-printSomeAssemblyListHtml(db, dbList, NULL);
+printSomeAssemblyListHtml(db, dbList, NULL, NULL);
 }
 
 static char *getDbForGenome(char *genome, struct cart *cart)
@@ -1214,29 +1229,7 @@ if (!fileExists(dyStringContents(realFileName)))
 long mtime = fileModTime(dyStringContents(realFileName));
 struct dyString *linkWithTimestamp;
 
-char *scriptName = cgiScriptName();
-if (scriptName == NULL)
-    scriptName = cloneString("");
-boolean nonVersionedLinks = FALSE;
-if (endsWith(scriptName, "qaPushQ"))
-    nonVersionedLinks = TRUE;
-if (nonVersionedLinks)
-    linkWithTimestamp = dyStringCreate("%s/%s%s", dyStringContents(fullDirName), baseName, extension);
-else if ((cfgOption("versionStamped") == NULL) &&  (hIsPreviewHost() || hIsPrivateHost()))
-    linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
-else
-    linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);
-
-if (hIsBrowserbox() && !fileExists(dyStringContents(linkWithTimestamp)))
-    // on the browserbox, both alpha and beta binaries can run 
-    {
-    linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), 
-        baseName, mtime, extension);
-    }
-
-if (!fileExists(dyStringContents(linkWithTimestamp)))
-        errAbort("Cannot find correct version of file '%s'; this is due to an installation "
-        "error\n\nError details: %s does not exist", fileName, dyStringContents(linkWithTimestamp));
+linkWithTimestamp = dyStringCreate("%s/%s%s?v=%ld", dyStringContents(fullDirName), baseName, extension, mtime);
 
 // Free up all that extra memory
 dyStringFree(&realFileName);
@@ -1559,13 +1552,14 @@ if (thisNodeStr)   // if geo-mirroring is enabled
             safef(newUri, newUriSize, "http%s://%s:%s%s%sredirect=manual&source=%s", 
 		cgiServerHttpsIsOn() ? "s" : "", newDomain, port, uri, sep, oldDomain);
 
-	    printf("<TR><TD COLSPAN=3 id='redirectTd' onclick=\"javascript:document.getElementById('redirectTd').innerHTML='';\">"
+	    printf("<TR><TD COLSPAN=3 id='redirectTd'>"
 	    "<div style=\"margin: 10px 25%%; border-style:solid; border-width:thin; border-color:#97D897;\">"
 	    "<h3 style=\"background-color: #97D897; text-align: left; margin-top:0px; margin-bottom:0px;\">"
 	    "&nbsp;You might want to navigate to your nearest mirror - %s"
 	    "</h3> "
 	    "<ul style=\"margin:5px;\">",
 	    newDomain);
+	    jsOnEventById("click","redirectTd", "document.getElementById('redirectTd').innerHTML='';");
 	    
 	    printf("<li>User settings (sessions and custom tracks) <B>will differ</B> between sites."
 		"<idiv style=\"float:right;\"><a href=\"../goldenPath/help/genomeEuro.html#sessions\">Read more.</a></idiv>");
@@ -1574,6 +1568,7 @@ if (thisNodeStr)   // if geo-mirroring is enabled
 	    printf("<li>Let me stay here   <a href=\"%s\">%s</a>",
 		oldUri, oldDomain );
 	    printf("</div></TD></TR>\n");
+	    jsInlineFinish();
             exit(0);
             }
         hDisconnectCentral(&centralConn);

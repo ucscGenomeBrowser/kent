@@ -1,0 +1,101 @@
+track refSeqComposite
+compositeTrack on
+shortLabel NCBI RefSeq
+longLabel RefSeq gene predictions from NCBI
+group genes
+visibility pack
+type genePred
+dragAndDrop subTracks
+noInherit on
+subGroup1 view Views aNcbiRefSeq=NCBI_RefSeq zUcscRefSeq=UCSC_RefSeq
+allButtonPair on
+priority 2
+
+    track ncbiRefSeqView
+    shortLabel NCBI RefSeq genes and alignments
+    view aNcbiRefSeq
+    parent refSeqComposite on
+    configurable on
+    baseColorDefault genomicCodons
+
+	track ncbiRefSeq
+        parent ncbiRefSeqView off
+        color 12,12,120
+        shortLabel RefSeq All
+        subGroups view=aNcbiRefSeq
+        longLabel NCBI RefSeq genes, curated and predicted sets (NM_*, XM_*, NR_*, XR_*, and YP_*)
+        idXref ncbiRefSeqLink mrnaAcc name
+        baseColorUseCds given
+        priority 1
+
+	track ncbiRefSeqCurated
+        color 12,12,120
+        parent ncbiRefSeqView on
+	shortLabel RefSeq Curated
+        subGroups view=aNcbiRefSeq
+	longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, and YP_*)
+        idXref ncbiRefSeqLink mrnaAcc name
+        baseColorUseCds given
+        priority 2
+
+	track ncbiRefSeqPredicted
+        color 109,109,174
+        parent ncbiRefSeqView off
+	shortLabel RefSeq Predicted
+        subGroups view=aNcbiRefSeq
+	longLabel NCBI RefSeq genes, predicted subset (XM_* and XR_*)
+        idXref ncbiRefSeqLink mrnaAcc name
+        baseColorUseCds given
+        priority 3
+
+	track ncbiRefSeqOther
+        color 32,32,32
+        parent ncbiRefSeqView off
+	shortLabel RefSeq Other
+        subGroups view=aNcbiRefSeq
+	longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
+        priority 4
+        searchIndex name
+        searchTrix /gbdb/hg38/ncbiRefSeq/ncbiRefSeqOther.ix
+        type bigBed 12
+
+	track ncbiRefSeqPsl
+        priority 5
+	parent ncbiRefSeqView off
+	shortLabel RefSeq Alignments
+        subGroups view=aNcbiRefSeq
+	longLabel RefSeq Alignments of RNAs
+        type psl
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        showCdsMaxZoom 10000.0
+        showCdsAllScales .
+        baseColorDefault diffCodons
+        pslSequence no
+        baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
+        baseColorUseCds table ncbiRefSeqCds
+        idXref ncbiRefSeqLink mrnaAcc name
+        color 0,0,0
+        pepTable ncbiRefSeqPepTable
+
+    track ucscRefSeqView
+    parent refSeqComposite off
+    shortLabel UCSC RefSeq Genes
+    view zUcscRefSeq
+
+        track refGene override
+	parent ucscRefSeqView off
+        shortLabel UCSC RefSeq
+        longLabel UCSC annotations of RefSeq RNAs (NM_* and NR_*)
+        subGroups view=zUcscRefSeq
+        color 12,12,120
+        type genePred refPep refMrna
+        idXref hgFixed.refLink mrnaAcc name
+        priority 6
+
+searchTable ncbiRefSeqOther
+searchPriority 2.07207
+searchType bigBed
+searchDescription ncbiRefSeq Other annotations

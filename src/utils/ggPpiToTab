@@ -1,0 +1,688 @@
+#!/usr/bin/env python2.7
+
+import logging, sys, optparse, operator, glob
+from collections import defaultdict, namedtuple, OrderedDict
+from os.path import join, basename, dirname, isfile
+
+HGNCFILE="/hive/data/outside/hgnc/111413/hgnc_complete_set.txt"
+UNIPROTFILE="/hive/data/inside/pubs/parsedDbs/uniprot.9606.tab"
+
+# output format:
+
+outFields = "eventId,causeType,causeName,causeGenes,themeType,themeName,themeGenes"\
+    ",relType,relSubtype,sourceDb,sourceId,sourceDesc,pmids".split(",")
+# eventId: short form of database where download occured + number, like pwc1234 or mentha1234
+# causeType: gene or complex
+# causeName: name string in database
+# causeGenes: |-separated list of HGNC symbols
+# themeType, themeName, themeGenes: like three previous fields, 
+# NB: cause and theme are not directed in interaction databases, they're just called like this
+# to be compatible with pathway databases
+# NB2: if themeType=="": line describes a purified complex, genes are in "causeGenes"
+# (This is similar to the iref format of complexes)
+
+# relType: relation, as annotated in database, e.g. "physical interaction" etc
+# relSubtype: subtype of relation, e.g. "yeast-two hybrid" 
+# sourceDb: source database
+# sourceId: ID in source database of interaction, for HTML links
+# sourceDesc: description of interaction in source database
+# pmids: |-sep list of PMIDs that support the interaction
+
+IntRec = namedtuple("IntRec", outFields)
+
+# === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
+parser = optparse.OptionParser("""usage: %prog [options] db fileOrDir - convert a pathway database to a sorted tab-sep file
+
+possible DBs:
+- reactome: filename like homo_sapiens.interactions.txt  URL http://www.reactome.org/download/
+- biogrid:  filename like BIOGRID-ALL-3.2.114.tab2.txt   URL http://thebiogrid.org/download.php
+- mentha:   filename like 2014-07-27_MITAB-2.5           URL http://mentha.uniroma2.it/download.php
+
+- iref:     filename like 9606.mitab.08122013.txt        URL http://irefindex.org/download/irefindex/data/archive/release_13.0/psi_mitab/MITAB2.6/
+- quickgo:  filename like association.tsv                URL http://www.ebi.ac.uk/QuickGO/GTerm?id=GO:0043234#info=2 
+- corum:    filename like allComplexes.csv               URL http://mips.helmholtz-muenchen.de/genre/proj/corum
+- negatome: filename like manual.txt                     URL http://mips.helmholtz-muenchen.de/proj/ppi/negatome/
+- string:   filenames in current dir                     URL http://string-db.org/newstring_cgi/show_download_page.pl
+- stringFilt: like string, but with score>400 and only converts "experiment" and "dataset"
+  does not convert co-expression, text-mining, etc.
+
+"string" and "stringFilt" open these files from the input directory:
+9606.protein.actions.detailed.*.txt
+9606.protein.links.detailed.*.txt
+9606.protein.aliases.detailed.*.txt
+""")
+
+parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
+#parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+#parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+parser.add_option("", "--hgncFile", dest="hgncFile", action="store", help="location of the HGNC tab-sep file, default %default", default=HGNCFILE)
+parser.add_option("", "--upFile", dest="upFile", action="store", help="location of the uniprot tab-sep file, default %default", default=UNIPROTFILE)
+parser.add_option("", "--mysql", dest="mysql", action="store_true", help="print mysql table create and quit")
+(options, args) = parser.parse_args()
+
+if options.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
+# ==== FUNCTIONs =====
+def lineFileNext(fh, headers=None, colCount=None, sep="\t"):
+    """ 
+        parses tab-sep file with headers as field names 
+        yields collection.namedtuples, strips "#"-prefix from header line
+    """
+    if headers==None:
+        line1 = fh.readline()
+        line1 = line1.strip("\n").strip("#")
+        headers = line1.split(sep)
+        headers = [h.replace(" ","_").replace("(","").replace(")","").replace('"', "") for h in headers]
+        if headers[-1]=="":
+            del headers[-1]
+    Record = namedtuple('tsvRec', headers)
+
+    for line in fh:
+        line = line.rstrip("\n")
+        fields = line.split(sep)
+        if colCount!=None:
+            fields = fields[:colCount]
+        try:
+            rec = Record(*fields)
+        except Exception, msg:
+            logging.error("Exception occured while parsing line, %s" % msg)
+            logging.error("Filename %s" % fh.name)
+            logging.error("Line was: %s" % repr(line))
+            logging.error("Does number of fields match headers?")
+            logging.error("Headers are: %s" % headers)
+            #raise Exception("wrong field count in line %s" % line)
+            continue
+        # convert fields to correct data type
+        yield rec
+
+def readUniprotToSym(fname, addEntrez=False):
+    " return a uniprotAcc -> hgnc symbol dict from the HGNC tab-sep file "
+    upToSym = {}
+    skipSyms = set()
+    for row in lineFileNext(open(fname)):
+        sym = row.Approved_Symbol
+        if "withdrawn" in sym or "-AS" in sym:
+            continue
+        upAcc = row.UniProt_ID_supplied_by_UniProt
+        if upAcc=="" or upAcc=="-":
+            continue
+        if upAcc in upToSym:
+            #logging.debug("uniprot accession %s assigned to %s, but already assigned to symbol %s" % (upAcc, sym, upToSym[upAcc]))
+            skipSyms.add(sym)
+            continue
+        entrez = row.Entrez_Gene_ID
+        if addEntrez and entrez!="":
+            upToSym[entrez] = sym
+        upToSym[upAcc] = sym
+    logging.info("Skipped these symbols due to duplicate uniprot IDs: %s" % ",".join(skipSyms))
+    return upToSym
+
+def addListField(sym, listStr, accToSym):
+    " split listStr and add all values to accToSym "
+    if listStr!="":
+        for acc in listStr.split("|"):
+            acc = acc.split(".")[0].upper() # remove version
+            #print acc, sym
+            accToSym[acc] = sym
+    return accToSym
+
+def allUpToSym(fname, accToSym):
+    """ use the pubs parsed uniprot tables to resolve uniprot, pdb, genbank and refseq to symbol 
+    """
+    for row in lineFileNext(open(fname)):
+        sym = row.hgncSym
+        if sym=="":
+            continue
+
+        accToSym = addListField(sym, row.pdb, accToSym)
+        accToSym = addListField(sym, row.emblMrna, accToSym)
+        accToSym = addListField(sym, row.emblMrnaProt, accToSym)
+        accToSym = addListField(sym, row.refSeq, accToSym)
+        accToSym = addListField(sym, row.refSeqProt, accToSym)
+        accToSym = addListField(sym, row.accList, accToSym)
+
+    logging.info("Read %d synonyms from %s" % (len(accToSym), fname))
+    return accToSym
+
+def convReactome(inPath, hgncFname):
+    " convert reactome tab-sep file and yield rows as namedtuples "
+    upToSym = readUniprotToSym(hgncFname)
+    ifh = open(inPath)
+    ifh.readline()
+    headers = ["srcSpId", "srcEnsId", "srcEntrez", "trgSpId", "trgEnsId", "trgEntrez", "relType", "reactIds", "pmids"]
+    eventId = 0
+
+    allPmids = defaultdict(set)
+    allReactIds = defaultdict(set)
+    for row in lineFileNext(ifh, headers):
+        causeId = row.srcSpId.split(":")[1]
+        themeId = row.trgSpId.split(":")[1]
+        causeSym = upToSym.get(causeId, None)
+        themeSym = upToSym.get(themeId, None)
+        if causeSym==None or themeSym==None:
+            continue
+        relType = row.relType
+        if relType=="neighbouring_reaction":
+            continue
+
+        key = (causeSym, themeSym, relType)
+        srcIds = row.reactIds.split("<->")
+
+        pmids = row.pmids.split(",")
+        pmids = [p for p in pmids if p!="-"]
+        pmids = [p for p in pmids if p!=""]
+        pmidStr = "|".join(pmids)
+        srcStr = "|".join(srcIds)
+        allPmids[key].update(pmids)
+        allReactIds[key].update(srcIds)
+
+    for geneTuple, reactIds in allReactIds.iteritems():
+            causeSym, themeSym, relType = geneTuple
+            srcStr = "|".join(reactIds)
+            pmidStr = "|".join(allPmids.get(geneTuple, []))
+            eventId+=1
+            assayDesc = ""
+            row = ("reactome%d"%eventId, "gene", "", causeSym, "gene", "", themeSym, relType, "", "reactome", srcStr, assayDesc, pmidStr)
+            yield IntRec(*row)
+
+def convBiogrid(inPath):
+    ifh = open(inPath)
+    # tsvRec(BioGRID_Interaction_ID='32312', Entrez_Gene_Interactor_A='39787', Entrez_Gene_Interactor_B='34060', BioGRID_ID_Interactor_A='65095', BioGRID_ID_Interactor_B='60199', Systematic_Name_Interactor_A='Dmel_CG13050', Systematic_Name_Interactor_B='Dmel_CG7^C171', Official_Symbol_Interactor_A='CG13050', Official_Symbol_Interactor_B='Uro', Synonyms_Interactor_A='Dmel\\CG13050', Synonyms_Interactor_B='OU|UOX|uro|anon-WO0140519.210|Dmel\\CG7171|CG7171|UO|Dm UO', Experimental_System='Two-hybrid', Experimental_System_Type='physical', Author='Giot L (2003)', Pubmed_ID='14605208', Organism_Interactor_A='7227', Organism_Interactor_B='7227', Throughput='High Throughput', Score='-', Modification='-', Phenotypes='-', Qualifications='-', Tags='-', Source_Database='BioGRID')
+    genePmids = defaultdict(set)
+    geneAssays = defaultdict(OrderedDict)
+    geneIntIds = defaultdict(set)
+    for row in lineFileNext(ifh):
+        org1 = row.Organism_Interactor_A
+        org2 = row.Organism_Interactor_B
+        if org1!="9606" or org2!="9606":
+            continue
+
+        symA = row.Official_Symbol_Interactor_A
+        symB = row.Official_Symbol_Interactor_B
+        # sort the symbols
+        if symA > symB:
+            symA, symB = symB, symA
+
+        geneTup = (symA, symB)
+
+        intId = row.BioGRID_Interaction_ID
+        geneIntIds[geneTup].add(intId)
+
+        pmid = row.Pubmed_ID
+        genePmids[geneTup].add(pmid)
+
+        assayWords = [row.Throughput, row.Experimental_System, row.Experimental_System_Type]
+        assayWords = [x for x in assayWords if x!=""]
+        for a in assayWords:
+            geneAssays[geneTup][a]=None
+
+    eventId = 0
+    for genePair, intIds in geneIntIds.iteritems():
+        pmids = genePmids.get(genePair, [])
+        assays = geneAssays.get(genePair, [])
+        symA, symB = genePair
+        eventId += 1
+        row = (symA, symB, "interaction", ["biogrid"]*len(intIds), "|".join(intIds), ", ".join(assays), "|".join(pmids))
+        yield IntRec(*row)
+
+def convMentha(inPath, hgncFname):
+    " parse psitab and return our own, more compact format "
+    upToSym = readUniprotToSym(hgncFname)
+    ifh = open(inPath)
+
+    #columns, see https://code.google.com/p/psimi/wiki/PsimiTabFormat
+    #
+    #     1	Unique identifier for interactor A, represented as databaseName:ac, where databaseName is the name of the corresponding database as defined in the PSI-MI controlled vocabulary, and ac is the unique primary identifier of the molecule in the database. Identifiers from multiple databases can be separated by "|". It is recommended that proteins be identified by stable identifiers such as their UniProtKB or RefSeq accession number.
+    #     2	Unique identifier for interactor B.
+    #     3	Alternative identifier for interactor A, for example the official gene symbol as defined by a recognised nomenclature committee. Representation as databaseName:identifier. Multiple identifiers separated by "|".
+    #     4	Alternative identifier for interactor B.
+    #     5	Aliases for A, separated by "|". Representation as databaseName:identifier. Multiple identifiers separated by "|".
+    #     6	Aliases for B.
+    #     7	Interaction detection methods, taken from the corresponding PSI-MI controlled Vocabulary, and represented as darabaseName:identifier(methodName), separated by "|".
+    #     8	First author surname(s) of the publication(s) in which this interaction has been shown, optionally followed by additional indicators, e.g. "Doe-2005-a". Separated by "|".
+    #     9	Identifier of the publication in which this interaction has been shown. Database name taken from the PSI-MI controlled vocabulary, represented as databaseName:identifier. Multiple identifiers separated by "|".
+    #    10	NCBI Taxonomy identifier for interactor A. Database name for NCBI taxid taken from the PSI-MI controlled vocabulary, represented as databaseName:identifier (typicaly databaseName is set to 'taxid'). Multiple identifiers separated by "|". Note: In this column, the databaseName:identifier(speciesName) notation is only there for consistency. Currently no taxonomy identifiers other than NCBI taxid are anticipated, apart from the use of -1 to indicate "in vitro", -2 to indicate "chemical synthesis", -3 indicates "unknown", -4 indicates "in vivo" and -5 indicates "in silico".
+    #    11	NCBI Taxonomy identifier for interactor B.
+    #    12	Interaction types, taken from the corresponding PSI-MI controlled vocabulary, and represented as dataBaseName:identifier(interactionType), separated by "|".
+    #    13	Source databases and identifiers, taken from the corresponding PSI-MI controlled vocabulary, and represented as databaseName:identifier(sourceName). Multiple source databases can be separated by "|".
+    #    14	Interaction identifier(s) in the corresponding source database, represented by databaseName:identifier
+    #    15	Confidence score. Denoted as scoreType:value. There are many different types of confidence score, but so far no controlled vocabulary. Thus the only current recommendation is to use score types consistently within one source. Multiple scores separated by "|".
+    # uniprotkb:Q9VEA5        uniprotkb:Q9VA91        -       -       uniprotkb:RPB4(gene name)       uniprotkb:RPS7(gene name)     psi-mi:"MI:0018"(two hybrid)     -       pubmed:14605208 taxid:7227(Drosophila melanogaster)     taxid:7227(Drosophila melanogaster)    psi-mi:"MI:0915"(physical association)  psi-mi:"MI:0469"(IntAct)        intact:EBI-255917       mentha-score:0.183
+
+    pairData = defaultdict(list) # db, intType, detMethod, intId, pmid
+
+    headers = ["acc1", "acc2", "empty1", "empty2", "sym1", "sym2", "detMethod", "author", "pubId", "taxon1", "taxon2", "intType", "srcDb", "intId", "confScore"]
+    for row in lineFileNext(ifh, headers, len(headers)):
+        org1 = row.taxon1.split(":")[1].split("(")[0]
+        org2 = row.taxon2.split(":")[1].split("(")[0]
+        if org1!="9606" or org2!="9606":
+            continue
+
+        causeId = row.acc1.split(":")[1]
+        themeId = row.acc2.split(":")[1]
+        causeSym = upToSym.get(causeId, None)
+        themeSym = upToSym.get(themeId, None)
+        if causeSym==None or themeSym==None:
+            logging.debug("Uniprot ID not found: Resolved %s / %s to %s / %s" % (causeId, themeId, causeSym, themeSym))
+            continue
+
+        # sort the symbols
+        if themeSym < causeSym:
+            themeSym, causeSym = causeSym, themeSym
+
+        pair = (causeSym, themeSym)
+
+        pmid = row.pubId.split(":")[1]
+        intType = row.intType.split("(")[1].strip(")").replace("_", " ")
+        db, intId = row.intId.split(":")
+        detMethod = row.detMethod.split("(")[1].strip(")").replace("_", " ")
+
+        pairData[pair].append((db, intType, detMethod, intId, pmid))
+
+    eventId = 0
+    for pair, dataList in pairData.iteritems():
+        eventId += 1
+        gene1, gene2 = pair
+
+        pmids = set()
+        relTypes = set()
+        assayTypes = set()
+        dbs = []
+        srcIds = []
+        for db, intType, detMethod, intId, pmid in dataList:
+            pmids.add(pmid)
+            relTypes.add(intType)
+            assayTypes.add(detMethod)
+            srcIds.append(intId)
+            dbs.append(db)
+
+        row = (gene1, gene2, ", ".join(relTypes), "|".join(dbs), "|".join(srcIds), ", ".join(assayTypes), "|".join(pmids))
+
+        yield row
+
+def printMysql():
+    " print mysql table create statement for output format "
+    print "CREATE TABLE interactions ("
+    for field in outFields:
+        len = "255"
+        if field in ["assay", "pmids", "sourceDb", "sourceId"]:
+            len = "4000"
+        print "%s VARCHAR(%s)," % (field, len)
+    print "INDEX symAIdx (geneA),"
+    print "INDEX symBIdx (geneB));"
+
+def resolveToSym(descStr, accToSym):
+    " resolve a string like entrezgene/locuslink:57546|refseq:NP_065837|refseq:XP_005256121|rogid:I9M7ny+Fn4CKL9YkJt4IFPIRYwQ9606|irogid:2345345 to a symbol via the dict "
+    parts = descStr.split("|")
+    for p in parts:
+        fields = p.split(":")
+        if len(fields)!=2:
+            print fields
+            assert(0)
+        db, acc = fields
+        if db in ["entrezgene/locuslink", "uniprotkb", "pdb","refseq", "genbank_protein_gi"]:
+            sym = accToSym.get(acc, None)
+            if sym!=None:
+                return sym
+        elif db=="hgnc":
+            return acc
+    #logging.debug("Could not resolve %s" % descStr)
+    return None
+
+def convIRef(inPath, hgncFname, upFname):
+    " convert iref to our format and yield tuples "
+    accToSym = readUniprotToSym(hgncFname, addEntrez=True)
+    accToSym = allUpToSym(upFname, accToSym)
+    ifh = open(inPath)
+
+    complexes = defaultdict(list) # id -> list of symbols
+    complexMeta = {} # id -> metadata
+    # convert lines but keep complexes "
+    # #uidA   uidB    altA    altB    aliasA  aliasB  method  author  pmids   taxa    taxb    interactionType sourcedb        interactionIdentifier  confidence      expansion       biological_role_A       biological_role_B       experimental_role_A     experimental_role_B    interactor_type_A       interactor_type_B       xrefs_A xrefs_B xrefs_Interaction       Annotations_A   Annotations_B  Annotations_Interaction Host_organism_taxid     parameters_Interaction  Creation_date   Update_date     Checksum_A    Checksum_B       Checksum_Interaction    Negative        OriginalReferenceA      OriginalReferenceB      FinalReferenceA FinalReferenceB        MappingScoreA   MappingScoreB   irogida irogidb irigid  crogida crogidb crigid  icrogida        icrogidb      icrigid  imex_id edgetype        numParticipants
+    skipGeneCount = 0
+    skipComplexCount = 0
+    wrongOrgCount = 0
+    ppiId = 1
+    data = OrderedDict()
+    irigSuffix = defaultdict(int)
+    for row in lineFileNext(ifh):
+        uidA = row.uidA
+        if ("Homo sapiens" not in row.taxa and not row.taxa=="-") or "Homo sapiens" not in row.taxb:
+            wrongOrgCount +=1
+            continue
+
+        # handle assay, sourceDb, relType
+        if row.method=="-":
+            assay = ""
+        else:
+            assay = row.method.split("(")[1].strip(")")
+            if assay.startswith("psi-mi"):
+                assay = "unknown"
+
+        sourceDb = row.sourcedb.split("(")[1].strip(")")
+        if sourceDb=="corum":
+            continue
+        relType = row.interactionType
+        if relType =="-":
+            relType = ""
+        else:
+            relType = relType.split("(")[1].strip(")")
+            if relType.startswith("psi-mi"):
+                relType = "unknown"
+        pmids = [x.replace("pubmed:", "") for x in row.pmids.split("|")]
+        pmids = [x for x in pmids if x!="-"]
+        pmidStr = "|".join(pmids)
+
+        #intId = row.irigid # IRIGID does NOT work with irefweb! 
+        intId = row.icrigid
+
+        # parse gene2
+        gene2 = resolveToSym(row.uidB, accToSym)
+        if gene2==None:
+            gene2 = resolveToSym(row.altB, accToSym)
+        if gene2==None:
+            gene2 = resolveToSym(row.aliasB, accToSym)
+        if gene2==None:
+            logging.debug("gene2 resolve error, row %s" % str(row))
+
+        # check for complex, save data and skip
+        # print uidA
+        if uidA.startswith("complex"):
+            if gene2==None:
+                #print "no resolv", row.altB, gene2
+                skipComplexCount +=1
+            else:
+                uidA = uidA.split(":")[1]
+                complexes[uidA].append(gene2)
+                complexMeta[uidA] = (relType, assay, sourceDb, intId, "", pmidStr)
+            continue
+
+        # we have two proteins A and B
+        gene1 = resolveToSym(row.uidA, accToSym)
+        if gene1==None:
+            gene1 = resolveToSym(row.altA, accToSym)
+        if gene1==None:
+            gene1 = resolveToSym(row.aliasA, accToSym)
+        if gene1==None:
+            logging.debug("gene1 resolve error, row %s" % str(row))
+
+        #print row.uidA, row.uidB, gene1, gene2
+        if gene1==None or gene2==None:
+            skipGeneCount += 1
+            logging.debug("Could not resolve one of the two genes, row %s" % str(row))
+            continue
+
+        # make sure we dont' have duplicate lines
+        data[("gene", "", gene1, "gene", "", gene2, relType, assay, sourceDb, intId, "", pmidStr)]=None
+
+    for row in data.keys():
+        row = list(row)
+        irig = row[-3]
+        irigSuffix[irig]+=1
+        eventId = "iref%s_%d" % (irig, irigSuffix[irig])
+        row.insert(0, eventId)
+        #yield ("iref%d" % ppiId, "gene", "", gene1, "gene", "", gene2, relType, assay, sourceDb, intId, "", pmidStr)
+        ppiId += 1
+        yield row
+
+
+        #relType = row.
+        #sourceDb = row.sourceDb
+
+    for uid, geneList in complexes.iteritems():
+        metaRow = complexMeta[uid] 
+        irig = metaRow[-3]
+        irigSuffix[irig]+=1
+        eventId = "iref%s_%d" % (irig, irigSuffix[irig])
+        fields = [eventId, "complex", "", "|".join(geneList), "", "", ""]
+        fields.extend( metaRow )
+        yield fields
+
+    logging.info( "skipGeneRows %d"% skipGeneCount)
+    logging.info( "skipComplexRows %d"% skipComplexCount)
+    logging.info( "wrongOrg %d"% wrongOrgCount)
+
+def findFile(inDir, mask):
+    " open the single file in inDir that matches a glob mask "
+    mask = join(inDir, mask)
+    inFnames = glob.glob(mask)
+    assert(len(inFnames)==1)
+    inFname = inFnames[0]
+    return inFname
+
+def parseEnsToSym(inDir):
+    " parse the protein.aliases file of string, return a dict ensProtId -> HGNC symbol "
+    logging.info("Parsing ensPep -> symbol")
+    inFname = findFile(inDir, "9606.protein.aliases.*.txt")
+    ensToHgnc = defaultdict(list)
+    # 9606    ENSP00000262374 ALG1    BLAST_KEGG_NAME 
+    duplGenes = set()
+    for line in open(inFname):
+        if line.startswith("#"):
+            continue
+        fields = line.rstrip("\n").split('\t')
+        taxId, protId, sym, tags = fields
+        tags = set(tags.split())
+        if not "BioMart_HUGO" in tags:
+            continue
+        #if not "Ensembl_HGNC_UniProt_ID_(mapped_data_supplied_by_UniProt)_GN" in tags:
+            #continue
+        #if protId in ensToHgnc and sym!=ensToHgnc[protId]:
+            #print protId, ensToHgnc[protId], sym
+            duplGenes.add(sym)
+        ensToHgnc[protId].append(sym)
+    #logging.info("%d symbols are not uniquely assigned to ensembld IDs" % len(duplGenes))
+    return ensToHgnc
+
+def readOkPairs(inDir, minScore, onlyExpDb):
+    " get list of gene pairs that have enough evidence and score > 400"
+    logging.info("getting list of only-text mining interactions")
+    okPairs = set()
+    fname = findFile(inDir, "9606.protein.links.*.txt")
+    allPairs = set()
+    for line in open(fname):
+        #protein1 protein2 neighborhood fusion cooccurence coexpression experimental database textmining combined_score
+        #9606.ENSP00000000233 9606.ENSP00000020673 0 0 0 0 0 0 176 176
+        if line.startswith("protein"):
+            continue
+        prot1, prot2, neighb, fusion, cooc, coexpr, exp, db, tm, combScore = line.rstrip("\n").split()
+        pair = tuple(sorted([prot1, prot2]))
+        allPairs.add(pair)
+        if int(combScore)<minScore:
+            continue
+        # skip if not accepted evidence
+        #nonTmEvidScores = set([neighb, fusion, cooc, coexpr, exp, db])
+        if onlyExpDb and exp=="0" and db=="0":
+            continue
+        okPairs.add(pair)
+    logging.info("%d pairs out of %d have good score and acceptable evidence" % (len(okPairs), len(allPairs)))
+    return okPairs
+
+def convStringDb(inDir, minScore, onlyExpDb):
+    """ convert string db, ignore imported interactions and text-mined interactions.
+    Also ignore interactions with score < 400 """
+    protIdToSym = parseEnsToSym(inDir)
+    okPairs = readOkPairs(inDir, minScore, onlyExpDb)
+
+    # get list of gene pairs that have not been imported by string
+    # have >400 score and are not only text mining based
+    logging.info("Parsing interactions, using only ones with score > 400")
+    pairs = set()
+    fname = findFile(inDir, "9606.protein.actions.detailed.*.txt")
+    #item_id_a            item_id_b            mode    action a_is_acting score sources transferred_sources
+    #9606.ENSP00000000233 9606.ENSP00000294179 binding        0           170           grid
+    i = 0
+    notMapIds = set()
+    notMapCount = 0
+    for line in open(fname):
+        if line.startswith("#"):
+            continue
+        fields = line.rstrip("\n").split("\t")
+        id1, id2, mode, action, aIsActing, score, sources, transfSources = fields
+        #sources = sources.split()
+        #transfSources = transfSources.split()
+        # we don't need directly imported ones, those that mention sources
+        if sources!="":
+            continue
+        score = int(score)
+        if score < 400:
+            continue
+        pair = tuple(sorted([id1, id2]))
+        if not pair in okPairs:
+            continue
+
+        syms1 = protIdToSym.get(id1.replace("9606.",""), None)
+        if syms1==None:
+            logging.debug("Could not map to sym, %s" % (id1))
+            notMapIds.add(id1)
+            notMapCount +=1
+            continue
+
+        syms2 = protIdToSym.get(id2.replace("9606.",""), None)
+        if syms2==None:
+            logging.warn("Could not map to sym, %s" % (id2))
+            notMapIds.add(id2)
+            notMapCount +=1
+            continue
+
+        for sym1 in syms1:
+            for sym2 in syms2:
+                #intId = "string%d" % i
+                #row = [intId, sym1, sym2, transfSources, str(score)]
+                if transfSources!="":
+                    desc = "mapped from "+transfSources
+                    
+                row = ("string%d"%i, "gene", "", sym1, "gene", "", sym2, "interaction", desc, "string", sym1+"%0A"+sym2, "interaction", "")
+                yield IntRec(*row)
+                i += 1
+    logging.info("Could not map %d identifiers, %d rows,  to symbols" % \
+        (len(notMapIds), notMapCount))
+
+def convQuickGo(tabFname):
+    " convert quickGO tab sep file "
+    compNames = {} # goId -> (complexName)
+    compGenes = defaultdict(list) # goId -> list of symbols
+    compRefs = defaultdict(list) # goId -> list of refs
+
+    for row in lineFileNext(open(tabFname)):
+        compGenes[row.GO_ID].append(row.Symbol)
+        if row.GO_ID not in compNames:
+            compNames[row.GO_ID] = row.GO_Name
+        if row.Reference.startswith("PMID:"):
+            compRefs[row.GO_ID].append(row.Reference.replace("PMID:",""))
+
+    i = 0
+    for goId, genes in compGenes.iteritems():
+        goName = compNames[goId]
+        ref = "|".join(set(compRefs[goId]))
+        genes = set(genes)
+        if len(genes)==1:
+            continue
+        row = ("go%d"%i, "complex", goName, "|".join(genes), "", "", "", "", "", "go", goId, goName, ref)
+        yield IntRec(*row)
+        i += 1
+        
+def convCorum(tabFname, hgncFname, upFname):
+    " convert corum semicolon-sep file "
+    upToSym = readUniprotToSym(hgncFname)
+    upToSym = allUpToSym(upFname, upToSym)
+
+    for row in lineFileNext(open(tabFname), sep=";"):
+        #Complex_id='1', Complex_name='BCL6-HDAC4 complex', Synonyms='', organism='Human', subunits_UniProt_IDs='P41182,P56524', subunits_Entrez_IDs='604,9759', protein_complex_purification_method='MI:0007- anti tag coimmunoprecipitation', PubMed_id='11929873', FunCat_categories='10.01.09.05,11.02.03.04.03,14.07.04,42.10.03,43.03.07.02.01.01,70.10', functional_comment='"Transcriptional repression by BCL6 is thought to be achieved in part by recruiting a repressor complex containing histone deacetylases."', disease_comment='""', subunit_comment='""')
+        if row.organism!="Human":
+            continue
+        syms = []
+        for upId in row.subunits_UniProt_IDs.split(","):
+            upId = upId.strip("(").strip(")").strip()
+            sym = upToSym.get(upId, None)
+            if sym==None:
+                logging.warn("No symbol for uniprot ID %s" % upId)
+                continue
+            syms.append(sym)
+        row = ("corum%s"%row.Complex_id, "complex", row.Complex_name, "|".join(syms), "", "", "", "", "", "corum", row.Complex_id, row.Complex_name, row.PubMed_id)
+        yield IntRec(*row)
+
+def convNegatome(tabFname, hgncFname, upFname):
+    " convert negatome dump file "
+    upToSym = readUniprotToSym(hgncFname)
+    upToSym = allUpToSym(upFname, upToSym)
+
+    i = 0
+    for row in lineFileNext(open(tabFname), headers=["upId1", "upId2", "pmid", "desc"]):
+        sym1 = upToSym.get(row.upId1, None)
+        sym2 = upToSym.get(row.upId2, None)
+        if sym1==None:
+            logging.warn("no symbol for %s" % row.upId1)
+            continue
+        if sym2==None:
+            logging.warn("no symbol for %s" % row.upId2)
+            continue
+        #print row
+        if "-" in row.desc:
+            desc = row.desc.split("-")[1].strip()
+        else:
+            desc = row.desc.split()[-1]
+        #print desc
+        desc = desc.replace("\r", "")
+        row = ("negatome%s"%i, "gene", "", sym1, "gene", "", sym2, "Absence of interaction", desc, "negatome", "", "", row.pmid)
+        yield IntRec(*row)
+        i+=1
+
+def main(args, options):
+    if options.mysql:
+        printMysql()
+        sys.exit(0)
+
+    db, inPath = args
+
+    ofh = sys.stdout
+
+    global outFields
+
+    if db=="reactome":
+        # reactom has to look like a pathway database
+        outFields = "eventId,causeType,causeName,causeGenes,themeType,themeName,themeGenes"\
+            ",relType,relSubtype,sourceDb,sourceId,sourceDesc,pmids".split(",")
+        reader = convReactome(inPath, options.hgncFile)
+    elif db=="biogrid":
+        reader = convBiogrid(inPath)
+    elif db=="mentha":
+        reader = convMentha(inPath, options.hgncFile)
+    elif db=="iref":
+        reader = convIRef(inPath, options.hgncFile, options.upFile)
+    elif db=="stringFilt":
+        reader = convStringDb(inPath, 400, True)
+    elif db=="string":
+        reader = convStringDb(inPath, 0, False)
+    elif db=="quickgo":
+        reader = convQuickGo(inPath)
+    elif db=="corum":
+        reader = convCorum(inPath, options.hgncFile, options.upFile)
+    elif db=="negatome":
+        reader = convNegatome(inPath, options.hgncFile, options.upFile)
+
+    else:
+        logging.error("Unknown db %s" % db)
+        sys.exit(1)
+        
+    ofh.write("#"+"\t".join(outFields)+"\n")
+
+    # read everything into mem and sort
+    rows = []
+    for row in reader:
+        rows.append(row)
+    rows.sort(key=operator.itemgetter(1))
+
+    for row in rows:
+        row = [r.replace("\t", " ") for r in row] # make sure fields don't include a tab
+        line = "\t".join(row)
+        ofh.write(line+"\n")
+
+# ----------- MAIN --------------
+if args==[]:
+    parser.print_help()
+    exit(1)
+
+main(args, options)

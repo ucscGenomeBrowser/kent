@@ -256,6 +256,7 @@
 #include "aveStats.h"
 #include "trix.h"
 #include "bPlusTree.h"
+#include "customFactory.h"
 
 static char *rootDir = "hgcData";
 
@@ -274,10 +275,6 @@ struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 void printLines(FILE *f, char *s, int lineSize);
 
 char mousedb[] = "mm3";
-
-/* JavaScript to automatically submit the form when certain values are
- * changed. */
-char *onChangeAssemblyText = "onchange=\"document.orgForm.submit();\"";
 
 #define NUMTRACKS 9
 int prevColor[NUMTRACKS]; /* used to optimize color change html commands */
@@ -1538,7 +1535,7 @@ int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
 int start = 0;
 char *type = cloneString(tdb->type);
 char *word = nextWord(&type);
-if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred")))
+if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred") || sameWord(word,"bigPsl")))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
@@ -2985,22 +2982,54 @@ if (start == end)
     ivEnd++;
     }  
 
+boolean showEvery = sameString(item, "PrintAllSequences");
 boolean showAll = trackDbSettingOn(tdb, "showAll");
 unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-struct bigBedInterval *bb, *bbList;
+struct bigBedInterval *bb, *bbList = NULL;
 
 // If showAll is on, show all alignments with this qName, not just the
 // selected one.
-if (showAll)
+if (showEvery)
+    {
+    struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+    for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+        {
+        char *chromName = chrom->name;
+        int start = 0, end = chrom->size;
+        int itemsLeft = 0;  // Zero actually means no limit.... 
+        struct bigBedInterval *intervalList = bigBedIntervalQuery(bbi, chromName,
+            start, end, itemsLeft, lm);
+        slCat(&bbList, intervalList);
+        }
+    }
+else if (showAll)
     {
     int fieldIx;
     struct bptFile *bpt = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
-    struct lm *lm = lmInit(0);
     bbList = bigBedNameQuery(bbi, bpt, fieldIx, item, lm);
     }
 else
     bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
 
+
+/* print out extra fields */
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    char *restFields[256];
+    int restCount = chopTabs(cloneString(bb->rest), restFields);
+    if (sameString(restFields[0], item))
+        {
+        int bedSize = 25;
+        int restBedFields = bedSize - 3;
+        if (restCount > restBedFields)
+            {
+            char **extraFields = (restFields + restBedFields);
+            int extraFieldCount = restCount - restBedFields;
+            int printCount = extraFieldsPrint(tdb,NULL,extraFields, extraFieldCount);
+            printCount += 0;
+            }
+        }
+    }
 
 char *bedRow[32];
 char startBuf[16], endBuf[16];
@@ -3014,15 +3043,21 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
     lastChromId=bb->chromId;
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, 4);
-    if (sameString(bedRow[3], item))
+    if (showEvery || sameString(bedRow[3], item))
 	{
         struct psl *psl= pslFromBigPsl(chromName, bb, seqTypeField, NULL, NULL);
         slAddHead(&pslList, psl);
 	}
     }
 
-printf("<H3>%s/Genomic Alignments</H3>", item);
-if (pslIsProtein(pslList))
+char *sort = cartUsualString(cart, "sort", pslSortList[0]);
+pslSortListByVar(&pslList, sort);
+
+if (showEvery)
+    printf("<H3>Genomic Alignments</H3>");
+else
+    printf("<H3>%s/Genomic Alignments</H3>", item);
+if (showEvery || pslIsProtein(pslList))
     printAlignmentsSimple(pslList, start, "htcBigPslAli", tdb->table, item);
 else
     printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow",
@@ -4124,6 +4159,20 @@ if (container == NULL && wordCount > 0)
          &&  headerItem
          &&  sameString(headerItem, ".") )
         headerItem = NULL;
+    }
+
+// doNcbiRefSeq
+if (sameWord(tdb->table, "ncbiRefSeqOther"))
+    {
+    struct dyString *dy = newDyString(1024);
+    dyStringPrintf(dy, "%s", item);
+
+    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+        dyStringPrintf(dy, " - Release %s", trackVersion->version);
+
+    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, dyStringCannibalize(&dy));
+    headerItem = cloneString("ncbiRefSeqOther");
     }
 
 /* Print header. */
@@ -5865,8 +5914,9 @@ int aliCount = slCount(pslList);
 boolean isClicked;
 if (pslList == NULL || tableName == NULL)
     return;
+boolean showEvery = sameString(itemIn, "PrintAllSequences");
 
-if (aliCount > 1)
+if (!showEvery && (aliCount > 1))
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
 printf("<PRE><TT>");
@@ -5882,10 +5932,13 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 	if (isPslToPrintByClick(psl, startFirst, isClicked))
 	    {
             char otherString[512];
+            char *qName = itemIn;
+            if (sameString(itemIn, "PrintAllSequences"))
+                qName = psl->qName;
 	    safef(otherString, sizeof(otherString), "%d&aliTable=%s", psl->tStart, tableName);
             printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
-	    hgcAnchorWindow(hgcCommand, itemIn, psl->tStart, psl->tEnd,  otherString, psl->tName);
+	    hgcAnchorWindow(hgcCommand, qName, psl->tStart, psl->tEnd,  otherString, psl->tName);
 	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d</A>",
 		   psl->match + psl->misMatch + psl->repMatch,
 		   100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
@@ -7174,6 +7227,7 @@ for (i=1; i<=blockCount; ++i)
 	    bodyTn.forCgi, i, i);
     }
 fprintf(index, "<A HREF=\"../%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+htmEnd(index);
 fclose(index);
 chmod(indexTn.forCgi, 0666);
 
@@ -7261,7 +7315,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
     struct bed *bed = bedLoadN(bedRow, 12);
-    if (sameString(bed->name, acc))
+    if (sameString(bed->name, acc) && (bb->start == start) && (bb->end == end))
 	{
 	bb->next = NULL;
 	break;
@@ -10030,6 +10084,11 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 char *chrom = cartString(cart, "c");
 
+/* So far, we can just remove "chr" from UCSC chrom names to get DECIPHER names */
+char *decipherChrom = chrom;
+if (startsWithNoCase("chr", decipherChrom))
+    decipherChrom += 3;
+
 printf("<H3>Patient %s </H3>", itemName);
 
 /* print phenotypes and other information, if available */
@@ -10037,7 +10096,8 @@ if (sqlFieldIndex(conn, "decipherRaw", "phenotypes") >= 0)
     {
     sqlSafef(query, sizeof(query),
         "select phenotypes, mean_ratio, inheritance, pathogenicity, contribution "
-        "from decipherRaw where id = '%s'", itemName);
+        "from decipherRaw where id = '%s' and chr = '%s' and start = %d and end = %d",
+        itemName, decipherChrom, start+1, end);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if ((row != NULL) && strlen(row[0]) >= 1)
@@ -10101,7 +10161,10 @@ printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
 
 /* print UCSC Genes in the reported region */
 sqlSafef(query, sizeof(query),
-      "select distinct t.name from knownCanonToDecipher t, kgXref x  where value ='%s' and x.kgId=t.name order by geneSymbol", itemName);
+      "select distinct t.name "
+      // mysql 5.7: SELECT list w/DISTINCT must include all fields in ORDER BY list (#18626)
+      ", geneSymbol "
+      "from knownCanonToDecipher t, kgXref x  where value ='%s' and x.kgId=t.name order by geneSymbol", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -21096,6 +21159,8 @@ else if (sameWord(type, "bigMaf"))
     genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
+else if (sameWord(type, "bigBarChart") || sameWord(type, "barChart"))
+    doBarChartDetails(ct->tdb, item);
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcfTabix"))
@@ -22946,6 +23011,7 @@ for (i=1; i<=blockCount; ++i)
 	    bodyTn.forCgi, i, i);
     }
 fprintf(index, "<A HREF=\"../%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+htmEnd(index);
 fclose(index);
 chmod(indexTn.forCgi, 0666);
 
@@ -24980,7 +25046,10 @@ void doSnakeClick(struct trackDb *tdb, char *itemName)
 /* Put up page for snakes. */
 {
 struct trackDb *parentTdb = trackDbTopLevelSelfOrParent(tdb);
-char *otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
+char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
+if (otherSpecies == NULL)
+    otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
+
 char *hubName = cloneString(database);
 char otherDb[4096];
 char *qName = cartOptionalString(cart, "qName");
@@ -24990,11 +25059,6 @@ int qWidth = atoi(cartOptionalString(cart, "qWidth"));
 char *qTrack = cartString(cart, "g");
 if(isHubTrack(qTrack) && ! trackHubDatabase(database))
     hubName = cloneString(qTrack);
-
-struct hash *dbAliasHash = NULL;  // create later when needed
-char * dbAliasList = trackDbSetting(tdb, "dbAliasList");
-if (dbAliasList)
-    dbAliasHash = hashFromString(dbAliasList);
 
 /* current mouse strain hal file has incorrect chrom names */
 char *aliasQName = qName;
@@ -25010,14 +25074,6 @@ else
     {
     safef(otherDb, sizeof otherDb, "%s", otherSpecies);
     }
-
-if (dbAliasHash)
-   {
-   char *otherDbName = trackHubSkipHubName(otherDb);
-   struct hashEl* alias = hashLookup(dbAliasHash, otherDbName);
-   if (alias)
-      safef(otherDb, sizeof otherDb, "%s", (char *)alias->val);
-   }
 
 char headerText[256];
 safef(headerText, sizeof headerText, "reference: %s, query: %s\n", trackHubSkipHubName(database), trackHubSkipHubName(otherDb) );
@@ -25098,6 +25154,80 @@ while (*c != 0)
     c++;
     i++;
     }
+}
+
+static char *replaceSuffix(char *input, char *newSuffix)
+/* Given a filename with a suffix, replace existing suffix with a new suffix. */
+{
+char buffer[4096];
+safecpy(buffer, sizeof buffer, input);
+char *dot = strrchr(buffer, '.');
+safecpy(dot+1, sizeof buffer - 1 - (dot - buffer), newSuffix);
+return cloneString(buffer);
+}
+
+static void makeBigPsl(char *pslName, char *faName, char *db, char *outputBigBed)
+/* Make a bigPsl with the blat results. */
+{
+char *bigPslFile = replaceSuffix(outputBigBed, "bigPsl");
+
+char cmdBuffer[4096];
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/pslToBigPsl %s -fa=%s stdout | sort -k1,1 -k2,2n  > %s", pslName, faName, bigPslFile);  
+system(cmdBuffer);
+char buf[4096];
+char *twoBitDir;
+if (trackHubDatabase(db))
+    {
+    struct trackHubGenome *genome = trackHubGetGenome(db);
+    twoBitDir = genome->twoBitPath;
+    }
+else
+    {
+    safef(buf, sizeof(buf), "/gbdb/%s", db);
+    twoBitDir = hReplaceGbdbSeqDir(buf, db);
+    safef(buf, sizeof(buf), "%s%s.2bit", twoBitDir, db);
+    twoBitDir = buf;
+    }
+
+safef(cmdBuffer, sizeof(cmdBuffer), "loader/bedToBigBed -verbose=0 -udcDir=%s -extraIndex=name -sizesIs2Bit -tab -as=loader/bigPsl.as -type=bed9+16  %s %s %s",  
+        udcDefaultDir(), bigPslFile, twoBitDir, outputBigBed);
+system(cmdBuffer);
+unlink(bigPslFile);
+}
+
+static void buildBigPsl(char *fileNames)
+/* Build a custom track with a bigPsl file out of blat results.
+ * Bring up the bigPsl detail page with all the alignments. */
+{
+char *trackName = cartString(cart, "trackName");
+char *trackDescription = cartString(cart, "trackDescription");
+char *pslName, *faName, *qName;
+parseSs(fileNames, &pslName, &faName, &qName);
+
+struct tempName bigBedTn;
+trashDirDateFile(&bigBedTn, "hgBlat", "bp", ".bb");
+char *bigBedFile = bigBedTn.forCgi;
+makeBigPsl(pslName, faName, database, bigBedFile);
+
+char* host = getenv("HTTP_HOST");
+
+boolean isProt = cgiOptionalString("isProt") != NULL;
+char *customTextTemplate = "track type=bigPsl indelDoubleInsert=on indelQueryInsert=on pslFile=%s visibility=pack showAll=on htmlUrl=http://%s/goldenPath/help/hgUserPsl.html %s bigDataUrl=%s name=\"%s\" description=\"%s\"\n";  
+char *extraForMismatch = "indelPolyA=on  showDiffBasesAllScales=. baseColorUseSequence=lfExtra baseColorDefault=diffBases";
+  
+if (isProt)
+    extraForMismatch = "";
+char buffer[4096];
+safef(buffer, sizeof buffer, customTextTemplate, bigBedTn.forCgi, host, extraForMismatch, bigBedTn.forCgi, trackName, trackDescription);
+
+struct customTrack *ctList = getCtList();
+struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL);
+theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
+
+customTracksSaveCart(database, cart, theCtList);
+
+cartSetString(cart, "i", "PrintAllSequences");
+hgCustom(newCts->tdb->track, NULL);
 }
 
 void doMiddle()
@@ -25255,6 +25385,10 @@ else if (sameWord(table, "htcGetDnaExtended1"))
     {
     doGetDnaExtended1();
     }
+else if (sameWord(table, "buildBigPsl"))
+    {
+    buildBigPsl(item);
+    }
 else if (sameWord(table, "htcListItemsAssayed"))
     {
     doPeakClusterListItemsAssayed();
@@ -25287,7 +25421,7 @@ else if (sameString(track, "variome.delete"))
     doDeleteVariomeItem(item, seqName, winStart, winEnd);
 else if (sameString(track, "variome.addComments"))
     doAddVariomeComments(item, seqName, winStart, winEnd);
-else if (startsWith("transMapAln", table) || startsWith("reconTransMapAln", table))
+else if (startsWith("transMap", table))
     transMapClickHandler(tdb, item);
 else if (startsWith("hgcTransMapCdnaAli", table))
     {
@@ -25485,10 +25619,13 @@ else if (sameWord(table, "knownGene"))
 else if (sameWord(table, "ncbiRefSeq") ||
          sameWord(table, "ncbiRefSeqPsl") ||
          sameWord(table, "ncbiRefSeqCurated") ||
-         sameWord(table, "ncbiRefSeqPredicted") ||
-         sameWord(table, "ncbiRefSeqOther") )
+         sameWord(table, "ncbiRefSeqPredicted") )
     {
     doNcbiRefSeq(tdb, item);
+    }
+else if (sameWord(table, "ncbiRefSeqOther") )
+    {
+    genericClickHandler(tdb, item, NULL);
     }
 else if (sameWord(table, "refGene") )
     {
@@ -26423,6 +26560,12 @@ else if (tdb != NULL && startsWithWord("vcfTabix", tdb->type))
 else if (tdb != NULL && startsWithWord("vcf", tdb->type))
     {
     doVcfDetails(tdb, item);
+    }
+else if (tdb != NULL && 
+        (startsWithWord("barChart", tdb->type) || startsWithWord("bigBarChart", tdb->type)))
+    {
+    doBarChartDetails(tdb, item);
+    printTrackHtml(tdb);
     }
 else if (tdb != NULL)
     {

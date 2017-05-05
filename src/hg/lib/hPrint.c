@@ -114,11 +114,11 @@ if (!suppressHtml)
     cgiMakeButtonWithOnClick(name, label, msg, onClick);
 }
 
-void hOnClickButton(char *command, char *label)
+void hOnClickButton(char *id, char *command, char *label)
 /* Write out push button if not suppressed. */
 {
 if (!suppressHtml)
-    cgiMakeOnClickButton(command, label);
+    cgiMakeOnClickButton(id, command, label);
 }
 
 void hTextVar(char *varName, char *initialVal, int charSize)
@@ -147,13 +147,6 @@ void hCheckBox(char *varName, boolean checked)
 {
 if (!suppressHtml)
     cgiMakeCheckBox(varName, checked);
-}
-
-void hCheckBoxJS(char *varName, boolean checked, char *javascript)
-/* Make check box if not suppressed, with javascript. */
-{
-if (!suppressHtml)
-    cgiMakeCheckBoxJS(varName, checked, javascript);
 }
 
 void hDropListClassWithStyle(char *name, char *menu[], int menuSize, 

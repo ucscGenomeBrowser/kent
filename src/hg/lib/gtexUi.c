@@ -348,12 +348,11 @@ void gtexGeneUiLogTransform(struct cart *cart, char *track, struct trackDb *tdb)
 /* Checkbox to select log-transformed RPKM values */
 {
 char cartVar[1024];
-char buf[512];
 puts("<b>Log10 transform:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
-safef(buf, sizeof buf, "onchange='gtexTransformChanged(\"%s\")'", track);
-cgiMakeCheckBoxJS(cartVar, isLogTransform, buf);
+cgiMakeCheckBoxWithId(cartVar, isLogTransform, cartVar);
+jsOnEventByIdF("change", cartVar, "gtexTransformChanged('%s');", track);
 }
 
 void gtexGeneUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
@@ -361,11 +360,12 @@ void gtexGeneUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
 {
 char cartVar[1024];
 char buf[512];
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
 safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
 printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_LIMIT);
-int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_LIMIT_DEFAULT);
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_VIEW_LIMIT);
+int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_VIEW_LIMIT_DEFAULT);
 cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
 char *version = gtexVersion(tdb->table);
 printf("<span class='%s'>  RPKM (range 0-%d)</span>\n", buf, round(gtexMaxMedianScore(version)));
@@ -414,11 +414,11 @@ printf("<div><b>Samples:</b>&nbsp;");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SAMPLES);
 char *selected = cartCgiUsualString(cart, cartVar, GTEX_SAMPLES_DEFAULT); 
 boolean isAllSamples = sameString(selected, GTEX_SAMPLES_ALL);
-safef(buf, sizeof buf, "onchange='gtexSamplesChanged(\"%s\")'", track);
+safef(buf, sizeof buf, "gtexSamplesChanged(\"%s\");", track);
 char *command = buf;
-cgiMakeOnClickRadioButton(cartVar, GTEX_SAMPLES_ALL, isAllSamples, command);
+cgiMakeOnEventRadioButtonWithClass(cartVar, GTEX_SAMPLES_ALL, isAllSamples, NULL, "change", command);
 printf("All\n");
-cgiMakeOnClickRadioButton(cartVar, GTEX_SAMPLES_COMPARE_SEX, !isAllSamples, command);
+cgiMakeOnEventRadioButtonWithClass(cartVar, GTEX_SAMPLES_COMPARE_SEX, !isAllSamples, NULL, "change", command);
 printf("Compare by gender\n");
 printf("</div>");
 

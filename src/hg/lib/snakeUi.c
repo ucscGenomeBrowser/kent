@@ -54,7 +54,7 @@ safef(varName, sizeof(varName), "%s." SNAKE_COLOR_BY, name);
 cgiMakeDropListFull(varName, colorByOptionLabels,
 			colorByOptionValues,
 			ArraySize(colorByOptionLabels),
-			colorBy, NULL);
+			colorBy, NULL, NULL);
 puts("<BR>");
 }
 

@@ -24,6 +24,7 @@
 #include "gbMembers.h"
 #include "versionInfo.h"
 #include "mailViaPipe.h"
+#include "dystring.h"
 
 /* ---- Global variables. ---- */
 char msg[4096] = "";
@@ -41,29 +42,11 @@ char brwName[64];
 char brwAddr[256];
 char signature[256];
 char returnAddr[256];
-char *hgLoginUrl = NULL;
+char *hgLoginUrl = NULL; /* full absolute URL to hgLogin as seen from browser, 
+    e.g. http://genome.ucsc.edu/cgi-bin/hgLogin. Can be a relative URL /cgi-bin/hgLogin if 
+    hg.conf login.relativeLink is on. */
 
 /* ---- Global helper functions ---- */
-char *cookieNameForUserName()
-/* Return the cookie name used for logged in user name like 'wikidb_mw1_UserName' */
-{
-if isEmpty(cfgOption(CFG_COOKIIENAME_USERNAME))
-    return cloneString("NULL_cookieNameUserName");
-else
-    return cloneString(cfgOption(CFG_COOKIIENAME_USERNAME));
-}
-
-char *cookieNameForUserID()
-/* Return the cookie name used for logged in user ID like 'wikidb_mw1_UserID' */
-{
-if isEmpty(cfgOption(CFG_COOKIIENAME_USERID))
-    return cloneString("NULL_cookieNameUserID");
-else
-    return cloneString(cfgOption(CFG_COOKIIENAME_USERID));
-}
-
-
-
 char *browserName()
 /* Return the browser name like 'UCSC Genome Browser' */
 {
@@ -103,7 +86,6 @@ else
 }
 
 /* ---- password functions depend on optionally installed openssl lib ---- */
-#ifdef USE_SSL
 #include <openssl/md5.h>
 
 void cryptWikiWay(char *password, char *salt, char* result)
@@ -177,31 +159,6 @@ for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     }
 return cloneString(tokenMD5);
 }
-
-#else // --------- no USE_SSL ==> errAbort with message that openssl is required --------------
-
-#define NEED_OPENSSL "kent/src must be recompiled with openssl libs and USE_SSL=1 in order for this to work."
-
-void encryptPWD(char *password, char *salt, char *buf, int bufsize)
-/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
-{
-errAbort(NEED_OPENSSL);
-}
-
-void encryptNewPwd(char *password, char *buf, int bufsize)
-/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
-{
-errAbort(NEED_OPENSSL);
-}
-
-char *generateTokenMD5(char *token)
-/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
-{
-errAbort(NEED_OPENSSL);
-return NULL; // Compiler doesn't know that we never get here.
-}
-
-#endif//ndef USE_SSL
 
 void findSalt(char *encPassword, char *salt, int saltSize)
 /* find the salt part from the password field */
@@ -327,14 +284,30 @@ do
 return (count >= 1);
 }
 
+struct dyString *getLoginCookieJS(char *userName, uint idx)
+/* returns javascript statements that set the cookies associated with
+ * logging in as a particular user */
+{
+struct dyString *result = dyStringNew(1024);
+struct slName *newCookies = loginLoginUser(userName, idx), *sl;
+for (sl = newCookies;  sl != NULL;  sl = sl->next)
+    dyStringPrintf(result, " document.cookie = '%s';", sl->name);
+return result; 
+}
+
 char *getReturnToURL()
-/* get URL passed in with returnto URL */
+/* get URL from cart var returnto; if empty, make URL to hgSession on login host.  */
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
 char *hgLoginHost = wikiLinkHost();
 char *cgiDir = cgiScriptDirUrl();
 char returnTo[2048];
-if (!returnURL || sameString(returnURL,""))
+
+boolean relativeLink = cfgOptionBooleanDefault("login.relativeLink", FALSE);
+// reverse proxies and all-https sites have no need for absolute links
+if (relativeLink)
+    safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", cgiDir);
+else if (!returnURL || sameString(returnURL,""))
    safef(returnTo, sizeof(returnTo),
         "http%s://%s%shgSession?hgS_doMainPage=1",
         cgiAppendSForHttps(), hgLoginHost, cgiDir);
@@ -347,26 +320,17 @@ void returnToURL(int delay)
 /* delay for delay mill-seconds then return to the "returnto" URL */
 {
 char *returnURL = getReturnToURL();
-hPrintf(
-    "<script  language=\"JavaScript\">\n"
-    "<!-- "
-    "\n"
-    "window.setTimeout(afterDelay, %d);\n"
-    "function afterDelay() {\n"
-    "window.location =\"%s\";\n}"
-    "\n//-->\n"
-    "</script>", delay, returnURL);
+jsInlineF(
+    "setTimeout(function(){location='%s';}, %d);\n"
+    , returnURL, delay);
 }
 
 static void redirectToLoginPage(char *paramStr)
 /* redirect to hgLogin page with given parameter string */
 {
-hPrintf("<script  language=\"JavaScript\">\n"
-    "<!-- \n"
-    "window.location =\"%s?%s\""
-    "//-->"
-    "\n"
-    "</script>", hgLoginUrl, paramStr);
+jsInlineF(
+    "window.location ='%s?%s';\n"
+    , hgLoginUrl, paramStr);
 }
     
 void  displayActMailSuccess()
@@ -419,7 +383,7 @@ hPrintf(
   "have been sent to that address.<BR><BR>"
     "  If <B>%s</B> is not your registered email address, you will not receive an email."
     " If you can't find the message we sent you, please contact %s for help.</p>", sendMailTo, sendMailTo, returnAddr);
-hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>",
+hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>\n",
         hgLoginUrl);
 cartRemove(cart, "hgLogin_helpWith");
 cartRemove(cart, "hgLogin_email");
@@ -448,7 +412,7 @@ if (sameString(returnAddr, "NOEMAIL"))
     "genome-www@soe.ucsc.edu. As this is a mirror website not managed by UCSC, please "
     "specify the address of the mirror in your email.</p>");
 
-hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>",
+hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>\n",
         hgLoginUrl);
 cartRemove(cart, "hgLogin_helpWith");
 cartRemove(cart, "hgLogin_email");
@@ -476,12 +440,9 @@ if (result == -1)
     }
 else
     {
-    hPrintf("<script  language=\"JavaScript\">\n"
-        "<!-- \n"
-        "window.location =\"%s?hgLogin.do.displayMailSuccess=1\""
-        "//-->"
-        "\n"
-        "</script>", hgLoginUrl);
+    jsInlineF(
+        "window.location = '%s?hgLogin.do.displayMailSuccess=1';\n"
+        , hgLoginUrl);
     }
 }
 
@@ -542,12 +503,9 @@ if (result == -1)
     }
 else
     {
-    hPrintf("<script  language=\"JavaScript\">\n"
-        "<!-- \n"
-        "window.location =\"%s?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
-        "//-->"
-        "\n"
-        "</script>", hgLoginUrl, username);
+    jsInlineF(
+        "window.location = '%s?hgLogin.do.displayMailSuccessPwd=1&user=%s';\n"
+        , hgLoginUrl, username);
     }
 }
 
@@ -571,23 +529,17 @@ void displayAccHelpPage(struct sqlConnection *conn)
 char *email = cartUsualString(cart, "hgLogin_email", "");
 char *username = cartUsualString(cart, "hgLogin_userName", "");
 
-hPrintf("<script  language=\"JavaScript\">\n"
-    "<!-- "
-    "\n"
+jsInline(
     "function toggle(value){\n"
-    "if(value=='showE')\n"
-    "{\n"
+    "if(value=='showE'){\n"
     " document.getElementById('usernameBox').style.display='none';\n"
     " document.getElementById('emailAddrBox').style.display='inline';\n"
     " } else {\n"
     " document.getElementById('usernameBox').style.display='inline';\n"
     " document.getElementById('emailAddrBox').style.display='none';\n"
+    " }\n"
     "}\n"
-    "}\n"
-    "//-->"
-    "\n"
-    "</script>"
-    "\n");
+    );
 hPrintf("<div id=\"accountHelpBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>%s</h2>"
@@ -599,9 +551,9 @@ hPrintf("<h3>Having trouble signing in?</h3>"
     "<p><span style='color:red;'>%s</span><p>"
     "\n", hgLoginUrl, errMsg ? errMsg : "");
 hPrintf("<div class=\"inputGroup\">"
-    "<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"password\" id=\"password\" onclick=\"toggle('showU');\">"
+    "<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"password\" id=\"password\">"
     "<label for=\"password\" class=\"radioLabel\">I forgot my <b>password</b>. Send me a new one.</label></div>"
-    "<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"username\" id=\"username\"  onclick=\"toggle('showE');\">"
+    "<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"username\" id=\"username\">"
     "<label for=\"username\" class=\"radioLabel\">I forgot my <b>username</b>. Please email it to me.</label></div>"
     "\n"
     "</div>"
@@ -622,6 +574,8 @@ hPrintf("<div class=\"inputGroup\" id=\"usernameBox\" style=\"display: none;\">"
     "</div>"
     "</form>"
     "</div><!-- END - accountHelpBox -->", username, email, getReturnToURL());
+jsOnEventById("click", "password", "toggle('showU');");
+jsOnEventById("click", "username", "toggle('showE');");
 cartSaveSession(cart);
 }
 
@@ -912,6 +866,10 @@ hPrintf(
 cartRemove(cart, "hgLogin_password");
 cartRemove(cart, "hgLogin_newPassword1");
 cartRemove(cart, "hgLogin_newPassword2");
+sqlSafef(query,sizeof(query),"SELECT * FROM gbMembers WHERE userName='%s'", user);
+struct gbMembers *m = gbMembersLoadByQuery(conn, query);
+struct dyString *cookieJS = getLoginCookieJS(user, m->idx);
+jsInline(cookieJS->string);
 returnToURL(150);
 }
 
@@ -1180,40 +1138,7 @@ else
     return FALSE;
 }
 
-char *getCookieDomainName()
-/* Return domain name to be used by the cookies or NULL. Allocd here.   */
-/* Return central.domain if returnToURL is also in the same domain.     */
-/* else return the domain in returnTo URL generated by remote hgSession.*/
-{
-char *centralDomain=cloneString(cfgOption(CFG_CENTRAL_DOMAIN));
-char *returnURL = getReturnToURL();
-char returnToDomain[256];
-
-/* parse the URL */
-struct netParsedUrl rtpu;
-netParseUrl(returnURL, &rtpu);
-safecpy(returnToDomain, sizeof(returnToDomain), rtpu.host);
-if (endsWith(returnToDomain,centralDomain))
-    return centralDomain;
-else
-    return cloneString(returnToDomain);
-}
-
-char *getCookieDomainString()
-/* Get a string that will look something like " domain=.ucsc.edu;" if getCookieDomainName
- * returns something good,  otherwise just " " */
-{
-char buf[256];
-char *domain = getCookieDomainName();
-if (domain != NULL && strchr(domain, '.') != NULL)
-    safef(buf, sizeof(buf), " domain=%s;", domain);
-else
-    safef(buf, sizeof(buf), " ");
-freeMem(domain);
-return cloneString(buf);
-}
-
-void displayLoginSuccess(char *userName, int userID)
+void displayLoginSuccess(char *userName, uint idx)
 /* display login success msg, and set cookie */
 {
 hPrintf("<h2>%s</h2>", brwName);
@@ -1223,19 +1148,12 @@ hPrintf(
     "<span style='color:red;'></span>"
     "\n");
 /* Set cookies */
-char *domainString=getCookieDomainString();
-
-char *userNameCookie=cookieNameForUserName();
-char *userIDCookie=cookieNameForUserID();
-hPrintf("<script language=\"JavaScript\">"
-    " document.write(\"Login successful, setting cookies now...\");"
-    "</script>\n"
-    "<script language=\"JavaScript\">"
-    "document.cookie = \"%s=%s;%s expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
-    "\n"
-    "document.cookie = \"%s=%d;%s expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
-    " </script>"
-    "\n", userNameCookie, userName, domainString, userIDCookie, userID, domainString);
+struct dyString *javascript = dyStringNew(1024);
+dyStringPrintf(javascript,
+        " document.write(\"Login successful, setting cookies now...\");");
+jsInline(javascript->string);
+struct dyString *cookieJS = getLoginCookieJS(userName, idx);
+jsInline(cookieJS->string);
 cartRemove(cart,"hgLogin_userName");
 returnToURL(150);
 }
@@ -1286,11 +1204,9 @@ if (!sameString(m->accountActivated,"Y"))
     }
 if (checkPwd(password,m->password))
     {
-    unsigned int userID=m->idx;  
-    hPrintf("<h2>Login successful for user %s with id %d.\n</h2>\n"
-        ,userName,userID);
+    hPrintf("<h2>Login successful for user %s.\n</h2>\n", userName);
     clearNewPasswordFields(conn, userName);
-    displayLoginSuccess(userName,userID);
+    displayLoginSuccess(m->userName, m->idx);
     return;
     } 
 else if (usingNewPassword(conn, userName, password))
@@ -1316,14 +1232,11 @@ hPrintf(
     "</p>"
     "<span style='color:red;'></span>"
     "\n");
-char *domainString=getCookieDomainString();
-char *userNameCookie=cookieNameForUserName();
-char *userIDCookie=cookieNameForUserID();
-hPrintf("<script language=\"JavaScript\">"
-    "document.cookie = \"%s=;%s expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
-    "\n"
-    "document.cookie = \"%s=;%s expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
-    "</script>\n", userNameCookie, domainString, userIDCookie, domainString);
+struct dyString *javascript = dyStringNew(1024);
+struct slName *newCookies = loginLogoutUser(), *sl;
+for (sl = newCookies;  sl != NULL;  sl = sl->next)
+    dyStringPrintf(javascript, " document.cookie = '%s';", sl->name);
+jsInline(javascript->string);
 /* return to "returnto" URL */
 returnToURL(150);
 }
@@ -1391,7 +1304,13 @@ htmlSetStyleSheet("../style/userAccounts.css");
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 htmlSetFormClass("accountScreen");
-struct dyString *dy = dyStringCreate("http%s://%s%shgLogin",
+
+boolean relativeLink = cfgOptionBooleanDefault("login.relativeLink", FALSE);
+struct dyString *dy;
+if (relativeLink) // normal relative links are better for reverse proxyies or all-https sites
+    dy = dyStringCreate("%s", cgiScriptName());
+else 
+    dy = dyStringCreate("http%s://%s%shgLogin",
                                      loginUseHttps() ? "s" : "", wikiLinkHost(), cgiScriptDirUrl());
 hgLoginUrl = dyStringCannibalize(&dy);
 oldCart = hashNew(10);

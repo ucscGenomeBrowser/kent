@@ -4,12 +4,14 @@
 2	1	assay
 2	1	biosample_date
 2	1	donor
-24	24	file
-24	1	format
+25	25	file
+25	3	format
 2	2	lab
 6	2	lab_kent_disassociation_protocol
 6	3	lab_kent_quality
 2	1	life_stage
+12	7	map_ratio
 8	2	organ
-24	4	part
+23	4	part
+3	3	q
 2	1	sex

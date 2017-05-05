@@ -264,6 +264,59 @@ html chainNet
         html chainNet
 
 ################################################################
+# macNem1 -  Pig-tailed macaque - Macaca nemestrina - primate - 9545
+################################################################
+track chainNetMacNem1
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 498
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+otherDb macNem1
+chainMinScore 5000
+chainLinearGap medium
+html chainNet
+
+    track chainNetMacNem1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetMacNem1
+    spectrum on
+
+       track chainMacNem1
+        parent chainNetMacNem1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain macNem1
+        html chainNet
+
+    track chainNetMacNem1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetMacNem1
+
+        track netMacNem1
+        parent chainNetMacNem1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment net
+        type netAlign macNem1 chainMacNem1
+        html chainNet
+
+################################################################
 # rheMac8 - Rhesus - Macaca mulatta - primate
 ################################################################
 track chainNetRheMac8
@@ -1070,6 +1123,59 @@ html chainNet
         html chainNet
 
 ################################################################
+# rhiBie1 - Black snub-nosed monkey - Rhinopithecus bieti - primate - 61621
+################################################################
+track chainNetRhiBie1
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 498
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb rhiBie1
+chainMinScore 3000
+chainLinearGap medium
+html chainNet
+
+    track chainNetRhiBie1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetRhiBie1
+    spectrum on
+
+       track chainRhiBie1
+        parent chainNetRhiBie1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rhiBie1
+        html chainNet
+
+    track chainNetRhiBie1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetRhiBie1
+
+        track netRhiBie1
+        parent chainNetRhiBie1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment net
+        type netAlign rhiBie1 chainRhiBie1
+        html chainNet
+
+################################################################
 # rhiRox1 - Proboscis monkey - Nasalis larvatus - primate - primate - 7608
 ################################################################
 track chainNetRhiRox1
@@ -1176,7 +1282,6 @@ html chainNet
         type netAlign papAnu2 chainPapAnu2
         html chainNet
 
-
 ################################################################
 # macFas5 - Crab-eating macaque - Macaca fascicularis - primate - primate - 380
 ################################################################
@@ -1229,4 +1334,57 @@ html chainNet
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign macFas5 chainMacFas5
+        html chainNet
+
+################################################################
+# colAng1 - Angolan colobus - Colobus angolensis palliatus - primate - 336983
+################################################################
+track chainNetColAng1
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 498
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+otherDb colAng1
+chainMinScore 5000
+chainLinearGap medium
+html chainNet
+
+    track chainNetColAng1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetColAng1
+    spectrum on
+
+       track chainColAng1
+        parent chainNetColAng1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain colAng1
+        html chainNet
+
+    track chainNetColAng1Viewnet
+    shortLabel Net
+    view net
+    visibility full
+    parent chainNetColAng1
+
+        track netColAng1
+        parent chainNetColAng1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment net
+        type netAlign colAng1 chainColAng1
         html chainNet

@@ -1,0 +1,1466 @@
+#############################################################################
+## 11-Way Multiz (DONE - 2017-05-02 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/xenTro9/bed/multiz11way
+    cd /hive/data/genomes/xenTro9/bed/multiz11way
+
+    # from the 213-way in the source tree, select out the 11 used here:
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but anoCar2,canFam3,chrPic2,fr3,galGal5,hg38,mm10,monDom5,nanPar1,xenLae2,xenTro9 \
+        /cluster/home/hiram/kent/src/hg/utils/phyloTrees/213way.nh \
+          > t.nh
+
+    # using TreeGraph2 tree editor on the Mac, rearrange to get xenTro9
+    # at the top, and attempt to get the others in phylo order:
+    /cluster/bin/phast/all_dists t.nh | grep xenTro9 \
+        | sed -e "s/xenTro9.//" | sort -k2n
+xenLae2 0.377944
+nanPar1 0.477944
+chrPic2 0.719944
+monDom5 0.919898
+galGal5 0.957386
+anoCar2 0.966944
+canFam3 1.003432
+hg38    1.004005
+mm10    1.214580
+fr3     1.714285
+
+
+    #	what that looks like:
+~/kent/src/hg/utils/phyloTrees/asciiTree.pl xenTro9.11way.nh | sed -e 's/^/# /;'
+
+# ((((xenTro9:0.177944,
+#    xenLae2:0.2):0.1,
+#   nanPar1:0.2):0.07,
+#  (((chrPic2:0.19,
+#    galGal5:0.427442):0.01,
+#   anoCar2:0.447):0.122,
+#  (monDom5:0.340786,
+#  (canFam3:0.165928,
+#  (hg38:0.145908,
+#  mm10:0.356483):0.020593):0.258392):0.181168):0.05):0.211354,
+# fr3:1.154987);
+
+    # extract species list from that .nh file
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        xenTro9.11way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
+        | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
+
+    # construct db to name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+        | sed -e 's/-nosed/_nosed/; s/-eating/_eating/;' > db.to.name.txt
+
+    # construct a common name .nh file:
+    /cluster/bin/phast/tree_doctor --rename \
+    "`cat db.to.name.txt`" xenTro9.11way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         | sed -e 's/__/_/;' > xenTro9.11way.commonNames.nh
+    cat xenTro9.11way.commonNames.nh | sed -e 's/^/# /;'
+# ((((X_tropicalis:0.177944,
+#    African_clawed_frog:0.2):0.1,
+#   Tibetan_frog:0.2):0.07,
+#  (((Painted_turtle:0.19,
+#    Chicken:0.427442):0.01,
+#   Lizard:0.447):0.122,
+#  (Opossum:0.340786,
+#  (Dog:0.165928,
+#  (Human:0.145908,
+#  Mouse:0.356483):0.020593):0.258392):0.181168):0.05):0.211354,
+# Fugu:1.154987);
+
+#	Use this specification in the phyloGif tool:
+#	http://genome.ucsc.edu/cgi-bin/phyloGif
+#	to obtain a png image for src/hg/htdocs/images/phylo/xenTro9_11way.png
+
+    ~/kent/src/hg/utils/phyloTrees/asciiTree.pl xenTro9.11way.nh > t.nh
+    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh t.nh \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > xenTro9.11way.scientificNames.nh
+    rm -f t.nh
+    cat xenTro9.11way.scientificNames.nh | sed -e 's/^/# /;'
+# ((((Xenopus_tropicalis:0.177944,
+#    Xenopus_laevis:0.2):0.1,
+#   Nanorana_parkeri:0.2):0.07,
+#  (((Chrysemys_picta_bellii:0.19,
+#    Gallus_gallus:0.427442):0.01,
+#   Anolis_carolinensis:0.447):0.122,
+#  (Monodelphis_domestica:0.340786,
+#  (Canis_lupus_familiaris:0.165928,
+#  (Homo_sapiens:0.145908,
+#  Mus_musculus:0.356483):0.020593):0.258392):0.181168):0.05):0.211354,
+# Takifugu_rubripes:1.154987);
+
+    /cluster/bin/phast/all_dists xenTro9.11way.nh | grep xenTro9 \
+        | sed -e "s/xenTro9.//" | sort -k2n > 11way.distances.txt
+    #	Use this output to create the table below
+    cat 11way.distances.txt | sed -e 's/^/# /;'
+# xenLae2       0.377944
+# nanPar1       0.477944
+# chrPic2       0.719944
+# monDom5       0.919898
+# galGal5       0.957386
+# anoCar2       0.966944
+# canFam3       1.003432
+# hg38  1.004005
+# mm10  1.214580
+# fr3   1.714285
+
+    printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<11way.distances.txt") or
+        die "can not read 11way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($D, $dist) = split('"'"'\\s+'"'"', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/xenTro9/bed/lastz.$D/fb.xenTro9." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '"'"'{print \\$5}'"'"' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\\%%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.xenTro9/fb.${D}.chainXenTro9Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+	$swapMeasure =
+	    `awk '"'"'{print \\$5}'"'"' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+	chomp $swapMeasure;
+	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
+	$swapMeasure =~ s/\\%%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='"'"'$D'"'"';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %%02d  %%.4f (%%%% %%06.3f) (%%%% %%06.3f) - %%s %%s\\n", $count, $dist,
+        $chainLinkMeasure, $swapMeasure, $orgName, $D;
+}
+close (FH);
+' > sizeStats.pl
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#       featureBits chainLink measures
+#               chainLink
+#  N distance  on xenTro9  on other     other species
+# 01  0.3779 (% 54.877) (% 45.983) - African clawed frog xenLae2
+# 02  0.4779 (% 08.180) (% 06.700) - Tibetan frog nanPar1
+# 03  0.7199 (% 06.459) (% 04.977) - Painted turtle chrPic2
+# 04  0.9199 (% 05.414) (% 02.218) - Opossum monDom5
+# 05  0.9574 (% 03.387) (% 03.601) - Chicken galGal5
+# 06  0.9669 (% 05.977) (% 04.794) - Lizard anoCar2
+# 07  1.0034 (% 03.311) (% 01.890) - Dog canFam3
+# 08  1.0040 (% 07.950) (% 03.861) - Human hg38
+# 09  1.2146 (% 06.581) (% 03.282) - Mouse mm10
+# 10  1.7143 (% 03.777) (% 12.822) - Fugu fr3
+
+# None of this concern for distances matters in building the first step, the
+# maf files.  The distances will be better calibrated later.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	xenTro9.11way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+# xenTro9 xenLae2 nanPar1 chrPic2 galGal5 anoCar2 monDom5 canFam3 hg38 mm10 fr3
+
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/xenTro9/bed/multiz11way
+    export H=/hive/data/genomes/xenTro9/bed
+    mkdir mafLinks
+    # good assemblies can use syntenic net:
+    for G in xenLae2 galGal5 anoCar2 monDom5 canFam3 hg38 mm10 fr3
+    do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/axtChain/xenTro9.${G}.synNet.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/axtChain/xenTro9.${G}.synNet.maf.gz ./mafLinks/$G
+    done
+
+    # other assemblies using recip best net:
+    #
+    for G in nanPar1 chrPic2
+    do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/mafRBestNet/xenTro9.${G}.rbest.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/mafRBestNet/xenTro9.${G}.rbest.maf.gz ./mafLinks/$G
+    done
+
+    # verify the symLinks are good:
+    ls -ogrtL mafLinks/*/* | sed -e 's/^/# /; s/-rw-rw-r-- 1//;'
+#   27894852 Mar 30 09:09 mafLinks/hg38/xenTro9.hg38.synNet.maf.gz
+#   24203466 Mar 30 11:58 mafLinks/mm10/xenTro9.mm10.synNet.maf.gz
+#   64390281 Mar 31 05:05 mafLinks/nanPar1/xenTro9.nanPar1.rbest.maf.gz
+#  312694366 Apr  6 11:18 mafLinks/xenLae2/xenTro9.xenLae2.synNet.maf.gz
+#   17605854 Apr  6 14:15 mafLinks/canFam3/xenTro9.canFam3.synNet.maf.gz
+#   23610029 Apr  7 08:13 mafLinks/monDom5/xenTro9.monDom5.synNet.maf.gz
+#    6972556 Apr  7 22:32 mafLinks/fr3/xenTro9.fr3.synNet.maf.gz
+#   22357433 Apr  7 23:05 mafLinks/galGal5/xenTro9.galGal5.synNet.maf.gz
+#   26893489 Apr  7 23:34 mafLinks/anoCar2/xenTro9.anoCar2.synNet.maf.gz
+#   53169756 Apr  8 01:04 mafLinks/chrPic2/xenTro9.chrPic2.rbest.maf.gz
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/xenTro9/bed/multiz11way/mafSplit
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/mafSplit
+    time for D in `sed -e "s/xenTro9 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=8 /dev/null . ../../mafLinks/${D}/*.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../mafLinks/${D}/*.maf.gz
+    cd ..
+done
+    # real    0m35.835s
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 1188
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 256 maf.list
+
+    mkdir /hive/data/genomes/xenTro9/bed/multiz11way/splitRun
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    #	verify the db and pairs settings are correct
+    printf '#!/bin/csh -ef
+set db = xenTro9
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/xenTro9/bed/multiz11way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+' > autoMultiz.csh
+
+    chmod +x autoMultiz.csh
+
+    printf '#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/xenTro9/bed/multiz11way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+' > template
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh ku
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/splitRun/run
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+# Completed: 256 of 256 jobs
+# CPU time in finished jobs:       8447s     140.79m     2.35h    0.10d  0.000 y
+# IO & Wait Time:                   715s      11.91m     0.20h    0.01d  0.000 y
+# Average job time:                  36s       0.60m     0.01h    0.00d
+# Longest finished job:            1313s      21.88m     0.36h    0.02d
+# Submission to last job:          1404s      23.40m     0.39h    0.02d
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    cd /hive/data/genomes/xenTro9/bed/multiz11way
+    head -1 splitRun/maf/020.maf > multiz11way.maf
+    time for F in splitRun/maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F}
+done >> multiz11way.maf
+    # real    0m7.417s
+
+    tail -1 splitRun/maf/020.maf >> multiz11way.maf
+# -rw-rw-r--  1 2069911056 May  2 10:19 multiz11way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/xenTro9/bed/multiz11way
+    mkdir /gbdb/xenTro9/multiz11way
+    ln -s `pwd`/multiz11way.maf /gbdb/xenTro9/multiz11way
+    cd /dev/shm
+    time hgLoadMaf xenTro9 multiz11way
+# Loaded 3175390 mafs in 1 files from /gbdb/xenTro9/multiz11way
+# real    0m49.182s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 xenTro9 multiz11waySummary \
+	/gbdb/xenTro9/multiz11way/multiz11way.maf
+# Created 722708 summary blocks from 8242197 components and 3175390 mafs from /gbdb/xenTro9/multiz11way/multiz11way.maf
+# real    0m50.623s
+
+# -rw-rw-r-- 1 159755041 May  2 10:20 multiz11way.tab
+# -rw-rw-r-- 1  33687863 May  2 10:22 multiz11waySummary.tab
+
+    wc -l multiz11way*.tab
+#  3175390 multiz11way.tab
+#   722708 multiz11waySummary.tab
+
+    rm multiz11way*.tab
+
+##############################################################################
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2017-05-02 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.  Need to split of the maf file into individual
+    #   maf files
+    mkdir -p /hive/data/genomes/xenTro9/bed/multiz11way/anno/mafSplit
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/anno/mafSplit
+
+    time mafSplit -outDirDepth=2 -byTarget -useFullSequenceName \
+        /dev/null . ../../multiz11way.maf
+    #   real    0m45.899s
+
+    find . -type f | wc -l
+    #   3059
+
+    # check for N.bed files everywhere:
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/anno
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+#         cd /hive/data/genomes/${DB}
+#         twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+    else
+        echo "  OK: ${DB}"
+    fi
+done
+
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    screen -S gapAnno      # use a screen to control this longish job
+    ssh ku
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/anno
+    mkdir result
+    find ./mafSplit -type d | sed -e 's#./mafSplit/##' | while read D
+do
+    echo mkdir -p result/${D}
+    mkdir -p result/${D}
+done
+
+    printf '#LOOP
+mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/xenTro9/xenTro9.2bit {check out exists+ result/$(path1)}
+#ENDLOOP
+' > template
+
+    find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs on a node with the ram=32g requirement because they go fast
+    para -maxJob=100 create jobList
+    para try ... check ... push ...
+# Completed: 3059 of 3059 jobs
+# CPU time in finished jobs:       1192s      19.86m     0.33h    0.01d  0.000 y
+# IO & Wait Time:                  7870s     131.17m     2.19h    0.09d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              70s       1.17m     0.02h    0.00d
+# Submission to last job:           145s       2.42m     0.04h    0.00d
+
+    # verify all result files have some content, look for 0 size files:
+    find ./result -type f -size 0
+    # should see none
+    # or in this manner:
+    find ./result -type f | xargs ls -og | sort -k3nr | tail
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    head -q -n 1 result/9/7/chrUn_NW_016688023v1.maf > xenTro9.11way.maf
+    time find ./result -type f | while read F
+do
+    echo "${F}" 1>&2
+    grep -h -v "^#" ${F}
+done >> xenTro9.11way.maf
+    # real    0m44.827s
+
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1  result/9/7/chrUn_NW_016688023v1.maf >> xenTro9.11way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> xenTro9.11way.maf
+    ls -og
+# -rw-rw-r--  1 4266889197 May  2 10:33 xenTro9.11way.maf
+
+    du -hsc xenTro9.11way.maf
+    # 4.0G     xenTro9.11way.maf
+
+    # construct symlinks to get the individual maf files into gbdb:
+    rm /gbdb/xenTro9/multiz11way/multiz11way.maf   # remove previous results
+    ln -s `pwd`/xenTro9.11way.maf /gbdb/xenTro9/multiz11way/multiz11way.maf
+
+    # Load into database
+    cd /dev/shm
+    time hgLoadMaf -pathPrefix=/gbdb/xenTro9/multiz11way xenTro9 multiz11way
+# Loaded 4095419 mafs in 1 files from /gbdb/xenTro9/multiz11way
+# real    1m14.818s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 xenTro9 multiz11waySummary \
+        /gbdb/xenTro9/multiz11way/multiz11way.maf
+# Created 722708 summary blocks from 8242197 components and 4095419 mafs from /gbdb/xenTro9/multiz11way/multiz11way.maf
+# real    1m9.463s
+
+# -rw-rw-r-- 1 207262337 May  2 10:34 multiz11way.tab
+# -rw-rw-r-- 1  35133279 May  2 10:43 multiz11waySummary.tab
+
+    rm multiz11way*.tab
+
+######################################################################
+# MULTIZ7WAY MAF FRAMES (DONE - 2017-05-02 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/xenTro9/bed/multiz11way/frames
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+
+    printf '#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    printf "# ${db}: "
+    set tables = `hgsql $db -N -e "show tables" | egrep "Gene|ncbiRefSeq"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "ncbiRefSeq" || $table == "mgcGenes" || \
+           $table == "knownGene" || $table == "xenoRefGene" ) then
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+            echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='"'"'$db'"'"'"`
+    set orgId = `hgsql $db -N -e \
+            "select id from organism where name='"'"'$orgName'"'"'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql $db -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+' > showGenes.csh
+
+    chmod +x ./showGenes.csh
+    time ./showGenes.csh
+# xenTro9: refGene: 8730, xenoRefGene: 150402, Mrnas: 1298765
+# xenLae2: refGene: 10942, xenoRefGene: 192322, Mrnas: 725694
+# nanPar1: xenoRefGene: 433410, Mrnas: 0
+# chrPic2: xenoRefGene: 177023, Mrnas: 4
+# galGal5: ensGene: 48760, refGene: 7559, xenoRefGene: 238559, Mrnas: 638609
+# anoCar2: ensGene: 27172, xenoRefGene: 318255, Mrnas: 157031
+# monDom5: ensGene: 24882, refGene: 995, xenoRefGene: 253064, Mrnas: 2814
+# canFam3: ensGene: 39074, refGene: 2292, xenoRefGene: 263903, Mrnas: 388038
+# hg38: ensGene: 208239, knownGene: 197782, mgcGenes: 35305, ncbiRefSeq: 159322, refGene: 69853, xenoRefGene: 184854, Mrnas: 11482088
+# mm10: ensGene: 103734, knownGene: 63759, mgcGenes: 26777, ncbiRefSeq: 107894, refGene: 36869, xenoRefGene: 179393, Mrnas: 5367573
+# fr3: ensGene: 47702, refGene: 652, Mrnas: 28074
+
+# real    3m36.884s
+
+    # from that summary, use these gene sets:
+    # knownGene - hg38 mm10
+    # ensGene - galGal5 anoCar2 monDom5 canFam3 fr3
+    # refGene - xenTro9 xenLae2
+    # xenoRefGene - nanPar1 chrPic2
+
+    mkdir genes
+
+    #   1. knownGene: hg38 mm10
+    for DB in hg38 mm10
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${DB}.gp.gz
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
+done
+    # checked: 21375 failed: 0
+    # checked: 21100 failed: 0
+
+    #   2. ensGene: galGal5 anoCar2 monDom5 canFam3 fr3
+    for DB in galGal5 anoCar2 monDom5 canFam3 fr3
+do
+hgsql -N -e "select
+name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
+from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /dev/shm/${DB}.tmp.gz
+    mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
+    echo -n "# ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
+done
+# galGal5: checked: 16229 failed: 0
+# anoCar2: checked: 18531 failed: 0
+# monDom5: checked: 21033 failed: 0
+# canFam3: checked: 19507 failed: 0
+# fr3: checked: 18014 failed: 0
+
+    #   3. refGene for xenTro9 xenLae2
+    for DB in xenTro9 xenLae2
+do
+hgsql -N -e "select * from refGene" ${DB} | cut -f2- \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /dev/shm/${DB}.tmp.gz
+    mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
+    echo -n "# ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
+done
+# xenTro9: checked: 8331 failed: 0
+# xenLae2: checked: 10755 failed: 0
+
+    #   4. xenoRefGene for nanPar1 chrPic2
+    for DB in nanPar1 chrPic2
+do
+    hgsql -N -e "select
+name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
+from xenoRefGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /dev/shm/${DB}.tmp.gz
+    mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
+    echo -n "# ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
+done
+# nanPar1: checked: 19620 failed: 0
+# chrPic2: checked: 15236 failed: 0
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/anoCar2.gp.gz: 18531
+# genes/canFam3.gp.gz: 19507
+# genes/chrPic2.gp.gz: 15075
+# genes/fr3.gp.gz: 18014
+# genes/galGal5.gp.gz: 16229
+# genes/hg38.gp.gz: 21375
+# genes/mm10.gp.gz: 21100
+# genes/monDom5.gp.gz: 21033
+# genes/nanPar1.gp.gz: 17804
+# genes/xenLae2.gp.gz: 10741
+# genes/xenTro9.gp.gz: 8309
+
+    # if some are left out, add an 'egrep -v' to remove them, e.g.:
+    # egrep -v "nasLar1|rhiRox1|panPan1|nomLeu3|chlSab2|saiBol1"
+    #            ../species.list.txt | xargs echo \
+    time (cat ../anno/xenTro9.11way.maf \
+        | genePredToMafFrames xenTro9 stdin stdout \
+          `cat ../species.list.txt | xargs echo \
+              | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
+                | gzip > multiz11wayFrames.bed.gz)
+    #   real    1m11.357s
+
+    # verify there are frames on everything, should be 14 species:
+    zcat multiz11wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
+      | sed -e 's/^/# /;'
+#  147449 anoCar2
+#  114097 canFam3
+#  169728 chrPic2
+#   51768 fr3
+#  125968 galGal5
+#  154126 hg38
+#  156501 mm10
+#  124372 monDom5
+#  152127 nanPar1
+#   57824 xenLae2
+#   73700 xenTro9
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/frames
+    time hgLoadMafFrames xenTro9 multiz11wayFrames multiz11wayFrames.bed.gz
+    #   real    0m14.585s
+
+    time featureBits -countGaps xenTro9 multiz11wayFrames
+    # 29811946 bases of 1440398454 (2.070%) in intersection
+    # real    0m12.237s
+
+    #   enable the trackDb entries:
+# frames multiz11wayFrames
+# irows on
+    #   appears to work OK
+
+#########################################################################
+# Phylogenetic tree from 11-way (DONE - 2017-05-02 - Hiram)
+    mkdir /hive/data/genomes/xenTro9/bed/multiz11way/4d
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/4d
+
+    # using the refGene
+    hgsql -N -e "select
+name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
+from refGene" xenTro9 \
+      | genePredSingleCover stdin stdout > /dev/shm/xenTro9.tmp.gp
+    mv /dev/shm/xenTro9.tmp.gp xenTro9.refGeneNR.gp
+    genePredCheck -db=xenTro9 xenTro9.refGeneNR.gp
+    # checked: 8331 failed: 0
+
+	e genePredToMafFrames xenTro9 stdin stdout \
+    # the annotated maf is:
+    og ../anno/xenTro9.11way.maf
+# -rw-rw-r-- 1 4266889197 May  2 10:33 ../anno/xenTro9.11way.maf
+
+    mkdir annoSplit
+    cd annoSplit
+    time mafSplit -verbose=2 -outDirDepth=2 -byTarget -useFullSequenceName \
+	/dev/null . ../../anno/xenTro9.11way.maf
+    # real    1m38.504s
+
+    find . -type f | wc -l
+    #   3059
+
+    ssh ku
+    mkdir /hive/data/genomes/xenTro9/bed/multiz11way/4d/run
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set GP = xenTro9.refGeneNR.gp
+set r = "/hive/data/genomes/xenTro9/bed/multiz11way"
+set c = $1:r
+set infile = $r/4d/annoSplit/$2
+set outDir = $r/4d/mfa/$3:h
+set outfile = $r/4d/mfa/$3
+/bin/mkdir -p $outDir
+cd /dev/shm
+/bin/awk -v C=$c '"'"'$2 == C {print}'"'"' $r/4d/$GP | sed -e "s/\\t$c\\t/\\txenTro9.$c\\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '"'"'{print $1}'"'"'`
+echo $NL
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $infile -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+else
+    echo "" > $outfile
+endif
+/bin/rm -f /dev/shm/$c.gp /dev/shm/$c.ss
+' > 4d.csh
+
+    chmod +x 4d.csh
+
+    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
+
+    printf '#LOOP
+4d.csh $(file1) $(path1) {check out line+ ../mfa/$(dir1)/$(dir2)$(root1).mfa}
+#ENDLOOP
+' > template
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check
+    para time
+# Completed: 3053 of 3059 jobs
+# Crashed: 6 jobs
+# CPU time in finished jobs:        356s       5.93m     0.10h    0.00d  0.000 y
+# IO & Wait Time:                  7972s     132.87m     2.21h    0.09d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              46s       0.77m     0.01h    0.00d
+# Submission to last job:           113s       1.88m     0.03h    0.00d
+
+    # Not all results have contents, that is OK
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # sometimes this doesn't work, don't know why
+    find ./mfa -type f -size 1 | xargs rm -f
+    # when it doesn't, use this empty list procedure
+    find ./mfa -type f | xargs ls -og | awk '$3 < 2' | awk '{print $NF}' \
+        > empty.list
+    cat empty.list | xargs rm -f
+    # see what is left:
+    ls -ogrt mfa/*/*/*.mfa | sort -k3nr | wc
+    #  399    2793   26574
+
+    # want comma-less species.list
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*/*/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # real    0m1.419s
+
+    # check they are all in there:
+    grep "^>" 4d.all.mfa | wc -l
+    # 11
+    grep "^>" 4d.all.mfa | sed -e 's/^/# /;'
+# >xenTro9
+# >xenLae2
+# >nanPar1
+# >chrPic2
+# >galGal5
+# >anoCar2
+# >monDom5
+# >canFam3
+# >hg38
+# >mm10
+# >fr3
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../xenTro9.11way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
+    # tree_commas.nh looks like:
+    # ((((xenTro9,xenLae2),nanPar1),(((chrPic2,galGal5),anoCar2),
+    #	(monDom5,(canFam3,(hg38,mm10))))),fr3)
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree_commas.nh 4d.all.mfa
+    #  real    3m57.593s
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE:
+#  ((((xenTro9:0.112377,xenLae2:0.12472):0.360011,nanPar1:0.509957):0.214173,
+#  (((chrPic2:0.180814,galGal5:0.306963):0.0662812,anoCar2:0.44181):0.0949849,
+#  (monDom5:0.29966,(canFam3:0.144678,
+#  (hg38:0.114543,mm10:0.297108):0.020248):0.21538):0.15883):0.235899):0.458203,
+#  fr3:0.458203);
+
+    # compare these calculated lengths to the tree extracted from 213way:
+    grep TREE all.mod | sed -e 's/TREE: //' \
+       | /cluster/bin/phast/all_dists /dev/stdin | grep xenTro9 \
+          | sed -e "s/xenTro9.//;"  | sort > new.dists
+
+    /cluster/bin/phast/all_dists ../xenTro9.11way.nh | grep xenTro9 \
+        | sed -e "s/xenTro9.//;" | sort > old.dists
+
+     # printing out the 'new', the 'old' the 'difference' and percent difference
+    join new.dists old.dists | awk '{
+  printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }' \
+      | sort -k3n
+#       xenLae2 0.237097        0.377944        -0.140847       -37.266632
+#       nanPar1 0.982345        0.477944        0.504401        105.535586
+#       chrPic2 1.264540        0.719944        0.544596        75.644217
+#       monDom5 1.380950        0.919898        0.461052        50.119905
+#       galGal5 1.390689        0.957386        0.433303        45.258966
+#       hg38    1.431461        1.004005        0.427456        42.575087
+#       canFam3 1.441348        1.003432        0.437916        43.641821
+#       anoCar2 1.459255        0.966944        0.492311        50.914117
+#       fr3     1.602967        1.714285        -0.111318       -6.493553
+#       mm10    1.614026        1.214580        0.399446        32.887583
+
+#########################################################################
+# phastCons 11-way (DONE - 2017-05-02 - Hiram)
+    # split 11way mafs into 10M chunks and generate sufficient statistics
+    # files for # phastCons
+    ssh ku
+    mkdir -p /hive/data/genomes/xenTro9/bed/multiz11way/cons/SS
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/cons/SS
+    mkdir result done
+
+    printf '#!/bin/csh -ef
+set d = $1
+set c = $2
+set doneDir = done/$d
+set MAF = /hive/data/genomes/xenTro9/bed/multiz11way/anno/result/$d/$c.maf
+set WINDOWS = /hive/data/genomes/xenTro9/bed/multiz11way/cons/SS/result/$d/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $3 ) then
+    exit 0
+endif
+if ( -s $3.running ) then
+    exit 0
+endif
+
+/bin/mkdir -p $doneDir
+/bin/date >> $3.running
+
+/bin/rm -fr $WINDOWS
+/bin/mkdir -p $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \\
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+/bin/date >> $3
+/bin/rm -f $3.running
+' > mkSS.csh
+
+    chmod +x mkSS.csh
+
+    printf '#LOOP
+mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
+#ENDLOOP
+' > template
+
+    find ../../anno/result -type f | sed -e "s#../../anno/result/##" > maf.list
+
+    ssh ku
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/cons/SS
+
+    gensub2 maf.list single template jobList
+    # beware overwhelming the cluster with these quick high I/O jobs
+    para create jobList
+    para try ... check ... etc
+    para -maxJob=64 push
+# Completed: 3059 of 3059 jobs
+# CPU time in finished jobs:        572s       9.54m     0.16h    0.01d  0.000 y
+# IO & Wait Time:                  8017s     133.61m     2.23h    0.09d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              72s       1.20m     0.02h    0.00d
+# Submission to last job:           138s       2.30m     0.04h    0.00d
+
+    find ./result -type f | wc -l
+    #	 1350
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh ku
+    mkdir -p /hive/data/genomes/xenTro9/bed/multiz11way/cons/run.cons
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/cons/run.cons
+
+    #	This is setup for multiple runs based on subsets, but only running
+    #   the 'all' subset here.
+    #   It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  Running:
+    #	all and vertebrates
+
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set d = $2
+set f = $3
+set len = $4
+set cov = $5
+set rho = $6
+set grp = $cwd:t
+set cons = /hive/data/genomes/xenTro9/bed/multiz11way/cons
+set tmp = $cons/tmp/${d}_${c}
+mkdir -p $tmp
+set ssSrc = $cons/SS/result
+set useGrp = "$grp.mod"
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/$d/$f $tmp
+else
+  ln -s $ssSrc/$d/$f $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \\
+    --not-informative `cat $grp.non-inf` \\
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+else
+  $PHASTBIN/phastCons $f $useGrp \\
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \\
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+endif
+popd > /dev/null
+mkdir -p pp/$d bed/$d
+sleep 4
+touch pp/$d bed/$d
+rm -f pp/$d/$c.pp
+rm -f bed/$d/$c.bed
+mv $tmp/$c.pp pp/$d
+mv $tmp/$c.bed bed/$d
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
+' > doPhast.csh
+
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    printf '#LOOP
+../run.cons/doPhast.csh $(root1) $(dir1) $(file1) 45 0.3 0.3 {check out line+ pp/$(dir1)/$(root1).pp}
+#ENDLOOP
+' > template
+
+    find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
+    wc -l ss.list
+    #	1350 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/cons
+    mkdir -p all
+    cd all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para create jobList
+    para try ... check ...
+    para push
+# Completed: 1350 of 1350 jobs
+# CPU time in finished jobs:       2300s      38.33m     0.64h    0.03d  0.000 y
+# IO & Wait Time:                  8948s     149.14m     2.49h    0.10d  0.000 y
+# Average job time:                   8s       0.14m     0.00h    0.00d
+# Longest finished job:              27s       0.45m     0.01h    0.00d
+# Submission to last job:           129s       2.15m     0.04h    0.00d
+
+    # create Most Conserved track
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/cons/all
+    time cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/?/?/${C} 2> /dev/null | while read D
+    do
+        echo ${D}/${C}*.bed 1>&2
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+    # real    1m5.053s
+
+    time /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed \
+         > mostConserved.bed
+    # real    0m6.028s
+
+    # -rw-rw-r--  1 23838576 May  2 12:24 mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/cons/all
+    time hgLoadBed xenTro9 phastConsElements11way mostConserved.bed
+    # Read 670415 elements of size 5 from mostConserved.bed
+
+    # real    0m5.938s
+
+    # on human we often try for 5% overall cov, and 70% CDS cov
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    time featureBits xenTro9 -enrichment refGene:cds phastConsElements11way
+    # refGene:cds 0.798%, phastConsElements11way 8.078%, both 0.681%,
+    #	cover 85.24%, enrich 10.55x
+
+    # real    0m9.701s
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/cons/all
+    mkdir downloads
+
+    # the third sed fixes the chrom names, removing the partition extensions
+    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
+        | gzip -c > downloads/phastCons11way.wigFix.gz)
+    #   real    6m51.733s
+
+# -rw-rw-r-- 1 668419695 May  2 12:33 phastCons11way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons11way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/xenTro9/chrom.sizes \
+	    phastCons11way.bw) > bigWig.log 2>&1
+
+    tail bigWig.log
+    # pid=75385: VmPeak:     5275844 kB
+    # real    7m44.172s
+
+    bigWigInfo phastCons11way.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 1,110,912,583
+# primaryIndexSize: 34,835,380
+# zoomLevels: 10
+# chromCount: 1228
+# basesCovered: 484,850,746
+# mean: 0.298566
+# min: 0.000000
+# max: 1.000000
+# std: 0.360851
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons11way.wigFix.gz \
+	| wigEncode stdin phastCons11way.wig phastCons11way.wib)
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    #  real    2m43.897s
+
+    du -hsc *.wi?
+    #	463M    phastCons11way.wib
+    #	105M    phastCons11way.wig
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons11way.wib /gbdb/xenTro9/multiz11way/phastCons11way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/xenTro9/multiz11way \
+	xenTro9 phastCons11way phastCons11way.wig
+    #   real    0m11.884s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh xenTro9 phastCons11way
+# db.table             min max mean       count    sumData
+# xenTro9.phastCons11way  0 1 0.298566 484850746 1.4476e+08
+#	stdDev  viewLimits
+#	0.360851 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    time hgWiggle -doHistogram -db=xenTro9 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons11way > histogram.data 2>&1
+    #	real    0m33.591s
+
+    #	create plot of histogram:
+
+    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
+"/usr/share/fonts/default/Type1/n022004l.pfb"
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " X. tropicalis  xenTro9 Histogram phastCons4way track"
+set xlabel " phastCons4way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \\
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+' | gnuplot > histo.png
+
+    display histo.png &
+
+#########################################################################
+# phyloP for 11-way (DONE - 2017-05-02 - Hiram)
+    # run phyloP with score=LRT
+    ssh ku
+    mkdir /cluster/data/xenTro9/bed/multiz11way/consPhyloP
+    cd /cluster/data/xenTro9/bed/multiz11way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.476
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../4d/all.mod 0.476 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.262000 0.238000 0.238000 0.262000 
+
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set d = $f:h
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set grp = $cwd:t
+set cons = /hive/data/genomes/xenTro9/bed/multiz11way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/xenTro9/bed/multiz11way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \\
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+/bin/touch $out:h
+/bin/mv $tmp/$file1.wigFix $out
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d:h
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp
+' > doPhyloP.csh
+
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	1350 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    printf '#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+' > template
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/xenTro9/bed/multiz11way/consPhyloP/all
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    #	beware overwhelming the cluster with these fast running high I/O jobs
+    para create jobList
+    para try ... check ... push ... etc ...
+    para -maxJob=53 push
+    para time > run.time
+# Completed: 1350 of 1350 jobs
+# CPU time in finished jobs:       4299s      71.65m     1.19h    0.05d  0.000 y
+# IO & Wait Time:                 23549s     392.49m     6.54h    0.27d  0.001 y
+# Average job time:                  21s       0.34m     0.01h    0.00d
+# Longest finished job:              71s       1.18m     0.02h    0.00d
+# Submission to last job:           229s       3.82m     0.06h    0.00d
+
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP11way.wigFix.gz)
+    #   real    4m10.786s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP11way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/xenTro9/chrom.sizes \
+	phyloP11way.bw) > bigWig.log 2>&1
+XXX - running - Tue May  2 13:41:39 PDT 2017
+    egrep "real|VmPeak" bigWig.log
+    # pid=2838: VmPeak:      5275848 kB
+    # real    7m33.055s
+
+    bigWigInfo phyloP11way.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 545,397,984
+# primaryIndexSize: 34,835,380
+# zoomLevels: 10
+# chromCount: 1228
+# basesCovered: 484,850,746
+# mean: 0.158516
+# min: -3.475000
+# max: 2.548000
+# std: 0.620377
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP11way.wigFix.gz \
+	| wigEncode stdin phyloP11way.wig phyloP11way.wib)
+    # Converted stdin, upper limit 2.55, lower limit -3.48
+    # real    2m45.892s
+
+    du -hsc *.wi?
+    # 463M    phyloP11way.wib
+    # 105M    phyloP11way.wig
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP11way.wib /gbdb/xenTro9/multiz11way/phyloP11way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/xenTro9/multiz11way xenTro9 \
+	phyloP11way phyloP11way.wig
+    # real    0m13.806s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh xenTro9 phyloP11way
+# db.table                min max      mean      count sumData
+# xenTro9.phyloP11way  -3.475 2.548 0.158516 484850746 7.68567e+07
+#       stdDev viewLimits
+#	0.620377 viewLimits=-2.94337:2.548
+
+    #	that range is: 3.475+2.548 = 6.023 for hBinSize=0.006023
+
+    #  Create histogram to get an overview of all the data
+    time hgWiggle -doHistogram \
+	-hBinSize=0.006023 -hBinCount=1000 -hMinVal=-3.475 -verbose=2 \
+	    -db=xenTro9 phyloP11way > histogram.data 2>&1
+    # real    0m34.954s
+
+    # find the Y range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
+      | sed -e 's/^/# /;'
+# Q1 0.000002
+# median 0.000111
+# Q3 0.000287
+# average 0.001017
+# min 0.000000
+# max 0.345451
+# count 983
+# total 0.999993
+# standard deviation 0.011671
+
+    # find the X range for the 2:5 graph
+    grep "^[0-9]" histogram.data | ave -col=2 stdin \
+      | sed -e 's/^/# /;'
+# Q1 -1.906010
+# median -0.427362
+# Q3 1.051285
+# average -0.427852
+# min -3.475000
+# max 2.529930
+# count 983
+# total -420.578353
+# standard deviation 1.710847
+
+    #	create plot of histogram:
+    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
+"/usr/share/fonts/default/Type1/n022004l.pfb"
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " X. tropicalis xenTro9 Histogram phyloP4way track"
+set xlabel " phyloP4way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set xtics
+set xrange [-3:2]
+set yrange [0:0.01]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+' | gnuplot > histo.png
+
+    display histo.png &
+    # this one seems to be quite different from others before this time
+
+#############################################################################
+# construct download files for 11-way (TBD - 2015-04-15 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro9/multiz11way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro9/phastCons11way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro9/phyloP11way
+    mkdir /hive/data/genomes/xenTro9/bed/multiz11way/downloads
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/downloads
+    mkdir multiz11way phastCons11way phyloP11way
+    cd multiz11way
+    time cp -p ../../anno/xenTro9.11way.maf .
+    #   real    0m7.326s
+    # -rw-rw-r-- 1 4266889197 May  2 10:33 xenTro9.11way.maf
+
+    du -hsc *
+    #  4.0G     xenTro9.11way.maf
+
+    time gzip *.maf
+    #   real    10m41.569s
+    # -rw-rw-r-- 1 893985735 May  2 10:33 xenTro9.11way.maf.gz
+    du -hsc *11way.maf.gz
+    # 853M    xenTro9.11way.maf.gz
+
+    ###########################################################################
+    ## create upstream refGene maf files
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/downloads/multiz11way
+    # bash script
+#!/bin/sh
+export geneTbl="refGene"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits xenTro9 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags xenTro9 multiz11way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/xenTro9/bed/multiz11way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+    #   real    3m48.602s
+    ######################################################################
+
+    grep TREE ../../4d/all.mod | awk '{print $NF}' \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > xenTro9.11way.nh
+    ~/kent/src/hg/utils/phyloTrees/commonNames.sh xenTro9.11way.nh \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > xenTro9.11way.commonNames.nh
+    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh xenTro9.11way.nh \
+	| $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+	    > xenTro9.11way.scientificNames.nh
+    time md5sum *.nh *.maf.gz > md5sum.txt
+    #   real    0m3.147s
+
+    ln -s `pwd`/*.maf.gz `pwd`/*.nh \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro9/multiz11way
+
+    du -hsc *11way.maf.gz ../../anno/xenTro9.11way.maf
+    # 853M    xenTro9.11way.maf.gz
+    # 4.0G    ../../anno/xenTro9.11way.maf
+
+    # obtain the README.txt from anoCar2/multiz7way and update for this
+XXX - working - Tue May  2 15:26:42 PDT 2017
+    #   situation
+
+    #####################################################################
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/downloads/phastCons11way
+
+    ln -s ../../cons/all/downloads/phastCons11way.wigFix.gz \
+        ./xenTro9.phastCons11way.wigFix.gz
+    ln -s ../../cons/all/phastCons11way.bw ./xenTro9.phastCons11way.bw
+    ln -s ../../cons/all/all.mod ./xenTro9.phastCons11way.mod
+    time md5sum *.gz *.mod *.bw > md5sum.txt
+    #   real    0m20.354s
+
+    # obtain the README.txt from hg38/phastCons11way and update for this
+    #   situation
+    ln -s `pwd`/*.gz `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro9/phastCons11way
+
+    #####################################################################
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/downloads/phyloP11way
+
+    ln -s ../../consPhyloP/all/downloads/phyloP11way.wigFix.gz \
+        ./xenTro9.phyloP11way.wigFix.gz
+    ln -s ../../consPhyloP/run.phyloP/all.mod xenTro9.phyloP11way.mod
+    ln -s ../../consPhyloP/all/phyloP11way.bw xenTro9.phyloP11way.bw
+
+    time md5sum *.mod *.bw *.gz > md5sum.txt
+    #   real    0m29.662s
+
+    # obtain the README.txt from xenTro9/phyloP17way and update for this
+    #   situation
+    ln -s `pwd`/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro9/phyloP11way
+
+#############################################################################
+# hgPal downloads (DONE - 2017-05-02 - Hiram)
+#   FASTA from 11-way for knownGene, refGene and knownCanonical
+
+    ssh hgwdev
+    screen -S xenTro9HgPal
+    mkdir /hive/data/genomes/xenTro9/bed/multiz11way/pal
+    cd /hive/data/genomes/xenTro9/bed/multiz11way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    # this for loop can take hours on a high contig count assembly
+    export mz=multiz11way
+    export gp=refGene
+    export db=xenTro9
+    export I=0
+    export D=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+        D=`echo $D | awk '{print $1+1}'`
+        dNum=`echo $D | awk '{printf "%03d", int($1/1000)}'`
+        mkdir -p exonNuc/${dNum} > /dev/null
+        mkdir -p exonAA/${dNum} > /dev/null
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/${dNum}/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/${dNum}/$C.exonAA.fa.gz &"
+        if [ $I -gt 16 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time (sh -x ./$gp.jobs) > $gp.jobs.log 2>&1
+    # real    2m17.534s
+
+    export mz=multiz11way
+    export gp=refGene
+    time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonAA.fa.gz
+    # real    0m14.462s
+
+    time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    0m30.113s
+
+    # -rw-rw-r-- 1 17767900 May  2 16:46 refGene.multiz11way.exonAA.fa.gz
+    # -rw-rw-r-- 1 30143558 May  2 16:47 refGene.multiz11way.exonNuc.fa.gz
+
+    export mz=multiz11way
+    export gp=refGene
+    export db=xenTro9
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    rm -rf exonAA exonNuc
+
+#############################################################################
+# wiki page for 11-way (DONE - 2017-05-02 - Hiram)
+    mkdir /hive/users/hiram/bigWays/xenTro9.11way
+    cd /hive/users/hiram/bigWays
+    echo "xenTro9" > xenTro9.11way/ordered.list
+    awk '{print $1}' /hive/data/genomes/xenTro9/bed/multiz11way/11way.distances.txt \
+       >> xenTro9.11way/ordered.list
+
+    # sizeStats.sh catches up the cached measurements required for data
+    # in the tables.  They are usually already mostly done, only new
+    # assemblies will have updates.
+    ./sizeStats.sh xenTro9.11way/ordered.list
+    # dbDb.sh constructs xenTro9.11way/XenTro9_11-way_conservation_alignment.html
+    # may need to add new assembly references to srcReference.list and
+    # urlReference.list
+    ./dbDb.sh xenTro9 11way
+    # sizeStats.pl constructs xenTro9.11way/XenTro9_11-way_Genome_size_statistics.html
+    # this requires entries in coverage.list for new sequences
+    ./sizeStats.pl xenTro9 11way
+
+    # defCheck.pl constructs XenTro9_11-way_conservation_lastz_parameters.html
+    ./defCheck.pl xenTro9 11way
+
+    # this constructs the html pages in xenTro9.11way/:
+# -rw-rw-r-- 1 6247 May  2 17:07 XenTro9_11-way_conservation_alignment.html
+# -rw-rw-r-- 1 8411 May  2 17:09 XenTro9_11-way_Genome_size_statistics.html
+# -rw-rw-r-- 1 5033 May  2 17:10 XenTro9_11-way_conservation_lastz_parameters.html
+
+    # add those pages to the genomewiki.  Their page names are the
+    # names of the .html files without the .html:
+#  XenTro9_11-way_conservation_alignment
+#  XenTro9_11-way_Genome_size_statistics
+#  XenTro9_11-way_conservation_lastz_parameters
+
+    # when you view the first one you enter, it will have links to the
+    # missing two.
+
+############################################################################

@@ -2,16 +2,19 @@
 
 set -beEux -o pipefail
 
-if [ $# -ne 2 ]; then
-  printf "usage: trackDb.sh <asmId> <pathTo/assembly hub build directory> > trackDb.txt\n" 1>&2
+if [ $# -ne 3 ]; then
+  printf "usage: trackDb.sh <genbank|refseq> <asmId> <pathTo/assembly hub build directory> > trackDb.txt\n" 1>&2
   printf "expecting to find *.ucsc.2bit and bbi/ files at given path\n" 1>&2
   printf "the ncbi|ucsc selects the naming scheme\n" 1>&2
   exit 255
 fi
 
-export asmId=$1
-export buildDir=$2
+export genbankRefseq=$1
+export asmId=$2
+export buildDir=$3
 export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
+
+export scriptDir="$HOME/kent/src/hg/utils/automation"
 
 mkdir -p $buildDir/bbi
 mkdir -p $buildDir/ixIxx
@@ -44,7 +47,7 @@ searchIndex name%s
 url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
 group map\n\n" "${asmId}" "${asmId}" "${searchTrix}"
-asmHubAssembly.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz /gbdb/hubs/mouseStrains/$asmId > $buildDir/html/$asmId.assembly.html
+$scriptDir/asmHubAssembly.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId > $buildDir/html/$asmId.assembly.html
 fi
 
 if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.gap.bb ]; then
@@ -59,7 +62,7 @@ bigDataUrl bbi/%s.gap.bb
 type bigBed 4
 group map
 html html/%s.gap\n\n" "${asmId}" "${asmId}"
-asmHubGap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz /gbdb/hubs/mouseStrains/$asmId > $buildDir/html/$asmId.gap.html
+$scriptDir/asmHubGap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId > $buildDir/html/$asmId.gap.html
 fi
 
 if [ -s ${buildDir}/trackData/gc5Base/${asmId}.gc5Base.bw ]; then
@@ -81,7 +84,7 @@ viewLimits 30:70
 type bigWig 0 100
 bigDataUrl bbi/%s.gc5Base.bw
 html html/%s.gc5Base\n\n" "${asmId}" "${asmId}"
-asmHubGc5Percent.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.gc5Base.html
+$scriptDir/asmHubGc5Percent.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.gc5Base.html
 fi
 
 # see if there are repeatMasker bb files
@@ -97,7 +100,7 @@ visibility dense
 type bed 3 .
 noInherit on
 html html/%s.repeatMasker\n\n" "${asmId}"
-asmHubRmsk.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt > $buildDir/html/$asmId.repeatMasker.html
+$scriptDir/asmHubRmsk.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt > $buildDir/html/$asmId.repeatMasker.html
 fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.SINE.bb ]; then
@@ -246,7 +249,7 @@ visibility dense
 type bigBed 4 +
 bigDataUrl bbi/%s.simpleRepeat.bb
 html html/%s.simpleRepeat\n\n" "${asmId}" "${asmId}"
-asmHubSimpleRepeat.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.simpleRepeat.html
+$scriptDir/asmHubSimpleRepeat.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.simpleRepeat.html
 fi
 
 # may or may not have a searchTrix for ncbiGene, assume none
@@ -320,7 +323,7 @@ printf "    track cpgIslandExtUnmasked
 fi
 
 if [ -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb -o -s ${buildDir}/trackData/cpgIslands/masked/${asmId}.cpgIslandExt.bb ]; then
-  asmHubCpG.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.cpgIslands.html
+  $scriptDir/asmHubCpG.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.cpgIslands.html
 fi
 
 ###################################################################
@@ -337,7 +340,7 @@ visibility dense
 type bigBed 3
 bigDataUrl bbi/%s.windowMasker.bb
 html html/%s.windowMasker\n\n" "${asmId}" "${asmId}"
-asmHubWindowMasker.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.windowMasker.html
+$scriptDir/asmHubWindowMasker.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.windowMasker.html
 fi
 
 ###################################################################
@@ -354,7 +357,7 @@ visibility dense
 type bigBed 3
 bigDataUrl bbi/%s.allGaps.bb
 html html/%s.allGaps\n\n" "${asmId}" "${asmId}"
-asmHubAllGaps.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz /gbdb/hubs/mouseStrains/$asmId $buildDir/bbi/$asmId > $buildDir/html/$asmId.allGaps.html
+$scriptDir/asmHubAllGaps.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId $buildDir/bbi/$asmId > $buildDir/html/$asmId.allGaps.html
 fi
 
 ###################################################################
@@ -372,7 +375,7 @@ color 180,0,0
 type bigGenePred
 bigDataUrl bbi/%s.augustus.bb
 html html/%s.augustus\n\n" "${asmId}" "${asmId}"
-asmHubAugustusGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.augustus.html
+$scriptDir/asmHubAugustusGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.augustus.html
 fi
 
 printf "# Plink: ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb\n" 1>&2
@@ -395,7 +398,7 @@ bigDataUrl bbi/%s.ensGene.bb
 searchIndex name
 searchTrix ixIxx/%s.ensGene.name.ix
 html html/%s.ensGene\n\n" "${asmId}" "${asmId}" "${asmId}"
-asmHubEnsGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ensGene.html
+$scriptDir/asmHubEnsGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ensGene.html
 fi
 
 if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then

@@ -1883,3 +1883,18 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+# LIFTOVER TO ornAna2 (DONE - 2015-06-15 - Hiram )
+    mkdir /hive/data/genomes/ornAna1/bed/blat.ornAna2.2015-06-15
+    cd /hive/data/genomes/ornAna1/bed/blat.ornAna2.2015-06-15
+    # -debug run to create run dir, preview scripts...
+    #	verifies files can be found
+    doSameSpeciesLiftOver.pl -debug \
+         -ooc=/hive/data/genomes/ornAna1/jkStuff/ornAna1.11.ooc ornAna1 ornAna2
+    # Real run:
+    time doSameSpeciesLiftOver.pl -verbose=2 \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         -ooc=/hive/data/genomes/ornAna1/jkStuff/ornAna1.11.ooc \
+	 ornAna1 ornAna2 > do.log 2>&1
+    #	real    313m43.659s
+
+#############################################################################

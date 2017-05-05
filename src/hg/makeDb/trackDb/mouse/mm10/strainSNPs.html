@@ -1,0 +1,259 @@
+<h2>Description</h2>
+<p>
+This track shows single nucleotide variants (SNVs), from the
+<a href="http://www.sanger.ac.uk/resources/mouse/genomes/"
+target=_blank>Mouse Genomes Project</a>.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+<!-- An image with arrows & numbers sure would help here! and on the controls page -->
+<!-- Also, this will apply to any VCF track w/phased genotypes, so probably should -->
+<!-- be moved into an include file. -->
+In &quot;dense&quot; mode, a vertical line is drawn at the position of each
+variant.
+In &quot;pack&quot; mode, since these variants have been phased, the
+display shows a clustering of haplotypes in the viewed range, sorted
+by similarity of alleles weighted by proximity to a central variant.
+The clustering view can highlight local patterns of linkage.</p>
+<p>
+In the clustering display, each sample's phased diploid genotype is split
+into two independent haplotypes.
+Each haplotype is placed in a horizontal row of pixels; when the number of
+haplotypes exceeds the number of vertical pixels for the track, multiple
+haplotypes fall in the same pixel row and pixels are averaged across haplotypes.</p>
+<p>
+Each variant is a vertical bar with black representing the reference allele
+and white (invisible) representing the non-reference allele(s).
+Tick marks are drawn at the top and bottom of each variant's vertical bar
+to make the bar more visible when most alleles are reference alleles.
+The vertical bar for the central variant used in clustering is outlined in purple.
+In order to avoid long compute times, the range of alleles used in clustering
+may be limited; alleles used in clustering have purple tick marks at the
+top and bottom.</p>
+<p>
+The clustering tree is displayed to the left of the main image.
+It does not represent relatedness of individuals; it simply shows the arrangement
+of local haplotypes by similarity.  When a rightmost branch is purple, it means
+that all haplotypes in that branch are identical, at least within the range of
+variants used in clustering.
+</p>
+
+<h2>Methods</h2>
+<p>
+Listed below are the strain names as they appear in the VCF header, the full
+strain name, gender of samples sequenced and the approximate sequence
+fold-coverage of the genome, based on the number of read bases mapped to
+the reference genome (and excluding reads marked as PCR duplicates).
+</p>
+
+<table border=1>
+<tr><th>VCF header<br>name</th>
+    <th>strainname</th>
+    <th>sex</th>
+    <th>sequence<br>fold-coverage</th>
+</tr>
+<tr><td>129P2_OlaHsd</td><td>(129P2/OlaHsd)</td><td>F</td><td>52</td></tr>
+<tr><td>129S1_SvImJ</td><td>(129S1/SvImJ)</td><td>F</td><td>68</td></tr>
+<tr><td>129S5SvEvBrd</td><td>(129S5SvEvBrd)</td><td>F</td><td>22</td></tr>
+<tr><td>A_J</td><td>(A/J)</td><td>F</td><td>52</td></tr>
+<tr><td>AKR_J</td><td>(AKR/J)</td><td>F</td><td>57</td></tr>
+<tr><td>BALB_cJ</td><td>(BALB/cJ)</td><td>F</td><td>62</td></tr>
+<tr><td>BTBR_T+_Itpr3tf_J</td><td>(BTBR T+ Itpr3tf/J)</td><td>M</td><td>85</td></tr>
+<tr><td>BUB_BnJ</td><td>(BUB/BnJ)</td><td>M</td><td>49</td></tr>
+<tr><td>C3H_HeH</td><td>(C3H/HeH)</td><td>F</td><td>14</td></tr>
+<tr><td>C3H_HeJ</td><td>(C3H/HeJ)</td><td>F</td><td>63</td></tr>
+<tr><td>C57BL_10J</td><td>(C57BL/10J)</td><td>M</td><td>37</td></tr>
+<tr><td>C57BL_6NJ</td><td>(C57BL/6NJ)</td><td>F</td><td>61</td></tr>
+<tr><td>C57BR_cdJ</td><td>(C57BR/cdJ)</td><td>M</td><td>51</td></tr>
+<tr><td>C57L_J</td><td>(C57L/J)</td><td>M</td><td>64</td></tr>
+<tr><td>C58_J</td><td>(C58/J)</td><td>M</td><td>55</td></tr>
+<tr><td>CAST_EiJ</td><td>(CAST/EiJ)</td><td>F</td><td>53</td></tr>
+<tr><td>CBA_J</td><td>(CBA/J)</td><td>F</td><td>56</td></tr>
+<tr><td>DBA_1J</td><td>(DBA/1J)</td><td>M</td><td>49</td></tr>
+<tr><td>DBA_2J</td><td>(DBA/2J)</td><td>F</td><td>56</td></tr>
+<tr><td>FVB_NJ</td><td>(FVB/NJ)</td><td>F</td><td>73</td></tr>
+<tr><td>I_LnJ</td><td>(I/LnJ)</td><td>M</td><td>45</td></tr>
+<tr><td>KK_HiJ</td><td>(KK/HiJ)</td><td>M</td><td>55</td></tr>
+<tr><td>LEWES_EiJ</td><td>(LEWES/EiJ)</td><td>F</td><td>19</td></tr>
+<tr><td>LP_J</td><td>(LP/J)</td><td>F</td><td>54</td></tr>
+<tr><td>MOLF_EiJ</td><td>(MOLF/EiJ)</td><td>M</td><td>40</td></tr>
+<tr><td>NOD_ShiLtJ</td><td>(NOD/ShiLtJ)</td><td>F</td><td>66</td></tr>
+<tr><td>NZB_B1NJ</td><td>(NZB/B1NJ)</td><td>M</td><td>47</td></tr>
+<tr><td>NZO_HlLtJ</td><td>(NZO/HlLtJ)</td><td>F</td><td>72</td></tr>
+<tr><td>NZW_LacJ</td><td>(NZW/LacJ)</td><td>M</td><td>58</td></tr>
+<tr><td>PWK_PhJ</td><td>(PWK/PhJ)</td><td>F</td><td>53</td></tr>
+<tr><td>RF_J</td><td>(RF/J)</td><td>M</td><td>54</td></tr>
+<tr><td>SEA_GnJ</td><td>(SEA/GnJ)</td><td>M</td><td>49</td></tr>
+<tr><td>SPRET_EiJ</td><td>(SPRET/EiJ)</td><td>F</td><td>67</td></tr>
+<tr><td>ST_bJ</td><td>(ST/bJ)</td><td>M</td><td>81</td></tr>
+<tr><td>WSB_EiJ</td><td>(WSB/EiJ)</td><td>F</td><td>51</td></tr>
+<tr><td>ZALENDE_EiJ</td><td>(ZALENDE/EiJ)</td><td>M</td><td>19</td></tr>
+</table>
+
+<p>
+All SNP and indel calls are relative to the reference mouse
+genome C57BL/6J (GRCm38/mm10).  The reference genome used for the
+alignment can be found here: <a href="ftp://ftp-mouse.sanger.ac.uk/ref/"
+target=_blank>ftp-mouse.sanger.ac.uk/ref/</a>
+
+Gene models from Ensembl release 78 were used to predict the functional
+consequences of the SNPs and indels.
+
+SNPs and indels are annotated with rs IDs from dbSNP Build 142. The dbSNP
+data was downloaded from:
+
+<a href="ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/mouse_10090/VCF/"
+target=_blank>ftp.ncbi.nlm.nih.gov/snp/organisms/mouse_10090/VCF/</a>
+
+and the 'vcf-annotate' Perl utility from the VCFtools package
+(Danecek et al, 2011) was used to add the rsIDs to calls in this release.
+(See below for VCFtools information).
+
+For SNPs, the position, reference allele and alternative alleles were all
+compared:
+</p>
+<pre>
+e.g.
+vcf-annotate -c CHROM,POS,ID,REF,ALT
+
+For indels, only the positions were matched:
+e.g.
+vcf-annotate -c CHROM,POS,ID
+</pre>
+
+<p>
+Sequencing was performed using the Illumina HiSeq platform. All reads are
+100bp paired-end reads except for strains 129P2 and 129S5 in which the
+sequence data included reads of 75 bps or less. Also, a small amount of
+the sequence data for MOLF_EiJ is single-end sequencing.
+</p>
+<p>
+In version 3 all variant data was obtained from sequencing of female mice
+only. In version 4, 10 new strains were included in which all data was
+obtained from sequencing of male mice. The data for an additional 8 strains
+included in this release (version 5) was obtained from sequencing of male
+mice for 5 strains, and female mice for the remaining 3 strains. As such,
+the SNP and indel VCF files contain calls on chromosomes 1-19, MT, X and Y.
+The BAM files used to call SNPs and indels are located here:
+
+<a href="ftp://ftp-mouse.sanger.ac.uk/REL-1502-BAM/"
+target=_blank>ftp-mouse.sanger.ac.uk/REL-1502-BAM/</a>
+</p>
+<p>
+Reads were aligned to the reference genome (GRCm138) using BWA-MEM v0.7.5-r406
+(Li and Durbin, 2009; Li, 2013)
+<p>
+</p>
+Reads were realigned around indels using GATK realignment tool v3.0.0
+(McKenna et al., 2010) with default parameters.
+<p>
+</p>
+SNP and indel discovery was performed with the SAMtools v1.1 with parameters:<br>
+<tt>
+  Samtools mpileup -t DP,DV,DP4,SP,DPR,INFO/DPR -E -Q 0 -pm3 -F0.25 â#"d500<br>
+</tt>
+and calling was performed with BCFtools call v1.1 with parameters:<br>
+<tt>
+  Bcftools call -mv -f GQ,GP -p 0.99<br>
+</tt>
+Indels were then left-aligned and normalized using bcftools norm v1.1 with
+parameters:<br>
+<tt>
+  bcftools norm -D -s -m+indels<br>
+</tt>
+<p>
+The vcf-annotate function in the VCFtools package was used to soft-filter the
+SNP and indel calls.
+</p>
+<p>
+The Variant Effect Predictor software from Ensembl (McLaren et al., 2010)
+was used to predict the functional consequence of SNP and indels queried
+against Ensembl release 78 mouse gene models. 
+</p>
+<p>
+Definitions of consequence types can be found here:
+<a href="http://www.ensembl.org/info/docs/variation/predicted_data.html#consequences"
+target=_blank>www.ensembl.org/info/docs/variation/predicted_data.html#consequences</a>
+</p>
+<p>
+SNP calling was performed for each strain independently. These strain specific
+VCF files can be found on the ftp site
+<a href="ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/strain_specific_vcfs/"
+target=_blank>ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/strain_specific_vcfs/</a>.
+</p>
+<p>
+A single list of all polymorphic sites across the genome was then produced
+from all of the 36 strains' SNP calls. This list was then used to call
+SNPs again, this time across all 36 strains simultaneously, using the
+'samtools mpileup -l' option. The calls from all 36 strains were then
+merged into a single VCF file. All strain specific information was retained 
+in the sample columns for each strain. For indels, the same approach was
+taken with the addition of the indel normalisation step after the
+initial variant calling. The merged SNP VCF and indel VCF for version 5 can
+be found here: <a href="ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/"
+target=_blank>ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/</a>
+</p>
+<p>
+Information regarding the filtering of SNP and indel calls can be found
+in the VCF file headers in the '##FILTER' and '##source' lines.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the
+<a href="http://www.sanger.ac.uk/resources/mouse/genomes/"
+target=_blank>Mouse Genomes Project</a> for supplying the data for this track.
+</p>
+<p>
+See also: <a href="ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/README"
+target=_blank>ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/README</a>
+</p>
+
+<h2>References</h2>
+
+<p>
+Danecek P, Auton A, Abecasis G, Albers CA, Banks E, DePristo MA,
+Handsaker RE, Lunter G, Marth GT, Sherry ST, McVean G, Durbin R;
+1000 Genomes Project Analysis Group. The variant call format and
+VCFtools. Bioinformatics. 2011 Aug 1;27(15):2156-8. Epub 2011 Jun
+7. PubMed PMID: 21653522; PubMed Central PMCID: PMC3137218.
+</p>
+<p>
+Li, H. Aligning sequence reads, clone sequences and assembly contigs
+with BWA-MEM. Preprint at http://arxiv.org/pdf/1303.3997v2.pdf 2013.
+</p>
+<p>
+Li H, Durbin R. Fast and accurate short read alignment
+with Burrows-Wheeler transform. Bioinformatics. 2009 Jul
+15;25(14):1754-60. Epub 2009 May 18. PubMed PMID: 19451168; PubMed
+Central PMCID: PMC2705234.
+</p>
+<p>
+Li H, Handsaker B, Wysoker A, Fennell T, Ruan J, Homer N,
+Marth G, Abecasis G, Durbin R; 1000 Genome Project Data
+Processing Subgroup. The Sequence Alignment/Map format and
+SAMtools. Bioinformatics. 2009 Aug 15;25(16):2078-9. Epub 2009 Jun
+8. PubMed PMID: 19505943; PubMed Central PMCID: PMC2723002.
+</p>
+<p>
+Li H. A statistical framework for SNP calling, mutation
+discovery, association mapping and population genetical parameter
+estimation from sequencing data.  Bioinformatics. 2011 Nov
+1;27(21):2987-93. Epub 2011 Sep 8. PubMed PMID: 21903627; PubMed
+Central PMCID: PMC3198575.
+</p>
+<p>
+McLaren W, Pritchard B, Rios D, Chen Y, Flicek P, Cunningham
+F. Deriving the consequences of genomic variants with the
+Ensembl API and SNP Effect Predictor. Bioinformatics. 2010 Aug
+15;26(16):2069-70. Epub 2010 Jun 18. PubMed PMID: 20562413; PubMed
+Central PMCID: PMC2916720.
+</p>
+<p>
+McKenna A, Hanna M, Banks E, Sivachenko A, Cibulskis K, Kernytsky A, 
+Garimella K, Altshuler D, Gabriel S, Daly M, DePristo MA. The Genome 
+Analysis Toolkit: a MapReduce framework for analyzing next-generation 
+DNA sequencing data. Genome Research. 2010 20:1297-303. PubMed 
+PMID: 20644199; PubMed Central PMCID: 2928508
+</p>

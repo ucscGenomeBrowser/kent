@@ -18,6 +18,7 @@
 #include "twoBit.h"
 #include "genomeRangeTree.h"
 #include "basicBed.h"
+#include "bbiFile.h"
 #include "bigWig.h"
 #include "bigBed.h"
 #include "bamFile.h"
@@ -187,11 +188,95 @@ lmCleanup(&lm);
 }
 #endif /* OLD */
 
+static void checkBamChroms(struct sqlConnection *conn, char *bamPath, struct cdwAssembly *assembly)
+/* Check chromosomes in bam file are in agreement with those in
+ * assembly.  The bar here is pretty low - there must be at least one size
+ * agreement and no size disagreements. */
+{
+/* Get size hash from two bit file associated with assembly */
+char *twoBitPath = cdwPathForFileId(conn, assembly->twoBitId);
+struct hash *chromHash = twoBitChromHash(twoBitPath);
+
+/* Get bam file handle and chromosome list. */
+samfile_t *fh = bamMustOpenLocal(bamPath, "rb", NULL);
+bam_header_t *bamHeader = sam_hdr_read(fh);
+
+/* Count up chromosomes that match.  Not all need to but at least some do. */
+int i, matchCount = 0;
+for (i = 0; i < bamHeader->n_targets; i++)
+    {
+    /* Look up chrom size under BAM name, and if that fails under name with "chr" prefix */
+    char *name = bamHeader->target_name[i];
+    int size = bamHeader->target_len[i];
+    int chromSize = hashIntValDefault(chromHash, name, 0);
+    char chrName[256];
+    if (chromSize == 0)
+        {
+	safef(chrName, sizeof(chrName), "chr%s", name);
+	chromSize = hashIntValDefault(chromHash, chrName, 0);
+	}
+
+    /* Compare sizes, if they don't match swawk and die, otherwise add to match count */
+    if (chromSize != 0)
+        {
+	if (chromSize == size)
+	    ++matchCount;
+	else
+	    errAbort("Chromosome size mismatch: %s is %d bases in %s, %d base in %s (%s)",
+		name, size, bamPath, chromSize, assembly->name, twoBitPath);
+	}
+    }
+if (matchCount == 0)
+    errAbort("%s didn't match any chromosomes in %s", bamPath, twoBitPath);
+
+/* Clean up and go home */
+bamClose(&fh);
+hashFree(&chromHash);
+freez(&twoBitPath);
+}
+
+static void checkBbiChroms(struct sqlConnection *conn, struct bbiFile *bbi, 
+    struct cdwAssembly *assembly)
+/* Check chromosomes in bigBed or bigWig file are in agreement with those in
+ * assembly.  The bar here is pretty low - there must be at least one size
+ * agreement and no size disagreements.  The bbiFile may only have a single
+ * chromosome for all we know. Also want to tolerate different use of haplotypes */
+{
+/* Get size hash from two bit file associated with assembly */
+char *twoBitPath = cdwPathForFileId(conn, assembly->twoBitId);
+struct hash *chromHash = twoBitChromHash(twoBitPath);
+struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
+
+/* Count up chromosomes that match.  Not all need to but at least some do. */
+int matchCount = 0;
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    int chromSize = hashIntValDefault(chromHash, chrom->name, 0);
+    if (chromSize != 0)
+        {
+	if (chromSize == chrom->size)
+	    ++matchCount;
+	else
+	    errAbort("Chromosome size mismatch: %s is %d bases in %s, %d base in %s (%s)",
+		chrom->name, (int)chrom->size, bbi->fileName, chromSize, 
+		assembly->name, twoBitPath);
+	}
+    }
+if (matchCount == 0)
+    errAbort("%s didn't match any chromosomes in %s", bbi->fileName, twoBitPath);
+
+/* Clean up and go home */
+bbiChromInfoFreeList(&chromList);
+hashFree(&chromHash);
+freez(&twoBitPath);
+}
+
 void makeValidBigBed( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
 	struct cdwAssembly *assembly, char *format, struct cdwValidFile *vf)
 /* Fill in fields of vf based on bigBed. */
 {
 struct bbiFile *bbi = bigBedFileOpen(path);
+checkBbiChroms(conn, bbi, assembly);
 vf->sampleCount = vf->itemCount = bigBedItemCount(bbi);
 struct bbiSummaryElement sum = bbiTotalSummary(bbi);
 vf->basesInSample = vf->basesInItems = sum.sumData;
@@ -249,6 +334,7 @@ void makeValidBigWig(struct sqlConnection *conn, char *path, struct cdwFile *ef,
 /* Fill in fields of vf based on bigWig. */
 {
 struct bbiFile *bbi = bigWigFileOpen(path);
+checkBbiChroms(conn, bbi, assembly);
 struct bbiSummaryElement sum = bbiTotalSummary(bbi);
 vf->sampleCount = vf->itemCount = vf->basesInSample = vf->basesInItems = sum.validCount;
 vf->sampleCoverage = (double)sum.validCount/assembly->baseCount;
@@ -282,6 +368,9 @@ void makeValidBam( struct sqlConnection *conn, char *path, struct cdwFile *ef,
 	struct cdwAssembly *assembly, struct cdwValidFile *vf)
 /* Fill out fields of vf based on bam.  Create sample subset as a little bed file. */
 {
+/* Check chromosome sizes to fail fast if need be on wrong genome version. */
+checkBamChroms(conn, path, assembly);
+
 /* Have cdwBamStats do most of the work. */
 char sampleFileName[PATH_LEN];
 struct cdwBamFile *ebf = cdwMakeBamStatsAndSample(conn, ef->id, sampleFileName);

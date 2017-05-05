@@ -4,9 +4,9 @@ use strict;
 use warnings;
 
 # adjust values here for new patch level
-my $patchLevel = 7;
-my $asmId = "GCA_000001405.22_GRCh38.p${patchLevel}";
-my $patchOrdinal = "seventh";
+my $patchLevel = 9;
+my $asmId = "GCA_000001405.24_GRCh38.p${patchLevel}";
+my $patchOrdinal = "ninth";
 
 
 my $haploCount = `cat hg38Patch${patchLevel}Haplotypes.bed | wc -l`;

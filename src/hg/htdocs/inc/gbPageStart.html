@@ -1,0 +1,30 @@
+<!-- gbPageStart.html - Include file for GB static pages -->
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            <!--#echo var="TITLE" -->
+        </title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:700|Lato:700,700italic,300,400,400italic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+        <!-- Redirects don't forward ROOT, so can't determine relative paths -->
+        <!--#if expr="($REDIRECT_URL)" -->
+            <base href="/">
+        <!--#endif -->
+        <!-- Use ROOT variable set in caller to determine relative path to style sheets -->
+        <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/bootstrap.min.css">
+        <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/gb.css">
+        <link rel="stylesheet" href="<!--#echo var="ROOT" -->/staticStyle/gbStatic.css">
+        </head>
+
+    <body>
+        <!-- Blue menu bar / hotlinks -->
+        <!--#include virtual="../cgi-bin/hgMenubar"-->
+
+        <!-- Grid layout from bootstrap.css -->
+        <div class="container-fluid">
+            <!-- Wrapper for GB content -->
+            <div class="gbsPage">
+

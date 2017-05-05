@@ -116,29 +116,39 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
             collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
-    hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this,'%s');\" "
-            "id='%s_button' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
-            group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+    char idText[256];
+    safef(idText, sizeof idText, "%s_togBut", group->name);
+    hPrintf("<IMG class='toggleButton' "
+            "id='%s' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
+            idText, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+    // TODO XSS filter group->name
+    jsOnEventByIdF("click", idText, "return vis.toggleForGroup(this,'%s');", group->name);
+
     hPrintf("<B>&nbsp;%s</B> ", group->label);
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("</td><td style='text-align:right;'>\n");
-    hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-            "onClick=\"document.mainForm.%s.value='%s'; %s\" "
+    safef(idText, sizeof idText, "%s_hideAllBut", group->name);
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" id='%s' VALUE=\"%s\" "
             "title='Hide all tracks in this groups'>",
-	    configHideAll, "hide all", configGroupTarget, group->name,
-	    jsSetVerticalPosition("mainForm"));
+	    configHideAll, idText, "hide all");
+    // TODO XSS filter configGroupTarget
+    char jsText[256]; 
+    // used several times
+    safef(jsText, sizeof jsText, "document.mainForm.%s.value='%s'; %s",
+	    configGroupTarget, group->name, jsSetVerticalPosition("mainForm"));
+    jsOnEventById("click", idText, jsText);
     hPrintf(" ");
-    hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-            "onClick=\"document.mainForm.%s.value='%s'; %s\" "
+    safef(idText, sizeof idText, "%s_showAllBut", group->name);
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" id='%s' VALUE=\"%s\" "
             "title='Show all tracks in this groups'>",
-	    configShowAll, "show all", configGroupTarget, group->name,
-	    jsSetVerticalPosition("mainForm"));
+	    configShowAll, idText, "show all");
+    jsOnEventById("click", idText, jsText);
     hPrintf(" ");
-    hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-            "onClick=\"document.mainForm.%s.value='%s'; %s\" "
+    safef(idText, sizeof idText, "%s_defaultBut", group->name);
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" id='%s' VALUE=\"%s\" "
             "title='Show default tracks in this group'>",
-	    configDefaultAll, "default", configGroupTarget, group->name,
-	    jsSetVerticalPosition("mainForm"));
+	    configDefaultAll, idText, "default");
+    jsOnEventById("click", idText, jsText);
     hPrintf(" ");
     /* do not want all the submit buttons named the same.  It is
      * confusing to the javascript submit() function.
@@ -629,8 +639,29 @@ if (conn && sqlTableExists(conn,"knownCanonical"))
 hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "customUrl", sameWord("customUrl", virtModeType));
 hPrintf("</TD><TD>");
-hPrintf("Custom regions from BED URL: ");
-hTextVar("multiRegionsBedUrl", cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl), 60);
+hPrintf("Enter Custom regions as BED, or a URL to them:<br>");
+multiRegionsBedUrl = cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
+struct dyString *dyMultiRegionsBedInput = dyStringNew(256);
+if (strstr(multiRegionsBedUrl,"://"))
+    {
+    dyStringAppend(dyMultiRegionsBedInput, multiRegionsBedUrl);
+    }
+else
+    {
+    if (fileExists(multiRegionsBedUrl))
+	{
+	struct lineFile *lf = lineFileMayOpen(multiRegionsBedUrl, TRUE);
+	char *line;
+	int lineSize;
+	while (lineFileNext(lf, &line, &lineSize))
+	    {
+	    dyStringPrintf(dyMultiRegionsBedInput, "%s\n", line);
+	    }
+	lineFileClose(&lf);
+	}
+    }
+hPrintf("<TEXTAREA NAME='multiRegionsBedInput' ID='multiRegionsBedInput' rows='4' cols='58' style='white-space: pre;'>%s</TEXTAREA>",
+    dyMultiRegionsBedInput->string);
 hPrintf("</TD></TR>\n");
 
 

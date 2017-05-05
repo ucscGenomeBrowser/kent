@@ -839,3 +839,64 @@ searchPriority 8
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+############################################################################
+#  BLASTZ/CHAIN/NET Zebra finch vs Turkey (DONE - 2017-01-19,25 - Hiram)
+#   use a screen to manage this multi-day job
+    screen -S melGal5
+
+    mkdir /hive/data/genomes/taeGut2/bed/lastzMelGal5.2017-01-19
+    cd /hive/data/genomes/taeGut2/bed/lastzMelGal5.2017-01-19
+
+    printf '# Zebra finch vs. Turkey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Zebra finch TaeGut2
+SEQ1_DIR=/hive/data/genomes/taeGut2/taeGut2.2bit
+SEQ1_LEN=/hive/data/genomes/taeGut2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=300
+
+# QUERY: Turkey MelGal5
+SEQ2_DIR=/scratch/data/melGal5/melGal5.2bit
+SEQ2_LEN=/scratch/data/melGal5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=800
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/taeGut2/bed/lastzMelGal5.2017-01-19
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    # real    266m59.980s
+
+    cat fb.taeGut2.chainMelGal5Link.txt
+    # 807888817 bases of 1222864691 (66.065%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` taeGut2 melGal5) \
+           > rbest.log 2>&1 &
+    # real    413m28.452s
+
+    #   and then swap
+    mkdir /hive/data/genomes/melGal5/bed/blastz.taeGut2.swap
+    cd /hive/data/genomes/melGal5/bed/blastz.taeGut2.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/taeGut2/bed/lastzMelGal5.2017-01-19/DEF \
+        -swap -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    # real    119m13.393s
+
+    cat fb.melGal5.chainTaeGut2Link.txt
+    #   706578355 bases of 1093044709 (64.643%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 taeGut2) \
+           > rbest.log 2>&1
+    # real    354m40.975s
+
+############################################################################

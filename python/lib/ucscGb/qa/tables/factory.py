@@ -1,4 +1,3 @@
-import subprocess
 import pipes
 
 from ucscGb.qa.tables.genePredQa import GenePredQa
@@ -6,14 +5,15 @@ from ucscGb.qa.tables.tableQa import TableQa
 from ucscGb.qa.tables.pslQa import PslQa
 from ucscGb.qa.tables.positionalQa import PositionalQa
 from ucscGb.qa.tables.pointerQa import PointerQa
+from ucscGb.qa import qaUtils
 
 def getTrackType(db, table):
     """Looks for a track type via tdbQuery."""
     cmd = ["tdbQuery", "select type from " + db + " where track='" + table +
            "' or table='" + table + "'"]
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    cmdout, cmderr = p.communicate()
-    if p.returncode != 0:
+    cmdout, cmderr, cmdreturncode = qaUtils.runCommandNoAbort(cmd)
+
+    if cmdreturncode != 0:
         # keep command arguments nicely quoted
         cmdstr = " ".join([pipes.quote(arg) for arg in cmd])
         raise Exception("Error from: " + cmdstr + ": " + cmderr)
@@ -30,7 +30,8 @@ otherPositionalTypes = frozenset(["axt", "bed", "chain", "clonePos", "ctgPos", "
                                   "chromGraph", "factorSource", "bedDetail", "pgSnp", "altGraphX",
                                   "ld2", "bed5FloatScore", "bedRnaElements", "broadPeak", "gvf",
                                   "narrowPeak", "peptideMapping"])
-pointerTypes = frozenset(["bigWig", "bigBed", "bam", "vcfTabix"])
+pointerTypes = frozenset(["bigWig", "bigBed", "bigPsl", "bigGenePred", "bigMaf", "bigChain",
+                          "halSnake", "bam", "vcfTabix"])
 
 def tableQaFactory(db, table, reporter, sumTable):
     """Returns tableQa object according to trackDb track type.""" 

@@ -1685,7 +1685,6 @@ if (cacheConn)
     return sqlTableCacheTableExists(cacheConn, table);
 
 sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(table));  
-//sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkId(table));  // DEBUG RESTORE
 if ((sr = sqlUseOrStore(sc, query, DEFAULTGETTER, FALSE)) == NULL)
     {
     if (!sc->failoverConn)

@@ -114,8 +114,9 @@
 #define signed32 int	      /* Wants to be signed 32 bits. */
 #define bits8 unsigned char   /* Wants to be unsigned 8 bits. */
 
-#define BIGNUM 0x3fffffff	/* A really big number */
+#define BIGNUM 0x3fffffff	/* A really big number but most subtraction won't cause overflow */
 #define BIGDOUBLE 1.7E+308	/* Close to biggest double-precision number */
+#define BIGLONGLONG 0x3fffffffffffffff /* A really big long long value safe for a subtraction */
 
 #define LIMIT_2or8GB (2147483647 * ((sizeof(size_t)/4)*(sizeof(size_t)/4)))
 /*      == 2 Gb for 32 bit machines, 8 Gb for 64 bit machines */
@@ -576,10 +577,6 @@ struct slName *slNameListFromString(char *s, char delimiter);
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
 
-struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes);
-// Return list of unique words found by parsing string delimited by whitespace.
-// If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] will yield 2 slNames no quotes
-
 struct slName *slNameListFromStringArray(char *stringArray[], int arraySize);
 /* Return list of slNames from an array of strings of length arraySize.
  * If a string in the array is NULL, the array will be treated as
@@ -848,9 +845,9 @@ boolean sqlMatchLike(char *wildCard, char *string);
 boolean anyWild(const char *string);
 /* Return TRUE if any wild card characters in string. */
 
-struct slName *wildExpandList(struct slName *allList, struct slName *wildList, 
+struct slName *wildExpandList(struct slName *allList, struct slName *wildList,
     boolean abortMissing);
-/* Wild list is a list of names, possibly including * and ? wildcard characters.  This 
+/* Wild list is a list of names, possibly including * and ? wildcard characters.  This
  * function returns names taken from allList that match patterns in wildList.  Works much
  * like wildcard expansion over a file system but expands over allList instead. */
 
@@ -874,6 +871,9 @@ char *strUpper(char *s);
 char *strLower(char *s);
 #define tolowers(s) (void)strLower(s)
 /* Convert entire string to lower case */
+
+void replaceChar(char *s, char old, char new);
+/* Repace one char with another. Modifies original string. */
 
 char *replaceChars(char *string, char *oldStr, char *newStr);
 /*
@@ -1019,9 +1019,6 @@ char *nextWord(char **pLine);
 /* Return next word in *pLine and advance *pLine to next
  * word. Returns NULL when no more words. */
 
-char *nextWordRespectingQuotes(char **pLine);
-// return next word but respects single or double quotes surrounding sets of words.
-
 char *cloneFirstWord(char *line);
 /* Clone first word in line */
 
@@ -1032,7 +1029,7 @@ char *nextTabWord(char **pLine);
 /* Return next tab-separated word. */
 
 char *cloneFirstWordByDelimiterNoSkip(char *line,char delimit);
-/* Returns a cloned first word, not harming the memory passed in. 
+/* Returns a cloned first word, not harming the memory passed in.
  * Does not skip leading white space.*/
 
 char *cloneFirstWordByDelimiter(char *line,char delimit);
@@ -1065,7 +1062,11 @@ int ptArrayIx(void *pt, void *array, int arraySize);
 
 #define stringIx(string, array) stringArrayIx( (string), (array), ArraySize(array))
 
+int cmpStringOrder(char *a, char *b, char **orderFields, int orderCount);
+/* Compare two strings to sort in same order as orderedFields.  If strings are
+ * not in order, will sort them to be after all ordered fields, alphabetically */
 /* Some stuff that is left out of GNU .h files!? */
+
 #ifndef SEEK_SET
 #define SEEK_SET 0
 #endif
@@ -1365,6 +1366,14 @@ int vasafef(char* buffer, int bufSize, char *format, va_list args);
 /* Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. */
 
+int vatruncatef(char *buf, int size, char *format, va_list args);
+/* Like vasafef, but truncates the formatted string instead of barfing on
+ * overflow. */
+
+void truncatef(char *buf, int size, char *format, ...);
+/* Like safef, but truncates the formatted string instead of barfing on
+ * overflow. */
+
 int safef(char* buffer, int bufSize, char *format, ...)
 /* Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte. */
@@ -1422,6 +1431,9 @@ boolean isSymbolString(char *s);
 
 boolean isNumericString(char *s);
 /* Return TRUE if string is numeric (integer or floating point) */
+
+boolean isAllDigits(char *s);
+/* Return TRUE if string is non-empty and contains only digits (i.e. is a nonnegative integer). */
 
 char *skipNumeric(char *s);
 /* Return first char of s that's not a digit */
@@ -1506,6 +1518,9 @@ boolean dateIsOlderBy(const char *date,const char*format, time_t seconds);
 char *dateAddTo(char *date,char *format,int addYears,int addMonths,int addDays);
 /* Add years,months,days to a formatted date and returns the new date as a cloned string
 *  format is a strptime/strftime format: %F = yyyy-mm-dd */
+
+unsigned dayOfYear();
+/* Return the day of the year. */
 
 boolean haplotype(const char *name);
 /* Is this name a haplotype name ?  _hap or _alt in the name */

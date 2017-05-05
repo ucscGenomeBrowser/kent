@@ -11,6 +11,7 @@
 #include "web.h"
 #include "hCommon.h"
 #include "hui.h"
+#include "jsHelper.h"
 #include "gtexUi.h"
 #include "gtexInfo.h"
 #include "gtexTissue.h"
@@ -18,6 +19,28 @@
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
+
+static void printGoButton()
+/* HTML for GO button and 'play' icon */
+{
+puts(
+"           <div class='gbButtonGoContainer text-right' title='Go to the Genome Browser'>\n"
+"               <div class='gbButtonGo'>GO</div>\n"
+"               <i class='gbIconGo fa fa-play fa-2x'></i>\n"
+"           </div>\n"
+);
+}
+
+static void printBodyMap()
+/* Include BodyMap SVG in HTML */
+{
+puts(
+"        <!-- Body Map panel -->\n"
+"           <object id='bodyMapSvg' type='image/svg+xml' data='/images/gtexBodyMap.svg'>\n"
+"               GTEx Body Map illustration not found\n"
+"           </object>\n");
+puts("<div class='gbmCredit'>Credit: jwestdesign</div>\n");
+}
 
 static void printTrackHeader(char *db, struct trackDb *tdb)
 /* Print top banner with track labels */
@@ -45,22 +68,12 @@ puts(
 "               </span></a>\n"
 "       </div>\n"
 "       <div class='col-md-2 text-right'>\n"
-"           <div class='gbButtonGoContainer' title='Go to the Genome Browser'>\n"
-"               <div class='gbButtonGo'>GO</div>\n"
-"               <i class='gbIconGo fa fa-play fa-2x'></i>\n"
-"           </div>\n"
-"       </div>\n"
-"   </div>\n");
-}
-
-static void printBodyMap()
-{
+);
+printGoButton();
 puts(
-"        <!-- Body Map panel -->\n"
-"           <object id='bodyMapSvg' type='image/svg+xml' data='/images/gtexBodyMap.svg'>\n"
-"               GTEx Body Map illustration not found\n"
-"           </object>\n");
-puts("<div class='gbmCredit'>Credit: jwestdesign</div>\n");
+"       </div>\n"
+"   </div>\n"
+);
 }
 
 static void printVisSelect(struct trackDb *tdb)
@@ -93,11 +106,12 @@ char *track = tdb->track;
 puts(
 "        <!-- Configuration panel -->\n"
 "        <div class='row gbSectionBanner'>\n"
-"            <div class='col-md-10'>Configuration</div>\n"
-"            <div class='col-md-2 text-right'>\n");
+"            <div class='col-md-8'>Configuration</div>\n"
+"            <div class='col-md-4 text-right'>\n");
 
 /* Track vis dropdown */
 printVisSelect(tdb);
+printGoButton();
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -170,7 +184,7 @@ puts(
  "  <div class='col-md-7 gbSectionInfo'>\n"
  "      Click label below or in Body Map to set or clear a tissue\n"
  "  </div>\n"
- "  <div class='col-md-4 gbButtonContainer'>\n"
+ "  <div class='col-md-4 gbButtonContainer text-right'>\n"
  "      <div id='setAll' class='gbButtonSetClear gbButton'>set all</div>\n"
  "      <div id='clearAll' class='gbButtonSetClear gbButton'>clear all</div>\n"
  "  </div>\n"
@@ -246,7 +260,14 @@ puts(
 printBodyMap();
 puts(
 "        </div>\n"
-"    </div>\n");
+"    </div>\n"
+);
+}
+
+static void onclickJumpToTop(char *id)
+/* CSP-safe click handler arrows that cause scroll to top */
+{
+jsOnEventById("click", id, "$('html,body').scrollTop(0);");
 }
 
 static void printDataInfo(char *db, struct trackDb *tdb)
@@ -256,9 +277,15 @@ puts(
 "    <div class='row gbSectionBanner'>\n"
 "        <div class='col-md-11'>Data Information</div>\n"
 "        <div class='col-md-1'>\n"
-// TODO: move click handler to JS
-"            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" "
-"                class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n"
+);
+#define DATA_INFO_JUMP_ARROW_ID    "hgGtexDataInfo_jumpArrow"
+printf(
+"            <i id='%s' title='Jump to top of page' \n"
+"               class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n",
+DATA_INFO_JUMP_ARROW_ID
+);
+onclickJumpToTop(DATA_INFO_JUMP_ARROW_ID);
+puts(
 "       </div>\n"
 "    </div>\n"
 );
@@ -285,8 +312,15 @@ puts(
 "    <div class='row gbSectionBanner'>\n"
 "        <div class='col-md-11'>Track Description</div>\n"
 "        <div class='col-md-1'>\n"
-"            <i title='Jump to top of page' onclick=\"$('html,body').scrollTop(0);\" "
-"               class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n"
+);
+#define TRACK_INFO_JUMP_ARROW_ID    "hgGtexTrackInfo_jumpArrow"
+printf(
+"            <i id='%s' title='Jump to top of page' \n"
+"               class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n",
+TRACK_INFO_JUMP_ARROW_ID
+);
+onclickJumpToTop(TRACK_INFO_JUMP_ARROW_ID);
+puts(
 "       </div>\n"
 "    </div>\n"
 "    <div class='row gbTrackDescriptionPanel'>\n"
@@ -322,6 +356,7 @@ getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 // Start web page with new-style header
 webStartGbNoBanner(cart, db, "Genome Browser GTEx Track Settings");
 puts("<link rel='stylesheet' href='../style/gb.css'>");         // NOTE: This will likely go to web.c
+puts("<link rel='stylesheet' href='../style/gbLogoInMenu.css'>");
 puts("<link rel='stylesheet' href='../style/hgGtexTrackSettings.css'>");
 
 char *track = cartUsualString(cart, "g", "gtexGene");
@@ -348,7 +383,8 @@ puts(
 "</div>");
 
 // Initialize illustration display and handle mouseover and clicks
-puts("<script type='text/javascript' src='../js/hgGtexTrackSettings.js'></script>");
+jsIncludeFile("utils.js", NULL);
+jsIncludeFile("hgGtexTrackSettings.js", NULL);
 
 webIncludeFile("inc/gbFooter.html");
 webEndJWest();

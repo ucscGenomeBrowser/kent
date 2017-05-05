@@ -27,6 +27,7 @@ struct galleryEntry
     struct galleryEntry *next;
     char *userName;
     char *realName;
+    char *userIdx;
     char *sessionName;
     char *settings;
     char *db;
@@ -59,13 +60,16 @@ AllocVar(ret);
 ret->realName = cloneString(row[0]);
 ret->userName = cloneString(row[1]);
 cgiDecodeFull(ret->userName, ret->userName, strlen(ret->userName));
+ret->userIdx = cloneString(row[2]);
 ret->sessionName = cloneString(row[3]);
 cgiDecodeFull(ret->sessionName, ret->sessionName, strlen(ret->sessionName));
 ret->sessionUrl = dyStringCreate("hgS_doOtherUser=submit&hgS_otherUserName=%s&hgS_otherUserSessionName=%s", row[1], row[3]);
 
-ret->imgPath = sessionThumbnailFilePath(row[2], row[3], row[7]);
+char *userIdentifier = sessionThumbnailGetUserIdentifier(row[1], ret->userIdx);
+
+ret->imgPath = sessionThumbnailFilePath(userIdentifier, row[3], row[7]);
 if (fileExists(ret->imgPath))
-    ret->imgUri = sessionThumbnailFileUri(row[2], row[3], row[7]);
+    ret->imgUri = sessionThumbnailFileUri(userIdentifier, row[3], row[7]);
 else
     ret->imgUri = NULL;
 ret->useCount = sqlUnsignedLong(row[4]);
@@ -142,8 +146,8 @@ struct galleryEntry *thisSession = galList;
 /* Hide the orderable columns and disable ordering on the visible columns
  * https://datatables.net/reference/option/columnDefs for more info.
  * Then set up the ordering drop-down menu */
-printf ("<script type=\"text/javascript\">");
-printf("$(document).ready(function () {\n"
+jsInlineF(
+   "$(document).ready(function () {\n"
     "    $('#sessionTable').DataTable({\"columnDefs\": [{\"visible\":false, \"targets\":[2,3]},\n"
     "                                                   {\"orderable\":false, \"targets\":[0,1]}\n"
     "                                                  ],\n"
@@ -174,7 +178,9 @@ printf("$(document).ready(function () {\n"
     "    }\n"
     "});\n",
     jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart));
-printf ("function changeSort() {\n"
+
+jsInline(
+   "function changeSort() {\n"
     "    var newSort = document.getElementById('sortMethod').value;\n"
     "    var theTable = $('#sessionTable').DataTable();\n"
     "    if (newSort == \"useDesc\") {theTable.order([3,'desc']).draw(); }\n"
@@ -182,15 +188,15 @@ printf ("function changeSort() {\n"
     "    if (newSort == \"dateDesc\") {theTable.order([2,'desc']).draw(); }\n"
     "    if (newSort == \"dateAsc\") {theTable.order([2,'asc']).draw(); }\n"
     "}\n");
-printf("</script>\n");
 
 printf ("<p>\n");
-printf ("<b>Sort by:</b> <select id=\"sortMethod\" onchange=\"changeSort()\">\n");
+printf ("<b>Sort by:</b> <select id=\"sortMethod\">\n");
 printf ("\t\t<option value=\"useDesc\">Popularity (descending)</option>\n");
 printf ("\t\t<option value=\"useAsc\">Popularity (ascending)</option>\n");
 printf ("\t\t<option value=\"dateDesc\">Creation (newest first)</option>\n");
 printf ("\t\t<option value=\"dateAsc\">Creation (oldest first)</option>\n");
 printf ("</select></p>\n");
+jsOnEventById("change", "sortMethod", "changeSort();");
 printf ("<table id=\"sessionTable\" class=\"sessionTable stripe hover row-border compact\" width=\"100%%\">\n"
     "    <thead>"
     "        <tr>"
@@ -266,7 +272,7 @@ char *db = cartUsualString(cart, "db", hDefaultDb());
 cartWebStart(cart, db, "Public Sessions");
 
 /* Not in a form; can't use cartSaveSession() to set up an hgsid input */
-printf ("<script>var common = {hgsid:\"%s\"};</script>\n", cartSessionId(cart));
+jsInlineF("var common = {hgsid:\"%s\"};\n", cartSessionId(cart));
 
 jsIncludeDataTablesLibs();
 

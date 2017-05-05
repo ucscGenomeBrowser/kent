@@ -44,7 +44,7 @@
 # -rw-rw-r-- 1  20585665 Apr  3 12:39 criGri1.ucsc.agp
 # -rw-rw-r-- 1 696696150 Apr  3 12:53 criGri1.ucsc.fa.gz
 # -rw-rw-r-- 1       206 Apr  3 12:54 checkAgp.result.txt
-    cat checkAgp.result.txt 
+    cat checkAgp.result.txt
 # AMDS01150761 1 414 1 W AMDS01150761.1 1 414 +
 # agpFrag->chromStart: 0, agpFrag->chromEnd: 414, dnaOffset: 0
 # FASTA sequence entry
@@ -119,7 +119,7 @@ taxId 10029
     egrep -i "versi|relea" do.log
 #  RepeatMasker version open-4.0.3
 #    June 20 2013 (open-4-0-3) version of RepeatMasker
-#  CC   RELEASE 20130422;     
+#  CC   RELEASE 20130422;
 
     featureBits -countGaps criGri1 rmsk
     #   622786906 bases of 2360146428 (26.388%) in intersection
@@ -136,7 +136,7 @@ taxId 10029
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
 	criGri1 > do.log 2>&1 &
     #  real    34m39.070s
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #   60911693 bases of 2301325917 (2.647%) in intersection
 
     # add to rmsk after it is done:
@@ -242,7 +242,7 @@ taxId 10029
     #   Read 14660 elements of size 10 from cpgIsland.bed
     #   real    0m8.166s
 
-    cat fb.criGri1.cpgIslandExtUnmasked.txt 
+    cat fb.criGri1.cpgIslandExtUnmasked.txt
     # 7278222 bases of 2301325917 (0.316%) in intersection
 
     time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
@@ -454,3 +454,111 @@ searchPriority 8
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+#########################################################################
+# LIFTOVER TO criGriChoV1 (DONE - 2017-04-13 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/criGri1/bed/blat.criGriChoV1.2017-04-13
+    cd /hive/data/genomes/criGri1/bed/blat.criGriChoV1.2017-04-13
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/criGri1/jkStuff/criGri1.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         criGri1 criGriChoV1) > do.log 2>&1 &
+    # real    1684m42.081s
+
+    # verify the convert link on the test browser is now active
+    #    from criGri1 to criGriChoV1
+
+#########################################################################
+# LASTZ criGri1 vs criGriChoV1 Chinese hamster CHO-K1 cell line
+#	(DONE - 2017-04-19 - Hiram)
+
+    # this is in addition to the blat liftOver result, not to
+    # replace that result, but just to get this chainNet track on the
+    # browser which the blat liftOver does not create.
+
+    mkdir /hive/data/genomes/criGri1/bed/lastzCriGriChoV1.2017-04-19
+    cd /hive/data/genomes/criGri1/bed/lastzCriGriChoV1.2017-04-19
+
+    printf '# Chinese hamster vs Chinese hamster CHO-K1 cell line
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Chinese hamster
+SEQ1_DIR=/hive/data/genomes/criGri1/criGri1.wmTrf.2bit
+SEQ1_LEN=/hive/data/genomes/criGri1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=500
+
+# QUERY: Chinese hamster CHO-K1 cell line
+SEQ2_DIR=/hive/data/genomes/criGriChoV1/criGriChoV1.2bit
+SEQ2_LEN=/hive/data/genomes/criGriChoV1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/criGri1/bed/lastzCriGriChoV1.2017-04-19
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      -noDbNameCheck `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -stop=net -chainMinScore=1000 -chainLinearGap=loose) > do.log 2>&1
+    # real    572m1.046s
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      -continue=load -noDbNameCheck `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -stop=load -chainMinScore=1000 -chainLinearGap=loose) > load.log 2>&1
+    # real    130m2.464s
+
+
+    # debug download to allow edit of script to avoid changing liftOver
+    time (doBlastzChainNet.pl -verbose=2 \
+      -debug -continue=download -noDbNameCheck `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+  -stop=download -chainMinScore=1000 -chainLinearGap=loose) > download.log 2>&1
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      -continue=cleanup -noDbNameCheck `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -chainMinScore=1000 -chainLinearGap=loose) > cleanup.log 2>&1
+    # real    1m37.970s
+
+
+    cat fb.criGri1.chainCriGriChoV1Link.txt
+    # 2258183039 bases of 2301325917 (98.125%) in intersection
+
+  time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` criGri1 criGriChoV1) \
+     > rbest.log 2>&1 &
+    # real    55m37.534s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/criGriChoV1/bed/blastz.criGri1.swap
+    cd /hive/data/genomes/criGriChoV1/bed/blastz.criGri1.swap
+
+    # stop at 'load' to avoid changing liftOver (already done with blat)
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/criGri1/bed/lastzCriGriChoV1.2017-04-19/DEF \
+        -swap -chainMinScore=1000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -stop=load -noDbNameCheck -syntenicNet) > swap.log 2>&1
+    #  real    258m32.140s
+
+    cat fb.criGriChoV1.chainCriGri1Link.txt
+    # 2274544087 bases of 2318132242 (98.120%) in intersection
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/criGri1/bed/lastzCriGriChoV1.2017-04-19/DEF -debug \
+        -continue=download -swap -chainMinScore=1000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -stop=download -noDbNameCheck -syntenicNet) > download.log 2>&1
+
+  time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` criGriChoV1 criGri1) \
+       > rbest.log 2>&1 &
+    # real    83m10.946s
+
+#########################################################################

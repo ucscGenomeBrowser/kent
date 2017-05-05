@@ -90,6 +90,10 @@ char *nextQuotedWord(char **pLine);
  * to point past word that is returned. Does not return
  * quotes. */
 
+struct slName *slNameListOfUniqueWords(char *text,boolean respectQuotes);
+/* Return list of unique words found by parsing string delimited by whitespace.
+ * If respectQuotes then ["Lucy and Ricky" 'Fred and Ethyl'] will yield 2 slNames no quotes */
+
 char *makeQuotedString(char *in, char quoteChar);
 /* Create a string surrounded by quoteChar, with internal
  * quoteChars escaped.  freeMem result when done. */
@@ -137,6 +141,9 @@ struct hash *hashNameIntFile(char *fileName);
 
 struct hash *hashTwoColumnFile(char *fileName);
 /* Given a two column file (key, value) return a hash. */
+
+struct slPair *slPairTwoColumnFile(char *fileName);
+/* Read in a two column file into an slPair list */
 
 void shuffleArrayOfChars(char *array, int arraySize);
 /* Shuffle array of characters of given size given number of times. */
@@ -192,5 +199,8 @@ boolean endsWithWordComma(char *string, char *word);
 
 void ensureNamesCaseUnique(struct slName *fieldList);
 /* Ensure that there would be no name conflicts in fieldList if all fields were lower-cased. */
+
+boolean readAndIgnore(char *fileName);
+/* Read a byte from fileName, so its access time is updated. */
 
 #endif /* OBSCURE_H */

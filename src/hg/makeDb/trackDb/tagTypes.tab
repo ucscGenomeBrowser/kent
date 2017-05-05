@@ -24,14 +24,21 @@ autoTranslate genePred
 bamColorMode bam
 bamGrayMode bam
 bamSkipPrintQualScore bam
+barChartBars barChart bigBarChart
+barChartColors barChart bigBarChart
+barChartDataUrl barChart bigBarChart
+barChartLabel barChart bigBarChart
+barChartMetric barChart bigBarChart
+barChartSampleUrl barChart bigBarChart
+barChartUnit barChart bigBarChart
 baseColorDefault *
 baseColorTickColor bed bigBed
 baseColorUseCds bed psl genePred bigPsl
 baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
-bedNameLabel bed
-bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake
+bedNameLabel bed barChart bigBarChart
+bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl halSnake bigBarChart
 bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
@@ -74,11 +81,11 @@ dataVersion *
 dateSubmitted bedGraph bed
 dateUnrestricted bed
 db *
-dbAliasList bed halSnake
 dbProfile *
 dbTrackType customTracks
 detailsTabUrls bigBed bigGenePred bigPsl
 defaultGeneTracks bed
+defaultLabelFields bigBed bigPsl bigGenePred bigBarChart
 defaultMaf wigMaf
 defaultMaxWeight bed
 defaultLinkedTables genePred
@@ -178,7 +185,7 @@ hapClusterTreeAngle vcf vcfTabix
 hapClusterHeight vcf vcfTabix
 hapmapPhase bed
 hgGene genePred
-hgsid bed genePred
+hgsid bed genePred bigBed
 highlightBy genePred
 highlightColor genePred
 hoverMetadata wig bigWig
@@ -219,7 +226,9 @@ itemRgb bedDetail bedGraph bed bedLogR bigBed
 lfPslTable bed
 linesAt chromGraph
 linkIdInName bed bigBed
+labelFields bigBed bigPsl bigGenePred bigBarChart
 labelOnFeature bed bigBed
+labelSeparator bigBed bigPsl bigGenePred
 longLabel *
 longlabel genePred
 longLabelClip *
@@ -348,8 +357,8 @@ scoreFilterMax bed bedlogR peptideMapping bigBed
 scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed
 scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed
 scoreLabel bed bigBed bigPsl bigGenePred
-searchIndex bigBed
-searchTrix bigBed
+searchIndex bigBed bigPsl bigGenePred
+searchTrix bigBed bigPsl bigGenePred
 selectSubject psl bigPsl
 seqTable bed
 settingsByView *
@@ -418,6 +427,7 @@ transMapGene psl bigPsl
 transMapInfo psl bigPsl
 transMapSrc psl bigPsl
 transMapTypeDesc psl bigPsl
+transMapSrcSet psl bigPsl
 transformFunc bed bedGraph wig bigWig
 treeImage wigMaf
 txInfo genePred

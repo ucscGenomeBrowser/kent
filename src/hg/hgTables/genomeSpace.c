@@ -382,6 +382,7 @@ while ((bufRead = fread(&buffer, 1, S3UPBUFSIZE, f)) > 0)
 	webInTextMode = FALSE;
 	includedResourceFiles = NULL;
 	htmlWarnBoxSetUpAlready=FALSE;
+	jsInlineReset();
 
 	htmlOpen("Uploading Output to GenomeSpace");
 
@@ -392,14 +393,11 @@ while ((bufRead = fread(&buffer, 1, S3UPBUFSIZE, f)) > 0)
 
 	printf("<FORM ACTION=\"/cgi-bin/hgTables\" METHOD=GET>\n"
 	    "<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"Back\" >"
-	    "<INPUT TYPE=SUBMIT NAME=\"Refresh\" VALUE=\"Refresh\" onclick='window.location=window.location;return false;' >"
+	    "<INPUT TYPE=SUBMIT NAME=\"Refresh\" id='Refresh' VALUE=\"Refresh\">"
 	    "</FORM>\n"
 	    , hgtaDoMainPage);
-	puts("<script type=\"text/javascript\">");
-	puts("<!--");
-	puts("setTimeout(\"location = location;\",5000);");
-	puts("-->");
-	puts("</script>");
+	jsOnEventById("click", "Refresh", "window.location=window.location;return false;");
+	jsInline("setTimeout(function(){location = location;},5000);\n");
 
 	htmlClose();
 	fflush(stdout);
@@ -467,7 +465,7 @@ boolean successfullyUploaded = FALSE;
 for (line=start; line <= end; line++)
     {
     puts(lines[line]);
-    if (startsWith("setTimeout(\"location = location;", lines[line]))
+    if (startsWith("setTimeout(function(){location = location;}", lines[line]))
 	autoRefreshFound = TRUE;
     if (startsWith("Output has been successfully uploaded", lines[line]))
 	successfullyUploaded = TRUE;
@@ -645,14 +643,11 @@ printf("Otherwise, feel free to continue working, and your output will appear in
 printf("<br>\n");
 printf("<FORM ACTION=\"/cgi-bin/hgTables\" METHOD=GET>\n"
         "<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"Back\" >\n"
-	"<INPUT TYPE=SUBMIT NAME=\"Refresh\" VALUE=\"Refresh\" onclick='window.location=window.location;return false;' >"
+	"<INPUT TYPE=SUBMIT NAME=\"Refresh\" id='Refresh' VALUE=\"Refresh\">"
 	"</FORM>\n"
 	, hgtaDoMainPage);
-puts("<script type=\"text/JavaScript\">");
-puts("<!--");
-puts("setTimeout(\"location = location;\",5000);");
-puts("-->");
-puts("</script>");
+jsOnEventById("click", "Refresh", "window.location=window.location;return false;");
+jsInline("setTimeout(function(){location = location;},5000);\n");
 
 htmlClose();
 fflush(stdout);
@@ -675,6 +670,8 @@ if (sameString(s3Response,""))
     webInTextMode = FALSE;
     includedResourceFiles = NULL;
     htmlWarnBoxSetUpAlready=FALSE;
+    jsInlineReset();
+
     htmlOpen("Uploaded Output to GenomeSpace");
 
     printf("Name: %s<br>\n", fileName);

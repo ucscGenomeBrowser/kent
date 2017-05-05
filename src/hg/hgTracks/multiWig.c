@@ -253,6 +253,16 @@ switch(wigCart->aggregateFunction)
 	wgo = wigGraphOutputStack(xOff, yOff, width, numTracks, hvg);
 	break;
 	}
+    case wiggleAggregateAdd:
+	{
+	wgo = wigGraphOutputStack(xOff, yOff, width, numTracks, hvg);
+	break;
+	}
+    case wiggleAggregateSubtract:
+	{
+	wgo = wigGraphOutputStack(xOff, yOff, width, numTracks, hvg);
+	break;
+	}
     default:
 	{
 	errAbort("bad aggregate function (value: %d)\n", wigCart->aggregateFunction);

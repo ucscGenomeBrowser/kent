@@ -234,7 +234,7 @@ void textOpen()
  */
 {
 hgBotDelayNoWarn();  // delay but suppress warning at 10-20 sec delay level because this is not html output.
-char *fileName = cartUsualString(cart, hgtaOutFileName, "");
+char *fileName = textOutSanitizeHttpFileName(cartUsualString(cart, hgtaOutFileName, ""));
 char *compressType = cartUsualString(cart, hgtaCompressType,
 				     textOutCompressNone);
 
@@ -1807,6 +1807,7 @@ else
     mainPageAfterOpen(conn);
     hFreeConn(&conn);
     webPopErrHandlers();
+    htmlClose();
     }
 
 textOutClose(&compressPipeline, &saveStdout);
@@ -1821,11 +1822,11 @@ if (doGenomeSpace())
 
 	htmlOpen("Uploading Output to GenomeSpace");
 
-	puts("<script type=\"text/JavaScript\">");
-	puts("<!--");
-	printf("setTimeout(\"location = 'hgTables?backgroundStatus=%s';\",2000);\n", cgiEncode(workUrl)); // was 10000?
-	puts("-->");
-	puts("</script>");
+	jsInlineF(
+	    "setTimeout(function(){location = 'hgTables?backgroundStatus=%s';},2000);\n", // was 10000?
+	    cgiEncode(workUrl));
+	htmlClose();
+	fflush(stdout);
 
 	gsTemp = NULL;
 	}	

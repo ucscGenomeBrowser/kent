@@ -29,9 +29,9 @@ cat << EOF
 Usage: `basename $0` [-hv] \$database(s) \$table(s)
 
 	Required arguments:
-	\$database(s)	    A single database or list of databases for which
+	database(s)	    A single database or list of databases for which
 			    table(s) will be pushed. This list can be a file.
-	\$table(s)	    A single table or list of tables to be pushed.
+	table(s)	    A single table or list of tables to be pushed.
 			    List of tables can be a file.
 
 	Optional arguments:

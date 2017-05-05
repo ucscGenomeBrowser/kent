@@ -23,13 +23,16 @@ umask 002
 db=""
 tableName=""
 bigBedMode=""
-verboseMode=""
+verboseMode=false
+overwriteLogUrl=false
+newLogDir=""
 
 # Other variables
 currDate=$(date +%F)
+currTime=$(date +%H_%M_%S)
 output="" # holds output message
-logUrl="http://genecats.cse.ucsc.edu/qa/test-results/qaAutoTrack"
-logDir="/usr/local/apache/htdocs-genecats/qa/test-results/qaAutoTrack"
+logUrl="http://genecats.cse.ucsc.edu/qa/test-results/qaAutoTrackLogs"
+logDir="/usr/local/apache/htdocs-genecats/qa/test-results/qaAutoTrackLogs"
 currLogFile=""
 prevLogFile=""
 prevLogDate=""
@@ -44,15 +47,22 @@ percentDiff=""
 # Usage message function
 showHelp() {
 cat << EOF
-Usage: $0 [-hbv] [-d DATABASE] [-t TABLENAME]
+Usage: `basename $0` [-hbvs] [-l log dir] [-u log url] \$database \$table
 
-	-h		Display this help and exit
-	-d DATABASE	UCSC database name, i.e. hg19 or hg38.
-	-t TABLENAME	Table name, i.e. gwasCatalog.
-	-b		BigBed mode. Used for tracks supported
-			bigBed files, i.e. grcIncidentDb.
-	-v		Verbose mode. Outputs test results to
-			standard out as well as file.
+	Required arguments:
+	database	 UCSC database name, e.g. hg19 or hg38.
+	table		 Table name, e.g. gwasCatalog.
+
+	Optional arguments:
+	-h		 Display this help and exit
+	-b		 BigBed mode. Used for tracks supported
+			 bigBed files, i.e. grcIncidentDb.
+	-v		 Verbose mode. Outputs test results to
+			 standard out as well as file.
+	-l log directory Alternate directory for output log
+	-u log url	 Alternate URL for output log.
+	-s		 Suppress URL in output. Will instead
+			 print directory in messages.
 
 Performs basic QA for auto-pushed tracks, which includes:
 - Checks when data for track was last updated
@@ -66,8 +76,8 @@ results on the command line as well. All log files are output to:
 http://genecats.cse.ucsc.edu/qa/test-results/qaAutoTrack.
 
 Notes:
-	- For OMIM, ISCA, or ClinVar tracks use omim, isca, or clinvar as the table name.
-	- Can only be run once for each database/track pair per day.
+	- For OMIM, ClinGen (formerly ISCA), or ClinVar tracks use omim, isca, or clinvar as the table name.
+	- If run more than once per day, then subsequent log files will include current time in name.
 
 EOF
 }
@@ -79,7 +89,7 @@ function outputCovDiff () {
 	# If no previous log file exists or if previous log file doesn't contain coverage info,
 	# then no coverage diff will be calculated and the percentDiff variable will retain its
 	# default value of ""
- 
+
 	if [[ $1 != "" ]] # Check for previous log file. True if file exists.
 	then
 		# get info needed for diff
@@ -114,42 +124,53 @@ function checkForIssues () {
 	# Raises an error if it's been too long since last update
 	if [ $(date -d "$1" +%s) -le $(date -d "$2" +%s) ]
 	then
-		issueNote+="$3 has not been updated since $1\n"
+		issueNote+="$db.$3 has not been updated since $1\n"
 	fi
 
 	# Raises error if coverage diff between track versions is too large
 	if [[ "$4" != "" ]]
 	then
-		#Round our percentDiff to 3 decimal places. Really small numbers don't play nice with bc.
+		# Round our percentDiff to 3 decimal places.
 		percentDiffRounded=$(printf "%.3f\n" "$4")
 		if [ $(echo "$percentDiffRounded >= 10" | bc) -ne 0 ]
 		then
-			issueNote+="Large coverage diff for $3\n"
+			issueNote+="Large coverage diff for $db.$3\n"
 		fi
 	fi
 }
 
 ##### Parse command-line input #####
 
-OPTIND=1 # Reset is necessary if getopts was used previously in the script.  It is a good idea to make this local in a function.
-while getopts "hd:t:bv" opt
+OPTIND=1 # Reset is necessary if getopts was used previously in the script.
+while getopts "hl:u:bvs" opt
 do
 	case $opt in
 		h)
 			showHelp
 			exit 0
 			;;
-		d)
-			db=$OPTARG
-			;;
-		t)
-			tableName=$OPTARG
-			;;
 		v)
-			verboseMode="on"
+			verboseMode=true
 			;;
 		b)
 			bigBedMode="on"
+			;;
+		l)
+			# Check if directory is valid before attempting to write to it.
+			if [ -d "$OPTARG" ]
+			then
+				newLogDir=$OPTARG
+			else
+				echo -e "Sorry, directory \"$2\" does not exist."
+				echo -e "Check spelling or create this directory and try again.\n"
+				exit 1
+			fi
+			;;
+		u)
+			logUrl=$OPTARG
+			;;
+		s)
+			overwriteLogUrl=true
 			;;
 		'?')
 			showHelp >&2
@@ -158,44 +179,55 @@ do
 	esac
 done
 
-# Check if no command line options were supplied
-if [ $OPTIND -eq 1 ]
-then
-	showHelp >&2
-	exit 1
-fi
-
 shift "$((OPTIND-1))" # Shift off the options and optional --.
+
+# Check number of required arguments
+if [ $# -ne 2 ]
+then
+        # Output usage message if number of required arguments is wrong
+        showHelp >&2
+        exit 1
+else
+        # Set variables with required argument values
+        db=$1
+        tableName=$2
+fi
 
 ##### Main Program #####
 
+# Set some variables based on optional input
+if [[ "$newLogDir" != "" ]]
+then
+	# Set logDir if newLogDir is provided
+	logDir="$newLogDir"
+fi
+if [[ $overwriteLogUrl == true ]]
+then
+	# Overwrite url if option is set
+	logUrl=$logDir
+fi
+
 # set currLogFile
-currLogFile="$logDir/$db.$tableName.$currDate.txt"
+currLogFile="$db.$tableName.$currDate.$currTime.txt"
 
 # set info for prevLog
 prevLogDate=$(ls -Lt $logDir | sed -n /$db.$tableName/p | head -1 | awk -F . '{print $3}')
+prevLogTime=$(ls -Lt $logDir | sed -n /$db.$tableName/p | head -1 | awk -F . '{print $4}')
 
 #initialize output string
 output="\n$db\n"
 
-if [ -e $logDir/$db.$tableName.$prevLogDate.txt ]
+if [ -e $logDir/$db.$tableName.$prevLogDate.$prevLogTime.txt ]
 then
-	prevLogFile="$logDir/$db.$tableName.$prevLogDate.txt"
-fi
-
-# Can't run twice in one day as it messes up the "Coverage Old" output
-if [[ "$currDate" == "$prevLogDate" ]]
-then
-	echo -e "Previous log date is the same as today's date, $currDate"
-	exit 1
+	prevLogFile="$logDir/$db.$tableName.$prevLogDate.$prevLogTime.txt"
 fi
 
 # Set tooOld for different tables
 if  [[ "$tableName" == "clinvar" ]] || [[ "$tableName" == "grcIndcidentDb" ]]
 then 
-	tooOld=$(date -d "$currDate - 1 month" +%F)
+	tooOld=$(date -d "$currDate - 2 months" +%F)
 else
-	tooOld=$(date -d "$currDate - 15 days" +%F)
+	tooOld=$(date -d "$currDate - 1 month" +%F)
 fi
 
 # Run tests for different tracks 
@@ -294,14 +326,14 @@ fi
 if [[ $issueNote != "" ]]
 then
 	#Put URL to log file at end of issue note
-	issueNote+="\nSee $logUrl/$db.$tableName.$currDate.txt for more details about these errors.\n\n"
+	issueNote+="\nSee $logUrl/$currLogFile for more details about these errors.\n\n"
 
-	echo -e $issueNote | tee $currLogFile
+	echo -e $issueNote | tee $logDir/$currLogFile
 fi
 
-if [[ $verboseMode != "" ]] # True if verboseMode is on
+if [[ $verboseMode == true ]] # True if verboseMode is on
 then
-	echo -e $output | tee -a $currLogFile
+	echo -e $output | tee -a $logDir/$currLogFile
 else
-	echo -e $output >> $currLogFile
+	echo -e $output >> $logDir/$currLogFile
 fi

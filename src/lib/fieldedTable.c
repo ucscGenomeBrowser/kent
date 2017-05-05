@@ -10,6 +10,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "fieldedTable.h"
+#include "net.h"
 
 struct fieldedTable *fieldedTableNew(char *name, char **fields, int fieldCount)
 /* Create a new empty fieldedTable with given name, often a file name. */
@@ -61,6 +62,7 @@ for (i=0; i<rowSize; ++i)
 /* Add it to end of list using cursor to avoid slReverse hassles. */
 *(table->cursor) = fr;
 table->cursor = &fr->next;
+table->rowCount += 1;
 
 return fr;
 }
@@ -172,7 +174,7 @@ struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *reportFileNam
  * We do know the remote file exists at least, because we just copied it. */
 {
 /* Open file with fileName */
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = netLineFileOpen(fileName);
 
 /* Substitute in reportFileName for error reporting */
 if (reportFileName != NULL)
@@ -192,9 +194,13 @@ else
 char *line;
 if (!lineFileNext(lf, &line, NULL))
    errAbort("%s is empty", reportFileName);
-if (line[0] != '#')
-   errAbort("%s must start with '#' and field names on first line", reportFileName);
-line = skipLeadingSpaces(line+1);
+boolean startsSharp = FALSE;
+if (line[0] == '#')
+   {
+   line = skipLeadingSpaces(line+1);
+   startsSharp = TRUE;
+   }
+   
 int fieldCount = chopByChar(line, '\t', NULL, 0);
 char *fields[fieldCount];
 chopTabs(line, fields);
@@ -211,6 +217,7 @@ for (i = 0; i < requiredCount; ++i)
 
 /* Create fieldedTable . */
 struct fieldedTable *table = fieldedTableNew(reportFileName, fields, fieldCount);
+table->startsSharp = startsSharp;
 while (lineFileRowTab(lf, fields))
     {
     fieldedTableAdd(table, fields, fieldCount, lf->lineIx);
@@ -219,6 +226,39 @@ while (lineFileRowTab(lf, fields))
 /* Clean up and go home. */
 lineFileClose(&lf);
 return table;
+}
+
+void fieldedTableToTabFile(struct fieldedTable *table, char *fileName)
+/* Write out a fielded table back to file */
+{
+FILE *f = mustOpen(fileName, "w");
+
+/* Write out header row with optional leading # */
+if (table->startsSharp)
+    fputc('#', f);
+int i;
+fputs(table->fields[0], f);
+for (i=1; i<table->fieldCount; ++i)
+    {
+    fputc('\t', f);
+    fputs(table->fields[i], f);
+    }
+fputc('\n', f);
+
+/* Write out rest. */
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    fputs(fr->row[0], f);
+    for (i=1; i<table->fieldCount; ++i)
+	{
+	fputc('\t', f);
+	fputs(fr->row[i], f);
+	}
+    fputc('\n', f);
+    }
+
+carefulClose(&f);
 }
 
 int fieldedTableMustFindFieldIx(struct fieldedTable *table, char *field)

@@ -1,63 +1,32 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-  <HEAD>
-    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-    <META name="description" content="UCSC Genome Browser">
-    <META name="keywords" content="genome, genome browser, genome assembly, Blat, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA">
-    <TITLE>UCSC Genome Browser: Permission Denied</TITLE>
-    <LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
-  </HEAD>
-  <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
-  <A NAME="TOP"></A>
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser Error 403" -->
+<!--#set var="ROOT" value=".." -->
 
-    <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-     <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../cgi-bin/hgMenubar"--></TD></TR>
+<h1>Error 403: Permission Denied</h1> 
+<p> 
+The page or object you requested was denied to your system. This can be for many reasons
+including:</p>
+<ul>
+  <li>directory listings that are not allowed</li> 
+  <li>badly formed URL</li> 
+  <li>hardware or power problems that leave a storage device temporarily offline</li>
+</ul>
+<p> 
+<!--#if expr='"$SERVER_NAME" != /.*.ucsc.edu/ && "$SERVER_NAME" 
+!= /.*.sdsc.edu/ && "$SERVER_NAME" != /browser/'--> 
+<!-- 'browser' = GBiB --> 
+<strong>This website <em><!--#echo var="HTTP_HOST" --></em> is a &quot;mirror&quot; not run by 
+UCSC.</strong> Please try to contact the person who manages this mirror if you have questions.</p> 
+<p> 
+<strong>If you mail the UCSC mailing list, please include this mirror's address 
+<em>http://<!--#echo var="HTTP_HOST" --></em> with any questions.</strong></p> 
+<!--#else --> 
+You can email us at 
+<a href="mailto:&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;">&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;</a>.</p> 
+<!-- above address is genome-www at soe.ucsc.edu --> 
+<!--#endif -->
 
-<!--Content Table------------------------------------------------------->
-      <TR><TD COLSPAN=2 CELLPADDING=10>
-        <!--outer table is for border purposes-->
-        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-          <TR><TD>
-            <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-	      <TR><TD>
-                <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
-	          <TR><TD>
-                    <FONT SIZE="4"><b>&nbsp;   Error 403: Permission Denied</FONT>
-                  </TD></TR>
-	        </TABLE>
-                <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-		  <TR><TH HEIGHT=10></TH></TR>
-        	  <TR><TD WIDTH=10>&nbsp;</TD><TD>
-  		    <P>
- 		    The page or object you requested was denied to your system.<br>
- 		    This can be for many reasons including:<br> 
- 		    - directory listings that are not allowed<br>
- 		    - badly formed URL<br>
- 		    - hardware or power problems that leave a storage device temporarily offline<br>
- 		    <P>
-                    <!--#if expr='"$SERVER_NAME" != /.*.ucsc.edu/ && "$SERVER_NAME"
-                    != /.*.sdsc.edu/ && "$SERVER_NAME" != /browser/'-->
-                    <!-- 'browser' = GBiB -->
-                    <B>This website <EM><!--#echo var="HTTP_HOST" --></EM> is a "mirror" not run by UCSC.</B><BR>
-                    Please try to contact the person that manages this mirror with questions.</BR>
-                    <P>
-                    <B>If you mail the UCSC mailing list, please include this mirror's address
-                    <EM>http://<!--#echo var="HTTP_HOST" --></EM> with any questions.</B>
-                    </P>
-                    <!--#else -->
- 		    You can email us at 
-		    <A HREF="mailto:&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;">&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;</A>.
-	  	    <!-- above address is genome-www at soe.ucsc.edu -->
-                    <!--#endif -->
-                  </TD><TD WIDTH=15></TD></TR>
-	        </TABLE>
-              <BR></TD></TR>
-	    </TABLE>
-          </TD></TR>
-        </TABLE>
-      </TD></TR>
-    </TABLE>
-  </BODY>
-</HTML>
-
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

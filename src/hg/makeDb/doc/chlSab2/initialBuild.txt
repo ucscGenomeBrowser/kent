@@ -532,3 +532,45 @@ chlSab2.genbank.est.native.loadDesc = yes
     #	test it with some sequence
 
 ############################################################################
+#  chlSab2 - Green monkey - Ensembl Genes version 81  (DONE - 2015-08-04 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/chlSab2
+    cat << '_EOF_' > chlSab2.ensGene.ra
+# required db variable
+db chlSab2
+liftUp /hive/data/genomes/chlSab2/jkStuff/ensToUcsc.lift
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=81 chlSab2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/chlSab2/bed/ensGene.81
+    featureBits chlSab2 ensGene
+    # 51250643 bases of 2752019208 (1.862%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/chlSab2/bed/ensGene.81
+
+############################################################################
+############################################################################
+#  chlSab2 - Green monkey - Ensembl Genes version 86  (DONE - 2016-10-18 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/chlSab2
+    cat << '_EOF_' > chlSab2.ensGene.ra
+# required db variable
+db chlSab2
+liftUp /hive/data/genomes/chlSab2/jkStuff/ensToUcsc.lift
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=86 chlSab2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/chlSab2/bed/ensGene.86
+    featureBits chlSab2 ensGene
+    # 51250643 bases of 2752019208 (1.862%) in intersection
+
+ *** All done!  (through the 'makeDoc' step)
+ *** Steps were performed in /hive/data/genomes/chlSab2/bed/ensGene.86
+
+############################################################################
+

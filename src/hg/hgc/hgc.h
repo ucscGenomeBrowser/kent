@@ -436,6 +436,9 @@ void doVcfTabixDetails(struct trackDb *tdb, char *item);
 void doVcfDetails(struct trackDb *tdb, char *item);
 /* Show details of an alignment from an uncompressed VCF file. */
 
+void doBarChartDetails(struct trackDb *tdb, char *item);
+/* Details of barChart item */
+
 void doMakeItemsDetails(struct customTrack *ct, char *itemIdString);
 /* Show details of a makeItems item. */
 
@@ -488,6 +491,12 @@ int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int 
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 void doJRepeat (struct trackDb *tdb, char *repeat);
-   /* New RepeatMasker Visualization defined in joinedRmskClick.c */
+/* New RepeatMasker Visualization defined in joinedRmskClick.c */
+
+INLINE char* strOrNbsp(char* val)
+/* return val if not empty otherwise HTML entity &nbsp; */
+{
+return isEmpty(val) ? "&nbsp;" : val;
+}
 
 #endif

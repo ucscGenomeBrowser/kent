@@ -18,6 +18,7 @@
 #include "cartJson.h"
 #include "cartTrackDb.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "genbank.h"
 #include "hAnno.h"
 #include "hCommon.h"
@@ -617,6 +618,7 @@ if (outFileOptions)
     if (doFile)
         {
         fileName = jsonOptionalStringField(outFileOptions, "fileName", "hgIntegratorResults");
+        fileName = textOutSanitizeHttpFileName(fileName);
         boolean doGzip = jsonOptionalBooleanField(outFileOptions, "doGzip", FALSE);
         if (doGzip)
             compressType = textOutCompressGzip;
@@ -943,11 +945,15 @@ puts("<div id=\"appContainer\">Loading...</div>");
 
 // Set a global JS variable hgsid.
 // Plain old "var ..." doesn't work (other scripts can't see it), it has to belong to window.
-printf("<script>window.%s='%s';</script>\n", cartSessionVarName(), cartSessionId(cart));
+char javascript[1024];
+safef(javascript, sizeof javascript,
+    "window.%s='%s';\n", cartSessionVarName(), cartSessionId(cart));
+// jsInline(javascript);  // GALT TODO would prefer inline, but lack of global early causes issues.
+printf("<script type='text/javascript' nonce='%s'>\n%s</script>\n", getNonce(), javascript);
 
 jsIncludeReactLibs();
-puts("<script src=\"../js/reactHgIntegrator.js\"></script>");
-puts("<script src=\"../js/hgIntegratorModel.js\"></script>");
+jsIncludeFile("reactHgIntegrator.js", NULL);
+jsIncludeFile("hgIntegratorModel.js", NULL);
 
 // Invisible form for submitting a query
 printf("\n<form action=\"%s\" method=%s id='queryForm'>\n",
@@ -986,11 +992,13 @@ else
 int main(int argc, char *argv[])
 /* Process CGI / command line. */
 {
+long enteredMainTime = clock1000();
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
 char *excludeVars[] = {DO_QUERY, CARTJSON_COMMAND, NULL,};
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
 cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
+cgiExitTime("hgIntegrator", enteredMainTime);
 return 0;
 }

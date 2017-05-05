@@ -346,7 +346,7 @@ hvGfxBox(hvg, gl->picWidth-1, 0, 1, gl->picHeight, MG_GRAY);
 hvGfxClose(&hvg);
 }
 
-void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal, char *js)
+void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal, char *event, char *js)
 /* Make a drop-down with available chrom graphs */
 {
 int totalCount = 1;
@@ -375,17 +375,17 @@ for (ref = ggList; ref != NULL; ref = ref->next)
 	values[i] = gg->name;
 	}
     }
-cgiMakeDropListFull(varName, menu, values, totalCount, curVal, js);
+cgiMakeDropListFull(varName, menu, values, totalCount, curVal, event, js);
 freez(&menu);
 freez(&values);
 }
 
-void colorDropdown(int row, int col, char *js)
+void colorDropdown(int row, int col, char *event, char *js)
 /* Put up color drop down menu. */
 {
 char *varName = graphColorVarName(row, col);
 char *curVal = graphColorAt(row, col);
-cgiMakeDropListFull(varName, allColors, allColors, ArraySize(allColors), curVal, js);
+cgiMakeDropListFull(varName, allColors, allColors, ArraySize(allColors), curVal, event, js);
 }
 
 static void addThresholdGraphCarries(struct dyString *dy, int graphRows, int graphCols, boolean cgaOnly)
@@ -436,29 +436,31 @@ static void saveOnChangeOtherFunction(int graphRows, int graphCols, boolean cgaO
 /* Write out Javascript function to save vars in hidden
  * form and submit. */
 {
-struct dyString *dy = dyStringNew(0);
+struct dyString *dy = dyStringNew(4096);
+dyStringAppend(dy, 
+"var submitted=false;\n"
+"function changeOther()\n"
+"{\n"
+"if (!submitted)\n"
+"    {\n"
+"    submitted=true;\n"
+"    ");
 addThresholdGraphCarries(dy, graphRows, graphCols, cgaOnly);
 jsDropDownCarryOver(dy, "clade");
 jsDropDownCarryOver(dy, "org");
 jsDropDownCarryOver(dy, "db");
-char *js = jsOnChangeEnd(&dy);
-chopSuffixAt(js, '"');
-hPrintf("<SCRIPT>\n");
-hPrintf("function changeOther()\n");
-hPrintf("{\n");
-hPrintf("if (!submitted)\n");
-hPrintf("{\n");
-hPrintf("submitted=true;\n");
-hPrintf("%s\n", js);
-hPrintf("}\n");
-hPrintf("}\n");
-hPrintf("</SCRIPT>\n");
+dyStringAppend(dy, "document.hiddenForm.submit();\n");
+dyStringAppend(dy, 
+"    }\n"
+"}\n"
+);
+jsInline(dy->string);
 }
 
 static char *onChangeOther()
 /* Return javascript executed when they change database. */
 {
-return "onChange=\"changeOther();\"";
+return "changeOther();";
 }
 
 boolean renderGraphic(struct sqlConnection *conn, char *psOutput)
@@ -572,19 +574,19 @@ boolean gotClade = hGotClade();
 if (gotClade)
     {
     hPrintf("<TR><TD><B>clade:</B>\n");
-    printCladeListHtml(hGenome(database), onChangeClade(graphRows, graphCols, cgaOnly));
+    printCladeListHtml(hGenome(database), "change", onChangeClade(graphRows, graphCols, cgaOnly));
     htmlNbSpaces(3);
     hPrintf("<B>genome:</B>\n");
-    printGenomeListForCladeHtml(database, onChangeOrg(graphRows, graphCols, cgaOnly));
+    printGenomeListForCladeHtml(database, "change", onChangeOrg(graphRows, graphCols, cgaOnly));
     }
 else
     {
     hPrintf("<TR><TD><B>genome:</B>\n");
-    printGenomeListHtml(database, onChangeOrg(graphRows, graphCols, cgaOnly));
+    printGenomeListHtml(database, "change", onChangeOrg(graphRows, graphCols, cgaOnly));
     }
 htmlNbSpaces(3);
 hPrintf("<B>assembly:</B>\n");
-printAssemblyListHtml(database, jsOther);
+printAssemblyListHtml(database, "change", jsOther);
 hPrintf("</TD></TR>\n");
 hPrintf("</TABLE>");
 
@@ -618,9 +620,9 @@ else
 	    if (curVal[0] != 0)
 		++realCount;
 	    hPrintf("<TD>");
-	    graphDropdown(conn, varName, curVal, jsOther);
+	    graphDropdown(conn, varName, curVal, "change", jsOther);
 	    hPrintf(" <B>in</B> ");
-	    colorDropdown(i, j, jsOther);
+	    colorDropdown(i, j, "change", jsOther);
 	    if (j != graphCols-1) hPrintf(",");
 	    hPrintf("</TD>");
 	    }
@@ -635,9 +637,10 @@ else
     hPrintf(" ");
     cgiMakeOptionalButton(hggCorrelate, "correlate", realCount < 2);
     hPrintf(" <B>significance threshold:</B>");
-    hPrintf("<INPUT TYPE=\"TEXT\" NAME=\"%s\" SIZE=\"%d\" VALUE=\"%g\"",
-	    getThresholdName(), 3, getThreshold());
-    hPrintf(" onchange=\"changeOther();\" onkeypress=\"return submitOnEnter(event,document.mainForm);\">");
+    hPrintf("<INPUT TYPE=\"TEXT\" NAME=\"%s\" id='%s' SIZE=\"%d\" VALUE=\"%g\">"
+	    , getThresholdName(),  getThresholdName(), 3, getThreshold());
+    jsOnEventById("change"  , getThresholdName(), "changeOther();");
+    jsOnEventById("keypress", getThresholdName(), "return submitOnEnter(event,document.mainForm);");
     hPrintf(" ");
     cgiMakeOptionalButton(hggBrowse, "browse regions", realCount == 0);
     hPrintf(" ");

@@ -67,6 +67,7 @@ hgBotDelay();
 
 if (asTable)
     {
+    jsIncludeFile("jquery.js",NULL); // required by utils.js
     jsIncludeFile("utils.js",NULL);
     jsIncludeFile("ajax.js",NULL);
     printf("<A HREF='../cgi-bin/cartDump?%s=[]'>Show as plain text.</a><BR>",CART_DUMP_AS_TABLE);

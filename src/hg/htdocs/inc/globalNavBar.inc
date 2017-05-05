@@ -47,7 +47,7 @@
 <li class="menuparent" id="mirrors"><span>Mirrors</span>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="../mirror.html">Third Party Mirrors</a></li>
-	<li><a href="../admin/mirror.html">Mirroring Instructions</a></li>
+	<li><a href="../goldenPath/help/mirror.html">Mirroring Instructions</a></li>
 	<!-- OPTIONAL_MIRROR_MENU -->
 	</ul>
 
@@ -94,7 +94,7 @@
 	<li class="even"><a href="../staff.html">Staff</a></li>
 	<li class="odd"><a href="../contacts.html">Contact Us</a></li>
 	<li class="even"><a href="../conditions.html">Conditions of Use</a></li>
-	<li class="odd"><a href="https://genomics.soe.ucsc.edu/careers" TARGET="_blank">Jobs</a></li>
+	<li class="odd"><a href="https://ucscgenomics.soe.ucsc.edu/careers/" TARGET="_blank">Jobs</a></li>
 	<li class="even last"><a href="../license/">Licenses</a></li>
 </ul>
 </li>
@@ -108,10 +108,3 @@
 </div>
 </div><!-- end main-menu -->
 </div><!-- end main-menu-whole -->
-
-<script type="text/javascript">
-<!--//--><![CDATA[//><!--
-jQuery.extend(Drupal.settings, { "basePath": "/", "nice_menus_options": { "delay": 800, "speed": 1 }, "thickbox": { "close": "Close", "next": "Next \x3e", "prev": "\x3c Prev", "esc_key": "or Esc Key", "next_close": "Next / Close on last", "image_count": "Image !current of !total" }, "custom_search": { "form_target": "_self", "solr": 0 } });
-//--><!]]>
-
-</script>

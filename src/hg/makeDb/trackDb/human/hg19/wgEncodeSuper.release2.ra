@@ -29,6 +29,7 @@ wgEncode 1
 track wgEncodeExonArraySuper
 superTrack on
 group expression
+priority 10
 shortLabel ENC Exon Array
 longLabel ENCODE Exon Array
 wgEncode 1
@@ -50,6 +51,7 @@ wgEncode 1
 track wgEncodeRnaSeqSuper
 superTrack on
 group expression
+priority 12
 shortLabel ENC RNA-seq
 longLabel ENCODE RNA-seq
 wgEncode 1
@@ -64,6 +66,7 @@ wgEncode 1
 track wgEncodeProtGenoSuper
 superTrack on
 group expression
+priority 11
 shortLabel ENC ProtGeno
 longLabel ENCODE Proteogenomics
 wgEncode 1

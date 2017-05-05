@@ -48,6 +48,32 @@ TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans. The complete script is
 part of the kent source tree and is located in src/hg/utils/uniprotMutations. 
 </p>
 
+<h2>Data Access</h2>
+
+<p>
+The raw data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a>, or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
+For automated analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from the
+<a href="http://hgdownload.cse.ucsc.edu/gbdb/$db/bbi/" target="_blank">download server</a>.
+The underlying data file for this track is called <tt>spMut.bb</tt>. Individual 
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt> 
+which can be compiled from the source code or downloaded as a precompiled binary
+for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. 
+The tool can also be used to obtain only features within a given range, for example:
+<br> 
+<tt>bigBedToBed http://hgdownload.cse.ucsc.edu/gbdb/$db/bbi/uniprot/spMut.bb -chrom=chr6 -start=0 -end=1000000 stdout</tt> 
+<br>
+Please refer to our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
+for questions, or our
+<a href="../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
+for more information. 
+</p>
+
+
 <h2>Credits</h2>
 
 <p>

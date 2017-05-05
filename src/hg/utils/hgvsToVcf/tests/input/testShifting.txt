@@ -1,0 +1,49 @@
+# hg38: run of 15 A's from chr9:133,269,985-133,269,999
+# HGVS insertion on the right, forward strand of genome:
+NC_000009.12:g.133269999_133270000insA
+NC_000009.12:g.133269999_133270000insAAAA
+NC_000009.12:g.133269999_133270000insAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+# Deletions
+NC_000009.12:g.133269999del
+NC_000009.12:g.133269990_133269999del
+# This should not be shifted:
+NC_000009.12:g.133269984_133269999del
+# NM_020469.2(ABO) utr3 exon has run of 5 AC's on - strand; GT on + chr9:133,255,436-133,255,445
+NC_000009.12:g.133255445_133255446insGT
+NC_000009.12:g.133255445_133255446insGTGTGTGTGTGTGTGTGTGTGTGTGTGTGTGT
+NC_000009.12:g.133255445_133255446del
+# This should not be shifted:
+NC_000009.12:g.133255445_133255447del
+
+# NM_020469.2(ABO) utr3 exon has run of 5 AC's on - strand; GT on + chr9:133,255,436-133,255,445
+# 000001309 tcacacacacacc 000001321
+# <<<<<<<<< ||||||||||||| <<<<<<<<<
+# 133255447 tcacacacacacc 133255435
+# The repeat range in NM_020469.2 mRNA coords is (1-based) 1310 - 1319
+# HGVS UTR3 coords are relative to cdsEnd which is 1090 for NM_020469.2.
+# Subtracting 1090, the c. coords of the repeat region are (1-based) 220 - 229.
+# This actually needs to be shifted right one base because there is a C after all the CACA:
+NM_020469.2:c.*229_*230insCA
+# This is properly right-shifted on NM_020469.2, so due to strand-swapping it is
+# already left-shifted on the genome and does not need to be left-shifted for VCF:
+NM_020469.2:c.*230_*231insAC
+# But somebody might forego right-alignment on NM_020469.2, meaning we would
+# need to left-shift on the genome for VCF:
+NM_020469.2:c.*221_*222insCA
+NM_020469.2:c.*220_*221insAC
+NM_020469.2:c.*219_*220insCA
+
+# Try indels at (or shiftable to) the beginning of a chrom.  chr9 begins with Ns.
+# What are the proper HGVS coordinates for insertion at the beginning of a sequence?
+NC_000009.12:g.1del
+NC_000009.12:g.2del
+NC_000009.12:g.10000del
+NC_000009.12:g.1_10del
+NC_000009.12:g.2_11del
+NC_000009.12:g.1_2insN
+NC_000009.12:g.1_2insNNNNNNNNNNNNNNNN
+NC_000009.12:g.2_3insN
+# These are not shiftable.
+NC_000009.12:g.1_2insA
+NC_000009.12:g.1_2insAAAAAAAAAAAAAAAA
+NC_000009.12:g.2_3insA

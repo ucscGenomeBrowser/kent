@@ -10,8 +10,11 @@ use File::Basename;
 my @months = qw( 0 Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 
 sub usage() {
-  printf STDERR "usage: asmHubGatewayPage.pl <pathTo>/*assembly_report.txt <pathTo>/asmId.chrom.sizes <pathTo>/image.jpg\n";
+  printf STDERR "usage: asmHubGatewayPage.pl <pathTo>/*assembly_report.txt <pathTo>/asmId.chrom.sizes <pathTo>/image.jpg <pathTo>/photoCredits.txt\n";
   printf STDERR "output is to stdout, redirect to file: > description.html\n";
+  printf STDERR "photoCredits.txt is a two line tag<tab>string file:\n";
+  printf STDERR "tags: photoCreditURL and photoCreditName\n";
+  printf STDERR "use string 'noPhoto' for image and credits when no photo\n";
   exit 255;
 }
 
@@ -88,43 +91,78 @@ sub chromSizes($) {
 
 my $argc = scalar(@ARGV);
 
-if ($argc != 3) {
+if ($argc != 4) {
   usage;
 }
 
-my ($asmReport, $chromSizes, $jpgImage) = @ARGV;
+my ($asmReport, $chromSizes, $jpgImage, $photoCredits) = @ARGV;
 if ( ! -s $asmReport ) {
   printf STDERR "ERROR: can not find '$asmReport'\n";
   usage;
 }
+if ( ! -s $chromSizes ) {
+  printf STDERR "ERROR: can not find '$chromSizes'\n";
+  usage;
+}
+if ($jpgImage ne "noPhoto") {
+  if ( ! -s $jpgImage ) {
+    printf STDERR "ERROR: can not find '$jpgImage'\n";
+    usage;
+  }
+  if ( ! -s $photoCredits ) {
+    printf STDERR "ERROR: can not find '$photoCredits'\n";
+    usage;
+  }
+}
 
+my $photoCreditURL = "";
+my $photoCreditName = "";
 my $imageSize = "";
 my $imageName = "";
 my $imageWidth = 0;
 my $imageHeight = 0;
 my $imageWidthBorder = 15;
 
-if ( -s $jpgImage ) {
-  $imageSize = `identify $jpgImage | awk '{print \$3}'`;
-  chomp $imageSize;
-  ($imageWidth, $imageHeight) = split('x', $imageSize);
-  $imageName = basename($jpgImage);
+if ($jpgImage ne "noPhoto") {
+  printf STDERR "# reading $photoCredits\n";
+  open (FH, "<$photoCredits") or die "can not read $photoCredits";
+  while (my $line = <FH>) {
+    chomp $line;
+    next if ($line =~ m/^#/);
+    next if (length($line) < 2);
+    my ($tag, $value) = split('\t', $line);
+    if ($tag =~ m/photoCreditURL/) {
+      $photoCreditURL = $value;
+    } elsif ($tag =~ m/photoCreditName/) {
+      $photoCreditName = $value;
+    }
+  }
+  close (FH);
+
+  if ( -s $jpgImage ) {
+    $imageSize = `identify $jpgImage | awk '{print \$3}'`;
+    chomp $imageSize;
+    ($imageWidth, $imageHeight) = split('x', $imageSize);
+    $imageName = basename($jpgImage);
+  }
 }
 
 # transform this path name into a chrom.sizes reference
 
 my $thisDir = `pwd`;
 chomp $thisDir;
+printf STDERR "# thisDir $thisDir\n";
 my $ftpName = dirname($thisDir);
 my $asmId = basename($ftpName);;
 $ftpName =~ s#/hive/data/outside/ncbi/##;
 $ftpName =~ s#/hive/data/inside/ncbi/##;
 $ftpName =~ s#/hive/data/genomes/asmHubs/##;
+printf STDERR "# ftpName $ftpName\n";
 my $urlDirectory = `basename $ftpName`;
 chomp $urlDirectory;
 my $speciesSubgroup = $ftpName;
 my $asmType = "genbank";
-$asmType = "refseq" if ( $speciesSubgroup =~ m#/refseq/#);
+$asmType = "refseq" if ( $speciesSubgroup =~ m#refseq/#);
 $speciesSubgroup =~ s#genomes/$asmType/##;;
 $speciesSubgroup =~ s#/.*##;;
 
@@ -208,6 +246,13 @@ while (my $line = <FH>) {
 close (FH);
 
 $commonName = $orgName if ($commonName =~ m#\(n/a#);
+if ($commonName =~ m/\(/) {
+   $commonName =~ s/.*\(//;
+   $commonName =~ s/\).*//;
+}
+if ($orgName =~ m/\(/) {
+   $orgName =~ s/\(.*//;
+}
 
 printf STDERR "#taxId\tcommonName\tsubmitter\tasmName\torgName\tbioSample\tasmType\tasmLevel\tasmDate\tasmAccession\n";
 printf STDERR "%s\t", $taxId;
@@ -226,19 +271,19 @@ printf STDERR "%s\n", $asmAccession;
 if (length($imageName)) {
 printf "<!-- Display image in righthand corner -->
 <table align=right border=0 width=%d height=%d>
-  <tr><td align=RIGHT><a href=\"http://www.ncbi.nlm.nih.gov/assembly/%s\" 
+  <tr><td align=RIGHT><a href=\"http://www.ncbi.nlm.nih.gov/assembly/%s\"
     target=_blank>
-    <img src=\"http://hgdownload.cse.ucsc.edu/hubs/mouseStrains/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
+    <img src=\"../hubs/ncbiAssemblies/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
   </td></tr>
   <tr><td align=right>
     <font size=-1> <em>%s</em><BR>
     </font>
     <font size=-2> (Photo courtesy of
-      <a href=\"http://www.jax.org/\" target=_blank>The Jackson Laboratory</a>)
+      <a href=\"%s\" target=_blank>%s</a>)
     </font>
   </td></tr>
 </table>
-\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $asmId, $imageName, $imageWidth, $imageHeight, $commonName, $orgName
+\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $ftpName, $imageName, $imageWidth, $imageHeight, $commonName, $orgName, $photoCreditURL, $photoCreditName;
 }
 
 printf "<p>
@@ -267,7 +312,7 @@ To download these data, issue this <em>wget</em> command:
 <pre>
 wget --timestamping -m -nH -x --cut-dirs=5 -e robots=off -np -k \\
    --reject \"index.html*\" -P \"$asmId\" \\
-       http://hgdownload.cse.ucsc.edu/hubs/mouseStrains/$asmId/
+       http://genome-test.soe.ucsc.edu/hubs/ncbiAssemblies/$asmId/
 </pre>
 to download the files for this assembly,<br>
 creating the local directory: \"$asmId\"<br>
@@ -322,7 +367,7 @@ keywords from the GenBank description of an mRNA.
 <a href=\"http://genome.ucsc.edu/goldenPath/help/query.html\">More information</a>, including sample queries.</li>
 <li>
 <b>By gene name: </b> Type a gene name into the &quot;search term&quot; box,
-choose your gene from the drop-down list, then press &quot;submit&quot; to go 
+choose your gene from the drop-down list, then press &quot;submit&quot; to go
 directly to the assembly location associated with that gene.
 <a href=\"http://genome.ucsc.edu/goldenPath/help/geneSearchBox.html\">More information</a>.</li>
 <li>

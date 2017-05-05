@@ -1,0 +1,701 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the rhiBie1
+
+#########################################################################
+# obtain photograph:  (DONE - 2017-02-28 - Hiram)
+
+# per email request to photographer, obtained photograph via email:
+
+# -rw-r--r-- 1 1371219 Feb 28 06:47 Copyright_JackyPoon_black_snub-nosed_monkey.jpg
+
+mkdir /hive/data/genomes/rhiBie1/photo
+cd /hive/data/genomes/rhiBie1/photo
+convert -quality 80 -sharpen 0 -normalize -geometry 400x400 \
+	Copyright_JackyPoon_black_snub-nosed_monkey.jpg Rhinopithecus_bieti.jpg
+
+# check that into the source tree kent/src/hg/htdocs/images/
+git commit -m '(C) Copyright Jacky Poon, all rights reserved - http://www.jackypoon.org/mystery-monkeys refs #18785' \
+   Rhinopithecus_bieti.jpg
+
+# and copy to /usr/local/apache/htdocs/images/
+
+cd /hive/data/genomes/rhiBie1
+# establish photoReference.txt
+print 'photoCreditURL  http://www.jackypoon.org/mystery-monkeys
+photoCreditName (C) Copyright Jacky Poon, all rights reserved
+' > photoReference.txt
+
+#########################################################################
+#  Initial steps (DONE - 2017-02-28 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/rhiBie1
+cd ~/kent/src/hg/makeDb/doc/rhiBie1
+
+# best to use a most recent document since it has the latest features and
+# procedures:
+sed -e 's/macNem/rhiBie/g; s/MacNem/RhiBie/g; s/DONE/TBD/g;' \
+    ../macNem1/initialBuild.txt > initialBuild.txt
+
+mkdir /hive/data/genomes/rhiBie1/refseq
+cd /hive/data/genomes/rhiBie1/refseq
+
+rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Rhinopithecus_bieti/all_assembly_versions/GCF_001698545.1_ASM169854v1/ ./
+# sent 562 bytes  received 3295813018 bytes  18158752.51 bytes/sec
+# total size is 3295407913  speedup is 1.00
+# real    3m0.443s
+
+# appears to be a scaffold-only assembly:
+faSize G*v1_genomic.fna.gz
+# 2977074946 bases (175194759 N's 2801880187 real 1797410004 upper 1004470183 lower) in 105032 sequences in 1 files
+# Total size: mean 28344.5 sd 282015.2 min 200 (NW_016906396.1) max 14887386 (NW_016806642.1) median 912
+# %33.74 masked total, %35.85 masked real
+
+# this information is from the top of 
+#    rhiBie1/refseq/GCF_001698545.1_ASM169854v1_assembly_report.txt
+
+# Assembly name:  ASM169854v1
+# Organism name:  Rhinopithecus bieti (black snub-nosed monkey)
+# Isolate:  Rb0
+# Sex:  male
+# Taxid:          61621
+# BioSample:      SAMN02786331
+# BioProject:     PRJNA339282
+# Submitter:      Laboratory for conservation and utilization of Bio-resource
+# Date:           2016-8-3
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    MCGX01
+# Assembly method: Newbler v. 71; Anytag v. 70; GOBOND v. 69; GapCloser v. 1.12
+# Expected final version: Yes
+# Genome coverage: 76.6x
+# Sequencing technology: Illumina HiSeq
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_001698545.1
+# RefSeq assembly accession: GCF_001698545.1
+# RefSeq assembly and GenBank assemblies identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_001698555.1      GCF_001698555.1 Primary Assembly
+##      GCF_001705985.1 non-nuclear
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2017-02-28)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/rhiBie1
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl rhiBie1 mammal \
+        rhinopithecus ./refseq/*_assembly_report.txt > rhiBie1.config.ra
+
+    # verify it looks sane
+    cat rhiBie1.config.ra
+# config parameters for makeGenomeDb.pl:
+db rhiBie1
+clade mammal
+genomeCladePriority 35
+scientificName Rhinopithecus bieti
+commonName Black snub-nosed monkey
+assemblyDate Aug. 2016
+assemblyLabel Laboratory for conservation and utilization of Bio-resource
+assemblyShortLabel ASM169854v1
+orderKey 2534
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_015486.1
+mitoAcc none
+fastaFiles /hive/data/genomes/rhiBie1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/rhiBie1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir rhinopithecus
+photoCreditURL  http://www.jackypoon.org/mystery-monkeys
+photoCreditName (C) Copyright Jacky Poon, all rights reserved
+ncbiGenomeId 9846
+ncbiAssemblyId 777531
+ncbiAssemblyName ASM169854v1
+ncbiBioProject 339282
+ncbiBioSample SAMN02786331
+genBankAccessionID GCF_001698545.1
+taxId 61621
+
+#############################################################################
+# setup UCSC named files (DONE - 2017-02-28 - Hiram)
+
+    mkdir /hive/data/genomes/rhiBie1/ucsc
+    cd /hive/data/genomes/rhiBie1/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../refseq/G*v1_genomic.fna.gz refseq.2bit
+    #  real    1m10.263s
+
+    twoBitDup refseq.2bit
+# NW_016884136.1 and NW_016884133.1 are identical
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this refseq.2bit file
+    # place it in a list for removal
+    echo NW_016884136.1 > exclude.list
+
+    # simple unplaced_scaffolds, just transform their names:
+    # remove the duplicate contig
+
+    faSomeRecords -exclude ../refseq/G*v1_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz exclude.list stdout \
+       | sed -e 's/.1 Rhinopithecus bieti .*/v1/;' | gzip -c > unplaced.fa.gz
+    # real    1m21.170s
+
+    zcat ../refseq/G*v1_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+       | grep -v NW_016884136 | sed -e 's/.1\t/v1\t/;' > unplaced.agp
+
+    # there is a chrMT in this assembly:
+    zcat ../refseq/GCF_001698545.1_ASM169854v1_assembly_structure/non-nuclear/assembled_chromosomes/FASTA/chrMT.fna.gz \
+      | sed -e 's/^>.*/>chrM/;' | gzip > chrM.fa.gz
+
+    zcat ../refseq/GCF_001698545.1_ASM169854v1_assembly_structure/non-nuclear/assembled_chromosomes/AGP/chrMT.comp.agp.gz \
+      | sed -e 's/^NC_015486.1/chrM/;'  > chrM.agp
+
+    # verify fasta and AGPs agree
+    time faToTwoBit unplaced.fa.gz chrM.fa.gz test.2bit
+
+    cat unplaced.agp chrM.agp \
+        | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+    # real    0m16.654s
+
+    # and no sequence lost from orginal:
+    #	(well except for the one dropped contig)
+    twoBitToFa test.2bit stdout | faSize stdin
+# 2977074741 bases (175194759 N's 2801879982 real 2801879982 upper 0 lower) in 105031 sequences in 1 files
+# Total size: mean 28344.7 sd 282016.5 min 200 (NW_016906396v1) max 14887386 (NW_016806642v1) median 912
+
+    # same numbers as above, minus the one contig (205 bases)
+# 2977074946 bases (175194759 N's 2801880187 real 1797410004 upper 1004470183 lower) in 105032 sequences in 1 files
+# Total size: mean 28344.5 sd 282015.2 min 200 (NW_016906396.1) max 14887386 (NW_016806642.1) median 912
+
+    # no longer need these temporary 2bit files
+    rm refseq.2bit unplaced.2bit test.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2017-02-28 - Hiram)
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp rhiBie1.config.ra) > agp.log 2>&1
+    # real    3m32.248s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db rhiBie1.config.ra) > db.log 2>&1
+    # real    23m23.025s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add rhiBie1 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/rhiBie1
+    ln -s `pwd`/rhiBie1.unmasked.2bit /gbdb/rhiBie1/rhiBie1.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2017-02-28 - Hiram)
+    mkdir /hive/data/genomes/rhiBie1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/rhiBie1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/rhiBie1/rhiBie1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku rhiBie1) > do.log 2>&1
+    # real    17m31.456s
+
+    cat fb.rhiBie1.cpgIslandExtUnmasked.txt
+    # 35321721 bases of 2977074741 (1.186%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-02-28 - Hiram)
+    mkdir /hive/data/genomes/rhiBie1/bed/cytoBand
+    cd /hive/data/genomes/rhiBie1/bed/cytoBand
+    makeCytoBandIdeo.csh rhiBie1
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2017-03-02 - Hiram)
+    # the sequence here is working for a 'refseq' assembly
+    # beware of a chrM situation may be specific depending upon what is
+    # available in the assembly
+
+    mkdir /hive/data/genomes/rhiBie1/bed/ucscToINSDC
+    cd /hive/data/genomes/rhiBie1/bed/ucscToINSDC
+
+    # find accession for chrM
+    grep chrM ../../rhiBie1.agp
+# chrM    1       16551   1       O       NC_015486.1     1       16551   +
+    # find the genbank accession for NC_026976.1 at Entrez nucleotide
+    # The NC_015486.1 name is the RefSeq name, the genbank name is: KP765688.1
+    # the assembly_report does not have this KP name since the chrM sequence
+    # is not in the genbank assembly:
+    grep NC_015486 ../../refseq/GCF*v1_assembly_report.txt
+# MT assembled-molecule MT Mitochondrion na <> NC_015486.1 non-nuclear 16551 na
+
+    # if there is a chrM, use its INSDC name as a second argument:
+    # this is a RefSeq assembly, use the chrM refSeq name:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+      ../../refseq/GCF_*structure/Primary_Assembly NC_015486.1
+
+    # this is actually ucscToRefSeq since this is a RefSeq assembly
+    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt \
+       | sort > refSeqToUcsc.txt
+
+    # chrM processing needs special help, fixup with the sed
+    # extract the refseq vs. genbank names from the assembly_report
+    # columns 5 and 7 are the INSDC and RefSeq names
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | awk '{printf "%s\t%s\n", $2, $1}' | sed -e 's/na/KP765688.1/' \
+          | sort > refseq.insdc.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > ucsc.coordinate.tab
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 ucsc.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+           > ucscToRefSeq.bed
+
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 ucsc.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
+    # verify chrM is correct:
+    grep chrM *.bed
+    # ucscToINSDC.bed:chrM    0       16551   KP765688.1
+    # ucscToRefSeq.bed:chrM   0       16551   NC_015486.1
+
+    # should be same line counts throughout:
+    # in this case one is missing in the final result due to the duplicate
+    # contig being removed
+    wc -l *
+#	105032 refSeqToUcsc.txt
+#	105032 refseq.insdc.txt
+#	105031 ucsc.coordinate.tab
+#	105031 ucscToINSDC.bed
+#	105032 ucscToINSDC.txt
+#	105031 ucscToRefSeq.bed
+#	105032 ucscToRefSeq.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab rhiBie1 ucscToINSDC stdin ucscToINSDC.bed
+    # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  14
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab rhiBie1 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords rhiBie1
+    # each should cover %100 entirely:
+    featureBits -countGaps rhiBie1 ucscToINSDC
+    # 2977074741 bases of 2977074741 (100.000%) in intersection
+
+    featureBits -countGaps rhiBie1 ucscToRefSeq
+    # 2977074741 bases of 2977074741 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2017-03-02 - Hiram)
+
+    mkdir /hive/data/genomes/rhiBie1/bed/chromAlias
+    cd /hive/data/genomes/rhiBie1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' rhiBie1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' rhiBie1 \
+        > ucsc.genbank.tab
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > rhiBie1.chromAlias.tab
+
+    hgLoadSqlTab rhiBie1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        rhiBie1.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2017-03-02 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/rhinopithecus/rhiBie1
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" rhiBie1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+ 105030 MCGX.1
+      1 NC_.1
+
+    # implies a rule: '[MN]C[G_][X0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" rhiBie1 | wc -l
+    # 105031
+
+    hgsql -N -e "select frag from gold;" rhiBie1 \
+       | egrep -e '[MN]C[G_][X0-9]+(\.[0-9]+)?' | wc -l
+    # 105031
+
+    hgsql -N -e "select frag from gold;" rhiBie1 \
+       | egrep -v -e '[MN]C[G_][X0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/rhiBie1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [MN]C[G_][X0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2017-02-28 - Hiram)
+    mkdir /hive/data/genomes/rhiBie1/bed/repeatMasker
+    cd /hive/data/genomes/rhiBie1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku rhiBie1) > do.log 2>&1
+    # real    662m1.726s
+
+    cat faSize.rmsk.txt
+# 2977074741 bases (175194759 N's 2801879982 real 1394937761 upper
+#	1406942221 lower) in 105031 sequences in 1 files
+# Total size: mean 28344.7 sd 282016.5 min 200 (NW_016906396v1)
+#	max 14887386 (NW_016806642v1) median 912
+# %47.26 masked total, %50.21 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;                                            *
+
+    time featureBits -countGaps rhiBie1 rmsk
+    #	1407426392 bases of 2977074741 (47.275%) in intersection
+    #   real    2m3.210s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' rhiBie1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    #	total 1407426392.000000
+    #   real    0m41.063s
+
+##########################################################################
+# running simple repeat (DONE - 2017-02-28 - Hiram)
+
+    mkdir /hive/data/genomes/rhiBie1/bed/simpleRepeat
+    cd /hive/data/genomes/rhiBie1/bed/simpleRepeat
+    # using trf409 3 here guessing smaller genome (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 6 rhiBie1) > do.log 2>&1
+    # real    64m29.232s
+
+    cat fb.simpleRepeat
+    # 73021659 bases of 2977074741 (2.453%) in intersection
+
+    # adding this trfMask to the other masking
+    cd /hive/data/genomes/rhiBie1
+
+    # when using the Window Masker result:
+#    twoBitMask bed/windowMasker/rhiBie1.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  rhiBie1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # when using Rmsk results, add to rmsk after it is done:
+    twoBitMask rhiBie1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed rhiBie1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa rhiBie1.2bit stdout | faSize stdin > faSize.rhiBie1.2bit.txt
+    cat faSize.rhiBie1.2bit.txt
+# 2977074741 bases (175194759 N's 2801879982 real 1393352740 upper
+#	1408527242 lower) in 105031 sequences in 1 files
+# Total size: mean 28344.7 sd 282016.5 min 200 (NW_016906396v1)
+#	max 14887386 (NW_016806642v1) median 912
+# %47.31 masked total, %50.27 masked real
+
+    # reset the symlink
+    rm /gbdb/rhiBie1/rhiBie1.2bit
+    ln -s `pwd`/rhiBie1.2bit /gbdb/rhiBie1/rhiBie1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-02-28 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/rhiBie1/bed/microsat
+    cd /cluster/data/rhiBie1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed rhiBie1 microsat microsat.bed
+    # Read 31859 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2017-03-01 - Hiram)
+
+    mkdir /hive/data/genomes/rhiBie1/bed/windowMasker
+    cd /hive/data/genomes/rhiBie1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev rhiBie1) > do.log 2>&1
+    # real    260m40.754s
+
+    # Masking statistics
+    cat faSize.rhiBie1.cleanWMSdust.txt
+# 2977074741 bases (175194759 N's 2801879982 real 1782047365 upper
+#	1019832617 lower) in 105031 sequences in 1 files
+# Total size: mean 28344.7 sd 282016.5 min 200 (NW_016906396v1)
+#	max 14887386 (NW_016806642v1) median 912
+# %34.26 masked total, %36.40 masked real
+
+    cat fb.rhiBie1.rmsk.windowmaskerSdust.txt
+    # 784491226 bases of 2977074741 (26.351%) in intersection
+
+##########################################################################
+# run up idKeys files for ncbiRefSeq (DONE - 2017-03-01 - Hiram)
+    mkdir /hive/data/genomes/rhiBie1/bed/idKeys
+    cd /hive/data/genomes/rhiBie1/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd`  rhiBie1) > do.log 2>&1 &
+    # real    45m57.080s
+
+    cat rhiBie1.keySignature.txt
+    #   ad94c2baecdb85a63bd9285d42161b91
+
+##########################################################################
+# cpgIslands - (DONE - 2017-03-01 - Hiram)
+    mkdir /hive/data/genomes/rhiBie1/bed/cpgIslands
+    cd /hive/data/genomes/rhiBie1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku rhiBie1) > do.log 2>&1 &
+    # real    14m4.248s
+
+    cat fb.rhiBie1.cpgIslandExt.txt
+    # 20309988 bases of 2977074741 (0.682%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2017-03-01 - Hiram)
+    mkdir /hive/data/genomes/rhiBie1/bed/genscan
+    cd /hive/data/genomes/rhiBie1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku rhiBie1) > do.log 2>&1 &
+    # real    64m46.377s
+
+    cat fb.rhiBie1.genscan.txt
+    # 52459334 bases of 2977074741 (1.762%) in intersection
+
+    cat fb.rhiBie1.genscanSubopt.txt
+    # 53805481 bases of 2977074741 (1.807%) in intersection
+
+#############################################################################
+# augustus gene track (dONE - 2017-03-01 - Hiram)
+
+    mkdir /hive/data/genomes/rhiBie1/bed/augustus
+    cd /hive/data/genomes/rhiBie1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev -workhorse=hgwdev rhiBie1) > do.log 2>&1 &
+    # reel    104m18.398s
+
+    cat fb.rhiBie1.augustusGene.txt
+    # 47275232 bases of 2977074741 (1.588%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2017-03-01 - Hiram)
+
+    # numerator is rhiBie1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap rhiBie1 gap
+    # 0 bases of 2977074741 (0.000%) in intersection
+    #               ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2977074741 / 2861349177 \) \* 1024
+    #  ( 2977074741 / 2861349177 ) * 1024 = 1065.415070
+
+    # ==> use -repMatch=1000 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/rhiBie1
+    blat rhiBie1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/rhiBie1.11.ooc \
+        -repMatch=1000
+    #   Wrote 25834 overused 11-mers to jkStuff/rhiBie1.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' rhiBie1 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # there are no gaps at all in this assembly
+
+    # # all these gap sizes are 100
+    # # minimum gap size is 100 and produces a reasonable number of lifts
+    # gapToLift -verbose=2 -minGap=10 rhiBie1 jkStuff/nonBridged.lft \
+    #    -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2017-03-05 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism             mrnaCnt   estCnt  refSeqCnt
+    # Rhinopithecus bieti     9       0       0
+
+    # edit etc/genbank.conf to add rhiBie1 just before macFas5
+# rhiBie1 - Rhinopithecus bieti - black snub-nosed monkey taxId 61621
+rhiBie1.serverGenome = /hive/data/genomes/rhiBie1/rhiBie1.2bit
+rhiBie1.clusterGenome = /hive/data/genomes/rhiBie1/rhiBie1.2bit
+rhiBie1.ooc = /hive/data/genomes/rhiBie1/jkStuff/rhiBie1.11.ooc
+rhiBie1.lift = no
+rhiBie1.perChromTables = no
+rhiBie1.downloadDir = rhiBie1
+rhiBie1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+rhiBie1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+rhiBie1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+rhiBie1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+rhiBie1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# defaults are fine: genbank.mrna.native refseq.mrna.native refseq.mrna.xeno yes
+# and genbank.est.native
+# rhiBie1.upstreamGeneTbl = refGene
+# rhiBie1.upstreamMaf = multiz7way
+# /hive/data/genomes/melGal4/bed/multiz7way/species.lst
+
+    git commit -m "Added rhiBie1; refs #18927" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # also add to src/lib/gbGenome.c
+#	static char *rhiBieNames[] = {"Macaca nemestrina", NULL};
+#	{"rhiBie", rhiBieNames},
+
+    git commit -m "Added rhiBie1; refs #18958" src/lib/gbGenome.c
+    make install-server
+
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial rhiBie1
+    # logFile: var/build/logs/2017.03.05-06:48:55.rhiBie1.initalign.log
+    #   about 13 hours
+
+    tail -2 2017.03.05-06:48:55.rhiBie1.initalign.log
+    #	hgwdev 2017.03.05-19:28:21 rhiBie1.initalign: Succeeded: rhiBie1
+    #	hgwdev 2017.03.05-19:28:53 rhiBie1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.rhiBie1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad rhiBie1
+    # logFile: var/dbload/hgwdev/logs/2017.03.05-19:52:47.rhiBie1.dbload.log
+    #  about 21 minutes
+
+    tail -1 var/dbload/hgwdev/logs/2017.03.05-19:52:47.rhiBie1.dbload.log
+    #	hgwdev 2017.03.05-20:13:03 rhiBie1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add rhiBie1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding rhiBie1 to the update alignments refs #18958' etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# ncbiRefSeq (TBD - 2016-05-13 - Hiram)
+
+    mkdir /hive/data/genomes/rhiBie1/bed/ncbiRefSeq
+    cd /hive/data/genomes/rhiBie1/bed/ncbiRefSeq
+    # running step wise as this script is still under development
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 rhiBie1) > download.log 2>&1
+    # real    16m29.536s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 rhiBie1) > process.log 2>&1
+    # real    3m58.858s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 rhiBie1) > load.log 2>&1
+    # real    0m33.205s
+
+    cat fb.ncbiRefSeq.rhiBie1.txt
+    #  82563006 bases of 1218501075 (6.776%) in intersection
+
+    featureBits -enrichment rhiBie1 refGene ncbiRefSeq 
+    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
+    #    enrich 14.68x
+
+#########################################################################
+#  BLATSERVERS ENTRY (TBD - 2017-01-17 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rhiBie1", "blat1d", "17878", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rhiBie1", "blat1d", "17879", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MEPE gene (egg shell protein)
+## located via blat of the chicken protein
+##  (TBD - 2017-01-17 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr4:21251858-21288049"
+	where name="rhiBie1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2017-03-06 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=rhiBie1 -tableCoverage all.joiner
+    joinerCheck -database=rhiBie1 -times all.joiner
+    joinerCheck -database=rhiBie1 -keys all.joiner
+
+    cd /hive/data/genomes/rhiBie1
+    time (makeDownloads.pl -workhorse=hgwdev rhiBie1) > downloads.log 2>&1
+    #  real    24m57.372s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/rhiBie1/pushQ
+    cd /hive/data/genomes/rhiBie1/pushQ
+    time (makePushQSql.pl rhiBie1) > rhiBie1.pushQ.sql 2> stderr.out
+    #  real    11m29.572s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    #	WARNING: rhiBie1 does not have seq
+    #	WARNING: rhiBie1 does not have extFile
+    #	WARNING: rhiBie1 does not have estOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p rhiBie1.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/rhiBie1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

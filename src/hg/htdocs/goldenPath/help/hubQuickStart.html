@@ -1,226 +1,165 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN"
-          "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>Quick Start Guide to a Basic Track Hub</title>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link rel="stylesheet" href="/style/HGStyle.css">
-</head>
-<body class="oldStaticPage">
-<div class="header">
-<img src="../../images/title.jpg" alt="UCSC Genome Bioinformatics">
-</div><!-- .header -->
-<div class="nav">
-<!--#include virtual="../../cgi-bin/hgMenubar"-->
-</div><!-- .nav -->
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Track Hub Quick Start" -->
+<!--#set var="ROOT" value="../.." -->
 
-<div class="content"> <!-- start of page content -->
-<div class="section">
-<h1>Basic Hub Quick Start Guide</h1> 
-<div class="sectionContent">
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>Basic Track Hub Quick Start Guide</h1> 
 <p>
-Hubs are a method of displaying remote custom tracks quickly
-(binary indexed bigBed, bigWig, BAM or VCF formats),
-while providing more persistence and flexibility than normal
-custom tracks for any UCSC assembly (or remotely-hosted assembly in twoBit format).
-</p>
+Hubs are a method of displaying remote custom tracks quickly (binary indexed bigBed, bigWig, BAM or 
+VCF formats), while providing more persistence and flexibility than normal custom tracks for any 
+UCSC assembly (or remotely-hosted assembly in twoBit format).</p>
 <p>
-<ul>
-<b>STEP 1:</b> In a publicly-accessible directory, copy the hub.txt, genomes.txt,
-trackDb.txt files using the following command:<br>
+<strong>STEP 1:</strong> In a publicly-accessible directory, copy the hub.txt, genomes.txt,
+trackDb.txt files using the following command:
+<pre><code>wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3 http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/</code></pre>
 <p>
-<tt>wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3 http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/</tt>
-</p>
-<ul>
 Alternatively, <em>if you do not have wget installed</em>, use curl:<br>
-<tt>curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt<br>
-curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/genomes.txt<br>
-mkdir hg19<br>
-cd hg19<br>
-curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hg19/trackDb.txt<br>
-</tt>
+<pre><code>curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt
+curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/genomes.txt
+mkdir hg19
+cd hg19
+curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hg19/trackDb.txt</code></pre>
 <p>
-If you do not have curl, you can alternatively use a text editor and
-directly recreate the above three files.
-</p>
-</ul>
+If you do not have curl, you can alternatively use a text editor and directly recreate the above 
+three files.</p>
 <p>
-<b>STEP 2:</b> Paste your hub.txt link (<tt>http://yourURL/hub.txt</tt>) into the
-<a href="../../cgi-bin/hgHubConnect" target="_blank">My Hubs</a>
-tab of the Track Data Hubs page, then click the "Use Selected Hubs" button.
-It should work the same as pasting the original hub.txt file:
-<tt>http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt</tt><br>
-</p>
+<strong>STEP 2:</strong> Paste your hub.txt link (<code>http://yourURL/hub.txt</code>) into the
+<a href="../../cgi-bin/hgHubConnect" target="_blank">My Hubs</a> tab of the Track Data Hubs page, 
+then click the &quot;Use Selected Hubs&quot; button. It should work the same as pasting the original
+hub.txt file:</p>
+<pre><code>http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt</code></pre>
 <p>
-<b>STEP 3:</b> Congratulations! Your hub should display! If you are not already
-browsing the hg19 assembly on chr21, change assemblies
-and navigate to the gene
+<strong>STEP 3:</strong> Congratulations! Your hub should display! If you are not already browsing 
+the hg19 assembly on chr21, change assemblies and navigate to the gene
 <a href="../../cgi-bin/hgTracks?db=hg19&singleSearch=knownCanonical&position=SOD1"
-target="_blank">SOD1</a> to see data displayed for each of the hub's BAM, bigWig,
-bigBed, and VCF tracks.
-</p>
-<p>If you are having problems, be sure all your files and the hg19 directory are
-publicly-accessible. For hubs to work, your server must also accept byte-ranges.
-You can check using the following command to verify "<tt>Accept-Ranges: bytes</tt>"
-displays:<br>
-<tt>curl -I http://yourURL/hub.txt</tt>
-</p>
-</ul>
-<b><font color="#006666" size=4>The Three Parts of a Hub</font></b>
-<ul>
-<li><b><a href="#hub.txt">Understanding hub.txt</a></b>
-<li><b><a href="#genomes.txt">Understanding genomes.txt</a></b>
-<li><b><a href="#trackDb.txt">Understanding trackDb.txt</a></b>
-<br>
-<a href="../help/examples/hubDirectory"><img src ="../../images/hubDirectoryImage.jpg"
-alt="Example Hub Directory" height="150"></a><br>
-<a href="../help/examples/hubDirectory"><em><font size=-2>Example Hub Directory</em></font></a>
+target="_blank">SOD1</a> to see data displayed for each of the hub's BAM, bigWig, bigBed, and VCF 
+tracks.</p>
 <p>
-Now that you have a working hub copied from above, you can edit
-the three main text documents to get an idea of how they work,
-and also point to your local files.
-</p>
-<p>
-Hubs begin with the short hub.txt, which describes your hub and informs
-the UCSC Browser where to find the underlying assemblies by defining the
-location of genomes.txt. The genomes.txt file outlines the hub's assemblies and
-defines the location of each assembly's trackDb.txt, which is basically
-the heart of your hub, defining the location of all the binary indexed
-track data for each assembly. 
-</p>
-<p>
-The hub.txt file can be as short as four lines, and the genomes.txt as short as two.
-The trackDb.txt file is typically much larger. At its most basic,
-it defines the tracks in the hub using stanzas about the type, location, and name of
-the binary files to display. However, it provides real power to tailor your
-presentation using additional <a href="trackDb/trackDbHub.html"
-target="_blank">trackDb settings</a>.
-</p>
-<p>
-Note that the Browser waits 300 seconds before checking for 
-any changes to these files. <b>When editing hub.txt, genomes.txt,and trackDb.txt,
-shorten this delay by adding <tt>udcTimeout=1</tt> to your URL.</b> For more information,
-please see the <a href="hgTrackHubHelp.html#Debug"
-target="_blank">Debugging and Updating Track Hubs</a> section of the
-<a href="hgTrackHubHelp.html" target="_blank">Track Hub User Guide</a>.
-</p>
-<p>
-<b>For more detailed instructions on setting up a hub, please see the
-<a href="hgTrackHubHelp.html#Setup" target="_blank">Setting Up Your Own Track Hub</a>
-section of the Track Hub User Guide.</b>
-</ul>
+If you are having problems, be sure all your files and the hg19 directory are publicly-accessible. 
+For hubs to work, your server must also accept byte-ranges. You can check using the following 
+command to verify &quot;Accept-Ranges: bytes&quot; displays:</p>
+<pre><code>curl -I http://yourURL/hub.txt</code></pre>
 
-<b><font color="#006666" size=4> Resources: </font></b>
+<h2>The three parts of a hub</h2>
+<p>
+Now that you have a working hub copied from above, you can edit the three main text documents to 
+get an idea of how they work, and also point to your local files.</p>
 <ul>
-<li><b><a href="hgTrackHubHelp.html" target="_blank">Track Hub User Guide</a></b> 
-<li><b><a href="trackDb/trackDbHub.html"
-target="_blank">Track Database (trackDb) Definition Document</a></b> 
-<li><b><a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs"
-target="_blank">Assembly Hubs Wiki</a></b>
-<li><b><a href="http://genomewiki.ucsc.edu/index.php/Public_Hub_Guidelines"
-target="_blank">Public Hub Guidelines Wiki</a></b>
-<li><b><a href="hubQuickStartGroups.html"
-target="_blank">Quick Start Guide to Organizing Track Hubs into Groupings</a></b>
-<li><b><a href="hubQuickStartAssembly.html"
-target="_blank">Quick Start Guide to Assembly Track Hubs</a></b>
+  <li><strong><a href="#hub.txt">Understanding hub.txt</a></strong></li>
+  <li><strong><a href="#genomes.txt">Understanding genomes.txt</a></strong></li>
+  <li><strong><a href="#trackDb.txt">Understanding trackDb.txt</a></strong></li>
 </ul>
-</div> <!-- end sectionContent-->
-</div> <!-- end section-->
+<a href="../help/examples/hubDirectory"><img src="../../images/hubDirectoryImage.jpg"
+alt="Example hub directory" width="177" height="102"></a>
+<p class="gbsCaption">
+<a href="../help/examples/hubDirectory"><em>Example Hub Directory</em></a></p>
+<p>
+Hubs begin with the short hub.txt, which describes your hub and informs the UCSC Browser where to 
+find the underlying assemblies by defining the location of genomes.txt. The genomes.txt file 
+outlines the hub's assemblies and defines the location of each assembly's trackDb.txt, which is 
+basically the heart of your hub, defining the location of all the binary indexed track data for each
+assembly.</p>
+<p>
+The hub.txt file can be as short as four lines, and the genomes.txt as short as two. The trackDb.txt
+file is typically much larger. At its most basic, it defines the tracks in the hub using stanzas 
+about the type, location, and name of the binary files to display. However, it provides real power 
+to tailor your presentation using additional <a href="trackDb/trackDbHub.html" 
+target="_blank">trackDb settings</a>.</p>
+<p>
+Note that the Browser waits 5 minutes before checking for any changes to these files. <strong>When 
+editing hub.txt, genomes.txt,and trackDb.txt, you can shorten this delay by adding 
+<code>udcTimeout=1</code> to your URL.</strong> For more information, see the 
+<a href="hgTrackHubHelp.html#Debug" target="_blank">Debugging and Updating Track Hubs</a> section of
+the <a href="hgTrackHubHelp.html" target="_blank">Track Hub User Guide</a>.</p>
+<p>
+<strong>For more detailed instructions on setting up a hub, refer to the 
+<a href="hgTrackHubHelp.html#Setup" target="_blank">Setting Up Your Own Track Hub</a> section of the
+Track Hub User Guide.</strong>
+
+<h2>Resources</h2>
+<ul>
+  <li>
+  <strong><a href="hgTrackHubHelp.html" target="_blank">Track Hub User
+Guide</a></strong></li> 
+  <li>
+  <strong><a href="trackDb/trackDbHub.html" target="_blank">Track Database (trackDb) Definition 
+  Document</a></strong></li> 
+  <li>
+  <strong><a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs" target="_blank">Assembly Hubs
+   Wiki</a></strong></li>
+  <li>
+  <strong><a href="http://genomewiki.ucsc.edu/index.php/Public_Hub_Guidelines"
+  target="_blank">Public Hub Guidelines Wiki</a></strong></li>
+  <li>
+  <strong><a href="hubQuickStartGroups.html" target="_blank">Quick Start Guide to Organizing Track 
+  Hubs into Groupings</a></strong></li>
+  <li>
+  <strong><a href="hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Track 
+  Hubs</a></strong></li>
+</ul>
 
 <!-- ========== hub.txt ============================== -->
-
-<a name="hub.txt"></a><br>
-<div class="section">
-<h1>Understanding hub.txt</h1>
-<div class="sectionContent">
-<blockquote><tt>
-<b>hub</b> <em>MyHubsNameWithoutSpaces</em> <br>
-<b>shortLabel</b> <em>My Hub's Name</em><br>
-<b>longLabel</b> <em>Name up to 80 characters versus shortLabel limited to 17 characters</em><br>
-<b>genomesFile</b> <em>genomes.txt</em><br>
-<b>email</b> <em>myEmail@address</em><br>
-<b>descriptionUrl</b> <em>aboutMyHub.html</em><br>
-</tt>
-</blockquote>
-A hub starts with a few short lines in hubs.txt.
-The hub.txt file informs the UCSC Browser where to find the underlying assemblies via the
-<tt><b> genomesFile</b> <em>genomes.txt</em></tt> line, which
-in turn will direct the Browser to each assembly's related binary indexed track data
-outlined in the trackDb.txt. The optional <tt><b>descriptionUrl</b></tt> field allows you to
-add a HTML page describing your hub. See a basic <a href="../help/examples/hubDirectory/hub.txt"
-target="_blank">example hub.txt</a>.
-</p>
-</div> <!--- sectionContent -->
-</div> <!--- section-->
+<a name="hub.txt"></a>
+<h2>Understanding hub.txt</h2>
+<pre><code><strong>hub</strong> <em>MyHubsNameWithoutSpaces</em>
+<strong>shortLabel</strong> <em>My Hub's Name</em>
+<strong>longLabel</strong> <em>Name up to 80 characters versus shortLabel limited to 17 characters</em>
+<strong>genomesFile</strong> <em>genomes.txt</em>
+<strong>email</strong> <em>myEmail@address</em>
+<strong>descriptionUrl</strong> <em>aboutMyHub.html</em> </code></pre>
+<p>
+A hub starts with a few short lines in hubs.txt. The hub.txt file informs the UCSC Browser where to 
+find the underlying assemblies via the <code><strong> genomesFile</strong>genomes.txt</code> 
+parameter, which in turn will direct the Browser to each assembly's related binary indexed track 
+data outlined in the trackDb.txt. The optional <code><strong>descriptionUrl</strong></code> field 
+allows you to add an HTML page describing your hub. See an example of a basic hub.txt file
+<a href="../help/examples/hubDirectory/hub.txt" target="_blank">here</a>.</p>
 
 <!-- ========== genomes.txt ============================== -->
+<a name="genomes.txt"></a>
+<h2>Understanding genomes.txt</h2>
+<pre><code><strong>genome</strong> <em>assembly_database_1</em>
+<strong>trackDb</strong> <em>assembly_1_path/trackDb.txt</em>
 
-<a name="genomes.txt"></a><br>
-<div class="section">
-<h1>Understanding genomes.txt</h1>
-<div class="sectionContent">
-<blockquote><tt>
-<b>genome</b> <em>assembly_database_1</em><br>
-<b>trackDb</b> <em>assembly_1_path/trackDb.txt</em><br>
-<br>
-<b>genome</b> <em>assembly_database_2</em><br>
-<b>trackDb</b> <em>assembly_2_path/trackDb.txt</em><br>
-</tt></blockquote>
+<strong>genome</strong> <em>assembly_database_2</em>
+<strong>trackDb</strong> <em>assembly_2_path/trackDb.txt</em>
+</code></pre>
 <p>
-The genomes.txt text file can be as short as a two-line stanza when using only
-one UCSC assembly (e.g., <tt><b>genome</b> <em>panTro4</em></tt> and <tt>
-<b>trackDb</b> <em>panTro4/trackDb.txt</em></tt>).  The <tt><b>genome</b></tt>
-line explains to the Browser to use the panTro4 chimp genome, while the
-<tt><b>trackDb</b></tt> line points the Browser to the associated trackDb.txt
-which will outline all of the assembly's tracks. See a basic
-<a href="../help/examples/hubDirectory/genomes.txt"
-target="_blank">example genomes.txt</a>.
+The genomes.txt text file can be as short as a two-line stanza when using only one UCSC assembly 
+(e.g., <code><strong>genome</strong> <em>panTro4</em></code> and <code> <strong>trackDb</strong> 
+<em>panTro4/trackDb.txt</em></code>). The <code><strong>genome</strong></code> line directs the 
+Browser to use the panTro4 chimp genome, while the <code><strong>trackDb</strong></code> line points
+the Browser to the associated trackDb.txt, which will outline all of the assembly's tracks.
+View an example of a basic genomes.txt file <a href="../help/examples/hubDirectory/genomes.txt"
+target="_blank">here</a>.
 </p>
-</div> <!--- sectionContent --->
-</div> <!--- section -->
 
 <!-- ==========trackDb.txt ==================== -->
-
-<a name="trackDb.txt"></a><br>
-<div class="section">
-<h1>Understanding trackDb.txt</h1>
-<div class="sectionContent">
+<a name="trackDb.txt"></a>
+<h2>Understanding trackDb.txt</h2>
+<pre><code><strong>track</strong> <em>uniqueNameNoSpacesOrDots</em>
+<strong>type</strong> <em>track_type</em>
+<strong>bigDataUrl</strong> <em>track_data_url</em>
+<strong>shortLabel</strong> <em>label 17 chars</em>
+<strong>longLabel</strong> <em>long label up to 80 chars</em><br></code></pre>
 <p>
-<blockquote><tt>
-<b>track</b> <em>uniqueNameNoSpacesOrDots</em><br>
-<b>type</b> <em>track_type</em><br>
-<b>bigDataUrl</b> <em>track_data_url</em><br>
-<b>shortLabel</b> <em>label 17 chars</em><br>
-<b>longLabel</b> <em>long label up to 80 chars</em><br>
-</tt></blockquote>
-</p>
-<p>
-The trackDb.txt file uses stanzas for each track to inform
-the Browser of the name, type, location, and description
-of each binary file to display. The <a href="trackDb/trackDbHub.html"
-target="_blank">trackDb settings</a> allow further display control
-such as by adding the line <tt><b>color</b> <em>255,0,0</em></tt> to
-define a track's color. Each track <tt><b>type</b></tt>
-(<tt><a href="trackDb/trackDbHub.html#bigBed_-_Item_or_Region_Track_Settings"
-target="_blank"><em>bigBed</em></a>,
+The trackDb.txt file uses stanzas for each track to inform the Browser of the name, type, location, 
+and description of each binary file to display. The <a href="trackDb/trackDbHub.html"
+target="_blank">trackDb settings</a> allow further display control such as by adding the line 
+<code><strong>color</strong>255,0,0</code> to define a track's color. Each track 
+<code><strong>type</strong></code>
+(<code><a href="trackDb/trackDbHub.html#bigBed_-_Item_or_Region_Track_Settings"
+target="_blank">bigBed</a>,
 <a href="trackDb/trackDbHub.html#bigWig_-_Signal_Graphing_Track_Settings"
-target="_blank"><em>bigWig</em></a>,
-<a href="trackDb/trackDbHub.html#bam"
-target="_blank"><em>bam</em></a>,
-</tt>and<tt> <a href="trackDb/trackDbHub.html#vcfTabix"
-target="_blank"><em>vcfTabix</em></a></tt>) 
-has further customizable trackDb settings.
-The <tt><b>bigDataUrl</b></tt> can be a relative path to a
-local file or a publicly-accessibly URL that
-accepts byte-ranges. The trackDb.txt also allows for advanced 
-<a href="trackDb/trackDbHub.html#groupingTracks"
-target="_blank">track grouping</a> known as composites,
-superTracks and multiWigs.
-See a basic <a href="../help/examples/hubDirectory/hg19/trackDb.txt"
-target="_blank">example trackDb.txt</a>.
-</p>
-</div> <!--- sectionContent -->
-</div> <!--- section --->
+target="_blank">bigWig</a>, <a href="trackDb/trackDbHub.html#bam" target="_blank">bam</a>,
+</code>and<code> <a href="trackDb/trackDbHub.html#vcfTabix" target="_blank">vcfTabix</a></code>) 
+has further customizable trackDb settings. The <code><strong>bigDataUrl</strong></code> can be a 
+relative path to a local file or a publicly-accessibly URL that accepts byte-ranges. The trackDb.txt
+also allows for advanced <a href="trackDb/trackDbHub.html#groupingTracks" target="_blank">track 
+grouping</a> known as composites, superTracks and multiWigs. See a basic 
+<a href="../help/examples/hubDirectory/hg19/trackDb.txt" target="_blank">example 
+trackDb.txt</a>.</p>
 
-</div> <!--  end content-->
-</body></html>
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

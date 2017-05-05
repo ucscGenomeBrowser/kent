@@ -20,8 +20,8 @@
 
 /* Viewing limits */
     // WARNING: this also appears in JS
-#define GTEX_MAX_LIMIT                  "maxLimit"
-#define GTEX_MAX_LIMIT_DEFAULT          300
+#define GTEX_MAX_VIEW_LIMIT                  "maxViewLimit"
+#define GTEX_MAX_VIEW_LIMIT_DEFAULT          300
 /* TODO: Get default from gtexInfo table */
 
 /* Sample selection and comparison */

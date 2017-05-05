@@ -1,430 +1,258 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<HTML>
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Graphs" -->
+<!--#set var="ROOT" value="../.." -->
 
-<HEAD>
-  <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-  <META name="description" content="UCSC Genome Graphs">
-  <META name="keywords" content="genome, genome data, table browser, genome browser, genome assembly, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA">
-  <TITLE>UCSC Genome Browser: Genome Graphs User's Guide</TITLE>
-  <LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
-</HEAD>
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
-<A NAME="TOP"></A>
+<h1>Genome Graphs User's Guide</h1>
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-  <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
+<h2>Contents</h2>
 
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../cgi-bin/hgMenubar"--></TD></TR>
-<!--Content Tables-->  
-  <TR><TD CELLPADDING=10 ROWSPAN=2 VALIGN="top">
-    <!--outer table is for border purposes-->
-    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-      <TR><TD>	
-        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-          <TR><TD>	
-	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
-	      <TR><TD>
-	        <FONT SIZE="4"><B>&nbsp;Genome Graphs User's Guide </B></FONT>
-	      </TD></TR>
-	    </TABLE>
-	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-	      <TR><TH HEIGHT=10></TH></TR>
-   	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
-              <A NAME="TOC"></A>
-	        <H3> Table of Contents: </H3>
-	 	<UL><B>
-  		<LI><A CLASS="toc" HREF="#Introduction">Introduction</A>
-        	<LI><A CLASS="toc" HREF="#FormatUpload">Formatting, Uploading &amp; 
-			Importing Data</A>
-	   	  <UL>
-                  <LI><A CLASS="toc" HREF="#Format">Formatting Data</A>
-                  <LI><A CLASS="toc" HREF="#Upload">Uploading Data</A>
-                  <LI><A CLASS="toc" HREF="#Import">Importing Data</A>
-		  </UL>
-		<LI><A CLASS="toc" HREF="#Sample">Quick Start</A>
-        	<LI><A CLASS="toc" HREF="#Displaying">Displaying Data in Genome Graphs</A>
-	   	  <UL>
-                  <LI><A CLASS="toc" HREF="#Configure">Configuring the Display</A>
-                  <LI><A CLASS="toc" HREF="#SigThreshold">Setting a Significance Threshold</A>
-                  <LI><A CLASS="toc" HREF="#DataRegion">Setting a Data Region</A>
-		  </UL>
-        	<LI><A CLASS="toc" HREF="#ViewInGB">Viewing Data in the Genome Browser</A>
-        	<LI><A CLASS="toc" HREF="#ViewInGS">Viewing Data in the Gene Sorter</A>
-        	<LI><A CLASS="toc" HREF="#DataSets">Deleting Data</A>
-        	<LI><A CLASS="toc" HREF="#Correlate">Correlating Data</A>
-		</B></UL>
-		<P>
+<h6><a href="#Introduction">Introduction</a></h6>
+<h6><a href="#FormatUpload">Formatting, uploading and importing data</a></h6>
+<ul> 
+  <li><a href="#Format"><strong>Formatting data</strong></a></li> 
+  <li><a href="#Upload"><strong>Uploading data</strong></a></li> 
+  <li><a href="#Import"><strong>Importing data</strong></a></li> 
+</ul> 
+<h6><a href="#Sample">Quick start</a></h6>
+<h6><a href="#Displaying">Displaying data in Genome Graphs</a></h6>
+<ul> 
+  <li><a href="#Configure"><strong>Configuring the display</strong></a></li> 
+  <li><a href="#SigThreshold"><strong>Setting a significance threshold</strong></a></li> 
+  <li><a href="#DataRegion"><strong>Setting a data region</strong></a></li> 
+</ul> 
+<h6><a href="#ViewInGB">Viewing data in the Genome Browser</a></h6> 
+<h6><a href="#ViewInGS">Viewing data in the Gene Sorter</a></h6>
+<h6><a href="#DataSets">Deleting data</a></h6>
+<h6><a href="#Correlate">Correlating data</a></h6>
+<hr>
+<p> 
+<a href="../../contacts.html">Questions and feedback on this User's Guide are welcome.</a></p> 
+<p> 
+User questions and answers on Genome Graphs and other topics are available in the 
+<a href = "https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome" 
+target="_blank">Genome Browser mailing list</a>.</p>
 
-		<A HREF="../../contacts.html">Questions 
-                and feedback on this User's Guide are welcome.</A>
+<!-- Introduction -->
+<a name="Introduction"></a>
+<h2>Introduction</h2> 
+<p> 
+Genome Graphs is a tool for displaying genome-wide data sets such as the results of genome-wide SNP 
+association studies, linkage studies and homozygosity mapping.</p> 
+<p> 
+Using the Genome Graphs tool, you can: 
+<ul> 
+  <li> 
+  upload several sets of genome-wide data and display them simultaneously</li> 
+  <li> 
+  click on an area of interest and go directly to the genome browser at that position</li> 
+  <li> 
+  set a significance threshold for your data and view only regions that meet that threshold</li> 
+  <li> 
+  view the genes that exist in areas where your data meet your significance threshold</li> 
+</ul> 
+<p> 
+To return to Genome Graphs from any other location on the Genome Browser website, use your browser's
+Back button, or click <em>Home</em> on the blue navigation bar, then click the <em>Genome 
+Graphs</em> link.</p> 
+<p> 
+Note that only the &quot;standard&quot; chromosomes are displayed in the Genome Graphs display; 
+haplotype and mitochondrial chromosomes are not displayed.</p> 
+<p> 
+This User's Guide is aimed at both the novice Genome Graphs user as well as the advanced user. If 
+you are new to the Genome Graphs tool, read the <a href="#Sample">Quick Start</a> section to learn 
+about the basics using some sample data. Advanced users may want to proceed directly to the section 
+that addresses a particular area of functionality in detail.</p>
 
-                <P>
-                User questions and answers on Genome Graphs and other topics
-		are available in the 
-                <A HREF = "https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
-                TARGET = _BLANK>Genome Browser mailing list</A>.
-	      </TD><TD WIDTH=15></TD></TR>
-	    </TABLE>
-	  <BR></TD></TR>
-	</TABLE>
-      </TD></TR>
-    </TABLE>
-  <P>
+<!-- Format & Upload -->
+<a name="FormatUpload"></a>
+<h2>Formatting, uploading and importing data</h2>
 
-<!------Introduction-------------------------->
-<A NAME="Introduction"></A>
-    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-      <TR><TD>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-          <TR><TD>
- 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
-	      <TR><TD>
-	    	<FONT SIZE="4"><B>&nbsp; Introduction </B></FONT>
-	      </TD></TR>
-	    </TABLE>
-	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-	      <TR><TH HEIGHT=10></TH></TR>
-	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
-		<P>
-		Genome Graphs is a tool for displaying genome-wide data sets 
-		such as the results of genome-wide SNP association studies, 
-		linkage studies and homozygosity mapping.</P>
-		<P>
-		Using the Genome Graphs tool, you can:
-                <UL>
-                <LI> upload several sets of genome-wide data and display
-                     them simultaneously</LI>
-                <LI> click on an area of interest and go directly to the
-                     genome browser at that position</LI>
-                <LI> set a significance threshold for your data and view
-                     only regions that meet that threshold</LI>
-                <LI> view the genes that exist in areas where your data
-                     meet your significance threshold</LI>
-                </UL>
+<!-- Formatting Data -->
+<a name="Format"></a>
+<h3>Formatting data</h3> 
+<p>
+Genome Graphs allows you to upload data from files that reside on your computer. Several file 
+formats are accepted by the program. For all formats there is a single line for each marker. Each 
+line starts with information on the marker, and ends with the numerical values associated with that 
+marker. The markers can be of one of the following types:</p>
+<ul>
+  <li>
+  <strong>chromosome base:</strong> e.g., <code>chr1 130000</code> (Note that the first base in a 
+  chromosome is considered position 0)</li>
+  <li>
+  <strong>STS Marker:</strong> e.g., <code>RH75228</code></li>
+  <li>
+  <strong>dbSNP rsID:</strong> e.g., <code>rs12345</code></li>
+  <li>
+  <strong>Affymetrix 500k Gene Chip:</strong> e.g., <code>SNP_A-1780270</code></li>
+  <li>
+  <strong>Affymetrix Genome-Wide SNP Array 6:</strong> e.g., <code>SNP_A-8575125</code></li>
+  <li>
+  <strong>Affymetrix SNP Array 6 Structural-Variation:</strong> e.g., <code>CN_47396</code></li>
+  <li>
+  <strong>Illumina HumanHap300 Bead Chip:</strong> e.g., <code>rs3934834</code></li>
+  <li>
+  <strong>Illumina HumanHap550 Bead Chip:</strong> e.g., <code>rs3094315</code></li>
+  <li>
+  <strong>Illumina HumanHap650 Bead Chip:</strong> e.g., <code>rs3094315</code></li>
+  <li><strong>Agilent CGH 244A: </strong>e.g. <code>A_14_P112718</code></li>
+</ul> 
+<p>
+The marker-value pairs in each line of the file can be separated with a single space, a tab, or a 
+comma. The file can contain multiple values for each marker.  In that case, a separate graph will be
+created for each value column in the input file.</p> 
+<p>
+For example, <strong>chromosome base</strong> markers with only one value associated with the marker
+would be entered like this:</p>
+<pre><code>chrX 100000 1.23</code></pre>
+<p>
+<strong>dbSNP rsID</strong> markers with two values associated with the marker would be entered like
+this:</p>
+<pre><code>rs10218492 0.384 0.882</code></pre>
+<p>
+The Genome Graph program will map the marker IDs to the genome. In cases where the marker maps to 
+more than one location in the genome, the value(s) in your input file will be associated with each 
+location.</p> 
+<p>
+If the value associated with your marker is positive, do not include a sign (e.g., &quot;+&quot;).  
+Include a sign (&quot;-&quot;) only if the value is negative.</p>
+<p>
+Note that markers can only be mapped to assemblies for which there already exists a track of the 
+type that contains your marker type. You can not, for example, use dbSNP rsID markers for the cow 
+genome, as it does not have a SNP track.</p> 
 
-		<P>
-		To return to Genome Graphs from any other location on the 
-		Genome Browser website, use your browser's Back button, or 
-		press <EM>Home</EM> on the blue navigation bar, then 
-		press the <EM>Genome Graphs</EM> link.
-		</P>
+<!-- Uploading Data -->
+<a name="Upload"></a>
+<h3>Uploading data</h3> 
+<p>
+Once you have created your input file, you must upload it to Genome Graphs. From the main Genome 
+Graphs page, choose the clade, genome, and assembly to which your data pertains. If you are unsure 
+of the UCSC assembly name, check <a href="../../FAQ/FAQreleases.html#release1">this</a> page. Then, 
+click the upload button to go to the upload page.</p> 
+<p>
+To upload a file in any of the supported formats, locate the file on your computer using the 
+controls next to &quot;file name&quot;, and then submit. The other controls on this form are 
+optional, but can be used to enhance the display. In general, the controls that default to 
+&quot;best guess&quot; will not need modification, since the default guess is almost always 
+correct.</p> 
+<p>
+The controls for display min and max values and connecting lines may be adjusted later via the 
+configuration page. Here is a description of each control:</p>
 
-		<P>
-		Note that only the &quot;standard&quot; chromosomes are 
-		displayed in the Genome Graphs display; haplotype and 
-		mitochondrial chromosomes are not displayed.
-		</P>
+<a name="Controls"></a>
+<ul>
+  <li>
+  <strong>name of data set:</strong> Displayed in graph drop-down in Genome Graphs and as the track 
+  name in Genome Browser. Only the first 16 characters are visible in some contexts. For data sets 
+  with multiple graphs, this is the first part of the name, shared with all members of the data 
+  set.</li>
+  <li>
+  <strong>description:</strong>  A short sentence describing the data set. Displayed in the Genome 
+  Graphs and Genome Browser configuration pages, and as the center label in the Genome Browser.</li>
+  <li>
+  <strong>file format:</strong> Controls whether the upload file is a tab-separated, 
+  comma-separated, or space separated table.</li> 
+  <li>
+  <strong>markers are:</strong> Describes how to map the data to chromosomes. The choices are that 
+  either the first column of the file is an ID of some sort, or the first column is a chromosome and
+  the next a base. The IDs can be SNP rs numbers, STS marker names or IDs from any of the supported 
+  genotyping platforms.</li>
+  <li>
+  <strong>column labels:</strong> Controls whether the first row of the upload file is interpreted 
+  as labels or data. If the first row contains text in the numerical fields, or if the mapping 
+  fields are empty, it is interpreted by &quot;best guess&quot; as labels. This is generally 
+  correct, but you can override this interpretation by explicitly setting the control.</li>
+  <li>
+  <strong>display min value/max value:</strong> Set the range of the data set that will be plotted. 
+  If left blank, the range will be taken from the min/max values in the data set itself. For all 
+  data sets to share the same scale, you will usually need to set this.</li> 
+  <li>
+  <strong>label values:</strong> A comma-separated list of numbers for the vertical axis. If left 
+  blank, the axis will be labeled at the 1/3 and 2/3 points of your data range.</li>
+  <li>
+  <strong>draw connecting lines:</strong> Lines are drawn connecting data points that are separated 
+  by this number of bases or fewer.</li>
+  <li>
+  <strong>file name, or Paste URLs or data:</strong> Specify the uploaded data -- enter either a 
+  file on your local computer; or a URL at which the data file can be found; or simply paste-in the 
+  data. If entries are made in both fields, the file name will take precedence.</li>
+</ul>
 
-		<P>
-		This User's Guide is aimed at both the novice Genome Graphs user
-		as well as the advanced user. If you are new to the Genome Graphs 
-		tool, read the <A HREF="#Sample">Quick Start</A> section to 
-		learn about the basics using some sample data. Advanced users 
-		may want to proceed directly to the section that addresses 
-		a particular area of functionality in detail.</P>
-	      </TD><TD WIDTH=15></TD></TR>
-	    </TABLE>
-	  <BR></TD></TR>
-	</TABLE>
-      </TD></TR>
-    </TABLE>
-    <P>
+<!-- Importing Data -->
+<a name="Import"></a>
+<h3>Importing data</h3> 
+<p>
+In addition to supplying your own genome-wide data files, you can also import existing database 
+tables from an assembly into the Genome Graphs tool. Any table containing positional information can
+be imported.  This includes tables of the following types: BED, PSL, wiggle, MAF, and bedGraph. 
+Custom track tables can be imported as well. The tables made by Genome Graphs (chromGraph) can not 
+be imported as they are already in the format used by the tool, thus no conversion is necessary. 
+All tables imported into Genome Graphs will be converted into a custom track of type chromGraph 
+using a window-size of 10,000 bases.</p>
+<p>
+To import a table or custom track, choose the group, track, and table from the lists, then click the
+submit button.  The other controls are optional, though completing them will enhance the display. 
+The controls for display min and max values and connecting lines can be set later via the 
+configuration page as well. Here is a description of each control.</p> 
+<ul>
+  <li>
+  <strong>name of data set:</strong> This will be displayed in the graph list in the Genome Graphs 
+  tool and as the track name in the Genome Browser. Only the first 16 characters are visible in some
+  contexts. For data sets with multiple graphs, this is the first part of the name, shared with all   members of the data set.</li>
+  <li>
+  <strong>description:</strong> Enter a short sentence describing the data set. It will be displayed
+  in the Genome Graphs tool and in the Genome Browser.</li>
+  <li>
+  <strong>display min value/max value:</strong> Set the range of the data set to be plotted. If left
+  blank, the range will be taken from the min and max values in the data set itself. If you would 
+  like all of your data sets to share the same scale, you will need to set this.</li>
+  <li>
+  <strong>label values:</strong> A comma-separated list of numbers for the vertical axis. If left 
+  blank the axis will be labeled at the 1/3 and 2/3 point.</li> 
+  <li>
+  <strong>draw connecting lines:</strong> Lines connecting data points separated by no more than 
+  this number of bases are drawn.</li>
+  <li>
+  <strong>depth or coverage:</strong> When importing positional tables, you can choose to convert 
+  those tables to the chromGraph format by using either the <em>depth</em> or <em>coverage</em> 
+  conversion method. Both conversion methods use a non-overlapping window size of 10,000 bases when 
+  converting to the chromGraph format. In the <em>depth</em> method, the weighted average for each 
+  10,000 base window is assigned to a single point in the center of this window. Whereas the 
+  <em>coverage</em> method is binary &mdash if there is even one point in the input table in that 
+  10,000 base window, the resulting graph will have a value of 1 for that range.</li>
+</ul>
 
-<!-------Format & Upload-------------------------->
-<A NAME="FormatUpload"></A>
- <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
- <TR><TD>
-  <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-  <TR><TD>
-    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
-    <TR><TD>
-    <FONT SIZE="4"><B>&nbsp; Formatting, Uploading &amp; Importing Data </B></FONT>
-    </TD></TR>
-    </TABLE>
-     <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-     <TR><TH HEIGHT=10></TH></TR>
-     <TR><TD WIDTH=10>&nbsp;</TD><TD>
-     <P>
-     </P>
+<!-- Quick Start -->
+<a name="Sample"></a>
+<h2>Quick start</h2>
+<p> 
+Use the examples in this section of the User's Guide to get a feel for how the tool works. Refer to 
+other sections in this User's Guide for details and instructions for more advanced features.</p>
+<p> 
+The Genome Graphs tool comes pre-loaded with sample data. These sample data sets are from real-world
+genome-wide studies.  Use these data sets to quickly see what the tool looks like when data is 
+displayed. To view the sample data, choose a data set from the <strong>graph</strong> drop-down 
+list, then choose your desired display color from the <strong>in</strong> drop-down list. The tool 
+will display the data set directly above the chromosomes in Genome Graphs. Read on to learn how to 
+<a href="#Configure">customize</a> the display.</p> 
 
-<!-------Formatting Data------------------------->
-<A NAME="Format"></A>
-  <B><FONT SIZE="3" COLOR="#0000FF">Formatting Data</FONT></B>
-  <P>Genome Graphs allows you to upload data from files that reside 
-  on your computer. Several file formats are accepted by the 
-  program.  For all formats there is a single line for each marker. 
-  Each line starts with information on the marker, and ends with 
-  the numerical values associated with that marker. The markers 
-  can be of one of the following types:</P>
-
-  <table>
-  <tbody><tr><td valign="top" width="20">&mdash;</td>
-  <td><b>chromosome base: </b> e.g. <TT>chr1 130000</TT> 
-  (Note that the first base in a chromosome is considered position 0.)
-  </td></tr>
-
-  <tr><td valign="top" width="20">&mdash;</td>
-  <td><b>STS Marker:</b> e.g. <TT>RH75228</TT>
-  </td></tr>
-
-  <tr><td valign="top" width="20">&mdash;</td>
-  <td><b>dbSNP rsID:</b> e.g. <TT>rs12345</TT>
-  </td></tr>
-
-
-  <tr><td valign="top" width="20">&mdash;</td>
-  <td><b>Affymetrix 500k Gene Chip:</b> e.g. <TT>SNP_A-1780270</TT>
-  </td></tr>
-
-  <tr><td valign="top" width="20">&mdash;</td>
-  <td><b>Affymetrix Genome-Wide SNP Array 6:</b> e.g. <TT>SNP_A-8575125</TT>
-  </td></tr>
-
-  <tr><td valign="top" width="20">&mdash;</td>
-  <td><b>Affymetrix SNP Array 6 Structural-Variation:</b> e.g. <TT>CN_47396</TT>
-  </td></tr>
-
-  <tr><td valign="top" width="20">&mdash;</td>
-  <td><b>Illumina HumanHap300 Bead Chip: </b>e.g. <TT>rs3934834</TT>
-  </td></tr>
-
-  <tr><td valign="top" width="20">&mdash;</td>
-  <td><b>Illumina HumanHap550 Bead Chip: </b>e.g. <TT>rs3094315</TT>
-  </td></tr>
-
-  <tr><td valign="top" width="20">&mdash;</td>
-  <td><b>Illumina HumanHap650 Bead Chip: </b>e.g. <TT>rs3094315</TT>
-  </td></tr>
-
-  <tr><td valign="top" width="20">&mdash;</td>
-  <td><b>Agilent CGH 244A: </b>e.g. <TT>A_14_P112718</TT>
-  </td></tr>
-
-  </table>
-
-  <P>The marker-value pairs in each line of the file can be separated 
-  with a single space, a tab, or a comma. The file can 
-  contain multiple values for each marker.  In that case, a 
-  separate graph will be created for each value column in the input file.</P>
-  <P>For example, <B>chromosome base</B> markers with only one 
-  value associated with the marker would be entered like this:</P>
-
-  <TT>chrX 100000 1.23</TT>
-
-  <P><B>dbSNP rsID</B> markers with two values associated 
-  with the marker would be entered like this:</P>
-
-  <TT>rs10218492 0.384 0.882</TT>
-
-  <P>The Genome Graph program will map the marker IDs to the genome. 
-  In cases where the marker maps to more than one location in 
-  the genome, the value(s) in your input file will be associated 
-  with each location.</P>
-
-  <P>If the value associated with your marker is positive, do not 
-  include a sign (e.g. '+').  Include a sign ('-') only if the value is
-  negative.</P>
-
-  <P>Note that markers can only be mapped to assemblies for which 
-  there already exists a track of the type that contains your 
-  marker type. You can not, for example, use dbSNP rsID markers 
-  for the cow genome, as it does not have a SNP track.</P>
-  <P>
-
-
-<!-------Uploading Data---------------------------->
-<A NAME="Upload"></A>
-  <HR>
-  <B><FONT SIZE="3" COLOR="#0000FF">Uploading Data</FONT></B>
-
-  <P>Once you have created your input file, you must upload it to
-  Genome Graphs. From the main Genome Graphs page, choose your
-  clade, genome, and assembly to which your data pertains.
-  If you are unsure of the UCSC assembly name, you can check
-  <A HREF="../../FAQ/FAQreleases.html#release1">this</A> page.
-  Now, press the upload button to go to the upload page.</P>
-
-  <P>To upload a file in any of the supported formats, locate the 
-  file on your computer using the controls next to <B>file 
-  name</B>, and then submit. The other controls on this form are 
-  optional, though filling them out will sometimes enhance the 
-  display. In general the controls that default to &quot;best 
-  guess&quot; can be left alone, since the guess is almost always 
-  correct.</P>
-
-  <P>The controls for display min and max values and connecting 
-  lines can be set later via the configuration page as well. 
-  Here is a description of each control.</P>
-
-<A NAME="Controls"></A>
-  <UL>
-  <LI><B>name of data set:</B> Displayed in graph drop-down in 
-   Genome Graphs and as the track name in Genome Browser. Only the
-   first 16 characters are visible in some contexts. For data 
-   sets with multiple graphs, this is the first part of the 
-   name, shared with all members of the data set.</LI>
-
-  <LI><B>description:</B>  A short sentence describing the 
-   data set. Displayed in the Genome Graphs and Genome Browser 
-   configuration pages, and as the center label in the Genome Browser.</LI>
-
-  <LI><B>file format:</B> Controls whether the upload file is 
-   a tab-separated, comma-separated, or space separated table.</LI>
-
-  <LI><B>markers are:</B> Describes how to map the data to 
-   chromosomes. The choices are that either the first column of the 
-   file is an ID of some sort, or the first column is a chromosome 
-   and the next a base. The IDs can be SNP rs numbers, STS marker 
-   names or ID's from any of the supported genotyping platforms.</LI>
-
-  <LI><B>column labels:</B> Controls whether the first row of the 
-   upload file is interpreted as labels or data. If the 
-   first row contains text in the numerical fields, or if the 
-   mapping fields are empty, it is interpreted by &quot;best 
-   guess&quot; as labels. This is generally correct, but you can 
-   override this interpretation by explicitly setting the control.</LI>
-
-  <LI><B>display min value/max value:</B> Set the range of the 
-   data set that will be plotted. If left blank, the range will 
-   be taken from the min/max values in the data set itself. For 
-   all data sets to share the same scale, you will usually need 
-   to set this.</LI>
-
-  <LI><B>label values:</B> A comma-separated list of numbers 
-   for the vertical axis. If left blank, the axis will be 
-   labeled at the 1/3 and 2/3 points of your data range.</LI>
-
-  <LI><B>draw connecting lines:</B> Lines are drawn connecting data points 
-   that are separated by this number of bases or fewer.</LI>
-
-  <LI><B>file name, or Paste URLs or data:</B> Specify the uploaded data --
-   enter either a file on your local computer; or a URL at which the data file can be
-   found; or simply paste-in the data. If entries are made in both fields, the file name will take
-   precedence. </LI>
-
- 
-  </UL>
-
-
-<!-------Importing Data---------------------------->
-<A NAME="Import"></A>
-  <HR>
-  <B><FONT SIZE="3" COLOR="#0000FF">Importing Data</FONT></B>
-
-  <P>In addition to supplying your own genome-wide data files, you can also
-import existing database tables from an assembly into the 
-Genome Graphs tool.  Any table containing positional information can be 
-imported.  This includes tables of the following types: BED, PSL, wiggle, 
-MAF, and bedGraph.  Custom track tables can be imported 
-as well.  The tables made by Genome Graphs (chromGraph) can not be imported 
-as they are already in the format used by the tool, thus no conversion is 
-necessary.  All tables imported into Genome Graphs will be converted into 
-a custom track of type chromGraph using a window-size of 10,000 bases.</P>
-
-  <P>To import a table or custom track, choose the group, track, and table 
-from the lists, then press the submit button.  The other controls are optional, 
-though completing them will enhance the display. The controls for display 
-min and max values and connecting lines can be set later via the configuration 
-page as well. Here is a description of each control.</P>
-
-  <UL>
-  <LI><B>name of data set:</B> This will be displayed in the graph list 
-  in the Genome Graphs tool and as the track name in the Genome Browser. 
-  Only the first 16 characters are visible in some contexts. For data 
-  sets with multiple graphs, this is the first part of the name, shared 
-  with all members of the data set.</LI>
-
-  <LI><B>description:</B> Enter a short sentence describing the data set. 
-  It will be displayed in the Genome Graphs tool and in the Genome Browser.</LI>
-
-  <LI><B>display min value/max value:</B> Set the range of the data set to 
-  be plotted. If left blank, the range will be taken from the min and max 
-  values in the data set itself. If you would like all of your data sets to 
-  share the same scale, you will need to set this.</LI>
-
-  <LI><B>label values:</B> A comma-separated list of numbers for the vertical 
-  axis. If left blank the axis will be labeled at the 1/3 and 2/3 point.</LI>
-
-  <LI><B>draw connecting lines:</B> Lines connecting data points separated 
-  by no more than this number of bases are drawn.</LI>
-
-  <LI><B>depth or coverage:</B> When importing positional tables, you 
-  can choose to convert those tables to the chromGraph format by using 
-  either the <EM>depth</EM> or <EM>coverage</EM> conversion method. Both 
-  conversion methods use a non-overlapping window size of 10,000 bases 
-  when converting to the chromGraph format. In the <EM>depth</EM> method, 
-  the weighted average for each 10,000 base window is assigned to a single
-  point in the center of this window.  Whereas the <EM>coverage</EM> method 
-  is binary &mdash if there is even one point in the input table in that 
-  10,000 base window, the resulting graph will have a value of 1 for that 
-  range.</LI>
-  </UL>
-
-  </P>
-  <P>
-  </TD><TD WIDTH=15></TD></TR>
-  </TABLE>
- <BR></TD></TR>
- </TABLE>
-</TD></TR>
-</TABLE>
-<P>
-
-
-<!-------Quick Start------------------------->
-<A NAME="Sample"></A>
-<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-<TR><TD>
- <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
- <TR><TD>
-  <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
-  <TR><TD>
-  <FONT SIZE="4"><B>&nbsp; Quick Start </B></FONT>
-  </TD></TR>
-  </TABLE>
-   <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-   <TR><TH HEIGHT=10></TH></TR>
-   <TR><TD WIDTH=10>&nbsp;</TD><TD>
-   <P>
-   Use the examples in this section of the User's Guide to get a feel for how 
-   the tool works. Refer to other sections 
-   in this User's Guide for details and instructions for more advanced features.
-   </P>
-   <P>
-   The Genome Graphs tool comes pre-loaded with sample data.  These sample 
-   data sets are from real-world genome-wide studies.  Use these data sets to 
-   quickly see what the tool looks like when data is displayed.  To
-   view the sample data, choose a data set from the 
-   <B>graph</B> drop-down list, then choose your desired display color from 
-   the <B>in</B> drop-down list.  The tool will display the data set 
-   directly above the chromosomes in Genome Graphs. 
-   Read on to learn how to 
-   <A HREF="#Configure">customize</A> the display.
-   </P> 
-
-<!-------Example #1---------------------------->
-<A NAME="example1"></A>
- <HR>
- <B><FONT SIZE="3" COLOR="#0000FF">Example #1 &mdash; SNPs on chr22</FONT></B>
-   <P>
-   Follow these steps to display in Genome Graphs all of the highest quality 
-   SNPs on chromosome 22 for the hg18 assembly whose predicted functional 
-   role is &quot;coding non-synonymous&quot; 
-   (where there is a change in the peptide for the allele with respect to 
-   the reference assembly). Note that there are no SNPs on the p-arm of 
-   chromosome 22. 
-   </P>
-   <P>
-   This data set is <A HREF="#Format">formatted</A> in the &quot;<TT>marker 
-   value</TT>&quot; 
-   style. The <TT>markers</TT> are <B>dbSNP rsIDs</B>. The associated 
-   <TT>value</TT> is <B>+1</B> if the SNP is on the positive strand, and 
-   <B>-1</B> if the SNP is on the negative strand. Here are the first 
-   ten rows of the data file:<BR><BR>
-
-<TT><PRE>
-rs1007298       +1
+<!-- Example #1 -->
+<a name="example1"></a>
+<h3>Example #1 &mdash; SNPs on chr22</h3> 
+<p> 
+Follow these steps to display in Genome Graphs all of the highest quality SNPs on chromosome 22 for 
+the hg18 assembly whose predicted functional role is &quot;coding non-synonymous&quot; (where there 
+is a change in the peptide for the allele with respect to the reference assembly). Note that there 
+are no SNPs on the p-arm of chromosome 22.</p> 
+<p> 
+This data set is <a href="#Format">formatted</a> in the &quot;<code>marker value</code>&quot; style.
+The <code>markers</code> are <strong>dbSNP rsIDs</strong>. The associated <code>value</code> is 
+<strong>+1</strong> if the SNP is on the positive strand, and <strong>-1</strong> if the SNP is on 
+the negative strand. Here are the first ten rows of the data file:</p>
+<pre><code>rs1007298       +1
 rs1007863       +1
 rs10154509      +1
 rs10154678      +1
@@ -433,475 +261,234 @@ rs1018448       +1
 rs10212022      +1
 rs1022478       +1
 rs1042311       +1
-rs1042435       +1
-</TT></PRE>
+rs1042435       +1 </code></pre>
 
-   <P><B>Step 1. Upload the data into the Genome Graphs tool</B><BR>
-   Copy the entire sample <A HREF="examples/hgGenome_example1.txt">data set</A> 
-   into a text editor and save the file to your computer. This data 
-   set is associated with the human assembly: hg18 
-   (Mar. 2006). Be sure to 
-   configure the Genome Graphs tool to use the hg18 assembly 
-   like so:<BR><BR>
+<p>
+<strong>Step 1. Upload the data into the Genome Graphs tool</strong><br> 
+Copy the entire sample <a href="examples/hgGenome_example1.txt">data set</a> into a text editor and save the file to your computer. This data set is associated with the human assembly: hg18 (Mar. 
+2006). Be sure to configure the Genome Graphs tool to use the hg18 assembly like so:</p>
+<pre><code><strong>clade:</strong>		Vertebrate
+<strong>genome:</strong>		Human
+<strong>assembly:</strong>	Mar. 2006 </code></pre>
 
-<PRE>
-<B>clade:</B>		Vertebrate
-<B>genome:</B>		Human
-<B>assembly:</B>	Mar. 2006
-</PRE>
-    
-   <A HREF="#Upload">Upload</A> the file into the Genome Graphs tool. 
-   You can configure each <A HREF="#Controls">control</A> on the upload 
-   page, or just leave them set to their default values.<BR>
-   The upload process may take some time, as the program is actually 
-   mapping each rsID in the input file to its location(s) in the genome.
-   </P>
+<p>
+<a href="#Upload">Upload</a> the file into the Genome Graphs tool. You can configure each 
+<a href="#Controls">control</a> on the upload page, or just leave them set to their default values.
+The upload process may take some time, as the program is actually mapping each rsID in the input 
+file to its location(s) in the genome.</p> 
+<p>
+<strong>Step 2. Display the graph in Genome Graphs</strong><br> 
+Now that your input file has been uploaded to the server, you will want to display it in the Genome 
+Graphs tool. To display your uploaded data, simply choose the graph name from the 
+<strong>graph</strong> drop-down list, then choose your desired display color from the 
+<strong>in</strong> drop-down list. Your graph will be displayed directly above the chromosomes in 
+Genome Graphs. You should see the data plotted directly above chromosome 22.</p> 
+<p>
+<strong>Step 3. View the graph in the Genome Browser</strong><br> 
+From the Genome Graphs display, click anywhere on the graph or on chromosome 22 to open the Genome 
+Browser for hg18 centered at that location on chr22. The graph will be drawn as a track near the top
+of the Genome Browser display.</p>
 
-   <P><B>Step 2. Display the graph in Genome Graphs</B><BR>
-   Now that your input file has been uploaded to the server, you will want 
-   to display it in the Genome Graphs tool. To display your uploaded data, 
-   simply choose the graph name from the 
-   <B>graph</B> drop-down list, then choose your desired display color 
-   from the <B>in</B> drop-down list. 
-   Your graph will be displayed directly above the chromosomes 
-   in Genome Graphs. You should see the data plotted directly 
-   above chromosome 22.
-   </P>
+<!-- Example #2  
+<a name="example2"></a>
+COMMENTED OUT -- ADD EXAMPLE #2 WHEN READY 
+-->
 
-   <P><B>Step 3. View the graph in the Genome Browser</B><BR>
-   From the Genome Graphs display, press anywhere on the graph 
-   or on chromosome 22 to open the
-   Genome Browser for hg18 centered at that location on chr22. 
-   The graph will be drawn as a track near the top of the Genome
-   Browser display. 
-   </P>
-   <P>
+<!-- Displaying Data in Genome Graphs -->
+<a name="Displaying"></a>
+<h2>Displaying data in Genome Graphs</h2> 
+<p> 
+Once you have uploaded your data, you will want to display it in the Genome Graphs tool. To display 
+your uploaded data, simply choose the graph name from the <strong>graph</strong> drop-down list, 
+then choose the color in which you would like it to be displayed from the <strong>in</strong> 
+drop-down list. Your graph will be displayed directly above the chromosomes in Genome Graphs. Read 
+on to learn how to <a href="#Configure">customize</a> the display.</p>
 
+<!-- Configuring the Display -->
+<a name="Configure"></a> 
+<h3>Configuring the display</h3> 
+<p> 
+<strong>Configuring the graphs display</strong><br> 
+To go to the configuration page, click the <em>configure</em> button on the main Genome Graphs page.
+This is the page from which you can configure many overall aspects of the Genome Graphs display. 
+Individual graphs can also be configured (see the next section for help on that).</p> 
+<p> 
+On this page you will find the following controls:</p> 
+<ul> 
+  <li>
+  <strong>image width</strong> - controls the overall width of the graphs display on the main Genome
+  Graphs page. The default is 620 pixels.</li> 
+  <li>
+  <strong>graph height</strong> - controls the height of the graph(s) in the space above each 
+  chromosome. The default is 27 pixels.</li> 
+  <li>
+  <strong>graphs per line</strong> - controls how many graphs are displayed on each line in the 
+  space above each chromosome. For example, if you set this value to two, the display will 
+  superimpose two graphs on top of each other on one line. The axis label for the first graph will 
+  appear on the left side of the display and the axis for the second graph on the right side.</li> 
+  <li>
+  <strong>lines of graphs</strong> - controls how many sets of graphs will appear above each 
+  chromosome. For example, if you set this value to 2, the display will make room for two lines of 
+  graphs (each at the <strong>graph height</strong> above) in the space above each chromosome.</li> 
+  <li>
+  <strong>chromosome layout</strong> - controls how the chromosomes are laid out in the Genome 
+  Graphs display. You can choose to view one or two chromosomes on each horizontal line in the 
+  display. Alternatively, you can set up the display such that all of the chromosomes appear in one 
+  long line. If you choose this layout, you may want to adjust the width of the image 
+  (<strong>image width</strong> above).</li> 
+  <li>
+  <strong>numerical labels</strong> - check this box if you would like to see axis labels to the 
+  right/left of the display. If you did not specify <strong>label values</strong> when you uploaded 
+  your file, the numerical labels will default to 1/3 and 2/3 of the max and min values in your 
+  data input file.</li> 
+  <li>
+  <strong>highlight missing</strong> - check this box if you would like to see the areas in your 
+  graph where there is no data. Note that if you are displaying more than one graph, this attribute 
+  only pertains to the first graph.</li> 
+  <li>
+  <strong>region padding</strong> - controls the size of the data regions. The data points in your 
+  graphs which exceed the significance threshold are padded by this number of bases on either side. 
+  The default places 25,000 bases on each side.</li> 
+</ul>
+<p> 
+When you have completed configuring the display, click the <strong>submit</strong> button to return 
+to the Genome Graphs display.</p> 
+<p> 
+<strong>Configuring individual graphs</strong><br> 
+Near the bottom of the Configuration page, you will see a list of the graphs that you have uploaded.
+Click on the hyperlinked graph name to configure that graph. This configuration pertains to the 
+Genome Graphs view.</p> 
+<p> 
+You can set the range of the display by editing the <strong>display min/max value</strong> values. 
+This will restrict the Genome Graphs display for this graph to that data range. The axis will be 
+labeled at 1/3 and 2/3 of the data range that you set.</p> 
+<p>
+If your data is sparse, you may want to draw lines between your data points. You can configure that 
+by editing the <strong>draw connecting lines between markers separated by up to ... bases</strong> 
+value. The default value is 25,000,000 bases.</p> 
+<p> 
+When you have completed configuring the display, click the <strong>submit</strong> button twice to 
+return to the Genome Graphs display.</p>
 
-<!-------Example #2--------------------------***
-<A NAME="example2"></A>
- <HR>
- <B><FONT SIZE="3" COLOR="#0000FF">Example #2</FONT></B>
-   <P>
-   </P>
-   <P>
-   </P>
-   <P>
+<!-- Setting a Significance Threshold -->
+<a name="SigThreshold"></a> 
+<h3>Setting a significance threshold</h3> 
+<p> 
+Most genome-wide data has some amount of noise and is only interesting when the data values are 
+above a certain value. You can set this value using the significance threshold input box. Enter a 
+decimal number in this input box and click Enter. The display will now have a light gray line across
+the graph at this data value.  If you have more than one graph displayed, the significance threshold
+only pertains to the graphs that contain the significance threshold in the displayed data range.</p>
+<p> 
+The significance threshold works in concert with the <strong>browse regions</strong> and 
+<strong>sort genes</strong> buttons; it will affect the regions that are displayed once you click 
+either of these two buttons.</p> 
+<p> 
+To open the Genome Browser with a view of all of the regions in your graph that include data points 
+that pass the significance threshold, click the <strong>browse regions</strong> button. This will 
+open the Genome Browser with a navigation pane on the left side of the screen. This pane will 
+contain links to all regions which pass your significance threshold. Note that if you are displaying
+more than one graph, the significant regions are based only on the first graph in the display 
+list.</p> 
+<p> 
+To view a list of genes which are in regions that pass the significance threshold, click the 
+<strong>sort genes</strong> button. This will open the Gene Sorter with only the genes that are in 
+significant locations with respect to your data.</p> 
+<p> 
+If you would rather view all of your regions without restricting the output to only those regions 
+that pass the significance threshold, simply delete any values from the significance threshold input
+box and click Enter before clicking <strong>browse regions</strong>.</p> 
 
-*** ADD EXAMPLE #2 WHEN READY -->
+<!-- Setting a Data Region -->
+<a name="DataRegion"></a> 
+<h3>Setting a data region</h3> 
+<p> 
+The data region is the span of bases that will be added to either side of the data points in your 
+graphs which exceed the significance threshold. Set the data region by editing the <strong>region 
+padding</strong> value on the configuration page. The combination of setting the data region and the
+significance threshold will affect two things:</p> 
+<ul> 
+  <li>
+  the regions displayed in the <a href="#ViewInGB">Genome Browser</a> after you click the 
+  <strong>browse regions</strong> button,</li> 
+  <li>
+  the genes displayed in the <a href="#ViewInGS">Gene Sorter</a> after you click the <strong>sort 
+  genes</strong> button.</li> 
+</ul> 
+<p> 
+For example, take a data set that contains the following data:</p>
+<pre><code>chr2 100100000 2.3 
+chr2 100100500 4.5 
+chr2 100101000 1.2</code></pre> 
+<p>
+If you set the significance threshold at 4.0, one data point in the data set passes that threshold. 
+If you then set the data range to 200, then the one significant data point will be padded on each 
+side by 200 base pairs. In that case, the only resulting significant data region will be 
+chr2:100,100,300-100,100,700.</p> 
+<p>
+If instead you set the data range to 2,000, then the one significant data point will be padded on 
+each side by 2,000 base pairs.  In that case, the resulting significant data region will be 
+chr2:100,098,500-100,102,500.</p>
 
-   <P>
-   </TD><TD WIDTH=15></TD></TR>
-   </TABLE>
-   <BR></TD></TR>
- </TABLE>
- </TD></TR>
-</TABLE>
-<P>
+<!-- Displaying Data in the Genome Browser -->
+<a name="ViewInGB"></a>
+<h2>Viewing data in the Genome Browser</h2> 
+<p> 
+To view your graphs in the Genome Browser, click the <strong>browse regions</strong> button. This 
+will open the Genome Browser with your graph(s) displayed as track(s). You can configure and 
+<a href="hgTracksHelp.html#FineTuning">edit your track</a> as you can any other track in the Genome 
+Browser. In addition to the Genome Browser, you will also see a pane on the left-hand side, which 
+contains links to all of the <a href="#DataRegion">significant regions</a> in your data. Please note
+that if you are displaying more than one graph in Genome Graphs, the significant regions are based 
+only on the first graph in the display list.</p> 
+<p> 
+You can also navigate to the Genome Browser by clicking directly on a graph or chromosome in Genome 
+Graphs. The Genome Browser will open with a 1,000,000 bp window centered on the location on which 
+you clicked.</p>
 
+<!-- Displaying Data in the Gene Sorter -->
+<a name="ViewInGS"></a>
+<h2>Viewing data in the Gene Sorter</h2> 
+<p> 
+To view the set of genes that are in <a href="#DataRegion">significant regions</a> in your data, 
+click the <strong>sort genes</strong> button. This will open the Gene Sorter with a filter to 
+include only genes that are located in regions in your input data that are above the significance 
+threshold. Please note that if you are displaying more than one graph in Genome Graphs, the 
+significant genes are based only on the first graph in the display list.</p> 
+<p> 
+If the graph was uploaded using markers, then a custom Gene Sorter column with the same name as the 
+graph will be created. This column will list all markers for each gene that contain values above the
+significance threshold.</p>
 
-<!-------Displaying Data in Genome Graphs-------------------------->
-<A NAME="Displaying"></A>
-<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-<TR><TD>
- <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
- <TR><TD>
-  <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
-  <TR><TD>
-  <FONT SIZE="4"><B>&nbsp; Displaying Data in Genome Graphs </B></FONT>
-  </TD></TR>
-  </TABLE>
-   <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-   <TR><TH HEIGHT=10></TH></TR>
-   <TR><TD WIDTH=10>&nbsp;</TD><TD>
-   <P>
-   Once you have uploaded your data, you will want to display it in the 
-   Genome Graphs tool. To display your uploaded data, simply choose the 
-   graph name from the 
-   <B>graph</B> drop-down list, then choose the color in which you 
-   would like it to be displayed from the <B>in</B> drop-down list. 
-   Your graph will be displayed directly above the chromosomes 
-   in Genome Graphs. Read on to learn how to 
-   <A HREF="#Configure">customize</A> the display.
-   </P>
-   <P>
+<!-- Deleting Data -->
+<a name="DataSets"></a>
+<h2>Deleting data</h2> 
+<p> 
+There are several ways to delete your data once it has been uploaded. If you are viewing your data 
+as a track in the Genome Browser, you can click on the mini-button or track control for the track 
+and delete the track using the <strong>Remove custom track</strong> button. You can also choose to 
+reset your cart which will reset the browser interface settings to their defaults, as well as delete
+all custom tracks and data.  Do this by visiting the gateway page and clicking the hyper link: 
+&quot;Click here to reset&quot;.</p> 
+<p> 
+Your data will be saved on our server for at least 48 hours from the time you last access it, unless
+it is saved in a <a href="/goldenPath/help/hgSessionHelp.html#CTs">Session</a>.</p>
 
-<!-------Configuring the Display------------------------->
-<A NAME="Configure"></A>
-                <HR>
-                <B><FONT SIZE="3" COLOR="#0000FF">Configuring the Display</FONT></B>
-                <P>
-		<B>Configuring the graphs display</B><BR>
-		To go to the configuration page, press the <EM>configure</EM> button
-		on the main Genome Graphs page.  This is the page from which you can
-		configure many overall aspects of the Genome Graphs display.
-		Individual graphs can also be configured (see the next section
-		for help on that).
-		</P>
+<!-- Correlating Data -->
+<a name="Correlate"></a>
+<h2>Correlating data sets</h2> 
+<p> 
+To calculate how well correlated with one another your data sets are, click the 
+<strong>correlate</strong> button. This will calculate and display the correlation coefficient 
+(<strong>R</strong>) among each of your data sets. <strong>R</strong>, also known as Pearson's 
+correlation coefficient, is a measure of the extent that two graphs move together. The value of 
+<strong>R</strong> ranges between -1 and 1. A positive <strong>R</strong> indicates that the graphs 
+tend to move in the same direction, while a negative <strong>R</strong> indicates that they tend to 
+move in opposite directions.  <strong>R-Squared</strong> (which is indeed just <strong>R*R</strong>)
+measures how much of the variation in one graph can be explained by a linear dependence on the other
+graph. <strong>R-Squared</strong> ranges between 0 when the two graphs are independent to 1 when the
+graphs are completely dependent.</p> 
+<p> 
+To return to the Genome Graphs, click the <strong>return to graphs</strong> button.</p>
 
-		<P>
-		On this page you will find the following controls:
-		<UL>
-		<LI><B>image width</B> - controls the overall width of the graphs
-			display on the main Genome Graphs page.  The default is
-			620 pixels.</LI>
-		<LI><B>graph height</B> - controls the height of the graph(s) in
-			the space above each chromosome.  The default is
-			27 pixels.</LI>
-		<LI><B>graphs per line</B> - controls how many graphs are displayed
-			on each line in the space above each chromosome. For example,
-			if you set this value to two, the display will superimpose
-			two graphs on top of each other on one line.  The axis label
-			for the first graph will appear on the left side of the display
-			and the axis for the second graph on the right side.</LI>
-		<LI><B>lines of graphs</B> - controls how many sets of graphs will
-			appear above each chromosome.  For example, if you set this
-			value to 2, the display will make room for two lines of
-			graphs (each at the <B>graph height</B> above) in the space
-			above each chromosome.
-		<LI><B>chromosome layout</B> - controls how the chromosomes are laid
-			out in the Genome Graphs display. You can choose to view one
-			or two chromosomes on each horizontal line in the display. 
-			Alternatively, you can set up the display such that all of the
-			chromosomes appear in one long line. If you choose this layout,
-			you may want to adjust the width of the image (<B>image width</B> 
-			above).</LI>
-		<LI><B>numerical labels</B> - check this box if you would like to see
-			axis labels to the right/left of the display. If you did not specify
-			<B>label values</B> when you uploaded your file, the numerical
-			labels will default to 1/3 and 2/3 of the max and min values in
-			your data input file.</LI>
-		<LI><B>highlight missing</B> - check this box if you would like to
-			see the areas in your graph where there is no data. Note that if
-			you are displaying more than one graph, this attribute only
-			pertains to the first graph.</LI>
-		<LI><B>region padding</B> - controls the size of the data 
-                       regions. The data points in your graphs which exceed 
-		       the significance threshold are padded by this number
-		       of bases on either side.  
-		       The default places 25,000 bases on each side.</LI>
-		</UL>
-		</P>
-
-		<P>
-		When you have completed configuring the display, press the 
-		<B>submit</B>
-		button to return to the Genome Graphs display.
-		</P>
-	
-		<P>
-		<B>Configuring individual graphs</B><BR>
-		</P>
-
-		<P>
-		Near the bottom of the Configuration page, you will see a list of
-		the graphs that you have uploaded. Click on the hyperlinked graph
-		name to configure that graph. This configuration pertains to 
-		the Genome Graphs view. 
-		</P>
-
-		<P>
-		You can set the range of the display 
-		by editing the <B>display min/max value</B> values. This will
-		restrict the Genome Graphs display for this graph to that
-		data range. The axis will be labeled at 1/3 and 2/3 of the 
-		data range that you set.
-		</P>
-
-		<P>
-		If your data is sparse, you may want to draw lines between
-		your data points. You can configure that by editing the
-		<B>draw connecting lines between markers separated by
-		up to ... bases</B> value.  The default value is 25,000,000
-		bases.
-		</P>
-		
-		<P>
-		When you have completed configuring the display, press the
-		<B>submit</B>
-		button twice to return to the Genome Graphs display.
-		</P>
-                <P>
-
-<!-------Setting a Significance Threshold------------------------->
-<A NAME="SigThreshold"></A>
-                <HR>
-                <B><FONT SIZE="3" COLOR="#0000FF">Setting a Significance Threshold</FONT></B>
-                <P>
-		Most genome-wide data has some amount of noise and is only interesting when 
-		the data values are above a certain value.  You can set this value using the 
-		significance threshold input box.  Enter a decimal number in this input box
-		and press Enter.  The display will now have a light gray line across the 
-		graph at this data value.  If you have more than one graph displayed, the 
-		significance threshold only pertains to the graphs that contain the significance
-		threshold in the displayed data range.
-		</P>
-
-		<P>
-		The significance threshold works in concert with the <B>browse
-		regions</B> 
-		and <B>sort genes</B> buttons; it will affect the regions 
-		that are 
-		displayed once you press either of these two buttons.
-		</P>
-
-		<P>
-		To open the Genome Browser with a view of all of the regions 
-		in your graph 
-		that include data points that pass the significance threshold,
-		press the 
-		<B>browse regions</B> button. This will open the Genome 
-		Browser with a 
-		navigation pane on the left side of the screen. This pane 
-		will contain 
-		links to all regions which pass your significance threshold.
-		Note that if you are displaying more than one graph, the 
-		significant regions are based only on the first graph in the 
-		display list.
-		</P>
-
-		<P>
-		To view a list of genes which are in regions that pass the 
-		significance 
-		threshold, press the <B>sort genes</B> button.  This will 
-		open the 
-		Gene Sorter with only the genes that are in significant 
-		locations 
-		with respect to your data.
-		</P>
-
-		<P>
-		If you would rather view all of your regions without restricting the 
-		output to only those regions that pass the significance threshold, simply 
-		delete any values from the significance threshold input box and press 
-		Enter before pressing <B>browse regions</B>.
-		</P>
-                <P>
-
-<!-------Setting a Data Region------------------------->
-<A NAME="DataRegion"></A>
-                <HR>
-                <B><FONT SIZE="3" COLOR="#0000FF">Setting a Data Region</FONT></B>
-                <P>
-		The data region is the span of bases that will be added to either side
-		of the data points in your graphs which exceed the significance 
-		threshold. Set the data region by editing the <B>region 
-		padding</B> value on the configuration page. 
-		The combination of setting the data region and the significance 
-		threshold will affect two things:
-		<UL>
-		<LI>the regions displayed in the 
-			<A HREF="#ViewInGB">Genome Browser</A> 
-			after you press the <B>browse regions</B> button,</LI>
-		<LI>the genes displayed in the 
-			<A HREF="#ViewInGS">Gene Sorter</A> 
-			after you press the <B>sort genes</B> button.</LI>
-		</UL> 
-                </P>
-
-		<P>
-		For example, take a data set that contains the following data:
-		<P>
-		<TT>chr2 100100000 2.3<BR>
-		    chr2 100100500 4.5<BR>
-		    chr2 100101000 1.2<BR></TT>
-		<P>If you set the significance threshold at 4.0, one data 
-		point
-		in the data set passes that threshold. If you then set the data 
-		range to 200, then the one significant data point will be 
-		padded on each side by 200 base pairs.  In that case, the 
-		only resulting significant data region will be 
-		chr2:100,100,300-100,100,700.<BR><BR>
-		If instead you set the data range
-		to 2,000, then the one significant data point will be
-		padded on each side by 2,000 base pairs.  In that case, the 
-		resulting significant data region will be 
-		chr2:100,098,500-100,102,500.
-		</P>
-
-		<P>
-
-	      </TD><TD WIDTH=15></TD></TR>
-	    </TABLE>
-	  <BR></TD></TR>
-	</TABLE>
-      </TD></TR>
-    </TABLE>
-    <P>
-
-<!-------Displaying Data in the Genome Browser-------------------------->
-<A NAME="ViewInGB"></A>
-    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-      <TR><TD>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-          <TR><TD>
- 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
-	      <TR><TD>
-	    	<FONT SIZE="4"><B>&nbsp; Viewing Data in the Genome Browser </B></FONT>
-	      </TD></TR>
-	    </TABLE>
-	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-	      <TR><TH HEIGHT=10></TH></TR>
-	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
-		<P>
-		To view your graphs in the Genome Browser, press the 
-		<B>browse regions</B> button. This will open the Genome
-		Browser with your graph(s) displayed as track(s). You can
-		configure and <A HREF="hgTracksHelp.html#FineTuning">edit your track</A> 
-		as you can any other track in the Genome Browser. 
-		In addition to the Genome Browser, you will also see a pane 
-		on the left-hand side, which contains links to all of the 
-		<A HREF="#DataRegion">significant regions</A> in your data.
-		Please note that if you are displaying more than one graph in 
-		Genome Graphs, the significant regions are based only on the 
-		first graph in the display list. 
-		</P>
-		<P>
-		You can also navigate to the Genome Browser by clicking directly 
-		on a graph or chromosome in Genome Graphs. The Genome Browser 
-		will open with a 1,000,000 bp window centered on the location 
-		on which you clicked.
-		</P>
-		<P>
-
-	      </TD><TD WIDTH=15></TD></TR>
-	    </TABLE>
-	  <BR></TD></TR>
-	</TABLE>
-      </TD></TR>
-    </TABLE>
-    <P>
-
-
-<!-------Displaying Data in the Gene Sorter-------------------------->
-<A NAME="ViewInGS"></A>
-    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-      <TR><TD>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-          <TR><TD>
- 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
-	      <TR><TD>
-	    	<FONT SIZE="4"><B>&nbsp; Viewing Data in the Gene Sorter </B></FONT>
-	      </TD></TR>
-	    </TABLE>
-	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-	      <TR><TH HEIGHT=10></TH></TR>
-	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
-		<P>
-		To view the set of genes that are in 
-		<A HREF="#DataRegion">significant regions</A> in your data, 
-		press the <B>sort genes</B> button. This will open the Gene
-		Sorter with a filter to include only genes that are located 
-		in regions in your input data that are above the significance 
-		threshold. Please note that if you are displaying more than 
-		one graph in Genome Graphs, the significant genes are based 
-		only on the first graph in the display list.
-		</P>
-		<P>
-		If the graph was uploaded using markers, then a custom 
-		Gene Sorter column with the same name as the graph 
-		will be created.  This column will list all markers for each
-                gene that contain values above the significance threshold.
-		</P>
-		<P>
-	      </TD><TD WIDTH=15></TD></TR>
-	    </TABLE>
-	  <BR></TD></TR>
-	</TABLE>
-      </TD></TR>
-    </TABLE>
-    <P>
-
-<!-------Deleting Data-------------------------->
-<A NAME="DataSets"></A>
-    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-      <TR><TD>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-          <TR><TD>
- 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
-	      <TR><TD>
-	    	<FONT SIZE="4"><B>&nbsp; Deleting Data </B></FONT>
-	      </TD></TR>
-	    </TABLE>
-	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-	      <TR><TH HEIGHT=10></TH></TR>
-	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
-		<P>
-		There are several ways to delete your data once it has 
-		been uploaded. If you are viewing your data as a track in 
-		the Genome Browser, you can click on the mini-button 
-		or track control for the track and delete the track 
-		using the <B>Remove custom track</B> button. You can also
-		choose to reset your cart which will reset the browser 
-		interface settings to their defaults, as well as delete 
-		all custom tracks and data.  Do this by visiting the 
-		gateway page and pressing the hyper link: &quot;Click 
-		here to reset&quot;.
-		</P>
-
-		<P>
-		Your data will be saved on our server for at least 48 hours 
-		from the time you last access it, unless it is saved in a
-                <A HREF="/goldenPath/help/hgSessionHelp.html#CTs">Session</A>.
-		</P>
-		<P>
-	      </TD><TD WIDTH=15></TD></TR>
-	    </TABLE>
-	  <BR></TD></TR>
-	</TABLE>
-      </TD></TR>
-    </TABLE>
-    <P>
-
-
-
-<!-------Correlating Data-------------------------->
-<A NAME="Correlate"></A>
-    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-      <TR><TD>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-          <TR><TD>
- 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
-	      <TR><TD>
-	    	<FONT SIZE="4"><B>&nbsp; Correlating Data Sets </B></FONT>
-	      </TD></TR>
-	    </TABLE>
-	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-	      <TR><TH HEIGHT=10></TH></TR>
-	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
-		<P>
-		To calculate how well correlated with one another your data 
-		sets are, press the <B>correlate</B> button. This will 
-		calculate and display the correlation coefficient (<B>R</B>) 
-		among each of your data sets. <B>R</B>, also known as Pearson's 
-		correlation coefficient, is a measure of the extent that two 
-		graphs move together. The value of <B>R</B> ranges between 
-		-1 and 1. A positive <B>R</B> indicates that the graphs 
-		tend to move in the same direction, while a negative <B>R</B> 
-		indicates that they tend to move in opposite directions.
-		<B>R-Squared</B> (which is indeed just <B>R*R</B>) measures 
-		how much of the variation in one graph can be explained by 
-		a linear dependence on the other graph. <B>R-Squared</B> 
-		ranges between 0 when the two graphs are independent to 1 
-		when the graphs are completely dependent.
-		</P>
-		<P>
-		To return to the Genome Graphs, press the <B>return to 
-		graphs</B> button.
-		</P>
-		<P>
-	      </TD><TD WIDTH=15></TD></TR>
-	    </TABLE>
-	  <BR></TD></TR>
-	</TABLE>
-      </TD></TR>
-    </TABLE>
-    <P>
-
-
-
-<!------End of Document--------------------->
-  </TD></TR>
-</TABLE>
-</BODY></HTML>
-
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

@@ -195,13 +195,17 @@ for(i = 0, link = links; link != NULL; i++, link = link->next)
 
     if (!isEmpty(link->name))
         {
-        dyStringPrintf(menuHtml, "<a href='%s' ", link->url);
+        dyStringPrintf(menuHtml, "<a href='%s'", link->url);
         if (link->mouseOver)
-            dyStringPrintf(menuHtml, "title='%s' ", link->mouseOver); 
+            dyStringPrintf(menuHtml, " title='%s'", link->mouseOver); 
         if (link->onClick)
-            dyStringPrintf(menuHtml, "onclick=\"%s\" ", link->onClick); 
-        dyStringPrintf(menuHtml, "id='%s'%s>%s</a>\n", link->id, 
-            link->external ? " TARGET='_blank'" : "", encodedName);
+	    {
+	    jsOnEventById("click", link->id, link->onClick);
+	    }
+        dyStringPrintf(menuHtml, " id='%s'", link->id);
+	if (link->external)
+	    dyStringAppend(menuHtml, " TARGET='_blank'");
+        dyStringPrintf(menuHtml, ">%s</a>\n", encodedName);
         }
     if (!isEmpty(link->shortcut))
         dyStringPrintf(menuHtml, "<span class='shortcut'>%s</span>", link->shortcut);
@@ -434,6 +438,7 @@ safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.reset=on", uiVars);
 appendLinkWithShortcut(&links, buf, "Default Tracks", "defaultTracksMenuLink", "Show only default tracks", "d t", FALSE, FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars);
 appendLinkWithShortcut(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", "Re-order tracks to be in default order", "d o", FALSE, FALSE);
+appendLinkWithOnclick(&links, "#", "Remove all highlights", "cleaerHighlightLink", "Remove all highlights on all genomes", "highlightCurrentPosition('clear'); $('ul.nice-menu li ul').hide();", "h c", FALSE, FALSE);
 appendLinkWithShortcut(&links, "../cgi-bin/cartReset", "Reset All User Settings", "cartResetMenuLink", "Clear user data, e.g. active tracks, track configuration, custom data, ...", "c r", FALSE, FALSE);
 
 struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul>\n");
@@ -445,4 +450,5 @@ menuStr = replaceChars(menuStr, "id=\"main-menu-whole\"", "id=\"hgTracks-main-me
 menuStr = replaceChars(menuStr, "id=\"home-link\"", "id=\"hgTracks-home-link\"");
 hPuts(menuStr);
 freez(&menuStr);
+
 }

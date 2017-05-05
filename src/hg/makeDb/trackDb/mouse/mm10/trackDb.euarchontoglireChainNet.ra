@@ -109,13 +109,13 @@ include chainNetRheMac8.ra
         type chain gorGor3
         otherDb gorGor3
 
-        track chainPanTro4
+        track chainPanTro5
         subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=kChimp clade=aHom
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain panTro4
-        otherDb panTro4
+        type chain panTro5
+        otherDb panTro5
 
 include hg19ChainNet.ra
 include hg38ChainNet.ra
@@ -206,12 +206,12 @@ include hg38ChainNet.ra
         type netAlign gorGor3 chainGorGor3
         otherDb gorGor3
 
-        track netPanTro4
+        track netPanTro5
         subTrack euarchontoglireChainNetViewnet on
         subGroups view=net species=kChimp clade=aHom
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign panTro4 chainPanTro4
-        otherDb panTro4
+        type netAlign panTro5 chainPanTro5
+        otherDb panTro5
 
 # hg19/hg38 include above

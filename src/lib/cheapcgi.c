@@ -17,6 +17,203 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
+//============ javascript inline-separation routines ===============
+
+// One of the main services that CSP (Content Security Policy) provides
+// is protecting from reflected and stored XSS attacks by disabling all inline javacript,
+// both in script tags, and in inline event handlers.  The separated javascript 
+// can be either added back to the end of the html page with a nonce or sha hashid,
+// or it can be saved to a temp file in trash and then included as a non-inline, off-page .js.
+
+struct dyString *jsInlineLines = NULL;
+
+void jsInlineInit()
+/* init if needed */
+{
+if (!jsInlineLines) 
+    {
+    jsInlineLines = dyStringNew(1024);	
+    }
+}
+
+void jsInline(char *javascript)
+/* Add javascript text to output file or memory structure */
+{
+jsInlineInit(); // init if needed
+dyStringAppend(jsInlineLines, javascript);
+}
+
+void jsInlineF(char *format, ...)
+/* Add javascript text to output file or memory structure */
+{
+jsInlineInit(); // init if needed
+va_list args;
+va_start(args, format);
+dyStringVaPrintf(jsInlineLines, format, args);
+va_end(args);
+}
+
+boolean jsInlineFinishCalled = FALSE;
+
+void jsInlineFinish()
+/* finish outputting accumulated inline javascript */
+{
+if (jsInlineFinishCalled)
+    {
+    // jsInlineFinish can be called multiple times when generating framesets or genomeSpace.
+    warn("jsInlineFinish() called already.");
+    }
+jsInlineInit(); // init if needed
+printf("<script type='text/javascript' nonce='%s'>\n%s</script>\n", getNonce(), jsInlineLines->string);
+dyStringClear(jsInlineLines);
+jsInlineFinishCalled = TRUE;
+}
+
+void jsInlineReset()
+/* used by genomeSpace to repeatedly output multiple pages to stdout */
+{
+jsInlineFinishCalled = FALSE;
+}
+
+const char * const jsEvents[] = { 
+"abort",
+"activate",
+"afterprint",
+"afterupdate",
+"beforeactivate",
+"beforecopy",
+"beforecut",
+"beforedeactivate",
+"beforeeditfocus",
+"beforepaste",
+"beforeprint",
+"beforeunload",
+"beforeupdate",
+"blur",
+"bounce",
+"cellchange",
+"change",
+"click",
+"contextmenu",
+"controlselect",
+"copy",
+"cut",
+"dataavailable",
+"datasetchanged",
+"datasetcomplete",
+"dblclick",
+"deactivate",
+"drag",
+"dragend",
+"dragenter",
+"dragleave",
+"dragover",
+"dragstart",
+"drop",
+"error",
+"errorupdate",
+"filterchange",
+"finish",
+"focus",
+"focusin",
+"focusout",
+"hashchange",
+"help",
+"input",
+"keydown",
+"keypress",
+"keyup",
+"load",
+"losecapture",
+"message",
+"mousedown",
+"mouseenter",
+"mouseleave",
+"mousemove",
+"mouseout",
+"mouseover",
+"mouseup",
+"mousewheel",
+"move",
+"moveend",
+"movestart",
+"offline",
+"line",
+"online",
+"paste",
+"propertychange",
+"readystatechange",
+"reset",
+"resize",
+"resizeend",
+"resizestart",
+"rowenter",
+"rowexit",
+"rowsdelete",
+"rowsinserted",
+"scroll",
+"search",
+"select",
+"selectionchange",
+"selectstart",
+"start",
+"stop",
+"submit",
+"unload",
+"" };
+
+
+boolean findJsEvent(char *event)
+/* see if it is in the list */
+{
+int i = 0;
+while (TRUE)
+    {
+    const char *w = jsEvents[i];
+    if (sameString(w, event))
+	return TRUE;
+    if (sameString(w, ""))
+	return FALSE;
+    ++i;
+    }
+return FALSE; // should never get here
+}
+
+void checkValidEvent(char *event)
+/* check if it is lowercase and a known valid event name */
+{
+char *temp = cloneString(event);
+tolowers(temp);
+if (!sameString(temp, event))
+    warn("jsInline: javascript event %s should be given in lower-case", event);
+event = temp; 
+if (!findJsEvent(event))
+    warn("jsInline: unknown javascript event %s", event);
+freeMem (event);
+}
+
+void jsOnEventById(char *eventName, char *idText, char *jsText)
+/* Add js mapping for inline event */
+{
+checkValidEvent(eventName);
+jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; %s};\n", idText, eventName, jsText);
+}
+
+void jsOnEventByIdF(char *eventName, char *idText, char *format, ...)
+/* Add js mapping for inline event with printf formatting */
+{
+checkValidEvent(eventName);
+jsInlineF("document.getElementById('%s').on%s = function(event) {if (!event) {event=window.event}; ", idText, eventName);
+va_list args;
+va_start(args, format);
+dyStringVaPrintf(jsInlineLines, format, args);
+va_end(args);
+jsInlineF("};\n");
+}
+
+
+//============ END of javascript inline-separation routines ===============
+
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1277,27 +1474,34 @@ printf("<INPUT TYPE=RESET NAME=\"Reset\" VALUE=\" Reset \">");
 void cgiMakeClearButton(char *form, char *field)
 /* Make button to clear a text field. */
 {
+char id[256];
+safef(id, sizeof id, "%s_clickBut", form);
 char javascript[1024];
-
 safef(javascript, sizeof(javascript),
     "document.%s.%s.value = ''; document.%s.submit();", form, field, form);
-cgiMakeOnClickButton(javascript, " Clear  ");
+cgiMakeOnClickButton(id, javascript, " Clear  ");
 }
 
 void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
 /* Make 'submit' type button. Display msg on mouseover, if present*/
 {
-printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" %s%s%s>",
-        name, value,
-        (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ));
+printf("<input type='submit' name='%s' id='%s' value='%s'",
+        name, name, value);
+if (msg)
+    printf(" title='%s'", msg);
+printf(">");
 }
 
 void cgiMakeButtonWithOnClick(char *name, char *value, char *msg, char *onClick)
 /* Make 'submit' type button, with onclick javascript */
 {
-printf("<input type=\"submit\" name=\"%s\" value=\"%s\" onclick=\"%s\" %s%s%s>",
-        name, value, onClick,
-        (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ));
+printf("<input type='submit' name='%s' id='%s' value='%s'",
+        name, name, value);
+if (msg)
+    printf(" title='%s'", msg);
+printf(">");
+
+jsOnEventById("click", name, onClick);
 }
 
 void cgiMakeButton(char *name, char *value)
@@ -1306,18 +1510,20 @@ void cgiMakeButton(char *name, char *value)
 cgiMakeButtonWithMsg(name, value, NULL);
 }
 
-void cgiMakeOnClickButton(char *command, char *value)
-/* Make 'push' type button with client side onClick (java)script. */
+void cgiMakeOnClickButton(char *id, char *command, char *value)
+/* Make button with client side onClick javascript. */
 {
-printf("<INPUT TYPE=\"button\" VALUE=\"%s\" onClick=\"%s\">", value, command);
+printf("<INPUT TYPE='button' id='%s' VALUE=\"%s\">", id, value);
+jsOnEventById("click", id, command);
 }
 
 void cgiMakeOnClickSubmitButton(char *command, char *name, char *value)
 /* Make submit button with both variable name and value with client side
  * onClick (java)script. */
 {
-printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" onClick=\"%s\">",
-       name, value, command);
+printf("<INPUT TYPE=SUBMIT NAME='%s' id='%s' VALUE=\"%s\">",
+       name, name, value);
+jsOnEventById("click", name, command);
 }
 
 void cgiMakeOptionalButton(char *name, char *value, boolean disabled)
@@ -1403,19 +1609,33 @@ void cgiMakeRadioButton(char *name, char *value, boolean checked)
  * same name but different values.   The default selection should be
  * sent with checked on. */
 {
-printf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\" %s>", name, value,
-   (checked ? "CHECKED" : ""));
+printf("<input type=radio name='%s' id='%s' value='%s'",
+        name, name, value);
+if (checked)
+   printf(" CHECKED");
+printf(">");
 }
 
-void cgiMakeOnClickRadioButton(char *name, char *value, boolean checked,
-                                        char *command)
-/* Make radio type button with onClick command.
+void cgiMakeOnEventRadioButtonWithClass(char *name, char *value, boolean checked,
+    char *class, char *event, char *command)
+/* Make radio type button with an event and an optional class attribute.
  *  A group of radio buttons should have the
  * same name but different values.   The default selection should be
- * sent with checked on. */
+ * sent with checked on. If class is non-null it is included. */
 {
-printf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\" %s %s>",
-        name, value, command, (checked ? "CHECKED" : ""));
+char temp[256];
+safef(temp, sizeof temp, "%s_%s", name, value);
+char *valNoSpc = replaceChars(temp, " ", "_"); // replace spaces with underscore
+char *id = replaceChars(valNoSpc, ".", "_"); // replace dots with underscore, js does not like dots in ids
+freeMem(valNoSpc);
+printf("<input type=radio name='%s' id='%s' value='%s'",
+        name, id, value);
+if (checked)
+   printf(" CHECKED");
+printf(" class='%s'", class);
+printf(">");
+jsOnEventById(event, id, command);
+freeMem(id);
 }
 
 char *cgiBooleanShadowPrefix()
@@ -1499,16 +1719,16 @@ void cgiMakeCheckBoxEnabled(char *name, boolean checked, boolean enabled)
 cgiMakeCheckBox2Bool(name, checked, enabled, NULL, NULL);
 }
 
-void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript)
-/* Make check box with javascript. */
+void cgiMakeCheckBoxMore(char *name, boolean checked, char *moreHtml)
+/* Make check box with moreHtml. */
 {
-cgiMakeCheckBox2Bool(name,checked,TRUE,NULL,javascript);
+cgiMakeCheckBox2Bool(name,checked,TRUE,NULL,moreHtml);
 }
 
-void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript)
-/* Make check box with ID and javascript. */
+void cgiMakeCheckBoxIdAndMore(char *name, boolean checked, char *id, char *moreHtml)
+/* Make check box with ID and extra (non-javascript) html. */
 {
-cgiMakeCheckBox2Bool(name,checked,TRUE,id,javascript);
+cgiMakeCheckBox2Bool(name,checked,TRUE,id,moreHtml);
 }
 
 void cgiMakeCheckBoxFourWay(char *name, boolean checked, boolean enabled, char *id,
@@ -1584,10 +1804,10 @@ if (initialVal == NULL)
 if (charSize == 0) charSize = strlen(initialVal);
 if (charSize == 0) charSize = 8;
 
-htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE='%s|attr|'", varName,
-        charSize, initialVal);
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' ID='%s|attr|' SIZE=%d VALUE='%s|attr|'", 
+	varName, varName, charSize, initialVal);
 if (isNotEmpty(script))
-    printf(" onkeypress='%s'", script); // TODO XSS
+    jsOnEventById("keypress", varName, script);
 printf(">\n");
 }
 
@@ -1598,7 +1818,7 @@ void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
 cgiMakeOnKeypressTextVar(varName, initialVal, charSize, NULL);
 }
 
-void cgiMakeTextVarWithExtraHtml(char *varName, char *initialVal, int width, char *extra)
+void cgiMakeTextVarWithJs(char *varName, char *initialVal, int width, char *event, char *javascript)
 /* Make a text control filled with initial value. */
 {
 if (initialVal == NULL)
@@ -1608,18 +1828,17 @@ if (width==0)
 if (width==0)
     width = 100;
 
-htmlPrintf("<INPUT TYPE=TEXT class='inputBox' NAME='%s|attr|' style='width:%dpx' VALUE='%s|attr|'",
-       varName, width, initialVal);
-if (isNotEmpty(extra))
-    printf(" %s",extra); // TODO XSS
-printf(">\n");
+htmlPrintf("<INPUT TYPE=TEXT class='inputBox' NAME='%s|attr|' id='%s' style='width:%dpx' VALUE='%s|attr|'>\n",
+       varName, varName, width, initialVal);
+if (event)
+    jsOnEventById(event, varName, javascript);
 }
 
 void cgiMakeIntVarWithExtra(char *varName, int initialVal, int maxDigits, char *extra)
 /* Make a text control filled with initial value and optional extra HTML.  */
 {
 if (maxDigits == 0) maxDigits = 4;
-htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE=%d %s|none|>", // TODO XSS extra
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE=%d %s|none|>", // TODO XSS risk in extra
                 varName, maxDigits, initialVal, extra ? extra : "");
 }
 
@@ -1652,9 +1871,9 @@ if (width==0)
 if (width < 65)
     width = 65;
 
-printf("<INPUT TYPE=TEXT class='inputBox' name=\"%s\" style='width: %dpx' value=%d",
-       varName,width,initialVal);
-printf(" onChange='return validateInt(this,%s,%s);'",
+printf("<INPUT TYPE=TEXT class='inputBox' name='%s' id='%s' style='width: %dpx' value=%d",
+       varName,varName,width,initialVal);
+jsOnEventByIdF("change", varName, "return validateInt(this,%s,%s);",
        (min ? min : "\"null\""),(max ? max : "\"null\""));
 if (title)
     printf(" title='%s'",title);
@@ -1728,9 +1947,9 @@ if (width==0)
 if (width < 65)
     width = 65;
 
-printf("<INPUT TYPE=TEXT class='inputBox' name=\"%s\" style='width: %dpx' value=%g",
-       varName,width,initialVal);
-printf(" onChange='return validateFloat(this,%s,%s);'",
+printf("<INPUT TYPE=TEXT class='inputBox' name='%s' id='%s' style='width: %dpx' value=%g",
+       varName,varName,width,initialVal);
+jsOnEventByIdF("change", varName, "return validateFloat(this,%s,%s);",
        (min ? min : "\"null\""),(max ? max : "\"null\""));
 if (title)
     printf(" title='%s'",title);
@@ -1781,9 +2000,9 @@ if ((int)max != NO_VALUE)
 cgiMakeDoubleVarInRange(varName,initialVal,title,width,NULL,maxStr);
 }
 
-void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
-        int menuSize, char *checked, char *class, char *style,char *javascript)
-/* Make a drop-down list with names, text class, style and javascript. */
+void cgiMakeDropListClassWithIdStyleAndJavascript(char *name, char *id, char *menu[],
+        int menuSize, char *checked, char *class, char *style, struct slPair *events)
+/* Make a drop-down list with name, id, text class, style and javascript. */
 {
 int i;
 char *selString;
@@ -1791,12 +2010,22 @@ if (checked == NULL) checked = menu[0];
 printf("<SELECT");
 if (name)
     printf(" NAME='%s'", name);
+if (events && !id)  // use name as id
+    id = name;
+if (id)
+    printf(" id='%s'", id);
 if (class)
     printf(" class='%s'", class);
+if (events)
+    {
+    struct slPair *e;
+    for(e = events; e; e = e->next)
+	{
+	jsOnEventById(e->name, id, e->val);
+	}    
+    }
 if (style)
     printf(" style='%s'", style);
-if (javascript)
-    printf(" %s", javascript);
 printf(">\n");
 for (i=0; i<menuSize; ++i)
     {
@@ -1809,11 +2038,18 @@ for (i=0; i<menuSize; ++i)
 printf("</SELECT>\n");
 }
 
+void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
+        int menuSize, char *checked, char *class, char *style, struct slPair *events)
+/* Make a drop-down list with names, text class, style and javascript. */
+{
+cgiMakeDropListClassWithIdStyleAndJavascript(name,NULL,menu,menuSize,checked,class,style,events);
+}
+
 void cgiMakeDropListClassWithStyle(char *name, char *menu[],
                                    int menuSize, char *checked, char *class, char *style)
 /* Make a drop-down list with names, text class and style. */
 {
-cgiMakeDropListClassWithStyleAndJavascript(name,menu,menuSize,checked,class,style,"");
+cgiMakeDropListClassWithStyleAndJavascript(name,menu,menuSize,checked,class,style,NULL);
 }
 
 void cgiMakeDropListClass(char *name, char *menu[],
@@ -1894,22 +2130,26 @@ void cgiMakeCheckboxGroup(char *name, char *menu[], int menuSize, struct slName 
 cgiMakeCheckboxGroupWithVals(name, menu, NULL, menuSize, checked, tableColumns);
 }
 
-void cgiMakeDropListFull(char *name, char *menu[], char *values[],
-                         int menuSize, char *checked, char *extraAttribs)
-/* Make a drop-down list with names and values. */
+void cgiMakeDropListFullExt(char *name, char *menu[], char *values[],
+                         int menuSize, char *checked, char *event, char *javascript, char *style, char *class)
+/* Make a drop-down list with names and values.
+ * Optionally include values for style and class */
 {
 int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
 
-if (NULL != extraAttribs)
+printf("<SELECT NAME='%s'", name);
+if (class)
+    printf(" class='%s'", class);
+if (javascript)
     {
-    printf("<SELECT NAME=\"%s\" %s>\n", name, extraAttribs);
+    printf(" id='%s'", name);
+    jsOnEventById(event, name, javascript);
     }
-else
-    {
-    printf("<SELECT NAME=\"%s\">\n", name);
-    }
+if (style)
+    printf(" style='%s'", style);
+printf(">\n");
 
 for (i=0; i<menuSize; ++i)
     {
@@ -1922,8 +2162,16 @@ for (i=0; i<menuSize; ++i)
 printf("</SELECT>\n");
 }
 
+void cgiMakeDropListFull(char *name, char *menu[], char *values[],
+                         int menuSize, char *checked, char *event, char *javascript)
+/* Make a table of checkboxes that have the same variable name but different
+ * values (same behavior as a multi-select input). */
+{
+cgiMakeDropListFullExt(name, menu, values, menuSize, checked, event, javascript, NULL, NULL);
+}
+
 char *cgiMakeSelectDropList(boolean multiple, char *name, struct slPair *valsAndLabels,
-                            char *selected, char *anyAll,char *extraClasses, char *extraHtml)
+                            char *selected, char *anyAll,char *extraClasses, char *event, char *javascript, char *style, char *id)
 // Returns allocated string of HTML defining a drop-down select
 // (if multiple, REQUIRES ui-dropdownchecklist.js)
 // valsAndLabels: val (pair->name) must be filled in but label (pair->val) may be NULL.
@@ -1931,8 +2179,10 @@ char *cgiMakeSelectDropList(boolean multiple, char *name, struct slPair *valsAnd
 //           If null and anyAll not NULL, that will be selected
 // anyAll: if not NULL is the string for an initial option. It can contain val and label,
 //         delimited by a comma
-// extraHtml: if not NULL contains id, javascript calls and style.
-//            It does NOT contain class definitions
+// event: click, etc.
+// javacript: what to execute when the event happens.
+// style: inline style
+// id is optional
 {
 struct dyString *output = dyStringNew(1024);
 boolean checked = FALSE;
@@ -1945,8 +2195,27 @@ if (extraClasses != NULL)
 else if (multiple)
     dyStringAppend(output," class='filterBy'");
 
-if (extraHtml != NULL)
-    dyStringPrintf(output," %s",extraHtml);
+char *autoId = NULL;
+if (javascript)
+    {
+    if (!id)
+	{
+    	id = name;
+	}
+    }
+if (id)
+    dyStringPrintf(output, " id='%s'", id);
+if (javascript)
+    {
+    jsOnEventById(event, id, javascript);
+    freeMem(autoId);
+    }
+
+if (style)
+    {
+    dyStringPrintf(output, " style='%s'", style);
+    }
+
 dyStringAppend(output,">\n");
 
 // Handle initial option "Any" or "All"

@@ -243,7 +243,7 @@ cartJsonRegisterHandler(cj, "getUiState", getUiState);
 cartJsonExecute(cj);
 }
 
-static void printActiveGenomes()
+static void printActiveGenomes(struct dyString *dy)
 /* Print out JSON for an object mapping each genome that has at least one db with active=1
  * to its taxId.  */
 {
@@ -268,7 +268,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 hDisconnectCentral(&conn);
 jsonWriteObjectEnd(jw);
-puts(jw->dy->string);
+dyStringAppend(dy, jw->dy->string);
 jsonWriteFree(&jw);
 }
 
@@ -330,35 +330,39 @@ puts(
 // Set global JS variables hgsid, activeGenomes, and survey* at page load time
 // We can't just use "var hgsid = " or the other scripts won't see it -- it has to be
 // "window.hgsid = ".
-puts("<script>");
-printf("window.%s = '%s';\n", cartSessionVarName(), cartSessionId(cart));
-puts("window.activeGenomes =");
-printActiveGenomes();
-puts(";");
+struct dyString *dy = dyStringNew(1024);
+
+dyStringPrintf(dy, "window.%s = '%s';\n", cartSessionVarName(), cartSessionId(cart));
+dyStringPrintf(dy, "window.activeGenomes =\n");
+printActiveGenomes(dy);
+dyStringPrintf(dy, "\n;\n");
 char *surveyLink = cfgOption("survey");
 if (isNotEmpty(surveyLink) && !sameWord(surveyLink, "off"))
     {
-    printf("window.surveyLink=\"%s\";\n", jsonStringEscape(surveyLink));
+    dyStringPrintf(dy, "window.surveyLink=\"%s\";\n", jsonStringEscape(surveyLink));
     char *surveyLabel = cfgOptionDefault("surveyLabel", "Please take our survey");
-    printf("window.surveyLabel=\"%s\";\n", jsonStringEscape(surveyLabel));
+    dyStringPrintf(dy, "window.surveyLabel=\"%s\";\n", jsonStringEscape(surveyLabel));
     char *surveyLabelImage = cfgOption("surveyLabelImage");
     if (isNotEmpty(surveyLabelImage))
-        printf("window.surveyLabelImage=\"%s\";\n", jsonStringEscape(surveyLabelImage));
+        dyStringPrintf(dy, "window.surveyLabelImage=\"%s\";\n", jsonStringEscape(surveyLabelImage));
     else
-        puts("window.surveyLabelImage=null;");
+        dyStringPrintf(dy, "window.surveyLabelImage=null;\n");
     }
 else
     {
-    puts("window.surveyLink=null;");
-    puts("window.surveyLabel=null;");
-    puts("window.surveyLabelImage=null;");
+    dyStringPrintf(dy, "window.surveyLink=null;\n");
+    dyStringPrintf(dy, "window.surveyLabel=null;\n");
+    dyStringPrintf(dy, "window.surveyLabelImage=null;\n");
     }
-puts("</script>");
+dyStringPrintf(dy, "hgGateway.init();\n");
 
-puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/lodash.3.10.0.compat.min.js\"></script>");
-puts("<script src=\"../js/cart.js\"></script>");
+jsInline(dy->string);
+dyStringFree(&dy);
+
+jsIncludeFile("es5-shim.4.0.3.min.js", NULL);
+jsIncludeFile("es5-sham.4.0.3.min.js", NULL);
+jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
+jsIncludeFile("cart.js", NULL);
 
 webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("jquery-ui.js", NULL);
@@ -366,12 +370,13 @@ jsIncludeFile("jquery.watermarkinput.js", NULL);
 jsIncludeFile("utils.js",NULL);
 
 // Phylogenetic tree .js file, produced by dbDbTaxonomy.pl:
-char *dbDbTree = cfgOptionDefault("hgGateway.dbDbTaxonomy", "../js/dbDbTaxonomy.js");
+char *defaultDbDbTree = webTimeStampedLinkToResource("dbDbTaxonomy.js", FALSE);
+char *dbDbTree = cfgOptionDefault("hgGateway.dbDbTaxonomy", defaultDbDbTree);
 if (isNotEmpty(dbDbTree))
     printf("<script src=\"%s\"></script>\n", dbDbTree);
 
 // Main JS for hgGateway:
-puts("<script src=\"../js/hgGateway.js\"></script>");
+jsIncludeFile("hgGateway.js", NULL);
 
 webIncludeFile("inc/jWestFooter.html");
 

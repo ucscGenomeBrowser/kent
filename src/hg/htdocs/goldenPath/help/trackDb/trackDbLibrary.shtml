@@ -159,6 +159,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bed5FloatScore</A>,
     <A onclick="return jumpTo(this);" HREF="#">bedGraph</A>,
     <A onclick="return jumpTo(this);" HREF="#">bedRnaElements</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigBarChart</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
@@ -203,11 +204,13 @@
     <P>Valid settings:</P>
     <P>
     <A onclick="return jumpTo(this);" HREF="#">bam/cram</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigBarChart</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
+    <A onclick="return jumpTo(this);" HREF="#">halSnake</A>,
     <A onclick="return jumpTo(this);" HREF="#">vcfTabix</A>,
     <P>Detailed descriptions of each type can be found
     below.  In many cases the type setting includes additional
@@ -338,7 +341,7 @@
     <P>The location of a remote data file containing the chain link data.</P>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBed bigChain bigMaf bigPsl bigWig bam vcfTabix"></span>
+<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigMaf bigPsl bigWig bam vcfTabix"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -347,11 +350,15 @@
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBed, bigChain, bigMaf, bigPsl, bigGenePred,  bigWig or
+    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigMaf, bigPsl, bigGenePred,  bigWig or
     vcfTabix.  Note that bam/cram and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
     <A onclick="jumpTo(this)" HREF="#">bigDataIndex</A> is used.
+    All occurrences of the  string <code>$D</code> in the URL will be
+    substituted with the genome assembly database name.  This allows a
+    trackDb entry to be used with for multiple assemblies.  <code>$D</code>
+    substitution is not implement for track hubs.
 
     </P> <P><B>Example:</B></P>
     <pre>   bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb</pre>
@@ -394,7 +401,7 @@
     over the <code>dense</code> and <code>full</code> modes. By default, these tracks will
     not offer the <code>squish</code> and <code>pack</code> vilibility settings.
     Nevertheless, you can make your track offer
-    these visibilility choices by turning canPack on.  Note: subtracks
+    these visibility choices by turning canPack on.  Note: subtracks
     of composites will always offer all five choices.</P>
     <P><B>Example:</B></P>
     <pre>   canPack on</pre>
@@ -603,6 +610,14 @@
     The URL can either be a full external URL or local to the web site.</P>
     <P><B>Example:</B></P>
     <pre>   directUrl http://mygenes.org/cgi-bin/geneView/%s</pre>
+</DIV>
+
+<DIV class="otherSpecies"><span class="types all"></span>
+<div class="format"><code>otherSpecies &lt;otherSpecies&gt;</code></div>
+    <P>The name of the other assembly in the pairwise alignment for this track. </P>
+    <P><B>Example:</B></P>
+    <pre>   otherSpecies tweeter</pre>
+    <P>The other species (other than the reference) in the alignment is the tweeter assembly in the same HAL file.</P>
 </DIV>
 
 <DIV class="otherDb"><span class="types all"></span>
@@ -958,7 +973,7 @@
 </DIV>
 
 <DIV class="bigMaf_intro">
-<H3>bigMaf: Mulitple Alignments</H3>
+<H3>bigMaf: Multiple Alignments</H3>
     <P>
         The bigMaf format stores multiple alignments in a format compatible with MAF files, which are then compressed and indexed as bigBeds. bigMaf files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigMaf. The resulting bigMaf files are in an indexed binary format. The main advantage of the bigMaf files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigMaf is considerably faster than regular MAF files. The bigMaf file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
     For complete bigMaf format definitions please see the
@@ -976,6 +991,25 @@
     and having optionally many more fields.  For complete bigBed
     format definitions please see the 
     <A HREF="../bigBed.html">bigBed help page</A>.</P>
+</DIV>
+
+<DIV class="halSnake_intro">
+<H3>halSnake -- Multiple Alignments in a HAL file</H3>
+    <P>
+    HAL is a file generated by the Cactus Progressive Alignment Suite, see 
+    <A HREF="https://github.com/glennhickey/progressiveCactus">Cactus github page</A>.</P>
+    </P>
+</DIV>
+
+<DIV class="halSnake"><span class="types halSnake"></span>
+<div class="format"><code>type halSnake</code></div>
+    <P>If the <code>bigDataUrl</code> setting is included, the data at the location
+    specified by that URL will be
+    displayed. Otherwise, a database table with a single column <code>fileName</code>
+    can specify the location of a local file or a URL.
+    If the database table includes a column <code>seqName</code>, a different
+    VCF file or URL can be specified for each assembly sequence.</P>
+    <P><em>Example can be found below.</em></P>
 </DIV>
 
 <DIV class="bed"><span class="types bed bigBed"></span>
@@ -1027,6 +1061,12 @@ There are no extra options that can appear on the type bigGenePred line.
 There are no extra options that can appear on the type bigMaf line.
 </DIV>
 
+<DIV class="bigBarChart"><span class="types bigBarChart"></span>
+<div class="format">
+    <code>type bigBarChart</code></div>
+There are no extra options that can appear on the type bigBarChart line.
+</DIV>
+
 <DIV class="bed_flavors"><span class="types bed5FloatScore bedRnaElements broadPeak coloredExon gvf ld2 narrowPeak peptideMapping"></span>
 <div class="format">
     <code>type bed5FloatScore</code><BR>
@@ -1061,7 +1101,7 @@ There are no extra options that can appear on the type bigMaf line.
     setting.  The first color will be used for plus strand alignments
     and the second for the minus strand.  This setting is incompatible with <code>spectrum</code>
     and all items on the same strand will have the same color, regardless of the item's
-    <code>score</score>.</P>
+    <code>score</code>.</P>
     <P><B>Example:</B></P>
     <pre>   colorByStrand 255,0,0 0,0,255</pre>
     <P>Plus strand alignments will be colored red, and minus
@@ -1457,11 +1497,13 @@ There are no extra options that can appear on the type bigMaf line.
     Lower scores will be shaded in light gray by default, while higher
     scores will trend towards black.  This can be modified in a number of ways:</P>
     <UL>
+<!-- The below statement about color and altColor is not accurate and removed 1/4/17
     <LI> <code><A onclick="jumpTo(this)" HREF="#">color</A></code>
     can be used to replace gray scale with a color scale</LI>
     <LI> <code><A onclick="jumpTo(this)" HREF="#">altColor</A></code>
     with <code><A onclick="jumpTo(this)" HREF="#">color</A></code> can vary items from
     color to altColor</LI>
+-->
     <LI><code><A onclick="jumpTo(this)" HREF="#">minGrayLevel</A></code>
     can be used to set the level of the lightest shade</LI>
     <LI> <code>scoreMin</code>
@@ -1474,12 +1516,12 @@ There are no extra options that can appear on the type bigMaf line.
     scoreMin 700
     scoreMax 900
     color 0,0,128    </pre>
-    <P>In this example, the track items will be
-    displayed in blue. Items with scores less than or equal to 700 will be shown in very 
-    light blue,
-    those with scores between 700 and 900 will display in increasingly darker shades of blue, 
-    and items
-    with scores greater than or equal to 900 above will display in dark blue.</P>
+    <P>In this example, the track description will be
+    displayed in blue, but the track will remain a gray scale.
+    Items with scores less than or equal to 700 will be shown in very
+    light gray, those with scores between 700 and 900 will display
+    in increasingly darker shades of gray, and items with
+    scores greater than or equal to 900 above will display in black.</P>
 </DIV>
 
 <DIV class="searchIndex"><span class="types bed bigBed"></span>
@@ -1562,6 +1604,15 @@ There are no extra options that can appear on the type bigMaf line.
     setting, the label will be "Score:".</P>
     <P><B>Example:</B></P>
     <pre>   scoreLabel Log of binding Score * 1000</pre>
+</DIV>
+
+<DIV class="maxLimit"><span class="types bedGraph bigBarChart"></span>
+<div class="format"><code>maxLimit&lt;#&gt;</code></div>
+    <P>The upper limit of the data range in a track is specified with this setting.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   maxLimit 5000</pre>
+    <P>
 </DIV>
 
 <DIV class="linkIdInName"><span class="types bed bigBed"></span>
@@ -1830,10 +1881,10 @@ There are no extra options that can appear on the type bigMaf line.
     the Browser that the user may configure this track.  The score
     filter is explicitly declared to default to 700, and the defined
     range of 100 - 1000 suggests there are no values of interest below 100. 
-    This example also colors the items blue and presents
+    This example also colors the description text blue and presents
     a spectrum or gradation of darkness based upon the score range.
-    Items with a score or 700 or less are displayed as the lightest shade of
-    blue, and items with a score of 900 or more are the darkest blue.  Finally, 
+    Items with a score or 700 or less are displayed as the lightest
+    and items with a score of 900 or more are the darkest.  Finally, 
     the <code>minGrayLevel</code> ensures that the lightest shade is visible 
     to the user.  No doubt the value of '4' was chosen after experimentation 
     with the Browser display.</P>
@@ -1879,11 +1930,11 @@ There are no extra options that can appear on the type bigMaf line.
     the Browser that the user may configure this track.  The score
     filter is explicitly declared to default to 700, and an allowable
     range for the score suggests there are no values below 100 worth
-    looking at.  This example also sets the items to blue and presents
+    looking at.  This example also sets the description text to blue and presents
     a spectrum or gradation of darkness based upon the score range.
     Items with score 700 or less are the lightest, and items with
-    score 900 or more are the darkest blue.  Finally the lightest
-    shade set to be not too light with the poorly named <code>minGrayLevel</code>
+    score 900 or more are the darkest.  Finally the lightest
+    shade is set to be not too light with the <code>minGrayLevel</code>
     setting.  No doubt 4 was chosen after experimentation to see how
     it actually looks in the Browser.</P><BR>
 </DIV>
@@ -3627,6 +3678,30 @@ There are no extra options that can appear on the type bigMaf line.
     </P>
 </DIV>
 
+<DIV class="labelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
+<div class="format"><code>labelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
+    <P>A list of fields from the bigBed based file that can be used as a label. The special value <B>none</B> can be specified if no labels are desired.
+    </P>
+</DIV>
+
+<DIV class="defaultLabelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
+<div class="format"><code>defaultLabelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
+    <P>A list of fields from the bigBed based file that should be used as a label by default.  Only applicable if <B>labelFields</B> is set.  If <B>defaultLabelFields</B> is not specified, the first field in labelFields is used as the default. The special value <B>none</B> can be specified if no label should be the default.
+    </P>
+</DIV>
+
+<DIV class="labelSeparator"><span class="types bigBed bigGenePred bigPsl"></span>
+<div class="format"><code>labelSeparator &lt;<EM>text</EM>&gt;</code></div>
+    <P>One or more characters to use as the field separator between multiple labels.  A slash (/) by default, this string can have double quotes around it if it should have white spaces in it.
+    </P>
+</DIV>
+
+<DIV class="showSnpWidth"><span class="types halSnake"></span>
+<div class="format"><code>showSnpWidth &lt;<EM>integer</EM>&gt;</code></div>
+    <P>The maximum width (in bases) of a window where the halSnake will show SNPs between the reference and the other species.
+    </P>
+</DIV>
+
 <DIV class="hapClusterHeight"><span class="types vcf"></span>
 <div class="format"><code>hapClusterHeight &lt;<EM>N</EM>&gt;</code></div>
     <P>Assuming <code>hapClusterEnabled</code> is <code>true</code>,
@@ -4189,6 +4264,103 @@ for each cell associated with the particular TF binding location.</P>
     </P>
 </DIV>
 
+<!-- - - - - - - - bigBarChart settings - - - - - - - -->
+<DIV class="bigBarChart_intro">
+<H3>bigBarChart: Bar charts of variables displayed on genomic regions</H3>
+    <P>
+    The bigBarChart format stores values of a set of variables for each genomic region 
+in the file.  BigBarChart files are created using the program bedToBigBed with a special 
+AutoSQL file that defines the fields.  The resulting files are in an indexed binary format
+that supports efficient remote access, so the file can be hosted on your web accessible server
+and displayed at UCSC.
+For the complete bigBarChart format definitions please see the
+    <A HREF="../bigBarChart.html">bigBarChart help page</A>.</P>
+</DIV>
+
+<DIV class="barChartUnit"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartUnit &lt;unit&gt;</code></div>
+    <P>The unit label is attached to values in the display, charts and plots of the track.
+    </P>
+</DIV>
+
+<DIV class="barChartLabel"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartLabel &lt;label&gt;</code></div>
+    <P>This setting provides a label for the category selection list.</p>
+    </P>
+</DIV>
+
+<DIV class="barChartMetric"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartMetric &lt;metric&gt;</code></div>
+    <P>This setting provides a label for details page information about the barChart values presented.
+        These are typically summary values, derived from many samples (often the median value).</p>
+    </P>
+</DIV>
+
+<DIV class="barChartBars"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartBars &lt;label1 label2...&gt;</code></div>
+    <P>This setting is a list of labels for the categorical variables (bars).
+    It is required for this track type.
+    </P>
+</DIV>
+
+<DIV class="barChartColors"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartColors &lt;color1 color2...&gt;</code></div>
+    <P>This setting is a list of colors, one for each category (bar).
+        Colors are specified as RGB values (#FFFFFF) or by name (the 16 HTML color names defined
+        in HTML 4.01).  
+        The named HTML colors are: <div class='dot' style='background: #000000'></div>black,
+            <div class='dot'style='background: silver'></div>silver,
+            <div class='dot'style='background: gray'></div>gray,
+            <div class='dot'style='height: 8px; width: 8px; background: white; border: 1px solid black'></div>white,
+            <div class='dot'style='background: maroon'></div>maroon,
+            <div class='dot'style='background: red'></div>red,
+            <div class='dot'style='background: purple'></div>purple,
+            <div class='dot'style='background: fuchsia'></div>fuchsia,
+            <div class='dot'style='background: green'></div>green,
+            <div class='dot'style='background: lime'></div>lime,
+            <div class='dot'style='background: olive'></div>olive,
+            <div class='dot'style='background: yellow'></div>yellow,
+            <div class='dot'style='background: navy'></div>navy,
+            <div class='dot'style='background: blue'></div>blue,
+            <div class='dot'style='background: teal'></div>teal,
+            <div class='dot'style='background: aqua'></div>aqua.
+    </P>
+</DIV>
+
+<DIV class="barChartDataUrl"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartDataUrl &lt;url&gt;</code></div>
+    <P>Specifies a data matrix file that provides data values for all samples.
+Used together with barChartSampleUrl to generate a box plot on the details page.
+    </P>
+</DIV>
+<DIV class="barChartSampleUrl"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartSampleUrl &lt;url&gt;</code></div>
+    <P>Specifies a tab-separated file that provides categories for samples in the
+barChartDataUrl file.  Used for generating a box plot on the details page.
+    </P>
+</DIV>
+
+<DIV class="bigBarChart_example"><span class="types bigBarChart"></span>
+<div class="format"><B>Example of a bigBarChart track</B></div>
+    <pre>
+    track brainRegionRna
+    type bigBarChart
+    maxLimit 8000
+    barChartUnit RPKM
+    barChartLabel Brain Regions
+    barChartMetric median
+    barChartBars Amygdala Cerebellum Cortex Hippocampus
+    barChartColors #ff0000 green maroon navy
+    shortLabel Brain RNA
+    longLabel Brain Gene Expression
+    spectrum on
+    labelFields gene, name
+    defaultLabelFields gene
+    bigDataUrl http://...
+    barChartDataUrl http://...
+    barChartSampleUrl http://...
+    </pre>
+</div>
 
 <!-- - - - - - - - GROUP settings - - - - - - - -->
 <DIV class="group_intro">

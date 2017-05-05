@@ -192,3 +192,119 @@ TMPDIR=/dev/shm
     # real    132m33.263s
 
 #########################################################################
+# LASTZ chicken/galGal5 vs. turkey - (DONE - 2017-01-19 - Hiram)
+    mkdir /hive/data/genomes/galGal5/bed/lastzMelGal5.2017-01-19
+    cd /hive/data/genomes/galGal5/bed/lastzMelGal5.2017-01-19
+
+    printf '# chicken vs. turkey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: chicken galGal5
+SEQ1_DIR=/hive/data/genomes/galGal5/galGal5.2bit
+SEQ1_LEN=/hive/data/genomes/galGal5/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# QUERY: turkey melGal5
+SEQ2_DIR=/hive/data/genomes/melGal5/melGal5.2bit
+SEQ2_LEN=/hive/data/genomes/melGal5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/galGal5/bed/lastzMelGal5.2017-01-19
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    620m42.543s
+
+    cat fb.galGal5.chainMelGal5Link.txt
+    #  1029400481 bases of 1218501075 (84.481%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` galGal5 melGal5) \
+          > rbest.log 2>&1 &
+    #  real    312m39.922s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melGal5/bed/blastz.galGal5.swap
+    cd /hive/data/genomes/melGal5/bed/blastz.galGal5.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/galGal5/bed/lastzMelGal5.2017-01-19/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    284m22.838s
+
+    cat fb.melGal5.chainGalGal5Link.txt
+    # 984928299 bases of 1093044709 (90.109%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melGal5 galGal5) \
+       > rbest.log 2>&1
+    # real    487m51.030s
+
+#########################################################################
+# LASTZ Golden eagle/aquChr2 vs. chicken/galGal5 - (DONE - 2017-03-17 - Hiram)
+    mkdir /hive/data/genomes/galGal5/bed/lastzAquChr2.2017-03-17
+    cd /hive/data/genomes/galGal5/bed/lastzAquChr2.2017-03-17
+
+    printf '# Golden eagle vs. chicken
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: chicken galGal5
+SEQ1_DIR=/hive/data/genomes/galGal5/galGal5.2bit
+SEQ1_LEN=/hive/data/genomes/galGal5/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=50
+SEQ1_LAP=10000
+
+# QUERY: Golden eagle aquChr2
+SEQ2_DIR=/hive/data/genomes/aquChr2/aquChr2.2bit
+SEQ2_LEN=/hive/data/genomes/aquChr2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/galGal5/bed/lastzAquChr2.2017-03-17
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    181m2.296s
+
+    cat fb.galGal5.chainAquChr2Link.txt
+    #  919609897 bases of 1218501075 (75.471%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` galGal5 aquChr2) \
+          > rbest.log 2>&1 &
+    #  real    183m23.066s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/aquChr2/bed/blastz.galGal5.swap
+    cd /hive/data/genomes/aquChr2/bed/blastz.galGal5.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/galGal5/bed/lastzAquChr2.2017-03-17/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    60m38.086s
+
+    cat fb.aquChr2.chainGalGal5Link.txt
+    # 854022282 bases of 1180019022 (72.374%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` aquChr2 galGal5) \
+       > rbest.log 2>&1
+    # real    167m4.022s
+
+#########################################################################

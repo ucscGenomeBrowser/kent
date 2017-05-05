@@ -1,0 +1,102 @@
+track cons4wayTupChi1
+compositeTrack on
+shortLabel 4-way Mammal
+longLabel Multiz Alignment & Conservation (4 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+
+    track cons4wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons4wayTupChi1
+
+        track tupChi1Multiz4way
+        subTrack cons4wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 4 Mammals
+        subGroups view=align
+        noInherit on
+        irows on
+        summary tupChi1Multiz4waySummary
+        frames tupChi1Multiz4wayFrames
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault hg38
+        speciesGroups Mammal
+        sGroup_Mammal galVar1 tupChi1 mm10
+        itemFirstCharCase noChange
+        treeImage phylo/hg38_4way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons4wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons4wayTupChi1
+    viewLimits -3:0.5
+    viewLimitsMax -4.611:0.934
+
+        track phyloP4way
+        subTrack cons4wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel 4 Mammals Cons
+        longLabel 4 mammal Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -2.315 0.714
+        maxHeightPixels 100:50:11
+        viewLimits -2.0:0.72
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons4wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons4wayTupChi1
+
+        track tupChi1PhastCons4way
+        subTrack cons4wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel 4 Mammals Cons
+        longLabel 4 mammals conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons4wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons4wayTupChi1
+
+        track tupChi1PhastConsElements4way
+        subTrack cons4wayViewelements on
+        subGroups view=elements
+        shortLabel 4 Mammals El
+        longLabel 4 mammals Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 4 .
+        priority 23

@@ -951,3 +951,73 @@ TMPDIR=/dev/shm' > DEF
     # real    0m4.400s
 
 ##############################################################################
+# LASTZ frog xenTro9 (DONE - 2017-04-05 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S canFam3XenTro9
+    mkdir /hive/data/genomes/canFam3/bed/lastzXenTro9.2017-04-05
+    cd /hive/data/genomes/canFam3/bed/lastzXenTro9.2017-04-05
+
+    printf '# dog vs frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: dog CanFam3
+SEQ1_DIR=/hive/data/genomes/canFam3/canFam3.2bit
+SEQ1_LEN=/hive/data/genomes/canFam3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=30
+
+# QUERY: frog XenTro9
+SEQ2_DIR=/hive/data/genomes/xenTro9/xenTro9.2bit
+SEQ2_LEN=/hive/data/genomes/xenTro9/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/canFam3/bed/lastzXenTro9.2017-04-05
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    #	real    661m0.702s
+
+    # ku difficulties due to /dev/shm/ being full, continuing:
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -continue=cat -chainMinScore=5000 -chainLinearGap=loose) > cat.log 2>&1
+    # real    14m3.596s
+
+    # chain trouble, continuing:
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -continue=chainMerge -chainMinScore=5000 -chainLinearGap=loose) > chainMerge.log 2>&1
+    #	real    11m28.081s
+
+    cat fb.canFam3.chainXenTro9Link.txt
+    #	73335538 bases of 2392715236 (3.065%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` canFam3 xenTro9) \
+       > rbest.log 2>&1 &
+    # real    134m47.527s
+
+    # and the swap
+
+    mkdir /hive/data/genomes/xenTro9/bed/blastz.canFam3.swap
+    cd /hive/data/genomes/xenTro9/bed/blastz.canFam3.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/canFam3/bed/lastzXenTro9.2017-04-05/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    # real    11m49.432s
+
+    cat fb.xenTro9.chainCanFam3Link.txt
+    #	45357837 bases of 1369865365 (3.311%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 canFam3) \
+      > rbest.log 2>&1
+    # real    131m41.477s
+
+##############################################################################

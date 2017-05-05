@@ -1,0 +1,232 @@
+track transMap
+superTrack on
+shortLabel TransMap
+longLabel TransMap Alignments
+group genes
+
+    track transMapAlnUcscGenes
+    superTrack transMap pack
+    shortLabel TransMap UCSC
+    longLabel TransMap UCSC Gene Mappings
+    trackHandler transMap
+    group genes
+    type psl
+    priority 12.002
+    color 0,100,0
+    visibility pack
+    transMapInfo transMapInfoUcscGenes
+    transMapSrc hgFixed.transMapSrcUcscGenes
+    transMapGene hgFixed.transMapGeneUcscGenes
+    baseColorDefault diffCodons
+    baseColorUseCds table hgFixed.transMapGeneUcscGenes
+    baseColorUseSequence extFile hgFixed.transMapSeqUcscGenes hgFixed.transMapExtFileUcscGenes
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+
+searchTable transMapAlnUcscGenes
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
+    track transMapAlnRefSeq
+    superTrack transMap pack
+    shortLabel TransMap RefGene
+    longLabel TransMap RefSeq Gene Mappings
+    trackHandler transMap
+    group genes
+    type psl
+    priority 12.003
+    color 0,100,0
+    visibility pack
+    transMapInfo transMapInfoRefSeq
+    transMapSrc hgFixed.transMapSrcRefSeq
+    transMapGene hgFixed.transMapGeneRefSeq
+    baseColorDefault diffCodons
+    baseColorUseCds table hgFixed.transMapGeneRefSeq
+    baseColorUseSequence extFile hgFixed.transMapSeqRefSeq hgFixed.transMapExtFileRefSeq
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+
+searchTable transMapAlnRefSeq
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
+    track transMapAlnMRna
+    superTrack transMap pack
+    shortLabel TransMap mRNA
+    longLabel TransMap GenBank mRNA Mappings
+    trackHandler transMap
+    group genes
+    type psl
+    priority 12.004
+    color 0,100,0
+    visibility pack
+    transMapInfo transMapInfoMRna
+    transMapSrc hgFixed.transMapSrcMRna
+    transMapGene hgFixed.transMapGeneMRna
+    baseColorDefault diffCodons
+    baseColorUseCds table hgFixed.transMapGeneMRna
+    baseColorUseSequence extFile hgFixed.transMapSeqMRna hgFixed.transMapExtFileMRna
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+
+searchTable transMapAlnMRna
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
+    track transMapAlnSplicedEst
+    superTrack transMap hide
+    shortLabel TransMap ESTs
+    longLabel TransMap Spliced EST Mappings
+    trackHandler transMap
+    group genes
+    type psl
+    priority 12.005
+    color 0,100,0
+    visibility hide
+    transMapInfo transMapInfoSplicedEst
+    transMapSrc hgFixed.transMapSrcSplicedEst
+    baseColorDefault none
+    baseColorUseSequence extFile hgFixed.transMapSeqSplicedEst hgFixed.transMapExtFileSplicedEst
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+
+searchTable transMapAlnSplicedEst
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
+track transMapV4
+superTrack on
+shortLabel TransMap 
+longLabel TransMap Alignments Version 4
+group genes
+
+    track transMapEnsemblV4
+    superTrack transMapV4 pack
+    shortLabel TransMap Ensembl
+    longLabel TransMap Ensembl Mappings Version 4
+    transMapSrcSet ensembl
+    group genes
+    type bigPsl
+    priority 10.001
+    color 0,100,0
+    canPack on
+    visibility pack
+    baseColorDefault diffCodons
+    baseColorUseCds given
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName,geneId,geneType,transcriptType
+    defaultLabelFields orgAbbrev,geneName
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V4/$D.ensembl.transMapV4.bigPsl
+    searchIndex name,srcTransId,geneName,geneId
+
+searchTable transMapEnsemblV4
+searchType bigPsl
+
+    track transMapRefSeqV4
+    superTrack transMapV4 pack
+    shortLabel TransMap RefGene
+    longLabel TransMap RefSeq Gene Mappings Version 4
+    transMapSrcSet refseq
+    group genes
+    type bigPsl
+    priority 10.003
+    color 0,100,0
+    canPack on
+    visibility pack
+    baseColorDefault diffCodons
+    baseColorUseCds given
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName,geneId
+    defaultLabelFields orgAbbrev,geneName
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V4/$D.refseq.transMapV4.bigPsl
+    searchIndex name,srcTransId,geneName,geneId
+
+searchTable transMapRefSeqV4
+searchType bigPsl
+
+    track transMapRnaV4
+    superTrack transMapV4 pack
+    shortLabel TransMap RNA
+    longLabel TransMap GenBank RNA Mappings Version 4
+    transMapSrcSet rna
+    group genes
+    type bigPsl
+    priority 10.004
+    color 0,100,0
+    canPack on
+    visibility pack
+    baseColorDefault diffCodons
+    baseColorUseCds given
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name,geneName
+    defaultLabelFields orgAbbrev,srcTransId
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V4/$D.rna.transMapV4.bigPsl
+    searchIndex name,srcTransId,geneName
+
+searchTable transMapRnaV4
+searchType bigPsl
+
+    track transMapEstV4
+    superTrack transMapV4 hide
+    shortLabel TransMap ESTs
+    longLabel TransMap EST Mappings Version 4
+    transMapSrcSet est
+    group genes
+    type bigPsl
+    priority 10.005
+    color 0,100,0
+    canPack on
+    visibility hide
+    baseColorDefault none
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    labelFields commonName,orgAbbrev,srcDb,srcTransId,name
+    defaultLabelFields orgAbbrev,srcTransId
+    labelSeparator " "
+    bigDataUrl /gbdb/$D/transMap/V4/$D.est.transMapV4.bigPsl
+    searchIndex name,srcTransId
+
+searchTable transMapEstV4
+searchType bigPsl

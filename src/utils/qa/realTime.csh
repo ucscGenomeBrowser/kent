@@ -14,7 +14,7 @@ set tablelist=""
 set tables=""
 set db=""
 set verbosity="0"
-set dot=( '.' '.' '.' '.' )
+set dot=( '.' '.' '.' '.' '.' )
 set update=""
 
 if ( $#argv < 2 || $#argv > 3 ) then
@@ -29,6 +29,7 @@ if ( $#argv < 2 || $#argv > 3 ) then
   echo
   echo " . hgw6"
   echo " . genome-euro"
+  echo " . genome-asia"
   echo
   exit
 else
@@ -41,7 +42,7 @@ endif
 if ( $#argv == 3 ) then
   if ( $argv[3] == "verbose" ) then
     set verbosity=1
-    set dot=( 'dev ' 'beta' 'rr  ' 'euro' )
+    set dot=( 'dev ' 'beta' 'rr  ' 'euro' 'asia')
   else
     echo
     echo 'sorry. third argument must be "verbose"'
@@ -68,7 +69,7 @@ foreach table ($tables)
   echo $table
   echo "============="
   set i=1
-  foreach machine ( hgwdev hgwbeta hgw6 genome-euro )
+  foreach machine ( hgwdev hgwbeta hgw6 genome-euro genome-asia )
     if ( "hgw6" == $machine ) then
       echo  # space out results
     endif

@@ -1,0 +1,758 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the macNem1
+
+#########################################################################
+# obtain photograph:  (DONE - 2017-02-14 - Hiram)
+
+mkdir /hive/data/genomes/macNem1/photo
+cd /hive/data/genomes/macNem1/photo
+wget -O photoFile.jpg \
+'https://upload.wikimedia.org/wikipedia/commons/7/79/Cercopithecidae_-_Macaca_nemastrina.jpg'
+convert -sharpen 0 -normalize -geometry 400x400 photoFile Macaca_nemestrina.png
+
+# check that into the source tree kent/src/hg/htdocs/images/
+git commit -m ''WikiMedia Commons: Hectonichus https://commons.wikimedia.org/wiki/File:Cercopithecidae_-_Macaca_nemastrina.jpg refs #18785' \
+   Macaca_nemestrina.png
+
+# and copy to /usr/local/apache/htdocs/images/
+
+cd /hive/data/genomes/macNem1
+# establish photoReference.txt
+print 'photoCreditURL  https://commons.wikimedia.org/wiki/File:Cercopithecidae_-_Macaca_nemastrina.jpg
+photoCreditName WikiMedia Commons: Hectonichus
+' > photoReference.txt
+
+#########################################################################
+#  Initial steps, find photograph (DONE - 2017-02-23 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/macNem1
+cd ~/kent/src/hg/makeDb/doc/macNem1
+
+sed -e 's/melGal5/macNem1/g; s/MelGal5/MacNem1/g; s/DONE/TBD/g;' \
+       ../melGal5/initialBuild.txt > initialBuild.txt
+
+mkdir /hive/data/genomes/macNem1/refseq
+cd /hive/data/genomes/macNem1/refseq
+
+time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Macaca_nemestrina/all_assembly_versions/GCF_000956065.1_Mnem_1.0/ ./
+
+# sent 489 bytes  received 3389462340 bytes  20357134.11 bytes/sec
+# total size is 3389046120  speedup is 1.00
+# real    2m45.892s
+
+# appears to be a scaffold-only assembly:
+faSize G*0_genomic.fna.gz
+# 2948703511 bases (110217031 N's 2838486480 real 1832124010
+#   upper 1006362470 lower) in 9733 sequences in 1 files
+# Total size: mean 302959.4 sd 2322696.7 min 353 (NW_012018190.1)
+#   max 63123227 (NW_012016132.1) median 3915
+# %34.13 masked total, %35.45 masked real
+
+# this information is from the top of 
+#    macNem1/refseq/GCF_000956065.1_Mnem_1.0_assembly_report.txt
+
+# Assembly name:  Mnem_1.0
+# Organism name:  Macaca nemestrina (pig-tailed macaque)
+# Isolate:  M95218
+# Sex:  female
+# Taxid:          9545
+# BioSample:      SAMN03121842
+# BioProject:     PRJNA279145
+# Submitter:      Baylor College of Medicine
+# Date:           2015-3-19
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    JZLF01
+# Assembly method: AllPathsLG v. 48744; Atlas Link v. 1.1; Atlas GapFill v. 2.2; PBJelly2 v. 14.9.9
+# Genome coverage: 113.1x
+# Sequencing technology: Illumina; PacBio RS; PacBio RSII
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000956065.1
+# RefSeq assembly accession: GCF_000956065.1
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000956075.1      GCF_000956075.1 Primary Assembly
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2017-02-23)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/macNem1
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl macNem1 mammal macaca \
+       ./refseq/*_assembly_report.txt > macNem1.config.ra
+# going to need a mitoAcc ?
+    # NCBI Entrez indicates there is a mitochondrion: NC_026976.1
+
+    # verify it looks sane
+    cat macNem1.config.ra
+# config parameters for makeGenomeDb.pl:
+db macNem1
+clade mammal
+genomeCladePriority 35
+scientificName Macaca nemestrina
+commonName Pig-tailed macaque
+assemblyDate Mar. 2015
+assemblyLabel Baylor College of Medicine
+assemblyShortLabel Mnem_1.0
+orderKey 16322
+mitoAcc NC_026976.1
+fastaFiles /hive/data/genomes/macNem1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/macNem1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir macaca
+photoCreditURL  https://commons.wikimedia.org/wiki/File:Cercopithecidae_-_Macaca_nemastrina.jpg
+photoCreditName WikiMedia Commons: Hectonichus
+ncbiGenomeId 13267
+ncbiAssemblyId 313501
+ncbiAssemblyName Mnem_1.0
+ncbiBioProject 279145
+ncbiBioSample SAMN03121842
+genBankAccessionID GCF_000956065.1
+taxId 9545
+
+#############################################################################
+# setup UCSC named files (DONE - 2017-02-23 - Hiram)
+
+    mkdir /hive/data/genomes/macNem1/ucsc
+    cd /hive/data/genomes/macNem1/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../refseq/G*0_genomic.fna.gz refseq.2bit
+    #  real    1m18.995s
+
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this refseq.2bit file
+    # remove it later
+
+    time twoBitToFa refseq.2bit stdout | faSize stdin
+# 2948703511 bases (110217031 N's 2838486480 real 2838486480 upper 0 lower)
+#    in 9733 sequences in 1 files
+# Total size: mean 302959.4 sd 2322696.7 min 353 (NW_012018190.1)
+#    max 63123227 (NW_012016132.1) median 3915
+
+    # simple unplaced_scaffolds, just transform their names:
+
+    zcat ../refseq/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Macaca nemestrina .*/v1/;' | gzip -c > unplaced.fa.gz
+    time faToTwoBit unplaced.fa.gz unplaced.2bit
+    # real    1m21.170s
+
+    zcat ../refseq/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+       | sed -e 's/.1\t/v1\t/;' > unplaced.agp
+
+    # verify fasta and AGPs agree
+
+    time checkAgpAndFa unplaced.agp unplaced.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+    # real    0m16.654s
+
+    # and no sequence lost from orginal:
+    twoBitToFa unplaced.2bit stdout | faSize stdin
+# 2948703511 bases (110217031 N's 2838486480 real 2838486480 upper 0 lower)
+#    in 9733 sequences in 1 files
+# Total size: mean 302959.4 sd 2322696.7 min 353 (NW_012018190v1)
+#    max 63123227 (NW_012016132v1) median 3915
+
+    # same numbers as above (except for upper/lower masking)
+# 2948703511 bases (110217031 N's 2838486480 real 2838486480 upper 0 lower)
+#    in 9733 sequences in 1 files
+
+    # no longer need these temporary 2bit files
+    rm refseq.2bit unplaced.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2017-02-23 - Hiram)
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp macNem1.config.ra) > agp.log 2>&1
+    # real    2m57.235s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db macNem1.config.ra) > db.log 2>&1
+    # real    24m28.659s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add macNem1 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/macNem1
+    ln -s `pwd`/macNem1.unmasked.2bit /gbdb/macNem1/macNem1.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2017-02-23 - Hiram)
+    mkdir /hive/data/genomes/macNem1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/macNem1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/macNem1/macNem1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku macNem1) > do.log 2>&1
+    # real    187m20.754s
+
+    cat fb.macNem1.cpgIslandExtUnmasked.txt
+    # 18554530 bases of 1093044709 (1.698%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-02-23 - Hiram)
+    mkdir /hive/data/genomes/macNem1/bed/cytoBand
+    cd /hive/data/genomes/macNem1/bed/cytoBand
+    makeCytoBandIdeo.csh macNem1
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2017-02-23 - Hiram)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
+
+    mkdir /hive/data/genomes/macNem1/bed/ucscToINSDC
+    cd /hive/data/genomes/macNem1/bed/ucscToINSDC
+
+    # find accession for chrM
+    grep chrM ../../macNem1.agp
+# chrM    1       16560   8       F       NC_026976.1     1       16560   +
+    # find the genbank accession for NC_026976.1 at Entrez nucleotide
+    # The NC_026976.1 name is the RefSeq name, the KP765688.1 is the INSDC name
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+      ../../refseq/GCF_*structure/Primary_Assembly KP765688.1
+
+    # this is actually ucscToRefSeq since this is a RefSeq assembly
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+
+    #  chrM processing needs special help
+    printf "NC_026976.1\tKP765688.1\n" > refseq.insdc.txt
+    # extract the refseq vs. genbank names from the assembly_report
+    # columns 5 and 7 are the INSDC and RefSeq names
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | awk '{printf "%s\t%s\n", $2, $1}' | sort >> refseq.insdc.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    sed -e 's/\.1/v1/; s/NC_026976.1/chrM/;' refseq.insdc.txt | sort \
+       | join - ucscToINSDC.txt | tr '[ ]' '[\t]' | sort -k1 \
+       | join name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+           > ucscToINSDC.bed
+
+    # verify chrM is correct:
+    grep chrM *.bed
+    #  chrM    0       16560   KP765688.1
+
+    # should be same line counts throughout:
+    wc -l *
+	# 9734 insdcToUcsc.txt
+	# 9734 name.coordinate.tab
+	# 9734 refseq.insdc.txt
+	# 9734 ucscToINSDC.bed
+	# 9734 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab macNem1 ucscToINSDC stdin ucscToINSDC.bed
+    # checkTableCoords should be silent
+    checkTableCoords macNem1
+    # should cover %100 entirely:
+    featureBits -countGaps macNem1 ucscToINSDC
+    # 2948720071 bases of 2948720071 (100.000%) in intersection
+
+#########################################################################
+# UCSC to RefSeq name correspondence (DONE - 2017-02-23 - Hiram)
+
+    mkdir /hive/data/genomes/macNem1/bed/ucscToRefSeq
+    cd /hive/data/genomes/macNem1/bed/ucscToRefSeq
+
+    ln -s ../../refseq/GCF_000146605.2_Turkey_5.0_assembly_report.txt .
+
+    # this assembly_report has "UCSC-style-name" in column 10
+    # but it does not name anything, they are all "na"
+
+    # columns 5 and 7 are the INSDC and RefSeq names
+    (printf "KP765688.1\tNC_026976.1\n"
+    grep -v "^#" ../../refseq/G*0_assembly_report.txt \
+      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}') \
+        | sort > insdc.refSeq.tab
+
+    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' \
+      macNem1 | sort  > insdc.ucsc.tab
+
+    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
+       | cut -f2- | sort > ucsc.refSeq.tab
+
+    # when working perfectly, all these tab files have the same line count:
+    wc -l *.tab
+	#  9734 insdc.refSeq.tab
+	#  9734 insdc.ucsc.tab
+	#  9734 ucsc.refSeq.tab
+
+    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  14
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab macNem1 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+
+    checkTableCoords  macNem1 -table=ucscToRefSeq
+    # should cover %100 all bases:
+    featureBits -countGaps macNem1 ucscToRefSeq
+    # 2948720071 bases of 2948720071 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2017-02-23 - Hiram)
+
+    mkdir /hive/data/genomes/macNem1/bed/chromAlias
+    cd /hive/data/genomes/macNem1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' macNem1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' macNem1 \
+        > ucsc.genbank.tab
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > macNem1.chromAlias.tab
+
+    hgLoadSqlTab macNem1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        macNem1.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2017-02-23 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/macaca/macNem1
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" macNem1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+ 94057 JZLF.1
+     1 NC_.1
+
+    # implies a rule: '[JN][CZ][L_][F0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" macNem1 | wc -l
+    # 94058
+
+    hgsql -N -e "select frag from gold;" macNem1 \
+       | egrep -e '[JN][CZ][L_][F0-9]+(\.[0-9]+)?' | wc -l
+    # 94058
+
+    hgsql -N -e "select frag from gold;" macNem1 \
+       | egrep -v -e '[JN][CZ][L_][F0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/macNem1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [JN][CZ][L_][F0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2017-02-23,25 - Hiram)
+    mkdir /hive/data/genomes/macNem1/bed/repeatMasker
+    cd /hive/data/genomes/macNem1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku macNem1) > do.log 2>&1
+    # something odd took place during this run.  seven of the jobs appeared
+    # to be running cross-match forever with no progress.  Killed them and
+    # allowed them to start over and they finished in normal time.
+    # real    3511m26.962s
+
+    cat faSize.rmsk.txt
+# 2948720071 bases (110217031 N's 2838503040 real 1418642754 upper
+#	1419860286 lower) in 9734 sequences in 1 files
+# Total size: mean 302929.9 sd 2322579.2 min 353 (NW_012018190v1)
+#	max 63123227 (NW_012016132v1) median 3920
+# %48.15 masked total, %50.02 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;                                            *
+
+    time featureBits -countGaps macNem1 rmsk
+    #	1420318490 bases of 2948720071 (48.167%) in intersection
+    #	real    0m39.024s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' macNem1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    #	total 1420318490.000000
+    #	real    0m42.463s
+
+##########################################################################
+# running simple repeat (DONE - 2017-02-23 - Hiram)
+
+    mkdir /hive/data/genomes/macNem1/bed/simpleRepeat
+    cd /hive/data/genomes/macNem1/bed/simpleRepeat
+    # using trf409 3 here guessing smaller genome (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 6 macNem1) > do.log 2>&1
+    # real    6m30.668s
+
+    cat fb.simpleRepeat
+    # 69295380 bases of 2838503083 (2.441%) in intersection
+
+
+    # adding this trfMask to the other masking
+    cd /hive/data/genomes/macNem1
+
+    # when using the Window Masker result:
+#    twoBitMask bed/windowMasker/macNem1.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  macNem1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # when using Rmsk results, add to rmsk after it is done:
+    twoBitMask macNem1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed macNem1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa macNem1.2bit stdout | faSize stdin > faSize.macNem1.2bit.txt
+    cat faSize.macNem1.2bit.txt
+# 2948720071 bases (110217031 N's 2838503040 real 1417139630 upper
+#	1421363410 lower) in 9734 sequences in 1 files
+# Total size: mean 302929.9 sd 2322579.2 min 353 (NW_012018190v1)
+#	max 63123227 (NW_012016132v1) median 3920
+# %48.20 masked total, %50.07 masked real
+
+    # reset the symlink
+    rm /gbdb/macNem1/macNem1.2bit
+    ln -s `pwd`/macNem1.2bit /gbdb/macNem1/macNem1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-02-23 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/macNem1/bed/microsat
+    cd /cluster/data/macNem1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed macNem1 microsat microsat.bed
+    # Read 30599 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2017-02-26 - Hiram)
+
+    mkdir /hive/data/genomes/macNem1/bed/windowMasker
+    cd /hive/data/genomes/macNem1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev macNem1) > do.log 2>&1
+    # real    206m6.903s
+
+    # Masking statistics
+    cat faSize.macNem1.cleanWMSdust.txt
+# 1128339136 bases (35294427 N's 1093044709 real 852254578 upper
+#	240790131 lower) in 231286 sequences in 1 files
+# Total size: mean 4878.5 sd 586734.6 min 99 (chrUn_NW_011236709v1)
+#	max 190651702 (chr1) median 462
+# %21.34 masked total, %22.03 masked real
+
+    cat fb.macNem1.rmsk.windowmaskerSdust.txt
+    # 779179867 bases of 2948720071 (26.424%) in intersection
+
+    # when this completes before rmsk is done:
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=cleanup -dbHost=hgwdev macNem1) > cleanup.log 2>&1
+    # real    2m2.076s
+
+##########################################################################
+# run up idKeys files for ncbiRefSeq (DONE - 2017-02-27 - Hiram)
+    mkdir /hive/data/genomes/macNem1/bed/idKeys
+    cd /hive/data/genomes/macNem1/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd`  macNem1) > do.log 2>&1 &
+    # real    12m39.807s
+
+    cat macNem1.keySignature.txt
+    #   4565a53011bf78e2e6a489f4ed1cc8f9
+
+##########################################################################
+# cpgIslands - (DONE - 2017-02-27 - Hiram)
+    mkdir /hive/data/genomes/macNem1/bed/cpgIslands
+    cd /hive/data/genomes/macNem1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku macNem1) > do.log 2>&1 &
+    # real    6m11.419s
+
+    cat fb.macNem1.cpgIslandExt.txt
+    # 21891021 bases of 2838503083 (0.771%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2017-02-27 - Hiram)
+    mkdir /hive/data/genomes/macNem1/bed/genscan
+    cd /hive/data/genomes/macNem1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku macNem1) > do.log 2>&1 &
+    # real    20m34.741s
+
+# Completed: 9733 of 9734 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      79229s    1320.49m    22.01h    0.92d  0.003 y
+# IO & Wait Time:                 27058s     450.96m     7.52h    0.31d  0.001 y
+# Average job time:                  11s       0.18m     0.00h    0.00d
+# Longest finished job:            1563s      26.05m     0.43h    0.02d
+# Submission to last job:          1620s      27.00m     0.45h    0.02d
+
+    # one job need window size 2000000 to finish
+    ./runLastGsBig.csh NW_012012688v1 000 gtf/000/NW_012012688v1.gtf pep/000/NW_012012688v1.pep subopt/000/NW_012012688v1.bed
+    # real    3m26.559s
+
+    # continuing:
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku macNem1) > makeBed.log 2>&1
+    # real    3m3.487s
+
+    cat fb.macNem1.genscan.txt
+    # 52901202 bases of 2838503083 (1.864%) in intersection
+
+    cat fb.macNem1.genscanSubopt.txt
+    # 53835070 bases of 2838503083 (1.897%) in intersection
+
+#############################################################################
+# augustus gene track (DONE - 2017-02-27 - Hiram)
+
+    mkdir /hive/data/genomes/macNem1/bed/augustus
+    cd /hive/data/genomes/macNem1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev -workhorse=hgwdev macNem1) > do.log 2>&1 &
+    # real    98m44.064s
+
+    cat fb.macNem1.augustusGene.txt
+    # 48184131 bases of 2838503083 (1.698%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2017-02-27 - Hiram)
+
+    # numerator is macNem1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap macNem1 gap
+    # 110216988 bases of 2838503083 (3.883%) in intersection
+    #                    ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2838503083 / 2861349177 \) \* 1024
+    #  ( 2838503083 / 2861349177 ) * 1024 = 1015.823997
+
+    # ==> use -repMatch=1000 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/macNem1
+    blat macNem1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/macNem1.11.ooc \
+        -repMatch=1000
+    #   Wrote 26519 overused 11-mers to jkStuff/macNem1.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' macNem1 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # there are none in this assembly
+
+    # # all these gap sizes are 100
+    # # minimum gap size is 100 and produces a reasonable number of lifts
+    # gapToLift -verbose=2 -minGap=10 macNem1 jkStuff/nonBridged.lft \
+    #    -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2017-03-05 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism             mrnaCnt   estCnt  refSeqCnt
+    # Macaca nemestrina       1412    34762   55
+
+    # edit etc/genbank.conf to add macNem1 just before macFas5
+# macNem1 (pig-tailed macaque)
+macNem1.serverGenome = /hive/data/genomes/macNem1/macNem1.2bit
+macNem1.clusterGenome = /hive/data/genomes/macNem1/macNem1.2bit
+macNem1.ooc = /hive/data/genomes/macNem1/jkStuff/macNem1.11.ooc
+macNem1.lift = no
+macNem1.perChromTables = no
+macNem1.downloadDir = macNem1
+macNem1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+macNem1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+macNem1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+macNem1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+macNem1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# defaults are fine: genbank.mrna.native refseq.mrna.native refseq.mrna.xeno yes
+# and genbank.est.native
+# macNem1.upstreamGeneTbl = refGene
+# macNem1.upstreamMaf = multiz7way
+# /hive/data/genomes/melGal4/bed/multiz7way/species.lst
+
+    git commit -m "Added macNem1; refs #18927" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # also add to src/lib/gbGenome.c
+#	static char *macNemNames[] = {"Macaca nemestrina", NULL};
+#	{"macNem", macNemNames},
+
+    git commit -m "Added macNem1; refs #18927" src/lib/gbGenome.c
+    make install-server
+
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial macNem1
+    # logFile: var/build/logs/2017.03.05-06:51:20.macNem1.initalign.log
+    #   about 13 hours
+
+    tail var/build/logs/2017.03.05-06:51:20.macNem1.initalign.log
+    #	hgwdev 2017.03.05-19:31:30 macNem1.initalign: Succeeded: macNem1
+    #	hgwdev 2017.03.05-19:32:03 macNem1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.macNem1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad macNem1
+    # logFile: var/dbload/hgwdev/logs/2017.03.05-19:53:57.macNem1.dbload.log
+    #  about 21 minutes
+
+    tail -1 var/dbload/hgwdev/logs/2017.03.05-19:53:57.macNem1.dbload.log
+    #  hgwdev 2017.03.05-20:14:56 macNem1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add macNem1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding macNem1 to the update alignments refs #18927' etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# swap chainNet from mouse/mm10 (DONE - 2017-03-01 - Hiram)
+    # since this is a new assembly, add the chainNet definitions to
+    # trackDb
+
+    # the original alignment
+    cd /hive/data/genomes/mm10/bed/lastzMacNem1.2017-02-28
+    cat fb.mm10.chainMacNem1Link.txt
+    # 918083212 bases of 2652783500 (34.608%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/macNem1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/macNem1/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzMacNem1.2017-02-28/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    65m14.074s
+
+    cat fb.macNem1.chainMm10Link.txt
+    # 905682728 bases of 2838503083 (31.907%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` macNem1 mm10) \
+       > rbest.log 2>&1
+    # real    321m2.285s
+
+#############################################################################
+# ncbiRefSeq (TBD - 2016-05-13 - Hiram)
+
+    mkdir /hive/data/genomes/macNem1/bed/ncbiRefSeq
+    cd /hive/data/genomes/macNem1/bed/ncbiRefSeq
+    # running step wise as this script is still under development
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 macNem1) > download.log 2>&1
+    # real    16m29.536s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 macNem1) > process.log 2>&1
+    # real    3m58.858s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 macNem1) > load.log 2>&1
+    # real    0m33.205s
+
+    cat fb.ncbiRefSeq.macNem1.txt
+    #  82563006 bases of 1218501075 (6.776%) in intersection
+
+    featureBits -enrichment macNem1 refGene ncbiRefSeq 
+    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
+    #    enrich 14.68x
+
+#########################################################################
+#  BLATSERVERS ENTRY (TBD - 2017-01-17 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("macNem1", "blat1d", "17878", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("macNem1", "blat1d", "17879", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MEPE gene (egg shell protein)
+## located via blat of the chicken protein
+##  (TBD - 2017-01-17 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr4:21251858-21288049"
+	where name="macNem1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2017-03-07 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=macNem1 -tableCoverage all.joiner
+    joinerCheck -database=macNem1 -times all.joiner
+    joinerCheck -database=macNem1 -keys all.joiner
+
+    cd /hive/data/genomes/macNem1
+    time (makeDownloads.pl -workhorse=hgwdev macNem1) > downloads.log 2>&1
+    #  real    25m42.531s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/macNem1/pushQ
+    cd /hive/data/genomes/macNem1/pushQ
+    time (makePushQSql.pl macNem1) > macNem1.pushQ.sql 2> stderr.out
+    #  real    7m21.629s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    #	WARNING: macNem1 does not have seq
+    #	WARNING: macNem1 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p macNem1.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/macNem1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

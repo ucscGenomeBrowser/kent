@@ -7,6 +7,7 @@
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "hdb.h"
+#include "errCatch.h"
 
 static struct hgPos *bigBedIntervalListToHgPositions(struct bbiFile *bbi, char *term, struct bigBedInterval *intervalList, char *description)
 /* Given an open bigBed file, and an interval list, return a pointer to a list of hgPos structures. */
@@ -39,20 +40,30 @@ return posList;
 static struct hgPos *getPosFromBigBed(char *bigDataUrl, char *indexField, char *term, char *description)
 /* Given a bigBed file with a search index, check for term. */
 {
-struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
-int fieldIx;
-struct bptFile *bpt = bigBedOpenExtraIndex(bbi, indexField, &fieldIx);
-struct lm *lm = lmInit(0);
-struct bigBedInterval *intervalList;
-intervalList = bigBedNameQuery(bbi, bpt, fieldIx, term, lm);
+struct errCatch *errCatch = errCatchNew();
+struct hgPos *posList = NULL;
+if (errCatchStart(errCatch))
+    {
+    struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
+    int fieldIx;
+    struct bptFile *bpt = bigBedOpenExtraIndex(bbi, indexField, &fieldIx);
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *intervalList;
+    intervalList = bigBedNameQuery(bbi, bpt, fieldIx, term, lm);
 
-struct hgPos *posList = bigBedIntervalListToHgPositions(bbi, term, 
-    intervalList, description);
-bbiFileClose(&bbi);
+    posList = bigBedIntervalListToHgPositions(bbi, term, 
+        intervalList, description);
+    bbiFileClose(&bbi);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError) 
+    // we fail silently if bigBed is missing
+    return NULL;
+
 return posList;
 }
 
-static struct hgPos *doTrixSearch(char *trixFile, struct slName  *indices, char *bigDataUrl, char *term)
+static struct hgPos *doTrixSearch(char *trixFile, struct slName  *indices, char *bigDataUrl, char *term, char *description)
 /* search a trix file in the "searchTrix" field of a bigBed trackDb */
 {
 struct trix *trix = trixOpen(trixFile);
@@ -76,7 +87,6 @@ if (trixWordCount == 0)
 
 struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, tsmExpand);
 struct hgPos *posList = NULL;
-char *description = NULL;   // we're not filling in this field at the moment
 for ( ; tsList != NULL; tsList = tsList->next)
     {
     struct slName *oneIndex = indices;
@@ -92,7 +102,7 @@ return posList;
 }
 
 
-boolean findBigBedPosInTdbList(char *db, struct trackDb *tdbList, char *term, struct hgPositions *hgp)
+boolean findBigBedPosInTdbList(char *db, struct trackDb *tdbList, char *term, struct hgPositions *hgp, struct hgFindSpec *hfs)
 /* Given a list of trackDb entries, check each of them for a searchIndex */
 {
 struct trackDb *tdb;
@@ -120,7 +130,19 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
     char *trixFile = trackDbSetting(tdb, "searchTrix");
     // if there is a trix file, use it to search for the term
     if (trixFile != NULL)
-	posList1 = doTrixSearch(trixFile, indexList, fileName, term);
+	{
+	char *description = NULL;
+	if (hfs)
+            {
+            char buf[2048];
+            if (isNotEmpty(hfs->searchDescription))
+                truncatef(buf, sizeof(buf), "%s", hfs->searchDescription);
+            else
+                safef(buf, sizeof(buf), "%s", hfs->searchTable);
+            description = cloneString(buf);
+            }
+	posList1 = doTrixSearch(hReplaceGbdb(trixFile), indexList, fileName, term, description);
+	}
 
     // now search for the raw id's
     struct slName *oneIndex=indexList;

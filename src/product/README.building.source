@@ -33,7 +33,7 @@ Following the instructions in scripts/README
 	Other users do report successful operation on other systems.
 
         Depending upon what libraries you have installed locally, you may want
-        to set environment variables USE_SSL and/or USE_SAMTABIX.
+        to set environment variable USE_SAMTABIX.
 
 	See also:
 	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
@@ -93,19 +93,12 @@ Following the instructions in scripts/README
 	The -lz requires a link to the libraries installed in the
 	zlib-devel rpm.
 
-4a. optional SSL support:
-	If you want the libraries to be able to use SSL,
+4a. Required SSL support:
+	In order for the libraries to be able to use SSL,
 	for instance to support fetching HTTPS URLs,
 	install openssl.  We are currently using these packages: 
-	openssl-0.9.8b-10.el5
-	openssl-devel-0.9.8b-10.el5
-        Add the following as an environment variable to 
-        .bashrc or .tcshrc, OR alternatively add it as the first
-	line of your kent/src/inc/common.mk:
-	  USE_SSL=1
-        If you try to fetch an https url without this support
-	you will see an error message:
-	  No openssl available in netMustConnectHttps for <hostName> : <port>
+	openssl-1.0.1e
+	openssl-devel-1.0.1e
         SSL is also useful for accessing bigWig and bigBed over HTTPS.
 
 4b. optional SAM/BAM and tabix (for VCF) support:

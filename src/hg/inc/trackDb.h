@@ -424,6 +424,7 @@ typedef enum _eCfgType
     cfgVcf      =11,
     cfgSnake    =12,
     cfgLong     =13,
+    cfgBarChart =14,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 
@@ -607,7 +608,13 @@ void tdbSetCartVisibility(struct trackDb *tdb, struct cart *cart, char *vis);
 INLINE boolean tdbIsBigBed(struct trackDb *tdb)
 // Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
 {
-return startsWithWord("bigBed", tdb->type) || startsWithWord("bigGenePred", tdb->type) || startsWithWord("bigMaf", tdb->type) || startsWithWord("bigPsl", tdb->type) || startsWithWord("bigChain", tdb->type);
+// KRR TODO: replace with table lookup  (same as bigBedFind ?)
+return startsWithWord("bigBed", tdb->type) || 
+        startsWithWord("bigGenePred", tdb->type) || 
+        startsWithWord("bigMaf", tdb->type) || 
+        startsWithWord("bigPsl", tdb->type) || 
+        startsWithWord("bigBarChart", tdb->type) || 
+        startsWithWord("bigChain", tdb->type);
 }
 
 INLINE boolean tdbIsBigWig(struct trackDb *tdb)

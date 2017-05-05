@@ -333,12 +333,6 @@ static void writeBasicInfoHtml(struct sqlConnection *conn, struct trackDb *tdb, 
                                struct wgEncodeGencodeTag *tags, bool haveTsl, struct wgEncodeGencodeTranscriptionSupportLevel *tsl)
 /* write basic HTML info for all genes */
 {
-/*
- * notes:
- *   - According to Steve: `status' is not the same for ensembl and havana.  So either avoid displaying it
- *     or display it as `automatic status' or `manual status'.
- */
-
 // basic gene and transcript information
 printf("<table class=\"hgcCcds\" style=\"white-space: nowrap;\"><thead>\n");
 printf("<tr><th><th>Transcript<th>Gene</tr>\n");
@@ -364,8 +358,6 @@ printf("</tr>\n");
 printf("<tr><th>Strand<td>%s<td></tr>\n", transAnno->strand);
 
 printf("<tr><th><a href=\"%s\" target = _blank>Biotype</a><td>%s<td>%s</tr>\n", gencodeBiotypesUrl, transAttrs->transcriptType, transAttrs->geneType);
-
-printf("<tr><th>Status<td>%s<td>%s</tr>\n", transAttrs->transcriptStatus, transAttrs->geneStatus);
 
 printf("<tr><th>Annotation Level<td>%s (%d)<td></tr>\n", getLevelDesc(transAttrs->level), transAttrs->level);
 

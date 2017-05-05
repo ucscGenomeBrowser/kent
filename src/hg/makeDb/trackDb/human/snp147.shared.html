@@ -179,7 +179,7 @@ display according to several attributes:
       </UL>
       <span style="color: #0000ff; font-weight: bold;">Non-coding (ncRNA):</span>
       (<A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001619"
-      TARGET=_BLANK>nc_transcript_variant</A>) are always covered blue.
+      TARGET=_BLANK>nc_transcript_variant</A>) are always colored blue.
     </LI>
     <LI>
       <A name="MolType"></A>
@@ -315,14 +315,10 @@ display according to several attributes:
     </LI>
     <LI>
       <A name="Weight"></A>
-      <B>Weight</B>: Alignment quality assigned by dbSNP<BR>
-      <UL>
-      <LI>Weight can be 0, 1, 2, 3 or 10.</LI>
-      <LI>Weight = 1 are the highest quality alignments.</LI>
-      <LI>Weight = 0 and weight = 10 are excluded from the data set.</LI>
-      <LI>A filter on maximum weight value is supported, which defaults to 1
-        on all tracks except the Mult. SNPs track, which defaults to 3.</LI>
-      </UL>
+      <B>Weight</B>: Alignment quality assigned by dbSNP. Before dbSNP build 
+	147, weight had values 1, 2 or 3, with 1 being the highest quality 
+	(mapped to a single genomic location). As of dbSNP build 147, dbSNP 
+	now releases only the variants with weight 1.
     </LI>
     <LI>
       <A name="Submitters"></A>
@@ -431,6 +427,17 @@ for hg38.
   <LI>The header lines in the rs_fasta files were used for molecule type,
       class and observed polymorphism.</LI>
   </UL>
+
+<H2>Data Access</H2>
+<P>
+The raw data can be explored interactively with the <A HREF="../../cgi-bin/hgTables"TARGET=_blank>Table Browser</a>,
+<A HREF="../../cgi-bin/hgIntegrator"TARGET=_blank>Data Integrator</a>, or <A HREF="../../cgi-bin/hgVai"TARGET=_blank>Variant Annotation Integrator</a>.
+For automated analysis, the genome annotation can be downloaded from the downloads server for <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/"TARGET=_blank> hg38</a> and
+<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/"TARGET=_blank> hg19</a> (snp147*.txt.gz) or the <A HREF="../goldenPath/help/mysql.html"TARGET=_blank>public MySQL server</a>.
+Please refer to our <A HREF="https://groups.google.com/a/soe.ucsc.edu/forum/?hl=en&fromgroups#!search/download+snps"TARGET=_blank>mailing list archives</a>
+for questions and example queries, or our <A HREF="../FAQ/FAQdownloads.html#download36"TARGET=_blank>Data Access FAQ</a> for more information.
+</P>
+
 
 <H2>Orthologous Alleles (human assemblies only)</H2>
 <P>

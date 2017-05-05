@@ -1,0 +1,102 @@
+track cons11way
+compositeTrack on
+shortLabel 11-way Vertebrate
+longLabel Multiz Alignment & Conservation (11 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+
+    track cons11wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons11way
+
+        track multiz11way
+        subTrack cons11wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 11 Vertebrates
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz11waySummary
+        frames multiz11wayFrames
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault xenTro9
+        speciesGroups Vertebrate
+        sGroup_Vertebrate xenLae2 nanPar1 chrPic2 monDom5 anoCar2 canFam3 hg38 mm10 fr3
+        itemFirstCharCase noChange
+        treeImage phylo/xenTro9_11way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons11wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons11way
+    viewLimits -2:1
+    viewLimitsMax -3.475:2.548
+
+        track phyloP11way
+        subTrack cons11wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel 11 Vertebrate Cons
+        longLabel 11 vertebrate Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -3.475 2.548
+        maxHeightPixels 100:50:11
+        viewLimits -2:1
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons11wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons11way
+
+        track phastCons11way
+        subTrack cons11wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel 11 Vertebrate Cons
+        longLabel 11 vertebrate conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons11wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons11way
+
+        track phastConsElements11way
+        subTrack cons11wayViewelements on
+        subGroups view=elements
+        shortLabel 11 Vertebrate El
+        longLabel 11 vertebrate Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

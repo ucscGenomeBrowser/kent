@@ -13,6 +13,7 @@
 #include "hgTracks.h"
 #include "cds.h"
 #include "bedTabix.h"
+#include "obscure.h"
 
 #define SEQ_DELIM '~'
 
@@ -32,37 +33,82 @@ ret->name = cloneString(buf);
 return ret;
 }
 
-void loadSimpleBed(struct track *tg)
-/* Load the items in one track - just move beds in
- * window... */
+static void calculateLabelFields(struct track *track)
+/* Figure out which fields are available to label a bigBed track. */
 {
-struct bed *(*loader)(char **row);
+struct bbiFile *bbi = fetchBbiForTrack(track);
+struct asObject *as = bigBedAsOrDefault(bbi);
+struct slPair *labelList = buildFieldList(track->tdb, "labelFields",  as);
+
+if (labelList == NULL)
+    {
+    // There is no labelFields entry in the trackDb.
+    // If there is a name, use it by default, otherwise no label by default 
+    if (track->bedSize > 3)
+        slAddHead(&track->labelColumns, slIntNew(3));
+    }
+else if (sameString(labelList->name, "none"))
+    return;  // no label
+else
+    {
+    // what has the user said to use as a label
+    char cartVar[1024];
+    safef(cartVar, sizeof cartVar, "%s.label", track->tdb->track);
+    struct hashEl *labelEl = cartFindPrefix(cart, cartVar);
+    struct hash *onHash = newHash(4);
+
+    // fill hash with fields that should be used for labels
+    // first turn on all the fields that are in defaultLabelFields
+    struct slPair *defaultLabelList = buildFieldList(track->tdb, "defaultLabelFields",  as);
+    if (defaultLabelList != NULL)
+        {
+        for(; defaultLabelList; defaultLabelList = defaultLabelList->next)
+            hashStore(onHash, defaultLabelList->name);
+        }
+    else
+        // no default list, use first entry in labelFields as default
+        hashStore(onHash, labelList->name);
+
+    // use cart variables to tweak the default-on hash
+    for(; labelEl; labelEl = labelEl->next)
+        {
+        /* the field name is after the <trackName>.label string */
+        char *fieldName = &labelEl->name[strlen(cartVar) + 1];
+
+        if (sameString((char *)labelEl->val, "1"))
+            hashStore(onHash, fieldName);
+        else if (sameString((char *)labelEl->val, "0"))
+            hashRemove(onHash, fieldName);
+        }
+
+    struct slPair *thisLabel = labelList;
+    for(; thisLabel; thisLabel = thisLabel->next)
+        {
+        if (hashLookup(onHash, thisLabel->name))
+            {
+            // put this column number in the list of columns to use to make label
+            slAddHead(&track->labelColumns, slIntNew(ptToInt(thisLabel->val)));
+            }
+        }
+    slReverse(&track->labelColumns);
+    }
+}
+
+char *bedName(struct track *tg, void *item);
+
+void loadSimpleBedWithLoader(struct track *tg, bedItemLoader loader)
+/* Load the items in one track using specified loader - just move beds in window... */
+{
 struct bed *bed, *list = NULL;
 char **row;
 int rowOffset;
 char *words[3];
 int wordCt;
 char query[128];
-char *setting = NULL;
 bool doScoreCtFilter = FALSE;
 int scoreFilterCt = 0;
+char *setting;
 char *topTable = NULL;
-
-if (tg->bedSize <= 3)
-    loader = bedLoad3;
-else if (tg->bedSize == 4)
-    loader = bedLoad;
-else if (tg->bedSize == 5)
-    loader = bedLoad5;
-else
-    loader = bedLoad6;
-
-// pairedTagAlign loader is required for base coloring using sequence from seq1 & seq2
-// after removing optional bin column, this loader assumes seq1 and seq2 are in
-// row[6] and row[7] respectively of the sql result.
-if ((setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE))
-	&& sameString(setting, "seq1Seq2"))
-    loader = bedLoadPairedTagAlign;
 
 /* limit to a specified count of top scoring items.
  * If this is selected, it overrides selecting item by specified score */
@@ -103,18 +149,32 @@ else if (tg->isBigBed)
     if (scoreFilter)
 	minScore = atoi(scoreFilter);
 
+     if (tg->itemName == bedName && !trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
+        tg->itemName = bigBedItemName;
+
+    calculateLabelFields(tg);
     for (bb = bbList; bb != NULL; bb = bb->next)
-	{
-	bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-	bed = loader(bedRow);
-	if (scoreFilter == NULL || bed->score >= minScore)
-	    slAddHead(&list, bed);
-	}
+        {
+        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        bed = loader(bedRow);
+        bed->label = makeLabel(tg, bb);
+        if (scoreFilter == NULL || bed->score >= minScore)
+            slAddHead(&list, bed);
+        }
     lmCleanup(&lm);
     }
 else
     {
-    struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+    char *table = tg->table;
+    struct customTrack *ct = tg->customPt;
+    struct sqlConnection *conn = NULL;
+    if (ct == NULL)
+        conn = hAllocConnTrack(database, tg->tdb);
+    else
+        {
+        conn = hAllocConn(CUSTOM_TRASH);
+        table = ct->dbTableName;
+        }
     struct sqlResult *sr = NULL;
     /* limit to items above a specified score */
     char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
@@ -127,11 +187,11 @@ else
 	}
     else if(scoreFilterClause != NULL && tg->bedSize >= 5)
 	{
-	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, scoreFilterClause, &rowOffset);
+	sr = hRangeQuery(conn, table, chromName, winStart, winEnd, scoreFilterClause, &rowOffset);
 	}
     else
 	{
-	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
+	sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
 	}
     freeMem(scoreFilterClause);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -151,6 +211,30 @@ if (doScoreCtFilter)
     }
 slReverse(&list);
 tg->items = list;
+}
+
+void loadSimpleBed(struct track *tg)
+/* Load the items in one track - just move beds in
+ * window... */
+{
+struct bed *(*loader)(char **row);
+if (tg->bedSize <= 3)
+    loader = bedLoad3;
+else if (tg->bedSize == 4)
+    loader = bedLoad;
+else if (tg->bedSize == 5)
+    loader = bedLoad5;
+else
+    loader = bedLoad6;
+
+char *setting = NULL;
+// pairedTagAlign loader is required for base coloring using sequence from seq1 & seq2
+// after removing optional bin column, this loader assumes seq1 and seq2 are in
+// row[6] and row[7] respectively of the sql result.
+if ((setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE))
+	&& sameString(setting, "seq1Seq2"))
+    loader = bedLoadPairedTagAlign;
+loadSimpleBedWithLoader(tg, loader);
 }
 
 void bed8To12(struct bed *bed)
@@ -205,6 +289,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
+    calculateLabelFields(tg);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 9, &lfList);
     }
@@ -255,6 +340,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
+    calculateLabelFields(tg);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 8, &lfList);
     }
@@ -453,6 +539,7 @@ useItemRgb = bedItemRgb(tdb);
 
 if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
+    calculateLabelFields(tg);
     bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
           scoreMin, scoreMax, useItemRgb, 12, &lfList);
     }

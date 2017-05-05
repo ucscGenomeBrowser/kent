@@ -73,27 +73,28 @@ if (centralCookie)
 return user;
 }
 
-static char *getBotCheckString(char *ip)
-/* compose user.ip string for bot check */
+static char *getBotCheckString(char *ip, double fraction)
+/* compose "user.ip fraction" string for bot check */
 {
 char *user = getCookieUser();
 char *botCheckString = needMem(256);
 if (user)
-  safef(botCheckString, 256, "%s.%s", user, ip);
+  safef(botCheckString, 256, "%s.%s %f", user, ip, fraction);
 else
-  safef(botCheckString, 256, "%s", ip);
+  safef(botCheckString, 256, "%s %f", ip, fraction);
 return botCheckString;
 }
 
-void botDelayCgi(char *host, int port, boolean noWarn)
+void botDelayCgi(char *host, int port, boolean noWarn, double fraction)
 /* Connect with bottleneck server and sleep the
- * amount it suggests for IP address calling CGI script. */
+ * amount it suggests for IP address calling CGI script,
+ * after imposing the specified fraction of the access penalty. */
 {
 int millis;
 char *ip = getenv("REMOTE_ADDR");
 if (ip != NULL)
     {
-    char *botCheckString = getBotCheckString(ip);    
+    char *botCheckString = getBotCheckString(ip, fraction);    
     millis = botDelayTime(host, port, botCheckString);
     freeMem(botCheckString);
     if (millis > 0)
@@ -142,7 +143,7 @@ if (exceptIps)
 return FALSE;
 }
 
-static void hgBotDelayExt(boolean noWarn)
+static void hgBotDelayExt(boolean noWarn, double fraction)
 /* High level bot delay call - looks up bottleneck server
  * in hg.conf. */
 {
@@ -153,23 +154,40 @@ char *host = cfgOption("bottleneck.host");
 char *port = cfgOption("bottleneck.port");
 
 if (host != NULL && port != NULL)
-    botDelayCgi(host, atoi(port), noWarn);
+    botDelayCgi(host, atoi(port), noWarn, fraction);
 }
 
 void hgBotDelay()
 /* High level bot delay call - for use with regular webpage output */ 
 {
-hgBotDelayExt(FALSE);
+hgBotDelayExt(FALSE, 1.0);
+}
+
+void hgBotDelayFrac(double fraction)
+/* Like hgBotDelay, but imposes a fraction of the standard access penalty */ 
+{
+hgBotDelayExt(FALSE, fraction);
 }
 
 void hgBotDelayNoWarn()
 /* High level bot delay call without warning - for use with non-webpage outputs */
 {
-hgBotDelayExt(TRUE);
+hgBotDelayExt(TRUE, 1.0);
+}
+
+void hgBotDelayNoWarnFrac(double fraction)
+/* Like hgBotDelayNoWarn, but imposes a fraction of the standard access penalty */
+{
+hgBotDelayExt(TRUE, fraction);
 }
 
 int hgBotDelayTime()
-/* Get suggested delay time from cgi. */
+{
+return hgBotDelayTimeFrac(1.0);
+}
+
+int hgBotDelayTimeFrac(double fraction)
+/* Get suggested delay time from cgi using the standard penalty. */
 {
 char *ip = getenv("REMOTE_ADDR");
 char *host = cfgOption("bottleneck.host");
@@ -178,7 +196,7 @@ char *port = cfgOption("bottleneck.port");
 int delay = 0;
 if (host != NULL && port != NULL && ip != NULL)
     {
-    char *botCheckString = getBotCheckString(ip);    
+    char *botCheckString = getBotCheckString(ip, fraction);
     delay = botDelayTime(host, atoi(port), botCheckString);
     freeMem(botCheckString);
     }

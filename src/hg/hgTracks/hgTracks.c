@@ -70,6 +70,9 @@
 #include "bigWarn.h"
 #include "wigCommon.h"
 #include "knetUdc.h"
+#include "hex.h"
+#include <openssl/sha.h>
+#include "customComposite.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -432,6 +435,7 @@ if (!IS_KNOWN(track->remoteDataSource))
     //    }
     if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type) ||
 	startsWithWord("halSnake",track->tdb->type) ||
+	startsWithWord("pslSnake",track->tdb->type) ||
 	startsWithWord("bigPsl",track->tdb->type) ||
 	startsWithWord("bigGenePred",track->tdb->type) ||
 	startsWithWord("bigChain",track->tdb->type) ||
@@ -564,7 +568,7 @@ struct track *chromIdeoTrack(struct track *trackList)
 struct track *track;
 for(track = trackList; track != NULL; track = track->next)
     {
-    if(sameString(track->track, "cytoBandIdeo"))
+    if(sameString(trackHubSkipHubName(track->track), "cytoBandIdeo"))
 	{
 	if (hTableExists(database, track->table))
 	    return track;
@@ -670,9 +674,9 @@ else
 //  updating the warning-insertion target name.
 if(doIdeo)
     {
-    char startBand[16];
-    char endBand[16];
-    char title[64];  // was 32
+    char startBand[1024];
+    char endBand[1024];
+    char title[1024];
     startBand[0] = endBand[0] = '\0';
     fillInStartEndBands(ideoTrack, startBand, endBand, sizeof(startBand));
     /* Start up client side map. */
@@ -726,7 +730,10 @@ if(doIdeo)
     hvGfxClose(&hvg);
     /* Finish map. */
     if (!psOutput)
+	{
         hPrintf("</MAP>\n");
+	jsInline("$('area.cytoBand').click(function(){return false;});\n");
+	}
     }
 
 // create an empty hidden-map place holder which can change dynamically with ajax callbacks.
@@ -3906,29 +3913,180 @@ slReverse(&virtRegionList);
 
 }
 
+void checkmultiRegionsBedInput()
+/* Check if multiRegionsBedInput needs processing.
+ * If BED submitted, see if it has changed, and if so, save it to trash
+ * and update cart and global vars. Uses sha1 hash for faster change check. */
+{
+enum custRgnType { empty, url, trashFile };
+enum custRgnType oldType = empty;
+enum custRgnType newType = empty;
+
+// OLD input
+
+char *newMultiRegionsBedUrl = NULL;
+multiRegionsBedUrl = cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
+char multiRegionsBedUrlSha1Name[1024];
+safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", multiRegionsBedUrl);
+if (!multiRegionsBedUrl)
+    {
+    multiRegionsBedUrl = "";
+    cartSetString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
+    }
+if (sameString(multiRegionsBedUrl,""))
+    oldType = empty;
+else if (strstr(multiRegionsBedUrl,"://"))
+    oldType = url;
+else 
+    oldType = trashFile;
+if ((oldType == trashFile) && !(fileExists(multiRegionsBedUrl) && fileExists(multiRegionsBedUrlSha1Name)))
+    {  // if the trash files no longer exists, reset to empty string default value.
+    multiRegionsBedUrl = "";
+    cartSetString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
+    oldType = empty;
+    }
+
+// NEW input
+
+char *multiRegionsBedInput = cartOptionalString(cart, "multiRegionsBedInput");
+if (!multiRegionsBedInput)
+    return;
+
+// create cleaned up dyString from input.
+// remove blank lines, trim leading and trailing spaces, change CRLF from TEXTAREA input to LF.
+struct dyString *dyInput = dyStringNew(1024);
+char *input = cloneString(multiRegionsBedInput);  // make a copy, linefile modifies
+struct lineFile *lf = lineFileOnString("multiRegionsBedInput", TRUE, input);
+char *line;
+int lineSize;
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    line = trimSpaces(line);
+    if (sameString(line, "")) // skip blank lines
+	continue;
+    dyStringAppend(dyInput,line);
+    dyStringAppend(dyInput,"\n");
+    }
+lineFileClose(&lf);
+
+// test multiRegionsBedInput. empty? url? trashFile?
+input = cloneString(dyInput->string);  // make a copy, linefile modifies
+lf = lineFileOnString("multiRegionsBedInput", TRUE, input);
+int lineCount = 0;
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    ++lineCount;
+    if (lineCount==1 && 
+	(startsWithNoCase("http://" ,line)
+      || startsWithNoCase("https://",line)
+      || startsWithNoCase("ftp://"  ,line)))
+	{
+	// new value is a URL. set vars and cart.
+	newMultiRegionsBedUrl = cloneString(line);
+	newType = url;
+	}
+    break;
+    }
+lineFileClose(&lf);
+if (newType != url)
+    {
+    if (lineCount == 0)  // there are no non-blank lines
+	{	
+	newMultiRegionsBedUrl = "";
+	newType = empty;
+	}
+    else
+	newType = trashFile;
+    }
+
+char newSha1[(SHA_DIGEST_LENGTH + 1) * 2];
+if (newType==trashFile)
+    {
+    // calculate sha1 checksum on new input.
+    unsigned char hash[SHA_DIGEST_LENGTH];
+    SHA1((const unsigned char *)dyInput->string, dyInput->stringSize, hash);
+    hexBinaryString(hash, SHA_DIGEST_LENGTH, newSha1, (SHA_DIGEST_LENGTH + 1) * 2);
+    }
+
+// compare input sha1 to trashFile sha1 to see if same
+boolean filesAreSame = FALSE;
+if (oldType==trashFile && newType==trashFile)
+    {
+    lf = lineFileMayOpen(multiRegionsBedUrlSha1Name, TRUE);
+    while (lineFileNext(lf, &line, &lineSize))
+	{
+	if (sameString(line, newSha1))
+	    filesAreSame = TRUE;
+	}
+    lineFileClose(&lf);
+    }
+
+// save new trashFile unless no changes.
+if (newType==trashFile && (!(oldType==trashFile && filesAreSame) ))
+    {
+    struct tempName bedTn;
+    trashDirFile(&bedTn, "hgt", "custRgn", ".bed");
+    FILE *f = mustOpen(bedTn.forCgi, "w");
+    mustWrite(f, dyInput->string, dyInput->stringSize);
+    carefulClose(&f);
+    // new value is a trash file. 
+    newMultiRegionsBedUrl = cloneString(bedTn.forCgi);
+    // save new input sha1 to trash file.
+    safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", bedTn.forCgi);
+    f = mustOpen(multiRegionsBedUrlSha1Name, "w");
+    mustWrite(f, newSha1, strlen(newSha1));
+    carefulClose(&f);
+    }
+
+dyStringFree(&dyInput);
+
+// if new value, set vars and cart
+if (newMultiRegionsBedUrl)
+    {
+    multiRegionsBedUrl = newMultiRegionsBedUrl;
+    cartSetString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
+    }
+cartRemove(cart, "multiRegionsBedInput");
+}
+
+
 boolean initVirtRegionsFromBedUrl(time_t *bedDateTime)
 /* Read custom regions from BED URL */
 {
 multiRegionsBedUrl = cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl);
 int bedPadding = 0; // default no padding
-// TODO add some checks for db change? save in cart var?
 if (sameString(multiRegionsBedUrl,""))
     {
-    warn("No BED URL specified.");
+    warn("No BED or BED URL specified.");
     return FALSE;
     }
-if (!strstr(multiRegionsBedUrl,"://"))
+
+struct lineFile *lf = NULL;
+if (strstr(multiRegionsBedUrl,"://"))
     {
-    warn("No protocol specified in BED URL %s", multiRegionsBedUrl);
-    return FALSE;
+    lf = lineFileUdcMayOpen(multiRegionsBedUrl, FALSE);
+    if (!lf)
+	{
+	warn("Unable to open [%s] with udc", multiRegionsBedUrl);
+	return FALSE;
+	}
+    *bedDateTime = udcTimeFromCache(multiRegionsBedUrl, NULL);
     }
-struct lineFile *lf = lineFileUdcMayOpen(multiRegionsBedUrl, FALSE);
-if (!lf)
+else
     {
-    warn("Unable to open [%s] with udc", multiRegionsBedUrl);
-    return FALSE;
+    lf = lineFileMayOpen(multiRegionsBedUrl, TRUE);
+    if (!lf)
+	{
+	warn("BED custom regions file [%s] not found.", multiRegionsBedUrl);
+	return FALSE;
+	}
+    *bedDateTime = 0;
+    // touch corresponding .sha1 file to save it from trash cleaner.
+    char multiRegionsBedUrlSha1Name[1024];
+    safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", multiRegionsBedUrl);
+    if (fileExists(multiRegionsBedUrlSha1Name))
+	readAndIgnore(multiRegionsBedUrlSha1Name);	
     }
-*bedDateTime = udcTimeFromCache(multiRegionsBedUrl, NULL);
 char *line;
 int lineSize;
 int expectedFieldCount = -1;
@@ -3981,7 +4139,19 @@ while (lineFileNext(lf, &line, &lineSize))
     AllocVar(bed);
     // All fields are standard BED fields, no bedplus fields supported at this time.
     // note: this function does not validate chrom name or end beyond chrom size
-    loadAndValidateBed(row, numFields, numFields+0, lf, bed, NULL, TRUE);
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	loadAndValidateBed(row, numFields, numFields+0, lf, bed, NULL, TRUE); // can errAbort
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	warn("%s", errCatch->message->string);
+	return FALSE;
+	}
+    errCatchFree(&errCatch);
+
     bed->chrom=cloneString(bed->chrom);  // loadAndValidateBed does not do it for speed. but bedFree needs it.
 
     struct chromInfo *ci = hGetChromInfo(database, bed->chrom);
@@ -4073,6 +4243,8 @@ if (saveBoth)
 boolean initRegionList()
 /* initialize window list */
 {
+
+checkmultiRegionsBedInput();
 
 struct virtRegion *v;
 virtRegionList = NULL;
@@ -4297,6 +4469,7 @@ wordCount = chopLine(cloneString(typeLine), words);
 if (wordCount <= 0)
     return FALSE;
 type = words[0];
+// NOTE: if type is missing here, full mode fails to return an hgTracks object
 if (
 (  sameWord(type, "bed")
 || sameWord(type, "bed5FloatScore")
@@ -4311,6 +4484,8 @@ if (
 || sameWord(type, "gvf")
 || sameWord(type, "narrowPeak")
 || sameWord(type, "psl")
+|| sameWord(type, "barChart")
+|| sameWord(type, "bigBarChart")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
 ) 
@@ -4361,6 +4536,38 @@ for (window=windows, winTrack=track; window; window=window->next, winTrack=winTr
 setGlobalsFromWindow(windows); // first window
 
 flatTrack->maxHeight = maxHeight;
+}
+
+static boolean isCompositeInAggregate(struct track *track)
+// Check to see if this is a custom composite in aggregate mode.
+{
+if (!isCustomComposite(track->tdb))
+    return FALSE;
+
+char *aggregateVal = cartOrTdbString(cart, track->tdb, "aggregate", NULL);
+if ((aggregateVal == NULL) || sameString(aggregateVal, "none"))
+    return FALSE;
+
+struct track *subtrack = NULL;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (isSubtrackVisible(subtrack))
+        break;
+    }
+if (subtrack == NULL)
+    return FALSE;
+
+multiWigContainerMethods(track);
+struct wigCartOptions *wigCart = wigCartOptionsNew(cart, track->tdb, 0, NULL);
+track->wigCartData = (void *) wigCart;
+//track->lineHeight = wigCart->defaultHeight;
+wigCart->isMultiWig = TRUE;
+wigCart->autoScale = wiggleScaleAuto;
+//wigCart->defaultHeight = track->lineHeight;
+//struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, wigCart, hvg);
+//tg->wigGraphOutput = wgo;
+
+return TRUE;
 }
 
 void makeActiveImage(struct track *trackList, char *psOutput)
@@ -4553,14 +4760,19 @@ for (track = trackList; track != NULL; track = track->next)
     if (tdbIsComposite(track->tdb))
         {
         struct track *subtrack;
-        for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        if (isCompositeInAggregate(track))
+            flatTracksAdd(&flatTracks,track,cart);
+        else
             {
-            if (!isSubtrackVisible(subtrack))
-                continue;
-
-	    if (!isLimitedVisHiddenForAllWindows(subtrack))
+            for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
                 {
-                flatTracksAdd(&flatTracks,subtrack,cart);
+                if (!isSubtrackVisible(subtrack))
+                    continue;
+
+                if (!isLimitedVisHiddenForAllWindows(subtrack))
+                    {
+                    flatTracksAdd(&flatTracks,subtrack,cart);
+                    }
                 }
             }
         }
@@ -4609,7 +4821,7 @@ for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatT
             warn("Image is over %s pixels high (%d pix) at the following track which is now "
                  "hidden:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
                  (flatTrack->next != NULL ?
-                      "<BR>Additional tracks may have also been hidden at this zoom level." : ""));
+                      "\nAdditional tracks may have also been hidden at this zoom level." : ""));
         safeHeight = FALSE;
 	struct track *winTrack;
 	for(winTrack=track;winTrack;winTrack=winTrack->nextWindow)
@@ -5848,7 +6060,7 @@ else if (sameString(type, "bigWig"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain"))
+else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain") || sameString(type, "bigBarChart"))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
@@ -5863,6 +6075,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameStr
 	safef(typeBuf, sizeof(typeBuf), "bigMaf");
     else if (sameString(type, "bigPsl"))
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
+    else if (sameString(type, "bigBarChart"))
+	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
     else
 	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
     tdb->type = cloneString(typeBuf);
@@ -6006,6 +6220,12 @@ else if (sameString(type, "pgSnp"))
     tg = trackFromTrackDb(tdb);
     pgSnpCtMethods(tg);
     //tg->mapItemName = ctMapItemName;
+    tg->customPt = ct;
+    }
+else if (sameString(type, "barChart"))
+    {
+    tg = trackFromTrackDb(tdb);
+    barChartCtMethods(tg);
     tg->customPt = ct;
     }
 else
@@ -6471,6 +6691,7 @@ else
         paddedLabel[i+1] = label[i];
     }
 hButtonWithOnClick(var, paddedLabel, NULL, "return imageV2.navigateButtonClick(this);");
+// TODO GALT could consider trying to give these all the same class and then attach handlers at the class level.
 }
 
 void limitSuperTrackVis(struct track *track)
@@ -6555,6 +6776,8 @@ if (cgiOptionalString( "hideTracks"))
 for (track = trackList; track != NULL; track = track->next)
     {
     char *s = cartOptionalString(cart, track->track);
+    if (startsWith("hub_", track->track) && (s == NULL))
+        s = cartOptionalString(cart, trackHubSkipHubName(track->track));
     if (cgiOptionalString("hideTracks"))
 	{
         if (tdbIsSuperTrackChild(track->tdb))
@@ -7223,6 +7446,8 @@ if (sharedErrMsg)
     }
 }
 
+
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -7804,11 +8029,11 @@ if (!hideControls)
 	char buf[256];
 	char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
 	char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
-	    char *javascript = "onchange=\"document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
+	    char *javascript = "document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;";
 	    if (containsStringNoCase(database, "zoo"))
 		{
 		hPuts("Organism ");
-		printAssemblyListHtmlExtra(database, javascript);
+		printAssemblyListHtmlExtra(database, "change", javascript);
 		}
 
 	if (virtualSingleChrom()) // DISGUISE VMODE
@@ -7980,16 +8205,17 @@ if (!hideControls)
         }
 
     hPrintf(" ");
-    hPrintf("<INPUT TYPE='button' VALUE='%s' onClick='document.customTrackForm.submit();"
-            "return false;' title='%s'>",
+    hPrintf("<INPUT TYPE='button' id='ct_add' VALUE='%s' title='%s'>",
             hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
             hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
+    jsOnEventById("click", "ct_add", "document.customTrackForm.submit();return false;");
 
     hPrintf(" ");
     if (hubConnectTableExists())
         {
-        hPrintf("<INPUT TYPE='button' VALUE='track hubs' onClick='document.trackHubForm.submit();"
+        hPrintf("<INPUT TYPE='button' id='th_form' VALUE='track hubs'"
                 "return false;' title='Import tracks from hubs'>");
+	jsOnEventById("click", "th_form", "document.trackHubForm.submit();");
         hPrintf(" ");
         }
 
@@ -8077,17 +8303,27 @@ if (!hideControls)
 
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-            hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this, '%s');\" "
-                    "id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
-                    group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+
+	    char idText[256];
+	    safef(idText, sizeof idText, "%s_button", group->name);
+            hPrintf("<IMG class='toggleButton'"
+                    " id='%s' src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
+                    idText, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+	    jsOnEventByIdF("click", idText, "return vis.toggleForGroup(this, '%s');", group->name);
+
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
             if (isHubTrack(group->name))
-                hPrintf("<input name=\"hubDisconnectButton\""
-                    "onClick="
-                    "\" document.disconnectHubForm.elements['hubId'].value= '%s';"
-                    "document.disconnectHubForm.submit();return true;\" "
-                    "type=\"button\" value=\"disconnect\">\n", &group->name[sizeof hubTrackPrefix - 1]);
+		{
+		safef(idText, sizeof idText, "%s_disconn", group->name);
+                hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
+                    " type=\"button\" value=\"disconnect\">\n", idText);
+		jsOnEventByIdF("click", idText,
+                    "document.disconnectHubForm.elements['hubId'].value='%s';"
+                    "document.disconnectHubForm.submit();return true;",
+		    group->name + strlen(hubTrackPrefix));
+		}
+
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
                     "title='Update image with your changes'>\n");
             hPrintf("</td></tr></table></th>\n");
@@ -8720,9 +8956,11 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
 	jsonForConvert = newJsonObject(newHash(8));
 	jsonObjectAdd(jsonForConvert, "virtWinStart", newJsonNumber(virtWinStart));
 	jsonObjectAdd(jsonForConvert, "virtWinEnd", newJsonNumber(virtWinEnd));
-	hPrintf("<script type='text/javascript'>\n");
-	jsonPrint((struct jsonElement *) jsonForConvert, "convertChromToVirtChrom", 0);
-	hPrintf("</script>\n");
+
+	struct dyString *dy = dyStringNew(1024);
+	jsonDyStringPrint(dy, (struct jsonElement *) jsonForConvert, "convertChromToVirtChrom", 0);
+	jsInline(dy->string);
+	dyStringFree(&dy);
 	}
     return;
     }
@@ -9076,6 +9314,12 @@ if (cartUsualBoolean(cart, "hgt.psOutput", FALSE))
     handlePostscript();
 else
     doTrackForm(NULL, NULL);
+
+boolean gotExtTools = extToolsEnabled();
+setupHotkeys(gotExtTools);
+if (gotExtTools)
+    printExtMenuData();
+
 }
 
 void chromInfoTotalRow(int count, long long total)
@@ -9396,79 +9640,90 @@ cgiVarExcludeExcept(except);
 void setupHotkeys(boolean gotExtTools)
 /* setup keyboard shortcuts and a help dialog for it */
 {
+struct dyString *dy = dyStringNew(1024);
 // wire the keyboard hotkeys
-hPrintf("<script type='text/javascript'>\n");
+
 // left
-hPrintf("Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').click(); return false; }); \n");
-hPrintf("Mousetrap.bind('j', function() { $('input[name=\"hgt.left2\"]').click() }); \n");
-hPrintf("Mousetrap.bind('J', function() { $('input[name=\"hgt.left3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('j', function() { $('input[name=\"hgt.left2\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('J', function() { $('input[name=\"hgt.left3\"]').click() }); \n");
 
 // right
-hPrintf("Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').click(); return false; }); \n");
-hPrintf("Mousetrap.bind('l', function() { $('input[name=\"hgt.right2\"]').click() }); \n");
-hPrintf("Mousetrap.bind('L', function() { $('input[name=\"hgt.right3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('l', function() { $('input[name=\"hgt.right2\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('L', function() { $('input[name=\"hgt.right3\"]').click() }); \n");
 
 // zoom in
-hPrintf("Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').click(); return false; }); \n");
-hPrintf("Mousetrap.bind('i', function() { $('input[name=\"hgt.in2\"]').click() }); \n");
-hPrintf("Mousetrap.bind('I', function() { $('input[name=\"hgt.in3\"]').click() }); \n");
-hPrintf("Mousetrap.bind('b', function() { $('input[name=\"hgt.inBase\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('i', function() { $('input[name=\"hgt.in2\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('I', function() { $('input[name=\"hgt.in3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('b', function() { $('input[name=\"hgt.inBase\"]').click() }); \n");
 
 // zoom out
-hPrintf("Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
-hPrintf("Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
-hPrintf("Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
-hPrintf("Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
-hPrintf("Mousetrap.bind('1', function() { zoomTo(10);} ); \n");
-hPrintf("Mousetrap.bind('2', function() { zoomTo(100);} ); \n");
-hPrintf("Mousetrap.bind('3', function() { zoomTo(1000);} ); \n");
-hPrintf("Mousetrap.bind('4', function() { zoomTo(50000);} ); \n");
-hPrintf("Mousetrap.bind('5', function() { zoomTo(100000);} ); \n");
-hPrintf("Mousetrap.bind('6', function() { zoomTo(1000000);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('1', function() { zoomTo(50);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('2', function() { zoomTo(500);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('3', function() { zoomTo(5000);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('4', function() { zoomTo(50000);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('5', function() { zoomTo(500000);} ); \n");
+dyStringPrintf(dy,"Mousetrap.bind('6', function() { zoomTo(5000000);} ); \n");
 
 // buttons
-hPrintf("Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').click() }); \n");
-hPrintf("Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').click() }); \n");
-hPrintf("Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').click() }); \n");
-hPrintf("Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').click() }); \n");
-hPrintf("Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').click() }); \n");
-hPrintf("Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
-hPrintf("Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
-hPrintf("Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
-hPrintf("Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
-hPrintf("Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
-hPrintf("Mousetrap.bind('v d', gotoGetDnaPage); \n");
+dyStringPrintf(dy,"Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('v d', gotoGetDnaPage); \n");
+
+// highlight
+dyStringPrintf(dy,"Mousetrap.bind('h c', function() { highlightCurrentPosition('clear'); }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('h m', function() { highlightCurrentPosition('add'); }); \n");
+//dyStringPrintf(dy,"Mousetrap.bind('h n', function() { highlightCurrentPosition('new'); }); \n"); superfluos as it is just hc + hm?
 
 // focus
-hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
-hPrintf("Mousetrap.bind('?', showHotkeyHelp);\n");
+dyStringPrintf(dy,"Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
+dyStringPrintf(dy,"Mousetrap.bind('?', showHotkeyHelp);\n");
 
 // menu
 if (gotExtTools)
-    hPrintf("Mousetrap.bind('s t', showExtToolDialog); \n");
+    dyStringPrintf(dy,"Mousetrap.bind('s t', showExtToolDialog); \n");
 
 // multi-region views
-hPrintf("Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtModeType=exonMostly'; });  \n",
+dyStringPrintf(dy,"Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtModeType=exonMostly'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
-hPrintf("Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; });  \n",
+dyStringPrintf(dy,"Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
 // links to a few tools
-hPrintf("Mousetrap.bind('t b', function() { $('#blatMenuLink')[0].click()});\n");
-hPrintf("Mousetrap.bind('t i', function() { $('#ispMenuLink')[0].click()});\n");
-hPrintf("Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink')[0].click()});\n");
-hPrintf("Mousetrap.bind('c r', function() { $('#cartResetMenuLink')[0].click()});\n");
-hPrintf("Mousetrap.bind('s s', function() { $('#sessionsMenuLink')[0].click()});\n");
-hPrintf("Mousetrap.bind('p s', function() { $('#publicSessionsMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('t b', function() { $('#blatMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('t i', function() { $('#ispMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('c r', function() { $('#cartResetMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('s s', function() { $('#sessionsMenuLink')[0].click()});\n");
+dyStringPrintf(dy,"Mousetrap.bind('p s', function() { $('#publicSessionsMenuLink')[0].click()});\n");
 
 // also add an entry to the help menu that shows the keyboard shortcut help dialog
-hPrintf("$(document).ready(addKeyboardHelpEntries);");
+dyStringPrintf(dy,"$(document).ready(addKeyboardHelpEntries);\n");
 
-hPrintf("</script>\n");
+jsInline(dy->string);
+dyStringFree(&dy);
 
 // help dialog
 hPrintf("<div style=\"display:none\" id=\"hotkeyHelp\" title=\"Keyboard shortcuts\">\n");
-hPrintf("<table style=\"width:580px; border-color:#666666; border-collapse:collapse\">\n");
+hPrintf("<table style=\"width:600px; border-color:#666666; border-collapse:collapse\">\n");
 hPrintf("<tr><td style=\"width:18ch\">left 10&#37;</td><td width=\"auto\" class=\"hotkey\">ctrl+j</td>  <td style=\"width:24ch\"> track search</td><td class=\"hotkey\">t then s</td>               </tr>\n"); // percent sign
 hPrintf("<tr><td> left 1/2 screen</td><td class=\"hotkey\">j</td>   <td> default tracks</td><td class=\"hotkey\">d then t</td>             </tr>\n");
 hPrintf("<tr><td> left one screen</td><td class=\"hotkey\">J</td>   <td> default order</td><td class=\"hotkey\">d then o</td>              </tr>\n");
@@ -9487,12 +9742,13 @@ hPrintf("               </tr>\n");
 hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>      <td> exon view</td><td class=\"hotkey\">e then v</td>                  </tr>\n");
 hPrintf("<tr><td> zoom out 100x</td><td class=\"hotkey\">0</td>     <td> default view</td><td class=\"hotkey\">d then v</td>               </tr>\n");
 hPrintf("<tr><td> zoom to ...</td><td class=\"hotkey\"></td><td> view DNA</td><td class='hotkey'>v then d</td></tr>\n");
-hPrintf("<tr><td> &nbsp;10bp (1 zero)</td><td class=\"hotkey\">1</td><td></td><td class='hotkey'></td></tr>\n");
-hPrintf("<tr><td> &nbsp;100bp (2 zeroes)</td><td class=\"hotkey\">2</td><td></td><td class='hotkey'></td></tr>\n");
-hPrintf("<tr><td> &nbsp;1000bp (3 zeroes)</td><td class=\"hotkey\">3</td><td></td><td class='hotkey'></td></tr>\n");
-hPrintf("<tr><td> &nbsp;50kbp (4 zeroes)</td><td class=\"hotkey\">4</td><td></td><td class='hotkey'></td></tr>\n");
-hPrintf("<tr><td> &nbsp;100kbp (5 zeroes)</td><td class=\"hotkey\">5</td><td></td><td class='hotkey'></td></tr>\n");
-hPrintf("<tr><td> &nbsp;1Mbp (6 zeroes)</td><td class=\"hotkey\">6</td><td></td><td class='hotkey'></td></tr>\n");
+hPrintf("<tr><td> &nbsp;50bp (1 zero)</td><td class=\"hotkey\">1</td><td>Reset all User Settings</td><td class='hotkey'>c then r</td></tr>\n");
+hPrintf("<tr><td> &nbsp;500bp (2 zeros)</td><td class=\"hotkey\">2</td><td>Tools - BLAT</td><td class='hotkey'>t then b</td></tr>\n");
+hPrintf("<tr><td> &nbsp;5000bp (3 zeros)</td><td class=\"hotkey\">3</td><td>Tools - Table Browser</td><td class='hotkey'>t then t</td></tr>\n");
+hPrintf("<tr><td> &nbsp;50kbp (4 zeros)</td><td class=\"hotkey\">4</td><td>Tools - PCR</td><td class='hotkey'>t then i</td></tr>\n");
+hPrintf("<tr><td> &nbsp;500kbp (5 zeros)</td><td class=\"hotkey\">5</td><td>My Sessions</td><td class='hotkey'>s then s</td></tr>\n");
+hPrintf("<tr><td> &nbsp;5Mbp (6 zeros)</td><td class=\"hotkey\">6</td><td>Public Sessions</td><td class='hotkey'>p then s</td></tr>\n");
+hPrintf("<tr><td>Highlight all (mark)</td><td class=\"hotkey\">h then m</td><td>Clear all Highlights</td><td class='hotkey'>h then c</td></tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");
@@ -9506,7 +9762,7 @@ measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTi
 if (measureTiming)
     measureTime("Startup");
 
-hgBotDelay();
+hgBotDelayFrac(0.25); /* Impose a quarter of the standard CGI penalty */
 if (measureTiming)
     measureTime("Bottleneck delay");
 
@@ -9586,11 +9842,13 @@ if(!trackImgOnly)
         }
     jsIncludeFile("autocomplete.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
+    jsIncludeFile("spectrum.min.js", NULL);
 
 #ifdef LOWELAB
     jsIncludeFile("lowetooltip.js", NULL);
 #endif///def LOWELAB
 
+    webIncludeResourceFile("spectrum.min.css");
     webIncludeResourceFile("jquery-ui.css");
     if (!searching)     // NOT doing search
         {
@@ -9696,14 +9954,11 @@ if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(dat
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));
 jsonObjectAdd(jsonForClient, "enableHighlightingDialog",
 	      newJsonBoolean(cartUsualBoolean(cart, "enableHighlightingDialog", TRUE)));
-hPrintf("<script type='text/javascript'>\n");
-jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
-hPrintf("</script>\n");
 
-boolean gotExtTools = extToolsEnabled();
-setupHotkeys(gotExtTools);
-if (gotExtTools)
-    printExtMenuData();
+struct dyString *dy = dyStringNew(1024);
+jsonDyStringPrint(dy, (struct jsonElement *) jsonForClient, "hgTracks", 0);
+jsInline(dy->string);
+dyStringFree(&dy);
 
 if (measureTiming)
     measureTime("Time at end of doMiddle, next up cart write");
@@ -9715,6 +9970,13 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"performance.   To clear this variable, click "
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
     }
+}
 
+void labelTrackAsFiltered(struct track *tg)
+/* add text to track long label to indicate filter is active */
+{
+char *oldLabel = tg->longLabel;
+tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+freeMem(oldLabel);
 }
 

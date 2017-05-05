@@ -46,6 +46,11 @@
     color: white;
 }
 
+span.disabled,
+input[disabled] {
+    opacity: .6;
+}
+
 /* Below are from hgGateway/Jeff West styling (jWest.css)
  *      Used with these selector names in inc/gbFooter.html */
 
@@ -193,10 +198,6 @@ span#home-link {
     cursor: pointer;
 }
 
-.gbButtonGo:hover {
-    font-weight: bold;
-}
-
 .gbButtonSetClear {
     width: 5em; /* fixed width for 'set all' and 'clear all' */
 }
@@ -212,6 +213,7 @@ span#home-link {
     font-size: 14px;
     font-weight: normal;
     border-radius: 3px;
+    cursor: pointer;
 }
 
 /* Track UI

@@ -1,0 +1,6 @@
+# thisDir /hive/data/genomes/asmHubs/genbank/vertebrate_mammalian/Mus_caroli/GCA_900094665.1_CAROLI_EIJ_v1/html
+# ftpName genbank/vertebrate_mammalian/Mus_caroli/GCA_900094665.1_CAROLI_EIJ_v1
+#taxId	commonName	submitter	asmName	orgName	bioSample	asmType	asmLevel	asmDate	asmAccession
+10089	ricefield mouse	EBI	CAROLI_EIJ_v1	Mus caroli 	SAMEA3367631	haploid	Chromosome	11 Jan 2017	GCA_900094665.1
+# reading chrom.sizes file:
+#	'../GCA_900094665.1_CAROLI_EIJ_v1.chrom.sizes'

@@ -1,0 +1,25 @@
+<H2>Description</H2>
+
+<P>
+These tracks contain cDNA and gene alignments produced by
+the <em>TransMap</em> cross-species alignment algorithm
+from other vertebrate species in the UCSC Genome Browser.
+For closer evolutionary distances, the alignments are created using
+syntenically filtered LASTZ or BLASTZ alignment chains, resulting
+in a prediction of the orthologous genes in $organism.  For more distant
+organisms, reciprocal best alignments are used.
+</P>
+
+<em>TransMap</em> maps genes and related annotations in one species to another
+using synteny-filtered pairwise genome alignments (chains and nets) to
+determine the most likely orthologs.  For example, for the mRNA TransMap track
+on the human assembly, more than 400,000 mRNAs from 25 vertebrate species were
+aligned at high stringency to the native assembly using BLAT.  The alignments
+were then mapped to the human assembly using the chain and net alignments
+produced using blastz, which has higher sensitivity than BLAT for diverged
+organisms.
+<P>
+Compared to translated BLAT, TransMap finds fewer paralogs and aligns more UTR
+bases.
+</P>
+<!--#insert file="transMapTailer.html"-->

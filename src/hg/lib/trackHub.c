@@ -46,6 +46,7 @@
 #include "vcf.h"
 #include "htmshell.h"
 #include "bigBedFind.h"
+#include "customComposite.h"
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
@@ -492,6 +493,8 @@ struct hash *ra;
 while ((ra = raNextRecord(lf)) != NULL)
     {
     // allow that trackDb+hub+genome is in one single file
+    if (hashFindVal(ra, "hub"))
+        continue;
     if (hashFindVal(ra, "track"))
         break;
 
@@ -770,24 +773,29 @@ else
     {
     /* Check type field. */
     char *type = requiredSetting(hub, genome, tdb, "type");
-    if (!(startsWithWord("bigWig", type) ||
-          startsWithWord("bigBed", type) ||
+    if (!( isCustomComposite(tdb) && startsWithWord("wig", type)))
+        {
+        if (!(startsWithWord("bigWig", type) ||
+              startsWithWord("bigBed", type) ||
 #ifdef USE_HAL
-          startsWithWord("halSnake", type) ||
+              startsWithWord("pslSnake", type) ||
+              startsWithWord("halSnake", type) ||
 #endif
-          startsWithWord("vcfTabix", type) ||
-          startsWithWord("bigPsl", type) ||
-          startsWithWord("bigMaf", type) ||
-          startsWithWord("longTabix", type) ||
-          startsWithWord("bigGenePred", type) ||
-          startsWithWord("bigChain", type) ||
-          startsWithWord("bam", type)))
-	{
-	errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
-	    hub->url, genome->name, tdb->track);
-	}
+              startsWithWord("vcfTabix", type) ||
+              startsWithWord("bigPsl", type) ||
+              startsWithWord("bigMaf", type) ||
+              startsWithWord("longTabix", type) ||
+              startsWithWord("bigGenePred", type) ||
+              startsWithWord("bigChain", type) ||
+              startsWithWord("bigBarChart", type) ||
+              startsWithWord("bam", type)))
+            {
+            errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
+                hub->url, genome->name, tdb->track);
+            }
 
-    requiredSetting(hub, genome, tdb, "bigDataUrl");
+        requiredSetting(hub, genome, tdb, "bigDataUrl");
+        }
     }
 }
 
@@ -867,7 +875,12 @@ struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, 64*1024*10
 struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
 lineFileClose(&lf);
 
-char *tagStormName = hashFindVal(genome->settingsHash, "tagStorm");
+char *tabMetaName = hashFindVal(genome->settingsHash, "metaTab");
+char *absTabName  = NULL;
+if (tabMetaName)
+    absTabName  = trackHubRelativeUrl(hub->url, tabMetaName);
+
+char *tagStormName = hashFindVal(genome->settingsHash, "metaDb");
 char *absStormName  = NULL;
 if (tagStormName)
     absStormName  = trackHubRelativeUrl(hub->url, tagStormName);
@@ -878,7 +891,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     expandBigDataUrl(hub, genome, tdb);
     if  (absStormName)
-        hashReplace(tdb->settingsHash, "tagStorm", absStormName);
+        hashReplace(tdb->settingsHash, "metaDb", absStormName);
+    if  (absTabName)
+        hashReplace(tdb->settingsHash, "metaTab", absTabName);
     }
 
 validateTracks(hub, genome, tdbList);
@@ -1074,7 +1089,7 @@ if (trackHubDatabase(db))
 else
     tdbList = hubCollectTracks(db, NULL);
 
-findBigBedPosInTdbList(db, tdbList, term, hgp);
+findBigBedPosInTdbList(db, tdbList, term, hgp, NULL);
 }
 
 boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort)

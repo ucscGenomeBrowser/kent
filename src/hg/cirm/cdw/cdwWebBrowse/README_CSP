@@ -1,0 +1,16 @@
+
+I was trying to pull separte all Javascript
+from html for clean separation that CSP2 needs.
+
+This was at the bottom of cdwNavBar.h,
+so I pulled it out. But since the nav bar seems not to be in use 
+right now, and I can't really test it,
+I have docked it here for later use if needed.
+
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, { "basePath": "/", "nice_menus_options": { "delay": 800, "speed": 1 }, "thickbox": { "close": "Close", "next": "Next \x3e", "prev": "\x3c Prev", "esc_key": "or Esc Key", "next_close": "Next / Close on last", "image_count": "Image !current of !total" }, "custom_search": { "form_target": "_self", "solr": 0 } });
+//--><!]]>
+
+</script>
+

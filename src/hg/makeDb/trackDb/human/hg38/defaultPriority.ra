@@ -2,7 +2,6 @@
 
 track gold override
 html gold
-priority 1
 
 # track hg38ContigDiff override
 # priority 2
@@ -13,24 +12,6 @@ priority 1
 
 #track knownGene override
 #priority 1
-
-track refGene override
-release beta,public
-visibility pack
-priority 2
-
-track refSeqComposite override
-release alpha
-visibility pack
-priority 2
-
-    track ncbiRefGenesView override
-    release alpha
-    parent refSeqComposite on
-
-        track refGene override
-        release alpha
-        parent ncbiRefGenesView on
 
 #Phenotype and Literature
 

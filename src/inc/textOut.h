@@ -45,4 +45,9 @@ void textOutClose(struct pipeline **pCompressPipeline, int *saveStdout);
 /* Flush and close stdout, wait for the pipeline to finish, and then free 
  * the pipeline object. */
 
+char *textOutSanitizeHttpFileName(char *fileName);
+/* Replace troublesome characters in a fileName for HTTP download entered by the user,
+ * such as '/' which textOutInit interprets as implying a local file and ',' which
+ * messes up the HTTP response header syntax. */
+
 #endif /* TEXTOUT_H */

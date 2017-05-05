@@ -37,12 +37,12 @@ struct bbClosure
 struct bbiFile *bbi;
 };
 
-typedef void  (*linkRetrieveFunc)(void *closure,  char *fullName, 
-			struct lm *lm, struct hash *hash, 
+typedef void  (*linkRetrieveFunc)(void *closure,  char *fullName,
+			struct lm *lm, struct hash *hash,
 			int start, int end, char * chainId, boolean isSplit);
 
-static void doBbQuery(void *closure, char *fullName, 
-			struct lm *lm, struct hash *hash, 
+static void doBbQuery(void *closure, char *fullName,
+			struct lm *lm, struct hash *hash,
 			int start, int end, char * chainId, boolean isSplit)
 /* doBbQuery- check a bigBed for chain elements between
  * 	start and end.  Use the passed hash to resolve chain
@@ -69,15 +69,15 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	lmAllocVar(lm, sf);
 	sf->start = sqlUnsigned(bedRow[1]);
 	sf->end = sqlUnsigned(bedRow[2]);
-	sf->qStart = sqlUnsigned(bedRow[4]); 
+	sf->qStart = sqlUnsigned(bedRow[4]);
 	sf->qEnd = sf->qStart + (sf->end - sf->start);
 	slAddHead(&lf->components, sf);
 	}
     }
 }
 
-static void doQuery(void *closure, char *fullName, 
-			struct lm *lm, struct hash *hash, 
+static void doQuery(void *closure, char *fullName,
+			struct lm *lm, struct hash *hash,
 			int start, int end, char * chainId, boolean isSplit)
 /* doQuery- check the database for chain elements between
  * 	start and end.  Use the passed hash to resolve chain
@@ -98,11 +98,11 @@ if (isSplit)
     force = "force index (bin)";
 
 if (chainId == NULL)
-    sqlDyStringPrintf(query, 
+    sqlDyStringPrintf(query,
 	"select chainId,tStart,tEnd,qStart from %sLink %-s where ",
 	fullName, force);
 else
-    sqlDyStringPrintf(query, 
+    sqlDyStringPrintf(query,
 	"select chainId, tStart,tEnd,qStart from %sLink where chainId=%s and ",
 	fullName, chainId);
 if (!isSplit)
@@ -121,7 +121,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	lmAllocVar(lm, sf);
 	sf->start = sqlUnsigned(row[1]);
 	sf->end = sqlUnsigned(row[2]);
-	sf->qStart = sqlUnsigned(row[3]); 
+	sf->qStart = sqlUnsigned(row[3]);
 	sf->qEnd = sf->qStart + (sf->end - sf->start);
 	slAddHead(&lf->components, sf);
 	}
@@ -131,9 +131,9 @@ dyStringFree(&query);
 }
 
 static void chainDraw(struct track *tg, int seqStart, int seqEnd,
-        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
-/* Draw chained features. This loads up the simple features from 
+/* Draw chained features. This loads up the simple features from
  * the chainLink table, calls linkedFeaturesDraw, and then
  * frees the simple features again. */
 {
@@ -184,7 +184,7 @@ hash = newHash(0);
  * id, which is held in the extras field.  To
  * avoid burning memory on full chromosome views
  * we'll just make a single simple feature and
- * exclude from hash chains less than three pixels wide, 
+ * exclude from hash chains less than three pixels wide,
  * since these would always appear solid. */
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
@@ -221,14 +221,14 @@ if (hash->size)
 	isSplit = FALSE;
 	}
 
-    /* in dense mode we don't draw the lines 
-     * so we don't need items off the screen 
+    /* in dense mode we don't draw the lines
+     * so we don't need items off the screen
      */
     if (vis == tvDense)
 	queryFunc(closure, fullName, lm,  hash, seqStart, seqEnd, NULL, isSplit);
     else
 	{
-	/* if chains extend beyond edge of window we need to get 
+	/* if chains extend beyond edge of window we need to get
 	 * elements that are off the screen
 	 * in both directions so we know whether to draw
 	 * one or two lines to the edge of the screen.
@@ -284,8 +284,8 @@ if (hash->size)
 	     * now look for one off left
 	     */
 	    extra = (STARTSLOP < maxOverLeft) ? STARTSLOP:maxOverLeft;
-	    start = seqStart - extra; 
-	    while((extra < MAXLOOK) && (lf->start < seqStart) && 
+	    start = seqStart - extra;
+	    while((extra < MAXLOOK) && (lf->start < seqStart) &&
 		(lf->components != NULL) && (lf->components->start > seqStart))
 		{
 		extra *= MULTIPLIER;
@@ -327,7 +327,7 @@ freeHash(&hash);
 }
 
 void bigChainLoadItems(struct track *tg)
-/* Load up all of the chains from correct table into tg->items 
+/* Load up all of the chains from correct table into tg->items
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
 {
@@ -354,7 +354,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if ((optionChrStr != NULL) && !startsWith(optionChrStr, bedRow[7]))
         continue;
 
-    if (chainCart->scoreFilter >0) 
+    if (chainCart->scoreFilter >0)
         {
         unsigned score = sqlUnsigned(bedRow[4]);
         if  (score < chainCart->scoreFilter)
@@ -399,7 +399,7 @@ bbiFileClose(&bbi);
 }
 
 void chainLoadItems(struct track *tg)
-/* Load up all of the chains from correct table into tg->items 
+/* Load up all of the chains from correct table into tg->items
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
 {
@@ -417,29 +417,30 @@ struct cartOptions *chainCart;
 
 chainCart = (struct cartOptions *) tg->extraUiData;
 
-optionChrStr = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
-	"chromFilter", "All");
-if (startsWith("chr",optionChrStr)) 
+optionChrStr = skipLeadingSpaces(cartUsualStringClosestToHome(cart, tg->tdb,
+    FALSE, "chromFilter", "All"));
+
+if (strlen(optionChrStr) > 0 && differentWord("All",optionChrStr))
     {
-    safef(extraWhere, sizeof(extraWhere), 
-            "qName = \"%s\" and score > %d",optionChrStr, 
+    safef(extraWhere, sizeof(extraWhere),
+            "qName = \"%s\" and score > %d",optionChrStr,
             chainCart->scoreFilter);
-    sr = hRangeQuery(conn, table, chromName, winStart, winEnd, 
+    sr = hRangeQuery(conn, table, chromName, winStart, winEnd,
             extraWhere, &rowOffset);
     }
 else
     {
     if (chainCart->scoreFilter > 0)
         {
-        safef(extraWhere, sizeof(extraWhere), 
+        safef(extraWhere, sizeof(extraWhere),
                 "score > \"%d\"",chainCart->scoreFilter);
-        sr = hRangeQuery(conn, table, chromName, winStart, winEnd, 
+        sr = hRangeQuery(conn, table, chromName, winStart, winEnd,
                 extraWhere, &rowOffset);
         }
     else
         {
         safef(extraWhere, sizeof(extraWhere), " ");
-        sr = hRangeQuery(conn, table, chromName, winStart, winEnd, 
+        sr = hRangeQuery(conn, table, chromName, winStart, winEnd,
                 NULL, &rowOffset);
         }
     }
@@ -522,7 +523,7 @@ tg->ixColor = MG_BLACK;
 tg->ixAltColor = MG_GRAY;
 }
 
-void chainMethods(struct track *tg, struct trackDb *tdb, 
+void chainMethods(struct track *tg, struct trackDb *tdb,
 	int wordCount, char *words[])
 /* Fill in custom parts of alignment chains. */
 {

@@ -379,11 +379,13 @@ var hgva = // result of invoking:
 	changeVariantSource: function()
 	{
 	    var newVal = $('select[name="hgva_variantTrack"]').val();
+	    $('#variantPasteContainer').hide();
+	    $('#hgvsPasteContainer').hide();
 	    if (newVal === 'hgva_useVariantIds') {
 		$('#variantPasteContainer').show().focus();
-	    } else {
-		$('#variantPasteContainer').hide();
-	    }
+	    } else if (newVal === "hgva_useHgvs") {
+                $('#hgvsPasteContainer').show().focus();
+            }
 	    setCartVar("hgva_variantTrack", newVal);
 	},
 
@@ -508,7 +510,10 @@ var hgva = // result of invoking:
 
 	submitQuery: function()
 	{
-	    loadingImage.run();
+            // Show loading image and message -- unless downloading to a file
+            if (! $('#hgva_outFile').val()) {
+	        loadingImage.run();
+            }
 	    var startQueryHiddenInput = '<INPUT TYPE=HIDDEN NAME="hgva_startQuery" VALUE="1">';
 	    $("#mainForm").append(startQueryHiddenInput).submit();
 	},

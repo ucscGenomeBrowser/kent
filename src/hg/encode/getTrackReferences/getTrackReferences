@@ -4,7 +4,7 @@ from xml.etree import ElementTree as ET
 
 def parsePubmed(doc, id):
     infoDict = dict()
-    infoDict['url'] = "http://www.ncbi.nlm.nih.gov/pubmed/%s" % id
+    infoDict['url'] = "https://www.ncbi.nlm.nih.gov/pubmed/%s" % id
     attribList = ['PubDate', 'Source', 'Title', 'Volume', 'Issue', 'Pages', 'SO', 'CollectiveName']
     for element in doc:
         if element.tag != "DocSum":
@@ -41,7 +41,7 @@ def parsePmc(doc, id):
     sys.exit()
 
 def parseInit(id):
-    urlbase = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?"
+    urlbase = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?"
     db = "Pubmed"
     url = urlbase + "db=%s" % db + "&id=%s" % id
     if re.match("^PMC", id):
@@ -108,7 +108,7 @@ def makeHtml(infoDict, plain, verbose):
     # construct hyperlinks for PMID and PMCID (if it exists)
     idStr = "PMID: <a href=\"%s\" target=\"_blank\">%s</a>" % (htmlEscape(infoDict['url']), infoDict['pubmed'])
     if 'pmc' in infoDict:
-        idStr = idStr + "; PMC: <a href=\"http://www.ncbi.nlm.nih.gov/pmc/articles/%s/\" target=\"_blank\">%s</a>" % (infoDict['pmc'], infoDict['pmc'])
+        idStr = idStr + "; PMC: <a href=\"https://www.ncbi.nlm.nih.gov/pmc/articles/%s/\" target=\"_blank\">%s</a>" % (infoDict['pmc'], infoDict['pmc'])
 
     # now that the pubmed link has been constructed, we can overwrite the url in infoDict with the original article URL
 

@@ -10,13 +10,15 @@ biosample_date has 2 uses with 1 vals
    2	2015-01-00
 donor has 2 uses with 1 vals
    2	000
-file has 24 uses with 24 vals
+file has 25 uses with 25 vals
    1	ex01do00or01fa02.fq.gz
    1	ex01do00or02fa01.fq.gz
    1	ex00do00or00fa02.fq.gz
-   21	(in 21 others)
-format has 24 uses with 1 vals
-   24	fastq
+   22	(in 22 others)
+format has 25 uses with 3 vals
+   23	fastq
+   1	tag storm
+   1	bam
 lab has 2 uses with 2 vals
    1	lab_2
    1	lab_1
@@ -29,13 +31,22 @@ lab_kent_quality has 6 uses with 3 vals
    2	0
 life_stage has 2 uses with 1 vals
    2	embryo
+map_ratio has 12 uses with 7 vals
+   3	0.90
+   2	0.93
+   2	0.92
+   5	(in 4 others)
 organ has 8 uses with 2 vals
    4	brain
    4	liver
-part has 24 uses with 4 vals
-   6	4
+part has 23 uses with 4 vals
    6	3
    6	2
-   6	(in 1 others)
+   6	1
+   5	(in 1 others)
+q has 3 uses with 3 vals
+   1	-1
+   1	3
+   1	1
 sex has 2 uses with 1 vals
    2	male

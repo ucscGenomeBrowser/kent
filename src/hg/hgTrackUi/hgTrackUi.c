@@ -48,6 +48,7 @@
 #include "trackVersion.h"
 #include "gtexUi.h"
 #include "genbank.h"
+#include "botDelay.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -612,9 +613,9 @@ else if (version <= 131)
 // menus when the color source selection changes, but for now we do a submit that
 // returns to the current vertical position:
 char autoSubmit[2048];
-safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
+safef(autoSubmit, sizeof(autoSubmit), ""
       "document."MAIN_FORM".action = '%s'; %s"
-      "document."MAIN_FORM".submit();\"",
+      "document."MAIN_FORM".submit();",
       cgiScriptName(), jsSetVerticalPosition(MAIN_FORM));
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("c");
@@ -623,7 +624,7 @@ char cartVar[512];
 safef(cartVar, sizeof(cartVar), "%s.colorSource", tdb->track);
 enum snp125ColorSource colorSourceCart = snp125ColorSourceFromCart(cart, tdb);
 char *colorSourceSelected = snp125ColorSourceToLabel(tdb, colorSourceCart);
-cgiMakeDropListFull(cartVar, labels, labels, arraySize, colorSourceSelected, autoSubmit);
+cgiMakeDropListFull(cartVar, labels, labels, arraySize, colorSourceSelected, "change", autoSubmit);
 printf("&nbsp;\n");
 char javascript[2048];
 safef(javascript, sizeof(javascript),
@@ -870,7 +871,7 @@ if (tdbIsComposite(tdb))
 	if (hTableExists(database, subTdb->table))
 	    {
 	    safef(var, sizeof(var), "%s_inv", subTdb->track);
-	    cgiMakeCheckBoxJS(var, cartUsualBoolean(cart, var, ldInvDefault),
+	    cgiMakeCheckBoxMore(var, cartUsualBoolean(cart, var, ldInvDefault),
 			      "class='subtrackInCompositeUi'");
 	    printf("&nbsp;Invert display for %s<BR>&nbsp;&nbsp;\n",
 		   subTdb->longLabel);
@@ -1882,8 +1883,9 @@ wigOption(cart, tdb->track, tdb->shortLabel, tdb);
 }
 
 void transMapUI(struct trackDb *tdb)
-/* Put up transMap-specific controls */
+/* Put up transMap-specific controls for table-based transMap */
 {
+// FIXME: this can be deleted once table-based transMap is no longer supported.
 printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "orgCommon", "common name", FALSE);
 labelMakeCheckBox(tdb, "orgAbbrv", "organism abbreviation", FALSE);
@@ -2080,15 +2082,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 void chainColorUi(struct trackDb *tdb)
 /* UI for the chain tracks */
 {
-boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 boolean compositeTrack = tdbIsComposite(tdb);
 
 if (compositeTrack)
     return;	// configuration taken care of by hCompositeUi() later
-else if (normScoreAvailable)
-    chainCfgUi(database, cart, tdb, tdb->track, NULL, FALSE, chromosome);
 else
-    crossSpeciesCfgUi(cart,tdb);
+    chainCfgUi(database, cart, tdb, tdb->track, NULL, FALSE, chromosome);
 }
 
 void chromGraphUi(struct trackDb *tdb)
@@ -2167,7 +2166,7 @@ puts("<P><B>Zoom factor:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 puts("<P><B>Motifs to highlight:&nbsp;</B>");
 cgiMakeTextVar(BASE_MOTIFS, motifString, 20);
-puts("&nbsp;(Comma separated list, i.e.: GT,AG for splice sites)");
+puts("&nbsp;(Comma separated list, e.g.: GT,AG for splice sites)");
 puts("<P>");
 cgiMakeCheckBox(MOTIF_COMPLEMENT, complementsToo);
 puts("&nbsp;<B>Show reverse complements of motifs also</B>");
@@ -2259,16 +2258,16 @@ void oligoMatchUi(struct trackDb *tdb)
 {
 char *oligo = cartUsualString(cart, oligoMatchVar, oligoMatchDefault);
 puts("<P><B>Short (2-30 base) sequence:</B>");
-puts("<script>\
-    function packTrack () \
-    { \
-    var box = jQuery('select[name$=oligoMatch]'); \
-    if (box.val()=='hide') \
-        box.val('pack'); \
-    } \
-    </script>");
-printf("<input name=\"%s\" size=\"%d\" value=\"%s\" oninput=\"packTrack();\" type=\"TEXT\">", \
-    oligoMatchVar, 45, oligo);
+jsInline(
+"function packTrack()\n"
+"{\n"
+"var box = jQuery('select[name$=oligoMatch]');\n"
+"if (box.val()=='hide')\n"
+"    box.val('pack');\n"
+"}\n");
+printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">", 
+    oligoMatchVar, oligoMatchVar, 45, oligo);
+jsOnEventById("input", oligoMatchVar, "packTrack();");
 }
 
 void cutterUi(struct trackDb *tdb)
@@ -2735,46 +2734,50 @@ return FALSE;
 void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 /* List tracks in this collection, with visibility controls and UI links */
 {
-#define SUPERS_WITH_CHECKBOXES
-#ifdef SUPERS_WITH_CHECKBOXES
-#define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" " \
-                         "id='btn_%s' src='../images/%s'>"
-#define    BUTTON_PLUS_SUPER()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
-#define    BUTTON_MINUS_SUPER() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
 jsIncludeFile("hui.js",NULL);
-#endif///def SUPERS_WITH_CHECKBOXES
 printf("\n<P><TABLE CELLPADDING=2>");
 tdbRefSortPrioritiesFromCart(cart, &superTdb->children);
 struct slRef *childRef;
+char javascript[1024];
 for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     {
     struct trackDb *tdb = childRef->val;
-    #ifdef SUPERS_WITH_CHECKBOXES
     if (childRef == superTdb->children) // first time through
         {
         printf("\n<TR><TD NOWRAP colspan=2>");
-        BUTTON_PLUS_SUPER();
-        BUTTON_MINUS_SUPER();
+	printf("<IMG height=18 width=18 id='btn_plus_all' src='../images/add_sm.gif'>");
+	jsOnEventById("click", "btn_plus_all", "superT.plusMinus(true);");
+	printf("<IMG height=18 width=18 id='btn_minus_all' src='../images/remove_sm.gif'>");
+	jsOnEventById("click", "btn_minus_all", "superT.plusMinus(false);");
         printf("&nbsp;<B>All</B><BR>");
         printf("</TD></TR>\n");
         }
     printf("<TR><TD NOWRAP>");
     if (!tdbIsDownloadsOnly(tdb))
         {
+	char id[256];
         enum trackVisibility tv =
                 hTvFromString(cartUsualString(cart, tdb->track,hStringFromTv(tdb->visibility)));
         // Don't use cheapCgi code... no name and no boolshad... just js
-        printf("<INPUT TYPE=CHECKBOX id='%s' onchange='superT.childChecked(this);'%s>",
-               tdb->track,(tv != tvHide?" CHECKED":""));
+	safef(id, sizeof id, "%s_check", tdb->track);
+        printf("<INPUT TYPE=CHECKBOX id='%s'%s>",
+               id, (tv != tvHide?" CHECKED":""));
+	jsOnEventById("change", id, "superT.childChecked(this);");
+
+        safef(javascript, sizeof(javascript), "superT.selChanged(this)");
+        struct slPair *event = slPairNew("change", cloneString(javascript));
         hTvDropDownClassVisOnlyAndExtra(tdb->track, tv, tdb->canPack,
                                         (tv == tvHide ? "hiddenText":"normalText"),
                                         trackDbSetting(tdb, "onlyVisibility"),
-                                        "onchange='superT.selChanged(this);'");
+                                        event);
+
         printf("</TD>\n<TD>");
-        printf("<A HREF='%s?%s=%s&c=%s&g=%s' onclick='return superT.submitAndLink(this);'>"
+	safef(id, sizeof id, "%s_link", tdb->track);
+        printf("<A HREF='%s?%s=%s&c=%s&g=%s' id='%s'>"
                "%s</A>&nbsp;", (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
                cartSessionVarName(), cartSessionId(cart),
-               chromosome, cgiEncode(tdb->track), tdb->shortLabel);
+               chromosome, cgiEncode(tdb->track), id, tdb->shortLabel);
+	jsOnEventById("click", id, "superT.submitAndLink(this);");
         }
     else
         {
@@ -2784,30 +2787,6 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         printf("%s&nbsp;",tdb->shortLabel);
         }
     printf("</TD>\n");
-    #else///ifndef SUPERS_WITH_CHECKBOXES
-    printf("<TR><TD NOWRAP>");
-    if (tdbIsDownloadsOnly(tdb))
-        printf("%s&nbsp;",tdb->shortLabel);
-    else
-        printf("<A HREF='%s?%s=%s&c=%s&g=%s'>%s</A>&nbsp;",
-               (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
-               cartSessionVarName(), cartSessionId(cart),
-               chromosome, cgiEncode(tdb->track), tdb->shortLabel);
-    printf("</TD><TD>");
-    if (tdbIsDownloadsOnly(tdb))
-        {
-        printf("<A HREF='%s?%s=%s&g=%s'>Downloads</A>",
-               hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
-        }
-    else
-        {
-        enum trackVisibility tv =
-                hTvFromString(cartUsualString(cart, tdb->track, hStringFromTv(tdb->visibility)));
-        hTvDropDownClassVisOnly(tdb->track, tv, tdb->canPack,
-                                tv == tvHide ?  "hiddenText" : "normalText",
-                                trackDbSetting(tdb, "onlyVisibility"));
-        }
-    #endif///ndef SUPERS_WITH_CHECKBOXES
     printf("<TD>%s", tdb->longLabel);
     char *dataVersion = trackDbSetting(tdb, "dataVersion");
     if (dataVersion)
@@ -2852,7 +2831,7 @@ for(sp=speciesList; sp; sp = sp->next)
 char *coalescent = cartOptionalString(cart, codeVarName);
 printf("<B>Set Coalescent Ancestor to:</B>");
 cgiMakeDropListFull(codeVarName, ancestors, ancestors,
-    count, coalescent, NULL);
+    count, coalescent, NULL, NULL);
 }
 #endif
 
@@ -2908,7 +2887,7 @@ else if (sameString(track, "xenoRefGene")
      ||  sameString(track, "ncbiGene")
      ||  sameString(track, "refGene"))
     refGeneUI(tdb);
-else if (startsWith("transMapAln", track))
+else if (startsWith("transMapAln", track) && (trackDbSetting(tdb, "bigDataUrl") == NULL))
     transMapUI(tdb);
 else if (sameString(track, "rgdGene2"))
     rgdGene2UI(tdb);
@@ -3043,6 +3022,8 @@ else if (tdb->type != NULL)
         expRatioCtUi(tdb);
     else if (startsWithWord("factorSource",tdb->type))
         factorSourceUi(database,tdb);
+    else if (startsWithWord("bigBed",tdb->type))
+        labelCfgUi(database, cart, tdb);
     }
 
 if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
@@ -3075,17 +3056,16 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 
 struct jsonElement *jsonGlobalsHash = NULL; 
 
-void jsonPrintGlobals(boolean wrapWithScriptTags)
+void jsonPrintGlobals()
 // prints out the "common" globals json hash
 // This hash is the one utils.js and therefore all CGIs know about
 {
 if (jsonGlobalsHash != NULL)
     {
-    if (wrapWithScriptTags)
-        printf("<script type='text/javascript'>\n");
-    jsonPrint(jsonGlobalsHash, "common", 0);
-    if (wrapWithScriptTags)
-        printf("</script>\n");
+    struct dyString *dy = dyStringNew(1024);
+    jsonDyStringPrint(dy, jsonGlobalsHash, "common", 0);
+    jsInline(dy->string);
+    dyStringFree(&dy);
     }
 }
 
@@ -3272,9 +3252,12 @@ if (!tdbIsDownloadsOnly(tdb))
 
         if (tdbIsSuperTrackChild(tdb))
             {
+	    char javascript[1024];
+	    safef(javascript, sizeof(javascript), "visTriggersHiddenSelect(this);");
+	    struct slPair *event = slPairNew("change", cloneString(javascript));
+
             hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,"normalText superChild visDD",
-                                            trackDbSetting(tdb, "onlyVisibility"),
-                                            "onchange='visTriggersHiddenSelect(this);'");
+                                            trackDbSetting(tdb, "onlyVisibility"), event);
             }
         else
             hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,"normalText visDD",
@@ -3289,13 +3272,15 @@ if (!tdbIsDownloadsOnly(tdb))
         if (tdbIsContainer(tdb))
             {
             printf("&nbsp;");
-            cgiMakeOnClickButton("window.history.back();","Cancel");
+            cgiMakeOnClickButton("htui_cancel", "window.history.back();","Cancel");
             }
 
         if (tdbIsComposite(tdb))
-            printf("\n&nbsp;&nbsp;<a href='#' "
-                   "onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); "
-                   "return false;'>Reset to defaults</a>\n",setting);
+	    {
+            printf("\n&nbsp;&nbsp;<a href='#' id='htui_reset'>Reset to defaults</a>\n");
+	    jsOnEventByIdF("click", "htui_reset",
+                   "setVarAndPostForm('%s','1','mainForm'); return false;", setting);
+	    }
         }
 
     if (ct)
@@ -3314,7 +3299,7 @@ if (!tdbIsDownloadsOnly(tdb))
                       hgCustomName(), cartSessionId(cart), CT_SELECTED_TABLE_VAR, tdb->track);
             else
                 safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
-            cgiMakeOnClickButton(buf, "Update custom track");
+            cgiMakeOnClickButton("htui_updtCustTrk", buf, "Update custom track");
             }
         }
     }
@@ -3477,6 +3462,9 @@ struct trackDb *tdb = NULL;
 char *track;
 struct customTrack *ct = NULL, *ctList = NULL;
 char *ignored;
+
+hgBotDelayFrac(0.25);
+
 cart = theCart;
 track = cartString(cart, "g");
 getDbAndGenome(cart, &database, &ignored, NULL);
@@ -3525,15 +3513,18 @@ char *title = (tdbIsSuper(tdb) ? "Super-track Settings" :
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html
+    // still need CSP2 header for security
+    printf("%s", getCspMetaHeader());
     trackUi(tdb, tdbList, ct, TRUE);
     cartRemove(cart,"ajax");
+    jsInlineFinish();
     }
 else
     {
     cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);
     trackUi(tdb, tdbList, ct, FALSE);
     printf("<BR>\n");
-    jsonPrintGlobals(TRUE);
+    jsonPrintGlobals();
     webEnd();
     }
 }

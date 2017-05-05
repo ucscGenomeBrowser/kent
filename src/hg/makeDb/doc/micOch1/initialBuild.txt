@@ -1,0 +1,664 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the micOch1
+
+# this browser started a long time ago as a manual one time shot,
+#  this is a catch up procedure to fill in the standard details
+
+#########################################################################
+#  Initial steps, find photograph (DONE - 2017-01-25 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/micOch1
+cd ~/kent/src/hg/makeDb/doc/micOch1
+
+sed -e 's/galGal/melGal/g; s/GalGal/MelGal/g; s/TBD/TBD/g;' \
+       ../galGal5/initialBuild.txt > initialBuild.txt
+
+# there is now a refseq release since this was first built, it
+# has not changed sequence.  Fetch for reference here:
+mkdir /hive/data/genomes/micOch1/refseq
+cd /hive/data/genomes/micOch1/refseq
+
+rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Microtus_ochrogaster/all_assembly_versions/GCF_000317375.1_MicOch1.0/ ./
+
+# sent 3299 bytes  received 2922069976 bytes  20221960.38 bytes/sec
+# total size is 2921701078  speedup is 1.00
+# real    2m23.342s
+
+mkdir /hive/data/genomes/micOch1/photo
+cd /hive/data/genomes/micOch1/photo
+wget --timestamping \
+http://wildlife.ohiodnr.gov/portals/wildlife/Species%20and%20Habitats/Species%20Guide%20Index/Images/prarievole.jpg
+# the size is OK already and it is good quality
+
+# construct the required photoReference.txt
+cd /hive/data/genomes/micOch1
+printf "photoCreditURL\t%s\nphotoCreditName\t%s\n" \
+'http://wildlife.ohiodnr.gov/species-and-habitats/species-guide-index/mammals/prairie-vole' \
+'Photo courtesy of the National Park Service' > photoReference.txt
+
+# this information is from the top of 
+#    micOch1/refseq/*_assembly_report.txt
+#    ( aka: micOch1/refseq/GCF_000317375.1_MicOch1.0_assembly_report.txt )
+
+# Assembly name:  MicOch1.0
+# Organism name:  Microtus ochrogaster (prairie vole)
+# Isolate:  Prairie Vole_2
+# Sex:  female
+# Taxid:          79684
+# BioSample:      SAMN00727831
+# BioProject:     PRJNA210839
+# Submitter:      Broad Institute
+# Date:           2012-12-7
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# WGS project:    AHZW01
+# Assembly method: allpaths v. R41985 HAPLOIDIFY=True SPRS_WRITE_SEPS=True
+# Genome coverage: 94x
+# Sequencing technology: Illumina Hi-Seq
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000317375.1
+# RefSeq assembly accession: GCF_000317375.1
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000317385.1      GCF_000317385.1 Primary Assembly
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2017-01-25)
+    cd /hive/data/genomes/micOch1
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl \
+micOch1 mammal micOch \
+/hive/data/outside/ncbi/genomes/genbank/vertebrate_mammalian/Microtus_ochrogaster/all_assembly_versions/GCA_000317375.1_MicOch1.0/GCA_000317375.1_MicOch1.0_assembly_report.txt
+       ./refseq/*_assembly_report.txt > micOch1.config.ra
+
+    # verify it looks sane
+    cat micOch1.config.ra
+# config parameters for makeGenomeDb.pl:
+db micOch1
+clade mammal
+scientificName Microtus ochrogaster
+commonName Prairie vole
+assemblyDate Dec. 2012
+assemblyLabel Broad Institute
+assemblyShortLabel MicOch1.0
+orderKey 16759
+mitoAcc none
+fastaFiles /hive/data/genomes/micOch1/ucsc/*.fa
+agpFiles /hive/data/genomes/micOch1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir micOch
+photoCreditURL  http://wildlife.ohiodnr.gov/species-and-habitats/species-guide-index/mammals/prairie-vole
+photoCreditName Photo courtesy of the National Park Service
+ncbiGenomeId 10848
+ncbiAssemblyId 504458
+ncbiAssemblyName MicOch1.0
+ncbiBioProject 210839
+ncbiBioSample SAMN00727831
+genBankAccessionID GCF_000317375.1
+taxId 79684
+
+    # and compare with how well it matches the existing dbDb entry:
+    hgsql -e 'select * from dbDb where name="micOch1"\G' hgcentraltest
+
+*************************** 1. row ***************************
+          name: micOch1
+   description: Oct 2012 (MicOch1.0/micOch1)
+       nibPath: /gbdb/micOch1
+      organism: Prairie vole
+    defaultPos: chr1:50669050-76003576
+        active: 1
+      orderKey: 16760
+        genome: Prairie vole
+scientificName: Microtus ochrogaster
+      htmlPath: /gbdb/micOch1/html/description.html
+      hgNearOk: 0
+        hgPbOk: 0
+    sourceName: Broad Institute GCA_000317375.1
+         taxId: 79684
+
+     # that is close enough, only the date Oct. vs Dec. is different
+     # It was Oct. in the genbank release in 2012
+     # It does need the .
+     hgsql -e 'update dbDb set description="Oct. 2012 (MicOch1.0/micOch1)" where name="micOch1";' hgcentraltest
+
+#############################################################################
+# setup UCSC named files (DONE - 2016-06-07 - Hiram)
+
+    mkdir /hive/data/genomes/micOch1/ucsc
+    cd /hive/data/genomes/micOch1/ucsc
+    # measure what is in the refseq release:
+    faSize ../refseq/GCF_000317375.1_MicOch1.0_genomic.fna.gz
+# 2287340943 bases (183019268 N's 2104321675 real 1490270617 upper
+#    614051058 lower) in 6335 sequences in 1 files
+# Total size: mean 361064.1 sd 4482029.3 min 1000 (NW_004955401.1)
+#    max 126672627 (NC_022009.1) median 2515
+# %26.85 masked total, %29.18 masked real
+
+    # compare to existing UCSC 2bit:
+# 2287340943 bases (183019268 N's 2104321675 real 1601638277 upper
+#    502683398 lower) in 6335 sequences in 1 files
+# Total size: mean 361064.1 sd 4482029.3 min 1000 (chrUn_AHZW01186948)
+#    max 126672627 (chr1) median 2515
+# %21.98 masked total, %23.89 masked real
+
+    # check for duplicate sequences:
+    cd /hive/data/genomes/micOch1
+    twoBitDup micOch1.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this refseq.2bit file
+    # remove it later
+
+    # it appears the following scripts were used:
+    $HOME/kent/src/hg/makeDb/doc/micOch1/unplaced.pl
+    $HOME/kent/src/hg/makeDb/doc/micOch1/unlocalized.pl
+    $HOME/kent/src/hg/makeDb/doc/micOch1/ucscCompositeAgp.pl
+
+    # there was no chrM sequence in 2012.  There may be now, but it
+    # can't be put into this sequence now
+
+    # verify fasta and AGPs agree
+    cd /hive/data/genomes/micOch1
+    checkAgpAndFa micOch1.agp micOch1.2bit 2>&1 | tail -1
+    #  All AGP and FASTA entries agree - both files are valid
+
+#############################################################################
+#  Initial database build (DONE - 2013-06-07 - Hiram)
+
+    # one outstanding issues is the trackDb entry:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+      -fileServer=hgwdev -continue=trackDb micOch1.config.ra) > trackDb.log 2>&1
+    # real    0m7.981s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add micOch1 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/micOch1
+    ln -s `pwd`/micOch1.unmasked.2bit /gbdb/micOch1/micOch1.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2016-07-16 - Hiram)
+    mkdir /hive/data/genomes/micOch1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/micOch1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/micOch1/micOch1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku micOch1) > do.log 2>&1
+    # real    24m14.786s
+
+    cat fb.micOch1.cpgIslandExtUnmasked.txt
+    # 11831917 bases of 2104321675 (0.562%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-01-25 - Hiram)
+    mkdir /hive/data/genomes/micOch1/bed/cytoBand
+    cd /hive/data/genomes/micOch1/bed/cytoBand
+    makeCytoBandIdeo.csh micOch1
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2017-01-25 - Hiram)
+    # this one is a bit different due to the older style UCSC names
+    #  without the v1 version, and was then using genbank names
+
+    mkdir /hive/data/genomes/micOch1/bed/ucscToINSDC
+    cd /hive/data/genomes/micOch1/bed/ucscToINSDC
+
+
+    grep -v "^#" \
+      ../../genbank/Primary_Assembly/assembled_chromosomes/chr2acc \
+          | awk '{printf "chr%s\t%s\n", $1, $2}' > t.txt
+
+    grep -v "^#" \
+    ../../genbank/Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf \
+      | awk '{printf "chr%d_%s_random\t%s\n", $1, $2, $2}' \
+         | sed -e 's/\.1//;' >> t.txt
+
+    zcat ../../genbank/Primary_Assembly/unplaced_scaffolds/AGP/*.gz \
+       | grep -v "^#" | awk '$5 != "N"'  | egrep "^JH|^AHZ" | cut -f1 \
+          | sort -u | awk '{printf "%s\t%s\n", $1, $1}' \
+             | sed -e 's/^/chrUn_/; s/\.1//;' >> t.txt
+
+    sort -k2 t.txt > ucscToINSDC.txt
+    rm -f t.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+
+    # extract the refseq vs. genbank names from the assembly_report
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | awk '{printf "%s\t%s\n", $2, $1}'  | sort -k2 > refseq.insdc.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join -1 2 -2 2 refseq.insdc.txt ucscToINSDC.txt | tr '[ ]' '[\t]' \
+       | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,4 \
+           > ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    wc -l *
+    #	6335 insdcToUcsc.txt
+    #	6335 name.coordinate.tab
+    #	6335 refseq.insdc.txt
+    #	6335 ucscToINSDC.bed
+    #	6335 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 21
+    # use the 21 in this sed
+    sed -e "s/21/21/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab micOch1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords micOch1
+    # should cover %100 entirely:
+    featureBits -countGaps micOch1 ucscToINSDC
+    # 2287340943 bases of 2287340943 (100.000%) in intersection
+
+#########################################################################
+# UCSC to RefSeq name correspondence (DONE - 2017-01-25 - Hiram)
+
+    mkdir /hive/data/genomes/micOch1/bed/ucscToRefSeq
+    cd /hive/data/genomes/micOch1/bed/ucscToRefSeq
+
+    # the work for this is already done from above, just a different
+    # column select on the final result:
+
+    join -1 2 -2 2 ../ucscToINSDC/refseq.insdc.txt \
+        ../ucscToINSDC/ucscToINSDC.txt | tr '[ ]' '[\t]' \
+       | sort -k3 \
+       | join -2 3 ../ucscToINSDC/name.coordinate.tab - \
+           | tr '[ ]' '[\t]' | cut -f1-3,5 | sort -k1,1 -k2,2n > ucsc.refSeq.tab
+
+
+    # verify same row count as above
+    wc -l *.tab
+    #	6335 ucsc.refSeq.tab
+
+    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  21
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab micOch1 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+
+    checkTableCoords  micOch1 -table=ucscToRefSeq
+    # should cover %100 all bases:
+    featureBits -countGaps micOch1 ucscToRefSeq
+    # 2287340943 bases of 2287340943 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2017-01-25 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/micOch/micOch1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" micOch1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+#   187012 AHZW.1
+
+    # implies a rule: 'AHZW[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" micOch1 | wc -l
+    # 187012
+
+    hgsql -N -e "select frag from gold;" micOch1 \
+       | egrep -e 'AHZW[0-9]+(\.[0-9]+)?' | wc -l
+    # 187012
+
+    hgsql -N -e "select frag from gold;" micOch1 \
+       | egrep -v -e 'AHZW[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/micOch/micOch1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex AHZW[0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2013-06-12 - Hiram)
+    mkdir /hive/data/genomes/micOch1/bed/repeatMasker
+    cd /hive/data/genomes/micOch1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku micOch1) > do.log 2>&1
+    # real    579m2.068s
+
+    cat faSize.rmsk.txt
+# 2287340943 bases (183019268 N's 2104321675 real 1603144124 upper
+#	501177551 lower) in 6335 sequences in 1 files
+# Total size: mean 361064.1 sd 4482029.3 min 1000 (chrUn_AHZW01186948)
+#	max 126672627 (chr1) median 2515
+# %21.91 masked total, %23.82 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.2
+    # April 29 2013 (open-4-0-2) version of RepeatMasker
+    # CC   RELEASE 20130422;    
+
+    time featureBits -countGaps micOch1 rmsk
+    # 501206092 bases of 2287340943 (21.912%) in intersection
+    #  real    0m34.548s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' micOch1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 501206092.000000
+    #  real    0m26.341s
+
+    time  (doRepeatMasker.pl -buildDir=`pwd` -continue=install \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku micOch1) > install.log 2>&1
+    # real    12m11.673s
+
+##########################################################################
+# running simple repeat (DONE - 2013-06-07 - Hiram)
+
+    mkdir /hive/data/genomes/micOch1/bed/simpleRepeat
+    cd /hive/data/genomes/micOch1/bed/simpleRepeat
+    # using trf409 3 here guessing smaller genome (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 3 micOch1) > do.log 2>&1
+    # real    16m52.479s
+
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -debug -continue=load -trf409 3 micOch1) > load.log 2>&1
+
+    cat fb.simpleRepeat
+    # 48159368 bases of 2104321675 (2.289%) in intersection
+
+    cd /hive/data/genomes/micOch1
+    # using the Window Masker result:
+    cd /hive/data/genomes/micOch1
+    twoBitMask bed/windowMasker/micOch1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  micOch1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # add to rmsk after it is done:
+#    twoBitMask micOch1.rmsk.2bit \
+#        -add bed/simpleRepeat/trfMask.bed micOch1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa micOch1.2bit stdout | faSize stdin > faSize.micOch1.2bit.txt
+    cat faSize.micOch1.2bit.txt
+# 2287340943 bases (183019268 N's 2104321675 real 1601638277 upper
+#	502683398 lower) in 6335 sequences in 1 files
+# Total size: mean 361064.1 sd 4482029.3 min 1000 (chrUn_AHZW01186948)
+#	max 126672627 (chr1) median 2515
+# %21.98 masked total, %23.89 masked real
+
+    rm /gbdb/micOch1/micOch1.2bit
+    ln -s `pwd`/micOch1.2bit /gbdb/micOch1/micOch1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-01-25 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/micOch1/bed/microsat
+    cd /cluster/data/micOch1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed micOch1 microsat microsat.bed
+    # Read 127857 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2013-06-07 - Hiram)
+
+    mkdir /hive/data/genomes/micOch1/bed/windowMasker
+    cd /hive/data/genomes/micOch1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev micOch1) > do.log 2>&1
+    # real    165m20.954s
+
+    # Masking statistics
+    cat faSize.micOch1.cleanWMSdust.txt
+# 2287340943 bases (183019268 N's 2104321675 real 1478898175 upper
+#	625423500 lower) in 6335 sequences in 1 files
+# Total size: mean 361064.1 sd 4482029.3 min 1000 (chrUn_AHZW01186948)
+#	max 126672627 (chr1) median 2515
+# %27.34 masked total, %29.72 masked real
+
+    cat fb.micOch1.rmsk.windowmaskerSdust.txt
+    # 251778480 bases of 2287340943 (11.007%) in intersection
+
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=load -debug -dbHost=hgwdev micOch1) > load.log 2>&1
+
+##########################################################################
+# run up idKeys files for ncbiRefSeq (DONE - 2016-05-05 - Hiram)
+    mkdir /hive/data/genomes/micOch1/bed/idKeys
+    cd /hive/data/genomes/micOch1/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd`  micOch1) > do.log 2>&1
+    # real    22m47.114s
+
+    cat micOch1.keySignature.txt
+    #   2869962b2f1b8aed754cf95e5febdd2a
+
+##########################################################################
+# cpgIslands - (DONE - 2013-11-25 - Hiram)
+    mkdir /hive/data/genomes/micOch1/bed/cpgIslands
+    cd /hive/data/genomes/micOch1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku micOch1) > run.log 2>&1
+    # Elapsed time: 6m48s
+
+    cat fb.micOch1.cpgIslandExt.txt
+    # 11062898 bases of 2104321675 (0.526%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2013-09-11 - Hiram)
+    mkdir /hive/data/genomes/micOch1/bed/genscan
+    cd /hive/data/genomes/micOch1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku micOch1) > do.log 2>&1
+    # real    595m22.318s
+# Completed: 6331 of 6335 jobs
+# Crashed: 4 jobs
+# CPU time in finished jobs:      62384s    1039.74m    17.33h    0.72d  0.002 y
+# IO & Wait Time:                 17010s     283.49m     4.72h    0.20d  0.001 y
+# Average job time:                  13s       0.21m     0.00h    0.00d
+# Longest finished job:            3161s      52.68m     0.88h    0.04d
+# Submission to last job:          3727s      62.12m     1.04h    0.04d
+
+    # four jobs completed with window=2000000
+./lastRunGsBig.csh chrUn_JH996442 000 gtf/000/chrUn_JH996442.gtf pep/000/chrUn_JH996442.pep subopt/000/chrUn_JH996442.bed &
+./lastRunGsBig.csh chr10 000 gtf/000/chr10.gtf pep/000/chr10.pep subopt/000/chr10.bed &
+./lastRunGsBig.csh chr18 000 gtf/000/chr18.gtf pep/000/chr18.pep subopt/000/chr18.bed &
+./lastRunGsBig.csh chr1 000 gtf/000/chr1.gtf pep/000/chr1.pep subopt/000/chr1.bed
+    # continuing:
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku micOch1) > makeBed.log 2>&1
+    #  Elapsed time: 3m23s
+
+    cat fb.micOch1.genscan.txt
+    # 58244164 bases of 2104321675 (2.768%) in intersection
+
+    cat fb.micOch1.genscanSubopt.txt
+    # 56202479 bases of 2104321675 (2.671%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2017-01-25 - Hiram)
+
+    # numerator is micOch1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap micOch1 gap
+    # 112230976 bases of 1543152531 (7.273%) in intersection
+    #                     ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1543152531 / 2861349177 \) \* 1024
+    #  ( 1543152531 / 2861349177 ) * 1024 = 552.252834
+
+    # ==> use -repMatch=500 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50 approximately
+    cd /hive/data/genomes/micOch1
+    blat micOch1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/micOch1.11.ooc \
+        -repMatch=500
+    #   Wrote 49691 overused 11-mers to jkStuff/micOch1.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' micOch1 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # all these gap sizes are 100
+    # minimum gap size is 100 and produces a reasonable number of lifts
+    gapToLift -verbose=2 -minGap=10 micOch1 jkStuff/nonBridged.lft \
+        -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2017-01-25 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism             mrnaCnt   estCnt  refSeqCnt
+    # Microtus ochrogaster    7       0       12
+
+    # edit etc/genbank.conf to add micOch1 just before rheMac2
+# micOch1 (prairie vole)
+micOch1.serverGenome = /hive/data/genomes/micOch1/micOch1.2bit
+micOch1.clusterGenome = /hive/data/genomes/micOch1/micOch1.2bit
+micOch1.ooc = /hive/data/genomes/micOch1/jkStuff/micOch1.11.ooc
+micOch1.lift = /hive/data/genomes/micOch1/jkStuff/nonBridged.lft
+micOch1.perChromTables = no
+micOch1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+micOch1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+micOch1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+micOch1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+micOch1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# defaults are fine: genbank.mrna.native refseq.mrna.native refseq.mrna.xeno yes
+# and genbank.est.native
+micOch1.downloadDir = micOch1
+# micOch1.upstreamGeneTbl = refGene
+# micOch1.upstreamMaf = multiz7way
+# /hive/data/genomes/melGal4/bed/multiz7way/species.lst
+
+    git commit -m "Added micOch1; refs #9871" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added micOch1 Microtus ochrogaster - prairie vole refs #9871" \
+       src/lib/gbGenome.c
+    git push
+    make install-server
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial micOch1
+    # logFile: var/build/logs/2017.01.25-19:53:43.micOch1.initalign.log
+    #   real    806m16.270s
+
+    tail var/build/logs/2017.01.25-19:53:43.micOch1.initalign.log
+    #	hgwdev 2017.01.26-09:17:39 micOch1.initalign: Succeeded: micOch1
+    #	hgwdev 2017.01.26-09:19:59 micOch1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.micOch1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad micOch1
+    # logFile: var/dbload/hgwdev/logs/2017.01.26-10:30:14.micOch1.dbload.log
+    #  real    17m58.909s
+
+    tail -1 var/dbload/hgwdev/logs/2017.01.26-10:30:14.micOch1.dbload.log
+    #  hgwdev 2017.01.26-10:48:12 micOch1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add micOch1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding micOch1 to the update alignments refs #9871' etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# augustus gene track (DONE - 2015-05-20 - Hiram)
+
+    mkdir /hive/data/genomes/micOch1/bed/augustus
+    cd /hive/data/genomes/micOch1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev micOch1) > do.log 2>&1
+    # real    170m55.747s
+
+    cat fb.micOch1.augustusGene.txt
+    # 52632496 bases of 2104321675 (2.501%) in intersection
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-01-26 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("micOch1", "blat1d", "17880", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("micOch1", "blat1d", "17881", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to GULO gene (vitamin C)
+##  (DONE - 2017-01-30 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr17:12364220-12405863"
+	where name="micOch1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2017-01-30 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=micOch1 -tableCoverage all.joiner
+    joinerCheck -database=micOch1 -times all.joiner
+    joinerCheck -database=micOch1 -keys all.joiner
+
+    cd /hive/data/genomes/micOch1
+    time (makeDownloads.pl -workhorse=hgwdev micOch1) > downloads.log 2>&1
+    #  real    22m13.021s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/micOch1/pushQ
+    cd /hive/data/genomes/micOch1/pushQ
+    time (makePushQSql.pl micOch1) > micOch1.pushQ.sql 2> stderr.out
+    #  real    3m48.613s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/micOch1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/micOch1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/micOch1/bbi/quality.bw
+    # WARNING: micOch1 does not have seq
+    # WARNING: micOch1 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p micOch1.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/micOch1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

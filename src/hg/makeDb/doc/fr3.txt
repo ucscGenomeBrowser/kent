@@ -2331,3 +2331,29 @@ done
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# lastz chainNet xenTro9/X. tropicalis (DONE - 2017-04-06 - Hiram)
+
+    # original alignment
+    cd /hive/data/genomes/xenTro9/bed/lastzFr3.2017-04-05
+    cat fb.xenTro9.chainFr3Link.txt
+    #	51743020 bases of 1369865365 (3.777%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/fr3/bed/blastz.xenTro9.swap
+    cd /hive/data/genomes/fr3/bed/blastz.xenTro9.swap
+    time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/xenTro9/bed/lastzFr3.2017-04-05/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #	real    17m36.964s
+
+    cat  fb.fr3.chainXenTro9Link.txt
+    #	44999785 bases of 350961831 (12.822%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` fr3 xenTro9) \
+	> rbest.log 2>&1 &
+    # real    161m34.026s
+
+#########################################################################

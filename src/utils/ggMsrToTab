@@ -1,0 +1,88 @@
+#!/usr/bin/env python2.7
+
+import logging, sys, optparse
+from collections import defaultdict, namedtuple
+from os.path import join, basename, dirname, isfile
+
+outFields = "eventId,causeType,causeName,causeGenes,themeType,themeName,themeGenes"\
+    ",relType,relSubtype,pmid,sentenceId,triggerTokenId,themeTokenStart,themeTokenEnd,"\
+    "causeTokenStart,causeTokenEnd,sentence".split(',')
+# === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
+parser = optparse.OptionParser("usage: %prog [options] filename") 
+
+parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages - convert MSR BioNLP text mining format to our tab sep gene graph format, write to stdout") 
+#parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+#parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+(options, args) = parser.parse_args()
+
+if options.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
+# ==== FUNCTIONs =====
+def lineFileNext(fh, headers=None, colCount=None):
+    """ 
+        parses tab-sep file with headers as field names 
+        yields collection.namedtuples, strips "#"-prefix from header line
+    """
+    if headers==None:
+        line1 = fh.readline()
+        line1 = line1.strip("\n").strip("#")
+        headers = line1.split("\t")
+        headers = [h.replace(" ","_").replace("(","").replace(")","") for h in headers]
+    Record = namedtuple('tsvRec', headers)
+
+    for line in fh:
+        line = line.rstrip("\n")
+        fields = line.split("\t")
+        if colCount!=None:
+            fields = fields[:colCount]
+        try:
+            rec = Record(*fields)
+        except Exception, msg:
+            logging.error("Exception occured while parsing line, %s" % msg)
+            logging.error("Filename %s" % fh.name)
+            logging.error("Line was: %s" % repr(line))
+            logging.error("Does number of fields match headers?")
+            logging.error("Headers are: %s" % headers)
+            #raise Exception("wrong field count in line %s" % line)
+            continue
+        # convert fields to correct data type
+        yield rec
+
+def convMsr(gene, fam, comp, tokenStart, tokenEnd, tokens):
+    " given the split msr format, translate to our format type, name, id and extract name from snippet "
+    name = " ".join(tokens[int(tokenStart):int(tokenEnd)])
+    if gene!="":
+        entType = "gene"
+        ids = gene
+    elif fam!="":
+        entType = "family"
+        ids = fam.split(".")[1].replace("_", "|")
+    elif comp!="":
+        entType = "complex"
+        ids = comp.split(".")[1].replace("_", "|")
+    return entType, name, ids
+    
+    
+# ----------- MAIN --------------
+if args==[]:
+    parser.print_help()
+    exit(1)
+
+print "\t".join(outFields)
+filename = args[0]
+for row in lineFileNext(open(filename)):
+    eventId = "msr"+row.EventId
+    tokens = row.Sentence.split()
+    themeType, themeName, themeGenes = \
+        convMsr(row.ThemeGene, row.ThemeFamily, row.ThemeComplex, row.ThemeTokenStart, row.ThemeTokenEnd, tokens)
+    causeType, causeName, causeGenes = \
+        convMsr(row.CauseGene, row.CauseFamily, row.CauseComplex, row.CauseTokenStart, row.CauseTokenEnd, tokens)
+    subType = row.EventSubtype.replace("Theme:","")
+    newRow = [eventId,  themeType, themeName, themeGenes, causeType, causeName, causeGenes, \
+        row.EventType, subType, row.Pmid, row.SentenceId, row.TriggerTokenId, row.ThemeTokenStart, \
+        row.ThemeTokenEnd, row.CauseTokenStart, row.CauseTokenEnd, row.Sentence]
+    print "\t".join(newRow)
+        
+    

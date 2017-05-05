@@ -20,20 +20,7 @@ priority 2
 # If this priority changes, please change it here and there as well
 
 track refGene override
-release beta,public
 priority 3
-
-track refSeqComposite override
-release alpha
-priority 3
-
-    track ncbiRefGenesView override
-    release alpha
-    parent refSeqComposite on
-
-        track refGene override
-        release alpha
-        parent ncbiRefGenesView on
 
 # mRNA and EST
 

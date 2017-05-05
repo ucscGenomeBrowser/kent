@@ -114,7 +114,7 @@ else
 	    struct cdwValidFile *vf = hashFindVal(validHash, acc);
 	    if (vf != NULL)
 		{
-		addGroupToFile(conn, vf->id, group);
+		addGroupToFile(conn, vf->fileId, group);
 		}
 	    }
 	}

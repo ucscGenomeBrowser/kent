@@ -57,12 +57,11 @@ echo
 # Each case will be tried and may fail.
 # An early failure must not interfere with the rest of the trial
 # argument order:                            USE_BAM
-#                                              USE_SSL
-#                                                USE_TABIX
-#                                                  USE_SAMTABIX
-#                                                    USE_HTS
-#                                                      KNETFILE_HOOKS
-#                                                        USE_HAL
+#                                              USE_TABIX
+#                                                USE_SAMTABIX
+#                                                  USE_HTS
+#                                                    KNETFILE_HOOKS
+#                                                      USE_HAL
 rm -f $targetDir/buildWithUse.log >& /dev/null
 
 $HOME/bin/scripts/buildOneUseCase $targetDir 0 0 0 0 0 0 0 $argv >>& $targetDir/buildWithUse.log

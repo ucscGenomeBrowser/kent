@@ -19,6 +19,9 @@
 
 #include "dystring.h"
 
+char *makeRandomKey(int numBits);
+/* Generate base64 encoding of a random key of at least size numBits returning string to be freed when done */
+
 void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure);
 /* create a cookie with the given stats */
 
@@ -86,6 +89,15 @@ void urlDecode(char *s);
 
 void htmlMemDeath();
 /* Complain about lack of memory and abort.  */
+
+char *getNonce();
+/* make nonce one-use-per-page */
+
+char *getCspMetaHeader();
+/* return meta CSP header string */
+
+void generateCspMetaHeader(FILE *f);
+/* Generate Meta CSP Header */
 
 void htmlStart(char *title);
 /* Write the start of a cgi-generated html file */

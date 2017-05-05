@@ -252,7 +252,7 @@ if (!cdb)
 	{
 	if (cartDbUseSessionKey())
 	    {
-	    sessionKey = cartDbMakeRandomKey(128+33); // at least 128 bits of protection, 33 for the world population size.
+	    sessionKey = makeRandomKey(128+33); // at least 128 bits of protection, 33 for the world population size.
 	    }
 	sqlDyStringPrintf(query, ",'%s'", sessionKey);
 	}
@@ -787,16 +787,21 @@ if (didSessionLoad)
 
 if (newDatabase != NULL)
     {
-    // this is some magic to use the defaultPosition and reset cart variables
-    if (oldVars)
+    char *cartDb = cartOptionalString(cart, "db");
+
+    if ((cartDb == NULL) || differentString(cartDb, newDatabase))
         {
-        struct hashEl *hel;
-        if ((hel = hashLookup(oldVars,"db")) != NULL)
-            hel->val = "none";
-        else
-            hashAdd(oldVars, "db", "none");
+        // this is some magic to use the defaultPosition and reset cart variables
+        if (oldVars)
+            {
+            struct hashEl *hel;
+            if ((hel = hashLookup(oldVars,"db")) != NULL)
+                hel->val = "none";
+            else
+                hashAdd(oldVars, "db", "none");
+            }
+        cartSetString(cart,"db", newDatabase);
         }
-    cartSetString(cart,"db", newDatabase);
     }
 
 if (exclude != NULL)
@@ -1380,8 +1385,8 @@ if (asTable)
     int width=(strlen(val)+1)*8;
     if (width<100)
         width = 100;
-    cgiMakeTextVarWithExtraHtml(hel->name, val, width,
-                                "onchange='setCartVar(this.name,this.value);'");
+    cgiMakeTextVarWithJs(hel->name, val, width,
+                                "change", "setCartVar(this.name,this.value);");
     printf("</TD></TR>\n");
     }
 else
@@ -1587,21 +1592,44 @@ if (geoMirrorEnabled())
         printf("Set-Cookie: redirect=%s; path=/; domain=%s; expires=%s\r\n", redirect, cgiServerName(), cookieDate());
         }
     }
+/* Validate login cookies if login is enabled */
+if (loginSystemEnabled())
+    {
+    struct slName *newCookies = loginValidateCookies(cart), *sl;
+    for (sl = newCookies;  sl != NULL;  sl = sl->next)
+        printf("Set-Cookie: %s\r\n", sl->name);
+    }
 }
 
 struct cart *cartForSession(char *cookieName, char **exclude,
                             struct hash *oldVars)
 /* This gets the cart without writing any HTTP lines at all to stdout. */
 {
+/* Most cgis call this routine */
+if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
+    initSigHandlers(hDumpStackEnabled());
+/* Proxy Settings 
+ * net.c cannot see the cart, pass the value through env var */
+char *httpProxy = cfgOption("httpProxy");  
+if (httpProxy)
+    setenv("http_proxy", httpProxy, TRUE);
+char *httpsProxy = cfgOption("httpsProxy");
+if (httpsProxy)
+    setenv("https_proxy", httpsProxy, TRUE);
+char *ftpProxy = cfgOption("ftpProxy");
+if (ftpProxy)
+    setenv("ftp_proxy", ftpProxy, TRUE);
+char *noProxy = cfgOption("noProxy");
+if (noProxy)
+    setenv("no_proxy", noProxy, TRUE);
+char *logProxy = cfgOption("logProxy");
+if (logProxy)
+    setenv("log_proxy", logProxy, TRUE);
+
 char *hguid = getCookieId(cookieName);
 char *hgsid = getSessionId();
 struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 cartExclude(cart, sessionVar);
-if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
-    initSigHandlers(hDumpStackEnabled());
-char *httpProxy = cfgOption("httpProxy");  /* most cgis call this routine */
-if (httpProxy)
-    setenv("http_proxy", httpProxy, TRUE);   /* net.c cannot see the cart, pass the value through env var */
 return cart;
 }
 
@@ -1646,11 +1674,13 @@ static void cartErrorCatcher(void (*doMiddle)(struct cart *cart),
                              struct cart *cart)
 /* Wrap error catcher around call to do middle. */
 {
-int status = setjmp(htmlRecover);
 pushAbortHandler(htmlAbort);
 hDumpStackPushAbortHandler();
+int status = setjmp(htmlRecover);
 if (status == 0)
+    {
     doMiddle(cart);
+    }
 hDumpStackPopAbortHandler();
 popAbortHandler();
 }
@@ -1661,7 +1691,7 @@ void cartEarlyWarningHandler(char *format, va_list args)
 static boolean initted = FALSE;
 va_list argscp;
 va_copy(argscp, args);
-if (!initted)
+if (!initted && !cgiOptionalString("ajax"))
     {
     htmStart(stdout, "Early Error");
     initted = TRUE;

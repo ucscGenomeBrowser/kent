@@ -168,6 +168,9 @@ void jsReloadOnBackButton(struct cart *cart);
 
 // --- Genome browser specific json stuff - see also inc/json.h for more generic stuff 
 
+void jsonDyStringPrint(struct dyString *dy, struct jsonElement *json, char *name, int indentLevel);
+// dyStringPrint out a jsonElement, indentLevel -1 means no indenting
+
 void jsonPrint(struct jsonElement *json, char *name, int indentLevel);
 // print out a jsonElement and children using hPrintf, and for indentLevel >=0
 // bracketing with comments.  See also jsonPrintToFile.

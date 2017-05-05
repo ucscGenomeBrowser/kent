@@ -22,3 +22,22 @@ def runCommand(command):
         cmdstr = " ".join([pipes.quote(arg) for arg in command])
         raise Exception("Error from: " + cmdstr)
     return cmdout, cmderr
+
+def runCommandMergedOutErr(command):
+    """Runs command in subprocess and raises exception if return code is not 0.
+    Combines stdout and stderr into a single output. Returns stdoutdata string."""
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # cmderr is empty, but we still need to call both so cmdout is properly set
+    cmdout, cmderr = p.communicate()
+    if p.returncode != 0:
+        # keep command arguments nicely quoted
+        cmdstr = " ".join([pipes.quote(arg) for arg in command])
+        raise Exception("Error from: " + cmdstr)
+    return cmdout
+
+def runCommandNoAbort(command):
+    """Runs command in subprocess. Returns tuple (stdoutdata, stderrdata)
+    and returncode from process."""
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    cmdout, cmderr = p.communicate()
+    return cmdout, cmderr, p.returncode

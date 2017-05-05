@@ -1,12 +1,16 @@
 kentSrc = ../..
 include ../../inc/common.mk
 
-all:
-	pandoc -t html5 -o $(DOCUMENTROOT)-$(USER)/admin/mirror.html ../README.txt --template staticPage.html -t staticPage.lua	
-	for i in ../*.txt; do pandoc -t html5 -o $(DOCUMENTROOT)-$(USER)/admin/`basename $$i .txt`.html $$i --template staticPage.html -t staticPage.lua; done
-alpha:
-	pandoc -t html5 -o $(DOCUMENTROOT)/admin/mirror.html ../README.txt --template staticPage.html -t staticPage.lua	
-	for i in ../*.txt; do pandoc -t html5 -o $(DOCUMENTROOT)/admin/`basename $$i .txt`.html  $$i --template staticPage.html -t staticPage.lua; done
-beta:
-	pandoc -t html5 -o $(DOCUMENTROOT)-beta/admin/mirror.html ../README.txt --template staticPage.html -t staticPage.lua	
-	for i in ../*.txt; do pandoc -t html5 -o $(DOCUMENTROOT)-beta/admin/mirror.html ../README.First --template staticPage.html -t staticPage.lua; done
+GIT = git
+GITUP = ${GIT} pull
+
+user:
+	${MAKE} doInstall destDir=${kentSrc}/hg/htdocs
+	@echo ""
+	@echo "Don't forget to cd to kent/src/hg/htdocs, commit goldenPath/help/mirror.html"
+	@echo "and goldenPath/help/mirrorManual.html, and run your makes from there!"
+	@echo ""
+
+doInstall:
+	pandoc -t html5 -o ${destDir}/goldenPath/help/mirror.html ../README.txt --template staticPage.html -t staticPage.lua
+	pandoc -t html5 -o ${destDir}/goldenPath/help/mirrorManual.html ../mirrorManual.txt --template staticPage.html -t staticPage.lua

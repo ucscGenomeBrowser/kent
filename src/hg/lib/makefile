@@ -8,11 +8,12 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     altGraphX.o ancientRref.o \
     annoFormatVep.o annoGratorGpVar.o annoGrateWigDb.o \
     annoStreamDb.o annoStreamDbFactorSource.o annoStreamWig.o \
-    api.o atomDb.o autoUpgrade.o axtInfo.o \
-    axtLib.o bactigPos.o hgBam.o baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
+    api.o atomDb.o autoUpgrade.o axtInfo.o axtLib.o bactigPos.o hgBam.o \
+    barChartBed.o barChartCategory.o barChartUi.o barChartData.o barChartSample.o \
+    baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o  bed8Attrs.o bed12Source.o \
     bed12wSeq.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bigBedFind.o \
-    bigGenePred.o bigPsl.o bioImage.o \
+    bigGenePred.o bigPsl.o bigTransMap.o bioImage.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o\
     cart.o cartDb.o cartJson.o cartTrackDb.o cdsEvidence.o cdsOrtho.o cdsPick.o cdsSpec.o \
     ccdsInfo.o ccdsNotes.o ccdsGeneMap.o celeraCoverage.o \
@@ -66,7 +67,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     hapmapSnps.o hapmapSnpsCombined.o \
     hashJoin.o hCommon.o \
     hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
-    hgFindSpec.o hgFindSpecCustom.o hgHgvs.o \
+    hgFindSpec.o hgFindSpecCustom.o hgHgvs.o hgHgvsParse.o \
     hgGene.o hgMaf.o hgRelate.o hgSeq.o hgdpGeo.o hPrint.o hVarSubst.o hvGfx.o \
     HInv.o hubConnect.o hui.o humanParalog.o \
     imageClone.o isochores.o ispyTables.o itemAttr.o itemConf.o itemDetailsHtml.o jalview.o \
