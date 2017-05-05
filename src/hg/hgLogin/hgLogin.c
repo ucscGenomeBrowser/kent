@@ -42,7 +42,9 @@ char brwName[64];
 char brwAddr[256];
 char signature[256];
 char returnAddr[256];
-char *hgLoginUrl = NULL;
+char *hgLoginUrl = NULL; /* full absolute URL to hgLogin as seen from browser, 
+    e.g. http://genome.ucsc.edu/cgi-bin/hgLogin. Can be a relative URL /cgi-bin/hgLogin if 
+    hg.conf login.relativeLink is on. */
 
 /* ---- Global helper functions ---- */
 char *browserName()
@@ -300,7 +302,12 @@ char *returnURL = cartUsualString(cart, "returnto", "");
 char *hgLoginHost = wikiLinkHost();
 char *cgiDir = cgiScriptDirUrl();
 char returnTo[2048];
-if (!returnURL || sameString(returnURL,""))
+
+boolean relativeLink = cfgOptionBooleanDefault("login.relativeLink", FALSE);
+// reverse proxies and all-https sites have no need for absolute links
+if (relativeLink)
+    safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", cgiDir);
+else if (!returnURL || sameString(returnURL,""))
    safef(returnTo, sizeof(returnTo),
         "http%s://%s%shgSession?hgS_doMainPage=1",
         cgiAppendSForHttps(), hgLoginHost, cgiDir);
@@ -1297,7 +1304,13 @@ htmlSetStyleSheet("../style/userAccounts.css");
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 htmlSetFormClass("accountScreen");
-struct dyString *dy = dyStringCreate("http%s://%s%shgLogin",
+
+boolean relativeLink = cfgOptionBooleanDefault("login.relativeLink", FALSE);
+struct dyString *dy;
+if (relativeLink) // normal relative links are better for reverse proxyies or all-https sites
+    dy = dyStringCreate("%s", cgiScriptName());
+else 
+    dy = dyStringCreate("http%s://%s%shgLogin",
                                      loginUseHttps() ? "s" : "", wikiLinkHost(), cgiScriptDirUrl());
 hgLoginUrl = dyStringCannibalize(&dy);
 oldCart = hashNew(10);
