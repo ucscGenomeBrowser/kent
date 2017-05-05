@@ -2987,6 +2987,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &vcfTabixFactory);
     slAddTail(&factoryList, &makeItemsFactory);
     slAddTail(&factoryList, &bigDataOopsFactory);
+    slAddTail(&factoryList, &barChartFactory);
     slAddTail(&factoryList, &bigBarChartFactory);
     }
 }
