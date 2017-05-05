@@ -27,7 +27,7 @@ def parseArgs(args):
                 "separated; chr, start coord, end coord, label, strand, gene name. ",
         action = "store")
     parser.add_argument ("outputFile",
-        help = " The output file. ",
+        help = " The output file, bed 6+5 format. See the schema in kent/src/hg/lib/barChartBed.as. ",
         type =argparse.FileType("w"))
     # Optional arguments.  
     parser.add_argument ("--groupOrderFile",
@@ -173,7 +173,7 @@ def condenseMatrixIntoBedCols(matrix, groupOrder, sampleToGroup, validTpms, bedL
         # Store some information on the bed file. Most important is the groupOrder. 
         if getBedInfo: 
             getBedInfo = False 
-            bedInfo += "#chr\tstart\tend\tname\tscore\tstrand\tgroupCount\tgroupOrder;"
+            bedInfo += "#chr\tstart\tend\tname\tscore\tstrand\tname2\tgroupCount\tgroupOrder;"
             if (groupOrder is not None):
                 for group in open(groupOrder, "r"): 
                     bedInfo += group.strip("\n") + " " 
@@ -224,11 +224,12 @@ def expMatrixToBarchartBed(options):
     Convert the expression matrix into a barchart bed file. 
     options - The command line options (file names, etc). 
         Use the meta data to map the sample names to their groups, then create a dict that maps
-    the columns to the groups.  Go through the matrix line by line and get the average for each 
-    group. Print this to an intermediate file, then use the unix 'join' command to link this with
-    the coordinates file, creating a bed like file.  Go through this file once more to clean up a
-    bit, re arrange columns and calculate a new score creating a bed 6+2.  Finally run
-    Max's bedJoinTabOffset to index the matrix, creating a bed 6+4 file.   
+    the columns to the groups.  Go through the matrix line by line and get the median or average for each 
+    group. Print this to an intermediate file, then use the unix 'join' command to link with
+    the coordinates file via the first matrix column. This creates a file with many of the bed fields
+    just in the wrong order.  Go through this file to re arrange the columns, check for and remove entries 
+    where chromsomes names include "_" and chr start > chr end.  Finally run Max's bedJoinTabOffset to 
+    index the matrix adding the dataOffset and dataLen columns and creating a bed 6+5 file.   
     """
 
     # Create a dictionary that maps the sample names to their group.
@@ -296,24 +297,19 @@ def expMatrixToBarchartBed(options):
             continue
         newLine = (splitLine[1] + "\t" + str(splitLine[2]) + "\t" + str(splitLine[3]) + "\t" + \
                 splitLine[0] + "\t" + str(determineScore(tpmCutoffs, float(splitLine[6]))) + \
-                "\t" + str(splitLine[4]) + "\t" + str(splitLine[7]) + "\t" + splitLine[8] + \
-                "\t" + splitLine[5] + "\n")
+                "\t" + str(splitLine[4]) + "\t" + splitLine[5] + "\t" + str(splitLine[7]) + \
+                "\t" + splitLine[8] + "\n")
         bedFile.write(newLine)
-
-    # Run Max's indexing script
-    indexedBedFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
-    cmd = "bedJoinTabOffset " + options.matrixFile.name + " " + bedFile.name + " " + indexedBedFile.name
-    os.system(cmd)
-
+    
     # Prepend the bed info to the start of the file.  
     cmd = "echo '" + bedInfo + "' > " + options.outputFile.name
     os.system(cmd)
 
-    # Reformat with awk, move the gene name to behind the indeces. 
-    cmd = "cat " + indexedBedFile.name + " | awk '{print $1\"\t\"$2\"\t\"$3\"\t\"$4\"\t\"" + \
-            "$5\"\t\"$6\"\t\"$7\"\t\"$8\"\t\"$10\"\t\"$11\"\t\"$9}' >> " + options.outputFile.name
+    # Run Max's indexing script
+    indexedBedFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
+    cmd = "bedJoinTabOffset " + options.matrixFile.name + " " + bedFile.name + " " + options.outputFile.name
     os.system(cmd)
-    
+
     print ("The columns and order of the groups are; \n" + bedInfo)
 
 def main(args):

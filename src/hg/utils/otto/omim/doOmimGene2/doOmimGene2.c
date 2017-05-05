@@ -48,14 +48,23 @@ conn3= hAllocConn(database);
 outFn   = argv[2];
 outf    = mustOpen(outFn, "w");
 
+struct hash *idToGene = hashNew(0);
 sqlSafef(query1, sizeof query1, "select omimId, geneId from omim2geneNew where geneId <>'-' and entryType='gene' ");
 sr1 = sqlMustGetResult(conn1, query1);
-row1 = sqlNextRow(sr1);
-while (row1 != NULL)
+while ((row1 = sqlNextRow(sr1)) != NULL)
     {
     /* get all OMIM Genes with Gene ID (Entrez/LocusLink) */
     omimId = row1[0];
-    geneId = row1[1];
+    geneId = cloneString(row1[1]);
+    hashAdd(idToGene, omimId, geneId);
+    }
+hFreeConn(&conn1);
+
+struct hashEl *hel, *helList = hashElListHash(idToGene);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    omimId = hel->name;
+    geneId = hel->val;
 
     /* get different chroms from RefSeq for each geneId */
     sqlSafef(query3, sizeof query3, 
@@ -87,13 +96,11 @@ while (row1 != NULL)
         row3 = sqlNextRow(sr3);
 	}
     sqlFreeResult(&sr3);
-    row1 = sqlNextRow(sr1);
     }
 
 sqlFreeResult(&sr2);
 
 fclose(outf);
-hFreeConn(&conn1);
 hFreeConn(&conn2);
 hFreeConn(&conn3);
 return(0);
