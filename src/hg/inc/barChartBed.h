@@ -88,6 +88,8 @@ void barChartBedOutput(struct barChartBed *el, FILE *f, char sep, char lastSep);
 // indexes in .as file for standard barChartBed.  Use to find comparable fields in custom .as's
 #define BARCHART_NAME_COLUMN_IX         3
 #define BARCHART_NAME2_COLUMN_IX        6
+#define BARCHART_EXPCOUNT_COLUMN_IX     7
+#define BARCHART_EXPSCORES_COLUMN_IX    8 
 
 void barChartBedCreateTable(struct sqlConnection *conn, char *table);
 /* Create barChart format table of given name. */

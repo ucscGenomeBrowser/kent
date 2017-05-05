@@ -85,7 +85,15 @@ static struct barChartBed *getBarChartFromTable(struct trackDb *tdb, char *table
                                                 char *item, char *chrom, int start, int end)
 /* Retrieve barChart BED item from track table */
 {
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = NULL;
+struct customTrack *ct = lookupCt(tdb->track);
+if (ct == NULL)
+    conn = hAllocConnTrack(database, tdb);
+else
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    }
 if (conn == NULL)
     return NULL;
 struct barChartBed *barChart = NULL;
