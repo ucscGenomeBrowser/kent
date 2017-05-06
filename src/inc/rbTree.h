@@ -98,5 +98,10 @@ int rbTreeCmpString(void *a, void *b);
 int rbTreeCmpWord(void *a, void *b);	
 /* Set up rbTree so as to work on case-insensitive strings. */
 
+void rbTreeTraverseRangeWithContext(struct rbTree *tree, void *minItem, void *maxItem,
+	void (*doItem)(void *item, void *context), void *context);
+/* Apply doItem function to all items in tree such that
+ * minItem <= item <= maxItem.  THREAD SAFE */
+
 #endif /* RBTREE_H */
 
