@@ -4388,19 +4388,43 @@ struct slList *items = track->items;
 struct slList *item;
 unsigned size = winEnd - winStart;
 unsigned *counts = needHugeZeroedMem(size * sizeof(unsigned));
+extern int linkedFeaturesItemStart(struct track *tg, void *item);
+boolean isLinkedFeature = ( track->itemStart == linkedFeaturesItemStart);
 
 for (item = items; item; item = item->next)
     {
-    unsigned start = track->itemStart(track, item);
-    unsigned end = track->itemEnd(track, item);
-    if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
-	continue;
+    if (isLinkedFeature)
+        {
+        struct linkedFeatures *lf = (struct linkedFeatures *)item;
+        struct simpleFeature *sf;
 
-    int x1 = max((int)start - (int)winStart, 0);
-    int x2 = min((int)end - (int)winStart, size);
+        for (sf = lf->components; sf != NULL; sf = sf->next)
+            {
+            unsigned start = sf->start;
+            unsigned end = sf->end;
+            if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
+                continue;
 
-    for(; x1 < x2; x1++)
-	counts[x1]++;
+            int x1 = max((int)start - (int)winStart, 0);
+            int x2 = min((int)end - (int)winStart, size);
+
+            for(; x1 < x2; x1++)
+                counts[x1]++;
+            }
+        }
+    else
+        {
+        unsigned start = track->itemStart(track, item);
+        unsigned end = track->itemEnd(track, item);
+        if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
+            continue;
+
+        int x1 = max((int)start - (int)winStart, 0);
+        int x2 = min((int)end - (int)winStart, size);
+
+        for(; x1 < x2; x1++)
+            counts[x1]++;
+        }
     }
 
 return counts;
