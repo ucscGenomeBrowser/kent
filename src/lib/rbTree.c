@@ -615,6 +615,30 @@ static void (*doIt)(void *item);
 static void *minIt, *maxIt;
 static int (*compareIt)(void *, void *);
 
+/* Structure to pass down to make thread safe versions of range functions */
+struct rangeParams 
+{
+void (*doIt)(void *item, void *context);
+void *minIt, *maxIt;
+int (*compareIt)(void *, void *);
+};
+
+static void rTreeTraverseRangeWithContext(struct rbTreeNode *n, struct rangeParams *rp, void *context)
+/* Recursively traverse tree in range applying doIt with context. */
+{
+if (n != NULL)
+   {
+   int minCmp = rp->compareIt(n->item, rp->minIt);
+   int maxCmp = rp->compareIt(n->item, rp->maxIt);
+   if (minCmp >= 0)
+       rTreeTraverseRangeWithContext(n->left, rp, context);
+   if (minCmp >= 0 && maxCmp <= 0)
+       rp->doIt(n->item, context);
+   if (maxCmp <= 0)
+       rTreeTraverseRangeWithContext(n->right, rp, context);
+   }
+}
+
 static void rTreeTraverseRange(struct rbTreeNode *n)
 /* Recursively traverse tree in range applying doIt. */
 {
@@ -642,6 +666,18 @@ if (n != NULL)
     }
 }
 
+void rbTreeTraverseRangeWithContext(struct rbTree *tree, void *minItem, void *maxItem,
+	void (*doItem)(void *item, void *context), void *context)
+/* Apply doItem function to all items in tree such that
+ * minItem <= item <= maxItem.  THREAD SAFE */
+{
+struct rangeParams ourParams;
+ourParams.doIt = doItem;
+ourParams.minIt = minItem;
+ourParams.maxIt = maxItem;
+ourParams.compareIt = tree->compare;
+rTreeTraverseRangeWithContext(tree->root, &ourParams, context);
+}
 
 void rbTreeTraverseRange(struct rbTree *tree, void *minItem, void *maxItem,
 	void (*doItem)(void *item))
