@@ -165,7 +165,16 @@ else if (tg->isBigBed)
     }
 else
     {
-    struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+    char *table = tg->table;
+    struct customTrack *ct = tg->customPt;
+    struct sqlConnection *conn = NULL;
+    if (ct == NULL)
+        conn = hAllocConnTrack(database, tg->tdb);
+    else
+        {
+        conn = hAllocConn(CUSTOM_TRASH);
+        table = ct->dbTableName;
+        }
     struct sqlResult *sr = NULL;
     /* limit to items above a specified score */
     char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,NULL);
@@ -178,11 +187,11 @@ else
 	}
     else if(scoreFilterClause != NULL && tg->bedSize >= 5)
 	{
-	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, scoreFilterClause, &rowOffset);
+	sr = hRangeQuery(conn, table, chromName, winStart, winEnd, scoreFilterClause, &rowOffset);
 	}
     else
 	{
-	sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
+	sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
 	}
     freeMem(scoreFilterClause);
     while ((row = sqlNextRow(sr)) != NULL)

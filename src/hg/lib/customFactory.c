@@ -43,6 +43,7 @@
 #include "chromInfo.h"
 #include "trackHub.h"
 #include "bedTabix.h"
+#include "barChartBed.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -1079,6 +1080,190 @@ static struct customFactory pgSnpFactory =
     pgSnpLoader,
     };
 
+/* BarChart and bigBarChart tracks */
+
+static boolean rowIsBarChart (char **row, char *db)
+/* return TRUE if row looks like a barChart row */
+{
+char *type = "barChart";
+if (!rowIsBed(row, 3, db))
+    errAbort("Error line 1 of custom track, type is %s but first 3 fields are not BED", type);
+return TRUE;
+}
+
+static boolean barChartRecognizer(struct customFactory *fac,
+        struct customPp *cpp, char *type,
+        struct customTrack *track)
+/* Return TRUE if looks like we're handling a barChart track */
+{
+if (type != NULL && !sameType(type, fac->name))
+    return FALSE;
+char *line = customFactoryNextRealTilTrack(cpp);
+if (line == NULL)
+    return FALSE;
+char *dupe = cloneString(line);
+char *row[BARCHARTBED_NUM_COLS+1];
+int wordCount = chopLine(dupe, row);
+boolean isBarChart = FALSE;
+if (wordCount == BARCHARTBED_NUM_COLS)
+    {
+    track->fieldCount = wordCount;
+    char *ctDb = ctGenomeOrCurrent(track);
+    isBarChart = rowIsBarChart(row, ctDb);
+    }
+freeMem(dupe);
+customPpReuse(cpp, line);
+return isBarChart;
+}
+
+static struct barChartBed *customTrackBarChart(char *db, char **row, struct hash *chromHash, 
+                                                struct lineFile *lf)
+/* Convert a row of strings to barChart. */
+{
+// Validate first 6 standard bed fields 
+struct bed *bed;
+AllocVar(bed);
+loadAndValidateBed(row, 6, BARCHARTBED_NUM_COLS - 6, lf, bed, NULL, TRUE);
+
+// Load as barChart and validate custom fields
+struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, TRUE);
+int count;
+sqlFloatDynamicArray(row[BARCHART_EXPSCORES_COLUMN_IX], &barChart->expScores, &count);
+if (count != barChart->expCount)
+    lineFileAbort(lf, "expecting %d elements in expScores list (field %d)", 
+                        barChart->expCount, BARCHART_EXPSCORES_COLUMN_IX+1);
+// TODO: check offset and len
+
+hashStoreName(chromHash, barChart->chrom);
+customFactoryCheckChromNameDb(db, barChart->chrom, lf);
+int chromSize = hChromSize(db, barChart->chrom);
+if (barChart->chromEnd > chromSize)
+    lineFileAbort(lf, "chromEnd larger than chrom %s size (%d > %d)",
+                        barChart->chrom, barChart->chromEnd, chromSize);
+return barChart;
+}
+
+static struct pipeline *barChartLoaderPipe(struct customTrack *track)
+{
+/* Similar to bedLoaderPipe, but loads with the specified schemaFile.
+ * Constructs and run the command:
+ *	hgLoadBed -customTrackLoader -sqlTable=loader/schemaFile -renameSqlTable
+ *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
+ *		-maxChromNameLength=${nameLength} customTrash tableName stdin
+ */
+char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
+struct stat statBuf;
+if (stat(tmpDir,&statBuf))
+    errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
+	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
+
+char *schemaFile = "barChartBed.sql";
+char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", NULL,
+	"-renameSqlTable", "-trimSqlTable", "-notItemRgb", "-noBin", NULL, NULL, NULL, NULL, NULL, NULL};
+
+struct dyString *ds = newDyString(0);
+dyStringPrintf(ds, "-sqlTable=loader/%s", schemaFile);
+cmd1[2] = dyStringCannibalize(&ds);
+
+int index = 7;
+ds = newDyString(0);
+dyStringPrintf(ds, "-tmpDir=%s", tmpDir);
+cmd1[index++] = dyStringCannibalize(&ds); 
+
+ds = newDyString(0);
+dyStringPrintf(ds, "-maxChromNameLength=%d", track->maxChromName);
+cmd1[index++] = dyStringCannibalize(&ds);
+
+cmd1[index++] = CUSTOM_TRASH;
+cmd1[index++] = track->dbTableName;
+cmd1[index++] = "stdin";
+assert(index <= ArraySize(cmd1));
+
+/* the "/dev/null" file isn't actually used for anything, but it is used
+ * in the pipeLineOpen to properly get a pipe started that isn't simply
+ * to STDOUT which is what a NULL would do here instead of this name.
+ *	This function exits if it can't get the pipe created
+ *	The dbStderrFile will get stderr messages from hgLoadBed into the
+ *	our private error log so we can send it back to the user
+ */
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort, "/dev/null", track->dbStderrFile);
+}
+
+static struct customTrack *barChartFinish(struct customTrack *track, struct barChartBed *itemList)
+/* Finish up barChart tracks. TODO: reuse from pgSnp*/
+{
+struct barChartBed *item;
+char buf[50];
+track->tdb->type = cloneString("barChart");
+track->dbTrackType = cloneString("barChart");
+safef(buf, sizeof(buf), "%d", track->fieldCount);
+ctAddToSettings(track, "fieldCount", cloneString(buf));
+safef(buf, sizeof(buf), "%d", slCount(itemList));
+ctAddToSettings(track, "itemCount", cloneString(buf));
+safef(buf, sizeof(buf), "%s:%u-%u", itemList->chrom,
+                itemList->chromStart, itemList->chromEnd);
+ctAddToSettings(track, "firstItemPos", cloneString(buf));
+
+/* If necessary add track offsets. */
+int offset = track->offset;
+if (offset != 0)
+    {
+    /* Add track offsets if any */
+    for (item = itemList; item != NULL; item = item->next)
+        {
+        item->chromStart += offset;
+        item->chromEnd += offset;
+        }
+    track->offset = 0;  /*      so DB load later won't do this again */
+    hashMayRemove(track->tdb->settingsHash, "offset"); /* nor the file reader*/
+    }
+
+/* If necessary load database */
+customFactorySetupDbTrack(track);
+struct pipeline *dataPipe = barChartLoaderPipe(track);
+FILE *out = pipelineFile(dataPipe);
+for (item = itemList; item != NULL; item = item->next)
+    barChartBedOutput(item, out, '\t', '\n');
+fflush(out);            /* help see error from loader failure */
+if(ferror(out) || pipelineWait(dataPipe))
+    pipelineFailExit(track);    /* prints error and exits */
+unlink(track->dbStderrFile);    /* no errors, not used */
+pipelineFree(&dataPipe);
+return track;
+}
+
+static struct customTrack *barChartLoader(struct customFactory *fac,
+        struct hash *chromHash,
+        struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up barChart data until next track line. */
+{
+char *line;
+char *db = ctGenomeOrCurrent(track);
+struct barChartBed *itemList = NULL;
+if (!dbRequested)
+    errAbort("barChart custom track type unavailable without custom trash database. Please set that up in your hg.conf");
+while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
+    {
+    char *row[BARCHARTBED_NUM_COLS];
+    int wordCount = chopLine(line, row);
+    struct lineFile *lf = cpp->fileStack;
+    lineFileExpectAtLeast(lf, track->fieldCount, wordCount);
+    struct barChartBed *item = customTrackBarChart(db, row, chromHash, lf);
+    slAddHead(&itemList, item);
+    }
+slReverse(&itemList);
+return barChartFinish(track, itemList);
+}
+
+struct customFactory barChartFactory =
+/* Factory for barChart tracks */
+    {
+    NULL,
+    "barChart",
+    barChartRecognizer,
+    barChartLoader,
+    };
+
 /*** GFF/GTF Factory - converts to BED ***/
 
 static boolean rowIsGff(char *db, char **row, int wordCount)
@@ -2109,22 +2294,6 @@ static struct customFactory bigWigFactory =
     bigWigLoader,
     };
 
-static boolean barChartRecognizer(struct customFactory *fac,
-        struct customPp *cpp, char *type,
-        struct customTrack *track)
-/* Return TRUE if looks like we're handling a barChart track */
-{
-return sameOk(type, fac->name);
-}
-
-struct customFactory barChartFactory =
-/* Factory for barChart tracks */
-    {
-    NULL,
-    "barChart",
-    barChartRecognizer,
-    bedLoader,
-    };
 
 /*** Big Bed Factory - for big client-side BED tracks ***/
 
@@ -2818,6 +2987,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &vcfTabixFactory);
     slAddTail(&factoryList, &makeItemsFactory);
     slAddTail(&factoryList, &bigDataOopsFactory);
+    slAddTail(&factoryList, &barChartFactory);
     slAddTail(&factoryList, &bigBarChartFactory);
     }
 }

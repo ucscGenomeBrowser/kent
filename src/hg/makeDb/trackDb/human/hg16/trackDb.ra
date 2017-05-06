@@ -1165,7 +1165,7 @@ track ecoresFr1
 shortLabel Fugu Ecores
 longLabel Human/Fugu (Aug. 2002/fr1) Evolutionary Conserved Regions
 group compGeno
-priority 11
+priority 620.3
 visibility hide
 color 0,60,120
 altColor 200,220,255
@@ -1175,7 +1175,7 @@ track ecoresTetraodon
 shortLabel Tetraodon Ecores
 longLabel Human/Tetraodon Evolutionary Conserved Regions
 group compGeno
-priority 12
+priority 621
 visibility hide
 color 0,60,120
 altColor 200,220,255

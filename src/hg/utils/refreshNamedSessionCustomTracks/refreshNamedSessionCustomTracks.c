@@ -226,10 +226,10 @@ while (isNotEmpty(namePt))
     dyStringClear(oneSetting);
     dyStringPrintf(oneSetting, "%s=%s%s",
 		   namePt, dataPt, (nextNamePt ? "&" : ""));
+    cgiDecode(dataPt, dataPt, strlen(dataPt));
     if (startsWith(CT_FILE_VAR_PREFIX, namePt))
 	{
 	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
-	cgiDecode(dataPt, dataPt, strlen(dataPt));
 	verbose(3, "Found variable %s = %s\n", namePt, dataPt);
 	/* If the file does not exist, omit this setting from newContents so 
 	 * it doesn't get copied from session to session.  If it does exist,

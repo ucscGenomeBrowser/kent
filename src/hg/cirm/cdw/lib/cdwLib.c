@@ -2382,8 +2382,8 @@ static struct dyString *getLoginBits(struct cart *cart)
 char *command = cartUsualString(cart, "cdwCommand", "home");
 char *sidString = cartSidUrlString(cart);
 char returnUrl[PATH_LEN*2];
-safef(returnUrl, sizeof(returnUrl), "http%s://%s/cgi-bin/cdwWebBrowse?cdwCommand=%s&%s",
-    cgiAppendSForHttps(), cgiServerNamePort(), command, sidString );
+safef(returnUrl, sizeof(returnUrl), "/cgi-bin/cdwWebBrowse?cdwCommand=%s&%s",
+    command, sidString );
 char *encodedReturn = cgiEncode(returnUrl);
 
 /* Write a little html into loginBits */
