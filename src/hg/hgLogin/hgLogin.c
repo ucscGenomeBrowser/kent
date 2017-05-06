@@ -304,12 +304,12 @@ char *cgiDir = cgiScriptDirUrl();
 char returnTo[2048];
 
 boolean relativeLink = cfgOptionBooleanDefault("login.relativeLink", FALSE);
-// reverse proxies and all-https sites have no need for absolute links
-if (relativeLink)
-    safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", cgiDir);
-else if (!returnURL || sameString(returnURL,""))
-   safef(returnTo, sizeof(returnTo),
-        "http%s://%s%shgSession?hgS_doMainPage=1",
+if (!returnURL || sameString(returnURL,""))
+    if (relativeLink)
+        // reverse proxies and all-https sites have no need for absolute links
+       safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", cgiDir);
+   else 
+       safef(returnTo, sizeof(returnTo), "http%s://%s%shgSession?hgS_doMainPage=1",
         cgiAppendSForHttps(), hgLoginHost, cgiDir);
 else
    safecpy(returnTo, sizeof(returnTo), returnURL);
