@@ -3727,8 +3727,11 @@ if (bigDataUrl != NULL)
         }
     }
 else
+    {
     // we now allow references to native tracks in track hubs
-    return (hTableForTrack(database, trackHubSkipHubName(tdb->table)) != NULL);
+    tdb->table = trackHubSkipHubName(tdb->table);
+    return (hTableForTrack(database, tdb->table) != NULL);
+    }
 }
 
 static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,

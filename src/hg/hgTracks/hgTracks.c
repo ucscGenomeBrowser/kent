@@ -4558,11 +4558,11 @@ if (subtrack == NULL)
     return FALSE;
 
 multiWigContainerMethods(track);
-struct wigCartOptions *wigCart = wigCartOptionsNew(cart, track->tdb, 0, NULL);
-track->wigCartData = (void *) wigCart;
+//struct wigCartOptions *wigCart = wigCartOptionsNew(cart, track->tdb, 0, NULL);
+//track->wigCartData = (void *) wigCart;
 //track->lineHeight = wigCart->defaultHeight;
-wigCart->isMultiWig = TRUE;
-wigCart->autoScale = wiggleScaleAuto;
+//wigCart->isMultiWig = TRUE;
+//wigCart->autoScale = wiggleScaleAuto;
 //wigCart->defaultHeight = track->lineHeight;
 //struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, wigCart, hvg);
 //tg->wigGraphOutput = wgo;

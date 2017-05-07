@@ -168,7 +168,6 @@ if (hubName != NULL)
 
     for(tdb = tdbList; tdb; tdb = tdbNext)
         {
-        printf("adding %s\n", tdb->track);
         hashAdd(nameHash, tdb->track, tdb);
         tdbNext = tdb->next;
         trackDbFieldsFromSettings(tdb);
@@ -247,9 +246,10 @@ shortLabel %s\n\
 compositeTrack on\n\
 aggregate none\n\
 longLabel %s\n\
+%s on\n\
 #container multiWig\n\
 type wig \n\
-visibility full\n\n", parent, shortLabel, longLabel);
+visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING);
 }
 
 static struct trackDb *findTrack(char *name, struct trackDb *fullTrackList)
@@ -287,8 +287,7 @@ char *hubName = cartOptionalString(cart, buffer);
 
 if (hubName == NULL)
     {
-    //trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
-    trashDirDateFile(&hubTn, "brTest", "hub", ".txt");
+    trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
     hubName = cloneString(hubTn.forCgi);
     cartSetString(cart, buffer, hubName);
     FILE *f = mustOpen(hubName, "a");
@@ -707,7 +706,6 @@ char *makeUnique(struct hash *nameHash, struct trackDb *tdb)
 {
 if (hashLookup(nameHash, tdb->track) == NULL)
     {
-    printf("adding %s\n", tdb->track);
     hashAdd(nameHash, tdb->track, tdb);
     return tdb->track;
     }
@@ -720,7 +718,6 @@ for(;; count++)
     safef(buffer, sizeof buffer, "%s%d", tdb->track, count);
     if (hashLookup(nameHash, buffer) == NULL)
         {
-        printf("adding %s\n", buffer);
         hashAdd(nameHash, buffer, tdb);
         return cloneString(buffer);
         }
@@ -777,7 +774,6 @@ struct composite *compositeList = getCompositeList(database, hubName, nameHash);
 
 struct composite *currentComposite = NULL;
 char *currentCompositeName = cartOptionalString(cart, hgsCurrentComposite);
-printf("currentcomposite name %s\n", currentCompositeName);
 
 if (currentCompositeName != NULL)
     {

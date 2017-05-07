@@ -2,11 +2,9 @@
 #define CUSTOMCOMPOSITE_H
 
 #define customCompositeCartName     "customComposite"
+#define CUSTOM_COMPOSITE_SETTING    "customComposite"
 
-INLINE boolean isCustomComposite(struct trackDb *tdb)
+boolean isCustomComposite(struct trackDb *tdb);
 /* Is this track part of a custom composite. */
-{
-return FALSE;
-}
 
 #endif
