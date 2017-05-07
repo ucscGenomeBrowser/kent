@@ -596,8 +596,8 @@ void wiggleGridDropDown(char *var, char *curVal);
 #define WIG_AGGREGATE_TRANSPARENT "transparentOverlay"
 #define WIG_AGGREGATE_SOLID "solidOverlay"
 #define WIG_AGGREGATE_STACKED "stacked"
-#define WIG_AGGREGATE_SUBSTRACT "subtract"
 #define WIG_AGGREGATE_ADD "add"
+#define WIG_AGGREGATE_SUBTRACT "subtract"
 
 /*	Wiggle track aggregate option	*/
 enum wiggleAggregateFunctionEnum {
@@ -605,8 +605,8 @@ enum wiggleAggregateFunctionEnum {
    wiggleAggregateTransparent = 1,
    wiggleAggregateSolid = 2,
    wiggleAggregateStacked = 3,
-   wiggleAggregateSubtract = 4,
-   wiggleAggregateAdd = 5,
+   wiggleAggregateAdd = 4,
+   wiggleAggregateSubtract = 5,
 };
 
 char *wiggleAggregateFunctionEnumToString(enum wiggleAggregateFunctionEnum x);
