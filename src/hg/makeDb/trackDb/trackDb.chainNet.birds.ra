@@ -61,7 +61,6 @@ html chainNet
 # aquChr2 - Golden eagle - Aquila chrysaetos canadensis - vertebrate - aves - taxId: 216574
 ################################################################
 track chainNetAquChr2
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -84,7 +83,6 @@ spectrum on
 html chainNet
 
     track chainNetAquChr2Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -92,7 +90,6 @@ html chainNet
     spectrum on
 
         track chainAquChr2
-        release alpha
         parent chainNetAquChr2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -101,14 +98,12 @@ html chainNet
         html chainNet
 
     track chainNetAquChr2Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetAquChr2
 
         track netAquChr2
-        release alpha
         parent chainNetAquChr2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net

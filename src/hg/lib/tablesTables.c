@@ -50,6 +50,14 @@ printf("<BR>\n");
 printf("You can further filter search results field by field below. ");    
 printf("Wildcard * and ? characters are allowed in text fields. ");
 printf("&GT;min or &LT;max are allowed in numerical fields.<BR>\n");
+printf("<a id='resetLink' href='#' >Reset all filters</a>\n");
+jsInlineF(
+"$(function() {\n"
+"  $('#resetLink').click( function() { "
+"     $(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
+"     $('#submit').click();\n"
+"  });"
+"});\n");
 }
 
 static void printSuggestScript(char *id, struct slName *suggestList)
