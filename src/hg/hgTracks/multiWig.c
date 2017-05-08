@@ -404,7 +404,7 @@ static void mergeWiggles(struct track *tg, boolean add)
 struct preDrawContainer *firstPre = tg->preDrawContainer;
 
 struct track *firstTrack = tg;
-struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->wigCartData;
+//struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->wigCartData;
 int ii;
 
 for(tg = tg->next; tg; tg = tg->next)
@@ -421,7 +421,7 @@ for(tg = tg->next; tg; tg = tg->next)
             firstPreDraw->smooth -= thisPreDraw->smooth;
         }
     }
-if (wigCart->autoScale == wiggleScaleAuto)
+//if (wigCart->autoScale == wiggleScaleAuto)
     {
     double upperLimit = wigEncodeStartingUpperLimit;
     double lowerLimit = wigEncodeStartingLowerLimit;
