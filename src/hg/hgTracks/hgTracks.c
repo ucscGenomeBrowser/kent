@@ -8316,6 +8316,15 @@ if (!hideControls)
             hPrintf("</td><td style='text-align:right;'>\n");
             if (isHubTrack(group->name))
 		{
+                if (strstr(group->label, "Composite"))
+                    {
+                    safef(idText, sizeof idText, "%s_edit", group->name);
+                    hPrintf("<input name=\"hubEditButton\" id='%s'"
+                        " type=\"button\" value=\"edit\">\n", idText);
+                    jsOnEventByIdF("click", idText,
+                        "document.editHubForm.submit();return true;");
+                    }
+
 		safef(idText, sizeof idText, "%s_disconn", group->name);
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
                     " type=\"button\" value=\"disconnect\">\n", idText);
@@ -8442,6 +8451,11 @@ hPrintf("</FORM>\n");
 
 /* hidden form for custom tracks CGI */
 hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
+cartSaveSession(cart);
+hPrintf("</FORM>\n");
+
+/* hidden form for composite builder CGI */
+hPrintf("<FORM ACTION='%s' NAME='editHubForm'>", hgCompositeName());
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 

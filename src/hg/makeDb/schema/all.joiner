@@ -3495,11 +3495,13 @@ identifier chainSelfNonSplit
     $gbd.chainSelf.id
     $gbd.chainSelfLink.chainId full
 
+
 identifier chain[${chainDest}]Id
 "Link together chain info"
     $gbd.chain[].id $split
     $gbd.chain[].id
     $gbd.chain[]Link.chainId $split full
+    $gbd.chain[]Link.chainId full
     $gbd.net[].chainId exclude=0
     $gbd.netRxBest[].chainId exclude=0
     $gbd.net[]NonGap.chainId exclude=0

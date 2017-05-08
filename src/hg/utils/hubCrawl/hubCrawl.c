@@ -86,15 +86,18 @@ fprintf(searchFp, "%s\t%s\t%s\n",hub->url, hub->shortLabel, hub->longLabel);
 if (hub->descriptionUrl != NULL)
     {
     char *html = netReadTextFileIfExists(hub->descriptionUrl);
-    char *stripHtml =htmlTextStripTags(html);
-    strSwapChar(stripHtml, '\n', ' ');
-    strSwapChar(stripHtml, '\t', ' ');
-    strSwapChar(stripHtml, '\015', ' ');
-    strSwapChar(stripHtml, ')', ' ');
-    strSwapChar(stripHtml, '(', ' ');
-    strSwapChar(stripHtml, '[', ' ');
-    strSwapChar(stripHtml, ']', ' ');
-    fprintf(searchFp, "%s\t%s\n",hub->url,  stripHtml);
+    if (html != NULL)
+        {
+        char *stripHtml =htmlTextStripTags(html);
+        strSwapChar(stripHtml, '\n', ' ');
+        strSwapChar(stripHtml, '\t', ' ');
+        strSwapChar(stripHtml, '\015', ' ');
+        strSwapChar(stripHtml, ')', ' ');
+        strSwapChar(stripHtml, '(', ' ');
+        strSwapChar(stripHtml, '[', ' ');
+        strSwapChar(stripHtml, ']', ' ');
+        fprintf(searchFp, "%s\t%s\n",hub->url,  stripHtml);
+        }
     }
 
 trackHubClose(&hub);
