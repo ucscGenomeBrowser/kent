@@ -239,8 +239,8 @@ fprintf(f, "\n");
 static void outComposite(FILE *f, struct composite *composite)
 {
 char *parent = composite->name;
-char *shortLabel = composite->name;
-char *longLabel = composite->name;
+char *shortLabel = composite->shortLabel;
+char *longLabel = composite->longLabel;
 fprintf(f,"track %s\n\
 shortLabel %s\n\
 compositeTrack on\n\
@@ -450,7 +450,8 @@ static void printCompositeList(struct composite *compositeList, struct composite
 if (compositeList == NULL)
     return;
 
-printf("<H4>My Composites</H4>\n");
+printf("<div class='sectionLiteHeader noReorderRemove'>"
+       "My Composites</div>\n");
 
 int count = slCount(compositeList);
 char *labels[count];
@@ -481,10 +482,11 @@ printf("<BR>");
 printf("<H3>Make New Composite</H3>");
 printf("name ");
 cgiMakeTextVar(hgsNewCompositeName, "", 29);
-printf("short label ");
+printf("<BR>short label ");
 cgiMakeTextVar(hgsNewCompositeShortLabel, "", 29);
-printf("long label ");
+printf("<BR>long label ");
 cgiMakeTextVar(hgsNewCompositeLongLabel, "", 29);
+printf("<BR>");
 hOnClickButton("selVar_MakeNewComposite", 
                     "var e = document.getElementById('"hgsNewCompositeName"'); \
                     document.makeNewCompositeForm.elements['"hgsNewCompositeName"'].value = e.value; \
@@ -526,7 +528,7 @@ return  (tdb->subtracks == NULL) && !startsWith("wigMaf",tdb->type) &&  (startsW
 
 static void availableTracks(char *db, struct grp *groupList, struct trackDb *fullTrackList)
 {
-printf("<H4>Available tracks in %s</H4>", db);
+printf("<H4>Add tracks from %s</H4>", db);
 
 char *curGroupName = cartOptionalString(cart, hgsCurrentGroup);
 printf("<BR>groups: ");
@@ -622,6 +624,8 @@ addSomeCss();
 printAssemblySection();
 
 puts("<BR>");
+printf("<div class='sectionLiteHeader noReorderRemove'>"
+       "Add Hubs and Custom Tracks </div>\n");
 printCtAndHubButtons();
 
 //struct hashEl *hel = cartFindPrefix(cart, hgCompEditPrefix);
@@ -631,11 +635,11 @@ printCtAndHubButtons();
   ///  printEditComposite();
     }
 
-printf("</FORMk");
+printf("</FORM>");
 puts("<BR>");
-makeAddComposite();
 puts("<BR>");
 printCompositeList(compositeList, currentComposite);
+makeAddComposite();
 puts("<BR>");
 printTrackList(currentComposite);
 puts("<BR>");

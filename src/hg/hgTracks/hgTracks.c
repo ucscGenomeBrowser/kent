@@ -455,6 +455,38 @@ return (theImgBox && !trackImgOnly && trackUsesRemoteData(track));
 }
 #endif///def REMOTE_TRACK_AJAX_CALLBACK
 
+static boolean isCompositeInAggregate(struct track *track)
+// Check to see if this is a custom composite in aggregate mode.
+{
+if (!isCustomComposite(track->tdb))
+    return FALSE;
+
+char *aggregateVal = cartOrTdbString(cart, track->tdb, "aggregate", NULL);
+if ((aggregateVal == NULL) || sameString(aggregateVal, "none"))
+    return FALSE;
+
+struct track *subtrack = NULL;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (isSubtrackVisible(subtrack))
+        break;
+    }
+if (subtrack == NULL)
+    return FALSE;
+
+multiWigContainerMethods(track);
+//struct wigCartOptions *wigCart = wigCartOptionsNew(cart, track->tdb, 0, NULL);
+//track->wigCartData = (void *) wigCart;
+//track->lineHeight = wigCart->defaultHeight;
+//wigCart->isMultiWig = TRUE;
+//wigCart->autoScale = wiggleScaleAuto;
+//wigCart->defaultHeight = track->lineHeight;
+//struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, wigCart, hvg);
+//tg->wigGraphOutput = wgo;
+
+return TRUE;
+}
+
 static int trackPlusLabelHeight(struct track *track, int fontHeight)
 /* Return the sum of heights of items in this track (or subtrack as it may be)
  * and the center label(s) above the items (if any). */
@@ -465,7 +497,7 @@ if (trackShouldUseAjaxRetrieval(track))
 int y = track->totalHeight(track, limitVisibility(track));
 if (isCenterLabelIncluded(track))
     y += fontHeight;
-if (tdbIsComposite(track->tdb))
+if (tdbIsComposite(track->tdb) && !isCompositeInAggregate(track))
     {
     struct track *subtrack;
     for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
@@ -4538,37 +4570,6 @@ setGlobalsFromWindow(windows); // first window
 flatTrack->maxHeight = maxHeight;
 }
 
-static boolean isCompositeInAggregate(struct track *track)
-// Check to see if this is a custom composite in aggregate mode.
-{
-if (!isCustomComposite(track->tdb))
-    return FALSE;
-
-char *aggregateVal = cartOrTdbString(cart, track->tdb, "aggregate", NULL);
-if ((aggregateVal == NULL) || sameString(aggregateVal, "none"))
-    return FALSE;
-
-struct track *subtrack = NULL;
-for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    {
-    if (isSubtrackVisible(subtrack))
-        break;
-    }
-if (subtrack == NULL)
-    return FALSE;
-
-multiWigContainerMethods(track);
-//struct wigCartOptions *wigCart = wigCartOptionsNew(cart, track->tdb, 0, NULL);
-//track->wigCartData = (void *) wigCart;
-//track->lineHeight = wigCart->defaultHeight;
-//wigCart->isMultiWig = TRUE;
-//wigCart->autoScale = wiggleScaleAuto;
-//wigCart->defaultHeight = track->lineHeight;
-//struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, wigCart, hvg);
-//tg->wigGraphOutput = wgo;
-
-return TRUE;
-}
 
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
