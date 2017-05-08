@@ -1,4 +1,5 @@
 track chainNetGalGal5 override
+visibility dense
 priority 210.3
 chainLinearGap loose
 chainMinScore 5000

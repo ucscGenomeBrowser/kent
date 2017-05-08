@@ -915,8 +915,10 @@ freeMem(noncePolicy);
 dyStringAppend(policy, " code.jquery.com");          // used by hgIntegrator jsHelper and others
 dyStringAppend(policy, " www.google-analytics.com"); // used by google analytics
 // cirm cdw lib and web browse
-dyStringAppend(policy, " cpettitt.github.io/project/dagre-d3/latest/dagre-d3.js");
+dyStringAppend(policy, " www.samsarin.com/project/dagre-d3/latest/dagre-d3.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js");
+dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js");
+dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js");
 dyStringAppend(policy, " login.persona.org/include.js");
 // expMatrix
 dyStringAppend(policy, " ajax.googleapis.com/ajax");

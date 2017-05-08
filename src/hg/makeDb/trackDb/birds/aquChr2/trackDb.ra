@@ -8,6 +8,9 @@ html gold
 track gap override
 html gap
 
+track genscan override
+visibility pack
+
 searchTable gold
 shortCircuit 1
 termRegex JRUM010[0-9]+(\.1)?
