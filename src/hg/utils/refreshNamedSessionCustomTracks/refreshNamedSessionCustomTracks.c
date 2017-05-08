@@ -226,9 +226,9 @@ while (isNotEmpty(namePt))
     dyStringClear(oneSetting);
     dyStringPrintf(oneSetting, "%s=%s%s",
 		   namePt, dataPt, (nextNamePt ? "&" : ""));
-    cgiDecode(dataPt, dataPt, strlen(dataPt));
     if (startsWith(CT_FILE_VAR_PREFIX, namePt))
 	{
+	cgiDecode(dataPt, dataPt, strlen(dataPt));
 	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
 	verbose(3, "Found variable %s = %s\n", namePt, dataPt);
 	/* If the file does not exist, omit this setting from newContents so 
@@ -276,6 +276,7 @@ while (isNotEmpty(namePt))
     else if (sameString(namePt, "multiRegionsBedUrl"))
 	{
 	// touch corresponding multi-region custom regions .bed and .sha1 files to save them from trash cleaner.
+	cgiDecode(dataPt, dataPt, strlen(dataPt));
 	boolean mrBedUrlExpired = FALSE;
 	char multiRegionsBedUrlSha1Name[1024];
 	safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", dataPt);
