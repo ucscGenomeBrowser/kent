@@ -4,17 +4,17 @@ track chainNetPanTro1 override
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetPonAbe2 override
-priority 24
+priority 230.3
 chainMinScore 3000
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetRheMac2 override
-priority 28
+priority 240.3
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetCalJac1 override
 shortLabel $o_Organism Chain/Net
-priority 20
+priority 250.3
 chainMinScore 3000
 
 	track chainCalJac1 override
@@ -42,7 +42,7 @@ shortLabel $o_db Chain/Net
     shortLabel $o_db Net
 
 track chainNetRn4 override
-priority 27
+priority 330.3
 chainMinScore 1000
 
 track chainNetGalGal2 override
@@ -67,70 +67,70 @@ shortLabel $o_db Chain/Net
     shortLabel $o_db Net
 
 track chainNetOrnAna1 override
-priority 26
+priority 540.3
 chainMinScore 1000
 
 track chainNetGasAcu1 override
-priority 30
+priority 600.3
 chainMinScore 2000
 
 track chainNetFr2 override
-priority 14
+priority 620.3
 chainMinScore 2000
 
 track chainNetBosTau4 override
-priority 7
+priority 440.3
 
 track chainNetFelCat3 override
-priority 8
+priority 420.3
 
 track chainNetGalGal3 override
-priority 9
+priority 560.3
 
 track chainNetPanTro2 override
-priority 10
+priority 210.3
 
 track chainNetCanFam2 override
-priority 12
+priority 410.3
 
 track chainNetCavPor3 override
-priority 15
+priority 320.3
 
 track chainNetEquCab1 override
-priority 16
+priority 430.3
 
 track chainNetPetMar1 override
-priority 17
+priority 640.3
 
 track chainNetBraFlo1 override
-priority 18
+priority 650.3
 
 track chainNetAnoCar1 override
-priority 19
+priority 550.3
 
 track chainNetOryLat2 override
-priority 21
+priority 610.3
 
 track chainNetMm9 override
-priority 22
+priority 340.3
 
 track chainNetMonDom4 override
-priority 23
+priority 530.3
 
 track chainNetStrPur2 override
-priority 29
+priority 660.3
 
 track chainNetEchTel1 override
-priority 31
+priority 490.3
 
 track chainNetTetNig1 override
-priority 32
+priority 630.3
 
 track chainNetXenTro2 override
-priority 34
+priority 580.1
 
 track chainNetTaeGut1 override
-priority 35
+priority 570.3
 
 track chainNetDanRer5 override
-priority 36
+priority 590.3

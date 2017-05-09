@@ -728,6 +728,66 @@ are described below along with the settings specific to their types.</P>
 </TABLE>
 <BR><BR>
 
+<a name="bigBarChart"></a>
+<style>
+.dot {
+    display: inline-block; 
+    height: 10px; 
+    width: 10px; 
+    margin-right: 2px;
+    border-radius: 50%;
+}
+</style>
+<table class="settingsTable" id="bigBarChart">
+<thead><tr><td><div ID="bigBarChart_intro" class="intro"></div></td></tr></thead>
+<tr valign=top><th><img class='toggle oneSection'>
+    &nbsp;bigBarChart - Bar chart display of categorical variables over genomic regions
+</th></tr>
+<tr valign=top><td class="bigBarChart"><img class='toggle detail'>
+    <div class="format"> <code>type bigBarChart</code></div>
+</td></tr>
+<tr valign=top><td class="barChartBars"><a name="barChartBars"></a><img class='toggle detail'>
+    <div class="format"> <code class="level-required">barChartBars &lt;label1 label2...&gt;</code></div>
+</td></tr>
+<tr valign=top><td class="bigDataUrl"><img class='toggle detail'>
+    <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code>
+    </div>
+</td></tr>
+<tr valign=top><td class="barChartColors"><a name="barChartColors"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">barChartColors &lt;color1 color2...&gt;</code>
+    </div>
+<tr valign=top><td class="barChartLabel"><a name="barChartLabel"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">barChartLabel &lt;label&gt;</code>
+    </div>
+<tr valign=top><td class="barChartMetric"><a name="barChartMetric"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">barChartMetric &lt;metric&gt;</code>
+    </div>
+<tr valign=top><td class="barChartUnit"><a name="barChartUnit"></a> <img class='toggle detail'>
+    <div class="format"> <code class="level-full">barChartUnit &lt;unit&gt;</code>
+    </div>
+<tr valign=top><td class="barChartMatrixUrl"><a name="barChartMatrixUrl"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-full">barChartMatrixUrl &lt;url/relativePath&gt;</code>
+    </div>
+<tr valign=top><td class="barChartSampleUrl"><a name="barChartSampleUrl"></a>
+        <img class='toggle detail'>
+    <div class="format"><code class="level-full">barChartSampleUrl &lt;url/relativePath&gt;</code>
+    </div>
+<tr valign=top><td class="maxLimit"><img class='toggle detail'>
+    <div class="format"><code class="level-full">maxLimit &lt;maximum-bar-value&gt;</code>
+    </div>
+<tr valign=top><td>
+        <p>Additional settings defined in other sections are also
+        available for displaying bigBarChart tracks.</p>
+        <a onclick="return jumpTo(this);" HREF="#">labelFields</a>,
+        <a onclick="return jumpTo(this);" HREF="#">defaultLabelFields</a>
+</td></tr>
+<tr class="examples" valign=top><td class="bigBarChart_example"><img class='toggle detail'>
+    <div class="format"><b>Example of a bigBarChart track</b></div>
+</td></tr>
+</table>
+<br><br>
+
 <A name="pgSnp"></A>
 <TABLE class="settingsTable" id="pgSnp_-_Personal_Genome_SNP_Track_Settings">
 <THEAD><TR><TD><DIV ID="pgSnp_intro" class="intro"></DIV></TD></TR></THEAD>

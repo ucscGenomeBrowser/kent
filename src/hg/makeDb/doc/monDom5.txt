@@ -2347,30 +2347,37 @@ TMPDIR=/dev/shm
     time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
         -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1 &
-    #	Elapsed time: 1329m50s
+    #	real    915m25.257s
+
     # ku difficulties due to /dev/shm/ being full, continuing:
     time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
         -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
        -continue=cat -chainMinScore=5000 -chainLinearGap=loose) > cat.log 2>&1 &
-XXX - running - Thu Apr  6 20:13:39 PDT 2017
+    #  real    102m42.257s
+
 
     cat fb.monDom5.chainXenTro9Link.txt
-    #	75079446 bases of 3501660299 (2.144%) in intersection
+    #	77656334 bases of 3501660299 (2.218%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` monDom5 xenTro9) \
+           > rbest.log 2>&1 &
+    #  real    869m58.025s
 
     # and the swap
     mkdir /hive/data/genomes/xenTro9/bed/blastz.monDom5.swap
     cd /hive/data/genomes/xenTro9/bed/blastz.monDom5.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    time (doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/monDom5/bed/lastzXenTro9.2017-04-05/DEF \
         -swap -syntenicNet \
-        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #	real    66m38.348s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    #	real    63m13.594s
 
     cat fb.xenTro9.chainMonDom5Link.txt
-    #	74593612 bases of 1358334882 (5.492%) in intersection
+    #	74164292 bases of 1369865365 (5.414%) in intersection
 
-    cd /hive/data/genomes/xenTro9/bed
-    ln -s blastz.monDom5.swap lastz.monDom5
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 monDom5) \
+           > rbest.log 2>&1 &
+    #	real    798m41.569s
 
 ############################################################################

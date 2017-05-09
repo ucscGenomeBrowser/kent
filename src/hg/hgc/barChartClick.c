@@ -47,7 +47,8 @@ return categoryHash;
 }
 
 static struct barChartBed *getBarChartFromFile(struct trackDb *tdb, char *file, 
-                                                char *item, char *chrom, int start, int end)
+                                                char *item, char *chrom, int start, int end, 
+                                                struct asObject **retAs)
 /* Retrieve barChart BED item from big file */
 {
 struct sqlConnection *conn = hAllocConnTrack(database, tdb);
@@ -56,6 +57,8 @@ boolean hasOffsets = TRUE;
 if (conn != NULL)
     {
     as = asForTdb(conn, tdb);
+    if (retAs != NULL)
+        *retAs = as;
     hasOffsets = (
         asColumnFind(as, BARCHART_OFFSET_COLUMN) != NULL && 
         asColumnFind(as, BARCHART_LEN_COLUMN) != NULL);
@@ -70,6 +73,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     char *row[32];
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, ArraySize(row));
     struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
+    if (barChart == NULL)
+        continue;
     if (sameString(barChart->name, item))
         return barChart;
     }
@@ -80,13 +85,25 @@ static struct barChartBed *getBarChartFromTable(struct trackDb *tdb, char *table
                                                 char *item, char *chrom, int start, int end)
 /* Retrieve barChart BED item from track table */
 {
+struct sqlConnection *conn = NULL;
+struct customTrack *ct = lookupCt(tdb->track);
+if (ct == NULL)
+    conn = hAllocConnTrack(database, tdb);
+else
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    }
+if (conn == NULL)
+    return NULL;
 struct barChartBed *barChart = NULL;
-struct sqlConnection *conn = hAllocConn(database);
 char **row;
 char query[512];
 struct sqlResult *sr;
 if (sqlTableExists(conn, table))
     {
+    boolean hasOffsets = (sqlColumnExists(conn, table, BARCHART_OFFSET_COLUMN) &&
+                         sqlColumnExists(conn, table, BARCHART_LEN_COLUMN));
     sqlSafef(query, sizeof query, 
                 "SELECT * FROM %s WHERE name='%s'"
                     "AND chrom='%s' AND chromStart=%d AND chromEnd=%d", 
@@ -95,7 +112,7 @@ if (sqlTableExists(conn, table))
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-        barChart = barChartBedLoadOptionalOffsets(row, FALSE);
+        barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
         }
     sqlFreeResult(&sr);
     }
@@ -103,27 +120,27 @@ hFreeConn(&conn);
 return barChart;
 }
 
-static struct barChartBed *getBarChart(struct trackDb *tdb, char *item, char *chrom, int start, int end)
+static struct barChartBed *getBarChart(struct trackDb *tdb, char *item, char *chrom, int start, int end,
+                                        struct asObject **retAs)
 /* Retrieve barChart BED item from track */
 {
 struct barChartBed *barChart = NULL;
 char *file = trackDbSetting(tdb, "bigDataUrl");
 if (file != NULL)
-    barChart = getBarChartFromFile(tdb, file, item, chrom, start, end);
+    barChart = getBarChartFromFile(tdb, file, item, chrom, start, end, retAs);
 else
     barChart = getBarChartFromTable(tdb, tdb->table, item, chrom, start, end);
 return barChart;
 }
 
 static struct barChartItemData *getSampleValsFromFile(struct trackDb *tdb, 
-                                                        struct hash *categoryHash,
-                                                        struct barChartBed *bed)
+                        struct hash *categoryHash, struct barChartBed *bed, 
+                        char *dataFile, char *sampleFile)
 /* Get all data values in a file for this item (locus) */
 {
 // Get sample categories from sample file
 // Format: id, category, extras
-char *url = trackDbSetting(tdb, "barChartSampleUrl");
-struct lineFile *lf = udcWrapShortLineFile(url, NULL, 0);
+struct lineFile *lf = udcWrapShortLineFile(sampleFile, NULL, 0);
 struct hash *sampleHash = hashNew(0);
 char *words[2];
 int sampleCt = 0;
@@ -135,8 +152,7 @@ while (lineFileChopNext(lf, words, sizeof words))
 lineFileClose(&lf);
 
 // Open matrix file
-url = trackDbSetting(tdb, "barChartDataUrl");
-struct udcFile *f = udcFileOpen(url, NULL);
+struct udcFile *f = udcFileOpen(dataFile, NULL);
 
 // Get header line with sample ids
 char *header = udcReadLine(f);
@@ -165,7 +181,7 @@ udcFileClose(&f);
 // Construct list of sample data with category
 struct barChartItemData *sampleVals = NULL, *data = NULL;
 int i;
-for (i=1; i<wordCt; i++)
+for (i=1; i<wordCt && samples[i] != NULL; i++)
     {
     char *sample = samples[i];
     char *categ = (char *)hashFindVal(sampleHash, sample);
@@ -248,14 +264,28 @@ for (val = vals; val != NULL; val = val->next)
 return sampleVals;
 }
 
-static struct barChartItemData *getSampleVals(struct trackDb *tdb, struct barChartBed *chartItem)
+static struct barChartItemData *getSampleVals(struct trackDb *tdb, struct barChartBed *chartItem,
+                                                char **retMatrixUrl, char **retSampleUrl)
 /* Get data values for this item (locus) from all samples */
 {
 struct barChartItemData *vals = NULL;
-char *file = trackDbSetting(tdb, "barChartDataUrl");
+char *dataFile = trackDbSetting(tdb, "barChartMatrixUrl");
+// for backwards compatibility during qa review
+if (dataFile == NULL)
+    dataFile = trackDbSetting(tdb, "barChartDataUrl");
+// for backwards compatibility during qa review
 struct hash *categoryHash = getTrackCategories(tdb);
-if (file != NULL)
-    vals = getSampleValsFromFile(tdb, categoryHash, chartItem);
+if (dataFile != NULL)
+    {
+    char *sampleFile = trackDbSetting(tdb, "barChartSampleUrl");
+    if (sampleFile == NULL)
+        return NULL;
+    if (retMatrixUrl != NULL)
+        *retMatrixUrl = dataFile;
+    if (retSampleUrl != NULL)
+        *retSampleUrl = sampleFile;
+    vals = getSampleValsFromFile(tdb, categoryHash, chartItem, dataFile, sampleFile);
+    }
 else
     vals = getSampleValsFromTable(tdb, categoryHash, chartItem);
 return vals;
@@ -273,12 +303,10 @@ FILE *f = fopen(dfTn.forCgi, "w");
 if (f == NULL)
     errAbort("can't create temp file %s", dfTn.forCgi);
 fprintf(f, "sample\tcategory\tvalue\n");
-int i = 0;
 struct barChartItemData *val;
 for (val = vals; val != NULL; val = val->next)
     {
-    // NOTE: don't actually need sample ID here -- just use a unique int
-    fprintf(f, "%d\t%s\t%0.3f\n", i++, val->category, val->value);
+    fprintf(f, "%s\t%s\t%0.3f\n", val->sample, val->category, val->value);
     }
 fclose(f);
 return cloneString(dfTn.forCgi);
@@ -304,7 +332,7 @@ fclose(f);
 return cloneString(colorTn.forCgi);
 }
 
-static void printBoxplot(char *df, char *item, char *units, char *colorFile)
+static void printBoxplot(char *df, char *item, char *name2, char *units, char *colorFile)
 /* Plot data frame to image file and include in HTML */
 {
 struct tempName pngTn;
@@ -312,12 +340,22 @@ trashDirFile(&pngTn, "hgc", "barChart", ".png");
 
 /* Exec R in quiet mode, without reading/saving environment or workspace */
 char cmd[256];
-safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s %s %s %s %s",
-                                item, units, colorFile, df, pngTn.forHtml);
+safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/barChartBoxplot.R %s %s %s %s %s %s",
+                                item, units, colorFile, df, pngTn.forHtml, isEmpty(name2) ? "n/a" : name2);
 int ret = system(cmd);
 if (ret == 0)
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
-warn("Error creating boxplot from sample data");
+else
+    warn("Error creating boxplot from sample data");
+}
+
+struct asColumn *asFindColByIx(struct asObject *as, int ix)
+/* Find AS column by index */
+{
+struct asColumn *asCol;
+int i;
+for (i=0, asCol = as->columnList; asCol != NULL && i<ix; asCol = asCol->next, i++);
+return asCol;
 }
 
 void doBarChartDetails(struct trackDb *tdb, char *item)
@@ -325,33 +363,56 @@ void doBarChartDetails(struct trackDb *tdb, char *item)
 {
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-struct barChartBed *chartItem = getBarChart(tdb, item, seqName, start, end);
+struct asObject *as = NULL;
+struct barChartBed *chartItem = getBarChart(tdb, item, seqName, start, end, &as);
 if (chartItem == NULL)
     errAbort("Can't find item %s in barChart table/file %s\n", item, tdb->table);
 
 genericHeader(tdb, item);
+
+// get name and name2 from trackDb, .as file, or use defaults
+struct asColumn *nameCol = NULL, *name2Col = NULL;
+char *nameLabel = NULL, *name2Label = NULL;
+if (as != NULL)
+    {
+    nameCol = asFindColByIx(as, BARCHART_NAME_COLUMN_IX);
+    name2Col = asFindColByIx(as, BARCHART_NAME2_COLUMN_IX);
+    }
+nameLabel = trackDbSettingClosestToHomeOrDefault(tdb, "bedNameLabel", nameCol ? nameCol->comment : "Item"),
+printf("<b>%s: </b>%s<br>\n", nameLabel, chartItem->name);
+name2Label = name2Col ? name2Col->comment : "Alternative name";
+if (differentString(chartItem->name2, ""))
+    printf("<b>%s: </b> %s<br>\n", name2Label, chartItem->name2);
+
 int categId;
 float highLevel = barChartMaxValue(chartItem, &categId);
 char *units = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "units");
-printf("<b>Maximum value: </b> %0.2f %s in %s<br>\n", 
-                highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
-printf("<b>Total all values: </b> %0.2f<br>\n", barChartTotalValue(chartItem));
+char *metric = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_METRIC, "");
+printf("<b>Total all %s values: </b> %0.2f %s<br>\n", metric, barChartTotalValue(chartItem), units);
+printf("<b>Maximum %s value: </b> %0.2f %s in %s<br>\n", 
+                metric, highLevel, units, barChartUiGetCategoryLabelById(categId, database, tdb));
 printf("<b>Score: </b> %d<br>\n", chartItem->score); 
 printf("<b>Genomic position: "
                 "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
                     database, hgTracksPathAndSettings(), database, 
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd,
                     chartItem->chrom, chartItem->chromStart+1, chartItem->chromEnd);
-struct barChartItemData *vals = getSampleVals(tdb, chartItem);
+printf("<b>Strand: </b> %s\n", chartItem->strand); 
+char *matrixUrl = NULL, *sampleUrl = NULL;
+struct barChartItemData *vals = getSampleVals(tdb, chartItem, &matrixUrl, &sampleUrl);
 if (vals != NULL)
     {
     // Print boxplot
     puts("<p>");
     char *df = makeDataFrame(tdb->table, vals);
     char *colorFile = makeColorFile(tdb);
-    printBoxplot(df, item, units, colorFile);
+    printBoxplot(df, item, chartItem->name2, units, colorFile);
+    printf("<br><a href='%s'>View all data points for %s%s%s%s</a>\n", df, 
+                        chartItem->name, 
+                        chartItem->name2 ? " (" : "",
+                        chartItem->name2 ? chartItem->name2 : "",
+                        chartItem->name2 ? ")" : "");
     }
 puts("<br>");
-printTrackHtml(tdb);
 }
 

@@ -75,7 +75,8 @@ if (!info->categNames)
         info->categNames[categ->id] = cloneString(categ->name);
     }
 if (id >= count)
-    errAbort("Bar chart track: can't find id %d\n", id);
+    //errAbort("Bar chart track: can't find id %d\n", id);
+    return NULL;        // Exclude this category
 return info->categNames[id];
 }
 
@@ -182,6 +183,8 @@ return hashNumEntries(extras->categoryFilter);
 static boolean filterCategory(struct track *tg, char *name)
 /* Does category pass filter */
 {
+if (name == NULL)
+    return FALSE;
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 return (hashLookup(extras->categoryFilter, name) != NULL);
 }
@@ -499,7 +502,7 @@ double maxMedian = ((struct barChartTrack *)tg->extraUiData)->maxMedian;
 int i;
 int expCount = bed->expCount;
 struct barChartCategory *categ;
-for (i=0, categ=extras->categories; i<expCount; i++, categ=categ->next)
+for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=categ->next)
     {
     if (!filterCategory(tg, categ->name))
         continue;
@@ -810,3 +813,8 @@ tg->nonPropDrawItemAt = barChartNonPropDrawAt;
 tg->nonPropPixelWidth = barChartNonPropPixelWidth;
 }
 
+void barChartCtMethods(struct track *tg)
+/* Bar Chart track methods for custom track */
+{
+barChartMethods(tg);
+}

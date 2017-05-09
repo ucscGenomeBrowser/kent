@@ -8,6 +8,13 @@ strainList = GCA_001624185.1_129S1_SvImJ_v1 GCA_001624215.1_A_J_v1 \
 	GCA_001632525.1_BALB_cJ_v1 GCA_001632555.1_C57BL_6NJ_v1 \
 	GCA_001632575.1_C3H_HeJ_v1 GCA_001632615.1_LP_J_v1
 
+trackDb::
+	@for D in ${strainList}; do \
+	    echo $$D ; \
+	    rm -f /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.trackDb.txt ; \
+	    cp -p $$D/$$D.trackDb.txt /hive/data/genomes/asmHubs/hubLinks/$$D/$$D.trackDb.txt ;\
+	done
+
 install::
 	@for D in ${strainList}; do \
 	    echo $$D ; \
@@ -22,3 +29,7 @@ install::
 	cp -p rnaSeqStar.html /hive/data/genomes/asmHubs/hubLinks/rnaSeqStar.html
 	rm -f /hive/data/genomes/asmHubs/hubLinks/mouseStrains.html
 	cp -p mouseStrains.html /hive/data/genomes/asmHubs/hubLinks/mouseStrains.html
+	rm -f /hive/data/genomes/asmHubs/hubLinks/mouseStrains.genomes.txt
+	cp -p mouseStrains.genomes.txt /hive/data/genomes/asmHubs/hubLinks/mouseStrains.genomes.txt
+	rm -f /hive/data/genomes/asmHubs/hubLinks/minimal.hubIndex.html
+	cp -p hubIndex.html /hive/data/genomes/asmHubs/hubLinks/minimal.hubIndex.html

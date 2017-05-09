@@ -242,7 +242,9 @@ switch(wigCart->aggregateFunction)
 	wgo = wigGraphOutputTransparent(floatPic);
 	break;
 	}
+    case wiggleAggregateSubtract:
     case wiggleAggregateNone:
+    case wiggleAggregateAdd:
     case wiggleAggregateSolid:
 	{
 	wgo = wigGraphOutputSolid(xOff, yOff, hvg);
@@ -397,6 +399,47 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     }
 }
 
+static void mergeWiggles(struct track *tg, boolean add)
+{
+struct preDrawContainer *firstPre = tg->preDrawContainer;
+
+struct track *firstTrack = tg;
+//struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->wigCartData;
+int ii;
+
+for(tg = tg->next; tg; tg = tg->next)
+    {
+    struct preDrawContainer *pre = tg->preDrawContainer;
+
+    for(ii=firstPre->preDrawZero; ii < firstPre->preDrawZero + firstPre->width; ii++)
+        {
+        struct preDrawElement *firstPreDraw = &firstPre->preDraw[ii];
+        struct preDrawElement *thisPreDraw = &pre->preDraw[ii];
+        if (add)
+            firstPreDraw->smooth += thisPreDraw->smooth;
+        else
+            firstPreDraw->smooth -= thisPreDraw->smooth;
+        }
+    }
+//if (wigCart->autoScale == wiggleScaleAuto)
+    {
+    double upperLimit = wigEncodeStartingUpperLimit;
+    double lowerLimit = wigEncodeStartingLowerLimit;
+    for(ii=firstPre->preDrawZero; ii < firstPre->preDrawZero + firstPre->width; ii++)
+        {
+        struct preDrawElement *firstPreDraw = &firstPre->preDraw[ii];
+        if (firstPreDraw->smooth < lowerLimit)
+            lowerLimit = firstPreDraw->smooth;
+        if (firstPreDraw->smooth > upperLimit)
+            upperLimit = firstPreDraw->smooth;
+        }
+    firstTrack->graphLowerLimit = lowerLimit;
+    firstTrack->graphUpperLimit = upperLimit;
+    firstPre->graphLowerLimit = lowerLimit;
+    firstPre->graphUpperLimit = upperLimit;
+    }
+}
+
 static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -432,6 +475,11 @@ if (errMsgFound && currentWindow==windows)  // first window
 struct wigCartOptions *wigCart = tg->wigCartData;
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
 
+if (wigCart->aggregateFunction == wiggleAggregateAdd || wigCart->aggregateFunction == wiggleAggregateSubtract)
+    {
+    mergeWiggles(tg->subtracks, wigCart->aggregateFunction == wiggleAggregateAdd);
+    tg->subtracks->next = NULL;
+    }
 int numTrack = 0;
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {

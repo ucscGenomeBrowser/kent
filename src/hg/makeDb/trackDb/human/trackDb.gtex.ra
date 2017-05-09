@@ -37,8 +37,8 @@ priority 10.15
 track gtexEqtlSnp
 release alpha
 type bed 4
-shortLabel GTEx eQTL
-longLabel Genetic variants identified by GTEx as significantly affecting gene expression
+shortLabel GTEx Pilot eQTL
+longLabel Genetic variants identified by GTEx V4 (pilot) analysis as significantly affecting gene expression
 group expression
 priority 10.16
 

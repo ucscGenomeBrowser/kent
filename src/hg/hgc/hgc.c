@@ -21159,6 +21159,8 @@ else if (sameWord(type, "bigMaf"))
     genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
+else if (sameWord(type, "bigBarChart") || sameWord(type, "barChart"))
+    doBarChartDetails(ct->tdb, item);
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcfTabix"))
@@ -26563,6 +26565,7 @@ else if (tdb != NULL &&
         (startsWithWord("barChart", tdb->type) || startsWithWord("bigBarChart", tdb->type)))
     {
     doBarChartDetails(tdb, item);
+    printTrackHtml(tdb);
     }
 else if (tdb != NULL)
     {

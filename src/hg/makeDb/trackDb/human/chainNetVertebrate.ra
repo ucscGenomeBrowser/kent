@@ -3,13 +3,13 @@ compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aWallaby=Wallaby baTasmanian_Devil=Tasmanian_Devil bbOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken faMedium_Ground_Finch=Medium_Ground_Finch fbBudgerigar=Budgerigar fbZebra_Finch=Zebra_Finch fcAlligator=American_Alligator gLizard=Lizard haX_Tro=X._tropicalis hbCoelacanth=Coelacanth iTetraodon=Tetraodon jaTilapia=Nile_Tilapia jFugu=Fugu kCod=Atlantic_Cod kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nArcticLamprey=Arctic_lamprey nLamprey=Lamprey
+subGroup2 species Species aWallaby=Wallaby baTasmanian_Devil=Tasmanian_Devil bbOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken e1GEagle=Golden_eagle faMedium_Ground_Finch=Medium_Ground_Finch fbBudgerigar=Budgerigar fbZebra_Finch=Zebra_Finch fcAlligator=American_Alligator gLizard=Lizard haX_Tro=X._tropicalis hbCoelacanth=Coelacanth iTetraodon=Tetraodon jaTilapia=Nile_Tilapia jFugu=Fugu kCod=Atlantic_Cod kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nArcticLamprey=Arctic_lamprey nLamprey=Lamprey
 subGroup3 clade Clade aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria dAmph=Amphibia dbCoela=Coelacanthimorpha eTele=Teleostei fHyper=Hyperoartia
 dragAndDrop subTracks
 visibility hide
 group compGeno
 noInherit on
-priority 10
+priority 9
 color 0,0,0
 altColor 255,255,0
 type bed 3
@@ -64,6 +64,14 @@ html vertebrateChainNet
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain melGal5
         otherDb melGal5
+
+        track chainAquChr2
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=e1GEagle clade=bDino
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain aquChr2
+        otherDb aquChr2
 
 include chainNetGalGal3.ra beta,public
 include chainNetGalGal4.ra alpha
@@ -235,6 +243,14 @@ include chainNetFr3.ra alpha
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign melGal5 chainMelGal5
         otherDb melGal5
+
+        track netAquChr2
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=e1GEagle clade=bDino
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign aquChr2 chainAquChr2
+        otherDb aquChr2
 
         track netGeoFor1
         subTrack vertebrateChainNetViewnet off

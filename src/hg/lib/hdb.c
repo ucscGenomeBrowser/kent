@@ -3727,7 +3727,11 @@ if (bigDataUrl != NULL)
         }
     }
 else
+    {
+    // we now allow references to native tracks in track hubs
+    tdb->table = trackHubSkipHubName(tdb->table);
     return (hTableForTrack(database, tdb->table) != NULL);
+    }
 }
 
 static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
@@ -5424,44 +5428,54 @@ char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn,
 return bbiNameFromSettingOrTableChrom(tdb, conn, table, NULL);
 }
 
-char *hFindLatestSnpTableConn(struct sqlConnection *conn, char *suffix)
-/* Return the name of the 'snp1__<suffix>' table with the highest build number, if any.
+static struct slName *hListSnpNNNTables(struct sqlConnection *conn, char *suffix)
+/* Return a list of 'snpNNN<suffix>' tables, if any, in reverse 'SHOW TABLES' order
+ * (highest first).  If there are none and suffix is NULL/empty but conn has a table 'snp',
+ * return that as a fallback for older databases like hg16.
  * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
 {
-if (suffix == NULL)
-    suffix = "";
-char *tableName = NULL;
 char likeExpr[64];
-safef(likeExpr, sizeof(likeExpr), "LIKE 'snp1__%s'", suffix);
+safef(likeExpr, sizeof(likeExpr), "LIKE 'snp___%s'", suffix ? suffix : "");
 struct slName *snpNNNTables = sqlListTablesLike(conn, likeExpr);
+slReverse(&snpNNNTables);
+// Trim non-snpNNN tables e.g. snpSeq in hg17, hg18:
+while (snpNNNTables && !isdigit(snpNNNTables->name[3]))
+    snpNNNTables = snpNNNTables->next;
+// hg16 has only "snp":
+if (snpNNNTables == NULL && isEmpty(suffix) && sqlTableExists(conn, "snp"))
+    snpNNNTables = slNameNew("snp");
+return snpNNNTables;
+}
+
+char *hFindLatestSnpTableConn(struct sqlConnection *conn, char *suffix)
+/* Return the name of the 'snpNNN<suffix>' table with the highest build number, if any.
+ * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
+{
+char *tableName = NULL;
+struct slName *snpNNNTables = hListSnpNNNTables(conn, suffix);
 if (snpNNNTables)
-    {
-    // Skip to last in list -- highest number (show tables can't use rlike or 'order by'):
-    struct slName *table = snpNNNTables;
-    while (table->next != NULL && isdigit(table->next->name[4]) && isdigit(table->next->name[5]))
-        table = table->next;
-    if (table != NULL)
-        tableName = cloneString(table->name);
-    }
-else if (isEmpty(suffix))
-    {
-    // Before snpNNN* tables (e.g. hg16) there was a track with table 'snp', so check for that:
-    snpNNNTables = sqlListTablesLike(conn, "LIKE 'snp'");
-    if (snpNNNTables != NULL)
-        tableName = cloneString(snpNNNTables->name);
-    }
+    tableName = cloneString(snpNNNTables->name);
 slNameFreeList(&snpNNNTables);
 return tableName;
 }
 
-char *hFindLatestSnpTable(char *db, char *suffix)
-/* Return the name of the 'snp1__<suffix>' table with the highest build number, if any.
+struct trackDb *hFindLatestSnpTrack(char *db, char *suffix, struct trackDb **pFullTrackList)
+/* Return the 'snpNNN<suffix>' track with the highest build number, if any.
  * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
 {
 if (startsWith(hubTrackPrefix, db))
+    // Don't know how to find SNP tracks on hub yet
     return NULL;
 struct sqlConnection *conn = hAllocConn(db);
-char *tableName = hFindLatestSnpTableConn(conn, suffix);
-hFreeConn(&conn);
-return tableName;
+struct slName *snpNNNTables = hListSnpNNNTables(conn, suffix);
+// Return the first trackDb that we can find (sometimes there is a brand new lastest-version table
+// that does not yet have a trackDb)
+struct slName *table;
+for (table = snpNNNTables;  table != NULL;  table = table->next)
+    {
+    struct trackDb *tdb = tdbForTrack(db, table->name, pFullTrackList);
+    if (tdb)
+        return tdb;
+    }
+return NULL;
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 # expMatrixToBarchartBed
 """
-Generate a barChart bed6+4 file from a matrix, meta data, and coordinates.
+Generate a barChart bed6+5 file from a matrix, meta data, and coordinates.
 """
 import os
 import sys
@@ -18,24 +18,31 @@ def parseArgs(args):
                 "the matrix, the second is the grouping (cell type, tissue, etc)",
         type = argparse.FileType("r"))
     parser.add_argument ("matrixFile",
-            help = " The input matrix file, the first row should start with a a #." + \
-                "the samples in the first row should exactly match the ones in " + \
+            help = " The input matrix file. The samples in the first row should exactly match the ones in " + \
                 "the metaFile. The labels (ex ENST*****) in the first column should exactly match " + \
                 "the ones in the coordinate file.",
         type = argparse.FileType("r"))
     parser.add_argument ("coordinateMap",
-        help = " Five column no header,  maps the column labels from the matrix to coordinates. Tab " + \
-                "separated; label, chr, strand, start coord, end coord. ",
+        help = " Bed5+1 format. File that maps the column labels from the matrix to coordinates. Tab " + \
+                "separated; chr, start coord, end coord, label, strand, gene name. ",
         action = "store")
     parser.add_argument ("outputFile",
-        help = " The output file. ",
+        help = " The output file, bed 6+5 format. See the schema in kent/src/hg/lib/barChartBed.as. ",
         type =argparse.FileType("w"))
-    
+    # Optional arguments.  
+    parser.add_argument ("--groupOrderFile",
+        help = " Optional file to define the group order, list the groups in a single column in " + \
+                "the order desired. The default ordering is alphabetical.",
+        action = "store")
+    parser.add_argument ("--useMean",
+    help = " Calculate the group values using mean rather than median.",
+    action = "store_true")
     parser.add_argument ("--verbose",
     help = " Show runtime messages.",
     action = "store_true")
     
     parser.set_defaults(verbose = False)
+    parser.set_defaults(groupOrderFile = None)
 
     if (len(sys.argv) == 1):
         parser.print_help()
@@ -43,25 +50,58 @@ def parseArgs(args):
     options = parser.parse_args()
     return options
 
-def determineScore(tpmCuttoffs, tpm):
+def median(lst):
+    lst = sorted(lst)
+    if len(lst) < 1:
+        return None
+    if len(lst) %2 == 1:
+        return lst[((len(lst)+1)/2)-1]
+    else:
+        return float(sum(lst[(len(lst)/2)-1:(len(lst)/2)+1]))/2.0
+
+def determineScore(tpmCutoffs, tpm):
     """
     Cast the tpm to a score between 0-1000. Since there are only
     9 visual blocks cast them to be in one of the 9 blocks.  
-    tpmCuttoffs - A list of integers
+    tpmCutoffs - A list of integers
     tpm - An integer
     """
     count = 0
-    for val in tpmCuttoffs: 
+    for val in tpmCutoffs: 
         if (val > tpm): 
             return count*111
         count = count + 1
     return 999
 
-def condenseMatrixIntoBed8Col(validTpms, sampleToGroup, matrix, bedLikeFile):
+def floatRound(inFloat):
+    """
+    Return a float that has at most 2 decimal places.
+    """
+    beforeDecimal = True
+    result = ""
+    count = 0
+    for char in inFloat: 
+        if char is ".":
+            beforeDecimal = False
+            result += char
+            continue
+        if beforeDecimal:
+            result += char
+        else:
+            if count >= 2:
+                return result
+            else:
+                count += 1
+                result += char
+    return result
+
+def condenseMatrixIntoBedCols(matrix, groupOrder, sampleToGroup, validTpms, bedLikeFile, useMean):
     """
     Take an expression matrix and a dictionary that maps the samples to groups. 
     Go through the expression matrix and calculate the average for each group, outputting
-    it to an intermediate file as they are calculated. 
+    it to an intermediate file as they are calculated. The intermediate file has
+    three columns, the first is the average tpm for the entire gene, next is the
+    number of groups and finally the average tpm for each group as a comma separated list. 
     validTpms - An empty list of integers. 
     sampleToGroup - A dictionary that maps string samples to string groups. 
     matrix - An expression matrix, samples are the x rows, transcripts the y rows.  
@@ -104,26 +144,43 @@ def condenseMatrixIntoBed8Col(validTpms, sampleToGroup, matrix, bedLikeFile):
             if firstCol:
                 firstCol = False
                 continue 
-            # First time this group is seen, add it to the groupCounts dict. 
-            if (groupAverages.get(columnToGroup[count]) == None):
-                groupAverages.setdefault(columnToGroup[count], float(col))
-                groupCounts.setdefault(columnToGroup[count], 1)
-            # This group has already been seen, update the TPM average.  
+            if (useMean): 
+                # First time this group is seen, add it to the groupCounts dict. 
+                if (groupAverages.get(columnToGroup[count]) == None):
+                    groupAverages.setdefault(columnToGroup[count], float(col))
+                    groupCounts.setdefault(columnToGroup[count], 1)
+                # This group has already been seen, update the TPM average.  
+                else:
+                    groupCounts[columnToGroup[count]] += 1 
+                    # Average calculation
+                    normal = float(groupCounts[columnToGroup[count]])
+                    newTpm = (float(col) * (1/normal)) 
+                    oldTpm = (((normal - 1) / normal) * groupAverages[columnToGroup[count]])
+                    groupAverages[columnToGroup[count]] = newTpm + oldTpm 
             else:
-                groupCounts[columnToGroup[count]] += 1 
-                normal = float(groupCounts[columnToGroup[count]])
-                newTpm = (float(col) * (1/normal)) 
-                oldTpm = (((normal - 1) / normal) * groupAverages[columnToGroup[count]])
-                groupAverages[columnToGroup[count]] = newTpm + oldTpm 
+                # First time this group is seen, add it to the groupCounts dict. 
+                if (groupAverages.get(columnToGroup[count]) == None):
+                    groupAverages.setdefault(columnToGroup[count], [float(col)])
+                    groupCounts.setdefault(columnToGroup[count], 1)
+                # This group has already been seen, update the TPM average.  
+                else:
+                    groupCounts[columnToGroup[count]] += 1 
+                    # Median preparation
+                    groupAverages[columnToGroup[count]].append(float(col))
+
             count += 1
        
         # Store some information on the bed file. Most important is the groupOrder. 
         if getBedInfo: 
             getBedInfo = False 
-            bedInfo += "#chr\tstart\tend\tname\tscore\tstrand\tgroupCount\tgroupOrder;"
-            for key, value in groupAverages.iteritems():
-                bedInfo += key + ","
-            bedInfo = bedInfo[:-1] + "\toffset\tlineLength"
+            bedInfo += "#chr\tstart\tend\tname\tscore\tstrand\tname2\tgroupCount\tgroupOrder;"
+            if (groupOrder is not None):
+                for group in open(groupOrder, "r"): 
+                    bedInfo += group.strip("\n") + " " 
+            else: 
+                for key, value in sorted(groupAverages.iteritems()):
+                    bedInfo += key + " "
+                bedInfo = bedInfo[:-1] + "\toffset\tlineLength"
 
         # Write out the transcript name, this is needed to join with coordinates later. 
         bedLikeFile.write(splitLine[0] + "\t")
@@ -132,17 +189,33 @@ def condenseMatrixIntoBed8Col(validTpms, sampleToGroup, matrix, bedLikeFile):
         # The fullAverage is used to assign a tpm score representative of the entire bed row. 
         fullAverage = 0.0
         count = 0.0
-        for key, value in groupAverages.iteritems(): 
-            bedLine = bedLine + "," + str(value)
-            count += 1.0
-            fullAverage += value
+        if (groupOrder is not None):
+            for group in open(groupOrder, "r"): 
+                # Averages
+                if (useMean):
+                    value = groupAverages[group.strip("\n")]
+                else:
+                    value = median(groupAverages[group.strip("\n")])
+                bedLine = bedLine + "," + floatRound(str(value))
+                count += 1.0
+                fullAverage += value
+        else: 
+            for key, value in sorted(groupAverages.iteritems()): 
+                if (useMean):
+                    bedLine = bedLine + "," + floatRound(str(value))
+                    fullAverage += value
+                else:
+                    bedLine = bedLine + "," + floatRound(str(median(value)))
+                    fullAverage += median(value)
+                
+                count += 1.0
         # Create what will be columns 5, 7 and 8 of the final bed. 
         bedLine = str(fullAverage/count) + "\t" + str(int(count)) +  "\t" + bedLine[1:] + "\n"
         # If the fullAverage tpm is greater than 0 then consider it in the validTpm list. 
         if (fullAverage > 0.0): 
             validTpms.append((fullAverage/count))
         # Write the bedLine to the intermediate bed-like file. 
-        bedLikeFile.write(bedLine) 
+        bedLikeFile.write(bedLine)
     # Return the bedInfo so it can be printed right before the script ends. 
     return bedInfo
 
@@ -151,11 +224,12 @@ def expMatrixToBarchartBed(options):
     Convert the expression matrix into a barchart bed file. 
     options - The command line options (file names, etc). 
         Use the meta data to map the sample names to their groups, then create a dict that maps
-    the columns to the groups.  Go through the matrix line by line and get the average for each 
-    group. Print this to an intermediate file, then use the unix 'join' command to link this with
-    the coordinates file, creating a bed like file.  Go through this file once more to clean up a
-    bit, re arrange columns and calculate a new score creating a bed 6+2.  Finally run
-    Max's bedJoinTabOffset to index the matrix, creating a bed 6+4 file.   
+    the columns to the groups.  Go through the matrix line by line and get the median or average for each 
+    group. Print this to an intermediate file, then use the unix 'join' command to link with
+    the coordinates file via the first matrix column. This creates a file with many of the bed fields
+    just in the wrong order.  Go through this file to re arrange the columns, check for and remove entries 
+    where chromsomes names include "_" and chr start > chr end.  Finally run Max's bedJoinTabOffset to 
+    index the matrix adding the dataOffset and dataLen columns and creating a bed 6+5 file.   
     """
 
     # Create a dictionary that maps the sample names to their group.
@@ -172,25 +246,34 @@ def expMatrixToBarchartBed(options):
 
     # Go through the matrix and condense it into a bed like file. Populate
     # the validTpms array and the bedInfo string.  
-    bedInfo = condenseMatrixIntoBed8Col(validTpms, sampleToGroup, options.matrixFile, bedLikeFile)
+    bedInfo = condenseMatrixIntoBedCols(options.matrixFile, options.groupOrderFile, sampleToGroup, \
+                    validTpms, bedLikeFile, options.useMean)
     # Find the number which divides the list of non 0 TPM scores into ten blocks. 
     tpmMedian = sorted(validTpms)
     blockSizes = len(tpmMedian)/10
 
     # Create a list of the ten TPM values at the edge of each block.  
     # These used to cast a TPM score to one of ten value between 0-1000.  
-    tpmCuttoffs = []
+    tpmCutoffs = []
     for i in range(1,10):
-        tpmCuttoffs.append(tpmMedian[blockSizes*i])
+        tpmCutoffs.append(tpmMedian[blockSizes*i])
  
     # Sort the bed like file to prepare it for the join. 
     sortedBedLikeFile = tempfile.NamedTemporaryFile( mode = "w+", bufsize = 1)
     cmd = "sort " + bedLikeFile.name + " > " + sortedBedLikeFile.name
     os.system(cmd)
 
-    # Sort the coordinate file to prepare it for the join.  
+    # Cut apart the coordinate bed to get the transcripts in the first column so it can be joined. 
+    coordBedPart1 = tempfile.NamedTemporaryFile( mode = "w+", bufsize = 1)
+    cmd = "cut -f 4  " + options.coordinateMap + " > " + coordBedPart1.name 
+    os.system(cmd)
+    coordBedPart2 = tempfile.NamedTemporaryFile( mode = "w+", bufsize = 1)
+    cmd = "cut -f 1-3,5,6 " + options.coordinateMap + " > " + coordBedPart2.name 
+    os.system(cmd)
+
+    # Sort the coordinate file to prepare it for the join. 
     sortedCoords = tempfile.NamedTemporaryFile( mode = "w+", bufsize = 1)
-    cmd = "sort " + options.coordinateMap + " > " + sortedCoords.name 
+    cmd = "paste " + coordBedPart1.name + " " + coordBedPart2.name + " | sort > " + sortedCoords.name 
     os.system(cmd)
     
     # Join the bed-like file and the coordinate file. 
@@ -204,23 +287,29 @@ def expMatrixToBarchartBed(options):
     bedFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
     for line in joinedFile:
         splitLine = line.strip("\n").split()
-        if ("_" in splitLine[0]): continue # Ignore alt sequences.  
+        if ("_" in splitLine[0]): 
+            sys.stderr.write("This transcript " + splitLine[0] + " was dropped for having a '_' in the name.\n") 
+            continue # Ignore alt sequences.  
         # Drop sequences where start is greater than end. 
-        if (float(splitLine[3]) > float(splitLine[4])):
+        if (float(splitLine[2]) > float(splitLine[3])):
+            sys.stderr.write("This transcript " + splitLine[0] + " was dropped since chr end, " + \
+                    splitLine[3] + ", is smaller than chr start, " + splitLine[2] + "\n.") 
             continue
-        newLine = (splitLine[1] + "\t" + str(splitLine[3]) + "\t" + str(splitLine[4]) + "\t" + \
-                splitLine[0] + "\t" + str(determineScore(tpmCuttoffs, float(splitLine[5]))) + \
-                "\t" + str(splitLine[2]) + "\t" + str(splitLine[6]) + "\t" + splitLine[7] + "\n")
+        newLine = (splitLine[1] + "\t" + str(splitLine[2]) + "\t" + str(splitLine[3]) + "\t" + \
+                splitLine[0] + "\t" + str(determineScore(tpmCutoffs, float(splitLine[6]))) + \
+                "\t" + str(splitLine[4]) + "\t" + splitLine[5] + "\t" + str(splitLine[7]) + \
+                "\t" + splitLine[8] + "\n")
         bedFile.write(newLine)
+    
+    # Prepend the bed info to the start of the file.  
+    cmd = "echo '" + bedInfo + "' > " + options.outputFile.name
+    os.system(cmd)
 
     # Run Max's indexing script
+    indexedBedFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
     cmd = "bedJoinTabOffset " + options.matrixFile.name + " " + bedFile.name + " " + options.outputFile.name
     os.system(cmd)
-    
-    # Append the bed info to the end of the file.  
-    cmd = "echo '" + bedInfo + "' >> " + options.outputFile.name
-    os.system(cmd)
-    
+
     print ("The columns and order of the groups are; \n" + bedInfo)
 
 def main(args):

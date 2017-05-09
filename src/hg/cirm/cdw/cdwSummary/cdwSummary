@@ -3,8 +3,8 @@
 # create html/js files that describe a CDW dataset. Includes basic summary
 # information, cell type assignment charts and cell clustering")
 
-import logging, sys, optparse, gzip, marshal, json, urllib2, re, tempfile, os, math
-import string, unicodedata, itertools, platform
+import logging, sys, optparse, gzip, marshal, json, urllib2, re, tempfile, os, math, urllib
+import string, unicodedata, itertools
 from collections import defaultdict, Counter, namedtuple
 from os.path import join, basename, dirname, isfile, isdir, getsize
 
@@ -116,6 +116,8 @@ def parseCmdLine():
     parser.add_option("", "--colorBy", dest="colorBy", action="store", help="attribute to color the seurat plot on by default, default is %default", default=defaultSeuratAttribute)
     parser.add_option("-S", "--onlySeurat", dest="onlySeurat", action="store_true", help="create only the seurat plot")
     parser.add_option("", "--annoDir", dest="annovarDir", action="store", help="name of directory with annovar output files of VCFs")
+    parser.add_option("", "--mani", dest="maniFname", action="store", help="if VCF mode: name of manifest file")
+    parser.add_option("-p", "--pipeline", dest="pipeline", action="store", help="if VCF mode: name of pipeline for manifest file")
     parser.add_option("", "--seuratOut", dest="seuratOut", action="store", help="write Seurat data to json file")
 
     (options, args) = parser.parse_args()
@@ -1606,6 +1608,8 @@ def writeSeuratSection(htmlFh, matrixFname, exprMatrix, cellInfo, geneToSym, tag
 
     if not isfile(clusterGenesPath) or options.force:
         runRscript(seuratScript, seuratScriptPath)
+    else:
+        logging.info("Not running %s, %s already exists" % (seuratScriptPath, clusterGenesPath))
 
     newToOrig = sanitizeForR(cellInfo)
     tsneJson, coordList  = parseTsneToJson(newToOrig, tsnePath)
@@ -1930,7 +1934,27 @@ def allSubFiles(dirName, suffix=None):
                 continue
             yield (os.path.join(root, name))
 
-def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
+def findInputFiles(maniFname, pipeline):
+    """ return file names """
+    """ this is done by parsing the manifest and returning a dict with  """
+    """ meta -> dict "variants"/"alignments"/"variantAnnotations" -> fname """
+    assert(maniFname!=None)
+    assert(pipeline!=None)
+    metaToFname = defaultdict(dict)
+    for row in lineFileNextRow(maniFname):
+        if row.pipeline!=pipeline:
+            continue
+        assert(row.output not in metaToFname[row.meta])
+        metaToFname[row.meta][row.output] = row.file
+    return metaToFname
+
+    #bamFnames = []
+    #for meta in metas:
+        #print meta, metaToFname[meta]
+        #bamFnames.append(metaToFname[meta]["alignments"])
+    #return bamFnames
+
+def writeVcfSummary(htmlFh, trackDbFname, cellInfo, annovarDir, maniFname, pipeline, cacheDir):
     " summarize a list of annovar files "
     htmlFh.write("<h3>Mutated genes</h3>\n")
     htmlFh.write("<table>\n")
@@ -1941,16 +1965,25 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
     #maniInfo = parseManifest(maniFname)
     #for row in maniInfo["variants"]:
     #fname = row.file
-    fnames = list(allSubFiles(annovarDir, "_multianno.txt"))
+    #fnames = list(allSubFiles(annovarDir, "_multianno.txt"))
+    #metas = [basename(f).split(".")[0] for f in fnames]
+    metaToFnames = findInputFiles(maniFname, pipeline)
 
     sampleNames = []
     allSumms = {}
     mutToSamples = defaultdict(set)
     nameToMuts = defaultdict(set) # datasetname -> set of coding mutations
-    for i, fname in enumerate(fnames):
-        logging.info("processing %d out of %d files" % (i, len(fnames)))
+    mutToCoord = {} # mut name -> (chrom, start, end)
+    for i, sampleName in enumerate(metaToFnames):
+        sampleFnames = metaToFnames[sampleName]
+        if "variantAnnotations" not in sampleFnames:
+            print "No variantAnnotations for %s" % sampleName
+            continue
+        fname = sampleFnames["variantAnnotations"]
+        logging.info("processing %d out of %d files" % (i, len(metaToFnames)))
         vcfSumm = parseAnnovar(fname, annovarCacheDir)
         sampleName = basename(fname).split(".")[0]
+        mutToCoord.update(vcfSumm["mutToCoord"]) # update the mutation -> coordinate mapping
 
         sampleNames.append(sampleName)
         allSumms[sampleName] = vcfSumm
@@ -1980,7 +2013,7 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
         sampleToNewMuts[sampleName] = newMuts
         allMuts.update(newMuts)
 
-    htmlFh.write("Number mutations in at least one sample: %d" % len(allMuts))
+    htmlFh.write("Total number of coding mutations in at least one sample: %d" % len(allMuts))
 
         #if fname.endswith(".vcf.gz"):
             #runSnpEff(fname, annovarCacheDir)
@@ -2023,6 +2056,7 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
     htmlFh.write("<table style='table-layout:fixed'>\n")
     htmlFh.write("<thead><tr>\n")
     htmlFh.write("<th style='width:100px'>Mutation</th>\n")
+    htmlFh.write("<th style='width:100px'>BAM Reads</th>\n")
     htmlFh.write("<th style='width:50px'>Sample Count</th>\n")
     for sampleName in sampleNames:
         htmlFh.write("<th style='width:60px'>")
@@ -2060,15 +2094,62 @@ def writeVcfSummary(htmlFh, cellInfo, annovarDir, cacheDir):
 
     rows.sort(reverse=True)
 
+    tdbfh = open(trackDbFname, "w")
+    tdbfh.write("""hub CIRM-CDW
+shortLabel Baldwin 12 Paired IPS Cell Lines
+longLabel Baldwin 12 Paired IPS Cell Lines
+genomesFile trackDb.txt
+email max@soe.ucsc.edu
+descriptionUrl trackDb.txt
+genome hg19
+trackDb trackDb.txt
+
+""")
+
+    #ctLines = []
+    token = "M0iPQUvDcBQQH09S"
+    for meta, typeFnames in metaToFnames.iteritems():
+        bamFname = typeFnames["alignments"]
+        baiFname = typeFnames["index"]
+        bamUrl = join("http://cirm-01.local/cgi-bin/cdwGetFile?token=%s&path=%s" % (token, bamFname))
+        baiUrl = join("http://cirm-01.local/cgi-bin/cdwGetFile?token=%s&path=%s" % (token, baiFname))
+        trackName = meta
+        trackDesc = meta
+        #ctLine = 'track name="{0}" description="{1}" bigDataUrl={2} bigDataIndex={3} type=bam'.format(trackName, trackDesc, bamUrl, baiUrl)
+        #ctLines.append(ctLine)
+
+        tdbfh.write("track %s\n" % trackName)
+        tdbfh.write("shortLabel %s\n" % trackName)
+        tdbfh.write("longLabel %s\n" % trackDesc)
+        tdbfh.write("bigDataUrl %s\n" % bamUrl)
+        tdbfh.write("bigDataIndex %s\n" % baiUrl)
+        tdbfh.write("visibility dense\n")
+        tdbfh.write("type bam\n")
+        tdbfh.write("\n")
+
+    print "Wrote %s" % trackDbFname
+    tdbfh.close()
+    #ctText = "\n".join(ctLines)
+    #ctText = urllib.quote_plus(ctText)
+
     for row in rows:
         sampleCount = row[0]
         mutName = row[1]
         colors = row[2:]
 
         htmlFh.write("<tr>\n")
+        chrom, start, end = mutToCoord[mutName.split(":")[1]]
+
         if len(mutName)>20:
             mutName = mutName[:20]+"..."
+
         htmlFh.write("<td>%s</td>\n" % mutName)
+        position = "%s:%d-%d" % (chrom, int(start)-1, int(end))
+
+        #htmlFh.write("<td><a href='http://cirm-01.local/cgi-bin/hgTracks?db=hg19&position={0}&hgt.customText={1}'>Reads</a></td>\n".format(position, ctText))
+        hubUrl = "http://cirm-01-max.pod/datasetSummary/baldwin12PairedIpsCellLines/trackDb.txt"
+        htmlFh.write("<td><a href='http://cirm-01.local/cgi-bin/hgTracks?db=hg19&position={0}&hubUrl={1}'>Reads</a></td>\n".format(position, hubUrl))
+        # http://cirm-01-max/cgi-bin/hgTracks?hgsid=4423_zFP0CyERJhSChPvZ28dtgoe5bobK&db=hg19
         htmlFh.write("<td>%d</td>\n" % sampleCount)
 
         for color in colors:
@@ -2161,7 +2242,8 @@ def writeDatasetPage(datasetId, matrixFname, tagTabFname, kallistoMetaTab, annov
 
     if annovarDir:
         tmpDir = makeTmpDirFor(outDir)
-        writeVcfSummary(htmlFh, cellInfo, annovarDir, tmpDir)
+        trackDbFname = join(outDir, "trackDb.txt")
+        writeVcfSummary(htmlFh, trackDbFname, cellInfo, annovarDir, maniFname, pipeline, tmpDir)
     #htmlFh.write("<h2>Dendrogram</h2>")
     #htmlFh.write("<a href='http://hgwdev-ceisenhart.cse.ucsc.edu/~ceisenhart/radialDendrograms/cirm/quake/quakeBrainGeo1/sleuthGeneClusters2.html'>Link to dendrogram page</a>")
     # activate the collapser

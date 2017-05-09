@@ -41,7 +41,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     ra.o rainbow.o raToStruct.o rbTree.o rangeTree.o regexHelper.o repMask.o \
     rle.o rnautil.o rqlEval.o rqlParse.o rudp.o \
     scoreWindow.o seg.o seqOut.o seqStats.o servBrcMcw.o servCrunx.o \
-    servcis.o servcl.o servmsII.o servpws.o sha1.o shaRes.o slog.o snof.o \
+    servcis.o servcl.o servmsII.o servpws.o shaRes.o slog.o snof.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
     splatAli.o sqlList.o sqlNum.o sqlReserved.o subText.o sufa.o sufx.o synQueue.o \
     tabRow.o tagStorm.o tagToSql.o textOut.o tokenizer.o trix.o twoBit.o \

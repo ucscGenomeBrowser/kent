@@ -1229,8 +1229,12 @@ else if (isCustomTrack(table))
     if (type != NULL)
         {
 	conn = hAllocConn(CUSTOM_TRASH);
-	if (startsWithWord("maf", type) || startsWithWord("makeItems", type) || sameWord("bedDetail", type) || sameWord("pgSnp", type))
-	    fieldList = sqlListFields(conn, ct->dbTableName);
+	if (startsWithWord("maf", type) || 
+            startsWithWord("makeItems", type) || 
+            sameWord("bedDetail", type) || 
+            sameWord("barChart", type) || 
+            sameWord("pgSnp", type))
+	        fieldList = sqlListFields(conn, ct->dbTableName);
 	hFreeConn(&conn);
 	}
     if (fieldList == NULL)

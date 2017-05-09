@@ -478,7 +478,7 @@ function waitKey ()
 {
     echo2
     echo2 Press any key to continue or CTRL-C to abort.
-    read -n 1 -s
+    read -n 1
     echo2
 }
 
@@ -553,7 +553,6 @@ function setupCgiOsx ()
     export MYSQLINC=$APACHEDIR/ext/include
     export MYSQLLIBS="/$APACHEDIR/ext/lib/libmysqlclient.a -lz -lc++"
     export SSLDIR=$APACHEDIR/ext/include
-    export USE_SSL=1 
     export PNGLIB=$APACHEDIR/ext/lib/libpng.a 
     # careful - PNGINCL is the only option that requires the -I prefix
     export PNGINCL=-I$APACHEDIR/ext/include
@@ -606,7 +605,8 @@ function installRedhat () {
     waitKey
     # make sure we have and EPEL and ghostscript and rsync (not installed on vagrant boxes)
     # imagemagick is required for the session gallery
-    yum -y install epel-release ghostscript rsync ImageMagick
+    yum -y install epel-release
+    yum -y install ghostscript rsync ImageMagick R-core
 
     # centos 7 and fedora 20 do not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -1587,7 +1587,7 @@ function updateBrowser {
 
    # update the mysql DBs
    stopMysql
-   DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^mysql)|(performance)|(.flag$)|(hgcentral)'`
+   DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(hgcentral)'`
    for db in $DBS/*; do 
        echo2 syncing full mysql database: $db
        $RSYNC --update --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/

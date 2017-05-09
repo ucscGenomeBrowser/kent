@@ -188,7 +188,7 @@ track consIndelsHgMmCanFam
 shortLabel Cons Indels MmCf
 longLabel Indel-based Conservation for human hg18, mouse mm8 and dog canFam2
 group compGeno
-priority 11
+priority 7
 visibility hide
 useScore 1
 color 0, 60, 120
@@ -3728,7 +3728,7 @@ shortLabel Evo Cpg
 longLabel Weizmann Evolutionary CpG Islands
 visibility hide
 group compGeno
-priority 13
+priority 8
 type bed 9 .
 noScoreFilter .
 itemRgb on
@@ -3805,8 +3805,8 @@ include defaultPriority.ra
 
 track phastBias override
 group compGeno
-priority 25
+priority 9
 
 track ecoresTetNig1 override
 group compGeno
-priority 33
+priority 630.3

@@ -42,7 +42,9 @@ char brwName[64];
 char brwAddr[256];
 char signature[256];
 char returnAddr[256];
-char *hgLoginUrl = NULL;
+char *hgLoginUrl = NULL; /* full absolute URL to hgLogin as seen from browser, 
+    e.g. http://genome.ucsc.edu/cgi-bin/hgLogin. Can be a relative URL /cgi-bin/hgLogin if 
+    hg.conf login.relativeLink is on. */
 
 /* ---- Global helper functions ---- */
 char *browserName()
@@ -84,7 +86,6 @@ else
 }
 
 /* ---- password functions depend on optionally installed openssl lib ---- */
-#ifdef USE_SSL
 #include <openssl/md5.h>
 
 void cryptWikiWay(char *password, char *salt, char* result)
@@ -158,31 +159,6 @@ for(i = 0; i < MD5_DIGEST_LENGTH; i++)
     }
 return cloneString(tokenMD5);
 }
-
-#else // --------- no USE_SSL ==> errAbort with message that openssl is required --------------
-
-#define NEED_OPENSSL "kent/src must be recompiled with openssl libs and USE_SSL=1 in order for this to work."
-
-void encryptPWD(char *password, char *salt, char *buf, int bufsize)
-/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
-{
-errAbort(NEED_OPENSSL);
-}
-
-void encryptNewPwd(char *password, char *buf, int bufsize)
-/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
-{
-errAbort(NEED_OPENSSL);
-}
-
-char *generateTokenMD5(char *token)
-/* This is just a warning that appears in the absence of USE_SSL. Real implementation is above! */
-{
-errAbort(NEED_OPENSSL);
-return NULL; // Compiler doesn't know that we never get here.
-}
-
-#endif//ndef USE_SSL
 
 void findSalt(char *encPassword, char *salt, int saltSize)
 /* find the salt part from the password field */
@@ -326,9 +302,14 @@ char *returnURL = cartUsualString(cart, "returnto", "");
 char *hgLoginHost = wikiLinkHost();
 char *cgiDir = cgiScriptDirUrl();
 char returnTo[2048];
+
+boolean relativeLink = cfgOptionBooleanDefault("login.relativeLink", FALSE);
 if (!returnURL || sameString(returnURL,""))
-   safef(returnTo, sizeof(returnTo),
-        "http%s://%s%shgSession?hgS_doMainPage=1",
+    if (relativeLink)
+        // reverse proxies and all-https sites have no need for absolute links
+       safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", cgiDir);
+   else 
+       safef(returnTo, sizeof(returnTo), "http%s://%s%shgSession?hgS_doMainPage=1",
         cgiAppendSForHttps(), hgLoginHost, cgiDir);
 else
    safecpy(returnTo, sizeof(returnTo), returnURL);
@@ -1323,7 +1304,13 @@ htmlSetStyleSheet("../style/userAccounts.css");
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 htmlSetFormClass("accountScreen");
-struct dyString *dy = dyStringCreate("http%s://%s%shgLogin",
+
+boolean relativeLink = cfgOptionBooleanDefault("login.relativeLink", FALSE);
+struct dyString *dy;
+if (relativeLink) // normal relative links are better for reverse proxyies or all-https sites
+    dy = dyStringCreate("%s", cgiScriptName());
+else 
+    dy = dyStringCreate("http%s://%s%shgLogin",
                                      loginUseHttps() ? "s" : "", wikiLinkHost(), cgiScriptDirUrl());
 hgLoginUrl = dyStringCannibalize(&dy);
 oldCart = hashNew(10);

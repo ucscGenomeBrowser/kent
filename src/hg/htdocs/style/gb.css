@@ -46,6 +46,11 @@
     color: white;
 }
 
+span.disabled,
+input[disabled] {
+    opacity: .6;
+}
+
 /* Below are from hgGateway/Jeff West styling (jWest.css)
  *      Used with these selector names in inc/gbFooter.html */
 

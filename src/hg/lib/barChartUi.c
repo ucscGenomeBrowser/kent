@@ -156,13 +156,6 @@ printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit,
                                 round(barChartUiMaxMedianScore(tdb)));
 }
 
-char *barChartUiGetLabel(char *database, struct trackDb *tdb)
-/* Get label for category list */
-{
-return trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_CATEGORY_LABEL, 
-                                        BAR_CHART_CATEGORY_LABEL_DEFAULT);
-}
-
 struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)
 /* Get category colors and descriptions.  Use barChartColors setting if present.
    If not, if there is a barChartBars setting, assign rainbow colors.
@@ -178,7 +171,9 @@ struct barChartCategory *categ = NULL;
 
 if (labels == NULL)
     {
-    categs = barChartGetCategories(database, tdb->table);
+    errAbort("barChart track %s missing required %s setting\n", tdb->track, BAR_CHART_CATEGORY_LABELS);
+    // TODO: consider getting categories from .as schema
+    //categs = barChartGetCategories(database, tdb->table);
     }
 else
     {

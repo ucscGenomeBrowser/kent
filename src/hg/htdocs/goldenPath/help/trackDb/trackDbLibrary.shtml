@@ -159,6 +159,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bed5FloatScore</A>,
     <A onclick="return jumpTo(this);" HREF="#">bedGraph</A>,
     <A onclick="return jumpTo(this);" HREF="#">bedRnaElements</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigBarChart</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
@@ -203,6 +204,7 @@
     <P>Valid settings:</P>
     <P>
     <A onclick="return jumpTo(this);" HREF="#">bam/cram</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigBarChart</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
@@ -339,7 +341,7 @@
     <P>The location of a remote data file containing the chain link data.</P>
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBed bigChain bigMaf bigPsl bigWig bam vcfTabix"></span>
+<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigMaf bigPsl bigWig bam vcfTabix"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -348,7 +350,7 @@
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBed, bigChain, bigMaf, bigPsl, bigGenePred,  bigWig or
+    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigMaf, bigPsl, bigGenePred,  bigWig or
     vcfTabix.  Note that bam/cram and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
@@ -971,7 +973,7 @@
 </DIV>
 
 <DIV class="bigMaf_intro">
-<H3>bigMaf: Mulitple Alignments</H3>
+<H3>bigMaf: Multiple Alignments</H3>
     <P>
         The bigMaf format stores multiple alignments in a format compatible with MAF files, which are then compressed and indexed as bigBeds. bigMaf files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigMaf. The resulting bigMaf files are in an indexed binary format. The main advantage of the bigMaf files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigMaf is considerably faster than regular MAF files. The bigMaf file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
     For complete bigMaf format definitions please see the
@@ -1057,6 +1059,12 @@ There are no extra options that can appear on the type bigGenePred line.
 <div class="format">
     <code>type bigMaf</code></div>
 There are no extra options that can appear on the type bigMaf line.
+</DIV>
+
+<DIV class="bigBarChart"><span class="types bigBarChart"></span>
+<div class="format">
+    <code>type bigBarChart</code></div>
+There are no extra options that can appear on the type bigBarChart line.
 </DIV>
 
 <DIV class="bed_flavors"><span class="types bed5FloatScore bedRnaElements broadPeak coloredExon gvf ld2 narrowPeak peptideMapping"></span>
@@ -1596,6 +1604,15 @@ There are no extra options that can appear on the type bigMaf line.
     setting, the label will be "Score:".</P>
     <P><B>Example:</B></P>
     <pre>   scoreLabel Log of binding Score * 1000</pre>
+</DIV>
+
+<DIV class="maxLimit"><span class="types bedGraph bigBarChart"></span>
+<div class="format"><code>maxLimit&lt;#&gt;</code></div>
+    <P>The upper limit of the data range in a track is specified with this setting.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   maxLimit 5000</pre>
+    <P>
 </DIV>
 
 <DIV class="linkIdInName"><span class="types bed bigBed"></span>
@@ -3661,13 +3678,13 @@ There are no extra options that can appear on the type bigMaf line.
     </P>
 </DIV>
 
-<DIV class="labelFields"><span class="types bigBed bigGenePred bigPsl"></span>
+<DIV class="labelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
 <div class="format"><code>labelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
     <P>A list of fields from the bigBed based file that can be used as a label. The special value <B>none</B> can be specified if no labels are desired.
     </P>
 </DIV>
 
-<DIV class="defaultLabelFields"><span class="types bigBed bigGenePred bigPsl"></span>
+<DIV class="defaultLabelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
 <div class="format"><code>defaultLabelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
     <P>A list of fields from the bigBed based file that should be used as a label by default.  Only applicable if <B>labelFields</B> is set.  If <B>defaultLabelFields</B> is not specified, the first field in labelFields is used as the default. The special value <B>none</B> can be specified if no label should be the default.
     </P>
@@ -4247,6 +4264,103 @@ for each cell associated with the particular TF binding location.</P>
     </P>
 </DIV>
 
+<!-- - - - - - - - bigBarChart settings - - - - - - - -->
+<DIV class="bigBarChart_intro">
+<H3>bigBarChart: Bar charts of variables displayed on genomic regions</H3>
+    <P>
+    The bigBarChart format stores values of a set of variables for each genomic region 
+in the file.  BigBarChart files are created using the program bedToBigBed with a special 
+AutoSQL file that defines the fields.  The resulting files are in an indexed binary format
+that supports efficient remote access, so the file can be hosted on your web accessible server
+and displayed at UCSC.
+For the complete bigBarChart format definitions please see the
+    <A HREF="../bigBarChart.html">bigBarChart help page</A>.</P>
+</DIV>
+
+<DIV class="barChartUnit"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartUnit &lt;unit&gt;</code></div>
+    <P>The unit label is attached to values in the display, charts and plots of the track.
+    </P>
+</DIV>
+
+<DIV class="barChartLabel"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartLabel &lt;label&gt;</code></div>
+    <P>This setting provides a label for the category selection list.</p>
+    </P>
+</DIV>
+
+<DIV class="barChartMetric"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartMetric &lt;metric&gt;</code></div>
+    <P>This setting provides a label for details page information about the barChart values presented.
+        These are typically summary values, derived from many samples (often the median value).</p>
+    </P>
+</DIV>
+
+<DIV class="barChartBars"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartBars &lt;label1 label2...&gt;</code></div>
+    <P>This setting is a list of labels for the categorical variables (bars).
+    It is required for this track type.
+    </P>
+</DIV>
+
+<DIV class="barChartColors"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartColors &lt;color1 color2...&gt;</code></div>
+    <P>This setting is a list of colors, one for each category (bar).
+        Colors are specified as RGB values (#FFFFFF) or by name (the 16 HTML color names defined
+        in HTML 4.01).  
+        The named HTML colors are: <div class='dot' style='background: #000000'></div>black,
+            <div class='dot'style='background: silver'></div>silver,
+            <div class='dot'style='background: gray'></div>gray,
+            <div class='dot'style='height: 8px; width: 8px; background: white; border: 1px solid black'></div>white,
+            <div class='dot'style='background: maroon'></div>maroon,
+            <div class='dot'style='background: red'></div>red,
+            <div class='dot'style='background: purple'></div>purple,
+            <div class='dot'style='background: fuchsia'></div>fuchsia,
+            <div class='dot'style='background: green'></div>green,
+            <div class='dot'style='background: lime'></div>lime,
+            <div class='dot'style='background: olive'></div>olive,
+            <div class='dot'style='background: yellow'></div>yellow,
+            <div class='dot'style='background: navy'></div>navy,
+            <div class='dot'style='background: blue'></div>blue,
+            <div class='dot'style='background: teal'></div>teal,
+            <div class='dot'style='background: aqua'></div>aqua.
+    </P>
+</DIV>
+
+<DIV class="barChartMatrixUrl"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartMatrixUrl &lt;url&gt;</code></div>
+    <P>Specifies a data matrix file that provides data values for all samples.
+Used together with barChartSampleUrl to generate a box plot on the details page.
+    </P>
+</DIV>
+<DIV class="barChartSampleUrl"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartSampleUrl &lt;url&gt;</code></div>
+    <P>Specifies a tab-separated file that provides categories for samples in the
+barChartMatrixUrl file.  Used for generating a box plot on the details page.
+    </P>
+</DIV>
+
+<DIV class="bigBarChart_example"><span class="types bigBarChart"></span>
+<div class="format"><B>Example of a bigBarChart track</B></div>
+    <pre>
+    track brainRegionRna
+    type bigBarChart
+    maxLimit 8000
+    barChartUnit RPKM
+    barChartLabel Brain Regions
+    barChartMetric median
+    barChartBars Amygdala Cerebellum Cortex Hippocampus
+    barChartColors #ff0000 green maroon navy
+    shortLabel Brain RNA
+    longLabel Brain Gene Expression
+    spectrum on
+    labelFields gene, name
+    defaultLabelFields gene
+    bigDataUrl http://...
+    barChartMatrixUrl http://...
+    barChartSampleUrl http://...
+    </pre>
+</div>
 
 <!-- - - - - - - - GROUP settings - - - - - - - -->
 <DIV class="group_intro">

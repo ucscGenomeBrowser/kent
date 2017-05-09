@@ -1,0 +1,49 @@
+#!/usr/bin/python
+
+import sys
+from optparse import OptionParser
+import tabfile, bed
+
+# -------- OPTIONS ------------
+parser = OptionParser("usage: %prog [options] transcriptBedFile transcriptGeneFile\nselects only the longest or median-length transcript for each gene, transcriptBedFile has format: transcriptID<tab>geneId") 
+parser.add_option("-m", "--median", dest="median", action="store_true", help="use median-length transcript, instead of longest (which is the default)",default=False)
+(options, args) = parser.parse_args()
+if len(args)==0:
+    parser.print_help()
+    sys.exit(1)
+
+# ------ MAIN -----------------
+
+bedFile, geneTransFile = args
+transcripts = bed.parseBedFilename(bedFile)
+transToGene = tabfile.slurpdict(geneTransFile)
+
+# index transcripts by gene id
+geneToTransList = {}
+for trans in transcripts:
+    gene = transToGene.get(trans.name, "unknownGene")
+    geneToTransList.setdefault(gene, [])
+    geneToTransList[gene].append(trans)
+
+transNames = [t.name for t in geneToTransList.get("unknownGene",[])]
+sys.stderr.write("The following %d transcripts are not associated to any gene:\n" % len(transNames))
+sys.stderr.write(",".join(transNames))
+sys.stderr.write("\n")
+
+# iterate over gene and keep only best transcript
+bestTransList = bed.Features()
+for gene, transList in geneToTransList.iteritems():
+    transList.sort(key= lambda trans: trans.end - trans.start)
+    if options.median:
+        bestTrans = transList[len(transList)/2]
+    else:
+        bestTrans = transList[-1] # -1 = last element in list
+    #bestTrans.name += ("|"+gene)
+    bestTrans.name = gene
+    bestTransList.append(bestTrans)
+
+for trans in bestTransList:
+    print trans
+sys.stderr.write("%d best transcripts found\n" % len(bestTransList))
+sys.stderr.write("%d transcripts are not associated to any gene\n" % len(transNames))
+    

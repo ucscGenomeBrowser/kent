@@ -70,7 +70,7 @@ DBS = \
 	ci1 ci2 ci3 cioSav2 \
 	cioSav1 \
 	colAng1 \
-	criGri1 criGriChoV1 \
+	criGri1 \
 	danRer3 danRer4 danRer5 danRer6 danRer7 danRer10 \
 	dasNov1 dasNov2 dasNov3 \
 	dipOrd1 proCap1 \
@@ -176,9 +176,6 @@ DBS = \
 	vicPac1 vicPac2 \
 	xenLae2 \
 	xenTro1 xenTro2 xenTro3 xenTro7 xenTro9
-
-GSID_DBS = \
-	hiv1 vax004 hivgne8 hivmn hivmn1 hivmn2 hivgne8v2 hivVax003Vax004
 
 ARCHIVED_DBS = \
 	rheMac1 \

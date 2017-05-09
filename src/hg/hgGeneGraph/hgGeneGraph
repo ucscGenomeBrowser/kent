@@ -1,0 +1,1986 @@
+#!/usr/bin/env python2.7
+
+# Protein Interaction Viewer for the Genome Browser
+
+# query tables with prefix "gg" in hgFixed, writes the results to a dot file,
+# runs graphviz's "dot" program to create a pathway map from it and write html
+# and mapfiles to the trash directory.
+
+# CGI params: gene=(HGNCsymbol) or link=sym1:sym2
+# optional params: addNeighbors
+
+# colors:
+
+# grey+thickness = only text mining data
+# light blue, dashed = only high-throughput data
+
+# light blue, thickness = high-throughput data + text
+# dark blue, dashed = only low-throughput data
+
+# dark blue, thickness = low-throughput data + text
+# dark blue + dashed  = only pathway data
+
+# code review
+# - os.system is not a security risk here, no variables go into the cmd line
+# - mysql statements are not escaped, instead all CGI vars are checked for non-alpha letters
+
+# hgFixed tables required for this script: ggLink (main table with gene-gene links), 
+# ggLinkEvent (details about link), ggEventDb (details about links from databases), 
+# ggEventText (details about links from text mining), ggDoc (details about documents for ggEventText)
+# ggGeneName (symbols), ggGeneClass (HPRD/Panther class)
+
+# these are default python modules on python 2.7, no errors expected here
+import sys, cgi, os, string, urllib, operator, hashlib
+from sys import exit
+from collections import defaultdict, namedtuple
+from os.path import *
+
+# import the UCSC-specific library
+sys.path.append("pyLib")
+try:
+    from hgLib import cgiArgs, cgiSetup, cgiString, printContentType, printMenuBar, \
+            sqlConnect, sqlQuery, errAbort, cfgOption, runCmd, cgiGetAll, printHgcHeader, \
+            printHgcSection, webStartGbNoBanner, htmlPageEnd, hConnectCentral, sqlTableExists
+except:
+    print("Content-type: text/html\n")
+    print("Cannot find the directory cgi-bin/pyLib in Apache. This is an installation error.")
+    print("All all parts of cgi-bin installed? Did you do 'make' in kent/src/hg/pyLib?")
+
+# not using feedback button for now. Fan would have liked it, but not sure how we can write
+# to any form of database.
+#skimpyGimpyLoaded=False
+#try:
+    #from skimpyGimpy import skimpyAPI
+    #skimpyGimpyLoaded=True
+#except:
+    #pass
+
+# the list of allowed chars in cgi args: digits, letters and dashes
+legalChars = set(string.digits)
+legalChars.update(set(string.letters))
+legalChars.update("_-./: ")
+
+# number of genes to show on graph by default
+DEFGENECOUNT="25"
+# ignore all text mining data with less than X abstracts
+MINSUPP=2
+
+# minResCount is used throughout the code. For a given interaction, it is the minimal
+# number of interactions from all documents linked to this interaction.
+# E.g. minResCount of 5 means that the interaction is based on at least one document 
+# that contained not more than 5 interactions.
+
+# Cutoff on minResCount:
+# maximum number of pairs a study can have to be considered "low-throughput"
+# only interactions with at least one low-throughput study are colord in dark
+# In essence, this gets rid of curated papers that describe huge complexes
+LTCUTOFF=10
+
+# color for edges with only text-mining data ("text")
+TEXTCOLOR="#BBBBBB"
+# color for edges with low-throughput data (=pwy or (ppi and LTCUTOFF))
+LTCOLOR="#000099"
+# color for edges with high-throughput data (=ppi)
+HTCOLOR="#8080CC"
+# transparency for the gene graph edges
+TRANSPARENCY="C0"
+
+# url of the user's manual
+MANUALURL="../goldenPath/help/hgGeneGraph.html"
+
+# database where the tables are stored
+GGDB="hgFixed"
+
+# ==== GLOBALS =====
+
+# CGI parameters as a FieldStorage object
+# args = None
+
+# external DB information
+dbData = {
+"kegg" : ("KEGG", "http://www.kegg.jp/kegg-bin/show_pathway?%s"),
+"wikipathways" : ("WikiPathways", "http://www.wikipathways.org/index.php/Pathway:%s"),
+"iref" : ("Iref", "http://wodaklab.org/iRefWeb/interaction/show/%s"),
+#"pid" : ("NCI Pathway Database", "http://pid.nci.nih.gov/search/InteractionPage?atomid=%s"),
+#PID server is down, linking to NDex now, adapted the IDs, see ggPidToTables
+"pid" : ("NCI Pathway Database", "http://www.ndexbio.org/#/search?searchType=All&searchString=labels%%253A%s"),
+"reactome" : ("Reactome", "http://www.reactome.org/content/detail/%s"),
+"go" : ("Gene Ontology Complexes", "http://www.ebi.ac.uk/QuickGO/GTerm?id=%s#info=2"),
+"fastforward" : ("FastForward", "http://fastforward.sys-bio.net/popup.php?name_target=%s"),
+"argdb" : ("ARGDB", "http://argdb.fudan.edu.cn/geneshow_id.php?gene_id=%s"),
+"corum" : ("MIPS CORUM", "http://mips.helmholtz-muenchen.de/genre/proj/corum/complexdetails.html?id=%s"),
+"string" : ("STRING", "http://string-db.org/newstring_cgi/show_network_section.pl?multiple_input_items=%s&multi_input=1&multiple_input_type=multi_identifier&limit=0&input_page_type=multiple_identifiers&have_user_input=2&species_text=Homo%%20sapiens&input_query_species=auto_detect&flash=15&required_score=400")
+}
+
+# mime types to send in http header for other downloads
+mimeTypes = {
+"svg" : "image/svg+xml",
+"pdf" : "application/pdf",
+"json" : "application/json",
+"sif" : "application/octet-stream"
+}
+
+# gbdb file names and descriptions
+geneAnnotFiles = [
+("none", None, "No Annotation", "Do not annotate color genes on graph by external information"),
+("gnf2", "gnf2Avg.tab", "GNF2 Expression", "Gene Expression Atlas 2 average across tissues"),
+("drugbank", "drugbank.tab", "DrugBank", "DrugBank. Black = gene is targetable with a drug. Mouse-over shows drug names"),
+("cosmic" , "cosmicCensus.tab", "Cancer Gene Census", "COSMIC Cancer Gene Census Tumor Types. Black = gene is in cancer gene census. Mouse-over shows cancer type"),
+("tcgaMut" , "tcgaMut.tab", "Pan-Cancer Mutations", "TCGA PanCan12 samples with non-silent mutations - Gene mouse-over shows count")
+]
+
+# ==== FUNCTIONS ===
+
+#<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+#<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+#<script src="../js/readmore.min.js"></script>
+
+#<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+#<link rel="stylesheet" href="../style/HGStyle.css" type="text/css" />
+#<link rel='stylesheet' href='../style/nice_menu.css' type='text/css' />
+
+def printInlineAndStyles():
+    #print('<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>')
+    print('<script src="//cdn.rawgit.com/jedfoster/Readmore.js/master/readmore.min.js"></script>')
+
+
+
+    print("""
+<script type="text/javascript">
+  $(function() {
+    //$( document ).uitooltip();
+    //$( document ).uitooltip();
+    $('[data-toggle="tooltip"]').bsTooltip(); // bootstrap does not really allow HTML in the title attribute
+
+    // use jquery ui tooltips for the graph
+    var opt = {
+        items: "area",
+        track : true,
+        content: function() {return $(this).prop('title')}
+    };
+    $("area").uitooltip(opt);
+
+    // when user opens annotate genes menu, close the tooltip
+    //$('#colorLink').click( function () { console.log($(this)); $(this).tooltip("close"); } );
+
+    // for the more/less buttons,
+    // see http://code-tricks.com/jquery-read-more-less-example/
+    $('.more').readmore({
+      moreLink: '<a href="#" class="read-more-link">+ more</a>',
+      lessLink: '<a href="#" class="read-less-link">- less</a>',
+      maxHeight: 210,
+      
+      afterToggle: function(trigger, element, expanded) {
+        if(! expanded) { // The "Close" link was clicked
+          $('html, body').animate( { scrollTop: element.offset().top }, {duration: 100 } );
+        }
+      }
+    });
+
+  });
+
+</script>
+
+<style>
+/* fix up the styling of links in section headers */
+.gbSectionBanner a {
+    color: lightgrey;
+    font-weight: bold;
+}
+
+.gbSectionBanner a:link {
+    color: lightgrey;
+    font-weight: bold;
+}
+
+/* make the bootstrap menu buttons smaller */
+.btn-sm {
+    padding: 0px 10px;
+}
+
+label {
+    display: inline-block;
+    width: 5em;
+}
+.ui-tooltip
+{
+      font-size:10pt;
+      font-family:Helvetica;
+      padding: 3px;
+}
+
+ul { padding-left: 15px; margin: 0px; padding-top:3px;}
+
+.tooltip.right  { margin-left: 20px; }
+.tooltip.left  { margin-left: -20px; }
+
+</style>
+
+    """)
+
+def htmlHeader():
+    " print start of page "
+    webStartGbNoBanner("", "Genome Browser Gene Interaction Graph")
+
+    print('<body class="hgc cgi">')
+    printMenuBar()
+
+    db = getCgiVar("db", "hg19")
+    printHgcHeader(db, "Protein Interactions Track", "Protein interactions and pathways from curated databases and text-mining", addGoButton=False, infoUrl=MANUALURL)
+
+
+def mustBeClean(str):
+    """ make sure a string contains only letters and digits """
+    if str==None:
+        return str
+
+    str = urllib.unquote(str)
+    str = str.strip()
+
+    for s in str:
+        if s not in legalChars:
+            errAbort("illegal character in CGI parameter")
+    return str
+
+def getCgiVar(name, default=None, allowAnyChar=False, maxLen=30):
+    " get named cgi variable as a string "
+    val = cgiString(name, default=default)
+    if not allowAnyChar:
+        mustBeClean(val)
+
+    if val != None and len(val) > maxLen:
+        errAbort("CGI arg %s cannot be longer than %d characters" % (name, maxLen))
+    return val
+
+def mergeCgiParamDicts(data, changes, reset=False):
+    """ given a data dict and a 2nd one with key=val changes, return a new dict with
+    changes merged into data. If changes has key=None, remove the key from data.
+
+    Skips some typical hgTracks-specific settings, like hgt.*, l, r or pix.
+    """
+    cgiArgs = cgiGetAll()
+    newArgs = {}
+    # copy all existing CGI vars into new dict
+    if not reset:
+        for key in data.keys():
+            if key.startswith("hgt") or key.startswith("dink") or key=="c" or key=="l" or key=="r" or key=="pix" or key=="position":
+                continue
+            val = cgiArgs.getfirst(key)
+            newArgs[key] = val
+
+    # remove or add the changes
+    for key, val in changes.iteritems():
+        if val==None:
+            if key in newArgs:
+                del newArgs[key]
+        else:
+            newArgs[key] = str(val)
+    return newArgs
+
+
+def makeSelfUrl(changes, clear=False):
+    " return a url to myself, keep all CGI vars, but change/append addParam=addValue "
+    # construct the new link
+    newArgs = mergeCgiParamDicts(cgiGetAll(), changes, clear)
+    paramStr = urllib.urlencode(newArgs)
+    myName = basename(__file__)
+    url = "%s?%s" % (myName, paramStr)
+    return url
+
+def printSelfHiddenVars(paramDict, clear=False, skipList=[]):
+    " like makeSelfUrl, but write out all current CGI vars as hidden form fields "
+    newArgs = mergeCgiParamDicts(cgiGetAll(), paramDict, clear)
+    for key, val in newArgs.iteritems():
+        if key not in skipList and not key=="submit":
+            print '<input type="HIDDEN" name="%s" value="%s">' % (key, val)
+
+def makeSelfLink(linkName, paramDict, clear=False, anchor=None, className=None, title=None, style=None, dataToggle=None):
+    """ make a href link to myself, keep all CGI vars, but change/append addParam=addValue 
+    styleDict is a list of css styles
+    """
+    url = makeSelfUrl(paramDict, clear=clear)
+    if anchor!=None:
+        url += "#"+anchor
+
+    classStr = ""
+    if className!=None:
+        classStr='class="%s" ' % className
+
+    dataToggleStr = ""
+    if dataToggle!=None:
+        dataToggleStr='data-toggle="%s" data-placement="right"' % dataToggle
+
+    styleStr = ""
+    if style!=None:
+        styleStr='style="%s" ' % style
+
+    titleStr = ""
+    if title!=None:
+        titleStr = ' title="%s"' % title.replace('"', ' ')
+    return '<a %s%s%shref="%s"%s>%s</a>' % (titleStr, classStr, dataToggleStr, url, styleStr, linkName)
+
+def saltedHash(word, length=5):
+    " return first 5 chars of salted hash "
+    # pretty simple salt: PITX2, salting is just for the captcha
+    hashStr = "".join(hashlib.sha1(word+"PITX2").hexdigest()[:length]).lower()
+    return hashStr
+
+def htmlCaptcha(word):
+    " return html that encodes captcha word "
+    # copied from http://skimpygimpy.sourceforge.net/
+    if not skimpyGimpyLoaded:
+        return None
+
+    HTMLSPECKLE = 0.1
+    HTMLSCALE = 1.5
+    HTMLCOLOR = "000000"
+
+    # create an HTML generator
+    htmlGenerator = skimpyAPI.Pre(word,
+                                  speckle=HTMLSPECKLE, # optional
+                                  scale=HTMLSCALE, # optional
+                                  color=HTMLCOLOR, # optional
+                                  )
+    # store the preformatted text as htmlText
+    htmlText = htmlGenerator.data()
+    return htmlText
+
+def reqMinSupp(links, minArtSupp, maxResCount, targetGene):
+    """ remove all 'text mining only' links with less than minArtSupp supporting documents
+        The only exception is targetGene which we always want to stay connected
+
+        Also remove links that are PPI-only and have a high minResCount.
+    """
+    newLinks = defaultdict(set)
+    genes = set()
+    targetConns = {}
+    for genePair, linkData in links.iteritems():
+        docCount, dbCount, tagSet, minResCount = linkData[:4]
+        if targetGene in genePair:
+            targetConns[genePair] = linkData
+        # remove text-mining links with only one article
+        if "text" in tagSet and docCount < minArtSupp:
+            continue
+        # remove noisy PPI links 
+        if len(tagSet)==1 and "ppi" in tagSet and minResCount > maxResCount:
+            continue
+        genes.update(genePair)
+        newLinks[genePair] = linkData
+
+    # is the target gene still connected to something? If not add it back and
+    # accept that these links are less than minSupp
+    if targetGene not in genes:
+        for genePair, linkData in targetConns.iteritems():
+            newLinks[genePair] = linkData
+    return newLinks
+
+def scorePair(docCount, tagSet):
+    " return the score for a gene pair "
+    # pairs that have no text mining results get assigned artifical
+    # article counts, based on this query:
+    # hgsql publications -e "select * from ggLink where linkTypes like '%ppi%'" -NB | tawk '($4!=0 && $5!=0) { print $4+$5}' | avg
+    # the avg for PPI was 14 and the one for pwy 22
+    # but PPI scores were mostly 0, so I lower it manually
+    geneScore = docCount
+    if geneScore==0 and "ppi" in tagSet:
+        geneScore = 2
+    if geneScore==0 and "pwy" in tagSet:
+        geneScore = 4
+    return geneScore
+
+def iterLinkScores(links):
+    """ given a dict (gene1, gene2) -> [score1, score2, ...] 
+    yield tuples (gene1, gene2), totalScore
+    """
+    for genes, linkData in links.iteritems():
+        docCount, dbCount, tagSet = linkData[:3]
+        geneScore = scorePair(docCount, tagSet)
+        yield genes, geneScore
+
+
+def limitGenes(links, maxRank, targetGene, lowLinks=None):
+    """ get the links for the top X genes and return two lists of links, highLinks and lowLinks
+    The targetGene is always in the high list.
+    """
+    # create a list of genes sorted by article count in links
+    geneScores = defaultdict(int)
+    for genes, geneScore in iterLinkScores(links):
+        for g in genes:
+            geneScores[g] += geneScore
+
+    geneScores = geneScores.items()
+    geneScores.sort(key=operator.itemgetter(1), reverse=True)
+
+    # keep only the best genes
+    sortedGenes = [x for x,y in geneScores]
+    highGenes = set(sortedGenes[:maxRank])
+    lowGenes = set(sortedGenes[maxRank:])
+
+    # the target gene itself always has to be in the top list
+    if targetGene not in highGenes:
+        highGenes.add(targetGene)
+    if targetGene in lowGenes:
+        lowGenes.remove(targetGene)
+
+    # filter the links into high and low
+    highLinks = defaultdict(set)
+    if lowLinks==None:
+        lowLinks = defaultdict(set)
+    for genes, linkData in links.iteritems():
+        g1, g2 = genes
+        if g1 in highGenes and g2 in highGenes:
+            highLinks[genes] = linkData
+        else:
+            lowLinks[genes] = linkData
+    return highLinks, lowLinks
+
+def limitLinks(graphLinks, lowLinks, maxRank, targetGene):
+    """ filter the high links to keep only the best X and return them, move the
+    others into the lowLinks dict. Always keep all links to/from targetGene.
+    """
+    # ignoring link direction, get all PMIDs per link
+    linkScores = {}
+    for genes, geneScore in iterLinkScores(graphLinks):
+        linkScores[genes] = geneScore
+    linkScores= linkScores.items() # convert to list
+    linkScores.sort(key=operator.itemgetter(1), reverse=True) # sort
+    linkScores = [x for x,y in linkScores] # keep only the gene pairs
+
+    highPairs = set(linkScores[:maxRank]) # keep only the best pairs
+    lowPairs = set(linkScores[maxRank:])
+    
+    # now filter all links and keep only the those of the pairs
+    highLinksFiltered = defaultdict(set)
+    for pair, linkData in graphLinks.iteritems():
+        g1, g2 = pair
+        if pair in highPairs or g1==targetGene or g2==targetGene:
+            #print "high", pair
+            highLinksFiltered[pair] = linkData
+        else:
+            #print "low"
+            lowLinks[pair] = linkData
+    return highLinksFiltered, lowLinks
+        
+
+def splitHighLowLinks(links, gene, minSupp, lowLinks, geneCount):
+    """ split into two sets of links: high = best geneCount genes and best 2*geneCount links
+    between them, low = all the others"""
+    links = reqMinSupp(links, minSupp, LTCUTOFF, gene)
+
+    highLinks, lowLinks = limitGenes(links, geneCount, gene, lowLinks)
+    #print "lowLinks", lowLinks, "<p>"
+    #print "highLinks", highLinks, "<p>"
+
+    highLinks, lowLinks = limitLinks(highLinks, lowLinks, 2*geneCount, gene)
+    #print "bestLinks", highLinks, "<p>"
+
+    return highLinks, lowLinks
+
+def queryLinks(conn, gene=None, genes=None):
+    """ query the mysql table ggLink for either all links to gene
+    or all links between all pairs of genes
+    Return result as a dict (gene1, gene2) ->
+    (docCount, tagSet, snippet)
+    tags can be any subset of ppi, text, pwy, pwyRev, low
+    """
+    assert (gene!=None or genes!=None)
+    query = "SELECT gene1, gene2, linkTypes, docCount, minResCount, dbList, snippet FROM ggLink "
+
+    if gene!=None:
+        query += "WHERE gene1='%s' OR gene2='%s'" % (gene, gene)
+    else:
+        geneList = ["'"+g+"'" for g in genes]
+        listStr = '(%s)' % ",".join(geneList)
+        query += "WHERE gene1 IN %s AND gene2 IN %s" % (listStr, listStr)
+
+    rows = sqlQuery(conn, query)
+
+    links = {}
+    for row in rows:
+        pair = (row.gene1, row.gene2)
+        links[pair] = (int(row.docCount), row.dbList.split("|"),  \
+            row.linkTypes.split(","), int(row.minResCount), row.snippet)
+    return links
+
+def filterLinks(links):
+    " remove links depending on the CGI param 'supportLevel'. Can show all, only with PPI/pathway or only with pathway "
+    showTags = getFilterStatus()
+    if len(showTags)==3:
+        # no filtering
+        return links
+
+    # filter links
+    filtLinks = {}
+    for pair, pairData in links.iteritems():
+        docCount, dbList, tagSet = pairData[:3]
+        if len(showTags.intersection(tagSet))!=0:
+            filtLinks[pair] = pairData
+    return filtLinks
+
+def buildGraph(conn, gene, geneCount, minSupp, addNeighbors):
+    """ get (gene,gene) links from database and annotate with weights and tags
+    only get links with minSupp articles for each link  
+    """
+    links = queryLinks(conn, gene=gene)
+
+    if len(links)==0:
+        errAbort("Sorry, the gene %s is not a valid gene symbol or is not present in any gene interaction database." % cgi.escape(gene))
+
+    links = filterLinks(links)
+
+    lowLinks = defaultdict(set)
+    graphLinks, lowLinks = splitHighLowLinks(links, gene, minSupp, lowLinks, geneCount)
+
+    if addNeighbors:
+        # create the links between all other genes, be less stringent about these
+        otherGenes = set()
+        for genes, pmids in graphLinks.iteritems():
+            otherGenes.update(genes)
+        if gene in otherGenes:
+            otherGenes.remove(gene)
+        # get links between all other genes but keep the limit on the graphed links
+        otherLinks = queryLinks(conn, genes=otherGenes)
+        otherLinks = filterLinks(otherLinks)
+        otherLinks = reqMinSupp(otherLinks, 2, 999999999, gene) # we still require two text mining abstracts
+        otherLinks, lowLinks = limitLinks(otherLinks, lowLinks, 35, gene)
+        # add the high links back to the graph
+        for pair, linkData in otherLinks.iteritems():
+            assert(pair not in graphLinks)
+            graphLinks[pair] = linkData
+
+    return graphLinks, lowLinks
+
+#def queryLinkColors(conn, links):
+    #" figure out if links have annotations in pathway commons "
+    #colors = {}
+    #for gene1, gene2 in links:
+        #if sqlQueryExists(conn, "SELECT causeGene, themeGene FROM pathCommons where causeGene='%s' and themeGene='%s'" % (gene1,gene2)):
+            #colors[(gene1, gene2)] = "blue"
+    #return colors
+        
+def pmidCountToThick(pmidCount):
+    " convert pmid count to line thickness "
+    if pmidCount > 50:
+        thick = 4.5
+    elif pmidCount > 5:
+        thick = 3.5
+    elif pmidCount > 1:
+        thick = 2.5
+    else:
+        thick = 1
+    return thick
+
+def minResToThick(count):
+    " convert minResCount to line thickness, for description of minResCount see start of file "
+    if count > 100:
+        thick = 1
+    elif count > 50:
+        thick = 2
+    elif count > 10:
+        thick = 3.5
+    else:
+        thick = 2
+    return thick
+
+def which(binPath):
+    " find full path of binary "
+    import distutils.spawn
+    return distutils.spawn.find_executable(binPath)
+
+def runDot(fname, alg, format="png"):
+    " run dot and return tuple outFname, outMapFname "
+    outFname = splitext(fname)[0]+"."+format
+    outMap = splitext(fname)[0]+".map"
+    binPath = cfgOption("graphvizPath", "dot")
+
+    if which(binPath) is None:
+        print("Could not find the command %s<p>" % binPath)
+        print("This usually means that on this UCSC Genome Browser, GraphViz is not installed.")
+        print("To install GraphViz, ask the Administrator of this server to run one of the following commands:<br>")
+        print("<tt>sudo apt-get install graphviz</tt><br>")
+        print("<tt>sudo wget http://www.graphviz.org/graphviz-rhel.repo -o /etc/yum/repos.d/graphviz.rhel.repo; sudo yum install graphviz*</tt><br>")
+        print("<p>")
+        print("Alternatively, you can compile GraphViz from source and specify the full path to 'dot' with the option 'graphvizPath' in cgi-bin/hg.conf.")
+        exit(0)
+
+    cmd = [binPath, "-Gdpi=96", "-Gsize=12,5", "-Gratio=fill", "-K"+alg, "-T"+format, fname, "-o",outFname]
+    # create a html map for png format
+    if format=="png":
+        cmd.extend(["-Tcmapx", "-o", outMap])
+    ret = runCmd(cmd, mustRun=False)
+
+    if ret!=0:
+        print("Could not run the command '%s'. <br>" % "".join(cmd))
+        print("This means that on this UCSC Genome Browser Installation too old.")
+        print("To update GraphViz to a more recent version, ask the Administrator of this ")
+        print("server to try running one of these commands:<br>")
+        print("<tt>sudo apt-get install graphviz</tt><br>")
+        print("<tt>sudo wget http://www.graphviz.org/graphviz-rhel.repo -o ")
+        print("/etc/yum/repos.d/graphviz.rhel.repo;")
+        print("sudo yum install graphviz*</tt><br>")
+        print("<p>")
+        print("If this does not work, you may have to compile GraphViz from source and")
+        print("specify the 'dot' binary with the option graphvizPath cgi-bin/hg.conf.")
+        exit(0)
+
+    return outFname, outMap
+
+def dictToDot(d):
+    """ reformat a dictionary to a string like [key1="value1"; key2="value2"] """
+    if len(d)==0:
+        return ""
+
+    strList = []
+    for key, val in d.iteritems():
+        strList.append('%s="%s"' % (key, val.replace('"', '')))
+    return "[%s]" % (";".join(strList))
+
+def writeDot(allGenes, links, fname, targetGene, geneDescs, annotLabel, geneAnnots, linkSnips):
+    """ write a description of the graph to fname in dot format.
+    targetGene is highlighted, geneDescs are on mouseovers, geneAnnots are used to color the genes.
+    geneSnips are added to mouseovers.
+    """
+
+    ofh = open(fname, "w")
+    ofh.write("digraph test {\n")
+    ofh.write("graph [bgcolor=transparent; esep=0.4];\n")
+    #ofh.write("rankdir=LR;\n")
+    ofh.write("overlap=voronoi;\n")
+    ofh.write('size="7,7";\n')
+    #ofh.write('splines=polyline;\n')
+    ofh.write('splines=true;\n')
+    #ofh.write('nodesep=2.0;\n')
+    #ofh.write('pack=true;\n')
+    #ofh.write('edge [arrowhead=vee, color=grey];\n')
+    #ofh.write('node [color=none; shape=plaintext; fixedsize=true,width=0.9,fontname="Helvetica"];\n')
+    ofh.write('edge [color="%s"; weight=0.2; arrowsize=0.7];\n' % (TEXTCOLOR+TRANSPARENCY))
+    ofh.write('node [penwidth=0; style=filled; fontcolor="#ffffff"; fillcolor="#111177"; shape=ellipse; fontsize=11; fixedsize=true; width=0.8; height=0.3; fontname="Helvetica"];\n')
+    #ofh.write('"%s" [fontcolor="#00000"; color="transparent"; style=filled; fillcolor="#ffff00"];\n' % targetGene)
+
+    # write out the genes
+    for g in allGenes:
+        d = {}
+        ttLines = geneDescs[g]
+        if g in geneAnnots:
+            #d["color"]="#3636E2"
+            geneAnnotVal, geneAnnotGrey = geneAnnots[g]
+            transVal = 200 - (geneAnnotGrey*25) # scale to 55-255
+            transHex = "%0.2X" % transVal # convert to hex
+            d["fillcolor"]="#"+"".join([transHex]*3) # concat three times, creates a grey-value
+            d["fontcolor"] = "white"
+            ttLines.append("<b>%s</b>: %s" % (annotLabel, geneAnnotVal))
+        d["tooltip"] = " &lt;br&gt; ".join(ttLines) # separate with encoded html linebreaks
+        url = makeSelfUrl({"gene":g})
+        url = url.replace("&", "&amp;") # otherwise invalid SVG will result
+        d["URL"] = url
+        if g==targetGene:
+            d["penwidth"] = "1"
+            d["fontcolor"] = "black"
+            d["fillcolor"] = "yellow"
+            #d["style"] = "bold"
+            d["color"] = "blue"
+        ofh.write('"%s" %s;\n' % (g, dictToDot(d)))
+
+    # write the links between genes
+    for gene1, gene2, score, docCount, dbs, tags, minResCount, snippet in links:
+        dbs = [x.upper() for x in dbs if x!='']
+
+        addStr = ""
+
+        # based on http://www.w3schools.com/tags/ref_colorpicker.asp?colorhex=F0F8FF
+        color = None
+        if "pwy" in tags or ("ppi" in tags and minResCount<=LTCUTOFF):
+            color = LTCOLOR+TRANSPARENCY #"#000099A0"
+        elif "ppi" in tags:
+            color = HTCOLOR+TRANSPARENCY # "#8080CCA0"
+
+        if color:
+            addStr = 'color="%s";' % color
+
+        if gene2==gene1:
+            addStr += 'len="5"; '
+        thick = pmidCountToThick(score)
+
+        if "fwd" in tags and "rev" in tags:
+            arrDir = "both"
+        elif "fwd" in tags:
+            arrDir = "forward"
+        elif "rev" in tags:
+            arrDir = "back"
+        else:
+            arrDir = "none"
+
+        if "text" in tags:
+            style = "solid"
+        else:
+            style = "dashed"
+            thick = 1
+
+        tooltipLines = ["<b>%s-%s</b> " % (gene1, gene2)]
+        tooltipLines.append("<ul>")
+        if len(dbs)==0:
+            tooltipLines.append("<li>No curated information")
+        else:
+            suffix = ""
+            if len(dbs)>3:
+                suffix = "..."
+            tooltipLines.append("<li>Databases: %s%s" % (", ".join(dbs[:3]), suffix))
+
+        if docCount==0:
+            tooltipLines.append("<li>%d interactions were curated from source document" % minResCount)
+            tooltipLines.append("<li>No text-mining data")
+            thick = minResToThick(minResCount)
+        else:
+            tooltipLines.append("<li>Text-mining: %d abstracts" % docCount)
+        if linkSnips.get( (gene1, gene2), None):
+            snip = linkSnips[(gene1, gene2)].replace(" , ", ", ")
+            tooltipLines.append(" e.g. <i>"+snip+"</i>")
+
+        tooltipLines.append("</ul>")
+        tooltipLines.append("&nbsp;<small>Click link to show details</small>")
+            
+        tooltip = "".join(tooltipLines)
+
+        url = makeSelfUrl({"gene" : None, "lastGene":targetGene, "link":gene2+":"+gene1})
+        url = url.replace("&", "&amp;") # otherwise is invalid SVG
+        ofh.write('"%s" -> "%s" [dir="%s"; penwidth=%d; %s edgetooltip = "%s"; URL="%s", style=%s ]; \n' % \
+                (gene1, gene2, arrDir, thick, addStr, tooltip, url, style))
+    ofh.write("}\n")
+    ofh.close()
+        
+def getPos (db, gene, pos):
+    " print position as link "
+    chrom, start, end = pos
+    if (chrom!="" and start!=""):
+        return """ located at <A title="link to Genome Browser" HREF="../cgi-bin/hgTracks?db=%s&position=%s:%d-%s">%s:%s-%s</A><BR>""" % \
+            (db, chrom, start, end, chrom, start, end)
+    else:
+        return ""
+
+def queryPos(conn, gene):
+    "return position of gene symbol as tuple (chrom, start, end) from kgXref, fallback to refGene "
+    rows = sqlQuery(conn, "select chrom, chromStart, chromEnd from knownCanonical JOIN kgXref ON kgId=transcript where geneSymbol='%s'" % gene)
+    if len(rows)==0:
+        # "INS" is not in kgXref???
+        rows = sqlQuery(conn, 'select chrom, txStart, txEnd from refGene where name2="%s" limit 1;' % gene)
+        if len(rows)==0:
+            return "", "", ""
+
+    return rows[0]
+    
+def flattenLink(links):
+    """ given a dict with a directed graph geneA, geneB -> linkData
+        return a undirected graph in the form of a list
+        (geneA, geneB), totalCount, docCount, tags
+    """
+    counts = []
+    minAbsCount = 99999999
+    for genes, linkData in links.iteritems():
+        docCount, dbCount, tagSet, minResCount, snippet = linkData
+        geneScore = scorePair(docCount, tagSet)
+        counts.append( (genes[0], genes[1], geneScore, docCount, dbCount, tagSet, minResCount, snippet)  )
+        if docCount!=0:
+            minAbsCount = min(minAbsCount, docCount)
+    return counts, minAbsCount
+
+
+def countTargetLinks(links, targetGene):
+    """ given a dict with (gene1, gene2) => docCount, dbCount, tags create a list
+        of (gene, count) for all genes connected to target gene
+    """
+    # count the in+outgoing links for each gene in 'links', the DB evidence
+    # and the union of the tags
+    allGenes = set()
+    txtCounts = defaultdict(int)
+    pairDbs = defaultdict(set)
+    tags = defaultdict(set)
+
+    for genePair, pairData in links.iteritems():
+        g1, g2 = genePair
+        docCount, dbs, tagSet = pairData[:3]
+        if g1==targetGene:
+            gene = g2
+        elif g2==targetGene:
+            gene = g1
+        else:
+            continue
+
+        allGenes.add(gene)
+        pairDbs[gene].update(dbs)
+        txtCounts[gene] += docCount
+        tags[gene].update(tagSet)
+    
+    # create a list (gene, txtCount, dbCount)
+    linkList = []
+    for g in allGenes:
+        linkList.append( (g, txtCounts.get(g, 0), len(pairDbs.get(g, [])), tags.get(g, [])) )
+
+    return linkList
+        
+def makeUniDir(links):
+    " for bidirectional links: keep only strongest direction and return new links dict "
+    newLinks = defaultdict(set)
+    for pair, pmids in links.iteritems():
+        if not pair in newLinks:
+            cause, theme = pair
+            revPair = (theme, cause)
+            score = len(pmids)
+            revPmids = links.get( revPair, set())
+            revScore = len(revPmids)
+            allPmids = pmids.union(revPmids)
+            if score > revScore:
+                newLinks[pair] = allPmids
+            elif revScore > score:
+                newLinks[revPair] = allPmids
+            else:
+                newLinks[pair] = allPmids
+                newLinks[revPair] = allPmids
+    return newLinks
+
+def queryGeneDescs(conn, allGenes):
+    " get descriptions of genes from mysql tables, return dict gene -> description "
+    geneDescs = defaultdict(list)
+    for gene in allGenes:
+        #q = 'SELECT text from geneDescRefSeq where gene="%s"' % gene
+        #q = 'SELECT text from geneClassHgnc where gene="%s"' % gene
+        q = 'SELECT text from ggGeneName where gene="%s"' % gene
+        rows = sqlQuery(conn, q)
+        if len(rows)!=0:
+            geneDescs[gene].append("<b>%s</b>" % rows[0].text)
+
+        #q = 'SELECT text from geneDescRefSeq where gene="%s"' % gene
+        q = 'SELECT text from ggGeneClass where gene="%s"' % gene
+        rows = sqlQuery(conn, q)
+        if len(rows)!=0:
+            geneDescs[gene].append(rows[0].text)
+    return geneDescs
+
+def printHttpHead(format):
+    " print content type header "
+    mimeType = mimeTypes[format]
+    print "Content-Type: %s" % mimeType
+    if format in ["pdf", "svg", "sif"]:
+        fname = "graph."+format
+        print "Content-Disposition: attachment; filename=%s" % fname
+    print
+
+def printCheckbox(name, isChecked, addAttr):
+    " print a html checkbox "
+    addStr = ""
+    if isChecked:
+        addStr = 'checked="true" '
+    print '<input type="checkbox" name="%s" value="on" %s%s />' % (name, addStr, addAttr)
+
+def getFilterStatus():
+    """ return a set of the support tags that should be shown, based on the CGI var 'supportLevel'.
+    """
+    supportLevel  = getCgiVar("supportLevel", "text")
+    tagSet = set(["pwy"])
+    if supportLevel=="ppi" or supportLevel=="text":
+        tagSet.add("ppi")
+    if supportLevel=="text":
+        tagSet.add("text")
+    return tagSet
+
+def printDropdown(cgiArgName, selectedName, options, addStr=""):
+    " print a html dropdown <select> box. "
+    print("<select name='%s'%s>" % (cgiArgName, addStr))
+    for name, label in options:
+        addStr = ""
+        if name==selectedName:
+            addStr = " selected"
+
+        print('<option value="%s"%s>%s</option>' % (name, addStr, label))
+    print("</select>")
+
+def printFilterMenu(targetGene, addNeighbors):
+    # form to filter by type
+    print "<small>"
+    print '<form name="filterForm" action="%s" method="GET">' % makeSelfUrl({}, True)
+    print """Gene:""" 
+    print '<input type="text" size="6" name="gene" value="%s" />' % targetGene
+    print "&nbsp;"
+    print '<input type="submit" name="1" value="OK">'
+    print "&nbsp;&nbsp;&nbsp;"
+
+
+    supportLevel = getCgiVar("supportLevel", "text")
+    if supportLevel not in ["text", "pwy", "ppi"]:
+        errAbort("Illegal value for the supportLevel argument. Can only be text,pwy or ppi.")
+
+    onChangeAttr = '''onchange="document.forms['filterForm'].submit();"'''
+
+    printDropdown("supportLevel", supportLevel, [("text", "Show all interactions, even only text-mining support"), ("ppi", "Show only interactions with some database support"), ("pwy", "Show only interactions with pathway database support")], addStr=onChangeAttr )
+
+    #filterTags = getFilterStatus()
+    #printCheckbox("pwy", "pwy" in filterTags, onChangeAttr)
+    #print '<span style="background:%s;color:white" title="Show interactions manually curated by a pathway database, like WikiPathways, KEGG or Reactome, in dark-blue" onclick="">Pathways</span>' % LTCOLOR
+
+    #printCheckbox("ppi", "ppi" in filterTags, onChangeAttr)
+    #print '<span style="background:%s;color:white" title="Show interactions manually curated by a protein interaction database, like IntAct or BioGrid, in light-blue">Protein Interaction</span>' % HTCOLOR
+
+    #printCheckbox("text", "text" in filterTags, onChangeAttr)
+    #print '<span style="background:%s;color:white" title="Show interactions automatically extracted from PubMed abstracts with text-mining software in grey." onclick="">Text-Mining</span>' % TEXTCOLOR
+
+    print "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+
+    #if addNeighbors:
+        #addNeighborLink = makeSelfLink("Show only %s links" % targetGene, {"onlyDirect":"1"})
+        #print("Only %s-interacting genes and only the most-mentioned interactions are shown. (%s)<br>" % (targetGene, noNeighborLink))
+    #else:
+        #addNeighborLink = makeSelfLink("Show links between neighbors", {"onlyDirect":None})
+        #print("Only %s interactions are shown (%s)<br>" % (targetGene, addNeighborLink))
+    #print(addNeighborLink)
+    hideIndirectStatus = (getCgiVar("hideIndirect")=="on")
+    printCheckbox("hideIndirect", hideIndirectStatus, onChangeAttr)
+    print '<span style="">Hide non-%s interactions</span>' % targetGene
+    print "&nbsp;&nbsp;&nbsp;"
+
+    geneCount = getCgiVar("geneCount", DEFGENECOUNT)
+    print "Show top"
+    print '<input name="geneCount" type="text" size="3" value="%s">' % geneCount
+    print "Genes on graph"
+    print "&nbsp;&nbsp;&nbsp;"
+
+    printSelfHiddenVars({}, skipList=["supportLevel", "hideIndirect", "gene"])
+
+    print "</form>"
+    print "</small>"
+
+def printDropDownMenu(label, entries, tooltip, selectedLabel=None):
+    " output bootstrap dropdown menu of links "
+    print
+    print('<span class="dropdown">')
+    if tooltip is not None:
+        print('<button class="btn btn-default btn-sm dropdown-toggle dropdown-toggle-split" type="button" id="dropdownMenu1" data-toggle="dropdown" title="%s" aria-haspopup="true" aria-expanded="false">' % tooltip)
+    else:
+        print('<button class="btn btn-default btn-sm dropdown-toggle dropdown-toggle-split" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
+    print(label)
+    print('<span class="caret"></span>')
+    print('</button>')
+    print('<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">')
+    for row in entries:
+        if len(row)==2:
+            label, url = row
+            link = '<a class="dropdown-item" href="%s">%s</a></li>' % (url, label)
+        else:
+            label, url, title = row
+            link = '<a data-placement="left" data-toggle="tooltip" title="%s" class="dropdown-item" href="%s">%s</a></li>' % (title, url, label)
+
+        if label==selectedLabel:
+            print("<li class='active'>")
+        else:
+            print("<li>")
+        print link
+
+    print('</ul>')
+    print('</span>')
+    print
+
+
+def printGraphMenu(conn, targetGene, addNeighbors):
+    " print the menu above the graph "
+    print '<div style="layout: inline-block; background: white"> <!-- whole menu -->'
+
+    print '<div style="layout: inline; float: left;"> <!-- left part of menu -->'
+    printFilterMenu(targetGene, addNeighbors)
+    print '</div> <!-- left part of menu -->' 
+
+    print '<div style="layout: inline; float: right"> <!-- right part of menu -->' 
+    print "<small>"
+
+    #print """
+    #<style>
+    #.smallDropDownMenu {
+        #border: 1px solid #ccc;
+        #margin: 0px;
+        #padding: 3px;
+        #display: none;
+        #position:absolute;
+        #z-index: 10;
+        #width: 140px;
+        #background:white
+        #}
+    #</style>
+    #"""
+
+    #print '<div style="display:inline-block">'
+    #title = "Highlight genes depending on their expression level, whether they are implicated in Cancer or targetable with drugs"
+    #print '<a href="#" onclick="return false;" class="smallDropDownLink" id="colorLink">&#9660; Annotate Genes</a>&nbsp;&nbsp;'
+
+    #print '<script>'
+    #print '</script>'
+    #print '<div class="smallDropDownMenu" id="smallDropDown_color" style="width:150px">'
+
+    entries = []
+    selected = "No Annotation"
+    for dataName, annotFname, annotShortLabel, annotLongLabel in geneAnnotFiles:
+        #link = makeSelfLink(annotShortLabel, {"geneAnnot":dataName}, className=None)
+        label = annotShortLabel
+        url = makeSelfUrl({"geneAnnot":dataName})
+        entries.append((label, url, annotLongLabel))
+        if dataName==cgiString("geneAnnot"):
+            selected=annotShortLabel
+
+    printDropDownMenu("Annotate Genes", entries, "Annotate genes using external databases", selectedLabel=selected)
+
+    pdfLink  = makeSelfUrl({"format":"pdf"})
+    svgLink  = makeSelfUrl({"format":"svg"})
+    jsonLink = makeSelfUrl({"format":"json"})
+    sifLink  = makeSelfUrl({"format":"sif"})
+
+    entries = [
+            ("PDF", pdfLink),
+            ("SVG", svgLink),
+            ("Cytoscape", sifLink),
+            ("JSON", jsonLink)
+    ]
+    printDropDownMenu("Download", entries, "Export the graph to various file formats")
+
+    #print "<br>".join([pdfLink, svgLink, jsonLink, sifLink])
+    #print "<br>"
+    #print '</div> <!-- export drop down menu -->'
+    #print '</div>'
+
+    #print '<script type="text/javascript">'
+    #print '''
+    #$(document).ready(function() {
+        #// when user clicks the dropdown link, hide all other menus and toggle the menu of this link
+        #$('.smallDropDownLink').click(function(event) {
+            #var menuId = "#smallDropDown_"+event.target.id;
+            #$(".smallDropDownMenu"+":not("+menuId+")").hide();
+            #$(menuId).toggle();
+        #});
+        #// when user clicks any link in the menu, hide all menus
+        #$('.closeMenu').click(function() {
+            #$('.smallDropDownMenu').hide();
+        #});
+
+    #});
+    #'''
+    #print '</script>'
+
+    print '</div> <!-- right part of menu -->'
+
+    print "</small>"
+    print '</div> <!-- whole menu -->'
+    #print '</div>'
+
+def openGeneAnnotFile(dataName):
+    " return name and lines in gbdb tab sep file "
+    gbdbDir = cfgOption("gbdbLoc1", "/gbdb")
+    annotData = None
+    for annotTuple in geneAnnotFiles:
+        if dataName==annotTuple[0]:
+            annotData = annotTuple
+            break
+    if annotData==None:
+        errAbort("Could not find annotations with name %s" % dataName)
+
+    _, annotFname, annotName, annotLongName = annotData
+    inPath = join(gbdbDir, "hgFixed", "geneGraph", annotFname)
+    ifh = open(inPath)
+    return annotName, ifh
+
+def getGeneAnnots():
+    """ depending on the CGI arg 'geneAnnot', parse a file with
+    key-whitespace-value and return a dict. Alternative format is
+    (key, value, greyscaleBin) where greyscaleBin is 0-9
+    """
+    annotName = getCgiVar("geneAnnot")
+    if annotName==None or annotName=="none":
+        return None, {}
+    geneAnnot = {}
+    annotName, ifh = openGeneAnnotFile(annotName)
+    for line in ifh:
+        line = line.rstrip("\n")
+        if "\t" in line:
+            fields = line.split("\t")
+        else:
+            fields = line.split()
+        if len(fields)==2:
+            key, val = fields
+            greyVal = 8
+        else:
+            key, val, greyVal = fields
+            if not greyVal.isdigit():
+                errAbort("Found non-digit greyscale value %s in line %s" % (repr(greyVal), repr(line)))
+            greyVal = int(greyVal)
+            if greyVal>8 or greyVal<0:
+                errAbort("Found greyscale value %d, outside 0-8, in line %s" % (greyVal, line))
+        geneAnnot[key] = (val, greyVal)
+    return annotName, geneAnnot
+
+def printGraph(conn, weightedLinks, alg, addNeighbors, targetGene, format):
+    """ given a dict of (gene, gene) -> (docCount, tagSet, snippet),
+    print a html image map
+    """
+    import json
+
+    # the trash file name has the format hgGeneGraph_targetGene_<md5OfCGIParams>
+    trashDir = join("..","trash","geneGraph")
+    if not isdir(trashDir):
+        os.mkdir(trashDir)
+
+    stateStr = makeSelfUrl({})
+    stateStr += alg
+    stateHash =  saltedHash(stateStr, length=20)
+    tmpName = join(trashDir, "%s_%s.dot" % (targetGene, stateHash))
+
+    if format=="json":
+        jsonStr = json.dumps(weightedLinks)
+
+    allGenes = set()
+    sifLines = []
+    for linkRow in weightedLinks:
+        gene1, gene2 = linkRow[:2]
+        allGenes.add(gene1)
+        allGenes.add(gene2)
+        if format=="sif":
+            sifLines.append("%s pp %s" % (gene1, gene2))
+
+    if format in ["sif", "json"]:
+        printHttpHead(format)
+        if format=="sif":
+            print "\n".join(sifLines)
+        else:
+            print jsonStr
+        return
+
+    geneDescs = queryGeneDescs(conn, allGenes)
+    linkSnips = querySnippets(conn, weightedLinks)
+    annotLabel, geneAnnots = getGeneAnnots()
+
+    writeDot(allGenes, weightedLinks, tmpName, targetGene, geneDescs, annotLabel, geneAnnots, linkSnips)
+    if len(allGenes)>=100:
+        alg = "fdp"
+    picName, mapName = runDot(tmpName, alg, format)
+
+    if format!="png":
+        printHttpHead(format)
+        sys.stdout.write(open(picName,"rb").read())
+        sys.stdout.flush()
+        return
+    
+    # text above graph
+    print("Mouse over or click genes or lines for details. Dashed lines indicate interactions without text mining support. ")
+    print("Arrows indicate the most common direction of effect based on pathway or text-mining databases.<br>")
+    print("Click any gene to make it the new center. Click any line to show details about the interaction. ")
+    print("Only %s-interacting genes and only the most-mentioned/most-curated interactions are shown in the graph.<p>" % (targetGene))
+
+    # menu above graph
+    # background #fffef5 would be an alternive
+    print '<div style="display:inline-block"> <!-- graph -->'
+    printGraphMenu(conn, targetGene, addNeighbors)
+    print "<p>"
+
+    # graph itself
+    print '<img src="%s" usemap="#test">' % picName
+    map = open(mapName).read()
+    print map
+
+    print '</div> <!-- graph -->'
+    print "<p>"
+
+def printPmidSearchForm():
+    " print a little form that allows to search for a PMID "
+    print "<hr>"
+    print "Search for a PMID: "
+    print '<form action="hgGeneGraph" method="get">'
+    print '  <input type="text" name="search">'
+    print '  <input type="submit" name="Search">'
+    print '</form><p>'
+
+def printDisclaimer():
+    print '''
+    <div class="warn-note" style="width:800px;border: 2px solid #9e5900; padding: 5px 20px; background-color: #ffe9cc;">
+     <P><span style="font-weight: bold; color: #c70000;">NOTE:</span><br> 
+     Gene interactions that are not highlighted in blue were obtained with text mining software.
+     They include errors. Please read the original source text before relying on an interaction.
+     </P>
+     </div>
+    '''
+
+def printInfo():
+    print """Please see the <a href='%s'>Gene Interactions Track Manual</a>.""" % MANUALURL
+    print "<div style='height:20px'>&nbsp</div>"
+
+def printLowLinksTable(gene, lowLinks, sortByCount):
+    " print the other links as a table "
+    if len(lowLinks)==0:
+        return
+
+    lowGeneList = countTargetLinks(lowLinks, gene)
+
+    if len(lowGeneList)==0:
+        return
+
+
+    # sort lowGenes by either count or name
+    if sortByCount:
+        lowGeneList.sort(key=operator.itemgetter(1), reverse=True)
+        selfLink = makeSelfLink("sort alphabetically", {"sortByCount": None}, anchor="table")
+        currentSortDesc = "Sorted by article count"
+    else:
+        lowGeneList.sort(key=operator.itemgetter(0))
+        selfLink = makeSelfLink("sort by article count", {"sortByCount": "1"}, anchor="table")
+        currentSortDesc = "Sorted alphabetically"
+
+    geneCount = int(getCgiVar("geneCount", DEFGENECOUNT))
+    title =  'Less-frequently mentioned interactions with %s, not among the Top %d' % (gene, geneCount)
+    printHgcSection(title, "", id='table')
+
+    print "Other genes interacting with %s. Mouse-over to show number of abstracts or databases. %s (%s).<br>" % \
+        (gene, currentSortDesc, selfLink)
+    print("Like above, interactions are colored by support. Grey:only text mining, light-blue:interaction database, blue:pathway database<p>")
+    #print("Click any gene to make it the new center. Click number of articles to show sentences.<p>")
+
+    print '<table class="hgcCcds" style="table-layout:fixed">'
+    print '<tr>'
+
+    i = 0
+    rowSize = 7 # columns per row
+    for g, artCount, dbCount, tags in lowGeneList:
+        # to set the cell width, browsers use only the first row
+        cellStyle = ""
+        if i <= rowSize:
+            cellStyle=' style="width:140px"'
+
+        color = None
+        if "low" in tags or "pwy" in tags:
+            color = LTCOLOR
+        elif "ppi" in tags:
+            color = HTCOLOR
+        elif "text" in tags:
+            color = TEXTCOLOR
+
+        linkStyle = None
+        if color != None:
+            linkStyle = 'color:%s' % color
+
+        newGeneLink = makeSelfLink("&#9656;", {"gene": g}, title="Center graph on %s" % g, style='text-decoration:none', dataToggle="tooltip")
+
+        if dbCount == 1 and artCount != 0:
+            detailsText = "interaction %s-%s mentioned by %d articles and %d database" % (gene, g, artCount, dbCount)
+        elif dbCount != 0 and artCount != 0:
+            detailsText = "interaction %s-%s mentioned by %d articles and %d databases" % (gene, g, artCount, dbCount)
+        elif artCount != 0:
+            detailsText = "interaction %s-%s mentioned by %d articles" % (gene, g, artCount)
+        elif dbCount != 0:
+            detailsText = "interaction %s-%s mentioned by %d databases" % (gene, g, dbCount)
+
+        detailsLink = makeSelfLink(g, {"gene": None, "link":"%s:%s" % (g, gene)},
+            style=linkStyle, title=detailsText, dataToggle="tooltip")
+
+        print( '<td%s>%s %s</td>' % (cellStyle, detailsLink, newGeneLink))
+
+        i += 1
+        if i % rowSize == 0:
+            print "</tr><tr>"
+
+    print "</tr>"
+    print "</table>"
+
+def listToMysqlList(l):
+    " convert a python list of strings to a mysql list, like ('a', 'b') "
+    newList = []
+    for s in l:
+        s = s.replace("'", "")
+        newList.append("'"+s+"'")
+    return "(%s)" % ",".join(newList)
+
+def querySnippets(conn, pairs):
+    """ get the little text snippets from the ggLink table for a list of pairs 
+    return as a dict (gene1, gene2) -> snippet
+    """
+    # convert list of pairs to mysql quoted string list
+    newList = []
+    for pairData in pairs:
+        g1, g2 = pairData[:2]
+        pairQuote = "('%s', '%s')" % (g1, g2)
+        newList.append(pairQuote)
+    listStr = "(%s)" % ",".join(newList)
+
+    query = "SELECT gene1, gene2, snippet FROM ggLink "\
+        "WHERE (gene1, gene2) in %s" % listStr
+
+    rows = sqlQuery(conn, query)
+
+    pairSnips = {}
+    for g1, g2, snip in rows:
+        pairSnips[(g1,g2)]=snip
+    return pairSnips
+
+def makeHgGeneLink(sym, db):
+    return "<a title='Link to Gene Details page' href='hgGene?db=%s&hgg_gene=%s'>%s</a>" % (db, sym, sym)
+
+def showGraphBrowser():
+    " run graphviz on gene graph around gene, print html img and html map "
+    gene, alg, addNeighbors, sortByCount, geneCount = parseGraphArgs()
+
+    conn = sqlConnect(GGDB)
+
+    graphLinks, lowLinks = buildGraph(conn, gene, geneCount, MINSUPP, addNeighbors)
+    weightedLinks, minAbsCount = flattenLink(graphLinks)
+
+    humanDb = getCgiVar("db", "hg19")
+    hgGeneLink = makeHgGeneLink(gene, humanDb)
+
+    # get the position of the gene
+    humanConn = sqlConnect(humanDb)
+    pos = queryPos(humanConn, gene)
+    posLink = getPos (humanDb, gene, pos)
+    
+    # not showing literome link for now on the first page, Literome times out too often
+    #litLink = '<a target=_blank href="http://literome.azurewebsites.net/Network?gene1=%s">(Literome)</a>' % (gene)
+    #title = "Top %d genes that interact with %s %s %s" % (geneCount, hgGeneLink, litLink, posLink)
+
+    title = "Top %d genes that interact with %s %s" % (geneCount, hgGeneLink, posLink)
+    printHgcSection(title, "")
+    #print("<h3>Top %d genes that interact with %s mentioned in more than %d articles</h3>" % (gene, minAbsCount))
+
+    # print the interaction graph as an image map 
+    printGraph(conn, weightedLinks, alg, addNeighbors, gene, "png")
+
+    print('</div>')
+    print('</div>')
+
+    printLowLinksTable(gene, lowLinks, sortByCount)
+    #printPmidSearchForm()
+
+    printHgcSection("Data information", "", id='#INFO')
+    #printDisclaimer()
+    printInfo()
+
+    print('</div>')
+    print('</div>')
+    print('</body>')
+    print('</html>')
+
+
+def docLink(pmid, text=None, mouseOver=None):
+    if text==None:
+        text = "PMID%s" % str(pmid)
+    url = makeSelfUrl({"docId":pmid}, clear=True)
+    attr = ""
+    if mouseOver!=None:
+        attr='data-toggle="tooltip" data-placement="top" title="Title: %s" ' % mouseOver
+    linkStr = '<a %shref="%s">%s</a>' % (attr, url, text)
+    return linkStr
+
+def pubmedLink(pmid, text=None):
+    url = "http://www.ncbi.nlm.nih.gov/pubmed/%s" % pmid
+    if text==None:
+        text = "PMID: %s" % str(pmid)
+    linkStr = '<a href="%s">%s</a>' % (url, text)
+    return linkStr
+
+def pmidInternalLink(pmid):
+    url = "hgGeneGraph?pmid=%s" % str(pmid)
+    linkStr = '<a href="%s">PMID%s</a>' % (url, pmid)
+    return linkStr
+
+def entToDesc(eType, eName, eGenes):
+    """ get a readable html description for a entity, type can be gene, complex or family,
+    name is the full name, eGenes is the list of genes 
+    """
+    # don't display compounds
+    eGenes = eGenes.split("|")
+    eGenes = [eg for eg in eGenes if not eg.startswith("compound")]
+
+    if eType == "complex":
+        geneStr = "-".join(eGenes)
+        protCount = len(eGenes)
+        if eName=="":
+            if protCount < 10:
+                return "Complex of %s" % geneStr
+            else:
+                return "Complex of %d proteins" % (protCount+1)
+        else:
+            return "%s complex (%s)" % (eName, geneStr)
+
+    if eType == "gene":
+        geneStr = ", ".join(eGenes)
+        if eName=="":
+            return "%s"  % geneStr
+        else:
+            return "%s (%s)"  % (eName, geneStr)
+
+    if eType == "family":
+        geneStr = "/".join(eGenes)
+        if eName=="":
+            return "%s"  % geneStr
+        else:
+            return "%s (%s)"  % (eName, geneStr)
+
+def printDbRows(conn, rows, onlyDoc=None):
+    " print a row from the ggEventDb table as html "
+    print '<ul class="more">'
+    # sort by database name
+    for row in sorted(rows, key=operator.itemgetter(9)):
+        eventId, causeType, causeName, causeGenes, themeType, themeName, themeGenes, \
+            relType, relSubtype, sourceDb, sourceId, sourceDesc, docIds = row
+
+        if eventId.startswith("ppi_"):
+            isPpi = True
+        else: 
+            isPpi = False
+
+        docSet = set(docIds.split("|"))
+
+        if eventId.startswith("ppi_iref"):
+            dbName, dbUrlPat = dbData["iref"]
+            dbName = "IRef %s" % sourceDb.capitalize()
+        else:
+            dbName, dbUrlPat = dbData[sourceDb]
+
+        url = dbUrlPat % sourceId
+
+        print "<li>"
+        if sourceDesc=="":
+            if isPpi:
+                sourceDesc = "Interaction"
+            else:
+                sourceDesc = "Reaction"
+
+        print '%s <a href="%s" target="_BLANK">%s</a>: ' % (dbName, url, sourceDesc)
+
+        print entToDesc(causeType, causeName, causeGenes)
+
+        if themeGenes!="":
+            if isPpi:
+                print "&#8212;" # unicode long dash
+            else:
+                print "&#8594;" # Unicode Arrow
+
+            print entToDesc(themeType, themeName, themeGenes)
+
+        if relType!="" or relSubtype!="":
+            if relType!="" and relSubtype!="":
+                print "(%s/%s)" % (relType, relSubtype)
+            elif relType!="":
+                print "(%s)" % (relType)
+            elif relSubtype!="":
+                print "(%s)" % (relSubtype)
+
+        if onlyDoc==None and len(docSet)!=0:
+                print prettyDocLinks(conn, sorted(docSet))
+
+        print "</li>"
+    print "</ul>"
+
+def showPwyPpiInfo(conn, gene1, gene2):
+    " print pathway and PPI info about link "
+
+    gene1, gene2 = sorted([gene1, gene2])
+    q = "SELECT ggEventDb.* FROM ggLinkEvent, ggEventDb " \
+        "WHERE gene1='%s' and gene2='%s' AND ggEventDb.eventId=ggLinkEvent.eventId" % (gene1,gene2)
+    rows =  sqlQuery(conn, q)
+
+    # split db rows into ppi and pathway rows
+    pwyRows, ppiRows = [], []
+    for r in rows:
+        if r[0].startswith("ppi_"):
+            ppiRows.append(r)
+        else:
+            pwyRows.append(r)
+
+    if len(pwyRows)!=0:
+        print "<h3>Pathways - manually collected, often from reviews:</h3>"
+        printDbRows(conn, pwyRows)
+
+    if len(ppiRows)!=0:
+        print "<h3>Protein-Protein interactions - manually collected from original source literature:</h3>"
+        print '<p>Studies that report less than %d interactions are marked with *</p>' % LTCUTOFF
+        printDbRows(conn, ppiRows)
+
+def markupSentence(row):
+    " given a MSR-textmining row, print a sentence with the various detected words marked up in bold "
+    sent = row.sentence
+    tStart, tEnd = int(row.themeTokenStart), int(row.themeTokenEnd)
+    cStart, cEnd = int(row.causeTokenStart), int(row.causeTokenEnd)
+    trigToken = int(row.triggerTokenId)
+    sentId = int(row.sentenceId)
+
+    # put into temporary var to be able to replace " , " later
+    parts = []
+    for i, word in enumerate(sent.split()):
+        if i==tStart or i==cStart:
+            if i==cStart:
+                genes = row.themeGenes # XX bug in MsrNlp tab file: Inversed?
+            else:
+                genes = row.causeGenes
+            geneDisp = genes.replace("|", ", ")
+            gene1 = genes.split("|")[0]
+            parts.append( '<b><i><a href="http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" data-toggle="tooltip" data-placement="top" title="recognized genes: %s, click to go to Gene Cards" target=_blank>' % \
+                (gene1, geneDisp))
+        if i==trigToken:
+            parts.append( '<i class="trigger">')
+        if i==tEnd or i==cEnd:
+            parts.append( "</a></i></b>")
+        if i==trigToken+1:
+            parts.append('</i class="trigger">')
+        parts.append(word)
+
+    line = " ".join(parts)
+    line = line.replace(" , ", ", ").replace(" . ", ". ").rstrip(". ")
+    line = line.replace("-LRB-", "(").replace("-RRB-", ")")
+    return line
+
+def iterUniqueInteractions(rows):
+    " iterate over msrNlp rows, but remove interactions we already had (=ignore direction) "
+    doneDocs = set()
+    for row in rows:
+        # make sure to skip duplicated info (=same genes + same document + same sentence)
+        docInfo = tuple(sorted([row.causeGenes, row.themeGenes, row.docId, row.sentenceId]))
+        if docInfo in doneDocs:
+            continue
+        doneDocs.add(docInfo)
+        yield row
+
+def printDocNlpResults(rows):
+    " print text mining results for document-centered view "
+    for row in iterUniqueInteractions(rows):
+        causeGene, themeGene = row.causeGenes, row.themeGenes
+
+        if "Negative" in row.relType:
+            sym = "8867" # unicode right-tack
+        elif "Positive" in row.relType:
+            sym = "8594" # unicode right arrow
+        else:
+            sym = "8212" # unicode long dash
+
+        print '%s &#%s; %s: "' % (row.causeName, sym, row.themeName), 
+        print markupSentence(row),
+        print '"<p>'
+
+def printMsrNlpRows(rows):
+    " print msrNlp table rows with marked-up snippets "
+    phrases = []
+    for row in iterUniqueInteractions(rows):
+        causeGene, themeGene = row.causeGenes, row.themeGenes
+        #if addGenes:
+            #print "%s &#8594; %s :" % (causeGene, themeGene)
+        line = markupSentence(row)
+        phrases.append(line)
+
+    print " ... ".join(phrases)
+
+# the blacklist ist not used right now, as we cannot write to the database. 
+# pending further discussions with senior engineers
+
+#def readBlackList(conn):
+    #""" return flagged interactions as a set of (cause, theme, pmid (as str)) """
+    #centralDb = cfgOption("central.db")
+    #blackList = set()
+    #rows = sqlQuery(conn, "SELECT causeGene, themeGene, pmid from %s.ggFeedback" % centralDb)
+    #for row in rows:
+        #blackList.add( (row.causeGene, row.themeGene, str(row.pmid)) )
+    #return blackList
+
+def queryEventText(conn, gene1, gene2):
+    " return rows from the ggEventText table "
+    gene1, gene2 = sorted([gene1, gene2])
+    q = "SELECT ggEventText.*, "\
+        "ggDoc.authors, ggDoc.title, ggDoc.journal, ggDoc.year, ggDoc.context, ggDoc.resCount " \
+        "FROM ggLinkEvent, ggEventText " \
+        "JOIN ggDoc ON (ggDoc.docId=ggEventText.docId) " \
+        "WHERE gene1='%s' and gene2='%s' AND ggEventText.eventId=ggLinkEvent.eventId " \
+        "ORDER BY ggDoc.docId" % (gene1,gene2)
+    rows =  sqlQuery(conn, q)
+    return rows
+
+def htmlInteraction(gene1, gene2):
+    " return html: two genes separated by an arrow from g1 to g2, with links to hgGeneGraph "
+    return '<a href="hgGeneGraph?gene=%s">%s</a> &#8594; <a href="hgGeneGraph?gene=%s">%s</a>' % (gene1, gene1, gene2, gene2)
+
+def prettyDocLinks(conn, pmids):
+    " given a list of pmids, return a list of nice links to articles on our own site "
+    quoteList = ['"%s"' % pmid for pmid in pmids]
+    idStr = "(%s)" % (",".join(quoteList))
+    # XX remove distinct if not needed anymore
+    query = "SELECT authors, title, journal, year, docId, resCount FROM ggDoc WHERE docId IN %s" % idStr
+    rows = sqlQuery(conn, query)
+
+    links = []
+    for row in rows:
+        links.append(prettyDocLink(row))
+    return ", ".join(links)
+
+def prettyDocLink(row, showStar=True):
+    " given a row that includes author/title/year/docId fields, return a nice link to our doc view "
+    authors = row.authors.split("; ")
+    if len(authors)>0:
+        fAu = authors[0].split(",")[0]
+    else:
+        fAu = ""
+
+    suffix = ""
+    if len(authors)>1:
+        suffix = " et al."
+
+    note = ""
+    if showStar and int(row.resCount)<=LTCUTOFF:
+        note = '<a href="#" title="Low-throughput publication">*</a>'
+        #note = "*"
+    text = "%s %s, %s %s" % (fAu, suffix, row.journal, row.year)
+
+    mouseOver = None
+    if row.title!="":
+        mouseOver = row.title.replace('"', "")
+    return docLink(row.docId, text=text, mouseOver=mouseOver)+note
+
+def showSnipsLink(conn, gene1, gene2):
+    " show snippets for a gene pair "
+    rows = queryEventText(conn, gene1, gene2)
+
+    if len(rows)!=0:
+        print '<h3>Text-mined interactions from <A HREF="http://literome.azurewebsites.net/Network?gene1=%s&gene2=%s">Literome</A></h3>' % (gene1, gene2)
+
+    byDoc = defaultdict(list)
+    for row in rows:
+        byDoc[row.docId].append(row)
+
+    for docId, rows in byDoc.iteritems():
+        print prettyDocLink(rows[0], showStar=False),
+
+        disSuffix = ""
+        if rows[0].context!="":
+            contexts = rows[0].context.split("|")
+            if len(contexts)>1:
+                suffix = "..."
+            else:
+                suffix = ""
+            disSuffix = "(%s%s)" % (contexts[0], suffix)
+
+        print "%s :" % disSuffix
+        printMsrNlpRows(rows)
+        print "<br>"
+
+
+def showLink(link):
+    " print details page with db info and snippets for a gene interaction "
+    if ":" not in link:
+        errAbort("'link' CGI parameter has to contain a colon-separated pair of genes, like PITX2:TBX5")
+    gene1, gene2 = link.split(":")
+    gene1, gene2 = sorted([gene1, gene2])
+    gene1 = gene1.upper()
+    gene2 = gene2.upper()
+
+    lastGene = getCgiVar("lastGene")
+    if lastGene is not None:
+        backUrl = makeSelfUrl({"gene":lastGene, "link":None})
+        print "<p><a href='%s'>&#9664; Back to %s</a></p>" % (backUrl, lastGene)
+
+    print "<h3>%s &#8212; %s</h3>" % (gene1, gene2)# unicode long dash
+    conn = sqlConnect(GGDB)
+
+    #flagLink = makeSelfLink("Report data error", {"flag":"%s:%s" % (gene1, gene2)}, clear=True)
+    #print ('%s<p>' % flagLink)
+
+    showPwyPpiInfo(conn, gene1, gene2)
+
+    showSnipsLink(conn, gene1, gene2)
+
+def makeRefString(articleData):
+    """ prepare a string that describes the citation: 
+    vol, issue, page, etc of journal 
+    """
+    refParts = [articleData.journal]
+    if articleData.year!="":
+        refParts[0] += (" "+articleData.year)
+    #if articleData.vol!="":
+        #refParts.append("Vol "+articleData.vol)
+    #if articleData.issue!="":
+        #refParts.append("Issue "+articleData.issue)
+    #if articleData.page!="":
+        #refParts.append("Page "+articleData.page)
+    return ", ".join(refParts)
+
+def showArtInfo(conn, pmid):
+    " show basic pubmed metadata for article "
+    q = "SELECT * from ggDoc where docId='%s'" % (str(pmid))
+    rows = sqlQuery(conn, q)
+    if len(rows)==0:
+        print "No metadata for docId PMID %s" % str(pmid)
+        return
+
+    p = rows[0]
+
+    print "<small>%s, " % makeRefString(p)
+    print pubmedLink(p.docId)
+    print "</small><p>"
+    print '<h4 style="width:900px">%s</h4>' % (pubmedLink(pmid, p.title))
+    print "%s<p>" % p.authors
+    print '<div style="width: 900px">'
+    print p.abstract
+    print '</div><br>'
+    if p.context!="":
+        print "<b>Diseases/Pathways annotated by Medline MESH: </b>", p.context.replace("|", ", "), "<br>"
+
+    print "<small>Document information provided by NCBI PubMed<p></small>"
+
+    return p.resCount
+
+#def printPwyRows(rows, showPmids=True):
+    #dbToTypePmids = defaultdict(dict) # db -> intType -> list of pmid
+    #for row in rows:
+        #dbToTypePmids[row.db].setdefault(row.intType, []).append( (row.pmid, row.causeGene, row.themeGene ))
+
+#    print "<ul>"
+#    for db, typePmids in dbToTypePmids.iteritems():
+#        for intType, pmids in typePmids.iteritems():
+#
+#            print "<li>"
+#            print "%s (%s): " % (db, intType.lower().replace("_", " "))
+#            links = []
+#            for pmid, causeGene, themeGene in pmids:
+#                if pmid=="unknown":
+#                    links.append("not curated")
+#                else:
+#                    #links.append(pubmedLink(pmid))
+#                    if showPmids:
+#                        desc = pmidInternalLink(pmid)
+#                    else:
+#                        desc = htmlInteraction(causeGene, themeGene)
+#
+#                    links.append(desc)
+#        print ", ".join(links)
+#    print "</ul>"
+
+
+def showDoc(pmid):
+    " show a page with all information we have about a document "
+    if not pmid.isdigit():
+        errAbort("PMID %s is not a number" % pmid)
+    pmid = int(pmid)
+
+    conn = sqlConnect(GGDB)
+    resCount = showArtInfo(conn, pmid)
+
+    rows = sqlQuery(conn, "SELECT ggEventText.*, "\
+        "ggDoc.authors, ggDoc.title, ggDoc.journal, ggDoc.year, ggDoc.context, ggDoc.resCount " \
+        "FROM ggEventText, ggDoc "\
+        "WHERE ggDoc.docId='%d' AND ggDoc.docId=ggEventText.docId" % pmid)
+
+    print ("<h3>Text Mining Data</h3>")
+    if len(rows)==0:
+        print("Dashed line = No text mining data")
+    else:
+        printDocNlpResults(rows)
+
+    print("<h3>Manually curated Databases</h3>")
+    query = "SELECT ggEventDb.* FROM ggDocEvent, ggEventDb " \
+        "WHERE ggDocEvent.docId='%s' AND ggEventDb.eventId=ggDocEvent.eventId " % pmid
+    rows = sqlQuery(conn, query)
+
+    if len(rows)==0:
+        print("No curated data.")
+    else:
+        printDbRows(conn, rows, onlyDoc=pmid)
+
+    if resCount!=0:
+        print "In total, %d gene pairs are associated to this article in curated databases" % resCount
+    #if len(rows)==0:
+        #rint("No data in pathway databases for PMID %d" % pmid)
+    #else#
+        #printPwyRow(row)
+
+def flagInteraction(param):
+    " show flag interaction dialog with comment box "
+    fields = param.split(":")
+    if len(fields)!=2:
+        errAbort( "illegal CGI parameter")
+
+    causeGene, themeGene = fields
+
+    print "<h3>Interaction %s - %s</h3>" % (causeGene, themeGene)
+
+    conn = sqlConnect(GGDB)
+    rows = queryEventText(conn, causeGene, themeGene)
+
+    print ("<p>")
+    print ("Thank you for reporting errors, e.g.")
+    print("<ul><li>not true (e.g. the authors state that the interaction does not happen )</li>")
+    print("<li>text mining errors (the authors did not say anything about this particular interaction)</li>")
+    print("</ul>")
+    print("This makes it easier for us to improve the text mining system or database imports.<br>")
+    print("You can leave your email address in the comment if you want to give us the possibility to comment.<P>")
+
+    print ("Optional comment: <br>")
+    print ('<FORM method="GET" action="%s">' % basename(__file__))
+    print ('<INPUT TYPE="HIDDEN" NAME="remove" VALUE="%s"></INPUT>' % param)
+    print ('<TEXTAREA rows="6" cols="50" name="comment"></TEXTAREA>')
+    print ("<P>")
+
+    captHtml = htmlCaptcha(saltedHash(param))
+    if captHtml!=None:
+        print captHtml
+        print ('Enter the word above: <INPUT TYPE="TEXT" NAME="captcha"></INPUT><BR>')
+
+    print ('<INPUT TYPE="SUBMIT" name="submit" value="Report Interaction as inaccurate"></INPUT>')
+    print ('</FORM>')
+    #printMsrNlpRows(rows)
+    showSnipsLink(conn, causeGene, themeGene)
+
+#def namedtuple_factory(cursor, row):
+    #"""
+    #used as a function pointer to sqlite to have it return structs with names and not just arrays
+    #"""
+    #fields = [col[0] for col in cursor.description]
+    #Row = collections.namedtuple("Row", fields)
+    #return Row(*row)
+
+#def openSqlite(dbName):
+    #" opens sqlite database and have it return structs (=namedtuples) "
+    #tryCount = retries
+    #con = None
+    #con = sqlite3.connect(dbName, timeout=20)
+    #con.row_factory = namedtuple_factory
+    ##con.row_factory = sqlite3.Row
+
+def removeInteraction(param, captcha, comment):
+    fields = param.split(":")
+    if len(fields)!=2:
+        errAbort( "illegal CGI parameter")
+    
+    if skimpyGimpyLoaded:
+        expCaptcha = saltedHash(param)
+        if expCaptcha.lower()!=captcha.lower():
+            errAbort("Wrong captcha word, please go back and try again")
+
+    causeGene, themeGene = fields
+    ip = cgi.escape(os.environ["REMOTE_ADDR"])
+
+    conn = hConnectCentral()
+    if not sqlTableExists(conn, "ggFeedback"):
+        sqlQuery(conn, "CREATE TABLE ggFeedback (causeGene varchar(255), themeGene varchar(255), pmid varchar(255), " \
+                "comment varchar(10000), time TIMESTAMP, ip varchar(255), INDEX allIdx (causeGene, themeGene, pmid));")
+
+    cur = conn.cursor()
+    cur.execute("INSERT INTO ggFeedback VALUES (%s, %s, %s, NOW(), %s, %s)", (causeGene, themeGene, 0, comment, ip))
+    cur.close()
+    conn.close()
+    print ("Interaction successfully removed.<p>")
+
+    lastGene = getCgiVar("lastGene")
+    linkUrl  = makeSelfUrl({"gene":None, "link":"%s:%s" % (causeGene, themeGene), "lastGene":lastGene})
+    print ('Return to the <a href="%s">Interaction page</a></p>' % linkUrl)
+
+def parseGraphArgs():
+    " get the arguments to build a graph from the CGI parameters "
+    gene = getCgiVar("gene").rstrip(":")
+    if gene==None:
+        print "missing CGI parameter 'gene' or 'link'"
+        exit(0)
+    gene = gene.split()[0]
+    gene = gene.upper()
+
+    alg = getCgiVar("alg")
+    if alg==None:
+        alg= "neato"
+
+    addNeighbors = (getCgiVar("hideIndirect")!="on")
+    sortByCount = getCgiVar("sortByCount")
+
+    geneCount = getCgiVar("geneCount", DEFGENECOUNT)
+    if not geneCount.isdigit():
+        errAbort("geneCount must be a number")
+    geneCount = int(geneCount)
+    if geneCount > 200:
+        errAbort("Sorry, cannot show more than 200 genes")
+
+    return gene, alg, addNeighbors, sortByCount, geneCount
+
+def uniquePairs(conn):
+    " return a dict with db -> unique pairs "
+    pairs = defaultdict(set)
+    q = "SELECT sourceDb, causeGenes, themeGenes from ggEventDb"
+    for row in sqlQuery(conn, q):
+        for g1 in row.causeGenes.split("|"):
+            for g2 in row.themeGenes.split("|"):
+                pair = tuple(sorted([g1, g2]))
+                pairs[row.sourceDb].add(pair)
+
+    q = "SELECT docId, causeGenes, themeGenes from ggEventText"
+    pairToPmids = defaultdict(set)
+    for row in sqlQuery(conn, q):
+        for g1 in row.causeGenes.split("|"):
+            for g2 in row.themeGenes.split("|"):
+                pair = tuple(sorted([g1, g2]))
+                pairToPmids[pair].add(row.docId)
+                pairs["literome"].add(pair)
+
+    for pair, pmids in pairToPmids.iteritems():
+        if len(pmids)>1:
+            pairs["literome (>= 2 PMIDs)"].add(pair)
+    return pairs
+
+def showStats():
+    " "
+    print "<h3>Databases - number of unique pairs</h3>"
+    print "<ul>"
+    conn = sqlConnect(GGDB)
+    pairs = uniquePairs(conn)
+    for db, pairSet in sorted(pairs.items()):
+        print "<li>%s: %d" % (db, len(pairSet))
+    print "</ul>"
+
+def htmlMiddle():
+    " print html middle part "
+    sys.stdout.flush()
+
+    flag = getCgiVar("flag")
+    if flag!=None:
+        flagInteraction(flag)
+        exit(0)
+        
+    remove = getCgiVar("remove")
+    if remove!=None:
+        captcha = getCgiVar("captcha")
+        comment = getCgiVar("comment", allowAnyChar=True, maxLen=10000)
+        removeInteraction(remove, captcha, comment)
+        exit(0)
+        
+    docId = getCgiVar("docId")
+    if docId!=None:
+        showDoc(docId)
+        exit(0)
+        
+    link = getCgiVar("link")
+    if link!=None:
+        showLink(link)
+        exit(0)
+
+    page = getCgiVar("page")
+    if page=="stats":
+        showStats()
+        exit(0)
+
+    showGraphBrowser()
+
+def main():
+    cgiSetup()
+
+    format = getCgiVar("format")
+    if format in ["pdf", "svg", "sif", "json"]:
+        conn = sqlConnect(GGDB)
+        gene, alg, addNeighbors, sortByCount, geneCount = parseGraphArgs()
+        graphLinks, lowLinks = buildGraph(conn, gene, geneCount, 2, addNeighbors)
+        weightedLinks, minAbsCount = flattenLink(graphLinks)
+        printGraph(conn, weightedLinks, alg, addNeighbors, gene, format)
+        sys.exit(0)
+
+
+    printContentType()
+
+    if cgiString("debug") is not None:
+        global DEBUG
+        DEBUG = True
+
+    htmlHeader()
+    printInlineAndStyles()
+    htmlMiddle()
+    htmlPageEnd()
+
+main()

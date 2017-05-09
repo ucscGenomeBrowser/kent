@@ -2,13 +2,13 @@
 
 track chainNetRn3 override
 shortLabel $o_Organism Chain/Net
-priority 11
+priority 330.3
 chainMinScore 1000
 chainLinearGap loose
 
 track chainNetMm6 override
 shortLabel $o_Organism Chain/Net
-priority 10
+priority 340.3
 
 	track chainMm6 override
 	shortLabel $o_Organism Chain
@@ -18,7 +18,7 @@ priority 10
 
 track chainNetFr1 override
 shortLabel $o_Organism Chain/Net
-priority 8
+priority 620.3
 
 track chainNetGalGal2 override
-priority 3
+priority 560.3

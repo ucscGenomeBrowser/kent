@@ -14,6 +14,7 @@
 #include "hgTracks.h"
 #include "hgConfig.h"
 #include "regexHelper.h"
+#include "customComposite.h"
 
 // Note: when right-click View image (or pdf output) then theImgBox==NULL, so it will be rendered as a single simple image
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
@@ -240,6 +241,8 @@ if (kindOfChild != kocOrphan)
         }
     }
 
+boolean isCustomComposite = trackDbSettingOn(track->tdb, CUSTOM_COMPOSITE_SETTING);
+jsonObjectAdd(ele, "isCustomComposite", newJsonBoolean(isCustomComposite));
 // XXXX really s/d be numChildren
 jsonObjectAdd(ele, "hasChildren", newJsonNumber(slCount(track->tdb->subtracks)));
 

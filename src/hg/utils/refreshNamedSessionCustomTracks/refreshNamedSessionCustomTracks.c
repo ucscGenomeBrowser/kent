@@ -228,8 +228,8 @@ while (isNotEmpty(namePt))
 		   namePt, dataPt, (nextNamePt ? "&" : ""));
     if (startsWith(CT_FILE_VAR_PREFIX, namePt))
 	{
-	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
 	cgiDecode(dataPt, dataPt, strlen(dataPt));
+	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
 	verbose(3, "Found variable %s = %s\n", namePt, dataPt);
 	/* If the file does not exist, omit this setting from newContents so 
 	 * it doesn't get copied from session to session.  If it does exist,
@@ -276,25 +276,27 @@ while (isNotEmpty(namePt))
     else if (sameString(namePt, "multiRegionsBedUrl"))
 	{
 	// touch corresponding multi-region custom regions .bed and .sha1 files to save them from trash cleaner.
-	boolean mrBedUrlExpired = FALSE;
+	cgiDecode(dataPt, dataPt, strlen(dataPt));
 	char multiRegionsBedUrlSha1Name[1024];
 	safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", dataPt);
         if (!sameString(dataPt,"") && !strstr(dataPt,"://"))
 	    {  // should have a bed file in trash and a sha1 for quick change detection
 	    if (fileExists(dataPt) && fileExists(multiRegionsBedUrlSha1Name))
 		{
-		readAndIgnore(dataPt);
 		verbose(4, "setting multiRegionsBedUrl: %s\n", dataPt);
-		readAndIgnore(multiRegionsBedUrlSha1Name);
 		verbose(4, "setting multiRegionsBedUrl: %s\n", multiRegionsBedUrlSha1Name);
-		}
-	    else
-		{
-		mrBedUrlExpired = TRUE;
+	        dyStringAppend(newContents, oneSetting->string);
 		}
 	    }
-	if (!mrBedUrlExpired)
-	    dyStringAppend(newContents, oneSetting->string);
+	}
+    else if (startsWith("customComposite", namePt))
+	{
+	cgiDecode(dataPt, dataPt, strlen(dataPt));
+	if (fileExists(dataPt))
+           {
+           verbose(4, "setting compositeFile: %s\n", dataPt);
+	   dyStringAppend(newContents, oneSetting->string);
+           }
 	}
     else
 	{

@@ -582,7 +582,7 @@ release beta,public
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
 group compGeno
-priority 104.3
+priority 2
 visibility hide
 exonArrows off
 showTopScorers 200
@@ -594,7 +594,7 @@ shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
 compositeTrack on
 group compGeno
-priority 11
+priority 2
 visibility hide
 exonArrows off
 showTopScorers 200
@@ -693,7 +693,7 @@ track consIndelsHgMmCanFam
 shortLabel Cons Indels MmCf
 longLabel Indel-based Conservation for human hg17, mouse mm5 and dog canFam1
 group compGeno
-priority 4
+priority 3
 visibility hide
 useScore 1
 color 0, 60, 120
@@ -1070,13 +1070,14 @@ spectrum on
 type psl xeno 
 
 track syntenyCow override
-priority 7
+group compGeno
+priority 440.3
 
 track bacendsCow
 shortLabel $o_Organism BAC Ends
 longLabel $o_Organism ($o_date) BAC Ends (BLASTn)
 group compGeno
-priority 5
+priority 440.3
 visibility hide
 color 0,100,0
 altColor 255,240,200
@@ -2125,11 +2126,11 @@ priority 197.1
 
 track blatFr1 override
 group compGeno
-priority 9
+priority 620.3
 
 track ecoresTetNig1 override
 group compGeno
-priority 16
+priority 630.3
 
 track kiddEichlerValid override
 group varRep

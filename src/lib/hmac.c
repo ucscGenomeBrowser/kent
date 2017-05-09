@@ -8,7 +8,6 @@
 /* Copyright (C) 2013 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
-#ifdef USE_SSL 
 #include "openssl/hmac.h"
 #include "openssl/evp.h"
 #include "common.h"
@@ -38,26 +37,3 @@ for(i = 0; i < 16; i++)
 return cloneStringZ(hmacStr, sizeof(hmacStr));
 }
 
-#else // --------- no USE_SSL ==> errAbort with message that openssl is required --------------
-
-#include "common.h"
-#include "errAbort.h"
-#define NEED_OPENSSL "kent/src must be recompiled with openssl libs and USE_SSL=1 in order for this to work."
-
-char *hmacSha1(char *key, char *data)
-/* This is just a warning that appears in the absence of USE_SSL. Real
- * implementation is above! */
-{
-errAbort(NEED_OPENSSL);
-return NULL;
-}
-
-char *hmacMd5(char *key, char *data)
-/* This is just a warning that appears in the absence of USE_SSL. Real
- * implementation is above! */
-{
-errAbort(NEED_OPENSSL);
-return NULL;
-}
-
-#endif
