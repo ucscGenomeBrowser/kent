@@ -403,7 +403,11 @@ if (vals != NULL)
     char *df = makeDataFrame(tdb->table, vals);
     char *colorFile = makeColorFile(tdb);
     printBoxplot(df, item, chartItem->name2, units, colorFile);
-    printf("<br><a href='%s'>View data for all samples</a>\n", df); 
+    printf("<br><a href='%s'>View all data points for %s%s%s%s</a>\n", df, 
+                        chartItem->name, 
+                        chartItem->name2 ? " (" : "",
+                        chartItem->name2 ? chartItem->name2 : "",
+                        chartItem->name2 ? ")" : "");
     }
 puts("<br>");
 }
