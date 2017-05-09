@@ -41,7 +41,7 @@ priority 2
 # Variation and Repeats
 
 track rmsk override
-priority 1
+priority 2
 
 track snp126 override
-priority 2
+priority 1
