@@ -28,6 +28,7 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
+#include "barChartBed.h"
 #include "samAlignment.h"
 #include "trackHub.h"
 
@@ -1032,7 +1033,11 @@ if (type != NULL && startsWithWord("maf", type))
     integerFilter(db, table, "chromStart", "chromStart", " AND ");
     integerFilter(db, table, "chromEnd", "chromEnd", " AND ");
     }
-else if (type != NULL && (startsWithWord("makeItems", type) || sameWord("bedDetail", type) || sameWord("pgSnp", type)))
+else if (type != NULL && 
+        (startsWithWord("makeItems", type) || 
+        sameWord("bedDetail", type) || 
+        sameWord("barChart", type) || 
+        sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     struct sqlFieldType *ftList = sqlListFieldsAndTypes(conn, ct->dbTableName);

@@ -27,6 +27,7 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
+#include "barChartBed.h"
 #include "hubConnect.h"
 #include "errCatch.h"
 
@@ -612,6 +613,12 @@ else if (sameWord("bedDetail", type))
 else if (sameWord("pgSnp", type))
     {
     struct asObject *asObj = pgSnpAsObj();
+    showSchemaWithAsObj(db, table, ct, asObj);
+    asObjectFree(&asObj);
+    }
+else if (sameWord("barChart", type))
+    {
+    struct asObject *asObj = barChartAsObj();
     showSchemaWithAsObj(db, table, ct, asObj);
     asObjectFree(&asObj);
     }
