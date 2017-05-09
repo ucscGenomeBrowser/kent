@@ -478,7 +478,7 @@ function waitKey ()
 {
     echo2
     echo2 Press any key to continue or CTRL-C to abort.
-    read -n 1 -s
+    read -n 1
     echo2
 }
 
