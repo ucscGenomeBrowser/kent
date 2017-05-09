@@ -269,7 +269,11 @@ static struct barChartItemData *getSampleVals(struct trackDb *tdb, struct barCha
 /* Get data values for this item (locus) from all samples */
 {
 struct barChartItemData *vals = NULL;
-char *dataFile = trackDbSetting(tdb, "barChartDataUrl");
+char *dataFile = trackDbSetting(tdb, "barChartMatrixUrl");
+// for backwards compatibility during qa review
+if (dataFile == NULL)
+    dataFile = trackDbSetting(tdb, "barChartDataUrl");
+// for backwards compatibility during qa review
 struct hash *categoryHash = getTrackCategories(tdb);
 if (dataFile != NULL)
     {
