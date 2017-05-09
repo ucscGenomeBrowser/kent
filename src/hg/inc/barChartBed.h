@@ -94,6 +94,9 @@ void barChartBedOutput(struct barChartBed *el, FILE *f, char sep, char lastSep);
 void barChartBedCreateTable(struct sqlConnection *conn, char *table);
 /* Create barChart format table of given name. */
 
+struct asObject *barChartAsObj();
+/* Return asObject describing fields of barChart database table (includes bin) */
+
 struct bed *barChartSimpleBedLoad(char **row);
 /* Load a bed from row containing barChart bed fields. 
  * This is reuses autoSql barChartBedLoad, but with a full-size bed.
