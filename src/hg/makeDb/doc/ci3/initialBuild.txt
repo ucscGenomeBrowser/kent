@@ -163,6 +163,114 @@ taxId 7719
     makeCytoBandIdeo.csh ci3
 
 #########################################################################
+# ucscToRefSeq table/track (DONE - 2017-03-14 - Hiram)
+    mkdir /hive/data/genomes/ci3/bed/ucscToRefSeq
+    cd /hive/data/genomes/ci3/bed/ucscToRefSeq
+
+    # there is a chrM here
+    grep chrM ../../*.agp
+# chrM    1       14790   1       O       NC_004447.2     1       14790   +
+    # NCBI ENtrez says this NC_004447.2 is AJ517314.2
+
+    # This assembly_report has *two* different MT sequences:
+    # one with a genbank name:
+# KhM0    assembled-molecule      MT      Mitochondrion   HT000188.1      <>     na       non-nuclear     14104   na
+    # and one with a refseq name:
+# MT      assembled-molecule      MT      Mitochondrion   na      <>      NC_004447.2     non-nuclear     14790   na
+
+    printf "NC_004447.2\tAJ517314.2\n" > refseq.insdc.txt
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | grep -v NC_004447.2 \
+      | awk '{printf "%s\t%s\n", $2, $1}' | sort >> refseq.insdc.txt
+
+    printf "chrM\tNC_004447.2\n" > ucscToRefSeq.tab
+    grep -v "Accession.version" ../../genbank/GCF_000224145.1_KH_assembly_structure/Primary_Assembly/assembled_chromosomes/chr2acc \
+       | awk '{printf "chr%d\t%s\n", $1, $2}' | sort >> ucscToRefSeq.tab
+    grep NW_ ../../chrom.sizes | awk '{printf "%s\t%s\n", $1, $1}' \
+       | sed -e 's/chrUn_//; s/v1/.1/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+          | sort >> ucscToRefSeq.tab
+
+    sort -k2 ucscToRefSeq.tab | join -1 2 - refseq.insdc.txt \
+      | awk '{printf "%s\t%s\n", $2, $3}' | sort > ucscToINSDC.tab
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > ucsc.coordinate.tab
+
+    join ucscToINSDC.tab ucsc.coordinate.tab \
+         | awk '{printf "%s\t%d\t%d\t%s\n", $1,$3,$4,$2}' \
+             | sort > ucscToINSDC.bed
+
+    sort ucscToRefSeq.tab \
+       | join - ucsc.coordinate.tab \
+         | awk '{printf "%s\t%d\t%d\t%s\n", $1,$3,$4,$2}' \
+             | sort > ucscToRefSeq.bed
+
+
+    # the second MT HT000188.1 is not matched in UCSC assembly:
+    wc -l *
+#   1273 refseq.insdc.txt
+#   1272 ucsc.coordinate.tab
+#   1272 ucscToINSDC.bed
+#   1272 ucscToINSDC.tab
+#   1272 ucscToRefSeq.bed
+#   1272 ucscToRefSeq.tab
+
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  20
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab ci3 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    # and the existing ucscToINSDC is incorrect:
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  20
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        > ucscToINSDC.sql
+    hgLoadSqlTab ci3 ucscToINSDC ./ucscToINSDC.sql ucscToINSDC.bed
+
+
+    # checkTableCoords should be silent
+    checkTableCoords ci3
+    # each should cover %100 entirely:
+    featureBits -countGaps ci3 ucscToINSDC
+    # 115227500 bases of 115227500 (100.000%) in intersection
+
+    featureBits -countGaps ci3 ucscToRefSeq
+    # 115227500 bases of 115227500 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2017-03-14 - Hiram)
+
+    # the previous chromAlias was incorrect, it was the incorrect genbank
+    # assembly correspondence.  This already has the ensembl list here.
+
+    mkdir /hive/data/genomes/ci3/bed/chromAlias
+    cd /hive/data/genomes/ci3/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' ci3 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' ci3 \
+        > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+
+    # verify all are correct counts:
+    cut -f3 ci3.chromAlias.tab | tr '[,]' '[\n]' | sort | uniq -c
+    #	1272 ensembl
+    #	1272 genbank
+    #	1272 refseq
+    wc -l *.tab
+    #	2559 ci3.chromAlias.tab
+    #	1272 ucsc.ensembl.tab
+    #	1272 ucsc.genbank.tab
+    #	1272 ucsc.refseq.tab
+
+    hgLoadSqlTab ci3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        ci3.chromAlias.tab
+
+#########################################################################
 # ucscToINSDC table/track (DONE - 2015-07-10 - Hiram)
     mkdir /hive/data/genomes/ci3/bed/ucscToINSDC
     cd /hive/data/genomes/ci3/bed/ucscToINSDC
@@ -397,7 +505,7 @@ searchPriority 8
         -bedFile=jkStuff/nonBridged.bed
 
     #   check N50 size
-    n50.pl chrom.sizes 
+    n50.pl chrom.sizes
 #       reading: chrom.sizes
 #       contig count: 1272, total size: 115227500, one half size: 57613750
 # cumulative    N50 count       contig  contig size
@@ -522,3 +630,15 @@ daily.2015.0725/mrna.xeno.alidx:AC_000192       1       0
     #   sizes will set properly
 
 #########################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-05-09 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ci3", "blat1a", "17828", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ci3", "blat1a", "17829", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
