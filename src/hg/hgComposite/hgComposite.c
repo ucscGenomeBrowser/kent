@@ -50,6 +50,7 @@ struct track
 struct track *next;
 char *name;
 char *shortLabel;
+char *longLabel;
 };
 
 struct composite
