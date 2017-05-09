@@ -26,7 +26,10 @@ bamGrayMode bam
 bamSkipPrintQualScore bam
 barChartBars barChart bigBarChart
 barChartColors barChart bigBarChart
+barChartMatrixUrl barChart bigBarChart
+# below for backwards compatibility during QA. 
 barChartDataUrl barChart bigBarChart
+#
 barChartLabel barChart bigBarChart
 barChartMetric barChart bigBarChart
 barChartSampleUrl barChart bigBarChart
