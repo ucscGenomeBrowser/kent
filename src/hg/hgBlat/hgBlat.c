@@ -243,7 +243,7 @@ void showAliPlaces(char *pslName, char *faName, char *customText, char *database
            char *organism, boolean feelingLucky)
 /* Show all the places that align. */
 {
-boolean useBigPsl = cfgOptionBooleanDefault("useBlatBigPsl", FALSE);
+boolean useBigPsl = cfgOptionBooleanDefault("useBlatBigPsl", TRUE);
 struct lineFile *lf = pslFileOpen(pslName);
 struct psl *pslList = NULL, *psl;
 char *browserUrl = hgTracksName();
