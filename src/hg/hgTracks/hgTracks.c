@@ -92,6 +92,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             "hgt.contentType", "hgt.positionInput", "hgt.internal",
+            "sortExp", "sortSim",
             NULL };
 
 /* These variables persist from one incarnation of this program to the
@@ -8312,8 +8313,6 @@ if (!hideControls)
                     idText, indicatorImg, indicator,isOpen?"Collapse":"Expand");
 	    jsOnEventByIdF("click", idText, "return vis.toggleForGroup(this, '%s');", group->name);
 
-            hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
-            hPrintf("</td><td style='text-align:right;'>\n");
             if (isHubTrack(group->name))
 		{
                 if (strstr(group->label, "Composite"))
@@ -8324,7 +8323,12 @@ if (!hideControls)
                     jsOnEventByIdF("click", idText,
                         "document.editHubForm.submit();return true;");
                     }
+                }
 
+            hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
+            hPrintf("</td><td style='text-align:right;'>\n");
+            if (isHubTrack(group->name))
+		{
 		safef(idText, sizeof idText, "%s_disconn", group->name);
                 hPrintf("<input name=\"hubDisconnectButton\" id='%s'"
                     " type=\"button\" value=\"disconnect\">\n", idText);
@@ -9825,6 +9829,19 @@ char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 char *configMultiRegionPageCall = cartCgiUsualString(cart, "hgTracksConfigMultiRegionPage", "notSet");
 
 /* Do main display. */
+
+char *sortTrack;
+if ((sortTrack = cgiOptionalString( "sortSim")) != NULL)
+    {
+    printf("sort track by similarity %s\n", sortTrack);
+    //sortTrackByExpression(cart);
+    }
+
+if ((sortTrack = cgiOptionalString( "sortExp")) != NULL)
+    {
+    printf("sort track by expression %s\n", sortTrack);
+    //sortTrackByExpression(cart);
+    }
 
 if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     {
