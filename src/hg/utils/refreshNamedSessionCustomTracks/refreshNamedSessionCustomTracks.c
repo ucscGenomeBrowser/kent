@@ -277,25 +277,26 @@ while (isNotEmpty(namePt))
 	{
 	// touch corresponding multi-region custom regions .bed and .sha1 files to save them from trash cleaner.
 	cgiDecode(dataPt, dataPt, strlen(dataPt));
-	boolean mrBedUrlExpired = FALSE;
 	char multiRegionsBedUrlSha1Name[1024];
 	safef(multiRegionsBedUrlSha1Name, sizeof multiRegionsBedUrlSha1Name, "%s.sha1", dataPt);
         if (!sameString(dataPt,"") && !strstr(dataPt,"://"))
 	    {  // should have a bed file in trash and a sha1 for quick change detection
 	    if (fileExists(dataPt) && fileExists(multiRegionsBedUrlSha1Name))
 		{
-		readAndIgnore(dataPt);
 		verbose(4, "setting multiRegionsBedUrl: %s\n", dataPt);
-		readAndIgnore(multiRegionsBedUrlSha1Name);
 		verbose(4, "setting multiRegionsBedUrl: %s\n", multiRegionsBedUrlSha1Name);
-		}
-	    else
-		{
-		mrBedUrlExpired = TRUE;
+	        dyStringAppend(newContents, oneSetting->string);
 		}
 	    }
-	if (!mrBedUrlExpired)
-	    dyStringAppend(newContents, oneSetting->string);
+	}
+    else if (startsWith("customComposite", namePt))
+	{
+	cgiDecode(dataPt, dataPt, strlen(dataPt));
+	if (fileExists(dataPt))
+           {
+           verbose(4, "setting compositeFile: %s\n", dataPt);
+	   dyStringAppend(newContents, oneSetting->string);
+           }
 	}
     else
 	{
