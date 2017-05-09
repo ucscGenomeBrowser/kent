@@ -2684,6 +2684,22 @@ var rightClick = {
             }
             location.assign(url);
 
+        } else if ((cmd === 'sortExp') || (cmd === 'sortSim')) {
+
+            url = "hgTracks?hgsid=" + getHgsid() + "&" + cmd + "=";
+            rec = hgTracks.trackDb[id];
+            if (tdbHasParent(rec) && tdbIsLeaf(rec))
+                url += rec.parentTrack;
+            else {
+                // The button already has the ref
+                var link2 = normed($( 'td#td_btn_'+ rightClick.selectedMenuItem.id ).children('a')); 
+                if (link2)
+                    url = $(link2).attr('href');
+                else
+                    url += rightClick.selectedMenuItem.id;
+            }
+            location.assign(url);
+
         } else if (cmd === 'viewImg') {
             // Fetch a new copy of track img and show it to the user in another window. This code
             // assume we have updated remote cart with all relevant chages (e.g. drag-reorder).
@@ -3196,6 +3212,29 @@ var rightClick = {
                     menu.push(o);
                 }
             }
+
+            // add sort options if this is a custom composite
+            if (rec.isCustomComposite) {
+
+                o = {};
+                o[" Sort by Expression "] = {
+                    onclick: function(menuItemClicked, menuObject) {
+                        rightClick.hit(menuItemClicked, menuObject, "sortExp");
+                        return true; }
+                };  
+                menu.push(o);
+
+                o = {};
+                o[" Sort by Similarity "] = {
+                    onclick: function(menuItemClicked, menuObject) {
+                        rightClick.hit(menuItemClicked, menuObject, "sortSim");
+                        return true; }
+                };  
+                menu.push(o);
+
+                menu.push($.contextMenu.separator);
+            }
+
             // Add view image at end
             o = {};
             o[rightClick.makeImgTag("eye.png") + " View image"] = {

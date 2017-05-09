@@ -157,9 +157,11 @@ printf("<OPTION VALUE='%s'%s>%s\n", val, (sameString(selectedVal, val) ? " SELEC
 static struct composite *getCompositeList(char *db, char *hubName, struct hash *nameHash)
 {
 struct composite *compositeList = NULL;
+FILE *f;
 
-if (hubName != NULL)
+if ((hubName != NULL) && ((f = fopen(hubName, "r")) != NULL))
     {
+    fclose(f);
     // read hub to find names of composites and add them to compositeList
     struct trackDb *tdbList = trackDbFromRa(hubName, NULL);
     struct trackDb *tdb, *tdbNext;
@@ -177,6 +179,7 @@ if (hubName != NULL)
             slAddHead(&compositeList, composite);
             composite->name = tdb->track;
             composite->shortLabel = tdb->shortLabel;
+            composite->longLabel = tdb->shortLabel;
             }
         else
             {
@@ -185,6 +188,7 @@ if (hubName != NULL)
             AllocVar(track);
             track->name = tdb->track;
             track->shortLabel = tdb->shortLabel;
+            track->longLabel = tdb->shortLabel;
             slAddHead(&composite->trackList, track);
             }
         }
@@ -247,7 +251,6 @@ compositeTrack on\n\
 aggregate none\n\
 longLabel %s\n\
 %s on\n\
-#container multiWig\n\
 type wig \n\
 visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING);
 }
