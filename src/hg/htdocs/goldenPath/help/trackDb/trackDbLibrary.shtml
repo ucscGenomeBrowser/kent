@@ -4327,8 +4327,8 @@ For the complete bigBarChart format definitions please see the
     </P>
 </DIV>
 
-<DIV class="barChartDataUrl"><span class="types bigBarChart"></span>
-<div class="format"><code>barChartDataUrl &lt;url&gt;</code></div>
+<DIV class="barChartMatrixUrl"><span class="types bigBarChart"></span>
+<div class="format"><code>barChartMatrixUrl &lt;url&gt;</code></div>
     <P>Specifies a data matrix file that provides data values for all samples.
 Used together with barChartSampleUrl to generate a box plot on the details page.
     </P>
@@ -4336,7 +4336,7 @@ Used together with barChartSampleUrl to generate a box plot on the details page.
 <DIV class="barChartSampleUrl"><span class="types bigBarChart"></span>
 <div class="format"><code>barChartSampleUrl &lt;url&gt;</code></div>
     <P>Specifies a tab-separated file that provides categories for samples in the
-barChartDataUrl file.  Used for generating a box plot on the details page.
+barChartMatrixUrl file.  Used for generating a box plot on the details page.
     </P>
 </DIV>
 
@@ -4357,7 +4357,7 @@ barChartDataUrl file.  Used for generating a box plot on the details page.
     labelFields gene, name
     defaultLabelFields gene
     bigDataUrl http://...
-    barChartDataUrl http://...
+    barChartMatrixUrl http://...
     barChartSampleUrl http://...
     </pre>
 </div>

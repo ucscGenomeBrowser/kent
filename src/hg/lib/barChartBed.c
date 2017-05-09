@@ -246,6 +246,31 @@ sqlSafef(query, sizeof(query),
 sqlRemakeTable(conn, table, query);
 }
 
+static char *barChartAutoSqlString =
+"table barChartBed"
+"\"BED6+5 with additional fields for category count and median values, and sample matrix fields\""
+"    ("
+"   string chrom;       \"Reference sequence chromosome or scaffold\""
+"   uint   chromStart;  \"Start position in chromosome\""
+"   uint   chromEnd;    \"End position in chromosome\""
+"   string name;        \"Name or ID of item, ideally both human readable and unique\""
+"   uint   score;       \"Score from 0-1000, typically derived from total of median value from all categories\""
+"   char[1] strand;     \"+ or - for strand. Use . if not applicable\""
+"   string name2;       \"Alternative name for item\""
+"   uint expCount;      \"Number of categories\""
+"   float[expCount] expScores; \"Comma separated list of category values\""
+"   bigint _dataOffset; \"Offset of sample data in data matrix file, for boxplot on details page\""
+"   int _dataLen;       \"Length of sample data row in data matrix file\""
+"   )"
+;
+
+struct asObject *barChartAsObj()
+/* Return asObject describing fields of barChart database table (includes bin) */
+{
+return asParseText(barChartAutoSqlString);
+}
+
+
 struct bed *barChartSimpleBedLoad(char **row)
 /* Load a bed from row containing barChart bed fields. 
  * This reuses autoSql barChartBedLoad, but with a full-size bed.
@@ -325,4 +350,3 @@ for (i=0; i<bed->expCount; i++)
     }
 return maxScore;
 }
-

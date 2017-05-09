@@ -269,7 +269,11 @@ static struct barChartItemData *getSampleVals(struct trackDb *tdb, struct barCha
 /* Get data values for this item (locus) from all samples */
 {
 struct barChartItemData *vals = NULL;
-char *dataFile = trackDbSetting(tdb, "barChartDataUrl");
+char *dataFile = trackDbSetting(tdb, "barChartMatrixUrl");
+// for backwards compatibility during qa review
+if (dataFile == NULL)
+    dataFile = trackDbSetting(tdb, "barChartDataUrl");
+// for backwards compatibility during qa review
 struct hash *categoryHash = getTrackCategories(tdb);
 if (dataFile != NULL)
     {
@@ -403,7 +407,11 @@ if (vals != NULL)
     char *df = makeDataFrame(tdb->table, vals);
     char *colorFile = makeColorFile(tdb);
     printBoxplot(df, item, chartItem->name2, units, colorFile);
-    printf("<br><a href='%s'>View data for all samples</a>\n", df); 
+    printf("<br><a href='%s'>View all data points for %s%s%s%s</a>\n", df, 
+                        chartItem->name, 
+                        chartItem->name2 ? " (" : "",
+                        chartItem->name2 ? chartItem->name2 : "",
+                        chartItem->name2 ? ")" : "");
     }
 puts("<br>");
 }

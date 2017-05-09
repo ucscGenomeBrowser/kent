@@ -134,9 +134,9 @@ puts(" Data must be formatted in\n"
 " line in the box below.\n"
 " Examples are\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#EXAMPLE1'>here</A>.\n <br><br>"
-" <B>Please note a much more efficient way to share data is to use\n"
+" Please note a much more efficient way to load data is to use\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/hgTrackHubHelp.html'>Track Hubs</A>, which are loaded\n" 
-" from the <A HREF='hgHubConnect'>Track Hubs Portal</A> found in the menu under My Data.</B>\n"
+" from the <A HREF='hgHubConnect'>Track Hubs Portal</A> found in the menu under My Data.\n"
 );
 }
 
