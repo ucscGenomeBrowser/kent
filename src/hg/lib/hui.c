@@ -8525,9 +8525,9 @@ else if (startsWith("big", tdb->type))
     char *bbiFileName = bbiNameFromSettingOrTable(tdb, conn, tableName);
     hFreeConn(&conn);
     struct bbiFile *bbi = NULL;
-    if (startsWith("bigBed", tdb->type))
+    if (startsWith("bigBed", tdb->type) || sameString("bigBarChart", tdb->type))
 	bbi = bigBedFileOpen(bbiFileName);
-    if (startsWith("bigWig", tdb->type))
+    else if (startsWith("bigWig", tdb->type))
 	bbi = bigWigFileOpen(bbiFileName);
     time_t timep = 0;
     if (bbi)

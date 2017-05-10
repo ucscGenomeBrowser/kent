@@ -478,7 +478,7 @@ function waitKey ()
 {
     echo2
     echo2 Press any key to continue or CTRL-C to abort.
-    read -n 1 -s
+    read -n 1
     echo2
 }
 
@@ -605,7 +605,8 @@ function installRedhat () {
     waitKey
     # make sure we have and EPEL and ghostscript and rsync (not installed on vagrant boxes)
     # imagemagick is required for the session gallery
-    yum -y install epel-release ghostscript rsync ImageMagick
+    yum -y install epel-release
+    yum -y install ghostscript rsync ImageMagick R-core
 
     # centos 7 and fedora 20 do not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then

@@ -1,6 +1,6 @@
-/* hgVai - Variant Annotation Integrator. */
+/* hgComposite --- build a composite */
 
-/* Copyright (C) 2014 The Regents of the University of California 
+/* Copyright (C) 2017 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
@@ -36,6 +36,7 @@
 
 #define hgCompEditPrefix    "hgCompositeEdit_"
 #define hgsAddTrack hgCompEditPrefix "addTrack"
+#define hgsAddVisTrack hgCompEditPrefix "addVisTrack"
 #define hgsChangeGroup hgCompEditPrefix "changeGroup"
 #define hgsCurrentGroup hgCompEditPrefix "currentGroup"
 #define hgsCurrentComposite hgCompEditPrefix "currentComposite"
@@ -50,6 +51,7 @@ struct track
 struct track *next;
 char *name;
 char *shortLabel;
+char *longLabel;
 };
 
 struct composite
@@ -70,7 +72,7 @@ char *database = NULL;		/* Current genome database - hg17, mm5, etc. */
 struct grp *fullGroupList = NULL;	/* List of all groups. */
 
 // Null terminated list of CGI Variables we don't want to save permanently:
-char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", hgsAddTrack,  hgsNewCompositeName, hgsNewCompositeShortLabel, hgsNewCompositeLongLabel, hgsChangeGroup, NULL};
+char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", hgsAddTrack,  hgsNewCompositeName, hgsNewCompositeShortLabel, hgsNewCompositeLongLabel, hgsChangeGroup, hgsAddVisTrack, NULL};
 
 void nbSpaces(int count)
 /* Print some non-breaking spaces. */
@@ -157,9 +159,11 @@ printf("<OPTION VALUE='%s'%s>%s\n", val, (sameString(selectedVal, val) ? " SELEC
 static struct composite *getCompositeList(char *db, char *hubName, struct hash *nameHash)
 {
 struct composite *compositeList = NULL;
+FILE *f;
 
-if (hubName != NULL)
+if ((hubName != NULL) && ((f = fopen(hubName, "r")) != NULL))
     {
+    fclose(f);
     // read hub to find names of composites and add them to compositeList
     struct trackDb *tdbList = trackDbFromRa(hubName, NULL);
     struct trackDb *tdb, *tdbNext;
@@ -177,6 +181,7 @@ if (hubName != NULL)
             slAddHead(&compositeList, composite);
             composite->name = tdb->track;
             composite->shortLabel = tdb->shortLabel;
+            composite->longLabel = tdb->shortLabel;
             }
         else
             {
@@ -185,6 +190,7 @@ if (hubName != NULL)
             AllocVar(track);
             track->name = tdb->track;
             track->shortLabel = tdb->shortLabel;
+            track->longLabel = tdb->shortLabel;
             slAddHead(&composite->trackList, track);
             }
         }
@@ -247,7 +253,6 @@ compositeTrack on\n\
 aggregate none\n\
 longLabel %s\n\
 %s on\n\
-#container multiWig\n\
 type wig \n\
 visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING);
 }
@@ -414,6 +419,11 @@ cartSaveSession(cart);
 cgiMakeHiddenVar(hgsNewCompositeName, "");
 cgiMakeHiddenVar(hgsNewCompositeShortLabel, "");
 cgiMakeHiddenVar(hgsNewCompositeLongLabel, "");
+hPrintf("</FORM>\n");
+
+hPrintf("<FORM ACTION='%s' NAME='addVisTrackForm'>", cgiScriptName());
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgsAddVisTrack, "");
 hPrintf("</FORM>\n");
 
 hPrintf("<FORM ACTION='%s' NAME='addTrackForm'>", cgiScriptName());
@@ -606,7 +616,7 @@ hOnClickButton("addTrack",
 printf("<BR>");
 printf("<BR>");
 printf("<BR>");
-hOnClickButton("selVar_AddAllVis", "document.trackHubForm.submit(); return false;", "Add All Visibile Wiggles");
+hOnClickButton("selVar_AddAllVis", "document.addVisTrackForm.submit(); return false;", "Add All Visibile Wiggles");
 }
 
 void doMainPage(char *db, struct grp *groupList,  struct trackDb *fullTrackList, struct composite *currentComposite, struct composite *compositeList)
@@ -662,7 +672,7 @@ printf("</FORM>");
 jsReloadOnBackButton(cart);
 
 webNewSection("Using the Composite Builder");
-webIncludeHelpFileSubst("hgCompositeHelpText", cart, FALSE);
+webIncludeHelpFileSubst("hgCompositeHelp", cart, FALSE);
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("hgVarAnnogrator.js", NULL);
 jsIncludeFile("ui.dropdownchecklist.js", NULL);
@@ -729,6 +739,26 @@ for(;; count++)
 
 return NULL;
 }
+
+bool trackVisible(struct trackDb *tdb)
+{
+if ((tdb->parent != NULL) && !trackVisible(tdb->parent))
+    return FALSE;
+
+boolean vis = tdb->visibility != tvHide;
+char *cartVis = cartOptionalString(cart, tdb->track);
+
+if (cartVis != NULL) 
+    {
+    if (differentString(cartVis, "hide"))
+        vis = TRUE;
+    else
+        vis = FALSE;
+    }
+
+return vis;
+}
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -819,6 +849,25 @@ if (newCompositeName != NULL)
 if (currentCompositeName == NULL)
     currentComposite = compositeList;
 
+char *addAllVisible = cartOptionalString(cart, hgsAddVisTrack);
+if (addAllVisible != NULL)
+    {
+    struct trackDb *tdb;
+
+    for(tdb = fullTrackList; tdb; tdb = tdb->next)
+        {
+        if (trackCanBeAdded(tdb) && trackVisible(tdb))
+            {
+            struct track *track;
+            AllocVar(track);
+            track->name = makeUnique(nameHash,  tdb);
+            track->shortLabel = tdb->shortLabel;
+            track->longLabel = tdb->longLabel;
+            slAddHead(&currentComposite->trackList, track);
+            }
+        }
+    }
+
 char *newTrackName = cartOptionalString(cart, hgsAddTrack);
 if (newTrackName != NULL)
     {
@@ -832,6 +881,7 @@ if (newTrackName != NULL)
         AllocVar(track);
         track->name = makeUnique(nameHash,  tdb);
         track->shortLabel = tdb->shortLabel;
+        track->longLabel = tdb->longLabel;
         slAddHead(&currentComposite->trackList, track);
         }
     }

@@ -35,6 +35,8 @@ struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
     struct slPair *pair;
+    repeatCharOut(f, '\t', depth);
+    fprintf(f, "<LI>\n");
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
         repeatCharOut(f, '\t', depth);
@@ -45,7 +47,6 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     fprintf(f, "<BR>\n");
     if (stanza->children != NULL)
         {
-        liLabel = "<LI>";
         rTsWrite(stanza->children, f, depth+1, liLabel);
         }
     }
@@ -96,7 +97,7 @@ fprintf(f, "<B>stanzas:</B> %d ", stanzaCount);
 fprintf(f, "<B>tags:</B> %d ", tagCount);
 fprintf(f, "<B>fields:</B> %d ", fieldCount);
 fputs(
-"<BR><BR>\n"
+"<BR>\n"
 "</div>\n"
 "\n"
 "<div id=\"ts_tree\">\n"

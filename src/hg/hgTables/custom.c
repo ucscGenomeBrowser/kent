@@ -93,6 +93,8 @@ hti->hasBin = FALSE;
 hti->type = cloneString(ct->tdb->type);
 if (sameString("pgSnp", hti->type))
     fieldCount = 4; /* only 4 bed-like */
+else if (sameString("barChart", hti->type))
+    fieldCount = 6; /* only 6 bed-like */
 else if (sameString("bedDetail", hti->type))
     fieldCount = ct->fieldCount - 2; /* bed part 4-12 */
 else
@@ -487,7 +489,10 @@ if (ct == NULL)
     errAbort("Can't find custom track %s", name);
 char *type = ct->dbTrackType;
 
-if (type != NULL && (startsWithWord("makeItems", type) || sameWord("bedDetail", type) || sameWord("pgSnp", type)))
+if (type != NULL && (startsWithWord("makeItems", type) || 
+        sameWord("bedDetail", type) || 
+        sameWord("barChart", type) || 
+        sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     bedList = dbGetFilteredBedsOnRegions(conn, CUSTOM_TRASH, db, ct->dbTableName, name,
@@ -498,6 +503,8 @@ if (type != NULL && (startsWithWord("makeItems", type) || sameWord("bedDetail", 
         fieldCount = *retFieldCount;
     else if (sameWord("pgSnp", type))
         fieldCount = 4;
+    else if (sameWord("barChart", type))
+        fieldCount = 6;
     }
 else if (ct->wiggle)
     {
@@ -584,7 +591,10 @@ void doTabOutCustomTracks(char *db, char *table, struct sqlConnection *conn,
 {
 struct customTrack *ct = ctLookupName(table);
 char *type = ct->tdb->type;
-if (startsWithWord("makeItems", type) || sameWord("bedDetail", type) || sameWord("pgSnp", type))
+if (startsWithWord("makeItems", type) || 
+        sameWord("bedDetail", type) || 
+        sameWord("barChart", type) ||
+        sameWord("pgSnp", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     doTabOutDb(CUSTOM_TRASH, db, ct->dbTableName, table, f, conn, fields);
