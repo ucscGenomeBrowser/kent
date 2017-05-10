@@ -2,6 +2,7 @@
 
 include ../chainNetXenTro3.ra
 include ../chainNetFelCat5.ra
+include ../chainNetMelGal1.ra
 
 track chainNetOryCun2 override
 shortLabel $o_db Chain/Net
