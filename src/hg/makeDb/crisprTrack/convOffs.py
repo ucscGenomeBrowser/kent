@@ -63,9 +63,9 @@ def writeGuideRow(db, guideSeq, otRows, ofh):
         #if mismCount >= 4:
             #continue # just show count, don't store locations of off-targets with 4 mismatches
         #row[2] = "%0.2f" % row[2]
-        chrom, start, score, pam, diffString, annot = row
+        chrom, start, strand, score, pam, diffString, annot = row
         start = int(start)-1 # aargh!! crispor is 1-based!
-        row = [chrom, start, score, otSeq]
+        row = [chrom, start, strand, score, otSeq]
 
         #otStrings.append(";".join(row))
         filtOtRows.append(row)
@@ -73,11 +73,11 @@ def writeGuideRow(db, guideSeq, otRows, ofh):
     # need to determine strand. idiotic bug: old version of crispor didn't give me the strand.
 
     # get seqs, but in chrom order to get better speed
-    otCoords = []
-    for row in filtOtRows:
-        chrom, start, score, otSeq = row
-        otCoords.append( (chrom, start, otSeq) )
-    otCoords.sort()
+    #otCoords = []
+    #for row in filtOtRows:
+        #chrom, start, score, otSeq = row
+        #otCoords.append( (chrom, start, otSeq) )
+    #otCoords.sort()
 
     # write to bed
     #tmpFh = tempfile.NamedTemporaryFile(dir="/dev/shm", prefix="max-crisprTrack")
@@ -86,45 +86,45 @@ def writeGuideRow(db, guideSeq, otRows, ofh):
         #tmpFh.write("%s\n" % ("\t".join(r)))
     #tmpFh.flush()
 
-    twoBitFname = '/scratch/data/%s/%s.2bit' % (db, db)
-    if not isfile(twoBitFname): # can happen these days, says Hiram
-        twoBitFname = '/gbdb/%s/%s.2bit' % (db, db)
-    if not isfile(twoBitFname): # can happen these days, says Hiram
-        twoBitFname = '/cluster/data/%s/%s.2bit' % (db, db)
-    genome = TwoBitFile(twoBitFname)
+    #twoBitFname = '/scratch/data/%s/%s.2bit' % (db, db)
+    #if not isfile(twoBitFname): # can happen these days, says Hiram
+        #twoBitFname = '/gbdb/%s/%s.2bit' % (db, db)
+    #if not isfile(twoBitFname): # can happen these days, says Hiram
+        #twoBitFname = '/cluster/data/%s/%s.2bit' % (db, db)
+    #genome = TwoBitFile(twoBitFname)
 
     # get sequences
-    strands = {}
-    for otRow in otCoords:
-        chrom, start, otSeq = otRow
-        twoBitChrom = genome[chrom]
-        forwSeq = twoBitChrom[start:start+23].upper()
-        # two possible sequences, depending on strand
-        revSeq = revComp(forwSeq).upper()
+    #strands = {}
+    #for otRow in otCoords:
+    #    chrom, start, otSeq = otRow
+    #    twoBitChrom = genome[chrom]
+    #    forwSeq = twoBitChrom[start:start+23].upper()
+    #    # two possible sequences, depending on strand
+    #    revSeq = revComp(forwSeq).upper()
 
-        #print guideSeq, otSeq, forwSeq, revSeq
-        # for palindromes, we can't decide, default to +
-        if otSeq==forwSeq:
-            strand = "+"
-        elif otSeq==revSeq:
-            strand = "-"
-        else:
-            assert(False)
-        strands[(chrom, start)] = strand
+    #    #print guideSeq, otSeq, forwSeq, revSeq
+    #    # for palindromes, we can't decide, default to +
+    #    if otSeq==forwSeq:
+    #        strand = "+"
+    #    elif otSeq==revSeq:
+    #        strand = "-"
+    #    else:
+    #        assert(False)
+    #    strands[(chrom, start)] = strand
 
     # now add the strand to the features
     otStrings = []
     for row in filtOtRows:
-        chrom, start, score, mismCount = row
+        chrom, start, strand, score, mismCount = row
         scoreStr = str(int(score*100))
         #if scoreStr[:2]=="0.":
             #scoreStr = scoreStr[1:]
-        row = (chrom, str(start)+strands[(chrom,start)],scoreStr)
+        row = (chrom, str(start)+strand,scoreStr)
         otStrings.append(";".join(row))
 
     mismCounts = [str(x) for x in mismCounts]
     otField = "|".join(otStrings)
-    # mysql has trouble with very long blogs, and we also can save a lot of space by 
+    # mysql has trouble with very long blobs, and we also can save a lot of space by 
     # ignoring too repetitive sequences
     if len(otField) > 5000:
         otField = ""
@@ -173,9 +173,9 @@ def main():
 
         print "%s: %d of %d input files done" % (fname, i, len(fnames))
         for line in open(fname, "rb"):
-            if line.startswith("guideId"):
+            if line.startswith("guideId") or line.startswith("seqId"):
                 continue
-            _, guideSeq, otSeq, mismCount, mitScore, cfdScore, chrom, start, end, annot = line.rstrip("\n").split("\t")
+            _, _, guideSeq, otSeq, _, mismCount, mitScore, cfdScore, chrom, start, end, strand, annot = line.rstrip("\n").split("\t")
 
             guideSeq = guideSeq[:20]
             if cfdScore=="None":
@@ -208,7 +208,7 @@ def main():
             annot = annot.replace("intergenic:", "g:")
             annot = annot.replace("intron:", "i:")
             annot = annot.replace("exon:", "e:")
-            otRow = [chrom, start, cfdScore,pam, otSeq, annot]
+            otRow = [chrom, start, strand, cfdScore,pam, otSeq, annot]
             otRows.append(otRow)
             
     if len(otRows)!=0:
