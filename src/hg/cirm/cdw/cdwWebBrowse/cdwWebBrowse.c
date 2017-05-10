@@ -1228,7 +1228,7 @@ printf("<H2>Metadata tree for %s</H2>\n", dataSet);
 char *path = cdwPathForFileId(conn, fileId);
 char command[3*PATH_LEN];
 fflush(stdout);
-safef(command, sizeof(command), "./tagStormToHtml -embed %s stdout", path);
+safef(command, sizeof(command), "./tagStormToHtml -embed %s -nonce=%s stdout", path, getNonce());
 mustSystem(command);
 }
 
