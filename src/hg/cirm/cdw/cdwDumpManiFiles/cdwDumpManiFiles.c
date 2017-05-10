@@ -73,9 +73,12 @@ struct slManiPair *makeManiList(struct sqlConnection *conn, char *dataSetId)
 {
 char query[1024]; 
 sqlSafef(query, sizeof(query), "select * from cdwSubmit where url like '%%%s%%'", dataSetId);  
+verbose(2, "%s\n", query);
 struct cdwSubmit *cS, *cSList = cdwSubmitLoadByQuery(conn, query);  
 struct slManiPair *maniList = NULL; 
 
+if (cSList == NULL)
+    errAbort("Can't find any submissions for %s", dataSetId);
 for (cS = cSList; cS != NULL; cS = cS->next)
     {
     struct slManiPair *cur = slManiPairFind(maniList, cS->url); // Look for the URL in the list. 
@@ -123,7 +126,7 @@ void serveUpFiles(struct sqlConnection *conn, char *directory, struct slManiPair
 {
 char cwd[1024];
 getcwd(cwd, sizeof(cwd)); 
-char fullpath[sizeof(cwd)+sizeof(directory)]; 
+char fullpath[PATH_LEN]; 
 safef(fullpath, sizeof(fullpath), "%s%s", cwd, directory); 
 struct stat st; 
 if (stat(directory, &st) == -1)  
