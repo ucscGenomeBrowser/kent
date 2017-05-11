@@ -672,17 +672,12 @@ printf("</FORM>");
 jsReloadOnBackButton(cart);
 
 webNewSection("Using the Composite Builder");
-webIncludeHelpFileSubst("hgCompositeHelp", cart, FALSE);
+webIncludeHelpFileSubst("hgCompositeHelp", NULL, FALSE);
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("hgVarAnnogrator.js", NULL);
 jsIncludeFile("ui.dropdownchecklist.js", NULL);
 jsIncludeFile("ddcl.js", NULL);
 }
-
-
-
-
-
 
 void doUi(char *db, struct grp *groupList, struct trackDb *fullTrackList,struct composite *currentComposite, struct composite *compositeList) 
 /* Set up globals and make web page */
@@ -694,17 +689,17 @@ cartWebEnd();
 //cartCheckout(&cart);
 }
 
-static struct hash *addWigs(struct trackDb **wigList, struct trackDb *list)
+static void addWigs(struct hash *hash, struct trackDb **wigList, struct trackDb *list)
+// Add tracks that are acceptable in custom composites.
 {
-struct hash *hash = newHash(4);
 if (list == NULL)
-    return hash;
+    return;
 
 struct trackDb *tdb, *tdbNext;
 for(tdb = list; tdb; tdb = tdbNext)
     {
     tdbNext = tdb->next;
-    addWigs(wigList, tdb->subtracks);
+    addWigs(hash, wigList, tdb->subtracks);
 
     if (trackCanBeAdded(tdb))
         {
@@ -713,10 +708,10 @@ for(tdb = list; tdb; tdb = tdbNext)
         }
     }
 
-return hash;
 }
 
 char *makeUnique(struct hash *nameHash, struct trackDb *tdb)
+// Make the name of this track unique.
 {
 if (hashLookup(nameHash, tdb->track) == NULL)
     {
@@ -740,21 +735,56 @@ for(;; count++)
 return NULL;
 }
 
-bool trackVisible(struct trackDb *tdb)
+static bool subtrackEnabledInTdb(struct trackDb *subTdb)
+/* Return TRUE unless the subtrack was declared with "subTrack ... off". */
 {
-if ((tdb->parent != NULL) && !trackVisible(tdb->parent))
+bool enabled = TRUE;
+char *words[2];
+char *setting;
+if ((setting = trackDbLocalSetting(subTdb, "parent")) != NULL)
+    {
+    if (chopLine(cloneString(setting), words) >= 2)
+        if (sameString(words[1], "off"))
+            enabled = FALSE;
+    }
+else
+    return subTdb->visibility != 0;
+
+return enabled;
+}
+
+bool isSubtrackVisible(struct trackDb *tdb)
+/* Has this subtrack not been deselected in hgTrackUi or declared with
+ *  * "subTrack ... off"?  -- assumes composite track is visible. */
+{
+boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
+bool enabledInTdb = subtrackEnabledInTdb(tdb);
+char option[1024];
+safef(option, sizeof(option), "%s_sel", tdb->track);
+boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+if (overrideComposite)
+    enabled = TRUE;
+return enabled;
+}
+
+
+bool isParentVisible( struct trackDb *tdb)
+// Are this track's parents visible?
+{
+if (tdb->parent == NULL)
+    return TRUE;
+
+if (!isParentVisible(tdb->parent))
     return FALSE;
 
-boolean vis = tdb->visibility != tvHide;
-char *cartVis = cartOptionalString(cart, tdb->track);
-
+char *cartVis = cartOptionalString(cart, tdb->parent->track);
+boolean vis;
 if (cartVis != NULL) 
-    {
-    if (differentString(cartVis, "hide"))
-        vis = TRUE;
-    else
-        vis = FALSE;
-    }
+    vis =  differentString(cartVis, "hide");
+else if (tdbIsSuperTrack(tdb->parent))
+    vis = tdb->parent->isShow;
+else
+    vis = tdb->parent->visibility != tvHide;
 
 return vis;
 }
@@ -784,7 +814,8 @@ knetUdcInstall();
 struct trackDb *fullTrackList = NULL;	/* List of all tracks in database. */
 struct trackDb *wigTracks = NULL;	/* List of all wig tracks */
 cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
-struct hash *groupHash = addWigs(&wigTracks, fullTrackList);
+struct hash *groupHash = newHash(5);
+addWigs(groupHash, &wigTracks, fullTrackList);
 struct grp *grp, *grpNext,  *groupList = NULL;
 
 for(grp = fullGroupList; grp; grp = grpNext)
@@ -854,9 +885,9 @@ if (addAllVisible != NULL)
     {
     struct trackDb *tdb;
 
-    for(tdb = fullTrackList; tdb; tdb = tdb->next)
+    for(tdb = wigTracks; tdb; tdb = tdb->next)
         {
-        if (trackCanBeAdded(tdb) && trackVisible(tdb))
+        if (isParentVisible(tdb) &&  isSubtrackVisible(tdb))
             {
             struct track *track;
             AllocVar(track);
