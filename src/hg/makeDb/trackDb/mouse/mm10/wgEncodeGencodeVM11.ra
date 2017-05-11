@@ -6,13 +6,13 @@
 ##
 track wgEncodeGencodeVM11
 compositeTrack on
-superTrack wgEncodeGencodeSuper hide
+superTrack wgEncodeGencodeSuper pack
 shortLabel GENCODE VM11 (Ensembl 86)
 longLabel Gene Annotations from ENCODE/GENCODE Version M11 (Ensembl 86)
 group genes
 dragAndDrop subTracks
 priority 2.973
-visibility hide
+visibility pack
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
 allButtonPair on
@@ -79,6 +79,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
         subGroups view=aGenes name=Basic
         longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version M11 (Ensembl 86)
         type genePred
+        visibility pack
         priority 1
     
         track wgEncodeGencodeCompVM11
