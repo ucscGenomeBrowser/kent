@@ -672,7 +672,7 @@ printf("</FORM>");
 jsReloadOnBackButton(cart);
 
 webNewSection("Using the Composite Builder");
-webIncludeHelpFileSubst("hgCompositeHelp", cart, FALSE);
+webIncludeHelpFileSubst("hgCompositeHelp", NULL, FALSE);
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("hgVarAnnogrator.js", NULL);
 jsIncludeFile("ui.dropdownchecklist.js", NULL);
@@ -694,17 +694,16 @@ cartWebEnd();
 //cartCheckout(&cart);
 }
 
-static struct hash *addWigs(struct trackDb **wigList, struct trackDb *list)
+static void addWigs(struct hash *hash, struct trackDb **wigList, struct trackDb *list)
 {
-struct hash *hash = newHash(4);
 if (list == NULL)
-    return hash;
+    return;
 
 struct trackDb *tdb, *tdbNext;
 for(tdb = list; tdb; tdb = tdbNext)
     {
     tdbNext = tdb->next;
-    addWigs(wigList, tdb->subtracks);
+    addWigs(hash, wigList, tdb->subtracks);
 
     if (trackCanBeAdded(tdb))
         {
@@ -713,7 +712,6 @@ for(tdb = list; tdb; tdb = tdbNext)
         }
     }
 
-return hash;
 }
 
 char *makeUnique(struct hash *nameHash, struct trackDb *tdb)
@@ -784,7 +782,8 @@ knetUdcInstall();
 struct trackDb *fullTrackList = NULL;	/* List of all tracks in database. */
 struct trackDb *wigTracks = NULL;	/* List of all wig tracks */
 cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
-struct hash *groupHash = addWigs(&wigTracks, fullTrackList);
+struct hash *groupHash = newHash(5);
+addWigs(groupHash, &wigTracks, fullTrackList);
 struct grp *grp, *grpNext,  *groupList = NULL;
 
 for(grp = fullGroupList; grp; grp = grpNext)
