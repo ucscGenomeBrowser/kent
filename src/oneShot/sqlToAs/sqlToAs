@@ -42,6 +42,7 @@ sqlToAs = \
 fieldLines = []
 
 tableCommentDone = False
+tableComment = ""
 
 for line in open(filename).read().splitlines():
     line = line.strip()
