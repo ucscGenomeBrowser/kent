@@ -6,6 +6,7 @@
 #include "tagStorm.h"
 
 boolean gEmbed = FALSE;
+char *gNonce= NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -17,12 +18,14 @@ errAbort(
   "options:\n"
   "   -embed - don't write beginning and end of page, just controls and tree.\n"
   "            useful for making html to be embedded in another page.\n"
+  "   -nonce=nonce-string\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"embed", OPTION_BOOLEAN},
+   {"nonce", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -106,7 +109,13 @@ rTsWrite(ts->forest, f, 0, "<LI id=\"ts_root\">");
 fputs(
 "</div>\n"
 "\n"
-"<script>\n"
+, f);
+
+if (gNonce != NULL)
+    fprintf(f, "<script nonce='%s'>\n", gNonce);
+else
+    fprintf(f, "<script>\n");
+fputs(
 "\n"
 "var tag_storm_tree = (function() {\n"
 "    // Effectively global vars set by init\n"
@@ -146,6 +155,7 @@ fputs(
 "            open_n(2);\n"
 "\n"
 ,f );
+
 for (i=1; i<=maxDepth; ++i)
     {
     fprintf(f, 
@@ -199,6 +209,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 gEmbed = optionExists("embed");
+gNonce = optionVal("nonce", NULL);
 tagStormToHtml(argv[1], argv[2]);
 return 0;
 }
