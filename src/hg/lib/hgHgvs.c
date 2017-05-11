@@ -668,6 +668,23 @@ if (regexMatchNoCase(change, "^([ACGTU])>"))
 return '\0';
 }
 
+static void hgvsStartEndToZeroBasedHalfOpen(struct hgvsVariant *hgvs, int *retStart, int *retEnd)
+/* Convert HGVS's fully closed, 1-based-unless-negative start and end to UCSC start and end. */
+{
+// If hgvs->start1 is negative, it is effectively 0-based, so subtract 1 only if positive.
+int start = hgvs->start1;
+if (start > 0)
+    start--;
+// If hgvs->end is negative, it is effectively 0-based, so add 1 to get half-open end.
+int end = hgvs->end;
+if (end < 0)
+    end++;
+if (retStart)
+    *retStart = start;
+if (retEnd)
+    *retEnd = end;
+}
+
 static boolean hgvsValidateGenomic(char *db, struct hgvsVariant *hgvs,
                                    char **retFoundAcc, int *retFoundVersion,
                                    char **retDiffRefAllele)
@@ -689,8 +706,9 @@ char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
 if (isNotEmpty(chrom))
     {
     struct chromInfo *ci = hGetChromInfo(db, chrom);
-    if ((hgvs->start1 >= 1 && hgvs->start1 <= ci->size) &&
-        (hgvs->end >=1 && hgvs->end <= ci->size))
+    int start, end;
+    hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
+    if (start >= 0 && start < ci->size && end > 0 && end < ci->size)
         {
         coordsOK = TRUE;
         if (retDiffRefAllele)
@@ -698,8 +716,7 @@ if (isNotEmpty(chrom))
             char hgvsBase = refBaseFromNucSubst(hgvs->changes);
             if (hgvsBase != '\0')
                 {
-                struct dnaSeq *refBase = hFetchSeq(ci->fileName, chrom,
-                                                   hgvs->start1-1, hgvs->start1);
+                struct dnaSeq *refBase = hFetchSeq(ci->fileName, chrom, start, end);
                 touppers(refBase->dna);
                 if (refBase->dna[0] != hgvsBase)
                     *retDiffRefAllele = cloneString(refBase->dna);
@@ -820,16 +837,16 @@ str[1] = '\0';
 return cloneString(str);
 }
 
-static void checkRefAllele(struct hgvsVariant *hgvs, int start1, char *accSeq,
+static void checkRefAllele(struct hgvsVariant *hgvs, int start, char *accSeq,
                            char **retDiffRefAllele)
-/* If hgvs change includes a reference allele, and if accSeq at start1 does not match,
+/* If hgvs change includes a reference allele, and if accSeq at start does not match,
  *  then set retDiffRefAllele to the accSeq version.  retDiffRefAllele must be non-NULL. */
 {
 char hgvsRefBase = (hgvs->type == hgvstProtein) ? refBaseFromProt(hgvs->changes) :
                                                   refBaseFromNucSubst(hgvs->changes);
 if (hgvsRefBase != '\0')
     {
-    char seqRefBase = toupper(accSeq[start1-1]);
+    char seqRefBase = toupper(accSeq[start]);
     if (seqRefBase != hgvsRefBase)
         *retDiffRefAllele = cloneStringFromChar(seqRefBase);
     }
@@ -934,6 +951,8 @@ if (accSeq)
     if (retFoundAcc)
         *retFoundAcc = cloneFirstWordByDelimiter(acc, '.');
     int seqLen = strlen(accSeq);
+    int start, end;
+    hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
     if (hgvs->type == hgvstCoding)
         {
         // Coding term coords can extend beyond the bounds of the transcript so
@@ -943,19 +962,18 @@ if (accSeq)
         coordsOK = getCds(db, acc, &cds);
         if (coordsOK && retDiffRefAllele)
             {
-            int start = hgvs->start1 + (hgvs->startIsUtr3 ? cds.end : cds.start);
-            if (hgvs->startOffset == 0 && start >= 1 && start <= seqLen)
+            start += (hgvs->startIsUtr3 ? cds.end : cds.start);
+            if (hgvs->startOffset == 0 && start >= 0 && start < seqLen)
                 checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
             }
         }
     else
         {
-        if (hgvs->start1 >= 1 && hgvs->start1 <= seqLen &&
-            hgvs->end >= 1 && hgvs->end <= seqLen)
+        if (start >= 0 && start < seqLen && end > 0 && end <= seqLen)
             {
             coordsOK = TRUE;
             if (retDiffRefAllele)
-                checkRefAllele(hgvs, hgvs->start1, accSeq, retDiffRefAllele);
+                checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
             }
         }
     }
@@ -1019,7 +1037,7 @@ static struct bed *hgvsMapGDotToGenome(char *db, struct hgvsVariant *hgvs, char 
 {
 struct bed *region = NULL;
 char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
-if (isNotEmpty(chrom))
+if (isNotEmpty(chrom) && hgvs->start1 > 0)
     {
     region = bed6New(chrom, hgvs->start1 - 1, hgvs->end, "", 0, '+');
     adjustInsStartEnd(hgvs, &region->chromStart, &region->chromEnd);
@@ -1037,14 +1055,8 @@ static void hgvsCodingToZeroBasedHalfOpen(struct hgvsVariant *hgvs,
  * for when the coding HGVS has coordinates that extend beyond its sequence boundaries.
  * ret* args must be non-NULL. */
 {
-// If hgvs->start1 is negative, it is effectively 0-based, so subtract 1 only if positive.
-int start = hgvs->start1;
-if (start > 0)
-    start -= 1;
-// If hgvs->end is negative, it is effectively 0-based, so add 1 to get half-open end.
-int end = hgvs->end;
-if (end < 0)
-    end += 1;
+int start, end;
+hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
 // If the position follows '*' that means it's relative to cdsEnd; otherwise rel to cdsStart
 if (hgvs->startIsUtr3)
     *retStart = cds->end + start;
@@ -1111,8 +1123,7 @@ psl->tSize = accSize;
 if (hgvs->type != hgvstCoding)
     {
     // Sane 1-based fully closed coords.
-    psl->tStart = hgvs->start1 - 1;
-    psl->tEnd = hgvs->end;
+    hgvsStartEndToZeroBasedHalfOpen(hgvs, &psl->tStart, &psl->tEnd);
     }
 else
     {
@@ -1490,8 +1501,8 @@ static boolean hgvsToTxCoords(struct hgvsVariant *hgvs, char *db, uint *retStart
  * fall past the end of the transcript (genomic downstream). */
 {
 boolean coordsOk = TRUE;
-int start = hgvs->start1 - 1;
-int end = hgvs->end;
+int start, end;
+hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
 if (hgvs->type == hgvstCoding)
     {
     struct genbankCds cds;
