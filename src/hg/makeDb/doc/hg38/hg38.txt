@@ -6524,3 +6524,28 @@ update gwipsvizRiboseq set fileName="/gbdb/hg38/bbi/gwipsvizRiboseq/gwipsvizRibo
 
     # commit all
 #########################################################################
+# COSMIC v81 DONE Chris Eisenhart 2017-05-11
+# Make a new COSCMIC track for hg19
+mkdir /hive/data/outside/cosmic/hg38/v81
+cd /hive/data/outside/cosmic/hg38/v81
+
+# Get the new data
+sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
+# Login to SFTP server then run these commands 
+get /files/grch38/cosmic/v81/CosmicMutantExport.tsv.gz
+
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
+
+# Use a script to convert to bed format.
+cosmicToBed cosMut.tsv cosMut.bed
+# This many lines were skipped, 126756, for not having genomic coordinates. 
+
+# Sort and convert to big bed using the .as file.  
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/chrom.sizes cosMutHg38V81.bb -tab
+
+# Link it up so the outside world can see it. 
+cd /gbdb/hg38/cosmic/
+ln -s /hive/data/outside/cosmic/hg38/v81/cosMutHg38V81.bb .
+#########################################################################
