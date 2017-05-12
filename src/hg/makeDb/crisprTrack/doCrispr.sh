@@ -129,7 +129,7 @@ for i in specScores/catJobs/inFnames/otJob*; do fname=`basename $i`; echo python
 ssh $CLUSTER "cd `pwd`/specScores/catJobs; para freeBatch; para make jobList"
 
 echo concating and indexing the off-targets 
-catAndIndex specScores/catJobs/out crisprDetails.tab offtargets.offsets.tab --headers=_mismatchCounts,_crisprOfftargets
+$crisprTrack/catAndIndex specScores/catJobs/out crisprDetails.tab offtargets.offsets.tab --headers=_mismatchCounts,_crisprOfftargets
 
 # create the bigBed file
 # approx 30 mins on human

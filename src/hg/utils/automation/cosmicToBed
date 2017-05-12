@@ -1,0 +1,167 @@
+#!/usr/bin/env python2.7
+# cosmicToBed
+"""Convert a cosmic file into a bed file"""
+import os
+import sys
+import collections
+import argparse
+
+# import the UCSC kent python library
+sys.path.append(os.path.dirname(__file__))
+import common
+
+def parseArgs(args):
+    """
+    Parse the command line arguments.
+    """
+    parser= argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("inputFile",
+    help = " The input file. ",
+    type = argparse.FileType("r"))
+    parser.add_argument ("outputFile",
+    help = " The output file. ",
+    type =argparse.FileType("w"))
+    parser.add_argument ("--verbose",
+    help = " Show runtime messages.",
+    action = "store_true") 
+    parser.set_defaults(verbose = False)
+    if (len(sys.argv) == 1):
+        parser.print_help()
+        exit(1)
+    options = parser.parse_args()
+    return options
+
+def main(args):
+    """
+    Initialized options and calls other functions.
+    """
+    options = parseArgs(args)
+    firstLine = True
+    count = 0 
+    skippedLines = 0
+    for line in options.inputFile:
+        count += 1
+        if firstLine:
+            firstLine = False
+            continue
+        splitLine = line.strip("\n").split("\t")
+        #.replace("\tNS","\t ").replace("\tNS\n","\t \n").replace("\t\t","\t \t").replace("\t\n","\t \n").split("\t")
+        if (len(splitLine) < 34): 
+            print ("This line has less than the expected number of fields " + str(count))
+            print ("Aborting, please check that the input file has not been corrupted")
+            exit(1)
+        if (len(splitLine[23].split(":")) < 2):
+            if options.verbose: print(" Line number " + str(count) + " has no genomic coordinates and will be excluded. ")
+            skippedLines += 1
+            continue
+       
+        chromNum = splitLine[23].split(":")[0]       
+        if ("23" in chromNum):
+            chrom = "chrX"
+        elif ("24" in chromNum):
+            chrom = "chrY"
+        elif ("25" in chromNum):
+            chrom = "chrM"
+        else:
+            chrom = "chr" + splitLine[23].split(":")[0] # Reference chromosome
+        
+        chromStart = splitLine[23].split(":")[1].split("-")[0]  # Chrome start coordinate
+        chromEnd = splitLine[23].split(":")[1].split("-")[1]    # Chrome end coordinate
+        name = splitLine[16].strip("COSM")    # COSMIC mutation id
+        strand = splitLine[24]  # + or - for strand
+        geneName = splitLine[0] # Gene: HUGO symbol etc
+        transcriptAcc = splitLine[1]    # ENST or other transcript accession
+        if "" == splitLine[2]:
+            geneCdsLength = "0" # Cast to 0. 
+        else:
+            geneCdsLength = splitLine[2]    # Length of the gene (base pair)
+        if "" == splitLine[3]:
+            geneId = "0" # Cast to 0.  
+        else:
+            geneId = splitLine[3]   # If the gene is in HGNC, this links to it
+        sampleName = splitLine[4]  # A sample name is an instance of a portion of a tumor. 
+        if "" == splitLine[5]:
+            sampleId = "0" # Cast to 0.  
+        else:
+            sampleId = splitLine[5] # The sample id is used to identify a sample within the COSMIC database
+        if "" == splitLine[6]:
+            idTumor = "0" # Cast to 0.  
+        else:
+            idTumor = splitLine[6] # The tumors id
+        primSite = splitLine[7] # Primary site of organ/tissue
+        siteSubtype1 = splitLine[8] # Subtype 1 site of organ/tissue
+        siteSubtype2 = splitLine[9] # Subtype 2 site of organ/tissue
+        siteSubtype3 = splitLine[10]    # Subtype 3 site of organ/tissue
+        primHistology = splitLine[11]   # Primary histology of organ/tissue
+        histSubtype1 = splitLine[12]    # Subtype 1 of histology of organ/tissue
+        histSubtype2 = splitLine[13]    # Subtype 2 of histology of organ/tissue   
+        histSubtype3 = splitLine[14]    # Subtype 3 of histology of organ/tissue
+        ntChange = splitLine[17]    # Nucleotide sequence change
+        aaChange = splitLine[18]    # Amino acid sequence change
+        mutDesc = splitLine[19] # Description on effect of variant on the gene
+        mutZyg = splitLine[20]  # Information on whether the mutation was reported homozygous, heterozygous or other
+        loh = splitLine[21] # Loss of heterozygosity information 
+        snp = splitLine[25] # All the known SNP's are flagged as 'y' 
+        resMut = splitLine[26]  # Resistant mutation, mutation confers drug resistance 
+        fathmmPred = splitLine[27]  # FATHMM (Functional Analysis through Hidden Markov Models) prediction
+        if "" == splitLine[28]:
+            fathmmScore = "0.0"
+        else:
+            fathmmScore = splitLine[28] # FATHMM score
+        mutSomStat = splitLine[29]  # Mutation somatic status 
+        if "" == splitLine[30]:
+            pubmedId = "0"
+        else:
+            pubmedId = splitLine[30]    # The pubmed id for the paper the sample was noted in
+        if "" == splitLine[31]:
+            studyIds = "0"
+        else:
+            studyIds = splitLine[31]    # Lists the unique ids of studies that have involved this sample
+        samSource = splitLine[32]   # Describes where the sample has originated from
+        tumSource = splitLine[33]   # Describes the tumor type
+        if "" == splitLine[34]:
+            age = "0" # Cast null values to 0 to satisfy int requirement. 
+        else:
+            age = splitLine[34] # Age of the sample 
+
+        options.outputFile.write(chrom + "\t")
+        options.outputFile.write(chromStart + "\t")
+        options.outputFile.write(chromEnd + "\t")
+        options.outputFile.write(name + "\t")
+        options.outputFile.write(strand + "\t")
+        options.outputFile.write(geneName + "\t")
+        options.outputFile.write(transcriptAcc + "\t")
+        options.outputFile.write(geneCdsLength + "\t")
+        options.outputFile.write(geneId + "\t")
+        options.outputFile.write(sampleName + "\t")
+        options.outputFile.write(sampleId + "\t")
+        options.outputFile.write(idTumor + "\t")
+        options.outputFile.write(primSite + "\t")
+        options.outputFile.write(siteSubtype1 + "\t")
+        options.outputFile.write(siteSubtype2 + "\t")
+        options.outputFile.write(siteSubtype3 + "\t")
+        options.outputFile.write(primHistology + "\t")
+        options.outputFile.write(histSubtype1 + "\t")
+        options.outputFile.write(histSubtype2 + "\t")
+        options.outputFile.write(histSubtype3 + "\t")
+        options.outputFile.write(ntChange + "\t")
+        options.outputFile.write(aaChange + "\t")
+        options.outputFile.write(mutDesc + "\t")
+        options.outputFile.write(mutZyg + "\t")
+        options.outputFile.write(loh + "\t")
+        options.outputFile.write(snp + "\t")
+        options.outputFile.write(resMut + "\t")
+        options.outputFile.write(fathmmPred + "\t")
+        options.outputFile.write(fathmmScore + "\t")
+        options.outputFile.write(mutSomStat + "\t")
+        options.outputFile.write(pubmedId + "\t")
+        options.outputFile.write(studyIds + "\t")
+        options.outputFile.write(samSource + "\t")
+        options.outputFile.write(tumSource + "\t")
+        options.outputFile.write(age + "\n")
+
+    print("This many lines were skipped, " + str(skippedLines) + \
+            " for not having genomic coordinate")
+
+if __name__ == "__main__" : 
+    sys.exit(main(sys.argv))
