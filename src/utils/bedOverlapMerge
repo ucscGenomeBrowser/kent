@@ -7,6 +7,7 @@ from optparse import OptionParser
 parser = OptionParser("usage: %prog [options] file - merge overlapping bed features, join their names")
 
 #parser.add_option("-v", "--inverse", dest="inverse", action="store_true", help="inverse restult, only print lines that DO overlap",default=False) 
+parser.add_option("-o", "--onlyFirst", dest="onlyFirst", action="store_true", help="only use the first name, do not concat all",default=False)
 
 (options, args) = parser.parse_args()
 if len(args)==0:
@@ -23,7 +24,9 @@ def coordOverlap(start1, end1, start2, end2):
     #print result, start1, end1, start2, end2
     return result
 
-def printLine(chrom, start, end, names):
+def printLine(chrom, start, end, names, onlyFirst):
+    if onlyFirst:
+        names = [names[0]]
     row = [lastChrom, str(start), str(end), "/".join(names)]
     print "\t".join(row)
 
@@ -41,7 +44,7 @@ for line in open(infname):
 
     # if first feature on chromosome and we have some lastX data: output lastX data
     if lastChrom!=None and lastChrom!=chrom:
-        printLine(lastChrom, lastStart, lastEnd, names)
+        printLine(lastChrom, lastStart, lastEnd, names, options.onlyFirst)
         lastChrom=None
 
     # if first feature on chromosome: save lastX data and continue
@@ -60,8 +63,8 @@ for line in open(infname):
             names.append(name)
     # no overlap: print last feature and update lastX data
     else:
-        printLine(lastChrom, lastStart, lastEnd, names)
+        printLine(lastChrom, lastStart, lastEnd, names, options.onlyFirst)
         lastChrom, lastStart, lastEnd = chrom, start, end
         names = [name]
 
-printLine(lastChrom, lastStart, lastEnd, names)
+printLine(lastChrom, lastStart, lastEnd, names, options.onlyFirst)
