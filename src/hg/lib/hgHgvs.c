@@ -542,7 +542,7 @@ else
         }
     else
         {
-        aaSeq *aaSeq = hGenBankGetPep(db, acc, gbSeqTable);
+        aaSeq *aaSeq = hGenBankGetPep(db, acc, NULL);
         if (aaSeq)
             seq = aaSeq->dna;
         }
@@ -775,7 +775,7 @@ else
     if (dbHasNcbiRefSeq(db))
         cdnaSeq = hDnaSeqGet(db, acc, "seqNcbiRefSeq", "extNcbiRefSeq");
     else
-        cdnaSeq = hGenBankGetMrna(db, acc, gbSeqTable);
+        cdnaSeq = hGenBankGetMrna(db, acc, NULL);
     if (cdnaSeq)
         seq = dnaSeqCannibalize(&cdnaSeq);
     }
@@ -1849,11 +1849,11 @@ boolean noChange = sameString(hgvsSeqRef, hgvsSeqAlt);
 // VCF indels have start coord one base to the left of the actual indel point.
 // HGVS treats multi-base substitutions as indels but VCF does not, so look for
 // differing length of ref vs. each alt sequence in order to call it a VCF indel.
-boolean isIndel = FALSE;
+boolean isIndel = (genomicRefLen != hgvsSeqRefLen || genomicRefLen != hgvsSeqAltLen ||
+                   genomicRefLen == 0);
 if (sameString(hgvsSeqRef, genomicRef))
     {
     // VCF alt is HGVS alt
-    isIndel = (genomicRefLen != hgvsSeqAltLen);
     if (noChange)
         safecpy(vcfAlt, sizeof(vcfAlt), ".");
     else if (isIndel)
@@ -1869,7 +1869,6 @@ if (sameString(hgvsSeqRef, genomicRef))
 else if (sameString(genomicRef, hgvsSeqAlt))
     {
     // Genomic reference allele is HGVS alt allele; VCF alt is HGVS ref allele
-    isIndel = (genomicRefLen != hgvsSeqRefLen);
     if (noChange)
         safecpy(vcfAlt, sizeof(vcfAlt), ".");
     else if (isIndel)
@@ -1885,7 +1884,6 @@ else if (sameString(genomicRef, hgvsSeqAlt))
 else
     {
     // Both HGVS ref and HGVS alt differ from genomicRef, so both are VCF alts (unless noChange)
-    isIndel = (genomicRefLen != hgvsSeqRefLen || genomicRefLen != hgvsSeqAltLen);
     if (noChange)
         {
         if (isIndel)
