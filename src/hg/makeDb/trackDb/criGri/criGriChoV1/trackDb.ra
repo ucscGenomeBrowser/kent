@@ -7,6 +7,9 @@ track gap override
 visibility dense
 html gap
 
+track gc5BaseBw override
+visibility full
+
 searchTable gold
 shortCircuit 1
 termRegex [AN][CF][T_][D0-9]+(\.[0-9]+)?
@@ -22,7 +25,22 @@ chainMinScore 1000
 chainLinearGap loose
 
 track chainNetHg38 override
-visibility full
+visibility dense
+
+track chainNetMm10 override
+visibility dense
 
 track intronEst override
+visibility hide
+
+track rmsk override
+visibility dense
+
+track xenoRefGene override
+visibility pack
+
+track refGene override
+visibility hide
+
+track mrna override
 visibility hide
