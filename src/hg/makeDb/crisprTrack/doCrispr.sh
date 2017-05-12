@@ -143,4 +143,4 @@ ln -sf `pwd`/crisprDetails.tab /gbdb/$db/crispr/crisprDetails.tab
 hgBbiDbLink $db crisprTargets /gbdb/$db/crispr/crispr.bb
 hgLoadBed $db crisprRanges crisprRanges.bed
 echo You can add locus names to each off-target in the CRISPR hgc page by running
-echo '"doLocusNames"' now, if this assembly does not yet have a locusName table.
+echo '"doLocusName"' now, if this assembly does not yet have a locusName table.
