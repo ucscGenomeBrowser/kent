@@ -240,7 +240,7 @@ def expMatrixToBarchartBed(options):
         count +=1 
         splitLine = item.strip("\n").split()
         if (len(splitLine) is not 2):
-            print ("There was an error reading the sample file at line " + count)
+            print ("There was an error reading the sample file at line " + str(count))
             exit(1)
         sampleToGroup.setdefault(splitLine[0], splitLine[1])
 
@@ -308,8 +308,8 @@ def expMatrixToBarchartBed(options):
         score = str(determineScore(tpmCutoffs, float(splitLine[7])))
         strand = splitLine[5]
         name2 = splitLine[6]
-        expCount = str(splitLine[7])
-        expScores = splitLine[8]
+        expCount = str(splitLine[8])
+        expScores = splitLine[9]
         
         bedLine = (chrom + "\t" + chrStart + "\t" + chrEnd + "\t" + name + "\t" \
                         + score + "\t" + strand + "\t" + name2 + "\t" + expCount + "\t" \
