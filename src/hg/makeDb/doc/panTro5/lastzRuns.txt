@@ -73,4 +73,27 @@ TMPDIR=/dev/shm
     # real    118m53.869s
 
 #############################################################################
+# swap hg19 chainNet (DONE - 2017-05-11 - Hiram)
+    # alignment to hg19
+    cd /hive/data/genomes/hg19/bed/lastzPanTro5.2017-05-04
+    cat fb.hg19.chainPanTro5Link.txt
+    # 2824333913 bases of 2897316137 (97.481%) in intersection
 
+    # running the swap
+    mkdir /hive/data/genomes/panTro5/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panTro5/bed/blastz.hg19.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzPanTro5.2017-05-04/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    111m15.418s
+
+    cat fb.panTro5.chainHg19Link.txt
+    # 2929713252 bases of 3132620660 (93.523%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        panTro5 hg19) > rbest.log 2>&1
+    # real    279m26.262s
+
+#############################################################################
