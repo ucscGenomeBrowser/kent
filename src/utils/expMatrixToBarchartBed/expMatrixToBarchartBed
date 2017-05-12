@@ -23,8 +23,9 @@ def parseArgs(args):
                 "the ones in the bed file.",
         type = argparse.FileType("r"))
     parser.add_argument ("bedFile",
-        help = " Bed4+2 format. File that maps the column labels from the matrix to coordinates. Tab " + \
-                "separated; chr, start coord, end coord, label, strand, gene name. ",
+        help = " Bed6+1 format. File that maps the column labels from the matrix to coordinates. Tab " + \
+                "separated; chr, start coord, end coord, label, score, strand, gene name. The score " + \
+                "column is ignored.",
         action = "store")
     parser.add_argument ("outputFile",
         help = " The output file, bed 6+5 format. See the schema in kent/src/hg/lib/barChartBed.as. ",
