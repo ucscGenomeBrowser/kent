@@ -10,39 +10,11 @@
 <h1>Composite Builder Help</h1>
 
 <h2>Contents</h2>
-
-
-<div class="container">
-  <div class="row">
-  <div class="col-sm-6">
   
-<h6><a href="#Intro">Introduction</strong></a></h6>
-<h6><a href="#Features">Key Features</a></h6>
-<h6><a href="#GetStarted">Getting Started</a></h6>
-<h6><a href="#Support">Resources and Support</a></h6>
-
-</div>
-  <div class="col-sm-6">
-
-
-<form name="googleForm1" method="GET" action="http://www.google.com/search" 
-onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   
-site:genome.ucsc.edu/goldenPath/help';">    
-      
-<p> 
-  Search our help pages: &nbsp;
-  <input type="hidden" name="q" value=""> 
-  <input type="hidden" name="num" value="10"> 
-  <input type="hidden" name="filter" value="0"> 
-  <input type=text name=qq size=30 maxlength=255 value=""> 
-  <input type="submit" value="Submit"> 
-</form> 
-</p>
-<p>Questions? Please <a href="../../contacts.html" target="_blank">contact us</a>.</p>
-
-</div>
-  </div>
-  </div>
+<h5><a href="#Intro">Introduction</a></h6>
+<h5><a href="#Features">Key Features</a></h6>
+<h5><a href="#GetStarted">Getting Started</a></h6>
+<h5><a href="#Support">Resources and Support</a></h6>
 
 <a name="Intro"></a>	
 <h2>Introduction</h2> 
@@ -51,8 +23,8 @@ In the UCSC Genome Browser, a <a href="/goldenpath/help/trackDb/trackDbHub.html#
 target="_blank" >composite track</a> is a grouping for a set of similar-type annotation tracks 
 (e.g., all tracks store continuous <a href="../../FAQ/FAQformat.html#format6.1" target="_blank">
 bigWig</a> data, or all tracks store data in the <a href="../../FAQ/FAQformat.html#format9" 
-target="_blank">genePred</a> format). A set of tracks within a composite track are sometimes 
-referred to as &quot;sub-tracks.&quot; Some of the natively-hosted annotation tracks within the UCSC 
+target="_blank">genePred</a> format). A set of tracks within a composite track are referred to 
+as &quot;sub-tracks.&quot; Some of the natively-hosted annotation tracks within the UCSC 
 Genome Browser are composite tracks. For example, the 
 <a href="../../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper" target="_blank">ALL GENCODE</a> 
 GRCh38/hg38 composite track is a group containing a set of GENCODE sub-tracks, where each track can 
@@ -134,14 +106,20 @@ Text about Step 3.</p>
 <ul>
   <li>Questions? Please <a href="../../contacts.html" target="_blank">contact us</a>.</li>
   <li>Supported data types: Information about the <a href="../../FAQ/FAQformat.html#format6.1" 
-  target="_blank">bigWig</a> format. 
+  target="_blank">bigWig</a> format.</li> 
   <li>Documentation for composite tracks: 
   <a href="/goldenpath/help/hubQuickStartGroups.html#composite" target="_blank">
   Quick Start Guide to Hubs</a> and the 
   <a href="/goldenpath/help/trackDb/trackDbHub.html#Composite_Track_Settings"
-  target-"_blank"> Hub Track Database Definition</a> guide. 
-  <li>View the Composite Builder <a href="/goldenPath/newsarch.html"target="_blank">News Release
-  </a>.
+  target-"_blank"> Hub Track Database Definition</a> guide.</li> 
+  <li>View the Composite Builder <a href="/goldenPath/newsarch.html"target="_blank">News Release</a></li>
+  <li>Credit to Dr. Bar-Joseph for assisting with wiggle sorting development: 
+</br>Bar-Joseph Z, Demaine ED, Gifford DK, Srebro N, Hamel AM, Jaakkola TS.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target="_blank">
+K-ary clustering with optimal leaf ordering for gene expression data</a>.
+<em>Bioinformatics</em>. 2003 Jun 12;19(9):1070-8.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target="_blank">12801867</a>
+  </li>
 </ul>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

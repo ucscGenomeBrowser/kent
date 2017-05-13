@@ -199,10 +199,8 @@ if ((hubName != NULL) && ((f = fopen(hubName, "r")) != NULL))
 return compositeList;
 }
 
-static char *getSqlBigWig(char *db, struct trackDb *tdb)
+static char *getSqlBigWig(struct sqlConnection *conn, char *db, struct trackDb *tdb)
 {
-struct sqlConnection *conn = hAllocConn(db);
-
 char buffer[4096];
 
 safef(buffer, sizeof buffer, "NOSQLINJ select fileName from %s", tdb->table);
@@ -215,14 +213,15 @@ static int snakePalette2[] =
 };
 
 
-void outTdb(char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, unsigned int color)
+void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, unsigned int color)
 {
 char *dataUrl = NULL;
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+
 if (bigDataUrl == NULL)
     {
     if (startsWith("bigWig", tdb->type))
-        dataUrl = getSqlBigWig(db, tdb);
+        dataUrl = getSqlBigWig(conn, db, tdb);
     }
 struct hashCookie cookie = hashFirst(tdb->settingsHash);
 struct hashEl *hel;
@@ -305,16 +304,15 @@ return hubName;
 }
 
 
-//static void outputCompositeHub(char *db, char *hubName, struct trackDb *fullTrackList, struct composite *compositeList, struct hash *nameHash)
 static void outputCompositeHub(char *db, char *hubName,  struct composite *compositeList, struct hash *nameHash)
 {
-// Do we already have a hub?
 chmod(hubName, 0666);
 FILE *f = mustOpen(hubName, "w");
 
 outHubHeader(f, db, hubName);
 int useColor = 0;
 struct composite *composite;
+struct sqlConnection *conn = hAllocConn(db);
 for(composite = compositeList; composite; composite = composite->next)
     {
     outComposite(f, composite);
@@ -323,9 +321,8 @@ for(composite = compositeList; composite; composite = composite->next)
     for (track = composite->trackList; track; track = track->next)
         {
         tdb = hashMustFindVal(nameHash, track->name);
-        //tdb = findTrack(track->name, fullTrackList);
 
-        outTdb(db, f, track->name,tdb, composite->name, snakePalette2[useColor]);
+        outTdb(conn, db, f, track->name,tdb, composite->name, snakePalette2[useColor]);
         useColor++;
         if (useColor == (sizeof snakePalette2 / sizeof(int)))
             useColor = 0;
