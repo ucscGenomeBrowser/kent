@@ -1,4 +1,4 @@
-table ggLinkEventText
+table ggEventText
 " hgcGeneGraph details of text-mined interactions; a cause influences a theme. Both can be a gene, gegen complex or gene family. "
     (
     string eventId;       "ID of interaction description"
