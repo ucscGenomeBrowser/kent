@@ -1,4 +1,4 @@
-table ggLink
+table ggEvent
 " hgcGeneGraph links between genes and enough info to draw a graph"
     (
     string gene1 index;       "Gene pair, symbol1 (first in alphabet)"
