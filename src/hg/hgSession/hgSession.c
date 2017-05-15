@@ -769,7 +769,7 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringClear(dy);
     sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
     dyStringAppend(dy, "(userName, sessionName, contents, shared, "
-		       "firstUse, lastUse, useCount) VALUES (");
+		       "firstUse, lastUse, useCount, settings) VALUES (");
     dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
     dyStringAppend(dy, "'");
     cleanHgSessionFromCart(cart);
@@ -783,7 +783,7 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringFree(&encoded);
     dyStringAppend(dy, "', ");
     dyStringPrintf(dy, "%d, ", (shareSession ? 1 : 0));
-    dyStringPrintf(dy, "%s, now(), %d);", firstUse, useCount);
+    dyStringPrintf(dy, "%s, now(), %d, '');", firstUse, useCount);
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
 
