@@ -1,9 +1,10 @@
 kentSrc = ../..
 include ../../inc/common.mk
 
+HG_INC += -I../../optimalLeaf
 L += ${HALLIBS} ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/optimalLeaf.a
 
 A = hgTracks
 RENDERA = hgRenderTracks
@@ -17,7 +18,7 @@ COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrac
 	longRangeTrack.o loweLabTracks.o lrgTrack.o \
 	mafTrack.o makeItemsTrack.o menu.o multiWig.o netTrack.o peptideAtlasTrack.o pslTrack.o \
 	rmskJoinedTrack.o rmskTrack.o \
-	sampleTracks.o searchTracks.o simpleTracks.o snakeTrack.o switchGear.o transMapTracks.o \
+	sampleTracks.o searchTracks.o simpleTracks.o snakeTrack.o sortWig.o switchGear.o transMapTracks.o \
 	wabaTrack.o wigTrack.o cds.o \
 	wigMafTrack.o encode.o variation.o vcfTrack.o transcriptome.o\
 	rnaFoldTrack.o retroGene.o hapmapTrack.o rnaPLFoldTrack.o\

@@ -49,7 +49,7 @@ struct flatTracks // List of tracks in image, flattened to promote subtracks
     int maxHeight;             // largest height among all windows in image.
     };
 
-void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart);
+void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart, struct slName *orderedWiggles);
 // Adds one track into the flatTracks list
 
 int flatTracksCmp(const void *va, const void *vb);

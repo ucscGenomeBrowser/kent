@@ -21,21 +21,24 @@ topLibs:
 	cd parasol/lib && ${MAKE}
 	cd htslib && ${MAKE}
 
+optLib:
+	cd optimalLeaf && ${MAKE}
+
 hgLib:
 	@./hg/sqlEnvTest.sh
 	cd hg/lib && ${MAKE}
 
 libs: topLibs hgLib
 
-cgi: libs
+cgi: libs optLib
 	cd hg && ${MAKE} cgi
 	cd utils/bedToBigBed && ${MAKE} cgi
 
-cgi-alpha: libs
+cgi-alpha: libs optLib
 	cd hg && ${MAKE} alpha
 	cd utils/bedToBigBed && ${MAKE} alpha
 
-cgi-beta: check-beta libs
+cgi-beta: check-beta libs optLib
 	cd hg && ${MAKE} beta
 	cd utils/bedToBigBed && ${MAKE} beta
 
