@@ -20,6 +20,7 @@ topLibs:
 	cd jkOwnLib && ${MAKE}
 	cd parasol/lib && ${MAKE}
 	cd htslib && ${MAKE}
+	cd optimalLeaf && ${MAKE}
 
 hgLib:
 	@./hg/sqlEnvTest.sh
