@@ -835,11 +835,11 @@ wgo->yOff = yOff;
 return wgo;
 }
 
-static void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
+void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
     struct track *tg, void *image, WigVerticalLineVirtual vLine, int xOff, int yOff, double *yOffsets, int numTrack,
     double graphUpperLimit, double graphLowerLimit, double graphRange,
     double epsilon, Color *colorArray, enum trackVisibility vis,
-    struct wigCartOptions *wigCart)
+    struct wigCartOptions *wigCart, struct pixelCountBin *pixelBins)
 /*	graph the preDraw array */
 {
 int x1;
@@ -863,6 +863,8 @@ for (x1 = 0; x1 < width; ++x1)
     int x = x1 + xOff;
     int preDrawIndex = x1 + preDrawZero;
     struct preDrawElement *p = &preDraw[preDrawIndex];
+    assert(x1/pixelBins->binSize < pixelBins->binCount);
+    unsigned long *bitCount = &pixelBins->bins[x1/pixelBins->binSize];
 
     Color drawColor = colorArray[x1];
     if (drawColor != oldDrawColor)
@@ -899,6 +901,7 @@ for (x1 = 0; x1 < width; ++x1)
         if (vis == tvFull || vis == tvPack)
             {
 #define scaleHeightToPixels(val) (min(BIGNUM,(scaleFactor * (graphUpperLimit - (val)) + yOff)))
+#define doLine(image, x, y, height, color) {vLine(image, x, y, height, color); *bitCount += height;}
 	    if (lineBar == wiggleGraphBar)
 		{
 		if (whiskers)
@@ -924,10 +927,10 @@ for (x1 = 0; x1 < width; ++x1)
 			    zeroPos -= 1;
 		        if (((zeroPos-yOff)+darkHeight) == 0)
 			    darkHeight += 1;	  // top pixel special case
-			vLine(image, x,zeroPos, darkHeight, drawColor);
-                        vLine(image, x, zeroPos+darkHeight, mediumHeight-darkHeight,
+			doLine(image, x,zeroPos, darkHeight, drawColor);
+                        doLine(image, x, zeroPos+darkHeight, mediumHeight-darkHeight,
 				mediumColor);
-                        vLine(image, x, zeroPos+mediumHeight, lightHeight-mediumHeight,
+                        doLine(image, x, zeroPos+mediumHeight, lightHeight-mediumHeight,
 				lightColor);
 			}
 		    else
@@ -971,9 +974,9 @@ for (x1 = 0; x1 < width; ++x1)
 
                         /* Draw, making sure not to overwrite pixels since
                          * would mess up transparent drawing. */
-                        vLine(image,x,darkTop, darkHeight, drawColor);
-			vLine(image, x, mediumTop, mediumHeight-darkHeight, mediumColor);
-			vLine(image,x,lightTop,lightHeight-mediumHeight, lightColor);
+                        doLine(image,x,darkTop, darkHeight, drawColor);
+			doLine(image, x, mediumTop, mediumHeight-darkHeight, mediumColor);
+			doLine(image,x,lightTop,lightHeight-mediumHeight, lightColor);
 			}
 		    }
 		else
@@ -1001,7 +1004,7 @@ for (x1 = 0; x1 < width; ++x1)
 		    // make sure it draws something
 		    if ((boxTop+boxHeight) == 0)
 			boxHeight += 1;
-		    vLine(image,x, yOff+boxTop, boxHeight, drawColor);
+		    doLine(image,x, yOff+boxTop, boxHeight, drawColor);
 		    }
 		}
 	    else
@@ -1012,7 +1015,7 @@ for (x1 = 0; x1 < width; ++x1)
 		    int scaledMax = scaleHeightToPixels(doTransform(p->max, transformFunc));
 		    double mean = p->sumData/p->count;
 		    int boxHeight = max(1,scaledMin - scaledMax);
-		    vLine(image, x, scaledMax, boxHeight, lightColor);
+		    doLine(image, x, scaledMax, boxHeight, lightColor);
 		    int scaledMean = scaleHeightToPixels(dataValue);
 		    double std = calcStdFromSums(p->sumData, p->sumSquares, p->count);
 		    if (!isnan(std))  // Test needed because of bug in version 1.5 bigWiles
@@ -1020,9 +1023,9 @@ for (x1 = 0; x1 < width; ++x1)
 			int scaledPlus = scaleHeightToPixels(doTransform(mean+std, transformFunc));
 			int scaledMinus = scaleHeightToPixels(doTransform(mean-std, transformFunc));
 			int boxHeight = max(1,scaledMinus - scaledPlus);
-			vLine(image, x, scaledPlus, boxHeight, mediumColor);
+			doLine(image, x, scaledPlus, boxHeight, mediumColor);
 			}
-		    vLine(image, x, scaledMean, 1, drawColor);
+		    doLine(image, x, scaledMean, 1, drawColor);
 		    }
 		else
 		    {
@@ -1030,7 +1033,7 @@ for (x1 = 0; x1 < width; ++x1)
 		    if ((yOffsets != NULL) && (numTrack > 0))
 			y0 += yOffsets[(numTrack-1) *  width + x1];
 		    int yPointGraph = scaleHeightToPixels(y0) - 1;
-		    vLine(image, x, yPointGraph, 3, drawColor);
+		    doLine(image, x, yPointGraph, 3, drawColor);
 		    }
 		}
 	    double stackValue = dataValue;
@@ -1038,9 +1041,13 @@ for (x1 = 0; x1 < width; ++x1)
 	    if ((yOffsets != NULL) && (numTrack > 0))
 		stackValue += yOffsets[(numTrack-1) *  width + x1];
 	    if (stackValue > graphUpperLimit)
-		vLine(image, x, yOff, 2, clipColor);
+                {
+		doLine(image, x, yOff, 2, clipColor);
+                }
 	    else if (stackValue < graphLowerLimit)
-		vLine(image, x, yOff + h - 1, 2, clipColor);
+                {
+		doLine(image, x, yOff + h - 1, 2, clipColor);
+                }
 #undef scaleHeightToPixels	/* No longer use this symbol */
             }   /*	vis == tvFull || vis == tvPack */
         else if (vis == tvDense || vis == tvSquish)
@@ -1054,7 +1061,7 @@ for (x1 = 0; x1 < width; ++x1)
 
 	    drawColor =
 		tg->colorShades[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
-	    vLine(image, x, yOff, tg->lineHeight, drawColor);
+	    doLine(image, x, yOff, tg->lineHeight, drawColor);
             }   /*	vis == tvDense || vis == tvSquish	*/
 	}	/*	if (preDraw[].count)	*/
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
@@ -1073,7 +1080,7 @@ struct wigGraphOutput *wgo = tg->wigGraphOutput;
 graphPreDraw(preDraw, preDrawZero, width,
 	tg, wgo->image, wgo->vLine, wgo->xOff, wgo->yOff, wgo->yOffsets, wgo->numTrack,
 	graphUpperLimit, graphLowerLimit, graphRange,
-	epsilon, colorArray, vis, wigCart);
+	epsilon, colorArray, vis, wigCart, wgo->pixelBins);
 
 freez(&colorArray);
 }
@@ -1207,11 +1214,15 @@ if (minimalSpan > usingDataSpan)
 return usingDataSpan;
 }
 
-void wigTrackSetGraphOutputDefault(struct track *tg, int xOff, int yOff, struct hvGfx *hvg)
+void wigTrackSetGraphOutputDefault(struct track *tg, int xOff, int yOff, int width, struct hvGfx *hvg)
 /* Set up to draw on hvg if no other destination set already */
 {
 if (tg->wigGraphOutput == NULL)
+    {
     tg->wigGraphOutput = wigGraphOutputSolid(xOff, yOff, hvg);
+void AllocPixelBins(struct wigGraphOutput *wgo, int width);
+    AllocPixelBins(tg->wigGraphOutput, width);
+    }
 }
 
 void wigPreDrawPredraw(struct track *tg, int seqStart, int seqEnd,
@@ -1277,7 +1288,7 @@ if (graphUpperLimit == graphLowerLimit)
     }
 graphRange = graphUpperLimit - graphLowerLimit;
 
-wigTrackSetGraphOutputDefault(tg, xOff, yOff, hvg); 
+wigTrackSetGraphOutputDefault(tg, xOff, yOff, width, hvg); 
 
 graphPreDrawContainer(preContainer, preDrawZero, width, tg, hvg, xOff, yOff, 
     graphUpperLimit, graphLowerLimit, graphRange, vis, wigCart);
