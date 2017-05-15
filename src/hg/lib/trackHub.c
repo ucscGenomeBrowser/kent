@@ -32,6 +32,7 @@
 #include "hgBam.h"
 #include "bigWig.h"
 #include "bigBed.h"
+#include "barChartUi.h"
 #include "hdb.h"
 #include "chromInfo.h"
 #include "grp.h"
@@ -738,6 +739,13 @@ struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName
 return hashFindVal(hub->genomeHash, genomeName);
 }
 
+static void requireBarChartBars(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
+/* Fetch setting(s) or give an error message */
+{
+/* LATER: allow URL for file containing labels and colors */
+requiredSetting(hub, genome, tdb, BAR_CHART_CATEGORY_LABELS);
+}
+
 static void validateOneTrack( struct trackHub *hub, 
     struct trackHubGenome *genome, struct trackDb *tdb)
 /* Validate a track's trackDb entry. */
@@ -793,8 +801,10 @@ else
             errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
                 hub->url, genome->name, tdb->track);
             }
-
         requiredSetting(hub, genome, tdb, "bigDataUrl");
+
+        if (sameString("barChart", type) || sameString("bigBarChart", type))
+            requireBarChartBars(hub, genome, tdb);
         }
     }
 }

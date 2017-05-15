@@ -75,8 +75,10 @@ if (!info->categNames)
         info->categNames[categ->id] = cloneString(categ->name);
     }
 if (id >= count)
-    //errAbort("Bar chart track: can't find id %d\n", id);
+    {
+    warn("Bar chart track: can't find id %d\n", id);
     return NULL;        // Exclude this category
+    }
 return info->categNames[id];
 }
 
