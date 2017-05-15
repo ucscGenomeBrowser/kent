@@ -172,8 +172,6 @@ struct barChartCategory *categ = NULL;
 if (labels == NULL)
     {
     errAbort("barChart track %s missing required %s setting\n", tdb->track, BAR_CHART_CATEGORY_LABELS);
-    // TODO: consider getting categories from .as schema
-    //categs = barChartGetCategories(database, tdb->table);
     }
 else
     {

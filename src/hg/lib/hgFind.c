@@ -2599,7 +2599,6 @@ if (relativeFlag)
 
 static boolean isBigFileFind(struct hgFindSpec *hfs)
 /* is this a find on a big* file? */
-// KRR TODOO: replace with table lookup  (same as tdbIsBIgBed) in trackDb.h ?
 {
 return sameString(hfs->searchType, "bigBed")
     || sameString(hfs->searchType, "bigPsl")
