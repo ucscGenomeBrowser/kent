@@ -1779,6 +1779,7 @@ void localWebStartWrapper(char *titleString)
     jsIncludeFile("ajax.js", NULL);
     jsIncludeFile("d3pie.min.js", NULL);
     printf("<script src=\"//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js\"></script>");
+    printf("<script src=\"//cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js\"></script>");
     // http://cpettitt.github.io/project/dagre-d3/latest/dagre-d3.js redirects to:
     printf("<script src='http://www.samsarin.com/project/dagre-d3/latest/dagre-d3.js'></script>\n");
     printf("</HEAD>\n");

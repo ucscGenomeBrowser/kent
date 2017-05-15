@@ -250,11 +250,19 @@ return email;
 struct cdwUser *cdwUserFromUserName(struct sqlConnection *conn, char* userName)
 /* Return user associated with that username or NULL if not found */
 {
-struct sqlConnection *cc = hConnectCentral();
-char query[512];
-sqlSafef(query, sizeof(query), "select email from gbMembers where userName='%s'", userName);
-char *email = sqlQuickString(cc, query);
-hDisconnectCentral(&cc);
+char *email = NULL;
+// if the username is already an email address, then there is no need to go through the 
+// gbMembers table
+if (strstr("@", userName)!=NULL)
+    email = userName;
+else 
+    {
+    struct sqlConnection *cc = hConnectCentral();
+    char query[512];
+    sqlSafef(query, sizeof(query), "select email from gbMembers where userName='%s'", userName);
+    email = sqlQuickString(cc, query);
+    hDisconnectCentral(&cc);
+    }
 
 struct cdwUser *user = cdwUserFromEmail(conn, email);
 return user;
@@ -1242,6 +1250,7 @@ puts("<script type='text/javascript' SRC='/js/jquery.js'></script>");
 puts("<script type='text/javascript' SRC='/js/jquery.cookie.js'></script>");
 puts("<script type='text/javascript' src='https://login.persona.org/include.js'></script>");
 puts("<script type='text/javascript' src='/js/cdwPersona.js'></script>");
+puts("<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js'></script>");
 puts("</HEAD>");
 
 /* layout with navigation bar */
@@ -2400,7 +2409,19 @@ else
     {
     dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s&%s",
 	    encodedReturn, sidString);
-    dyStringPrintf(loginBits, "\">Logout %s</a></li>", userName);
+    dyStringPrintf(loginBits, "\" id=\"logoutLink\">Logout %s</a></li>", userName);
+
+    if (getenv("HTTP_AUTHORIZATION"))
+        // on cirm-01, we use HTTP Basic Auth, which requires a strange hack to logout
+        {
+        struct dyString *dy = dyStringNew(4096);
+        // cdwLogoutJs.h is a stringified .js file
+        #include "cdwLogoutJs.h"
+        dyStringPrintf(dy, cdwLogoutJs);
+        dyStringPrintf(dy, "$('#logoutLink').click( function() { logout('/', 'http://cirm.ucsc.edu'); return false; });\n");
+        jsInline(dy->string);
+        dyStringFree(&dy);
+        }
     }
 
 /* Clean up and go home */
