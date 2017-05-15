@@ -914,7 +914,9 @@ if (newTrackName != NULL)
         }
     }
 
-//struct trackDb *fullTrackList = getFullTrackList(cart);
+if (currentComposite)
+    cartSetString(cart, hgsCurrentComposite, currentComposite->name);
+
 doUi(database, groupList, wigTracks, currentComposite, compositeList);
 
 outputCompositeHub(database, hubName,  compositeList, nameHash);
