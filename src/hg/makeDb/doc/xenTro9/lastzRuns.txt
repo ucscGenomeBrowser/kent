@@ -108,8 +108,7 @@ TMPDIR=/dev/shm
     #    1107603590 bases of 2408724787 (45.983%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenLae2 xenTro9) \            > rbest.log 2>&1
-XXX - running - Fri Apr  7 21:44:21 PDT 2017
-    #  real    6m53.584s
+    #  real    6008m44.551s
 
 #########################################################################
 # chicken/galGal5 Lastz run  (DONE - 2017-04-07 - Hiram)
@@ -367,7 +366,11 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` chrPic2 xenTro9) \
 	> rbest.log 2>&1 &
-    # real    368m12.613s
+    # about 1.5 hours
+    # had to finish the recipBest step manually due to network interruption,
+    #   then continuing:
+    time (doRecipBest.pl -continue=download -workhorse=hgwdev \
+       -buildDir=`pwd` chrPic2 xenTro9) > rbest.download.log 2>&1 &
 
 ##############################################################################
 # swap lastz chainNet opossum/monDom5 (DONE - 2017-04-07 - Hiram)
