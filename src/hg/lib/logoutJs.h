@@ -1,0 +1,26 @@
+// copied from http://stackoverflow.com/questions/233507/how-to-log-out-user-from-web-site-using-basic-authentication
+char *cdwLogoutJs =
+"function logout(secUrl, redirUrl) {\n"
+"    if (bowser.msie) {\n"
+"        document.execCommand('ClearAuthenticationCache', 'false');\n"
+"    } else if (bowser.gecko) {\n"
+"        $.ajax({\n"
+"            async: false,\n"
+"            url: secUrl,\n"
+"            type: 'GET',\n"
+"            username: 'logout'\n"
+"        });\n"
+"    } else if (bowser.webkit || bowser.chrome) {\n"
+"        var xmlhttp = new XMLHttpRequest();\n"
+"        xmlhttp.open(\"GET\", secUrl, true);\n"
+"        xmlhttp.setRequestHeader(\"Authorization\", \"Basic logout\");\n"
+"        xmlhttp.send();\n"
+"    } else {\n"
+// http://stackoverflow.com/questions/5957822/how-to-clear-basic-authentication-details-in-chrome
+"        redirUrl = url.replace('http://', 'http://' + new Date().getTime() + '@');\n"
+"    }\n"
+"    setTimeout(function () {\n"
+"        window.location.href = redirUrl;\n"
+"    }, 200);\n"
+"}\n"
+;
