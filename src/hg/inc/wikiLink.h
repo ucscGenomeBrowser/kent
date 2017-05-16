@@ -18,6 +18,8 @@
 #define CFG_LOGIN_COOKIE_SALT "login.cookieSalt"
 #define CFG_LOGIN_ACCEPT_ANY_ID "login.acceptAnyId"
 #define CFG_LOGIN_ACCEPT_IDX "login.acceptIdx"
+#define CFG_LOGIN_BASICAUTH "login.basicAuth"
+#define CFG_LOGIN_RELATIVE "login.relativeLink"
 
 /* hg.conf central db parameters */
 #define CFG_CENTRAL_DOMAIN "central.domain"
@@ -31,6 +33,9 @@ boolean loginSystemEnabled();
 
 boolean loginUseHttps();
 /* Return TRUE unless https is disabled in hg.conf. */
+
+boolean loginUseBasicAuth();
+/* Return TRUE if login.basicAuth is on in hg.conf . */
 
 struct slName *loginLoginUser(char *userName, uint idx);
 /* Return cookie strings to set for user so we'll recognize that user is logged in.
@@ -72,5 +77,15 @@ char *wikiLinkUserSignupUrl(char *hgsid);
 
 char *wikiLinkChangePasswordUrl(char *hgsid);
 /* Return the URL for the user change password page. */
+
+char *wikiServerAndCgiDir();
+/* return the current full absolute URL up to the CGI name, like
+ * http://genome.ucsc.edu/cgi-bin/. If login.relativeLink=on is
+ * set, return only /cgi-bin/. Takes care of of non-root location of cgi-bin
+ * and https. Result has to be free'd. */
+
+void wikiFixLogoutLinkWithJs();
+/* HTTP Basic Auth requires a strange hack to logout. This code prints a script 
+ * that fixes an html link with id=logoutLink */
 
 #endif /* WIKILINK_H */

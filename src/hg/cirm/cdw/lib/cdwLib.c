@@ -2411,17 +2411,8 @@ else
 	    encodedReturn, sidString);
     dyStringPrintf(loginBits, "\" id=\"logoutLink\">Logout %s</a></li>", userName);
 
-    if (getenv("HTTP_AUTHORIZATION"))
-        // on cirm-01, we use HTTP Basic Auth, which requires a strange hack to logout
-        {
-        struct dyString *dy = dyStringNew(4096);
-        // cdwLogoutJs.h is a stringified .js file
-        #include "cdwLogoutJs.h"
-        dyStringPrintf(dy, cdwLogoutJs);
-        dyStringPrintf(dy, "$('#logoutLink').click( function() { logout('/', 'http://cirm.ucsc.edu'); return false; });\n");
-        jsInline(dy->string);
-        dyStringFree(&dy);
-        }
+    if (loginUseBasicAuth)
+        wikiFixLogoutLinkWithJs();
     }
 
 /* Clean up and go home */

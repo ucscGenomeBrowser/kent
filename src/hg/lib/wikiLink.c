@@ -1,4 +1,7 @@
-/* wikiLink - interoperate with a wiki site (share user identities). */
+/* wikiLink - originally used to interoperate with a wiki site (share user identities). 
+ * With the Wiki Track removed these days, this file contains code related to user
+ * authentication.
+ * */
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -12,6 +15,7 @@
 #include "md5.h"
 #include "web.h"
 #include "wikiLink.h"
+#include "base64.h"
 
 // Flag to indicate that loginValidateCookies has been called:
 static boolean alreadyAuthenticated = FALSE;
@@ -31,6 +35,12 @@ boolean loginSystemEnabled()
 /* Return TRUE if login.systemName  parameter is defined in hg.conf . */
 {
 return (cfgOption(CFG_LOGIN_SYSTEM_NAME) != NULL);
+}
+
+boolean loginUseBasicAuth()
+/* Return TRUE if login.basicAuth is on in hg.conf . */
+{
+return (cfgOptionBooleanDefault(CFG_LOGIN_BASICAUTH, FALSE));
 }
 
 boolean wikiLinkEnabled()
@@ -295,10 +305,84 @@ safef(buf, sizeof(buf), "http%s://%s/cgi-bin/hgLogin",
 return cloneString(buf);
 }
 
+char* getHttpBasicToken()
+/* Return HTTP Basic Auth Token or NULL. Result has to be freed. */
+{
+char *auth = getenv("HTTP_AUTHORIZATION");
+// e.g. "Basic bwF4OmQxUglhanM="
+if (auth==NULL)
+    return NULL;
+char *token = cloneNotFirstWord(auth);
+if (isEmpty(token))
+    {
+    fprintf(stderr, "wikiLinkc.: Illegal format of HTTP Authorization Header?");
+    return NULL;
+    }
+return token;
+}
+
+void printTokenErrorAndExit() 
+/* output an error message if http basic token is missing */
+{
+    printf("Internal error: this server has HTTP Basic Authentication enabled in cgi-bin/hg.conf:%s.<br>", CFG_LOGIN_BASICAUTH);
+    puts("The Genome Browser cannot find an 'Authorization' header to the Genome Browser.<br>");
+    puts("This website should only be reachable through a https connection that requires username and password.<p>");
+    puts("If you have reached this website in a way that does not require a password, please contact your adminstrator.<p><p>");
+    puts("If this was the case, for the administrator: ");
+    puts("Make sure that HTTP Basic Authentication is activated for the cgi-bin directory in the Apache Configuration. <p>");
+    puts("If it is and you are logged in, check that the CGI-BIN directory in Apache has these settings activated:<br>");
+    puts("<li>CGIPassAuth on' (Apache 2.4) <br>");
+    puts("<li>'SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0' (Apache 2.2).<br>");
+    puts("These settings tell Apache to forward credentials to CGIs. Do not forget to restart Apache after the changes.<p>");
+    exit(0);
+}
+
+boolean isValidUsername(char *s)
+/* Return TRUE if s is a valid username: only contains alpha chars, @, _ or - */
+{
+char c = *s;
+while ((c = *s++) != 0)
+    {
+    if (!(isalnum(c) || (c == '_') || (c=='@') || (c=='-')))
+	return FALSE;
+    }
+return TRUE;
+}
+
+char *basicAuthUser(char *token)
+/* get the HTTP Header 'Authorization', which is just the b64 encoded username:password,
+ * and return the username. Result has to be freed. */
+{
+
+// username:password is b64 encrypted 
+char *tokenPlain = base64Decode(token, 0);
+
+// plain text is in format username:password
+char *words[2];
+int wordCount = chopString(tokenPlain, ":", words, ArraySize(words));
+if (wordCount!=2)
+    errAbort("wikiLink/basicAuthUser: got illegal basic auth token");
+char *user = words[0];
+
+return user;
+}
+
 char *wikiLinkUserName()
 /* Return the user name specified in cookies from the browser, or NULL if 
  * the user doesn't appear to be logged in. */
 {
+if (loginUseBasicAuth())
+    {
+    char *token = getHttpBasicToken();
+    //XX The following should be uncommented for security reasons
+    //if (!token) 
+        //printTokenErrorAndExit();
+    // May 2017: Allowing normal login even when HTTP Basic is enabled. This may be insecure. 
+    // Keeping it insecure pending Jim's/Clay's approval, for backwards compatibility.
+    if (token) 
+        return basicAuthUser(token);
+    }
+
 if (loginSystemEnabled())
     {
     if (! alreadyAuthenticated)
@@ -445,3 +529,34 @@ freez(&retEnc);
 return(cloneString(buf));
 }
 
+char *wikiServerAndCgiDir() 
+/* return the current full absolute URL up to the CGI name, like
+ * http://genome.ucsc.edu/cgi-bin/. If login.relativeLink=on is
+ * set, return only the empty string. Takes care of of non-root location of cgi-bin
+ * and https. Result has to be free'd. */
+{
+boolean relativeLink = cfgOptionBooleanDefault(CFG_LOGIN_RELATIVE, FALSE);
+if (relativeLink)
+    return cloneString("");
+
+char *cgiDir = cgiScriptDirUrl();
+char buf[2048];
+char *hgLoginHost = wikiLinkHost();
+safef(buf, sizeof(buf), "http%s://%s%s", cgiAppendSForHttps(), hgLoginHost, cgiDir);
+
+return cloneString(buf);
+}
+
+void wikiFixLogoutLinkWithJs()
+/* HTTP Basic Auth requires a strange hack to logout. This code prints a script 
+ * that fixes an html link with id=logoutLink */
+{
+struct dyString *dy = dyStringNew(4096);
+// logoutJs.h is a stringified .js file
+#include "logoutJs.h"
+dyStringPrintf(dy, cdwLogoutJs);
+dyStringPrintf(dy, "$('#logoutLink').click( function() { logout('/', 'http://cirm.ucsc.edu'); return false; });\n");
+jsInline(dy->string);
+dyStringFree(&dy);
+printf("<script src='//cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js'></script>");
+}
