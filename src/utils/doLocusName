@@ -43,6 +43,8 @@ def doLocusName(db, geneTableName, options):
     " create and fill the locusName table for db "
     if geneTableName=="ensGene":
         query = "SELECT * from ensemblToGeneName"
+    elif geneTableName=="xenoRefGene":
+        query = "SELECT name,name2 from xenoRefGene"
     elif geneTableName=="knownGene":
         query = "SELECT kgID, geneSymbol from kgXref where geneSymbol<>'' and geneSymbol not like '% %'"
     else:
