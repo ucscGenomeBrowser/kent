@@ -554,7 +554,7 @@ void wikiFixLogoutLinkWithJs()
 struct dyString *dy = dyStringNew(4096);
 // logoutJs.h is a stringified .js file
 #include "logoutJs.h"
-dyStringPrintf(dy, cdwLogoutJs);
+dyStringAppend(dy, cdwLogoutJs);
 dyStringPrintf(dy, "$('#logoutLink').click( function() { logout('/', 'http://cirm.ucsc.edu'); return false; });\n");
 jsInline(dy->string);
 dyStringFree(&dy);
