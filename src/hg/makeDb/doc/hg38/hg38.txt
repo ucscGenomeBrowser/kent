@@ -6549,3 +6549,16 @@ bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/c
 cd /gbdb/hg38/cosmic/
 ln -s /hive/data/outside/cosmic/hg38/v81/cosMutHg38V81.bb .
 #########################################################################
+# hoffmanMappability hub import (2 super tracks) DONE Chris Eisenhart 2017-05-16 
+mkdir /hive/data/outside/hoffmanMappability/hg38
+cd /hive/data/outside/hoffmanMappability/hg38
+wget https://www.pmgenomics.ca/hoffmanlab/proj/bismap/trackhub/hg38/trackDb.txt
+# Get the trackDb file 
+importTrackHub trackDb.txt hofMap.ra /gbdb/hg38/hoffmanMappability/ --trackDbPath=$HOME/kent/src/hg/makeDb/trackDb/human/hg38/ --test
+# Check that the commands are what we want, then run for real
+importTrackHub trackDb.txt hofMap.ra /gbdb/hg38/hoffmanMappability/ --trackDbPath=$HOME/kent/src/hg/makeDb/trackDb/human/hg38/
+# View the .ra file to make sure things are ok, here changed the groups to map,
+# added the alpha tags, and removed the 'show' from 'superTrack on show'
+cp hofMap.ra ~/kent/src/hg/makeDb/trackDb/human/hg38
+# Include hofMap.ra in the trackDb.ra file
+#########################################################################

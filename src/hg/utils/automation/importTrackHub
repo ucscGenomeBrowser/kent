@@ -1,0 +1,115 @@
+#!/usr/bin/env python2.7
+# importTrackHub
+"""Take a trackHub trackDb file and import things so it can be loaded as a native track"""
+import os
+import sys
+import collections
+import argparse
+
+def parseArgs(args):
+    """
+    Parse the command line arguments.
+    """
+    parser= argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("inputFile",
+        help = " The input file. ",
+        action = "store")
+    parser.add_argument ("outputFile",
+        help = " The output file, the trackDb.ra stanzas.",
+        type =argparse.FileType("w"))
+    parser.add_argument ("gbdbPath",
+        help = " The full gbdb path where the soft links should live, must start with /gbdb",
+        action = "store")
+    parser.add_argument ("--trackDbPath",
+        help = " The local trackDb path where the html files should live. This setting defaults to "\
+                " ~/kent/src/hg/makeDb/trackDb",
+        action = "store")
+    parser.add_argument ("--test",
+        help = " Don't actually run any commands. ",
+        action = "store_true")
+
+    parser.set_defaults(test = False)
+    parser.set_defaults(trackDbPath = os.environ["HOME"] + "kent/src/hg/makeDb/trackDb/")
+    if (len(sys.argv) == 1):
+        parser.print_help()
+        exit(1)
+    options = parser.parse_args()
+    return options
+
+def main(args):
+    """
+    Initialized options and calls other functions.
+    """
+    options = parseArgs(args)
+    
+    if not options.gbdbPath.startswith("/gbdb/"):
+        print ("The gbdb path must start with /gbdb/, please update it and run again")
+        exit(1)
+    if options.gbdbPath[-1] is not "/":
+        print ("The gbdb path must end in a '/', please update it and run again.")
+        exit(1)
+    if options.trackDbPath[-1] is not "/":
+        print ("The trackDb path must end in a '/', please update it and run again.")
+        exit(1)
+
+    # Go through the trackDb.ra file. Download the files that are needed and update
+    # the trackDb stanza to reflect their new location.  
+    filesToDownload = []
+    currentTrack = ""
+    for line in open(options.inputFile, "r"): 
+        splitLine = line.strip("\t").strip("\n").split()
+        
+        # Handle the empty lines
+        if (len(splitLine) < 2):
+            options.outputFile.write(line)
+            continue
+        if "track" in splitLine[0]:
+            currentTrack = splitLine[1]
+        elif "parent" in splitLine[0]:
+            currentTrack = splitLine[1]
+
+        localFile = splitLine[1].split("/")[-1]
+        # Download big data and soft link it to gbdb
+        if "bigDataUrl" in splitLine[0]:
+            if splitLine[1] in filesToDownload:
+                newLine = line.replace(splitLine[1], options.gbdbPath + localFile)
+                options.outputFile.write(newLine)
+                continue
+            else: 
+                filesToDownload.append(splitLine[1])
+                cmd = "wget " + splitLine[1]
+                print(cmd)                
+                if not options.test:
+                    os.system(cmd)
+                fileFormat = localFile.split(".")[-1]
+
+                cmd = "ln -s " + os.getcwd() + "/" + localFile + " " + options.gbdbPath
+                print(cmd)                
+                newLine = line.replace(splitLine[1], options.gbdbPath + localFile)
+                options.outputFile.write(newLine)
+                if not options.test:
+                    os.system(cmd)
+        # Download description pages and put into trackDb 
+        elif "html" in splitLine[0]:
+            htmlFileName = splitLine[1].split("/")[-1]
+            if htmlFileName in filesToDownload:
+                newLine = line.replace(splitLine[1], currentTrack)
+                options.outputFile.write(newLine)
+                continue
+            else: 
+                filesToDownload.append(htmlFileName)
+                cmd = "wget " + splitLine[1]
+                print(cmd)                
+                if not options.test:
+                    os.system(cmd)
+                cmd = "cp " + os.getcwd() + "/" + htmlFileName + " " + options.trackDbPath + currentTrack + ".html"
+                print(cmd)                
+                if not options.test:
+                    os.system(cmd)
+                newLine = line.replace(splitLine[1], currentTrack)
+                options.outputFile.write(newLine)
+        else:
+            options.outputFile.write(line)
+
+if __name__ == "__main__" : 
+    sys.exit(main(sys.argv))
