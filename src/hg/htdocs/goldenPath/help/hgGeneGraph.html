@@ -24,12 +24,12 @@ interactions found through text mining of PubMed abstracts.
 </p>
 
 <p>
-The curated data was imported from 23 pathway or protein-interaction database
+The curated data were imported from 23 pathway or protein-interaction database
 (see Methods section below). Curators at these databases typically read
 research articles, collect protein interactions from them and store them in a
-web-accessible database. Pathway databases like Reactome or WikiPathways
-describe a whole set of interactions and the type of effect, e.g. the WNT
-pathway and sometimes annotate indirect or inferred effects with a physical
+web-accessible database. Pathway databases such as Reactome or WikiPathways
+describe a whole set of interactions, e.g. the WNT pathway, and the type of 
+effect, and sometimes annotate indirect or inferred effects with a physical
 interaction. They often work from review articles. In contrast, protein
 interaction databases focus more on the original literature that describes the
 results of the biochemical protein-interaction experiments and focus less on
@@ -41,8 +41,8 @@ The text mining data was generated in collaboration with the <a href='https://ha
 target="_blank">Microsoft Research Project Hanover Team</a> using
 <a href="https://literome.azurewebsites.net" target="_blank">Literome machine-reading</a>.
 Literome is a natural-language processing (NLP) system that analyzes sentences and tries to
-extract the proteins and the type of interaction. A simple example is a
-sentence like, &quot;PTEN negatively regulates AKT3&quot;, which gets transformed to
+extract names of proteins and the type of interaction. A simple example is a
+sentence such as, &quot;PTEN negatively regulates AKT3&quot;, which gets transformed to
 &quot;PTEN-AKT3&quot; and &quot;regulation: negative&quot;. The text mining system was run on all
 20 million <a href='https://www.ncbi.nlm.nih.gov/pubmed/' target="_blank">PubMed</a> abstracts at the end
 of 2014 and can also be queried through the website
@@ -53,13 +53,13 @@ of 2014 and can also be queried through the website
 <h2>Configuring the Pathway and Gene Interaction Display</h2>
 
 <p>
-Clicking on an item in the track display takes you to a page that includes gene
+Clicking on an item in the track display takes you to a page that includes a gene
 interaction graph with detailed information on the directionality and support
 for the various interactions displayed. The graph is initially centered on the
-gene clicked in the track display, with this gene also being highlighted in
-yellow. [image here?] By default, only the top 25 most supported interactions
+gene clicked in the track display, with this gene highlighted in
+yellow. [image here?] By default, only the top 25 best supported interactions
 are displayed, but this number can be increased, decreased or filtered using
-the controls above the image. You can filter the interactions displayed using
+the controls above the image. The interaction display can be filtered using
 the drop-down menu to display subsets by their support:
 </p>
 
@@ -90,9 +90,9 @@ interactions, e.g. a complex or a mass-spec study</li>
 <p>
 Lines may include arrows showing the directionality of this interaction. In
 these cases, the directionality is determined by majority support. For example,
-imagine an interaction between protein A and protein B, two articles support
+imagine an interaction between protein A and protein B; two articles support
 that A acts on B while a single article supports the opposite, B acting on A.
-In this case, since there are more articles supporting A acting on B, then the
+In this case, because there are more articles supporting A acting on B, then the
 arrow will be drawn such that it starts at A and points to B.
 </p>
 
@@ -113,7 +113,7 @@ Genes will be colored dark blue if there is no information in the database.
 </p>
 
 <p>
-You can mouse-over items in the display to display more details about the gene
+You can mouse-over items in the display to show more details about the gene
 such as their product. [image here?] If you've chosen to annotate genes with
 one of the various databases, then it will display that information as well.
 You can mouse-over the connecting lines between genes to see more details about
@@ -134,7 +134,7 @@ support this interaction.
 </p>
 
 <p>
-You can export the currently display gene interaction graph in a variety of formats
+You can export the currently displayed gene interaction graph in a variety of formats
 including PDF, SVG, Cytoscape, and JSON. 
 </p>
 
