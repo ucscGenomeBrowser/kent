@@ -6,7 +6,7 @@ subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyl
 subGroup2 clade Clade glires=Glires euarchontoglires=Euarchontoglires placental=Placental all=All_species
 dragAndDrop subTracks
 dimensions dimensionX=clade
-visibility hide
+visibility full
 type bed 4
 group compGeno
 priority 1
