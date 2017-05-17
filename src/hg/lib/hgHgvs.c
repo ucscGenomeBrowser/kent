@@ -74,8 +74,7 @@ if (pHgvs && *pHgvs)
 // It's pretty common for users to omit the '.' so if it's missing but the rest of the regex fits,
 // roll with it.
 #define hgvsCDotPosExp "c\\.?" hgvsCdsPosExp
-#define hgvsGDotPosExp "g\\.?" hgvsNtPosExp
-#define hgvsMDotPosExp "m\\.?" hgvsNtPosExp
+#define hgvsGMDotPosExp "([gm])\\.?" hgvsNtPosExp
 #define hgvsNDotPosExp "n\\.?" hgvsNtPosExp
 #define hgvsRDotPosExp "r\\.?" hgvsNtPosExp
 
@@ -101,7 +100,7 @@ if (pHgvs && *pHgvs)
 // Complete HGVS term regexes combining sequence identifiers and change operations
 #define hgvsFullRegex(seq, op) "^" seq ":" op
 
-#define hgvsRefSeqNCGDotPosExp hgvsFullRegex(versionedRefSeqNCExp, hgvsGDotPosExp)
+#define hgvsRefSeqNCGDotPosExp hgvsFullRegex(versionedRefSeqNCExp, hgvsGMDotPosExp)
 #define hgvsRefSeqNCGDotExp hgvsRefSeqNCGDotPosExp "(.*)"
 // substring numbering:
 //      0.....................................  whole matching string
@@ -109,10 +108,31 @@ if (pHgvs && *pHgvs)
 //               2........                      optional dot version
 //                       3......                (n/a) optional gene symbol in ()s
 //                        4....                 (n/a) optional gene symbol
-//                               5...           1-based start position
-//                                   6....      optional range separator and end position
-//                                    7...      1-based end position
-//                                       8....  change description
+//                              5.              g or m
+//                                6..           1-based start position
+//                                   7...       optional range separator and end position
+//                                     8..      1-based end position
+//                                        9...  change description
+
+#define hgvsLrgNDotExp hgvsFullRegex(lrgTranscriptExp, hgvsNDotPosExp) "(.*)"
+//      0.....................................  whole matching string
+//      1...................                    LRG transcript
+//                   2......                    1-based start position
+//                           3..........        optional range separator and end position
+//                               4.....         1-based end position
+//                                        5...  change description
+
+#define hgvsRefSeqNMNDotExp hgvsFullRegex(versionedRefSeqNMExp, hgvsNDotPosExp) "(.*)"
+// substring numbering:
+//      0.....................................  whole matching string
+//      1.................                      accession and optional dot version
+//               2........                      optional dot version
+//                       3......                (n/a) optional gene symbol in ()s
+//                        4....                 (n/a) optional gene symbol
+//                                5..           1-based start position
+//                                   6...       optional range separator and end position
+//                                     7..      1-based end position
+//                                        8...  change description
 
 #define hgvsLrgCDotPosExp hgvsFullRegex(lrgTranscriptExp, hgvsCDotPosExp)
 #define hgvsLrgCDotExp hgvsLrgCDotPosExp "(.*)"
@@ -245,12 +265,56 @@ regmatch_t substrs[17];
 if (regexMatchSubstr(term, hgvsRefSeqNCGDotExp, substrs, ArraySize(substrs)))
     {
     int accIx = 1;
-    int startPosIx = 5;
-    int endPosIx = 7;
-    int changeIx = 8;
+    int startPosIx = 6;
+    int endPosIx = 8;
+    int changeIx = 9;
     AllocVar(hgvs);
+    // HGVS recommendation May 2017: replace m. with g. since mitochondrion is genomic too
     hgvs->type = hgvstGenomic;
     hgvs->seqAcc = regexSubstringClone(term, substrs[accIx]);
+    hgvs->start1 = regexSubstringInt(term, substrs[startPosIx]);
+    if (regexSubstrMatched(substrs[endPosIx]))
+        hgvs->end = regexSubstringInt(term, substrs[endPosIx]);
+    else
+        hgvs->end = hgvs->start1;
+    hgvs->changes = regexSubstringClone(term, substrs[changeIx]);
+    }
+return hgvs;
+}
+
+static struct hgvsVariant *hgvsParseNDotPos(char *term)
+/* If term is parseable as an HGVS n. term, return the parsed representation, otherwise NULL. */
+{
+struct hgvsVariant *hgvs = NULL;
+boolean matches = FALSE;
+int accIx = 1;
+int startPosIx = 2;
+int endPosIx = 4;
+int changeIx = 5;
+// The LRG accession regex has only one substring but the RefSeq acc regex has 4, so that
+// affects all substring offsets after the accession.
+int refSeqExtra = 3;
+int geneSymbolIx = -1;
+regmatch_t substrs[10];
+if (regexMatchSubstr(term, hgvsLrgNDotExp, substrs, ArraySize(substrs)))
+    {
+    matches = TRUE;
+    }
+else if (regexMatchSubstr(term, hgvsRefSeqNMNDotExp, substrs, ArraySize(substrs)))
+    {
+    matches = TRUE;
+    geneSymbolIx = 4;
+    startPosIx += refSeqExtra;
+    endPosIx += refSeqExtra;
+    changeIx += refSeqExtra;
+    }
+if (matches)
+    {
+    AllocVar(hgvs);
+    hgvs->type = hgvstNoncoding;
+    hgvs->seqAcc = regexSubstringClone(term, substrs[accIx]);
+    if (geneSymbolIx >= 0 && regexSubstrMatched(substrs[geneSymbolIx]))
+        hgvs->seqGeneSymbol = regexSubstringClone(term, substrs[geneSymbolIx]);
     hgvs->start1 = regexSubstringInt(term, substrs[startPosIx]);
     if (regexSubstrMatched(substrs[endPosIx]))
         hgvs->end = regexSubstringInt(term, substrs[endPosIx]);
@@ -411,6 +475,8 @@ struct hgvsVariant *hgvsParseTerm(char *term)
  * This does not check validity of accessions, coordinates or alleles. */
 {
 struct hgvsVariant *hgvs = hgvsParseCDotPos(term);
+if (hgvs == NULL)
+    hgvs = hgvsParseNDotPos(term);
 if (hgvs == NULL)
     hgvs = hgvsParsePDotSubst(term);
 if (hgvs == NULL)
