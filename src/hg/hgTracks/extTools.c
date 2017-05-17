@@ -26,7 +26,7 @@ boolean extToolsEnabled()
 return fileExists("extTools.ra");
 }
 
-void printExtMenuData() 
+void printExtMenuData(char *chromName) 
 /* print the external tools aka "send to" menu entries as a javascript list to stdout */
 {
 if (!extToolsEnabled())
@@ -37,6 +37,10 @@ struct dyString *dy = dyStringNew(1024);
 dyStringAppend(dy, "extTools = [\n");
 for(et = extTools; et != NULL; et = et->next)
     {
+    // special case for alternate chroms on hg38, skip the Ensembl links
+    if (chromName!=NULL && startsWith("ensembl", et->tool) && endsWith(chromName, "_alt"))
+        continue;
+
     if (et->dbs!=NULL)
         {
         if (!slNameInList(et->dbs, database))

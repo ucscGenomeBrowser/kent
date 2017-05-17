@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "options.h"
+#include "genbank.h"
 #include "hdb.h"
 #include "hgHgvs.h"
 #include "vcf.h"
@@ -47,6 +48,7 @@ fprintf(f,
 void hgvsToVcf(char *db, char *inFile, char *outFile, boolean doLeftShift)
 /* hgvsToVcf - Convert HGVS terms to VCF tab-separated output. */
 {
+initGenbankTableNames(db);
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
 writeVcfHeader(f, db, inFile);

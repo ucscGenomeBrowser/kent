@@ -15,10 +15,7 @@ compile: $O
 	${CC} $O ${MYLIBS} ${L} 
 	mv ${AOUT} $A${EXE}
 
-$O: cdwNavBar.h tagDescriptions.h cdwHelp.h
-
-cdwNavBar.h: cdwNavBar.html
-	stringify cdwNavBar.html > cdwNavBar.h
+$O: tagDescriptions.h cdwHelp.h
 
 cdwHelp.h: cdwHelp.html
 	stringify cdwHelp.html > cdwHelp.h

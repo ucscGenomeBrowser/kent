@@ -553,3 +553,15 @@ searchPriority 8
     #   sizes will set properly
 
 #########################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-05-09 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("aquChr2", "blat1c", "17866", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("aquChr2", "blat1c", "17867", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################

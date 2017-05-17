@@ -1,0 +1,21 @@
+table ggEventText
+" hgcGeneGraph details of text-mined interactions; a cause influences a theme. Both can be a gene, gegen complex or gene family. "
+    (
+    string eventId;       "ID of interaction description"
+    string causeType;       "type of cause of interaction, values: complex, gene or family"
+    string causeName;       "name of cause, as used in text"
+    lstring causeGenes;       "HGNC gene symbols of cause, comma-separated list"
+    string themeType;       "type of theme of interaction, values: complex, gene or family"
+    string themeName;       "name of theme, as used in database"
+    lstring themeGenes;       "gene symbols of theme, comma-separated list"
+    string relType;       "type of relation between cause and theme"
+    string relSubtype;       "subtype of relation, if provided"
+    string docId;       "document docId, number is a PMID"
+    string sentenceId;       "index of sentence in document"
+    string triggerTokenId;       "index of trigger token in sentence"
+    string themeTokenStart;       "index of token where theme starts in sentence"
+    string themeTokenEnd;       "index of token where theme ends in sentence"
+    string causeTokenStart;       "index of token where cause starts in sentence"
+    string causeTokenEnd;       "index of token where cause ends in sentence"
+    lstring sentence;       "full sentence from document"
+    )

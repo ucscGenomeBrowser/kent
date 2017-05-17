@@ -18,9 +18,9 @@ echo "TrackCheck robot done. Check to see if any errors in $WEEKLYBLD/logs/$log.
 # imperfect error test.
 set wc = `cat $WEEKLYBLD/logs/$log | egrep "Error" | wc -w` 
 if ( "$wc" != "0" ) then
-  echo "At least 1 error may have occurred.  Check $WEEKLYBLD/logs/$log." | mail -s "v${BRANCHNN} TrackCheck robot done." $USER@soe.ucsc.edu ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
+  echo "At least 1 error may have occurred.  Check $WEEKLYBLD/logs/$log." | mail -s "v${BRANCHNN} TrackCheck robot done." ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
 else
-   echo "Check to see if any errors in $WEEKLYBLD/logs/$log." | mail -s "v${BRANCHNN} TrackCheck robot done." $USER@soe.ucsc.edu ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
+   echo "Check to see if any errors in $WEEKLYBLD/logs/$log." | mail -s "v${BRANCHNN} TrackCheck robot done." ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
 endif
 
 exit 0

@@ -11,6 +11,6 @@ nohup LiftOverTest kent/java/src/edu/ucsc/genome/util/LiftOverTest.props >& $WEE
 
 echo "LiftOverTest robot done. Check to see if any errors in $WEEKLYBLD/logs/$log."
 echo "LiftOverTest robot done. Check to see if any errors in $WEEKLYBLD/logs/$log." \
-  | mail -s "v${BRANCHNN} LiftOverTest robot done." $USER@soe.ucsc.edu ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
+  | mail -s "v${BRANCHNN} LiftOverTest robot done." ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
 
 exit 0

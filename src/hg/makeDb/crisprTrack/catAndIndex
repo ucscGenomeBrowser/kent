@@ -1,0 +1,65 @@
+#!/usr/bin/env python2.7
+
+import logging, sys, optparse, string
+from collections import defaultdict
+import os
+from os.path import join, basename, dirname, isfile
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("usage: %prog [options] inDir outFile outIndex - concatenate all tab-sep files in inDir to outFile, remove the first field and create an index <field1Val>,<offset> to outIndex. If multiple lines have the same field1Val, all but the first line will be skipped.")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("", "--headers", dest="headers", action="store", help="comma-separated list of headers for outFile")
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+    return args, options
+
+def catAndIndex(inDir, outFname, outIndexPath, headerStr):
+    " cat and index all files in inDir "
+
+    print ("Getting files in directory %s" % inDir)
+    fnames = os.listdir(inDir)
+    print ("Found %d files" % len(fnames))
+
+    ofh = open(outFname, "wb")
+    if headerStr:
+        headers = headerStr.split(",")
+        ofh.write("%s\n" % ("\t".join(headers)))
+
+    idxOfh = open(outIndexPath, "wb")
+
+    idxFnames = {}
+    for i, fname in enumerate(fnames):
+        inPath = join(inDir, fname)
+        #print (chr(27)+'[1K'+"Reading %s, %0.f %%"  % (inPath, float(100*i)/len(fnames))),
+        print ("Reading %s, %0.f %%"  % (inPath, float(100*i)/len(fnames)))
+        for line in open(inPath, "rb"):
+            #tabPos = line.find('\t')
+            #field1 = line[:tabPos] # extract substr up to tabPos
+            field1, restLine = string.split(line, "\t", 1)
+            if field1 in idxFnames:
+                print("Warning: duplicate key %s, found in files %s and %s" % \
+                    (field1, inPath, idxFnames[field1]))
+                continue
+            idxOfh.write("%s\t%d\n" % (field1, ofh.tell()))
+            ofh.write(restLine)
+
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+    inDir, outFname, outIndexPath = args
+    catAndIndex(inDir, outFname, outIndexPath, options.headers)
+
+main()

@@ -1,3 +1,4 @@
+#chr	start	end	name	score	strand	name2	expCount	expScores;A B C D	_offset	_lineLength
 chr1	100	175	t1	444	+	gene1	4	5.5,0.0,0.0,0.0	36	19
 chr1	80	95	t10	999	-	gene7	4	0.0,0.0,0.0,10.0	211	22
 chr2	100	325	t2	666	-	gene1	4	0.0,7.5,0.0,0.0	55	19

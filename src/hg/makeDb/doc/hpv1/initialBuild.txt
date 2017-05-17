@@ -1,0 +1,632 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the hpv1
+
+#########################################################################
+# micrograph photograph from cancer.gov
+#    (DONE - 2017-05-10 - Hiram)
+
+mkdir -p /hive/data/genomes/hpv1/photo
+cd /hive/data/genomes/hpv1/photo
+
+wget -O cancer.gov.jpg \
+"https://visualsonline.cancer.gov/retrieve.cfm?imageid=2255&dpi=300&fileformat=jpg"
+
+convert -quality 80 -geometry 350x350 cancer.gov.jpg hpv1.jpg
+
+printf 'photoCreditURL\thttps://commons.wikimedia.org/wiki/File:Papilloma_virus_(hpv).jpg
+photoCreditName\tNIH National Cancer Institute
+' > photoReference.txt
+
+cat photoReference.txt
+
+photoCreditURL  https://commons.wikimedia.org/wiki/File:Papilloma_virus_(hpv).jpg
+photoCreditName NIH National Cancer Institute
+
+# Checking in that photograph to the source tree, will need to fixup the
+#	description.html page to correctly reference this photo since
+#       our scripts use the scientific name to find the photo
+
+#########################################################################
+#  Initial steps (DONE - 2017-05-10 - Hiram)
+
+# This initialBuild.txt document was started from criGriChoV1
+#  version of initialBuild.txt
+
+mkdir /hive/data/genomes/hpv1/refseq
+cd /hive/data/genomes/hpv1/refseq
+
+export accession="GCF_000862685.1"
+export asmId="ViralProj15424"
+export level0="GCF"
+export level1="000"
+export level2="862"
+export level3="685"
+
+rsync -L -a -P rsync://ftp.ncbi.nlm.nih.gov/genomes/all/$level0/$level1/$level2/$level3/${accession}_${asmId}/ ./
+
+# sent 279 bytes  received 50441 bytes  20288.00 bytes/sec
+# total size is 48785  speedup is 0.96
+
+# real    0m1.239s
+
+# check assembly size for later reference:
+
+faSize G*424_genomic.fna.gz
+
+# 8033 bases (0 N's 8033 real 8033 upper 0 lower) in 1 sequences in 1 files
+
+# this information is from the top of
+#    hpv1/refseq/GCF_000862685.1_ViralProj15424_assembly_report.txt
+
+# Assembly name:  ViralProj15424
+# Organism name:  Human papillomavirus type 90 (viruses)
+# Taxid:          333769
+# BioProject:     PRJNA15424
+# Submitter:      Albert Einstein College of Medicine, Microbiology & Immunology, USA, Bronx, New York
+# Date:           2002-8-5
+# Assembly type:  n/a
+# Release type:   major
+# Assembly level: Complete Genome
+# Genome representation: full
+# RefSeq assembly accession: GCF_000862685.1
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+##      GCF_000862675.1 Primary assembly
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2017-05-10)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/hpv1
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl hpv1 virus \
+        HPV ./refseq/*_assembly_report.txt > hpv1.config.ra
+# going to need a mitoAcc ?
+
+    # unfortunately, there is no bioSample, set to n/a
+    # will need to fixup resulting description.html
+    # set: mitoAcc none
+    # set: commonName HPV
+    # set: orderKey 8700  (common name alphabetic)
+
+    # to see order keys to verify this one is correct:
+# hgsql -e 'select name,organism,orderKey from dbDb order by orderKey;' \
+#	hgcentraltest | less
+
+    # verify it looks sane
+    cat hpv1.config.ra
+# config parameters for makeGenomeDb.pl:
+db hpv1
+clade virus
+genomeCladePriority 2000
+scientificName Human papillomavirus type 90
+commonName HPV
+assemblyDate Aug. 2002
+assemblyLabel Albert Einstein College of Medicine, Microbiology & Immunology, USA, Bronx, New York
+assemblyShortLabel ViralProj15424
+orderKey 8700
+mitoAcc none
+fastaFiles /hive/data/genomes/hpv1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/hpv1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir HPV
+photoCreditURL  https://commons.wikimedia.org/wiki/File:Papilloma_virus_(hpv).jpg
+photoCreditName NIH National Cancer Institute
+ncbiGenomeId 5533
+ncbiAssemblyId 265281
+ncbiAssemblyName ViralProj15424
+ncbiBioProject 15424
+ncbiBioSample n/a
+genBankAccessionID GCF_000862685.1
+taxId 333769
+
+#############################################################################
+# setup UCSC named files (DONE - 2017-05-10 - Hiram)
+
+    mkdir /hive/data/genomes/hpv1/ucsc
+    cd /hive/data/genomes/hpv1/ucsc
+
+    # one simple sequence:
+    zcat ../refseq/GCF_000862685.1_ViralProj15424_genomic.fna.gz \
+      | sed -e 's/^>NC_004104.1.*/>NC_004104v1/;' | gzip > chr.fa.gz
+
+    printf "NC_004104v1\t1\t8033\t1\tF\tNC_004104.1\t1\t8033\t+\n" > chr.agp
+
+    # verify OK:
+    checkAgpAndFa chr.agp chr.fa.gz
+# Valid Fasta file entry
+# All AGP and FASTA entries agree - both files are valid
+
+#############################################################################
+#  Initial database build (DONE - 2017-05-10 - Hiram)
+
+    cd /hive/data/genomes/hpv1
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp hpv1.config.ra) > agp.log 2>&1
+    # real    0m9.024s
+
+    # then finish it off: (will break down in trackDb step due to
+    #   photograph name.  Attempt to avoid this
+    #   in /usr/local/apache/htdocs/images
+    #       ln -s hpv1.jpg 'Human_papillomavirus_type_90'.jpg
+
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db hpv1.config.ra) > db.log 2>&1
+    # real    0m10.396s
+
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -continue=trackDb -fileServer=hgwdev -continue=db hpv1.config.ra) > trackDb.log 2>&1
+
+    # remove the temporary symlink, edit the description.html page
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add hpv1 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/hpv1
+    ln -s `pwd`/hpv1.unmasked.2bit /gbdb/hpv1/hpv1.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2017-05-10 - Hiram)
+    mkdir /hive/data/genomes/hpv1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/hpv1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/hpv1/hpv1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku hpv1) > do.log 2>&1
+    # real    0m37.362s
+
+    cat fb.hpv1.cpgIslandExtUnmasked.txt
+    # 203 bases of 8033 (2.527%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-05-10 - Hiram)
+    mkdir /hive/data/genomes/hpv1/bed/cytoBand
+    cd /hive/data/genomes/hpv1/bed/cytoBand
+    makeCytoBandIdeo.csh hpv1
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2017-05-10 - Hiram)
+
+    # really simple situation here, only one name to deal with
+
+    mkdir /hive/data/genomes/hpv1/bed/ucscToINSDC
+    cd /hive/data/genomes/hpv1/bed/ucscToINSDC
+
+    # lookup the INSDC name at:
+    #	https://www.ncbi.nlm.nih.gov/genome/?term=txid931244[orgn]
+
+    printf "NC_004104v1\t0\t8033\tNC_004104.1\n" > ucscToRefSeq.bed
+    printf "NC_004104v1\t0\t8033\tAY057438.1\n" > ucscToINSDC.bed
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 11
+    # use the chrSize in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab hpv1 ucscToINSDC stdin ucscToINSDC.bed
+    # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  11
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab hpv1 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords hpv1
+    # each should cover %100 entirely:
+    featureBits -countGaps hpv1 ucscToINSDC
+    # 8033 bases of 8033 (100.000%) in intersection
+
+    featureBits -countGaps hpv1 ucscToRefSeq
+    # 8033 bases of 8033 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2017-05-10 - Hiram)
+
+    mkdir /hive/data/genomes/hpv1/bed/chromAlias
+    cd /hive/data/genomes/hpv1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' hpv1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' hpv1 \
+        > ucsc.genbank.tab
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > hpv1.chromAlias.tab
+
+    cat  hpv1.chromAlias.tab
+# AY057438.1      NC_004104v1     genbank
+# NC_004104.1     NC_004104v1     refseq
+
+    hgLoadSqlTab hpv1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        hpv1.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2017-05-10 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/criGri/hpv1
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" hpv1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
+#       1 NC_.1
+
+    # implies a rule: 'NC_[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" hpv1 | wc -l
+    # 1
+
+    hgsql -N -e "select frag from gold;" hpv1 \
+       | egrep -e 'NC_[0-9]+(\.[0-9]+)?' | wc -l
+    # 1
+
+    hgsql -N -e "select frag from gold;" hpv1 \
+       | egrep -v -e 'NC_[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/hpv1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex NC_[0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2017-05-10 - Hiram)
+    # RepeatMasker doesn't know about this virus sequence name as is,
+    # scientificName Human papillomavirus type 90
+    # and there is nothing related in the taxonomy.dat table in RM.
+    # However, there is a generic 'viruses' name, taxId 10239
+
+    mkdir /hive/data/genomes/hpv1/bed/repeatMasker
+    cd /hive/data/genomes/hpv1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -species "viruses" -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku hpv1) > do.log 2>&1 &
+    # real    3m6.878s
+
+    # looks like it ends up with one single repeat:
+
+#   16  26.7  3.6  1.8  NC_004104v1    7405    7480     (553) +  (TG)n          Simple_repeat            1   77    (0)      1
+
+    # and it fails with an empty nestedRepeats file during load
+    # help the doLoad step finish:
+    ln -s `pwd`/hpv1.rmsk.2bit /hive/data/genomes/hpv1/hpv1.rmsk.2bit
+
+    # continue with cleanUp:
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -species "viruses" -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=cleanup -smallClusterHub=ku hpv1) > cleanup.log 2>&1 &
+    # real    0m4.568s
+
+    cat faSize.rmsk.txt
+# 8033 bases (0 N's 8033 real 7957 upper 76 lower) in 1 sequences in 1 files
+# %0.95 masked total, %0.95 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;                                            *
+
+    time featureBits -countGaps hpv1 rmsk
+    #	76 bases of 8033 (0.946%) in intersection
+    #	real    0m0.024s
+
+    # why is it different than the faSize above ? (It isn't there are no gaps)
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' hpv1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    #	total 76.000000
+    #	real    0m0.029s
+
+##########################################################################
+# running simple repeat (DONE - 2017-05-10 - Hiram)
+
+    mkdir /hive/data/genomes/hpv1/bed/simpleRepeat
+    cd /hive/data/genomes/hpv1/bed/simpleRepeat
+    # using trf409 1 here (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 1 hpv1) > do.log 2>&1 &
+    # XXX - there are no simple repeats, empty result
+    # real    0m13.037s
+
+#########################################################################
+# CREATE MICROSAT TRACK (TBD - 2017-04-11 - Hiram)
+    # XXX - there are no simple repeats
+    ssh hgwdev
+    mkdir /cluster/data/hpv1/bed/microsat
+    cd /cluster/data/hpv1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed hpv1 microsat microsat.bed
+    # Read 213828 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2017-04-11 - Hiram)
+
+    mkdir /hive/data/genomes/hpv1/bed/windowMasker
+    cd /hive/data/genomes/hpv1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev hpv1) > do.log 2>&1
+    # real    299m17.427s
+
+    # finished before RepeatMasker, failed on featureBits rmsk, so finish
+    # this off
+
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=cleanup -dbHost=hgwdev hpv1) > cleanup.log 2>&1
+
+    # Masking statistics
+    cat faSize.hpv1.cleanWMSdust.txt
+# 8033 bases (0 N's 8033 real 7715 upper 318 lower) in 1 sequences in 1 files
+# %3.96 masked total, %3.96 masked real
+
+    cat fb.hpv1.rmsk.windowmaskerSdust.txt
+    # 76 bases of 8033 (0.946%) in intersection
+
+    # check to see what the addition together would be
+    # for rmsk and WM:
+    featureBits -or -countGaps hpv1 rmsk windowmaskerSdust \
+	> fb.hpv1.rmsk+windowmaskerSdust.txt 2>&1
+
+    cat fb.hpv1.rmsk+windowmaskerSdust.txt
+    # 318 bases of 8033 (3.959%) in intersection
+
+    # using the Window Masker result by itself:
+    cd /hive/data/genomes/hpv1
+    twoBitMask hpv1.unmasked.2bit \
+	-type=.bed -add bed/windowMasker/cleanWMask.bed.gz hpv1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa hpv1.2bit stdout \
+	| faSize stdin > faSize.hpv1.2bit.txt
+    cat faSize.hpv1.2bit.txt
+   # 8033 bases (0 N's 8033 real 7715 upper 318 lower) in 1 sequences in 1 files
+    # %3.96 masked total, %3.96 masked real
+
+    # reset the symlink
+    rm /gbdb/hpv1/hpv1.2bit
+    ln -s `pwd`/hpv1.2bit /gbdb/hpv1/hpv1.2bit
+
+##########################################################################
+# run up idKeys files for ncbiRefSeq (DONE - 2017-05-10 - Hiram)
+    mkdir /hive/data/genomes/hpv1/bed/idKeys
+    cd /hive/data/genomes/hpv1/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd`  hpv1) > do.log 2>&1 &
+    # real    0m17.364s
+
+    cat hpv1.keySignature.txt
+    #   a1821a8fb20b88bd25f0eacea585b24a
+
+##########################################################################
+# cpgIslands - (DONE - 2017-05-10 - Hiram)
+    mkdir /hive/data/genomes/hpv1/bed/cpgIslands
+    cd /hive/data/genomes/hpv1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku hpv1) > do.log 2>&1 &
+    # real    0m36.957s
+
+    cat fb.hpv1.cpgIslandExt.txt
+    # 203 bases of 8033 (2.527%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2017-05-10 - Hiram)
+    mkdir /hive/data/genomes/hpv1/bed/genscan
+    cd /hive/data/genomes/hpv1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku hpv1) > do.log 2>&1 &
+    # real    0m52.467s
+
+    cat fb.hpv1.genscan.txt
+    # 3408 bases of 8033 (42.425%) in intersection
+
+    cat fb.hpv1.genscanSubopt.txt
+    # 3144 bases of 8033 (39.139%) in intersection
+
+#############################################################################
+# augustus gene track (TBD - 2017-04-13 - Hiram)
+    # XXX augustus can not do virus sequence
+
+    mkdir /hive/data/genomes/hpv1/bed/augustus
+    cd /hive/data/genomes/hpv1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+    -species=human -dbHost=hgwdev -workhorse=hgwdev hpv1) > do.log 2>&1 &
+    # real    72m23.671s
+
+    cat fb.hpv1.augustusGene.txt
+    # 29811614 bases of 2318132242 (1.286%) in intersection
+
+##############################################################################
+# Create kluster run files (TBD - 2017-04-13 - Hiram)
+
+    # numerator is hpv1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap hpv1 gap
+    # 0 bases of 8033 (0.000%) in intersection
+    #            ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 8033 / 2861349177 \) \* 1024
+    #  ( 8033 / 2861349177 ) * 1024 = 0.002875
+
+    # repMatch=1 produces 1,459 overused 11-mers
+    $ repMatch=2 produces 1 overused 11-mers
+    $ repMatch=3 produces 0 overused 11-mers
+    # ==> use -repMatch=3, do not need to mask anything
+    cd /hive/data/genomes/hpv1
+    blat hpv1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/hpv1.11.ooc \
+        -repMatch=3
+    #   Wrote 0 overused 11-mers to jkStuff/hpv1.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    # there are no non-bridged gaps in this assembly:
+    hgsql -N -e 'select bridge from gap;' hpv1 | sort | uniq -c
+    #	no output, nothing to see here
+
+#########################################################################
+# GENBANK AUTO UPDATE (TBD - 2017-04-13 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # organism             mrnaCnt   estCnt  refSeqCnt
+    # Human papillomavirus    61      0       0
+    # Human papillomavirus type 16    21      2       0
+    # Human papillomavirus type 18    9       0       0
+    # Human papillomavirus type 197   1       0       0
+    # Human papillomavirus type 38    1       0       0
+    # Human papillomavirus type 45    1       0       0
+    # Human papillomavirus type 58    2       0       0
+    # Human papillomavirus type 68    2       0       0
+    # Human papillomavirus type 6b    1       0       0
+
+    # edit etc/genbank.conf to add hpv1 at the end
+# hpv1 (Human papillomavirus type 90 -  Taxid: 333769)
+hpv1.serverGenome = /hive/data/genomes/hpv1/hpv1.2bit
+hpv1.clusterGenome = /hive/data/genomes/hpv1/hpv1.2bit
+hpv1.ooc = /hive/data/genomes/hpv1/jkStuff/hpv1.11.ooc
+hpv1.lift = no
+hpv1.downloadDir = hpv1
+hpv1.perChromTables = no
+hpv1.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+hpv1.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+hpv1.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+hpv1.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+hpv1.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
+# genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
+# refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
+# hpv1.upstreamGeneTbl = ensGene
+# hpv1.upstreamMaf = multiz9way /hive/data/genomes/hpv1/bed/multiz9way/species.list
+
+    git commit -m 'adding hpv1 Human papillomavirus type 90 - refs #18971' etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+    make install-server
+
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial hpv1
+    # logFile: var/build/logs/2017.05.10-18:36:54.hpv1.initalign.log
+    #   real    1354m21.533s
+
+    tail -2  var/build/logs/2017.05.10-18:36:54.hpv1.initalign.log
+    #	hgwdev 2017.05.11-17:11:12 hpv1.initalign: Succeeded: hpv1
+    #	hgwdev 2017.05.11-17:11:15 hpv1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.hpv1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad hpv1
+    # logFile: var/dbload/hgwdev/logs/2017.05.11-23:06:35.hpv1.dbload.log
+    #  about 90 minutes, appears to load nothing ?
+
+    tail -1 var/dbload/hgwdev/logs/2017.05.11-23:06:35.hpv1.dbload.log
+    # hgwdev 2017.05.12-00:35:31 hpv1.dbload: finish
+
+XXX -checking with genbank master on zero results - Fri May 12 08:19:39 PDT 2017
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add hpv1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding hpv1 to the update alignments refs #19228' etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# ncbiGene (DONE - 2017-05-10 - Hiram)
+
+    mkdir /hive/data/genomes/hpv1/bed/ncbiGene
+    cd /hive/data/genomes/hpv1/bed/ncbiGene
+
+    # switching the names from column 1 to 12 and 12 to 1 with the awk:
+    gff3ToGenePred -useName -attrsOut=hpv1.attrs.tab -geneNameAttr=gene \
+       ../../refseq/GCF_000862685.1_ViralProj15424_genomic.gff.gz \
+           stdout | sed -e 's/NC_004104.1/NC_004104v1/;' \
+             | awk -F'\t' '{print $12,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$1,$13,$14,$15}' | tr '[ ]' '[\t]' > hpv1.ncbiGene.gp
+# NP_671509.1     NC_004104v1     +       5791    7309    5791    7309    1      5791,    7309,   0       L1      cmpl    cmpl    0,
+# becomes:
+# L1      NC_004104v1     +       5791    7309    5791    7309    1       5791,  7309,    0       NP_671509.1     cmpl    cmpl    0,
+
+    genePredCheck -db=hpv1 hpv1.ncbiGene.gp 
+    # checked: 7 failed: 0
+
+    hgLoadGenePred -genePredExt hpv1 ncbiGene hpv1.ncbiGene.gp
+    genePredCheck -db=hpv1 ncbiGene
+    # checked: 7 failed: 0
+XXX - more name wrangling is in order
+XXX - need to get gene descriptions out of the genbank record
+
+#########################################################################
+#  BLATSERVERS ENTRY (TBD - 2017-04-19 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hpv1", "blat1a", "17872", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hpv1", "blat1a", "17873", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## set default position to SRC gene sequence from human protein blat
+##  (TBD - 2017-04-19 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="NW_003613641v1:1277445-1295702"
+	where name="hpv1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2017-04-25 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=hpv1 -tableCoverage all.joiner
+    joinerCheck -database=hpv1 -times all.joiner
+    joinerCheck -database=hpv1 -keys all.joiner
+
+    cd /hive/data/genomes/hpv1
+    time (makeDownloads.pl -workhorse=hgwdev hpv1) > downloads.log 2>&1
+    #  real    22m35.669s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/hpv1/pushQ
+    cd /hive/data/genomes/hpv1/pushQ
+    time (makePushQSql.pl -redmineList hpv1) \
+          > hpv1.pushQ.sql 2> stderr.out
+    #  real    7m21.629s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/hpv1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/hpv1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/hpv1/bbi/quality.bw
+    # WARNING: hpv1 does not have seq
+    # WARNING: hpv1 does not have extFile
+
+
+    # enter the path names to the redmine listings in the redmine issue
+    # refs 19228
+
+#########################################################################

@@ -477,12 +477,7 @@ boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
  * and returns status of HEAD or GET byterange 0-0. */
 {
 verbose(4, "checking http remote info on %s\n", url);
-boolean byteRangeUsed = (strstr(url,";byterange=") != NULL);
-if (byteRangeUsed) // URLs passed into here should not have byterange.
-    {
-    warn("Unexpected byterange use in udcInfoViaHttp [%s]", url);
-    dumpStack("Unexpected byterange use in udcInfoViaHttp [%s]", url);
-    }
+// URLs passed into here should not have byterange clause.
 int redirectCount = 0;
 struct hash *hash;
 int status;

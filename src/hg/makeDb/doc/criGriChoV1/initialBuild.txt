@@ -818,11 +818,11 @@ criGriChoV1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.ps
     #	test it with some sequence
 
 ############################################################################
-## set default position to SRC gene sequence from human protein blat
-##  (DONE - 2017-04-19 - Hiram)
+## set default position upon recommendation from Regeneron
+##  (DONE - 2017-05-12 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="NW_003613641v1:1277445-1295702"
+    hgsql -e 'update dbDb set defaultPos="NW_003613923v1:714339-726966"
 	where name="criGriChoV1";' hgcentraltest
 
 #########################################################################

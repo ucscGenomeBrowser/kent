@@ -356,6 +356,11 @@ criGri1.perChromTables = no
 'update dbDb set defaultPos="KE382584:3834159-3887734" where name="criGri1";' \
 	hgcentraltest
 
+# reset default position to recommendation from Regeneron: (2017-05-12 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="KE382835:847038-859636" where name="criGri1";' \
+	hgcentraltest
+
 #########################################################################
 # create ucscToINSDC name mapping (DONE - 2014-04-11 - Hiram)
     mkdir /hive/data/genomes/criGri1/bed/ucscToINSDC

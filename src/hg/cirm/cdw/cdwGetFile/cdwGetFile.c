@@ -137,10 +137,21 @@ if (addExt != NULL)
     {
     if (! (sameWord(addExt, ".bai") || sameWord(addExt, ".tbi")))
         errAbort("The addExt argument to cdwGetFile can only be .bai or .tbi. No other values are allowed.");
-    filePath = catTwoStrings(filePath, addExt);
+    if ((endsWith(filePath, ".vcf") || endsWith(filePath, ".VCF")) && sameWord(addExt, ".tbi"))
+        // the .tbi files of .vcf files are actually named .vcf.gz.tbi
+        filePath = catTwoStrings(filePath, ".gz.tbi");
+    else
+        filePath = catTwoStrings(filePath, addExt);
+    
     }
 else
+    {
     addExt = ""; // make sure reference to addExt does not fail below
+
+    // for .vcf files, we send the .vcf.gz version
+    if (endsWith(filePath, ".vcf") || endsWith(filePath, ".VCF"))
+        filePath = catTwoStrings(filePath, ".gz");
+    }
 
 mustHaveAccess(conn, ef);
 

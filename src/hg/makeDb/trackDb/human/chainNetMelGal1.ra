@@ -1,0 +1,15 @@
+        track chainMelGal1
+        subTrack vertebrateChainNet off
+        subGroups view=chain species=dTurkey clade=bDino
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain melGal1
+        otherDb melGal1
+
+        track netMelGal1
+        subTrack vertebrateChainNet off
+        subGroups view=net species=dTurkey clade=bDino
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign melGal1 chainMelGal1
+        otherDb melGal1

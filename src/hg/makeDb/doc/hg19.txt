@@ -31927,3 +31927,106 @@ EOF
 
     # commit all
 #########################################################################
+# COSMIC v81 DONE Chris Eisenhart 2017-05-11
+# Make a new COSCMIC track for hg19
+mkdir /hive/data/outside/cosmic/hg19/v81
+cd /hive/data/outside/cosmic/hg19/v81
+
+# Get the new data
+sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
+# Login to SFTP server then run these commands 
+get /files/grch37/cosmic/v81/CosmicMutantExport.tsv.gz
+
+# Get the schema from V80
+cp ~/kent/src/hg/lib/cosmicNew.as . 
+
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
+
+# Use a script to convert to bed format.
+cosmicToBed cosMut.tsv cosMut.bed
+# This many lines were skipped, 126756, for not having genomic coordinates. 
+
+# Sort and convert to big bed using the .as file.  
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg19/chrom.sizes cosMutHg19V80.bb -tab
+
+# Link it up so the outside world can see it. 
+cd /gbdb/hg19/cosmic/
+ln -s /hive/data/outside/cosmic/hg19/v81/cosMutHg19V81.bb .
+
+###########################################################################
+# Chimp Lastz run (DONE - 2017-05-04 - Hiram)
+    screen -S hg19PanTro5      # use a screen to manage this longish running job
+    mkdir /hive/data/genomes/hg19/bed/lastzPanTro5.2017-05-04
+    cd /hive/data/genomes/hg19/bed/lastzPanTro5.2017-05-04
+
+    # always set the BLASTZ program so we know what version was used
+    printf "# human vs chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_L=4500
+BLASTZ_T=2
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#    A    C    G    T
+#    90 -330 -236 -356
+#  -330  100 -318 -236
+#  -236 -318  100 -330
+#  -356 -236 -330   90
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Chimp PanTro5
+SEQ2_DIR=/hive/data/genomes/panTro5/panTro5.2bit
+SEQ2_LEN=/hive/data/genomes/panTro5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPanTro5.2017-05-04
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > do.log 2>&1
+    # real    219m12.394s
+
+    cat fb.hg19.chainPanTro5Link.txt
+    # 2824333913 bases of 2897316137 (97.481%) in intersection
+
+    # filter with doRecipBest.pl
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 panTro5) > rbest.log 2>&1
+    # real    192m19.595s
+
+    # running the swap
+    mkdir /hive/data/genomes/panTro5/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panTro5/bed/blastz.hg19.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzPanTro5.2017-05-04/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    111m15.418s
+
+    cat fb.panTro5.chainHg19Link.txt
+    # 2929713252 bases of 3132620660 (93.523%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        panTro5 hg19) > rbest.log 2>&1
+    # real    279m26.262s
+
+#############################################################################

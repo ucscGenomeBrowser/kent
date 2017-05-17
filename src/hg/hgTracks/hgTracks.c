@@ -4756,6 +4756,26 @@ for(window=windows;window;window=window->next)
 trackList = windows->trackList;
 setGlobalsFromWindow(windows); // first window
 
+struct slName *orderedWiggles = NULL;
+char *sortTrack;
+char *wigOrder = NULL;
+if ((sortTrack = cgiOptionalString( "sortSim")) != NULL)
+    {
+    char buffer[1024];
+    safef(buffer, sizeof buffer,  "simOrder_%s", sortTrack);
+    wigOrder = cartString(cart, buffer);
+    }
+
+if ((sortTrack = cgiOptionalString( "sortExp")) != NULL)
+    {
+    char buffer[1024];
+    safef(buffer, sizeof buffer,  "expOrder_%s", sortTrack);
+    wigOrder = cartString(cart, buffer);
+    }
+
+if (wigOrder != NULL)
+    orderedWiggles = slNameListFromString(wigOrder, ' ');
+
 // Construct flatTracks 
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -4763,7 +4783,7 @@ for (track = trackList; track != NULL; track = track->next)
         {
         struct track *subtrack;
         if (isCompositeInAggregate(track))
-            flatTracksAdd(&flatTracks,track,cart);
+            flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
         else
             {
             for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
@@ -4773,7 +4793,7 @@ for (track = trackList; track != NULL; track = track->next)
 
                 if (!isLimitedVisHiddenForAllWindows(subtrack))
                     {
-                    flatTracksAdd(&flatTracks,subtrack,cart);
+                    flatTracksAdd(&flatTracks,subtrack,cart, orderedWiggles);
                     }
                 }
             }
@@ -4782,7 +4802,7 @@ for (track = trackList; track != NULL; track = track->next)
 	{	
 	if (!isLimitedVisHiddenForAllWindows(track))
 	    {
-	    flatTracksAdd(&flatTracks,track,cart);
+	    flatTracksAdd(&flatTracks,track,cart, orderedWiggles);
 	    }
 	}
     }
@@ -5422,6 +5442,8 @@ if (withCenterLabels)
             warn("Slice height for track %s does not add up.  Expecting %d != %d actual",
                  track->shortLabel, yEnd - yStart - 1, y - yStart);
         }
+
+    calcWiggleOrdering(cart, flatTracks);
     y++;
     }
 
@@ -9337,7 +9359,7 @@ else
 boolean gotExtTools = extToolsEnabled();
 setupHotkeys(gotExtTools);
 if (gotExtTools)
-    printExtMenuData();
+    printExtMenuData(chromName);
 
 }
 
@@ -9829,19 +9851,6 @@ char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 char *configMultiRegionPageCall = cartCgiUsualString(cart, "hgTracksConfigMultiRegionPage", "notSet");
 
 /* Do main display. */
-
-char *sortTrack;
-if ((sortTrack = cgiOptionalString( "sortSim")) != NULL)
-    {
-    printf("sort track by similarity %s\n", sortTrack);
-    //sortTrackByExpression(cart);
-    }
-
-if ((sortTrack = cgiOptionalString( "sortExp")) != NULL)
-    {
-    printf("sort track by expression %s\n", sortTrack);
-    //sortTrackByExpression(cart);
-    }
 
 if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     {

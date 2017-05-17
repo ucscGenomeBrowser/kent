@@ -521,6 +521,9 @@ def buildGraph(conn, gene, geneCount, minSupp, addNeighbors):
     """ get (gene,gene) links from database and annotate with weights and tags
     only get links with minSupp articles for each link  
     """
+    if geneCount <= 1:
+        errAbort("Sorry, you have to show at least two genes.")
+
     links = queryLinks(conn, gene=gene)
 
     if len(links)==0:

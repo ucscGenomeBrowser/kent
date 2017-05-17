@@ -1027,8 +1027,8 @@ NCBI genome/$ncbiGenomeId ($scientificName)</A><BR>
 <A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId" TARGET="_blank">
 NCBI assembly/$ncbiAssemblyId ($assemblyLabel)</A><BR>
 
-<B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A><BR>
-<B>BioSample information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample" TARGET="_blank"> NCBI Biosample: $ncbiBioSample</A>
+<B>BioProject information:</B> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A><BR>
+<B>BioSample information:</B> <A HREF="http://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample" TARGET="_blank"> NCBI Biosample: $ncbiBioSample</A>
 </P>
 <HR>
 <P>
