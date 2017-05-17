@@ -902,19 +902,11 @@ char *userName = wikiLinkUserName();
 
 // for debugging, accept the userName on the cgiSpoof command line
 // instead of a cookie
-if (hIsPrivateHost() && userName == NULL)
+if (!cgiIsOnWeb() && userName == NULL)
     userName = cgiOptionalString("userName");
 
 if (userName != NULL)
-    {
-    /* Look up email vial hgCentral table */
-    struct sqlConnection *cc = hConnectCentral();
-    char query[512];
-    sqlSafef(query, sizeof(query), "select email from gbMembers where userName='%s'", userName);
-    char *email = sqlQuickString(cc, query);
-    hDisconnectCentral(&cc);
-    user = cdwUserFromEmail(conn, email);
-    }
+    user = cdwUserFromUserName(conn, userName);
 }
 
 void doDownloadUrls()
