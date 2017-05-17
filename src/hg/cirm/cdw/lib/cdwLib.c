@@ -265,6 +265,7 @@ else
     }
 
 struct cdwUser *user = cdwUserFromEmail(conn, email);
+printf("User id %d", user->id);
 return user;
 }
 
@@ -2411,7 +2412,7 @@ else
 	    encodedReturn, sidString);
     dyStringPrintf(loginBits, "\" id=\"logoutLink\">Logout %s</a></li>", userName);
 
-    if (loginUseBasicAuth)
+    if (loginUseBasicAuth())
         wikiFixLogoutLinkWithJs();
     }
 
