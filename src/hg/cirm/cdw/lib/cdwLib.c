@@ -253,7 +253,7 @@ struct cdwUser *cdwUserFromUserName(struct sqlConnection *conn, char* userName)
 char *email = NULL;
 // if the username is already an email address, then there is no need to go through the 
 // gbMembers table
-if (strstr("@", userName)!=NULL)
+if (strstr(userName, "@")!=NULL)
     email = userName;
 else 
     {
@@ -2411,7 +2411,7 @@ else
 	    encodedReturn, sidString);
     dyStringPrintf(loginBits, "\" id=\"logoutLink\">Logout %s</a></li>", userName);
 
-    if (loginUseBasicAuth)
+    if (loginUseBasicAuth())
         wikiFixLogoutLinkWithJs();
     }
 

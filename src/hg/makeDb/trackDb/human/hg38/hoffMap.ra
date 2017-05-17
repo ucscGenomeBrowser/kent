@@ -11,6 +11,7 @@ html Umap
 
 	track Umap.24
 	parent Umap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k24.Unique.Mappability.bb
 	shortLabel Umap S24
@@ -24,6 +25,7 @@ html Umap
 
 	track Umap.50
 	parent Umap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Unique.Mappability.bb
 	shortLabel Umap S50
@@ -37,6 +39,7 @@ html Umap
 
 	track Umap.36
 	parent Umap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k36.Unique.Mappability.bb
 	shortLabel Umap S36
@@ -50,6 +53,7 @@ html Umap
 
 	track Umap.100
 	parent Umap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k100.Unique.Mappability.bb
 	shortLabel Umap S100
@@ -63,6 +67,7 @@ html Umap
 
 	track Umap.36.quantitative
 	parent Umap
+	release alpha
 	type bigWig
 	viewLimits 0:1
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k36.Umap.MultiTrackMappability.bw
@@ -76,6 +81,7 @@ html Umap
 
 	track Umap.24.quantitative
 	parent Umap
+	release alpha
 	type bigWig
 	viewLimits 0:1
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k24.Umap.MultiTrackMappability.bw
@@ -89,6 +95,7 @@ html Umap
 
 	track Umap.50.quantitative
 	parent Umap
+	release alpha
 	type bigWig
 	viewLimits 0:1
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Umap.MultiTrackMappability.bw
@@ -102,6 +109,7 @@ html Umap
 
 	track Umap.100.quantitative
 	parent Umap
+	release alpha
 	type bigWig
 	viewLimits 0:1
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k100.Umap.MultiTrackMappability.bw
@@ -125,6 +133,7 @@ html Bismap
 
 	track Bismap.50.-
 	parent Bismap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k50.G2A-Converted.bb
 	shortLabel Bismap S50 -
@@ -138,6 +147,7 @@ html Bismap
 
 	track Bismap.50.+
 	parent Bismap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k50.C2T-Converted.bb
 	shortLabel Bismap S50 +
@@ -151,6 +161,7 @@ html Bismap
 
 	track Bismap.100.-
 	parent Bismap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k100.G2A-Converted.bb
 	shortLabel Bismap S100 -
@@ -164,6 +175,7 @@ html Bismap
 
 	track Bismap.24.+
 	parent Bismap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k24.C2T-Converted.bb
 	shortLabel Bismap S24 +
@@ -177,6 +189,7 @@ html Bismap
 
 	track Bismap.36.+
 	parent Bismap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k36.C2T-Converted.bb
 	shortLabel Bismap S36 +
@@ -190,6 +203,7 @@ html Bismap
 
 	track Bismap.36.-
 	parent Bismap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k36.G2A-Converted.bb
 	shortLabel Bismap S36 -
@@ -203,6 +217,7 @@ html Bismap
 
 	track Bismap.100.+
 	parent Bismap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k100.C2T-Converted.bb
 	shortLabel Bismap S100 +
@@ -216,6 +231,7 @@ html Bismap
 
 	track Bismap.24.-
 	parent Bismap
+	release alpha
 	type bigBed 6
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k24.G2A-Converted.bb
 	shortLabel Bismap S24 -
@@ -229,6 +245,7 @@ html Bismap
 
 	track Bismap.50.quantitative
 	parent Bismap
+	release alpha
 	type bigWig
 	viewLimits 0:1
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Bismap.MultiTrackMappability.bw
@@ -242,6 +259,7 @@ html Bismap
 
 	track Bismap.36.quantitative
 	parent Bismap
+	release alpha
 	type bigWig
 	viewLimits 0:1
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k36.Bismap.MultiTrackMappability.bw
@@ -255,6 +273,7 @@ html Bismap
 
 	track Bismap.100.quantitative
 	parent Bismap
+	release alpha
 	type bigWig
 	viewLimits 0:1
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k100.Bismap.MultiTrackMappability.bw
@@ -268,6 +287,7 @@ html Bismap
 
 	track Bismap.24.quantitative
 	parent Bismap
+	release alpha
 	type bigWig
 	viewLimits 0:1
 	bigDataUrl /gbdb/hg38/hoffmanMappability/k24.Bismap.MultiTrackMappability.bw
