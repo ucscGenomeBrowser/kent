@@ -1083,12 +1083,18 @@ static struct customFactory pgSnpFactory =
 
 /* BarChart and bigBarChart tracks */
 
-static boolean rowIsBarChart (char **row, char *db)
-/* return TRUE if row looks like a barChart row */
+static boolean rowIsBarChart (char **row, int wordCount, char *db)
+/* return TRUE if row looks like a barChart row. BED 6+5 */
 {
 char *type = "barChart";
-if (!rowIsBed(row, 3, db))
-    errAbort("Error line 1 of custom track, type is %s but first 3 fields are not BED", type);
+if (!rowIsBed(row, 6, db))
+    errAbort("Error line 1 of custom track, type is %s but first 6 fields are not BED", type);
+char *buf[BAR_CHART_MAX_CATEGORIES];
+int expScoresCount = chopCommas(cloneString(row[BARCHART_EXPSCORES_COLUMN_IX]), buf);
+int expCount = sqlUnsigned(row[BARCHART_EXPCOUNT_COLUMN_IX]);
+if (expCount != expScoresCount)
+    errAbort("Error line 1 of custom track, type is %s, but found %d expScores (expecting %d)", 
+                type, expScoresCount, expCount);
 return TRUE;
 }
 
@@ -1123,7 +1129,7 @@ if (wordCount == BARCHARTBED_NUM_COLS)
     {
     track->fieldCount = wordCount;
     char *ctDb = ctGenomeOrCurrent(track);
-    isBarChart = rowIsBarChart(row, ctDb);
+    isBarChart = rowIsBarChart(row, wordCount, ctDb);
     }
 freeMem(dupe);
 customPpReuse(cpp, line);
