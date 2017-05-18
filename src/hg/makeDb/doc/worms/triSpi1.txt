@@ -431,3 +431,8 @@ triSpi1.perChromTables = no
     #   sizes will set properly
 
 #############################################################################
+# improve common name (DONE - 2015-07-24 - Hiram)
+
+    hgsql -e 'update dbDb set organism="Trichina worm" where name="triSpi1";' hgcentraltest
+
+#############################################################################

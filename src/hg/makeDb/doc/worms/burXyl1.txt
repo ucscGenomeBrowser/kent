@@ -25,6 +25,17 @@ ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJEA64437
 
     hgFakeAgp burXyl1.fa.gz burXyl1.agp
 
+    # photo from WikiMedia Commons from USDA
+    wget --timestamping \
+https://upload.wikimedia.org/wikipedia/commons/0/0f/Bursaphelenchus_xylophilus.jpg
+    # http://www.forestryimages.org/browse/detail.cfm?imgnum=4387005
+    # L.D. Dwinell USDA Forest Service
+    mv Bursaphelenchus_xylophilus.jpg usda.Bursaphelenchus_xylophilus.jpg
+    convert -quality 80 -geometry 400x300 usda.Bursaphelenchus_xylophilus.jpg \
+       Bursaphelenchus_xylophilus.jpg
+    identify Bursaphelenchus_xylophilus.jpg
+Bursaphelenchus_xylophilus.jpg JPEG 400x271 400x271
+
 #############################################################################
 #  Initial database build (DONE - 2015-07-09 - Hiram)
 
@@ -169,7 +180,7 @@ searchPriority 8
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps burXyl1 rmsk
     # 469243 bases of 74576239 (0.629%) in intersection

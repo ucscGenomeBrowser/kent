@@ -174,7 +174,7 @@ searchPriority 8
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps strRat2 rmsk
     # 1885105 bases of 43150242 (4.369%) in intersection
@@ -441,5 +441,10 @@ strRat2.perChromTables = no
     #	real    3m12.837s
 
     # verify it works on genome-test
+
+#############################################################################
+# improve common name (DONE - 2015-07-24 - Hiram)
+
+    hgsql -e 'update dbDb set organism="Threadworm" where name="strRat2";' hgcentraltest
 
 #############################################################################
