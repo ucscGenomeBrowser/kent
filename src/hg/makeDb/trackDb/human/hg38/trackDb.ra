@@ -1,5 +1,9 @@
 include ../../refSeqComposite.ra
 
+include barCharts.ra
+
+include hoffMap.ra
+
 track cosmicRegions
 release alpha
 shortLabel COSMIC Regions
