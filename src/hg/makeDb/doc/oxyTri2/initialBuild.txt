@@ -237,7 +237,7 @@ taxId 1172189
 
 
 ##############################################################################
-# cpgIslands on UNMASKED sequence (TBD - 2015-12-10 - Chris)
+# cpgIslands on UNMASKED sequence (DONE - 2015-12-10 - Hiram)
     mkdir /hive/data/genomes/oxyTri2/bed/cpgIslandsUnmasked
     cd /hive/data/genomes/oxyTri2/bed/cpgIslandsUnmasked
 
@@ -247,10 +247,10 @@ taxId 1172189
              -workhorse=hgwdev -smallClusterHub=ku oxyTri2) > do.log 2>&1
 
     cat fb.oxyTri2.cpgIslandExtUnmasked.txt
-    #36538307 bases of 1311306859 (2.786%) in intersection
+    # 482406 bases of 620980971 (0.078%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (TBD - 2015-12-10 - Chris)
+# cytoBandIdeo - (DONE - 2015-12-10 - Hiram)
     mkdir /hive/data/genomes/oxyTri2/bed/cytoBand
     cd /hive/data/genomes/oxyTri2/bed/cytoBand
     makeCytoBandIdeo.csh oxyTri2
@@ -284,30 +284,166 @@ taxId 1172189
     # 2053849526 bases of 2053849526 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2015-03-20 - Hiram)
-    hgsql -N -e "select frag from gold;" oxyTri2 | sort | head -1
-JYOU01000001.1
+# fixup search rule for assembly track/gold table (DONE - 2015-12-15 - Hiram)
+    hgsql -N -e "select frag from gold;" oxyTri2 | sort -u \
+        > oxyTri2.frag.gold.txt
 
-    hgsql -N -e "select frag from gold;" oxyTri2 | sort | tail -2
-JYOU01147511.1
-JYOU01147512.1
+    export maxLen=`awk '{print length($0)}' oxyTri2.frag.gold.txt | sort -rn | head -1`
+    echo "scan to column: $maxLen"
+
+export C=1
+while [ $C -le $maxLen ];
+do
+echo -n " $C: "
+awk '{ print substr($0,'$C',1) }' oxyTri2.frag.gold.txt | sort -u | xargs echo | sed -e 's/ //g'
+C=`echo $C | awk '{print $1+1}'`
+done
+ 1: ACJL
+ 2: ANRo
+ 3: 3EYn
+ 4: 8Ct
+ 5: 03i
+ 6: 18g
+ 7: 0123456789
+ 8: .0123456789
+ 9: .0123456789
+ 10: .0123456789
+ 11: .0123456789_
+ 12: .0123456789
+ 13: .0123456789v
+ 14: .0123456789
+ 15: 012345
+
+    # implying a regexp of:
+    [ACJL][ANRo][EYn3][Ct8][i03]([g18][0-9][v0-9_.]*)?
 
     # verify this rule will find them all or eliminate them all:
     hgsql -N -e "select frag from gold;" oxyTri2 | wc -l
+    # 70660
+
+    hgsql -N -e "select frag from gold;" oxyTri2 \
+       | egrep -e '[ACJL][ANRo][EYn3][Ct8][i03][g18][0-9]([v0-9_.]*)?' | wc -l
     # 147512
 
     hgsql -N -e "select frag from gold;" oxyTri2 \
-       | egrep -e 'JYOU01[0-9]+(\.1)?' | wc -l
-    # 147512
-
-    hgsql -N -e "select frag from gold;" oxyTri2 \
-       | egrep -v -e 'JYOU01[0-9]+(\.1)?' | wc -l
+      | egrep -v -e '[ACJL][ANRo][EYn3][Ct8][i03][g18][0-9]([v0-9_.]*)?' | wc -l
     # 0
 
     # hence, add to trackDb/tarsier/oxyTri2/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex JYOU01[0-9]+(\.1)?
+termRegex [ACJL][ANRo][EYn3][Ct8][i03][g18][0-9]([v0-9_.]*)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################
+# sequences track, for the other names of the 'contigs'
+#    (DONE - 2015-12-15 - Hiram)
+    mkdir /hive/data/genomes/oxyTri2/bed/sequences
+    cd /hive/data/genomes/oxyTri2/bed/sequences
+
+    # construct the required 'bed' files from the names in the original
+    #   genbank fasta, and the contigs.lift file that specifies where the
+    #   'contigs' were placed to construct the artificial chroms
+
+    zcat ../../genbank/GCA_001297925.1_ASM129792v1/GCA_001297925.1_ASM129792v1_genomic.fna.gz \
+    | grep "^>" \
+      | sed -e 's/^>//; s/.1 Oxytricha trifallax strain JRB510 /v1\t/; s/, whole genome shotgun sequence//;' \
+       | sort > chrMACjrb510.contig.names.txt
+   grep LAEC01 ../../jkStuff/oxyTri2.contigs.lift | sort -k2 > chrMACjrb510.lift
+    join -2 2 chrMACjrb510.contig.names.txt chrMACjrb510.lift \
+       | awk '{printf "%d\t%s\t%d\t%s\t%d\n", $3,$2,$4,$5,$6}' \
+         | sort -k1,1n > chrMACjrb510.contigs.lift
+    join -2 2 chrMACjrb510.contig.names.txt chrMACjrb510.lift \
+      | awk '{printf "%s\t%d\t%d\t%s\n", $5,$3,$3+$4,$2}' \
+        | sort -k2,2n > chrMACjrb510.contigs.bed
+
+
+    zgrep "^>" ../../genbank/GCA_000295675.1_oxytricha_asm_v1.1/GCA_000295675.1_oxytricha_asm_v1.1_genomic.fna.gz \
+   | sed -e 's/^>//; s/ Oxytricha trifallax strain SB310 /\t/; s/ macronuclear, whole genome shotgun sequence//;' \
+     | sort -k2,2 > chrMACsb310.contig.names.txt
+
+    grep chrMACsb310 ../../jkStuff/oxyTri2.contigs.lift | sort -k2 \
+       > chrMACsb310.lift
+
+    join -1 2 -2 2 chrMACsb310.contig.names.txt chrMACsb310.lift \
+       | awk '{printf "%d\t%s\t%d\t%s\t%d\n", $3,$2,$4,$5,$6}' \
+         | sort -k1,1n > chrMACsb310.contigs.lift
+
+    join -1 2 -2 2 chrMACsb310.contig.names.txt chrMACsb310.lift \
+       | awk '{printf "%s\t%d\t%d\t%s\n", $5,$3,$3+$4,$2}' \
+         | sort -k2,2n > chrMACsb310.contigs.bed
+
+    zgrep "^>" ../../genbank/GCA_000711775.1_Oxytricha_MIC_v2.0/GCA_000711775.1_Oxytricha_MIC_v2.0_genomic.fna.gz \
+       | sed -e 's/^>//; s/.1 Oxytricha trifallax strain JRB310 /\t/; s/, whole genome shotgun sequence//;' \
+         | sort -k1,1 > chrMICjrb310.contig.names.txt
+
+    grep chrMICjrb310 ../../jkStuff/oxyTri2.contigs.lift | sort -k2 \
+       > chrMICjrb310.lift
+
+    join -2 2 chrMICjrb310.contig.names.txt chrMICjrb310.lift \
+       | awk '{printf "%d\t%s\t%d\t%s\t%d\n", $3,$2,$4,$5,$6}' \
+         | sort -k1,1n > chrMICjrb310.contigs.lift
+
+    join -2 2 chrMICjrb310.contig.names.txt chrMICjrb310.lift \
+       | awk '{printf "%s\t%d\t%d\t%s\n", $5,$3,$3+$4,$2}' \
+         | sort -k2,2n > chrMICjrb310.contigs.bed
+
+    grep -w chrM ../../chrom.sizes \
+        | awk '{printf "%s\t0\t%d\tJN383842.1\n", $1, $2}' > chrM.bed
+
+
+    grep chrmO ../../chrom.sizes \
+        | awk '{printf "%s\t0\t%d\tJN383843.1\n", $1, $2}' > chrmO.bed
+
+    hgLoadBed -type=bed4 oxyTri2 sequences *.bed
+
+    hgsql -N -e "select name from sequences;" oxyTri2 | sort -u \
+        > oxyTri2.name.sequences.txt
+
+    export maxLen=`awk '{print length($0)}' oxyTri2.name.sequences.txt | sort -rn | head -1`
+    echo "scan to column: $maxLen"
+
+export C=1
+while [ $C -le $maxLen ];
+do
+echo -n " $C: "
+awk '{ print substr($0,'$C',1) }' oxyTri2.name.sequences.txt | sort -u | xargs echo | sed -e 's/ //g'
+C=`echo $C | awk '{print $1+1}'`
+done
+ 1: ACJcd
+ 2: MNeot
+ 3: 3Cgn
+ 4: 12345678Rt
+ 5: 0123456789i
+ 6: 0123456789g
+ 7: 0123456789
+ 8: .0123456789
+ 9: .0123456789
+ 10: .0123456789_
+ 11: .0123456789C_
+ 12: .0123456789C_o
+...
+
+    # implying a regexp of:
+    [ACJcd][MNeot][Cgn3][Rt0-9][i0-9][g0-9][0-9]([a-z0-9_.]*)?
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select name from sequences;" oxyTri2 | wc -l
+    # 70453
+
+    hgsql -N -e "select name from sequences;" oxyTri2 \
+       | egrep -e '[ACJcd][MNeot][Cgn3][Rt0-9][i0-9][g0-9][0-9]([a-z0-9_.]*)?' | wc -l
+    # 70453
+
+    hgsql -N -e "select frag from gold;" oxyTri2 \
+       | egrep -v -e '[ACJcd][MNeot][Cgn3][Rt0-9][i0-9][g0-9][0-9]([a-z0-9_.]*)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/tarsier/oxyTri2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ACJL][ANRo][EYn3][Ct8][i03][g18][0-9]([v0-9_.]*)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -564,8 +700,8 @@ oxyTri2.downloadDir = oxyTri2
 ############################################################################
 ## reset default position to ABO gene (DONE - 2014-01-13 - Hiram)
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr9:133252000-133280861"
-	where name="hg38";' hgcentraltest
+    hgsql -e 'update dbDb set defaultPos="chrMACsb310:13679183-13682923"
+	where name="oxyTri2";' hgcentraltest
 
 #########################################################################
 
