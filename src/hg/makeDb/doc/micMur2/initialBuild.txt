@@ -441,6 +441,20 @@ searchPriority 8
     # micMur1
 
 #########################################################################
+# LIFTOVER TO micMur3 (DONE - 2017-03-03 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/micMur2/bed/blat.micMur3.2017-03-03
+    cd /hive/data/genomes/micMur2/bed/blat.micMur3.2017-03-03
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/micMur2/jkStuff/micMur2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         micMur2 micMur3) > do.log 2>&1 &
+    # real    3321m59.899s
+
+    # verify the convert link on the test browser is now active from micMur2 to
+    # micMur3
+
+#########################################################################
 # all.joiner update, downloads and in pushQ - (DONE 2014-12-29 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
@@ -475,3 +489,25 @@ searchPriority 8
     #   sizes will set properly
 
 #########################################################################
+# ncbiRefSeq gene track (DONE - 2016-05-05 - Hiram)
+    mkdir /hive/data/genomes/micMur2/bed/ncbiRefSeq
+    cd /hive/data/genomes/micMur2/bed/ncbiRefSeq
+
+    # working on this script, running step by step:
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -stop=load -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Microcebus_murinus \
+         GCF_000165445.1_Mmur_2.0 micMur2) > load.log 2>&1
+    # real    12m36.320s
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -continue=process -stop=load -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Microcebus_murinus \
+         GCF_000165445.1_Mmur_2.0 micMur2) > load.log 2>&1
+    # real    5m29.483s
+
+    cat fb.ncbiRefSeq.micMur2.txt
+    # 90551422 bases of 2377775715 (3.808%) in intersection
+
+##############################################################################
