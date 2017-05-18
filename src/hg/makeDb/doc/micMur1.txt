@@ -335,3 +335,17 @@ micMur1.perChromTables = no
     # micMur2
 
 ##############################################################################
+# LIFTOVER TO micMur3 (DONE - 2017-03-03 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/micMur1/bed/blat.micMur3.2017-03-03
+    cd /hive/data/genomes/micMur1/bed/blat.micMur3.2017-03-03
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/micMur1/jkStuff/micMur1.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         micMur1 micMur3) > do.log 2>&1 &
+    # real    3006m22.394s
+
+    # verify the convert link on the test browser is now active from micMur1 to
+    # micMur3
+
+##############################################################################
