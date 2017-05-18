@@ -77,7 +77,7 @@ if ($argc != 1) {
 my $initialPrio = 200.3;
 my $db = shift;
 my $dbCount = 0;
-my %priorities;
+my %priorities;  # key is lc(dbName) value is a priority
 my $priority = $initialPrio;
 my $stripName = $db;
 $stripName =~ s/[0-9]+$//;
