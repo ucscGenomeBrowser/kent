@@ -135,6 +135,7 @@ gasAcu1 -> Stickleback ;
 gavGan0 -> Gharial ;
 gavGan1 -> Gharial ;
 gavSte1 -> Red_throated_loon ;
+gekJap1 -> Schlegel_s_Japanese_gecko ;
 geoFor1 -> Medium_ground_finch ;
 gorGor3 -> Gorilla ;
 haeCon2 -> Barber_pole_worm;
@@ -246,6 +247,7 @@ priPac3 -> P__pacificus;
 proCap1 -> Rock_hyrax ;
 proCap2 -> Rock_hyrax ;
 proCoq1 -> Coquerel_s_sifaka ;
+proMuc1 -> Brown_spotted_pit_viper ;
 pseHum1 -> Tibetan_ground_jay ;
 pteAle1 -> Black_flying_fox ;
 pteGut1 -> Yellow_throated_sandgrouse ;
@@ -288,6 +290,7 @@ tarSyr2 -> Tarsier ;
 tauEry1 -> Red_crested_turaco ;
 tetNig1 -> Tetraodon ;
 tetNig2 -> Tetraodon ;
+thaSir1 -> Garter_snake ;
 tinGut1 -> White_throated_tinamou ;
 tinGut2 -> White_throated_tinamou ;
 triMan1 -> Manatee ;
@@ -302,9 +305,11 @@ ursMar1 -> Polar_bear ;
 vicPac1 -> Alpaca ;
 vicPac2 -> Alpaca ;
 vipBer1 -> Adder ;
+xenLae2 -> African_clawed_frog ;
 xenTro3 -> Frog_X_tropicalis ;
 xenTro4 -> Frog_X_tropicalis ;
 xenTro7 -> Frog_X_tropicalis ;
+xenTro9 -> Frog_X_tropicalis ;
 xipMac1 -> Southern_platyfish ;
 zonAlb1 -> White_throated_sparrow ;" \
-	${F} | sed -e "s/long_finger/long-finger/; s/rel_s/rel's/; s/Ma_s/Ma's/; s/White_faced/White-faced/; s/Pig_tailed/Pig-tailed/; s/X_trop/X._trop/; s/Burton_s/Burton's/; s/Brand_s/Brand's/; s/David_s/David's/; s/Parnell_s/Parnell's/; s/queen_s/queen's/; s/will_s/will's/; s/Anna_s/Anna's/; s/_nosed/-nosed/; s/00*)/)/g; s/00*,/,/g"
+	${F} | sed -e "s/long_finger/long-finger/; s/rel_s/rel's/; s/Ma_s/Ma's/; s/White_faced/White-faced/; s/Pig_tailed/Pig-tailed/; s/X_trop/X._trop/; s/Burton_s/Burton's/; s/Brand_s/Brand's/; s/David_s/David's/; s/Parnell_s/Parnell's/; s/queen_s/queen's/; s/will_s/will's/; s/Anna_s/Anna's/; s/_nosed/-nosed/; s/00*)/)/g; s/00*,/,/g; s/Schlegel_s/Schlegel's/;"
