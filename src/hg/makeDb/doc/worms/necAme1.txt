@@ -9,7 +9,7 @@
     cd /hive/data/genomes/necAme1/genbank
 
     rsync -L -a -P \
-rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/invertebrate/Ancylostoma_ceylanicum/all_assembly_versions/GCA_000688135.1_Acey_2013.11.30.genDNA/ ./
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/invertebrate/Necator_americanus/all_assembly_versions/GCA_000507365.1_N_americanus_v1/ ./
 
     mkdir -p /hive/data/genomes/necAme1/ws245
     cd /hive/data/genomes/necAme1/ws245

@@ -298,6 +298,9 @@ searchPriority 8
     cd /hive/data/genomes/priExs1
     # numerator is priExs1 gapless bases "real" as reported by:
     head -1 faSize.priExs1.2bit.txt
+# 177536987 bases (10621485 N's 166915502 real 128017169 upper 38898333 lower)
+#    in 4369 sequences in 1 files
+
 # 172510819 bases (19302620 N's 153208199 real 116540993 upper 36667206 lower)
 # in 18084 sequences in 1 files
     # numerator is 'real' base count
@@ -305,26 +308,27 @@ searchPriority 8
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 153208199 / 2861349177 \) \* 1024
-    # ( 153208199 / 2861349177 ) * 1024 = 54.829098
+    calc \( 166915502 / 2861349177 \) \* 1024
+    # ( 166915502 / 2861349177 ) * 1024 = 59.734574
 
-    # ==> use -repMatch=50 according to size scaled down from 1024 for human.
-    #   and rounded down to nearest 50
+
+    # ==> use -repMatch=100 according to size scaled down from 1024 for human.
+    #   not rounded down to 50 since that produces too many
     cd /hive/data/genomes/priExs1
     time blat priExs1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/priExs1.11.ooc \
-        -repMatch=50
-    # Wrote 23520 overused 11-mers to jkStuff/priExs1.11.ooc
-    #  real    0m2.869s
+        -repMatch=100
+    # Wrote 5972 overused 11-mers to jkStuff/priExs1.11.ooc
+    # real    0m2.812s
 
     # there are a few non-bridged gaps
     #   check non-bridged gaps to see what the typical size is:
     hgsql -N -e 'select * from gap where bridge="no" order by size;' priExs1 \
        | ave -tableOut -col=7 stdin
 # min Q1 median Q3 max mean N sum stddev
-# 61704 80172.5 105503 114920 116040 93010.2 8 744082 22910.2
+# 50982 62629.5 70410 83825 97150 72037 33 2.37722e+06 13087.
 
-    # note the minimum non-bridged gap size is 61,704
+    # note the minimum non-bridged gap size is 50,982
 
     gapToLift -verbose=2 -minGap=50000 priExs1 jkStuff/priExs1.nonBridged.lft \
          -bedFile=jkStuff/priExs1.nonBridged.bed
@@ -332,64 +336,75 @@ searchPriority 8
     # survey sizes:
     n50.pl chrom.sizes
 #       reading: chrom.sizes
-#       contig count: 18084, total size: 172510819, one half size: 86255409
+#       contig count: 4369, total size: 177536987, one half size: 88768493
 # cumulative    N50 count       contig  contig size
-# 85581688        38      Ppa_Contig38    1290309
-# 86255409 one half size
-# 86826222        39      Ppa_Contig47    1244534
+# 88630386        341     scaffold300     142436
+# 88768493 one half size
+# 88772631        342     scaffold305     142245
 
 #############################################################################
-# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2015-08-20 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
-    # /cluster/data/genbank/data/organism.lst shows:
+    # /cluster/data/genbank/data/organism.lst shows nothing
+    # for Pristionchus exspectatus:
     # #organism               mrnaCnt estCnt  refSeqCnt
-    #  Pristionchus pacificus  97      37470   0
+    #  Pristionchus exspectatus  <no entry>
 
-    # edit etc/genbank.conf to add priExs1 just before priPac1
+    # edit etc/genbank.conf to add priExs1 just before priPac3
 
-# priExs1 (P. pacificus)
+# priExs1 (P. exspectatus/Pristionchus exspectatus)
 priExs1.serverGenome = /hive/data/genomes/priExs1/priExs1.2bit
 priExs1.clusterGenome = /hive/data/genomes/priExs1/priExs1.2bit
 priExs1.ooc = /hive/data/genomes/priExs1/jkStuff/priExs1.11.ooc
 priExs1.lift = /hive/data/genomes/priExs1/jkStuff/priExs1.nonBridged.lft
-priExs1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-priExs1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
-priExs1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
-priExs1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
-priExs1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
-priExs1.refseq.mrna.native.load = yes
-priExs1.refseq.mrna.xeno.load  = yes
-priExs1.refseq.mrna.xeno.loadDesc = yes
-# DO NOT NEED genbank.mrna.xeno except for human, mouse
-priExs1.genbank.mrna.xeno.load = no
-priExs1.genbank.est.native.load = yes
-priExs1.genbank.est.native.loadDesc = no
-priExs1.downloadDir = priExs1
+# the nematodes have small introns
+priExs1.maxIntron = 100000
 priExs1.perChromTables = no
+priExs1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+priExs1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+priExs1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+priExs1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+priExs1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+# refseq.mrna native and xeno are default yes
+# genbank.mrna and genbank.est native are default yes, the xeno is default no
+priExs1.downloadDir = priExs1
 
-    git commit -m "Added priExs1 - P. pacificus refs #15209" etc/genbank.conf
+    git pull
+    git commit -m "Added priExs1 - P. exspectatus refs #15209" etc/genbank.conf
     git push
     # update /cluster/data/genbank/etc/:
     make etc-update
+
+    # adding priExsNames to src/lib/gbGenome.c
+    git pull
+    git commit -m "Added priExsNames - P. exspectatus refs #15209" \
+       src/lib/gbGenome.c
+    git push
+    make install-server
 
     screen      #  control this business with a screen since it takes a while
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial priExs1
-    # logFile: var/build/logs/2015.07.02-11:39:01.priExs1.initalign.log
-    # real    91m20.362s
+    # logFile: var/build/logs/2016.08.08-15:06:11.priExs1.initalign.log
+    # real    1428m15.320s
+# hgwdev 2016.08.09-14:54:12 priExs1.initalign: Succeeded: priExs1
+# hgwdev 2016.08.09-14:54:26 priExs1.initalign: finish
 
-    #   To re-do, rm the dir first:
+    #   To re-do, rm these two sets first:
     #     /cluster/data/genbank/work/initial.priExs1
+    #     /cluster/data/genbank/data/aligned/*/priExs1
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad priExs1
-    # logFile: var/dbload/hgwdev/logs/2015.07.06-09:51:31.priExs1.dbload.log
-    # real    18m34.687s
+XXX - running Wed Aug 31 09:36:23 PDT 2016
+    # logFile: var/dbload/hgwdev/logs/2016.08.31-09:36:16.priExs1.dbload.log
+    # real    12m13.931s
+XXX - failed loading Fri Aug 21 15:01:26 PDT 2015
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank

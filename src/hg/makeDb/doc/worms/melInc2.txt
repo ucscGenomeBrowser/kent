@@ -25,6 +25,13 @@ ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJEA28837
 
     hgFakeAgp melInc2.fa.gz melInc2.agp
 
+    # correct photo 2015-08-19
+    mkdir /hive/data/genomes/melInc2/photo
+    cd /hive/data/genomes/melInc2/photo
+    wget --timestamping \
+http://www.ars.usda.gov/is/graphics/photos/jul12/d2549-1.jpg
+    convert -quality 80 -geometry 300x400 d2549-1.jpg Meloidogyne_incognita.jpg
+
 #############################################################################
 #  Initial database build (DONE - 2015-06-30 - Hiram)
 
@@ -172,7 +179,7 @@ searchPriority 8
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps melInc2 rmsk
     # 2736734 bases of 86079534 (3.179%) in intersection
@@ -295,7 +302,7 @@ searchPriority 8
 
     # there are no non-bridged gaps, do not need to do this
     #   check non-bridged gaps to see what the typical size is:
-#     hgsql -N -e 'select * from gap where bridge="no" order by size;' melInc2 
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' melInc2
 #       | ave -tableOut -col=7 stdin
 # # min Q1 median Q3 max mean N sum stddev
 # 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
@@ -442,5 +449,10 @@ melInc2.genbank.est.native.loadDesc = no
 		> do.log 2>&1
     #	real    2m23.422s
     # verify it works on genome-test
+
+#############################################################################
+# improve common name (DONE - 2015-07-24 - Hiram)
+
+    hgsql -e 'update dbDb set organism="Root knot" where name="melInc2";' hgcentraltest
 
 #############################################################################
