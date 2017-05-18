@@ -378,6 +378,26 @@ html html/%s.augustus\n\n" "${asmId}" "${asmId}"
 $scriptDir/asmHubAugustusGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.augustus.html
 fi
 
+###################################################################
+# gapOverlap
+if [ -s ${buildDir}/trackData/gapOverlap/${asmId}.gapOverlap.bb ]; then
+rm -f ${buildDir}/bbi/${asmId}.gapOverlap.bb
+ln -s ${buildDir}/trackData/gapOverlap/${asmId}.gapOverlap.bb ${buildDir}/bbi/${asmId}.gapOverlap.bb
+
+printf "track gapOverlap
+shortLabel Gap Overlaps
+longLabel Exactly identical sequence on each side of a gap
+group map
+visibility hide
+type bigBed 12 .
+bigDataUrl bbi/%s.gapOverlap.bb
+html html/%s.gapOverlap\n\n" "${asmId}" "${asmId}"
+
+$scriptDir/asmHubGapOverlap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.gapOverlap.html
+
+fi
+###################################################################
+
 printf "# Plink: ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb\n" 1>&2
 ###################################################################
 # Ensembl genes

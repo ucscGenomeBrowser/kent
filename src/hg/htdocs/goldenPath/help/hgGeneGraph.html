@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 
-<!--#set var="TITLE" value="Gene and Pathways Interactions Graph User&#39;s Guide" -->
+<!--#set var="TITLE" value="Gene and Pathways Interaction Graph User&#39;s Guide" -->
 <!--#set var="ROOT" value="../.." -->
 
 <!-- Relative paths to support mirror sites with non-standard GB docs install -->
@@ -37,15 +37,16 @@ the effect or direction of the interaction.
 </p>
 
 <p>
-The text mining data was generated in collaboration with the <a href='https://hanover.azurewebsites.net'
+The text mining data was generated in collaboration with the
+<a href='https://hanover.azurewebsites.net'
 target="_blank">Microsoft Research Project Hanover Team</a> using
 <a href="https://literome.azurewebsites.net" target="_blank">Literome machine-reading</a>.
 Literome is a natural-language processing (NLP) system that analyzes sentences and tries to
 extract names of proteins and the type of interaction. A simple example is a
 sentence such as, &quot;PTEN negatively regulates AKT3&quot;, which gets transformed to
 &quot;PTEN-AKT3&quot; and &quot;regulation: negative&quot;. The text mining system was run on all
-20 million <a href='https://www.ncbi.nlm.nih.gov/pubmed/' target="_blank">PubMed</a> abstracts at the end
-of 2014 and can also be queried through the website
+20 million <a href='https://www.ncbi.nlm.nih.gov/pubmed/' target="_blank">PubMed</a>
+abstracts at the end of 2014 and can also be queried through the website
 <a href='http://literome.azurewebsites.net/' target="_blank">Literome</a>.
 </p>
 
@@ -64,9 +65,9 @@ the drop-down menu to display subsets by their support:
 </p>
 
 <ul>
-<li>All interactions, regardless of support type</li>
-<li>Curated interactions only</li>
-<li>Interactions present in a database, manually curated or not</li>
+  <li>All interactions, regardless of support type</li>
+  <li>Curated interactions only</li>
+  <li>Interactions present in a database, manually curated or not</li>
 </ul>
 
 <p>
@@ -76,15 +77,16 @@ different levels of support from text mining and databases. [image here?]
 </p>
 
 <ul>
-<li>Solid grey lines - only text-mining support for this interaction, with the thickness of the
-line indicating the number of articles supporting it.</li>
-<li>Dashed blue lines - at least one curated database supports this interaction.
-<ul>
-<li> dark blue - the information is derived from a paper describing less than 10 interactions</li>
-<li> light blue - the information is derived from a high-throughput paper, describing more than 10
-interactions, e.g. a complex or a mass-spec study</li>
-</ul>
-<li>Solid blue lines - both databases and text mining support this interaction</li>
+  <li>Solid grey lines - only text-mining support for this interaction, with the thickness of the
+      line indicating the number of articles supporting it.</li>
+  <li>Dashed blue lines - at least one curated database supports this interaction.
+  <ul>
+    <li>dark blue - the information is derived from a paper describing less than
+        10 interactions</li>
+    <li>light blue - the information is derived from a high-throughput paper, describing more
+         than 10 interactions, e.g. a complex or a mass-spec study</li>
+  </ul>
+  <li>Solid blue lines - both databases and text mining support this interaction</li>
 </ul>
 
 <p>
@@ -154,36 +156,39 @@ Human protein interactions from the following databases were imported:
 </p>
 
 <ul>
-<li>Protein interactions
-<ul>
-<li><a href='http://irefindex.org/' target="_blank">iRefIndex 13</a> which includes
-<a href='https://www.ncbi.nlm.nih.gov/pmc/articles/PMC165503/' target="_blank">BIND</a>,
-<a href='https://thebiogrid.org/' target="_blank">BioGRID</a>,
-<a href='http://mips.helmholtz-muenchen.de/corum/' target="_blank">CORUM</a>,
-<a href='http://dip.doe-mbi.ucla.edu/' target="_blank">DIP</a>,
-<a href='http://www.hprd.org/' target="_blank">HPRD</a>,
-<a href='http://www.innatedb.com/' target="_blank">InnateDB</a>,
-<a href='http://www.ebi.ac.uk/intact/' target="_blank">IntAct</a>,
-<a href='http://matrixdb.univ-lyon1.fr/' target="_blank">MatrixDB</a>,
-<a href='http://mint.bio.uniroma2.it/' target="_blank">MINT</a>,
-<a href='https://www.ncbi.nlm.nih.gov/pubmed/16381906' target="_blank">MPact</a>,
-<a href='http://jcvi.org/mpidb/about.php' target="_blank">MPIDB</a> and
-<a href='http://mips.helmholtz-muenchen.de/proj/ppi/' target="_blank">MPPI</a></li>
-<li><a href='http://argdb.fudan.edu.cn/' target="_blank">Androgen Responsive Gene Database</a></li>
-<li><a href='http://string-db.org/' target="_blank">String 9.1</a></li>
-<li><a href='http://mips.helmholtz-muenchen.de/proj/ppi/negatome/' target="_blank">Negatome 2.0</a></li>
-<li><a href='http://mips.helmholtz-muenchen.de/corum/' target="_blank">Corum Protein Complexes</a></li>
-<li><a href='http://www.geneontology.org' target="_blank">Gene Ontology Protein Complexes</a></li>
-</ul></li>
-
-<li>Pathways
-<ul>
-<li><a href='http://www.genome.jp/kegg/pathway.html' target="_blank">KEGG</a></li>
-<li><a href='https://pid.nci.nih.gov/' target="_blank">NCI Pathway Interaction Database</a></li>
-<li><a href='http://www.reactome.org/' target="_blank">Reactome 2014</a></li>
-<li><a href='http://www.wikipathways.org' target="_blank">WikiPathways</a></li>
-<li><a href='http://fastforward.sys-bio.net/' target="_blank">FastForward</a></li>
-</ul></li>
+  <li>Protein interactions</li>
+  <ul>
+    <li><a href='http://irefindex.org/' target="_blank">iRefIndex 13</a> which includes
+        <a href='https://www.ncbi.nlm.nih.gov/pmc/articles/PMC165503/' target="_blank">BIND</a>,
+        <a href='https://thebiogrid.org/' target="_blank">BioGRID</a>,
+        <a href='http://mips.helmholtz-muenchen.de/corum/' target="_blank">CORUM</a>,
+        <a href='http://dip.doe-mbi.ucla.edu/' target="_blank">DIP</a>,
+        <a href='http://www.hprd.org/' target="_blank">HPRD</a>,
+        <a href='http://www.innatedb.com/' target="_blank">InnateDB</a>,
+        <a href='http://www.ebi.ac.uk/intact/' target="_blank">IntAct</a>,
+        <a href='http://matrixdb.univ-lyon1.fr/' target="_blank">MatrixDB</a>,
+        <a href='http://mint.bio.uniroma2.it/' target="_blank">MINT</a>,
+        <a href='https://www.ncbi.nlm.nih.gov/pubmed/16381906' target="_blank">MPact</a>,
+        <a href='http://jcvi.org/mpidb/about.php' target="_blank">MPIDB</a> and
+        <a href='http://mips.helmholtz-muenchen.de/proj/ppi/' target="_blank">MPPI</a></li>
+    <li><a href='http://argdb.fudan.edu.cn/'
+         target="_blank">Androgen Responsive Gene Database</a></li>
+    <li><a href='http://string-db.org/' target="_blank">String 9.1</a></li>
+    <li><a href='http://mips.helmholtz-muenchen.de/proj/ppi/negatome/'
+         target="_blank">Negatome 2.0</a></li>
+    <li><a href='http://mips.helmholtz-muenchen.de/corum/'
+         target="_blank">Corum Protein Complexes</a></li>
+    <li><a href='http://www.geneontology.org'
+         target="_blank">Gene Ontology Protein Complexes</a></li>
+  </ul>
+  <li>Pathways</li>
+  <ul>
+    <li><a href='http://www.genome.jp/kegg/pathway.html' target="_blank">KEGG</a></li>
+    <li><a href='https://pid.nci.nih.gov/' target="_blank">NCI Pathway Interaction Database</a></li>
+    <li><a href='http://www.reactome.org/' target="_blank">Reactome 2014</a></li>
+    <li><a href='http://www.wikipathways.org' target="_blank">WikiPathways</a></li>
+    <li><a href='http://fastforward.sys-bio.net/' target="_blank">FastForward</a></li>
+  </ul>
 </ul>
 
 <p>
@@ -194,7 +199,8 @@ The quantitative contribution of each database in terms of number of gene-pairs 
 <p>
 PubMed abstracts were downloaded from the National Library of Medicine (NLM)
 website. The abstracts were then
-<a href='https://en.wikipedia.org/wiki/Tokenization_(lexical_analysis)' target="_blank">tokenized</a> and
+<a href='https://en.wikipedia.org/wiki/Tokenization_(lexical_analysis)'
+target="_blank">tokenized</a> and
 parsed syntactically using the <a href='https://www.microsoft.com/en-us/research/project/msr-splat/'
 target="_blank">SPLAT toolkit</a>. Protein
 and Gene names were identified and normalized after which potential

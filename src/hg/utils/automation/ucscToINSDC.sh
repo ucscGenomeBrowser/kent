@@ -36,7 +36,7 @@ fi
 if [ -s ${priAsmPath}/unlocalized_scaffolds/unlocalized.chr2scaf ]; then
 grep -v "^#" \
   ${priAsmPath}/unlocalized_scaffolds/unlocalized.chr2scaf \
-    | sed -e 's/^\([A-Za-z0-9]*\)\t\([A-Za-z0-9]*\).\([0-9]*$\)/chr\1_\2v\3_random\t\2.\3/;'
+    | sed -e 's/^\([A-Za-z0-9]*\)\t\([A-Za-z0-9_]*\).\([0-9]*$\)/chr\1_\2v\3_random\t\2.\3/;'
 
 fi
 
