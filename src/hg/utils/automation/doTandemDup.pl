@@ -248,7 +248,7 @@ export chrName=\$1
 export result=\$2
 mkdir -p tmp
 
-$Bin/kmerCollapsePairedEnds.pl ../pairedEnds/tmp/\$chrName.bed.gz \\
+$Bin/kmerCollapsePairedEnds.pl $kmersMinus1 ../pairedEnds/tmp/\$chrName.bed.gz \\
    | gzip -c > tmp/\$chrName.bed.gz
 ' > runOne
 chmod +x runOne
@@ -285,14 +285,16 @@ sub doLoad {
 for F in collapsePairedEnds/tmp/*.bed.gz
 do
   zcat \$F | awk '\$5 > $kmersMinus1'
-done | sort -k1,1 -k2,2n > $db.tandemDups.bed
+done | sort -k1,1 -k2,2n | gzip -c > $db.tandemDups.bed.gz
 twoBitInfo $twoBit stdout | sort -k2nr > $db.chrom.sizes
-bedToBigBed -as=$ENV{'HOME'}/kent/src/hg/lib/fullBed.as -type=bed4+8 $db.tandemDups.bed $db.chrom.sizes $db.tandemDups.bb
-bedToExons $db.tandemDups.bed stdout | bedSingleCover.pl stdin > exons.bed
-awk '{printf "%s\\t%d\\t%s\\n", \$1,\$2,\$1}' $db.chrom.sizes \\
-   | featureBits -countGaps -chromSize=stdin test exons.bed \\
-      > fb.$db.tandemDups.txt 2>&1
-rm -f exons.bed
+export maxScore=`zcat $db.tandemDups.bed.gz | cut -f5 | sort -k1,1nr | head -1`
+zcat $db.tandemDups.bed.gz | awk -vmax=\$maxScore '{score=\$5; newScore=int(1000*score/max); printf "%s\\t%s\\t%s\\t%s\\t", \$1, \$2, \$3, \$4; printf "%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\n", newScore, \$6, \$7, \$8, \$9, \$10, \$11, \$12, score}' > $db.reScore.bed
+bedToBigBed -type=bed12+1 $db.reScore.bed $db.chrom.sizes $db.tandemDups.bb
+bedToExons $db.tandemDups.bed.gz stdout | bedSingleCover.pl stdin > $db.exons.bed
+export baseCount=`awk '{sum+=\$3-\$2}END{printf "%d", sum}' $db.exons.bed`
+export asmSize=`awk '{sum+=\$2}END{printf "%d", sum}' $db.chrom.sizes`
+export perCent=`echo \$baseCount \$asmSize | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSize" "\$perCent" > fb.$db.tandemDups.txt
 _EOF_
   );
 
@@ -301,8 +303,8 @@ printf STDERR "dbExists: '$dbExists'\n";
   if ( $opt_debug || $dbExists ) {
       $bossScript->add(<<_EOF_
 # do not load empty files
-if [ -s $db.tandemDups.bed ]; then
-  hgLoadBed -as=$ENV{'HOME'}/kent/src/hg/lib/fullBed.as -type=bed4+8 $db tandemDups $db.tandemDups.bed
+if [ -s $db.reScore.bed ]; then
+  hgLoadBed -as=\$HOME/kent/src/hg/lib/fullBed.as -type=bed4+8 $db tandemDups $db.tandemDups.bed.gz
   checkTableCoords $db tandemDups
 fi
 _EOF_
@@ -325,8 +327,8 @@ sub doCleanup {
     my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $workhorse,
 				      $runDir, $whatItDoes);
     $bossScript->add(<<_EOF_
+rm -f $db.reScore.bed $db.exons.bed
 rm -fr kmers/tmp pairedEnds/tmp collapsePairedEnds/tmp $db.chrom.sizes bed.tab
-gzip $db.tandemDups.bed
 _EOF_
     );
     $bossScript->execute();

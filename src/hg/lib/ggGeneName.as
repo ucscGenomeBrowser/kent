@@ -1,5 +1,5 @@
 table ggGeneName
-" gene names for the gene interactions track "
+" Human readable gene names for the gene interactions track "
     (
     string gene;          "gene symbol"
     string text;          "short description of the gene"
