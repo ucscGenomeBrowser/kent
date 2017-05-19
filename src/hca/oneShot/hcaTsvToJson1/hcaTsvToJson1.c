@@ -1,4 +1,5 @@
 /* hcaTsvToJson1 - Convert HCA flavored tab-separated-values to HCA flavored JSON. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -13,6 +14,9 @@ errAbort(
   "hcaTsvToJson1 - Convert HCA flavored tab-separated-values to HCA flavored JSON\n"
   "usage:\n"
   "   hcaTsvToJson1 in.tsv outDir\n"
+  "This will create a bundle per line of in.tsv in outDir.  A bundle is itself\n"
+  "a directory that is filled with 4 or 5 .json files: assay.json, file.json, project.json\n"
+  "sample.json and possibly cell.json\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
