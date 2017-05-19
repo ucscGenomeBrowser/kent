@@ -298,7 +298,6 @@ printf "%d bases of %d (%s%%) in intersection\\n" "\$baseCount" "\$asmSize" "\$p
 _EOF_
   );
 
-printf STDERR "dbExists: '$dbExists'\n";
   # do not load if db does not exist:
   if ( $opt_debug || $dbExists ) {
       $bossScript->add(<<_EOF_
