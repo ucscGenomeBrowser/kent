@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="barChart and bigBarChart Track Format" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>barChart and bigBarChart Track Format</h1> 
+<p>
+<p>
+The barChart track format displays category specific values over a genomic region, similar to 
+the GTEx track in the <a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&gtexGene=pack">Genome Browser</a>. 
+This format is useful for displaying microarray, RNA-seq, and any other dataset where a distinct
+set of variables are associated via genomic regions.
+
+The barChart format is available as a standalone bed6+5 custom track format for smaller datasets, as 
+well as a binary indexed format (bigBarChart) for use in both track hubs and custom tracks.
+barChart format files are converted to bigBarChart files using the program 
+<code>bedToBigBed</code>, run with the <code>-as</code> option to pull in a special 
+<a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a> (<em>.as</em>) file 
+that defines the fields of the bigBarChart.</p>
+<p>
+The bigBarChart files are in an indexed binary format. The main advantage of this format is that only 
+those portions of the file needed to display a particular region are transferred to the Genome 
+Browser server. Because of this, bigBarChart files have considerably faster display performance than 
+regular barChart files when working with large data sets. The bigBarChart file remains on your local 
+web-accessible server (http, https or ftp), not on the UCSC server, and only the portion needed for 
+the currently displayed chromosomal position is locally cached as a &quot;sparse file&quot;.</p>
+
+<a name=barChart></a>
+<h2>barChart format definition</h2>
+<p>
+The following autoSql definition is used to define barChart bar graphs. The standalone bed6+5
+custom tracks mentioned previously must have the same number and format as the below columns. 
+Additionaly, this definition, contained in the file 
+<a href="examples/bigBarChart.as"><em>bigBarChart.as</em></a>, 
+is pulled in when the <code>bedToBigBed</code> utility is run with the 
+<code>-as=bigBarChart.as</code> option.</p> 
+<pre><code>table bigBarChart
+"bigBarChart bar graph display"  
+    ( 
+    string chrom;               "Reference sequence chromosome or scaffold"
+    uint chromStart;            "Start position in chromosome"
+    uint chromEnd;              "End position in chromosome"
+    string name;                "Name or ID of item"
+    uint score;                 "Score (0-1000)"
+    char[1] strand;             "'+','-' or '.'. Indicates whether the query aligns to the + or - strand on the reference"
+    string name2;               "Alternate name of item"
+    uint expCount;              "Number of bar graphs in display, must be <= 100"
+    float[expCount] expScores;  "Comma separated list of category values."
+    bigint _dataOffset;         "Offset of sample data in data matrix file, for boxplot on details page"
+    int _dataLen;               "Length of sample data row in data matrix file"
+    )
+</code></pre>
+
+<a name="columnDefinition"></a>
+<h6>Column Explanation</h6>
+
+<p>
+The first 6 fields of the barChart format are the same as the first 6 fields of the standard
+<a href="../../FAQ/FAQformat#format1">BED</a> format. The name2 field provides for an alternate
+item name, useful if you would like to associate multiple transcripts to a single gene locus, different
+variables to the same experiment type, etc. 
+The expCount and expScores fields are similar to the gtexGene table definition in that they define
+the number of categories and a value for each category. The _dataOffset and _dataLen fields provide
+indexes into an optionally provided matrix file, which when provided for a bigBarChart format track,
+allows for drawing a boxplot of sample data on the details page for each individual bar graph in the
+bigBarChart track. The _dataOffset and _dataLength fields are not currently used for plain text
+barChart format tracks, even if a url to the matrix file is provided on the track line. 
+</p>
+
+<p>
+These autoSql files are meant to be customized to your use case. For example, if the name
+field of your track refers to a transcript name, while the name2 field is for a gene, you are welcome
+to change the field definitions like so when making your bigBed:
+<pre><code>
+"bigBarChart bar graph display"
+(
+string chrom;               "Reference sequence chromosome or scaffold"
+uint chromStart;            "Start position in chromosome"
+uint chromEnd;              "End position in chromosome"
+string name;                "Transcript name"
+uint score;                 "Score (0-1000)"
+char[1] strand;             "'+','-' or '.'. Indicates whether the query aligns to the + or - strand on the reference"
+string name2;               "Gene name" 
+uint expCount;              "Number of categories"
+float[expCount] expScores;  "Comma separated list of category values."
+bigint _dataOffset;         "Offset of sample data in data matrix file, for boxplot on details page"
+int _dataLen;               "Length of sample data row in data matrix file"
+)
+</code></pre>
+This is helpful when viewing items on the Genome Browser details
+pages, where you can get information about field names view the "view table schema" link,
+or via the Table Browser.
+</p>
+
+<h2>Creating barChart and bigBarChart custom tracks</h2>
+<p>
+The steps for creating barChart tracks differs from the process for creating 
+bigBarChart tracks. The steps also differ based on whether you have an input 
+matrix file (generated perhaps from an RNA-Seq differential analysis pipeline) or not. 
+If you have an expression matrix-like file, skip to <a href="example3">Example #3</a>, otherwise 
+follow example 1 below. 
+</p>
+
+<a name="example1"></a>
+<h6>Example #1</h6>
+<p>
+In this example, you will create a barChart custom track using example bed6+5 data.
+<ol>
+   <li>Paste the following track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
+   page</a> for the human assembly hg38.
+   <pre><code>
+track type=barChart name=&quot;barChart Example One&quot; description=&quot;A barChart file&quot; barChartBars=&quot;bar1 bar2 bar3 bar4 bar5&quot; visibility=pack
+chr9    133257408    133275201    ABO    311    -    ENSG00000175164.9    5    10,20,30,40,50 1 1
+   </code></pre></li>  
+   <li>Click the &quot;submit&quot; button.</li> 
+</ol>
+</p>
+<p>
+After the file  loads in the Genome Browser, you should see an automatically colored bar 
+graph with 5 bars.
+</p>
+
+<a name="example2"></a>
+<h6>Example #2</h6>
+<p>
+In this example, you will create a bigBarChart track out of an existing bigBarChart format file,
+located on the UCSC Genome Browser http server. This file contains data for the hg38 assembly.
+</p>
+
+<p>
+To create a custom track using this file:
+<ol>
+   <li>Construct a track line referencing the file:
+   <pre><code>
+track type=bigBarChart name=&quot;bigBarChart Example One&quot; description=&quot;A bigBarChart file&quot; barChartBars=&quot;bar1 bar2 bar3 bar4 bar5&quot; visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBarChart.bb
+   </code></pre></li>
+   <li>Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
+   page</a> for the human assembly hg38. </li>
+   <li>Click the &quot;submit&quot; button.</li>
+</ol>
+</p>
+<p>
+After the file  loads in the Genome Browser, you should see an automatically colored bar
+graph with 5 bars.
+</p>
+
+<a name="example3"></a>
+<h6>Example #3</h6>
+<p>
+In this example, you will use the helper scripts expMatrixToBarChartBed and bedJoinTabOffset
+on example matrix and category files in order to generate a bed6+5 barChart format file which 
+can be loaded as a custom track into the Genome Browser.
+</p>
+
+<p>
+The matrix file is a tab-separated (must be tabs, not spaces) file of the following form, perhaps 
+resulting from an RNA-Seq analysis pipeline. Please note that the first line must contain a
+&quot;#&quot;, and describe each column like the example below.
+   <pre>
+#transcript	sample1	sample2	sample3	sample4	sample5	...
+transcriptName	value1	value2	value3	value4	value5	...
+   </pre>
+</p>
+
+<p>
+The categories file then provides more meta information about this matrix file. It is a two column,
+tab-separated file that maps the samples in the matrix file to a specific category:
+<pre>
+sample1	category1
+sample2	category1
+...	...
+sampleA	category2
+sampleB	category2
+...	...
+sampleX	category3
+sampleY	category3
+...	...
+</pre>
+
+<p>
+Each column in the first line of the matrix file must be found in the categories file. 
+</p>
+
+<p>
+We have provided an example <a href="">category file</a> and <a href="">matrix file</a> to follow
+along with the rest of this example.
+
+<p>
+To create a custom track in this form, follow the below steps:
+<ol>
+   <li>Create a bed6+1 file to use as a map for all the items in your matrix. This file will be one
+   of three input files to the helper script expMatrixToBarChartBed. For an example file to
+   follow along with the rest of this example, you can download the 
+   <a href="">example bed6+1 file</a>.</li>
+   <li>Download the helper programs <em>expMatrixToBarChartBed</em> and <em>bedJoinTabOffset</em> 
+   from the <a href="http://hgdownload.soe.ucsc.edu/admin/exe">utilities directory</a>
+   appropriate for your operating system. </li>
+   <li>Make sure the programs downloaded above are in your system's PATH variable. For example,
+   if you downloaded the programs to your $HOME/Downloads directory, set your PATH variable
+   accordingly:
+   <pre><code>
+export PATH=$PATH:$HOME/Downloads
+   </code></pre></li>
+   <li>Now run <em>expMatrixToBarChartBed</em> (which in turn runs <em>bedJoinTabOffset</em>) like so:
+   <pre><code>
+expMatrixToBarChartBed categoriesFile matrixFile bedInputFile outputBed6+5
+   </code></pre>
+   The argument outputBed6+5 will be a bed6+5 file, with the expCount, expScores, _dataOffset, and 
+   _dataLength fields computed for you. <em>expMatrixToBarChartBed</em> will also
+   output the order of the scores in the expScores field, which you can then 
+   copy and paste into the barChartBars field of the custom track line so
+   the bars displayed in the browser match the right values:
+   <pre><code>
+The columns and order of the groups are; 
+#chr	start	end	name	score	strand	name2	expCount	expScores;shRNA	_offset	_lineLength
+   </code></pre>
+   If you have already pre-computed expCount and 
+   expScores, and just need offsets into your matrix file for a more descriptive details
+   page, run only bedJoinTabOffset like so:
+   <pre><code>
+bedJoinTabOffset matrixFile exampleBed6+3 outBed
+   </code></pre></li>
+   <li>Now that we have a bed6+5 format file that corresponds  to the barChart format, we can 
+   construct a track line and prepend it to our bed6+5 file so the Genome Browser will
+   recognize it::
+   <pre><code>
+track type=barChart name=&quot;barChart Example&quot; description=&quot;A barChart file&quot; barChartBars=&quot;&quot; visibility=pack 
+   </code></pre></li>
+   <li>Use the upload button on  the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
+   page</a> for the human assembly hg38 to upload the file just created.</li>
+   <li>Click the &quot;submit&quot; button.</li>
+</ol>
+
+<p>
+<em>expMatrixToBarChartBed</em> automatically computes the median values for all the samples in
+the matrix file, which is useful when your experiment contains data from 8000 samples (like
+GTEx data). <em>expMatrixToBarChartBed</em> can instead compute the mean value of all samples in a
+category of the matrix file, in addition to allowing for a specific ordering of the expScores
+field. For more information about <em>expMatrixToBarChartBed</em> or <em>bedJoinTabOffset</em>,
+run the program with no arguments to get a usage message.
+</p>
+
+
+
+<a name="example4"></a>
+<h6>Example #4</h6>
+<p>
+In this example, you will use the bed6+5 file created in Example 3 to create a bigBarChart file.
+</p>
+<ol>
+   <li>If not already completed, follow steps 1-4 from <a href="exmaple3">Example 3</a> above. </li>
+   <li>Download the <em>fetchChromSizes</em> and <em>bedToBigBed</em> programs from the
+   <a href="http://hgdownload.soe.ucsc.edu/admin/exe">utilities directory</a> appropriate to your
+   operating system.
+   <li>Use <em>fetchChromSizes</em> to create a <em>chrom.sizes</em> file for the UCSC database you
+   are working with (hg38 for these examples). Alternatively, you can download the 
+   <em>chrom.sizes</em> file for any assembly hosted at UCSC from
+   our <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full
+   data set&quot; for any assembly). For example, the <em>hg38.chrom.sizes</em> file for the hg38
+   database is located at
+   <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
+   target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</li>
+   <li>Save the autoSql file <a href="">bigBarChar.as</a> to your computer.</li>
+   <li>Run bedToBigBed to create the bigBarChart file:
+   <pre><code>
+bedToBigBed -as=bigBarChart.as -type=bed6+5 inputBed hg38.chrom.sizes output.bigBed
+   </code></pre></li>
+   <li>Move the newly constructed bigBarChart file to a web accessible http, https, or ftp location.</li>
+   <li>Construct a custom track line with a bigDataUrl parameter pointing to the newly created
+   bigBarChart file. If the matrix and category files used to make the precursor barChart file
+   are also moved to an http, https, or ftp location, we can point to them on the custom
+   track line as well:
+   <pre><code>
+track type=bigBarChart name="bigBarChart Example One" description="A bigBarChart file" barChartBars="bar1 bar2 bar3 bar4 bar5" visibility=pack 
+bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBarChart.bb 
+barChartMatrixUrl=http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartMatrix.txt
+barChartSampleUrl="http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartSamples.txt
+   </code></pre>
+</ol>
+
+<h2>Sharing your data with others</h2>
+<p>
+If you would like to share your barChart/bigBarChart data track with a colleague, learn how to create a URL by 
+looking at Example 11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
+
+<h2>Extracting data from the bigBarChart format</h2>
+<p>
+Because bigBarChart files are an extension of bigBed files, which are indexed binary files, it can 
+be difficult to extract data from them. UCSC has developed the following programs to assist
+in working with bigBed formats, available from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<ul>
+  <li>
+  <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
+  <li>
+  <code>bigBedSummary</code> &mdash; extracts summary information from a bigBed file.</li>
+  <li>
+  <code>bigBedInfo</code> &mdash; prints out information about a bigBed file.</li>
+</ul>
+<p>
+As with all UCSC Genome Browser programs, simply type the program name (with no parameters) at the 
+command line to view the usage statement.</p>
+
+<h2>Troubleshooting</h2>
+<p>
+If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
+file for data coordinates that extend past the the end of the chromosome. If these are present, run 
+the <code>bedClip</code> program 
+(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic
+row(s) in your input file before running the <code>bedToBigBed</code> program.</p> 
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

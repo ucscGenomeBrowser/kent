@@ -4253,6 +4253,10 @@ identifier kgGeneSymbol
     $hg.kgXref.geneSymbol dupeOk
     $hg.omimGeneMap.geneSymbol comma minCheck=0.38
     $hg.omimMorbidMap.geneSymbols comma minCheck=0.25
+    hgFixed.ggLink.gene1 minCheck=0.8
+    hgFixed.ggLink.gene2 minCheck=0.8
+    hgFixed.ggGeneClass.gene minCheck=0.8
+    hgFixed.ggGeneName.gene minCheck=0.8
 
 identifier mouseGeneName fuzzy
 "Mouse gene name from Jackson Labs/RefSeq"
@@ -6079,6 +6083,28 @@ identifier chromAlias
 "Chromosome name correspondence to Ensembl, RefSeq, GenBank assemblies"
     $gbd.chromAlias.chrom dupeOk
     $gbd.chromInfo.chrom minCheck=0.99
+
+# hgGeneGraph protein interaction viewer data tables
+
+identifier ggDoc
+"identifier of a publication, currently the PMID, an integer "
+    hgFixed.ggDoc.docId minCheck=0.99
+    hgFixed.ggDocEvent.docId
+    hgFixed.ggEventDb.docIds separator=| minCheck=0.99
+
+identifier ggEvent
+"an event (originally an NLP term) here is a protein interaction with a direction, from a curated database or from text mining."
+    hgFixed.ggDocEvent.eventId
+    hgFixed.ggEventDb.eventId
+    hgFixed.ggEventText.eventId
+    hgFixed.ggLinkEvent.eventId
+
+identifier ggGeneSymbol
+"An HGNC gene symbol, but a few old synonyms slipped into these tables"
+    hgFixed.ggGeneName.gene
+    hgFixed.ggLink.gene1 minCheck=0.99
+    hgFixed.ggLink.gene2 minCheck=0.99
+    hgFixed.ggGeneClass.gene minCheck=0.97
 
 # Dependencies not already captured in identifiers
 

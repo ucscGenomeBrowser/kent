@@ -1,5 +1,5 @@
 table ggLinkEventDb
-" hgcGeneGraph details of database curated interactions; a cause gene influences a theme gene "
+" An interaction between two proteins imported from a curated interaction database. Can have document IDs (PMIDs). Cause and theme (target) are relevant usually only when curated by a pathway database, otherwise the interaction has no direction."
     (
     string eventId;       "ID of interaction description"
     string causeType;       "type of cause of interaction, values: complex, gene or family"

@@ -355,14 +355,14 @@ def reqMinSupp(links, minArtSupp, maxResCount, targetGene):
     genes = set()
     targetConns = {}
     for genePair, linkData in links.iteritems():
-        docCount, dbCount, tagSet, minResCount = linkData[:4]
+        docCount, dbCount, tagSet, pairMinResCount = linkData[:4]
         if targetGene in genePair:
             targetConns[genePair] = linkData
         # remove text-mining links with only one article
         if "text" in tagSet and docCount < minArtSupp:
             continue
         # remove noisy PPI links 
-        if len(tagSet)==1 and "ppi" in tagSet and minResCount > maxResCount:
+        if len(tagSet)==1 and "ppi" in tagSet and pairMinResCount > maxResCount: 
             continue
         genes.update(genePair)
         newLinks[genePair] = linkData
@@ -465,7 +465,7 @@ def limitLinks(graphLinks, lowLinks, maxRank, targetGene):
 def splitHighLowLinks(links, gene, minSupp, lowLinks, geneCount):
     """ split into two sets of links: high = best geneCount genes and best 2*geneCount links
     between them, low = all the others"""
-    links = reqMinSupp(links, minSupp, LTCUTOFF, gene)
+    links = reqMinSupp(links, minSupp, 999999999, gene)
 
     highLinks, lowLinks = limitGenes(links, geneCount, gene, lowLinks)
     #print "lowLinks", lowLinks, "<p>"
@@ -1969,7 +1969,7 @@ def main():
     if format in ["pdf", "svg", "sif", "json"]:
         conn = sqlConnect(GGDB)
         gene, alg, addNeighbors, sortByCount, geneCount = parseGraphArgs()
-        graphLinks, lowLinks = buildGraph(conn, gene, geneCount, 2, addNeighbors)
+        graphLinks, lowLinks = buildGraph(conn, gene, geneCount, MINSUPP, addNeighbors)
         weightedLinks, minAbsCount = flattenLink(graphLinks)
         printGraph(conn, weightedLinks, alg, addNeighbors, gene, format)
         sys.exit(0)
