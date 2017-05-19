@@ -12,6 +12,7 @@
 
 char *barChartBedCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,name2,expCount,expScores,_dataOffset,_dataLen";
 
+#ifdef NOT_SAFE
 struct barChartBed *barChartBedLoadByQuery(struct sqlConnection *conn, char *query)
 /* Load all barChartBed from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
@@ -33,6 +34,7 @@ slReverse(&list);
 sqlFreeResult(&sr);
 return list;
 }
+#endif
 
 void barChartBedSaveToDb(struct sqlConnection *conn, struct barChartBed *el, char *tableName, int updateSize)
 /* Save barChartBed as a row to the table specified by tableName. 
@@ -51,6 +53,7 @@ freeDyString(&update);
 freez(&expScoresArray);
 }
 
+#ifdef NOT_SAFE
 struct barChartBed *barChartBedLoad(char **row)
 /* Load a barChartBed from row fetched with select * from barChartBed
  * from database.  Dispose of this with barChartBedFree(). */
@@ -111,6 +114,8 @@ lineFileClose(&lf);
 slReverse(&list);
 return list;
 }
+
+#endif
 
 struct barChartBed *barChartBedCommaIn(char **pS, struct barChartBed *ret)
 /* Create a barChartBed out of a comma separated string. 
@@ -286,11 +291,13 @@ ret->score = sqlUnsigned(row[4]);
 safecpy(ret->strand, sizeof(ret->strand), row[5]);
 // name2 is in row[6]
 ret->expCount = sqlUnsigned(row[7]);
-{
 int sizeOne;
 sqlFloatDynamicArray(row[8], &ret->expScores, &sizeOne);
-assert(sizeOne == ret->expCount);
-}
+if (sizeOne != ret->expCount)
+    {
+    warn("expScores mismatch");
+    return NULL;
+    }
 return ret;
 }
 
@@ -310,11 +317,13 @@ ret->score = sqlUnsigned(row[4]);
 safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->name2 = cloneString(row[6]);
 ret->expCount = sqlUnsigned(row[7]);
-{
 int sizeOne;
 sqlFloatDynamicArray(row[8], &ret->expScores, &sizeOne);
-assert(sizeOne == ret->expCount);
-}
+if (sizeOne != ret->expCount)
+    {
+    warn("expScores mismatch");
+    return NULL;
+    }
 if (hasOffsets)
     {
     ret->_dataOffset = sqlLongLong(row[9]);
@@ -338,7 +347,8 @@ float barChartMaxValue(struct barChartBed *bed, int *categIdRet)
 {
 int i;
 float maxScore = 0.0;
-assert(categIdRet);
+if (!categIdRet)
+    return maxScore;
 for (i=0; i<bed->expCount; i++)
     {
     float score = bed->expScores[i];
