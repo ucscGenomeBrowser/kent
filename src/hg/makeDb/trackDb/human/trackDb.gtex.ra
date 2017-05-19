@@ -6,9 +6,10 @@ shortLabel GTEx
 longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 html gtexGeneExpr
 group expression
-priority 10.13
+priority 1
 maxItems 200
 spectrum on
+visibility pack
 
 searchTable gtexGene
 query select chrom, chromStart, chromEnd, geneId from %s where geneId like '%s%%'
