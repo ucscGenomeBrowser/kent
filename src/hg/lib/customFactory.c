@@ -1147,6 +1147,8 @@ loadAndValidateBed(row, 6, BARCHARTBED_NUM_COLS - 6, lf, bed, NULL, TRUE);
 
 // Load as barChart and validate custom fields
 struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, TRUE);
+if (!barChart)
+    lineFileAbort(lf, "Invalid barChart row");
 int count;
 sqlFloatDynamicArray(row[BARCHART_EXPSCORES_COLUMN_IX], &barChart->expScores, &count);
 if (count != barChart->expCount)
