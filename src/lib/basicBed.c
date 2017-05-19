@@ -1641,7 +1641,21 @@ if (as)
 	    }
 	else if (asCol->isList)
 	    {
-	    if (asTypesIsInt(type))
+            if (asTypesIsFloating(type))
+                {
+                // assure count = #items in list; lightweight validation (better than none)
+                int ix = asColumnFindIx(as->columnList, asCol->linkedSizeName);
+                int count = sqlUnsigned(row[ix]);
+		if (count == 0)
+                    lineFileAbort(lf, 
+                        "expecting positive number in count field for %s list, found %d", 
+                                        asCol->name, asCol->fixedSize);
+                int itemCount = countSeparatedItems(row[i], ',');
+                if (count != itemCount)
+                    lineFileAbort(lf, "expecting %d elements in %s list, found %d", 
+                                        count, asCol->name, itemCount);
+                }
+	    else if (asTypesIsInt(type))
 		{
 		count = lineFileAllIntsArray(lf, row, i, NULL, countSeparatedItems(row[i], ','),
 		    !asTypesIsUnsigned(type), asTypesIntSize(type), asTypesIntSizeDescription(type), FALSE);

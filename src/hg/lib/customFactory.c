@@ -44,6 +44,7 @@
 #include "trackHub.h"
 #include "bedTabix.h"
 #include "barChartBed.h"
+#include "barChartUi.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -1082,13 +1083,32 @@ static struct customFactory pgSnpFactory =
 
 /* BarChart and bigBarChart tracks */
 
-static boolean rowIsBarChart (char **row, char *db)
-/* return TRUE if row looks like a barChart row */
+static boolean rowIsBarChart (char **row, int wordCount, char *db)
+/* return TRUE if row looks like a barChart row. BED 6+5 */
 {
 char *type = "barChart";
-if (!rowIsBed(row, 3, db))
-    errAbort("Error line 1 of custom track, type is %s but first 3 fields are not BED", type);
+if (!rowIsBed(row, 6, db))
+    errAbort("Error line 1 of custom track, type is %s but first 6 fields are not BED", type);
+char *buf[BAR_CHART_MAX_CATEGORIES];
+int expScoresCount = chopCommas(cloneString(row[BARCHART_EXPSCORES_COLUMN_IX]), buf);
+int expCount = sqlUnsigned(row[BARCHART_EXPCOUNT_COLUMN_IX]);
+if (expCount != expScoresCount)
+    errAbort("Error line 1 of custom track, type is %s, but found %d expScores (expecting %d)", 
+                type, expScoresCount, expCount);
 return TRUE;
+}
+
+static void requireBarChartBars(struct customTrack *track)
+/* If barChart bars spec is empty, errAbort with helpful message */
+{
+struct hash *settings = track->tdb->settingsHash;
+char *barChartBars = hashFindVal(settings, BAR_CHART_CATEGORY_LABELS);
+if (isNotEmpty(barChartBars))
+    return;
+errAbort("Missing '%s' setting from track of type=%s (%s).  "
+         "Please check for case and spelling and that there is no new-line "
+         "between the 'track' and the '%s'.",
+         BAR_CHART_CATEGORY_LABELS, track->tdb->type, track->tdb->shortLabel, BAR_CHART_CATEGORY_LABELS);
 }
 
 static boolean barChartRecognizer(struct customFactory *fac,
@@ -1109,7 +1129,7 @@ if (wordCount == BARCHARTBED_NUM_COLS)
     {
     track->fieldCount = wordCount;
     char *ctDb = ctGenomeOrCurrent(track);
-    isBarChart = rowIsBarChart(row, ctDb);
+    isBarChart = rowIsBarChart(row, wordCount, ctDb);
     }
 freeMem(dupe);
 customPpReuse(cpp, line);
@@ -1127,6 +1147,8 @@ loadAndValidateBed(row, 6, BARCHARTBED_NUM_COLS - 6, lf, bed, NULL, TRUE);
 
 // Load as barChart and validate custom fields
 struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, TRUE);
+if (!barChart)
+    lineFileAbort(lf, "Invalid barChart row");
 int count;
 sqlFloatDynamicArray(row[BARCHART_EXPSCORES_COLUMN_IX], &barChart->expScores, &count);
 if (count != barChart->expCount)
@@ -1238,6 +1260,7 @@ static struct customTrack *barChartLoader(struct customFactory *fac,
 /* Load up barChart data until next track line. */
 {
 char *line;
+requireBarChartBars(track);
 char *db = ctGenomeOrCurrent(track);
 struct barChartBed *itemList = NULL;
 if (!dbRequested)
@@ -2390,6 +2413,15 @@ setBbiViewLimits(track);
 return track;
 }
 
+static struct customTrack *bigBarChartLoader(struct customFactory *fac,
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up bigBarChartdata until get next track line. A bit of error checking before bigBedLoad. */
+{
+requireBarChartBars(track);
+return bigBedLoader(fac, chromHash, cpp, track, dbRequested);
+}
+
 static struct customFactory bigChainFactory =
 /* Factory for bigChain tracks */
     {
@@ -2495,7 +2527,7 @@ static struct customFactory bigBarChartFactory =
     NULL,
     "bigBarChart",
     bigBarChartRecognizer,
-    bigBedLoader,
+    bigBarChartLoader
     };
 
 static struct customFactory bigBedFactory =
