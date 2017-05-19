@@ -176,7 +176,7 @@ void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
 struct dyString *dyTmp = dyStringNew(1024);
 dyStringPrintf(dyTmp, "%s%s?hgS_doOtherUser=submit&"
 	       "hgS_otherUserName=%s&hgS_otherUserSessionName=%s",
-	       wikiServerAndCgiDir(), destAppScriptName(), userName, sessionName);
+	       wikiServerAndCgiDir(), "hgTracks", userName, sessionName);
 if (encode)
     {
     dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
@@ -220,7 +220,7 @@ void addUrlLink(struct dyString *dy, char *url, boolean encode)
 struct dyString *dyTmp = dyStringNew(1024);
 char *encodedUrl = cgiEncodeFull(url);
 dyStringPrintf(dyTmp, "%s%s?hgS_doLoadUrl=submit&hgS_loadUrlName=%s",
-	       wikiServerAndCgiDir(), destAppScriptName(), encodedUrl);
+	       wikiServerAndCgiDir(), "hgTracks", encodedUrl);
 if (encode)
     {
     dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
@@ -607,7 +607,7 @@ else if (loginSystemEnabled() || wikiLinkEnabled())
             " Browser and Email links.</LI>\n",
             wikiLinkUserLoginUrl(cartSessionId(cart)));
     }
-dyStringPrintf(dyUrl, "%s%s", wikiServerAndCgiDir(), cgiScriptName());
+dyStringPrintf(dyUrl, "%s%s", wikiServerAndCgiDir(), "hgTracks");
 
 printf("<LI>If you have saved your settings to a local file, you can send "
        "email to others with the file as an attachment and direct them to "

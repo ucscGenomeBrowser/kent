@@ -164,7 +164,7 @@ searchPriority 8
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps caeAng2 rmsk
     # 1583946 bases of 105997628 (1.494%) in intersection
@@ -307,7 +307,7 @@ XXX - running - Tue Jun 30 14:19:12 PDT 2015
 
     # there are no non-bridged gaps, do not need to do this
     #   check non-bridged gaps to see what the typical size is:
-#     hgsql -N -e 'select * from gap where bridge="no" order by size;' caeAng2 
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' caeAng2
 #       | ave -tableOut -col=7 stdin
 # # min Q1 median Q3 max mean N sum stddev
 # 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006

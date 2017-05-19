@@ -482,6 +482,11 @@ chains file, and calls hgAddLiftOverChain to register the $HgAutomate::gbdb loca
 mkdir -p $liftOverChainDir
 rm -f $liftOverChainPath
 ln -s $buildDir/$liftOverChainFile $liftOverChainPath
+set tmpFile = `mktemp -t -p /dev/shm tmpMd5.XXXXXX`
+csh -c "grep -v $liftOverChainFile $liftOverChainDir/md5sum.txt || true" > \$tmpFile
+md5sum $buildDir/$liftOverChainFile | sed -e "s#$buildDir/##;" >> \$tmpFile
+sort \$tmpFile > $liftOverChainDir/md5sum.txt
+rm -f \$tmpFile
 
 # Link from download area:
 mkdir -p $HgAutomate::goldenPath/$tDb/liftOver

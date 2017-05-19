@@ -6562,3 +6562,88 @@ importTrackHub trackDb.txt hofMap.ra /gbdb/hg38/hoffmanMappability/ --trackDbPat
 cp hofMap.ra ~/kent/src/hg/makeDb/trackDb/human/hg38
 # Include hofMap.ra in the trackDb.ra file
 #########################################################################
+# tcgaExpr super track Chris Eisenhart, DONE, 2017-05-17
+# tcgaTranscExpr 
+# TCGA transcript level expression barChart track, from TOIL pipeline recompute (John Vivian)
+# biorxiv.org/content/biorxiv/early/2016/07/07/062497.full.pdf
+mkdir /hive/data/outside/tcgaBarcharts/
+mkdir /hive/data/outside/tcgaBarcharts/transcripts
+cd /hive/data/outside/tcgaBarcharts/transcripts
+
+# Get all the meta data
+cp ~max/projects/cirm/datasetPages/tcgaGtex/tcgaMeta.tab . 
+# Cut out the meta data the script wants, sample name and group.
+cut -f 1,5 tcgaMeta.tab | sed 's/ /_/g' > tcgaLargeSamples.tsv
+
+# Get and clean the matrix
+cp ~max/projects/cirm/datasetPages/tcgaGtex/tcga.tpm.tab .
+# Clean up the transcript names (remove the .#)
+cut -f 1 tcga.tpm.tab | cut -f 1 -d "." > tcgaTranscripts.txt
+cut -f 2- tcga.tpm.tab > tcgaTpmValues.tsv 
+paste tcgaTranscripts.txt tcgaTpmValues.tsv > tcgaMatrix.tsv
+
+# Build a coordinate map
+hgsql hg38 -e "select * from ensGene" | cut -f 2- | sort > ensGene
+hgsql hg38 -e "select * from ensemblToGeneName" | sort >  ensemblToGeneName
+join ensGene ensemblToGeneName | awk '{print $2"\t"$4"\t"$5"\t"$1"\t0\t"$3"\t"$16}' > coord.bed 
+
+# Use the meta data, matrix, and coordinate map to generate a barchart bed
+time expMatrixToBarchartBed tcgaLargeSamples.tsv tcgaMatrix.tsv coord.bed tcgaTransExp.bed --groupOrder tcgaGroupOrder.txt
+
+# NOTE: Use the header line of the bed file to populate the barChartBars field in the trackDb.
+# The order of the labels in the barChartBars field should match the order of the labels in the 
+# expScores column in the bed file header. 
+
+# Sort and convert into a bigBed file. 
+sort -k1,1 -k2,2n tcgaTransExp.bed > sortedTcgaTransExp.bed
+bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartBed.as sortedTcgaTransExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaTransExp.bb
+
+# Link the files into gbdb
+cd /gbdb/hgFixed/human/expMatrix 
+ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaLargeSamples.tsv tcgaLargeSamples.tab
+ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaMatrix.tsv tcgaMatrix.tab
+ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaTransExp.bb .
+
+# TCGA gene level expression barChart track, from TOIL pipeline recompute (John Vivian)
+mkdir ../genes 
+cd ../genes
+
+# TCGA gene level expression barChart track, from TOIL pipeline recompute (John Vivian)
+# tcgaGeneExpr
+mkdir ../genes 
+cd ../genes
+
+# Get the gene matrix.  
+cp ~max/projects/cirm/datasetPages/tcgaGtex/tcga.geneTpm.tab .
+
+# Make a coordinate file, the genes in gtexGeneModelV6 have .# versions which are 
+# removed with the temp fils.  
+hgsql hg38 -e "select * from hg38.gtexGeneModelV6" | awk '{print $3"\t"$5"\t"$6"\t"$2"\t0\t"$4"\t"$2}' > coord6+1.bed.temp
+cut -f 4 coord6+1.bed.temp | cut -f 1 -d "." > foo
+cut -f 1-3 coord6+1.bed.temp > foo2
+paste foo2 foo > foo3
+cut -f 5- coord6+1.bed.temp > foo4
+paste foo3 foo4 > coord6+1.bed
+# This bed file didn't have the right gene names (ENS rather than Hugo), fix it. 
+hgsql hg38 -e "select * From knownCanonical" > foo
+wc foo
+cut -f 6 foo | cut -f 1 -d "." 
+cut -f 6 foo | cut -f 1 -d "." > foo2
+head foo
+cut -f 1-3 foo > foo3
+paste foo2 foo3 > foo4
+cut -f 4- coord6+1.bed > foo5
+join <(sort foo5) <(sort foo4) | awk '{print $5"\t"$6"\t"$7"\t"$1"\t0\t"$3"\t"$4}' > coord6+1.3.bed 
+
+# Generate the bed file, can use the same transcript file
+time expMatrixToBarchartBed ../transcripts/tcgaLargeSamples.tsv tcga.geneTpm.tab coord6+1.3.bed tcgaGeneExp.bed --groupOrder=../transcripts/tcgaGroupOrder.txt
+
+# Convert to big bed
+sort -k1,1 -k2,2n tcgaGeneExp.bed > sortedTcgaGeneExp.bed
+bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartBed.as sortedTcgaGeneExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaGeneExp.bb
+
+# Link to gbdb 
+cd /gbdb/hgFixed/human/expMatrix 
+ln -s /hive/data/outside/tcgaBarcharts/genes/tcgaGeneExp.bb .
+ln -s /hive/data/outside/tcgaBarcharts/genes/tcga.geneTpm.tab tcgaGeneMatrix.tab
+#########################################################################

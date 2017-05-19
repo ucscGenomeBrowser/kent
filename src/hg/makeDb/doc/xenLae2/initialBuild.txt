@@ -768,13 +768,13 @@ xenLae2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
 
     cd /hive/data/genomes/xenLae2
     time (makeDownloads.pl -workhorse=hgwdev xenLae2) > downloads.log 2>&1
-    #  real    22m35.669s
+    #  real    28m8.550s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/xenLae2/pushQ
     cd /hive/data/genomes/xenLae2/pushQ
-    time (makePushQSql.pl xenLae2) > xenLae2.pushQ.sql 2> stderr.out
-    #  real    7m21.629s
+  time (makePushQSql.pl -redmineList xenLae2) > xenLae2.pushQ.sql 2> stderr.out
+    #  real    7m13.295s
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/xenLae2/wib/gc5Base.wib

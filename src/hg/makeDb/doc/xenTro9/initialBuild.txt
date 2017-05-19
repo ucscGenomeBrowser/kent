@@ -779,12 +779,13 @@ xenTro9.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
 
     cd /hive/data/genomes/xenTro9
     time (makeDownloads.pl -workhorse=hgwdev xenTro9) > downloads.log 2>&1
-    #  real    22m35.669s
+    #  real    14m41.395s
+
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/xenTro9/pushQ
     cd /hive/data/genomes/xenTro9/pushQ
-    time (makePushQSql.pl xenTro9) > xenTro9.pushQ.sql 2> stderr.out
+    time (makePushQSql.pl -redmineList xenTro9) > xenTro9.pushQ.sql 2> stderr.out
     #  real    7m21.629s
 
     #   check for errors in stderr.out, some are OK, e.g.:

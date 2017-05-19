@@ -25,6 +25,9 @@ errAbort(
   "   -allowDups       - for fasta output, allow duplicate query sequences output\n"
   "                    - default is to eliminate duplicate sequences\n"
   "                    - runs much faster without the duplicate check\n"
+  "   -noSequenceVerify - when checking for dups, do not verify each sequence\n"
+  "                    - when the same name is identical, assume they are\n"
+  "                    - helps speed up the dup check but not thorough\n"
   "   -dots=N          - output progress dot(.) every N alignments processed\n"
   "\n"
   "note: a chromAlias file can be obtained from a UCSC database, e.g.:\n"
@@ -38,6 +41,7 @@ static struct optionSpec options[] = {
    {"chromAlias", OPTION_STRING},
    {"nohead", OPTION_BOOLEAN},
    {"allowDups", OPTION_BOOLEAN},
+   {"noSequenceVerify", OPTION_BOOLEAN},
    {"dots", OPTION_INT},
    {NULL, 0},
 };
@@ -45,6 +49,7 @@ static struct optionSpec options[] = {
 static int dots = 0;
 static boolean nohead = FALSE;
 static boolean allowDups = FALSE;
+static boolean noSequenceVerify = FALSE;
 
 static struct hash *hashChromAlias(char *fileName)
 /* Read two column file into hash keyed by first column */
@@ -122,19 +127,21 @@ for (;;)
 	    faWriteNext(faF, qName, dna, strlen(dna));
         else
             {
-            char *md5sum = md5HexForString(dna);
             struct hashEl *hel = NULL;
-            if ((hel = hashLookup(fastaSums, qName)) == NULL)
-                {
-                hel = hashAdd(fastaSums, qName, md5sum);
-                faWriteNext(faF, qName, dna, strlen(dna));
-                }
-            else
-                {  /* verify sequence is identical for same name */
-                if (differentWord((char *)hel->val, md5sum))
-                   verbose(1, "# warning: different sequence found for '%s'\n",
-                          qName);
-                }
+            if ((hel = hashLookup(fastaSums, qName)) == NULL) // first seen
+               {
+               char *md5sum = md5HexForString(dna);
+               hel = hashAdd(fastaSums, qName, md5sum);
+               faWriteNext(faF, qName, dna, strlen(dna));
+               }
+            else if (! noSequenceVerify)  // repeated md5sum calculation
+               {
+               char *md5sum = md5HexForString(dna);
+               /* verify sequence is identical for same name */
+               if (differentWord((char *)hel->val, md5sum))
+                  verbose(1, "# warning: different sequence found for '%s'\n",
+                             qName);
+               }
             }
 	freez(&dna);
 	}
@@ -158,6 +165,7 @@ char *aliasFile = optionVal("chromAlias", NULL);
 dots = optionInt("dots", dots);
 nohead = optionExists("nohead");
 allowDups = optionExists("allowDups");
+noSequenceVerify = optionExists("noSequenceVerify");
 bamToPsl(argv[1], argv[2], fastaName, aliasFile);
 return 0;
 }

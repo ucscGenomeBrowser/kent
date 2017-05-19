@@ -46,9 +46,9 @@ while (my $line = <FH>) {
 my $chrCount = 0;
 #  all zeros and ends covered ?
 foreach my $chr (sort (keys %chromInfo)) {
-    next if ($chr =~ m/random/);
-    next if ($chr =~ m/chrM/);
-    next if ($chr =~ m/chrUn/);
+#    next if ($chr =~ m/random/);
+#    next if ($chr =~ m/chrM/);
+#    next if ($chr =~ m/chrUn/);
     if (!exists($zeros{$chr})) {
 	printf STDERR "no zero coordinate on chrom %s\n", $chr;
 	++$errors;

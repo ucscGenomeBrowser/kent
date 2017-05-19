@@ -255,6 +255,18 @@ taxId   8478
     #	it masks more sequence
 
 #########################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-05-08 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/chrPic2/bed/microsat
+    cd /cluster/data/chrPic2/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed chrPic2 microsat microsat.bed
+    # Read 24434 elements of size 4 from microsat.bed
+
+##########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
 #	(DONE - 2012-03-27 - Hiram)
     mkdir /hive/data/genomes/chrPic2/bed/gap
@@ -470,34 +482,9 @@ chrPic2.perChromTables = no
     make etc-update
 
 #########################################################################
-# create pushQ entry (DONE - 2012-05-24 - Hiram)
-    # first make sure all.joiner is up to date and has this new organism
-    # a keys check should be clean:
-    cd ~/kent/src/hg/makeDb/schema
-    joinerCheck -database=chrPic2 -keys all.joiner
-
-    mkdir /hive/data/genomes/chrPic2/pushQ
-    cd /hive/data/genomes/chrPic2/pushQ
-    makePushQSql.pl chrPic2 > chrPic2.sql 2> stderr.out
-    # check stderr.out for no significant problems, it is common to see:
-# WARNING: hgwdev does not have /gbdb/chrPic2/wib/gc5Base.wib
-# WARNING: hgwdev does not have /gbdb/chrPic2/wib/quality.wib
-# WARNING: hgwdev does not have /gbdb/chrPic2/bbi/quality.bw
-# WARNING: chrPic2 does not have seq
-# WARNING: chrPic2 does not have extFile
-    # which are no real problem
-    # if some tables are not identified:
-# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
-# supporting and genbank tables) which tracks to assign these tables to:
-#	<some table list ... >
-    # put them in manually after loading the pushQ entry
-    scp -p chrPic2.sql hgwbeta:/tmp
-    ssh hgwbeta
-    cd /tmp
-    hgsql qapushq < chrPic2.sql
-
-#########################################################################
 # create ucscToINSDC name mapping (DONE - 2013-08-23 - Hiram)
+    # XXX - redone correctly 2017-05-08 see later instructions XXX #####
+
     mkdir /hive/data/genomes/chrPic2/bed/ucscToINSDC
     cd /hive/data/genomes/chrPic2/bed/ucscToINSDC
 
@@ -528,7 +515,7 @@ chrPic2.perChromTables = no
     # verify the track link to INSDC functions
 
 ##############################################################################
-# cytoBandIdeo - (DONE - 2014-04-29 - Hiram)
+# cytoBandIdeo - (DONE - 2017-05-08 - Hiram)
     mkdir /hive/data/genomes/chrPic2/bed/cytoBand
     cd /hive/data/genomes/chrPic2/bed/cytoBand
     makeCytoBandIdeo.csh chrPic2
@@ -584,5 +571,173 @@ searchPriority 8
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` chrPic2 mm10) \
          > rbest.log 2>&1 &
     # real    110m9.546s
+
+#########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2017-05-08 - Hiram)
+    # the sequence here is working for a 'refseq' assembly
+    # beware of a chrM situation may be specific depending upon what is
+    # available in the assembly
+
+    # normal procedure did not work here since our names were different
+    # than the genbank(INSDC) names
+
+    mkdir /hive/data/genomes/chrPic2/bed/ucscToRefSeq
+    cd /hive/data/genomes/chrPic2/bed/ucscToRefSeq
+
+    # run up idKeys for the refseq release
+    mkdir refseqIdKeys
+    cd refseqIdKeys
+    doIdKeys.pl -buildDir=`pwd` -twoBit=refseq.2bit refseqChrPic303
+
+    # that can be joined to UCSC to get that reference
+    join refseqChrPic303.idKeys.txt ../../idKeys/chrPic2.idKeys.txt \
+     | awk '{printf "%s\t%s\n", $3,$2 }' | sort -k2,2 > ../ucscToRefSeq.txt
+
+    # find accession for chrM
+    grep chrM ../../chrPic2.agp
+# chrM    1       16866   1       F       NC_002073.3     1       16866   +
+
+    # find the genbank accession for NC_002073.3 at Entrez nucleotide
+    # in this case, this NC_002073.3 is not used in either the genbank or
+    #  the refseq assembly.  From Entrez, the equivalent genbank name is
+    #  AF069423.1
+
+    # if there is a chrM, use its RefSeq name as a second argument:
+    # this is a RefSeq assembly, use the chrM refSeq name:
+#    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+#      ../../refseq/GCF_*structure/Primary_Assembly NC_002073.3
+
+    # this is actually ucscToRefSeq since this is a RefSeq assembly
+#    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+#    rm -f ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt \
+       | sort > refSeqToUcsc.txt
+
+    # chrM processing needs special help, fixup with the sed
+    # extract the refseq vs. genbank names from the assembly_report
+    # columns 5 and 7 are the INSDC and RefSeq names
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | awk '{printf "%s\t%s\n", $2, $1}' | sed -e 's/na/AF069423.1/' \
+          | sed -e 's/NC_023890.1/NC_002073.3/;' | sort > refseq.insdc.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > ucsc.coordinate.tab
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 ucsc.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+           > ucscToRefSeq.bed
+    printf "chrM\t0\t16866\tNC_002073.3\n" >> ucscToRefSeq.bed
+
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 ucsc.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+    printf "chrM\t0\t16866\tAF069423.1\n" >> ucscToINSDC.bed
+
+    # verify chrM is correct:
+    grep chrM *.bed
+    #	ucscToINSDC.bed:chrM    0       16866   AF069423.1
+    #	ucscToRefSeq.bed:chrM   0       16866   NC_002073.3
+
+    # should be same line counts throughout: (except for chrM sometimes)
+    wc -l *
+    #	78594 refSeqToUcsc.txt
+    #	78595 refseq.insdc.txt
+    #	78595 ucsc.coordinate.tab
+    #	78595 ucscToINSDC.bed
+    #	78595 ucscToRefSeq.bed
+    #	78594 ucscToRefSeq.txt
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 20
+    # use the 25 in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab chrPic2 ucscToINSDC stdin ucscToINSDC.bed
+    # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  20
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab chrPic2 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords chrPic2
+    # each should cover %100 entirely:
+    featureBits -countGaps chrPic2 ucscToINSDC
+    # 1440398454 bases of 1440398454 (100.000%) in intersection
+
+    featureBits -countGaps chrPic2 ucscToRefSeq
+    # 1440398454 bases of 1440398454 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2017-03-27 - Hiram)
+
+    mkdir /hive/data/genomes/chrPic2/bed/chromAlias
+    cd /hive/data/genomes/chrPic2/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' chrPic2 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' chrPic2 \
+        > ucsc.genbank.tab
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > chrPic2.chromAlias.tab
+
+    hgLoadSqlTab chrPic2 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        chrPic2.chromAlias.tab
+
+#########################################################################
+# create pushQ entry (DONE - 2017-05-08 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=chrPic2 -keys all.joiner
+
+    mkdir /hive/data/genomes/chrPic2/pushQ
+    cd /hive/data/genomes/chrPic2/pushQ
+    makePushQSql.pl chrPic2 > chrPic2.sql 2> stderr.out
+    # check stderr.out for no significant problems, it is common to see:
+# WARNING: hgwdev does not have /gbdb/chrPic2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/chrPic2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/chrPic2/bbi/quality.bw
+# WARNING: chrPic2 does not have seq
+# WARNING: chrPic2 does not have extFile
+    # which are no real problem
+    # if some tables are not identified:
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#	<some table list ... >
+    # put them in manually after loading the pushQ entry
+    scp -p chrPic2.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < chrPic2.sql
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2017-05-08 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=chrPic2 -tableCoverage all.joiner
+    joinerCheck -database=chrPic2 -times all.joiner
+    joinerCheck -database=chrPic2 -keys all.joiner
+
+    cd /hive/data/genomes/chrPic2
+    time (makeDownloads.pl -workhorse=hgwdev chrPic2) > downloads.log 2>&1
+    #  real    22m35.669s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/chrPic2/pushQ
+    cd /hive/data/genomes/chrPic2/pushQ
+   time (makePushQSql.pl -redmineList chrPic2) > chrPic2.pushQ.sql 2> stderr.out
+    #  real    7m18.635s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/chrPic2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/chrPic2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/chrPic2/bbi/quality.bw
+    # WARNING: chrPic2 does not have seq
+    # WARNING: chrPic2 does not have extFile
+
 
 #########################################################################

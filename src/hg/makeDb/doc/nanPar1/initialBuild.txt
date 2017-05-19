@@ -39,6 +39,35 @@ rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_other/Nanorana_parkeri/a
     # %0.00 masked total, %0.00 masked real
 
 #############################################################################
+# Assembly name:  ASM93562v1
+# Organism name:  Nanorana parkeri (frogs & toads)
+# Isolate:  BGI_ZX_2015
+# Sex:  female
+# Taxid:          125878
+# BioSample:      SAMN02720813
+# BioProject:     PRJNA344660
+# Submitter:      BGI-Shenzhen
+# Date:           2015-3-17
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    JYOU01
+# Assembly method: SOAPdenovo v. 1.06
+# Genome coverage: 83x
+# Sequencing technology: Illumina Genome Analyzer II
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000935625.1
+# RefSeq assembly accession: GCF_000935625.1
+# RefSeq assembly and GenBank assemblies identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000935635.1      GCF_000935635.1 Primary Assembly
+##      GCF_001746995.1 non-nuclear
+#
+
+#############################################################################
 # fixup to UCSC naming scheme (DONE - 2015-03-19 - Hiram)
     mkdir /hive/data/genomes/nanPar1/ucsc
     cd /hive/data/genomes/nanPar1/ucsc
