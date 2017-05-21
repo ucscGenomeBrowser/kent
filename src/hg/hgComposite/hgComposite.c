@@ -181,7 +181,7 @@ if ((hubName != NULL) && ((f = fopen(hubName, "r")) != NULL))
             slAddHead(&compositeList, composite);
             composite->name = tdb->track;
             composite->shortLabel = tdb->shortLabel;
-            composite->longLabel = tdb->shortLabel;
+            composite->longLabel = tdb->longLabel;
             }
         else
             {
@@ -190,7 +190,7 @@ if ((hubName != NULL) && ((f = fopen(hubName, "r")) != NULL))
             AllocVar(track);
             track->name = tdb->track;
             track->shortLabel = tdb->shortLabel;
-            track->longLabel = tdb->shortLabel;
+            track->longLabel = tdb->longLabel;
             slAddHead(&composite->trackList, track);
             }
         }
@@ -329,6 +329,7 @@ for(composite = compositeList; composite; composite = composite->next)
         }
     }
 fclose(f);
+hFreeConn(&conn);
 }
 
 
@@ -745,7 +746,7 @@ if ((setting = trackDbLocalSetting(subTdb, "parent")) != NULL)
             enabled = FALSE;
     }
 else
-    return subTdb->visibility != 0;
+    return subTdb->visibility != tvHide;
 
 return enabled;
 }
