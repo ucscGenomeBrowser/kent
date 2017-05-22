@@ -1,5 +1,5 @@
 table ggEventText
-" hgcGeneGraph details of text-mined interactions; a cause influences a theme. Both can be a gene, gegen complex or gene family. "
+" An interaction between two proteins as extracted by a text mining pipeline. Has a single document ID (PMID) and includes the sentence and the tokens (words) where the interaction was found."
     (
     string eventId;       "ID of interaction description"
     string causeType;       "type of cause of interaction, values: complex, gene or family"
