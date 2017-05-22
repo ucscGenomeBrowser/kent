@@ -122,7 +122,7 @@ static void processRnaSeq(FILE *fh, struct sqlConnection *conn, struct refSeqVer
 {
 struct dnaSeq *seq = hGenBankGetMrnaC(conn, rsvi->acc, NULL);
 if (seq == NULL)
-    errAbort("failed to get %s from database", rsvi->acc);
+    errAbort("failed to get %s RNA sequence from database", rsvi->acc);
 faWriteNext(fh, seq->name, seq->dna, seq->size);
 dnaSeqFree(&seq);
 }
@@ -147,7 +147,7 @@ if (isNotEmpty(protAcc) && hashLookup(doneProts, protAcc) == NULL)
     {
     struct dnaSeq *seq = hGenBankGetPepC(conn, protAcc, NULL);
     if (seq == NULL)
-        errAbort("failed to get %s from database", protAcc);
+        errAbort("failed to get %s peptide sequence from database", protAcc);
     faWriteNext(fh, seq->name, seq->dna, seq->size);
     dnaSeqFree(&seq);
     hashAdd(doneProts, protAcc, NULL);
