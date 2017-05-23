@@ -39,7 +39,6 @@ longLabel Expression of 33 TCGA cancer tissues (Gencode 23)
 	longLabel TCGA transcript expression (Gencode 23)
 	defaultLabelFields name2
 	labelFields name2, name
-	spectrum on
 	group expression
 	bigDataUrl /gbdb/hgFixed/human/expMatrix/tcgaTransExp.bb
 
@@ -76,6 +75,5 @@ longLabel Expression of 33 TCGA cancer tissues (Gencode 23)
 	longLabel TCGA gene expression (Gencode 23)
 	defaultLabelFields name2
 	labelFields name2, name
-	spectrum on
 	bigDataUrl /gbdb/hgFixed/human/expMatrix/tcgaGeneExp.bb
 
