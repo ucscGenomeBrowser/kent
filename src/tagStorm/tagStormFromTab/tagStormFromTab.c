@@ -825,9 +825,7 @@ while (lineFileNextReal(lf, &line))
 	slNameAddTail(&stanza->tagList, word);
 	}
     slAddTail(&spec->stanzaSpecList, stanza);
-    uglyf("%d tags starting with %s\n", slCount(stanza->tagList), stanza->tagList->name);
     }
-uglyf("%d divs\n", slCount(spec->stanzaSpecList));
 return spec;
 }
 
@@ -919,7 +917,6 @@ for (fieldedRow = table->rowList; fieldedRow != NULL; fieldedRow = fieldedRow->n
 	     }
 	slReverse(&stanza->tagList);
 
-	uglyf("Recurse on %s %s\n", partingField, partingVal);
 	struct fieldedTable *subtable = NULL;
 	int ixTranslator[table->fieldCount];
 	if (makeSubtableExcluding(table, partingIx, partingVal,
