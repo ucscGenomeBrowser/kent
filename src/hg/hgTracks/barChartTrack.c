@@ -231,8 +231,10 @@ return hvGfxFindColorIx(hvg, color.r, color.g, color.b);
 static void barChartLoadItems(struct track *tg)
 /* Load method for track items */
 {
+/* Initialize colors for visibilities that don't display actual barchart */
 if (tg->visibility == tvSquish || tg->limitedVis == tvSquish)
     tg->itemColor = barChartItemColor;
+tg->colorShades = shadesOfGray;
 
 /* Get track UI info */
 struct barChartTrack *extras;
@@ -246,8 +248,6 @@ extras->maxMedian = barChartUiMaxMedianScore(tdb);
 extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_NO_WHITEOUT,
                                                         BAR_CHART_NO_WHITEOUT_DEFAULT);
 extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
-
-tdb->useScore = 1; // dense mode should use score (don't require spectrum/useScore setting in trackDb) */
 
 /* Get bed (names and all-sample category median scores) in range */
 loadSimpleBedWithLoader(tg, (bedItemLoader)barChartSimpleBedLoad);
