@@ -400,8 +400,10 @@ return hvGfxFindColorIx(hvg, color.r, color.g, color.b);
 static void gtexGeneLoadItems(struct track *tg)
 /* Load method for track items */
 {
+/* Initialize colors for visibilities that don't display actual barchart */
 if (tg->visibility == tvSquish || tg->limitedVis == tvSquish)
     tg->itemColor = gtexGeneItemColor;
+tg->colorShades = shadesOfGray;
 
 /* Get track UI info */
 struct gtexGeneExtras *extras;
