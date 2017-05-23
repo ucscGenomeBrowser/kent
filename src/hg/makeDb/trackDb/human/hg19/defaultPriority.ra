@@ -17,7 +17,7 @@ priority 1
 # mRNA and EST
 
 track mrna override
-priority 1
+visibility hide
 
 track intronEst override
 priority 12
@@ -43,6 +43,17 @@ visibility hide
 # priority 1
 # This priority is defined in human/trackDb.ra
 # If this priority changes, please change it here and there as well
+
+track dgvPlus override
+group varRep
+visibility dense
+priority 1
+
+    track dgvMerged override
+    parent dgvPlus on
+
+    track dgvSupporting override
+    parent dgvPlus off
 
 # Repeats
 

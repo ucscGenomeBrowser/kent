@@ -30,7 +30,7 @@ priority 1
 # mRNA and EST
 
 track mrna override
-priority 1
+visibility hide
 
 track intronEst override
 priority 2

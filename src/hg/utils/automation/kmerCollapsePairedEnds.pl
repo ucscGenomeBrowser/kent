@@ -5,15 +5,18 @@ use warnings;
 
 my $argc = scalar(@ARGV);
 
-if ($argc != 1) {
-   printf STDERR "usage: collapsePairedEnds.pl path/to/file.bed.gz | gzip -c > tmp/file.bed.gz\n";
+if ($argc != 2) {
+   printf STDERR "usage: collapsePairedEnds.pl minSize path/to/file.bed.gz | gzip -c > tmp/file.bed.gz\n";
    printf STDERR "takes input file that are paired kmer ends, will collapse\n";
    printf STDERR "those ends down when they overlap each other and have\n";
    printf STDERR "the same gap between the ends.  They can collapse completely\n";
    printf STDERR "into a repeat sequence, such sequences are discarded.\n";
+   printf STDERR "print out only those pairs where the duplicated sequence\n";
+   printf STDERR "is greater than minSize\n";
    exit 255;
 }
 
+my $minSize = shift;
 my $bedFile = shift;
 my $disappear = 0;
 
@@ -32,7 +35,7 @@ sub itemOut($$$$) {
 #     printf STDERR "%s\t%d\t%d\n", $name, $start, $dupSize;
      $disappear = 0;
   } else {
-     if ( ($dupSize > 0) && ($gapSize > 0) ) {
+     if ( ($dupSize > $minSize) && ($gapSize > 0) ) {
        printf "%s\t%d\t%d\t%s:%d-%d\t%d\t+\t%d\t%d\t0\t2\t%d,%d\t0,%d\n",
           $name, $start, $start + 2 * $dupSize + $gapSize,
           $name, 1 + $start, $start + 2 * $dupSize + $gapSize,
