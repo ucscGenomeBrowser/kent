@@ -590,21 +590,63 @@ def which(binPath):
     import distutils.spawn
     return distutils.spawn.find_executable(binPath)
 
+def findDot():
+    """ this would never be run on the RR but only on mirrors, because we specify it in hg.conf.
+    It will try to find 'dot' and if it cannot find it, will fall back to cgi-bin/loader/dot_static:
+
+        - if anything is specified in hg.conf, it will use that
+        - if it can find "dot" in the PATH, it will use that next (dot
+          installed from the repos will always work)
+        - if that doesn't work either, we run cgi-bin/loader/dot_static (our
+          static version may fail due to wrong glibc version) """
+    binPath = cfgOption("graphvizPath")
+
+    if binPath is not None and binPath.strip()!="":
+        return binPath
+
+    installedBin = which("dot")
+
+    if installedBin is None:
+        staticPath = join("loader", "dot_static")
+        if not isfile(staticPath):
+            return None
+        else:
+            return staticPath
+    else:
+        sys.stderr.write("Using graphviz binary %s\n" % installedBin)
+        return installedBin
+
+def printDotErrorHelpAndExit():
+    print("This often means that on this UCSC Genome Browser, GraphViz is not installed or is too old and ")
+    print("that the supplied program dot_static also did not work. It can also mean that the configuration option")
+    print("graphvizPath in hg.conf specifies a program that does not work.<p>")
+    print("To resolve any of these problems, you will have to contact the system administrator of this Genome Browser server.<p>")
+    print("To install GraphViz, ask the administrator of this server to run one of the following commands:<br>")
+    print("<tt>sudo apt-get install graphviz</tt><br>")
+    print("<tt>sudo wget http://www.graphviz.org/graphviz-rhel.repo -o /etc/yum/repos.d/graphviz.rhel.repo; sudo yum install graphviz*</tt><br>")
+    print("<p>")
+    print("If you have graphviz installed but this error message still appears, then the ")
+    print("graphviz version may be too old.<p>")
+    print("Also, the Genome Browser ships with a statically compiled version of")
+    print("dot, cgi-bin/loader/dot_static. This version should work with a")
+    print("64bit linux, unless the installed glibc is too different from the one compiled into dot_static.<p>")
+    print("As a last resort, you can compile GraphViz from source and specify the full path to 'dot'")
+    print("with the option 'graphvizPath' in cgi-bin/hg.conf.<br>")
+    print("If you see this message on a website managed by UCSC, please contact genome-www@soe.ucsc.edu immediately.<p>")
+    exit(0)
+
 def runDot(fname, alg, format="png"):
-    " run dot and return tuple outFname, outMapFname "
+    """ run dot and return tuple outFname, outMapFname. Makes a real effort to find a working version of dot,
+        see findDot()
+    """
     outFname = splitext(fname)[0]+"."+format
     outMap = splitext(fname)[0]+".map"
-    binPath = cfgOption("graphvizPath", "dot")
+
+    binPath = findDot()
 
     if which(binPath) is None:
-        print("Could not find the command %s<p>" % binPath)
-        print("This usually means that on this UCSC Genome Browser, GraphViz is not installed.")
-        print("To install GraphViz, ask the Administrator of this server to run one of the following commands:<br>")
-        print("<tt>sudo apt-get install graphviz</tt><br>")
-        print("<tt>sudo wget http://www.graphviz.org/graphviz-rhel.repo -o /etc/yum/repos.d/graphviz.rhel.repo; sudo yum install graphviz*</tt><br>")
-        print("<p>")
-        print("Alternatively, you can compile GraphViz from source and specify the full path to 'dot' with the option 'graphvizPath' in cgi-bin/hg.conf.")
-        exit(0)
+        print("Could not find the command dot or cgi-bin/loader/dot_static<p>")
+        printDotErrorHelpAndExit()
 
     cmd = [binPath, "-Gdpi=96", "-Gsize=12,5", "-Gratio=fill", "-K"+alg, "-T"+format, fname, "-o",outFname]
     # create a html map for png format
@@ -613,18 +655,8 @@ def runDot(fname, alg, format="png"):
     ret = runCmd(cmd, mustRun=False)
 
     if ret!=0:
-        print("Could not run the command '%s'. <br>" % "".join(cmd))
-        print("This means that on this UCSC Genome Browser Installation too old.")
-        print("To update GraphViz to a more recent version, ask the Administrator of this ")
-        print("server to try running one of these commands:<br>")
-        print("<tt>sudo apt-get install graphviz</tt><br>")
-        print("<tt>sudo wget http://www.graphviz.org/graphviz-rhel.repo -o ")
-        print("/etc/yum/repos.d/graphviz.rhel.repo;")
-        print("sudo yum install graphviz*</tt><br>")
-        print("<p>")
-        print("If this does not work, you may have to compile GraphViz from source and")
-        print("specify the 'dot' binary with the option graphvizPath cgi-bin/hg.conf.")
-        exit(0)
+        print("Could not run the command '%s'. <p>" % " ".join(cmd))
+        printDotErrorHelpAndExit()
 
     return outFname, outMap
 
@@ -677,11 +709,15 @@ def writeDot(allGenes, links, fname, targetGene, geneDescs, annotLabel, geneAnno
         url = url.replace("&", "&amp;") # otherwise invalid SVG will result
         d["URL"] = url
         if g==targetGene:
-            d["penwidth"] = "1"
-            d["fontcolor"] = "black"
-            d["fillcolor"] = "yellow"
-            #d["style"] = "bold"
-            d["color"] = "blue"
+            if g not in geneAnnots:
+                d["penwidth"] = "1"
+                d["fontcolor"] = "black"
+                d["fillcolor"] = "yellow"
+                d["color"] = "blue"
+            else:
+                d["penwidth"] = "3"
+                d["color"] = "yellow"
+
         ofh.write('"%s" %s;\n' % (g, dictToDot(d)))
 
     # write the links between genes
@@ -1272,7 +1308,7 @@ def printLowLinksTable(gene, lowLinks, sortByCount):
         elif dbCount != 0:
             detailsText = "interaction %s-%s mentioned by %d databases" % (gene, g, dbCount)
 
-        detailsLink = makeSelfLink(g, {"gene": None, "link":"%s:%s" % (g, gene)},
+        detailsLink = makeSelfLink(g, {"gene": None, "lastGene": gene,"link":"%s:%s" % (g, gene)},
             style=linkStyle, title=detailsText, dataToggle="tooltip")
 
         print( '<td%s>%s %s</td>' % (cellStyle, detailsLink, newGeneLink))
