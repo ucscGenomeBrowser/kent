@@ -622,7 +622,6 @@ bedNameLabel Gene accession
 shortLabel GTEx Brain
 longLabel GTEx Brain Gene Expression in barChart track format
 group expression
-spectrum on
 
 track snp147Mult override
 group varRep

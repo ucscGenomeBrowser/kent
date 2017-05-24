@@ -2069,7 +2069,7 @@ jQuery.fn.panImages = function(){
     var portalWidth = 0;
     var portalAbsoluteX = 0;
     var savedPosition;
-    var highlightArea  = null; // Used to ensure dragSelect highlight will scroll. 
+    var highlightAreas  = null; // Used to ensure dragSelect highlight will scroll. 
 
     this.each(function(){
 
@@ -2121,7 +2121,7 @@ jQuery.fn.panImages = function(){
                 }
                 mouseIsDown = true;
                 mouseDownX = e.clientX;
-                highlightArea = $('#highlightItem')[0];
+                highlightAreas = $('.highlightItem');
                 atEdge = (!beyondImage && (prevX >= leftLimit || prevX <= rightLimit));
                 $(document).bind('mousemove',panner);
                 $(document).bind( 'mouseup', panMouseUp);  // Will exec only once
@@ -2201,7 +2201,7 @@ jQuery.fn.panImages = function(){
                 var oldPos = prevX.toString() + "px";
                 $(".panImg").css( {'left': oldPos });
                 $('.tdData').css( {'backgroundPosition': oldPos } );
-                if (highlightArea)
+                if (highlightAreas)
                     imageV2.highlightRegion();
                 return true;
             }
@@ -2387,22 +2387,24 @@ jQuery.fn.panImages = function(){
     function scrollHighlight(relativeX) 
     // Scrolls the highlight region if one exists
     {        
-        if (highlightArea) {
-            // Best to have a left and right, then min/max the edges, then set width
-            var hiOffset = $(highlightArea).offset();
-            var hiDefinedLeft  = $(highlightArea).data('leftPixels');
-            var hiDefinedWidth = $(highlightArea).data('widthPixels');
-            hiOffset.left = Math.max(hiDefinedLeft + relativeX,
-                                     portalAbsoluteX);
-            var right     = Math.min(hiDefinedLeft + hiDefinedWidth + relativeX,
-                                     portalAbsoluteX + portalWidth);
-            var newWidth = Math.max(right - hiOffset.left,0);
-            if (hiDefinedWidth !== newWidth)
-                $(highlightArea).width(newWidth);
-            $(highlightArea).offset(hiOffset);
+        if (highlightAreas) {
+            for (i=0; i<highlightAreas.length; i++) {
+                highlightArea = highlightAreas[i];
+                // Best to have a left and right, then min/max the edges, then set width
+                var hiOffset = $(highlightArea).offset();
+                var hiDefinedLeft  = $(highlightArea).data('leftPixels');
+                var hiDefinedWidth = $(highlightArea).data('widthPixels');
+                hiOffset.left = Math.max(hiDefinedLeft + relativeX,
+                                         portalAbsoluteX);
+                var right     = Math.min(hiDefinedLeft + hiDefinedWidth + relativeX,
+                                         portalAbsoluteX + portalWidth);
+                var newWidth = Math.max(right - hiOffset.left,0);
+                if (hiDefinedWidth !== newWidth)
+                    $(highlightArea).width(newWidth);
+                $(highlightArea).offset(hiOffset);
+            }
         }
     }
-
 
 };
 

@@ -298,3 +298,34 @@ ul.nice-menu ul li a {
     height: auto;
     padding: 5px 20px;
 }
+
+/* Styling for bootstrap collapsible section, used as follows:
+
+<div class="collapse-section">
+<a class="collapse-toggle" data-toggle="collapse" href=#collapseMe">Collapsible section</div>
+<div class="collapse" id="collapseMe">
+Stuff here
+</div>
+
+requires: jQuery.js and bootstrap.js
+*/
+
+.collapse-section .collapse-toggle {
+    text-decoration: none;
+    margin: 15px 12px 0 15px;   /* same as paragraph */
+}
+
+.collapse-section .collapse-toggle:after {
+    vertical-align: -3px;
+    font-family: Glyphicons Halflings;
+    margin-left: 2px;
+    color: lightgray;
+}
+
+.collapse-section .collapse-toggle:not(.collapsed):after {
+    content: "\e252";
+}
+
+.collapse-section .collapse-toggle.collapsed:after {
+    content: "\e250";
+}

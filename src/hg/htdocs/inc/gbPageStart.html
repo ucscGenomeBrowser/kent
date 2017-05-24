@@ -14,10 +14,22 @@
             <base href="/">
         <!--#endif -->
         <!-- Use ROOT variable set in caller to determine relative path to style sheets -->
+
+        <!--#if expr="${DYNAMIC}" -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!--#else -->
         <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/bootstrap.min.css">
+        <!--#endif -->
+
         <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/gb.css">
         <link rel="stylesheet" href="<!--#echo var="ROOT" -->/staticStyle/gbStatic.css">
-        </head>
+
+        <!--#if expr="${DYNAMIC}" -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!--#endif -->
+
+    </head>
 
     <body>
         <!-- Blue menu bar / hotlinks -->

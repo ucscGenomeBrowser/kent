@@ -226,7 +226,7 @@ def reviewStatusToHtmlStars(reviewStatus):
         starCount = 4
     if revStatus == "reviewedbyexpertpanel":
         starCount = 3
-    if "noassertion" in revStatus:
+    if "noassertion" in revStatus or revStatus=="-":
         starCount = 0
 
     if starCount == None:
