@@ -11,14 +11,18 @@
 The barChart and bigBarChart track formats display category specific values over a genomic region, similar to 
 the GTEx track in the <a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&gtexGene=pack">Genome Browser</a>. 
 This format is useful for displaying microarray, RNA-seq, and any other dataset where a distinct
-set of variables are associated via genomic regions.
+sets of variables are associated via genomic regions.
+</p>
 
+<p>
 The barChart format is available as a standalone plain text bed6+ custom track format for smaller datasets, as 
 well as a binary indexed format (bigBarChart) for use in both track hubs and custom tracks for
 larger datasets. barChart format files are converted to bigBarChart files using the program 
 <code>bedToBigBed</code>, run with the <code>-as</code> option to pull in a special 
 <a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a> (<em>.as</em>) file 
-that defines the fields of the bigBarChart.</p>
+that defines the fields of the bigBarChart.
+</p>
+
 <p>
 The bigBarChart files are in an indexed binary format. The main advantage of this format is that only 
 those portions of the file needed to display a particular region are transferred to the Genome 
@@ -61,14 +65,14 @@ item name, useful if you would like to associate multiple transcripts to a singl
 variables to the same experiment type, etc. 
 The expCount and expScores fields are similar to the gtexGene table definition in that they define
 the number of categories and a value for each category. The optional _dataOffset and _dataLen fields provide
-indexes into an optionally provided matrix file, which when provided for a bigBarChart format track,
+indexes into an again optionally provided matrix file, which when provided for a bigBarChart format track,
 allows for a boxplot of sample data to be displayed on the details page for each individual bar graph in the
 bigBarChart track. The _dataOffset and _dataLen fields are optional only for plain text
 barChart format tracks, and even if provided, are not used. 
 </p>
 
 <p>
-These autoSql files are meant to be customized to your use case. For example, if the name
+These autoSql files should be customized to your use case. For example, if the name
 field of your track refers to a transcript name, while the name2 field is for a gene, you are welcome
 to change the field definitions like so when making your bigBed:
 <pre><code>
@@ -94,7 +98,7 @@ or via the Table Browser.
 
 <h2>Creating barChart and bigBarChart custom tracks</h2>
 <p>
-The steps for creating barChart tracks differ from the process for creating 
+The steps for creating barChart tracks differs from the process for creating 
 bigBarChart tracks. The steps also differ based on whether you have an input 
 matrix file (generated perhaps from an RNA-Seq differential expression analysis pipeline) or not. 
 If you have an expression matrix-like file, skip to <a href="example3">Example #3</a>, otherwise 
@@ -117,7 +121,10 @@ chr9    133257408    133275201    ABO    311    -    ENSG00000175164.9    5    1
 </p>
 <p>
 After the file  loads in the Genome Browser, you should see an automatically colored bar 
-graph with 5 bars.
+graph with 5 bars. Mouse hover over any of the individual bars will display the name of the
+particular bar ("bar1", "bar2", ...) as well as the value associated with that bar. The order
+of bar names in the barChartBars field of track line should exactly match the order of the 
+values in the expScores field. 
 </p>
 
 <a name="example2"></a>
@@ -140,8 +147,10 @@ track type=bigBarChart name=&quot;bigBarChart Example One&quot; description=&quo
 </ol>
 </p>
 <p>
-After the file  loads in the Genome Browser, you should see an automatically colored bar
-graph with 5 bars.
+After the file  loads in the Genome Browser, you should again see an automatically colored bar
+graph with 5 bars. The same rules apply to bigBarChart custom tracks as barChart custom tracks
+in that the order of names in the barChartBars field should exactly match the order of values
+from the expScores field in the bigBarChart file. 
 </p>
 
 <a name="example3"></a>
