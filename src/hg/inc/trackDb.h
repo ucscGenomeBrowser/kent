@@ -620,7 +620,7 @@ return startsWithWord("bigBed", tdb->type) ||
 INLINE boolean tdbIsBigWig(struct trackDb *tdb)
 // Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
 {
-return startsWithWord("bigWig", tdb->type);
+return startsWithWord("bigWig", tdb->type) || startsWithWord("mathWig", tdb->type);
 }
 
 INLINE boolean tdbIsLongTabix(struct trackDb *tdb)
