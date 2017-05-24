@@ -99,7 +99,8 @@ if (params->noProxy)
 char *connectHost;
 int connectPort;
 
-BIO *sbio=NULL, *ssbio=NULL;
+BIO *fbio=NULL;  // file descriptor bio
+BIO *sbio=NULL;  // ssl bio
 SSL_CTX *ctx;
 SSL *ssl;
 
@@ -189,19 +190,20 @@ if (proxyUrl)
     }
 
 
-sbio=BIO_new_socket(fd,BIO_NOCLOSE);
-if (sbio == NULL)
+fbio=BIO_new_socket(fd,BIO_NOCLOSE);  
+// BIO_NOCLOSE because we handle closing fd ourselves.
+if (fbio == NULL)
     {
     xerr("BIO_new_socket() failed");
     goto cleanup;
     }
-ssbio = BIO_new_ssl(ctx, 1);
-if (ssbio == NULL) 
+sbio = BIO_new_ssl(ctx, 1);
+if (sbio == NULL) 
     {
     xerr("BIO_new_ssl() failed");
     goto cleanup;
     }
-sbio = BIO_push(ssbio, sbio);
+sbio = BIO_push(sbio, fbio);
 BIO_get_ssl(sbio, &ssl);
 if(!ssl) 
     {
@@ -447,6 +449,7 @@ while (1)
 cleanup:
 
 BIO_free_all(sbio);  // will free entire chain of bios
+close(fd);     // Needed because we use BIO_NOCLOSE above. Someday might want to re-use a connection.
 close(params->sv[1]);  /* we are done with it */
 
 return NULL;
