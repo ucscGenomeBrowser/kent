@@ -677,6 +677,8 @@ for (region = regionList; region != NULL; region = region->next)
     else if (startsWithWord("bedGraph", track->type))
 	outCount = bedGraphOutRegion(table, conn, region, curMaxOut,
 				     wigOutType);
+    else if (startsWithWord("mathWig", track->type))
+        outCount = mathWigOutRegion(track, table, conn, region, curMaxOut, wigOutType);
     else if (startsWithWord("bigWig", track->type))
         outCount = bigWigOutRegion(table, conn, region, curMaxOut, wigOutType);
     else

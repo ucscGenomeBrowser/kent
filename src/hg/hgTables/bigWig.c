@@ -23,6 +23,7 @@
 #include "bigWig.h"
 #include "hubConnect.h"
 #include "hgTables.h"
+#include "mathWig.h"
 
 boolean isBigWigTable(char *table)
 /* Return TRUE if table corresponds to a bigWig file. */
@@ -31,7 +32,7 @@ struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 if (tdb)
     return tdbIsBigWig(tdb);
 else
-    return trackIsType(database, table, curTrack, "bigWig", ctLookupName);
+    return trackIsType(database, table, curTrack, "bigWig", ctLookupName) || trackIsType(database, table, curTrack, "mathWig", ctLookupName);
 }
 
 static char *settingFromCtOrHub(char *table, struct sqlConnection *conn, char *settingName, boolean mustBeInHub)
@@ -178,6 +179,34 @@ checkWigDataFilter(database, curTable, &dataConstraint, retLl, retUl);
 if (dataConstraint != NULL)
     cmp = wigCompareFromString(dataConstraint);
 *retCmp = cmp;
+}
+
+static void valuesToVector(double *values, struct dataVector *dv, int start)
+/* Move an array of doubles into a dataVector. */
+{
+int ii;
+
+for(ii=0; ii < dv->maxCount; ii++)
+    {
+    dv->value[ii] = values[ii];
+    dv->position[ii] = start + ii;
+    }
+dv->count = dv->maxCount;
+}
+
+int mathWigOutRegion(struct trackDb *track, char *table, struct sqlConnection *conn,
+			     struct region *region, int maxOut,
+			     enum wigOutputType wigOutType)
+/* Write out mathWig for region, doing intersecting and filtering as need be. */
+{
+int resultCount = 0;
+struct dataVector *dv = dataVectorNew(region->chrom, region->end - region->start);
+char *equation = cloneString(trackDbSetting(track, "mathDataUrl"));
+double *values = mathWigGetValues(equation, region->chrom, region->start, region->end);
+valuesToVector(values, dv, region->start);
+resultCount = wigPrintDataVectorOut(dv, wigOutType, maxOut, NULL);
+dataVectorFree(&dv);
+return resultCount;
 }
 
 int bigWigOutRegion(char *table, struct sqlConnection *conn,

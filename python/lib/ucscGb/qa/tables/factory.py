@@ -6,45 +6,20 @@ from ucscGb.qa.tables.pslQa import PslQa
 from ucscGb.qa.tables.positionalQa import PositionalQa
 from ucscGb.qa.tables.pointerQa import PointerQa
 from ucscGb.qa import qaUtils
-
-def getTrackType(db, table):
-    """Looks for a track type via tdbQuery."""
-    cmd = ["tdbQuery", "select type from " + db + " where track='" + table +
-           "' or table='" + table + "'"]
-    cmdout, cmderr, cmdreturncode = qaUtils.runCommandNoAbort(cmd)
-
-    if cmdreturncode != 0:
-        # keep command arguments nicely quoted
-        cmdstr = " ".join([pipes.quote(arg) for arg in cmd])
-        raise Exception("Error from: " + cmdstr + ": " + cmderr)
-    if cmdout:
-        tableType = cmdout.split()[1]
-    else:
-        tableType = None
-    return tableType
-
-pslTypes = frozenset(["psl"])
-genePredTypes = frozenset(["genePred"])
-otherPositionalTypes = frozenset(["axt", "bed", "chain", "clonePos", "ctgPos", "expRatio", "maf",
-                                  "netAlign", "rmsk", "sample", "wigMaf", "wig", "bedGraph",
-                                  "chromGraph", "factorSource", "bedDetail", "pgSnp", "altGraphX",
-                                  "ld2", "bed5FloatScore", "bedRnaElements", "broadPeak", "gvf",
-                                  "narrowPeak", "peptideMapping"])
-pointerTypes = frozenset(["bigWig", "bigBed", "bigPsl", "bigGenePred", "bigMaf", "bigChain",
-                          "halSnake", "bam", "vcfTabix"])
+from ucscGb.qa.tables import tableTypeUtils
 
 def tableQaFactory(db, table, reporter, sumTable):
     """Returns tableQa object according to trackDb track type.""" 
-    tableType = getTrackType(db, table)
-    if not tableType:
+    tableType = tableTypeUtils.getTrackType(db, table)
+    if tableType == None:
         return TableQa(db, table, tableType, reporter, sumTable)
-    elif tableType in pslTypes:
+    elif tableTypeUtils.isPsl(tableType):
         return PslQa(db, table, tableType, reporter, sumTable)
-    elif tableType in genePredTypes:
+    elif tableTypeUtils.isGenePred(tableType):
         return GenePredQa(db, table, tableType, reporter, sumTable)
-    elif tableType in otherPositionalTypes:
+    elif tableTypeUtils.isPositional(tableType):
         return PositionalQa(db, table, tableType, reporter, sumTable)
-    elif tableType in pointerTypes:
+    elif tableTypeUtils.isPointer(tableType):
         return PointerQa(db, table, tableType, reporter, sumTable)
     else:
         raise Exception(db + table + " has unknown track type " + tableType)
