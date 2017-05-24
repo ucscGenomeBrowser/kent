@@ -189,4 +189,8 @@ void wigBedGraphFindItemLimits(void *items,
     double *graphUpperLimit, double *graphLowerLimit);
 /*	find upper and lower limits of graphed items (bedGraphItem)	*/
 
+int normalizeCount(struct preDrawElement *el, double countFactor,
+    double minVal, double maxVal, double sumData, double sumSquares);
+/* Normalize statistics to be based on an integer number of valid bases.
+ * Integer value is the smallest integer not less than countFactor. */
 #endif /* WIGCOMMON_H */

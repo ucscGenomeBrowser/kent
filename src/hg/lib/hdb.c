@@ -3708,6 +3708,8 @@ boolean trackDataAccessible(char *database, struct trackDb *tdb)
  * or a database table with the same name.
  * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. */
 {
+if (startsWith("mathWig", tdb->type))
+    return TRUE; // assume mathWig data is available.  Fail at load time if it isn't
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 if (bigDataUrl != NULL)
     {
