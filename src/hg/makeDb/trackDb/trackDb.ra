@@ -2959,9 +2959,20 @@ searchMethod fuzzy
 termRegex g[0-9]+(\.t[0-9]+)?
 searchPriority 50
 
-track gapOverlap
-shortLabel Gap Overlaps
-longLabel Exactly identical sequence on each side of a gap
-group map
+track tanDups
+shortLabel Tandem Dups
+longLabel Paired identical sequences
+compositeTrack on
 visibility hide
 type bed 12
+group map
+
+    track gapOverlap
+    parent tanDups on
+    shortLabel Gap Overlaps
+    longLabel Paired exactly identical sequence on each side of a gap
+
+    track tandemDups
+    parent tanDups on
+    shortLabel Tandem Dups
+    longLabel Paired exactly identical sequence survey over entire genome assembly
