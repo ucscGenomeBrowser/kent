@@ -231,8 +231,10 @@ return hvGfxFindColorIx(hvg, color.r, color.g, color.b);
 static void barChartLoadItems(struct track *tg)
 /* Load method for track items */
 {
+/* Initialize colors for visibilities that don't display actual barchart */
 if (tg->visibility == tvSquish || tg->limitedVis == tvSquish)
     tg->itemColor = barChartItemColor;
+tg->colorShades = shadesOfGray;
 
 /* Get track UI info */
 struct barChartTrack *extras;

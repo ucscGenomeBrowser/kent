@@ -6596,17 +6596,13 @@ time expMatrixToBarchartBed tcgaLargeSamples.tsv tcgaMatrix.tsv coord.bed tcgaTr
 
 # Sort and convert into a bigBed file. 
 sort -k1,1 -k2,2n tcgaTransExp.bed > sortedTcgaTransExp.bed
-bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartBed.as sortedTcgaTransExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaTransExp.bb
+bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartTranscExp.as sortedTcgaTransExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaTransExp.bb
 
 # Link the files into gbdb
 cd /gbdb/hgFixed/human/expMatrix 
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaLargeSamples.tsv tcgaLargeSamples.tab
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaMatrix.tsv tcgaMatrix.tab
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaTransExp.bb .
-
-# TCGA gene level expression barChart track, from TOIL pipeline recompute (John Vivian)
-mkdir ../genes 
-cd ../genes
 
 # TCGA gene level expression barChart track, from TOIL pipeline recompute (John Vivian)
 # tcgaGeneExpr
@@ -6640,10 +6636,58 @@ time expMatrixToBarchartBed ../transcripts/tcgaLargeSamples.tsv tcga.geneTpm.tab
 
 # Convert to big bed
 sort -k1,1 -k2,2n tcgaGeneExp.bed > sortedTcgaGeneExp.bed
-bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartBed.as sortedTcgaGeneExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaGeneExp.bb
+bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartGeneExp.as sortedTcgaGeneExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaGeneExp.bb
 
 # Link to gbdb 
 cd /gbdb/hgFixed/human/expMatrix 
 ln -s /hive/data/outside/tcgaBarcharts/genes/tcgaGeneExp.bb .
 ln -s /hive/data/outside/tcgaBarcharts/genes/tcga.geneTpm.tab tcgaGeneMatrix.tab
+#########################################################################
+# gtexTransExp Chris Eisenhart, done, 2017-05-23
+# TCGA transcript level RNA-seq, from TOIL pipeline recompute (John Vivian)
+# biorxiv.org/content/biorxiv/early/2016/07/07/062497.full.pdf
+mkdir /hive/data/outside/gtex/barChartTrack
+cd /hive/data/outside/gtex/barChartTrack
+
+# Seems John included some TCGA data (CML) in the GTEx matrix and samples, the cleaning steps remove this. 
+# Make a clean sample file
+cat ../johnVivianRecompute/sraToSample.txt | sed 's/ male /\tmale\t/g' | sed 's/ female /\tfemale\t/g' | cut -f 3 | sed 's/ - /-/g' | sed 's/ /_/g' > gtexSampleGroups.txt
+cat ../johnVivianRecompute/sraToSample.txt | cut -f 1 -d " " > gtexSampleNames.txt
+paste gtexSampleNames.txt gtexSampleGroups.txt > gtexSamples.txt
+grep -v '(CML)' gtexSamples.tsv > cleanGtexSamples.tsv 
+
+# Make a clean matrix
+cut -f 1 ../johnVivianRecompute/gtex.tpm.tab | cut -f 1 -d "." > gtexTranscripts.txt
+cut -f 2- ../johnVivianRecompute/gtex.tpm.tab > gtexTpmValues.tsv 
+paste gtexTranscripts.txt gtexTpmValues.tsv > gtexMatrix.tsv
+rowsToCols gtexMatrix.tsv tspsdGtexMatrix.tsv
+sort tspsdGtexMatrix.tsv > sortedTspsdGtexMatrix.tsv
+grep -v '(CML)' gtexSamples.tsv | cut -f 1 | sed 's/Run_s/#transcript/g' | sort > sortedCleanGtexSamples.tsv
+join sortedCleanGtexSamples.tsv sortedTspsdGtexMatrix.tsv > cleanTspsdGtexMatrix.tsv
+rowsToCols cleanTspsdMatrix.tsv cleanGtexMatrix.tsv 
+
+# Build a coordinate map
+hgsql hg38 -e "select * from ensGene" | cut -f 2- | sort > ensGene
+hgsql hg38 -e "select * from ensemblToGeneName" | sort >  ensemblToGeneName
+join ensGene ensemblToGeneName | awk '{print $2"\t"$4"\t"$5"\t"$1"\t0\t"$3"\t"$16}' > coord.bed 
+
+# Get the gtex ordering 
+hgsql hgFixed -e "select * from gtexTissue" | cut -f 3 | sed 's/ - /-/g' | sed 's/ /_/g' | sed '1D' > gtexGroupOrder.txt
+
+# Use the meta data, matrix, and coordinate map to generate a barchart bed
+time expMatrixToBarchartBed cleanGtexSamples.tsv cleanGtexMatrix.tsv coord.bed gtexTransExp.bed --groupOrderFile gtexGroupOrder.txt
+
+# NOTE: Use the header line of the bed file to populate the barChartBars field in the trackDb.
+# The order of the labels in the barChartBars field should match the order of the labels in the 
+# expScores column in the bed file header. 
+
+# Sort and convert into a bigBed file. 
+sort -k1,1 -k2,2n gtexTransExp.bed > sortedGtexTransExp.bed
+bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGtexTransMed.bed /hive/data/genomes/hg38/chrom.sizes gtexTranscExpr.bb
+
+# Link the files into gbdb
+cd /gbdb/hgFixed/human/expMatrix 
+ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexSamples.tsv cleanGtexSamples.tab
+ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexMatrix.tsv cleanGtexMatris.tab
+ln -s /hive/data/outside/gtex/barChartTrack/gtexTranscExpr.bb .
 #########################################################################

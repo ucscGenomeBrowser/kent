@@ -2,22 +2,14 @@ import re
 import math
 
 from ucscGb.qa import qaUtils
+from ucscGb.qa.tables import tableTypeUtils
+from ucscGb.qa.tables import checkGapOverlap
 from ucscGb.qa.tables.tableQa import TableQa
 
 shortLabelLimit = 17
 longLabelLimit = 80
 genbankTableListDev = "/cluster/data/genbank/etc/genbank.tbls"
 genbankTableListBeta = "/genbank/etc/genbank.tbls"
-
-# group the types of positional tables by the name of the column that contains the chrom
-# couldn't find any existing chromGraph tables, so left it out for now
-chromTypes = frozenset(['bed', 'genePred', 'axt', 'clonePos', 'ctgPos', 'expRatio', 'maf', 'sample',
-                        'wigMaf', 'wig', 'bedGraph', 'factorSource', 'bedDetail', 'Ld2',
-                        'bed5FloatScore', 'bedRnaElements', 'broadPeak', 'gvf', 'narrowPeak',
-                        'peptideMapping', 'pgSnp'])
-tNameTypes = frozenset(['chain', 'psl', 'altGraphX', 'netAlign'])
-genoNameTypes = frozenset(['rmsk'])
-
 
 # Read the list of genbank tables once, for __positionalTblCheck()
 try:
@@ -124,20 +116,9 @@ class PositionalQa(TableQa):
             self.recordPass()
         self.reporter.endStep()
 
-    def __getChromCol(self):
-        """Returns the name of the column that contains the chrom name, based on track type."""
-        if self.tableType in chromTypes:
-            return 'chrom'
-        elif self.tableType in genoNameTypes:
-            return 'genoName'
-        elif self.tableType in tNameTypes:
-            return 'tName'
-        else:
-            raise Exception("Can't find column name for track type " + self.tableType)
-
     def __getChromCountsFromDatabase(self):
         """Returns a list of ['chrom', 'size (bases)', 'count', 'count/megabase'] lists for table"""
-        chromCol = self.__getChromCol()
+        chromCol = tableTypeUtils.getChromCol(self.tableType)
         # first half of the UNION below gets rows that do not appear in table at all 
         query = "(SELECT chrom, size, 0 as count FROM chromInfo WHERE chrom NOT IN" +\
             " (select distinct " + chromCol + " from " + self.table + "))" +\
@@ -239,19 +220,23 @@ class PositionalQa(TableQa):
         self.reporter.endStep()
 
     def __featureBits(self):
-        """Uses runBits.csh script to find featureBits coverage and overlap with gap.
-        Adds output to sumRow and records commands and results in reporter."""
-        rbCommand = ["runBits.csh", self.db, self.table, "checkUnbridged"]
-        self.reporter.writeCommand(rbCommand)
-        rbOut = qaUtils.runCommandMergedOutErr(rbCommand)
-        self.reporter.writeLine(str(rbOut))
-        # extract featureBits + featureBits gap results from rubBits output
-        matches = re.findall('[0-9].*[\%\)]', rbOut)
-        # Set fb and fbGap results tp proper variables, are used in creating the summary file
-        fbOut = matches[0]
-        fbGapOut = matches[1]
-        self.sumRow.setFeatureBits(fbOut)
-        self.sumRow.setFeatureBitsGaps(fbGapOut)
+        """Runs featureBits. Adds output to sumRow and records commands and results in reporter."""
+
+        fbCommand = ["featureBits", "-countGaps", self.db, self.table]
+        fbOut, fbErr = qaUtils.runCommand(fbCommand)
+        # normal featureBits output actually goes to stderr
+        self.reporter.writeLine(' '.join(fbCommand))
+        self.reporter.writeLine(str(fbErr))
+        self.sumRow.setFeatureBits(fbErr.rstrip("in intersection\n"))
+        fbGapCommand = ["featureBits", "-countGaps", self.db, self.table, "gap"]
+        fbGapOut, fbGapErr = qaUtils.runCommand(fbGapCommand)
+        self.reporter.writeLine(' '.join(fbGapCommand))
+        self.reporter.writeLine(str(fbGapErr))
+        self.sumRow.setFeatureBitsGaps(fbGapErr.rstrip("in intersection\n"))
+
+        # Check overlap with gaps, both bridged and unbridged
+        gapOverlapOut = checkGapOverlap.checkGapOverlap(self.db, self.table, True)
+        self.reporter.writeLine(gapOverlapOut)
 
     def validate(self):
         """Adds positional-table-specific checks to basic table checks."""

@@ -328,6 +328,7 @@ sub doCleanup {
     $bossScript->add(<<_EOF_
 rm -f $db.reScore.bed $db.exons.bed
 rm -fr kmers/tmp pairedEnds/tmp collapsePairedEnds/tmp $db.chrom.sizes bed.tab
+rm -fr kmers/err pairedEnds/err collapsePairedEnds/err
 _EOF_
     );
     $bossScript->execute();

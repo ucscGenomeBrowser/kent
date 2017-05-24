@@ -1111,9 +1111,8 @@ errAbort("Missing '%s' setting from track of type=%s (%s).  "
          BAR_CHART_CATEGORY_LABELS, track->tdb->type, track->tdb->shortLabel, BAR_CHART_CATEGORY_LABELS);
 }
 
-static boolean barChartRecognizer(struct customFactory *fac,
-        struct customPp *cpp, char *type,
-        struct customTrack *track)
+static boolean barChartRecognizer(struct customFactory *fac, struct customPp *cpp, char *type,
+                                        struct customTrack *track)
 /* Return TRUE if looks like we're handling a barChart track */
 {
 if (type != NULL && !sameType(type, fac->name))
@@ -1125,7 +1124,8 @@ char *dupe = cloneString(line);
 char *row[BARCHARTBED_NUM_COLS+1];
 int wordCount = chopLine(dupe, row);
 boolean isBarChart = FALSE;
-if (wordCount == BARCHARTBED_NUM_COLS)
+if (wordCount == BARCHARTBED_NUM_COLS ||
+        wordCount == BARCHARTBED_NUM_COLS-2)    // don't require dataOffset/dataLen
     {
     track->fieldCount = wordCount;
     char *ctDb = ctGenomeOrCurrent(track);
@@ -1136,17 +1136,18 @@ customPpReuse(cpp, line);
 return isBarChart;
 }
 
-static struct barChartBed *customTrackBarChart(char *db, char **row, struct hash *chromHash, 
-                                                struct lineFile *lf)
+static struct barChartBed *customTrackBarChart(struct customTrack *track, char *db, 
+                                    char **row, struct hash *chromHash, struct lineFile *lf)
 /* Convert a row of strings to barChart. */
 {
 // Validate first 6 standard bed fields 
 struct bed *bed;
 AllocVar(bed);
-loadAndValidateBed(row, 6, BARCHARTBED_NUM_COLS - 6, lf, bed, NULL, TRUE);
+loadAndValidateBed(row, 6, BARCHARTBED_NUM_COLS-6, lf, bed, NULL, TRUE);
 
 // Load as barChart and validate custom fields
-struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, TRUE);
+boolean hasOffsets = track->fieldCount == BARCHARTBED_NUM_COLS ? TRUE : FALSE;
+struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
 if (!barChart)
     lineFileAbort(lf, "Invalid barChart row");
 int count;
@@ -1179,10 +1180,10 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
 
-char *schemaFile = "barChartBed.sql";
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", NULL,
 	"-renameSqlTable", "-trimSqlTable", "-notItemRgb", "-noBin", NULL, NULL, NULL, NULL, NULL, NULL};
 
+char *schemaFile = "barChartBed.sql";
 struct dyString *ds = newDyString(0);
 dyStringPrintf(ds, "-sqlTable=loader/%s", schemaFile);
 cmd1[2] = dyStringCannibalize(&ds);
@@ -1271,7 +1272,7 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     int wordCount = chopLine(line, row);
     struct lineFile *lf = cpp->fileStack;
     lineFileExpectAtLeast(lf, track->fieldCount, wordCount);
-    struct barChartBed *item = customTrackBarChart(db, row, chromHash, lf);
+    struct barChartBed *item = customTrackBarChart(track, db, row, chromHash, lf);
     slAddHead(&itemList, item);
     }
 slReverse(&itemList);
