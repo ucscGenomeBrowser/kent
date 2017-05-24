@@ -1,4 +1,4 @@
-table barChartBed
+table barChartTranscExp
 "BED6+5 with additional fields for category count and median values, and sample matrix fields"
     (
     string chrom;       "Reference sequence chromosome or scaffold"
