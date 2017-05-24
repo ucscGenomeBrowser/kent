@@ -356,7 +356,6 @@ getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 // Start web page with new-style header
 webStartGbNoBanner(cart, db, "Genome Browser GTEx Track Settings");
 puts("<link rel='stylesheet' href='../style/gb.css'>");         // NOTE: This will likely go to web.c
-puts("<link rel='stylesheet' href='../style/gbLogoInMenu.css'>");
 puts("<link rel='stylesheet' href='../style/hgGtexTrackSettings.css'>");
 
 char *track = cartUsualString(cart, "g", "gtexGene");
