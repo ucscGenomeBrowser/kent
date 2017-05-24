@@ -4364,7 +4364,7 @@ if (!tg->mapsSelf)
     withIndividualLabels = TRUE; /* reset in case done with pgSnp */
 }
 
-static int normalizeCount(struct preDrawElement *el, double countFactor,
+int normalizeCount(struct preDrawElement *el, double countFactor,
     double minVal, double maxVal, double sumData, double sumSquares)
 /* Normalize statistics to be based on an integer number of valid bases.
  * Integer value is the smallest integer not less than countFactor. */
@@ -13842,6 +13842,12 @@ else if (sameWord(type, "longTabix"))
     complexBedMethods(track, tdb, FALSE, 2, words);
     longRangeMethods(track, tdb);
     if (trackShouldUseAjaxRetrieval(tg))
+        track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "mathWig"))
+    {
+    mathWigMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "bigBed"))

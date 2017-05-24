@@ -783,7 +783,13 @@ else
     char *type = requiredSetting(hub, genome, tdb, "type");
     if (!( isCustomComposite(tdb) && startsWithWord("wig", type)))
         {
-        if (!(startsWithWord("bigWig", type) ||
+        if (startsWithWord("mathWig", type) )
+            {
+            requiredSetting(hub, genome, tdb, "mathDataUrl");
+            }
+        else 
+            {
+            if (!(startsWithWord("bigWig", type) ||
               startsWithWord("bigBed", type) ||
 #ifdef USE_HAL
               startsWithWord("pslSnake", type) ||
@@ -797,11 +803,12 @@ else
               startsWithWord("bigChain", type) ||
               startsWithWord("bigBarChart", type) ||
               startsWithWord("bam", type)))
-            {
-            errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
-                hub->url, genome->name, tdb->track);
+                {
+                errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
+                    hub->url, genome->name, tdb->track);
+                }
+            requiredSetting(hub, genome, tdb, "bigDataUrl");
             }
-        requiredSetting(hub, genome, tdb, "bigDataUrl");
 
         if (sameString("barChart", type) || sameString("bigBarChart", type))
             requireBarChartBars(hub, genome, tdb);

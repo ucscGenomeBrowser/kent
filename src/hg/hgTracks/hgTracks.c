@@ -7057,6 +7057,7 @@ static boolean isTrackForParallelLoad(struct track *track)
 {
 char *bdu = trackDbSetting(track->tdb, "bigDataUrl");
 return (startsWithWord("bigWig"  , track->tdb->type)
+     || startsWithWord("mathWig"  , track->tdb->type)
      || startsWithWord("bigBed"  , track->tdb->type)
      || startsWithWord("bigPsl"  , track->tdb->type)
      || startsWithWord("bigGenePred"  , track->tdb->type)
