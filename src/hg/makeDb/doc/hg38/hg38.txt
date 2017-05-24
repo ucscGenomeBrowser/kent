@@ -6596,17 +6596,13 @@ time expMatrixToBarchartBed tcgaLargeSamples.tsv tcgaMatrix.tsv coord.bed tcgaTr
 
 # Sort and convert into a bigBed file. 
 sort -k1,1 -k2,2n tcgaTransExp.bed > sortedTcgaTransExp.bed
-bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartBed.as sortedTcgaTransExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaTransExp.bb
+bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartTranscExp.as sortedTcgaTransExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaTransExp.bb
 
 # Link the files into gbdb
 cd /gbdb/hgFixed/human/expMatrix 
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaLargeSamples.tsv tcgaLargeSamples.tab
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaMatrix.tsv tcgaMatrix.tab
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaTransExp.bb .
-
-# TCGA gene level expression barChart track, from TOIL pipeline recompute (John Vivian)
-mkdir ../genes 
-cd ../genes
 
 # TCGA gene level expression barChart track, from TOIL pipeline recompute (John Vivian)
 # tcgaGeneExpr
@@ -6640,7 +6636,7 @@ time expMatrixToBarchartBed ../transcripts/tcgaLargeSamples.tsv tcga.geneTpm.tab
 
 # Convert to big bed
 sort -k1,1 -k2,2n tcgaGeneExp.bed > sortedTcgaGeneExp.bed
-bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartBed.as sortedTcgaGeneExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaGeneExp.bb
+bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartGeneExp.as sortedTcgaGeneExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaGeneExp.bb
 
 # Link to gbdb 
 cd /gbdb/hgFixed/human/expMatrix 
