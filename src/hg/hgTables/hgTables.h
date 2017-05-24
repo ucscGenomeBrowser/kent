@@ -751,6 +751,11 @@ char *bigWigFileName(char *table, struct sqlConnection *conn);
 #define bigBedFileName(table, conn) bigWigFileName(table, conn)
 
 
+int mathWigOutRegion(struct trackDb *track, char *table, struct sqlConnection *conn,
+			     struct region *region, int maxOut,
+			     enum wigOutputType wigOutType);
+/* Write out mathWig for region, doing intersecting and filtering as need be. */
+
 int bigWigOutRegion(char *table, struct sqlConnection *conn,
 			     struct region *region, int maxOut,
 			     enum wigOutputType wigOutType);
