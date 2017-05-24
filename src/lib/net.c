@@ -1684,6 +1684,7 @@ else
 	{  
 	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
 	    {
+	    close(sd);
 	    return NULL;
 	    }
 	if (newUrl != NULL)
