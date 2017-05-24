@@ -1,0 +1,51 @@
+#!/usr/bin/env python2.7
+
+##################################################################
+#
+#  05-24-17
+#  Matthew Speir
+#
+#  Run featureBits and check for overlap with gaps (including unbridged)
+#       
+##################################################################
+
+import argparse
+
+from ucscGb.qa import qaUtils
+from ucscGb.qa.tables import checkGapOverlap
+
+def parseCommandLine():
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description='runs featureBits and checks for overlap with gaps.')
+    parser.add_argument('db', type=str, help='the database to check')
+    parser.add_argument('table', type=str, help='the name of a table to check')
+    parser.add_argument('-u',"--checkUnbridged", default=False, action='store_true',
+                        help='check for overlap with unbridged gaps')
+    args = parser.parse_args()
+
+    return args
+
+def main():
+    args = parseCommandLine()
+    db = args.db
+    table = args.table
+    checkUnbridged = args.checkUnbridged
+
+    output = ""
+
+    fbCmd = ["featureBits", "-countGaps", db, table]
+    fbOut, fbErr = qaUtils.runCommand(fbCmd)
+    output += "\n" + fbCmd[0] + " " + fbCmd[1] + " " + fbCmd[2] + " " + fbCmd[3] + "\n" + fbErr
+
+    fbGapCmd = ["featureBits", "-countGaps", db, table, "gap"]
+    fbGapOut, fbGapErr = qaUtils.runCommand(fbGapCmd)
+    output += "\n" + fbGapCmd[0] + " " + fbGapCmd[1] + " " + fbGapCmd[2] + " " + fbGapCmd[3] + \
+              fbGapCmd[4] + "\n" + fbGapErr
+
+    gapOverlapOut = checkGapOverlap.checkGapOverlap(db, table, checkUnbridged)
+
+    print output + gapOverlapOut
+
+if __name__ == "__main__":
+    main()
