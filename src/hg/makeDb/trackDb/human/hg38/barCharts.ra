@@ -86,6 +86,7 @@ shortLabel GTEx
 longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 
 	track gtexGene
+        release alpha
 	parent gtexExpr
 	type bed 6 +
 	shortLabel GTEx Gene
