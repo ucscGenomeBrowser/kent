@@ -247,6 +247,13 @@ if (summaryTables != NULL)
 return dyStringCannibalize(&description);
 }
 
+static char *getGencodeGeneId(struct sqlConnection *conn, char *id, char *buffer, int bufSize)
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select protein from knownCanonical c, knownIsoforms i where i.clusterId=c.clusterId and i.transcript='%s'" ,id);
+return sqlQuickQuery(conn, query, buffer, bufSize );
+}
+
 static void printDescription(char *id, struct sqlConnection *conn, struct trackDb *tdb)
 /* Print out description of gene given ID. */
 {
@@ -263,7 +270,11 @@ char *commaPos;
 char *isGencode = trackDbSetting(tdb, "isGencode");
    
 if (isGencode)
+    {
     hPrintf("<B>Gencode Transcript:</B> %s<br>\n", curAlignId);
+    char buffer[1024];
+    hPrintf("<B>Gencode Gene:</B> %s<br>\n", getGencodeGeneId(conn, curGeneId, buffer, sizeof buffer));
+    }
 exonCnt = curGenePred->exonCount;
 safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, curGeneStart+1, curGeneEnd);
 commaPos = addCommasToPos(database, buffer);
