@@ -11,15 +11,21 @@ UCSC genome browser 'kent' bioinformatic utilities
 Pre-compiled binaries available:
 
 These binaries built at UCSC may already work in your linux/Mac
-environment.  Please access via:
+environment.  Please access via rsync:
+
+  rsync -a -P rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/linux.x86_64/ ./
+  rsync -a -P rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/macOSX.x86_64/ ./
+
+Or via HTTP:
   http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/
   http://hgdownload.cse.ucsc.edu/admin/exe/macOSX.x86_64/
-  http://hgdownload.cse.ucsc.edu/admin/exe/macOSX.i386/
 
 Or via FTP:
   ftp://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/
   ftp://hgdownload.cse.ucsc.edu/admin/exe/macOSX.x86_64/
-  ftp://hgdownload.cse.ucsc.edu/admin/exe/macOSX.i386/
+
+Note: access via HTTP or FTP does not copy with the 'execute' bits on,
+to enable execute bits on files in a directory:  chmod +x ./*
 
 ========================================================================
 
@@ -167,7 +173,7 @@ On a typical Linux system, for example Ubuntu, use the apt-get command
 to install additional packages:
 
    sudo apt-get install git libssl-dev openssl mysql-client-5.5 \
-      mysql-client-core-5.5
+      mysql-client-core-5.5 libmysqlclient-dev
 
 Depending upon the version of your Linux/Ubuntu/CentOS operating system,
 the specific version of packages you need may be different than this example.
