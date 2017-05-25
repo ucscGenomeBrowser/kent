@@ -12,11 +12,6 @@ ifeq (${CGI_BIN_BETA},)
     CGI_BIN_ALPHA=${CGI_BIN}-beta
 endif
 
-# Take the MySQLdb implementation of the current machine and copy it into the
-# CGI-BIN/pyLib/MySQLdb/ directory. This saves mirrors and our admins having to
-# install this library. Hopefully the binary libraries work on Ubuntu and other
-# distros as they work on our RedHat-based distro
-
 my:: compile 
 	mkdir -p ${CGI_BIN_USER}/pyLib/
 	rm -f ${CGI_BIN_USER}/pyLib/hgLib.{py,pyc,pyo}
@@ -24,7 +19,7 @@ my:: compile
 	cp -p hgLib.pyo ${CGI_BIN_USER}/pyLib/hgLib.pyo
 	
 	mkdir -p ${CGI_BIN_USER}/pyLib/MySQLdb
-	cp -R `python2.7 -c 'import MySQLdb, os.path; print os.path.dirname(MySQLdb.__file__)'`/* ${CGI_BIN_USER}/pyLib/MySQLdb/
+	#cp -R `python2.7 -c 'import MySQLdb, os.path; print os.path.dirname(MySQLdb.__file__)'`/* ${CGI_BIN_USER}/pyLib/MySQLdb/
 
 beta:: compile
 	mkdir -p ${CGI_BIN_BETA}/pyLib/
@@ -33,7 +28,7 @@ beta:: compile
 	cp -p hgLib.pyo ${CGI_BIN_BETA}/pyLib/hgLib.pyo
 	
 	mkdir -p ${CGI_BIN_BETA}/pyLib/MySQLdb
-	cp -R `python2.7 -c 'import MySQLdb, os.path; print os.path.dirname(MySQLdb.__file__)'`/* ${CGI_BIN_BETA}/pyLib/MySQLdb/
+	#cp -R `python2.7 -c 'import MySQLdb, os.path; print os.path.dirname(MySQLdb.__file__)'`/* ${CGI_BIN_BETA}/pyLib/MySQLdb/
 
 alpha:: compile
 	mkdir -p ${CGI_BIN}/pyLib/
@@ -42,7 +37,7 @@ alpha:: compile
 	cp -p hgLib.pyo ${CGI_BIN}/pyLib/hgLib.pyo
 	
 	mkdir -p ${CGI_BIN}/pyLib/MySQLdb
-	cp -R `python2.7 -c 'import MySQLdb, os.path; print os.path.dirname(MySQLdb.__file__)'`/* ${CGI_BIN}/pyLib/MySQLdb/
+	#cp -R `python2.7 -c 'import MySQLdb, os.path; print os.path.dirname(MySQLdb.__file__)'`/* ${CGI_BIN}/pyLib/MySQLdb/
 
 compile:
 	# byte-compile and strip all python source code to .pyo files
