@@ -26610,7 +26610,9 @@ TMPDIR=/dev/shm
 
 #########################################################################
 # NCBI ClinVar (new version -DONE - 2014-11-08 - Max)
-#
+# Note that since Jan 2015, ClinVar is on otto update mode. 
+# for the procedure, see ~/kent/src/hg/utils/otto/clinvar/
+
 mkdir /hive/data/genomes/hg19/bed/clinvar
 cd /hive/data/genomes/hg19/bed/clinvar
 cat << '_EOF_' > clinvar.as
