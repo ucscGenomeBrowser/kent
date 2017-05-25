@@ -1,0 +1,7 @@
+#############################################################################
+# interactions track, May 2017 Max
+also see the hg19.txt makeDoc ../hg19.txt for details
+
+cd /hive/data/genomes/hg19/bed/interactions/
+ggTables bigBed mysql/ bigBed/ geneModels/bestGenes.hg38.bed hg38
+ln -s `pwd`/bigBed/geneInteractions.hg38.bb /gbdb/hg38/bbi/interactions.bb

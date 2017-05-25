@@ -32032,3 +32032,45 @@ TMPDIR=/dev/shm
     # real    279m26.262s
 
 #############################################################################
+# Interactions track, 
+cd /hive/data/genomes/hg19/bed/interactions/
+
+# convert the protein interaction databases
+cd ppi
+
+cd iref
+psiMtabToTab iref 9606.mitab.08122013.txt > ../iref.tab 
+psiMtabToTab iref 9606.mitab.08122013.txt > ../iref.tab 
+cat All.mitab.08122013.txt | cut -f9 | sed -e 's/pubmed://g' | tr '|' '\n' | grep -v pmids | grep -v ^-$ | uniq | sort | uniq > allPmids.txt
+
+cd ../argdb
+python parse_shortened.py | tawk '{print "argdb"NR, "gene", "", "AR", "gene", "", $1, "regulation", "", "argdb", $3, "interaction", $2}' | cat headers.tab - > ../argdb.tab
+cd ..
+
+ggPpiToTab quickgo go/associations.tsv > go.tab
+ggPpiToTab corum corum/allComplexes.csv > corum.tab
+ggPpiToTab negatome negatome/manual.txt > negatome.tab
+
+# convert the pathway databases
+
+cd pathways
+ggPpiToTab reactome reactome/homo_sapiens.interactions.txt > reactome.tab
+ggGpmlToTag wikiPathways/gpml/*.gpml > wiki.tab
+ggKgmlToTab kegg/*.xml > kegg.tab
+ggPidToTab pid/NCI-Nature_Curated.xml pid/BioCarta.xml > pid.tab
+cd ..
+
+# the text/ directory file msr.tab was created by adding 'msr' in front of every line
+# of text/msr3/pubmed_evts_140805.txt
+
+# build the big ggLink table from information in the subdirectories
+# and write the output to mysql/
+ggTables build pathways/ ppi/ text/ mysql/
+# add the document/abstract information
+ggTables docs mysql/
+# load mysql/ into hgFixed
+ggTables load hgFixed
+# create the bigBed files
+ggTables bigBed mysql/ bigBed/ geneModels/bestGenes.hg19.bed hg19
+ln -s `pwd`/bigBed/geneInteractions.hg19.bb /gbdb/h19/bbi/interactions.bb
+#############################################################################
