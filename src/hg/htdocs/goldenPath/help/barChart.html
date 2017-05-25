@@ -10,7 +10,7 @@
 <p>
 The barChart and bigBarChart track formats display category specific values over a genomic region, similar to 
 the GTEx track in the <a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&gtexGene=pack">Genome Browser</a>. 
-This format is useful for displaying microarray, RNA-seq, and any other dataset where a distinct
+This format is useful for displaying microarray, RNA-seq, and other dataset where a distinct
 sets of variables are associated via genomic regions.
 </p>
 
@@ -31,13 +31,20 @@ regular barChart files when working with large data sets. The bigBarChart file r
 web-accessible server (http, https or ftp), not on the UCSC server, and only the portion needed for 
 the currently displayed chromosomal position is locally cached as a &quot;sparse file&quot;.</p>
 
+<p>
+Another advantage to the bigBarChart format are the 
+<a href="trackDb/trackDbHub.html#barChartMatrixUrl">barChartMatrixUrl</a> and 
+<a href="trackDb/trackDbHub.html#barChartSampleUrl">barChartSampleUrl</a> track
+line settings that enable efficient access into a matrix like file for drawing a boxplot of sample
+data and a download link to sample data  on the details page for each barChart.</p>
+
 <a name=barChart></a>
 <h2>barChart format definition</h2>
 <p>
-The following autoSql definition is used to define the barChart and bigBarChart bar graphs. The standalone 
-custom tracks mentioned previously must have the same number and format as the below columns,
-except for the _dataOffset and _dataLen fields, which are optional. In contrast, all of these fields 
-must be present in bigBarChart tracks.
+The following autoSql definition is used to define the barChart and bigBarChart bar graphs. The 
+standalone barChart custom tracks mentioned previously must have the same number and format as 
+the below columns, except for the _dataOffset and _dataLen fields, which are optional. In 
+contrast, all of these fields must be present in bigBarChart tracks.
 <pre><code>table bigBarChart
 "bigBarChart bar graph display"  
     ( 
@@ -56,25 +63,26 @@ must be present in bigBarChart tracks.
 </code></pre>
 
 <a name="columnDefinition"></a>
-<h6>Column Explanation</h6>
+<h6>Column Explanations</h6>
 
 <p>
 The first 6 fields of the barChart format are the same as the first 6 fields of the standard
 <a href="../../FAQ/FAQformat#format1">BED</a> format. The name2 field provides for an alternate
-item name, useful if you would like to associate multiple transcripts to a single gene locus, different
-variables to the same experiment type, etc. 
-The expCount and expScores fields are similar to the gtexGene table definition in that they define
-the number of categories and a value for each category. The optional _dataOffset and _dataLen fields provide
-indexes into an again optionally provided matrix file, which when provided for a bigBarChart format track,
-allows for a boxplot of sample data to be displayed on the details page for each individual bar graph in the
-bigBarChart track. The _dataOffset and _dataLen fields are optional only for plain text
-barChart format tracks, and even if provided, are not used. 
+item name, useful if you would like to associate multiple transcripts to a single gene locus, 
+different variables to the same experiment type, etc. The expCount and expScores fields are 
+similar to the gtexGene table definition in that they define the number of categories and a 
+value for each category (see example #1 below). 
+The optional _dataOffset and _dataLen field provide indexes into an 
+again optionally provided matrix file, which when provided for a bigBarChart format track, allows 
+for a boxplot of sample data to be displayed on the details page for each individual bar graph in 
+the bigBarChart track. Please note the _dataOffset and _dataLen fields are optional only for plain
+text barChart format tracks, and even if provided, are not used. 
 </p>
 
 <p>
 These autoSql files should be customized to your use case. For example, if the name
-field of your track refers to a transcript name, while the name2 field is for a gene, you are welcome
-to change the field definitions like so when making your bigBed:
+field of your track refers to a transcript name, while the name2 field is for a gene, you are 
+welcome to change the field definitions such as seen below when making your bigBed:
 <pre><code>
 "bigBarChart bar graph display"
 (
@@ -92,7 +100,7 @@ int _dataLen;               "Length of sample data row in data matrix file"
 )
 </code></pre>
 This is helpful when viewing items on the Genome Browser details
-pages, where you can get information about field names view the "view table schema" link,
+pages, where you can get information about field names via the "view table schema" link,
 or via the Table Browser.
 </p>
 
@@ -101,7 +109,7 @@ or via the Table Browser.
 The steps for creating barChart tracks differs from the process for creating 
 bigBarChart tracks. The steps also differ based on whether you have an input 
 matrix file (generated perhaps from an RNA-Seq differential expression analysis pipeline) or not. 
-If you have an expression matrix-like file, skip to <a href="example3">Example #3</a>, otherwise 
+If you have an expression matrix-like file, skip to <a href="#example3">Example #3</a>, otherwise 
 follow example 1 below. 
 </p>
 
@@ -110,7 +118,8 @@ follow example 1 below.
 <p>
 In this example, you will create a barChart custom track using example bed6+3 data.
 <ol>
-   <li>Paste the following track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
+   <li>Paste the following track line into the 
+       <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
    page</a> for the human assembly hg38.
    <pre><code>
 track type=barChart name=&quot;barChart Example One&quot; description=&quot;A barChart file&quot; barChartBars=&quot;bar1 bar2 bar3 bar4 bar5&quot; visibility=pack
@@ -121,7 +130,7 @@ chr9    133257408    133275201    ABO    311    -    ENSG00000175164.9    5    1
 </p>
 <p>
 After the file  loads in the Genome Browser, you should see an automatically colored bar 
-graph with 5 bars. Mouse hover over any of the individual bars will display the name of the
+graph with 5 bars. Hovering the mouse  over any of the individual bars will display the name of the
 particular bar ("bar1", "bar2", ...) as well as the value associated with that bar. The order
 of bar names in the barChartBars field of track line should exactly match the order of the 
 values in the expScores field. 
@@ -198,7 +207,11 @@ along with the rest of this example.
 To create a custom track in this form, follow the below steps:
 <ol>
    <li>Create a bed6+1 file to use as a map for the items in your matrix (does not need to be 
-   all-inclusive). This file will be one
+   all-inclusive). This file, with example lines like:
+<pre>
+chr9 133257408 133275201 ABO 311 - ENSG00000175164.9
+</pre>
+   will be one
    of three input files to the helper script expMatrixToBarChartBed. For an example file to
    follow along with the rest of this example, you can download the 
    <a href="">example bed6+1 file</a>.</li>
@@ -216,14 +229,18 @@ export PATH=$PATH:$HOME/Downloads
 expMatrixToBarChartBed categoriesFile matrixFile bedInputFile outputBed6+5
    </code></pre>
    The argument outputBed6+5 will be a bed6+5 file, with the expCount, expScores, _dataOffset, and 
-   _dataLen fields computed for you. <em>expMatrixToBarChartBed</em> will also
+   _dataLen fields computed for you, for example:
+<pre>
+chr14 95086227 95158010 ENSG00000100697.10 999 - DICER1 5 10.94,11.60,8.00,6.69,4.89 93153 26789
+</pre>
+   <em>expMatrixToBarChartBed</em> will also
    output the order of the scores in the expScores field, which you can then 
    copy and paste into the barChartBars field of the custom track line so
    the bars displayed in the browser match the right values:
-   <pre><code>
-The columns and order of the groups are; 
+   <pre>
+The columns and order of the groups are: 
 #chr	start	end	name	score	strand	name2	expCount	expScores;shRNA	_offset	_lineLength
-   </code></pre>
+   </pre>
    If you have already pre-computed expCount and 
    expScores, and just need offsets into your matrix file for a more descriptive details
    page, run only bedJoinTabOffset like so:
@@ -232,7 +249,7 @@ bedJoinTabOffset matrixFile exampleBed6+3 outBed
    </code></pre></li>
    <li>Now that we have a bed6+5 format file that corresponds  to the barChart format, we can 
    construct a track line and prepend it to our bed6+5 file so the Genome Browser will
-   recognize it::
+   recognize it:
    <pre><code>
 track type=barChart name=&quot;barChart Example&quot; description=&quot;A barChart file&quot; barChartBars=&quot;&quot; visibility=pack 
    </code></pre></li>
