@@ -67,6 +67,21 @@ static void gencodeQueryEndSubWhere(struct gencodeQuery *gencodeQuery)
 dyStringAppend(gencodeQuery->where, ")");
 }
 
+static boolean anyFilterBy(struct track *tg, filterBySetGetFuncType filterBySetGetFunc)
+/* check if any filters were specified of the particular type */
+{
+filterBy_t *filterBySet = filterBySetGetFunc(tg->tdb, cart, NULL);
+filterBy_t *filterBy;
+boolean someFilters = FALSE;
+for (filterBy = filterBySet; (filterBy != NULL) && !someFilters; filterBy = filterBy->next)
+    {
+    if (!filterByAllChosen(filterBy))
+        someFilters = TRUE;
+    }   
+filterBySetFree(&filterBySet);
+return someFilters;
+}
+
 static char *tslSymToNumStr(char *tslSym)
 /* convert a transcription support level string (tsl1..tsl5, tslN), to 
  * a numeric string ("1".."5", "-1") */
@@ -349,7 +364,8 @@ static struct linkedFeatures *loadGencodeGenePred(struct track *tg, struct genco
 {
 struct genePred *gp = genePredExtLoad(row, (gencodeQuery->isGenePredX ? GENEPREDX_NUM_COLS:  GENEPRED_NUM_COLS));
 struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, gp, TRUE);
-highlightByGetColor(gp, highlightIds, highlightColor, lf);
+if (highlightIds != NULL)
+    highlightByGetColor(gp, highlightIds, highlightColor, lf);
 return lf;
 }
 
@@ -357,7 +373,9 @@ static void loadGencodeGenePreds(struct track *tg)
 /* Load genePreds in window info linked feature, with filtering, etc. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-struct hash *highlightIds = loadHighlightIds(conn, tg);
+struct hash *highlightIds = NULL;
+if (anyFilterBy(tg, highlightBySetGet))
+    highlightIds = loadHighlightIds(conn, tg);
 struct gencodeQuery *gencodeQuery = geneQueryConstruct(tg);
 struct sqlResult *sr = executeQuery(conn, gencodeQuery);
 struct linkedFeatures *lfList = NULL;
