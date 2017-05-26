@@ -47,4 +47,8 @@ void tagStormToSqlCreate(struct tagStorm *tagStorm,
 void tagStanzaToSqlInsert(struct tagStanza *stanza, char *table, struct dyString *dy);
 /* Put SQL insert statement for stanza into dy. */
 
+void tagTypeInfoPrintSchemaLine(struct tagTypeInfo *tti, int useCount, struct hash *valHash, 
+    boolean doLooseSchema, boolean doTightSchema, FILE *f);
+/* Print out a line in tagStorm type schema */
+
 #endif /* TAGTOSQL_H */
