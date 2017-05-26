@@ -159,7 +159,7 @@ utils-alpha: libs destBin
 	cd utils && ${MAKE}
 	cd hg && ${MAKE} utils
 
-DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm
+DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm tabFile
 
 ##  cellar archive for obsolete programs
 
