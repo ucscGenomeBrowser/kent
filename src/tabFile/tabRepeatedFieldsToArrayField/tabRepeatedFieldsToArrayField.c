@@ -70,6 +70,7 @@ void tabRepeatedFieldsToArrayField(char *inFile, char *outFile)
 {
 /* Read in tab-sep file */
 struct fieldedTable *table = fieldedTableFromTabFile(inFile, inFile, NULL, 0);
+int collapsedFields = 0;
 
 /* Build up list and hash of fieldInfo from table's field list */
 struct hash *hash = hashNew(0);
@@ -86,10 +87,13 @@ for (i=0; i<table->fieldCount; ++i)
 	slAddHead(&list, field);
 	hashAdd(hash, name, field);
 	}
+    else
+        ++collapsedFields;
     struct slInt *si = slIntNew(i);
     slAddTail(&field->offsetList, si);
     }
 slReverse(&list);
+verbose(1, "Collapsed %d fields\n", collapsedFields);
 
 
 /* Open output file and write out header row with optional leading # */
