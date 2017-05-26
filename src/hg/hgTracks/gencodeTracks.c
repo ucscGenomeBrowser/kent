@@ -10,6 +10,8 @@
 #include "genePredReader.h"
 #include "genePred.h"
 
+typedef filterBy_t* (*filterBySetGetFuncType)(struct trackDb *tdb, struct cart *cart, char *name);
+
 struct gencodeQuery
 /* structure used to store information about the query being assembled.
  * this allows a join to bring in additional data without having to
@@ -19,16 +21,7 @@ struct gencodeQuery
     struct dyString *from;                  // from clause
     struct dyString *where;                 // where clause
     boolean isGenePredX;                    // does this have the extended fields?
-    int nextFieldCol;                       // next available column in result row
-    int supportLevelCol;                    // support level column if joined for highlighting, or -1 
-    int transcriptTypeCol;                  // transcript type column if joined for highlighting, or -1 
-    int transcriptSourceCol;                // transcript source column if joined for method highlighting, or -1 
-    int tagCol;                             // tag column if joined for method highlighting, or -1
     boolean isFiltered;                     // are there filters on the query?
-    filterBy_t *supportLevelHighlight;      // choices for support level highlighting if not NULL
-    filterBy_t *transcriptTypeHighlight;    // choices for transcript type highlighting if not NULL
-    filterBy_t *transcriptMethodHighlight;  // choices for transcript method highlighting if not NULL
-    filterBy_t *tagHighlight;               // choices for tag highlighting if not NULL
     boolean joinAttrs;                      // join the wgEncodeGencodeAttrs table
     boolean joinSupportLevel;               // join the wgEncodeGencodeTranscriptionSupportLevel table
     boolean joinTranscriptSource;           // join the wgEncodeGencodeTranscriptSource table
@@ -43,10 +36,6 @@ AllocVar(gencodeQuery);
 gencodeQuery->fields = dyStringNew(0);
 gencodeQuery->from = dyStringNew(0);
 gencodeQuery->where = dyStringNew(0);
-gencodeQuery->supportLevelCol = -1;
-gencodeQuery->transcriptTypeCol = -1;
-gencodeQuery->transcriptSourceCol = -1;
-gencodeQuery->tagCol = -1;
 return gencodeQuery;
 }
 
@@ -59,10 +48,6 @@ if (gencodeQuery != NULL)
     dyStringFree(&gencodeQuery->fields);
     dyStringFree(&gencodeQuery->from);
     dyStringFree(&gencodeQuery->where);
-    filterBySetFree(&gencodeQuery->supportLevelHighlight);
-    filterBySetFree(&gencodeQuery->transcriptTypeHighlight);
-    filterBySetFree(&gencodeQuery->transcriptMethodHighlight);
-    filterBySetFree(&gencodeQuery->tagHighlight);
     freeMem(gencodeQuery);
     *gencodeQueryPtr = NULL;
     }
@@ -82,6 +67,21 @@ static void gencodeQueryEndSubWhere(struct gencodeQuery *gencodeQuery)
 dyStringAppend(gencodeQuery->where, ")");
 }
 
+static boolean anyFilterBy(struct track *tg, filterBySetGetFuncType filterBySetGetFunc)
+/* check if any filters were specified of the particular type */
+{
+filterBy_t *filterBySet = filterBySetGetFunc(tg->tdb, cart, NULL);
+filterBy_t *filterBy;
+boolean someFilters = FALSE;
+for (filterBy = filterBySet; (filterBy != NULL) && !someFilters; filterBy = filterBy->next)
+    {
+    if (!filterByAllChosen(filterBy))
+        someFilters = TRUE;
+    }   
+filterBySetFree(&filterBySet);
+return someFilters;
+}
+
 static char *tslSymToNumStr(char *tslSym)
 /* convert a transcription support level string (tsl1..tsl5, tslN), to 
  * a numeric string ("1".."5", "-1") */
@@ -90,20 +90,6 @@ if (sameString(tslSym, "tslNA"))
     return "-1";
 else
     return tslSym+3;
-}
-
-static char *tslNumStrToSym(char *tslNum)
-/* convert a transcription support level numeric string ("1".."5", "-1:) 
- * to a symbol (tsl1..tsl5, tslN).  WARNING: static return */
-{
-static char buf[8];
-if (sameString(tslNum, "-1"))
-    return "tslNA";
-else
-    {
-    safef(buf, sizeof(buf), "tsl%s", tslNum);
-    return buf;
-    }
 }
 
 static void filterByMethodChoiceQuery(char *choice, struct gencodeQuery *gencodeQuery)
@@ -237,10 +223,10 @@ else
 gencodeQuery->isFiltered = TRUE;
 }
 
-static void gencodeFilterBySetQuery(struct track *tg, struct gencodeQuery *gencodeQuery)
-/* build where clause based on filters. */
+static void gencodeFilterBySetQuery(struct track *tg, filterBySetGetFuncType filterBySetGetFunc, struct gencodeQuery *gencodeQuery)
+/* build where clause based for filters or highlights filters. */
 {
-filterBy_t *filterBySet = filterBySetGet(tg->tdb, cart, NULL);
+filterBy_t *filterBySet = filterBySetGetFunc(tg->tdb, cart, NULL);
 filterBy_t *filterBy;
 for (filterBy = filterBySet; filterBy != NULL; filterBy = filterBy->next)
     {
@@ -248,175 +234,6 @@ for (filterBy = filterBySet; filterBy != NULL; filterBy = filterBy->next)
         gencodeFilterByQuery(tg, filterBy, gencodeQuery);
     }
 filterBySetFree(&filterBySet);
-}
-
-static void highlightBySupportLevelQuery(struct track *tg, filterBy_t *highlightBy, struct gencodeQuery *gencodeQuery)
-/* generate SQL where clause for obtaining support level for highlighting */
-{
-dyStringAppend(gencodeQuery->fields, ", supLevel.level");
-gencodeQuery->supportLevelCol = gencodeQuery->nextFieldCol++;
-gencodeQuery->supportLevelHighlight = highlightBy;
-gencodeQuery->joinSupportLevel = TRUE;
-}
-
-static void highlightByTranscriptTypeQuery(struct track *tg, filterBy_t *highlightBy, struct gencodeQuery *gencodeQuery)
-/* generate SQL where clause for obtaining transcript type for highlighting */
-{
-dyStringAppend(gencodeQuery->fields, ", attrs.transcriptType");
-gencodeQuery->transcriptTypeCol = gencodeQuery->nextFieldCol++;
-gencodeQuery->transcriptTypeHighlight = highlightBy;
-gencodeQuery->joinAttrs = TRUE;
-}
-
-
-static void highlightByTranscriptMethodQuery(struct track *tg, filterBy_t *highlightBy, struct gencodeQuery *gencodeQuery)
-/* generate SQL where clause for obtaining transcript type for highlighting */
-{
-gencodeQuery->joinTranscriptSource = TRUE;
-dyStringAppend(gencodeQuery->fields, ", transSrc.source");
-gencodeQuery->transcriptSourceCol = gencodeQuery->nextFieldCol++;
-gencodeQuery->transcriptMethodHighlight = highlightBy;
-gencodeQuery->joinAttrs = TRUE;
-}
-
-static void highlightByTagQuery(struct track *tg, filterBy_t *highlightBy, struct gencodeQuery *gencodeQuery)
-/* generate SQL where clause for obtaining tag for highlighting */
-{
-gencodeQuery->joinTag = TRUE;
-dyStringAppend(gencodeQuery->fields, ", tag.tag");
-gencodeQuery->tagCol = gencodeQuery->nextFieldCol++;
-gencodeQuery->tagHighlight = highlightBy;
-gencodeQuery->joinTag = TRUE;
-}
-
-static void gencodeHighlightByQuery(struct track *tg, filterBy_t *highlightBy, struct gencodeQuery *gencodeQuery)
-/* Handle a highlight by category.  highlightBy object will be saved in gencodeQuery */
-{
-if (sameString(highlightBy->column, "supportLevel"))
-    highlightBySupportLevelQuery(tg, highlightBy, gencodeQuery);
-else if (sameString(highlightBy->column, "attrs.transcriptType"))
-    highlightByTranscriptTypeQuery(tg, highlightBy, gencodeQuery);
-else if (sameString(highlightBy->column, "transcriptMethod"))
-    highlightByTranscriptMethodQuery(tg, highlightBy, gencodeQuery);
-else if (sameString(highlightBy->column, "tag"))
-    highlightByTagQuery(tg, highlightBy, gencodeQuery);
-else
-    errAbort("BUG: gencodeHighlightByQuery unknown highlight column: \"%s\"", highlightBy->column);
-}
-
-static void gencodeHighlightBySetQuery(struct track *tg, struct gencodeQuery *gencodeQuery)
-/* build add join and fields to include to provide data for highlighting.  This results
- * in extra columns being returned. */
-{
-filterBy_t *highlightBySet = highlightBySetGet(tg->tdb, cart, NULL);
-filterBy_t *highlightBy;
-while ((highlightBy = slPopHead(&highlightBySet)) != NULL)
-    {
-    if (!filterByAllChosen(highlightBy))
-        gencodeHighlightByQuery(tg, highlightBy, gencodeQuery);
-    else
-        filterBySetFree(&highlightBy);
-    }
-}
-
-static bool highlightBySupportLevelSelected(char **row, struct gencodeQuery *gencodeQuery)
-/* is the support level associated with this transcript selected? */
-{
-if (gencodeQuery->supportLevelHighlight == NULL)
-    return FALSE;  // no highlighting by support level
-else
-    return slNameInList(gencodeQuery->supportLevelHighlight->slChoices, tslNumStrToSym(row[gencodeQuery->supportLevelCol]));
-}
-
-static bool highlightByTranscriptTypeSelected(char **row, struct gencodeQuery *gencodeQuery)
-/* is the transcript type associated with this transcript selected? */
-{
-if (gencodeQuery->transcriptTypeHighlight == NULL)
-    return FALSE;  // no highlighting by transcript type
-else
-    return slNameInList(gencodeQuery->transcriptTypeHighlight->slChoices, row[gencodeQuery->transcriptTypeCol]);
-}
-
-static bool highlightByTranscriptMethodMatch(char *choice, char *transSource)
-/* check if the transcript source matches the specified choice */
-{
-if (sameString(choice, "manual"))
-    {
-    if (containsStringNoCase(transSource, "havana"))
-        return TRUE;
-    }
-else if (sameString(choice, "automatic"))
-    {
-    if (containsStringNoCase(transSource, "ensembl") || !containsStringNoCase(transSource, "havana"))
-        return TRUE;
-    }
-else if (sameString(choice, "manual_only"))
-    {
-    if (containsStringNoCase(transSource, "havana") && !containsStringNoCase(transSource, "ensembl"))
-        return TRUE;
-    }
-else if (sameString(choice, "automatic_only"))
-    {
-    if (!containsStringNoCase(transSource, "havana"))
-        return TRUE;
-    }
-else if (sameString(choice, "manual_and_automatic"))
-    {
-    if (containsStringNoCase(transSource, "havana") && containsStringNoCase(transSource, "ensembl"))
-        return TRUE;
-    }
-else
-    errAbort("BUG: highlightByTranscriptMethodMatch missing choice: \"%s\"", choice);
-return FALSE;
-}
-
-static bool highlightByTranscriptMethodSelected(char **row, struct gencodeQuery *gencodeQuery)
-/* is the transcript type associated with this transcript selected? */
-{
-if (gencodeQuery->transcriptMethodHighlight != NULL)
-    {
-    struct slName *choice;
-    for (choice = gencodeQuery->transcriptMethodHighlight->slChoices; choice != NULL; choice = choice->next)
-        {
-        if (highlightByTranscriptMethodMatch(choice->name, row[gencodeQuery->transcriptSourceCol]))
-            return TRUE;
-        }
-    }
-return FALSE;
-}
-
-static bool highlightByTagSelected(char **row, struct gencodeQuery *gencodeQuery)
-/* is the tag associated with this transcript selected? */
-{
-if (gencodeQuery->tagHighlight == NULL)
-    return FALSE;  // no highlighting by tag
-else
-    return slNameInList(gencodeQuery->tagHighlight->slChoices, row[gencodeQuery->tagCol]);
-}
-
-static unsigned getHighlightColor(struct track *tg)
-/* get the highlightColor from trackDb, or a default if not found */
-{
-unsigned char red = 255, green = 165, blue = 0; // Orange default
-char *colorStr = trackDbSetting(tg->tdb, "highlightColor");
-if (colorStr != NULL)
-    parseColor(colorStr, &red, &green, &blue);
-return MAKECOLOR_32(red, green, blue);
-}
-
-static void highlightByGetColor(char **row, struct gencodeQuery *gencodeQuery, unsigned highlightColor,
-                                struct linkedFeatures *lf)
-/* compute the highlight color based on a extra fields returned in a row, setting
- * the linkedFeatures field */
-{
-if (highlightBySupportLevelSelected(row, gencodeQuery)
-    || highlightByTranscriptTypeSelected(row, gencodeQuery)
-    || highlightByTranscriptMethodSelected(row, gencodeQuery)
-    || highlightByTagSelected(row, gencodeQuery))
-    {
-    lf->highlightColor = highlightColor;
-    lf->highlightMode = highlightBackground;
-    }
 }
 
 static void addQueryTables(struct track *tg, struct gencodeQuery *gencodeQuery)
@@ -445,6 +262,28 @@ if (gencodeQuery->joinTag)
     }
 }
 
+static void addQueryCommon(struct track *tg, filterBySetGetFuncType filterBySetGetFunc, struct gencodeQuery *gencodeQuery)
+/* Add tables and joins for both gene and highlight queries */
+{
+// bin range overlap part
+hAddBinToQuery(winStart, winEnd, gencodeQuery->where);
+sqlDyStringPrintf(gencodeQuery->where, "(g.chrom = \"%s\") and (g.txStart < %u) and (g.txEnd > %u)", chromName, winEnd, winStart);
+
+gencodeFilterBySetQuery(tg, filterBySetGetFunc, gencodeQuery);
+addQueryTables(tg, gencodeQuery);
+}
+
+static struct sqlResult *executeQuery(struct sqlConnection *conn, struct gencodeQuery *gencodeQuery)
+/* execute the actual SQL query */
+{
+struct dyString *query = dyStringNew(0);
+sqlDyStringPrintf(query, "select %-s from %-s where %-s", 
+    sqlCkIl(dyStringContents(gencodeQuery->fields)), dyStringContents(gencodeQuery->from), dyStringContents(gencodeQuery->where));
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
+dyStringFree(&query);
+return sr;
+}
+
 static boolean tableIsGenePredX(struct track *tg)
 /* determine if a table has genePred extended fields.  two-way consensus
  * pseudo doesn't have them. */
@@ -457,58 +296,93 @@ slFreeList(&fields);
 return isGenePredX;
 }
 
-static struct gencodeQuery *gencodeQueryConstruct(struct track *tg)
-/* construct the query for a GENCODE genePred track, which includes filters. */
+static struct gencodeQuery *geneQueryConstruct(struct track *tg)
+/* construct the query for a GENCODE genePred records, which includes filters. */
 {
 static char *genePredXFields = "g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds, g.score, g.name2, g.cdsStartStat, g.cdsEndStat, g.exonFrames";
 static char *genePredFields = "g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds";
 
 struct gencodeQuery *gencodeQuery = gencodeQueryNew();
 gencodeQuery->isGenePredX = tableIsGenePredX(tg);
-gencodeQuery->nextFieldCol = (gencodeQuery->isGenePredX ? GENEPREDX_NUM_COLS : GENEPRED_NUM_COLS);
 dyStringAppend(gencodeQuery->fields, (gencodeQuery->isGenePredX ? genePredXFields : genePredFields));
 
-// bin range overlap part
-hAddBinToQuery(winStart, winEnd, gencodeQuery->where);
-sqlDyStringPrintf(gencodeQuery->where, "(g.chrom = \"%s\") and (g.txStart < %u) and (g.txEnd > %u)", chromName, winEnd, winStart);
-
-gencodeFilterBySetQuery(tg, gencodeQuery);
-gencodeHighlightBySetQuery(tg, gencodeQuery);
-addQueryTables(tg, gencodeQuery);
+addQueryCommon(tg, filterBySetGet, gencodeQuery);
 return gencodeQuery;
 }
 
-static struct sqlResult *gencodeMakeQuery(struct sqlConnection *conn, struct gencodeQuery *gencodeQuery)
-/* make the actual SQL query */
+static struct gencodeQuery *highlightQueryConstruct(struct track *tg)
+/* construct the query for GENCODE ids which should be highlighted.
+ * this essentially redoes the genePred query, only using the filter functions
+ * and only getting ids */
 {
-struct dyString *query = dyStringNew(0);
-sqlDyStringPrintf(query, "select %-s from %-s where %-s", 
-    sqlCkIl(dyStringContents(gencodeQuery->fields)), dyStringContents(gencodeQuery->from), dyStringContents(gencodeQuery->where));
-struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
-dyStringFree(&query);
-return sr;
+struct gencodeQuery *gencodeQuery = gencodeQueryNew();
+dyStringAppend(gencodeQuery->fields, "g.name");
+
+addQueryCommon(tg, highlightBySetGet, gencodeQuery);
+return gencodeQuery;
 }
 
-static struct linkedFeatures *loadGencodeGenePred(struct track *tg, struct gencodeQuery *gencodeQuery, char **row, unsigned highlightColor)
+static unsigned getHighlightColor(struct track *tg)
+/* get the highlightColor from trackDb, or a default if not found */
+{
+unsigned char red = 255, green = 165, blue = 0; // Orange default
+char *colorStr = trackDbSetting(tg->tdb, "highlightColor");
+if (colorStr != NULL)
+    parseColor(colorStr, &red, &green, &blue);
+return MAKECOLOR_32(red, green, blue);
+}
+
+static void highlightByGetColor(struct genePred *gp, struct hash *highlightIds, unsigned highlightColor,
+                                struct linkedFeatures *lf)
+/* compute the highlight color based on a extra fields returned in a row, setting
+ * the linkedFeatures field */
+{
+if (hashLookup(highlightIds, gp->name) != NULL)
+    {
+    lf->highlightColor = highlightColor;
+    lf->highlightMode = highlightBackground;
+    }
+}
+
+static struct hash* loadHighlightIds(struct sqlConnection *conn, struct track *tg)
+/* Load ids (genePred names) in window for annotations to be highlighted. */
+{
+struct hash *highlightIds = hashNew(0);
+struct gencodeQuery *gencodeQuery = highlightQueryConstruct(tg);
+struct sqlResult *sr = executeQuery(conn, gencodeQuery);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAddInt(highlightIds, row[0], 1);
+sqlFreeResult(&sr);
+return highlightIds;
+}
+
+
+static struct linkedFeatures *loadGencodeGenePred(struct track *tg, struct gencodeQuery *gencodeQuery, char **row,
+                                                  struct hash *highlightIds, unsigned highlightColor)
 /* load one genePred record into a linkedFeatures object */
 {
 struct genePred *gp = genePredExtLoad(row, (gencodeQuery->isGenePredX ? GENEPREDX_NUM_COLS:  GENEPRED_NUM_COLS));
 struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, gp, TRUE);
-highlightByGetColor(row, gencodeQuery, highlightColor, lf);
+if (highlightIds != NULL)
+    highlightByGetColor(gp, highlightIds, highlightColor, lf);
 return lf;
 }
 
 static void loadGencodeGenePreds(struct track *tg)
 /* Load genePreds in window info linked feature, with filtering, etc. */
 {
-struct gencodeQuery *gencodeQuery = gencodeQueryConstruct(tg);
 struct sqlConnection *conn = hAllocConn(database);
-struct sqlResult *sr = gencodeMakeQuery(conn, gencodeQuery);
+struct hash *highlightIds = NULL;
+if (anyFilterBy(tg, highlightBySetGet))
+    highlightIds = loadHighlightIds(conn, tg);
+struct gencodeQuery *gencodeQuery = geneQueryConstruct(tg);
+struct sqlResult *sr = executeQuery(conn, gencodeQuery);
 struct linkedFeatures *lfList = NULL;
 unsigned highlightColor = getHighlightColor(tg);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
-    slAddHead(&lfList, loadGencodeGenePred(tg, gencodeQuery, row, highlightColor));
+    slAddHead(&lfList, loadGencodeGenePred(tg, gencodeQuery, row, highlightIds, highlightColor));
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 
@@ -522,6 +396,7 @@ genePredAssignConfiguredName(tg);
 if (gencodeQuery->isFiltered)
     labelTrackAsFiltered(tg);
 gencodeQueryFree(&gencodeQuery);
+hashFree(&highlightIds);
 }
 
 static char *gencodeGeneName(struct track *tg, void *item)

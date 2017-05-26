@@ -356,6 +356,11 @@ criGri1.perChromTables = no
 'update dbDb set defaultPos="KE382584:3834159-3887734" where name="criGri1";' \
 	hgcentraltest
 
+# reset default position to recommendation from Regeneron: (2017-05-12 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="KE382835:847038-859636" where name="criGri1";' \
+	hgcentraltest
+
 #########################################################################
 # create ucscToINSDC name mapping (DONE - 2014-04-11 - Hiram)
     mkdir /hive/data/genomes/criGri1/bed/ucscToINSDC
@@ -562,3 +567,28 @@ TMPDIR=/dev/shm
     # real    83m10.946s
 
 #########################################################################
+# swap chainNet/lastz mouse/mm10 (DONE - 2017-05-16 - Hiram)
+
+    # the alignment on mm10
+    cd /hive/data/genomes/mm10/bed/lastzCriGri1.2017-05-12
+    cat fb.mm10.chainCriGri1Link.txt
+    #	1577848220 bases of 2652783500 (59.479%) in intersection
+
+    # and for the swap
+    mkdir /hive/data/genomes/criGri1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/criGri1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCriGri1.2017-05-12/DEF \
+	-noDbNameCheck -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    172m50.552s
+
+    cat fb.criGri1.chainMm10Link.txt
+    #	1589449878 bases of 2301325917 (69.067%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev criGri1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    846m34.982s
+
+##############################################################################

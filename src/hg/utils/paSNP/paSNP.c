@@ -46,8 +46,8 @@ void countAA( struct alignDetail *detail, int cNum, void *closure)
 int ii;
 FILE *f = (FILE *) closure;
 
-char firstChar;
-char *position;
+char firstChar = 0;
+char *position = NULL;
 for(ii=0; ii < detail->numSpecies; ii++)
     {
     struct seqBuffer *sb = &detail->seqBuffers[ii];

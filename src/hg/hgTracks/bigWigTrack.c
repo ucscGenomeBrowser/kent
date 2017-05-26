@@ -16,6 +16,7 @@
 #include "errCatch.h"
 #include "container.h"
 #include "bigWarn.h"
+#include "mathWig.h"
 
 struct preDrawContainer *bigWigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
 /* Do bits that load the predraw buffer tg->preDrawContainer. */
@@ -125,6 +126,112 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 }
 
+static void dataToPixelsUp(double *data, struct preDrawContainer *pre)
+/* Up sample data into pixels. */
+{
+int preDrawZero = pre->preDrawZero;
+unsigned size = winEnd - winStart;
+double dataPerPixel = size / (double) insideWidth;
+int pixel;
+
+for (pixel=0; pixel<insideWidth; ++pixel)
+    {
+    struct preDrawElement *pe = &pre->preDraw[pixel + preDrawZero];
+    unsigned index = pixel * dataPerPixel;
+    pe->count = 1;
+    pe->min = data[index];
+    pe->max = data[index];
+    pe->sumData = data[index] ;
+    pe->sumSquares = data[index] * data[index];
+    }
+}
+
+static void dataToPixelsDown(double *data, struct preDrawContainer *pre)
+/* Down sample data into pixels. */
+{
+int preDrawZero = pre->preDrawZero;
+unsigned size = winEnd - winStart;
+double dataPerPixel = size / (double) insideWidth;
+int pixel;
+
+for (pixel=0; pixel<insideWidth; ++pixel)
+    {
+    struct preDrawElement *pe = &pre->preDraw[pixel + preDrawZero];
+    double startReal = pixel * dataPerPixel;
+    double endReal = (pixel + 1) * dataPerPixel;
+    unsigned startUns = startReal;
+    unsigned endUns = endReal;
+    double realCount, realSum, realSumSquares, max, min;
+
+    realCount = realSum = realSumSquares = 0.0;
+    max = min = data[startUns];
+
+    assert(startUns != endUns);
+    unsigned ceilUns = ceil(startReal);
+
+    if (ceilUns != startUns)
+	{
+	/* need a fraction of the first count */
+	double frac = (double)ceilUns - startReal;
+	realCount = frac;
+	realSum = frac * data[startUns];
+	realSumSquares = realSum * realSum;
+	startUns++;
+	}
+
+    // add in all the data that are totally in this pixel
+    for(; startUns < endUns; startUns++)
+	{
+	realCount += 1.0;
+	realSum += data[startUns];
+	realSumSquares += data[startUns] * data[startUns];
+	if (max < data[startUns])
+	    max = data[startUns];
+	if (min > data[startUns])
+	    min = data[startUns];
+	}
+
+    // add any fraction of the count that's only partially in this pixel
+    double lastFrac = endReal - endUns;
+    double lastSum = lastFrac * data[endUns];
+    if ((lastFrac > 0.0) && (endUns < size))
+	{
+	if (max < data[endUns])
+	    max = data[endUns];
+	if (min > data[endUns])
+	    min = data[endUns];
+	realCount += lastFrac;
+	realSum += lastSum;
+	realSumSquares += lastSum * lastSum;
+	}
+
+    pe->count = normalizeCount(pe, realCount, min, max, realSum, realSumSquares);
+    }
+}
+
+static void dataToPixels(double *data, struct preDrawContainer *pre)
+/* Sample data into pixels. */
+{
+unsigned size = winEnd - winStart;
+double dataPerPixel = size / (double) insideWidth;
+
+if (dataPerPixel <= 1.0)
+    dataToPixelsUp(data, pre);
+else
+    dataToPixelsDown(data, pre);
+}
+
+static void mathWigLoadItems(struct track *tg)
+/* Fill up tg->items with bedGraphItems derived from a bigWig file */
+{
+char *equation = cloneString(trackDbSetting(tg->tdb, "mathDataUrl"));
+
+struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(insideWidth);
+double *data = mathWigGetValues(equation, chromName, winStart, winEnd);
+dataToPixels(data, pre);
+
+free(data);
+}
 
 static void bigWigLoadItems(struct track *tg)
 /* Fill up tg->items with bedGraphItems derived from a bigWig file */
@@ -154,6 +261,14 @@ if (tg->bbiFile == NULL)
 	}
     }
 bigWigLoadPreDraw(tg, winStart, winEnd, insideWidth);
+}
+
+void mathWigMethods(struct track *track, struct trackDb *tdb, 
+	int wordCount, char *words[])
+/* Set up bigWig methods. */
+{
+bigWigMethods(track, tdb, wordCount, words);
+track->loadItems = mathWigLoadItems;
 }
 
 void bigWigMethods(struct track *track, struct trackDb *tdb, 

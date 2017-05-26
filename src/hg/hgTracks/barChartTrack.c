@@ -75,8 +75,10 @@ if (!info->categNames)
         info->categNames[categ->id] = cloneString(categ->name);
     }
 if (id >= count)
-    //errAbort("Bar chart track: can't find id %d\n", id);
+    {
+    warn("Bar chart track: can't find id %d\n", id);
     return NULL;        // Exclude this category
+    }
 return info->categNames[id];
 }
 
@@ -229,8 +231,10 @@ return hvGfxFindColorIx(hvg, color.r, color.g, color.b);
 static void barChartLoadItems(struct track *tg)
 /* Load method for track items */
 {
+/* Initialize colors for visibilities that don't display actual barchart */
 if (tg->visibility == tvSquish || tg->limitedVis == tvSquish)
     tg->itemColor = barChartItemColor;
+tg->colorShades = shadesOfGray;
 
 /* Get track UI info */
 struct barChartTrack *extras;

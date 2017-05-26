@@ -66,17 +66,27 @@ jsInit();
 
 jsIncludeDataTablesLibs();
 
-if (loginSystemEnabled()) /* Using the new hgLogin CGI for login? */
+if (loginSystemEnabled()) /* Using the new hgLogin CGI for login */
     {
     printf("<h4 style=\"margin: 0pt 0pt 7px;\">Your Account Information</h4>"
         "<ul style=\"list-style: none outside none; margin: 0pt; padding: 0pt;\">"
         "<li>Username:  %s</li>",wikiUserName);
-    printf("<li><A HREF=\"%s\">Change password</A></li></ul>",
-        wikiLinkChangePasswordUrl(cartSessionId(cart)));
-    printf("<p><A HREF=\"%s\">Sign out</A></p>",
+
+    if (loginUseBasicAuth())
+        printf("<li>The Genome Browser is configured to use HTTP Basic Authentication, so the password cannot be changed here.</li></ul>");
+    else
+        printf("<li><A HREF=\"%s\">Change password</A></li></ul>",
+            wikiLinkChangePasswordUrl(cartSessionId(cart)));
+
+    printf("<p><A id='logoutLink' HREF=\"%s\">Sign out</A></p>",
         wikiLinkUserLogoutUrl(cartSessionId(cart)));
+
+    if (loginUseBasicAuth())
+            wikiFixLogoutLinkWithJs();
     }
+
 else
+/* this part is not used anymore at UCSC since 2014 */
     {
     printf("If you are not %s (on the wiki at "
         "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
@@ -164,9 +174,9 @@ void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
  * If encode, cgiEncodeFull the URL. */
 {
 struct dyString *dyTmp = dyStringNew(1024);
-dyStringPrintf(dyTmp, "http%s://%s%s?hgS_doOtherUser=submit&"
+dyStringPrintf(dyTmp, "%s%s?hgS_doOtherUser=submit&"
 	       "hgS_otherUserName=%s&hgS_otherUserSessionName=%s",
-	       cgiAppendSForHttps(), cgiServerNamePort(), destAppScriptName(), userName, sessionName);
+	       wikiServerAndCgiDir(), "hgTracks", userName, sessionName);
 if (encode)
     {
     dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
@@ -209,8 +219,8 @@ void addUrlLink(struct dyString *dy, char *url, boolean encode)
 {
 struct dyString *dyTmp = dyStringNew(1024);
 char *encodedUrl = cgiEncodeFull(url);
-dyStringPrintf(dyTmp, "http%s://%s%s?hgS_doLoadUrl=submit&hgS_loadUrlName=%s",
-	       cgiAppendSForHttps(), cgiServerNamePort(), destAppScriptName(), encodedUrl);
+dyStringPrintf(dyTmp, "%s%s?hgS_doLoadUrl=submit&hgS_loadUrlName=%s",
+	       wikiServerAndCgiDir(), "hgTracks", encodedUrl);
 if (encode)
     {
     dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
@@ -597,7 +607,7 @@ else if (loginSystemEnabled() || wikiLinkEnabled())
             " Browser and Email links.</LI>\n",
             wikiLinkUserLoginUrl(cartSessionId(cart)));
     }
-dyStringPrintf(dyUrl, "http%s://%s%s", cgiAppendSForHttps(), cgiServerNamePort(), cgiScriptName());
+dyStringPrintf(dyUrl, "%s%s", wikiServerAndCgiDir(), "hgTracks");
 
 printf("<LI>If you have saved your settings to a local file, you can send "
        "email to others with the file as an attachment and direct them to "
@@ -769,7 +779,7 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringClear(dy);
     sqlDyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
     dyStringAppend(dy, "(userName, sessionName, contents, shared, "
-		       "firstUse, lastUse, useCount) VALUES (");
+		       "firstUse, lastUse, useCount, settings) VALUES (");
     dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
     dyStringAppend(dy, "'");
     cleanHgSessionFromCart(cart);
@@ -783,7 +793,7 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringFree(&encoded);
     dyStringAppend(dy, "', ");
     dyStringPrintf(dy, "%d, ", (shareSession ? 1 : 0));
-    dyStringPrintf(dy, "%s, now(), %d);", firstUse, useCount);
+    dyStringPrintf(dy, "%s, now(), %d, '');", firstUse, useCount);
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
 
@@ -1285,8 +1295,8 @@ else
 	lf = NULL;
 	}
     dyStringPrintf(dyMessage, "&nbsp;&nbsp;"
-	   "<A HREF=\"http%s://%s%s?%s=%s\">Browser</A>",
-	   cgiAppendSForHttps(), cgiServerNamePort(), destAppScriptName(),
+	   "<A HREF=\"%s%s?%s=%s\">Browser</A>",
+	   wikiServerAndCgiDir(), destAppScriptName(),
 	   cartSessionVarName(), cartSessionId(cart));
     }
 if (lf != NULL)

@@ -1073,6 +1073,10 @@ void bigWigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 /* Make track group for wig - wiggle tracks. */
 
+void mathWigMethods(struct track *track, struct trackDb *tdb, 
+	int wordCount, char *words[]);
+/* mathWig load and draw methods. */
+
 void bigBedMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Set up bigBed methods. */
@@ -1631,5 +1635,8 @@ void labelTrackAsFiltered(struct track *tg);
 
 void setupHotkeys(boolean gotExtTools);
 /* setup keyboard shortcuts and a help dialog for it */
+
+void calcWiggleOrdering(struct cart *cart, struct flatTracks *flatTracks);
+
 #endif /* HGTRACKS_H */
 

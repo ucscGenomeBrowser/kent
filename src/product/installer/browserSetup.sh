@@ -1467,6 +1467,12 @@ function stopMysql
             service mysql stop
     elif [ -f /etc/init.d/mysqld ]; then 
             service mysqld stop
+    elif [ -f /usr/lib/systemd/system/mariadb.service ]; then
+            # RHEL 7, etc use systemd instead of SysV
+            systemctl stop mariadb
+    elif [ -f /usr/lib/systemd/system/mysql.service ]; then
+            # at least seen in Fedora 17
+            systemctl stop mysql
     else
         echo2 Could not find mysql nor mysqld file in /etc/init.d. Please email genome-mirror@soe.ucsc.edu.
     fi
@@ -1479,6 +1485,12 @@ function startMysql
             service mysql start
     elif [ -f /etc/init.d/mysqld ]; then 
             service mysqld start
+    elif [ -f /usr/lib/systemd/system/mariadb.service ]; then
+            # RHEL 7, etc use systemd instead of SysV
+            systemctl start mariadb
+    elif [ -f /usr/lib/systemd/system/mysql.service ]; then
+            # at least seen in Fedora 17
+            systemctl start mysql
     else
         echo2 Could not find mysql nor mysqld file in /etc/init.d. Please email genome-mirror@soe.ucsc.edu.
     fi
@@ -1588,7 +1600,7 @@ function updateBrowser {
    # update the mysql DBs
    stopMysql
    DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(hgcentral)'`
-   for db in $DBS/*; do 
+   for db in $DBS; do 
        echo2 syncing full mysql database: $db
        $RSYNC --update --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/
    done

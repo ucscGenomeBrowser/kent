@@ -181,7 +181,7 @@ if ((hubName != NULL) && ((f = fopen(hubName, "r")) != NULL))
             slAddHead(&compositeList, composite);
             composite->name = tdb->track;
             composite->shortLabel = tdb->shortLabel;
-            composite->longLabel = tdb->shortLabel;
+            composite->longLabel = tdb->longLabel;
             }
         else
             {
@@ -190,7 +190,7 @@ if ((hubName != NULL) && ((f = fopen(hubName, "r")) != NULL))
             AllocVar(track);
             track->name = tdb->track;
             track->shortLabel = tdb->shortLabel;
-            track->longLabel = tdb->shortLabel;
+            track->longLabel = tdb->longLabel;
             slAddHead(&composite->trackList, track);
             }
         }
@@ -199,10 +199,8 @@ if ((hubName != NULL) && ((f = fopen(hubName, "r")) != NULL))
 return compositeList;
 }
 
-static char *getSqlBigWig(char *db, struct trackDb *tdb)
+static char *getSqlBigWig(struct sqlConnection *conn, char *db, struct trackDb *tdb)
 {
-struct sqlConnection *conn = hAllocConn(db);
-
 char buffer[4096];
 
 safef(buffer, sizeof buffer, "NOSQLINJ select fileName from %s", tdb->table);
@@ -215,14 +213,15 @@ static int snakePalette2[] =
 };
 
 
-void outTdb(char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, unsigned int color)
+void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, unsigned int color)
 {
 char *dataUrl = NULL;
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+
 if (bigDataUrl == NULL)
     {
     if (startsWith("bigWig", tdb->type))
-        dataUrl = getSqlBigWig(db, tdb);
+        dataUrl = getSqlBigWig(conn, db, tdb);
     }
 struct hashCookie cookie = hashFirst(tdb->settingsHash);
 struct hashEl *hel;
@@ -305,16 +304,15 @@ return hubName;
 }
 
 
-//static void outputCompositeHub(char *db, char *hubName, struct trackDb *fullTrackList, struct composite *compositeList, struct hash *nameHash)
 static void outputCompositeHub(char *db, char *hubName,  struct composite *compositeList, struct hash *nameHash)
 {
-// Do we already have a hub?
 chmod(hubName, 0666);
 FILE *f = mustOpen(hubName, "w");
 
 outHubHeader(f, db, hubName);
 int useColor = 0;
 struct composite *composite;
+struct sqlConnection *conn = hAllocConn(db);
 for(composite = compositeList; composite; composite = composite->next)
     {
     outComposite(f, composite);
@@ -323,15 +321,15 @@ for(composite = compositeList; composite; composite = composite->next)
     for (track = composite->trackList; track; track = track->next)
         {
         tdb = hashMustFindVal(nameHash, track->name);
-        //tdb = findTrack(track->name, fullTrackList);
 
-        outTdb(db, f, track->name,tdb, composite->name, snakePalette2[useColor]);
+        outTdb(conn, db, f, track->name,tdb, composite->name, snakePalette2[useColor]);
         useColor++;
         if (useColor == (sizeof snakePalette2 / sizeof(int)))
             useColor = 0;
         }
     }
 fclose(f);
+hFreeConn(&conn);
 }
 
 
@@ -679,11 +677,6 @@ jsIncludeFile("ui.dropdownchecklist.js", NULL);
 jsIncludeFile("ddcl.js", NULL);
 }
 
-
-
-
-
-
 void doUi(char *db, struct grp *groupList, struct trackDb *fullTrackList,struct composite *currentComposite, struct composite *compositeList) 
 /* Set up globals and make web page */
 {
@@ -695,6 +688,7 @@ cartWebEnd();
 }
 
 static void addWigs(struct hash *hash, struct trackDb **wigList, struct trackDb *list)
+// Add tracks that are acceptable in custom composites.
 {
 if (list == NULL)
     return;
@@ -715,6 +709,7 @@ for(tdb = list; tdb; tdb = tdbNext)
 }
 
 char *makeUnique(struct hash *nameHash, struct trackDb *tdb)
+// Make the name of this track unique.
 {
 if (hashLookup(nameHash, tdb->track) == NULL)
     {
@@ -738,21 +733,56 @@ for(;; count++)
 return NULL;
 }
 
-bool trackVisible(struct trackDb *tdb)
+static bool subtrackEnabledInTdb(struct trackDb *subTdb)
+/* Return TRUE unless the subtrack was declared with "subTrack ... off". */
 {
-if ((tdb->parent != NULL) && !trackVisible(tdb->parent))
+bool enabled = TRUE;
+char *words[2];
+char *setting;
+if ((setting = trackDbLocalSetting(subTdb, "parent")) != NULL)
+    {
+    if (chopLine(cloneString(setting), words) >= 2)
+        if (sameString(words[1], "off"))
+            enabled = FALSE;
+    }
+else
+    return subTdb->visibility != tvHide;
+
+return enabled;
+}
+
+bool isSubtrackVisible(struct trackDb *tdb)
+/* Has this subtrack not been deselected in hgTrackUi or declared with
+ *  * "subTrack ... off"?  -- assumes composite track is visible. */
+{
+boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
+bool enabledInTdb = subtrackEnabledInTdb(tdb);
+char option[1024];
+safef(option, sizeof(option), "%s_sel", tdb->track);
+boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+if (overrideComposite)
+    enabled = TRUE;
+return enabled;
+}
+
+
+bool isParentVisible( struct trackDb *tdb)
+// Are this track's parents visible?
+{
+if (tdb->parent == NULL)
+    return TRUE;
+
+if (!isParentVisible(tdb->parent))
     return FALSE;
 
-boolean vis = tdb->visibility != tvHide;
-char *cartVis = cartOptionalString(cart, tdb->track);
-
+char *cartVis = cartOptionalString(cart, tdb->parent->track);
+boolean vis;
 if (cartVis != NULL) 
-    {
-    if (differentString(cartVis, "hide"))
-        vis = TRUE;
-    else
-        vis = FALSE;
-    }
+    vis =  differentString(cartVis, "hide");
+else if (tdbIsSuperTrack(tdb->parent))
+    vis = tdb->parent->isShow;
+else
+    vis = tdb->parent->visibility != tvHide;
 
 return vis;
 }
@@ -853,9 +883,9 @@ if (addAllVisible != NULL)
     {
     struct trackDb *tdb;
 
-    for(tdb = fullTrackList; tdb; tdb = tdb->next)
+    for(tdb = wigTracks; tdb; tdb = tdb->next)
         {
-        if (trackCanBeAdded(tdb) && trackVisible(tdb))
+        if (isParentVisible(tdb) &&  isSubtrackVisible(tdb))
             {
             struct track *track;
             AllocVar(track);
@@ -885,7 +915,9 @@ if (newTrackName != NULL)
         }
     }
 
-//struct trackDb *fullTrackList = getFullTrackList(cart);
+if (currentComposite)
+    cartSetString(cart, hgsCurrentComposite, currentComposite->name);
+
 doUi(database, groupList, wigTracks, currentComposite, compositeList);
 
 outputCompositeHub(database, hubName,  compositeList, nameHash);

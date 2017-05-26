@@ -11113,8 +11113,7 @@ TMPDIR=/dev/shm
 
 
 #########################################################################
-
-# download and load ncbiGene track
+# download and load ncbiGene track ( DONE - 2015-06-09 - Brian)
 
 db=mm10
 mkdir  /cluster/data/genomes/$db/bed/ncbiGene
@@ -13841,7 +13840,7 @@ end
     # knownGene - hg38 mm10
     # ncbiRefSeq - galVar1
     # xenoRefGene - tupChi1
- 
+
     mkdir genes
     #   1. knownGene: hg38 mm10
     for DB in hg38 mm10
@@ -14395,7 +14394,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \\
 	../../4d/all.mod 0.571 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.219000 0.281000 0.281000 0.219000 
+    #   BACKGROUND: 0.219000 0.281000 0.281000 0.219000
 
     printf '#!/bin/csh -fe
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
@@ -14617,7 +14616,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     echo "date" >> $gp.jobs
     echo "wait" >> $gp.jobs
 
-    chmod +x  knownGene.jobs 
+    chmod +x  knownGene.jobs
 
     time (./$gp.jobs) > $gp.jobs.log 2>&1 &
     # real    11m18.851s
@@ -14789,4 +14788,134 @@ done
     # when you view the first one you enter, it will have links to the
     # missing two.
 
-############################################################################
+##############################################################################
+# LASTZ Chinese hamster criGri1 (DONE - 2017-05-12 - Hiram)
+    #	establish a screen to control this job
+    screen -S mm10criGri1
+    mkdir /hive/data/genomes/mm10/bed/lastzCriGri1.2017-05-12
+    cd /hive/data/genomes/mm10/bed/lastzCriGri1.2017-05-12
+
+    printf '# mouse vs. Chinese hamster
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Chinese hamster criGri1
+SEQ2_DIR=/hive/data/genomes/criGri1/criGri1.2bit
+SEQ2_LEN=/hive/data/genomes/criGri1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzCriGri1.2017-05-12
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    289m42.628s
+
+    cat fb.mm10.chainCriGri1Link.txt
+    #	1577848220 bases of 2652783500 (59.479%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev mm10 criGri1 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    797m59.816s
+
+    mkdir /hive/data/genomes/criGri1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/criGri1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCriGri1.2017-05-12/DEF \
+	-noDbNameCheck -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    172m50.552s
+
+    cat fb.criGri1.chainMm10Link.txt
+    #	1589449878 bases of 2301325917 (69.067%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev criGri1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    846m34.982s
+
+##############################################################################
+# ncbiRefSeq composite gene track (DONE - 2017-05-26 - Hiram)
+    mkdir  /hive/data/genomes/mm10/bed/ncbiRefSeq.p5
+    cd  /hive/data/genomes/mm10/bed/ncbiRefSeq.p5
+
+    ~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Mus_musculus \
+      GCF_000001635.25_GRCm38.p5 mm10
+
+    ~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -debug -bigClusterHub=ku -dbHost=hgwdev \
+      -continue=process -stop=process -fileServer=hgwdev -smallClusterHub=ku \
+      -workhorse=hgwdev refseq vertebrate_mammalian Mus_musculus \
+      GCF_000001635.25_GRCm38.p5 mm10
+
+    ~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -debug -bigClusterHub=ku -dbHost=hgwdev \
+      -continue=load -stop=load -fileServer=hgwdev -smallClusterHub=ku \
+      -workhorse=hgwdev refseq vertebrate_mammalian Mus_musculus \
+      GCF_000001635.25_GRCm38.p5 mm10
+
+    # There are some ncRNAs missing
+    faSize -detailed mm10.rna.fa \
+      | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+       -db=mm10 ncbiRefSeqPsl
+    #  checked: 85224 failed: 18 errors: 18
+
+    mkdir /hive/data/genomes/mm10/bed/ncbiRefSeq.p5/missingRna
+    cd  /hive/data/genomes/mm10/bed/ncbiRefSeq.p5/missingRna
+
+    # determine missing sequences ids
+
+    faSize -detailed ../mm10.rna.fa \
+      | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+       -db=mm10 ncbiRefSeqPsl > pslCheck.ncbiRefSeq.rna.fa.txt 2>&1
+
+    egrep -v "does not exist|errors:" pslCheck.ncbiRefSeq.rna.fa.txt \
+      | awk '{printf "%s\t%s\n", $5,$4}' | sort -u > idWithRange.seqListFile.tab
+
+    # fetch RNA sequences from entrez:
+    mkdir ncbiRna
+
+cut -f2 idWithRange.seqListFile.tab | sed -e 's#:[0-9]\+-[0-9]\+##;' \
+  | while read id
+do
+   wget -O /dev/stdout \
+  "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$id" \
+     | sed -e 's/ Mus musculus .*//;' | sed -e '/^$/d' > ncbiRna/$id.fa
+done
+
+fi
+
+    cat ../mm10.rna.fa ncbiRna > mm10.seqNcbiRefSeq.rna.fa
+
+    rm -f /gbdb/mm10/ncbiRefSeq/seqNcbiRefSeq.rna.fa
+    ln -s `pwd`/mm10.seqNcbiRefSeq.rna.fa \
+        /gbdb/mm10/ncbiRefSeq/seqNcbiRefSeq.rna.fa
+    hgLoadSeq -drop -seqTbl=seqNcbiRefSeq -extFileTbl=extNcbiRefSeq mm10 \
+        /gbdb/mm10/ncbiRefSeq/seqNcbiRefSeq.rna.fa
+
+    # now have clean pslCheck, verify both with the file and the seq table:
+    faSize -detailed /gbdb/mm10/ncbiRefSeq/seqNcbiRefSeq.rna.fa \
+       | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+           -db=mm10 ncbiRefSeqPsl
+    #  checked: 85224 failed: 0 errors: 0
+
+    hgsql -N -e 'select acc,size from seqNcbiRefSeq;' mm10 \
+      | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+         -db=mm10 ncbiRefSeqPsl
+
+    #  checked: 85224 failed: 0 errors: 0
+
+##############################################################################

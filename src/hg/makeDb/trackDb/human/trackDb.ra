@@ -3357,9 +3357,9 @@ noScoreFilter on
     priority 2
 
 track interactions
-shortLabel Protein Interactions
+shortLabel Gene Interactions
 longLabel Protein Interactions from Curated Databases and Text-Mining
-group pub
+group phenDis
 visibility hide
 type bigBed 9
 itemRgb on

@@ -25,7 +25,7 @@ struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge r
 // A simplistic way of flattening the track list before building the image
 // NOTE: Strategy is NOT to use imgBox->imgTracks, since this should be independednt of imageV2
 /////////////////////////
-void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart)
+void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart, struct slName *orderedWiggles)
 // Adds one track into the flatTracks list
 {
 struct flatTracks *flatTrack;
@@ -45,6 +45,9 @@ if ( flatTrack->order == IMG_ANYORDER)
     {
     if (track->customTrack)
         flatTrack->order = ++topOrder; // Custom tracks go to top
+    int index;
+    if ((orderedWiggles != NULL) && ((index = slNameFindIx(orderedWiggles, track->track)) != -1))
+        flatTrack->order = topOrder + index + 1;
     else
         flatTrack->order = ++lastOrder;
     }

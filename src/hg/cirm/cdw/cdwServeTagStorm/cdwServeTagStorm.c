@@ -50,8 +50,21 @@ char metaFileName[PATH_LEN];
 safef(metaFileName, sizeof(metaFileName), "%s/%s", dataSet, "meta.txt");
 int fileId = cdwFileIdFromPathSuffix(conn, metaFileName);
 char *path = cdwPathForFileId(conn, fileId);
-fflush(stdout);
-if (strcmp(format,"tsv"))
+if (sameString(format,"tsv"))
+    {
+    fflush(stdout);
+    char command[3*PATH_LEN];
+    safef(command, sizeof(command), "./tagStormToTab %s stdout", path);
+    mustSystem(command);
+    }
+if (sameString(format,"csv"))
+    {
+    fflush(stdout);
+    char command[3*PATH_LEN];
+    safef(command, sizeof(command), "./tagStormToCsv %s stdout", path);
+    mustSystem(command);
+    }
+else if (sameString(format,"text"))
     {
     struct lineFile *lf = lineFileOpen(path, TRUE);
     char *line;
@@ -60,10 +73,9 @@ if (strcmp(format,"tsv"))
 	printf("%s\n",line); 
 	}
     }
-else{
-    char command[3*PATH_LEN];
-    safef(command, sizeof(command), "./tagStormToTab %s stdout", path);
-    mustSystem(command);
+else
+    {
+    printf("Unknown format: %s\n", format);
     }
 }
 

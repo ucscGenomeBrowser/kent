@@ -11,6 +11,7 @@ def parseArgs():
     parser = optparse.OptionParser("usage: %prog [options] db geneTableName - create and fill locusNames, a BED4 table that covers all chromosomes and assigns a name to all ranges. ensGene usually works well as the gene table.")
 
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("-o", "--onlyFirst", dest="onlyFirst", action="store_true", help="Only use the first gene name if there are many alternatives. Use this if you get 'Warning 1265 Data truncated for column 'name' at row xxx' messages. This happens when transcripts have no gene names and every locus gets annotated with all flanking transcripts, not genes.")
     (options, args) = parser.parse_args()
 
     if args==[]:
@@ -38,10 +39,12 @@ def runCmd(cmd, mustRun=True):
         sys.exit(1)
     return ret
 
-def doLocusName(db, geneTableName):
+def doLocusName(db, geneTableName, options):
     " create and fill the locusName table for db "
     if geneTableName=="ensGene":
         query = "SELECT * from ensemblToGeneName"
+    elif geneTableName=="xenoRefGene":
+        query = "SELECT name,name2 from xenoRefGene"
     elif geneTableName=="knownGene":
         query = "SELECT kgID, geneSymbol from kgXref where geneSymbol<>'' and geneSymbol not like '% %'"
     else:
@@ -67,8 +70,14 @@ def doLocusName(db, geneTableName):
     cmdParts.append("genePredToBed stdin stdout | bedToExons stdin stdout | ")
     # replace transcript with symbol, skip dupes
     cmdParts.append("tabRepl %(tempFname)s 3 /dev/stdin | sort -u | ")
+
     # merge adjacent exons
-    cmdParts.append("bedSort stdin stdout | bedOverlapMerge /dev/stdin /dev/stdout |")
+
+    overlapOpt = ""
+    if options.onlyFirst:
+        overlapOpt = "-o"
+    cmdParts.append("bedSort stdin stdout | bedOverlapMerge /dev/stdin /dev/stdout %s |" % overlapOpt)
+
     # annotate regions
     cmdParts.append("bedBetween stdin /dev/stdout -a -s %(chromSizesFname)s -m 100 |")
     # and sort
@@ -85,6 +94,6 @@ def main():
     args, options = parseArgs()
 
     db, geneTable = args
-    doLocusName(db, geneTable)
+    doLocusName(db, geneTable, options)
 
 main()

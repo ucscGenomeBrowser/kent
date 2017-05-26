@@ -26610,7 +26610,9 @@ TMPDIR=/dev/shm
 
 #########################################################################
 # NCBI ClinVar (new version -DONE - 2014-11-08 - Max)
-#
+# Note that since Jan 2015, ClinVar is on otto update mode. 
+# for the procedure, see ~/kent/src/hg/utils/otto/clinvar/
+
 mkdir /hive/data/genomes/hg19/bed/clinvar
 cd /hive/data/genomes/hg19/bed/clinvar
 cat << '_EOF_' > clinvar.as
@@ -31927,3 +31929,181 @@ EOF
 
     # commit all
 #########################################################################
+# COSMIC v81 DONE Chris Eisenhart 2017-05-11
+# Make a new COSCMIC track for hg19
+mkdir /hive/data/outside/cosmic/hg19/v81
+cd /hive/data/outside/cosmic/hg19/v81
+
+# Get the new data
+sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
+# Login to SFTP server then run these commands 
+get /files/grch37/cosmic/v81/CosmicMutantExport.tsv.gz
+
+# Get the schema from V80
+cp ~/kent/src/hg/lib/cosmicNew.as . 
+
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
+
+# Use a script to convert to bed format.
+cosmicToBed cosMut.tsv cosMut.bed
+# This many lines were skipped, 126756, for not having genomic coordinates. 
+
+# Sort and convert to big bed using the .as file.  
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg19/chrom.sizes cosMutHg19V80.bb -tab
+
+# Link it up so the outside world can see it. 
+cd /gbdb/hg19/cosmic/
+ln -s /hive/data/outside/cosmic/hg19/v81/cosMutHg19V81.bb .
+
+###########################################################################
+# Chimp Lastz run (DONE - 2017-05-04 - Hiram)
+    screen -S hg19PanTro5      # use a screen to manage this longish running job
+    mkdir /hive/data/genomes/hg19/bed/lastzPanTro5.2017-05-04
+    cd /hive/data/genomes/hg19/bed/lastzPanTro5.2017-05-04
+
+    # always set the BLASTZ program so we know what version was used
+    printf "# human vs chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_L=4500
+BLASTZ_T=2
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#    A    C    G    T
+#    90 -330 -236 -356
+#  -330  100 -318 -236
+#  -236 -318  100 -330
+#  -356 -236 -330   90
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Chimp PanTro5
+SEQ2_DIR=/hive/data/genomes/panTro5/panTro5.2bit
+SEQ2_LEN=/hive/data/genomes/panTro5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPanTro5.2017-05-04
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > do.log 2>&1
+    # real    219m12.394s
+
+    cat fb.hg19.chainPanTro5Link.txt
+    # 2824333913 bases of 2897316137 (97.481%) in intersection
+
+    # filter with doRecipBest.pl
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        hg19 panTro5) > rbest.log 2>&1
+    # real    192m19.595s
+
+    # running the swap
+    mkdir /hive/data/genomes/panTro5/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panTro5/bed/blastz.hg19.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzPanTro5.2017-05-04/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    111m15.418s
+
+    cat fb.panTro5.chainHg19Link.txt
+    # 2929713252 bases of 3132620660 (93.523%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        panTro5 hg19) > rbest.log 2>&1
+    # real    279m26.262s
+
+#############################################################################
+# Interactions track, 
+cd /hive/data/genomes/hg19/bed/interactions/
+
+# convert the protein interaction databases
+cd ppi
+
+cd iref
+psiMtabToTab iref 9606.mitab.08122013.txt > ../iref.tab 
+psiMtabToTab iref 9606.mitab.08122013.txt > ../iref.tab 
+cat All.mitab.08122013.txt | cut -f9 | sed -e 's/pubmed://g' | tr '|' '\n' | grep -v pmids | grep -v ^-$ | uniq | sort | uniq > allPmids.txt
+
+cd ../argdb
+python parse_shortened.py | tawk '{print "argdb"NR, "gene", "", "AR", "gene", "", $1, "regulation", "", "argdb", $3, "interaction", $2}' | cat headers.tab - > ../argdb.tab
+cd ..
+
+ggPpiToTab quickgo go/associations.tsv > go.tab
+ggPpiToTab corum corum/allComplexes.csv > corum.tab
+ggPpiToTab negatome negatome/manual.txt > negatome.tab
+
+# convert the pathway databases
+
+cd pathways
+ggPpiToTab reactome reactome/homo_sapiens.interactions.txt > reactome.tab
+ggGpmlToTag wikiPathways/gpml/*.gpml > wiki.tab
+ggKgmlToTab kegg/*.xml > kegg.tab
+ggPidToTab pid/NCI-Nature_Curated.xml pid/BioCarta.xml > pid.tab
+cd ..
+
+# the text/ directory file msr.tab was created by adding 'msr' in front of every line
+# of text/msr3/pubmed_evts_140805.txt
+
+# build the big ggLink table from information in the subdirectories
+# and write the output to mysql/
+ggTables build pathways/ ppi/ text/ mysql/
+# add the document/abstract information
+ggTables docs mysql/
+# load mysql/ into hgFixed
+ggTables load hgFixed
+
+# == CREATE THE GENE LOCATIONS ==
+cd geneModels
+# === hg19 ===
+
+# get best transcript for gencode basic
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from wgEncodeGencodeBasicV19' > gencode19.bed
+mysql hg19 -NBe 'select distinct name, name2 from wgEncodeGencodeBasicV19' > gencode19.names.tab
+bedBestTranscript gencode19.bed gencode19.names.tab -m > gencode19.best.bed
+
+# get best transcript for refGene
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from refGene' > refGene.bed
+mysql hg19 -NBe 'select distinct name, name2 from refGene' > refGene.names.tab
+bedBestTranscript refGene.bed refGene.names.tab -m > refGene.best.bed
+
+# get UCSC knownGene canonical transcripts
+hgsql hg19 -NBe 'select chrom, chromStart, chromEnd, geneSymbol from knownCanonical JOIN kgXref ON kgId=transcript' > knownCanon.best.bed
+
+# add all gencode comprehensive models, but only as a last resort
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from wgEncodeGencodeCompV19' > gencodeComp19.bed
+mysql hg19 -NBe 'select distinct name, name2 from wgEncodeGencodeCompV19' > gencodeComp19.names.tab
+bedBestTranscript -m gencodeComp19.bed gencodeComp19.names.tab > gencodeComp19.best.bed
+
+# finally, even add the pseudogenes
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from wgEncodeGencodePseudoGeneV19' > gencodePseudo19.bed
+mysql hg19 -NBe 'select distinct name, name2 from wgEncodeGencodePseudoGeneV19' > gencodePseudo19.names.tab
+bedBestTranscript -m gencodePseudo19.bed gencodePseudo19.names.tab > gencodePseudo19.best.bed
+
+# now take the first line for each gene from all files, in this order
+bedNamePickFirst gencode19.best.bed refGene.best.bed gencodeComp19.best.bed knownCanon.best.bed gencodePseudo19.bed | cut -f-4 | bedSort stdin stdout > bestGenes.hg19.bed 
+
+# == END GENE LOCATIONS ==
+
+# create the bigBed files
+ggTables bigBed mysql/ bigBed/ geneModels/bestGenes.hg19.bed hg19
+ln -s `pwd`/bigBed/geneInteractions.hg19.bb /gbdb/h19/bbi/interactions.bb
+#############################################################################

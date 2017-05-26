@@ -129,7 +129,7 @@ for i in specScores/catJobs/inFnames/otJob*; do fname=`basename $i`; echo python
 ssh $CLUSTER "cd `pwd`/specScores/catJobs; para freeBatch; para make jobList"
 
 echo concating and indexing the off-targets 
-catAndIndex specScores/catJobs/out crisprDetails.tab offtargets.offsets.tab --headers=_mismatchCounts,_crisprOfftargets
+$crisprTrack/catAndIndex specScores/catJobs/out crisprDetails.tab offtargets.offsets.tab --headers=_mismatchCounts,_crisprOfftargets
 
 # create the bigBed file
 # approx 30 mins on human
@@ -143,4 +143,4 @@ ln -sf `pwd`/crisprDetails.tab /gbdb/$db/crispr/crisprDetails.tab
 hgBbiDbLink $db crisprTargets /gbdb/$db/crispr/crispr.bb
 hgLoadBed $db crisprRanges crisprRanges.bed
 echo You can add locus names to each off-target in the CRISPR hgc page by running
-echo '"doLocusNames"' now, if this assembly does not yet have a locusName table.
+echo '"doLocusName"' now, if this assembly does not yet have a locusName table.

@@ -226,7 +226,7 @@ def reviewStatusToHtmlStars(reviewStatus):
         starCount = 4
     if revStatus == "reviewedbyexpertpanel":
         starCount = 3
-    if "noassertion" in revStatus:
+    if "noassertion" in revStatus or revStatus=="-":
         starCount = 0
 
     if starCount == None:
@@ -475,6 +475,14 @@ for fname in fnames:
     outFname = "%s.%s.bb" % (base, db)
     outFname = basename(outFname) # strip the archive/ part, put into current dir
     cmd = "bedToBigBed -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, outFname)
+    logging.debug(cmd)
+    ret = os.system(cmd)
+    if ret != 0:
+        print "Could not run:", cmd
+
+    # make sure that the "Data last updated" in the table browser is correct
+    tableName = outFname.split('.')[0] # e.g. clinvarMain
+    cmd = "hgBbiDbLink %s %s /gbdb/%s/bbi/clinvar/%s.bb" % (db, tableName, db, tableName)
     logging.debug(cmd)
     ret = os.system(cmd)
     if ret != 0:

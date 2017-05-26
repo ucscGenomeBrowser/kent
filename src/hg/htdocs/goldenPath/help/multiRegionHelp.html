@@ -54,7 +54,7 @@ Using the multi-region display, one can:
   Show only the genes on a chromosome (gene-only view).</li> 
   <li>
   Display the same chromosomal position on either side of a gene in order to model a repeat region 
-  (using a BED file with custom regions).</li>  
+  (using custom regions in BED format).</li>  
   <li>
   See how an alternate haplotype fits onto its chromosome (alternate haplotype view).</li> 
 </ul>
@@ -79,8 +79,8 @@ height="201"></p>
 By default, the <strong>Exit multi-region mode</strong> button is selected. This button returns the 
 display to the traditional view.</p>  
 <p>
-<img src="../../images/MultiRegionConfigurationWindow.png" alt="Configure Multi-Region view" 
-width="650" height="267"> </p>
+<img src="../../images/MultiRegionConfigurationWindow2.png" alt="Configure Multi-Region view" 
+width="701" height="387"> </p>
 <p>
 To activate a multi-region view, click one of these options:</p> 
 <ul> 
@@ -91,8 +91,8 @@ To activate a multi-region view, click one of these options:</p>
   <strong>Show genes using</strong> -- display only those regions with gene annotations in the 
   specified genes track</li> 
   <li> 
-  <strong>Custom regions from BED URL</strong> -- display only those regions listed in a specified 
-  BED file</li> 
+  <strong>Enter custom regions as BED, or a URL to them</strong> -- display only those regions entered into the
+text box in BED format, or listed in a specified BED file</li> 
   <li> 
   <strong>Show one alternate haplotype</strong> -- display the specified alternate haplotype in 
   place on the reference chromosome (human assemblies hg17 and later only)</li> 
@@ -156,7 +156,8 @@ no cause for concern.</p>
 <a name="CustomRegions"></a> 
 <h3>Custom regions mode</h3> 
 <p> 
-The custom regions mode allows user-specific modeling of genomic regions using a 
+The custom regions mode allows user-specific modeling of genomic regions by either entering them into the
+text box, or linking to a  
 <a href="../../FAQ/FAQformat.html#format1">BED</a> file. Typically when a BED file is loaded into 
 the browser, the entries are displayed in the tracks window in order of chromosomal location, 
 regardless of the order in the file. When the multi-region view option is selected, the BED file 

@@ -1,5 +1,16 @@
 #	"$Id: trackDb.ra,v 1.125 2010/06/11 22:12:18 mary Exp $";
 
+track cosmicRegions
+release alpha
+shortLabel COSMIC Regions
+longLabel Catalogue of Somatic Mutations in Cancer
+type bigBed 4 +
+bigDataUrl /gbdb/hg19/cosmic/cosMutHg19V81.bb
+group phenDis
+color 200, 0, 0
+url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
+
+
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
@@ -1484,7 +1495,7 @@ html gc5Base
 track affyExonArray
 compositeTrack on
 group expression
-priority 1
+priority 1.5
 shortLabel Affy Exon Array
 longLabel Affymetrix $Organism Exon Array Probes and Probesets
 subGroup1 view Views v1Probeset=Probeset v2Probe=Probe
@@ -2546,10 +2557,6 @@ track gnfAtlas2 override
 group expression
 priority 14
 
-track gtexGene override
-group expression
-priority 15
-
 track gwipsvizRiboseq override
 group expression
 priority 16
@@ -2589,10 +2596,6 @@ priority 6.2
 track snp146Common override
 group varRep
 priority 7.1
-
-track dgvPlus override
-group varRep
-priority 8
 
 track hgdpGeo override
 group varRep

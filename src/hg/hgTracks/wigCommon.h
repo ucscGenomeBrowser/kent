@@ -76,6 +76,14 @@ struct bedGraphItem
 typedef void (*WigVerticalLineVirtual)(void *image, int x, int y, int height, Color color);
 /* Draw a vertical line somewhere, maybe a regular image, maybe a transparent one. */
 
+struct pixelCountBin
+/* A structure used to keep track of how many pixels are drawn in a set of bins. */
+    {
+    unsigned binCount;
+    unsigned binSize;
+    unsigned long *bins;
+    };
+
 struct wigGraphOutput
 /* Info on where to draw a wig - may be pretty indirect in transparent case. */
    {
@@ -84,6 +92,7 @@ struct wigGraphOutput
    int xOff, yOff;  /* Where to offset output within image. */
    double *yOffsets; /* if not NULL, points to yOffsets for stacked bars */
    int numTrack;   /* the index of this track */
+   struct pixelCountBin *pixelBins;
    };
 
 struct wigGraphOutput *wigGraphOutputStack(int xOff, int yOff, int width, int numTracks,  struct hvGfx *image);
@@ -180,4 +189,8 @@ void wigBedGraphFindItemLimits(void *items,
     double *graphUpperLimit, double *graphLowerLimit);
 /*	find upper and lower limits of graphed items (bedGraphItem)	*/
 
+int normalizeCount(struct preDrawElement *el, double countFactor,
+    double minVal, double maxVal, double sumData, double sumSquares);
+/* Normalize statistics to be based on an integer number of valid bases.
+ * Integer value is the smallest integer not less than countFactor. */
 #endif /* WIGCOMMON_H */

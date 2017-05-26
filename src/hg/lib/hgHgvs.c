@@ -74,8 +74,7 @@ if (pHgvs && *pHgvs)
 // It's pretty common for users to omit the '.' so if it's missing but the rest of the regex fits,
 // roll with it.
 #define hgvsCDotPosExp "c\\.?" hgvsCdsPosExp
-#define hgvsGDotPosExp "g\\.?" hgvsNtPosExp
-#define hgvsMDotPosExp "m\\.?" hgvsNtPosExp
+#define hgvsGMDotPosExp "([gm])\\.?" hgvsNtPosExp
 #define hgvsNDotPosExp "n\\.?" hgvsNtPosExp
 #define hgvsRDotPosExp "r\\.?" hgvsNtPosExp
 
@@ -101,7 +100,7 @@ if (pHgvs && *pHgvs)
 // Complete HGVS term regexes combining sequence identifiers and change operations
 #define hgvsFullRegex(seq, op) "^" seq ":" op
 
-#define hgvsRefSeqNCGDotPosExp hgvsFullRegex(versionedRefSeqNCExp, hgvsGDotPosExp)
+#define hgvsRefSeqNCGDotPosExp hgvsFullRegex(versionedRefSeqNCExp, hgvsGMDotPosExp)
 #define hgvsRefSeqNCGDotExp hgvsRefSeqNCGDotPosExp "(.*)"
 // substring numbering:
 //      0.....................................  whole matching string
@@ -109,10 +108,31 @@ if (pHgvs && *pHgvs)
 //               2........                      optional dot version
 //                       3......                (n/a) optional gene symbol in ()s
 //                        4....                 (n/a) optional gene symbol
-//                               5...           1-based start position
-//                                   6....      optional range separator and end position
-//                                    7...      1-based end position
-//                                       8....  change description
+//                              5.              g or m
+//                                6..           1-based start position
+//                                   7...       optional range separator and end position
+//                                     8..      1-based end position
+//                                        9...  change description
+
+#define hgvsLrgNDotExp hgvsFullRegex(lrgTranscriptExp, hgvsNDotPosExp) "(.*)"
+//      0.....................................  whole matching string
+//      1...................                    LRG transcript
+//                   2......                    1-based start position
+//                           3..........        optional range separator and end position
+//                               4.....         1-based end position
+//                                        5...  change description
+
+#define hgvsRefSeqNMNDotExp hgvsFullRegex(versionedRefSeqNMExp, hgvsNDotPosExp) "(.*)"
+// substring numbering:
+//      0.....................................  whole matching string
+//      1.................                      accession and optional dot version
+//               2........                      optional dot version
+//                       3......                (n/a) optional gene symbol in ()s
+//                        4....                 (n/a) optional gene symbol
+//                                5..           1-based start position
+//                                   6...       optional range separator and end position
+//                                     7..      1-based end position
+//                                        8...  change description
 
 #define hgvsLrgCDotPosExp hgvsFullRegex(lrgTranscriptExp, hgvsCDotPosExp)
 #define hgvsLrgCDotExp hgvsLrgCDotPosExp "(.*)"
@@ -245,12 +265,56 @@ regmatch_t substrs[17];
 if (regexMatchSubstr(term, hgvsRefSeqNCGDotExp, substrs, ArraySize(substrs)))
     {
     int accIx = 1;
-    int startPosIx = 5;
-    int endPosIx = 7;
-    int changeIx = 8;
+    int startPosIx = 6;
+    int endPosIx = 8;
+    int changeIx = 9;
     AllocVar(hgvs);
+    // HGVS recommendation May 2017: replace m. with g. since mitochondrion is genomic too
     hgvs->type = hgvstGenomic;
     hgvs->seqAcc = regexSubstringClone(term, substrs[accIx]);
+    hgvs->start1 = regexSubstringInt(term, substrs[startPosIx]);
+    if (regexSubstrMatched(substrs[endPosIx]))
+        hgvs->end = regexSubstringInt(term, substrs[endPosIx]);
+    else
+        hgvs->end = hgvs->start1;
+    hgvs->changes = regexSubstringClone(term, substrs[changeIx]);
+    }
+return hgvs;
+}
+
+static struct hgvsVariant *hgvsParseNDotPos(char *term)
+/* If term is parseable as an HGVS n. term, return the parsed representation, otherwise NULL. */
+{
+struct hgvsVariant *hgvs = NULL;
+boolean matches = FALSE;
+int accIx = 1;
+int startPosIx = 2;
+int endPosIx = 4;
+int changeIx = 5;
+// The LRG accession regex has only one substring but the RefSeq acc regex has 4, so that
+// affects all substring offsets after the accession.
+int refSeqExtra = 3;
+int geneSymbolIx = -1;
+regmatch_t substrs[10];
+if (regexMatchSubstr(term, hgvsLrgNDotExp, substrs, ArraySize(substrs)))
+    {
+    matches = TRUE;
+    }
+else if (regexMatchSubstr(term, hgvsRefSeqNMNDotExp, substrs, ArraySize(substrs)))
+    {
+    matches = TRUE;
+    geneSymbolIx = 4;
+    startPosIx += refSeqExtra;
+    endPosIx += refSeqExtra;
+    changeIx += refSeqExtra;
+    }
+if (matches)
+    {
+    AllocVar(hgvs);
+    hgvs->type = hgvstNoncoding;
+    hgvs->seqAcc = regexSubstringClone(term, substrs[accIx]);
+    if (geneSymbolIx >= 0 && regexSubstrMatched(substrs[geneSymbolIx]))
+        hgvs->seqGeneSymbol = regexSubstringClone(term, substrs[geneSymbolIx]);
     hgvs->start1 = regexSubstringInt(term, substrs[startPosIx]);
     if (regexSubstrMatched(substrs[endPosIx]))
         hgvs->end = regexSubstringInt(term, substrs[endPosIx]);
@@ -412,6 +476,8 @@ struct hgvsVariant *hgvsParseTerm(char *term)
 {
 struct hgvsVariant *hgvs = hgvsParseCDotPos(term);
 if (hgvs == NULL)
+    hgvs = hgvsParseNDotPos(term);
+if (hgvs == NULL)
     hgvs = hgvsParsePDotSubst(term);
 if (hgvs == NULL)
     hgvs = hgvsParsePDotRange(term);
@@ -542,7 +608,7 @@ else
         }
     else
         {
-        aaSeq *aaSeq = hGenBankGetPep(db, acc, gbSeqTable);
+        aaSeq *aaSeq = hGenBankGetPep(db, acc, NULL);
         if (aaSeq)
             seq = aaSeq->dna;
         }
@@ -668,6 +734,23 @@ if (regexMatchNoCase(change, "^([ACGTU])>"))
 return '\0';
 }
 
+static void hgvsStartEndToZeroBasedHalfOpen(struct hgvsVariant *hgvs, int *retStart, int *retEnd)
+/* Convert HGVS's fully closed, 1-based-unless-negative start and end to UCSC start and end. */
+{
+// If hgvs->start1 is negative, it is effectively 0-based, so subtract 1 only if positive.
+int start = hgvs->start1;
+if (start > 0)
+    start--;
+// If hgvs->end is negative, it is effectively 0-based, so add 1 to get half-open end.
+int end = hgvs->end;
+if (end < 0)
+    end++;
+if (retStart)
+    *retStart = start;
+if (retEnd)
+    *retEnd = end;
+}
+
 static boolean hgvsValidateGenomic(char *db, struct hgvsVariant *hgvs,
                                    char **retFoundAcc, int *retFoundVersion,
                                    char **retDiffRefAllele)
@@ -689,8 +772,9 @@ char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
 if (isNotEmpty(chrom))
     {
     struct chromInfo *ci = hGetChromInfo(db, chrom);
-    if ((hgvs->start1 >= 1 && hgvs->start1 <= ci->size) &&
-        (hgvs->end >=1 && hgvs->end <= ci->size))
+    int start, end;
+    hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
+    if (start >= 0 && start < ci->size && end > 0 && end < ci->size)
         {
         coordsOK = TRUE;
         if (retDiffRefAllele)
@@ -698,8 +782,7 @@ if (isNotEmpty(chrom))
             char hgvsBase = refBaseFromNucSubst(hgvs->changes);
             if (hgvsBase != '\0')
                 {
-                struct dnaSeq *refBase = hFetchSeq(ci->fileName, chrom,
-                                                   hgvs->start1-1, hgvs->start1);
+                struct dnaSeq *refBase = hFetchSeq(ci->fileName, chrom, start, end);
                 touppers(refBase->dna);
                 if (refBase->dna[0] != hgvsBase)
                     *retDiffRefAllele = cloneString(refBase->dna);
@@ -758,7 +841,7 @@ else
     if (dbHasNcbiRefSeq(db))
         cdnaSeq = hDnaSeqGet(db, acc, "seqNcbiRefSeq", "extNcbiRefSeq");
     else
-        cdnaSeq = hGenBankGetMrna(db, acc, gbSeqTable);
+        cdnaSeq = hGenBankGetMrna(db, acc, NULL);
     if (cdnaSeq)
         seq = dnaSeqCannibalize(&cdnaSeq);
     }
@@ -820,16 +903,16 @@ str[1] = '\0';
 return cloneString(str);
 }
 
-static void checkRefAllele(struct hgvsVariant *hgvs, int start1, char *accSeq,
+static void checkRefAllele(struct hgvsVariant *hgvs, int start, char *accSeq,
                            char **retDiffRefAllele)
-/* If hgvs change includes a reference allele, and if accSeq at start1 does not match,
+/* If hgvs change includes a reference allele, and if accSeq at start does not match,
  *  then set retDiffRefAllele to the accSeq version.  retDiffRefAllele must be non-NULL. */
 {
 char hgvsRefBase = (hgvs->type == hgvstProtein) ? refBaseFromProt(hgvs->changes) :
                                                   refBaseFromNucSubst(hgvs->changes);
 if (hgvsRefBase != '\0')
     {
-    char seqRefBase = toupper(accSeq[start1-1]);
+    char seqRefBase = toupper(accSeq[start]);
     if (seqRefBase != hgvsRefBase)
         *retDiffRefAllele = cloneStringFromChar(seqRefBase);
     }
@@ -934,6 +1017,8 @@ if (accSeq)
     if (retFoundAcc)
         *retFoundAcc = cloneFirstWordByDelimiter(acc, '.');
     int seqLen = strlen(accSeq);
+    int start, end;
+    hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
     if (hgvs->type == hgvstCoding)
         {
         // Coding term coords can extend beyond the bounds of the transcript so
@@ -943,19 +1028,18 @@ if (accSeq)
         coordsOK = getCds(db, acc, &cds);
         if (coordsOK && retDiffRefAllele)
             {
-            int start = hgvs->start1 + (hgvs->startIsUtr3 ? cds.end : cds.start);
-            if (hgvs->startOffset == 0 && start >= 1 && start <= seqLen)
+            start += (hgvs->startIsUtr3 ? cds.end : cds.start);
+            if (hgvs->startOffset == 0 && start >= 0 && start < seqLen)
                 checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
             }
         }
     else
         {
-        if (hgvs->start1 >= 1 && hgvs->start1 <= seqLen &&
-            hgvs->end >= 1 && hgvs->end <= seqLen)
+        if (start >= 0 && start < seqLen && end > 0 && end <= seqLen)
             {
             coordsOK = TRUE;
             if (retDiffRefAllele)
-                checkRefAllele(hgvs, hgvs->start1, accSeq, retDiffRefAllele);
+                checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
             }
         }
     }
@@ -1019,7 +1103,7 @@ static struct bed *hgvsMapGDotToGenome(char *db, struct hgvsVariant *hgvs, char 
 {
 struct bed *region = NULL;
 char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
-if (isNotEmpty(chrom))
+if (isNotEmpty(chrom) && hgvs->start1 > 0)
     {
     region = bed6New(chrom, hgvs->start1 - 1, hgvs->end, "", 0, '+');
     adjustInsStartEnd(hgvs, &region->chromStart, &region->chromEnd);
@@ -1037,14 +1121,8 @@ static void hgvsCodingToZeroBasedHalfOpen(struct hgvsVariant *hgvs,
  * for when the coding HGVS has coordinates that extend beyond its sequence boundaries.
  * ret* args must be non-NULL. */
 {
-// If hgvs->start1 is negative, it is effectively 0-based, so subtract 1 only if positive.
-int start = hgvs->start1;
-if (start > 0)
-    start -= 1;
-// If hgvs->end is negative, it is effectively 0-based, so add 1 to get half-open end.
-int end = hgvs->end;
-if (end < 0)
-    end += 1;
+int start, end;
+hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
 // If the position follows '*' that means it's relative to cdsEnd; otherwise rel to cdsStart
 if (hgvs->startIsUtr3)
     *retStart = cds->end + start;
@@ -1111,8 +1189,7 @@ psl->tSize = accSize;
 if (hgvs->type != hgvstCoding)
     {
     // Sane 1-based fully closed coords.
-    psl->tStart = hgvs->start1 - 1;
-    psl->tEnd = hgvs->end;
+    hgvsStartEndToZeroBasedHalfOpen(hgvs, &psl->tStart, &psl->tEnd);
     }
 else
     {
@@ -1490,8 +1567,8 @@ static boolean hgvsToTxCoords(struct hgvsVariant *hgvs, char *db, uint *retStart
  * fall past the end of the transcript (genomic downstream). */
 {
 boolean coordsOk = TRUE;
-int start = hgvs->start1 - 1;
-int end = hgvs->end;
+int start, end;
+hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
 if (hgvs->type == hgvstCoding)
     {
     struct genbankCds cds;
@@ -1838,11 +1915,11 @@ boolean noChange = sameString(hgvsSeqRef, hgvsSeqAlt);
 // VCF indels have start coord one base to the left of the actual indel point.
 // HGVS treats multi-base substitutions as indels but VCF does not, so look for
 // differing length of ref vs. each alt sequence in order to call it a VCF indel.
-boolean isIndel = FALSE;
+boolean isIndel = (genomicRefLen != hgvsSeqRefLen || genomicRefLen != hgvsSeqAltLen ||
+                   genomicRefLen == 0);
 if (sameString(hgvsSeqRef, genomicRef))
     {
     // VCF alt is HGVS alt
-    isIndel = (genomicRefLen != hgvsSeqAltLen);
     if (noChange)
         safecpy(vcfAlt, sizeof(vcfAlt), ".");
     else if (isIndel)
@@ -1858,7 +1935,6 @@ if (sameString(hgvsSeqRef, genomicRef))
 else if (sameString(genomicRef, hgvsSeqAlt))
     {
     // Genomic reference allele is HGVS alt allele; VCF alt is HGVS ref allele
-    isIndel = (genomicRefLen != hgvsSeqRefLen);
     if (noChange)
         safecpy(vcfAlt, sizeof(vcfAlt), ".");
     else if (isIndel)
@@ -1874,7 +1950,6 @@ else if (sameString(genomicRef, hgvsSeqAlt))
 else
     {
     // Both HGVS ref and HGVS alt differ from genomicRef, so both are VCF alts (unless noChange)
-    isIndel = (genomicRefLen != hgvsSeqRefLen || genomicRefLen != hgvsSeqAltLen);
     if (noChange)
         {
         if (isIndel)

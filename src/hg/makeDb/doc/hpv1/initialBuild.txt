@@ -383,45 +383,61 @@ searchPriority 8
     cat fb.hpv1.rmsk+windowmaskerSdust.txt
     # 318 bases of 8033 (3.959%) in intersection
 
-XXX - ready to continue - Wed May 10 16:30:28 PDT 2017
+    # using the Window Masker result by itself:
+    cd /hive/data/genomes/hpv1
+    twoBitMask hpv1.unmasked.2bit \
+	-type=.bed -add bed/windowMasker/cleanWMask.bed.gz hpv1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa hpv1.2bit stdout \
+	| faSize stdin > faSize.hpv1.2bit.txt
+    cat faSize.hpv1.2bit.txt
+   # 8033 bases (0 N's 8033 real 7715 upper 318 lower) in 1 sequences in 1 files
+    # %3.96 masked total, %3.96 masked real
+
+    # reset the symlink
+    rm /gbdb/hpv1/hpv1.2bit
+    ln -s `pwd`/hpv1.2bit /gbdb/hpv1/hpv1.2bit
+
 ##########################################################################
-# run up idKeys files for ncbiRefSeq (TBD - 2017-04-13 - Hiram)
+# run up idKeys files for ncbiRefSeq (DONE - 2017-05-10 - Hiram)
     mkdir /hive/data/genomes/hpv1/bed/idKeys
     cd /hive/data/genomes/hpv1/bed/idKeys
 
     time (doIdKeys.pl -buildDir=`pwd`  hpv1) > do.log 2>&1 &
-    # real    45m2.374s
+    # real    0m17.364s
 
     cat hpv1.keySignature.txt
-    #   832a66e945d9edd075787c256aedfae0
+    #   a1821a8fb20b88bd25f0eacea585b24a
 
 ##########################################################################
-# cpgIslands - (TBD - 2017-04-13 - Hiram)
+# cpgIslands - (DONE - 2017-05-10 - Hiram)
     mkdir /hive/data/genomes/hpv1/bed/cpgIslands
     cd /hive/data/genomes/hpv1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku hpv1) > do.log 2>&1 &
-    # real    10m43.281s
+    # real    0m36.957s
 
     cat fb.hpv1.cpgIslandExt.txt
-    # 4837862 bases of 2318132242 (0.209%) in intersection
+    # 203 bases of 8033 (2.527%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2017-04-13 - Hiram)
+# genscan - (DONE - 2017-05-10 - Hiram)
     mkdir /hive/data/genomes/hpv1/bed/genscan
     cd /hive/data/genomes/hpv1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku hpv1) > do.log 2>&1 &
-    # real    65m50.006s
+    # real    0m52.467s
 
     cat fb.hpv1.genscan.txt
-    # 31211644 bases of 2318132242 (1.346%) in intersection
+    # 3408 bases of 8033 (42.425%) in intersection
 
     cat fb.hpv1.genscanSubopt.txt
-    # 37035688 bases of 2318132242 (1.598%) in intersection
+    # 3144 bases of 8033 (39.139%) in intersection
 
 #############################################################################
 # augustus gene track (TBD - 2017-04-13 - Hiram)
+    # XXX augustus can not do virus sequence
 
     mkdir /hive/data/genomes/hpv1/bed/augustus
     cd /hive/data/genomes/hpv1/bed/augustus
@@ -432,146 +448,35 @@ XXX - ready to continue - Wed May 10 16:30:28 PDT 2017
     cat fb.hpv1.augustusGene.txt
     # 29811614 bases of 2318132242 (1.286%) in intersection
 
-#########################################################################
-# LIFTOVER TO criGri1 (TBD - 2017-04-13 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/hpv1/bed/blat.criGri1.2017-04-13
-    cd /hive/data/genomes/hpv1/bed/blat.criGri1.2017-04-13
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/hpv1/jkStuff/hpv1.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         hpv1 criGri1) > do.log 2>&1 &
-    # real    1589m33.139s
-
-    # verify the convert link on the test browser is now active
-    # from hpv1 to criGri1
-
-#############################################################################
-# SWAP lastz/chain/net hpv1 (TBD - 2017-04-24 - Hiram)
-
-    # this is in addition to the blat liftOver result, not to
-    # replace that result, but just to get this chainNet track on the
-    # browser which the blat liftOver does not create.
-
-    # alignment to criGri1
-    cd /hive/data/genomes/criGri1/bed/lastzCriGriChoV1.2017-04-19
-
-    cat fb.criGri1.chainCriGriChoV1Link.txt
-    # 2258183039 bases of 2301325917 (98.125%) in intersection
-
-    # and for the swap:
-    mkdir /hive/data/genomes/hpv1/bed/blastz.criGri1.swap
-    cd /hive/data/genomes/hpv1/bed/blastz.criGri1.swap
-
-    # stop at 'load' to avoid changing liftOver (already done with blat)
-    time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/criGri1/bed/lastzCriGriChoV1.2017-04-19/DEF \
-        -swap -chainMinScore=1000 -chainLinearGap=loose \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -stop=load -noDbNameCheck -syntenicNet) > swap.log 2>&1
-    #  real    258m32.140s
-
-    cat fb.hpv1.chainCriGri1Link.txt
-    # 2274544087 bases of 2318132242 (98.120%) in intersection
-
-    time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/criGri1/bed/lastzCriGriChoV1.2017-04-19/DEF -debug \
-        -continue=download -swap -chainMinScore=1000 -chainLinearGap=loose \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -stop=download -noDbNameCheck -syntenicNet) > download.log 2>&1
-
-  time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hpv1 criGri1) \
-       > rbest.log 2>&1 &
-    # real    83m10.946s
-
-#############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2017-04-13 - Hiram)
-
-    # original alignment
-    cat fb.hg38.chainCriGriChoV1Link.txt
-    # 973293331 bases of 3049335806 (31.918%) in intersection
-
-    # and for the swap:
-    mkdir /hive/data/genomes/hpv1/bed/blastz.hg38.swap
-    cd /hive/data/genomes/hpv1/bed/blastz.hg38.swap
-
-    time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzCriGriChoV1.2017-04-13/DEF \
-        -swap -chainMinScore=3000 -chainLinearGap=medium \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -noDbNameCheck -syntenicNet) > swap.log 2>&1
-    #  real    91m19.847s
-
-    cat fb.hpv1.chainHg38Link.txt
-    # 935724011 bases of 2318132242 (40.365%) in intersection
-
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hpv1 hg38) \
-       > rbest.log 2>&1 &
-    # real    436m55.979s
-
-#############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2017-04-13 - Hiram)
-
-    # original alignment
-    cat fb.mm10.chainCriGriChoV1Link.txt
-    #	1553371182 bases of 2652783500 (58.556%) in intersection
-
-    mkdir /hive/data/genomes/hpv1/bed/blastz.mm10.swap
-    cd /hive/data/genomes/hpv1/bed/blastz.mm10.swap
-    time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzCriGriChoV1.2017-04-13/DEF \
-	-noDbNameCheck -swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
-    #	real    157m21.977s
-
-    cat fb.hpv1.chainMm10Link.txt
-    #	1513594461 bases of 2318132242 (65.294%) in intersection
-
-    time (doRecipBest.pl -workhorse=hgwdev hpv1 mm10 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    769m8.998s
-
 ##############################################################################
 # Create kluster run files (TBD - 2017-04-13 - Hiram)
 
     # numerator is hpv1 gapless bases "real" as reported by:
     featureBits -noRandom -noHap hpv1 gap
-    # 81654506 bases of 2318132242 (3.522%) in intersection
-    #                   ^^^
+    # 0 bases of 8033 (0.000%) in intersection
+    #            ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2318132242 / 2861349177 \) \* 1024
-    #  ( 2318132242 / 2861349177 ) * 1024 = 829.597253
+    calc \( 8033 / 2861349177 \) \* 1024
+    #  ( 8033 / 2861349177 ) * 1024 = 0.002875
 
-    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
-    #   and rounded down to nearest 100
+    # repMatch=1 produces 1,459 overused 11-mers
+    $ repMatch=2 produces 1 overused 11-mers
+    $ repMatch=3 produces 0 overused 11-mers
+    # ==> use -repMatch=3, do not need to mask anything
     cd /hive/data/genomes/hpv1
     blat hpv1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/hpv1.11.ooc \
-        -repMatch=800
-    #   Wrote 24542 overused 11-mers to jkStuff/hpv1.11.ooc
-    # criGri1 was:
-    #	Wrote 21108 overused 11-mers to jkStuff/criGri1.11.ooc
+        -repMatch=3
+    #   Wrote 0 overused 11-mers to jkStuff/hpv1.11.ooc
 
     #   check non-bridged gaps to see what the typical size is:
     # there are no non-bridged gaps in this assembly:
     hgsql -N -e 'select bridge from gap;' hpv1 | sort | uniq -c
-    #	156635 yes
-
-    # if there are, scan their sizes:
-    hgsql -N \
-        -e 'select * from gap where bridge="no" order by size;' hpv1 \
-        | sort -k7,7nr | ave -col=7 stdin
-
-    # and make a gap lift file for genbank
-    # # all these gap sizes are 100
-    # # minimum gap size is 100 and produces a reasonable number of lifts
-    # gapToLift -verbose=2 -minGap=10 hpv1 jkStuff/nonBridged.lft \
-    #    -bedFile=jkStuff/nonBridged.bed
+    #	no output, nothing to see here
 
 #########################################################################
 # GENBANK AUTO UPDATE (TBD - 2017-04-13 - Hiram)
@@ -579,24 +484,30 @@ XXX - ready to continue - Wed May 10 16:30:28 PDT 2017
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # #organism             mrnaCnt   estCnt  refSeqCnt
-    # Cricetulus griseus      90138   12      345
+    # organism             mrnaCnt   estCnt  refSeqCnt
+    # Human papillomavirus    61      0       0
+    # Human papillomavirus type 16    21      2       0
+    # Human papillomavirus type 18    9       0       0
+    # Human papillomavirus type 197   1       0       0
+    # Human papillomavirus type 38    1       0       0
+    # Human papillomavirus type 45    1       0       0
+    # Human papillomavirus type 58    2       0       0
+    # Human papillomavirus type 68    2       0       0
+    # Human papillomavirus type 6b    1       0       0
 
-# Organism name:  Cricetulus griseus (Chinese hamster)
-
-    # edit etc/genbank.conf to add hpv1 just before criGri1
-# hpv1 (Cricetulus griseus - Chinese hamster ovary cell line CHO-K1)
+    # edit etc/genbank.conf to add hpv1 at the end
+# hpv1 (Human papillomavirus type 90 -  Taxid: 333769)
 hpv1.serverGenome = /hive/data/genomes/hpv1/hpv1.2bit
 hpv1.clusterGenome = /hive/data/genomes/hpv1/hpv1.2bit
 hpv1.ooc = /hive/data/genomes/hpv1/jkStuff/hpv1.11.ooc
 hpv1.lift = no
 hpv1.downloadDir = hpv1
 hpv1.perChromTables = no
-hpv1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
-hpv1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
-hpv1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
-hpv1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
-hpv1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+hpv1.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+hpv1.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+hpv1.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+hpv1.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+hpv1.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
 # defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
 # genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
@@ -604,20 +515,21 @@ hpv1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFi
 # hpv1.upstreamGeneTbl = ensGene
 # hpv1.upstreamMaf = multiz9way /hive/data/genomes/hpv1/bed/multiz9way/species.list
 
-    git commit -m 'adding hpv1 Cricetulus griseus - Chinese hamster ovary cell line CHO-K1 refs #19228' etc/genbank.conf
+    git commit -m 'adding hpv1 Human papillomavirus type 90 - refs #18971' etc/genbank.conf src/lib/gbGenome.c
     git push
     # update /cluster/data/genbank/:
     make etc-update
+    make install-server
 
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial hpv1
-    # logFile: var/build/logs/2017.04.13-10:50:30.hpv1.initalign.log
-    #   real    1744m57.359s
+    # logFile: var/build/logs/2017.05.10-18:36:54.hpv1.initalign.log
+    #   real    1354m21.533s
 
-    tail -2 var/build/logs/2017.04.13-10:50:30.hpv1.initalign.log
-    #	hgwdev 2017.04.14-15:54:57 hpv1.initalign: Succeeded: hpv1
-    #	hgwdev 2017.04.14-15:55:28 hpv1.initalign: finish
+    tail -2  var/build/logs/2017.05.10-18:36:54.hpv1.initalign.log
+    #	hgwdev 2017.05.11-17:11:12 hpv1.initalign: Succeeded: hpv1
+    #	hgwdev 2017.05.11-17:11:15 hpv1.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.hpv1
@@ -626,12 +538,13 @@ hpv1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFi
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad hpv1
-    # logFile: var/dbload/hgwdev/logs/2017.04.19-10:31:05.hpv1.dbload.log
-    #  real    30m42.283s
+    # logFile: var/dbload/hgwdev/logs/2017.05.11-23:06:35.hpv1.dbload.log
+    #  about 90 minutes, appears to load nothing ?
 
-    tail -1 var/dbload/hgwdev/logs/2017.04.19-10:31:05.hpv1.dbload.log
-    # hgwdev 2017.04.19-10:49:44 hpv1.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2017.05.11-23:06:35.hpv1.dbload.log
+    # hgwdev 2017.05.12-00:35:31 hpv1.dbload: finish
 
+XXX -checking with genbank master on zero results - Fri May 12 08:19:39 PDT 2017
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
@@ -643,38 +556,28 @@ hpv1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFi
     make etc-update
 
 #############################################################################
-# ncbiRefSeq (TBD - 2016-05-13 - Hiram)
+# ncbiGene (DONE - 2017-05-10 - Hiram)
 
-    mkdir /hive/data/genomes/hpv1/bed/ncbiRefSeq
-    cd /hive/data/genomes/hpv1/bed/ncbiRefSeq
-    # running step wise as this script is still under development
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 hpv1) > download.log 2>&1
-    # real    16m29.536s
+    mkdir /hive/data/genomes/hpv1/bed/ncbiGene
+    cd /hive/data/genomes/hpv1/bed/ncbiGene
 
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 hpv1) > process.log 2>&1
-    # real    3m58.858s
+    # switching the names from column 1 to 12 and 12 to 1 with the awk:
+    gff3ToGenePred -useName -attrsOut=hpv1.attrs.tab -geneNameAttr=gene \
+       ../../refseq/GCF_000862685.1_ViralProj15424_genomic.gff.gz \
+           stdout | sed -e 's/NC_004104.1/NC_004104v1/;' \
+             | awk -F'\t' '{print $12,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$1,$13,$14,$15}' | tr '[ ]' '[\t]' > hpv1.ncbiGene.gp
+# NP_671509.1     NC_004104v1     +       5791    7309    5791    7309    1      5791,    7309,   0       L1      cmpl    cmpl    0,
+# becomes:
+# L1      NC_004104v1     +       5791    7309    5791    7309    1       5791,  7309,    0       NP_671509.1     cmpl    cmpl    0,
 
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 hpv1) > load.log 2>&1
-    # real    0m33.205s
+    genePredCheck -db=hpv1 hpv1.ncbiGene.gp 
+    # checked: 7 failed: 0
 
-    cat fb.ncbiRefSeq.hpv1.txt
-    #  82563006 bases of 1218501075 (6.776%) in intersection
-
-    featureBits -enrichment hpv1 refGene ncbiRefSeq
-    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
-    #    enrich 14.68x
+    hgLoadGenePred -genePredExt hpv1 ncbiGene hpv1.ncbiGene.gp
+    genePredCheck -db=hpv1 ncbiGene
+    # checked: 7 failed: 0
+XXX - more name wrangling is in order
+XXX - need to get gene descriptions out of the genbank record
 
 #########################################################################
 #  BLATSERVERS ENTRY (TBD - 2017-04-19 - Hiram)

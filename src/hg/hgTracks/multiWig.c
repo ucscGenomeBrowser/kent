@@ -227,10 +227,22 @@ if (alwaysZero == wiggleAlwaysZeroOn)
 }
 
 
-static struct wigGraphOutput *setUpWgo(int xOff, int yOff, int width, int height, int numTracks, struct wigCartOptions *wigCart, struct hvGfx *hvg)
+void AllocPixelBins(struct wigGraphOutput *wgo, int width)
+{
+struct pixelCountBin *bins;
+
+AllocVar(bins);
+
+wgo->pixelBins = bins;
+bins->binSize = 1;
+bins->binCount = width / bins->binSize + 1;
+AllocArray(bins->bins, bins->binCount);
+}
+
+struct wigGraphOutput *setUpWgo(int xOff, int yOff, int width, int height, int numTracks, struct wigCartOptions *wigCart, struct hvGfx *hvg)
 {
 /* Deal with tranparency possibly */
-struct wigGraphOutput *wgo;
+struct wigGraphOutput *wgo = NULL;
 struct floatPic *floatPic = NULL;
 switch(wigCart->aggregateFunction)
     {
@@ -261,6 +273,7 @@ switch(wigCart->aggregateFunction)
 	break;
 	}
     }
+AllocPixelBins(wgo, width);
 return wgo;
 }
 

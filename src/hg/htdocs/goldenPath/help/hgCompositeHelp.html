@@ -7,54 +7,37 @@
 <!--#set var="ROOT" value="../.."-->
 <!--#include virtual="$ROOT/inc/gbPageStart.html" -->
 
-<h1>Composite Builder Help</h1>
+<h1>Composite Builder Help - DRAFT IN PROGRESS</h1>
 
 <h2>Contents</h2>
-
-
-<div class="container">
-  <div class="row">
-  <div class="col-sm-6">
   
-<h6><a href="#Intro">Introduction</strong></a></h6>
-<h6><a href="#Features">Key Features</a></h6>
-<h6><a href="#GetStarted">Getting Started</a></h6>
-<h6><a href="#Support">Resources and Support</a></h6>
-
-</div>
-  <div class="col-sm-6">
-
-
-<form name="googleForm1" method="GET" action="http://www.google.com/search" 
-onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   
-site:genome.ucsc.edu/goldenPath/help';">    
-      
-<p> 
-  Search our help pages: &nbsp;
-  <input type="hidden" name="q" value=""> 
-  <input type="hidden" name="num" value="10"> 
-  <input type="hidden" name="filter" value="0"> 
-  <input type=text name=qq size=30 maxlength=255 value=""> 
-  <input type="submit" value="Submit"> 
-</form> 
-</p>
-<p>Questions? Please <a href="../../contacts.html" target="_blank">contact us</a>.</p>
-
-</div>
-  </div>
-  </div>
+<h5><a href="#Intro">Introduction</a></h6>
+<h5><a href="#Features">Key Features</a></h6>
+<h5><a href="#GetStarted">Getting Started</a></h6>
+<h5><a href="#Support">Resources and Support</a></h6>
 
 <a name="Intro"></a>	
 <h2>Introduction</h2> 
+
+<p>The <a href="/cgi-bin/hgComposite" target="_blank">Composite Builder</a> is a tool which provides a 
+quick and easy way to build a custom composite track grouping, without having to build a track hub. From a 
+single interface, tracks that are being viewed in the UCSC Genome Browser display can be added into 
+a new composite track group. Composite groups can then be customized with a suite of options (e.g., 
+choosing colors for each sub-track, naming tracks, etc.). Your newly created composite group can 
+then be viewed in the UCSC Genome Browser in reference to the particular genome assembly from which
+the custom composite was built. 
 <p> 
+
+<p>
+<i>About composite tracks</i></br>
 In the UCSC Genome Browser, a <a href="/goldenpath/help/trackDb/trackDbHub.html#compositeTrack" 
 target="_blank" >composite track</a> is a grouping for a set of similar-type annotation tracks 
 (e.g., all tracks store continuous <a href="../../FAQ/FAQformat.html#format6.1" target="_blank">
 bigWig</a> data, or all tracks store data in the <a href="../../FAQ/FAQformat.html#format9" 
-target="_blank">genePred</a> format). A set of tracks within a composite track are sometimes 
-referred to as &quot;sub-tracks.&quot; Some of the natively-hosted annotation tracks within the UCSC 
+target="_blank">genePred</a> format). A set of tracks within a composite track are referred to 
+as &quot;sub-tracks.&quot; Some of the natively-hosted annotation tracks within the UCSC 
 Genome Browser are composite tracks. For example, the 
-<a href="../../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper" target="_blank">ALL GENCODE</a> 
+<a href="../../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeGencodeSuper" target="_blank">All GENCODE</a> 
 GRCh38/hg38 composite track is a group containing a set of GENCODE sub-tracks, where each track can 
 have custom settings (such as different <a href="/goldenpath/help/hgTracksHelp.html#TRACK_CONT" 
 target="_blank" >display modes</a> per sub-track).</p> 
@@ -69,15 +52,6 @@ target="_blank">several ways </a> to host your own customized data sets, which c
 UCSC Genome Browser environment (including the utilization of major tools such as the 
 <a href="/cgi-bin/hgTables" target="_blank">Table Browser</a>). </p>
 
-<p>The <a href="/cgi-bin/hgComposite" target="_blank">Composite Builder</a> is a tool which provides a 
-quick and easy way to build a custom composite track, without having to build a track hub. From a 
-single interface, tracks that are being viewed in the UCSC Genome Browser display can be added into 
-a new composite track group. Composite groups can then be customized with a suite of options (e.g., 
-choosing colors for each sub-track, naming tracks, etc.). Your newly created composite group can 
-then be viewed in the UCSC Genome Browser in reference to the particular genome assembly from which
-the custom composite was built. 
-<p> 
-
 <a name="Features"></a>	
 <h2>Key Features</h2> 
 <p> 
@@ -87,8 +61,8 @@ the custom composite was built.
 only.</li>
   <li>The Composite Builder builds groups per genome assembly. A group cannot contain tracks from
   more than one genome assembly.
-  <li>Any track that is not set to <a href="/goldenpath/help/hgTracksHelp.html#TRACK_CONT" 
-target="_blank" >&quot;hide&quot;</a> in your current genome browser will appear as available to 
+  <li>Any track that is not <a href="/goldenpath/help/hgTracksHelp.html#TRACK_CONT" 
+target="_blank" >set to &quot;hide&quot;</a> in your current genome browser will appear as available to 
 add into a new composite group. 
   <li>Other...
   <li>Other..
@@ -134,14 +108,20 @@ Text about Step 3.</p>
 <ul>
   <li>Questions? Please <a href="../../contacts.html" target="_blank">contact us</a>.</li>
   <li>Supported data types: Information about the <a href="../../FAQ/FAQformat.html#format6.1" 
-  target="_blank">bigWig</a> format. 
+  target="_blank">bigWig</a> format.</li> 
   <li>Documentation for composite tracks: 
   <a href="/goldenpath/help/hubQuickStartGroups.html#composite" target="_blank">
   Quick Start Guide to Hubs</a> and the 
   <a href="/goldenpath/help/trackDb/trackDbHub.html#Composite_Track_Settings"
-  target-"_blank"> Hub Track Database Definition</a> guide. 
-  <li>View the Composite Builder <a href="/goldenPath/newsarch.html"target="_blank">News Release
-  </a>.
+  target-"_blank"> Hub Track Database Definition</a> guide.</li> 
+  <li>View the Composite Builder <a href="/goldenPath/newsarch.html"target="_blank">News Release</a></li>
+  <li>Credit to Dr. Bar-Joseph for assisting with wiggle sorting development: 
+</br>Bar-Joseph Z, Demaine ED, Gifford DK, Srebro N, Hamel AM, Jaakkola TS.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target="_blank">
+K-ary clustering with optimal leaf ordering for gene expression data</a>.
+<em>Bioinformatics</em>. 2003 Jun 12;19(9):1070-8.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target="_blank">12801867</a>
+  </li>
 </ul>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
