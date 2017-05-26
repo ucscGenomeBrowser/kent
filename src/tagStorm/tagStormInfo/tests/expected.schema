@@ -5,13 +5,13 @@ assay $ *
 biosample_date $ *
 donor # 0 0
 file $ *
-format $ *
+format $ bam fastq "tag storm"
 lab $ *
 lab_kent_disassociation_protocol $ *
 lab_kent_quality % 0 1
 life_stage $ *
 map_ratio % 0 1
-organ $ *
+organ $ brain liver
 part # 1 10
 q # -1 10
 sex $ *
