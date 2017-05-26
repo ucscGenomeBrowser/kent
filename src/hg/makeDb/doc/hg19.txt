@@ -32070,6 +32070,39 @@ ggTables build pathways/ ppi/ text/ mysql/
 ggTables docs mysql/
 # load mysql/ into hgFixed
 ggTables load hgFixed
+
+# == CREATE THE GENE LOCATIONS ==
+cd geneModels
+# === hg19 ===
+
+# get best transcript for gencode basic
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from wgEncodeGencodeBasicV19' > gencode19.bed
+mysql hg19 -NBe 'select distinct name, name2 from wgEncodeGencodeBasicV19' > gencode19.names.tab
+bedBestTranscript gencode19.bed gencode19.names.tab -m > gencode19.best.bed
+
+# get best transcript for refGene
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from refGene' > refGene.bed
+mysql hg19 -NBe 'select distinct name, name2 from refGene' > refGene.names.tab
+bedBestTranscript refGene.bed refGene.names.tab -m > refGene.best.bed
+
+# get UCSC knownGene canonical transcripts
+hgsql hg19 -NBe 'select chrom, chromStart, chromEnd, geneSymbol from knownCanonical JOIN kgXref ON kgId=transcript' > knownCanon.best.bed
+
+# add all gencode comprehensive models, but only as a last resort
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from wgEncodeGencodeCompV19' > gencodeComp19.bed
+mysql hg19 -NBe 'select distinct name, name2 from wgEncodeGencodeCompV19' > gencodeComp19.names.tab
+bedBestTranscript -m gencodeComp19.bed gencodeComp19.names.tab > gencodeComp19.best.bed
+
+# finally, even add the pseudogenes
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from wgEncodeGencodePseudoGeneV19' > gencodePseudo19.bed
+mysql hg19 -NBe 'select distinct name, name2 from wgEncodeGencodePseudoGeneV19' > gencodePseudo19.names.tab
+bedBestTranscript -m gencodePseudo19.bed gencodePseudo19.names.tab > gencodePseudo19.best.bed
+
+# now take the first line for each gene from all files, in this order
+bedNamePickFirst gencode19.best.bed refGene.best.bed gencodeComp19.best.bed knownCanon.best.bed gencodePseudo19.bed | cut -f-4 | bedSort stdin stdout > bestGenes.hg19.bed 
+
+# == END GENE LOCATIONS ==
+
 # create the bigBed files
 ggTables bigBed mysql/ bigBed/ geneModels/bestGenes.hg19.bed hg19
 ln -s `pwd`/bigBed/geneInteractions.hg19.bb /gbdb/h19/bbi/interactions.bb
