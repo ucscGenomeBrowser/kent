@@ -393,7 +393,6 @@ else  /* Not numerical */
     fputc('$', f);
     if (!doLooseSchema)
 	{
-	int useCount = useCount;
 	int distinctCount = valHash->elCount;
 	double repeatRatio = (double)useCount/distinctCount;
 	int useFloor = 8, distinctCeiling = 10, distinctFloor = 1;
