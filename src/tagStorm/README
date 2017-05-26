@@ -1,0 +1,12 @@
+This directory contains programs for manipulating files in tagStorm format,  a
+relatively simple text based format that is often a good alternative to a big
+tab-separated-file or spreadsheet, and that is used often at UCSC.
+
+The basic idea of the format is one tag per line with the first word of the
+line containing the tag name, and the rest of the line containing the tag 
+value.  Stanzas are separated by blank lines.  If a stanza is indented relative
+to the previous stanza, it is considered a child of that stanza.  Children
+inherit tags from their parents.   A tag corresponds to a column in a 
+spreadsheet, and a stanza to a row.
+
+
