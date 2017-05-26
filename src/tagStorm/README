@@ -9,4 +9,4 @@ to the previous stanza, it is considered a child of that stanza.  Children
 inherit tags from their parents.   A tag corresponds to a column in a 
 spreadsheet, and a stanza to a row.
 
-
+Please see the LICENSE file for usage conditions.
