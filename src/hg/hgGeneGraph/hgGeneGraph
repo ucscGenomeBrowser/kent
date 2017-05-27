@@ -1208,9 +1208,9 @@ def printGraph(conn, weightedLinks, alg, addNeighbors, targetGene, format):
     
     # text above graph
     print("Mouse over or click genes or lines for details. Dashed lines indicate interactions without text mining support. ")
-    print("Arrows indicate the most common direction of effect based on pathway or text-mining databases.<br>")
     print("Click any gene to make it the new center. Click any line to show details about the interaction. ")
-    print("Only %s-interacting genes and only the most-mentioned/most-curated interactions are shown in the graph.<p>" % (targetGene))
+    print("Only %s-interacting genes and only the most-mentioned/most-curated interactions are shown in the graph. " % (targetGene))
+    print("See the <a href='../../goldenPath/help/hgGeneGraph.html'>Help Page</a> for details.")
 
     # menu above graph
     # background #fffef5 would be an alternive
