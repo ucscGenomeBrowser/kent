@@ -6,7 +6,7 @@ use warnings;
 my $argc = scalar(@ARGV);
 
 if ($argc < 2) {
-  printf STDERR "usage: kmerPrint.pl <N> <fastaFile.fa> [moreFastaFiles.fa] \\\n\t| sort | uniq -c | awk '{printf \"%%s\\t%%d\\n\", \$2,\$1}' \\\n\t| gzip -c > result.gz\n";
+  printf STDERR "usage: kmerPrint.pl <N> <fastaFile.fa> [moreFastaFiles.fa] | gzip -c > result.gz\n";
   printf STDERR "where <N> is kmer size\n";
   printf STDERR "followed by fasta file names (can be 'stdin')\n";
   exit 255;
