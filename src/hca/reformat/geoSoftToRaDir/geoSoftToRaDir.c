@@ -34,8 +34,7 @@ struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = NULL;
 char linePrefix[128];  // Expected prefix for line, something like !Series_
 char linePrefixSize = 0;
-char *lastTag = NULL;
-boolean openLine = FALSE;
+int dpPartCount = 0;
 
 makeDirsOnPath(outDir);
 char *line;
@@ -45,14 +44,9 @@ while (lineFileNext(lf, &line, NULL))
     if (typeChar == '^')
         {
 	if (f != NULL)
-	    {
-	    if (openLine)
-		{
-		fputc('\n', f);
-		openLine = FALSE;
-		}
 	    fputc('\n', f);
-	    }
+	dpPartCount = 0;
+
 	/* Parse out first word after ^ and save lower case versions */
 	line += 1;
 	char *output = nextWord(&line);
@@ -76,7 +70,6 @@ while (lineFileNext(lf, &line, NULL))
 	/* Make line prefix */
 	safef(linePrefix, sizeof(linePrefix), "!%c%s_", output[0], lcOutput+1);
 	linePrefixSize = strlen(linePrefix);
-	freez(&lastTag);
 	}
     else if (typeChar == '!')
         {
@@ -112,59 +105,39 @@ while (lineFileNext(lf, &line, NULL))
 	if (isEmpty(val))
 	    errAbort("Nothing after = line %d of %s", lf->lineIx, lf->fileName);
 
+	/* Write out the tag name, simple for most tags, but data_processing and 
+	 * characteristics need special handling */
 	if (sameString("data_processing", tag))
 	    {
-	    /* The data_processing bit gets turned into an array in tagStorm */
-	    if (!openLine)
-	        {
-		fprintf(f, "%s ", tag);
-		openLine = TRUE;
-		}
-	    else
-	        fputc(',', f);
-	    csvWriteVal(val, f);
+	    ++dpPartCount;
+	    fprintf(f, "%s_%d ", tag, dpPartCount);
+	    }
+	else if (sameString("characteristics", tag))
+	    {
+	    /* The characteristics tag has a subtag between the = and a : */
+	    char *colonPos = strchr(val, ':');
+	    if (colonPos == NULL)
+		errAbort("No colon after %s line %d of %s", tag, lf->lineIx, lf->fileName);
+	    *colonPos++ = 0;
+	    char *subTag = trimSpaces(val);
+	    subChar(subTag, ' ', '_');
+	    val = skipLeadingSpaces(colonPos);
+	    fprintf(f, "%s_%s ", tag, subTag);
 	    }
 	else
 	    {
-	    if (openLine)
-		{
-		fputc('\n', f);
-		openLine = FALSE;
-		}
-	    if (sameString("characteristics", tag))
-		{
-		/* The characteristics tag has a subtag between the = and a : */
-		char *colonPos = strchr(val, ':');
-		if (colonPos == NULL)
-		    errAbort("No colon after %s line %d of %s", tag, lf->lineIx, lf->fileName);
-		*colonPos++ = 0;
-		char *subTag = trimSpaces(val);
-		subChar(subTag, ' ', '_');
-		val = skipLeadingSpaces(colonPos);
-		fprintf(f, "%s_%s ", tag, subTag);
-		csvWriteVal(val, f);
-		fputc('\n', f);
-		}
-	    else
-		{
-		fprintf(f, "%s ", tag);
-		csvWriteVal(val, f);
-		fputc('\n', f);
-		}
-	    if (!sameOk(tag, lastTag))
-		{
-		freez(&lastTag);
-		lastTag = cloneString(tag);
-		}
+	    fprintf(f, "%s ", tag);
 	    }
+
+	/* Write out value */
+	csvWriteVal(val, f);
+	fputc('\n', f);
 	}
     else
         errAbort("Unrecognized line %d of %s:\n%s", lf->lineIx, lf->fileName, line);
     }
 if (f != NULL)
     {
-    if (openLine)
-	fputc('\n', f);
     fputc('\n', f);
     carefulClose(&f);  
     }
