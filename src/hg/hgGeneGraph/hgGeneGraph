@@ -46,6 +46,8 @@ except:
     print("Cannot find the directory cgi-bin/pyLib in Apache. This is an installation error.")
     print("All all parts of cgi-bin installed? Did you do 'make' in kent/src/hg/pyLib?")
 
+import MySQLdb
+
 # not using feedback button for now. Fan would have liked it, but not sure how we can write
 # to any form of database.
 #skimpyGimpyLoaded=False
@@ -524,7 +526,10 @@ def buildGraph(conn, gene, geneCount, minSupp, addNeighbors):
     if geneCount <= 1:
         errAbort("Sorry, you have to show at least two genes.")
 
-    links = queryLinks(conn, gene=gene)
+    try:
+        links = queryLinks(conn, gene=gene)
+    except MySQLdb.Error:
+        errAbort("Cannot find the gg* tables in hgFixed. This mirror's database may need updating.")
 
     if len(links)==0:
         errAbort("Sorry, the gene %s is not a valid gene symbol or is not present in any gene interaction database." % cgi.escape(gene))
