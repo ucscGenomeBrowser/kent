@@ -1,0 +1,27 @@
+#############################################################################
+# interactions track, May 2017 Max
+also see the hg19.txt makeDoc ../hg19.txt for details
+
+cd /hive/data/genomes/hg19/bed/interactions/
+
+cd geneModels
+# === hg38 ===
+
+mysql hg38 -NBe 'select chrom, txStart, txEnd, name from wgEncodeGencodeBasicV26' > gencode26.bed
+mysql hg38 -NBe 'select distinct name, name2 from wgEncodeGencodeBasicV26' > gencode26.names.tab
+bedBestTranscript gencode26.bed gencode26.names.tab -m > gencode26.best.bed
+
+# get best transcript for refGene
+mysql hg38 -NBe 'select chrom, txStart, txEnd, name from refGene' > refGene-hg38.bed
+mysql hg38 -NBe 'select distinct name, name2 from refGene' > refGene-hg38.names.tab
+bedBestTranscript refGene-hg38.bed refGene-hg38.names.tab -m > refGene-hg38.best.bed
+
+# add all gencode comprehensive models, but only as a last resort
+mysql hg38 -NBe 'select chrom, txStart, txEnd, name from wgEncodeGencodeCompV26' > gencodeComp26.bed
+mysql hg38 -NBe 'select distinct name, name2 from wgEncodeGencodeCompV26' > gencodeComp26.names.tab
+bedBestTranscript -m gencodeComp26.bed gencodeComp26.names.tab > gencodeComp26.best.bed
+
+bedNamePickFirst gencode26.best.bed refGene-hg38.best.bed gencodeComp26.best.bed | cut -f-4 | bedSort stdin stdout > bestGenes.hg38.bed 
+== END GENE MODELS ==
+ggTables bigBed mysql/ bigBed/ geneModels/bestGenes.hg38.bed hg38
+ln -s `pwd`/bigBed/geneInteractions.hg38.bb /gbdb/hg38/bbi/interactions.bb

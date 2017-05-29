@@ -334,3 +334,100 @@ dyStringPrintf(dy, ")");
 slPairFreeList(&tagList);
 }
 
+static double roundedMax(double val)
+/* Return number rounded up to nearest power of ten */
+{
+if (val <= 0.0)
+    return 0;
+double roundedVal = 1;
+for (;;)
+    {
+    if (val <= roundedVal)
+	break;
+    roundedVal *= 10;
+    }
+return roundedVal;
+}
+
+static double roundedMin(double val)
+/* Return number that is 0, 1, or nearest negative power of 10 */
+{
+if (val < 0)
+    return -roundedMax(-val);
+if (val < 1.0)
+    return 0.0;
+else
+    return 1.0;
+}
+
+
+void tagTypeInfoPrintSchemaLine(struct tagTypeInfo *tti, int useCount, struct hash *valHash, 
+    boolean doLooseSchema, boolean doTightSchema, FILE *f)
+/* Print out a line in tagStorm type schema */
+{
+struct hashEl *valEl, *valList = hashElListHash(valHash);
+fprintf(f, "%s ", tti->name);
+if (tti->isNum)
+    {
+    double minVal = tti->minVal, maxVal = tti->maxVal;
+    if (tti->isInt)
+	 fputc('#', f);
+    else 
+	 fputc('%', f);
+    if (!doLooseSchema)
+	{
+	if (!doTightSchema)
+	    {
+	    minVal = roundedMin(minVal);
+	    maxVal = roundedMax(maxVal);
+	    }
+	if (tti->isInt)
+	    fprintf(f, " %lld %lld", (long long)floor(minVal), (long long)ceil(maxVal));
+	else
+	    fprintf(f, " %g %g", minVal, maxVal);
+	}
+    }
+else  /* Not numerical */
+    {
+    /* Decide by a heuristic whether to make it an enum or not */
+    fputc('$', f);
+    if (!doLooseSchema)
+	{
+	int distinctCount = valHash->elCount;
+	double repeatRatio = (double)useCount/distinctCount;
+	int useFloor = 8, distinctCeiling = 10, distinctFloor = 1;
+	double repeatFloor = 4.0;
+
+	if (doTightSchema)
+	    {
+	    useFloor = 0;
+	    repeatFloor = 0.0;
+	    distinctFloor = 0;
+	    }
+	if (useCount >= useFloor && distinctCount <= distinctCeiling 
+	    && distinctCount > distinctFloor && repeatRatio >= repeatFloor)
+	    {
+	    slSort(&valList, hashElCmp);
+	    for (valEl = valList; valEl != NULL; valEl = valEl->next)
+		{
+		char *val = valEl->name;
+		if (hasWhiteSpace(val))
+		    {
+		    char *quotedVal = makeQuotedString(val, '"');
+		    fprintf(f, " %s", quotedVal);
+		    freeMem(quotedVal);
+		    }
+		else
+		    fprintf(f, " %s", val);
+		}
+	    }
+	else
+	    {
+	    fprintf(f, " *");
+	    }
+	}
+    }
+fputc('\n', f);
+slFreeList(&valList);
+}
+

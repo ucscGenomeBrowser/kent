@@ -26,6 +26,7 @@
 #include "tagToSql.h"
 
 struct slName *gDivFieldList = NULL;  // Filled in from div command line option.
+struct treeSpec *gSpec = NULL;   // Filled in from spec command line variable.
 
 static void usage()
 /* Explain usage and exit. */
@@ -36,17 +37,22 @@ errAbort(
   "usage:\n"
   "   tagStormFromTab in.tab out.tags\n"
   "options:\n"
-  "   -div=fields,to,divide,on - comma separated list of fields, from highest to lowest level\n"
-  "                              to partition data on. Otherwise will be calculated.\n"
   "   -local - calculate fields to divide on locally and recursively rather than globally.\n"
   "   -noHoist - don't automatically move tags to a higher level when possible.\n"
   "   -keepOrder - keep field order from input file rather than alphabetizing\n"
+  "   -div=fields,to,divide,on - comma separated list of fields, from highest to lowest level\n"
+  "        to partition data on. Otherwise will be calculated.\n"
+  "   -spec=specFile.txt - Separate into stanzas based on specFile.  The specFile has one\n"
+  "         line per level in the hierarchy.  The lines are space separated and contain\n"
+  "         each field in the stanza at that level of hierarchy.  The program will complain\n"
+  "         about any fieds in the in.tab that aren't in the specFile.txt\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"div", OPTION_STRING},
+   {"spec", OPTION_STRING},
    {"local", OPTION_BOOLEAN},
    {"noHoist", OPTION_BOOLEAN},
    {"keepOrder", OPTION_BOOLEAN},
@@ -578,6 +584,7 @@ else
     return findBestParting(table, allFields, retFields, retField);
 }
 
+#ifdef OLD
 static boolean inFieldRefList(struct slRef *fieldRefList, char *name)
 /* Look for named field in fieldRefList */
 {
@@ -590,10 +597,11 @@ for (ref = fieldRefList; ref != NULL; ref = ref->next)
     }
 return FALSE;
 }
+#endif /* OLD */
 
 static boolean makeSubtableExcluding(struct fieldedTable *table, 
     int partingFieldIx, char *partingVal,
-    struct slRef *excludedFields,
+    struct slName *excludedFields,
     struct fieldedTable **retSubtable, int ixTranslator[])
 /* Make up a subtable that contains all the fields of the table except the excluded ones 
  * Return FALSE if no fields left. */
@@ -609,7 +617,7 @@ for (i=0; i<table->fieldCount; ++i)
     {
     char *field = table->fields[i];
     ixTranslator[i] = -1;
-    if (!inFieldRefList(excludedFields, field))
+    if (slNameFind(excludedFields, field) == NULL)
         {
 	subFields[subI] = field;
 	ixTranslator[i] = subI;
@@ -640,6 +648,20 @@ for (row = table->rowList; row != NULL; row = row->next)
 
 *retSubtable = subtable;
 return TRUE;
+}
+
+struct slName *fieldRefToSlNameList(struct slRef *fieldRefList)
+/* Turn a linst of references to fields into a list of field names */
+{
+struct slName *nameList = NULL;
+struct slRef *ref;
+for (ref = fieldRefList; ref != NULL; ref = ref->next)
+    {
+    struct fieldInfo *field = ref->val;
+    slNameAddHead(&nameList, field->name);
+    }
+slReverse(&nameList);
+return nameList;
 }
 
 static void rPartition(struct fieldedTable *table, struct tagStorm *tagStorm, 
@@ -715,11 +737,13 @@ else
 		verbose(3, "parting on %s=%s\n", partingField->name, partVal);
 		int ixTranslator[table->fieldCount];
 		struct fieldedTable *subtable = NULL;
+		struct slName *excludedFields = fieldRefToSlNameList(partingFields);
 		if (makeSubtableExcluding(table, partingFieldIx, partVal,
-					    partingFields, &subtable, ixTranslator))
+					    excludedFields, &subtable, ixTranslator))
 		    {
 		    rPartition(subtable, tagStorm, stanza, doPrepart, nextPrepart);
 		    }
+		slFreeList(&excludedFields);
 		fieldedTableFree(&subtable);
 		}
 	    }
@@ -764,22 +788,57 @@ static void removeEmptyPairs(struct tagStorm *tagStorm)
 rRemoveEmptyPairs(tagStorm->forest);
 }
 
-static void tagStormFromTab(char *input, char *output)
-/* tagStormFromTab - Create a tagStorm file from a tab-separated file where the labels are on the 
- * first line, that starts with a #. */
+
+struct stanzaSpec
+/* Information on a line parsed out from a spec file */
+    {
+    struct stanzaSpec *next;
+    struct slName *tagList;  /* List of tags in stanza */
+    };
+
+struct treeSpec 
+/* Information parsed out from a spec file */
+    {
+    struct treeSpec *next;   /* Next in list if any */
+    char *name;	     /* Name of spec file */
+    struct hash *tagHash;    /* Hash of all tags in spec, NULL valued */
+    struct stanzaSpec *stanzaSpecList;  
+    };
+
+struct treeSpec *treeSpecFromFile(char *fileName)
+/* Read in a tree spec from a file. */
 {
-/* Load up input as a fielded table */
-struct fieldedTable *table = fieldedTableFromTabFile(input, input, NULL, 0);
-verbose(2, "%s has %d fields and %d rows\n", input, table->fieldCount, table->rowCount);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+struct treeSpec *spec;
+AllocVar(spec);
+spec->name = cloneString(fileName);
+spec->tagHash = hashNew(0);
+while (lineFileNextReal(lf, &line))
+    {
+    struct stanzaSpec *stanza;
+    AllocVar(stanza);
+    char *word;
+    while ((word = nextWord(&line)) != NULL)
+        {
+	hashAddUnique(spec->tagHash, word, NULL);
+	slNameAddTail(&stanza->tagList, word);
+	}
+    slAddTail(&spec->stanzaSpecList, stanza);
+    }
+return spec;
+}
 
+static void divTableIntoTagStorm(struct slName *divFieldList, struct fieldedTable *table,
+    struct tagStorm *tagStorm)
+/* Recursively partition table into an empty tagStorm based on fields we at least partially 
+ * calculate */
+{
 /* Possibly set up global list of partitioning fields */
-if (gDivFieldList == NULL && !optionExists("local"))
-     {
-     gDivFieldList = findPartingDivs(table);
-     }
-
-struct tagStorm *tagStorm = tagStormNew(input);
-rPartition(table, tagStorm, NULL, gDivFieldList != NULL, gDivFieldList);
+if (divFieldList == NULL && !optionExists("local"))
+     divFieldList = findPartingDivs(table);
+/* Do partitioning recursively. */
+rPartition(table, tagStorm, NULL, divFieldList != NULL, divFieldList);
 tagStormReverseAll(tagStorm);
 
 /* Make output prettier by cleaning up empty pairs and stanzas, hoisting, and ordering
@@ -797,6 +856,121 @@ if (optionExists("keepOrder"))
 else
     tagStormAlphaSort(tagStorm);
 
+}
+
+static void rFixedPartition(struct stanzaSpec *ss, struct fieldedTable *table, 
+    struct tagStorm *tagStorm, struct tagStanza *parent)
+/* Recursively partition table based on spec and add to tagStorm. */
+{
+/* Make up a cache of indexes of tags in stanza within table rows. */
+int stanzaSize = slCount(ss->tagList);
+int stanzaTagIx[stanzaSize];
+int tagIx=0;
+struct slName *tag;
+for (tag = ss->tagList,tagIx=0; tag != NULL; tag = tag->next, ++tagIx)
+    stanzaTagIx[tagIx] = fieldedTableMustFindFieldIx(table, tag->name);
+
+/* Make a pass through table making sure that each value of first tag in stanza
+ * has only a single value for the other tags */
+char *partingField = ss->tagList->name;
+int partingIx = stanzaTagIx[0];
+struct slName *lockedField;
+for (lockedField = ss->tagList->next, tagIx=1; lockedField != NULL; 
+    lockedField = lockedField->next, ++tagIx)
+    {
+    int lockedIx = stanzaTagIx[tagIx];
+    struct hash *uniq = hashNew(0);
+    struct fieldedRow *fieldedRow;
+    for (fieldedRow = table->rowList; fieldedRow != NULL; fieldedRow = fieldedRow->next)
+	{
+	char **row = fieldedRow->row;
+	char *parting = row[partingIx];
+	char *locked = row[lockedIx];
+	char *oldLocked = hashFindVal(uniq, parting);
+	if (oldLocked == NULL)
+	    hashAdd(uniq, parting, locked);
+	else if (differentString(locked,oldLocked))
+	    {
+	    errAbort("field %s val %s is associated with at least two vals (%s and %s) of field %s",
+		partingField, parting, oldLocked, locked, lockedField->name); 
+	    }
+	}
+    hashFree(&uniq);
+    }
+
+/* Now emit stanza values and as need be recurse */
+struct hash *uniq = hashNew(0);
+struct fieldedRow *fieldedRow;
+for (fieldedRow = table->rowList; fieldedRow != NULL; fieldedRow = fieldedRow->next)
+    {
+    char **row = fieldedRow->row;
+    struct tagStanza *stanza = tagStanzaNew(tagStorm, parent);
+    struct slName *field;
+    char *partingVal = row[partingIx];
+    if (hashLookup(uniq, partingVal) == NULL)
+	{
+	hashAdd(uniq, partingVal, NULL);
+	for (field = ss->tagList, tagIx=0; field != NULL; field = field->next, ++tagIx)
+	     {
+	     int fieldIx = stanzaTagIx[tagIx];
+	     tagStanzaAdd(tagStorm, stanza, field->name, row[fieldIx]);
+	     }
+	slReverse(&stanza->tagList);
+
+	struct fieldedTable *subtable = NULL;
+	int ixTranslator[table->fieldCount];
+	if (makeSubtableExcluding(table, partingIx, partingVal,
+				    ss->tagList, &subtable, ixTranslator))
+	    {
+	    rFixedPartition(ss->next, subtable, tagStorm, stanza);
+	    }
+	fieldedTableFree(&subtable);
+	}
+    }
+hashFree(&uniq);
+
+}
+
+static void specAndTableIntoTagStorm(struct treeSpec *spec, struct fieldedTable *table,
+    struct tagStorm *tagStorm)
+/* Recursively partition table into an empty tagStorm based on fields defined in spec. */
+{
+/* Check that all fields in table are mentioned in spec. */
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    {
+    char *field = table->fields[i];
+    if (!hashLookup(spec->tagHash, field))
+        errAbort("Field %s is in %s but not %s", field, table->name, spec->name);
+    }
+
+/* Recursively partition */
+rFixedPartition(spec->stanzaSpecList, table, tagStorm, NULL);
+verbose(2, "reversing and cleaning up empties\n");
+tagStormReverseAll(tagStorm);
+removeEmptyPairs(tagStorm);
+tagStormRemoveEmpties(tagStorm);
+}
+
+
+static void tagStormFromTab(char *input, char *output)
+/* tagStormFromTab - Create a tagStorm file from a tab-separated file where the labels are on the 
+ * first line, that starts with a #. */
+{
+/* Load up input as a fielded table */
+struct fieldedTable *table = fieldedTableFromTabFile(input, input, NULL, 0);
+verbose(2, "%s has %d fields and %d rows\n", input, table->fieldCount, table->rowCount);
+
+struct tagStorm *tagStorm = tagStormNew(input);
+if (gSpec != NULL)
+     {
+     specAndTableIntoTagStorm(gSpec, table, tagStorm);
+     }
+else
+     {
+     divTableIntoTagStorm(gDivFieldList, table, tagStorm);
+     }
+     
 /* Write out result */
 verbose(2, "writing %s\n", output);
 tagStormWrite(tagStorm, output, 0);
@@ -814,6 +988,11 @@ char *div = optionVal("div", NULL);
 if (div != NULL)
     gDivFieldList = slNameListFromComma(div);
 
+char *spec = optionVal("spec", NULL);
+if (spec != NULL)
+    {
+    gSpec = treeSpecFromFile(spec);
+    }
 tagStormFromTab(argv[1], argv[2]);
 return 0;
 }

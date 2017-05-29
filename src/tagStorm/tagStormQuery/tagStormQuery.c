@@ -41,21 +41,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-boolean tagStanzaRqlMatch(struct rqlStatement *rql, struct tagStanza *stanza,
-	struct lm *lm)
-/* Return TRUE if where clause and tableList in statement evaluates true for tdb. */
-{
-struct rqlParse *whereClause = rql->whereClause;
-if (whereClause == NULL)
-    return TRUE;
-else
-    {
-    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, tagStanzaRqlLookupField, lm);
-    res = rqlEvalCoerceToBoolean(res);
-    return res.val.b;
-    }
-}
-
 int matchCount = 0;
 boolean doSelect = FALSE;
 
@@ -89,7 +74,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
-void tagStormQuery(char *query)
+void tagStormQueryMain(char *query)
 /* tagStormQuery - Find stanzas in tag storm based on SQL-like query.. */
 {
 /* Get parsed out query */
@@ -122,6 +107,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-tagStormQuery(argv[1]);
+tagStormQueryMain(argv[1]);
 return 0;
 }
