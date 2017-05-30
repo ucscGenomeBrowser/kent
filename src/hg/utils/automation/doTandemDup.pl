@@ -148,8 +148,7 @@ export result=\$2
 mkdir -p tmp
 
 twoBitToFa ${twoBit}:\$fa stdout \\
-  | $Bin/kmerPrint.pl \\
-    $kmersMinus1 /dev/stdin | gzip -c > \$result
+  | $Bin/kmerPrint.pl $kmersMinus1 stdin | gzip -c > \$result
 ' > runOne
 chmod +x runOne
 gensub2 part.list single gsub jobList
