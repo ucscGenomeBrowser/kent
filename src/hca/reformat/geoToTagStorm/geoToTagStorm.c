@@ -5,6 +5,8 @@
 #include "options.h"
 #include "tagStorm.h"
 #include "csv.h"
+#include "localmem.h"
+#include "obscure.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -39,6 +41,37 @@ char *subs[][2] = {
    {"series.taxid", "taxid"},
    {"platform.taxid", "taxid"},
    {"sample.taxid", "taxid"},
+   {"series.status", "status"},
+   {"sample.status", "status"},
+   {"series.contact_name", "contact_name"},
+   {"sample.contact_name", "contact_name"},
+   {"series.contact_phone", "contact_phone"},
+   {"sample.contact_phone", "contact_phone"},
+   {"series.contact_laboratory", "contact_laboratory"},
+   {"sample.contact_laboratory", "contact_laboratory"},
+   {"series.contact_department", "contact_department"},
+   {"sample.contact_department", "contact_department"},
+   {"series.contact_institute", "contact_institute"},
+   {"sample.contact_institute", "contact_institute"},
+   {"series.contact_address", "contact_address"},
+   {"sample.contact_address", "contact_address"},
+   {"series.contact_city", "contact_city"},
+   {"sample.contact_city", "contact_city"},
+   {"series.contact_state", "contact_state"},
+   {"sample.contact_state", "contact_state"},
+   {"series.contact_zip/postal_code", "contact_postal_code"},
+   {"sample.contact_zip/postal_code", "contact_postal_code"},
+   {"series.contact_country", "contact_country"},
+   {"sample.contact_country", "contact_country"},
+   {"sample.supplementary_file_1", "sample.supplementary_file"},
+   {"sample.supplementary_file_2", "sample.supplementary_file"},
+   {"sample.supplementary_file_3", "sample.supplementary_file"},
+   {"sample.supplementary_file_4", "sample.supplementary_file"},
+   {"sample.supplementary_file_5", "sample.supplementary_file"},
+   {"sample.supplementary_file_6", "sample.supplementary_file"},
+   {"sample.supplementary_file_7", "sample.supplementary_file"},
+   {"sample.supplementary_file_8", "sample.supplementary_file"},
+   {"sample.supplementary_file_9", "sample.supplementary_file"},
 };
 
 
@@ -52,7 +85,6 @@ struct tagStorm *tags = NULL;
 struct tagStanza *stanza = NULL;
 char linePrefix[128];  // Expected prefix for line, something like !Series_
 char linePrefixSize = 0;
-int dpPartCount = 0;
 struct dyString *escaperDy = dyStringNew(0);
 
 char *line;
@@ -62,8 +94,6 @@ while (lineFileNext(lf, &line, NULL))
     char lcSection[128];
     if (typeChar == '^')
         {
-	dpPartCount = 0;
-
 	/* Parse out first word after ^ and save lower case versions */
 	line += 1;
 	char *section = nextWord(&line);
@@ -123,12 +153,7 @@ while (lineFileNext(lf, &line, NULL))
 
 	/* Write out the tag name, simple for most tags, but data_processing and 
 	 * characteristics need special handling */
-	if (sameString("data_processing", tag))
-	    {
-	    ++dpPartCount;
-	    safef(outputTag, sizeof(outputTag), "%s.%s_%d", lcSection, tag, dpPartCount);
-	    }
-	else if (sameString("characteristics", tag))
+	if (sameString("characteristics", tag))
 	    {
 	    /* The characteristics tag has a subtag between the = and a : */
 	    char *colonPos = strchr(val, ':');
@@ -163,6 +188,54 @@ struct tagStorm *tags = hashFindVal(hash, section);
 if (tags == NULL)
     errAbort("No ^%s in %s, aborting", section, fileName);
 return tags;
+}
+
+
+void addIndexesToMultis(struct tagStorm *tagStorm, struct tagStanza *stanza)
+/* Add subscript indexes to tags that occur more than once in stanza */
+{
+/* Make up hash of all tags and of repeated tags */
+struct hash *hash = hashNew(0), *repeatedHash = hashNew(0);
+struct slPair *pair;
+for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+    {
+    char *tag = pair->name;
+    if (hashLookup(hash, tag) == NULL)
+	hashAdd(hash, tag, NULL);
+    else
+        {
+	hashStore(repeatedHash, tag);
+	}
+    }
+
+/* Alter names of duplicates */
+for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+    {
+    char *tag = pair->name;
+    struct hashEl *hel = hashLookup(repeatedHash, tag);
+    if (hel != NULL)
+	{
+	char *val = hel->val;
+	char newTag[256];
+	safef(newTag, sizeof(newTag), "%s[%d]", tag, ptToInt(val));
+	pair->name = lmCloneString(tagStorm->lm, newTag);
+	hel->val = val+1;
+	}
+    }
+
+hashFree(&repeatedHash);
+hashFree(&hash);
+}
+
+void rAddArrayIndexesToMultis(struct tagStorm *tagStorm, struct tagStanza *list)
+/* Add subscript indexes to tags that occur more than once in a stanza */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    addIndexesToMultis(tagStorm, stanza);
+    rAddArrayIndexesToMultis(tagStorm, stanza->children);
+    }
 }
 
 void geoToTagStorm(char *inSoft, char *outTags)
@@ -208,6 +281,9 @@ for (stanza = topStanza->children; stanza != NULL; stanza = stanza->next)
 /* Weed out useless tags, and substitute others */
 tagStormWeedArray(topTags, weeds, ArraySize(weeds));
 tagStormSubArray(topTags, subs, ArraySize(subs));
+
+/* Add array subscripts to tags that are repeated */
+rAddArrayIndexesToMultis(topTags, topTags->forest);
 
 /* Write result */
 tagStormWrite(topTags, outTags, 0);
