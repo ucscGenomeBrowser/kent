@@ -144,30 +144,6 @@ printf("<A HREF=\"../cgi-bin/cartReset?%s&destination=%s\">Click here to "
        session, cgiEncodeFull(returnAddress));
 }
 
-
-char *destAppScriptName()
-/* Return the complete path (/cgi-bin/... on our systems) of the destination
- * CGI for share-able links.  Currently hardcoded; there might be a way to
- * offer the user a choice. */
-{
-static char *thePath = NULL;
-if (thePath == NULL)
-    {
-    char path[512];
-    char buf[512];
-    char *ptr = NULL;
-    safef(path, sizeof(path), "%s", cgiScriptName());
-    ptr = strrchr(path, '/');
-    if (ptr == NULL)
-	path[0] = '\0';
-    else
-	*(ptr+1) = '\0';
-    safef(buf, sizeof(buf), "%s%s", path, "hgTracks");
-    thePath = cloneString(buf);
-    }
-return thePath;
-}
-
 void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
 		    boolean encode)
 /* Add to dy an URL that tells hgSession to load a saved session.
@@ -1296,7 +1272,7 @@ else
 	}
     dyStringPrintf(dyMessage, "&nbsp;&nbsp;"
 	   "<A HREF=\"%s%s?%s=%s\">Browser</A>",
-	   wikiServerAndCgiDir(), destAppScriptName(),
+	   wikiServerAndCgiDir(), "hgTracks",
 	   cartSessionVarName(), cartSessionId(cart));
     }
 if (lf != NULL)
