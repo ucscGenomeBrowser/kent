@@ -1,11 +1,11 @@
-/* tagStormInfo - Get basic information on a tag storm. */
+/* tabInfo - Get basic info on a tab-separated-file. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "obscure.h"
 #include "options.h"
-#include "tagStorm.h"
+#include "fieldedTable.h"
 #include "tagToSql.h"
+#include "obscure.h"
 
 /* Global vars. */
 boolean anySchema;
@@ -21,9 +21,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "tagStormInfo - Get basic information on a tag storm\n"
+  "tabInfo - Get basic info on a tab-separated-file\n"
   "usage:\n"
-  "   tagStormInfo input.tags\n"
+  "   tabInfo input.tsv\n"
   "options:\n"
   "   -counts - if set output names, use counts, and value counts of each tag\n"
   "   -vals=N - display tags and the top N values for them\n"
@@ -55,7 +55,8 @@ struct tagInfo
 void tagInfoAdd(struct tagInfo *tagInfo, char *tagVal)
 /* Add information about tag to tagInfo */
 {
-tagInfo->useCount += 1;
+if (!isEmpty(tagVal))
+    tagInfo->useCount += 1;
 hashIncInt(tagInfo->tagVals, tagVal);
 }
 
@@ -69,62 +70,47 @@ tagInfo->tagVals = hashNew(0);
 return tagInfo;
 }
 
-void rFillInStats(struct tagStanza *list, int expansion, struct hash *tagHash,
-    long *retStanzaCount, long *retTagCount, long *retExpandedCount, 
-    int depth, int *retMaxDepth)
-/* Recursively traverse stanza tree filling in values */
+void tabInfo(char *fileName)
+/* tabInfo - Get basic info on a tab-separated-file. */
 {
-struct tagStanza *stanza;
-if (++depth > *retMaxDepth)
-    *retMaxDepth = depth;
-for (stanza = list; stanza != NULL; stanza = stanza->next)
-    {
-    *retStanzaCount += 1;
-    struct slPair *pair;
-    int stanzaSize = 0;
-    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
-        {
-	char *tagName = pair->name;
-	stanzaSize += 1;
-	*retExpandedCount += 1 + expansion;
-	struct tagInfo *tagInfo = hashFindVal(tagHash, tagName);
-	if (tagInfo == NULL)
-	     {
-	     tagInfo = tagInfoNew(tagName);
-	     hashAdd(tagHash, tagName, tagInfo);
-	     }
-	tagInfoAdd(tagInfo, pair->val);
-	}
-    *retTagCount += stanzaSize;
-    if (stanza->children != NULL)
-	rFillInStats(stanza->children, expansion + stanzaSize, tagHash,
-	    retStanzaCount, retTagCount, retExpandedCount, depth, retMaxDepth);
-    }
-}
-
-void tagStormInfo(char *inputTags)
-/* tagStormInfo - Get basic information on a tag storm. */
-{
-struct tagStorm *tags = tagStormFromFile(inputTags);
-struct hash *tagHash = hashNew(0);
-long stanzaCount = 0, tagCount = 0, expandedTagCount = 0;
-int maxDepth = 0;
-rFillInStats(tags->forest, 0, tagHash, &stanzaCount, &tagCount, &expandedTagCount, 0, &maxDepth);
+/* Read table from file and unpack some common fields into local vars */
+struct fieldedTable *table = fieldedTableFromTabFile(fileName, fileName, NULL, 0);
+int fieldCount = table->fieldCount;
+char **fields = table->fields;
 
 /* Do we do something fancy? */
 if (clCounts || clVals > 0 || anySchema)
     {
-    /* Set up type inference if doing schema */
-    struct tagTypeInfo *ttiList = NULL;
-    struct hash *ttiHash = NULL;
-    if (anySchema)
-        tagStormInferTypeInfo(tags, &ttiList, &ttiHash);
-        
-    struct hashEl *el, *list = hashElListHash(tagHash);
-    slSort(&list, hashElCmp);
-    for (el = list; el != NULL; el = el->next)
-        {
-	struct tagInfo *tagInfo = el->val;
+    /* Make up array of tagInfos and tagTypeInfos */
+    struct tagInfo *tagArray[fieldCount];
+    struct tagTypeInfo *typeArray[fieldCount];
+    int fieldIx;
+    for (fieldIx=0; fieldIx<fieldCount; ++fieldIx)
+	{
+	char *field = fields[fieldIx];
+	tagArray[fieldIx] = tagInfoNew(field);
+	if (anySchema)
+	    typeArray[fieldIx] = tagTypeInfoNew(field);
+	}
+
+    /* Loop through table collecting info */
+    struct fieldedRow *fr;
+    for (fr = table->rowList; fr != NULL; fr = fr->next)
+	{
+	char **row = fr->row;
+	for (fieldIx=0; fieldIx<fieldCount; ++fieldIx)
+	    {
+	    char *val = row[fieldIx];
+	    tagInfoAdd(tagArray[fieldIx], val);
+	    if (anySchema)
+		tagTypeInfoAdd(typeArray[fieldIx], val);
+	    }
+	}
+
+    /* Output information on each field */
+    for (fieldIx=0; fieldIx<fieldCount; ++fieldIx)
+	{
+	struct tagInfo *tagInfo = tagArray[fieldIx];
 	struct hash *valHash = tagInfo->tagVals;
 	if (clVals > 0)
 	    {
@@ -132,8 +118,8 @@ if (clCounts || clVals > 0 || anySchema)
 	    printf("%s has %d uses with %d vals\n", tagInfo->tagName, tagInfo->useCount,
 		slCount(valList));
 	    slSort(&valList, hashElCmpIntValDesc);
-	    int soFar = 0, i;
-	    for (i=0, valEl = valList; i < clVals && valEl != NULL; ++i, valEl = valEl->next)
+	    int soFar = 0, j;
+	    for (j=0, valEl = valList; j < clVals && valEl != NULL; ++j, valEl = valEl->next)
 	        {
 		int valCount = ptToInt(valEl->val);
 		soFar += valCount;
@@ -146,8 +132,7 @@ if (clCounts || clVals > 0 || anySchema)
 	    }
 	else if (anySchema)
 	    {
-	    struct tagTypeInfo *tti = hashMustFindVal(ttiHash, tagInfo->tagName);
-	    tagTypeInfoPrintSchemaLine(tti, tagInfo->useCount, valHash, 
+	    tagTypeInfoPrintSchemaLine(typeArray[fieldIx], tagInfo->useCount, valHash, 
 		clLooseSchema, clTightSchema, stdout);
 	    }
 	else
@@ -158,21 +143,8 @@ if (clCounts || clVals > 0 || anySchema)
     }
 else
     {
-    printf("stanzas\t%ld\n", stanzaCount);
-    printf("depth\t%d\n", maxDepth);
-    printf("tags\t%ld\n", tagCount);
-    printf("storm\t%ld\n", expandedTagCount);
-    printf("types\t%d\n", tagHash->elCount);
-    printf("fields\t");
-    struct hashEl *el, *list = hashElListHash(tagHash);
-    slSort(&list, hashElCmp);
-    for (el = list; el != NULL; el = el->next)
-	{
-	printf("%s", el->name);
-	if (el->next != NULL)
-	   printf(",");
-	}
-    printf("\n");
+    printf("columns\t%d\n", fieldCount);
+    printf("rows\t%d\n", table->rowCount);
     }
 }
 
@@ -188,6 +160,6 @@ clSchema = optionExists("schema");
 clLooseSchema = optionExists("looseSchema");
 clTightSchema = optionExists("tightSchema");
 anySchema = (clSchema || clLooseSchema || clTightSchema);
-tagStormInfo(argv[1]);
+tabInfo(argv[1]);
 return 0;
 }

@@ -479,3 +479,11 @@ for fname in fnames:
     ret = os.system(cmd)
     if ret != 0:
         print "Could not run:", cmd
+
+    # make sure that the "Data last updated" in the table browser is correct
+    tableName = outFname.split('.')[0] # e.g. clinvarMain
+    cmd = "hgBbiDbLink %s %s /gbdb/%s/bbi/clinvar/%s.bb" % (db, tableName, db, tableName)
+    logging.debug(cmd)
+    ret = os.system(cmd)
+    if ret != 0:
+        print "Could not run:", cmd
