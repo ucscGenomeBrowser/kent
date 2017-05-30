@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "tagStorm.h"
+#include "csv.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -22,6 +23,107 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+struct slPair *tagStanzaDeleteTagsInHash(struct tagStanza *stanza, struct hash *weedHash)
+/* Delete any tags in stanza that have names that match hash. Return list of removed tags. */
+{
+struct slPair *pair, *next;
+struct slPair *newList = NULL, *removedList = NULL;
+for (pair = stanza->tagList; pair != NULL; pair = next)
+    {
+    next = pair->next;
+    struct slPair **dest;
+    if (hashLookup(weedHash, pair->name))
+	dest = &removedList;
+    else
+        dest = &newList;
+    slAddHead(dest, pair);
+    }
+slReverse(&newList);
+stanza->tagList = newList;
+slReverse(&removedList);
+return removedList;
+}
+
+void tagStanzaSubTagsInHash(struct tagStanza *stanza, struct hash *valHash)
+/* Delete any tags in stanza that have names that match hash. Return list of removed tags. */
+{
+struct slPair *pair;
+for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+    {
+    char *val = hashFindVal(valHash, pair->name);
+    if (val != NULL)
+	pair->name = val;
+    }
+}
+
+
+void tagStanzaRecursiveRemoveWeeds(struct tagStanza *list, struct hash *weedHash)
+/* Recursively remove weeds in list and any children in list */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    tagStanzaDeleteTagsInHash(stanza, weedHash);
+    tagStanzaRecursiveRemoveWeeds(stanza->children, weedHash);
+    }
+}
+
+void tagStanzaRecursiveSubTags(struct tagStanza *list, struct hash *subHash)
+/* Recursively remove weeds in list and any children in list */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    tagStanzaSubTagsInHash(stanza, subHash);
+    tagStanzaRecursiveSubTags(stanza->children, subHash);
+    }
+}
+
+void tagStormWeedArray(struct tagStorm *tagStorm, char **weeds, int weedCount)
+/* Remove all tags with names matching any of the weeds from storm */
+{
+struct hash *weedHash = hashFromNameArray(weeds, weedCount);
+tagStanzaRecursiveRemoveWeeds(tagStorm->forest, weedHash);
+freeHash(&weedHash);
+}
+
+struct hash *hashFromNameValArray(char *nameVal[][2], int nameValCount)
+/* Make up a hash from nameVal array */
+{
+struct hash *hash = newHash(0);
+int i;
+for (i=0; i<nameValCount; ++i)
+    hashAdd(hash, nameVal[i][0], nameVal[i][1]);
+return hash;
+}
+
+void tagStormSubArray(struct tagStorm *tagStorm, char *subs[][2], int subCount)
+/* Substitute all tag names with substitutions from subs array */
+{
+struct hash *weedHash = hashFromNameValArray(subs, subCount);
+tagStanzaRecursiveSubTags(tagStorm->forest, weedHash);
+freeHash(&weedHash);
+}
+
+
+char *weeds[] = {
+   "series.sample_id",
+   "series.platform_id",
+   "series.platform_taxid",
+   "series.sample_taxid",
+   "sample.channel_count",
+};
+
+char *subs[][2] = {
+   {"series.organism", "organism"},
+   {"platform.organism", "organism"},
+   {"sample.organism", "organism"},
+   {"series.taxid", "taxid"},
+   {"platform.taxid", "taxid"},
+   {"sample.taxid", "taxid"},
+};
+
+
 struct hash *geoSoftToTagHash(char *fileName)
 /* Read in file in GEO soft format and return it as a hash of tagStorm files,
  * keyed by the lower case section name, things like 'database' or 'series' */
@@ -33,6 +135,7 @@ struct tagStanza *stanza = NULL;
 char linePrefix[128];  // Expected prefix for line, something like !Series_
 char linePrefixSize = 0;
 int dpPartCount = 0;
+struct dyString *escaperDy = dyStringNew(0);
 
 char *line;
 while (lineFileNext(lf, &line, NULL))
@@ -125,7 +228,8 @@ while (lineFileNext(lf, &line, NULL))
 	    }
 
 	/* Write out value */
-	tagStanzaAppend(tags, stanza, outputTag, val);
+	char *escapedVal = csvEscapeToDyString(escaperDy, val);
+	tagStanzaAppend(tags, stanza, outputTag, escapedVal);
 	}
     else
         errAbort("Unrecognized line %d of %s:\n%s", lf->lineIx, lf->fileName, line);
@@ -178,10 +282,16 @@ for (stanza = sampleTags->forest; stanza != NULL; stanza = nextStanza)
     slAddHead(&platformStanza->children, stanza);
     }
 
-/* Make platform tags children of the top tag and write out final tagStorm. */
+/* Make platform tags children of the top tag */
 topStanza->children = platformTags->forest;
 for (stanza = topStanza->children; stanza != NULL; stanza = stanza->next)
     stanza->parent = topStanza;
+
+/* Weed out useless tags, and substitute others */
+tagStormWeedArray(topTags, weeds, ArraySize(weeds));
+tagStormSubArray(topTags, subs, ArraySize(subs));
+
+/* Write result */
 tagStormWrite(topTags, outTags, 0);
 }
 
