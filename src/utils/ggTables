@@ -301,6 +301,7 @@ def writeGraphTable(allPairs, pairDocs, pairToDbs, pairMinResCounts, pwDirPairs,
     logging.info("writing merged graph to %s" % outFname)
     rows = []
     rows2 = []
+    allSyms = set()
     for pair,pairRows in allPairs.iteritems():
         gene1, gene2 = pair
 
@@ -336,6 +337,9 @@ def writeGraphTable(allPairs, pairDocs, pairToDbs, pairMinResCounts, pwDirPairs,
             str(len(allDocs)), pairDbs, str(pairMinResCount), snippet]
         rows.append(row)
 
+        allSyms.add(gene1)
+        allSyms.add(gene2)
+
         refs = list(refs)
         refs.sort()
         for ref in refs:
@@ -356,6 +360,8 @@ def writeGraphTable(allPairs, pairDocs, pairToDbs, pairMinResCounts, pwDirPairs,
         ofh2.write("\t".join(row))
         ofh2.write("\n")
     ofh2.close()
+
+    return allSyms
 
 def runCmd(cmd):
     """ run command in shell, exit if not successful """
@@ -414,6 +420,7 @@ def addIndexes(db):
 def loadTables(tableDir, db):
     " load graph tables into mysql "
 
+    loadTable(db, tableDir, "ggSymbol")
     loadTable(db, tableDir, "ggDoc")
     loadTable(db, tableDir, "ggDocEvent")
     loadTable(db, tableDir, "ggEventDb")
@@ -1146,7 +1153,7 @@ if cmd == "build":
 
     outFname = join(outDir, "ggLink.tmp.txt") # needs the addContext step to complete it
     eventFname = join(outDir, "ggLinkEvent.tab")
-    writeGraphTable(allPairs, pairDirDocs, pairDbs, pairMinResultCounts, pwDirPairs, \
+    allSyms = writeGraphTable(allPairs, pairDirDocs, pairDbs, pairMinResultCounts, pwDirPairs, \
         bestSentences, outFname, eventFname)
 
     pmidToId = indexPmids([dbRows,pwRows], textRows)
@@ -1163,6 +1170,12 @@ if cmd == "build":
     linkFname = join(outDir, "ggLink.tab")
     if isfile(linkFname):
         os.remove(linkFname)
+
+    # hgGene does not like it if the gene symbols are in two different
+    # columns, so we create a very simple table with just the gene symbols
+    symFname = join(outDir, "ggSymbol.tab")
+    logging.info("Writing %s" % symFname)
+    open(symFname, "w").write("\n".join(allSyms))
 
 elif cmd == "medline":
     outDir = args[1]

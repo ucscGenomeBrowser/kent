@@ -13,6 +13,7 @@ all:
 	cd tagStormToTab && ${MAKE}
 	cd tagStormToSql && ${MAKE}
 	cd tagStormCheck && ${MAKE}
+	cd tagStormArrayToCsv && ${MAKE}
 
 alpha: all
 
@@ -29,6 +30,7 @@ compile:
 	cd tagStormToTab && ${MAKE} compile
 	cd tagStormToSql && ${MAKE} compile
 	cd tagStormCheck && ${MAKE} compile
+	cd tagStormArrayToCsv && ${MAKE} compile
 
 test:
 	cd tagStormHoist && ${MAKE} test
@@ -43,6 +45,7 @@ test:
 	cd tagStormToTab && ${MAKE} test
 	cd tagStormToSql && ${MAKE} test
 	cd tagStormCheck && ${MAKE} test
+	cd tagStormArrayToCsv && ${MAKE} test
 
 
 clean::
@@ -57,3 +60,4 @@ clean::
 	cd tagStormToTab && ${MAKE} clean
 	cd tagStormToSql && ${MAKE} clean
 	cd tagStormCheck && ${MAKE} clean
+	cd tagStormArrayToCsv && ${MAKE} clean

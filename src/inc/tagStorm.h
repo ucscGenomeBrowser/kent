@@ -83,6 +83,11 @@ void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idT
     boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal, boolean sharpLabel);
 /* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
 
+void tagStanzaRecursiveWrite(struct tagStanza *list, FILE *f, int maxDepth, int depth);
+/* Recursively write out stanza list and children to open file */
+
+void tagStanzaSimpleWrite(struct tagStanza *stanza, FILE *f, int depth);
+/* Write out tag stanza to file.  Do not recurse or add last blank line */
 
 /** Index a tag storm and look up in an index. */
 
@@ -161,6 +166,25 @@ void tagStormAlphaSort(struct tagStorm *tagStorm);
 void tagStormOrderSort(struct tagStorm *tagStorm, char **orderFields, int orderCount);
 /* Sort tags in stanza to be in same order as orderFields input  which is orderCount long */
 
+struct slPair *tagStanzaDeleteTagsInHash(struct tagStanza *stanza, struct hash *weedHash);
+/* Delete any tags in stanza that have names that match hash. Return list of removed tags. */
+
+void tagStanzaSubTagsInHash(struct tagStanza *stanza, struct hash *valHash);
+/* Delete any tags in stanza that have names that match hash. Return list of removed tags. */
+
+void tagStanzaRecursiveRemoveWeeds(struct tagStanza *list, struct hash *weedHash);
+/* Recursively remove weeds in list and any children in list */
+
+void tagStormWeedArray(struct tagStorm *tagStorm, char **weeds, int weedCount);
+/* Remove all tags with names matching any of the weeds from storm */
+
+void tagStanzaRecursiveSubTags(struct tagStanza *list, struct hash *subHash);
+/* Recursively remove weeds in list and any children in list */
+
+void tagStormSubArray(struct tagStorm *tagStorm, char *subs[][2], int subCount);
+/* Substitute all tag names with substitutions from subs array */
+
+
 /** Information about a tag storm */
 
 struct slName *tagStormFieldList(struct tagStorm *tagStorm);
@@ -185,7 +209,7 @@ int tagStormCountStanzas(struct tagStorm *ts);
 /* Return number of stanzas in storm */
 
 int tagStormCountTags(struct tagStorm *ts);
-/* Return number of stanzas in storm. Does not include expanding ancestors */
+/* Return number of tags in storm. Does not include expanding ancestors */
 
 int tagStormCountFields(struct tagStorm *ts);
 /* Return number of distinct tag types (fields) in storm */
