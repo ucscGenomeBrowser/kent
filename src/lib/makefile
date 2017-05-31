@@ -10,7 +10,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     blastOut.o blastParse.o boxClump.o boxLump.o bPlusTree.o \
     bwgCreate.o bwgQuery.o bwgValsOnChrom.o \
     cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o chainToPsl.o \
-    cheapcgi.o cirTree.o codebias.o colHash.o common.o correlate.o crTree.o \
+    cheapcgi.o cirTree.o codebias.o colHash.o common.o correlate.o crTree.o  csv.o \
     dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o dnaMotif.o dnaseq.o \
     dnautil.o dtdParse.o dyOut.o dystring.o elmTree.o \
     emblParse.o errCatch.o errAbort.o \

@@ -130,3 +130,10 @@ tables knownToMalacards
 idSql select knownToMalacards.value from kgXref, knownToMalacards where kgID = '%s' and kgXref.geneSymbol = knownToMalacards.value
 url http://malacards.org/search/results/%s
 priority 10
+
+name hgGeneGraph
+shortLabel Protein interactions
+tables hgFixed.ggSymbol kgXref
+idSql SELECT ggSymbol.geneSymbol FROM hgFixed.ggSymbol, kgXref where (kgXref.geneSymbol = ggSymbol.geneSymbol) and kgId='%s'
+url hgGeneGraph?gene=%s
+priority 10
