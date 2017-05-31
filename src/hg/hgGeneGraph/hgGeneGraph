@@ -546,15 +546,17 @@ def buildGraph(conn, gene, geneCount, minSupp, addNeighbors):
             otherGenes.update(genes)
         if gene in otherGenes:
             otherGenes.remove(gene)
-        # get links between all other genes but keep the limit on the graphed links
-        otherLinks = queryLinks(conn, genes=otherGenes)
-        otherLinks = filterLinks(otherLinks)
-        otherLinks = reqMinSupp(otherLinks, 2, 999999999, gene) # we still require two text mining abstracts
-        otherLinks, lowLinks = limitLinks(otherLinks, lowLinks, 35, gene)
-        # add the high links back to the graph
-        for pair, linkData in otherLinks.iteritems():
-            assert(pair not in graphLinks)
-            graphLinks[pair] = linkData
+
+        if len(otherGenes)!=0:
+            # get links between all other genes but keep the limit on the graphed links
+            otherLinks = queryLinks(conn, genes=otherGenes)
+            otherLinks = filterLinks(otherLinks)
+            otherLinks = reqMinSupp(otherLinks, 2, 999999999, gene) # we still require two text mining abstracts
+            otherLinks, lowLinks = limitLinks(otherLinks, lowLinks, 35, gene)
+            # add the high links back to the graph
+            for pair, linkData in otherLinks.iteritems():
+                assert(pair not in graphLinks)
+                graphLinks[pair] = linkData
 
     return graphLinks, lowLinks
 
@@ -1174,6 +1176,11 @@ def printGraph(conn, weightedLinks, alg, addNeighbors, targetGene, format):
     if format=="json":
         jsonStr = json.dumps(weightedLinks)
 
+    if len(weightedLinks)==0:
+        geneName = cgi.escape(cgiString("gene"))
+        selfLink = makeSelfLink("Remove all filters", {"supportLevel": None})
+        errAbort("Sorry, there are no direct interactions with %s that fulfill your "
+            "filter criteria. %s" % (geneName, selfLink))
     allGenes = set()
     sifLines = []
     for linkRow in weightedLinks:
