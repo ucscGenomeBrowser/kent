@@ -25295,7 +25295,7 @@ winEnd = cartUsualInt(cart, "r", 0);
 if (seqName == NULL)
     {
     if (winStart != 0 || winEnd != 0)
-	webAbort("CGI variable error",
+	webAbortNoHttpHeader("CGI variable error", 
 		 "hgc: bad input variables c=%s l=%d r=%d",
 		 cartString(cart, "c"), winStart, winEnd);
     else
