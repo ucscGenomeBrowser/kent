@@ -63,7 +63,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 	    vcfCfgHaplotypeCenterHiddens(track, thisName, thisChrom, thisPos);
 	    char label[256];
 	    safef(label, sizeof(label), "Use %s", nameOrDefault(thisName, "this variant"));
-	    cgiMakeButton("submit", label);
+	    cgiMakeButton("setCenterSubmit", label);
 	    printf(" as anchor</TD></TR>\n");
 	    }
 	else
@@ -93,7 +93,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 		       nameOrDefault(centerName, "variant"), centerChrom, centerPos+1);
 		char label[256];
 		safef(label, sizeof(label), "Use %s", nameOrDefault(thisName, "this variant"));
-		cgiMakeButton("submit", label);
+		cgiMakeButton("replaceCenterSubmit", label);
 		printf(" as anchor</TD></TR>\n");
 		}
 	    }
@@ -114,7 +114,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 	dyStringPrintf(onClick, "updateOrMakeNamedVariable(%s, '%s.centerVariantPos', 0);",
 		       formName, track);
 	dyStringPrintf(onClick, "document.%s.submit(); return false;", formName);
-	cgiMakeButtonWithOnClick("submit", "Clear selection", NULL, onClick->string);
+	cgiMakeButtonWithOnClick("clearCenterSubmit", "Clear selection", NULL, onClick->string);
 	printf(" (use " VCF_HAPLOSORT_DEFAULT_DESC ")</TD></TR>\n");
 	}
     puts("</TABLE>");
