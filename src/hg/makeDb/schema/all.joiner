@@ -4256,7 +4256,7 @@ identifier kgGeneSymbol
     hgFixed.ggLink.gene1 minCheck=0.8
     hgFixed.ggLink.gene2 minCheck=0.8
     hgFixed.ggGeneClass.gene minCheck=0.8
-    hgFixed.ggGeneName.gene minCheck=0.8
+    hgFixed.ggGeneName.gene minCheck=0.6
 
 identifier mouseGeneName fuzzy
 "Mouse gene name from Jackson Labs/RefSeq"
@@ -6089,15 +6089,15 @@ identifier chromAlias
 identifier ggDoc
 "identifier of a publication, currently the PMID, an integer "
     hgFixed.ggDoc.docId minCheck=0.99
-    hgFixed.ggDocEvent.docId
+    hgFixed.ggDocEvent.docId minCheck=0.99
     hgFixed.ggEventDb.docIds separator=| minCheck=0.99
 
 identifier ggEvent
 "an event (originally an NLP term) here is a protein interaction with a direction, from a curated database or from text mining."
-    hgFixed.ggDocEvent.eventId
-    hgFixed.ggEventDb.eventId
+    hgFixed.ggLinkEvent.eventId dupeOk
+    hgFixed.ggEventDb.eventId minCheck=0.99
+    hgFixed.ggDocEvent.eventId minCheck=0.99
     hgFixed.ggEventText.eventId
-    hgFixed.ggLinkEvent.eventId
 
 identifier ggGeneSymbol
 "An HGNC gene symbol, but a few old synonyms slipped into these tables"
