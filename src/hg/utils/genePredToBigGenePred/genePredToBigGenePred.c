@@ -23,9 +23,19 @@ errAbort(
   "    -score=scores         scores is two column file with id's mapping to scores\n"
   "    -geneNames=geneNames  geneNames is a three column file with id's mapping to two gene names\n"
   "    -colors=colors        colors is a four column file with id's mapping to r,g,b\n"
+  "    -cds=cds              cds is a five column file with id's mapping to cds status codes and exonFrames (see knownCds.as)\n"
   );
 }
 
+
+struct cds
+{
+char *name;
+enum cdsStatus  cdsStartStat;       /* enum('none','unk','incmpl','cmpl') */
+enum cdsStatus cdsEndStat;  /* enum('none','unk','incmpl','cmpl') */
+int exonCount;
+int *exonFrames;    /* Exon frame {0,1,2}, or -1 if no frame for exon */
+};
 
 struct geneNames 
 {
@@ -37,6 +47,7 @@ struct hash *colorsHash = NULL;
 
 struct hash *scoreHash = NULL;
 struct hash *geneHash = NULL;
+struct hash *cdsHash = NULL;
 boolean isKnown;
 
 /* Command line validation table. */
@@ -45,6 +56,7 @@ static struct optionSpec options[] = {
    {"score", OPTION_STRING},
    {"geneNames", OPTION_STRING},
    {"colors", OPTION_STRING},
+   {"cds", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -60,7 +72,17 @@ if (gp->exonCount > MAX_BLOCKS)
     errAbort("genePred has more than %d exons, make MAX_BLOCKS bigger in source", MAX_BLOCKS);
 
 if (gp->exonFrames == NULL)
-    genePredAddExonFrames(gp);
+    {
+    struct cds *cds;
+    if ((cdsHash != NULL) && (cds = (struct cds *)hashFindVal(cdsHash, gp->name)) != NULL)
+        {
+        gp->cdsStartStat = cds->cdsStartStat;
+        gp->cdsEndStat = cds->cdsEndStat;
+        gp->exonFrames = cds->exonFrames;
+        }
+    else
+        genePredAddExonFrames(gp);
+    }
 
 bgp.chrom = gp->chrom;
 bgp.chromStart = gp->txStart;
@@ -133,6 +155,29 @@ for(; gp ; gp = gp->next)
 }
 
 
+struct hash *hashCds(char *fileName)
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[5];
+struct hash *hash = hashNew(16);
+while (lineFileChopTab(lf, row))
+    {
+    char *name = row[0];
+    struct cds *cds;
+    lmAllocVar(hash->lm, cds );
+    cds->cdsStartStat = atoi(row[1]);
+    cds->cdsEndStat = atoi(row[2]);
+    cds->exonCount = atoi(row[3]);
+    //  this memory will be leaked if the hash is free'd
+    int numBlocks;
+    sqlSignedDynamicArray(row[4], &cds->exonFrames, &numBlocks);
+    assert(numBlocks = cds->exonCount);
+    hashAdd(hash, name, cds);
+    }
+lineFileClose(&lf);
+return hash;
+}
+
 struct hash *hashGeneNames(char *fileName)
 /* Given a three column file (key, geneName, geneName2) return a hash. */
 {
@@ -188,6 +233,10 @@ if (scoreFile != NULL)
 char *geneNames = optionVal("geneNames", NULL);
 if (geneNames != NULL)
     geneHash = hashGeneNames(geneNames);
+
+char *cdsValues = optionVal("cds", NULL);
+if (cdsValues != NULL)
+    cdsHash = hashCds(cdsValues);
 
 char *colors = optionVal("colors", NULL);
 if (colors != NULL)
