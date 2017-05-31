@@ -32,6 +32,7 @@ char *weeds[] = {
    "series.platform_taxid",
    "series.sample_taxid",
    "sample.channel_count",
+   "sample.series_id",
 };
 
 char *subs[][2] = {
@@ -72,6 +73,11 @@ char *subs[][2] = {
    {"sample.supplementary_file_7", "sample.supplementary_file"},
    {"sample.supplementary_file_8", "sample.supplementary_file"},
    {"sample.supplementary_file_9", "sample.supplementary_file"},
+   {"series.relation_SRA", "series.sra_url"},
+   {"sample.relation_SRA", "sample.sra_url"},
+   {"series.relation_BioProject", "series.bioproject_url"},
+   {"series.relation_SubSeries_of", "series.parent"},
+   {"sample.relation_BioSample", "series.biosample_url"},
 };
 
 
@@ -153,7 +159,7 @@ while (lineFileNext(lf, &line, NULL))
 
 	/* Write out the tag name, simple for most tags, but data_processing and 
 	 * characteristics need special handling */
-	if (sameString("characteristics", tag))
+	if (sameString("characteristics", tag) || sameString("relation", tag))
 	    {
 	    /* The characteristics tag has a subtag between the = and a : */
 	    char *colonPos = strchr(val, ':');
@@ -245,11 +251,11 @@ void geoToTagStorm(char *inSoft, char *outTags)
 struct hash *softHash = geoSoftToTagHash(inSoft);
 verbose(1, "Got %d types of sections in %s\n", softHash->elCount, inSoft);
 
-/* Find database tags and append series tags to database tags. */
+/* Find database tags and put series tags as i's children. */
 struct tagStorm *topTags = mustFindSection(softHash, "DATABASE", inSoft);
 struct tagStanza *topStanza = topTags->forest;
 struct tagStorm *seriesTags = mustFindSection(softHash, "SERIES", inSoft);
-topStanza->tagList = slCat(topStanza->tagList, seriesTags->forest->tagList);
+topStanza->children = seriesTags->forest;
 
 /* Find platform tags, index them */
 struct tagStorm *platformTags = mustFindSection(softHash, "PLATFORM", inSoft);
@@ -273,8 +279,11 @@ for (stanza = sampleTags->forest; stanza != NULL; stanza = nextStanza)
     slAddHead(&platformStanza->children, stanza);
     }
 
-/* Make platform tags children of the top tag */
-topStanza->children = platformTags->forest;
+/* Make platform tags children of the series tag */
+int seriesCount = slCount(seriesTags->forest);
+if (seriesCount != 1)
+    errAbort("geoToTagStorm can only handle soft files with a single series");
+seriesTags->forest->children = platformTags->forest;
 for (stanza = topStanza->children; stanza != NULL; stanza = stanza->next)
     stanza->parent = topStanza;
 
