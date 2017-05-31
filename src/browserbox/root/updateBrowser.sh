@@ -234,6 +234,14 @@ if apt-cache policy imagemagick | grep "Installed: .none." > /dev/null; then
    apt-get -y autoremove
 fi
 
+# install mysql-python for hgGeneGraph, actually cgi-bin/pyLib/hgLib.py
+if apt-cache policy python-mysqldb | grep "Installed: .none." > /dev/null; then
+   echo - Installing mysql-python
+   apt-get update
+   apt-get --no-install-recommends install -y python-mysqldb
+   apt-get -y autoremove
+fi
+
 echo
 echo - Updating the genome browser software via rsync:
 
