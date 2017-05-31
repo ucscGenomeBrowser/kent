@@ -37,18 +37,31 @@ parser = optparse.OptionParser("""usage: %prog [options] build|load pathwayDir p
 
 run it like this:
 
-%prog medline - to reduce the big medline table to something smaller, only needed once
+Reduce the big medline table to something smaller, only needed once:
+    %prog medline
 
-%prog build pathways ppi text mysql
-%prog docs mysql  # creates the ggDocs.tab file, slow
-%prog context mysql
-%prog load mysql publications
-%prog bigBed outDir bigBedFile db
+Slowest part: build the big table of interactions mysql/ggLink.tmp.tab
+    %prog build pathways ppi text mysql
+
+Create mysql/ggDocs.tab, very slow
+    %prog docs mysql
+
+Add the "context" (aka mesh terms) to mysql/ggLink.tmp.tab 
+and write to mysql/ggLink.tab file
+    %prog context mysql  
+format is:
+gene1, gene2, flags, forwDocCount, revDocCount, allDocCount, databaseList, minimalPairCountPaper, snippet
+
+Load all tables in mysql/ into MySql:
+    %prog load mysql hgFixed
+
+Create the bigBed File
+    %prog bigBed outDir bigBedFile db
 """)
 
 parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
 #parser.add_option("-t", "--test", dest="test", action="store_true", help="run tests") 
-parser.add_option("-t", "--textDir", dest="textDir", action="store", help="directory with the parsed copy of medline, default %default", default="/hive/data/inside/pubs/text/medline") 
+parser.add_option("-t", "--textDir", dest="textDir", action="store", help="directory with the parsed copy of medline, default %default", default="/hive/data/inside/pubs/text/medline")
 parser.add_option("-m", "--meshFile", dest="meshFname", action="store", help="An mtrees<year>.bin file, default %default", default="/hive/data/outside/ncbi/mesh/mtrees2015.bin")
 parser.add_option("-j", "--journalInfo", dest="journalInfo", action="store", help="tab-sep file with journal info from the NLM Catalog converted by 'pubPrepCrawl publishers'. Used to shorten the journal names. Optional and not used if file is not found. Default %default", default="/cluster/home/max/projects/pubs/tools/data/journals/journals.tab")
 parser.add_option("-b", "--wordFname", dest="wordFname", action="store", help="a file with common English words", default="/hive/data/outside/pubs/wordFrequency/bnc/bnc.txt")
@@ -129,9 +142,9 @@ def loadFiles(inDir, prefix=None):
     return rows
 
 def getResultCounts(pairs):
-    """ 
+    """
     Input is a pair -> rows dictionary
-    for each PMID, count how many pairs are assigned to it. This is 
+    for each PMID, count how many pairs are assigned to it. This is
     something like the "resultCount" of a paper, the lower, the better.
     Then, for each pair, get the minimum resultCount and return as a dict
     pair -> resultCount
@@ -143,7 +156,6 @@ def getResultCounts(pairs):
     for pair, rows in pairs.iteritems():
         #print "pp", pair
         for row in rows:
-            #print "r", row
             #members = row.themeGenes.split("|")
             #members.extend(row.causeGenes.split("|"))
             # complexes with more than 5 proteins are not low-throughput anyways
@@ -289,6 +301,7 @@ def writeGraphTable(allPairs, pairDocs, pairToDbs, pairMinResCounts, pwDirPairs,
     logging.info("writing merged graph to %s" % outFname)
     rows = []
     rows2 = []
+    allSyms = set()
     for pair,pairRows in allPairs.iteritems():
         gene1, gene2 = pair
 
@@ -324,6 +337,9 @@ def writeGraphTable(allPairs, pairDocs, pairToDbs, pairMinResCounts, pwDirPairs,
             str(len(allDocs)), pairDbs, str(pairMinResCount), snippet]
         rows.append(row)
 
+        allSyms.add(gene1)
+        allSyms.add(gene2)
+
         refs = list(refs)
         refs.sort()
         for ref in refs:
@@ -344,6 +360,8 @@ def writeGraphTable(allPairs, pairDocs, pairToDbs, pairMinResCounts, pwDirPairs,
         ofh2.write("\t".join(row))
         ofh2.write("\n")
     ofh2.close()
+
+    return allSyms
 
 def runCmd(cmd):
     """ run command in shell, exit if not successful """
@@ -402,6 +420,7 @@ def addIndexes(db):
 def loadTables(tableDir, db):
     " load graph tables into mysql "
 
+    loadTable(db, tableDir, "ggSymbol")
     loadTable(db, tableDir, "ggDoc")
     loadTable(db, tableDir, "ggDocEvent")
     loadTable(db, tableDir, "ggEventDb")
@@ -1134,7 +1153,7 @@ if cmd == "build":
 
     outFname = join(outDir, "ggLink.tmp.txt") # needs the addContext step to complete it
     eventFname = join(outDir, "ggLinkEvent.tab")
-    writeGraphTable(allPairs, pairDirDocs, pairDbs, pairMinResultCounts, pwDirPairs, \
+    allSyms = writeGraphTable(allPairs, pairDirDocs, pairDbs, pairMinResultCounts, pwDirPairs, \
         bestSentences, outFname, eventFname)
 
     pmidToId = indexPmids([dbRows,pwRows], textRows)
@@ -1151,6 +1170,12 @@ if cmd == "build":
     linkFname = join(outDir, "ggLink.tab")
     if isfile(linkFname):
         os.remove(linkFname)
+
+    # hgGene does not like it if the gene symbols are in two different
+    # columns, so we create a very simple table with just the gene symbols
+    symFname = join(outDir, "ggSymbol.tab")
+    logging.info("Writing %s" % symFname)
+    open(symFname, "w").write("\n".join(allSyms))
 
 elif cmd == "medline":
     outDir = args[1]

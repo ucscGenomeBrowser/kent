@@ -761,3 +761,24 @@ for (kv = keyVals; kv != NULL; kv = kv->next)
 return nameToVal;
 }
 
+struct hash *hashFromNameArray(char **nameArray, int nameCount)
+/* Create a NULL valued hash on all names in array */
+{
+struct hash *hash = hashNew(0);
+int i;
+for (i=0; i<nameCount; ++i)
+    hashAdd(hash, nameArray[i], NULL);
+return hash;
+}
+
+struct hash *hashFromNameValArray(char *nameVal[][2], int nameValCount)
+/* Make up a hash from nameVal array */
+{
+struct hash *hash = newHash(0);
+int i;
+for (i=0; i<nameValCount; ++i)
+    hashAdd(hash, nameVal[i][0], nameVal[i][1]);
+return hash;
+}
+
+

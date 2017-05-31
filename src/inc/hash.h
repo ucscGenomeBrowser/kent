@@ -285,5 +285,11 @@ struct hash *hashFromString(char *string);
 /* parse a whitespace-separated string with tuples in the format name=val or
  * name="val" to a hash name->val */
 
+struct hash *hashFromNameArray(char **nameArray, int nameCount);
+/* Create a NULL valued hash on all names in array */
+
+struct hash *hashFromNameValArray(char *nameVal[][2], int nameValCount);
+/* Make up a hash from nameVal array */
+
 #endif /* HASH_H */
 

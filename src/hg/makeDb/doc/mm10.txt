@@ -11113,8 +11113,7 @@ TMPDIR=/dev/shm
 
 
 #########################################################################
-
-# download and load ncbiGene track
+# download and load ncbiGene track ( DONE - 2015-06-09 - Brian)
 
 db=mm10
 mkdir  /cluster/data/genomes/$db/bed/ncbiGene
@@ -13841,7 +13840,7 @@ end
     # knownGene - hg38 mm10
     # ncbiRefSeq - galVar1
     # xenoRefGene - tupChi1
- 
+
     mkdir genes
     #   1. knownGene: hg38 mm10
     for DB in hg38 mm10
@@ -14395,7 +14394,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \\
 	../../4d/all.mod 0.571 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.219000 0.281000 0.281000 0.219000 
+    #   BACKGROUND: 0.219000 0.281000 0.281000 0.219000
 
     printf '#!/bin/csh -fe
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
@@ -14617,7 +14616,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     echo "date" >> $gp.jobs
     echo "wait" >> $gp.jobs
 
-    chmod +x  knownGene.jobs 
+    chmod +x  knownGene.jobs
 
     time (./$gp.jobs) > $gp.jobs.log 2>&1 &
     # real    11m18.851s
@@ -14844,5 +14843,169 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev criGri1 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
     # real    846m34.982s
+
+##############################################################################
+# ncbiRefSeq composite gene track (DONE - 2017-05-26 - Hiram)
+    mkdir  /hive/data/genomes/mm10/bed/ncbiRefSeq.p5
+    cd  /hive/data/genomes/mm10/bed/ncbiRefSeq.p5
+
+    ~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_mammalian Mus_musculus \
+      GCF_000001635.25_GRCm38.p5 mm10
+
+    ~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -debug -bigClusterHub=ku -dbHost=hgwdev \
+      -continue=process -stop=process -fileServer=hgwdev -smallClusterHub=ku \
+      -workhorse=hgwdev refseq vertebrate_mammalian Mus_musculus \
+      GCF_000001635.25_GRCm38.p5 mm10
+
+    ~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -debug -bigClusterHub=ku -dbHost=hgwdev \
+      -continue=load -stop=load -fileServer=hgwdev -smallClusterHub=ku \
+      -workhorse=hgwdev refseq vertebrate_mammalian Mus_musculus \
+      GCF_000001635.25_GRCm38.p5 mm10
+
+    # There are some ncRNAs missing
+    faSize -detailed mm10.rna.fa \
+      | pslCheck -querySizes=stdin -targetSizes=../../chrom.sizes \
+       -db=mm10 ncbiRefSeqPsl
+    #  checked: 85224 failed: 18 errors: 18
+
+    # and joinerCheck is not completely clean:
+ joinerCheck -identifier=ncbiRefSeq -keys -database=mm10 all.joiner
+Checking keys on database mm10
+ mm10.ncbiRefSeqLink.id - hits 107479 of 107479 (100.000%) ok
+ mm10.ncbiRefSeqCurated.name - hits 32217 of 32217 (100.000%) ok
+ mm10.ncbiRefSeqPredicted.name - hits 52989 of 52989 (100.000%) ok
+ mm10.ncbiRefSeqPsl.qName - hits 85206 of 85224 (99.979%)
+Error: 18 of 85224 elements (0.021%) of mm10.ncbiRefSeqPsl.qName are not in key ncbiRefSeq.name line 6045 of all.joiner
+Example miss: NR_033199.1
+ mm10.ncbiRefSeqCds.id - hits 76076 of 76076 (100.000%) ok
+ mm10.seqNcbiRefSeq.acc - hits 85205 of 85205 (100.000%) ok
+
+    # The reason for these difficulties is because some of the original
+    # GFF items were dropped due to unprocessedRoots.  The fix is to eliminate
+    # the rest of these unprocessedRoots from PSL loaded file.
+
+    # discovered that it didn't help to add them in, (procedure included below)
+    #   then featureBits went bad:
+ joinerCheck -identifier=ncbiRefSeq -keys -database=mm10 all.joiner
+Checking keys on database mm10
+ mm10.ncbiRefSeqLink.id - hits 107479 of 107479 (100.000%) ok
+ mm10.ncbiRefSeqCurated.name - hits 32217 of 32217 (100.000%) ok
+ mm10.ncbiRefSeqPredicted.name - hits 52989 of 52989 (100.000%) ok
+ mm10.ncbiRefSeqPsl.qName - hits 85206 of 85224 (99.979%)
+Error: 18 of 85224 elements (0.021%) of mm10.ncbiRefSeqPsl.qName are not in key ncbiRefSeq.name line 6045 of all.joiner
+Example miss: NR_033199.1
+ mm10.ncbiRefSeqCds.id - hits 76076 of 76076 (100.000%) ok
+ mm10.seqNcbiRefSeq.acc - hits 85205 of 85222 (99.980%)
+Error: 17 of 85222 elements (0.020%) of mm10.seqNcbiRefSeq.acc are not in key ncbiRefSeq.name line 6047 of all.joiner
+Example miss: NR_015480.1
+
+    # eliminate items from PSL file,
+    # compare name lists:
+    hgsql -N -e 'select qName from ncbiRefSeqPsl;' mm10 \
+      | sort -u > ncbiRefSeqPsl.qName
+    hgsql -N -e 'select name from ncbiRefSeq;' mm10 \
+      | sort -u > ncbiRefSeq.name
+    wc -l ncbiRefSeqPsl.qName ncbiRefSeq.name
+#   85220 ncbiRefSeqPsl.qName
+#  107479 ncbiRefSeq.name
+    comm -12 ncbiRefSeqPsl.qName ncbiRefSeq.name | wc -l
+#   85203
+    # need to eliminate 17 items from the PSL track:
+    comm -23 ncbiRefSeqPsl.qName ncbiRefSeq.name | wc -l
+#       17
+    comm -23 ncbiRefSeqPsl.qName ncbiRefSeq.name | while read N
+do
+   hgsql -e "select * from ncbiRefSeqPsl where qName=\"$N\";" mm10
+done | wc -l
+#         35
+    comm -23 ncbiRefSeqPsl.qName ncbiRefSeq.name | while read N
+do
+   hgsql -e "delete from ncbiRefSeqPsl where qName=\"$N\";" mm10
+done
+
+    hgsql -N -e 'select qName from ncbiRefSeqPsl;' mm10 \
+      | sort -u > ncbiRefSeqPsl.clean.qName
+    wc -l ncbiRefSeqPsl.clean.qName ncbiRefSeq.name
+    comm -12 ncbiRefSeqPsl.clean.qName ncbiRefSeq.name | wc -l
+#   85203 ncbiRefSeqPsl.clean.qName
+#  107479 ncbiRefSeq.name
+
+    comm -12 ncbiRefSeqPsl.clean.qName ncbiRefSeq.name | wc -l
+#   85203
+
+    # joinerCheck is now clean
+    joinerCheck -identifier=ncbiRefSeq -keys -database=mm10 all.joiner
+Checking keys on database mm10
+ mm10.ncbiRefSeqLink.id - hits 107479 of 107479 (100.000%) ok
+ mm10.ncbiRefSeqCurated.name - hits 32217 of 32217 (100.000%) ok
+ mm10.ncbiRefSeqPredicted.name - hits 52989 of 52989 (100.000%) ok
+ mm10.ncbiRefSeqPsl.qName - hits 85206 of 85206 (100.000%) ok
+ mm10.ncbiRefSeqCds.id - hits 76076 of 76076 (100.000%) ok
+ mm10.seqNcbiRefSeq.acc - hits 85205 of 85205 (100.000%) ok
+
+    # and pslCheck is now clean:
+    faSize -detailed /gbdb/mm10/ncbiRefSeq/seqNcbiRefSeq.rna.fa \
+       | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+           -db=mm10 ncbiRefSeqPsl
+    # checked: 85206 failed: 0 errors: 0
+
+    hgsql -N -e 'select acc,size from seqNcbiRefSeq;' mm10 \
+      | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+         -db=mm10 ncbiRefSeqPsl
+    # checked: 85206 failed: 0 errors: 0
+
+    ### update hgFixed.trackVersion
+    hgsql -e 'update trackVersion set version="2016-12-16" where ix=1706;' hgFixed
+
+    ### XXX obsolete procedure that does not fix the problem
+    mkdir /hive/data/genomes/mm10/bed/ncbiRefSeq.p5/missingRna
+    cd  /hive/data/genomes/mm10/bed/ncbiRefSeq.p5/missingRna
+
+    # determine missing sequences ids
+
+    faSize -detailed ../mm10.rna.fa \
+      | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+       -db=mm10 ncbiRefSeqPsl > pslCheck.ncbiRefSeq.rna.fa.txt 2>&1
+
+    egrep -v "does not exist|errors:" pslCheck.ncbiRefSeq.rna.fa.txt \
+      | awk '{printf "%s\t%s\n", $5,$4}' | sort -u > idWithRange.seqListFile.tab
+
+    # fetch RNA sequences from entrez:
+    mkdir ncbiRna
+
+cut -f2 idWithRange.seqListFile.tab | sed -e 's#:[0-9]\+-[0-9]\+##;' \
+  | while read id
+do
+   wget -O /dev/stdout \
+  "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$id" \
+     | sed -e 's/ Mus musculus .*//;' | sed -e '/^$/d' > ncbiRna/$id.fa
+done
+
+fi
+
+    cat ../mm10.rna.fa ncbiRna > mm10.seqNcbiRefSeq.rna.fa
+
+    rm -f /gbdb/mm10/ncbiRefSeq/seqNcbiRefSeq.rna.fa
+    ln -s `pwd`/mm10.seqNcbiRefSeq.rna.fa \
+        /gbdb/mm10/ncbiRefSeq/seqNcbiRefSeq.rna.fa
+    hgLoadSeq -drop -seqTbl=seqNcbiRefSeq -extFileTbl=extNcbiRefSeq mm10 \
+        /gbdb/mm10/ncbiRefSeq/seqNcbiRefSeq.rna.fa
+
+    # now have clean pslCheck, verify both with the file and the seq table:
+    faSize -detailed /gbdb/mm10/ncbiRefSeq/seqNcbiRefSeq.rna.fa \
+       | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+           -db=mm10 ncbiRefSeqPsl
+    #  checked: 85224 failed: 0 errors: 0
+
+    hgsql -N -e 'select acc,size from seqNcbiRefSeq;' mm10 \
+      | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+         -db=mm10 ncbiRefSeqPsl
+
+    #  checked: 85224 failed: 0 errors: 0
 
 ##############################################################################

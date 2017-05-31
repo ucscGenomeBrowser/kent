@@ -681,7 +681,7 @@ sub doGatewayPage {
   my $photoLink = "";
   if ( -s "$runDir/photo/$species.jpg" ) {
      $photoJpg = "../photo/\${species}.jpg";
-     $photoCredit = "../photo/photoCredits.jpg";
+     $photoCredit = "../photo/photoCredits.txt";
      $photoLink = "ln -s ../photo/\${species}.jpg ."
   } else {
      printf STDERR "# gatewayPage: warning: no photograph available\n";

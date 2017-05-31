@@ -1,10 +1,11 @@
+# DONE braney 2017-05-28
 mkdir /hive/groups/browser/wikipediaScrape
 cd /hive/groups/browser/wikipediaScrape
 # get all the pages in the category "Human Proteins"
-wget "https://petscan.wmflabs.org/?language=en&project=wikipedia&depth=1&categories=Human+proteins&format=tsv&ns%5B0%5D=1&interface_language=en&&&doit=" -O humanProteins.lst
+wget "https://petscan.wmflabs.org/?format=tsv&language=en&project=wikipedia&depth=10&categories=human%20genes%0D%0A&interface_language=en&&doit=" -O humanProteins.lst
 
 mkdir pages
-for i in `tawk '{print $1}' humanProteins.lst`; 
+for i in `tawk '{print $2}' humanProteins.lst`; 
 do echo $i; 
 wget "https://en.wikipedia.org/wiki/$i" -O pages/$i; 
 sleep 2;
