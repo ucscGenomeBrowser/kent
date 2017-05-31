@@ -14869,10 +14869,100 @@ TMPDIR=/dev/shm
 
     # There are some ncRNAs missing
     faSize -detailed mm10.rna.fa \
-      | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+      | pslCheck -querySizes=stdin -targetSizes=../../chrom.sizes \
        -db=mm10 ncbiRefSeqPsl
     #  checked: 85224 failed: 18 errors: 18
 
+    # and joinerCheck is not completely clean:
+ joinerCheck -identifier=ncbiRefSeq -keys -database=mm10 all.joiner
+Checking keys on database mm10
+ mm10.ncbiRefSeqLink.id - hits 107479 of 107479 (100.000%) ok
+ mm10.ncbiRefSeqCurated.name - hits 32217 of 32217 (100.000%) ok
+ mm10.ncbiRefSeqPredicted.name - hits 52989 of 52989 (100.000%) ok
+ mm10.ncbiRefSeqPsl.qName - hits 85206 of 85224 (99.979%)
+Error: 18 of 85224 elements (0.021%) of mm10.ncbiRefSeqPsl.qName are not in key ncbiRefSeq.name line 6045 of all.joiner
+Example miss: NR_033199.1
+ mm10.ncbiRefSeqCds.id - hits 76076 of 76076 (100.000%) ok
+ mm10.seqNcbiRefSeq.acc - hits 85205 of 85205 (100.000%) ok
+
+    # The reason for these difficulties is because some of the original
+    # GFF items were dropped due to unprocessedRoots.  The fix is to eliminate
+    # the rest of these unprocessedRoots from PSL loaded file.
+
+    # discovered that it didn't help to add them in, (procedure included below)
+    #   then featureBits went bad:
+ joinerCheck -identifier=ncbiRefSeq -keys -database=mm10 all.joiner
+Checking keys on database mm10
+ mm10.ncbiRefSeqLink.id - hits 107479 of 107479 (100.000%) ok
+ mm10.ncbiRefSeqCurated.name - hits 32217 of 32217 (100.000%) ok
+ mm10.ncbiRefSeqPredicted.name - hits 52989 of 52989 (100.000%) ok
+ mm10.ncbiRefSeqPsl.qName - hits 85206 of 85224 (99.979%)
+Error: 18 of 85224 elements (0.021%) of mm10.ncbiRefSeqPsl.qName are not in key ncbiRefSeq.name line 6045 of all.joiner
+Example miss: NR_033199.1
+ mm10.ncbiRefSeqCds.id - hits 76076 of 76076 (100.000%) ok
+ mm10.seqNcbiRefSeq.acc - hits 85205 of 85222 (99.980%)
+Error: 17 of 85222 elements (0.020%) of mm10.seqNcbiRefSeq.acc are not in key ncbiRefSeq.name line 6047 of all.joiner
+Example miss: NR_015480.1
+
+    # eliminate items from PSL file,
+    # compare name lists:
+    hgsql -N -e 'select qName from ncbiRefSeqPsl;' mm10 \
+      | sort -u > ncbiRefSeqPsl.qName
+    hgsql -N -e 'select name from ncbiRefSeq;' mm10 \
+      | sort -u > ncbiRefSeq.name
+    wc -l ncbiRefSeqPsl.qName ncbiRefSeq.name
+#   85220 ncbiRefSeqPsl.qName
+#  107479 ncbiRefSeq.name
+    comm -12 ncbiRefSeqPsl.qName ncbiRefSeq.name | wc -l
+#   85203
+    # need to eliminate 17 items from the PSL track:
+    comm -23 ncbiRefSeqPsl.qName ncbiRefSeq.name | wc -l
+#       17
+    comm -23 ncbiRefSeqPsl.qName ncbiRefSeq.name | while read N
+do
+   hgsql -e "select * from ncbiRefSeqPsl where qName=\"$N\";" mm10
+done | wc -l
+#         35
+    comm -23 ncbiRefSeqPsl.qName ncbiRefSeq.name | while read N
+do
+   hgsql -e "delete from ncbiRefSeqPsl where qName=\"$N\";" mm10
+done
+
+    hgsql -N -e 'select qName from ncbiRefSeqPsl;' mm10 \
+      | sort -u > ncbiRefSeqPsl.clean.qName
+    wc -l ncbiRefSeqPsl.clean.qName ncbiRefSeq.name
+    comm -12 ncbiRefSeqPsl.clean.qName ncbiRefSeq.name | wc -l
+#   85203 ncbiRefSeqPsl.clean.qName
+#  107479 ncbiRefSeq.name
+
+    comm -12 ncbiRefSeqPsl.clean.qName ncbiRefSeq.name | wc -l
+#   85203
+
+    # joinerCheck is now clean
+    joinerCheck -identifier=ncbiRefSeq -keys -database=mm10 all.joiner
+Checking keys on database mm10
+ mm10.ncbiRefSeqLink.id - hits 107479 of 107479 (100.000%) ok
+ mm10.ncbiRefSeqCurated.name - hits 32217 of 32217 (100.000%) ok
+ mm10.ncbiRefSeqPredicted.name - hits 52989 of 52989 (100.000%) ok
+ mm10.ncbiRefSeqPsl.qName - hits 85206 of 85206 (100.000%) ok
+ mm10.ncbiRefSeqCds.id - hits 76076 of 76076 (100.000%) ok
+ mm10.seqNcbiRefSeq.acc - hits 85205 of 85205 (100.000%) ok
+
+    # and pslCheck is now clean:
+    faSize -detailed /gbdb/mm10/ncbiRefSeq/seqNcbiRefSeq.rna.fa \
+       | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+           -db=mm10 ncbiRefSeqPsl
+    # checked: 85206 failed: 0 errors: 0
+
+    hgsql -N -e 'select acc,size from seqNcbiRefSeq;' mm10 \
+      | pslCheck -querySizes=stdin -targetSizes=../../../chrom.sizes \
+         -db=mm10 ncbiRefSeqPsl
+    # checked: 85206 failed: 0 errors: 0
+
+    ### update hgFixed.trackVersion
+    hgsql -e 'update trackVersion set version="2016-12-16" where ix=1706;' hgFixed
+
+    ### XXX obsolete procedure that does not fix the problem
     mkdir /hive/data/genomes/mm10/bed/ncbiRefSeq.p5/missingRna
     cd  /hive/data/genomes/mm10/bed/ncbiRefSeq.p5/missingRna
 

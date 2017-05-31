@@ -46,6 +46,8 @@ except:
     print("Cannot find the directory cgi-bin/pyLib in Apache. This is an installation error.")
     print("All all parts of cgi-bin installed? Did you do 'make' in kent/src/hg/pyLib?")
 
+import MySQLdb
+
 # not using feedback button for now. Fan would have liked it, but not sure how we can write
 # to any form of database.
 #skimpyGimpyLoaded=False
@@ -524,7 +526,10 @@ def buildGraph(conn, gene, geneCount, minSupp, addNeighbors):
     if geneCount <= 1:
         errAbort("Sorry, you have to show at least two genes.")
 
-    links = queryLinks(conn, gene=gene)
+    try:
+        links = queryLinks(conn, gene=gene)
+    except MySQLdb.Error:
+        errAbort("Cannot find the gg* tables in hgFixed. This mirror's database may need updating.")
 
     if len(links)==0:
         errAbort("Sorry, the gene %s is not a valid gene symbol or is not present in any gene interaction database." % cgi.escape(gene))
@@ -1203,9 +1208,9 @@ def printGraph(conn, weightedLinks, alg, addNeighbors, targetGene, format):
     
     # text above graph
     print("Mouse over or click genes or lines for details. Dashed lines indicate interactions without text mining support. ")
-    print("Arrows indicate the most common direction of effect based on pathway or text-mining databases.<br>")
     print("Click any gene to make it the new center. Click any line to show details about the interaction. ")
-    print("Only %s-interacting genes and only the most-mentioned/most-curated interactions are shown in the graph.<p>" % (targetGene))
+    print("Only %s-interacting genes and only the most-mentioned/most-curated interactions are shown in the graph. " % (targetGene))
+    print("See the <a href='../../goldenPath/help/hgGeneGraph.html'>Help Page</a> for details.")
 
     # menu above graph
     # background #fffef5 would be an alternive
