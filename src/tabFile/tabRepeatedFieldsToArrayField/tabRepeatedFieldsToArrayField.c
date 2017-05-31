@@ -5,6 +5,7 @@
 #include "hash.h"
 #include "options.h"
 #include "fieldedTable.h"
+#include "csv.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -31,38 +32,6 @@ struct fieldInfo
     char *name;
     struct slInt *offsetList;
     };
-
-void csvItemOutput(char *val, FILE *f)
-/* Rewrite val, which may have some quotes or commas in it, in a way to be more compatable with
- * csv list representation */
-{
-/* If there are no commas just output it */
-if (strchr(val, ',') == NULL)
-    {
-    fputs(val, f);
-    return;
-    }
-
-/* Strip surrounding quotes if any */
-val = trimSpaces(val);
-int valLen = strlen(val);
-if (valLen > 2 && val[0] == '"' && lastChar(val) == '"')
-     {
-     val[valLen-1] = 0;
-     val += 1;
-     }
-
-/* Put quotes around it and output, escaping internal quotes with double quotes */
-fputc('"', f);
-char c;
-while ((c = *val++) != 0)
-    {
-    if (c == '"')
-	fputc('"', f);
-    fputc(c, f);
-    }
-fputc('"', f);
-}
 
 void tabRepeatedFieldsToArrayField(char *inFile, char *outFile)
 /* tabRepeatedFieldsToArrayField - Convert columns that are repeated in a tab-separated file to a 
@@ -121,7 +90,7 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	for (offset = field->offsetList; offset != NULL; offset = offset->next)
 	    {
 	    char *val = row[offset->val];
-	    csvItemOutput(val, f);
+	    csvWriteVal(val, f);
 	    if (offset->next != NULL)
 	        fputc(',', f);
 	    }
