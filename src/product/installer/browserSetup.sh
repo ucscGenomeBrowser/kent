@@ -605,8 +605,9 @@ function installRedhat () {
     waitKey
     # make sure we have and EPEL and ghostscript and rsync (not installed on vagrant boxes)
     # imagemagick is required for the session gallery
+    # MySQL-python is required for hgGeneGraph
     yum -y install epel-release
-    yum -y install ghostscript rsync ImageMagick R-core
+    yum -y install ghostscript rsync ImageMagick R-core MySQL-python
 
     # centos 7 and fedora 20 do not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -842,7 +843,8 @@ function installDebian ()
     # ghostscript for PDF export
     # imagemagick for the session gallery
     # r-base-core for the gtex tracks
-    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core
+    # python-mysqldb for hgGeneGraph
+    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core python-mysqldb
 
     if [ ! -f $APACHECONF ]; then
         echo2
