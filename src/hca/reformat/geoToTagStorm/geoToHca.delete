@@ -18,3 +18,6 @@ sample.supplementary_file
 sample.supplementary_file[0]
 sample.supplementary_file[1]
 sample.type
+series.type
+series.type[0]
+series.type[1]
