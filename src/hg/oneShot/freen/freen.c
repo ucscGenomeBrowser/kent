@@ -27,12 +27,16 @@ errAbort("freen - test some hairbrained thing.\n"
 void freen(char *input)
 /* Test something */
 {
-char *pt = input;
 uglyf("input is '%s'\n", input);
-struct dyString *scratch = dyStringNew(0);
-char *s;
-while ((s = csvParseNext(&pt, scratch)) != NULL)
-    printf("'%s'\n", s);
+if (csvNeedsParsing(input))
+    {
+    printf("Parses to:\n");
+    char *pt = input;
+    struct dyString *scratch = dyStringNew(0);
+    char *s;
+    while ((s = csvParseNext(&pt, scratch)) != NULL)
+	printf("'%s'\n", s);
+    }
 }
 
 int main(int argc, char *argv[])

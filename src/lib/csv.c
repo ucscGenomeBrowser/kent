@@ -138,3 +138,12 @@ else	// Did not start with a quote,  so we just copy until comma or end of strin
 *pos = s;
 return scratch->string;
 }
+
+boolean csvNeedsParsing(char *s)
+/* Return TRUE if s is something that needs parsing through the csv parser.  That
+ * is it either starts with a quote or has a comma */
+{
+if (strchr(s, ','))
+    return TRUE;
+return *s == '"';
+}

@@ -22,5 +22,9 @@ char *csvParseNext(char **pos, struct dyString *scratch);
  * want empty strings to be a legitimate value then they have to be quoted
  * or followed by a comma. */
 
+boolean csvNeedsParsing(char *s);
+/* Return TRUE if s is something that needs parsing through the csv parser.  That
+ * is it either starts with a quote or has a comma */
+
 #endif /* CSV_H */
 
