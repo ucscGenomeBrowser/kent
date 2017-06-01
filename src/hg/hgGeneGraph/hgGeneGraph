@@ -228,8 +228,8 @@ def htmlHeader():
     printMenuBar()
 
     db = getCgiVar("db")
-    printHgcHeader(db, "Protein Interactions Track",
-            "Protein interactions and pathways from curated databases and text-mining",
+    printHgcHeader(db, "Gene Interactions Track",
+            "Gene interactions and pathways from curated databases and text-mining",
             addGoButton=False, infoUrl=MANUALURL, infoMouseOver="Open help page")
 
 def mustBeClean(str):
