@@ -26,61 +26,6 @@ static struct optionSpec options[] = {
 };
 
 
-char *weeds[] = {
-   "series.sample_id",
-   "series.platform_id",
-   "series.platform_taxid",
-   "series.sample_taxid",
-   "sample.channel_count",
-   "sample.series_id",
-};
-
-char *subs[][2] = {
-   {"series.organism", "organism"},
-   {"platform.organism", "organism"},
-   {"sample.organism", "organism"},
-   {"series.taxid", "taxid"},
-   {"platform.taxid", "taxid"},
-   {"sample.taxid", "taxid"},
-   {"series.status", "status"},
-   {"sample.status", "status"},
-   {"series.contact_name", "contact_name"},
-   {"sample.contact_name", "contact_name"},
-   {"series.contact_phone", "contact_phone"},
-   {"sample.contact_phone", "contact_phone"},
-   {"series.contact_laboratory", "contact_laboratory"},
-   {"sample.contact_laboratory", "contact_laboratory"},
-   {"series.contact_department", "contact_department"},
-   {"sample.contact_department", "contact_department"},
-   {"series.contact_institute", "contact_institute"},
-   {"sample.contact_institute", "contact_institute"},
-   {"series.contact_address", "contact_address"},
-   {"sample.contact_address", "contact_address"},
-   {"series.contact_city", "contact_city"},
-   {"sample.contact_city", "contact_city"},
-   {"series.contact_state", "contact_state"},
-   {"sample.contact_state", "contact_state"},
-   {"series.contact_zip/postal_code", "contact_postal_code"},
-   {"sample.contact_zip/postal_code", "contact_postal_code"},
-   {"series.contact_country", "contact_country"},
-   {"sample.contact_country", "contact_country"},
-   {"sample.supplementary_file_1", "sample.supplementary_file"},
-   {"sample.supplementary_file_2", "sample.supplementary_file"},
-   {"sample.supplementary_file_3", "sample.supplementary_file"},
-   {"sample.supplementary_file_4", "sample.supplementary_file"},
-   {"sample.supplementary_file_5", "sample.supplementary_file"},
-   {"sample.supplementary_file_6", "sample.supplementary_file"},
-   {"sample.supplementary_file_7", "sample.supplementary_file"},
-   {"sample.supplementary_file_8", "sample.supplementary_file"},
-   {"sample.supplementary_file_9", "sample.supplementary_file"},
-   {"series.relation_SRA", "series.sra_url"},
-   {"sample.relation_SRA", "sample.sra_url"},
-   {"series.relation_BioProject", "series.bioproject_url"},
-   {"series.relation_SubSeries_of", "series.parent"},
-   {"sample.relation_BioSample", "series.biosample_url"},
-};
-
-
 struct hash *geoSoftToTagHash(char *fileName)
 /* Read in file in GEO soft format and return it as a hash of tagStorm files,
  * keyed by the lower case section name, things like 'database' or 'series' */
@@ -132,10 +77,17 @@ while (lineFileNext(lf, &line, NULL))
 		linePrefix, lf->lineIx, lf->fileName, line);
 	line += linePrefixSize;
 
-	/* Parse out tag, get rid of repetitive "_ch1" channel prefix if it's there, check of
-	 * "_ch2" and abort if it's there because can only handle one channel */
+	/* Parse out tag. */
 	char *tag = nextWord(&line);
 	int tagLen = strlen(tag);
+
+	/* Remove _1, _2, _3 suffixes.  These will be turned into arrays later */
+	char *lastUnderbar = strrchr(tag, '_');
+	if (lastUnderbar != NULL && isAllDigits(lastUnderbar+1))
+	    *lastUnderbar = 0;
+
+	/* Get rid of repetitive "_ch1" channel prefix if it's there, check of
+	 * "_ch2" and abort if it's there because can only handle one channel */
 	int channelSuffixSize = 4;
 	char *channelGoodSuffix = "_ch1";
 	char *channelBadSuffix = "_ch2";
@@ -147,6 +99,7 @@ while (lineFileNext(lf, &line, NULL))
 	    else if (sameString(channelBadSuffix, channelSuffix))
 		errAbort("Can't handle multiple channel soft files, sorry");
 	    }
+
 
 	/* Parse out the value, which happens after '=' */
 	char *equ = nextWord(&line);
@@ -197,7 +150,7 @@ return tags;
 }
 
 
-void addIndexesToMultis(struct tagStorm *tagStorm, struct tagStanza *stanza)
+void addArrayIndexesToMultis(struct tagStorm *tagStorm, struct tagStanza *stanza)
 /* Add subscript indexes to tags that occur more than once in stanza */
 {
 /* Make up hash of all tags and of repeated tags */
@@ -239,7 +192,7 @@ void rAddArrayIndexesToMultis(struct tagStorm *tagStorm, struct tagStanza *list)
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
-    addIndexesToMultis(tagStorm, stanza);
+    addArrayIndexesToMultis(tagStorm, stanza);
     rAddArrayIndexesToMultis(tagStorm, stanza->children);
     }
 }
@@ -251,11 +204,12 @@ void geoToTagStorm(char *inSoft, char *outTags)
 struct hash *softHash = geoSoftToTagHash(inSoft);
 verbose(1, "Got %d types of sections in %s\n", softHash->elCount, inSoft);
 
-/* Find database tags and put series tags as i's children. */
-struct tagStorm *topTags = mustFindSection(softHash, "DATABASE", inSoft);
-struct tagStanza *topStanza = topTags->forest;
+/* Find series tags and make sure it just has a single one. */
 struct tagStorm *seriesTags = mustFindSection(softHash, "SERIES", inSoft);
-topStanza->children = seriesTags->forest;
+struct tagStanza *seriesStanza = seriesTags->forest;
+int seriesCount = slCount(seriesStanza);
+if (seriesCount != 1)
+    errAbort("%s has %d ^SERIES lines, can only handle 1.", inSoft, seriesCount);
 
 /* Find platform tags, index them */
 struct tagStorm *platformTags = mustFindSection(softHash, "PLATFORM", inSoft);
@@ -280,22 +234,15 @@ for (stanza = sampleTags->forest; stanza != NULL; stanza = nextStanza)
     }
 
 /* Make platform tags children of the series tag */
-int seriesCount = slCount(seriesTags->forest);
-if (seriesCount != 1)
-    errAbort("geoToTagStorm can only handle soft files with a single series");
-seriesTags->forest->children = platformTags->forest;
-for (stanza = topStanza->children; stanza != NULL; stanza = stanza->next)
-    stanza->parent = topStanza;
-
-/* Weed out useless tags, and substitute others */
-tagStormWeedArray(topTags, weeds, ArraySize(weeds));
-tagStormSubArray(topTags, subs, ArraySize(subs));
+seriesStanza->children = platformTags->forest;
+for (stanza = platformTags->forest; stanza != NULL; stanza = stanza->next)
+    stanza->parent = seriesStanza;
 
 /* Add array subscripts to tags that are repeated */
-rAddArrayIndexesToMultis(topTags, topTags->forest);
+rAddArrayIndexesToMultis(seriesTags, seriesTags->forest);
 
 /* Write result */
-tagStormWrite(topTags, outTags, 0);
+tagStormWrite(seriesTags, outTags, 0);
 }
 
 int main(int argc, char *argv[])
