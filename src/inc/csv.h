@@ -13,5 +13,14 @@ void csvWriteVal(char *val, FILE *f);
 /* Write val, which may have some quotes or commas in it, in a way to be compatable with
  * csv list representation */
 
+char *csvParseNext(char **pos, struct dyString *scratch);
+/* Return next value starting at pos, putting results into scratch and
+ * returning scratch->string or NULL if no values left. Will update *pos
+ * to after trailing comma if any. This will tolerate and ignore leading
+ * and trailing white space.  
+ *     Since an empty or all-white string is will return NULL, if you
+ * want empty strings to be a legitimate value then they have to be quoted
+ * or followed by a comma. */
+
 #endif /* CSV_H */
 

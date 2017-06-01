@@ -60,3 +60,81 @@ while ((c = *val++) != 0)
 fputc('"', f);
 }
 
+char *csvParseNext(char **pos, struct dyString *scratch)
+/* Return next value starting at pos, putting results into scratch and
+ * returning scratch->string or NULL if no values left. Will update *pos
+ * to after trailing comma if any. This will tolerate and ignore leading
+ * and trailing white space.  
+ *     Since an empty or all-white string is will return NULL, if you
+ * want empty strings to be a legitimate value then they have to be quoted
+ * or followed by a comma. */
+{
+// Return NULL at end of string
+char *s = skipLeadingSpaces(*pos);
+if (isEmpty(s))
+    return NULL;
+
+// Clear scratch pad and get first character
+dyStringClear(scratch);
+char c = *s;
+
+// If we start with a quote then fall into logic that goes to next quote,
+// treating internal "" as a single " so that can have internal quotes
+if (c == '"')
+    {
+    for (;;)
+        {
+	c = *(++s);
+	if (c == 0)
+	    errAbort("Isolated quote in csvParseNext %s", *pos);
+	if (c == '"')  
+	    {
+	    ++s;
+	    if (*s == c)  // Next char also a quote we convert the two quotes to one
+		{
+		dyStringAppendC(scratch, c);
+		}
+	    else
+	        {
+		// End of string.  Skip over white space until next comma
+		s = skipLeadingSpaces(s);
+		c = *s;
+		if (c == ',')
+		    {
+		    ++s;  // skip over trailing comma.
+		    break;
+		    }
+		if (c == 0)
+		    break;
+		else
+		    errAbort("Unexpected text after quotes in csvParseNext %s", *pos);
+		}
+	    }
+	else
+	    dyStringAppendC(scratch, c);
+	}
+    }
+else	// Did not start with a quote,  so we just copy until comma or end of string.
+    {
+    char lastC = 0;
+    for (;;)
+       {
+       if (c == 0)
+           break;
+       if (c == ',')
+           {
+	   ++s;  // skip over trailing comma.
+	   break;
+	   }
+	dyStringAppendC(scratch, c);
+	lastC = c;
+	c = *(++s);
+	}
+    if (isspace(lastC))
+        eraseTrailingSpaces(scratch->string);
+    }
+
+// Update position to start reading next one from and return scratchpad
+*pos = s;
+return scratch->string;
+}
