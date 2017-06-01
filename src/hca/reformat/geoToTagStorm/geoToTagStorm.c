@@ -8,6 +8,8 @@
 #include "localmem.h"
 #include "obscure.h"
 
+boolean clExpandArrays = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -16,7 +18,7 @@ errAbort(
   "usage:\n"
   "   geoToTagStorm geoSoftFile out.tags\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -expandArrays - if set repeated tags are kept separate with [0], [1], [2] added to them\n"
   );
 }
 
@@ -114,7 +116,7 @@ while (lineFileNext(lf, &line, NULL))
 	 * characteristics need special handling */
 	if (sameString("characteristics", tag) || sameString("relation", tag))
 	    {
-	    /* The characteristics tag has a subtag between the = and a : */
+	    /* These tags hava a subtag between the = and a : */
 	    char *colonPos = strchr(val, ':');
 	    if (colonPos == NULL)
 		errAbort("No colon after %s line %d of %s", tag, lf->lineIx, lf->fileName);
@@ -197,6 +199,89 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
+void collapseMultis(struct tagStorm *tagStorm, struct tagStanza *stanza)
+/* Collapse multiply occurring tags into a single tag has a comma separated
+ * list as a value.  While we're at it we'll csv escape singly occurring tags
+ * as well. */
+{
+/* Make up hash of all tags and of repeated tags.  Repeating tags has
+ * empty dyStrings as values. */
+struct hash *hash = hashNew(0), *repeatedHash = hashNew(0);
+struct slPair *pair;
+for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+    {
+    char *tag = pair->name;
+    if (hashLookup(hash, tag) == NULL)
+	hashAdd(hash, tag, NULL);
+    else
+        {
+	struct dyString *dy = hashFindVal(repeatedHash, tag);
+	if (dy == NULL)
+	    {
+	    dy = dyStringNew(0);
+	    hashAdd(repeatedHash, tag, dy);
+	    }
+	}
+    }
+hashFree(&hash);
+
+/* Construct comma-separated lists in repeatedHash */
+for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+    {
+    struct dyString *dy = hashFindVal(repeatedHash, pair->name);
+    if (dy != NULL)
+	{
+	if (dy->stringSize != 0)
+	     dyStringAppendC(dy, ',');
+	dyStringAppend(dy, pair->val);
+	}
+    }
+
+/* replace first occurence of multi-tag with one with all values, and remove
+ * rest */
+struct slPair *newList = NULL, *next;
+for (pair = stanza->tagList; pair != NULL; pair = next)
+    {
+    boolean skip = FALSE;
+    next = pair->next;
+    char *tag = pair->name;
+    struct hashEl *hel = hashLookup(repeatedHash, tag);
+    if (hel != NULL)
+	{
+	struct dyString *dy = hel->val;
+	if (dy != NULL)
+	    {
+	    // First time we see this tag output combined value and free
+	    // up the dyString that contained it
+	    pair->val = lmCloneString(tagStorm->lm, dy->string);
+	    dyStringFree(&dy);
+	    hel->val = NULL;
+	    }
+	else
+	    skip = TRUE;
+	}
+    if (!skip)
+        slAddHead(&newList, pair);
+    }
+slReverse(&newList);
+stanza->tagList = newList;
+
+hashFree(&repeatedHash);
+}
+
+
+void rCollapseMultis(struct tagStorm *tagStorm, struct tagStanza *list)
+/* Collapse tags that occure more than once in a stanza to a single 
+ * tag with comma separated values. */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    collapseMultis(tagStorm, stanza);
+    rCollapseMultis(tagStorm, stanza->children);
+    }
+}
+
 void geoToTagStorm(char *inSoft, char *outTags)
 /* geoToTagStorm - Convert from GEO soft format to tagStorm.. */
 {
@@ -239,7 +324,10 @@ for (stanza = platformTags->forest; stanza != NULL; stanza = stanza->next)
     stanza->parent = seriesStanza;
 
 /* Add array subscripts to tags that are repeated */
-rAddArrayIndexesToMultis(seriesTags, seriesTags->forest);
+if (clExpandArrays)
+    rAddArrayIndexesToMultis(seriesTags, seriesTags->forest);
+else
+    rCollapseMultis(seriesTags, seriesTags->forest);
 
 /* Write result */
 tagStormWrite(seriesTags, outTags, 0);
@@ -251,6 +339,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+clExpandArrays = optionExists("expandArrays");
 geoToTagStorm(argv[1], argv[2]);
 return 0;
 }
