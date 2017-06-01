@@ -227,9 +227,10 @@ def htmlHeader():
     print('<body class="hgc cgi">')
     printMenuBar()
 
-    db = getCgiVar("db", "hg19")
-    printHgcHeader(db, "Protein Interactions Track", "Protein interactions and pathways from curated databases and text-mining", addGoButton=False, infoUrl=MANUALURL)
-
+    db = getCgiVar("db")
+    printHgcHeader(db, "Gene Interactions Track",
+            "Gene interactions and pathways from curated databases and text-mining",
+            addGoButton=False, infoUrl=MANUALURL, infoMouseOver="Open help page")
 
 def mustBeClean(str):
     """ make sure a string contains only letters and digits """
@@ -500,7 +501,13 @@ def queryLinks(conn, gene=None, genes=None):
     links = {}
     for row in rows:
         pair = (row.gene1, row.gene2)
-        links[pair] = (int(row.docCount), row.dbList.split("|"),  \
+
+        if row.dbList=="":
+            dbList = []
+        else:
+            dbList = row.dbList.split("|")
+
+        links[pair] = (int(row.docCount), dbList,  \
             row.linkTypes.split(","), int(row.minResCount), row.snippet)
     return links
 
@@ -546,15 +553,17 @@ def buildGraph(conn, gene, geneCount, minSupp, addNeighbors):
             otherGenes.update(genes)
         if gene in otherGenes:
             otherGenes.remove(gene)
-        # get links between all other genes but keep the limit on the graphed links
-        otherLinks = queryLinks(conn, genes=otherGenes)
-        otherLinks = filterLinks(otherLinks)
-        otherLinks = reqMinSupp(otherLinks, 2, 999999999, gene) # we still require two text mining abstracts
-        otherLinks, lowLinks = limitLinks(otherLinks, lowLinks, 35, gene)
-        # add the high links back to the graph
-        for pair, linkData in otherLinks.iteritems():
-            assert(pair not in graphLinks)
-            graphLinks[pair] = linkData
+
+        if len(otherGenes)!=0:
+            # get links between all other genes but keep the limit on the graphed links
+            otherLinks = queryLinks(conn, genes=otherGenes)
+            otherLinks = filterLinks(otherLinks)
+            otherLinks = reqMinSupp(otherLinks, 2, 999999999, gene) # we still require two text mining abstracts
+            otherLinks, lowLinks = limitLinks(otherLinks, lowLinks, 35, gene)
+            # add the high links back to the graph
+            for pair, linkData in otherLinks.iteritems():
+                assert(pair not in graphLinks)
+                graphLinks[pair] = linkData
 
     return graphLinks, lowLinks
 
@@ -820,9 +829,9 @@ def flattenLink(links):
     counts = []
     minAbsCount = 99999999
     for genes, linkData in links.iteritems():
-        docCount, dbCount, tagSet, minResCount, snippet = linkData
+        docCount, dbList, tagSet, minResCount, snippet = linkData
         geneScore = scorePair(docCount, tagSet)
-        counts.append( (genes[0], genes[1], geneScore, docCount, dbCount, tagSet, minResCount, snippet)  )
+        counts.append( (genes[0], genes[1], geneScore, docCount, dbList, tagSet, minResCount, snippet)  )
         if docCount!=0:
             minAbsCount = min(minAbsCount, docCount)
     return counts, minAbsCount
@@ -857,7 +866,9 @@ def countTargetLinks(links, targetGene):
     # create a list (gene, txtCount, dbCount)
     linkList = []
     for g in allGenes:
-        linkList.append( (g, txtCounts.get(g, 0), len(pairDbs.get(g, [])), tags.get(g, [])) )
+        dbs = pairDbs.get(g, [])
+        dbCount = len(dbs)
+        linkList.append( (g, txtCounts.get(g, 0), dbCount, tags.get(g, [])) )
 
     return linkList
         
@@ -941,7 +952,7 @@ def printFilterMenu(targetGene, addNeighbors):
     # form to filter by type
     print "<small>"
     print '<form name="filterForm" action="%s" method="GET">' % makeSelfUrl({}, True)
-    print """Gene:""" 
+    print """<b>Gene:</b>""" 
     print '<input type="text" size="6" name="gene" value="%s" />' % targetGene
     print "&nbsp;"
     print '<input type="submit" name="1" value="OK">'
@@ -977,13 +988,13 @@ def printFilterMenu(targetGene, addNeighbors):
     #print(addNeighborLink)
     hideIndirectStatus = (getCgiVar("hideIndirect")=="on")
     printCheckbox("hideIndirect", hideIndirectStatus, onChangeAttr)
-    print '<span style="">Hide non-%s interactions</span>' % targetGene
+    print '<span style="font-weight:bold">Hide non-%s interactions</span>' % targetGene
     print "&nbsp;&nbsp;&nbsp;"
 
     geneCount = getCgiVar("geneCount", DEFGENECOUNT)
-    print "Show top"
+    print "<b>Show top"
     print '<input name="geneCount" type="text" size="3" value="%s">' % geneCount
-    print "Genes on graph"
+    print "Genes on graph</b>"
     print "&nbsp;&nbsp;&nbsp;"
 
     printSelfHiddenVars({}, skipList=["supportLevel", "hideIndirect", "gene"])
@@ -1174,6 +1185,11 @@ def printGraph(conn, weightedLinks, alg, addNeighbors, targetGene, format):
     if format=="json":
         jsonStr = json.dumps(weightedLinks)
 
+    if len(weightedLinks)==0:
+        geneName = cgi.escape(cgiString("gene"))
+        selfLink = makeSelfLink("Remove all filters", {"supportLevel": None})
+        errAbort("Sorry, there are no direct interactions with %s that fulfill your "
+            "filter criteria. %s" % (geneName, selfLink))
     allGenes = set()
     sifLines = []
     for linkRow in weightedLinks:
@@ -1913,10 +1929,11 @@ def removeInteraction(param, captcha, comment):
 
 def parseGraphArgs():
     " get the arguments to build a graph from the CGI parameters "
-    gene = getCgiVar("gene").rstrip(":")
-    if gene==None:
-        print "missing CGI parameter 'gene' or 'link'"
-        exit(0)
+    gene = getCgiVar("gene")
+    if gene is None:
+        gene = "MTOR"
+
+    gene = gene.rstrip(":")
     gene = gene.split()[0]
     gene = gene.upper()
 

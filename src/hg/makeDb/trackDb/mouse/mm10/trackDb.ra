@@ -366,6 +366,7 @@ include wgEncodeGencodeVM10.ra
 include wgEncodeGencodeVM11.ra
 include wgEncodeGencodeVM12.ra
 include wgEncodeGencodeVM13.ra
+include wgEncodeGencodeVM14.ra
 
 include defaultPriority.ra
 

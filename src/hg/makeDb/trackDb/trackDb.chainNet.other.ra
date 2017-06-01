@@ -2,7 +2,7 @@
 # ci3 - Ciona intestinalis - invertebrate - 7719
 ################################################################
 track chainNetCi3
-release alpha
+release alpha,beta 
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -25,7 +25,7 @@ spectrum on
 html chainNet
 
     track chainNetCi3Viewchain
-    release alpha
+    release alpha,beta
     shortLabel Chain
     view chain
     visibility pack
@@ -33,7 +33,7 @@ html chainNet
     spectrum on
 
         track chainCi3
-        release alpha
+        release alpha,beta
         parent chainNetCi3Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -42,14 +42,14 @@ html chainNet
         html chainNet
 
     track chainNetCi3Viewnet
-    release alpha
+    release alpha,beta
     shortLabel Net
     view net
     visibility dense
     parent chainNetCi3
 
         track netCi3
-        release alpha
+        release alpha,beta
         parent chainNetCi3Viewnet
         subGroups view=net
         shortLabel $o_Organism Net

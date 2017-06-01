@@ -41,6 +41,7 @@
 	<li><a id="ispMenuLink" href="../cgi-bin/hgPcr">In-Silico PCR</a></li>
 	<li><a id="liftOverMenuLink" href="../cgi-bin/hgLiftOver">LiftOver</a></li>
 	<li><a id="visiGeneMenuLink" href="../cgi-bin/hgVisiGene">VisiGene</a></li>
+	<li><a id="interactionMenuLink" href="../cgi-bin/hgGeneGraph">Gene Interactions</a></li>
 	<li class="last"><a href="../util.html">Other Utilities</a></li>
 	</ul>
 </li>
