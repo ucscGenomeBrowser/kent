@@ -40,8 +40,8 @@ def main():
 
     fbGapCmd = ["featureBits", "-countGaps", db, table, "gap"]
     fbGapOut, fbGapErr = qaUtils.runCommand(fbGapCmd)
-    output += "\n" + fbGapCmd[0] + " " + fbGapCmd[1] + " " + fbGapCmd[2] + " " + fbGapCmd[3] + \
-              fbGapCmd[4] + "\n" + fbGapErr
+    output += "\n" + fbGapCmd[0] + " " + fbGapCmd[1] + " " + fbGapCmd[2] + " " + fbGapCmd[3] +\
+              " " + fbGapCmd[4] + "\n" + fbGapErr
 
     gapOverlapOut = checkGapOverlap.checkGapOverlap(db, table, checkUnbridged)
 
