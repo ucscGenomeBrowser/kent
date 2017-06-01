@@ -24,6 +24,7 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"expandArrays", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -287,7 +288,7 @@ void geoToTagStorm(char *inSoft, char *outTags)
 {
 /* Read in soft file */
 struct hash *softHash = geoSoftToTagHash(inSoft);
-verbose(1, "Got %d types of sections in %s\n", softHash->elCount, inSoft);
+verbose(2, "Got %d types of sections in %s\n", softHash->elCount, inSoft);
 
 /* Find series tags and make sure it just has a single one. */
 struct tagStorm *seriesTags = mustFindSection(softHash, "SERIES", inSoft);
@@ -299,7 +300,7 @@ if (seriesCount != 1)
 /* Find platform tags, index them */
 struct tagStorm *platformTags = mustFindSection(softHash, "PLATFORM", inSoft);
 struct hash *platformHash = tagStormUniqueIndex(platformTags, "platform.geo_accession");
-verbose(1, "Got %d platforms\n", platformHash->elCount);
+verbose(2, "Got %d platforms\n", platformHash->elCount);
 
 /* Find sample tags and add them as children to the appropriate platform */
 struct tagStorm *sampleTags = mustFindSection(softHash, "SAMPLE", inSoft);
