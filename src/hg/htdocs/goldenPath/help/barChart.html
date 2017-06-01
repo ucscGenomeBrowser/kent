@@ -165,7 +165,7 @@ from the expScores field in the bigBarChart file.
 <a name="example3"></a>
 <h6>Example #3</h6>
 <p>
-In this example, you will use the helper scripts expMatrixToBarChartBed and bedJoinTabOffset
+In this example, you will use the helper scripts expMatrixToBarchartBed and bedJoinTabOffset
 on example matrix and category files in order to generate a bed6+5 barChart format file, which 
 can be loaded as a custom track into the Genome Browser.
 </p>
@@ -174,10 +174,10 @@ can be loaded as a custom track into the Genome Browser.
 The matrix file is a tab-separated (must be tabs, not spaces) file of the following form, perhaps 
 resulting from an RNA-Seq analysis pipeline. Please note that the first line must contain a
 &quot;#&quot;, and describe each column like in the example snippet below.
-   <pre>
+<pre>
 #transcript	sample1	sample2	sample3	sample4	sample5	...
 transcriptName	value1	value2	value3	value4	value5	...
-   </pre>
+</pre>
 </p>
 
 <p>
@@ -208,14 +208,14 @@ To create a custom track in this form, follow the below steps:
 <ol>
    <li>Create a bed6+1 file to use as a map for the items in your matrix (does not need to be 
    all-inclusive). This file, with example lines like:
-<pre>
+   <pre><code>
 chr9 133257408 133275201 ABO 311 - ENSG00000175164.9
-</pre>
+   </code></pre>
    will be one
-   of three input files to the helper script expMatrixToBarChartBed. For an example file to
+   of three input files to the helper script expMatrixToBarchartBed. For an example file to
    follow along with the rest of this example, you can download the 
    <a href="">example bed6+1 file</a>.</li>
-   <li>Download the helper programs <em>expMatrixToBarChartBed</em> and <em>bedJoinTabOffset</em> 
+   <li>Download the helper programs <em>expMatrixToBarchartBed</em> and <em>bedJoinTabOffset</em> 
    from the <a href="http://hgdownload.soe.ucsc.edu/admin/exe">utilities directory</a>
    appropriate for your operating system. </li>
    <li>Make sure the programs downloaded above are in your system's PATH variable. For example,
@@ -224,16 +224,16 @@ chr9 133257408 133275201 ABO 311 - ENSG00000175164.9
    <pre><code>
 export PATH=$PATH:$HOME/Downloads
    </code></pre></li>
-   <li>Now run <em>expMatrixToBarChartBed</em> (which in turn runs <em>bedJoinTabOffset</em>) like so:
+   <li>Now run <em>expMatrixToBarchartBed</em> (which in turn runs <em>bedJoinTabOffset</em>) like so:
    <pre><code>
-expMatrixToBarChartBed categoriesFile matrixFile bedInputFile outputBed6+5
+expMatrixToBarchartBed categoriesFile matrixFile bedInputFile outputBed6+5
    </code></pre>
    The argument outputBed6+5 will be a bed6+5 file, with the expCount, expScores, _dataOffset, and 
    _dataLen fields computed for you, for example:
-<pre>
+   <pre><code>
 chr14 95086227 95158010 ENSG00000100697.10 999 - DICER1 5 10.94,11.60,8.00,6.69,4.89 93153 26789
-</pre>
-   <em>expMatrixToBarChartBed</em> will also
+   </code></pre>
+   <em>expMatrixToBarchartBed</em> will also
    output the order of the scores in the expScores field, which you can then 
    copy and paste into the barChartBars field of the custom track line so
    the bars displayed in the browser match the right values:
@@ -251,7 +251,7 @@ bedJoinTabOffset matrixFile exampleBed6+3 outBed
    construct a track line and prepend it to our bed6+5 file so the Genome Browser will
    recognize it:
    <pre><code>
-track type=barChart name=&quot;barChart Example&quot; description=&quot;A barChart file&quot; barChartBars=&quot;&quot; visibility=pack 
+track type=barChart name=&quot;barChart Example&quot; description=&quot;A barChart file&quot; barChartBars=&quot;adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeBlood&quot; visibility=pack 
    </code></pre></li>
    <li>Use the upload button on  the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
    page</a> for the human assembly hg38 to upload the file just created.</li>
@@ -259,19 +259,20 @@ track type=barChart name=&quot;barChart Example&quot; description=&quot;A barCha
 </ol>
 
 <p>
-<em>expMatrixToBarChartBed</em> automatically computes the median values for all the samples in
+<em>expMatrixToBarchartBed</em> automatically computes the median values for all the samples in
 the matrix file, which is useful when your experiment contains data from 8000 samples (like
-the GTEx data). Furthermore, <em>expMatrixToBarChartBed</em> can compute the mean value of all 
+the GTEx data). Furthermore, <em>expMatrixToBarchartBed</em> can compute the mean value of all 
 samples in a category of the matrix file (instead of the default median), in addition to allowing 
 for a specific ordering of the expScores field. For more information about 
-<em>expMatrixToBarChartBed</em> or <em>bedJoinTabOffset</em>, run the program with no arguments 
+<em>expMatrixToBarchartBed</em> or <em>bedJoinTabOffset</em>, run the program with no arguments 
 to get a usage message.
 </p>
 
 <a name="example4"></a>
 <h6>Example #4</h6>
 <p>
-In this example, you will use the bed6+5 file created in Example 3 to create a bigBarChart file.
+In this example, you will use the bed6+5 file created in Example 3 to create a bigBarChart file,
+allowing the data to be remotely accessed and exist within a track hub.
 </p>
 <ol>
    <li>If not already completed, follow steps 1-4 from <a href="exmaple3">Example 3</a> above. </li>
@@ -295,13 +296,39 @@ bedToBigBed -as=bigBarChart.as -type=bed6+5 inputBed hg38.chrom.sizes output.big
    <li>Construct a custom track line with a bigDataUrl parameter pointing to the newly created
    bigBarChart file. If the matrix and category files used to make the precursor barChart file
    are also moved to an http, https, or ftp location, we can point to them on the custom
-   track line as well:
+   track line as well (all settings must be on the same line):
    <pre><code>
-track type=bigBarChart name="bigBarChart Example One" description="A bigBarChart file" barChartBars="bar1 bar2 bar3 bar4 bar5" visibility=pack 
+track type=bigBarChart name="bigBarChart Example One" description="A bigBarChart file" 
+barChartBars="bar1 bar2 bar3 bar4 bar5" visibility=pack 
 bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBarChart.bb 
 barChartMatrixUrl=http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartMatrix.txt
-barChartSampleUrl="http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartSamples.txt
+barChartSampleUrl=http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartSamples.txt
    </code></pre>
+   <li>To fully take advantage of creating a bigBarChart file and the barChartMatrixUrl and
+   barChartSampleUrl supporting files, create a <a href="hgTrackHubHelp.html">Track Hub</a> and
+   use a stanza such as the following:
+   <pre><code>
+track exampleBarChartTrack
+type bigBarChart
+visibility full
+shortLabel exBarChart
+longLabel Simple example bar chart track
+barChartBars adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeBlood
+barChartColors #FF6600 #33CCCC #CC9955 #AAAAFF #FF00BB
+barChartLabel Tissues
+barChartUnit TPM
+bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigBarChart.bb
+barChartMatrixUrl http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartMatrix.txt
+barChartSampleUrl http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartSamples.txt
+   </code></pre>
+   Please note, the fields in your barChartBars line must match the terms
+   in your categories file (exampleBarChartSamples.txt) in order for the boxplot display to show 
+   up on the details page for tracks. Below is an example image indicating the benefit of using 
+   these files in a hub, note the "View all data points for..." link that allows extracting data 
+   from the matrix file (exampleBarChartMatrix.txt) specific for this named item.
+   <div class="text-center">
+      <img src="../../images/exampleBoxPlot.png" alt="Example boxPlot image" height="500" width="700">
+   </div>
 </ol>
 
 <h2>Sharing your data with others</h2>
