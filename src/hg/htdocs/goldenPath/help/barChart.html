@@ -8,43 +8,39 @@
 <h1>barChart and bigBarChart Track Format</h1> 
 <p>
 <p>
-The barChart and bigBarChart track formats display category specific values over a genomic region, similar to 
-the GTEx track in the <a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&gtexGene=pack">Genome Browser</a>. 
-This format is useful for displaying microarray, RNA-seq, and other dataset where a distinct
-sets of variables are associated via genomic regions.
-</p>
-
+The barChart (and bigBarChart) track format displays a graph of category-specific values over 
+genomic regions, similar to the
+<a href="../../cgi-bin/hgTracks?organism=human&hideTracks=1&gtexGene=pack">GTEx Gene</a> track.
+This format is useful for displaying gene expression and other datasets where it is desirable to
+compare a set of variables over genomic regions.</p>
 <p>
-The barChart format is available as a standalone plain text bed6+ custom track format for smaller datasets, as 
-well as a binary indexed format (bigBarChart) for use in both track hubs and custom tracks for
-larger datasets. barChart format files are converted to bigBarChart files using the program 
+While a barChart track can effectively show datasets with single values for each 
+variable (e.g. comparing individual samples),
+the format provides specific features to display studies comprised of a large set 
+of samples for each variable (e.g. comparing tissues with multiple samples for each tissue).
+In this usage, the main genome browser display presents a graph of summary values (e.g. medians)
+for each variable, and the distribution of sample values across variables is
+shown via a boxplot graph shown on the details page for each region.</p>
+<p>
+The barChart format is available as a standalone plain text bed6+ format 
+for use with smaller datasets as a custom track, and as a binary indexed format (bigBarChart) 
+suitable for track hubs and custom tracks.
+The bigBarChart format provides more track customization
+features (i.e. schema customization, and label configuration support), and
+is recommended for users who can use command-line tools and have web-accessible data storage.
+barChart format files are converted to bigBarChart files using the program 
 <code>bedToBigBed</code>, run with the <code>-as</code> option to pull in a special 
-<a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a> (<em>.as</em>) file 
-that defines the fields of the bigBarChart.
+<a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a> (<em>.as</em>) 
+schema file defining the fields of the bigBarChart.
 </p>
 
-<p>
-The bigBarChart files are in an indexed binary format. The main advantage of this format is that only 
-those portions of the file needed to display a particular region are transferred to the Genome 
-Browser server. Because of this, bigBarChart files have considerably faster display performance than 
-regular barChart files when working with large data sets. The bigBarChart file remains on your local 
-web-accessible server (http, https or ftp), not on the UCSC server, and only the portion needed for 
-the currently displayed chromosomal position is locally cached as a &quot;sparse file&quot;.</p>
-
-<p>
-Another advantage to the bigBarChart format are the 
-<a href="trackDb/trackDbHub.html#barChartMatrixUrl">barChartMatrixUrl</a> and 
-<a href="trackDb/trackDbHub.html#barChartSampleUrl">barChartSampleUrl</a> track
-line settings that enable efficient access into a matrix like file for drawing a boxplot of sample
-data and a download link to sample data  on the details page for each barChart.</p>
 
 <a name=barChart></a>
 <h2>barChart format definition</h2>
 <p>
-The following autoSql definition is used to define the barChart and bigBarChart bar graphs. The 
-standalone barChart custom tracks mentioned previously must have the same number and format as 
-the below columns, except for the _dataOffset and _dataLen fields, which are optional. In 
-contrast, all of these fields must be present in bigBarChart tracks.
+The following autoSql definition illustrates the basic schema supporting barChart (and 
+bigBarChart) tracks.</p>
+
 <pre><code>table bigBarChart
 "bigBarChart bar graph display"  
     ( 
@@ -67,41 +63,46 @@ contrast, all of these fields must be present in bigBarChart tracks.
 
 <p>
 The first 6 fields of the barChart format are the same as the first 6 fields of the standard
-<a href="../../FAQ/FAQformat#format1">BED</a> format. The name2 field provides for an alternate
+<a href="../../FAQ/FAQformat#format1">BED</a> format. The name2 field provides an alternate
 item name, useful if you would like to associate multiple transcripts to a single gene locus, 
 different variables to the same experiment type, etc. The expCount and expScores fields are 
-similar to the gtexGene table definition in that they define the number of categories and a 
-value for each category (see example #1 below). 
-The optional _dataOffset and _dataLen field provide indexes into an 
-again optionally provided matrix file, which when provided for a bigBarChart format track, allows 
-for a boxplot of sample data to be displayed on the details page for each individual bar graph in 
-the bigBarChart track. Please note the _dataOffset and _dataLen fields are optional only for plain
-text barChart format tracks, and even if provided, are not used. 
-</p>
-
+used as in the <a href="../../FAQ/FAQformat#format6.5">Microarray</a> format; they define the 
+number of categories and a value for each category (see example #1 below).<p>
 <p>
-These autoSql files should be customized to your use case. For example, if the name
-field of your track refers to a transcript name, while the name2 field is for a gene, you are 
-welcome to change the field definitions such as seen below when making your bigBed:
+The _dataOffset and _dataLen fields are used internally by the track to locate sample values
+for a region in an optional matrix file containing all sample values.
+These values are used to draw a boxplot of all sample data on the details page for the bar chart.
+When a matrix file is not supplied, these fields should be set to 0.  
+(As a convenience, these fields are optional for barChart custom tracks).
+</p>
+<p>
+When creating bigBarChart files, we encourage you to customize the title and field
+descriptions of the prototype autoSql schema to better describe your data. 
+In the example below, the name field of the track refers to a transcript, while the name2 
+field represents a gene:
 <pre><code>
-"bigBarChart bar graph display"
+table xyzGeneExpression
+"XYZ gene expression barChart"
 (
 string chrom;               "Reference sequence chromosome or scaffold"
 uint chromStart;            "Start position in chromosome"
 uint chromEnd;              "End position in chromosome"
 string name;                "Transcript name"
-uint score;                 "Score (0-1000)"
-char[1] strand;             "'+','-' or '.'. Indicates whether the query aligns to the + or - strand on the reference"
+uint score;                 "Score (0-1000), derived from total expScores (below)"
+char[1] strand;             "+, -, or ., indicating orientation of the item"
 string name2;               "Gene name" 
-uint expCount;              "Number of categories"
-float[expCount] expScores;  "Comma separated list of category values."
-bigint _dataOffset;         "Offset of sample data in data matrix file, for boxplot on details page"
+uint expCount;              "Number of tissues"
+float[expCount] expScores;  "Comma separated list of median expression in RPKM for each tissue."
+bigint _dataOffset;         "Offset of sample data in data matrix file"
 int _dataLen;               "Length of sample data row in data matrix file"
 )
 </code></pre>
-This is helpful when viewing items on the Genome Browser details
-pages, where you can get information about field names via the "view table schema" link,
-or via the Table Browser.
+Customing this file will make your data more easily interpreted by users, who will
+see the field descriptions when accessing the track data from 
+the Table Browser, 
+when viewing items on the Genome Browser details
+pages (via the "view table schema" link),
+and (for users who download files), from the -as option of the bigBedInfo tool.
 </p>
 
 <h2>Creating barChart and bigBarChart custom tracks</h2>
@@ -251,7 +252,7 @@ bedJoinTabOffset matrixFile exampleBed6+3 outBed
    construct a track line and prepend it to our bed6+5 file so the Genome Browser will
    recognize it:
    <pre><code>
-track type=barChart name=&quot;barChart Example&quot; description=&quot;A barChart file&quot; barChartBars=&quot;adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeBlood&quot; visibility=pack 
+track type=barChart name=&quot;barChart Example&quot; description=&quot;A barChart file&quot; barChartBars=&quot;adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeBlood&quot; barChartMetric=median&quot; visibility=pack 
    </code></pre></li>
    <li>Use the upload button on  the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
    page</a> for the human assembly hg38 to upload the file just created.</li>
@@ -263,7 +264,7 @@ track type=barChart name=&quot;barChart Example&quot; description=&quot;A barCha
 the matrix file, which is useful when your experiment contains data from 8000 samples (like
 the GTEx data). Furthermore, <em>expMatrixToBarchartBed</em> can compute the mean value of all 
 samples in a category of the matrix file (instead of the default median), in addition to allowing 
-for a specific ordering of the expScores field. For more information about 
+for a specific ordering of the expScores field. NOTE: Set the barChartMetric setting to 'mean' if yhou use this option of <em>expMatrixToBarchartBed</em>. For more information about 
 <em>expMatrixToBarchartBed</em> or <em>bedJoinTabOffset</em>, run the program with no arguments 
 to get a usage message.
 </p>
@@ -272,7 +273,7 @@ to get a usage message.
 <h6>Example #4</h6>
 <p>
 In this example, you will use the bed6+5 file created in Example 3 to create a bigBarChart file,
-allowing the data to be remotely accessed and exist within a track hub.
+allowing the data to be remotely accessed and exist within a track hub.  The track settings for bigBarChart on a hub can be viewed <a href="./trackDb/trackDbHub.html">here</a>.
 </p>
 <ol>
    <li>If not already completed, follow steps 1-4 from <a href="exmaple3">Example 3</a> above. </li>
@@ -299,10 +300,11 @@ bedToBigBed -as=bigBarChart.as -type=bed6+5 inputBed hg38.chrom.sizes output.big
    track line as well (all settings must be on the same line):
    <pre><code>
 track type=bigBarChart name="bigBarChart Example One" description="A bigBarChart file" 
-barChartBars="bar1 bar2 bar3 bar4 bar5" visibility=pack 
+barChartBars="bar1 bar2 bar3 bar4 bar5" barChartMetric=median barChartUnit=RPKM
 bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBarChart.bb 
 barChartMatrixUrl=http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartMatrix.txt
 barChartSampleUrl=http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartSamples.txt
+visibility=pack 
    </code></pre>
    <li>To fully take advantage of creating a bigBarChart file and the barChartMatrixUrl and
    barChartSampleUrl supporting files, create a <a href="hgTrackHubHelp.html">Track Hub</a> and
@@ -316,6 +318,7 @@ longLabel Simple example bar chart track
 barChartBars adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeBlood
 barChartColors #FF6600 #33CCCC #CC9955 #AAAAFF #FF00BB
 barChartLabel Tissues
+barChartMetric median
 barChartUnit TPM
 bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigBarChart.bb
 barChartMatrixUrl http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartMatrix.txt
@@ -348,7 +351,7 @@ in working with bigBed formats, available from the
   <li>
   <code>bigBedSummary</code> &mdash; extracts summary information from a bigBed file.</li>
   <li>
-  <code>bigBedInfo</code> &mdash; prints out information about a bigBed file.</li>
+  <code>bigBedInfo</code> &mdash; prints out information about a bigBed file. Use the -as option to see the file field descriptions.</li>
 </ul>
 <p>
 As with all UCSC Genome Browser programs, simply type the program name (with no parameters) at the 
