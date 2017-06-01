@@ -227,9 +227,10 @@ def htmlHeader():
     print('<body class="hgc cgi">')
     printMenuBar()
 
-    db = getCgiVar("db", "hg19")
-    printHgcHeader(db, "Protein Interactions Track", "Protein interactions and pathways from curated databases and text-mining", addGoButton=False, infoUrl=MANUALURL)
-
+    db = getCgiVar("db")
+    printHgcHeader(db, "Protein Interactions Track",
+            "Protein interactions and pathways from curated databases and text-mining",
+            addGoButton=False, infoUrl=MANUALURL, infoMouseOver="Open help page")
 
 def mustBeClean(str):
     """ make sure a string contains only letters and digits """
@@ -943,7 +944,7 @@ def printFilterMenu(targetGene, addNeighbors):
     # form to filter by type
     print "<small>"
     print '<form name="filterForm" action="%s" method="GET">' % makeSelfUrl({}, True)
-    print """Gene:""" 
+    print """<b>Gene:</b>""" 
     print '<input type="text" size="6" name="gene" value="%s" />' % targetGene
     print "&nbsp;"
     print '<input type="submit" name="1" value="OK">'
@@ -979,13 +980,13 @@ def printFilterMenu(targetGene, addNeighbors):
     #print(addNeighborLink)
     hideIndirectStatus = (getCgiVar("hideIndirect")=="on")
     printCheckbox("hideIndirect", hideIndirectStatus, onChangeAttr)
-    print '<span style="">Hide non-%s interactions</span>' % targetGene
+    print '<span style="font-weight:bold">Hide non-%s interactions</span>' % targetGene
     print "&nbsp;&nbsp;&nbsp;"
 
     geneCount = getCgiVar("geneCount", DEFGENECOUNT)
-    print "Show top"
+    print "<b>Show top"
     print '<input name="geneCount" type="text" size="3" value="%s">' % geneCount
-    print "Genes on graph"
+    print "Genes on graph</b>"
     print "&nbsp;&nbsp;&nbsp;"
 
     printSelfHiddenVars({}, skipList=["supportLevel", "hideIndirect", "gene"])
@@ -1920,10 +1921,11 @@ def removeInteraction(param, captcha, comment):
 
 def parseGraphArgs():
     " get the arguments to build a graph from the CGI parameters "
-    gene = getCgiVar("gene").rstrip(":")
-    if gene==None:
-        print "missing CGI parameter 'gene' or 'link'"
-        exit(0)
+    gene = getCgiVar("gene")
+    if gene is None:
+        gene = "MTOR"
+
+    gene = gene.rstrip(":")
     gene = gene.split()[0]
     gene = gene.upper()
 
