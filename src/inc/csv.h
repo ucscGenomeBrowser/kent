@@ -26,5 +26,8 @@ boolean csvNeedsParsing(char *s);
 /* Return TRUE if s is something that needs parsing through the csv parser.  That
  * is it either starts with a quote or has a comma */
 
+struct slName *csvParse(char *csv);
+/* Return a list of parsed out csv values.  Do a slFreeList of this when done */
+
 #endif /* CSV_H */
 

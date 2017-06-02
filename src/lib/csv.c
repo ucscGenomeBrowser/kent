@@ -147,3 +147,17 @@ if (strchr(s, ','))
     return TRUE;
 return *s == '"';
 }
+
+struct slName *csvParse(char *csv)
+/* Return a list of parsed out csv values.  Do a slFreeList of this when done */
+{
+struct dyString *scratch = dyStringNew(0);
+struct slName *list = NULL;
+char *val;
+while ((val = csvParseNext(&csv, scratch)) != NULL)
+    slNameAddHead(&list, val);
+dyStringFree(&scratch);
+slReverse(&list);
+return list;
+}
+
