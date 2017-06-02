@@ -94,6 +94,7 @@ longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors
 	longLabel Gene expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 	html gtexExpr
 	group expression
+	visibility pack
 	priority 10.13
 	maxItems 200
 
