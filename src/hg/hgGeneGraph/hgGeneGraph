@@ -106,6 +106,7 @@ dbData = {
 #"pid" : ("NCI Pathway Database", "http://pid.nci.nih.gov/search/InteractionPage?atomid=%s"),
 #PID server is down, linking to NDex now, adapted the IDs, see ggPidToTables
 "pid" : ("NCI Pathway Database", "http://www.ndexbio.org/#/search?searchType=All&searchString=labels%%253A%s"),
+"biocarta" : ("BioCarta", "https://cgap.nci.nih.gov/Pathways/BioCarta/%s"),
 "reactome" : ("Reactome", "http://www.reactome.org/content/detail/%s"),
 "go" : ("Gene Ontology Complexes", "http://www.ebi.ac.uk/QuickGO/GTerm?id=%s#info=2"),
 "fastforward" : ("FastForward", "http://fastforward.sys-bio.net/popup.php?name_target=%s"),
@@ -1442,7 +1443,7 @@ def pmidInternalLink(pmid):
 
 def entToDesc(eType, eName, eGenes):
     """ get a readable html description for a entity, type can be gene, complex or family,
-    name is the full name, eGenes is the list of genes 
+    name is the full name, eGenes is the list of genes
     """
     # don't display compounds
     eGenes = eGenes.split("|")
@@ -1483,7 +1484,7 @@ def printDbRows(conn, rows, onlyDoc=None):
 
         if eventId.startswith("ppi_"):
             isPpi = True
-        else: 
+        else:
             isPpi = False
 
         docSet = set(docIds.split("|"))
@@ -1493,6 +1494,7 @@ def printDbRows(conn, rows, onlyDoc=None):
             dbName = "IRef %s" % sourceDb.capitalize()
         else:
             dbName, dbUrlPat = dbData[sourceDb]
+
 
         url = dbUrlPat % sourceId
 
