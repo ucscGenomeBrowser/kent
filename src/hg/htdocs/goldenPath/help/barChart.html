@@ -107,7 +107,7 @@ and (for users who download files), from the -as option of the bigBedInfo tool.
 
 <h2>Creating barChart and bigBarChart custom tracks</h2>
 <p>
-The steps for creating barChart tracks differs from the process for creating 
+The steps for creating barChart tracks differ from the process for creating 
 bigBarChart tracks. The steps also differ based on whether you have an input 
 matrix file (generated perhaps from an RNA-Seq differential expression analysis pipeline) or not. 
 If you have an expression matrix-like file, skip to <a href="#example3">Example #3</a>, otherwise 
@@ -123,8 +123,11 @@ In this example, you will create a barChart custom track using example bed6+3 da
        <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
    page</a> for the human assembly hg38.
    <pre><code>
-track type=barChart name=&quot;barChart Example One&quot; description=&quot;A barChart file&quot; barChartBars=&quot;bar1 bar2 bar3 bar4 bar5&quot; visibility=pack
-chr9    133257408    133275201    ABO    311    -    ENSG00000175164.9    5    10,20,30,40,50
+track type=barChart name=&quot;barChart Example One&quot; description=&quot;A barChart file&quot; barChartBars=&quot;adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeBlood&quot; visibility=pack
+browser position chr14:95,086,228-95,158,010
+chr14	95086227	95158010	ENSG00000100697.10	999	-	DICER1	5	10.94,11.60,8.00,6.69,4.89
+chr14	95181939	95319906	ENSG00000165959.7	999	-	CLMN	5	7.08,9.53,9.32,1.38,1.68
+chr14	95417493	95475836	ENSG00000176438.8	999	-	SYNE3	5	7.29,3.73,0.74,0.35,1.39
    </code></pre></li>  
    <li>Click the &quot;submit&quot; button.</li> 
 </ol>
@@ -132,9 +135,9 @@ chr9    133257408    133275201    ABO    311    -    ENSG00000175164.9    5    1
 <p>
 After the file  loads in the Genome Browser, you should see an automatically colored bar 
 graph with 5 bars. Hovering the mouse  over any of the individual bars will display the name of the
-particular bar ("bar1", "bar2", ...) as well as the value associated with that bar. The order
-of bar names in the barChartBars field of track line should exactly match the order of the 
-values in the expScores field. 
+particular bar ("wholeBlood", "adiposeSubcut", ...) as well as the value associated with that bar 
+(10.94, 0.74, ...). The order of bar names in the barChartBars field of track line should exactly
+match the order of the values in the expScores field. 
 </p>
 
 <a name="example2"></a>
@@ -149,7 +152,8 @@ To create a custom track using this file:
 <ol>
    <li>Construct a track line referencing the file:
    <pre><code>
-track type=bigBarChart name=&quot;bigBarChart Example One&quot; description=&quot;A bigBarChart file&quot; barChartBars=&quot;bar1 bar2 bar3 bar4 bar5&quot; visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBarChart.bb
+track type=bigBarChart name=&quot;bigBarChart Example One&quot; description=&quot;A bigBarChart file&quot; barChartBars=&quot;adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeBlood&quot; visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/barChart/hg38.gtexTranscripts.bb
+browser position chr14:95,086,228-95,158,010
    </code></pre></li>
    <li>Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
    page</a> for the human assembly hg38. </li>
@@ -201,7 +205,8 @@ Each column in the first line of the matrix file must be found in the categories
 </p>
 
 <p>
-We have provided an example <a href="">category file</a> and <a href="">matrix file</a> to follow
+We have provided an example <a href="examples/barChart/exampleSampleData.txt">category file</a> 
+and <a href="examples/barChart/exampleMatrix.txt">matrix file</a> to follow
 along with the rest of this example.
 
 <p>
@@ -210,12 +215,12 @@ To create a custom track in this form, follow the below steps:
    <li>Create a bed6+1 file to use as a map for the items in your matrix (does not need to be 
    all-inclusive). This file, with example lines like:
    <pre><code>
-chr9 133257408 133275201 ABO 311 - ENSG00000175164.9
+chr14	95086227	95158010	ENSG00000100697.10	999	-	DICER1
    </code></pre>
    will be one
    of three input files to the helper script expMatrixToBarchartBed. For an example file to
-   follow along with the rest of this example, you can download the 
-   <a href="">example bed6+1 file</a>.</li>
+   follow along with the rest of this example, you can download an example bed6+1 file
+   <a href="examples/barChart/hg38.gtexTranscripts">here</a>.</li>
    <li>Download the helper programs <em>expMatrixToBarchartBed</em> and <em>bedJoinTabOffset</em> 
    from the <a href="http://hgdownload.soe.ucsc.edu/admin/exe">utilities directory</a>
    appropriate for your operating system. </li>
@@ -240,7 +245,7 @@ chr14 95086227 95158010 ENSG00000100697.10 999 - DICER1 5 10.94,11.60,8.00,6.69,
    the bars displayed in the browser match the right values:
    <pre>
 The columns and order of the groups are: 
-#chr	start	end	name	score	strand	name2	expCount	expScores;shRNA	_offset	_lineLength
+#chr	start	end	name	score	strand	name2	expCount	expScores;adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeBlood	_offset	_lineLength
    </pre>
    If you have already pre-computed expCount and 
    expScores, and just need offsets into your matrix file for a more descriptive details
@@ -274,10 +279,12 @@ to get a usage message.
 <h6>Example #4</h6>
 <p>
 In this example, you will use the bed6+5 file created in Example 3 to create a bigBarChart file,
-allowing the data to be remotely accessed and exist within a track hub.  The track settings for bigBarChart on a hub can be viewed <a href="./trackDb/trackDbHub.html">here</a>.
+allowing the data to be remotely accessed and exist within a track hub.  The track settings for 
+bigBarChart on a hub can be viewed <a href="./trackDb/trackDbHub.html#bigBarChart">here</a>.
 </p>
 <ol>
-   <li>If not already completed, follow steps 1-4 from <a href="exmaple3">Example 3</a> above. </li>
+   <li>If not already completed, follow steps 1-4 from <a href="example3">Example 3</a> above, or
+   download the example bed6+5 file <a href="examples/barChart/hg38.gtexTranscripts.bed">here</a> </li>
    <li>Download the <em>fetchChromSizes</em> and <em>bedToBigBed</em> programs from the
    <a href="http://hgdownload.soe.ucsc.edu/admin/exe">utilities directory</a> appropriate to your
    operating system.
@@ -289,10 +296,10 @@ allowing the data to be remotely accessed and exist within a track hub.  The tra
    database is located at
    <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
    target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</li>
-   <li>Save the autoSql file <a href="">bigBarChar.as</a> to your computer.</li>
+   <li>Save the autoSql file <a href="examples/barChart/barChartBed.as">barChartBed.as</a> to your computer.</li>
    <li>Run bedToBigBed to create the bigBarChart file:
    <pre><code>
-bedToBigBed -as=bigBarChart.as -type=bed6+5 inputBed hg38.chrom.sizes output.bigBed
+bedToBigBed -as=barChartBed.as -type=bed6+5 inputBed hg38.chrom.sizes output.bigBed
    </code></pre></li>
    <li>Move the newly constructed bigBarChart file to a web accessible http, https, or ftp location.</li>
    <li>Construct a custom track line with a bigDataUrl parameter pointing to the newly created
@@ -301,10 +308,11 @@ bedToBigBed -as=bigBarChart.as -type=bed6+5 inputBed hg38.chrom.sizes output.big
    track line as well (all settings must be on the same line):
    <pre><code>
 track type=bigBarChart name="bigBarChart Example One" description="A bigBarChart file" 
-barChartBars="bar1 bar2 bar3 bar4 bar5" barChartMetric=median barChartUnit=RPKM
-bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigBarChart.bb 
-barChartMatrixUrl=http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartMatrix.txt
-barChartSampleUrl=http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartSamples.txt
+barChartBars="adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeBlood" 
+barChartMetric=median barChartUnit=RPKM
+bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/barChart/hg38.gtexTranscripts.bb 
+barChartMatrixUrl=http://genome.ucsc.edu/goldenPath/help/examples/exampleMatrix.txt
+barChartSampleUrl=http://genome.ucsc.edu/goldenPath/help/examples/barChart/exampleSampleData.txt
 visibility=pack 
    </code></pre>
    <li>To fully take advantage of creating a bigBarChart file and the barChartMatrixUrl and
@@ -320,10 +328,10 @@ barChartBars adiposeSubcut breastMamTissue colonTransverse muscleSkeletal wholeB
 barChartColors #FF6600 #33CCCC #CC9955 #AAAAFF #FF00BB
 barChartLabel Tissues
 barChartMetric median
-barChartUnit TPM
-bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigBarChart.bb
-barChartMatrixUrl http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartMatrix.txt
-barChartSampleUrl http://genome.ucsc.edu/goldenPath/help/examples/exampleBarChartSamples.txt
+barChartUnit RPKM
+bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/barChart/hg38.gtexTranscripts.bb
+barChartMatrixUrl http://genome.ucsc.edu/goldenPath/help/examples/exampleMatrix.txt
+barChartSampleUrl http://genome.ucsc.edu/goldenPath/help/examples/exampleSampleData.txt
    </code></pre>
    Please note, the fields in your barChartBars line must match the terms
    in your categories file (exampleBarChartSamples.txt) in order for the boxplot display to show 
