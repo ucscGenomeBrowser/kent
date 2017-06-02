@@ -4,7 +4,10 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "obscure.h"
 #include "tagStorm.h"
+
+struct hash *gSrxToSrr;
 
 void usage()
 /* Explain usage and exit. */
@@ -13,7 +16,9 @@ errAbort(
   "geoStormToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human \n"
   "Cell Atlas wants.\n"
   "usage:\n"
-  "   geoStormToHcaStorm in.tags out.tags\n"
+  "   geoStormToHcaStorm in.tags srxToSrr.tab out.tags\n"
+  "Where in.tags is geoToTagStorm output, srxToSrr.tab is a two column file with\n"
+  "NCBI short read archive SRX IDs followed by SRR ones, and out.tags is the output\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -80,16 +85,11 @@ char *substitutions[][2] =
     {"sample.library_strategy", "assay.seq.prep"},
     {"sample.molecule", "assay.seq.molecule"},
     {"sample.organism", "sample.donor.species"},
-    {"sample.relation_BioSample", "sample.biosample_url"},
-    {"sample.relation_SRA", "sample.sra_url"},
     {"sample.source_name", "sample.body_part.name"},
-    {"sample.sra_url", "assay.sra_url"},
     {"sample.status", "project.release_status"},
     {"sample.submission_date", "sample.submission_date"},
     {"sample.taxid", "sample.donor.ncbi_taxon"},
     {"sample.title", "sample.long_label"},
-    {"series.bioproject_url project.bioproject_url"},
-    {"series.biosample_url project.biosample_url"},
     {"series.contact_address", "project.contact_address"},
     {"series.contact_city", "project.contact_city"},
     {"series.contact_country", "project.contact_country"},
@@ -102,7 +102,7 @@ char *substitutions[][2] =
     {"series.contact_state", "project.contact_state"},
     {"series.contact_zip/postal_code", "project.contact_postal_code"},
     {"series.contributor", "project.contributor"},
-    {"series.geo_accession", "project.geo_accession"},
+    {"series.geo_accession", "project.geo_series"},
     {"series.last_update_date", "project.last_update_date"},
     {"series.organism", "sample.donor.species"},
     {"series.overall_design", "project.overall_design"},
@@ -131,6 +131,9 @@ return s+1;
 void fixAccessions(struct tagStorm *storm, struct tagStanza *stanza)
 /* Convert various URLs containing accessions to just accessions */
 {
+/* Lets deal with the SRR/SRX issue as well */
+struct dyString *srrDy = dyStringNew(0);
+
 struct slPair *pair;
 for (pair = stanza->tagList; pair != NULL; pair = pair->next)
     {
@@ -146,15 +149,28 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
 	/* Convert something like https://www.ncbi.nlm.nih.gov/sra?term=SRP018525
 	 * to SRP018525 */
-	pair->name = "project.ncbi_srp";
+	pair->name = "project.sra_project";
 	pair->val = accFromEnd(pair->val, '=', "SRP", "SRA");
 	}
     else if (sameString("sample.relation_SRA", name))
         {
 	/* Convert something like https://www.ncbi.nlm.nih.gov/sra?term=SRX229786
 	 * to SRX229786 */
-	pair->name = "sample.ncbi_srx";
-	pair->val = accFromEnd(pair->val, '=', "SRX", "SRA");
+	pair->name = "assay.sra_experiment";
+	char *srx = accFromEnd(pair->val, '=', "SRX", "SRA");
+	pair->val = srx;
+
+	/* Now make comma separated list of all SRR id's associated */
+	struct hashEl *hel = hashLookup(gSrxToSrr, srx);
+	if (hel == NULL)
+	    errAbort("Can't find SRX tag %s in srxToSra.tab file", srx);
+	else
+	    dyStringAppend(srrDy, hel->val);
+	while ((hel = hashLookupNext(hel)) != NULL)
+	    {
+	    dyStringAppendC(srrDy, ',');
+	    dyStringAppend(srrDy, hel->val);
+	    }
 	}
     else if (sameString("sample.relation_BioSample", name))
         {
@@ -164,6 +180,13 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
 	pair->val = accFromEnd(pair->val, '/', "SAMN", "biosample");
 	}
     }
+
+if (srrDy->stringSize > 0)
+    {
+    tagStanzaAppend(storm, stanza, "assay.sra_run", srrDy->string);
+    }
+dyStringFree(&srrDy);
+
 }
 
 void rFixAccessions(struct tagStorm *storm, struct tagStanza *list)
@@ -177,11 +200,13 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
-void geoStormToHcaStorm(char *input, char *output)
+void geoStormToHcaStorm(char *inTags, char *inSrxSrr, char *output)
 /* geoStormToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
  *  Atlas wants.. */
 {
-struct tagStorm *storm = tagStormFromFile(input);
+struct tagStorm *storm = tagStormFromFile(inTags);
+gSrxToSrr = hashTwoColumnFile(inSrxSrr);
+hashReverseAllBucketLists(gSrxToSrr);
 tagStormWeedArray(storm, weeds, ArraySize(weeds));
 rFixAccessions(storm, storm->forest);
 tagStormSubArray(storm, substitutions, ArraySize(substitutions));
@@ -192,8 +217,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-geoStormToHcaStorm(argv[1], argv[2]);
+geoStormToHcaStorm(argv[1], argv[2], argv[3]);
 return 0;
 }
