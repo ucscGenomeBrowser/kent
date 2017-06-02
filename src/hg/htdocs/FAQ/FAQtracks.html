@@ -326,14 +326,15 @@ Historically, NCBI RefSeq coordinates were not directly available for building t
 Genome Brower. Instead of using coordinates to map annotations, mappings to the reference assembly 
 were conducted using <a href="../FAQ/FAQblat.html" target="_blank">BLAT</a> 
 (BLAST-like alignment tool) alignment methods. This BLAT alignment method has caused some discrepancies 
-from the NCBI RefSeq database. In essence, by using BLAT to align the sequence, a single transcript 
-could result in matching to multiple novel places across the genome, or alignments of small exons 
-could differ slightly in final coordinates within the region of a gene rich with repeats. 
-BLAT-generated RefSeq track methods are described in corresponding track description pages (e.g., 
-<a href="../cgi-bin/hgTrackUi?db=hg19&g=refGene" 
+from the NCBI RefSeq database. Most discrepancies arise when the BLAT-generated annotations align to 
+multiple regions where the sequence in the assembly is either identical or nearly identical.  In essence, 
+by using BLAT to align the sequence, a single transcript could result in matching to multiple novel 
+places across the genome, or alignments of small exons could differ slightly in final coordinates 
+within the region of a gene rich with repeats. BLAT-generated RefSeq track methods are described in 
+corresponding track description pages (e.g., <a href="../cgi-bin/hgTrackUi?db=hg19&g=refGene" 
 target="_blank">RefSeq track description for hg19)</a>.</p>
 <p>
-In 2017, NCBI RefSeq coordinates for hg38 became available for generating non-discrepant RefSeq tracks 
+In 2017, NCBI RefSeq coordinates for hg38 were used for generating non-discrepant RefSeq tracks 
 in the UCSC Genome Browser. This new 
 <a href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite" 
 target="_blank">NCBI RefSeq track</a> in the UCSC Genome Browser displays identical RNA coordinates to 
