@@ -134,3 +134,27 @@ for (; !isEmpty(s); s = e)
     }
 }
 
+static void rPathsInDirAndSubdirs(char *dir, char *wildcard, struct slName **pList)
+/* Recursively add directory contents that match wildcard (* for all) to list */
+{
+struct fileInfo *fi, *fiList = listDirX(dir, wildcard, TRUE);
+for (fi = fiList; fi != NULL; fi = fi->next)
+   {
+   if (fi->isDir)
+       rPathsInDirAndSubdirs(fi->name, wildcard, pList);
+   else
+       slNameAddHead(pList, fi->name);
+   }
+slFreeList(&fiList);
+}
+
+struct slName *pathsInDirAndSubdirs(char *dir, char *wildcard)
+/* Return list of all non-directory files in dir and it's
+ * subdirs.  Returns path to files including dir and subdir. */
+{
+struct slName *list = NULL;
+rPathsInDirAndSubdirs(dir, wildcard, &list);
+slReverse(&list);
+return list;
+}
+

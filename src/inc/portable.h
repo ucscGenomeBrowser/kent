@@ -19,6 +19,9 @@ struct slName *listDirRegEx(char *dir, char *regEx, int flags);
  * the regular expression pattern in directory.
  * See REGCOMP(3) for flags (e.g. REG_ICASE)  */
 
+struct slName *pathsInDirAndSubdirs(char *dir, char *wildcard);
+/* Return list of all non-directory files in dir and it's
+ * subdirs.  Returns path to files including dir and subdir. */
 
 struct fileInfo 
 /* Info about a file. */
