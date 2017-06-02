@@ -86,6 +86,7 @@ char umiBarcodeOffset[8], cellBarcodeOffset[8];
 /* Figure out more or less what to do based on method and pairing */
 if (sameString(method, "drop-seq"))
     {
+    uglyf("drop-seq\n");
     gEnds = 2;
     safef(umiBarcodeOffset, sizeof(umiBarcodeOffset), "12");
     safef(cellBarcodeOffset, sizeof(cellBarcodeOffset), "0");
@@ -94,6 +95,7 @@ if (sameString(method, "drop-seq"))
     }
 else if (sameString(method, "10x"))
     {
+    uglyf("10x\n");
     gEnds = 2;
     safef(umiBarcodeOffset, sizeof(umiBarcodeOffset), "16");
     safef(cellBarcodeOffset, sizeof(cellBarcodeOffset), "0");
@@ -108,10 +110,10 @@ else
 
 /* Add barcode tags */
 tagStanzaUpdateTag(storm, rootStanza, "assay.seq.umi_barcode_size", umiBarcodeSize);
-if (differentString("0", umiBarcodeOffset))
+if (differentString("0", umiBarcodeSize))
     tagStanzaUpdateTag(storm, rootStanza, "assay.seq.umi_barcode_offset", umiBarcodeOffset);
 tagStanzaUpdateTag(storm, rootStanza, "assay.single_cell.cell_barcode_size", cellBarcodeSize);
-if (differentString("0", cellBarcodeOffset))
+if (differentString("0", cellBarcodeSize))
     tagStanzaUpdateTag(storm, rootStanza, "assay.single_cell.cell_barcode_offset", 
 	cellBarcodeOffset);
 
