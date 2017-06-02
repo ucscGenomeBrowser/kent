@@ -1,0 +1,93 @@
+assay.rna.primer poly-dt
+assay.seq.machine Illumina NextSeq 500
+assay.seq.molecule RNA
+assay.seq.paired_ends index1_data2
+assay.single_cell.method drop-seq
+assay.single_cell.cell_barcode_size 12
+project.contact_address 415 Main St.
+project.contact_city Cambridge
+project.contact_country USA
+project.contact_email karthik@broadinstitute.org
+project.contact_institute Broad Institute
+project.contact_name "Karthik,,Shekhar"
+project.contact_phone 217-979-9852
+project.contact_postal_code 02142
+project.contact_state MA
+project.contributor "Karthik,,Shekhar"
+project.geo_parent_series GSE81905
+project.geo_series GSE81904
+project.last_update_date May 26 2017
+project.ncbi_bioproject PRJNA323370
+project.overall_design Drop-Seq was performed on two different batches. Bipolar1-Bipolar4 are replicates from batch 1 and Bipolar5-6 are replicates from Batch 2
+project.pubmed_id 27565351
+project.release_status Public on Aug 25 2016
+project.sra_project SRP075719
+project.submission_date May 25 2016
+project.summary "Vsx2-GFP mouse retinas were dissected, FACS sorted for GFP+ cells and single-cell mRNAseq libraries generated with Drop-Seq"
+project.supplementary_files ftp://ftp.ncbi.nlm.nih.gov/pub/geo/DATA/supplementary/series/GSE81904/GSE81904_BipolarUMICounts_Cell2016.txt.gz,ftp://ftp.ncbi.nlm.nih.gov/pub/geo/DATA/supplementary/series/GSE81904/GSE81904_RAW.tar,ftp://ftp.ncbi.nlm.nih.gov/pub/geo/DATA/supplementary/series/GSE81904/GSE81904_bipolar_data_Cell2016.Rdata.gz,ftp://ftp.ncbi.nlm.nih.gov/pub/geo/DATA/supplementary/series/GSE81904/GSE81904_class.R.gz,ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP075/SRP075719
+project.title "Drop-Seq analysis of  P17 FACS sorted retinal cells from the Tg(Chx10-EGFP/cre,-ALPP)2Clc or Vsx2-GFP transgenic line"
+sample.body_part.name "Mus musculus retina, P17"
+sample.characteristics_developmental_stage P17
+sample.characteristics_genotype Vsx2-GFP
+sample.characteristics_tissue retina
+sample.data_processing Base calls performed with bcl2fastq2.15,Read 2 was aligned with Star v2.4.0,Each aligned read was tagged with its mate-pair UMI and cell barcode,Each aligned exonic read was tagged with a gene name,"A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes.",The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample,Samples Bipolar1-6 -- prepared from P17 Vsx2-GFP mouse retinas on two separate days (Bipolar1-4 and Bipolar5-6)--were merged together into a single matrix.,Genome_build: mm10,"Supplementary_files_format_and_content: compressed, flat text file with tab delimiters"
+sample.donor.ncbi_taxon 10090
+sample.donor.species Mus musculus
+sample.extract_protocol Single cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads,"Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol."
+sample.last_update_date Aug 25 2016
+sample.platform_id GPL19057
+sample.submission_date May 25 2016
+assay.seq.umi_barcode_size 8
+assay.seq.umi_barcode_offset 12
+assay.single_cell.cell_barcode_offset 0
+
+	assay.sra_experiment SRX1800080
+	sample.geo_accession GSM2177575
+	sample.long_label P17 Vsx2-GFP sorted mouse bipolar retina cells 6 (Batch 2)
+	sample.ncbi_biosample SAMN05177290
+	sample.short_label retina bipolar 6
+	assay.sra_run SRR3587505
+	assay.files SRR3587505_1.fastq.gz,SRR3587505_2.fastq.gz
+
+	assay.sra_experiment SRX1800079
+	sample.geo_accession GSM2177574
+	sample.long_label P17 Vsx2-GFP sorted mouse bipolar retina cells 5 (Batch 2)
+	sample.ncbi_biosample SAMN05177289
+	sample.short_label retina bipolar 5
+	assay.sra_run SRR3587504
+	assay.files SRR3587504_1.fastq.gz,SRR3587504_2.fastq.gz
+
+	assay.sra_experiment SRX1800078
+	sample.geo_accession GSM2177573
+	sample.long_label P17 Vsx2-GFP sorted mouse bipolar retina cells 4 (Batch 1)
+	sample.ncbi_biosample SAMN05177288
+	sample.short_label retina bipolar 4
+	assay.sra_run SRR3587503
+	assay.files SRR3587503_1.fastq.gz,SRR3587503_2.fastq.gz
+
+	assay.sra_experiment SRX1800077
+	sample.geo_accession GSM2177572
+	sample.long_label P17 Vsx2-GFP sorted mouse bipolar retina cells 3 (Batch 1)
+	sample.ncbi_biosample SAMN05177287
+	sample.short_label retina bipolar 3
+	assay.sra_run SRR3587502
+	assay.files SRR3587502_1.fastq.gz,SRR3587502_2.fastq.gz
+
+	assay.sra_experiment SRX1800076
+	sample.geo_accession GSM2177571
+	sample.long_label P17 Vsx2-GFP sorted mouse bipolar retina cells 2 (Batch 1)
+	sample.short_label mouse P16 retina 2
+	sample.ncbi_biosample SAMN05177286
+	sample.short_label retina bipolar 2
+	assay.sra_run SRR3587501
+	assay.files SRR3587501_1.fastq.gz,SRR3587501_2.fastq.gz
+
+	assay.sra_experiment SRX1800075
+	sample.geo_accession GSM2177570
+	sample.long_label P17 Vsx2-GFP sorted mouse bipolar retina cells 1 (Batch 1)
+	sample.short_label mouse P16 retina 1
+	sample.ncbi_biosample SAMN05177285
+	sample.short_label retina bipolar 1
+	assay.sra_run SRR3587500
+	assay.files SRR3587500_1.fastq.gz,SRR3587500_2.fastq.gz
+
