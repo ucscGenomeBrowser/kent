@@ -19,7 +19,6 @@ my:: compile
 	cp -p hgLib.pyo ${CGI_BIN_USER}/pyLib/hgLib.pyo
 	
 	mkdir -p ${CGI_BIN_USER}/pyLib/MySQLdb
-	#cp -R `python2.7 -c 'import MySQLdb, os.path; print os.path.dirname(MySQLdb.__file__)'`/* ${CGI_BIN_USER}/pyLib/MySQLdb/
 
 beta:: compile
 	mkdir -p ${CGI_BIN_BETA}/pyLib/
@@ -28,7 +27,6 @@ beta:: compile
 	cp -p hgLib.pyo ${CGI_BIN_BETA}/pyLib/hgLib.pyo
 	
 	mkdir -p ${CGI_BIN_BETA}/pyLib/MySQLdb
-	#cp -R `python2.7 -c 'import MySQLdb, os.path; print os.path.dirname(MySQLdb.__file__)'`/* ${CGI_BIN_BETA}/pyLib/MySQLdb/
 
 alpha:: compile
 	mkdir -p ${CGI_BIN}/pyLib/
@@ -37,7 +35,6 @@ alpha:: compile
 	cp -p hgLib.pyo ${CGI_BIN}/pyLib/hgLib.pyo
 	
 	mkdir -p ${CGI_BIN}/pyLib/MySQLdb
-	#cp -R `python2.7 -c 'import MySQLdb, os.path; print os.path.dirname(MySQLdb.__file__)'`/* ${CGI_BIN}/pyLib/MySQLdb/
 
 compile:
 	# byte-compile and strip all python source code to .pyo files
@@ -45,11 +42,6 @@ compile:
 
 clean::
 	rm -f *.pyc *.pyo
-
-	# ? clean up the CGI-BIN directory, remove the MysqlDb library ?
-	#rm -f ${CGI_BIN}/pyLib/MySQLdb/*
-	#rm -f ${CGI_BIN}/pyLib/MySQLdb/constants/*
-	#rmdir ${CGI_BIN}/pyLib/MySQLdb/constants ${CGI_BIN}/pyLib/MySQLdb/
 
 lint::
 	pylint -E hgLib.py
