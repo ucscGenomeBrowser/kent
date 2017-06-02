@@ -26,31 +26,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct tagStanzaRef
-/* A reference to a stanza in a tag storm */
-    {
-    struct tagStanzaRef *next;	/* Next in list */
-    struct tagStanza *stanza;   /* The stanza */
-    };
-
-static void rListLeaves(struct tagStanza *list, struct tagStanzaRef **pList)
-/* Recursively add leaf stanzas to *pList */
-{
-struct tagStanza *stanza;
-for (stanza = list; stanza != NULL; stanza = stanza->next)
-    {
-    if (stanza->children)
-        rListLeaves(stanza->children, pList);
-    else
-        {
-	struct tagStanzaRef *ref;
-	AllocVar(ref);
-	ref->stanza = stanza;
-	slAddHead(pList, ref);
-	}
-    }
-}
-
 void rPathsInDirAndSubdirs(char *dir, char *wildcard, struct slName **pList)
 /* Recursively add directory contents that match wildcard (* for all) to list */
 {
@@ -75,16 +50,6 @@ slReverse(&list);
 return list;
 }
 
-
-struct tagStanzaRef *tagStormListLeaves(struct tagStorm *tagStorm)
-/* Return list of references to all stanzas in tagStorm.  Free this
- * result with slFreeList. */
-{
-struct tagStanzaRef *list = NULL;
-rListLeaves(tagStorm->forest, &list);
-slReverse(&list);
-return list;
-}
 
 struct subObj
 /* A subobject - may have children or not */

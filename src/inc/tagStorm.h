@@ -236,6 +236,17 @@ boolean tagStanzaRqlMatch(struct rqlStatement *rql, struct tagStanza *stanza,
 char *tagStanzaRqlLookupField(void *record, char *key);
 /* Lookup a field in a tagStanza for rql. */
 
+struct tagStanzaRef
+/* A reference to a stanza in a tag storm */
+    {
+    struct tagStanzaRef *next;	/* Next in list */
+    struct tagStanza *stanza;   /* The stanza */
+    };
+
+struct tagStanzaRef *tagStormListLeaves(struct tagStorm *tagStorm);
+/* Return list of references to all stanzas in tagStorm.  Free this
+ * result with slFreeList. */
+
 /** Stuff for finding tags within a stanza */
 
 /* Find values in a stanza */
