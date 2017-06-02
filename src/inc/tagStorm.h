@@ -170,7 +170,7 @@ struct slPair *tagStanzaDeleteTagsInHash(struct tagStanza *stanza, struct hash *
 /* Delete any tags in stanza that have names that match hash. Return list of removed tags. */
 
 void tagStanzaSubTagsInHash(struct tagStanza *stanza, struct hash *valHash);
-/* Delete any tags in stanza that have names that match hash. Return list of removed tags. */
+/* Substitute tags that are keys in valHash with the values in valHash */
 
 void tagStanzaRecursiveRemoveWeeds(struct tagStanza *list, struct hash *weedHash);
 /* Recursively remove weeds in list and any children in list */
