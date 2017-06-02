@@ -100,6 +100,7 @@ DBS = \
 	gasAcu1 \
 	gorGor1 gorGor2 gorGor3 gorGor4 gorGor5 \
 	h1n1 \
+	hbv1 \
 	haeCon1 haeCon2 \
 	hetBac1 \
 	hetGla1 hetGla2 \
