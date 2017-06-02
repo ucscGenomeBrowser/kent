@@ -46,7 +46,6 @@ char *weeds[] =
     "sample.data_row_count",
     "sample.platform_id	",
     "sample.series_id",
-    "sample.supplementary_file",
     "sample.type",
     "series.platform_id",
     "series.platform_taxid",
