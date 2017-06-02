@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-# Protein Interaction Viewer for the Genome Browser
+# Gene Interaction Viewer for the Genome Browser
 
 # query tables with prefix "gg" in hgFixed, writes the results to a dot file,
 # runs graphviz's "dot" program to create a pathway map from it and write html
@@ -50,12 +50,6 @@ import MySQLdb
 
 # not using feedback button for now. Fan would have liked it, but not sure how we can write
 # to any form of database.
-#skimpyGimpyLoaded=False
-#try:
-    #from skimpyGimpy import skimpyAPI
-    #skimpyGimpyLoaded=True
-#except:
-    #pass
 
 # the list of allowed chars in cgi args: digits, letters and dashes
 legalChars = set(string.digits)
@@ -329,25 +323,6 @@ def saltedHash(word, length=5):
     hashStr = "".join(hashlib.sha1(word+"PITX2").hexdigest()[:length]).lower()
     return hashStr
 
-def htmlCaptcha(word):
-    " return html that encodes captcha word "
-    # copied from http://skimpygimpy.sourceforge.net/
-    if not skimpyGimpyLoaded:
-        return None
-
-    HTMLSPECKLE = 0.1
-    HTMLSCALE = 1.5
-    HTMLCOLOR = "000000"
-
-    # create an HTML generator
-    htmlGenerator = skimpyAPI.Pre(word,
-                                  speckle=HTMLSPECKLE, # optional
-                                  scale=HTMLSCALE, # optional
-                                  color=HTMLCOLOR, # optional
-                                  )
-    # store the preformatted text as htmlText
-    htmlText = htmlGenerator.data()
-    return htmlText
 
 def reqMinSupp(links, minArtSupp, maxResCount, targetGene):
     """ remove all 'text mining only' links with less than minArtSupp supporting documents
@@ -1480,7 +1455,7 @@ def printDbRows(conn, rows, onlyDoc=None):
     # sort by database name
     for row in sorted(rows, key=operator.itemgetter(9)):
         eventId, causeType, causeName, causeGenes, themeType, themeName, themeGenes, \
-            relType, relSubtype, sourceDb, sourceId, sourceDesc, docIds = row
+            relType, relSubtype, sourceDb, sourceId, sourceDesc, docIds, evidence = row
 
         if eventId.startswith("ppi_"):
             isPpi = True
@@ -1524,6 +1499,9 @@ def printDbRows(conn, rows, onlyDoc=None):
                 print "(%s)" % (relType)
             elif relSubtype!="":
                 print "(%s)" % (relSubtype)
+
+        if evidence!="":
+            print ", Evidence: ", evidence.replace("|", ", ").replace("_", " ")
 
         if onlyDoc==None and len(docSet)!=0:
                 print prettyDocLinks(conn, sorted(docSet))
@@ -1875,11 +1853,6 @@ def flagInteraction(param):
     print ('<TEXTAREA rows="6" cols="50" name="comment"></TEXTAREA>')
     print ("<P>")
 
-    captHtml = htmlCaptcha(saltedHash(param))
-    if captHtml!=None:
-        print captHtml
-        print ('Enter the word above: <INPUT TYPE="TEXT" NAME="captcha"></INPUT><BR>')
-
     print ('<INPUT TYPE="SUBMIT" name="submit" value="Report Interaction as inaccurate"></INPUT>')
     print ('</FORM>')
     #printMsrNlpRows(rows)
@@ -1906,11 +1879,6 @@ def removeInteraction(param, captcha, comment):
     if len(fields)!=2:
         errAbort( "illegal CGI parameter")
     
-    if skimpyGimpyLoaded:
-        expCaptcha = saltedHash(param)
-        if expCaptcha.lower()!=captcha.lower():
-            errAbort("Wrong captcha word, please go back and try again")
-
     causeGene, themeGene = fields
     ip = cgi.escape(os.environ["REMOTE_ADDR"])
 
