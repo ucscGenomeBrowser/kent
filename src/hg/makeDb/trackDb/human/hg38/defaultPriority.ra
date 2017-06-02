@@ -16,7 +16,7 @@ html gold
 #Phenotype and Literature
 
 track omimAvSnp override
-visibility pack
+visibility dense
 priority 1
 
 # mRNA and EST
