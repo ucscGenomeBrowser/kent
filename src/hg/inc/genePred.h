@@ -10,6 +10,7 @@
 
 #include "dnaseq.h"
 #include "bigBed.h"
+#include "nibTwo.h"
 
 struct gff;
 struct gffFile;
@@ -377,5 +378,20 @@ struct genePredExt  *genePredFromBigGenePred( char *chrom, struct bigBedInterval
 
 struct genePredExt  *genePredFromBigGenePredRow(char **row);
 /* build a genePred from a bigGenePred row */
+
+/* options to genePredTranslate */
+#define GENEPRED_TRANSLATE_SELENO              0x01   /* Assume internal TGA code for selenocysteine and translate to `U' */
+#define GENEPRED_TRANSLATE_INCLUDE_STOP        0x02   /* If the CDS ends with a stop codon, represent it as a `*' */
+#define GENEPRED_TRANSLATE_STAR_INFRAME_STOPS  0x04   /* Use `*' instead of `X' for in-frame stop codons.
+                                                       * This will result in selenocysteine's being `*', with only codons
+                                                       * containing `N' being translated to `X'.  This doesn't include terminal
+                                                       * stop */
+
+void genePredTranslate(struct genePred *gp, struct nibTwoCache* genomeSeqs, unsigned options,
+                       char **protRet, char **cdsRet);
+/* Translate a genePred into a protein.  It can also return the CDS part of the
+ * mRNA sequence. If the chrom is chrM, the mitochondrial translation tables are
+ * used. If protRet or cdsRet is NULL, those sequences are not returned.
+ */
 #endif /* GENEPRED_H */
 
