@@ -1,0 +1,1625 @@
+project.title Genetic Programs in Human and Mouse Early Embryos Revealed by Single-Cell RNA-Sequencing
+project.geo_accession GSE44183
+project.release_status Public on Jul 29 2013
+project.submission_date Feb 08 2013
+project.last_update_date May 26 2017
+project.pubmed_id 23892778
+project.summary "Mammalian preimplantation development is a complex process involving dramatic changes in the transcriptional architecture. Through single-cell RNA-sequencing (RNA-seq), we report here a comprehensive analysis of transcriptome dynamics from oocyte to morula in both human and mouse embryos. Based on single nucleotide variants (SNVs) in blastomere mRNAs and paternal-specific SNPs, we identify novel stage-specific monoallelic expression patterns for a significant portion of polymorphic gene transcripts (25-53%). By weighted gene co-expression network analysis (WGCNA), we find that each developmental stage can be concisely delineated by a small number of functional modules of co-expressed genes. This result indicates a sequential order of transcriptional changes in pathways of cell cycle, gene regulation, translation, and metabolism in a step-wise fashion from cleavage to morula.  Cross-species comparisons reveal that the majority of human stage-specific modules (7 out of 9) are remarkably preserved, only to diverge in developmental specificity and timing in mice. We further identify conserved key members (or hub genes) of the human and mouse networks. These genes represent novel candidates that are likely key players in driving mammalian preimplantation development. Collectively, we demonstrate that mammalian preimplantation development is orchestrated by evolutionarily conserved genetic programs that diverge in developmental timing.  Our results provide a valuable resource to dissect gene regulatory mechanism underlying progressive development of early mammalian embryos."
+project.overall_design single-cell RNA-seq of human and mouse blastomeres
+project.contributor "Kevin,,Huang","Xue,,Zhigang","Guoping,,Fan"
+project.contact_name "Kevin,,Huang"
+project.contact_phone 310-267-0438
+project.contact_laboratory Guoping Fan
+project.contact_department Human Genetics
+project.contact_institute UCLA
+project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+project.contact_city Los Angeles
+project.contact_state CA
+project.contact_postal_code 90095-7088
+project.contact_country USA
+project.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP018/SRP018525,ftp://ftp.ncbi.nlm.nih.gov/pub/geo/DATA/supplementary/series/GSE44183/GSE44183_RAW.tar,ftp://ftp.ncbi.nlm.nih.gov/pub/geo/DATA/supplementary/series/GSE44183/GSE44183_human_expression_mat.txt.gz,ftp://ftp.ncbi.nlm.nih.gov/pub/geo/DATA/supplementary/series/GSE44183/GSE44183_mouse_expression_mat.txt.gz
+project.bioproject_url https://www.ncbi.nlm.nih.gov/bioproject/PRJNA189204
+project.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRP018525
+
+	sample.donor.species Mus musculus
+	sample.donor.ncbi_taxon 10090
+
+		sample.long_label mouse morula 3
+		sample.geo_accession GSM1080211
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name morula
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type morula
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229800
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915431
+
+		sample.long_label mouse morula 2
+		sample.geo_accession GSM1080210
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name morula
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type morula
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229799
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915430
+
+		sample.long_label mouse morula 1
+		sample.geo_accession GSM1080209
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name morula
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type morula
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229798
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915429
+
+		sample.long_label mouse 8-cell 3
+		sample.geo_accession GSM1080208
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type 8-cell blastomere
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229797
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915428
+
+		sample.long_label mouse 8-cell 2
+		sample.geo_accession GSM1080207
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type 8-cell blastomere
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229796
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915427
+
+		sample.long_label mouse 8-cell 1
+		sample.geo_accession GSM1080206
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type 8-cell blastomere
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229795
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915426
+
+		sample.long_label mouse 4-cell 3
+		sample.geo_accession GSM1080205
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 4-cell blastomere
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type 4-cell blastomere
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229794
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915425
+
+		sample.long_label mouse 4-cell 2
+		sample.geo_accession GSM1080204
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 4-cell blastomere
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type 4-cell blastomere
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229793
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915424
+
+		sample.long_label mouse 4-cell 1
+		sample.geo_accession GSM1080203
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 4-cell blastomere
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type 4-cell blastomere
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229792
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915423
+
+		sample.long_label mouse 2-cell 3
+		sample.geo_accession GSM1080202
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 2-cell blastomere
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type 2-cell blastomere
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229791
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915422
+
+		sample.long_label mouse 2-cell 2
+		sample.geo_accession GSM1080201
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 2-cell blastomere
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type 2-cell blastomere
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229790
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915421
+
+		sample.long_label mouse 2-cell 1
+		sample.geo_accession GSM1080200
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 2-cell blastomere
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type 2-cell blastomere
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229789
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915420
+
+		sample.long_label mouse pronuclei 3
+		sample.geo_accession GSM1080199
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name pronucleus
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type pronucleus
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229788
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915419
+
+		sample.long_label mouse pronuclei 2
+		sample.geo_accession GSM1080198
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name pronucleus
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type pronucleus
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229787
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915418
+
+		sample.long_label mouse pronuclei 1
+		sample.geo_accession GSM1080197
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name pronucleus
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type pronucleus
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229786
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915417
+
+		sample.long_label mouse oocyte 2
+		sample.geo_accession GSM1080196
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name oocyte
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type oocyte
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229785
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915416
+
+		sample.long_label mouse oocyte 1
+		sample.geo_accession GSM1080195
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name oocyte
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type oocyte
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229784
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915415
+
+	sample.donor.species Homo sapiens
+	sample.donor.ncbi_taxon 9606
+
+		sample.long_label human morula 5
+		sample.geo_accession GSM1160140
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name morula
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type morula
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195169
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300901
+
+		sample.long_label human morula 4
+		sample.geo_accession GSM1160139
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name morula
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type morula
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195168
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300900
+
+		sample.long_label human morula 1
+		sample.geo_accession GSM1160138
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name morula
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type morula
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195167
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300899
+
+		sample.long_label human 8-cell pooled
+		sample.geo_accession GSM1160137
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell embryo
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 8-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195166
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300898
+
+		sample.long_label human 8-cell 5c
+		sample.geo_accession GSM1160136
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 8-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195165
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300897
+
+		sample.long_label human 8-cell 3c
+		sample.geo_accession GSM1160135
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 8-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195164
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300896
+
+		sample.long_label human 8-cell 5b
+		sample.geo_accession GSM1160134
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 8-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195163
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300895
+
+		sample.long_label human 8-cell 4b
+		sample.geo_accession GSM1160133
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 8-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195162
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300894
+
+		sample.long_label human 8-cell 3b
+		sample.geo_accession GSM1160132
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 8-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195161
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300893
+
+		sample.long_label human 8-cell 2b
+		sample.geo_accession GSM1160131
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 8-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195160
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300892
+
+		sample.long_label human 8-cell 1b
+		sample.geo_accession GSM1160130
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 8-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195159
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300891
+
+		sample.long_label human 8-cell 7a
+		sample.geo_accession GSM1160129
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 8-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195158
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300890
+
+		sample.long_label human 8-cell 6a
+		sample.geo_accession GSM1160128
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 8-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195157
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300889
+
+		sample.long_label human 8-cell 3a
+		sample.geo_accession GSM1160127
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 8-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 8-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195156
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300888
+
+		sample.long_label human 4-cell 4
+		sample.geo_accession GSM1160126
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 4-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 4-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195155
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300887
+
+		sample.long_label human 4-cell 3
+		sample.geo_accession GSM1160125
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 4-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 4-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195154
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300886
+
+		sample.long_label human 4-cell 2
+		sample.geo_accession GSM1160124
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 4-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 4-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195153
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300885
+
+		sample.long_label human 4-cell 1
+		sample.geo_accession GSM1160123
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 4-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 4-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195152
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300884
+
+		sample.long_label human 2-cell 6
+		sample.geo_accession GSM1160122
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 2-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 2-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195151
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300883
+
+		sample.long_label human 2-cell 5
+		sample.geo_accession GSM1160121
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 2-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 2-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195150
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300882
+
+		sample.long_label human 2-cell 1
+		sample.geo_accession GSM1160120
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name 2-cell blastomere
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type 2-cell blastomere
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195149
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300881
+
+		sample.long_label human zygote 2
+		sample.geo_accession GSM1160119
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name zygote
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type zygote
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195148
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300880
+
+		sample.long_label human zygote 1
+		sample.geo_accession GSM1160118
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name zygote
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type zygote
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195147
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300879
+
+		sample.long_label human pronuclei 4
+		sample.geo_accession GSM1160117
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name pronucleus
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type pronucleus
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195146
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300878
+
+		sample.long_label human pronuclei 3
+		sample.geo_accession GSM1160116
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name pronucleus
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type pronucleus
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195145
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300877
+
+		sample.long_label human pronuclei 2
+		sample.geo_accession GSM1160115
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name pronucleus
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type pronucleus
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195144
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300876
+
+		sample.long_label human oocyte 4
+		sample.geo_accession GSM1160114
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name oocyte
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type oocyte
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195143
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300875
+
+		sample.long_label human oocyte 3
+		sample.geo_accession GSM1160113
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name oocyte
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type oocyte
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195142
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300874
+
+		sample.long_label human oocyte 1
+		sample.geo_accession GSM1160112
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name oocyte
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type oocyte
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN02195141
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX300873
+
+		sample.long_label human paternal exome
+		sample.geo_accession GSM1080212
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name blood
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type primary blood
+		assay.genome.method Agilent 50M kit was used to capture the genome
+		sample.growth_protocol Genomic DNA was obtained from blood of the father for exome sequencing analysis
+		assay.seq.molecule genomic DNA
+		sample.extract_protocol Targeted enrichment was performed with Agilent 50M kit,Libraries were prepared using an Illumina paired-end DNA sample prep kit (Illumina) following the manufacturer's protocols
+		sample.data_processing Library strategy: Exome-Seq,Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,hg19,exome.wig: wiggle files represent the read depth every 10bp along the hg19 genome
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer other
+		assay.rna.prep genomic
+		assay.seq.prep OTHER
+		sample.sra_url https://www.ncbi.nlm.nih.gov/sra?term=SRX229801
+		sample.biosample_url https://www.ncbi.nlm.nih.gov/biosample/SAMN01915432
+
