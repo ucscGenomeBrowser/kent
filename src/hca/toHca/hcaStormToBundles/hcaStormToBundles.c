@@ -5,6 +5,7 @@
 #include "hash.h"
 #include "options.h"
 #include "tagStorm.h"
+#include "jsonParse.h"
 #include "portable.h"
 #include "csv.h"
 
@@ -170,15 +171,11 @@ return obj;
 void writeJsonVal(FILE *f, char *s)
 /* Write out s surrounded by quotes, and doing escaping of any internal quotes or \ */
 {
-char quote = '"', esc = '\\', c;
-fputc(quote, f);
-while ((c = *s++) != 0)
-    {
-    if (c == quote || c == esc)
-        fputc(esc, f);
-    fputc(c, f);
-    }
-fputc(quote, f);
+char *esc = jsonStringEscape(s);
+fputc('"', f);
+fputs(esc, f);
+fputc('"', f);
+freez(&esc);
 }
 
 void rWriteJson(FILE *f, struct tagStanza *stanza, struct subObj *obj)
