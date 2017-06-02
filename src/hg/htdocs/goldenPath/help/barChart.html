@@ -157,7 +157,7 @@ track type=bigBarChart name=&quot;bigBarChart Example One&quot; description=&quo
 </ol>
 </p>
 <p>
-After the file  loads in the Genome Browser, you should again see an automatically colored bar
+After the file  loads in the Genome Browser, you should see an automatically colored bar
 graph with 5 bars. The same rules apply to bigBarChart custom tracks as barChart custom tracks
 in that the order of names in the barChartBars field should exactly match the order of values
 from the expScores field in the bigBarChart file. 
@@ -173,10 +173,10 @@ can be loaded as a custom track into the Genome Browser.
 
 <p>
 The matrix file is a tab-separated (must be tabs, not spaces) file of the following form, perhaps 
-resulting from an RNA-Seq analysis pipeline. Please note that the first line must contain a
-&quot;#&quot;, and describe each column like in the example snippet below.
+resulting from an RNA-Seq analysis pipeline. Please note that the first line must  describe each 
+column like in the example snippet below.
 <pre>
-#transcript	sample1	sample2	sample3	sample4	sample5	...
+transcript	sample1	sample2	sample3	sample4	sample5	...
 transcriptName	value1	value2	value3	value4	value5	...
 </pre>
 </p>
@@ -227,9 +227,9 @@ export PATH=$PATH:$HOME/Downloads
    </code></pre></li>
    <li>Now run <em>expMatrixToBarchartBed</em> (which in turn runs <em>bedJoinTabOffset</em>) like so:
    <pre><code>
-expMatrixToBarchartBed categoriesFile matrixFile bedInputFile outputBed6+5
+expMatrixToBarchartBed categoriesFile matrixFile bedInputFile outputBed
    </code></pre>
-   The argument outputBed6+5 will be a bed6+5 file, with the expCount, expScores, _dataOffset, and 
+   The argument outputBed will be a bed6+5 file, with the expCount, expScores, _dataOffset, and 
    _dataLen fields computed for you, for example:
    <pre><code>
 chr14 95086227 95158010 ENSG00000100697.10 999 - DICER1 5 10.94,11.60,8.00,6.69,4.89 93153 26789
@@ -264,7 +264,8 @@ track type=barChart name=&quot;barChart Example&quot; description=&quot;A barCha
 the matrix file, which is useful when your experiment contains data from 8000 samples (like
 the GTEx data). Furthermore, <em>expMatrixToBarchartBed</em> can compute the mean value of all 
 samples in a category of the matrix file (instead of the default median), in addition to allowing 
-for a specific ordering of the expScores field. NOTE: Set the barChartMetric setting to 'mean' if yhou use this option of <em>expMatrixToBarchartBed</em>. For more information about 
+for a specific ordering of the expScores field. NOTE: Set the barChartMetric setting to 'mean' if
+you use this option of <em>expMatrixToBarchartBed</em>. For more information about 
 <em>expMatrixToBarchartBed</em> or <em>bedJoinTabOffset</em>, run the program with no arguments 
 to get a usage message.
 </p>
