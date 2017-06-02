@@ -46,7 +46,7 @@ if (srrCsv != NULL)
 	    ++gFileCount;
 	    if (filesDy->stringSize > 0)
 		dyStringAppendC(filesDy, ',');
-	    dyStringPrintf(filesDy, "%s_%d.fastq.gz", srr, i);
+	    dyStringPrintf(filesDy, "%s_%d.fastq.gz", srr, i+1);
 	    }
 	}
     tagStanzaAppend(storm, stanza, "assay.files", filesDy->string);

@@ -65,7 +65,7 @@ assay.single_cell.cell_barcode_offset 
 		assay.sra_experiment SRX229786
 		sample.ncbi_biosample SAMN01915417
 		assay.sra_run SRR689235
-		assay.files SRR689235_0.fastq.gz,SRR689235_1.fastq.gz
+		assay.files SRR689235_1.fastq.gz,SRR689235_2.fastq.gz
 
 		sample.long_label mouse oocyte 2
 		sample.geo_accession GSM1080196
@@ -101,7 +101,7 @@ assay.single_cell.cell_barcode_offset 
 		assay.sra_experiment SRX229785
 		sample.ncbi_biosample SAMN01915416
 		assay.sra_run SRR689234
-		assay.files SRR689234_0.fastq.gz,SRR689234_1.fastq.gz
+		assay.files SRR689234_1.fastq.gz,SRR689234_2.fastq.gz
 
 		sample.long_label mouse oocyte 1
 		sample.geo_accession GSM1080195
@@ -137,7 +137,7 @@ assay.single_cell.cell_barcode_offset 
 		assay.sra_experiment SRX229784
 		sample.ncbi_biosample SAMN01915415
 		assay.sra_run SRR689233
-		assay.files SRR689233_0.fastq.gz,SRR689233_1.fastq.gz
+		assay.files SRR689233_1.fastq.gz,SRR689233_2.fastq.gz
 
 	sample.donor.species Homo sapiens
 	sample.donor.ncbi_taxon 9606
@@ -176,7 +176,7 @@ assay.single_cell.cell_barcode_offset 
 		sample.ncbi_biosample SAMN02195169
 		assay.sra_experiment SRX300901
 		assay.sra_run SRR893074
-		assay.files SRR893074_0.fastq.gz,SRR893074_1.fastq.gz
+		assay.files SRR893074_1.fastq.gz,SRR893074_2.fastq.gz
 
 		sample.long_label human morula 4
 		sample.geo_accession GSM1160139
@@ -212,5 +212,5 @@ assay.single_cell.cell_barcode_offset 
 		sample.ncbi_biosample SAMN02195168
 		assay.sra_experiment SRX300900
 		assay.sra_run SRR893073
-		assay.files SRR893073_0.fastq.gz,SRR893073_1.fastq.gz
+		assay.files SRR893073_1.fastq.gz,SRR893073_2.fastq.gz
 
