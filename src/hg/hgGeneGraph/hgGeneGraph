@@ -101,6 +101,7 @@ dbData = {
 #PID server is down, linking to NDex now, adapted the IDs, see ggPidToTables
 "pid" : ("NCI Pathway Database", "http://www.ndexbio.org/#/search?searchType=All&searchString=labels%%253A%s"),
 "biocarta" : ("BioCarta", "https://cgap.nci.nih.gov/Pathways/BioCarta/%s"),
+"belLarge" : ("OpenBEL Large Corpus", "http://www.ndexbio.org/#/newNetwork/%s"),
 "reactome" : ("Reactome", "http://www.reactome.org/content/detail/%s"),
 "go" : ("Gene Ontology Complexes", "http://www.ebi.ac.uk/QuickGO/GTerm?id=%s#info=2"),
 "fastforward" : ("FastForward", "http://fastforward.sys-bio.net/popup.php?name_target=%s"),
