@@ -101,6 +101,7 @@ dbData = {
 #PID server is down, linking to NDex now, adapted the IDs, see ggPidToTables
 "pid" : ("NCI Pathway Database", "http://www.ndexbio.org/#/search?searchType=All&searchString=labels%%253A%s"),
 "biocarta" : ("BioCarta", "https://cgap.nci.nih.gov/Pathways/BioCarta/%s"),
+"belLarge" : ("OpenBEL Large Corpus", "http://www.ndexbio.org/#/newNetwork/%s"),
 "reactome" : ("Reactome", "http://www.reactome.org/content/detail/%s"),
 "go" : ("Gene Ontology Complexes", "http://www.ebi.ac.uk/QuickGO/GTerm?id=%s#info=2"),
 "fastforward" : ("FastForward", "http://fastforward.sys-bio.net/popup.php?name_target=%s"),
@@ -1490,7 +1491,8 @@ def printDbRows(conn, rows, onlyDoc=None):
             else:
                 print "&#8594;" # Unicode Arrow
 
-            print entToDesc(themeType, themeName, themeGenes)
+            desc = entToDesc(themeType, themeName, themeGenes)
+            print desc
 
         if relType!="" or relSubtype!="":
             if relType!="" and relSubtype!="":
@@ -1500,11 +1502,14 @@ def printDbRows(conn, rows, onlyDoc=None):
             elif relSubtype!="":
                 print "(%s)" % (relSubtype)
 
-        if evidence!="":
-            print ", Evidence: ", evidence.replace("|", ", ").replace("_", " ")
-
         if onlyDoc==None and len(docSet)!=0:
+                if len(desc)>25:
+                    print "<br>"
                 print prettyDocLinks(conn, sorted(docSet))
+
+        if evidence!="" and evidence!="unknown":
+            print "<br>Evidence: <i>", evidence.replace("|", ", ").replace("_", " "), "</i>"
+
 
         print "</li>"
     print "</ul>"
