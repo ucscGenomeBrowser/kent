@@ -1491,7 +1491,8 @@ def printDbRows(conn, rows, onlyDoc=None):
             else:
                 print "&#8594;" # Unicode Arrow
 
-            print entToDesc(themeType, themeName, themeGenes)
+            desc = entToDesc(themeType, themeName, themeGenes)
+            print desc
 
         if relType!="" or relSubtype!="":
             if relType!="" and relSubtype!="":
@@ -1501,11 +1502,14 @@ def printDbRows(conn, rows, onlyDoc=None):
             elif relSubtype!="":
                 print "(%s)" % (relSubtype)
 
-        if evidence!="":
-            print ", Evidence: ", evidence.replace("|", ", ").replace("_", " ")
-
         if onlyDoc==None and len(docSet)!=0:
+                if len(desc)>25:
+                    print "<br>"
                 print prettyDocLinks(conn, sorted(docSet))
+
+        if evidence!="" and evidence!="unknown":
+            print "<br>Evidence: <i>", evidence.replace("|", ", ").replace("_", " "), "</i>"
+
 
         print "</li>"
     print "</ul>"
