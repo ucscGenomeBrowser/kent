@@ -1,0 +1,32 @@
+Comment[ArrayExpressAccession]	E-GEOD-81904
+MAGE-TAB Version	1.1	
+Public Release Date	2016-08-25
+Investigation Title	Drop-Seq analysis of  P17 FACS sorted retinal cells from the Tg(Chx10-EGFP/cre,-ALPP)2Clc or Vsx2-GFP transgenic line	
+Comment[Submitted Name]	Drop-Seq analysis of  P17 FACS sorted retinal cells from the Tg(Chx10-EGFP/cre,-ALPP)2Clc or Vsx2-GFP transgenic line
+Experiment Description	Vsx2-GFP mouse retinas were dissected, FACS sorted for GFP+ cells and single-cell mRNAseq libraries generated with Drop-Seq Drop-Seq was performed on two different batches. Bipolar1-Bipolar4 are replicates from batch 1 and Bipolar5-6 are replicates from Batch 2	
+Term Source Name	ArrayExpress	EFO
+Term Source File	http://www.ebi.ac.uk/arrayexpress/	http://www.ebi.ac.uk/efo/efo.owl
+Person Last Name	Shekhar	Shekhar
+Person First Name	Karthik	Karthik
+Person Email	karthik@broadinstitute.org	
+Person Affiliation	Broad Institute	
+Person Phone	217-979-9852	
+Person Address	Broad Institute, 415 Main St., Cambridge, MA, USA	
+Person Roles	submitter	
+Protocol Name	P-GSE81904-1	
+Protocol Description	Single cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.	
+Protocol Type	nucleic acid library construction protocol	
+Publication Title	Comprehensive Classification of Retinal Bipolar Neurons by Single-Cell Transcriptomics.	
+Publication Author List	Shekhar K, Lapan SW, Whitney IE, Tran NM, Macosko EZ, Kowalczyk M, Adiconis X, Levin JZ, Nemesh J, Goldman M, McCarroll SA, Cepko CL, Regev A, Sanes JR	
+PubMed ID	27565351	
+Publication DOI	10.1016/j.cell.2016.07.054	
+Comment[SecondaryAccession]	GSE81904	
+Comment[GEOReleaseDate]	2016-08-25	
+Comment[ArrayExpressSubmissionDate]	2016-05-25	
+Comment[GEOLastUpdateDate]	2016-08-29	
+Comment[AEExperimentType]	RNA-seq of coding RNA	
+Comment[AdditionalFile:Data1]	GSE81904_BipolarUMICounts_Cell2016.txt	
+Comment[AdditionalFile:Data2]	GSE81904_bipolar_data_Cell2016.Rdata	
+Comment[AdditionalFile:Data3]	GSE81904_class.R	
+Comment[SecondaryAccession]	SRP075719	
+SDRF File	E-GEOD-81904.sdrf.txt
