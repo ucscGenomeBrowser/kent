@@ -71,6 +71,10 @@ struct tagStanza *stanza = tagStanzaNew(storm, NULL);
 char *additionalFilePrefix = "idf.Comment_AdditionalFile_Data";
 struct dyString *additionalFileDy = dyStringNew(0);
 
+/* There can be multiple secondary accession tags, so handle these too */
+char *secondaryAccessionTag = "idf.Comment_SecondaryAccession";
+struct dyString *secondaryAccessionDy = dyStringNew(0);
+
 
 /* Parse lines from idf file into stanza */
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -103,6 +107,10 @@ while (lineFileNextReal(lf, &line))
         {
 	csvEscapeAndAppend(additionalFileDy, row[1]);
 	}
+    else if (sameString(secondaryAccessionTag, tagName))
+        {
+	csvEscapeAndAppend(secondaryAccessionDy, row[1]);
+	}
     else
 	{
 	/* Convert rest of elements to possibly comma separated values */
@@ -115,6 +123,9 @@ while (lineFileNextReal(lf, &line))
     }
 if (additionalFileDy->stringSize != 0)
      tagStanzaAppend(storm, stanza, additionalFilePrefix, additionalFileDy->string);
+if (secondaryAccessionDy->stringSize != 0)
+     tagStanzaAppend(storm, stanza, secondaryAccessionTag, secondaryAccessionDy->string);
+dyStringFree(&secondaryAccessionDy);
 dyStringFree(&additionalFileDy);
 dyStringFree(&dyVal);
 lineFileClose(&lf);
