@@ -2973,6 +2973,97 @@ identifier wgEncodeGencodeEntrezGeneVM13
 
 # end Gencode VM13
 
+# begin Gencode VM14
+
+# gencode genePred tables with no associations
+# wgEncodeGencodePolyaVM14
+# wgEncodeGencode2wayConsPseudoVM14
+
+# gencode genePred tables with joining through wgEncodeGencodeAttrsVM14
+identifier wgEncodeGencodeBasicAttrsVM14
+"Link together Gencode Basic Table with Attributes table"
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId
+    mm10.wgEncodeGencodeBasicVM14.name
+
+identifier wgEncodeGencodeCompAttrsVM14
+"Link together Gencode Comprehensive Table with Attributes table"
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId
+    mm10.wgEncodeGencodeCompVM14.name
+
+identifier wgEncodeGencodePseudoGeneAttrsVM14
+"Link together Gencode PseudoGene Table with Attributes table"
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId
+    mm10.wgEncodeGencodePseudoGeneVM14.name
+
+# gencode association tables (joined through wgEncodeGencodeAttrsVM14)
+identifier wgEncodeGencodeExonSupportVM14
+"Link together Gencode Exon Support table with Attributes table"
+    mm10.wgEncodeGencodeExonSupportVM14.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId minCheck=0.95
+
+identifier wgEncodeGencodeGeneSourceVM14
+"Link together Gencode Gene Source table with Attributes table"
+    mm10.wgEncodeGencodeGeneSourceVM14.geneId
+    mm10.wgEncodeGencodeAttrsVM14.geneId
+
+identifier wgEncodeGencodePdbVM14
+"Link together Gencode Pdb table with Attributes table"
+    mm10.wgEncodeGencodePdbVM14.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId minCheck=0.015
+
+identifier wgEncodeGencodePubMedVM14
+"Link together Gencode Pubmed table with Attributes table"
+    mm10.wgEncodeGencodePubMedVM14.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId  minCheck=0.63
+
+identifier wgEncodeGencodeRefSeqVM14
+"Link together Gencode RefSeq table with Attributes table"
+    mm10.wgEncodeGencodeRefSeqVM14.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId minCheck=0.05
+
+identifier wgEncodeGencodeRefSeqToRefGeneVM14
+"Link together Gencode RefSeq table with refGene track"
+    mm10.wgEncodeGencodeRefSeqVM14.rnaAcc dupeOk chopAfter=.
+    mm10.refGene.name minCheck=0.77
+
+identifier wgEncodeGencodeTagVM14
+"Link together Gencode Tag table with Attributes table"
+    mm10.wgEncodeGencodeTagVM14.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId minCheck=0.373378
+    mm10.wgEncodeGencodeRefSeqVM14.transcriptId minCheck=0.9
+
+identifier wgEncodeGencodeTranscriptSourceVM14
+"Link together Gencode Transcript Source table with Attributes table"
+    mm10.wgEncodeGencodeTranscriptSourceVM14.transcriptId
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId
+
+identifier wgEncodeGencodeTranscriptSupportVM14
+"Link together Gencode Transcript Support table with Attributes table"
+    mm10.wgEncodeGencodeTranscriptSupportVM14.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId minCheck=0.20
+
+identifier wgEncodeGencodeTranscriptionSupportLevelVM14
+"Link together Gencode Transcription Support Level table with Attributes table"
+    mm10.wgEncodeGencodeTranscriptionSupportLevelVM14.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId minCheck=0.30
+
+identifier wgEncodeGencodeUniProtVM14
+"Link together Gencode UniProt Support table with Attributes table"
+    mm10.wgEncodeGencodeUniProtVM14.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId minCheck=0.358209
+
+identifier wgEncodeGencodeAnnotationRemarkVM14
+"Link together Gencode Annotation Remark table with Attributes table"
+    mm10.wgEncodeGencodeAnnotationRemarkVM14.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM14.transcriptId minCheck=0.10
+
+identifier wgEncodeGencodeEntrezGeneVM14
+"Link together Gencode UniProt Support table with Attributes table"
+    mm10.wgEncodeGencodeEntrezGeneVM14.transcriptId dupeOk
+    mm10.wgEncodeGencodeEntrezGeneVM14.transcriptId minCheck=0.358209
+
+# end Gencode VM14
+
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"
     hg19.wgEncodeGencodeClassesV3.name
@@ -4256,7 +4347,7 @@ identifier kgGeneSymbol
     hgFixed.ggLink.gene1 minCheck=0.8
     hgFixed.ggLink.gene2 minCheck=0.8
     hgFixed.ggGeneClass.gene minCheck=0.8
-    hgFixed.ggGeneName.gene minCheck=0.8
+    hgFixed.ggGeneName.gene minCheck=0.6
 
 identifier mouseGeneName fuzzy
 "Mouse gene name from Jackson Labs/RefSeq"
@@ -6089,15 +6180,15 @@ identifier chromAlias
 identifier ggDoc
 "identifier of a publication, currently the PMID, an integer "
     hgFixed.ggDoc.docId minCheck=0.99
-    hgFixed.ggDocEvent.docId
+    hgFixed.ggDocEvent.docId minCheck=0.99
     hgFixed.ggEventDb.docIds separator=| minCheck=0.99
 
 identifier ggEvent
 "an event (originally an NLP term) here is a protein interaction with a direction, from a curated database or from text mining."
-    hgFixed.ggDocEvent.eventId
-    hgFixed.ggEventDb.eventId
+    hgFixed.ggLinkEvent.eventId dupeOk
+    hgFixed.ggEventDb.eventId minCheck=0.99
+    hgFixed.ggDocEvent.eventId minCheck=0.99
     hgFixed.ggEventText.eventId
-    hgFixed.ggLinkEvent.eventId
 
 identifier ggGeneSymbol
 "An HGNC gene symbol, but a few old synonyms slipped into these tables"

@@ -123,8 +123,10 @@ hgLoadBed $tempDb knownAlt ucscSplice.bed
 makeGencodeKnownGene -justKnown $db $tempDb $GENCODE_VERSION txToAcc.tab
 
 hgLoadSqlTab -notOnServer $tempDb knownGene $kent/src/hg/lib/knownGene.sql knownGene.gp
+hgLoadGenePred -genePredExt $tempDb  knownGeneExt knownGeneExt.gp
 
-getRnaPred -peptides $tempDb knownGene all ucscGenes.faa
+#getRnaPred -genePredExt -peptides $tempDb knownGeneExt all ucscGenes.faa
+genePredToProt knownGeneExt.gp /cluster/data/hg38/hg38.2bit ucscGenes.faa
 hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 
 hgMapToGene -type=psl -all -tempDb=$tempDb $db all_mrna knownGene knownToMrna
@@ -185,15 +187,12 @@ hgsql -e "select * from wgEncodeGencodeTag$GENCODE_VERSION" --skip-column-names 
 hgLoadSqlTab -notOnServer $tempDb knownToTag $kent/src/hg/lib/knownTo.sql knownToTag.tab
 
 
-#STOPPED HERE
 # this should be done AFTER moving the new tables into hg38
-# TODO
 hgKgGetText $tempDb knownGene.text 
 ixIxx knownGene.text knownGene.ix knownGene.ixx
  rm -rf /gbdb/$tempDb/knownGene.ix /gbdb/$tempDb/knownGene.ixx
 ln -s $dir/knownGene.ix  /gbdb/$tempDb/knownGene.ix
 ln -s $dir/knownGene.ixx /gbdb/$tempDb/knownGene.ixx  
-# end TODO
 
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from hgFixed.refLink" $db > refToLl.txt
 hgMapToGene -tempDb=$tempDb $db refGene knownGene knownToLocusLink -lookup=refToLl.txt
@@ -462,7 +461,7 @@ ls -1 utr5/split > utr5/in.lst
 cd utr3
 cat << _EOF_ > template
 #LOOP
-rnaFoldBig split/$(path1) fold
+rnaFoldBig split/\$(path1) fold
 #ENDLOOP
 _EOF_
 gensub2 in.lst single template jobList
@@ -478,15 +477,14 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
 
 # Load database
     cd $dir/rnaStruct/utr5
-    hgLoadRnaFold $tempDb foldUtr5 fold
+    hgLoadRnaFold $db foldUtr5 fold
     cd ../utr3
-    hgLoadRnaFold -warnEmpty $tempDb foldUtr3 fold
+    hgLoadRnaFold -warnEmpty $db foldUtr3 fold
 
 # Clean up
     rm -r split fold err batch.bak
     cd ../utr5
     rm -r split fold err batch.bak
-#END NOT DO
 
 # Make pfam run.  Actual cluster run is about 6 hours.
 #mkdir -p /hive/data/outside/pfam/Pfam27.0
@@ -523,12 +521,12 @@ ssh $cpuFarm "cd $dir/pfam; para make jobList"
 ssh $cpuFarm "cd $dir/pfam; para time > run.time"
 cat run.time
 
-# Completed: 9576 of 9576 jobs
-# CPU time in finished jobs:    2356627s   39277.11m   654.62h   27.28d  0.075 y
-# IO & Wait Time:                632452s   10540.87m   175.68h    7.32d  0.020 y
-# Average job time:                 312s       5.20m     0.09h    0.00d
-# Longest finished job:             452s       7.53m     0.13h    0.01d
-# Submission to last job:          5016s      83.60m     1.39h    0.06d
+# Completed: 9024 of 9024 jobs
+# CPU time in finished jobs:    1944366s   32406.10m   540.10h   22.50d  0.062 y
+# IO & Wait Time:                775557s   12925.95m   215.43h    8.98d  0.025 y
+# Average job time:                 301s       5.02m     0.08h    0.00d
+# Longest finished job:             648s      10.80m     0.18h    0.01d
+# Submission to last job:          8810s     146.83m     2.45h    0.10d
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cat << '_EOF_' > makePfamRa.awk
@@ -593,13 +591,12 @@ ssh $cpuFarm "cd $dir/scop; para make jobList"
 ssh $cpuFarm "cd $dir/scop; para time > run.time"
 cat run.time
 
-# Completed: 9576 of 9576 jobs
-#Completed: 9576 of 9576 jobs
-#CPU time in finished jobs:    2193134s   36552.23m   609.20h   25.38d  0.070 y
-#IO & Wait Time:                557803s    9296.72m   154.95h    6.46d  0.018 y
-#Average job time:                 287s       4.79m     0.08h    0.00d
-#Longest finished job:            1167s      19.45m     0.32h    0.01d
-#Submission to last job:          3549s      59.15m     0.99h    0.04d
+# Completed: 9024 of 9024 jobs
+# CPU time in finished jobs:    1630805s   27180.09m   453.00h   18.88d  0.052 y
+# IO & Wait Time:                918257s   15304.28m   255.07h   10.63d  0.029 y
+# Average job time:                 282s       4.71m     0.08h    0.00d
+# Longest finished job:             486s       8.10m     0.14h    0.01d
+# Submission to last job:         12224s     203.73m     3.40h    0.14d
 
 # Convert scop output to tab-separated files
 cd $dir
@@ -688,14 +685,11 @@ hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycM
     hgLoadSqlTab -notOnServer $tempDb cgapBiocDesc $kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 
 
-
-#STOPPED HERE
-#TODO
 cd $dir
 # Make PCR target for UCSC Genes, Part 1.
 # 1. Get a set of IDs that consist of the UCSC Gene accession concatenated with the
 #    gene symbol, e.g. uc010nxr.1__DDX11L1
-hgsql $tempDb -N -e 'select kgId,geneSymbol from kgXref' \
+hgsql $db -N -e 'select kgId,geneSymbol from kgXref' \
     | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
       > idSub.txt 
 # 2. Get a file of per-transcript fasta sequences that contain the sequences of each UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.   Convert that file to TwoBit format and soft-link it into /gbdb/hg38/targetDb/ 
@@ -707,7 +701,6 @@ ln -s $dir/kgTargetSeq${curVer}.2bit /gbdb/$db/targetDb/
 # Load the table kgTargetAli, which shows where in the genome these targets are.
 #cut -f 1-10 knownGene.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
 #hgLoadPsl $tempDb kgTargetAli.psl
-#end TODO
 
 #
 # At this point we should save a list of the tables in tempDb!!!
@@ -771,6 +764,10 @@ do
 echo "rename table $db.$i to ${db}Backup3.$i;" | hgsql $db;
 done
 
+# Drop tempDb history table and chromInfo, we don't want to swap them in!
+hgsql -e "drop table history" $tempDb
+hgsql -e "drop table chromInfo" $tempDb
+
 for i in  `cat tablesInKnownGene.lst`
 do
 echo "rename table $tempDb.$i to ${db}.$i;"  | hgsql $db
@@ -796,9 +793,6 @@ hgsqladmin flush-tables
 # You'll need superuser powers for this step.....
 
 cd $dir
-# Drop tempDb history table and chromInfo, we don't want to swap them in!
-hgsql -e "drop table history" $tempDb
-hgsql -e "drop table chromInfo" $tempDb
 
 
 cat << _EOF_ > moveTablesIntoPlace
@@ -843,11 +837,11 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # blatServer by the keyword "$db"Kg with the version number appended
 # untrans gfServer for hg38KgSeq10 on host blat1c, port 17873
 hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("hg38KgSeq10", "blat1c", 17873, 0, 1);'
+      'INSERT into blatServers values ("hg38KgSeq11", "blat1c", 17891, 0, 1);'
 hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("hg38KgSeq10", "UCSC Genes", \
+      'INSERT into targetDb values("hg38KgSeq11", "UCSC Genes", \
          "hg38", "kgTargetAli", "", "", \
-         "/gbdb/hg38/targetDb/kgTargetSeq10.2bit", 1, now(), "");'
+         "/gbdb/hg38/targetDb/kgTargetSeq11.2bit", 1, now(), "");'
 
 #
 ##

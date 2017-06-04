@@ -14,4 +14,5 @@ table ggLinkEventDb
     lstring sourceId;       "identifier in source database for HTML links"
     string sourceDesc;       "description of interaction in source database (e.g. pathway name)"
     lstring docIds;       "list of supporting documents, numbers are PMIDs"
+    lstring evidence;       "human-readable description of the evidence. PID and fastForward: certain keywords. OpenBEL has a full text excerpt."
     )

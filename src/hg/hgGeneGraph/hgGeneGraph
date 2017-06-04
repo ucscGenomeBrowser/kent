@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 
-# Protein Interaction Viewer for the Genome Browser
+# Gene Interaction Viewer for the Genome Browser
 
 # query tables with prefix "gg" in hgFixed, writes the results to a dot file,
 # runs graphviz's "dot" program to create a pathway map from it and write html
@@ -50,12 +50,6 @@ import MySQLdb
 
 # not using feedback button for now. Fan would have liked it, but not sure how we can write
 # to any form of database.
-#skimpyGimpyLoaded=False
-#try:
-    #from skimpyGimpy import skimpyAPI
-    #skimpyGimpyLoaded=True
-#except:
-    #pass
 
 # the list of allowed chars in cgi args: digits, letters and dashes
 legalChars = set(string.digits)
@@ -106,6 +100,8 @@ dbData = {
 #"pid" : ("NCI Pathway Database", "http://pid.nci.nih.gov/search/InteractionPage?atomid=%s"),
 #PID server is down, linking to NDex now, adapted the IDs, see ggPidToTables
 "pid" : ("NCI Pathway Database", "http://www.ndexbio.org/#/search?searchType=All&searchString=labels%%253A%s"),
+"biocarta" : ("BioCarta", "https://cgap.nci.nih.gov/Pathways/BioCarta/%s"),
+"belLarge" : ("OpenBEL", "http://www.ndexbio.org/#/newNetwork/%s"),
 "reactome" : ("Reactome", "http://www.reactome.org/content/detail/%s"),
 "go" : ("Gene Ontology Complexes", "http://www.ebi.ac.uk/QuickGO/GTerm?id=%s#info=2"),
 "fastforward" : ("FastForward", "http://fastforward.sys-bio.net/popup.php?name_target=%s"),
@@ -227,9 +223,10 @@ def htmlHeader():
     print('<body class="hgc cgi">')
     printMenuBar()
 
-    db = getCgiVar("db", "hg19")
-    printHgcHeader(db, "Protein Interactions Track", "Protein interactions and pathways from curated databases and text-mining", addGoButton=False, infoUrl=MANUALURL)
-
+    db = getCgiVar("db")
+    printHgcHeader(db, "Gene Interactions Track",
+            "Gene interactions and pathways from curated databases and text-mining",
+            addGoButton=False, infoUrl=MANUALURL, infoMouseOver="Open help page")
 
 def mustBeClean(str):
     """ make sure a string contains only letters and digits """
@@ -327,25 +324,6 @@ def saltedHash(word, length=5):
     hashStr = "".join(hashlib.sha1(word+"PITX2").hexdigest()[:length]).lower()
     return hashStr
 
-def htmlCaptcha(word):
-    " return html that encodes captcha word "
-    # copied from http://skimpygimpy.sourceforge.net/
-    if not skimpyGimpyLoaded:
-        return None
-
-    HTMLSPECKLE = 0.1
-    HTMLSCALE = 1.5
-    HTMLCOLOR = "000000"
-
-    # create an HTML generator
-    htmlGenerator = skimpyAPI.Pre(word,
-                                  speckle=HTMLSPECKLE, # optional
-                                  scale=HTMLSCALE, # optional
-                                  color=HTMLCOLOR, # optional
-                                  )
-    # store the preformatted text as htmlText
-    htmlText = htmlGenerator.data()
-    return htmlText
 
 def reqMinSupp(links, minArtSupp, maxResCount, targetGene):
     """ remove all 'text mining only' links with less than minArtSupp supporting documents
@@ -500,7 +478,13 @@ def queryLinks(conn, gene=None, genes=None):
     links = {}
     for row in rows:
         pair = (row.gene1, row.gene2)
-        links[pair] = (int(row.docCount), row.dbList.split("|"),  \
+
+        if row.dbList=="":
+            dbList = []
+        else:
+            dbList = row.dbList.split("|")
+
+        links[pair] = (int(row.docCount), dbList,  \
             row.linkTypes.split(","), int(row.minResCount), row.snippet)
     return links
 
@@ -546,15 +530,17 @@ def buildGraph(conn, gene, geneCount, minSupp, addNeighbors):
             otherGenes.update(genes)
         if gene in otherGenes:
             otherGenes.remove(gene)
-        # get links between all other genes but keep the limit on the graphed links
-        otherLinks = queryLinks(conn, genes=otherGenes)
-        otherLinks = filterLinks(otherLinks)
-        otherLinks = reqMinSupp(otherLinks, 2, 999999999, gene) # we still require two text mining abstracts
-        otherLinks, lowLinks = limitLinks(otherLinks, lowLinks, 35, gene)
-        # add the high links back to the graph
-        for pair, linkData in otherLinks.iteritems():
-            assert(pair not in graphLinks)
-            graphLinks[pair] = linkData
+
+        if len(otherGenes)!=0:
+            # get links between all other genes but keep the limit on the graphed links
+            otherLinks = queryLinks(conn, genes=otherGenes)
+            otherLinks = filterLinks(otherLinks)
+            otherLinks = reqMinSupp(otherLinks, 2, 999999999, gene) # we still require two text mining abstracts
+            otherLinks, lowLinks = limitLinks(otherLinks, lowLinks, 35, gene)
+            # add the high links back to the graph
+            for pair, linkData in otherLinks.iteritems():
+                assert(pair not in graphLinks)
+                graphLinks[pair] = linkData
 
     return graphLinks, lowLinks
 
@@ -727,8 +713,6 @@ def writeDot(allGenes, links, fname, targetGene, geneDescs, annotLabel, geneAnno
 
     # write the links between genes
     for gene1, gene2, score, docCount, dbs, tags, minResCount, snippet in links:
-        dbs = [x.upper() for x in dbs if x!='']
-
         addStr = ""
 
         # based on http://www.w3schools.com/tags/ref_colorpicker.asp?colorhex=F0F8FF
@@ -762,6 +746,8 @@ def writeDot(allGenes, links, fname, targetGene, geneDescs, annotLabel, geneAnno
 
         tooltipLines = ["<b>%s-%s</b> " % (gene1, gene2)]
         tooltipLines.append("<ul>")
+
+        dbs = [x.upper().replace("BELLARGE","OpenBEL") for x in dbs if x!='']
         if len(dbs)==0:
             tooltipLines.append("<li>No curated information")
         else:
@@ -771,7 +757,8 @@ def writeDot(allGenes, links, fname, targetGene, geneDescs, annotLabel, geneAnno
             tooltipLines.append("<li>Databases: %s%s" % (", ".join(dbs[:3]), suffix))
 
         if docCount==0:
-            tooltipLines.append("<li>%d interactions were curated from source document" % minResCount)
+            if minResCount!=0:
+                tooltipLines.append("<li>%d interactions were curated from source document" % minResCount)
             tooltipLines.append("<li>No text-mining data")
             thick = minResToThick(minResCount)
         else:
@@ -820,9 +807,9 @@ def flattenLink(links):
     counts = []
     minAbsCount = 99999999
     for genes, linkData in links.iteritems():
-        docCount, dbCount, tagSet, minResCount, snippet = linkData
+        docCount, dbList, tagSet, minResCount, snippet = linkData
         geneScore = scorePair(docCount, tagSet)
-        counts.append( (genes[0], genes[1], geneScore, docCount, dbCount, tagSet, minResCount, snippet)  )
+        counts.append( (genes[0], genes[1], geneScore, docCount, dbList, tagSet, minResCount, snippet)  )
         if docCount!=0:
             minAbsCount = min(minAbsCount, docCount)
     return counts, minAbsCount
@@ -857,7 +844,9 @@ def countTargetLinks(links, targetGene):
     # create a list (gene, txtCount, dbCount)
     linkList = []
     for g in allGenes:
-        linkList.append( (g, txtCounts.get(g, 0), len(pairDbs.get(g, [])), tags.get(g, [])) )
+        dbs = pairDbs.get(g, [])
+        dbCount = len(dbs)
+        linkList.append( (g, txtCounts.get(g, 0), dbCount, tags.get(g, [])) )
 
     return linkList
         
@@ -941,8 +930,8 @@ def printFilterMenu(targetGene, addNeighbors):
     # form to filter by type
     print "<small>"
     print '<form name="filterForm" action="%s" method="GET">' % makeSelfUrl({}, True)
-    print """Gene:""" 
-    print '<input type="text" size="6" name="gene" value="%s" />' % targetGene
+    print """<b>Gene:</b>""" 
+    print '<input type="text" size="10" name="gene" value="%s" />' % targetGene
     print "&nbsp;"
     print '<input type="submit" name="1" value="OK">'
     print "&nbsp;&nbsp;&nbsp;"
@@ -977,13 +966,13 @@ def printFilterMenu(targetGene, addNeighbors):
     #print(addNeighborLink)
     hideIndirectStatus = (getCgiVar("hideIndirect")=="on")
     printCheckbox("hideIndirect", hideIndirectStatus, onChangeAttr)
-    print '<span style="">Hide non-%s interactions</span>' % targetGene
+    print '<span style="font-weight:bold">Hide non-%s interactions</span>' % targetGene
     print "&nbsp;&nbsp;&nbsp;"
 
     geneCount = getCgiVar("geneCount", DEFGENECOUNT)
-    print "Show top"
+    print "<b>Show top"
     print '<input name="geneCount" type="text" size="3" value="%s">' % geneCount
-    print "Genes on graph"
+    print "Genes on graph</b>"
     print "&nbsp;&nbsp;&nbsp;"
 
     printSelfHiddenVars({}, skipList=["supportLevel", "hideIndirect", "gene"])
@@ -1174,6 +1163,11 @@ def printGraph(conn, weightedLinks, alg, addNeighbors, targetGene, format):
     if format=="json":
         jsonStr = json.dumps(weightedLinks)
 
+    if len(weightedLinks)==0:
+        geneName = cgi.escape(cgiString("gene"))
+        selfLink = makeSelfLink("Remove all filters", {"supportLevel": None})
+        errAbort("Sorry, there are no direct interactions with %s that fulfill your "
+            "filter criteria. %s" % (geneName, selfLink))
     allGenes = set()
     sifLines = []
     for linkRow in weightedLinks:
@@ -1426,7 +1420,7 @@ def pmidInternalLink(pmid):
 
 def entToDesc(eType, eName, eGenes):
     """ get a readable html description for a entity, type can be gene, complex or family,
-    name is the full name, eGenes is the list of genes 
+    name is the full name, eGenes is the list of genes
     """
     # don't display compounds
     eGenes = eGenes.split("|")
@@ -1463,11 +1457,11 @@ def printDbRows(conn, rows, onlyDoc=None):
     # sort by database name
     for row in sorted(rows, key=operator.itemgetter(9)):
         eventId, causeType, causeName, causeGenes, themeType, themeName, themeGenes, \
-            relType, relSubtype, sourceDb, sourceId, sourceDesc, docIds = row
+            relType, relSubtype, sourceDb, sourceId, sourceDesc, docIds, evidence = row
 
         if eventId.startswith("ppi_"):
             isPpi = True
-        else: 
+        else:
             isPpi = False
 
         docSet = set(docIds.split("|"))
@@ -1477,6 +1471,7 @@ def printDbRows(conn, rows, onlyDoc=None):
             dbName = "IRef %s" % sourceDb.capitalize()
         else:
             dbName, dbUrlPat = dbData[sourceDb]
+
 
         url = dbUrlPat % sourceId
 
@@ -1491,13 +1486,15 @@ def printDbRows(conn, rows, onlyDoc=None):
 
         print entToDesc(causeType, causeName, causeGenes)
 
+        desc = ""
         if themeGenes!="":
             if isPpi:
                 print "&#8212;" # unicode long dash
             else:
                 print "&#8594;" # Unicode Arrow
 
-            print entToDesc(themeType, themeName, themeGenes)
+            desc = entToDesc(themeType, themeName, themeGenes)
+            print desc
 
         if relType!="" or relSubtype!="":
             if relType!="" and relSubtype!="":
@@ -1508,7 +1505,13 @@ def printDbRows(conn, rows, onlyDoc=None):
                 print "(%s)" % (relSubtype)
 
         if onlyDoc==None and len(docSet)!=0:
+                if len(desc)>25:
+                    print "<br>"
                 print prettyDocLinks(conn, sorted(docSet))
+
+        if evidence!="" and evidence!="unknown":
+            print "<br>Evidence: <i>", evidence.replace("|", ", ").replace("_", " "), "</i>"
+
 
         print "</li>"
     print "</ul>"
@@ -1857,11 +1860,6 @@ def flagInteraction(param):
     print ('<TEXTAREA rows="6" cols="50" name="comment"></TEXTAREA>')
     print ("<P>")
 
-    captHtml = htmlCaptcha(saltedHash(param))
-    if captHtml!=None:
-        print captHtml
-        print ('Enter the word above: <INPUT TYPE="TEXT" NAME="captcha"></INPUT><BR>')
-
     print ('<INPUT TYPE="SUBMIT" name="submit" value="Report Interaction as inaccurate"></INPUT>')
     print ('</FORM>')
     #printMsrNlpRows(rows)
@@ -1888,11 +1886,6 @@ def removeInteraction(param, captcha, comment):
     if len(fields)!=2:
         errAbort( "illegal CGI parameter")
     
-    if skimpyGimpyLoaded:
-        expCaptcha = saltedHash(param)
-        if expCaptcha.lower()!=captcha.lower():
-            errAbort("Wrong captcha word, please go back and try again")
-
     causeGene, themeGene = fields
     ip = cgi.escape(os.environ["REMOTE_ADDR"])
 
@@ -1913,10 +1906,11 @@ def removeInteraction(param, captcha, comment):
 
 def parseGraphArgs():
     " get the arguments to build a graph from the CGI parameters "
-    gene = getCgiVar("gene").rstrip(":")
-    if gene==None:
-        print "missing CGI parameter 'gene' or 'link'"
-        exit(0)
+    gene = getCgiVar("gene")
+    if gene is None:
+        gene = "MTOR"
+
+    gene = gene.rstrip(":")
     gene = gene.split()[0]
     gene = gene.upper()
 

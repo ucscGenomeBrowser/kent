@@ -5,7 +5,7 @@ UCSC genome browser 'kent' bioinformatic utilities
   These are only the command line bioinformatic utilities
   from the kent source tree.  This is not the genome browser install.
   For the genome browser install, see the mirror instructions:
-    http://hgwdev.soe.ucsc.edu/admin/mirror.html
+    http://genome.ucsc.edu/goldenPath/help/mirror.html
 
 ========================================================================
 Pre-compiled binaries available:

@@ -1,12 +1,12 @@
-track wgEncodeGencodeVM13
+track wgEncodeGencodeVM14
 compositeTrack on
 superTrack wgEncodeGencodeSuper pack
-shortLabel All GENCODE VM13
-longLabel All GENCODE annotations from VM13 (Ensembl 88)
+shortLabel All GENCODE VM14
+longLabel All GENCODE annotations from VM14 (Ensembl 89)
 group genes
 dragAndDrop subTracks
-priority 2.971
-visibility hide
+priority 2.970
+visibility pack
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
 allButtonPair on
@@ -14,30 +14,30 @@ sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 type genePred 
 configurable off
-wgEncodeGencodeVersion M13
-wgEncodeGencodeAttrs wgEncodeGencodeAttrsVM13
-wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportVM13
-wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceVM13
-wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceVM13
-wgEncodeGencodePdb wgEncodeGencodePdbVM13
-wgEncodeGencodePubMed wgEncodeGencodePubMedVM13
-wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqVM13
-wgEncodeGencodeTag wgEncodeGencodeTagVM13
-wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportVM13
-wgEncodeGencodeUniProt wgEncodeGencodeUniProtVM13
-wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureVM13
-wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkVM13
-wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelVM13
-wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM13
+wgEncodeGencodeVersion M14
+wgEncodeGencodeAttrs wgEncodeGencodeAttrsVM14
+wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportVM14
+wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceVM14
+wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceVM14
+wgEncodeGencodePdb wgEncodeGencodePdbVM14
+wgEncodeGencodePubMed wgEncodeGencodePubMedVM14
+wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqVM14
+wgEncodeGencodeTag wgEncodeGencodeTagVM14
+wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportVM14
+wgEncodeGencodeUniProt wgEncodeGencodeUniProtVM14
+wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureVM14
+wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkVM14
+wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelVM14
+wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM14
 
-    track wgEncodeGencodeVM13ViewGenes
+    track wgEncodeGencodeVM14ViewGenes
     shortLabel Genes
     view aGenes
     configurable on
     visibility pack
-    subTrack wgEncodeGencodeVM13
+    subTrack wgEncodeGencodeVM14
     type genePred
-    itemClassTbl wgEncodeGencodeAttrsVM13
+    itemClassTbl wgEncodeGencodeAttrsVM14
     itemClassNameColumn transcriptId
     itemClassClassColumn transcriptClass
     cdsDrawDefault genomic\ codons
@@ -53,9 +53,9 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM13
     #  - attrs is an alias for the current wgEncodeGencodeAttrs in the sql
     #  - transcriptMethod is a pseudo-column name, which is handled explictly in the code
     #  - attrs.transcriptType are transcript biotypes.  This will get the current list of values:
-    #    hgsql -Ne 'select distinct(transcriptType) from wgEncodeGencodeAttrsVM13 order by transcriptType' mm10
+    #    hgsql -Ne 'select distinct(transcriptType) from wgEncodeGencodeAttrsVM14 order by transcriptType' mm10
     #  - tag - is s pseudo-column name for join with the tag table.  This will get the current list of values:
-    #    hgsql -Ne 'select distinct(tag) from wgEncodeGencodeTagVM13 order by tag' mm10
+    #    hgsql -Ne 'select distinct(tag) from wgEncodeGencodeTagVM14 order by tag' mm10
     #  - supportLevel is a pseudo-column name handled in the code
     filterBy attrs.transcriptClass:Transcript_Class=coding,nonCoding,pseudo,problem \
              transcriptMethod:Transcript_Annotation_Method=manual,automatic,manual_only,automatic_only \
@@ -67,200 +67,200 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneVM13
                 tag:Tag=alternative_3_UTR,alternative_5_UTR,appris_alternative_1,appris_alternative_2,appris_principal_1,appris_principal_2,appris_principal_3,appris_principal_4,appris_principal_5,basic,bicistronic,CCDS,cds_end_NF,cds_start_NF,dotter_confirmed,downstream_ATG,exp_conf,inferred_exon_combination,inferred_transcript_model,low_sequence_quality,mRNA_end_NF,mRNA_start_NF,NAGNAG_splice_site,NMD_exception,NMD_likely_if_extended,non_ATG_start,non_canonical_conserved,non_canonical_genome_sequence_error,non_canonical_other,non_canonical_polymorphism,non_canonical_TEC,non_canonical_U12,non_submitted_evidence,not_best_in_genome_evidence,not_organism_supported,overlapping_uORF,pseudo_consens,readthrough_transcript,retained_intron_CDS,retained_intron_final,retained_intron_first,RNA_Seq_supported_only,RNA_Seq_supported_partial,RP_supported_TIS,seleno,sequence_error,upstream_ATG,upstream_uORF \
                 supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA
     
-        track wgEncodeGencodeBasicVM13
+        track wgEncodeGencodeBasicVM14
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM13ViewGenes on
+        subTrack wgEncodeGencodeVM14ViewGenes on
         shortLabel Basic
         subGroups view=aGenes name=Basic
-        longLabel Basic Gene Annotation Set from GENCODE Version M13 (Ensembl 88)
+        longLabel Basic Gene Annotation Set from GENCODE Version M14 (Ensembl 89)
         type genePred
         priority 1
     
-        track wgEncodeGencodeCompVM13
+        track wgEncodeGencodeCompVM14
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM13ViewGenes off
+        subTrack wgEncodeGencodeVM14ViewGenes off
         subGroups view=aGenes name=Comprehensive
         shortLabel Comprehensive
-        longLabel Comprehensive Gene Annotation Set from GENCODE Version M13 (Ensembl 88)
+        longLabel Comprehensive Gene Annotation Set from GENCODE Version M14 (Ensembl 89)
         type genePred
         priority 2
     
-        track wgEncodeGencodePseudoGeneVM13
+        track wgEncodeGencodePseudoGeneVM14
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM13ViewGenes on
+        subTrack wgEncodeGencodeVM14ViewGenes on
         subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
-        longLabel Pseudogene Annotation Set from GENCODE Version M13 (Ensembl 88)
+        longLabel Pseudogene Annotation Set from GENCODE Version M14 (Ensembl 89)
         type genePred
         color 255,51,255
         priority 3
 
-    track wgEncodeGencodeVM13View2Way 
+    track wgEncodeGencodeVM14View2Way 
     shortLabel 2-Way
     view b2-way
     visibility hide
-    subTrack wgEncodeGencodeVM13
+    subTrack wgEncodeGencodeVM14
     type genePred
     configurable off
 
-        track wgEncodeGencode2wayConsPseudoVM13
+        track wgEncodeGencode2wayConsPseudoVM14
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM13View2Way off
+        subTrack wgEncodeGencodeVM14View2Way off
         subGroups view=b2-way name=yTwo-way
         shortLabel 2-way Pseudogenes
-        longLabel 2-way Pseudogene Annotation Set from GENCODE Version M13 (Ensembl 88)
+        longLabel 2-way Pseudogene Annotation Set from GENCODE Version M14 (Ensembl 89)
         type genePred
         color 255,51,255
         priority 4
     
-    track wgEncodeGencodeVM13ViewPolya
+    track wgEncodeGencodeVM14ViewPolya
     shortLabel PolyA
     view cPolya
     visibility hide
-    subTrack wgEncodeGencodeVM13
+    subTrack wgEncodeGencodeVM14
     type genePred
     configurable off
 
-        track wgEncodeGencodePolyaVM13
+        track wgEncodeGencodePolyaVM14
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM13ViewPolya off
+        subTrack wgEncodeGencodeVM14ViewPolya off
         subGroups view=cPolya name=zPolyA
         shortLabel PolyA
-        longLabel PolyA Transcript Annotation Set from GENCODE Version M13 (Ensembl 88)
+        longLabel PolyA Transcript Annotation Set from GENCODE Version M14 (Ensembl 89)
         type genePred
         color 0,0,0
         priority 5
 
 # searches for basic
-searchName wgEncodeGencodeBasicVM13
-searchTable wgEncodeGencodeBasicVM13
+searchName wgEncodeGencodeBasicVM14
+searchTable wgEncodeGencodeBasicVM14
 searchMethod prefix
 searchType genePred
 termRegex ENSMUST[0-9.]+
-searchPriority 2.26101
+searchPriority 2.26001
 
-searchName wgEncodeGencodeBasicGeneSymVM13
-searchTable wgEncodeGencodeBasicVM13
+searchName wgEncodeGencodeBasicGeneSymVM14
+searchTable wgEncodeGencodeBasicVM14
 searchMethod exact
 searchType genePred
-searchPriority 2.26102
+searchPriority 2.26002
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
-searchName wgEncodeGencodeBasicGeneVM13
-searchTable wgEncodeGencodeBasicVM13
+searchName wgEncodeGencodeBasicGeneVM14
+searchTable wgEncodeGencodeBasicVM14
 searchMethod prefix
 searchType genePred
 termRegex ENSMUSG[0-9.]+
-searchPriority 2.26103
-xrefTable wgEncodeGencodeAttrsVM13
+searchPriority 2.26003
+xrefTable wgEncodeGencodeAttrsVM14
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
-searchName wgEncodeGencodeBasicHavanaTranscriptVM13
-searchTable wgEncodeGencodeBasicVM13
+searchName wgEncodeGencodeBasicHavanaTranscriptVM14
+searchTable wgEncodeGencodeBasicVM14
 searchMethod prefix
 searchType genePred
 termRegex OTTMUST[0-9.]+
-searchPriority 2.26104
-xrefTable wgEncodeGencodeAttrsVM13
+searchPriority 2.26004
+xrefTable wgEncodeGencodeAttrsVM14
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
-searchName wgEncodeGencodeBasicHavanaGeneVM13
-searchTable wgEncodeGencodeBasicVM13
+searchName wgEncodeGencodeBasicHavanaGeneVM14
+searchTable wgEncodeGencodeBasicVM14
 searchMethod prefix
 searchType genePred
 termRegex OTTMUSG[0-9.]+
-searchPriority 2.26105
-xrefTable wgEncodeGencodeAttrsVM13
+searchPriority 2.26005
+xrefTable wgEncodeGencodeAttrsVM14
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
 # searches for comp
-searchName wgEncodeGencodeCompVM13
-searchTable wgEncodeGencodeCompVM13
+searchName wgEncodeGencodeCompVM14
+searchTable wgEncodeGencodeCompVM14
 searchMethod prefix
 searchType genePred
 termRegex ENSMUST[0-9.]+
-searchPriority 2.26106
+searchPriority 2.26006
 
-searchName wgEncodeGencodeCompGeneSymVM13
-searchTable wgEncodeGencodeCompVM13
+searchName wgEncodeGencodeCompGeneSymVM14
+searchTable wgEncodeGencodeCompVM14
 searchMethod exact
 searchType genePred
-searchPriority 2.26107
+searchPriority 2.26007
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
-searchName wgEncodeGencodeCompGeneVM13
-searchTable wgEncodeGencodeCompVM13
+searchName wgEncodeGencodeCompGeneVM14
+searchTable wgEncodeGencodeCompVM14
 searchMethod prefix
 searchType genePred
 termRegex ENSMUSG[0-9.]+
-searchPriority 2.26108
-xrefTable wgEncodeGencodeAttrsVM13
+searchPriority 2.26008
+xrefTable wgEncodeGencodeAttrsVM14
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
-searchName wgEncodeGencodeCompHavanaTranscriptVM13
-searchTable wgEncodeGencodeCompVM13
+searchName wgEncodeGencodeCompHavanaTranscriptVM14
+searchTable wgEncodeGencodeCompVM14
 searchMethod prefix
 searchType genePred
 termRegex OTTMUST[0-9.]+
-searchPriority 2.26109
-xrefTable wgEncodeGencodeAttrsVM13
+searchPriority 2.26009
+xrefTable wgEncodeGencodeAttrsVM14
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
-searchName wgEncodeGencodeCompHavanaGeneVM13
-searchTable wgEncodeGencodeCompVM13
+searchName wgEncodeGencodeCompHavanaGeneVM14
+searchTable wgEncodeGencodeCompVM14
 searchMethod prefix
 searchType genePred
 termRegex OTTMUSG[0-9.]+
-searchPriority 2.26110
-xrefTable wgEncodeGencodeAttrsVM13
+searchPriority 2.26010
+xrefTable wgEncodeGencodeAttrsVM14
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
 # searches for pseudogene
-searchName wgEncodeGencodePseudoGeneVM13
-searchTable wgEncodeGencodePseudoGeneVM13
+searchName wgEncodeGencodePseudoGeneVM14
+searchTable wgEncodeGencodePseudoGeneVM14
 searchMethod prefix
 searchType genePred
 termRegex ENSMUST[0-9.]+
-searchPriority 2.26111
+searchPriority 2.26011
 
-searchName wgEncodeGencodePseudoGeneGeneSymVM13
-searchTable wgEncodeGencodePseudoGeneVM13
+searchName wgEncodeGencodePseudoGeneGeneSymVM14
+searchTable wgEncodeGencodePseudoGeneVM14
 searchMethod exact
 searchType genePred
-searchPriority 2.26112
+searchPriority 2.26012
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
-searchName wgEncodeGencodePseudoGeneGeneVM13
-searchTable wgEncodeGencodePseudoGeneVM13
+searchName wgEncodeGencodePseudoGeneGeneVM14
+searchTable wgEncodeGencodePseudoGeneVM14
 searchMethod prefix
 searchType genePred
 termRegex ENSMUSG[0-9.]+
-searchPriority 2.26113
-xrefTable wgEncodeGencodeAttrsVM13
+searchPriority 2.26013
+xrefTable wgEncodeGencodeAttrsVM14
 xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
 
-searchName wgEncodeGencodePseudoGeneHavanaTranscriptVM13
-searchTable wgEncodeGencodePseudoGeneVM13
+searchName wgEncodeGencodePseudoGeneHavanaTranscriptVM14
+searchTable wgEncodeGencodePseudoGeneVM14
 searchMethod prefix
 searchType genePred
 termRegex OTTMUST[0-9.]+
-searchPriority 2.26114
-xrefTable wgEncodeGencodeAttrsVM13
+searchPriority 2.26014
+xrefTable wgEncodeGencodeAttrsVM14
 xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
 
-searchName wgEncodeGencodePseudoGeneHavanaGeneVM13
-searchTable wgEncodeGencodePseudoGeneVM13
+searchName wgEncodeGencodePseudoGeneHavanaGeneVM14
+searchTable wgEncodeGencodePseudoGeneVM14
 searchMethod prefix
 searchType genePred
 termRegex OTTMUSG[0-9.]+
-searchPriority 2.26115
-xrefTable wgEncodeGencodeAttrsVM13
+searchPriority 2.26015
+xrefTable wgEncodeGencodeAttrsVM14
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
 # searches for 2-way consensus
-searchName wgEncodeGencode2wayConsPseudoVM13
-searchTable wgEncodeGencode2wayConsPseudoVM13
+searchName wgEncodeGencode2wayConsPseudoVM14
+searchTable wgEncodeGencode2wayConsPseudoVM14
 searchMethod exact
 searchType genePred
 termRegex PGOMOU[0-9.]+
-searchPriority 2.26116
+searchPriority 2.26016

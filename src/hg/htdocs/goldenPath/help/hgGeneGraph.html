@@ -212,7 +212,7 @@ results were then mapped to the genome using their HGNC gene symbols.
 <a name='dataAccess'></a>
 <h2>Data Access</h2>
 <p>
-The raw data for these graphs can be accessed in multiple ways. It can be explored interactively 
+The raw data for these graphs can be accessed in multiple ways. They can be explored interactively 
 using the <a href="../cgi-bin/hgTables">Table Browser</a>, by selecting "group" - "All Tables"
 and "database" - "hgFixed". Under "table", select "hgFixed.ggLink". You can then start to explore the 
 relationships between the database tables using the "describe table schema" button or download
@@ -226,9 +226,9 @@ processing.</p>
 
 The database tables are:
 <ul>
-    <li><tt>ggLink</tt> - one row per gene/gene interaction</li>
-    <li><tt>ggLinkEvent</tt> - connections between a ggLink and one of the ggEvent tables. The prefix of the eventId indicates the table: ppi/pwy is a database, msr is a text event.</li>
-    <li><tt>ggEventDb</tt> - information about gene/gene interactions imported from protein interaction or pathway databases </li>
+    <li><tt>ggLink</tt> - one row per gene/gene interaction. The field 'minResCount' is the minimum number of interactions obtained from the same supporting article. E.g. if it is 10, then out of all supporting articles, there is one with 10 interactions curated from it and maybe others with more interactions. A cutoff of 50 should remove high-throughput data from the table.</li>
+    <li><tt>ggLinkEvent</tt> - connections between a ggLink and one of the ggEvent tables. The prefix of the eventId indicates the table: ppi/pwy links to ggEventDb, msr links to ggEventText.</li>
+    <li><tt>ggEventDb</tt> - information about gene/gene interactions imported from protein interaction or pathway databases. The structure is modeled after the NCI PID interactions data schema and distinguishes genes, complexes and compounds on each side of the reaction, the type of the relation and contains the curated display names for the genes. The compounds are not shown in our user interface.</li>
     <li><tt>ggEventText</tt> - information about gene/gene interactions obtained from text mining </li>
     <li><tt>ggDocEvent</tt> - connections between documents and events</li>
     <li><tt>ggDoc</tt> - information about documents referenced from ggEventText and ggDocEvent</li>

@@ -161,19 +161,24 @@ def printMenuBar(oldJquery=False):
 
     print("<div class='container-fluid'>")
 
-def printHgcHeader(assembly, shortLabel, longLabel, addGoButton=True, infoUrl="#INFO_SECTION"):
+def printHgcHeader(assembly, shortLabel, longLabel, addGoButton=True, infoUrl="#INFO_SECTION", infoMouseOver="Jump to the track description"):
     " copied from hgGtexTrackSettings, uses bootstrap styling "
     #print("<form action='../cgi-bin/hgTracks' name='MAIN_FORM' method=POST>")
 
     print("<a name='TRACK_TOP'></a>")
     print("<div class='row gbTrackTitleBanner'>")
     print("<div class='col-md-10'>")
-    print("<span class='gbTrackName'>")
-    print(shortLabel)
-    print("<span class='gbAssembly'>%s</span>" % assembly)
-    print("</span>")
+
+    if assembly is not None:
+        print("<span class='gbTrackName'>")
+        print(shortLabel)
+        print("<span class='gbAssembly'>%s</span>" % assembly)
+        print("</span>")
+
     print("<span class='gbTrackTitle'>%s</span>" % longLabel)
-    print("<a href='%s' title='Jump to the track description'>" % infoUrl)
+
+    print("<a href='%s' title='%s'>" % (infoUrl, infoMouseOver))
+
     print("<span class='gbIconSmall fa-stack'>")
     print("<i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>")
     print("<i class='gbWhiteColor fa fa-info fa-stack-1x'></i>")
