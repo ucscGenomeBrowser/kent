@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "localmem.h"
 #include "fieldedTable.h"
 #include "tagStorm.h"
 #include "csv.h"
@@ -48,7 +49,6 @@ while ((c = *in++) != 0)
 	c = '_';
 	if (c == '_' && lastC == '_')
 	    {
-	    uglyf("Skipping double _ in %s", aeName);
 	    continue;
 	    }
 	}
@@ -75,8 +75,7 @@ struct dyString *additionalFileDy = dyStringNew(0);
 /* Parse lines from idf file into stanza */
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
-struct dyString *csvEscaper = dyStringNew(0), *dyVal = dyStringNew(0);
-char *csvEscapeToDyString(struct dyString *dy, char *string);
+struct dyString *dyVal = dyStringNew(0);
 while (lineFileNextReal(lf, &line))
     {
     /* Erase trailing tab... */
@@ -102,10 +101,7 @@ while (lineFileNextReal(lf, &line))
 	}
     else if (startsWith(additionalFilePrefix, tagName))
         {
-	if (additionalFileDy->stringSize != 0)
-	     dyStringAppendC(additionalFileDy, ',');
-	char *escaped = csvEscapeToDyString(csvEscaper, row[1]);
-	dyStringAppend(additionalFileDy, escaped);
+	csvEscapeAndAppend(additionalFileDy, row[1]);
 	}
     else
 	{
@@ -113,28 +109,99 @@ while (lineFileNextReal(lf, &line))
 	dyStringClear(dyVal);
 	int i;
 	for (i=1; i<rowSize; ++i)
-	    {
-	    if (i > 1)
-		dyStringAppendC(dyVal, ',');
-	    char *escaped = csvEscapeToDyString(csvEscaper, row[i]);
-	    dyStringAppend(dyVal, escaped);
-	    }
+	    csvEscapeAndAppend(dyVal, row[i]);
 	tagStanzaAppend(storm, stanza, tagName, dyVal->string);
 	}
     }
 if (additionalFileDy->stringSize != 0)
      tagStanzaAppend(storm, stanza, additionalFilePrefix, additionalFileDy->string);
 dyStringFree(&additionalFileDy);
-dyStringFree(&csvEscaper);
 dyStringFree(&dyVal);
+lineFileClose(&lf);
 return storm;
+}
+
+
+void addSdrfToStormTop(char *sdrfFile, struct tagStorm *storm)
+/* Add lines of sdrfFile as children of first top level stanza in storm. */
+{
+/* Load table with a few required fields for sanity checking */
+static char *requiredFields[] = { "Source Name", "Extract Name", "Material Type", "Assay Name", };
+struct fieldedTable *table = fieldedTableFromTabFile(sdrfFile, sdrfFile, 
+    requiredFields, ArraySize(requiredFields) );
+
+/* Convert ArrayExpress field names to our field names */
+int fieldIx;
+for (fieldIx=0; fieldIx < table->fieldCount; fieldIx += 1)
+    {
+    char tagName[256];
+    aeFieldToNormalField("sdrf.", table->fields[fieldIx], tagName, sizeof(tagName));
+    table->fields[fieldIx] = lmCloneString(table->lm, tagName);
+    }
+
+/* Make up a list and hash of fieldMergers to handle conversion of columns that occur
+ * multiple times to a comma-separated list of values in a single column. */
+struct fieldMerger
+/* Something to help merge multiple columns with same name */
+    {
+    struct fieldMerger *next;	/* Next in list */
+    char *name;	
+    struct dyString *val;	/* Comma separated value */
+    };
+struct hash *fieldHash = hashNew(0);
+struct fieldMerger *fmList = NULL;
+for (fieldIx = 0; fieldIx < table->fieldCount; ++fieldIx)
+    {
+    char *fieldName = table->fields[fieldIx];
+    if (hashLookup(fieldHash, fieldName) == NULL)
+        {
+	struct fieldMerger *fm;
+	AllocVar(fm);
+	fm->name = fieldName;
+	fm->val = dyStringNew(0);
+	slAddTail(&fmList, fm);
+	hashAdd(fieldHash, fieldName, fm);
+	}
+    }
+
+/* Grab top level stanza and make sure there is only one. */
+struct tagStanza *topStanza = storm->forest;
+if (topStanza == NULL || topStanza->next != NULL)
+    internalErr();
+
+/* Scan through table, making new stanzas for each row and hooking them into topStanza */
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    /* Empty out any existing vals */
+    struct fieldMerger *fm;
+    for (fm = fmList; fm != NULL; fm = fm->next)
+	dyStringClear(fm->val);
+
+    /* Add all non-empty values from this row to our fieldMergers. */
+    char **row = fr->row;
+    for (fieldIx = 0; fieldIx < table->fieldCount; ++fieldIx)
+        {
+	char *fieldName = table->fields[fieldIx];
+	fm = hashMustFindVal(fieldHash, fieldName);
+	char *val = row[fieldIx];
+	if (!isEmpty(val))
+	    csvEscapeAndAppend(fm->val, val);
+	}
+
+    /* Output all nonempty vals to stanza */
+    struct tagStanza *stanza = tagStanzaNew(storm, topStanza);
+    for (fm = fmList; fm != NULL; fm = fm->next)
+	if (fm->val->stringSize > 0)
+	    tagStanzaAppend(storm, stanza, fm->name, fm->val->string);
+    }
 }
 
 void arrayExpressToTagStorm(char *idfName, char *sdrfName, char *outName)
 /* arrayExpressToTagStorm - Convert from ArrayExpress idf.txt + sdrf.txt format to tagStorm.. */
 {
 struct tagStorm *storm = idfToStormTop(idfName);
-// addSdrfToStormTop(sdrfName, storm);
+addSdrfToStormTop(sdrfName, storm);
 
 tagStormWrite(storm, outName, 0);
 }
