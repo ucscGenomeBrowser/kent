@@ -91,8 +91,7 @@ while (lineFileNextReal(lf, &line))
     if (rowSize == ArraySize(row))
         errAbort("Line %d of %s has too many fields", lf->lineIx, lf->fileName);
     if (rowSize < 2)
-        errAbort("Expecting at least 2 fields but only got %d line %d of %s",
-	    rowSize, lf->lineIx, lf->fileName);
+	continue;
 
     /* Convert first element to tagName */
     char tagName[256];
