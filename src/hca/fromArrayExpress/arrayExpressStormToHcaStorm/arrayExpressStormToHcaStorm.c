@@ -42,6 +42,8 @@ char *weeds[] =
     "sdrf.Factor_Value_cell_type",   // Redundant with Characteristics_cell_type
     "sdrf.Factor_Value_disease",     // Redundant with Characteristics_disease
     "sdrf.Technology_Type",          // Always "sequencing assay" which is captured elsewhere
+    "sdrf.Characteristics_age_Unit_Term_Accession_Number",  // Overkill for day/week/month/year
+    "sdrf.Characteristics_age_Unit_Term_Source_REF",  // Overkill for day/week/month/year
     };
 
 char *machineTags[] = 
@@ -92,6 +94,7 @@ char *substitutions[][2] =
 {"idf.Term_Source_Name", "project.ebi_term_source_name",}, 
 {"sdrf.Assay_Name", "assay.array_express_assay_name",}, 
 {"sdrf.Characteristics_age", "sample.donor.age",}, 
+{"sdrf.Characteristics_age_Unit", "sample.donor.age_unit",}, 
 {"sdrf.Characteristics_body_mass_index", "sample.donor.body_mass_index",}, 
 {"sdrf.Characteristics_cell_type", "cell.type",}, 
 {"sdrf.Characteristics_developmental_stage", "sample.donor.developmental_stage",}, 
@@ -125,9 +128,6 @@ char *substitutions[][2] =
 {"sdrf.Protocol_REF", "reformat.Protocol_REF",}, 
 {"sdrf.Protocol_REF_Term_Source_REF", "reformat.Protocol_REF_Term_Source_REF",}, 
 {"sdrf.Source_Name", "sample.submitted_id",}, 
-{"sdrf.Unit_time_unit", "#sdrf.Unit_time_unit",}, 
-{"sdrf.Unit_time_unit_Term_Accession_Number", "#sdrf.Unit_time_unit_Term_Accession_Number",}, 
-{"sdrf.Unit_time_unit_Term_Source_REF", "#sdrf.Unit_time_unit_Term_Source_REF",}, 
 };
 
 void arrayExpressStormToHcaStorm(char *inTags, char *outTags)
