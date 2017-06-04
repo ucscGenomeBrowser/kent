@@ -97,15 +97,17 @@ def pipeSplitAddAll(string, dict, key, toLower=False):
         dict[val]=key
 
 def parseHgnc(fname, addEntrez=False):
-    " return two dicts: uniprot -> symbol and alias -> symbol from the HGNC tab-sep file "
+    " return two dicts: uniprot -> symbol, set of validSyms and alias -> symbol from the HGNC tab-sep file "
     upToSym = {}
     skipSyms = set()
     aliasToSym = defaultdict(set)
     clashList = []
+    validSyms = set()
     for row in lineFileNext(open(fname)):
         sym = row.symbol
         if "withdrawn" in sym:
             continue
+        validSyms.add(sym)
 
         aliasList = [sym]
         #aliasList.append(row.Approved_Name)
@@ -134,9 +136,9 @@ def parseHgnc(fname, addEntrez=False):
         upToSym[upAcc] = sym
     logging.info("Skipped these symbols due to duplicate uniprot IDs: %s" % ",".join(skipSyms))
     logging.info("%d symbol clashes: %s" % (len(clashList),  clashList))
-    return upToSym, aliasToSym
+    return validSyms, upToSym, aliasToSym
 
-def flattenCsv(member):
+def flattenCsv(member, validSyms, aliasToSym):
     " convert pybel csv member to type and list of genes, as in our format "
     mType = member[0]
 
@@ -145,27 +147,35 @@ def flattenCsv(member):
         #if sDb!="HGNC":
             #return None
         sym = member[2]
-        newSyms = aliasToSym[sym]
-        return "gene", "", "|".join(newSyms)
+        if sym in validSyms:
+            newSyms = [sym]
+        else:
+            newSyms = aliasToSym[sym]
+        return "gene", sym, "|".join(newSyms)
 
     if mType=="Complex":
         parts = member[1:]
         partSyms = []
+        origNames = []
         for p in parts:
             sDb = p[1]
+            sym = p[2]
+            origNames.append(sym)
             if sDb!="HGNC":
                 continue
 
-            sym = p[2]
-            partSyms.extend(aliasToSym[sym])
-        return "complex", "", "|".join(partSyms)
+            if sym in validSyms:
+                partSyms.append(sym)
+            else:
+                partSyms.extend(aliasToSym[sym])
+        return "complex", "/".join(origNames), "|".join(partSyms)
 
     if mType=="Abundance":
         # ('Abundance', 'CHEBI', 'metformin')
         name = member[2]
         return "compound", name, ""
 
-def parseBelCsv(fname, aliasToSym):
+def parseBelCsv(fname, validSyms, aliasToSym):
     " parse BEL csv format and return as rows "
     skipCount = 0
     #('Protein', 'HGNC', 'HOXD3')	('RNA', 'HGNC', 'TSPAN7')	{'subject_effect_namespace': 'bel', 'citation_type': 'PubMed', 'citation_name': 'Oncogene 2002 Jan 24 21(5) 798-808', 'evidence': 'Table 1 - Gene regulated by overexpressing HOXD3 in A549 lung cancer cell lines by more than 1.6 fold.', 'subject_modifier': 'Activity', 'relation': 'increases', 'line': 62002, 'subject_effect_name': 'tscript', 'citation_reference': '11850808'}
@@ -201,8 +211,8 @@ def parseBelCsv(fname, aliasToSym):
         if attrs["relation"]=="hasComponent":
             continue
 
-        g1 = flattenCsv(source)
-        g2 = flattenCsv(target)
+        g1 = flattenCsv(source, validSyms, aliasToSym)
+        g2 = flattenCsv(target, validSyms, aliasToSym)
         if g1 is None or g2 is None:
             continue
         g1Type, g1Name, g1Genes = g1
@@ -265,13 +275,13 @@ if args==[]:
 filename = args[0]
 
 #uniprotTable = "/hive/data/inside/pubs/parsedDbs/uniprot.9606.tab"
-upToSym, aliasToSym = parseHgnc(options.hgncFname)
+validSyms, upToSym, aliasToSym = parseHgnc(options.hgncFname)
 #accToSym = parseUniprot(options.uniprotFname, accToSym)
 
 print "#"+"\t".join(headers)
 
 logging.debug(filename)
-rows = parseBelCsv(filename, aliasToSym)
+rows = parseBelCsv(filename, validSyms, aliasToSym)
 for row in rows:
     l = "\t".join(row)
     print l

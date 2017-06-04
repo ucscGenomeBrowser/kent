@@ -101,7 +101,7 @@ dbData = {
 #PID server is down, linking to NDex now, adapted the IDs, see ggPidToTables
 "pid" : ("NCI Pathway Database", "http://www.ndexbio.org/#/search?searchType=All&searchString=labels%%253A%s"),
 "biocarta" : ("BioCarta", "https://cgap.nci.nih.gov/Pathways/BioCarta/%s"),
-"belLarge" : ("OpenBEL Large Corpus", "http://www.ndexbio.org/#/newNetwork/%s"),
+"belLarge" : ("OpenBEL", "http://www.ndexbio.org/#/newNetwork/%s"),
 "reactome" : ("Reactome", "http://www.reactome.org/content/detail/%s"),
 "go" : ("Gene Ontology Complexes", "http://www.ebi.ac.uk/QuickGO/GTerm?id=%s#info=2"),
 "fastforward" : ("FastForward", "http://fastforward.sys-bio.net/popup.php?name_target=%s"),
@@ -713,8 +713,6 @@ def writeDot(allGenes, links, fname, targetGene, geneDescs, annotLabel, geneAnno
 
     # write the links between genes
     for gene1, gene2, score, docCount, dbs, tags, minResCount, snippet in links:
-        dbs = [x.upper() for x in dbs if x!='']
-
         addStr = ""
 
         # based on http://www.w3schools.com/tags/ref_colorpicker.asp?colorhex=F0F8FF
@@ -748,6 +746,8 @@ def writeDot(allGenes, links, fname, targetGene, geneDescs, annotLabel, geneAnno
 
         tooltipLines = ["<b>%s-%s</b> " % (gene1, gene2)]
         tooltipLines.append("<ul>")
+
+        dbs = [x.upper().replace("BELLARGE","OpenBEL") for x in dbs if x!='']
         if len(dbs)==0:
             tooltipLines.append("<li>No curated information")
         else:
@@ -757,7 +757,8 @@ def writeDot(allGenes, links, fname, targetGene, geneDescs, annotLabel, geneAnno
             tooltipLines.append("<li>Databases: %s%s" % (", ".join(dbs[:3]), suffix))
 
         if docCount==0:
-            tooltipLines.append("<li>%d interactions were curated from source document" % minResCount)
+            if minResCount!=0:
+                tooltipLines.append("<li>%d interactions were curated from source document" % minResCount)
             tooltipLines.append("<li>No text-mining data")
             thick = minResToThick(minResCount)
         else:
@@ -930,7 +931,7 @@ def printFilterMenu(targetGene, addNeighbors):
     print "<small>"
     print '<form name="filterForm" action="%s" method="GET">' % makeSelfUrl({}, True)
     print """<b>Gene:</b>""" 
-    print '<input type="text" size="6" name="gene" value="%s" />' % targetGene
+    print '<input type="text" size="10" name="gene" value="%s" />' % targetGene
     print "&nbsp;"
     print '<input type="submit" name="1" value="OK">'
     print "&nbsp;&nbsp;&nbsp;"
@@ -1485,6 +1486,7 @@ def printDbRows(conn, rows, onlyDoc=None):
 
         print entToDesc(causeType, causeName, causeGenes)
 
+        desc = ""
         if themeGenes!="":
             if isPpi:
                 print "&#8212;" # unicode long dash
