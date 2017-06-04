@@ -44,7 +44,7 @@ char *weeds[] =
     "platform.title",
     "sample.channel_count",
     "sample.data_row_count",
-    "sample.platform_id	",
+    "sample.platform_id",
     "sample.series_id",
     "sample.type",
     "series.platform_id",
@@ -61,9 +61,12 @@ char *substitutions[][2] =
     {"platform.organism", "sample.donor.species"},
     {"platform.taxid", "sample.donor.ncbi_taxon"},
     {"sample.characteristics_cell_type", "cell.type"},
+    {"sample.characteristics_developmental_stage", "sample.donor.life_stage"},
     {"sample.characteristics_ethnicity", "sample.donor.ethnicity"},
+    {"sample.characteristics_genotype", "sample.donor.genotype"},
     {"sample.characteristics_exome_capture", "assay.genome.method"},
     {"sample.characteristics_strain", "sample.donor.strain"},
+    {"sample.characteristics_tissue", "sample.body_part.name"},
     {"sample.contact_address", "project.contact_address"},
     {"sample.contact_city", "project.contact_city"},
     {"sample.contact_country", "project.contact_country"},
@@ -77,6 +80,7 @@ char *substitutions[][2] =
     {"sample.contact_zip/postal_code", "project.contact_postal_code"},
     {"sample.contributor", "project.contributor"},
     {"sample.description", "sample.short_label"},
+    {"sample.geo_accession", "sample.geo_sample"},
     {"sample.instrument_model", "assay.seq.machine"},
     {"sample.last_update_date sample.last_update_date"},
     {"sample.library_selection", "assay.rna.primer"},
@@ -114,6 +118,36 @@ char *substitutions[][2] =
     {"series.taxid", "sample.donor.ncbi_taxon"},
     {"series.title", "project.title"},
 };
+
+char *mon[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+char *geoDateToHcaDate(char *geoDate, char *hcaBuf, int hcaBufSize)
+/* Convert Mon DD YYYY format date to YYYY-MM-DD format in hcaBuf, which should be
+ * at least 11 long. */
+{ 
+/* Make sure input is right size and make a copy of it for parsing */
+int geoDateSize = strlen(geoDate);
+if (geoDateSize != 11)
+    errAbort("date %s is not in DD Mon YYY format", geoDate);
+char geoParsed[geoDateSize+1];
+strcpy(geoParsed, geoDate);
+
+/* Parse out three parts */
+char *parser = geoParsed;
+char *month = nextWord(&parser);
+char *day = nextWord(&parser);
+char *year = nextWord(&parser);
+if (year == NULL)
+    errAbort("date %s is not in DD Mon YYY format", geoDate);
+
+/* Look up month */
+int monthIx = stringArrayIx(month, mon, sizeof(mon));
+if (monthIx < 0)
+    errAbort("unrecognized month in %s", geoDate);
+
+safef(hcaBuf, hcaBufSize, "%s-%02d-%s", year, monthIx+1, day);
+return hcaBuf;
+}
 
 char *accFromEnd(char *url, char endChar, char *accPrefix, char *type)
 /* Parse out something like
@@ -199,6 +233,28 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
+void fixDates(struct tagStorm *storm, struct tagStanza *stanza)
+/* Convert various URLs containing accessions to just accessions */
+{
+struct slPair *pair;
+for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+    {
+    if (endsWith(pair->name, "_date"))
+	geoDateToHcaDate(pair->val, pair->val, strlen(pair->val)+1);
+    }
+}
+
+void rFixDates(struct tagStorm *storm, struct tagStanza *list)
+/* Go through and fix accessions in all stanzas */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    fixDates(storm, stanza);
+    rFixDates(storm, stanza->children);
+    }
+}
+
 void geoStormToHcaStorm(char *inTags, char *inSrxSrr, char *output)
 /* geoStormToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
  *  Atlas wants.. */
@@ -208,6 +264,7 @@ gSrxToSrr = hashTwoColumnFile(inSrxSrr);
 hashReverseAllBucketLists(gSrxToSrr);
 tagStormWeedArray(storm, weeds, ArraySize(weeds));
 rFixAccessions(storm, storm->forest);
+rFixDates(storm, storm->forest);
 tagStormSubArray(storm, substitutions, ArraySize(substitutions));
 tagStormWrite(storm, output, 0);
 }
