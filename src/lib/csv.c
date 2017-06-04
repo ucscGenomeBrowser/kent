@@ -5,26 +5,34 @@
 #include "linefile.h"
 #include "csv.h"
 
+void csvEscapeAndAppend(struct dyString *dy, char *string)
+/* Append escaped string to dy.  Will insert comma if dy is non-empty */
+{
+if (dy->stringSize != 0)
+    dyStringAppendC(dy, ',');
+if (strchr(string, ',') == NULL)
+    dyStringAppend(dy, string);
+else
+    {
+    dyStringAppendC(dy, '"');
+    char c;
+    while ((c = *string++) != 0)
+	{
+	if (c == '"')
+	    dyStringAppendC(dy, c);
+	dyStringAppendC(dy, c);
+	}
+    dyStringAppendC(dy, '"');
+    }
+}
+
 char *csvEscapeToDyString(struct dyString *dy, char *string)
-/* Wrap string in quotes if it has any commas.  Anything already in quotes get s double-quoted 
- * Returns transformated result, which will be input string if it has no commas, otherwise
- * will be dy*/
+/* Wrap string in quotes if it has any commas.  Put result into dy, and return it as a 
+ * string.   Anything already in quotes get double-quoted */
 {
 /* If there are no commas just output it */
-if (strchr(string, ',') == NULL)
-    {
-    return string;
-    }
 dyStringClear(dy);
-dyStringAppendC(dy, '"');
-char c;
-while ((c = *string++) != 0)
-    {
-    if (c == '"')
-        dyStringAppendC(dy, c);
-    dyStringAppendC(dy, c);
-    }
-dyStringAppendC(dy, '"');
+csvEscapeAndAppend(dy, string);
 return dy->string;
 }
 

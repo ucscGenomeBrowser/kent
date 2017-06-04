@@ -4,10 +4,12 @@
 #ifndef CSV_H
 #define CSV_H
 
+void csvEscapeAndAppend(struct dyString *dy, char *string);
+/* Append escaped string to dy.  Will insert comma if dy is non-empty */
+
 char *csvEscapeToDyString(struct dyString *dy, char *string);
-/* Wrap string in quotes if it has any commas.  Anything already in quotes get s double-quoted 
- * Returns transformated result, which will be input string if it has no commas, otherwise
- * will be dy*/
+/* Wrap string in quotes if it has any commas.  Put result into dy, and return it as a 
+ * string.   Anything already in quotes get double-quoted */
 
 void csvWriteVal(char *val, FILE *f);
 /* Write val, which may have some quotes or commas in it, in a way to be compatable with
