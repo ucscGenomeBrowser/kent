@@ -7,6 +7,8 @@ from itertools import chain, combinations
 from os.path import join, basename, dirname, isfile, expanduser
 import ujson
 
+# TODO: change indexPairs so it corrects synonyms to the current gene symbol
+
 # saves 20% of time when loading graph marshal
 import gc
 gc.disable()
@@ -406,7 +408,7 @@ def loadTable(db, tableDir, table):
     os.remove(tmpSqlFname)
 
 def hgsql(db, query):
-    assert('"' not in sql)
+    assert('"' not in query)
     cmd = "hgsql %s -NBe '%s'" % (db, query)
 
 def addIndexes(db):
@@ -415,6 +417,9 @@ def addIndexes(db):
     hgsql(db, query)
 
     query = "ALTER TABLE ggEventText ADD INDEX docIdIdx (docId);"
+    hgsql(db, query)
+
+    query = "alter table ggDocEvent add index eventIdIdx (eventId);"
     hgsql(db, query)
 
 def loadTables(tableDir, db):
@@ -469,7 +474,11 @@ def writeEventTable(rowList, outFname, colCount=None):
     for rows in rowList:
         for row in rows:
             if colCount:
-                row = row[:colCount]
+                if len(row)+1 == colCount:
+                    row = list(row)
+                    row.append("")
+                #row = row[:colCount]
+                assert(len(row)==colCount)
             ofh.write("%s\n" % ("\t".join(row)))
     ofh.close()
 
@@ -1161,7 +1170,7 @@ if cmd == "build":
     writeDocEvents(pmidToId, outFname)
 
     outFname = join(outDir, "ggEventDb.tab")
-    writeEventTable([dbRows, pwRows], outFname, colCount=13)
+    writeEventTable([dbRows, pwRows], outFname, colCount=14)
 
     outFname = join(outDir, "ggEventText.tab")
     writeEventTable([textRows], outFname)

@@ -36,8 +36,9 @@ headers = "eventId,causeType,causeName,causeGenes,themeType,themeName,themeGenes
 eventId = 0
 
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
-parser = optparse.OptionParser("""usage: %prog [options] filename - convert NCI PID xml files to tab-sep format
+parser = optparse.OptionParser("""usage: %prog [options] filename - convert NCI PID xml files to tab-sep format.
 
+If filename contains 'BioCarta', adapt the pathway names for biocarta links
 """)
 
 parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
@@ -282,6 +283,9 @@ def parseXml(filename, accToSym):
     for pwEl in root.findall("Model/PathwayList/Pathway"):
         pwName = pwEl.find("LongName").text
         pwShortName = pwEl.find("ShortName").text
+        if "BioCarta" in filename:
+            # bad hack, but uppercase is lost in the xml
+            pwShortName = "h_"+pwShortName.replace("pathway", "Pathway")
         #print pwName
         pwCompEls = pwEl.findall("PathwayComponentList/PathwayComponent")
         if pwCompEls==None:
@@ -294,6 +298,10 @@ def parseXml(filename, accToSym):
     global eventId
     skipCount = 0
     for ic in root.findall("Model/InteractionList/Interaction"):
+        dbName = "pid"
+        if "BioCarta" in filename:
+            dbName = "biocarta"
+
         intId = ic.attrib["id"]
         iType = ic.attrib["interaction_type"]
         if iType in ["pathway", "subnet"]: # refs to complete pathways
@@ -350,7 +358,7 @@ def parseXml(filename, accToSym):
             row.extend(m2)
             row.append(iType)
             row.append(subRel)
-            row.append("pid")
+            row.append(dbName)
             #row.append(intId)
             row.append(intIdToShortName[intId])
             row.append(pwName)
