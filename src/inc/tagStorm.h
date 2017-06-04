@@ -81,7 +81,11 @@ void tagStormWriteAsFlatRa(struct tagStorm *tagStorm, char *fileName, char *idTa
 
 void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idTag, 
     boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal, boolean sharpLabel);
-/* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in .tsv format */
+
+void tagStormWriteAsFlatCsv(struct tagStorm *tagStorm, char *fileName, char *idTag, 
+    boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal);
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in .csv format */
 
 void tagStanzaRecursiveWrite(struct tagStanza *list, FILE *f, int maxDepth, int depth);
 /* Recursively write out stanza list and children to open file */
