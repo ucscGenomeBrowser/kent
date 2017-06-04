@@ -132,11 +132,26 @@ struct fieldedTable *table = fieldedTableFromTabFile(sdrfFile, sdrfFile,
 
 /* Convert ArrayExpress field names to our field names */
 int fieldIx;
+char *lastNonTerm = NULL;
 for (fieldIx=0; fieldIx < table->fieldCount; fieldIx += 1)
     {
     char tagName[256];
     aeFieldToNormalField("sdrf.", table->fields[fieldIx], tagName, sizeof(tagName));
-    table->fields[fieldIx] = lmCloneString(table->lm, tagName);
+    if (lastNonTerm != NULL && sameString("sdrf.Term_Source_REF", tagName))
+	 {
+         safef(tagName, sizeof(tagName), "%s_Term_Source_REF", lastNonTerm);
+	 table->fields[fieldIx] = lmCloneString(table->lm, tagName);
+	 }
+    else if (lastNonTerm != NULL && sameString("sdrf.Term_Accession_Number", tagName))
+	 {
+         safef(tagName, sizeof(tagName), "%s_Term_Accession_Number", lastNonTerm);
+	 table->fields[fieldIx] = lmCloneString(table->lm, tagName);
+	 }
+    else
+	 {
+         lastNonTerm = lmCloneString(table->lm, tagName);
+	 table->fields[fieldIx] = lmCloneString(table->lm, lastNonTerm);
+	 }
     }
 
 /* Make up a list and hash of fieldMergers to handle conversion of columns that occur
