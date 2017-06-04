@@ -143,6 +143,7 @@ struct fieldedTable *table = fieldedTableFromTabFile(sdrfFile, sdrfFile,
 /* Convert ArrayExpress field names to our field names */
 int fieldIx;
 char *lastNonTerm = NULL;
+char *lastNonUnit = NULL;
 for (fieldIx=0; fieldIx < table->fieldCount; fieldIx += 1)
     {
     char tagName[256];
@@ -157,10 +158,16 @@ for (fieldIx=0; fieldIx < table->fieldCount; fieldIx += 1)
          safef(tagName, sizeof(tagName), "%s_Term_Accession_Number", lastNonTerm);
 	 table->fields[fieldIx] = lmCloneString(table->lm, tagName);
 	 }
+    else if (lastNonUnit != NULL && startsWith("sdrf.Unit_", tagName))
+         {
+	 safef(tagName, sizeof(tagName), "%s_Unit", lastNonUnit);
+	 lastNonTerm = lmCloneString(table->lm, tagName);
+	 table->fields[fieldIx] = lastNonTerm;
+	 }
     else
 	 {
-         lastNonTerm = lmCloneString(table->lm, tagName);
-	 table->fields[fieldIx] = lmCloneString(table->lm, lastNonTerm);
+         lastNonTerm = lastNonUnit = lmCloneString(table->lm, tagName);
+	 table->fields[fieldIx] = lastNonTerm;
 	 }
     }
 
