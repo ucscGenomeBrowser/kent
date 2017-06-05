@@ -1498,7 +1498,7 @@ def printDbRows(conn, rows, onlyDoc=None):
 
         if relType!="" or relSubtype!="":
             if relType!="" and relSubtype!="":
-                print "(%s/%s)" % (relType, relSubtype)
+                print "(%s, %s)" % (relType, relSubtype)
             elif relType!="":
                 print "(%s)" % (relType)
             elif relSubtype!="":
@@ -1958,6 +1958,7 @@ def showStats():
     " "
     print "<h3>Databases - number of unique pairs</h3>"
     print "<ul>"
+
     conn = sqlConnect(GGDB)
     pairs = uniquePairs(conn)
     for db, pairSet in sorted(pairs.items()):
