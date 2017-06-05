@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "localmem.h"
 #include "tagStorm.h"
 #include "csv.h"
 
@@ -30,8 +31,9 @@ char *weeds[] =
     {
     "idf.SDRF_File",			// This file is embedded in tagStorm
     "idf.Comment_GEOReleaseDate",	// Redundant with Public_Release_DATE
-    "idf.Comment_Submitted_Name",	// Redundant with Investigation_Title
+    "idf.Comment_SecondaryAccession", // Actually we do capture this before weeding
     "idf.Comment_SequenceDataURI",	// Takes you to web page can get to other ways
+    "idf.Comment_Submitted_Name",	// Redundant with Investigation_Title
     "idf.Experimental_Design_Term_Source_REF",  // Can be deduced from related field
     "idf.Experimental_Factor_Term_Source_REF",	// Can be deduced from related field
     "idf.Experimental_Factor_Term_Accession_Number", // Sparsely used and uninformative
@@ -43,7 +45,8 @@ char *weeds[] =
     "sdrf.Technology_Type",          // Always "sequencing assay" which is captured elsewhere
     "sdrf.Characteristics_age_Unit_Term_Accession_Number",  // Overkill for day/week/month/year
     "sdrf.Characteristics_age_Unit_Term_Source_REF",  // Overkill for day/week/month/year
-    "idf.Comment_SecondaryAccession", // Actually we do capture this before weeding
+    "sdrf.Comment_LIBRARY_SOURCE", // Always seems to be transcriptome or genomic
+    "sdrf.Performer",		   // Difficult and not in GEO 
     };
 
 
@@ -67,13 +70,19 @@ char *machineTags[] =
     "sdrf.Comment_Platform_title",   
     };
 
+char *moleculeTags[] = 
+/* Various fields assay.seq.molecule might be found in */
+    {
+    "sdrf.Comment_LIBRARY_STRATEGY", 
+    "sdrf.Material_Type", 
+    };
+
 char *projectSuppFileTags[] = 
 /* We'll make project.supplementary_files out of combining these */
     {
     "idf.Comment_AdditionalFile_txt", 
     "idf.Comment_AdditionalFile_Data", 
     };
-
 
 char *substitutions[][2] = 
 /* Tags we'll rename */
@@ -124,17 +133,13 @@ char *substitutions[][2] =
 {"sdrf.Comment_ENA_RUN", "assay.ena_run",}, 
 {"sdrf.Comment_ENA_SAMPLE", "sample.ena_sample",}, 
 {"sdrf.Comment_FASTQ_URI", "sample.files",}, 
-{"sdrf.Comment_LIBRARY_LAYOUT", "reformat.Comment_LIBRARY_LAYOUT",}, 
-{"sdrf.Comment_LIBRARY_SELECTION", "reformat.Comment_LIBRARY_SELECTION",}, 
-{"sdrf.Comment_LIBRARY_SOURCE", "reformat.Comment_LIBRARY_SOURCE",}, 
-{"sdrf.Comment_LIBRARY_STRAND", "reformat.Comment_LIBRARY_STRAND",}, 
-{"sdrf.Comment_LIBRARY_STRATEGY", "assay.seq.molecule",}, 
+{"sdrf.Comment_LIBRARY_LAYOUT", "assay.seq.paired_ends",}, 
+{"sdrf.Comment_LIBRARY_SELECTION", "assay.rna.primer",}, 
+{"sdrf.Comment_LIBRARY_STRAND", "assay.rna.strand",}, 
 {"sdrf.Comment_SUBMITTED_FILE_NAME", "assay.submitted_file_names",}, 
 {"sdrf.Comment_Sample_description", "sample.short_label",}, 
 {"sdrf.Comment_Sample_source_name", "sample.body_part.source_name",}, 
 {"sdrf.Comment_Sample_title", "sample.long_label",}, 
-{"sdrf.Material_Type", "reformat.Material_Type",}, 
-{"sdrf.Performer", "reformat.Performer",}, 
 {"sdrf.Protocol_REF", "reformat.Protocol_REF",}, 
 {"sdrf.Protocol_REF_Term_Source_REF", "reformat.Protocol_REF_Term_Source_REF",}, 
 {"sdrf.Source_Name", "sample.submitted_id",}, 
@@ -298,6 +303,35 @@ for (acc = accList; acc != NULL; acc = acc->next)
     }
 }
 
+void subTagLeafVals(struct tagStorm *storm, struct tagStanzaRef *leafList, 
+    char *tagName, char *subs[][2], int subCount)
+/* Change values of tagName using subs table */
+{
+struct tagStanzaRef *ref;
+for (ref = leafList; ref != NULL; ref = ref->next)
+    {
+    struct tagStanza *stanza = ref->stanza;
+    struct slPair *tag = slPairFind(stanza->tagList, tagName);
+    if (tag != NULL)
+        {
+	char *oldVal = tag->val;
+	char *newVal = NULL;
+	int i;
+	for (i=0; i<subCount; ++i)
+	    {
+	    if (sameString(oldVal, subs[i][0]))
+	        {
+		newVal = subs[i][1];
+		break;
+		}
+	    }
+	if (newVal == NULL)
+	    errAbort("Unrecognized value %s for %s", oldVal, tagName);
+	tag->val = lmCloneString(storm->lm, newVal);
+	}
+    }
+}
+
 void arrayExpressStormToHcaStorm(char *inTags, char *outTags)
 /* arrayExpressStormToHcaStorm - Convert output of arrayExpressToTagStorm to somethng closer to 
  * what the Human Cell Atlas wants.. */
@@ -313,12 +347,29 @@ reformatSecondaryAccessions(storm);
 combineIntoOneArray(storm, storm->forest, projectSuppFileTags, ArraySize(projectSuppFileTags),
     "project.supplementary_files");
     
-
 /* Deal with some tags that we just select one from a redundant set. */
 struct tagStanzaRef *leafList = tagStormListLeaves(storm);
 replaceWithFirstChoice(storm, leafList, machineTags,ArraySize(machineTags), "assay.seq.machine");
 replaceWithFirstChoice(storm, leafList, cellTypeTags,ArraySize(cellTypeTags), "cell.type");
 replaceWithFirstChoice(storm, leafList, diseaseTags,ArraySize(diseaseTags), "sample.donor.disease");
+replaceWithFirstChoice(storm, leafList, moleculeTags,ArraySize(moleculeTags), "assay.seq.molecule");
+
+/* Fix up paired_ends */
+char *pairedEndsSubs[][2] =
+    {
+	{"PAIRED", "yes"},
+	{"SINGLE", "no"},
+    };
+subTagLeafVals(storm, leafList, "assay.seq.paired_ends", pairedEndsSubs, ArraySize(pairedEndsSubs));
+
+/* Fix up strand */
+char *strandSubs[][2] = 
+    {
+        {"not applicable", "both"},
+	{"first strand", "first"},
+    };
+subTagLeafVals(storm, leafList, "assay.rna.strand", strandSubs, ArraySize(strandSubs));
+
 
 /* Remove tags that are useless or converted into other things. */
 tagStormWeedArray(storm, weeds, ArraySize(weeds));
