@@ -15,7 +15,6 @@ errAbort(
   "options:\n"
   "   -mid - include non-leaf middle and root nodes in output\n"
   "   -null=string - print string for empty cells, defaults to empty string\n"
-  "   -noSharp - suppress # character at front of label line\n"
   );
 }
 
@@ -23,16 +22,15 @@ errAbort(
 static struct optionSpec options[] = {
    {"mid", OPTION_BOOLEAN},
    {"null", OPTION_STRING},
-   {"noSharp", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-void tagStormToCsv(char *input, char *output, boolean mid, char *nullVal, boolean noSharp)
+void tagStormToCsv(char *input, char *output, boolean mid, char *nullVal)
 /* tagStormToTab - Convert tagStorm to tab-separated-value file.. */
 {
 struct tagStorm *tagStorm = tagStormFromFile(input);
 verbose(1, "%d trees in %s\n", slCount(tagStorm->forest), tagStorm->fileName);
-tagStormWriteAsFlatCsv(tagStorm, output, NULL, FALSE, 0, !mid, nullVal, !noSharp);
+tagStormWriteAsFlatCsv(tagStorm, output, NULL, FALSE, 0, !mid, nullVal);
 }
 
 int main(int argc, char *argv[])
@@ -41,7 +39,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-tagStormToCsv(argv[1], argv[2], optionExists("mid"), optionVal("null", ""), 
-    optionExists("noSharp"));
+tagStormToCsv(argv[1], argv[2], optionExists("mid"), optionVal("null", ""));
 return 0;
 }

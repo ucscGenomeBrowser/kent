@@ -36,6 +36,7 @@
 #include "errAbort.h"
 #include "rql.h"
 #include "tagStorm.h"
+#include "csv.h"
 
 
 struct tagStorm *tagStormNew(char *name)
@@ -421,7 +422,7 @@ carefulClose(&f);
 
 static void rTsWriteAsFlatTab(struct tagStanza *list, struct slName *fieldList,
     FILE *f, char *idTag, boolean withParent,
-     int maxDepth, int depth, boolean leavesOnly, char *nullVal)
+     int maxDepth, int depth, boolean leavesOnly, char *nullVal, boolean isCsv)
 /* Recursively write out list to file */
 {
 if (depth > maxDepth)
@@ -463,11 +464,19 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	    for (field = fieldList; field != NULL; field = field->next)
 		{
 		if (field != fieldList)
-		    fputc('\t', f);
+		    {
+		    if (isCsv)
+			fputc(',', f);
+		    else
+			fputc('\t', f);
+		    }
 		char *val = hashFindVal(uniq, field->name);
 		if (val == NULL)
 		    val = nullVal;
-		fputs(val, f);
+		if (isCsv)
+		    csvWriteVal(val, f);
+		else
+		    fputs(val, f);
 		}
 	    fputc('\n', f);
 	    }
@@ -475,13 +484,13 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	}
 
     rTsWriteAsFlatTab(stanza->children, fieldList, f, idTag, withParent, maxDepth, depth+1, 
-	leavesOnly, nullVal);
+	leavesOnly, nullVal, isCsv);
     }
 }
 
-void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idTag, 
-    boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal, boolean sharpLabel)
-/* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
+void tagStormWriteAsFlatTabOrCsv(struct tagStorm *tagStorm, char *fileName, char *idTag, 
+    boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal, boolean sharpLabel, boolean isCsv)
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in .tsv format */
 {
 FILE *f = mustOpen(fileName, "w");
 struct slName *fieldList = tagStormFieldList(tagStorm), *field;
@@ -494,13 +503,37 @@ if (sharpLabel)
 for (field = fieldList; field != NULL; field = field->next)
     {
     if (field != fieldList)
-	fputc('\t', f);
-    fprintf(f, "%s", field->name);
+	{
+	if (isCsv)
+	    fputc(',', f);
+	else
+	    fputc('\t', f);
+	}
+    if (isCsv)
+	csvWriteVal(field->name, f);
+    else
+	fputs(field->name, f);
     }
 fputc('\n', f);
 rTsWriteAsFlatTab(tagStorm->forest, fieldList, f, idTag, withParent, maxDepth, 0, leavesOnly,
-    nullVal);
+    nullVal, isCsv);
 carefulClose(&f);
+}
+
+void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idTag, 
+    boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal, boolean sharpLabel)
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in .tsv format */
+{
+tagStormWriteAsFlatTabOrCsv(tagStorm, fileName, idTag, 
+    withParent, maxDepth, leavesOnly, nullVal, sharpLabel, FALSE);
+}
+
+void tagStormWriteAsFlatCsv(struct tagStorm *tagStorm, char *fileName, char *idTag, 
+    boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal)
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in .csv format */
+{
+tagStormWriteAsFlatTabOrCsv(tagStorm, fileName, idTag, 
+    withParent, maxDepth, leavesOnly, nullVal, FALSE, TRUE);
 }
 
 void tagStanzaUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
