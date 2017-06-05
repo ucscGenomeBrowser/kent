@@ -49,8 +49,8 @@ char *weeds[] =
 char *machineTags[] = 
 /* Various fields array.seq.machine might be found in. */
      {
-    "idf.Protocol_Hardware", 
     "sdrf.Comment_INSTRUMENT_MODEL",
+    "idf.Protocol_Hardware", 
     "sdrf.Comment_Platform_title",   
     };
 
@@ -78,6 +78,7 @@ char *substitutions[][2] =
 {"idf.Person_Email", "project.contact_email",}, 
 {"idf.Person_First_Name", "reformat.Person_First_Name",}, 
 {"idf.Person_Last_Name", "reformat.Person_Last_Name",}, 
+{"idf.Person_Mid_Initials", "reformat.Person_Mid_Initials"},
 {"idf.Person_Phone", "project.contact_phone",}, 
 {"idf.Person_Roles", "reformat.Person_Roles",}, 
 {"idf.Protocol_Description", "project.extract_protocol",}, 
@@ -130,6 +131,31 @@ char *substitutions[][2] =
 {"sdrf.Source_Name", "sample.submitted_id",}, 
 };
 
+void replaceWithBestChoice(struct tagStorm *storm, struct tagStanzaRef *leafList, 
+    char *choices[], int choiceCount, char *replacement)
+/* On each leaf stanza, look for a value in list, which is ordered with
+ * what is likely to be best tag first.  Choose the first one that has
+ * a value, and enter it in stanza as a tag with the name of replacement.
+ * Finally delete all of the choices. */
+{
+struct tagStanzaRef *ref;
+for (ref = leafList; ref != NULL; ref = ref->next)
+    {
+    struct tagStanza *stanza = ref->stanza;
+    char *choice = NULL;
+    int i;
+    for (i=0; i<choiceCount; ++i)
+        {
+	if ((choice = tagFindVal(stanza, choices[i])) != NULL)
+	    {
+	    tagStanzaAppend(storm, stanza, replacement, choice);
+	    break;
+	    }
+	}
+    }
+tagStormWeedArray(storm, choices, choiceCount);
+}
+
 void arrayExpressStormToHcaStorm(char *inTags, char *outTags)
 /* arrayExpressStormToHcaStorm - Convert output of arrayExpressToTagStorm to somethng closer to 
  * what the Human Cell Atlas wants.. */
@@ -138,7 +164,10 @@ struct tagStorm *storm = tagStormFromFile(inTags);
 tagStormWeedArray(storm, weeds, ArraySize(weeds));
 tagStormSubArray(storm, substitutions, ArraySize(substitutions));
 
-uglyf("Still got to deal with %d machineTags\n", (int)ArraySize(machineTags) );
+/* Get list of leafs for further work. */
+struct tagStanzaRef *leafList = tagStormListLeaves(storm);
+replaceWithBestChoice(storm, leafList, machineTags, ArraySize(machineTags), "assay.seq.machine");
+
 tagStormWrite(storm, outTags, 0);
 }
 
