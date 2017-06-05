@@ -119,11 +119,66 @@ and BLAT in your firewall. Once all data is downloaded, no open ports are needed
 <li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks, like a manual local installation.</li>
 </ul></li>
 </ul></li>
-</ol>
+
+<li><p>
+<strong>Install locally with the Genome Browser installation script (GBIC)</strong>
+</p>
 
 <p>
-If none of the above options fulfill your needs, consider setting up a full local mirror of the UCSC website.
-We support mirror site installations as time allows, and have many functional mirrors of the Genome Browser worldwide.
+We recommend this only if none of the above options fulfill your needs. Our <a href="https://genome.ucsc.edu/goldenpath/help/gbic.html">GBIC installation script</a> will
+install a full local mirror of the UCSC website, for the assemblies you select.
+We support mirror site installations as time allows, and have many functional
+mirrors of the Genome Browser worldwide. For details, the section <a href="#installing-a-genome-browser-locally-with-the-gbic-installer">below</a>.
+<ul>
+<li>Pros:
+
+<ul>
+<li>Relatively simple to install on a virtual machine or cloud instance: just run the script.</li>
+<li>Best performance when rendering local BAM/bigWig/bigBed files.</li>
+<li>For commercial users: easier click-through licensing compared to a full multi-seat, manual license.</li>
+</ul></li>
+<li>Cons:
+
+<ul>
+<li>To keep up with changes in the Genome Browser, you will have to install linux packages and update the linux distribution yourself in the future and run the installation script with the 'update' command if you want to take advantage of new features in the Genome Browser.</li>
+<li>Preferably run on a linux server that is not used otherwise.</li>
+<li>By default requires opening at least three outgoing ports to UCSC for MySQL
+and BLAT in your firewall. Once all data is downloaded and BLAT setup locally, no open ports are needed.</li>
+<li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks.</li>
+</ul></li>
+</ul></li>
+
+<li><p>
+<strong>Install locally yourself, by following installation instructions</strong>
+</p>
+
+<p>
+We do provide <a href="https://genome.ucsc.edu/goldenpath/help/mirrorManual.html">step-by-step</a>
+instructions for local installation, but do not recommend this. The internet
+also has various pages with instructions, but they are often out of date and may
+cause problems later.  For details on these instructions, see the section <a
+href="#manual-installation-instructions">below</a>.
+<ul>
+<li>Pros:
+
+<ul>
+<li>You will understand the complete setup of the Genome Browser.</li>
+<li>For commercial users: license agreements can be customized to your needs.</li>
+</ul></li>
+<li>Cons:
+
+<ul>
+<li>Not easy to setup, even for experienced Unix administrators</li>
+<li>Will probably require some support from us via the genome-mirror mailing list</li>
+<li>To keep up with changes in the Genome Browser, you will have to install linux packages and update the linux distribution yourself in the future and apply UCSC data updates yourself using rsync or MySQL table loads.</li>
+<li>Configuration changes on our side may break your setup.</li>
+<li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks.</li>
+<li>For commercial users: license agreements take longer to negotiate.</li>
+</ul></li>
+</ul></li>
+
+
+</ol>
 </p>
 
 <p>
