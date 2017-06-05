@@ -2780,3 +2780,30 @@ http://genome.crg.es/genepredictions/E.caballus/equCab2/geneid_v1.4/equCab2.gene
 #     enrich 48.94x
 
 ##########################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2015-02-22 - Hiram)
+
+    # alignment to human/hg38:
+    cd /hive/data/genomes/hg38/bed/lastzEquCab2.2015-02-22
+    cat fb.hg38.chainEquCab2Link.txt
+    # 1691134629 bases of 3049335806 (55.459%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/equCab2/bed/blastz.hg38.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzEquCab2.2015-02-22/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    123m57.167s
+
+    cat fb.equCab2.chainHg38Link.txt
+    # 1617562865 bases of 2428790173 (66.600%) in intersection
+    # replacing the previous tuned version:
+    # 1516707888 bases of 2428790173 (62.447%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` equCab2 hg38) > rbest.log 2>&1
+    # real    43m47.647s
+
+#########################################################################

@@ -388,6 +388,7 @@ group varRep
 type vcfTabix
 visibility hide
 hapClusterHeight 78
+maxWindowToDraw 1000000
 
 track nestedRepeats override
 group varRep

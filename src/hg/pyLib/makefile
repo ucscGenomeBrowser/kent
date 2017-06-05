@@ -9,7 +9,7 @@ ifeq (${CGI_BIN_USER},)
 endif
 
 ifeq (${CGI_BIN_BETA},)
-    CGI_BIN_ALPHA=${CGI_BIN}-beta
+    CGI_BIN_BETA=${CGI_BIN}-beta
 endif
 
 my:: compile 
