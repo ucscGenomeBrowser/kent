@@ -63,32 +63,6 @@ def lineFileNext(fh):
         # convert fields to correct data type
         yield rec
 
-def trySymFromName(nameStr, accToSym):
-    # try a few things to get the official symbol of a synonym
-    # handles complexes and returns a | sep list for them
-
-    if "/" in nameStr:
-        parts = nameStr.split("/")
-        syms = []
-        for p in parts:
-            p = p.strip()
-            pSym = trySymFromName(p, accToSym)
-            if pSym!="":
-                syms.append(pSym)
-        if len(syms)!=0:
-            return "|".join(syms)
-
-    if nameStr == "":
-        nameStr = accTonameStr.get(nameStr, "")
-    if nameStr=="":
-        nameStr = accTonameStr.get(nameStr.split("-")[0].lower(), "")
-    if nameStr=="":
-        nameStr = accTonameStr.get(nameStr.split("/")[0].lower(), "")
-    if nameStr=="":
-        nameStr = accTonameStr.get(nameStr.split()[0].lower(), "")
-    # give up
-    return ""
-
 def pipeSplitAddAll(string, dict, key, toLower=False):
     " split on pipe and add all values to dict with key "
     for val in string.split("|"):
@@ -151,7 +125,13 @@ def flattenCsv(member, validSyms, aliasToSym):
             newSyms = [sym]
         else:
             newSyms = aliasToSym[sym]
-        return "gene", sym, "|".join(newSyms)
+
+        label = sym
+        # only output a label is we did make a change to the gene names
+        newSymStr = "|".join(newSyms)
+        if label==newSymStr:
+            label = ""
+        return "gene", label, newSymStr
 
     if mType=="Complex":
         parts = member[1:]
@@ -168,7 +148,13 @@ def flattenCsv(member, validSyms, aliasToSym):
                 partSyms.append(sym)
             else:
                 partSyms.extend(aliasToSym[sym])
-        return "complex", "/".join(origNames), "|".join(partSyms)
+
+        # only show a label if we changed something
+        label = "/".join(origNames)
+        geneStr = "|".join(partSyms)
+        if set(origNames)==set(partSyms):
+            label = ""
+        return "complex", label, geneStr
 
     if mType=="Abundance":
         # ('Abundance', 'CHEBI', 'metformin')
@@ -178,6 +164,7 @@ def flattenCsv(member, validSyms, aliasToSym):
 def parseBelCsv(fname, validSyms, aliasToSym):
     " parse BEL csv format and return as rows "
     skipCount = 0
+    doneRows = set()
     #('Protein', 'HGNC', 'HOXD3')	('RNA', 'HGNC', 'TSPAN7')	{'subject_effect_namespace': 'bel', 'citation_type': 'PubMed', 'citation_name': 'Oncogene 2002 Jan 24 21(5) 798-808', 'evidence': 'Table 1 - Gene regulated by overexpressing HOXD3 in A549 lung cancer cell lines by more than 1.6 fold.', 'subject_modifier': 'Activity', 'relation': 'increases', 'line': 62002, 'subject_effect_name': 'tscript', 'citation_reference': '11850808'}
     #('Abundance', 'CHEBI', 'palmitic acid') ('Complex', ('Protein', 'MGI', 'Myd88'), ('Protein', 'MGI', 'Tlr2')) {'citation_type': 'PubMed', 'citation_name': 'J Biol Chem 2006 Sep 15 281(37) 26865-75', 'evidence': 'Treatment with palmitate rapidly induced the association of myeloid differentiation factor 88 (MyD88) with the TLR2 receptor, activated the stress-linked kinases p38, JNK, and protein kinase C, induced degradation of IkappaBalpha, and increased NF-kappaB DNA binding...TLR2 mediates the initial events of fatty acid-induced insulin resistance in muscle', 'relation': 'increases', 'line': 205920, 'citation_reference': '16798732'}
 
@@ -226,18 +213,29 @@ def parseBelCsv(fname, validSyms, aliasToSym):
 
         # conv modifiers to a single string
         parts = []
-        mod1 = attrs.get("subject_modifier")
-        mod2 = attrs.get("object_modifier")
+        # our format is theme <- cause but every other database 
+        # is cause -> theme. Too late to change our format now.
+        mod1 = attrs.get("object_modifier")
+        mod2 = attrs.get("subject_modifier")
         if mod1!=None:
-            parts.append("gene1: %s" % mod1)
+            g1Label = g1Genes.replace("|", "/") # '/' is a bit more readable
+            parts.append("%s %s" % (g1Label, mod1))
         if mod2!=None:
-            parts.append("gene2: %s" % mod2)
+            g2Label = g2Genes.replace("|", "/")
+            parts.append("%s %s" % (g2Label, mod2))
         relSubtype = ", ".join(parts)
+
+        # skip duplicates
+        mainData = (g2Type, g2Name, g2Genes, g1Type, g1Name, g1Genes, relType, relSubtype, pmid, evid)
+        if mainData in doneRows:
+            continue
+        doneRows.add(mainData)
 
         # fields are:
         #"eventId,causeType,causeName,causeGenes,themeType,themeName,themeGenes,relType,relSubtype,sourceDb,sourceId,sourceDesc,pmids,evidence
         # openBel is source -> target
         # but our format is target <- source, because I copied Hoifung's format
+
         row = [
                 "belLarge"+str(i),g2Type, g2Name, g2Genes, g1Type, g1Name, g1Genes,
                 relType, relSubtype,
