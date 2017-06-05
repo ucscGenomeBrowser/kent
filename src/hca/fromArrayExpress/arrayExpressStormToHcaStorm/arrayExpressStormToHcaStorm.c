@@ -67,12 +67,18 @@ char *machineTags[] =
     "sdrf.Comment_Platform_title",   
     };
 
+char *projectSuppFileTags[] = 
+/* We'll make project.supplementary_files out of combining these */
+    {
+    "idf.Comment_AdditionalFile_txt", 
+    "idf.Comment_AdditionalFile_Data", 
+    };
+
+
 char *substitutions[][2] = 
 /* Tags we'll rename */
 {
 {"idf.Comment_AEExperimentType", "project.array_express.experiment_type",}, 
-{"idf.Comment_AdditionalFile_Data", "project.supplementary_files",}, 
-{"idf.Comment_AdditionalFile_txt", "reformat.Comment_AdditionalFile_txt",}, 
 {"idf.Comment_ArrayExpressAccession", "project.array_express.accession",}, 
 {"idf.Comment_ArrayExpressSubmissionDate", "project.submission_date",}, 
 {"idf.Comment_GEOLastUpdateDate", "project.last_update_date",}, 
@@ -157,6 +163,31 @@ for (ref = leafList; ref != NULL; ref = ref->next)
 	}
     }
 tagStormWeedArray(storm, choices, choiceCount);
+}
+
+
+void combineIntoOneArray(struct tagStorm *storm, struct tagStanza *stanza,
+    char *sources[], int sourceCount, char *destination)
+/* Combine values from multiple tags into a single one. */
+{
+struct dyString *dy = dyStringNew(0);
+int i;
+for (i=0; i<sourceCount; ++i)
+    {
+    char *sourceVal = tagFindVal(stanza, sources[i]);
+    if (sourceVal != NULL)
+        {
+	if (dy->stringSize > 0)
+	    dyStringAppendC(dy, ',');
+	dyStringAppend(dy, sourceVal);
+	}
+    }
+if (dy->stringSize > 0)
+    {
+    tagStanzaAppend(storm, stanza, destination, dy->string);
+    tagStormWeedArray(storm, sources, sourceCount);
+    }
+dyStringFree(&dy);
 }
 
 void addFirstWithVal(struct tagStorm *storm, struct tagStanza *stanza, char *oldTag, char *newTag)
@@ -260,6 +291,8 @@ for (acc = accList; acc != NULL; acc = acc->next)
        tagStanzaAppend(storm, stanza, "project.geo_series", acc->name); 
     else if (prefixedNumerical("SRP", acc->name))
        tagStanzaAppend(storm, stanza, "project.sra_project", acc->name);
+    else if (prefixedNumerical("ERP", acc->name))
+       tagStanzaAppend(storm, stanza, "project.ddjb_trace_project", acc->name);
     else
        errAbort("Unrecognized secondaryAccession %s", acc->name);
     }
@@ -275,8 +308,11 @@ tagStormSubArray(storm, substitutions, ArraySize(substitutions));
 /* Deal with Person tags */
 reformatPersonTags(storm);
 
-/* Deal with secondary accessions */
+/* Deal with secondary accessions and project supplementary files */
 reformatSecondaryAccessions(storm);
+combineIntoOneArray(storm, storm->forest, projectSuppFileTags, ArraySize(projectSuppFileTags),
+    "project.supplementary_files");
+    
 
 /* Deal with some tags that we just select one from a redundant set. */
 struct tagStanzaRef *leafList = tagStormListLeaves(storm);
