@@ -43,6 +43,7 @@ char *weeds[] =
     "sdrf.Technology_Type",          // Always "sequencing assay" which is captured elsewhere
     "sdrf.Characteristics_age_Unit_Term_Accession_Number",  // Overkill for day/week/month/year
     "sdrf.Characteristics_age_Unit_Term_Source_REF",  // Overkill for day/week/month/year
+    "idf.Comment_SecondaryAccession", // Actually we do capture this before weeding
     };
 
 
@@ -77,7 +78,6 @@ char *substitutions[][2] =
 {"idf.Comment_GEOLastUpdateDate", "project.last_update_date",}, 
 {"idf.Comment_GEOReleaseDate", "project.release_status",}, 
 {"idf.Comment_RelatedExperiment", "project.array_express.related_experiment",}, 
-{"idf.Comment_SecondaryAccession", "reformat.Comment_SecondaryAccession",}, 
 {"idf.Experiment_Description", "project.summary",}, 
 {"idf.Experimental_Design", "project.overall_design",}, 
 {"idf.Experimental_Design_Term_Accession_Number", "project.overall_design_accession",}, 
@@ -172,7 +172,10 @@ if (val != NULL)
 slFreeList(&valList);
 }
 
-char *personTags[] = 
+void reformatPersonTags(struct tagStorm *storm)
+/* Convert idf.Person_* tags to project.contact_* and project.contributor tag */
+{
+static char *personTags[] = 
     {
     "idf.Person_Address",
     "idf.Person_Affiliation",
@@ -184,9 +187,6 @@ char *personTags[] =
     "idf.Person_Roles",	    // Gets weeded but not replaced. Difficult not super informative.
     };
 
-void reformatPersonTags(struct tagStorm *storm)
-/* Convert idf.Person_* tags to project.contact_* and project.contributor tag */
-{
 struct tagStanza *stanza = storm->forest;  // Project tags/idf tags live on top
 
 /* Fetch the components of names.  We'll be converting them to first,mid,last */
@@ -241,27 +241,53 @@ addFirstWithVal(storm, stanza, "idf.Person_Affiliation", "project.contact_instit
 tagStormWeedArray(storm, personTags, ArraySize(personTags));
 }
 
+boolean prefixedNumerical(char *prefix, char *acc)
+/* Return TRUE if acc starts with prefix and is followed by all numbers */
+{
+if (!startsWith(prefix, acc))
+   return FALSE;
+return isAllDigits(acc + strlen(prefix));
+}
+
+void reformatSecondaryAccessions(struct tagStorm *storm)
+/* Reformat secondaryAccessions into individual accessions */
+{
+struct tagStanza *stanza = storm->forest;  // Project tags/idf tags live on top
+struct slName *acc, *accList = csvParse(tagFindVal(stanza, "idf.Comment_SecondaryAccession"));
+for (acc = accList; acc != NULL; acc = acc->next)
+    {
+    if (prefixedNumerical("GSE", acc->name))
+       tagStanzaAppend(storm, stanza, "project.geo_series", acc->name); 
+    else if (prefixedNumerical("SRP", acc->name))
+       tagStanzaAppend(storm, stanza, "project.sra_project", acc->name);
+    else
+       errAbort("Unrecognized secondaryAccession %s", acc->name);
+    }
+}
 
 void arrayExpressStormToHcaStorm(char *inTags, char *outTags)
 /* arrayExpressStormToHcaStorm - Convert output of arrayExpressToTagStorm to somethng closer to 
  * what the Human Cell Atlas wants.. */
 {
 struct tagStorm *storm = tagStormFromFile(inTags);
-tagStormWeedArray(storm, weeds, ArraySize(weeds));
 tagStormSubArray(storm, substitutions, ArraySize(substitutions));
 
 /* Deal with Person tags */
 reformatPersonTags(storm);
 
-/* Get list of leafs for further work. */
-struct tagStanzaRef *leafList = tagStormListLeaves(storm);
+/* Deal with secondary accessions */
+reformatSecondaryAccessions(storm);
 
 /* Deal with some tags that we just select one from a redundant set. */
+struct tagStanzaRef *leafList = tagStormListLeaves(storm);
 replaceWithFirstChoice(storm, leafList, machineTags,ArraySize(machineTags), "assay.seq.machine");
 replaceWithFirstChoice(storm, leafList, cellTypeTags,ArraySize(cellTypeTags), "cell.type");
 replaceWithFirstChoice(storm, leafList, diseaseTags,ArraySize(diseaseTags), "sample.donor.disease");
 
+/* Remove tags that are useless or converted into other things. */
+tagStormWeedArray(storm, weeds, ArraySize(weeds));
 
+/* And write final result */
 tagStormWrite(storm, outTags, 0);
 }
 
