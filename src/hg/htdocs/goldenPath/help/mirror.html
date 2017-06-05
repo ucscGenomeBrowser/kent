@@ -90,7 +90,7 @@ where all content is mirrored and the closest location is chosen by your provide
 <p>
 <a href='https://genome.ucsc.edu/goldenPath/help/gbib.html' title=''>Genome Browser in a Box</a> (GBiB):
 is a fully configured virtual machine that includes
-Apache and MySQL, and has behavior identical to the UCSC website.
+Apache and Mysql, and has behavior identifical to the UCSC website.
 GBiB loads genome data from the UCSC download servers on the fly.
 Website and data updates are applied automatically every two weeks. By default, GBiB
 uses the VirtualBox virtualization software, so it can be run on any
@@ -119,16 +119,19 @@ and BLAT in your firewall. Once all data is downloaded, no open ports are needed
 <li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks, like a manual local installation.</li>
 </ul></li>
 </ul></li>
-
 <li><p>
 <strong>Install locally with the Genome Browser installation script (GBIC)</strong>
 </p>
 
 <p>
-We recommend this only if none of the above options fulfill your needs. Our <a href="https://genome.ucsc.edu/goldenpath/help/gbic.html">GBIC installation script</a> will
-install a full local mirror of the UCSC website, for the assemblies you select.
-We support mirror site installations as time allows, and have many functional
-mirrors of the Genome Browser worldwide. For details, the section <a href="#installing-a-genome-browser-locally-with-the-gbic-installer">below</a>.
+We recommend this only if none of the above options fulfill your needs. Our
+<a href='https://genome.ucsc.edu/goldenpath/help/gbic.html' title=''>GBIC installation</a> script
+will install a full local mirror of the UCSC website,
+for the assemblies you select. We support mirror site installations as time
+allows, and have many functional mirrors of the Genome Browser worldwide. For
+details, see the <a href='#installing-a-genome-browser-locally-with-the-gbic-installer' title=''>section below</a>.
+</p>
+
 <ul>
 <li>Pros:
 
@@ -140,24 +143,30 @@ mirrors of the Genome Browser worldwide. For details, the section <a href="#inst
 <li>Cons:
 
 <ul>
-<li>To keep up with changes in the Genome Browser, you will have to install linux packages and update the linux distribution yourself in the future and run the installation script with the 'update' command if you want to take advantage of new features in the Genome Browser.</li>
+<li>To keep up with changes in the Genome Browser, you will have to install
+linux packages and update the linux distribution yourself in the future
+and run the installation script with the &#39;update&#39; command if you want to
+take advantage of new features in the Genome Browser.</li>
 <li>Preferably run on a linux server that is not used otherwise.</li>
-<li>By default requires opening at least three outgoing ports to UCSC for MySQL
-and BLAT in your firewall. Once all data is downloaded and BLAT setup locally, no open ports are needed.</li>
+<li>By default requires opening at least three outgoing ports to UCSC for
+MySQL and BLAT in your firewall. Once all data is downloaded and BLAT
+setup locally, no open ports are needed anymore.</li>
 <li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks.</li>
 </ul></li>
 </ul></li>
-
 <li><p>
-<strong>Install locally yourself, by following installation instructions</strong>
+<strong>Install manually yourself, by following installation instructions</strong>
 </p>
 
 <p>
-We do provide <a href="https://genome.ucsc.edu/goldenpath/help/mirrorManual.html">step-by-step</a>
-instructions for local installation, but do not recommend this. The internet
-also has various pages with instructions, but they are often out of date and may
-cause problems later.  For details on these instructions, see the section <a
-href="#manual-installation-instructions">below</a>.
+We do provide <a href='https://genome.ucsc.edu/goldenpath/help/mirrorManual.html' title=''>step-by-step
+instructions</a> for
+local installation, but do not recommend this, if any other system works for you.
+The internet also has various pages with instructions, but they are often out
+of date and may cause problems later. For details on manual instructions, see
+the <a href='#manual-installation-instructions' title=''>section below</a>.
+</p>
+
 <ul>
 <li>Pros:
 
@@ -168,18 +177,17 @@ href="#manual-installation-instructions">below</a>.
 <li>Cons:
 
 <ul>
-<li>Not easy to setup, even for experienced Unix administrators</li>
-<li>Will probably require some support from us via the genome-mirror mailing list</li>
-<li>To keep up with changes in the Genome Browser, you will have to install linux packages and update the linux distribution yourself in the future and apply UCSC data updates yourself using rsync or MySQL table loads.</li>
+<li>Not easy to setup, even for experienced Unix administrators.</li>
+<li>Will probably require some support from us via the genome-mirror mailing list.</li>
+<li>To keep up with changes in the Genome Browser, you will have to
+install linux packages and update the linux distribution yourself in
+the future and apply UCSC data updates yourself using rsync or MySQL table loads</li>
 <li>Configuration changes on our side may break your setup.</li>
 <li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks.</li>
-<li>For commercial users: license agreements take longer to negotiate.</li>
+<li>For commercial users: license agreements take longer to negotiate, no click-through license.</li>
 </ul></li>
 </ul></li>
-
-
 </ol>
-</p>
 
 <p>
 A license is required for commercial download and/or installation of the Genome
@@ -252,9 +260,9 @@ unusual platforms.
 <h2>Using UDR to speed up downloads</h2>
 
 <p>
-<a href='https://github.com/LabAdvComp/UDR' title=''>UDR</a> (UDT Enabled Rsync) is a download 
-protocol that is very efficient at sending large amounts of data over long distances. UDR utilizes 
-rsync as the transport mechanism, but sends the data over the UDT protocol.
+<a href='https://github.com/LabAdvComp/UDR' title=''>UDR</a> (UDT Enabled Rsync) is a download protocol that is very efficent
+at sending large amounts of data over long distances. UDR utilizes rsync
+as the transport mechanism, but sends the data over the UDT protocol.
 UDR is not written or managed by UCSC. It is an open source tool created
 by the <a href='http://www.labcomputing.org/' title=''>Laboratory for Advanced Computing</a> at the University of Chicago.
 It has been tested under Linux, FreeBSD and Mac OSX, but may
@@ -271,7 +279,7 @@ primarily to facilitate quick downloads of huge amounts of data over long distan
 </p>
 
 <p>
-With typical TCP-based protocols like http, ftp, and rsync, the transfer speed
+With typical TCP-based protocols like http, ftp, and rsync, the tranfer speed
 slows as the distance between the download source and destination increases.
 Protocols like UDT/UDR allow for many UDP packets to be
 sent in batch, thus allowing for much higher transmission speeds over long
@@ -294,7 +302,7 @@ rsync installed on your system.
 <p>
 For your convenience, we offer a binary distribution of UDR for
 Red Hat Enterprise Linux 6.x (or variants such as CentOS 6 or Scientific
-Linux 6). You&#39;ll find both a 64-bit and 32-bit rpm <a href='http://hgdownload.soe.ucsc.edu/admin/udr' title=''>here</a>.
+Linux 6). You&#39;ll find both a 64-bit and 32-bit rpm <a href='http://hgdownload.cse.ucsc.edu/admin/udr' title=''>here</a>.
 </p>
 
 <p>
@@ -305,15 +313,15 @@ rsync, all of the MySQL tables for the hg19
 database can be downloaded using either one of the following two commands:
 </p>
 
-<pre><code>rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hg19/ /my/local/hg19/
-rsync -avP hgdownload.soe.ucsc.edu::mysql/hg19/ /my/local/hg19/</code></pre>
+<pre><code>rsync -avP rsync://hgdownload.cse.ucsc.edu/mysql/hg19/ /my/local/hg19/
+rsync -avP hgdownload.cse.ucsc.edu::mysql/hg19/ /my/local/hg19/</code></pre>
 
 <p>
 Using UDR is very similar. The UDR syntax for downloading the same data
 would be:
 </p>
 
-<pre><code>udr rsync -avP hgdownload.soe.ucsc.edu::mysql/hg19/ /my/local/hg19/</code></pre>
+<pre><code>udr rsync -avP hgdownload.cse.ucsc.edu::mysql/hg19/ /my/local/hg19/</code></pre>
 
 <a name='the-genome-mirror-mailing-list'></a>
 <h2>The genome-mirror mailing list</h2>
