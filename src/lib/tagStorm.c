@@ -474,7 +474,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 		if (val == NULL)
 		    val = nullVal;
 		if (isCsv)
-		    csvWriteVal(field->name, f);
+		    csvWriteVal(val, f);
 		else
 		    fputs(val, f);
 		}
