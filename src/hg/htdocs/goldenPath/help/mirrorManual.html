@@ -1,5 +1,7 @@
 <!DOCTYPE HTML>
-
+<!-- DO NOT EDIT THE HTDOCS VERSION OF THIS FILE. THIS FILE IS AUTOMATICALLY
+     GENERATED FROM A MARKDOWN FILE IN kent/src/product. MAKE ANY EDITS TO
+     THIS PAGE THERE, RUN MAKE, AND FOLLOW THE INSTRUCTIONS TO EDIT THIS PAGE. -->
 <!--#set var="TITLE" value="Genome Browser Manual Installation" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -1539,17 +1541,23 @@ such as (but not limited to) for example
 bigWig or bigBed data via custom track bigDataUrl.
 </p>
 
-<p>One may add the settings &quot;httpProxy&quot;, &quot;httpsProxy&quot; and &quot;ftpProxy&quot; to hg.conf</p>
+<p>
+One must add the setting &quot;httpProxy&quot;, &quot;httpsProxy&quot;, &quot;ftpProxy&quot; to hg.conf
+</p>
 
-<pre><code>httpProxy=http://someProxyServer:3128</code></pre>
-<pre><code>httpsProxy=http://someProxyServer:3128</code></pre>
-<pre><code>ftpProxy=http://127.0.0.1:2121</code></pre>
+<p>
+httpProxy=http://someProxyServer:3128
+httpsProxy=http://someProxyServer:3128
+ftpProxy=ftp://127.0.0.1:2121
 </p>
 
 <p>
 If the proxy server requires BASIC authentication
-<pre><code>httpProxy=http://user:password@someProxyServer:3128</code></pre>
-<pre><code>httpsProxy=http://user:password@someProxyServer:3128</code></pre>
+</p>
+
+<p>
+httpProxy=http://user:password@someProxyServer:3128
+httpsProxy=http://user:password@someProxyServer:3128
 </p>
 
 <p>
@@ -1573,7 +1581,21 @@ One reason for this is that https sessions would end up doubly-encoded.)
 </p>
 
 <p>
-net.c also responds to environment variables http_proxy and https_proxy and no_proxy.
+If you are debugging your proxy configuration, you can use this hg.conf setting
+to turn on logging to stderr.
+</p>
+
+<p>
+logProxy=on
+</p>
+
+<p>
+It is not meant to be left on in production.
+Your proxy server should have its own logging features.
+</p>
+
+<p>
+net.c also responds to environment variables http_proxy, https_proxy, ftp_proxy, no_proxy and log_proxy.
 </p>
 
 <a name='adding-tracks-to-the-browser'></a>
