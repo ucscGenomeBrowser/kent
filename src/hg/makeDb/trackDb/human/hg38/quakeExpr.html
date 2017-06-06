@@ -1,0 +1,84 @@
+<H2>Description</H2>
+<p>The Quake lab used single cell RNA sequencing on 466 cells to capture the cellular complexity
+of the adult and fetal human brain at a whole transcriptome level. Healthy adult
+temporal lobe tissue was obtained from epileptic patients during temporal lobectomy
+for medically refractory seizures. The Quake lab was able to classify individual cells into
+all of the major neuronal, glial, and vascular cell types in the brain. For this track only
+the adult cells were considered, resulting in a 331 cell subset.  
+</p>
+<H2>Display Conventions</H2>
+<P>
+In Full and Pack display modes, expression for each cell type is represented by a colored bargraph,
+where the height of each bar represents the median expression level across all samples for a 
+cell type, and the bar color indicates the cell type.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img border='1' src="../images/gtex/gtexGeneTcap.png"><br>
+The bargraph display has the same width and cell type order for all genes or transcripts. 
+Mouse hover over a bar will show the cell type and median expression level.
+The Squish display mode draws a rectangle for each gene or transcript, colored to indicate the cell type
+with highest expression level if it contributes more than 10% to the overall expression
+(and colored black if no cell type predominates).
+In Dense mode, the darkness of the grayscale rectangle displayed for the gene or transcript reflects the total
+median expression level across all cell types.</p>
+<P>
+Click-through on a graph displays a boxplot of expression level quartiles with outliers, 
+per cell type.
+The track configuration page provides controls to limit the genes or transcripts and cell types displayed,
+and to select raw or log transformed expression level display.</P>
+The groups are colored according to the biased groupings in sections B and D of Figure 1 in the accompanying paper (seen below).  
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img border='1' src="../images/quake466Image.jpg"><br>
+
+<H2>Methods</H2>
+<p>
+The raw sequences were downloaded using the SRA toolkit and an accession list from the 
+<a href="https://trace.ncbi.nlm.nih.gov/Traces/study/?acc=SRP057196" target="_blank">SRA run selector</a>. 
+The reads were quantified to the hg38/GRCh38 reference using 
+<a href="https://pachterlab.github.io/kallisto/" target="_blank">kallisto</a>
+and a transcriptome file. The transcriptome file was generated from the 
+HG38 reference genome and Gencode v23 comprehensive CHR annotation file5. The 
+reference genome did not contain alternative sequences and had the overlapping 
+genes from the PAR locus removed (chrY:10,000-2,781,479 and chrY:56,887,902-57,217,415)
+due to duplicate gene conflicts with the X chromosome. 
+</p>
+<p>
+Read quantification was performed at UCSC
+by the Genome Browser team. The resulting kallisto files were
+combined to generate both a transcript per million (tpm) and a gene per million (gpm) expression matrices using the UCSC tool
+kallistoToMatrix. 
+A meta data file mapping each sample to its cell type was obtained from the 
+A SOFT formatted meta data file was downloaded from the 
+<a href="ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE67nnn/GSE67835/soft/" target="_blank">GEO ftp server</a>.
+This file was then converted into a tab separated file which was used to map each sample to 
+the Quake assigned cell type.  
+Coordinates for the transcripts and genes were identified using the UCSC table browser and
+used to generate two bed6+1 file which map the ensemble gene/transcript names to chromosomes, genomic coordinates,
+strand, score and hugo gene names.
+</p>
+<p>
+The meta data, expression matrix and bed6+1 coordinate files
+were passed into the UCSC tool expMatrixToBarchartBed. This script calculated the average
+expression value for each cell type and generated a bed6+5 file that is the base of the track.
+Finally the UCSC tool bedToBigBed was used to convert to a bigBed file for displaying. 
+</p>
+<H2>Credits</H2>
+<p>
+Samples were produced and sequenced by the Quake lab. The raw fastq files for
+their RNA-seq are available online at the
+<a href="https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?study=SRP057196" target="_blank">
+Sequence Read Archive</a>.
+</p>
+<p>
+The meta data, including the Quake lab assigned cell types, was obtained online through the 
+<a href="ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE67nnn/GSE67835/soft/" target="_blank">GEO ftp server</a>.
+<p>
+The read quantification and track generation was done by Chris Eisenhart at the UCSC genome browser group. 
+</p>
+<H2>References</H2>
+<p>
+Spyros Darmanis, Steven A. Sloan, Ye Zhang, Martin Enge, Christine Caneda, Lawrence M. Shuer, 
+Melanie G. Hayden Gephart, Ben A. Barres, and Stephen R. Quake.
+<a href="http://www.pnas.org/content/112/23/7285.full?sid=f5afdf1e-609b-4f10-af10-9fab0f239b22"
+target="_blank">
+A survey of human brain transcriptome diversity at the single cell level</a>.
+<em>Biological Sciences - Neuroscience</em>. 2015 May 18, 2015 112 (23) 7285-7290. 
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26060301" target="_blank">26060301</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4466750/" target="_blank">PMC4466750</a></p>

@@ -1,3 +1,57 @@
+track quakeExpr
+release alpha
+superTrack on 
+type bigBarChart
+group expression
+shortLabel Quake Expression
+longLabel Quake Lab Gene and Trancscript Expression in Brain by Cell Type
+html quakeExpr
+
+	track quakeTranscExpr
+	parent quakeExpr	
+	release alpha
+	type bigBarChart
+	maxLimit 14000
+	barChartLabel Cell types
+	barChartUnit TPM
+	# Get the barChartLabels from the last line in the bed file.
+	barChartBars \
+			Astrocytes Endothelial Hybrid Microglia Neurons OPC Oligodendrocytes
+	barChartColors \
+			\#F5DE81 #DD9FA2 #C8C8C8 #44773C #B70C15 #5C80BE #E6AB13
+	barChartDataUrl /gbdb/hgFixed/human/expMatrix/cleanQuakeTranscMatrix.tab
+	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/cleanQuakeSamples.tab
+	shortLabel Quake TranscExpr 
+	longLabel Quake Lab Transcript Expression in Brain by Cell Type
+	defaultLabelFields name2
+	labelFields name2, name
+	group expression
+	bigDataUrl /gbdb/hgFixed/human/expMatrix/quakeTranscExpr.bb
+	html quakeExpr
+
+	track quakeGeneExpr
+	parent quakeExpr	
+	release alpha
+	type bigBarChart
+	maxLimit 14000
+	barChartLabel Cell types
+	barChartUnit GPM
+	# Get the barChartLabels from the last line in the bed file.
+	barChartBars \
+			Astrocytes Endothelial Hybrid Microglia Neurons OPC Oligodendrocytes
+	barChartColors \
+			\#F5DE81 #DD9FA2 #C8C8C8 #44773C #B70C15 #5C80BE #E6AB13
+	barChartDataUrl /gbdb/hgFixed/human/expMatrix/cleanQuakeGeneMatrix.tab
+	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/cleanQuakeSamples.tab
+	shortLabel Quake GeneExpr
+	longLabel Quake Lab Gene Expression in Brain by Cell Type
+	defaultLabelFields name2
+	labelFields name2, name
+	group expression
+	visibility pack
+	bigDataUrl /gbdb/hgFixed/human/expMatrix/quakeGeneExpr.bb
+	html quakeExpr
+
 track tcgaExpr
 release alpha
 superTrack on 
