@@ -36,12 +36,12 @@
 	<li><a id="tableBrowserMenuLink" href="../cgi-bin/hgTables">Table Browser</a></li>
 	<li><a id="vaiMenuLink" href="../cgi-bin/hgVai">Variant Annotation Integrator</a></li>
 	<li><a id="diMenuLink" href="../cgi-bin/hgIntegrator">Data Integrator</a></li>
+	<li><a title="Explore gene/protein interactions and pathways" id="interactionMenuLink" href="../cgi-bin/hgGeneGraph">Gene Interactions</a></li>
 	<li><a id="gsMenuLink" href="../cgi-bin/hgNear">Gene Sorter</a></li>
 	<li><a id="ggMenuLink" href="../cgi-bin/hgGenome">Genome Graphs</a></li>
 	<li><a id="ispMenuLink" href="../cgi-bin/hgPcr">In-Silico PCR</a></li>
 	<li><a id="liftOverMenuLink" href="../cgi-bin/hgLiftOver">LiftOver</a></li>
 	<li><a id="visiGeneMenuLink" href="../cgi-bin/hgVisiGene">VisiGene</a></li>
-	<li><a id="interactionMenuLink" href="../cgi-bin/hgGeneGraph">Gene Interactions</a></li>
 	<li class="last"><a href="../util.html">Other Utilities</a></li>
 	</ul>
 </li>

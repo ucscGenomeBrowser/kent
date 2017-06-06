@@ -45,14 +45,14 @@ You can use the following command to get the size of the files for all
 of the assemblies, but it can also be modified to give the size for a
 particular assembly:
 
-    rsync -hna --stats rsync://hgdownload.cse.ucsc.edu/gbdb/ | egrep "Number of files:|total size is"
+    rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/gbdb/ | egrep "Number of files:|total size is"
 
 For example, to get the size of all of the files for hg19, you would
 use the following command:
 
-    rsync -hna --stats rsync://hgdownload.cse.ucsc.edu/gbdb/hg19/ | egrep "Number of files:|total size is"
+    rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/gbdb/hg19/ | egrep "Number of files:|total size is"
 
-After runnning that command, you should see output like this:
+After running that command, you should see output like this:
 
     Number of files: 54886
     total size is 6515.70G  speedup is 5181080.38 (DRY RUN)
@@ -60,7 +60,7 @@ After runnning that command, you should see output like this:
 The next command will give you the size of the entire mySQL database,
 but can be changed to get the size for a particular assembly:
   
-    rsync -hna --stats rsync://hgdownload.cse.ucsc.edu/mysql/ | egrep "Number of files:|total size is"
+    rsync -hna --stats rsync://hgdownload.soe.ucsc.edu/mysql/ | egrep "Number of files:|total size is"
 
 # Overview of the Genome Browser directories and databases
 
@@ -184,7 +184,7 @@ Confirm the following:
     follow the instructions in: README.building.source
     See also: src/product/scripts/kentSrcUpdate.sh
 
-        rsync -avP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/
+        rsync -avP rsync://hgdownload.soe.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/
 
 7.  Create hgcentral database and tables.  This is the primary gateway
     database that allows the browser to find specific organism
@@ -242,7 +242,7 @@ Confirm the following:
     step is quite compute intensive.  A typical rsync command for an
     entire database (e.g. ce4) would be something like:
 
-        rsync -avP --delete --max-delete=20 rsync://hgdownload.cse.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/
+        rsync -avP --delete --max-delete=20 rsync://hgdownload.soe.ucsc.edu/mysql/ce4/ /var/lib/mysql/ce4/
 
 11.  Download extra databases to work with a full genome assembly
     such as human/hg38: hgFixed go140213 proteins140122 sp140122
@@ -650,7 +650,7 @@ Create an empty hgcentral database:
 Load all tables into the hgcentral database.
 Copy all the mysql data files from
 
-    rsync -avP rsync://hgdownload.cse.ucsc.edu/mysql/hgcentral/ .
+    rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hgcentral/ .
 
 directly into the MySQL data area for your hgcentral database.
 (something usually like /var/lib/mysql/hgcentral/)
@@ -658,7 +658,7 @@ directly into the MySQL data area for your hgcentral database.
 Or load this database with mysql/hgsql commands and the hgcentral.sql
         text file dump of these tables from:
 
-    rsync -avP rsync://hgdownload.cse.ucsc.edu/genome/admin/hgcentral.sql .
+    rsync -avP rsync://hgdownload.soe.ucsc.edu/genome/admin/hgcentral.sql .
 
 And then six tables for the latest human database.
 
@@ -675,12 +675,12 @@ Start with an empty database, for example hg18:
 Again, copy the MySQL files directly from the download
 server, for example hg18:
 
-    rsync -avP rsync://hgdownload.cse.ucsc.edu/mysql/hg18/ .
+    rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hg18/ .
 
 (beware, this is several TB of data) into your MySQL data area.  Or load these tables from the text SQL
 dumps from:
 
-    rsync -avP rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/ .
+    rsync -avP rsync://hgdownload.soe.ucsc.edu/goldenPath/hg18/database/ .
 
 (beware, this is several TB of data)
 
@@ -822,7 +822,7 @@ discusses the steps required to enable this function.
         db.password=ctdbpasswd
         central.db=hgcentral
 
-    Remember to set the priviledges on this hg.conf file at 600:
+    Remember to set the privileges on this hg.conf file at 600:
 
         chmod 600 $HOME/.ct.hg.conf
 
@@ -1066,11 +1066,11 @@ Install Git software version 1.6.2.2 or later. See the Git Community Handbook
 
 Start an initial Git local repository:
 
-    git clone git://genome-source.cse.ucsc.edu/kent.git
+    git clone git://genome-source.soe.ucsc.edu/kent.git
  
 or, if a firewall prevents git daemon port 9418, use:
  
-    git clone http://genome-source.cse.ucsc.edu/kent.git
+    git clone http://genome-source.soe.ucsc.edu/kent.git
  
 The kent source tree will be imported to the current working directory in a
 directory named ./kent/.
