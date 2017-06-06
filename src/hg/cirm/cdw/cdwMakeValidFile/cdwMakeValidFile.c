@@ -528,6 +528,27 @@ char *labels[] = { "target_id",       "length",  "eff_length",      "est_counts"
 makeValidTabSepFile(conn, path, ef, vf, labels, ArraySize(labels));
 }
 
+void makeValidTsv( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+    struct cdwValidFile *vf)
+/* Make sure a tsv tab-separated values file looks all good */
+{
+struct lineFile *lf = lineFileOpen(path, TRUE);
+// get fieldCount from first line
+int fieldCount = 0;
+int lineSize;
+char *line;
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    if (line[0] == '#')
+        continue;
+    fieldCount = chopByChar(line, '\t', NULL, 0);
+    }
+lineFileClose(&lf);
+if (fieldCount == 0)
+    errAbort("0 columns in tsv %s", ef->submitFileName);
+makeValidTabSepFile(conn, path, ef, vf, NULL, fieldCount);
+}
+
 void makeValidHtml(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
     struct cdwValidFile *vf)
 /* Fill in info about html file */
@@ -829,6 +850,10 @@ if (vf->format)	// We only can validate if we have something for format
     else if (sameString(format, "kallisto_abundance"))
 	{
         makeValidKallistoAbundance(conn, path, ef, vf);
+	}
+    else if (sameString(format, "tsv"))
+	{
+        makeValidTsv(conn, path, ef, vf);
 	}
     else if (sameString(format, "html"))
         {
