@@ -40,8 +40,19 @@ int matchCount = slCount(table->rowList);
 if (largerContext != NULL)  // Need to page?
      matchCount = largerContext->tableSize;
 cgiMakeButton("submit", "search");
+
+printf("&nbsp;<button id='resetLink'>Reset filters</button>\n");
+jsInlineF(
+"$(function() {\n"
+"  $('#resetLink').click( function() { "
+"     $(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
+"     $('#submit').click();\n"
+"  });"
+"});\n");
+
 printf("&nbsp;&nbsp;&nbsp&nbsp;");
 printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
+
 
 if (addFunc)
     addFunc();
@@ -50,14 +61,7 @@ printf("<BR>\n");
 printf("You can further filter search results field by field below. ");    
 printf("Wildcard * and ? characters are allowed in text fields. ");
 printf("&GT;min or &LT;max are allowed in numerical fields.<BR>\n");
-printf("<a id='resetLink' href='#' >Reset all filters</a>\n");
-jsInlineF(
-"$(function() {\n"
-"  $('#resetLink').click( function() { "
-"     $(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
-"     $('#submit').click();\n"
-"  });"
-"});\n");
+//printf("<a href='#' >Reset all filters</a>\n");
 }
 
 static void printSuggestScript(char *id, struct slName *suggestList)

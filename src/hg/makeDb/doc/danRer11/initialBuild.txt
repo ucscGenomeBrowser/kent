@@ -1,0 +1,705 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the danRer11
+#
+#  Can use existing photograph (otherwise find one before starting here)
+
+#########################################################################
+#  Initial steps, find photograph (DONE - 2017-05-24 - Chris)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/danRer11
+cd ~/kent/src/hg/makeDb/doc/danRer11
+
+sed -e 's/galGal5/danRer11/g; s/GalGal5/DanRer11/g; s/TBD/TBD/g;' \
+  ../galGal5/initialBuild.txt > initialBuild.txt
+
+# the files required are probably already here, take a look into:
+#  /hive/data/outside/ncbi/genomes/refseq/<subSet>/<scientificName>/all_assembly_versions
+# and merely symlink them in:
+
+mkdir -p /hive/data/genomes/danRer11/genbank
+cd /hive/data/genomes/danRer11/genbank
+ln -s /hive/data/outside/ncbi/genomes/genbank/vertebrate_other/Danio_rerio/all_assembly_versions/GCA_000002035.4_GRCz11/* ./
+
+#  Can use existing photograph
+
+# Link to the existing photo. 
+cd ../
+ln -s ../danRer10/photoReference.txt .  
+
+# Assembly name:  GRCz11
+# Description:    Genome Reference Consortium Zebrafish Build 11
+# Organism name:  Danio rerio (zebrafish)
+# Infraspecific name:  strain=Tuebingen
+# Taxid:          7955
+# BioSample:      SAMN06930106
+# BioProject:     PRJNA11776
+# Submitter:      Genome Reference Consortium
+# Date:           2017-5-9
+# Assembly type:  haploid-with-alt-loci
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# RefSeq category: Reference Genome
+# GenBank assembly accession: GCA_000002035.4
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000000175.4              Primary Assembly
+## GCA_002119155.1              ALT_DRER_TU_1
+## GCA_002119165.1              ALT_DRER_TU_2
+## GCA_002119175.1              ALT_DRER_TU_3
+## GCA_002119185.1              ALT_DRER_TU_4
+
+#############################################################################
+# establish config.ra file (DONE - Chris - 2017-05-24)
+    cd /hive/data/genomes/danRer11
+    ~/kent/src/hg/utils/automation/prepConfig.pl danRer11 vertebrate zebrafish \
+       genbank/*_assembly_report.txt > danRer11.config.ra
+
+    # verify it looks sane
+    cat danRer11.config.ra
+# config parameters for makeGenomeDb.pl:
+db danRer11
+clade vertebrate
+scientificName Danio rerio
+commonName Zebrafish
+assemblyDate May 2017
+assemblyLabel Genome Reference Consortium
+assemblyShortLabel GRCz11
+orderKey 26172
+mitoAcc NC_002333.2
+fastaFiles /hive/data/genomes/danRer11/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/danRer11/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir zebrafish
+photoCreditURL	http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Zebrafish&id=79130
+photoCreditName	NHGRI Press Photos
+ncbiGenomeId 50
+ncbiAssemblyId 1104621
+ncbiAssemblyName GRCz11
+ncbiBioProject 11776
+ncbiBioSample SAMN06930106
+genBankAccessionID GCA_000002035.4
+taxId 7955
+
+#############################################################################
+# setup UCSC named files (DONE - 2017-06-01 - Chris)
+
+    mkdir /hive/data/genomes/danRer11/ucsc
+    cd /hive/data/genomes/danRer11/ucsc
+    # measure what is in the refseq release:
+    faSize ../genbank/*genomic.fna.gz
+
+#1679186873 bases (4693618 N's 1674493255 real 861444935 upper 813048320 lower) in 1922 sequences in 1 files
+#Total size: mean 873666.4 sd 6187603.1 min 650 (KN150525.1) max 78093715 (CM002888.2) median 149621
+#N count: mean 2442.0 sd 64890.9
+#U count: mean 448202.4 sd 3139997.1
+#L count: mean 423022.0 sd 3024074.2
+#%48.42 masked total, %48.55 masked real
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../genbank/*_genomic.fna.gz genbank.2bit
+    #  real    0m52.302s
+    twoBitDup genbank.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this genbank.2bit file
+    # remove it later
+
+    # new option required to ucscCompositeAgp.pl 2016-04-13
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+      ../genbank/*_genomic.fna.gz ../genbank/*_assembly_structure/Primary_Assembly
+# constructing genbank.2bit from ../genbank/GCF_000002315.4_Gallus_gallus-5.0_genomic.fna.gz
+# constructing refseq.2bit from ../genbank/GCA_000002035.4_GRCz11_genomic.fna.gz
+CM002885.2 chr1
+CM002886.2 chr2
+CM002887.2 chr3
+CM002888.2 chr4
+CM002889.2 chr5
+CM002890.2 chr6
+CM002891.2 chr7
+CM002892.2 chr8
+CM002893.2 chr9
+CM002894.2 chr10
+CM002895.2 chr11
+CM002896.2 chr12
+CM002897.2 chr13
+CM002898.2 chr14
+CM002899.2 chr15
+CM002900.2 chr16
+CM002901.2 chr17
+CM002902.2 chr18
+CM002903.2 chr19
+CM002904.2 chr20
+CM002905.2 chr21
+CM002906.2 chr22
+CM002907.2 chr23
+CM002908.2 chr24
+CM002909.2 chr25
+
+real	8m20.666s
+user	8m33.194s
+    
+	time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../genbank/*_assembly_structure/Primary_Assembly
+
+    # Are no unlocalized
+	#./unlocalizedWithChroms.pl ../genbank/*_assembly_structure/Primary_Assembly
+
+    # Handle the alternative sequences
+	time ucscAltAgp ../genbank/GCA_000002035.4_GRCz11_assembly_structure/all_alt_scaffold_placement.txt ../genbank/GCA_000002035.4_GRCz11_assembly_structure/
+	# Finished creating alt_4.agp
+	# Finished creatingalt_4.fa.gz
+	# Finished creating alt_2.agp
+	# Finished creatingalt_2.fa.gz
+	# Finished creating alt_1.agp
+	# Finished creatingalt_1.fa.gz
+	# Finished creating alt_3.agp
+	# Finished creatingalt_3.fa.gz
+
+	# real	1m49.141s
+	# user	1m47.337s
+	# sys	0m1.237s
+	
+	# verify fasta and AGPs agree
+	time faToTwoBit *.fa.gz test.2bit
+    # real    0m46.414s
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+	# 1679186873 bases (4693618 N's 1674493255 real 1674493255 upper 0 lower) in 1922 sequences in 1 files
+	# Total size: mean 873666.4 sd 6187603.1 min 650 (chrUn_KN150525v1) max 78093715 (chr4) median 149621
+	# N count: mean 2442.0 sd 64890.9
+	# U count: mean 871224.4 sd 6162220.4
+	# L count: mean 0.0 sd 0.0
+	# %0.00 masked total, %0.00 masked real
+	
+    # same numbers as above (except for upper/lower masking)
+
+    # no longer need these temporary 2bit files
+    rm test.2bit genbank.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2016-06-01 - Chris)
+
+	cd /hive/data/genomes/danRer11
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp danRer11.config.ra) > agp.log 2>&1
+    # real	1m40.249s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db danRer11.config.ra) > db.log 2>&1
+    # real    11m9.465s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add danRer11 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/danRer11
+    ln -s `pwd`/danRer11.unmasked.2bit /gbdb/danRer11/danRer11.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2017-06-01 - Chris)
+    mkdir /hive/data/genomes/danRer11/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/danRer11/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/danRer11/danRer11.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku danRer11) > do.log 2>&1
+    # real    6m59.252s
+
+    cat fb.danRer11.cpgIslandExtUnmasked.txt
+	# 34662385 bases of 1674677181 (2.070%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-06-02 - Chris)
+    mkdir /hive/data/genomes/danRer11/bed/cytoBand
+    cd /hive/data/genomes/danRer11/bed/cytoBand
+    makeCytoBandIdeo.csh danRer11
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2016-04-14 - Chris)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
+
+    mkdir /hive/data/genomes/danRer11/bed/ucscToINSDC
+    cd /hive/data/genomes/danRer11/bed/ucscToINSDC
+
+    # find accession for chrM
+    grep chrM ../../danRer11.agp
+# chrM    1       16775   1       O       NC_001323.1     1       16775   +
+
+    # use that accession here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../refseq/GCF_*structure/Primary_Assembly NC_001323.1
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+    # there is no name for chrM/NC_001323.1 sequence, there is no such
+    #  sequence with an INSDC name
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+         | sort > insdc.refseq.txt
+    # the sed \b means to match word
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    wc -l *
+    # 23475 insdc.refseq.txt
+    # 23475 insdcToUcsc.txt
+    # 23475 name.coordinate.tab
+    # 23475 ucscToINSDC.bed
+    # 23475 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 27
+    # use the 27 in this sed
+    sed -e "s/21/27/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab danRer11 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords danRer11
+    # should cover %100 entirely:
+    featureBits -countGaps danRer11 ucscToINSDC
+    # 1230258557 bases of 1230258557 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2016-04-14 - Chris)
+    cd ~/kent/src/hg/makeDb/trackDb/chicken/danRer11
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" danRer11 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+  24806 AADN.1
+     47 AC.1
+    310 AC.2
+    327 AC.3
+     74 AC.4
+     20 AC.5
+      1 AC.6
+      1 NC_.1
+
+    # implies a rule: '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" danRer11 | wc -l
+    # 25586
+
+    hgsql -N -e "select frag from gold;" danRer11 \
+       | egrep -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 25586
+
+    hgsql -N -e "select frag from gold;" danRer11 \
+       | egrep -v -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/danRer11/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2017-06-07 - Chris)
+    mkdir /hive/data/genomes/danRer11/bed/repeatMasker
+    cd /hive/data/genomes/danRer11/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku danRer11) > do.log 2>&1
+    # real    254m18.208s
+
+	# 9 jobs (out of 3664) crashed in the cluster, they were re run manually and
+	# completed fine, taking ~90 minute each. 
+
+    cat faSize.rmsk.txt
+# 1679203469 bases (4693618 N's 1674509851 real 809208275 upper 865301576 lower) in 1923 sequences in 1 files
+# Total size: mean 873220.7 sd 6186024.0 min 650 (chrUn_KN150525v1) max 78093715 (chr4) median 146921
+# N count: mean 2440.8 sd 64874.0
+# U count: mean 420805.1 sd 2950984.7
+# L count: mean 449974.8 sd 3210628.1
+# %51.53 masked total, %51.67 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+	# grep version of RepeatMasker$ /scratch/data/RepeatMasker/RepeatMasker
+	#    January 31 2015 (open-4-0-5) version of RepeatMasker
+	# grep RELEASE /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
+	# CC   RELEASE 20140131;  
+
+    time featureBits -countGaps danRer11 rmsk
+    # 865410761 bases of 1679203469 (51.537%) in intersection
+	# real	0m28.805s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' danRer11 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    #  total 865410761.000000
+	# real	0m28.896s
+
+##########################################################################
+# running simple repeat (DONE - 2017-06-07 - Chris)
+
+    mkdir /hive/data/genomes/danRer11/bed/simpleRepeat
+    cd /hive/data/genomes/danRer11/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 3 danRer11) > do.log 2>&1
+    # real	14m55.497s
+
+    cat fb.simpleRepeat
+	# 108632714 bases of 1674677181 (6.487%) in intersection
+
+    cd /hive/data/genomes/danRer11
+    # using the Window Masker result:
+    #twoBitMask bed/windowMasker/danRer11.cleanWMSdust.2bit \
+    #   -add bed/simpleRepeat/trfMask.bed  danRer11.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # add to rmsk after it is done:
+    twoBitMask danRer11.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed danRer11.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa danRer11.2bit stdout | faSize stdin > faSize.danRer11.2bit.txt
+    cat faSize.danRer11.2bit.txt
+# 1679203469 bases (4693618 N's 1674509851 real 807728713 upper 866781138 lower) in 1923 sequences in 1 files
+# Total size: mean 873220.7 sd 6186024.0 min 650 (chrUn_KN150525v1) max 78093715 (chr4) median 146921
+# %51.62 masked total, %51.76 masked real
+
+    rm /gbdb/danRer11/danRer11.2bit
+    ln -s `pwd`/danRer11.2bit /gbdb/danRer11/danRer11.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-06-04 - Chris)
+    ssh hgwdev
+    mkdir /cluster/data/danRer11/bed/microsat
+    cd /cluster/data/danRer11/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed danRer11 microsat microsat.bed
+    # Read 127131 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2017-06-07 - Chris)
+
+    mkdir /hive/data/genomes/danRer11/bed/windowMasker
+    cd /hive/data/genomes/danRer11/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev danRer11) > do.log 2>&1
+    # real    53m45.183s
+
+    # Masking statistics
+    cat faSize.danRer11.cleanWMSdust.txt
+# 1679203469 bases (4693618 N's 1674509851 real 844135283 upper 830374568 lower) in 1923 sequences in 1 files
+# Total size: mean 873220.7 sd 6186024.0 min 650 (chrUn_KN150525v1) max 78093715 (chr4) median 146921
+# N count: mean 2440.8 sd 64874.0
+# U count: mean 438967.9 sd 3081301.2
+# L count: mean 431812.0 sd 3080639.1
+# %49.45 masked total, %49.59 masked real
+
+    cat fb.danRer11.rmsk.windowmaskerSdust.txt
+    # 638473395 bases of 1679203469 (38.022%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2016-04-14 - Chris)
+    mkdir /hive/data/genomes/danRer11/bed/cpgIslands
+    cd /hive/data/genomes/danRer11/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku danRer11) > do.log 2>&1
+    # real	25m38.539s
+
+    cat fb.danRer11.cpgIslandExtUnmasked.txt
+	# 34662385 bases of 1674677181 (2.070%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2017-06-07 - Chris)
+    mkdir /hive/data/genomes/danRer11/bed/genscan
+    cd /hive/data/genomes/danRer11/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku danRer11) > do.log 2>&1
+    # real	66m57.728s
+
+    cat fb.danRer11.genscan.txt
+    # 57461966 bases of 1674677181 (3.431%) in intersection
+
+    cat fb.danRer11.genscanSubopt.txt
+    # 45875776 bases of 1674677181 (2.739%) in intersection
+
+#########################################################################
+# Create kluster run files (TBD - 2016-04-14 - Chris)
+
+    # numerator is danRer11 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap danRer11 gap
+    # 11060953 bases of 1010394850 (1.095%) in intersection
+    #                   ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1010394850 / 2861349177 \) \* 1024
+    #  ( 1010394850 / 2861349177 ) * 1024 = 361.593172
+
+    # ==> use -repMatch=350 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/danRer11
+    blat danRer11.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/danRer11.11.ooc \
+        -repMatch=350
+    #   Wrote 31510 overused 11-mers to jkStuff/danRer11.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' danRer11 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # minimum gap size is 10 and produces a reasonable number of lifts
+    gapToLift -verbose=2 -minGap=10 danRer11 jkStuff/nonBridged.lft \
+        -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (TBD - 2016-04-15,19 - Chris)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Gallus gallus   30510   600534  6360
+
+    # edit etc/genbank.conf to add danRer11 just before rheMac2
+# danRer11 (zebrafish)
+danRer11.serverGenome = /hive/data/genomes/danRer11/danRer11.2bit
+danRer11.clusterGenome = /hive/data/genomes/danRer11/danRer11.2bit
+danRer11.ooc = /hive/data/genomes/danRer11/jkStuff/danRer11.11.ooc
+danRer11.lift = /hive/data/genomes/danRer11/jkStuff/nonBridged.lft
+danRer11.perChromTables = no
+danRer11.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+danRer11.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+danRer11.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+danRer11.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+danRer11.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# defaults are fine: genbank.mrna.native refseq.mrna.native refseq.mrna.xeno yes
+# and genbank.est.native
+danRer11.genbank.mrna.xeno.load  = yes
+danRer11.refseq.mrna.xeno.load  = yes
+danRer11.downloadDir = danRer11
+# danRer11.upstreamGeneTbl = refGene
+# danRer11.upstreamMaf = multiz7way
+# /hive/data/genomes/danRer10/bed/multiz7way/species.lst
+
+    git commit -m "Added danRer11; refs #19459" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial danRer11
+	# logFile: var/build/logs/2017.06.07-13:49:34.danRer11.initalign.log
+    XXX-Running 2017-06-07
+	#   real    5678m9.548s
+    tail var/build/logs/2016.04.15-09:58:43.danRer11.initalign.log
+    #    hgwdev 2016.04.19-08:29:59 danRer11.initalign: Succeeded: danRer11
+    #    hgwdev 2016.04.19-08:36:52 danRer11.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.danRer11
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad danRer11
+    # var/dbload/hgwdev/logs/2016.04.19-08:38:37.danRer11.dbload.log
+    #  real    195m36.119s
+    tail -1 var/dbload/hgwdev/logs/2016.04.19-08:38:37.danRer11.dbload.log
+    #  hgwdev 2016.04.19-11:54:13 danRer11.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add danRer11 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added danRer11 - chicken refs #17168" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# augustus gene track (TBD - 2016-04-14 - Chris)
+
+    mkdir /hive/data/genomes/danRer11/bed/augustus
+    cd /hive/data/genomes/danRer11/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=chicken -dbHost=hgwdev \
+           -workhorse=hgwdev danRer11) > do.log 2>&1
+
+    cat fb.danRer11.augustusGene.txt
+    # 25248650 bases of 100286401 (25.177%) in intersection
+
+#########################################################################
+# ncbiRefSeq (TBD - 2016-05-13 - Chris)
+
+    mkdir /hive/data/genomes/danRer11/bed/ncbiRefSeq
+    cd /hive/data/genomes/danRer11/bed/ncbiRefSeq
+    # running step wise as this script is still under development
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 danRer11) > download.log 2>&1
+    # real    16m29.536s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 danRer11) > process.log 2>&1
+    # real    3m58.858s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 danRer11) > load.log 2>&1
+    # real    0m33.205s
+
+    cat fb.ncbiRefSeq.danRer11.txt
+    #  82563006 bases of 1218501075 (6.776%) in intersection
+
+    featureBits -enrichment danRer11 refGene ncbiRefSeq 
+    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
+    #    enrich 14.68x
+
+#########################################################################
+# LIFTOVER TO danRer10 (TBD - 2016-04-15 - Chris)
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer11/bed/blat.danRer10.2016-04-15
+    cd /hive/data/genomes/danRer11/bed/blat.danRer10.2016-04-15
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/danRer11/jkStuff/danRer11.11.ooc \
+         danRer11 danRer10
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/danRer11/jkStuff/danRer11.11.ooc \
+         danRer11 danRer10) > doLiftOverToGalGal4.log 2>&1
+    # real    86m43.038s
+
+    # see if the liftOver menus function in the browser from danRer11 to danRer10
+
+#########################################################################
+#  BLATSERVERS ENTRY (TBD - 2016-04-15 - Chris)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("danRer11", "blat1b", "17862", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("danRer11", "blat1b", "17863", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MEPE gene (egg shell protein)
+##  (TBD - 2016-05-13 - Chris)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr4:45985744-45991655"
+	where name="danRer11";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2016-05-13 - Chris)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=danRer11 -tableCoverage all.joiner
+    joinerCheck -database=danRer11 -times all.joiner
+    joinerCheck -database=danRer11 -keys all.joiner
+
+    cd /hive/data/genomes/danRer11
+    time (makeDownloads.pl danRer11) > downloads.log 2>&1
+    #  real    27m1.207s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/danRer11/pushQ
+    cd /hive/data/genomes/danRer11/pushQ
+    time (makePushQSql.pl danRer11) > danRer11.pushQ.sql 2> stderr.out
+    #  real    7m21.629s
+
+   71 danRer11.pushQ.sql
+   43 stderr.out
+  114 total
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/danRer11/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/danRer11/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/danRer11/bbi/quality.bw
+    # WARNING: danRer11 does not have seq
+    # WARNING: danRer11 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p danRer11.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/danRer11.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################
+# UCSC to RefSeq name correspondence (TBD - 2016-05-12 - Chris)
+
+    mkdir /hive/data/genomes/danRer11/bed/ucscToRefSeq
+    cd /hive/data/genomes/danRer11/bed/ucscToRefSeq
+
+    ln -s /hive/data/outside/ncbi/genomes/refseq/vertebrate_other/Gallus_gallus/all_assembly_versions/GCF_000002315.4_Gallus_gallus-5.0/GCF_000002315.4_Gallus_gallus-5.0_assembly_report.txt .
+
+    # this assembly_report has "UCSC-style-name" in column 10
+    # but it does not name anything, they are all "na"
+
+    # columns 5 and 7 are the INSDC and RefSeq names
+    # chrMT fixup in the sed
+    grep -v "^#" GCF_000002315.4_Gallus_gallus-5.0_assembly_report.txt \
+      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}' |
+        sed -e 's/^na/NC_001323.1/;' | sort > insdc.refSeq.tab
+
+    # the sed fixes chrM since it doesn't have an INSDC name
+    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' \
+      danRer11 | sed -e 's/notAvailable/NC_001323.1/;' | sort  > insdc.ucsc.tab
+
+    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
+       | cut -f2- > ucsc.refSeq.tab
+
+    # when working perfectly, all these tab files have the same line count:
+    wc -l *.tab
+#   23475 insdc.refSeq.tab
+#   23475 insdc.ucsc.tab
+#   23474 ucsc.refSeq.tab
+
+    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  27
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab danRer11 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+
+    checkTableCoords  danRer11 -table=ucscToRefSeq
+    # should cover %100 all bases:
+    featureBits -countGaps danRer11 ucscToRefSeq
+    # 1230258557 bases of 1230258557 (100.000%) in intersection
+
+#########################################################################
