@@ -53,7 +53,7 @@ alternatives before embarking on a full UCSC Genome Browser installation directl
 
     [Genome Browser in a Box](https://genome.ucsc.edu/goldenPath/help/gbib.html) (GBiB): 
     is a fully configured virtual machine that includes
-    Apache and Mysql, and has behavior identifical to the UCSC website.
+    Apache and MySQL, and has behavior identifical to the UCSC website.
     GBiB loads genome data from the UCSC download servers on the fly.
     Website and data updates are applied automatically every two weeks. By default, GBiB
     uses the VirtualBox virtualization software, so it can be run on any
@@ -112,7 +112,7 @@ alternatives before embarking on a full UCSC Genome Browser installation directl
         * For commercial users: license agreements can be customized to your needs.
     * Cons:
         * Not easy to setup, even for experienced Unix administrators.
-        * Will probably require some support from us via the genome-mirror mailing list.
+        * Will probably require some support via the [genome-mirror](mailto:genome-mirror@soe.ucsc.edu) mailing list.
         * To keep up with changes in the Genome Browser, you will have to 
           install linux packages and update the linux distribution yourself in 
           the future and apply UCSC data updates yourself using rsync or MySQL table loads
@@ -186,7 +186,7 @@ need to change your method; continue to visit our download server to
 download the files you need. This new protocol has been put in place 
 primarily to facilitate quick downloads of huge amounts of data over long distances.
 
-With typical TCP-based protocols like http, ftp, and rsync, the tranfer speed
+With typical TCP-based protocols like http, ftp, and rsync, the transfer speed
 slows as the distance between the download source and destination increases. 
 Protocols like UDT/UDR allow for many UDP packets to be
 sent in batch, thus allowing for much higher transmission speeds over long
@@ -213,17 +213,17 @@ download servers in a fashion similar to rsync. For example, using
 rsync,  all of the MySQL tables for the hg19
 database can be downloaded using either one of the following two commands:
 
-    rsync -avP rsync://hgdownload.cse.ucsc.edu/mysql/hg19/ /my/local/hg19/
-    rsync -avP hgdownload.cse.ucsc.edu::mysql/hg19/ /my/local/hg19/
+    rsync -avP rsync://hgdownload.soe.ucsc.edu/mysql/hg19/ /my/local/hg19/
+    rsync -avP hgdownload.soe.ucsc.edu::mysql/hg19/ /my/local/hg19/
 
 Using UDR is very similar. The UDR syntax for downloading the same data
 would be:
 
-    udr rsync -avP hgdownload.cse.ucsc.edu::mysql/hg19/ /my/local/hg19/
+    udr rsync -avP hgdownload.soe.ucsc.edu::mysql/hg19/ /my/local/hg19/
 
 [UDR]: https://github.com/LabAdvComp/UDR
 [Laboratory for Advanced Computing]: http://www.labcomputing.org/
-[here]: http://hgdownload.cse.ucsc.edu/admin/udr
+[here]: http://hgdownload.soe.ucsc.edu/admin/udr
 
 # The genome-mirror mailing list
 
