@@ -15,13 +15,13 @@ def checkSplit(db, table):
         splitTableList.append(table)
     elif splitCheck == "":
         hgsqlTblsOut = qaUtils.callHgsql(db, "show tables like 'chr%" + table + "%'")
-        splitTableList = hgsqlGapTblsOut.split('\n')
+        splitTableList = hgsqlTblsOut.split('\n')
         splitTableList.remove("")
     
     return splitTableList
 
 def checkCanPack(db, table):
-
+    """Check if a table can be set to pack"""
     visibility = "pack"
     canPackOut = qaUtils.callHgsql(db, "select canPack from trackDb where tableName='" + table + "'") 
 
@@ -58,7 +58,8 @@ def constructOutputUrls(db, table, overlapFile):
                 position = chrom + ":" + str(int(start) - 300) + "-" + str(int(end) + 300)
                 color = "&highlight=" + db + "." + chrom + ":" + start + "-" + end + "#aaedff"
                 url="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=" + db + "&"\
-                     + table + "=" + vis + "&gap=pack&position=" + position + color + "\n"
+                     + table + "=" + vis + "&gap=pack&hideTracks=1&position=" + position\
+                     + color + "\n"
                 gapOverUrls += url  
                 i+=1  
         outputUrls += str(lineCount) + " " + overlapFile + "\n\n" + gapOverUrls
@@ -66,6 +67,7 @@ def constructOutputUrls(db, table, overlapFile):
     return outputUrls
 
 def makeBedFromTable(db, table):
+    """Make BED3 tempfile out of a table"""
     # Get chrom, start, and end column names
     trackType = tableTypeUtils.getTrackType(db, table)
     columnNames = tableTypeUtils.getChrStartEndCols(trackType)
@@ -83,7 +85,7 @@ def makeBedFromTable(db, table):
     return tableBedTemp
 
 def checkGapOverlap(db, table, checkUnbridged=False):
-
+    """Check if any items in a table over lap with bridged and unbridged gaps"""
     tableBedTemp = makeBedFromTable(db, table)
 
     gapOverlapOut = ""

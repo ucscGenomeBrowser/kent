@@ -17,11 +17,11 @@ my::
 	cp -p hgGeneGraph ${CGI_BIN_USER}/
 
 alpha::
-	rm -f ${CGI_BIN}/hgMirror
+	rm -f ${CGI_BIN}/hgGeneGraph
 	cp -p hgGeneGraph ${CGI_BIN}/
 
 beta::
-	rm -f ${CGI_BIN_BETA}/hgMirror
+	rm -f ${CGI_BIN_BETA}/hgGeneGraph
 	cp -p hgGeneGraph ${CGI_BIN_BETA}/
 
 

@@ -113,7 +113,17 @@ for ( i = 0; i < numFiles; ++i)
   FILE *fh = mustOpen(fileName, "w");
   size_t writeSize = normalDistribution(averageSize, 1, maxSize);
   bytesWritten += writeSize;
-  fwrite(buf, writeSize, 1, fh);
+  size_t itemsWritten = fwrite(buf, writeSize, 1, fh);
+/*
+  fread()  and  fwrite()  return the number of items successfully read or
+  written (i.e., not the number of characters).  If an error  occurs,  or
+  the  end-of-file is reached, the return value is a short item count (or
+  zero).
+*/
+  if ( 1 != itemsWritten )
+     {
+     errAbort("# ERROR write error,  bytes requested: %ld != bytes written: %ld\n", (long)writeSize, (long)itemsWritten);
+     }
   fclose(fh);
   }
 

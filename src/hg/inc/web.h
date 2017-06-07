@@ -100,6 +100,13 @@ void webVaWarn(char *format, va_list args);
 boolean webGotWarnings();
 /* Return TRUE if webVaWarn has been called. */
 
+void webAbortNoHttpHeader(char* title, char* format, ...)
+/* an abort function that outputs a error page. No http header output. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
+
 void webAbort(char* title, char* format, ...)
 /* an abort function that outputs a error page */
 #if defined(__GNUC__)

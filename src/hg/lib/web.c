@@ -300,6 +300,16 @@ webStartWrapperGatewayHeader(theCart, db, "", format, args, withHttpHeader,
                              withLogo, FALSE);
 }
 
+void webStartExt(boolean withHttpHeader, struct cart *theCart, char *db, char *format, ...)
+/* Print out pretty wrapper around things when not
+ * from cart. Do not output an http header.*/
+{
+va_list args;
+va_start(args, format);
+webStartWrapper(theCart, db, format, args, withHttpHeader, TRUE);
+va_end(args);
+}
+
 void webStart(struct cart *theCart, char *db, char *format, ...)
 /* Print out pretty wrapper around things when not
  * from cart. */
@@ -532,28 +542,48 @@ boolean webGotWarnings()
 return gotWarnings;
 }
 
-void webAbort(char* title, char* format, ...)
+void webAbortExt(boolean withHttpHeader, char* title, char *format, va_list args)
 /* an abort function that outputs a error page */
 {
-va_list args;
-va_start(args, format);
 
 /* output the header */
 if(!webHeadAlreadyOutputed)
-    webStart(errCart, NULL, "%s", title);
+    webStartExt(withHttpHeader, errCart, NULL, "%s", title);
 
 /* in text mode, have a different error */
 if(webInTextMode)
 	printf("\n\n\n          %s\n\n", title);
 
 vprintf(format, args);
+
 printf("<!-- HGERROR -->\n");
 printf("\n\n");
 
 webEnd();
 
-va_end(args);
 exit(0);
+}
+
+void webAbortNoHttpHeader(char* title, char* format, ...)
+/* an abort function that outputs a error page. No http header output. */
+{
+va_list args;
+va_start(args, format);
+
+webAbortExt(FALSE, title, format, args); 
+
+va_end(args);
+}
+
+void webAbort(char* title, char* format, ...)
+/* an abort function that outputs a error page */
+{
+va_list args;
+va_start(args, format);
+
+webAbortExt(TRUE, title, format, args); 
+
+va_end(args);
 }
 
 void printCladeListHtml(char *genome, char *event, char *javascript)

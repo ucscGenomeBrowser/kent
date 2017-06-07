@@ -108,6 +108,10 @@ def parseGpml(filename, accToSym):
                 groupType = "complex"
             elif style=="Group":
                 groupType = "family" # XX careful - A. Pico email ?
+            elif style=="Pathway":
+                #groupType = "pathway"
+                logging.warn("A group is a pathway?")
+                continue
             else:
                 assert(False) # unknown group
             groupToType[g.attrib["GraphId"]] = groupType

@@ -1,5 +1,7 @@
 <!DOCTYPE HTML>
-
+<!-- DO NOT EDIT THE HTDOCS VERSION OF THIS FILE. THIS FILE IS AUTOMATICALLY
+     GENERATED FROM A MARKDOWN FILE IN kent/src/product. MAKE ANY EDITS TO
+     THIS PAGE THERE, RUN MAKE, AND FOLLOW THE INSTRUCTIONS TO EDIT THIS PAGE. -->
 <!--#set var="TITLE" value="Genome Browser Manual Installation" -->
 <!--#set var="ROOT" value="../.." -->
 
@@ -90,7 +92,7 @@ where all content is mirrored and the closest location is chosen by your provide
 <p>
 <a href='https://genome.ucsc.edu/goldenPath/help/gbib.html' title=''>Genome Browser in a Box</a> (GBiB):
 is a fully configured virtual machine that includes
-Apache and MySQL, and has behavior identical to the UCSC website.
+Apache and MySQL, and has behavior identifical to the UCSC website.
 GBiB loads genome data from the UCSC download servers on the fly.
 Website and data updates are applied automatically every two weeks. By default, GBiB
 uses the VirtualBox virtualization software, so it can be run on any
@@ -119,12 +121,75 @@ and BLAT in your firewall. Once all data is downloaded, no open ports are needed
 <li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks, like a manual local installation.</li>
 </ul></li>
 </ul></li>
-</ol>
+<li><p>
+<strong>Install locally with the Genome Browser installation script (GBIC)</strong>
+</p>
 
 <p>
-If none of the above options fulfill your needs, consider setting up a full local mirror of the UCSC website.
-We support mirror site installations as time allows, and have many functional mirrors of the Genome Browser worldwide.
+We recommend this only if none of the above options fulfill your needs. Our
+<a href='https://genome.ucsc.edu/goldenpath/help/gbic.html' title=''>GBIC installation</a> script
+will install a full local mirror of the UCSC website,
+for the assemblies you select. We support mirror site installations as time
+allows, and have many functional mirrors of the Genome Browser worldwide. For
+details, see the <a href='#installing-a-genome-browser-locally-with-the-gbic-installer' title=''>section below</a>.
 </p>
+
+<ul>
+<li>Pros:
+
+<ul>
+<li>Relatively simple to install on a virtual machine or cloud instance: just run the script.</li>
+<li>Best performance when rendering local BAM/bigWig/bigBed files.</li>
+<li>For commercial users: easier click-through licensing compared to a full multi-seat, manual license.</li>
+</ul></li>
+<li>Cons:
+
+<ul>
+<li>To keep up with changes in the Genome Browser, you will have to install
+linux packages and update the linux distribution yourself in the future
+and run the installation script with the &#39;update&#39; command if you want to
+take advantage of new features in the Genome Browser.</li>
+<li>Preferably run on a linux server that is not used otherwise.</li>
+<li>By default requires opening at least three outgoing ports to UCSC for
+MySQL and BLAT in your firewall. Once all data is downloaded and BLAT
+setup locally, no open ports are needed anymore.</li>
+<li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks.</li>
+</ul></li>
+</ul></li>
+<li><p>
+<strong>Install manually yourself, by following installation instructions</strong>
+</p>
+
+<p>
+We do provide <a href='https://genome.ucsc.edu/goldenpath/help/mirrorManual.html' title=''>step-by-step
+instructions</a> for
+local installation, but do not recommend this, if any other system works for you.
+The internet also has various pages with instructions, but they are often out
+of date and may cause problems later. For details on manual instructions, see
+the <a href='#manual-installation-instructions' title=''>section below</a>.
+</p>
+
+<ul>
+<li>Pros:
+
+<ul>
+<li>You will understand the complete setup of the Genome Browser.</li>
+<li>For commercial users: license agreements can be customized to your needs.</li>
+</ul></li>
+<li>Cons:
+
+<ul>
+<li>Not easy to setup, even for experienced Unix administrators.</li>
+<li>Will probably require some support via the <a href='mailto:&#58&#103&#101&#110&#111&#109&#101&#45&#109&#105&#114&#114&#111&#114&#64&#115&#111&#101&#46&#117&#99&#115&#99&#46&#101&#100&#117' title=''>genome-mirror</a> mailing list.</li>
+<li>To keep up with changes in the Genome Browser, you will have to
+install linux packages and update the linux distribution yourself in
+the future and apply UCSC data updates yourself using rsync or MySQL table loads</li>
+<li>Configuration changes on our side may break your setup.</li>
+<li>For maximum browsing speed, can require up to 2-6TB to store all genome annotation tracks.</li>
+<li>For commercial users: license agreements take longer to negotiate, no click-through license.</li>
+</ul></li>
+</ul></li>
+</ol>
 
 <p>
 A license is required for commercial download and/or installation of the Genome
@@ -197,9 +262,9 @@ unusual platforms.
 <h2>Using UDR to speed up downloads</h2>
 
 <p>
-<a href='https://github.com/LabAdvComp/UDR' title=''>UDR</a> (UDT Enabled Rsync) is a download 
-protocol that is very efficient at sending large amounts of data over long distances. UDR utilizes 
-rsync as the transport mechanism, but sends the data over the UDT protocol.
+<a href='https://github.com/LabAdvComp/UDR' title=''>UDR</a> (UDT Enabled Rsync) is a download protocol that is very efficent
+at sending large amounts of data over long distances. UDR utilizes rsync
+as the transport mechanism, but sends the data over the UDT protocol.
 UDR is not written or managed by UCSC. It is an open source tool created
 by the <a href='http://www.labcomputing.org/' title=''>Laboratory for Advanced Computing</a> at the University of Chicago.
 It has been tested under Linux, FreeBSD and Mac OSX, but may

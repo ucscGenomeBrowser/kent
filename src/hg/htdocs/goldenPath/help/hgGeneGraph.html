@@ -18,7 +18,7 @@
 <h2>Introduction</h2>
 
 <p>
-The Pathways and Gene Interactions graph accompanies the &quot;Protein Interactions&quot;
+The Pathways and Gene Interactions graph accompanies the &quot;Gene Interactions&quot;
 track and displays a detailed gene interaction and pathway graph based on data
 collected from two sources: curated pathway/protein-interaction databases and
 interactions found through text mining of PubMed abstracts.
@@ -30,10 +30,10 @@ The curated data were imported from 23 pathway or protein-interaction databases
 research articles, collect protein interactions from them and store them in a
 web-accessible database. Pathway databases such as Reactome or WikiPathways
 describe a whole set of interactions, e.g. the WNT pathway, and the type of 
-effect, and sometimes annotate indirect or inferred effects with a physical
-interaction. They often work from review articles. In contrast, protein
+effect, and sometimes annotate indirect or inferred effects as an interaction.
+They often work from review articles. In contrast, protein
 interaction databases focus more on the original literature that describes the
-results of the biochemical protein-interaction experiments and focus less on
+results of the biochemical assay and focus less on
 the effect or direction of the interaction.
 </p>
 
@@ -173,7 +173,7 @@ Human protein interactions from the following databases were imported:
         <a href='https://www.ncbi.nlm.nih.gov/pubmed/18556668' target="_blank">MPIDB</a> and
         <a href='http://mips.helmholtz-muenchen.de/proj/ppi/' target="_blank">MPPI</a></li>
     <li><a href='https://www.ncbi.nlm.nih.gov/pubmed/19762544'
-         target="_blank">Androgen Responsive Gene Database</a></li>
+        target="_blank">Androgen Responsive Gene Database</a>. This database is not available anymore on the internet, but we kept a <a href="https://hgdownload.ucsc.edu/goldenPath/external/geneGraph/">a copy</a></li>
     <li><a href='http://string-db.org/' target="_blank">String 9.1</a></li>
     <li><a href='http://mips.helmholtz-muenchen.de/proj/ppi/negatome/'
          target="_blank">Negatome 2.0</a></li>
@@ -184,10 +184,12 @@ Human protein interactions from the following databases were imported:
   </ul>
   <li>Pathways</li>
   <ul>
-    <li><a href='http://www.genome.jp/kegg/pathway.html' target="_blank">KEGG</a></li>
-    <li><a href='https://pid.nci.nih.gov/' target="_blank">NCI Pathway Interaction Database</a></li>
+      <li><a href='http://www.genome.jp/kegg/pathway.html' target="_blank">KEGG</a>, Version from April 2011. This is a version of the database before the switch to a <a href="http://www.kegg.jp/kegg/legal.html">non-commercial license.</a></li>
+    <li><a href='https://pid.nci.nih.gov/' target="_blank">NCI Pathway Interaction Database</a> This database is not available anymore on the internet in its original format, but we kept <a href="https://hgdownload-test.cse.ucsc.edu/goldenPath/external/geneGraph/">a copy</a>.</li>
+      <li><a href='https://cgap.nci.nih.gov/Pathways/BioCarta_Pathways' target="_blank">BioCarta</a> This database is not directly available in a machine readable format. We use a version from 2009 that was included in the original NCI-PID. As the original file is not available anymore, we provide <a href="https://hgdownload.ucsc.edu/goldenPath/external/geneGraph/">a copy</a>.</li>
     <li><a href='http://www.reactome.org/' target="_blank">Reactome 2014</a></li>
-    <li><a href='http://www.wikipathways.org' target="_blank">WikiPathways</a></li>
+    <li><a href='http://www.wikipathways.org' target="_blank">WikiPathways</a>, version 20170510</li>
+    <li><a href='https://github.com/OpenBEL/openbel-framework-resources/tree/latest/knowledge' target="_blank">OpenBEL large corpus</a>, version 20150611 (commit 5515fcf, Jan 2016). This database is Copyright 2011-2015, Selventa and under a non-commercial license.</li>
     <li><a href='http://fastforward.sys-bio.net/' target="_blank">FastForward</a></li>
   </ul>
 </ul>
@@ -198,21 +200,21 @@ The quantitative contribution of each database in terms of number of gene-pairs 
 </p>
 
 <p>
-PubMed abstracts were downloaded from the National Library of Medicine (NLM)
+For text mining, PubMed abstracts were downloaded from the National Library of Medicine (NLM)
 website. The abstracts were then
 <a href='https://en.wikipedia.org/wiki/Tokenization_(lexical_analysis)'
 target="_blank">tokenized</a> and
 parsed syntactically using the <a href='https://www.microsoft.com/en-us/research/project/msr-splat/'
 target="_blank">SPLAT toolkit</a>. Protein
 and Gene names were identified and normalized after which potential
-interactions were extracted using the MSR &quot;Protein and Pathway Extractors&quot;. The
-results were then mapped to the genome using their HGNC gene symbols.
+interactions were extracted using the Microsoft Research NLP &quot;Protein and Pathway Extractors&quot;. The
+results were then mapped to the genome using their HGNC gene symbols. Text-mining results supporting by only a single abstract are in the database tables but are not shown in the user interface.
 </p>
 
 <a name='dataAccess'></a>
 <h2>Data Access</h2>
 <p>
-The raw data for these graphs can be accessed in multiple ways. It can be explored interactively 
+The raw data for these graphs can be accessed in multiple ways. They can be explored interactively 
 using the <a href="../cgi-bin/hgTables">Table Browser</a>, by selecting "group" - "All Tables"
 and "database" - "hgFixed". Under "table", select "hgFixed.ggLink". You can then start to explore the 
 relationships between the database tables using the "describe table schema" button or download
@@ -226,20 +228,36 @@ processing.</p>
 
 The database tables are:
 <ul>
-    <li><tt>ggLink</tt> - one row per gene/gene interaction</li>
-    <li><tt>ggLinkEvent</tt> - connections between a ggLink and one of the ggEvent tables. The prefix of the eventId indicates the table: ppi/pwy is a database, msr is a text event.</li>
-    <li><tt>ggEventDb</tt> - information about gene/gene interactions imported from protein interaction or pathway databases </li>
+    <li><tt>ggLink</tt> - one row per gene/gene interaction. The field 'minResCount' is the minimum number of interactions obtained from the same supporting article. E.g. if it is 10, then out of all supporting articles, there is one with 10 interactions curated from it and maybe others with more interactions. A cutoff of 50 should remove high-throughput data from the table. Note that while most databases are in the format source -&gt; target, in this table, the target comes first and the source second. Gene names are separated by the "|"-symbol.</li>
+    <li><tt>ggLinkEvent</tt> - connections between a ggLink and one of the ggEvent tables. The prefix of the eventId indicates the table: ppi/pwy links to ggEventDb, msr links to ggEventText.</li>
+    <li><tt>ggEventDb</tt> - information about gene/gene interactions imported from protein interaction or pathway databases. The structure is modeled after the NCI PID interactions data schema and distinguishes genes, complexes and compounds on each side of the reaction, the type of the relation and contains the curated display names for the genes. The compounds are part of the table but not shown in our user interface.</li>
     <li><tt>ggEventText</tt> - information about gene/gene interactions obtained from text mining </li>
     <li><tt>ggDocEvent</tt> - connections between documents and events</li>
     <li><tt>ggDoc</tt> - information about documents referenced from ggEventText and ggDocEvent</li>
     <li><tt>ggGeneClass</tt> - the HPRD/Panther class, one for each gene symbol</li>
     <li><tt>ggGeneName</tt> - the HGNC name, one for each gene symbol</li>
 </ul>
+
+<p>For more details about the tables and their fields, use the Table Browser's
+"describe schema" button.</p>
+
+<p>
+The annotations for genes are accessed as text files for performance reasons
+and can be downloaded from our <a
+href="http://hgdownload.soe.ucsc.edu/gbdb/hgFixed">downloads server</a>.
 <p>
 
-The annotations for genes are accessed as text files for performance reasons
-and can be downloaded from our <a href="http://hgdownload.soe.ucsc.edu/gbdb/hgFixed">downloads server</a>.
-<p>
+<h2 id="credits">Credits</h2>
+<ul>
+<li>The text-mined data for the gene interactions and pathways were generated by Chris Quirk and Hoifung Poon as part of <a href="https://hanover.azurewebsites.net">Microsoft Research, Project Hanover</a>.
+<li>Pathway data was provided by the databases listed under methods.
+<li>Thanks to Ian Donaldson for IRefIndex, the biggest and free collection of protein interaction databases.
+<li>Arjun Rao (UCSC) provided the ArgDB converter
+<li>Thanks to Dexter Pratt for help with OpenBEL and to Charles Tepley Hoyt for the <a href="https://github.com/pybel/pybel">pybel</a> converter.
+<li>Thanks to Alexander Pico for help with the WikiPathways data format GPML
+<li>The short gene descriptions are a merge of the <a href="http://hprd.org">HPRD</a> and <a href="http://pantherdb.org">PantherDB</a> gene/molecule classifications. Thanks to Arun Patil from HPRD for making them available as a download.
+<li>The track display and gene interaction graph were developed at the UCSC Genome Browser by Max Haeussler.
+</ul>
 
 <a name='references'></a>
 <h2>References</h2>

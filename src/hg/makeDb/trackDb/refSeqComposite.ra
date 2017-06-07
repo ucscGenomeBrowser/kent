@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel NCBI RefSeq
 longLabel RefSeq gene predictions from NCBI
 group genes
-visibility pack
+visibility dense
 type genePred
 dragAndDrop subTracks
 noInherit on

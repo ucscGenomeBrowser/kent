@@ -1,0 +1,95 @@
+# quakeExpr DONE Chris Eisenhart 2017-06-06 
+mkdir /hive/data/genomes/hg38/bed/quakeBrainExpression
+cd /hive/data/genomes/hg38/bed/quakeBrainExpression
+
+# Go here and download the accession list and runInfo list 
+# https://trace.ncbi.nlm.nih.gov/Traces/study/?acc=SRP057196
+# Use awk to turn it into a list of fastq dump commands
+cat SRR_Acc_List.txt | awk '{print "~/sratoolkit.2.8.0-centos_linux64/bin/fastq-dump "$1" --gzip --split-files"}' > commandList.txt
+chmod 755 commandList.txt
+./commandList.txt 
+# This has a nasty habit of downloading .sra files to a folder in the home dir ~/ncbi/public/sra/
+# these can be removed.  In this case these data are in our system several times already for CIRM
+
+# Get the transcriptome John Vivian used for the Toil recompute. 
+sftp ceisenha@cirm-01:/data/cirm/annotation/humanTranscriptome/Homo_sapiens.GRCh38.rel79.cdna.all.fa.index .
+
+# Make a command list and run kallisto on the paired end samples
+# Could use parasol here, just make a joblist and pass to parasol instead of 
+# running the command list.  
+cat SRR_Acc_List.txt | awk '{print "~/bin/x86_64/kallisto quant -i Homo_sapiens.GRCh38.rel79.cdna.all.fa.index -o kallistoOut/"$1" "$1"_1.fastq.gz "$1"_2.fastq.gz"}' > commandList2.txt
+chmod 755 commandList2.txt
+./commandList2.txt 
+
+# Merge the tpm files into a tpm matrix and gpm matrix
+cd kallistoOut
+kallistoToMatrix . quakeMatrix -t 20
+
+# Download the meta data file, convert to tagStorm then to tab
+wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE67nnn/GSE67835/soft/GSE67835_family.soft.gz
+gunzip GSE67835_family.soft.gz 
+~/kent/src/tagStorm/softToTagStorm.py GSE67835_family.soft GSE67835_family.tags
+tagStormToTab GSE67835_family.tags GSE67835_family.tab
+
+# Generate the sample list, needs SRR names and the cell type which are stored in 
+# two different files.  Also we want to throw out the fetal samples.  
+echo "#meta" > cleanQuakeSamples.tab
+join <(cut -f 62,79 GSE67835_family.tab | awk '{print $2"\t"$1}') <(cut -f 8,10 SraRunTable.txt | sort -k2 | awk '{print $2"\t"$1}') | awk '{print $3"\t"$2}' | grep -v fetal >> cleanQuakeSamples.tab
+
+#head -4 cleanQuakeSamples.tab
+#meta	biosample_cell_type
+#SRR1974543	oligodendrocytes
+#SRR1974544	hybrid
+#SRR1974545	oligodendrocytes
+
+# Go through and make the cell types capitalized (fits with the Gtex tissue convention)
+#head -4 cleanQuakeSamples.tab
+#meta	biosample_cell_type
+#SRR1974543	Oligodendrocytes
+#SRR1974544	Hybrid
+#SRR1974545	Oligodendrocytes
+
+
+# Clean up the matrices removing the fetal samples.  
+rowsToCols kallistoOut/quakeMatrix.tpm.tab tspsdQuakeTranscMatrix.tab
+join <(cut -f 1 cleanQuakeSamples.tab | sed 's/meta/transcript/g' | sort) <(sort tspsdQuakeTranscMatrix.tab) > cleanTspsdQuakeTranscMatrix.tab
+rowsToCols cleanTspsdQuakeTranscMatrix.tab cleanQuakeTranscMatrix.tab
+
+rowsToCols kallistoOut/quakeMatrix.geneTpm.tab tspsdQuakeGeneMatrix.tab
+join <(cut -f 1 cleanQuakeSamples.tab | sed 's/meta/gene/g' | sort) <(sort tspsdQuakeGeneMatrix.tab) > cleanTspsdQuakeGeneMatrix.tab
+rowsToCols cleanTspsdQuakeGeneMatrix.tab cleanQuakeGeneMatrix.tab
+
+# Remove the 'meta' to make the script happy. 
+sed -i '1D' cleanQuakeSamples.tab 
+
+# Make up the coordinate files that map the transcript/gene names to coordinates
+hgsql hg38 -e "select name,chrom,strand,txStart,txEnd from ensGene" > transcDump.tab
+hgsql hg38 -e "select name2,chrom,strand,txStart,txEnd from ensGene" > geneDump.tab
+cp /hive/data/outside/gencode/release_22/transToGene.tab .
+cut -f 3 transToGene.tab > hugoGenes.txt 
+cut -f 1 transToGene.tab | cut -f 1 -d "." > trans1.txt
+cut -f 2 transToGene.tab | cut -f 1 -d "." > gene1.txt
+paste trans1.txt hugoGenes.txt > transcToHugoGenes.tab
+paste gene1.txt hugoGenes.txt > geneToHugoGenes.tab
+join <(sort transcToHugoGenes.tab) <(sort transcDump.tab) | awk '{print $3"\t"$5"\t"$6"\t"$1"\t0\t"$4"\t"$2}' > transcCoords.bed6+1.tab 
+join <(sort geneToHugoGenes.tab) <(sort geneDump.tab) | awk '{print $3"\t"$5"\t"$6"\t"$1"\t0\t"$4"\t"$2}' | sort -k4,4 -u > geneCoords.bed6+1.tab 
+
+# Generate a bed 6+5 barChart file.
+time expMatrixToBarchartBed cleanQuakeSamples.tab cleanQuakeTranscMatrix.tab transcCoords.bed6+1.tab quakeTranscExpr.bed 
+sort -k1,1 -k2,2n quakeTranscExpr.bed > sortedQuakeTranscExpr.bed
+bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedQuakeTranscExpr.bed /hive/data/genomes/hg38/chrom.sizes quakeTranscExpr.bb
+
+time expMatrixToBarchartBed cleanQuakeSamples.tab cleanQuakeGeneMatrix.tab geneCoords.bed6+1.tab quakeGeneExpr.bed 
+sort -k1,1 -k2,2n quakeGeneExpr.bed > sortedQuakeGeneExpr.bed
+bedToBigBed -as=$HOME/kent/src/hg/lib/barChartGeneExp.as -type=bed6+5 sortedQuakeGeneExpr.bed /hive/data/genomes/hg38/chrom.sizes quakeGeneExpr.bb
+
+cd /gbdb/hgFixed/human/expMatrix/
+ln -s /hive/data/genomes/hg38/bed/quakeBrainExpression/cleanQuakeTranscMatrix.tab .
+ln -s /hive/data/genomes/hg38/bed/quakeBrainExpression/cleanQuakeGeneMatrix.tab .
+ln -s /hive/data/genomes/hg38/bed/quakeBrainExpression/cleanQuakeSamples.tab .
+ln -s /hive/data/genomes/hg38/bed/quakeBrainExpression/quakeTranscExpr.bb .
+ln -s /hive/data/genomes/hg38/bed/quakeBrainExpression/quakeGeneExpr.bb .
+
+# Get the colors for the barcharts from Figure 1:D of the publication, I used an online
+# color to hex converter to get each color's hex code from the paper.  There are a bunch
+# of these tools and all provide the same results, http://html-color-codes.info/colors-from-image/
