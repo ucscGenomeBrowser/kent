@@ -11,7 +11,7 @@ void usage()
 errAbort(
   "tagStormToCsv - Convert tagStorm to comma-separated-value file.\n"
   "usage:\n"
-  "   tagStormToCsv tagStorm.txt output.tsv\n"
+  "   tagStormToCsv tagStorm.txt output.csv\n"
   "options:\n"
   "   -mid - include non-leaf middle and root nodes in output\n"
   "   -null=string - print string for empty cells, defaults to empty string\n"
