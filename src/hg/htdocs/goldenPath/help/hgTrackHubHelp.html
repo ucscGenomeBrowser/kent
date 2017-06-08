@@ -639,11 +639,13 @@ are displaying the hub upon such as &quot;db=hg19&quot;. For example, here is a 
 will visualize the ENCODE AWG hub:
 <pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>db=hg19&hubUrl=</b>http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt </code></pre>
 <p>
-If you also want to load your hub with a specific set of other tracks (you can also set each track's
-visibility) and at specific browser coordinates, you can save your hub in a session which can also 
-be loaded directly by URL. Instructions for creating a session and saving it to a file can be found 
-<a href="http://genome.ucsc.edu/goldenPath/help/hgSessionHelp.html#Create" 
-target="_blank">here</a>.</p> 
+If you also want to load your hub at specific browser coordinates and with a specific set of other
+browser tracks (you can also set the visibility of each track in your hub), you can save your
+hub in a session, which are in essence &quot;View Settings&quot; collected in a text file (example
+session text files <a href="../help/examples/sessions/" target="_blank">here</a>). Sessions can be
+<a href="hgSessionHelp.html#HowToShare" target="_blank">shared</a> in different ways,
+please see the instructions for <a href="hgSessionHelp.html#Create" target="_blank">
+creating a session and saving it to a file</a>.</p>
 <p>
 By making your session file available over the Internet, you can build a URL that will load the 
 session automatically by adding &quot;<b>&hgS_loadUrlName=</b>&quot; to the hgTracks CGI followed by
