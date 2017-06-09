@@ -1,5 +1,6 @@
 /* geoStormToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
  * Atlas wants.. */
+#include <uuid/uuid.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -71,7 +72,7 @@ char *substitutions[][2] =
     {"sample.characteristics_Sex", "sample.donor.sex"},
     {"sample.characteristics_strain", "sample.donor.strain"},
     {"sample.characteristics_tissue", "sample.body_part.name"},
-    {"sample.contact_address", "project.contact.address"},
+    {"sample.contact_address", "project.contact.street_address"},
     {"sample.contact_city", "project.contact.city"},
     {"sample.contact_country", "project.contact.country"},
     {"sample.contact_department", "project.contact.department"},
@@ -81,7 +82,7 @@ char *substitutions[][2] =
     {"sample.contact_name", "project.contact.name"},
     {"sample.contact_phone", "project.contact.phone"},
     {"sample.contact_state", "project.contact.state"},
-    {"sample.contact_zip/postal_code", "project.contact_postal_code"},
+    {"sample.contact_zip/postal_code", "project.contact.postal_code"},
     {"sample.contributor", "project.contributor"},
     {"sample.description", "sample.short_label"},
     {"sample.geo_accession", "sample.geo_sample"},
@@ -97,7 +98,7 @@ char *substitutions[][2] =
     {"sample.submission_date", "sample.submission_date"},
     {"sample.taxid", "sample.donor.ncbi_taxon"},
     {"sample.title", "sample.long_label"},
-    {"series.contact_address", "project.contact.address"},
+    {"series.contact_address", "project.contact.street_address"},
     {"series.contact_city", "project.contact.city"},
     {"series.contact_country", "project.contact.country"},
     {"series.contact_department", "project.contact.department"},
@@ -113,7 +114,7 @@ char *substitutions[][2] =
     {"series.last_update_date", "project.last_update_date"},
     {"series.organism", "sample.donor.species"},
     {"series.overall_design", "project.overall_design"},
-    {"series.pubmed_id", "project.pubmed_id"},
+    {"series.pubmed_id", "project.pmid"},
     {"series.relation_SubSeries_of", "project.geo_parent_series"},
     {"series.status", "project.release_status"},
     {"series.submission_date", "project.submission_date"},
@@ -122,6 +123,17 @@ char *substitutions[][2] =
     {"series.taxid", "sample.donor.ncbi_taxon"},
     {"series.title", "project.title"},
 };
+
+char *makeUuidString(char buf[37])
+/* Generate a random uuid and put it in the usual hex-plus-dashes form */
+{
+/* Generate 16 bytes of random sequence with uuid generator */
+unsigned char uuid[16];
+uuid_generate(uuid);
+uuid_unparse_lower(uuid, buf);
+return buf;
+}
+
 
 char *mon[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
@@ -165,7 +177,7 @@ if (s == NULL || !startsWith(accPrefix, s+1))
 return s+1;
 }
 
-void fixAccessions(struct tagStorm *storm, struct tagStanza *stanza)
+void fixAccessions(struct tagStorm *storm, struct tagStanza *stanza, void *context)
 /* Convert various URLs containing accessions to just accessions */
 {
 /* Lets deal with the SRR/SRX issue as well */
@@ -226,18 +238,26 @@ dyStringFree(&srrDy);
 
 }
 
+void tagStormTraverse(struct tagStorm *storm, struct tagStanza *stanzaList, void *context,
+    void (*doStanza)(struct tagStorm *storm, struct tagStanza *stanza, void *context))
+/* Traverse tagStormStanzas recursively applying doStanza with to each stanza in
+ * stanzaList and any children.  Pass through context */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    doStanza(storm, stanza, context);
+    tagStormTraverse(storm, stanza->children, context, doStanza);
+    }
+}
+    
 void rFixAccessions(struct tagStorm *storm, struct tagStanza *list)
 /* Go through and fix accessions in all stanzas */
 {
-struct tagStanza *stanza;
-for (stanza = list; stanza != NULL; stanza = stanza->next)
-    {
-    fixAccessions(storm, stanza);
-    rFixAccessions(storm, stanza->children);
-    }
+tagStormTraverse(storm, list, NULL, fixAccessions);
 }
 
-void fixDates(struct tagStorm *storm, struct tagStanza *stanza)
+void fixDates(struct tagStorm *storm, struct tagStanza *stanza, void *context)
 /* Convert various URLs containing accessions to just accessions */
 {
 struct slPair *pair;
@@ -248,15 +268,45 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
     }
 }
 
-void rFixDates(struct tagStorm *storm, struct tagStanza *list)
-/* Go through and fix accessions in all stanzas */
+void mergeWithSpaces(struct tagStanza *stanza, struct dyString *dy, char **tags, int tagCount)
+/* Look up all of tags in stanza and concatenate together with space separation */
 {
-struct tagStanza *stanza;
-for (stanza = list; stanza != NULL; stanza = stanza->next)
+char *address = emptyForNull(tagFindVal(stanza, tags[0]));
+char *city = emptyForNull(tagFindVal(stanza, tags[1]));
+char *state = emptyForNull(tagFindVal(stanza, tags[2]));
+char *zip = emptyForNull(tagFindVal(stanza, tags[3]));
+char *country = emptyForNull(tagFindVal(stanza, tags[4]));
+if (address || city || state || zip || country)
+    dyStringPrintf(dy, "%s; %s, %s %s %s", address, city, state, zip, country);
+}
+
+void mergeAddresses(struct tagStorm *storm, struct tagStanza *stanza, void *context)
+/* Because we want to be international, we merge the address into a single line.
+ * Something like 101 Main St. Sausilito CA 94965 USA with the format of
+ * number, street, city, state, postal code is not how they represent things
+ * in all countries.  Some don't have states.  Some put the number after the street.
+ * So we just store the whole thing as a single string.  We do keep the separate
+ * components as well since we are data hoarders. */
+{
+struct dyString *dy = dyStringNew(0);
+char *seriesComponents[] = 
     {
-    fixDates(storm, stanza);
-    rFixDates(storm, stanza->children);
+    "series.contact_address", "series.contact_city", "series.contact_state", 
+    "series.contact_zip/postal_code", "series.contact_country"
+    };
+mergeWithSpaces(stanza, dy, seriesComponents, ArraySize(seriesComponents));
+if (dy->stringSize == 0)
+    {
+    char *sampleComponents[] = 
+	{
+	"sample.contact_address", "sample.contact_city", "sample.contact_state", 
+	"sample.contact_zip/postal_code", "sample.contact_country"
+	};
+    mergeWithSpaces(stanza, dy, sampleComponents, ArraySize(sampleComponents));
     }
+if (dy->string != 0)
+    tagStanzaAppend(storm, stanza, "project.contact.address", dy->string);
+dyStringFree(&dy);
 }
 
 void geoStormToHcaStorm(char *inTags, char *inSrxSrr, char *output)
@@ -267,9 +317,12 @@ struct tagStorm *storm = tagStormFromFile(inTags);
 gSrxToSrr = hashTwoColumnFile(inSrxSrr);
 hashReverseAllBucketLists(gSrxToSrr);
 tagStormWeedArray(storm, weeds, ArraySize(weeds));
-rFixAccessions(storm, storm->forest);
-rFixDates(storm, storm->forest);
+tagStormTraverse(storm, storm->forest, NULL, fixAccessions);
+tagStormTraverse(storm, storm->forest, NULL, fixDates);
+tagStormTraverse(storm, storm->forest, NULL, mergeAddresses);
 tagStormSubArray(storm, substitutions, ArraySize(substitutions));
+char projectUuid[37];
+tagStanzaAppend(storm, storm->forest, "project.uuid",  makeUuidString(projectUuid));
 tagStormWrite(storm, output, 0);
 }
 
