@@ -1,7 +1,7 @@
 assay.rna.primer poly-dt
 assay.seq.machine Illumina NextSeq 500
 assay.seq.molecule RNA
-assay.seq.paired_ends index1_data2
+assay.seq.paired_ends index1_reads2
 assay.single_cell.method drop-seq
 assay.single_cell.cell_barcode_size 12
 project.contact_address 415 Main St.
