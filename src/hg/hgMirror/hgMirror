@@ -387,9 +387,10 @@ def parseTrackDb(db, tableSizes):
             trackBigDataFiles[track] = settings["bigDataUrl"]
             # create a pseudo table, so we know we have to download something
             trackTables[track] = [track]
+
         # same for bigGeneDataUrl, only used on knownGene right now
         if "bigGeneDataUrl" in settings:
-            trackBigDataFiles[track].append(settings["bigGeneDataUrl"])
+            trackBigDataFiles[track] = settings["bigGeneDataUrl"]
             trackTables[track] = [track]
 
         if track=="bacEndPairs":
