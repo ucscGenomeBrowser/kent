@@ -16,6 +16,7 @@ Person Roles	submitter
 Protocol Name	P-GSE81904-1	
 Protocol Description	Single cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol.	
 Protocol Type	nucleic acid library construction protocol	
+Protocol Term Source	EFO	
 Publication Title	Comprehensive Classification of Retinal Bipolar Neurons by Single-Cell Transcriptomics.	
 Publication Author List	Shekhar K, Lapan SW, Whitney IE, Tran NM, Macosko EZ, Kowalczyk M, Adiconis X, Levin JZ, Nemesh J, Goldman M, McCarroll SA, Cepko CL, Regev A, Sanes JR	
 PubMed ID	27565351	
