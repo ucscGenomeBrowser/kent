@@ -38,6 +38,9 @@ char *weeds[] =
     "idf.Experimental_Factor_Term_Source_REF",	// Can be deduced from related field
     "idf.Experimental_Factor_Term_Accession_Number", // Sparsely used and uninformative
     "idf.Experimental_Factor_Type",  // Redundant with idf.Experimental_Factor_Name
+    "idf.Protocol_Term_Accession_Number", // Redundant with protocol_type
+    "idf.Protocol_Term_Source",  // Always EFO
+    "idf.Protocol_Term_Source_REF",  // Always EFO
     "sdrf.Characteristics_organism_Term_Source_REF",  // Can be deduced from related field
     "sdrf.Derived_Array_Data_File",  // Redundant with sdrf.Comment_Derived_ArrayExpress_FTP_file
     "sdrf.Scan_Name",		     // Redundant with sdrf.Comment_SUBMITTED_FILE_NAME
@@ -47,6 +50,11 @@ char *weeds[] =
     "sdrf.Characteristics_age_Unit_Term_Source_REF",  // Overkill for day/week/month/year
     "sdrf.Comment_LIBRARY_SOURCE", // Always seems to be transcriptome or genomic
     "sdrf.Performer",		   // Difficult and not in GEO 
+    "sdrf.Protocol_REF_Term_Source_REF", // ArrayExpress all the time
+    "idf.Protocol_Description",  // We transform to sample.protocols
+    "idf.Protocol_Name",	 // We end up not needing thsi because protocols live in sample
+    "idf.Protocol_Type",	 // We transform to sample.protocol_types
+    "sdrf.Protocol_REF",	 // We transform this to sample.protocol and .protocol_types
     };
 
 
@@ -99,11 +107,6 @@ char *substitutions[][2] =
 {"idf.Experimental_Factor_Name", "project.experimental_factor_name",}, 
 {"idf.Investigation_Title", "project.title",}, 
 {"idf.MAGE_TAB_Version", "project.mage_tab_version",}, 
-{"idf.Protocol_Description", "project.extract_protocol",}, 
-{"idf.Protocol_Name", "reformat.Protocol_Name",}, 
-{"idf.Protocol_Term_Accession_Number", "reformat.Protocol_Term_Accession_Number",}, 
-{"idf.Protocol_Term_Source_REF", "reformat.Protocol_Term_Source_REF",}, 
-{"idf.Protocol_Type", "reformat.Protocol_Type",}, 
 {"idf.PubMed_ID", "project.pmid",}, 
 {"idf.PubMedID", "project.pmid",}, 
 {"idf.Pubmed_ID", "project.pmid",}, 
@@ -140,8 +143,6 @@ char *substitutions[][2] =
 {"sdrf.Comment_Sample_description", "sample.short_label",}, 
 {"sdrf.Comment_Sample_source_name", "sample.body_part.source_name",}, 
 {"sdrf.Comment_Sample_title", "sample.long_label",}, 
-{"sdrf.Protocol_REF", "reformat.Protocol_REF",}, 
-{"sdrf.Protocol_REF_Term_Source_REF", "reformat.Protocol_REF_Term_Source_REF",}, 
 {"sdrf.Source_Name", "sample.submitted_id",}, 
 };
 
@@ -277,6 +278,103 @@ addFirstWithVal(storm, stanza, "idf.Person_Affiliation", "project.contact_instit
 tagStormWeedArray(storm, personTags, ArraySize(personTags));
 }
 
+void slNameListToArray(struct slName *list, char ***retArray, int *retSize)
+/* Turn an slNameList to an array.  Free *retArray with done.  *retSize is
+ * size of array */
+{
+int size = slCount(list);
+if (size == 0)
+    {
+    *retArray = NULL;
+    *retSize = 0;
+    return;
+    }
+
+char **array;
+AllocArray(array, size);
+int i = 0;
+struct slName *el;
+for (el=list; el != NULL; el=el->next)
+    array[i++] = el->name;
+
+*retArray = array;
+*retSize= size;
+}
+
+void tagArrayVal(struct tagStanza *stanza, char *tag, char ***retArray, int *retSize, int forceSize)
+/* Look for tag in stanze.  Return values of tag as an array.  If forceSize is non zero
+ * complain if array is not right size. */
+{
+int size = 0;
+char **array = NULL;
+char *csvVal = tagFindVal(stanza, tag);
+if (csvVal != NULL)
+    {
+    struct slName *valList = csvParse(csvVal);
+    slNameListToArray(valList, &array, &size);
+    }
+if (forceSize != 0 && forceSize != size)
+    errAbort("Expected %d values in %s tag but got %d", forceSize, tag, size);
+*retArray = array;
+*retSize = size;
+}
+
+void reformatProtocols(struct tagStorm *storm, struct tagStanzaRef *leafList)
+/* Convert protocols.  They are in the top stanza as descriptions/types/accessions.
+ * They are in the leaf stanzas as accessions.  We want to convert them to
+ * descriptions/types in the leaves. */
+{
+/* Get top level stanza and look for protocol tags, turning them into arrays */
+struct tagStanza *idfStanza = storm->forest;
+int descriptionSize, typeSize, accSize;
+char **descriptionArray, **typeArray, **accArray;
+tagArrayVal(idfStanza, "idf.Protocol_Description", &descriptionArray, &descriptionSize, 0);
+tagArrayVal(idfStanza, "idf.Protocol_Type", &typeArray, &typeSize, descriptionSize);
+tagArrayVal(idfStanza, "idf.Protocol_Name", &accArray, &accSize, typeSize);
+uglyf("Protocols: got %d descriptions, %d types, %d accs\n", descriptionSize, typeSize, accSize);
+
+/* Build up desciption and type hashes keyed by acc. */
+struct hash *descriptionHash = hashNew(0);
+struct hash *typeHash = hashNew(0);
+int i;
+for (i=0; i<accSize; ++i)
+    {
+    char *acc = accArray[i];
+    hashAdd(descriptionHash, acc, descriptionArray[i]);
+    hashAdd(typeHash, acc, typeArray[i]);
+    }
+
+/* Look through leaf stanzas for protocol accessions and turn them instead to
+ * type and descriptions */
+struct tagStanzaRef *leaf;
+for (leaf = leafList; leaf != NULL; leaf = leaf->next)
+    {
+    struct tagStanza *stanza = leaf->stanza;
+    int count = 0;
+    char **array = NULL;
+    tagArrayVal(stanza, "sdrf.Protocol_REF",  &array, &count, 0);
+    if (count > 0)
+        {
+	struct dyString *descDy = dyStringNew(0);
+	struct dyString *typeDy = dyStringNew(0);
+        int i;
+	for (i=0; i < count; ++i)
+	    {
+	    char *acc = array[i];
+	    char *desc = hashMustFindVal(descriptionHash, acc);
+	    char *type = hashMustFindVal(typeHash, acc);
+	    csvEscapeAndAppend(descDy, desc);
+	    csvEscapeAndAppend(typeDy, type);
+	    }
+	tagStanzaAppend(storm, stanza, "sample.protocols", descDy->string);
+	tagStanzaAppend(storm, stanza, "sample.protocol_types", typeDy->string);
+	dyStringFree(&descDy);
+	dyStringFree(&typeDy);
+	}
+    }
+
+}
+
 boolean prefixedNumerical(char *prefix, char *acc)
 /* Return TRUE if acc starts with prefix and is followed by all numbers */
 {
@@ -353,6 +451,9 @@ replaceWithFirstChoice(storm, leafList, machineTags,ArraySize(machineTags), "ass
 replaceWithFirstChoice(storm, leafList, cellTypeTags,ArraySize(cellTypeTags), "cell.type");
 replaceWithFirstChoice(storm, leafList, diseaseTags,ArraySize(diseaseTags), "sample.donor.disease");
 replaceWithFirstChoice(storm, leafList, moleculeTags,ArraySize(moleculeTags), "assay.seq.molecule");
+
+/* Deal with protocols. */
+reformatProtocols(storm, leafList);
 
 /* Fix up paired_ends */
 char *pairedEndsSubs[][2] =
