@@ -112,11 +112,114 @@ return obj;
 void writeJsonVal(FILE *f, char *s)
 /* Write out s surrounded by quotes, and doing escaping of any internal quotes or \ */
 {
-char *esc = jsonStringEscape(s);
+char quote = '"', esc = '\\', c;
 fputc('"', f);
-fputs(esc, f);
+while ((c = *s++) != 0)
+    {
+    if (c == quote || c == esc)
+        fputc(esc, f);
+    fputc(c, f);
+    }
 fputc('"', f);
-freez(&esc);
+}
+
+void writeJsonTag(FILE *f, char *name, boolean *pFirstOut)
+/* Write out quoted field name followed by colon.  If not first
+ * time through then write comma */
+{
+boolean firstOut = *pFirstOut;
+if (firstOut)
+    *pFirstOut =  !firstOut;
+else
+    fputc(',', f);
+fprintf(f, "\"%s\":", name);
+}
+
+int endFromFileName(char *fileName)
+/* Try and figure out end from file name */
+{
+if (stringIn("_R1_", fileName))
+    return 1;
+else if (stringIn("_R2_", fileName))
+    return 2;
+else if (stringIn("_1.", fileName))
+    return 1;
+else if (stringIn("_2.", fileName))
+    return 2;
+errAbort("Couldn't deduce paired end from file name %s", fileName);
+return 0;
+}
+
+void writeFilesArray(FILE *f, struct tagStanza *stanza, char *csvList)
+/* Write out an array of file objects base on file names in csvList */
+{
+boolean firstOut = TRUE;
+struct slName *list = csvParse(csvList), *file;
+fputc('[', f);
+for (file = list; file != NULL; file = file->next)
+    {
+    /* Write comma between file objects */
+    if (firstOut)
+	firstOut = FALSE;
+    else
+	fputc(',', f);
+
+    /* Write file object starting with file name */
+    fputc('{', f);
+    char *name = file->name;
+    fprintf(f, "\"%s\":", "name");
+    writeJsonVal(f, name);
+
+    /* If can recognize format from suffix write format. */
+    char *format = NULL;
+    boolean isRead = FALSE;
+    if (endsWith(name, ".fastq.gz") || endsWith(name, ".fq.gz"))
+	 {
+         format = ".fastq.gz";
+	 isRead = TRUE;
+	 }
+    else if (endsWith(name, ".bam"))
+         format = ".bam";
+    else if (endsWith(name, ".cram"))
+         format = ".cram";
+    if (format != NULL)
+        {
+	fprintf(f, ",\"%s\":", "format");
+	writeJsonVal(f, format);
+	}
+
+    /* If it's a read format try to classify it to a type */
+    if (isRead)
+        {
+	char *pairedEnds = tagMustFindVal(stanza, "assay.seq.paired_ends");
+	char *type = NULL;
+	if (sameString(pairedEnds, "no"))
+	    type = "reads";
+	else if (sameString(pairedEnds, "yes"))
+	    {
+	    int end = endFromFileName(name);
+	    if (end == 1)
+	        type = "read1";
+	    else
+	        type = "read2";
+	    }
+	else if (sameString(pairedEnds, "index1_reads2"))
+	    {
+	    int end = endFromFileName(name);
+	    if (end == 1)
+		type = "index";
+	    else
+	        type = "reads";
+	    }
+	else
+	    errAbort("Unrecognized paired_ends %s", pairedEnds);
+	fprintf(f, ",\"%s\":", "type");
+	writeJsonVal(f, type);
+	}
+    fputc('}', f);
+    }
+fputc(']', f);
+slFreeList(&list);
 }
 
 void rWriteJson(FILE *f, struct tagStanza *stanza, struct subObj *obj)
@@ -133,43 +236,46 @@ struct subObj *field;
 boolean firstOut = TRUE;
 for (field = obj->children; field != NULL; field = field->next)
     {
-    if (!firstOut)
-        fputc(',', f);
     char *fieldName = field->name;
     if (field->children != NULL)
 	 {
-	 fprintf(f, "\"%s\":", fieldName);
+	 writeJsonTag(f, fieldName, &firstOut);
 	 rWriteJson(f, stanza, field);
-	 firstOut = FALSE;
 	 }
     else
 	{
 	char *val = tagFindVal(stanza, field->fullName);
 	if (val != NULL)
 	    {
-	    fprintf(f, "\"%s\":", fieldName);
-	    if (csvNeedsParsing(val))
+	    writeJsonTag(f, fieldName, &firstOut);
+	    if (sameString(fieldName, "files"))
 	        {
-		struct slName *list = csvParse(val);
-		if (list != NULL && list->next == NULL)
-		    writeJsonVal(f, list->name);
-		else
-		    {
-		    fputc('[', f);
-		    struct slName *el;
-		    for (el = list; el != NULL; el = el->next)
-		        {
-			writeJsonVal(f, el->name);
-		        if (el->next != NULL)
-			    fputc(',', f);
-		        }
-		    fputc(']', f);
-		    }
-		slFreeList(&list);
+		writeFilesArray(f, stanza, val);
 		}
 	    else
-		writeJsonVal(f, val);
-	    firstOut = FALSE;
+		{
+		if (csvNeedsParsing(val))
+		    {
+		    struct slName *list = csvParse(val);
+		    if (list != NULL && list->next == NULL)
+			writeJsonVal(f, list->name);
+		    else
+			{
+			fputc('[', f);
+			struct slName *el;
+			for (el = list; el != NULL; el = el->next)
+			    {
+			    writeJsonVal(f, el->name);
+			    if (el->next != NULL)
+				fputc(',', f);
+			    }
+			fputc(']', f);
+			}
+		    slFreeList(&list);
+		    }
+		else
+		    writeJsonVal(f, val);
+		}
 	    }
 	}
     }
@@ -179,7 +285,7 @@ fprintf(f, "}");
 void writeTopJson(char *fileName, struct tagStanza *stanza, struct subObj *top)
 /* Write one json file using the parts of stanza referenced in subObj */
 {
-uglyf("Writing %s\n", fileName);
+verbose(2, "Writing %s\n", fileName);
 FILE *f = mustOpen(fileName, "w");
 rWriteJson(f, stanza, top);
 fprintf(f, "\n");
@@ -221,11 +327,11 @@ struct slName *topEl;
 struct subObj *objList = NULL;
 for (topEl = topLevelList; topEl != NULL; topEl = topEl->next)
     {
-    uglyf("topEl %s\n", topEl->name);
+    verbose(2, "topEl %s\n", topEl->name);
     struct subObj *obj = makeSubObj(allFields, topEl->name, topEl->name);
     slAddHead(&objList, obj);
     }
-verbose(1, "Made %d objects\n", slCount(objList));
+verbose(1, "Made %d top level objects\n", slCount(objList));
 
 /* Figure out all files in dataFileDir and make a hash keyed by name
  * with full path as values */
@@ -286,6 +392,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
 
     makeBundleJson(bundleDir, stanza, objList);
     }
+verbose(1, "wrote json files into %s/bundle* dirs\n", outDir);
 }
 
 int main(int argc, char *argv[])
