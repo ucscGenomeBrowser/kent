@@ -16,6 +16,7 @@ idf.Person_Roles submitter
 idf.Protocol_Name P-GSE81904-1
 idf.Protocol_Description "Single cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol."
 idf.Protocol_Type nucleic acid library construction protocol
+idf.Protocol_Term_Source EFO
 idf.Publication_Title Comprehensive Classification of Retinal Bipolar Neurons by Single-Cell Transcriptomics.
 idf.Publication_Author_List Shekhar K, Lapan SW, Whitney IE, Tran NM, Macosko EZ, Kowalczyk M, Adiconis X, Levin JZ, Nemesh J, Goldman M, McCarroll SA, Cepko CL, Regev A, Sanes JR
 idf.PubMed_ID 27565351
