@@ -44,6 +44,8 @@ while ((c = *in++) != 0)
     {
     if (!isalnum(c))
 	{
+	if (outSize == prefixSize)
+	    continue;	// Skip leading ones too
 	if (c == ']')
 	    continue;
 	c = '_';
@@ -57,6 +59,11 @@ while ((c = *in++) != 0)
 	errAbort("aeName %s too long", aeName);
     lastC = c;
     }
+
+// Trim trailing underbars
+while (outName[outSize-1] == '_')
+     --outSize;
+
 outName[outSize] = 0;
 }
 
@@ -135,10 +142,7 @@ return storm;
 void addSdrfToStormTop(char *sdrfFile, struct tagStorm *storm)
 /* Add lines of sdrfFile as children of first top level stanza in storm. */
 {
-/* Load table with a few required fields for sanity checking */
-static char *requiredFields[] = { "Source Name", "Extract Name", "Material Type", "Assay Name", };
-struct fieldedTable *table = fieldedTableFromTabFile(sdrfFile, sdrfFile, 
-    requiredFields, ArraySize(requiredFields) );
+struct fieldedTable *table = fieldedTableFromTabFile(sdrfFile, sdrfFile, NULL, 0 );
 
 /* Convert ArrayExpress field names to our field names */
 int fieldIx;
