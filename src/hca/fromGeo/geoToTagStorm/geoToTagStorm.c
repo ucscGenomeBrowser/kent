@@ -87,7 +87,10 @@ while (lineFileNext(lf, &line, NULL))
 	/* Remove _1, _2, _3 suffixes.  These will be turned into arrays later */
 	char *lastUnderbar = strrchr(tag, '_');
 	if (lastUnderbar != NULL && isAllDigits(lastUnderbar+1))
-	    *lastUnderbar = 0;
+	    {
+	    lastUnderbar[0] = 's';
+	    lastUnderbar[1] = 0;
+	    }
 
 	/* Get rid of repetitive "_ch1" channel prefix if it's there, check of
 	 * "_ch2" and abort if it's there because can only handle one channel */
@@ -319,10 +322,14 @@ for (stanza = sampleTags->forest; stanza != NULL; stanza = nextStanza)
     slAddHead(&platformStanza->children, stanza);
     }
 
-/* Make platform tags children of the series tag */
+/* Make platform tags children of the series tag and unreverse them. */
+slReverse(&platformTags->forest);
 seriesStanza->children = platformTags->forest;
 for (stanza = platformTags->forest; stanza != NULL; stanza = stanza->next)
+    {
     stanza->parent = seriesStanza;
+    slReverse(&stanza->children);
+    }
 
 /* Add array subscripts to tags that are repeated */
 if (clExpandArrays)
