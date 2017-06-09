@@ -317,6 +317,7 @@ chmod -R a+r /usr/local/apache/htdocs
 # Touching the files once is enough. Rsync will download them.
 mkdir -p /data/gbdb/hg38
 mkdir -p /data/gbdb/hg38/targetDb/
+mkdir -p /data/gbdb/hg38/html/
 mkdir -p /data/mysql/hg38
 
 # GBDB files
@@ -326,9 +327,9 @@ done
 
 # MySQL tables
 for i in chromInfo cytoBand cytoBandIdeo ensemblLift extFile grp gtexGene gtexGeneModel hgFindSpec kgColor kgXref knownCanonical knownGene knownToTag ncbiRefSeq ncbiRefSeqCurated ncbiRefSeqLink ncbiRefSeqOther ncbiRefSeqPredicted ncbiRefSeqPsl refGene tableList trackDb ucscToEnsembl ucscToINSDC xenoRefGene; do
-   touch /data/mysql/$i.MYD;
-   touch /data/mysql/$i.MYI;
-   touch /data/mysql/$i.frm;
+   touch /data/mysql/hg38/$i.MYD;
+   touch /data/mysql/hg38/$i.MYI;
+   touch /data/mysql/hg38/$i.frm;
 done
 # -- END JUNE 2017
 
@@ -371,7 +372,7 @@ touch /data/mysql/hg19/wgEncodeRegTfbsClusteredInputsV3.{frm,MRI,MYD}
 if grep -q secure-file-priv /etc/mysql/my.cnf; then
     true
 else
-    echo Allowing LOAD DATA in MySQL again and restarat MySQL
+    echo Allowing LOAD DATA in MySQL and restart MySQL
     sed -i '/\[mysqld\]/a secure-file-priv = ""' /etc/mysql/my.cnf
     service mysql restart
 fi
