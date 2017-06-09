@@ -7,6 +7,7 @@
 #include "localmem.h"
 #include "tagStorm.h"
 #include "csv.h"
+#include "uuid.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -42,6 +43,7 @@ char *weeds[] =
     "idf.Protocol_Term_Source",  // Always EFO
     "idf.Protocol_Term_Source_REF",  // Always EFO
     "sdrf.Characteristics_organism_Term_Source_REF",  // Can be deduced from related field
+    "sdrf.Characteristics_organism_part_Term_Source_REF", // Can be deduced from related field
     "sdrf.Derived_Array_Data_File",  // Redundant with sdrf.Comment_Derived_ArrayExpress_FTP_file
     "sdrf.Scan_Name",		     // Redundant with sdrf.Comment_SUBMITTED_FILE_NAME
     "sdrf.Extract_Name",	     // Redundant with sdrf.Source_Name
@@ -127,7 +129,6 @@ char *substitutions[][2] =
 {"sdrf.Characteristics_organism_Term_Accession_Number", "sample.donor.ncbi_taxon",}, 
 {"sdrf.Characteristics_organism_part", "sample.body_part.name",}, 
 {"sdrf.Characteristics_organism_part_Term_Accession_Number", "sample.body_part.ontology",}, 
-{"sdrf.Characteristics_organism_part_Term_Source_REF", "sample.body_part.ontology_source",}, 
 {"sdrf.Characteristics_sex", "sample.donor.sex",}, 
 {"sdrf.Characteristics_single_cell_well_quality", "cell.well_quality",}, 
 {"sdrf.Comment_BioSD_SAMPLE", "sample.biosd_sample",}, 
@@ -135,7 +136,7 @@ char *substitutions[][2] =
 {"sdrf.Comment_ENA_EXPERIMENT", "assay.ena_experiment",}, 
 {"sdrf.Comment_ENA_RUN", "assay.ena_run",}, 
 {"sdrf.Comment_ENA_SAMPLE", "sample.ena_sample",}, 
-{"sdrf.Comment_FASTQ_URI", "sample.files",}, 
+{"sdrf.Comment_FASTQ_URI", "assay.files",}, 
 {"sdrf.Comment_LIBRARY_LAYOUT", "assay.seq.paired_ends",}, 
 {"sdrf.Comment_LIBRARY_SELECTION", "assay.rna.primer",}, 
 {"sdrf.Comment_LIBRARY_STRAND", "assay.rna.strand",}, 
@@ -210,7 +211,7 @@ slFreeList(&valList);
 }
 
 void reformatPersonTags(struct tagStorm *storm)
-/* Convert idf.Person_* tags to project.contact_* and project.contributor tag */
+/* Convert idf.Person_* tags to project.contact.* and project.contributor tag */
 {
 static char *personTags[] = 
     {
@@ -232,7 +233,7 @@ struct slName *midList = csvParse(tagFindVal(stanza, "idf.Person_Mid_Initials"))
 struct slName *lastList= csvParse(tagFindVal(stanza, "idf.Person_Last_Name"));
 char combinedName[256], lastCombinedName[256] = "";
 
-/* We'll build up contributor string.  First element of it will be contact_name as well. */
+/* We'll build up contributor string.  First element of it will be contact.name as well. */
 struct dyString *contributorOut = dyStringNew(0);
 struct slName *firstEl = firstList, *midEl = midList, *lastEl = lastList;
 boolean firstTime = TRUE;
@@ -262,7 +263,7 @@ for (;;)
 	csvEscapeAndAppend(contributorOut, combinedName);
     if (firstTime)
         {
-	tagStanzaAppend(storm, stanza, "project.contact_name", contributorOut->string);
+	tagStanzaAppend(storm, stanza, "project.contact.name", contributorOut->string);
 	firstTime = FALSE;
 	}
     strcpy(lastCombinedName, combinedName);
@@ -270,10 +271,10 @@ for (;;)
 tagStanzaAppend(storm, stanza, "project.contributor", contributorOut->string);
 
 /* Ok, we are done with names, now for easy things: email and phone. We only store first one */
-addFirstWithVal(storm, stanza, "idf.Person_Address", "project.contact_address");
-addFirstWithVal(storm, stanza, "idf.Person_Email", "project.contact_email");
-addFirstWithVal(storm, stanza, "idf.Person_Phone", "project.contact_phone");
-addFirstWithVal(storm, stanza, "idf.Person_Affiliation", "project.contact_institute");
+addFirstWithVal(storm, stanza, "idf.Person_Address", "project.contact.address");
+addFirstWithVal(storm, stanza, "idf.Person_Email", "project.contact.email");
+addFirstWithVal(storm, stanza, "idf.Person_Phone", "project.contact.phone");
+addFirstWithVal(storm, stanza, "idf.Person_Affiliation", "project.contact.institute");
 
 tagStormWeedArray(storm, personTags, ArraySize(personTags));
 }
@@ -375,6 +376,44 @@ for (leaf = leafList; leaf != NULL; leaf = leaf->next)
 
 }
 
+void addDonorIds(struct tagStorm *storm, struct tagStanzaRef *leafList)
+/* Assign a uuid to each sample.donor.id, and then add it to leaf stanzas
+ * as sample.donor.uuid. */
+{
+struct hash *donorHash = hashNew(0);
+
+/* Make pass through generating uuids for each unique donor and putting in hash */
+struct tagStanzaRef *leaf;
+for (leaf = leafList; leaf != NULL; leaf = leaf->next)
+    {
+    struct tagStanza *stanza = leaf->stanza;
+    char *donor = tagFindVal(stanza, "sample.donor.id");
+    if (donor != NULL)
+        {
+	char *uuid = hashFindVal(donorHash, donor);
+	if (uuid == NULL)
+	    {
+	    uuid = needMem(UUID_STRING_SIZE);
+	    makeUuidString(uuid);
+	    hashAdd(donorHash, donor, uuid);
+	    }
+	}
+    }
+
+/* Make a second pass now adding the uuid to all leaves. */
+for (leaf = leafList; leaf != NULL; leaf = leaf->next)
+    {
+    struct tagStanza *stanza = leaf->stanza;
+    char *donor = tagFindVal(stanza, "sample.donor.id");
+    if (donor != NULL)
+        {
+	char *uuid = hashMustFindVal(donorHash, donor);
+	tagStanzaAppend(storm, stanza, "sample.donor.uuid", uuid);
+	}
+    }
+
+}
+
 boolean prefixedNumerical(char *prefix, char *acc)
 /* Return TRUE if acc starts with prefix and is followed by all numbers */
 {
@@ -451,6 +490,9 @@ replaceWithFirstChoice(storm, leafList, machineTags,ArraySize(machineTags), "ass
 replaceWithFirstChoice(storm, leafList, cellTypeTags,ArraySize(cellTypeTags), "cell.type");
 replaceWithFirstChoice(storm, leafList, diseaseTags,ArraySize(diseaseTags), "sample.donor.disease");
 replaceWithFirstChoice(storm, leafList, moleculeTags,ArraySize(moleculeTags), "assay.seq.molecule");
+
+/* Add in donor IDs */
+addDonorIds(storm, leafList);
 
 /* Deal with protocols. */
 reformatProtocols(storm, leafList);
