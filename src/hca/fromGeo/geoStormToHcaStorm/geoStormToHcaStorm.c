@@ -7,6 +7,7 @@
 #include "options.h"
 #include "obscure.h"
 #include "tagStorm.h"
+#include "csv.h"
 
 struct hash *gSrxToSrr;
 
@@ -309,20 +310,75 @@ if (dy->string != 0)
 dyStringFree(&dy);
 }
 
+
+void fixProtocols(struct tagStorm *storm, struct tagStanza *stanza, void *context)
+/* Convert the various protocols in sample to and array of protocol descriptions and
+ * an array of types.  This helps us be compatible with array express, which has
+ * an unbounded set of protocol types */
+{
+struct protocolInfo { char *tag, *type;} info[] = 
+    {
+       {"sample.growth_protocol", "growth protocol",},
+       {"sample.treatment_protocol", "treatment protocol",},
+       {"sample.extract_protocol", "nucleic acid library construction protocol",},
+    };
+struct dyString *protocol = dyStringNew(0);
+struct dyString *type = dyStringNew(0);
+struct dyString *scratch = dyStringNew(0);
+
+int i;
+for (i=0; i<ArraySize(info); ++i)
+    {
+    char *pro = tagFindVal(stanza, info[i].tag);
+    if (pro != NULL)
+	{
+	char *escaped = csvParseNext(&pro, scratch);
+        csvEscapeAndAppend(protocol, escaped);
+	csvEscapeAndAppend(type, info[i].type);
+	}
+    }
+
+if (protocol->stringSize > 0)
+    {
+    tagStanzaAppend(storm, stanza, "sample.protocols", protocol->string);
+    tagStanzaAppend(storm, stanza, "sample.protocol_types", type->string);
+    }
+dyStringFree(&scratch);
+dyStringFree(&protocol);
+dyStringFree(&type);
+}
+
 void geoStormToHcaStorm(char *inTags, char *inSrxSrr, char *output)
 /* geoStormToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
  *  Atlas wants.. */
 {
+/* Read in input. */
 struct tagStorm *storm = tagStormFromFile(inTags);
 gSrxToSrr = hashTwoColumnFile(inSrxSrr);
 hashReverseAllBucketLists(gSrxToSrr);
+
+/* Get rid of tags we find useless */
 tagStormWeedArray(storm, weeds, ArraySize(weeds));
+
+/* Fix up all stanzas with various functions */
 tagStormTraverse(storm, storm->forest, NULL, fixAccessions);
 tagStormTraverse(storm, storm->forest, NULL, fixDates);
 tagStormTraverse(storm, storm->forest, NULL, mergeAddresses);
+tagStormTraverse(storm, storm->forest, NULL, fixProtocols);
+
+/* Get rid of protocols stuff we just fixed */
+char *protoWeeds[] = 
+    {"sample.extract_protocol", "sample.treatment_protocol", "sample.growth_protocol", };
+tagStormWeedArray(storm, protoWeeds, ArraySize(protoWeeds));
+
+/* Do simple subsitutions. */
 tagStormSubArray(storm, substitutions, ArraySize(substitutions));
+
+/* Add a project level UUID */
 char projectUuid[37];
 tagStanzaAppend(storm, storm->forest, "project.uuid",  makeUuidString(projectUuid));
+
+/* Save results */
 tagStormWrite(storm, output, 0);
 }
 
