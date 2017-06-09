@@ -45,7 +45,7 @@ if (pHgvs && *pHgvs)
 #define versionedRefSeqNGExp versionedAccPrefixExp("NG")
 #define versionedRefSeqNMExp versionedAccPrefixExp("NM")
 #define versionedRefSeqNPExp versionedAccPrefixExp("NP")
-#define versionedRefSeqNRExp versionedAccPrefixExp("NR")
+#define versionedRefSeqNMRExp versionedAccPrefixExp("N[MR]")
 
 // Nucleotide position regexes
 // (c. = CDS, g. = genomic, m. = mitochondrial, n.= non-coding RNA, r. = RNA)
@@ -122,7 +122,7 @@ if (pHgvs && *pHgvs)
 //                               4.....         1-based end position
 //                                        5...  change description
 
-#define hgvsRefSeqNMNDotExp hgvsFullRegex(versionedRefSeqNMExp, hgvsNDotPosExp) "(.*)"
+#define hgvsRefSeqNMRNDotExp hgvsFullRegex(versionedRefSeqNMRExp, hgvsNDotPosExp) "(.*)"
 // substring numbering:
 //      0.....................................  whole matching string
 //      1.................                      accession and optional dot version
@@ -300,7 +300,7 @@ if (regexMatchSubstr(term, hgvsLrgNDotExp, substrs, ArraySize(substrs)))
     {
     matches = TRUE;
     }
-else if (regexMatchSubstr(term, hgvsRefSeqNMNDotExp, substrs, ArraySize(substrs)))
+else if (regexMatchSubstr(term, hgvsRefSeqNMRNDotExp, substrs, ArraySize(substrs)))
     {
     matches = TRUE;
     geneSymbolIx = 4;
@@ -1312,7 +1312,7 @@ static char *pslTableForAcc(char *db, char *acc)
 char *pslTable = NULL;
 if (startsWith("LRG_", acc))
     pslTable = "lrgTranscriptAli";
-else if (startsWith("NM_", acc))
+else if (startsWith("NM_", acc) || startsWith("NR_", acc))
     {
     // Use NCBI's alignments if they are available
     if (dbHasNcbiRefSeq(db))

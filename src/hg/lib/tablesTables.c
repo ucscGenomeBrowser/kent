@@ -49,6 +49,7 @@ cgiMakeOnClickButton("clearButton",
 "$('#submit').click();\n"
 , "clear search");
 printf("<br>");
+
 printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
 
 if (addFunc)

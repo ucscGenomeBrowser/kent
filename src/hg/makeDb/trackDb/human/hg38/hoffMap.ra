@@ -69,7 +69,7 @@ html Umap
 	release alpha
 	type bigWig
 	viewLimits 0:1
-	bigDataUrl /gbdb/hg38/hoffmanMappability/k36.Umap_MultiTrackMappability.bw
+	bigDataUrl /gbdb/hg38/hoffmanMappability/k36.Umap.MultiTrackMappability.bw
 	shortLabel Umap_M36
 	longLabel Multi-read mappability with 36-mers
 	priority 30
@@ -83,7 +83,7 @@ html Umap
 	release alpha
 	type bigWig
 	viewLimits 0:1
-	bigDataUrl /gbdb/hg38/hoffmanMappability/k24.Umap_MultiTrackMappability.bw
+	bigDataUrl /gbdb/hg38/hoffmanMappability/k24.Umap.MultiTrackMappability.bw
 	shortLabel Umap_M24
 	longLabel Multi-read mappability with 24-mers
 	priority 20
@@ -97,7 +97,7 @@ html Umap
 	release alpha
 	type bigWig
 	viewLimits 0:1
-	bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Umap_MultiTrackMappability.bw
+	bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Umap.MultiTrackMappability.bw
 	shortLabel Umap_M50
 	longLabel Multi-read mappability with 50-mers
 	priority 40
@@ -111,7 +111,7 @@ html Umap
 	release alpha
 	type bigWig
 	viewLimits 0:1
-	bigDataUrl /gbdb/hg38/hoffmanMappability/k100.Umap_MultiTrackMappability.bw
+	bigDataUrl /gbdb/hg38/hoffmanMappability/k100.Umap.MultiTrackMappability.bw
 	shortLabel Umap_M100
 	longLabel Multi-read mappability with 100-mers
 	priority 82
