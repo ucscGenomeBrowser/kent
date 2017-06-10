@@ -1,3 +1,4 @@
 #!/bin/tcsh -efx
 rm -rf out
 hcaStormToBundles test.tags /cluster/home/kent/kent/src/hca/toHca/hcaStormToBundles/testFastqs out
+python -mjson.tool out/bundle1/assay.json
