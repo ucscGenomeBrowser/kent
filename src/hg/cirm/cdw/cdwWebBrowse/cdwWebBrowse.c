@@ -889,8 +889,11 @@ printf("<img src=\"../images/magnify.png\">\n");
 jsInlineF(
     "$(function () {\n"
     "  $('#%s').watermark(\"type in words or starts of words to find specific %s\");\n" 
+    "  $('form').delegate('#%s','change keyup paste',function(e){\n"
+    "    $('[name=cdwBrowseFiles_page]').val('1');\n"
+    "  });\n"
     "});\n",
-    varName, itemPlural);
+    varName, itemPlural, varName);
 return varVal;
 }
 

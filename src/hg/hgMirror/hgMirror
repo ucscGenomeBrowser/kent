@@ -77,7 +77,8 @@ DEBUG=False
 REMOVESEARCH = ["wgEncodeGencodeBasicV19", "wgEncodeGencodeCompV17", "wgEncodeGencodeBasicV14", "wgEncodeGencodeBasicV17", "wgEncodeGencodeCompV14", "mgcFullMrna", "wgEncodeGencodeBasicV7", "orfeomeMrna", "wgEncodeGencodePseudoGeneV14", "wgEncodeGencodePseudoGeneV17", "wgEncodeGencodePseudoGeneV19", "wgEncodeGencodeCompV7", "knownGeneOld6", "geneReviews", "transMapAlnSplicedEst", "gbCdnaInfo", "oreganno", "vegaPseudoGene", "transMapAlnMRna", "ucscGenePfam", "qPcrPrimers", "transMapAlnUcscGenes", "transMapAlnRefSeq", "genscan", "bacEndPairs", "fosEndPairs"]
 
 # list of tracks to hide by default
-FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5", "mrna"]
+FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5", "mrna",
+        "wgEncodeRegDnaseClustered"]
 
 # always copy these (small) tables for the current db, if they exist
 FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
@@ -85,6 +86,8 @@ FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
     'tableList', 'refSeqStatus', 'wgEncodeRegTfbsCellsV3', 'extFile', 'trackDb', 'grp',
     'ucscRetroInfo5', "refLink", "ucscRetroSeq5", "ensemblLift", "knownCanonical",
     'gbExtFile', 'flyBase2004Xref',
+    # for gencode/knownGene tracks and hg38 in particular
+    "knownToTag", "ncbiRefSeqLink", "ncbiRefSeqCurated", "gtexGeneModel", "gtexGene",
     # for faster searches
     'hgFindSpec', 'ensemblToGeneName', "ucscToINSDC",
     # these are almost required for searches, common tracks and not too big
@@ -383,6 +386,11 @@ def parseTrackDb(db, tableSizes):
         if "bigDataUrl" in settings:
             trackBigDataFiles[track] = settings["bigDataUrl"]
             # create a pseudo table, so we know we have to download something
+            trackTables[track] = [track]
+
+        # same for bigGeneDataUrl, only used on knownGene right now
+        if "bigGeneDataUrl" in settings:
+            trackBigDataFiles[track] = settings["bigGeneDataUrl"]
             trackTables[track] = [track]
 
         if track=="bacEndPairs":
@@ -1143,11 +1151,11 @@ def buildRsyncCmd(remotePath, localPath, listFname, logFname):
     """ returns an rsync or udr command  to get files from remotePath to localPath"""
     if udrIsUsable():
         cmd =\
-            'udr rsync -avz --no-progress --files-from=%(listFname)s ' \
+            'udr rsync -av --no-progress --files-from=%(listFname)s ' \
             'hgdownload.cse.ucsc.edu::%(remotePath)s %(localPath)s >> %(logFname)s 2>&1\n' % locals()
     else:
         cmd =\
-            'rsync -avz --no-progress --files-from=%(listFname)s ' \
+            'rsync -av --no-progress --files-from=%(listFname)s ' \
             'rsync://hgdownload.cse.ucsc.edu/%(remotePath)s %(localPath)s >> %(logFname)s 2>&1\n' % locals()
     return cmd
 
@@ -1847,6 +1855,14 @@ def setCookies(db):
     cookie['db']['comment'] = 'holds the last hgMirror database'
     print cookie
 
+def setDefaultDb(genome, db):
+    " change the default db "
+    query = 'UPDATE hgcentral SET name="%s" where genome="%s"' % (genome, db)
+    conn = sqlConnect(hgConf.get("central.db", "hgcentral"), "local")
+    cur = conn.cursor()
+    cur.execute(query)
+    conn.close()
+
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
@@ -1855,6 +1871,7 @@ def main():
         for db in dbSet:
             localSizes = getLocalSizes(db)
             postRsyncChanges(db, localSizes)
+        #setDefaultDb("Human", "hg19")
         sys.exit(0)
 
     # the code above is not creating or using TMPDIR, as from the cronjob, we're

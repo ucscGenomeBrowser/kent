@@ -39,20 +39,18 @@ static void showTableFilterInstructionsEtc(struct fieldedTable *table,
 int matchCount = slCount(table->rowList);
 if (largerContext != NULL)  // Need to page?
      matchCount = largerContext->tableSize;
+
 cgiMakeButton("submit", "search");
 
-printf("&nbsp;<button id='resetLink'>Reset filters</button>\n");
-jsInlineF(
-"$(function() {\n"
-"  $('#resetLink').click( function() { "
-"     $(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
-"     $('#submit').click();\n"
-"  });"
-"});\n");
+printf("&nbsp&nbsp;");
+cgiMakeOnClickButton("clearButton",
+"$(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');\n"
+"$('[name=cdwBrowseFiles_page]').val('1');\n"
+"$('#submit').click();\n"
+, "clear search");
+printf("<br>");
 
-printf("&nbsp;&nbsp;&nbsp&nbsp;");
 printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
-
 
 if (addFunc)
     addFunc();
@@ -61,7 +59,6 @@ printf("<BR>\n");
 printf("You can further filter search results field by field below. ");    
 printf("Wildcard * and ? characters are allowed in text fields. ");
 printf("&GT;min or &LT;max are allowed in numerical fields.<BR>\n");
-//printf("<a href='#' >Reset all filters</a>\n");
 }
 
 static void printSuggestScript(char *id, struct slName *suggestList)
@@ -95,6 +92,19 @@ jsInlineF(
 "  $('#%s').watermark(\"%s\");\n"
 "});\n", id, watermark);
 }
+
+static void resetPageNumberOnChange(char *id)
+/* On change, reset page number to 1. */
+{
+jsInlineF(
+"$(function() {\n"
+" $('form').delegate('#%s','change keyup paste',function(e){\n"
+"  $('[name=cdwBrowseFiles_page]').val('1');\n"
+" });\n"
+"});\n"
+, id);
+}
+
 
 static void showTableFilterControlRow(struct fieldedTable *table, struct cart *cart, 
     char *varPrefix, int maxLenField, struct hash *suggestHash)
@@ -146,6 +156,10 @@ for (i=0; i<table->fieldCount; ++i)
 
     /* Write out javascript to initialize autosuggest on control */
     printWatermark(varName, " filter ");
+
+    /* Write out javascript to reset page number to 1 if filter changes */
+    resetPageNumberOnChange(varName);
+
     if (suggestHash != NULL)
         {
 	struct slName *suggestList = hashFindVal(suggestHash, field);
@@ -289,6 +303,30 @@ if (largerContext != NULL)  // Need to page?
 	int curPage = largerContext->tableOffset/pageSize;
 	int totalPages = (largerContext->tableSize + pageSize - 1)/pageSize;
 
+
+	char id[256];
+	if ((curPage + 1) > 1)
+	    {
+	    // first page
+	    safef(id, sizeof id, "%s_first", varPrefix);
+	    printf("<a href='#' id='%s' style='font-size: 150%%;'>&#9198;</a>", id);
+	    jsOnEventByIdF("click", id, 
+		"$('[name=%s_page]').val('1');\n"
+		"$('#submit').click();\n"
+		, varPrefix);
+	    printf("&nbsp;&nbsp;&nbsp;");
+
+	    // prev page
+	    safef(id, sizeof id, "%s_prev", varPrefix);
+	    printf("<a href='#' id='%s' style='font-size: 150%%;'>&#9194;</a>", id);
+	    jsOnEventByIdF("click", id, 
+		"$('[name=%s_page]').val('%d');\n"
+		"$('#submit').click();\n"
+		, varPrefix, (curPage+1)-1);
+	    printf("&nbsp;&nbsp;&nbsp;");
+	    }
+
+
 	printf("Displaying page ");
 
 	char pageVar[64];
@@ -296,6 +334,28 @@ if (largerContext != NULL)  // Need to page?
 	cgiMakeIntVar(pageVar, curPage+1, 3);
 
 	printf(" of %d", totalPages);
+
+	if ((curPage + 1) < totalPages)
+	    {
+	    // next page
+	    printf("&nbsp;&nbsp;&nbsp;");
+	    safef(id, sizeof id, "%s_next", varPrefix);
+	    printf("<a href='#' id='%s' style='font-size: 150%%;' >&#9193;</a>", id);
+	    jsOnEventByIdF("click", id, 
+		"$('[name=%s_page]').val('%d');\n"
+		"$('#submit').click();\n"
+		, varPrefix, (curPage+1)+1);
+
+	    // last page
+	    printf("&nbsp;&nbsp;&nbsp;");
+	    safef(id, sizeof id, "%s_last", varPrefix);
+	    printf("<a href='#' id='%s' style='font-size: 150%%;' >&#9197;</a>", id);
+	    jsOnEventByIdF("click", id, 
+		"$('[name=%s_page]').val('%d');\n"
+		"$('#submit').click();\n"
+		, varPrefix, totalPages);
+
+	    }
 	}
      }
 }
@@ -314,7 +374,6 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
 {
 if (strchr(returnUrl, '?') == NULL)
      errAbort("Expecting returnUrl to include ? in showFieldedTable\nIt's %s", returnUrl);
-
 
 if (withFilters)
     showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc);

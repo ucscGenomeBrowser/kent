@@ -40,7 +40,9 @@
 # v = verbose
 # h = human readable
 # u = skip if file is newer on receiver
-RSYNCOPTS="-ltrzvh"
+# We are not using the -z option anymore because it may cause
+# CPU overload on hgdownload
+RSYNCOPTS="-ltrvh"
 # rsync server for CGIs and html files
 RSYNCSRC="rsync://hgdownload.cse.ucsc.edu"
 RSYNCCGIBIN=cgi-bin
@@ -252,7 +254,7 @@ if [ "$1" == "hgwdev" ] ; then
     # On a development machine, the developer might have touched a file
     # for testing. We want to make sure that all local files are overwritten by the 
     # files on hgwdev
-    RSYNCOPTS="-ltrzvh"
+    RSYNCOPTS="-ltrvh"
     user=$2
     dirExt=$3
 
@@ -309,6 +311,28 @@ chown -R www-data.www-data /usr/local/apache/cgi-bin/*
 chown -R www-data.www-data /usr/local/apache/htdocs/
 chmod -R a+r /usr/local/apache/htdocs
 
+# June 2017: add a basic set of hg38 files to the GBIB
+# This will add 1.2 GB to the size of the virtual disc but hg38
+# is the default genome so probably should be included
+# Touching the files once is enough. Rsync will download them.
+mkdir -p /data/gbdb/hg38
+mkdir -p /data/gbdb/hg38/targetDb/
+mkdir -p /data/gbdb/hg38/html/
+mkdir -p /data/mysql/hg38
+
+# GBDB files
+for i in hg38.2bit html/description.html knownGene.ix knownGene.ixx knownGene.bb targetDb/kgTargetSeq10.2bit targetDb/kgTargetSeq8.2bit targetDb/kgTargetSeq9.2bit trackDb.ix trackDb.ixx; do
+   touch /data/gbdb/hg38/$i;
+done
+
+# MySQL tables
+for i in chromInfo cytoBand cytoBandIdeo ensemblLift extFile grp gtexGene gtexGeneModel hgFindSpec kgColor kgXref knownCanonical knownGene knownToTag ncbiRefSeq ncbiRefSeqCurated ncbiRefSeqLink ncbiRefSeqOther ncbiRefSeqPredicted ncbiRefSeqPsl refGene tableList trackDb ucscToEnsembl ucscToINSDC xenoRefGene; do
+   touch /data/mysql/hg38/$i.MYD;
+   touch /data/mysql/hg38/$i.MYI;
+   touch /data/mysql/hg38/$i.frm;
+done
+# -- END JUNE 2017
+
 if [ "$1" != "hgwdev" ] ; then
   echo - Updating GBDB files...
   rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/gbdb/ /data/gbdb/
@@ -342,6 +366,16 @@ touch /data/mysql/hgFixed/refLink.MYI /data/mysql/hgFixed/refLink.MYD /data/mysq
 # Jan 2017: hgVai does not work if /data/mysql/hg19/wgEncodeRegTfbsClusteredInputsV3 is not present, so force this 
 # table into the rsync, refs #18778
 touch /data/mysql/hg19/wgEncodeRegTfbsClusteredInputsV3.{frm,MRI,MYD}
+
+# Jun 2017: An Ubuntu security update in early 2017 deactivated LOAD DATA in Mysql
+# so we are switching it back on
+if grep -q secure-file-priv /etc/mysql/my.cnf; then
+    true
+else
+    echo Allowing LOAD DATA in MySQL and restart MySQL
+    sed -i '/\[mysqld\]/a secure-file-priv = ""' /etc/mysql/my.cnf
+    service mysql restart
+fi
 
 # we can now remove the old tables
 rm -f /data/mysql/hg19/refSeqStatus*
