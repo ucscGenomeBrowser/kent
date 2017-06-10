@@ -1,0 +1,207 @@
+assay.single_cell.method mouth pipetting
+assay.seq.paired_ends yes
+assay.seq.molecule RNA
+project.title Genetic Programs in Human and Mouse Early Embryos Revealed by Single-Cell RNA-Sequencing
+project.geo_series GSE44183
+project.release_status Public on Jul 29 2013
+project.submission_date Feb 08 2013
+project.last_update_date May 22 2017
+project.pubmed_id 23892778
+project.summary "Mammalian preimplantation development is a complex process involving dramatic changes in the transcriptional architecture. Through single-cell RNA-sequencing (RNA-seq), we report here a comprehensive analysis of transcriptome dynamics from oocyte to morula in both human and mouse embryos. Based on single nucleotide variants (SNVs) in blastomere mRNAs and paternal-specific SNPs, we identify novel stage-specific monoallelic expression patterns for a significant portion of polymorphic gene transcripts (25-53%). By weighted gene co-expression network analysis (WGCNA), we find that each developmental stage can be concisely delineated by a small number of functional modules of co-expressed genes. This result indicates a sequential order of transcriptional changes in pathways of cell cycle, gene regulation, translation, and metabolism in a step-wise fashion from cleavage to morula.  Cross-species comparisons reveal that the majority of human stage-specific modules (7 out of 9) are remarkably preserved, only to diverge in developmental specificity and timing in mice. We further identify conserved key members (or hub genes) of the human and mouse networks. These genes represent novel candidates that are likely key players in driving mammalian preimplantation development. Collectively, we demonstrate that mammalian preimplantation development is orchestrated by evolutionarily conserved genetic programs that diverge in developmental timing.  Our results provide a valuable resource to dissect gene regulatory mechanism underlying progressive development of early mammalian embryos."
+project.overall_design single-cell RNA-seq of human and mouse blastomeres
+project.contributor "Kevin,,Huang","Xue,,Zhigang","Guoping,,Fan"
+project.contact_name "Kevin,,Huang"
+project.contact_phone 310-267-0438
+project.contact_laboratory Guoping Fan
+project.contact_department Human Genetics
+project.contact_institute UCLA
+project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+project.contact_city Los Angeles
+project.contact_state CA
+project.contact_postal_code 90095-7088
+project.contact_country USA
+project.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP018/SRP018525,ftp://ftp.ncbi.nlm.nih.gov/pub/geo/DATA/supplementary/series/GSE44183/GSE44183_RAW.tar,ftp://ftp.ncbi.nlm.nih.gov/pub/geo/DATA/supplementary/series/GSE44183/GSE44183_human_expression_mat.txt.gz,ftp://ftp.ncbi.nlm.nih.gov/pub/geo/DATA/supplementary/series/GSE44183/GSE44183_mouse_expression_mat.txt.gz
+project.ncbi_bioproject PRJNA189204
+project.sra_project SRP018525
+
+	sample.donor.species Mus musculus
+	sample.donor.ncbi_taxon 10090
+
+		sample.long_label mouse pronuclei 1
+		sample.geo_accession GSM1080197
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name pronucleus
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type pronucleus
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		assay.sra_experiment SRX229786
+		sample.ncbi_biosample SAMN01915417
+		assay.sra_run SRR689235
+
+		sample.long_label mouse oocyte 2
+		sample.geo_accession GSM1080196
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name oocyte
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type oocyte
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		assay.sra_experiment SRX229785
+		sample.ncbi_biosample SAMN01915416
+		assay.sra_run SRR689234
+
+		sample.long_label mouse oocyte 1
+		sample.geo_accession GSM1080195
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Feb 08 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name oocyte
+		sample.donor.species Mus musculus
+		sample.donor.ncbi_taxon 10090
+		cell.type oocyte
+		sample.donor.strain C57BL/6
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule polyA RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.short_label processed data file = mouse_expression_mat.txt
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the mm9 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.1) were filtered out, followed by quantile normalization.",mm9,mouse_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL13112
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		assay.sra_experiment SRX229784
+		sample.ncbi_biosample SAMN01915415
+		assay.sra_run SRR689233
+
+	sample.donor.species Homo sapiens
+	sample.donor.ncbi_taxon 9606
+
+		sample.long_label human morula 5
+		sample.geo_accession GSM1160140
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name morula
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type morula
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.ncbi_biosample SAMN02195169
+		assay.sra_experiment SRX300901
+		assay.sra_run SRR893074
+
+		sample.long_label human morula 4
+		sample.geo_accession GSM1160139
+		project.release_status Public on Jul 29 2013
+		sample.submission_date Jun 11 2013
+		sample.last_update_date Jul 29 2013
+		sample.body_part.name morula
+		sample.donor.species Homo sapiens
+		sample.donor.ncbi_taxon 9606
+		cell.type morula
+		sample.donor.ethnicity Han Chinese
+		sample.characteristics_supplementary_file Human_expression_mat.txt
+		sample.treatment_protocol Single cells were washed twice with 1x PBS containing 0.1% BSA before placing in lysis buffer.
+		sample.growth_protocol "Single blastomeres were isolated by removing the zona pellucida using acidic tyrode solution (Sigma, cat. no. T1788), then separated by gentle mouth pipetting in a calcium-free medium."
+		assay.seq.molecule total RNA
+		sample.extract_protocol "RNA was isolated from single cells or single morula embryos and amplified as previously described (Tang et al., 2010, Nat Protoc)",Library construction was performed following Illumina manufacturer suggestions.
+		sample.data_processing Raw reads from the Illumina HiSeq2000 were mapped to the hg19 genome using default parameters in BWA,Mapped transcripts reads were transformed using the reads per kilobase per million (RPKM) metric,"Genes with low expression in all stages (average RPKM<0.5) were filtered out, followed by quantile normalization.",Genome_build: hg19,Supplementary_files_format_and_content: human_expression_mat.txt: matrix listing normalized RPKM
+		sample.platform_id GPL11154
+		project.contact_name "Kevin,,Huang"
+		project.contact_phone 310-267-0438
+		project.contact_laboratory Guoping Fan
+		project.contact_department Human Genetics
+		project.contact_institute UCLA
+		project.contact_address "Gonda BLDG Rm. 6554, P.O.Box 957088"
+		project.contact_city Los Angeles
+		project.contact_state CA
+		project.contact_postal_code 90095-7088
+		project.contact_country USA
+		assay.seq.machine Illumina HiSeq 2000
+		assay.rna.primer cDNA
+		assay.rna.prep transcriptomic
+		assay.seq.prep RNA-Seq
+		sample.ncbi_biosample SAMN02195168
+		assay.sra_experiment SRX300900
+		assay.sra_run SRR893073
+

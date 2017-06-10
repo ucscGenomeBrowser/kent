@@ -372,6 +372,19 @@ hash->expansionFactor = defaultExpansionFactor;   /* Expand when elCount > size*
 return hash;
 }
 
+void hashReverseAllBucketLists(struct hash *hash)
+/* Reverse all hash bucket list.  You might do this to
+ * get them back in the same order things were added to the hash */
+{
+int i;
+for (i=0; i<hash->size; ++i)
+    {
+    struct hashEl *hel = hash->table[i];
+    if (hel != NULL && hel->next != NULL)	    
+	slReverse(&hash->table[i]);
+    }
+}
+
 void hashResize(struct hash *hash, int powerOfTwoSize)
 /* Resize the hash to a new size */
 {
@@ -405,12 +418,8 @@ for (i=0; i<oldHashSize; ++i)
 	}
     }
 /* restore original list order */
-for (i=0; i<hash->size; ++i)
-    {
-    struct hashEl *hel = hash->table[i];
-    if (hel != NULL && hel->next != NULL)	    
-	slReverse(&hash->table[i]);
-    }
+hashReverseAllBucketLists(hash);
+
 freeMem(oldTable);
 hash->numResizes++;
 }

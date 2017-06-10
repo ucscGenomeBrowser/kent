@@ -174,7 +174,7 @@ struct slPair *tagStanzaDeleteTagsInHash(struct tagStanza *stanza, struct hash *
 /* Delete any tags in stanza that have names that match hash. Return list of removed tags. */
 
 void tagStanzaSubTagsInHash(struct tagStanza *stanza, struct hash *valHash);
-/* Delete any tags in stanza that have names that match hash. Return list of removed tags. */
+/* Substitute tags that are keys in valHash with the values in valHash */
 
 void tagStanzaRecursiveRemoveWeeds(struct tagStanza *list, struct hash *weedHash);
 /* Recursively remove weeds in list and any children in list */
@@ -239,6 +239,17 @@ boolean tagStanzaRqlMatch(struct rqlStatement *rql, struct tagStanza *stanza,
 
 char *tagStanzaRqlLookupField(void *record, char *key);
 /* Lookup a field in a tagStanza for rql. */
+
+struct tagStanzaRef
+/* A reference to a stanza in a tag storm */
+    {
+    struct tagStanzaRef *next;	/* Next in list */
+    struct tagStanza *stanza;   /* The stanza */
+    };
+
+struct tagStanzaRef *tagStormListLeaves(struct tagStorm *tagStorm);
+/* Return list of references to all stanzas in tagStorm.  Free this
+ * result with slFreeList. */
 
 /** Stuff for finding tags within a stanza */
 

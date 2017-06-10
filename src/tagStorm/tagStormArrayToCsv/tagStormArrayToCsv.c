@@ -46,7 +46,7 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
 
 if (arrayHash->elCount > 0)
     {
-    uglyf("Got %d arrays in stanza\n", arrayHash->elCount);
+    verbose(2, "Got %d arrays in stanza\n", arrayHash->elCount);
     // Turn valHash into a comma separated list of values for each array type
     struct hash *valHash = hashNew(0);
     struct dyString *valList = NULL;
@@ -131,7 +131,7 @@ void tagStormArrayToCsv(char *inFile, char *outFile)
 /* tagStormArrayToCsv - Convert multiple indexed tag approach to comma-separated-values.. */
 {
 struct tagStorm *storm = tagStormFromFile(inFile);
-verbose(1, "Read %d from %s\n", slCount(storm->forest), inFile);
+verbose(2, "Read %d from %s\n", slCount(storm->forest), inFile);
 tagStormRecursivelyMergeArrays(storm, storm->forest);
 tagStormWrite(storm, outFile, 0);
 }
