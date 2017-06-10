@@ -139,10 +139,25 @@ return storm;
 }
 
 
+boolean sameExceptForSome(char **a, char **b, int size, bool *some)
+/* Go through a and b of given size.  Return TRUE if they are the same 
+ * except for places where the some array it TRUE */
+{
+int i;
+for (i=0; i<size; ++i)
+    {
+    if (!some[i])
+        if (differentString(a[i], b[i]))
+	    return FALSE;
+    }
+return TRUE;
+}
+
 void addSdrfToStormTop(char *sdrfFile, struct tagStorm *storm)
 /* Add lines of sdrfFile as children of first top level stanza in storm. */
 {
 struct fieldedTable *table = fieldedTableFromTabFile(sdrfFile, sdrfFile, NULL, 0 );
+
 
 /* Convert ArrayExpress field names to our field names */
 int fieldIx;
@@ -175,6 +190,34 @@ for (fieldIx=0; fieldIx < table->fieldCount; fieldIx += 1)
 	 }
     }
 
+
+/* Make up fastq field indexes to handle processing of paired reads in fastq, which
+ * take two lines of sdrf file. */
+char *fieldsWithFastqs[] = 
+/* Fields that contain the fastq file names */
+    {
+    "sdrf.Comment_FASTQ_URI",
+    "sdrf.Comment_SUBMITTED_FILE_NAME",
+    "sdrf.Scan_Name",
+    };
+boolean mightReuseStanza = TRUE;
+bool *reuseMultiFields;  // If set this field can vary and line still reused
+AllocArray(reuseMultiFields, table->fieldCount);
+int i;
+for (i=0; i<ArraySize(fieldsWithFastqs); ++i)
+    {
+    char *field = fieldsWithFastqs[i];
+    int ix = stringArrayIx(field, table->fields, table->fieldCount);
+    if (ix >=0)
+	reuseMultiFields[ix] = TRUE;
+    else if (i == 0)
+	{
+	mightReuseStanza = FALSE;
+        break;	    // Make sure has first one if going to do paired read fastq processing
+	}
+    }
+
+
 /* Make up a list and hash of fieldMergers to handle conversion of columns that occur
  * multiple times to a comma-separated list of values in a single column. */
 struct fieldMerger
@@ -206,7 +249,8 @@ if (topStanza == NULL || topStanza->next != NULL)
     internalErr();
 
 /* Scan through table, making new stanzas for each row and hooking them into topStanza */
-struct fieldedRow *fr;
+struct fieldedRow *fr, *lastFr = NULL;
+struct tagStanza *stanza = NULL;
 for (fr = table->rowList; fr != NULL; fr = fr->next)
     {
     /* Empty out any existing vals */
@@ -225,11 +269,36 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	    csvEscapeAndAppend(fm->val, val);
 	}
 
-    /* Output all nonempty vals to stanza */
-    struct tagStanza *stanza = tagStanzaNew(storm, topStanza);
-    for (fm = fmList; fm != NULL; fm = fm->next)
-	if (fm->val->stringSize > 0)
-	    tagStanzaAppend(storm, stanza, fm->name, fm->val->string);
+    /* If only the reuseMultiFields are varying, append to those values in previous stanza,
+     * otherwise make a new stanza */
+    if (mightReuseStanza && lastFr != NULL 
+        && sameExceptForSome(lastFr->row, fr->row, table->fieldCount, reuseMultiFields))
+	{
+	int i;
+	for (i=0; i<ArraySize(fieldsWithFastqs); ++i)
+	    {
+	    char *fieldName = fieldsWithFastqs[i];
+	    if ((fm = hashFindVal(fieldHash, fieldName)) != NULL)
+	        {
+		char *newVal = fm->val->string;
+		char *oldVal = tagMustFindVal(stanza, fieldName);
+		int bothSize = strlen(newVal) + strlen(oldVal) + 1 + 1;
+		char bothBuf[bothSize];
+		safef(bothBuf, bothSize, "%s,%s", oldVal, newVal);
+		tagStanzaUpdateTag(storm, stanza, fieldName, bothBuf);
+		}
+	    }
+	}
+    else
+        {
+	/* Output all nonempty vals to stanza */
+	stanza = tagStanzaNew(storm, topStanza);
+	for (fm = fmList; fm != NULL; fm = fm->next)
+	    if (fm->val->stringSize > 0)
+		tagStanzaAppend(storm, stanza, fm->name, fm->val->string);
+	}
+
+    lastFr = fr;
     }
 slReverse(&topStanza->children);
 }
