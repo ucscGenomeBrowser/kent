@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 
 ####################
 #  Script to clean, zip and move the browserbox

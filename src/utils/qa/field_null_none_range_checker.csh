@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 source `which qaConfig.csh`
 # Script to process the refLink table
 # Based on Bob Kuhn's spgGene.csh 

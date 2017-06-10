@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 source `which qaConfig.csh`
 
 # This script runs the chain.csh, chain2.csh, and net.csh

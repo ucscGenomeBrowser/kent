@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 source `which qaConfig.csh`
 
 # This script runs qa scripts on a table

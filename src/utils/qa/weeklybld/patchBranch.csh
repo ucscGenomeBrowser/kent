@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 #
 # Patch files based on PatchBranchFiles.conf
 #

@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 #following line using source .cshrc doesnt really work?
 cd $WEEKLYBLD
 

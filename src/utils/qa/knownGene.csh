@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 source `which qaConfig.csh`
 
 # to do:  check that trackDb.hgGene is "on"

@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 cd $WEEKLYBLD
 
 set dir = "v"$BRANCHNN"_branch"

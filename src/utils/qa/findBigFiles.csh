@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 source `which qaConfig.csh`
 
 if ( $#argv != 1 ) then

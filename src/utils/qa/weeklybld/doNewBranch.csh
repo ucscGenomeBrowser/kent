@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 #
 # WARNING: this does not like to be run with final & to detach from terminal.
 #  Heather says perhaps running with "nohup" in front of the command might

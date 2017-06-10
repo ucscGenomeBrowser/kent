@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 source `which qaConfig.csh`
 ##########################################################
 # remove unneeded trackDb_ and hgFindSpec_ tables        #

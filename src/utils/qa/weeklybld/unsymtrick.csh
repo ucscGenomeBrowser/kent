@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 #
 if ( -e ~/bin/${MACHTYPE}.orig ) then
     mv ~/bin/$MACHTYPE ~/bin/${MACHTYPE}.cluster

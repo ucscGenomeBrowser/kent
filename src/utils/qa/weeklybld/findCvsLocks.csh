@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 #
 # This script attempts to find cvs locks that users
 # have accidentally left on and which will never 

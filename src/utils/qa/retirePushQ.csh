@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 source `which qaConfig.csh`
 # This program retires the separate gateway table used for staging a new assembly in qapushq.
 #  This will check and set things and then migrate the records into the real main pushQ table.

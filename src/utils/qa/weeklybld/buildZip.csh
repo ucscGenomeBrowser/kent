@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 cd $BUILDDIR
 cd zips
 if ( -e kent ) then

@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 
 # configures sandbox $1 by prepending settings file $2 
 #  to the common.mk in the sandbox indicated

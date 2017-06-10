@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 # ------------------------------------
 # Note - this script assumes you have your ssh key in
 # qateam@hgdownload:.ssh/authorized_keys. Without it,

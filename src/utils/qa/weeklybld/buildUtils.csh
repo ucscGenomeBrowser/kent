@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 # Build utils into /cluster/bin/$MACHTYPE on dev or beta from branch or tip
 # specify "tip" as command line parm 1 to build from tip sandbox 
 

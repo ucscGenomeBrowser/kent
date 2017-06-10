@@ -1,4 +1,4 @@
-#!/bin/tcsh -ef
+#!/usr/bin/env tcsh
 source `which qaConfig.csh`
 
 set db=""

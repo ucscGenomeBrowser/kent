@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 cd $WEEKLYBLD
 if ( "$HOST" != "hgwbeta" ) then
     echo "error: doSearchRobot.csh must be executed from hgwbeta!"

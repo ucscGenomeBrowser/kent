@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 cd $WEEKLYBLD
 
 echo "updating CGI version [${0}: `date`]"

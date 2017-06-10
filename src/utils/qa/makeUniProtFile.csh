@@ -1,4 +1,4 @@
-#!/bin/tcsh -e
+#!/usr/bin/env tcsh
 source `which qaConfig.csh`
 
 ########################################

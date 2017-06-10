@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 
 ####################
 #  09-20-07 Bob Kuhn

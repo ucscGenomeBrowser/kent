@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 cd $BUILDDIR
 set zip = "zips/jksrc.v"$BRANCHNN".zip"
 if ( -e $zip ) then

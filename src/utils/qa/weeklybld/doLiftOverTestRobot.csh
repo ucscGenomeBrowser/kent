@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 cd $WEEKLYBLD
 if ( "$HOST" != "hgwdev" ) then
  echo "error: doLiftOverTestRobot.csh must be executed from hgwdev!"

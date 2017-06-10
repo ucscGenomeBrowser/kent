@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 cd $WEEKLYBLD
 
 # this scripts starts the main gbib VM on hgwdev, creates an ssh key on it, adds this key to the build account

@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 if ( "$HOST" != "hgwdev" ) then
  echo "Error: this script must be run from hgwdev. [${0}: `date`]"
  exit 1
