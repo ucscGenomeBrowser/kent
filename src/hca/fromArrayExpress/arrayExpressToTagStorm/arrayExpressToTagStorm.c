@@ -231,6 +231,7 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	if (fm->val->stringSize > 0)
 	    tagStanzaAppend(storm, stanza, fm->name, fm->val->string);
     }
+slReverse(&topStanza->children);
 }
 
 void arrayExpressToTagStorm(char *idfName, char *sdrfName, char *outName)
