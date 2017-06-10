@@ -1,6 +1,5 @@
 /* geoStormToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
  * Atlas wants.. */
-#include <uuid/uuid.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,6 +7,7 @@
 #include "obscure.h"
 #include "tagStorm.h"
 #include "csv.h"
+#include "uuid.h"
 
 struct hash *gSrxToSrr;
 
@@ -124,17 +124,6 @@ char *substitutions[][2] =
     {"series.taxid", "sample.donor.ncbi_taxon"},
     {"series.title", "project.title"},
 };
-
-char *makeUuidString(char buf[37])
-/* Generate a random uuid and put it in the usual hex-plus-dashes form */
-{
-/* Generate 16 bytes of random sequence with uuid generator */
-unsigned char uuid[16];
-uuid_generate(uuid);
-uuid_unparse_lower(uuid, buf);
-return buf;
-}
-
 
 char *mon[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
