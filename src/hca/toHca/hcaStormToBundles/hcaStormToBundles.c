@@ -1,5 +1,4 @@
 /* hcaStormToBundles - Convert a HCA formatted tagStorm to a directory full of bundles.. */
-#include <uuid/uuid.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,6 +7,9 @@
 #include "jsonParse.h"
 #include "portable.h"
 #include "csv.h"
+#include "uuid.h"
+
+boolean gUrls = FALSE;	// If set we are working with urls rather than local file names
 
 void usage()
 /* Explain usage and exit. */
@@ -16,6 +18,8 @@ errAbort(
   "hcaStormToBundles - Convert a HCA formatted tagStorm to a directory full of bundles.\n"
   "usage:\n"
   "   hcaStormToBundles in.tags /path/to/data/files outDir\n"
+  "If the /path/to/data/files is 'urls' then it will just leave the assay.files[]\n"
+  "array as is.\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -35,16 +39,6 @@ struct subObj
     char *name;		      // Field name 
     char *fullName;	      // Field name with parent fields too.
     };
-
-char *makeUuidString(char buf[37])
-/* Generate a random uuid and put it in the usual hex-plus-dashes form */
-{
-/* Generate 16 bytes of random sequence with uuid generator */
-unsigned char uuid[16];
-uuid_generate(uuid);
-uuid_unparse_lower(uuid, buf);
-return buf;
-}
 
 struct slName *uniqToDotList(struct slName *fieldList, char *prefix, int prefixLen)
 /* Return list of all unique prefixes in field, that is parts up to first dot */
@@ -150,6 +144,38 @@ errAbort("Couldn't deduce paired end from file name %s", fileName);
 return 0;
 }
 
+void writeProtocolsArray(FILE *f, struct tagStanza *stanza, char *protocolsCsv)
+/* Write up an array of protocols based on protocols and protocol_types tags in
+ * stanza. */
+{
+char *typesCsv = tagFindVal(stanza, "sample.protocol_types");
+if (typesCsv == NULL)
+    errAbort("sample.protocol defined but not sample.protocol_types");
+
+struct slName *protocolList = csvParse(protocolsCsv), *proto;
+struct slName *typeList = csvParse(typesCsv), *type;
+if (slCount(protocolList) != slCount(typeList))
+    errAbort("Diffent sized protocols and protocol_types lists.");
+
+boolean firstProtocol = TRUE;
+fputc('[', f);
+for (proto = protocolList, type = typeList; proto != NULL; proto = proto->next, type = type->next)
+    {
+    if (firstProtocol)
+        firstProtocol = FALSE;
+    else 
+        fputc(',', f);
+    fputc('{', f);
+    boolean first = TRUE;
+    writeJsonTag(f, "description", &first);
+    writeJsonVal(f, proto->name);
+    writeJsonTag(f, "type", &first);
+    writeJsonVal(f, type->name);
+    fputc('}', f);
+    }
+fputc(']', f);
+}
+
 void writeFilesArray(FILE *f, struct tagStanza *stanza, char *csvList)
 /* Write out an array of file objects base on file names in csvList */
 {
@@ -242,6 +268,10 @@ for (field = obj->children; field != NULL; field = field->next)
 	 writeJsonTag(f, fieldName, &firstOut);
 	 rWriteJson(f, stanza, field);
 	 }
+    else if (sameString("protocol_types", fieldName))
+        {
+		// do nothing, this was handles by protocols 
+	}
     else
 	{
 	char *val = tagFindVal(stanza, field->fullName);
@@ -251,6 +281,10 @@ for (field = obj->children; field != NULL; field = field->next)
 	    if (sameString(fieldName, "files"))
 	        {
 		writeFilesArray(f, stanza, val);
+		}
+	    else if (sameString(fieldName, "protocols"))
+	        {
+		writeProtocolsArray(f, stanza, val);
 		}
 	    else
 		{
@@ -295,6 +329,7 @@ carefulClose(&f);
 void makeBundleJson(char *dir, struct tagStanza *stanza, struct subObj *topLevelList)
 /* Write out bundle json file for stanza into dir */
 {
+uglyf("makeBundleJson on %s\n", dir);
 char jsonFileName[PATH_LEN];
 struct subObj *topEl;
 for (topEl = topLevelList; topEl != NULL; topEl = topEl->next)
@@ -308,7 +343,9 @@ void hcaStormToBundles(char *inTags, char *dataFileDir, char *outDir)
 /* hcaStormToBundles - Convert a HCA formatted tagStorm to a directory full of bundles.. */
 {
 /* Check that have full path name for dataFileDir */
-if (dataFileDir[0] != '/')
+if (sameString("urls", dataFileDir))
+   gUrls = TRUE;
+else if (dataFileDir[0] != '/')
     errAbort("data file directory must be an absolute path starting with /");
 
 /* Load up tagStorm and get leaf list */
@@ -335,18 +372,21 @@ verbose(1, "Made %d top level objects\n", slCount(objList));
 
 /* Figure out all files in dataFileDir and make a hash keyed by name
  * with full path as values */
-struct slName *dataFileList = pathsInDirAndSubdirs(dataFileDir, "*");
-verbose(1, "Got %d files in %s\n", slCount(dataFileList), dataFileDir);
-struct slName *file;
-struct hash *fileHash = hashNew(0);
-struct dyString *csvScratch = dyStringNew(0);
-for (file = dataFileList; file != NULL; file = file->next)
+struct hash *fileHash = NULL;
+if (!gUrls)
     {
-    char name[FILENAME_LEN], extension[FILEEXT_LEN];
-    char fileName[PATH_LEN];
-    splitPath(file->name, NULL, name, extension);
-    safef(fileName, sizeof(fileName), "%s%s", name, extension);
-    hashAdd(fileHash, fileName, file->name);
+    struct slName *dataFileList = pathsInDirAndSubdirs(dataFileDir, "*");
+    verbose(1, "Got %d files in %s\n", slCount(dataFileList), dataFileDir);
+    struct slName *file;
+    fileHash = hashNew(0);
+    for (file = dataFileList; file != NULL; file = file->next)
+	{
+	char name[FILENAME_LEN], extension[FILEEXT_LEN];
+	char fileName[PATH_LEN];
+	splitPath(file->name, NULL, name, extension);
+	safef(fileName, sizeof(fileName), "%s%s", name, extension);
+	hashAdd(fileHash, fileName, file->name);
+	}
     }
 
 /* Loop through stanzas making bundles */
@@ -369,25 +409,29 @@ for (ref = refList; ref != NULL; ref = ref->next)
     makeDir(bundleDir);
 
     /* Make symbolic link of all files */
-    char *fileName, *csvPos = fileCsv;
-    while ((fileName = csvParseNext(&csvPos, csvScratch)) != NULL)
-        {
-	/* Figure out destination path for symbolic link */
-	char destPath[PATH_LEN];
-	safef(destPath, sizeof(destPath), "%s/%s", bundleDir, fileName);
+    if (!gUrls)
+	{
+	char *fileName, *csvPos = fileCsv;
+	struct dyString *csvScratch = dyStringNew(0);
+	while ((fileName = csvParseNext(&csvPos, csvScratch)) != NULL)
+	    {
+	    /* Figure out destination path for symbolic link */
+	    char destPath[PATH_LEN];
+	    safef(destPath, sizeof(destPath), "%s/%s", bundleDir, fileName);
 
-	/* Figure out source path using fileHash.  We'll check that the
-	 * file name is unique within the hash to avoid ambiguity. */
-        struct hashEl *hel = hashLookup(fileHash, fileName);
-	if (hel == NULL)
-	    errAbort("%s is not found in %s", fileName, dataFileDir);
-	if (hashLookupNext(hel))
-	    errAbort("%s occurs in multiple subdirectories of %s, can't figure out which to use",
-		fileName, dataFileDir);
-	char *sourcePath = hel->val;
+	    /* Figure out source path using fileHash.  We'll check that the
+	     * file name is unique within the hash to avoid ambiguity. */
+	    struct hashEl *hel = hashLookup(fileHash, fileName);
+	    if (hel == NULL)
+		errAbort("%s is not found in %s", fileName, dataFileDir);
+	    if (hashLookupNext(hel))
+		errAbort("%s occurs in multiple subdirectories of %s, can't figure out which to use",
+		    fileName, dataFileDir);
+	    char *sourcePath = hel->val;
 
-	/* And make the link */
-	makeSymLink(sourcePath, destPath);
+	    /* And make the link */
+	    makeSymLink(sourcePath, destPath);
+	    }
 	}
 
     makeBundleJson(bundleDir, stanza, objList);
