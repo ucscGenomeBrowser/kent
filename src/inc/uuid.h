@@ -7,5 +7,7 @@
 
 #include <uuid/uuid.h>
 
-char *makeUuidString(char buf[37]);
+#define UUID_STRING_SIZE 37
+
+char *makeUuidString(char buf[UUID_STRING_SIZE]);
 /* Generate a random uuid and put it in the usual hex-plus-dashes form */
