@@ -1,6 +1,5 @@
 /* hcaTsvToJson2 - Convert HCA flavored tab-separated-values to HCA flavored JSON. */
 
-#include <uuid/uuid.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -37,16 +36,6 @@ struct subObj
     char *fullName;	      // Field name with parent fields too.
     int rowIx;		      // Index of field in row. 
     };
-
-char *makeUuidString(char buf[37])
-/* Generate a random uuid and put it in the usual hex-plus-dashes form */
-{
-/* Generate 16 bytes of random sequence with uuid generator */
-unsigned char uuid[16];
-uuid_generate(uuid);
-uuid_unparse_lower(uuid, buf);
-return buf;
-}
 
 struct slName *uniqToDotList(char *fields[], int fieldCount, char *prefix, int prefixLen)
 /* Return list of all unique prefixes in field, that is parts up to first dot */
