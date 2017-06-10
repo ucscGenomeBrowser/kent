@@ -33,7 +33,8 @@ sample.characteristics_tissue retina
 sample.data_processing Base calls performed with bcl2fastq2.15,Read 2 was aligned with Star v2.4.0,Each aligned read was tagged with its mate-pair UMI and cell barcode,Each aligned exonic read was tagged with a gene name,"A digital expression matrix was built by counting the number of unique UMIs per gene within each cell; columns are cells, and rows are genes.",The first inflection point was estimated on a cumulative sum plot of the digital expression matrix to determine the number of cells in the sample,Samples Bipolar1-6 -- prepared from P17 Vsx2-GFP mouse retinas on two separate days (Bipolar1-4 and Bipolar5-6)--were merged together into a single matrix.,Genome_build: mm10,"Supplementary_files_format_and_content: compressed, flat text file with tab delimiters"
 sample.donor.ncbi_taxon 10090
 sample.donor.species Mus musculus
-sample.extract_protocol Single cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads,"Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol."
+sample.protocols "Single cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads. Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol."
+sample.protocol_types nucleic acid library construction protocol
 sample.last_update_date Aug 25 2016
 sample.platform_id GPL19057
 sample.submission_date May 25 2016
