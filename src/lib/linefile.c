@@ -301,19 +301,23 @@ struct lineFile *lineFileUdcMayOpen(char *fileOrUrl, bool zTerm)
 if (fileOrUrl == NULL)
     errAbort("lineFileUdcMayOpen: fileOrUrl is NULL");
 
-struct udcFile *udcFile = udcFileMayOpen(fileOrUrl, NULL);
-if (udcFile == NULL)
-    return NULL;
-
-struct lineFile *lf;
-AllocVar(lf);
-lf->fileName = cloneString(fileOrUrl);
-lf->fd = -1;
-lf->bufSize = 0;
-lf->buf = NULL;
-lf->zTerm = zTerm;
-lf->udcFile = udcFile;
-return lf;
+if (udcIsLocal(fileOrUrl))
+     return lineFileOpen(fileOrUrl, zTerm);
+else
+    {
+    struct udcFile *udcFile = udcFileMayOpen(fileOrUrl, NULL);
+    if (udcFile == NULL)
+	return NULL;
+    struct lineFile *lf;
+    AllocVar(lf);
+    lf->fileName = cloneString(fileOrUrl);
+    lf->fd = -1;
+    lf->bufSize = 0;
+    lf->buf = NULL;
+    lf->zTerm = zTerm;
+    lf->udcFile = udcFile;
+    return lf;
+    }
 }
 
 
