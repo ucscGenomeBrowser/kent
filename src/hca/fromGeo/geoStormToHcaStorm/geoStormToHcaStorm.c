@@ -258,7 +258,7 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
     }
 }
 
-void mergeWithSpaces(struct tagStanza *stanza, struct dyString *dy, char **tags, int tagCount)
+void mergeAddress(struct tagStanza *stanza, struct dyString *dy, char **tags, int tagCount)
 /* Look up all of tags in stanza and concatenate together with space separation */
 {
 char *address = emptyForNull(tagFindVal(stanza, tags[0]));
@@ -267,7 +267,7 @@ char *state = emptyForNull(tagFindVal(stanza, tags[2]));
 char *zip = emptyForNull(tagFindVal(stanza, tags[3]));
 char *country = emptyForNull(tagFindVal(stanza, tags[4]));
 if (address || city || state || zip || country)
-    dyStringPrintf(dy, "%s; %s, %s %s %s", address, city, state, zip, country);
+    dyStringPrintf(dy, "\"%s; %s, %s %s %s\"", address, city, state, zip, country);
 }
 
 void mergeAddresses(struct tagStorm *storm, struct tagStanza *stanza, void *context)
@@ -284,7 +284,7 @@ char *seriesComponents[] =
     "series.contact_address", "series.contact_city", "series.contact_state", 
     "series.contact_zip/postal_code", "series.contact_country"
     };
-mergeWithSpaces(stanza, dy, seriesComponents, ArraySize(seriesComponents));
+mergeAddress(stanza, dy, seriesComponents, ArraySize(seriesComponents));
 if (dy->stringSize == 0)
     {
     char *sampleComponents[] = 
@@ -292,7 +292,7 @@ if (dy->stringSize == 0)
 	"sample.contact_address", "sample.contact_city", "sample.contact_state", 
 	"sample.contact_zip/postal_code", "sample.contact_country"
 	};
-    mergeWithSpaces(stanza, dy, sampleComponents, ArraySize(sampleComponents));
+    mergeAddress(stanza, dy, sampleComponents, ArraySize(sampleComponents));
     }
 if (dy->string != 0)
     tagStanzaAppend(storm, stanza, "project.contact.address", dy->string);
@@ -337,6 +337,44 @@ dyStringFree(&protocol);
 dyStringFree(&type);
 }
 
+void addDonorIds(struct tagStorm *storm, struct tagStanzaRef *leafList)
+/* Assign a uuid to each sample.donor.id, and then add it to leaf stanzas
+ * as sample.donor.uuid. */
+{
+struct hash *donorHash = hashNew(0);
+
+/* Make pass through generating uuids for each unique donor and putting in hash */
+struct tagStanzaRef *leaf;
+for (leaf = leafList; leaf != NULL; leaf = leaf->next)
+    {
+    struct tagStanza *stanza = leaf->stanza;
+    char *donor = tagFindVal(stanza, "sample.donor.id");
+    if (donor != NULL)
+        {
+	char *uuid = hashFindVal(donorHash, donor);
+	if (uuid == NULL)
+	    {
+	    uuid = needMem(UUID_STRING_SIZE);
+	    makeUuidString(uuid);
+	    hashAdd(donorHash, donor, uuid);
+	    }
+	}
+    }
+
+/* Make a second pass now adding the uuid to all leaves. */
+for (leaf = leafList; leaf != NULL; leaf = leaf->next)
+    {
+    struct tagStanza *stanza = leaf->stanza;
+    char *donor = tagFindVal(stanza, "sample.donor.id");
+    if (donor != NULL)
+        {
+	char *uuid = hashMustFindVal(donorHash, donor);
+	tagStanzaAppend(storm, stanza, "sample.donor.uuid", uuid);
+	}
+    }
+
+}
+
 void geoStormToHcaStorm(char *inTags, char *inSrxSrr, char *output)
 /* geoStormToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
  *  Atlas wants.. */
@@ -366,6 +404,10 @@ tagStormSubArray(storm, substitutions, ArraySize(substitutions));
 /* Add a project level UUID */
 char projectUuid[37];
 tagStanzaAppend(storm, storm->forest, "project.uuid",  makeUuidString(projectUuid));
+
+/* Add in donor IDs */
+struct tagStanzaRef *leafList = tagStormListLeaves(storm);
+addDonorIds(storm, leafList);
 
 /* Save results */
 tagStormWrite(storm, output, 0);
