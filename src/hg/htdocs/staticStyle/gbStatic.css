@@ -254,12 +254,14 @@ img.gbsAlignRight {
 }
 
 /* Text alignment in table cells requires override in our version of bootstrap (revisit later) */
+/* TODO: Remove if confirmed unneeded.
 .gbsPage table text-center {
     text-align: center;
 }
 .gbsPage table text-right {
     text-align: right;
 }
+*/
 
 /* Use UCSC Genome Browser 'bridge' logo as home link.
  * Suitable for static pages and CGI's without a top banner with logo.
