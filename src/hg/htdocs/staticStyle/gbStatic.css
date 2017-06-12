@@ -155,6 +155,10 @@
 
 /* List without bullets */
 
+.gbsPage ul.gbsNoBullet {
+    padding-left: 20px;
+}
+
 .gbsPage ul.gbsNoBullet li::before {
     content: none;
 }
@@ -247,6 +251,14 @@ p.gbsAlignRight {
 
 img.gbsAlignRight {
     float: right !important;
+}
+
+/* Text alignment in table cells requires override in our version of bootstrap (revisit later) */
+.gbsPage table text-center {
+    text-align: center;
+}
+.gbsPage table text-right {
+    text-align: right;
 }
 
 /* Use UCSC Genome Browser 'bridge' logo as home link.
