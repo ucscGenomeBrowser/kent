@@ -44,6 +44,7 @@ double *mathWigGetValues(char *equation, char *chrom, unsigned winStart, unsigne
 /* Build an array of doubles that is calculated from bigWig's listed
  * in equation in the requested region. */
 {
+static char lastOpcode = 0;
 char *words[100];
 int count = chopByWhite(equation, words, sizeof(words)/sizeof(char *));
 int jj,ii;
@@ -78,9 +79,17 @@ for (jj=0; jj < count; jj++)
         }
     else
         {
+        char opcode;
         if (opcodeStack.depth == 0)
-            errAbort("underflow in opcode stack");
-        char opcode = opcodeStack.stack[--opcodeStack.depth];
+            {
+            opcode = lastOpcode;
+            if (opcode == 0)
+                opcode = '+';
+
+            //errAbort("underflow in opcode stack");
+            }
+        else
+            lastOpcode = opcode = opcodeStack.stack[--opcodeStack.depth];
         for (iv = ivList; iv != NULL; iv = iv->next)
             {
             unsigned start = max(0, iv->start - winStart);
