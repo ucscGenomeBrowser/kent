@@ -233,6 +233,10 @@ struct hash *newHashExt(int powerOfTwoSize, boolean useLocalMem);
 /* Returns new hash table using local memory. */
 #define hashNew(a) newHash(a)	/* Synonym */
 
+void hashReverseAllBucketLists(struct hash *hash);
+/* Reverse all hash bucket list.  You might do this to
+ * get them back in the same order things were added to the hash */
+
 void hashResize(struct hash *hash, int powerOfTwoSize);
 /* Resize the hash to a new size */
 

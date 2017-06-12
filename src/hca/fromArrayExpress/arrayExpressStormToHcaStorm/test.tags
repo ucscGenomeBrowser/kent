@@ -1,0 +1,193 @@
+idf.Comment_ArrayExpressAccession E-GEOD-81904
+idf.MAGE_TAB_Version 1.1
+idf.Public_Release_Date 2016-08-25
+idf.Investigation_Title "Drop-Seq analysis of  P17 FACS sorted retinal cells from the Tg(Chx10-EGFP/cre,-ALPP)2Clc or Vsx2-GFP transgenic line"
+idf.Comment_Submitted_Name "Drop-Seq analysis of  P17 FACS sorted retinal cells from the Tg(Chx10-EGFP/cre,-ALPP)2Clc or Vsx2-GFP transgenic line"
+idf.Experiment_Description "Vsx2-GFP mouse retinas were dissected, FACS sorted for GFP+ cells and single-cell mRNAseq libraries generated with Drop-Seq Drop-Seq was performed on two different batches. Bipolar1-Bipolar4 are replicates from batch 1 and Bipolar5-6 are replicates from Batch 2"
+idf.Term_Source_Name ArrayExpress,EFO
+idf.Term_Source_File http://www.ebi.ac.uk/arrayexpress/,http://www.ebi.ac.uk/efo/efo.owl
+idf.Person_Last_Name Shekhar,Shekhar
+idf.Person_First_Name Karthik,Karthik
+idf.Person_Email karthik@broadinstitute.org
+idf.Person_Affiliation Broad Institute
+idf.Person_Phone 217-979-9852
+idf.Person_Address "Broad Institute, 415 Main St., Cambridge, MA, USA"
+idf.Person_Roles submitter
+idf.Protocol_Name P-GSE81904-1
+idf.Protocol_Description "Single cell suspensions were processed through Drop-Seq to generate single-cell cDNA libraries attached to microbeads Microbeads were counted, and amplified by PCR, and the 3' end of the cDNA prepared for sequencing using a modified Nextera XT protocol."
+idf.Protocol_Type nucleic acid library construction protocol
+idf.Protocol_Term_Source EFO
+idf.Publication_Title Comprehensive Classification of Retinal Bipolar Neurons by Single-Cell Transcriptomics.
+idf.Publication_Author_List Shekhar K, Lapan SW, Whitney IE, Tran NM, Macosko EZ, Kowalczyk M, Adiconis X, Levin JZ, Nemesh J, Goldman M, McCarroll SA, Cepko CL, Regev A, Sanes JR
+idf.PubMed_ID 27565351
+idf.Publication_DOI 10.1016/j.cell.2016.07.054
+idf.Comment_GEOReleaseDate 2016-08-25
+idf.Comment_ArrayExpressSubmissionDate 2016-05-25
+idf.Comment_GEOLastUpdateDate 2016-08-29
+idf.Comment_AEExperimentType RNA-seq of coding RNA
+idf.SDRF_File E-GEOD-81904.sdrf.txt
+idf.Comment_AdditionalFile_Data GSE81904_BipolarUMICounts_Cell2016.txt,GSE81904_bipolar_data_Cell2016.Rdata,GSE81904_class.R
+idf.Comment_SecondaryAccession GSE81904,SRP075719
+
+	sdrf.Source_Name GSM2177570 1
+	sdrf.Comment_Sample_description Bipolar1
+	sdrf.Comment_Sample_source_name "Mus musculus retina, P17"
+	sdrf.Comment_Sample_title P17 Vsx2-GFP mouse retina 1 (Batch 1)
+	sdrf.Characteristics_developmental_stage P17
+	sdrf.Characteristics_genotype Vsx2-GFP
+	sdrf.Characteristics_organism Mus musculus
+	sdrf.Characteristics_organism_Term_Source_REF EFO
+	sdrf.Characteristics_organism_Term_Accession_Number http://purl.obolibrary.org/obo/NCBITaxon_10090
+	sdrf.Characteristics_organism_part retina
+	sdrf.Characteristics_organism_part_Term_Source_REF EFO
+	sdrf.Characteristics_organism_part_Term_Accession_Number http://purl.obolibrary.org/obo/UBERON_0000966
+	sdrf.Protocol_REF P-GSE81904-1
+	sdrf.Protocol_REF_Term_Source_REF ArrayExpress
+	sdrf.Extract_Name GSM2177570 extract 1
+	sdrf.Comment_INSTRUMENT_MODEL Illumina NextSeq 500
+	sdrf.Comment_LIBRARY_SELECTION cDNA
+	sdrf.Comment_LIBRARY_SOURCE transcriptomic
+	sdrf.Comment_LIBRARY_STRATEGY RNA-Seq
+	sdrf.Material_Type total RNA
+	sdrf.Assay_Name GSM2177570
+	sdrf.Comment_ENA_EXPERIMENT SRX1800075
+	sdrf.Comment_Platform_title Illumina NextSeq 500 (Mus musculus)
+	sdrf.Technology_Type sequencing assay
+	sdrf.Derived_Array_Data_File GSM2177570_Bipolar1.bam
+	sdrf.Comment_Derived_ArrayExpress_FTP_file ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/GEOD/E-GEOD-81904/E-GEOD-81904.GSM2177570_Bipolar1.bam
+
+	sdrf.Source_Name GSM2177571 1
+	sdrf.Comment_Sample_description Bipolar2
+	sdrf.Comment_Sample_source_name "Mus musculus retina, P17"
+	sdrf.Comment_Sample_title P17 Vsx2-GFP mouse retina 2 (Batch 1)
+	sdrf.Characteristics_developmental_stage P17
+	sdrf.Characteristics_genotype Vsx2-GFP
+	sdrf.Characteristics_organism Mus musculus
+	sdrf.Characteristics_organism_Term_Source_REF EFO
+	sdrf.Characteristics_organism_Term_Accession_Number http://purl.obolibrary.org/obo/NCBITaxon_10090
+	sdrf.Characteristics_organism_part retina
+	sdrf.Characteristics_organism_part_Term_Source_REF EFO
+	sdrf.Characteristics_organism_part_Term_Accession_Number http://purl.obolibrary.org/obo/UBERON_0000966
+	sdrf.Protocol_REF P-GSE81904-1
+	sdrf.Protocol_REF_Term_Source_REF ArrayExpress
+	sdrf.Extract_Name GSM2177571 extract 1
+	sdrf.Comment_INSTRUMENT_MODEL Illumina NextSeq 500
+	sdrf.Comment_LIBRARY_SELECTION cDNA
+	sdrf.Comment_LIBRARY_SOURCE transcriptomic
+	sdrf.Comment_LIBRARY_STRATEGY RNA-Seq
+	sdrf.Material_Type total RNA
+	sdrf.Assay_Name GSM2177571
+	sdrf.Comment_ENA_EXPERIMENT SRX1800076
+	sdrf.Comment_Platform_title Illumina NextSeq 500 (Mus musculus)
+	sdrf.Technology_Type sequencing assay
+	sdrf.Derived_Array_Data_File GSM2177571_Bipolar2.bam
+	sdrf.Comment_Derived_ArrayExpress_FTP_file ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/GEOD/E-GEOD-81904/E-GEOD-81904.GSM2177571_Bipolar2.bam
+
+	sdrf.Source_Name GSM2177572 1
+	sdrf.Comment_Sample_description Bipolar3
+	sdrf.Comment_Sample_source_name "Mus musculus retina, P17"
+	sdrf.Comment_Sample_title P17 Vsx2-GFP mouse retina 3 (Batch 1)
+	sdrf.Characteristics_developmental_stage P17
+	sdrf.Characteristics_genotype Vsx2-GFP
+	sdrf.Characteristics_organism Mus musculus
+	sdrf.Characteristics_organism_Term_Source_REF EFO
+	sdrf.Characteristics_organism_Term_Accession_Number http://purl.obolibrary.org/obo/NCBITaxon_10090
+	sdrf.Characteristics_organism_part retina
+	sdrf.Characteristics_organism_part_Term_Source_REF EFO
+	sdrf.Characteristics_organism_part_Term_Accession_Number http://purl.obolibrary.org/obo/UBERON_0000966
+	sdrf.Protocol_REF P-GSE81904-1
+	sdrf.Protocol_REF_Term_Source_REF ArrayExpress
+	sdrf.Extract_Name GSM2177572 extract 1
+	sdrf.Comment_INSTRUMENT_MODEL Illumina NextSeq 500
+	sdrf.Comment_LIBRARY_SELECTION cDNA
+	sdrf.Comment_LIBRARY_SOURCE transcriptomic
+	sdrf.Comment_LIBRARY_STRATEGY RNA-Seq
+	sdrf.Material_Type total RNA
+	sdrf.Assay_Name GSM2177572
+	sdrf.Comment_ENA_EXPERIMENT SRX1800077
+	sdrf.Comment_Platform_title Illumina NextSeq 500 (Mus musculus)
+	sdrf.Technology_Type sequencing assay
+	sdrf.Derived_Array_Data_File GSM2177572_Bipolar3.bam
+	sdrf.Comment_Derived_ArrayExpress_FTP_file ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/GEOD/E-GEOD-81904/E-GEOD-81904.GSM2177572_Bipolar3.bam
+
+	sdrf.Source_Name GSM2177573 1
+	sdrf.Comment_Sample_description Bipolar4
+	sdrf.Comment_Sample_source_name "Mus musculus retina, P17"
+	sdrf.Comment_Sample_title P17 Vsx2-GFP mouse retina 4 (Batch 1)
+	sdrf.Characteristics_developmental_stage P17
+	sdrf.Characteristics_genotype Vsx2-GFP
+	sdrf.Characteristics_organism Mus musculus
+	sdrf.Characteristics_organism_Term_Source_REF EFO
+	sdrf.Characteristics_organism_Term_Accession_Number http://purl.obolibrary.org/obo/NCBITaxon_10090
+	sdrf.Characteristics_organism_part retina
+	sdrf.Characteristics_organism_part_Term_Source_REF EFO
+	sdrf.Characteristics_organism_part_Term_Accession_Number http://purl.obolibrary.org/obo/UBERON_0000966
+	sdrf.Protocol_REF P-GSE81904-1
+	sdrf.Protocol_REF_Term_Source_REF ArrayExpress
+	sdrf.Extract_Name GSM2177573 extract 1
+	sdrf.Comment_INSTRUMENT_MODEL Illumina NextSeq 500
+	sdrf.Comment_LIBRARY_SELECTION cDNA
+	sdrf.Comment_LIBRARY_SOURCE transcriptomic
+	sdrf.Comment_LIBRARY_STRATEGY RNA-Seq
+	sdrf.Material_Type total RNA
+	sdrf.Assay_Name GSM2177573
+	sdrf.Comment_ENA_EXPERIMENT SRX1800078
+	sdrf.Comment_Platform_title Illumina NextSeq 500 (Mus musculus)
+	sdrf.Technology_Type sequencing assay
+	sdrf.Derived_Array_Data_File GSM2177573_Bipolar4.bam
+	sdrf.Comment_Derived_ArrayExpress_FTP_file ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/GEOD/E-GEOD-81904/E-GEOD-81904.GSM2177573_Bipolar4.bam
+
+	sdrf.Source_Name GSM2177574 1
+	sdrf.Comment_Sample_description Bipolar5
+	sdrf.Comment_Sample_source_name "Mus musculus retina, P17"
+	sdrf.Comment_Sample_title P17 Vsx2-GFP mouse retina 5 (Batch 2)
+	sdrf.Characteristics_developmental_stage P17
+	sdrf.Characteristics_genotype Vsx2-GFP
+	sdrf.Characteristics_organism Mus musculus
+	sdrf.Characteristics_organism_Term_Source_REF EFO
+	sdrf.Characteristics_organism_Term_Accession_Number http://purl.obolibrary.org/obo/NCBITaxon_10090
+	sdrf.Characteristics_organism_part retina
+	sdrf.Characteristics_organism_part_Term_Source_REF EFO
+	sdrf.Characteristics_organism_part_Term_Accession_Number http://purl.obolibrary.org/obo/UBERON_0000966
+	sdrf.Protocol_REF P-GSE81904-1
+	sdrf.Protocol_REF_Term_Source_REF ArrayExpress
+	sdrf.Extract_Name GSM2177574 extract 1
+	sdrf.Comment_INSTRUMENT_MODEL Illumina NextSeq 500
+	sdrf.Comment_LIBRARY_SELECTION cDNA
+	sdrf.Comment_LIBRARY_SOURCE transcriptomic
+	sdrf.Comment_LIBRARY_STRATEGY RNA-Seq
+	sdrf.Material_Type total RNA
+	sdrf.Assay_Name GSM2177574
+	sdrf.Comment_ENA_EXPERIMENT SRX1800079
+	sdrf.Comment_Platform_title Illumina NextSeq 500 (Mus musculus)
+	sdrf.Technology_Type sequencing assay
+	sdrf.Derived_Array_Data_File GSM2177574_Bipolar5.bam
+	sdrf.Comment_Derived_ArrayExpress_FTP_file ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/GEOD/E-GEOD-81904/E-GEOD-81904.GSM2177574_Bipolar5.bam
+
+	sdrf.Source_Name GSM2177575 1
+	sdrf.Comment_Sample_description Bipolar6
+	sdrf.Comment_Sample_source_name "Mus musculus retina, P17"
+	sdrf.Comment_Sample_title P17 Vsx2-GFP mouse retina 6 (Batch 2)
+	sdrf.Characteristics_developmental_stage P17
+	sdrf.Characteristics_genotype Vsx2-GFP
+	sdrf.Characteristics_organism Mus musculus
+	sdrf.Characteristics_organism_Term_Source_REF EFO
+	sdrf.Characteristics_organism_Term_Accession_Number http://purl.obolibrary.org/obo/NCBITaxon_10090
+	sdrf.Characteristics_organism_part retina
+	sdrf.Characteristics_organism_part_Term_Source_REF EFO
+	sdrf.Characteristics_organism_part_Term_Accession_Number http://purl.obolibrary.org/obo/UBERON_0000966
+	sdrf.Protocol_REF P-GSE81904-1
+	sdrf.Protocol_REF_Term_Source_REF ArrayExpress
+	sdrf.Extract_Name GSM2177575 extract 1
+	sdrf.Comment_INSTRUMENT_MODEL Illumina NextSeq 500
+	sdrf.Comment_LIBRARY_SELECTION cDNA
+	sdrf.Comment_LIBRARY_SOURCE transcriptomic
+	sdrf.Comment_LIBRARY_STRATEGY RNA-Seq
+	sdrf.Material_Type total RNA
+	sdrf.Assay_Name GSM2177575
+	sdrf.Comment_ENA_EXPERIMENT SRX1800080
+	sdrf.Comment_Platform_title Illumina NextSeq 500 (Mus musculus)
+	sdrf.Technology_Type sequencing assay
+	sdrf.Derived_Array_Data_File GSM2177575_Bipolar6.bam
+	sdrf.Comment_Derived_ArrayExpress_FTP_file ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/experiment/GEOD/E-GEOD-81904/E-GEOD-81904.GSM2177575_Bipolar6.bam
+

@@ -36,11 +36,18 @@
 
 #define hgCompEditPrefix    "hgCompositeEdit_"
 #define hgsAddTrack hgCompEditPrefix "addTrack"
+#define hgsAddMathTrack hgCompEditPrefix "addMathTrack"
+#define hgsDeleteMathTrack hgCompEditPrefix "deleteMathTrack"
+#define hgsDeleteTrack hgCompEditPrefix "deleteTrack"
 #define hgsAddVisTrack hgCompEditPrefix "addVisTrack"
 #define hgsChangeGroup hgCompEditPrefix "changeGroup"
 #define hgsCurrentGroup hgCompEditPrefix "currentGroup"
 #define hgsCurrentComposite hgCompEditPrefix "currentComposite"
+#define hgsMakeMathTrack hgCompEditPrefix "makeMathTrack"
+#define hgsCurrentMathTrack hgCompEditPrefix "currentMathTrack"
 #define hgsNewCompositeName hgCompEditPrefix "newCompositeName"
+#define hgsNewMathTrackShortLabel hgCompEditPrefix "newMathTrackShortLabel"
+#define hgsNewMathTrackLongLabel hgCompEditPrefix "newMathTrackLongLabel"
 #define hgsNewCompositeShortLabel hgCompEditPrefix "newCompositeShortLabel"
 #define hgsNewCompositeLongLabel hgCompEditPrefix "newCompositeLongLabel"
 //#define hgCompositePrefix    "hgComposite_"
@@ -52,11 +59,21 @@ struct track *next;
 char *name;
 char *shortLabel;
 char *longLabel;
+void *reserved;
 };
 
 struct composite
 {
 struct composite *next;
+char *name;
+char *shortLabel;
+char *longLabel;
+struct track *trackList;
+};
+
+struct mathTrack 
+{
+struct mathTrack *next;
 char *name;
 char *shortLabel;
 char *longLabel;
@@ -72,7 +89,19 @@ char *database = NULL;		/* Current genome database - hg17, mm5, etc. */
 struct grp *fullGroupList = NULL;	/* List of all groups. */
 
 // Null terminated list of CGI Variables we don't want to save permanently:
-char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", hgsAddTrack,  hgsNewCompositeName, hgsNewCompositeShortLabel, hgsNewCompositeLongLabel, hgsChangeGroup, hgsAddVisTrack, NULL};
+char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", hgsAddTrack,  hgsNewCompositeName, hgsNewCompositeShortLabel, hgsNewCompositeLongLabel, hgsNewMathTrackShortLabel, hgsNewMathTrackLongLabel, hgsChangeGroup, hgsAddVisTrack, hgsAddMathTrack, hgsDeleteMathTrack, "createNewComposite", "deleteComposite", "makeMathWig",  NULL};
+
+static struct trackDb *findTrack(char *name, struct trackDb *fullTrackList)
+{
+struct trackDb *tdb;
+for (tdb = fullTrackList; tdb != NULL; tdb = tdb->next)
+    {
+    if (sameString(name, tdb->track))
+        return tdb;            
+    }
+errAbort("cannot find track");
+return NULL;
+}
 
 void nbSpaces(int count)
 /* Print some non-breaking spaces. */
@@ -156,7 +185,7 @@ printf("<OPTION VALUE='%s'%s>%s\n", val, (sameString(selectedVal, val) ? " SELEC
 }
 
 
-static struct composite *getCompositeList(char *db, char *hubName, struct hash *nameHash)
+static struct composite *getCompositeList(char *db, char *hubName, struct hash *nameHash, struct trackDb *wigTracks)
 {
 struct composite *compositeList = NULL;
 FILE *f;
@@ -192,6 +221,24 @@ if ((hubName != NULL) && ((f = fopen(hubName, "r")) != NULL))
             track->shortLabel = tdb->shortLabel;
             track->longLabel = tdb->longLabel;
             slAddHead(&composite->trackList, track);
+            if (sameString(tdb->type, "mathWig"))
+                {
+                struct mathTrack *mathTrack = (struct mathTrack *)track;
+                char *equation = hashMustFindVal(tdb->settingsHash, "trackNames");
+                char *words[100];
+                int count = chopByWhite(equation, words, sizeof(words)/sizeof(char *));
+                struct track *subTrack;
+                int ii;
+                for (ii=0; ii < count; ii++)
+                    {
+                    AllocVar(subTrack);
+                    slAddHead(&mathTrack->trackList, subTrack);
+                    subTrack->name = cloneString(words[ii]);
+                    struct trackDb *tdb = findTrack(subTrack->name, wigTracks);
+                    subTrack->shortLabel = tdb->shortLabel;
+                    subTrack->longLabel = tdb->longLabel;
+                    }
+                }
             }
         }
     }
@@ -213,7 +260,19 @@ static int snakePalette2[] =
 };
 
 
-void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, unsigned int color)
+char *getUrl(struct sqlConnection *conn, char *db, struct trackDb *wigTracks, struct track *track)
+{
+struct trackDb *tdb = findTrack(track->name, wigTracks);
+char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+if (bigDataUrl == NULL)
+    {
+    if (startsWith("bigWig", tdb->type))
+        bigDataUrl = getSqlBigWig(conn, db, tdb);
+    }
+return bigDataUrl;
+}
+
+void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, unsigned int color, struct track *track, struct trackDb *wigTracks)
 {
 char *dataUrl = NULL;
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
@@ -228,7 +287,26 @@ struct hashEl *hel;
 fprintf(f, "\ttrack %s\n", name);
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "color")&& differentString(hel->name, "track"))
+    if (sameString(hel->name, "mathDataUrl"))
+        {
+        fprintf(f, "\ttrackNames ");
+        struct mathTrack *mt = (struct mathTrack *)track;
+        struct track *tr = mt->trackList;
+        for(;  tr; tr = tr->next)
+            {
+            fprintf(f, "%s ", tr->name);
+            }
+        fprintf(f, "\n");
+
+        fprintf(f, "\tmathDataUrl ");
+        tr = mt->trackList;
+        for(;  tr; tr = tr->next)
+            {
+            fprintf(f, "%s ", getUrl(conn, db, wigTracks, tr));
+            }
+        fprintf(f, "\n");
+        }
+    else if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "color")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames"))
         fprintf(f, "\t%s %s\n", hel->name, (char *)hel->val);
     }
 if (bigDataUrl == NULL)
@@ -254,18 +332,6 @@ longLabel %s\n\
 %s on\n\
 type wig \n\
 visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING);
-}
-
-static struct trackDb *findTrack(char *name, struct trackDb *fullTrackList)
-{
-struct trackDb *tdb;
-for (tdb = fullTrackList; tdb != NULL; tdb = tdb->next)
-    {
-    if (sameString(name, tdb->track))
-        return tdb;            
-    }
-errAbort("cannot find track");
-return NULL;
 }
 
 static void outHubHeader(FILE *f, char *db, char *hubName)
@@ -304,7 +370,7 @@ return hubName;
 }
 
 
-static void outputCompositeHub(char *db, char *hubName,  struct composite *compositeList, struct hash *nameHash)
+static void outputCompositeHub(char *db, char *hubName,  struct composite *compositeList, struct hash *nameHash, struct trackDb *wigTracks)
 {
 chmod(hubName, 0666);
 FILE *f = mustOpen(hubName, "w");
@@ -322,7 +388,7 @@ for(composite = compositeList; composite; composite = composite->next)
         {
         tdb = hashMustFindVal(nameHash, track->name);
 
-        outTdb(conn, db, f, track->name,tdb, composite->name, snakePalette2[useColor]);
+        outTdb(conn, db, f, track->name,tdb, composite->name, snakePalette2[useColor], track, wigTracks);
         useColor++;
         if (useColor == (sizeof snakePalette2 / sizeof(int)))
             useColor = 0;
@@ -402,46 +468,6 @@ void printAssemblySection()
     jsCreateHiddenForm(cart, cgiScriptName(), saveVars, ArraySize(saveVars));
     }
 
-hPrintf("<FORM ACTION='%s' NAME='changeGroupForm'>", cgiScriptName());
-cartSaveSession(cart);
-cgiMakeHiddenVar(hgsCurrentGroup, "");
-hPrintf("</FORM>\n");
-
-hPrintf("<FORM ACTION='%s' NAME='changeCompositeForm'>", cgiScriptName());
-cartSaveSession(cart);
-cgiMakeHiddenVar(hgsCurrentComposite, "");
-hPrintf("</FORM>\n");
-
-hPrintf("<FORM ACTION='%s' NAME='makeNewCompositeForm'>", cgiScriptName());
-cartSaveSession(cart);
-cgiMakeHiddenVar(hgsNewCompositeName, "");
-cgiMakeHiddenVar(hgsNewCompositeShortLabel, "");
-cgiMakeHiddenVar(hgsNewCompositeLongLabel, "");
-hPrintf("</FORM>\n");
-
-hPrintf("<FORM ACTION='%s' NAME='addVisTrackForm'>", cgiScriptName());
-cartSaveSession(cart);
-cgiMakeHiddenVar(hgsAddVisTrack, "");
-hPrintf("</FORM>\n");
-
-hPrintf("<FORM ACTION='%s' NAME='addTrackForm'>", cgiScriptName());
-cartSaveSession(cart);
-cgiMakeHiddenVar(hgsAddTrack, "");
-hPrintf("</FORM>\n");
-
-/* Hidden form for jumping to custom tracks CGI. */
-hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
-cartSaveSession(cart);
-hPrintf("</FORM>\n");
-
-/* Hidden form for jumping to track hub manager CGI. */
-hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
-cartSaveSession(cart);
-hPrintf("</FORM>\n");
-
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" ID=\"mainForm\" METHOD=%s>\n",
-	cgiScriptName(), cartUsualString(cart, "formMethod", "GET"));
-cartSaveSession(cart);
 
 //#*** ------------------ end verbatim ---------------
 
@@ -455,76 +481,143 @@ hgGatewayCladeGenomeDb();
 
 static void printCompositeList(struct composite *compositeList, struct composite *currentComposite)
 {
-if (compositeList == NULL)
+if (compositeList != NULL)
+    {
+
+    printf("<div class='sectionLiteHeader noReorderRemove'>"
+           "My Composites</div>\n");
+
+    int count = slCount(compositeList);
+    char *labels[count];
+    char *names[count];
+    count = 0;
+    for(; compositeList; compositeList = compositeList->next)
+        {
+        labels[count] = compositeList->shortLabel;
+        names[count] = compositeList->name;
+        count++;
+        }
+    printf("Current composite: ");
+    cgiMakeDropListFull("compositeList", labels, names, count,
+                        currentComposite->name,
+                        "change", 
+                        "var e = document.getElementById('compositeList'); \
+                        var strUser = e.options[e.selectedIndex].value; \
+                        document.changeCompositeForm.elements['"hgsCurrentComposite"'].value = strUser; \
+                        document.changeCompositeForm.submit();");
+                        //document.addTrackForm.elements['hgComp_track'] = strUser;");
+
+    hOnClickButton("deleteComposite", "document.deleteCompositeForm.submit(); return false;", "Delete Composite");
+    }
+hOnClickButton("new2Composite", "document.makeNewCompositeForm.submit(); return false;", "New Composite");
+
+}
+
+
+static void printCompositeLabels(struct composite *composite)
+{
+if (composite == NULL)
     return;
 
-printf("<div class='sectionLiteHeader noReorderRemove'>"
-       "My Composites</div>\n");
-
-int count = slCount(compositeList);
-char *labels[count];
-char *names[count];
-count = 0;
-for(; compositeList; compositeList = compositeList->next)
-    {
-    labels[count] = compositeList->shortLabel;
-    names[count] = compositeList->name;
-    count++;
-    }
-cgiMakeDropListFull("compositeList", labels, names, count,
-                    currentComposite->name,
-                    "change", 
-                    "var e = document.getElementById('compositeList'); \
-                    var strUser = e.options[e.selectedIndex].value; \
-                    document.changeCompositeForm.elements['"hgsCurrentComposite"'].value = strUser; \
-                    document.changeCompositeForm.submit();");
-                    //document.addTrackForm.elements['hgComp_track'] = strUser;");
-
-}
-
-
-static void makeAddComposite()
-{
-printf("<BR>");
-printf("<BR>");
-printf("<H3>Make New Composite</H3>");
-printf("name ");
-cgiMakeTextVar(hgsNewCompositeName, "", 29);
 printf("<BR>short label ");
-cgiMakeTextVar(hgsNewCompositeShortLabel, "", 29);
+cgiMakeTextVar(hgsNewCompositeShortLabel, composite->shortLabel, 29);
 printf("<BR>long label ");
-cgiMakeTextVar(hgsNewCompositeLongLabel, "", 29);
+cgiMakeTextVar(hgsNewCompositeLongLabel, composite->longLabel, 29);
 printf("<BR>");
-hOnClickButton("selVar_MakeNewComposite", 
-                    "var e = document.getElementById('"hgsNewCompositeName"'); \
-                    document.makeNewCompositeForm.elements['"hgsNewCompositeName"'].value = e.value; \
-                    var e = document.getElementById('"hgsNewCompositeShortLabel"'); \
-                    document.makeNewCompositeForm.elements['"hgsNewCompositeShortLabel"'].value = e.value; \
-                    var e = document.getElementById('"hgsNewCompositeLongLabel"'); \
-                    document.makeNewCompositeForm.elements['"hgsNewCompositeLongLabel"'].value = e.value; \
-document.makeNewCompositeForm.submit(); return false;", "submit");
+hOnClickButton("selVar_MakeNewComposite",
+    "var e = document.getElementById('"hgsNewCompositeLongLabel"'); \
+    var strUser = e.value; \
+    document.editCompositeForm.elements['"hgsNewCompositeLongLabel"'].value =  strUser;  \
+    var e = document.getElementById('"hgsNewCompositeShortLabel"'); \
+    var strUser = e.value; \
+    document.editCompositeForm.elements['"hgsNewCompositeShortLabel"'].value =  strUser;  \
+document.editCompositeForm.submit();" , "make changes");
 printf("<BR>");
 }
+
+static boolean printMakeMath(struct mathTrack *currentMathTrack)
+{
+if (currentMathTrack == NULL)
+    {
+    hOnClickButton("makeMathWig",  "document.makeMathWigForm.submit(); return FLASE;", "Add Math Track to Composite");
+
+
+    return FALSE; 
+    }
+
+printf("<BR>short label ");
+cgiMakeTextVar(hgsNewMathTrackShortLabel, currentMathTrack->shortLabel, 29);
+printf("<BR>long label ");
+cgiMakeTextVar(hgsNewMathTrackLongLabel, currentMathTrack->longLabel, 29);
+struct track *track;
+hOnClickButton("selVar_newMathLabels",
+    "var e = document.getElementById('"hgsNewMathTrackLongLabel"'); \
+    var strUser = e.value; \
+    document.editMathTrackForm.elements['"hgsNewMathTrackLongLabel"'].value =  strUser;  \
+    var e = document.getElementById('"hgsNewMathTrackShortLabel"'); \
+    var strUser = e.value; \
+    document.editMathTrackForm.elements['"hgsNewMathTrackShortLabel"'].value =  strUser;  \
+document.editMathTrackForm.submit();" , "make changes");
+printf("<BR>");
+printf("<table id=\"sessionTable\" class=\"sessionTable stripe hover row-border compact\" borderwidth=0>\n");
+printf("<thead><tr>");
+printf("<TD><B>Name</B></TD><TD>Color</TD><TD>Edit</TD><TD>Delete</TD>");
+printf("</tr></thead><tbody>");
+if (currentMathTrack)
+    for(track = currentMathTrack->trackList; track; track = track->next)
+        {
+        printf("<TR>\n");
+        printf("<TD>%s</TD>",track->shortLabel);
+        printf("<TD>COLORSELECTOR</TD>");
+        printf("<TD>");
+        hOnClickButton("selVar_AddAllVis", "document.addVisTrackForm.submit(); return false;", "Edit Track");
+        printf("</TD>");
+        printf("<TD>");
+        char javaScript[4096];
+        safef(javaScript, sizeof javaScript, 
+            "document.deleteMathTrackForm.elements['"hgsDeleteMathTrack"'].value =  '%s'; "
+            "document.deleteMathTrackForm.submit(); return false;",
+            track->name);
+        char buttonName[1024];
+        safef(buttonName, sizeof buttonName, "delMathTrack%s", track->name);
+        hOnClickButton(buttonName, javaScript,  "Delete Track");
+        printf("</TD>");
+        printf("</TR>\n");
+        }
+printf("</tbody></table>");
+return TRUE;
+}
+
 
 static void printTrackList(struct composite *composite)
 {
-printf("<div class='sectionLiteHeader noReorderRemove'>"
-       "Tracks in Composite</div>\n");
-printf("<BR>");
-printf("<div style=\"max-width:1024px\">");
 printf("<table id=\"sessionTable\" class=\"sessionTable stripe hover row-border compact\" borderwidth=0>\n");
 printf("<thead><tr>");
-printf("<TH><TD><B>Name</B></TD></TH>");
+printf("<TD><B>Name</B></TD><TD>Color</TD><TD>Edit</TD><TD>Delete</TD>");
 printf("</tr></thead><tbody>");
 
 struct track *track;
 if (composite)
     for(track = composite->trackList; track; track = track->next)
         {
-        printf("<TR><TD>%s</TD></TR>\n",track->shortLabel);
+        printf("<TR>\n");
+        printf("<TD>%s</TD>",track->shortLabel);
+        printf("<TD>COLORSELECTOR</TD>");
+printf("<TD>");
+hOnClickButton("selVar_AddAllVis", "document.addVisTrackForm.submit(); return false;", "Edit Track");
+printf("</TD>");
+printf("<TD>");
+        char javaScript[4096];
+        safef(javaScript, sizeof javaScript, 
+            "document.deleteTrackForm.elements['"hgsDeleteTrack"'].value =  '%s'; "
+            "document.deleteTrackForm.submit(); return false;",
+            track->name);
+        char buttonName[1024];
+        safef(buttonName, sizeof buttonName, "delTrack%s", track->name);
+        hOnClickButton(buttonName, javaScript,  "Delete Track");
+printf("</TD>");
+        printf("</TR>\n");
         }
-//printf("<TR><TD>track1</TD></TR>");
-//printf("<TR><TD>track2</TD></TR>");
 printf("</table>");
 }
 
@@ -534,7 +627,7 @@ static boolean trackCanBeAdded(struct trackDb *tdb)
 return  (tdb->subtracks == NULL) && !startsWith("wigMaf",tdb->type) &&  (startsWith("wig",tdb->type) || startsWith("bigWig",tdb->type)) ;
 }
 
-static void availableTracks(char *db, struct grp *groupList, struct trackDb *fullTrackList)
+static void availableTracks(char *db, struct grp *groupList, struct trackDb *fullTrackList, char *formName, char *varName)
 {
 printf("<H4>Add tracks from %s</H4>", db);
 
@@ -552,13 +645,17 @@ for(grp = groupList; grp; grp = grp->next)
     names[count] = grp->name;
     count++;
     }
-cgiMakeDropListFull("availGroups", labels, names, count,
-                    curGroupName,
-                    "change", 
-    "var e = document.getElementById('availGroups'); \
+char buffer[1024];
+safef(buffer, sizeof buffer, "availGroups%s", formName);
+char javaScript[4096];
+safef(javaScript, sizeof javaScript, 
+    "var e = document.getElementById('availGroups%s'); \
     var strUser = e.options[e.selectedIndex].value; \
     document.changeGroupForm.elements['"hgsCurrentGroup"'].value =  strUser;  \
-    document.changeGroupForm.submit();");
+    document.changeGroupForm.submit();", formName);
+cgiMakeDropListFull(buffer, labels, names, count,
+                    curGroupName,
+                    "change", javaScript);
 
 struct grp *curGroup;
 if (curGroupName == NULL)
@@ -582,7 +679,6 @@ for(tdb = fullTrackList; tdb; tdb = tdb->next)
         count++;
     }
 
-//char **labels, **names;
 AllocArray(labels, count);
 AllocArray(names, count);
 count = 0;
@@ -597,19 +693,16 @@ for(tdb = fullTrackList; tdb; tdb = tdb->next)
     }
 
 printf("track:");
-cgiMakeDropListFull("availTracks", labels, names, count,
+safef(buffer, sizeof buffer, "availTracks%s", formName);
+cgiMakeDropListFull(buffer, labels, names, count,
                     *names, 
-                    "change", 
-                    "var e = document.getElementById('availTracks'); \
-                    var strUser = e.options[e.selectedIndex].value; \
-                    document.addTrackForm.elements['"hgsAddTrack"'].value = strUser;");
-                    //document.addTrackForm.elements['hgComp_track'] = strUser;");
-hOnClickButton("addTrack", 
-    "var e = document.getElementById('availTracks'); \
+                    "change", "");
+safef(javaScript, sizeof javaScript, 
+    "var e = document.getElementById('availTracks%s'); \
     var strUser = e.options[e.selectedIndex].value;  \
-    document.addTrackForm.elements['"hgsAddTrack"'].value =  strUser;  \
-    document.addTrackForm.submit();"
-, "add track");
+    document.%s.elements['%s'].value =  strUser;  \
+    document.%s.submit();", formName, formName, varName, formName);
+hOnClickButton(formName, javaScript, "add track");
 
 printf("<BR>");
 printf("<BR>");
@@ -617,55 +710,126 @@ printf("<BR>");
 hOnClickButton("selVar_AddAllVis", "document.addVisTrackForm.submit(); return false;", "Add All Visibile Wiggles");
 }
 
-void doMainPage(char *db, struct grp *groupList,  struct trackDb *fullTrackList, struct composite *currentComposite, struct composite *compositeList)
+void doMainPage(char *db, struct grp *groupList,  struct trackDb *fullTrackList, struct composite *currentComposite, struct composite *compositeList, struct mathTrack *currentMathTrack)
 /* Print out initial HTML of control page. */
 {
-//struct composite *currentComposite = compositeList;
 jsInit();
 webIncludeResourceFile("jquery-ui.css");
 webIncludeResourceFile("ui.dropdownchecklist.css");
-boolean alreadyAgreed = cartUsualBoolean(cart, "hgva_agreedToDisclaimer", FALSE);
-jsInlineF(
-    "$(document).ready(function() { hgva.disclaimer.init(%s, hgva.userClickedAgree); });\n"
-    , alreadyAgreed ? "true" : "false");
 addSomeCss();
+#ifdef NOTNOW
 printAssemblySection();
 
 puts("<BR>");
 printf("<div class='sectionLiteHeader noReorderRemove'>"
        "Add Hubs and Custom Tracks </div>\n");
 printCtAndHubButtons();
+#endif
 
-//struct hashEl *hel = cartFindPrefix(cart, hgCompEditPrefix);
-//if (hel != NULL)
+hPrintf("<FORM ACTION='%s' NAME='changeGroupForm'>", cgiScriptName());
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgsCurrentGroup, "");
+hPrintf("</FORM>\n");
+
+hPrintf("<FORM ACTION='%s' NAME='changeCompositeForm'>", cgiScriptName());
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgsCurrentComposite, "");
+hPrintf("</FORM>\n");
+
+if (currentComposite)
     {
- //   printf("printing EditCom\n");
-  ///  printEditComposite();
+    hPrintf("<FORM ACTION='%s' NAME='deleteCompositeForm'>", cgiScriptName());
+    cgiMakeHiddenVar("deleteComposite", currentComposite->name);
+    cartSaveSession(cart);
+    hPrintf("</FORM>\n");
     }
+
+hPrintf("<FORM ACTION='%s' NAME='makeMathWigForm'>", cgiScriptName());
+cgiMakeHiddenVar("makeMathWig", "on");
+cartSaveSession(cart);
+hPrintf("</FORM>\n");
+
+hPrintf("<FORM ACTION='%s' NAME='makeNewCompositeForm'>", cgiScriptName());
+cgiMakeHiddenVar("createNewComposite", "on");
+cartSaveSession(cart);
+hPrintf("</FORM>\n");
+
+hPrintf("<FORM ACTION='%s' NAME='editMathTrackForm'>", cgiScriptName());
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgsNewMathTrackShortLabel, "");
+cgiMakeHiddenVar(hgsNewMathTrackLongLabel, "");
+hPrintf("</FORM>\n");
+
+hPrintf("<FORM ACTION='%s' NAME='editCompositeForm'>", cgiScriptName());
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgsNewCompositeShortLabel, "");
+cgiMakeHiddenVar(hgsNewCompositeLongLabel, "");
+hPrintf("</FORM>\n");
+
+hPrintf("<FORM ACTION='%s' NAME='addVisTrackForm'>", cgiScriptName());
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgsAddVisTrack, "");
+hPrintf("</FORM>\n");
+
+hPrintf("<FORM ACTION='%s' NAME='deleteTrackForm'>", cgiScriptName());
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgsDeleteTrack, "");
+hPrintf("</FORM>\n");
+
+hPrintf("<FORM ACTION='%s' NAME='deleteMathTrackForm'>", cgiScriptName());
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgsDeleteMathTrack, "");
+hPrintf("</FORM>\n");
+
+hPrintf("<FORM ACTION='%s' NAME='addMathTrackForm'>", cgiScriptName());
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgsAddMathTrack, "");
+hPrintf("</FORM>\n");
+
+hPrintf("<FORM ACTION='%s' NAME='addTrackForm'>", cgiScriptName());
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgsAddTrack, "");
+hPrintf("</FORM>\n");
+
+/* Hidden form for jumping to custom tracks CGI. */
+hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
+cartSaveSession(cart);
+hPrintf("</FORM>\n");
+
+/* Hidden form for jumping to track hub manager CGI. */
+hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
+cartSaveSession(cart);
+hPrintf("</FORM>\n");
+
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" ID=\"mainForm\" METHOD=%s>\n",
+	cgiScriptName(), cartUsualString(cart, "formMethod", "GET"));
+cartSaveSession(cart);
 
 printf("</FORM>");
 puts("<BR>");
 puts("<BR>");
 printCompositeList(compositeList, currentComposite);
-makeAddComposite();
 puts("<BR>");
+printCompositeLabels(currentComposite);
+puts("<BR>");
+
+printf("<div id=\"tabs\">"
+       "<ul> <li><a href=\"#addTracksToComposite\">Add Tracks To Composite</a></li>"
+              "<li><a href=\"#addTracksToMathWig\">Add Tracks to Math Wig</a></li> "
+                     "</ul> ");
+
+printf("<div id=\"addTracksToComposite\" class=\"hubList\"> \n");
 printTrackList(currentComposite);
+availableTracks(db, groupList, fullTrackList, "addTrackForm", hgsAddTrack );
 puts("<BR>");
-availableTracks(db, groupList, fullTrackList);
+printf("</div>");
+
+printf("<div id=\"addTracksToMathWig\" class=\"hubList\"> \n");
+if (printMakeMath(currentMathTrack))
+    availableTracks(db, groupList, fullTrackList, "addMathTrackForm", hgsAddMathTrack);
 puts("<BR>");
-
-// Make wrapper table for collapsible sections:
-//selectVariants();
-//char *geneTrack = selectGenes();
-//if (geneTrack != NULL)
-    {
-    //selectRegulatory();
-    //selectAnnotations(geneTrack);
-    //selectFilters();
-    //selectOutput();
-    //submitAndDisclaimer();
-    }
-
+printf("</div>");
+printf("</div>");
 printf("</FORM>");
 jsReloadOnBackButton(cart);
 
@@ -677,14 +841,22 @@ jsIncludeFile("ui.dropdownchecklist.js", NULL);
 jsIncludeFile("ddcl.js", NULL);
 }
 
-void doUi(char *db, struct grp *groupList, struct trackDb *fullTrackList,struct composite *currentComposite, struct composite *compositeList) 
+void doUi(char *db, struct grp *groupList, struct trackDb *fullTrackList,struct composite *currentComposite, struct composite *compositeList, struct mathTrack *currentMathTrack) 
 /* Set up globals and make web page */
 {
 cartWebStart(cart, db, "Composite Editor");
-doMainPage(database, groupList, fullTrackList, currentComposite, compositeList);
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("utils.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
+
+webIncludeResourceFile("jquery-ui.css");
+
+jsIncludeFile("ajax.js", NULL);
+jsIncludeFile("hgHubConnect.js", NULL);
+jsIncludeFile("jquery.cookie.js", NULL);
+
+doMainPage(database, groupList, fullTrackList, currentComposite, compositeList, currentMathTrack);
 cartWebEnd();
-/* Save variables. */
-//cartCheckout(&cart);
 }
 
 static void addWigs(struct hash *hash, struct trackDb **wigList, struct trackDb *list)
@@ -711,10 +883,11 @@ for(tdb = list; tdb; tdb = tdbNext)
 char *makeUnique(struct hash *nameHash, struct trackDb *tdb)
 // Make the name of this track unique.
 {
-if (hashLookup(nameHash, tdb->track) == NULL)
+char *skipHub = trackHubSkipHubName(tdb->track);
+if (hashLookup(nameHash, skipHub) == NULL)
     {
     hashAdd(nameHash, tdb->track, tdb);
-    return tdb->track;
+    return skipHub;
     }
 
 unsigned count = 0;
@@ -722,7 +895,7 @@ char buffer[4096];
 
 for(;; count++)
     {
-    safef(buffer, sizeof buffer, "%s%d", tdb->track, count);
+    safef(buffer, sizeof buffer, "%s%d", skipHub, count);
     if (hashLookup(nameHash, buffer) == NULL)
         {
         hashAdd(nameHash, buffer, tdb);
@@ -788,6 +961,29 @@ return vis;
 }
 
 
+struct mathTrack *getMathTracks(struct composite *compositeList)
+{
+struct mathTrack *mathTrackList = NULL;
+
+return mathTrackList;
+}
+
+static char *createNewCompositeName(struct hash *nameHash)
+{
+static int compositeNumber = 0;
+char buffer[4096];
+for(;;)
+    {
+    safef(buffer, sizeof buffer, "userTrack%d", compositeNumber);
+    if (hashLookup(nameHash, buffer) == NULL)
+        {
+        hashStore(nameHash, buffer);
+        return cloneString(buffer);
+        }
+    compositeNumber++;
+    }
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -825,15 +1021,27 @@ for(grp = fullGroupList; grp; grp = grpNext)
 
 slReverse(&groupList);
 
-/*
-struct grp *grpList;
-struct trackDb *tdbList = hubCollectTracks(database, &grpList);
-addWigs(&wigTracks, tdbList);
-*/
-
 char *hubName = getHubName(database);
 struct hash *nameHash = newHash(5);
-struct composite *compositeList = getCompositeList(database, hubName, nameHash);
+struct composite *compositeList = getCompositeList(database, hubName, nameHash, wigTracks);
+
+char *deleteCompositeName = cgiOptionalString("deleteComposite");
+if (deleteCompositeName)
+    {
+    struct composite *composite, *prevComposite = NULL;
+    for (composite = compositeList; composite; prevComposite = composite, composite = composite->next)
+        {
+        if (sameString(composite->name, deleteCompositeName))
+            break;
+        }
+    if (composite)
+        {
+        if (composite == compositeList)
+            compositeList = compositeList->next;
+        else
+            prevComposite->next = composite->next;
+        }
+    }
 
 struct composite *currentComposite = NULL;
 char *currentCompositeName = cartOptionalString(cart, hgsCurrentComposite);
@@ -844,39 +1052,80 @@ if (currentCompositeName != NULL)
         if (sameString(currentComposite->name, currentCompositeName))
             break;
     }
+if (currentCompositeName == NULL)
+    currentComposite = compositeList;
 
 if (currentComposite == NULL)
     currentComposite = compositeList;
 
-char *newCompositeName = cartOptionalString(cart, hgsNewCompositeName);
-if (newCompositeName != NULL)
+char *createNewComposite = cartOptionalString(cart, "createNewComposite");
+if (createNewComposite != NULL)
     {
-    if (isEmpty(newCompositeName))
-        warn("Composite name must not be empty string");
-    else
+    struct composite *composite;
+    AllocVar(composite);
+    slAddHead(&compositeList, composite);
+    currentComposite = composite;
+
+    composite->name = createNewCompositeName(nameHash);
+    composite->shortLabel = cloneString("Short Label");
+    composite->longLabel = cloneString("Long Label");
+    }
+
+char *newShortLabel = cgiOptionalString(hgsNewCompositeShortLabel);
+if (newShortLabel != NULL)
+    {
+    if (currentComposite != NULL)
         {
-        struct composite *composite;
-        AllocVar(composite);
-        slAddHead(&compositeList, composite);
-        currentComposite = composite;
-
-        composite->name = cloneString(newCompositeName);
-        char *newCompositeShortLabel = cartOptionalString(cart, hgsNewCompositeShortLabel);
-        if (isEmpty(newCompositeShortLabel))
-            composite->shortLabel = composite->name;
-        else
-            composite->shortLabel = cloneString(newCompositeShortLabel);
-        char *newCompositeLongLabel = cartOptionalString(cart, hgsNewCompositeLongLabel);
-        if (isEmpty(newCompositeLongLabel))
-            composite->longLabel = composite->name;
-        else
-            composite->longLabel = cloneString(newCompositeLongLabel);
-
+        currentComposite->shortLabel = cloneString(newShortLabel);
+        currentComposite->longLabel = cloneString(cgiOptionalString(hgsNewCompositeLongLabel));
         }
     }
 
-if (currentCompositeName == NULL)
-    currentComposite = compositeList;
+struct mathTrack *currentMathTrack = NULL;
+
+char *currentMathTrackName = cartOptionalString(cart, hgsCurrentMathTrack);
+char *makeMathWig = cartOptionalString(cart, "makeMathWig");
+
+if (makeMathWig != NULL)
+    {
+    AllocVar(currentMathTrack);
+    if (currentComposite == NULL)
+        errAbort("need currentComposite");
+    slAddHead(&currentComposite->trackList, currentMathTrack);
+    currentMathTrack->name = createNewCompositeName(nameHash);
+    currentMathTrack->shortLabel = cloneString("MathWig Short");
+    currentMathTrack->longLabel = cloneString("MathWig Long Label");
+    cartSetString(cart, hgsCurrentMathTrack, currentMathTrack->name);
+    struct trackDb *tdb;
+    AllocVar(tdb);
+    hashAdd(nameHash, currentMathTrack->name, tdb);
+    tdb->track = currentMathTrack->name;
+    tdb->type = "mathWig";
+    tdb->settingsHash = newHash(5);
+    hashAdd(tdb->settingsHash, "shortLabel",currentMathTrack->shortLabel);
+    hashAdd(tdb->settingsHash, "longLabel", currentMathTrack->longLabel);
+    hashAdd(tdb->settingsHash, "type", "mathWig");
+    hashAdd(tdb->settingsHash, "mathDataUrl", "");
+    }
+else if (currentMathTrackName != NULL)
+    {
+    if (currentComposite == NULL)
+        errAbort("need currentComposite");
+    for (currentMathTrack = (struct mathTrack  *)currentComposite->trackList; currentMathTrack; currentMathTrack = currentMathTrack->next)
+        if (sameString(currentMathTrack->name, currentMathTrackName))
+            break;
+    }
+
+newShortLabel = cgiOptionalString(hgsNewMathTrackShortLabel);
+if (newShortLabel != NULL)
+    {
+    if (currentMathTrack != NULL)
+        {
+        struct trackDb *tdb = hashMustFindVal(nameHash, currentMathTrack->name);
+        hashReplace(tdb->settingsHash, "shortLabel",cloneString(newShortLabel));
+        hashReplace(tdb->settingsHash, "longLabel", cloneString(cgiOptionalString(hgsNewMathTrackLongLabel)));
+        }
+    }
 
 char *addAllVisible = cartOptionalString(cart, hgsAddVisTrack);
 if (addAllVisible != NULL)
@@ -893,6 +1142,70 @@ if (addAllVisible != NULL)
             track->shortLabel = tdb->shortLabel;
             track->longLabel = tdb->longLabel;
             slAddHead(&currentComposite->trackList, track);
+            }
+        }
+    }
+
+char *newMathTrackName = cartOptionalString(cart, hgsAddMathTrack);
+if (newMathTrackName != NULL)
+    {
+    if (currentMathTrack == NULL)
+        warn("cannot add track without specifying a mathwig");
+    else
+        {
+        struct trackDb *tdb = findTrack(newMathTrackName, wigTracks);
+
+        struct track *track;
+        AllocVar(track);
+        track->name = makeUnique(nameHash,  tdb);
+        track->shortLabel = tdb->shortLabel;
+        track->longLabel = tdb->longLabel;
+        slAddHead(&currentMathTrack->trackList, track);
+        }
+    }
+
+char *deleteTrackName = cartOptionalString(cart, hgsDeleteTrack);
+if (deleteTrackName != NULL)
+    {
+    if (currentComposite == NULL)
+        warn("cannot delete track without specifying a composite");
+    else
+        {
+        struct track *track, *prevTrack = NULL;
+        for(track = currentComposite->trackList; track; prevTrack = track,track = track->next)
+            {
+            if (sameString(track->name, deleteTrackName))
+                break;
+            }
+        if (track != NULL)
+            {
+            if (prevTrack == NULL)
+                currentComposite->trackList = track->next;
+            else
+                prevTrack->next = track->next;
+            }
+        }
+    }
+
+char *deleteMathTrackName = cartOptionalString(cart, hgsDeleteMathTrack);
+if (deleteMathTrackName != NULL)
+    {
+    if (currentMathTrack == NULL)
+        warn("cannot delete track without specifying a mathwig");
+    else
+        {
+        struct track *track, *prevTrack = NULL;
+        for(track = currentMathTrack->trackList; track; prevTrack = track,track = track->next)
+            {
+            if (sameString(track->name, deleteMathTrackName))
+                break;
+            }
+        if (track != NULL)
+            {
+            if (prevTrack == NULL)
+                currentMathTrack->trackList = track->next;
+            else
+                prevTrack->next = track->next;
             }
         }
     }
@@ -918,9 +1231,9 @@ if (newTrackName != NULL)
 if (currentComposite)
     cartSetString(cart, hgsCurrentComposite, currentComposite->name);
 
-doUi(database, groupList, wigTracks, currentComposite, compositeList);
+doUi(database, groupList, wigTracks, currentComposite, compositeList, currentMathTrack);
 
-outputCompositeHub(database, hubName,  compositeList, nameHash);
+outputCompositeHub(database, hubName,  compositeList, nameHash, wigTracks);
 cartCheckout(&cart);
 cgiExitTime("hgComposite", enteredMainTime);
 return 0;

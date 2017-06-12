@@ -13,7 +13,8 @@ include ${kentSrc}/inc/common.mk
 ALL_APPS = \
 	tabInfo \
 	tabQuery \
-	tabRepeatedFieldsToArrayField
+	tabRepeatedFieldsToArrayField \
+	tabToHtml
 
 all: $(ALL_APPS:%=%.all)
 

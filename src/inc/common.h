@@ -813,6 +813,12 @@ char *stringBetween(char *start, char *end, char *haystack);
  * none found.  The first such instance is returned.
  * String must be freed by caller. */
 
+char *nextStringBetween(char *start, char *end, char **pHaystack);
+/* Return next string that occurs between start and end strings
+ * starting seach at *pHaystack.  This will update *pHaystack to after 
+ * end, so it can be called repeatedly. Returns NULL when
+ * no more to be found*/
+
 char * findWordByDelimiter(char *word,char delimit, char *line);
 /* Return pointer to first word in line matching 'word' and delimited
    by 'delimit'. Comparison is case sensitive. Delimit of ' ' uses isspace() */

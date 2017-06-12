@@ -1049,6 +1049,35 @@ slReverse(&list);
 return list;
 }
 
+
+static void rListLeaves(struct tagStanza *list, struct tagStanzaRef **pList)
+/* Recursively add leaf stanzas to *pList */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    if (stanza->children)
+        rListLeaves(stanza->children, pList);
+    else
+        {
+	struct tagStanzaRef *ref;
+	AllocVar(ref);
+	ref->stanza = stanza;
+	slAddHead(pList, ref);
+	}
+    }
+}
+
+struct tagStanzaRef *tagStormListLeaves(struct tagStorm *tagStorm)
+/* Return list of references to all stanzas in tagStorm.  Free this
+ * result with slFreeList. */
+{
+struct tagStanzaRef *list = NULL;
+rListLeaves(tagStorm->forest, &list);
+slReverse(&list);
+return list;
+}
+
 char *tagStanzaRqlLookupField(void *record, char *key)
 /* Lookup a field in a tagStanza for rql. */
 {

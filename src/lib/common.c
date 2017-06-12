@@ -1452,13 +1452,17 @@ for (pos = haystack + strlen(haystack) - nSize; pos >= haystack; pos -= 1)
 return NULL;
 }
 
-char *stringBetween(char *start, char *end, char *haystack)
-/* Return string between start and end strings, or NULL if
- * none found.  The first such instance is returned.
- * String must be freed by caller. */
+char *nextStringBetween(char *start, char *end, char **pHaystack)
+/* Return next string that occurs between start and end strings
+ * starting seach at *pHaystack.  This will update *pHaystack to after 
+ * end, so it can be called repeatedly. Returns NULL when
+ * no more to be found*/
 {
 char *pos, *p;
 int len;
+char *haystack = *pHaystack;
+if (isEmpty(haystack))
+    return NULL;
 if ((p = stringIn(start, haystack)) != NULL)
     {
     pos = p + strlen(start);
@@ -1467,10 +1471,20 @@ if ((p = stringIn(start, haystack)) != NULL)
         len = p - pos;
         pos = cloneMem(pos, len + 1);
         pos[len] = 0;
+	*pHaystack = p;
         return pos;
         }
     }
+*pHaystack = NULL;
 return NULL;
+}
+
+char *stringBetween(char *start, char *end, char *haystack)
+/* Return string between start and end strings, or NULL if
+ * none found.  The first such instance is returned.
+ * String must be freed by caller. */
+{
+return nextStringBetween(start, end, &haystack);
 }
 
 boolean endsWith(char *string, char *end)
