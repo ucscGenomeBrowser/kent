@@ -329,6 +329,10 @@ requires: jQuery.js and bootstrap.js
     margin: 15px 12px 0 15px;   /* same as paragraph */
 }
 
+p.collapse-section .collapse-toggle {
+    margin-left: 0px;
+}
+
 .collapse-section .collapse-toggle:after {
     vertical-align: -3px;
     font-family: Glyphicons Halflings;
