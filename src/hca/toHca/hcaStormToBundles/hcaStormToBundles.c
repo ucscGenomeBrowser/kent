@@ -143,6 +143,32 @@ errAbort("Couldn't deduce paired end from file name %s", fileName);
 return 0;
 }
 
+int laneFromFileName(char *fileName)
+/* Deduce lane from file name.  If there is something of form _L123_ in the midst of
+ * file name we'll call it lane.  Otherwise return 0 (they start counting at 1) */
+{
+char *pat = "_L";
+int patLen = strlen(pat);
+char *s = fileName;
+while ((s = stringIn(pat, s)) != NULL)
+    {
+    s += patLen;
+    char *e = strchr(s, '_');
+    if (e == NULL)
+        break;
+    int midSize = e - s;
+    if (midSize == 3)
+        {
+	char midBuf[midSize+1];
+	memcpy(midBuf, s, midSize);
+	midBuf[midSize] = 0;
+	if (isAllDigits(midBuf))
+	    return atoi(midBuf);
+	}
+    }
+return 0;
+}
+
 void writeProtocolsArray(FILE *f, struct tagStanza *stanza, char *protocolsCsv)
 /* Write up an array of protocols based on protocols and protocol_types tags in
  * stanza. */
@@ -191,6 +217,13 @@ else
 void writeFilesArray(FILE *f, struct tagStanza *stanza, char *csvList)
 /* Write out an array of file objects base on file names in csvList */
 {
+int laneIx = 1;
+int filesPerLane = 1;
+int curFileInLane = 0;
+char *pairedEnds = tagMustFindVal(stanza, "assay.seq.paired_ends");
+if (!sameString(pairedEnds, "no"))
+    filesPerLane = 2;
+
 boolean firstOut = TRUE;
 struct slName *list = csvParse(csvList), *file;
 fputc('[', f);
@@ -220,10 +253,12 @@ for (file = list; file != NULL; file = file->next)
     boolean isRead = sameString(format, ".fastq.gz");
     if (isRead)
         {
-	char *pairedEnds = tagMustFindVal(stanza, "assay.seq.paired_ends");
+	/* Calculate and write type */
 	char *type = NULL;
 	if (sameString(pairedEnds, "no"))
+	    {
 	    type = "reads";
+	    }
 	else if (sameString(pairedEnds, "yes"))
 	    {
 	    int end = endFromFileName(name);
@@ -244,6 +279,19 @@ for (file = list; file != NULL; file = file->next)
 	    errAbort("Unrecognized paired_ends %s", pairedEnds);
 	fprintf(f, ",\"%s\":", "type");
 	writeJsonVal(f, type);
+
+	/* Write out lane info */
+	int lane = laneFromFileName(name);
+	if (lane == 0)
+	    lane = laneIx;
+	fprintf(f, ",\"%s\": \"%d\"", "lane", lane);
+
+	/* Update laneIx */
+	if (++curFileInLane >= filesPerLane)
+	    {
+	    ++laneIx;
+	    curFileInLane = 0;
+	    }
 	}
     fputc('}', f);
     }
