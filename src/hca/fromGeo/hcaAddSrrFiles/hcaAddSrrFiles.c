@@ -8,7 +8,6 @@
 
 /* Global vars */
 int gSrrCount = 0, gFileCount = 0;  // Keep track of number srr tags in and files out */
-int gEnds = 1;			    // Default to single ended
 
 void usage()
 /* Explain usage and exit. */
@@ -34,6 +33,8 @@ void  addFilesToSraRun(struct tagStorm *storm, struct tagStanza *stanza)
 char *srrCsv = tagFindLocalVal(stanza, "assay.sra_run");
 if (srrCsv != NULL)
     {
+    char *pairing = tagMustFindVal(stanza, "assay.seq.paired_ends");
+    int endCount = (sameString(pairing, "no") ? 1 : 2);
     struct dyString *scratch = dyStringNew(0);
     char *srr, *pos = srrCsv;
     struct dyString *filesDy = dyStringNew(0);
@@ -41,7 +42,7 @@ if (srrCsv != NULL)
         {
 	++gSrrCount;
 	int i;
-	for (i=0; i<gEnds; ++i)
+	for (i=0; i<endCount; ++i)
 	    {
 	    ++gFileCount;
 	    if (filesDy->stringSize > 0)
@@ -66,58 +67,66 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
+void  addBarcodeInfo(struct tagStorm *storm, struct tagStanza *stanza)
+/* If stanza has an srr_run tag add a files tag to it */
+{
+char *method = tagFindLocalVal(stanza, "assay.single_cell.method");
+if (method != NULL)
+    {
+    verbose(2, "hcaAddSrrFiles method=%s\n", method);
+
+    /* Set up default values for things that control output based on method */
+    char *umiBarcodeSize = "0", *cellBarcodeSize = "0";
+    char umiBarcodeOffset[8], cellBarcodeOffset[8];
+
+    /* Figure out more or less what to do based on method and pairing */
+    if (sameString(method, "drop-seq"))
+	{
+	safef(umiBarcodeOffset, sizeof(umiBarcodeOffset), "12");
+	safef(cellBarcodeOffset, sizeof(cellBarcodeOffset), "0");
+	umiBarcodeSize = "8";
+	cellBarcodeSize = "12";
+	}
+    else if (sameString(method, "10x_v2"))
+	{
+	safef(umiBarcodeOffset, sizeof(umiBarcodeOffset), "16");
+	safef(cellBarcodeOffset, sizeof(cellBarcodeOffset), "0");
+	umiBarcodeSize = "10";
+	cellBarcodeSize = "16";
+	}
+    if (differentString("0", umiBarcodeSize))
+        {
+	/* Add barcode tags */
+	tagStanzaUpdateTag(storm, stanza, "assay.seq.umi_barcode_size", umiBarcodeSize);
+	tagStanzaUpdateTag(storm, stanza, "assay.seq.umi_barcode_offset", umiBarcodeOffset);
+	tagStanzaUpdateTag(storm, stanza, "assay.single_cell.cell_barcode_size", 
+		cellBarcodeSize);
+	tagStanzaUpdateTag(storm, stanza, "assay.single_cell.cell_barcode_offset", 
+		cellBarcodeOffset);
+	}
+    }
+}
+
+void rAddBarcodeInfo(struct tagStorm *storm, struct tagStanza *list)
+/* Recursively do addFilesToSraRun to all stanzas in storm */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    addBarcodeInfo(storm, stanza);
+    rAddBarcodeInfo(storm, stanza->children);
+    }
+}
+
+
 void hcaAddSrrFiles(char *inTags, char *outTags)
 /* hcaAddSrrFiles - Add srr files to a HCA tagStorm as a files[] array in assay.. */
 {
 struct tagStorm *storm = tagStormFromFile(inTags);
-struct tagStanza *rootStanza = storm->forest;
-if (storm->forest == NULL)
-    errAbort("Expecting single top level stanza, got %d", slCount(rootStanza));
 
-char *method = tagMustFindVal(rootStanza, "assay.single_cell.method");
-char *pairing = tagMustFindVal(rootStanza, "assay.seq.paired_ends");
-char *molecule = tagMustFindVal(rootStanza, "assay.seq.molecule");
-verbose(2, "hcaAddSrrFiles method=%s, pairing=%s, molecule=%s\n", method, pairing, molecule);
+rAddBarcodeInfo(storm, storm->forest);
+verbose(1, "Added barcode sizes and offsets\n");
 
-/* Set up default values for things that control output based on method */
-char *umiBarcodeSize = "0", *cellBarcodeSize = "0";
-char umiBarcodeOffset[8], cellBarcodeOffset[8];
-
-/* Figure out more or less what to do based on method and pairing */
-if (sameString(method, "drop-seq"))
-    {
-    uglyf("drop-seq\n");
-    gEnds = 2;
-    safef(umiBarcodeOffset, sizeof(umiBarcodeOffset), "12");
-    safef(cellBarcodeOffset, sizeof(cellBarcodeOffset), "0");
-    umiBarcodeSize = "8";
-    cellBarcodeSize = "12";
-    }
-else if (sameString(method, "10x"))
-    {
-    uglyf("10x\n");
-    gEnds = 2;
-    safef(umiBarcodeOffset, sizeof(umiBarcodeOffset), "16");
-    safef(cellBarcodeOffset, sizeof(cellBarcodeOffset), "0");
-    umiBarcodeSize = "10";
-    cellBarcodeSize = "16";
-    }
-else
-    {
-    if (sameString(pairing, "yes"))
-        gEnds = 2;
-    }
-
-/* Add barcode tags */
-tagStanzaUpdateTag(storm, rootStanza, "assay.seq.umi_barcode_size", umiBarcodeSize);
-if (differentString("0", umiBarcodeSize))
-    tagStanzaUpdateTag(storm, rootStanza, "assay.seq.umi_barcode_offset", umiBarcodeOffset);
-tagStanzaUpdateTag(storm, rootStanza, "assay.single_cell.cell_barcode_size", cellBarcodeSize);
-if (differentString("0", cellBarcodeSize))
-    tagStanzaUpdateTag(storm, rootStanza, "assay.single_cell.cell_barcode_offset", 
-	cellBarcodeOffset);
-
-/* Add files[] array wherever find an assay.sra_run */
 rAddFilesToSraRun(storm, storm->forest);
 verbose(1, "Added %d files to %d runs\n", gFileCount, gSrrCount);
 
