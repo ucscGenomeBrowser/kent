@@ -9,7 +9,7 @@
 #include "csv.h"
 #include "uuid.h"
 
-boolean gUrls = FALSE;	// If set we are working with urls rather than local file names
+boolean gUrls;
 
 void usage()
 /* Explain usage and exit. */
@@ -17,11 +17,10 @@ void usage()
 errAbort(
   "hcaStormToBundles - Convert a HCA formatted tagStorm to a directory full of bundles.\n"
   "usage:\n"
-  "   hcaStormToBundles in.tags /path/to/data/files outDir\n"
+  "   hcaStormToBundles in.tags http://path/to/data/files outDir\n"
   "If the /path/to/data/files is 'urls' then it will just leave the assay.files[]\n"
   "array as is.\n"
   "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
@@ -176,6 +175,19 @@ for (proto = protocolList, type = typeList; proto != NULL; proto = proto->next, 
 fputc(']', f);
 }
 
+char *guessFormatFromName(char *name)
+/* Guess format from file extension */
+{
+if (endsWith(name, ".fastq.gz") || endsWith(name, ".fq.gz"))
+     return ".fastq.gz";
+else if (endsWith(name, ".bam"))
+     return ".bam";
+else if (endsWith(name, ".cram"))
+     return ".cram";
+else
+     return NULL;
+}
+
 void writeFilesArray(FILE *f, struct tagStanza *stanza, char *csvList)
 /* Write out an array of file objects base on file names in csvList */
 {
@@ -197,17 +209,7 @@ for (file = list; file != NULL; file = file->next)
     writeJsonVal(f, name);
 
     /* If can recognize format from suffix write format. */
-    char *format = NULL;
-    boolean isRead = FALSE;
-    if (endsWith(name, ".fastq.gz") || endsWith(name, ".fq.gz"))
-	 {
-         format = ".fastq.gz";
-	 isRead = TRUE;
-	 }
-    else if (endsWith(name, ".bam"))
-         format = ".bam";
-    else if (endsWith(name, ".cram"))
-         format = ".cram";
+    char *format = guessFormatFromName(name);
     if (format != NULL)
         {
 	fprintf(f, ",\"%s\":", "format");
@@ -215,6 +217,7 @@ for (file = list; file != NULL; file = file->next)
 	}
 
     /* If it's a read format try to classify it to a type */
+    boolean isRead = sameString(format, ".fastq.gz");
     if (isRead)
         {
 	char *pairedEnds = tagMustFindVal(stanza, "assay.seq.paired_ends");
@@ -326,10 +329,81 @@ fprintf(f, "\n");
 carefulClose(&f);
 }
 
-void makeBundleJson(char *dir, struct tagStanza *stanza, struct subObj *topLevelList)
+struct slName *tagFindValList(struct tagStanza *stanza, char *tag)
+/* Read in tag as a list. Do a slFreeList on this when done.
+ * Returns NULL if no value */
+{
+char *val = tagFindVal(stanza, tag);
+return csvParse(val);
+}
+
+struct slName *tagMustFindValList(struct tagStanza *stanza, char *tag)
+/* Find tag or die trying, and return it as parsed out list */
+{
+char *val = tagMustFindVal(stanza, tag);
+return csvParse(val);
+}
+
+void writeManifest(char *fileName, struct tagStanza *stanza, char *dataDir)
+/* Write out manifest file */
+{
+verbose(2, "Writing manifest %s\n", fileName);
+/* Start up a json file */
+FILE *f = mustOpen(fileName, "w");
+boolean firstOut = TRUE;
+fprintf(f, "{");
+
+/* Write dir and version tags */
+writeJsonTag(f, "dir", &firstOut);
+writeJsonVal(f, dataDir);
+writeJsonTag(f, "version", &firstOut);
+writeJsonVal(f, "1");
+
+/* Write out files array */
+writeJsonTag(f, "files", &firstOut);
+fputc('[', f);
+boolean firstFile = TRUE;
+struct slName *file, *list = tagMustFindValList(stanza, "assay.files");
+for (file = list; file != NULL; file = file->next)
+    {
+    if (firstFile)
+        firstFile = FALSE;
+    else
+        fputc(',', f);
+    boolean firstField = TRUE;
+    fputc('{', f);
+    writeJsonTag(f, "name", &firstField);
+    if (gUrls)
+        {
+	char fileName[FILENAME_LEN], ext[FILEEXT_LEN], path[PATH_LEN];
+	splitPath(file->name, NULL, fileName, ext);
+	safef(path, sizeof(path), "%s%s", fileName, ext);
+	writeJsonVal(f, path);
+	}
+    else
+	writeJsonVal(f, file->name);
+    char *format = guessFormatFromName(file->name);
+    if (format != NULL)
+        {
+	writeJsonTag(f, "format", &firstField);
+	writeJsonVal(f, format);
+	}
+    fputc('}', f);
+    }
+slFreeList(&list);
+fputc(']', f);
+
+
+/* Close up and go home */
+fprintf(f, "}");
+carefulClose(&f);
+}
+
+void makeBundleJson(char *dir, struct tagStanza *stanza, struct subObj *topLevelList,
+    char *dataDir)
 /* Write out bundle json file for stanza into dir */
 {
-uglyf("makeBundleJson on %s\n", dir);
+verbose(2, "makeBundleJson on %s\n", dir);
 char jsonFileName[PATH_LEN];
 struct subObj *topEl;
 for (topEl = topLevelList; topEl != NULL; topEl = topEl->next)
@@ -337,16 +411,18 @@ for (topEl = topLevelList; topEl != NULL; topEl = topEl->next)
     safef(jsonFileName, sizeof(jsonFileName), "%s/%s.json", dir, topEl->name);
     writeTopJson(jsonFileName, stanza, topEl);
     }
+safef(jsonFileName, sizeof(jsonFileName), "%s/manifest.json", dir);
+writeManifest(jsonFileName, stanza, dataDir);
 }
 
-void hcaStormToBundles(char *inTags, char *dataFileDir, char *outDir)
+void hcaStormToBundles(char *inTags, char *dataUrl, char *outDir)
 /* hcaStormToBundles - Convert a HCA formatted tagStorm to a directory full of bundles.. */
 {
 /* Check that have full path name for dataFileDir */
-if (sameString("urls", dataFileDir))
+if (sameString("urls", dataUrl))
    gUrls = TRUE;
-else if (dataFileDir[0] != '/')
-    errAbort("data file directory must be an absolute path starting with /");
+else if (!stringIn("://", dataUrl))
+    errAbort("data file directory must be a url.");
 
 /* Load up tagStorm and get leaf list */
 struct tagStorm *storm = tagStormFromFile(inTags);
@@ -364,29 +440,9 @@ struct slName *topEl;
 struct subObj *objList = NULL;
 for (topEl = topLevelList; topEl != NULL; topEl = topEl->next)
     {
-    verbose(2, "topEl %s\n", topEl->name);
+    verbose(1, "  %s\n", topEl->name);
     struct subObj *obj = makeSubObj(allFields, topEl->name, topEl->name);
     slAddHead(&objList, obj);
-    }
-verbose(1, "Made %d top level objects\n", slCount(objList));
-
-/* Figure out all files in dataFileDir and make a hash keyed by name
- * with full path as values */
-struct hash *fileHash = NULL;
-if (!gUrls)
-    {
-    struct slName *dataFileList = pathsInDirAndSubdirs(dataFileDir, "*");
-    verbose(1, "Got %d files in %s\n", slCount(dataFileList), dataFileDir);
-    struct slName *file;
-    fileHash = hashNew(0);
-    for (file = dataFileList; file != NULL; file = file->next)
-	{
-	char name[FILENAME_LEN], extension[FILEEXT_LEN];
-	char fileName[PATH_LEN];
-	splitPath(file->name, NULL, name, extension);
-	safef(fileName, sizeof(fileName), "%s%s", name, extension);
-	hashAdd(fileHash, fileName, file->name);
-	}
     }
 
 /* Loop through stanzas making bundles */
@@ -409,32 +465,16 @@ for (ref = refList; ref != NULL; ref = ref->next)
     makeDir(bundleDir);
 
     /* Make symbolic link of all files */
-    if (!gUrls)
-	{
-	char *fileName, *csvPos = fileCsv;
-	struct dyString *csvScratch = dyStringNew(0);
-	while ((fileName = csvParseNext(&csvPos, csvScratch)) != NULL)
-	    {
-	    /* Figure out destination path for symbolic link */
-	    char destPath[PATH_LEN];
-	    safef(destPath, sizeof(destPath), "%s/%s", bundleDir, fileName);
-
-	    /* Figure out source path using fileHash.  We'll check that the
-	     * file name is unique within the hash to avoid ambiguity. */
-	    struct hashEl *hel = hashLookup(fileHash, fileName);
-	    if (hel == NULL)
-		errAbort("%s is not found in %s", fileName, dataFileDir);
-	    if (hashLookupNext(hel))
-		errAbort("%s occurs in multiple subdirectories of %s, can't figure out which to use",
-		    fileName, dataFileDir);
-	    char *sourcePath = hel->val;
-
-	    /* And make the link */
-	    makeSymLink(sourcePath, destPath);
-	    }
+    char localUrl[PATH_LEN*2];
+    if (gUrls)
+        {
+	struct slName *fileList = tagMustFindValList(stanza, "assay.files");
+	splitPath(fileList->name, localUrl, NULL, NULL);
+	dataUrl = localUrl;
+	slFreeList(&fileList);
 	}
 
-    makeBundleJson(bundleDir, stanza, objList);
+    makeBundleJson(bundleDir, stanza, objList, dataUrl);
     }
 verbose(1, "wrote json files into %s/bundle* dirs\n", outDir);
 }
