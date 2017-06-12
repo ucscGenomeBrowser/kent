@@ -40,6 +40,7 @@ series.relation_SRA https://www.ncbi.nlm.nih.gov/sra?term=SRP018525
 	platform.data_row_count 0
 
 		sample.title mouse pronuclei 1
+		sample.donor.id mouse pronuclei 1
 		sample.geo_accession GSM1080197
 		sample.status Public on Jul 29 2013
 		sample.submission_date Feb 08 2013
@@ -79,6 +80,7 @@ series.relation_SRA https://www.ncbi.nlm.nih.gov/sra?term=SRP018525
 		sample.data_row_count 0
 
 		sample.title mouse oocyte 2
+		sample.donor.id mouse oocyte 2
 		sample.geo_accession GSM1080196
 		sample.status Public on Jul 29 2013
 		sample.submission_date Feb 08 2013
@@ -118,6 +120,7 @@ series.relation_SRA https://www.ncbi.nlm.nih.gov/sra?term=SRP018525
 		sample.data_row_count 0
 
 		sample.title mouse oocyte 1
+		sample.donor.id mouse oocyte 1
 		sample.geo_accession GSM1080195
 		sample.status Public on Jul 29 2013
 		sample.submission_date Feb 08 2013
@@ -170,6 +173,7 @@ series.relation_SRA https://www.ncbi.nlm.nih.gov/sra?term=SRP018525
 	platform.data_row_count 0
 
 		sample.title human morula 5
+		sample.donor.id human morula 5
 		sample.geo_accession GSM1160140
 		sample.status Public on Jul 29 2013
 		sample.submission_date Jun 11 2013
@@ -209,6 +213,7 @@ series.relation_SRA https://www.ncbi.nlm.nih.gov/sra?term=SRP018525
 		sample.data_row_count 0
 
 		sample.title human morula 4
+		sample.donor.id human morula 4
 		sample.geo_accession GSM1160139
 		sample.status Public on Jul 29 2013
 		sample.submission_date Jun 11 2013

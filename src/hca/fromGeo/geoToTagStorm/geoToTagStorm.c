@@ -113,7 +113,10 @@ while (lineFileNext(lf, &line, NULL))
 	    errAbort("Expecting = but got %s line %d of %s", equ, lf->lineIx, lf->fileName);
 	char *val = skipLeadingSpaces(line);
 	if (isEmpty(val))
-	    errAbort("Nothing after = line %d of %s", lf->lineIx, lf->fileName);
+	    {
+	    verbose(2, "Nothing after = line %d of %s", lf->lineIx, lf->fileName);
+	    continue;
+	    }
 	char outputTag[256];
 
 	/* Write out the tag name, simple for most tags, but data_processing and 

@@ -144,6 +144,7 @@ char *substitutions[][2] =
 {"sdrf.Comment_Sample_description", "sample.short_label",}, 
 {"sdrf.Comment_Sample_source_name", "sample.body_part.source_name",}, 
 {"sdrf.Comment_Sample_title", "sample.long_label",}, 
+{"sdrf.Factor_Value_individual", "sample.donor.id",},
 {"sdrf.Source_Name", "sample.submitted_id",}, 
 };
 
@@ -493,6 +494,10 @@ replaceWithFirstChoice(storm, leafList, moleculeTags,ArraySize(moleculeTags), "a
 
 /* Add in donor IDs */
 addDonorIds(storm, leafList);
+
+/* Add a project level UUID */
+char projectUuid[37];
+tagStanzaAppend(storm, storm->forest, "project.uuid",  makeUuidString(projectUuid));
 
 /* Deal with protocols. */
 reformatProtocols(storm, leafList);
