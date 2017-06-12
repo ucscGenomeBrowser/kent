@@ -139,7 +139,7 @@ safef(versionQuery, sizeof versionQuery, "%s%s", query, version);
 sr = sqlGetResult(conn, versionQuery);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct genePred *gp = genePredLoad(&row[1]);
+    struct genePred *gp = genePredExtLoad(&row[1], 15);
 
     slAddHead(&gpList, gp);
     }
@@ -150,7 +150,7 @@ slReverse(&gpList);
 return gpList;
 }
 
-static void writeOutOneKnownGene(FILE *f, struct genePred *gp, struct hashes *hashes)
+static void writeOutOneKnownGeneNoNl(FILE *f, struct genePred *gp, struct hashes *hashes)
 {
 
 char buffer[1024];
@@ -170,6 +170,11 @@ fprintf(f, "\t");
 for (i=0; i<gp->exonCount; ++i)
     fprintf(f, "%d,", gp->exonEnds[i]);
 fprintf(f, "\t");
+}
+
+static void writeOutOneKnownGene(FILE *f, struct genePred *gp, struct hashes *hashes)
+{
+writeOutOneKnownGeneNoNl(f, gp, hashes);
 char *uniProt = (char *)hashFindVal(hashes->genToUniProt, gp->name);
 if (uniProt != NULL)
     fprintf(f, "%s\t", uniProt);
@@ -177,6 +182,22 @@ else
     fputs("\t", f);
 fprintf(f, "%s\n", gp->name);
 }
+
+static void writeOutOneKnownGeneExt(FILE *f, struct genePred *gp, struct hashes *hashes)
+{
+writeOutOneKnownGeneNoNl(f, gp, hashes);
+fprintf(f, "0\t%s\t", gp->name);
+fprintf(f, "%s\t", genePredCdsStatStr(gp->cdsStartStat));
+fprintf(f, "%s\t", genePredCdsStatStr(gp->cdsEndStat));
+int i;
+for (i=0; i< gp->exonCount; ++i)
+    {
+    fprintf(f, "%d",  gp->exonFrames[i]);
+    fputc(',', f);
+    }
+fputs("\n", f);
+}
+
 
 static struct rgbColor black = {0,0,0};
 static struct rgbColor trueBlue = {12,12,120};
@@ -233,12 +254,15 @@ static void outputKnownGene( struct genePred *compGenePreds, struct hashes *hash
 {
 struct genePred *gp;
 FILE *f = mustOpen("knownGene.gp", "w");
+FILE *fx = mustOpen("knownGeneExt.gp", "w");
 
 for (gp = compGenePreds; gp; gp = gp->next)
     {
     writeOutOneKnownGene(f, gp, hashes);
+    writeOutOneKnownGeneExt(fx, gp, hashes);
     }
 fclose(f);
+fclose(fx);
 }
 
 static char *descriptionFromAcc(struct sqlConnection *conn, char *acc)
