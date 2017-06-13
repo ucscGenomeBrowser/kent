@@ -59,7 +59,12 @@ Clicking on an item in the track display takes you to a page that includes a gen
 interaction graph with detailed information on the directionality and support
 for the various interactions displayed. The graph is initially centered on the
 gene clicked in the track display, with this gene highlighted in
-yellow. [image here?] By default, only the top 25 best supported interactions
+yellow. For example, you can see that the primary gene &quot;SOD1&quot; is
+highlighted in yellow in this image:</p>
+<p><img class='text-center' src="../../images/hgGeneGraph.png" alt="Gene Interaction Graph"
+width="50%" height="50%"></p>
+<p>
+By default, only the top 25 best supported interactions
 are displayed, but this number can be increased, decreased or filtered using
 the controls above the image. The interaction display can be filtered using
 the drop-down menu to display subsets by their support:
@@ -74,9 +79,7 @@ the drop-down menu to display subsets by their support:
 <p>
 Genes in the interaction graph are connected by a number different types of
 lines, with each type of line and the line properties themselves indicating
-different levels of support from text mining and databases. [image here?]
-</p>
-
+different levels of support from text mining and databases.
 <ul>
   <li>Solid grey lines - only text-mining support for this interaction, with the thickness of the
       line indicating the number of articles supporting it.</li>
@@ -89,6 +92,11 @@ different levels of support from text mining and databases. [image here?]
   </ul>
   <li>Solid blue lines - both databases and text mining support this interaction</li>
 </ul>
+<p>
+Here you can see nearly all of these lines types in a gene interaction graph centered
+around the ROBO3 gene:</p>
+<p><img class='text-center' src="../../images/hgGeneGraphLineDemo.png"
+alt="Gene Interaction Graph Line Types" width="40%" height="40%"></p>
 
 <p>
 Lines may include arrows showing the directionality of this interaction. In
@@ -112,26 +120,42 @@ sliding scale from light grey to black, with those items with the highest
 expression or the largest number of non-silent mutations being colored the
 darkest and those with lower expression or fewer mutations being colored grey.
 Genes will be colored dark blue if there is no information in the database.
-[image here?]
-</p>
+In this image you can see a set of genes that interaction with TP53
+colored by</p>
+<p><img class='text-center' src="../../images/hgGeneGraphAnnotateDemo.png"
+alt="Gene Interaction Graph 'Annotate Genes' Example" width="40%" height="40%"></p>
 
 <p>
 You can mouse-over items in the display to show more details about the gene
-such as their product. [image here?] If you've chosen to annotate genes with
+such as their product. If you've chosen to annotate genes with
 one of the various databases, then it will display that information as well.
+For example, hovering over the BAX gene in this exaple displays a description
+of the gene product as wells as the number of Pan-Cancer mutations since that
+option is selected:
+<p><img class='text-center' src="../../images/hgGeneGraphItemHover.png"
+alt="Gene Interaction Graph Item Hover Example" width="30%" height="30%"></p>
+<p>
 You can mouse-over the connecting lines between genes to see more details about
-the evidence that supports this connection. [image here?] If you click on the
-line connecting two proteins, you can see a
+the evidence that supports this connection.</p>
+If you click on the line connecting two proteins, you can see a
 <a href='http://www4.ncsu.edu/~mbcusick/papers/nenkova2005impact.pdf'
 target="_blank">SumBasic</a>-selected
 snippet of text from a Pubmed abstract and, if it is a curated interaction, the
-supporting information from the pathway or interaction databases.
+supporting information from the pathway or interaction databases. In this image,
+you can see the details that pop-up when you mouse over such a line; information
+displayed includes database support and text-mining support.
 </p>
+<p><img class='text-center' src="../../images/hgGeneGraphLineHover.png"
+alt="Gene Interaction Graph Line Hover Example" width="30%" height="30%"></p>
 
 <p>
 Below the graph of gene interactions and pathways, there is table of less
 supported interactions. These are interactions which were mentioned only a few
-times each in the literature. [image here?] The numbers shown on mouse-over for
+times each in the literature.</p>
+<p><img class='text-center' src="../../images/hgGeneGraphExtraInteractionsTable.png"
+alt="Gene Interaction Graph Extra Interactions" width="75%" height="75%"></p>
+<p>
+The numbers shown on mouse-over for
 each interaction represents the number of articles and number of databases that
 support this interaction.
 </p>
