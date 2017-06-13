@@ -1505,7 +1505,7 @@ def printDbRows(conn, rows, onlyDoc=None):
                 print "(%s)" % (relSubtype)
 
         if onlyDoc==None and len(docSet)!=0:
-                if len(desc)>25:
+                if desc is not None and len(desc)>25:
                     print "<br>"
                 print prettyDocLinks(conn, sorted(docSet))
 
