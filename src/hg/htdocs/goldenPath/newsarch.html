@@ -44,6 +44,37 @@
 
 <!-- ============= 2017 archived news ============= -->
 <a name="2017"></a>
+<a name="061317"></a>
+<h2>Jun. 13, 2017 &nbsp;&nbsp; New barChart track format</h2>
+<p>
+Are you loving the 
+<a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&gtexGene=pack&position=chr9%3A133255602-133275214">
+GTEx track</a> and want to make a similar barChart display track for yourself? Are you wondering
+how you can get boxplots of data points to show up on track item 
+<a href="../../cgi-bin/hgc?db=hg38&c=chr9&l=133255601&r=133275214&o=133257408&t=133275201&g=gtexGene&i=ABO">
+details pages</a>? Well, look no
+further as we have just released support for a GTEx style 
+<a href="help/barChart.html">barChart track format</a>. This new track format is
+available for use with custom tracks, and in binary format (bigBarChart) for use in track hubs. 
+Both barChart and bigBarChart formats support external matrix and sample files specifying data 
+points for a boxplot display on details pages, while the barChart/bigBarChart file typically 
+specifies summary values (mean or median) over the matrix, which determines the bar heights. See 
+the <a href="help/barChart.html">documentation</a> for further explanation and examples. 
+</p>
+
+<p>
+Along with the release of this new track format are some tools that help to create the tracks,
+<code>expMatrixToBarchartBed</code> and <code>bedJoinTabOffset</code>. Both utilities are free for
+all use cases, and can be downloaded from our <a href="http://hgdownload.soe.ucsc.edu/admin/exe">
+directory of utilities</a>. For more information about this new track format and helper scripts, 
+please see the <a href="help/barChart.html">help documentation</a>.
+</p>
+
+<p>
+Thanks to Kate Rosenbloom, Christopher Eisenhart and Christopher Lee for the development
+and testing of this new track format. 
+</p>
+
 <a name="060817"></a>
 <h2>Jun. 8, 2017 &nbsp;&nbsp; New command line tool for annotating variants, vai.pl</h2>
 <p>

@@ -1770,6 +1770,12 @@ if [[ "$#" -gt "1" && ( "${2:0:1}" == "-" ) || ( "${lastArg:0:1}" == "-" )  ]]; 
   exit 1
 fi
 
+if uname -m | grep -vq _64; then
+  echo "Your machine does not seem to be a 64bit system"
+  echo "Sorry, the Genome Browser requires a 64bit linux."
+  exit 1
+fi
+
 if [[ "$EUID" != "0" ]]; then
   echo "This script must be run as root or with sudo like this:"
   echo "sudo -H $0"
