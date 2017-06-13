@@ -53,7 +53,7 @@ alternatives before embarking on a full UCSC Genome Browser installation directl
 
     [Genome Browser in a Box](https://genome.ucsc.edu/goldenPath/help/gbib.html) (GBiB): 
     is a fully configured virtual machine that includes
-    Apache and MySQL, and has behavior identifical to the UCSC website.
+    Apache and MySQL, and has behavior identical to the UCSC website.
     GBiB loads genome data from the UCSC download servers on the fly.
     Website and data updates are applied automatically every two weeks. By default, GBiB
     uses the VirtualBox virtualization software, so it can be run on any
