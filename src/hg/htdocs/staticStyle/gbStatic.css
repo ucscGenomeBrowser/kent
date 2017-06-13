@@ -326,11 +326,11 @@ requires: jQuery.js and bootstrap.js
 
 .collapse-section .collapse-toggle {
     text-decoration: none;
-    margin: 15px 12px 0 15px;   /* same as paragraph */
+    margin: 15px 12px 0 0;
 }
 
-p.collapse-section .collapse-toggle {
-    margin-left: 0px;
+div.collapse-section .collapse-toggle {
+    margin-left: 15px;  /* same as paragraph */
 }
 
 .collapse-section .collapse-toggle:after {
