@@ -589,6 +589,10 @@ struct psl *bamToPslUnscored(const bam1_t *bam, const bam_hdr_t *hdr)
  * no scoring info) */
 {
 const bam1_core_t *core = &bam->core;
+
+if (core->tid == -1)
+    return NULL;
+
 struct psl *psl;
 AllocVar(psl);
 boolean isRc = (core->flag & BAM_FREVERSE);
