@@ -4274,7 +4274,7 @@ AutoSQL file that defines the fields.  The resulting files are in an indexed bin
 that supports efficient remote access, so the file can be hosted on your web accessible server
 and displayed at UCSC.
 For the complete bigBarChart format definitions please see the
-    <A HREF="../bigBarChart.html">bigBarChart help page</A>.</P>
+    <A HREF="../barChart.html">bigBarChart help page</A>.</P>
 </DIV>
 
 <DIV class="barChartUnit"><span class="types bigBarChart"></span>
