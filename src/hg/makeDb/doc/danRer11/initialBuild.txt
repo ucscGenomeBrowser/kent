@@ -713,8 +713,58 @@ searchPriority 8
     cat fb.danRer11.genscanSubopt.txt
     # 45875776 bases of 1674677181 (2.739%) in intersection
 
+#############################################################################
+# lastz/chain/net swap human/hg38 (TBD - 2017-03-30 - Chris)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzXenTro9.2017-03-29
+
+    cat fb.hg38.chainXenTro9Link.txt
+    # 117720401 bases of 3049335806 (3.861%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/xenTro9/bed/blastz.hg38.swap
+    cd /hive/data/genomes/xenTro9/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzXenTro9.2017-03-29/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    61m0.707s
+
+    cat fb.xenTro9.chainHg38Link.txt
+    # 108900066 bases of 1369865365 (7.950%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 hg38) \
+       > rbest.log 2>&1
+    # real    749m24.229s
+
+#############################################################################
+# lastz/chain/net swap mouse/mm10 (TBD - 2017-03-30 - Chris)
+
+    cd /hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29
+    cat fb.mm10.chainXenTro9Link.txt
+    #	87053836 bases of 2652783500 (3.282%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/xenTro9/bed/blastz.mm10.swap
+    cd /hive/data/genomes/xenTro9/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
+	> swap.log 2>&1 &
+    #	real    53m19.485s
+
+    cat  fb.xenTro9.chainMm10Link.txt
+    #	90150612 bases of 1369865365 (6.581%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 mm10) \
+         > rbest.log 2>&1 &
+    #	real    597m52.740s
+
 #########################################################################
-# Create kluster run files (TBD - 2016-04-14 - Chris)
+# Create kluster run files (DONE - 2017-06-08 - Chris)
 
     # numerator is danRer11 gapless bases "real" as reported by:
     featureBits -noRandom -noHap danRer11 gap
@@ -785,11 +835,10 @@ danRer11.downloadDir = danRer11
 
     time ./bin/gbAlignStep -initial danRer11
 	# logFile: var/build/logs/2017.06.07-13:49:34.danRer11.initalign.log
-    XXX-Running 2017-06-07
-	#   real    5678m9.548s
-    tail var/build/logs/2016.04.15-09:58:43.danRer11.initalign.log
-    #    hgwdev 2016.04.19-08:29:59 danRer11.initalign: Succeeded: danRer11
-    #    hgwdev 2016.04.19-08:36:52 danRer11.initalign: finish
+	# real    2983m0.012s
+	tail var/build/logs/2017.06.07-13:49:34.danRer11.initalign.log
+    # hgwdev 2017.06.09-15:24:14 danRer11.initalign: Succeeded: danRer11
+	# hgwdev 2017.06.09-15:32:33 danRer11.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.danRer11
@@ -798,7 +847,9 @@ danRer11.downloadDir = danRer11
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad danRer11
-    # var/dbload/hgwdev/logs/2016.04.19-08:38:37.danRer11.dbload.log
+    XXX - Running 2017-06-12
+	
+	# var/dbload/hgwdev/logs/2016.04.19-08:38:37.danRer11.dbload.log
     #  real    195m36.119s
     tail -1 var/dbload/hgwdev/logs/2016.04.19-08:38:37.danRer11.dbload.log
     #  hgwdev 2016.04.19-11:54:13 danRer11.dbload: finish
@@ -814,7 +865,7 @@ danRer11.downloadDir = danRer11
     make etc-update
 
 #############################################################################
-# augustus gene track (TBD - 2016-04-14 - Chris)
+# augustus gene track (DONE - 2017-06-09 - Chris)
 
     mkdir /hive/data/genomes/danRer11/bed/augustus
     cd /hive/data/genomes/danRer11/bed/augustus
@@ -823,7 +874,8 @@ danRer11.downloadDir = danRer11
            -workhorse=hgwdev danRer11) > do.log 2>&1
 
     cat fb.danRer11.augustusGene.txt
-    # 25248650 bases of 100286401 (25.177%) in intersection
+	# 53437277 bases of 1674677181 (3.191%) in intersection
+
 
 #########################################################################
 # ncbiRefSeq (TBD - 2016-05-13 - Chris)
@@ -860,18 +912,46 @@ danRer11.downloadDir = danRer11
     #    enrich 14.68x
 
 #########################################################################
-# LIFTOVER TO danRer10 (TBD - 2016-04-15 - Chris)
+# add chromAlias table (DONE for genbank- 2017-06-09 - Chris)
+
+    mkdir /hive/data/genomes/danRer11/bed/chromAlias
+    cd /hive/data/genomes/danRer11/bed/chromAlias
+
+	# Put the chrM for refseq in manually. 
+    #hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' danRer11 \
+    #    > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' danRer11 \
+        > ucsc.genbank.tab
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > danRer11.chromAlias.tab
+
+    hgLoadSqlTab danRer11 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        danRer11.chromAlias.tab
+
+#########################################################################
+# LIFTOVER TO danRer7 (WORK - 2017-06-12 - Chris)
     ssh hgwdev
-    mkdir /hive/data/genomes/danRer11/bed/blat.danRer10.2016-04-15
-    cd /hive/data/genomes/danRer11/bed/blat.danRer10.2016-04-15
-    doSameSpeciesLiftOver.pl -verbose=2 \
-        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/danRer11/jkStuff/danRer11.11.ooc \
-         danRer11 danRer10
+    mkdir /hive/data/genomes/danRer11/bed/blat.danRer7.2017-06-09
+    cd /hive/data/genomes/danRer11/bed/blat.danRer7.2017-06-09
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/danRer11/jkStuff/danRer11.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         danRer10 danRer7) > do.log 2>&1
+    # real    253m49.880s
+
+    # verify the convert link on the test browser is now active from danRer10 to
+    # danRer7
+
+#########################################################################
+# LIFTOVER TO danRer10 (DONE - 2017-06-12 - Chris)
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer11/bed/blat.danRer10.2017-06-09
+    cd /hive/data/genomes/danRer11/bed/blat.danRer10.2017-06-09
     time (doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/danRer11/jkStuff/danRer11.11.ooc \
-         danRer11 danRer10) > doLiftOverToGalGal4.log 2>&1
+         danRer11 danRer10) > doLiftOverToDanRer10.log 2>&1
     # real    86m43.038s
 
     # see if the liftOver menus function in the browser from danRer11 to danRer10
@@ -897,7 +977,7 @@ danRer11.downloadDir = danRer11
 	where name="danRer11";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2016-05-13 - Chris)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-06-09 - Chris)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=danRer11 -tableCoverage all.joiner
@@ -908,22 +988,22 @@ danRer11.downloadDir = danRer11
     time (makeDownloads.pl danRer11) > downloads.log 2>&1
     #  real    27m1.207s
 
+
+	# New Redmine pushQ System
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/danRer11/pushQ
     cd /hive/data/genomes/danRer11/pushQ
     time (makePushQSql.pl danRer11) > danRer11.pushQ.sql 2> stderr.out
-    #  real    7m21.629s
+    #real	3m32.847s
 
-   71 danRer11.pushQ.sql
-   43 stderr.out
-  114 total
+	59  372 5799 danRer11.pushQ.sql
+	38  298 1971 stderr.out
 
     #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: hgwdev does not have /gbdb/danRer11/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/danRer11/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/danRer11/bbi/quality.bw
-    # WARNING: danRer11 does not have seq
-    # WARNING: danRer11 does not have extFile
+    # WARNING: danRer11 does not have cpgIslandExt
+	# WARNING: danRer11 does not have ucscToRefSeq
+	# WARNING: danRer11 does not have seq
+	# WARNING: danRer11 does not have extFile
 
     #   copy it to hgwbeta
     scp -p danRer11.pushQ.sql qateam@hgwbeta:/tmp/
