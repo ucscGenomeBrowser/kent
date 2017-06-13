@@ -3365,7 +3365,7 @@ type bigBed 9
 itemRgb on
 exonNumbers off
 noScoreFilter on
-release alpha,beta
+#release alpha,beta
 # draw the name field directly over the feature
 labelOnFeature on
 # linkIdInName means that the first part of the "name" field (space-separated) is the ID used for the %s parameter in directUrl
