@@ -1049,6 +1049,19 @@ slReverse(&list);
 return list;
 }
 
+void tagStormTraverse(struct tagStorm *storm, struct tagStanza *stanzaList, void *context,
+    void (*doStanza)(struct tagStorm *storm, struct tagStanza *stanza, void *context))
+/* Traverse tagStormStanzas recursively applying doStanza with to each stanza in
+ * stanzaList and any children.  Pass through context */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    (*doStanza)(storm, stanza, context);
+    tagStormTraverse(storm, stanza->children, context, doStanza);
+    }
+}
+    
 
 static void rListLeaves(struct tagStanza *list, struct tagStanzaRef **pList)
 /* Recursively add leaf stanzas to *pList */
