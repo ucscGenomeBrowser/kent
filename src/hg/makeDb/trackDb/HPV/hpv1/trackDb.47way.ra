@@ -1,0 +1,108 @@
+track cons47way
+compositeTrack on
+shortLabel 47 strains
+longLabel Multiz Alignment & Conservation (47 HPV strains)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility hide
+priority 1
+type bed 4
+group compGeno
+
+    track cons47wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons47way
+
+        track multiz47way
+        subTrack cons47wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Genome Alignments of 47 HPV viral strains
+        subGroups view=align
+        noInherit on
+#        irows on
+#        summary multiz47waySummary
+        frames multiz47wayFrames
+#        frames testAllFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        mafDot on
+	snpTable mafSnp47way
+	mafShowSnp on
+#	snpMode on
+        type wigMaf 0.0 1.0
+        speciesCodonDefault hpv1
+        speciesGroups Others
+        sGroup_Others NC_001576v1 NC_001593v1 NC_001355v1 NC_001595v1 NC_001587v1 NC_001583v1 NC_001586v1 NC_005134v2 NC_001591v1 NC_004500v1 NC_001596v1 NC_001531v1 NC_001458v1 NC_012213v1 NC_008189v1 NC_008188v1 NC_012485v1 NC_001354v1 NC_001457v1 NC_017997v1 NC_001693v1 NC_010329v1 NC_027528v1 NC_022095v1 NC_017993v1 NC_012486v1 NC_027779v1 NC_017994v1 NC_017996v1 NC_021483v1 NC_016157v1 NC_014953v1 NC_023891v1 NC_014185v1 NC_014956v1 NC_014952v1 NC_017995v1 NC_022892v1 NC_019023v1 NC_014954v1 NC_014469v1 NC_001691v1 NC_013035v1 NC_026946v1 NC_001690v1 NC_014955v1
+        itemFirstCharCase noChange
+        priority 100
+        treeImage phylo/hpv1_47way.png
+
+    # PhyloP conservation
+    track cons47wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons47way
+    viewLimits -3:0.5
+    viewLimitsMax -4.611:0.934
+
+        track phyloP47way
+        subTrack cons47wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel PhyloP
+        longLabel 47 HPV viral strains Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -4.711 0.934
+        maxHeightPixels 100:50:11
+        viewLimits -3.107:0.934
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons47wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons47way
+
+        track phastCons47way
+        subTrack cons47wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel PhastCons
+        longLabel 47 HPV viral strains Basewise Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons47wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons47way
+
+        track phastConsElements47way
+        subTrack cons47wayViewelements on
+        subGroups view=elements
+        shortLabel Cons. Elements
+        longLabel 47 HPV viral strains Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
