@@ -7,7 +7,6 @@
 #include "localmem.h"
 #include "tagStorm.h"
 #include "csv.h"
-#include "uuid.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -377,6 +376,7 @@ for (leaf = leafList; leaf != NULL; leaf = leaf->next)
 
 }
 
+#ifdef OLD
 void addDonorIds(struct tagStorm *storm, struct tagStanzaRef *leafList)
 /* Assign a uuid to each sample.donor.id, and then add it to leaf stanzas
  * as sample.donor.uuid. */
@@ -414,6 +414,7 @@ for (leaf = leafList; leaf != NULL; leaf = leaf->next)
     }
 
 }
+#endif /* OLD */
 
 boolean prefixedNumerical(char *prefix, char *acc)
 /* Return TRUE if acc starts with prefix and is followed by all numbers */
@@ -492,12 +493,14 @@ replaceWithFirstChoice(storm, leafList, cellTypeTags,ArraySize(cellTypeTags), "c
 replaceWithFirstChoice(storm, leafList, diseaseTags,ArraySize(diseaseTags), "sample.donor.disease");
 replaceWithFirstChoice(storm, leafList, moleculeTags,ArraySize(moleculeTags), "assay.seq.molecule");
 
+#ifdef OLD
 /* Add in donor IDs */
 addDonorIds(storm, leafList);
 
 /* Add a project level UUID */
 char projectUuid[37];
 tagStanzaAppend(storm, storm->forest, "project.uuid",  makeUuidString(projectUuid));
+#endif /* OLD */
 
 /* Deal with protocols. */
 reformatProtocols(storm, leafList);

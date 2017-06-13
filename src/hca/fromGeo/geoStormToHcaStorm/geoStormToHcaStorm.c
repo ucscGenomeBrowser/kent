@@ -7,7 +7,6 @@
 #include "obscure.h"
 #include "tagStorm.h"
 #include "csv.h"
-#include "uuid.h"
 
 struct hash *gSrxToSrr;
 
@@ -228,19 +227,6 @@ dyStringFree(&srrDy);
 
 }
 
-void tagStormTraverse(struct tagStorm *storm, struct tagStanza *stanzaList, void *context,
-    void (*doStanza)(struct tagStorm *storm, struct tagStanza *stanza, void *context))
-/* Traverse tagStormStanzas recursively applying doStanza with to each stanza in
- * stanzaList and any children.  Pass through context */
-{
-struct tagStanza *stanza;
-for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
-    {
-    doStanza(storm, stanza, context);
-    tagStormTraverse(storm, stanza->children, context, doStanza);
-    }
-}
-    
 void rFixAccessions(struct tagStorm *storm, struct tagStanza *list)
 /* Go through and fix accessions in all stanzas */
 {
@@ -253,8 +239,16 @@ void fixDates(struct tagStorm *storm, struct tagStanza *stanza, void *context)
 struct slPair *pair;
 for (pair = stanza->tagList; pair != NULL; pair = pair->next)
     {
-    if (endsWith(pair->name, "_date"))
-	geoDateToHcaDate(pair->val, pair->val, strlen(pair->val)+1);
+    char *name = pair->name;
+    char *val = pair->val;
+    if (endsWith(name, "_date"))
+	geoDateToHcaDate(val, val, strlen(val)+1);
+    else if (sameString(name, "series.status") || sameString(name, "sample.status"))
+        {
+	char *pat = "Public on ";
+	if (startsWith(pat, val))
+	    geoDateToHcaDate(val + strlen(pat), val, strlen(val)+1);
+	}
     }
 }
 
@@ -337,6 +331,7 @@ dyStringFree(&protocol);
 dyStringFree(&type);
 }
 
+#ifdef OLD
 void addDonorIds(struct tagStorm *storm, struct tagStanzaRef *leafList)
 /* Assign a uuid to each sample.donor.id, and then add it to leaf stanzas
  * as sample.donor.uuid. */
@@ -374,6 +369,7 @@ for (leaf = leafList; leaf != NULL; leaf = leaf->next)
     }
 
 }
+#endif /* OLD */
 
 void geoStormToHcaStorm(char *inTags, char *inSrxSrr, char *output)
 /* geoStormToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
@@ -401,6 +397,7 @@ tagStormWeedArray(storm, protoWeeds, ArraySize(protoWeeds));
 /* Do simple subsitutions. */
 tagStormSubArray(storm, substitutions, ArraySize(substitutions));
 
+#ifdef OLD
 /* Add a project level UUID */
 char projectUuid[37];
 tagStanzaAppend(storm, storm->forest, "project.uuid",  makeUuidString(projectUuid));
@@ -408,6 +405,7 @@ tagStanzaAppend(storm, storm->forest, "project.uuid",  makeUuidString(projectUui
 /* Add in donor IDs */
 struct tagStanzaRef *leafList = tagStormListLeaves(storm);
 addDonorIds(storm, leafList);
+#endif /* OLD */
 
 /* Save results */
 tagStormWrite(storm, output, 0);
