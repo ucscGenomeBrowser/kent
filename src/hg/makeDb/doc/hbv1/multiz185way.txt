@@ -1,0 +1,294 @@
+#########################################################################
+# fetch sequences from Entrez  (DONE - 2017-06-07 - Hiram)
+
+mkdir /hive/data/genomes/hbv1/bed/multipleAlignment
+cd /hive/data/genomes/hbv1/bed/multipleAlignment
+
+# obtain list of accessions with the search in Nucleotide:
+#    Hepatitis B complete
+#  set limit to 200 (the maximum), view 'accessions'
+#    screen scrape the list into the file:
+#	accession.list
+
+head accession.list 
+AF384372.1
+AF384371.1
+... etc ...
+
+# running this script to fetch this set:
+
+#!/bin/sh
+
+mkdir fasta gbk
+cat accession.list | while read acc
+do
+wget -O fasta/${acc}.fa \
+   "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$acc"
+wget -O gbk/${acc}.gbk \
+  "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=gb&sendto=on&id=$acc"
+done
+
+# create a fasta file of them all with simple names:
+
+cd fasta
+sed -e 's/ .*//;' *.fa > ../hbv120.fa
+cd /hive/data/genomes/hbv1/bed/multipleAlignment
+# check for duplicates
+faToTwoBit hbv120.fa 200.2bit
+twoBitDup 200.2bit 
+AB775201.1 and AB775200.1 are identical
+
+#########################################################################
+# lastz the 200 sequences (DONE - 2017-06-07 - Hiram)
+
+mkdir /hive/data/genomes/hbv1/bed/multipleAlignment/lastz
+cd /hive/data/genomes/hbv1/bed/multipleAlignment/lastz
+
+faToTwoBit ../hbv120.fa hbv120.2bit
+
+target="/hive/data/genomes/hbv1/hbv1.2bit"
+query="/hive/data/genomes/hbv1/bed/multipleAlignment/lastz/hbv120.2bit"
+axtResult="hbv1.hbv120.axt"
+pslResult="hbv1.hbv120.psl"
+
+twoBitInfo $target stdout | sort -k2nr > target.chrom.sizes
+twoBitInfo $query stdout | sort -k2nr > query.chrom.sizes
+
+/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz \
+  $target[multiple] $query H=2000 --format=axt+ > "${axtResult}"
+
+axtToPsl "${axtResult}" target.chrom.sizes query.chrom.sizes \
+    "${pslResult}"
+
+# only 185 sequences pass the pslScore test
+
+pslScore "${pslResult}" | awk '$5 > 2000' > filtered.2000
+
+cut -f4 filtered.2000 | sed -e 's/:.*//;' \
+  > filtered.query.in.order.txt
+
+# this listToTree.pl takes the ordered list of sequence names,
+# ordered by pslScore, highest first, and converts that to a binary
+# .nh tree format for multiz
+
+./listToTree.pl  > 185way.nh
+
+where listToTree.pl is:
+
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $treeDepth = 0;
+
+my $specCount = 0;
+
+my $nameCount = `cat filtered.query.in.order.txt | wc -l`;
+chomp $nameCount;
+
+my $treeOut = "NC_003977v2:0.1";
+++$treeDepth;
+
+open (FH, "<filtered.query.in.order.txt") or die "can not read filtered.query.in.order.txt";
+while (my $line = <FH>) {
+  chomp $line;
+  $line =~ s/\./v/;
+  if ($treeDepth < 2) {
+    $treeOut = sprintf("%s,%s:0.1):0.1,\n", $treeOut, $line);
+  } else {
+    if ($treeDepth < $nameCount) {
+      $treeOut = sprintf("%s%s:0.1):0.1,\n", $treeOut, $line);
+    } else {
+      for (my $i = 0; $i < $treeDepth; ++$i) {
+         printf "(";
+      }
+      printf "\n%s%s:0.1);\n", $treeOut, $line;
+    }
+  }
+  ++$treeDepth;
+}
+close (FH);
+
+#########################################################################
+# multiple alignment (DONE - 2017-06-07 - Hiram)
+
+    mkdir /hive/data/genomes/hbv1/bed/multipleAlignment/multiz
+    cd /hive/data/genomes/hbv1/bed/multipleAlignment/multiz
+
+    echo NC_003977v2 > species.list
+    cp -p ../lastz/185way.nh .
+    rm -f species.list
+    /cluster/home/hiram/kent/src/hg/utils/phyloTrees/speciesList.sh \
+        185way.nh | sed -e 's/\./v/;' >> species.list
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        185way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+# rearrange the axt results from the lastz run into maf files
+#   with appropriate target and query sequence names to work with 'multiz'
+
+export srcAxt="../lastz/hbv1.hbv120.axt"
+export targetSizes="../lastz/target.chrom.sizes"
+export querySizes="../lastz/query.chrom.sizes"
+
+axtSwap $srcAxt $targetSizes $querySizes swapped.hbv120.axt
+
+mkdir  queryAxt
+
+axtSplitByTarget swapped.hbv120.axt queryAxt
+
+mkdir  targetAxt
+
+for F in queryAxt/*.axt
+do
+   B=`basename $F`
+   axtSwap ${F} $querySizes $targetSizes targetAxt/${B}
+done
+
+mkdir queryMaf
+for F in targetMaf/*.axt
+do
+  B=`basename $F | sed -e 's/.axt/.maf/;'`
+  axtToMaf -qPrefix=qry -tPrefix=targ ${F} ${targetSizes} \
+   ${querySizes} queryMaf/${B}
+done
+
+mkdir  mafLinks
+for F in queryMaf/*.maf
+do
+  B=`basename $F | sed -e 's/.maf//;'`
+  noDots=`echo $B | sed -e 's/\./v/;'`
+  printf "%s\n" "${B}"
+  sed -e "s/targNC_003977v2/NC_003977v2.NC_003977v2/;
+s/qry${B}/${noDots}.${noDots}/;" ${F} > mafLinks/NC_003977v2.${noDots}.maf
+done
+
+mkdir /hive/data/genomes/hbv1/bed/multipleAlignment/multiz/run
+mkdir /hive/data/genomes/hbv1/bed/multipleAlignment/multiz/maf
+
+cd /hive/data/genomes/hbv1/bed/multipleAlignment/multiz/run
+mkdir penn
+cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+join <(sort ../species.list) <(ls ../mafLinks | sed -e 's/.maf//; s/NC_003977v2.//' | sort) > maf.list
+
+printf '#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/hbv1/bed/multipleAlignment/multiz/maf/$(root1).maf}
+#ENDLOOP
+' > template
+
+printf '#!/bin/csh -ef
+set db = NC_003977v2
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/hbv1/bed/multipleAlignment/multiz/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../tree.nh ../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/grep -v "$db" species.list`)
+    set in = $pairs/$db.$s.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+' > autoMultiz.csh
+
+chmod +x autoMultiz.csh
+
+ssh ku
+cd /hive/data/genomes/hbv1/bed/multipleAlignment/multiz/run
+gensub2 maf.list single template jobList
+para create jobList
+para try ... check ... push
+para time
+
+# Completed: 184 of 184 jobs
+# CPU time in finished jobs:      56969s     949.49m    15.82h    0.66d  0.002 y
+# IO & Wait Time:                   940s      15.66m     0.26h    0.01d  0.000 y
+# Average job time:                 315s       5.25m     0.09h    0.00d
+# Longest finished job:             320s       5.33m     0.09h    0.00d
+# Submission to last job:           643s      10.72m     0.18h    0.01d
+
+# back on hgwdev
+cd  /hive/data/genomes/hbv1/bed/multipleAlignment/multiz
+
+# put the results back together into a single file:
+head -1 maf/AB775198v1.maf > multiz185way.maf
+for F in maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F} | sed -e 's#^s \([A-Z0-9a-z_]*\)#s \1.\1#;'
+done | sed -e 's#^s NC_003977v2.NC_003977v2#s hbv1.NC_003977v2#;' \
+>> multiz185way.maf
+tail -1 maf/AB775198v1.maf >> multiz185way.maf
+
+printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $file = shift;
+
+open (FH, "<$file") or die "can not read $file";
+while (my $line = <FH>) {
+  if ($line =~ m/^s /) {
+    chomp $line;
+    my @a = split("\s+", $line);
+    if (scalar(@a) == 7) {
+      if ($a[1] !~ m/hbv1/) {
+        $a[1] = "$a[1].$a[1]";
+      }
+      $a[6] =~ s/\./-/g;
+      print join(" ", @a), "\\n";
+    } else {
+      die "ERROR: s line found not 7 fields ?";
+    }
+  } else {
+    printf "%%s", $line;
+  }
+}
+close (FH);
+' > dotToDash.pl
+
+chmod +x dotToDash.pl
+
+cd /hive/data/genomes/hbv1/bed/multipleAlignment/multiz
+mkdir /gbdb/hbv1/multiz185way
+ln -s `pwd`/multiz185way.maf /gbdb/hbv1/multiz185way/multiz185way.maf
+
+cd /dev/shm
+hgLoadMaf hbv1 multiz185way
+
+cd /hive/data/genomes/hbv1/bed/multipleAlignment/multiz
+mafFrag hbv1 multiz185way NC_003977v2 0 3182 + mafFrag.multiz185way.maf
+
+./dotToDash.pl mafFrag.multiz185way.maf > defraged.multiz185way.maf
+
+rm -f /gbdb/hbv1/multiz185way/multiz185way.maf
+ln -s `pwd`/defraged.multiz185way.maf /gbdb/hbv1/multiz185way/multiz185way.maf
+
+cd /dev/shm
+hgLoadMaf hbv1 multiz185way
+
+#########################################################################
