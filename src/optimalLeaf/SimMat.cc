@@ -144,8 +144,6 @@ float *SimMat::compStd(int tot,int c, int isGene) {
     }
     sum = sum/(float)num;
     if(sum == 0) {
-      cerr<<"Error! no variance for gene "<<i<<'\n';
-      cerr<<"The variance for gene "<<i<<" has been set to 1"<<'\n';
       sum = 1;
     }
     res[i] = sqrt(sum);
