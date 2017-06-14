@@ -108,6 +108,7 @@ if (!doCount)
 int matchCount = 0;
 struct lm *lm = lmInit(0);
 struct fieldedRow *row;
+int limit = rql->limit;
 for (row = gTable->rowList; row != NULL; row = row->next)
     {
     boolean pass = TRUE;
@@ -119,10 +120,11 @@ for (row = gTable->rowList; row != NULL; row = row->next)
 	}
     if (pass)
         {
-	if (doCount)
-	    ++matchCount;
-	else
+	++matchCount;
+	if (!doCount)
 	    {
+	    if (limit != 0 && matchCount > limit)
+	        break;
 	    char *sep = "";
 	    for (field = rql->fieldList; field != NULL; field = field->next)
 		{
