@@ -123,7 +123,7 @@ for (row = gTable->rowList; row != NULL; row = row->next)
 	++matchCount;
 	if (!doCount)
 	    {
-	    if (limit != 0 && matchCount > limit)
+	    if (limit > 0 && matchCount > limit)
 	        break;
 	    char *sep = "";
 	    for (field = rql->fieldList; field != NULL; field = field->next)
