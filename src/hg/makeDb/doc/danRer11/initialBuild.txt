@@ -722,8 +722,8 @@ searchPriority 8
     # 117720401 bases of 3049335806 (3.861%) in intersection
 
     # and for the swap:
-    mkdir /hive/data/genomes/xenTro9/bed/blastz.hg38.swap
-    cd /hive/data/genomes/xenTro9/bed/blastz.hg38.swap
+    mkdir /hive/data/genomes/danRer11/bed/blastz.hg38.swap
+    cd /hive/data/genomes/danRer11/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
       /hive/data/genomes/hg38/bed/lastzXenTro9.2017-03-29/DEF \
@@ -731,36 +731,37 @@ searchPriority 8
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
     #  real    61m0.707s
-
-    cat fb.xenTro9.chainHg38Link.txt
+	XXX - Running
+    cat fb.danRer11.chainHg38Link.txt
     # 108900066 bases of 1369865365 (7.950%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 hg38) \
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer11 hg38) \
        > rbest.log 2>&1
     # real    749m24.229s
 
 #############################################################################
 # lastz/chain/net swap mouse/mm10 (TBD - 2017-03-30 - Chris)
 
-    cd /hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29
-    cat fb.mm10.chainXenTro9Link.txt
-    #	87053836 bases of 2652783500 (3.282%) in intersection
+    cd /hive/data/genomes/mm10/bed/lastzDanRer11.2017-06-12
+    cat fb.mm10.chainDanRer11Link.txt
+    # 36448414 bases of 2652783500 (1.374%) in intersection
 
     #	and for the swap
-    mkdir /hive/data/genomes/xenTro9/bed/blastz.mm10.swap
-    cd /hive/data/genomes/xenTro9/bed/blastz.mm10.swap
+    mkdir /hive/data/genomes/danRer11/bed/blastz.mm10.swap
+    cd /hive/data/genomes/danRer11/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29/DEF \
+	/hive/data/genomes/mm10/bed/lastzDanRer11.2017-06-12/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
 	> swap.log 2>&1 &
     #	real    53m19.485s
 
-    cat  fb.xenTro9.chainMm10Link.txt
+    cat  fb.danRer11.chainMm10Link.txt
     #	90150612 bases of 1369865365 (6.581%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 mm10) \
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer11 mm10) \
          > rbest.log 2>&1 &
+	XXX running
     #	real    597m52.740s
 
 #########################################################################
@@ -795,7 +796,7 @@ searchPriority 8
         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-06-07 - Chris)
+# GENBANK AUTO UPDATE (DONE - 2017-06-14 - Chris)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -847,12 +848,9 @@ danRer11.downloadDir = danRer11
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad danRer11
-    XXX - Running 2017-06-12
 	
-	# var/dbload/hgwdev/logs/2016.04.19-08:38:37.danRer11.dbload.log
-    #  real    195m36.119s
-    tail -1 var/dbload/hgwdev/logs/2016.04.19-08:38:37.danRer11.dbload.log
-    #  hgwdev 2016.04.19-11:54:13 danRer11.dbload: finish
+    tail -1 var/build/logs/2017.06.07-13:49:34.danRer11.initalign.log
+	# hgwdev 2017.06.09-15:32:33 danRer11.initalign: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -860,7 +858,7 @@ danRer11.downloadDir = danRer11
     # add danRer11 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added danRer11 - zebrafish refs #17168" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added danRer11 - zebrafish refs #19459" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
