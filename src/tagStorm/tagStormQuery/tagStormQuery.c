@@ -59,7 +59,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	if (tagStanzaRqlMatch(rql, stanza, lm))
 	    {
 	    ++matchCount;
-	    if (doSelect && (limit == 0 || matchCount <= limit))
+	    if (doSelect && (limit < 0 || matchCount <= limit))
 		{
 		struct slName *field;
 		for (field = rql->fieldList; field != NULL; field = field->next)
@@ -92,7 +92,6 @@ struct tagStorm *tags = tagStormFromFile(tagsFileName);
 /* Expand any field names with wildcards. */
 struct slName *allFieldList = tagStormFieldList(tags);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
-uglyf("limit = %d\n", rql->limit);
 
 /* Traverse tree applying query */
 struct lm *lm = lmInit(0);
