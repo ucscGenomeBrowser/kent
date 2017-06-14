@@ -64,6 +64,7 @@ struct tagStanza
     int startLineIx;		/* Starting line number for stanza, for error reporting */
     };
 
+
 /** Read and write tag storms from/to files. */
 
 struct tagStorm *tagStormFromFile(char *fileName);
@@ -239,6 +240,13 @@ boolean tagStanzaRqlMatch(struct rqlStatement *rql, struct tagStanza *stanza,
 
 char *tagStanzaRqlLookupField(void *record, char *key);
 /* Lookup a field in a tagStanza for rql. */
+
+/** Apply a function to every stanza in a tag storm or get a list of all leaf stanzas. */
+
+void tagStormTraverse(struct tagStorm *storm, struct tagStanza *stanzaList, void *context,
+    void (*doStanza)(struct tagStorm *storm, struct tagStanza *stanza, void *context));
+/* Traverse tagStormStanzas recursively applying doStanza with to each stanza in
+ * stanzaList and any children.  Pass through context */
 
 struct tagStanzaRef
 /* A reference to a stanza in a tag storm */
