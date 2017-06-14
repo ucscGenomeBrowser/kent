@@ -541,7 +541,7 @@ if (relativeLink)
 
 char *cgiDir = cgiScriptDirUrl();
 char buf[2048];
-char *hgLoginHost = wikiLinkHost();
+char *hgLoginHost = cgiServerNamePort();
 safef(buf, sizeof(buf), "http%s://%s%s", cgiAppendSForHttps(), hgLoginHost, cgiDir);
 
 return cloneString(buf);
