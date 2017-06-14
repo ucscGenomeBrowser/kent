@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 #	Do not modify this script, modify the source tree copy:
 #	src/utils/otto/lovd/check.sh
 #	This script is used via a cron job 
@@ -43,10 +43,12 @@ if [ "$new19Lc" -eq "$old19Lc" ]; then
         exit 0
 fi
 
-if [ "$new19Lc" -lt "$old19Lc" ]; then
-        echo LVOD hg19: rowcount for $today is smaller to old rowcount in mysql, quitting
-        exit 255
-fi
+# commenting out, as LOVD count will go down in the future, because they have a 
+# db cleanup procedure in place now
+#if [ "$new19Lc" -lt "$old19Lc" ]; then
+        #echo LVOD hg19: rowcount for $today is smaller to old rowcount in mysql, quitting
+        #exit 255
+#fi
 
 # bedDetail4.sql was generated like this:
 # egrep -v 'score|strand|thick|reserved|block|chromStarts' /cluster/home/max/kent/src/hg/lib/bedDetail.sql > bedDetail4.sql 

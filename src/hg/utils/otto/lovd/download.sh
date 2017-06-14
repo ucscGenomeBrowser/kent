@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 #	Do not modify this script, modify the source tree copy:
 #	src/utils/lovd/check.sh
 #	This script is used via a cron job 
@@ -22,3 +22,6 @@ cd $today
 # http request needs to come from hgwdev IP address otherwise file not found error
 wget -q http://varcache.lovd.nl/bed/hg19 -O - | grep -v track | grep -v ^$ > lovd.hg19.bed
 wget -q http://varcache.lovd.nl/bed/hg18 -O - | grep -v track | grep -v ^$ > lovd.hg18.bed
+
+sed -i s/^/chr/g lovd.hg19.bed
+sed -i s/^/chr/g lovd.hg18.bed
