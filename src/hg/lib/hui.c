@@ -5137,10 +5137,7 @@ if (parentLevel)
         char *aggregateVal = cartOrTdbString(cart, tdb->parent, "aggregate", NULL);
         printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
         safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
-        if (isCustomComposite(tdb))
-            aggregateExtraDropDown(option, aggregateVal);
-        else
-            aggregateDropDown(option, aggregateVal);
+        aggregateDropDown(option, aggregateVal);
         puts("</td></TR>");
 
 	if (sameString(aggregateVal, WIG_AGGREGATE_STACKED)  &&

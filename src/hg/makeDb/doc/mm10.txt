@@ -15037,3 +15037,58 @@ fi
 
     # commit all
 ##############################################################################
+# LASTZ zebrafish danRer11 (DONE - 2017-06-12 - Chris)
+    #	establish a screen to control this job
+    screen -S mm10danRer11
+    mkdir /hive/data/genomes/mm10/bed/lastzDanRer11.2017-06-12
+    cd /hive/data/genomes/mm10/bed/lastzDanRer11.2017-06-12
+
+    printf '# mouse vs. zebrafish
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: zebrafish danRer11
+SEQ2_DIR=/hive/data/genomes/danRer11/danRer11.2bit
+SEQ2_LEN=/hive/data/genomes/danRer11/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzDanRer11.2017-06-12
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    289m42.628s
+    cat fb.mm10.chainDanRer11Link.txt
+    # 36448414 bases of 2652783500 (1.374%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev mm10 danRer11 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+
+    mkdir /hive/data/genomes/danRer11/bed/blastz.mm10.swap
+    cd /hive/data/genomes/danRer11/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzDanRer11.2017-06-12/DEF \
+	-noDbNameCheck -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    172m50.552s
+
+    cat fb.danRer11.chainMm10Link.txt
+    #	45558857 bases of 1674677181 (2.720%) in intersection
+	1589449878 bases of 2301325917 (69.067%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev danRer11 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    846m34.982s
+
+##############################################################################
