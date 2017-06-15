@@ -864,7 +864,8 @@ void printHubList(struct slName *hubsToPrint, struct hash *hubLookup, struct has
 int count = 0;
 int udcTimeoutVal = udcCacheTimeout();
 char *udcOldDir = cloneString(udcDefaultDir());
-udcSetDefaultDir("/hive/users/jcasper/hubCrawl/");
+char *searchUdcDir = cfgOptionDefault("hgHubConnect.cacheDir", udcOldDir);
+udcSetDefaultDir(searchUdcDir);
 udcSetCacheTimeout(1<<30);
 if (hubsToPrint != NULL)
     {
