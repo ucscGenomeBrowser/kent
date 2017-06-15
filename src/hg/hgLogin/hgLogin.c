@@ -299,11 +299,20 @@ char *getReturnToURL()
 /* get URL from cart var returnto; if empty, make URL to hgSession on login host.  */
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
+char *hgLoginHost = wikiLinkHost();
+char *cgiDir = cgiScriptDirUrl();
 char returnTo[2048];
-
+  
+boolean relativeLink = cfgOptionBooleanDefault(CFG_LOGIN_RELATIVE, FALSE);
 if (!returnURL || sameString(returnURL,""))
-   safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1",
-    wikiServerAndCgiDir());
+    // XX replace with call to new function hLoginHostUrl
+   if (relativeLink)
+       // reverse proxies and all-https sites have no need for absolute links
+       safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", cgiDir);
+   else 
+       safef(returnTo, sizeof(returnTo),
+             "http%s://%s%shgSession?hgS_doMainPage=1",
+             cgiAppendSForHttps(), hgLoginHost, cgiDir);
 else
    safecpy(returnTo, sizeof(returnTo), returnURL);
 return cloneString(returnTo);
