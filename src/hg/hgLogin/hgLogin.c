@@ -299,20 +299,12 @@ char *getReturnToURL()
 /* get URL from cart var returnto; if empty, make URL to hgSession on login host.  */
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
-char *hgLoginHost = wikiLinkHost();
-char *cgiDir = cgiScriptDirUrl();
 char returnTo[2048];
   
-boolean relativeLink = cfgOptionBooleanDefault(CFG_LOGIN_RELATIVE, FALSE);
 if (!returnURL || sameString(returnURL,""))
-    // XX replace with call to new function hLoginHostUrl
-   if (relativeLink)
-       // reverse proxies and all-https sites have no need for absolute links
-       safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", cgiDir);
-   else 
-       safef(returnTo, sizeof(returnTo),
-             "http%s://%s%shgSession?hgS_doMainPage=1",
-             cgiAppendSForHttps(), hgLoginHost, cgiDir);
+   safef(returnTo, sizeof(returnTo),
+         "%shgSession?hgS_doMainPage=1",
+         hLoginHostCgiBinUrl());
 else
    safecpy(returnTo, sizeof(returnTo), returnURL);
 return cloneString(returnTo);
@@ -1307,14 +1299,10 @@ htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 htmlSetFormClass("accountScreen");
 
-boolean relativeLink = cfgOptionBooleanDefault("login.relativeLink", FALSE);
 struct dyString *dy;
-if (relativeLink) // normal relative links are better for reverse proxyies or all-https sites
-    dy = dyStringCreate("%s", cgiScriptName());
-else 
-    dy = dyStringCreate("http%s://%s%shgLogin",
-                                     loginUseHttps() ? "s" : "", wikiLinkHost(), cgiScriptDirUrl());
+dy = dyStringCreate("%shgLogin", hLoginHostCgiBinUrl());
 hgLoginUrl = dyStringCannibalize(&dy);
+
 oldCart = hashNew(10);
 cartHtmlShell("Login - UCSC Genome Browser", doMiddle, hUserCookie(), excludeVars, oldCart);
 cgiExitTime("hgLogin", enteredMainTime);
