@@ -170,6 +170,9 @@ void trackHubAddDescription(char *trackDbFile, struct trackDb *tdb);
 /* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
  * and store in tdb->html. */
 
+void trackHubAddOneDescription(char *trackDbFile, struct trackDb *tdb);
+/* Fetch tdb->track's html description and store in tdb->html. */
+
 struct trackHubGenome *trackHubGetGenome(char *database);
 /* get genome structure for an assembly in a trackHub */
 

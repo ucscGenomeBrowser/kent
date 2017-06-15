@@ -987,7 +987,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-static void addOneDescription(char *trackDbFile, struct trackDb *tdb)
+void trackHubAddOneDescription(char *trackDbFile, struct trackDb *tdb)
 /* Fetch tdb->track's html description and store in tdb->html. */
 {
 /* html setting should always be set because we set it at load time */
@@ -1012,13 +1012,13 @@ void trackHubAddDescription(char *trackDbFile, struct trackDb *tdb)
 /* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
  * and store in tdb->html. */
 {
-addOneDescription(trackDbFile, tdb);
+trackHubAddOneDescription(trackDbFile, tdb);
 if (isEmpty(tdb->html))
     {
     struct trackDb *parent;
     for (parent = tdb->parent;  isEmpty(tdb->html) && parent != NULL;  parent = parent->parent)
 	{
-	addOneDescription(trackDbFile, parent);
+	trackHubAddOneDescription(trackDbFile, parent);
 	if (isNotEmpty(parent->html))
 	    tdb->html = cloneString(parent->html);
 	}
