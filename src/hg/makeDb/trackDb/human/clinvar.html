@@ -19,10 +19,11 @@ evidence. The track is updated after every ClinVar release, once a month.</p>
 
 <p>
 <b>Note:</b> The data in the track are obtained directly from ClinVar's FTP site.
-While some groups, such as the Exome Aggregation Consortium (ExAC), reprocess the ClinVar data to
-adjust the information and position, we opt to display the data obtained directly from ClinVar to
-avoid discrepancies between the two websites.
-</p>
+We display the data obtained from ClinVar as-is to avoid discrepancies between UCSC and NCBI. 
+However, be aware that the ClinVar conventions are different from the VCF standard. 
+Variants may be right-aligned or may contain additional context, e.g. for
+inserts. ExAC/gnomAD make available <a href="https://github.com/macarthur-lab/clinvar">a converter</a> 
+to make ClinVar more comparable to VCF files.</p>
 
 <h2>Display Conventions and Configuration</h2>
 
