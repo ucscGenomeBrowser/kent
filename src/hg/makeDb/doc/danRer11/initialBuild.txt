@@ -226,7 +226,7 @@ user	8m33.194s
     makeCytoBandIdeo.csh danRer11
 
 #########################################################################
-# ucscToINSDC table/track (TBD - 2016-04-14 - Chris)
+# ucscToINSDC table/track (DONE - 2016-04-14 - Chris)
     # the sequence here is working for a 'refseq' assembly with a chrM
     # situation may be specific depending upon what is available in the assembly
 
@@ -540,7 +540,8 @@ user	8m33.194s
 	1 LO.5
 	6 LT.1
 	1 NC_.2
-																																																																																													   
+							
+	XXX Need to get a rule 
     # implies a rule: '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?'
 
     # verify this rule will find them all and eliminate them all:
@@ -955,12 +956,18 @@ danRer11.downloadDir = danRer11
 #  BLATSERVERS ENTRY (TBD - 2016-04-15 - Chris)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
+	# Haifang 
+	# Done.
+
+	# Starting trans gfServer for danRer11 on host blat1a, port 17874
+	# Starting untrans gfServer for danRer11 on host blat1a, port 17875
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("danRer11", "blat1b", "17862", "1", "0"); \
+	VALUES ("danRer11", "blat1a", "17874", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("danRer11", "blat1b", "17863", "0", "1");' \
+	VALUES ("danRer11", "blat1a", "17875", "0", "1");' \
 	    hgcentraltest
+	XXX Need to test
     #	test it with some sequence
 
 #########################################################################
