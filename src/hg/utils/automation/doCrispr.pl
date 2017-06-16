@@ -18,11 +18,13 @@ use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
     $opt_twoBit
+    $opt_shoulder
     /;
 
 # Specify the steps supported with -continue / -stop:
 my $stepper = new HgStepManager(
     [ { name => 'ranges',   func => \&doRanges },
+      { name => 'guides',   func => \&doGuides },
       { name => 'cleanup', func => \&doCleanup },
     ]
 				);
@@ -40,6 +42,7 @@ my $bigClusterHub = 'ku';
 my $workhorse = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $twoBit = "$HgAutomate::clusterData/\$db/\$db.2bit";
+my $shoulder = 10000;	# default shoulder around exons
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -61,6 +64,8 @@ options:
                               $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/crispr
     -twoBit seq.2bit      Use seq.2bit as the input sequence instead
                               of default: ($twoBit).
+    -shoulder N           Use N as 'shoulder' extra on each side of an exon,
+                              default: $shoulder bases.
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -152,20 +157,76 @@ genePredToBed genes.gp stdout | grep -v hap | grep -v chrUn \\
     | bedClip stdin $chromSizes stdout | grep -v _alt \\
     | grep -i -v hap > ranges.bed
 
-printf "# Get sequence, removing gaps. This can take 10-15 minutes\\n" 1>&2
-printf "# featureBits of target ranges\\n" 1>&2
-featureBits $db -not gap -bed=notGap.bed
-featureBits $db ranges.bed notGap.bed -faMerge -fa=ranges.fa \\
-    -minSize=20 -bed=stdout | cut -f-3 > crisprRanges.bed
+printf "# Get sequence without any gaps.\\n" 1>&2
+# featureBits $db -not gap -bed=notGap.bed
+hgsql -N -e 'select chrom,chromStart,chromEnd from gap;' $db \\
+   | bedInvert.pl $chromSizes stdin > notGap.bed
+
+# featureBits $db ranges.bed notGap.bed -faMerge -fa=ranges.fa \\
+#    -minSize=20 -bed=stdout | cut -f-3 > crisprRanges.bed
+# the minCoverage means 1 base in 100 billion will be recognized properly
+# the awk '\$4 > 19' selects items 20 bases and larger
+bedIntersect -minCoverage=0.00000000001 ranges.bed notGap.bed \\
+   stdout | bedSingleCover.pl stdin | awk '\$4 > 19' \\
+      > crisprRanges.bed
+
+twoBitToFa -noMask -bedPos -bed=crisprRanges.bed $twoBit ranges.fa
 
 printf "# split the sequence file into pieces for the cluster\\n" 1>&2
-mkdir -p inFa/ outGuides
+mkdir -p inFa
 faSplit sequence ranges.fa 100 inFa/
 _EOF_
   );
   $bossScript->execute();
-} # doTemplate
+} # doRanges
 
+#########################################################################
+sub doGuides {
+# * step: guides [bigClusterHub]
+  my $paraHub = $bigClusterHub;
+  my $runDir = "$buildDir/guides";
+  my $inFaDir = "$buildDir/ranges/inFa";
+  my $guidesDir = "$buildDir/outGuides";
+
+  # First, make sure we're starting clean, or if done already, let
+  #   it continue.
+  if ( ! $opt_debug && ( -d "$runDir" ) ) {
+    if (-s "$runDir/run.time") {
+     &HgAutomate::verbose(1,
+         "# step guides is already completed, continuing...\n");
+     return;
+    } else {
+      die "step guides may have been attempted and failed," .
+        "directory $runDir exists, however the run.time result does not " .
+        "exist.  Either run with -continue guides or some later " .
+        "stage, or move aside/remove $runDir and run again, " .
+        "or determine the failure to complete this step.\n";
+    }
+  }
+
+  &HgAutomate::mustMkdir($runDir);
+  my $templateCmd = ("python $crisprScripts/findGuides.py " .
+		     "{check in exists $inFaDir/\$(file1)} " .
+		     "{check in exists $chromSizes} " .
+		     "outGuides/\$(root1).bed " .
+		     "{check out exists outGuides/\$(root1).fa}" );
+  &HgAutomate::makeGsub($runDir, $templateCmd);
+
+  my $whatItDoes = "Construct guides for alignments.";
+  my $bossScript = newBash HgRemoteScript("$runDir/runGuides.bash",
+		$paraHub, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+mkdir -p outGuides
+find $inFaDir -type f | grep "\.fa\$" > fa.list
+$HgAutomate::gensub2 fa.list single gsub jobList
+$HgAutomate::paraRun
+catDir -suffix=.fa outGuides | grep -v "^>" > ../allGuides.txt
+catDir -suffix=.bed outGuides > ../allGuides.bed
+_EOF_
+  );
+  $bossScript->execute();
+} # doGuides
 
 #########################################################################
 # * step: cleanup [fileServer]
@@ -209,6 +270,9 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
 $twoBit = $opt_twoBit ? $opt_twoBit : "$HgAutomate::clusterData/$db/$db.2bit";
 &HgAutomate::verbose(1, "# 2bit file: $twoBit\n");
 die "can not find 2bit file: '$twoBit'" if ( ! -s $twoBit);
+$shoulder = $opt_shoulder ? $opt_shoulder : $shoulder;
+die "illegal value for shoulder: $shoulder, must be >= 30" if ($shoulder < 30);
+&HgAutomate::verbose(1, "# shoulder: $shoulder bases\n");
 $genomeFname = "$crisporSrc/genomes/$db/$db.fa.bwt";
 die "can not find bwa index '$genomeFname'" if ( ! -s $genomeFname);
 $chromSizes = "/hive/data/genomes/$db/chrom.sizes";
