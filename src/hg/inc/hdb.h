@@ -451,8 +451,37 @@ char *hDbDbNibPath(char *database);
 char *hHttpHost();
 /* return http host from apache or hostname if run from command line  */
 
+char *hLocalHostCgiBinUrl();
+/* Return the current full absolute URL of the cgi-bin directory of the local
+ * server in the format http(s)://<host>/<cgiBinDir>, e.g.
+ * https://genome.ucsc.edu/cgi-bin/.
+ * The <host> is coming from the SERVER_NAME variable, which is
+ * the ServerName setting in the Apache config file.
+ * The cgi-bin directory is coming from the SCRIPT_NAME variable, the relative
+ * location of the cgi program relative to Apache's DOCUMENT_ROOT.
+ * Https is used if the variable HTTPS is set by Apache.
+ *
+ * If login.relativeLink=on is set, return only the empty string. 
+ * (This is used on the CIRM server, as it has no way of knowing what its
+ * actual server name is, it is behind a reverse proxy)
+ * Result has to be free'd. */
+
+char *hLoginHostCgiBinUrl();
+/* Return the current full absolute URL of the cgi-bin directory of the host
+ * used for logins. Genome-euro/genome-asia use genome.ucsc.edu for the login,
+ * as we have only one single server for user accounts.
+ * Returns a string in the format
+ * http(s)://<host>/cgi-bin/ e.g. http://genome.ucsc.edu/cgi-bin/
+ * - the <host> is coming from the wiki.host variable in hg.conf.
+ * - https is used unless login.useHttps=off in hg.conf
+ *
+ * If login.relativeLink=on is set, return only the empty string. 
+ * (see hLocalCgiBinUrl)
+ * Result has to be free'd. */
+
 boolean hHostHasPrefix(char *prefix);
 /* Return TRUE if this is running on web-server with host name prefix */
+
 
 boolean hIsPrivateHost(void);
 /* Return TRUE if this is running on private (development) web-server.

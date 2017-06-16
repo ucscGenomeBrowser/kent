@@ -6691,3 +6691,67 @@ ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexSamples.tsv cleanGtexSample
 ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexMatrix.tsv cleanGtexMatris.tab
 ln -s /hive/data/outside/gtex/barChartTrack/gtexTranscExpr.bb .
 #########################################################################
+# LASTZ human/hg38 vs. Zebrafish /danRer11
+#	(DONE - 2017-06-12 - Chris)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzDanRer11.2017-06-12
+    cd /hive/data/genomes/hg38/bed/lastzDanRer11.2017-06-12
+
+    printf '# human vs zebrafish danRer11
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# QUERY: zebrafish danRer11
+SEQ2_DIR=/hive/data/genomes/danRer11/danRer11.2bit
+SEQ2_LEN=/hive/data/genomes/danRer11/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzDanRer11.2017-06-12
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > do.log 2>&1
+    # real    3327m39.074s
+    
+	cat fb.hg38.chainDanRer11Link.txt
+    # 41036733 bases of 3049335806 (1.346%) in intersection
+
+	973293331 bases of 3049335806 (31.918%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 danRer11) \
+       > rbest.log 2>&1 &
+
+    # and for the swap:
+    mkdir /hive/data/genomes/danRer11/bed/blastz.hg38.swap
+    cd /hive/data/genomes/danRer11/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzDanRer11.2017-06-12/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+	#  real	39m24.916s
+
+    cat fb.danRer11.chainHg38Link.txt
+    # 47869194 bases of 1674677181 (2.858%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer11 hg38) \
+       > rbest.log 2>&1 &
+    # real	638m45.337s
+
+#########################################################################

@@ -6,7 +6,7 @@
 #ifndef WIKILINK_H
 #define WIKILINK_H
 
-/* hg.conf wiki parameters -- wikiLink is disabled if any are undefined. */
+/* hg.conf wiki parameters -- logins are disabled if any are undefined. */
 #define CFG_WIKI_HOST "wiki.host"
 #define CFG_WIKI_USER_NAME_COOKIE "wiki.userNameCookie"
 #define CFG_WIKI_LOGGED_IN_COOKIE "wiki.loggedInCookie"

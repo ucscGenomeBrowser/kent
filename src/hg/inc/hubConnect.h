@@ -43,11 +43,15 @@
 #define hgHubSearchTerms      "hubSearchTerms"
 /* name of cart/cgi variable containing the current search terms */
 
+#define hgHubDbFilter      "hubDbFilter"
+/* name of cart/cgi variable containing text for filtering hubs by assembly */
+
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
 #define hgHubDoClear       hgHubDo "clear"
 #define hgHubDoSearch      hgHubDo "search"
 #define hgHubDoDeleteSearch      hgHubDo "deleteSearch"
+#define hgHubDoFilter      hgHubDo "filter"
 #define hgHubDoDisconnect  hgHubDo "disconnect"
 #define hgHubDoFirstDb     hgHubDo "firstDb"
 #define hgHubDoDecorateDb  hgHubDo "decorateDb"
