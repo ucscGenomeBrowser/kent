@@ -800,6 +800,8 @@ void bedToBigBed(char *inName, char *chromSizes, char *outName)
 {
 struct slName *extraIndexList = slNameListFromString(extraIndex, ',');
 struct asObject *as = asParseText(asText);
+if (as == NULL)
+    errAbort("AutoSql file (%s) not in legal format.", asFile);
 asCompareObjAgainstStandardBed(as, bedN, TRUE); // abort if bedN columns are not standard
 bbFileCreate(inName, chromSizes, blockSize, itemsPerSlot, asText, as, 
 	doCompress, extraIndexList, outName);

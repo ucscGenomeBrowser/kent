@@ -27,7 +27,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 #include "net.h"
-
+#include "hubSearchText.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -35,6 +35,70 @@ struct hash *oldVars = NULL;
 static char *pageTitle = "Track Data Hubs";
 char *database = NULL;
 char *organism = NULL;
+
+struct hubOutputStructure
+    {
+    struct hubOutputStructure *next;
+    struct dyString *descriptionMatch;
+    struct genomeOutputStructure *genomes;
+    int genomeCount;
+    struct hash *genomeOutHash;
+    };
+
+struct genomeOutputStructure
+    {
+    struct genomeOutputStructure *next;
+    struct dyString *shortLabel;
+    struct dyString *descriptionMatch;
+    struct tdbOutputStructure *tracks;
+    struct dyString *assemblyLink;
+    char *genomeName;
+    int trackCount;
+    struct hash *tdbOutHash;
+    int hitCount;
+    };
+
+struct tdbOutputStructure
+    {
+    struct tdbOutputStructure *next;
+    struct dyString *shortLabel;
+    struct dyString *descriptionMatch;
+    struct dyString *configUrl;
+    struct tdbOutputStructure *children;
+    int childCount;
+    };
+
+struct hubEntry
+// for entries pulled from hubPublic
+    {
+    struct hubEntry *next;
+    char *hubUrl;
+    char *shortLabel;
+    char *longLabel;
+    char *dbList;
+    char *errorMessage;
+    int id;
+    char *descriptionUrl;
+    bool tableHasDescriptionField;
+    };
+
+struct hubEntry *hubEntryTextLoad(char **row, bool hasDescription)
+{
+struct hubEntry *ret;
+AllocVar(ret);
+ret->hubUrl = cloneString(row[0]);
+ret->shortLabel = cloneString(row[1]);
+ret->longLabel = cloneString(row[2]);
+ret->dbList = cloneString(row[3]);
+ret->errorMessage = cloneString(row[4]);
+ret->id = sqlUnsigned(row[5]);
+if (hasDescription)
+    ret->descriptionUrl = cloneString(row[6]);
+else
+    ret->descriptionUrl = NULL;
+return ret;
+}
+
 
 static void ourCellStart()
 {
@@ -126,7 +190,6 @@ else
 	, row, row);
     }
 ourPrintCell(tempHtml);
-//ourPrintCell(removeLastComma( dyStringCannibalize(&dy)));
 }
 
 
@@ -281,8 +344,9 @@ printf("</tbody></TABLE>\n");
 printf("</div>");
 }
 
+
 static void addPublicHubsToHubStatus(struct sqlConnection *conn, char *publicTable, char  *statusTable)
-/* add url's in the hubPublic table to the hubStatus table if they aren't there already */
+/* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
 {
 char query[1024];
 sqlSafef(query, sizeof(query), "select hubUrl from %s where hubUrl not in (select hubUrl from %s)\n", publicTable, statusTable); 
@@ -298,194 +362,663 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 }
 
-struct hash *getUrlSearchHash(char *trixFile, char *hubSearchTerms)
-/* find hubs that match search term in trixFile */
+
+struct hubSearchText *getHubSearchResults(struct sqlConnection *conn, char *hubSearchTableName,
+        char *hubSearchTerms, bool checkLongText, char *dbFilter, struct hash *hubLookup)
+/* Find hubs, genomes, and tracks that match the provided search terms.
+ * Return all hits that satisfy the (optional) supplied assembly filter.
+ * if checkLongText is FALSE, skip searching within the long description text entries */
 {
-struct hash *urlSearchHash = newHash(5);
-struct trix *trix = trixOpen(trixFile);
-int trixWordCount = chopString(hubSearchTerms, " ", NULL, 0);
-char *trixWords[trixWordCount];
-trixWordCount = chopString(hubSearchTerms, " ", trixWords, trixWordCount);
+struct hubSearchText *hubSearchResultsList = NULL;
+struct dyString *query = dyStringNew(100);
+char *noLongText = NULL;
 
-struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, tsmExpand);
-for ( ; tsList != NULL; tsList = tsList->next)
-    hashStore(urlSearchHash, tsList->itemId);
+if (!checkLongText)
+    noLongText = cloneString("textLength = 'Short' and");
+else
+    noLongText = cloneString("");
 
-return urlSearchHash;
+sqlDyStringPrintf(query, "select * from %s where %s match(text) against ('%s' in natural language mode)",
+        hubSearchTableName, noLongText, hubSearchTerms);
+
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hubSearchText *hst = hubSearchTextLoadWithNullGiveContext(row, hubSearchTerms);
+    char *hubUrl = hst->hubUrl;
+    char *db = cloneString(hst->db);
+    tolowers(db);
+    if (isNotEmpty(dbFilter))
+        {
+        if (isNotEmpty(db))
+            {
+            if (stringIn(dbFilter, db) == NULL)
+                continue;
+            }
+        else
+            {
+            // no db in the hubSearchText means this is a top-level hub hit.
+            // filter by the db list associated with the hub instead
+            struct hubEntry *hubInfo = hashFindVal(hubLookup, hubUrl);
+            char *dbList = cloneString(hubInfo->dbList);
+            tolowers(dbList);
+            if (stringIn(dbFilter, dbList) == NULL)
+                continue;
+            }
+        }
+    // Add hst to the list to be returned
+    slAddHead(&hubSearchResultsList, hst);
+    }
+return hubSearchResultsList;
 }
 
-static boolean outputPublicTable(struct sqlConnection *conn, char *publicTable, char *statusTable, struct hash **pHash)
+
+void printSearchBox(char *hubSearchTerms, char *dbFilter)
+/* Create the text boxes for search and database filtering along with the required
+ * javscript */
+{
+printf("Enter search terms to find in public track hub description pages:<BR>"
+        "<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\" "
+        "type=\"text\" size=\"65\" value=\"%s\"> \n"
+        "<input name=\"hubSearchButton\" id='hubSearchButton' "
+        "class=\"hubField\" type=\"button\" value=\"Search Public Hubs\">\n",
+        hubSearchTerms!=NULL?hubSearchTerms:"");
+jsOnEventById("click", "hubSearchButton",
+        "document.searchHubForm.elements['hubSearchTerms'].value=$('#hubSearchTerms').val();"
+        "document.searchHubForm.submit();return true;");
+printf("<br>\n");
+printf("Filter hubs by assembly: "
+        "<input name=\"%s\" id=\"hubDbFilter\" class=\"hubField\" "
+        "type=\"text\" size=\"10\" value=\"%s\"> \n"
+        "<input name=\"dbFilterButton\" id='dbFilterButton' "
+        "class=\"hubField\" type=\"button\" value=\"Filter assemblies\">\n",
+        hgHubDbFilter, dbFilter!=NULL?dbFilter:"");
+jsOnEventById("click", "dbFilterButton",
+        "document.dbFilterHubForm.elements['hubDbFilter'].value=$('#hubDbFilter').val();"
+        "document.dbFilterHubForm.submit();return true;");
+puts("<BR><BR>\n");
+}
+
+
+void printSearchTerms(char *hubSearchTerms)
+/* Write out a reminder about the current search terms and a note about
+ * how to navigate detailed search results */
+{
+printf("Displayed list <B>restricted by search terms:</B> %s\n", hubSearchTerms);
+puts("<input name=\"hubDeleteSearchButton\" id='hubDeleteSearchButton' "
+        "class=\"hubField\" type=\"button\" value=\"Show All Hubs\">\n");
+jsOnEventById("click", "hubDeleteSearchButton",
+        "document.searchHubForm.elements['hubSearchTerms'].value='';"
+        "document.searchHubForm.submit();return true;");
+puts("<BR><BR>\n");
+printf("When exploring the detailed search results for a hub, you may right-click "
+        "on an assembly or track line to open it in a new window\n");
+puts("<BR><BR>\n");
+}
+
+
+void printHubListHeader()
+/* Write out the header for a list of hubs in its own table */
+{
+puts("<I>Clicking Connect redirects to the gateway page of the selected hub's default assembly.</I><BR>");
+printf("<table id=\"publicHubsTable\" class=\"hubList\"> "
+        "<thead><tr> "
+            "<th>Display</th> "
+            "<th>Hub Name</th> "
+            "<th>Description</th> "
+            "<th>Assemblies</th> "
+        "</tr></thead></table>\n");
+}
+
+
+struct hash *buildPublicLookupHash(struct sqlConnection *conn, char *publicTable, char *statusTable,
+        struct hash **pHash)
+/* Return a hash linking hub URLs to struct hubEntries.  Also make pHash point to a hash that just stores
+ * the names of the public hubs (for use later when determining if hubs were added by the user) */
+{
+struct hash *hubLookup = newHash(5);
+struct hash *publicLookup = newHash(5);
+char query[512];
+bool hasDescription = sqlColumnExists(conn, publicTable, "descriptionUrl");
+if (hasDescription)
+    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,"
+            "s.errorMessage,s.id,p.descriptionUrl from %s p,%s s where p.hubUrl = s.hubUrl", 
+	    publicTable, statusTable); 
+else
+    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,"
+            "s.errorMessage,s.id from %s p,%s s where p.hubUrl = s.hubUrl", 
+	    publicTable, statusTable); 
+
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hubEntry *hubInfo = hubEntryTextLoad(row, hasDescription);
+    hubInfo->tableHasDescriptionField = hasDescription;
+    hashAddUnique(hubLookup, hubInfo->hubUrl, hubInfo);
+    hashStore(publicLookup, hubInfo->hubUrl);
+    }
+sqlFreeResult(&sr);
+*pHash = publicLookup;
+return hubLookup;
+}
+
+
+void outputPublicTableRow(struct hubEntry *hubInfo, int count)
+/* Prints out a table row with basic information about a hub and a button
+ * to connect to that hub */
+{
+int id = hubInfo->id;
+char jsId[256];
+struct slName *dbListNames = slNameListFromComma(hubInfo->dbList);
+printf("<tr>\n");
+if (id != 0)
+    {
+    ourCellStart();
+    char hubName[32];
+    safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
+    if (cartUsualBoolean(cart, hubName, FALSE))
+        {
+        safef(jsId, sizeof jsId, "hubDisconnectButton%d", count);
+        printf("<input name=\"hubDisconnectButton\" id='%s' "
+            "class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", jsId);
+        jsOnEventByIdF("click", jsId, 
+            "document.disconnectHubForm.elements['hubId'].value= '%d';"
+            "document.disconnectHubForm.submit();return true;", id);
+        }
+    else
+        {
+        // get first name off of list of supported databases
+        char * name = dbListNames->name;
+
+        // if the name isn't currently loaded, we assume it's a hub
+        if (!hDbExists(name))
+            {
+            char buffer[512];
+            safef(buffer, sizeof buffer, "hub_%d_%s",  id, name);
+            name = cloneString(buffer);
+            }
+
+        safef(jsId, sizeof jsId, "hubConnectButton%d", count);
+        printf("<input name=\"hubConnectButton\" id='%s' "
+            "class=\"hubButton\" type=\"button\" value=\"Connect\">\n", jsId);
+        jsOnEventByIdF("click", jsId, 
+            "document.connectHubForm.elements['hubUrl'].value= '%s';"
+            "document.connectHubForm.elements['db'].value= '%s';"
+            "document.connectHubForm.submit();return true;", hubInfo->hubUrl,name);
+        }
+
+    ourCellEnd();
+    }
+else
+    errAbort("cannot get id for hub with url %s\n", hubInfo->hubUrl);
+
+ourPrintCellLink(hubInfo->shortLabel, hubInfo->hubUrl);
+
+if (isEmpty(hubInfo->errorMessage))
+    {
+    if (hubInfo->tableHasDescriptionField && !isEmpty(hubInfo->descriptionUrl))
+        ourPrintCellLink(hubInfo->longLabel, hubInfo->descriptionUrl);
+    else
+        ourPrintCell(hubInfo->longLabel);
+    }
+else
+    {
+    ourCellStart();
+    printf("<span class=\"hubError\">ERROR: %s </span>"
+        "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug Help</a>", 
+        hubInfo->errorMessage);
+    safef(jsId, sizeof jsId, "hubClearButton%d", count);
+    printf(
+    "<input name=\"hubClearButton\" id='%s' "
+            "class=\"hubButton\" type=\"button\" value=\"Retry Hub\">"
+            , jsId);
+    jsOnEventByIdF("click", jsId, 
+        "document.resetHubForm.elements['hubCheckUrl'].value='%s';"
+        "document.resetHubForm.submit();return true;", hubInfo->hubUrl);
+    ourCellEnd();
+    }
+
+printGenomeList(dbListNames, count); 
+printf("</tr>\n");
+}
+
+
+void printSearchOutputForTrack(struct tdbOutputStructure *tdbOut)
+/* Write out a <li> entry for a search hit on a track, along with a nested
+ * <ul> for any included hits to subtracks */
+{
+printf("<li configLink='%s' nodeType='track'>\n", dyStringContents(tdbOut->configUrl));
+printf("%s", dyStringContents(tdbOut->shortLabel));
+if (tdbOut->childCount > 0)
+    printf(" (%d subtrack%s)", tdbOut->childCount, tdbOut->childCount==1?"":"s");
+printf("<br>\n");
+if (isNotEmpty(dyStringContents(tdbOut->descriptionMatch)))
+    {
+    printf("<span class='descriptionMatch'><em>%s</em></span>\n", dyStringContents(tdbOut->descriptionMatch));
+    }
+if (tdbOut->children != NULL)
+    {
+    struct tdbOutputStructure *child = tdbOut->children;
+    printf("<ul>\n");
+    while (child != NULL)
+        {
+        printSearchOutputForTrack(child);
+        child = child->next;
+        }
+    printf("</ul>\n");
+    }
+printf("</li>\n");
+}
+
+
+void printSearchOutputForGenome(struct genomeOutputStructure *genomeOut)
+/* Write out a chunk of search results for a genome as a <li>, with a nested ul
+ * element for hits to tracks within that genome */
+{
+printf("<li assemblyLink='%s' nodeType='assembly'>%s",
+        dyStringContents(genomeOut->assemblyLink), dyStringContents(genomeOut->shortLabel));
+if (genomeOut->trackCount > 0)
+    printf(" (%d track%s)", genomeOut->trackCount, genomeOut->trackCount==1?"":"s");
+
+if (isNotEmpty(dyStringContents(genomeOut->descriptionMatch)))
+    {
+    printf("<br>\n<em>Assembly Description:</em> %s\n", dyStringContents(genomeOut->descriptionMatch));
+    }
+if (genomeOut->tracks != NULL)
+    {
+    printf("<ul>\n");
+    struct tdbOutputStructure *tdbOut = genomeOut->tracks;
+    while (tdbOut != NULL)
+        {
+        printSearchOutputForTrack(tdbOut);
+        tdbOut = tdbOut->next;
+        }
+    printf("</ul>\n");
+    }
+printf("</li>\n");
+}
+
+
+struct trackHub *fetchTrackHub(struct hubEntry *hubInfo)
+/* Fetch the hub structure for a public hub, trapping the error
+ * if the hub cannot be reached */
+{
+struct errCatch *errCatch = errCatchNew();
+struct trackHub *hub = NULL;
+if (errCatchStart(errCatch))
+    {
+    char hubName[4096];
+    safef(hubName, sizeof(hubName), "hub_%d", hubInfo->id);
+    hub = trackHubOpen(hubInfo->hubUrl, hubName);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    fprintf(stderr, "%s\n", errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+return hub;
+}
+
+
+struct tdbOutputStructure *addOrUpdateTrackOut(char *track, struct genomeOutputStructure *genomeOut,
+        struct hash *tdbHash, struct trackHub *hub)
+/* If an output structure already exists for the track within genomeOut, return that.  Otherwise,
+ * create one for it and add it to genomeOut.  Any missing parent tracks are also added at
+ * the same time.
+ * tdbHash takes track names to the struct trackDb * for that track */
+{
+struct tdbOutputStructure *tdbOut = hashFindVal(genomeOut->tdbOutHash, track);
+if (tdbOut == NULL)
+    {
+    genomeOut->trackCount++;
+    AllocVar(tdbOut);
+    tdbOut->shortLabel = dyStringNew(0);
+    tdbOut->descriptionMatch = dyStringNew(0);
+    tdbOut->configUrl = dyStringNew(0);
+    struct trackDb *trackInfo = (struct trackDb *) hashFindVal(tdbHash, track);
+    if (trackInfo == NULL)
+        {
+        // Some tracks are prefixed with the hub name; try that
+        char withHubName[4096];
+        safef(withHubName, sizeof(withHubName), "%s_%s", hub->name, track);
+        trackInfo = hashMustFindVal(tdbHash, withHubName);
+        }
+    if (isNotEmpty(trackInfo->longLabel))
+        dyStringPrintf(tdbOut->shortLabel, "%s", trackInfo->longLabel);
+    else if (isNotEmpty(trackInfo->shortLabel))
+        dyStringPrintf(tdbOut->shortLabel, "%s", trackInfo->shortLabel);
+    else
+        dyStringPrintf(tdbOut->shortLabel, "%s", trackHubSkipHubName(trackInfo->track));
+
+    dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s", hub->url,
+            genomeOut->genomeName, trackInfo->track, cartSessionId(cart));
+
+    if (trackInfo->parent != NULL)
+        {
+        struct trackDb *parent = trackInfo->parent;
+        struct tdbOutputStructure *parentOut = addOrUpdateTrackOut(parent->track, genomeOut, tdbHash, hub);
+        slAddTail(&(parentOut->children), tdbOut);
+        parentOut->childCount++;
+        }
+    else
+        slAddTail(&(genomeOut->tracks), tdbOut);
+    hashAdd(genomeOut->tdbOutHash, track, tdbOut);
+    }
+return tdbOut;
+}
+
+
+void buildTdbHash(struct hash *tdbHash, struct trackDb *tdbList)
+/* Recursively add all tracks from tdbList to the hash (indexed by track),
+ * along with all parents and children of those tracks */
+{
+struct trackDb *tdb = tdbList;
+while (tdb != NULL)
+    {
+    hashAdd(tdbHash, tdb->track, tdb);
+    if (tdb->subtracks != NULL)
+        buildTdbHash(tdbHash, tdb->subtracks);
+    if (tdb->parent != NULL)
+        {
+        // supertracks might be omitted from tdbList, but are still referred to by parent links
+        if (hashFindVal(tdbHash, tdb->parent->track) == NULL)
+            hashAdd(tdbHash, tdb->parent->track, tdb->parent);
+        }
+    tdb = tdb->next;
+    }
+}
+
+
+struct hubOutputStructure *buildHubSearchOutputStructure(struct trackHub *hub,
+        struct hubSearchText *searchResults)
+/* Build a structure that contains the data for writing out the hub search results for this hub */
+{
+struct hubOutputStructure *hubOut = NULL;
+AllocVar(hubOut);
+hubOut->descriptionMatch = dyStringNew(0);
+hubOut->genomeOutHash = newHash(5);
+
+struct hash *tdbHashHash = newHash(5);  // takes genome names to trackDb hashes
+
+struct hubSearchText *hst = NULL;
+for (hst = searchResults; hst != NULL; hst = hst->next)
+    {
+    if (isEmpty(hst->db))
+        {
+        // must be a hit to the hub itself, not an assembly or track within it
+        if (hst->textLength == hubSearchTextLong)
+            {
+            dyStringPrintf(hubOut->descriptionMatch, "%s", hst->text);
+            }
+        continue;
+        }
+
+    char *db = cloneString(hst->db);
+    struct trackHubGenome *genome = hashFindVal(hub->genomeHash, db);
+    if (genome == NULL)
+        {
+        // assembly hub genomes are stored with a prefix; try that
+        char withHubName[4096];
+        safef(withHubName, sizeof(withHubName), "%s_%s", hub->name, db);
+        genome = hashMustFindVal(hub->genomeHash, withHubName);
+        }
+    struct genomeOutputStructure *genomeOut = hashFindVal(hubOut->genomeOutHash, db);
+    if (genomeOut == NULL)
+        {
+        AllocVar(genomeOut);
+        genomeOut->tdbOutHash = newHash(5);
+        genomeOut->descriptionMatch = dyStringNew(0);
+        genomeOut->shortLabel = dyStringNew(0);
+        genomeOut->assemblyLink = dyStringNew(0);
+        dyStringPrintf(genomeOut->assemblyLink, "../cgi-bin/hgTracks?hubUrl=%s&db=%s&hgsid=%s",
+                hub->url, genome->name, cartSessionId(cart));
+        char *name = trackHubSkipHubName(genome->name);
+        if (isNotEmpty(genome->description))
+            dyStringPrintf(genomeOut->shortLabel, "%s (%s)", genome->description, name);
+        else if (isNotEmpty(genome->organism))
+            dyStringPrintf(genomeOut->shortLabel, "%s %s", genome->organism, name);
+        else
+            dyStringPrintf(genomeOut->shortLabel, "%s", name);
+        genomeOut->genomeName = cloneString(genome->name);
+        hashAdd(hubOut->genomeOutHash, db, genomeOut);
+        slAddTail(&(hubOut->genomes), genomeOut);
+        hubOut->genomeCount++;
+        }
+
+    if (isNotEmpty(hst->track))
+        {
+        // Time to add a track! (or add info to one, maybe)
+        struct hash *tdbHash = (struct hash *) hashFindVal(tdbHashHash, db);
+        if (tdbHash == NULL)
+            {
+            tdbHash = newHash(5);
+            hashAdd(tdbHashHash, db, tdbHash);
+            struct trackDb *tdbList = trackHubTracksForGenome(hub, genome);
+            tdbList = trackDbLinkUpGenerations(tdbList);
+            tdbList = trackDbPolishAfterLinkup(tdbList, db);
+            trackHubPolishTrackNames(hub, tdbList);
+            buildTdbHash(tdbHash, tdbList);
+            }
+        struct tdbOutputStructure *tdbOut = addOrUpdateTrackOut(hst->track, genomeOut, tdbHash, hub);
+        if (hst->textLength == hubSearchTextLong)
+            dyStringPrintf(tdbOut->descriptionMatch, "%s", hst->text);
+        }
+    }
+return hubOut;
+}
+
+
+static void printOutputForHub(struct hubEntry *hubInfo, struct hubSearchText *hubSearchResult, int count)
+/* Given a hub's info and a structure listing the search hits within the hub, first print
+ * a basic line of hub information with a "connect" button.  Then, if the search results
+ * are non-NULL, write out information about the genomes and tracks from the search hits that
+ * match the db filter.
+ * If there are no search results to print, the basic hub lines are combined into a single HTML table
+ * that is defined outside this function.
+ * Otherwise, each hub line is printed in its own table followed by a <ul> containing details
+ * about the search results. */
+{
+if (hubSearchResult != NULL)
+    printf("<table class='hubList'><tbody>\n");
+outputPublicTableRow(hubInfo, count);
+if (hubSearchResult != NULL)
+    {
+    printf("</tbody></table>\n");
+
+    struct trackHub *hub = fetchTrackHub(hubInfo);
+    struct hubOutputStructure *hubOut = buildHubSearchOutputStructure(hub, hubSearchResult);
+    if (dyStringIsEmpty(hubOut->descriptionMatch) && (hubOut->genomes == NULL))
+        return; // no detailed search results; hit must have been to hub short label or something   
+
+    printf("<div class=\"hubTdbTree\">\n");
+    printf("<ul>\n");
+    printf("<li>Search details ...\n<ul>\n");
+    if (isNotEmpty(dyStringContents(hubOut->descriptionMatch)))
+        printf("<li>Hub Description:&nbsp<span class='descriptionMatch'><em>%s</em></span></li>\n", dyStringContents(hubOut->descriptionMatch));
+
+    struct genomeOutputStructure *genomeOut = hubOut->genomes;
+    if (genomeOut != NULL)
+        {
+        printf("<li>%d Matching Assembl%s\n<ul>\n", hubOut->genomeCount, hubOut->genomeCount==1?"y":"ies");
+        while (genomeOut != NULL)
+            {
+            printSearchOutputForGenome(genomeOut);
+            genomeOut = genomeOut->next;
+            }
+        printf("</ul></li>\n");
+        }
+    printf("</ul></li></ul></div>\n");
+    }
+}
+
+
+void printHubList(struct slName *hubsToPrint, struct hash *hubLookup, struct hash *searchResultHash)
+/* Print out a list of hubs, possibly along with search hits to those hubs.
+ * hubLookup takes hub URLs to struct hubEntry
+ * searchResultHash takes hub URLs to struct hubSearchText * (list of hits on that hub)
+ */
+{
+int count = 0;
+int udcTimeoutVal = udcCacheTimeout();
+char *udcOldDir = cloneString(udcDefaultDir());
+char *searchUdcDir = cfgOptionDefault("hgHubConnect.cacheDir", udcOldDir);
+udcSetDefaultDir(searchUdcDir);
+udcSetCacheTimeout(1<<30);
+if (hubsToPrint != NULL)
+    {
+    printHubListHeader();
+
+    if (searchResultHash == NULL) // if not displaying search results, join the hub <tr>s into one table
+        printf("<table class='hubList'><tbody>\n");
+    struct slName *thisHubName = NULL;
+    for (thisHubName = hubsToPrint; thisHubName != NULL; thisHubName = thisHubName->next)
+        {
+        struct hubEntry *hubInfo = (struct hubEntry *) hashFindVal(hubLookup, thisHubName->name);
+        if (hubInfo == NULL)
+            {
+            /* This shouldn't happen often, but maybe the search hits list was built from an outdated
+             * search text file that includes hubs for which no info is available.
+             * Skip this hub. */
+            continue;
+            }
+        struct hubSearchText *searchResult = NULL;
+        if (searchResultHash != NULL)
+            {
+            searchResult = (struct hubSearchText *) hashMustFindVal(searchResultHash, thisHubName->name);
+            }
+        printOutputForHub(hubInfo, searchResult, count);
+        count++;
+        }
+    if (searchResultHash == NULL)
+        printf("</tbody></table>\n");
+    }
+udcSetCacheTimeout(udcTimeoutVal);
+udcSetDefaultDir(udcOldDir);
+if (hubsToPrint != NULL)
+    {
+    /* Write out the list of hubs in a single table inside a div that will be hidden by
+     * javascript.  This table is used (before being hidden) to set common column widths for
+     * the individual hub tables when they're split by detailed search results. */
+    printf("<div id='hideThisDiv'>\n");
+    printf("<table class='hubList' id='hideThisTable'><tbody>\n");
+    struct slName *thisHubName = NULL;
+    for (thisHubName = hubsToPrint; thisHubName != NULL; thisHubName = thisHubName->next)
+        {
+        struct hubEntry *hubInfo = (struct hubEntry *) hashFindVal(hubLookup, thisHubName->name);
+        if (hubInfo == NULL)
+            {
+            continue;
+            }
+        printOutputForHub(hubInfo, NULL, count);
+        count++;
+        }
+    printf("</tbody></table>\n");
+    printf("</div>\n");
+    }
+
+jsInline(
+        "function lineUpCols()\n"
+        "    {\n"
+        "    var tableList = $('table.hubList');\n"
+        "    if (tableList.length == 0)\n"
+        "        return;\n"
+        "    var colWidths = new Array();\n"
+        "    var combinedTrackTable = $('#hideThisTable');\n"
+        "    for (i=0; i<combinedTrackTable[0].rows[0].cells.length; i++)\n"
+        "        colWidths[i] = combinedTrackTable[0].rows[0].cells[i].clientWidth;\n"
+        "    $('#hideThisDiv')[0].style.display = 'none';\n"
+        "    for(i=0; i<tableList.length; i++)\n"
+        "        {\n"
+        "        for(j=0; j<tableList[i].rows[0].cells.length; j++)\n"
+        "            tableList[i].rows[0].cells[j].style.width = colWidths[j]+'px';\n"
+        "        }\n"
+        "    }\n"
+        "window.onload = lineUpCols();\n"
+        );
+}
+
+
+static bool outputPublicTable(struct sqlConnection *conn, char *publicTable, char *statusTable,
+        struct hash **pHash)
 /* Put up the list of public hubs and other controls for the page. */
 {
-char *trixFile = hReplaceGbdb(cfgOptionEnvDefault("HUBSEARCHTRIXFILE", "hubSearchTrixFile", "/gbdb/hubs/public.ix"));
 char *hubSearchTerms = cartOptionalString(cart, hgHubSearchTerms);
-char *cleanSearchTerms = cloneString(hubSearchTerms);
-int trixFd = netUrlOpen(trixFile);
-boolean haveTrixFile = (trixFd != -1);
-if (haveTrixFile)
-    close(trixFd);
-struct hash *urlSearchHash = NULL;
-
-printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
-
-// if we have a trix file, draw the search box
-if (haveTrixFile)
-    {
-    puts("Enter search terms to find in public track hub description pages:<BR>"
-	"<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\" "
-	"type=\"text\" size=\"65\"> \n"
-	"<input name=\"hubSearchButton\" id='hubSearchButton' "
-	    "class=\"hubField\" type=\"button\" value=\"Search Public Hubs\">\n");
-    jsOnEventById("click", "hubSearchButton",
-	"document.searchHubForm.elements['hubSearchTerms'].value=$('#hubSearchTerms').val();"
-	"document.searchHubForm.submit();return true;");
-    puts("<BR><BR>\n");
-    }
-
-// if we have search terms, put out the line telling the user so
-if (haveTrixFile && !isEmpty(hubSearchTerms))
-    {
-    printf("Displayed list <B>restricted by search terms:</B> %s\n", hubSearchTerms);
-    puts("<input name=\"hubDeleteSearchButton\" id='hubDeleteSearchButton' "
-	"class=\"hubField\" type=\"button\" value=\"Show All Hubs\">\n");
-    jsOnEventById("click", "hubDeleteSearchButton",
-	"document.searchHubForm.elements['hubSearchTerms'].value='';"
-	"document.searchHubForm.submit();return true;");
-    puts("<BR><BR>\n");
-
-    strLower(cleanSearchTerms);
-    urlSearchHash = getUrlSearchHash(trixFile, cleanSearchTerms);
-    }
+char *cleanSearchTerms = cloneString(hubSearchTerms); // only cleaned by tolowers() at the moment
+char *dbFilter = cartOptionalString(cart, hgHubDbFilter);
+char *lcDbFilter = cloneString(dbFilter);
+if (isNotEmpty(lcDbFilter))
+    tolowers(lcDbFilter);
 
 // make sure all the public hubs are in the hubStatus table.
 addPublicHubsToHubStatus(conn, publicTable, statusTable);
 
-struct hash *publicHash = newHash(5);
-char query[512];
-bool hasDescription = sqlColumnExists(conn, publicTable, "descriptionUrl");
-if (hasDescription)
-    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,s.errorMessage,s.id,p.descriptionUrl from %s p,%s s where p.hubUrl = s.hubUrl", 
-	  publicTable, statusTable); 
-else
-    sqlSafef(query, sizeof(query), "select p.hubUrl,p.shortLabel,p.longLabel,p.dbList,s.errorMessage,s.id from %s p,%s s where p.hubUrl = s.hubUrl", 
-	 publicTable, statusTable); 
+// build full public hub lookup hash, taking each URL to struct hubEntry * for that hub
+struct hash *hubLookup = buildPublicLookupHash(conn, publicTable, statusTable, pHash);
 
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-int count = 0;
-boolean gotAnyRows = FALSE;
-char jsId[256];
-while ((row = sqlNextRow(sr)) != NULL)
+printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
+
+char *hubSearchTableName = cfgOptionDefault("hubSearchTextTable", "hubSearchText");
+int searchEnabled = sqlTableExists(conn, hubSearchTableName);
+if (searchEnabled)
+    printSearchBox(hubSearchTerms, dbFilter);
+
+struct hash *searchResultHash = NULL;
+struct slName *hubsToPrint = NULL;
+if (searchEnabled && !isEmpty(hubSearchTerms))
     {
-    ++count;
-    char *url = row[0], *shortLabel = row[1], *longLabel = row[2], 
-    	  *dbList = row[3], *errorMessage = row[4], *descriptionUrl = row[6];
-    int id = atoi(row[5]);
-
-    hashStore(publicHash, url);
-    if ((urlSearchHash != NULL) && (hashLookup(urlSearchHash, url) == NULL))
-	continue;
-
-    struct slName *dbListNames = slNameListFromComma(dbList);
-
-    if (gotAnyRows)
-	webPrintLinkTableNewRow();
-    else
-	{
-	/* output header */
-
-	puts("<I>Clicking Connect redirects to the gateway page of the selected hub's default assembly.</I><BR>");
-	printf("<table id=\"publicHubsTable\"> "
-	    "<thead><tr> "
-		"<th>Display</th> "
-		"<th>Hub Name</th> "
-		"<th>Description</th> "
-		"<th>Assemblies</th> "
-	    "</tr></thead>\n");
-
-	// start first row
-	printf("<tbody> <tr>");
-	gotAnyRows = TRUE;
-	}
-
-    if (id != 0)
-	{
-	ourCellStart();
-	char hubName[32];
-	safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
-	if (cartUsualBoolean(cart, hubName, FALSE))
-	    {
-	    safef(jsId, sizeof jsId, "hubDisconnectButton%d", count);
-	    printf("<input name=\"hubDisconnectButton\" id='%s' "
-		"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", jsId);
-	    jsOnEventByIdF("click", jsId, 
-		"document.disconnectHubForm.elements['hubId'].value= '%d';"
-		"document.disconnectHubForm.submit();return true;", id);
-	    }
-	else
-	    {
-	    // get first name off of list of supported databases
-	    char * name = dbListNames->name;
-
-	    // if the name isn't currently loaded, we assume it's a hub
-	    if (!hDbExists(name))
-		{
-		char buffer[512];
-
-		safef(buffer, sizeof buffer, "hub_%d_%s",  id, name);
-		name = cloneString(buffer);
-		}
-
-	    safef(jsId, sizeof jsId, "hubConnectButton%d", count);
-	    printf("<input name=\"hubConnectButton\" id='%s' "
-		"class=\"hubButton\" type=\"button\" value=\"Connect\">\n", jsId);
-	    jsOnEventByIdF("click", jsId, 
-		"document.connectHubForm.elements['hubUrl'].value= '%s';"
-		"document.connectHubForm.elements['db'].value= '%s';"
-		"document.connectHubForm.submit();return true;", url,name);
-	    }
-
-	ourCellEnd();
-	}
-    else
-	errAbort("cannot get id for hub with url %s\n", url);
-
-    ourPrintCellLink(shortLabel, url);
-
-    if (isEmpty(errorMessage))
-	{
-	if (hasDescription && !isEmpty(descriptionUrl))
-	    ourPrintCellLink(longLabel, descriptionUrl);
-	else
-	    ourPrintCell(longLabel);
-	}
-    else
-	{
-	ourCellStart();
-	printf("<span class=\"hubError\">ERROR: %s </span>"
-	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug Help</a>", 
-	    errorMessage);
-	safef(jsId, sizeof jsId, "hubClearButton%d", count);
-	printf(
-	"<input name=\"hubClearButton\" id='%s' "
-		"class=\"hubButton\" type=\"button\" value=\"Retry Hub\">"
-		, jsId);
-	jsOnEventByIdF("click", jsId, 
-	    "document.resetHubForm.elements['hubCheckUrl'].value='%s';"
-	    "document.resetHubForm.submit();return true;", url);
-	ourCellEnd();
-	}
-
-    printGenomeList(dbListNames, count); 
+    printSearchTerms(hubSearchTerms);
+    if (isNotEmpty(cleanSearchTerms))
+        tolowers(cleanSearchTerms);
+    // Forcing checkDescriptions to TRUE right now, but we might want to add this as a
+    // checkbox option for users in the near future.
+    bool checkDescriptions = TRUE;
+    struct hubSearchText *hubSearchResults = getHubSearchResults(conn, hubSearchTableName,
+            cleanSearchTerms, checkDescriptions, lcDbFilter, hubLookup);
+    searchResultHash = newHash(5);
+    struct hubSearchText *hst = hubSearchResults;
+    while (hst != NULL)
+        {
+        struct hubSearchText *nextHst = hst->next;
+        hst->next = NULL;
+        struct hashEl *hubHashEnt = hashLookup(searchResultHash, hst->hubUrl);
+        if (hubHashEnt == NULL)
+            {
+            slNameAddHead(&hubsToPrint, hst->hubUrl);
+            hashAdd(searchResultHash, hst->hubUrl, hst);
+            }
+        else
+            slAddTail(&(hubHashEnt->val), hst);
+        hst = nextHst;
+        }
     }
-sqlFreeResult(&sr);
+else
+    {
+    // There is no active search, so just add all hubs to the list
+    struct hashEl *hel;
+    struct hashEl *helList;
+    helList = hashElListHash(hubLookup);
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+        if (isNotEmpty(lcDbFilter))
+            {
+            struct hubEntry *hubEnt = (struct hubEntry *) hel->val;
+            char *lcDbList = cloneString(hubEnt->dbList);
+            if (isNotEmpty(lcDbList))
+                tolowers(lcDbList);
+            if ((lcDbList == NULL) || (stringIn(lcDbFilter, lcDbList) == NULL))
+                continue;
+            }
+        slNameAddHead(&hubsToPrint, hel->name);
+        }
+    }
+slReverse(&hubsToPrint);
 
-if (gotAnyRows)
-    printf("</TR></tbody></TABLE>\n");
-
+printHubList(hubsToPrint, hubLookup, searchResultHash);
 printf("</div>");
-*pHash = publicHash;
-return gotAnyRows;
+return (hubsToPrint != NULL);
 }
 
 
@@ -509,6 +1042,7 @@ hDisconnectCentral(&conn);
 
 return retHash;
 }
+
 
 static void tryHubOpen(unsigned id)
 /* try to open hub, leaks trackHub structure */
@@ -568,7 +1102,7 @@ hPrintf("Hub: %s<BR><BR>", tHub->longLabel);
 hPrintf("Hub Genomes: ");
 struct trackHubGenome *genomeList = tHub->genomeList;
 
-boolean firstTime = TRUE;
+bool firstTime = TRUE;
 for(; genomeList; genomeList = genomeList->next)
     {
     if (!firstTime)
@@ -660,14 +1194,18 @@ if (cartVarExists(cart, hgHubDoRedirect))
     }
 
 cartWebStart(cart, NULL, "%s", pageTitle);
-jsIncludeFile("jquery.js", NULL);
+printf(
+"<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/themes/default/style.min.css\" />\n"
+"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js\"></script>\n"
+"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js\"></script>\n"
+"<style>.jstree-default .jstree-anchor { height: initial; } </style>\n"
+);
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("jquery-ui.js", NULL);
-
 webIncludeResourceFile("jquery-ui.css");
-
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hgHubConnect.js", NULL);
+webIncludeResourceFile("hgHubConnect.css");
 jsIncludeFile("jquery.cookie.js", NULL);
 
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
@@ -736,6 +1274,13 @@ cgiMakeHiddenVar(hgHubDoSearch, "on");
 cartSaveSession(cart);
 puts("</FORM>");
 
+// this is the form for the search hub button
+printf("<FORM ACTION=\"%s\" NAME=\"dbFilterHubForm\">\n",  "../cgi-bin/hgHubConnect");
+cgiMakeHiddenVar(hgHubDbFilter, "");
+cgiMakeHiddenVar(hgHubDoFilter, "on");
+cartSaveSession(cart);
+puts("</FORM>");
+
 // ... and now the main form
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", "../cgi-bin/hgGateway");
 cartSaveSession(cart);
@@ -762,6 +1307,50 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 
 puts("</FORM>");
 printf("</div>\n");
+
+jsInline(
+"var hubSearchTree = (function() {\n"
+"    // Effectively global vars set by init\n"
+"    var treeDiv;        // Points to div we live in\n"
+"\n"
+"    function hubSearchTreeContextMenuHandler (node, callback) {\n"
+"        var nodeType = node.li_attr.nodetype;\n"
+"        if (nodeType == 'track') {\n"
+"            callback({\n"
+"               'openConfig': {\n"
+"                   'label' : 'Configure this track',\n"
+"                   'action' : function () {window.open(node.li_attr.configlink, '_blank'); }\n"
+"               }\n"
+"            });\n"
+"        }\n"
+"        else if (nodeType == 'assembly') {\n"
+"            callback({\n"
+"               'openConfig': {\n"
+"                   'label' : 'Open this assembly',\n"
+"                   'action' : function () {window.open(node.li_attr.assemblylink, '_blank'); }\n"
+"               }\n"
+"            });\n"
+"        }\n"
+"    }"
+"    function init() {\n"
+"       $.jstree.defaults.core.themes.icons = false;\n"
+"       $.jstree.defaults.core.themes.dots = true;\n"
+"       $.jstree.defaults.contextmenu.show_at_node = false;\n"
+"       $.jstree.defaults.contextmenu.items = hubSearchTreeContextMenuHandler\n"
+"       treeDiv=$('.hubTdbTree');\n"
+"       treeDiv.jstree({\n"
+"               'conditionalselect' : function (node, event) { return false; },\n"
+"               'plugins' : ['conditionalselect', 'contextmenu']\n"
+"               });\n"
+"    }\n\n"
+"    return { init: init};\n\n"
+"}());\n"
+"\n"
+"$(function () {\n"
+"    hubSearchTree.init();\n"
+"});\n"
+);
+
 cartWebEnd();
 }
 
