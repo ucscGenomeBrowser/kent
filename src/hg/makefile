@@ -8,7 +8,7 @@ include ${kentSrc}/inc/localEnvironment.mk
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgComposite hgConvert hgHubConnect \
         hgGateway hgGene hgGenome hgIntegrator hgLogin hgPcr hgSession hgSuggest \
         hgTables hgTracks hgTrackUi hgUserSuggestion hgc hgApi cartDump near/hgNear \
-	hgLiftOver hgVai visiGene/hgVisiGene hgMenubar hgPublicSessions \
+	hgLiftOver hgLinkIn hgVai visiGene/hgVisiGene hgMenubar hgPublicSessions \
 	encode/hgEncodeDataVersions \
 	encode/hgEncodeVocab encode/hgEncodeApi \
 	phyloPng hgCustom hgPal hgFileUi hgFileSearch\
