@@ -28,17 +28,17 @@ hgLib:
 	@./hg/sqlEnvTest.sh
 	cd hg/lib && ${MAKE}
 
-libs: topLibs hgLib
+libs: topLibs hgLib optLib
 
-cgi: libs optLib
+cgi: libs
 	cd hg && ${MAKE} cgi
 	cd utils/bedToBigBed && ${MAKE} cgi
 
-cgi-alpha: libs optLib
+cgi-alpha: libs
 	cd hg && ${MAKE} alpha
 	cd utils/bedToBigBed && ${MAKE} alpha
 
-cgi-beta: check-beta libs optLib
+cgi-beta: check-beta libs
 	cd hg && ${MAKE} beta
 	cd utils/bedToBigBed && ${MAKE} beta
 

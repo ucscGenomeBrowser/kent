@@ -78,13 +78,14 @@ display, and share their own track hubs. Genome assemblies that UCSC does not su
 and viewed with associated data.</p>  
 <p>
 The data underlying the tracks and optional sequence in a hub reside on the remote server of the 
-data provider rather than at UCSC. Genomic annotations are stored in compressed binary indexed files in bigBed, bigGenePred, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, HAL or VCF format that contain 
-the data at several resolutions. In the case of assemblies that UCSC does not support, genomic 
-sequence is stored in the efficient twoBit format. When a hub track is displayed in the Genome 
-Browser, only the relevant data needed to support the view of the current genomic region are 
-transmitted rather than the entire file. The transmitted data are cached on the UCSC server to 
-expedite future access. This on-demand transfer mechanism eliminates the need to transmit large data
-sets across the Internet, thereby minimizing upload time into the browser.</p> 
+data provider rather than at UCSC. Genomic annotations are stored in compressed binary indexed 
+files in bigBed, bigBarChart, bigGenePred, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, HAL or VCF 
+format that contain the data at several resolutions. In the case of assemblies that UCSC does not 
+support, genomic sequence is stored in the efficient twoBit format. When a hub track is displayed 
+in the Genome Browser, only the relevant data needed to support the view of the current genomic 
+region are transmitted rather than the entire file. The transmitted data are cached on the UCSC 
+server to expedite future access. This on-demand transfer mechanism eliminates the need to transmit 
+large data sets across the Internet, thereby minimizing upload time into the browser.</p> 
 <p>
 The track hub utility offers a convenient way to view and share very large sets of data. Individuals
 wishing to display only a few small data sets may find it easier to use the Genome Browser 
@@ -186,7 +187,8 @@ To create your own hub you will need:</p>
 <ul>
   <li>
   one or more data sets formatted in one of the compressed binary index formats supported by the 
-  Genome Browser: bigBed, bigGenePred, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, HAL or VCF</li>
+  Genome Browser: bigBed, bigBarChart, bigGenePred, bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, 
+  HAL or VCF</li>
   <li>
   a set of text files that specify properties for the track hub and for each of the data tracks 
   within it</li>
@@ -247,6 +249,7 @@ supported by the Genome Browser:
 <a href="bigBed.html">bigBed</a>,
 <a href="bigGenePred.html">bigGenePred</a>,
 <a href="bigChain.html">bigChain</a>, 
+<a href="barChart.html">bigBarChart</a>,
 <a href="bigPsl.html">bigPsl</a>, 
 <a href="bigMaf.html">bigMaf</a>,
 <a href="bigWig.html">bigWig</a>, 
@@ -274,8 +277,14 @@ information on creating and configuring bigBed tracks.</p>
 useful for describing gene predictions that are modeled after the fields in 
 <a href="../../FAQ/FAQformat.html#format9">genePred</a> files. BigGenePred format is useful for 
 associating a name and (optionally) a color and a score with one or more related regions on the same
-chromosome, such as all the exons of a gene. See the <a href="bigBed.html">bigBed Track Format</a> 
-help page for information on creating and configuring bigBed tracks.</p> 
+chromosome, such as all the exons of a gene. See the <a href="bigGenePred.html">bigGenePred Track 
+Format</a> help page for information on creating and configuring bigGenePred tracks.</p> 
+<p>
+<em>bigBarChart</em> - BigBarChart files are binary indexed versions of 
+<a href="../../FAQ/FAQformat.html#format21">barChart</a> files. BigBarChart format is useful for
+bringing barChart display into track hubs, and supports schema customization and label configuration
+that is not supported for regular barChart format. See the <a href="barChart.html">barChart Track
+Format</a> help page for information on creating and configuring bigBarChart tracks.</p> 
 <p>
 <em>bigPsl</em> - BigPsl files are binary indexed versions of 
 <a href="../../FAQ/FAQformat.html#format2">PSL</a> files. BigPsl format is useful for large data 
@@ -499,11 +508,11 @@ configuration and track settings, and on the details pages. Suggested maximum le
 characters.</p>
 <p>
 <em>type</em> - the format of the file specified by bigDataUrl. Must be either <em>bigWig</em>, 
-<em>bigBed</em>, <em>bigGenePred</em>, <em>bigChain</em>, <em>bigPsl</em>, <em>bigMaf</em>, 
-<em>bam</em>, <em>halSnake</em> or <em>vcfTabix</em> (Note: use <em> type bam</em> for CRAM files). 
-If the type is <em>bigBed</em>, it may be followed by an optional number denoting the number of 
-fields in the bigBed file (e.g., &quot;type bigBed 12&quot; for a file with 12 fields). If no number
-is given, a default value of 3 is assumed (a very limited display that omits names, strand 
+<em>bigBed</em>, <em>bigBarChart</em>, <em>bigGenePred</em>, <em>bigChain</em>, <em>bigPsl</em>, 
+<em>bigMaf</em>, <em>bam</em>, <em>halSnake</em> or <em>vcfTabix</em> (Note: use <em> type bam</em> 
+for CRAM files). If the type is <em>bigBed</em>, it may be followed by an optional number denoting 
+the number of fields in the bigBed file (e.g., &quot;type bigBed 12&quot; for a file with 12 fields). 
+If no number is given, a default value of 3 is assumed (a very limited display that omits names, strand 
 information, and exon boundaries).</p>
 <p>
 <strong><em>Example 4:</em></strong> Sample trackDb.txt file containing two simple tracks.</p>

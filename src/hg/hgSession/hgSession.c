@@ -3,6 +3,15 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
+/* WARNING: testing this CGI on hgwbeta can lead to missed bugs. This is
+ * because on hgwbeta, the login links go just to hgwbeta. But on genome-euro
+ * and genome-asia, the login links go to genome.ucsc.edu and session links to 
+ * genome-euro/asia. For proper testing of session loading on hgSession and
+ * hgLogin, configure your sandbox to use genome.ucsc.edu as a "remote login"
+ * (wiki.host=genome.ucsc.edu). Make sure that links to load sessions go to
+ * your sandbox, but login links go to genome.ucsc.edu. For QA, tell them to
+ * use genome-preview to test this CGI. */
+
 #include "common.h"
 #include "hash.h"
 #include "htmshell.h"
@@ -118,6 +127,7 @@ if (loginSystemEnabled())
         "If you wish, you can share named sessions with other users.</P>");
     }    
 else
+    // the following block is not used at UCSC anymore since 2014
     {
     printf("Signing in enables you to save current settings into a "
         "named session, and then restore settings from the session later.\n"
@@ -147,12 +157,14 @@ printf("<A HREF=\"../cgi-bin/cartReset?%s&destination=%s\">Click here to "
 void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
 		    boolean encode)
 /* Add to dy an URL that tells hgSession to load a saved session.
- * If encode, cgiEncodeFull the URL. */
+ * If encode, cgiEncodeFull the URL. 
+ * The link is an absolute link that includes the server name so people can
+ * copy-paste it into emails.  */
 {
 struct dyString *dyTmp = dyStringNew(1024);
-dyStringPrintf(dyTmp, "%s%s?hgS_doOtherUser=submit&"
+dyStringPrintf(dyTmp, "%shgTracks?hgS_doOtherUser=submit&"
 	       "hgS_otherUserName=%s&hgS_otherUserSessionName=%s",
-	       wikiServerAndCgiDir(), "hgTracks", userName, sessionName);
+	       hLocalHostCgiBinUrl(), userName, sessionName);
 if (encode)
     {
     dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
@@ -195,8 +207,8 @@ void addUrlLink(struct dyString *dy, char *url, boolean encode)
 {
 struct dyString *dyTmp = dyStringNew(1024);
 char *encodedUrl = cgiEncodeFull(url);
-dyStringPrintf(dyTmp, "%s%s?hgS_doLoadUrl=submit&hgS_loadUrlName=%s",
-	       wikiServerAndCgiDir(), "hgTracks", encodedUrl);
+dyStringPrintf(dyTmp, "%shgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=%s",
+	       hLocalHostCgiBinUrl(), encodedUrl);
 if (encode)
     {
     dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
@@ -583,7 +595,7 @@ else if (loginSystemEnabled() || wikiLinkEnabled())
             " Browser and Email links.</LI>\n",
             wikiLinkUserLoginUrl(cartSessionId(cart)));
     }
-dyStringPrintf(dyUrl, "%s%s", wikiServerAndCgiDir(), "hgTracks");
+dyStringPrintf(dyUrl, "%shgTracks", hLocalHostCgiBinUrl());
 
 printf("<LI>If you have saved your settings to a local file, you can send "
        "email to others with the file as an attachment and direct them to "
@@ -1271,8 +1283,8 @@ else
 	lf = NULL;
 	}
     dyStringPrintf(dyMessage, "&nbsp;&nbsp;"
-	   "<A HREF=\"%s%s?%s=%s\">Browser</A>",
-	   wikiServerAndCgiDir(), "hgTracks",
+	   "<A HREF=\"%shgTracks?%s=%s\">Browser</A>",
+	   hLocalHostCgiBinUrl(), 
 	   cartSessionVarName(), cartSessionId(cart));
     }
 if (lf != NULL)

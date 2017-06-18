@@ -300,10 +300,11 @@ char *getReturnToURL()
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
 char returnTo[2048];
-
+  
 if (!returnURL || sameString(returnURL,""))
-   safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1",
-    wikiServerAndCgiDir());
+   safef(returnTo, sizeof(returnTo),
+         "%shgSession?hgS_doMainPage=1",
+         hLoginHostCgiBinUrl());
 else
    safecpy(returnTo, sizeof(returnTo), returnURL);
 return cloneString(returnTo);
@@ -1298,14 +1299,10 @@ htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 htmlSetFormClass("accountScreen");
 
-boolean relativeLink = cfgOptionBooleanDefault("login.relativeLink", FALSE);
 struct dyString *dy;
-if (relativeLink) // normal relative links are better for reverse proxyies or all-https sites
-    dy = dyStringCreate("%s", cgiScriptName());
-else 
-    dy = dyStringCreate("http%s://%s%shgLogin",
-                                     loginUseHttps() ? "s" : "", wikiLinkHost(), cgiScriptDirUrl());
+dy = dyStringCreate("%shgLogin", hLoginHostCgiBinUrl());
 hgLoginUrl = dyStringCannibalize(&dy);
+
 oldCart = hashNew(10);
 cartHtmlShell("Login - UCSC Genome Browser", doMiddle, hUserCookie(), excludeVars, oldCart);
 cgiExitTime("hgLogin", enteredMainTime);

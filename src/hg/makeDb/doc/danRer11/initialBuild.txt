@@ -226,7 +226,7 @@ user	8m33.194s
     makeCytoBandIdeo.csh danRer11
 
 #########################################################################
-# ucscToINSDC table/track (TBD - 2016-04-14 - Chris)
+# ucscToINSDC table/track (DONE - 2016-04-14 - Chris)
     # the sequence here is working for a 'refseq' assembly with a chrM
     # situation may be specific depending upon what is available in the assembly
 
@@ -540,7 +540,8 @@ user	8m33.194s
 	1 LO.5
 	6 LT.1
 	1 NC_.2
-																																																																																													   
+							
+	XXX Need to get a rule 
     # implies a rule: '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?'
 
     # verify this rule will find them all and eliminate them all:
@@ -714,52 +715,50 @@ searchPriority 8
     # 45875776 bases of 1674677181 (2.739%) in intersection
 
 #############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2017-03-30 - Chris)
+# lastz/chain/net swap human/hg38 (DONE - 2017-03-30 - Chris)
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzXenTro9.2017-03-29
+	mkdir /hive/data/genomes/hg38/bed/lastzDanRer11.2017-06-12
+	cd /hive/data/genomes/hg38/bed/lastzDanRer11.2017-06-12
+	# 41036733 bases of 3049335806 (1.346%) in intersection
 
-    cat fb.hg38.chainXenTro9Link.txt
-    # 117720401 bases of 3049335806 (3.861%) in intersection
-
-    # and for the swap:
-    mkdir /hive/data/genomes/xenTro9/bed/blastz.hg38.swap
-    cd /hive/data/genomes/xenTro9/bed/blastz.hg38.swap
+	mkdir /hive/data/genomes/danRer11/bed/blastz.hg38.swap
+    cd /hive/data/genomes/danRer11/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzXenTro9.2017-03-29/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
+      /hive/data/genomes/hg38/bed/lastzDanRer11.2017-06-12/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    61m0.707s
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+	#  real	39m24.916s
 
-    cat fb.xenTro9.chainHg38Link.txt
-    # 108900066 bases of 1369865365 (7.950%) in intersection
+    cat fb.danRer11.chainHg38Link.txt
+    # 47869194 bases of 1674677181 (2.858%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 hg38) \
-       > rbest.log 2>&1
-    # real    749m24.229s
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer11 hg38) \
+       > rbest.log 2>&1 &
+    # real	638m45.337s
 
 #############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2017-03-30 - Chris)
+# lastz/chain/net swap mouse/mm10 (DONE - 2017-03-30 - Chris)
 
-    cd /hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29
-    cat fb.mm10.chainXenTro9Link.txt
-    #	87053836 bases of 2652783500 (3.282%) in intersection
+    cd /hive/data/genomes/mm10/bed/lastzDanRer11.2017-06-12
+    cat fb.mm10.chainDanRer11Link.txt
+    # 36448414 bases of 2652783500 (1.374%) in intersection
 
     #	and for the swap
-    mkdir /hive/data/genomes/xenTro9/bed/blastz.mm10.swap
-    cd /hive/data/genomes/xenTro9/bed/blastz.mm10.swap
+    mkdir /hive/data/genomes/danRer11/bed/blastz.mm10.swap
+    cd /hive/data/genomes/danRer11/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzXenTro9.2017-03-29/DEF \
+	/hive/data/genomes/mm10/bed/lastzDanRer11.2017-06-12/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
 	> swap.log 2>&1 &
     #	real    53m19.485s
 
-    cat  fb.xenTro9.chainMm10Link.txt
+    cat  fb.danRer11.chainMm10Link.txt
     #	90150612 bases of 1369865365 (6.581%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro9 mm10) \
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer11 mm10) \
          > rbest.log 2>&1 &
     #	real    597m52.740s
 
@@ -795,7 +794,7 @@ searchPriority 8
         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-06-07 - Chris)
+# GENBANK AUTO UPDATE (DONE - 2017-06-14 - Chris)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -847,12 +846,9 @@ danRer11.downloadDir = danRer11
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad danRer11
-    XXX - Running 2017-06-12
 	
-	# var/dbload/hgwdev/logs/2016.04.19-08:38:37.danRer11.dbload.log
-    #  real    195m36.119s
-    tail -1 var/dbload/hgwdev/logs/2016.04.19-08:38:37.danRer11.dbload.log
-    #  hgwdev 2016.04.19-11:54:13 danRer11.dbload: finish
+    tail -1 var/build/logs/2017.06.07-13:49:34.danRer11.initalign.log
+	# hgwdev 2017.06.09-15:32:33 danRer11.initalign: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -860,7 +856,7 @@ danRer11.downloadDir = danRer11
     # add danRer11 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added danRer11 - zebrafish refs #17168" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added danRer11 - zebrafish refs #19459" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -960,21 +956,19 @@ danRer11.downloadDir = danRer11
 #  BLATSERVERS ENTRY (TBD - 2016-04-15 - Chris)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
+	# Haifang 
+	# Done.
+
+	# Starting trans gfServer for danRer11 on host blat1a, port 17874
+	# Starting untrans gfServer for danRer11 on host blat1a, port 17875
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("danRer11", "blat1b", "17862", "1", "0"); \
+	VALUES ("danRer11", "blat1a", "17874", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("danRer11", "blat1b", "17863", "0", "1");' \
+	VALUES ("danRer11", "blat1a", "17875", "0", "1");' \
 	    hgcentraltest
+	XXX Need to test
     #	test it with some sequence
-
-############################################################################
-## reset default position to MEPE gene (egg shell protein)
-##  (TBD - 2016-05-13 - Chris)
-
-    ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr4:45985744-45991655"
-	where name="danRer11";' hgcentraltest
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2017-06-09 - Chris)
