@@ -541,16 +541,15 @@ user	8m33.194s
 	6 LT.1
 	1 NC_.2
 							
-	XXX Need to get a rule 
-    # implies a rule: '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?'
+    # implies a rule: '[A-N][A-Z][D0-9_][N0-9][0-9]+(\.[0-9]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" danRer11 | wc -l
-    # 25586
+    # 34617
 
-    hgsql -N -e "select frag from gold;" danRer11 \
-       | egrep -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
-    # 25586
+	hgsql -N -e "select frag from gold;" danRer11 \
+	| egrep -e '[A-N][A-Z]+[D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
+	# 34617
 
     hgsql -N -e "select frag from gold;" danRer11 \
        | egrep -v -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
@@ -559,7 +558,7 @@ user	8m33.194s
     # hence, add to trackDb/zebrafish/danRer11/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?
+termRegex [A-N][A-Z][D0-9_][N0-9][0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -926,7 +925,7 @@ danRer11.downloadDir = danRer11
         danRer11.chromAlias.tab
 
 #########################################################################
-# LIFTOVER TO danRer7 (WORK - 2017-06-12 - Chris)
+# LIFTOVER TO danRer7 (DONE - 2017-06-19 - Chris)
     ssh hgwdev
     mkdir /hive/data/genomes/danRer11/bed/blat.danRer7.2017-06-09
     cd /hive/data/genomes/danRer11/bed/blat.danRer7.2017-06-09
@@ -953,7 +952,7 @@ danRer11.downloadDir = danRer11
     # see if the liftOver menus function in the browser from danRer11 to danRer10
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2016-04-15 - Chris)
+#  BLATSERVERS ENTRY (DONE - 2017-05-19 - Chris)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 	# Haifang 
@@ -967,7 +966,6 @@ danRer11.downloadDir = danRer11
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
 	VALUES ("danRer11", "blat1a", "17875", "0", "1");' \
 	    hgcentraltest
-	XXX Need to test
     #	test it with some sequence
 
 #########################################################################
@@ -987,24 +985,9 @@ danRer11.downloadDir = danRer11
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/danRer11/pushQ
     cd /hive/data/genomes/danRer11/pushQ
-    time (makePushQSql.pl danRer11) > danRer11.pushQ.sql 2> stderr.out
+    time (makePushQSql.pl -redmineList danRer11) > danRer11.pushQ.sql 2> stderr.out
     #real	3m32.847s
-
-	59  372 5799 danRer11.pushQ.sql
-	38  298 1971 stderr.out
-
-    #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: danRer11 does not have cpgIslandExt
-	# WARNING: danRer11 does not have ucscToRefSeq
-	# WARNING: danRer11 does not have seq
-	# WARNING: danRer11 does not have extFile
-
-    #   copy it to hgwbeta
-    scp -p danRer11.pushQ.sql qateam@hgwbeta:/tmp/
-    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/danRer11.pushQ.sql"
-
-    #   in that pushQ entry walk through each entry and see if the
-    #   sizes will set properly
+	# Put a path to the files produced here in the redmine ticket 
 
 #########################################################################
 # UCSC to RefSeq name correspondence (TBD - 2016-05-12 - Chris)
