@@ -89,27 +89,41 @@ int e = 0, qSize=0;
 for (e = 0; e < gp->exonCount; ++e)
     qSize+=(gp->exonEnds[e] - gp->exonStarts[e]);
 
+int realSize = 0;
 int sizeAdjust = 0;
 if (qSizes != NULL)
     {
-    int realSize = hashIntValDefault(qSizeHash, gp->name, 0);
-    if (realSize > 0)
+    realSize = hashIntValDefault(qSizeHash, gp->name, 0);
+    // If there is a realSize (>0), but realSize is less than qSize, this subtraction would
+    // cause unsigned underflow so don't do it.  qSize > realSize implies that one of the genePred
+    // "exons" is glossing over a query gap.
+    if (realSize > qSize)
        sizeAdjust = realSize - qSize;
     }
 
-struct psl *psl = pslNew(gp->name, qSize+sizeAdjust, 0, qSize,
+struct psl *psl = pslNew(gp->name, realSize ? realSize : qSize, 0, qSize,
                          gp->chrom, chromSize, gp->txStart, gp->txEnd,
                          gp->strand, gp->exonCount, 0);
 /* no size adjustment to qStarts for positive strand */
 if (gp->strand[0] == '+')
    sizeAdjust = 0;
-psl->blockCount = gp->exonCount;		    
+int i = -1;
 for (e = 0; e < gp->exonCount; ++e)
     {
-    psl->blockSizes[e] = (gp->exonEnds[e] - gp->exonStarts[e]);
-    psl->qStarts[e] = e==0 ? 0 + sizeAdjust : psl->qStarts[e-1] + psl->blockSizes[e-1];
-    psl->tStarts[e] = gp->exonStarts[e];
+    if (e == 0 || gp->exonStarts[e] != gp->exonEnds[e-1])
+        {
+        i++;
+        psl->blockSizes[i] = (gp->exonEnds[e] - gp->exonStarts[e]);
+        psl->qStarts[i] = i==0 ? 0 + sizeAdjust : psl->qStarts[i-1] + psl->blockSizes[i-1];
+        psl->tStarts[i] = gp->exonStarts[e];
+        }
+    else
+        {
+        // Merge "exons" that have a 0-length gap between them to avoid pslCheck failure
+        psl->blockSizes[i] += (gp->exonEnds[e] - gp->exonStarts[e]);
+        }
     }
+psl->blockCount = i+1;
 psl->match = qSize;	
 psl->tNumInsert = psl->blockCount-1; 
 psl->tBaseInsert = (gp->txEnd - gp->txStart) - qSize;
