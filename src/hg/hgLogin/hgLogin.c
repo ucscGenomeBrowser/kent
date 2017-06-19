@@ -302,9 +302,7 @@ char *returnURL = cartUsualString(cart, "returnto", "");
 char returnTo[2048];
   
 if (!returnURL || sameString(returnURL,""))
-   safef(returnTo, sizeof(returnTo),
-         "%shgSession?hgS_doMainPage=1",
-         hLoginHostCgiBinUrl());
+   safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", hLoginHostCgiBinUrl())
 else
    safecpy(returnTo, sizeof(returnTo), returnURL);
 return cloneString(returnTo);
