@@ -7,7 +7,6 @@
 #include "jsonParse.h"
 #include "portable.h"
 #include "csv.h"
-#include "uuid.h"
 
 boolean gUrls;
 
@@ -302,13 +301,7 @@ slFreeList(&list);
 void rWriteJson(FILE *f, struct tagStanza *stanza, struct subObj *obj)
 /* Write out json object recursively */
 {
-char uuidBuf[37];
-char *objName = obj->name;
 fprintf(f, "{");
-if (sameString(objName, "sample"))
-     {
-     fprintf(f, "\"uuid\":\"%s\",",  makeUuidString(uuidBuf));
-     }
 struct subObj *field;
 boolean firstOut = TRUE;
 for (field = obj->children; field != NULL; field = field->next)

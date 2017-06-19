@@ -49,6 +49,7 @@ void traverse(struct tagStorm *tags, struct tagStanza *list,
 /* Recursively traverse stanzas on list. */
 {
 struct tagStanza *stanza;
+int limit = rql->limit;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
     if (stanza->children)
@@ -58,7 +59,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	if (tagStanzaRqlMatch(rql, stanza, lm))
 	    {
 	    ++matchCount;
-	    if (doSelect)
+	    if (doSelect && (limit < 0 || matchCount <= limit))
 		{
 		struct slName *field;
 		for (field = rql->fieldList; field != NULL; field = field->next)

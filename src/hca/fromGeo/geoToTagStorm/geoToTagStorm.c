@@ -84,7 +84,7 @@ while (lineFileNext(lf, &line, NULL))
 	char *tag = nextWord(&line);
 	int tagLen = strlen(tag);
 
-	/* Remove _1, _2, _3 suffixes.  These will be turned into arrays later */
+	/* Remove _1, _2, _30 suffixes.  These will be turned into arrays later */
 	char *lastUnderbar = strrchr(tag, '_');
 	if (lastUnderbar != NULL && isAllDigits(lastUnderbar+1))
 	    {
@@ -130,6 +130,7 @@ while (lineFileNext(lf, &line, NULL))
 	    *colonPos++ = 0;
 	    char *subTag = trimSpaces(val);
 	    subChar(subTag, ' ', '_');
+	    subChar(subTag, '-', '_');
 	    val = skipLeadingSpaces(colonPos);
 	    safef(outputTag, sizeof(outputTag), "%s.%s_%s", lcSection, tag, subTag);
 	    }
