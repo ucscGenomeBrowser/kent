@@ -3349,7 +3349,7 @@ char *hLoginHostCgiBinUrl()
  * Result has to be free'd. */
 {
 char buf[2048];
-safef(buf, sizeof(buf), "http%s://%s/cgi-bin/hgLogin",
+safef(buf, sizeof(buf), "http%s://%s/cgi-bin/",
       loginUseHttps() ? "s" : "", wikiLinkHost());
 return cloneString(buf);
 }

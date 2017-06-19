@@ -300,7 +300,7 @@ static char *loginUrl()
 /* Return the URL for the login host. */
 {
 char buf[2048];
-safef(buf, sizeof(buf), "%s/hgLogin", hLoginHostCgiBinUrl());
+safef(buf, sizeof(buf), "%shgLogin", hLoginHostCgiBinUrl());
 return cloneString(buf);
 }
 
