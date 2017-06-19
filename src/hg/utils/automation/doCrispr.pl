@@ -19,12 +19,17 @@ use vars qw/
     $opt_buildDir
     $opt_twoBit
     $opt_shoulder
+    $opt_tableName
     /;
 
 # Specify the steps supported with -continue / -stop:
 my $stepper = new HgStepManager(
     [ { name => 'ranges',   func => \&doRanges },
       { name => 'guides',   func => \&doGuides },
+      { name => 'specScores',   func => \&doSpecScores },
+      { name => 'effScores',   func => \&doEffScores },
+      { name => 'offTargets',   func => \&doOffTargets },
+      { name => 'load',   func => \&doLoad },
       { name => 'cleanup', func => \&doCleanup },
     ]
 				);
@@ -43,6 +48,8 @@ my $workhorse = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $twoBit = "$HgAutomate::clusterData/\$db/\$db.2bit";
 my $shoulder = 10000;	# default shoulder around exons
+my $tableName = "crispr10K";	# table name in database to load
+my $python = "/cluster/software/bin/python";
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -66,6 +73,8 @@ options:
                               of default: ($twoBit).
     -shoulder N           Use N as 'shoulder' extra on each side of an exon,
                               default: $shoulder bases.
+    -tableName name       Use name as gbdb path name and base name for db
+i                             table name, default: $tableName(Ranges|Targets)
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -76,6 +85,11 @@ _EOF_
 Automates UCSC's crispr procedure.  Steps:
     ranges: Construct ranges to work on around exons
     guides: Extract guide sequences from ranges
+    specScores: Compute spec scores
+    effScores: Compute the efficiency scores
+    offTargets: Converting off-targets
+    load: Construct bigBed file of results, link into /gbdb/<db>/<tableName>
+          and load into database if database is present
     cleanup: Removes or compresses intermediate files.
 All operations are performed in the build directory which is
 $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/crispr unless -buildDir is given.
@@ -122,12 +136,12 @@ sub checkOptions {
 # * step: ranges [workhorse]
 sub doRanges {
   my $runDir = "$buildDir/ranges";
-  my $inFaDir = "$buildDir/ranges/inFa";
+  my $inFaDir = "$buildDir/ranges/tmp";
 
   # First, make sure we're starting clean, or if done already, let
   #   it continue.
   if ( ! $opt_debug && ( -d "$runDir" ) ) {
-    if (! -d "$inFaDir") {
+    if (! -d "$inFaDir" && -s "$runDir/ranges.fa") {
       die "step ranges may have been attempted and failed," .
         "directory $runDir exists, however directory $inFaDir does not " .
         "exist.  Either run with -continue guides or some later " .
@@ -162,10 +176,8 @@ printf "# Get sequence without any gaps.\\n" 1>&2
 hgsql -N -e 'select chrom,chromStart,chromEnd from gap;' $db \\
    | bedInvert.pl $chromSizes stdin > notGap.bed
 
-# featureBits $db ranges.bed notGap.bed -faMerge -fa=ranges.fa \\
-#    -minSize=20 -bed=stdout | cut -f-3 > crisprRanges.bed
 # the minCoverage means 1 base in 100 billion will be recognized properly
-# the awk '\$4 > 19' selects items 20 bases and larger
+# the awk '\$4 > 19' selects items 20 bases and larger sized items
 bedIntersect -minCoverage=0.00000000001 ranges.bed notGap.bed \\
    stdout | bedSingleCover.pl stdin | awk '\$4 > 19' \\
       > crisprRanges.bed
@@ -173,8 +185,8 @@ bedIntersect -minCoverage=0.00000000001 ranges.bed notGap.bed \\
 twoBitToFa -noMask -bedPos -bed=crisprRanges.bed $twoBit ranges.fa
 
 printf "# split the sequence file into pieces for the cluster\\n" 1>&2
-mkdir -p inFa
-faSplit sequence ranges.fa 100 inFa/
+mkdir -p tmp
+faSplit sequence ranges.fa 100 tmp/
 _EOF_
   );
   $bossScript->execute();
@@ -185,31 +197,30 @@ sub doGuides {
 # * step: guides [bigClusterHub]
   my $paraHub = $bigClusterHub;
   my $runDir = "$buildDir/guides";
-  my $inFaDir = "$buildDir/ranges/inFa";
-  my $guidesDir = "$buildDir/outGuides";
+  my $inFaDir = "$buildDir/ranges/tmp";
 
   # First, make sure we're starting clean, or if done already, let
   #   it continue.
   if ( ! $opt_debug && ( -d "$runDir" ) ) {
-    if (-s "$runDir/run.time") {
+    if (-s "$runDir/run.time" && -s "$buildDir/allGuides.txt" && -s "$buildDir/allGuides.bed") {
      &HgAutomate::verbose(1,
          "# step guides is already completed, continuing...\n");
      return;
     } else {
       die "step guides may have been attempted and failed," .
         "directory $runDir exists, however the run.time result does not " .
-        "exist.  Either run with -continue guides or some later " .
+        "exist.  Either run with -continue specScores or some later " .
         "stage, or move aside/remove $runDir and run again, " .
         "or determine the failure to complete this step.\n";
     }
   }
 
   &HgAutomate::mustMkdir($runDir);
-  my $templateCmd = ("python $crisprScripts/findGuides.py " .
+  my $templateCmd = ("$python $crisprScripts/findGuides.py " .
 		     "{check in exists $inFaDir/\$(file1)} " .
 		     "{check in exists $chromSizes} " .
-		     "outGuides/\$(root1).bed " .
-		     "{check out exists outGuides/\$(root1).fa}" );
+		     "tmp/\$(root1).bed " .
+		     "{check out exists tmp/\$(root1).fa}" );
   &HgAutomate::makeGsub($runDir, $templateCmd);
 
   my $whatItDoes = "Construct guides for alignments.";
@@ -217,16 +228,200 @@ sub doGuides {
 		$paraHub, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-mkdir -p outGuides
+mkdir -p tmp
 find $inFaDir -type f | grep "\.fa\$" > fa.list
 $HgAutomate::gensub2 fa.list single gsub jobList
 $HgAutomate::paraRun
-catDir -suffix=.fa outGuides | grep -v "^>" > ../allGuides.txt
-catDir -suffix=.bed outGuides > ../allGuides.bed
+catDir -suffix=.fa tmp | grep -v "^>" > ../allGuides.txt
+catDir -suffix=.bed tmp > ../allGuides.bed
 _EOF_
   );
   $bossScript->execute();
 } # doGuides
+
+#########################################################################
+sub doSpecScores {
+# * step: specScores [bigClusterHub]
+  my $paraHub = $bigClusterHub;
+  my $runDir = "$buildDir/specScores";
+
+  # First, make sure we're starting clean, or if done already, let
+  #   it continue.
+  if ( ! $opt_debug && ( -d "$runDir" ) ) {
+    if (-s "$runDir/run.time" && -s "$buildDir/specScores.tab") {
+     &HgAutomate::verbose(1,
+         "# step specScores is already completed, continuing...\n");
+     return;
+    } else {
+      die "step specScores may have been attempted and failed," .
+        "directory $runDir exists, however the run.time result does not " .
+        "exist.  Either run with -continue effScores or some later " .
+        "stage, or move aside/remove $runDir and run again, " .
+        "or determine the failure to complete this step.\n";
+    }
+  }
+
+  &HgAutomate::mustMkdir($runDir);
+  my $templateCmd = ("$python $crisprScripts/crispor.py " .
+		     "$db {check in exists \$(path1)} " .
+		     "{check out exists tmp/outGuides/\$(root1).tab} " .
+		     "-o tmp/outOffs/\$(root1).tab" );
+  &HgAutomate::makeGsub($runDir, $templateCmd);
+
+  my $whatItDoes = "Compute spec scores.";
+  my $bossScript = newBash HgRemoteScript("$runDir/runSpecScores.bash",
+		$paraHub, $runDir, $whatItDoes);
+
+  &HgAutomate::verbose(1,
+         "# preparing the specificity alignment cluster run\n");
+
+  $bossScript->add(<<_EOF_
+mkdir -p tmp/inFa tmp/outGuides tmp/outOffs
+twoBitToFa -noMask $twoBit $db.fa
+/cluster/bin/samtools-0.1.19/samtools faidx $db.fa
+$python $crisprScripts/splitGuidesSpecScore.py ../allGuides.txt tmp/inFa jobNames.txt
+$HgAutomate::gensub2 jobNames.txt single gsub jobList
+$HgAutomate::paraRun
+find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
+printf "# Number of specScores: %d\\n" "`cat ../specScores.tab | wc -l`" 1>&1
+_EOF_
+  );
+  $bossScript->execute();
+} # doSpecScores
+
+#########################################################################
+sub doEffScores {
+# * step: effScores [bigClusterHub]
+  my $paraHub = $bigClusterHub;
+  my $runDir = "$buildDir/effScores";
+
+  # First, make sure we're starting clean, or if done already, let
+  #   it continue.
+  if ( ! $opt_debug && ( -d "$runDir" ) ) {
+    if (-s "$runDir/run.time" && -s "$buildDir/effScores.tab") {
+     &HgAutomate::verbose(1,
+         "# step effScores is already completed, continuing...\n");
+     return;
+    } else {
+      die "step effScores may have been attempted and failed," .
+        "directory $runDir exists, however the run.time result does not " .
+        "exist.  Either run with -continue offTargets or some later " .
+        "stage, or move aside/remove $runDir and run again, " .
+        "or determine the failure to complete this step.\n";
+    }
+  }
+
+  &HgAutomate::mustMkdir($runDir);
+  my $templateCmd = ("$python $crisprScripts/jobCalcEffScores.py " .
+		     "$crisporSrc $db {check in exists \$(path1)} " .
+		     "{check out exists tmp/out/\$(root1).tab} " );
+  &HgAutomate::makeGsub($runDir, $templateCmd);
+
+  my $whatItDoes = "Compute efficiency scores.";
+  my $bossScript = newBash HgRemoteScript("$runDir/runEffScores.bash",
+		$paraHub, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+$python $crisprScripts/splitGuidesEffScore.py $chromSizes ../allGuides.bed tmp jobNames.txt
+$HgAutomate::gensub2 jobNames.txt single gsub jobList
+$HgAutomate::paraRun
+find tmp/out -type f | xargs cat > ../effScores.tab
+printf "# Number of effScores: %d\\n" "`cat ../effScores.tab | wc -l`" 1>&1
+_EOF_
+  );
+  $bossScript->execute();
+} # doEffScores
+
+#########################################################################
+sub doOffTargets {
+# * step: effScores [bigClusterHub]
+  my $paraHub = $bigClusterHub;
+  my $runDir = "$buildDir/offTargets";
+  my $specScores = "$buildDir/specScores";
+
+  # First, make sure we're starting clean, or if done already, let
+  #   it continue.
+  if ( ! $opt_debug && ( -d "$runDir" ) ) {
+    if (-s "$runDir/run.time" && -s "$buildDir/crisprDetails.tab" && -s "$buildDir/offtargets.offsets.tab" ) {
+     &HgAutomate::verbose(1,
+         "# step offTargets is already completed, continuing...\n");
+     return;
+    } else {
+      die "step offTargets may have been attempted and failed," .
+        "directory $runDir exists, however the run.time result does not " .
+        "exist.  Either run with -continue load or some later " .
+        "stage, or move aside/remove $runDir and run again, " .
+        "or determine the failure to complete this step.\n";
+    }
+  }
+
+  &HgAutomate::mustMkdir($runDir);
+  my $templateCmd = ("$python $crisprScripts/convOffs.py " .
+		     "$db {check in exists ../specScores/tmp/\$(path1)} " .
+		     "{check out exists tmp/out/\$(root1).tab} " );
+  &HgAutomate::makeGsub($runDir, $templateCmd);
+
+  my $whatItDoes = "Compute efficiency scores.";
+  my $bossScript = newBash HgRemoteScript("$runDir/runOffTargets.bash",
+		$paraHub, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+mkdir -p tmp/inFnames tmp/out/
+find $specScores/tmp/outOffs -type f | sed -e 's#.*/tmp/##;' > otFnames.txt
+splitFile otFnames.txt 20 tmp/inFnames/otJob
+$HgAutomate::gensub2 otFnames.txt single gsub jobList
+$HgAutomate::paraRun
+$crisprScripts/catAndIndex tmp/out ../crisprDetails.tab ../offtargets.offsets.tab --headers=_mismatchCounts,_crisprOfftargets
+_EOF_
+  );
+  $bossScript->execute();
+} # doOffTargets
+
+#########################################################################
+sub doLoad {
+# * step: load [dbHost]
+  my $runDir = "$buildDir";
+
+  # First, make sure we're starting clean, or if done already, let
+  #   it continue.
+  if ( ! $opt_debug && ( -d "$runDir" ) ) {
+    if (-s "$runDir/crispr.bb") {
+     &HgAutomate::verbose(1,
+         "# step load is already completed, continuing...\n");
+     return;
+    } else {
+      die "step load may have been attempted and failed," .
+        "directory $runDir exists, however the crispr.bb result does not " .
+        "exist.  Either run with -continue cleanup or some later " .
+        "stage, or move aside/remove $runDir and run again, " .
+        "or determine the failure to complete this step.\n";
+    }
+  }
+
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "Construct bigBed file and load into database.";
+  my $bossScript = newBash HgRemoteScript("$runDir/loadUp.bash",
+		$dbHost, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+# creating the bigBed file
+$python $crisprScripts/createBigBed.py $db allGuides.bed specScores.tab effScores.tab offtargets.offsets.tab
+# now link it into gbdb
+mkdir -p /gbdb/$db/$tableName/
+ln -sf `pwd`/crispr.bb /gbdb/$db/$tableName/crispr.bb
+ln -sf `pwd`/crisprDetails.tab /gbdb/$db/$tableName/crisprDetails.tab
+_EOF_
+  );
+  if ($dbExists) {
+    $bossScript->add(<<_EOF_
+hgBbiDbLink $db ${tableName}Targets /gbdb/$db/$tableName/crispr.bb
+hgLoadBed $db ${tableName}Ranges crisprRanges.bed
+_EOF_
+    );
+  }
+  $bossScript->execute();
+} # doLoad
 
 #########################################################################
 # * step: cleanup [fileServer]
@@ -244,7 +439,6 @@ _EOF_
   );
   $bossScript->execute();
 } # doCleanup
-
 
 #########################################################################
 # main
@@ -271,8 +465,10 @@ $twoBit = $opt_twoBit ? $opt_twoBit : "$HgAutomate::clusterData/$db/$db.2bit";
 &HgAutomate::verbose(1, "# 2bit file: $twoBit\n");
 die "can not find 2bit file: '$twoBit'" if ( ! -s $twoBit);
 $shoulder = $opt_shoulder ? $opt_shoulder : $shoulder;
+$tableName = $opt_tableName ? $opt_tableName : $tableName;
 die "illegal value for shoulder: $shoulder, must be >= 30" if ($shoulder < 30);
 &HgAutomate::verbose(1, "# shoulder: $shoulder bases\n");
+&HgAutomate::verbose(1, "# tableName $tableName\n");
 $genomeFname = "$crisporSrc/genomes/$db/$db.fa.bwt";
 die "can not find bwa index '$genomeFname'" if ( ! -s $genomeFname);
 $chromSizes = "/hive/data/genomes/$db/chrom.sizes";
