@@ -796,14 +796,14 @@ type bed 4 +
 html cpgIslandSuper
 
     track cpgIslandExt
-    superTrack cpgIslandSuper pack
+    parent cpgIslandSuper pack
     shortLabel CpG Islands
     longLabel CpG Islands (Islands < 300 Bases are Light Green)
     priority 1
     html cpgIslandSuper
 
     track cpgIslandExtUnmasked
-    superTrack cpgIslandSuper hide
+    parent cpgIslandSuper hide
     shortLabel Unmasked CpG
     longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
     priority 2
