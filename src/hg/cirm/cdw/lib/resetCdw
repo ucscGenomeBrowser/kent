@@ -1,0 +1,131 @@
+#!/bin/tcsh -efx
+
+# Kill any running daemons
+killall cdwRunDaemon
+
+# Destroy current cdw and make a fresh one
+hgsql cdw -e "drop database cdw"
+
+# Create fifos for submission daemon.  Write 'hi' to
+# is so that it'll notice that the database is gone and kill itself
+# if it is already running
+set subFifo = /usr/local/apache/userdata/cdwSubmit.fifo
+if (! -e $subFifo) then
+    mkfifo $subFifo
+    chmod a+x $subFifo
+endif
+echo hi > $subFifo &
+
+# Do same thing for QA agent daemon.
+set qaFifo = /usr/local/apache/userdata/cdwQaAgent.fifo
+if (! -e $qaFifo) then
+    mkfifo $qaFifo
+    chmod a+x $qaFifo
+    echo hi > $qaFifo &
+endif
+echo hi > $qaFifo &
+
+# Do the often time consuming removal of all data.
+rm -rf /hive/groups/cirm/data/cdw
+
+# Make new data directory.
+mkdir -p /hive/groups/cirm/data/cdw
+
+# Create database and populate it with empty tables.
+hgsql hgFixed -e "create database cdw"
+hgsql cdw < cdw.sql
+
+# Add to database settings
+hgsql -e "insert into cdwSettings (name,val) values ('prefix', 'SCHb')" cdw
+
+# Create users
+cdwCreateUser kent@soe.ucsc.edu
+hgsql -e "update cdwUser set isAdmin=1 where email='kent@soe.ucsc.edu'" cdw
+cdwCreateUser cdw@cirm-01
+cdwCreateUser brianlee@soe.ucsc.edu
+cdwAddAssembly 9606 hg19 hg19 /data/cirm/valData/hg19/hg19.2bit -symLink=bcdbfbe9da62f19bee88b74dabef8cd3
+cdwAddAssembly 9606 hg38 hg38 /data/cirm/valData/hg38/hg38.2bit -symLink=dcc3ea27079aa6dc3f9deccd7275e0f8
+cdwAddAssembly 10090 mm9 mm9 /data/cirm/valData/mm9/mm9.2bit -symLink=e47354d24b9d95e832c337d42b9f8f71
+cdwAddAssembly 10090 mm10 mm10 /data/cirm/valData/mm10/mm10.2bit -symLink=fcfcc276799031793a513e2e9c07adad
+cdwAddAssembly 10116 rn4 rn4 /data/cirm/valData/rn4/rn4.2bit -symLink=9f0ed3cd87ab900be5e8157dbeaee12e
+cdwAddAssembly 7227 dm6 dm6 /data/cirm/valData/dm6/dm6.2bit -symLink=a2855251bb81479b1742dbbbd575fdcc
+cdwAddAssembly 559292 sacCer3 sacCer3 /data/cirm/valData/sacCer3/sacCer3.2bit -symLink=880201a7d1ec95c0185b0b4783c80411
+cdwAddAssembly 6239 ce10 ce10 /data/cirm/valData/ce10/ce10.2bit -symLink=3d0bab4bc255fc5b3276a476e13d230c
+cdwAddAssembly 562 escCol1 escCol1 /data/cirm/valData/escCol1/escCol1.2bit
+cdwAddQaEnrichTarget open hg19 /data/cirm/valData/hg19/regions/open.bb
+cdwAddQaEnrichTarget exon hg19 /data/cirm/valData/hg19/regions/exon.bb
+cdwAddQaEnrichTarget promoter hg19 /data/cirm/valData/hg19/regions/promoter.bb
+cdwAddQaEnrichTarget coding hg19 /data/cirm/valData/hg19/regions/coding.bb
+cdwAddQaEnrichTarget intron hg19 /data/cirm/valData/hg19/regions/intron.bb
+cdwAddQaEnrichTarget utr hg19 /data/cirm/valData/hg19/regions/utr.bb
+cdwAddQaEnrichTarget utr3 hg19 /data/cirm/valData/hg19/regions/utr3.bb
+cdwAddQaEnrichTarget utr5 hg19 /data/cirm/valData/hg19/regions/utr5.bb
+cdwAddQaEnrichTarget chrM hg19 /data/cirm/valData/hg19/regions/chrM.bb
+cdwAddQaEnrichTarget chrX hg19 /data/cirm/valData/hg19/regions/chrX.bb
+cdwAddQaEnrichTarget chrY hg19 /data/cirm/valData/hg19/regions/chrY.bb
+cdwAddQaEnrichTarget common_snp hg19 /data/cirm/valData/hg19/regions/common_snp.bb
+cdwAddQaEnrichTarget open mm9 /data/cirm/valData/mm9/regions/open.bb
+cdwAddQaEnrichTarget exon mm9 /data/cirm/valData/mm9/regions/exon.bb
+cdwAddQaEnrichTarget promoter mm9 /data/cirm/valData/mm9/regions/promoter.bb
+cdwAddQaEnrichTarget coding mm9 /data/cirm/valData/mm9/regions/coding.bb
+cdwAddQaEnrichTarget intron mm9 /data/cirm/valData/mm9/regions/intron.bb
+cdwAddQaEnrichTarget utr3 mm9 /data/cirm/valData/mm9/regions/utr3.bb
+cdwAddQaEnrichTarget utr5 mm9 /data/cirm/valData/mm9/regions/utr5.bb
+cdwAddQaEnrichTarget utr mm9 /data/cirm/valData/mm9/regions/utr.bb
+cdwAddQaEnrichTarget chrM mm9 /data/cirm/valData/mm9/regions/chrM.bb
+cdwAddQaEnrichTarget chrX mm9 /data/cirm/valData/mm9/regions/chrX.bb
+cdwAddQaEnrichTarget chrY mm9 /data/cirm/valData/mm9/regions/chrY.bb
+cdwAddQaEnrichTarget common_snp mm9 /data/cirm/valData/mm9/regions/common_snp.bb
+cdwAddQaEnrichTarget open mm10 /data/cirm/valData/mm10/regions/open.bb
+cdwAddQaEnrichTarget exon mm10 /data/cirm/valData/mm10/regions/exon.bb
+cdwAddQaEnrichTarget promoter mm10 /data/cirm/valData/mm10/regions/promoter.bb
+cdwAddQaEnrichTarget coding mm10 /data/cirm/valData/mm10/regions/coding.bb
+cdwAddQaEnrichTarget intron mm10 /data/cirm/valData/mm10/regions/intron.bb
+cdwAddQaEnrichTarget utr3 mm10 /data/cirm/valData/mm10/regions/utr3.bb
+cdwAddQaEnrichTarget utr5 mm10 /data/cirm/valData/mm10/regions/utr5.bb
+cdwAddQaEnrichTarget utr mm10 /data/cirm/valData/mm10/regions/utr.bb
+cdwAddQaEnrichTarget chrM mm10 /data/cirm/valData/mm10/regions/chrM.bb
+cdwAddQaEnrichTarget chrX mm10 /data/cirm/valData/mm10/regions/chrX.bb
+cdwAddQaEnrichTarget chrY mm10 /data/cirm/valData/mm10/regions/chrY.bb
+cdwAddQaEnrichTarget common_snp mm10 /data/cirm/valData/mm10/regions/common_snp.bb
+cdwAddQaEnrichTarget open hg38 /data/cirm/valData/hg38/regions/open.bb
+cdwAddQaEnrichTarget exon hg38 /data/cirm/valData/hg38/regions/exon.bb
+cdwAddQaEnrichTarget promoter hg38 /data/cirm/valData/hg38/regions/promoter.bb
+cdwAddQaEnrichTarget coding hg38 /data/cirm/valData/hg38/regions/coding.bb
+cdwAddQaEnrichTarget intron hg38 /data/cirm/valData/hg38/regions/intron.bb
+cdwAddQaEnrichTarget utr hg38 /data/cirm/valData/hg38/regions/utr.bb
+cdwAddQaEnrichTarget utr3 hg38 /data/cirm/valData/hg38/regions/utr3.bb
+cdwAddQaEnrichTarget utr5 hg38 /data/cirm/valData/hg38/regions/utr5.bb
+cdwAddQaEnrichTarget chrM hg38 /data/cirm/valData/hg38/regions/chrM.bb
+cdwAddQaEnrichTarget chrX hg38 /data/cirm/valData/hg38/regions/chrX.bb
+cdwAddQaEnrichTarget chrY hg38 /data/cirm/valData/hg38/regions/chrY.bb
+cdwAddQaEnrichTarget common_snp hg38 /data/cirm/valData/hg38/regions/common_snp.bb
+cdwAddQaContamTarget hg19
+cdwAddQaContamTarget mm10
+cdwAddQaContamTarget escCol1
+cdwAddQaContamTarget dm6
+cdwAddQaContamTarget ce10
+cdwAddQaContamTarget rn4
+cdwAddQaContamTarget sacCer3
+hgsql cdw -e 'insert cdwLab (name,pi,institution,url) values ("quake", "Stephen Quake", "Stanford University", "http://thebigone.stanford.edu")'
+hgsql cdw -e 'insert cdwLab (name,pi,institution,url) values ("snyder", "Michael Snyder", "Stanford University", "http://snyderlab.stanford.edu")'
+hgsql cdw -e 'insert cdwLab (name,pi,institution,url) values ("stam", "John Stamatoyannopoulus", "University of Washington", "http://stamlab.org")'
+hgsql cdw -e 'insert cdwLab (name,pi,institution,url) values ("kent", "W. James Kent", "UC Santa Cruz", "http://users.soe.ucsc.edu/~kent")'
+hgsql cdw -e 'create view enrichedFiles as select f.id,v.format,v.enrichedIn,e.enrichment,left(f.submitFileName,70) submitFileName from cdwQaEnrich e,cdwValidFile v,cdwFile f,cdwQaEnrichTarget t where e.fileId=f.id and v.fileId=f.id and t.id=e.qaEnrichTargetId and v.enrichedIn=t.name;'
+hgsql cdw -e 'create view crossEnrichments as select e.id aId,e.cdwFileName aFileName,y.id bId,y.cdwFileName bFileName,ev.enrichedIn enrich,sampleSampleEnrichment xEnrichment from cdwFile e,cdwQaPairSampleOverlap p, cdwFile y,cdwValidFile ev where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId = e.id'
+hgsql cdw -e 'create view correlations as select e.id aId,e.cdwFileName aFileName,y.id bId,y.cdwFileName bFileName,pearsonInEnriched from cdwFile e,cdwQaPairCorrelation p, cdwFile y where  e.id=p.elderFileId and y.id=p.youngerFileId'
+hgsql cdw -e 'create view vf as select e.id fileId,submitId,submitFileName,cdwFileName,FROM_UNIXTIME(endUploadTime) endUploadTime,FROM_UNIXTIME(updateTime) updateTime,size,md5,tags,errorMessage,deprecated,replacedBy,v.id validId,licensePlate,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,mapRatio,depth,singleQaStatus,replicateQaStatus,part,pairedEnd,qaVersion,uniqueMapRatio from cdwFile e, cdwValidFile v where e.id = v.fileId'
+
+hgsql cdw -e 'create view xf as select fileId,submitId,submitFileName,cdwFileName,endUploadTime endUploadTime,updateTime updateTime,size,md5,tags,errorMessage,deprecated,replacedBy,validId,licensePlate,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,mapRatio,depth,singleQaStatus,replicateQaStatus,part,pairedEnd,qaVersion,uniqueMapRatio,rfa,assayType,dataType,lab,biosample,ipTarget from vf,cdwExperiment ex where vf.experiment = ex.accession'
+
+#Add experiment table,  just a local one rather than from stanford
+#hgsql cdw -e 'load data local infile "../oneShot/rsyncCdwExpDataType/jan17.tab" into table cdwExperiment'
+#hgsql cdw -e 'load data local infile "../oneShot/cdwFakeBiosample/jan3.tab" into table cdwBiosample'
+
+
+## Add eap tables and run eap setup script
+#hgsql cdw < ../../eap/lib/eapDb.sql
+#../../eap/lib/addSoftware
+
+# Relaunch cdwRunDaemons.  Send them initial wake up message
+restartDeamons
