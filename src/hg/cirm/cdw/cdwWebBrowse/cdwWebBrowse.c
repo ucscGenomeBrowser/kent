@@ -1037,9 +1037,9 @@ puts("<ul>\n");
 puts("<li>With Firefox and <a href=\"https://addons.mozilla.org/en-US/firefox/addon/downthemall/\">DownThemAll</a>: Click Tools - DownThemAll! - Manager. Right click - Advanced - Import from file. Right-click - Select All. Right-click - Toogle All\n");
 puts("<li>With Chrome and <a href=\"https://chrome.google.com/webstore/detail/tab-save/lkngoeaeclaebmpkgapchgjdbaekacki\">TabToSave</a>: Click the T/S icon next to the URL bar, click the edit button at the bottom of the screen and paste the file contents\n");
 puts("<li>OSX/Linux: With curl and a single thread: <tt>xargs -n1 curl -JO --user YOUREMAIL:YOURPASS < fileUrls.txt</tt>\n");
-puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt --username YOUREMAIL --password YOURPASS</tt>\n");
-puts("<li>With wget and 4 threads: <tt>xargs -n 1 -P 4 wget --content-disposition -q --username YOUREMAIL --password YOURPASS < fileUrls.txt</tt>\n");
-puts("<li>With aria2c, 16 threads and two threads per file: <tt>aria2c --username YOUREMAIL --password YOURPASS -x 16 -s 2 -i fileUrls.txt</tt>\n");
+puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt --user YOUREMAIL --password YOURPASS</tt>\n");
+puts("<li>With wget and 4 threads: <tt>xargs -n 1 -P 4 wget --content-disposition -q --user YOUREMAIL --password YOURPASS < fileUrls.txt</tt>\n");
+puts("<li>With aria2c, 16 threads and two threads per file: <tt>aria2c --http-user YOUREMAIL --http-password YOURPASS -x 16 -s 2 -i fileUrls.txt</tt>\n");
 puts("</ul>\n");
 puts("</div>\n");
 
