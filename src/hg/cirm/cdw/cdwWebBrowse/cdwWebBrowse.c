@@ -967,11 +967,11 @@ for (ef = efList; ef != NULL; ef = ef->next)
         if ( (submitFname!=NULL) && (!isEmpty(submitFname)) && (*submitFname=='/') )
             submitFname += 1;
 
-        printf("curl 'http://%s/cgi-bin/cdwGetFile?acc=%s&token=%s' --create-dirs -o %s\n", \
+        printf("curl 'https://%s/cgi-bin/cdwGetFile?acc=%s&token=%s' --create-dirs -o %s\n", \
             host, vf->licensePlate, token, submitFname);
         }
     else
-        printf("http://%s/cgi-bin/cdwGetFile?acc=%s&token=%s%s\n", \
+        printf("https://%s/cgi-bin/cdwGetFile?acc=%s&token=%s%s\n", \
             host, vf->licensePlate, token, optArg);
     }
 }
@@ -1036,10 +1036,10 @@ puts("To download the files:\n");
 puts("<ul>\n");
 puts("<li>With Firefox and <a href=\"https://addons.mozilla.org/en-US/firefox/addon/downthemall/\">DownThemAll</a>: Click Tools - DownThemAll! - Manager. Right click - Advanced - Import from file. Right-click - Select All. Right-click - Toogle All\n");
 puts("<li>With Chrome and <a href=\"https://chrome.google.com/webstore/detail/tab-save/lkngoeaeclaebmpkgapchgjdbaekacki\">TabToSave</a>: Click the T/S icon next to the URL bar, click the edit button at the bottom of the screen and paste the file contents\n");
-puts("<li>OSX/Linux: With curl and a single thread: <tt>xargs -n1 curl -JO < fileUrls.txt</tt>\n");
-puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt</tt>\n");
-puts("<li>With wget and 4 threads: <tt>xargs -n 1 -P 4 wget --content-disposition -q < fileUrls.txt</tt>\n");
-puts("<li>With aria2c, 16 threads and two threads per file: <tt>aria2c -x 16 -s 2 -i fileUrls.txt</tt>\n");
+puts("<li>OSX/Linux: With curl and a single thread: <tt>xargs -n1 curl -JO --user YOUREMAIL:YOURPASS < fileUrls.txt</tt>\n");
+puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt --username YOUREMAIL --password YOURPASS</tt>\n");
+puts("<li>With wget and 4 threads: <tt>xargs -n 1 -P 4 wget --content-disposition -q --username YOUREMAIL --password YOURPASS < fileUrls.txt</tt>\n");
+puts("<li>With aria2c, 16 threads and two threads per file: <tt>aria2c --username YOUREMAIL --password YOURPASS -x 16 -s 2 -i fileUrls.txt</tt>\n");
 puts("</ul>\n");
 puts("</div>\n");
 
