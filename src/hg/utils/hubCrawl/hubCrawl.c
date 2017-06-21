@@ -277,7 +277,6 @@ if (hub->descriptionUrl != NULL)
     {
     hubHst->textLength = hubSearchTextLong;
     char *rawHtml = netReadTextFileIfExists(hub->descriptionUrl);
-    sleep(2);
     hubHst->text = cleanHubHtml(rawHtml);
     if (isNotEmpty(hubHst->text))
         hubSearchTextTabOut(hubHst, searchFp);
