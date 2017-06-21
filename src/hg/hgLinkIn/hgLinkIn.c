@@ -70,8 +70,8 @@ void hgLinkIn(struct cart *theCart)
 struct linkInResult *results = NULL;
 registerLinkInHandlers();
 
-char *linkInResource = cartOptionalString(theCart, "resource");
-char *linkInId = cartOptionalString(theCart, "id");
+char *linkInResource = cgiOptionalString("resource");
+char *linkInId = cgiOptionalString("id");
 
 if (isEmpty(linkInId))
     {
