@@ -187,6 +187,52 @@ while (*from!='\0')
 return scrubbed;
 }
 
+char *htmlTextStripJavascriptCssAndTags(char *s)
+/* Returns a cloned string with all inline javascript, css, and html tags stripped out */
+{
+if (s == NULL)
+    return NULL;
+char *scrubbed = needMem(strlen(s));
+char *from=s;
+char *to=scrubbed;
+while (*from!='\0')
+    {
+    if (startsWithNoCase("<script", from))
+        {
+        from++;
+        while (*from!='\0' && !startsWithNoCase("</script>", from))
+            from++;
+        if (*from == '\0')  // The last open tag was never closed!
+            break;
+        from += strlen("</script>");
+        *to++ = ' ';
+        }
+    else if (startsWithNoCase("<style", from))
+        {
+        from++;
+        while (*from!='\0' && !startsWithNoCase("</style>", from))
+            from++;
+        if (*from == '\0')  // The last open tag was never closed!
+            break;
+        from += strlen("</style>");
+        *to++ = ' ';
+        }
+    else if (*from == '<')
+        {
+        from++;
+        while (*from!='\0' && *from != '>')
+            from++;
+        if (*from == '\0')  // The last open tag was never closed!
+            break;
+        from++;
+        *to++ = ' ';
+        }
+    else
+        *to++ = *from++;
+    }
+return scrubbed;
+}
+
 char *htmlTextReplaceTagsWithChar(char *s, char ch)
 /* Returns a cloned string with all html tags replaced with given char (useful for tokenizing) */
 {
