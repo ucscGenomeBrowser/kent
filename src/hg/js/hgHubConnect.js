@@ -41,7 +41,7 @@ $(document).ready(function() {
     $('#hubDbFilter').bind('keypress', function(e) {  // binds listener to text field
         if (e.which === 13) {  // listens for return key
             e.preventDefault();   // prevents return from also submitting whole form
-            $('input[name="dbFilterButton"]').focus().click(); // clicks db filter button
+            $('input[name="hubSearchButton"]').focus().click(); // clicks db filter button
         }
     });
 });
