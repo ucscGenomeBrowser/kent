@@ -44,54 +44,6 @@ static struct optionSpec options[] = {
 };
 
 
-char *stripJavascriptCssAndHtmlTags(char *s)
-/* Scrub text from a description page to remove all html tags, inline javascript,
- * and css. */
-{
-if (s == NULL)
-    return NULL;
-char *scrubbed = needMem(strlen(s));
-char *from=s;
-char *to=scrubbed;
-while (*from!='\0')
-    {
-    if (startsWithNoCase("<script", from))
-        {
-        from++;
-        while (*from!='\0' && !startsWithNoCase("</script>", from))
-            from++;
-        if (*from == '\0')  // The last open tag was never closed!
-            break;
-        from += strlen("</script>");
-        *to++ = ' ';
-        }
-    else if (startsWithNoCase("<style", from))
-        {
-        from++;
-        while (*from!='\0' && !startsWithNoCase("</style>", from))
-            from++;
-        if (*from == '\0')  // The last open tag was never closed!
-            break;
-        from += strlen("</style>");
-        *to++ = ' ';
-        }
-    else if (*from == '<')
-        {
-        from++;
-        while (*from!='\0' && *from != '>')
-            from++;
-        if (*from == '\0')  // The last open tag was never closed!
-            break;
-        from++;
-        *to++ = ' ';
-        }
-    else
-        *to++ = *from++;
-    }
-return scrubbed;
-}
-
-
 char *removeExtraSpaces(char *s)
 /* Replace long spans of whitespace in s with just the first whitespace
  * character in each span. */
@@ -118,7 +70,7 @@ char *cleanHubHtml(char *html)
 {
 if (isEmpty(html))
     return NULL;
-char *stripHtml = stripJavascriptCssAndHtmlTags(html);
+char *stripHtml = htmlTextStripJavascriptCssAndTags(html);
 strSwapChar(stripHtml, '\n', ' ');
 strSwapChar(stripHtml, '\t', ' ');
 strSwapChar(stripHtml, '\015', ' ');
