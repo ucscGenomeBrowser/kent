@@ -3349,8 +3349,8 @@ char *hLoginHostCgiBinUrl()
  * Result has to be free'd. */
 {
 char buf[2048];
-safef(buf, sizeof(buf), "http%s://%s/cgi-bin/",
-      loginUseHttps() ? "s" : "", wikiLinkHost());
+safef(buf, sizeof(buf), "http%s://%s%s",
+      loginUseHttps() ? "s" : "", wikiLinkHost(), cgiScriptDirUrl());
 return cloneString(buf);
 }
 
