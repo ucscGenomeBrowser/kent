@@ -53,6 +53,7 @@ struct genomeOutputStructure
     struct tdbOutputStructure *tracks;
     struct dyString *assemblyLink;
     char *genomeName;
+    char *positionString;
     int trackCount;
     struct hash *tdbOutHash;
     int hitCount;
@@ -703,8 +704,8 @@ if (tdbOut == NULL)
     else
         dyStringPrintf(tdbOut->shortLabel, "%s", trackHubSkipHubName(trackInfo->track));
 
-    dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s", hub->url,
-            genomeOut->genomeName, trackInfo->track, cartSessionId(cart));
+    dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s&%s", hub->url,
+            genomeOut->genomeName, trackInfo->track, cartSessionId(cart), genomeOut->positionString);
 
     if (trackInfo->parent != NULL)
         {
@@ -739,6 +740,24 @@ while (tdb != NULL)
         }
     tdb = tdb->next;
     }
+}
+
+
+char *getPositionStringForDb(struct trackHubGenome *genome)
+{
+char positionVar[1024];
+safef(positionVar, sizeof(positionVar), "position.%s", genome->name);
+char *position = cartOptionalString(cart, positionVar);
+if (position == NULL)
+    {
+    struct dyString *tmp = dyStringCreate("position=");
+    if (genome->defaultPos != NULL)
+        dyStringAppend(tmp, genome->defaultPos);
+    else
+        dyStringAppend(tmp, hDefaultPos(genome->name)); // memory leak from hDefaultPos return value
+    position = dyStringCannibalize(&tmp);
+    }
+return position;
 }
 
 
@@ -783,8 +802,9 @@ for (hst = searchResults; hst != NULL; hst = hst->next)
         genomeOut->descriptionMatch = dyStringNew(0);
         genomeOut->shortLabel = dyStringNew(0);
         genomeOut->assemblyLink = dyStringNew(0);
-        dyStringPrintf(genomeOut->assemblyLink, "../cgi-bin/hgTracks?hubUrl=%s&db=%s&hgsid=%s",
-                hub->url, genome->name, cartSessionId(cart));
+        genomeOut->positionString = getPositionStringForDb(genome);
+        dyStringPrintf(genomeOut->assemblyLink, "../cgi-bin/hgTracks?hubUrl=%s&db=%s&hgsid=%s&%s",
+                hub->url, genome->name, cartSessionId(cart), genomeOut->positionString);
         char *name = trackHubSkipHubName(genome->name);
         if (isNotEmpty(genome->description))
             dyStringPrintf(genomeOut->shortLabel, "%s (%s)", genome->description, name);
