@@ -16,7 +16,7 @@ photoCreditURL  http://www.oumedicine.com/pathology/general-program-info/faculty
 photoCreditName Roman Wolf, University of Oklahoma Health Sciences Center
 
 #########################################################################
-#  Initial steps (TBD - 2017-03-27 - Hiram)
+#  Initial steps (DONE - 2017-06-20 - Hiram)
 
 # To start this initialBuild.txt document, from a previous assembly document:
 
@@ -343,13 +343,15 @@ taxId 9555
     mkdir /hive/data/genomes/papAnu3/bed/chromAlias
     cd /hive/data/genomes/papAnu3/bed/chromAlias
 
-    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' papAnu3 \
-        > ucsc.refseq.tab
-    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' papAnu3 \
-        > ucsc.genbank.tab
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' papAnu3 \
+        | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' papAnu3 \
+        | sort -k1,1 > ucsc.genbank.tab
 
-    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
-        | sort > papAnu3.chromAlias.tab
+    awk '{printf "%s\t%s\n", $1,$2}' ../ensLift/ucscToEns.txt \
+        | sort -k1,1 > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
 
     hgLoadSqlTab papAnu3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         papAnu3.chromAlias.tab
@@ -394,15 +396,14 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku papAnu3) > do.log 2>&1 &
-XXX - running - Tue Jun 20 14:13:54 PDT 2017
-    # real    462m52.098s
+    # real    752m10.908s
 
     cat faSize.rmsk.txt
-# 1440398454 bases (70533089 N's 1369865365 real 899399454 upper
-#	470465911 lower) in 6822 sequences in 1 files
-# Total size: mean 211140.2 sd 5118536.3 min 226 (chrUn_NW_016690147v1)
-#	max 194866763 (chr1) median 4812
-# %32.66 masked total, %34.34 masked real
+# 2948397226 bases (55130419 N's 2893266807 real 1378626320 upper
+#	1514640487 lower) in 63251 sequences in 1 files
+# Total size: mean 46614.2 sd 2497421.7 min 200 (chrUn_NW_003880573v1)
+#	max 220367699 (chr1) median 1416
+# %51.37 masked total, %52.35 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -410,8 +411,8 @@ XXX - running - Tue Jun 20 14:13:54 PDT 2017
     # CC   RELEASE 20140131;                                            *
 
     time featureBits -countGaps papAnu3 rmsk
-    #	471365620 bases of 1440398454 (32.725%) in intersection
-    #	real    0m20.783s
+    # 1515828879 bases of 2948397226 (51.412%) in intersection
+    # real    1m14.038s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -420,8 +421,8 @@ XXX - running - Tue Jun 20 14:13:54 PDT 2017
     # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' papAnu3 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    #	total 471365620.000000
-    #	real    0m16.203s
+    #	total 1515828879.000000
+    #	real    0m39.569s
 
 ##########################################################################
 # running simple repeat (DONE - 2017-06-20 - Hiram)
@@ -452,18 +453,18 @@ XXX - running - Tue Jun 20 14:13:54 PDT 2017
 
     twoBitToFa papAnu3.2bit stdout | faSize stdin > faSize.papAnu3.2bit.txt
     cat faSize.papAnu3.2bit.txt
-# 1440398454 bases (70533089 N's 1369865365 real 898405355 upper
-#	471460010 lower) in 6822 sequences in 1 files
-# Total size: mean 211140.2 sd 5118536.3 min 226 (chrUn_NW_016690147v1)
-#	max 194866763 (chr1) median 4812
-# %32.73 masked total, %34.42 masked real
+# 2948397226 bases (55130419 N's 2893266807 real 1377167920 upper
+#	1516098887 lower) in 63251 sequences in 1 files
+# Total size: mean 46614.2 sd 2497421.7 min 200 (chrUn_NW_003880573v1)
+#	max 220367699 (chr1) median 1416
+# %51.42 masked total, %52.40 masked real
 
     # reset the symlink
     rm /gbdb/papAnu3/papAnu3.2bit
     ln -s `pwd`/papAnu3.2bit /gbdb/papAnu3/papAnu3.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2017-03-27 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2017-06-21 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/papAnu3/bed/microsat
     cd /cluster/data/papAnu3/bed/microsat
@@ -472,224 +473,216 @@ XXX - running - Tue Jun 20 14:13:54 PDT 2017
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed papAnu3 microsat microsat.bed
-    # Read 13167 elements of size 4 from microsat.bed
+    # Read 28500 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2017-03-27 - Hiram)
+## WINDOWMASKER (DONE - 2017-06-21 - Hiram)
 
     mkdir /hive/data/genomes/papAnu3/bed/windowMasker
     cd /hive/data/genomes/papAnu3/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev papAnu3) > do.log 2>&1
-    # real    129m31.454s
+    # real    237m57.966s
 
     # Masking statistics
     cat faSize.papAnu3.cleanWMSdust.txt
-# 1440398454 bases (70533089 N's 1369865365 real 830396076 upper
-#	539469289 lower) in 6822 sequences in 1 files
-# Total size: mean 211140.2 sd 5118536.3 min 226 (chrUn_NW_016690147v1)
-#	max 194866763 (chr1) median 4812
-# %37.45 masked total, %39.38 masked real
-
+# 2948397226 bases (55130419 N's 2893266807 real 1766616003 upper 1126650804 lower) in 63251 sequences in 1 files
+# Total size: mean 46614.2 sd 2497421.7 min 200 (chrUn_NW_003880573v1) max 220367699 (chr1) median 1416
+# %38.21 masked total, %38.94 masked real
 
     cat fb.papAnu3.rmsk.windowmaskerSdust.txt
-    # 361644174 bases of 1440398454 (25.107%) in intersection
+    # 897063458 bases of 2948397226 (30.425%) in intersection
 
 ##########################################################################
-# run up idKeys files for ncbiRefSeq (TBD - 2017-03-28 - Hiram)
+# run up idKeys files for ncbiRefSeq (DONE - 2017-06-21 - Hiram)
     mkdir /hive/data/genomes/papAnu3/bed/idKeys
     cd /hive/data/genomes/papAnu3/bed/idKeys
 
     time (doIdKeys.pl -buildDir=`pwd`  papAnu3) > do.log 2>&1 &
-    # real    12m20.939s
+    # real    70m22.608s
 
     cat papAnu3.keySignature.txt
-    #   8ae219619932349bebc17364408bf9d0
+    #  23214ba62fc59aeee20827fb5be54544
 
 ##########################################################################
-# cpgIslands - (TBD - 2017-03-28 - Hiram)
+# cpgIslands - (DONE - 2017-06-21 - Hiram)
     mkdir /hive/data/genomes/papAnu3/bed/cpgIslands
     cd /hive/data/genomes/papAnu3/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku papAnu3) > do.log 2>&1 &
-    # real    3m28.088s
+    # real    17m26.948s
 
     cat fb.papAnu3.cpgIslandExt.txt
-    # 4735284 bases of 1369865365 (0.346%) in intersection
+    # 21276357 bases of 2893270787 (0.735%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2017-03-28 - Hiram)
+# genscan - (DONE - 2017-06-21 - Hiram)
     mkdir /hive/data/genomes/papAnu3/bed/genscan
     cd /hive/data/genomes/papAnu3/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku papAnu3) > do.log 2>&1 &
-    # real    105m32.304s
+    # real    197m24.943s
 
     cat fb.papAnu3.genscan.txt
-    # 49227165 bases of 1369865365 (3.594%) in intersection
+    # 52318577 bases of 2893270787 (1.808%) in intersection
 
     cat fb.papAnu3.genscanSubopt.txt
-    # 37665356 bases of 1369865365 (2.750%) in intersection
-
+    # 51120501 bases of 2893270787 (1.767%) in intersection
 
 #############################################################################
-# augustus gene track (TBD - 2017-03-28 - Hiram)
+# augustus gene track (DONE - 2017-06-21 - Hiram)
 
     mkdir /hive/data/genomes/papAnu3/bed/augustus
     cd /hive/data/genomes/papAnu3/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
-     -species=chicken -dbHost=hgwdev -workhorse=hgwdev papAnu3) > do.log 2>&1 &
-    # real    79m25.311s
+     -species=human -dbHost=hgwdev -workhorse=hgwdev papAnu3) > do.log 2>&1 &
+    # real    119m13.121s
 
     cat fb.papAnu3.augustusGene.txt
-    # 38938672 bases of 1369865365 (2.843%) in intersection
-
+    # 47314970 bases of 2893270787 (1.635%) in intersection
 
 #############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2017-03-30 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2017-06-21 - Hiram)
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzPapAnu3.2017-03-29
+    cd /hive/data/genomes/hg38/bed/lastzPapAnu3.2017-06-21
 
     cat fb.hg38.chainPapAnu3Link.txt
-    # 117720401 bases of 3049335806 (3.861%) in intersection
+    # 2632683317 bases of 3049335806 (86.336%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/papAnu3/bed/blastz.hg38.swap
     cd /hive/data/genomes/papAnu3/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzPapAnu3.2017-03-29/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
+      /hive/data/genomes/hg38/bed/lastzPapAnu3.2017-06-21/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    61m0.707s
+    #  real    232m5.391s
 
     cat fb.papAnu3.chainHg38Link.txt
-    # 108900066 bases of 1369865365 (7.950%) in intersection
+    # 2501550280 bases of 2893270787 (86.461%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` papAnu3 hg38) \
-       > rbest.log 2>&1
-    # real    749m24.229s
+      > rbest.log 2>&1
+    # real    446m1.402s
 
-#############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2017-03-30 - Hiram)
+#########################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2017-06-21 - Hiram)
 
-    cd /hive/data/genomes/mm10/bed/lastzPapAnu3.2017-03-29
+    # alignment to mouse/mm10:
+    cd /hive/data/genomes/mm10/bed/lastzPapAnu3.2017-06-21
     cat fb.mm10.chainPapAnu3Link.txt
-    #	87053836 bases of 2652783500 (3.282%) in intersection
+    #	910628118 bases of 2652783500 (34.327%) in intersection
 
-    #	and for the swap
     mkdir /hive/data/genomes/papAnu3/bed/blastz.mm10.swap
     cd /hive/data/genomes/papAnu3/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzPapAnu3.2017-03-29/DEF \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-        -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
-	> swap.log 2>&1 &
-    #	real    53m19.485s
+	/hive/data/genomes/mm10/bed/lastzPapAnu3.2017-06-21/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    66m35.501s
 
-    cat  fb.papAnu3.chainMm10Link.txt
-    #	90150612 bases of 1369865365 (6.581%) in intersection
+    cat fb.papAnu3.chainMm10Link.txt
+    #	897929517 bases of 2893270787 (31.035%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` papAnu3 mm10) \
-         > rbest.log 2>&1 &
-    #	real    597m52.740s
+    time (doRecipBest.pl -workhorse=hgwdev papAnu3 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    578m46.893s
 
-#############################################################################
-# Create kluster run files (TBD - 2017-03-28 - Hiram)
+##############################################################################
+# Create kluster run files (DONE - 2017-06-21 - Hiram)
 
     # numerator is papAnu3 gapless bases "real" as reported by:
     featureBits -noRandom -noHap papAnu3 gap
-    # 45444714 bases of 1227082306 (3.703%) in intersection
+    # 42059064 bases of 2682285126 (1.568%) in intersection
     #                   ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1227082306 / 2861349177 \) \* 1024
-    #  ( 1227082306 / 2861349177 ) * 1024 = 439.139792
+    calc \( 2682285126 / 2861349177 \) \* 1024
+    #  ( 2682285126 / 2861349177 ) * 1024 = 959.917787
 
-    # ==> use -repMatch=500 according to size scaled down from 1024 for human.
-    #   and rounded up to nearest 100
+    # ==> use -repMatch=1025 same as papAnu2
     cd /hive/data/genomes/papAnu3
     blat papAnu3.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/papAnu3.11.ooc \
-        -repMatch=500
-    #   Wrote 31375 overused 11-mers to jkStuff/papAnu3.11.ooc
-    # xenTro7 was:
-    #   Wrote 31229 overused 11-mers to jkStuff/xenTro7.11.ooc
+        -repMatch=1025
+    #   Wrote 29129 overused 11-mers to jkStuff/papAnu3.11.ooc
+    # papAnu2 at repMatch=1025 was:
+    #   Wrote 29128 overused 11-mers to jkStuff/papAnu2.11.ooc
 
     #   check non-bridged gaps to see what the typical size is:
     hgsql -N \
         -e 'select * from gap where bridge="no" order by size;' papAnu3 \
         | sort -k7,7nr | ave -col=7 stdin
-    # there are no non-bridged gaps in this assembly
+# Q1 100.000000
+# median 100.000000
+# Q3 100.000000
+# average 100.000000
+# min 100.000000
+# max 100.000000
+# count 9250
+# total 925000.000000
+# standard deviation 0.000000
 
-    # # all these gap sizes are 100
-    # # minimum gap size is 100 and produces a reasonable number of lifts
-    # gapToLift -verbose=2 -minGap=10 papAnu3 jkStuff/nonBridged.lft \
-    #    -bedFile=jkStuff/nonBridged.bed
+    # all these gap sizes are 100
+    gapToLift -verbose=2 -minGap=100 papAnu3 jkStuff/papAnu3.nonBridged.lft \
+       -bedFile=jkStuff/papAnu3.nonBridged.bed
 
 #########################################################################
-# LIFTOVER TO xenTro7 (TBD - 2017-03-28 - Hiram)
+# LIFTOVER TO papAnu2 (DONE - 2017-06-23 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/papAnu3/bed/blat.xenTro7.2017-03-27
-    cd /hive/data/genomes/papAnu3/bed/blat.xenTro7.2017-03-27
+    mkdir /hive/data/genomes/papAnu3/bed/blat.papAnu2.2017-06-23
+    cd /hive/data/genomes/papAnu3/bed/blat.papAnu2.2017-06-23
     time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
 	-ooc=/hive/data/genomes/papAnu3/jkStuff/papAnu3.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         papAnu3 xenTro7) > do.log 2>&1
-    # real    407m17.792s
+         papAnu3 papAnu2) > do.log 2>&1
+    # real    396m5.063s
 
     # verify the convert link on the test browser is now active from papAnu3 to
-    # xenTro7
+    # papAnu2
 
 #########################################################################
-# LIFTOVER TO xenTro3 (TBD - 2017-03-28 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/papAnu3/bed/blat.xenTro3.2017-03-28
-    cd /hive/data/genomes/papAnu3/bed/blat.xenTro3.2017-03-28
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/papAnu3/jkStuff/papAnu3.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         papAnu3 xenTro3) > do.log 2>&1
-    # real    422m44.841s
-
-    # verify the convert link on the test browser is now active from papAnu3 to
-    # xenTro3
-
-########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-03-28 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-06-21 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism             mrnaCnt   estCnt  refSeqCnt
-    # Xenopus tropicalis      18478   1271480 8612
+    # Papio anubis    512     145626  505
+    # Papio anubis anubis     6       0       0
+    # Papio cynocephalus      23      0       0
+    # Papio cynocephalus x Papio anubis       3       0       0
+    # Papio hamadryas 102     0       0
+    # Papio hamadryas hamadryas       1       0       0
+    # Papio papio     10      0       0
 
-    # edit etc/genbank.conf to add papAnu3 just before macFas5
-# papAnu3 'Xenopus tropicalis' 11 chroms + 6811 contigs
+    # edit etc/genbank.conf to add papAnu3 just before papAnu2
+# Baboon
+# papAnu3 (baboon)
 papAnu3.serverGenome = /hive/data/genomes/papAnu3/papAnu3.2bit
 papAnu3.clusterGenome = /hive/data/genomes/papAnu3/papAnu3.2bit
 papAnu3.ooc = /hive/data/genomes/papAnu3/jkStuff/papAnu3.11.ooc
-papAnu3.lift = no
+papAnu3.lift = /hive/data/genomes/papAnu3/jkStuff/papAnu3.nonBridged.lift
 papAnu3.perChromTables = no
+papAnu3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+papAnu3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+papAnu3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+papAnu3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+papAnu3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+papAnu3.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 papAnu3.downloadDir = papAnu3
-# papAnu3.mgc = yes
-papAnu3.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
-papAnu3.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
-papAnu3.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
-papAnu3.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
-papAnu3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
 # defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
 # genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
 # refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
-# xenTro7.upstreamGeneTbl = ensGene
-# xenTro7.upstreamMaf = multiz9way /hive/data/genomes/xenTro7/bed/multiz9way/species.list
 
-    git commit -m 'adding papAnu3 X, tropicalis refs #19151' etc/genbank.conf
+    git commit -m 'adding papAnu3 baboon refs #19660' etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
     make etc-update
@@ -697,12 +690,13 @@ papAnu3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial papAnu3
-    # logFile: var/build/logs/2017.03.28-10:19:21.papAnu3.initalign.log
-    #   real    424m59.280s
+    # logFile: var/build/logs/2017.06.21-10:02:02.papAnu3.initalign.log
+    #   real    422m26.969s
 
-    tail -2 var/build/logs/2017.03.28-10:19:21.papAnu3.initalign.log
-    #	hgwdev 2017.03.28-17:22:09 papAnu3.initalign: Succeeded: papAnu3
-    #   hgwdev 2017.03.28-17:24:20 papAnu3.initalign: finish
+
+    tail -2 var/build/logs/2017.06.21-10:02:02.papAnu3.initalign.log
+    # hgwdev 2017.06.21-17:01:26 papAnu3.initalign: Succeeded: papAnu3
+    # hgwdev 2017.06.21-17:04:29 papAnu3.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.papAnu3
@@ -711,11 +705,11 @@ papAnu3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad papAnu3
-    # logFile: var/dbload/hgwdev/logs/2017.03.28-18:08:41.papAnu3.dbload.log
-    #  real    30m42.283s
+    # logFile: var/dbload/hgwdev/logs/2017.06.21-18:22:49.papAnu3.dbload.log
+    #  real    18m30.415s
 
-    tail -1 var/dbload/hgwdev/logs/2017.03.28-18:08:41.papAnu3.dbload.log
-    #  hgwdev 2017.03.28-18:39:24 papAnu3.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2017.06.21-18:22:49.papAnu3.dbload.log
+    #  hgwdev 2017.06.21-18:41:19 papAnu3.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -723,7 +717,7 @@ papAnu3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
     # add papAnu3 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding papAnu3 to the update alignments refs #19151' etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding papAnu3 to the update alignments refs #19660' etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -762,27 +756,27 @@ papAnu3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
     #    enrich 14.68x
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-03-29 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-06-23 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("papAnu3", "blat1d", "17884", "1", "0"); \
+	VALUES ("papAnu3", "blat1c", "17892", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("papAnu3", "blat1d", "17885", "0", "1");' \
+	VALUES ("papAnu3", "blat1c", "17893", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to same as xenTro7
-##  (TBD - 2017-03-29 - Hiram)
+## reset default position to same as what hg38 has
+##  (DONE - 2017-06-23 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr9:15945953-15959305"
+    hgsql -e 'update dbDb set defaultPos="chr1:13964116-14118692"
 	where name="papAnu3";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-03-06 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-06-23 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=papAnu3 -tableCoverage all.joiner
@@ -791,27 +785,23 @@ papAnu3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
 
     cd /hive/data/genomes/papAnu3
     time (makeDownloads.pl -workhorse=hgwdev papAnu3) > downloads.log 2>&1
-    #  real    14m41.395s
-
+    #  real    26m28.250s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/papAnu3/pushQ
     cd /hive/data/genomes/papAnu3/pushQ
     time (makePushQSql.pl -redmineList papAnu3) > papAnu3.pushQ.sql 2> stderr.out
-    #  real    7m21.629s
+    #  real    3m42.117s
 
     #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: hgwdev does not have /gbdb/papAnu3/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/papAnu3/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/papAnu3/bbi/quality.bw
     # WARNING: papAnu3 does not have seq
     # WARNING: papAnu3 does not have extFile
 
-    #   copy it to hgwbeta
-    scp -p papAnu3.pushQ.sql qateam@hgwbeta:/tmp/
-    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/papAnu3.pushQ.sql"
+    # add the path names to the listing files in the redmine issue
+    # in the three appropriate entry boxes:
 
-    #   in that pushQ entry walk through each entry and see if the
-    #   sizes will set properly
+/hive/data/genomes/papAnu3/pushQ/redmine.papAnu3.file.list
+/hive/data/genomes/papAnu3/pushQ/redmine.papAnu3.releaseLog.txt
+/hive/data/genomes/papAnu3/pushQ/redmine.papAnu3.table.list
 
 #########################################################################
