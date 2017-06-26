@@ -2143,21 +2143,27 @@ for (;;)
 
 
 
-void eraseTrailingSpaces(char *s)
-/* Replace trailing white space with zeroes. */
+int eraseTrailingSpaces(char *s)
+/* Replace trailing white space with zeroes. Returns number of
+ * spaces erased. */
 {
 int len = strlen(s);
 int i;
 char c;
+int erased = 0;
 
 for (i=len-1; i>=0; --i)
     {
     c = s[i];
     if (isspace(c))
+	{
 	s[i] = 0;
+	++erased;
+	}
     else
 	break;
     }
+return erased;
 }
 
 /* Remove white space from a string */

@@ -20,7 +20,7 @@ char *csvParseNext(char **pos, struct dyString *scratch);
  * returning scratch->string or NULL if no values left. Will update *pos
  * to after trailing comma if any. This will tolerate and ignore leading
  * and trailing white space.  
- *     Since an empty or all-white string is will return NULL, if you
+ *     Since an empty or all-white string will return NULL, if you
  * want empty strings to be a legitimate value then they have to be quoted
  * or followed by a comma. */
 

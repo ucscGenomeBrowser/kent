@@ -124,6 +124,9 @@ consistency there in the existing code base.
 Variables that are global should begin with the small letter "g."  This
 is a relatively recent convention, and is not so widely used, but when
 maintaining code or writing new code it would be good to adopt it.
+Global variable set from the command line instead should begin with
+the letters "cl."  This is actually a somewhat older but still not 
+universal convention.
 
 ERROR HANDLING AND MEMORY ALLOCATION
 

@@ -376,45 +376,6 @@ for (leaf = leafList; leaf != NULL; leaf = leaf->next)
 
 }
 
-#ifdef OLD
-void addDonorIds(struct tagStorm *storm, struct tagStanzaRef *leafList)
-/* Assign a uuid to each sample.donor.id, and then add it to leaf stanzas
- * as sample.donor.uuid. */
-{
-struct hash *donorHash = hashNew(0);
-
-/* Make pass through generating uuids for each unique donor and putting in hash */
-struct tagStanzaRef *leaf;
-for (leaf = leafList; leaf != NULL; leaf = leaf->next)
-    {
-    struct tagStanza *stanza = leaf->stanza;
-    char *donor = tagFindVal(stanza, "sample.donor.id");
-    if (donor != NULL)
-        {
-	char *uuid = hashFindVal(donorHash, donor);
-	if (uuid == NULL)
-	    {
-	    uuid = needMem(UUID_STRING_SIZE);
-	    makeUuidString(uuid);
-	    hashAdd(donorHash, donor, uuid);
-	    }
-	}
-    }
-
-/* Make a second pass now adding the uuid to all leaves. */
-for (leaf = leafList; leaf != NULL; leaf = leaf->next)
-    {
-    struct tagStanza *stanza = leaf->stanza;
-    char *donor = tagFindVal(stanza, "sample.donor.id");
-    if (donor != NULL)
-        {
-	char *uuid = hashMustFindVal(donorHash, donor);
-	tagStanzaAppend(storm, stanza, "sample.donor.uuid", uuid);
-	}
-    }
-
-}
-#endif /* OLD */
 
 boolean prefixedNumerical(char *prefix, char *acc)
 /* Return TRUE if acc starts with prefix and is followed by all numbers */
@@ -492,15 +453,6 @@ replaceWithFirstChoice(storm, leafList, machineTags,ArraySize(machineTags), "ass
 replaceWithFirstChoice(storm, leafList, cellTypeTags,ArraySize(cellTypeTags), "cell.type");
 replaceWithFirstChoice(storm, leafList, diseaseTags,ArraySize(diseaseTags), "sample.donor.disease");
 replaceWithFirstChoice(storm, leafList, moleculeTags,ArraySize(moleculeTags), "assay.seq.molecule");
-
-#ifdef OLD
-/* Add in donor IDs */
-addDonorIds(storm, leafList);
-
-/* Add a project level UUID */
-char projectUuid[37];
-tagStanzaAppend(storm, storm->forest, "project.uuid",  makeUuidString(projectUuid));
-#endif /* OLD */
 
 /* Deal with protocols. */
 reformatProtocols(storm, leafList);
