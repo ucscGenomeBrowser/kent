@@ -6,14 +6,14 @@
 #       ./summaryEmail.sh $USER | mail -s "Code summaries are due" $USER
 #   end
 
-victim=${USER}
+author=${USER}
 if [ $# -gt 0 ]; then
-    victim=${1}
+    author=${1}
 fi
 LASTNN=$((BRANCHNN - 1))
 
-#git log --author=${victim} v${LASTNN}_branch.1..v${BRANCHNN}_base --pretty=oneline > /dev/null
-command="git log --stat --author=${victim} --reverse v${LASTNN}_base..v${BRANCHNN}_base"
+#git log --author=${author} v${LASTNN}_branch.1..v${BRANCHNN}_base --pretty=oneline > /dev/null
+command="git log --stat --author=${author} --reverse v${LASTNN}_base..v${BRANCHNN}_base"
 
 echo "To those who need reminding..."
 echo ""
@@ -24,9 +24,9 @@ echo "The end of this message contains the log of all your changes for this buil
 echo ""
 echo "If you prefer to review the git reports directly, visit these three links to see your changes:"
 echo ""
-echo "    http://genecats.cse.ucsc.edu/git-reports-history/v${BRANCHNN}/review/user/${victim}/index.html"
-echo "    http://genecats.cse.ucsc.edu/git-reports-history/v${BRANCHNN}/review2/user/${victim}/index.html"
-echo "    http://genecats.cse.ucsc.edu/git-reports-history/v${BRANCHNN}/branch/user/${victim}/index.html"
+echo "    http://genecats.cse.ucsc.edu/git-reports-history/v${BRANCHNN}/review/user/${author}/index.html"
+echo "    http://genecats.cse.ucsc.edu/git-reports-history/v${BRANCHNN}/review2/user/${author}/index.html"
+echo "    http://genecats.cse.ucsc.edu/git-reports-history/v${BRANCHNN}/branch/user/${author}/index.html"
 echo ""
 echo "Your bona fide build-meister"
 echo ""
@@ -36,5 +36,5 @@ echo "    $command"
 echo ""
 $command
 if [ $? -ne 0 ]; then
-  echo No changes were found for ${victim}
+  echo No changes were found for ${author}
 fi
