@@ -45,18 +45,6 @@ strip::  compile
 	chmod g+w $A${EXE}
 	chmod a+rx $A${EXE}
 
-install::  strip
-	@if [ ! -d "${DESTDIR}${CGI_BIN}/loader" ]; then \
-		${MKDIR} "${DESTDIR}${CGI_BIN}/loader"; \
-	fi
-	rm -f ${DESTDIR}${CGI_BIN}/loader/$A
-	mv $A${EXE} ${DESTDIR}${CGI_BIN}/loader/$A
-	for F in ${SQL_FILES}; do \
-	    B=`basename $$F` ; \
-	    rm -f ${DESTDIR}${CGI_BIN}/loader/$$B ; \
-	    cp -p $$F ${DESTDIR}${CGI_BIN}/loader/$$B ; \
-	done
-
 debug:: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
