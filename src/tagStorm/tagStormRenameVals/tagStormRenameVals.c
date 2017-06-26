@@ -18,8 +18,6 @@ errAbort(
   "first column is the tag name, and the second the old val, the third the new val.\n"
   "   If in.tags and out.tags are the same, it will create a backup of\n"
   "in.tags in in.tags.bak\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
