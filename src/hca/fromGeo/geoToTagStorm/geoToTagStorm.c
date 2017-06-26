@@ -241,7 +241,7 @@ for (pair = stanza->tagList; pair != NULL; pair = pair->next)
 	{
 	if (dy->stringSize != 0)
 	     dyStringAppendC(dy, ',');
-	dyStringAppend(dy, pair->val);
+	dyStringAppend(dy, pair->val);  // Pair->val already comma escaped
 	}
     }
 
