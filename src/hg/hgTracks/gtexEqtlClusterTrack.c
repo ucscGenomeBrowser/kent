@@ -85,7 +85,7 @@ static void gtexEqtlClusterMapItem(struct track *tg, struct hvGfx *hvg, void *it
 /* Create a map box on item and label with list of tissues with colors and effect size */
 {
 char *title = itemName;
-uglyf("<br>title: %s\n", title);
+//uglyf("<br>title: %s\n", title);
 if (tg->limitedVis != tvDense)
     {
     // construct list of tissues with colors and effect sizes for mouseover
@@ -107,7 +107,7 @@ if (tg->limitedVis != tvDense)
         }
     title = dyStringCannibalize(&ds);
     }
-uglyf("<br>title2: %s\n", title);
+//uglyf("<br>title2: %s\n", title);
 genericMapItem(tg, hvg, item, title, itemName, start, end, x, y, width, height);
 }
 
