@@ -163,7 +163,10 @@ char *accFromEnd(char *url, char endChar, char *accPrefix, char *type)
 char *s = strrchr(url, endChar);
 if (s == NULL || !startsWith(accPrefix, s+1))
     errAbort("Malformed %s URL\n\t%s", type, url);
-return s+1;
+s += 1;
+if (!isSymbolString(s))
+    errAbort("accFromEnd got something that doesn't look like accession: %s", s);
+return s;
 }
 
 void fixAccessions(struct tagStorm *storm, struct tagStanza *stanza, void *context)
