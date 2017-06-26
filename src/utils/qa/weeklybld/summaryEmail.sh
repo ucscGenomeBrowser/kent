@@ -13,6 +13,8 @@ fi
 LASTNN=$((BRANCHNN - 1))
 
 #git log --author=${victim} v${LASTNN}_branch.1..v${BRANCHNN}_base --pretty=oneline > /dev/null
+command="git log --stat --author=${victim} --reverse v${LASTNN}_base..v${BRANCHNN}_base"
+
 echo "To those who need reminding..."
 echo ""
 echo "v${BRANCHNN} has been built successfully on beta."
@@ -30,9 +32,9 @@ echo "Your bona fide build-meister"
 echo ""
 echo "- - - - - - - - - - - - - - - -"
 echo "Here is the log of all your changes for this build obtained by running the following command:"
-echo "    git log --stat --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base"
+echo "    $command"
 echo ""
-git log --stat --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base
+$command
 if [ $? -ne 0 ]; then
   echo No changes were found for ${victim}
 fi
