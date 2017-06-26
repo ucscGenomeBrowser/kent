@@ -334,46 +334,6 @@ dyStringFree(&protocol);
 dyStringFree(&type);
 }
 
-#ifdef OLD
-void addDonorIds(struct tagStorm *storm, struct tagStanzaRef *leafList)
-/* Assign a uuid to each sample.donor.id, and then add it to leaf stanzas
- * as sample.donor.uuid. */
-{
-struct hash *donorHash = hashNew(0);
-
-/* Make pass through generating uuids for each unique donor and putting in hash */
-struct tagStanzaRef *leaf;
-for (leaf = leafList; leaf != NULL; leaf = leaf->next)
-    {
-    struct tagStanza *stanza = leaf->stanza;
-    char *donor = tagFindVal(stanza, "sample.donor.id");
-    if (donor != NULL)
-        {
-	char *uuid = hashFindVal(donorHash, donor);
-	if (uuid == NULL)
-	    {
-	    uuid = needMem(UUID_STRING_SIZE);
-	    makeUuidString(uuid);
-	    hashAdd(donorHash, donor, uuid);
-	    }
-	}
-    }
-
-/* Make a second pass now adding the uuid to all leaves. */
-for (leaf = leafList; leaf != NULL; leaf = leaf->next)
-    {
-    struct tagStanza *stanza = leaf->stanza;
-    char *donor = tagFindVal(stanza, "sample.donor.id");
-    if (donor != NULL)
-        {
-	char *uuid = hashMustFindVal(donorHash, donor);
-	tagStanzaAppend(storm, stanza, "sample.donor.uuid", uuid);
-	}
-    }
-
-}
-#endif /* OLD */
-
 void geoStormToHcaStorm(char *inTags, char *inSrxSrr, char *output)
 /* geoStormToHcaStorm - Convert output of geoToTagStorm to something closer to what the Human Cell 
  *  Atlas wants.. */
@@ -399,16 +359,6 @@ tagStormWeedArray(storm, protoWeeds, ArraySize(protoWeeds));
 
 /* Do simple subsitutions. */
 tagStormSubArray(storm, substitutions, ArraySize(substitutions));
-
-#ifdef OLD
-/* Add a project level UUID */
-char projectUuid[37];
-tagStanzaAppend(storm, storm->forest, "project.uuid",  makeUuidString(projectUuid));
-
-/* Add in donor IDs */
-struct tagStanzaRef *leafList = tagStormListLeaves(storm);
-addDonorIds(storm, leafList);
-#endif /* OLD */
 
 /* Save results */
 tagStormWrite(storm, output, 0);
