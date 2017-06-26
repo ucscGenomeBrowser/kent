@@ -16,6 +16,7 @@ int clVals = 0;
 boolean clSchema = FALSE;
 boolean clLooseSchema = FALSE;
 boolean clTightSchema = FALSE;
+char *clTag = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +28,7 @@ errAbort(
   "options:\n"
   "   -counts - if set output names, use counts, and value counts of each tag\n"
   "   -vals=N - display tags and the top N values for them\n"
+  "   -tag=tagName - restrict info to just the one tag, often used with vals option\n"
   "   -schema - put a schema that will fit this tag storm in output.txt\n"
   "   -looseSchema - put a less fussy schema instead\n"
   "   -tightSchema - put a more fussy schema instead\n"
@@ -40,6 +42,7 @@ static struct optionSpec options[] = {
    {"schema", OPTION_BOOLEAN},
    {"tightSchema", OPTION_BOOLEAN},
    {"looseSchema", OPTION_BOOLEAN},
+   {"tag", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -85,15 +88,18 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
 	char *tagName = pair->name;
-	stanzaSize += 1;
-	*retExpandedCount += 1 + expansion;
-	struct tagInfo *tagInfo = hashFindVal(tagHash, tagName);
-	if (tagInfo == NULL)
-	     {
-	     tagInfo = tagInfoNew(tagName);
-	     hashAdd(tagHash, tagName, tagInfo);
-	     }
-	tagInfoAdd(tagInfo, pair->val);
+	if (clTag == NULL || sameString(tagName, clTag))
+	    {
+	    stanzaSize += 1;
+	    *retExpandedCount += 1 + expansion;
+	    struct tagInfo *tagInfo = hashFindVal(tagHash, tagName);
+	    if (tagInfo == NULL)
+		 {
+		 tagInfo = tagInfoNew(tagName);
+		 hashAdd(tagHash, tagName, tagInfo);
+		 }
+	    tagInfoAdd(tagInfo, pair->val);
+	    }
 	}
     *retTagCount += stanzaSize;
     if (stanza->children != NULL)
@@ -187,6 +193,7 @@ clVals = optionInt("vals", clVals);
 clSchema = optionExists("schema");
 clLooseSchema = optionExists("looseSchema");
 clTightSchema = optionExists("tightSchema");
+clTag = optionVal("tag", clTag);
 anySchema = (clSchema || clLooseSchema || clTightSchema);
 tagStormInfo(argv[1]);
 return 0;
