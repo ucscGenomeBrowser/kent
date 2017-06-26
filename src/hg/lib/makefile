@@ -60,8 +60,8 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     genomicSuperDups.o geoMirror.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     ggTypes.o glDbRep.o goa.o goaPart.o googleAnalytics.o gpFx.o \
     growthCondition.o grp.o \
-    gtexAse.o gtexBoxplot.o gtexInfo.o gtexDonor.o gtexGeneBed.o gtexSample.o gtexSampleData.o \
-    gtexTissue.o gtexTissueData.o gtexTissueMedian.o gtexUi.o \
+    gtexAse.o gtexBoxplot.o gtexEqtlCluster.o gtexInfo.o gtexDonor.o gtexGeneBed.o gtexSample.o \
+    gtexSampleData.o gtexTissue.o gtexTissueData.o gtexTissueMedian.o gtexUi.o \
     gwasCatalog.o hAnno.o haplotypes.o \
     hapmapAllelesOrtho.o hapmapAllelesSummary.o hapmapPhaseIIISummary.o \
     hapmapSnps.o hapmapSnpsCombined.o \

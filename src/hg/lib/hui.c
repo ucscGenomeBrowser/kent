@@ -567,6 +567,8 @@ if (trackName == NULL)
     return hgTrackUiName();
 if (gtexIsGeneTrack(trackName))
     return gtexGeneTrackUiName();
+//if (startsWith("gtexEqtlCluster", trackName))
+    //return gtexGeneTrackUiName();
 return hgTrackUiName();
 }
 

@@ -1530,6 +1530,12 @@ void barChartMethods(struct track *tg);
 void barChartCtMethods(struct track *tg);
 /* Bar Chart track methods for custom track */
 
+void gtexEqtlMethods(struct track *tg);
+/* GTEx eQTL (bigBed 5 +) tracks */
+
+void gtexEqtlClusterMethods(struct track *tg);
+/* GTEx eQTL Cluster (bigBed 5 +) tracks */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */

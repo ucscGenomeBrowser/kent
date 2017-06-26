@@ -2607,3 +2607,5 @@ html crispr
 
 include defaultPriority.ra
 include trackDb.cloneEnd.ra
+
+include gtexEqtl.ra
