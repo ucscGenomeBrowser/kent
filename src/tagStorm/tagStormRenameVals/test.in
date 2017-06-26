@@ -1,0 +1,249 @@
+project.title A Molecular Census of Arcuate Hypothalamus and Median Eminence Cell Types
+project.id GSE90806
+sample.donor.genotype AAV-GFP+ RIP-Cre+
+assay.single_cell.method mouth pipette
+assay.rna.primer poly-dt
+assay.seq.paired_ends no
+sample.body_part.organ brain
+sample.body_part.name arcuate nucleus and median eminence of hypothalamus
+sample.donor.age 63
+sample.donor.age_unit day
+sample.donor.life_stage adult
+sample.donor.sex male
+assay.seq.machine Illumina NextSeq 500
+assay.seq.molecule polyA RNA
+project.contact.address "Center for Life Science, room 7-717; Boston, MA 02115 USA"
+project.contact.city Boston
+project.contact.country USA
+project.contact.department Medicine
+project.contact.email jncampbe@caregroup.org
+project.contact.institute Beth Israel Deaconess Medical Center
+project.contact.laboratory Lowell Lab
+project.contact.name "John,N,Campbell"
+project.contact.phone 3392229246
+project.contact.postal_code 02115
+project.contact.state MA
+project.contact.street_address "Center for Life Science, room 7-717"
+project.contributor "Linus,T,Tsai","John,N,Campbell"
+project.geo_series GSE90806
+project.last_update_date 2017-06-05
+project.ncbi_bioproject PRJNA355987
+project.overall_design Single-cell RNA-seq was performed on Cre-dependent AAV-GFP+ cells that were manually isolated from dissociated Arc-ME of two adult male RIP-Cre mice
+project.pmid 28166221
+project.release_status 2017-02-06
+project.sra_project SRP094469
+project.submission_date 2016-12-02
+project.summary Drop-seq and single cell sequencing of mouse arcuate nucleus and median eminence
+project.supplementary_files ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE90nnn/GSE90806/suppl/GSE90806_RIP-Cre_ARC_GeneCounts.csv.gz,ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP094/SRP094469
+project.uuid 24ec624c-fe81-4482-9766-a86d7840140f
+sample.data_processing Base calls performed with bcl2fastq2.15.0.4,"Alignment by TopHat v2.0.14. [Using “-M”, “--no-coverage-search”, “--segment-length 10”]","Removal of duplicates and low quality reads, indexing, and sorting: Picard 2.5.0 and samtools 0.1.19.",Assigned reads to features: featureCounts-1.4.6. [Using recommended setting and a custom meta-annotation that merges overlapping isoforms.],Genome_build: Genome_build: mm10 (GRCm38),Supplementary_files_format_and_content: CSV file containing expression values by sample (columns) and gene ID (rows)
+sample.donor.ncbi_taxon 10090
+sample.donor.species Mus musculus
+sample.donor.strain (C57BL/6 x DBA)F2
+sample.last_update_date 2017-02-06
+sample.protocol_types nucleic acid library construction protocol
+sample.protocols GFP+ cells were manually isolated from a cell suspension prepared by triturating and washing papain-digested Arc-ME
+sample.submission_date 2016-12-02
+sample.short_label brain: Arc-ME
+sample.long_label arcuate hypothalamus/median eminence cells from RIP-Cre::AAV-loxSTOPlox-GFP+ mouse
+
+	assay.sra_experiment SRX2390154
+	assay.sra_run SRR5070307
+	sample.geo_sample GSM2413264
+	sample.ncbi_biosample SAMN06099681
+	cell.id RIPCre-2-01
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390154
+	sample.uuid bdb35279-e6e5-4a9a-8e44-0b2fcd8392c2
+
+	assay.sra_experiment SRX2390155
+	assay.sra_run SRR5070308
+	sample.geo_sample GSM2413265
+	sample.ncbi_biosample SAMN06099680
+	cell.id RIPCre-2-02
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390155
+	sample.uuid 89d5f337-bfce-49c1-8f17-c8f10f371c92
+
+	assay.sra_experiment SRX2390156
+	assay.sra_run SRR5070309
+	sample.geo_sample GSM2413266
+	sample.ncbi_biosample SAMN06099679
+	cell.id RIPCre-2-03
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390156
+	sample.uuid 3d274cf5-3b4d-416a-912e-e5fde832ced1
+
+	assay.sra_experiment SRX2390157
+	assay.sra_run SRR5070310
+	sample.geo_sample GSM2413267
+	sample.ncbi_biosample SAMN06099678
+	cell.id RIPCre-2-04
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390157
+	sample.uuid 8af0f2ab-4cc3-4c36-9542-b54164711549
+
+	assay.sra_experiment SRX2390158
+	assay.sra_run SRR5070311
+	sample.geo_sample GSM2413268
+	sample.ncbi_biosample SAMN06099696
+	cell.id RIPCre-2-05
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390158
+	sample.uuid ceb8f013-52e9-49b4-a6e8-aed65aa6441b
+
+	assay.sra_experiment SRX2390159
+	assay.sra_run SRR5070312
+	sample.geo_sample GSM2413269
+	sample.ncbi_biosample SAMN06099698
+	cell.id RIPCre-2-06
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390159
+	sample.uuid b4c3e6b1-0391-42ae-ade1-f6c6ecc19f69
+
+	assay.sra_experiment SRX2390160
+	assay.sra_run SRR5070313
+	sample.geo_sample GSM2413270
+	sample.ncbi_biosample SAMN06099697
+	cell.id RIPCre-2-07
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390160
+	sample.uuid d1c40891-f3df-47a2-bb01-268d83160ca1
+
+	assay.sra_experiment SRX2390161
+	assay.sra_run SRR5070314
+	sample.geo_sample GSM2413271
+	sample.ncbi_biosample SAMN06099677
+	cell.id RIPCre-2-08
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390161
+	sample.uuid 454d3253-6f29-4c87-bfbb-5997274f38cd
+
+	assay.sra_experiment SRX2390162
+	assay.sra_run SRR5070315
+	sample.geo_sample GSM2413272
+	sample.ncbi_biosample SAMN06099701
+	cell.id RIPCre-2-09
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390162
+	sample.uuid 1bad4dd9-f303-4f28-91ae-1e288cea3696
+
+	assay.sra_experiment SRX2390163
+	assay.sra_run SRR5070316
+	sample.geo_sample GSM2413273
+	sample.ncbi_biosample SAMN06099700
+	cell.id RIPCre-2-10
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390163
+	sample.uuid afa093e3-28c6-4e67-aeb9-842a60dadd08
+
+	assay.sra_experiment SRX2390164
+	assay.sra_run SRR5070317
+	sample.geo_sample GSM2413274
+	sample.ncbi_biosample SAMN06099699
+	cell.id RIPCre-2-11
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390164
+	sample.uuid 38fa0daf-cd90-435c-995f-597ea261512d
+
+	assay.sra_experiment SRX2390165
+	assay.sra_run SRR5070318
+	sample.geo_sample GSM2413275
+	sample.ncbi_biosample SAMN06099689
+	cell.id RIPCre-2-12
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390165
+	sample.uuid ed31ee22-329f-46b8-9deb-7fef182edfaf
+
+	assay.sra_experiment SRX2390166
+	assay.sra_run SRR5070319
+	sample.geo_sample GSM2413276
+	sample.ncbi_biosample SAMN06099695
+	cell.id RIPCre-2-13
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390166
+	sample.uuid 59207b9c-30f5-42f7-886d-8b8f28e21cf3
+
+	assay.sra_experiment SRX2390167
+	assay.sra_run SRR5070320
+	sample.geo_sample GSM2413277
+	sample.ncbi_biosample SAMN06099694
+	cell.id RIPCre-2-14
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390167
+	sample.uuid bb442216-677a-40a6-908f-bb1b52898c0e
+
+	assay.sra_experiment SRX2390168
+	assay.sra_run SRR5070321
+	sample.geo_sample GSM2413278
+	sample.ncbi_biosample SAMN06099693
+	cell.id RIPCre-2-15
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390168
+	sample.uuid 55c13220-7b2e-4163-80eb-ad1f8b611cb2
+
+	assay.sra_experiment SRX2390169
+	assay.sra_run SRR5070322
+	sample.geo_sample GSM2413279
+	sample.ncbi_biosample SAMN06099692
+	cell.id RIPCre-2-17
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390169
+	sample.uuid 966f4684-3afb-48c8-8ce1-4110711712ea
+
+	assay.sra_experiment SRX2390170
+	assay.sra_run SRR5070323
+	sample.geo_sample GSM2413280
+	sample.ncbi_biosample SAMN06099691
+	cell.id RIPCre-2-24
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390170
+	sample.uuid e216e865-492a-4780-b94a-f110c2b59823
+
+	assay.sra_experiment SRX2390171
+	assay.sra_run SRR5070324
+	sample.geo_sample GSM2413281
+	sample.ncbi_biosample SAMN06099690
+	cell.id RIPCre-2-25
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390171
+	sample.uuid 3b7a8845-a394-4de5-beaa-170be0bee2a6
+
+	assay.sra_experiment SRX2390172
+	assay.sra_run SRR5070325
+	sample.geo_sample GSM2413282
+	sample.ncbi_biosample SAMN06099685
+	cell.id RIPCre-2-26
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390172
+	sample.uuid 057649b4-7d09-4880-881f-ea3336c92ed8
+
+	assay.sra_experiment SRX2390173
+	assay.sra_run SRR5070326
+	sample.geo_sample GSM2413283
+	sample.ncbi_biosample SAMN06099684
+	cell.id RIPCre-2-27
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390173
+	sample.uuid d1169a7c-9a43-4feb-a3f2-44f2f6a0cbe2
+
+	assay.sra_experiment SRX2390174
+	assay.sra_run SRR5070327
+	sample.geo_sample GSM2413284
+	sample.ncbi_biosample SAMN06099683
+	cell.id RIPCre-2-29
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390174
+	sample.uuid 97e0db31-097a-4080-8ccf-9a13e7e36a10
+
+	assay.sra_experiment SRX2390175
+	assay.sra_run SRR5070328
+	sample.geo_sample GSM2413285
+	sample.ncbi_biosample SAMN06099686
+	cell.id RIPCre-2-31
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390175
+	sample.uuid 43f511af-db20-4bd2-8b8a-5c07b85b9ffc
+
+	assay.sra_experiment SRX2390176
+	assay.sra_run SRR5070329
+	sample.geo_sample GSM2413286
+	sample.ncbi_biosample SAMN06099688
+	cell.id RIPCre-2-32
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390176
+	sample.uuid 84e12785-1e35-437e-b22e-e5d9724d2037
+
+	assay.sra_experiment SRX2390177
+	assay.sra_run SRR5070330
+	sample.geo_sample GSM2413287
+	sample.ncbi_biosample SAMN06099687
+	cell.id RIPCre-2-34
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390177
+	sample.uuid 3750825f-8328-41a1-8a69-df4c4be0e6cb
+
+	assay.sra_experiment SRX2390178
+	assay.sra_run SRR5070331
+	sample.geo_sample GSM2413288
+	sample.ncbi_biosample SAMN06099682
+	cell.id RIPCre-2-43
+	sample.supplementary_files ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX239/SRX2390178
+	sample.uuid bffa470e-5bea-4fd2-8727-62d36f09e75d
+

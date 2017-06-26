@@ -749,3 +749,17 @@ http://genome.crg.es/genepredictions/P.anubis/papAnu2/geneid_v1.4/papAnu2.geneid
 #    enrich 62.64x
 
 ##########################################################################
+# LIFTOVER TO papAnu3 (DONE - 2017-06-23 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/papAnu2/bed/blat.papAnu3.2017-06-23
+    cd /hive/data/genomes/papAnu2/bed/blat.papAnu3.2017-06-23
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/papAnu2/jkStuff/papAnu2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         papAnu2 papAnu3) > do.log 2>&1
+    # real    393m53.436s
+
+    # verify the convert link on the test browser is now active from papAnu2 to
+    # papAnu3
+
+#########################################################################
