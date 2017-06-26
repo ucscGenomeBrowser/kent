@@ -63,6 +63,9 @@ void htmlTextOut(char *s);
 char *htmlTextStripTags(char *s);
 /* Returns a cloned string with all html tags stripped out */
 
+char *htmlTextStripJavascriptCssAndTags(char *s);
+/* Returns a cloned string with all inline javascript, css, and html tags stripped out */
+
 char *htmlTextReplaceTagsWithChar(char *s, char ch);
 /* Returns a cloned string with all html tags replaced with given char (useful for tokenizing) */
 

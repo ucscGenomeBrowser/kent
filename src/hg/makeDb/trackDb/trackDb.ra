@@ -319,6 +319,66 @@ html crispr
     urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
     html crispr
 
+track crispors
+superTrack on
+shortLabel Crispr kMers
+longLabel WGE Crisprs from Ensembl release v89 and kMer locations
+group genes
+visibility hide
+type bed 3
+html crispors
+
+    track crisprEnsembl
+    parent crispors
+    shortLabel WGE Crisprs
+    longLabel WGE Crisprs from Ensembl release v89
+    visibility squish
+    type bigBed 9 +
+    colorByStrand 0,0,128 128,0,0
+    priority 1
+
+    track crisprKmers
+    parent crispors
+    shortLabel kMer Crisprs
+    longLabel kMer crispr locations
+    visibility squish
+    type bigBed 9 .
+    itemRgb on
+    priority 2
+
+track crispr10K
+shortLabel CRISPR 10K
+longLabel CRISPR/Cas9 Sp. Pyog. target sites (exons +/- 10,000 bp)
+group genes
+visibility hide
+type bed 3
+superTrack on
+html crispr
+
+    track crispr10KRanges
+    shortLabel CRISPR Regions 10K
+    longLabel Genome regions processed to find CRISPR/Cas9 target sites (exons +/- 10,000 bp)
+    visibility dense
+    color 110,110,110
+    type bed 3
+    parent crispr10K
+    html crispr
+
+    track crispr10KTargets
+    shortLabel CRISPR Targets 10K
+    longLabel CRISPR/Cas9 -NGG Targets (exons +/- 10,000 bp)
+    visibility pack
+    type bigBed 9 +
+    itemRgb on
+    parent crispr10K
+    mouseOverField _mouseOver
+    scoreLabel MIT Guide Specificity Score
+    # details page is not using a mysql table but a tab-sep file
+    detailsTabUrls _offset=/gbdb/$db/crispr10K/crisprDetails.tab
+    url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
+    urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
+    html crispr
+
 track augustus
 shortLabel Augustus
 longLabel Augustus Gene Predictions
@@ -796,14 +856,14 @@ type bed 4 +
 html cpgIslandSuper
 
     track cpgIslandExt
-    superTrack cpgIslandSuper pack
+    parent cpgIslandSuper pack
     shortLabel CpG Islands
     longLabel CpG Islands (Islands < 300 Bases are Light Green)
     priority 1
     html cpgIslandSuper
 
     track cpgIslandExtUnmasked
-    superTrack cpgIslandSuper hide
+    parent cpgIslandSuper hide
     shortLabel Unmasked CpG
     longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
     priority 2

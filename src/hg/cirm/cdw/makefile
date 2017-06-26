@@ -30,6 +30,7 @@ UTIL_DIRS = \
     cdwMakeTrackViz \
     cdwMakeValidFile \
     cdwQaEvaluate \
+    cdwPublicSubset \
     cdwReallyRemoveFiles \
     cdwReallyRemoveDataset \
     cdwRenameFiles \

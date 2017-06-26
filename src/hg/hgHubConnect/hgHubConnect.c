@@ -53,6 +53,7 @@ struct genomeOutputStructure
     struct tdbOutputStructure *tracks;
     struct dyString *assemblyLink;
     char *genomeName;
+    char *positionString;
     int trackCount;
     struct hash *tdbOutHash;
     int hitCount;
@@ -410,34 +411,43 @@ while ((row = sqlNextRow(sr)) != NULL)
     // Add hst to the list to be returned
     slAddHead(&hubSearchResultsList, hst);
     }
+slReverse(&hubSearchResultsList);
 return hubSearchResultsList;
 }
 
 
-void printSearchBox(char *hubSearchTerms, char *dbFilter)
+void printSearchAndFilterBoxes(int searchEnabled, char *hubSearchTerms, char *dbFilter)
 /* Create the text boxes for search and database filtering along with the required
  * javscript */
 {
-printf("Enter search terms to find in public track hub description pages:<BR>"
-        "<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\" "
-        "type=\"text\" size=\"65\" value=\"%s\"> \n"
-        "<input name=\"hubSearchButton\" id='hubSearchButton' "
-        "class=\"hubField\" type=\"button\" value=\"Search Public Hubs\">\n",
-        hubSearchTerms!=NULL?hubSearchTerms:"");
-jsOnEventById("click", "hubSearchButton",
-        "document.searchHubForm.elements['hubSearchTerms'].value=$('#hubSearchTerms').val();"
-        "document.searchHubForm.submit();return true;");
-printf("<br>\n");
+char event[4096];
+if (searchEnabled)
+    {
+    safef(event, sizeof(event), 
+            "document.searchHubForm.elements['hubSearchTerms'].value=$('#hubSearchTerms').val();"
+            "document.searchHubForm.elements['hubDbFilter'].value=$('#hubDbFilter').val();"
+            "document.searchHubForm.submit();return true;");
+    printf("Enter search terms to find in public track hub description pages:<BR>"
+            "<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\" "
+            "type=\"text\" size=\"65\" value=\"%s\"> \n",
+            hubSearchTerms!=NULL?hubSearchTerms:"");
+    printf("<br>\n");
+    }
+else
+    {
+    safef(event, sizeof(event), 
+            "document.searchHubForm.elements['hubDbFilter'].value=$('#hubDbFilter').val();"
+            "document.searchHubForm.submit();return true;");
+    }
+
 printf("Filter hubs by assembly: "
         "<input name=\"%s\" id=\"hubDbFilter\" class=\"hubField\" "
         "type=\"text\" size=\"10\" value=\"%s\"> \n"
-        "<input name=\"dbFilterButton\" id='dbFilterButton' "
-        "class=\"hubField\" type=\"button\" value=\"Filter assemblies\">\n",
+        "<input name=\"hubSearchButton\" id='hubSearchButton' "
+        "class=\"hubField\" type=\"button\" value=\"Search Public Hubs\">\n",
         hgHubDbFilter, dbFilter!=NULL?dbFilter:"");
-jsOnEventById("click", "dbFilterButton",
-        "document.dbFilterHubForm.elements['hubDbFilter'].value=$('#hubDbFilter').val();"
-        "document.dbFilterHubForm.submit();return true;");
-puts("<BR><BR>\n");
+jsOnEventById("click", "hubSearchButton", event);
+puts("<br><br>\n");
 }
 
 
@@ -450,10 +460,11 @@ puts("<input name=\"hubDeleteSearchButton\" id='hubDeleteSearchButton' "
         "class=\"hubField\" type=\"button\" value=\"Show All Hubs\">\n");
 jsOnEventById("click", "hubDeleteSearchButton",
         "document.searchHubForm.elements['hubSearchTerms'].value='';"
+        "document.searchHubForm.elements['hubDbFilter'].value='';"
         "document.searchHubForm.submit();return true;");
 puts("<BR><BR>\n");
 printf("When exploring the detailed search results for a hub, you may right-click "
-        "on an assembly or track line to open it in a new window\n");
+        "on an assembly or track line to open it in a new window.\n");
 puts("<BR><BR>\n");
 }
 
@@ -693,8 +704,8 @@ if (tdbOut == NULL)
     else
         dyStringPrintf(tdbOut->shortLabel, "%s", trackHubSkipHubName(trackInfo->track));
 
-    dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s", hub->url,
-            genomeOut->genomeName, trackInfo->track, cartSessionId(cart));
+    dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s&%s", hub->url,
+            genomeOut->genomeName, trackInfo->track, cartSessionId(cart), genomeOut->positionString);
 
     if (trackInfo->parent != NULL)
         {
@@ -729,6 +740,24 @@ while (tdb != NULL)
         }
     tdb = tdb->next;
     }
+}
+
+
+char *getPositionStringForDb(struct trackHubGenome *genome)
+{
+char positionVar[1024];
+safef(positionVar, sizeof(positionVar), "position.%s", genome->name);
+char *position = cartOptionalString(cart, positionVar);
+if (position == NULL)
+    {
+    struct dyString *tmp = dyStringCreate("position=");
+    if (genome->defaultPos != NULL)
+        dyStringAppend(tmp, genome->defaultPos);
+    else
+        dyStringAppend(tmp, hDefaultPos(genome->name)); // memory leak from hDefaultPos return value
+    position = dyStringCannibalize(&tmp);
+    }
+return position;
 }
 
 
@@ -773,8 +802,9 @@ for (hst = searchResults; hst != NULL; hst = hst->next)
         genomeOut->descriptionMatch = dyStringNew(0);
         genomeOut->shortLabel = dyStringNew(0);
         genomeOut->assemblyLink = dyStringNew(0);
-        dyStringPrintf(genomeOut->assemblyLink, "../cgi-bin/hgTracks?hubUrl=%s&db=%s&hgsid=%s",
-                hub->url, genome->name, cartSessionId(cart));
+        genomeOut->positionString = getPositionStringForDb(genome);
+        dyStringPrintf(genomeOut->assemblyLink, "../cgi-bin/hgTracks?hubUrl=%s&db=%s&hgsid=%s&%s",
+                hub->url, genome->name, cartSessionId(cart), genomeOut->positionString);
         char *name = trackHubSkipHubName(genome->name);
         if (isNotEmpty(genome->description))
             dyStringPrintf(genomeOut->shortLabel, "%s (%s)", genome->description, name);
@@ -962,8 +992,8 @@ printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
 
 char *hubSearchTableName = cfgOptionDefault("hubSearchTextTable", "hubSearchText");
 int searchEnabled = sqlTableExists(conn, hubSearchTableName);
-if (searchEnabled)
-    printSearchBox(hubSearchTerms, dbFilter);
+
+printSearchAndFilterBoxes(searchEnabled, hubSearchTerms, dbFilter);
 
 struct hash *searchResultHash = NULL;
 struct slName *hubsToPrint = NULL;
@@ -1271,13 +1301,7 @@ puts("</FORM>");
 printf("<FORM ACTION=\"%s\" NAME=\"searchHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar(hgHubSearchTerms, "");
 cgiMakeHiddenVar(hgHubDoSearch, "on");
-cartSaveSession(cart);
-puts("</FORM>");
-
-// this is the form for the search hub button
-printf("<FORM ACTION=\"%s\" NAME=\"dbFilterHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar(hgHubDbFilter, "");
-cgiMakeHiddenVar(hgHubDoFilter, "on");
 cartSaveSession(cart);
 puts("</FORM>");
 
@@ -1297,10 +1321,9 @@ printf("</div>");
 
 printf("<div class=\"tabFooter\">");
 
-char *emailAddress = cfgOptionDefault("hub.emailAddress","genome@soe.ucsc.edu");
 printf("<span class=\"small\">"
-    "Contact <A HREF=\"mailto:%s\">%s</A> to add a public hub."
-    "</span>\n", emailAddress,emailAddress);
+    "Contact <a href=\"../contacts.html\">us</A> to add a public hub."
+    "</span>\n");
 printf("</div>");
 
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
@@ -1331,7 +1354,13 @@ jsInline(
 "               }\n"
 "            });\n"
 "        }\n"
-"    }"
+"    }\n"
+"    function toggleExpansion(node, event) {\n"
+"       var ident = '#' + node.id;\n"
+"       if (event.type != 'contextmenu')\n"
+"           $(ident).jstree(true).toggle_node(node);\n"
+"       return false;\n"
+"    }\n" 
 "    function init() {\n"
 "       $.jstree.defaults.core.themes.icons = false;\n"
 "       $.jstree.defaults.core.themes.dots = true;\n"
@@ -1339,8 +1368,9 @@ jsInline(
 "       $.jstree.defaults.contextmenu.items = hubSearchTreeContextMenuHandler\n"
 "       treeDiv=$('.hubTdbTree');\n"
 "       treeDiv.jstree({\n"
-"               'conditionalselect' : function (node, event) { return false; },\n"
-"               'plugins' : ['conditionalselect', 'contextmenu']\n"
+"               'conditionalselect' : function (node, event) { toggleExpansion(node, event); },\n"
+"               'plugins' : ['conditionalselect', 'contextmenu'],\n"
+"               'core' : { dblclick_toggle: false }\n"
 "               });\n"
 "    }\n\n"
 "    return { init: init};\n\n"
