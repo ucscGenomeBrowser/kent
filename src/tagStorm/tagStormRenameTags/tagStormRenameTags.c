@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "obscure.h"
+#include "portable.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -15,8 +16,8 @@ errAbort(
   "where in.tags is the input tagstorm file, out.tags the output\n"
   "and 2column.tab is a tab or white space separated file where the\n"
   "first column is the old tag name, and the second the new tag name.\n"
-  "options:\n"
-  "   -xxx=XXX\n"
+  "   If in.tags and out.tags are the same, it will create a backup of\n"
+  "in.tags in in.tags.bak\n"
   );
 }
 
@@ -28,8 +29,16 @@ static struct optionSpec options[] = {
 void tagStormRenameTags(char *inName, char *twoColName, char *outName)
 /* tagStormRenameTags - rename tags in a tagStorm file. */
 {
+char *sourceName = inName;
+if (sameString(inName, outName))
+    {
+    char backupName[PATH_LEN];
+    safef(backupName, sizeof(backupName), "%s.bak", inName);
+    sourceName = backupName;
+    mustRename(inName, backupName);
+    }
 // Open up input as a lineFile
-struct lineFile *lf = lineFileOpen(inName, TRUE);
+struct lineFile *lf = lineFileOpen(sourceName, TRUE);
 
 // Read twoColName into a hash
 struct hash *hash = hashTwoColumnFile(twoColName);
