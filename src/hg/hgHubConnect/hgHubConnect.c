@@ -350,7 +350,9 @@ static void addPublicHubsToHubStatus(struct sqlConnection *conn, char *publicTab
 /* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
 {
 char query[1024];
-sqlSafef(query, sizeof(query), "select hubUrl from %s where hubUrl not in (select hubUrl from %s)\n", publicTable, statusTable); 
+sqlSafef(query, sizeof(query),
+        "select %s.hubUrl from %s left join %s on %s.hubUrl = %s.hubUrl where %s.hubUrl is NULL",
+        publicTable, publicTable, statusTable, publicTable, statusTable, statusTable); 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
