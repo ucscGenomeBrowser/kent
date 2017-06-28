@@ -107,6 +107,31 @@ for (schema = schemaList; schema != NULL; schema = schema->next)
     jsonWriteObjectEnd(jw);
     }
 jsonWriteObjectEnd(jw);
+
+
+/* Figure out if any required fields  */
+boolean needsRequired = FALSE;
+for (schema = schemaList; schema != NULL; schema = schema->next)
+    {
+    if (schema->required != 0)
+        {
+	needsRequired = TRUE;
+	break;
+	}
+    }
+
+/* If have any requirements write out in array */
+if (needsRequired)
+    {
+    jsonWriteListStart(jw, "required");
+    for (schema = schemaList; schema != NULL; schema = schema->next)
+	{
+	if (schema->required != 0)
+	    jsonWriteString(jw, NULL, schema->name);
+	}
+    jsonWriteListEnd(jw);
+    }
+
 jsonWriteObjectEnd(jw);
 
 FILE *f = mustOpen(outJson, "w");
