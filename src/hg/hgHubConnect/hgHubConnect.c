@@ -388,6 +388,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct hubSearchText *hst = hubSearchTextLoadWithNullGiveContext(row, hubSearchTerms);
     char *hubUrl = hst->hubUrl;
+    struct hubEntry *hubInfo = hashFindVal(hubLookup, hubUrl);
+    if (hubInfo == NULL)
+        continue; // Search table evidently includes a hub that's not on this server.  Skip it.
     char *db = cloneString(hst->db);
     tolowers(db);
     if (isNotEmpty(dbFilter))
@@ -401,7 +404,6 @@ while ((row = sqlNextRow(sr)) != NULL)
             {
             // no db in the hubSearchText means this is a top-level hub hit.
             // filter by the db list associated with the hub instead
-            struct hubEntry *hubInfo = hashFindVal(hubLookup, hubUrl);
             char *dbList = cloneString(hubInfo->dbList);
             tolowers(dbList);
             if (stringIn(dbFilter, dbList) == NULL)
