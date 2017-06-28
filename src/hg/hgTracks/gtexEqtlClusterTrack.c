@@ -58,19 +58,19 @@ static Color gtexEqtlClusterItemColor(struct track *track, void *item, struct hv
 /* Color by highest effect in list (blue -, red +), with brighter for higher effect (teal, fuschia) */
 {
 struct gtexEqtlCluster *cluster = (struct gtexEqtlCluster *)item;
-int maxEffect = 0;
+double maxEffect = 0.0;
 int i;
 for (i=0; i<cluster->expCount; i++)
     {
-    int effect = ceil(cluster->expScores[i]);
-    if (abs(effect) > abs(maxEffect))
+    double effect = cluster->expScores[i];
+    if (fabs(effect) > fabs(maxEffect))
         maxEffect = effect;
     }
-int cutoff = 2;
-if (maxEffect < 0)
+double cutoff = 2.0;
+if (maxEffect < 0.0)
     {
     /* down-regulation displayed as blue */
-    if (maxEffect < 0 - cutoff)
+    if (maxEffect < 0.0 - cutoff)
         return MG_CYAN;
     return MG_BLUE;
     }
@@ -93,11 +93,12 @@ if (tg->limitedVis != tvDense)
     //struct gtexEqtlClusterTrack *extras = (struct gtexEqtlClusterTrack *)tg->extraUiData;
     //struct hash *tissueHash = extras->tissueHash;
     struct dyString *ds = dyStringNew(0);
+    dyStringPrintf(ds, "%s/%s: ", eqtl->name, eqtl->target);
     int i;
     for (i=0; i<eqtl->expCount; i++)
         {
         double effect= eqtl->expScores[i];
-        dyStringPrintf(ds,"%s(%s%0.2f)%s", eqtl->expNames[i], effect < 0 ? "" : "+", effect, 
+        dyStringPrintf(ds, "%s(%s%0.2f)%s", eqtl->expNames[i], effect < 0 ? "" : "+", effect, 
                         i < eqtl->expCount - 1 ? ", " : "");
         //struct gtexTissue *tis = (struct gtexTissue *)hashFindVal(tissueHash, eqtl->expNames[i]);
         //unsigned color = tis ? tis->color : 0;       // BLACK
