@@ -7,6 +7,8 @@
 #include "tagSchema.h"
 #include "jsonWrite.h"
 
+struct hash *gDescriptions = NULL;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -16,14 +18,32 @@ errAbort(
   "usage:\n"
   "   tagSchemaToJsonSchema tagSchema.in jsonSchema.json\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -descriptions=twoCol.txt - first col is tag, second description\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"descriptions", OPTION_STRING},
    {NULL, 0},
 };
+
+void addRegExWildEquivalent(struct dyString *dy, char *s)
+/* Convert wildcard string to a regular expression */
+{
+char c;
+dyStringAppendC(dy, '^');
+while ((c = *s++) != 0)
+    {
+    if (c == '?')
+       dyStringAppendC(dy, '.');
+    else if (c == '*')
+       dyStringAppend(dy, ".*");
+    else
+       dyStringAppendC(dy, c);
+    }
+dyStringAppendC(dy, '$');
+}
 
 struct dyString*wildListToRegEx(struct slName *wildList)
 /* Try to convert list of wildcard string to a regular expression */
@@ -34,20 +54,70 @@ for (wild = wildList; wild != NULL; wild = wild->next)
     {
     if (dy->stringSize != 0)
         dyStringAppendC(dy, '|');
-    char *s = wild->name;
-    char c;
-    dyStringAppendC(dy, '^');
-    while ((c = *s++) != 0)
-        {
-	if (c == '?')
-	   dyStringAppendC(dy, '.');
-	else if (c == '*')
-	   dyStringAppend(dy, ".*");
-	else
-	   dyStringAppendC(dy, c);
-	}
+    addRegExWildEquivalent(dy, wild->name);
     }
 return dy;
+}
+
+struct hash *hashDescriptions(char *fileName)
+/* Read in descriptions file keyed by first word */
+{
+struct hash *hash = hashNew(0);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+while (lineFileNextReal(lf, &line))
+   {
+   char *tag = nextWord(&line);
+   char *val = trimSpaces(line);
+   if (isEmpty(val))
+       errAbort("Empty description line %d of %s", lf->lineIx, lf->fileName);
+   hashAdd(hash, tag, cloneString(val));
+   }
+lineFileClose(&lf);
+return hash;
+}
+
+void writeOneSchema(struct jsonWrite *jw, char *label, struct tagSchema *schema)
+/* Write out label for one schema item */
+{
+jsonWriteObjectStart(jw, label);
+if (gDescriptions != NULL)
+    {
+    char *description = hashFindVal(gDescriptions, schema->name);
+    if (description != NULL)
+        {
+	jsonWriteString(jw, "description", description);
+	}
+    }
+if (schema->type == '#')
+    {
+    jsonWriteString(jw, "type",  "integer");
+    if (schema->minVal != -BIGDOUBLE)
+	jsonWriteNumber(jw, "minimum", schema->minVal);
+    if (schema->maxVal != BIGDOUBLE)
+	jsonWriteNumber(jw, "maximum", schema->maxVal);
+    }
+else if (schema->type == '%')
+    {
+    jsonWriteString(jw, "type",  "number");
+    if (schema->minVal != -BIGDOUBLE)
+	jsonWriteDouble(jw, "minimum", schema->minVal);
+    if (schema->maxVal != BIGDOUBLE)
+	jsonWriteDouble(jw, "maximum", schema->maxVal);
+    }
+else if (schema->type == '$')
+    {
+    jsonWriteString(jw, "type",  "string");
+    if (schema->allowedVals != NULL)
+	{
+	struct dyString *dy = wildListToRegEx(schema->allowedVals);
+	jsonWriteString(jw, "pattern", dy->string);
+	dyStringFree(&dy);
+	}
+    }
+else
+    errAbort("Unrecognized type %c for %s", schema->type, schema->name);
+jsonWriteObjectEnd(jw);
 }
 
 void tagSchemaToJson(char *inTagSchema, char *outJson)
@@ -55,7 +125,6 @@ void tagSchemaToJson(char *inTagSchema, char *outJson)
  * schema such as decribed in http://json-schema.org/. */
 {
 struct tagSchema *schemaList = tagSchemaFromFile(inTagSchema);
-uglyf("Read %d from %s\n", slCount(schemaList), inTagSchema);
 struct jsonWrite *jw = jsonWriteNew();
 jw->sep = '\n';
 
@@ -69,45 +138,48 @@ safef(text, sizeof(text), "schema generate by tagSchemaToJson from %s", inTagSch
 jsonWriteString(jw, "description", text);
 jsonWriteString(jw, "type", "object");
 
-jsonWriteObjectStart(jw, "properties");
+/* Figure out if we have to do fixed properties and or pattern properties */
+boolean needFixed = FALSE, needPattern = FALSE;
 struct tagSchema *schema;
 for (schema = schemaList; schema != NULL; schema = schema->next)
     {
-    jsonWriteObjectStart(jw, schema->name);
-    jsonWriteString(jw, "description", "please_describe_me");
-    if (schema->type == '#')
+    if (anyWild(schema->name))
+        needPattern = TRUE;
+    else
+        needFixed = TRUE;
+    }
+
+if (needFixed)
+    {
+    jsonWriteObjectStart(jw, "properties");
+    for (schema = schemaList; schema != NULL; schema = schema->next)
 	{
-	jsonWriteString(jw, "type",  "integer");
-	if (schema->minVal != -BIGDOUBLE)
-	    jsonWriteNumber(jw, "minimum", schema->minVal);
-	if (schema->maxVal != BIGDOUBLE)
-	    jsonWriteNumber(jw, "maximum", schema->maxVal);
-	}
-    else if (schema->type == '%')
-	{
-	jsonWriteString(jw, "type",  "number");
-	if (schema->minVal != -BIGDOUBLE)
-	    jsonWriteDouble(jw, "minimum", schema->minVal);
-	if (schema->maxVal != BIGDOUBLE)
-	    jsonWriteDouble(jw, "maximum", schema->maxVal);
-	}
-    else if (schema->type == '$')
-	{
-	jsonWriteString(jw, "type",  "string");
-	if (schema->allowedVals != NULL)
+	if (!anyWild(schema->name))
 	    {
-	    struct dyString *dy = wildListToRegEx(schema->allowedVals);
-	    jsonWriteString(jw, "pattern", dy->string);
+	    writeOneSchema(jw, schema->name, schema);
+	    }
+
+	}
+    jsonWriteObjectEnd(jw);
+    }
+if (needPattern)
+    {
+    struct tagSchema *schema;
+    jsonWriteObjectStart(jw, "patternProperties");
+    for (schema = schemaList; schema != NULL; schema = schema->next)
+	{
+	if (anyWild(schema->name))
+	    {
+	    struct dyString *dy = dyStringNew(0);
+	    addRegExWildEquivalent(dy, schema->name);
+	    writeOneSchema(jw, dy->string, schema);
 	    dyStringFree(&dy);
 	    }
 	}
-    else
-        errAbort("Unrecognized type %c for %s", schema->type, schema->name);
-
     jsonWriteObjectEnd(jw);
     }
-jsonWriteObjectEnd(jw);
 
+jsonWriteBoolean(jw, "additionalProperties", FALSE);
 
 /* Figure out if any required fields  */
 boolean needsRequired = FALSE;
@@ -145,6 +217,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+char *descriptions = optionVal("descriptions", NULL);
+if (descriptions != NULL)
+   gDescriptions = hashDescriptions(descriptions);
 tagSchemaToJson(argv[1], argv[2]);
 return 0;
 }
