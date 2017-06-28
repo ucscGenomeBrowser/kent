@@ -548,7 +548,7 @@ def getHumanGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
                           34.205, 2.29701,
                           "ENST[0-9.]+", "OTTHUMT[0-9.]+",
                           "ENSG[0-9.]+", "OTTHUMG[0-9.]+",
-                          "PGOMOU[0-9.]+")
+                          "PGOHUM[0-9.]+")
 
 def getHumanBackmapGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
     "create GENCODE parameters for human backmapped GENCODE"
