@@ -50,33 +50,35 @@ if (pHgvs && *pHgvs)
 // Nucleotide position regexes
 // (c. = CDS, g. = genomic, m. = mitochondrial, n.= non-coding RNA, r. = RNA)
 #define posIntExp "([0-9]+)"
-#define hgvsNtPosExp posIntExp "(_" posIntExp ")?"
+#define hgvsGenoPosExp posIntExp "(_" posIntExp ")?"
 //                   ......                     1-based start position
 //                           .............      optional range separator and end position
 //                               ......         1-based end position
-// Now for a regex that can handle positions like "26" or "*80" or "-24+75_-24+92"...
-#define anchorExp "([-*])?"
+// n. terms can have exonic anchor base and intron offset for both start and end:
 #define offsetExp "([-+])"
+// c. terms may also have a UTR indicator before the anchor base (- for UTR5, * for UTR3)
+#define anchorExp "([-*])?"
 #define complexNumExp anchorExp posIntExp "(" offsetExp posIntExp ")?"
 #define hgvsCdsPosExp complexNumExp "(_" complexNumExp ")?"
-//                    ...                               optional anchor "-" or "*"
-//                        ...                           mandatory first number
+//                    ...                               optional UTR anchor "-" or "*"
+//                        ...                           mandatory 1-based start anchor base offset
 //                            .......                   optional offset separator and offset
-//                            ...                       offset separator
-//                                ...                   offset number
-//                                    ...............   optional range separator and complex num
-//                                    ...               optional anchor "-" or "*"
-//                                        ...           first number
+//                            ...                       intron offset separator
+//                                ...                   intron offset number
+//                                    ...............   optional range separator and complex end
+//                                    ...               optional UTR anchor "-" or "*"
+//                                        ...           1-based end anchor base offset
 //                                            .......   optional offset separator and offset
-//                                            ...       offset separator
-//                                                ...   offset number
+//                                            ...       intron offset separator
+//                                                ...   intron offset number
 
 // It's pretty common for users to omit the '.' so if it's missing but the rest of the regex fits,
 // roll with it.
 #define hgvsCDotPosExp "c\\.?" hgvsCdsPosExp
-#define hgvsGMDotPosExp "([gm])\\.?" hgvsNtPosExp
-#define hgvsNDotPosExp "n\\.?" hgvsNtPosExp
-#define hgvsRDotPosExp "r\\.?" hgvsNtPosExp
+#define hgvsGMDotPosExp "([gm])\\.?" hgvsGenoPosExp
+#define hgvsNDotPosExp "n\\.?" hgvsCdsPosExp
+// Not supporting RDot at this point because r. terms may use either n. or c. numbering!
+// #define hgvsRDotPosExp "r\\.?" hgvsCdsPosExp
 
 // Protein substitution regex
 #define aa3Exp "Ala|Arg|Asn|Asp|Cys|Gln|Glu|Gly|His|Ile|Leu|Lys|Met|Phe|Pro|Ser|Thr|Trp|Tyr|Val|Ter"
@@ -98,7 +100,7 @@ if (pHgvs && *pHgvs)
 //  change description                                                                    ...
 
 // Complete HGVS term regexes combining sequence identifiers and change operations
-#define hgvsFullRegex(seq, op) "^" seq ":" op
+#define hgvsFullRegex(seq, op) "^" seq "[ :]+" op
 
 #define hgvsRefSeqNCGDotPosExp hgvsFullRegex(versionedRefSeqNCExp, hgvsGMDotPosExp)
 #define hgvsRefSeqNCGDotExp hgvsRefSeqNCGDotPosExp "(.*)"
@@ -114,38 +116,18 @@ if (pHgvs && *pHgvs)
 //                                     8..      1-based end position
 //                                        9...  change description
 
-#define hgvsLrgNDotExp hgvsFullRegex(lrgTranscriptExp, hgvsNDotPosExp) "(.*)"
-//      0.....................................  whole matching string
-//      1...................                    LRG transcript
-//                   2......                    1-based start position
-//                           3..........        optional range separator and end position
-//                               4.....         1-based end position
-//                                        5...  change description
-
-#define hgvsRefSeqNMRNDotExp hgvsFullRegex(versionedRefSeqNMRExp, hgvsNDotPosExp) "(.*)"
-// substring numbering:
-//      0.....................................  whole matching string
-//      1.................                      accession and optional dot version
-//               2........                      optional dot version
-//                       3......                (n/a) optional gene symbol in ()s
-//                        4....                 (n/a) optional gene symbol
-//                                5..           1-based start position
-//                                   6...       optional range separator and end position
-//                                     7..      1-based end position
-//                                        8...  change description
-
 #define hgvsLrgCDotPosExp hgvsFullRegex(lrgTranscriptExp, hgvsCDotPosExp)
 #define hgvsLrgCDotExp hgvsLrgCDotPosExp "(.*)"
 // substring numbering:
 //      0.....................................................  whole matching string
 //      1...................                                    LRG transcript
-//                   2...                                       optional anchor "-" or "*"
+//                   2...                                       optional UTR anchor "-" or "*"
 //                       3...                                   mandatory first number
 //                           4.......                           optional offset separator and offset
 //                           5...                               offset separator
 //                               6...                           offset number
 //                                   7...............           optional range sep and complex num
-//                                   8...                       optional anchor "-" or "*"
+//                                   8...                       optional UTR anchor "-" or "*"
 //                                       9...                   first number
 //                                          10.......           optional offset separator and offset
 //                                          11...               offset separator
@@ -160,13 +142,50 @@ if (pHgvs && *pHgvs)
 //             2........                                                  optional dot version
 //                       3.....                                           optional gene sym in ()s
 //                        4...                                            optional gene symbol
-//                              5...                                      optional anchor
+//                              5...                                      optional UTR anchor
 //                                  6...                                  mandatory first number
 //                                      7.......                          optional offset
 //                                      8...                              offset separator
 //                                          9...                          offset number
 //                                             10...............          optional range
-//                                             11...                      optional anchor
+//                                             11...                      optional UTR anchor
+//                                                12...                   first number
+//                                                     13.......          optional offset
+//                                                     14...              offset separator
+//                                                         15...          offset number
+//                                                             16........ sequence change
+
+#define hgvsLrgNDotExp hgvsFullRegex(lrgTranscriptExp, hgvsNDotPosExp) "(.*)"
+// substring numbering:
+//      0.....................................................  whole matching string
+//      1...................                                    LRG transcript
+//                   2...                                       n/a 4 n.: UTR anchor "-" or "*"
+//                       3...                                   mandatory first number
+//                           4.......                           optional offset separator and offset
+//                           5...                               offset separator
+//                               6...                           offset number
+//                                   7...............           optional range sep and complex num
+//                                   8...                       n/a 4 n.: UTR anchor "-" or "*"
+//                                       9...                   first number
+//                                          10.......           optional offset separator and offset
+//                                          11...               offset separator
+//                                              12...           offset number
+//                                                  13........  sequence change
+
+#define hgvsRefSeqNMRNDotExp hgvsFullRegex(versionedRefSeqNMRExp, hgvsNDotPosExp) "(.*)"
+// substring numbering:
+//      0...............................................................  whole matching string
+//      1...............                                                  acc & optional dot version
+//             2........                                                  optional dot version
+//                       3.....                                           optional gene sym in ()s
+//                        4...                                            optional gene symbol
+//                              5...                                      n/a 4 n.: UTR anchor
+//                                  6...                                  mandatory first number
+//                                      7.......                          optional offset
+//                                      8...                              offset separator
+//                                          9...                          offset number
+//                                             10...............          optional range
+//                                             11...                      n/a 4 n.: UTR anchor
 //                                                12...                   first number
 //                                                     13.......          optional offset
 //                                                     14...              offset separator
@@ -282,49 +301,6 @@ if (regexMatchSubstr(term, hgvsRefSeqNCGDotExp, substrs, ArraySize(substrs)))
 return hgvs;
 }
 
-static struct hgvsVariant *hgvsParseNDotPos(char *term)
-/* If term is parseable as an HGVS n. term, return the parsed representation, otherwise NULL. */
-{
-struct hgvsVariant *hgvs = NULL;
-boolean matches = FALSE;
-int accIx = 1;
-int startPosIx = 2;
-int endPosIx = 4;
-int changeIx = 5;
-// The LRG accession regex has only one substring but the RefSeq acc regex has 4, so that
-// affects all substring offsets after the accession.
-int refSeqExtra = 3;
-int geneSymbolIx = -1;
-regmatch_t substrs[10];
-if (regexMatchSubstr(term, hgvsLrgNDotExp, substrs, ArraySize(substrs)))
-    {
-    matches = TRUE;
-    }
-else if (regexMatchSubstr(term, hgvsRefSeqNMRNDotExp, substrs, ArraySize(substrs)))
-    {
-    matches = TRUE;
-    geneSymbolIx = 4;
-    startPosIx += refSeqExtra;
-    endPosIx += refSeqExtra;
-    changeIx += refSeqExtra;
-    }
-if (matches)
-    {
-    AllocVar(hgvs);
-    hgvs->type = hgvstNoncoding;
-    hgvs->seqAcc = regexSubstringClone(term, substrs[accIx]);
-    if (geneSymbolIx >= 0 && regexSubstrMatched(substrs[geneSymbolIx]))
-        hgvs->seqGeneSymbol = regexSubstringClone(term, substrs[geneSymbolIx]);
-    hgvs->start1 = regexSubstringInt(term, substrs[startPosIx]);
-    if (regexSubstrMatched(substrs[endPosIx]))
-        hgvs->end = regexSubstringInt(term, substrs[endPosIx]);
-    else
-        hgvs->end = hgvs->start1;
-    hgvs->changes = regexSubstringClone(term, substrs[changeIx]);
-    }
-return hgvs;
-}
-
 static void extractComplexNum(char *term, regmatch_t *substrs, int substrOffset,
                               boolean *retIsUtr3, int *retPos, int *retOffset)
 /* Extract matches from substrs starting at substrOffset to parse a complex number
@@ -353,10 +329,11 @@ if (isNotEmpty(offsetOp))
     }
 }
 
-static struct hgvsVariant *hgvsParseCDotPos(char *term)
+static struct hgvsVariant *hgvsParseCNDotPos(char *term)
 /* If term is parseable as an HGVS CDS term, return the parsed representation, otherwise NULL. */
 {
 struct hgvsVariant *hgvs = NULL;
+boolean isNoncoding = FALSE;
 boolean matches = FALSE;
 int accIx = 1;
 int startAnchorIx = 2;
@@ -368,11 +345,13 @@ int changeIx = 13;
 int refSeqExtra = 3;
 int geneSymbolIx = -1;
 regmatch_t substrs[17];
-if (regexMatchSubstr(term, hgvsLrgCDotExp, substrs, ArraySize(substrs)))
+if (regexMatchSubstr(term, hgvsLrgCDotExp, substrs, ArraySize(substrs)) ||
+    (isNoncoding = regexMatchSubstr(term, hgvsLrgNDotExp, substrs, ArraySize(substrs))))
     {
     matches = TRUE;
     }
-else if (regexMatchSubstr(term, hgvsRefSeqNMCDotExp, substrs, ArraySize(substrs)))
+else if (regexMatchSubstr(term, hgvsRefSeqNMCDotExp, substrs, ArraySize(substrs)) ||
+         (isNoncoding = regexMatchSubstr(term, hgvsRefSeqNMRNDotExp, substrs, ArraySize(substrs))))
     {
     matches = TRUE;
     geneSymbolIx = 4;
@@ -384,16 +363,22 @@ else if (regexMatchSubstr(term, hgvsRefSeqNMCDotExp, substrs, ArraySize(substrs)
 if (matches)
     {
     AllocVar(hgvs);
-    hgvs->type = hgvstCoding;
+    hgvs->type = isNoncoding ? hgvstNoncoding : hgvstCoding;
     hgvs->seqAcc = regexSubstringClone(term, substrs[accIx]);
     extractComplexNum(term, substrs, startAnchorIx,
                       &hgvs->startIsUtr3, &hgvs->start1, &hgvs->startOffset);
+    if (isNoncoding && (hgvs->startIsUtr3 || hgvs->start1 < 0))
+        warn("hgvsParseCNDotPos: noncoding term '%s' appears to start in UTR, "
+             "not applicable for noncoding", term);
     if (geneSymbolIx >= 0 && regexSubstrMatched(substrs[geneSymbolIx]))
         hgvs->seqGeneSymbol = regexSubstringClone(term, substrs[geneSymbolIx]);
     if (regexSubstrMatched(substrs[endPosIx]))
         {
         extractComplexNum(term, substrs, endAnchorIx,
                           &hgvs->endIsUtr3, &hgvs->end, &hgvs->endOffset);
+        if (isNoncoding && (hgvs->endIsUtr3 || hgvs->end < 0))
+            warn("hgvsParseCNDotPos: noncoding term '%s' appears to end in UTR, "
+                 "not applicable for noncoding", term);
         }
     else
         {
@@ -474,16 +459,13 @@ struct hgvsVariant *hgvsParseTerm(char *term)
 /* If term is a parseable form of HGVS, return the parsed representation, otherwise NULL.
  * This does not check validity of accessions, coordinates or alleles. */
 {
-struct hgvsVariant *hgvs = hgvsParseCDotPos(term);
-if (hgvs == NULL)
-    hgvs = hgvsParseNDotPos(term);
+struct hgvsVariant *hgvs = hgvsParseCNDotPos(term);
 if (hgvs == NULL)
     hgvs = hgvsParsePDotSubst(term);
 if (hgvs == NULL)
     hgvs = hgvsParsePDotRange(term);
 if (hgvs == NULL)
     hgvs = hgvsParseGDotPos(term);
-//#*** TODO: MDot, RDot, NDot
 return hgvs;
 }
 
