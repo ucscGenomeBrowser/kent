@@ -2,7 +2,7 @@ import re
 import math
 
 from ucscGb.qa import qaUtils
-from ucscGb.qa.tables import tableTypeUtils
+from ucscGb.qa.tables import trackUtils
 from ucscGb.qa.tables import checkGapOverlap
 from ucscGb.qa.tables.tableQa import TableQa
 
@@ -118,7 +118,7 @@ class PositionalQa(TableQa):
 
     def __getChromCountsFromDatabase(self):
         """Returns a list of ['chrom', 'size (bases)', 'count', 'count/megabase'] lists for table"""
-        chromCol = tableTypeUtils.getChromCol(self.tableType)
+        chromCol = trackUtils.getChromCol(self.tableType)
         # first half of the UNION below gets rows that do not appear in table at all 
         query = "(SELECT chrom, size, 0 as count FROM chromInfo WHERE chrom NOT IN" +\
             " (select distinct " + chromCol + " from " + self.table + "))" +\

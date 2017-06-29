@@ -3,7 +3,7 @@ import stat
 import os
         
 from ucscGb.qa import qaUtils
-from ucscGb.qa.tables import tableTypeUtils
+from ucscGb.qa.tables import trackUtils
 
 def checkSplit(db, table):
     """Check if table is split"""
@@ -66,18 +66,18 @@ def constructOutputUrls(db, table, overlapFile):
         openOverlapFile.close()
     return outputUrls
 
-def makeBedFromTable(db, table):
+def makeBedFromTable(db, table, whereOpt=""):
     """Make BED3 tempfile out of a table"""
     # Get chrom, start, and end column names
-    trackType = tableTypeUtils.getTrackType(db, table)
-    columnNames = tableTypeUtils.getChrStartEndCols(trackType)
+    trackType = trackUtils.getTrackType(db, table)
+    columnNames = trackUtils.getChrStartEndCols(trackType)
 
     tableList = checkSplit(db, table)
     tableBedTemp = tempfile.NamedTemporaryFile(mode='w')
     tableBed = open(tableBedTemp.name, 'w')
     for tbl in tableList:
             hgsqlCmd = "select " + columnNames[0] + ", " + columnNames[1] + ", " \
-                        + columnNames[2] + " from " + tbl
+                        + columnNames[2] + " from " + tbl + whereOpt
             hgsqlOut = qaUtils.callHgsql(db, hgsqlCmd)
             tableBed.write(hgsqlOut)
     tableBed.close()
