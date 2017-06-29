@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "obscure.h"
 #include "portable.h"
 #include "tagSchema.h"
 #include "jsonWrite.h"
@@ -48,7 +49,7 @@ while ((c = *s++) != 0)
 dyStringAppendC(dy, '$');
 }
 
-struct dyString*wildListToRegEx(struct slName *wildList)
+struct dyString *wildListToRegEx(struct slName *wildList)
 /* Try to convert list of wildcard string to a regular expression */
 {
 struct dyString *dy = dyStringNew(0);
@@ -74,10 +75,20 @@ while (lineFileNextReal(lf, &line))
    char *val = trimSpaces(line);
    if (isEmpty(val))
        errAbort("Empty description line %d of %s", lf->lineIx, lf->fileName);
-   hashAdd(hash, tag, cloneString(val));
+   hashAdd(hash, tag, makeEscapedString(val, '"'));
    }
 lineFileClose(&lf);
 return hash;
+}
+
+boolean anyWildInList(struct slName *list)
+/* Return TRUE if any items in list contain wildcrads */
+{
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+    if (anyWild(el->name))
+        return TRUE;
+return FALSE;
 }
 
 void writeOneSchema(struct jsonWrite *jw, char *label, struct tagSchema *schema)
@@ -87,10 +98,14 @@ jsonWriteObjectStart(jw, label);
 if (gDescriptions != NULL)
     {
     char *description = hashFindVal(gDescriptions, schema->name);
-    if (description != NULL)
-        {
-	jsonWriteString(jw, "description", description);
-	}
+    if (description == NULL)
+        description = "describe_me_please";
+    jsonWriteString(jw, "description", description);
+    }
+if (schema->isArray)
+    {
+    jsonWriteString(jw, "type", "array");
+    jsonWriteObjectStart(jw, "items");
     }
 if (schema->type == '#')
     {
@@ -110,16 +125,33 @@ else if (schema->type == '%')
     }
 else if (schema->type == '$')
     {
-    jsonWriteString(jw, "type",  "string");
-    if (schema->allowedVals != NULL)
+    if (schema->allowedVals != NULL && differentString(schema->allowedVals->name, "*"))
 	{
-	struct dyString *dy = wildListToRegEx(schema->allowedVals);
-	jsonWriteString(jw, "pattern", dy->string);
-	dyStringFree(&dy);
+	if (anyWildInList(schema->allowedVals))
+	    {
+	    jsonWriteString(jw, "type",  "string");
+	    struct dyString *dy = wildListToRegEx(schema->allowedVals);
+	    jsonWriteString(jw, "pattern", dy->string);
+	    dyStringFree(&dy);
+	    }
+	else
+	    {
+	    jsonWriteListStart(jw, "enum");
+	    struct slName *val;
+	    for (val = schema->allowedVals; val != NULL; val = val->next)
+	        jsonWriteString(jw, NULL, val->name);
+	    jsonWriteListEnd(jw);
+	    }
+	}
+    else
+        {
+	jsonWriteString(jw, "type",  "string");
 	}
     }
 else
     errAbort("Unrecognized type %c for %s", schema->type, schema->name);
+if (schema->isArray)
+     jsonWriteObjectEnd(jw);
 jsonWriteObjectEnd(jw);
 }
 
@@ -210,7 +242,7 @@ if (needsRequired)
 	    {
 	    struct tagSchema *schema = hashMustFindVal(schemaHash, sub->fullName);
 	    if (schema->required != 0)
-		jsonWriteString(jw, NULL, schema->name);
+		jsonWriteString(jw, NULL, sub->name);
 	    }
 	}
     jsonWriteListEnd(jw);
