@@ -16,16 +16,16 @@
 
 <P>
 <B>UCSC Genome Browser assembly ID:</B> hg38<BR>
-<B>Sequencing/Assembly provider ID:</B> Genome Reference Consortium Human GRCh38 (GCA_000001405.15)<BR>
+<B>Sequencing/Assembly provider ID:</B> GRCh38 Genome Reference Consortium Human Reference 38 (GCA_000001405.15)<BR>
 <B>Assembly date:</B> Dec. 2013<BR>
 <B>Accession ID:</B> GCA_000001305.2<BR>
-<B>NCBI Genome ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/51"
-TARGET="_blank">51</A> (Homo sapiens (human))</BR>
-<B>NCBI Assembly ID:</B>
+<B>NCBI Genome information:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/51"
+TARGET="_blank">NCBI genome/51 (Homo sapiens)</A><BR>
+<B>NCBI Assembly information:</B>
 <A HREF="http://www.ncbi.nlm.nih.gov/assembly/883148"
-TARGET="_blank">883148</A> (GRCh38, GCA_000001405.15)<BR>
-<B>BioProject ID:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/31257"
-TARGET="_blank">31257</A>
+TARGET="_blank">NCBI assembly/883148 (GRCh38/GCA_000001405.15)</A><BR>
+<B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/31257"
+TARGET="_blank">NCBI Bioproject: 31257</A>
 </P>
 <HR>
 <P>
