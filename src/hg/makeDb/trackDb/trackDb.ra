@@ -319,13 +319,32 @@ html crispr
     urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
     html crispr
 
-track crisprEnsembl
-shortLabel WGE Crisprs
-longLabel WGE Crisprs from Ensembl release v89
+track crispors
+superTrack on
+shortLabel Crispr kMers
+longLabel WGE Crisprs from Ensembl release v89 and kMer locations
 group genes
 visibility hide
-type bigBed 9 +
-colorByStrand 0,0,128 128,0,0
+type bed 3
+html crispors
+
+    track crisprEnsembl
+    parent crispors
+    shortLabel WGE Crisprs
+    longLabel WGE Crisprs from Ensembl release v89
+    visibility squish
+    type bigBed 9 +
+    colorByStrand 0,0,128 128,0,0
+    priority 1
+
+    track crisprKmers
+    parent crispors
+    shortLabel kMer Crisprs
+    longLabel kMer crispr locations
+    visibility squish
+    type bigBed 9 .
+    itemRgb on
+    priority 2
 
 track crispr10K
 shortLabel CRISPR 10K

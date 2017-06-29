@@ -1,6 +1,6 @@
 !access $ *
 age # 1 10
-age_units $ *
+age_units $ weeks days
 assay $ *
 biosample_date $ *
 donor # 0 0
@@ -13,5 +13,5 @@ map_ratio % 0 1
 organ $ brain liver
 part # 1 10
 q # -1 10
-sex $ *
+sex $ male female
 user_* $ *

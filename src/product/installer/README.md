@@ -12,7 +12,7 @@ page for a summary of installation options, including the pros and cons of using
 via the GBiC program vs. using GBiB.
 
 The program works by setting up MySQL, Apache, and Ghostscript, and then copying the Genome
-Browser CGIs onto the machine under `/usr/local/apache/`. Because It also deactivates the default
+Browser CGIs onto the machine under `/usr/local/apache/`. Because it also deactivates the default
 Apache htdocs/cgi folders, it is best run on a new machine, or at least a host that is not 
 already used as a web server. The tool can also download full or partial assembly databases,
 update the Genome Browser CGIs, and remove temporary files (aka "trash cleaning").

@@ -8,6 +8,7 @@
 #include "tagStorm.h"
 #include "errAbort.h"
 #include "obscure.h"
+#include "csv.h"
 
 int clMaxErr = 10;
 boolean clSqlSymbols = FALSE;
@@ -148,6 +149,7 @@ static void rCheck(struct tagStanza *stanzaList, char *fileName,
 /* Recurse through tagStorm */
 {
 struct tagStanza *stanza;
+struct dyString *csvScratch = dyStringNew(0);
 for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     {
     struct slPair *pair;
@@ -198,59 +200,64 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
 	else
 	    {
 	    char type = schema->type;
-	    if (type == '#')
+	    char *pos = val;
+	    char *oneVal;
+	    while ((oneVal =csvParseNext(&pos, csvScratch)) != NULL)
 		{
-		char *end;
-		long long v = strtoll(val, &end, 10);
-		if (end == val || *end != 0)	// val is not integer
-		    reportError(fileName, stanza->startLineIx, 
-			"Non-integer value %s for %s", val, tag);
-		else if (v < schema->minVal)
-		    reportError(fileName, stanza->startLineIx, 
-			"Value %s too low for %s", val, tag);
-		else if (v > schema->maxVal)
-		     reportError(fileName, stanza->startLineIx, 
-			"Value %s too high for %s", val, tag);
-		}
-	    else if (type == '%')
-		{
-		char *end;
-		double v = strtod(val, &end);
-		if (end == val || *end != 0)	// val is not just a floating point number
-		    reportError(fileName, stanza->startLineIx, 
-			"Non-numerical value %s for %s", val, tag);
-		else if (v < schema->minVal)
-		    reportError(fileName, stanza->startLineIx, 
-			"Value %s too low for %s", val, tag);
-		else if (v > schema->maxVal)
-		    reportError(fileName, stanza->startLineIx, 
-			"Value %s too high for %s", val, tag);
-		}
-	    else
-		{
-		boolean gotMatch = FALSE;
-		struct slName *okVal;
-		for (okVal = schema->allowedVals; okVal != NULL; okVal = okVal->next)
+		if (type == '#')
 		    {
-		    if (wildMatch(okVal->name, val))
-			{
-			gotMatch = TRUE;
-			break;
-			}
+		    char *end;
+		    long long v = strtoll(oneVal, &end, 10);
+		    if (end == oneVal || *end != 0)	// oneVal is not integer
+			reportError(fileName, stanza->startLineIx, 
+			    "Non-integer value %s for %s", oneVal, tag);
+		    else if (v < schema->minVal)
+			reportError(fileName, stanza->startLineIx, 
+			    "Value %s too low for %s", oneVal, tag);
+		    else if (v > schema->maxVal)
+			 reportError(fileName, stanza->startLineIx, 
+			    "Value %s too high for %s", oneVal, tag);
 		    }
-		if (!gotMatch)
-		    reportError(fileName, stanza->startLineIx, 
-			"Unrecognized value '%s' for tag %s", val, tag);
-		}
-
-	    struct hash *uniqHash = schema->uniqHash;
-	    if (uniqHash != NULL)
-		{
-		if (hashLookup(uniqHash, val))
-		    reportError(fileName, stanza->startLineIx, 
-			"Non-unique value '%s' for tag %s", val, tag);
+		else if (type == '%')
+		    {
+		    char *end;
+		    double v = strtod(oneVal, &end);
+		    if (end == oneVal || *end != 0)	// val is not just a floating point number
+			reportError(fileName, stanza->startLineIx, 
+			    "Non-numerical value %s for %s", oneVal, tag);
+		    else if (v < schema->minVal)
+			reportError(fileName, stanza->startLineIx, 
+			    "Value %s too low for %s", oneVal, tag);
+		    else if (v > schema->maxVal)
+			reportError(fileName, stanza->startLineIx, 
+			    "Value %s too high for %s", oneVal, tag);
+		    }
 		else
-		    hashAdd(uniqHash, val, NULL);
+		    {
+		    boolean gotMatch = FALSE;
+		    struct slName *okVal;
+		    for (okVal = schema->allowedVals; okVal != NULL; okVal = okVal->next)
+			{
+			if (wildMatch(okVal->name, oneVal))
+			    {
+			    gotMatch = TRUE;
+			    break;
+			    }
+			}
+		    if (!gotMatch)
+			reportError(fileName, stanza->startLineIx, 
+			    "Unrecognized value '%s' for tag %s", oneVal, tag);
+		    }
+
+		struct hash *uniqHash = schema->uniqHash;
+		if (uniqHash != NULL)
+		    {
+		    if (hashLookup(uniqHash, oneVal))
+			reportError(fileName, stanza->startLineIx, 
+			    "Non-unique value '%s' for tag %s", oneVal, tag);
+		    else
+			hashAdd(uniqHash, oneVal, NULL);
+		    }
 		}
 	    }
 	}
@@ -270,6 +277,7 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
 	    }
 	}
     }
+dyStringFree(&csvScratch);
 }
 
 void tagStormCheck(char *schemaFile, char *tagStormFile)

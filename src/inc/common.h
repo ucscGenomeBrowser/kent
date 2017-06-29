@@ -985,8 +985,9 @@ char *skipLeadingSpaces(char *s);
 char *skipToSpaces(char *s);
 /* Return first white space. */
 
-void eraseTrailingSpaces(char *s);
-/* Replace trailing white space with zeroes. */
+int eraseTrailingSpaces(char *s);
+/* Replace trailing white space with zeroes. Returns number of
+ * spaces erased. */
 
 void eraseWhiteSpace(char *s);
 /* Remove white space from a string */

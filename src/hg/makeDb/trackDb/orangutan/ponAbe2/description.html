@@ -17,81 +17,55 @@
 </TABLE>
 
 <P>
-The Jul. 2007 <em>Pongo pygmaeus abelii</em> draft assembly (WUSTL version 
-Pongo_albelii-2.0.2) was produced by the 
-<A HREF="http://genome.wustl.edu/genomes/detail/pongo-abelii/"
-TARGET=_blank>Genome Sequencing Center at Washington University School of
-Medicine in St. Louis</A> (WUSTL). For more information about this assembly, see
-<A HREF="http://www.ncbi.nlm.nih.gov/assembly/6678/" TARGET="_blank">
-P_pygmaeus_2.0.2</A> in the NCBI Assembly database.
-
-<H3>Sample position queries</H3>
-<P>
-A genome position can be specified by the accession number of a
-sequenced genomic region, an mRNA or EST, a chromosomal coordinate
-range, or keywords from the GenBank description of an mRNA. The
-following list shows examples of valid position queries for the
-orangutan genome.  See the
-<A HREF="../goldenPath/help/hgTracksHelp.html"
-    TARGET=_blank>User's Guide</A> for more information.
-<P>
-<TABLE border=0 CELLPADDING=0 CELLSPACING=0>
-    <TR><TH ALIGN=LEFT>Request:</TH>
-        <TH WIDTH=14>&nbsp;</TH>
-       	<TH ALIGN=LEFT>Genome Browser Response:</TH></TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD VALIGN=Top>chr22</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays all of chromosome 22</TD>
-    </TR>
-    <TR><TD VALIGN=Top>chr1:1-1000000</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays first million bases of chr 1</TD>
-    </TR>
-    <TR><TD VALIGN=Top NOWRAP>chr1:1000000+2000</TD>
-       	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chr 1 that spans 2000 bases, starting with position 1000000 </TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>AF512949</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays region of mRNA with GenBank accession
-		number AF512949</TD>
-    </TR>
-    <TR><TD VALIGN=Top>CR542506</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-      	<TD VALIGN=Top>Displays region of EST with GenBank accession
-		CR542506 on chr 22</TD>
-    </TR>
-    <TR><TD VALIGN=Top>homeobox caudal</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD>
-    </TR>
-    <TR><TD VALIGN=Top>zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD>
-    </TR>
-    <TR><TD VALIGN=Top>kruppel zinc finger</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>paabo</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Paabo</TD>
-    </TR>
-    <TR><TD VALIGN=Top>Wiemann,S.</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs deposited by co-author S. Wiemann</TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD COLSPAN="3"> Use this last format for author queries. Although
-	GenBank requires the search format <em>Wiemann S</em>, internally it
-	uses the format <em>Wiemann,S.</em>.</TD>
-    </TR>
-</TABLE>
+<B>UCSC Genome Browser assembly ID:</B> ponAbe2<BR>
+<B>Sequencing/Assembly provider ID:</B> 
+<A HREF="http://genome.wustl.edu/genomes/detail/pongo-abelii/" 
+TARGET=_blank>WUSTL Pongo_abelii-2.0.2</A><BR>
+<B>Assembly date:</B> Jul. 2007<BR>
+<B>NCBI Genome ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/325"
+TARGET="_blank">325</A> (Pongo abelii)<BR>
+<B>NCBI Assembly ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/6678/"
+TARGET="_blank">6678</A> (P_pygmaeus_2.0.2)<BR>
+<B>NCBI BioProject ID:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/20869"
+TARGET="_blank">20869</A>
+</P>
 
 <HR>
+<P>
+<B>Search the assembly:</B>
+<UL>
+  <LI>
+  <B>By position or search term: </B> Use the &quot;position or search term&quot;
+  box to find areas of the genome associated with many different attributes, such
+  as a specific chromosomal coordinate range; mRNA, EST, or STS marker names; or
+  keywords from the GenBank description of an mRNA.
+  <A HREF="../goldenPath/help/query.html">More information</A>, including sample
+  queries.
+  <LI>
+  <B>By gene name: </B> Type a gene name into the &quot;search term&quot; box,
+  choose your gene from the drop-down list, then press &quot;submit&quot; to go
+  directly to the assembly location associated with that gene.
+  <A HREF="../goldenPath/help/geneSearchBox.html">More information</A>.
+  <LI>
+  <B>By track type: </B> Click the &quot;track search&quot; button
+  to find Genome Browser tracks that match specific selection criteria.
+  <A HREF="../goldenPath/help/trackSearch.html">More information</A>.
+</UL>
+</P>
+<HR>
+<P>
+<B>Download sequence and annotation data:</B>
+<UL>
+  <LI><A HREF="../goldenPath/help/ftp.html">Using rsync</A> (recommended)
+  <LI><A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/ponAbe2/">Using FTP</A>
+  <LI><A HREF="http://hgdownload.soe.ucsc.edu/downloads.html#orangutan">Using HTTP</A>
+  <LI><A HREF="../goldenPath/credits.html#orangutan_use">Data use conditions and
+restrictions</A>
+  <LI><A HREF="../goldenPath/credits.html#orangutan_credits">Acknowledgments</A>
+</UL>
+</P>
+<HR>
+
 <H3>Assembly details</H3>
 <P>
 The <em>Pongo pygmaeus abelii</em> assembly (6X coverage) consists of whole 
@@ -137,20 +111,17 @@ assembly, see the WUSTL
 <A HREF="http://genome.wustl.edu/genomes/detail/pongo-abelii/"
 TARGET=_blank><em>Pongo abelii</em></A> web page.</P>
 </P>
-<P>
-Bulk downloads of the sequence and annotation data are available via 
-the Genome Browser 
-<A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/ponAbe2/">FTP server</A> 
-or the 
-<A HREF="http://hgdownload.soe.ucsc.edu/downloads.html#orangutan">Downloads</A> 
-page. 
-These data have <A HREF="../goldenPath/credits.html#orangutan_use">specific 
-conditions for use</A>. 
-The orangutan browser annotation tracks were generated by UCSC and 
-collaborators worldwide. See the 
-<A HREF="/goldenPath/credits.html#orangutan_credits">Credits</A> 
-page for a detailed list of the organizations and individuals who contributed 
-to this release. </P>
+
 <HR>
-<H3>Genbank Pipeline Details</H3>
+<H3>Genbank pipeline details</H3>
 For the purposes of the Genbank alignment pipeline, this assembly is considered to be: <B>well-ordered</B>.
+
+<HR>
+<H3>References</H3>
+<P>
+Locke DP, Hillier LW, Warren WC, Worley KC, Nazareth LV, Muzny DM, Yang SP, Wang Z,
+Chinwalla AT, Minx P <em>et al</em>. <A HREF="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3060778/"
+target="_blank">Comparative and demographic analysis of orang-utan genomes</a>.
+<em>Nature</em>. 2011 Jan 27;469(7331):529-33. 
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/20010809" target="_blank">20010809</a>
+</P>

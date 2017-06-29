@@ -73,7 +73,7 @@ char *csvParseNext(char **pos, struct dyString *scratch)
  * returning scratch->string or NULL if no values left. Will update *pos
  * to after trailing comma if any. This will tolerate and ignore leading
  * and trailing white space.  
- *     Since an empty or all-white string is will return NULL, if you
+ *     Since an empty or all-white string will return NULL, if you
  * want empty strings to be a legitimate value then they have to be quoted
  * or followed by a comma. */
 {
@@ -139,7 +139,10 @@ else	// Did not start with a quote,  so we just copy until comma or end of strin
 	c = *(++s);
 	}
     if (isspace(lastC))
-        eraseTrailingSpaces(scratch->string);
+	{
+        int erased = eraseTrailingSpaces(scratch->string);
+	scratch->stringSize -= erased;
+	}
     }
 
 // Update position to start reading next one from and return scratchpad

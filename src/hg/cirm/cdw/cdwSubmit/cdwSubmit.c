@@ -549,6 +549,7 @@ static char *otherSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf",
     "bed_bedLogR", "bed_bedRrbs", "bed_bedMethyl", "bed_broadPeak", "bed_narrowPeak",
     "bedRnaElements", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
     "rcc", "idat", "fasta", "customTrack", "pdf", "png", "vcf", "cram", "jpg", "text", "html",
+    "tsv", "csv",
     "kallisto_abundance", "expression_matrix",
     };
 static int otherSupportedFormatsCount = ArraySize(otherSupportedFormats);
