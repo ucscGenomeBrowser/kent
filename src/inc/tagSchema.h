@@ -14,6 +14,7 @@ struct tagSchema
     double minVal, maxVal;  // Bounds for numerical types
     struct slName *allowedVals;  // Allowed values for string types
     struct hash *uniqHash;   // Help make sure that all values are unique
+    boolean isArray;	// If true then can have multiple values
     };
 
 

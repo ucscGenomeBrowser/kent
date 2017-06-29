@@ -30,16 +30,25 @@ while (lineFileNextReal(lf, &line))
         required = 0;
 
     /* Parse out type field */
+    boolean isArray = FALSE;
     char *typeString = nextWord(&line);
     if (typeString == NULL)
         errAbort("truncated line %d of %s", lf->lineIx, lf->fileName);
     char type = typeString[0];
+    if (type == '[')
+	{
+        isArray = TRUE;
+	type = typeString[1];
+	if (typeString[2] != ']')
+	    errAbort("Expecting ']' in type field line %d of %s\n", lf->lineIx, lf->fileName);
+	}
 
     /* Allocate schema struct and fill in several fields. */
     AllocVar(schema);
     schema->name = cloneString(name);
     schema->required = required;
     schema->type = type;
+    schema->isArray = isArray;
     if (required == '^')
         schema->uniqHash = hashNew(0);
 
