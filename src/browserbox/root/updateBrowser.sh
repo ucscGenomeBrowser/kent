@@ -331,6 +331,10 @@ for i in chromInfo cytoBand cytoBandIdeo ensemblLift extFile grp gtexGene gtexGe
    touch /data/mysql/hg38/$i.MYI;
    touch /data/mysql/hg38/$i.frm;
 done
+
+# adding tables that are required for gtex, which is now a default track, #19587
+touch /data/mysql/hgFixed/gtexInfo.{MYI,MYD,frm}
+
 # -- END JUNE 2017
 
 if [ "$1" != "hgwdev" ] ; then
