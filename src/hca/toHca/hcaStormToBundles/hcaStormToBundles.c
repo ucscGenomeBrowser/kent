@@ -233,7 +233,8 @@ fputc(']', f);
 slFreeList(&list);
 }
 
-void rWriteJson(FILE *f, struct tagStanza *stanza, struct ttjSubObj *obj, struct hash *schemaHash)
+void rWriteJson(FILE *f, struct tagStorm *storm, struct tagStanza *stanza, 
+    struct ttjSubObj *obj, struct hash *schemaHash)
 /* Write out json object recursively */
 {
 fprintf(f, "{");
@@ -245,7 +246,7 @@ for (field = obj->children; field != NULL; field = field->next)
     if (field->children != NULL)
 	 {
 	 writeJsonTag(f, fieldName, &firstOut);
-	 rWriteJson(f, stanza, field, schemaHash);
+	 rWriteJson(f, storm, stanza, field, schemaHash);
 	 }
     else if (sameString("protocol_types", fieldName))
         {
@@ -271,27 +272,29 @@ for (field = obj->children; field != NULL; field = field->next)
 		}
 	    else
 		{
-		if (csvNeedsParsing(val))
-		    {
-		    struct slName *list = csvParse(val);
-		    if (list != NULL && list->next == NULL)
-			writeJsonVal(f, list->name, isNum);
-		    else
-			{
-			fputc('[', f);
-			struct slName *el;
-			for (el = list; el != NULL; el = el->next)
-			    {
-			    writeJsonVal(f, el->name, isNum);
-			    if (el->next != NULL)
-				fputc(',', f);
-			    }
-			fputc(']', f);
-			}
-		    slFreeList(&list);
-		    }
+		boolean isArray = FALSE;
+		struct tagSchema *schema = hashFindVal(schemaHash, field->fullName);
+		if (schema != NULL)
+		    isArray = schema->isArray;
+		struct slName *list = csvParse(val);
+		if (isArray)
+		    fputc('[', f);
 		else
-		    writeJsonVal(f, val, isNum);
+		    {
+		    if (list->next != NULL)  // more than one element
+		       errAbort("Multiple vals for scalar tag %s in stanza starting line %d of %s",
+			    field->fullName, stanza->startLineIx, storm->fileName);
+		    }
+		struct slName *el;
+		for (el = list; el != NULL; el = el->next)
+		    {
+		    writeJsonVal(f, el->name, isNum);
+		    if (el->next != NULL)
+			fputc(',', f);
+		    }
+		if (isArray)
+		    fputc(']', f);
+		slFreeList(&list);
 		}
 	    }
 	}
@@ -299,12 +302,13 @@ for (field = obj->children; field != NULL; field = field->next)
 fprintf(f, "}");
 }
 
-void writeTopJson(char *fileName, struct tagStanza *stanza, struct ttjSubObj *top, struct hash *schemaHash)
+void writeTopJson(char *fileName, struct tagStorm *storm, struct tagStanza *stanza, 
+    struct ttjSubObj *top, struct hash *schemaHash)
 /* Write one json file using the parts of stanza referenced in ttjSubObj */
 {
 verbose(2, "Writing %s\n", fileName);
 FILE *f = mustOpen(fileName, "w");
-rWriteJson(f, stanza, top, schemaHash);
+rWriteJson(f, storm, stanza, top, schemaHash);
 fprintf(f, "\n");
 carefulClose(&f);
 }
@@ -366,7 +370,7 @@ for (file = list; file != NULL; file = file->next)
     if (format != NULL)
         {
 	writeJsonTag(f, "format", &firstField);
-	writeJsonVal(f, format, TRUE);
+	writeJsonVal(f, format, FALSE);
 	}
     fputc('}', f);
     }
@@ -379,8 +383,8 @@ fprintf(f, "}");
 carefulClose(&f);
 }
 
-void makeBundleJson(char *dir, struct tagStanza *stanza, struct ttjSubObj *topLevelList,
-    char *dataDir, struct hash *schemaHash)
+void makeBundleJson(struct tagStorm *storm, char *dir, struct tagStanza *stanza, 
+    struct ttjSubObj *topLevelList, char *dataDir, struct hash *schemaHash)
 /* Write out bundle json file for stanza into dir */
 {
 verbose(2, "makeBundleJson on %s\n", dir);
@@ -389,7 +393,7 @@ struct ttjSubObj *topEl;
 for (topEl = topLevelList; topEl != NULL; topEl = topEl->next)
     {
     safef(jsonFileName, sizeof(jsonFileName), "%s/%s.json", dir, topEl->name);
-    writeTopJson(jsonFileName, stanza, topEl, schemaHash);
+    writeTopJson(jsonFileName, storm, stanza, topEl, schemaHash);
     }
 safef(jsonFileName, sizeof(jsonFileName), "%s/manifest.json", dir);
 writeManifest(jsonFileName, stanza, dataDir);
@@ -458,7 +462,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	slFreeList(&fileList);
 	}
 
-    makeBundleJson(bundleDir, stanza, objList, dataUrl, schemaHash);
+    makeBundleJson(storm, bundleDir, stanza, objList, dataUrl, schemaHash);
     }
 verbose(1, "wrote json files into %s/bundle* dirs\n", outDir);
 }
