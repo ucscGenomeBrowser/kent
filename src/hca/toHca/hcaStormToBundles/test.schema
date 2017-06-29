@@ -1,0 +1,50 @@
+assay.files $ *
+assay.rna.primer $ *
+assay.seq.machine $ *
+assay.seq.molecule $ *
+assay.seq.paired_ends $ *
+assay.seq.umi_barcode_offset # 1 100
+assay.seq.umi_barcode_size # 1 10
+assay.single_cell.cell_barcode_offset # 0 0
+assay.single_cell.cell_barcode_size # 1 100
+assay.single_cell.method $ *
+assay.sra_experiment $ *
+assay.sra_run $ *
+project.contact_address $ *
+project.contact_city $ *
+project.contact_country $ *
+project.contact_email $ *
+project.contact_institute $ *
+project.contact_name $ *
+project.contact_phone $ *
+project.contact_postal_code # 1 10000
+project.contact_state $ *
+project.contributor $ *
+project.geo_parent_series $ *
+project.geo_series $ *
+project.last_update_date $ *
+project.ncbi_bioproject $ *
+project.overall_design $ *
+project.pubmed_id # 1 100000000
+project.release_status $ *
+project.sra_project $ *
+project.submission_date $ *
+project.summary $ *
+project.supplementary_files $ *
+project.title $ *
+sample.body_part.name $ *
+sample.characteristics_developmental_stage $ *
+sample.characteristics_genotype $ *
+sample.characteristics_tissue $ *
+sample.data_processing $ *
+sample.donor.ncbi_taxon # 1 100000
+sample.donor.species $ *
+sample.geo_accession $ *
+sample.last_update_date $ *
+sample.long_label $ *
+sample.ncbi_biosample $ *
+sample.platform_id $ *
+sample.protocol_types $ *
+sample.protocols $ *
+sample.short_label $ *
+sample.submission_date $ *

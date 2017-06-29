@@ -1,4 +1,4 @@
 #!/bin/tcsh -efx
 rm -rf out
-hcaStormToBundles test.tags http://hgwdev.cse.ucsc.edu/~kent/hca/big_data_files/ out
+hcaStormToBundles test.tags http://hgwdev.cse.ucsc.edu/~kent/hca/big_data_files/ test.schema out
 python -mjson.tool out/bundle1/assay.json
