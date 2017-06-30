@@ -13,6 +13,7 @@ bigDataUrl /gbdb/hg38/cosmic/cosMutHg38V81.bb
 group phenDis
 color 200, 0, 0
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
+urlLabel COSMIC ID:
 
 track coriellDelDup override
 origAssembly hg19 
