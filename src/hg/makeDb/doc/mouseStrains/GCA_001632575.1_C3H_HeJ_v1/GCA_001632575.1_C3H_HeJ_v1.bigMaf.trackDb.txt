@@ -3,6 +3,7 @@ shortLabel mice strains
 longLabel Cactus alignments, 17 mice strains plus rat
 type bigMaf
 visibility full
+html html/mouseStrains.html
 bigDataUrl maf/C3H_HeJ.bigMaf.bb
 summary maf/C3H_HeJ.bigMafSummary.bb
 frames maf/C3H_HeJ.bigMafFrames.bb
