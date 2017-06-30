@@ -2136,6 +2136,11 @@ if (!mapping)
     }
 else
     {
+    if (dyStringIsNotEmpty(dyWarn))
+        {
+        dyStringAppend(dyError, dyStringContents(dyWarn));
+        dyStringClear(dyWarn);
+        }
     struct hgvsChange *changeList = hgvsParseNucleotideChange(hgvs->changes, hgvs->type,
                                                               dyWarn);
     if (dyStringIsNotEmpty(dyWarn))
