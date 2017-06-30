@@ -1021,14 +1021,14 @@ sub makeDescription {
 <B>Sequencing/Assembly provider ID:</B> $assemblyLabel<BR>
 <B>Assembly date:</B> $assemblyDate<BR>
 <B>Accession ID:</B> $genBankAccessionID<BR>
-<B>NCBI Genome information:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET="_blank">
+<B>NCBI Genome ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET="_blank">
 NCBI genome/$ncbiGenomeId ($scientificName)</A><BR>
-<B>NCBI Assembly information:</B>
+<B>NCBI Assembly ID:</B>
 <A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId" TARGET="_blank">
 NCBI assembly/$ncbiAssemblyId ($assemblyLabel)</A><BR>
 
-<B>BioProject information:</B> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A><BR>
-<B>BioSample information:</B> <A HREF="http://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample" TARGET="_blank"> NCBI Biosample: $ncbiBioSample</A>
+<B>NCBI BioProject ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A><BR>
+<B>NCBI BioSample ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample" TARGET="_blank"> NCBI Biosample: $ncbiBioSample</A>
 </P>
 <HR>
 <P>
