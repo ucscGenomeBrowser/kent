@@ -367,18 +367,24 @@ if (matches)
     hgvs->seqAcc = regexSubstringClone(term, substrs[accIx]);
     extractComplexNum(term, substrs, startAnchorIx,
                       &hgvs->startIsUtr3, &hgvs->start1, &hgvs->startOffset);
-    if (isNoncoding && (hgvs->startIsUtr3 || hgvs->start1 < 0))
-        warn("hgvsParseCNDotPos: noncoding term '%s' appears to start in UTR, "
+    if (isNoncoding && hgvs->startIsUtr3)
+        {
+        warn("hgvsParseCNDotPos: noncoding term '%s' appears to start in UTR3 (*), "
              "not applicable for noncoding", term);
+        hgvs->startIsUtr3 = FALSE;
+        }
     if (geneSymbolIx >= 0 && regexSubstrMatched(substrs[geneSymbolIx]))
         hgvs->seqGeneSymbol = regexSubstringClone(term, substrs[geneSymbolIx]);
     if (regexSubstrMatched(substrs[endPosIx]))
         {
         extractComplexNum(term, substrs, endAnchorIx,
                           &hgvs->endIsUtr3, &hgvs->end, &hgvs->endOffset);
-        if (isNoncoding && (hgvs->endIsUtr3 || hgvs->end < 0))
-            warn("hgvsParseCNDotPos: noncoding term '%s' appears to end in UTR, "
+        if (isNoncoding && hgvs->endIsUtr3)
+            {
+            warn("hgvsParseCNDotPos: noncoding term '%s' appears to end in UTR3 (*), "
                  "not applicable for noncoding", term);
+            hgvs->endIsUtr3 = FALSE;
+            }
         }
     else
         {
@@ -979,7 +985,7 @@ return normalizedAcc;
 static boolean hgvsValidateGene(char *db, struct hgvsVariant *hgvs,
                                 char **retFoundAcc, int *retFoundVersion, char **retDiffRefAllele)
 /* Return TRUE if hgvs coords are within the bounds of the sequence for hgvs->seqAcc.
- * Note: Coding terms may contain coords outside the bounds (upstream, intron, downstream) so
+ * Note: Transcript terms may contain coords outside the bounds (upstream, intron, downstream) so
  * those can't be checked without mapping the term to the genome.
  * If retFoundAcc is not NULL, set it to our local accession (which may be missing the .version
  * of hgvs->seqAcc) or NULL if we can't find any match.
@@ -1003,9 +1009,6 @@ if (accSeq)
     hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
     if (hgvs->type == hgvstCoding)
         {
-        // Coding term coords can extend beyond the bounds of the transcript so
-        // we can't check them without mapping to the genome.  However, if the coords
-        // are in bounds and a reference allele is provided, we can check that.
         struct genbankCds cds;
         coordsOK = getCds(db, acc, &cds);
         if (coordsOK && retDiffRefAllele)
@@ -1017,12 +1020,9 @@ if (accSeq)
         }
     else
         {
-        if (start >= 0 && start < seqLen && end > 0 && end <= seqLen)
-            {
-            coordsOK = TRUE;
-            if (retDiffRefAllele)
-                checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
-            }
+        coordsOK = TRUE;
+        if (retDiffRefAllele && hgvs->startOffset == 0 && start >= 0 && start < seqLen)
+            checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
         }
     }
 freeMem(accSeq);
@@ -1033,7 +1033,7 @@ return coordsOK;
 boolean hgvsValidate(char *db, struct hgvsVariant *hgvs,
                      char **retFoundAcc, int *retFoundVersion, char **retDiffRefAllele)
 /* Return TRUE if hgvs coords are within the bounds of the sequence for hgvs->seqAcc.
- * Note: Coding terms may contain coords outside the bounds (upstream, intron, downstream) so
+ * Note: Transcript terms may contain coords outside the bounds (upstream, intron, downstream) so
  * those can't be checked without mapping the term to the genome; this returns TRUE if seq is found.
  * If retFoundAcc is not NULL, set it to our local accession (which may be missing the .version
  * of hgvs->seqAcc) or NULL if we can't find any match.
@@ -1095,35 +1095,31 @@ if (retPslTable)
 return region;
 }
 
-static void hgvsCodingToZeroBasedHalfOpen(struct hgvsVariant *hgvs,
-                                          int maxCoord, struct genbankCds *cds,
-                                          int *retStart, int *retEnd,
-                                          int *retUpstreamBases, int *retDownstreamBases)
-/* Convert a coding HGVS's start1 and end into UCSC coords plus upstream and downstream lengths
- * for when the coding HGVS has coordinates that extend beyond its sequence boundaries.
+static void hgvsTranscriptToZeroBasedHalfOpen(struct hgvsVariant *hgvs,
+                                              int maxCoord, struct genbankCds *cds,
+                                              int *retStart, int *retEnd,
+                                              int *retUpstreamBases, int *retDownstreamBases)
+/* Convert a transcript HGVS's start1 and end into UCSC coords plus upstream and downstream lengths
+ * for when the transcript HGVS has coordinates that extend beyond its sequence boundaries.
  * ret* args must be non-NULL. */
 {
-int start, end;
-hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
-// If the position follows '*' that means it's relative to cdsEnd; otherwise rel to cdsStart
-if (hgvs->startIsUtr3)
-    *retStart = cds->end + start;
-else
-    *retStart = cds->start + start;
-if (hgvs->endIsUtr3)
-    *retEnd = cds->end + end;
-else
-    *retEnd = cds->start + end;
+hgvsStartEndToZeroBasedHalfOpen(hgvs, retStart, retEnd);
+if (hgvs->type == hgvstCoding)
+    {
+    // If the position follows '*' that means it's relative to cdsEnd; otherwise rel to cdsStart
+    *retStart += (hgvs->startIsUtr3 ? cds->end : cds->start);
+    *retEnd += (hgvs->endIsUtr3 ? cds->end : cds->start);
+    }
 // Now check for coords that extend beyond the transcript('s alignment to the genome)
 if (*retStart < 0)
     {
-    // hgvs->start1 is upstream of coding transcript.
+    // hgvs->start1 is upstream of transcript.
     *retUpstreamBases = -*retStart;
     *retStart = 0;
     }
-else if (*retStart > maxCoord)
+else if (*retStart >= maxCoord)
     {
-    // Even the start coord is downstream of coding transcript -- make a negative "upstream"
+    // Even the start coord is downstream of transcript -- make a negative "upstream"
     // for adjusting start.
     *retUpstreamBases = -(*retStart - maxCoord + 1);
     *retStart = maxCoord - 1;
@@ -1132,13 +1128,13 @@ else
     *retUpstreamBases = 0;
 if (*retEnd > maxCoord)
     {
-    // hgvs->end is downstream of coding transcript.
+    // hgvs->end is downstream of transcript.
     *retDownstreamBases = *retEnd - maxCoord;
     *retEnd = maxCoord;
     }
-else if (*retEnd < 0)
+else if (*retEnd <= 0)
     {
-    // Even the end coord is upstream of coding transcript -- make a negative "downstream"
+    // Even the end coord is upstream of transcript -- make a negative "downstream"
     // for adjusting end.
     *retEnd += *retUpstreamBases;
     *retDownstreamBases = -*retUpstreamBases;
@@ -1156,7 +1152,7 @@ static struct psl *pslFromHgvsNuc(struct hgvsVariant *hgvs, char *acc, int accSi
  * If hgvs is coding ("c.") then the caller must pass in a valid cds.
  * In case the start or end position is outside the bounds of the sequence, set retUpstreamBases
  * or retDownstreamBases to the number of bases beyond the beginning or end of sequence.
- * NOTE: coding intron offsets are ignored; the PSL contains the exon anchor point
+ * NOTE: intron offsets are ignored; the PSL contains the exon anchor point
  * and the caller will have to map that to the genome and then apply the intron offset. */
 {
 if (hgvs == NULL)
@@ -1168,7 +1164,7 @@ AllocVar(psl);
 psl->tName = cloneString(acc);
 safecpy(psl->strand, sizeof(psl->strand), "+");
 psl->tSize = accSize;
-if (hgvs->type != hgvstCoding)
+if (hgvs->type == hgvstGenomic || hgvs->type == hgvstMito)
     {
     // Sane 1-based fully closed coords.
     hgvsStartEndToZeroBasedHalfOpen(hgvs, &psl->tStart, &psl->tEnd);
@@ -1176,8 +1172,8 @@ if (hgvs->type != hgvstCoding)
 else
     {
     // Simple or insanely complex CDS-relative coords.
-    hgvsCodingToZeroBasedHalfOpen(hgvs, accEnd, cds, &psl->tStart, &psl->tEnd,
-                                  retUpstreamBases, retDownstreamBases);
+    hgvsTranscriptToZeroBasedHalfOpen(hgvs, accEnd, cds, &psl->tStart, &psl->tEnd,
+                                      retUpstreamBases, retDownstreamBases);
     }
 int refLen = psl->tEnd - psl->tStart;
 // Just use refLen for alt until we parse the sequence change portion of the term:
@@ -1224,21 +1220,22 @@ return del;
 
 static struct psl *mapToDeletion(struct psl *variantPsl, struct psl *txAli)
 /* If the variant falls on a transcript base that is deleted in the reference genome,
+ * (or upstream/downstream mapped to a zero-length point),
  * return the deletion coords (pslTransMap returns NULL), otherwise return NULL. */
 {
 // variant start and end coords, in transcript coords:
 int vStart = variantPsl->tStart;
 int vEnd = variantPsl->tEnd;
-// If txAli->strand is '-', reverse coords
-if (txAli->strand[0] == '-')
+boolean isRc = (pslQStrand(txAli) == '-');
+if (isRc)
     {
     vStart = variantPsl->tSize - variantPsl->tEnd;
     vEnd = variantPsl->tSize - variantPsl->tStart;
     }
 if (vEnd < txAli->qStart)
-    return pslDelFromCoord(txAli, txAli->qStart, variantPsl);
+    return pslDelFromCoord(txAli, isRc ? txAli->tEnd : txAli->tStart, variantPsl);
 else if (vStart > txAli->qEnd)
-    return pslDelFromCoord(txAli, txAli->qEnd, variantPsl);
+    return pslDelFromCoord(txAli, isRc ? txAli->tStart : txAli->tEnd, variantPsl);
 int i;
 for (i = 0;  i < txAli->blockCount - 1;  i++)
     {
@@ -2139,6 +2136,11 @@ if (!mapping)
     }
 else
     {
+    if (dyStringIsNotEmpty(dyWarn))
+        {
+        dyStringAppend(dyError, dyStringContents(dyWarn));
+        dyStringClear(dyWarn);
+        }
     struct hgvsChange *changeList = hgvsParseNucleotideChange(hgvs->changes, hgvs->type,
                                                               dyWarn);
     if (dyStringIsNotEmpty(dyWarn))
