@@ -34,14 +34,19 @@ boolean gtexIsGeneTrack(char *trackName)
 return startsWith(GTEX_GENE_TRACK_BASENAME, trackName);
 }
 
-char *gtexGeneTrackUiName()
+boolean gtexIsEqtlTrack(char *trackName)
+/* Identify GTEx eQTL track so custom trackUi CGI can be launched */
+{
+return startsWith(GTEX_EQTL_TRACK_BASENAME, trackName);
+}
+
+char *gtexTrackUiName()
 /* Refer to Body Map CGI if suitable */
 {
 // Display body map configuration page if user is on a browser we've tested
 enum browserType bt = cgiBrowser();
 if (bt == btChrome || bt == btFF || bt == btSafari)
     return(_hgGtexTrackSettingsName);
-
 return hgTrackUiName();
 }
 
@@ -450,6 +455,108 @@ cgiMakeRadioButton(cartVar, GTEX_COLORS_RAINBOW, !isGtexColors);
 printf("Rainbow\n");
 printf("</p>");
 #endif
+
+/* Tissue filter */
+printf("<br>");
+printf("<div><b>Tissues:</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
+if (isPopup)
+    {
+    printf("<a href='%s?g=%s'><button type='button'>Change</button><a>", 
+                hTrackUiForTrack(track), track);
+    }
+else
+    {
+    jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
+    puts("&nbsp;");
+    jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
+    }
+printf("</div>");
+char *version = gtexVersion(tdb->table);
+struct gtexTissue *tissues = gtexGetTissues(version);
+struct slName *selectedValues = NULL;
+if (cartListVarExistsAnyLevel(cart, tdb, FALSE, GTEX_TISSUE_SELECT))
+    selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, GTEX_TISSUE_SELECT);
+char *selectType = cgiUsualString("tis", "table");
+if (sameString(selectType, "group"))
+    makeGroupedTissueCheckboxes(cartVar, tissues, selectedValues);
+else if (sameString(selectType, "table"))
+    makeTableTissueCheckboxes(cartVar, tissues, selectedValues, cart, track, version);
+else
+    makeAllTissueCheckboxes(cartVar, tissues, selectedValues);
+
+puts("\n</table>\n");
+cfgEndBox(boxed);
+}
+
+/* GTEx eQTL track configuration */
+
+void gtexEqtlGene(struct cart *cart, char *track, struct trackDb *tdb)
+/* Limit to selected gene */
+// TODO: autocomplete
+{
+char cartVar[1024];
+puts("<b>Limit to eQTLs for gene: </b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_EQTL_GENE);
+char *gene = cartCgiUsualString(cart, cartVar, "");
+cgiMakeTextVar(cartVar, gene, 20);
+}
+
+#define GTEX_EQTL_EFFECT_MAX       15362.9
+// Maximum V6p effect size for CAVIAR 95% eQTLs
+// TODO: add to gtexInfo table
+
+void gtexEqtlEffectSize(struct cart *cart, char *track, struct trackDb *tdb)
+/* Limit to items with absolute value of effect size >= threshold.  Use largest
+ * effect size in tissue list */
+{
+char cartVar[1024];
+puts("<b>Effect size minimum: </b>+-\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_EQTL_EFFECT);
+double effectMin = cartCgiUsualDouble(cart, cartVar, 0.0);
+cgiMakeDoubleVar(cartVar, effectMin, 7);
+printf(" FPKM (range 0-%0.1f)\n", GTEX_EQTL_EFFECT_MAX);
+}
+
+void gtexEqtlProbability(struct cart *cart, char *track, struct trackDb *tdb)
+/* Limit to items with specified probability.  Use largest probability in tissue list,
+ * which is score/1000, so use that */
+{
+char cartVar[1024];
+puts("<b>Probability minimum:</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_EQTL_PROBABILITY);
+double probMin = cartCgiUsualDouble(cart, cartVar, 0);
+cgiMakeDoubleVar(cartVar, probMin, 3);
+printf(" (range 0-1.0)\n");
+}
+
+void gtexEqtlClusterUi(struct cart *cart, struct trackDb *tdb, char *track, char *title, 
+                        boolean boxed)
+/* GTEx (Genotype Tissue Expression) eQTL clusters. Use this on right-click,
+ * (when hgGtexTrackSettings can't be) */
+{
+if (cartVarExists(cart, "ajax"))
+    isPopup = TRUE;
+
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+printf("\n<table id=gtexEqtlClusterControls style='font-size:%d%%' %s>\n<tr><td>", 
+        isPopup ? 75 : 100, boxed ?" width='100%'":"");
+
+char cartVar[1024];
+
+/* Gene filter  */
+puts("<div>");
+gtexEqtlGene(cart, track, tdb);
+puts("</div>\n");
+
+/* Absolute value of effect size */
+puts("<div>");
+gtexEqtlEffectSize(cart, track, tdb);
+
+/* Probability eQTL is in CAVIAR 95% causal set */
+puts("&nbsp;&nbsp;");
+gtexEqtlProbability(cart, track, tdb);
+puts("</div>");
 
 /* Tissue filter */
 printf("<br>");
