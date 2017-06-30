@@ -1018,17 +1018,17 @@ sub makeDescription {
 
 <P>
 <B>UCSC Genome Browser assembly ID:</B> $db<BR>
-<B>Sequencing/Assembly provider ID:</B> $assemblyLabel<BR>
+<B>Sequencing/Assembly provider ID:</B> $assemblyLabel $ncbiAssemblyName<BR>
 <B>Assembly date:</B> $assemblyDate<BR>
 <B>Accession ID:</B> $genBankAccessionID<BR>
-<B>NCBI Genome ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET="_blank">
-NCBI genome/$ncbiGenomeId ($scientificName)</A><BR>
-<B>NCBI Assembly ID:</B>
-<A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId" TARGET="_blank">
-NCBI assembly/$ncbiAssemblyId ($assemblyLabel)</A><BR>
-
-<B>NCBI BioProject ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A><BR>
-<B>NCBI BioSample ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample" TARGET="_blank"> NCBI Biosample: $ncbiBioSample</A>
+<B>NCBI Genome ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId"
+TARGET="_blank">$ncbiGenomeId</A> ($scientificName)<BR>
+<B>NCBI Assembly ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
+TARGET="_blank">$ncbiAssemblyId</A> ($ncbiAssemblyName)<BR>
+<B>NCBI BioProject ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject"
+TARGET="_blank">$ncbiBioProject</A><BR>
+<B>NCBI BioSample ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample"
+TARGET="_blank">$ncbiBioSample</A>
 </P>
 <HR>
 <P>
