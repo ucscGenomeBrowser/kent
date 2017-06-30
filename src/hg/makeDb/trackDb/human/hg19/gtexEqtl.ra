@@ -20,7 +20,7 @@
 track gtexEqtlCluster
 type bed 5 +
 shortLabel GTEx eQTL Clusters
-longLabel Expression QTLs clusters in 44 tissues from GTEx (midpoint release, V6)
+longLabel Expression QTL clusters in 44 tissues from GTEx (midpoint release, V6)
 group regulation
 
 track gtexEqtlTissue
