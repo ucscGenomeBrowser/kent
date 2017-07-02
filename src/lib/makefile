@@ -44,7 +44,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     servcis.o servcl.o servmsII.o servpws.o shaRes.o slog.o snof.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
     splatAli.o sqlList.o sqlNum.o sqlReserved.o subText.o sufa.o sufx.o synQueue.o \
-    tabRow.o tagSchema.o tagStorm.o tagToSql.o textOut.o tokenizer.o trix.o twoBit.o \
+    tabRow.o tagSchema.o tagStorm.o tagToJson.o tagToSql.o textOut.o tokenizer.o trix.o twoBit.o \
     udc.o uuid.o vcf.o vcfBits.o vGfx.o vPng.o verbose.o \
     wildcmp.o wormdna.o \
     xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o zlibFace.o
