@@ -19,6 +19,7 @@ UTIL_DIRS = \
     cdwCreateUser \
     cdwDumpManiFiles \
     cdwFakeManifestFromSubmit \
+    cdwGroupUser \
     cdwJob \
     cdwSummary \
     cdwMakeContaminationQa \
@@ -40,6 +41,7 @@ UTIL_DIRS = \
     cdwRunOnIds \
     cdwSubmit \
     cdwSwapInSymLink \
+    cdwTextForIndex \
     cdwUndeprecate \
     utils/cdwFastqPolyFilter \
     utils/cdwVcfStats

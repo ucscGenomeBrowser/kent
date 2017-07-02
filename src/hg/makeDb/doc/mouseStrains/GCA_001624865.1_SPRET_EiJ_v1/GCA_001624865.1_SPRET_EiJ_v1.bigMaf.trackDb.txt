@@ -1,8 +1,9 @@
 track bigMaf
-shortLabel bigMaf
-longLabel bigMaf long label
+shortLabel mice strains
+longLabel Cactus alignments, 17 mice strains plus rat
 type bigMaf
 visibility full
+html html/mouseStrains.html
 bigDataUrl maf/SPRET_EiJ.bigMaf.bb
 summary maf/SPRET_EiJ.bigMafSummary.bb
 frames maf/SPRET_EiJ.bigMafFrames.bb

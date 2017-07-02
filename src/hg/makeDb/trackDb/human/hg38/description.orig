@@ -1,0 +1,218 @@
+<!-- Display image in righthand corner -->
+<TABLE ALIGN=RIGHT BORDER=0 WIDTH=415>
+  <TR><TD ALIGN=RIGHT>
+    <A HREF="http://www.ncbi.nlm.nih.gov/genome/51" TARGET=_blank>
+    <IMG SRC="../images/human.jpg" WIDTH=275 HEIGHT=275 ALT="Human"></A>
+  </TD></TR>
+  <TR><TD ALIGN=RIGHT> 
+    <FONT SIZE=-1><em>Homo sapiens</em><BR> 
+    </FONT>
+    <FONT SIZE=-2> 
+      (<A HREF="http://www.cbse.ucsc.edu/"
+      TARGET=_blank>Graphic courtesy of CBSE</A>)
+    </FONT>
+  </TD></TR>
+</TABLE>
+
+<P>
+<B>UCSC Genome Browser assembly ID:</B> hg38<BR>
+<B>Sequencing/Assembly provider ID:</B> GRCh38 Genome Reference Consortium Human Reference 38 (GCA_000001405.15)<BR>
+<B>Assembly date:</B> Dec. 2013<BR>
+<B>Accession ID:</B> GCA_000001305.2<BR>
+<B>NCBI Genome information:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/51"
+TARGET="_blank">NCBI genome/51 (Homo sapiens)</A><BR>
+<B>NCBI Assembly information:</B>
+<A HREF="http://www.ncbi.nlm.nih.gov/assembly/883148"
+TARGET="_blank">NCBI assembly/883148 (GRCh38/GCA_000001405.15)</A><BR>
+<B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/31257"
+TARGET="_blank">NCBI Bioproject: 31257</A>
+</P>
+<HR>
+<P>
+<B>Search the assembly:</B>
+<UL>
+<LI>
+<B>By position or search term: </B> Use the &quot;position or search term&quot;
+box to find areas of the genome associated with many different attributes, such
+as a specific chromosomal coordinate range; mRNA, EST, or STS marker names; or
+keywords from the GenBank description of an mRNA.
+<A HREF="../goldenPath/help/query.html">More information</A>, including sample
+queries.
+<LI>
+<B>By gene name: </B> Type a gene name into the &quot;search term&quot; box,
+choose your gene from the drop-down list, then press &quot;submit&quot; to go 
+directly to the assembly location associated with that gene.
+<A HREF="../goldenPath/help/geneSearchBox.html">More information</A>.
+<LI>
+<B>By track type: </B> Click the &quot;track search&quot; button
+to find Genome Browser tracks that match specific selection criteria.
+<A HREF="../goldenPath/help/trackSearch.html">More information</A>.
+</UL>
+</P>
+<HR>
+<P>
+<B>Download sequence and annotation data:</B>
+<UL>
+<LI><A HREF="../goldenPath/help/ftp.html">Using rsync</A> (recommended)
+<LI><A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/">Using FTP</A>
+<LI><A HREF="http://hgdownload.soe.ucsc.edu/downloads.html#human">Using HTTP</A>
+<LI><A HREF="../goldenPath/credits.html#human_credits">Data use conditions and
+restrictions</A>
+<LI><A HREF="../goldenPath/credits.html#human_credits">Acknowledgments</A>
+</UL>
+</P>
+<hr>
+<h3>Assembly Details</h3>
+<p>
+The GRCh38 assembly is the first major revision of the human genome released in more than four
+years. As with the previous GRCh37 assembly, the 
+<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/"
+target="_blank">Genome Reference Consortium</a> (GRC) 
+is now the primary source for human genome assembly data submitted to GenBank. Beginning with this 
+release, the UCSC Genome Browser version numbers for the human assemblies now match those of the 
+GRC to minimize version confusion. Hence, the GRCh38 assembly is referred to as &quot;hg38&quot; 
+in the Genome Browser datasets and documentation. For a glossary of assembly-related terms, see the 
+GRC <a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/definitions.shtml"
+target="_blank">Assembly Terminology</a> page.
+<p>
+<b>GRCh38 Highlights</b>
+<ul>
+<li>
+<b>Alternate sequences</b> - Several human chromosomal regions exhibit sufficient variability to 
+prevent adequate representation by a single sequence. To address this, the GRCh38 assembly provides 
+alternate sequence for selected variant regions through the inclusion of  <em>alternate loci 
+scaffolds</em> (or <em>alt loci</em>). Alt loci are separate accessioned sequences that are aligned 
+to reference chromosomes. This assembly contains 261 alt loci, many of which are associated with 
+the LRC/KIR area of chr19 and the MHC region on chr6.
+See the <a href="../cgi-bin/hgTracks?chromInfoPage=">sequences</a> page for a complete
+list of the reference chromosomes and alternate sequences in GRCh38.
+<li>
+<b>Centromere representation</b> - Debuting in this release, the large megabase-sized gaps that
+represented centromeric regions in previous assemblies have been replaced by sequences from
+centromere models created by 
+<a href="http://genome.cshlp.org/content/24/4/697.abstract"
+target="_blank">Karen Miga et al.</a>, using centromere databases developed during her work in
+the Willard lab at Duke University (now at the <a href="https://president.uchicago.edu/directory/huntington-willard"
+target="_blank">University of Chicago</a>) and analysis software developed while working in the 
+<a href="http://cbse.soe.ucsc.edu/people/kent" target="_blank">Kent lab</a> at UCSC.
+The models, which provide the approximate repeat number and order for each centromere, will be 
+useful for read mapping and variation studies. 
+<li>
+<b>Mitochondrial genome</b> - The mitochondrial reference sequence included in the GRCh38 assembly 
+(termed &quot;chrM&quot; in the UCSC Genome Browser) is the 
+<a href="http://mitomap.org/bin/view.pl/MITOMAP/HumanMitoSeq"
+target="_blank">Revised Cambridge Reference Sequence</a> (rCRS) from 
+<a href="http://mitomap.org/MITOMAP" target="_blank">MITOMAP</a> with GenBank accession number 
+J01415.2 and RefSeq accession number NC_012920.1. This differs from the chrM sequence 
+(RefSeq accession number NC_001907) provided by the Genome Browser for hg19, which was not updated 
+when the GRCh37 assembly later transitioned to the new version.
+<li>
+<b>Sequence updates</b> - Several erroneous bases and misassembled regions in GRCh37 have been 
+corrected in the GRCh38 assembly, and more than 100 gaps have been filled or reduced. Much of the 
+data used to improve the reference sequence was obtained from other genome sequencing and analysis
+projects, such as the <a href="http://www.1000genomes.org/" target="_blank">1000 Genomes
+Project</a>.
+<li>
+<b>Analysis set</b> - The GRCh38 assembly offers an &quot;analysis set&quot; that was created to 
+accommodate next generation sequencing read alignment pipelines. To avoid false mapping of reads,
+duplicate copies of centromeric arrays and WGS on several chromosomes have been hard-masked with
+Ns.  The two PAR regions on chromosome Y have also been hard-masked, and the Epstein-Barr virus
+sequence has been added as a decoy to attract contamination in samples. Two versions of the
+analysis set are available on our
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/analysisSet/"
+target="_blank">downloads page</a>:
+one without the alternate chromosomes from this assembly, and one that includes them.
+</ul>
+<p>
+<b>Chromosome naming conventions</b>
+<br>
+UCSC has introduced some slight changes to the Genome Browser chromosome naming scheme with
+this release:
+<ul>
+  <li>Haplotype chromosome, unplaced contig and unlocalized contig names now include
+      their NCBI accession number (e.g., chr6_GL000256v2_alt)</li>
+  <li>The &quot;v2&quot; at the end of the accession number indicates the NCBI version number</li>
+  <li>Haplotype chromosome names consist of the chromosome number, followed by the NCBI accession
+      number, followed by &quot;alt&quot;</li>
+  <li>Unlocalized contig names consist of the chromosome number, followed by the NCBI accession
+      number, followed by &quot;random&quot;</li>
+  <li>Unplaced contig names (contigs whose associated chromosome is not known) consist of
+      &quot;chrUn&quot; followed by the NCBI accession number</li>
+</ul>
+</p>
+<p>
+<b>Pseudoautosomal regions</b>
+<br>
+The Y chromosome in this assembly contains two pseudoautosomal regions (PARs)
+that were taken from the corresponding regions in the X chromosome and are
+exact duplicates:
+<blockquote>
+chrY:10,000-2,781,479 and chrY:56,887,902-57,217,415
+<br>chrX:10,000-2,781,479 and chrX:155,701,382-156,030,895
+</blockquote>
+</p>
+
+<p>
+<b>Assembly statistics</b>
+<br>
+For a detailed set of statistics about this assembly, see the 
+<a href="http://www.ncbi.nlm.nih.gov/assembly/883148/#/st_Primary-Assembly"
+target="_blank">GRCh38 GenBank record</a>.
+<br>
+<TABLE BORDER=1 CELLPADDING=3>
+    <TR><TH>Number</TH><TH>Haplotypes</TH><TH>Unplaced Contigs</TH></TH></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr1</TD><TD ALIGN="CENTER"><FONT SIZE=-1>12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr2</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>15</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>2</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr3</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>11</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr7</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr8</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>5</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr10</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr11</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr12</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr13</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr14</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>8</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr15</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr16</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>6</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr17</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>18</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr18</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>10</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr19</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>43</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr20</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>4</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr21</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>7</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chr22</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>9</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrX</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>3</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrY</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>1</FONT></TD></TR>
+    <TR><TD ALIGN="CENTER"><FONT SIZE=-1>chrM</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>0</FONT></TD></TR>
+</TABLE>
+</p>
+<p>
+<TABLE BORDER=1 CELLPADDING=3>
+    <TH ALIGN="LEFT">Type</TH><TH WIDTH=50>Total</TH>
+    <TR><TD><FONT SIZE=-1>chromosomes</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>25</FONT></TD></TR>
+    <TR><TD><FONT SIZE=-1>haplotypes</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>261</FONT></TD></TR>
+    <TR><TD><FONT SIZE=-1>unlocalized contigs</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>42</FONT></TD></TR>
+    <TR><TD><FONT SIZE=-1>unplaced contigs</FONT></TD><TD ALIGN="CENTER"><FONT SIZE=-1>127</FONT></TD></TR>
+    <TR><TD></TD><TD></TD></TR>
+    <TR><TD><B><FONT SIZE=-1>Total</FONT></B></TD><TD ALIGN="CENTER"><FONT SIZE=-1>455</FONT></TD></TR>
+</TABLE>
+</p>
+<p>
+For more information about the files included in the GRCh38 GenBank submission, see the
+<a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.15_GRCh38/README.txt"
+target="_blank">GRCh38 README</a>. 
+Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser 
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/">FTP server</a> or the
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#human">Downloads</a> page.  
+The annotation tracks for this browser were generated by UCSC and collaborators worldwide.
+</p>
+
+<h3>References</h3>
+<p>
+Miga KH, Newton Y, Jain M, Altemose N, Willard HF, Kent WJ.
+<a href="http://genome.cshlp.org/content/24/4/697.abstract"
+target="_blank">Centromere reference models for human chromosomes X and Y satellite arrays</a>.
+<em>Genome Res.</em> 2014 Apr;24(4):697-707. Epub 2014 Feb 5.
+</p>
