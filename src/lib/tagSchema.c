@@ -91,3 +91,13 @@ slReverse(&list);
 return list;
 }
 
+struct hash *tagSchemaHash(struct tagSchema *list)
+/* Return a hash of tagSchemas keyed by name */
+{
+struct hash *hash = hashNew(9);
+struct tagSchema *schema;
+for (schema = list; schema != NULL; schema = schema->next)
+    hashAdd(hash, schema->name, schema);
+return hash;
+}
+

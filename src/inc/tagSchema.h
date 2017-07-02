@@ -21,6 +21,8 @@ struct tagSchema
 struct tagSchema *tagSchemaFromFile(char *fileName);
 /* Read in a tagSchema file */
 
+struct hash *tagSchemaHash(struct tagSchema *list);
+/* Return a hash of tagSchemas keyed by name */
 
 #endif /* TAGSCHEMA_H */
 
