@@ -1196,19 +1196,9 @@ static struct psl *pslDelFromCoord(struct psl *txAli, int tStart, struct psl *va
 /* Return a PSL with same target and query as txAli, but as a deletion at offset tStart:
  * two zero-length blocks surrounding no target and query = variantPsl's target coords. */
 {
-struct psl *del;
-AllocVar(del);
-del->tName = cloneString(txAli->tName);
-del->tSize = txAli->tSize;
-safecpy(del->strand, sizeof(del->strand), txAli->strand);
-del->tStart = del->tEnd = tStart;
-del->qName = cloneString(txAli->qName);
-del->qStart = variantPsl->tStart;
-del->qEnd = variantPsl->tEnd;
-del->blockCount = 2;
-AllocArray(del->blockSizes, del->blockCount);
-AllocArray(del->qStarts, del->blockCount);
-AllocArray(del->tStarts, del->blockCount);
+struct psl *del = pslNew(txAli->qName, txAli->qSize, variantPsl->tStart, variantPsl->tEnd,
+                         txAli->tName, txAli->tSize, tStart, tStart,
+                         txAli->strand, 2, 0);
 // I wonder if zero-length blockSizes would trigger crashes somewhere...
 del->blockSizes[0] = del->blockSizes[1] = 0;
 del->tStarts[0] = del->tStarts[1] = del->tStart;
@@ -1217,6 +1207,54 @@ del->qStarts[1] = del->qEnd;
 return del;
 }
 
+struct psl *pslFromGap(struct psl *txAli, int blkIx, struct psl *variantPsl)
+/* Return a PSL with same target and query as txAli, but as a potentially double-sided gap between
+ * two zero-length blocks surrounding skipped bases in target and/or query. */
+{
+int qGapStart = txAli->qStarts[blkIx] + txAli->blockSizes[blkIx];
+int qGapEnd = txAli->qStarts[blkIx+1];
+int tGapStart = txAli->tStarts[blkIx] + txAli->blockSizes[blkIx];
+int tGapEnd = txAli->tStarts[blkIx+1];
+struct psl *gapPsl = pslNew(txAli->qName, txAli->qSize, qGapStart, qGapEnd,
+                            txAli->tName, txAli->tSize, tGapStart, tGapEnd,
+                            txAli->strand, 2, 0);
+int qBlockStart = txAli->qStarts[blkIx];
+if (variantPsl->tStart > qBlockStart && variantPsl->tStart < qGapStart)
+    {
+    // keep non-zero overlapping part of preceding block, if any
+    int overlapSize = qGapStart - variantPsl->tStart;
+    gapPsl->blockSizes[0] = overlapSize;
+    gapPsl->tStart = gapPsl->tStarts[0] = tGapStart - overlapSize;
+    gapPsl->qStart = gapPsl->qStarts[0] = variantPsl->tStart;
+    }
+else
+    {
+    // zero-length block at beginning of gap
+    gapPsl->blockSizes[0] = 0;
+    gapPsl->tStarts[0] = tGapStart;
+    gapPsl->qStarts[0] = qGapStart;
+    }
+
+int qNextBlkEnd = txAli->qStarts[blkIx+1] + txAli->blockSizes[blkIx+1];
+if (variantPsl->tEnd > qGapEnd && variantPsl->tEnd <= qNextBlkEnd)
+    {
+    // keep non-zero overlapping part of next block, if any
+    int overlapSize = variantPsl->tEnd - qGapEnd;
+    gapPsl->blockSizes[1] = overlapSize;
+    gapPsl->tStarts[1] = tGapEnd;
+    gapPsl->tEnd = tGapEnd + overlapSize;
+    gapPsl->qStarts[1] = qGapEnd;
+    gapPsl->qEnd = variantPsl->tEnd;
+    }
+else
+    {
+    // zero-length block at end of gap
+    gapPsl->blockSizes[1] = 0;
+    gapPsl->tStarts[1] = tGapEnd;
+    gapPsl->qStarts[1] = qGapEnd;
+    }
+return gapPsl;
+}
 
 static struct psl *mapToDeletion(struct psl *variantPsl, struct psl *txAli)
 /* If the variant falls on a transcript base that is deleted in the reference genome,
@@ -1243,9 +1281,13 @@ for (i = 0;  i < txAli->blockCount - 1;  i++)
     int qNextBlockStart = txAli->qStarts[i+1];
     int tBlockEnd = txAli->tStarts[i] + txAli->blockSizes[i];
     int tNextBlockStart = txAli->tStarts[i+1];
-    if (vStart >= qBlockEnd && vEnd <= qNextBlockStart &&
-        tBlockEnd == tNextBlockStart)
-        return pslDelFromCoord(txAli, tBlockEnd, variantPsl);
+    if (vStart >= qBlockEnd && vEnd <= qNextBlockStart)
+        {
+        if (tBlockEnd == tNextBlockStart)
+            return pslDelFromCoord(txAli, tBlockEnd, variantPsl);
+        else
+            return pslFromGap(txAli, i, variantPsl);
+        }
     }
 // Not contained in a deletion from reference genome (txAli target) -- return NULL.
 return NULL;

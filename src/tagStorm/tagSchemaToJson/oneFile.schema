@@ -1,0 +1,17 @@
+!access $ *
+age # 1 10
+age_units $ weeks days
+assay $ *
+biosample_date $ *
+donor # 0 0
+^file $ *
+!format $ bam fastq "tag storm"
+lab $ *
+lab_*_* $ *
+life_stage $ *
+map_ratio % 0 1
+organ $ brain liver
+part # 1 10
+q # -1 10
+sex $ male female
+user_* $ *

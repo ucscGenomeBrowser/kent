@@ -14,7 +14,6 @@
 // Newlines are fine in Javascript, e.g. in an embedded <script>.
 // However, unescaped \n is illegal in JSON and web browsers may reject it.
 // Web browser plugins can pretty-print JSON nicely.
-#define JW_SEP " "
 
 struct jsonWrite *jsonWriteNew()
 /* Return new empty jsonWrite struct. */
@@ -22,6 +21,7 @@ struct jsonWrite *jsonWriteNew()
 struct jsonWrite *jw;
 AllocVar(jw);
 jw->dy = dyStringNew(0);
+jw->sep = ' ';
 return jw;
 }
 
@@ -65,7 +65,10 @@ INLINE void jsonWriteMaybeComma(struct jsonWrite *jw)
 /* If this is not the first item added to an object or list, write a comma. */
 {
 if (jw->objStack[jw->stackIx].isNotEmpty)
-    dyStringAppend(jw->dy, ","JW_SEP);
+    {
+    dyStringAppendC(jw->dy, ',');
+    dyStringAppendC(jw->dy, jw->sep);
+    }
 else
     jw->objStack[jw->stackIx].isNotEmpty = TRUE;
 }
@@ -139,7 +142,8 @@ void jsonWriteListStart(struct jsonWrite *jw, char *var)
 {
 struct dyString *dy = jw->dy;
 jsonWriteTag(jw, var);
-dyStringAppend(dy, "["JW_SEP);
+dyStringAppendC(dy, '[');
+dyStringAppendC(dy, jw->sep);
 jsonWritePushObjStack(jw, FALSE, FALSE);
 }
 
@@ -147,7 +151,8 @@ void jsonWriteListEnd(struct jsonWrite *jw)
 /* End an array in JSON */
 {
 struct dyString *dy = jw->dy;
-dyStringAppend(dy, "]"JW_SEP);
+dyStringAppendC(dy, ']');
+dyStringAppendC(dy, jw->sep);
 jsonWritePopObjStack(jw, FALSE);
 }
 
@@ -156,7 +161,8 @@ void jsonWriteObjectStart(struct jsonWrite *jw, char *var)
 {
 jsonWriteTag(jw, var);
 struct dyString *dy = jw->dy;
-dyStringAppend(dy, "{"JW_SEP);
+dyStringAppendC(dy, '{');
+dyStringAppendC(dy, jw->sep);
 jsonWritePushObjStack(jw, FALSE, TRUE);
 }
 
@@ -164,7 +170,8 @@ void jsonWriteObjectEnd(struct jsonWrite *jw)
 /* End object in JSON */
 {
 struct dyString *dy = jw->dy;
-dyStringAppend(dy, "}"JW_SEP);
+dyStringAppendC(dy, '}');
+dyStringAppendC(dy, jw->sep);
 jsonWritePopObjStack(jw, TRUE);
 }
 

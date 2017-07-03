@@ -38,7 +38,7 @@ void usage()
 errAbort(
   "fastqStatsAndSubsample v2 - Go through a fastq file doing sanity checks and collecting stats\n"
   "and also producing a smaller fastq out of a sample of the data.  The fastq input may be\n"
-  "compressed with gzip or bzip2.  Unfortunately the fastq input can't be in a pipe\n"
+  "compressed with gzip or bzip2.\n"
   "usage:\n"
   "   fastqStatsAndSubsample in.fastq out.stats out.fastq\n"
   "options:\n"
