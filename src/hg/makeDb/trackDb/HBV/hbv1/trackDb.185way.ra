@@ -1,0 +1,109 @@
+track cons185way
+compositeTrack on
+shortLabel 185 Accessions
+longLabel Multiz Alignment & Conservation (185 Virus Strains, Accession Names)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility hide
+priority 1
+type bed 4
+group compGeno
+
+    track cons185wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons185way
+
+        track multiz185way
+        subTrack cons185wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Genome Alignments of 185 Hepatitis B sequences 
+        subGroups view=align
+        noInherit on
+#        irows on
+#        summary multiz185waySummary
+##        frames multiz185wayFrames
+#        frames testAllFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        mafDot on
+	snpTable mafSnp185way
+	mafShowSnp on
+	snpMode on
+        type wigMaf 0.0 1.0
+        speciesCodonDefault hbv1
+        speciesGroups Others
+        sGroup_Others AB775198v1 AB775199v1 AB775200v1 AB775201v1 AB937799v1 D00630v1 FJ386640v1 FJ386641v1 FJ386642v1 FJ386643v1 FJ386644v1 FJ386645v1 FJ386646v1 FJ386647v1 FJ386648v1 FJ386649v1 FJ386650v1 FJ386651v1 FJ386652v1 FJ386653v1 FJ386654v1 FJ386655v1 FJ386656v1 FJ386657v1 FJ386658v1 FJ386659v1 FJ386660v1 FJ386661v1 FJ386662v1 FJ386663v1 FJ386664v1 FJ386665v1 FJ386666v1 FJ386667v1 FJ386668v1 FJ386669v1 FJ386670v1 FJ386671v1 FJ386672v1 FJ386673v1 FJ386674v1 FJ386675v1 FJ386676v1 FJ386677v1 FJ386678v1 FJ386679v1 FJ386680v1 FJ386681v1 FJ386682v1 FJ386683v1 FJ386684v1 FJ386685v1 FJ386686v1 FJ386687v1 FJ386688v1 FJ386689v1 FJ562218v1 FJ562219v1 FJ562220v1 FJ562221v1 FJ562222v1 FJ562223v1 FJ562224v1 FJ562225v1 FJ562226v1 FJ562227v1 FJ562228v1 FJ562229v1 FJ562230v1 FJ562231v1 FJ562232v1 FJ562233v1 FJ562234v1 FJ562235v1 FJ562236v1 FJ562237v1 FJ562238v1 FJ562239v1 FJ562240v1 FJ562241v1 FJ562242v1 FJ562243v1 FJ562244v1 FJ562245v1 FJ562246v1 FJ562247v1 FJ562248v1 FJ562249v1 FJ562250v1 FJ562251v1 FJ562252v1 FJ562253v1 FJ562254v1 FJ562255v1 FJ562256v1 FJ562257v1 FJ562258v1 FJ562259v1 FJ562260v1 FJ562261v1 FJ562262v1 FJ562263v1 FJ562264v1 FJ562265v1 FJ562266v1 FJ562267v1 FJ562268v1 FJ562269v1 FJ562270v1 FJ562271v1 FJ562272v1 FJ562273v1 FJ562274v1 FJ562275v1 FJ562276v1 FJ562277v1 FJ562278v1 FJ562279v1 FJ562280v1 FJ562281v1 FJ562282v1 FJ562283v1 FJ562284v1 FJ562285v1 FJ562287v1 FJ562288v1 FJ562289v1 FJ562290v1 FJ562291v1 FJ562292v1 FJ562293v1 FJ562294v1 FJ562295v1 FJ562296v1 FJ562297v1 FJ562298v1 FJ562299v1 FJ562300v1 FJ562301v1 FJ562302v1 FJ562303v1 FJ562304v1 FJ562305v1 FJ562306v1 FJ562307v1 FJ562308v1 FJ562309v1 FJ562310v1 FJ562311v1 FJ562312v1 FJ562313v1 FJ562314v1 FJ562315v1 FJ562316v1 FJ562317v1 FJ562318v1 FJ562319v1 FJ562320v1 FJ562321v1 FJ562322v1 FJ562323v1 FJ562324v1 FJ562325v1 FJ562326v1 FJ562327v1 FJ562328v1 FJ562329v1 FJ562330v1 FJ562331v1 FJ562332v1 FJ562333v1 FJ562334v1 FJ562335v1 FJ562336v1 FJ562337v1 FJ562338v1 FJ562339v1 FJ562340v1 GQ161799v1 GQ161805v1 GQ161818v1 GQ161821v1 GQ161822v1 GQ161830v1
+        itemFirstCharCase noChange
+        priority 100
+
+#        treeImage phylo/eboVir3_160way.png
+##
+##    # PhyloP conservation
+##    track cons185wayViewphyloP
+##    shortLabel Basewise Conservation (phyloP)
+##    view phyloP
+##    visibility full
+##    subTrack cons185way
+##    viewLimits -3:0.5
+##    viewLimitsMax -4.611:0.934
+##
+##        track phyloP185way
+##        subTrack cons185wayViewphyloP on
+##        subGroups view=phyloP
+##        shortLabel PhyloP
+##        longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhyloP
+##        noInherit on
+##        configurable on
+##        type wig -4.711 0.934
+##        maxHeightPixels 100:50:11
+##        viewLimits -3.107:0.934
+##        autoScale off
+##        spanList 1
+##        windowingFunction mean
+##        color 60,60,140
+##        altColor 140,60,60
+##        priority 4
+##
+##    # phastCons conservation
+##    track cons185wayViewphastcons
+##    shortLabel Element Conservation (phastCons)
+##    view phastcons
+##    visibility full
+##    subTrack cons185way
+##
+##        track phastCons185way
+##        subTrack cons185wayViewphastcons on
+##        subGroups view=phastcons
+##        shortLabel PhastCons
+##        longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhastCons
+##        noInherit on
+##        configurable on
+##        type wig 0 1
+##        maxHeightPixels 100:40:11
+##        autoScale off
+##        spanList 1
+##        windowingFunction mean
+##        color 70,130,70
+##        altColor 130,70,70
+##        priority 13
+##
+##    # Conserved Elements (Most Conserved)
+##    track cons185wayViewelements
+##    shortLabel Conserved Elements
+##    view elements
+##    visibility dense
+##    subTrack cons185way
+##
+##        track phastConsElements185way
+##        subTrack cons185wayViewelements on
+##        subGroups view=elements
+##        shortLabel Cons. Elements
+##        longLabel 158 Ebola strains and 2 Marburg strains Conserved Elements
+##        noInherit on
+##        color 110,10,40
+##        type bed 5 .
+##        priority 23
