@@ -326,7 +326,7 @@ $python $crisprScripts/splitGuidesEffScore.py $chromSizes ../allGuides.bed tmp j
 $HgAutomate::gensub2 jobNames.txt single gsub jobList
 $HgAutomate::paraRun
 find tmp/out -type f | xargs cat > ../effScores.tab
-printf "# Number of effScores: %d\\n" "`cat ../effScores.tab | wc -l`" 1>&1
+printf "# Number of effScores: %d\\n" "`cat ../effScores.tab | wc -l`" 1>&2
 _EOF_
   );
   $bossScript->execute();
@@ -357,7 +357,7 @@ sub doOffTargets {
 
   &HgAutomate::mustMkdir($runDir);
   my $templateCmd = ("$python $crisprScripts/convOffs.py " .
-		     "$db {check in exists ../specScores/tmp/\$(path1)} " .
+		     "$db {check in exists \$(path1)} " .
 		     "{check out exists tmp/out/\$(root1).tab} " );
   &HgAutomate::makeGsub($runDir, $templateCmd);
 
@@ -367,9 +367,10 @@ sub doOffTargets {
 
   $bossScript->add(<<_EOF_
 mkdir -p tmp/inFnames tmp/out/
-find $specScores/tmp/outOffs -type f | sed -e 's#.*/tmp/##;' > otFnames.txt
+find $specScores/tmp/outOffs -type f | sed -e 's#.*/tmp/#../specScores/tmp/#;' > otFnames.txt
 splitFile otFnames.txt 20 tmp/inFnames/otJob
-$HgAutomate::gensub2 otFnames.txt single gsub jobList
+find ./tmp/inFnames -type f | sed -e 's#^./##;' > file.list
+$HgAutomate::gensub2 file.list single gsub jobList
 $HgAutomate::paraRun
 $crisprScripts/catAndIndex tmp/out ../crisprDetails.tab ../offtargets.offsets.tab --headers=_mismatchCounts,_crisprOfftargets
 _EOF_
@@ -416,7 +417,7 @@ _EOF_
   if ($dbExists) {
     $bossScript->add(<<_EOF_
 hgBbiDbLink $db ${tableName}Targets /gbdb/$db/$tableName/crispr.bb
-hgLoadBed $db ${tableName}Ranges crisprRanges.bed
+hgLoadBed $db ${tableName}Ranges ranges/crisprRanges.bed
 _EOF_
     );
   }
