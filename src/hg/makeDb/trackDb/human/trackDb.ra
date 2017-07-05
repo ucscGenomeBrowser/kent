@@ -1330,6 +1330,85 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp149CodingDbSnp,
 
+track snp150Common
+shortLabel Common SNPs(150)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 150) Found in >= 1% of Samples
+group varRep
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp150Seq
+snpExceptionDesc snp150ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp150OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp150CodingDbSnp,
+priority 1
+
+track snp150Flagged
+shortLabel Flagged SNPs(150)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 150) Flagged by dbSNP as Clinically Assoc
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp150Seq
+snpExceptionDesc snp150ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp150OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp150CodingDbSnp,
+
+track snp150Mult
+shortLabel Mult. SNPs(150)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 150) That Map to Multiple Genomic Loci
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp150Seq
+snpExceptionDesc snp150ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp150OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp150CodingDbSnp,
+
+track snp150
+shortLabel All SNPs(150)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 150)
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp150OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp150CodingDbSnp,
+
 track hgdpGeo
 shortLabel HGDP Allele Freq
 longLabel Human Genome Diversity Project SNP Population Allele Frequencies
@@ -4791,7 +4870,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9846
+searchPriority 12.9847
 padding 250
 
 searchTable snp147Flagged
@@ -4799,7 +4878,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9847
+searchPriority 12.9848
 padding 250
 
 searchTable snp147Mult
@@ -4807,7 +4886,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9848
+searchPriority 12.9849
 padding 250
 
 searchTable snp147
@@ -4823,7 +4902,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9856
+searchPriority 12.9844
 padding 250
 
 searchTable snp149Flagged
@@ -4831,7 +4910,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9857
+searchPriority 12.9845
 padding 250
 
 searchTable snp149Mult
@@ -4839,7 +4918,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9858
+searchPriority 12.9846
 padding 250
 
 searchTable snp149
@@ -4848,6 +4927,46 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.952
+padding 250
+
+searchTable snp150Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.952
+padding 250
+
+searchTable snp150
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9841
+padding 250
+
+searchTable snp150Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9842
+padding 250
+
+searchTable snp150Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9843
+padding 250
+
+searchTable snp150
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.951
 padding 250
 
 include cloneEnd.trackDb.ra

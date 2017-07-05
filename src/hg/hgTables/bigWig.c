@@ -425,4 +425,12 @@ else
     }
 }
 
-
+void showSchemaBigWigNoTable(char *db, char *table, struct trackDb *tdb)
+{
+hPrintf("<B>Database:</B> %s", db);
+printf("<BR>The data for this track is provided by a file in "
+       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
+       "BigWig</A> format.");
+hPrintf("<BR><B>Data URL:</B>  %s", trackDbSetting(tdb, "bigDataUrl"));
+printTrackHtml(tdb);
+}

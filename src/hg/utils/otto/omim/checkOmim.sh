@@ -40,7 +40,7 @@ check wget.log in ${WORKDIR}/${today}"
     exit 255
 fi
 
-md5sum $(ls | grep -v wget.log) | sort > md5sum.txt
+ls | grep -v wget.log | xargs -I % sh -c "echo -ne '%\t'; (grep -v '^#' % || true) | md5sum | awk '{print \$1}'" | sort > md5sum.txt
 
 if [ ! -e ../prev.md5sum.txt ]
 then

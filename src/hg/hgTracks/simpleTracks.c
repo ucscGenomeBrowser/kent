@@ -13816,6 +13816,8 @@ if (sameWord(type, "bed"))
         pubsMarkerMethods(track);
     if (startsWith("pubs", track->track) && stringIn("Blat", track->track))
         pubsBlatMethods(track);
+    if (startsWith("gtexEqtlCluster", track->track))
+        gtexEqtlClusterMethods(track);
     }
 /*
 else if (sameWord(type, "bedLogR"))

@@ -26549,6 +26549,10 @@ else if (startsWith("gtexGene", table))
     {
     doGtexGeneExpr(tdb, item);
     }
+else if (startsWith("gtexEqtlCluster", table))
+    {
+    doGtexEqtlDetails(tdb, item);
+    }
 else if (startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);

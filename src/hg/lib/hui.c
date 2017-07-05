@@ -566,7 +566,9 @@ char *hTrackUiForTrack(char *trackName)
 if (trackName == NULL)
     return hgTrackUiName();
 if (gtexIsGeneTrack(trackName))
-    return gtexGeneTrackUiName();
+    return gtexTrackUiName();
+if (gtexIsEqtlTrack(trackName))
+    return gtexTrackUiName();
 return hgTrackUiName();
 }
 
