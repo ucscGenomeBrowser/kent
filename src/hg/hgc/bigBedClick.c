@@ -204,7 +204,7 @@ static void seekAndPrintTable(char *url, off_t offset, struct slPair *extraField
 char *detailsUrl = replaceChars(url, "$db", database);
 
 // open the URL
-struct lineFile *lf = lineFileUdcMayOpen(detailsUrl, FALSE);
+struct lineFile *lf = lineFileUdcMayOpen(detailsUrl, TRUE);
 if (lf==NULL)
     {
     printf("Error: Could not open the URL referenced in detailsTabUrls, %s", detailsUrl);
@@ -212,11 +212,16 @@ if (lf==NULL)
     }
 
 // get the headers
-char *headLine;
-int lineSize;
+char *headLine = NULL;
+int lineSize = 0;
 lineFileNext(lf, &headLine, &lineSize);
 char *headers[1024];
 int headerCount = chopTabs(headLine, headers);
+
+// clone the headers
+int i;
+for (i=0; i<headerCount; i++)
+    headers[i] = cloneString(headers[i]);
 
 lineFileSeek(lf, offset, SEEK_SET);
 
@@ -241,7 +246,6 @@ if (fieldCount!=headerCount)
 // print the table for all external extra fields 
 printf("<br><table class='bedExtraTbl'>\n");
 fieldCount = min(fieldCount, headerCount);
-int i;
 for (i=0; i<fieldCount; i++)
 {
     char *name = headers[i];
