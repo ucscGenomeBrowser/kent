@@ -11,17 +11,26 @@
 #include "gtexEqtlCluster.h"
 #include "hgc.h"
 
-static struct gtexEqtlCluster *getGtexEqtl(char *item, char *chrom, int start, char *table)
+static struct gtexEqtlCluster *getGtexEqtl(char *item, char *chrom, int start, int end, char *table)
 /* Retrieve this item from the track table */
 {
 char *gene = firstWordInLine(cloneString(item));
 struct sqlConnection *conn = hAllocConn(database);
-char query[512];
-sqlSafef(query, sizeof(query), "SELECT * FROM %s WHERE chrom='%s' AND chromStart=%d AND target='%s'",
-                                        table, chrom, start, gene);
-struct gtexEqtlCluster *eqtl = gtexEqtlClusterLoadByQuery(conn, query);
+struct gtexEqtlCluster *eqtls = NULL, *eqtl;
+char **row;
+int offset;
+char where[512];
+sqlSafefFrag(where, sizeof(where), "target='%s'", gene);
+struct sqlResult *sr = hRangeQuery(conn, table, chrom, start, end, where, &offset); 
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    eqtl = gtexEqtlClusterLoad(row+offset);
+    slAddHead(&eqtls, eqtl);
+    }
+slReverse(&eqtls);
+sqlFreeResult(&sr);
 hFreeConn(&conn);
-return eqtl;
+return eqtls;
 }
 
 static char *getGeneDescription(struct sqlConnection *conn, char *geneName)
@@ -38,8 +47,8 @@ void doGtexEqtlDetails(struct trackDb *tdb, char *item)
 {
 char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
-int end;
-struct gtexEqtlCluster *eqtl = getGtexEqtl(item, chrom, start, tdb->table);
+int end = cartInt(cart, "t");
+struct gtexEqtlCluster *eqtl = getGtexEqtl(item, chrom, start, end, tdb->table);
 genericHeader(tdb, item);
 char *version = gtexVersion(tdb->table);
 struct gtexTissue *tissues = gtexGetTissues(version);
