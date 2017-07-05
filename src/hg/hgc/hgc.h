@@ -475,6 +475,9 @@ void doPeptideAtlas(struct trackDb *tdb, char *item);
 void doGtexGeneExpr(struct trackDb *tdb, char *item);
 /* Details of GTEX gene expression item */
 
+void doGtexEqtlDetails(struct trackDb *tdb, char *item);
+/* Details of GTEx eQTL item */
+
 void printAddWbr(char *text, int distance);
 /* a crazy hack for firefox/mozilla that is unable to break long words in tables
  * We need to add a <wbr> tag every x characters in the text to make text breakable.
