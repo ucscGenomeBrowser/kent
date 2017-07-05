@@ -1,34 +1,8 @@
-import tempfile
 import stat
 import os
         
 from ucscGb.qa import qaUtils
 from ucscGb.qa.tables import trackUtils
-
-def checkSplit(db, table):
-    """Check if table is split"""
-    splitCheck = qaUtils.callHgsql(db, "show tables like '" + table + "'")
-    splitCheck = splitCheck.strip()
-        
-    splitTableList = []
-    if splitCheck == table:
-        splitTableList.append(table)
-    elif splitCheck == "":
-        hgsqlTblsOut = qaUtils.callHgsql(db, "show tables like 'chr%" + table + "%'")
-        splitTableList = hgsqlTblsOut.split('\n')
-        splitTableList.remove("")
-    
-    return splitTableList
-
-def checkCanPack(db, table):
-    """Check if a table can be set to pack"""
-    visibility = "pack"
-    canPackOut = qaUtils.callHgsql(db, "select canPack from trackDb where tableName='" + table + "'") 
-
-    if canPackOut != 1:
-        visibility = "full"
-    
-    return visibility    
 
 def constructOutputUrls(db, table, overlapFile):
     """ Using file of overlaping gaps, build URLs to genome-test
@@ -40,14 +14,36 @@ def constructOutputUrls(db, table, overlapFile):
         gapOverUrls = ""
 
         splitFile = overlapFile.split(".")
-	if splitFile[2] == "unbr":
+        if splitFile[2] == "unbr":
             outputUrls += "\nTotal number of overlaps with unbridged gaps:\n"
         else:
             outputUrls += "\nThere are gaps overlapping " + table + " (gaps may be bridged or not):\n"
 
-        vis = checkCanPack(db, table)
+        vis = trackUtils.checkCanPack(db, table)
 
-	openOverlapFile = open(overlapFile)
+        # This block of code should deal with most configurations of views + composites
+        # (composites w/o views + composites w/ views)
+        parentUrl = ""
+        parent = trackUtils.getParent(db, table)
+        view = trackUtils.getAttributeForTrack("view", db, table)
+        if view:
+            # If a composite contains views, the direct parent of the track will be the view.
+            # Changing the view visibility does nothing, so we need to grab the view's parent.
+            viewParent = trackUtils.getParent(db, parent)
+            viewParentVis = trackUtils.checkCanPack(db, viewParent)
+            parentUrl = "&" + viewParent + "=" + viewParentVis
+        elif parent:
+            parentVis = trackUtils.checkCanPack(db, table)
+            parentUrl = "&" + parent + "=" + parentVis
+
+        superTrackUrl = ""
+        superTrack = trackUtils.getAttributeForTrack("superTrack", db, table)
+        if superTrack:
+            superTrackSplit = superTrack.strip().split(" ")
+            superTrackName = superTrackSplit[0]
+            superTrackUrl = "&" + superTrackName + "=show"
+
+        openOverlapFile = open(overlapFile)
         for line in openOverlapFile:
             lineCount += 1
             if i < 3:
@@ -57,48 +53,36 @@ def constructOutputUrls(db, table, overlapFile):
                 end = splitLine[2]
                 position = chrom + ":" + str(int(start) - 300) + "-" + str(int(end) + 300)
                 color = "&highlight=" + db + "." + chrom + ":" + start + "-" + end + "#aaedff"
-                url="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=" + db + "&"\
-                     + table + "=" + vis + "&gap=pack&hideTracks=1&position=" + position\
-                     + color + "\n"
+                # Order of tracks in hgTracks URLs is very sensitive. It MUST be in this order:
+                # superTrack vis > composite vis > base track vis
+                url="http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=" + db + "&hideTracks=1"\
+                     + superTrackUrl + parentUrl + "&" + table + "=" + vis + "&gap=pack&position="\
+                     + position + color + "\n"
                 gapOverUrls += url  
                 i+=1  
         outputUrls += str(lineCount) + " " + overlapFile + "\n\n" + gapOverUrls
         openOverlapFile.close()
     return outputUrls
 
-def makeBedFromTable(db, table, whereOpt=""):
-    """Make BED3 tempfile out of a table"""
-    # Get chrom, start, and end column names
-    trackType = trackUtils.getTrackType(db, table)
-    columnNames = trackUtils.getChrStartEndCols(trackType)
-
-    tableList = checkSplit(db, table)
-    tableBedTemp = tempfile.NamedTemporaryFile(mode='w')
-    tableBed = open(tableBedTemp.name, 'w')
-    for tbl in tableList:
-            hgsqlCmd = "select " + columnNames[0] + ", " + columnNames[1] + ", " \
-                        + columnNames[2] + " from " + tbl + whereOpt
-            hgsqlOut = qaUtils.callHgsql(db, hgsqlCmd)
-            tableBed.write(hgsqlOut)
-    tableBed.close()
-
-    return tableBedTemp
-
 def checkGapOverlap(db, table, checkUnbridged=False):
     """Check if any items in a table over lap with bridged and unbridged gaps"""
-    tableBedTemp = makeBedFromTable(db, table)
+    tableBed = trackUtils.makeBedFromTable(db, table)
+    tableFileName = db + "." + table + ".bed.temp"
+    tableFile = open(tableFileName, "w")
+    tableFile.write(tableBed)
+    tableFile.close()
 
     gapOverlapOut = ""
-    gapTableList = checkSplit(db, "gap")
+    gapTableList = trackUtils.checkSplit(db, "gap")
     gapFileName = str(db) + ".gap.bed.temp"
-    gapFile = open(gapFileName, 'w')
+    gapFile = open(gapFileName, "a")
     for tbl in gapTableList:
-            hgsqlGapOut = qaUtils.callHgsql(db, "select chrom, chromStart, chromEnd from " + tbl)
-            gapFile.write(hgsqlGapOut)      
+            gapBed = trackUtils.makeBedFromTable(db, "gap")
+            gapFile.write(gapBed)
     gapFile.close()
 
     gapOverFile = str(db) + ".gapOver.bed"
-    bedIntCmd = ["bedIntersect", "-aHitAny", gapFileName, tableBedTemp.name, gapOverFile]
+    bedIntCmd = ["bedIntersect", "-aHitAny", gapFileName, tableFileName, gapOverFile]
     qaUtils.runCommand(bedIntCmd)
     
     gapOverUrls = constructOutputUrls(db, table, gapOverFile)
@@ -111,15 +95,15 @@ def checkGapOverlap(db, table, checkUnbridged=False):
     if checkUnbridged == True:
         # Create temp file to store unbridged gaps
         gapUnbrFileName = str(db) + ".gap.unbr.bed.temp"
-        gapUnbrFile = open(gapUnbrFileName, 'w')
+        gapUnbrFile = open(gapUnbrFileName, "a")
         # Get unbridged gaps
         for tbl in gapTableList:
-                hgsqlGapOut = qaUtils.callHgsql(db, "select chrom, chromStart, chromEnd from " + tbl + " where bridge='no'")
-                gapUnbrFile.write(hgsqlGapOut)
+                gapUnbrBed = trackUtils.makeBedFromTable(db, "gap", whereOpt="bridge='no'")
+                gapUnbrFile.write(gapUnbrBed)
         gapUnbrFile.close()
 
         gapUnbrOverFile = str(db) + ".gapOver.unbr.bed"
-        bedIntCmd = ["bedIntersect", "-aHitAny", gapUnbrFileName, tableBedTemp.name, gapUnbrOverFile]
+        bedIntCmd = ["bedIntersect", "-aHitAny", gapUnbrFileName, tableFileName, gapUnbrOverFile]
         qaUtils.runCommand(bedIntCmd)
 
         gapUnbrOverUrls = constructOutputUrls(db, table, gapUnbrOverFile)
@@ -127,5 +111,6 @@ def checkGapOverlap(db, table, checkUnbridged=False):
         # Remove intermediate files
         os.remove(gapUnbrOverFile)
         os.remove(gapUnbrFileName)
+    os.remove(tableFileName)
 
     return gapOverlapOut
