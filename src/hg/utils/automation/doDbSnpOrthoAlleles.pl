@@ -26,9 +26,9 @@ my $stepper = new HgStepManager(
 			       );
 
 # Hardcoded (for now):
-my $chimpDb = 'panTro4';
+my $chimpDb = 'panTro5';
 my $orangDb = 'ponAbe2';
-my $macDb = 'rheMac3';
+my $macDb = 'rheMac8';
 
 # Option variable names, both common and peculiar to this script:
 use vars @HgAutomate::commonOptionVars;

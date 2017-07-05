@@ -6539,11 +6539,11 @@ zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
 
 # Use a script to convert to bed format.
 cosmicToBed cosMut.tsv cosMut.bed
-# This many lines were skipped, 126756, for not having genomic coordinates. 
+# This many lines were skipped, 131597 for not having genomic coordinate
 
 # Sort and convert to big bed using the .as file.  
 sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
-bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/chrom.sizes cosMutHg38V81.bb -tab
+bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/chrom.sizes cosMutHg38V81.bb -tab -extraIndex=name,cosmLabel
 
 # Link it up so the outside world can see it. 
 cd /gbdb/hg38/cosmic/

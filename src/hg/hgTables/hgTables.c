@@ -633,6 +633,8 @@ else if (sameWord(table, WIKI_TRACK_TABLE))
     {
     hti = wikiHti();
     }
+else if (!hTableExists(db, table))
+    hti = hFindBigWigTrackInfo(db, NULL, table); 
 else
     {
     char *track;

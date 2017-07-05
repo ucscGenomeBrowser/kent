@@ -6,6 +6,7 @@
 #include "sqlNum.h"
 #include "sqlReserved.h"
 #include "tagStorm.h"
+#include "tagSchema.h"
 #include "errAbort.h"
 #include "obscure.h"
 #include "csv.h"
@@ -45,93 +46,6 @@ static struct optionSpec options[] = {
    {"sqlSymbols", OPTION_BOOLEAN},
    {NULL, 0},
 };
-
-struct tagSchema
-/* Represents schema for a single tag */
-    {
-    struct tagSchema *next;
-    char *name;   // Name of tag
-    char required; // ! for required, ^ for required unique at each leaf, 0 for whatever
-    char type;   // # for integer, % for floating point, $ for string
-    double minVal, maxVal;  // Bounds for numerical types
-    struct slName *allowedVals;  // Allowed values for string types
-    struct hash *uniqHash;   // Help make sure that all values are unique
-    };
-
-struct tagSchema *tagSchemaFromFile(char *fileName)
-/* Read in a tagSchema file */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line;
-struct tagSchema *schema, *list = NULL;
-while (lineFileNextReal(lf, &line))
-    {
-    /* Parse out name field and optional requirement field */
-    char *name = nextWord(&line);
-    char required = name[0];
-    if (required == '!' || required == '^')
-        {
-	/* Allow req char to be either next to name, or separated  by space */
-	if (name[1] != 0)
-	    name = name+1;
-	else
-	    name = nextWord(&line);
-	}
-    else
-        required = 0;
-
-    /* Parse out type field */
-    char *typeString = nextWord(&line);
-    if (typeString == NULL)
-        errAbort("truncated line %d of %s", lf->lineIx, lf->fileName);
-    char type = typeString[0];
-
-    /* Allocate schema struct and fill in several fields. */
-    AllocVar(schema);
-    schema->name = cloneString(name);
-    schema->required = required;
-    schema->type = type;
-    if (required == '^')
-        schema->uniqHash = hashNew(0);
-
-    /* Parse out rest of it depending on field type */
-    if (type == '#' || type == '%') // numeric
-        {
-	char *minString = nextWord(&line);
-	char *maxString = nextWord(&line);
-	if (maxString == NULL)
-	    {
-	    schema->minVal = -BIGDOUBLE;
-	    schema->maxVal = BIGDOUBLE;
-	    }
-	else
-	    {
-	    schema->minVal = sqlDouble(minString);
-	    schema->maxVal = sqlDouble(maxString);
-	    }
-	}
-    else if (type == '$')
-        {
-	char *val;
-
-	while ((val = nextQuotedWord(&line)) != NULL)
-	    {
-	    slNameAddHead(&schema->allowedVals, val);
-	    }
-	slReverse(&schema->allowedVals);
-	if (schema->allowedVals == NULL)
-	    schema->allowedVals = slNameNew("*");
-	}
-    else
-	{
-        errAbort("Unrecognized type character %s line %d of %s", 
-	    typeString, lf->lineIx, lf->fileName);
-	}
-    slAddHead(&list, schema);
-    }
-slReverse(&list);
-return list;
-}
 
 void reportError(char *fileName, int startLine, char *format, ...)
 /* Report error and abort if there are too many errors. */

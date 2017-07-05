@@ -64,7 +64,7 @@ hFreeConn(&conn);
 return gtexGene;
 }
 
-char *getGeneDescription(struct gtexGeneBed *gtexGene)
+static char *getGeneDescription(struct gtexGeneBed *gtexGene)
 /* Get description for gene. Needed because knownGene table semantics have changed in hg38 */
 {
 char query[256];

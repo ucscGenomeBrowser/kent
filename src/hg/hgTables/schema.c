@@ -394,7 +394,7 @@ if (tdbForConn != NULL)
     {
     char *type = tdbForConn->type;
     if (startsWithWord("bigWig", type))
-	printf("<BR>This table simply points to a file in "
+	printf("<BR>This table points to a file in "
 	       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
 	       "BigWig</A> format.<BR>\n");
     }
@@ -674,6 +674,8 @@ else if (isCustomTrack(table))
     showSchemaCt(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
+else if (startsWithWord("bigWig", tdb->type) && !hTableExists(db, table))
+    showSchemaBigWigNoTable(db, table, tdb);
 else
     showSchemaDb(db, tdb, table);
 }

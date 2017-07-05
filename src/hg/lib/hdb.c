@@ -711,7 +711,7 @@ sqlSetParanoid(TRUE);
 struct sqlConnection *conn = sqlConnCacheMayAlloc(centralCc, centralDb);
 if ((conn == NULL) || !cartTablesOk(conn))
     {
-    fprintf(stderr, "ASH: hConnectCentral failed over to backupcentral!  "
+    fprintf(stderr, "hConnectCentral failed over to backupcentral "
             "pid=%ld\n", (long)getpid());
     sqlConnCacheDealloc(centralCc, &conn);
     sqlConnCacheFree(&centralCc);
@@ -3235,6 +3235,37 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
 	hti->type = NULL;
     }
 return hti;
+}
+
+struct hTableInfo *hFindBigWigTrackInfo(char *db, char *chrom, char *rootName)
+/* Get track information on a big* file that has no table */
+{
+struct sqlConnection *conn;
+conn = hAllocConn(db);
+static struct hash *dbHash = NULL; 
+struct hash *hash;
+struct hTableInfo *hti;
+char fullName[HDB_MAX_TABLE_STRING];
+chrom = hDefaultChrom(db);
+dbHash = newHash(8);
+hash = hashFindVal(dbHash, db);
+if (hash == NULL)
+    {
+    hash = newHash(8);
+    hashAdd(dbHash, db, hash);
+    }
+if ((hti = hashFindVal(hash, rootName)) == NULL)
+    {
+    safecpy(fullName, sizeof(fullName), rootName);
+    safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
+    AllocVar(hti);
+    hashAddSaveName(hash, rootName, hti, &hti->rootName);
+    hti->isSplit = FALSE;
+    hFreeConn(&conn);
+    return hti; 
+    }
+hFreeConn(&conn);
+return hti; 
 }
 
 int hTableInfoBedFieldCount(struct hTableInfo *hti)
