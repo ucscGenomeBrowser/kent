@@ -769,6 +769,9 @@ struct bed *bigWigIntervalsToBed(struct sqlConnection *conn, char *table, struct
 /* Return a list of unfiltered, unintersected intervals in region as bed (for
  * secondary table in intersection). */
 
+void showSchemaBigWigNoTable(char *db, char *table, struct trackDb *tdb);
+/* Show schema on bigWig. */
+
 /* ----------- BigBed business in bigBed.c -------------------- */
 boolean isBigBed(char *database, char *table, struct trackDb *parent,
 	struct customTrack *(*ctLookupName)(char *table));
