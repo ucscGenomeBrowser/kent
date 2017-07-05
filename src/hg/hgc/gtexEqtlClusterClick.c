@@ -71,7 +71,7 @@ else
     printf("<b>Description:</b> %s\n", desc);
     }
 char posLink[1024];
-safef(posLink, sizeof(posLink),"<a href=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a>",
+safef(posLink, sizeof posLink,"<a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a>",
         hgTracksPathAndSettings(), database,
             eqtl->chrom, eqtl->chromStart+1, eqtl->chromEnd,
             eqtl->chrom, eqtl->chromStart+1, eqtl->chromEnd);
@@ -82,18 +82,20 @@ printf("<br><b>Variant:</b> %s\n", eqtl->name);
 printf("<br><b>Position:</b> %s\n", posLink);
 printf("<br><b>Score:</b> %d\n", eqtl->score);
 
+#define FLANK  1000 
 char query[256];
 sqlSafef(query, sizeof query, "SELECT MIN(chromStart) from %s WHERE target='%s'", 
             tdb->table, eqtl->target);
-start = sqlQuickNum(conn, query);
-sqlSafef(query, sizeof query, "SELECT MAX(chromStart) from %s WHERE target='%s'", 
+start = sqlQuickNum(conn, query) - FLANK;
+sqlSafef(query, sizeof query, "SELECT MAX(chromEnd) from %s WHERE target='%s'", 
             tdb->table, eqtl->target);
-end = sqlQuickNum(conn, query);
-safef(posLink, sizeof(posLink),"<a href=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a>",
+end = sqlQuickNum(conn, query) + FLANK;
+safef(posLink, sizeof posLink,"<a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a>",
         hgTracksPathAndSettings(), database,
             eqtl->chrom, start+1, end,
             eqtl->chrom, start+1, end);
-printf("<br><b>Region containing eQTLs for this gene:</b> %s (%d bp)\n", posLink, end-start);
+printf("<br><b>Region containing eQTLs for this gene:</b> %s (%d bp, including +-%dbp flank)\n", 
+        posLink, end-start, FLANK);
 printf("<br><a target='_blank' href='https://www.gtexportal.org/home/bubbleHeatmapPage/%s'>"
         "View eQTLs for this gene at the GTEx portal<a>\n", 
                 geneName);
