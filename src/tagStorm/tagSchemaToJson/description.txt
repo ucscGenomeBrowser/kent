@@ -1,0 +1,3 @@
+lab The name of the lab, often the PI's last name
+lab_*_* Lab specific tags, not controlled
+life_stage Adult/child/embryo etc.

@@ -1407,27 +1407,27 @@ function downloadGenomes
     # now do the actual download of mysql files
     for db in $MYSQLDBS; do
        echo2 Downloading Mysql files for mysql database $db
-       $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ 
+       $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ 
        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/$db
     done
 
     if [ ! -z "$GENBANKTBLS" ]; then
         echo2 Downloading hgFixed tables
         for tbl in $GENBANKTBLS; do
-            $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/${tbl}.* $MYSQLDIR/hgFixed/
+            $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/${tbl}.* $MYSQLDIR/hgFixed/
         done
         chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
     fi
 
     echo2 Downloading hgFixed.refLink, required for all RefSeq tracks
-    $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
+    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
     chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
 
     # download /gbdb files
     for db in $DBS; do
        echo2 Downloading $GBDBDIR files for assembly $db
        mkdir -p $GBDBDIR
-       $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::gbdb/$db/ $GBDBDIR/$db/
+       $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::gbdb/$db/ $GBDBDIR/$db/
        chown -R $APACHEUSER:$APACHEUSER $GBDBDIR/$db
     done
 
@@ -1524,14 +1524,14 @@ function downloadMinimal
 
     for db in $DBS; do
        echo2 Downloading Mysql files for mysql database $db
-       $RSYNC $minRsyncOpt --exclude=* --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ 
+       $RSYNC $minRsyncOpt --exclude=* --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ 
        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/$db
     done
 
     echo2 Copying hgFixed.trackVersion, required for most tracks
-    $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/trackVersion.* $MYSQLDIR/hgFixed/ 
+    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/trackVersion.* $MYSQLDIR/hgFixed/ 
     echo2 Copying hgFixed.refLink, required for RefSeq tracks across all species
-    $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
+    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
 
     startMysql
 
@@ -1596,7 +1596,7 @@ function updateBrowser {
    echo updating GBDB: $DBS
    for db in $DBS; do 
        echo2 syncing gbdb: $db
-       rsync -avzp $RSYNCOPTS $HGDOWNLOAD::gbdb/$db/ $GBDBDIR/$db/ 
+       rsync -avp $RSYNCOPTS $HGDOWNLOAD::gbdb/$db/ $GBDBDIR/$db/ 
    done
 
    # update the mysql DBs
@@ -1604,7 +1604,7 @@ function updateBrowser {
    DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(hgcentral)'`
    for db in $DBS; do 
        echo2 syncing full mysql database: $db
-       $RSYNC --update --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/
+       $RSYNC --update --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/
    done
    startMysql
 

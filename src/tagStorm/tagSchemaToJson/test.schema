@@ -1,0 +1,109 @@
+assay.ena_experiment $ ERX*
+assay.ena_run $ ERR*
+assay.files [$] *
+assay.rna.prep $ *
+assay.rna.primer $ poly-dt random
+assay.rna.spike_in $ *
+assay.rna.spike_in_dilution # 1 1000000
+assay.rna.strand $ both first
+assay.seq.machine $ "Illumina HiSeq 2000" "Illumina HiSeq 2500" "Illumina HiSeq 4000" "Illumina NextSeq 500" "Illumina MiSeq"
+!assay.seq.molecule $ RNA "polyA RNA" "total RNA"
+!assay.seq.paired_ends $ index1_reads2 no yes
+assay.seq.prep $ "DNA Library Prep kit (Nextera XT; Illumina)" "Nextera XT" TruSeq "modified Nextera XT"
+assay.seq.umi_barcode.offset # 0 50
+assay.seq.umi_barcode.read $ read1 read2 index
+assay.seq.umi_barcode.size # 0 50
+assay.single_cell.cell_barcode.offset # 0 50
+assay.single_cell.cell_barcode.read $ read1 read2 index
+assay.single_cell.cell_barcode.size # 0 50
+!assay.single_cell.method $ 10x_v2 FACS "Fluidigm C1" drop-seq "mouth pipette" bulk
+assay.sra_experiment $ *
+assay.sra_run $ *
+assay.submitted_file_names $ *
+cell.cell_cycle $ "G1 phase" "G2/M phase" "M phase" "G2 phase" "S phase"
+cell.characteristics_* $ *
+cell.id $ *
+cell.type $ *
+cell.ontology $ *_0?????? FMA_*
+cell.well_quality $ *
+project.array_express.accession $ E-????-*
+project.array_express.experiment_type $ *
+project.array_express.related_experiment $ *
+project.array_express.term_source_file $ *
+project.array_express.term_source_name $ *
+project.contact.address $ *
+project.contact.city $ *
+project.contact.country $ *
+project.contact.department $ *
+!project.contact.email $ *@*.*
+project.contact.institute $ *
+project.contact.laboratory $ *
+!project.contact.name $ *
+project.contact.phone $ *
+project.contact.postal_code $ *
+project.contact.state $ AL AZ CA FL IL MA MO NY OR PA TX WA
+project.contact.street_address $ *
+project.contributor [$] *
+project.ddjb_trace_project $ ERP*
+project.experimental_factor_name $ *
+project.geo_doc_id # 1 1000000000
+project.geo_parent_series $ *
+project.geo_series $ GSE*
+!project.id $ *
+project.last_update_date $ 2???-??-??
+project.mage_tab_version % 1 10
+project.ncbi_bioproject $ PRJNA*
+project.overall_design $ *
+project.overall_design_accession $ *
+project.pmid # 1 100000000
+project.publication_author_list $ *
+project.release_status $ *2???-??-??
+project.sra_project $ SRP*
+project.submission_date $ 2???-??-??
+!project.summary $ *
+project.supplementary_files [$] *
+!project.title $ *
+!project.uuid $ ????????-????-????-????-????????????
+sample.biosd_sample $ *
+sample.body_part.cell_count % 0 10000
+!sample.body_part.name $ *
+sample.body_part.ontology $ *_0??????
+!sample.body_part.organ $ blood bone brain embryo eye liver pancreas skin tonsil
+sample.body_part.organ_ontology $ *_0??????
+sample.body_part.source $ "Proto or NDRI" "Prodo Laboratories Inc."
+sample.cell_line $ AB2.2 H9 "iPSC 409B2"
+sample.characteristics_* $ *
+sample.data_processing [$] *
+sample.donor.age $ *
+sample.donor.age_unit $ day week year
+sample.donor.body_mass_index % 1 100
+sample.donor.development_stage $ "2-cell blastomeres" "4-cell blastomeres" "8-cell blastomeres" "fertilized oocyte" "late blastocyst" morula oocyte zygote "pronucleus phase zygote"
+sample.donor.disease $ normal "type II diabetes mellitus" "type I diabetes mellitus" "epilepsy" "obstructive sleep apnea"
+sample.donor.ethnicity $ *
+sample.donor.genotype $ "AAV-GFP+ RIP-Cre+" Vsx2-GFP "Tomato/DAT-Cre+"
+sample.donor.id $ *
+sample.donor.life_stage $ adult "cell line" child embryo organoid postpartum
+sample.donor.medication $ *
+sample.donor.ncbi_taxon # 1 100000
+sample.donor.sex $ female male mixed unknown
+!sample.donor.species $ "Homo sapiens" "Mus musculus"
+sample.donor.strain $ "(C57BL/6 x DBA)F2" C57BL/6 "C57BL/6J (mother) x CAST/EiJ (father)" "CAST/EiJ (mother) x C57BL/6J (father)" "CAST/EiJ x C57BL/6J or C57BL/6J x CAST/EiJ" CAST/EiJ_x_C57BL/6J ICR CD1 C57BL/6
+sample.donor.uuid $ ????????-????-????-????-????????????
+sample.ena_sample $ ERS*
+sample.geo_sample $ GSM*
+sample.id $ *
+sample.last_update_date $ 2???-??-??
+!sample.long_label $ *
+sample.ncbi_biosample $ *
+sample.passage_number # 0 10
+sample.protocol_types [$] *
+sample.protocols [$] *
+sample.short $ *
+!sample.uuid $ ????????-????-????-????-????????????
+!sample.short_label $ *
+sample.storage $ *
+sample.submission_date $ 2???-??-??
+sample.supplementary_files [$] *
+sample.treatment.culture_type $ "cell line" "primary culture" tissue
+sample.treatment.enrichment $ *
+sample.treatment.enrichment_method $ *

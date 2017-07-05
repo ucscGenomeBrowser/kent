@@ -26,12 +26,14 @@ bye" > ftp.rsp
 
 ftp -n -v -i ftp.ensembl.org < ftp.rsp > release.${VERSION}.gtf.ls-lR
 
+# the mus_musculus_ extra sequences are stuck at version 86
 egrep -v "CHECKSUMS|README" release.${VERSION}.gtf.ls-lR | awk '
 {
-if (match($1,"^[a-z_]*:$")) {gsub(":$","",$1); printf "%s/", $1 }
+if (match($1,"^./[a-z0-9_]*:$")) {gsub(":$","",$1); printf "%s/", $1 }
 if (NF == 9) { if ((match($1,"^-rw")) && (match($NF,"'${VERSION}'.gtf.gz"))) {printf "%s\n", $NF} }
+if (NF == 9) { if ((match($1,"^-rw")) && (match($NF,"86.gtf.gz"))) {printf "%s\n", $NF} }
 }
-' | sed -e "s#^#'x' => '#; s#\$#',#" > release.${VERSION}.gtf.names
+' | sed -e "s#^./#'x' => '#; s#\$#',#" > release.${VERSION}.gtf.names
 
 echo "Scanning for MySQL table files"
 
@@ -43,24 +45,8 @@ bye" > ftp.rsp
 ftp -i -n -v ftp.ensembl.org < ftp.rsp > release.${VERSION}.MySQL.ls-lR
 
 egrep "_core_${VERSION}.*:$" release.${VERSION}.MySQL.ls-lR \
-  | sed -e 's/://;' | sed -e "s#^#'x' => '#; s#\$#',#" \
+  | sed -e 's/://;' | sed -e "s#^./#'x' => '#; s#\$#',#" \
      > release.${VERSION}.MySQL.names
-
-if [ 0 = 1 ]; then
-awk '
-BEGIN{ D="notYet" }
-{
-  if (!match($1,"^drwx")) {
-    if (match($1,"^./")) {
-        gsub("^./","",$1); gsub(":$","",$1); D = $1;
-        if (match(D,"_core_")) { printf "%s\n", D }
-    }
-  }
-}
-' release.${VERSION}.MySQL.ls-lR \
-	| sed -e "s#^#'x' => '#; s#\$#',#" > release.${VERSION}.MySQL.names
-
-fi
 
 echo "Scanning for protein fasta files:"
 
@@ -75,7 +61,7 @@ awk '
 BEGIN{ D="notYet" }
 {
   if (!match($1,"^drwx")) {
-    if (match($1,"^[a-z_]*/pep:$")) {
+    if (match($1,"^./[a-z_]*/pep:$")) {
         gsub(":$","",$1); D = $1;
     }
     if ((9 == NF) && match($1,"^-rw") && match($NF,"pep.all.fa")) {
@@ -84,6 +70,6 @@ BEGIN{ D="notYet" }
   }
 }
 ' release.${VERSION}.fasta.ls-lR \
-	| sed -e "s#^#'x' => '#; s#\$#',#" > release.${VERSION}.fasta.names
+	| sed -e "s#^./#'x' => '#; s#\$#',#" > release.${VERSION}.fasta.names
 
 rm -f ftp.rsp

@@ -350,7 +350,9 @@ static void addPublicHubsToHubStatus(struct sqlConnection *conn, char *publicTab
 /* Add urls in the hubPublic table to the hubStatus table if they aren't there already */
 {
 char query[1024];
-sqlSafef(query, sizeof(query), "select hubUrl from %s where hubUrl not in (select hubUrl from %s)\n", publicTable, statusTable); 
+sqlSafef(query, sizeof(query),
+        "select %s.hubUrl from %s left join %s on %s.hubUrl = %s.hubUrl where %s.hubUrl is NULL",
+        publicTable, publicTable, statusTable, publicTable, statusTable, statusTable); 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -388,6 +390,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct hubSearchText *hst = hubSearchTextLoadWithNullGiveContext(row, hubSearchTerms);
     char *hubUrl = hst->hubUrl;
+    struct hubEntry *hubInfo = hashFindVal(hubLookup, hubUrl);
+    if (hubInfo == NULL)
+        continue; // Search table evidently includes a hub that's not on this server.  Skip it.
     char *db = cloneString(hst->db);
     tolowers(db);
     if (isNotEmpty(dbFilter))
@@ -401,7 +406,6 @@ while ((row = sqlNextRow(sr)) != NULL)
             {
             // no db in the hubSearchText means this is a top-level hub hit.
             // filter by the db list associated with the hub instead
-            struct hubEntry *hubInfo = hashFindVal(hubLookup, hubUrl);
             char *dbList = cloneString(hubInfo->dbList);
             tolowers(dbList);
             if (stringIn(dbFilter, dbList) == NULL)
