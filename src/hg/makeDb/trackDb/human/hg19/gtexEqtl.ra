@@ -1,22 +1,3 @@
-#track gtexEqtlGene
-#release alpha
-#type bigBed 5 +
-#shortLabel GTEx Gene eQTL
-#longLabel Expression QTL by gene from GTEx V6p CAVIAR analysis (95% credible set)
-#color 200, 0, 200
-#group regulation
-#bigDataUrl /gbdb/hg19/gtex/gtexEqtlGene.bb
-#url id=$$
-
-#track gtexEqtlTissue
-#release alpha
-#type bigBed 5 +
-#shortLabel GTEx Tissue eQTL
-#longLabel Expression QTL by tissue from GTEx V6p CAVIAR analysis (95% credible set)
-#color 200, 200, 0
-#group regulation
-#bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissue.bb
-
 track gtexEqtlCluster
 type bed 5 +
 shortLabel GTEx eQTL Clusters

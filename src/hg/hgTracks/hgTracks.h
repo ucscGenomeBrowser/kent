@@ -1530,9 +1530,6 @@ void barChartMethods(struct track *tg);
 void barChartCtMethods(struct track *tg);
 /* Bar Chart track methods for custom track */
 
-void gtexEqtlMethods(struct track *tg);
-/* GTEx eQTL (bigBed 5 +) tracks */
-
 void gtexEqtlClusterMethods(struct track *tg);
 /* GTEx eQTL Cluster (bigBed 5 +) tracks */
 

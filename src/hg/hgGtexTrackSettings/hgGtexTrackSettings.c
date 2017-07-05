@@ -44,7 +44,6 @@ puts("<div class='gbmCredit'>Credit: jwestdesign</div>\n");
 
 static void printTrackHeader(char *db, struct trackDb *tdb)
 /* Print top banner with track labels */
-// TODO: Try to simplify layout
 {
 char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
 puts(
@@ -436,7 +435,6 @@ int main(int argc, char *argv[])
 /* Process CGI / command line. */
 {
 /* Null terminated list of CGI Variables we don't want to save to cart */
-/* TODO: check these */
 char *excludeVars[] = {"submit", "Submit", "g", NULL};
 long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);

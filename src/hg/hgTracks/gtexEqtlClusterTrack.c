@@ -2,6 +2,7 @@
 
 /* Copyright (C) 2017 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "dystring.h"
 #include "hgTracks.h"
@@ -85,8 +86,6 @@ for (i=0; i<eqtl->expCount; i++)
         }
     }
 // exclude if no tissues match selector
-//uglyf(", excluded: %d, maxEffect: %0.2f (min %0.2f), maxProb: %0.2f (min %0.2f)",
-        //excluded, maxEffect, extras->minEffect, maxProb, extras->minProb);
 if (excluded == eqtl->expCount || 
     // or if variant has no selected tissue where effect size is above cutoff
     maxEffect < extras->minEffect || 
@@ -116,7 +115,6 @@ if (gene)
     where = dyStringCannibalize(&ds);
     }
 bedLoadItemWhere(track, track->table, where, (ItemLoader)loadOne);
-//uglyf("DEBUG: loaded items: %d\n", slCount(track->items));
 
 safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_EFFECT);
 extras->minEffect = fabs(cartUsualDouble(cart, cartVar, GTEX_EFFECT_MIN_DEFAULT));
@@ -128,7 +126,6 @@ if (!hasTissueFilter && extras->minEffect == 0.0 && extras->minProb == 0.0)
 
 // more filtering
 filterItems(track, eqtlIncludeFilter, "include");
-//uglyf(", items after filter: %d\n", slCount(track->items));
 }
 
 static char *gtexEqtlClusterItemName(struct track *track, void *item)
@@ -184,11 +181,10 @@ static void gtexEqtlClusterMapItem(struct track *track, struct hvGfx *hvg, void 
 /* Create a map box on item and label with list of tissues with colors and effect size */
 {
 char *title = itemName;
-//uglyf("<br>title: %s\n", title);
 if (track->limitedVis != tvDense)
     {
-    // construct list of tissues with colors and effect sizes for mouseover
     struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
+    // Experiment: construct list of tissues with colors and effect sizes for mouseover
     //struct gtexEqtlClusterTrack *extras = (struct gtexEqtlClusterTrack *)track->extraUiData;
     //struct hash *tissueHash = extras->tissueHash;
     struct dyString *ds = dyStringNew(0);
@@ -209,7 +205,6 @@ if (track->limitedVis != tvDense)
         }
     title = dyStringCannibalize(&ds);
     }
-//uglyf("<br>title2: %s\n", title);
 genericMapItem(track, hvg, item, title, itemName, start, end, x, y, width, height);
 }
 

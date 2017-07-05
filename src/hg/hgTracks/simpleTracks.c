@@ -14777,9 +14777,6 @@ registerTrackHandler("omimComposite", omimGene2Methods);
 registerTrackHandler("cosmic", cosmicMethods);
 registerTrackHandler("rest", restMethods);
 registerTrackHandler("lrg", lrgMethods);
-
-registerTrackHandler("gtexEqtlTissue", gtexEqtlMethods);
-registerTrackHandler("gtexEqtlGene", gtexEqtlMethods);
 #endif /* GBROWSE */
 }
 

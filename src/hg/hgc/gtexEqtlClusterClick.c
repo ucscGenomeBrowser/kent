@@ -105,7 +105,6 @@ hFreeConn(&conn);
 
 webNewSection("eQTL cluster details");
 printf("<table id='eqtls' cellspacing=1 cellpadding=3>\n");
-//printf("<style>#eqtls th {text-align: left; background-color: #eaca92;}</style>");
 printf("<style>#eqtls th {text-align: left; background-color: #F3E0BE;}</style>");
 printf("<tr><th>&nbsp;&nbsp;&nbsp;</th><th>Tissue</th><th>Effect &nbsp;&nbsp;</th><th>Probability </th></tr>\n");
 for (i=0; i<eqtl->expCount; i++)
