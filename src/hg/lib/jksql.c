@@ -1140,7 +1140,7 @@ if (mysql_real_connect(
 	errAbort("Couldn't connect to database %s on %s as %s.\n%s",
 	    database, sp->host, sp->user, mysql_error(conn));
     else if (sqlParanoid)
-	fprintf(stderr, "ASH: Couldn't connect to database %s on %s as %s.  "
+	fprintf(stderr, "Couldn't connect to database %s on %s as %s.  "
 		"mysql: %s  pid=%ld\n",
 		database, sp->host, sp->user, mysql_error(conn), (long)getpid());
     return NULL;

@@ -109,7 +109,7 @@ if (textSize == NULL)
     textSize = "-";
 if (trackControls == NULL)
     trackControls = "-";
-fprintf(stderr, "ASH: %22s: "
+fprintf(stderr, "cartTrace: %22s: "
 	"u.i=%d u.l=%d u.c=%d s.i=%d s.l=%d s.c=%d "
 	"p=%s f=%s t=%s pid=%ld %s\n",
 	when,
@@ -118,12 +118,12 @@ fprintf(stderr, "ASH: %22s: "
 char userIdKey[256];
 cartDbSecureId(userIdKey, sizeof userIdKey, u);
 if (cart->userId && !sameString(userIdKey, cart->userId))
-    fprintf(stderr, "ASH: bad userId %s --> %d_%s!  pid=%ld\n",
+    fprintf(stderr, "cartTrace: bad userId %s --> %d_%s!  pid=%ld\n",
 	    cart->userId, u->id, u->sessionKey, (long)getpid());
 char sessionIdKey[256];
 cartDbSecureId(sessionIdKey, sizeof sessionIdKey, s);
 if (cart->sessionId && !sameString(sessionIdKey, cart->sessionId))
-    fprintf(stderr, "ASH: bad sessionId %s --> %d_%s!  pid=%ld\n",
+    fprintf(stderr, "cartTrace: bad sessionId %s --> %d_%s!  pid=%ld\n",
 	    cart->sessionId, s->id, s->sessionKey, (long)getpid());
 }
 
@@ -133,13 +133,13 @@ boolean cartTablesOk(struct sqlConnection *conn)
 {
 if (!sqlTableExists(conn, userDbTable()))
     {
-    fprintf(stderr, "ASH: cartTablesOk failed on %s.%s!  pid=%ld\n",
+    fprintf(stderr, "cartTablesOk failed on %s.%s  pid=%ld\n",
 	    sqlGetDatabase(conn), userDbTable(),  (long)getpid());
     return FALSE;
     }
 if (!sqlTableExists(conn, sessionDbTable()))
     {
-    fprintf(stderr, "ASH: cartTablesOk failed on %s.%s!  pid=%ld\n",
+    fprintf(stderr, "cartTablesOk failed on %s.%s  pid=%ld\n",
 	    sqlGetDatabase(conn), sessionDbTable(), (long)getpid());
     return FALSE;
     }

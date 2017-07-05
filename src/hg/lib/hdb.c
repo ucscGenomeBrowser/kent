@@ -711,7 +711,7 @@ sqlSetParanoid(TRUE);
 struct sqlConnection *conn = sqlConnCacheMayAlloc(centralCc, centralDb);
 if ((conn == NULL) || !cartTablesOk(conn))
     {
-    fprintf(stderr, "ASH: hConnectCentral failed over to backupcentral!  "
+    fprintf(stderr, "hConnectCentral failed over to backupcentral "
             "pid=%ld\n", (long)getpid());
     sqlConnCacheDealloc(centralCc, &conn);
     sqlConnCacheFree(&centralCc);
