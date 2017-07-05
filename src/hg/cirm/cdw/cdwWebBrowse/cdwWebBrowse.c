@@ -967,7 +967,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
         if ( (submitFname!=NULL) && (!isEmpty(submitFname)) && (*submitFname=='/') )
             submitFname += 1;
 
-        printf("curl 'https://%s/cgi-bin/cdwGetFile?acc=%s&token=%s' --create-dirs -o %s\n", \
+        printf("curl --netrc-file cirm_credentials 'https://%s/cgi-bin/cdwGetFile?acc=%s&token=%s' --create-dirs -o %s\n", \
             host, vf->licensePlate, token, submitFname);
         }
     else
@@ -1046,7 +1046,9 @@ puts("</div>\n");
 puts("<div id='scriptDoc' style='display:none'>\n");
 puts("When you click 'submit', a shell script that runs curl will get downloaded.\n");
 puts("The URLs are valid for one week.<p>\n");
-puts("To download the files:\n");
+puts("Before you start the download, create a file called cirm_credentials with your username and password like this:<br>\n");
+puts("<tt>echo 'default login <i>user@university.edu</i> password <i>mypassword</i>' > cirm_credentials</tt><p>\n");
+puts("Then, to download the files:\n");
 puts("<ul>\n");
 puts("<li>Linux/OSX: With curl and a single thread: <tt>sh downloadCirm.sh</tt>\n");
 puts("<li>Linux/OSX: With curl and four threads: <tt>parallel -j4 :::: downloadCirm.sh</tt>\n");
