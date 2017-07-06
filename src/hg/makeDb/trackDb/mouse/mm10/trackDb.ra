@@ -388,6 +388,7 @@ group varRep
 type vcfTabix
 visibility hide
 hapClusterHeight 78
+hapClusterEnabled off
 maxWindowToDraw 1000000
 release alpha,beta
 

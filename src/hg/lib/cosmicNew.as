@@ -36,4 +36,6 @@ table cosmicNew
     string samSource;      "Describes where the sample has originated from"
     string tumSource;      "Describes the tumor type"
     float age;             "Age of the sample (if provided)"
-    )
+	string cosmLabel;      "COSMIC external name"
+	string _mouseOver;     "Mouseover label" 
+	)

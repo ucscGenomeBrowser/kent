@@ -222,15 +222,6 @@ type bigBed 12 .
 bigDataUrl bbi/GCA_001632615.1_LP_J_v1.gapOverlap.bb
 html html/GCA_001632615.1_LP_J_v1.gapOverlap
 
-track gapOverlap
-shortLabel Gap Overlaps
-longLabel Exactly identical sequence on each side of a gap
-group map
-visibility hide
-type bigBed 12 .
-bigDataUrl bbi/GCA_001632615.1_LP_J_v1.gapOverlap.bb
-html html/GCA_001632615.1_LP_J_v1.gapOverlap
-
 track ensGene
 shortLabel Ensembl genes
 longLabel Ensembl genes v86

@@ -24,7 +24,7 @@ except:
     exit(0)
 
 # Imports from the Python 2.7 standard library
-# Minimize global imports. Each library import can take up to 20msecs.
+# Please minimize global imports. Each library import can take up to 20msecs.
 import os, cgi, sys, logging
 
 from os.path import join, isfile, normpath, abspath, dirname
@@ -43,6 +43,8 @@ cgiArgs = None
 
 # like in the kent tree, we keep track of whether we have already output the content-type line
 contentLineDone = False
+
+jksqlTrace = False
 
 def errAbort(msg):
     " show msg and abort. Like errAbort.c "
@@ -91,11 +93,20 @@ def parseHgConf():
     fname = os.path.join(confDir, "..", "hg.conf")
     hgConf = parseConf(fname)
 
+    if cfgOptionBoolean("JKSQL_TRACE"):
+        global jksqlTrace
+        jksqlTrace = True
+    
     return hgConf
 
 def cfgOption(name, default=None):
     " return hg.conf option or default "
     return hgConf.get(name, default)
+
+def cfgOptionBoolean(name, default=False):
+    " return True if option is set to 1, on or true, or default if not set "
+    val = hgConf.get(name, default) in [True, "on", "1", "true"]
+    return val
 
 def sqlConnect(db, host=None, user=None, passwd=None):
     """ connect to sql server specified in hg.conf with given db. Like jksql.c. """
@@ -103,6 +114,11 @@ def sqlConnect(db, host=None, user=None, passwd=None):
     if host==None:
         host, user, passwd = cfg["db.host"], cfg["db.user"], cfg["db.password"]
     conn = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)
+
+    # we will need this info later
+    conn.failoverConn = None
+    conn.db = db
+    conn.host = host
     return conn
 
 def sqlTableExists(conn, table):
@@ -115,9 +131,27 @@ def sqlQueryExists(conn, query, args=None):
     cursor = conn.cursor()
     rows = cursor.execute(query, args)
     row = cursor.fetchone()
+
     res = (row!=None)
     cursor.close()
     return res
+
+def _sqlConnectFailover(conn):
+    " connect the failover connection of a connection "
+    cfg = parseHgConf()
+    if "slow-db.host" not in cfg:
+        return
+
+    host, user, passwd = cfg["slow-db.host"], cfg["slow-db.user"], cfg["slow-db.password"]
+    sys.stderr.write("SQL_CONNECT 0 %s %s %s\n" % (host, user, passwd))
+    db = conn.db
+    failoverConn = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)
+    conn.failoverConn = failoverConn
+
+def _timeDeltaSeconds(time1, time2):
+    " convert time difference to total seconds for python 2.6 "
+    td = time1 - time2
+    return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
 
 def sqlQuery(conn, query, args=None):
     """ Return all rows for query, placeholders can be used, args is a list to
@@ -130,12 +164,51 @@ def sqlQuery(conn, query, args=None):
     rows = sqlQuery(conn, query, {"id":1234, "name":"hiram"})
     """
     cursor = conn.cursor()
-    rows = cursor.execute(query, args)
+
+    if jksqlTrace:
+        from datetime import datetime
+        sys.stderr.write("SQL_QUERY 0 %s %s %s %s\n" % (conn.host, conn.db, query, args))
+        startTime = datetime.now()
+
+    try:
+        rows = cursor.execute(query, args)
+
+        if jksqlTrace:
+            timeDiff = _timeDeltaSeconds(datetime.now(), startTime)
+            sys.stderr.write("SQL_TIME 0 %s %s %.3f\n" % (conn.host, conn.db, timeDiff))
+
+    except MySQLdb.Error, errObj:
+        # on table not found, try the secondary mysql connection, "slow-db" in hg.conf
+        errCode, errDesc = errObj
+        if errCode!=1146: # "table not found" error
+            raise
+
+        if conn.failoverConn == None:
+            _sqlConnectFailover(conn)
+
+        if not conn.failoverConn:
+            raise
+
+        # stay compatible with the jksql.c JKSQL_TRACE output format
+        if jksqlTrace:
+            sys.stderr.write("SQL_FAILOVER 0 %s %s db -> slow-db | %s %s\n" % \
+                    (conn.host, conn.db, query, args))
+        cursor = conn.failoverConn.cursor()
+        rows = cursor.execute(query, args)
+
+    if jksqlTrace:
+        startTime = datetime.now()
+
     data = cursor.fetchall()
+    cursor.close()
+
+    if jksqlTrace:
+        timeDiff = _timeDeltaSeconds(datetime.now(), startTime)
+        sys.stderr.write("SQL_FETCH 0 %s %s %.3f\n" % (conn.host, conn.db, timeDiff))
+
     colNames = [desc[0] for desc in cursor.description]
     Rec = namedtuple("MysqlRow", colNames)
     recs = [Rec(*row) for row in data]
-    cursor.close()
     return recs
 
 def htmlPageEnd(oldJquery=False):
