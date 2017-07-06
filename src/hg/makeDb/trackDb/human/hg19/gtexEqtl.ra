@@ -1,9 +1,3 @@
-track gtexEqtlCluster
-type bed 5 +
-shortLabel GTEx eQTL Clusters
-longLabel Expression QTL Clusters in 44 Tissues from GTEx (midpoint release, V6)
-group variation
-
 track gtexEqtlTissue
 type bed
 compositeTrack on
@@ -13,7 +7,7 @@ shortLabel GTEx eQTL Tissues
 longLabel Expression QTLs in 44 tissues from GTEx (midpoint release, V6)
 darkerLabels on
 visibility dense
-group variation
+group regulation
 
     track gtexEqtlTissueAdiposeSubcut
     type bigBed 9 +
