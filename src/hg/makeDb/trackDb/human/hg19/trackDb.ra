@@ -2490,12 +2490,6 @@ termRegex PAp[0-9]{8}
 semiShortCircuit 1
 searchPriority 3.6
 
-track gtexEqtlCluster
-type bed 5 +
-shortLabel GTEx eQTL Clusters
-longLabel Expression QTL clusters in 44 tissues from GTEx (midpoint release, V6)
-group regulation
-
 track nestedRepeats override
 group rep
 
