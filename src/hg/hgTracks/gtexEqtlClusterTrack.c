@@ -129,23 +129,31 @@ filterItems(track, eqtlIncludeFilter, "include");
 }
 
 static char *gtexEqtlClusterItemName(struct track *track, void *item)
-/* Load all items (and motifs if table is present) in window */
+/* Left label is gene name */
 {
 struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
+return eqtl->target;
+}
+
+static char *gtexEqtlClusterSourcesLabel(struct track *track, void *item)
+/* Right label is tissue (or number of tissues if >1) */
+{
+struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
+int i, included;
+for (i=0, included=0; i<eqtl->expCount; i++)
+    if (!isExcludedTissue(eqtl, i))
+        included++;
+if (included == 1)
+    return eqtl->expNames[i-1];
 struct dyString *ds = dyStringNew(0);
-if (eqtl->expCount == 1)
-    {
-    dyStringPrintf(ds, "%s in %s", eqtl->target, eqtl->expNames[0]);
-    }
-else
-    {
-    int i, included;
-    for (i=0, included=0; i<eqtl->expCount; i++)
-        if (!isExcludedTissue(eqtl, i))
-            included++;
-    dyStringPrintf(ds, "%s in %d tissues", eqtl->target, included);
-    }
+dyStringPrintf(ds, "%d tissues", included);
 return dyStringCannibalize(&ds);
+}
+
+static int gtexEqtlClusterItemRightPixels(struct track *track, void *item)
+/* Return number of pixels we need to the right of an item (for sources label). */
+{
+return mgFontStringWidth(tl.font, gtexEqtlClusterSourcesLabel(track, item));
 }
 
 static Color gtexEqtlClusterItemColor(struct track *track, void *item, struct hvGfx *hvg)
@@ -176,8 +184,27 @@ if (maxEffect > cutoff)
 return MG_RED;
 }
 
-static void gtexEqtlClusterMapItem(struct track *track, struct hvGfx *hvg, void *item, char *itemName,
-                        char *mapItemName, int start, int end, int x, int y, int width, int height)
+static void gtexEqtlClusterDrawItemAt(struct track *track, void *item, 
+	struct hvGfx *hvg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw GTEx eQTL cluster with right label indicating source(s) */
+{
+bedPlusLabelDrawAt(track, item, hvg, xOff, y, scale, font, color, vis);
+if (vis != tvFull && vis != tvPack)
+    return;
+
+/* Draw text to the right */
+struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
+int x2 = round((double)((int)eqtl->chromEnd-winStart)*scale) + xOff;
+int x = x2 + tl.mWidth/2;
+char *label = gtexEqtlClusterSourcesLabel(track, item);
+int w = mgFontStringWidth(font, label);
+hvGfxTextCentered(hvg, x, y, w, track->heightPer, MG_BLACK, font, label);
+}
+
+static void gtexEqtlClusterMapItem(struct track *track, struct hvGfx *hvg, void *item, 
+                                char *itemName, char *mapItemName, int start, int end, 
+                                int x, int y, int width, int height)
 /* Create a map box on item and label with list of tissues with colors and effect size */
 {
 char *title = itemName;
@@ -205,7 +232,8 @@ if (track->limitedVis != tvDense)
         }
     title = dyStringCannibalize(&ds);
     }
-genericMapItem(track, hvg, item, title, itemName, start, end, x, y, width, height);
+int w = width + gtexEqtlClusterItemRightPixels(track, item);
+genericMapItem(track, hvg, item, title, itemName, start, end, x, y, w, height);
 }
 
 void gtexEqtlClusterMethods(struct track *track)
@@ -214,5 +242,7 @@ void gtexEqtlClusterMethods(struct track *track)
 track->loadItems = gtexEqtlClusterLoadItems;
 track->itemName  = gtexEqtlClusterItemName;
 track->itemColor = gtexEqtlClusterItemColor;
-track->mapItem   = gtexEqtlClusterMapItem;
+track->itemRightPixels = gtexEqtlClusterItemRightPixels;
+track->drawItemAt = gtexEqtlClusterDrawItemAt;
+track->mapItem = gtexEqtlClusterMapItem;
 }
