@@ -4961,14 +4961,6 @@ termRegex rs[0-9]+
 searchPriority 12.9843
 padding 250
 
-searchTable snp150
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.951
-padding 250
-
 include cloneEnd.trackDb.ra
 
 track sgpGene override
