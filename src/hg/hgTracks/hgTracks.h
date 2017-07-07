@@ -1641,5 +1641,10 @@ void setupHotkeys(boolean gotExtTools);
 
 void calcWiggleOrdering(struct cart *cart, struct flatTracks *flatTracks);
 
+void bedPlusLabelDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
+			       double scale, MgFont *font, Color color, enum trackVisibility vis);
+/* Draw a single bed item at position.  If vis is full, draw the associated label to the left
+ * of the item. */
+
 #endif /* HGTRACKS_H */
 
