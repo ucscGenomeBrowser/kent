@@ -2484,17 +2484,17 @@ longLabel Peptide sequences identified by tandem MS from PeptideAtlas
     group expression
     color 82, 82, 160
 
+track gtexEqtlCluster
+type bed 5 +
+shortLabel GTEx eQTL Clusters
+longLabel Expression QTL Clusters in 44 Tissues from GTEx (midpoint release, V6)
+group regulation
+
 searchTable peptideAtlas2014
 searchType bed
 termRegex PAp[0-9]{8}
 semiShortCircuit 1
 searchPriority 3.6
-
-track gtexEqtlCluster
-type bed 5 +
-shortLabel GTEx eQTL Clusters
-longLabel Expression QTL clusters in 44 tissues from GTEx (midpoint release, V6)
-group regulation
 
 track nestedRepeats override
 group rep
@@ -2613,5 +2613,4 @@ html crispr
 
 include defaultPriority.ra
 include trackDb.cloneEnd.ra
-
 

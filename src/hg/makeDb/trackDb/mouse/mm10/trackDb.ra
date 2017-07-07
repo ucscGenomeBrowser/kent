@@ -387,7 +387,9 @@ longLabel Annotated SNPs from mouse strain comparison analysis
 group varRep
 type vcfTabix
 visibility hide
+priority 11.5
 hapClusterHeight 78
+hapClusterEnabled off
 maxWindowToDraw 1000000
 release alpha,beta
 

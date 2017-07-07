@@ -1530,6 +1530,9 @@ void barChartMethods(struct track *tg);
 void barChartCtMethods(struct track *tg);
 /* Bar Chart track methods for custom track */
 
+void gtexEqtlClusterMethods(struct track *tg);
+/* GTEx eQTL Cluster (bigBed 5 +) tracks */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
@@ -1637,6 +1640,11 @@ void setupHotkeys(boolean gotExtTools);
 /* setup keyboard shortcuts and a help dialog for it */
 
 void calcWiggleOrdering(struct cart *cart, struct flatTracks *flatTracks);
+
+void bedPlusLabelDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
+			       double scale, MgFont *font, Color color, enum trackVisibility vis);
+/* Draw a single bed item at position.  If vis is full, draw the associated label to the left
+ * of the item. */
 
 #endif /* HGTRACKS_H */
 

@@ -31879,7 +31879,7 @@ EOF
 
 ##############################################################################
 # SNP149 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 3/24/17 angie)
-    # Redmine #17209
+    # Redmine #18330
     screen -S ortho -t ortho
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 149 -debug
 # *** Steps were performed in /hive/data/genomes/hg19/bed/snp149Ortho.2017-03-24
@@ -31891,7 +31891,7 @@ EOF
 
 ##############################################################################
 # SNPMASKED SEQUENCE FOR SNP149 (DONE 3/24/17 angie)
-    # Redmine #17209
+    # Redmine #18330
     screen -S mask -t mask
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 149 -debug
 # *** Steps were performed in /hive/data/genomes/hg19/snp149Mask.2017-03-24
@@ -31956,6 +31956,7 @@ bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg19/c
 # Link it up so the outside world can see it. 
 cd /gbdb/hg19/cosmic/
 ln -s /hive/data/outside/cosmic/hg19/v81/cosMutHg19V81.bb .
+
 
 ###########################################################################
 # Chimp Lastz run (DONE - 2017-05-04 - Hiram)
@@ -32108,3 +32109,84 @@ bedNamePickFirst gencode19.best.bed refGene.best.bed gencodeComp19.best.bed know
 ggTables bigBed mysql/ bigBed/ geneModels/bestGenes.hg19.bed hg19
 ln -s `pwd`/bigBed/geneInteractions.hg19.bb /gbdb/h19/bbi/interactions.bb
 #############################################################################
+
+##############################################################################
+# DBSNP B150 / SNP150 (DONE 5/6/17 angie)
+    # Redmine #19202
+    mkdir -p /hive/data/outside/dbSNP/150/human_hg19
+    cd /hive/data/outside/dbSNP/150/human_hg19
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/organisms/
+    # to find the subdir name to use as orgDir below (human_9606_b150_GRCh38p7 in this case).
+    # Go to that subdirectory, then to database/organism_data/ and look for files
+    # whose names start with b150_* and may or may not end with a suffix that identifies
+    # the build assembly version or some annotation version.  If there is a suffix shared
+    # by all b150_* files, add that to config.ra as the "buildAssembly".
+    # Since this build is on GRCh37.p13 like b144 above, use the liftUp.lft file
+    # and ignoreDbSnpContigsFile constructed for b144.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606_b150_GRCh37p13
+build 150
+buildAssembly 105
+liftUp ../../144/human_hg19/liftUp.lft
+refAssemblyLabel GRCh37.p13
+ignoreDbSnpContigsFile ../../144/human_hg19/patchContigs.txt
+EOF
+    # dbSNP does not make a complete set of download files for hg19 anymore, so
+    # do a "debug" run and link some files from hg38 before running the script.
+    # (hard link so wget doesn't get confused)
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -debug
+    ln ../human_hg38/data/{S*,B*} data/
+    # Edit the download script: put if(0) around download files that dbSNP doesn't dump.
+    # They changed database/organism_data to database/data/organism_data so edit that too.
+    vi ../download_human_hg19_150.csh
+    # Run the edited script manually:
+    csh -efx ../download_human_hg19_150.csh >& do.log & tail -f do.log
+    # Now continue the usual way at the next step after download:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue loadDbSnp >>& do.log &
+    tail -f do.log
+
+    # While that's running, compare rs IDs in rs_fasta with b147_SNPContigLoc_105 to see
+    # which IDs (if any) were omitted from the rs_fasta dump.
+    zcat rs_fasta/rs*.fas.gz \
+    | perl -wne 'if (/^>/) { s/^>gnl\|dbSNP\|(rs\d+) .*/$1/ || die; print; }' \
+    | sort -u > rsFastaIds.txt
+    zcat data/b150_SNPContigLoc_105.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    wc -l rsFastaIds.txt contigLocIds.txt
+# 325658303 rsFastaIds.txt
+# 231449737 contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#0 missingFromRsFasta
+    # Good!  If there are some missing in the future see "DBSNP B147" above for instructions.
+
+    # Yay, script completed:
+# *** All done!  (through the 'bigBed' step)
+
+
+##############################################################################
+# SNP150 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 5/8/17 angie)
+    # Redmine #19202
+    screen -S ortho -t ortho
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 150 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp150Ortho.2017-05-08
+    cd /hive/data/genomes/hg19/bed/snp150Ortho.2017-05-08
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 150 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP150 (DONE 5/8/17 angie)
+    # Redmine #19202
+    screen -S mask -t mask
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 150 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/snp150Mask.2017-05-08
+    cd /hive/data/genomes/hg19/snp150Mask.2017-05-08
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 150 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+##############################################################################

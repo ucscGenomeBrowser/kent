@@ -36,7 +36,7 @@ from collections import defaultdict, namedtuple
 from os.path import *
 
 # import the UCSC-specific library
-sys.path.append("pyLib")
+sys.path.append(join(dirname(__file__), "pyLib"))
 try:
     from hgLib import cgiArgs, cgiSetup, cgiString, printContentType, printMenuBar, \
             sqlConnect, sqlQuery, errAbort, cfgOption, runCmd, cgiGetAll, printHgcHeader, \
