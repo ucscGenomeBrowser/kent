@@ -1,0 +1,5 @@
+Clipping negative line 1 of badEndExample.bed.gz: chrM:-1-2
+Clipping end <= start line 2 of badEndExample.bed.gz: chrM:0-0
+chrM	0	2	ok:0-2
+chrM	5	10	ok:5-10
+Expecting number got b10 line 5 of badEndExample.bed.gz: chrM:5-b10
