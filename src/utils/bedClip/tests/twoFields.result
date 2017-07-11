@@ -1,0 +1,5 @@
+Truncating negative start line 1 of twoFieldsExample.bed.gz: chrM:-1-2
+Clipping end <= start line 2 of twoFieldsExample.bed.gz: chrM:0-0
+chrM	0	2	clip:-1-2
+chrM	0	2	ok:0-2
+Need at least three fields line 4 of twoFieldsExample.bed.gz

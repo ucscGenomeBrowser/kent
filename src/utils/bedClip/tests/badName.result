@@ -1,0 +1,7 @@
+Clipping negative line 1 of badNameExample.bed.gz: chrM:-1-2
+Clipping end <= start line 2 of badNameExample.bed.gz: chrM:0-0
+Clipping end <= start line 5 of badNameExample.bed.gz: chrM:10-5
+chrM	0	2	ok:0-2
+chrM	5	10	ok:5-10
+Chromosome chrZ isn't in ce6.chrom.sizes line 6 of badNameExample.bed.gz: chrZ:5-10
+
