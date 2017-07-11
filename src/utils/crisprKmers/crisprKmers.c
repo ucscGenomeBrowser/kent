@@ -1,4 +1,8 @@
 /* crisprKmers - find and annotate crispr sequences. */
+
+/* Copyright (C) 2017 The Regents of the University of California
+ * See README in this or parent directory for licensing information. */
+
 #include <popcntintrin.h>
 #include "common.h"
 #include "linefile.h"
@@ -18,26 +22,21 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "crisprKmers - annotate crispr sequences\n"
+  "crisprKmers - annotate crispr guide sequences\n"
   "usage:\n"
   "   crisprKmers <sequence>\n"
   "options:\n"
   "   where <sequence> is a .2bit file or .fa fasta sequence\n"
-  "   -verbose=N - control processing steps with level of verbose:\n"
-  "                default N=1 - only find crisprs, set up listings\n"
-  "                N=2 - empty process crispr list into new list\n"
-  "                N=3 - only count identicals during processing\n"
-  "                N=4 - attempt measure all off targets and\n"
-  "                      print out all crisprs as bed format\n"
-  "   -bed=<file> - output kmers to given bed9+ file\n"
-  "   -offTargets=<file> - output offTargets to given file\n"
-  "   -ranges=<file> - use specified bed3 file to limit which crisprs are\n"
+  "   -verbose=N - for debugging control processing steps with level of verbose:\n"
+  "   -bed=<file> - output results to given bed9+ file\n"
+  "   -offTargets=<file> - output off target data to given file\n"
+  "   -ranges=<file> - use specified bed3 file to limit which guides are\n"
   "                  - measured, only those with any overlap to these bed items.\n"
-  "   -dumpKmers=<file> - after scan of sequence, output kmers to file\n"
+  "   -memLimit=N - N number of gigabytes for each thread, default: 8\n"
+  "                 when memory size goes beyond N gB program will thread\n"
+  "   -dumpKmers=<file> - NOT VALID after scan of sequence, output kmers to file\n"
   "                     - process will exit after this, use -loadKmers to continue\n"
-  "   -loadKmers=<file> - load kmers from previous scan of sequence from -dumpKmers\n"
-  "   NOTE: It is faster to simply scan the sequence to get the system ready\n"
-  "         to go.  Reading in the kmer file takes longer than scanning."
+  "   -loadKmers=<file> - NOT VALID load kmers from previous scan of sequence from -dumpKmers"
   );
 }
 
@@ -48,12 +47,15 @@ static char *ranges = NULL;	/* use ranges <file> to limit scanning */
 static struct hash *rangesHash = NULL;	/* ranges into hash + binkeeper */
 static char *dumpKmers = NULL;	/* file name to write out kmers from scan */
 static char *loadKmers = NULL;	/* file name to read in kmers from previous scan */
+static int memLimit = 8;	/* gB limit before going into thread mode */
+static int threadCount = 1;	/* will be adjusted depending upon vmPeak */
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"bed", OPTION_STRING},
    {"offTargets", OPTION_STRING},
    {"ranges", OPTION_STRING},
+   {"memLimit", OPTION_INT},
    {"dumpKmers", OPTION_STRING},
    {"loadKmers", OPTION_STRING},
    {NULL, 0},
@@ -145,6 +147,8 @@ struct hash *hash = newHash(0);	/* key is chromName, value is binkeeper data */
 struct lineFile *lf = lineFileOpen(bedFile, TRUE);
 char *row[3];
 
+verbose(1, "# using ranges file: %s\n", bedFile);
+
 while (lineFileNextRow(lf, row, 3))
     {
     struct binKeeper *bk;
@@ -185,7 +189,7 @@ else
 #endif
 
 /* these two kmerVal to strings routines could be reduced to one and they
- * could use lookup tables to run faster
+ * could use lookup tables to run faster.  This is *definately* not reentrant !
  */
 static char *kmerPAMString(long long val)
 /* return the ASCII string for last three bases in then binary sequence value */
@@ -863,20 +867,23 @@ timingMessage("writeKmers", crisprsWritten, "crisprs written", elapsedMs, "crisp
 static void crisprKmers(char *sequence)
 /* crisprKmers - find and annotate crispr sequences. */
 {
-struct crisprList *queryCrisprs = NULL;
+struct crisprList *queryGuides = NULL;
 // struct crisprList *countedCrisprs = NULL;
-struct crisprList *allCrisprs = NULL;
+struct crisprList *allGuides = NULL;
 
 if (loadKmers)
-    allCrisprs = readKmers(loadKmers);
+    allGuides = readKmers(loadKmers);
 else
-    allCrisprs = scanSequence(sequence);
+    allGuides = scanSequence(sequence);
 
 if (dumpKmers)
     {
-    writeKmers(allCrisprs, dumpKmers);
+    writeKmers(allGuides, dumpKmers);
     return;
     }
+
+long long vmPeak = currentVmPeak();
+verbose(1, "# vmPeak after scanSequence: %lld kB\n", vmPeak);
 
 /* processing those crisprs */
 if (verboseLevel() > 1)
@@ -886,27 +893,36 @@ if (verboseLevel() > 1)
     /* if ranges have been specified, construct queryList of kmers to measure */
     if (rangesHash)
         {
-	/* result here is two exclusive sets: query, and allCrisprs
-	 *    the query crisprs have been extracted from the allCrisprs */
-        queryCrisprs = rangeExtraction(& allCrisprs);
-        copyToArray(queryCrisprs);
-	if (allCrisprs)	// if there are any left on the all list
-	    {
-	    copyToArray(allCrisprs);
-            /* first run up query vs. all */
-            queryVsAll(queryCrisprs, allCrisprs);
-	    }
-        /* then run up the query vs. itself avoiding self vs. self */
-        allVsAll(queryCrisprs);
-        countsOutput(queryCrisprs);
+	/* result here is two exclusive sets: query, and allGuides
+	 *    the query crisprs have been extracted from the allGuides */
+        queryGuides = rangeExtraction(& allGuides);
+        }
+    if (queryGuides)
+        copyToArray(queryGuides);
+    if (allGuides)
+	copyToArray(allGuides);
+    vmPeak = currentVmPeak();
+    verbose(1, "# vmPeak after copyToArray: %lld kB\n", vmPeak);
+    /* larger example: 62646196 kB */
+    if ((vmPeak >> 20) > 8)	// the >> 20 converts kB to gB
+	{
+	threadCount = 1 + ((vmPeak >> 20) / 8);
+	verbose(1, "# over 8 Gb at %lld kB, threadCount: %d\n", vmPeak, threadCount);
+	}
+    if (queryGuides)	// when range selected some query sequences
+	{
+	if (allGuides) // if there are any left on the all list
+	    queryVsAll(queryGuides, allGuides);
+	/* then run up the query vs. itself avoiding self vs. self */
+        allVsAll(queryGuides);
+        countsOutput(queryGuides);
         }
     else
         {
-	copyToArray(allCrisprs);
-        /* run up all vs. all avoiding self vs. self */
-        allVsAll(allCrisprs);
-        countsOutput(allCrisprs);
+	allVsAll(allGuides); /* run up all vs. all avoiding self vs. self */
+	countsOutput(allGuides);
         }
+
     carefulClose(&offFile);
     }
 }	// static void crisprKmers(char *sequence)
@@ -924,12 +940,14 @@ bedFileOut = optionVal("bed", bedFileOut);
 dumpKmers = optionVal("dumpKmers", dumpKmers);
 loadKmers = optionVal("loadKmers", loadKmers);
 offTargets = optionVal("offTargets", offTargets);
+memLimit = optionInt("memLimit", memLimit);
 ranges = optionVal("ranges", ranges);
 if (ranges)
     rangesHash = readRanges(ranges);
 
 initOrderedNtVal();	/* set up orderedNtVal[] */
 crisprKmers(argv[1]);
+
 if (verboseLevel() > 1)
     printVmPeak();
 return 0;
