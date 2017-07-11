@@ -1,7 +1,7 @@
 kentSrc = ../../..
 include ../../../inc/common.mk
 
-PROG = ../bedClip
+PROG = bedClip
 
 test:
 	@${PROG} -verbose=2 clipExample.bed.gz ce6.chrom.sizes stdout > clip.bed 2>&1
