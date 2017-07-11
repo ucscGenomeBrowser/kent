@@ -10,7 +10,6 @@ shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer
 type bigBed 4 +
 bigDataUrl /gbdb/hg38/cosmic/cosMutHg38V81.bb
-mouseOverField _mouseOver
 labelFields cosmLabel
 group phenDis
 color 200, 0, 0

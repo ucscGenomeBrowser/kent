@@ -5,7 +5,8 @@ release alpha
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer
 type bigBed 4 +
-bigDataUrl /gbdb/hg19/cosmic/cosMutHg19V81.2.bb
+bigDataUrl /gbdb/hg19/cosmic/cosMutHg19V81.bb
+labelFields cosmLabel
 group phenDis
 color 200, 0, 0
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
