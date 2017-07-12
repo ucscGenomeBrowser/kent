@@ -27,7 +27,7 @@ except:
 # Please minimize global imports. Each library import can take up to 20msecs.
 import os, cgi, sys, logging
 
-from os.path import join, isfile, normpath, abspath, dirname
+from os.path import join, isfile, normpath, abspath, dirname, isdir, splitext
 from collections import namedtuple
 
 # activate debugging output output only on dev
@@ -454,6 +454,93 @@ def parseDict(fname):
         key, val = line.rstrip("\n").split("\t")
         d[key] = val
     return d
+
+def gbdbReplace(fname, hgConfSetting):
+    " replace /gbdb/ in fname with hgConfSetting "
+    if not fname.startswith("/gbdb/"):
+        return None
+
+    gbdbLoc = hgConf.get(hgConfSetting)
+    if gbdbLoc is None:
+        return None
+
+    return fname.replace("/gbdb/", gbdbLoc)
+
+def getUdcCacheDir():
+    " return the udc cache dir and create it if it doesn't exist "
+    udcDir = hgConf.get("udc.cacheDir", "/tmp/udcCache")
+    if not isdir(udcDir):
+        os.makedirs(udcDir)
+    return udcDir
+
+def hGbdbReplace(fname):
+    " hdb.c : get the local filename on disk or construct a URL to a /gbdb file and return it "
+    if not isfile(fname):
+    # try using gbdbLoc1
+        fname2 = gbdbReplace(fname, "gbdbLoc1")
+        if fname2 and isfile(fname2):
+            return fname2
+
+    if not isfile(fname):
+    # try using gbdbLoc2, which can be a URL
+        fname2 = gbdbReplace(fname, "gbdbLoc2")
+        return fname2
+    return fname
+
+def netUrlOpen(url):
+    " net.c: open a URL and return a file object "
+    import urllib2, time, errno
+    from socket import error as SocketError
+
+    # let our webservers know that we are not a Firefox
+    opener = urllib2.build_opener()
+    opener.addheaders = [('User-Agent', 'Genome Browser pyLib/hgLib.py:netUrlOpen()')]
+
+    resp = None
+    for x in range(5): # limit number of retries
+      try:
+        resp = opener.open(url)
+        break
+      except SocketError as e:
+        if e.errno != errno.ECONNRESET:
+          raise # re-raise any other error
+        time.sleep(1)
+    return resp
+
+def readSmallFile(fname):
+    """ read a small file, usually from /gbdb/, entirely into memory and return lines.
+    If the file doesn't exist, try gbdbLoc1, then gbdbLoc2
+    and keep a local copy if only found on gbdbLoc2.
+
+    This is similar but not the same as the UDC system in the kent C code, but
+    for small files and a complete read over it, the UDC system may be overkill
+    for Python.
+    """
+    fname = hGbdbReplace(fname)
+
+    if fname.startswith("http"):
+        # download to local disk; local filename is the hash of the URL
+        import hashlib
+        udcCacheDir = getUdcCacheDir()
+        m = hashlib.md5()
+        m.update(fname)
+        fileExt = splitext(fname)[-1]
+        tmpFname = join(udcCacheDir, "hgLibCache_"+m.hexdigest()+"."+fileExt)
+        if not isfile(tmpFname):
+            data = netUrlOpen(fname).read()
+            fh = open(tmpFname, "w")
+            fh.write(data)
+            fh.close()
+        fname = tmpFname
+
+    if fname.endswith(".gz"):
+        import gzip
+        fh = gzip.open(fname)
+    else:
+        fh = open(fname)
+
+    lines = fh.read().splitlines()
+    return lines
 
 def cgiString(name, default=None):
     " get named cgi variable as a string, like lib/cheapcgi.c "
