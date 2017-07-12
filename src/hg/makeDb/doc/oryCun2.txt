@@ -968,4 +968,29 @@ http://genome.crg.es/genepredictions/O.cuniculus/oryCun2/geneid_v1.4/oryCun2.gen
 # augustusGene:CDS 1.267%, geneid 1.539%, both 1.010%, cover 79.71%,
 #     enrich 51.80x
 
-##########################################################################
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-07-16 - Hiram)
+    mkdir /hive/data/genomes/oryCun2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/oryCun2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-tableName=cpgIslandExtUnmasked \
+	    -maskedSeq=/hive/data/genomes/oryCun2/oryCun2.unmasked.2bit \
+    -dbHost=hgwdev -smallClusterHub=ku -workhorse=hgwdev oryCun2) > do.log 2>&1
+    # real    24m54.858s
+
+    cat fb.oryCun2.cpgIslandExtUnmasked.txt
+    # 63694762 bases of 2604023284 (2.446%) in intersection
+
+#############################################################################
+# cpgIslands - (DONE - 2014-07-15 - Hiram)
+    mkdir /hive/data/genomes/oryCun2/bed/cpgIslands
+    cd /hive/data/genomes/oryCun2/bed/cpgIslands
+    time (doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -dbHost=hgwdev -smallClusterHub=ku -workhorse=hgwdev oryCun2) > do.log 2>&1
+    # real    3m31.486s
+
+    cat fb.oryCun2.cpgIslandExt.txt
+    # 47233011 bases of 2604023284 (1.814%) in intersection
+
+##############################################################################
