@@ -28,6 +28,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     dyStringAppendN(dna, dnaBuf->dna + sf->start - dnaBuf->chromStart, sf->end - sf->start);
     }
+slReverse(&lf->components);
 if (lf->orientation == -1)
     {
     reverseComplement(dna->string, strlen(dna->string));

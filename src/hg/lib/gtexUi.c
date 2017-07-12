@@ -574,19 +574,21 @@ else
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
     }
 printf("</div>");
-char *version = gtexVersion(tdb->table);
-struct gtexTissue *tissues = gtexGetTissues(version);
-struct slName *selectedValues = NULL;
-if (cartListVarExistsAnyLevel(cart, tdb, FALSE, GTEX_TISSUE_SELECT))
-    selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, GTEX_TISSUE_SELECT);
-char *selectType = cgiUsualString("tis", "table");
-if (sameString(selectType, "group"))
-    makeGroupedTissueCheckboxes(cartVar, tissues, selectedValues);
-else if (sameString(selectType, "table"))
-    makeTableTissueCheckboxes(cartVar, tissues, selectedValues, cart, track, version);
-else
-    makeAllTissueCheckboxes(cartVar, tissues, selectedValues);
-
+if (!isPopup)
+    {
+    char *version = gtexVersion(tdb->table);
+    struct gtexTissue *tissues = gtexGetTissues(version);
+    struct slName *selectedValues = NULL;
+    if (cartListVarExistsAnyLevel(cart, tdb, FALSE, GTEX_TISSUE_SELECT))
+        selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, GTEX_TISSUE_SELECT);
+    char *selectType = cgiUsualString("tis", "table");
+    if (sameString(selectType, "group"))
+        makeGroupedTissueCheckboxes(cartVar, tissues, selectedValues);
+    else if (sameString(selectType, "table"))
+        makeTableTissueCheckboxes(cartVar, tissues, selectedValues, cart, track, version);
+    else
+        makeAllTissueCheckboxes(cartVar, tissues, selectedValues);
+    }
 puts("\n</table>\n");
 cfgEndBox(boxed);
 }

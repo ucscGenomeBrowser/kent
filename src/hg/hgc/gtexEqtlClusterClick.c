@@ -63,7 +63,7 @@ char *geneName = eqtl->target;
 char *desc = getGeneDescription(conn, geneName);
 printf("<b>Gene: </b>");
 if (desc == NULL)
-    printf("%s<br>\n", geneName);
+    printf("%s\n", geneName);
 else
     {
     printf("<a target='_blank' href='%s?db=%s&hgg_gene=%s'>%s</a><br>\n",
@@ -77,13 +77,35 @@ safef(posLink, sizeof posLink,"<a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d<
             eqtl->chrom, eqtl->chromStart+1, eqtl->chromEnd);
 
 // TODO: Consider adding Ensembl gene ID, GENCODE biotype and class (as in gtexGene track)
-printf("<br><b>Variant:</b> %s\n", eqtl->name);
+char query[256];
+printf("<br><b>Variant: </b>%s ", eqtl->name);
+if (startsWith("rs", eqtl->name))
+    {
+    printDbSnpRsUrl(eqtl->name, "dbSNP");
+    sqlSafef(query, sizeof query, "SELECT alleleFreqs FROM snp147 WHERE name='%s'", eqtl->name);
+    char *freqs = sqlQuickString(conn, query);
+    printf("<br><b>Allele frequencies:</b> %s\n", freqs);
+    sqlSafef(query, sizeof query, "SELECT count(*) FROM gwasCatalog WHERE name='%s'", eqtl->name);
+    int count = sqlQuickNum(conn, query);
+    if (count)
+        {
+        sqlSafef(query, sizeof query, "SELECT trait FROM gwasCatalog WHERE name='%s' LIMIT 1", 
+                eqtl->name);
+        char *trait = sqlQuickString(conn, query);
+        printf("<br><b>GWAS disease or trait");
+        if (count > 1)
+            printf(" (1 of %d)", count);
+        printf(": </b>%s <a target='_blank' href='https://www.ebi.ac.uk/gwas/search?query=%s'>"
+                        "GWAS Catalog</a>\n", trait, eqtl->name);
+        }
+    }
+else
+    printf("%s\n", eqtl->name);
 
 printf("<br><b>Position:</b> %s\n", posLink);
 printf("<br><b>Score:</b> %d\n", eqtl->score);
 
 #define FLANK  1000 
-char query[256];
 sqlSafef(query, sizeof query, "SELECT MIN(chromStart) from %s WHERE target='%s'", 
             tdb->table, eqtl->target);
 start = sqlQuickNum(conn, query) - FLANK;
@@ -103,7 +125,7 @@ printf("<br><a target='_blank' href='https://www.gtexportal.org/home/bubbleHeatm
 printf("<br><b>Number of tissues with this eQTL:</b> %d\n", eqtl->expCount);
 hFreeConn(&conn);
 
-webNewSection("eQTL cluster details");
+webNewSection("eQTL Cluster Details");
 printf("<table id='eqtls' cellspacing=1 cellpadding=3>\n");
 printf("<style>#eqtls th {text-align: left; background-color: #F3E0BE;}</style>");
 printf("<tr><th>&nbsp;&nbsp;&nbsp;</th><th>Tissue</th><th>Effect &nbsp;&nbsp;</th><th>Probability </th></tr>\n");
