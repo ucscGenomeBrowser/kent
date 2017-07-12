@@ -10,6 +10,7 @@
 #include "hash.h"
 #include "obscure.h"
 #include "linefile.h"
+#include "sqlNum.h"
 
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
@@ -812,6 +813,35 @@ while ((c = *s) != 0)
         *s = '_';
     ++s;
     }
+}
+
+long long currentVmPeak()
+/* return value of peak Vm memory usage (if /proc/ business exists) */
+{
+long long vmPeak = 0;
+
+pid_t pid = getpid();
+char temp[256];
+safef(temp, sizeof(temp), "/proc/%d/status", (int) pid);
+struct lineFile *lf = lineFileMayOpen(temp, TRUE);
+if (lf)
+    {
+    char *line;
+    while (lineFileNextReal(lf, &line))
+	{	// typical line: 'VmPeak:     62646196 kB'
+		// seems to always be kB
+	if (stringIn("VmPeak", line))
+	    {
+	    char *words[3];
+	    chopByWhite(line, words, 3);
+	    vmPeak = sqlLongLong(words[1]);	// assume always 2nd word
+	    break;
+	    }
+	}
+    lineFileClose(&lf);
+    }
+
+return vmPeak;
 }
 
 void printVmPeak()
