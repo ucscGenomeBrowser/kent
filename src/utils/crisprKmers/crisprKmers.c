@@ -76,8 +76,8 @@ errAbort(
   "   -offTargets=<file> - output off target data to given file\n"
   "   -ranges=<file> - use specified bed3 file to limit which guides are\n"
   "                  - measured, only those with any overlap to these bed items.\n"
-  "   -memLimit=N - N number of gigabytes for each thread, default: 8\n"
-  "                 when memory size goes beyond N gB program will thread\n"
+  "   -memLimit=N - N number of gigabytes for each thread, default: no threading\n"
+  "               when memory size goes beyond N gB program will thread gB/N times\n"
   "   -dumpKmers=<file> - NOT VALID after scan of sequence, output kmers to file\n"
   "                     - process will exit after this, use -loadKmers to continue\n"
   "   -loadKmers=<file> - NOT VALID load kmers from previous scan of sequence from -dumpKmers"
@@ -91,7 +91,7 @@ static char *ranges = NULL;	/* use ranges <file> to limit scanning */
 static struct hash *rangesHash = NULL;	/* ranges into hash + binkeeper */
 static char *dumpKmers = NULL;	/* file name to write out kmers from scan */
 static char *loadKmers = NULL;	/* file name to read in kmers from previous scan */
-static int memLimit = 8;	/* gB limit before going into thread mode */
+static int memLimit = 0;	/* gB limit before going into thread mode */
 static int threadCount = 1;	/* will be adjusted depending upon vmPeak */
 
 /* Command line validation table. */
@@ -480,15 +480,11 @@ else
     }
 }
 
-static void countsOutput(struct crisprList *all)
+static void countsOutput(struct crisprList *all, FILE *bedFH)
 /* everything has been scanned and counted, print out all the data from arrays*/
 {
 long startTime = clock1000();
 long long itemsOutput = 0;
-
-FILE *bedFH = NULL;
-if (bedFileOut)
-    bedFH = mustOpen(bedFileOut, "w");
 
 struct crisprList *list;
 long long totalOut = 0;
@@ -533,7 +529,7 @@ if (bedFH)
 
 long elapsedMs = clock1000() - startTime;
 timingMessage("copyToArray:", itemsOutput, "items output", elapsedMs, "items/sec", "seconds/item");
-}	// static void countsOutput(struct crisprList *all)
+}	//	static void countsOutput(struct crisprList *all, FILE *bedFH)
 
 static struct crisprList *scanSequence(char *inFile)
 /* scan the given file, return list of crisprs */
@@ -804,9 +800,6 @@ long long totalCrisprsTarget = 0;
 long long totalCompares = 0;
 struct loopControl *control = NULL;
 AllocVar(control);
-if (threadCount > 1)
-    verbose(1, "# thread %d of %d threads running queryVsTarget()\n",
-	1+threadId, threadCount);
 
 long processStart = clock1000();
 long elapsedMs = 0;
@@ -815,7 +808,6 @@ for (qList = query; qList; qList = qList->next)
     {
     long long qCount = 0;
     totalCrisprsQuery += qList->crisprCount;
-    verbose(1, "# queryVsTarget %lld query crisprs on chrom %s\n", qList->crisprCount, qList->chrom);
     if (threadCount > 1)
 	{
 	setLoopEnds(control, qList->crisprCount, threadCount, threadId);
@@ -827,9 +819,10 @@ for (qList = query; qList; qList = qList->next)
 	control->listStart = 0;
 	control->listEnd = qList->crisprCount;
 	}
-    verbose(1, "# thread # %d of %d running %s items [ %lld : %lld )\n",
-	1 + threadId, threadCount, qList->chrom, control->listStart,
-	    control->listEnd);
+    verbose(1, "# thread %d of %d running %s %lld items [ %lld : %lld )\n",
+	1 + threadId, threadCount, qList->chrom,
+	    control->listEnd - control->listStart, control->listStart,
+		control->listEnd);
     totalCrisprsTarget += control->listEnd - control->listStart;
     for (qCount = control->listStart; qCount < control->listEnd; ++qCount)
 	{
@@ -1066,7 +1059,7 @@ for (pt = 0; pt < threadCount; ++pt)
     pthread_join(threads[pt], NULL);
 }
 
-static void crisprKmers(char *sequence)
+static void crisprKmers(char *sequence, FILE *bedFH)
 /* crisprKmers - find and annotate crispr sequences. */
 {
 struct crisprList *queryGuides = NULL;
@@ -1105,7 +1098,7 @@ if (verboseLevel() > 1)
     vmPeak = currentVmPeak();
     verbose(1, "# vmPeak after copyToArray: %lld kB\n", vmPeak);
     /* larger example: 62646196 kB */
-    if ((vmPeak >> 20) > memLimit)	// the >> 20 converts kB to gB
+    if ((memLimit > 0) && ((vmPeak >> 20) > memLimit))	// the >> 20 converts kB to gB
 	{
 	threadCount = 1 + ((vmPeak >> 20) / memLimit);
 	verbose(1, "# over %d Gb at %lld kB, threadCount: %d\n", memLimit, vmPeak, threadCount);
@@ -1121,17 +1114,17 @@ if (verboseLevel() > 1)
 	    }
 	/* then run up the query vs. itself avoiding self vs. self */
         queryVsSelf(queryGuides);
-        countsOutput(queryGuides);
+        countsOutput(queryGuides, bedFH);
         }
     else
         {
 	queryVsSelf(allGuides); /* run up all vs. all avoiding self vs. self */
-	countsOutput(allGuides);
+	countsOutput(allGuides, bedFH);
         }
 
     carefulClose(&offFile);
     }
-}	// static void crisprKmers(char *sequence)
+}	// static void crisprKmers(char *sequence, FILE *bedFH)
 
 int main(int argc, char *argv[])
 /* Process command line, initialize translation arrays and call the process */
@@ -1151,8 +1144,12 @@ ranges = optionVal("ranges", ranges);
 if (ranges)
     rangesHash = readRanges(ranges);
 
+FILE *bedFH = NULL;
+if (bedFileOut)
+    bedFH = mustOpen(bedFileOut, "w");
+
 initOrderedNtVal();	/* set up orderedNtVal[] */
-crisprKmers(argv[1]);
+crisprKmers(argv[1], bedFH);
 
 if (verboseLevel() > 1)
     printVmPeak();
