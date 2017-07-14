@@ -391,7 +391,6 @@ priority 11.5
 hapClusterHeight 78
 hapClusterEnabled off
 maxWindowToDraw 1000000
-release alpha,beta
 
 track nestedRepeats override
 group varRep
