@@ -4,7 +4,7 @@
  * See README in this or parent directory for licensing information. */
 
 /*  Theory of operation:
-  a. scan given sequence (2bit of fa or fa.gz file)
+  a. scan given sequence (2bit or fa or fa.gz file)
   b. record all quide sequences, both positive and negative strands,
      on a linked list structure, 2bit encoding of the A C G T bases,
      with PAM sequence, strand and start coordinates, one linked list
