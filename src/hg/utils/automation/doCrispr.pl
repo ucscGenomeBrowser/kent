@@ -166,7 +166,7 @@ sub doRanges {
 printf "# getting genes\\n" 1>&2
 hgsql $db -NB -e 'select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from '$geneTrack' where chrom not like "%_alt" and chrom not like "%hap%"; '  > genes.gp
 printf "# Number of transcripts: %d\\n" "`cat genes.gp | wc -l`" 1>&2
-printf "# break genes into exons and add 200 bp on each side\\n" 1>&2
+printf "# break genes into exons and add $exonShoulder bp on each side\\n" 1>&2
 genePredToBed genes.gp stdout | grep -v hap | grep -v chrUn \\
     | bedToExons stdin stdout \\
     | awk '{\$2=\$2-$exonShoulder; \$3=\$3+$exonShoulder; \$6="+"; print}' \\
