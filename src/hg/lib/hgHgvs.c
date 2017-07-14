@@ -2185,7 +2185,17 @@ else
         }
     struct hgvsChange *changeList = hgvsParseNucleotideChange(hgvs->changes, hgvs->type,
                                                               dyWarn);
-    if (dyStringIsNotEmpty(dyWarn))
+    if (changeList == NULL)
+        {
+        if (isEmpty(hgvs->changes))
+            dyStringPrintf(dyError, "HGVS term '%s' does not specify any sequence changes", term);
+        else if (dyStringIsNotEmpty(dyWarn))
+            dyStringPrintf(dyError, "Unable to parse HGVS description in '%s': %s", term,
+                           dyStringContents(dyWarn));
+        else
+            dyStringPrintf(dyError, "Unable to parse HGVS description in '%s'", term);
+        }
+    else if (dyStringIsNotEmpty(dyWarn))
         {
         dyStringPrintf(dyError, "Unable to parse HGVS description in '%s': %s",
                        term, dyStringContents(dyWarn));
