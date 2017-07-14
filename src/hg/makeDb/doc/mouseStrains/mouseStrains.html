@@ -1,55 +1,92 @@
 <h2>Description</h2>
 <p>
-An alignment track, or <em>snake</em> track, shows the relationship between the chosen browser genome, termed the reference (genome), and another genome, termed the query (genome).
-The <em>snake</em> display is capable of showing all possible types of structural rearrangement.
+An alignment track, or <em>snake</em> track, shows the relationship between the chosen browser
+genome, termed the reference (genome), and another genome, termed the query (genome). The
+<em>snake</em> display is capable of showing all possible types of structural rearrangement.</p>
 <p>
-The snake tracks in this hub show the alignment of all the assembled laboratory mouse strains with the reference mouse (mm10) as well as the reference rat (rn6).
-</p>
-</p>
+The snake tracks in this hub show the alignment of all the assembled laboratory mouse strains with
+the reference mouse (mm10) as well as the reference rat (rn6).</p>
 
 <h2>Display Convention and Configuration</h2>
 <p>
-In <em>full</em> display mode, a <em>snake</em> track can be decomposed into two primitive drawing elements, segments, which are the colored rectangles, and adjacencies, which are the lines connecting the segments. Segments represent subsequences of the query genome aligned to the given portion of the reference genome. Adjacencies represent the covalent bonds between the aligned subsequences of the query genome. Segments can be configured to be colored by chromosome, strand or left a single color under the <em>Select track Type</em>, <em>Alignments</em>, then <em>Block coloring method</em>.
-</p>
+In <em>full</em> display mode, a <em>snake</em> track can be decomposed into two primitive drawing
+elements, segments, which are the colored rectangles, and adjacencies, which are the lines
+connecting the segments. Segments represent subsequences of the query genome aligned to the given
+portion of the reference genome. Adjacencies represent the covalent bonds between the aligned
+subsequences of the query genome. Segments can be configured to be colored by chromosome, strand or
+left a single color under the <em>Select track Type</em>, <em>Alignments</em>, then
+<em>Block coloring method</em>.</p>
 <p>
-Red tick-marks within segments represent substitutions with respect to the reference, shown in windows of the reference of (by default) up to 50 kilo-bases. This default can be adjusted under <em>Select track Type</em>, <em>Alignments</em>, then <em>Maximum window size in which to show mismatches</em>. Zoomed in to the base-level these substitutions are labeled with the non-reference base.
-</p>
+Red tick-marks within segments represent substitutions with respect to the reference, shown in
+windows of the reference of (by default) up to 50 kilo-bases. This default can be adjusted under
+<em>Select track Type</em>, <em>Alignments</em>, then
+<em>Maximum window size in which to show mismatches</em>. Zoomed in to the base-level these
+substitutions are labeled with the non-reference base.</p>
 <p>
-An insertion in the reference relative to the query creates a gap between abutting segment sides that is connected by an adjacency. An insertion in the query relative to the reference is represented by an orange tick mark that splits a segment at the location the extra bases would be inserted. Simultaneous independent insertions in both query and reference look like an insertion in the reference relative to the query, except that the corresponding adjacency connecting the two segments is colored orange. More complex structural rearrangements create adjacencies that connect the sides of non-abutting segments in a natural fashion.
-</p>
+An insertion in the reference relative to the query creates a gap between abutting segment sides
+that is connected by an adjacency. An insertion in the query relative to the reference is
+represented by an orange tick mark that splits a segment at the location the extra bases would be
+inserted. Simultaneous independent insertions in both query and reference look like an insertion in
+the reference relative to the query, except that the corresponding adjacency connecting the two
+segments is colored orange. More complex structural rearrangements create adjacencies that connect
+the sides of non-abutting segments in a natural fashion.</p>
 <p>
-Duplications within the query genome create extra segments that overlap along the reference genome axis. Duplications within the reference imply self-alignments, intervals of the reference genome that align to other intervals of the reference genome. To show these self-alignments within the reference genome we draw colored coded sets of lines along the reference genome axis that indicate these self homologies, and align any query segments that align to these regions arbitrarily to just one copy of the reference self alignment.
-</p>
+Duplications within the query genome create extra segments that overlap along the reference genome
+axis. Duplications within the reference imply self-alignments, intervals of the reference genome
+that align to other intervals of the reference genome. To show these self-alignments within the
+reference genome we draw colored coded sets of lines along the reference genome axis that indicate
+these self homologies, and align any query segments that align to these regions arbitrarily to just
+one copy of the reference self alignment.</p>
 <p>
-The <em>pack</em> display option can be used to display a larger number of <em>snake</em> tracks in limited vertical browser. This mode eliminates the adjacencies from the display and forces the segments onto as few rows as possible, given the constraint of still showing duplications in the query sequence.
-</p>
+The <em>pack</em> display option can be used to display a larger number of <em>snake</em> tracks in
+limited vertical browser. This mode eliminates the adjacencies from the display and forces the
+segments onto as few rows as possible, given the constraint of still showing duplications in the
+query sequence.</p>
 <p>
-The <em>dense</em> display further eliminates these duplications so that each <em>snake</em> track is compactly represented along just one row.
-</p>
+The <em>dense</em> display further eliminates these duplications so that each <em>snake</em> track
+is compactly represented along just one row.</p>
 <p>
-To ensure that the <em>snake</em> alignments track loads quickly at any resolution, from windows showing individual bases up to entire scaffolds or chromosomes, the LOD (Levels-Of-Detail) algorithm (part of the HAL tools package) is used, which creates scaleable levels of detail for the alignments. The additional use of the hdf5 caching scheme further aides scaling.
-</p>
+To ensure that the <em>snake</em> alignments track loads quickly at any resolution, from windows
+showing individual bases up to entire scaffolds or chromosomes, the LOD (Levels-Of-Detail) algorithm
+(part of the HAL tools package) is used, which creates scaleable levels of detail for the
+alignments. The additional use of the hdf5 caching scheme further aides scaling.</p>
 <p>
-Various mouse overs are implemented and clicking on segments navigates to the corresponding region in the query genome, making it simple to instantly switch the alignment view between reference points.
-</p>
+Various mouse overs are implemented and clicking on segments navigates to the corresponding region
+in the query genome, making it simple to instantly switch the alignment view between reference
+points.</p>
 
 <h2>Methods</h2>
 <p>
-A <em>snake</em> is a way of viewing a set of pairwise gap-less alignments that may overlap on both the reference and query genomes. Alignments are always represented as being on the positive strand of the reference species, but can be on either strand on the query sequence.
-</p>
+A <em>snake</em> is a way of viewing a set of pairwise gap-less alignments that may overlap on both
+the reference and query genomes. Alignments are always represented as being on the positive strand
+of the reference species, but can be on either strand on the query sequence.</p>
 
 <p>
-A <em>snake</em> plot puts all the query segments within a reference chromosome range on a set of one or more levels. All the segments on a level are on the same strand, do not overlap in reference coordinate space, and are in the same order and orientation in both sequences. This is the same requirement as the alignments in a chain on the UCSC browser. Before the algorithm is started, all the segments are sorted by their starting coordinate on the query, and the current level is set to one. Then in a recursive fashion, the algorithm places the first segment on the current list on the current level, and then adds all the rest of the segments on the list that will fit onto the current level with the requirements that all the segments on a level are on the same strand, and that the proposed segment be non-overlapping and have a reference start address that is greater than the query end address of the previously added segment on that level. All segments that will not fit on the current level are then added to subsequent levels following the same rules. Once all the segments have been assigned a level, lines are drawn between the segments to show the adjacencies in the list when sorted by query start address.
-</p>
+A <em>snake</em> plot puts all the query segments within a reference chromosome range on a set of
+one or more levels. All the segments on a level are on the same strand, do not overlap in reference
+coordinate space, and are in the same order and orientation in both sequences. This is the same
+requirement as the alignments in a chain on the UCSC browser. Before the algorithm is started, all
+the segments are sorted by their starting coordinate on the query, and the current level is set to
+one. Then in a recursive fashion, the algorithm places the first segment on the current list on the
+current level, and then adds all the rest of the segments on the list that will fit onto the current
+level with the requirements that all the segments on a level are on the same strand, and that the
+proposed segment be non-overlapping and have a reference start address that is greater than the
+query end address of the previously added segment on that level. All segments that will not fit on
+the current level are then added to subsequent levels following the same rules. Once all the
+segments have been assigned a level, lines are drawn between the segments to show the adjacencies in
+the list when sorted by query start address.</p>
 
 <p>
-For this assembly hub, a progressiveCactus alignment was generated using the Genbank version of these assemblies. The reference mouse (mm10) as well as the reference rat (rn6) were included as well. Here is the guide tree for this alignment:
+For this assembly hub, a progressiveCactus alignment was generated using the Genbank version of
+these assemblies. The reference mouse (mm10) as well as the reference rat (rn6) were included as
+well. Here is the guide tree for this alignment:
 <p>
 
 <img src="http://hgwdev.cse.ucsc.edu/~ifiddes/mouse_genomes_data/mouse_tree.png" alt="Mouse Genomes Phylogeny" height="600">
 </p>
-Due to the highly similar nature of the laboratory mice strains, this tree was binarized as well as possible, but incomplete lineage sorting is prevalent and as a result the guide tree may not be correct in all regions.
-</p>
+Due to the highly similar nature of the laboratory mice strains, this tree was binarized as well as
+possible, but incomplete lineage sorting is prevalent and as a result the guide tree may not be
+correct in all regions.</p>
 
 <h2>Credits</h2>
 <p>
