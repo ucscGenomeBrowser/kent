@@ -6,7 +6,7 @@
 ##
 track wgEncodeGencodeVM11
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE VM11 (Ensembl 86)
 longLabel Gene Annotations from ENCODE/GENCODE Version M11 (Ensembl 86)
 group genes

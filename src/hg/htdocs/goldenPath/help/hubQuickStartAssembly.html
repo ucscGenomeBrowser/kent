@@ -157,9 +157,10 @@ target="_blank">blog post</a> by OpenHelix.</p>
 into your GBiB: 
 <code>ssh browser@localhost -p 1235</code>, using <code>browser</code> for the password.</p>
 <p>
-<strong>STEP 3.</strong> Navigate to the GBiB's folders directory and use sudo to wget this assembly
+<strong>STEP 3.</strong> Navigate to the GBiB's <code>/folders</code> directory and use sudo to wget this assembly
 hub:</p>
-<pre><code>sudo wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/</code></pre>
+<pre><code>cd /folders
+sudo wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/</code></pre>
 <p>
 <strong>STEP 4.</strong> You now have all the required files on your local machine and can load this
 plant assembly hub by using this URL and selecting it under the &quot;group&quot; category where
