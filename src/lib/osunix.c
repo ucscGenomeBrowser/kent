@@ -697,9 +697,7 @@ boolean maybeTouchFile(char *fileName)
 {
 if (fileExists(fileName))
     {
-    struct utimbuf ut;
-    ut.actime = ut.modtime = clock1();
-    int ret = utime(fileName, &ut);
+    int ret = utime(fileName, NULL);
     if (ret != 0)
 	{
 	warn("utime(%s) failed (ownership?)", fileName);
