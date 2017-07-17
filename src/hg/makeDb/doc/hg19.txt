@@ -32269,3 +32269,11 @@ TMPDIR=/dev/shm
     # real    1088m7.851s
 
 ##############################################################################
+# Snpedia (DONE - 2016-07-03 - Max) - pushed in July 2017
+cd /hive/data/genomes/hg19/bed/snpedia
+wget http://www.snpedia.com/files/gbrowse/SNPedia.gff
+python download.py
+python filterPages.py > goodPages.txt
+python makeBed.py
+hgLoadBed hg19 snpedia snpedia.bed 
+hgLoadSqlTab hg19 snpediaHtml snpediaHtml.sql snpedia.htmlTab 
