@@ -3775,8 +3775,12 @@ var popUp = {
             buttons: uiDialogButtons,
 
             // popup.ready() doesn't seem to work in open.
-            
-            open: function () {
+            open: function(event) {
+                // fix popup to a location -- near the top and somewhat centered on the browser image
+                $(event.target).parent().css('position', 'fixed');
+                $(event.target).parent().css('top', '18%');
+                $(event.target).parent().css('left', '30%');
+
                 if (!popUp.trackDescriptionOnly) {
                     $('#hgTrackUiDialog').find('.filterBy,.filterComp').each(
                         function(i) {
