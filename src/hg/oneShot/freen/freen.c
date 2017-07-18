@@ -11,6 +11,7 @@
 #include "jksql.h"
 #include "portable.h"
 #include "obscure.h"
+#include "jsonWrite.h"
 #include "csv.h"
 
 /* Command line validation table. */
@@ -27,16 +28,9 @@ errAbort("freen - test some hairbrained thing.\n"
 void freen(char *input)
 /* Test something */
 {
-uglyf("input is '%s'\n", input);
-if (csvNeedsParsing(input))
-    {
-    printf("Parses to:\n");
-    char *pt = input;
-    struct dyString *scratch = dyStringNew(0);
-    char *s;
-    while ((s = csvParseNext(&pt, scratch)) != NULL)
-	printf("'%s'\n", s);
-    }
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteDouble(jw, "num", 0.00000001);
+uglyf("%s\n", jw->dy->string);
 }
 
 int main(int argc, char *argv[])
