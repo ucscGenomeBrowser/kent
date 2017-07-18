@@ -552,7 +552,7 @@ while ((seq = dnaLoadNext(dl)) != NULL)
     if (startsWithNoCase("chrUn", seq->name) ||
          rStringIn("hap", seq->name) || rStringIn("_alt", seq->name) )
 	{
-	verbose(1, "# skip chrom: %s\n", seq->name);
+	verbose(4, "# skip chrom: %s\n", seq->name);
 	continue;
 	}
 
@@ -561,11 +561,13 @@ while ((seq = dnaLoadNext(dl)) != NULL)
     slAddHead(&listReturn, oneList);
     totalCrisprs += oneList->crisprCount;
     elapsedMs = clock1000() - startTime;
-    timingMessage(seq->name, oneList->crisprCount, "crisprs", elapsedMs, "crisprs/sec", "seconds/crispr");
+    if (verboseLevel() > 3)
+	timingMessage(seq->name, oneList->crisprCount, "crisprs", elapsedMs, "crisprs/sec", "seconds/crispr");
     }
 
 elapsedMs = clock1000() - scanStart;
 timingMessage("scanSequence", totalCrisprs, "total crisprs", elapsedMs, "crisprs/sec", "seconds/crispr");
+
 return listReturn;
 }	/*	static crisprList *scanSequence(char *inFile)	*/
 
@@ -671,10 +673,16 @@ else if (*allReference != all)
 return listReturn;
 }	//	static crisprList *rangeExtraction(crisprList *all)
 
-static double hitScoreM[20] = {0,0,0.014,0,0,0.395,0.317,0,0.389,0.079,0.445,0.508,0.613,0.851,0.732,0.828,0.615,0.804,0.685,0.583};
+static double hitScoreM[20] =
+{
+    0,0,0.014,0,0,
+    0.395,0.317,0,0.389,0.079,
+    0.445,0.508,0.613,0.851,0.732,
+    0.828,0.615,0.804,0.685,0.583
+};
 
 static double calcHitScore(long long sequence1, long long sequence2)
-/* calcHitScore - from Max' crispor.py script and paper:
+/* calcHitScore - from Max's crispor.py script and paper:
  *    https://www.ncbi.nlm.nih.gov/pubmed/27380939 */
 {
 double score1 = 1.0;
@@ -718,27 +726,189 @@ if (mmCount > 0)
 return (score1 * score2 * score3 * 100);
 } //	static double calcHitScore(long long sequence1, long long sequence2)
 
-#ifdef NOT
+static double pamScores[4][4] = {
+    { 0.0, 0.0, 0.25925926, 0.0 },	/* A[ACGT] */
+    { 0.0, 0.0, 0.107142857, 0.0 },	/* C[ACGT] */
+    { 0.069444444, 0.022222222, 1.0, 0.016129032 },	/* G[ACGT] */
+    { 0.0, 0.0, 0.03896104, 0.0 }	/* T[ACGT] */
+};
+
+/* the [20] index is the position in the string
+ * the first [4] index is the query base at that position
+ * the second [4] index is the target base at that position
+ */
+static double cfdMmScores[20][4][4] =
+{
+    {	/* 0 */
+	{ -1, 0.857142857, 1.0, 1.0 },
+	{ 1.0, -1, 0.913043478, 1.0 },
+	{ 0.9, 0.714285714, -1, 1.0 },
+	{ 1.0, 0.857142857, 0.956521739, -1 },
+    },
+    {	/* 1 */
+	{ -1, 0.785714286, 0.8, 0.727272727 },
+	{ 0.727272727, -1, 0.695652174, 0.909090909 },
+	{ 0.846153846, 0.692307692, -1, 0.636363636 },
+	{ 0.846153846, 0.857142857, 0.84, -1 },
+    },
+    {	/* 2 */
+	{ -1, 0.428571429, 0.611111111, 0.705882353 },
+	{ 0.866666667, -1, 0.5, 0.6875 },
+	{ 0.75, 0.384615385, -1, 0.5 },
+	{ 0.714285714, 0.428571429, 0.5, -1 },
+    },
+    {	/* 3 */
+	{ -1, 0.352941176, 0.625, 0.636363636 },
+	{ 0.842105263, -1, 0.5, 0.8 },
+	{ 0.9, 0.529411765, -1, 0.363636364 },
+	{ 0.476190476, 0.647058824, 0.625, -1 },
+    },
+    {	/* 4 */
+	{ -1, 0.5, 0.72, 0.363636364 },
+	{ 0.571428571, -1, 0.6, 0.636363636 },
+	{ 0.866666667, 0.785714286, -1, 0.3 },
+	{ 0.5, 1.0, 0.64, -1 },
+    },
+    {	/* 5 */
+	{ -1, 0.454545455, 0.714285714, 0.714285714 },
+	{ 0.928571429, -1, 0.5, 0.928571429 },
+	{ 1.0, 0.681818182, -1, 0.666666667 },
+	{ 0.866666667, 0.909090909, 0.571428571, -1 },
+    },
+    {	/* 6 */
+	{ -1, 0.4375, 0.705882353, 0.4375 },
+	{ 0.75, -1, 0.470588235, 0.8125 },
+	{ 1.0, 0.6875, -1, 0.571428571 },
+	{ 0.875, 0.6875, 0.588235294, -1 },
+    },
+    {	/* 7 */
+	{ -1, 0.428571429, 0.733333333, 0.428571429 },
+	{ 0.65, -1, 0.642857143, 0.875 },
+	{ 1.0, 0.615384615, -1, 0.625 },
+	{ 0.8, 1.0, 0.733333333, -1 },
+    },
+    {	/* 8 */
+	{ -1, 0.571428571, 0.666666667, 0.6 },
+	{ 0.857142857, -1, 0.619047619, 0.875 },
+	{ 0.642857143, 0.538461538, -1, 0.533333333 },
+	{ 0.928571429, 0.923076923, 0.619047619, -1 },
+    },
+    {	/* 9 */
+	{ -1, 0.333333333, 0.555555556, 0.882352941 },
+	{ 0.866666667, -1, 0.388888889, 0.941176471 },
+	{ 0.933333333, 0.4, -1, 0.8125 },
+	{ 0.857142857, 0.533333333, 0.5, -1 },
+    },
+    {	/* 10 */
+	{ -1, 0.4, 0.65, 0.307692308 },
+	{ 0.75, -1, 0.25, 0.307692308 },
+	{ 1.0, 0.428571429, -1, 0.384615385 },
+	{ 0.75, 0.666666667, 0.4, -1 },
+    },
+    {	/* 11 */
+	{ -1, 0.263157895, 0.722222222, 0.333333333 },
+	{ 0.714285714, -1, 0.444444444, 0.538461538 },
+	{ 0.933333333, 0.529411765, -1, 0.384615385 },
+	{ 0.8, 0.947368421, 0.5, -1 },
+    },
+    {	/* 12 */
+	{ -1, 0.210526316, 0.652173913, 0.3 },
+	{ 0.384615385, -1, 0.136363636, 0.7 },
+	{ 0.923076923, 0.421052632, -1, 0.3 },
+	{ 0.692307692, 0.789473684, 0.260869565, -1 },
+    },
+    {	/* 13 */
+	{ -1, 0.214285714, 0.466666667, 0.533333333 },
+	{ 0.35, -1, 0.0, 0.733333333 },
+	{ 0.75, 0.428571429, -1, 0.266666667 },
+	{ 0.619047619, 0.285714286, 0.0, -1 },
+    },
+    {	/* 14 */
+	{ -1, 0.272727273, 0.65, 0.2 },
+	{ 0.222222222, -1, 0.05, 0.066666667 },
+	{ 0.941176471, 0.272727273, -1, 0.142857143 },
+	{ 0.578947368, 0.272727273, 0.05, -1 },
+    },
+    {	/* 15 */
+	{ -1, 0.0, 0.192307692, 0.0 },
+	{ 1.0, -1, 0.153846154, 0.307692308 },
+	{ 1.0, 0.0, -1, 0.0 },
+	{ 0.909090909, 0.666666667, 0.346153846, -1 },
+    },
+    {	/* 16 */
+	{ -1, 0.176470588, 0.176470588, 0.133333333 },
+	{ 0.466666667, -1, 0.058823529, 0.466666667 },
+	{ 0.933333333, 0.235294118, -1, 0.25 },
+	{ 0.533333333, 0.705882353, 0.117647059, -1 },
+    },
+    {	/* 17 */
+	{ -1, 0.19047619, 0.4, 0.5 },
+	{ 0.538461538, -1, 0.133333333, 0.642857143 },
+	{ 0.692307692, 0.476190476, -1, 0.666666667 },
+	{ 0.666666667, 0.428571429, 0.333333333, -1 },
+    },
+    {	/* 18 */
+	{ -1, 0.206896552, 0.375, 0.538461538 },
+	{ 0.428571429, -1, 0.125, 0.461538462 },
+	{ 0.714285714, 0.448275862, -1, 0.666666667 },
+	{ 0.285714286, 0.275862069, 0.25, -1 },
+    },
+    {	/* 19 */
+	{ -1, 0.227272727, 0.764705882, 0.6 },
+	{ 0.5, -1, 0.058823529, 0.3 },
+	{ 0.9375, 0.428571429, -1, 0.7 },
+	{ 0.5625, 0.090909091, 0.176470588, -1 },
+    },
+};
+
+/* Cutting Frequency Determination */
 static double calcCfdScore(long long sequence1, long long sequence2)
-/* calcCfdScore - from Max' crispor.py script and paper:
+/* calcCfdScore - from cfd_score_calculator.py script and paper:
  *    https://www.ncbi.nlm.nih.gov/pubmed/27380939 */
 {
-return 0.0;
+double score = 1.0;
+/* the XOR determine differences in two sequences, the
+ * shift right 6 removes the PAM sequence and
+ * the 'fortyBits &' eliminates the negativeStrand bit
+ */
+long long misMatch = fortyBits & ((sequence1 ^ sequence2) >> 6);
+long long misMatchBitMask = 0xc000000000;
+long long twoBitMask = 0x300000000000;
+int shiftRight = 44;	/* to move the 2bits to bits 1,0 */
+int index = 0;
+
+while (misMatchBitMask)
+    {
+    if (misMatchBitMask & misMatch)
+	{
+        int queryIndex = (sequence1 & twoBitMask) >> shiftRight;
+        int targetIndex = (sequence2 & twoBitMask) >> shiftRight;
+	score *= cfdMmScores[index][queryIndex][targetIndex];
+	}
+    twoBitMask >>= 2;
+    misMatchBitMask >>= 2;
+    shiftRight -= 2;
+    ++index;
+    }
+int pam1 = (sequence2 & 0xc) >> 2;
+int pam2 = (sequence2 & 0x3);
+score *= pamScores[pam1][pam2];
+
+return score;
 }	// static double calcCfdScore(long long sequence1, long long sequence2)
-#endif
 
 static void misMatchString(char *stringReturn, long long misMatch)
 /* return ascii string ...*.....*.*.....*.. to indicate mis matches */
 {
 int i = 0;
-long long bitMask = 0xc000000000;
-while (bitMask)
+long long twoBitMask = 0xc000000000;
+while (twoBitMask)
     {
     stringReturn[i] = '.';
-    if (bitMask & misMatch)
+    if (twoBitMask & misMatch)
 	stringReturn[i] = '*';
     ++i;
-    bitMask >>= 2;
+    twoBitMask >>= 2;
     }
 stringReturn[i] = 0;
 }	// static void misMatchString(char *returnString, long long misMatch)
@@ -768,18 +938,18 @@ if (offFile)
         {
         double hitScore =
 		calcHitScore(query->sequence[qIndex], target->sequence[tIndex]);
-//        double cfdScore =
-//		calcCfdScore(query->sequence[qIndex], target->sequence[tIndex]);
+        double cfdScore =
+		calcCfdScore(query->sequence[qIndex], target->sequence[tIndex]);
         misMatchString(misMatch, twoBitMisMatch);
         kmerValToString(queryString, query->sequence[qIndex], pamSize);
         kmerValToString(targetString, target->sequence[tIndex], pamSize);
 	kmerPAMString(queryPAM, query->sequence[qIndex]);
 	kmerPAMString(targetPAM, target->sequence[tIndex]);
-        fprintf(offFile, "%s:%lld %c %s%s %s%s %s %d %.8f\t%s:%lld %c\n",
+        fprintf(offFile, "%s:%lld %c %s%s %s%s %s %d %.8f %.8f\t%s:%lld %c\n",
 	    query->chrom, query->start[qIndex],
 		negativeStrand & query->sequence[qIndex] ? '-' : '+',
                 queryString, queryPAM, targetString, targetPAM,
-                misMatch, bitsOn, hitScore, target->chrom,
+                misMatch, bitsOn, hitScore, cfdScore, target->chrom,
 		target->start[tIndex],
 		negativeStrand & target->sequence[tIndex] ? '-' : '+');
         }

@@ -1,0 +1,68 @@
+track gtexExpr
+release alpha
+superTrack on show 
+type bigBarChart
+group expression
+shortLabel GTEx
+longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
+
+	track gtexGene
+    superTrack gtexExpr pack
+	release alpha
+	parent gtexExpr
+	type bed 6 +
+	shortLabel GTEx Gene
+	longLabel Gene expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
+	html gtexExpr
+	group expression
+	visibility pack
+	priority 10.13
+	maxItems 200
+
+	searchTable gtexGene
+	query select chrom, chromStart, chromEnd, geneId from %s where geneId like '%s%%'
+	termRegex gtex:ENSG[0-9]+(\.[0-9]+)?
+	termPrefix gtex:
+	shortCircuit 1
+
+	# Gtex transcription expression by median  
+	track gtexTranscExpr
+	parent gtexExpr
+	release alpha
+	type bigBarChart
+	maxLimit 8000
+	barChartLabel Tissue types
+	barChartUnit TPM
+	# Get the barChartLabels from the last line in the bed file.  
+	barChartBars \
+			Adipose-Subcutaneous Adipose-Visceral_(Omentum) Adrenal_Gland Artery-Aorta \
+			Artery-Coronary Artery-Tibial Bladder Brain-Amygdala Brain-Anterior_cingulate_cortex_(BA24) \
+			Brain-Caudate_(basal_ganglia) Brain-Cerebellar_Hemisphere Brain-Cerebellum Brain-Cortex \
+			Brain-Frontal_Cortex_(BA9) Brain-Hippocampus Brain-Hypothalamus \
+			Brain-Nucleus_accumbens_(basal_ganglia) Brain-Putamen_(basal_ganglia) \
+			Brain-Spinal_cord_(cervical_c-1) Brain-Substantia_nigra Breast-Mammary_Tissue \
+			Cells-EBV-transformed_lymphocytes Cells-Transformed_fibroblasts Cervix-Ectocervix \
+			Cervix-Endocervix Colon-Sigmoid Colon-Transverse Esophagus-Gastroesophageal_Junction \
+			Esophagus-Mucosa Esophagus-Muscularis Fallopian_Tube Heart-Atrial_Appendage \
+			Heart-Left_Ventricle Kidney-Cortex Liver Lung Minor_Salivary_Gland Muscle-Skeletal \
+			Nerve-Tibial Ovary Pancreas Pituitary Prostate Skin-Not_Sun_Exposed_(Suprapubic) \
+			Skin-Sun_Exposed_(Lower_leg) Small_Intestine-Terminal_Ileum Spleen Stomach Testis \
+			Thyroid Uterus Vagina Whole_Blood 
+	barChartColors \
+			\#FFA54F #EE9A00 #8FBC8F #8B1C62 #EE6A50 #FF0000 #CDB79E #EEEE00 \
+			\#EEEE00 #EEEE00 #EEEE00 #EEEE00 #EEEE00 #EEEE00 #EEEE00 #EEEE00 \
+			\#EEEE00 #EEEE00 #EEEE00 #EEEE00 #00CDCD #EE82EE #9AC0CD #EED5D2 \
+			\#EED5D2 #CDB79E #EEC591 #8B7355 #8B7355 #CDAA7D #EED5D2 #B452CD \
+			\#7A378B #CDB79E #CDB79E #9ACD32 #CDB79E #7A67EE #FFD700 #FFB6C1 \
+			\#CD9B1D #B4EEB4 #D9D9D9 #3A5FCD #1E90FF #CDB79E #CDB79E #FFD39B \
+			\#A6A6A6 #008B45 #EED5D2 #EED5D2 #FF00FF 
+	barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/cleanGtexMatrix.tab
+	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/cleanGtexSamples.tab
+	barChartMetric median
+	shortLabel GTEx Transc
+	longLabel Transcript expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
+	defaultLabelFields name2
+	labelFields name2, name
+	group expression
+	bigDataUrl /gbdb/hgFixed/human/expMatrix/gtexTranscExprHg19.bb
+	html gtexExpr
