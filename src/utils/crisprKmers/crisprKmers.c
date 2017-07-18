@@ -156,6 +156,7 @@ struct crisprList
     long long *sequence;	/* array of the sequences */
     long long *start;		/* array of the starts */
     int **offBy;		/* offBy[5][n] */
+    float *mitSum;		/* accumulating sum of MIT scores */
     };
 
 struct threadControl
@@ -183,6 +184,11 @@ struct loopControl
 #define G_BASE	2
 #define T_BASE	3
 #define U_BASE	3
+#define endsGG	((G_BASE << 2) | G_BASE)
+#define endsAG	((A_BASE << 2) | G_BASE)
+#define beginsCT	((long long)((C_BASE << 2) | T_BASE) << 42)
+#define beginsCC	((long long)((C_BASE << 2) | C_BASE) << 42)
+
 static int orderedNtVal[256];	/* values in alpha order: ACGT 00 01 10 11 */
 				/* for easier sorting and complementing */
 static char bases[4];  /* for binary to ascii conversion */
@@ -359,6 +365,8 @@ for (cl = list; cl; cl = cl->next)
     int r = 0;
     for (r = 0; r < 5; ++r)
         cl->offBy[r] = (int *)needLargeZeroedMem(memSize);
+    memSize = cl->crisprCount * sizeof(float);
+    cl->mitSum = (float *)needLargeMem(memSize);
 
     long long i = 0;
     struct crispr *c = NULL;
@@ -367,6 +375,7 @@ for (cl = list; cl; cl = cl->next)
 	++itemsCopied;
         cl->sequence[i] = c->sequence;
         cl->start[i] = c->start;
+        cl->mitSum[i] = 0.0;
 	++i;
         }
     }
@@ -388,15 +397,7 @@ long long startGap = 0;
 long long gapCount = 0;
 int kmerLength = 0;
 long long kmerVal = 0;
-long long endsAG = (A_BASE << 2) | G_BASE;
-long long endsGG = (G_BASE << 2) | G_BASE;
-long long beginsCT = (long long)((C_BASE << 2) | T_BASE) << 42;
-long long beginsCC = (long long)((C_BASE << 2) | C_BASE) << 42;
 long long reverseMask = (long long)0xf << 42;
-verbose(4, "#   endsAG: %032llx\n", endsAG);
-verbose(4, "#   endsGG: %032llx\n", endsGG);
-verbose(4, "# beginsCT: %032llx\n", beginsCT);
-verbose(4, "# beginsCC: %032llx\n", beginsCC);
 verbose(4, "#  46 bits: %032llx\n", (long long) fortySixBits);
 
 dna=seq->dna;
@@ -417,7 +418,8 @@ for (i=0; i < seq->size; ++i)
                 oneCrispr->sequence = kmerVal;
                 slAddHead(&crisprSet, oneCrispr);
                 }
-	    if ((beginsCT == (kmerVal & reverseMask)) || (beginsCC == (kmerVal & reverseMask)))
+	    if ((beginsCT == (kmerVal & reverseMask))
+		|| (beginsCC == (kmerVal & reverseMask)))
                 {	/* have match for negative strand */
                 struct crispr *oneCrispr = NULL;
                 AllocVar(oneCrispr);
@@ -506,7 +508,7 @@ for (list = all; list; list = list->next)
 	long long txStart = list->start[c] + negativeOffset;
 	long long txEnd = txStart + guideSize;
 
-        int totalOffs = list->offBy[0][c] + list->offBy[1][c] +
+        int mitScoreCount = + list->offBy[1][c] +
 	    list->offBy[2][c] + list->offBy[3][c] + list->offBy[4][c];
 
         char *color = itemColor(list->offBy, c);
@@ -515,14 +517,13 @@ for (list = all; list; list = list->next)
         char pamString[33];
         kmerPAMString(pamString, list->sequence[c]);
 
-        if (0 == totalOffs)
-verbose(1, "# PERFECT score %s:%lld %c\t%s\n", list->chrom, list->start[c], strand, kmerString);
-
 	if (bedFH)
-	    fprintf(bedFH, "%s\t%lld\t%lld\t%d,%d,%d,%d,%d\t%d\t%c\t%lld\t%lld\t%s\t%s\t%s\t%s\t%s\t%d\t%d\t%d\t%d\n", list->chrom, list->start[c], list->start[c]+pamSize+guideSize, list->offBy[0][c], list->offBy[1][c], list->offBy[2][c], list->offBy[3][c], list->offBy[4][c], list->offBy[0][c], strand, txStart, txEnd, color, color, color, kmerString, pamString, list->offBy[1][c], list->offBy[2][c], list->offBy[3][c], list->offBy[4][c]);
-
-//        if (list->offBy[0][c])
-//           verbose(3, "# array identical: %d %s:%lld %c\t%s\n", list->offBy[0][c], list->chrom, list->start[c], strand, kmerString);
+	    {
+	    long mitScore = 0;
+            if (mitScoreCount > 0)  /* note: interger <- float conversion  */
+		mitScore = roundf((list->mitSum[c] / (float) mitScoreCount));
+	    fprintf(bedFH, "%s\t%lld\t%lld\t%d,%d,%d,%d,%d\t%d\t%c\t%lld\t%lld\t%s\t%s\t%s\t%ld\t%d\t%d\t%d\t%d\n", list->chrom, list->start[c], list->start[c]+pamSize+guideSize, list->offBy[0][c], list->offBy[1][c], list->offBy[2][c], list->offBy[3][c], list->offBy[4][c], list->offBy[0][c], strand, txStart, txEnd, color, kmerString, pamString, mitScore, list->offBy[1][c], list->offBy[2][c], list->offBy[3][c], list->offBy[4][c]);
+	    }
 	++totalOut;
 	}
     }
@@ -673,7 +674,7 @@ else if (*allReference != all)
 return listReturn;
 }	//	static crisprList *rangeExtraction(crisprList *all)
 
-static double hitScoreM[20] =
+static float hitScoreM[20] =
 {
     0,0,0.014,0,0,
     0.395,0.317,0,0.389,0.079,
@@ -681,11 +682,11 @@ static double hitScoreM[20] =
     0.828,0.615,0.804,0.685,0.583
 };
 
-static double calcHitScore(long long sequence1, long long sequence2)
+static float calcHitScore(long long sequence1, long long sequence2)
 /* calcHitScore - from Max's crispor.py script and paper:
  *    https://www.ncbi.nlm.nih.gov/pubmed/27380939 */
 {
-double score1 = 1.0;
+float score1 = 1.0;
 int mmCount = 0;
 int lastMmPos = -1;
 /* the XOR determines differences in two sequences, the shift
@@ -713,20 +714,20 @@ for (pos = 0; pos < guideSize; ++pos)
     misMatch >>= 2;
     }
 
-double score2 = 1.0;
+float score2 = 1.0;
 if (distCount > 1)
     {
-    double avgDist = (double)distSum / distCount;
+    float avgDist = (float)distSum / distCount;
     score2 = 1.0 / (((19-avgDist)/19.0) * 4 + 1);
     }
-double score3 = 1.0;
+float score3 = 1.0;
 if (mmCount > 0)
     score3 = 1.0 / (mmCount * mmCount);
 
 return (score1 * score2 * score3 * 100);
-} //	static double calcHitScore(long long sequence1, long long sequence2)
+} //	static float calcHitScore(long long sequence1, long long sequence2)
 
-static double pamScores[4][4] = {
+static float pamScores[4][4] = {
     { 0.0, 0.0, 0.25925926, 0.0 },	/* A[ACGT] */
     { 0.0, 0.0, 0.107142857, 0.0 },	/* C[ACGT] */
     { 0.069444444, 0.022222222, 1.0, 0.016129032 },	/* G[ACGT] */
@@ -737,7 +738,7 @@ static double pamScores[4][4] = {
  * the first [4] index is the query base at that position
  * the second [4] index is the target base at that position
  */
-static double cfdMmScores[20][4][4] =
+static float cfdMmScores[20][4][4] =
 {
     {	/* 0 */
 	{ -1, 0.857142857, 1.0, 1.0 },
@@ -862,11 +863,11 @@ static double cfdMmScores[20][4][4] =
 };
 
 /* Cutting Frequency Determination */
-static double calcCfdScore(long long sequence1, long long sequence2)
+static float calcCfdScore(long long sequence1, long long sequence2)
 /* calcCfdScore - from cfd_score_calculator.py script and paper:
  *    https://www.ncbi.nlm.nih.gov/pubmed/27380939 */
 {
-double score = 1.0;
+float score = 1.0;
 /* the XOR determine differences in two sequences, the
  * shift right 6 removes the PAM sequence and
  * the 'fortyBits &' eliminates the negativeStrand bit
@@ -895,7 +896,7 @@ int pam2 = (sequence2 & 0x3);
 score *= pamScores[pam1][pam2];
 
 return score;
-}	// static double calcCfdScore(long long sequence1, long long sequence2)
+}	// static float calcCfdScore(long long sequence1, long long sequence2)
 
 static void misMatchString(char *stringReturn, long long misMatch)
 /* return ascii string ...*.....*.*.....*.. to indicate mis matches */
@@ -918,6 +919,23 @@ static void recordOffTargets(struct crisprList *query,
 	long long tIndex, long long twoBitMisMatch)
 /* bitsOn is from 1 to 4, record this match when less than 1000 total */
 {
+float mitScore =
+    calcHitScore(query->sequence[qIndex], target->sequence[tIndex]);
+float cfdScore =
+    calcCfdScore(query->sequence[qIndex], target->sequence[tIndex]);
+
+/* Note from Max's script:
+ *	this is a heuristic based on the guideSeq data where alternative
+ *	PAMs represent only ~10% of all cleaveage events.
+ *	We divide the MIT score by 5 to make sure that these off-targets
+ *	are not ranked among the top but still appear in the list somewhat
+ */
+if ( (endsGG == (query->sequence[qIndex] & 0xf)) &&
+	(endsGG != (target->sequence[tIndex] & 0xf) ) )
+    mitScore *= 0.2;
+
+query->mitSum[qIndex] += mitScore;
+
 if (query->offBy[0][qIndex] ) // no need to accumulate if 0 mismatch > 0
     return;
 
@@ -936,10 +954,6 @@ if (offFile)
 
     if (bitsOnSum < 1000)	// could be command line option limit
         {
-        double hitScore =
-		calcHitScore(query->sequence[qIndex], target->sequence[tIndex]);
-        double cfdScore =
-		calcCfdScore(query->sequence[qIndex], target->sequence[tIndex]);
         misMatchString(misMatch, twoBitMisMatch);
         kmerValToString(queryString, query->sequence[qIndex], pamSize);
         kmerValToString(targetString, target->sequence[tIndex], pamSize);
@@ -949,7 +963,7 @@ if (offFile)
 	    query->chrom, query->start[qIndex],
 		negativeStrand & query->sequence[qIndex] ? '-' : '+',
                 queryString, queryPAM, targetString, targetPAM,
-                misMatch, bitsOn, hitScore, cfdScore, target->chrom,
+                misMatch, bitsOn, mitScore, cfdScore, target->chrom,
 		target->start[tIndex],
 		negativeStrand & target->sequence[tIndex] ? '-' : '+');
         }
