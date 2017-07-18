@@ -2498,7 +2498,7 @@ shortLabel GTEx eQTL Clusters
 longLabel Expression QTL Clusters in 44 Tissues from GTEx (midpoint release, V6)
 group expression
 
-#include gtexEqtl.ra
+include gtexEqtl.ra
 
 searchTable peptideAtlas2014
 searchType bed
