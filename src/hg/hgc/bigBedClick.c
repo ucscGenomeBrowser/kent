@@ -201,7 +201,7 @@ static void seekAndPrintTable(char *url, off_t offset, struct slPair *extraField
 /* seek to 0 at url, get headers, then seek to offset, read tab-sep fields and output 
  * (extraFields are needed for some special field handlers) */
 {
-char *detailsUrl = replaceChars(url, "$db", database);
+char *detailsUrl = hReplaceGbdb(replaceChars(url, "$db", database));
 
 // open the URL
 struct lineFile *lf = lineFileUdcMayOpen(detailsUrl, TRUE);
