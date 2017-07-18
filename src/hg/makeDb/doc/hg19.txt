@@ -32167,13 +32167,27 @@ EOF
 
 
 ##############################################################################
-# SNP150 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 5/8/17 angie)
+# SNP150 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 5/8/17, REDONE 7/7/17 angie)
     # Redmine #19202
+    # Redone 7/6/18 to use latest chimp & macaque assemblies
     screen -S ortho -t ortho
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 150 -debug
-# *** Steps were performed in /hive/data/genomes/hg19/bed/snp150Ortho.2017-05-08
-    cd /hive/data/genomes/hg19/bed/snp150Ortho.2017-05-08
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp150Ortho.2017-07-06
+    cd /hive/data/genomes/hg19/bed/snp150Ortho.2017-07-06
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 150 \
+      >>& do.log & tail -f do.log
+    # Oops, liftOver cluster run crashed because there was no hg19ToRheMac8 liftover file yet -
+    # added below.
+    ssh ku
+    cd /hive/data/genomes/hg19/bed/snp150Ortho.2017-07-06/run.liftOver
+    para push -retries=5
+    # wait for completion
+    para time >>& ../do.log
+    logout
+    # Continue at next step
+    cd /hive/data/genomes/hg19/bed/snp150Ortho.2017-07-06
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 150 \
+      -buildDir `pwd` -continue join \
       >>& do.log & tail -f do.log
 # *** All done!
 
@@ -32189,4 +32203,77 @@ EOF
       >>& do.log & tail -f do.log
 # *** All done!
 
+
 ##############################################################################
+# LASTZ human/hg19 Tree chimp/rheMac8 - (DONE - 2017-07-08 - Angie)
+    mkdir /hive/data/genomes/hg19/bed/lastzRheMac8.2017-07-06
+    cd /hive/data/genomes/hg19/bed/lastzRheMac8.2017-07-06
+
+    printf '# human vs macaca mulatta
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Macaca mulatta rheMac8
+SEQ2_DIR=/hive/data/genomes/rheMac8/rheMac8.2bit
+SEQ2_LEN=/hive/data/genomes/rheMac8/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=600
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzRheMac8.2017-07-06
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    # real    243m19.420s
+
+    cat fb.hg19.chainRheMac8Link.txt
+    # 2508296679 bases of 2897316137 (86.573%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg19 rheMac8) > rbest.log 2>&1 &
+    # real    534m6.491s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/rheMac8/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rheMac8/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzRheMac8.2017-07-06/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real    268m2.274s
+
+    cat fb.rheMac8.chainHg19Link.txt
+    # 2495454040 bases of 3142093174 (79.420%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rheMac8 hg19) > rbest.log 2>&1
+    # real    1088m7.851s
+
+##############################################################################
+# Snpedia (DONE - 2016-07-03 - Max) - pushed in July 2017
+cd /hive/data/genomes/hg19/bed/snpedia
+wget http://www.snpedia.com/files/gbrowse/SNPedia.gff
+python download.py
+python filterPages.py > goodPages.txt
+python makeBed.py
+hgLoadBed hg19 snpedia snpedia.bed 
+hgLoadSqlTab hg19 snpediaHtml snpediaHtml.sql snpedia.htmlTab 

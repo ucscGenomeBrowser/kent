@@ -525,7 +525,7 @@ void gtexEqtlProbability(struct cart *cart, char *track, struct trackDb *tdb)
 char cartVar[1024];
 puts("<b>Probability minimum:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_EQTL_PROBABILITY);
-double probMin = cartCgiUsualDouble(cart, cartVar, 0);
+double probMin = cartCgiUsualDouble(cart, cartVar, GTEX_EQTL_PROBABILITY_DEFAULT);
 cgiMakeDoubleVar(cartVar, probMin, 3);
 printf(" (range 0-1.0)\n");
 }
@@ -574,19 +574,21 @@ else
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
     }
 printf("</div>");
-char *version = gtexVersion(tdb->table);
-struct gtexTissue *tissues = gtexGetTissues(version);
-struct slName *selectedValues = NULL;
-if (cartListVarExistsAnyLevel(cart, tdb, FALSE, GTEX_TISSUE_SELECT))
-    selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, GTEX_TISSUE_SELECT);
-char *selectType = cgiUsualString("tis", "table");
-if (sameString(selectType, "group"))
-    makeGroupedTissueCheckboxes(cartVar, tissues, selectedValues);
-else if (sameString(selectType, "table"))
-    makeTableTissueCheckboxes(cartVar, tissues, selectedValues, cart, track, version);
-else
-    makeAllTissueCheckboxes(cartVar, tissues, selectedValues);
-
+if (!isPopup)
+    {
+    char *version = gtexVersion(tdb->table);
+    struct gtexTissue *tissues = gtexGetTissues(version);
+    struct slName *selectedValues = NULL;
+    if (cartListVarExistsAnyLevel(cart, tdb, FALSE, GTEX_TISSUE_SELECT))
+        selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, GTEX_TISSUE_SELECT);
+    char *selectType = cgiUsualString("tis", "table");
+    if (sameString(selectType, "group"))
+        makeGroupedTissueCheckboxes(cartVar, tissues, selectedValues);
+    else if (sameString(selectType, "table"))
+        makeTableTissueCheckboxes(cartVar, tissues, selectedValues, cart, track, version);
+    else
+        makeAllTissueCheckboxes(cartVar, tissues, selectedValues);
+    }
 puts("\n</table>\n");
 cfgEndBox(boxed);
 }

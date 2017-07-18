@@ -1533,6 +1533,9 @@ void barChartCtMethods(struct track *tg);
 void gtexEqtlClusterMethods(struct track *tg);
 /* GTEx eQTL Cluster (bigBed 5 +) tracks */
 
+void gtexEqtlTissueMethods(struct track *tg);
+/* Install handler for GTEx eQTL Tissues track */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
@@ -1645,6 +1648,9 @@ void bedPlusLabelDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOf
 			       double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single bed item at position.  If vis is full, draw the associated label to the left
  * of the item. */
+
+Color blackItemNameColor(struct track *tg, void *item, struct hvGfx *hvg);
+/* Force item name (label) color to black */
 
 #endif /* HGTRACKS_H */
 

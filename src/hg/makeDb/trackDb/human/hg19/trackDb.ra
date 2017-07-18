@@ -1,15 +1,25 @@
 #	"$Id: trackDb.ra,v 1.125 2010/06/11 22:12:18 mary Exp $";
 
+include barCharts.ra
+
 track cosmicRegions
 release alpha
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer
 type bigBed 4 +
 bigDataUrl /gbdb/hg19/cosmic/cosMutHg19V81.bb
+labelFields cosmLabel
 group phenDis
 color 200, 0, 0
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
 urlLabel COSMIC ID:
+searchIndex name,cosmLabel
+tableBrowser noGenome
+
+searchTable cosmicRegions
+searchPriority 2.07207
+searchType bigBed
+searchDescription COSMIC Regions
 
 # chainNet tracks
 include trackDb.chainNet.ra
@@ -653,12 +663,13 @@ directUrl hgGeneGraph?db=hg19&gene=%s
 
 track snpedia
 shortLabel SNPedia
-longLabel SNPedia: dbSNPs with a SNPedia article
+longLabel SNPedia article text
+urlLabel SNPedia page:
 group phenDis
 visibility hide
 color 50,0,100
-type bigBed 4 
-bigDataUrl /gbdb/hg19/bbi/snpedia.bb
+type bed 4
+itemDetailsHtmlTable snpediaHtml
 url https://www.snpedia.com/index.php/$$
 release alpha
 
@@ -2488,7 +2499,9 @@ track gtexEqtlCluster
 type bed 5 +
 shortLabel GTEx eQTL Clusters
 longLabel Expression QTL Clusters in 44 Tissues from GTEx (midpoint release, V6)
-group regulation
+group expression
+
+include gtexEqtl.ra
 
 searchTable peptideAtlas2014
 searchType bed

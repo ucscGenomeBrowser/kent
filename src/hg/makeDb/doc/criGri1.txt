@@ -592,3 +592,30 @@ TMPDIR=/dev/shm
     # real    846m34.982s
 
 ##############################################################################
+# crispr track (DONE - 2017-05-16 - Hiram)
+    mkdir /hive/data/genomes/criGri1/bed/crispr.0
+    cd /hive/data/genomes/criGri1/bed/crispr.0
+
+    # construct index for new genome, the index ends up in:
+    #    /hive/data/outside/crisprTrack/crispor/genomes/criGri1/
+
+    export PATH=/hive/data/outside/crisprTrack/crispor/tools/usrLocalBin:$PATH
+    export TMPDIR=/dev/shm
+
+    time (/hive/data/outside/crisprTrack/crispor/tools/crisprAddGenome \
+	ucscLocal criGri1 --geneTable=xenoRefGene --baseDir \
+	    /hive/data/outside/crisprTrack/crispor/genomes) > run.log 2>&1
+    # real    3565m25.671s
+
+    export PATH=/hive/data/outside/crisprTrack/scripts:/hive/data/outside/crisprTrack/crispor/tools/usrLocalBin:$PATH
+
+    export TMPDIR=/dev/shm
+
+    # this builds everything in /hive/data/genomes/criGri1/bed/crispr/
+    /cluster/bin/scripts/doCrispr.sh criGri1 xenoRefGene
+
+    export PATH=:/cluster/home/hiram/kent/src/utils:/hive/data/outside/crisprTrack/crispor/bin:/hive/data/outside/crisprTrack/crispor/tools/usrLocalBin:$PATH
+
+    ~/kent/src/utils/doLocusName -o criGri1 xenoRefGene
+
+##############################################################################

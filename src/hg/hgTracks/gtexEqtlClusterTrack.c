@@ -27,28 +27,35 @@ return gtexEqtlClusterLoad(row);
 }
 
 static boolean filterTissues(struct track *track, struct gtexEqtlClusterTrack *extras)
-/* Check cart for tissue selection */
+/* Check cart for tissue selection. Populate track tissues hash */
 {
 char *version = gtexVersionSuffix(track->table);
 extras->tissues = gtexGetTissues(version);
 extras->tissueHash = hashNew(0);
-if (cartListVarExistsAnyLevel(cart, track->tdb, FALSE, GTEX_TISSUE_SELECT))
-    {
-    struct slName *selectedValues = cartOptionalSlNameListClosestToHome(cart, track->tdb,
-                                                        FALSE, GTEX_TISSUE_SELECT);
-    if (selectedValues != NULL)
-        {
-        struct slName *name;
-        for (name = selectedValues; name != NULL; name = name->next)
-            hashAdd(extras->tissueHash, name->name, name->name);
-        return TRUE;
-        }
-    }
-/* no filter */
 struct gtexTissue *tis = NULL;
 for (tis = extras->tissues; tis != NULL; tis = tis->next)
-    hashAdd(extras->tissueHash, tis->name, tis->name);
-return FALSE;
+    hashAdd(extras->tissueHash, tis->name, tis);
+
+// if all tissues included, return full hash
+if (!cartListVarExistsAnyLevel(cart, track->tdb, FALSE, GTEX_TISSUE_SELECT))
+    return FALSE;
+
+// create tissue hash with only included tissues
+struct hash *tisHash = hashNew(0);
+struct slName *selectedValues = cartOptionalSlNameListClosestToHome(cart, track->tdb,
+                                                    FALSE, GTEX_TISSUE_SELECT);
+if (selectedValues == NULL)
+    return FALSE;
+
+struct slName *name;
+for (name = selectedValues; name != NULL; name = name->next)
+    {
+    tis = (struct gtexTissue *)hashFindVal(extras->tissueHash, name->name);
+    if (tis != NULL)
+        hashAdd(tisHash, name->name, tis);
+    }
+extras->tissueHash = tisHash;
+return TRUE;
 }
 
 static void excludeTissue(struct gtexEqtlCluster *eqtl, int i)
@@ -135,25 +142,68 @@ struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
 return eqtl->target;
 }
 
-static char *gtexEqtlClusterSourcesLabel(struct track *track, void *item)
+static int itemTissueCount(void *item)
+/* Return count of non-excluded tissues in the item */
+{
+struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
+int included = 0;
+int i;
+for (i=0; i<eqtl->expCount; i++)
+    if (!isExcludedTissue(eqtl, i))
+        included++;
+return included;
+}
+
+static int itemTissueIndex(void *item)
+/* Return index of first non-excluded tissue in an item. Used for single-tissue items. */
+{
+struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
+int i;
+for (i=0; i<eqtl->expCount; i++)
+    if (!isExcludedTissue(eqtl, i))
+        return i;
+return -1;
+}
+
+static char *itemSourcesLabel(void *item)
 /* Right label is tissue (or number of tissues if >1) */
 {
 struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
-int i, included;
-for (i=0, included=0; i<eqtl->expCount; i++)
-    if (!isExcludedTissue(eqtl, i))
-        included++;
-if (included == 1)
-    return eqtl->expNames[i-1];
+int ct = itemTissueCount(item);
+if (ct == 1)
+    {
+    int i = itemTissueIndex(item);
+    if (i<0)
+        errAbort("GTEx eQTL %s/%s track tissue index is negative", eqtl->name, eqtl->target);
+    return eqtl->expNames[i];
+    }
 struct dyString *ds = dyStringNew(0);
-dyStringPrintf(ds, "%d tissues", included);
+dyStringPrintf(ds, "%d tissues", ct);
 return dyStringCannibalize(&ds);
 }
+
+static struct rgbColor itemTissueColor(struct track *track, void *item)
+/* Return tissue color for single-tissue item, or NULL if none found */
+{
+int i = itemTissueIndex(item);
+assert(i>=0);
+struct gtexEqtlClusterTrack *extras = (struct gtexEqtlClusterTrack *)track->extraUiData;
+struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
+struct gtexTissue *tis = (struct gtexTissue *)hashFindVal(extras->tissueHash, eqtl->expNames[i]);
+assert (tis);
+return (struct rgbColor){.r=COLOR_32_BLUE(tis->color), .g=COLOR_32_GREEN(tis->color), 
+                .b=COLOR_32_RED(tis->color)};
+}
+
+#define TISSUE_COLOR_DOT        "*"
 
 static int gtexEqtlClusterItemRightPixels(struct track *track, void *item)
 /* Return number of pixels we need to the right of an item (for sources label). */
 {
-return mgFontStringWidth(tl.font, gtexEqtlClusterSourcesLabel(track, item));
+int ret = mgFontStringWidth(tl.font, itemSourcesLabel(item));
+if (itemTissueCount(item) == 1)
+    ret += mgFontStringWidth(tl.font, TISSUE_COLOR_DOT);
+return ret;
 }
 
 static Color gtexEqtlClusterItemColor(struct track *track, void *item, struct hvGfx *hvg)
@@ -189,7 +239,7 @@ static void gtexEqtlClusterDrawItemAt(struct track *track, void *item,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw GTEx eQTL cluster with right label indicating source(s) */
 {
-bedPlusLabelDrawAt(track, item, hvg, xOff, y, scale, font, color, vis);
+bedDrawSimpleAt(track, item, hvg, xOff, y, scale, font, color, vis);
 if (vis != tvFull && vis != tvPack)
     return;
 
@@ -197,9 +247,19 @@ if (vis != tvFull && vis != tvPack)
 struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
 int x2 = round((double)((int)eqtl->chromEnd-winStart)*scale) + xOff;
 int x = x2 + tl.mWidth/2;
-char *label = gtexEqtlClusterSourcesLabel(track, item);
+char *label = itemSourcesLabel(item);
 int w = mgFontStringWidth(font, label);
 hvGfxTextCentered(hvg, x, y, w, track->heightPer, MG_BLACK, font, label);
+if (itemTissueCount(item) == 1)
+    {
+    // append asterisk in tissue color
+    struct rgbColor tisColor = itemTissueColor(track, item);
+    x += w;
+    w = mgFontStringWidth(font, TISSUE_COLOR_DOT);
+    int ix = hvGfxFindColorIx(hvg, tisColor.r, tisColor.g, tisColor.b);
+    font = mgFontForSizeAndStyle(tl.textSize, "bold");
+    hvGfxTextCentered(hvg, x, y, w, track->heightPer, ix, font, TISSUE_COLOR_DOT);
+    }
 }
 
 static void gtexEqtlClusterMapItem(struct track *track, struct hvGfx *hvg, void *item, 
