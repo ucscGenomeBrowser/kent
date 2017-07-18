@@ -1,5 +1,7 @@
 #	"$Id: trackDb.ra,v 1.125 2010/06/11 22:12:18 mary Exp $";
 
+include barCharts.ra
+
 track cosmicRegions
 release alpha
 shortLabel COSMIC Regions
