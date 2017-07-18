@@ -662,12 +662,13 @@ directUrl hgGeneGraph?db=hg19&gene=%s
 
 track snpedia
 shortLabel SNPedia
-longLabel SNPedia: dbSNPs with a SNPedia article
+longLabel SNPedia article text
+urlLabel SNPedia page:
 group phenDis
 visibility hide
 color 50,0,100
-type bigBed 4 
-bigDataUrl /gbdb/hg19/bbi/snpedia.bb
+type bed 4
+itemDetailsHtmlTable snpediaHtml
 url https://www.snpedia.com/index.php/$$
 release alpha
 

@@ -525,7 +525,7 @@ void gtexEqtlProbability(struct cart *cart, char *track, struct trackDb *tdb)
 char cartVar[1024];
 puts("<b>Probability minimum:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_EQTL_PROBABILITY);
-double probMin = cartCgiUsualDouble(cart, cartVar, 0);
+double probMin = cartCgiUsualDouble(cart, cartVar, GTEX_EQTL_PROBABILITY_DEFAULT);
 cgiMakeDoubleVar(cartVar, probMin, 3);
 printf(" (range 0-1.0)\n");
 }
