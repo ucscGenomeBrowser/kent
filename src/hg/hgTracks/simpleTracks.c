@@ -3533,6 +3533,12 @@ itemRgb.b = lf->filterColor & 0xff;
 return hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b);
 }
 
+Color blackItemNameColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Force item name (label) color to black */
+{
+return hvGfxFindColorIx(hvg, 0, 0, 0);
+}
+
 Color linkedFeaturesNameColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Determine the color of the name for the linked feature. */
 {
@@ -13857,6 +13863,8 @@ else if (sameWord(type, "bigBed"))
     bigBedMethods(track, tdb, wordCount, words);
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
+    if (startsWith("gtexEqtlTissue", track->track))
+        gtexEqtlTissueMethods(track);
     }
 else if (sameWord(type, "bigMaf"))
     {

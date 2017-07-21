@@ -40,7 +40,8 @@ sys.path.append(join(dirname(__file__), "pyLib"))
 try:
     from hgLib import cgiArgs, cgiSetup, cgiString, printContentType, printMenuBar, \
             sqlConnect, sqlQuery, errAbort, cfgOption, runCmd, cgiGetAll, printHgcHeader, \
-            printHgcSection, webStartGbNoBanner, htmlPageEnd, hConnectCentral, sqlTableExists
+            printHgcSection, webStartGbNoBanner, htmlPageEnd, hConnectCentral, sqlTableExists, \
+            readSmallFile
 except:
     print("Content-type: text/html\n")
     print("Cannot find the directory cgi-bin/pyLib in Apache. This is an installation error.")
@@ -1101,7 +1102,6 @@ def printGraphMenu(conn, targetGene, addNeighbors):
 
 def openGeneAnnotFile(dataName):
     " return name and lines in gbdb tab sep file "
-    gbdbDir = cfgOption("gbdbLoc1", "/gbdb")
     annotData = None
     for annotTuple in geneAnnotFiles:
         if dataName==annotTuple[0]:
@@ -1111,8 +1111,8 @@ def openGeneAnnotFile(dataName):
         errAbort("Could not find annotations with name %s" % dataName)
 
     _, annotFname, annotName, annotLongName = annotData
-    inPath = join(gbdbDir, "hgFixed", "geneGraph", annotFname)
-    ifh = open(inPath)
+    inPath = join("/gbdb", "hgFixed", "geneGraph", annotFname)
+    ifh = readSmallFile(inPath)
     return annotName, ifh
 
 def getGeneAnnots():

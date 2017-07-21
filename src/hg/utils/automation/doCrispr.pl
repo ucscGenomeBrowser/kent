@@ -121,6 +121,8 @@ sub checkOptions {
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
 		      'twoBit=s',
+		      'shoulder=s',
+		      'tableName=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -164,11 +166,11 @@ sub doRanges {
 printf "# getting genes\\n" 1>&2
 hgsql $db -NB -e 'select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from '$geneTrack' where chrom not like "%_alt" and chrom not like "%hap%"; '  > genes.gp
 printf "# Number of transcripts: %d\\n" "`cat genes.gp | wc -l`" 1>&2
-printf "# break genes into exons and add 200 bp on each side\\n" 1>&2
+printf "# break genes into exons and add $exonShoulder bp on each side\\n" 1>&2
 genePredToBed genes.gp stdout | grep -v hap | grep -v chrUn \\
     | bedToExons stdin stdout \\
     | awk '{\$2=\$2-$exonShoulder; \$3=\$3+$exonShoulder; \$6="+"; print}' \\
-    | bedClip stdin $chromSizes stdout | grep -v _alt \\
+    | bedClip -truncate  stdin $chromSizes stdout | grep -v _alt \\
     | grep -i -v hap > ranges.bed
 
 printf "# Get sequence without any gaps.\\n" 1>&2
@@ -262,7 +264,7 @@ sub doSpecScores {
   }
 
   &HgAutomate::mustMkdir($runDir);
-  my $templateCmd = ("$python $crisprScripts/crispor.py " .
+  my $templateCmd = ("$python $crisporSrc/fasterCrispor.py " .
 		     "$db {check in exists \$(path1)} " .
 		     "{check out exists tmp/outGuides/\$(root1).tab} " .
 		     "-o tmp/outOffs/\$(root1).tab" );
@@ -473,7 +475,7 @@ die "illegal value for shoulder: $shoulder, must be >= 30" if ($shoulder < 30);
 $genomeFname = "$crisporSrc/genomes/$db/$db.fa.bwt";
 die "can not find bwa index '$genomeFname'" if ( ! -s $genomeFname);
 $chromSizes = "/hive/data/genomes/$db/chrom.sizes";
-$exonShoulder = 10000;
+$exonShoulder = $shoulder;
 
 # may be working on a 2bit file that does not have a database browser
 $dbExists = 0;

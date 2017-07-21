@@ -15,17 +15,20 @@ target=_blank>crispor.org</a>.
 <p>
 The track &quot;CRISPR Regions&quot; shows the regions of the genome where target
 sites were analyzed, i.e. within 200 bp of transcribed regions as annotated by
-transcript models from the UCSC Genes track.</p>
+Other RefSeq transcript models.</p>
 
 <p>
 The track &quot;CRISPR Targets&quot; shows the target sites in these regions.
-The target sequence of the guide is shown with a thick (exon) bar. The PAM
-motif match (NGG) is shown with a thinner bar. Guides 
+The target sequence of the guide is shown with a thick bar (same thickness
+as exons in gene tracks). The PAM
+motif match (NGG) is shown with a thinner bar (same thickness as UTRs in gene tracks). Guides
 are colored to reflect both predicted specificity and efficiency. Specificity
 reflects the &quot;uniqueness&quot; of a 20mer sequence in the genome; the less unique a
 sequence is, the more likely it is to cleave other locations of the genome
-(off-target effects). Efficiency is the frequency of cleavage at the target
-site (on-target efficiency).</p>
+(off-target effects). Shades of gray are used for items that are not very specific
+(MIT Specificity Score &lt;= 50). Guides that are specific (MIT Specificity &gt; 50) are 
+then color-coded by their efficiency: the frequency of cleavage at the target site 
+as determined by the Doench/Fusi 2016 score (on-target efficiency). </p>
 
 <p>Shades of gray stand for sites that are hard to target specifically, as the
 20mer is not very unique in the genome:</p>
@@ -34,6 +37,10 @@ site (on-target efficiency).</p>
 <tr><td style="width:50px; background-color:#787878"></td><td>hard to target: many similar sequences in the genome that alignment stopped, repeat?</td></tr>
 <tr><td style="width:50px; background-color:#505050"></td><td>hard to target: target site was aligned but results in a low specificity score &lt;= 50 (see below)</td></tr>
 </table>
+
+<p>
+The track supports filtering on the <a href="../cgi-bin/hgTrackUi?g=crisprTargets">configuration page</a>
+using  MIT Specificity score, but not the Doench/Fusi 2016 score.</p>
 
 <p>Colors highlight targets that are specific in the genome (MIT specificity &gt; 50) but have different predicted efficiencies:</p>
 <table class="stdTbl" style="width:100%">
@@ -109,8 +116,8 @@ each score percentile range.</p>
 
 <h3>Track methods</h3>
 <p>
-Exons as predicted by the UCSC Genes track were used, extended by 200 basepairs
-on each side, searched for the -NGG motif. Flanking 20mer guide sequences were
+Exons as predicted by Other RefSeq gene models were used, extended by 200 basepairs
+on each side, and searched for the -NGG motif. Flanking 20mer guide sequences were
 aligned to the genome with BWA and scored with MIT Specificity scores using the
 command-line version of crispor.org.  Non-unique guide sequences were skipped.
 Flanking sequences were extracted from the genome and input for Crispor

@@ -73,6 +73,7 @@
 
 #define GTEX_EQTL_EFFECT                "effect"
 #define GTEX_EQTL_PROBABILITY           "prob"
+#define GTEX_EQTL_PROBABILITY_DEFAULT   0.5
 #define GTEX_EQTL_GENE                  "gene"
 
 /* Identify GTEx tracks that use special trackUI. 
