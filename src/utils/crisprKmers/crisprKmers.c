@@ -78,11 +78,8 @@ errAbort(
   "   -offTargets=<file> - output off target data to given file\n"
   "   -ranges=<file> - use specified bed3 file to limit which guides are\n"
   "                  - measured, only those with any overlap to these bed items.\n"
-  "   -memLimit=N - N number of gigabytes for each thread, default: no threading\n"
-  "               when memory size goes beyond N gB program will thread gB/N times\n"
-  "   -cacheCount=N - number of guides to check at one time vs. targets,\n"
-  "                 - to take advantage of CPU cache, e.g. 1Mb of cache\n"
-  "                 - could hold 16,384 64bit words.\n"
+  "   -threads=N - N number of threads to run, default: no threading\n"
+  "              - use when ku is going to allocate more CPUs for big mem jobs.\n"
   "   -dumpKmers=<file> - NOT VALID after scan of sequence, output kmers to file\n"
   "                     - process will exit after this, use -loadKmers to continue\n"
   "   -loadKmers=<file> - NOT VALID load kmers from previous scan of sequence from -dumpKmers"
@@ -96,9 +93,7 @@ static char *ranges = NULL;	/* use ranges <file> to limit scanning */
 static struct hash *rangesHash = NULL;	/* ranges into hash + binkeeper */
 static char *dumpKmers = NULL;	/* file name to write out kmers from scan */
 static char *loadKmers = NULL;	/* file name to read in kmers from previous scan */
-static int memLimit = 0;	/* gB limit before going into thread mode */
-static int cacheCount = 0;	/* number of query guides to run through
-				 * for each target to utilize CPU cache */
+static int threads = 0;	/* number of threads to run */
 static int threadCount = 1;	/* will be adjusted depending upon vmPeak */
 
 /* Command line validation table. */
@@ -106,8 +101,7 @@ static struct optionSpec options[] = {
    {"bed", OPTION_STRING},
    {"offTargets", OPTION_STRING},
    {"ranges", OPTION_STRING},
-   {"memLimit", OPTION_INT},
-   {"cacheCount", OPTION_INT},
+   {"threads", OPTION_INT},
    {"dumpKmers", OPTION_STRING},
    {"loadKmers", OPTION_STRING},
    {NULL, 0},
@@ -530,7 +524,10 @@ for (list = all; list; list = list->next)
 		mitScore = 0.0;
 	    }
             char *color = scoreToColor(mitScore);
-	    fprintf(bedFH, "%s\t%lld\t%lld\t\t%ld\t%c\t%lld\t%lld\t%s\t%s\t%s\t%ld\t%d,%d,%d,%d,%d\n", list->chrom, list->start[c], list->start[c]+pamSize+guideSize, mitScore, strand, txStart, txEnd, color, kmerString, pamString, mitScore, list->offBy[0][c], list->offBy[1][c], list->offBy[2][c], list->offBy[3][c], list->offBy[4][c]);
+	    /* the end zero will be filled in by post-processing, it will be
+	     *   the _offset into the crisprDetails.tab file
+	     */
+	    fprintf(bedFH, "%s\t%lld\t%lld\t\t%ld\t%c\t%lld\t%lld\t%s\t%s\t%s\t%d,%d,%d,%d,%d\t0\n", list->chrom, list->start[c], list->start[c]+pamSize+guideSize, mitScore, strand, txStart, txEnd, color, kmerString, pamString, list->offBy[0][c], list->offBy[1][c], list->offBy[2][c], list->offBy[3][c], list->offBy[4][c]);
 	    }
 	++totalOut;
 	}
@@ -988,9 +985,7 @@ if (offFile)
 	//		long long tIndex)
 
 
-/* this queryVsTarget can be used by threads, it should be safe,
- * remains to be proven.
- */
+/* this queryVsTarget can be used by threads, appears to be safe */
 static void queryVsTarget(struct crisprList *query, struct crisprList *target,
     int threadCount, int threadId)
 /* run the query crisprs list against the target list in the array structures */
@@ -1023,17 +1018,9 @@ for (qList = query; qList; qList = qList->next)
 	    control->listEnd - control->listStart, control->listStart,
 		control->listEnd);
     totalCrisprsTarget += control->listEnd - control->listStart;
-    long long qStart = control->listStart;
-    long long qEnd = control->listEnd;
     long long qCount;
-    for (qCount = control->listStart; qCount < control->listEnd; qCount = qEnd)
+    for (qCount = control->listStart; qCount < control->listEnd; ++qCount)
 	{
-	qStart = qCount;
-	qEnd = qStart + cacheCount;
-	if (cacheCount < 1)
-		qEnd = qStart + 1;
-	if (qEnd > control->listEnd)
-		qEnd = control->listEnd;
         struct crisprList *tList;
         for (tList = target; tList; tList = tList->next)
             {
@@ -1041,35 +1028,31 @@ for (qList = query; qList; qList = qList->next)
             totalCompares += tList->crisprCount;
             for (tCount = 0; tCount < tList->crisprCount; ++tCount)
                 {
-		long long q;
-                for (q = qStart; q < qEnd; ++q)
+                /* the XOR determine differences in two sequences, the
+                 * shift right 6 removes the PAM sequence and
+                 * the 'fortyBits &' eliminates the negativeStrand bit
+                 */
+                long long misMatch = fortyBits &
+                    ((qList->sequence[qCount] ^ tList->sequence[tCount]) >> 6);
+                if (misMatch)
                     {
-                    /* the XOR determine differences in two sequences, the
-                     * shift right 6 removes the PAM sequence and
-                     * the 'fortyBits &' eliminates the negativeStrand bit
+                    /* possible misMatch bit values: 01 10 11
+                     *  turn those three values into just: 01
                      */
-                    long long misMatch = fortyBits &
-                        ((qList->sequence[q] ^ tList->sequence[tCount]) >> 6);
-                    if (misMatch)
+                    misMatch = (misMatch | (misMatch >> 1)) & 0x5555555555;
+                    int bitsOn = _mm_popcnt_u64(misMatch);
+                    if (bitsOn < 5)
                         {
-                        /* possible misMatch bit values: 01 10 11
-                         *  turn those three values into just: 01
-                         */
-                        misMatch = (misMatch | (misMatch >> 1)) & 0x5555555555;
-                        int bitsOn = _mm_popcnt_u64(misMatch);
-                        if (bitsOn < 5)
-                            {
-                            recordOffTargets(qList, tList, bitsOn, q, tCount, misMatch);
-                            qList->offBy[bitsOn][q] += 1;
-    //			tList->offBy[bitsOn][tCount] += 1; not needed
-                            }
+                        recordOffTargets(qList, tList, bitsOn, qCount, tCount, misMatch);
+                        qList->offBy[bitsOn][qCount] += 1;
+//			tList->offBy[bitsOn][tCount] += 1; not needed
                         }
-                    else
-                        { 	/* no misMatch, identical crisprs */
-                        qList->offBy[0][q] += 1;
-    //                  tList->offBy[0][tCount] += 1;	not needed
-                        }
-                    } // for (q = qStart; q < qEnd; ++q)
+                    }
+                else
+                    { 	/* no misMatch, identical crisprs */
+                    qList->offBy[0][qCount] += 1;
+//                  tList->offBy[0][tCount] += 1;	not needed
+                    }
                 } // for (tCount = 0; tCount < tList->crisprCount; ++tCount)
             }	//	for (tList = target; tList; tList = tList->next)
 	}	//	for (qCount = 0; qCount < qList->crisprCount; ++qCount)
@@ -1316,10 +1299,11 @@ if (verboseLevel() > 1)
     vmPeak = currentVmPeak();
     verbose(1, "# vmPeak after copyToArray: %lld kB\n", vmPeak);
     /* larger example: 62646196 kB */
-    if ((memLimit > 0) && ((vmPeak >> 20) > memLimit))	// the >> 20 converts kB to gB
+    if (threads > 1)
 	{
-	threadCount = 1 + ((vmPeak >> 20) / memLimit);
-	verbose(1, "# over %d Gb at %lld kB, threadCount: %d\n", memLimit, vmPeak, threadCount);
+	int gB = vmPeak >> 20;	/* convert kB to Gb */
+	threadCount = threads;
+	verbose(1, "# at %d Gb (%lld kB), running %d threads\n", gB, vmPeak, threadCount);
 	}
     if (queryGuides)	// when range selected some query sequences
 	{
@@ -1357,16 +1341,11 @@ bedFileOut = optionVal("bed", bedFileOut);
 dumpKmers = optionVal("dumpKmers", dumpKmers);
 loadKmers = optionVal("loadKmers", loadKmers);
 offTargets = optionVal("offTargets", offTargets);
-memLimit = optionInt("memLimit", memLimit);
-if (memLimit < 0)
-    errAbort("specified memLimi is less than 0: %d\n", memLimit);
-if (memLimit > 0)
-    verbose(1, "# memLimit %d gB\n", memLimit);
-cacheCount = optionInt("cacheCount", cacheCount);
-if (cacheCount < 0)
-    errAbort("specified cacheCount is less than 0: %d\n", cacheCount);
-if (cacheCount > 0)
-    verbose(1, "# cacheCount %d items\n", cacheCount);
+threads = optionInt("threads", threads);
+if (threads < 0)
+    errAbort("specified threads is less than 0: %d\n", threads);
+if (threads > 0)
+    verbose(1, "# requesting threads: %d\n", threads);
 ranges = optionVal("ranges", ranges);
 if (ranges)
     rangesHash = readRanges(ranges);
