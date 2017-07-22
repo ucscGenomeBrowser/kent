@@ -257,3 +257,36 @@ priority 103.29
         type bed 5 .
         color 170,50,100
         priority 6
+
+track crisprKmers
+shortLabel CRISPR kmers
+longLabel CRISPR/Cas9 target sites (exons +/- 10,000 bp) found by kmer matching
+group genes
+visibility hide
+type bed 3
+superTrack on
+html crispr
+
+    track crisprKmersRanges
+    shortLabel CRISPR Regions
+    longLabel Genome regions processed to find CRISPR/Cas9 target sites (exons +/- 10,000 bp)
+    visibility dense
+    color 110,110,110
+    type bed 3
+    parent crisprKmers
+    html crispr
+
+    track crisprKmersTargets
+    shortLabel CRISPR Targets
+    longLabel CRISPR/Cas9 -NGG and -NAG Targets (exons +/- 10,000 bp)
+    visibility pack
+    type bigBed 9 +
+    itemRgb on
+    parent crisprKmers
+    mouseOverField _mouseOver
+    scoreLabel MIT Guide Specificity Score
+    # details page is not using a mysql table but a tab-sep file
+    detailsTabUrls _offset=/gbdb/$db/crisprKmers/crisprDetails.tab
+    url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
+    urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
+    html crispr
