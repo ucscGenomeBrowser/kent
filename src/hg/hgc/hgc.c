@@ -7992,7 +7992,9 @@ if (offset >= 0)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	ro = rmskOutLoad(row+hasBin);
-	printf("<B>Name:</B> %s<BR>\n", ro->repName);
+	printf("<B>Name:</B> <A HREF='http://www.girinst.org/protected/repbase_extract.php?access=%s'>%s</A>\n", 
+            ro->repName, ro->repName);
+    printf("(link requires <A HREF='http://www.girinst.org/accountservices/register.php'>registration</A>)<BR>");
 	printf("<B>Family:</B> %s<BR>\n", ro->repFamily);
 	printf("<B>Class:</B> %s<BR>\n", ro->repClass);
 	printf("<B>SW Score:</B> %d<BR>\n", ro->swScore);
