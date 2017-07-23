@@ -239,7 +239,7 @@ static void gtexEqtlClusterDrawItemAt(struct track *track, void *item,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw GTEx eQTL cluster with right label indicating source(s) */
 {
-bedPlusLabelDrawAt(track, item, hvg, xOff, y, scale, font, color, vis);
+bedDrawSimpleAt(track, item, hvg, xOff, y, scale, font, color, vis);
 if (vis != tvFull && vis != tvPack)
     return;
 

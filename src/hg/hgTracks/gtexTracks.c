@@ -1162,6 +1162,7 @@ if (vis == tvSquish || vis == tvDense)
 }
 
 void gtexGeneMethods(struct track *tg)
+/* Install handlers for GTEx Gene track */
 {
 tg->drawItemAt = gtexGeneDrawAt;
 tg->preDrawItems = gtexGenePreDrawItems;
@@ -1177,3 +1178,8 @@ tg->nonPropDrawItemAt = gtexGeneNonPropDrawAt;
 tg->nonPropPixelWidth = gtexGeneNonPropPixelWidth;
 }
 
+void gtexEqtlTissueMethods(struct track *tg)
+/* Install handler for GTEx eQTL Tissues track */
+{
+tg->itemNameColor = blackItemNameColor;
+}
