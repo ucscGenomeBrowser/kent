@@ -47,7 +47,7 @@ while (row2 != NULL)
     char *entrez;
     char *hgncId, *name, *symbol, *refSeqIds, *uniProt;
     int j;
-    char *locusType;
+    // char *locusType;
     char *refseq;
 
     j=0;
@@ -58,7 +58,7 @@ while (row2 != NULL)
     refSeqIds 	= row2[j];j++;
     uniProt   	= row2[j];j++;
     entrez   	= row2[j];j++;
-    locusType  	= row2[j];j++;
+    // locusType  	= row2[j];j++;
     
     boolean gotRefseq = FALSE;
 
