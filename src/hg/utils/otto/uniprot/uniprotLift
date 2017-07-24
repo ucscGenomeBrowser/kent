@@ -126,19 +126,6 @@ disShortNames = {
     "a colon cancer cell line":"ColC-CL"
 }
 
-def removeAnds(disNames):
-    " remove useless 'and' in disease names "
-    newNames = []
-    for name in disNames:
-        if " and " in name:
-            splitNames = name.split(" and ")
-            newNames.extend(splitNames)
-            del disCodes[disCodes.index(name)]
-            disCodes.extend(splitNames)
-        else:
-            newNames.append(name)
-    return newNames
-
 def shortenDisCodes(disCodes):
     " some disease names are not shortened yet by UniProt. Do this now. "
     #print "XX", disNames, disCodes
@@ -154,20 +141,14 @@ def shortenDisCodes(disCodes):
     return newCodes
     #return list(set(newCodes))
 
-xxFh = open("uniprotLiftDbg.txt", "w")
+xxFh = open("temp/debug.txt", "w")
 
-def makeBedLine(muts, bed, isMut):
+def makeBedLine(muts, bed, isMut, pmids):
     mut = muts[-1]
     disStatus = set([mut.disRelated for mut in muts])
     comments = [mut.comment for mut in muts if mut.comment!=""]
-    # skip if it's not disease related 
-    #if not "disRelated" in disStatus and mut.featType=="sequence variant" \
-        #and len(comments)==0 and mut.disease=="":
-        #noInfoCount +=1
-        
     diseases = list([mut.disease for mut in muts if mut.disease!=""])
     disCodes = list([mut.disCode for mut in muts if mut.disCode!=""])
-    #diseases = removeAnds(diseases)
     if len(diseases)!=0:
         xxFh.write("%s\t%s\n" % ("|".join(diseases), "|".join(disCodes)))
     disCodes = shortenDisCodes(disCodes)
@@ -279,23 +260,205 @@ def makeBedLine(muts, bed, isMut):
     bedLine = "\t".join(bed)+"\n"
     return bedLine
 
+def makeSeqSizes(uniprotFa):
+    " create a file with the lengths of the uniprot seqs "
+    # create seq sizes for all uniprot sequences of this species
+    #uniprotFa = join(uniprotDir, "uniprot.%s.fa" % taxonId)
+    uniprotFaGz = uniprotFa+".gz"
+    if not isfile(uniprotFa):
+        print "uncompressing uniprot gz fa"
+        open(uniprotFa, "w").write(gzip.open(uniprotFaGz).read())
+
+    if not isfile(uniprotFa):
+        raise Exception("Not found: %s" % uniprotFa)
+
+    print "writing nucleotide lengths of %s to %s" % (uniprotFa, "temp/chromSizes")
+    cmd = "faSize %s -detailed | gawk '{$2=$2*3; print}'> temp/chromSizes" % uniprotFa
+    run(cmd)
+
+    # keep protein lengths for filtering later, we'll remove everything that 
+    # covers the whole protein
+    seqSizes = {}
+    for line in open("temp/chromSizes"):
+        seq, size = line.rstrip("\n").split()
+        seqSizes[seq] = int(size)/3
+    return seqSizes
+        
+def writeProtBed(uniProtAnnotName, seqSizes):
+    " write bed file in prot coordinates, one bed per uniprot annotation "
+    print "converting tab to bed"
+    ofh = open("temp/protCoords.bed", "w")
+
+    print "reading %s" % uniProtAnnotName
+    # index data by pos and write coords to BED
+    doneAnnots = set()
+    for annot in iterTsvRows(open(uniProtAnnotName)):
+        if annot.acc not in seqSizes:
+            logging.debug("skipping %s, not in temp/chromSizes" % annot.acc)
+            continue
+        if options.filterAnnots and annot.featType in removeTypes:
+            logging.debug("skipping %s, explicitely removed annotation" % str(annot))
+            continue
+        annotName = annot.featType.replace(" ", "_")+":"+annot.acc+":"+annot.origAa+annot.begin+annot.mutAa
+
+        # remove annotations that cover the whole protein, probably not very useful
+        #print annot.begin, annot.end, annot.acc, seqSizes[annot.acc]
+        if int(annot.begin)==1 and int(annot.end)==int(seqSizes[annot.acc])+1:
+            logging.debug("skipping %s, covers whole protein" % str(annot))
+            continue
+
+        annotPos = 3*(int(annot.begin)-1)
+        annotPosEnd = 3*(int(annot.end)-1)
+        if annotName not in doneAnnots:
+            ofh.write("\t".join([annot.acc, str(annotPos), str(annotPosEnd), annotName])+"\n")
+        doneAnnots.add(annotName)
+    ofh.close()
+    
+def parseAnnots(uniProtAnnotName):
+    " return uniprot annots indexed by their seq:start:from:to key "
+    print("Parsing %s" % uniProtAnnotName)
+    annotData = defaultdict(list)
+
+    for annot in iterTsvRows(open(uniProtAnnotName)):
+        annotName = annot.featType.replace(" ", "_")+":"+annot.acc+":"+annot.origAa+annot.begin+annot.mutAa
+        annotData[annotName].append(annot)
+
+    return annotData
+
+#       0 temp/spDisulfBond.bed
+#       0 temp/spDomain.bed
+
+def uniprotLift(seqFname, annotFname, chromSizesFname, liftFname):
+    print("Using directory ./temp for pslMap files")
+    if not isfile("temp/genomeCoords.bed"):
+        cmd = "rm -rf temp; mkdir temp"
+        run(cmd)
+
+        seqSizes = makeSeqSizes(seqFname)
+        writeProtBed(annotFname, seqSizes)
+        print "lifting to genome coords"
+        cmd = "bedToPsl temp/chromSizes temp/protCoords.bed stdout | pslMap stdin %s stdout | pslToBed stdin stdout | LC_COLLATE=C sort -k1,1 -k2,2n | bedFixBlockOverlaps /dev/stdin > temp/genomeCoords.bed" % liftFname
+        run(cmd)
+
+    annotData = parseAnnots(annotFname)
+
+    print "adding extra fields"
+    # read lifted bed and add uniprot annotations to it as additional fields
+
+    tracks = [
+        "spMut", # variants
+        "spAnnot", # all other features
+        "spStruct", # structural features
+        "spLocSignal", "spLocExtra", "spLocTransMemb", "spLocCytopl", # localization-related
+        "spDomain", "spModif", "spChain", "spDisulfBond" # domains, etc
+    ]
+
+    files = {}
+    for t in tracks:
+        files[t] = open("temp/"+t+".bed", "w")
+
+
+    count = 0 # total number of annotations
+    blackCount = 0 # number of blacklisted annotations
+    doneAnnots = set() # to skip overlaps: a set with (seq, start, end, name)
+    # name is sequence:start:
+
+    print("parsing temp/genomeCoords.bed")
+    for line in open("temp/genomeCoords.bed"):
+        bed = line.strip().split()
+        annots = annotData[bed[3]]
+        pmids = set()
+        for annot in annots:
+            pmids.update(annot.pmid.split(","))
+
+        if len(pmidBlackList.intersection(pmids))==len(pmids):
+            blackCount +=1
+            continue
+
+        isMut = False
+        if annot.featType in ["mutagenesis site", "sequence variant"]:
+            isMut = True
+            ofh = files["spMut"]
+        elif annot.featType in ["strand","helix", "coiled-coil region", "turn"]:
+            ofh = files["spStruct"]
+        # suggested by Regeneron: create four subtracks, for the subcell. localization indicators
+        elif annot.featType in ["transmembrane region"]:
+            ofh = files["spLocTransMemb"]
+        elif annot.comment in ["Extracellular"]:
+            ofh = files["spLocExtra"]
+        elif annot.comment in ["Cytoplasmic"]:
+            ofh = files["spLocCytopl"]
+        elif annot.featType in ["signal peptide"]:
+            ofh = files["spLocSignal"]
+        elif annot.featType in ["glycosylation site", "modified residue", "lipid moiety-binding region"]:
+            ofh = files["spModif"]
+        elif annot.featType in ["chain"]:
+            ofh = files["spChain"]
+        elif annot.featType in ["zinc finger region", "topological domain"]:
+            ofh = files["spDomain"]
+        elif annot.featType in ["disulfide bond"]:
+            ofh = files["spDisulfBond"]
+        # everything else
+        else:
+            ofh = files["spAnnot"]
+
+        bedLine = makeBedLine(annots, bed, isMut, pmids)
+        # skip annotations that we most likely have covered before
+        keyFields = tuple(bedLine.split("\t")[:4])
+        if keyFields in doneAnnots:
+            continue
+        doneAnnots.add(keyFields)
+        ofh.write(bedLine)
+        count += 1
+
+    print "%d features written to temp/*.bed" % (count)
+
+    # P53 as an example?? MTOR? BRCA?
+    for f in files.values():
+        f.close()
+
+    cmd = "wc -l temp/*.bed"
+    run(cmd)
+
+    cmd = "rm -rf bigBedTemp; mkdir bigBedTemp"
+    run(cmd)
+
+    for fname in files:
+        asFname = "bed12UniProtAnnot.as"
+        if fname=="spMut":
+            asFname = "bed12UniProtMut.as"
+
+        cmd = "bedToBigBed -as=%s temp/%s.bed %s bigBedTemp/%s.bb -type=bed12+ -tab" % \
+            (asFname, fname, chromSizesFname, fname)
+        run(cmd)
+
+    # kind of atomic update of bigBed files, otto procedure should not break hgwdev
+    # if anything went wrong, script will fail before here and will not touch old bigBed files
+    cmd = "mv bigBed bigBed.old"
+    run(cmd)
+
+    cmd = "mv bigBedTemp bigBed"
+    run(cmd)
+
+    cmd = "rm -rf bigBed.old"
+    run(cmd)
+
+    print "%d features written" % (count)
+    print "%d features skipped because of blacklisted PMIDS" % (blackCount)
+
 # ------ MAIN ------
 if __name__ == '__main__':
-    parser = optparse.OptionParser("""usage: %prog [options] uniprotTabDir taxonId chromSizesFile liftPslFile - lift uniprot annotations to genome. 
-    
-    uniprotTabDir is the directory with the output from uniprotToTab
+    parser = optparse.OptionParser("""usage: %prog [options] uniprotSeqTab uniprotAnnotTab chromSizesFile liftPslFile - lift uniprot annotations to genome. 
     
     Needs a mapping PSL from uniprot (in faked nucleotide coordinates) to genome positions.
-    - for genomes with introns, makeLiftOver.sh from
+    - for genomes with introns, use makeLiftOver.sh from
       kent/src/hg/utils/uniprotMutations/makeUniProtToHg.sh creates one for hg19
-    - for a quicker rough version, create one with BLAT and -q=dnax folowed by
+    - for a quicker rough version, create one with BLAT and -q=dnax followed by
       pslProtCnv 
-
     """)
     parser.add_option("", "--annot", dest="annot", action="store_true", help="lift other, non-variant annotations")
     parser.add_option("-d", "", dest="debug", action="store_true", help="debug output")
     parser.add_option("", "--filter", dest="filterAnnots", action="store_true", help="remove certain annotations that are not very useful, like helix,chain,beta, etc")
-    #parser.add_option("-u", "--uniprotDir", dest="uniprotDir", action="store", help="uniprot parser directory, default %default", default="/hive/data/inside/pubs/parsedDbs")
     (options, args) = parser.parse_args()
 
     if options.debug:
@@ -305,138 +468,7 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(1)
 
-    uniprotDir, taxonId, chromSizesPath, liftFname = args
+    seqFname, annotFname, chromSizesFname, liftFname = args
 
-    mutData = defaultdict(list)
+    uniprotLift(seqFname, annotFname, chromSizesFname, liftFname)
 
-    cmd = "rm -rf work; mkdir work"
-    run(cmd)
-
-    # create seq sizes for all uniprot sequences of this species
-    uniprotFa = join(uniprotDir, "uniprot.%s.fa" % taxonId)
-    uniprotFaGz = uniprotFa+".gz"
-    if not isfile(uniprotFa):
-        print "uncompressing uniprot gz fa"
-        open(uniprotFa, "w").write(gzip.open(uniprotFaGz).read())
-
-    if not isfile(uniprotFa):
-        raise Exception("Not found: %s" % uniprotFa)
-
-    print "writing nucleotide lengths of %s to %s" % (uniprotFa, "work/chromSizes")
-    cmd = "faSize %s -detailed | gawk '{$2=$2*3; print}'> work/chromSizes" % uniprotFa
-    run(cmd)
-
-    # keep protein lengths for filtering later, we'll remove everything that 
-    # covers the whole protein
-    seqSizes = {}
-    for line in open("work/chromSizes"):
-        seq, size = line.rstrip("\n").split()
-        seqSizes[seq] = int(size)/3
-        
-    # get uniprot IDs 
-    speciesAccs = set([line.split()[0] for line in open("work/chromSizes")])
-    print "got %d accessions" % len(speciesAccs)
-
-    # read data, write bed to file
-    # this annotates in protein coordinates
-    print "converting tab to bed"
-    ofh = open("work/temp.bed", "w")
-    uniProtMutFname = join(uniprotDir, "uniprot.%s.annots.tab" % taxonId)
-    print "reading %s" % uniProtMutFname
-    for mut in iterTsvRows(open(uniProtMutFname)):
-        if mut.acc not in speciesAccs:
-            logging.debug("skipping %s, not in work/chromSizes" % mut.acc)
-            continue
-        if options.filterAnnots and mut.featType in removeTypes:
-            logging.debug("skipping %s, explicitely removed annotation" % str(mut))
-            continue
-        mutName = mut.featType.replace(" ", "_")+":"+mut.acc+":"+mut.origAa+mut.begin+mut.mutAa
-
-        # remove annotations that cover the whole protein, probably not very useful
-        #print mut.begin, mut.end, mut.acc, seqSizes[mut.acc]
-        if int(mut.begin)==1 and int(mut.end)==int(seqSizes[mut.acc])+1:
-            logging.debug("skipping %s, covers whole protein" % str(mut))
-            continue
-
-        mutPos = 3*(int(mut.begin)-1)
-        mutPosEnd = 3*(int(mut.end)-1)
-        if mutName not in mutData:
-            ofh.write("\t".join([mut.acc, str(mutPos), str(mutPosEnd), mutName])+"\n")
-        mutData[mutName].append(mut)
-    ofh.close()
-    
-    # lift from protein sequence bed to target bed
-    print "lifting"
-    cmd = "bedToPsl work/chromSizes work/temp.bed stdout | pslMap stdin %s stdout | pslToBed stdin stdout | LC_COLLATE=C sort -k1,1 -k2,2n | bedFixBlockOverlaps /dev/stdin > work/temp.lifted.bed" % liftFname
-    run(cmd)
-
-    print "adding extra fields"
-    # read lifted bed and add uniprot annotations to it as additional fields
-    mutBed = open("spMut.bed", "w")
-    annotBed = open("spAnnot.bed" , "w")
-    structBed = open("spStruct.bed" , "w")
-
-    count = 0
-    blackCount = 0
-    noInfoCount = 0
-    doneAnnots = set() # to skip overlaps: a set with (seq, start, end, name)
-    # name is sequence:start:
-
-    for line in open("work/temp.lifted.bed"):
-        bed = line.strip().split()
-        muts = mutData[bed[3]]
-        varIds = set([mut.varId for mut in muts])
-        pmids = set()
-        for mut in muts:
-            pmids.update(mut.pmid.split(","))
-
-        if len(pmidBlackList.intersection(pmids))==len(pmids):
-            blackCount +=1
-            continue
-
-        if mut.featType in ["mutagenesis site", "sequence variant"]:
-            isMut = True
-            ofh = mutBed
-        elif mut.featType in ["strand","helix", "coiled-coil region", "turn"]:
-            isMut = False
-            ofh = structBed
-        else:
-            isMut = False
-            ofh = annotBed
-
-        bedLine = makeBedLine(muts, bed, isMut)
-        # skip annotations that we most likely have covered before
-        keyFields = tuple(bedLine.split("\t")[:4])
-        if keyFields in doneAnnots:
-            continue
-        doneAnnots.add(keyFields)
-        ofh.write(bedLine)
-        count += 1
-
-    print "%d features written to %s" % (count, ofh.name)
-    mutBed.close()
-    annotBed.close()
-    structBed.close()
-
-    #print "%d variants not mapped to genome" % len(notMapped)
-
-    asFname = "bed12UniProtMut.as"
-    cmd = "bedToBigBed -as=%s spMut.bed %s spMut.bb -type=bed12+ -tab" % \
-        (asFname, chromSizesPath)
-    run(cmd)
-
-    asFname = "bed12UniProtAnnot.as"
-    cmd = "bedToBigBed -as=%s spAnnot.bed %s spAnnot.bb -type=bed12+ -tab" % \
-        (asFname, chromSizesPath)
-    run(cmd)
-    cmd = "bedToBigBed -as=%s spStruct.bed %s spStruct.bb -type=bed12+ -tab" % \
-        (asFname, chromSizesPath)
-    run(cmd)
-
-    #cmd = "rm -rf work"
-    #run(cmd)
-    cmd = "wc -l spMut.bed spAnnot.bed spStruct.bed"
-    run(cmd)
-    #print "%d features written to spMut.bed and %s.bed" % (count, outFname, outFname)
-    print "%d features skipped because of blacklisted PMIDS" % (blackCount)
-    print "%d features skipped because no info (no disease evidence, no comment)" % (noInfoCount)
