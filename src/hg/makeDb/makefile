@@ -7,6 +7,7 @@ include ${kentSrc}/inc/common.mk
 
 # List of directories to build for userApps
 UTILS_APPLIST = \
+	hgFakeAgp \
 	hgFindSpec \
 	hgLoadBed \
 	hgLoadChain \
