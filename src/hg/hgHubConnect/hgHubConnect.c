@@ -366,12 +366,59 @@ while ((row = sqlNextRow(sr)) != NULL)
 }
 
 
+char *modifyTermsForHubSearch(char *hubSearchTerms, bool isStrictSearch)
+/* This won't exactly be pretty.  MySQL treats any sequence of alphanumerics and underscores
+ * as a word, and single apostrophes are allowed as long as they don't come back-to-back.
+ * Cut down to those characters, then add initial + (for requiring word) and * (for word
+ * expansion) as appropriate. */
+{
+char *cloneTerms = cloneString(hubSearchTerms);
+struct dyString *modifiedTerms = dyStringNew(0);
+if (isNotEmpty(cloneTerms))
+    {
+    int i;
+    for (i=0; i<strlen(cloneTerms); i++)
+        {
+        // allowed punctuation is underscore and apostrophe, and we'll do special handling for hyphen
+        if (!isalnum(cloneTerms[i]) && cloneTerms[i] != '_' && cloneTerms[i] != '\'' &&
+                cloneTerms[i] != '-')
+            cloneTerms[i] = ' ';
+        }
+    char *splitTerms[1024];
+    int termCount = chopByWhite(cloneTerms, splitTerms, sizeof(splitTerms));
+    for (i=0; i<termCount; i++)
+        {
+        char *hyphenatedTerms[1024];
+        int hyphenTerms = chopString(splitTerms[i], "-", hyphenatedTerms, sizeof(hyphenatedTerms));
+        int j;
+        for (j=0; j<hyphenTerms-1; j++)
+            {
+            dyStringPrintf(modifiedTerms, "+%s ", hyphenatedTerms[j]);
+            }
+        if (isStrictSearch)
+            dyStringPrintf(modifiedTerms, "+%s ", hyphenatedTerms[j]);
+        else
+            {
+            dyStringPrintf(modifiedTerms, "+%s* ", hyphenatedTerms[j]);
+            }
+        }
+    }
+fprintf(stderr, "Final search terms: %s\n", dyStringContents(modifiedTerms));
+return dyStringCannibalize(&modifiedTerms);
+}
+
+
 struct hubSearchText *getHubSearchResults(struct sqlConnection *conn, char *hubSearchTableName,
         char *hubSearchTerms, bool checkLongText, char *dbFilter, struct hash *hubLookup)
 /* Find hubs, genomes, and tracks that match the provided search terms.
  * Return all hits that satisfy the (optional) supplied assembly filter.
  * if checkLongText is FALSE, skip searching within the long description text entries */
 {
+char *cleanSearchTerms = cloneString(hubSearchTerms);
+if (isNotEmpty(cleanSearchTerms))
+    tolowers(cleanSearchTerms);
+bool isStrictSearch = FALSE;
+char *modifiedSearchTerms = modifyTermsForHubSearch(cleanSearchTerms, isStrictSearch);
 struct hubSearchText *hubSearchResultsList = NULL;
 struct dyString *query = dyStringNew(100);
 char *noLongText = NULL;
@@ -381,14 +428,20 @@ if (!checkLongText)
 else
     noLongText = cloneString("");
 
-sqlDyStringPrintf(query, "select * from %s where %s match(text) against ('%s' in natural language mode)",
-        hubSearchTableName, noLongText, hubSearchTerms);
+sqlDyStringPrintf(query, "select * from %s where %s match(text) against ('%s' in boolean mode)"
+        " order by match(text) against ('%s' in boolean mode)",
+        hubSearchTableName, noLongText, modifiedSearchTerms, modifiedSearchTerms);
 
 struct sqlResult *sr = sqlGetResult(conn, dyStringContents(query));
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct hubSearchText *hst = hubSearchTextLoadWithNullGiveContext(row, hubSearchTerms);
+    struct hubSearchText *hst = hubSearchTextLoadWithNullGiveContext(row, cleanSearchTerms);
+    // Skip rows where the long text matched the more lax MySQL search (punctuation just
+    // splits terms into two words, so "rna-seq" finds "rna" and "seq" separately, but
+    // not the more strict rules used to find context for the search terms.
+    if ((hst->textLength == hubSearchTextLong) && isEmpty(hst->text))
+        continue;
     char *hubUrl = hst->hubUrl;
     struct hubEntry *hubInfo = hashFindVal(hubLookup, hubUrl);
     if (hubInfo == NULL)
@@ -861,7 +914,6 @@ outputPublicTableRow(hubInfo, count);
 if (hubSearchResult != NULL)
     {
     printf("</tbody></table>\n");
-
     struct trackHub *hub = fetchTrackHub(hubInfo);
     struct hubOutputStructure *hubOut = buildHubSearchOutputStructure(hub, hubSearchResult);
     if (dyStringIsEmpty(hubOut->descriptionMatch) && (hubOut->genomes == NULL))
@@ -952,7 +1004,6 @@ if (hubsToPrint != NULL)
     printf("</tbody></table>\n");
     printf("</div>\n");
     }
-
 jsInline(
         "function lineUpCols()\n"
         "    {\n"
@@ -980,7 +1031,6 @@ static bool outputPublicTable(struct sqlConnection *conn, char *publicTable, cha
 /* Put up the list of public hubs and other controls for the page. */
 {
 char *hubSearchTerms = cartOptionalString(cart, hgHubSearchTerms);
-char *cleanSearchTerms = cloneString(hubSearchTerms); // only cleaned by tolowers() at the moment
 char *dbFilter = cartOptionalString(cart, hgHubDbFilter);
 char *lcDbFilter = cloneString(dbFilter);
 if (isNotEmpty(lcDbFilter))
@@ -1004,13 +1054,11 @@ struct slName *hubsToPrint = NULL;
 if (searchEnabled && !isEmpty(hubSearchTerms))
     {
     printSearchTerms(hubSearchTerms);
-    if (isNotEmpty(cleanSearchTerms))
-        tolowers(cleanSearchTerms);
     // Forcing checkDescriptions to TRUE right now, but we might want to add this as a
     // checkbox option for users in the near future.
     bool checkDescriptions = TRUE;
     struct hubSearchText *hubSearchResults = getHubSearchResults(conn, hubSearchTableName,
-            cleanSearchTerms, checkDescriptions, lcDbFilter, hubLookup);
+            hubSearchTerms, checkDescriptions, lcDbFilter, hubLookup);
     searchResultHash = newHash(5);
     struct hubSearchText *hst = hubSearchResults;
     while (hst != NULL)
