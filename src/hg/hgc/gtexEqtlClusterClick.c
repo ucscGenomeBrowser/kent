@@ -45,11 +45,15 @@ return sqlQuickString(conn, query);
 static void printMinorAlleleFreq(char *rsId, struct sqlConnection *conn)
 /* Print minor allele frequency for a SNP (from UCSC dbSNP table) */
 {
-#define ALLELE_COUNT 10
+#define SNP_COMMON_SUFFIX       "Common"
+#define MAX_ALLELE_COUNT 10
+char *snpTable = hFindLatestSnpTableConn(conn, SNP_COMMON_SUFFIX);
+if (!snpTable)
+    return;
 char query[256];
-sqlSafef(query, sizeof query, "SELECT alleleFreqs FROM snp147 WHERE name='%s'", rsId);
-double freqs[ALLELE_COUNT];
-int count = sqlDoubleArray(sqlQuickString(conn, query), freqs, ALLELE_COUNT);
+sqlSafef(query, sizeof query, "SELECT alleleFreqs FROM %s WHERE name='%s'", snpTable, rsId);
+double freqs[MAX_ALLELE_COUNT];
+int count = sqlDoubleArray(sqlQuickString(conn, query), freqs, MAX_ALLELE_COUNT);
 doubleSort(count, freqs);
 printf("<br><b>Minor allele frequency (1000 Genomes):</b> %.0f%%\n", 100.0 * freqs[count-2]);
 }
@@ -164,12 +168,12 @@ printf("<br><b>Position:</b> %s\n", posLink);
 printf("<br><b>Score:</b> %d\n", eqtl->score);
 
 printEqtlRegion(eqtl, tdb->table, conn);
+printf("<br><b>Number of tissues with this eQTL:</b> %d\n", eqtl->expCount);
 
 // print link to GTEx portal
 printf("<br><a target='_blank' href='https://www.gtexportal.org/home/bubbleHeatmapPage/%s'>"
-        "View eQTLs for this gene at the GTEx portal<a>\n", 
+        "View eQTL Visualizer for this gene at the GTEx Portal<a>\n", 
                 geneName);
-printf("<br><b>Number of tissues with this eQTL:</b> %d\n", eqtl->expCount);
 hFreeConn(&conn);
 
 printClusterDetails(eqtl, tdb->table);
