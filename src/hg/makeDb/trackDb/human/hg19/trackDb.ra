@@ -14,7 +14,7 @@ color 200, 0, 0
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
 urlLabel COSMIC ID:
 searchIndex name,cosmLabel
-tableBrowser noGenome
+tableBrowser off
 
 searchTable cosmicRegions
 searchPriority 2.07207

@@ -1,34 +1,34 @@
 <h2>Description</h2>
-<p><a href="http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/" target="_blank">COSMIC</a>, 
+<p><a href="http://cancer.sanger.ac.uk/cosmic/" target="_blank">COSMIC</a>, 
 the "Catalogue Of Somatic Mutations In Cancer," is an online database of somatic mutations found in 
 human cancer. Focused exclusively on non-inherited acquired mutations, COSMIC combines information 
 from a range of sources, curating the described relationships between cancer phenotypes and gene 
-(and genomic) mutations. This data is then made available in a number of ways including here in the 
+(and genomic) mutations. These data are then made available in a number of ways including here in the 
 UCSC genome browser, on the COSMIC website with custom analytical tools, or via the
 <a href="http://cancer.sanger.ac.uk/cosmic/download" target="_blank">COSMIC sftp server</a>.
-Publications using COSMIC as a data source may cite any of our references below.</p>
+Publications using COSMIC as a data source may cite our reference below.</p>
 
 <h2>Methods</h2>
 <p>This track was built from the COSMIC v81 data release. 
 </p>
-<p>The data in COSMIC is curated from a number of high-quality sources and combined into a single
+<p>The data in COSMIC are curated from a number of high-quality sources and combined into a single
 resource. The sources include:</p>
 
 <ul>
 <li>Peer-reviewed journal articles</li>
-<li><a href="http://www.sanger.ac.uk/science/groups/cancer-genome-project" target="_blank">CGP laboratories at the Sanger
-Institute, UK</a></li>
+<li><a href="http://www.sanger.ac.uk/science/groups/cancer-genome-project" target="_blank">
+CGP laboratories at the Sanger Institute, UK</a></li>
 <li><a href="http://cancergenome.nih.gov/" target="_blank">TCGA data portal</a></li>
 <li><a href="https://dcc.icgc.org" target="_blank">The ICGC data portal</a></li>
 <li><a href="http://p53.iarc.fr/" target="_blank">IARC p53 database</a></li>
 </ul>
 
 <p>Information on known cancer genes, selected from the <a
-href="http://cancer.sanger.ac.uk/cancergenome/projects/census/" target="_blank">Cancer Gene Census</a> is curated manually to
-maximise its descriptive content. 
+href="http://cancer.sanger.ac.uk/cancergenome/projects/census/" target="_blank">
+Cancer Gene Census</a> is curated manually to maximise its descriptive content. 
 
 <p>
-The data was downloaded from the COSMIC sftp server.  It was first converted to a bed file using
+The data was downloaded from the COSMIC sftp server. It was first converted to a bed file using
 the UCSC utility cosmicToBed, then converted into a bigBed file using the UCSC utility bedToBigBed.
 The bigBed file is used to generate the track. 
 </p>
@@ -36,36 +36,35 @@ The bigBed file is used to generate the track.
 <h2>Display</h2>
 <ul>
 <li>Dense - Indicate the positions where COSMIC mutations have been annotated in a single horizontal
-track</li>
-<li>Squish - Indicate each mutation, in vertical pileups where appropriate, whilst minimizing screen
- space used.</li>
-<li>Pack - Indicate each mutation with COSMIC identifier (COSMnnnnn), mutation annotation,
-overall mutation frequency and tissues affected, with a link to further details.</li>
-<li>Full - Show each mutation in detail, one per line, with COSM identifier, mutation annotation,
-overall mutation frequency and tissues affected, with a link to even further details.</li>
+track.</li>
+<li>Squish - Indicate each mutation, in vertical pileups where appropriate, whilst minimizing 
+screen space used.</li>
+<li>Pack - Indicate each mutation with COSMIC identifier (COSMnnnnn).</li>
+<li>Full - Show each mutation in detail, one per line, with COSM identifier (COSMnnnnn).</li>
 </ul>
+
+<h2>Data Access</h2>
+<p>
+The raw data underlying this track can be explored and downloaded via the COSMIC 
+<a href="http://cancer.sanger.ac.uk/cosmic">website</a>. 
 
 <h2>Contacts</h2>
 <p>For further information on COSMIC, or for help with the information provided, please contact
-cosmic@<span style="display: none;">null</span>sanger.ac.uk.</p>
+<A HREF="mailto:&#99;&#111;sm&#105;&#99;&#64;&#115;a&#110;g&#101;&#114;.
+&#97;&#99;.
+&#117;&#107;">
+&#99;&#111;sm&#105;&#99;&#64;&#115;a&#110;g&#101;&#114;.
+&#97;&#99;.
+&#117;&#107;</A>.
+</p>
 
 <h2>References</h2>
 <p>
-Forbes SA, Bhamra G, Bamford S, Dawson E, Kok C, Clements J, Menzies A, Teague JW, Futreal PA,
-Stratton MR.
-<a href="http://onlinelibrary.wiley.com/doi/10.1002/0471142905.hg1011s57/abstract" target="_blank">
-The Catalogue of Somatic Mutations in Cancer (COSMIC)</a>.
-<em>Curr Protoc Hum Genet</em>. 2008 Apr;Chapter 10:Unit 10.11.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/18428421" target="_blank">18428421</a>; PMC: <a
-href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2705836/" target="_blank">PMC2705836</a>
-</p>
-
-<p>
-Forbes SA, Bindal N, Bamford S, Cole C, Kok CY, Beare D, Jia M, Shepherd R, Leung K, Menzies A
+Forbes SA, Beare D, Boutselakis H, Bamford S, Bindal N, Tate J, Cole CG, Ward S, Dawson E, Ponting L
 <em>et al</em>.
-<a href="http://nar.oxfordjournals.org/content/39/suppl_1/D945.long" target="_blank">
-COSMIC: mining complete cancer genomes in the Catalogue of Somatic Mutations in Cancer</a>.
-<em>Nucleic Acids Res</em>. 2011 Jan;39(Database issue):D945-50.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/20952405" target="_blank">20952405</a>; PMC: <a
-href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3013785/" target="_blank">PMC3013785</a>
+<a href="https://academic.oup.com/nar/article-lookup/doi/10.1093/nar/gkw1121" target="_blank">
+COSMIC: somatic cancer genetics at high-resolution</a>.
+<em>Nucleic Acids Res</em>. 2017 Jan 4;45(D1):D777-D783.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27899578" target="_blank">27899578</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5210583/" target="_blank">PMC5210583</a>
 </p>
