@@ -205,7 +205,14 @@ else
   endif
 endif
 
-L+=${PNGLIB} -lz -lm
+ifeq (${ZLIB},)
+  ZLIB=-lz
+  ifneq ($(wildcard /opt/local/lib/libz.a),)
+    ZLIB=/opt/local/lib/libz.a
+  endif
+endif
+
+L+=${PNGLIB} ${ZLIB} -lm
 HG_INC+=${PNGINCL}
 
 # pass through COREDUMP
