@@ -156,6 +156,21 @@ printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit,
                                 round(barChartUiMaxMedianScore(tdb)));
 }
 
+void barChartUiMaxHeight(struct cart *cart, char *track, struct trackDb *tdb)
+/* Input to change maximum track height */
+{
+int min = BAR_CHART_MAX_HEIGHT_MIN;
+int deflt = BAR_CHART_MAX_HEIGHT_DEFAULT;
+int max = BAR_CHART_MAX_HEIGHT_MAX;
+int settingsDefault;
+wigFetchMinMaxPlusPixelsWithCart(cart, tdb, track, &min, &max, &deflt, &settingsDefault);
+puts("<b>Track height maximum:</b>\n");
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s.%s", track, HEIGHTPER);
+cgiMakeIntVarWithLimits(cartVar, deflt, "Track height maximum", 0, min, max);
+printf("pixels&nbsp;(range: %d to %d, default: %d)", min, max, settingsDefault);
+}
+
 struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)
 /* Get category colors and descriptions.  Use barChartColors setting if present.
    If not, if there is a barChartBars setting, assign rainbow colors.
@@ -252,15 +267,17 @@ if (cartVarExists(cart, "ajax"))
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 if (startsWith("big", tdb->type))
     labelCfgUi(database, cart, tdb);
-printf("\n<table id=barChartControls style='font-size:%d%%' %s>\n<tr><td>", 
-        isPopup ? 75 : 100, boxed ?" width='100%'":"");
-
-char cartVar[1024];
 
 /* Data transform (log, autoscale or viewlimits) */
-puts("<div>");
+char cartVar[1024];
+puts("<p>");
 barChartUiViewTransform(cart, track, tdb);
-puts("</div>");
+puts("</p>");
+
+/* Maximum track height */
+puts("<p>");
+barChartUiMaxHeight(cart, track, tdb);
+puts("</p>");
 
 /* Category filter */
 printf("<br>");
@@ -286,7 +303,5 @@ struct slName *selectedValues = NULL;
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, BAR_CHART_CATEGORY_SELECT))
     selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, BAR_CHART_CATEGORY_SELECT);
 makeCategoryCheckboxes(cartVar, categs, selectedValues);
-
-puts("\n</table>\n");
 cfgEndBox(boxed);
 }

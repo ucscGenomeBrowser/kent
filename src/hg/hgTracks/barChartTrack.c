@@ -22,6 +22,7 @@ struct barChartTrack
     {
     boolean noWhiteout;         /* Suppress whiteout of graph background (allow highlight, blue lines) */
     double maxMedian;           /* Maximum median across all categories */
+    int maxHeight;              /* Maximum height in pixels for track */
     boolean doLogTransform;     /* Log10(x+1) */
     boolean doAutoScale;        /* Scale to maximum in window, alternative to log */
     char *unit;                /* Units for category values (e.g. RPKM) */
@@ -151,6 +152,21 @@ else
     return MIN_BAR_CHART_MODEL_HEIGHT;
 }
 
+static int barChartMaxHeight(int maxHeight)
+/* Set maximum graph height based on window size */
+{
+// scale based on subjective aesthetic (previous hardcoded were 175/100)
+#define WIN_MED_GRAPH_SCALE     .57
+
+long winSize = virtWinBaseCount;
+if (winSize < WIN_MAX_GRAPH)
+    return maxHeight;
+else if (winSize < WIN_MED_GRAPH)
+    return maxHeight * WIN_MED_GRAPH_SCALE;
+else
+    return tl.fontHeight * 4;
+}
+
 static int barChartItemHeight(struct track *tg, void *item);
 
 static void filterCategories(struct track *tg)
@@ -276,6 +292,10 @@ extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_N
                                                         BAR_CHART_NO_WHITEOUT_DEFAULT);
 extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 
+int min, max, deflt;
+wigFetchMinMaxPixelsWithCart(cart, tdb, tdb->track, &min, &max, &deflt);
+extras->maxHeight = barChartMaxHeight(deflt);
+
 /* Get bed (names and all-sample category median scores) in range */
 loadSimpleBedWithLoader(tg, (bedItemLoader)barChartSimpleBedLoad);
 
@@ -320,12 +340,10 @@ tg->items = infoList;
 
 /* Bargraph layouts for three window sizes */
 #define WIN_MAX_GRAPH 50000
-#define MAX_GRAPH_HEIGHT 175
 #define MAX_BAR_WIDTH 5
 #define MAX_GRAPH_PADDING 2
 
 #define WIN_MED_GRAPH 500000
-#define MED_GRAPH_HEIGHT 100
 #define MED_BAR_WIDTH 3
 #define MED_GRAPH_PADDING 1
 
@@ -362,17 +380,6 @@ else if (winSize < WIN_MED_GRAPH)
     return MED_GRAPH_PADDING;
 else
     return MIN_GRAPH_PADDING;
-}
-
-static int barChartMaxHeight()
-{
-long winSize = virtWinBaseCount;
-if (winSize < WIN_MAX_GRAPH)
-    return MAX_GRAPH_HEIGHT;
-else if (winSize < WIN_MED_GRAPH)
-    return MED_GRAPH_HEIGHT;
-else
-    return tl.fontHeight * 4;
 }
 
 static boolean barChartUseViewLimit(struct barChartTrack *extras)
@@ -418,8 +425,7 @@ if (scaled < 0)
 return (scaled * (maxHeight-1));
 }
 
-static int valToClippedHeight(double val, double maxVal, int maxView, int maxHeight, 
-                                        struct barChartTrack *extras)
+static int valToClippedHeight(double val, double maxVal, int maxView, struct barChartTrack *extras)
 /* Convert a value from 0 to maxVal to 0 to maxHeight-1, with clipping, or log transform the value */
 {
 double useVal = val;
@@ -430,7 +436,7 @@ if (barChartUseViewLimit(extras))
     if (val > maxView)
         useVal = maxView;
     }
-return valToHeight(useVal, useMax, barChartMaxHeight(), extras->doLogTransform);
+return valToHeight(useVal, useMax, extras->maxHeight, extras->doLogTransform);
 }
 
 static int barChartHeight(struct track *tg, struct barChartItem *itemInfo)
@@ -441,7 +447,7 @@ double maxExp = barChartMaxExpScore(tg, itemInfo);
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
                                 BAR_CHART_MAX_VIEW_LIMIT, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
 double maxMedian = ((struct barChartTrack *)tg->extraUiData)->maxMedian;
-return valToClippedHeight(maxExp, maxMedian, viewMax, barChartMaxHeight(), extras);
+return valToClippedHeight(maxExp, maxMedian, viewMax, extras);
 }
 
 static void drawGraphBox(struct track *tg, struct barChartItem *itemInfo, struct hvGfx *hvg, int x, int y)
@@ -548,7 +554,7 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
     struct rgbColor fillColor = extras->colors[i];
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = bed->expScores[i];
-    int height = valToClippedHeight(expScore, maxMedian, viewMax, barChartMaxHeight(), extras);
+    int height = valToClippedHeight(expScore, maxMedian, viewMax, extras);
     if (graphPadding == 0 || sameString(colorScheme, BAR_CHART_COLORS_USER))
         hvGfxBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx);
     else
@@ -582,7 +588,7 @@ struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 if (isMax)
     {
     int extra = 0;
-    height = barChartMaxHeight() + barChartMargin() + barChartModelHeight(extras) + extra;
+    height = extras->maxHeight + barChartMargin() + barChartModelHeight(extras) + extra;
     return height;
     }
 if (item == NULL)
@@ -714,7 +720,7 @@ for (categ = categs; categ != NULL; categ = categ->next, i++)
     if (!filterCategory(tg, categ->name))
         continue;
     double expScore = bed->expScores[i];
-    int height = valToClippedHeight(expScore, maxMedian, viewMax, barChartMaxHeight(), extras);
+    int height = valToClippedHeight(expScore, maxMedian, viewMax, extras);
     mapBoxHc(hvg, itemStart, itemEnd, x1, yZero-height, barWidth, height, tg->track, mapItemName,  
                 barChartMapText(tg, categ, expScore));
     x1 = x1 + barWidth + padding;

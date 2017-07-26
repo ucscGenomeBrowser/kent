@@ -257,8 +257,9 @@ if (cartMaxStr)
     *retMax = cartMax;
 }       /*      void wigFetchMinMaxYWithCart()  */
 
-void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, char *name,int *Min, int *Max, int *Default)
-/*      Min, Max, Default Pixel height of track
+void wigFetchMinMaxPlusPixelsWithCart(struct cart *theCart, struct trackDb *tdb, 
+                                    char *name, int *Min, int *Max, int *Default, int *settingsDefault)
+/*      Min, Max, Defaults Pixel height of track
  *      Limits may be defined in trackDb with the maxHeightPixels string,
  *	Or user requested limits are defined in the cart.
  *	And default opening display limits may optionally be defined with the
@@ -267,11 +268,11 @@ void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, cha
 {
 boolean parentLevel = isNameAtParentLevel(tdb,name);
 char *heightPer = NULL; /*	string from cart	*/
-int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
-int defaultHeightPixels = maxHeightPixels;
-int defaultHeight;      /*      truncated by limits     */
-int minHeightPixels = MIN_HEIGHT_PER;
-char * tdbDefault = cloneString(
+int minHeightPixels = (Min && *Min) ? *Min : MIN_HEIGHT_PER;
+int maxHeightPixels = (Max && *Max) ? *Max : atoi(DEFAULT_HEIGHT_PER);
+int defaultHeightPixels = (Default && *Default) ? *Default : maxHeightPixels;
+int defaultHeight;     /* truncated by limits */
+char *tdbDefault = cloneString(
     trackDbSettingClosestToHomeOrDefault(tdb, MAXHEIGHTPIXELS, DEFAULT_HEIGHT_PER) );
 
 if (sameWord(DEFAULT_HEIGHT_PER,tdbDefault))
@@ -340,16 +341,27 @@ if (differentWord(DEFAULT_HEIGHT_PER,tdbDefault))
     }
 heightPer = cartOptionalStringClosestToHome(theCart, tdb, parentLevel, HEIGHTPER);
 /*      Clip the cart value to range [minHeightPixels:maxHeightPixels] */
-if (heightPer) defaultHeight = min( maxHeightPixels, atoi(heightPer));
-else defaultHeight = defaultHeightPixels;
+if (heightPer) 
+    defaultHeight = min(maxHeightPixels, atoi(heightPer));
+else 
+    defaultHeight = defaultHeightPixels;
 defaultHeight = max(minHeightPixels, defaultHeight);
 
 *Max = maxHeightPixels;
 *Default = defaultHeight;
 *Min = minHeightPixels;
+*settingsDefault = defaultHeightPixels;
 
 freeMem(tdbDefault);
 }       /* void wigFetchMinMaxPixelsWithCart()  */
+
+void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, char *name, 
+                                        int *Min, int *Max, int *Default)
+/*      Min, Max, Default Pixel height of track */
+{
+int settingsDefault;
+wigFetchMinMaxPlusPixelsWithCart(cart, tdb, name, Min, Max, Default, &settingsDefault);
+}
 
 static char *wigCheckBinaryOption(struct trackDb *tdb, char *Default,
     char *notDefault, char *tdbString, char *secondTdbString)
