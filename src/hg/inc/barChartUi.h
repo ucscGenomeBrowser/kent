@@ -17,6 +17,8 @@
     // WARNING: this also appears in JS
 #define BAR_CHART_LOG_TRANSFORM              "logTransform"
 #define BAR_CHART_LOG_TRANSFORM_DEFAULT      TRUE
+#define BAR_CHART_AUTOSCALE                  "autoScale"
+#define BAR_CHART_AUTOSCALE_DEFAULT           FALSE
 
 /* Data range and viewing limits */
 #define BAR_CHART_MAX_LIMIT                  "maxLimit"
