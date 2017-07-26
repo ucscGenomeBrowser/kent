@@ -110,6 +110,7 @@ static struct optionSpec options[] = {
 #define	guideSize	20	// 20 bases
 #define	pamSize		3	//  3 bases
 #define negativeStrand	0x0000800000000000
+#define duplicateGuide	0x0001000000000000
 
 #define fortyEightBits	0xffffffffffff
 #define fortySixBits	0x3fffffffffff
@@ -134,6 +135,7 @@ static struct optionSpec options[] = {
 // bits 5-0 - PAM sequence in 2bit encoding for 3 bases
 // bits 45-6 - 20 base sequence in 2bit encoding format
 // bit 47 - negative strand indication
+// bit 48 - duplicate guide indication
 // considering using other bits during processing to mark
 // an item for no more consideration
 
@@ -481,10 +483,11 @@ else
 }
 
 static void countsOutput(struct crisprList *all, FILE *bedFH)
-/* everything has been scanned and counted, print out all the data from arrays*/
+/* all done scanning and counting, print out all the guide data */
 {
 long startTime = clock1000();
 long long itemsOutput = 0;
+long long duplicatesMarked = 0;
 
 struct crisprList *list;
 long long totalOut = 0;
@@ -494,6 +497,8 @@ for (list = all; list; list = list->next)
     for (c = 0; c < list->crisprCount; ++c)
         {
 	++itemsOutput;
+	if (list->sequence[c] & duplicateGuide)
+	    ++duplicatesMarked;
 	int negativeOffset = 0;
         char strand = '+';
         if (negativeStrand & list->sequence[c])
@@ -519,7 +524,7 @@ for (list = all; list; list = list->next)
 	    {
 		mitScore = roundf((list->mitSum[c] / (float) mitScoreCount));
 	    }
-	    else if (list->offBy[0][c] > 0)
+	    else if (list->sequence[c] & duplicateGuide)
 	    {
 		mitScore = 0.0;
 	    }
@@ -535,6 +540,8 @@ for (list = all; list; list = list->next)
 if (bedFH)
     carefulClose(&bedFH);
 
+verbose(1, "# countsOutput: %lld guides marked as duplicate sequence\n",
+    duplicatesMarked);
 timingMessage("countsOutput:", itemsOutput, "items output", startTime,
     "items/sec", "seconds/item");
 
@@ -701,7 +708,7 @@ int mmCount = 0;
 int lastMmPos = -1;
 /* the XOR determines differences in two sequences, the shift
  * right 6 removes the PAM sequence and the 'fortyBits &' eliminates
- * the negativeStrand bit
+ * the negativeStrand and duplicateGuide bits
  */
 long long misMatch = fortyBits & ((sequence1 ^ sequence2) >> 6);
 int distCount = 0;
@@ -880,7 +887,7 @@ static float calcCfdScore(long long sequence1, long long sequence2)
 float score = 1.0;
 /* the XOR determine differences in two sequences, the
  * shift right 6 removes the PAM sequence and
- * the 'fortyBits &' eliminates the negativeStrand bit
+ * the 'fortyBits &' eliminates the negativeStrand and duplicateGuide bits
  */
 long long misMatch = fortyBits & ((sequence1 ^ sequence2) >> 6);
 long long misMatchBitMask = 0xc000000000;
@@ -1000,6 +1007,7 @@ struct loopControl *control = NULL;
 AllocVar(control);
 
 long startTime = clock1000();
+long long duplicatesMarked = 0;
 
 for (qList = query; qList; qList = qList->next)
     {
@@ -1023,6 +1031,8 @@ for (qList = query; qList; qList = qList->next)
     long long qCount;
     for (qCount = control->listStart; qCount < control->listEnd; ++qCount)
 	{
+        if (qList->sequence[qCount] & duplicateGuide)
+	    continue;	/* already marked as duplicate */
         struct crisprList *tList;
         for (tList = target; tList; tList = tList->next)
             {
@@ -1032,7 +1042,8 @@ for (qList = query; qList; qList = qList->next)
                 {
                 /* the XOR determine differences in two sequences, the
                  * shift right 6 removes the PAM sequence and
-                 * the 'fortyBits &' eliminates the negativeStrand bit
+                 * the 'fortyBits &' eliminates the negativeStrand and
+		 * duplicateGuide bits
                  */
                 long long misMatch = fortyBits &
                     ((qList->sequence[qCount] ^ tList->sequence[tCount]) >> 6);
@@ -1045,7 +1056,8 @@ for (qList = query; qList; qList = qList->next)
                     int bitsOn = _mm_popcnt_u64(misMatch);
                     if (bitsOn < 5)
                         {
-                        recordOffTargets(qList, tList, bitsOn, qCount, tCount, misMatch);
+                        recordOffTargets(qList, tList, bitsOn, qCount,
+			    tCount, misMatch);
                         qList->offBy[bitsOn][qCount] += 1;
 //			tList->offBy[bitsOn][tCount] += 1; not needed
                         }
@@ -1053,6 +1065,8 @@ for (qList = query; qList; qList = qList->next)
                 else
                     { 	/* no misMatch, identical guides */
                     qList->offBy[0][qCount] += 1;
+                    qList->sequence[qCount] |= duplicateGuide;
+		    ++duplicatesMarked;
 //                  tList->offBy[0][tCount] += 1;	not needed
                     }
                 } // for (tCount = 0; tCount < tList->crisprCount; ++tCount)
@@ -1060,6 +1074,8 @@ for (qList = query; qList; qList = qList->next)
 	}	//	for (qCount = 0; qCount < qList->crisprCount; ++qCount)
     }	//	for (qList = query; qList; qList = qList->next)
 
+verbose(1, "# queryVsTarget: an additional %lld duplicates marked\n",
+    duplicatesMarked);
 timingMessage("queryVsTarget", totalCrisprsQuery, "query guides processed",
     startTime, "guides/sec", "seconds/guide");
 timingMessage("queryVsTarget", totalCrisprsTarget, "vs target guides",
@@ -1079,6 +1095,8 @@ long long totalCrisprsCompare = 0;
 
 long startTime = clock1000();
 
+long long duplicatesMarked = 0;
+
 /* query runs through all chroms */
 for (qList = all; qList; qList = qList->next)
     {
@@ -1091,6 +1109,8 @@ for (qList = all; qList; qList = qList->next)
 	   at next kmer after query for this first chrom */
         long long tStart = qCount+1;
         struct crisprList *tList;
+        if (qList->sequence[qCount] & duplicateGuide)
+	    continue;	/* already marked as duplicate */
         for (tList = qList; tList; tList = tList->next)
             {
             long long tCount;
@@ -1099,7 +1119,8 @@ for (qList = all; qList; qList = qList->next)
                 {
 		/* the XOR determine differences in two sequences, the
 		 * shift right 6 removes the PAM sequence and
-		 * the 'fortyBits &' eliminates the negativeStrand bit
+		 * the 'fortyBits &' eliminates the negativeStrand and
+		 * duplicateGuide bits
 		 */
                 long long misMatch = fortyBits &
                     ((qList->sequence[qCount] ^ tList->sequence[tCount]) >> 6);
@@ -1119,8 +1140,11 @@ for (qList = all; qList; qList = qList->next)
                     }
                 else
                     { 	/* no misMatch, identical guides */
+                    qList->sequence[qCount] |= duplicateGuide;
+                    tList->sequence[tCount] |= duplicateGuide;
                     qList->offBy[0][qCount] += 1;
                     tList->offBy[0][tCount] += 1;
+		    ++duplicatesMarked;
                     }
                 } // for (tCount = 0; tCount < tList->crisprCount; ++tCount)
                 tStart = 0;	/* following chroms run through all */
@@ -1128,6 +1152,7 @@ for (qList = all; qList; qList = qList->next)
 	}	//	for (qCount = 0; qCount < qList->crisprCount; ++qCount)
     }	//	for (qList = query; qList; qList = qList->next)
 
+verbose(1, "# queryVsSelf: counted %lld duplicate guides\n", duplicatesMarked);
 timingMessage("queryVsSelf", totalCrisprsQuery, "guides processed",
     startTime, "guides/sec", "seconds/guide");
 timingMessage("queryVsSelf", totalCrisprsCompare, "total comparisons",
@@ -1198,12 +1223,13 @@ char pamString[33];
 
 long startTime = clock1000();
 
-slReverse(&all);
+/* slReverse(&all);   * can not do this here, destroy's caller's list,
+                      * caller's value of all doesn't change */
+
 for (list = all; list; list = list->next)
     {
     fprintf(fh, "%s\t%lld\t%d\n", list->chrom, list->crisprCount, list->size);
     struct crispr *c;
-//    slReverse(&list->chromCrisprs);
     for (c = list->chromCrisprs; c; c = c->next)
 	{
         kmerValToString(kmerString, c->sequence, pamSize);
@@ -1217,7 +1243,6 @@ carefulClose(&fh);
 
 timingMessage("writeGuides", crisprsWritten, "guides written", startTime,
     "guides/sec", "seconds/guide");
-
 }	//	static void writeGuides(struct crisprList *all, char *fileOut)
 
 static void *threadFunction(void *id)
@@ -1310,15 +1335,15 @@ if (verboseLevel() > 1)
 	}
     if (queryGuides)	// when range selected some query sequences
 	{
+	/* the query vs. itself avoiding self vs. self and marking dups */
+        queryVsSelf(queryGuides);
 	if (allGuides) // if there are any left on the all list
 	    {
 	    if (threadCount > 1)
 		runThreads(threadCount, queryGuides, allGuides);
 	    else
-		queryVsTarget(queryGuides, allGuides, 1, 0);
+		queryVsTarget(queryGuides, allGuides, 0, 0);
 	    }
-	/* then run up the query vs. itself avoiding self vs. self */
-        queryVsSelf(queryGuides);
         countsOutput(queryGuides, bedFH);
         }
     else
