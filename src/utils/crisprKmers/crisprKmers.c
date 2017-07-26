@@ -359,9 +359,11 @@ static void copyToArray(struct crisprList *list)
 long startTime = clock1000();
 struct crisprList *cl;
 long long itemsCopied = 0;
+long long chromsCopied = 0;
 
 for (cl = list; cl; cl = cl->next)
     {
+    ++chromsCopied;
     size_t memSize = cl->crisprCount * sizeof(long long);
     cl->sequence = (long long *)needLargeMem(memSize);
     cl->start = (long long *)needLargeMem(memSize);
@@ -386,6 +388,7 @@ for (cl = list; cl; cl = cl->next)
         }
     }
 
+verbose(1, "# copyToArray: copied %lld chromosome lists\n", chromsCopied);
 timingMessage("copyToArray", itemsCopied, "items copied", startTime,
     "items/sec", "seconds/item");
 
@@ -617,7 +620,10 @@ for (list = all; list; list = nextList)
             {
 	    next = c->next;	// remember before perhaps lost
 	    if (endsAG == (c->sequence & 0xf))
+		{
+		prevCrispr = c;	// remains on 'all' list
 		continue;	// only check guides endsGG
+		}
             struct binElement *hitList = NULL;
 	    // select any guide that is at least half contained in any range
 	    int midPoint = c->start + ((pamSize + guideSize) >> 1);
