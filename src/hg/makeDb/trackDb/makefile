@@ -129,7 +129,7 @@ DBS = \
 	ochPri2 ochPri3 \
 	oncVol1 \
 	orcOrc1 \
-	oreNil1 oreNil2 \
+	oreNil1 oreNil2 oreNil3 \
 	ornAna1 ornAna2 \
 	oryCun1 oryCun2 \
 	oryLat1 oryLat2 \
