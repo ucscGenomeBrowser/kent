@@ -3,11 +3,12 @@ release alpha
 superTrack on show 
 type bigBarChart
 group expression
+priority 1
 shortLabel GTEx
 longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 
 	track gtexGene
-    superTrack gtexExpr pack
+	superTrack gtexExpr pack
 	release alpha
 	parent gtexExpr
 	type bed 6 +
