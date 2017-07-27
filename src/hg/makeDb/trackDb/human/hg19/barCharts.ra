@@ -13,7 +13,7 @@ longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors
 	parent gtexExpr
 	type bed 6 +
 	shortLabel GTEx Gene
-	longLabel Gene expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
+	longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 	html gtexExpr
 	group expression
 	visibility pack
@@ -61,7 +61,7 @@ longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors
 	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/cleanGtexSamples.tab
 	barChartMetric median
 	shortLabel GTEx Transc
-	longLabel Transcript expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
+	longLabel Transcript Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 	defaultLabelFields name2
 	labelFields name2, name
 	group expression
