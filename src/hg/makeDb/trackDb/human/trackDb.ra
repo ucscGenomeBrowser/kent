@@ -3375,6 +3375,7 @@ color 200, 0, 0
 type bed 4
 hgsid on
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
+release alpha
 
 track cosmicNew
 shortLabel COSMIC

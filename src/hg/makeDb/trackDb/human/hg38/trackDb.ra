@@ -5,7 +5,6 @@ include barCharts.ra
 include hoffMap.ra
 
 track cosmicRegions
-release alpha
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer
 type bigBed 4 +
