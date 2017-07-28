@@ -109,7 +109,7 @@ int refSeqVerInfoGetVersion(char *acc, struct sqlConnection *conn)
 {
 char query[128];
 sqlSafef(query, sizeof(query),
-      "SELECT version FROM gbSeq WHERE (acc = \"%s\")", acc);
+      "SELECT version FROM hgFixed.gbSeq WHERE (acc = \"%s\")", acc);
 return sqlQuickNum(conn, query);
 }
 
