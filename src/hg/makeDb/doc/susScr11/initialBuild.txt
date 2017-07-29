@@ -111,7 +111,7 @@ real    14m57.924s
 #	max 274330532 (NC_010443.5) median 49329
 
 #############################################################################
-#  Initial database build (TBD - 2016-04-18 - Hiram)
+#  Initial database build (DONE - 2017-07-25 - Hiram)
 
 # same photoReference.txt as was used in susScr3:
     cd /hive/data/genomes/susScr11
@@ -225,29 +225,14 @@ taxId 9823
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku susScr11) > do.log 2>&1 &
-XXX - running - Tue Jul 25 11:24:05 PDT 2017
-    # real    805m20.249s
-    # had one missing ID failure:
-#RepeatMasker bug?: Undefined id, line 3391703 of input:
-#  2118  12.4  3.8  2.4  chr4      152298481 152298818 (43505445) +  MER61C         LTR/ERV1                86  428    (0)
-# At least one ID was missing (see warnings above) -- please report to Robert Hubley.  -continue at your disgression.
-
-    # cleaning out the single bad record
-    grep -v "152298481 152298818" susScr11.sorted.fa.out > susScr11.cleaned.fa.out
-    mv susScr11.sorted.fa.out susScr11.sorted.fa.out.badRecord
-    mv susScr11.cleaned.fa.out susScr11.sorted.fa.out
-
-    # continuing:
-    time  (doRepeatMasker.pl -buildDir=`pwd` \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -continue=mask -smallClusterHub=ku susScr11) > mask.log 2>&1
+    # real    781m8.842s
 
     cat faSize.rmsk.txt
-# 3286643896 bases (560753890 N's 2725890006 real 1348347850 upper
-#    1377542156 lower) in 10274 sequences in 1 files
-# Total size: mean 319899.2 sd 6899023.6 min 217 (chrUn_NW_014024393v1)
-#    max 247869975 (chr2B) median 1230
-# %41.91 masked total, %50.54 masked real
+# 2501912388 bases (29864684 N's 2472047704 real 1352527731 upper
+#	1119519973 lower) in 613 sequences in 1 files
+# Total size: mean 4081423.1 sd 23780904.1 min 15096 (chrUn_NW_018085360v1)
+#	max 274330532 (chr1) median 49329
+# %44.75 masked total, %45.29 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -255,8 +240,8 @@ XXX - running - Tue Jul 25 11:24:05 PDT 2017
     # CC   RELEASE 20140131;
 
     time featureBits -countGaps susScr11 rmsk
-    # 1378308706 bases of 3286643896 (41.937%) in intersection
-    # real    0m56.056s
+    # 1119521852 bases of 2501912388 (44.747%) in intersection
+    # real    0m42.868s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -265,8 +250,8 @@ XXX - running - Tue Jul 25 11:24:05 PDT 2017
     # faster way to get the same result:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' susScr11 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    # total 1378308706.000000
-    # real    0m36.998s
+    # total 1119521852.000000
+    #  real    0m35.755s
 
 ##########################################################################
 # running simple repeat (DONE - 2017-07-25 - Hiram)
@@ -276,30 +261,29 @@ XXX - running - Tue Jul 25 11:24:05 PDT 2017
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409 5 susScr11) > do.log 2>&1 &
-XXX - running - Tue Jul 25 11:29:48 PDT 2017
-    # real    20m23.012s
+    # real    9m56.089s
 
     cat fb.simpleRepeat
-    # 53570869 bases of 2725937399 (1.965%) in intersection
+    # 33056801 bases of 2472073034 (1.337%) in intersection
 
-    # add to rmsk after it is done:
+    # add to this simple repeat to rmsk:
     cd /hive/data/genomes/susScr11
     twoBitMask susScr11.rmsk.2bit \
         -add bed/simpleRepeat/trfMask.bed susScr11.2bit
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa susScr11.2bit stdout | faSize stdin > faSize.susScr11.2bit.txt
     cat faSize.susScr11.2bit.txt
-    # 3286643896 bases (560753890 N's 2725890006 real 1346906367 upper
-    #    1378983639 lower) in 10274 sequences in 1 files
-    # Total size: mean 319899.2 sd 6899023.6 min 217 (chrUn_NW_014024393v1)
-    #    max 247869975 (chr2B) median 1230
-    # %41.96 masked total, %50.59 masked real
+    # 2501912388 bases (29864684 N's 2472047704 real 1351491909 upper
+    #	1120555795 lower) in 613 sequences in 1 files
+    # Total size: mean 4081423.1 sd 23780904.1
+    #	min 15096 (chrUn_NW_018085360v1) max 274330532 (chr1) median 49329
+    # %44.79 masked total, %45.33 masked real
 
     rm /gbdb/susScr11/susScr11.2bit
     ln -s `pwd`/susScr11.2bit /gbdb/susScr11/susScr11.2bit
 
 #############################################################################
-# CREATE MICROSAT TRACK (TBD - 2016-04-19 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2017-07-27 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/susScr11/bed/microsat
     cd /cluster/data/susScr11/bed/microsat
@@ -308,10 +292,9 @@ XXX - running - Tue Jul 25 11:29:48 PDT 2017
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed susScr11 microsat microsat.bed
-    # Read 26743 elements of size 4 from microsat.bed
 
 #############################################################################
-# ucscToINSDC table/track (TBD - 2016-04-19 - Hiram)
+# ucscToINSDC table/track (DONE - 2017-07-29 - Hiram)
     # the sequence here is working for a 'refseq' assembly with a chrM
     # situation may be specific depending upon what is available in the assembly
 
@@ -320,18 +303,23 @@ XXX - running - Tue Jul 25 11:29:48 PDT 2017
 
     # find accession for chrM
     grep chrM ../../susScr11.agp
-# chrM    1       16563   1       O       NC_001644.1     1       16563   +
+# chrM    1       16613   1       O       NC_000845.1     1       16613   +
 
     # use that accession here:
     ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-        ../../refseq/GCF_*structure/Primary_Assembly NC_001644.1
-    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+        ../../refseq/GCF_*structure/Primary_Assembly NC_000845.1
+    # this is actually ucscToRefSeq
 
-    # there is no name for chrM/NC_007393.1 sequence, there is no such
-    #  sequence with an INSDC name
+    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+    rm -f ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt | sort > refseqToUcsc.txt
+
+    # there is no INSDC name in the assembly_report for chrM/NC_000845.1
+    #  use the INSDC name from before: AF034253.1
     grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
-      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $2, $1}' \
-         | sort > insdc.refseq.txt
+      | sed -e 's/na\b/AF034253.1/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+         | sort > refseq.insdc.txt
     # the sed \b means to match word
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
@@ -340,45 +328,43 @@ XXX - running - Tue Jul 25 11:29:48 PDT 2017
     # the tr commands avoid the problem of trying to use the -t argument
     # to the join command which doesn't accept -t'\t' but instead has
     # to use the unseen/can not copy command ctrl-v i
-    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
        | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
            > ucscToINSDC.bed
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+           > ucscToRefSeq.bed
+
+    # verify chrM is correct:
+    grep chrM *.bed
+# ucscToINSDC.bed:chrM    0       16613   AF034253.1
+# ucscToRefSeq.bed:chrM   0       16613   NC_000845.1
 
     # should be same line counts throughout:
     wc -l *
-    # 2490 insdc.refseq.txt
-    # 2490 insdcToUcsc.txt
-    # 2490 name.coordinate.tab
-    # 2490 ucscToINSDC.bed
-    # 2490 ucscToINSDC.txt
+    # 613 name.coordinate.tab
+    # 613 refseq.insdc.txt
+    # 613 ucscToINSDC.bed
+    # 613 ucscToRefSeq.bed
+    # 613 ucscToRefSeq.txt
 
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 20
-    # use the 20 in this sed
-    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    # 26
+    # use the 26 in this sed
+    sed -e "s/21/26/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab susScr11 ucscToINSDC stdin ucscToINSDC.bed
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    sed -e "s/21/26/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab susScr11 ucscToRefSeq stdin ucscToRefSeq.bed
     checkTableCoords susScr11
     # should cover %100 entirely:
     featureBits -countGaps susScr11 ucscToINSDC
-    # 3286643896 bases of 3286643896 (100.000%) in intersection
-
-    join -1 2 <(sort -k2 ucscToINSDC.txt) insdc.refseq.txt | tr '[ ]' '[\t]' \
-      | sort -k2 | join -2 2 name.coordinate.tab - |  tr '[ ]' '[\t]' \
-        | cut -f1-4 > ucscToRefSeq.bed
-    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 20
-    # use the 20 in this sed
-    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
-       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
-    hgLoadSqlTab susScr11 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
-
-    checkTableCoords  susScr11 -table=ucscToRefSeq
-    # should cover %100 all bases:
+    # 2501912388 bases of 2501912388 (100.000%) in intersection
     featureBits -countGaps susScr11 ucscToRefSeq
-    # 3286643896 bases of 3286643896 (100.000%) in intersection
+    # 2501912388 bases of 2501912388 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2017-02-27 - Hiram)
+# add chromAlias table (DONE - 2017-07-29 - Hiram)
 
     mkdir /hive/data/genomes/susScr11/bed/chromAlias
     cd /hive/data/genomes/susScr11/bed/chromAlias
@@ -388,6 +374,11 @@ XXX - running - Tue Jul 25 11:29:48 PDT 2017
     hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' susScr11 \
         > ucsc.genbank.tab
 
+    # verify chrM is correct:
+    grep chrM *
+# ucsc.genbank.tab:chrM   AF034253.1      genbank
+# ucsc.refseq.tab:chrM    NC_000845.1     refseq
+
     awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
         | sort > susScr11.chromAlias.tab
 
@@ -395,68 +386,89 @@ XXX - running - Tue Jul 25 11:29:48 PDT 2017
         susScr11.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2016-04-19 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2017-07-29 - Hiram)
 
-    cd ~/kent/src/hg/makeDb/trackDb/bonobo/susScr11
+    cd ~/kent/src/hg/makeDb/trackDb/pig/susScr11
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" susScr11 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
-# 121336 AJFE.1
-#      1 NC_.1
+    705 AEMK.1
+      2 AJKK.1
+      2 CU.2
+     18 FO.1
+    234 FO.2
+    105 FO.3
+     52 FO.4
+     12 FO.5
+      3 FO.6
+      1 FO.7
+      1 FO.9
+      1 FP.2
+      1 FP.3
+      7 FQ.1
+     91 FQ.2
+     55 FQ.3
+      9 FQ.4
+     10 FQ.5
+      2 FQ.6
+      1 FQ.9
+      1 NC_.1
 
-    # implies a search rule of: '[ACEFJN_]+[0-9]+(\.[0-9]+)?'
+    # implies a search rule of: '[ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?'
 
     # verify this rule will find them all or eliminate them all:
     hgsql -N -e "select frag from gold;" susScr11 | wc -l
-    # 121337
+    # 1313
 
     hgsql -N -e "select frag from gold;" susScr11 \
-       | egrep -e '[ACEFJN_]+[0-9]+(\.[0-9]+)?' | wc -l
-    # 121337
+       | egrep -e '[ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?' | wc -l
+    # 1313
 
     hgsql -N -e "select frag from gold;" susScr11 \
-       | egrep -v -e '[ACEFJN_]+[0-9]+(\.[0-9]+)?' | wc -l
+       | egrep -v -e '[ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/rhesus/susScr11/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [ACEFJN_]+[0-9]+(\.[0-9]+)?
+termRegex [ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
+
+    git commit -m 'add gold table search rule refs #19859' trackDb.ra
 
     # verify searches work in the position box
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2016-05-04 - Hiram)
+## WINDOWMASKER (DONE - 2017-07-27 - Hiram)
 
     mkdir /hive/data/genomes/susScr11/bed/windowMasker
     cd /hive/data/genomes/susScr11/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev susScr11) > do.log 2>&1
-    # real    379m56.649s
+    # real    158m14.091s
 
     # Masking statistics
     cat faSize.susScr11.cleanWMSdust.txt
-# 3286643896 bases (560753890 N's 2725890006 real 1730579207 upper
-#    995310799 lower) in 10274 sequences in 1 files
-# Total size: mean 319899.2 sd 6899023.6 min 217 (chrUn_NW_014024393v1)
-#    max 247869975 (chr2B) median 1230
-# %30.28 masked total, %36.51 masked real
+# 2501912388 bases (29864684 N's 2472047704 real 1563211996 upper
+#	908835708 lower) in 613 sequences in 1 files
+# Total size: mean 4081423.1 sd 23780904.1 min 15096 (chrUn_NW_018085360v1)
+#	max 274330532 (chr1) median 49329
+# %36.33 masked total, %36.76 masked real
 
     cat fb.susScr11.rmsk.windowmaskerSdust.txt
-    # 768236951 bases of 3286643896 (23.375%) in intersection
+    # 677163594 bases of 2501912388 (27.066%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2016-05-05 - Hiram)
+# cpgIslands - (DONE - 2017-07-27 - Hiram)
     mkdir /hive/data/genomes/susScr11/bed/cpgIslands
     cd /hive/data/genomes/susScr11/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku susScr11) > do.log 2>&1
-    # real    6m54.203s
+    # real    4m52.080s
 
     cat fb.susScr11.cpgIslandExt.txt
-    # 17035990 bases of 2725937399 (0.625%) in intersection
+    # 32550865 bases of 2472073034 (1.317%) in intersection
 
 ##############################################################################
 # ncbiRefSeq gene track (TBD - 2016-05-05 - Hiram)
@@ -489,11 +501,12 @@ searchPriority 8
     # 74646536 bases of 2725937399 (2.738%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2016-05-05 - Hiram)
+# genscan - (DONE - 2017-07-27 - Hiram)
     mkdir /hive/data/genomes/susScr11/bed/genscan
     cd /hive/data/genomes/susScr11/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku susScr11) > do.log 2>&1
+XXX - running - Thu Jul 27 13:03:27 PDT 2017
 # Completed: 10270 of 10274 jobs
 # Crashed: 2 jobs
 # CPU time in finished jobs:     450524s    7508.73m   125.15h    5.21d  0.014 y
@@ -517,65 +530,78 @@ searchPriority 8
     #   45930774 bases of 2725937399 (1.685%) in intersection
 
 #############################################################################
-# augustus gene track (TBD - 2016-05-11 - Hiram)
+# augustus gene track (DONE - 2017-07-27 - Hiram)
 
     mkdir /hive/data/genomes/susScr11/bed/augustus
     cd /hive/data/genomes/susScr11/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev susScr11) > do.log 2>&1
-    # real    95m5.905s
+    # real    207m36.088s
 
     cat fb.susScr11.augustusGene.txt
-    # 49244982 bases of 3142093174 (1.567%) in intersection
+    # 47127389 bases of 2472073034 (1.906%) in intersection
 
-#########################################################################
-# Create kluster run files (TBD - 2016-05-11 - Hiram)
+#############################################################################
+# Create kluster run files (DONE - 2017-07-27 - Hiram)
 
     # numerator is susScr11 gapless bases "real" as reported by:
     featureBits -noRandom -noHap susScr11 gap
-    # 469457882 bases of 2682465908 (17.501%) in intersection
+    # 29824354 bases of 2405454322 (1.240%) in intersection
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2682465908 / 2861349177 \) \* 1024
-    # ( 2682465908 / 2861349177 ) * 1024 = 959.982484
+    calc \( 2405454322 / 2861349177 \) \* 1024
+    # ( 2405454322 / 2861349177 ) * 1024 = 860.847479
 
-    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 100
     cd /hive/data/genomes/susScr11
     time blat susScr11.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/susScr11.11.ooc \
-        -repMatch=900
-    #   Wrote 34618 overused 11-mers to jkStuff/susScr11.11.ooc
-    #    real    0m56.353s
+        -repMatch=800
+    #   Wrote 34181 overused 11-mers to jkStuff/susScr11.11.ooc
+    #	real    0m44.366s
 
     #   check non-bridged gaps to see what the typical size is:
     hgsql -N \
         -e 'select * from gap where bridge="no" order by size;' susScr11 \
         | sort -k7,7nr
-    #   minimum size is 1000
-    #   decide on a minimum gap for this break, use either 100 or 5000 will
-    #   generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
-    #   so use 100 here to get more liftOver row.
-    gapToLift -verbose=2 -minGap=1000 susScr11 jkStuff/susScr11.nonBridged.lft \
-        -bedFile=jkStuff/susScr11.nonBridged.bed
+    #   minimum size is 50000
+    gapToLift -verbose=2 -minGap=50000 susScr11 \
+	jkStuff/susScr11.nonBridged.lft -bedFile=jkStuff/susScr11.nonBridged.bed
 
-########################################################################
+#########################################################################
+# LIFTOVER TO susScr3 (DONE - 2017-07-27 - Hiram )
+    mkdir /hive/data/genomes/susScr11/bed/blat.susScr3.2017-07-27
+    cd /hive/data/genomes/susScr11/bed/blat.susScr3.2017-07-27
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug \
+        -ooc /hive/data/genomes/susScr11/jkStuff/susScr11.11.ooc \
+	   susScr11 susScr3
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc /hive/data/genomes/susScr11/jkStuff/susScr11.11.ooc \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	 susScr11 susScr3) > do.log 2>&1 &
+    #   real    252m20.235s
+
+    # verify browser can run a view in other genomes to susScr3 from susScr11
+
+#########################################################################
 # GENBANK AUTO UPDATE (TBD - 2016-05-17 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # #organism       mrnaCnt estCnt  refSeqCnt
-    # Pan paniscus    440     1       46
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Sus scrofa      41240   1676416 4173
 
+    # edit etc/genbank.conf to add susScr11 just before susScr3
 
-    # edit etc/genbank.conf to add susScr11 just before panPan1
-
-# susScr11 (bonobo - Pan paniscus)
+# susScr11 (pig)
 susScr11.serverGenome = /hive/data/genomes/susScr11/susScr11.2bit
 susScr11.clusterGenome = /hive/data/genomes/susScr11/susScr11.2bit
 susScr11.ooc = /hive/data/genomes/susScr11/jkStuff/susScr11.11.ooc
@@ -588,12 +614,17 @@ susScr11.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDn
 susScr11.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
 susScr11.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
 susScr11.downloadDir = susScr11
-# defaults yes genbank.mrna.native, genbank.est.native.load,
-#              refseq.mrna.native, refseq.mrna.xeno
+susScr11.refseq.mrna.native.load  = yes
+susScr11.refseq.mrna.xeno.load  = yes
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
-susScr11.genbank.est.native.load = no
+susScr11.genbank.mrna.xeno.load = yes
+susScr11.genbank.mrna.xeno.loadDesc = no
+susScr11.genbank.est.native.load = yes
+# susScr11.upstreamGeneTbl = ensGene
+# susScr11.upstreamMaf = multiz12way
+# /hive/data/genomes/susScr11/bed/multiz12way/species.list
 
-    git commit -m "Added susScr11; refs #16036" etc/genbank.conf
+    git commit -m "Added susScr11; refs #19879" etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
     make etc-update
@@ -604,11 +635,13 @@ susScr11.genbank.est.native.load = no
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial susScr11
-    #  logFile: var/build/logs/2016.05.11-14:44:15.susScr11.initalign.log
-    #   real    196m8.278s
-    tail -2 var/build/logs/2016.05.11-14:44:15.susScr11.initalign.log
-# hgwdev 2016.05.11-17:58:29 susScr11.initalign: Succeeded: susScr11
-# hgwdev 2016.05.11-18:00:23 susScr11.initalign: finish
+    #  logFile: var/build/logs/2017.07.27-20:49:34.susScr11.initalign.log
+
+    #   real    1486m19.233s
+
+    tail -2 var/build/logs/2017.07.27-20:49:34.susScr11.initalign.log
+# hgwdev 2017.07.28-21:20:42 susScr11.initalign: Succeeded: susScr11
+# hgwdev 2017.07.28-21:35:53 susScr11.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.susScr11
@@ -617,43 +650,23 @@ susScr11.genbank.est.native.load = no
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad susScr11
-    # logFile: var/dbload/hgwdev/logs/2016.05.13-16:11:17.susScr11.dbload.log
-    # real    11m44.667s
-    tail -1 var/dbload/hgwdev/logs/2016.05.13-16:11:17.susScr11.dbload.log
-    # hgwdev 2016.05.13-16:23:02 susScr11.dbload: finish
+    # logFile: var/dbload/hgwdev/logs/2017.07.29-07:05:26.susScr11.dbload.log
+    # real    81m41.107s
+
+    tail -1 var/dbload/hgwdev/logs/2017.07.29-07:05:26.susScr11.dbload.log
+    # hgwdev 2017.07.29-08:27:07 susScr11.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add susScr11 to:
-    #   etc/align.dbs
-    #   etc/hgwdev.dbs
-    git add etc/align.dbs
-    git add etc/hgwdev.dbs
-    git commit -m "Added susScr11 - Bonobo refs #16036" etc/align.dbs etc/hgwdev.dbs
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added susScr11 - pig refs #19859" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 ##############################################################################
-# LIFTOVER TO panPan1 (TBD - 2016-05-17 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/susScr11/bed/blat.panPan1.2016-05-17
-    cd /hive/data/genomes/susScr11/bed/blat.panPan1.2016-05-17
-
-    doSameSpeciesLiftOver.pl -verbose=2 \
-        -debug -ooc=/hive/data/genomes/susScr11/jkStuff/susScr11.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         susScr11 panPan1
-
-    time (doSameSpeciesLiftOver.pl -verbose=2 \
-        -ooc=/hive/data/genomes/susScr11/jkStuff/susScr11.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         susScr11 panPan1) > doLiftOverToPanPan1.log 2>&1
-    # real    156m48.953s
-
-    # verify this functions in the genome browser from susScr11 to panPan1
-
-#########################################################################
 #  BLATSERVERS ENTRY (TBD - 2017-02-06 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
