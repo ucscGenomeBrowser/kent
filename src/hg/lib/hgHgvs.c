@@ -218,6 +218,17 @@ if (pHgvs && *pHgvs)
 //                                                     10.....  change description
 
 // Pseudo-HGVS in common usage
+// g. with "chr" ID:
+#define pseudoHgvsChrGDotExp hgvsFullRegex("(chr[0-9A-Za-z_]+)", hgvsGMDotPosExp) "(.*)"
+// substring numbering:
+//      0.....................................  whole matching string
+//      1...........                            chr...
+//                   2.                         g or m
+//                     3......                  1-based start position
+//                            4.......          optional range separator and end position
+//                              5.....          1-based end position
+//                                    6....     change description
+
 // Sometimes users give an NM_ accession, but a protein change.
 #define pseudoHgvsNMPDotSubstExp "^" versionedRefSeqNMExp "[ :]+p?\\.?" hgvsAminoAcidSubstExp
 // substring numbering:
@@ -710,6 +721,22 @@ else if (regexMatchSubstr(term, pseudoHgvsGeneSympolCDotPosExp, substrs, ArraySi
         dyStringFree(&nmTerm);
         freeMem(nmAcc);
         }
+    }
+else if (regexMatchSubstr(term, pseudoHgvsChrGDotExp, substrs, ArraySize(substrs)))
+    {
+    int chrIx = 1;
+    int startPosIx = 3;
+    int endPosIx = 5;
+    int changeIx = 6;
+    AllocVar(hgvs);
+    hgvs->type = hgvstGenomic;
+    hgvs->seqAcc = regexSubstringClone(term, substrs[chrIx]);
+    hgvs->start1 = regexSubstringInt(term, substrs[startPosIx]);
+    if (regexSubstrMatched(substrs[endPosIx]))
+        hgvs->end = regexSubstringInt(term, substrs[endPosIx]);
+    else
+        hgvs->end = hgvs->start1;
+    hgvs->changes = regexSubstringClone(term, substrs[changeIx]);
     }
 return hgvs;
 }
