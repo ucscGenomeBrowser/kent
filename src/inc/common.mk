@@ -24,9 +24,6 @@ UNAME_S := $(shell uname -s)
 # to check for builds on hgwdev
 FULLWARN = $(shell uname -n)
 
-#global external libraries 
-L=$(kentSrc)/htslib/libhts.a
-
 # pthreads is required
 ifneq ($(UNAME_S),Darwin)
   L+=-pthread
@@ -48,7 +45,7 @@ ifeq (${HALDIR},)
 endif
 
 ifeq (${USE_HAL},1)
-    HALLIBS=${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halChain.a ${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halLiftover.a ${HALDIR}/lib/halLod.a ${HALDIR}/lib/halLib.a ${HALDIR}/lib/sonLib.a ${HALDIR}/lib/libhdf5_cpp.a ${HALDIR}/lib/libhdf5.a ${HALDIR}/lib/libhdf5_hl.a 
+    HALLIBS=${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halChain.a ${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halLiftover.a ${HALDIR}/lib/halLod.a ${HALDIR}/lib/halLib.a ${HALDIR}/lib/sonLib.a ${HALDIR}/lib/libhdf5_cpp.a ${HALDIR}/lib/libhdf5.a ${HALDIR}/lib/libhdf5_hl.a
     HG_DEFS+=-DUSE_HAL
     HG_INC+=-I${HALDIR}/inc
 endif
@@ -205,8 +202,21 @@ else
   endif
 endif
 
-L+=${PNGLIB} -lz -lm
+ifeq (${ZLIB},)
+  ZLIB=-lz
+  ifneq ($(wildcard /opt/local/lib/libz.a),)
+    ZLIB=/opt/local/lib/libz.a
+  endif
+  ifneq ($(wildcard /usr/lib64/libz.a),)
+    ZLIB=/usr/lib64/libz.a
+  endif
+endif
+
+L+=${PNGLIB} ${ZLIB} -lm
 HG_INC+=${PNGINCL}
+
+#global external libraries
+L += $(kentSrc)/htslib/libhts.a
 
 # pass through COREDUMP
 ifneq (${COREDUMP},)
@@ -283,7 +293,7 @@ endif
 CVS=cvs
 GIT=git
 
-# portable naming of compiled executables: add ".exe" if compiled on 
+# portable naming of compiled executables: add ".exe" if compiled on
 # Windows (with cygwin).
 ifeq (${OS}, Windows_NT)
   AOUT=a

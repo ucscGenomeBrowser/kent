@@ -1,0 +1,693 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the oreNil3
+# Nile tilapia -- Oreochromis niloticus
+
+# chrMT listed in assembly == NC_013663.1 == GU238433.1
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2017-07-27 - Hiram)
+    mkdir -p /hive/data/genomes/oreNil3/refseq
+    cd /hive/data/genomes/oreNil3/refseq
+
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_other/Oreochromis_niloticus/all_assembly_versions/GCF_001858045.1_ASM185804v2/ ./
+    # real    1m49.631s
+    # sent 2790 bytes  received 1601058053 bytes  14621560.21 bytes/sec
+    # total size is 1600852394  speedup is 1.00
+
+    # measure what we have here:
+    faSize GCF_001858045.1_ASM185804v2_genomic.fna.gz
+# 1009856516 bases (4230001 N's 1005626515 real 714466436 upper
+#	291160079 lower) in 2567 sequences in 1 files
+# Total size: mean 393399.5 sd 3657283.6 min 5393 (NW_017615892.1)
+#	max 62059223 (NC_031972.1) median 21833
+# %28.83 masked total, %28.95 masked real
+
+
+    faCount GCF_001858045.1_ASM185804v2_genomic.fna.gz | tail
+# seq    len             A       C          G       T         N       cpg
+# total 1009856516 297968384 204671628 204958373 298028130 4230001 17363938
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2017-07-27 - Hiram)
+    mkdir /hive/data/genomes/oreNil3/ucsc
+    cd /hive/data/genomes/oreNil3/ucsc
+
+    # verify no duplicate sequences:
+    time faToTwoBit ../refseq/*2_genomic.fna.gz refseq.2bit
+    #  real    0m29.769s
+
+    time twoBitDup refseq.2bit
+    # should be silent output, otherwise the duplicates need to be removed
+    # real    0m7.797s
+
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+     ../refseq/*2_genomic.fna.gz ../refseq/*_assembly_structure/Primary_Assembly
+
+# NC_031965.1 chrLG1
+# NC_031966.1 chrLG2
+# NC_031967.1 chrLG3a
+# NC_031968.1 chrLG3b
+# NC_031969.1 chrLG4
+# NC_031970.1 chrLG5
+# NC_031971.1 chrLG6
+# NC_031972.1 chrLG7
+# NC_031973.1 chrLG8
+# NC_031974.1 chrLG9
+# NC_031975.1 chrLG10
+# NC_031976.1 chrLG11
+# NC_031977.1 chrLG12
+# NC_031978.1 chrLG13
+# NC_031979.1 chrLG14
+# NC_031980.1 chrLG15
+# NC_031981.1 chrLG17
+# NC_031982.1 chrLG18
+# NC_031983.1 chrLG19
+# NC_031984.1 chrLG20
+# NC_031985.1 chrLG22
+# NC_031986.1 chrLG23
+# NC_031987.1 chrLG16
+
+# real    4m57.131s
+
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+    # processed 2543 sequences into chrUn.fa.gz
+    # real    0m47.519s
+
+    # there are no unlocalized contigs
+#    time ~/kent/src/hg/utils/automation/unlocalizedWithChroms.pl \
+#	../refseq/*_assembly_structure/Primary_Assembly
+    # Y
+    # processed 9 sequences into chr*_random.gz 1 files
+    # real    0m0.501s
+
+    # bash syntax here
+G*2_assembly_report.txt
+
+    mitoAcc=`grep MT ../refseq/G*2_assembly_report.txt | cut -f7`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_013663.1
+
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+    gzip chrM.fa
+
+    # verify fasta and AGP match:
+    time faToTwoBit chr*.fa.gz test.2bit
+    # real    0m31.229s
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    #  All AGP and FASTA entries agree - both files are valid
+
+    # verify nothing lost compared to genbank:
+    time twoBitToFa test.2bit stdout | faSize stdin
+# 1009856516 bases (4230001 N's 1005626515 real 767408040 upper
+#	238218475 lower) in 2567 sequences in 1 files
+# Total size: mean 393399.5 sd 3657283.6 min 5393 (chrUn_NW_017615892v1)
+#	max 62059223 (chrLG7) median 21833
+# %23.59 masked total, %23.69 masked real
+
+# real    0m20.750s
+
+    # same totals as above:
+# 1009856516 bases (4230001 N's 1005626515 real 714466436 upper
+#	291160079 lower) in 2567 sequences in 1 files
+# Total size: mean 393399.5 sd 3657283.6 min 5393 (NW_017615892.1)
+#	max 62059223 (NC_031972.1) median 21833
+# %28.83 masked total, %28.95 masked real
+
+#############################################################################
+#  Initial database build (DONE - 2017-07-27 - Hiram)
+
+# same photoReference.txt as was used in oreNil2:
+    cd /hive/data/genomes/oreNil3
+    cat ../oreNil2/photoReference.txt
+photoCreditURL  http://fishbase.org/photos/PicturesSummary.php?resultPage=15&StartRow=9&ID=2&what=species&TotRec=11
+photoCreditName Robbie Cada, fishbase.org
+
+    cp -p ../oreNil2/photoReference.txt .
+
+    # establish the config.ra file:
+    ~/kent/src/hg/utils/automation/prepConfig.pl oreNil3 vertebrate oreNil \
+       refseq/G*2_assembly_report.txt > oreNil3.config.ra
+    
+    # verify this looks OK:
+
+    cat oreNil3.config.ra
+# config parameters for makeGenomeDb.pl:
+db oreNil3
+clade vertebrate
+scientificName Oreochromis niloticus
+commonName Nile tilapia
+assemblyDate Nov. 2016
+assemblyLabel University of Maryland
+assemblyShortLabel ASM185804v2
+orderKey 14418
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_013663.1
+mitoAcc none
+fastaFiles /hive/data/genomes/oreNil3/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/oreNil3/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir oreNil
+photoCreditURL  http://fishbase.org/photos/PicturesSummary.php?resultPage=15&StartRow=9&ID=2&what=species&TotRec=11
+photoCreditName Robbie Cada, fishbase.org
+ncbiGenomeId 197
+ncbiAssemblyId 893611
+ncbiAssemblyName ASM185804v2
+ncbiBioProject 354796
+ncbiBioSample SAMN05859795
+genBankAccessionID GCF_001858045.1
+taxId 8128
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp oreNil3.config.ra) > agp.log 2>&1
+    # real    1m1.424s
+    # verify it ran OK:
+    #   *** All done!  (through the 'agp' step)
+
+    # then finish it off:
+    time (~/kent/src/hg/utils/automation/makeGenomeDb.pl -workhorse=hgwdev \
+       -dbHost=hgwdev -fileServer=hgwdev -continue=db \
+           oreNil3.config.ra ) > db.log 2>&1
+    # real    8m19.946s
+
+    # check in the trackDb files created and add to trackDb/makefile
+    # temporary symlink until after masking
+    ln -s `pwd`/oreNil3.unmasked.2bit /gbdb/oreNil3/oreNil3.2bit
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-07-27 - Hiram)
+    mkdir /hive/data/genomes/oreNil3/bed/cytoBand
+    cd /hive/data/genomes/oreNil3/bed/cytoBand
+    makeCytoBandIdeo.csh oreNil3
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2017-07-27 - Hiram)
+    mkdir /hive/data/genomes/oreNil3/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/oreNil3/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/oreNil3/oreNil3.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku oreNil3) > do.log 2>&1
+    # real    4m24.538s
+
+    cat fb.oreNil3.cpgIslandExtUnmasked.txt
+    # 18179828 bases of 1009856516 (1.800%) in intersection
+
+#############################################################################
+# running repeat masker (DONE - 2017-07-27 - Hiram)
+    mkdir /hive/data/genomes/oreNil3/bed/repeatMasker
+    cd /hive/data/genomes/oreNil3/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku oreNil3) > do.log 2>&1 &
+    # real    36m33.307s
+
+    cat faSize.rmsk.txt
+# 1009856516 bases (4230001 N's 1005626515 real 951212348 upper
+#	54414167 lower) in 2567 sequences in 1 files
+# Total size: mean 393399.5 sd 3657283.6 min 5393 (chrUn_NW_017615892v1)
+#	max 62059223 (chrLG7) median 21833
+# %5.39 masked total, %5.41 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps oreNil3 rmsk
+    # 54414168 bases of 1009856516 (5.388%) in intersection
+    #	real    0m5.322s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' oreNil3 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 54414168.000000
+    #	real    0m4.606s
+
+##########################################################################
+# running simple repeat (DONE - 2017-07-27 - Hiram)
+
+    mkdir /hive/data/genomes/oreNil3/bed/simpleRepeat
+    cd /hive/data/genomes/oreNil3/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 5 oreNil3) > do.log 2>&1 &
+    # real    9m52.732s
+
+    cat fb.simpleRepeat
+    # 31944076 bases of 1009856516 (3.163%) in intersection
+
+    # using the Window Masker result:
+    cd /hive/data/genomes/oreNil3]
+    twoBitMask bed/windowMasker/oreNil3.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  oreNil3.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # if using rmsk:
+#    cd /hive/data/genomes/oreNil3
+#    twoBitMask oreNil3.rmsk.2bit \
+#        -add bed/simpleRepeat/trfMask.bed oreNil3.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa oreNil3.2bit stdout | faSize stdin > faSize.oreNil3.2bit.txt
+    cat faSize.oreNil3.2bit.txt
+    # 1009856516 bases (4230001 N's 1005626515 real 692122922 upper
+    #	313503593 lower) in 2567 sequences in 1 files
+    # Total size: mean 393399.5 sd 3657283.6
+    #	min 5393 (chrUn_NW_017615892v1) max 62059223 (chrLG7) median 21833
+    # %31.04 masked total, %31.17 masked real
+
+    rm /gbdb/oreNil3/oreNil3.2bit
+    ln -s `pwd`/oreNil3.2bit /gbdb/oreNil3/oreNil3.2bit
+
+#############################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-07-27 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/oreNil3/bed/microsat
+    cd /cluster/data/oreNil3/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed oreNil3 microsat microsat.bed
+    # Read 31297 elements of size 4 from microsat.bed
+
+#############################################################################
+# ucscToINSDC table/track (DONE - 2017-07-29 - Hiram)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
+
+    mkdir /hive/data/genomes/oreNil3/bed/ucscToINSDC
+    cd /hive/data/genomes/oreNil3/bed/ucscToINSDC
+
+    # find accession for chrM
+    grep chrM ../../oreNil3.agp
+# chrM    1       16627   1       O       NC_013663.1     1       16627   +
+
+    # use that accession here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../refseq/GCF_*structure/Primary_Assembly NC_013663.1
+
+    # since this is a refseq assembly, this is actually ucscToRefSeq.txt
+    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+    rm -f ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt | sort > refSeqToUcsc.txt
+
+    # there is no INSDC name for chrM/NC_013663.1 sequence in the
+    #	assembly_report, use what was looked up earlier in this sed correction:
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | sed -e 's/na\b/GU238433.1/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+         | sort > refseq.insdc.txt
+    # the sed \b means to match word
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    # the tr commands avoid the problem of trying to use the -t argument
+    # to the join command which doesn't accept -t'\t' but instead has
+    # to use the unseen/can not copy command ctrl-v i
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+           > ucscToRefSeq.bed
+
+    # should be same line counts throughout:
+    wc -l *
+    #	2567 name.coordinate.tab
+    #	2567 refSeqToUcsc.txt
+    #	2567 refseq.insdc.txt
+    #	2567 ucscToINSDC.bed
+    #	2567 ucscToRefSeq.bed
+    #	2567 ucscToRefSeq.txt
+
+    # verify chrM is correct:
+    grep chrM *.bed
+# ucscToINSDC.bed:chrM    0       16627   GU238433.1
+# ucscToRefSeq.bed:chrM   0       16627   NC_013663.1
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 20
+    # use the 20 in this sed
+    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab oreNil3 ucscToINSDC stdin ucscToINSDC.bed
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab oreNil3 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    checkTableCoords oreNil3
+    # should cover %100 entirely:
+    featureBits -countGaps oreNil3 ucscToINSDC
+    # 1009856516 bases of 1009856516 (100.000%) in intersection
+    featureBits -countGaps oreNil3 ucscToRefSeq
+    # 1009856516 bases of 1009856516 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2017-07-29 - Hiram)
+
+    mkdir /hive/data/genomes/oreNil3/bed/chromAlias
+    cd /hive/data/genomes/oreNil3/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' oreNil3 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' oreNil3 \
+        > ucsc.genbank.tab
+
+    # verify chrM is correct:
+    grep chrM *.tab
+# ucsc.genbank.tab:chrM   GU238433.1      genbank
+# ucsc.refseq.tab:chrM    NC_013663.1     refseq
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > oreNil3.chromAlias.tab
+
+    hgLoadSqlTab oreNil3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        oreNil3.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2017-07-29 - Hiram)
+
+    cd ~/kent/src/hg/makeDb/trackDb/oreNil/oreNil3
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" oreNil3 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+#    2566 MKQE.1
+#       1 NC_.1
+
+    # implies a search rule of: '[MN][KC][EQ_]+[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" oreNil3 | wc -l
+    # 2567
+
+    hgsql -N -e "select frag from gold;" oreNil3 \
+       | egrep -e '[MN][KC][EQ_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 2567
+
+    hgsql -N -e "select frag from gold;" oreNil3 \
+       | egrep -v -e '[MN][KC][EQ_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rhesus/oreNil3/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ACEFJN_]+[0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    git commit -m "Added gold table search rules refs #19879" trackDb.ra
+    # verify searches work in the position box
+
+##########################################################################
+## WINDOWMASKER (DONE - 2017-07-27 - Hiram)
+
+    mkdir /hive/data/genomes/oreNil3/bed/windowMasker
+    cd /hive/data/genomes/oreNil3/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev oreNil3) > do.log 2>&1
+    # real    43m54.433s
+
+    # Masking statistics
+    cat faSize.oreNil3.cleanWMSdust.txt
+# 1009856516 bases (4230001 N's 1005626515 real 692350940 upper
+#	313275575 lower) in 2567 sequences in 1 files
+# Total size: mean 393399.5 sd 3657283.6 min 5393 (chrUn_NW_017615892v1)
+#	max 62059223 (chrLG7) median 21833
+# %31.02 masked total, %31.15 masked real
+
+    cat fb.oreNil3.rmsk.windowmaskerSdust.txt
+    # 43101047 bases of 1009856516 (4.268%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2017-07-27 - Hiram)
+    mkdir /hive/data/genomes/oreNil3/bed/cpgIslands
+    cd /hive/data/genomes/oreNil3/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku oreNil3) > do.log 2>&1
+    # real    2m41.885s
+
+    cat fb.oreNil3.cpgIslandExt.txt
+    # 8831483 bases of 1009856516 (0.875%) in intersection
+
+##############################################################################
+# ncbiRefSeq gene track (TBD - 2016-05-05 - Hiram)
+    mkdir /hive/data/genomes/oreNil3/bed/ncbiRefSeq
+    cd /hive/data/genomes/oreNil3/bed/ncbiRefSeq
+
+    # working on this script, running step by step:
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -stop=download -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 oreNil3) > download.log 2>&1
+    # real    12m36.320s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -continue=process -stop=process -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 oreNil3) > process.log 2>&1
+    # real    4m22.621s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -continue=load -stop=load -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 oreNil3) > load.log 2>&1
+    # real    0m21.690s
+
+    cat fb.ncbiRefSeq.oreNil3.txt
+    # 74646536 bases of 2725937399 (2.738%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2017-07-27 - Hiram)
+    mkdir /hive/data/genomes/oreNil3/bed/genscan
+    cd /hive/data/genomes/oreNil3/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku oreNil3) > do.log 2>&1
+    # real    31m40.539s
+
+    # four broken, completed with window size 2000000, continuing:
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku oreNil3) > makeBed.log 2>&1
+    # real    1m12.510s
+
+    cat fb.oreNil3.genscan.txt
+    #   53054923 bases of 1009856516 (5.254%) in intersection
+
+    cat fb.oreNil3.genscanSubopt.txt
+    #   23284781 bases of 1009856516 (2.306%) in intersection
+
+#############################################################################
+# augustus gene track (DONE - 2017-07-27 - Hiram)
+
+    mkdir /hive/data/genomes/oreNil3/bed/augustus
+    cd /hive/data/genomes/oreNil3/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=zebrafish -dbHost=hgwdev \
+           -workhorse=hgwdev oreNil3) > do.log 2>&1
+    # real    59m19.281s
+
+    cat fb.oreNil3.augustusGene.txt
+    # 59505339 bases of 1009856516 (5.892%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2017-07-27 - Hiram)
+
+    cd /hive/data/genomes/oreNil3
+    # numerator is oreNil3 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap oreNil3 gap
+    # 0 bases of 868607890 (0.000%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 868607890 / 2861349177 \) \* 1024
+    # ( 868607890 / 2861349177 ) * 1024 = 310.851429
+
+    # ==> use -repMatch=300 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 100
+    cd /hive/data/genomes/oreNil3
+    time blat oreNil3.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/oreNil3.11.ooc \
+        -repMatch=300
+    #   Wrote 37324 overused 11-mers to jkStuff/oreNil3.11.ooc
+    #	real    0m17.355s
+
+    #	there are zero gaps in this assembly
+    #   check non-bridged gaps to see what the typical size is:
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' oreNil3 \
+#        | sort -k7,7nr
+    #   minimum size is 1000
+    #   decide on a minimum gap for this break, use either 100 or 5000 will
+    #   generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
+    #   so use 100 here to get more liftOver row.
+#    gapToLift -verbose=2 -minGap=1000 oreNil3 jkStuff/oreNil3.nonBridged.lft \
+#        -bedFile=jkStuff/oreNil3.nonBridged.bed
+
+#########################################################################
+# LIFTOVER TO oreNil2 (DONE - 2017-07-27 - Hiram )
+    mkdir /hive/data/genomes/oreNil3/bed/blat.oreNil2.2017-07-27
+    cd /hive/data/genomes/oreNil3/bed/blat.oreNil2.2017-07-27
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug \
+        -ooc /hive/data/genomes/oreNil3/jkStuff/oreNil3.11.ooc \
+	   oreNil3 oreNil2
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc /hive/data/genomes/oreNil3/jkStuff/oreNil3.11.ooc \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	 oreNil3 oreNil2) > do.log 2>&1 &
+    #   real    220m19.231s
+
+    # verify browser can run a view in other genomes to oreNil3 from oreNil2
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2017-07-29 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Oreochromis niloticus   861     120996  182
+    # Oreochromis niloticus niloticus 8       0       0
+
+    # edit etc/genbank.conf to add oreNil3 just before oreNil2
+
+# oreNil3 (Nile tilapia)
+oreNil3.serverGenome = /hive/data/genomes/oreNil3/oreNil3.2bit
+oreNil3.clusterGenome = /hive/data/genomes/oreNil3/oreNil3.2bit
+oreNil3.ooc = /hive/data/genomes/oreNil3/jkStuff/oreNil3.11.ooc
+oreNil3.lift = no
+oreNil3.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+oreNil3.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+oreNil3.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+oreNil3.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+oreNil3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+oreNil3.refseq.mrna.native.load = yes
+oreNil3.refseq.mrna.xeno.load = yes
+oreNil3.genbank.mrna.xeno.load = no
+oreNil3.genbank.est.native.load = yes
+oreNil3.downloadDir = oreNil3
+oreNil3.perChromTables = no
+
+    git commit -m "Added oreNil3; refs #19879" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+# Edit src/lib/gbGenome.c to add new species.  Skipped
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial oreNil3
+    #  logFile: var/build/logs/2017.07.27-20:58:31.oreNil3.initalign.log
+    #   real    266m50.129s
+    tail -2 var/build/logs/2017.07.27-20:58:31.oreNil3.initalign.log
+# hgwdev 2017.07.28-01:25:08 oreNil3.initalign: Succeeded: oreNil3
+# hgwdev 2017.07.28-01:25:21 oreNil3.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.oreNil3
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad oreNil3
+    # logFile: var/dbload/hgwdev/logs/2017.07.28-14:27:37.oreNil3.dbload.log
+XXX - running - Fri Jul 28 14:27:51 PDT 2017
+    # real    19m51.130s
+
+    # tail -1 var/dbload/hgwdev/logs/2017.07.28-14:27:37.oreNil3.dbload.log
+    # hgwdev 2017.07.28-14:47:28 oreNil3.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add oreNil3 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs
+    git add etc/hgwdev.dbs
+    git commit -m "Added oreNil3 - Nile tilapia refs #19879" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+##############################################################################
+#  BLATSERVERS ENTRY (TBD - 2017-02-06 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("oreNil3", "blat1c", "17884", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("oreNil3", "blat1c", "17885", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+
+##############################################################################
+# set default position to FOXP2 gene displays  (TBD - 2017-02-06 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr7:119267067-119359255" where name="oreNil3";' \
+	hgcentraltest
+
+##############################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2017-02-06 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    # tableCoverage and times should be silent, no output for clean check
+    joinerCheck -database=oreNil3 -tableCoverage all.joiner
+    joinerCheck -database=oreNil3 -times all.joiner
+    joinerCheck -database=oreNil3 -keys all.joiner
+
+    git commit -m 'adding oreNil3 rules refs #19879' all.joiner
+    git push
+
+XXX wait for some pairWise alignments
+    cd /hive/data/genomes/oreNil3
+    time (makeDownloads.pl oreNil3) > downloads.log 2>&1
+    # real    20m55.262s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/oreNil3/pushQ
+    cd /hive/data/genomes/oreNil3/pushQ
+    time (makePushQSql.pl oreNil3) > oreNil3.pushQ.sql 2> stderr.out
+    # real    3m46.855s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/oreNil3/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/oreNil3/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/oreNil3/bbi/quality.bw
+    # WARNING: oreNil3 does not have seq
+    # WARNING: oreNil3 does not have extFile
+
+    #   copy it to hgwbeta
+    #   copy it to hgwbeta
+    scp -p oreNil3.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/oreNil3.pushQ.sql"
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

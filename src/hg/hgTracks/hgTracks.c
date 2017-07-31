@@ -8482,7 +8482,7 @@ cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
 /* hidden form for composite builder CGI */
-hPrintf("<FORM ACTION='%s' NAME='editHubForm'>", hgCompositeName());
+hPrintf("<FORM ACTION='%s' NAME='editHubForm'>", hgCollectionName());
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 

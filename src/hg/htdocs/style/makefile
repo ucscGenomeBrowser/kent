@@ -6,6 +6,7 @@ include ../../../inc/common.mk
 CSS_FILES=HGStyle.css autocomplete.css blueStyle.css encodeProject.css floretStyle.css \
     hgHubConnect.css jquery-ui.css jquery.contextmenu.css \
     jquery.ui.autocomplete.css jquery.ui.colorPicker.css \
+    jquery.treetable.css jquery.treetable.theme.default.css  \
     jWest.css jWest.afterNiceMenu.css \
     theme-modern.css ui.dropdownchecklist.css nice_menu.css \
     encodeDataMatrix.css encodeDataSummary.css userAccounts.css \

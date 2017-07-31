@@ -57,8 +57,8 @@ release alpha
 superTrack on 
 type bigBarChart
 group phenDis
-shortLabel TCGA expression
-longLabel Expression of 33 TCGA cancer tissues (Gencode 23)
+shortLabel TCGA Expression
+longLabel Expression of 33 TCGA Cancer Tissues (GENCODE v23)
 
 	track tcgaTranscExpr
 	parent tcgaExpr
@@ -89,8 +89,8 @@ longLabel Expression of 33 TCGA cancer tissues (Gencode 23)
 	barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/tcgaMatrix.tab
 	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaLargeSamples.tab
 	barChartMetric median
-	shortLabel TCGA transExpr
-	longLabel TCGA transcript expression (Gencode 23)
+	shortLabel TCGA transcExpr
+	longLabel TCGA Transcript Expression (GENCODE v23)
 	defaultLabelFields name2
 	labelFields name2, name
 	group expression
@@ -126,7 +126,7 @@ longLabel Expression of 33 TCGA cancer tissues (Gencode 23)
 	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaLargeSamples.tab
 	barChartMetric median
 	shortLabel TCGA geneExpr
-	longLabel TCGA gene expression (Gencode 23)
+	longLabel TCGA Gene Expression (GENCODE v23)
 	defaultLabelFields name2
 	labelFields name2, name
 	bigDataUrl /gbdb/hgFixed/human/expMatrix/tcgaGeneExp.bb
@@ -136,16 +136,17 @@ release alpha
 superTrack on show 
 type bigBarChart
 group expression
+priority 1
 shortLabel GTEx
 longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 
 	track gtexGene
-    superTrack gtexExpr pack
+	superTrack gtexExpr pack
 	release alpha
 	parent gtexExpr
 	type bed 6 +
 	shortLabel GTEx Gene
-	longLabel Gene expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
+	longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 	html gtexExpr
 	group expression
 	visibility pack
@@ -193,7 +194,7 @@ longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors
 	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/cleanGtexSamples.tab
 	barChartMetric median
 	shortLabel GTEx Transc
-	longLabel Transcript expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
+	longLabel Transcript Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 	defaultLabelFields name2
 	labelFields name2, name
 	group expression
