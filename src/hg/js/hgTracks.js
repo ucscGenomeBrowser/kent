@@ -2167,11 +2167,15 @@ jQuery.fn.panImages = function(){
                 } else if (newX >= rightLimit && newX < leftLimit)
                     beyondImage = false; // could have scrolled back without mouse up
 
-                newX = panUpdatePosition(newX,true);
+                posStatus = panUpdatePosition(newX,true);
+                newX = posStatus.newX;
+                // do not update highlights if we are at the end of a chromsome
+                if (!posStatus.isOutsideChrom)
+                    scrollHighlight(relativeX);
+
                 var nowPos = newX.toString() + "px";
                 $(".panImg").css( {'left': nowPos });
                 $('.tdData').css( {'backgroundPosition': nowPos } );
-                scrollHighlight(relativeX);
                 if (!only1xScrolling)
                     panAdjustHeight(newX);  // Will dynamically resize image while scrolling.
             }
@@ -2267,7 +2271,11 @@ jQuery.fn.panImages = function(){
             portalScrolledX = (closedPortalStart - newPortalStart) / hgTracks.imgBoxBasesPerPixel;
             newOffsetX = portalScrolledX - (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel);
         }
-        return newOffsetX;
+
+        ret = {};
+        ret.newX = newOffsetX;
+        ret.isOutsideChrom = recalculate;
+        return ret;
     }
     function mapTopAndBottom(mapName,east,west)
     {
