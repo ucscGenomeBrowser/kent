@@ -235,7 +235,7 @@ return maxNum;
 }
 
 double barChartMaxExpScore(struct track *tg, struct barChartItem *itemInfo)
-/* Return maximum expScore in a barChart */
+/* Determine maximum expScore in a barChart, set it and return it */
 {
 // use preset if available
 double maxScore = itemInfo->maxScore;
@@ -255,6 +255,7 @@ for (i=0; i<expCount; i++)
     expScore = bed->expScores[i];
     maxScore = max(maxScore, expScore);
     }
+itemInfo->maxScore = maxScore;
 return maxScore;
 }
 
@@ -326,9 +327,11 @@ for (itemInfo = infoList; itemInfo != NULL; itemInfo = itemInfo->next)
     {
     itemInfo->height = barChartItemHeight(tg, itemInfo);
     }
-if (!extras->doAutoScale)
-    // maximum median score in entire dataset
-    extras->maxMedian = barChartUiMaxMedianScore(tdb);
+double  maxScore = barChartUiMaxMedianScore(tdb);
+if (!extras->doAutoScale && maxScore > extras->maxMedian)
+    // maximum median score in entire dataset.  
+    // If not set, using default, but might be too small for this dataset.
+    extras->maxMedian = maxScore;
 
 /* replace item list with wrapped beds */
 slReverse(&infoList);
@@ -446,7 +449,7 @@ struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
 double maxExp = barChartMaxExpScore(tg, itemInfo);
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
                                 BAR_CHART_MAX_VIEW_LIMIT, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
-double maxMedian = ((struct barChartTrack *)tg->extraUiData)->maxMedian;
+double maxMedian = extras->maxMedian;
 return valToClippedHeight(maxExp, maxMedian, viewMax, extras);
 }
 
@@ -543,7 +546,7 @@ Color clipColor = MG_MAGENTA;
 // draw bar graph
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
                                 BAR_CHART_MAX_VIEW_LIMIT, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
-double maxMedian = ((struct barChartTrack *)tg->extraUiData)->maxMedian;
+double maxMedian = extras->maxMedian;
 int i;
 int expCount = bed->expCount;
 struct barChartCategory *categ;
@@ -703,7 +706,7 @@ struct barChartCategory *categs = getCategories(tg);
 struct barChartCategory *categ = NULL;
 int barWidth = barChartBarWidth(tg);
 int padding = barChartPadding();
-double maxMedian = ((struct barChartTrack *)tg->extraUiData)->maxMedian;
+double maxMedian = extras->maxMedian;
 
 int graphX = barChartX(bed);
 if (graphX < 0)
