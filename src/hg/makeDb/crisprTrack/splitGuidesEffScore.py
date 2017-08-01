@@ -74,6 +74,7 @@ def main():
         for row in chunk:
             ofh.write("\t".join(row))
             ofh.write("\n")
+        fnameFh.write("%s\n" % ofh.name)
         ofh.close()
 
 main()
