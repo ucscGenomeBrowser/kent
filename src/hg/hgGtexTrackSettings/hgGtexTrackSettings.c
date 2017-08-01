@@ -19,6 +19,7 @@
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
+char *database = NULL;
 
 static void printGoButton()
 /* HTML for GO button and 'play' icon */
@@ -65,7 +66,26 @@ puts(
 "                   <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>\n"
 "                   <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>\n"
 "               </span></a>\n"
+);
+if (tdb->parent)
+    {
+    // link to supertrack
+    char *encodedMapName = cgiEncode(tdb->parent->track);
+    char *chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
+    puts("&nbsp;");
+    printf(
+    "       <a href='%s?%s=%s&c=%s&g=%s' title='Go to container track (%s)'>\n"
+    "           <i class='gbIconLevelUp fa fa-level-up'></i>\n"
+    "       </a>\n",
+                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                chromosome, encodedMapName, tdb->parent->shortLabel
+    );
+    freeMem(encodedMapName);
+    }
+puts(
 "       </div>\n"
+);
+puts(
 "       <div class='col-md-2 text-right'>\n"
 );
 printGoButton();
@@ -383,6 +403,15 @@ safef(where, sizeof(where), "tableName='%s'", track);
 // The fix of using hTrackDbList() would slow for all users, so leaving as is.
 struct trackDb *tdb = trackDbLoadWhere(conn, "trackDb", where);
 trackDbAddTableField(tdb);
+char *parent = trackDbLocalSetting(tdb, "parent");
+struct trackDb *parentTdb;
+if (parent)
+    {
+    safef(where, sizeof(where), "tableName='%s'", parent);
+    parentTdb = trackDbLoadWhere(conn, "trackDb", where);
+    if (parentTdb)
+        tdb->parent = parentTdb;
+    }
 sqlDisconnect(&conn);
 return tdb;
 }
@@ -393,6 +422,7 @@ static void doMiddle(struct cart *theCart)
 cart = theCart;
 char *db = NULL, *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+database = db;
 
 // Start web page with new-style header
 webStartGbNoBanner(cart, db, "Genome Browser GTEx Track Settings");
