@@ -4,6 +4,14 @@ include barCharts.ra
 
 include hoffMap.ra
 
+track refSeqFuncElems
+shortLabel refSeq FuncElems
+longLabel NCBI refSeq Functional Elements 
+type bigBed 6 +
+bigDataUrl /gbdb/hg38/ncbiRefSeq/refSeqFuncElems.bb
+group phenDis
+mouseOverField note
+
 track cosmicRegions
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer
