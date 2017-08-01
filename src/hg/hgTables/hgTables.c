@@ -807,7 +807,9 @@ for (track = trackList; track != NULL; track = track->next)
         {
 	struct trackDb *subtrack = findTrackInGroup(name, track->subtracks, group);
 	if (subtrack != NULL)
-	    return subtrack;
+            // Return composite track if given a subtrack name (e.g. hg19 refGene track to
+            // hg38 refSeqComposite, #19920)
+	    return track;
 	}
     }
 return NULL;
