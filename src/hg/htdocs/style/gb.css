@@ -259,6 +259,15 @@ span#home-link {
     margin: 0 20px 0 40px;
 }
 
+.gbSectionBanner {
+    padding: 3px;
+    margin-top: 6px;
+    background-color: #4c759c;  /* light blue */
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+
 /* Track Description section */
 
 .gbTrackDescription {
