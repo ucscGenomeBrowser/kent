@@ -150,7 +150,7 @@ longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors
 	html gtexExpr
 	group expression
 	visibility pack
-	priority 10.13
+	priority 1
 	maxItems 200
 
 	searchTable gtexGene
@@ -196,6 +196,7 @@ longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors
 	shortLabel GTEx Transc
 	longLabel Transcript Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 	defaultLabelFields name2
+	priority 2
 	labelFields name2, name
 	group expression
 	bigDataUrl /gbdb/hgFixed/human/expMatrix/gtexTranscExpr.bb 

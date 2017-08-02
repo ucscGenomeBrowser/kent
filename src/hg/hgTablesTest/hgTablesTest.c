@@ -817,6 +817,8 @@ struct htmlFormVar *trackVar;
 struct slName *track;
 int trackIx;
 
+if (groupPage == NULL)
+    errAbort("Error when changing group to %s", group);
 if ((mainForm = htmlFormGet(groupPage, "mainForm")) == NULL)
     errAbort("Couldn't get main form on groupPage");
 if ((trackVar = htmlFormVarGet(mainForm, hgtaTrack)) == NULL)

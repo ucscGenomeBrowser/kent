@@ -71,7 +71,7 @@ endif
 set lastYear=`getMonthLastYear.csh go | sed "s/-//"`
 # throw away output below because rm complains about no match for
 # the globbing character during most of the month
-rm -f $outpath/gbdb*${lastYear} >& /dev/null
+rm -f $outpath/gbdb*${lastYear}* >& /dev/null
 
 exit
 

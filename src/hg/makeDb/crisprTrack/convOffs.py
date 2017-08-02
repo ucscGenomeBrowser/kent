@@ -57,7 +57,7 @@ def writeGuideRow(db, guideSeq, otRows, ofh):
         otSeq = row[4]
         #mismString, mismCount = showMism(guideSeq, row[4][:20])
         #row[4] = compressAln(mismString)
-        mismCount = countMm(guideSeq, row[4][:20])
+        mismCount = countMm(guideSeq, row[5][:20])
         if mismCount <= 4: # very very rare >4: only when there are Ns in the off-target seq
             mismCounts[mismCount] += 1
         #if mismCount >= 4:
@@ -116,7 +116,7 @@ def writeGuideRow(db, guideSeq, otRows, ofh):
     otStrings = []
     for row in filtOtRows:
         chrom, start, strand, score, mismCount = row
-        scoreStr = str(int(score*100))
+        scoreStr = str(int(score*1000))
         #if scoreStr[:2]=="0.":
             #scoreStr = scoreStr[1:]
         row = (chrom, str(start)+strand,scoreStr)

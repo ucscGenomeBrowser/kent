@@ -551,9 +551,6 @@ struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb);
  * Note: if the composite trackDb is found and returned, then its subtracks
  * member will contain a newly allocated tdb like sTdb (but not ==). */
 
-struct hTableInfo *hFindBigWigTrackInfo(char *db, char *chrom, char *rootName); 
-/* Get track information on a big* file that has no table */
-
 struct hTableInfo *hFindTableInfoWithConn(struct sqlConnection *conn, char *chrom, char *rootName);
 /* Find table information, with conn as part of input parameters.  Return NULL if no table.  */
 

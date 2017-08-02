@@ -750,6 +750,8 @@ char *bigWigFileName(char *table, struct sqlConnection *conn);
  * a custom or built-in track.  Do a freeMem on returned string when done. */
 #define bigBedFileName(table, conn) bigWigFileName(table, conn)
 
+struct hTableInfo *bigWigToHti(char *table);
+/* Get fields of bigWig into hti structure. */
 
 int mathWigOutRegion(struct trackDb *track, char *table, struct sqlConnection *conn,
 			     struct region *region, int maxOut,
