@@ -5,7 +5,7 @@ include barCharts.ra
 track cosmicRegionsUpdate
 release alpha
 shortLabel COSMIC Regions
-longLabel Catalogue of Somatic Mutations in Cancer
+longLabel Catalogue of Somatic Mutations in Cancer V82
 type bigBed 4 +
 bigDataUrl /gbdb/hg19/cosmic/cosMutHg19V82.bb
 labelFields cosmLabel
@@ -23,7 +23,7 @@ searchDescription COSMIC Regions
 
 track cosmicRegions
 shortLabel COSMIC Regions
-longLabel Catalogue of Somatic Mutations in Cancer
+longLabel Catalogue of Somatic Mutations in Cancer V81
 type bigBed 4 +
 bigDataUrl /gbdb/hg19/cosmic/cosMutHg19V81.bb
 labelFields cosmLabel
