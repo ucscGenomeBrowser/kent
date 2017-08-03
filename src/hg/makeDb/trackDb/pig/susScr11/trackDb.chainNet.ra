@@ -1,0 +1,13 @@
+track chainNetMm10 override
+visibility dense
+priority 340.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetHg38 override
+visibility dense
+priority 460.3
+chainLinearGap medium
+chainMinScore 3000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
