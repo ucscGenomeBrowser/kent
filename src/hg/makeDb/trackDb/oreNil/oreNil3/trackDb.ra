@@ -15,7 +15,7 @@ visibility full
 track genscan override
 visibility pack
 
-track augustus override
+track augustusGene override
 visibility pack
 
 track refGene override
