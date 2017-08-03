@@ -32308,3 +32308,32 @@ bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGt
 # Link the files into gbdb
 cd /gbdb/hgFixed/human/expMatrix 
 ln -s /hive/data/outside/gtex/barChartTrack/hg19backLift/gtexTranscExprHg19.bb .
+
+##############################################################################
+# cosmicRegions (DONE - 2017-08-03 - Chris)  
+# Make a new COSCMIC track for hg19 v82 
+mkdir /hive/data/outside/cosmic/hg19/v82
+cd /hive/data/outside/cosmic/hg19/v82
+
+# Get the new data
+sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
+# Login to SFTP server (make an account online) then run this command
+get /files/grch37/cosmic/v82/CosmicMutantExport.tsv.gz
+
+# Get the schema from V81
+cp ../v81/cosmicNew.as . 
+
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
+
+# Use a script to convert to bed format.
+cosmicToBed cosMut.tsv cosMut.bed
+# This many lines were skipped, 128966 for not having genomic coordinate
+
+# Sort and convert to big bed using the .as file.  
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg19/chrom.sizes cosMutHg19V82.bb -tab -extraIndex=name,cosmLabel
+
+# Link it up so the outside world can see it. 
+cd /gbdb/hg19/cosmic/
+ln -s /hive/data/outside/cosmic/hg19/v82/cosMutHg19V82.bb .
