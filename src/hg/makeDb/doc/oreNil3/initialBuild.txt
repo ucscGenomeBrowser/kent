@@ -563,6 +563,55 @@ searchPriority 8
     # verify browser can run a view in other genomes to oreNil3 from oreNil2
 
 ########################################################################
+# lastz/chain/net swap from hg38 (DONE - 2017-08-02 - Hiram)
+    # alignment to hg38
+
+    cd /hive/data/genomes/hg38/bed/lastzOreNil3.2017-07-31
+    cat fb.hg38.chainOreNil3Link.txt
+    # 59963651 bases of 3049335806 (1.966%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oreNil3/bed/blastz.hg38.swap
+    cd /hive/data/genomes/oreNil3/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzOreNil3.2017-07-31/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    8m59.810s
+
+    cat fb.oreNil3.chainHg38Link.txt
+    # 56298016 bases of 1009856516 (5.575%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oreNil3 hg38) \
+       > rbest.log 2>&1
+    # real    263m17.904s
+
+#########################################################################
+# lastz/chain/net swap from mm10 (DONE = 2017-08-02 - Hiram)
+    # alignment to mm10
+    cd /hive/data/genomes/mm10/bed/lastzOreNil3.2017-07-31
+    cat fb.mm10.chainOreNil3Link.txt
+    #   54152663 bases of 2652783500 (2.041%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/oreNil3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/oreNil3/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/mm10/bed/lastzOreNil3.2017-07-31/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #   real    8m5.590s
+
+    cat  fb.oreNil3.chainMm10Link.txt
+    #   55291586 bases of 1009856516 (5.475%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev oreNil3 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    230m56.580s
+
+#########################################################################
 # GENBANK AUTO UPDATE (DONE - 2017-07-29 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
@@ -616,7 +665,6 @@ oreNil3.perChromTables = no
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad oreNil3
     # logFile: var/dbload/hgwdev/logs/2017.07.28-14:27:37.oreNil3.dbload.log
-XXX - running - Fri Jul 28 14:27:51 PDT 2017
     # real    19m51.130s
 
     # tail -1 var/dbload/hgwdev/logs/2017.07.28-14:27:37.oreNil3.dbload.log
@@ -634,27 +682,25 @@ XXX - running - Fri Jul 28 14:27:51 PDT 2017
     make etc-update
 
 ##############################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-02-06 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-07-31 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("oreNil3", "blat1c", "17884", "1", "0"); \
+	VALUES ("oreNil3", "blat1b", "17882", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("oreNil3", "blat1c", "17885", "0", "1");' \
+	VALUES ("oreNil3", "blat1b", "17883", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
-############################################################################
-
 ##############################################################################
-# set default position to FOXP2 gene displays  (TBD - 2017-02-06 - Hiram)
+# set default position to GHR gene displays  (DONE - 2017-08-03 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="chr7:119267067-119359255" where name="oreNil3";' \
+'update dbDb set defaultPos="chrLG7:32798427-32827906" where name="oreNil3";' \
 	hgcentraltest
 
 ##############################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-02-06 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-08-03 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     # tableCoverage and times should be silent, no output for clean check
@@ -665,29 +711,23 @@ XXX - running - Fri Jul 28 14:27:51 PDT 2017
     git commit -m 'adding oreNil3 rules refs #19879' all.joiner
     git push
 
-XXX wait for some pairWise alignments
     cd /hive/data/genomes/oreNil3
     time (makeDownloads.pl oreNil3) > downloads.log 2>&1
-    # real    20m55.262s
+    # real    7m31.828s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/oreNil3/pushQ
     cd /hive/data/genomes/oreNil3/pushQ
-    time (makePushQSql.pl oreNil3) > oreNil3.pushQ.sql 2> stderr.out
-    # real    3m46.855s
+    time (makePushQSql.pl -redmineList oreNil3) \
+          > oreNil3.pushQ.sql 2> stderr.out
+    # real    3m39.676s
 
     #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: hgwdev does not have /gbdb/oreNil3/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/oreNil3/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/oreNil3/bbi/quality.bw
+    # writing redmine listings to
+    # redmine.oreNil3.file.list
+    # redmine.oreNil3.table.list
+    # redmine.oreNil3.releaseLog.txt
     # WARNING: oreNil3 does not have seq
     # WARNING: oreNil3 does not have extFile
-
-    #   copy it to hgwbeta
-    #   copy it to hgwbeta
-    scp -p oreNil3.pushQ.sql qateam@hgwbeta:/tmp/
-    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/oreNil3.pushQ.sql"
-    #   in that pushQ entry walk through each entry and see if the
-    #   sizes will set properly
 
 #########################################################################
