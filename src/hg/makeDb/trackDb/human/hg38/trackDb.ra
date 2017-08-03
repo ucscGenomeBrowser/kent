@@ -12,7 +12,7 @@ bigDataUrl /gbdb/hg38/ncbiRefSeq/refSeqFuncElems.bb
 group phenDis
 mouseOverField note
 
-track cosmicRegions
+track cosmicRegionsUpdate
 release alpha
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer
@@ -26,7 +26,7 @@ urlLabel COSMIC ID:
 searchIndex name,cosmLabel
 tableBrowser off
 
-searchTable cosmicRegions
+searchTable cosmicRegionsUpdate
 searchPriority 2.07207
 searchType bigBed
 searchDescription COSMIC Regions
