@@ -252,6 +252,3 @@ var collections = (function() {
             init: init
            };
 }());
-
-// initialize everything
-collections.init();
