@@ -4,7 +4,9 @@ include barCharts.ra
 
 include hoffMap.ra
 
+
 track refSeqFuncElems
+release alpha
 shortLabel refSeq FuncElems
 longLabel NCBI refSeq Functional Elements 
 type bigBed 6 +
