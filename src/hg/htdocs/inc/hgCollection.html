@@ -1,3 +1,131 @@
-<INPUT TYPE='button' id='saveCollections' VALUE="Save">
+<div class='row gbTrackTitleBanner'>
+    <div class='col-md-10'>
+        <span class='gbTrackName'>My Collections </span>           
+        <span class='gbTrackTitle'> Build Custom Collections of Tracks </span>
+        <a href='#INFO_SECTION' title='Jump to the track description'>
+            <span class='gbIconSmall fa-stack'>
+                <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>
+                <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>
+            </span>
+        </a>
+        <div class='gbButtonGoContainer text-right' title='Save Collections'> </div>
+    </div>
+    <div class='col-md-2 text-right'>
+        <div class='gbButtonGoContainer text-right' title='Save or Discard'>
+            <div class='gbButtonGo' id='saveCollections' >Save</div>
+            <div class='gbButtonGo' id='discardChanges'>Discard Changes</div>
+        </div>
+    </div>
+</div>
 
+<div class='row'>
+    <div class='col-md-6'>
+        <div class='row gbSectionBanner'>
+            <div class='col-md-8'>All Tracks</div>
+            <div class='col-md-4 text-right'>
+                <div class='gbButtonGoContainer text-right' title='Make New Collection'>
+                    <div id='newCollection' class='gbButton'>Make New Collection </div>
+                </div>
+            </div>
+        </div>
 
+        <table id='tracks'><tbody>
+        <tr data-tt-id='collections'><td><span class='file'>My Collections</td> <td>Your collected tracks.</td></tr>
+        </tbody></table>
+    </div>
+
+    <div class='col-md-6'>
+    <!-- Configuration panel -->
+        <div class='row gbSectionBanner'>
+            <div class='col-md-8'>Set Attributes</div>
+            <div class='col-md-4 text-right'> </div>
+        </div>
+
+        <!-- trackDb track setting widgets (none) -->
+        <div id='TrackDbOptions' style="display: none;">Drag to custom composite to copy to Collections</div>
+
+        <!-- view track widgets -->
+        <div id='viewOptions' style="display: none;">
+            <label class='gbInputLabel'  for='name'>Name:</label>
+            <input type='text' name='viewName' id='viewName' value='' class='text ui-widget-content ui-corner-all'>
+
+            <br><label class='gbInputLabel'  for='description'>Description:</label>
+            <input type='text' name='viewDescription' id='viewDescription' value='' class='text ui-widget-content ui-corner-all'>
+
+            <br><label for='viewVis'>Visibility:</label>
+            <select ID='viewVis' >
+                <option>hide</option>
+                <option selectED>dense</option>
+                <option>squish</option>
+                <option>pack</option>
+                <option>full</option>
+            </select>
+
+            <br><label for='viewFunc'>Function:</label>
+            <select ID='viewFunc' >
+                <option selectED>show all</option>
+                <option >add all</option>
+                <option >subtract from the first</option>
+            </select>
+
+            <br> <p>Color: <input type='text' id='viewColorInput' value='0xffffff'>&nbsp;&nbsp;
+            <input id='viewColorPicker'>           
+
+            <div class='gbButtonGoContainer text-right' title='Apply'>
+                <div id='propsSave' class='gbButton'>Apply</div>
+            </div>
+            <div class='gbButtonGoContainer text-right' title='Reset'>
+                <div id='propsDiscard' class='gbButton'>Reset</div>
+            </div>
+        </div>
+
+        <!-- custom composite widgets -->
+        <div id='CustomCompositeOptions' style="display: none;">
+            <label class='gbInputLabel'  for='name'>Name:</label>
+            <input type='text' name='collectionName' id='collectionName' value='' class='text ui-widget-content ui-corner-all'>
+            <br><label for='description'>Description:</label>
+            <input type='text' name='collectionDescription' id='collectionDescription' value='' class='text ui-widget-content ui-corner-all'>
+            <br><label for='collectionVis'>Visibility:</label>
+            <select ID='collectionVis' style='width: 70px'>
+                <option>hide</option>
+                <option selectED>dense</option>
+                <option>squish</option>
+                <option>pack</option>
+                <option>full</option>
+            </select>
+            <br><input type='button' value='Create View' name='createView' id='createView'>
+            <div class='gbButtonGoContainer text-right' title='Apply'>
+                <div id='propsSave' class='gbButton'>Apply</div>
+            </div>
+            <div class='gbButtonGoContainer text-right' title='Reset'>
+                <div id='propsDiscard' class='gbButton'>Reset</div>
+            </div>
+        </div>
+
+        <!-- custom track composite widgets -->
+        <div id='CustomTrackOptions' style="display: none;">
+            <label class='gbInputLabel'  for='name'>Name:</label>
+            <input type='text' name='customName' id='customName' value='' class='text ui-widget-content ui-corner-all'>
+            <br><label class='gbInputLabel'  for='description'>Description:</label>
+            <input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all'>
+            <br><label for='customVis'>Visibility:</label>
+            <select ID='customVis' style='width: 70px'>
+                <option>hide</option>
+                <option selectED>dense</option>
+                <option>squish</option>
+                <option>pack</option>
+                <option>full</option>
+            </select>
+
+            <br> <p>Color: <input type='text' id='trackColorInput' value='0xffffff'>&nbsp;&nbsp;
+            <input id='trackColorPicker'>           
+
+            <div class='gbButtonGoContainer text-right' title='Apply'>
+                <div id='propsSave' class='gbButton'>Apply</div>
+            </div>
+            <div class='gbButtonGoContainer text-right' title='Reset'>
+                <div id='propsDiscard' class='gbButton'>Reset</div>
+            </div>
+        </div>
+    </div>
+</div>
