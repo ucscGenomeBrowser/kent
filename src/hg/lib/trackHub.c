@@ -789,25 +789,28 @@ else
             }
         else 
             {
-            if (!(startsWithWord("bigWig", type) ||
-              startsWithWord("bigBed", type) ||
-#ifdef USE_HAL
-              startsWithWord("pslSnake", type) ||
-              startsWithWord("halSnake", type) ||
-#endif
-              startsWithWord("vcfTabix", type) ||
-              startsWithWord("bigPsl", type) ||
-              startsWithWord("bigMaf", type) ||
-              startsWithWord("longTabix", type) ||
-              startsWithWord("bigGenePred", type) ||
-              startsWithWord("bigChain", type) ||
-              startsWithWord("bigBarChart", type) ||
-              startsWithWord("bam", type)))
+            if (!startsWithWord("wig", type) )
                 {
-                errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
-                    hub->url, genome->name, tdb->track);
+                if (!(startsWithWord("bigWig", type) ||
+                  startsWithWord("bigBed", type) ||
+#ifdef USE_HAL
+                  startsWithWord("pslSnake", type) ||
+                  startsWithWord("halSnake", type) ||
+#endif
+                  startsWithWord("vcfTabix", type) ||
+                  startsWithWord("bigPsl", type) ||
+                  startsWithWord("bigMaf", type) ||
+                  startsWithWord("longTabix", type) ||
+                  startsWithWord("bigGenePred", type) ||
+                  startsWithWord("bigChain", type) ||
+                  startsWithWord("bigBarChart", type) ||
+                  startsWithWord("bam", type)))
+                    {
+                    errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
+                        hub->url, genome->name, tdb->track);
+                    }
+                requiredSetting(hub, genome, tdb, "bigDataUrl");
                 }
-            requiredSetting(hub, genome, tdb, "bigDataUrl");
             }
 
         if (sameString("barChart", type) || sameString("bigBarChart", type))

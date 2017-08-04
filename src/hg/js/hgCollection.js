@@ -64,13 +64,13 @@ var collections = (function() {
 
         var trackOpt = {
             hideAfterPaletteSelect : true,
-            color : $('#trackColorInput').val(),
+            color : $('#customColorInput').val(),
             showPalette: true,
             showInput: true,
             preferredFormat: "hex",
-            change: function() { var color = $("#trackColorPicker").spectrum("get"); $('#trackColorInput').val(color); },
+            change: function() { var color = $("#customColorPicker").spectrum("get"); $('#customColorInput').val(color); },
             };
-        $("#trackColorPicker").spectrum(trackOpt);
+        $("#customColorPicker").spectrum(trackOpt);
 
         // Highlight selected row
         $("#tracks tbody").on("mousedown", "tr", function() {
@@ -79,7 +79,8 @@ var collections = (function() {
             selectedNode = this.getAttribute('data-tt-id');
             var name = this.cells[0].innerText;
             var description = this.cells[1].innerText;
-            var visibility = $(this).data("visibility");
+            var visibility = this.getAttribute("visibility");
+            var color = this.getAttribute("color");
 
             if ($(this).hasClass("user")) {
                 if ($(this).hasClass("view")) {
@@ -87,15 +88,17 @@ var collections = (function() {
                     $("#CustomCompositeOptions").hide();
                     $("#CustomTrackOptions").hide();
                     $("#TrackDbOptions").hide();
-                    $("#viewName").val(name);
+                    $("#viewName").val(name.slice(1));
                     $("#viewDescription").val(description);
                     $("#viewVis").val(visibility);
+                    $("#viewColorInput").val(color);
+                    $("#viewColorPicker").spectrum("set", color);
                 } else if ($(this).hasClass("ui-droppable")) {
                     $("#CustomCompositeOptions").show();
                     $("#viewOptions").hide();
                     $("#CustomTrackOptions").hide();
                     $("#TrackDbOptions").hide();
-                    $("#collectionName").val(name);
+                    $("#collectionName").val(name.slice(1));
                     $("#collectionDescription").val(description);
                     $("#collectionVis").val(visibility);
                 } else {
@@ -106,6 +109,8 @@ var collections = (function() {
                     $("#customName").val(name);
                     $("#customDescription").val(description);
                     $("#customVis").val(visibility);
+                    $("#customColorInput").val(color);
+                    $("#customColorPicker").spectrum("set", color);
                 }
             } else {
                 $("#CustomCompositeOptions").hide();
@@ -142,12 +147,16 @@ var collections = (function() {
             });
         });
 
+        $('body').on('click','#deleteTrack',function(){
+            $("#tracks").treetable("removeNode", selectedNode);
+        });
+
         $('body').on('click','#createView',function(){
             var composite = $("#tracks").treetable("node", selectedNode);
             var name = "View";
             var description = "Description of View";
             var thisNodeId = getUniqueName("View");
-            var contents = "<tr data-tt-id=" + thisNodeId + " data-tt-parent-id=\"collections\"  class=\"user ui-droppable view\"><td> <span class='folder'>" + name + "</td><td>" + description +"</td></tr>";
+            var contents = "<tr color='#000000' data-tt-id=" + thisNodeId + " data-tt-parent-id=" + selectedNode + " class=\"user ui-droppable view\"><td> <span class='folder'>" + name + "</td><td>" + description +"</td></tr>";
             $("#tracks").treetable("loadBranch", composite, contents);
             var newNode =  $("#tracks").treetable("node", thisNodeId);
             $("#tracks").treetable("move", thisNodeId, selectedNode);
@@ -171,11 +180,11 @@ var collections = (function() {
         });
 
         $("#newCollection").click ( function () {
-            var collections = $("#tracks").treetable("node", "collections");
+            var collections = $("#tracks").treetable("node", "coll_collections");
             var name = "Collection";
             var description = "Description of Collection";
             var thisNodeId = getUniqueName("collection");
-            var contents = "<tr data-tt-id=" + thisNodeId + " data-tt-parent-id=\"collections\"  class=\"user ui-droppable\"><td><span class='folder'>" + name + "</td><td>" + description +"</td></tr>";
+            var contents = "<tr color='#000000' data-tt-id=" + thisNodeId + " data-tt-parent-id=\"coll_collections\"  class=\"user ui-droppable\"><td><span class='folder'>" + name + "</td><td>" + description +"</td></tr>";
             $("#tracks").treetable("loadBranch", collections, contents);
             var newNode =  $("#tracks").treetable("node", thisNodeId);
             var newNodeTr =  newNode.row;
@@ -195,6 +204,98 @@ var collections = (function() {
                     }
                 }
             });
+        });
+
+        $("#collectionApply").click ( function () {
+            var view = $("#tracks").treetable("node", selectedNode);
+            var name = $(view.row).find('td:first');
+            name.html( name.html().replace(name.text().slice(1),$("#collectionName").val()));
+            // resetting the html trashes the event handler.
+            var target = view.treeCell;
+            var handler = function(e) {
+                $(this).parents("table").treetable("node", $(this).parents("tr").data("ttId")).toggle();
+                return e.preventDefault();
+            };
+            target.off("click.treetable").on("click.treetable", handler);
+
+            // now change the description
+            var description = $(view.row).find('td:last');
+            description.html(description.html().replace(description.text(),$("#collectionDescription").val()));
+
+            view.row[0].setAttribute("color", $("#collectionColorInput").val());
+            view.row[0].setAttribute("visibility", $("#collectionVis").val());
+        });
+
+        $("#collectionReset").click ( function () {
+            var row = $("#tracks").treetable("node", selectedNode).row[0];
+            var name = row.cells[0].innerText.slice(1);
+            var description = row.cells[1].innerText;
+            var color = row.getAttribute("color");
+            var visibility = row.getAttribute("visibility");
+            $("#collectionName").val(name);
+            $("#collectionDescription").val(description);
+            $("#collectionVis").val(visibility);
+            $("#collectionColorInput").val(color);
+            $("#collectionColorPicker").spectrum("set", color);
+        });
+
+        $("#customApply").click ( function () {
+            var view = $("#tracks").treetable("node", selectedNode);
+            var name = $(view.row).find('td:first');
+            name.html( name.html().replace(name.text(),$("#customName").val()));
+
+            // now change the description
+            var description = $(view.row).find('td:last');
+            description.html(description.html().replace(description.text(),$("#customDescription").val()));
+
+            view.row[0].setAttribute("color", $("#customColorInput").val());
+            view.row[0].setAttribute("visibility", $("#customVis").val());
+        });
+
+        $("#customReset").click ( function () {
+            var row = $("#tracks").treetable("node", selectedNode).row[0];
+            var name = row.cells[0].innerText.slice(1);
+            var description = row.cells[1].innerText;
+            var color = row.getAttribute("color");
+            var visibility = row.getAttribute("visibility");
+            $("#customName").val(name);
+            $("#customDescription").val(description);
+            $("#customVis").val(visibility);
+            $("#customColorInput").val(color);
+            $("#customColorPicker").spectrum("set", color);
+        });
+
+        $("#viewApply").click ( function () {
+            var view = $("#tracks").treetable("node", selectedNode);
+            var name = $(view.row).find('td:first');
+            name.html( name.html().replace(name.text().slice(1),$("#viewName").val()));
+            // resetting the html trashes the event handler.
+            var target = view.treeCell;
+            var handler = function(e) {
+                $(this).parents("table").treetable("node", $(this).parents("tr").data("ttId")).toggle();
+                return e.preventDefault();
+            };
+            target.off("click.treetable").on("click.treetable", handler);
+
+            // now change the description
+            var description = $(view.row).find('td:last');
+            description.html(description.html().replace(description.text(),$("#viewDescription").val()));
+
+            view.row[0].setAttribute("color", $("#viewColorInput").val());
+            view.row[0].setAttribute("visibility", $("#viewVis").val());
+        });
+
+        $("#viewReset").click ( function () {
+            var row = $("#tracks").treetable("node", selectedNode).row[0];
+            var name = row.cells[0].innerText.slice(1);
+            var description = row.cells[1].innerText;
+            var color = row.getAttribute("color");
+            var visibility = row.getAttribute("visibility");
+            $("#viewName").val(name);
+            $("#viewDescription").val(description);
+            $("#viewVis").val(visibility);
+            $("#viewColorInput").val(color);
+            $("#viewColorPicker").spectrum("set", color);
         });
 
         $("#propsSave").click ( function () {
@@ -227,11 +328,15 @@ var collections = (function() {
                 values[ii][jj] = $(this).data("ttId");
                 jj++;
 
-                values[ii][jj] = $(this).data("visibility");
+                values[ii][jj] = this.getAttribute("visibility");
                 if (!values[ii][jj]) {
                     values[ii][jj] = "hide";
                 }
                 jj++;
+
+                values[ii][jj] = this.getAttribute("color");
+                jj++;
+                
                 ii++;
             });
             requestData = 'jsonp=' + JSON.stringify(values);

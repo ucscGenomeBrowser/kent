@@ -22,15 +22,16 @@
     <div class='col-md-6'>
         <div class='row gbSectionBanner'>
             <div class='col-md-8'>All Tracks</div>
-            <div class='col-md-4 text-right'>
+            <div class='col-md-12 text-right'>
                 <div class='gbButtonGoContainer text-right' title='Make New Collection'>
                     <div id='newCollection' class='gbButton'>Make New Collection </div>
+                    <div id='deleteTrack' class='gbButton'>Delete Track</div>
                 </div>
             </div>
         </div>
 
         <table id='tracks'><tbody>
-        <tr data-tt-id='collections'><td><span class='file'>My Collections</td> <td>Your collected tracks.</td></tr>
+        <tr data-tt-id='coll_collections'><td><span class='file'>My Collections</td> <td>Your collected tracks.</td></tr>
         </tbody></table>
     </div>
 
@@ -72,10 +73,10 @@
             <input id='viewColorPicker'>           
 
             <div class='gbButtonGoContainer text-right' title='Apply'>
-                <div id='propsSave' class='gbButton'>Apply</div>
+                <div id='viewApply' class='gbButton'>Apply</div>
             </div>
             <div class='gbButtonGoContainer text-right' title='Reset'>
-                <div id='propsDiscard' class='gbButton'>Reset</div>
+                <div id='viewReset' class='gbButton'>Reset</div>
             </div>
         </div>
 
@@ -95,10 +96,10 @@
             </select>
             <br><input type='button' value='Create View' name='createView' id='createView'>
             <div class='gbButtonGoContainer text-right' title='Apply'>
-                <div id='propsSave' class='gbButton'>Apply</div>
+                <div id='collectionApply' class='gbButton'>Apply</div>
             </div>
             <div class='gbButtonGoContainer text-right' title='Reset'>
-                <div id='propsDiscard' class='gbButton'>Reset</div>
+                <div id='collectionReset' class='gbButton'>Reset</div>
             </div>
         </div>
 
@@ -117,14 +118,14 @@
                 <option>full</option>
             </select>
 
-            <br> <p>Color: <input type='text' id='trackColorInput' value='0xffffff'>&nbsp;&nbsp;
-            <input id='trackColorPicker'>           
+            <br> <p>Color: <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
+            <input id='customColorPicker'>           
 
             <div class='gbButtonGoContainer text-right' title='Apply'>
-                <div id='propsSave' class='gbButton'>Apply</div>
+                <div id='customApply' class='gbButton'>Apply</div>
             </div>
             <div class='gbButtonGoContainer text-right' title='Reset'>
-                <div id='propsDiscard' class='gbButton'>Reset</div>
+                <div id='customReset' class='gbButton'>Reset</div>
             </div>
         </div>
     </div>
