@@ -159,6 +159,7 @@ DBS = \
 	sc1 \
 	sorAra1 sorAra2 \
 	speTri1 speTri2 cavPor3 \
+	staAur1 \
 	strPur1 strPur2 strPur4 \
 	strRat1 strRat2 \
 	susScr1 susScr2 susScr3 susScr11 \
