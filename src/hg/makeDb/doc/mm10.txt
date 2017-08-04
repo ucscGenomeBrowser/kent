@@ -15146,7 +15146,7 @@ TMPDIR=/dev/shm
     # real    214m50.810s
 
 ##############################################################################
-# LASTZ Chinese hamster papAnu3 (DONE - 2017-06-21 - Hiram)
+# LASTZ Baboon papAnu3 (DONE - 2017-06-21 - Hiram)
     #	establish a screen to control this job
     screen -S mm10papAnu3
     mkdir /hive/data/genomes/mm10/bed/lastzPapAnu3.2017-06-21
@@ -15232,15 +15232,14 @@ TMPDIR=/dev/shm
     time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
 	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
-XXX - running - Mon Jul 31 08:52:42 PDT 2017
-    #	real    474m39.013s
+    #	real    567m0.166s
 
     cat fb.mm10.chainSusScr11Link.txt
-    #	910628118 bases of 2652783500 (34.327%) in intersection
+    #	731012356 bases of 2652783500 (27.556%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev mm10 susScr11 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    644m20.659s
+    # real    455m39.565s
 
     mkdir /hive/data/genomes/susScr11/bed/blastz.mm10.swap
     cd /hive/data/genomes/susScr11/bed/blastz.mm10.swap
@@ -15249,14 +15248,14 @@ XXX - running - Mon Jul 31 08:52:42 PDT 2017
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    66m35.501s
+    #	real    61m6.153s
 
     cat fb.susScr11.chainMm10Link.txt
-    #	897929517 bases of 2893270787 (31.035%) in intersection
+    #	715277290 bases of 2472073034 (28.934%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev susScr11 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    578m46.893s
+    # real    358m15.340s
 
 ##############################################################################
 # lastz nile tilapia oreNil3 (DONE - 2017-07-31 - Hiram)
@@ -15297,29 +15296,30 @@ TMPDIR=/scratch/tmp
         `pwd`/DEF \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1 &
-XXX - running - Mon Jul 31 09:03:46 PDT 2017
-    #   real    108m51.232s
+    #   real    307m32.926s
 
     cat fb.mm10.chainOreNil3Link.txt
-    #   51909908 bases of 2652783500 (1.957%) in intersection
-    # set sym link to indicate this is the lastz for this genome:
-    cd /hive/data/genomes/mm10/bed
-    ln -s lastzOreNil3.2017-07-31 lastz.oreNil3
+    #   54152663 bases of 2652783500 (2.041%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev mm10 oreNil3 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    243m27.139s
 
     #	and for the swap
     mkdir /hive/data/genomes/oreNil3/bed/blastz.mm10.swap
     cd /hive/data/genomes/oreNil3/bed/blastz.mm10.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+    time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
 	/hive/data/genomes/mm10/bed/lastzOreNil3.2017-07-31/DEF \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    9m8.213s
-    cat  fb.oreNil3.chainMm10Link.txt
-    #   49704887 bases of 816084674 (6.091%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #   real    8m5.590s
 
-    # set sym link to indicate this is the lastz for this genome:
-    cd /hive/data/genomes/oreNil3/bed
-    ln -s blastz.mm10.swap lastz.mm10
+    cat  fb.oreNil3.chainMm10Link.txt
+    #   55291586 bases of 1009856516 (5.475%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev oreNil3 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    230m56.580s
 
 #########################################################################
 # crispr 10K track (DONE - Hiram - 2017-07-28)
@@ -15379,4 +15379,61 @@ XXX - running - Mon Jul 31 09:03:46 PDT 2017
       -stop=load -buildDir=`pwd` mm10 ensGene
     # real    235m41.378s
 
-#########################################################################
+##############################################################################
+# LASTZ Gorilla gorGor5 (DONE - 2017-08-04 - Hiram)
+    #	establish a screen to control this job
+    screen -S mm10gorGor5
+    mkdir /hive/data/genomes/mm10/bed/lastzGorGor5.2017-08-04
+    cd /hive/data/genomes/mm10/bed/lastzGorGor5.2017-08-04
+
+    printf '# mouse vs. gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: gorilla gorGor5
+SEQ2_DIR=/hive/data/genomes/gorGor5/gorGor5.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=130
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzGorGor5.2017-08-04
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+XXX - running - Fri Aug  4 10:14:09 PDT 2017
+    #	real    474m39.013s
+
+    cat fb.mm10.chainGorGor5Link.txt
+    #	910628118 bases of 2652783500 (34.327%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev mm10 gorGor5 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    644m20.659s
+
+    mkdir /hive/data/genomes/gorGor5/bed/blastz.mm10.swap
+    cd /hive/data/genomes/gorGor5/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzGorGor5.2017-08-04/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    66m35.501s
+
+    cat fb.gorGor5.chainMm10Link.txt
+    #	897929517 bases of 2893270787 (31.035%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev gorGor5 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    578m46.893s
+
+##############################################################################
