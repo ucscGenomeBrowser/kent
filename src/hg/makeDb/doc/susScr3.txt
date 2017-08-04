@@ -866,3 +866,19 @@ TMPDIR=/dev/shm
     # real    42m24.943s
 
 #########################################################################
+# LIFTOVER TO susScr11 (DONE - 2017-07027 - Hiram )
+    mkdir /hive/data/genomes/susScr3/bed/blat.susScr11.2017-07-27
+    cd /hive/data/genomes/susScr3/bed/blat.susScr11.2017-07-27
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug \
+        -ooc /hive/data/genomes/susScr3/jkStuff/susScr3.11.ooc susScr3 susScr11
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc /hive/data/genomes/susScr3/jkStuff/susScr3.11.ooc \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	 susScr3 susScr11) > do.log 2>&1 &
+    #   real    273m49.891s
+
+    # verify browser can run a view in other genomes to susScr11 from susScr3
+
+#############################################################################

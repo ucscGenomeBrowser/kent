@@ -21,6 +21,9 @@ LTPMAX=5 # maximum number of interactions a PMID can have to be declared low thr
 # all interactions from these pathways databases.
 MINSUPP=0
 
+# a cutoff on the number of documents required for text mined documents to show up in the UI
+UI_MINSUPP=2
+
 outFields = ["gene1", "gene2", "flags", "refs", "fwWeight", "revWeight", "snip"]
 
 # directory with autoSql descriptions of output tables
@@ -988,6 +991,9 @@ def parseLinkTargets(outDir, validSyms):
     for row in lineFileNext(open(inFname), asFname=asPath):
         gene1, gene2 = row.gene1, row.gene2
         count = int(row.docCount)
+        # text mining documents needs some minimum support
+        if row.linkTypes=="text" and count<UI_MINSUPP:
+            continue
         if count==0:
             count = len(row.dbList.split("|"))
 
