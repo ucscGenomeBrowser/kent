@@ -1,44 +1,23 @@
-/* hgVai - Variant Annotation Integrator. */
+/* hgCollection - hub builder */
 
-/* Copyright (C) 2014 The Regents of the University of California 
+/* Copyright (C) 2017 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 #include "common.h"
-#include "linefile.h"
-#include "hash.h"
-#include "options.h"
-#include "jksql.h"
-#include "htmshell.h"
-#include "web.h"
-#include "cheapcgi.h"
-#include "cart.h"
 #include "cartTrackDb.h"
-#include "genbank.h"
-#include "hgConfig.h"
-#include "hgHgvs.h"
+#include "trackHub.h"
+#include "trashDir.h"
+#include "hubConnect.h"
 #include "hui.h"
 #include "grp.h"
-#include "hCommon.h"
-#include "hgFind.h"
-#include "hPrint.h"
+#include "cheapcgi.h"
 #include "jsHelper.h"
-#include "memalloc.h"
-#include "textOut.h"
-#include "trackHub.h"
-#include "hubConnect.h"
-#include "twoBit.h"
-#include "gpFx.h"
-#include "bigGenePred.h"
-#include "udc.h"
+#include "web.h"
 #include "knetUdc.h"
-#include "md5.h"
-#include "regexHelper.h"
-#include "hAnno.h"
-#include "trashDir.h"
 #include "api.h"
+#include "genbank.h"
+#include "htmshell.h"
+#include "jsonParse.h"
 #include "customComposite.h"
-
-//#include "libifyMe.h"
-
 
 /* Global Variables */
 struct cart *cart;		/* CGI and other variables */
@@ -66,6 +45,7 @@ char *visibility;
 };
 
 static char *getString(char **input)
+// grab a quoted string out of text blob
 {
 char *ptr = *input;
 
@@ -113,14 +93,27 @@ return NULL;
 }
 
 static boolean trackCanBeAdded(struct trackDb *tdb)
+// are we allowing this track into a custom composite
 {
 return  (tdb->subtracks == NULL) && !startsWith("wigMaf",tdb->type) &&  (startsWith("wig",tdb->type) || startsWith("bigWig",tdb->type)) ;
 }
 
 static void printGroup(char *parent, struct trackDb *tdb, boolean folder, boolean user)
+// output the table rows for a group
 {
-printf("<tr data-tt-parent-id='%s' data-tt-id='%s' %s><td><span class='%s'>%s</span></td>",  parent, trackHubSkipHubName(tdb->track),   user ? "class='user'" : "", folder ? "folder" : "file", tdb->shortLabel );
-printf("<td>%s</td></tr>\n", tdb->longLabel);
+char *userString = "";
+
+if (user)
+    {
+    if (tdb->parent && tdb->subtracks) 
+        userString = "class='user view'";
+    else
+        userString = "class='user'";
+    }
+    
+
+jsInlineF("<tr data-tt-parent-id='%s' data-tt-id='%s' %s><td><span class='%s'>%s</span></td>",  parent, trackHubSkipHubName(tdb->track),   userString, folder ? "folder" : "file", tdb->shortLabel );
+jsInlineF("<td>%s</td></tr>", tdb->longLabel);
 
 
 if (tdb->subtracks)
@@ -128,11 +121,12 @@ if (tdb->subtracks)
     struct trackDb *subTdb;
 
     for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
-        printGroup(trackHubSkipHubName(tdb->track), subTdb, FALSE, user);
+        printGroup(trackHubSkipHubName(tdb->track), subTdb, user && (subTdb->subtracks != NULL), user);
     }
 }
 
 static void outHubHeader(FILE *f, char *db, char *hubName)
+// output a track hub header
 {
 char *hubFile = strrchr(hubName, '/') + 1;
 
@@ -148,6 +142,7 @@ trackDb %s\n\n", db, hubFile);
 
 
 static char *getHubName(char *db)
+// get the name of the hub to use for user collections
 {
 struct tempName hubTn;
 char buffer[4096];
@@ -224,6 +219,7 @@ return vis;
 
 
 void addVisibleTracks()
+// add the visible tracks table rows
 {
 printf("<tr data-tt-id='visible' ><td><span class='file'>All Visible</td><td>All the tracks visible in hgTracks</td></tr>\n");
 struct trackDb *tdb;
@@ -236,63 +232,12 @@ for(tdb = fullTrackList; tdb; tdb = tdb->next)
     }
 }
 
-static void doHeader()
+void doTable()
+// output the tree table
 {
-puts(  
-"<a name='TRACK_TOP'></a>\n"  
-"    <div class='row gbTrackTitleBanner'>\n"  
-"       <div class='col-md-10'>\n"  
-);  
-printf(  
-"           <span class='gbTrackName'>\n"  
-"               My Collections \n"  
-"           </span>"  
-"           <span class='gbTrackTitle'> Build Custom Collections of Tracks </span>\n"  );
-puts(  
-"<!-- Info icon built from stacked fa icons -->\n"  
-"           <a href='#INFO_SECTION' title='Jump to the track description'>\n"  
-"               <span class='gbIconSmall fa-stack'>\n"  
-"                   <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>\n" 
-"                   <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>\n"  
-"               </span></a>\n"  
-"           <div class='gbButtonGoContainer text-right' title='Save Collections'>\n"
-"           </div>\n"
-
-"       </div>\n"  
-"       <div class='col-md-2 text-right'>\n"  
-"           <div class='gbButtonGoContainer text-right' title='Go to the Genome Browser'>\n"
-
-"               <div class='gbButtonGo' id='saveCollections' >Save</div>\n"
-"               <div class='gbButtonGo' id='discardChanges'>Discard Changes</div>\n"
-"       </div>\n"  );
-puts(  
-"       </div>\n"  
-"   </div>\n"  
-);  
-}
-
-static void doTable()
-{
-puts(
-"        <!-- Configuration panel -->\n"
-"        <div class='row gbSectionBanner'>\n"
-"            <div class='col-md-8'>All Tracks</div>\n"
-"            <div class='col-md-4 text-right'>\n");
-
-puts(
-"           <div class='gbButtonGoContainer text-right' title='Make New Collection'>\n"
-"               <div id='newCollection' class='gbButton'>Make New Collection </div>\n"
-"           </div>\n"
-);
-puts(
-"            </div>\n"
-"        </div>\n");
-
 char *hubName = hubNameFromUrl(getHubName(database));
-printf("<table id='tracks'><tbody>\n");
+jsInlineF("$('#tracks tr:last').after(\"");
 struct grp *curGroup;
-printf("<tr data-tt-id='collections'><td><span class='file'>My Collections</td>");
-printf("<td>Your collected tracks.</td></tr>\n");
 for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
     {
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
@@ -313,7 +258,7 @@ for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
     {
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
         continue;
-    printf("<tr data-tt-id='%s'><td><span class='file'>%s</span></td><td></td></tr>\n", curGroup->name, curGroup->label );
+    jsInlineF("<tr data-tt-id='%s'><td><span class='file'>%s</span></td><td></td></tr>", curGroup->name, curGroup->label );
     struct trackDb *tdb;
     for(tdb = fullTrackList; tdb;  tdb = tdb->next)
         {
@@ -323,98 +268,8 @@ for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
             }
         }
     }
-printf("</tbody></table>\n");
-}
-
-static void doAttributes()
-{
-puts(
-"        <!-- Configuration panel -->\n"
-"        <div class='row gbSectionBanner'>\n"
-"            <div class='col-md-8'>Set Attributes</div>\n"
-"            <div class='col-md-4 text-right'>\n");
-puts(
-"           <div class='gbButtonGoContainer text-right' title='Save Props'>\n"
-"               <div id='propsSave' class='gbButton'>Save</div>\n"
-"           </div>\n"
-);
-puts(
-"           <div class='gbButtonGoContainer text-right' title='Discard Changes'>\n"
-"               <div id='propsDiscard' class='gbButton'>Discard Changes</div>\n"
-"           </div>\n"
-);
-puts(
-"</div></div>\n");
-// trackDb track options (none at the moment)
-puts(
-"<div id='TrackDbOptions' style=\"display: none;\">"
-"Drag to custom composite to copy to Collections"
-"</div>"
-);
-
-// mathwig options
-puts(
-"<div class='jwInputLabel'  id='MathWigOptions' style=\"display: none;\">"
-"<label for='name'>Name:</label>"
-"<input type='text' name='mathWigName' id='mathWigName' value='' class='text ui-widget-content ui-corner-all'>\n"
-"<label for='description'>Description:</label>\n"
-"<input type='text' name='mathWigDescription' id='mathWigDescription' value='' class='text ui-widget-content ui-corner-all'>\n"
-"<label for='mathWigVis'>Visibility:</label>"
-"<SELECT ID='mathWigVis' >\n"
-"<OPTION>hide</OPTION>\n"
-"<OPTION SELECTED>dense</OPTION>\n"
-"<OPTION>squish</OPTION>\n"
-"<OPTION>pack</OPTION>\n"
-"<OPTION>full</OPTION>\n"
-"</SELECT>\n"
-"<label for='mathWigFunction'>Function:</label>"
-"<SELECT ID='mathWigFunction' >\n"
-"<OPTION SELECTED>add</OPTION>\n"
-"<OPTION >subtract</OPTION>\n"
-"</SELECT>\n"
-" <p>Highlight color: <input type='text' id='mathColorInput' value='0xffffff'>&nbsp;&nbsp;<input id='mathColorPicker'>"
-"</div>\n"
-);
-
-// custom composite options
-puts(
-"<div class='jwInputLabel'  id='CustomCompositeOptions' style=\"display: none;\">"
-"<label for='name'>Name:</label>"
-"<input type='text' name='collectionName' id='collectionName' value='' class='text ui-widget-content ui-corner-all'>\n"
-"<label for='description'>Description:</label>\n"
-"<input type='text' name='collectionDescription' id='collectionDescription' value='' class='text ui-widget-content ui-corner-all'>\n"
-"<label for='collectionVis'>Visibility:</label>"
-"<SELECT ID='collectionVis' style='width: 70px'>\n"
-"<OPTION>hide</OPTION>\n"
-"<OPTION SELECTED>dense</OPTION>\n"
-"<OPTION>squish</OPTION>\n"
-"<OPTION>pack</OPTION>\n"
-"<OPTION>full</OPTION>\n"
-"</SELECT>\n"
-"<input type='button' value='Create MathWig' name='createMathWig' id='createMathWig'>\n"
-"</div>\n"
-);
-
-// custom track  options
-puts(
-"<div class='jwInputLabel'  id='CustomTrackOptions' style=\"display: none;\">"
-"<label for='name'>Name:</label>"
-"<input type='text' name='customName' id='customName' value='' class='text ui-widget-content ui-corner-all'>\n"
-"<label for='description'>Description:</label>\n"
-"<input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all'>\n"
-"<label for='customVis'>Visibility:</label>"
-"<SELECT ID='customVis' style='width: 70px'>\n"
-"<OPTION>hide</OPTION>\n"
-"<OPTION SELECTED>dense</OPTION>\n"
-"<OPTION>squish</OPTION>\n"
-"<OPTION>pack</OPTION>\n"
-"<OPTION>full</OPTION>\n"
-"</SELECT>\n"
-" <p>Highlight color: <input type='text' id='trackColorInput' value='0xffffff'>&nbsp;&nbsp;<input id='trackColorPicker'>"
-"</div>\n"
-
-);
-
+jsInlineF("\");\n");
+jsInlineF("collections.init();\n");
 }
 
 static void onclickJumpToTop(char *id)
@@ -424,6 +279,7 @@ jsOnEventById("click", id, "$('html,body').scrollTop(0);");
 }
 
 static void printHelp()
+// print out the help page
 {
 puts(
 "<a name='INFO_SECTION'></a>\n"
@@ -455,16 +311,6 @@ puts("</div>");
 puts(
 "     </div>\n"
 "   </div>\n");
-
-
-puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
-puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
-jsIncludeFile("jquery.treetable.js", NULL);
-jsIncludeFile("utils.js", NULL);
-jsIncludeFile("ajax.js", NULL);
-jsIncludeFile("hgTracks.js", NULL);
-jsIncludeFile("spectrum.min.js", NULL);
-jsIncludeFile("hgCollection.js", NULL);
 }
 
 void doMainPage()
@@ -474,38 +320,27 @@ webStartGbNoBanner(cart, database, "Collections");
 webIncludeResourceFile("jquery.treetable.css");
 webIncludeResourceFile("jquery.treetable.theme.default.css");
 webIncludeResourceFile("gb.css");
-webIncludeResourceFile("jWest.css");
+//webIncludeResourceFile("jWest.css");
 webIncludeResourceFile("spectrum.min.css");
 webIncludeResourceFile("hgGtexTrackSettings.css");
 
-//webIncludeFile("inc/hgCollection.html");
+webIncludeFile("inc/hgCollection.html");
 
-printf(
-"<form action='%s' name='MAIN_FORM' method=%s>\n\n",
-                hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
-
-doHeader();
-puts(
-"<!-- Track Configuration Panels -->\n"
-"    <div class='row'>\n"
-"        <div class='col-md-6'>\n");
-doTable();
-puts(
-"        </div>\n"
-"        <div class='col-md-6'>\n");
-doAttributes();
-puts(
-"        </div>\n"
-"    </div>\n"
-);
-puts(
-"</form>");
 printHelp();
+doTable();
 
-
+puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
+puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
+jsIncludeFile("jquery.treetable.js", NULL);
+jsIncludeFile("utils.js", NULL);
+jsIncludeFile("ajax.js", NULL);
+jsIncludeFile("spectrum.min.js", NULL);
+jsIncludeFile("hgCollection.js", NULL);
+webEndGb();
 }
 
 static char *getSqlBigWig(struct sqlConnection *conn, char *db, struct trackDb *tdb)
+// figure out the bigWig for native tables
 {
 char buffer[4096];
 
@@ -514,6 +349,7 @@ return sqlQuickString(conn, buffer);
 }
 
 char *getUrl(struct sqlConnection *conn, char *db,  struct track *track, struct hash *nameHash)
+// get the bigDataUrl for a track
 {
 struct trackDb *tdb = hashMustFindVal(nameHash, track->name);
 
@@ -530,6 +366,7 @@ return bigDataUrl;
 }
 
 void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, unsigned int color, struct track *track, struct hash *nameHash, struct hash *collectionNameHash)
+// out the trackDb for one track
 {
 char *dataUrl = NULL;
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
@@ -544,32 +381,7 @@ struct hashEl *hel;
 fprintf(f, "\ttrack %s\n", makeUnique(collectionNameHash, name));
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    if (sameString(hel->name, "mathDataUrl"))
-        {
-/*
-        fprintf(f, "\ttrackNames ");
-        struct mathTrack *mt = (struct mathTrack *)track;
-        struct track *tr = mt->trackList;
-        for(;  tr; tr = tr->next)
-            {
-            fprintf(f, "%s ", tr->name);
-            }
-        fprintf(f, "\n");
-
-        fprintf(f, "\tmathDataUrl ");
-        tr = mt->trackList;
-        if ((mt->function == NULL) || sameString(mt->function, "add"))
-            fprintf(f, "+  ");
-        else
-            fprintf(f, "-  ");
-        for(;  tr; tr = tr->next)
-            {
-            fprintf(f, "%s ", getUrl(conn, db, wigTracks, tr, nameHash));
-            }
-        fprintf(f, "\n");
-*/
-        }
-    else if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "color")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames")&& differentString(hel->name, "superTrack"))
+    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "color")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames")&& differentString(hel->name, "superTrack"))
         fprintf(f, "\t%s %s\n", hel->name, (char *)hel->val);
     }
 if (bigDataUrl == NULL)
@@ -583,6 +395,7 @@ fprintf(f, "\n");
 }
 
 static void outComposite(FILE *f, struct track *collection)
+// output a composite header for user composite
 {
 char *parent = collection->name;
 char *shortLabel = collection->shortLabel;
@@ -603,25 +416,32 @@ static int snakePalette2[] =
 };
 
 
-static void outMathWig(FILE *f, struct sqlConnection *conn, char *db, struct track *mathWig, struct hash *nameHash)
+static void outView(FILE *f, struct sqlConnection *conn, char *db, struct track *view, char *parent, struct hash *nameHash, struct hash *collectionNameHash)
+// output a view to a trackhub
 {
 fprintf(f,"\ttrack %s\n\
 \tshortLabel %s\n\
 \tlongLabel %s\n\
-\ttype mathWig \n\
-\tvisibility full\n", mathWig->name, &mathWig->shortLabel[2], mathWig->longLabel);
-fprintf(f,"\tmathDataUrl + ");
-struct track *track = mathWig->trackList;
+\tview %s \n\
+\tparent %s \n\
+\tvisibility full\n", view->name, &view->shortLabel[2], view->longLabel, view->name, parent);
+//fprintf(f,"\tequation +\n");
+fprintf(f, "\n");
+
+int useColor = 0;
+struct track *track = view->trackList;
 for(; track; track = track->next)
     {
-    fprintf(f, "%s ",  getUrl(conn, db,  track, nameHash));
-    }
+    struct trackDb *tdb = hashMustFindVal(nameHash, track->name);
 
-fprintf(f, "\n");
+    outTdb(conn, db, f, track->name,tdb, view->name, snakePalette2[useColor], track,  nameHash, collectionNameHash);
+    useColor++;
+    }
 
 }
 
 void updateHub(char *db, struct track *collectionList, struct hash *nameHash)
+// save our state to the track hub
 {
 char *hubName = getHubName(db);
 
@@ -642,7 +462,7 @@ for(collection = collectionList; collection; collection = collection->next)
         {
         if (track->trackList != NULL)
             {
-            outMathWig(f, conn, db, track, nameHash);
+            outView(f, conn, db, track, collection->name,  nameHash, collectionNameHash);
             }
         else
             {
@@ -660,6 +480,7 @@ hFreeConn(&conn);
 }
 
 static struct track *parseJson(char *jsonText)
+// parse the JSON of the treetable from the Javascript
 {
 struct hash *trackHash = newHash(5);
 struct track *collectionList = NULL;
@@ -701,6 +522,7 @@ return collectionList;
 }
 
 void doAjax(char *db, char *jsonText, struct hash *nameHash)
+// Save our state
 {
 struct track *collectionList = parseJson(jsonText);
 
@@ -725,6 +547,7 @@ return nameHash;
 }
 
 static struct trackDb *traverseTree(struct trackDb *oldList, struct hash *groupHash)
+// add acceptable tracks to our tree
 {
 struct trackDb *newList = NULL, *tdb, *tdbNext;
 
@@ -756,6 +579,7 @@ return newList;
 }
 
 static void pruneTrackList(struct trackDb **fullTrackList, struct grp **fullGroupList)
+// drop track types we don't grok yet
 {
 struct hash *groupHash = newHash(5);
 

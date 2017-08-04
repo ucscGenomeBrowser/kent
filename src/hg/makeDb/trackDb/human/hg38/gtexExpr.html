@@ -10,12 +10,12 @@ This release is based on data from 8555 tissue samples obtained from 570 adult p
 
 <H2>Display Conventions</H2>
 <P>
-In Full and Pack display modes, expression for each gene is represented by a colored bargraph,
+In Full and Pack display modes, expression for each gene is represented by a colored bar chart,
 where the height of each bar represents the median expression level across all samples for a 
 tissue, and the bar color indicates the tissue.
 Tissue colors were assigned to conform to the GTEx Consortium publication conventions.
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img border='1' src="../images/gtex/gtexGeneTcap.png"><br>
-The bargraph display has the same width and tissue order for all genes.
+The bar chart display has the same width and tissue order for all genes.
 Mouse hover over a bar will show the tissue and median expression level.
 The Squish display mode draws a rectangle for each gene, colored to indicate the tissue
 with highest expression level if it contributes more than 10% to the overall expression
@@ -49,24 +49,6 @@ Images from stained tissue samples can be viewed via the
 NCI histopathology viewer</a>.
 The Qiagen PAXgene non-formalin tissue preservation product was used to stabilize 
 tissue specimens without cross-linking biomolecules.</P>
-<P>
-RNA-seq was performed by the GTEx Laboratory, Data Analysis and Coordinating Center 
-(LDACC) at the Broad Institute.
-The Illumina TruSeq protocol was used to create an unstranded polyA+ library sequenced
-on the Illumina HiSeq 2000 platform to produce 76-bp paired end reads at a depth 
-averaging 50M aligned reads per sample.
-Sequence reads were aligned to the hg19/GRCh37 human genome using Tophat v1.4.1 
-assisted by the GENCODE v19 transcriptome definition. 
-Gene annotations were produced by taking the union of the GENCODE exons for each gene.
-Gene expression levels in RPKM were called via the RNA-SeQC tool, after filtering for 
-unique mapping, proper pairing, and exon overlap.
-For further method details, see the 
-<a target="_blank" href="http://gtexportal.org/home/documentationPage#staticTexAnalysisMethods">
-GTEx Portal Documentation</a> page.
-<P>
-UCSC obtained the gene-level expression files, gene annotations and sample metadata from the 
-GTEx Portal Download page.
-Median expression level in RPKM was computed per gene/per tissue.</P>
 
 <H2>Subject and Sample Characteristics</H2>
 <P>

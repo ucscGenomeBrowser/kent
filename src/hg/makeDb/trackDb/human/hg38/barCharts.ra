@@ -59,6 +59,7 @@ type bigBarChart
 group phenDis
 shortLabel TCGA Expression
 longLabel Expression of 33 TCGA Cancer Tissues (GENCODE v23)
+html tcgaExpr
 
 	track tcgaTranscExpr
 	parent tcgaExpr
@@ -89,7 +90,7 @@ longLabel Expression of 33 TCGA Cancer Tissues (GENCODE v23)
 	barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/tcgaMatrix.tab
 	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaLargeSamples.tab
 	barChartMetric median
-	shortLabel TCGA transcExpr
+	shortLabel TCGA Transc Expr
 	longLabel TCGA Transcript Expression (GENCODE v23)
 	defaultLabelFields name2
 	labelFields name2, name
@@ -125,7 +126,7 @@ longLabel Expression of 33 TCGA Cancer Tissues (GENCODE v23)
 	barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/tcgaGeneMatrix.tab
 	barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaLargeSamples.tab
 	barChartMetric median
-	shortLabel TCGA geneExpr
+	shortLabel TCGA Gene Expr
 	longLabel TCGA Gene Expression (GENCODE v23)
 	defaultLabelFields name2
 	labelFields name2, name
@@ -150,7 +151,7 @@ longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors
 	html gtexExpr
 	group expression
 	visibility pack
-	priority 10.13
+	priority 1
 	maxItems 200
 
 	searchTable gtexGene
@@ -196,6 +197,7 @@ longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors
 	shortLabel GTEx Transc
 	longLabel Transcript Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 	defaultLabelFields name2
+	priority 2
 	labelFields name2, name
 	group expression
 	bigDataUrl /gbdb/hgFixed/human/expMatrix/gtexTranscExpr.bb 

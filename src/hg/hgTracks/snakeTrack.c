@@ -30,6 +30,8 @@
 
 // this is the number of pixels used by the target self-align bar
 #define DUP_LINE_HEIGHT	4
+// this is the number of pixels used when displaying the insertion lengths
+#define INSERT_TEXT_HEIGHT 10
 
 struct snakeFeature
     {
@@ -670,7 +672,7 @@ if (vis == tvDense)
 if (vis == tvSquish)
     return tg->lineHeight/2;
 
-int height = DUP_LINE_HEIGHT; 
+int height = DUP_LINE_HEIGHT + INSERT_TEXT_HEIGHT; 
 struct slList *item = tg->items;
 
 item = tg->items;
@@ -1094,8 +1096,56 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 #define MG_ORANGE  0xff0082E6
 	int color = MG_GRAY;
 
-	if (lastQEnd != qs)
-	    color = MG_ORANGE;
+	if (lastQEnd != qs) {
+            long long queryInsertSize = llabs(lastQEnd - qs);
+            long long targetInsertSize;
+            if (sf->orientation == 1)
+                targetInsertSize = s - lastE;
+            else
+                targetInsertSize = lastS - e;
+            int blue = 0;
+            int red = 0;
+            int green = 0;
+            if (queryInsertSize > targetInsertSize) {
+                double frac = ((double) queryInsertSize - targetInsertSize) / targetInsertSize;
+                if (frac > 1.0)
+                    frac = 1.0;
+                red = 255 - 255 * frac;
+                blue = 255 * frac;
+            } else {
+                double frac = ((double) targetInsertSize - queryInsertSize) / targetInsertSize;
+                if (frac > 1.0)
+                    frac = 1.0;
+                red = 255 - 255 * frac;
+                green = 255 * frac;
+            }
+            color = hvGfxFindColorIx(hvg, red, green, blue);
+        }
+        double queryGapNFrac = 0.0;
+        double queryGapMaskedFrac = 0.0;
+        if (qs - lastQEnd != 0 && qs - lastQEnd < 1000000) {
+            // sketchy
+            char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
+            char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
+            int handle = halOpenLOD(fileName, NULL);
+            char *queryGapDna = halGetDna(handle, otherSpecies, sf->qName, lastQEnd, qs, NULL);
+            long long numNs = 0;
+            long long numMasked = 0;
+            char *i = queryGapDna;
+            while (*i != '\0') {
+                if (*i == 'N' || *i == 'n') {
+                    numNs++;
+                    numMasked++;
+                }
+                if (*i == 'a' || *i == 't' || *i == 'g' || *i == 'c') {
+                        numMasked++;
+                }
+                i++;
+            }
+            free(queryGapDna);
+            queryGapMaskedFrac = ((double) numMasked) / (qs - lastQEnd);
+            queryGapNFrac = ((double) numNs) / (qs - lastQEnd);
+        }
 
 	// draw the vertical orange bars if there is an insert in the other sequence
 	if ((winBaseCount < showSnpWidth) )
@@ -1103,16 +1153,20 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	    if ((sf->orientation == 1) && (qs != lastQEnd) && (lastE == s))
 		{
 		hvGfxLine(hvg, sx, y2 - lineHeight/2 , sx, y2 + lineHeight/2, MG_ORANGE);
-		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+		safef(buffer, sizeof buffer, "%dbp (%.1lf%% N, %.1lf%% masked)", qs - lastQEnd, queryGapNFrac*100, queryGapMaskedFrac*100);
 		boundMapBox(hvg, s, e, sx, y2 - lineHeight/2, 1, lineHeight, tg->track,
 				    "foo", buffer, NULL, TRUE, NULL);
+		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+                hvGfxTextCentered(hvg, sx - 10, y2 + lineHeight/2, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
 		}
 	    else if ((sf->orientation == -1) && (qs != lastQEnd) && (lastS == e))
 		{
 		hvGfxLine(hvg, ex, y2 - lineHeight/2 , ex, y2 + lineHeight/2, MG_ORANGE);
-		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+		safef(buffer, sizeof buffer, "%dbp (%.1lf%% N, %.1lf%% masked)", qs - lastQEnd, queryGapNFrac*100, queryGapMaskedFrac*100);
 		boundMapBox(hvg, s, e, ex, y2 - lineHeight/2, 1, lineHeight, tg->track,
 				    "foo", buffer, NULL, TRUE, NULL);
+		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+                hvGfxTextCentered(hvg, ex - 10, y2 + lineHeight/2, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
 		}
 	    }
 
@@ -1124,7 +1178,10 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	    {
 	    if (lastLevel == sf->level)
 		{
-		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+                if (sf->orientation == 1)
+                    safef(buffer, sizeof buffer, "%dbp (%dbp in ref) (%.1lf%% N, %.1lf%% masked)", qs - lastQEnd, s - lastE, queryGapNFrac*100, queryGapMaskedFrac*100);
+                else
+                    safef(buffer, sizeof buffer, "%dbp (%dbp in ref) (%.1lf%% N, %.1lf%% masked)", qs - lastQEnd, lastS - e, queryGapNFrac*100, queryGapMaskedFrac*100);
 		if (sf->orientation == -1)
 		    {
 		    if (lastX != ex)
@@ -1132,6 +1189,10 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 			hvGfxLine(hvg, ex, y1, lastX, y2, color);
 			boundMapBox(hvg, s, e, ex, y1, lastX-ex, 1, tg->track,
 				"", buffer, NULL, TRUE, NULL);
+                        if (lastQEnd != qs) {
+                            safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+                            hvGfxTextCentered(hvg, ex, y2 + lineHeight/2, lastX-ex, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
+                        }
 			}
 		    }
 		else
@@ -1141,6 +1202,10 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 			hvGfxLine(hvg, lastX, y1, sx, y2, color);
 			boundMapBox(hvg, s, e, lastX, y1, sx-lastX, 1, tg->track,
 				"", buffer, NULL, TRUE, NULL);
+                        if (lastQEnd != qs) {
+                            safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+                            hvGfxTextCentered(hvg, lastX, y2 + lineHeight/2, sx-lastX, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
+                        }
 			}
 		    }
 		}
@@ -1149,21 +1214,27 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		hvGfxLine(hvg, lastX, y1, sx, y2, color);
 		hvGfxLine(hvg, sx, y2, sx, y2 - lineHeight - lineHeight/3, color);
 		char buffer[1024];
-		safef(buffer, sizeof buffer, "%d-%d %dbp gap",prevSf->qStart,prevSf->qEnd, qs - lastQEnd);
+		safef(buffer, sizeof buffer, "%d-%d %dbp gap (%.1lf%% N, %.1lf%% masked)",prevSf->qStart,prevSf->qEnd, qs - lastQEnd, queryGapNFrac*100, queryGapMaskedFrac*100);
 		boundMapBox(hvg, s, e, sx, y2 - lineHeight - lineHeight/3, 2, lineHeight + lineHeight/3, tg->track,
 	                    "", buffer, NULL, TRUE, NULL);
+		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+                if (lastQEnd != qs)
+                    hvGfxTextCentered(hvg, sx - 10, y2 + lineHeight/2, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
 
 		}
 	    else
 		{
 		char buffer[1024];
-		safef(buffer, sizeof buffer, "%d-%d %dbp gap",prevSf->qStart,prevSf->qEnd, qs - lastQEnd);
+		safef(buffer, sizeof buffer, "%d-%d %dbp gap (%.1lf%% N, %.1lf%% masked)",prevSf->qStart,prevSf->qEnd, qs - lastQEnd, queryGapNFrac*100, queryGapMaskedFrac*100);
 		if (sf->orientation == -1)
 		    {
 		    hvGfxLine(hvg, lastX-1, y1, ex, y2, color);
 		    hvGfxLine(hvg, ex, y2, ex, y2 + lineHeight , color);
 		    boundMapBox(hvg, s, e, ex-1, y2, 2, lineHeight , tg->track,
 				"", buffer, NULL, TRUE, NULL);
+                    safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+                    if (lastQEnd != qs)
+                        hvGfxTextCentered(hvg, ex - 10, y2 + lineHeight, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
 		    }
 		else
 		    {
@@ -1172,6 +1243,9 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		    boundMapBox(hvg, s, e, sx-1, y2, 2, lineHeight , tg->track,
 				"", buffer, NULL, TRUE, NULL);
 
+                    safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
+                    if (lastQEnd != qs)
+                        hvGfxTextCentered(hvg, sx - 10, y2 + lineHeight, 20, INSERT_TEXT_HEIGHT, MG_ORANGE, font, buffer);
 		    }
 		}
 	    }

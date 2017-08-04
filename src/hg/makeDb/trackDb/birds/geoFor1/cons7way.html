@@ -60,7 +60,7 @@ level (see <EM>Gap Annotation</EM>, below). </P>
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
 <TR ALIGN=left><TD>Medium ground finch</TD><TD>Geospiza fortis</TD><TD>Apr. 2012</TD><TD><A HREF="../cgi-bin/hgGateway?db=geoFor1" TARGET=_blank>BGI/geoFor1</A></TD><TD>reference species</TD></TR>
 <TR><TH COLSPAN=5>Birds subset</TH></TR>
-<TR ALIGN=left><TD>Budgerigar</TD><TD>Melopsittacus undulatus</TD><TD>Sep. 2011</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/melUnd1" TARGET=_blank>WUGSC v6.3/melUnd1</A>*</TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Budgerigar</TD><TD>Melopsittacus undulatus</TD><TD>Sep. 2011</TD><TD><A HREF="ftp://hgdownload.soe.ucsc.edu/gbdb/melUnd1" TARGET=_blank>WUGSC v6.3/melUnd1</A>*</TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Zebra finch</TD><TD>Taeniopygia guttata</TD><TD>Jul. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=taeGut1" TARGET=_blank>WUGSC 3.2.4/taeGut1</A></TD><TD>Net</TD></TR>
 <TR ALIGN=left><TD>Chicken</TD><TD>Gallus gallus</TD><TD>Nov. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=galGal4" TARGET=_blank>ICGSC Gallus_gallus-4.0/galGal4</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Turkey</TD><TD>Meleagris gallopavo</TD><TD>Dec. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=melGal1" TARGET=_blank>TGC Turkey_2.01/melGal1</A></TD><TD>Syntenic net</TD></TR>
@@ -75,11 +75,11 @@ level (see <EM>Gap Annotation</EM>, below). </P>
 Downloads for data in this track are available:
 <UL>
 <LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/multiz7way/">Multiz alignments</A> (MAF format), and phylogenetic trees
+<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/geoFor1/multiz7way/">Multiz alignments</A> (MAF format), and phylogenetic trees
 <LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phyloP7way/">PhyloP conservation</A> (WIG format)
+<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/geoFor1/phyloP7way/">PhyloP conservation</A> (WIG format)
 <LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phastCons7way/">PhastCons conservation</A> (WIG format)
+<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/geoFor1/phastCons7way/">PhastCons conservation</A> (WIG format)
 </UL>
 
 <H2>Display Conventions and Configuration</H2>
@@ -232,7 +232,7 @@ The multiple alignments were post-processed to
 add annotations indicating alignment gaps, genomic breaks,
 and base quality of the component sequences.
 The annotated multiple alignments, in MAF format, are available for
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/multiz7way"
+<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/geoFor1/multiz7way"
 TARGET=_blank>bulk download</A>.
 An alignment summary table containing an entry for each
 alignment block in each species was generated to improve
@@ -247,16 +247,16 @@ on a tree model containing the tree topology, branch lengths representing
 evolutionary distance at neutrally evolving sites, the background distribution
 of nucleotides, and a substitution rate matrix.
 The
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons.mod"
+<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons.mod"
 TARGET=_blank>all species tree model</A> for this track was
 generated using the <em>phyloFit</em> program from the PHAST package
 (REV model, EM algorithm, medium precision) using multiple alignments of
 4-fold degenerate sites extracted from the 7-way alignment
 (msa_view).  The 4d sites were derived from the Xeno RefSeq gene set,
 filtered to select single-coverage long transcripts.  The
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons.birds.mod"
+<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons.birds.mod"
 TARGET=_blank >birds</A> and
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons.vertebrate.mod"
+<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/geoFor1/phastCons7way/geoFor1.7way.phastCons.vertebrate.mod"
 TARGET=_blank >vertebrate</A> subset tree models
 were extracted from the full 7-way model.  Note, the
 medium ground finch/geoFor1 is included in
@@ -266,11 +266,11 @@ each of the tree models since it is the reference alignment species.
 These same tree models were used in the phyloP calculations, however their
 background frequencies were modified to maintain reversibility.
 The resulting tree models:
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP7way.mod"
+<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP7way.mod"
 TARGET=_blank>all species</A>,
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP.birds.mod"
+<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP.birds.mod"
 TARGET=_blank >birds</A>,
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP.vertebrate.mod"
+<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/geoFor1/phyloP7way/geoFor1.7way.phyloP.vertebrate.mod"
 TARGET=_blank >vertebrate</A> subsets.
 </P>
 <h3> PhastCons Conservation </h3>

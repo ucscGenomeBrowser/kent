@@ -1416,11 +1416,11 @@ static struct bed *hgvsMapNucToGenome(char *db, struct hgvsVariant *hgvs, char *
 /* Return a bed6 with the variant's span on the genome and strand, or NULL if unable to map.
  * If successful and retPslTable is not NULL, set it to the name of the PSL table used. */
 {
+if (hgvs->type == hgvstGenomic)
+    return hgvsMapGDotToGenome(db, hgvs, retPslTable);
 char *acc = normalizeVersion(db, hgvs->seqAcc, NULL);
 if (isEmpty(acc))
     return NULL;
-if (hgvs->type == hgvstGenomic)
-    return hgvsMapGDotToGenome(db, hgvs, retPslTable);
 struct bed *region = NULL;
 char *pslTable = pslTableForAcc(db, acc);
 struct genbankCds cds;
