@@ -804,16 +804,24 @@ can <a href="../contacts.html">contact us</a> for more information.</p>
 <h6>Known issues with Table Browser GTF output: What is the best method for obtaining GTF output?</h6>
 <p>
 Currently, the <a href="../cgi-bin/hgTables">Table Browser</a> option to output as
-<a href="../FAQ/FAQformat.html#format4">GTF</a> is limited, and in some cases, may contain bugs.
-For now, the best method to obtain GTF output is to convert genePred to GTF using the
-command-line utility, <code>genePredToGtf</code>.</p>
+<a href="../FAQ/FAQformat.html#format4">GTF</a> is limited. For now, the best method to obtain 
+GTF output is to convert genePred to GTF using the command-line utility, <code>genePredToGtf</code>.</p>
 <p>
+<p>Summary of Table Browser limitations:</p>
+<ul>
+  <li>The Table Browser has transcript IDs only, so although it includes both &quot;gene_id&quot;
+and &quot;transcript_id&quot; fields in its output, the value for transcript ID (e.g., ENST#) is 
+used for both fields.</li>
+  <li>The Table Browser adds start and stop codon annotations whether or not the transcript alignment 
+includes proper start and stop codons.</li>
+  <li>Some tables in older genome assemblies are not supported.</li>
+</ul>
             <a href="../FAQ/FAQformat#format9">GenePred</a> (short for Gene Predictions) is a table
 format commonly used for gene tracks in the UCSC Genome Browser where each transcript has a single
 row. Tables are not stored in GTF as it would require many rows to describe a single transcript
 since each gene feature (i.e., exon) requires a separate line. The <code>genePredToGtf</code> command-line
-utility can be used to convert genePred to GTF. Download the <code>genePredToGtf</code> operating-specific
-command-line utility from the
+utility can be used to convert genePred to GTF. Download the <code>genePredToGtf</code> operating 
+system-specific command-line utility from the
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a>.</p>
 <p>
 Please see the <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format"> Genes in GTF
