@@ -119,7 +119,7 @@ hPrintf(
 "        \n"
 "        <LI><em><B>GTF</B></em> - positions of all data items in a\n"
 "	 <A HREF=\"../FAQ/FAQdownloads.html#download37\">limited gene transfer format</A> \n"
-"        (Both BED and GTF formats can be used as the basis for custom tracks).</LI>\n"
+"        (both BED and GTF formats can be used as the basis for custom tracks).</LI>\n"
 "        \n"
 "        <LI><em><B>CDS FASTA alignment from multiple alignment</B></em> \n"
 "        - FASTA alignments of the CDS regions of a gene prediction track \n"
