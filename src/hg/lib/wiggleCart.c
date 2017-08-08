@@ -360,7 +360,7 @@ void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, cha
 /*      Min, Max, Default Pixel height of track */
 {
 int settingsDefault;
-wigFetchMinMaxPlusPixelsWithCart(cart, tdb, name, Min, Max, Default, &settingsDefault);
+wigFetchMinMaxPlusPixelsWithCart(theCart, tdb, name, Min, Max, Default, &settingsDefault);
 }
 
 static char *wigCheckBinaryOption(struct trackDb *tdb, char *Default,
