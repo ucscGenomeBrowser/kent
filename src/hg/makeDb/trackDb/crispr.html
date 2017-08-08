@@ -71,9 +71,12 @@ reading frame. The authors recommend out-of-frame scores &gt; 66 to create
 knock-outs with a single guide efficiently.<p>
 
 <p>Off-target sites are sorted by the CFD score (<a href="http://www.nature.com/nbt/journal/v34/n2/full/nbt.3437.html">Doench et al. 2016</a>). 
-The higher the CFD score, the more likely there is off-target cleavage at that site. The
-large majority of predicted off-targets with CFD scores &lt; 0.02 were
-false-positives.</p>
+The higher the CFD score, the more likely is off-target cleavage at that site. 
+Off-targets with a CFD score &lt; 0.023 are not shown on this page and are only
+shown when following the linkout to the external CRISPOR tool. 
+When compared against experimentally validated off-targets by 
+<a href="#References">Haeussler et al. 2016</a>, the large majority of predicted
+off-targets with CFD scores &lt; 0.023 were false-positives.</p>
 
 <h2>Methods</h2>
 
@@ -103,9 +106,9 @@ inefficient guides drops with increasing efficiency scores:
 their own training data. Especially for the Moreno-Mateos score, the
 results are too optimistic, due to overfitting. When evaluated on independent
 datasets, the correlation of the prediction with other assays was around 25%
-lower, see <a href="#References">Haeussler et al. 2016</a>. At the time of writing, there is no
-independent dataset available yet to determine the Moreno-Mateos accuracy for
-each score percentile range.</p>
+lower, see <a href="#References">Haeussler et al. 2016</a>. At the time of
+writing, there is no independent dataset available yet to determine the
+Moreno-Mateos accuracy for each score percentile range.</p>
 
 <h3>Track methods</h3>
 <p>
@@ -125,14 +128,14 @@ includes the Doench 2016, Moreno-Mateos 2015 and Bae
 The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>.
 For automated analysis, the genome annotation is stored in a bigBed file that
 can be downloaded from
-<a href="http://hgdownload.cse.ucsc.edu/gbdb/$db/crispr/" target="_blank">our download server</a>.
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/crispr/" target="_blank">our download server</a>.
 The files for this track are called <tt>crispr.bb</tt> and <tt>crisprDetails.tab</tt>. Individual
 regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
 can also be used to obtain only features within a given range, e.g. <tt>bigBedToBed
-http://hgdownload.cse.ucsc.edu/gbdb/hg19/crispr/crispr.bb -chrom=chr21
+http://hgdownload.soe.ucsc.edu/gbdb/hg19/crispr/crispr.bb -chrom=chr21
 -start=0 -end=1000000 stdout</tt> </p>
 
 <h2>Credits</h2>
@@ -142,6 +145,17 @@ Track created by Maximilian Haeussler, with helpful input from Jean-Paul Concord
 </p>
 <a name="References"></a>
 <h2>References</h2>
+
+<p>
+Haeussler M, Sch&#246;nig K, Eckert H, Eschstruth A, Miann&#233; J, Renaud JB, Schneider-Maunoury S,
+Shkumatava A, Teboul L, Kent J <em>et al</em>.
+<a href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-1012-2" target="_blank">
+Evaluation of off-target and on-target scoring algorithms and integration into the guide RNA
+selection tool CRISPOR</a>.
+<em>Genome Biol</em>. 2016 Jul 5;17(1):148.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/27380939" target="_blank">27380939</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4934014/" target="_blank">PMC4934014</a>
+</p>
 
 <p>
 Bae S, Kweon J, Kim HS, Kim JS.
@@ -159,17 +173,6 @@ Optimized sgRNA design to maximize activity and minimize off-target effects of C
 <em>Nat Biotechnol</em>. 2016 Feb;34(2):184-91.
 PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26780180" target="_blank">26780180</a>; PMC: <a
 href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4744125/" target="_blank">PMC4744125</a>
-</p>
-
-<p>
-Haeussler M, Sch&#246;nig K, Eckert H, Eschstruth A, Miann&#233; J, Renaud JB, Schneider-Maunoury S,
-Shkumatava A, Teboul L, Kent J <em>et al</em>.
-<a href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-1012-2" target="_blank">
-Evaluation of off-target and on-target scoring algorithms and integration into the guide RNA
-selection tool CRISPOR</a>.
-<em>Genome Biol</em>. 2016 Jul 5;17(1):148.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/27380939" target="_blank">27380939</a>; PMC: <a
-href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4934014/" target="_blank">PMC4934014</a>
 </p>
 
 <p>

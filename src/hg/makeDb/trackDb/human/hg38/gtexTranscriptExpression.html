@@ -41,20 +41,6 @@ NCI histopathology viewer</a>.
 The Qiagen PAXgene non-formalin tissue preservation product was used to stabilize 
 tissue specimens without cross-linking biomolecules.</P>
 <P>
-RNA-seq was performed by the GTEx Laboratory, Data Analysis and Coordinating Center 
-(LDACC) at the Broad Institute.
-The Illumina TruSeq protocol was used to create an unstranded polyA+ library sequenced
-on the Illumina HiSeq 2000 platform to produce 76-bp paired end reads at a depth 
-averaging 50M aligned reads per sample.
-Sequence reads were aligned to the hg19/GRCh37 human genome using Tophat v1.4.1 
-assisted by the GENCODE v19 transcriptome definition. 
-Gene annotations were produced by taking the union of the GENCODE exons for each gene.
-Gene expression levels in RPKM were called via the RNA-SeQC tool, after filtering for 
-unique mapping, proper pairing, and exon overlap.
-For further method details, see the 
-<a target="_blank" href="http://gtexportal.org/home/documentationPage#staticTexAnalysisMethods">
-GTEx Portal Documentation</a> page.
-<P>
 Sequence reads for this track were quantified to the hg38/GRCh38 human genome using kallisto
 assisted by the GENCODE v23 transcriptome definition. Read quantification was performed at UCSC
 by the Computational Genomics lab, using the Toil pipeline. The resulting kallisto files were
@@ -85,9 +71,7 @@ Samples were collected by the GTEx Consortium.
 RNA-seq was performed by the GTEx Laboratory, Data Analysis and Coordinating Center 
 (LDACC) at the Broad Institute.
 John Vivian, Melissa Cline, and Benedict Paten of the UCSC Computational Genomics lab were
-responsible for the sequence read quantification used to produce this track. Kate Rosenbloom 
-and Chris Eisenhart of the UCSC Genome Browser group were responsible for data file
-post-processing and track configuration.
+responsible for the sequence read quantification used to produce this track. Chris Eisenhart of the UCSC Genome Browser group were responsible for data processing and track configuration.
 <P>
 
 <H2>References</H2>

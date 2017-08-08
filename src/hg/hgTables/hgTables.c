@@ -615,6 +615,8 @@ if (isHubTrack(table))
     }
 else if (isBigBed(database, table, curTrack, ctLookupName))
     hti = bigBedToHti(table, conn);
+else if (isBigWigTable(table))
+    hti = bigWigToHti(table);
 else if (isLongTabixTable(table))
     hti = longTabixToHti(table);
 else if (isBamTable(table))
@@ -633,8 +635,6 @@ else if (sameWord(table, WIKI_TRACK_TABLE))
     {
     hti = wikiHti();
     }
-else if (!hTableExists(db, table))
-    hti = hFindBigWigTrackInfo(db, NULL, table); 
 else
     {
     char *track;
@@ -807,7 +807,9 @@ for (track = trackList; track != NULL; track = track->next)
         {
 	struct trackDb *subtrack = findTrackInGroup(name, track->subtracks, group);
 	if (subtrack != NULL)
-	    return subtrack;
+            // Return composite track if given a subtrack name (e.g. hg19 refGene track to
+            // hg38 refSeqComposite, #19920)
+	    return track;
 	}
     }
 return NULL;

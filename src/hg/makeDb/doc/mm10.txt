@@ -15146,7 +15146,7 @@ TMPDIR=/dev/shm
     # real    214m50.810s
 
 ##############################################################################
-# LASTZ Chinese hamster papAnu3 (DONE - 2017-06-21 - Hiram)
+# LASTZ Baboon papAnu3 (DONE - 2017-06-21 - Hiram)
     #	establish a screen to control this job
     screen -S mm10papAnu3
     mkdir /hive/data/genomes/mm10/bed/lastzPapAnu3.2017-06-21
@@ -15201,4 +15201,259 @@ TMPDIR=/dev/shm
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
     # real    578m46.893s
 
+##############################################################################
+# LASTZ pig susScr11 (DONE - 2017-07-31 - Hiram)
+    #	establish a screen to control this job
+    screen -S mm10susScr11
+    mkdir /hive/data/genomes/mm10/bed/lastzSusScr11.2017-07-31
+    cd /hive/data/genomes/mm10/bed/lastzSusScr11.2017-07-31
+
+    printf '# mouse vs. pig
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: baboon susScr11
+SEQ2_DIR=/hive/data/genomes/susScr11/susScr11.2bit
+SEQ2_LEN=/hive/data/genomes/susScr11/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=1
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzSusScr11.2017-07-31
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    567m0.166s
+
+    cat fb.mm10.chainSusScr11Link.txt
+    #	731012356 bases of 2652783500 (27.556%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev mm10 susScr11 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    455m39.565s
+
+    mkdir /hive/data/genomes/susScr11/bed/blastz.mm10.swap
+    cd /hive/data/genomes/susScr11/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzSusScr11.2017-07-31/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    61m6.153s
+
+    cat fb.susScr11.chainMm10Link.txt
+    #	715277290 bases of 2472073034 (28.934%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev susScr11 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    358m15.340s
+
+##############################################################################
+# lastz nile tilapia oreNil3 (DONE - 2017-07-31 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10OreNil3
+    mkdir /hive/data/genomes/mm10/bed/lastzOreNil3.2017-07-31
+    cd /hive/data/genomes/mm10/bed/lastzOreNil3.2017-07-31
+
+    printf '# Mouse vs. nile tilapia
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: nile tilapia oreNil3
+SEQ2_DIR=/hive/data/genomes/oreNil3/oreNil3.2bit
+SEQ2_LEN=/hive/data/genomes/oreNil3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=10
+
+BASE=/hive/data/genomes/mm10/bed/lastzOreNil3.2017-07-31
+TMPDIR=/scratch/tmp
+' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1 &
+    #   real    307m32.926s
+
+    cat fb.mm10.chainOreNil3Link.txt
+    #   54152663 bases of 2652783500 (2.041%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev mm10 oreNil3 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    243m27.139s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/oreNil3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/oreNil3/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 -syntenicNet \
+	/hive/data/genomes/mm10/bed/lastzOreNil3.2017-07-31/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #   real    8m5.590s
+
+    cat  fb.oreNil3.chainMm10Link.txt
+    #   55291586 bases of 1009856516 (5.475%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev oreNil3 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    230m56.580s
+
+#########################################################################
+# crispr 10K track (DONE - Hiram - 2017-07-28)
+    # this script was developed during this procedure, thus, the step-wise
+    # procedures:
+    mkdir /hive/data/genomes/mm10/bed/crispr.10K
+    cd /hive/data/genomes/mm10/bed/crispr.10K
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl \
+      -stop=guides -buildDir=`pwd` mm10 ensGene) > guides.log 2>&1
+    # real    78m39.898s
+# Completed: 99 of 99 jobs
+# CPU time in finished jobs:      12182s     203.04m     3.38h    0.14d  0.000 y
+# IO & Wait Time:                  1076s      17.93m     0.30h    0.01d  0.000 y
+# Average job time:                 134s       2.23m     0.04h    0.00d
+# Longest finished job:             181s       3.02m     0.05h    0.00d
+# Submission to last job:          4567s      76.12m     1.27h    0.05d
+
+    ~/kent/src/hg/utils/automation/doCrispr.pl -continue=specScores \
+      -stop=specScores -buildDir=`pwd` mm10 ensGene
+# Completed: 945820 of 1558824 jobs
+# CPU time in finished jobs:  352722192s 5878703.20m 97978.39h 4082.43d 11.185 y
+# IO & Wait Time:             1367298315s 22788305.25m 379805.09h 15825.21d 43.357 y
+# Average job time:                1819s      30.31m     0.51h    0.02d
+# Longest finished job:            8656s     144.27m     2.40h    0.10d
+# Submission to last job:       2172942s   36215.70m   603.60h   25.15d
+
+    # after ku reboot, finishing:
+# Completed: 613973 of 613973 jobs
+# CPU time in finished jobs:  155165030s 2586083.83m 43101.40h 1795.89d  4.920 y
+# IO & Wait Time:             584008656s 9733477.60m 162224.63h 6759.36d 18.519 y
+# Average job time:                1204s      20.07m     0.33h    0.01d
+# Longest finished job:            8978s     149.63m     2.49h    0.10d
+# Submission to last job:       1137188s   18953.13m   315.89h   13.16d
+
+
+    ~/kent/src/hg/utils/automation/doCrispr.pl -continue=effScores \
+      -stop=effScores -buildDir=`pwd` mm10 ensGene
+# Completed: 13518 of 13518 jobs
+# CPU time in finished jobs:    6244711s  104078.52m  1734.64h   72.28d  0.198 y
+# IO & Wait Time:                 32457s     540.95m     9.02h    0.38d  0.001 y
+# Average job time:                 464s       7.74m     0.13h    0.01d
+# Longest finished job:            2373s      39.55m     0.66h    0.03d
+# Submission to last job:         15145s     252.42m     4.21h    0.18d
+
+    ~/kent/src/hg/utils/automation/doCrispr.pl -continue=offTargets \
+      -stop=offTargets -buildDir=`pwd` mm10 ensGene
+# Completed: 77942 of 77942 jobs
+# CPU time in finished jobs:    1397706s   23295.10m   388.25h   16.18d  0.044 y
+# IO & Wait Time:                313616s    5226.94m    87.12h    3.63d  0.010 y
+# Average job time:                  22s       0.37m     0.01h    0.00d
+# Longest finished job:              35s       0.58m     0.01h    0.00d
+# Submission to last job:          9239s     153.98m     2.57h    0.11d
+
+
+    ~/kent/src/hg/utils/automation/doCrispr.pl -continue=load \
+      -stop=load -buildDir=`pwd` mm10 ensGene
+    # real    235m41.378s
+
+##############################################################################
+# LASTZ Gorilla gorGor5 (DONE - 2017-08-04 - Hiram)
+    #	establish a screen to control this job
+    screen -S mm10gorGor5
+    mkdir /hive/data/genomes/mm10/bed/lastzGorGor5.2017-08-04
+    cd /hive/data/genomes/mm10/bed/lastzGorGor5.2017-08-04
+
+    printf '# mouse vs. gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: gorilla gorGor5
+SEQ2_DIR=/hive/data/genomes/gorGor5/gorGor5.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=130
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzGorGor5.2017-08-04
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+XXX - running - Fri Aug  4 10:14:09 PDT 2017
+    #	real    474m39.013s
+
+    cat fb.mm10.chainGorGor5Link.txt
+    #	910628118 bases of 2652783500 (34.327%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev mm10 gorGor5 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    644m20.659s
+
+    mkdir /hive/data/genomes/gorGor5/bed/blastz.mm10.swap
+    cd /hive/data/genomes/gorGor5/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzGorGor5.2017-08-04/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    66m35.501s
+
+    cat fb.gorGor5.chainMm10Link.txt
+    #	897929517 bases of 2893270787 (31.035%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev gorGor5 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    578m46.893s
+
+##############################################################################
+# refSeqFuncElems NCBI refSeq functional elements, DONE 2017-08-08 Chris
+# Mouse
+cd /hive/data/outside/refSeqFuncElems
+
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Mus_musculus/GFF_interim/interim_GRCm38.p5_top_level_2017-05-19.gff3.gz
+gunzip interim_GRCm38.p5_top_level_2017-05-19.gff3.gz
+
+hgsql mm10 -e "select * from ucscToRefSeq" | cut -f 1,4 | awk '{print $2"\t"$1}' > refSeqToUcscMM10.tsv
+
+tail -2373040 interim_GRCm38.p5_top_level_2017-05-19.gff3 > foo2.mm10
+
+join <(sort foo2.mm10) <(sort refSeqToUcscMM10.tsv) -t $'\t' > join.foo.mm10
+
+./parseRefSeqFuncElems join.foo.mm10 bed.mm10 108.20170627
+sort -k1,1 -k2,2n bed.mm10 > sorted.bed.mm10
+bedToBigBed -type=bed6+8 -as=refSeqFuncElems.as sorted.bed.mm10 /hive/data/genomes/mm10/chrom.sizes refSeqFuncElemsMm10.bb -tab 
+
+cd /gbdb/hg38/ncbiRefSeq
+ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb .
 ##############################################################################

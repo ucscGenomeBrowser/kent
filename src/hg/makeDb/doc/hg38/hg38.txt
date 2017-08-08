@@ -6755,3 +6755,61 @@ TMPDIR=/dev/shm
     # real	638m45.337s
 
 #########################################################################
+# refSeqFuncElems NCBI refSeq functional elements, DONE 2017-08-01 Chris
+mkdir /hive/data/outside/refSeqFuncElems
+cd /hive/data/outside/refSeqFuncElems
+
+# Get the data from their ftp server
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/GFF_interim/interim_GRCh38.p10_top_level_2017-05-03.gff3.gz
+gunzip interim_GRCh38.p10_top_level_2017-05-03.gff3.gz
+
+# Get a table to map refSeq chrom names to our chrom names
+hgsql hg38 -e "select * from ucscToRefSeq" | cut -f 1,4 ucscToRefSeq.tsv | awk '{print $2"\t"$1}' > refSeqToUcsc.tsv
+
+# Drop the header lines 
+tail -3610666 ../interim_GRCh38.p11_top_level_2017-06-27.gff3 | sort > foo2
+join foo2 <(sort refSeqToUcsc.tsv) -t $'\t' > join.foo
+
+# Join with the ucscToRefSeq table to get UCSC chromosomes 
+join <(tail -3610666 interim_GRCh38.p11_top_level_2017-06-27.gff3 | sort) <(sort refSeqToUcsc.tsv) -t $'\t' > join.foo
+
+# Python script to grab just the functional elements from this list (given to us by Terence),
+# move things into a bed order and subtract 1 from the chr start coordinates provided.  
+./parseRefSeqFuncElems join.foo bed 108.20170627
+
+sort -k1,1 -k2,2n bed > sorted.bed
+
+#wc sorted.bed 
+#6188  159382 1763350 sorted.bed
+
+bedToBigBed -type=bed6+8 -as=refSeqFuncElems.as sorted.bed /hive/data/genomes/hg38/chrom.sizes refSeqFuncElems.bb -tab 
+
+cd /gbdb/hg38/ncbiRefSeq
+ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElems.bb . 
+###################################################################
+# cosmicRegions (DONE 2017-08-03 Chris)
+# Make a new COSCMIC track for hg38 v82
+mkdir /hive/data/outside/cosmic/hg38/v82
+cd /hive/data/outside/cosmic/hg38/v82
+
+# Get the new data
+sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
+# Login to SFTP server then run these commands 
+get /files/grch38/cosmic/v82/CosmicMutantExport.tsv.gz
+
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
+
+# Use a script to convert to bed format.
+cosmicToBed cosMut.tsv cosMut.bed
+# This many lines were skipped, 134601 for not having genomic coordinate
+
+# Sort and convert to big bed using the .as file.  
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/chrom.sizes cosMutHg38V82.bb -tab -extraIndex=name,cosmLabel
+
+
+# Link it up so the outside world can see it. 
+cd /gbdb/hg38/cosmic/
+ln -s /hive/data/outside/cosmic/hg38/v82/cosMutHg38V82.bb .
+

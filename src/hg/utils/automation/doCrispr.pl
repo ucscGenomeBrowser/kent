@@ -368,6 +368,9 @@ sub doOffTargets {
 		$paraHub, $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
+# to allow the crisprScripts to find their python2.7 version:
+export PATH=/cluster/software/bin:\$PATH
+
 mkdir -p tmp/inFnames tmp/out/
 find $specScores/tmp/outOffs -type f | sed -e 's#.*/tmp/#../specScores/tmp/#;' > otFnames.txt
 splitFile otFnames.txt 20 tmp/inFnames/otJob

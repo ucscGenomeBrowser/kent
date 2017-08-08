@@ -426,7 +426,7 @@ struct outputType otSelected =  { NULL, outSelectedFields,
 struct outputType otSequence =  { NULL, outSequence,    "sequence", };
 struct outputType otPal =       { NULL, outPalOptions,
                                   "CDS FASTA alignment from multiple alignment", };
-struct outputType otGff =         { NULL, outGff,         "GTF - gene transfer format", };
+struct outputType otGff =         { NULL, outGff,         "GTF - gene transfer format &#40;limited&#41;", };
 struct outputType otBed =         { NULL, outBed,         "BED - browser extensible data", };
 struct outputType otCustomTrack = { NULL, outCustomTrack, "custom track", };
 struct outputType otHyperlinks =  { NULL, outHyperlinks,  "hyperlinks to Genome Browser", };

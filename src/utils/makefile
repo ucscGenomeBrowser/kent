@@ -172,7 +172,7 @@ SCRIPT_FILES = \
 	uniprotToTab \
 	ggTables \
 	ggGeneClasses \
-	ggGpmlToTag \
+	ggGpmlToTab \
 	ggKgmlToTab \
 	ggMsrToTab \
 	ggPidToTab \

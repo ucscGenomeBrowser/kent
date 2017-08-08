@@ -8,7 +8,7 @@
 
 # This job script has been ripped out of the crispor.py source code
 
-import sys
+import sys, logging
 #sys.path.append("..")
 #from annotateOffs import *
 
@@ -150,6 +150,7 @@ def main():
     outBedFname = sys.argv[3]
     faFname     = sys.argv[4]
 
+    logging.warn("input fasta: %s, chromSizes %s, outBed %s, output fasta %s" % (fname, chromSizesPath, outBedFname, faFname))
     chromSizes = parseChromSizes(chromSizesPath)
 
     ofh   = open(outBedFname, "w")

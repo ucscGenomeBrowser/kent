@@ -4,60 +4,27 @@ textarea.form-control { width: 500px; height: 200px;}
 /* Colors */
 .label-cescg
 {
-    /*background-color: #<?php echo $theme['cescg']; ?>;*/
     background-color: #FF8C00 /* orange */
-}
-
-.label-cescg[href]:hover,
-.label-cescg[href]:focus
-{
-   background-color: #808080; /* gray */
 }
 
 .label-access
 {
-    /*background-color: #<?php echo $theme['access']; ?>;*/
     background-color: #4682B4 /* gray blue */
-}
-.label-access[href]:hover,
-.label-access[href]:focus
-{
-    background-color: #808080;
 }
 
 .label-files
 {
-    /*background-color: #<?php echo $theme['files']; ?>;*/
     background-color: #C71585 /* magenta */
-}
-
-.label-files[href]:hover,
-.label-files[href]:focus
-{
-    background-color: #808080;
 }
 
 .label-projects
 {
-    /*background-color: #<?php echo $theme['projects']; ?>;*/
     background-color: #1E90FF /* smurf blue */
 }
 
-.label-projects[href]:hover,
-.label-projects[href]:focus
-{
-    background-color: #808080;
-}
-
-.label-atlas
+.label-tools
 {
     background-color: #5cb85c /* lime green */
-}
-
-.label-atlas[href]:hover,
-.label-atlas[href]:focus
-{
-    background-color: #808080;
 }
 
 /*
@@ -69,46 +36,73 @@ textarea.form-control { width: 500px; height: 200px;}
 
 .footer
 {
-    background-color: #aaaaaa
+    width: 90%;
+    margin: 0% 5%;
+    background-color: #eaeaea
 }
 
+/* Styling for title bar and text */
+.cirm-page-title
+{
+    padding-left: 5px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.cirm-page-title-text
+{
+    color: #ffffff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.cirm-page-body
+{
+    width: 90%;
+    margin: 0% 5%;
+}
+
+/* Styling for text + links */
 .a-unstyled,
 .a-unstyled:link,
 .a-unstyled:visited
 {
     color: inherit;
 }
-/*.a-unstyled:link { color: inherit; }*/
-/*.a-unstyled:visited { color: inherit; }*/
 .a-unstyled:hover,
 .a-unstyled:active
 {
     color: inherit;
     text-decoration: none;
 }
-/*.a-unstyled:active { color: inherit; text-decoration: none; }*/
 
 .standsout
 {
-    color: #ffffff; background-color: #1E90FF; padding-left: 3px; padding-right: 3px;
+    color: #ffffff;
+    background-color: #1E90FF;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 .standsout:link,
 .standsout:visited
 {
-    color: #ffffff !important; background-color: #1E90FF;
+    color: #ffffff !important;
+    background-color: #1E90FF;
 }
-
-/*.standsout:visited { color: #ffffff !important; background-color: #1E90FF;}*/
 
 .standsout:hover
 {
-    color: #cccccc; text-decoration: none !important; background-color: #C71585;
+    color: #cccccc;
+    text-decoration: none !important;
+    background-color: #C71585;
 }
 
 .standsout:active
 {
-    color: #ffffff; text-decoration: none !important; background-color: #1E90FF;
+    color: #ffffff;
+    text-decoration: none !important;
+    background-color: #1E90FF;
 }
 
 .nopadding
@@ -158,32 +152,27 @@ textarea.form-control { width: 500px; height: 200px;}
 /* Coloring for experiments types on Projects page */
 .singlecell
 {
-    color: #ed217c; /* pink */
+    color: #ed217c;
 }
 .transcriptome
 {
-    /*color: #<?php echo $theme['projects']; ?>;*/
-    color: #1E90FF
+    color: #1E90FF;
 }
 .genome
 {
-    /*color: #<?php echo $theme['files']; ?>;*/
-    color: #C71585
+    color: #C71585;
 }
 .epigenome
 {
-    /*color: #<?php echo $theme['atlas']; ?>;*/
-    color: #5cb85c
+    color: #5cb85c;
 }
 .otherome
 {
-    /*color: #<?php echo $theme['cescg']; ?>;*/
-    color: #FF8C00
+    color: #FF8C00;
 }
 
 
 /*Styling for Projects page table*/
-
 .table-header-rotated th.row-header{
     width: auto;
 }

@@ -6,8 +6,8 @@ L += $(MYSQLLIBS) -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-A = hgComposite
-O = ${A}.o
+A = hgCollection
+O = hgCollection.o 
 
 include ../../inc/cgi_build_rules.mk
 

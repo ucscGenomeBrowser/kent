@@ -20,13 +20,19 @@ struct gtexEqtlClusterTrack
     double minProb;             /* Probability filter */
 };
 
+/* Track constants */
+
+#define TISSUE_COLOR_DOT        "*"
+
+/* Utility functions */
+
 static struct gtexEqtlCluster *loadOne(char **row)
 /* Load up gtexEqtlCluster from array of strings. */
 {
 return gtexEqtlClusterLoad(row);
 }
 
-static boolean filterTissues(struct track *track, struct gtexEqtlClusterTrack *extras)
+static boolean filterTissuesFromCart(struct track *track, struct gtexEqtlClusterTrack *extras)
 /* Check cart for tissue selection. Populate track tissues hash */
 {
 char *version = gtexVersionSuffix(track->table);
@@ -58,20 +64,20 @@ extras->tissueHash = tisHash;
 return TRUE;
 }
 
-static void excludeTissue(struct gtexEqtlCluster *eqtl, int i)
+static void eqtlExcludeTissue(struct gtexEqtlCluster *eqtl, int i)
 /* Mark the tissue to exclude from display */
 {
 eqtl->expScores[i] = 0.0;
 }
 
-static boolean isExcludedTissue(struct gtexEqtlCluster *eqtl, int i)
+static boolean eqtlIsExcludedTissue(struct gtexEqtlCluster *eqtl, int i)
 /* Check if eQTL is excluded */
 {
 return (eqtl->expScores[i] == 0.0);
 }
 
 static boolean eqtlIncludeFilter(struct track *track, void *item)
-/* Apply all filters (except gene) to eQTL item */
+/* Apply all filters (except gene) to eQTL item. Invoked by filterTissues method */
 {
 int i;
 int excluded = 0;
@@ -88,7 +94,7 @@ for (i=0; i<eqtl->expCount; i++)
         }
     else
         {
-        excludeTissue(eqtl, i);
+        eqtlExcludeTissue(eqtl, i);
         excluded++;
         }
     }
@@ -101,6 +107,57 @@ if (excluded == eqtl->expCount ||
         return FALSE;
 return TRUE;
 }
+
+static int eqtlTissueCount(struct gtexEqtlCluster *eqtl)
+/* Return count of non-excluded tissues in the item */
+{
+int included = 0;
+int i;
+for (i=0; i<eqtl->expCount; i++)
+    if (!eqtlIsExcludedTissue(eqtl, i))
+        included++;
+return included;
+}
+
+static int eqtlTissueIndex(struct gtexEqtlCluster *eqtl)
+/* Return index of first non-excluded tissue in an eQTL cluster. Used for single-tissue items. */
+{
+int i;
+for (i=0; i<eqtl->expCount; i++)
+    if (!eqtlIsExcludedTissue(eqtl, i))
+        return i;
+return -1;
+}
+
+static struct rgbColor eqtlTissueColor(struct track *track, struct gtexEqtlCluster *eqtl)
+/* Return tissue color for single-tissue item, or NULL if none found */
+{
+int i = eqtlTissueIndex(eqtl);
+assert(i>=0);
+struct gtexEqtlClusterTrack *extras = (struct gtexEqtlClusterTrack *)track->extraUiData;
+struct gtexTissue *tis = (struct gtexTissue *)hashFindVal(extras->tissueHash, eqtl->expNames[i]);
+assert (tis);
+return (struct rgbColor){.r=COLOR_32_BLUE(tis->color), .g=COLOR_32_GREEN(tis->color), 
+                .b=COLOR_32_RED(tis->color)};
+}
+
+static char *eqtlSourcesLabel(struct gtexEqtlCluster *eqtl)
+/* Right label is tissue (or number of tissues if >1) */
+{
+int ct = eqtlTissueCount(eqtl);
+if (ct == 1)
+    {
+    int i = eqtlTissueIndex(eqtl);
+    if (i<0)
+        errAbort("GTEx eQTL %s/%s track tissue index is negative", eqtl->name, eqtl->target);
+    return eqtl->expNames[i];
+    }
+struct dyString *ds = dyStringNew(0);
+dyStringPrintf(ds, "%d tissues", ct);
+return dyStringCannibalize(&ds);
+}
+
+/* Track methods */
 
 static void gtexEqtlClusterLoadItems(struct track *track)
 /* Load items in window and prune those that don't pass filter */
@@ -127,7 +184,7 @@ safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_EFFECT);
 extras->minEffect = fabs(cartUsualDouble(cart, cartVar, GTEX_EFFECT_MIN_DEFAULT));
 safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_PROBABILITY);
 extras->minProb = cartUsualDouble(cart, cartVar, 0.0);
-boolean hasTissueFilter = filterTissues(track, extras);
+boolean hasTissueFilter = filterTissuesFromCart(track, extras);
 if (!hasTissueFilter && extras->minEffect == 0.0 && extras->minProb == 0.0)
     return;
 
@@ -142,70 +199,6 @@ struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
 return eqtl->target;
 }
 
-static int itemTissueCount(void *item)
-/* Return count of non-excluded tissues in the item */
-{
-struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
-int included = 0;
-int i;
-for (i=0; i<eqtl->expCount; i++)
-    if (!isExcludedTissue(eqtl, i))
-        included++;
-return included;
-}
-
-static int itemTissueIndex(void *item)
-/* Return index of first non-excluded tissue in an item. Used for single-tissue items. */
-{
-struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
-int i;
-for (i=0; i<eqtl->expCount; i++)
-    if (!isExcludedTissue(eqtl, i))
-        return i;
-return -1;
-}
-
-static char *itemSourcesLabel(void *item)
-/* Right label is tissue (or number of tissues if >1) */
-{
-struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
-int ct = itemTissueCount(item);
-if (ct == 1)
-    {
-    int i = itemTissueIndex(item);
-    if (i<0)
-        errAbort("GTEx eQTL %s/%s track tissue index is negative", eqtl->name, eqtl->target);
-    return eqtl->expNames[i];
-    }
-struct dyString *ds = dyStringNew(0);
-dyStringPrintf(ds, "%d tissues", ct);
-return dyStringCannibalize(&ds);
-}
-
-static struct rgbColor itemTissueColor(struct track *track, void *item)
-/* Return tissue color for single-tissue item, or NULL if none found */
-{
-int i = itemTissueIndex(item);
-assert(i>=0);
-struct gtexEqtlClusterTrack *extras = (struct gtexEqtlClusterTrack *)track->extraUiData;
-struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
-struct gtexTissue *tis = (struct gtexTissue *)hashFindVal(extras->tissueHash, eqtl->expNames[i]);
-assert (tis);
-return (struct rgbColor){.r=COLOR_32_BLUE(tis->color), .g=COLOR_32_GREEN(tis->color), 
-                .b=COLOR_32_RED(tis->color)};
-}
-
-#define TISSUE_COLOR_DOT        "*"
-
-static int gtexEqtlClusterItemRightPixels(struct track *track, void *item)
-/* Return number of pixels we need to the right of an item (for sources label). */
-{
-int ret = mgFontStringWidth(tl.font, itemSourcesLabel(item));
-if (itemTissueCount(item) == 1)
-    ret += mgFontStringWidth(tl.font, TISSUE_COLOR_DOT);
-return ret;
-}
-
 static Color gtexEqtlClusterItemColor(struct track *track, void *item, struct hvGfx *hvg)
 /* Color by highest effect in list (blue -, red +), with brighter for higher effect (teal, fuschia) */
 {
@@ -214,7 +207,7 @@ double maxEffect = 0.0;
 int i;
 for (i=0; i<eqtl->expCount; i++)
     {
-    if (isExcludedTissue(eqtl, i))
+    if (eqtlIsExcludedTissue(eqtl, i))
         continue;
     double effect = eqtl->expScores[i];
     if (fabs(effect) > fabs(maxEffect))
@@ -234,6 +227,16 @@ if (maxEffect > cutoff)
 return MG_RED;
 }
 
+static int gtexEqtlClusterItemRightPixels(struct track *track, void *item)
+/* Return number of pixels we need to the right of an item (for sources label). */
+{
+struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
+int ret = mgFontStringWidth(tl.font, eqtlSourcesLabel(eqtl));
+if (eqtlTissueCount(eqtl) == 1)
+    ret += mgFontStringWidth(tl.font, TISSUE_COLOR_DOT);
+return ret;
+}
+
 static void gtexEqtlClusterDrawItemAt(struct track *track, void *item, 
 	struct hvGfx *hvg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
@@ -247,13 +250,13 @@ if (vis != tvFull && vis != tvPack)
 struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
 int x2 = round((double)((int)eqtl->chromEnd-winStart)*scale) + xOff;
 int x = x2 + tl.mWidth/2;
-char *label = itemSourcesLabel(item);
+char *label = eqtlSourcesLabel(eqtl);
 int w = mgFontStringWidth(font, label);
 hvGfxTextCentered(hvg, x, y, w, track->heightPer, MG_BLACK, font, label);
-if (itemTissueCount(item) == 1)
+if (eqtlTissueCount(eqtl) == 1)
     {
     // append asterisk in tissue color
-    struct rgbColor tisColor = itemTissueColor(track, item);
+    struct rgbColor tisColor = eqtlTissueColor(track, eqtl);
     x += w;
     w = mgFontStringWidth(font, TISSUE_COLOR_DOT);
     int ix = hvGfxFindColorIx(hvg, tisColor.r, tisColor.g, tisColor.b);
@@ -279,7 +282,7 @@ if (track->limitedVis != tvDense)
     int i;
     for (i=0; i<eqtl->expCount; i++)
         {
-        if (isExcludedTissue(eqtl, i))
+        if (eqtlIsExcludedTissue(eqtl, i))
             continue;
         double effect= eqtl->expScores[i];
         dyStringPrintf(ds, "%s(%s%0.2f)%s", eqtl->expNames[i], effect < 0 ? "" : "+", effect, 

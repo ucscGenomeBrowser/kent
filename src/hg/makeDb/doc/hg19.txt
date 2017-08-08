@@ -32277,3 +32277,63 @@ python filterPages.py > goodPages.txt
 python makeBed.py
 hgLoadBed hg19 snpedia snpedia.bed 
 hgLoadSqlTab hg19 snpediaHtml snpediaHtml.sql snpedia.htmlTab 
+##############################################################################
+# Gtex transcript track hg38->hg19 coordinate conversion (DONE - 2017-07-27 - Chris) 
+mkdir /hive/data/outside/gtex/barChartTrack/hg19backLift
+cd /hive/data/outside/gtex/barChartTrack/hg19backLift
+
+hgsql hg19 -e "select * from wgEncodeGencodeCompV24lift37" | awk '{print $2"\t"$5"\t"$6}' > foo
+cut -f 1 foo | cut -f 1 -d "." > foo2
+cut -f 2,3,4 foo > foo3
+paste foo2 foo3 > foo4
+
+cp ../sortedGtexTransExp.bed .
+cut -f 1,2,3 sortedGtexTransExp.bed > foo5
+cut -f 4 sortedGtexTransExp.bed > foo6
+cut -f 5- sortedGtexTransExp.bed > foo7
+paste foo6 foo5 > foo8
+paste foo8 foo7 > foo9
+ 
+
+join <(sort foo4) <(sort foo9) > foo10
+
+cat foo10 | awk '{print $4"\t"$2"\t"$3"\t"$1"\t"$8"\t"$9"\t"$10"\t"$11"\t"$12"\t"$13"\t"$14}' > foo11
+
+# Copy over the header line from sortedGtexTransExp.bed
+
+# Sort and convert into a bigBed file. 
+sort -k1,1 -k2,2n foo11 > sortedGtexTransExpHg19.bed
+bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGtexTransExpHg19.bed /hive/data/genomes/hg19/chrom.sizes gtexTranscExprHg19.bb
+
+# Link the files into gbdb
+cd /gbdb/hgFixed/human/expMatrix 
+ln -s /hive/data/outside/gtex/barChartTrack/hg19backLift/gtexTranscExprHg19.bb .
+
+##############################################################################
+# cosmicRegions (DONE - 2017-08-03 - Chris)  
+# Make a new COSCMIC track for hg19 v82 
+mkdir /hive/data/outside/cosmic/hg19/v82
+cd /hive/data/outside/cosmic/hg19/v82
+
+# Get the new data
+sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
+# Login to SFTP server (make an account online) then run this command
+get /files/grch37/cosmic/v82/CosmicMutantExport.tsv.gz
+
+# Get the schema from V81
+cp ../v81/cosmicNew.as . 
+
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
+
+# Use a script to convert to bed format.
+cosmicToBed cosMut.tsv cosMut.bed
+# This many lines were skipped, 128966 for not having genomic coordinate
+
+# Sort and convert to big bed using the .as file.  
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg19/chrom.sizes cosMutHg19V82.bb -tab -extraIndex=name,cosmLabel
+
+# Link it up so the outside world can see it. 
+cd /gbdb/hg19/cosmic/
+ln -s /hive/data/outside/cosmic/hg19/v82/cosMutHg19V82.bb .

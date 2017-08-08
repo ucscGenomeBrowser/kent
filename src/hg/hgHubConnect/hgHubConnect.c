@@ -403,7 +403,6 @@ if (isNotEmpty(cloneTerms))
             }
         }
     }
-fprintf(stderr, "Final search terms: %s\n", dyStringContents(modifiedTerms));
 return dyStringCannibalize(&modifiedTerms);
 }
 
@@ -761,8 +760,17 @@ if (tdbOut == NULL)
     else
         dyStringPrintf(tdbOut->shortLabel, "%s", trackHubSkipHubName(trackInfo->track));
 
-    dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s&%s", hub->url,
-            genomeOut->genomeName, trackInfo->track, cartSessionId(cart), genomeOut->positionString);
+    if (tdbIsCompositeView(trackInfo) || tdbIsCompositeChild(trackInfo))
+        {
+        struct trackDb *parentTdb = tdbGetComposite(trackInfo);
+        dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s&%s", hub->url,
+                genomeOut->genomeName, parentTdb->track, cartSessionId(cart), genomeOut->positionString);
+        }
+    else
+        {
+        dyStringPrintf(tdbOut->configUrl, "../cgi-bin/hgTrackUi?hubUrl=%s&db=%s&g=%s&hgsid=%s&%s", hub->url,
+                genomeOut->genomeName, trackInfo->track, cartSessionId(cart), genomeOut->positionString);
+        }
 
     if (trackInfo->parent != NULL)
         {
@@ -873,6 +881,11 @@ for (hst = searchResults; hst != NULL; hst = hst->next)
         hashAdd(hubOut->genomeOutHash, db, genomeOut);
         slAddTail(&(hubOut->genomes), genomeOut);
         hubOut->genomeCount++;
+        }
+    if (isEmpty(hst->track) && hst->textLength == hubSearchTextLong)
+        {
+        // Genome description match
+        dyStringPrintf(genomeOut->descriptionMatch, "%s", hst->text);
         }
 
     if (isNotEmpty(hst->track))
