@@ -15437,3 +15437,23 @@ XXX - running - Fri Aug  4 10:14:09 PDT 2017
     # real    578m46.893s
 
 ##############################################################################
+# refSeqFuncElems NCBI refSeq functional elements, DONE 2017-08-08 Chris
+# Mouse
+cd /hive/data/outside/refSeqFuncElems
+
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Mus_musculus/GFF_interim/interim_GRCm38.p5_top_level_2017-05-19.gff3.gz
+gunzip interim_GRCm38.p5_top_level_2017-05-19.gff3.gz
+
+hgsql mm10 -e "select * from ucscToRefSeq" | cut -f 1,4 | awk '{print $2"\t"$1}' > refSeqToUcscMM10.tsv
+
+tail -2373040 interim_GRCm38.p5_top_level_2017-05-19.gff3 > foo2.mm10
+
+join <(sort foo2.mm10) <(sort refSeqToUcscMM10.tsv) -t $'\t' > join.foo.mm10
+
+./parseRefSeqFuncElems join.foo.mm10 bed.mm10 108.20170627
+sort -k1,1 -k2,2n bed.mm10 > sorted.bed.mm10
+bedToBigBed -type=bed6+8 -as=refSeqFuncElems.as sorted.bed.mm10 /hive/data/genomes/mm10/chrom.sizes refSeqFuncElemsMm10.bb -tab 
+
+cd /gbdb/hg38/ncbiRefSeq
+ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb .
+##############################################################################
