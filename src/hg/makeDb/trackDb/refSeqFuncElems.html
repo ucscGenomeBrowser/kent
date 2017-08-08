@@ -1,0 +1,45 @@
+<h2>Description</h2>
+<p>
+NCBI recently announced a new release of
+<a href="https://www.ncbi.nlm.nih.gov/refseq/functionalelements/" 
+target="_blank"> functional regulatory elements</a>.
+
+NCBI is now providing 
+<a href="https://www.ncbi.nlm.nih.gov/refseq/" target="_blank" >RefSeq</a> and 
+<a href="https://www.ncbi.nlm.nih.gov/gene/" target="_blank" >Gene</a>
+records for non-genic functional elements that have been described in the literature and are 
+experimentally validated. Elements in scope include experimentally-verified gene regulatory 
+regions (e.g., enhancers, silencers, locus control regions), known structural elements
+(e.g., insulators, DNase I hypersensitive sites, matrix/scaffold-associated regions), 
+well-characterized DNA replication origins, and clinically-significant sites of DNA recombination
+and genomic instability. Priority is given to genomic regions that are implicated in human disease 
+or are otherwise of significant interest to the research community. Currently, the scope of this 
+project is restricted to human and mouse. The current scope does not include functional elements
+predicted from large-scale epigenomic mapping studies, nor elements based on disease-associated 
+variation
+</p> 
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+This track follows the display conventions for 
+<a href="https://genome.ucsc.edu/goldenpath/help/bigBed.html" target="_blank">big bed</a> 
+files.  Black bars indicate functional elements, the elements are labeled with 
+their sequence ontology term.  
+</p>
+
+<h2>Methods</h2>
+<p>This track was built from the NCBI refSeq gff3 file aquired from their
+<a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/GFF_interim/" target="_blank"> ftp server</a>.
+The gff3 file was joined with the UCSC table ucscToRefSeq to get the UCSC chromosome name.
+The file was then converted to a bed file then into bigBed for display.   
+</p>
+
+<h2>Credits</h2>
+This track was prepared by Chris Eisenhart and Angie Hinrichs with curation
+from the NCBI team.  
+
+<h2>Contact</h2>
+This track was made with assistance from <a HREF="mailto:&#109;&#117;r&#112;h&#121;&#116;&#101;&#64;&#110;&#99;&#98;&#105;.
+	&#110;lm.
+	&#110;&#105;&#104;.
+	&#103;&#111;v" target="_blank">Terence Murphy</a> at NCBI.
