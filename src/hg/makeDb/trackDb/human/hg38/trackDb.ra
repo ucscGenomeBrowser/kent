@@ -7,12 +7,16 @@ include hoffMap.ra
 
 track refSeqFuncElems
 release alpha
-shortLabel refSeq FuncElems
-longLabel NCBI refSeq Functional Elements 
+shortLabel RefSeq Func Elems
+longLabel NCBI RefSeq Functional Elements 
 type bigBed 6 +
 bigDataUrl /gbdb/hg38/ncbiRefSeq/refSeqFuncElems.bb
-group phenDis
-mouseOverField note
+labelFields soTerm
+group regulation
+url https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$
+urlLabel Gene ID: 
+urls pubMedIds=http://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
+mouseOverField _mouseOver
 
 track cosmicRegionsUpdate
 release alpha
