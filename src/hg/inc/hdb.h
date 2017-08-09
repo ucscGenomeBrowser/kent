@@ -1002,4 +1002,11 @@ char *hFindLatestSnpTableConn(struct sqlConnection *conn, char *suffix);
 /* Return the name of the 'snp1__<suffix>' table with the highest build number, if any.
  * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
 
+boolean hDbHasNcbiRefSeq(char *db);
+/* Return TRUE if db has NCBI's RefSeq alignments and annotations. */
+
+char *hRefSeqAccForChrom(char *db, char *chrom);
+/* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.
+ * db must never change. */
+
 #endif /* HDB_H */

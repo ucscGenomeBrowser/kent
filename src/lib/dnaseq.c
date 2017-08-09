@@ -65,6 +65,20 @@ for (seq = *pSeqList; seq != NULL; seq = next)
 *pSeqList = NULL;
 }
 
+char *dnaSeqCannibalize(struct dnaSeq **pSeq)
+/* Return the already-allocated dna string and free the dnaSeq container. */
+{
+char *seq = NULL;
+if (pSeq && *pSeq)
+    {
+    struct dnaSeq *dnaSeq = *pSeq;
+    seq = dnaSeq->dna;
+    dnaSeq->dna = NULL;
+    freeDnaSeq(pSeq);
+    }
+return seq;
+}
+
 boolean seqIsLower(bioSeq *seq)
 /* Return TRUE if sequence is all lower case. */
 {
@@ -126,6 +140,19 @@ aaSeq *translateSeq(struct dnaSeq *inSeq, unsigned offset, boolean stop)
  * represent stop codons as 'Z'). */
 {
 return translateSeqN(inSeq, offset, 0, stop);
+}
+
+void aaSeqZToX(aaSeq *aa)
+/* If seq has a 'Z' for stop codon, possibly followed by other bases, change the 'Z' to an X
+ * (compatible with dnautil's aminoAcidTable) and truncate there. */
+{
+char *p = strchr(aa->dna, 'Z');
+if (p)
+    {
+    *p++ = 'X';
+    *p = '\0';
+    aa->size = strlen(aa->dna);
+    }
 }
 
 bioSeq *whichSeqIn(bioSeq **seqs, int seqCount, char *letters)

@@ -647,6 +647,10 @@ void slPairFreeVals(struct slPair *list);
 void slPairFreeValsAndList(struct slPair **pList);
 /* Free up all values on list and list itself */
 
+void slPairFreeValsAndListExt(struct slPair **pList, void (*freeFunc)());
+/* Free up all values on list using freeFunc and list itself.  freeFunc should take a simple
+ * pointer to free an item, and can be NULL. */
+
 struct slPair *slPairFind(struct slPair *list, char *name);
 /* Return list element of given name, or NULL if not found. */
 

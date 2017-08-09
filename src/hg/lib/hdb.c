@@ -5528,3 +5528,42 @@ for (table = snpNNNTables;  table != NULL;  table = table->next)
     }
 return NULL;
 }
+
+boolean hDbHasNcbiRefSeq(char *db)
+/* Return TRUE if db has NCBI's RefSeq alignments and annotations. */
+{
+// hTableExists() caches results so this shouldn't make for loads of new SQL queries if called
+// more than once.
+return (hTableExists(db, "ncbiRefSeq") && hTableExists(db, "ncbiRefSeqPsl") &&
+        hTableExists(db, "ncbiRefSeqCds") && hTableExists(db, "ncbiRefSeqLink") &&
+        hTableExists(db, "ncbiRefSeqPepTable") &&
+        hTableExists(db, "seqNcbiRefSeq") && hTableExists(db, "extNcbiRefSeq"));
+}
+
+char *hRefSeqAccForChrom(char *db, char *chrom)
+/* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.
+ * db must never change. */
+{
+static char *firstDb = NULL;
+static struct hash *accHash = NULL;
+static boolean checkExistence = TRUE;
+if (firstDb && !sameString(firstDb, db))
+    errAbort("hRefSeqAccForChrom: only works for one db.  %s was passed in earlier, now %s.",
+             firstDb, db);
+char *seqAcc = NULL;
+if (checkExistence && !trackHubDatabase(db) && hTableExists(db, "chromAlias"))
+    // Will there be a chromAlias for hubs someday??
+    {
+    firstDb = db;
+    struct sqlConnection *conn = hAllocConn(db);
+    accHash = sqlQuickHash(conn,
+                           NOSQLINJ "select chrom, alias from chromAlias where source = 'refseq'");
+    hFreeConn(&conn);
+    checkExistence = FALSE;
+    }
+if (accHash && hashNumEntries(accHash) > 0)
+    seqAcc = cloneString(hashFindVal(accHash, chrom));
+if (seqAcc == NULL)
+    seqAcc = cloneString(chrom);
+return seqAcc;
+}

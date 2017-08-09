@@ -271,4 +271,11 @@ char aaAbbrToLetter(char *abbr);
 /* Convert an AA abbreviation such as "Ala", "Asp" etc., to its single letter code
  * such as "A", "D" etc.  Return the null char '\0' if abbr is not found. */
 
+void aaToAbbr(char aa, char *abbrBuf, size_t abbrBufSize);
+/* Convert an AA single letter such as "A", "D" etc. to its abbreviation such as "Ala", "Asp" etc.
+ * abbrBufSize must be at least 4.  If aa is not found, "?%c?",aa is written into abbrBuf. */
+
+void trimRefAlt(char *ref, char *alt, uint *pStart, uint *pEnd, int *pRefLen, int *pAltLen);
+/* If ref and alt have identical bases at beginning and/or end, trim those & update all params. */
+
 #endif /* DNAUTIL_H */
