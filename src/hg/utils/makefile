@@ -67,12 +67,14 @@ DIRS = ${buildRefresh} \
 	buildReleaseLog \
 	checkUrlsInTable \
 	geoMirrorNode \
+	hgvsToVcf \
 	makeTrackIndex \
 	mysqlSecurityCheck \
 	pslUniq \
 	refSeqGet \
 	safePush \
 	toDev64 \
+	vcfToHgvs \
 	wigBedToStep
 
 TEST_DIRS = \
@@ -81,12 +83,14 @@ TEST_DIRS = \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
+	hgvsToVcf \
 	hubCheck \
 	overlapSelect \
 	pslMap \
 	pslToBigPsl \
 	refSeqGet \
-	transMapPslToGenePred
+	transMapPslToGenePred \
+	vcfToHgvs
 
 APPS = $(DIRS) $(UTILS_APPLIST)
 
