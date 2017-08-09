@@ -33,12 +33,15 @@ wget -N -q "ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd
 # Remove patch contig mappings; we don't display them anyway.
 rm -f *.p*.gvf.gz
 
-zcat nstd101*.gvf.gz nstd37_ClinGen_Laboratory-Submitted*.gvf.gz \
-    | ../../gvfToBed8Attrs.pl | $liftUp \
-      > isca.bed
-zcat nstd45_*.gvf.gz \
-    | ../../gvfToBed8Attrs.pl | $liftUp \
-      > iscaCurated.bed
+join <(hgsql $db -e "select * from chromInfo" | sort) \
+<(zcat nstd101*.gvf.gz nstd37_ClinGen_Laboratory-Submitted*.gvf.gz \
+    | ../../gvfToBed8Attrs.pl | $liftUp | sort) \
+	  -t $'\t' > isca.bed
+
+join <(hgsql $db -e "select * from chromInfo" | sort) \
+<(zcat nstd45_*.gvf.gz \
+    | ../../gvfToBed8Attrs.pl | $liftUp | sort) \
+      -t $'\t' > iscaCurated.bed
 
 foreach subtrack (Benign Pathogenic)
   grep -w  $subtrack isca.bed > isca$subtrack.bed
