@@ -15410,15 +15410,14 @@ TMPDIR=/dev/shm
     time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
 	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
-XXX - running - Fri Aug  4 10:14:09 PDT 2017
-    #	real    474m39.013s
+    #	real    170m18.102s
 
     cat fb.mm10.chainGorGor5Link.txt
-    #	910628118 bases of 2652783500 (34.327%) in intersection
+    #	934147601 bases of 2652783500 (35.214%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev mm10 gorGor5 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    644m20.659s
+    # real    327m34.879s
 
     mkdir /hive/data/genomes/gorGor5/bed/blastz.mm10.swap
     cd /hive/data/genomes/gorGor5/bed/blastz.mm10.swap
@@ -15427,13 +15426,14 @@ XXX - running - Fri Aug  4 10:14:09 PDT 2017
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    66m35.501s
+    #	real    72m34.088s
 
     cat fb.gorGor5.chainMm10Link.txt
-    #	897929517 bases of 2893270787 (31.035%) in intersection
+    #	990002546 bases of 3080431298 (32.138%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev gorGor5 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+XXX - running - Tue Aug  8 08:59:04 PDT 2017
     # real    578m46.893s
 
 ##############################################################################
