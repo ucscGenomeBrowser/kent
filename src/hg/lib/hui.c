@@ -5093,7 +5093,6 @@ double minY;        /*  from trackDb or cart    */
 double maxY;        /*  from trackDb or cart    */
 double tDbMinY;     /*  data range limits from trackDb type line */
 double tDbMaxY;     /*  data range limits from trackDb type line */
-int defaultHeight;  /*  pixels per item */
 char *horizontalGrid = NULL;    /*  Grid lines, off by default */
 char *transformFunc = NULL;    /* function to transform data points */
 char *alwaysZero = NULL;    /* Always include 0 in range */
@@ -5105,6 +5104,7 @@ char *yLineMarkOnOff;   /*  user defined Y marker line to draw */
 double yLineMark;       /*  from trackDb or cart    */
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
+int defaultHeight = maxHeightPixels;  /*  pixels per item */
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 

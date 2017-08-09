@@ -1350,9 +1350,25 @@ function gtexTransformChanged(name)
     maxTextLabel.toggleClass("disabled", isLogChecked ? true : false);
 }
 
-function barChartUiTransformChanged(name) {
-// Disable view limits settings if log transform enabled
-    gtexTransformChanged(name);
+function barChartTransformChanged(event)
+{// When autoScale or logTransform is checked, uncheck the other and disable view limits
+ // When autoScale or logTransform is unchecked, enable view limits
+    var target = event.target;
+    var targetInfo = target.id.split('.');
+    var track = targetInfo[0];        
+    var transform = targetInfo[1];        
+    var $maxInput = $("input[name='" + track + ".maxViewLimit']");
+    var $maxLabel = $('.' + track + 'ViewLimitsMaxLabel');
+    if ($(target).attr('checked')) {
+        $maxInput.attr('disabled', true);
+        $maxLabel.addClass('disabled');
+        var $otherCheckbox = $("input[name='" + track + '.' + (transform === 'logTransform' ?
+                                        'autoScale' : 'logTransform') + "']");
+        $otherCheckbox.attr('checked', false);
+    } else {
+        $maxInput.attr('disabled', false);
+        $maxLabel.removeClass('disabled');
+    }
 }
 
 function gtexSamplesChanged(name)
