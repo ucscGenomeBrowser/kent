@@ -31,7 +31,7 @@ then color-coded by their efficiency: the frequency of cleavage at the target si
 as determined by the Doench/Fusi 2016 score (on-target efficiency). </p>
 
 <p>Shades of gray stand for sites that are hard to target specifically, as the
-20mer is not very unique in the genome:</p>
+20-mer is not very unique in the genome:</p>
 <table class="stdTbl" style="width:100%">
 <tr><td style="width:50px; background-color:#969696"></td><td>impossible to target: target site has at least one identical copy in the genome and was not scored</td></tr>
 <tr><td style="width:50px; background-color:#787878"></td><td>hard to target: many similar sequences in the genome that alignment stopped, repeat?</td></tr>
@@ -117,7 +117,7 @@ each score percentile range.</p>
 <h3>Track methods</h3>
 <p>
 Exons as predicted by Other RefSeq gene models were used, extended by 200 basepairs
-on each side, and searched for the -NGG motif. Flanking 20mer guide sequences were
+on each side, and searched for the -NGG motif. Flanking 20-mer guide sequences were
 aligned to the genome with BWA and scored with MIT Specificity scores using the
 command-line version of crispor.org.  Non-unique guide sequences were skipped.
 Flanking sequences were extracted from the genome and input for Crispor
@@ -139,7 +139,7 @@ which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
 can also be used to obtain only features within a given range, e.g. <tt>bigBedToBed
-http://hgdownload.soe.ucsc.edu/gbdb/hg19/crispr/crispr.bb -chrom=chr21
+http://hgdownload.soe.ucsc.edu/gbdb/criGri1/crispr/crispr.bb -chrom=KE382941
 -start=0 -end=1000000 stdout</tt> </p>
 
 <h2>Credits</h2>
