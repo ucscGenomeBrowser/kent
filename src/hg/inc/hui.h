@@ -1045,6 +1045,7 @@ void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
 
 #define NO_SCORE_FILTER  "noScoreFilter"
 #define  SCORE_FILTER      "scoreFilter"
+#define  SCORE_LABEL      "scoreLabel"
 #define SIGNAL_FILTER      "signalFilter"
 #define PVALUE_FILTER      "pValueFilter"
 #define QVALUE_FILTER      "qValueFilter"
