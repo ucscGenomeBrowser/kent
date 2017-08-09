@@ -14,8 +14,6 @@
 #include "wiggle.h"
 
 
-extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
-
 #define correctOrder(min,max) if (max < min) \
         { double d; d = max; max = min; min = d; }
 /* check a min,max pair (doubles) and keep them properly in order */
@@ -267,7 +265,7 @@ void wigFetchMinMaxPixelsWithCart(struct cart *theCart, struct trackDb *tdb, cha
  *****************************************************************************/
 {
 int settingsDefault;    // default track height
-cartTdbFetchMinMaxPixels(cart, tdb, MIN_HEIGHT_PER, atoi(DEFAULT_HEIGHT_PER), atoi(DEFAULT_HEIGHT_PER),
+cartTdbFetchMinMaxPixels(theCart, tdb, MIN_HEIGHT_PER, atoi(DEFAULT_HEIGHT_PER), atoi(DEFAULT_HEIGHT_PER),
                                 Min, Max, &settingsDefault, Default);  // Default is actually current setting
 }
 
