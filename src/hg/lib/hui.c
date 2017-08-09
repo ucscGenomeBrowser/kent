@@ -5825,7 +5825,8 @@ if (scoreFilterOk)
         }
     else
         {
-        printf("<b>Show only items with score at or above:</b> ");
+        char* scoreLabel = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_LABEL, "score");
+        printf("<b>Show only items with %s at or above:</b> ", scoreLabel);
         safef(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
         cgiMakeIntVarWithLimits(option, minVal, "Minimum score",0, minLimit,maxLimit);
         printf("&nbsp;&nbsp;(range: %d to %d)\n", minLimit, maxLimit);
