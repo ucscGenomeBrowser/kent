@@ -980,6 +980,34 @@ puts("<BR>");
 endCollapsibleSection();
 }
 
+static void selectHgvsOut()
+/* Offer HGVS output choices */
+{
+startCollapsibleSection("hgvsOut", "HGVS variant nomenclature", TRUE);
+printf("The <a href='http://www.hgvs.org/' target=_blank>Human Genome Variation Society (HGVS)</a> "
+       "has established a "
+       "<a href='http://varnomen.hgvs.org/' target=_blank>sequence variant nomenclature</a>, "
+       "an international standard used to report variation in "
+       "genomic, transcript and protein sequences.<br>\n");
+cartMakeCheckBox(cart, "hgva_hgvsG", FALSE);
+printf("Include HGVS genomic (g.) terms in output<br>\n");
+cartMakeCheckBox(cart, "hgva_hgvsCN", FALSE);
+printf("Include HGVS coding (c.) terms if applicable, otherwise noncoding (n.) terms, in output"
+       "<br>\n");
+cartMakeCheckBox(cart, "hgva_hgvsP", FALSE);
+printf("Include HGVS protein (p.) terms (if applicable) in output<br>\n");
+cartMakeCheckBox(cart, "hgva_hgvsPAddParens", FALSE);
+printf("When including HGVS protein (p.) terms, add parentheses around changes to emphasize "
+       "that they are predictions<br>\n");
+cartMakeCheckBox(cart, "hgva_hgvsBreakDelIns", FALSE);
+printf("For variants that involve both a deletion and insertion, "
+       "including multi-nucleotide variants, "
+       "include the deleted sequence (e.g. show \"delAGinsTT\" instead of only \"delinsTT\")"
+       "<br>\n");
+puts("<br>");
+endCollapsibleSection();
+}
+
 boolean isHg19RegulatoryTrack(struct trackDb *tdb, void *filterData)
 /* For now, just look for a couple specific tracks by tableName. */
 {
@@ -1129,6 +1157,7 @@ printf("<div class='sectionLiteHeader'>Select More Annotations (optional)</div>\
 puts("<TABLE border=0 cellspacing=5 cellpadding=0 style='padding-left: 10px;'>");
 selectDbNsfp(dbNsfpTables);
 selectTxStatus(hasTxStat, geneTrack);
+selectHgvsOut();
 selectDbSnp(gotSnp);
 trackCheckBoxSection("Cosmic", "COSMIC", cosmicTrackRefList);
 trackCheckBoxSection("ConsEl", "Conserved elements", elTrackRefList);
@@ -1408,6 +1437,23 @@ aggvFuncFilter.splice = cartUsualBoolean(cart, "hgva_include_splice", TRUE);
 aggvFuncFilter.nonCodingExon = cartUsualBoolean(cart, "hgva_include_nonCodingExon", TRUE);
 aggvFuncFilter.noVariation = cartUsualBoolean(cart, "hgva_include_noVariation", TRUE);
 annoGratorGpVarSetFuncFilter(gpVarGrator, &aggvFuncFilter);
+}
+
+static void setHgvsOutOptions(struct annoGrator *gpVarGrator)
+/* Use cart variables to configure gpVarGrator's HGVS output. */
+{
+uint hgvsOutOptions = 0;
+if (cartUsualBoolean(cart, "hgva_hgvsG", FALSE))
+    hgvsOutOptions |= HGVS_OUT_G;
+if (cartUsualBoolean(cart, "hgva_hgvsCN", FALSE))
+    hgvsOutOptions |= HGVS_OUT_CN;
+if (cartUsualBoolean(cart, "hgva_hgvsP", FALSE))
+    hgvsOutOptions |= HGVS_OUT_P;
+if (cartUsualBoolean(cart, "hgva_hgvsPAddParens", FALSE))
+    hgvsOutOptions |= HGVS_OUT_P_ADD_PARENS;
+if (cartUsualBoolean(cart, "hgva_hgvsBreakDelIns", FALSE))
+    hgvsOutOptions |= HGVS_OUT_BREAK_DELINS;
+annoGratorGpVarSetHgvsOutOptions(gpVarGrator, hgvsOutOptions);
 }
 
 struct annoGrator *gratorForSnpBed4(struct hash *gratorsByName, char *suffix,
@@ -2750,6 +2796,7 @@ struct annoGrator *gpVarGrator = hAnnoGratorFromTrackDb(assembly, geneTdb->table
                                                         ANNO_NO_LIMIT, primary->asObj,
                                                         geneOverlapRule, gpConfig);
 setGpVarFuncFilter(gpVarGrator);
+setHgvsOutOptions(gpVarGrator);
 
 // Some grators may be used as both filters and output values. To avoid making
 // multiple grators for the same source, hash them by trackName:

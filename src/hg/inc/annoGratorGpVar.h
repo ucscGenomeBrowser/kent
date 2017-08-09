@@ -42,4 +42,7 @@ struct gpFx *annoGratorGpVarGpFxFromRow(struct annoStreamer *gpVar, struct annoR
 // Turn the string array representation back into a real gpFx.
 // I know this is inefficient and am thinking about a better way.
 
+void annoGratorGpVarSetHgvsOutOptions(struct annoGrator *gSelf, uint hgvsOutOptions);
+/* Import the HGVS output options described in hgHgvs.h */
+
 #endif /* ANNOGRATORGPVAR_H*/

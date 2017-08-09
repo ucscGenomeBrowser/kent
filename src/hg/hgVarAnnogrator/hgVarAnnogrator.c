@@ -1647,7 +1647,7 @@ else
     struct annoStreamer *streamer = streamerFromSource(dataDb, dbTable, tdb, chrom);
     if (asObjectsMatch(primary->asObj, pgSnpAsObj()) &&
 	asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10))
-	grator = annoGratorGpVarNew(streamer);
+	grator = annoGratorGpVarNew(streamer, 0);
     else
 	grator = annoGratorNew(streamer);
     }

@@ -86,6 +86,9 @@ struct annoFormatVep
     int varAllelesIx;			// Index of alleles column from variant source, or -1
     int geneNameIx;			// Index of gene name (not tx name) from (big)genePred
     int exonCountIx;			// Index of exonCount from (big)genePred
+    int hgvsGIx;			// Index of HGVS g. column from annoGratorGpVar
+    int hgvsCNIx;			// Index of HGVS c./n. column from annoGratorGpVar
+    int hgvsPIx;			// Index of HGVS p. column from annoGratorGpVar
     int snpNameIx;			// Index of name column from dbSNP source, or -1
     boolean needHeader;			// TRUE if we should print out the header
     enum afVariantDataType variantType; // Are variants VCF or a flavor of pgSnp?
@@ -1073,6 +1076,28 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
     }
 }
 
+static void afVepPrintExtrasHgvs(struct annoFormatVep *self, struct annoRow *gpvRow,
+                                 boolean *pGotExtra)
+/* If not empty, print HGVS terms (last column of gpvRow). */
+{
+char **row = gpvRow->data;
+if (isNotEmpty(row[self->hgvsGIx]))
+    {
+    afVepNewExtra(self, pGotExtra);
+    fprintf(self->f, "HGVSG=%s", row[self->hgvsGIx]);
+    }
+if (isNotEmpty(row[self->hgvsCNIx]))
+    {
+    afVepNewExtra(self, pGotExtra);
+    fprintf(self->f, "HGVSCN=%s", row[self->hgvsCNIx]);
+    }
+if (isNotEmpty(row[self->hgvsPIx]))
+    {
+    afVepNewExtra(self, pGotExtra);
+    fprintf(self->f, "HGVSP=%s", row[self->hgvsPIx]);
+    }
+}
+
 static void afVepPrintExtraWigVec(struct annoFormatVepExtraSource *extraSrc,
                                   struct annoFormatVep *self,
                                   struct annoFormatVepExtraItem *extraItem,
@@ -1266,6 +1291,7 @@ afVepPrintPredictions(self, varRow, gpvRow, gpFx);
 afVepPrintExistingVar(self, varRow, gratorData, gratorCount);
 boolean gotExtra = FALSE;
 afVepPrintExtrasDbNsfp(self, varRow, gpvRow, gpFx, gratorData, gratorCount, &gotExtra);
+afVepPrintExtrasHgvs(self, gpvRow, &gotExtra);
 afVepPrintExtrasOther(self, varRow, gpvRow, gpFx, gratorData, gratorCount, FALSE, &gotExtra);
 afVepEndRow(self->f, self->doHtml);
 }
@@ -1420,6 +1446,9 @@ if (self->exonCountIx < 0)
 if (self->exonCountIx < 0)
     errAbort("afVepSetConfig: can't find exonCount or blockCount column in gpVarSource %s",
              config->gpVarSource->name);
+self->hgvsGIx = asColumnFindIx(gpvAsColumns, "hgvsG");
+self->hgvsCNIx = asColumnFindIx(gpvAsColumns, "hgvsCN");
+self->hgvsPIx = asColumnFindIx(gpvAsColumns, "hgvsP");
 if (config->snpSource != NULL)
     {
     struct asColumn *snpAsColumns = config->snpSource->asObj->columnList;
