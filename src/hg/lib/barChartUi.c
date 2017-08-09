@@ -138,12 +138,16 @@ boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSF
 cgiMakeCheckBoxWithId(cartVar, isLogTransform, cartVar);
 jsOnEventByIdF("change", cartVar, "barChartTransformChanged(event);");
 
+boolean isAutoScale = FALSE;
+#ifdef AUTO_SCALE
+// Implemented, but leaving out for now (seems confusing)
 puts("&nbsp;&nbsp;");
 puts("<b>Autoscale:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_AUTOSCALE);
-boolean isAutoScale = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_AUTOSCALE_DEFAULT);
+isAutoScale = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_AUTOSCALE_DEFAULT);
 cgiMakeCheckBoxWithId(cartVar, isAutoScale, cartVar);
 jsOnEventByIdF("change", cartVar, "barChartTransformChanged(event);");
+#endif
 
 boolean isViewLimits = !isAutoScale && !isLogTransform;
 safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, !isViewLimits ? "disabled" : "");
