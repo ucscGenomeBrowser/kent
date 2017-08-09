@@ -126,9 +126,10 @@ if (setting != NULL)
 return BAR_CHART_MAX_LIMIT_DEFAULT;
 }
 
-void barChartUiViewTransform(struct cart *cart, char *track, struct trackDb *tdb)
+void barChartUiViewTransform(struct cart *cart, struct trackDb *tdb)
 /* Checkboxes to select log-transform or autoscale RPKM values, or text input for view limits */
 {
+char *track = tdb->track;
 char buf[512];
 char cartVar[1024];
 puts("<b>Log10(x+1) transform:</b>\n");
@@ -156,19 +157,26 @@ printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit,
                                 round(barChartUiMaxMedianScore(tdb)));
 }
 
-void barChartUiMaxHeight(struct cart *cart, char *track, struct trackDb *tdb)
-/* Input to change maximum track height */
+void barChartUiFetchMinMaxPixels(struct cart *cart, struct trackDb *tdb, 
+                                int *retMin, int *retMax, int *retDefault, int *retCurrent)
+/* Get min/max/default/current settings for track height from cart and trackDb */
 {
-int min = BAR_CHART_MAX_HEIGHT_MIN;
-int deflt = BAR_CHART_MAX_HEIGHT_DEFAULT;
-int max = BAR_CHART_MAX_HEIGHT_MAX;
-int settingsDefault;
-wigFetchMinMaxPlusPixelsWithCart(cart, tdb, track, &min, &max, &deflt, &settingsDefault);
+assert(retMin && retMax && retDefault && retCurrent);
+cartTdbFetchMinMaxPixels(cart, tdb, 
+                            BAR_CHART_MAX_HEIGHT_MIN, BAR_CHART_MAX_HEIGHT_MAX, BAR_CHART_MAX_HEIGHT_DEFAULT,
+                            retMin, retMax, retDefault, retCurrent);
+}
+
+static void barChartUiMaxHeight(struct cart *cart, struct trackDb *tdb)
+/* Input box to change maximum track height */
+{
+int min, max, deflt, current;
+barChartUiFetchMinMaxPixels(cart, tdb, &min, &max, &deflt, &current);
 puts("<b>Track height maximum:</b>\n");
 char cartVar[1024];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HEIGHTPER);
-cgiMakeIntVarWithLimits(cartVar, deflt, "Track height maximum", 0, min, max);
-printf("pixels&nbsp;(range: %d to %d, default: %d)", min, max, settingsDefault);
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HEIGHTPER);
+cgiMakeIntVarWithLimits(cartVar, current, "Track height maximum", 0, min, max);
+printf("pixels&nbsp;(range: %d to %d, default: %d)", min, max, deflt);
 }
 
 struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)
@@ -271,12 +279,12 @@ if (startsWith("big", tdb->type))
 /* Data transform (log, autoscale or viewlimits) */
 char cartVar[1024];
 puts("<p>");
-barChartUiViewTransform(cart, track, tdb);
+barChartUiViewTransform(cart, tdb);
 puts("</p>");
 
 /* Maximum track height */
 puts("<p>");
-barChartUiMaxHeight(cart, track, tdb);
+barChartUiMaxHeight(cart, tdb);
 puts("</p>");
 
 /* Category filter */

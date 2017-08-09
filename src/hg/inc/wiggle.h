@@ -189,10 +189,6 @@ void wigFetchMinMaxLimitsWithCart(struct cart *cart, struct trackDb *tdb, char *
         wigFetchMinMaxLimitsWithCart(cart,(tdb),(tdb)->track,(min),(max),(tDbMin),(tDbMax))
 /* for bedGraph types, return min,max Y ranges from trackDb or cart */
 
-void wigFetchMinMaxPlusPixelsWithCart(struct cart *theCart, struct trackDb *tdb, char *name, 
-                                        int *Min, int *Max, int *Default, int *settingsDefault);
-/*      Min, Max, Default, settingsDefault Pixel height of track */
-
 void wigFetchMinMaxPixelsWithCart(struct cart *cart, struct trackDb *tdb, char *name,
                                   int *Min, int *Max, int *Default);
 #define wigFetchMinMaxPixels(tdb,Min,Max,Default) \

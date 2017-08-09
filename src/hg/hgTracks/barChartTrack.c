@@ -293,9 +293,9 @@ extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_N
                                                         BAR_CHART_NO_WHITEOUT_DEFAULT);
 extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 
-int min, max, deflt;
-wigFetchMinMaxPixelsWithCart(cart, tdb, tdb->track, &min, &max, &deflt);
-extras->maxHeight = barChartMaxHeight(deflt);
+int min, max, deflt, current;
+barChartUiFetchMinMaxPixels(cart, tdb, &min, &max, &deflt, &current);
+extras->maxHeight = barChartMaxHeight(current);
 
 /* Get bed (names and all-sample category median scores) in range */
 loadSimpleBedWithLoader(tg, (bedItemLoader)barChartSimpleBedLoad);
@@ -606,14 +606,14 @@ int topGraphHeight = barChartHeight(tg, itemInfo);
 topGraphHeight = max(topGraphHeight, tl.fontHeight);
 int bottomGraphHeight = 0;
 height = topGraphHeight + bottomGraphHeight + barChartMargin() + 
-                barChartModelHeight(extras);
+    barChartModelHeight(extras);
 return height;
 }
 
 static int barChartItemHeight(struct track *tg, void *item)
 {
-int height = barChartItemHeightOptionalMax(tg, item, FALSE);
-return height;
+    int height = barChartItemHeightOptionalMax(tg, item, FALSE);
+    return height;
 }
 
 static char *barChartMapText(struct track *tg, struct barChartCategory *categ, double expScore)
