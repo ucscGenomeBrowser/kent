@@ -172,14 +172,14 @@ cartTdbFetchMinMaxPixels(cart, tdb,
 }
 
 static void barChartUiMaxHeight(struct cart *cart, struct trackDb *tdb)
-/* Input box to change maximum track height */
+/* Input box to change maximum item height */
 {
 int min, max, deflt, current;
 barChartUiFetchMinMaxPixels(cart, tdb, &min, &max, &deflt, &current);
-puts("<b>Track height maximum:</b>\n");
+puts("<b>Maximum height:</b>\n");
 char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HEIGHTPER);
-cgiMakeIntVarWithLimits(cartVar, current, "Track height maximum", 0, min, max);
+cgiMakeIntVarWithLimits(cartVar, current, "Maximum height", 0, min, max);
 printf("pixels&nbsp;(range: %d to %d, default: %d)", min, max, deflt);
 }
 
