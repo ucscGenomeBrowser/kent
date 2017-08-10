@@ -3,7 +3,7 @@ include ${kentSrc}/inc/common.mk
 
 vcfToHgvs = ${DESTBINDIR}/vcfToHgvs
 
-test:: PersonalisGroundTruth2017_agree PersonalisGroundTruth2017_disagree
+test:: PersonalisGroundTruth2017_agree PersonalisGroundTruth2017_disagree stopLoss
 	${MAKE} clean
 
 PersonalisGroundTruth2017_agree: mkdirs
@@ -21,6 +21,10 @@ PersonalisGroundTruth2017_disagree: mkdirs
 	  > output/$@_matches.tab
 	diff -u expected/$@.tab output/$@.tab
 	diff -u /dev/null output/$@_matches.tab
+
+stopLoss:
+	${vcfToHgvs} hg38 input/$@.vcf output/$@.tab
+	diff -u expected/$@.tab output/$@.tab
 
 clean::
 	rm -rf output

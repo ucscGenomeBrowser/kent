@@ -474,6 +474,16 @@ if (pVpTx)
     }
 }
 
+char *translateString(char *codons)
+/* Translate a string of codon DNA into a string of peptide bases.  stop codon is 'X'. */
+{
+struct dnaSeq *codonSeq = newDnaSeq(cloneString(codons), strlen(codons), NULL);
+aaSeq *alt = translateSeq(codonSeq, 0, FALSE);
+aaSeqZToX(alt);
+dnaSeqFree(&codonSeq);
+return dnaSeqCannibalize(&alt);
+}
+
 // How close can an intronic variant be to a splice junction without being considered a splice hit?
 #define SPLICE_REGION_FUDGE 6
 
@@ -497,7 +507,7 @@ uint txEnd = vpTx->end.txOffset;
 if (txStart < cds->end && txEnd > cds->start &&
     vpTx->start.region == vpExon && vpTx->end.region == vpExon)
     {
-    if (txStart < cds->start || txEnd > cds->end)
+    if (txStart < cds->start)
         vpPep->spansUtrCds = TRUE;
     uint startInCds = max(txStart, cds->start) - cds->start;
     uint endInCds = min(txEnd, cds->end) - cds->start;
@@ -509,7 +519,16 @@ if (txStart < cds->end && txEnd > cds->start &&
     aaSeq *txTrans = translateSeqN(txSeq, cds->start + codonStartInCds,
                                    codonLenInCds, FALSE);
     aaSeqZToX(txTrans);
+    // We need pSeq to end with "X" because vpPep->start can be the stop codon / terminal
     char *pSeq = protSeq->dna;
+    int pLen = protSeq->size;
+    char pSeqWithX[pLen+2];
+    if (pSeq[pLen-1] != 'X')
+        {
+        safencpy(pSeqWithX, sizeof(pSeqWithX), pSeq, pLen);
+        safencpy(pSeqWithX+pLen, sizeof(pSeqWithX)-pLen, "X", 1);
+        pSeq = pSeqWithX;
+        }
     vpPep->txMismatch = !sameStringN(txTrans->dna, pSeq+vpPep->start,
                                      vpPep->end - vpPep->start);
     int startPadding = (startInCds - codonStartInCds);
@@ -545,11 +564,16 @@ if (txStart < cds->end && txEnd > cds->start &&
                      sizeof(altCodons)-startPadding-txAltLen,
                      txSeq->dna + cds->start + endInCds, endPadding);
         }
-    int altCodonLen = strlen(altCodons);
-    struct dnaSeq *altCodonSeq = newDnaSeq(cloneString(altCodons), altCodonLen, NULL);
-    aaSeq *alt = translateSeq(altCodonSeq, 0, FALSE);
-    aaSeqZToX(alt);
-    vpPep->alt = dnaSeqCannibalize(&alt);
+    char *alt = translateString(altCodons);
+    if (endsWith(vpPep->ref, "X") && !endsWith(alt, "X"))
+        {
+        // Stop loss -- recompute alt
+        freeMem(alt);
+        safecpy(altCodons+startPadding+txAltLen, sizeof(altCodons)-startPadding-txAltLen,
+                txSeq->dna + txEnd);
+        alt = translateString(altCodons);
+        }
+    vpPep->alt = alt;
     if (!vpPep->spansUtrCds)
         {
         int refLen = strlen(vpPep->ref), altLen = strlen(vpPep->alt);
@@ -572,7 +596,6 @@ if (txStart < cds->end && txEnd > cds->start &&
             }
         }
     dnaSeqFree((struct dnaSeq **)&txTrans);
-    dnaSeqFree((struct dnaSeq **)&altCodonSeq);
     }
 else if (vpTx->end.region == vpTx->start.region &&
          (vpTx->start.region == vpExon ||       // all UTR
