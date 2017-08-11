@@ -103,33 +103,36 @@ return  (tdb->subtracks == NULL) && !startsWith("wigMaf",tdb->type) &&  (startsW
 }
 
 static void printGroup(char *parent, struct trackDb *tdb, boolean folder, boolean user)
-// output the table rows for a group
+// output list elements for a group
 {
 char *userString = "";
 char *prefix = "";
 
-if (user)
+//if (user)
     {
-    prefix = "coll_";
+    //prefix = "coll_";
     if (tdb->parent && tdb->subtracks) 
-        userString = "class='user view'";
+        userString = "viewType='view'";
     else
-        userString = "class='user'";
+        userString = "viewType='track'";
     }
     
 #define IMAKECOLOR_32(r,g,b) ( ((unsigned int)b<<0) | ((unsigned int)g << 8) | ((unsigned int)r << 16))
 
-jsInlineF("<tr color='#%06x' visibility='%s'  data-tt-parent-id='%s%s' data-tt-id='%s%s' %s><td><span class='%s'>%s</span></td>",  IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB), hStringFromTv(tdb->visibility), prefix, parent,prefix,  trackHubSkipHubName(tdb->track),   userString, folder ? "folder" : "file", tdb->shortLabel );
-jsInlineF("<td>%s</td></tr>", tdb->longLabel);
+jsInlineF("<li shortLabel='%s' longLabel='%s' color='#%06x' visibility='%s'  name='%s%s' %s><span class='%s'>%s</span>",  tdb->shortLabel, tdb->longLabel,IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB), hStringFromTv(tdb->visibility), prefix,  trackHubSkipHubName(tdb->track),   userString, folder ? "folder" : "file", tdb->shortLabel );
+jsInlineF("%s", tdb->longLabel);
 
 
 if (tdb->subtracks)
     {
     struct trackDb *subTdb;
 
+    jsInlineF("<ul>");
     for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
         printGroup(trackHubSkipHubName(tdb->track), subTdb, user && (subTdb->subtracks != NULL), user);
+    jsInlineF("</ul>");
     }
+jsInlineF("</li>");
 }
 
 static void outHubHeader(FILE *f, char *db, char *hubName)
@@ -228,7 +231,7 @@ return vis;
 void addVisibleTracks()
 // add the visible tracks table rows
 {
-printf("<tr data-tt-id='visible' ><td><span class='file'>All Visible</td><td>All the tracks visible in hgTracks</td></tr>\n");
+printf("<tr name='visible' ><td><span class='file'>All Visible</td><td>All the tracks visible in hgTracks</td></tr>\n");
 struct trackDb *tdb;
 for(tdb = fullTrackList; tdb; tdb = tdb->next)
     {
@@ -243,7 +246,7 @@ void doTable()
 // output the tree table
 {
 char *hubName = hubNameFromUrl(getHubName(database));
-jsInlineF("$('#tracks tr:last').after(\"");
+jsInlineF("$('#tracks').append(\"");
 struct grp *curGroup;
 for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
     {
@@ -254,19 +257,23 @@ if (curGroup != NULL)
     {
     // print out all the tracks in this group
     struct trackDb *tdb;
+    jsInlineF("<ul>");
     for(tdb = fullTrackList; tdb;  tdb = tdb->next)
         {
         if (sameString(tdb->grp, hubName))
             printGroup("collections", tdb, TRUE, TRUE);
         }
+    jsInlineF("</ul>");
     }
 //addVisibleTracks();
 for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
     {
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
         continue;
-    jsInlineF("<tr data-tt-id='%s'><td><span class='file'>%s</span></td><td></td></tr>", curGroup->name, curGroup->label );
+    jsInlineF("<ul>");
+    jsInlineF("<li name='%s'><span class='file'>%s</span>", curGroup->name, curGroup->label );
     struct trackDb *tdb;
+    jsInlineF("<ul>");
     for(tdb = fullTrackList; tdb;  tdb = tdb->next)
         {
         if ( sameString(tdb->grp, curGroup->name))
@@ -274,6 +281,10 @@ for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
             printGroup(curGroup->name, tdb, FALSE, FALSE);
             }
         }
+    jsInlineF("</ul>");
+    jsInlineF("</li>");
+    jsInlineF("</ul>");
+
     }
 jsInlineF("\");\n");
 jsInlineF("collections.init();\n");
@@ -324,10 +335,7 @@ void doMainPage()
 /* Print out initial HTML of control page. */
 {
 webStartGbNoBanner(cart, database, "Collections");
-webIncludeResourceFile("jquery.treetable.css");
-webIncludeResourceFile("jquery.treetable.theme.default.css");
 webIncludeResourceFile("gb.css");
-//webIncludeResourceFile("jWest.css");
 webIncludeResourceFile("spectrum.min.css");
 webIncludeResourceFile("hgGtexTrackSettings.css");
 
@@ -336,9 +344,11 @@ webIncludeFile("inc/hgCollection.html");
 printHelp();
 doTable();
 
-puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
+puts("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css' />");
+puts("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js'></script>");
+//puts("<script src=\"//code.jquery.com/jquery-1.12.1.min.js\"></script>");
 puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
-jsIncludeFile("jquery.treetable.js", NULL);
+puts("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js\"></script>\n");
 jsIncludeFile("utils.js", NULL);
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("spectrum.min.js", NULL);
@@ -514,7 +524,7 @@ return strtol(&str[1], NULL, 16);
 }
 
 static struct track *parseJson(char *jsonText)
-// parse the JSON of the treetable from the Javascript
+// parse the JSON returned from the ap
 {
 struct hash *trackHash = newHash(5);
 struct track *collectionList = NULL;
