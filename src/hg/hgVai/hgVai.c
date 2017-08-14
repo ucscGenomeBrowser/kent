@@ -1465,21 +1465,24 @@ aggvFuncFilter.noVariation = cartUsualBoolean(cart, "hgva_include_noVariation", 
 annoGratorGpVarSetFuncFilter(gpVarGrator, &aggvFuncFilter);
 }
 
-static void setHgvsOutOptions(struct annoGrator *gpVarGrator)
+static void setHgvsOutOptions(struct annoGrator *gpVarGrator, char *geneTrack)
 /* Use cart variables to configure gpVarGrator's HGVS output. */
 {
 uint hgvsOutOptions = 0;
-if (cartUsualBoolean(cart, "hgva_hgvsG", FALSE))
-    hgvsOutOptions |= HGVS_OUT_G;
-if (cartUsualBoolean(cart, "hgva_hgvsCN", FALSE))
-    hgvsOutOptions |= HGVS_OUT_CN;
-if (cartUsualBoolean(cart, "hgva_hgvsP", FALSE))
-    hgvsOutOptions |= HGVS_OUT_P;
-if (cartUsualBoolean(cart, "hgva_hgvsPAddParens", FALSE))
-    hgvsOutOptions |= HGVS_OUT_P_ADD_PARENS;
-if (cartUsualBoolean(cart, "hgva_hgvsBreakDelIns", FALSE))
-    hgvsOutOptions |= HGVS_OUT_BREAK_DELINS;
-annoGratorGpVarSetHgvsOutOptions(gpVarGrator, hgvsOutOptions);
+if (sameString(geneTrack, "refGene") || startsWith("ncbiRefSeq", geneTrack))
+    {
+    if (cartUsualBoolean(cart, "hgva_hgvsG", FALSE))
+        hgvsOutOptions |= HGVS_OUT_G;
+    if (cartUsualBoolean(cart, "hgva_hgvsCN", FALSE))
+        hgvsOutOptions |= HGVS_OUT_CN;
+    if (cartUsualBoolean(cart, "hgva_hgvsP", FALSE))
+        hgvsOutOptions |= HGVS_OUT_P;
+    if (cartUsualBoolean(cart, "hgva_hgvsPAddParens", FALSE))
+        hgvsOutOptions |= HGVS_OUT_P_ADD_PARENS;
+    if (cartUsualBoolean(cart, "hgva_hgvsBreakDelIns", FALSE))
+        hgvsOutOptions |= HGVS_OUT_BREAK_DELINS;
+    annoGratorGpVarSetHgvsOutOptions(gpVarGrator, hgvsOutOptions);
+    }
 }
 
 struct annoGrator *gratorForSnpBed4(struct hash *gratorsByName, char *suffix,
@@ -2822,7 +2825,7 @@ struct annoGrator *gpVarGrator = hAnnoGratorFromTrackDb(assembly, geneTdb->table
                                                         ANNO_NO_LIMIT, primary->asObj,
                                                         geneOverlapRule, gpConfig);
 setGpVarFuncFilter(gpVarGrator);
-setHgvsOutOptions(gpVarGrator);
+setHgvsOutOptions(gpVarGrator, geneTdb->track);
 
 // Some grators may be used as both filters and output values. To avoid making
 // multiple grators for the same source, hash them by trackName:
