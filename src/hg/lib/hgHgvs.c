@@ -85,14 +85,14 @@ if (pHgvs && *pHgvs)
 #define aa3Exp "Ala|Arg|Asn|Asp|Cys|Gln|Glu|Gly|His|Ile|Leu|Lys|Met|Phe|Pro|Ser|Thr|Trp|Tyr|Val|Ter"
 #define hgvsAminoAcidExp "[ARNDCQEGHILKMFPSTWYVX*]|" aa3Exp
 #define hgvsAminoAcidSubstExp "(" hgvsAminoAcidExp ")" posIntExp "(" hgvsAminoAcidExp "|=)"
-#define hgvsPDotSubstExp "p\\." hgvsAminoAcidSubstExp
+#define hgvsPDotSubstExp "p\\.\\(?" hgvsAminoAcidSubstExp "\\)?"
 //                                 ...                                  // original sequence
 //                                              ......                  // 1-based position
 //                                                           ...        // replacement sequence
 
 // Protein range (or just single pos) regex
 #define hgvsAaRangeExp "(" hgvsAminoAcidExp ")" posIntExp "(_(" hgvsAminoAcidExp ")" posIntExp ")?(.*)"
-#define hgvsPDotRangeExp "p\\." hgvsAaRangeExp
+#define hgvsPDotRangeExp "p\\.\\(?" hgvsAaRangeExp "\\)?"
 //  original start AA           ...
 //  1-based start position                       ...
 //  optional range sep and AA+pos                          .....................................
@@ -230,8 +230,10 @@ if (pHgvs && *pHgvs)
 //                              5.....          1-based end position
 //                                    6....     change description
 
+
 // Sometimes users give an NM_ accession, but a protein change.
-#define pseudoHgvsNMPDotSubstExp "^" versionedRefSeqNMExp "[ :]+p?\\.?" hgvsAminoAcidSubstExp
+#define maybePDot "[ :]+p?\\.?\\(?"
+#define pseudoHgvsNMPDotSubstExp "^" versionedRefSeqNMExp maybePDot hgvsAminoAcidSubstExp "\\)?"
 // substring numbering:
 //      0.....................................................  whole matching string
 //      1...............                                        acc & optional dot version
@@ -242,7 +244,8 @@ if (pHgvs && *pHgvs)
 //                                           6......            1-based position
 //                                                     7......  replacement sequence
 
-#define pseudoHgvsNMPDotRangeExp "^" versionedRefSeqNMExp "[ :]+p?\\.?" hgvsAaRangeExp
+#define pseudoHgvsNMPDotRangeExp "^" versionedRefSeqNMExp maybePDot hgvsAaRangeExp "\\)?"
+
 // substring numbering:
 //      0.....................................................  whole matching string
 //      1...............                                        acc & optional dot version
@@ -257,14 +260,14 @@ if (pHgvs && *pHgvs)
 //                                                      10....  change description
 
 // Common: gene symbol followed by space and/or punctuation followed by protein change
-#define pseudoHgvsGeneSymbolProtSubstExp "^" geneSymbolExp "[ :]+p?\\.?" hgvsAminoAcidSubstExp
+#define pseudoHgvsGeneSymbolProtSubstExp "^" geneSymbolExp maybePDot hgvsAminoAcidSubstExp "\\)?"
 //      0.....................................................  whole matching string
 //      1...................                                    gene symbol
 //                                   2.....                     original sequence
 //                                           3......            1-based position
 //                                                     4......  replacement sequence
 
-#define pseudoHgvsGeneSymbolProtRangeExp "^" geneSymbolExp "[ :]+p?\\.?" hgvsAaRangeExp
+#define pseudoHgvsGeneSymbolProtRangeExp "^" geneSymbolExp maybePDot hgvsAaRangeExp "\\)?"
 //      0.....................................................  whole matching string
 //      1...................                                    gene symbol
 //                                 2...                         original start AA
@@ -275,7 +278,7 @@ if (pHgvs && *pHgvs)
 //                                                       7.....  change description
 
 // As above but omitting the protein change
-#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp "[ :]+p?\\.?" posIntExp
+#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp maybePDot posIntExp "\\)?"
 //      0..........................                             whole matching string
 //      1...................                                    gene symbol
 //                           2.....                             1-based position
@@ -1014,18 +1017,24 @@ if (accSeq)
         {
         struct genbankCds cds;
         coordsOK = getCds(db, acc, &cds);
-        if (coordsOK && retDiffRefAllele)
+        if (coordsOK)
             {
             start += (hgvs->startIsUtr3 ? cds.end : cds.start);
-            if (hgvs->startOffset == 0 && start >= 0 && start < seqLen)
+            end += (hgvs->endIsUtr3 ? cds.end : cds.start);
+            if (start > end)
+                coordsOK = FALSE;
+            else if (retDiffRefAllele && hgvs->startOffset == 0 && start >= 0 && start <= seqLen)
                 checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
             }
         }
     else
         {
-        coordsOK = TRUE;
-        if (retDiffRefAllele && hgvs->startOffset == 0 && start >= 0 && start < seqLen)
-            checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
+        if (start <= end)
+            {
+            coordsOK = TRUE;
+            if (retDiffRefAllele && hgvs->startOffset == 0 && start >= 0 && start < seqLen)
+                checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
+            }
         }
     }
 freeMem(accSeq);
