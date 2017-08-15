@@ -1,3 +1,25 @@
+track nowakowskiGeneExp
+release alpha
+type bigBarChart
+maxLimit 8000
+barChartLabel Cell types
+barChartUnit GPM
+# Get the barChartLabels from the last line in the bed file.
+barChartBars \
+		IPC1 IPC2 IPC3 IPC4 IPC5 NiN1 NiN2 NiN3 NiN4 NiN5 RG1 RG2 RG3 RG4 RG5 \
+		RG6 RG7 VP1 VP2 VP3 VP4 VP5 VP6 eN1 eN2 eN3 eN4 eN5 eN6 eN7 eN8 eN9 iN1 \
+		iN2 iN3 iN4 iN5 other1 other10 other2 other3 other4 other5 other6 other7 \
+		other8 other9
+barChartDataUrl /gbdb/hgFixed/human/expMatrix/nowakowskiMatrix.tsv
+barChartSampleUrl /gbdb/hgFixed/human/expMatrix/pollenSamples2.tsv
+shortLabel Nowakowski brain cell types
+longLabel Nowakowski gene expression (Gencode 23) in brain by cell type
+defaultLabelFields name2
+labelFields name2, name
+group expression
+spectrum on
+bigDataUrl /gbdb/hgFixed/human/expMatrix/nowakowskiGeneExp2.bb
+
 track quakeExpr
 release alpha
 superTrack on 
