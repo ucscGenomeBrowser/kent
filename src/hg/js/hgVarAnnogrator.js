@@ -392,8 +392,9 @@ var hgva = // result of invoking:
         changeGeneSource: function()
         {
             // Every time the user changes the gene prediction track, see if any
-            // transcript status options can be shown for the new track.
+            // HGVS or transcript status options can be shown for the new track.
             var newVal = $("select#hgva_geneTrack").val();
+            var isRefSeq = (newVal === 'refGene' || newVal.match(/^ncbiRefSeq/)) ? true : false;
             // Look for a div with classes txStatus and the name of the new gene track --
             // if the new gene track is GENCODE, strip it down to only the version at end.
             var matchesGencode = newVal.match(/^wgEncodeGencode(Basic|Comp|PseudoGene)(V[A-Z]?[0-9]+)$/);
@@ -410,6 +411,8 @@ var hgva = // result of invoking:
                 }
             });
             $("div.noTxStatus").toggle(visibleCount === 0);
+            $("div#hgvsOptions").toggle(isRefSeq);
+            $("div#noHgvs").toggle(!isRefSeq);
         },
 
 	showNextHiddenSource: function()
