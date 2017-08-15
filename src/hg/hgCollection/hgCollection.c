@@ -116,6 +116,7 @@ char *prefix = "";
     else
         userString = "viewType='track'";
     }
+        //userString = "viewType='track data-jstree='{'icon':'images/folderC.png'}''";
     
 #define IMAKECOLOR_32(r,g,b) ( ((unsigned int)b<<0) | ((unsigned int)g << 8) | ((unsigned int)r << 16))
 
@@ -246,7 +247,6 @@ void doTable()
 // output the tree table
 {
 char *hubName = hubNameFromUrl(getHubName(database));
-jsInlineF("$('#tracks').append(\"");
 struct grp *curGroup;
 for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
     {
@@ -257,15 +257,35 @@ if (curGroup != NULL)
     {
     // print out all the tracks in this group
     struct trackDb *tdb;
-    jsInlineF("<ul>");
+    jsInlineF("$('#startCollections').append(\"");
     for(tdb = fullTrackList; tdb;  tdb = tdb->next)
         {
         if (sameString(tdb->grp, hubName))
+            {
+            //jsInlineF("<li name='%s'><span class='file'>%s</span></li>", tdb->track, tdb->shortLabel);
+            jsInlineF("<div id='%s' shortLabel='%s'>", trackHubSkipHubName(tdb->track), tdb->shortLabel);
+            jsInlineF("<ul>");
             printGroup("collections", tdb, TRUE, TRUE);
+            jsInlineF("<ul>");
+            jsInlineF("</div>");
+            }
         }
-    jsInlineF("</ul>");
+    jsInlineF("\");\n");
+    
+    // print out all the tracks in this group
+    jsInlineF("$('#collections').append(\"");
+    for(tdb = fullTrackList; tdb;  tdb = tdb->next)
+        {
+        if (sameString(tdb->grp, hubName))
+            {
+            jsInlineF("<li id='%s'  name='%s'><span class='file'>%s</span></li>", trackHubSkipHubName(tdb->track),trackHubSkipHubName(tdb->track), tdb->shortLabel);
+            //printGroup("collections", tdb, TRUE, TRUE);
+            }
+        }
+    jsInlineF("\");\n");
     }
 //addVisibleTracks();
+jsInlineF("$('#tracks').append(\"");
 for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
     {
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
@@ -430,7 +450,7 @@ aggregate none\n\
 longLabel %s\n\
 %s on\n\
 type wig \n\
-visibility full\n\n", parent, &shortLabel[2], longLabel, CUSTOM_COMPOSITE_SETTING);
+visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING);
 }
 
 int snakePalette2[] =
@@ -454,7 +474,7 @@ fprintf(f,"\ttrack %s\n\
 \tview %s \n\
 \tparent %s \n\
 \tcolor %ld,%ld,%ld \n\
-\tvisibility %s\n", view->name, &view->shortLabel[2], view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), view->visibility);
+\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), view->visibility);
 //fprintf(f,"\tequation +\n");
 fprintf(f, "\n");
 
@@ -511,7 +531,7 @@ fclose(f);
 hFreeConn(&conn);
 }
 
-static unsigned long hexStringToLong(char *str)
+unsigned long hexStringToLong(char *str)
 {
 /*
 char buffer[1024];
@@ -523,47 +543,65 @@ strcat(buffer, &str[1]);
 return strtol(&str[1], NULL, 16);
 }
 
-static struct track *parseJson(char *jsonText)
-// parse the JSON returned from the ap
+struct jsonParseData
 {
-struct hash *trackHash = newHash(5);
-struct track *collectionList = NULL;
-struct track *track;
-char *ptr = jsonText;
-if (*ptr != '[')
-    errAbort("element didn't start with [");
-ptr++;
+struct track **collectionList;
+struct hash *trackHash;
+};
 
-do
+void jsonObjStart(struct jsonElement *ele, char *name,
+    boolean isLast, void *context)
+{
+struct jsonParseData *jpd = (struct jsonParseData *)context;
+struct track **collectionList = jpd->collectionList;
+struct hash *trackHash = jpd->trackHash;
+struct track *track;
+
+if ((name == NULL) && (ele->type == jsonObject))
     {
-    if (*ptr != '[')
-        errAbort("element didn't start with [");
-    ptr++;
+    struct hash *objHash = jsonObjectVal(ele, "name");
+
+    struct jsonElement *parentEle = hashFindVal(objHash, "id");
+    char *parentId = jsonStringEscape(parentEle->val.jeString);
+    parentEle = hashFindVal(objHash, "parent");
+    char *parentName = jsonStringEscape(parentEle->val.jeString);
 
     AllocVar(track);
-    char *parentName = getString(&ptr);
-    if (sameString(parentName, "collections"))
-        slAddHead(&collectionList, track);
+    if (sameString(parentName, "#"))
+        slAddHead(collectionList, track);
     else
         {
         struct track *parent = hashMustFindVal(trackHash, parentName);
         slAddTail(&parent->trackList, track);
         }
 
-    track->shortLabel = getString(&ptr);
-    track->longLabel = getString(&ptr);
-    track->name = getString(&ptr);
-    track->visibility = getString(&ptr);
-    char *colorString = getString(&ptr);
+    struct jsonElement *attEle = hashFindVal(objHash, "li_attr");
+    if (attEle)
+        {
+        struct hash *attrHash = jsonObjectVal(attEle, "name");
+        struct jsonElement *strEle = (struct jsonElement *)hashMustFindVal(attrHash, "name");
+        track->name = jsonStringEscape(strEle->val.jeString);
+        hashAdd(trackHash, parentId, track);
 
-    track->color = hexStringToLong(colorString);
-    hashAdd(trackHash, track->name, track);
-    if (*ptr != ']')
-        errAbort("element didn't end with ]");
-    ptr++;
-    if (*ptr == ',')
-        ptr++;
-    } while (*ptr != ']');
+        strEle = (struct jsonElement *)hashMustFindVal(attrHash, "shortlabel");
+        track->shortLabel = jsonStringEscape(strEle->val.jeString);
+        strEle = (struct jsonElement *)hashMustFindVal(attrHash, "longlabel");
+        track->longLabel = jsonStringEscape(strEle->val.jeString);
+        strEle = (struct jsonElement *)hashMustFindVal(attrHash, "visibility");
+        track->visibility = jsonStringEscape(strEle->val.jeString);
+        strEle = (struct jsonElement *)hashMustFindVal(attrHash, "color");
+        track->color = hexStringToLong(jsonStringEscape(strEle->val.jeString));
+        }
+    }
+}
+
+static struct track *parseJsonElements( struct jsonElement *collectionElements)
+// parse the JSON returned from the ap
+{
+struct track *collectionList = NULL;
+struct hash *trackHash = hashNew(5);
+struct jsonParseData jpd = {&collectionList, trackHash};
+jsonElementRecurse(collectionElements, NULL, FALSE, jsonObjStart, NULL, &jpd);
 
 slReverse(&collectionList);
 return collectionList;
@@ -572,7 +610,9 @@ return collectionList;
 void doAjax(char *db, char *jsonText, struct hash *nameHash)
 // Save our state
 {
-struct track *collectionList = parseJson(jsonText);
+cgiDecodeFull(jsonText, jsonText, strlen(jsonText));
+struct jsonElement *collectionElements = jsonParse(jsonText);
+struct track *collectionList = parseJsonElements(collectionElements);
 
 updateHub(db, collectionList, nameHash);
 }

@@ -75,9 +75,10 @@ var collections = (function() {
         var newDescription = "Description of New Collection";
         var attributes = "shortLabel='" +  newName + "' ";
         attributes += "longLabel='" +  newDescription + "' ";
-        attributes += "color='" + "0" + "' ";
+        attributes += "color='" + "#0" + "' ";
         attributes += "viewType='" + "collection" + "' ";
         attributes += "visibility='" + "full" + "' ";
+        attributes += "name='" +  ourCollectionName + "' ";
 
         $('#collections').append("<li " + attributes +  "id='"+ourCollectionName+"'>A New Collection</li>");
         $('#collection').append("<div id='"+ourTreeName+"'><ul><li " + attributes+ ">A New Collection</li><ul></div>");
@@ -125,11 +126,24 @@ var collections = (function() {
         json = json.slice(0, -1);
         json += ']';
         console.log(json);
+        var requestData = 'jsonp=' + json;
+        $.ajax({
+            data:  requestData ,
+            async: false,
+            dataType: "JSON",
+            type: "PUT",
+            url: "hgCollection?cmd=saveCollection",
+            trueSuccess: updatePage,
+            success: catchErrorOrDispatch,
+            error: errorHandler,
+        });
     }
 
     function init() {
         // called at initialization time
         $("#saveCollections").click ( function() {saveCollections(trees);} );
+        $("#discardChanges").click ( function () { window.location.reload(); });
+
         $("#newCollection").click ( newCollection );
         $("#collectionApply").click ( collectionApply );
         $("#customApply").click ( customApply );
@@ -145,10 +159,22 @@ var collections = (function() {
         };
 
         $("#customColorPicker").spectrum(trackOpt);
-        $.jstree.defaults.core.themes.icons = false;
+        //$.jstree.defaults.core.themes.icons = false;
         $.jstree.defaults.core.themes.dots = true;
         $.jstree.defaults.contextmenu.show_at_node = false;
-        treeDiv=$('#collection');
+        $("#startCollections div").each(function(index) {
+            $("#collection").append($(this).clone());
+            var newTree = $('#collection div:last');
+            trees[this.id] = newTree;
+
+            $(newTree).jstree({
+                   'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
+            });
+           $(newTree).on("select_node.jstree", selectTreeNode);
+        });
+        $("#collection  li").each(function() {
+            names[this.getAttribute("name")] = 1;
+        });
         treeDiv=$('#tracks');
         treeDiv.jstree({
                'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
