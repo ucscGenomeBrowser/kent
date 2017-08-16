@@ -9,6 +9,18 @@ var collections = (function() {
     var $tracks;  // the #tracks object
     var trees = [];
 
+    function selectElements (selectableContainer, elementsToSelect) {
+        // add unselecting class to all elements in the styleboard canvas except the ones to select
+        $(".ui-selected", selectableContainer).not(elementsToSelect).removeClass("ui-selected").addClass("ui-unselecting");
+
+        // add ui-selecting class to the elements to select
+        $(elementsToSelect).not(".ui-selected").addClass("ui-selecting");
+
+        // trigger the mouse stop event (this will select all .ui-selecting elements, and deselect all .ui-unselecting elements)
+        selectableContainer.data("ui-selectable").refresh();
+        selectableContainer.data("ui-selectable")._mouseStop(null);
+    }
+
     function customApply() {
         // called when the apply button on the track settings dialog is pressed
         selectedNode.li_attr.shortlabel = $("#customName").val();
@@ -25,15 +37,15 @@ var collections = (function() {
         $("#TrackDbOptions").hide();
     }
 
-    function selectTreeNode(evt, data) {
+    function selectNode(tree, node) {
         // called when a node in the collections tree is selected
-        var color = data.node.li_attr.color;
-        var name =  data.node.li_attr.shortlabel;
-        var description = data.node.li_attr.longlabel;
-        var visibility = data.node.li_attr.visibility;
-        var type = data.node.li_attr.viewtype;
-        selectedNode = data.node;
-        selectedTree = evt.target;
+        var color = node.li_attr.color;
+        var name =  node.li_attr.shortlabel;
+        var description = node.li_attr.longlabel;
+        var visibility = node.li_attr.visibility;
+        var type = node.li_attr.viewtype;
+        selectedNode = node;
+        selectedTree = tree;
 
         if (!type) {
                 hideAllAttributes();
@@ -61,16 +73,21 @@ var collections = (function() {
             hideAllAttributes();
             $("#TrackDbOptions").show();
         }
-   }           
+   }
+
+    function selectTreeNode(evt, data)             {
+        selectNode(evt.target, data.node);
+    }
 
     function checkCallback( operation, node, node_parent, node_position, more) {
         // called during a drag and drop action to see if the target is droppable
-        if (operation === "move_node") {
-            if ($(node_parent).hasClass('nodrop'))
+        if ((operation === "copy_node") ||  (operation === "move_node")) {
+            if (node_parent.li_attr.class === "nodrop")
                 return false;
             if ($(node_parent).attr('parent') !== '#')
                 return false;
         }
+
         return true;
     }
 
@@ -83,7 +100,7 @@ var collections = (function() {
         var attributes = "shortLabel='" +  newName + "' ";
         attributes += "longLabel='" +  newDescription + "' ";
         attributes += "color='" + "#0" + "' ";
-        attributes += "viewType='" + "collection" + "' ";
+        attributes += "viewType='" + "track" + "' ";
         attributes += "visibility='" + "full" + "' ";
         attributes += "name='" +  ourCollectionName + "' ";
 
@@ -99,7 +116,10 @@ var collections = (function() {
                'check_callback' : checkCallback,
                'dnd': {check_while_dragging: true}
         });
-       $(newTree).on("select_node.jstree", selectTreeNode);
+        $(newTree).on("select_node.jstree", selectTreeNode);
+        var lastElement = $("#collections li").last();
+        selectElements($("#collections"), lastElement) ;
+        rebuildLabel();
     }
 
     function hideAllTrees() {
@@ -114,7 +134,9 @@ var collections = (function() {
         $('#collectedTracksTitle').text(ui.selected.innerText);
         hideAllTrees();
         trees[id].show();
-        trees[id].jstree('select_node', trees[id].find("li").first());
+        var node = trees[id].find("li").first();
+        trees[id].jstree('select_node', node);
+        selectNode(trees[id], trees[id].jstree("get_node",node));
 
     }
 
@@ -149,7 +171,7 @@ var collections = (function() {
     }
 
     function rebuildLabel() {
-        var newText = selectedNode.li_attr.shortlabel + "   " + selectedNode.li_attr.longlabel;
+        var newText = selectedNode.li_attr.shortlabel + "   (" + selectedNode.li_attr.longlabel + ")";
         $(selectedTree).jstree('rename_node', selectedNode, newText);
     }
 
@@ -163,7 +185,7 @@ var collections = (function() {
         rebuildLabel();
         if (selectedNode.parent === '#') {
             $("#collections .ui-selected").text($("#customName").val());
-
+            $('#collectedTracksTitle').text($("#customName").val());
         }
     }
 
@@ -210,7 +232,7 @@ var collections = (function() {
 
         $("#customColorPicker").spectrum(trackOpt);
         //$.jstree.defaults.core.themes.icons = false;
-        //$.jstree.defaults.core.check_callback = true;
+        $.jstree.defaults.core.check_callback = checkCallback;
         $.jstree.defaults.core.themes.dots = true;
         $.jstree.defaults.contextmenu.show_at_node = false;
         $("#collection div").each(function(index) {
@@ -219,7 +241,7 @@ var collections = (function() {
 
             $(newTree).jstree({
                'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
-               'core': {
+               'dnd': {
                 "check_callback" : checkCallback,
                 }
             });
@@ -242,14 +264,9 @@ var collections = (function() {
             }
         });
 
-        $("#collections li").first().addClass( "ui-selected" );
-        hideAllTrees();
-        var id = $("#collections li").first().attr('id');
-        trees[id].show();
-        selectedNode = trees[id].find("li").first();
-        selectedTree = trees[id];
-        trees[id].jstree('select_node', selectedNode);
-        $('#collectedTracksTitle').text(trees[id].attr('shortlabel'));
+
+        var firstElement = $("#collections li").first();
+        selectElements($("#collections"), firstElement) ;
     }
 
     function updatePage(responseJson) {

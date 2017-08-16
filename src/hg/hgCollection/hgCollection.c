@@ -129,8 +129,8 @@ else
     
 #define IMAKECOLOR_32(r,g,b) ( ((unsigned int)b<<0) | ((unsigned int)g << 8) | ((unsigned int)r << 16))
 
-jsInlineF("<li shortLabel='%s' longLabel='%s' color='#%06x' visibility='%s'  name='%s%s' %s><span class='%s'>%s</span>",  tdb->shortLabel, tdb->longLabel,IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB), hStringFromTv(tdb->visibility), prefix,  trackHubSkipHubName(tdb->track),   userString, folder ? "folder" : "file", tdb->shortLabel );
-jsInlineF("%s", tdb->longLabel);
+jsInlineF("<li shortLabel='%s' longLabel='%s' color='#%06x' visibility='%s'  name='%s%s' %s>%s",  tdb->shortLabel, tdb->longLabel,IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB), hStringFromTv(tdb->visibility), prefix,  trackHubSkipHubName(tdb->track),   userString,  tdb->shortLabel );
+jsInlineF(" (%s)", tdb->longLabel);
 
 
 if (tdb->subtracks)
@@ -241,7 +241,7 @@ return vis;
 void addVisibleTracks()
 // add the visible tracks table rows
 {
-printf("<tr name='visible' ><td><span class='file'>All Visible</td><td>All the tracks visible in hgTracks</td></tr>\n");
+printf("<tr name='visible' ><td>All Visible</td><td>All the tracks visible in hgTracks</td></tr>\n");
 struct trackDb *tdb;
 for(tdb = fullTrackList; tdb; tdb = tdb->next)
     {
@@ -271,7 +271,6 @@ if (curGroup != NULL)
         {
         if (sameString(tdb->grp, hubName))
             {
-            //jsInlineF("<li name='%s'><span class='file'>%s</span></li>", tdb->track, tdb->shortLabel);
             jsInlineF("<div id='%s' shortLabel='%s'>", trackHubSkipHubName(tdb->track), tdb->shortLabel);
             jsInlineF("<ul>");
             printGroup("collections", tdb, TRUE, TRUE);
@@ -287,7 +286,7 @@ if (curGroup != NULL)
         {
         if (sameString(tdb->grp, hubName))
             {
-            jsInlineF("<li id='%s'  name='%s'><span class='file'>%s</span></li>", trackHubSkipHubName(tdb->track),trackHubSkipHubName(tdb->track), tdb->shortLabel);
+            jsInlineF("<li class='nodrop' id='%s'  name='%s'>%s</li>", trackHubSkipHubName(tdb->track),trackHubSkipHubName(tdb->track), tdb->shortLabel);
             //printGroup("collections", tdb, TRUE, TRUE);
             }
         }
@@ -300,7 +299,7 @@ for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
         continue;
     jsInlineF("<ul>");
-    jsInlineF("<li name='%s'><span class='file'>%s</span>", curGroup->name, curGroup->label );
+    jsInlineF("<li class='nodrop' name='%s'>%s", curGroup->name, curGroup->label );
     struct trackDb *tdb;
     jsInlineF("<ul>");
     for(tdb = fullTrackList; tdb;  tdb = tdb->next)
@@ -458,8 +457,11 @@ compositeTrack on\n\
 aggregate none\n\
 longLabel %s\n\
 %s on\n\
+\tcolor %ld,%ld,%ld \n\
 type wig \n\
-visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING);
+visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
+ 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color));
+
 }
 
 int snakePalette2[] =
