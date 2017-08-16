@@ -108,7 +108,7 @@ static void printGroup(char *parent, struct trackDb *tdb, boolean folder, boolea
 char *userString = "";
 char *prefix = "";
 
-//if (user)
+if (user)
     {
     //prefix = "coll_";
     if (tdb->parent && tdb->subtracks) 
@@ -116,6 +116,15 @@ char *prefix = "";
     else
         userString = "viewType='track'";
     }
+else
+    {
+    //prefix = "coll_";
+    if (tdb->parent && tdb->subtracks) 
+        userString = "class='nodrop' viewType='view'";
+    else
+        userString = "class='nodrop' viewType='track'";
+    }
+    
         //userString = "viewType='track data-jstree='{'icon':'images/folderC.png'}''";
     
 #define IMAKECOLOR_32(r,g,b) ( ((unsigned int)b<<0) | ((unsigned int)g << 8) | ((unsigned int)r << 16))
@@ -257,7 +266,7 @@ if (curGroup != NULL)
     {
     // print out all the tracks in this group
     struct trackDb *tdb;
-    jsInlineF("$('#startCollections').append(\"");
+    jsInlineF("$('#collection').append(\"");
     for(tdb = fullTrackList; tdb;  tdb = tdb->next)
         {
         if (sameString(tdb->grp, hubName))
