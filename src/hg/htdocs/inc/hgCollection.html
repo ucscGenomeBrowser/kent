@@ -39,7 +39,7 @@
     <div class='col-md-6' style="height:200px;">
     <!-- Configuration panel -->
         <div class='row gbSectionBanner'>
-            <div class='col-md-8'>Set Attributes</div>
+            <div class='col-md-8'>Set Collection Attributes</div>
             <div class='col-md-4 text-right'> </div>
         </div>
 
@@ -133,6 +133,10 @@
                     <input type='text' name='searchTracks' id='searchTracks' value='' class='text-right ui-widget-content ui-corner-all'>
             </div>
         </div>
+        <div>
+        Below are tracks are available to add to collections. To add new tracks from hubs or custom tracks, load the hub or custom track into the browser and then return to this list. 
+
+        </div>
         <div id='tracks'>
         </div>
     </div>
@@ -140,10 +144,13 @@
     <div class='col-md-6'>
     <!-- Configuration panel -->
         <div class='row gbSectionBanner'>
-            <div id='collectedTracksTitle' class='col-md-8'>Collected Tracks</div>
+            <div class='col-md-8'>Collected Tracks</div>
             <div class='gbButtonGoContainer text-right' title='Make New Calculated Track'>
                 <div id='newCollection' class='gbButton'>Make New Calculated Track </div>
             </div>
+        </div>
+        <div>
+        Below are tracks in <i><span id='collectedTracksTitle'></span></i>. To add tracks to this collection, drag and drop from "Available Tracks".  Right-click on the track to remove it.
         </div>
         <div id='collection'>
         </div>

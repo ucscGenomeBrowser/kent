@@ -711,7 +711,7 @@ fprintf(stderr, "BRANEY %s\n", jsonIn);
 if (jsonIn != NULL)
     {
     doAjax(database, jsonIn, nameHash);
-    apiOut("{\"serverSays\": \"bit me\"}", NULL);
+    apiOut("{\"serverSays\": \"Collections saved successfully.\"}", NULL);
     }
 else
     {

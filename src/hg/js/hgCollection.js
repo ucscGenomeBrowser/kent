@@ -276,7 +276,7 @@ var collections = (function() {
         }
         var message = responseJson.serverSays;
         if (message) {
-            console.log('server says: ' + JSON.stringify(message));
+            alert(message);
         }
     }
 
