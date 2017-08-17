@@ -998,6 +998,12 @@ puts("<BR>");
 endCollapsibleSection();
 }
 
+static boolean canDoHgvsOut(char *geneTrack)
+/* Return TRUE if we're able to make HGVS output terms for transcripts in geneTrack. */
+{
+return sameString(geneTrack, "refGene") || startsWith("ncbiRefSeq", geneTrack);
+}
+
 static void selectHgvsOut(char *geneTrack)
 /* Offer HGVS output choices if RefSeq Genes are selected */
 {
@@ -1007,8 +1013,8 @@ printf("The <a href='http://www.hgvs.org/' target=_blank>Human Genome Variation 
        "<a href='http://varnomen.hgvs.org/' target=_blank>sequence variant nomenclature</a>, "
        "an international standard used to report variation in "
        "genomic, transcript and protein sequences.<br>\n");
-boolean refSeqSelected = sameString(geneTrack, "refGene") || startsWith("ncbiRefSeq", geneTrack);
-printf("<div id=\"hgvsOptions\" style=\"display: %s;\">", refSeqSelected ? "block" : "none");
+boolean hgvsOk = canDoHgvsOut(geneTrack);
+printf("<div id=\"hgvsOptions\" style=\"display: %s;\">", hgvsOk ? "block" : "none");
 cartMakeCheckBox(cart, "hgva_hgvsG", FALSE);
 printf("Include HGVS genomic (g.) terms in output<br>\n");
 cartMakeCheckBox(cart, "hgva_hgvsCN", FALSE);
@@ -1026,7 +1032,7 @@ printf("For variants that involve both a deletion and insertion, "
        "<br>\n");
 puts("</div>");
 printf("<div id=\"noHgvs\" style=\"display: %s;\">",
-       refSeqSelected ? "none" : "block");
+       hgvsOk ? "none" : "block");
 printf("Select RefSeq Genes in the \"Select Genes\" section above "
        "in order to make options appear.\n");
 puts("</div>");
@@ -1399,7 +1405,7 @@ jsReloadOnBackButton(cart);
 webNewSection("Using the Variant Annotation Integrator");
 webIncludeHelpFileSubst("hgVaiHelpText", cart, FALSE);
 jsIncludeFile("jquery-ui.js", NULL);
-jsIncludeFile("hgVarAnnogrator.js", NULL);
+jsIncludeFile("hgVai.js", NULL);
 jsIncludeFile("ui.dropdownchecklist.js", NULL);
 jsIncludeFile("ddcl.js", NULL);
 }
@@ -1469,7 +1475,7 @@ static void setHgvsOutOptions(struct annoGrator *gpVarGrator, char *geneTrack)
 /* Use cart variables to configure gpVarGrator's HGVS output. */
 {
 uint hgvsOutOptions = 0;
-if (sameString(geneTrack, "refGene") || startsWith("ncbiRefSeq", geneTrack))
+if (canDoHgvsOut(geneTrack))
     {
     if (cartUsualBoolean(cart, "hgva_hgvsG", FALSE))
         hgvsOutOptions |= HGVS_OUT_G;
@@ -1481,8 +1487,8 @@ if (sameString(geneTrack, "refGene") || startsWith("ncbiRefSeq", geneTrack))
         hgvsOutOptions |= HGVS_OUT_P_ADD_PARENS;
     if (cartUsualBoolean(cart, "hgva_hgvsBreakDelIns", FALSE))
         hgvsOutOptions |= HGVS_OUT_BREAK_DELINS;
-    annoGratorGpVarSetHgvsOutOptions(gpVarGrator, hgvsOutOptions);
     }
+annoGratorGpVarSetHgvsOutOptions(gpVarGrator, hgvsOutOptions);
 }
 
 struct annoGrator *gratorForSnpBed4(struct hash *gratorsByName, char *suffix,
