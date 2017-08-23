@@ -3186,4 +3186,120 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -buildDir=`pwd` panTro4 calJac3) > rbest.log 2>&1 &
     # real    44m18.149s
 
+##############################################################################
+# LASTZ chimp panTro5 (DONE - 2017-08-08 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/lastzPanTro5.2017-08-08
+    cd /hive/data/genomes/calJac3/bed/lastzPanTro5.2017-08-08
+
+    printf '# Marmoset vs chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Marmoset calJac3
+SEQ1_DIR=/hive/data/genomes/calJac3/calJac3.2bit
+SEQ1_LEN=/hive/data/genomes/calJac3/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# QUERY: chimp panTro5
+SEQ2_DIR=/hive/data/genomes/panTro5/panTro5.2bit
+SEQ2_LEN=/hive/data/genomes/panTro5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzPanTro5.2017-08-08
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #	real    676m38.873s
+
+    cat fb.calJac3.chainPanTro5Link.txt
+    #	2208118247 bases of 2752505800 (80.222%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` calJac3 panTro5) \
+	> rbest.log 2>&1 &
+    #  real    937m46.656s
+
+    #	running the swap
+    mkdir /hive/data/genomes/panTro5/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/panTro5/bed/blastz.calJac3.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzPanTro5.2017-08-08/DEF \
+	-swap -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku \
+	-bigClusterHub=ku) > swap.log 2>&1
+    #	real    140m3.455s
+
+    cat fb.panTro5.chainCalJac3Link.txt
+    #	2319213349 bases of 3132620660 (74.034%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panTro5 calJac3) \
+	> rbest.log 2>&1 &
+    # real    850m40.412s
+
+##############################################################################
+# LASTZ chimp rheMac8 (DONE - 2017-08-08 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/lastzRheMac8.2017-08-08
+    cd /hive/data/genomes/calJac3/bed/lastzRheMac8.2017-08-08
+
+    printf '# Marmoset vs rhesus
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Marmoset calJac3
+SEQ1_DIR=/hive/data/genomes/calJac3/calJac3.2bit
+SEQ1_LEN=/hive/data/genomes/calJac3/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# QUERY: rhesus rheMac8
+SEQ2_DIR=/hive/data/genomes/rheMac8/rheMac8.2bit
+SEQ2_LEN=/hive/data/genomes/rheMac8/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=1000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzRheMac8.2017-08-08
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #	real    635m57.336s
+
+    cat fb.calJac3.chainRheMac8Link.txt
+    #	2183155505 bases of 2752505800 (79.315%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` calJac3 rheMac8) \
+	> rbest.log 2>&1 &
+    #  real    1056m51.268s
+
+    #	running the swap
+    mkdir /hive/data/genomes/rheMac8/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/rheMac8/bed/blastz.calJac3.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzRheMac8.2017-08-08/DEF \
+	-swap -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku \
+	-bigClusterHub=ku) > swap.log 2>&1
+    #	real    265m36.306s
+
+    cat fb.rheMac8.chainCalJac3Link.txt
+    #	2208994431 bases of 3142093174 (70.303%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rheMac8 calJac3) \
+	> rbest.log 2>&1 &
+    # real    1183m6.027s
+
 ############################################################################

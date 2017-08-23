@@ -97,3 +97,77 @@ TMPDIR=/dev/shm
     # real    279m26.262s
 
 #############################################################################
+# Rhesus lastz/chainNet run (DONE - 2017-08-08 - Hiram)
+    screen -S panTro5RheMac8  # use a screen to manage this longish running job
+    mkdir /hive/data/genomes/panTro5/bed/lastzRheMac8.2017-08-08
+    cd /hive/data/genomes/panTro5/bed/lastzRheMac8.2017-08-08
+
+    # always set the BLASTZ program so we know what version was used
+    printf "# chimp vs. rhesus
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_L=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#    A    C    G    T
+#    90 -330 -236 -356
+#  -330  100 -318 -236
+#  -236 -318  100 -330
+#  -356 -236 -330   90
+
+# TARGET: Chimp panTro5
+SEQ1_DIR=/hive/data/genomes/panTro5/panTro5.2bit
+SEQ1_LEN=/hive/data/genomes/panTro5/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+SEQ1_LIMIT=400
+
+# QUERY: Rhesus rheMac8
+SEQ2_DIR=/hive/data/genomes/rheMac8/rheMac8.2bit
+SEQ2_LEN=/hive/data/genomes/rheMac8/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=1000
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/panTro5/bed/lastzRheMac8.2017-08-08
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > do.log 2>&1
+    # real    187m26.960s
+
+    cat fb.panTro5.chainRheMac8Link.txt
+    # 2586883104 bases of 3132620660 (82.579%) in intersection
+
+    # filter with doRecipBest.pl
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        panTro5 rheMac8) > rbest.log 2>&1
+    # real    368m0.695s
+
+    # running the swap
+    mkdir /hive/data/genomes/rheMac8/bed/blastz.panTro5.swap
+    cd /hive/data/genomes/rheMac8/bed/blastz.panTro5.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/panTro5/bed/lastzRheMac8.2017-08-08/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    214m12.404s
+
+    cat fb.rheMac8.chainPanTro5Link.txt
+    # 2494854251 bases of 3142093174 (79.401%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        rheMac8 panTro5) > rbest.log 2>&1
+    # real    567m24.754s
+
+#############################################################################

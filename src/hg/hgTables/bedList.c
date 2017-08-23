@@ -651,6 +651,8 @@ for (region = regionList; region != NULL; region = region->next)
                 if (bed->name != NULL)
                     {
                     subChar(bed->name, ' ', '_');
+		    if (strcmp(bed->name, "") == 0)
+			bed->name = cloneString(".");
                     }
                 if (doCt)
                     {

@@ -42,11 +42,11 @@ if (pHgvs && *pHgvs)
 //                                              ...........       optional dot version
 //                                                         ...... optional gene symbol in ()s
 //                                                          ....  optional gene symbol
-#define versionedRefSeqNCExp versionedAccPrefixExp("NC")
-#define versionedRefSeqNGExp versionedAccPrefixExp("NG")
-#define versionedRefSeqNMExp versionedAccPrefixExp("NM")
-#define versionedRefSeqNPExp versionedAccPrefixExp("NP")
-#define versionedRefSeqNMRExp versionedAccPrefixExp("N[MR]")
+#define versionedRefSeqNCExp versionedAccPrefixExp("[NX]C")
+#define versionedRefSeqNGExp versionedAccPrefixExp("[NX]G")
+#define versionedRefSeqNMExp versionedAccPrefixExp("[NX]M")
+#define versionedRefSeqNPExp versionedAccPrefixExp("[NX]P")
+#define versionedRefSeqNMRExp versionedAccPrefixExp("[NX][MR]")
 
 // Nucleotide position regexes
 // (c. = CDS, g. = genomic, m. = mitochondrial, n.= non-coding RNA, r. = RNA)
@@ -85,14 +85,14 @@ if (pHgvs && *pHgvs)
 #define aa3Exp "Ala|Arg|Asn|Asp|Cys|Gln|Glu|Gly|His|Ile|Leu|Lys|Met|Phe|Pro|Ser|Thr|Trp|Tyr|Val|Ter"
 #define hgvsAminoAcidExp "[ARNDCQEGHILKMFPSTWYVX*]|" aa3Exp
 #define hgvsAminoAcidSubstExp "(" hgvsAminoAcidExp ")" posIntExp "(" hgvsAminoAcidExp "|=)"
-#define hgvsPDotSubstExp "p\\." hgvsAminoAcidSubstExp
+#define hgvsPDotSubstExp "p\\.\\(?" hgvsAminoAcidSubstExp "\\)?"
 //                                 ...                                  // original sequence
 //                                              ......                  // 1-based position
 //                                                           ...        // replacement sequence
 
 // Protein range (or just single pos) regex
 #define hgvsAaRangeExp "(" hgvsAminoAcidExp ")" posIntExp "(_(" hgvsAminoAcidExp ")" posIntExp ")?(.*)"
-#define hgvsPDotRangeExp "p\\." hgvsAaRangeExp
+#define hgvsPDotRangeExp "p\\.\\(?" hgvsAaRangeExp "\\)?"
 //  original start AA           ...
 //  1-based start position                       ...
 //  optional range sep and AA+pos                          .....................................
@@ -230,8 +230,10 @@ if (pHgvs && *pHgvs)
 //                              5.....          1-based end position
 //                                    6....     change description
 
+
 // Sometimes users give an NM_ accession, but a protein change.
-#define pseudoHgvsNMPDotSubstExp "^" versionedRefSeqNMExp "[ :]+p?\\.?" hgvsAminoAcidSubstExp
+#define maybePDot "[ :]+p?\\.?\\(?"
+#define pseudoHgvsNMPDotSubstExp "^" versionedRefSeqNMExp maybePDot hgvsAminoAcidSubstExp "\\)?"
 // substring numbering:
 //      0.....................................................  whole matching string
 //      1...............                                        acc & optional dot version
@@ -242,7 +244,8 @@ if (pHgvs && *pHgvs)
 //                                           6......            1-based position
 //                                                     7......  replacement sequence
 
-#define pseudoHgvsNMPDotRangeExp "^" versionedRefSeqNMExp "[ :]+p?\\.?" hgvsAaRangeExp
+#define pseudoHgvsNMPDotRangeExp "^" versionedRefSeqNMExp maybePDot hgvsAaRangeExp "\\)?"
+
 // substring numbering:
 //      0.....................................................  whole matching string
 //      1...............                                        acc & optional dot version
@@ -257,14 +260,14 @@ if (pHgvs && *pHgvs)
 //                                                      10....  change description
 
 // Common: gene symbol followed by space and/or punctuation followed by protein change
-#define pseudoHgvsGeneSymbolProtSubstExp "^" geneSymbolExp "[ :]+p?\\.?" hgvsAminoAcidSubstExp
+#define pseudoHgvsGeneSymbolProtSubstExp "^" geneSymbolExp maybePDot hgvsAminoAcidSubstExp "\\)?"
 //      0.....................................................  whole matching string
 //      1...................                                    gene symbol
 //                                   2.....                     original sequence
 //                                           3......            1-based position
 //                                                     4......  replacement sequence
 
-#define pseudoHgvsGeneSymbolProtRangeExp "^" geneSymbolExp "[ :]+p?\\.?" hgvsAaRangeExp
+#define pseudoHgvsGeneSymbolProtRangeExp "^" geneSymbolExp maybePDot hgvsAaRangeExp "\\)?"
 //      0.....................................................  whole matching string
 //      1...................                                    gene symbol
 //                                 2...                         original start AA
@@ -275,7 +278,7 @@ if (pHgvs && *pHgvs)
 //                                                       7.....  change description
 
 // As above but omitting the protein change
-#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp "[ :]+p?\\.?" posIntExp
+#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp maybePDot posIntExp "\\)?"
 //      0..........................                             whole matching string
 //      1...................                                    gene symbol
 //                           2.....                             1-based position
@@ -1014,18 +1017,24 @@ if (accSeq)
         {
         struct genbankCds cds;
         coordsOK = getCds(db, acc, &cds);
-        if (coordsOK && retDiffRefAllele)
+        if (coordsOK)
             {
             start += (hgvs->startIsUtr3 ? cds.end : cds.start);
-            if (hgvs->startOffset == 0 && start >= 0 && start < seqLen)
+            end += (hgvs->endIsUtr3 ? cds.end : cds.start);
+            if (start > end)
+                coordsOK = FALSE;
+            else if (retDiffRefAllele && hgvs->startOffset == 0 && start >= 0 && start <= seqLen)
                 checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
             }
         }
     else
         {
-        coordsOK = TRUE;
-        if (retDiffRefAllele && hgvs->startOffset == 0 && start >= 0 && start < seqLen)
-            checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
+        if (start <= end)
+            {
+            coordsOK = TRUE;
+            if (retDiffRefAllele && hgvs->startOffset == 0 && start >= 0 && start < seqLen)
+                checkRefAllele(hgvs, start, accSeq, retDiffRefAllele);
+            }
         }
     }
 freeMem(accSeq);
@@ -1336,7 +1345,8 @@ static char *pslTableForAcc(char *db, char *acc)
 char *pslTable = NULL;
 if (startsWith("LRG_", acc))
     pslTable = "lrgTranscriptAli";
-else if (startsWith("NM_", acc) || startsWith("NR_", acc))
+else if (startsWith("NM_", acc) || startsWith("NR_", acc) ||
+         startsWith("XM_", acc) || startsWith("XR_", acc))
     {
     // Use NCBI's alignments if they are available
     if (hDbHasNcbiRefSeq(db))
@@ -1441,7 +1451,7 @@ static struct bed *hgvsMapPDotToGenome(char *db, struct hgvsVariant *hgvs, char 
 {
 struct bed *region = NULL;
 char *acc = normalizeVersion(db, hgvs->seqAcc, NULL);
-if (acc && startsWith("NP_", acc))
+if (acc && (startsWith("NP_", acc) || startsWith("XP_", acc)))
     {
     // Translate the NP_*:p. to NM_*:c. and map NM_*:c. to the genome.
     struct sqlConnection *conn = hAllocConn(db);
@@ -2550,24 +2560,45 @@ struct dyString *dy = dyStringCreate("%s:p.", vpPep->name);
 if (addParens)
     dyStringAppendC(dy, '(');
 int refLen = vpPep->end - vpPep->start;
+// When predicting frameshift/extension, the length of ref may be different from refLen
+int refExtLen = vpPep->ref ? strlen(vpPep->ref) : refLen;
 int altLen = vpPep->alt ? strlen(vpPep->alt) : 0;
-char *pSeq = protSeq->dna;
 char refStartAbbr[4];
-aaToAbbr(pSeq[vpPep->start], refStartAbbr, sizeof(refStartAbbr));
+if (vpPep->ref)
+    aaToAbbr(vpPep->ref[0], refStartAbbr, sizeof(refStartAbbr));
+else
+    // If ref is null then we should be writing just '=' or '?' but prevent garbage just in case:
+    safecpy(refStartAbbr, sizeof(refStartAbbr), "?");
+// protSeq may or may not end with X, so treat protSeq->size accordingly
+boolean hitsStopCodon = (vpPep->end > protSeq->size ||
+                         ((protSeq->dna[protSeq->size-1] == 'X') && vpPep->end == protSeq->size));
 if (vpPep->likelyNoChange)
     dyStringAppend(dy, "=");
 else if (vpPep->cantPredict || vpPep->spansUtrCds)
     dyStringAppend(dy, "?");
 else if (vpPep->frameshift)
     {
+    dyStringPrintf(dy, "%s%d", refStartAbbr, vpPep->start+1);
     if (altLen == 1)
-        dyStringPrintf(dy, "%s%dTer", refStartAbbr, vpPep->start+1);
+        dyStringAppend(dy, "Ter");
     else
         {
         char altStartAbbr[4];
         aaToAbbr(vpPep->alt[0], altStartAbbr, sizeof(altStartAbbr));
-        dyStringPrintf(dy, "%s%d%sfsTer%d", refStartAbbr, vpPep->start+1, altStartAbbr, altLen);
+        // For stop-loss extension, make it "ext*"
+        if (hitsStopCodon && altLen > refExtLen)
+            dyStringPrintf(dy, "%sext*%d", altStartAbbr, altLen - refExtLen);
+        else
+            dyStringPrintf(dy, "%sfsTer%d", altStartAbbr, altLen);
         }
+    }
+else if (hitsStopCodon && altLen > refExtLen)
+    {
+    // Stop loss extension from something that doesn't disrupt frame
+    char altStartAbbr[4];
+    aaToAbbr(vpPep->alt[0], altStartAbbr, sizeof(altStartAbbr));
+    dyStringPrintf(dy, "%s%d%sext*%d", refStartAbbr, vpPep->start+1,
+                   altStartAbbr, altLen - refExtLen);
     }
 else
     {
@@ -2584,6 +2615,7 @@ else
     else
         {
         int rangeStart = vpPep->start, rangeEnd = vpPep->end;
+        char *pSeq = protSeq->dna;
         if (dupLen > 0)
             {
             // Duplication; position range changes to preceding bases.
@@ -2598,8 +2630,13 @@ else
             aaToAbbr(pSeq[rangeStart], refStartAbbr, sizeof(refStartAbbr));
             rangeEnd++;
             }
+        hitsStopCodon = (rangeEnd > protSeq->size ||
+                         ((protSeq->dna[protSeq->size-1] == 'X') && rangeEnd == protSeq->size));
         char refLastAbbr[4];
-        aaToAbbr(pSeq[rangeEnd-1], refLastAbbr, sizeof(refLastAbbr));
+        if (hitsStopCodon)
+            aaToAbbr('X', refLastAbbr, sizeof(refLastAbbr));
+        else
+            aaToAbbr(pSeq[rangeEnd-1], refLastAbbr, sizeof(refLastAbbr));
         dyStringPrintf(dy, "%s%d_%s%d", refStartAbbr, rangeStart+1, refLastAbbr, rangeEnd);
         }
     hgvsAppendChangesFromPepRefAlt(dy, vpPep->ref, vpPep->alt, dupLen);

@@ -6,6 +6,7 @@ html gold
 
 # Local declaration so that local crispr.html is picked up.
 track crispr override
+release alpha,beta,public
 html crispr
 scoreFilterLimits 0:100
 

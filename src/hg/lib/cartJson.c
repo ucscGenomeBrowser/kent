@@ -162,7 +162,8 @@ for (i = 0;  i < termCount;  i++)
     if (hgp == NULL || hgp->posCount == 0)
 	{
 	jsonWriteStringf(jw, "error",
-			 "Sorry, couldn't locate %s in genome database", htmlEncode(terms[i]));
+			 "Sorry, couldn't locate %s in %s %s", htmlEncode(terms[i]),
+                         trackHubSkipHubName(hOrganism(db)), hFreezeDate(db));
 	if (multiTerm)
 	    jsonWriteStringf(jw, "error",
 			     "%s not uniquely determined -- can't do multi-position search.",

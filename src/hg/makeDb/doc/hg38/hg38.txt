@@ -3298,7 +3298,7 @@ hgLoadBed -tab hg38 tRNAs hg38-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.s
 
 ## tRNAs track (2015-10-04, Chris FINISHING BUILD FOR RELEASE)
     cd /hive/data/genomes/hg38/bed/tRNAs
-    cp /hive/users/pchan/gtrnadb2/Eukaryota/hg38/hg38-tRNAs.bed hg38-tRNAs2.bed
+    cat /hive/users/pchan/gtrnadb2/Eukaryota/hg38/hg38-tRNAs.bed | sed 's^</BLOCKQUOTE>^^g' | > hg38-tRNAs2.bed
     hgsql hg38 -e 'drop table if exists tRNAs'
     hgLoadBed -tab hg38 tRNAs hg38-tRNAs2.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
     mkdir gif

@@ -646,13 +646,13 @@ static int ensTxIdIx=-1, altAl1Ix, score1Ix, altAl2Ix, score2Ix, altAl3Ix, score
 if (ensTxIdIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    ensTxIdIx = asColumnFindIx(columns, "ensTxId");
-    altAl1Ix = asColumnFindIx(columns, "altAl1");
-    score1Ix = asColumnFindIx(columns, "score1");
-    altAl2Ix = asColumnFindIx(columns, "altAl2");
-    score2Ix = asColumnFindIx(columns, "score2");
-    altAl3Ix = asColumnFindIx(columns, "altAl3");
-    score3Ix = asColumnFindIx(columns, "score3");
+    ensTxIdIx = asColumnMustFindIx(columns, "ensTxId");
+    altAl1Ix = asColumnMustFindIx(columns, "altAl1");
+    score1Ix = asColumnMustFindIx(columns, "score1");
+    altAl2Ix = asColumnMustFindIx(columns, "altAl2");
+    score2Ix = asColumnMustFindIx(columns, "score2");
+    altAl3Ix = asColumnMustFindIx(columns, "altAl3");
+    score3Ix = asColumnMustFindIx(columns, "score3");
     }
 
 struct annoRow *row;
@@ -700,22 +700,22 @@ static int aaPosIx=-1,
 if (aaPosIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    aaPosIx = asColumnFindIx(columns, "uniProtAaPos");
-    altAl1Ix = asColumnFindIx(columns, "altAl1");
-    hDivScore1Ix = asColumnFindIx(columns, "hDivScore1");
-    hDivPred1Ix = asColumnFindIx(columns, "hDivPred1");
-    hVarScore1Ix = asColumnFindIx(columns, "hVarScore1");
-    hVarPred1Ix = asColumnFindIx(columns, "hVarPred1");
-    altAl2Ix = asColumnFindIx(columns, "altAl2");
-    hDivScore2Ix = asColumnFindIx(columns, "hDivScore2");
-    hDivPred2Ix = asColumnFindIx(columns, "hDivPred2");
-    hVarScore2Ix = asColumnFindIx(columns, "hVarScore2");
-    hVarPred2Ix = asColumnFindIx(columns, "hVarPred2");
-    altAl3Ix = asColumnFindIx(columns, "altAl3");
-    hDivScore3Ix = asColumnFindIx(columns, "hDivScore3");
-    hDivPred3Ix = asColumnFindIx(columns, "hDivPred3");
-    hVarScore3Ix = asColumnFindIx(columns, "hVarScore3");
-    hVarPred3Ix = asColumnFindIx(columns, "hVarPred3");
+    aaPosIx = asColumnMustFindIx(columns, "uniProtAaPos");
+    altAl1Ix = asColumnMustFindIx(columns, "altAl1");
+    hDivScore1Ix = asColumnMustFindIx(columns, "hDivScore1");
+    hDivPred1Ix = asColumnMustFindIx(columns, "hDivPred1");
+    hVarScore1Ix = asColumnMustFindIx(columns, "hVarScore1");
+    hVarPred1Ix = asColumnMustFindIx(columns, "hVarPred1");
+    altAl2Ix = asColumnMustFindIx(columns, "altAl2");
+    hDivScore2Ix = asColumnMustFindIx(columns, "hDivScore2");
+    hDivPred2Ix = asColumnMustFindIx(columns, "hDivPred2");
+    hVarScore2Ix = asColumnMustFindIx(columns, "hVarScore2");
+    hVarPred2Ix = asColumnMustFindIx(columns, "hVarPred2");
+    altAl3Ix = asColumnMustFindIx(columns, "altAl3");
+    hDivScore3Ix = asColumnMustFindIx(columns, "hDivScore3");
+    hDivPred3Ix = asColumnMustFindIx(columns, "hDivPred3");
+    hVarScore3Ix = asColumnMustFindIx(columns, "hVarScore3");
+    hVarPred3Ix = asColumnMustFindIx(columns, "hVarPred3");
     }
 
 struct codingChange *cc = &(gpFx->details.codingChange);
@@ -784,16 +784,16 @@ static int ensTxIdIx=-1, altAl1Ix, score1Ix, pred1Ix,
 if (ensTxIdIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    ensTxIdIx = asColumnFindIx(columns, "ensTxId");
-    altAl1Ix = asColumnFindIx(columns, "altAl1");
-    score1Ix = asColumnFindIx(columns, "score1");
-    pred1Ix = asColumnFindIx(columns, "pred1");
-    altAl2Ix = asColumnFindIx(columns, "altAl2");
-    score2Ix = asColumnFindIx(columns, "score2");
-    pred2Ix = asColumnFindIx(columns, "pred2");
-    altAl3Ix = asColumnFindIx(columns, "altAl3");
-    score3Ix = asColumnFindIx(columns, "score3");
-    pred3Ix = asColumnFindIx(columns, "pred3");
+    ensTxIdIx = asColumnMustFindIx(columns, "ensTxId");
+    altAl1Ix = asColumnMustFindIx(columns, "altAl1");
+    score1Ix = asColumnMustFindIx(columns, "score1");
+    pred1Ix = asColumnMustFindIx(columns, "pred1");
+    altAl2Ix = asColumnMustFindIx(columns, "altAl2");
+    score2Ix = asColumnMustFindIx(columns, "score2");
+    pred2Ix = asColumnMustFindIx(columns, "pred2");
+    altAl3Ix = asColumnMustFindIx(columns, "altAl3");
+    score3Ix = asColumnMustFindIx(columns, "score3");
+    pred3Ix = asColumnMustFindIx(columns, "pred3");
     }
 
 struct annoRow *row;
@@ -845,16 +845,16 @@ static int ensTxIdIx=-1, altAl1Ix, score1Ix, pred1Ix,
 if (ensTxIdIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    ensTxIdIx = asColumnFindIx(columns, "ensTxId");
-    altAl1Ix = asColumnFindIx(columns, "altAl1");
-    score1Ix = asColumnFindIx(columns, "score1");
-    pred1Ix = asColumnFindIx(columns, "pred1");
-    altAl2Ix = asColumnFindIx(columns, "altAl2");
-    score2Ix = asColumnFindIx(columns, "score2");
-    pred2Ix = asColumnFindIx(columns, "pred2");
-    altAl3Ix = asColumnFindIx(columns, "altAl3");
-    score3Ix = asColumnFindIx(columns, "score3");
-    pred3Ix = asColumnFindIx(columns, "pred3");
+    ensTxIdIx = asColumnMustFindIx(columns, "ensTxId");
+    altAl1Ix = asColumnMustFindIx(columns, "altAl1");
+    score1Ix = asColumnMustFindIx(columns, "score1");
+    pred1Ix = asColumnMustFindIx(columns, "pred1");
+    altAl2Ix = asColumnMustFindIx(columns, "altAl2");
+    score2Ix = asColumnMustFindIx(columns, "score2");
+    pred2Ix = asColumnMustFindIx(columns, "pred2");
+    altAl3Ix = asColumnMustFindIx(columns, "altAl3");
+    score3Ix = asColumnMustFindIx(columns, "score3");
+    pred3Ix = asColumnMustFindIx(columns, "pred3");
     }
 
 struct annoRow *row;
@@ -905,13 +905,13 @@ static int ensTxIdIx=-1, altAl1Ix, score1Ix, altAl2Ix, score2Ix, altAl3Ix, score
 if (ensTxIdIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    ensTxIdIx = asColumnFindIx(columns, "ensTxId");
-    altAl1Ix = asColumnFindIx(columns, "altAl1");
-    score1Ix = asColumnFindIx(columns, "score1");
-    altAl2Ix = asColumnFindIx(columns, "altAl2");
-    score2Ix = asColumnFindIx(columns, "score2");
-    altAl3Ix = asColumnFindIx(columns, "altAl3");
-    score3Ix = asColumnFindIx(columns, "score3");
+    ensTxIdIx = asColumnMustFindIx(columns, "ensTxId");
+    altAl1Ix = asColumnMustFindIx(columns, "altAl1");
+    score1Ix = asColumnMustFindIx(columns, "score1");
+    altAl2Ix = asColumnMustFindIx(columns, "altAl2");
+    score2Ix = asColumnMustFindIx(columns, "score2");
+    altAl3Ix = asColumnMustFindIx(columns, "altAl3");
+    score3Ix = asColumnMustFindIx(columns, "score3");
     }
 
 struct annoRow *row;
@@ -949,7 +949,7 @@ static int domainsIx = -1;
 if (domainsIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    domainsIx = asColumnFindIx(columns, "domains");
+    domainsIx = asColumnMustFindIx(columns, "domains");
     }
 
 struct annoRow *row;
@@ -1415,7 +1415,7 @@ else if (asObjectsMatch(config->variantSource->asObj, pgSnpFileAsObj()))
 else if (asObjectsMatch(config->variantSource->asObj, vcfAsObj()))
     {
     self->variantType = afvdtVcf;
-    self->varNameIx = asColumnFindIx(varAsColumns, "id");
+    self->varNameIx = asColumnMustFindIx(varAsColumns, "id");
     }
 else
     errAbort("afVepSetConfig: variant source %s doesn't look like pgSnp or VCF",
@@ -1423,7 +1423,7 @@ else
 if (self->variantType == afvdtPgSnpTable || self->variantType == afvdtPgSnpFile)
     {
     // pgSnp's "name" column actually contains slash-separated alleles
-    self->varAllelesIx = asColumnFindIx(varAsColumns, "name");
+    self->varAllelesIx = asColumnMustFindIx(varAsColumns, "name");
     }
 if (config->gpVarSource == NULL)
     errAbort("afVepSetConfig: config must have a gpVarSource");
@@ -1446,13 +1446,13 @@ if (self->exonCountIx < 0)
 if (self->exonCountIx < 0)
     errAbort("afVepSetConfig: can't find exonCount or blockCount column in gpVarSource %s",
              config->gpVarSource->name);
-self->hgvsGIx = asColumnFindIx(gpvAsColumns, "hgvsG");
-self->hgvsCNIx = asColumnFindIx(gpvAsColumns, "hgvsCN");
-self->hgvsPIx = asColumnFindIx(gpvAsColumns, "hgvsP");
+self->hgvsGIx = asColumnMustFindIx(gpvAsColumns, "hgvsG");
+self->hgvsCNIx = asColumnMustFindIx(gpvAsColumns, "hgvsCN");
+self->hgvsPIx = asColumnMustFindIx(gpvAsColumns, "hgvsP");
 if (config->snpSource != NULL)
     {
     struct asColumn *snpAsColumns = config->snpSource->asObj->columnList;
-    self->snpNameIx = asColumnFindIx(snpAsColumns, "name");
+    self->snpNameIx = asColumnMustFindIx(snpAsColumns, "name");
     }
 else
     self->snpNameIx = -1;
@@ -1544,7 +1544,7 @@ item->tag = cloneString(tag);
 item->description = cloneString(description);
 item->rowIx = -1;
 if (isNotEmpty(column))
-    item->rowIx = asColumnFindIx(extraSource->asObj->columnList, column);
+    item->rowIx = asColumnMustFindIx(extraSource->asObj->columnList, column);
 item->isRegulatory = isReg;
 item->isBoolean = isBoolean;
 slAddTail(&(src->items), item);
