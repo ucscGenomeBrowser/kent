@@ -39,7 +39,7 @@ struct barChartItem
     {
     struct barChartItem *next;  /* Next in singly linked list */
     struct bed *bed;            /* Item coords, name, exp count and values */
-    int maxScore;               /* Maximum expScore in bed */
+    double maxScore;            /* Maximum expScore in bed */
     int height;                 /* Item height in pixels */
     };
 
@@ -289,6 +289,7 @@ extras->doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHA
                                                 BAR_CHART_LOG_TRANSFORM_DEFAULT);
 extras->doAutoScale = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_AUTOSCALE,
                                                 BAR_CHART_AUTOSCALE_DEFAULT);
+extras->maxMedian = barChartUiMaxMedianScore(tdb);
 extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_NO_WHITEOUT,
                                                         BAR_CHART_NO_WHITEOUT_DEFAULT);
 extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
@@ -310,6 +311,7 @@ extras->colors = getCategoryColors(tg);
 filterCategories(tg);
 
 /* create list of barChart items */
+double maxScoreInWindow = 0;
 while (bed != NULL)
     {
     AllocVar(itemInfo);
@@ -318,20 +320,16 @@ while (bed != NULL)
     bed = bed->next;
     itemInfo->bed->next = NULL;
     itemInfo->maxScore = barChartMaxExpScore(tg, itemInfo);
-    // for autoscale, determine maximum median score in window
-    if (itemInfo->maxScore > extras->maxMedian)
-        extras->maxMedian = itemInfo->maxScore;
+    maxScoreInWindow = max(maxScoreInWindow, itemInfo->maxScore);
     }
+if (extras->doAutoScale)
+    extras->maxMedian = maxScoreInWindow;
+else
+    extras->maxMedian = max(maxScoreInWindow, extras->maxMedian);
+
 /* determine graph heights */
 for (itemInfo = infoList; itemInfo != NULL; itemInfo = itemInfo->next)
-    {
     itemInfo->height = barChartItemHeight(tg, itemInfo);
-    }
-double  maxScore = barChartUiMaxMedianScore(tdb);
-if (!extras->doAutoScale && maxScore > extras->maxMedian)
-    // maximum median score in entire dataset.  
-    // If not set, using default, but might be too small for this dataset.
-    extras->maxMedian = maxScore;
 
 /* replace item list with wrapped beds */
 slReverse(&infoList);
