@@ -142,7 +142,10 @@ display according to several attributes:
 	    (dbSNP term: <TT>splice-5</TT>)</LI>
       </UL>
       In the Coloring Options section of the track controls page,
-      function terms are grouped into several categories, shown here with default colors:
+      function terms are grouped into several categories, shown here with default colors.
+      If a SNP has more than one of these attributes, the stronger color will override 
+      the weaker color. The order of colors, from strongest to weakest, is red, green, 
+      blue, gray, and black.
       <UL>
 	<LI><span style="color: #000000; font-weight: bold;">Locus:</span>
 	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001632"
@@ -179,7 +182,7 @@ display according to several attributes:
       </UL>
       <span style="color: #0000ff; font-weight: bold;">Non-coding (ncRNA):</span>
       (<A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001619"
-      TARGET=_BLANK>nc_transcript_variant</A>) are always colored blue.
+      TARGET=_BLANK>nc_transcript_variant</A>) are colored blue.
     </LI>
     <LI>
       <A name="MolType"></A>
