@@ -156,7 +156,7 @@ puts("&nbsp;&nbsp;");
 printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_MAX_VIEW_LIMIT);
 int viewMax = cartCgiUsualInt(cart, cartVar, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
-cgiMakeIntVarWithExtra(cartVar, viewMax, 4, !isViewLimits ? "disabled" : "");
+cgiMakeIntVarWithExtra(cartVar, viewMax, 6, !isViewLimits ? "disabled" : "");
 char *unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit, 
                                 round(barChartUiMaxMedianScore(tdb)));
@@ -168,20 +168,29 @@ void barChartUiFetchMinMaxPixels(struct cart *cart, struct trackDb *tdb,
 {
 assert(retMin && retMax && retDefault && retCurrent);
 cartTdbFetchMinMaxPixels(cart, tdb, 
-                            BAR_CHART_MAX_HEIGHT_MIN, BAR_CHART_MAX_HEIGHT_MAX, BAR_CHART_MAX_HEIGHT_DEFAULT,
+                            BAR_CHART_MAX_HEIGHT_MIN, BAR_CHART_MAX_HEIGHT_MAX, 
+                            BAR_CHART_MAX_HEIGHT_DEFAULT,
                             retMin, retMax, retDefault, retCurrent);
 }
 
 static void barChartUiMaxHeight(struct cart *cart, struct trackDb *tdb)
 /* Input box to change maximum item height */
 {
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, BAR_CHART_LIMIT_HEIGHT);
+boolean limitChartHeight = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LIMIT_HEIGHT_DEFAULT);
+cgiMakeCheckBoxWithId(cartVar, limitChartHeight, cartVar);
+jsOnEventByIdF("change", cartVar, "barChartHeightLimitChanged(event);");
+
 int min, max, deflt, current;
 barChartUiFetchMinMaxPixels(cart, tdb, &min, &max, &deflt, &current);
-puts("<b>Maximum height:</b>\n");
-char cartVar[1024];
+puts("<b>Chart height maximum:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", tdb->track, HEIGHTPER);
-cgiMakeIntVarWithLimits(cartVar, current, "Maximum height", 0, min, max);
-printf("pixels&nbsp;(range: %d to %d, default: %d)", min, max, deflt);
+char buf[512];
+safef(buf, sizeof buf, "%sChartLimitsMaxLabel %s", tdb->track, !limitChartHeight ? "disabled" : "");
+cgiMakeIntVarWithExtra(cartVar, current, 3, !limitChartHeight ? "disabled":"");
+printf("&nbsp;<span class='%s'>pixels&nbsp;(range: %d to %d, default: %d)<span>", 
+        buf, min, max, deflt);
 }
 
 struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)

@@ -22,7 +22,10 @@ struct barChartTrack
     {
     boolean noWhiteout;         /* Suppress whiteout of graph background (allow highlight, blue lines) */
     double maxMedian;           /* Maximum median across all categories */
-    int maxHeight;              /* Maximum height in pixels for track */
+    int limitChartHeight;       /* Set maximum height of a chart in the window to maxHeight. Else
+                                        maxHeight is maximum height for highest chart in dataset,
+                                        based on maxLimit trackDb setting */
+    int maxHeight;              /* Maximum height in pixels for a chart */
     boolean doLogTransform;     /* Log10(x+1) */
     boolean doAutoScale;        /* Scale to maximum in window, alternative to log */
     char *unit;                /* Units for category values (e.g. RPKM) */
@@ -157,14 +160,18 @@ static int barChartMaxHeight(int maxHeight)
 {
 // scale based on subjective aesthetic (previous hardcoded were 175/100)
 #define WIN_MED_GRAPH_SCALE     .57
+#define WIN_SMALL_GRAPH_SCALE     .3
 
 long winSize = virtWinBaseCount;
+int height;
 if (winSize < WIN_MAX_GRAPH)
-    return maxHeight;
+    height = maxHeight;
 else if (winSize < WIN_MED_GRAPH)
-    return maxHeight * WIN_MED_GRAPH_SCALE;
+    height = maxHeight * WIN_MED_GRAPH_SCALE;
 else
-    return tl.fontHeight * 4;
+    //height = tl.fontHeight * 4;
+    height = maxHeight * WIN_SMALL_GRAPH_SCALE;
+return height;
 }
 
 static int barChartItemHeight(struct track *tg, void *item);
@@ -293,10 +300,17 @@ extras->maxMedian = barChartUiMaxMedianScore(tdb);
 extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tdb, FALSE, BAR_CHART_NO_WHITEOUT,
                                                         BAR_CHART_NO_WHITEOUT_DEFAULT);
 extras->unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
-
-int min, max, deflt, current;
-barChartUiFetchMinMaxPixels(cart, tdb, &min, &max, &deflt, &current);
-extras->maxHeight = barChartMaxHeight(current);
+extras->limitChartHeight = cartUsualBooleanClosestToHome(cart, tdb, FALSE, 
+                                                        BAR_CHART_LIMIT_HEIGHT,
+                                                        BAR_CHART_LIMIT_HEIGHT_DEFAULT);
+int maxHeight = BAR_CHART_MAX_HEIGHT;
+if (extras->limitChartHeight)
+    {
+    int min, max, deflt, current;
+    barChartUiFetchMinMaxPixels(cart, tdb, &min, &max, &deflt, &current);
+    maxHeight = current;
+    }
+extras->maxHeight = barChartMaxHeight(maxHeight);
 
 /* Get bed (names and all-sample category median scores) in range */
 loadSimpleBedWithLoader(tg, (bedItemLoader)barChartSimpleBedLoad);
@@ -567,7 +581,7 @@ for (i=0, categ=extras->categories; i<expCount && categ != NULL; i++, categ=cate
     }
 }
 
-static int barChartItemHeightOptionalMax(struct track *tg, void *item, boolean isMax)
+static int barChartItemHeight(struct track *tg, void *item)
 {
 // It seems that this can be called early or late
 enum trackVisibility vis = tg->visibility;
@@ -586,12 +600,6 @@ if (vis == tvSquish || vis == tvDense)
     return height;
     }
 struct barChartTrack *extras = (struct barChartTrack *)tg->extraUiData;
-if (isMax)
-    {
-    int extra = 0;
-    height = extras->maxHeight + barChartMargin() + barChartModelHeight(extras) + extra;
-    return height;
-    }
 if (item == NULL)
     return 0;
 struct barChartItem *itemInfo = (struct barChartItem *)item;
@@ -606,12 +614,6 @@ int bottomGraphHeight = 0;
 height = topGraphHeight + bottomGraphHeight + barChartMargin() + 
     barChartModelHeight(extras);
 return height;
-}
-
-static int barChartItemHeight(struct track *tg, void *item)
-{
-    int height = barChartItemHeightOptionalMax(tg, item, FALSE);
-    return height;
 }
 
 static char *barChartMapText(struct track *tg, struct barChartCategory *categ, double expScore)

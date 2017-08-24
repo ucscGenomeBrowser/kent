@@ -1371,6 +1371,22 @@ function barChartTransformChanged(event)
     }
 }
 
+function barChartHeightLimitChanged(event)
+{// Enable/disable chart height maximum entry box and label
+    var target = event.target;
+    var targetInfo = target.id.split('.');
+    var track = targetInfo[0];        
+    var $maxInput = $("input[name='" + track + ".heightPer']");
+    var $maxLabel = $('.' + track + 'ChartLimitsMaxLabel');
+    if ($(target).attr('checked')) {
+        $maxInput.attr('disabled', false);
+        $maxLabel.removeClass('disabled');
+    } else {
+        $maxInput.attr('disabled', true);
+        $maxLabel.addClass('disabled');
+    }
+}
+
 function gtexSamplesChanged(name)
 { // Disable and comparison controls if all samples selected
 

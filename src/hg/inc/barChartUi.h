@@ -27,10 +27,15 @@
 #define BAR_CHART_MAX_VIEW_LIMIT             "maxViewLimit"
 #define BAR_CHART_MAX_VIEW_LIMIT_DEFAULT     50
 
-/* These cann be set via maxHeightPixels */
+/* These can be set via maxHeightPixels. Applies within window */
 #define BAR_CHART_MAX_HEIGHT_MIN             50
 #define BAR_CHART_MAX_HEIGHT_DEFAULT         175
 #define BAR_CHART_MAX_HEIGHT_MAX             250
+#define BAR_CHART_LIMIT_HEIGHT               "limitChartHeight"
+#define BAR_CHART_LIMIT_HEIGHT_DEFAULT       FALSE
+
+/* Max chart height when no limit set for window */
+#define BAR_CHART_MAX_HEIGHT                 175
 
 /* Category (bar) info */
 #define BAR_CHART_MAX_CATEGORIES        100
