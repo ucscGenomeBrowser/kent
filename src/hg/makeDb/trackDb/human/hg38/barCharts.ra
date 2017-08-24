@@ -89,6 +89,7 @@ html tcgaExpr
 	type bigBarChart
 	visibility full
 	maxLimit 8000
+	maxItems 300
 	barChartLabel Cancer types
 	barChartUnit TPM
 	# Get the barChartLabels from the last line in the bed file.
@@ -125,6 +126,7 @@ html tcgaExpr
 	release alpha
 	type bigBarChart
 	maxLimit 8000
+	maxItems 200
 	barChartLabel Cancer types
 	barChartUnit GPM
 	# Get the barChartLabels from the last line in the bed file.
