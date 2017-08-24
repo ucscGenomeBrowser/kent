@@ -75,7 +75,7 @@ html quakeExpr
 	html quakeExpr
 
 track tcgaExpr
-release alpha
+release alpha,beta
 superTrack on 
 type bigBarChart
 group phenDis
@@ -85,7 +85,7 @@ html tcgaExpr
 
 	track tcgaTranscExpr
 	parent tcgaExpr
-	release alpha
+	release alpha,beta
 	type bigBarChart
 	visibility full
 	maxLimit 8000
@@ -123,7 +123,7 @@ html tcgaExpr
 	track tcgaGeneExpr
 	parent tcgaExpr
 	visibility full
-	release alpha
+	release alpha,beta
 	type bigBarChart
 	maxLimit 8000
 	maxItems 200
