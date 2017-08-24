@@ -28,6 +28,7 @@ errAbort(
   "   name2 column\n"
   "  -attrsOut=file - output attributes of mRNA record to file.  These are per-genePred row,\n"
   "   not per-GFF3 record. Thery are derived from GFF3 attributes, not the attributes themselves.\n"
+  "  -processAllGeneChildren - output genePred for all children of a gene regardless of feature\n"
   "  -unprocessedRootsOut=file - output GFF3 root records that were not used.  This will not be a\n"
   "   valid GFF3 file.  It's expected that many non-root records will not be used and they are not\n"
   "   reported.\n"
@@ -79,6 +80,7 @@ static struct optionSpec options[] = {
     {"allowMinimalGenes", OPTION_BOOLEAN},
     {"attrsOut", OPTION_STRING},
     {"bad", OPTION_STRING},
+    {"processAllGeneChildren", OPTION_BOOLEAN},
     {"unprocessedRootsOut", OPTION_STRING},
     {NULL, 0},
 };
@@ -89,6 +91,7 @@ static boolean warnAndContinue = FALSE;
 static boolean honorStartStopCodons = FALSE;
 static boolean defaultCdsStatusToUnknown = FALSE;
 static boolean allowMinimalGenes = FALSE;
+static boolean processAllGeneChildren = FALSE;
 static int maxParseErrors = 50;  // maximum number of errors during parse
 static int maxConvertErrors = 50;  // maximum number of errors during conversion
 static int convertErrCnt = 0;  // number of convert errors
@@ -526,7 +529,9 @@ static boolean shouldProcessAsTranscript(struct gff3Ann *node)
 /* Decide if we should process this feature as a transcript and turn it into a
  * genePred. */
 {
-return sameString(node->type, gff3FeatMRna) 
+return (processAllGeneChildren
+        && node->parents && sameString(node->parents->ann->type, gff3FeatGene))
+    || sameString(node->type, gff3FeatMRna) 
     || sameString(node->type, gff3FeatNCRna)
     || sameString(node->type, gff3FeatCDS)
     || sameString(node->type, gff3FeatRRna)
@@ -684,6 +689,7 @@ defaultCdsStatusToUnknown = optionExists("defaultCdsStatusToUnknown");
 if (honorStartStopCodons && defaultCdsStatusToUnknown)
     errAbort("can't specify both -honorStartStopCodons and -defaultCdsStatusToUnknown");
 allowMinimalGenes = optionExists("allowMinimalGenes");
+processAllGeneChildren = optionExists("processAllGeneChildren");
 char *bad = optionVal("bad", NULL);
 if (bad != NULL)
     outBadFp = mustOpen(bad, "w");
