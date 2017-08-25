@@ -190,6 +190,7 @@ longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors
 	release alpha
 	type bigBarChart
 	maxLimit 8000
+	maxItems 300
 	barChartLabel Tissue types
 	barChartUnit TPM
 	# Get the barChartLabels from the last line in the bed file.  
