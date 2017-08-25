@@ -9,7 +9,7 @@ track refSeqFuncElems
 release alpha
 shortLabel RefSeq Func Elems
 longLabel NCBI RefSeq Functional Elements 
-type bigBed 6 +
+type bigBed 8 +
 bigDataUrl /gbdb/hg38/ncbiRefSeq/refSeqFuncElems.bb
 labelFields soTerm
 group regulation
@@ -22,7 +22,7 @@ track cosmicRegionsUpdate
 release alpha
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
-type bigBed 4 +
+type bigBed 8 +
 bigDataUrl /gbdb/hg38/cosmic/cosMutHg38V82.bb
 labelFields cosmLabel
 group phenDis
@@ -31,6 +31,7 @@ url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
 urlLabel COSMIC ID:
 searchIndex name,cosmLabel
 tableBrowser off
+mouseOverField _mouseOver
 
 searchTable cosmicRegionsUpdate
 searchPriority 2.07207

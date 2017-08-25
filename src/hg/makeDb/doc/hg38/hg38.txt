@@ -6782,7 +6782,7 @@ sort -k1,1 -k2,2n bed > sorted.bed
 #wc sorted.bed 
 #6188  159382 1763350 sorted.bed
 
-bedToBigBed -type=bed6+8 -as=refSeqFuncElems.as sorted.bed /hive/data/genomes/hg38/chrom.sizes refSeqFuncElems.bb -tab 
+bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed /hive/data/genomes/hg38/chrom.sizes refSeqFuncElems.bb -tab 
 
 cd /gbdb/hg38/ncbiRefSeq
 ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElems.bb . 
