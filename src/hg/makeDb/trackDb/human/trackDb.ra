@@ -882,6 +882,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
+priority 6
+
 
 track snp141Flagged
 shortLabel Flagged SNPs(141)
@@ -900,6 +902,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
+priority 18
+
 
 track snp141Mult
 shortLabel Mult. SNPs(141)
@@ -920,6 +924,7 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
+priority 24
 
 track snp141
 shortLabel All SNPs(141)
@@ -937,6 +942,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
+priority 12
+
 
 track snp142Common
 shortLabel Common SNPs(142)
@@ -957,6 +964,8 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Common_bugFix
+priority 5
+
 
 track snp142Flagged
 shortLabel Flagged SNPs(142)
@@ -976,6 +985,7 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Flagged_bugFix
+priority 17
 
 track snp142Mult
 shortLabel Mult. SNPs(142)
@@ -997,6 +1007,8 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Mult_bugFix
+priority 23
+
 
 track snp142
 shortLabel All SNPs(142)
@@ -1015,6 +1027,8 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142_bugFix
+priority 11
+
 
 track snp144Common
 shortLabel Common SNPs(144)
@@ -1035,6 +1049,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
+priority 4
+
 
 track snp144Flagged
 shortLabel Flagged SNPs(144)
@@ -1054,6 +1070,7 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
+priority 16
 
 track snp144Mult
 shortLabel Mult. SNPs(144)
@@ -1075,6 +1092,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
+priority 22
+
 
 track snp144
 shortLabel All SNPs(144)
@@ -1093,6 +1112,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
+priority 10
+
 
 track snp146Common
 shortLabel Common SNPs(146)
@@ -1113,6 +1134,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
+priority 3
+
 
 track snp146Flagged
 shortLabel Flagged SNPs(146)
@@ -1132,6 +1155,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
+priority 15
+
 
 track snp146Mult
 shortLabel Mult. SNPs(146)
@@ -1153,6 +1178,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
+priority 21
+
 
 track snp146
 shortLabel All SNPs(146)
@@ -1171,12 +1198,14 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
+priority 9
+
 
 track snp147Common
 shortLabel Common SNPs(147)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 147) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp147Seq
@@ -1191,7 +1220,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
-priority 1
+priority 2
+
 
 track snp147Flagged
 shortLabel Flagged SNPs(147)
@@ -1211,6 +1241,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
+priority 14
+
 
 track snp147Mult
 shortLabel Mult. SNPs(147)
@@ -1232,6 +1264,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
+priority 20
+
 
 track snp147
 shortLabel All SNPs(147)
@@ -1250,12 +1284,14 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
+priority 8
+
 
 track snp149Common
 shortLabel Common SNPs(149)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 149) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp149Seq
@@ -1270,7 +1306,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp149CodingDbSnp,
-priority 1
 
 track snp149Flagged
 shortLabel Flagged SNPs(149)
@@ -1369,6 +1404,8 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
+priority 13
+
 
 track snp150Mult
 shortLabel Mult. SNPs(150)
@@ -1390,6 +1427,8 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
+priority 19
+
 
 track snp150
 shortLabel All SNPs(150)
@@ -1408,6 +1447,8 @@ orangDb ponAbe2
 macaqueDb rheMac8
 hapmapPhase III
 codingAnnotations snp150CodingDbSnp,
+priority 7
+
 
 track hgdpGeo
 shortLabel HGDP Allele Freq

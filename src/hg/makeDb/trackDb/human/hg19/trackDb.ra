@@ -891,47 +891,36 @@ track genomicSuperDups override
 group rep
 
 track snp141Flagged override
-priority 11.5
 snpSeqFile /gbdb/hg19/snp/snp141.fa
 
 track snp141Common override
-priority 7.4
 snpSeqFile /gbdb/hg19/snp/snp141.fa
 
 track snp141 override
-priority 6.5
 snpSeqFile /gbdb/hg19/snp/snp141.fa
 
 track snp142Mult override
-priority 17.4
 snpSeqFile /gbdb/hg19/snp/snp142.fa
 
 track snp142Flagged override
-priority 11.4
 snpSeqFile /gbdb/hg19/snp/snp142.fa
 
 track snp142Common override
-priority 7.3
 snpSeqFile /gbdb/hg19/snp/snp142.fa
 
 track snp142 override
-priority 6.4
 snpSeqFile /gbdb/hg19/snp/snp142.fa
 
 track snp144Mult override
-priority 17.3
 snpSeqFile /gbdb/hg19/snp/snp144.fa
 
 track snp144Flagged override
-priority 11.3
 snpSeqFile /gbdb/hg19/snp/snp144.fa
 
 track snp144Common override
-priority 7.2
 snpSeqFile /gbdb/hg19/snp/snp144.fa
 
 track snp144 override
-priority 6.3
 snpSeqFile /gbdb/hg19/snp/snp144.fa
 
 track snp137Common override
@@ -946,7 +935,6 @@ track snp138Flagged
 shortLabel Flagged SNPs(138)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Flagged by dbSNP as Clinically Assoc
 group varRep
-priority 11.6
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -965,7 +953,6 @@ codingAnnotations snp138CodingDbSnp,
 #codingAnnoLabel_snp138CodingDbSnp dbSNP
 
 track snp138Mult override
-priority 17.5
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
 chimpDb panTro4
@@ -974,7 +961,6 @@ macaqueDb rheMac3
 hapmapPhase III
 
 track snp138 override
-priority 6.6
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
 chimpDb panTro4
@@ -983,7 +969,6 @@ macaqueDb rheMac3
 hapmapPhase III
 
 track snp138Common override
-priority 7.5
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
 chimpDb panTro4
@@ -2605,39 +2590,30 @@ priority 6
 
 track snp147Flagged override
 group varRep
-priority 11.1
 
 track snp147Mult override
 group varRep
-priority 17.1
 
 track snp147Common override
 group varRep
-priority 1
 
 track snp147 override
 group varRep
-priority 6.1
 
 track snp146Mult override
 group varRep
-priority 17.2
 
 track snp146Flagged override
 group varRep
-priority 11.2
 
 track snp146 override
 group varRep
-priority 6.2
 
 track snp146Common override
 group varRep
-priority 7.1
 
 track hgdpGeo override
 group varRep
-priority 16
 
 # override to use hg19 specific html page
 track crispr override
