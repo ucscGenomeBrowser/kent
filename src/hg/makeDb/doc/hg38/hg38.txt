@@ -6806,7 +6806,7 @@ cosmicToBed cosMut.tsv cosMut.bed
 
 # Sort and convert to big bed using the .as file.  
 sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
-bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/chrom.sizes cosMutHg38V82.bb -tab -extraIndex=name,cosmLabel
+bedToBigBed -type=bed8+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/chrom.sizes cosMutHg38V82.bb -tab -extraIndex=name,cosmLabel
 
 
 # Link it up so the outside world can see it. 

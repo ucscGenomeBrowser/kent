@@ -6,7 +6,7 @@ track cosmicRegionsUpdate
 release alpha
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
-type bigBed 4 +
+type bigBed 8 +
 bigDataUrl /gbdb/hg19/cosmic/cosMutHg19V82.bb
 labelFields cosmLabel
 group phenDis
@@ -15,6 +15,7 @@ url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
 urlLabel COSMIC ID:
 searchIndex name,cosmLabel
 tableBrowser off
+mouseOverField _mouseOver
 
 searchTable cosmicRegionsUpdate
 searchPriority 2.07207
@@ -24,7 +25,7 @@ searchDescription COSMIC Regions
 track cosmicRegions
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V81
-type bigBed 4 +
+type bigBed 8 +
 bigDataUrl /gbdb/hg19/cosmic/cosMutHg19V81.bb
 labelFields cosmLabel
 group phenDis
