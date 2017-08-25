@@ -5558,10 +5558,13 @@ if (checkExistence && !trackHubDatabase(db) && hTableExists(db, "chromAlias"))
     struct sqlConnection *conn = hAllocConn(db);
     accHash = sqlQuickHash(conn,
                            NOSQLINJ "select chrom, alias from chromAlias where source = 'refseq'");
+    if (hashNumEntries(accHash) == 0)
+        // No RefSeq accessions -- make accHash NULL
+        hashFree(&accHash);
     hFreeConn(&conn);
     checkExistence = FALSE;
     }
-if (accHash && hashNumEntries(accHash) > 0)
+if (accHash)
     seqAcc = cloneString(hashFindVal(accHash, chrom));
 if (seqAcc == NULL)
     seqAcc = cloneString(chrom);
