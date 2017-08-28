@@ -6,4 +6,4 @@ include ${kentSrc}/inc/common.mk
 all:
 	chmod +x cdwBackup;
 	rm -f ${SCRIPTS}/cdwBackup;
-	@cp -p cdwSummary ${SCRIPTS};
+	@cp -p cdwBackup ${SCRIPTS};
