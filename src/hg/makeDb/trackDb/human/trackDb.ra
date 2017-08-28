@@ -1724,6 +1724,7 @@ urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
 dataVersion 2016-05-15
+priority 25
 
     track dgvMerged
     parent dgvPlus
