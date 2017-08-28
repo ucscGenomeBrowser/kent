@@ -151,7 +151,7 @@ if (p)
     {
     *p++ = 'X';
     *p = '\0';
-    aa->size = strlen(aa->dna);
+    aa->size = p - aa->dna;
     }
 }
 

@@ -1725,6 +1725,7 @@ url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
 dataVersion 2016-05-15
 
+
     track dgvMerged
     parent dgvPlus
     shortLabel DGV Struct Var
