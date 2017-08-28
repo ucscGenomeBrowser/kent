@@ -75,7 +75,9 @@ return (txAli->tStarts[ix+1] == txAli->tStarts[ix] + blockSize &&
 }
 
 void vpPosGenoToTx(uint gOffset, struct psl *txAli, struct vpTxPosition *txPos, boolean isTxEnd)
-/* Use txAli to project gOffset onto transcript-relative coords in txPos. */
+/* Use txAli to project gOffset onto transcript-relative coords in txPos.
+ * Set isTxEnd to TRUE if we are projecting to the end coordinate in transcript space:
+ * higher genomic coord if transcript on '+' strand, lower genomic coord if tx on '-' strand. */
 {
 ZeroVar(txPos);
 txPos->aliBlkIx = -1;
