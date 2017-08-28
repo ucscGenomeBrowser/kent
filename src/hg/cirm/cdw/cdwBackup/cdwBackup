@@ -1,0 +1,10 @@
+#!/bin/tcsh -ef
+if ($1 == "") then
+	echo "Backup cdw database as tab-separated files in a directory"
+	echo "usage cdwBackup directory"
+	exit -1
+endif 
+set echo
+mkdir -p $1
+chmod a+w $1
+hgsqldump --tab=$1 cdw
