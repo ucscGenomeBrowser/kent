@@ -25,7 +25,7 @@ searchDescription COSMIC Regions
 track cosmicRegions
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V81
-type bigBed 8 +
+type bigBed 4 +
 bigDataUrl /gbdb/hg19/cosmic/cosMutHg19V81.bb
 labelFields cosmLabel
 group phenDis
