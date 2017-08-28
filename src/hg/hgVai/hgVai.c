@@ -1471,7 +1471,8 @@ aggvFuncFilter.noVariation = cartUsualBoolean(cart, "hgva_include_noVariation", 
 annoGratorGpVarSetFuncFilter(gpVarGrator, &aggvFuncFilter);
 }
 
-static void setHgvsOutOptions(struct annoGrator *gpVarGrator, char *geneTrack)
+static void setHgvsOutOptions(struct annoGrator *gpVarGrator, char *geneTrack,
+                              struct annoFormatter *vepOut)
 /* Use cart variables to configure gpVarGrator's HGVS output. */
 {
 uint hgvsOutOptions = 0;
@@ -1489,6 +1490,7 @@ if (canDoHgvsOut(geneTrack))
         hgvsOutOptions |= HGVS_OUT_BREAK_DELINS;
     }
 annoGratorGpVarSetHgvsOutOptions(gpVarGrator, hgvsOutOptions);
+annoFormatVepSetHgvsOutOptions(vepOut, hgvsOutOptions);
 }
 
 struct annoGrator *gratorForSnpBed4(struct hash *gratorsByName, char *suffix,
@@ -2831,7 +2833,6 @@ struct annoGrator *gpVarGrator = hAnnoGratorFromTrackDb(assembly, geneTdb->table
                                                         ANNO_NO_LIMIT, primary->asObj,
                                                         geneOverlapRule, gpConfig);
 setGpVarFuncFilter(gpVarGrator);
-setHgvsOutOptions(gpVarGrator, geneTdb->track);
 
 // Some grators may be used as both filters and output values. To avoid making
 // multiple grators for the same source, hash them by trackName:
@@ -2864,6 +2865,7 @@ addTxStatusExtras(vepOut, geneTrack, gpVarGrator, txStatusExtras);
 boolean haveRegulatory = FALSE;
 addOutputTracks(&gratorList, gratorsByName, vepOut, assembly, chrom, doHtml, &haveRegulatory);
 adjustGpVarOverlapRule(gpVarGrator, haveRegulatory);
+setHgvsOutOptions(gpVarGrator, geneTdb->track, vepOut);
 
 addFilterTracks(&gratorList, gratorsByName, assembly, chrom);
 
