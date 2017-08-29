@@ -378,6 +378,14 @@ var genomePos = {
         var mult = width / imgWidth;   // mult is bp/pixel multiplier
         var startDelta;   // startDelta is how many bp's to the right/left
         var x1;
+
+        // The magic number three appear at another place in the code 
+        // as LEFTADD. It was originally annotated as "borders or cgi item calc
+        // ?" by Larry. It has to be used when going any time when converting 
+        // between pixels and coordinates.
+        selStart -= 3;
+        selEnd -= 3;
+
         if (hgTracks.revCmplDisp) {
             x1 = Math.min(imgWidth, selStart);
             startDelta = Math.floor(mult * (imgWidth - x1));
