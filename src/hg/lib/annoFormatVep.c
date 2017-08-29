@@ -13,6 +13,8 @@
 #include "dystring.h"
 #include "genePred.h"
 #include "gpFx.h"
+#include "hdb.h"
+#include "hgHgvs.h"
 #include "htmshell.h"
 #include "pgSnp.h"
 #include "portable.h"
@@ -93,6 +95,9 @@ struct annoFormatVep
     boolean needHeader;			// TRUE if we should print out the header
     enum afVariantDataType variantType; // Are variants VCF or a flavor of pgSnp?
     boolean doHtml;			// TRUE if we should include html tags & make a <table>.
+    struct seqWindow *gSeqWin;          // genomic sequence fetcher for HGVS term generation
+    boolean hgvsMakeG;                  // Generate genomic (g.) HGVS terms only if this is set
+    boolean hgvsBreakDelIns;            // Include deleted sequence (not only ins) e.g. delGGinsAT
     };
 
 
@@ -1336,11 +1341,11 @@ else if (self->variantType == afvdtPgSnpFile)
 return firstAltAllele(variant->alleles);
 }
 
-static void afVepPrintPredictionsReg(struct annoFormatVep *self, struct annoRow *varRow)
+static void afVepPrintPredictionsReg(struct annoFormatVep *self, char *alt)
 /* Print VEP allele, placeholder gene and item names, 'RegulatoryFeature',
  * 'regulatory_region_variant', and placeholder coding effect columns. */
 {
-afVepPuts(afVepGetFirstAltAllele(self, varRow), self);
+afVepPuts(alt, self);
 afVepNextColumn(self->f, self->doHtml);
 afVepPrintPlaceholders(self->f, 2, self->doHtml);
 fputs("RegulatoryFeature", self->f);
@@ -1349,6 +1354,21 @@ fputs(soTermToString(regulatory_region_variant), self->f);
 afVepNextColumn(self->f, self->doHtml);
 // Coding effect columns are N/A:
 afVepPrintPlaceholders(self->f, 5, self->doHtml);
+}
+
+static void afVepPrintExtrasHgvsGOnly(struct annoFormatVep *self, struct annoRow *varRow, char *alt,
+                                      boolean *pGotExtra)
+/* Make our own HGVS g. term (when we aren't taking HGVS terms from annoGratorGpVar). */
+{
+if (self->hgvsMakeG)
+    {
+    struct bed3 *variantBed = (struct bed3 *)varRow;
+    char *chromAcc = hRefSeqAccForChrom(self->assembly->name, varRow->chrom);
+    char *hgvsG = hgvsGFromVariant(self->gSeqWin, variantBed, alt, chromAcc, self->hgvsBreakDelIns);
+    afVepNewExtra(self, pGotExtra);
+    fprintf(self->f, "HGVSG=%s", hgvsG);
+    freeMem(hgvsG);
+    }
 }
 
 static void afVepPrintRegulatory(struct annoFormatVep *self, struct annoStreamRows *varData,
@@ -1362,9 +1382,11 @@ if (afVepIsRegulatory(self, gratorData, gratorCount))
     struct annoRow *varRow = varData->rowList;
     afVepStartRow(self->f, self->doHtml);
     afVepPrintNameAndLoc(self, varRow);
-    afVepPrintPredictionsReg(self, varRow);
+    char *alt = afVepGetFirstAltAllele(self, varRow);
+    afVepPrintPredictionsReg(self, alt);
     afVepPrintExistingVar(self, varRow, gratorData, gratorCount);
     boolean gotExtra = FALSE;
+    afVepPrintExtrasHgvsGOnly(self, varRow, alt, &gotExtra);
     afVepPrintExtrasOther(self, varRow, NULL, NULL, gratorData, gratorCount, TRUE, &gotExtra);
     afVepEndRow(self->f, self->doHtml);
     }
@@ -1398,6 +1420,7 @@ freeMem(self->fileName);
 carefulClose(&(self->f));
 lmCleanup(&(self->lm));
 dyStringFree(&(self->dyScratch));
+chromSeqWindowFree(&self->gSeqWin);
 annoFormatterFree(pFSelf);
 }
 
@@ -1567,4 +1590,21 @@ void annoFormatVepAddRegulatory(struct annoFormatter *fSelf, struct annoStreamer
  * The VEP header will include tag's description. */
 {
 afvAddExtraItemMaybeReg(fSelf, regSource, tag, description, column, FALSE, TRUE);
+struct annoFormatVep *self = (struct annoFormatVep *)fSelf;
+if (self->gSeqWin == NULL)
+    {
+    char *db = regSource->assembly->name;
+    self->gSeqWin = chromSeqWindowNew(db, NULL, 0, 0);
+    }
+}
+
+void annoFormatVepSetHgvsOutOptions(struct annoFormatter *fSelf, uint hgvsOutOptions)
+/* Import the HGVS output options described in hgHgvs.h */
+{
+struct annoFormatVep *self = (struct annoFormatVep *)fSelf;
+// We only do g. terms, for regulatory region variants, so no need for transcript/protein opts.
+if (hgvsOutOptions & HGVS_OUT_G)
+    self->hgvsMakeG = TRUE;
+if (hgvsOutOptions & HGVS_OUT_BREAK_DELINS)
+    self->hgvsBreakDelIns = TRUE;
 }

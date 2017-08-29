@@ -75,7 +75,7 @@ html quakeExpr
 	html quakeExpr
 
 track tcgaExpr
-release alpha
+release alpha,beta
 superTrack on 
 type bigBarChart
 group phenDis
@@ -85,10 +85,11 @@ html tcgaExpr
 
 	track tcgaTranscExpr
 	parent tcgaExpr
-	release alpha
+	release alpha,beta
 	type bigBarChart
 	visibility full
 	maxLimit 8000
+	maxItems 300
 	barChartLabel Cancer types
 	barChartUnit TPM
 	# Get the barChartLabels from the last line in the bed file.
@@ -122,9 +123,10 @@ html tcgaExpr
 	track tcgaGeneExpr
 	parent tcgaExpr
 	visibility full
-	release alpha
+	release alpha,beta
 	type bigBarChart
 	maxLimit 8000
+	maxItems 200
 	barChartLabel Cancer types
 	barChartUnit GPM
 	# Get the barChartLabels from the last line in the bed file.
@@ -188,6 +190,7 @@ longLabel Expression of 53 tissues from GTEx RNA-seq of 8555 samples (570 donors
 	release alpha
 	type bigBarChart
 	maxLimit 8000
+	maxItems 300
 	barChartLabel Tissue types
 	barChartUnit TPM
 	# Get the barChartLabels from the last line in the bed file.  

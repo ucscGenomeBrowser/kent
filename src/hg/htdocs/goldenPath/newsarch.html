@@ -44,6 +44,46 @@
 
 <!-- ============= 2017 archived news ============= -->
 <a name="2017"></a>
+<a name="082517"></a>
+<h2>Aug. 23, 2017 &nbsp;&nbsp; New dbSNP build 150 tracks now available for hg19 and hg38</h2>
+<p>
+We are pleased to announce the release of our &quot;SNP&quot; tracks derived from
+<a href="http://www.ncbi.nlm.nih.gov/SNP/" target="_blank"> NCBI&#39;s dbSNP Human Build 150 data</a>, available on
+the two most recent human assemblies, 
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=snp150" target="_blank">GRCh38/hg38</a> and 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=snp150" target="_blank">GRCh37/hg19</a>.
+NCBI's dbSNP database is a collection which includes a range of molecular variation, such as single 
+nucleotide polymorphisms and small insertions/deletions (indels). This release 
+<a href="https://ncbiinsights.ncbi.nlm.nih.gov/2017/05/08/dbsnps-human-build-150-has-
+doubled-the-amount-of-refsnp-records/" target="_blank">
+nearly doubles</a> the amount of SNP records compared to the previous 147 release (now over 300
+million for hg38, and over 200 million for hg19). </p>
+
+<p>
+There are four SNP tracks available as part of this release:
+<ul>
+ <li>
+All SNPs (150): containing all mappings of reference SNPs to the human assembly. The tracks below
+are subsets of <i>All SNPs (150)</i>.</li>
+<li>
+Common SNPs (150): uniquely mapped variants that appear in at least 1% of the population or are
+100% non-reference.</li>
+<li>
+Flagged SNPs (150): uniquely mapped variants, excluding Common SNPs, that have been flagged by dbSNP
+as &quot;clinically associated.&quot;</li>
+<li>
+Mult. SNPs (150): variants that have been mapped to more than one genomic location. This track has
+been shrinking over the course of the last few releases as dbSNP now excludes most SNPs whose
+flanking sequences map to multiple locations in the genome.</li>
+</ul>
+<p>
+By default, only the <i>Common SNPs (150)</i> are visible in the browser; other tracks must be made
+visible using the track controls. <i>All SNPs (150)</i> tracks reside in the &quot;Variation&quot;
+group category for the hg19 and hg38 browsers.</p>
+<p>
+These tracks were produced at UCSC by Angie Hinrichs and checked for quality by Cath Tyner. 
+We'd like to thank the dbSNP group at NCBI for providing access to these data.</p>
+
 <a name="081717"></a>
 <h2>Aug. 17, 2017 &nbsp;&nbsp; New CRISPR track for Chinese hamster</h2>
 <p>
