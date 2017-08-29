@@ -147,7 +147,8 @@ UCSC_APPS = \
 
 USER_APP_SCRIPTS = \
 	bedJoinTabOffset \
-	expMatrixToBarchartBed
+	expMatrixToBarchartBed \
+	webSync
 
 SCRIPT_FILES = \
 	agpToLift \
