@@ -105,9 +105,18 @@ return posList;
 boolean findBigBedPosInTdbList(char *db, struct trackDb *tdbList, char *term, struct hgPositions *hgp, struct hgFindSpec *hfs)
 /* Given a list of trackDb entries, check each of them for a searchIndex */
 {
+char *description = NULL;
+if (hfs)
+    {
+    char buf[2048];
+    if (isNotEmpty(hfs->searchDescription))
+        truncatef(buf, sizeof(buf), "%s", hfs->searchDescription);
+    else
+        safef(buf, sizeof(buf), "%s", hfs->searchTable);
+    description = cloneString(buf);
+    }
 struct trackDb *tdb;
 boolean found = FALSE;
-
 for(tdb=tdbList; tdb; tdb = tdb->next)
     {
     char *indexField = trackDbSetting(tdb, "searchIndex");
@@ -131,17 +140,7 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
     // if there is a trix file, use it to search for the term
     if (trixFile != NULL)
 	{
-	char *description = NULL;
-	if (hfs)
-            {
-            char buf[2048];
-            if (isNotEmpty(hfs->searchDescription))
-                truncatef(buf, sizeof(buf), "%s", hfs->searchDescription);
-            else
-                safef(buf, sizeof(buf), "%s", hfs->searchTable);
-            description = cloneString(buf);
-            }
-	posList1 = doTrixSearch(hReplaceGbdb(trixFile), indexList, fileName, term, description);
+	posList1 = doTrixSearch(hReplaceGbdb(trixFile), indexList, fileName, term, NULL);
 	}
 
     // now search for the raw id's
@@ -159,12 +158,12 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
 	found = TRUE;
 	AllocVar(table);
 	slAddHead(&hgp->tableList, table);
-	table->description = cloneString(tdb->table);
+	table->description = cloneString(description ? description : tdb->longLabel);
 	table->name = cloneString(tdb->table);
 
 	table->posList = posList1;
 	}
     }
-
+freeMem(description);
 return found;
 }
