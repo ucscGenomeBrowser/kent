@@ -4,6 +4,7 @@ include barCharts.ra
 
 include hoffMap.ra
 
+include cancerExpr.ra
 
 track refSeqFuncElems
 release alpha
@@ -701,3 +702,4 @@ priority 2.2
 track dgvPlus override
 group varRep
 priority 4
+

@@ -6604,6 +6604,15 @@ ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaLargeSamples.tsv tcgaLarg
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaMatrix.tsv tcgaMatrix.tab
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaTransExp.bb .
 
+###########3
+# Reload bigBed with a schema that will be shared with genes track, to support
+# configuration as subtracks in a composite
+# (2007-08-30 kate)
+cd /hive/data/outside/tcgaBarcharts/transcripts
+bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartGeneExpr.as sortedTcgaTransExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaTranscExpr.hg38.bb
+mkdir /gbdb/hg38/tcga
+ln -s `pwd`/tcgaTranscExpr.hg38.bb /gbdb/hg38/tcga/tcgaTranscExpr.bb
+
 # TCGA gene level expression barChart track, from TOIL pipeline recompute (John Vivian)
 # tcgaGeneExpr
 mkdir ../genes 
@@ -6642,6 +6651,17 @@ bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartGeneExp.as sortedTcga
 cd /gbdb/hgFixed/human/expMatrix 
 ln -s /hive/data/outside/tcgaBarcharts/genes/tcgaGeneExp.bb .
 ln -s /hive/data/outside/tcgaBarcharts/genes/tcga.geneTpm.tab tcgaGeneMatrix.tab
+
+###########3
+# Reload bigBed with a schema that will be shared with transcript track, to support
+# configuration as subtracks in a composite
+# Apparently Chris actually loaded the #3 file (added gene names, adjusted end coord apparently)
+# (2007-08-30 kate)
+cd /hive/data/outside/tcgaBarcharts/genes
+bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartGeneExpr.as sortedTcgaGeneExp3.bed /hive/data/genomes/hg38/chrom.sizes tcgaGeneExpr.hg38.bb
+mkdir /gbdb/hg38/tcga
+ln -s `pwd`/tcgaGeneExpr.hg38.bb /gbdb/hg38/tcga/tcgaGeneExpr.bb
+
 #########################################################################
 # gtexTransExp Chris Eisenhart, done, 2017-05-23
 # TCGA transcript level RNA-seq, from TOIL pipeline recompute (John Vivian)
@@ -6689,7 +6709,9 @@ bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGt
 cd /gbdb/hgFixed/human/expMatrix 
 ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexSamples.tsv cleanGtexSamples.tab
 ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexMatrix.tsv cleanGtexMatris.tab
+cd /gbdb/hg38/gtex
 ln -s /hive/data/outside/gtex/barChartTrack/gtexTranscExpr.bb .
+
 #########################################################################
 # LASTZ human/hg38 vs. Zebrafish /danRer11
 #	(DONE - 2017-06-12 - Chris)
