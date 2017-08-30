@@ -450,7 +450,7 @@ char* val = (char*)el->val;
 /* Only some attribute support variable substitution, at least for now
  * Just leak memory when doing substitution.
  */
-if (sameString(el->name, "bigDataUrl"))
+if (sameString(el->name, "bigDataUrl") || sameString(el->name, "searchTrix"))
     {
     val = replaceChars(val, "$D", database);
     }

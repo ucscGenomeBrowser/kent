@@ -1,7 +1,34 @@
 <style>
-  #collections .ui-selecting { background: #FECA40; }
-  #collections .ui-selected { background: #F39814; color: white; }
-  #collections { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  #CustomTrackOptions {margin:12px}
+  #collectionList .ui-selecting { background: #FECA40; }
+  #collectionList .ui-selected { background: #B0E6FF; color: black; }
+  #collectionList { list-style-type: none; margin: 12px; padding: 0;  }
+.collectionList-menu li:hover {
+    background-color: #DEF;
+}
+.collectionList-menu {
+    display: none;
+    z-index: 1000;
+    position: absolute;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    white-space: nowrap;
+    font-family: sans-serif;
+    background: #FFF;
+    color: #333;
+    border-radius: 5px;
+    padding: 0;
+}
+.mygbSectionBanner {
+    padding: 3px;
+    margin-top: 6px;  
+    margin-left: 12px;  
+    margin-right: 12px;  
+    background-color: #4c759c;  /* light blue */  
+    color: white;  
+    font-weight: bold;  
+    font-size: 18px;  
+}  
 </style>
 
 <div class='row gbTrackTitleBanner'>
@@ -25,20 +52,20 @@
 
 <div class='row'>
     <div class='col-md-6'>
-        <div class='row gbSectionBanner'>
+        <div class='row mygbSectionBanner'>
             <div class='col-md-8'>My Collections</div>
                 <div class='gbButtonGoContainer text-right' title='Make New Collection'>
                     <div id='newCollection' class='gbButton'>Make New Collection </div>
                 </div>
         </div>
 
-        <ol id='collections'>
+        <ol id='collectionList'>
         </ol>
     </div>
 
     <div class='col-md-6' style="height:200px;">
     <!-- Configuration panel -->
-        <div class='row gbSectionBanner'>
+        <div class='row mygbSectionBanner'>
             <div class='col-md-8'>Set Collection Attributes</div>
             <div class='col-md-4 text-right'> </div>
         </div>
@@ -109,8 +136,8 @@
             <label class='gbInputLabel'  for='name'>Name:</label>
             <input type='text' name='customName' id='customName' value='' class='text ui-widget-content ui-corner-all'>
             <br><label class='gbInputLabel'  for='description'>Description:</label>
-            <input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all'>
-            <br><label for='customVis'>Visibility:</label>
+            <input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all' style='width:80%'>
+            <br><label for='customVis' class='gbInputLabel'>Visibility:</label>
             <select ID='customVis' style='width: 70px'>
                 <option>hide</option>
                 <option selectED>dense</option>
@@ -119,7 +146,7 @@
                 <option>full</option>
             </select>
 
-            <br> <p>Color: <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
+            <br> <p><span class='gbInputLabel'> Color:</span> <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
             <input id='customColorPicker'>           
 
         </div>
@@ -127,32 +154,34 @@
 
     <div class='col-md-6'>
     <!-- Configuration panel -->
-        <div class='row gbSectionBanner'>Available Tracks
-            <div class='gbButtonGoContainer text-right' title='Make New Collection'>
-                    <label class='text-right gbInputLabel'  for='name'>Search</label>
-                    <input type='text' name='searchTracks' id='searchTracks' value='' class='text-right ui-widget-content ui-corner-all'>
+        <div class='row mygbSectionBanner'>
+            <div class='col-md-8'>Collected Tracks</div>
+            <div class='gbButtonGoContainer text-right' title='Make New Calculated Track'>
+                <div id='newCollection' class='gbButton'>Make New Calculated Track </div>
             </div>
         </div>
+        <div style='margin:12px; font-size:12px'> 
+        Below are tracks in <i><span id='collectedTracksTitle'></span></i>. To add tracks to this collection, drag and drop from "Available Tracks".  Right-click on the track to remove it.
+        </div>
+        <div id='currentCollection'>
+        </div>
+    </div>
+
+    <div class='col-md-6'>
+    <!-- Configuration panel -->
+        <div class='row mygbSectionBanner'>
+            <div class='col-md-8'>Available Tracks</div>
+        </div>
         <div>
-        Below are tracks are available to add to collections. To add new tracks from hubs or custom tracks, load the hub or custom track into the browser and then return to this list. 
+        <div style='margin:12px; font-size:12px'> Below are tracks are available to add to collections. To add new tracks from hubs or custom tracks, load the hub or custom track into the browser and then return to this list. </div>
 
         </div>
         <div id='tracks'>
         </div>
     </div>
 
-    <div class='col-md-6'>
-    <!-- Configuration panel -->
-        <div class='row gbSectionBanner'>
-            <div class='col-md-8'>Collected Tracks</div>
-            <div class='gbButtonGoContainer text-right' title='Make New Calculated Track'>
-                <div id='newCollection' class='gbButton'>Make New Calculated Track </div>
-            </div>
-        </div>
-        <div>
-        Below are tracks in <i><span id='collectedTracksTitle'></span></i>. To add tracks to this collection, drag and drop from "Available Tracks".  Right-click on the track to remove it.
-        </div>
-        <div id='collection'>
-        </div>
-    </div>
 </div>
+
+<ul class='collectionList-menu' style='display:none'>
+    <li data-action="delete">Delete</li>
+</ul>

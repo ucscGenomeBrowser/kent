@@ -15452,7 +15452,7 @@ join <(sort foo2.mm10) <(sort refSeqToUcscMM10.tsv) -t $'\t' > join.foo.mm10
 
 ./parseRefSeqFuncElems join.foo.mm10 bed.mm10 108.20170627
 sort -k1,1 -k2,2n bed.mm10 > sorted.bed.mm10
-bedToBigBed -type=bed6+8 -as=refSeqFuncElems.as sorted.bed.mm10 /hive/data/genomes/mm10/chrom.sizes refSeqFuncElemsMm10.bb -tab 
+bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed.mm10 /hive/data/genomes/mm10/chrom.sizes refSeqFuncElemsMm10.bb -tab 
 
 cd /gbdb/hg38/ncbiRefSeq
 ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb .

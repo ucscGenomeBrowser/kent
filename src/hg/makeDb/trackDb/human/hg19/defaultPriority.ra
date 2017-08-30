@@ -48,8 +48,7 @@ visibility hide
 
 track dgvPlus override
 group varRep
-visibility dense
-priority 1
+visibility hide
 
     track dgvMerged override
     parent dgvPlus on

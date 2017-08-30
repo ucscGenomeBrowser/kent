@@ -438,6 +438,14 @@ if (isCustomTrack(tg->table) && tg->customPt)
     dbTableName = ct->dbTableName;
     tdb = ct->tdb;
     }
+else if (isCustomTrack(tg->table) )
+    {
+    // we can get custom tracks through track hubs that don't have customPt
+    hFreeConn(&conn);
+    conn = hAllocConn(CUSTOM_TRASH);
+    dbTableName = trackDbSetting(tg->tdb, "dbTableName");
+    tdb = tg->tdb;
+    }
 else
 #endif /* GBROWSE */
     {

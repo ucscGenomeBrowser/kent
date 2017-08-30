@@ -266,7 +266,7 @@ if (curGroup != NULL)
     {
     // print out all the tracks in this group
     struct trackDb *tdb;
-    jsInlineF("$('#collection').append(\"");
+    jsInlineF("$('#currentCollection').append(\"");
     for(tdb = fullTrackList; tdb;  tdb = tdb->next)
         {
         if (sameString(tdb->grp, hubName))
@@ -281,7 +281,7 @@ if (curGroup != NULL)
     jsInlineF("\");\n");
     
     // print out all the tracks in this group
-    jsInlineF("$('#collections').append(\"");
+    jsInlineF("$('#collectionList').append(\"");
     for(tdb = fullTrackList; tdb;  tdb = tdb->next)
         {
         if (sameString(tdb->grp, hubName))
@@ -315,7 +315,7 @@ for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
 
     }
 jsInlineF("\");\n");
-jsInlineF("collections.init();\n");
+jsInlineF("hgCollection.init();\n");
 }
 
 static void onclickJumpToTop(char *id)
@@ -410,7 +410,7 @@ if (bigDataUrl == NULL)
 return bigDataUrl;
 }
 
-void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, char *visibility, unsigned int color, struct track *track, struct hash *nameHash, struct hash *collectionNameHash, int numTabs)
+void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, char *visibility, unsigned int color, struct track *track, struct hash *nameHash, struct hash *collectionNameHash, int numTabs, int priority)
 // out the trackDb for one track
 {
 char *dataUrl = NULL;
@@ -431,7 +431,7 @@ fprintf(f, "%sshortLabel %s\n",tabs, track->shortLabel);
 fprintf(f, "%slongLabel %s\n",tabs, track->longLabel);
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "shortLabel")&& differentString(hel->name, "longLabel")&& differentString(hel->name, "color")&& differentString(hel->name, "visibility")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames")&& differentString(hel->name, "superTrack"))
+    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "shortLabel")&& differentString(hel->name, "longLabel")&& differentString(hel->name, "color")&& differentString(hel->name, "visibility")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames")&& differentString(hel->name, "superTrack")&& differentString(hel->name, "priority"))
         fprintf(f, "%s%s %s\n", tabs,hel->name, (char *)hel->val);
     }
 if (bigDataUrl == NULL)
@@ -442,6 +442,7 @@ if (bigDataUrl == NULL)
 fprintf(f, "%sparent %s\n",tabs,parent);
 fprintf(f, "%scolor %d,%d,%d\n", tabs,(color >> 16) & 0xff,(color >> 8) & 0xff,color & 0xff);
 fprintf(f, "%svisibility %s\n",tabs,visibility);
+fprintf(f, "%spriority %d\n",tabs,priority);
 fprintf(f, "\n");
 }
 
@@ -491,11 +492,12 @@ fprintf(f, "\n");
 
 //int useColor = 0;
 struct track *track = view->trackList;
+int priority = 1;
 for(; track; track = track->next)
     {
     struct trackDb *tdb = hashMustFindVal(nameHash, skipColl(track->name));
 
-    outTdb(conn, db, f, skipColl(track->name),tdb, view->name, track->visibility, track->color, track,  nameHash, collectionNameHash, 2);
+    outTdb(conn, db, f, skipColl(track->name),tdb, view->name, track->visibility, track->color, track,  nameHash, collectionNameHash, 2, priority++);
     //useColor++;
     }
 
@@ -519,6 +521,7 @@ for(collection = collectionList; collection; collection = collection->next)
     outComposite(f, collection);
     struct trackDb *tdb;
     struct track *track;
+    int priority = 1;
     for (track = collection->trackList; track; track = track->next)
         {
         if (track->trackList != NULL)
@@ -529,7 +532,7 @@ for(collection = collectionList; collection; collection = collection->next)
             {
             tdb = hashMustFindVal(nameHash, track->name);
 
-            outTdb(conn, db, f, track->name,tdb, collection->name, track->visibility, track->color, track,  nameHash, collectionNameHash, 1);
+            outTdb(conn, db, f, track->name,tdb, collection->name, track->visibility, track->color, track,  nameHash, collectionNameHash, 1, priority++);
             /*
             useColor++;
             if (useColor == (sizeof snakePalette2 / sizeof(int)))

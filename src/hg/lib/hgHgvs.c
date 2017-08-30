@@ -2505,6 +2505,17 @@ else
     errAbort("appendHgvsNucPos: unrecognized vpTxRegion value %d", txPos->region);
 }
 
+static char *refFromVpTx(struct vpTx *vpTx)
+/* If vpTx->txRef is non-NULL and both start & end are exonic, return txRef;
+ * otherwise return genomic.  For example, if a deletion spans exon/intron boundary, use genomic
+ * ref because it includes the intron bases.  Do not free the returned value. */
+{
+if (vpTx->txRef != NULL &&
+    vpTx->start.region == vpExon && vpTx->end.region == vpExon)
+    return vpTx->txRef;
+return vpTx->gRef;
+}
+
 char *hgvsNFromVpTx(struct vpTx *vpTx, struct seqWindow *gSeqWin, struct psl *txAli,
                     struct dnaSeq *txSeq, boolean breakDelIns)
 /* Return an HGVS n. (noncoding transcript) term for a variant projected onto a transcript.
@@ -2521,7 +2532,7 @@ if (!vpTxPosRangeIsSingleBase(&startPos, &endPos))
     dyStringAppendC(dy, '_');
     appendHgvsNucPos(dy, &endPos, FALSE, NULL);
     }
-char *ref = vpTx->txRef ? vpTx->txRef : vpTx->gRef;
+char *ref = refFromVpTx(vpTx);
 hgvsAppendChangesFromNucRefAlt(dy, ref, vpTx->txAlt, dupLen, breakDelIns);
 return dyStringCannibalize(&dy);
 }
@@ -2543,7 +2554,7 @@ if (!vpTxPosRangeIsSingleBase(&startPos, &endPos))
     dyStringAppendC(dy, '_');
     appendHgvsNucPos(dy, &endPos, FALSE, cds);
     }
-char *ref = vpTx->txRef ? vpTx->txRef : vpTx->gRef;
+char *ref = refFromVpTx(vpTx);
 hgvsAppendChangesFromNucRefAlt(dy, ref, vpTx->txAlt, dupLen, breakDelIns);
 return dyStringCannibalize(&dy);
 }

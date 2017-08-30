@@ -5,7 +5,7 @@ track refSeqFuncElems
 release alpha
 shortLabel RefSeq Func Elems
 longLabel NCBI RefSeq Functional Elements 
-type bigBed 6 +
+type bigBed 8 +
 bigDataUrl /gbdb/hg38/ncbiRefSeq/refSeqFuncElemsMm10.bb
 labelFields soTerm
 group regulation

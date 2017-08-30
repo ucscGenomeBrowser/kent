@@ -62,12 +62,10 @@ assisted by the GENCODE v23 transcriptome definition. Read quantification was pe
 the Computational Genomics lab, using the 
 <a href="https://xenabrowser.net/datapages/?host=https://toil.xenahubs.net" target="_blank">Toil
 pipeline</a>. The resulting kallisto files were combined to generate a transcript per million (tpm)
-expression matrix using the UCSC tool, <em>kallistoToMatrix</em>.</p>
-
-<p>
-Average tpm expression values for each tissue were calculated and used to generate a bed6+5 file 
-that is the base of the track. This was done using the UCSC tool, <em>expMatrixToBarchartBed</em>.
-The bed track was then converted to a bigBed file using the UCSC tool, <em>bedToBigBed</em>.</p>
+expression matrix using the UCSC tool, <em>kallistoToMatrix</em>. Average tpm expression values for
+each tissue were calculated and used to generate a bed6+5 file that is the base of the track. This
+was done using the UCSC tool, <em>expMatrixToBarchartBed</em>. The bed track was then converted to
+a bigBed file using the UCSC tool, <em>bedToBigBed</em>.</p>
 
 <H2>Credits</H2>
 <p>

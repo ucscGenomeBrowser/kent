@@ -10,7 +10,7 @@ track refSeqFuncElems
 release alpha
 shortLabel RefSeq Func Elems
 longLabel NCBI RefSeq Functional Elements 
-type bigBed 6 +
+type bigBed 8 +
 bigDataUrl /gbdb/hg38/ncbiRefSeq/refSeqFuncElems.bb
 labelFields soTerm
 group regulation
@@ -23,7 +23,7 @@ track cosmicRegionsUpdate
 release alpha
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
-type bigBed 4 +
+type bigBed 8 +
 bigDataUrl /gbdb/hg38/cosmic/cosMutHg38V82.bb
 labelFields cosmLabel
 group phenDis
@@ -32,6 +32,7 @@ url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
 urlLabel COSMIC ID:
 searchIndex name,cosmLabel
 tableBrowser off
+mouseOverField _mouseOver
 
 searchTable cosmicRegionsUpdate
 searchPriority 2.07207
@@ -440,62 +441,50 @@ searchPriority 3.53
 
 track snp141Mult override
 group varRep
-priority 6.5
 snpSeqFile /gbdb/hg38/snp/snp141.fa
 
 track snp141Flagged override
 group varRep
-priority 5.5
 snpSeqFile /gbdb/hg38/snp/snp141.fa
 
 track snp141Common override
 group varRep
-priority 3.4
 snpSeqFile /gbdb/hg38/snp/snp141.fa
 
 track snp141 override
 group varRep
-priority 2.5
 snpSeqFile /gbdb/hg38/snp/snp141.fa
 
 track snp142Mult override
 group varRep
-priority 6.4
 snpSeqFile /gbdb/hg38/snp/snp142.fa
 
 track snp142Flagged override
 group varRep
-priority 5.4
 snpSeqFile /gbdb/hg38/snp/snp142.fa
 
 track snp142Common override
 group varRep
-priority 3.3
 snpSeqFile /gbdb/hg38/snp/snp142.fa
 
 track snp142 override
 group varRep
-priority 2.4
 snpSeqFile /gbdb/hg38/snp/snp142.fa
 
 track snp144Mult override
 group varRep
-priority 6.3
 snpSeqFile /gbdb/hg38/snp/snp144.fa
 
 track snp144Flagged override
 group varRep
-priority 5.3
 snpSeqFile /gbdb/hg38/snp/snp144.fa
 
 track snp144Common override
 group varRep
-priority 3.2
 snpSeqFile /gbdb/hg38/snp/snp144.fa
 
 track snp144 override
 group varRep
-priority 2.3
 snpSeqFile /gbdb/hg38/snp/snp144.fa
 
 track genomicSuperDups override
@@ -667,6 +656,7 @@ shortLabel GTEx Brain
 longLabel GTEx Brain Gene Expression in barChart track format
 group expression
 
+<<<<<<< HEAD
 track snp147Mult override
 group varRep
 priority 6.1
