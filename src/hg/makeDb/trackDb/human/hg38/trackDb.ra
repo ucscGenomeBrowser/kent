@@ -656,7 +656,6 @@ shortLabel GTEx Brain
 longLabel GTEx Brain Gene Expression in barChart track format
 group expression
 
-<<<<<<< HEAD
 track snp147Mult override
 group varRep
 priority 6.1
