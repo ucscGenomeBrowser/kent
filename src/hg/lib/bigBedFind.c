@@ -140,7 +140,15 @@ for(tdb=tdbList; tdb; tdb = tdb->next)
     // if there is a trix file, use it to search for the term
     if (trixFile != NULL)
 	{
-	posList1 = doTrixSearch(hReplaceGbdb(trixFile), indexList, fileName, term, NULL);
+        struct errCatch *errCatch = errCatchNew();
+        if (errCatchStart(errCatch))
+            {
+            posList1 = doTrixSearch(hReplaceGbdb(trixFile), indexList, fileName, term, NULL);
+            }
+        errCatchEnd(errCatch);
+        if (errCatch->gotError)
+            warn("trix search failure for %s: %s", tdb->table, dyStringContents(errCatch->message));
+        errCatchFree(&errCatch);
 	}
 
     // now search for the raw id's
