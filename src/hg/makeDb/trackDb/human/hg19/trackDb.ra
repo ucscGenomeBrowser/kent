@@ -950,6 +950,7 @@ hapmapPhase III
 codingAnnotations snp138CodingDbSnp,
 # Need to request new tag
 #codingAnnoLabel_snp138CodingDbSnp dbSNP
+priority 23.4
 
 track snp138Mult override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
@@ -958,6 +959,7 @@ chimpDb panTro4
 orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
+priority 23.1
 
 track snp138 override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
@@ -966,6 +968,7 @@ chimpDb panTro4
 orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
+priority 23.2
 
 track snp138Common override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
@@ -975,6 +978,7 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 visibility hide
+priority 23.3
 
 track snp137Flagged
 shortLabel Flagged SNPs(137)
@@ -996,6 +1000,7 @@ hapmapPhase III
 codingAnnotations snp137CodingDbSnp,
 # Need to request new tag
 #codingAnnoLabel_snp137CodingDbSnp dbSNP
+
 
 track snp137Mult override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
@@ -1120,7 +1125,6 @@ snpSeqFile /gbdb/hg18/snp/snp130.fa
 origAssembly hg18
 
 track hapmapSnps override
-priority 15
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 longLabel HapMap SNPs (rel27, merged Phase II + Phase III genotypes)

@@ -12,7 +12,6 @@ fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By dccRep=U
 sortOrder cellType=+ rep=+ obtainedBy=+
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 dragAndDrop subTracks
-priority 14
 wgEncode 1
 type bed 9 +
 itemRgb on
