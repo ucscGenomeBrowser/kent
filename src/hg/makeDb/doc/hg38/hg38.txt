@@ -6709,6 +6709,8 @@ bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGt
 cd /gbdb/hgFixed/human/expMatrix 
 ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexSamples.tsv cleanGtexSamples.tab
 ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexMatrix.tsv cleanGtexMatris.tab
+
+# <2007-08-30 kate)
 cd /gbdb/hg38/gtex
 ln -s /hive/data/outside/gtex/barChartTrack/gtexTranscExpr.bb .
 

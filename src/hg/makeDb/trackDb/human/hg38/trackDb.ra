@@ -703,3 +703,6 @@ track dgvPlus override
 group varRep
 priority 4
 
+track gtexTranscExpr override
+bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
+

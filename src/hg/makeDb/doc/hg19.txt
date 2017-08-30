@@ -32306,8 +32306,9 @@ sort -k1,1 -k2,2n foo11 > sortedGtexTransExpHg19.bed
 bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGtexTransExpHg19.bed /hive/data/genomes/hg19/chrom.sizes gtexTranscExprHg19.bb
 
 # Link the files into gbdb
-cd /gbdb/hgFixed/human/expMatrix 
-ln -s /hive/data/outside/gtex/barChartTrack/hg19backLift/gtexTranscExprHg19.bb .
+# <2007-0-30 kate)
+cd /gbdb/hg19/gtex
+ln -s /hive/data/outside/gtex/barChartTrack/hg19backLift/gtexTranscExprHg19.bb gtexTranscExpr.bb
 
 ##############################################################################
 # cosmicRegions (DONE - 2017-08-03 - Chris)  
