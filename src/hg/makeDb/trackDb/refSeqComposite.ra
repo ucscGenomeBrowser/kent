@@ -55,9 +55,10 @@ priority 2
         subGroups view=aNcbiRefSeq
 	longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
         priority 4
-        searchIndex name
+        searchIndex name,gene,ID,Name2,geneSynonym,product
         searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
-        type bigBed 12
+        type bigBed 12 +
+        labelFields gene
 
 	track ncbiRefSeqPsl
         priority 5
