@@ -6,7 +6,8 @@ was created to establish a sample and data resource for studies on the relations
 genetic variation and gene expression in multiple human tissues. 
 This track displays median transcript expression levels in 53 tissues, based on
 RNA-seq data from the GTEx midpoint milestone data release (V6, October 2015). 
-Data for this track were computed at UCSC from GTEx RNA-seq sequence data using the Toil 
+Data for this track were computed at UCSC from GTEx RNA-seq sequence data using the
+<a href="http://toil.ucsc-cgl.org/" target="_blank">Toil</a>
 pipeline running the kallisto transcript-level quantification tool.</p>
 
 <h2>Display Conventions</h2>
@@ -48,7 +49,8 @@ averaging 50M aligned reads per sample.</p>
 <p>
 Sequence reads for this track were quantified to the hg38/GRCh38 human genome using kallisto
 assisted by the GENCODE v23 transcriptome definition. Read quantification was performed at UCSC
-by the Computational Genomics lab, using the Toil pipeline. The resulting kallisto files were
+by the Computational Genomics lab, using the <a href="http://toil.ucsc-cgl.org/"
+target="_blank">Toil</a> pipeline. The resulting kallisto files were
 combined to generate a transcript per million (TPM) expression matrix using the UCSC tool
 kallistoToMatrix.  Average TPM expression values for each tissue were calculated and 
 used to generate a bed6+5 file that is the base of the track.  This was done using the UCSC
