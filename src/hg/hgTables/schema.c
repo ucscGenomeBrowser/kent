@@ -141,9 +141,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    hPrintf("<A HREF=\"%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
-	    hPrintf("&%s=%s", hgtaDatabase, db);
-	    hPrintf("&%s=%s", hgtaHistoTable, table);
-	    hPrintf("&%s=%s", hgtaDoValueHistogram, row[0]);
+	    hPrintf("&amp;%s=%s", hgtaDatabase, db);
+	    hPrintf("&amp;%s=%s", hgtaHistoTable, table);
+	    hPrintf("&amp;%s=%s", hgtaDoValueHistogram, row[0]);
 	    hPrintf("\">");
 	    hPrintf("values");
 	    hPrintf("</A>");
@@ -152,9 +152,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    hPrintf("<A HREF=\"%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
-	    hPrintf("&%s=%s", hgtaDatabase, db);
-	    hPrintf("&%s=%s", hgtaHistoTable, table);
-	    hPrintf("&%s=%s", hgtaDoValueRange, row[0]);
+	    hPrintf("&amp;%s=%s", hgtaDatabase, db);
+	    hPrintf("&amp;%s=%s", hgtaHistoTable, table);
+	    hPrintf("&amp;%s=%s", hgtaDoValueRange, row[0]);
 	    hPrintf("\">");
 	    hPrintf("range");
 	    hPrintf("</A>");
