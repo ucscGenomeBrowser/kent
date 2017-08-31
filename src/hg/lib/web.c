@@ -1366,7 +1366,7 @@ for(offset = 0; offset < len && !regexec(&re, oldString + offset, ArraySize(matc
 	dyStringAppend(dy, "?");
     dyStringAppend(dy, uiVars);
     if(match[1].rm_so != match[1].rm_eo)
-	dyStringAppend(dy, "&");
+	dyStringAppend(dy, "&amp;");
     }
 if(offset < len)
     dyStringAppend(dy, oldString + offset);
