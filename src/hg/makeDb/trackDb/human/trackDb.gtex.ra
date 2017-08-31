@@ -73,7 +73,7 @@ maxLimit 8000
 defaultLabelFields name2, name
 labelFields name2, name
 group expression
-priority 2
+priority 1.1
 
 # Older, in progress, and experimental
 
