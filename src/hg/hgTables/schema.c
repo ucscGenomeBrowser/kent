@@ -354,7 +354,7 @@ if (tdb != NULL && isNotEmpty(tdb->html))
 	// like details pages in which HR's bottom margin melts into H2's top margin:
 	char *s = skipLeadingSpaces(tdb->html);
 	if (startsWith("<H2>", s) || startsWith("<h2>", s))
-	    printf("<span style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</span>",
+	    printf("<div style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</div>",
 		   tdb->html);
 	else
 	    puts(tdb->html);
