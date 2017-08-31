@@ -11981,7 +11981,7 @@ if (pslList)
     char * result= sqlQuickString(conn, query);
     if (isEmpty(result))
         {
-        printf ("<h4>there is NO alignment for %s</h4>\n", itemName);
+        printf ("<h4>No sequence available for %s, can't display alignment.</h4>\n", itemName);
         hasSequence = FALSE;
         }
     else
@@ -11993,7 +11993,7 @@ if (pslList)
     }
 else
     {
-    printf ("<h4>there is NO alignment for %s</h4><br>\n", itemName);
+    printf ("<h4>Missing alignment for %s</h4><br>\n", itemName);
     }
 
 htmlHorizontalLine();
