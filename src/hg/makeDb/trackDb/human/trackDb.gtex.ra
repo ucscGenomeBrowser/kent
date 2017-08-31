@@ -70,6 +70,7 @@ barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/cleanGtexMatrix.tab
 barChartSampleUrl /gbdb/hgFixed/human/expMatrix/cleanGtexSamples.tab
 barChartMetric median
 maxLimit 8000
+maxItems 300
 defaultLabelFields name2, name
 labelFields name2, name
 group expression
