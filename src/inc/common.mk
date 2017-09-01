@@ -132,8 +132,23 @@ ifneq ($(MAKECMDGOALS),clean)
     endif
   endif
   ifeq (${MYSQLINC},)
+    ifneq ($(wildcard /opt/local/include/mysql57/mysql/mysql.h),)
+	  MYSQLINC=/opt/local/include/mysql57/mysql
+    endif
+  endif
+  ifeq (${MYSQLINC},)
     ifneq ($(wildcard /opt/local/include/mysql55/mysql/mysql.h),)
 	  MYSQLINC=/opt/local/include/mysql55/mysql
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /opt/local/lib/mysql57/mysql/libmysqlclient.a),)
+	  MYSQLLIBS=/opt/local/lib/mysql57/mysql/libmysqlclient.a
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /opt/local/lib/mysql55/mysql/libmysqlclient.a),)
+	  MYSQLLIBS=/opt/local/lib/mysql55/mysql/libmysqlclient.a
     endif
   endif
   ifeq (${MYSQLLIBS},)
@@ -212,11 +227,11 @@ ifeq (${ZLIB},)
   endif
 endif
 
-L+=${PNGLIB} ${ZLIB} -lm
-HG_INC+=${PNGINCL}
-
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
+
+L+=${PNGLIB} ${ZLIB} -lm
+HG_INC+=${PNGINCL}
 
 # pass through COREDUMP
 ifneq (${COREDUMP},)

@@ -36,13 +36,13 @@ do
   mkdir -p ${D}/log/${YM}
 done
 
-./grcUpdate.sh GRCh38 hg38 GRCh38.p8_issues human/GRC/Issue_Mapping \
+./grcUpdate.sh GRCh38 hg38 GRCh38.p11_issues human/GRC/Issue_Mapping \
   > GRCh38/log/${YM}/${DS}.txt 2>&1
 
 ./grcUpdate.sh GRCh37 hg19 GRCh37.p13_issues human/GRC/Issue_Mapping \
   > GRCh37/log/${YM}/${DS}.txt 2>&1
 
-./grcUpdate.sh GRCm38 mm10 GRCm38.p4_issues mouse/GRC/Issue_Mapping \
+./grcUpdate.sh GRCm38 mm10 GRCm38.p5_issues mouse/GRC/Issue_Mapping \
   > GRCm38/log/${YM}/${DS}.txt 2>&1
 
 ./grcUpdate.sh Zv9 danRer7 Zv9_issues zebrafish/GRC/Issue_Mapping \

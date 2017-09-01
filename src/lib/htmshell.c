@@ -619,7 +619,7 @@ struct dyString *dy = dyStringNew(2048);
 fprintf(f,"<center>"
             "<div id='warnBox' style='display:none;'>"
             "<CENTER><B id='warnHead'></B></CENTER>"
-            "<UL id='warnList'></UL>"
+            "<UL id='warnList'><li>&nbsp;</li></UL>"
             "<CENTER><button id='warnOK'></button></CENTER>"
             "</div></center>\n");
 // TODO we should just move these warnBox functions to utils.js or warning.js or something.

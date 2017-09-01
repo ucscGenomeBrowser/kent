@@ -4,6 +4,7 @@ include barCharts.ra
 
 include hoffMap.ra
 
+include cancerExpr.ra
 
 track refSeqFuncElems
 release alpha
@@ -654,4 +655,43 @@ bedNameLabel Gene accession
 shortLabel GTEx Brain
 longLabel GTEx Brain Gene Expression in barChart track format
 group expression
+
+track snp147Mult override
+group varRep
+priority 6.1
+
+track snp147Flagged override
+group varRep
+priority 5.1
+
+track snp147Common override 
+group varRep
+priority 1
+
+track snp147 override
+group varRep
+priority 2.1
+
+track snp146Mult override
+group varRep
+priority 6.2
+
+track snp146Flagged override
+group varRep
+priority 5.2
+
+track snp146Common override
+group varRep
+priority 3.1
+
+track snp146 override
+group varRep
+priority 2.2
+
+track dgvPlus override
+group varRep
+priority 4
+
+track gtexTranscExpr override
+bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
 

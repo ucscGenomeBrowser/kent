@@ -1,7 +1,5 @@
 #	"$Id: trackDb.ra,v 1.125 2010/06/11 22:12:18 mary Exp $";
 
-include barCharts.ra
-
 track cosmicRegionsUpdate
 release alpha
 shortLabel COSMIC Regions
@@ -2606,4 +2604,8 @@ html crispr
 
 include defaultPriority.ra
 include trackDb.cloneEnd.ra
+
+track gtexTranscExpr override
+bigDataUrl /gbdb/hg19/gtex/gtexTranscExpr.bb
+html gtexTranscExpr
 

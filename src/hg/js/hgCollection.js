@@ -2,12 +2,30 @@
 
 // Copyright (C) 2017 The Regents of the University of California
 
-var collections = (function() {
+var hgCollection = (function() {
     var names = []; // a list of names that have been used
-    var selectedNode = "collections"; // keep track of id of selected row
-    var selectedTree = "collections"; // keep track of id of selected row
+    var selectedNode = "collectionList"; // keep track of id of selected row
+    var selectedTree = "collectionList"; // keep track of id of selected row
     var $tracks;  // the #tracks object
     var trees = [];
+
+    function currentCollectionItems(node) {
+        // populate the menu for the currentCollection tree
+        var items = {
+            deleteItem: { // The "delete" menu item
+                label: "Delete",
+                action: function () {
+                    $(selectedTree).jstree( "delete_node", selectedNode);
+                }
+            }
+        };
+
+        // can't delete root
+        if ($(node).attr('parent') === '#')
+            delete items.deleteItem;
+
+        return items;
+        }
 
     function selectElements (selectableContainer, elementsToSelect) {
         // add unselecting class to all elements in the styleboard canvas except the ones to select
@@ -21,14 +39,6 @@ var collections = (function() {
         selectableContainer.data("ui-selectable")._mouseStop(null);
     }
 
-    function customApply() {
-        // called when the apply button on the track settings dialog is pressed
-        selectedNode.li_attr.shortlabel = $("#customName").val();
-        selectedNode.li_attr.longlabel = $("#customDescription").val();
-        selectedNode.li_attr.visibility = $("#customVis").val();
-        selectedNode.li_attr.color = $("#customColorInput").val();
-    }
-
     function hideAllAttributes() {
         // hide all the "set attribute" dialogs
         $("#viewOptions").hide();
@@ -38,7 +48,7 @@ var collections = (function() {
     }
 
     function selectNode(tree, node) {
-        // called when a node in the collections tree is selected
+        // called when a node in the currentCollection tree is selected
         var color = node.li_attr.color;
         var name =  node.li_attr.shortlabel;
         var description = node.li_attr.longlabel;
@@ -104,9 +114,9 @@ var collections = (function() {
         attributes += "visibility='" + "full" + "' ";
         attributes += "name='" +  ourCollectionName + "' ";
 
-        $('#collections').append("<li " + attributes +  "id='"+ourCollectionName+"'>A New Collection</li>");
-        $('#collection').append("<div id='"+ourTreeName+"'><ul><li " + attributes+ ">A New Collection</li><ul></div>");
-        var newTree = $('#collection div:last');
+        $('#collectionList').append("<li " + attributes +  "id='"+ourCollectionName+"'>A New Collection</li>");
+        $('#currentCollection').append("<div id='"+ourTreeName+"'><ul><li " + attributes+ ">A New Collection</li><ul></div>");
+        var newTree = $('#currentCollection div:last');
         trees[ourCollectionName] = newTree;
         $(newTree).jstree({
                "core" : {
@@ -114,11 +124,12 @@ var collections = (function() {
                          },
                'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
                'check_callback' : checkCallback,
+               'contextmenu': { "items" : currentCollectionItems},
                'dnd': {check_while_dragging: true}
         });
         $(newTree).on("select_node.jstree", selectTreeNode);
-        var lastElement = $("#collections li").last();
-        selectElements($("#collections"), lastElement) ;
+        var lastElement = $("#collectionList li").last();
+        selectElements($("#collectionList"), lastElement) ;
         rebuildLabel();
     }
 
@@ -141,7 +152,7 @@ var collections = (function() {
     }
 
     function addCollection(trees, list) {
-        // called when outputting JSON of all the collections
+        // called when outputting JSON of all the collectionList
         var collectTree = trees[list.id];
         var v = collectTree.jstree(true).get_json('#', {flat:true, no_data:true, no_state:true, no_a_attr:true});
         var mytext = JSON.stringify(v);
@@ -151,7 +162,7 @@ var collections = (function() {
     function saveCollections(trees) {
        // called when the "Save" button is pressed
        var json = "[";
-       $('#collections li').each(function() {
+       $('#collectionList li').each(function() {
             json += addCollection(trees, this ) + ',';
         });
         json = json.slice(0, -1);
@@ -184,7 +195,7 @@ var collections = (function() {
         selectedNode.li_attr.shortlabel = $("#customName").val();
         rebuildLabel();
         if (selectedNode.parent === '#') {
-            $("#collections .ui-selected").text($("#customName").val());
+            $("#collectionList .ui-selected").text($("#customName").val());
             $('#collectedTracksTitle').text($("#customName").val());
         }
     }
@@ -206,6 +217,14 @@ var collections = (function() {
         return true;
     }
 
+    function collectionListRightClick (event) {
+        $(".collectionList-menu").finish().toggle(100).css({
+            top: event.pageY + "px",
+            left: event.pageX + "px"
+        });
+        return false;
+    }
+
     function init() {
         // called at initialization time
         $("#customName").change(nameChange);
@@ -216,9 +235,38 @@ var collections = (function() {
         $("#discardChanges").click ( function () { window.location.reload(); });
 
         $("#newCollection").click ( newCollection );
-        $("#collectionApply").click ( collectionApply );
-        $("#customApply").click ( customApply );
-        $('#collections').selectable({selected : selectCollection});
+        $('#collectionList').selectable({selected : selectCollection});
+        
+        $( "#collectionList" ).contextmenu(collectionListRightClick);
+
+        $(document).bind("mousedown", function (e) {
+                // If the clicked element is not the menu
+                if ($(e.target).parents(".collectionList-menu").length === 0) {
+                    // Hide it
+                $(".collectionList-menu").hide(100);
+                }
+        });
+
+        $(".collectionList-menu li").click(function(){
+
+            // This is the triggered action name
+            switch($(this).attr("data-action")) {
+                // A case for each action. Your actions here
+                case "delete": 
+                    $("#collectionList .ui-selected").remove();
+                    var firstElement = $("#collectionList li").first();
+                    if (firstElement.length !== 0)
+                        selectElements($("#collectionList"), firstElement) ;
+                    else 
+                        $(selectedTree).remove();
+
+            }
+
+            // Hide it AFTER the action was triggered
+            $(".collectionList-menu").hide(100);
+        });
+
+
 
         var trackOpt = {
             hideAfterPaletteSelect : true,
@@ -235,12 +283,13 @@ var collections = (function() {
         $.jstree.defaults.core.check_callback = checkCallback;
         $.jstree.defaults.core.themes.dots = true;
         $.jstree.defaults.contextmenu.show_at_node = false;
-        $("#collection div").each(function(index) {
+        $("#currentCollection div").each(function(index) {
             //$("#collection").append($(this).clone());
             var newTree = this;
 
             $(newTree).jstree({
                'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
+               'contextmenu': { "items" : currentCollectionItems},
                'dnd': {
                 "check_callback" : checkCallback,
                 }
@@ -248,7 +297,7 @@ var collections = (function() {
             trees[this.id] = $(newTree);
            $(newTree).on("select_node.jstree", selectTreeNode);
         });
-        $("#collection  li").each(function() {
+        $("#currentCollection  li").each(function() {
             names[this.getAttribute("name")] = 1;
         });
         treeDiv=$('#tracks');
@@ -265,8 +314,8 @@ var collections = (function() {
         });
 
 
-        var firstElement = $("#collections li").first();
-        selectElements($("#collections"), firstElement) ;
+        var firstElement = $("#collectionList li").first();
+        selectElements($("#collectionList"), firstElement) ;
     }
 
     function updatePage(responseJson) {

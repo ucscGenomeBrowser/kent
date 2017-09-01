@@ -1541,9 +1541,13 @@ if (baseInsert != pBaseInsert)
              pName, pCLabel, pBaseInsert, baseInsert);
 }
 
-int pslCheck(char *pslDesc, FILE* out, struct psl* psl)
-/* Validate a PSL for consistency.  pslDesc is printed the error messages
- * to file out (open /dev/null to discard). Return count of errors. */
+int pslCheck2(unsigned opts, char *pslDesc, FILE* out, struct psl* psl)
+/* Validate a PSL for consistency.  pslDesc is printed the error messages to
+ * file out (open /dev/null to discard). Return count of errors.  Option
+ * PSL_CHECK_IGNORE_INSERT_CNTS doesn't validate problems insert counts fields
+ * in each PSL.  Useful because protein PSL doesn't seen to compute these in a
+ * consistent way.
+ */
 {
 static char* VALID_STRANDS[] = {
     "+", "-", "++", "+-", "-+", "--", NULL
@@ -1564,14 +1568,23 @@ if (VALID_STRANDS[i] == NULL)
 /* check query */
 chkRanges(pslDesc, out, psl, psl->qName, "query", 'q', pslQStrand(psl), psl->qSize, psl->qStart, psl->qEnd,
           psl->qStarts, 1, &errCount);
-chkInsertCounts(pslDesc, out, psl, psl->qName, 'q', psl->qStarts, psl->qNumInsert, psl->qBaseInsert, &errCount);
+if ((opts & PSL_CHECK_IGNORE_INSERT_CNTS) == 0)
+    chkInsertCounts(pslDesc, out, psl, psl->qName, 'q', psl->qStarts, psl->qNumInsert, psl->qBaseInsert, &errCount);
 
 /* check target */
 chkRanges(pslDesc, out, psl, psl->tName, "target", 't', pslTStrand(psl), psl->tSize, psl->tStart, psl->tEnd,
           psl->tStarts, tBlockSizeMult, &errCount);
-chkInsertCounts(pslDesc, out, psl, psl->tName, 't', psl->tStarts, psl->tNumInsert, psl->tBaseInsert, &errCount);
+if ((opts & PSL_CHECK_IGNORE_INSERT_CNTS) == 0)
+    chkInsertCounts(pslDesc, out, psl, psl->tName, 't', psl->tStarts, psl->tNumInsert, psl->tBaseInsert, &errCount);
 
 return errCount;
+}
+
+int pslCheck(char *pslDesc, FILE* out, struct psl* psl)
+/* Validate a PSL for consistency.  pslDesc is printed the error messages
+ * to file out (open /dev/null to discard). Return count of errors. */
+{
+return pslCheck2(0, pslDesc, out, psl);
 }
 
 struct hash *readPslToBinKeeper(char *sizeFileName, char *pslFileName)

@@ -37,6 +37,7 @@ site (on-target efficiency).</p>
 
 <p>Colors highlight targets that are specific in the genome (MIT specificity &gt; 50) but have different predicted efficiencies:</p>
 <table class="stdTbl" style="width:100%">
+<tr><td style="width:50px; background-color:#000064"></td><td>unable to calculate Doench/Fusi 2016 efficiency score</td></tr>
 <tr><td style="width:50px; background-color:#FF7070"></td><td>low predicted cleavage: Doench/Fusi 2016 Efficiency percentile &lt;= 30</td></tr>
 <tr><td style="width:50px; background-color:#FFFF00"></td><td>medium predicted cleavage: Doench/Fusi 2016 Efficiency percentile &gt; 30 and &lt; 55</td></tr>
 <tr><td style="width:50px; background-color:#00b300"></td><td>high predicted cleavage: Doench/Fusi 2016 Efficiency &gt; 55</td></tr>
@@ -71,9 +72,9 @@ reading frame. The authors recommend out-of-frame scores &gt; 66 to create
 knock-outs with a single guide efficiently.<p>
 
 <p>Off-target sites are sorted by the CFD score (<a href="http://www.nature.com/nbt/journal/v34/n2/full/nbt.3437.html">Doench et al. 2016</a>). 
-The higher the CFD score, the more likely is off-target cleavage at that site. 
-Off-targets with a CFD score &lt; 0.023 are not shown on this page and are only
-shown when following the linkout to the external CRISPOR tool. 
+The higher the CFD score, the more likely there is off-target cleavage at that site. 
+Off-targets with a CFD score &lt; 0.023 are not shown on this page, but are availble  when 
+following the link to the external CRISPOR tool. 
 When compared against experimentally validated off-targets by 
 <a href="#References">Haeussler et al. 2016</a>, the large majority of predicted
 off-targets with CFD scores &lt; 0.023 were false-positives.</p>

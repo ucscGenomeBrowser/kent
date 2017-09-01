@@ -23,7 +23,7 @@ gbRoot=/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 databases=$(gbGetDatabases etc/hgwdev.dbs)
-maxParallel=16
+maxParallel=8
 
 buildTime=var/build/build.time
 
