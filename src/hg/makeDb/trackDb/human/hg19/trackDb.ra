@@ -2619,4 +2619,5 @@ include trackDb.cloneEnd.ra
 
 track gtexTranscExpr override
 bigDataUrl /gbdb/hg19/gtex/gtexTranscExpr.bb
+html gtexTranscExpr
 
