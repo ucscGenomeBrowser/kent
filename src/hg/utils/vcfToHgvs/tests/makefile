@@ -47,7 +47,7 @@ stopLoss:
 
 clean::
 	rm -rf output
-	rm PGTdb/seqNcbiRefSeq.rna.fa seqNcbiRefSeq.tab
+	rm -f PGTdb/seqNcbiRefSeq.rna.fa seqNcbiRefSeq.tab
 
 mkdirs:
 	@${MKDIR} output
