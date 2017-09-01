@@ -3452,6 +3452,18 @@ mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
 
+track snpedia
+shortLabel SNPedia
+longLabel SNPedia article text
+urlLabel SNPedia page:
+group phenDis
+visibility hide
+color 50,0,100
+type bed 4
+itemDetailsHtmlTable snpediaHtml
+url https://www.snpedia.com/index.php/$$
+release alpha
+
 track clinvar
 compositeTrack on
 shortLabel ClinVar Variants

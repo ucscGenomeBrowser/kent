@@ -679,18 +679,6 @@ noInherit on
 track interactions override
 directUrl hgGeneGraph?db=hg19&gene=%s
 
-track snpedia
-shortLabel SNPedia
-longLabel SNPedia article text
-urlLabel SNPedia page:
-group phenDis
-visibility hide
-color 50,0,100
-type bed 4
-itemDetailsHtmlTable snpediaHtml
-url https://www.snpedia.com/index.php/$$
-release alpha
-
 track cons46way
 compositeTrack on
 shortLabel Cons 46-Way
