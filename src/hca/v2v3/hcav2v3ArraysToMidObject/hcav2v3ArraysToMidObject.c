@@ -58,6 +58,16 @@ unpackArray(tags, stanza, "project.contributor", "project.contributors", "name")
 unpackArray(tags, stanza, "project.experimental_design.1.text", "project.experimental_design", "text");
 unpackArray(tags, stanza, "sample.supplementary_protocols.1.type", "sample.supplementary_protocols", "type");
 unpackArray(tags, stanza, "sample.supplementary_protocols.1.description", "sample.supplementary_protocols", "description");
+unpackArray(tags, stanza, "project.publications.1.pmid", "project.publications", "pmid");
+unpackArray(tags, stanza, "project.publications.1.author_list",  "project.publications", "author_list");
+unpackArray(tags, stanza, "sample.donor.disease.1.text",  "sample.donor.disease", "text");
+unpackArray(tags, stanza, "sample.donor.ancestry.1.text",  "sample.donor.ancestry", "text");
+unpackArray(tags, stanza, "sample.donor.medication.1.text",  "sample.donor.medication", "text");
+unpackArray(tags, stanza, "sample.donor.species.1.text",  "sample.donor.species", "text");
+unpackArray(tags, stanza, "sample.donor.species.1.ontology",  "sample.donor.species", "ontology");
+unpackArray(tags, stanza, "sample.donor.strain.1.text",  "sample.donor.strain", "text");
+unpackArray(tags, stanza, "sample.supplementary_protocols.1.type",  "sample.supplementary_protocols", "type");
+unpackArray(tags, stanza, "sample.supplementary_protocols.1.description",  "sample.supplementary_protocols", "description");
 }
 
 char *tagOrder[] = { "project.title", "project.core.id",};
