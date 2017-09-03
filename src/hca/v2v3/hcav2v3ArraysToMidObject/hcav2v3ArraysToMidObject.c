@@ -1,4 +1,5 @@
-/* hcav2v3ModifyContributors - Change format of contributers array in curated.tags for HCA v2v3 transition.. */
+/* hcav2v3ArraysToMidObject - Change format of contributers array and other arrays that used to 
+ * be simple arrays to a field of an array of objects in curated.tags for HCA v2v3 transition. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -10,9 +11,11 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hcav2v3ModifyContributors - Change format of contributers array in curated.tags for HCA v2v3 transition.\n"
+  "hcav2v3ArraysToMidObject - Change format of contributers array and other arrays that used to\n"
+  "be simple arrays to a field of an array of objects in curated.tags for HCA v2v3 transition.\n"
+  "hcav2v3ArraysToMidObject - Change format of contributers array in curated.tags for HCA v2v3 transition.\n"
   "usage:\n"
-  "   hcav2v3ModifyContributors in.tags out.tags\n"
+  "   hcav2v3ArraysToMidObject in.tags out.tags\n"
   "in.tags and out.tags can be the same\n"
   "options:\n"
   "   -xxx=XXX\n"
@@ -48,8 +51,8 @@ if (val != NULL)
 }
 
 
-void modifyContributors(struct tagStorm *tags, struct tagStanza *stanza, void *context)
-/* Modify contributors tag, unwinding an array. */
+void arrayToMidObject(struct tagStorm *tags, struct tagStanza *stanza, void *context)
+/* Modify a tag, unwinding a simple array into a field in an array of objects. */
 {
 unpackArray(tags, stanza, "project.contributor", "project.contributors", "name");
 unpackArray(tags, stanza, "project.experimental_design.1.text", "project.experimental_design", "text");
@@ -59,11 +62,12 @@ unpackArray(tags, stanza, "sample.supplementary_protocols.1.description", "sampl
 
 char *tagOrder[] = { "project.title", "project.core.id",};
 
-void hcav2v3ModifyContributors(char *inName, char *outName)
-/* hcav2v3ModifyContributors - Change format of contributers array in curated.tags for HCA v2v3 transition.. */
+void hcav2v3ArraysToMidObject(char *inName, char *outName)
+/* hcav2v3ModifyContributors - Change format of contributers array and other arrays that used to 
+ * be simple arrays to a field of an array of objects in curated.tags for HCA v2v3 transition. */
 {
 struct tagStorm *tags = tagStormFromFile(inName);
-tagStormTraverse(tags, tags->forest, NULL, modifyContributors);
+tagStormTraverse(tags, tags->forest, NULL, arrayToMidObject);
 tagStormOrderSort(tags, tagOrder, ArraySize(tagOrder) );
 tagStormWrite(tags, outName, 0);
 }
@@ -74,6 +78,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-hcav2v3ModifyContributors(argv[1], argv[2]);
+hcav2v3ArraysToMidObject(argv[1], argv[2]);
 return 0;
 }

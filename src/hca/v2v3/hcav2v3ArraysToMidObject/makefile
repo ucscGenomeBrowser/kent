@@ -1,3 +1,3 @@
 kentSrc = ../../..
-A = hcav2v3ModifyContributors
+A = hcav2v3ArraysToMidObject
 include $(kentSrc)/inc/userApp.mk
