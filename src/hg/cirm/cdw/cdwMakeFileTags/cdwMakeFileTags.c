@@ -76,6 +76,12 @@ void cdwMakeFileTags(char *database, char *table)
 /* cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.. */
 {
 struct sqlConnection *conn = cdwConnect(database);
+
+// See if somebody is already running this utility. Should only happen rarely.
+if (sqlIsLocked(conn, "makeFileTags"))
+    errAbort("Another user is already running cdwMakeFileTags. Advisory lock found.");
+sqlGetLockWithTimeout(conn, "makeFileTags", 1);
+
 removeUnusedMetaTags(conn);
 
 /* Get tagStorm and make sure that all tags are unique in case insensitive way */
@@ -127,6 +133,7 @@ for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     }
 dyStringFree(&query);
 slFreeList(&stanzaList);
+sqlReleaseLock(conn, "makeFileTags");
 sqlDisconnect(&conn);
 }
 

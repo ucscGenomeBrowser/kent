@@ -390,16 +390,19 @@ puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are cl
     "    <TABLE BGCOLOR='#" HG_COL_INSIDE
          "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n");
 if (hasTitle)
-    puts("<div class='subheadingBar' class='windowSize'>");
+    puts("<div class='subheadingBar'><div class='windowSize'>");
 else
     puts("<div>");
 }
 
-void webNewSectionHeaderEnd()
+void webNewSectionHeaderEnd(boolean hasTitle)
 /* Properly close header of collapsible section on web page */
 {
-puts("     </div>\n"
-     "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
+if (hasTitle)
+    puts("     </div></div>\n");
+else
+    puts("     </div>\n");
+puts("     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
           "<TR><TH HEIGHT=10></TH></TR>\n"
      "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n");
 }
@@ -411,7 +414,7 @@ va_list args;
 va_start(args, format);
 webNewSectionHeaderStart(TRUE);
 vprintf(format, args);
-webNewSectionHeaderEnd();
+webNewSectionHeaderEnd(TRUE);
 va_end(args);
 }
 
@@ -419,7 +422,7 @@ void webNewEmptySection()
 /* create a new section on the web page to maintain table layout */
 {
 webNewSectionHeaderStart(FALSE);
-webNewSectionHeaderEnd();
+webNewSectionHeaderEnd(FALSE);
 }
 
 void webEndSectionTables()
@@ -1363,7 +1366,7 @@ for(offset = 0; offset < len && !regexec(&re, oldString + offset, ArraySize(matc
 	dyStringAppend(dy, "?");
     dyStringAppend(dy, uiVars);
     if(match[1].rm_so != match[1].rm_eo)
-	dyStringAppend(dy, "&");
+	dyStringAppend(dy, "&amp;");
     }
 if(offset < len)
     dyStringAppend(dy, oldString + offset);

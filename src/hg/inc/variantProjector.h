@@ -103,7 +103,9 @@ void vpPepFree(struct vpPep **pVp);
 /* Free a vpPep. */
 
 void vpPosGenoToTx(uint gOffset, struct psl *txAli, struct vpTxPosition *txPos, boolean isTxEnd);
-/* Use txAli to project gOffset onto transcript-relative coords in txPos. */
+/* Use txAli to project gOffset onto transcript-relative coords in txPos.
+ * Set isTxEnd to TRUE if we are projecting to the end coordinate in transcript space:
+ * higher genomic coord if transcript on '+' strand, lower genomic coord if tx on '-' strand. */
 
 char *vpTxRegionToString(enum vpTxRegion region);
 /* Return a static string for region.  Do not free result! */

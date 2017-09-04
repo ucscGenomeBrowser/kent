@@ -36,6 +36,9 @@ struct rbTree;
 /* options for pslFromAlign */
 #define PSL_IS_SOFTMASK 0x01 /* lower case are mask */
 
+/* options for pslCheck */
+#define PSL_CHECK_IGNORE_INSERT_CNTS 0x01 /* Don't check insert counts in psl */
+
 struct psl
 /* Summary info about a patSpace alignment */
     {
@@ -260,6 +263,14 @@ struct psl *pslTrimToQueryRange(struct psl *oldPsl, int qMin, int qMax);
 int pslCheck(char *pslDesc, FILE* out, struct psl* psl);
 /* Validate a PSL for consistency.  pslDesc is printed the error messages
  * to file out (open /dev/null to discard). Return count of errors. */
+
+int pslCheck2(unsigned opts, char *pslDesc, FILE* out, struct psl* psl);
+/* Validate a PSL for consistency.  pslDesc is printed the error messages to
+ * file out (open /dev/null to discard). Return count of errors.  Option
+ * PSL_CHECK_IGNORE_INSERT_CNTS doesn't validate problems insert counts fields
+ * in each PSL.  Useful because protein PSL doesn't seen to compute these in a
+ * consistent way.
+ */
 
 int pslCountBlocks(struct psl *target, struct psl *query, int maxBlockGap);
 /* count the number of blocks in the query that overlap the target */
