@@ -101,3 +101,80 @@ for (schema = list; schema != NULL; schema = schema->next)
 return hash;
 }
 
+static int numDigitSize(char *s)
+/* Return number of digits if is all digit up to next dot or end of string.
+ * Otherwise return 0 */
+{
+char c;
+int digitCount = 0;
+for (;;)
+    {
+    c = *s++;
+    if (c == '.' || c == 0)
+       return digitCount;
+    if (!isdigit(c))
+       return FALSE;
+    ++digitCount;
+    }
+}
+
+static int nonDotSize(char *s)
+/* Return number of chars up to next dot or end of string */
+{
+char c;
+int size = 0;
+for (;;)
+    {
+    c = *s++;
+    if (c == '.' || c == 0)
+       return size;
+    ++size;
+    }
+}
+
+char *tagSchemaFigureArrayName(char *tagName, struct dyString *scratch, boolean clearScratch)
+/* Return tagName modified to indicate the array
+ * status. For names with .# in them substitute a '[]' for
+ * the number.   Example:
+ *      person.12.name becomes person.[].name
+ *      animal.13.children.4.name becomes animal.[].children.[].name
+ *      person.12.cars.1 becomes person.[].cars.[]
+ * Puts result into scratch and returns scratch->string.  Will clear previous contents
+ * of scratch optionally.  Just an option for easier composition in to lists. */
+{
+char dot = '.';
+char *s = tagName;
+if (clearScratch)
+    dyStringClear(scratch);
+
+for (;;)
+    {
+    /* Check for end of string */
+    char firstChar = *s;
+    if (firstChar == 0)
+        break;
+
+    /* If leading char is a dot and if so skip it. */
+    boolean startsWithDot = (firstChar == dot);
+    if (startsWithDot)
+       {
+       dyStringAppendC(scratch, dot);
+       ++s;
+       }
+
+    int numSize = numDigitSize(s);
+    if (numSize > 0)
+        {
+	dyStringAppend(scratch, "[]");
+	s += numSize;
+	}
+    else
+        {
+	int partSize = nonDotSize(s);
+	dyStringAppendN(scratch, s, partSize);
+	s += partSize;
+	}
+    }
+return scratch->string;
+}
+

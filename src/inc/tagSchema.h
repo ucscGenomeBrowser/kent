@@ -24,6 +24,16 @@ struct tagSchema *tagSchemaFromFile(char *fileName);
 struct hash *tagSchemaHash(struct tagSchema *list);
 /* Return a hash of tagSchemas keyed by name */
 
+char *tagSchemaFigureArrayName(char *tagName, struct dyString *scratch, boolean clearScratch);
+/* Return tagName modified to indicate the array
+ * status. For names with .# in them substitute a '[' for
+ * the number and put a ']' at the end.   Example:
+ *      person.12.name becomes person[name]
+ *      animal.13.children.4.name becomes animal[children[name]]
+ *      person.12.cars.1 becomes person[cars[]] 
+ * Puts result into scratch and returns scratch->string.  Will clear previous contents
+ * of scratch optionally.  Just an option for easier composition in to lists. */
+
 #endif /* TAGSCHEMA_H */
 
 
