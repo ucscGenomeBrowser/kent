@@ -7,11 +7,13 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dystring.h"
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "portable.h"
 #include "obscure.h"
 #include "jsonWrite.h"
+#include "tagSchema.h"
 #include "csv.h"
 
 /* Command line validation table. */
@@ -25,12 +27,12 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen input\n");
 }
 
+
 void freen(char *input)
 /* Test something */
 {
-struct jsonWrite *jw = jsonWriteNew();
-jsonWriteDouble(jw, "num", 0.00000001);
-uglyf("%s\n", jw->dy->string);
+struct dyString *dy = dyStringNew(0);
+printf("%s -> %s\n", input, tagSchemaFigureArrayName(input, dy, TRUE));
 }
 
 int main(int argc, char *argv[])
