@@ -59,7 +59,8 @@ warn(" in stanza starting line %d of %s", startLine, fileName);
 }
 
 static void rCheck(struct tagStanza *stanzaList, char *fileName, 
-    struct slRef *wildList, struct hash *hash, struct slRef *requiredList)
+    struct slRef *wildList, struct hash *hash, struct slRef *requiredList,
+    struct dyString *scratch)
 /* Recurse through tagStorm */
 {
 struct tagStanza *stanza;
@@ -70,7 +71,7 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
 	{
 	/* Break out tag and value */
-	char *tag = pair->name;
+	char *tag = tagSchemaFigureArrayName(pair->name, scratch, TRUE);
 	char *val = pair->val;
 
 	/* Make sure val exists and is non-empty */
@@ -177,7 +178,7 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
 	}
     if (stanza->children)
 	{
-	rCheck(stanza->children, fileName, wildList, hash, requiredList);
+	rCheck(stanza->children, fileName, wildList, hash, requiredList, scratch);
 	}
     else
 	{
@@ -221,7 +222,8 @@ slReverse(&wildSchemaList);
 schemaList = NULL;
 
 struct tagStorm *tagStorm = tagStormFromFile(tagStormFile);
-rCheck(tagStorm->forest, tagStormFile, wildSchemaList, hash, requiredSchemaList);
+struct dyString *scratch = dyStringNew(0);
+rCheck(tagStorm->forest, tagStormFile, wildSchemaList, hash, requiredSchemaList, scratch);
 
 if (gErrCount > 0)
     noWarnAbort();
