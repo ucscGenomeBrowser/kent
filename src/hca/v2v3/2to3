@@ -106,13 +106,13 @@ KEEP	sample.donor.body_mass_index	sample.donor.body_mass_index
 RENAME	sample.donor.development_stage	sample.donor.development_stage.text
 RENAME	sample.donor.disease	sample.donor.disease.1.text
 RENAME	sample.donor.ethnicity	sample.donor.ancestry.1.text
-MODIFY	sample.donor.genotype	sample.donor.strain_REFORMAT_NEEDED
+KEEP	sample.donor.genotype	sample.donor.genotype
 RENAME	sample.donor.id	sample.donor.submitted_id
-MODIFY	sample.donor.life_stage
+KEEP	sample.donor.life_stage sample.donor.life_stage
 KEEP	sample.donor.medication	sample.donor.medication.1.text
-RENAME	sample.donor.ncbi_taxon	sample.donor.species.ontology
+RENAME	sample.donor.ncbi_taxon	sample.donor.species.1.ontology
 KEEP	sample.donor.sex	sample.donor.sex
-MODIFY	sample.donor.species	sample.donor.species.1.text
+RENAME	sample.donor.species	sample.donor.species.1.text
 RENAME	sample.donor.strain	sample.donor.strain.1.text
 RENAME	sample.donor.uuid	sample.donor.core.id
 KEEP	sample.ena_sample	sample.ena_sample
