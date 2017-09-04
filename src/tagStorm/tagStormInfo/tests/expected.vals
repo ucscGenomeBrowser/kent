@@ -1,20 +1,29 @@
 access has 2 uses with 1 vals
    2	all
-age has 2 uses with 1 vals
-   2	5
+age has 2 uses with 2 vals
+   1	70
+   1	5
 age_units has 2 uses with 1 vals
-   2	weeks
+   2	year
 assay has 2 uses with 1 vals
    2	RNA-seq
-biosample_date has 2 uses with 1 vals
-   2	2015-01-00
-donor has 2 uses with 1 vals
-   2	000
-file has 25 uses with 25 vals
+biosample_date has 2 uses with 2 vals
+   1	2015-01-10
+   1	2015-01-00
+donor has 2 uses with 2 vals
+   1	001
+   1	000
+drug.[].dose has 1 uses with 1 vals
+   1	100 mg 2x/day
+drug.[].expense has 2 uses with 1 vals
+   2	$55.00
+drug.[].name has 1 uses with 1 vals
+   1	ibuprofin
+file has 25 uses with 26 vals
    1	ex01do00or01fa02.fq.gz
    1	ex01do00or02fa01.fq.gz
    1	ex00do00or00fa02.fq.gz
-   22	(in 22 others)
+   22	(in 23 others)
 format has 25 uses with 3 vals
    23	fastq
    1	tag storm
@@ -29,8 +38,9 @@ lab_kent_quality has 6 uses with 3 vals
    2	0.04
    2	0.01
    2	0
-life_stage has 2 uses with 1 vals
-   2	embryo
+life_stage has 2 uses with 2 vals
+   1	adult
+   1	child
 map_ratio has 12 uses with 7 vals
    3	0.90
    2	0.93
@@ -44,6 +54,18 @@ part has 23 uses with 4 vals
    6	2
    6	1
    5	(in 1 others)
+person.[].name has 3 uses with 3 vals
+   1	Bono Judd
+   1	Jerry Garcia
+   1	Janis Joplin
+person.[].state has 3 uses with 3 vals
+   1	California
+   1	Texas
+   1	homeless
+pmid has 1 uses with 3 vals
+   1	7654321
+   1	1234567
+   1	2345678
 q has 3 uses with 3 vals
    1	-1
    1	3
