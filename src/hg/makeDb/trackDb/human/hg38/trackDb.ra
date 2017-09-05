@@ -33,6 +33,7 @@ urlLabel COSMIC ID:
 searchIndex name,cosmLabel
 tableBrowser off
 mouseOverField _mouseOver
+html cosmicRegions
 
 searchTable cosmicRegionsUpdate
 searchPriority 2.07207
