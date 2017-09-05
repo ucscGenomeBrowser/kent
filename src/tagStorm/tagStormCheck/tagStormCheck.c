@@ -1,6 +1,7 @@
 /* tagStormCheck - Check that a tagStorm conforms to a schema.. */
 #include "common.h"
 #include "linefile.h"
+#include "localmem.h"
 #include "hash.h"
 #include "options.h"
 #include "sqlNum.h"
@@ -58,6 +59,113 @@ vaWarn(format, args);
 warn(" in stanza starting line %d of %s", startLine, fileName);
 }
 
+static boolean matchAndExtractIndexes(char *dottedName, struct tagSchema *schema,
+    struct dyString *scratch, char **retIndexes, boolean *retMatchEnd)
+/* Dotted name is something like this.that.12.more.2.ok
+ * The objArrayPieces is something like "this.that." ".more." ".notOk"
+ * Crucially it holds at least two elements, some of which may be ""
+ * This function will return TRUE if all but maybe the last of the objArrayPieces is
+ * found in the dottedName.  If this is the case it will put something like .12.2 in
+ * scratch and *retIndexes.  If the last one matches it will set *retMatchEnd.
+ * Sort of a complex routine but it plays a key piece in checking required array
+ * elements */
+{
+struct slName *objArrayPieces = schema->objArrayPieces;
+dyStringClear(scratch);
+struct slName *piece = objArrayPieces;
+char *pos = dottedName;
+boolean gotNum = FALSE;
+for (;;)
+    {
+    /* Check to see if we match next piece, and return FALSE if not */
+    char *pieceString = piece->name;
+    int pieceLen = strlen(pieceString);
+    if (pieceLen != 0 && memcmp(pieceString, pos, pieceLen) != 0)
+        return FALSE;
+    pos += pieceLen;
+
+    /* Put the number into scratch with a leading dot separator. */
+    int digits = tagSchemaDigitsUpToDot(pos);
+    if (digits == 0)
+        return FALSE;
+    dyStringAppendC(scratch, '.');
+    dyStringAppendN(scratch, pos, digits);
+    pos += digits;
+    gotNum = TRUE;
+
+    /* Go to next piece,saving last piece for outside of the loop. */
+    piece = piece->next;
+    if (piece->next == NULL)
+        break;
+    }
+
+/* One more special case, where last piece needs to agree on emptiness at least in
+ * terms of matching */
+if (isEmpty(piece->name) != isEmpty(pos))
+    return FALSE;
+
+/* Otherwise both have something.  We return true/false depending on whether it matches */
+*retMatchEnd = (strcmp(piece->name, pos) == 0);
+*retIndexes = scratch->string;
+return gotNum;
+}
+
+
+struct arrayCheckHelper
+/* An object to help check required items in an array. */
+    {
+    struct arrayCheckHelper *next;
+    char *indexSig;   // Not allocated here.  This will be something like .1.2.1, a dot separated list of index vals
+    char *prefix;   // Everything but last field
+    boolean gotRequired;  // If true we got our required field
+    };
+
+
+void checkInAllArrayItems(char *fileName, struct tagStanza *stanza, struct tagSchema *schema,
+    struct dyString *scratch)
+/* Given a schema that is an array, make sure all items in array have the required value */
+{
+struct hash *hash = hashNew(4);
+struct lm *lm = hash->lm;   // Memory short cut
+struct arrayCheckHelper *helperList = NULL, *helper;
+struct slPair *pair;
+struct tagStanza *ancestor;
+for (ancestor = stanza; ancestor != NULL; ancestor = ancestor->parent)
+    {
+    for (pair = ancestor->tagList; pair != NULL; pair = pair->next)
+	{
+	boolean fullMatch;
+	char *indexes;
+	if (matchAndExtractIndexes(pair->name, schema, scratch, &indexes, &fullMatch))
+	    {
+	    helper = hashFindVal(hash, indexes);
+	    if (helper == NULL)
+		{
+		lmAllocVar(lm, helper);
+		hashAddSaveName(hash, indexes, helper, &helper->indexSig);
+		helper->prefix = lmCloneString(lm, pair->name);
+		chopSuffix(helper->prefix);
+		slAddHead(&helperList, helper);
+		}
+	    if (fullMatch)
+		helper->gotRequired = TRUE;
+	    }
+	}
+    }
+if (helperList == NULL)
+    reportError(fileName, stanza->startLineIx, "Missing required '%s' tag", schema->name);
+else
+    {
+    for (helper = helperList; helper != NULL; helper = helper->next)
+        {
+	if (!helper->gotRequired)
+	    reportError(fileName, stanza->startLineIx, 
+		"Missing required '%s' tag for element %s", schema->name, helper->prefix);
+	}
+    }
+hashFree(&hash);
+}
+
 static void rCheck(struct tagStanza *stanzaList, char *fileName, 
     struct slRef *wildList, struct hash *hash, struct slRef *requiredList,
     struct dyString *scratch)
@@ -71,7 +179,7 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
 	{
 	/* Break out tag and value */
-	char *tag = tagSchemaFigureArrayName(pair->name, scratch, TRUE);
+	char *tag = tagSchemaFigureArrayName(pair->name, scratch);
 	char *val = pair->val;
 
 	/* Make sure val exists and is non-empty */
@@ -186,9 +294,16 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
 	for (ref = requiredList; ref != NULL; ref = ref->next)
 	    {
 	    struct tagSchema *schema = ref->val;
-	    if (tagFindVal(stanza, schema->name) == NULL)
-	        reportError(fileName, stanza->startLineIx, 
-		    "Missing required '%s' tag", schema->name);
+	    if (schema->objArrayPieces != NULL)  // It's an array, complex to handle, needs own routine
+	        {
+		checkInAllArrayItems(fileName, stanza, schema, scratch);
+		}
+	    else
+		{
+		if (tagFindVal(stanza, schema->name) == NULL)
+		    reportError(fileName, stanza->startLineIx, 
+			"Missing required '%s' tag", schema->name);
+		}
 	    }
 	}
     }

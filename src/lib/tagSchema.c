@@ -7,6 +7,46 @@
 #include "tagSchema.h"
 
 
+static struct slName *makeObjArrayPieces(char *name)
+/* Given something like this.[].that return a list of "this." ".that".  That is
+ * return a list of all strings before between and after the []'s Other
+ * examples:
+ *        [] returns "" ""
+ *        this.[] return "this." ""
+ *        [].that returns "" ".that"
+ *        this.[].that.and.[].more returns "this." ".that.and." ".more" */
+{
+struct slName *list = NULL;	// Result list goes here
+char *pos = name;
+
+/* Handle special case of leading "[]" */
+if (startsWith("[]", name))
+     {
+     slNameAddHead(&list, "");
+     pos += 2;
+     }
+
+char *aStart;
+for (;;)
+    {
+    aStart = strchr(pos, '[');
+    if (aStart == NULL)
+        {
+	slNameAddHead(&list, pos);
+	break;
+	}
+    else
+        {
+	struct slName *el = slNameNewN(pos, aStart-pos);
+	slAddHead(&list, el);
+	pos = aStart + 2;
+	}
+    }
+slReverse(&list);
+return list;
+}
+
+
 struct tagSchema *tagSchemaFromFile(char *fileName)
 /* Read in a tagSchema file */
 {
@@ -85,6 +125,11 @@ while (lineFileNextReal(lf, &line))
         errAbort("Unrecognized type character %s line %d of %s", 
 	    typeString, lf->lineIx, lf->fileName);
 	}
+
+    if (strchr(schema->name, '['))
+        {
+	schema->objArrayPieces = makeObjArrayPieces(schema->name);
+	}
     slAddHead(&list, schema);
     }
 slReverse(&list);
@@ -101,9 +146,10 @@ for (schema = list; schema != NULL; schema = schema->next)
 return hash;
 }
 
-static int numDigitSize(char *s)
+int tagSchemaDigitsUpToDot(char *s)
 /* Return number of digits if is all digit up to next dot or end of string.
- * Otherwise return 0 */
+ * Otherwise return 0.  A specialized function but used by a couple of tag
+ * storm modules. */
 {
 char c;
 int digitCount = 0;
@@ -132,20 +178,18 @@ for (;;)
     }
 }
 
-char *tagSchemaFigureArrayName(char *tagName, struct dyString *scratch, boolean clearScratch)
+char *tagSchemaFigureArrayName(char *tagName, struct dyString *scratch)
 /* Return tagName modified to indicate the array
  * status. For names with .# in them substitute a '[]' for
  * the number.   Example:
  *      person.12.name becomes person.[].name
  *      animal.13.children.4.name becomes animal.[].children.[].name
  *      person.12.cars.1 becomes person.[].cars.[]
- * Puts result into scratch and returns scratch->string.  Will clear previous contents
- * of scratch optionally.  Just an option for easier composition in to lists. */
+ */
 {
 char dot = '.';
 char *s = tagName;
-if (clearScratch)
-    dyStringClear(scratch);
+dyStringClear(scratch);
 
 for (;;)
     {
@@ -162,7 +206,7 @@ for (;;)
        ++s;
        }
 
-    int numSize = numDigitSize(s);
+    int numSize = tagSchemaDigitsUpToDot(s);
     if (numSize > 0)
         {
 	dyStringAppend(scratch, "[]");

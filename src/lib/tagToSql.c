@@ -128,7 +128,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     struct slPair *pair;
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
-	char *tag = tagSchemaFigureArrayName(pair->name, scratch, TRUE);
+	char *tag = tagSchemaFigureArrayName(pair->name, scratch);
 	struct tagTypeInfo *tti = hashFindVal(hash, tag);
 	if (tti == NULL)
 	     {

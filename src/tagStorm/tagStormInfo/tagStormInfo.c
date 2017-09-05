@@ -93,7 +93,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     int stanzaSize = 0;
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
-	char *tagName = tagSchemaFigureArrayName(pair->name, scratch, TRUE);
+	char *tagName = tagSchemaFigureArrayName(pair->name, scratch);
 	if (clTag == NULL || sameString(tagName, clTag))
 	    {
 	    stanzaSize += 1;
