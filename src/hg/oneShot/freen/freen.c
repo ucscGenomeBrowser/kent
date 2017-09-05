@@ -28,11 +28,52 @@ errAbort("freen - test some hairbrained thing.\n"
 }
 
 
+static struct slName *makeObjArrayPieces(char *name)
+/* Given something like this.[].that return a list of "this." ".that".  That is
+ * return a list of all strings before between and after the []'s Other
+ * examples:
+ *        [] returns "" ""
+ *        this.[] return "this." ""
+ *        [].that returns "" ".that"
+ *        this.[].that.and.[].more returns "this." ".that.and." ".more" */
+{
+struct slName *list = NULL;	// Result list goes here
+char *pos = name;
+
+/* Handle special case of leading "[]" */
+if (startsWith("[]", name))
+     {
+     slNameAddHead(&list, "");
+     pos += 2;
+     }
+
+char *aStart;
+for (;;)
+    {
+    aStart = strchr(pos, '[');
+    if (aStart == NULL)
+        {
+	slNameAddHead(&list, pos);
+	break;
+	}
+    else
+        {
+	struct slName *el = slNameNewN(pos, aStart-pos);
+	slAddHead(&list, el);
+	pos = aStart + 2;
+	}
+    }
+slReverse(&list);
+return list;
+}
+
 void freen(char *input)
 /* Test something */
 {
-struct dyString *dy = dyStringNew(0);
-printf("%s -> %s\n", input, tagSchemaFigureArrayName(input, dy, TRUE));
+struct slName *el, *list = makeObjArrayPieces(input);
+printf("%s\n", input);
+for (el = list; el != NULL; el = el->next)
+    printf("\t'%s'\n", el->name);
 }
 
 int main(int argc, char *argv[])
