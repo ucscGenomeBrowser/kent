@@ -2918,86 +2918,8 @@ mouseOverField comments
 exonNumbers off
 noScoreFilter on
 
-track spUniprot
-shortLabel Protein Annotations
-longLabel UniProt/SwissProt Annotations
-group genes
-visibility hide
-type bigBed 12 +
-itemRgb on
-exonNumbers off
-compositeTrack on
-mouseOverField comments
-noScoreFilter on
-urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-release alpha
-
-        track spLocSignal
-        shortLabel Signal Peptide
-        longLabel UniProt/SwissProt Signal Peptides
-        parent spUniprot
-        visibility dense
-        type bigBed 12 +
-
-        track spLocExtra
-        shortLabel Extracellular
-        longLabel UniProt/SwissProt Extracellular Domain
-        parent spUniprot
-        visibility dense
-        type bigBed 12 +
-
-        track spLocTransMemb
-        shortLabel Transmembrane
-        longLabel UniProt/SwissProt Transmembrane Domains
-        parent spUniprot
-        visibility dense
-        type bigBed 12 +
-
-        track spLocCytopl
-        shortLabel Cytoplasmic
-        longLabel UniProt/SwissProt Cytoplasmic Domains
-        parent spUniprot
-        visibility dense
-        type bigBed 12 +
-
-        track spChain
-        shortLabel Chains
-        longLabel UniProt/SwissProt Polypeptide Chains
-        parent spUniprot
-        visibility dense
-        type bigBed 12 +
-
-        track spDisulfBond
-        shortLabel Disulf. Bonds
-        longLabel UniProt/SwissProt Disulfide Bonds
-        parent spUniprot
-        visibility dense
-        type bigBed 12 +
-
-        track spModif
-        shortLabel Modifications
-        longLabel UniProt/SwissProt Amino Acid Modifications
-        parent spUniprot
-        visibility dense
-        type bigBed 12 +
-
-        track spAnnot
-        shortLabel Other Annot.
-        longLabel UniProt/SwissProt Other Annotations
-        parent spUniprot
-        visibility hide
-        type bigBed 12 +
-
-        track spStruct
-        shortLabel Structure
-        longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
-        parent spUniprot
-        group genes
-        visibility hide
-        type bigBed 12 +
-
 #track spUniprot
-#shortLabel UniProt
+#shortLabel Protein Annotations
 #longLabel UniProt/SwissProt Annotations
 #group genes
 #visibility hide
@@ -3005,32 +2927,110 @@ release alpha
 #itemRgb on
 #exonNumbers off
 #compositeTrack on
+#mouseOverField comments
+#noScoreFilter on
+#urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+#release alpha
+
+        #track spLocSignal
+        #shortLabel Signal Peptide
+        #longLabel UniProt/SwissProt Signal Peptides
+        #parent spUniprot
+        #visibility dense
+        #type bigBed 12 +
+
+        #track spLocExtra
+        #shortLabel Extracellular
+        #longLabel UniProt/SwissProt Extracellular Domain
+        #parent spUniprot
+        #visibility dense
+        #type bigBed 12 +
+
+        #track spLocTransMemb
+        #shortLabel Transmembrane
+        #longLabel UniProt/SwissProt Transmembrane Domains
+        #parent spUniprot
+        #visibility dense
+        #type bigBed 12 +
+
+        #track spLocCytopl
+        #shortLabel Cytoplasmic
+        #longLabel UniProt/SwissProt Cytoplasmic Domains
+        #parent spUniprot
+        #visibility dense
+        #type bigBed 12 +
+
+        #track spChain
+        #shortLabel Chains
+        #longLabel UniProt/SwissProt Polypeptide Chains
+        #parent spUniprot
+        #visibility dense
+        #type bigBed 12 +
+
+        #track spDisulfBond
+        #shortLabel Disulf. Bonds
+        #longLabel UniProt/SwissProt Disulfide Bonds
+        #parent spUniprot
+        #visibility dense
+        #type bigBed 12 +
+
+        #track spModif
+        #shortLabel Modifications
+        #longLabel UniProt/SwissProt Amino Acid Modifications
+        #parent spUniprot
+        #visibility dense
+        #type bigBed 12 +
 
         #track spAnnot
-        #shortLabel UniProt Annot.
-        #longLabel UniProt/SwissProt Protein Annotations
+        #shortLabel Other Annot.
+        #longLabel UniProt/SwissProt Other Annotations
         #parent spUniprot
-        #group genes
         #visibility hide
         #type bigBed 12 +
-        #itemRgb on
-        #urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-        #mouseOverField comments
-        #noScoreFilter on
-        #exonNumbers off
 
         #track spStruct
-        #shortLabel UniProt Structure
+        #shortLabel Structure
         #longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
         #parent spUniprot
         #group genes
         #visibility hide
         #type bigBed 12 +
-        #itemRgb on
-        #urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-        #mouseOverField comments
-        #noScoreFilter on
-        #exonNumbers off
+
+track spUniprot
+shortLabel UniProt
+longLabel UniProt/SwissProt Annotations
+group genes
+visibility hide
+type bigBed 12 +
+itemRgb on
+exonNumbers off
+compositeTrack on
+
+        track spAnnot
+        shortLabel UniProt Annot.
+        longLabel UniProt/SwissProt Protein Annotations
+        parent spUniprot
+        group genes
+        visibility hide
+        type bigBed 12 +
+        itemRgb on
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        mouseOverField comments
+        noScoreFilter on
+        exonNumbers off
+
+        track spStruct
+        shortLabel UniProt Structure
+        longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
+        parent spUniprot
+        group genes
+        visibility hide
+        type bigBed 12 +
+        itemRgb on
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        mouseOverField comments
+        noScoreFilter on
+        exonNumbers off
 
 track ncbiRefOverlap
 shortLabel NCBI Overlaps
