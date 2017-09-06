@@ -39,14 +39,6 @@ var hgCollection = (function() {
         selectableContainer.data("ui-selectable")._mouseStop(null);
     }
 
-    function hideAllAttributes() {
-        // hide all the "set attribute" dialogs
-        $("#viewOptions").hide();
-        $("#CustomCompositeOptions").hide();
-        $("#CustomTrackOptions").hide();
-        $("#TrackDbOptions").hide();
-    }
-
     function selectNode(tree, node) {
         // called when a node in the currentCollection tree is selected
         var color = node.li_attr.color;
@@ -54,35 +46,22 @@ var hgCollection = (function() {
         var description = node.li_attr.longlabel;
         var visibility = node.li_attr.visibility;
         var type = node.li_attr.viewtype;
+        var viewFunc = node.li_attr.viewfunc;
         selectedNode = node;
         selectedTree = tree;
 
-        if (!type) {
-                hideAllAttributes();
-                $("#viewOptions").show();
-                $("#viewName").val(name);
-                $("#viewDescription").val(description);
-                $("#viewVis").val(visibility);
-                $("#viewColorInput").val(color);
-                $("#viewColorPicker").spectrum("set", color);
-        } else if (type == 'collection') {
-                hideAllAttributes();
-                $("#CustomCompositeOptions").show();
-                $("#collectionName").val(name);
-                $("#collectionDescription").val(description);
-                $("#collectionVis").val(visibility);
-        } else  if (type == 'track') {
-            hideAllAttributes();
-            $("#CustomTrackOptions").show();
-            $("#customName").val(name);
-            $("#customDescription").val(description);
-            $("#customVis").val(visibility);
-            $("#customColorInput").val(color);
-            $("#customColorPicker").spectrum("set", color);
-        } else {
-            hideAllAttributes();
-            $("#TrackDbOptions").show();
-        }
+        if (type == 'view') 
+            $("#viewFuncDiv").show();
+        else
+            $("#viewFuncDiv").hide();
+
+        $("#CustomTrackOptions").show();
+        $("#viewFunc").val(viewFunc);
+        $("#customName").val(name);
+        $("#customDescription").val(description);
+        $("#customVis").val(visibility);
+        $("#customColorInput").val(color);
+        $("#customColorPicker").spectrum("set", color);
    }
 
     function selectTreeNode(evt, data)             {
@@ -92,13 +71,30 @@ var hgCollection = (function() {
     function checkCallback( operation, node, node_parent, node_position, more) {
         // called during a drag and drop action to see if the target is droppable
         if ((operation === "copy_node") ||  (operation === "move_node")) {
-            if (node_parent.li_attr.class === "nodrop")
-                return false;
-            if ($(node_parent).attr('parent') !== '#')
+            if (node_parent.li_attr.class !== "folder")
                 return false;
         }
 
         return true;
+    }
+
+    function newCalcTrack() {
+        // create a new view under a collection
+        var ourCalcName = getUniqueName("calc");
+        var newName = "Calc Track";
+        var newDescription = "Description of Calculated Track";
+        var parent = $(selectedTree).find("li").first();
+
+        var newId = $(selectedTree).jstree("create_node", parent, newName + " (" + newDescription + ")");
+        var newNode = $(selectedTree).jstree("get_node", newId);
+        newNode.li_attr.class = "folder";
+        newNode.li_attr.name = ourCalcName;
+        newNode.li_attr.shortlabel = newName;
+        newNode.li_attr.longlabel = newDescription;
+        newNode.li_attr.visibility = "full";
+        newNode.li_attr.color = "#0";
+        newNode.li_attr.viewfunc = "add all";
+        newNode.li_attr.viewtype = "view";
     }
 
     function newCollection() {
@@ -113,6 +109,7 @@ var hgCollection = (function() {
         attributes += "viewType='" + "track" + "' ";
         attributes += "visibility='" + "full" + "' ";
         attributes += "name='" +  ourCollectionName + "' ";
+        attributes += "class='" +  "folder" + "' ";
 
         $('#collectionList').append("<li " + attributes +  "id='"+ourCollectionName+"'>A New Collection</li>");
         $('#currentCollection').append("<div id='"+ourTreeName+"'><ul><li " + attributes+ ">A New Collection</li><ul></div>");
@@ -129,6 +126,7 @@ var hgCollection = (function() {
         });
         $(newTree).on("select_node.jstree", selectTreeNode);
         var lastElement = $("#collectionList li").last();
+        //lastElement.addClass("folder");
         selectElements($("#collectionList"), lastElement) ;
         rebuildLabel();
     }
@@ -148,7 +146,6 @@ var hgCollection = (function() {
         var node = trees[id].find("li").first();
         trees[id].jstree('select_node', node);
         selectNode(trees[id], trees[id].jstree("get_node",node));
-
     }
 
     function addCollection(trees, list) {
@@ -182,16 +179,24 @@ var hgCollection = (function() {
     }
 
     function rebuildLabel() {
+        // rebuild the label for tree item
         var newText = selectedNode.li_attr.shortlabel + "   (" + selectedNode.li_attr.longlabel + ")";
         $(selectedTree).jstree('rename_node', selectedNode, newText);
     }
 
     function descriptionChange() {
+        // change the description (longLabel) for a track
         selectedNode.li_attr.longlabel = $("#customDescription").val();
         rebuildLabel();
     }
 
+    function viewFuncChange() {
+        // change the view function for a track
+        selectedNode.li_attr.viewfunc = $("#viewFunc").val();
+        }
+
     function nameChange() {
+        // change the name (shortLabel)  of a track
         selectedNode.li_attr.shortlabel = $("#customName").val();
         rebuildLabel();
         if (selectedNode.parent === '#') {
@@ -201,15 +206,18 @@ var hgCollection = (function() {
     }
 
     function colorChange() {
+        // change the color for a track
         var color = $("#customColorPicker").spectrum("get"); $('#customColorInput').val(color);
         selectedNode.li_attr.color = $("#customColorInput").val();
     }
 
     function visChange() {
+        // change the visibility of a track
         selectedNode.li_attr.visibility = $("#customVis").val();
     }
 
     function isDraggable(nodes) {
+        // only children can be dragged
         var ii;
         for (ii=0; ii < nodes.length; ii++)
             if (nodes[ii].children.length !== 0)
@@ -218,6 +226,7 @@ var hgCollection = (function() {
     }
 
     function collectionListRightClick (event) {
+        // popup the right menu in the collection list
         $(".collectionList-menu").finish().toggle(100).css({
             top: event.pageY + "px",
             left: event.pageX + "px"
@@ -225,8 +234,18 @@ var hgCollection = (function() {
         return false;
     }
 
+    function recordNames(tree) {
+        // keep an accounting of track names that have been used
+        var v = $(tree).jstree(true).get_json('#', {'flat': true});
+        for (i = 0; i < v.length; i++) {
+            var z = v[i];
+            names[z.li_attr.name] = 1;
+        }
+    }
+
     function init() {
         // called at initialization time
+        $("#viewFunc").change(viewFuncChange);
         $("#customName").change(nameChange);
         $("#customDescription").change(descriptionChange);
         $("#customVis").change(visChange);
@@ -235,6 +254,7 @@ var hgCollection = (function() {
         $("#discardChanges").click ( function () { window.location.reload(); });
 
         $("#newCollection").click ( newCollection );
+        $("#newCalcTrack").click ( newCalcTrack );
         $('#collectionList').selectable({selected : selectCollection});
         
         $( "#collectionList" ).contextmenu(collectionListRightClick);
@@ -248,10 +268,8 @@ var hgCollection = (function() {
         });
 
         $(".collectionList-menu li").click(function(){
-
             // This is the triggered action name
             switch($(this).attr("data-action")) {
-                // A case for each action. Your actions here
                 case "delete": 
                     $("#collectionList .ui-selected").remove();
                     var firstElement = $("#collectionList li").first();
@@ -259,14 +277,11 @@ var hgCollection = (function() {
                         selectElements($("#collectionList"), firstElement) ;
                     else 
                         $(selectedTree).remove();
-
             }
 
             // Hide it AFTER the action was triggered
             $(".collectionList-menu").hide(100);
         });
-
-
 
         var trackOpt = {
             hideAfterPaletteSelect : true,
@@ -275,16 +290,13 @@ var hgCollection = (function() {
             showInput: true,
             preferredFormat: "hex",
             change: colorChange,
-//            change: function() { var color = $("#customColorPicker").spectrum("get"); $('#customColorInput').val(color); },
         };
 
         $("#customColorPicker").spectrum(trackOpt);
-        //$.jstree.defaults.core.themes.icons = false;
         $.jstree.defaults.core.check_callback = checkCallback;
         $.jstree.defaults.core.themes.dots = true;
         $.jstree.defaults.contextmenu.show_at_node = false;
         $("#currentCollection div").each(function(index) {
-            //$("#collection").append($(this).clone());
             var newTree = this;
 
             $(newTree).jstree({
@@ -294,12 +306,11 @@ var hgCollection = (function() {
                 "check_callback" : checkCallback,
                 }
             });
+            recordNames(newTree);
             trees[this.id] = $(newTree);
            $(newTree).on("select_node.jstree", selectTreeNode);
         });
-        $("#currentCollection  li").each(function() {
-            names[this.getAttribute("name")] = 1;
-        });
+
         treeDiv=$('#tracks');
         treeDiv.jstree({
                'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],

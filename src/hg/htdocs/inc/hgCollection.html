@@ -70,67 +70,6 @@
             <div class='col-md-4 text-right'> </div>
         </div>
 
-        <!-- trackDb track setting widgets (none) -->
-        <div id='TrackDbOptions' style="display: none;">Drag to custom composite to copy to Collections</div>
-
-        <!-- view track widgets -->
-        <div id='viewOptions'  style="display: none;">
-            <label class='gbInputLabel'  for='name'>Name:</label>
-            <input type='text' name='viewName' id='viewName' value='' class='text ui-widget-content ui-corner-all'>
-
-            <br><label class='gbInputLabel'  for='description'>Description:</label>
-            <input type='text' name='viewDescription' id='viewDescription' value='' class='text ui-widget-content ui-corner-all'>
-
-            <br><label for='viewVis'>Visibility:</label>
-            <select ID='viewVis' >
-                <option>hide</option>
-                <option selectED>dense</option>
-                <option>squish</option>
-                <option>pack</option>
-                <option>full</option>
-            </select>
-
-            <br><label for='viewFunc'>Function:</label>
-            <select ID='viewFunc' >
-                <option selectED>show all</option>
-                <option >add all</option>
-                <option >subtract from the first</option>
-            </select>
-
-            <br> <p>Color: <input type='text' id='viewColorInput' value='0xffffff'>&nbsp;&nbsp;
-            <input id='viewColorPicker'>           
-
-            <div class='gbButtonGoContainer text-right' title='Apply'>
-                <div id='viewApply' class='gbButton'>Apply</div>
-            </div>
-            <div class='gbButtonGoContainer text-right' title='Reset'>
-                <div id='viewReset' class='gbButton'>Reset</div>
-            </div>
-        </div>
-
-        <!-- custom composite widgets -->
-        <div id='CustomCompositeOptions' style="display: none;">
-            <label class='gbInputLabel'  for='name'>Name:</label>
-            <input type='text' name='collectionName' id='collectionName' value='' class='text ui-widget-content ui-corner-all'>
-            <br><label for='description'>Description:</label>
-            <input type='text' name='collectionDescription' id='collectionDescription' value='' class='text ui-widget-content ui-corner-all'>
-            <br><label for='collectionVis'>Visibility:</label>
-            <select ID='collectionVis' style='width: 70px'>
-                <option>hide</option>
-                <option selectED>dense</option>
-                <option>squish</option>
-                <option>pack</option>
-                <option>full</option>
-            </select>
-            <br>
-            <div class='gbButtonGoContainer text-right' title='Apply'>
-                <div id='collectionApply' class='gbButton'>Apply</div>
-            </div>
-            <div class='gbButtonGoContainer text-right' title='Reset'>
-                <div id='collectionReset' class='gbButton'>Reset</div>
-            </div>
-        </div>
-
         <!-- custom track composite widgets -->
         <div id='CustomTrackOptions' style="display: none;">
             <label class='gbInputLabel'  for='name'>Name:</label>
@@ -146,6 +85,15 @@
                 <option>full</option>
             </select>
 
+            <div id='viewFuncDiv' style='display:none;height:20px'>
+                <br><label class='gbInputLabel'  for='viewFunc'>Function:</label>
+                <select ID='viewFunc' >
+                    <option selectED>show all</option>
+                    <option >add all</option>
+                    <option >subtract from the first</option>
+                </select>
+            </div>
+
             <br> <p><span class='gbInputLabel'> Color:</span> <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
             <input id='customColorPicker'>           
 
@@ -157,7 +105,7 @@
         <div class='row mygbSectionBanner'>
             <div class='col-md-8'>Collected Tracks</div>
             <div class='gbButtonGoContainer text-right' title='Make New Calculated Track'>
-                <div id='newCollection' class='gbButton'>Make New Calculated Track </div>
+                <div id='newCalcTrack' class='gbButton'>Make New Calculated Track </div>
             </div>
         </div>
         <div style='margin:12px; font-size:12px'> 

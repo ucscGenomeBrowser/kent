@@ -44,6 +44,7 @@ char *shortLabel;
 char *longLabel;
 char *visibility;
 unsigned long color;
+char *viewFunc;
 };
 
 char *getString(char **input)
@@ -107,12 +108,20 @@ static void printGroup(char *parent, struct trackDb *tdb, boolean folder, boolea
 {
 char *userString = "";
 char *prefix = "";
+char *viewFunc = "show all";
 
 if (user)
     {
     //prefix = "coll_";
     if (tdb->parent && tdb->subtracks) 
-        userString = "viewType='view'";
+        {
+        viewFunc = trackDbSetting(tdb, "viewFunc");
+        if (viewFunc == NULL)
+            viewFunc = "show all";
+        userString = "viewType='view' class='folder'";
+        }
+    else if (tdb->subtracks)
+        userString = "viewType='track' class='folder'";
     else
         userString = "viewType='track'";
     }
@@ -129,7 +138,7 @@ else
     
 #define IMAKECOLOR_32(r,g,b) ( ((unsigned int)b<<0) | ((unsigned int)g << 8) | ((unsigned int)r << 16))
 
-jsInlineF("<li shortLabel='%s' longLabel='%s' color='#%06x' visibility='%s'  name='%s%s' %s>%s",  tdb->shortLabel, tdb->longLabel,IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB), hStringFromTv(tdb->visibility), prefix,  trackHubSkipHubName(tdb->track),   userString,  tdb->shortLabel );
+jsInlineF("<li shortLabel='%s' longLabel='%s' color='#%06x' viewFunc='%s' visibility='%s'  name='%s%s' %s>%s",  tdb->shortLabel, tdb->longLabel,IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB), viewFunc, hStringFromTv(tdb->visibility), prefix,  trackHubSkipHubName(tdb->track),   userString,  tdb->shortLabel );
 jsInlineF(" (%s)", tdb->longLabel);
 
 
@@ -241,7 +250,9 @@ return vis;
 void addVisibleTracks()
 // add the visible tracks table rows
 {
-printf("<tr name='visible' ><td>All Visible</td><td>All the tracks visible in hgTracks</td></tr>\n");
+jsInlineF("<ul>");
+jsInlineF("<li class='nodrop' name='%s'>%s", "visibile", "Visible Tracks");
+jsInlineF("<ul>");
 struct trackDb *tdb;
 for(tdb = fullTrackList; tdb; tdb = tdb->next)
     {
@@ -250,6 +261,9 @@ for(tdb = fullTrackList; tdb; tdb = tdb->next)
         printGroup("visible", tdb, FALSE, FALSE);
         }
     }
+jsInlineF("</ul>");
+jsInlineF("</li>");
+jsInlineF("</ul>");
 }
 
 void doTable()
@@ -274,7 +288,7 @@ if (curGroup != NULL)
             jsInlineF("<div id='%s' shortLabel='%s'>", trackHubSkipHubName(tdb->track), tdb->shortLabel);
             jsInlineF("<ul>");
             printGroup("collections", tdb, TRUE, TRUE);
-            jsInlineF("<ul>");
+            jsInlineF("</ul>");
             jsInlineF("</div>");
             }
         }
@@ -292,8 +306,8 @@ if (curGroup != NULL)
         }
     jsInlineF("\");\n");
     }
-//addVisibleTracks();
 jsInlineF("$('#tracks').append(\"");
+addVisibleTracks();
 for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
     {
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
@@ -349,7 +363,7 @@ puts(
 "       <div class='gbTrackDescription'>\n");
 puts("<div class='dataInfo'>");
 puts("</div>");
-webIncludeHelpFileSubst("hgCompositeHelp", NULL, FALSE);
+webIncludeHelpFileSubst("hgCollectionHelp", NULL, FALSE);
 
 puts("<div class='dataInfo'>");
 puts("</div>");
@@ -477,22 +491,24 @@ if (startsWith("coll_", str))
 return str;
 }
 
-static void outView(FILE *f, struct sqlConnection *conn, char *db, struct track *view, char *parent, struct hash *nameHash, struct hash *collectionNameHash)
+static int outView(FILE *f, struct sqlConnection *conn, char *db, struct track *view, char *parent, struct hash *nameHash, struct hash *collectionNameHash, int priority)
 // output a view to a trackhub
 {
 fprintf(f,"\ttrack %s\n\
 \tshortLabel %s\n\
 \tlongLabel %s\n\
 \tview %s \n\
+\tcontainer mathWig\n\
+\tautoScale on  \n\
 \tparent %s \n\
 \tcolor %ld,%ld,%ld \n\
-\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), view->visibility);
+\tviewFunc %s \n\
+\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), view->viewFunc, view->visibility);
 //fprintf(f,"\tequation +\n");
 fprintf(f, "\n");
 
 //int useColor = 0;
 struct track *track = view->trackList;
-int priority = 1;
 for(; track; track = track->next)
     {
     struct trackDb *tdb = hashMustFindVal(nameHash, skipColl(track->name));
@@ -501,6 +517,7 @@ for(; track; track = track->next)
     //useColor++;
     }
 
+return priority;
 }
 
 void updateHub(char *db, struct track *collectionList, struct hash *nameHash)
@@ -526,7 +543,7 @@ for(collection = collectionList; collection; collection = collection->next)
         {
         if (track->trackList != NULL)
             {
-            outView(f, conn, db, track, collection->name,  nameHash, collectionNameHash);
+            priority = outView(f, conn, db, track, collection->name,  nameHash, collectionNameHash, priority);
             }
         else
             {
@@ -605,6 +622,9 @@ if ((name == NULL) && (ele->type == jsonObject))
         track->visibility = jsonStringEscape(strEle->val.jeString);
         strEle = (struct jsonElement *)hashMustFindVal(attrHash, "color");
         track->color = hexStringToLong(jsonStringEscape(strEle->val.jeString));
+        strEle = (struct jsonElement *)hashFindVal(attrHash, "viewfunc");
+        if (strEle)
+            track->viewFunc = jsonStringEscape(strEle->val.jeString);
         }
     }
 }
@@ -636,7 +656,7 @@ static void buildNameHash(struct hash *nameHash, struct trackDb *list)
 if (list == NULL)
     return;
 
-struct trackDb *tdb;
+struct trackDb *tdb = list;
 for(tdb = list; tdb;  tdb = tdb->next)
     {
     hashAdd(nameHash, trackHubSkipHubName(tdb->track), tdb);
