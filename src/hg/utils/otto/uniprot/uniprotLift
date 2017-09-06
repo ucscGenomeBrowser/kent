@@ -276,8 +276,7 @@ def makeSeqSizes(uniprotFa):
     cmd = "faSize %s -detailed | gawk '{$2=$2*3; print}'> temp/chromSizes" % uniprotFa
     run(cmd)
 
-    # keep protein lengths for filtering later, we'll remove everything that 
-    # covers the whole protein
+    # keep protein lengths for later, we'll add one feature for every protein sequence
     seqSizes = {}
     for line in open("temp/chromSizes"):
         seq, size = line.rstrip("\n").split()
@@ -303,15 +302,20 @@ def writeProtBed(uniProtAnnotName, seqSizes):
 
         # remove annotations that cover the whole protein, probably not very useful
         #print annot.begin, annot.end, annot.acc, seqSizes[annot.acc]
-        if int(annot.begin)==1 and int(annot.end)==int(seqSizes[annot.acc])+1:
-            logging.debug("skipping %s, covers whole protein" % str(annot))
-            continue
+        #if int(annot.begin)==1 and int(annot.end)==int(seqSizes[annot.acc])+1:
+            #logging.debug("skipping %s, covers whole protein" % str(annot))
+            #continue
 
         annotPos = 3*(int(annot.begin)-1)
         annotPosEnd = 3*(int(annot.end)-1)
         if annotName not in doneAnnots:
             ofh.write("\t".join([annot.acc, str(annotPos), str(annotPosEnd), annotName])+"\n")
         doneAnnots.add(annotName)
+
+    # add one line for every accession, 
+    for accId, accSize in seqSizes.iteritems():
+            ofh.write("\t".join([accId, 0, str(accSize), "fullSeq:"+accId":")]+"\n")
+
     ofh.close()
     
 def parseAnnots(uniProtAnnotName):
@@ -346,9 +350,11 @@ def uniprotLift(seqFname, annotFname, chromSizesFname, liftFname):
     # read lifted bed and add uniprot annotations to it as additional fields
 
     tracks = [
+        "spFullSeq", # full protein sequence coverage on genome
         "spMut", # variants
         "spAnnot", # all other features
         "spStruct", # structural features
+        "spBlacklist", #blacklisted high-throughput-only features
         "spLocSignal", "spLocExtra", "spLocTransMemb", "spLocCytopl", # localization-related
         "spDomain", "spModif", "spChain", "spDisulfBond" # domains, etc
     ]
@@ -371,14 +377,14 @@ def uniprotLift(seqFname, annotFname, chromSizesFname, liftFname):
         for annot in annots:
             pmids.update(annot.pmid.split(","))
 
-        if len(pmidBlackList.intersection(pmids))==len(pmids):
-            blackCount +=1
-            continue
-
         isMut = False
         if annot.featType in ["mutagenesis site", "sequence variant"]:
             isMut = True
             ofh = files["spMut"]
+        elif len(pmidBlackList.intersection(pmids))==len(pmids):
+            blackCount +=1
+            #continue
+            ofh = files["spBlacklist"]
         elif annot.featType in ["strand","helix", "coiled-coil region", "turn"]:
             ofh = files["spStruct"]
         # suggested by Regeneron: create four subtracks, for the subcell. localization indicators
