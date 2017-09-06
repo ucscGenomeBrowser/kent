@@ -19,7 +19,7 @@ urlLabel Gene ID:
 urls pubMedIds=http://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
 mouseOverField _mouseOver
 
-track cosmicRegionsUpdate
+track cosmicRegions
 release alpha
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
@@ -35,12 +35,8 @@ tableBrowser off
 mouseOverField _mouseOver
 html cosmicRegions
 
-searchTable cosmicRegionsUpdate
-searchPriority 2.07207
-searchType bigBed
-searchDescription COSMIC Regions
-
 track cosmicRegions
+release beta,public
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V81
 type bigBed 4 +
