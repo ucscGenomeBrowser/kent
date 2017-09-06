@@ -12,6 +12,100 @@
    Patch scaffolds of type NOVEL: 59<br>
 </p>
 
+<h3><font color="#0000FF">Haplotypes</font></h3>
+<p>
+Items in the <em>Haplotype</em> track show sequence variation present in the
+population for certain sections of the genome. Items in this track were either
+designated as alternate loci or novel patches by the GRC. To view the alternate
+sequence, click on the "Fetch alternate sequence" link that appears on the sequence
+details pages. Data points in this track are always displayed in
+<font color="#0000FF"><b>blue</b></font>.
+</p>
+
+<h3><font color="#FF0000">Patches</font></h3>
+
+<p>
+Items in the <em>Patch</em> track indicate areas of the sequence that have
+been corrected by the GRC and will be updated to new sequence in the next full
+human assembly release. To view the new, corrected sequence, click on the
+"Fetch alternate sequence" link that appears on the sequence
+details pages. Data points in this track are always displayed in
+<font color="#FF0000"><b>red</b></font>.
+</p>
+
+<h3>Alignment</h3>
+
+<p>
+The <em>Alignment</em> track is the PSL representation of the <em>Chain</em>
+track. This PSL representation allows the side-by-side alignment to be
+viewed. It was created from the Chain track data using
+the <em>chainToPsl</em> kent source utility. This track follows the display
+conventions for
+<a href="/goldenPath/help/hgTracksHelp.html#PSLDisplay" target="_blank">
+PSL alignment tracks</a>. Alignments are displayed in <b>black</b> and,
+depending on the track configuration settings, may be interspersed with
+vertical <font color="#F88017"><b>orange</b></font> lines.
+</p>
+
+<h3>Chain Track</h3>
+
+<p>
+The chain track shows the alignment of human genome alternate sequence to the
+human $date genome sequence using a gap scoring system that allows
+longer gaps than traditional affine gap scoring systems. It can also
+tolerate gaps in both human and the alternate sequence simultaneously.
+</p>
+
+<h3>Net Track</h3>
+
+<p>
+The net track shows the best human/alternate chain for every part of the alternate
+sequence. It is useful for finding orthologous regions and for studying genome
+rearrangement. The human sequence used in this annotation is from the $date assembly.
+</p>
+
+<p>
+In full display mode, the top-level (level 1) chains are the largest, highest-scoring
+chains that span this region. In many cases, gaps exist in the top-level chain. When
+possible, these are filled in by other chains that are displayed at level 2. The gaps in
+level 2 chains may be filled by level 3 chains and so forth.
+</p>
+
+<p>
+In the graphical display, the boxes represent ungapped alignments; the lines represent
+gaps. Click on a box to view detailed information about the chain as a whole; click on a
+line to display information about the gap.  The detailed information is useful in determining
+the cause of the gap or, for lower level chains, the genomic rearrangement.
+</p>
+
+<p>
+Individual items in the display are categorized as one of four types (other than gap):
+</p>
+
+<p><ul>
+<li><b>Top</b> - The best, longest match. Displayed on level 1.</li>
+<li><b>Syn</b> - Line-ups on the same chromosome as the gap in the level above it.</li>
+<li><b>Inv</b> - A line-up on the same chromosome as the gap above it, but in the opposite orientation.</li>
+<li><b>NonSyn</b> - A match to a chromosome different from the gap in the level above.</li>
+</ul></p>
+
+<p>
+Data points in this track are displayed according to the chromosome color key
+that appears just below the Browser display (e.g., data points on
+chromosome 21 appear in <font color="#DD88FD"><b>pink</b></font>).
+</p>
+
+
+<p>
+The chain track displays boxes joined together by either single or
+double lines. The boxes represent aligning regions.
+Single lines indicate gaps that are largely due to a deletion in the
+human assembly or an insertion in the alternate sequence.
+Double lines represent more complex gaps that involve substantial
+sequence in both sequences.
+</p>
+
+
 <h2>Definitions</h2>
 <ul>
 
@@ -649,8 +743,9 @@
 </table>
 <h2>References</h2>
 <p>
-Data obtained from the
+Data obtained from the <a href="https://www.ncbi.nlm.nih.gov/grc" target="_blank">
+   Genome Reference Consortium (GRC)</a>. For more information, please see the
    <a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/patches.shtml" target="_blank">
-   Genome Reference Consortium:</a>&nbsp;&nbsp;
-   <a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.26_GRCh38.p11/" target="_blank">FTP</a>.
+   GRC Introduction to Patches</a> page, <a href="https://www.ncbi.nlm.nih.gov/grc/human/issues?filters=fix-version:GRCh38.p11" target="_blank">details for GRCh38.p11</a>, and the 
+   <a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.12_GRCh37.p11/" target="_blank">GRC p.11 FTP site</a> for downloads. 
 </p>
