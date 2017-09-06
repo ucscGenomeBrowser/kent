@@ -32338,3 +32338,7 @@ bedToBigBed -type=bed8+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg19/c
 # Link it up so the outside world can see it. 
 cd /gbdb/hg19/cosmic/
 ln -s /hive/data/outside/cosmic/hg19/v82/cosMutHg19V82.bb .
+##############################################################################
+# snpedia (DONE - 2017-09-06 - Max)  
+# see ../hg38/snpedia.txt
+##############################################################################

@@ -5222,6 +5222,11 @@ identifier snpException150
     $hg.snp150Flagged.exceptions comma
     $hg.snp150Mult.exceptions comma
 
+identifier snpediaId
+"snpedia rs* identifiers"
+    $hg.snpedia.name dupeOk
+    $hg.snpediaHtml.name
+
 # Other NCBI Identifiers
 
 identifier locusLinkId external=LocusLink
