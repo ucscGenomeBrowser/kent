@@ -109,7 +109,7 @@ if (textSize == NULL)
     textSize = "-";
 if (trackControls == NULL)
     trackControls = "-";
-fprintf(stderr, "ASH: %22s: "
+fprintf(stderr, "cartTrace: %22s: "
 	"u.i=%d u.l=%d u.c=%d s.i=%d s.l=%d s.c=%d "
 	"p=%s f=%s t=%s pid=%ld %s\n",
 	when,
@@ -118,12 +118,12 @@ fprintf(stderr, "ASH: %22s: "
 char userIdKey[256];
 cartDbSecureId(userIdKey, sizeof userIdKey, u);
 if (cart->userId && !sameString(userIdKey, cart->userId))
-    fprintf(stderr, "ASH: bad userId %s --> %d_%s!  pid=%ld\n",
+    fprintf(stderr, "cartTrace: bad userId %s --> %d_%s!  pid=%ld\n",
 	    cart->userId, u->id, u->sessionKey, (long)getpid());
 char sessionIdKey[256];
 cartDbSecureId(sessionIdKey, sizeof sessionIdKey, s);
 if (cart->sessionId && !sameString(sessionIdKey, cart->sessionId))
-    fprintf(stderr, "ASH: bad sessionId %s --> %d_%s!  pid=%ld\n",
+    fprintf(stderr, "cartTrace: bad sessionId %s --> %d_%s!  pid=%ld\n",
 	    cart->sessionId, s->id, s->sessionKey, (long)getpid());
 }
 
@@ -133,13 +133,13 @@ boolean cartTablesOk(struct sqlConnection *conn)
 {
 if (!sqlTableExists(conn, userDbTable()))
     {
-    fprintf(stderr, "ASH: cartTablesOk failed on %s.%s!  pid=%ld\n",
+    fprintf(stderr, "cartTablesOk failed on %s.%s  pid=%ld\n",
 	    sqlGetDatabase(conn), userDbTable(),  (long)getpid());
     return FALSE;
     }
 if (!sqlTableExists(conn, sessionDbTable()))
     {
-    fprintf(stderr, "ASH: cartTablesOk failed on %s.%s!  pid=%ld\n",
+    fprintf(stderr, "cartTablesOk failed on %s.%s  pid=%ld\n",
 	    sqlGetDatabase(conn), sessionDbTable(), (long)getpid());
     return FALSE;
     }
@@ -2955,3 +2955,109 @@ struct dyString *dbPosValue = newDyString(4096);
 cartEncodeState(lastDbPosCart, dbPosValue);
 cartSetString(cart, dbPosKey, dbPosValue->string);
 }
+
+void cartTdbFetchMinMaxPixels(struct cart *theCart, struct trackDb *tdb,
+                                int defaultMin, int defaultMax, int defaultVal,
+                                int *retMin, int *retMax, int *retDefault, int *retCurrent)
+/* Configure maximum track height for variable height tracks (e.g. wiggle, barchart)
+ *      Initial height and limits may be defined in trackDb with the maxHeightPixels string,
+ *	Or user requested limits are defined in the cart. */
+{
+boolean parentLevel = isNameAtParentLevel(tdb, tdb->track);
+char *heightPer = NULL; /*	string from cart	*/
+int minHeightPixels = defaultMin;
+int maxHeightPixels = defaultMax;
+int defaultHeightPixels = defaultVal;
+int defaultHeight;      /*      truncated by limits     */
+char defaultDefault[16];
+safef(defaultDefault, sizeof defaultDefault, "%d", defaultVal);
+char *tdbDefault = cloneString(
+    trackDbSettingClosestToHomeOrDefault(tdb, MAXHEIGHTPIXELS, defaultDefault));
+
+if (sameWord(defaultDefault, tdbDefault))
+    {
+    struct hashEl *hel;
+    /*	no maxHeightPixels from trackDb, maybe it is in tdb->settings
+     *	(custom tracks keep settings here)
+     */
+    if ((tdb->settings != (char *)NULL) &&
+	(tdb->settingsHash != (struct hash *)NULL))
+	{
+	if ((hel = hashLookup(tdb->settingsHash, MAXHEIGHTPIXELS)) != NULL)
+	    {
+	    freeMem(tdbDefault);
+	    tdbDefault = cloneString((char *)hel->val);
+	    }
+	}
+    }
+
+/*      the maxHeightPixels string can be one, two, or three words
+ *      separated by :
+ *      All three would be:     max:default:min
+ *      When only two:          max:default
+ *      When only one:          max
+ *      (this works too:        min:default:max)
+ *      Where min is minimum allowed, default is initial default setting
+ *      and max is the maximum allowed
+ *	If it isn't available, these three have already been set
+ *	in their declarations above
+ */
+if (differentWord(defaultDefault, tdbDefault))
+    {
+    char *words[3];
+    char *sep = ":";
+    int wordCount;
+    wordCount=chopString(tdbDefault,sep,words,ArraySize(words));
+    switch (wordCount)
+	{
+	case 3:
+	    minHeightPixels = atoi(words[2]);
+	    defaultHeightPixels = atoi(words[1]);
+	    maxHeightPixels = atoi(words[0]);
+
+            // flip max and min if min>max
+            if (maxHeightPixels < minHeightPixels)
+                {
+                int pixels;
+                pixels = maxHeightPixels;
+                maxHeightPixels = minHeightPixels;
+                minHeightPixels = pixels;
+                }
+
+	    if (defaultHeightPixels > maxHeightPixels)
+		defaultHeightPixels = maxHeightPixels;
+	    if (minHeightPixels > defaultHeightPixels)
+		minHeightPixels = defaultHeightPixels;
+	    break;
+	case 2:
+	    defaultHeightPixels = atoi(words[1]);
+	    maxHeightPixels = atoi(words[0]);
+	    if (defaultHeightPixels > maxHeightPixels)
+		defaultHeightPixels = maxHeightPixels;
+	    if (minHeightPixels > defaultHeightPixels)
+		minHeightPixels = defaultHeightPixels;
+	    break;
+	case 1:
+	    maxHeightPixels = atoi(words[0]);
+	    defaultHeightPixels = maxHeightPixels;
+	    if (minHeightPixels > defaultHeightPixels)
+		minHeightPixels = defaultHeightPixels;
+	    break;
+	default:
+	    break;
+	}
+    }
+heightPer = cartOptionalStringClosestToHome(theCart, tdb, parentLevel, HEIGHTPER);
+/*      Clip the cart value to range [minHeightPixels:maxHeightPixels] */
+if (heightPer) defaultHeight = min( maxHeightPixels, atoi(heightPer));
+else defaultHeight = defaultHeightPixels;
+defaultHeight = max(minHeightPixels, defaultHeight);
+
+*retMin = minHeightPixels;
+*retMax = maxHeightPixels;
+*retDefault = defaultHeightPixels;
+*retCurrent = defaultHeight;
+
+freeMem(tdbDefault);
+} 
+

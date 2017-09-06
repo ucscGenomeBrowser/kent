@@ -300,6 +300,16 @@ webStartWrapperGatewayHeader(theCart, db, "", format, args, withHttpHeader,
                              withLogo, FALSE);
 }
 
+void webStartExt(boolean withHttpHeader, struct cart *theCart, char *db, char *format, ...)
+/* Print out pretty wrapper around things when not
+ * from cart. Do not output an http header.*/
+{
+va_list args;
+va_start(args, format);
+webStartWrapper(theCart, db, format, args, withHttpHeader, TRUE);
+va_end(args);
+}
+
 void webStart(struct cart *theCart, char *db, char *format, ...)
 /* Print out pretty wrapper around things when not
  * from cart. */
@@ -380,16 +390,19 @@ puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are cl
     "    <TABLE BGCOLOR='#" HG_COL_INSIDE
          "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n");
 if (hasTitle)
-    puts("<div class='subheadingBar' class='windowSize'>");
+    puts("<div class='subheadingBar'><div class='windowSize'>");
 else
     puts("<div>");
 }
 
-void webNewSectionHeaderEnd()
+void webNewSectionHeaderEnd(boolean hasTitle)
 /* Properly close header of collapsible section on web page */
 {
-puts("     </div>\n"
-     "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
+if (hasTitle)
+    puts("     </div></div>\n");
+else
+    puts("     </div>\n");
+puts("     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
           "<TR><TH HEIGHT=10></TH></TR>\n"
      "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n");
 }
@@ -401,7 +414,7 @@ va_list args;
 va_start(args, format);
 webNewSectionHeaderStart(TRUE);
 vprintf(format, args);
-webNewSectionHeaderEnd();
+webNewSectionHeaderEnd(TRUE);
 va_end(args);
 }
 
@@ -409,7 +422,7 @@ void webNewEmptySection()
 /* create a new section on the web page to maintain table layout */
 {
 webNewSectionHeaderStart(FALSE);
-webNewSectionHeaderEnd();
+webNewSectionHeaderEnd(FALSE);
 }
 
 void webEndSectionTables()
@@ -532,28 +545,48 @@ boolean webGotWarnings()
 return gotWarnings;
 }
 
-void webAbort(char* title, char* format, ...)
+void webAbortExt(boolean withHttpHeader, char* title, char *format, va_list args)
 /* an abort function that outputs a error page */
 {
-va_list args;
-va_start(args, format);
 
 /* output the header */
 if(!webHeadAlreadyOutputed)
-    webStart(errCart, NULL, "%s", title);
+    webStartExt(withHttpHeader, errCart, NULL, "%s", title);
 
 /* in text mode, have a different error */
 if(webInTextMode)
 	printf("\n\n\n          %s\n\n", title);
 
 vprintf(format, args);
+
 printf("<!-- HGERROR -->\n");
 printf("\n\n");
 
 webEnd();
 
-va_end(args);
 exit(0);
+}
+
+void webAbortNoHttpHeader(char* title, char* format, ...)
+/* an abort function that outputs a error page. No http header output. */
+{
+va_list args;
+va_start(args, format);
+
+webAbortExt(FALSE, title, format, args); 
+
+va_end(args);
+}
+
+void webAbort(char* title, char* format, ...)
+/* an abort function that outputs a error page */
+{
+va_list args;
+va_start(args, format);
+
+webAbortExt(TRUE, title, format, args); 
+
+va_end(args);
 }
 
 void printCladeListHtml(char *genome, char *event, char *javascript)
@@ -1333,7 +1366,7 @@ for(offset = 0; offset < len && !regexec(&re, oldString + offset, ArraySize(matc
 	dyStringAppend(dy, "?");
     dyStringAppend(dy, uiVars);
     if(match[1].rm_so != match[1].rm_eo)
-	dyStringAppend(dy, "&");
+	dyStringAppend(dy, "&amp;");
     }
 if(offset < len)
     dyStringAppend(dy, oldString + offset);

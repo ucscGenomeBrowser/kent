@@ -882,6 +882,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
+priority 6
+
 
 track snp141Flagged
 shortLabel Flagged SNPs(141)
@@ -900,6 +902,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
+priority 18
+
 
 track snp141Mult
 shortLabel Mult. SNPs(141)
@@ -920,6 +924,7 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
+priority 24
 
 track snp141
 shortLabel All SNPs(141)
@@ -937,6 +942,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
+priority 12
+
 
 track snp142Common
 shortLabel Common SNPs(142)
@@ -957,6 +964,8 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Common_bugFix
+priority 5
+
 
 track snp142Flagged
 shortLabel Flagged SNPs(142)
@@ -976,6 +985,7 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Flagged_bugFix
+priority 17
 
 track snp142Mult
 shortLabel Mult. SNPs(142)
@@ -997,6 +1007,8 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Mult_bugFix
+priority 23
+
 
 track snp142
 shortLabel All SNPs(142)
@@ -1015,6 +1027,8 @@ macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142_bugFix
+priority 11
+
 
 track snp144Common
 shortLabel Common SNPs(144)
@@ -1035,6 +1049,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
+priority 4
+
 
 track snp144Flagged
 shortLabel Flagged SNPs(144)
@@ -1054,6 +1070,7 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
+priority 16
 
 track snp144Mult
 shortLabel Mult. SNPs(144)
@@ -1075,6 +1092,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
+priority 22
+
 
 track snp144
 shortLabel All SNPs(144)
@@ -1093,6 +1112,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
+priority 10
+
 
 track snp146Common
 shortLabel Common SNPs(146)
@@ -1113,6 +1134,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
+priority 3
+
 
 track snp146Flagged
 shortLabel Flagged SNPs(146)
@@ -1132,6 +1155,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
+priority 15
+
 
 track snp146Mult
 shortLabel Mult. SNPs(146)
@@ -1153,6 +1178,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
+priority 21
+
 
 track snp146
 shortLabel All SNPs(146)
@@ -1171,12 +1198,14 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
+priority 9
+
 
 track snp147Common
 shortLabel Common SNPs(147)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 147) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp147Seq
@@ -1191,7 +1220,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
-priority 1
+priority 2
+
 
 track snp147Flagged
 shortLabel Flagged SNPs(147)
@@ -1211,6 +1241,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
+priority 14
+
 
 track snp147Mult
 shortLabel Mult. SNPs(147)
@@ -1232,6 +1264,8 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
+priority 20
+
 
 track snp147
 shortLabel All SNPs(147)
@@ -1250,12 +1284,14 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
+priority 8
+
 
 track snp149Common
 shortLabel Common SNPs(149)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 149) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp149Seq
@@ -1270,7 +1306,6 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp149CodingDbSnp,
-priority 1
 
 track snp149Flagged
 shortLabel Flagged SNPs(149)
@@ -1329,6 +1364,91 @@ orangDb ponAbe2
 macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp149CodingDbSnp,
+
+track snp150Common
+shortLabel Common SNPs(150)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 150) Found in >= 1% of Samples
+group varRep
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp150Seq
+snpExceptionDesc snp150ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp150OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp150CodingDbSnp,
+priority 1
+
+track snp150Flagged
+shortLabel Flagged SNPs(150)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 150) Flagged by dbSNP as Clinically Assoc
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp150Seq
+snpExceptionDesc snp150ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp150OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp150CodingDbSnp,
+priority 13
+
+
+track snp150Mult
+shortLabel Mult. SNPs(150)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 150) That Map to Multiple Genomic Loci
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp150Seq
+snpExceptionDesc snp150ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp150OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp150CodingDbSnp,
+priority 19
+
+
+track snp150
+shortLabel All SNPs(150)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 150)
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp150OrthoPt5Pa2Rm8
+chimpDb panTro5
+orangDb ponAbe2
+macaqueDb rheMac8
+hapmapPhase III
+codingAnnotations snp150CodingDbSnp,
+priority 7
+
 
 track hgdpGeo
 shortLabel HGDP Allele Freq
@@ -1604,6 +1724,7 @@ urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
 dataVersion 2016-05-15
+
 
     track dgvMerged
     parent dgvPlus
@@ -3296,6 +3417,7 @@ color 200, 0, 0
 type bed 4
 hgsid on
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
+release alpha
 
 track cosmicNew
 shortLabel COSMIC
@@ -3329,6 +3451,18 @@ urlLabel Link to HGMD:
 mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
+
+track snpedia
+shortLabel SNPedia
+longLabel SNPedia article text
+urlLabel SNPedia page:
+group phenDis
+visibility hide
+color 50,0,100
+type bed 4
+itemDetailsHtmlTable snpediaHtml
+url https://www.snpedia.com/index.php/$$
+release alpha
 
 track clinvar
 compositeTrack on
@@ -3365,7 +3499,7 @@ type bigBed 9
 itemRgb on
 exonNumbers off
 noScoreFilter on
-release alpha
+#release alpha,beta
 # draw the name field directly over the feature
 labelOnFeature on
 # linkIdInName means that the first part of the "name" field (space-separated) is the ID used for the %s parameter in directUrl
@@ -4791,7 +4925,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9846
+searchPriority 12.9847
 padding 250
 
 searchTable snp147Flagged
@@ -4799,7 +4933,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9847
+searchPriority 12.9848
 padding 250
 
 searchTable snp147Mult
@@ -4807,7 +4941,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9848
+searchPriority 12.9849
 padding 250
 
 searchTable snp147
@@ -4823,7 +4957,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9856
+searchPriority 12.9844
 padding 250
 
 searchTable snp149Flagged
@@ -4831,7 +4965,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9857
+searchPriority 12.9845
 padding 250
 
 searchTable snp149Mult
@@ -4839,7 +4973,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9858
+searchPriority 12.9846
 padding 250
 
 searchTable snp149
@@ -4848,6 +4982,38 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.952
+padding 250
+
+searchTable snp150Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.952
+padding 250
+
+searchTable snp150
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9841
+padding 250
+
+searchTable snp150Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9842
+padding 250
+
+searchTable snp150Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9843
 padding 250
 
 include cloneEnd.trackDb.ra

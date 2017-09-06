@@ -20,7 +20,7 @@ errAbort(
 
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn, *conn2;
+struct sqlConnection *conn;
 
 char query2[256];
 struct sqlResult *sr2;
@@ -41,8 +41,7 @@ if (argc != 3) usage();
 database  = cloneString(argv[1]);
 proteinDB = cloneString(argv[2]);
 
-conn = hAllocConn(database);
-conn2= hAllocConn(database);
+conn= hAllocConn(database);
 o1 = fopen("j.dat", "w");
 o2 = fopen("jj.dat", "w");
 
@@ -60,7 +59,7 @@ while (!bothDone)
         sqlSafef(query2, sizeof query2, "select symbol, prvSymbols from %s.hgnc;", proteinDB);
     	}
     
-    sr2 = sqlMustGetResult(conn2, query2);
+    sr2 = sqlMustGetResult(conn, query2);
     row2 = sqlNextRow(sr2);
     while (row2 != NULL)
 	{

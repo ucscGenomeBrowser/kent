@@ -45,6 +45,8 @@
 #include "udc.h"
 #include "paraFetch.h"
 #include "filePath.h"
+#include "wikiLink.h"
+#include "cheapcgi.h"
 
 
 #ifdef LOWELAB
@@ -709,7 +711,7 @@ sqlSetParanoid(TRUE);
 struct sqlConnection *conn = sqlConnCacheMayAlloc(centralCc, centralDb);
 if ((conn == NULL) || !cartTablesOk(conn))
     {
-    fprintf(stderr, "ASH: hConnectCentral failed over to backupcentral!  "
+    fprintf(stderr, "hConnectCentral failed over to backupcentral "
             "pid=%ld\n", (long)getpid());
     sqlConnCacheDealloc(centralCc, &conn);
     sqlConnCacheFree(&centralCc);
@@ -3306,6 +3308,51 @@ if (httpHost == NULL && !gethostname(host, sizeof(host)))
 return httpHost;
 }
 
+char *hLocalHostCgiBinUrl() 
+/* Return the current full absolute URL of the cgi-bin directory of the local
+ * server in the format http(s)://<host>/<cgiBinDir>, e.g.
+ * https://genome.ucsc.edu/cgi-bin/.
+ * The <host> is coming from the SERVER_NAME variable, which is
+ * the ServerName setting in the Apache config file.
+ * The cgi-bin directory is coming from the SCRIPT_NAME variable, the relative
+ * location of the cgi program relative to Apache's DOCUMENT_ROOT.
+ * Https is used if the variable HTTPS is set by Apache.
+ *
+ * If login.relativeLink=on is set, return only the empty string. 
+ * (This is used on the CIRM server, as it has no way of knowing what its
+ * actual server name or protocol is, it is behind a reverse proxy)
+ * Result has to be free'd. */
+{
+boolean relativeLink = cfgOptionBooleanDefault(CFG_LOGIN_RELATIVE, FALSE);
+if (relativeLink)
+    return cloneString("");
+
+char *cgiDir = cgiScriptDirUrl();
+char buf[2048];
+char *hgLoginHost = cgiServerNamePort();
+safef(buf, sizeof(buf), "http%s://%s%s", cgiAppendSForHttps(), hgLoginHost, cgiDir);
+
+return cloneString(buf);
+}
+
+char *hLoginHostCgiBinUrl() 
+/* Return the current full absolute URL of the cgi-bin directory of the host
+ * used for logins. Genome-euro/genome-asia use genome.ucsc.edu for the login,
+ * as we have only one single server for user accounts.
+ * Returns a string in the format
+ * http(s)://<host>/cgi-bin/ e.g. http://genome.ucsc.edu/cgi-bin/ 
+ * - the <host> is coming from the wiki.host variable in hg.conf.
+ * - https is used unless login.useHttps=off in hg.conf
+ *
+ * If login.relativeLink=on is set, return only the empty string. 
+ * (see hLocalCgiBinUrl)
+ * Result has to be free'd. */
+{
+char buf[2048];
+safef(buf, sizeof(buf), "http%s://%s%s",
+      loginUseHttps() ? "s" : "", wikiLinkHost(), cgiScriptDirUrl());
+return cloneString(buf);
+}
 
 boolean hHostHasPrefix(char *prefix)
 /* Return TRUE if this is running on web-server with host name prefix */
@@ -5480,4 +5527,46 @@ for (table = snpNNNTables;  table != NULL;  table = table->next)
         return tdb;
     }
 return NULL;
+}
+
+boolean hDbHasNcbiRefSeq(char *db)
+/* Return TRUE if db has NCBI's RefSeq alignments and annotations. */
+{
+// hTableExists() caches results so this shouldn't make for loads of new SQL queries if called
+// more than once.
+return (hTableExists(db, "ncbiRefSeq") && hTableExists(db, "ncbiRefSeqPsl") &&
+        hTableExists(db, "ncbiRefSeqCds") && hTableExists(db, "ncbiRefSeqLink") &&
+        hTableExists(db, "ncbiRefSeqPepTable") &&
+        hTableExists(db, "seqNcbiRefSeq") && hTableExists(db, "extNcbiRefSeq"));
+}
+
+char *hRefSeqAccForChrom(char *db, char *chrom)
+/* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.
+ * db must never change. */
+{
+static char *firstDb = NULL;
+static struct hash *accHash = NULL;
+static boolean checkExistence = TRUE;
+if (firstDb && !sameString(firstDb, db))
+    errAbort("hRefSeqAccForChrom: only works for one db.  %s was passed in earlier, now %s.",
+             firstDb, db);
+char *seqAcc = NULL;
+if (checkExistence && !trackHubDatabase(db) && hTableExists(db, "chromAlias"))
+    // Will there be a chromAlias for hubs someday??
+    {
+    firstDb = db;
+    struct sqlConnection *conn = hAllocConn(db);
+    accHash = sqlQuickHash(conn,
+                           NOSQLINJ "select chrom, alias from chromAlias where source = 'refseq'");
+    if (hashNumEntries(accHash) == 0)
+        // No RefSeq accessions -- make accHash NULL
+        hashFree(&accHash);
+    hFreeConn(&conn);
+    checkExistence = FALSE;
+    }
+if (accHash)
+    seqAcc = cloneString(hashFindVal(accHash, chrom));
+if (seqAcc == NULL)
+    seqAcc = cloneString(chrom);
+return seqAcc;
 }

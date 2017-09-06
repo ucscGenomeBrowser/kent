@@ -44,8 +44,254 @@
 
 <!-- ============= 2017 archived news ============= -->
 <a name="2017"></a>
+<a name="082517"></a>
+<h2>Aug. 23, 2017 &nbsp;&nbsp; New dbSNP build 150 tracks now available for hg19 and hg38</h2>
+<p>
+We are pleased to announce the release of our &quot;SNP&quot; tracks derived from
+<a href="http://www.ncbi.nlm.nih.gov/SNP/" target="_blank"> NCBI&#39;s dbSNP Human Build 150 data</a>, available on
+the two most recent human assemblies, 
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=snp150" target="_blank">GRCh38/hg38</a> and 
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=snp150" target="_blank">GRCh37/hg19</a>.
+NCBI's dbSNP database is a collection which includes a range of molecular variation, such as single 
+nucleotide polymorphisms and small insertions/deletions (indels). This release 
+<a href="https://ncbiinsights.ncbi.nlm.nih.gov/2017/05/08/dbsnps-human-build-150-has-
+doubled-the-amount-of-refsnp-records/" target="_blank">
+nearly doubles</a> the amount of SNP records compared to the previous 147 release (now over 300
+million for hg38, and over 200 million for hg19). </p>
+
+<p>
+There are four SNP tracks available as part of this release:
+<ul>
+ <li>
+All SNPs (150): containing all mappings of reference SNPs to the human assembly. The tracks below
+are subsets of <i>All SNPs (150)</i>.</li>
+<li>
+Common SNPs (150): uniquely mapped variants that appear in at least 1% of the population or are
+100% non-reference.</li>
+<li>
+Flagged SNPs (150): uniquely mapped variants, excluding Common SNPs, that have been flagged by dbSNP
+as &quot;clinically associated.&quot;</li>
+<li>
+Mult. SNPs (150): variants that have been mapped to more than one genomic location. This track has
+been shrinking over the course of the last few releases as dbSNP now excludes most SNPs whose
+flanking sequences map to multiple locations in the genome.</li>
+</ul>
+<p>
+By default, only the <i>Common SNPs (150)</i> are visible in the browser; other tracks must be made
+visible using the track controls. <i>All SNPs (150)</i> tracks reside in the &quot;Variation&quot;
+group category for the hg19 and hg38 browsers.</p>
+<p>
+These tracks were produced at UCSC by Angie Hinrichs and checked for quality by Cath Tyner. 
+We'd like to thank the dbSNP group at NCBI for providing access to these data.</p>
+
+<a name="081717"></a>
+<h2>Aug. 17, 2017 &nbsp;&nbsp; New CRISPR track for Chinese hamster</h2>
+<p>
+A new <a href="../cgi-bin/hgTrackUi?db=criGri1&g=crispr" target="_blank">CRISPR/Cas9</a> track is 
+now available for the Chinese hamster (C_griseus_v1.0/<a href="../cgi-bin/hgGateway?db=criGri1"
+target="_blank">criGri1</a>) assembly.</p>
+<p>
+This track shows regions of the genome within 200 bp of transcribed regions and DNA sequences 
+targetable by CRISPR RNA guides using the Cas9 enzyme from S. pyogenes (PAM: NGG). CRISPR target 
+sites were annotated with predicted specificity (off-target effects) and predicted efficiency 
+(on-target cleavage) by various algorithms using the <a href="http://crispor.tefor.net/"
+target="_blank">CRISPOR</a> tool.</p>
+<p>
+The details page for each target contains a wealth of information related to the target, such as the
+<a href="http://dx.doi.org/10.1038/nbt.2647" target="_blank">MIT Specificity score</a>, 
+<a href="http://dx.doi.org/10.1038/nmeth.3543"
+target="_blank">Moreno-Mateos Efficiency Score</a>, 
+<a href="http://dx.doi.org/10.1038/nbt.3437"
+target="_blank">Doench/Fusi Efficiency Score</a>, and any off-targets.</p> 
+<p>
+If you would like us to generate this track for another assembly, please notify us at
+<a
+href="mailto:&#103;e&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;d&#117;">&#103;e&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.&#101;d&#117;</a>.</p>
+<!-- above address is genome at soe.ucsc.edu --> 
+<p>
+We would like to thank Hiram Clawson, Maximilian Haeussler, Christopher Lee, and Jairo Navarro for
+the development and release of these tracks.</p>
+
+<a name="071417"></a>
+<h2>Jul. 14, 2017 &nbsp;&nbsp; New alternative mouse strain hub and strain-specific annotations</h3>
+<p>
+A mouse strain assembly hub is now available and shows an alignment of 16 assembled laboratory mice
+strains, including the reference mouse (mm10) as well as the reference rat (rn6). This hub contains
+some of the most common mice strains used in disease models such as NOD, BALB/c, and C3H. Each
+mouse strain in the assembly hub is displayed as the primary sequence along with strain-specific
+annotations. You can load this hub from our <a href="../cgi-bin/hgHubConnect"
+target="_blank">Public Hubs</a> or the following
+<a href="http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hubIndex.html" target="_blank">page</a>.
+</p>
+<p>
+Along with the release of this assembly hub, a new track is available for mm10. The
+<a href="../cgi-bin/hgTrackUi?db=mm10&g=strainSNPs" target="_blank">Mouse SNPs</a> track shows
+single nucleotide variants between the different strains of mice and all SNP and indel calls are
+relative to the reference mouse genome (GRCm38/mm10).</p>
+<p>
+Special thanks to Joel Armstrong, Ian Fiddles, and Benedict Paten for the alignment generation, as
+well as Thomas Keane and the <a href="http://www.sanger.ac.uk/science/data/mouse-genomes-project"
+target="_blank">Mouse Genomes Project</a> for providing the genome assemblies. Thanks to Hiram Clawson
+and Jairo Navarro for the development and release of this track and hub.</p>
+
+<a name="2017-07-14"></a>
+<h2>Jul. 14, 2017 &nbsp;&nbsp; New Video:  Multi-Region mode for viewing 
+discontinuous regions in the Browser</h2>
+<p>
+Today we release a new <a href = "https://goo.gl/gQTcyR" target = _blank>video</a> 
+showing how to use the enhanced Multi-Region display mode.  This feature allows 
+the display of any regions of the genome together on the same screen.  A recent 
+enhancement of the feature allows users to load their coordinates directly into 
+a text box, bypassing the previous requirement to use a URL to upload coordinates.
+</p>
+<p>
+This completes a trilogy of videos demonstrating the Multi-Region mode.  Previous 
+episodes showed how to use <a href = "https://goo.gl/n8szK2" target = _blank>Exon-Only 
+mode</a> and how to view <a href = "https://goo.gl/99tX3Y" target = _blank>alternate 
+haplotypes</a> in their chromosomal context.
+</p>
+<p>
+This video, like the other content in this series, is annotated in
+our <a href = "../training/vids/" target = _blank>training pages</a> with an 
+index showing the steps, with links directly to the corresponding places in the 
+video.  There is also a <a 
+href = "http://genome.ucsc.edu/training/vids/transcript11.pdf" 
+target = _blank>transcript</a>.
+</p>
+<p>
+The videos were produced at UCSC by Robert Kuhn and David Gibson.
+The Multi-Region engineering was by Galt Barber.
+</p>
+
+<a name="062217"></a>
+<h2>Jun. 22, 2017 &nbsp;&nbsp; Visualize gene pathways and interactions</h2>
+<p>
+Individual genes do not exist in a vacuum and their expression, activation, and function
+are often dependent on their interactions with other genes, frequently as part of pathways or 
+complexes. The new &quot;Gene Interactions&quot; tool combines data from a number of 
+<a href="help/hgGeneGraph.html#methods" target="_blank">curated interaction and
+pathway databases</a> as well as interactions mined from over 20 million PubMed abstracts
+through the <a href="http://literome.azurewebsites.net/" target="_blank">Literome</a> project.
+<p><img class='text-center' src="../../images/hgGeneGraph.png" alt="Gene Interaction Graph"
+width="35%" height="35%"></p>
+
+<p>
+This new tool displays a detailed pathway and interaction graph for a selected gene, marked
+in yellow. This primary gene is connected by lines to other genes, with those displayed
+representing the interactions with the most support from both text mining and databases.
+You can hover over any gene in the image to see more details about its
+product; you can hover over the connecting lines to see more detailed information about the data
+supporting a particular interaction. Clicking on one of these interaction lines brings you to a
+page that provides links to supporting information. Interactions can be filtered based on
+various support levels (both text-mined and databases, all databases, curated-only databases);
+and genes can be annotated and colored according to a variety of properties (GNF2 average
+expression, DrugBank and more.) You can read more about this tool and its features on the 
+<a href="help/hgGeneGraph.html" target="_blank">help page</a>.</p>
+
+<p>
+This new interaction graph can be accessed from the &quot;Tools&quot; menu or through the
+&quot;Gene Interactions&quot; track for the human assemblies
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=interactions" target="_blank">hg38</a> or
+<a href="../cgi-bin/hgTrackUi?db=hg19&g=interactions" target="_blank">hg19</a>.
+Note that while this tool can be accessed from the &quot;Tools&quot; menu while browsing any
+genome assembly, the data will always be based on human sources.</p>
+
+<p>
+A huge thank you to the many
+<a href="help/hgGeneGraph.html#credits" target="_blank">collaborators and contributors</a>
+who helped by providing their databases and expertise, notably Hoifung Poon and Chris Quirk at Microsoft Research who provided text mining data.
+Thank you to Max Haeussler and Matthew Speir at the UCSC Genome Browser for all of their efforts in
+the creation and release of these new resources.
+</p>
+
+<a name="061317"></a>
+<h2>Jun. 13, 2017 &nbsp;&nbsp; New barChart track format</h2>
+<p>
+Are you loving the 
+<a href="../../cgi-bin/hgTracks?db=hg38&hideTracks=1&gtexGene=pack&position=chr9%3A133255602-133275214">
+GTEx track</a> and want to make a similar barChart display track for yourself? Are you wondering
+how you can get boxplots of data points to show up on track item 
+<a href="../../cgi-bin/hgc?db=hg38&c=chr9&l=133255601&r=133275214&o=133257408&t=133275201&g=gtexGene&i=ABO">
+details pages</a>? Well, look no
+further as we have just released support for a GTEx style 
+<a href="help/barChart.html">barChart track format</a>. This new track format is
+available for use with custom tracks, and in binary format (bigBarChart) for use in track hubs. 
+Both barChart and bigBarChart formats support external matrix and sample files specifying data 
+points for a boxplot display on details pages, while the barChart/bigBarChart file typically 
+specifies summary values (mean or median) over the matrix, which determines the bar heights. See 
+the <a href="help/barChart.html">documentation</a> for further explanation and examples. 
+</p>
+
+<p>
+Along with the release of this new track format are some tools that help to create the tracks,
+<code>expMatrixToBarchartBed</code> and <code>bedJoinTabOffset</code>. Both utilities are free for
+all use cases, and can be downloaded from our <a href="http://hgdownload.soe.ucsc.edu/admin/exe">
+directory of utilities</a>. For more information about this new track format and helper scripts, 
+please see the <a href="help/barChart.html">help documentation</a>.
+</p>
+
+<p>
+Thanks to Kate Rosenbloom, Christopher Eisenhart and Christopher Lee for the development
+and testing of this new track format. 
+</p>
+
+<a name="060817"></a>
+<h2>Jun. 8, 2017 &nbsp;&nbsp; New command line tool for annotating variants, vai.pl</h2>
+<p>
+We are pleased to announce the release of a new command-line tool for annotating variants, 
+<code>vai.pl</code>. This program is similar to our web-based 
+<a href="../../cgi-bin/hgVai">Variant Annotation Integrator (VAI)</a>, except it allows for bypassing 
+the variant limit imposed by web-based VAI, and does not require connections to UCSC, allowing 
+annotation of private clinical data.</p>
+
+<p>
+Along with the release of this program, we have published a 
+<a href="http://genome.ucsc.edu/blog/annotating-millions-of-private-variants-with-vai-pl/">
+new blog post</a> with some background on both web-based and command-line VAI, as well 
+as some example usage to serve users. <code>vai.pl</code> is available for download from the
+<a href="https://genome-store.ucsc.edu">genome-browser store</a>, via purchase of the GBiB, GBiC,
+or full source.
+</p>
+
+<p>
+Thanks to Angie Hinrichs and Christopher Lee for the development and testing of the program.</p>
+
+<a name="060617"></a>
+<h2>Jun. 6, 2017 &nbsp;&nbsp; New genome browser available for ciona intestinalis</h2>
+<p>
+A genome browser is now available for the ciona intestinalis(<em>vase tunicate</em>)
+assembly released in April 2011 by The Graduate School of Science, Kyoto University. 
+For more information and statistics
+about this assembly, see the NCBI assembly record for
+<a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000224145.1/" target="_blank">
+Ciona intestinalis</a>.
+There are 6,381 contigs and 1,272 scaffolds in this assembly with a total size of
+115,227,500 bases.</p>
+<p>
+Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/ci3/">FTP server</a> or the
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#ciona">Downloads</a> page.
+Please observe the <a href="credits.html#ciona">conditions for use</a> when
+accessing and using these data sets. The annotation tracks for this browser were
+generated by UCSC and collaborators worldwide. See the
+<a href="credits.html#ciona_credits">Credits</a> page for a detailed list of the
+organizations and individuals who contributed to this release.</p>
+<a name="060217"></a>
+<h2>Jun. 2, 2017 &nbsp;&nbsp; New default tracks for human and mouse assemblies</h2>
+<p>
+We have made several changes to the sets of default tracks for some of our human and
+mouse assemblies. The
+<a href="http://genome.ucsc.edu/blog/gtex-resources-in-the-browser/" target="_blank">GTEx
+Gene Expression</a> track is now part of the set of default tracks for both human genome assemblies
+hg38 and hg19. In addition, we have added the
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=dgvPlus">DGV Struct Var</a> track, which displays large
+structural variant such as CNVs, inversions and in/dels, to the default track set for
+the human genome assembly hg19. Lastly, for the mouse genome assembly mm10, we have added the
+<a href="../../cgi-bin/hgTrackUi?db=mm10&g=cons60way">60-way Vertebrate Conservation</a> track to
+its set of default tracks.</p>
+
 <a name="051617"></a>
-<h2>May. 16, 2017 &nbsp;&nbsp; New genome browser available for golden eagle</h2>
+<h2>May 16, 2017 &nbsp;&nbsp; New genome browser available for golden eagle</h2>
 <p>
 A genome browser is now available for the golden eagle (<em>Aquila chrysaetos canadensis</em>)
 assembly released in October 2014 by Washington University. For more information and statistics

@@ -72,6 +72,7 @@ else if (sameString(format,"text"))
 	{
 	printf("%s\n",line); 
 	}
+    lineFileClose(&lf);
     }
 else
     {

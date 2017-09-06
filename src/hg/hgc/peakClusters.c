@@ -523,7 +523,7 @@ if (inputTableFieldDisplay != NULL)
     safef(sectionTitle, 
             sizeof(sectionTitle),"Assays for %s Without Hits in Cluster", cluster->name);
     jsBeginCollapsibleSectionOldStyle(cart, tdb->track, "cellNoHits", sectionTitle, FALSE);
-    webNewSectionHeaderEnd();
+    webNewSectionHeaderEnd(TRUE);
     webPrintLinkTableStart();
     printClusterTableHeader(fieldList, TRUE, FALSE, FALSE);
     printFactorSourceTableHits(cluster, conn, sourceTable, 
@@ -538,7 +538,7 @@ else
     }
 webNewSectionHeaderStart(TRUE);
 jsBeginCollapsibleSectionOldStyle(cart, tdb->track, "cellSources", "Cell Abbreviations", FALSE);
-webNewSectionHeaderEnd();
+webNewSectionHeaderEnd(TRUE);
 hPrintFactorSourceAbbrevTable(conn, tdb);
 jsEndCollapsibleSection();
 

@@ -1,8 +1,10 @@
 track bigMaf
-shortLabel mice strains
+shortLabel Mice Strains
 longLabel Cactus alignments, 17 mice strains plus rat
 type bigMaf
+group compGeno
 visibility full
+html html/mouseStrains.html
 bigDataUrl maf/LP_J.bigMaf.bb
 summary maf/LP_J.bigMafSummary.bb
 frames maf/LP_J.bigMafFrames.bb

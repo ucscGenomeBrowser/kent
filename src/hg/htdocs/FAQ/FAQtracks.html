@@ -29,6 +29,7 @@ genes</a></li>
 <li><a href="#tracks19">Obtaining clones referenced in Genome Browser</a></li>
 <li><a href="#tracks20">Locating centromeres and telomeres</a></li>
 <li><a href="#tracks21">Determining the table name for an annotation track</a></li>
+<li><a href="#tracks22">Unexpected results in UCSC RefSeq track</a></li>
 </ul>
 <hr>
 <p>
@@ -315,5 +316,37 @@ hyper-linked track name in the track controls (below the display). From the resu
 page, follow the &quot;View table schema&quot; link.  Finally, on the schema page, you will find the
 name of the database table near the top of the page listed after the &quot;Primary Table&quot;
 label.</p>
+
+<a name="tracks22"></a>
+<h2>Unexpected results in UCSC RefSeq track</h2>
+<h6>Why do some annotations differ in the UCSC RefSeq track compared to NCBI's Reference Sequence 
+Database?</h6>
+<p> 
+Historically, NCBI RefSeq coordinates were not directly available for building tracks in the UCSC 
+Genome Brower. Instead of using coordinates to map annotations, mappings to the reference assembly 
+were conducted using <a href="../FAQ/FAQblat.html" target="_blank">BLAT</a> 
+(BLAST-like alignment tool) alignment methods. This BLAT alignment method has caused some 
+discrepancies from the NCBI RefSeq database. Most discrepancies arise when the BLAT-generated 
+annotations align to multiple regions where the sequence in the assembly is either identical or 
+nearly identical.  In essence, by using BLAT to align the sequence, a single transcript could 
+result in matching to multiple novel places across the genome, or alignments of small exons could 
+differ slightly in final coordinates within the region of a gene rich with repeats. 
+BLAT-generated RefSeq track methods are described in 
+corresponding track description pages (e.g., <a href="../cgi-bin/hgTrackUi?db=hg19&g=refGene" 
+target="_blank">RefSeq track description for hg19)</a>.</p>
+<p>
+In 2017, NCBI RefSeq coordinates for hg38 were used for generating non-discrepant RefSeq tracks 
+in the UCSC Genome Browser. This new 
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite" 
+target="_blank">NCBI RefSeq track</a> in the UCSC Genome Browser displays identical RNA 
+coordinates to annotations in the <a href="https://www.ncbi.nlm.nih.gov/refseq/" 
+target="_blank">NCBI Reference Sequence Database</a>. Please note that when annotations do map 
+to multiple loci, the NCBI RefSeq track displays unique identifiers for each locus, while the
+UCSC RefSeq track retains the same identifier.</p> 
+<p>
+For more information and future plans to integrate coordinate-generated NCBI RefSeq tracks for 
+other assemblies, please see the 
+<a href="http://genome.ucsc.edu/blog/the-new-ncbi-refseq-tracks-and-you/" 
+target="_blank">NCBI RefSeq track blog post</a>.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

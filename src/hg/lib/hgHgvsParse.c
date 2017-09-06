@@ -785,6 +785,9 @@ while (! hdt->eof)
         change = parseNtDelOrDupOrInv(hdt, dyError);
     else if (hdt->type == tk_ins || hdt->type == tk_con)
         change = parseNtInsOrCon(hdt, dyError);
+    else if (hdt->type == tk_equal)
+        change = hgvsChangeNewSimple(hgvsctNoChange, "", HGVS_LENGTH_UNSPECIFIED,
+                                     NULL, HGVS_LENGTH_UNSPECIFIED);
     if (change != NULL)
         slAddHead(&changeList, change);
     else

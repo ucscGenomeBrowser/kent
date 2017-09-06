@@ -52,15 +52,6 @@
     width: 3em !important;
 }
 
-.gbSectionBanner {
-    padding: 3px;
-    margin-top: 6px;
-    background-color: #4c759c;  /* light blue */
-    color: white;
-    font-weight: bold;
-    font-size: 15px;
-}
-
 .gbSectionInfo {
     margin-top: 3px;
     color: lightgray;

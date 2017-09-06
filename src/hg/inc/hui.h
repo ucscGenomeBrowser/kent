@@ -1045,6 +1045,7 @@ void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
 
 #define NO_SCORE_FILTER  "noScoreFilter"
 #define  SCORE_FILTER      "scoreFilter"
+#define  SCORE_LABEL      "scoreLabel"
 #define SIGNAL_FILTER      "signalFilter"
 #define PVALUE_FILTER      "pValueFilter"
 #define QVALUE_FILTER      "qValueFilter"
@@ -1155,26 +1156,6 @@ void lrgCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, b
 void lrgTranscriptAliCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title,
 			   boolean boxed);
 /* LRG Transcripts: Locus Reference Genomic transcript sequences mapped to assembly. */
-
-/* GTEx: Genotype Tissue Expression */
-
-void gtexGeneUiGeneLabel(struct cart *cart, char *track, struct trackDb *tdb);
-/* Radio buttons to select format of gene label */
-
-void gtexGeneUiCodingFilter(struct cart *cart, char *track, struct trackDb *tdb);
-/* Checkbox to restrict display to protein coding genes */
-
-void gtexGeneUiGeneModel(struct cart *cart, char *track, struct trackDb *tdb);
-/* Checkbox to enable display of GTEx gene model */
-
-void gtexGeneUiLogTransform(struct cart *cart, char *track, struct trackDb *tdb);
-/* Checkbox to select log-transformed RPKM values */
-
-void gtexGeneUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb);
-/* Set viewing limits if log transform not checked */
-
-void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
-/* GTEx (Genotype Tissue Expression) per gene data */
 
 boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
 // Updates the tdb->priority from cart then sorts the list anew.

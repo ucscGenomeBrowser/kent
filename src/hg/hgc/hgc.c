@@ -7992,7 +7992,9 @@ if (offset >= 0)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	ro = rmskOutLoad(row+hasBin);
-	printf("<B>Name:</B> %s<BR>\n", ro->repName);
+	printf("<B>Name:</B> <A HREF='http://www.girinst.org/protected/repbase_extract.php?access=%s'>%s</A>\n", 
+            ro->repName, ro->repName);
+    printf("(link requires <A HREF='http://www.girinst.org/accountservices/register.php'>registration</A>)<BR>");
 	printf("<B>Family:</B> %s<BR>\n", ro->repFamily);
 	printf("<B>Class:</B> %s<BR>\n", ro->repClass);
 	printf("<B>SW Score:</B> %d<BR>\n", ro->swScore);
@@ -25295,7 +25297,7 @@ winEnd = cartUsualInt(cart, "r", 0);
 if (seqName == NULL)
     {
     if (winStart != 0 || winEnd != 0)
-	webAbort("CGI variable error",
+	webAbortNoHttpHeader("CGI variable error", 
 		 "hgc: bad input variables c=%s l=%d r=%d",
 		 cartString(cart, "c"), winStart, winEnd);
     else
@@ -26548,6 +26550,10 @@ else if (startsWith("peptideAtlas", table))
 else if (startsWith("gtexGene", table))
     {
     doGtexGeneExpr(tdb, item);
+    }
+else if (startsWith("gtexEqtlCluster", table))
+    {
+    doGtexEqtlDetails(tdb, item);
     }
 else if (startsWith("snake", trackHubSkipHubName(table)))
     {

@@ -1199,3 +1199,58 @@ for (ix = 0;  ix < ArraySize(aminoAcidTable);  ix++)
     }
 return '\0';
 }
+
+void aaToAbbr(char aa, char *abbrBuf, size_t abbrBufSize)
+/* Convert an AA single letter such as "A", "D" etc. to its abbreviation such as "Ala", "Asp" etc.
+ * abbrBufSize must be at least 4.  If aa is not found, "?%c?",aa is written into abbrBuf. */
+{
+// Uppercase for comparison.
+char aaUC = toupper(aa);
+int ix;
+for (ix = 0;  ix < ArraySize(aminoAcidTable);  ix++)
+    {
+    if (aaUC == aminoAcidTable[ix].letter)
+        {
+        // safencpy(...3) is required here because aminoAcidTable.abbreviation is char[3] not [4]
+        safencpy(abbrBuf, abbrBufSize, aminoAcidTable[ix].abbreviation, 3);
+        abbrBuf[0] = toupper(abbrBuf[0]);
+        return;
+        }
+    }
+safef(abbrBuf, abbrBufSize, "?%c?", aa);
+}
+
+void trimRefAlt(char *ref, char *alt, uint *pStart, uint *pEnd, int *pRefLen, int *pAltLen)
+/* If ref and alt have identical bases at beginning and/or end, trim those & update all params. */
+{
+int trimStart = 0;
+while (ref[trimStart] != '\0' && alt[trimStart] != '\0' && ref[trimStart] == alt[trimStart])
+    trimStart++;
+int refLen = strlen(ref);
+int altLen = strlen(alt);
+int iR = refLen - 1, iA = altLen - 1, trimEnd = 0;
+while (iR >= trimStart && iA >= trimStart && ref[iR] == alt[iA])
+    {
+    iR--;
+    iA--;
+    trimEnd++;
+    }
+if (trimEnd)
+    {
+    *pEnd -= trimEnd;
+    refLen -= trimEnd;
+    altLen -= trimEnd;
+    ref[refLen] = '\0';
+    alt[altLen] = '\0';
+    }
+if (trimStart)
+    {
+    *pStart += trimStart;
+    refLen -= trimStart;
+    altLen -= trimStart;
+    memmove(ref, ref+trimStart, refLen+1);
+    memmove(alt, alt+trimStart, altLen+1);
+    }
+*pRefLen = refLen;
+*pAltLen = altLen;
+}

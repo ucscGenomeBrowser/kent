@@ -17,6 +17,7 @@
 	<li><a href="../cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=mm9&amp;position=lastDbPos">Mouse NCBI37/mm9</a></li>
+	<li><a href="http://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hubIndex.html">Mouse: 16 strains</a></li>
 	<li class="last"><a href="../cgi-bin/hgGateway">Other</a></li>
         </ul>
 </li>
@@ -36,6 +37,7 @@
 	<li><a id="tableBrowserMenuLink" href="../cgi-bin/hgTables">Table Browser</a></li>
 	<li><a id="vaiMenuLink" href="../cgi-bin/hgVai">Variant Annotation Integrator</a></li>
 	<li><a id="diMenuLink" href="../cgi-bin/hgIntegrator">Data Integrator</a></li>
+	<li><a title="Explore gene/protein interactions and pathways" id="interactionMenuLink" href="../cgi-bin/hgGeneGraph">Gene Interactions</a></li>
 	<li><a id="gsMenuLink" href="../cgi-bin/hgNear">Gene Sorter</a></li>
 	<li><a id="ggMenuLink" href="../cgi-bin/hgGenome">Genome Graphs</a></li>
 	<li><a id="ispMenuLink" href="../cgi-bin/hgPcr">In-Silico PCR</a></li>

@@ -566,7 +566,9 @@ char *hTrackUiForTrack(char *trackName)
 if (trackName == NULL)
     return hgTrackUiName();
 if (gtexIsGeneTrack(trackName))
-    return gtexGeneTrackUiName();
+    return gtexTrackUiName();
+if (gtexIsEqtlTrack(trackName))
+    return gtexTrackUiName();
 return hgTrackUiName();
 }
 
@@ -5091,7 +5093,6 @@ double minY;        /*  from trackDb or cart    */
 double maxY;        /*  from trackDb or cart    */
 double tDbMinY;     /*  data range limits from trackDb type line */
 double tDbMaxY;     /*  data range limits from trackDb type line */
-int defaultHeight;  /*  pixels per item */
 char *horizontalGrid = NULL;    /*  Grid lines, off by default */
 char *transformFunc = NULL;    /* function to transform data points */
 char *alwaysZero = NULL;    /* Always include 0 in range */
@@ -5103,6 +5104,7 @@ char *yLineMarkOnOff;   /*  user defined Y marker line to draw */
 double yLineMark;       /*  from trackDb or cart    */
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
+int defaultHeight = maxHeightPixels;  /*  pixels per item */
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
@@ -5137,10 +5139,7 @@ if (parentLevel)
         char *aggregateVal = cartOrTdbString(cart, tdb->parent, "aggregate", NULL);
         printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
         safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
-        if (isCustomComposite(tdb))
-            aggregateExtraDropDown(option, aggregateVal);
-        else
-            aggregateDropDown(option, aggregateVal);
+        aggregateDropDown(option, aggregateVal);
         puts("</td></TR>");
 
 	if (sameString(aggregateVal, WIG_AGGREGATE_STACKED)  &&
@@ -5826,7 +5825,8 @@ if (scoreFilterOk)
         }
     else
         {
-        printf("<b>Show only items with score at or above:</b> ");
+        char* scoreLabel = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_LABEL, "score");
+        printf("<b>Show only items with %s at or above:</b> ", scoreLabel);
         safef(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
         cgiMakeIntVarWithLimits(option, minVal, "Minimum score",0, minLimit,maxLimit);
         printf("&nbsp;&nbsp;(range: %d to %d)\n", minLimit, maxLimit);
@@ -8525,7 +8525,9 @@ else if (startsWith("big", tdb->type))
     char *bbiFileName = bbiNameFromSettingOrTable(tdb, conn, tableName);
     hFreeConn(&conn);
     struct bbiFile *bbi = NULL;
-    if (startsWith("bigBed", tdb->type) || sameString("bigBarChart", tdb->type))
+    if (startsWith("bigBed", tdb->type) || sameString("bigBarChart", tdb->type) 
+        || sameString("bigMaf", tdb->type) || sameString("bigPsl", tdb->type)
+        || sameString("bigChain", tdb->type) || sameString("bigGenePred", tdb->type) )
 	bbi = bigBedFileOpen(bbiFileName);
     else if (startsWith("bigWig", tdb->type))
 	bbi = bigWigFileOpen(bbiFileName);

@@ -1,0 +1,111 @@
+#!/usr/bin/env python2.7
+# ucscAltAgp
+"""Generate UCSC named agp and fasta files for alternate sequences"""
+import os
+import sys
+import argparse
+import tempfile
+import time
+import gzip
+
+def parseArgs(args):
+    """
+    Parse the command line arguments.
+    """
+    parser= argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("inputFile",
+        help = " Full meta data file for the alternate sequences, typically " + \
+                "../genbank/*assembly_structure/all_alt_scaffold_placement.txt ",
+        action = "store")
+    parser.add_argument ("path",
+        help = " The path to the alt agp files, typically ../genbank/*assembly_structure/",
+        action = "store")
+    
+    if (len(sys.argv) == 1):
+        parser.print_help()
+        exit(1)
+    
+    options = parser.parse_args()
+    return options
+
+def main(args):
+    """
+    Initialized options and calls other functions.
+    """
+    options = parseArgs(args)
+
+    # Their gene names. 
+    oldNameCol = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
+    cmd = "cut -f 4 " + options.inputFile + " > " + oldNameCol.name 
+    os.system(cmd)
+    
+    # Our gene names
+    newNameCol = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
+    cmd = "cut -f 4,6 " + options.inputFile + " | sed 's/\./v/g' | awk " +\
+            "'{print \"chr\"$2\"_\"$1\"_alt\"}' > " + newNameCol.name
+    os.system(cmd)
+
+    # This two col file can be used to map their gene names to ours.  
+    altNameMap = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
+    cmd = "paste " + oldNameCol.name + " " + newNameCol.name + " | sort > " + \
+            altNameMap.name
+    os.system(cmd)
+
+    # Read the two column file into a dictionary that maps their chromosome names to ours.  
+    theirNameToOurs = dict()
+    for line in altNameMap: 
+        splitLine = line.strip("\n").split("\t")
+        theirNameToOurs.setdefault(splitLine[0], splitLine[1])
+
+    # Find all alternative agp files and store as a list.  
+    altFileList = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
+    cmd = "find " + options.path + " -name \"*agp*\" | grep \"ALT\" > " + altFileList.name
+    os.system(cmd)
+
+    # Make new .agp and .fa files with ucsc names. 
+    for theirAgpFile in altFileList:
+        # All the alternative agp files have the same name, so get a number for the file 
+        # name from the file path. 
+        altNum = theirAgpFile.split("/")[3].split("_")[3]
+        ourFaFileName = "alt_" + altNum + ".fa"
+        ourAgpFileName = "alt_" + altNum + ".agp"
+
+        # Go through their agp file and convert the names. 
+        ourAgpFile = open(ourAgpFileName, "w")
+        for line in gzip.open(theirAgpFile.strip("\n"), "r"):
+            if line.startswith("#"):
+                ourAgpFile.write(line)
+                continue
+            splitLine = line.strip("\n").split("\t")
+            newChrom = theirNameToOurs[splitLine[0]]
+            ourAgpFile.write(newChrom + "\t" + "\t".join(splitLine[1:]) + "\n")
+        ourAgpFile.close()
+        print ("Finished creating " + ourAgpFileName)
+
+        # Make a list of alternative chromosomes to grab out of the twoBit.
+        altChrmList = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
+        cmd = "grep \"ALT_DRER_TU_" + altNum + "\" " + options.inputFile + \
+                " | cut -f 4  > " + altChrmList.name
+        os.system(cmd)
+
+        # Make an fasta file with their name scheme.  
+        theirFaFile = tempfile.NamedTemporaryFile(mode="w+", bufsize=1)
+        cmd = "twoBitToFa refseq.2bit " + theirFaFile.name + " -seqList=" + altChrmList.name
+        os.system(cmd)
+
+        # Go through their fa file and convert the names.  
+        ourFaFile = open(ourFaFileName, "w")
+        for line in theirFaFile:
+            if line.startswith(">"): 
+                theirChrom = line.strip("\n").strip(">")
+                ourFaFile.write(">" + theirNameToOurs[theirChrom] + "\n")
+            else:
+                ourFaFile.write(line)
+        ourFaFile.close() 
+
+        cmd = "gzip " + ourFaFileName
+        os.system(cmd)
+        print ("Finished creating" + ourFaFileName + ".gz")
+
+if __name__ == "__main__" : 
+    sys.exit(main(sys.argv))

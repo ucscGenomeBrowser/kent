@@ -81,6 +81,19 @@ struct trackDb *tdb = hashMustFindVal(fullTableToTdbHash, table);
 return tdbBigFileName(conn, tdb);
 }
 
+struct hTableInfo *bigWigToHti(char *table)
+/* Get fields of bigWig into hti structure. */
+{
+struct hTableInfo *hti;
+AllocVar(hti);
+hti->rootName = cloneString(table);
+hti->isPos= TRUE;
+safecpy(hti->chromField, sizeof(hti->chromField), "chrom");
+safecpy(hti->startField, sizeof(hti->startField), "chromStart");
+safecpy(hti->endField, sizeof(hti->endField), "chromEnd");
+return hti;
+}
+
 struct bbiInterval *intersectedFilteredBbiIntervalsOnRegion(struct sqlConnection *conn,
 	struct bbiFile *bwf, struct region *region, enum wigCompare filterCmp, double filterLl,
 	double filterUl, struct lm *lm)
@@ -425,4 +438,12 @@ else
     }
 }
 
-
+void showSchemaBigWigNoTable(char *db, char *table, struct trackDb *tdb)
+{
+hPrintf("<B>Database:</B> %s", db);
+printf("<BR>The data for this track is provided by a file in "
+       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
+       "BigWig</A> format.");
+hPrintf("<BR><B>Data URL:</B>  %s", trackDbSetting(tdb, "bigDataUrl"));
+printTrackHtml(tdb);
+}

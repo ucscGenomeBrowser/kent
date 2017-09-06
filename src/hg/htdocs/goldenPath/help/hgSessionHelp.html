@@ -26,6 +26,7 @@
 <h6><a href="#Delete">Deleting a session</a></h6>
 <h6><a href="#Lifespan">Lifespan of a session</a></h6>
 <h6><a href="#Gallery">Session gallery</a></h6> 
+<h6><a href="#NAR">Help for Nucleic Acids Research submitters</a></h6>
 <hr>
 <p>
 <a href="../../contacts.html">Questions and feedback on this User's Guide are welcome.</a></p>
@@ -430,5 +431,184 @@ location. This allows creating a single link, such as
 http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=U, where 
 <strong>U</strong> is the URL of the session file, e.g., http://www.mysite.edu/~me/mySession.txt, 
 enabling users to maintain external control of the content file for easy update.</p>
+
+<!-- ====NAR Session Help================================ -->
+<a name="NAR"></a>
+<h2>Help for Nucleic Acids Research submitters</h2>
+<p>
+The Nucleic Acids Research (NAR) journal now requires manuscript submissions to contain a private
+Session link to your data in the UCSC Genome Browser that allows reviewers to access data. These
+instructions will show you how to upload, view, and share your data.</p>
+
+<!-- ====Uploading custom data=================== -->
+<a name="custom_data"></a>
+<h3>Viewing your data on the Genome Browser</h3>
+<p>
+You can view your own private data by uploading your annotation files to the Genome Browser as
+<em>custom tracks</em>; visit our <a href="customTrack.html">custom track help page</a> to learn
+more. To summarize the steps to upload your data, you will need to:</p>
+
+<ol>
+  <li>
+    Ensure the data file is <a href="customTrack.html#format">formatted correctly.</a></li>
+  <li>
+    Create a <a href="customTrack.html#TRACK">track line</a> for your custom track.</li>
+  <li>
+    <a href="customTrack.html#ADD_CT">Load the custom track</a> by adding your track line to our
+    <a href="../../cgi-bin/hgCustom">Custom Tracks</a> page.</li>
+  <li>
+    View the data in the Genome Browser.</li>
+</ol>
+<!-- ====Custom track examples=================== -->
+<a name="custom_examples"></a>
+<h3>Custom track examples</h3>
+<p>
+Creating the track line may be the most challenging step since many configuration options exist. The
+track line begins with the <strong>track</strong> keyword, followed by one or more
+<a href="customTrack.html#TRACK">attribute=value</a> pairs where the order of the attributes does
+not matter. Here are some examples:</p>
+
+<h6>BAM custom track</h6>
+<p>
+The simplest example of a BAM custom track is the following track line:
+<pre><code>track name="My BAM" type=bam bigDataUrl=http://www.mysite.edu/~me/my_sorted.bam</code></pre></p>
+
+<p>
+In the example above, the <strong>name</strong> attribute defines the name of your custom track.
+The second attribute, <strong>type</strong>, is required for some data types, but not limited
+to: <a href="/FAQ/FAQformat.html#format5.1" target="_blank">BAM</a>, 
+<a href="/FAQ/FAQformat.html#format1.5" target="_blank">bigBed</a>, 
+<a href="/FAQ/FAQformat.html#format6" target="_blank">WIG</a>,
+<a href="/FAQ/FAQformat.html#format6.1" target="_blank">bigWig</a>, and
+<a href="/FAQ/FAQformat.html#format10.1" target="_blank">VCF</a> data types.
+The last attribute, <strong>bigDataUrl</strong>, is required for remotely hosted data types such
+as <a href="../help/bam.html" target="_blank">BAM</a>, 
+<a href="../help/cram.html" target="_blank">CRAM</a>,
+<a href="../help/bigBed.html" target="_blank">bigBed</a>,
+<a href="../help/bigWig.html" target="_blank">bigWig</a>, and
+<a href="../help/vcf.html" target="_blank">VCF</a>.</p>
+
+<p>
+Adding more <a href="customTrack.html#TRACK">attribute=value</a> pairs can further customize the
+display. Here is a custom track that uses the <strong>visibility</strong> and 
+<strong>description</strong> atrributes:
+<pre><code>track type=bam visibility=dense name="My BAM" description="Example from the ENCODE RNA-seq CSHL track" bigDataUrl=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/wgEncodeCshlLongRnaSeqA549CellPapAlnRep1.bam</code></pre></p>
+
+<p>
+There are also options to <a href="hgBamTrackHelp.html">configure the display</a> of your
+BAM files, such as a <em>density plot feature</em> that will dynamically process the underlying
+BAM into a wiggle signal.</p>
+
+<hr>
+
+<h6>bigWig custom track</h6>
+<p>
+A bigWig file is useful when trying to display dense, continuous data. Read more on the 
+<a href="bigWig.html">bigWig track format</a> help page. Here is an example bigWig track that is
+colored red, instead of the default black color, that can be pasted directly into  the
+<a href="../../cgi-bin/hgCustom">Custom Tracks Page</a>:
+<pre><code>track color=255,0,0 name="HeLa-S3 nucleus minus signal" description="RNA Subcellular CAGE Localization from ENCODE/RIKEN" type=bigWig visibility=full bigDataUrl=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/wgEncodeRikenCageHelas3NucleusPapMinusSignalRep1.bigWig</code></pre></p>
+
+<p>
+There are also options to <a href="hgWiggleTrackHelp.html">configure the display</a> of your wiggle
+tracks, such as changing the track height or type of graph.</p>
+
+<!-- ====Creating a session====================== -->
+<a name="NAR_session"></a>
+<h3>Creating a session for NAR publications</h3>
+<p>
+  After creating your custom tracks and viewing your data on the Genome Browser, you can save all of
+  your tracks and settings to a snapshot of the Genome Browser called a <em>session</em>. You can
+  easily save a session by following these five steps:</p>
+<ol>
+  <li>
+    <strong>Configure the Genome Browser to your preference</strong><br>
+    Make sure the display of your custom tracks is to your liking on the Genome Browser.</li>
+  <li>
+    <strong>Navigate to the sessions page</strong><br>
+    Once you are satisfied with the display, go to the 
+    <a href="../../cgi-bin/hgSession">My Sessions</a> page by either:
+    <ul>
+      <li>
+        Going to <em><strong>My Data</strong></em> -&gt; <em><strong>My Sessions</strong></em> from
+        the navigation bar.</li>
+      <li>
+        Using the &quot;<em><strong>s</strong> then <strong>s</strong></em>&quot; keyboard shortcut
+        when viewing the main page of the <a href="../../cgi-bin/hgTracks">Genome Browser</a>.</li>
+    </ul></li>
+  <li>
+    <strong>Login to the UCSC Genome Browser</strong><br>
+    You must sign in to be able to save named sessions which will then be displayed with Browser
+    and Email links.</li>
+  <li>
+    <strong>Save your session</strong><br>
+    Go to the <strong>Save Settings</strong> section and in the
+    <em>Save current settings as named session</em> text box, enter a name for your session. When
+    saving the session, be sure to have the
+    &quot;<em>allow this session to be loaded by others</em>&quot; option checked and then click
+    <em><strong>submit</strong></em>.</li>
+  <li>
+    <strong>Edit the session description</strong><br>
+    Once the session is created, you can click the <em><strong>details</strong></em> button to add
+    a description to the session. If you eventually make a Public Session, and provide a detailed
+    description, anyone can find it by searching for terms you share. For example, navigate to the
+    <a href="../../cgi-bin/hgPublicSessions">Public Sessions</a> page and search &quot;NAR&quot; to
+    see some example sessions.</li>
+</ol>
+
+<!-- ====Sharing the session===================== -->
+<a name="NAR_sharing"></a>
+<h3>Sharing your session link</h3>
+<p>
+After saving your session, you will now be able to share your session link with others. There are
+three different ways that you can share your session: </p>
+
+<ol>
+  <li>
+    Immediately after creating a new session, the top of the page offers a <em>Browser</em>
+    hyperlink that will allow you to view the newly saved session. You can right-click the
+    <em><strong>Browser</strong></em> link to save the URL.</li>
+  <li>
+    Alternatively, you can right-click the session name and then click <em>Copy Link Address</em> to
+    save the session URL.</li>
+  <li>
+    Adding your session to the <a href="../../cgi-bin/hgPublicSessions">Public Sessions</a> page
+    will provide a useful way of sharing your session with the world in the long run. You can add
+    your session to our Public Sessions by selecting the
+    &quot;<em>post in public listing?</em>&quot; checkbox.</li>
+</ol>
+
+<h6>Editing the session URL</h6>
+<p>
+You can edit URLs to directly go to different parts of the Genome Browser such as by changing
+<strong>hgSession</strong> to <strong>hgTracks</strong>, e.g.,
+<pre><code>http://genome.ucsc.edu/cgi-bin/<strong>hgTracks</strong>?hgS_doOtherUser=submit&hgS_otherUserName=brianlee&hgS_otherUserSessionName=hg19.rela</code></pre></p>
+
+<p>
+Having <strong>hgTracks</strong> in the session URL will take the viewer to the main page of the 
+Genome Browser instead of the sessions page.</p>
+
+<!-- ====Creating a hub========================== -->
+<a name="NAR_hub"></a>
+<h3>Using track hubs to organize custom tracks</h3>
+<p>
+Creating a track hub allows you to group and organize your annotation tracks, but is limited to
+<a href="hgTrackHubHelp.html#Setup">compressed binary indexed formats</a> that can be remotely
+hosted. This will require the use of a web-accessible location to load the track hub in the UCSC
+Genome Browser. If your institution does not provide web space for you, you can look into hosting
+your binary files at a couple different web hosting services, such as
+<a href="http://www.cyverse.org/">CyVerse</a> or <a href="https://figshare.com/">figshare</a>. If
+you would like to learn more about using track hubs, please read our
+<a href="hgTrackHubHelp.html">Track Hub help page</a>.</p>
+
+<!-- ====Genome Browser inquiries================ --> 
+<h3>Genome Browser inquiries</h3> 
+<p>
+If you have any questions regarding the creation of your custom track or session, please feel free
+to <a href="../../contacts.html">contact us</a>. Before submitting a question, we strongly encourage
+you to search our
+<a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>,
+our <a href="../../FAQ">website</a>, and our 
+<a href="http://genomewiki.soe.ucsc.edu/index.php/Main_Page">wiki</a> for the answer. 
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

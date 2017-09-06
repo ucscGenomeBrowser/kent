@@ -990,12 +990,33 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-void slPairFreeVals(struct slPair *list)
-/* Free up all values on list. */
+void slPairFreeValsExt(struct slPair *list, void (*freeFunc)())
+/* Free up all values on list using freeFunc.
+ * freeFunc should take a simple pointer to free an item, and can be NULL. */
 {
 struct slPair *el;
 for (el = list; el != NULL; el = el->next)
-    freez(&el->val);
+    {
+    if (freeFunc)
+        freeFunc(el->val);
+    else
+        freez(&el->val);
+    }
+}
+
+void slPairFreeVals(struct slPair *list)
+/* Free up all values on list. */
+{
+slPairFreeValsExt(list, NULL);
+}
+
+void slPairFreeValsAndListExt(struct slPair **pList, void (*freeFunc)())
+/* Free up all values on list using freeFunc and list itself.
+ * freeFunc should take a simple pointer to free an item, and can be NULL. */
+{
+if (pList)
+    slPairFreeValsExt(*pList, freeFunc);
+slPairFreeList(pList);
 }
 
 void slPairFreeValsAndList(struct slPair **pList)
@@ -1452,13 +1473,17 @@ for (pos = haystack + strlen(haystack) - nSize; pos >= haystack; pos -= 1)
 return NULL;
 }
 
-char *stringBetween(char *start, char *end, char *haystack)
-/* Return string between start and end strings, or NULL if
- * none found.  The first such instance is returned.
- * String must be freed by caller. */
+char *nextStringBetween(char *start, char *end, char **pHaystack)
+/* Return next string that occurs between start and end strings
+ * starting seach at *pHaystack.  This will update *pHaystack to after 
+ * end, so it can be called repeatedly. Returns NULL when
+ * no more to be found*/
 {
 char *pos, *p;
 int len;
+char *haystack = *pHaystack;
+if (isEmpty(haystack))
+    return NULL;
 if ((p = stringIn(start, haystack)) != NULL)
     {
     pos = p + strlen(start);
@@ -1467,10 +1492,20 @@ if ((p = stringIn(start, haystack)) != NULL)
         len = p - pos;
         pos = cloneMem(pos, len + 1);
         pos[len] = 0;
+	*pHaystack = p;
         return pos;
         }
     }
+*pHaystack = NULL;
 return NULL;
+}
+
+char *stringBetween(char *start, char *end, char *haystack)
+/* Return string between start and end strings, or NULL if
+ * none found.  The first such instance is returned.
+ * String must be freed by caller. */
+{
+return nextStringBetween(start, end, &haystack);
 }
 
 boolean endsWith(char *string, char *end)
@@ -2129,21 +2164,27 @@ for (;;)
 
 
 
-void eraseTrailingSpaces(char *s)
-/* Replace trailing white space with zeroes. */
+int eraseTrailingSpaces(char *s)
+/* Replace trailing white space with zeroes. Returns number of
+ * spaces erased. */
 {
 int len = strlen(s);
 int i;
 char c;
+int erased = 0;
 
 for (i=len-1; i>=0; --i)
     {
     c = s[i];
     if (isspace(c))
+	{
 	s[i] = 0;
+	++erased;
+	}
     else
 	break;
     }
+return erased;
 }
 
 /* Remove white space from a string */

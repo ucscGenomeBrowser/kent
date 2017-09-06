@@ -357,10 +357,16 @@ void sqlCopyTable(struct sqlConnection *sc, char *table1, char *table2);
 void sqlDropTable(struct sqlConnection *sc, char *table);
 /* Drop table if it exists. */
 
+void sqlGetLockWithTimeout(struct sqlConnection *sc, char *name, int wait);
+/* Tries to get an advisory lock on the process, waiting for wait seconds. */
+/* Blocks another client from obtaining a lock with the same name. */
+
 void sqlGetLock(struct sqlConnection *sc, char *name);
-/* Sets an advisory lock on the process for 1000s returns 1 if successful,*/
-/* 0 if name already locked or NULL if error occurred */
-/* blocks another client from obtaining a lock with the same name */
+/* Gets an advisory lock created by GET_LOCK in sqlGetLock. Waits up to 1000 seconds. */
+
+boolean sqlIsLocked(struct sqlConnection *sc, char *name);
+/* Tests if an advisory lock on the given name has been set. 
+ * Returns true if lock has been set, otherwise returns false. */
 
 void sqlReleaseLock(struct sqlConnection *sc, char *name);
 /* Releases an advisory lock created by GET_LOCK in sqlGetLock */

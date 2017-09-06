@@ -10,7 +10,7 @@
 }
 
 .hubList table {
-    width: 930px;
+    width: 1000px;
     border-collapse: collapse;
 }
 
@@ -26,6 +26,8 @@
 .hubList th {background-color: #e5dfb1; height: 1.6em; vertical-align: middle;}
 
 .hubList table tbody tr {background-color: #fffef8;}
+.hubTdbTree {font-size: 0.9em;}
+.descriptionMatch {font-size: 0.9em;}
 .selectedRow {background-color: #99dd9a !important;}
 .hoverRow {background-color: #fdffb7 !important;}
 .hubList td {border-top: 1px solid #d5cd9e; border-bottom: 1px solid #d5cd9e;}

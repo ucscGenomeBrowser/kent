@@ -19,6 +19,7 @@
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
+char *database = NULL;
 
 static void printGoButton()
 /* HTML for GO button and 'play' icon */
@@ -44,7 +45,6 @@ puts("<div class='gbmCredit'>Credit: jwestdesign</div>\n");
 
 static void printTrackHeader(char *db, struct trackDb *tdb)
 /* Print top banner with track labels */
-// TODO: Try to simplify layout
 {
 char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
 puts(
@@ -66,7 +66,26 @@ puts(
 "                   <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>\n"
 "                   <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>\n"
 "               </span></a>\n"
+);
+if (tdb->parent)
+    {
+    // link to supertrack
+    char *encodedMapName = cgiEncode(tdb->parent->track);
+    char *chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
+    puts("&nbsp;");
+    printf(
+    "       <a href='%s?%s=%s&c=%s&g=%s' title='Go to container track (%s)'>\n"
+    "           <i class='gbIconLevelUp fa fa-level-up'></i>\n"
+    "       </a>\n",
+                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                chromosome, encodedMapName, tdb->parent->shortLabel
+    );
+    freeMem(encodedMapName);
+    }
+puts(
 "       </div>\n"
+);
+puts(
 "       <div class='col-md-2 text-right'>\n"
 );
 printGoButton();
@@ -99,24 +118,38 @@ printf(
 "                    (range %d-%d)\n", minScore, maxScore);
 }
 
-static void printConfigPanel(struct trackDb *tdb)
-/* Controls for track configuration (except for tissues) */
+static void printGtexEqtlConfigPanel(struct trackDb *tdb, char *track)
+/* GTEx eQTL track specific controls */
 {
-char *track = tdb->track;
 puts(
-"        <!-- Configuration panel -->\n"
-"        <div class='row gbSectionBanner'>\n"
-"            <div class='col-md-8'>Configuration</div>\n"
-"            <div class='col-md-4 text-right'>\n");
-
-/* Track vis dropdown */
-printVisSelect(tdb);
-printGoButton();
+"        <!-- row 1 -->\n"
+"        <div class='row'>\n"
+"            <div class='gbControl col-md-12'>\n");
+gtexEqtlGene(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
+puts(
+"        <!-- row 2 -->\n"
+"        <div class='row'>\n"
+"            <div class='gbControl col-md-12'>\n");
+gtexEqtlEffectSize(cart, track, tdb);
+puts(
+"            </div>\n"
+"        </div>\n");
+puts(
+"        <!-- row 3 -->\n"
+"        <div class='row'>\n"
+"            <div class='gbControl col-md-12'>\n");
+gtexEqtlProbability(cart, track, tdb);
+puts(
+"            </div>\n"
+"        </div>\n");
+}
 
-/* GTEx-specific track controls, layout in 3 rows */
+static void printGtexGeneConfigPanel(struct trackDb *tdb, char *track)
+/* GTEx Gene track specific controls, layout in 3 rows */
+{
 puts(
 "        <!-- row 1 -->\n"
 "        <div class='row'>\n"
@@ -158,6 +191,33 @@ printScoreFilter(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
+}
+
+static void printConfigPanel(struct trackDb *tdb)
+/* Controls for track configuration (except for tissues) */
+{
+puts(
+"        <!-- Configuration panel -->\n"
+"        <div class='row gbSectionBanner'>\n"
+"            <div class='col-md-8'>Configuration</div>\n"
+"            <div class='col-md-4 text-right'>\n");
+
+/* Track vis dropdown */
+printVisSelect(tdb);
+printGoButton();
+puts(
+"            </div>\n"
+"        </div>\n");
+
+/* Track-specific config */
+char *track = tdb->track;
+if (gtexIsGeneTrack(track))
+    printGtexGeneConfigPanel(tdb, track);
+else if (gtexIsEqtlTrack(track))
+    printGtexEqtlConfigPanel(tdb, track);
+else
+    errAbort("Unknown GTEx track: %s\n", track);
+
 puts(
 "        <!-- end configure panel -->\n");
 }
@@ -339,9 +399,20 @@ if (conn == NULL)
     errAbort("Can't connect to database %s\n", db);
 char where[256];
 safef(where, sizeof(where), "tableName='%s'", track);
-// TODO: use hdb, hTrackDbList to get table names of trackDb, 
-struct trackDb *tdb = trackDbLoadWhere(conn, "trackDb", where);
+// WARNING: this will break in sandboxes unless trackDb entry is pushed to hgwdev.
+// The fix of using hTrackDbList() would slow for all users, so leaving as is.
+#define TRACKDB "trackDb"
+struct trackDb *tdb = trackDbLoadWhere(conn, TRACKDB, where);
 trackDbAddTableField(tdb);
+char *parent = trackDbLocalSetting(tdb, "parent");
+struct trackDb *parentTdb;
+if (parent)
+    {
+    safef(where, sizeof(where), "tableName='%s'", parent);
+    parentTdb = trackDbLoadWhere(conn, TRACKDB, where);
+    if (parentTdb)
+        tdb->parent = parentTdb;
+    }
 sqlDisconnect(&conn);
 return tdb;
 }
@@ -352,6 +423,7 @@ static void doMiddle(struct cart *theCart)
 cart = theCart;
 char *db = NULL, *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+database = db;
 
 // Start web page with new-style header
 webStartGbNoBanner(cart, db, "Genome Browser GTEx Track Settings");
@@ -394,7 +466,6 @@ int main(int argc, char *argv[])
 /* Process CGI / command line. */
 {
 /* Null terminated list of CGI Variables we don't want to save to cart */
-/* TODO: check these */
 char *excludeVars[] = {"submit", "Submit", "g", NULL};
 long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);

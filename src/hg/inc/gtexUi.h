@@ -69,16 +69,27 @@
 #define GTEX_LABEL_BOTH           "both"
 #define GTEX_LABEL_DEFAULT  GTEX_LABEL_SYMBOL
 
-/* Identify GTEx gene track as it uses special trackUI. 
+/* GTEx eQTL track controls */
+
+#define GTEX_EQTL_EFFECT                "effect"
+#define GTEX_EQTL_PROBABILITY           "prob"
+#define GTEX_EQTL_PROBABILITY_DEFAULT   0.5
+#define GTEX_EQTL_GENE                  "gene"
+
+/* Identify GTEx tracks that use special trackUI. 
  * NOTE: trackDb must follow this naming convention unless/until there is
  * a new trackType.
  */ 
 #define GTEX_GENE_TRACK_BASENAME        "gtexGene"
+#define GTEX_EQTL_TRACK_BASENAME        "gtexEqtlCluster"
 
 boolean gtexIsGeneTrack(char *trackName);
 /* Identify GTEx gene track so custom trackUi CGI can be launched */
 
-char *gtexGeneTrackUiName();
+boolean gtexIsEqtlTrack(char *trackName);
+/* Identify GTEx eqtl track so custom trackUi CGI can be launched */
+
+char *gtexTrackUiName();
 /* Refer to Body Map CGI if suitable */
 
 void gtexPortalLink(char *geneId);
@@ -89,5 +100,41 @@ boolean gtexGeneBoxplot(char *geneId, char *geneName, char *version,
 /* Create a png temp file with boxplot of GTEx expression values for this gene. 
  * GeneId is the Ensembl gene ID.  GeneName is the HUGO name, used for graph title;
  * If NULL, label with the Ensembl gene ID */
+
+/* UI controls */
+
+void gtexGeneUiGeneLabel(struct cart *cart, char *track, struct trackDb *tdb);
+/* Radio buttons to select format of gene label */
+
+void gtexGeneUiCodingFilter(struct cart *cart, char *track, struct trackDb *tdb);
+/* Checkbox to restrict display to protein coding genes */
+
+void gtexGeneUiGeneModel(struct cart *cart, char *track, struct trackDb *tdb);
+/* Checkbox to enable display of GTEx gene model */
+
+void gtexGeneUiLogTransform(struct cart *cart, char *track, struct trackDb *tdb);
+/* Checkbox to select log-transformed RPKM values */
+
+void gtexGeneUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb);
+/* Set viewing limits if log transform not checked */
+
+void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+/* GTEx (Genotype Tissue Expression) per gene data */
+
+void gtexEqtlGene(struct cart *cart, char *track, struct trackDb *tdb);
+/* Limit to selected gene */
+
+void gtexEqtlEffectSize(struct cart *cart, char *track, struct trackDb *tdb);
+/* Limit to items with absolute value of effect size >= threshold.  Use largest
+ * effect size in tissue list */
+
+void gtexEqtlProbability(struct cart *cart, char *track, struct trackDb *tdb);
+/* Limit to items with specified probability.  Use largest probability in tissue list,
+ * which is score/1000, so use that */
+
+void gtexEqtlClusterUi(struct cart *cart, struct trackDb *tdb, char *track, char *title, 
+                        boolean boxed);
+/* GTEx (Genotype Tissue Expression) eQTL clusters. Use this on right-click,
+ * (when hgGtexTrackSettings can't be) */
 
 #endif /* GTEXUI_H */

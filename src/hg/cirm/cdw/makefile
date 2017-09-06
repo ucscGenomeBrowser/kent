@@ -12,6 +12,7 @@ UTIL_DIRS = \
     cdwAddQaContamTarget \
     cdwAddQaEnrichTarget \
     cdwAddSubscriber \
+    cdwBackup \
     cdwChangeFormat \
     cdwCheckDataset \
 	cdwCheckValidation \
@@ -19,8 +20,8 @@ UTIL_DIRS = \
     cdwCreateUser \
     cdwDumpManiFiles \
     cdwFakeManifestFromSubmit \
+    cdwGroupUser \
     cdwJob \
-    cdwSummary \
     cdwMakeContaminationQa \
     cdwMakeEnrichments \
     cdwMakeFileTags \
@@ -30,6 +31,7 @@ UTIL_DIRS = \
     cdwMakeTrackViz \
     cdwMakeValidFile \
     cdwQaEvaluate \
+    cdwPublicSubset \
     cdwReallyRemoveFiles \
     cdwReallyRemoveDataset \
     cdwRenameFiles \
@@ -38,7 +40,9 @@ UTIL_DIRS = \
     cdwRunDaemon \
     cdwRunOnIds \
     cdwSubmit \
+    cdwSummary \
     cdwSwapInSymLink \
+    cdwTextForIndex \
     cdwUndeprecate \
     utils/cdwFastqPolyFilter \
     utils/cdwVcfStats

@@ -24,10 +24,10 @@ except:
     exit(0)
 
 # Imports from the Python 2.7 standard library
-# Minimize global imports. Each library import can take up to 20msecs.
+# Please minimize global imports. Each library import can take up to 20msecs.
 import os, cgi, sys, logging
 
-from os.path import join, isfile, normpath, abspath, dirname
+from os.path import join, isfile, normpath, abspath, dirname, isdir, splitext
 from collections import namedtuple
 
 # activate debugging output output only on dev
@@ -43,6 +43,8 @@ cgiArgs = None
 
 # like in the kent tree, we keep track of whether we have already output the content-type line
 contentLineDone = False
+
+jksqlTrace = False
 
 def errAbort(msg):
     " show msg and abort. Like errAbort.c "
@@ -91,11 +93,20 @@ def parseHgConf():
     fname = os.path.join(confDir, "..", "hg.conf")
     hgConf = parseConf(fname)
 
+    if cfgOptionBoolean("JKSQL_TRACE"):
+        global jksqlTrace
+        jksqlTrace = True
+    
     return hgConf
 
 def cfgOption(name, default=None):
     " return hg.conf option or default "
     return hgConf.get(name, default)
+
+def cfgOptionBoolean(name, default=False):
+    " return True if option is set to 1, on or true, or default if not set "
+    val = hgConf.get(name, default) in [True, "on", "1", "true"]
+    return val
 
 def sqlConnect(db, host=None, user=None, passwd=None):
     """ connect to sql server specified in hg.conf with given db. Like jksql.c. """
@@ -103,6 +114,11 @@ def sqlConnect(db, host=None, user=None, passwd=None):
     if host==None:
         host, user, passwd = cfg["db.host"], cfg["db.user"], cfg["db.password"]
     conn = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)
+
+    # we will need this info later
+    conn.failoverConn = None
+    conn.db = db
+    conn.host = host
     return conn
 
 def sqlTableExists(conn, table):
@@ -115,9 +131,27 @@ def sqlQueryExists(conn, query, args=None):
     cursor = conn.cursor()
     rows = cursor.execute(query, args)
     row = cursor.fetchone()
+
     res = (row!=None)
     cursor.close()
     return res
+
+def _sqlConnectFailover(conn):
+    " connect the failover connection of a connection "
+    cfg = parseHgConf()
+    if "slow-db.host" not in cfg:
+        return
+
+    host, user, passwd = cfg["slow-db.host"], cfg["slow-db.user"], cfg["slow-db.password"]
+    sys.stderr.write("SQL_CONNECT 0 %s %s %s\n" % (host, user, passwd))
+    db = conn.db
+    failoverConn = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)
+    conn.failoverConn = failoverConn
+
+def _timeDeltaSeconds(time1, time2):
+    " convert time difference to total seconds for python 2.6 "
+    td = time1 - time2
+    return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
 
 def sqlQuery(conn, query, args=None):
     """ Return all rows for query, placeholders can be used, args is a list to
@@ -130,12 +164,51 @@ def sqlQuery(conn, query, args=None):
     rows = sqlQuery(conn, query, {"id":1234, "name":"hiram"})
     """
     cursor = conn.cursor()
-    rows = cursor.execute(query, args)
+
+    if jksqlTrace:
+        from datetime import datetime
+        sys.stderr.write("SQL_QUERY 0 %s %s %s %s\n" % (conn.host, conn.db, query, args))
+        startTime = datetime.now()
+
+    try:
+        rows = cursor.execute(query, args)
+
+        if jksqlTrace:
+            timeDiff = _timeDeltaSeconds(datetime.now(), startTime)
+            sys.stderr.write("SQL_TIME 0 %s %s %.3f\n" % (conn.host, conn.db, timeDiff))
+
+    except MySQLdb.Error, errObj:
+        # on table not found, try the secondary mysql connection, "slow-db" in hg.conf
+        errCode, errDesc = errObj
+        if errCode!=1146: # "table not found" error
+            raise
+
+        if conn.failoverConn == None:
+            _sqlConnectFailover(conn)
+
+        if not conn.failoverConn:
+            raise
+
+        # stay compatible with the jksql.c JKSQL_TRACE output format
+        if jksqlTrace:
+            sys.stderr.write("SQL_FAILOVER 0 %s %s db -> slow-db | %s %s\n" % \
+                    (conn.host, conn.db, query, args))
+        cursor = conn.failoverConn.cursor()
+        rows = cursor.execute(query, args)
+
+    if jksqlTrace:
+        startTime = datetime.now()
+
     data = cursor.fetchall()
+    cursor.close()
+
+    if jksqlTrace:
+        timeDiff = _timeDeltaSeconds(datetime.now(), startTime)
+        sys.stderr.write("SQL_FETCH 0 %s %s %.3f\n" % (conn.host, conn.db, timeDiff))
+
     colNames = [desc[0] for desc in cursor.description]
     Rec = namedtuple("MysqlRow", colNames)
     recs = [Rec(*row) for row in data]
-    cursor.close()
     return recs
 
 def htmlPageEnd(oldJquery=False):
@@ -161,19 +234,24 @@ def printMenuBar(oldJquery=False):
 
     print("<div class='container-fluid'>")
 
-def printHgcHeader(assembly, shortLabel, longLabel, addGoButton=True, infoUrl="#INFO_SECTION"):
+def printHgcHeader(assembly, shortLabel, longLabel, addGoButton=True, infoUrl="#INFO_SECTION", infoMouseOver="Jump to the track description"):
     " copied from hgGtexTrackSettings, uses bootstrap styling "
     #print("<form action='../cgi-bin/hgTracks' name='MAIN_FORM' method=POST>")
 
     print("<a name='TRACK_TOP'></a>")
     print("<div class='row gbTrackTitleBanner'>")
     print("<div class='col-md-10'>")
-    print("<span class='gbTrackName'>")
-    print(shortLabel)
-    print("<span class='gbAssembly'>%s</span>" % assembly)
-    print("</span>")
+
+    if assembly is not None:
+        print("<span class='gbTrackName'>")
+        print(shortLabel)
+        print("<span class='gbAssembly'>%s</span>" % assembly)
+        print("</span>")
+
     print("<span class='gbTrackTitle'>%s</span>" % longLabel)
-    print("<a href='%s' title='Jump to the track description'>" % infoUrl)
+
+    print("<a href='%s' title='%s'>" % (infoUrl, infoMouseOver))
+
     print("<span class='gbIconSmall fa-stack'>")
     print("<i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>")
     print("<i class='gbWhiteColor fa fa-info fa-stack-1x'></i>")
@@ -376,6 +454,93 @@ def parseDict(fname):
         key, val = line.rstrip("\n").split("\t")
         d[key] = val
     return d
+
+def gbdbReplace(fname, hgConfSetting):
+    " replace /gbdb/ in fname with hgConfSetting "
+    if not fname.startswith("/gbdb/"):
+        return None
+
+    gbdbLoc = hgConf.get(hgConfSetting)
+    if gbdbLoc is None:
+        return None
+
+    return fname.replace("/gbdb/", gbdbLoc)
+
+def getUdcCacheDir():
+    " return the udc cache dir and create it if it doesn't exist "
+    udcDir = hgConf.get("udc.cacheDir", "/tmp/udcCache")
+    if not isdir(udcDir):
+        os.makedirs(udcDir)
+    return udcDir
+
+def hGbdbReplace(fname):
+    " hdb.c : get the local filename on disk or construct a URL to a /gbdb file and return it "
+    if not isfile(fname):
+    # try using gbdbLoc1
+        fname2 = gbdbReplace(fname, "gbdbLoc1")
+        if fname2 and isfile(fname2):
+            return fname2
+
+    if not isfile(fname):
+    # try using gbdbLoc2, which can be a URL
+        fname2 = gbdbReplace(fname, "gbdbLoc2")
+        return fname2
+    return fname
+
+def netUrlOpen(url):
+    " net.c: open a URL and return a file object "
+    import urllib2, time, errno
+    from socket import error as SocketError
+
+    # let our webservers know that we are not a Firefox
+    opener = urllib2.build_opener()
+    opener.addheaders = [('User-Agent', 'Genome Browser pyLib/hgLib.py:netUrlOpen()')]
+
+    resp = None
+    for x in range(5): # limit number of retries
+      try:
+        resp = opener.open(url)
+        break
+      except SocketError as e:
+        if e.errno != errno.ECONNRESET:
+          raise # re-raise any other error
+        time.sleep(1)
+    return resp
+
+def readSmallFile(fname):
+    """ read a small file, usually from /gbdb/, entirely into memory and return lines.
+    If the file doesn't exist, try gbdbLoc1, then gbdbLoc2
+    and keep a local copy if only found on gbdbLoc2.
+
+    This is similar but not the same as the UDC system in the kent C code, but
+    for small files and a complete read over it, the UDC system may be overkill
+    for Python.
+    """
+    fname = hGbdbReplace(fname)
+
+    if fname.startswith("http"):
+        # download to local disk; local filename is the hash of the URL
+        import hashlib
+        udcCacheDir = getUdcCacheDir()
+        m = hashlib.md5()
+        m.update(fname)
+        fileExt = splitext(fname)[-1]
+        tmpFname = join(udcCacheDir, "hgLibCache_"+m.hexdigest()+"."+fileExt)
+        if not isfile(tmpFname):
+            data = netUrlOpen(fname).read()
+            fh = open(tmpFname, "w")
+            fh.write(data)
+            fh.close()
+        fname = tmpFname
+
+    if fname.endswith(".gz"):
+        import gzip
+        fh = gzip.open(fname)
+    else:
+        fh = open(fname)
+
+    lines = fh.read().splitlines()
+    return lines
 
 def cgiString(name, default=None):
     " get named cgi variable as a string, like lib/cheapcgi.c "

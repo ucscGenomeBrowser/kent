@@ -1,0 +1,10 @@
+Clipping end <= start line 1 of badStartExample.bed.gz: chrM:0-0
+Clipping negative line 3 of badStartExample.bed.gz: chrM:-1-2
+Clipping end <= start line 6 of badStartExample.bed.gz: chrM:10-5
+Clipping end <= start line 7 of badStartExample.bed.gz: chrM:13793-13793
+Clipping end <= start line 8 of badStartExample.bed.gz: chrM:13794-13794
+Clipping end > chromSize(13794) line 9 of badStartExample.bed.gz: chrM:13793-13795
+chrM	0	2	ok:0-2
+chrM	5	10	ok:5-10
+chrM	13792	13793	ok:13792-13793
+chrM	13793	13794	ok:13793-13794

@@ -203,6 +203,16 @@ type bigBed 3
 bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.allGaps.bb
 html html/GCA_001624865.1_SPRET_EiJ_v1.allGaps
 
+track augustus
+shortLabel Augustus
+longLabel Augustus Gene Predictions
+group genes
+visibility dense
+color 180,0,0
+type bigGenePred
+bigDataUrl bbi/GCA_001624865.1_SPRET_EiJ_v1.augustus.bb
+html html/GCA_001624865.1_SPRET_EiJ_v1.augustus
+
 track gapOverlap
 shortLabel Gap Overlaps
 longLabel Exactly identical sequence on each side of a gap

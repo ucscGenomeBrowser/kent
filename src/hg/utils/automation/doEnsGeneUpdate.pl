@@ -405,7 +405,7 @@ gtfToGenePred -includeVersion -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz 
     | gzip > $db.allGenes.gp.gz
 $Bin/extractGtf.pl infoOut.txt > ensGtp.tab
 $Bin/ensemblInfo.pl infoOut.txt > ensemblToGeneName.tab
-$Bin/ensemblInfo.pl -field2=source infoOut.txt > ensemblSource.tab
+$Bin/extractSource.pl allGenes.gtf.gz | sort -u > ensemblSource.tab
 set NL = `awk 'BEGIN{max=0}{if (length(\$1) > max) max=length(\$1)}END{print max}' ensemblToGeneName.tab`
 set VL = `awk 'BEGIN{max=0}{if (length(\$2) > max) max=length(\$2)}END{print max}' ensemblToGeneName.tab`
 sed -e "s/ knownTo / ensemblToGeneName /; s/known gene/ensGen/; s/INDEX(name(12)/PRIMARY KEY(name(\$NL)/; s/value(12)/value(\$VL)/" \\

@@ -41,6 +41,9 @@ void freeDnaSeqList(struct dnaSeq **pSeqList);
 /* Free up list of DNA sequences. */
 #define dnaSeqFreeList freeDnaSeqList
 
+char *dnaSeqCannibalize(struct dnaSeq **pSeq);
+/* Return the already-allocated dna string and free the dnaSeq container. */
+
 aaSeq *translateSeqN(struct dnaSeq *inSeq, unsigned offset, unsigned size, boolean stop);
 /* Return a translated sequence.  Offset is position of first base to
  * translate. If size is 0 then use length of inSeq. */
@@ -49,6 +52,10 @@ aaSeq *translateSeq(struct dnaSeq *inSeq, unsigned offset, boolean stop);
 /* Return a translated sequence.  Offset is position of first base to
  * translate. If stop is TRUE then stop at first stop codon.  (Otherwise 
  * represent stop codons as 'Z'). */
+
+void aaSeqZToX(aaSeq *aa);
+/* If seq has a 'Z' for stop codon, possibly followed by other bases, change the 'Z' to an X
+ * (compatible with dnautil's aminoAcidTable) and truncate there. */
 
 boolean seqIsDna(bioSeq *seq);
 /* Make educated guess whether sequence is DNA or protein. */

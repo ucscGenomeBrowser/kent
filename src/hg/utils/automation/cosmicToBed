@@ -6,10 +6,6 @@ import sys
 import collections
 import argparse
 
-# import the UCSC kent python library
-sys.path.append(os.path.dirname(__file__))
-import common
-
 def parseArgs(args):
     """
     Parse the command line arguments.
@@ -39,6 +35,8 @@ def main(args):
     firstLine = True
     count = 0 
     skippedLines = 0
+
+    unmappedLines = open("unmappedLines.txt", "w")
     for line in options.inputFile:
         count += 1
         if firstLine:
@@ -52,6 +50,7 @@ def main(args):
             exit(1)
         if (len(splitLine[23].split(":")) < 2):
             if options.verbose: print(" Line number " + str(count) + " has no genomic coordinates and will be excluded. ")
+            unmappedLines.write(line)
             skippedLines += 1
             continue
        
@@ -65,7 +64,7 @@ def main(args):
         else:
             chrom = "chr" + splitLine[23].split(":")[0] # Reference chromosome
         
-        chromStart = splitLine[23].split(":")[1].split("-")[0]  # Chrome start coordinate
+        chromStart = int(splitLine[23].split(":")[1].split("-")[0]) - 1  # Chrome start coordinate
         chromEnd = splitLine[23].split(":")[1].split("-")[1]    # Chrome end coordinate
         name = splitLine[16].strip("COSM")    # COSMIC mutation id
         strand = splitLine[24]  # + or - for strand
@@ -124,44 +123,50 @@ def main(args):
         else:
             age = splitLine[34] # Age of the sample 
 
-        options.outputFile.write(chrom + "\t")
-        options.outputFile.write(chromStart + "\t")
-        options.outputFile.write(chromEnd + "\t")
-        options.outputFile.write(name + "\t")
-        options.outputFile.write(strand + "\t")
-        options.outputFile.write(geneName + "\t")
-        options.outputFile.write(transcriptAcc + "\t")
-        options.outputFile.write(geneCdsLength + "\t")
-        options.outputFile.write(geneId + "\t")
-        options.outputFile.write(sampleName + "\t")
-        options.outputFile.write(sampleId + "\t")
-        options.outputFile.write(idTumor + "\t")
-        options.outputFile.write(primSite + "\t")
-        options.outputFile.write(siteSubtype1 + "\t")
-        options.outputFile.write(siteSubtype2 + "\t")
-        options.outputFile.write(siteSubtype3 + "\t")
-        options.outputFile.write(primHistology + "\t")
-        options.outputFile.write(histSubtype1 + "\t")
-        options.outputFile.write(histSubtype2 + "\t")
-        options.outputFile.write(histSubtype3 + "\t")
-        options.outputFile.write(ntChange + "\t")
-        options.outputFile.write(aaChange + "\t")
-        options.outputFile.write(mutDesc + "\t")
-        options.outputFile.write(mutZyg + "\t")
-        options.outputFile.write(loh + "\t")
-        options.outputFile.write(snp + "\t")
-        options.outputFile.write(resMut + "\t")
-        options.outputFile.write(fathmmPred + "\t")
-        options.outputFile.write(fathmmScore + "\t")
-        options.outputFile.write(mutSomStat + "\t")
-        options.outputFile.write(pubmedId + "\t")
-        options.outputFile.write(studyIds + "\t")
-        options.outputFile.write(samSource + "\t")
-        options.outputFile.write(tumSource + "\t")
-        options.outputFile.write(age + "\n")
+        options.outputFile.write(chrom + "\t") # 1
+        options.outputFile.write(str(chromStart) + "\t") # 2
+        options.outputFile.write(chromEnd + "\t") # 3
+        options.outputFile.write(name + "\t") # 4
+        options.outputFile.write("0\t") #5
+        options.outputFile.write(strand + "\t") # 6
+        options.outputFile.write(str(chromStart) + "\t") # 7
+        options.outputFile.write(chromEnd + "\t") # 8
+        options.outputFile.write(geneName + "\t") # 10
+        options.outputFile.write(transcriptAcc + "\t") # 11
+        options.outputFile.write(geneCdsLength + "\t") # 12
+        options.outputFile.write(geneId + "\t") # 13
+        options.outputFile.write(sampleName + "\t") # 14
+        options.outputFile.write(sampleId + "\t") # 15
+        options.outputFile.write(idTumor + "\t") # 16
+        options.outputFile.write(primSite + "\t") # 17
+        options.outputFile.write(siteSubtype1 + "\t") # 18
+        options.outputFile.write(siteSubtype2 + "\t") # 19
+        options.outputFile.write(siteSubtype3 + "\t") # 20
+        options.outputFile.write(primHistology + "\t") # 21
+        options.outputFile.write(histSubtype1 + "\t") # 22
+        options.outputFile.write(histSubtype2 + "\t") # 23
+        options.outputFile.write(histSubtype3 + "\t") # 24
+        options.outputFile.write(ntChange + "\t") # 25
+        options.outputFile.write(aaChange + "\t") # 26
+        options.outputFile.write(mutDesc + "\t") # 27
+        options.outputFile.write(mutZyg + "\t") # 28
+        options.outputFile.write(loh + "\t") # 29
+        options.outputFile.write(snp + "\t") # 30
+        options.outputFile.write(resMut + "\t") # 31
+        options.outputFile.write(fathmmPred + "\t") # 32
+        options.outputFile.write(fathmmScore + "\t") # 33
+        options.outputFile.write(mutSomStat + "\t") # 34
+        options.outputFile.write(pubmedId + "\t") # 35
+        options.outputFile.write(studyIds + "\t") # 36
+        options.outputFile.write(samSource + "\t") # 37
+        options.outputFile.write(tumSource + "\t") # 38
+        options.outputFile.write(age + "\t") # 39
+        options.outputFile.write("COSM" + name + "\t") # 40
+        options.outputFile.write(geneName + " " + aaChange + " " + idTumor + "\n") # 41
 
     print("This many lines were skipped, " + str(skippedLines) + \
             " for not having genomic coordinate")
+
 
 if __name__ == "__main__" : 
     sys.exit(main(sys.argv))

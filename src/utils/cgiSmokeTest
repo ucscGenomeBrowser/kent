@@ -1,0 +1,72 @@
+#!/bin/bash -e
+
+# to debug this script, run it with bash -x 
+
+set -o pipefail
+set -o errtrace
+
+function usage {
+
+        cat <<EOM
+Usage: $(basename "$0") [OPTION]...
+
+  -a VALUE    argument description
+              line two
+              line three
+  -d          switch description
+  -h          display help
+EOM
+
+        exit 2
+}
+
+errorHandler() {
+    echo ERROR $?
+    rm -f /tmp/smokeTest.tmp
+    exit 1
+}
+
+# a function, so we can replace this with curl one day
+# some distros have only curl, others only wget by default
+function getPage {
+    wget -q -O - $*
+}
+
+# init switch flags
+a=0
+d=0
+
+while getopts ":adh" optKey; do
+        case $optKey in
+                a)
+                        a=$OPTARG
+                        ;;
+                b)
+                        b=$OPTARG
+                        ;;
+                h|*)
+                        usage
+                        ;;
+        esac
+done
+
+shift $((OPTIND - 1))
+
+#echo "Processed:"
+#echo "d=$d"
+#echo
+#echo "A total of $# args remain:"
+#echo "$*"
+trap errorHandler ERR
+
+baseUrl=$1
+
+echo Testing hgGeneGraph
+# check if the page loads correctly up to the end
+getPage ${baseUrl}'/cgi-bin/hgGeneGraph?gene=MTOR' | grep -i "Data Information" > /dev/null
+
+echo Testing hgGeneGraph image
+# check the image
+getPage ${baseUrl}/trash/geneGraph/MTOR_e9223a301250fc1e9d81.png | identify /dev/stdin | grep 'PNG 1095x480' > /dev/null
+
+exit 0

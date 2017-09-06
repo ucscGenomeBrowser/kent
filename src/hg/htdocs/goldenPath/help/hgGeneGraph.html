@@ -9,16 +9,18 @@
 
 <h1>Gene and Pathways Interactions Graph User&#39;s Guide</h1>
 <h2>Contents</h2>
-<h6><a href='#intro'>Introduction</a></h6>
-<h6><a href='#configure'>Configuring the Pathway and Gene Interaction Display</a></h6>
-<h6><a href='#methods'>Data Sources and Methods</a></h6>
-<h6><a href='#dataAccess'>Data Access</a></h6>
-<h6><a href='#references'>References</a></h6>
-<a name='intro'></a>
+<h6><a href="#intro">Introduction</a></h6>
+<h6><a href="#configure">Configuring the Pathway and Gene Interaction Display</a></h6>
+<h6><a href="#methods">Data Sources and Methods</a></h6>
+<h6><a href="#dataAccess">Data Access</a></h6>
+<h6><a href="#credits">Credits</a></h6>
+<h6><a href="#references">References</a></h6>
+
+<a name="intro"></a>
 <h2>Introduction</h2>
 
 <p>
-The Pathways and Gene Interactions graph accompanies the &quot;Protein Interactions&quot;
+The Pathways and Gene Interactions graph accompanies the &quot;Gene Interactions&quot;
 track and displays a detailed gene interaction and pathway graph based on data
 collected from two sources: curated pathway/protein-interaction databases and
 interactions found through text mining of PubMed abstracts.
@@ -26,32 +28,32 @@ interactions found through text mining of PubMed abstracts.
 
 <p>
 The curated data were imported from 23 pathway or protein-interaction databases
-(see Methods section below). Curators at these databases typically read
+(see the <a href="#methods">Methods</a> section below). Curators at these databases typically read
 research articles, collect protein interactions from them and store them in a
 web-accessible database. Pathway databases such as Reactome or WikiPathways
 describe a whole set of interactions, e.g. the WNT pathway, and the type of 
-effect, and sometimes annotate indirect or inferred effects with a physical
-interaction. They often work from review articles. In contrast, protein
+effect, and sometimes annotate indirect or inferred effects as an interaction.
+They often work from review articles. In contrast, protein
 interaction databases focus more on the original literature that describes the
-results of the biochemical protein-interaction experiments and focus less on
+results of the biochemical assay and focus less on
 the effect or direction of the interaction.
 </p>
 
 <p>
 The text mining data was generated in collaboration with the
-<a href='https://hanover.azurewebsites.net'
+<a href="https://hanover.azurewebsites.net"
 target="_blank">Microsoft Research Project Hanover Team</a> using
 <a href="https://literome.azurewebsites.net" target="_blank">Literome machine-reading</a>.
 Literome is a natural-language processing (NLP) system that analyzes sentences and tries to
 extract names of proteins and the type of interaction. A simple example is a
 sentence such as, &quot;PTEN negatively regulates AKT3&quot;, which gets transformed to
 &quot;PTEN-AKT3&quot; and &quot;regulation: negative&quot;. The text mining system was run on all
-20 million <a href='https://www.ncbi.nlm.nih.gov/pubmed/' target="_blank">PubMed</a>
+20 million <a href="https://www.ncbi.nlm.nih.gov/pubmed/" target="_blank">PubMed</a>
 abstracts at the end of 2014 and can also be queried through the website
-<a href='http://literome.azurewebsites.net/' target="_blank">Literome</a>.
+<a href="http://literome.azurewebsites.net/" target="_blank">Literome</a>.
 </p>
 
-<a name='configure'></a>
+<a name="configure"></a>
 <h2>Configuring the Pathway and Gene Interaction Display</h2>
 
 <p>
@@ -59,7 +61,12 @@ Clicking on an item in the track display takes you to a page that includes a gen
 interaction graph with detailed information on the directionality and support
 for the various interactions displayed. The graph is initially centered on the
 gene clicked in the track display, with this gene highlighted in
-yellow. [image here?] By default, only the top 25 best supported interactions
+yellow. For example, you can see that the primary gene &quot;SOD1&quot; is
+highlighted in yellow in this image:</p>
+<p><img class="text-center" src="../../images/hgGeneGraph.png" alt="Gene Interaction Graph"
+width="50%" height="50%"></p>
+<p>
+By default, only the top 25 best supported interactions
 are displayed, but this number can be increased, decreased or filtered using
 the controls above the image. The interaction display can be filtered using
 the drop-down menu to display subsets by their support:
@@ -74,21 +81,24 @@ the drop-down menu to display subsets by their support:
 <p>
 Genes in the interaction graph are connected by a number different types of
 lines, with each type of line and the line properties themselves indicating
-different levels of support from text mining and databases. [image here?]
-</p>
-
+different levels of support from text mining and databases.
 <ul>
   <li>Solid grey lines - only text-mining support for this interaction, with the thickness of the
       line indicating the number of articles supporting it.</li>
   <li>Dashed blue lines - at least one curated database supports this interaction.
   <ul>
-    <li>dark blue - the information is derived from a paper describing less than
+    <li>dark blue - the information is derived from a paper describing fewer than
         10 interactions</li>
     <li>light blue - the information is derived from a high-throughput paper, describing more
          than 10 interactions, e.g. a complex or a mass-spec study</li>
   </ul>
   <li>Solid blue lines - both databases and text mining support this interaction</li>
 </ul>
+<p>
+Here you can see nearly all of the different types of lines in a single
+gene interaction graph centered around the ROBO3 gene:</p>
+<p><img class="text-center" src="../../images/hgGeneGraphLineDemo.png"
+alt="Gene Interaction Graph Line Types" width="40%" height="40%"></p>
 
 <p>
 Lines may include arrows showing the directionality of this interaction. In
@@ -101,10 +111,10 @@ arrow will be drawn such that it starts at A and points to B.
 
 <p>
 From the &quot;Annotate Genes&quot; drop-down, you can annotate genes based on GNF2
-average expression, drugability from <a href='https://www.drugbank.ca/' target="_blank">DrugBank</a>
-entries, cancer type in the <a href='http://cancer.sanger.ac.uk/census/'
+average expression, drugability from <a href="https://www.drugbank.ca/" target="_blank">DrugBank</a>
+entries, cancer type in the <a href="http://cancer.sanger.ac.uk/census/"
 target="_blank">COSMIC Cancer Gene Census</a>, and the number of non-silent
-mutations identified by the <a href='http://www.nature.com/ng/journal/v45/n10/full/ng.2764.html'
+mutations identified by the <a href="http://www.nature.com/ng/journal/v45/n10/full/ng.2764.html"
 target="_blank">PanCancer analysis
 project</a>. For the
 GNF2 expression and PanCancer Mutation coloring, genes will be colored on a
@@ -112,26 +122,47 @@ sliding scale from light grey to black, with those items with the highest
 expression or the largest number of non-silent mutations being colored the
 darkest and those with lower expression or fewer mutations being colored grey.
 Genes will be colored dark blue if there is no information in the database.
-[image here?]
-</p>
+In this image, you can see a set of 14 genes that interact with TP53
+colored by their PanCancer Mutation number:</p>
+<p><img class="text-center" src="../../images/hgGeneGraphAnnotateDemo.png"
+alt="Gene Interaction Graph 'Annotate Genes' Example" width="40%" height="40%"></p>
 
 <p>
 You can mouse-over items in the display to show more details about the gene
-such as their product. [image here?] If you've chosen to annotate genes with
+such as their product. If you've chosen to annotate genes with
 one of the various databases, then it will display that information as well.
+For example, hovering over the BAX gene in this exaple displays a description
+of the gene product as wells as the number of Pan-Cancer mutations since that
+option is selected:
+<p><img class="text-center" src="../../images/hgGeneGraphItemHover.png"
+alt="Gene Interaction Graph Item Hover Example" width="30%" height="30%"></p>
+
+<p>
 You can mouse-over the connecting lines between genes to see more details about
-the evidence that supports this connection. [image here?] If you click on the
-line connecting two proteins, you can see a
-<a href='http://www4.ncsu.edu/~mbcusick/papers/nenkova2005impact.pdf'
+the evidence that supports this connection. In this image,
+you can see the details that pop-up when you mouse over such a line; information
+displayed includes database support and text-mining support.</p>
+<p><img class="text-center" src="../../images/hgGeneGraphLineHover.png"
+alt="Gene Interaction Graph Line Hover Example" width="30%" height="30%"></p>
+<p>
+If you click on the line connecting two proteins, you can see a
+<a href="http://www4.ncsu.edu/~mbcusick/papers/nenkova2005impact.pdf"
 target="_blank">SumBasic</a>-selected
 snippet of text from a Pubmed abstract and, if it is a curated interaction, the
-supporting information from the pathway or interaction databases.
-</p>
+supporting information from the pathway or interaction databases. This
+example shows the text-mined support for an interaction between
+CASP5 and HUNK:</p>
+<p><img class="text-center" src="../../images/hgGeneGraphLineClickDemo.png"
+alt="Gene Interaction Graph Line Click Example" width="70%" height="70%"></p>
 
 <p>
 Below the graph of gene interactions and pathways, there is table of less
 supported interactions. These are interactions which were mentioned only a few
-times each in the literature. [image here?] The numbers shown on mouse-over for
+times each in the literature.</p>
+<p><img class="text-center" src="../../images/hgGeneGraphExtraInteractionsTable.png"
+alt="Gene Interaction Graph Extra Interactions" width="75%" height="75%"></p>
+<p>
+The numbers shown on mouse-over for
 each interaction represents the number of articles and number of databases that
 support this interaction.
 </p>
@@ -149,7 +180,7 @@ the graph, (3) searching for a gene name in the search box above the graph.
 </p>
 
 
-<a name='methods'></a>
+<a name="methods"></a>
 <h2>Data Sources and Methods</h2>
 
 <p>
@@ -159,36 +190,50 @@ Human protein interactions from the following databases were imported:
 <ul>
   <li>Protein interactions</li>
   <ul>
-    <li><a href='http://irefindex.org/' target="_blank">iRefIndex 13</a> which includes
-        <a href='https://www.ncbi.nlm.nih.gov/pmc/articles/PMC165503/' target="_blank">BIND</a>,
-        <a href='https://thebiogrid.org/' target="_blank">BioGRID</a>,
-        <a href='http://mips.helmholtz-muenchen.de/corum/' target="_blank">CORUM</a>,
-        <a href='http://dip.doe-mbi.ucla.edu/' target="_blank">DIP</a>,
-        <a href='http://www.hprd.org/' target="_blank">HPRD</a>,
-        <a href='http://www.innatedb.com/' target="_blank">InnateDB</a>,
-        <a href='http://www.ebi.ac.uk/intact/' target="_blank">IntAct</a>,
-        <a href='http://matrixdb.univ-lyon1.fr/' target="_blank">MatrixDB</a>,
-        <a href='http://mint.bio.uniroma2.it/' target="_blank">MINT</a>,
-        <a href='https://www.ncbi.nlm.nih.gov/pubmed/16381906' target="_blank">MPact</a>,
-        <a href='https://www.ncbi.nlm.nih.gov/pubmed/18556668' target="_blank">MPIDB</a> and
-        <a href='http://mips.helmholtz-muenchen.de/proj/ppi/' target="_blank">MPPI</a></li>
-    <li><a href='https://www.ncbi.nlm.nih.gov/pubmed/19762544'
-         target="_blank">Androgen Responsive Gene Database</a></li>
-    <li><a href='http://string-db.org/' target="_blank">String 9.1</a></li>
-    <li><a href='http://mips.helmholtz-muenchen.de/proj/ppi/negatome/'
+    <li><a href="http://irefindex.org/" target="_blank">iRefIndex 13</a> which includes
+        <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC165503/" target="_blank">BIND</a>,
+        <a href="https://thebiogrid.org/" target="_blank">BioGRID</a>,
+        <a href="http://mips.helmholtz-muenchen.de/corum/" target="_blank">CORUM</a>,
+        <a href="http://dip.doe-mbi.ucla.edu/" target="_blank">DIP</a>,
+        <a href="http://www.hprd.org/" target="_blank">HPRD</a>,
+        <a href="http://www.innatedb.com/" target="_blank">InnateDB</a>,
+        <a href="http://www.ebi.ac.uk/intact/" target="_blank">IntAct</a>,
+        <a href="http://matrixdb.univ-lyon1.fr/" target="_blank">MatrixDB</a>,
+        <a href="http://mint.bio.uniroma2.it/" target="_blank">MINT</a>,
+        <a href="https://www.ncbi.nlm.nih.gov/pubmed/16381906" target="_blank">MPact</a>,
+        <a href="https://www.ncbi.nlm.nih.gov/pubmed/18556668" target="_blank">MPIDB</a> and
+        <a href="http://mips.helmholtz-muenchen.de/proj/ppi/" target="_blank">MPPI</a></li>
+    <li><a href="https://www.ncbi.nlm.nih.gov/pubmed/19762544" target="_blank">Androgen Responsive
+        Gene Database</a>. This database is not available anymore on the internet, but we kept
+        <a href="http://hgdownload.soe.ucsc.edu/goldenPath/external/geneGraph/">a copy</a>.</li>
+    <li><a href="http://string-db.org/" target="_blank">String 9.1</a></li>
+    <li><a href="http://mips.helmholtz-muenchen.de/proj/ppi/negatome/"
          target="_blank">Negatome 2.0</a></li>
-    <li><a href='http://mips.helmholtz-muenchen.de/corum/'
+    <li><a href="http://mips.helmholtz-muenchen.de/corum/"
          target="_blank">Corum Protein Complexes</a></li>
-    <li><a href='http://www.geneontology.org'
+    <li><a href="http://www.geneontology.org"
          target="_blank">Gene Ontology Protein Complexes</a></li>
   </ul>
   <li>Pathways</li>
   <ul>
-    <li><a href='http://www.genome.jp/kegg/pathway.html' target="_blank">KEGG</a></li>
-    <li><a href='https://pid.nci.nih.gov/' target="_blank">NCI Pathway Interaction Database</a></li>
-    <li><a href='http://www.reactome.org/' target="_blank">Reactome 2014</a></li>
-    <li><a href='http://www.wikipathways.org' target="_blank">WikiPathways</a></li>
-    <li><a href='http://fastforward.sys-bio.net/' target="_blank">FastForward</a></li>
+    <li><a href="http://www.genome.jp/kegg/pathway.html" target="_blank">KEGG</a>, Version from
+          April 2011. This is a version of the database before the switch to a
+          <a href="http://www.kegg.jp/kegg/legal.html">non-commercial license</a>.</li>
+    <li><a href="https://pid.nci.nih.gov/" target="_blank">NCI Pathway Interaction Database</a>.
+        This database is not available anymore on the internet in its original format,
+        but we kept <a href="http://hgdownload.soe.ucsc.edu/goldenPath/external/geneGraph/">a
+        copy</a>.</li>
+    <li><a href="https://cgap.nci.nih.gov/Pathways/BioCarta_Pathways" target="_blank">BioCarta</a>.
+        This database is not directly available in a machine readable format. We use a version from
+        2009 that was included in the original NCI-PID. As the original file is not available
+        anymore, we provide <a href="http://hgdownload.soe.ucsc.edu/goldenPath/external/geneGraph/">a
+        copy</a>.</li>
+    <li><a href="http://www.reactome.org/" target="_blank">Reactome 2014</a></li>
+    <li><a href="http://www.wikipathways.org" target="_blank">WikiPathways</a>, version 20170510</li>
+    <li><a href="https://github.com/OpenBEL/openbel-framework-resources/tree/latest/knowledge"
+        target="_blank">OpenBEL large corpus</a>, version 20150611 (commit 5515fcf, Jan 2016).
+        This database is Copyright 2011-2015, Selventa and under a non-commercial license.</li>
+    <li><a href="http://fastforward.sys-bio.net/" target="_blank">FastForward</a></li>
   </ul>
 </ul>
 
@@ -198,57 +243,97 @@ The quantitative contribution of each database in terms of number of gene-pairs 
 </p>
 
 <p>
-PubMed abstracts were downloaded from the National Library of Medicine (NLM)
+For text mining, PubMed abstracts were downloaded from the National Library of Medicine (NLM)
 website. The abstracts were then
-<a href='https://en.wikipedia.org/wiki/Tokenization_(lexical_analysis)'
+<a href="https://en.wikipedia.org/wiki/Tokenization_(lexical_analysis)"
 target="_blank">tokenized</a> and
-parsed syntactically using the <a href='https://www.microsoft.com/en-us/research/project/msr-splat/'
+parsed syntactically using the <a href="https://www.microsoft.com/en-us/research/project/msr-splat/"
 target="_blank">SPLAT toolkit</a>. Protein
 and Gene names were identified and normalized after which potential
-interactions were extracted using the MSR &quot;Protein and Pathway Extractors&quot;. The
-results were then mapped to the genome using their HGNC gene symbols.
+interactions were extracted using the Microsoft Research NLP &quot;Protein and Pathway
+Extractors&quot;. The results were then mapped to the genome using their HGNC gene symbols.
+Text-mining results supporting by only a single abstract are in the database tables but are
+not shown in the user interface.
 </p>
 
-<a name='dataAccess'></a>
+<a name="dataAccess"></a>
 <h2>Data Access</h2>
 <p>
-The raw data for these graphs can be accessed in multiple ways. It can be explored interactively 
-using the <a href="../cgi-bin/hgTables">Table Browser</a>, by selecting "group" - "All Tables"
-and "database" - "hgFixed". Under "table", select "hgFixed.ggLink". You can then start to explore the 
-relationships between the database tables using the "describe table schema" button or download
-tables with "get output". All database tables related to this viewer start with the prefix "gg".
+The raw data for these graphs can be accessed in multiple ways. They can be explored interactively 
+using the <a href="../../cgi-bin/hgTables">Table Browser</a>, by selecting &quot;group&quot; -
+&quot;All Tables&quot;
+and &quot;database&quot; - &quot;hgFixed&quot;. Under &quot;table&quot;, select
+&quot;hgFixed.ggLink&quot;. You can then start to explore the
+relationships between the database tables using the &quot;describe table schema&quot; button or
+download tables with &quot;get output&quot;. All database tables related to this viewer start with
+the prefix &quot;gg&quot;.</p>
 
+<p>
 The database tables can also be accessed programmatically through our
 <a href="../../goldenPath/help/mysql.html">public MySQL server</a> or downloaded from our
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/$db/database/">downloads server</a> for local 
-processing.</p>
-<p>
-
-The database tables are:
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hgFixed/database/">downloads server</a> for local
+processing. The database tables are:
 <ul>
-    <li><tt>ggLink</tt> - one row per gene/gene interaction</li>
-    <li><tt>ggLinkEvent</tt> - connections between a ggLink and one of the ggEvent tables. The prefix of the eventId indicates the table: ppi/pwy is a database, msr is a text event.</li>
-    <li><tt>ggEventDb</tt> - information about gene/gene interactions imported from protein interaction or pathway databases </li>
-    <li><tt>ggEventText</tt> - information about gene/gene interactions obtained from text mining </li>
-    <li><tt>ggDocEvent</tt> - connections between documents and events</li>
-    <li><tt>ggDoc</tt> - information about documents referenced from ggEventText and ggDocEvent</li>
-    <li><tt>ggGeneClass</tt> - the HPRD/Panther class, one for each gene symbol</li>
-    <li><tt>ggGeneName</tt> - the HGNC name, one for each gene symbol</li>
+  <li><tt>ggLink</tt> - one row per gene/gene interaction. The field &quot;minResCount&quot; is
+      the minimum number of interactions obtained from the same supporting article.
+      E.g. if it is 10, then out of all supporting articles, there is one with 10 interactions
+      curated from it and maybe others with more interactions. A cutoff of 50 should remove
+      high-throughput data from the table. Note that while most databases are in the format source
+      -&gt; target, in this table, the target comes first and the source second. Gene names are
+      separated by the &quot;|&quot;-symbol.</li>
+  <li><tt>ggLinkEvent</tt> - connections between a ggLink and one of the ggEvent tables.
+      The prefix of the eventId indicates the table: ppi/pwy links to ggEventDb, msr links
+      to ggEventText.</li>
+  <li><tt>ggEventDb</tt> - information about gene/gene interactions imported from protein
+      interaction or pathway databases. The structure is modeled after the NCI PID interactions
+      data schema and distinguishes genes, complexes and compounds on each side of the reaction,
+      the type of the relation and contains the curated display names for the genes. The compounds
+      are part of the table but not shown in our user interface.</li>
+  <li><tt>ggEventText</tt> - information about gene/gene interactions obtained from
+      text mining.</li>
+  <li><tt>ggDocEvent</tt> - connections between documents and events.</li>
+  <li><tt>ggDoc</tt> - information about documents referenced from ggEventText and ggDocEvent.</li>
+  <li><tt>ggGeneClass</tt> - the HPRD/Panther class, one for each gene symbol.</li>
+  <li><tt>ggGeneName</tt> - the HGNC name, one for each gene symbol.</li>
 </ul>
+
+<p>For more details about the tables and their fields, use the Table Browser's
+&quot;describe schema&quot; button.</p>
+
+<p>
+The annotations (GNF2 average expression, DrugBank, etc.) for genes are accessed as text files
+for performance reasons and can be downloaded from our
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hgFixed/geneGraph/">downloads server</a>.
 <p>
 
-The annotations for genes are accessed as text files for performance reasons
-and can be downloaded from our <a href="http://hgdownload.soe.ucsc.edu/gbdb/hgFixed">downloads server</a>.
-<p>
+<a name="credits"></a>
+<h2 id="credits">Credits</h2>
+<ul>
+  <li>The text-mined data for the gene interactions and pathways were generated by Chris Quirk and
+      Hoifung Poon as part of <a href="https://hanover.azurewebsites.net"
+      target="_blank">Microsoft Research Project Hanover</a>.
+  <li>Pathway data was provided by the databases listed under methods.
+  <li>Thanks to Ian Donaldson for IRefIndex, the biggest and free collection of protein interaction databases.
+  <li>Arjun Rao (UCSC) provided the ArgDB converter.
+  <li>Thanks to Dexter Pratt for help with OpenBEL and to Charles Tepley Hoyt for the
+      <a href="https://github.com/pybel/pybel" target="_blank">pybel</a> converter.
+  <li>Thanks to Alexander Pico for help with the WikiPathways data format GPML
+  <li>The short gene descriptions are a merge of the <a href="http://hprd.org"
+      target="_blank">HPRD</a> and <a href="http://pantherdb.org" target="_blank">PantherDB</a>
+      gene/molecule classifications. Thanks to Arun Patil from HPRD for making them available
+      as a download.
+  <li>The track display and gene interaction graph were developed at the UCSC Genome Browser
+      by Max Haeussler.
+</ul>
 
-<a name='references'></a>
+<a name="references"></a>
 <h2>References</h2>
-
+<p>
 Poon H, Quirk C, DeZiel C, Heckerman D.
-<a href='https://academic.oup.com/bioinformatics/article/30/19/2840/2422228/Literome-PubMed-scale-genomic-knowledge-base-in'
+<a href="https://academic.oup.com/bioinformatics/article/30/19/2840/2422228/Literome-PubMed-scale-genomic-knowledge-base-in"
 target="_blank">Literome: PubMed-scale genomic knowledge base in the cloud</a>
 <em>Bioinformatics</em>. 2014 Oct;30(19):2840-2.
-PMID: <a href='https://www.ncbi.nlm.nih.gov/pubmed/24939151' target="_blank">24939151</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24939151" target="_blank">24939151</a>
 </p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

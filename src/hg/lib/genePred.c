@@ -2255,3 +2255,158 @@ gp->geneName = cloneString(row[17]);
 gp->geneName2 = cloneString(row[18]);
 return gp;
 }
+
+struct cds
+/* CDS sequence being assembled */
+{
+    char *bases;    // CDS string being built
+    int iCds;       // Index into CDS
+    int nextFrame;  // next required frame
+};
+
+static struct dnaSeq* getGeneRegion(struct nibTwoCache* genomeSeqs,  struct genePred *gp, int start, int end,
+                                    int *chromSize)
+/* Get the genome sequence covering the a region of a gene, in transcription order */
+{
+struct dnaSeq *dna = nibTwoCacheSeqPart(genomeSeqs, gp->chrom, start, end-start, chromSize);
+if (gp->strand[0] == '-')
+    reverseComplement(dna->dna, dna->size);
+return dna;
+}
+
+static void removePartialCodon(struct cds* cds)
+/* remove partial codon that has already been copied to CDS */
+{
+int iCdsNew = cds->iCds - cds->nextFrame;
+if (iCdsNew < 0)
+    iCdsNew = 0;
+zeroBytes(cds->bases+iCdsNew, (cds->iCds - iCdsNew));
+cds->iCds = iCdsNew;
+cds->nextFrame = 0;
+}
+
+static void addCdsExonBases(struct nibTwoCache* genomeSeqs, struct genePred *genePred,
+                            int exonCdsStart, int exonCdsEnd, struct cds* cds, int *chromSize)
+{
+struct dnaSeq *dna = getGeneRegion(genomeSeqs, genePred, exonCdsStart, exonCdsEnd, chromSize);
+int iDna = 0;
+int iCdsStart = cds->iCds;
+while (iDna < dna->size)
+    cds->bases[cds->iCds++] = dna->dna[iDna++];
+cds->nextFrame = ((cds->nextFrame) + (cds->iCds - iCdsStart)) % 3;
+dnaSeqFree(&dna);
+}
+    
+static void addCdsExon(struct nibTwoCache* genomeSeqs, struct genePred *gp,
+                       int exonCdsStart, int exonCdsEnd, int frame,
+                       struct cds* cds)
+/* get CDS from one exon */
+{
+// adjust for frame shift, dropping partial codon
+if (frame != cds->nextFrame)
+    {
+    removePartialCodon(cds);
+    if (gp->strand[0] == '+')
+        exonCdsStart += frame;
+    else
+        exonCdsEnd -= frame;
+    }
+if (exonCdsStart < exonCdsEnd)
+    {
+    int chromSize = 0;
+    addCdsExonBases(genomeSeqs, gp, exonCdsStart, exonCdsEnd, cds, &chromSize);
+    }
+}
+
+static char* getCdsCodons(struct genePred *gp, struct nibTwoCache* genomeSeqs)
+/* get the CDS sequence, dropping partial codons */
+{
+struct cds cds;
+cds.bases = needMem(genePredCdsSize(gp) + 1);
+cds.iCds = 0;
+cds.nextFrame = 0;
+    
+// walk in direction of transcription
+int dir = (gp->strand[0] == '+') ? 1 : -1;
+int iExon = (dir > 0) ? 0 : gp->exonCount-1;
+int iStop = (dir > 0) ? gp->exonCount : -1;
+int exonCdsStart, exonCdsEnd;
+for (; iExon != iStop; iExon += dir)
+    {
+    if (genePredCdsExon(gp, iExon, &exonCdsStart, &exonCdsEnd))
+        addCdsExon(genomeSeqs, gp, exonCdsStart, exonCdsEnd, gp->exonFrames[iExon], &cds);
+    }
+if (cds.nextFrame != 0)
+    removePartialCodon(&cds);
+assert((strlen(cds.bases) % 3) == 0);  // ;-)
+return cds.bases;
+}
+
+static char translateCodon(boolean isChrM, char* codon, bool lastCodon, unsigned options)
+/* translate the first three bases starting at codon, handling weird
+ * biology as requested giving */
+{
+char aa = isChrM ? lookupMitoCodon(codon) : lookupCodon(codon);
+if (aa == '\0')
+    {
+    // stop, contains `N' or selenocysteine
+    boolean isStopOrSelno = isStopCodon(codon);
+    boolean isRealStop = isReallyStopCodon(codon, !lastCodon); // internal could be selenocysteine
+    if (lastCodon)
+        {
+        if ((options & GENEPRED_TRANSLATE_INCLUDE_STOP) != 0)
+            aa = '*';
+        else if (!isRealStop)
+            aa = 'X';
+        // others, \0' will terminate
+        }
+    else if (((options & GENEPRED_TRANSLATE_SELENO) != 0)
+             && isStopOrSelno && !isRealStop)
+        aa = 'U';
+    else if (isRealStop && ((options & GENEPRED_TRANSLATE_STAR_INFRAME_STOPS) != 0))
+        aa = '*';
+    else
+        aa = 'X';
+    }
+return aa;
+}
+
+static char* translateCds(char* chrom, char* cds, unsigned options)
+/* translate the CDS */
+{
+int cdsLen = strlen(cds);
+char *prot = needMem((cdsLen/3)+1);
+boolean isChrM = sameString(chrom, "chrM");
+int iCds, iProt;
+for (iCds = 0, iProt = 0; iCds < cdsLen; iCds+=3, iProt++)
+    prot[iProt] = translateCodon(isChrM, cds+iCds, (iCds == cdsLen-3), options);
+return prot;
+}
+
+void genePredTranslate(struct genePred *gp, struct nibTwoCache* genomeSeqs, unsigned options,
+                       char **protRet, char **cdsRet)
+/* Translate a genePred into a protein.  It can also return the CDS part of the
+ * mRNA sequence. If the chrom is chrM, the mitochondrial translation tables are
+ * used. If protRet or cdsRet is NULL, those sequences are not returned.
+ */
+{
+// note: code tests by genePredToProt
+bool haveFrames = (gp->exonFrames != NULL);
+if (!haveFrames)
+    genePredAddExonFrames(gp);  // assume correct frame if not included
+
+char* cds = getCdsCodons(gp, genomeSeqs);
+char *prot = translateCds(gp->chrom, cds, options);
+
+if (protRet != NULL)
+    *protRet = prot;
+else
+    freeMem(prot);
+if (cdsRet != NULL)
+    *cdsRet = cds;
+else
+    freeMem(cds);
+
+if (!haveFrames)
+    freez(&gp->exonFrames);
+}

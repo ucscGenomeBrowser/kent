@@ -1,0 +1,653 @@
+track gtexEqtlTissue
+type bigBed
+compositeTrack on
+allButtonPair on
+dragAndDrop subTracks
+shortLabel GTEx eQTL Tissues
+longLabel Expression QTLs in 44 tissues from GTEx (midpoint release, V6)
+darkerLabels on
+visibility dense
+showSubtrackColorOnUi on
+group expression
+#bedFilter on
+#mouseOverField mouseOver
+labelFields name, gene
+defaultLabelFields name, gene
+altColor 0,0,0
+
+    track gtexEqtlTissueAdiposeSubcut
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 255,165,79
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueAdiposeSubcut.bb
+    shortLabel adiposeSubcut
+    longLabel Expression QTL in Adipose_Subcutaneous from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueAdiposeVisceral
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,154,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueAdiposeVisceral.bb
+    shortLabel adiposeVisceral
+    longLabel Expression QTL in Adipose_Visceral_Omentum from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueAdrenalGland
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 143,188,143
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueAdrenalGland.bb
+    shortLabel adrenalGland
+    longLabel Expression QTL in Adrenal_Gland from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueArteryAorta
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 139,28,98
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueArteryAorta.bb
+    shortLabel arteryAorta
+    longLabel Expression QTL in Artery_Aorta from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueArteryCoronary
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,106,80
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueArteryCoronary.bb
+    shortLabel arteryCoronary
+    longLabel Expression QTL in Artery_Coronary from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueArteryTibial
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 255,0,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueArteryTibial.bb
+    shortLabel arteryTibial
+    longLabel Expression QTL in Artery_Tibial from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBladder
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 205,183,158
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBladder.bb
+    shortLabel bladder
+    longLabel Expression QTL in Bladder from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainAmygdala
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainAmygdala.bb
+    shortLabel brainAmygdala
+    longLabel Expression QTL in Brain_Amygdala from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainAnCinCortex
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainAnCinCortex.bb
+    shortLabel brainAnCinCortex
+    longLabel Expression QTL in Brain_Anterior_cingulate_cortex_BA24 from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainCaudate
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainCaudate.bb
+    shortLabel brainCaudate
+    longLabel Expression QTL in Brain_Caudate_basal_ganglia from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainCerebelHemi
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainCerebelHemi.bb
+    shortLabel brainCerebelHemi
+    longLabel Expression QTL in Brain_Cerebellar_Hemisphere from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainCerebellum
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainCerebellum.bb
+    shortLabel brainCerebellum
+    longLabel Expression QTL in Brain_Cerebellum from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainCortex
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainCortex.bb
+    shortLabel brainCortex
+    longLabel Expression QTL in Brain_Cortex from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainFrontCortex
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainFrontCortex.bb
+    shortLabel brainFrontCortex
+    longLabel Expression QTL in Brain_Frontal_Cortex_BA9 from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainHippocampus
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainHippocampus.bb
+    shortLabel brainHippocampus
+    longLabel Expression QTL in Brain_Hippocampus from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainHypothalamus
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainHypothalamus.bb
+    shortLabel brainHypothalamus
+    longLabel Expression QTL in Brain_Hypothalamus from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainNucAccumbens
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainNucAccumbens.bb
+    shortLabel brainNucAccumbens
+    longLabel Expression QTL in Brain_Nucleus_accumbens_basal_ganglia from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainPutamen
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainPutamen.bb
+    shortLabel brainPutamen
+    longLabel Expression QTL in Brain_Putamen_basal_ganglia from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainSpinalcord
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainSpinalcord.bb
+    shortLabel brainSpinalcord
+    longLabel Expression QTL in Brain_Spinal_cord_cervical_c-1 from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBrainSubstanNigra
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,238,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBrainSubstanNigra.bb
+    shortLabel brainSubstanNigra
+    longLabel Expression QTL in Brain_Substantia_nigra from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueBreastMamTissue
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 0,205,205
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueBreastMamTissue.bb
+    shortLabel breastMamTissue
+    longLabel Expression QTL in Breast_Mammary_Tissue from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueXformedlymphocytes
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,130,238
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueXformedlymphocytes.bb
+    shortLabel xformedlymphocytes
+    longLabel Expression QTL in Cells_EBV-transformed_lymphocytes from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueXformedfibroblasts
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 154,192,205
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueXformedfibroblasts.bb
+    shortLabel xformedfibroblasts
+    longLabel Expression QTL in Cells_Transformed_fibroblasts from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueEctocervix
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,213,210
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueEctocervix.bb
+    shortLabel ectocervix
+    longLabel Expression QTL in Cervix_Ectocervix from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueEndocervix
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,213,210
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueEndocervix.bb
+    shortLabel endocervix
+    longLabel Expression QTL in Cervix_Endocervix from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueColonSigmoid
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 205,183,158
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueColonSigmoid.bb
+    shortLabel colonSigmoid
+    longLabel Expression QTL in Colon_Sigmoid from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueColonTransverse
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,197,145
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueColonTransverse.bb
+    shortLabel colonTransverse
+    longLabel Expression QTL in Colon_Transverse from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueEsophagusJunction
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 139,115,85
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueEsophagusJunction.bb
+    shortLabel esophagusJunction
+    longLabel Expression QTL in Esophagus_Gastroesophageal_Junction from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueEsophagusMucosa
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 139,115,85
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueEsophagusMucosa.bb
+    shortLabel esophagusMucosa
+    longLabel Expression QTL in Esophagus_Mucosa from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueEsophagusMuscular
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 205,170,125
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueEsophagusMuscular.bb
+    shortLabel esophagusMuscular
+    longLabel Expression QTL in Esophagus_Muscularis from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueFallopianTube
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,213,210
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueFallopianTube.bb
+    shortLabel fallopianTube
+    longLabel Expression QTL in Fallopian_Tube from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueHeartAtrialAppend
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 180,82,205
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueHeartAtrialAppend.bb
+    shortLabel heartAtrialAppend
+    longLabel Expression QTL in Heart_Atrial_Appendage from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueHeartLeftVentricl
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 122,55,139
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueHeartLeftVentricl.bb
+    shortLabel heartLeftVentricl
+    longLabel Expression QTL in Heart_Left_Ventricle from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueKidneyCortex
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 205,183,158
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueKidneyCortex.bb
+    shortLabel kidneyCortex
+    longLabel Expression QTL in Kidney_Cortex from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueLiver
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 205,183,158
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueLiver.bb
+    shortLabel liver
+    longLabel Expression QTL in Liver from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueLung
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 154,205,50
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueLung.bb
+    shortLabel lung
+    longLabel Expression QTL in Lung from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueMinorSalivGland
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 205,183,158
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueMinorSalivGland.bb
+    shortLabel minorSalivGland
+    longLabel Expression QTL in Minor_Salivary_Gland from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueMuscleSkeletal
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 122,103,238
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueMuscleSkeletal.bb
+    shortLabel muscleSkeletal
+    longLabel Expression QTL in Muscle_Skeletal from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueNerveTibial
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 255,215,0
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueNerveTibial.bb
+    shortLabel nerveTibial
+    longLabel Expression QTL in Nerve_Tibial from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueOvary
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 255,182,193
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueOvary.bb
+    shortLabel ovary
+    longLabel Expression QTL in Ovary from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissuePancreas
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 205,155,29
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissuePancreas.bb
+    shortLabel pancreas
+    longLabel Expression QTL in Pancreas from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissuePituitary
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 180,238,180
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissuePituitary.bb
+    shortLabel pituitary
+    longLabel Expression QTL in Pituitary from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueProstate
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 217,217,217
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueProstate.bb
+    shortLabel prostate
+    longLabel Expression QTL in Prostate from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueSkinNotExposed
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 58,95,205
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueSkinNotExposed.bb
+    shortLabel skinNotExposed
+    longLabel Expression QTL in Skin_Not_Sun_Exposed_Suprapubic from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueSkinExposed
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 30,144,255
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueSkinExposed.bb
+    shortLabel skinExposed
+    longLabel Expression QTL in Skin_Sun_Exposed_Lower_leg from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueSmallIntestine
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 205,183,158
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueSmallIntestine.bb
+    shortLabel smallIntestine
+    longLabel Expression QTL in Small_Intestine_Terminal_Ileum from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueSpleen
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 205,183,158
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueSpleen.bb
+    shortLabel spleen
+    longLabel Expression QTL in Spleen from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueStomach
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 255,211,155
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueStomach.bb
+    shortLabel stomach
+    longLabel Expression QTL in Stomach from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueTestis
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 166,166,166
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueTestis.bb
+    shortLabel testis
+    longLabel Expression QTL in Testis from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueThyroid
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 0,139,69
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueThyroid.bb
+    shortLabel thyroid
+    longLabel Expression QTL in Thyroid from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueUterus
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,213,210
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueUterus.bb
+    shortLabel uterus
+    longLabel Expression QTL in Uterus from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueVagina
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 238,213,210
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueVagina.bb
+    shortLabel vagina
+    longLabel Expression QTL in Vagina from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+
+    track gtexEqtlTissueWholeBlood
+    release alpha
+    parent gtexEqtlTissue on
+    type bigBed 9 +
+    color 255,0,255
+    itemRgb on
+    bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueWholeBlood.bb
+    shortLabel wholeBlood
+    longLabel Expression QTL in Whole_Blood from GTEx V6 CAVIAR analysis (95% credible set)
+    labelFields name, gene
+    defaultLabelFields name, gene
+

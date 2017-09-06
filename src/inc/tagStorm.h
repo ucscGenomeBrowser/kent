@@ -64,6 +64,7 @@ struct tagStanza
     int startLineIx;		/* Starting line number for stanza, for error reporting */
     };
 
+
 /** Read and write tag storms from/to files. */
 
 struct tagStorm *tagStormFromFile(char *fileName);
@@ -81,8 +82,17 @@ void tagStormWriteAsFlatRa(struct tagStorm *tagStorm, char *fileName, char *idTa
 
 void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idTag, 
     boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal, boolean sharpLabel);
-/* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in .tsv format */
 
+void tagStormWriteAsFlatCsv(struct tagStorm *tagStorm, char *fileName, char *idTag, 
+    boolean withParent, int maxDepth, boolean leavesOnly, char *nullVal);
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in .csv format */
+
+void tagStanzaRecursiveWrite(struct tagStanza *list, FILE *f, int maxDepth, int depth);
+/* Recursively write out stanza list and children to open file */
+
+void tagStanzaSimpleWrite(struct tagStanza *stanza, FILE *f, int depth);
+/* Write out tag stanza to file.  Do not recurse or add last blank line */
 
 /** Index a tag storm and look up in an index. */
 
@@ -161,6 +171,25 @@ void tagStormAlphaSort(struct tagStorm *tagStorm);
 void tagStormOrderSort(struct tagStorm *tagStorm, char **orderFields, int orderCount);
 /* Sort tags in stanza to be in same order as orderFields input  which is orderCount long */
 
+struct slPair *tagStanzaDeleteTagsInHash(struct tagStanza *stanza, struct hash *weedHash);
+/* Delete any tags in stanza that have names that match hash. Return list of removed tags. */
+
+void tagStanzaSubTagsInHash(struct tagStanza *stanza, struct hash *valHash);
+/* Substitute tags that are keys in valHash with the values in valHash */
+
+void tagStanzaRecursiveRemoveWeeds(struct tagStanza *list, struct hash *weedHash);
+/* Recursively remove weeds in list and any children in list */
+
+void tagStormWeedArray(struct tagStorm *tagStorm, char **weeds, int weedCount);
+/* Remove all tags with names matching any of the weeds from storm */
+
+void tagStanzaRecursiveSubTags(struct tagStanza *list, struct hash *subHash);
+/* Recursively remove weeds in list and any children in list */
+
+void tagStormSubArray(struct tagStorm *tagStorm, char *subs[][2], int subCount);
+/* Substitute all tag names with substitutions from subs array */
+
+
 /** Information about a tag storm */
 
 struct slName *tagStormFieldList(struct tagStorm *tagStorm);
@@ -185,7 +214,7 @@ int tagStormCountStanzas(struct tagStorm *ts);
 /* Return number of stanzas in storm */
 
 int tagStormCountTags(struct tagStorm *ts);
-/* Return number of stanzas in storm. Does not include expanding ancestors */
+/* Return number of tags in storm. Does not include expanding ancestors */
 
 int tagStormCountFields(struct tagStorm *ts);
 /* Return number of distinct tag types (fields) in storm */
@@ -211,6 +240,24 @@ boolean tagStanzaRqlMatch(struct rqlStatement *rql, struct tagStanza *stanza,
 
 char *tagStanzaRqlLookupField(void *record, char *key);
 /* Lookup a field in a tagStanza for rql. */
+
+/** Apply a function to every stanza in a tag storm or get a list of all leaf stanzas. */
+
+void tagStormTraverse(struct tagStorm *storm, struct tagStanza *stanzaList, void *context,
+    void (*doStanza)(struct tagStorm *storm, struct tagStanza *stanza, void *context));
+/* Traverse tagStormStanzas recursively applying doStanza with to each stanza in
+ * stanzaList and any children.  Pass through context */
+
+struct tagStanzaRef
+/* A reference to a stanza in a tag storm */
+    {
+    struct tagStanzaRef *next;	/* Next in list */
+    struct tagStanza *stanza;   /* The stanza */
+    };
+
+struct tagStanzaRef *tagStormListLeaves(struct tagStorm *tagStorm);
+/* Return list of references to all stanzas in tagStorm.  Free this
+ * result with slFreeList. */
 
 /** Stuff for finding tags within a stanza */
 

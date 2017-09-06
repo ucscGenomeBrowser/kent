@@ -504,3 +504,26 @@ ornAna2.perChromTables = no
     #   sizes will set properly
 
 #########################################################################
+# add chromAlias table (DONE - 2017-06-22 - Hiram)
+
+    mkdir /hive/data/genomes/ornAna2/bed/chromAlias
+    cd /hive/data/genomes/ornAna2/bed/chromAlias
+
+    join ../idKeys/ornAna2.idKeys.txt \
+ ../../genbank/idKeys/GCA_000002275.2_ASM227v2.idKeys.txt \
+    | awk '{printf "%s\t%s\n", $2,$3}' | sort > ucsc.genbank.tab
+
+    join ../idKeys/ornAna2.idKeys.txt \
+ ../../refseq/refseq.idKeys.txt \
+    | awk '{printf "%s\t%s\n", $2,$3}' | sort > ucsc.refseq.tab
+
+    join ../idKeys/ornAna2.idKeys.txt \
+ ../../ensembl/ensOrnAna.idKeys.txt \
+    | awk '{printf "%s\t%s\n", $2,$3}' | sort > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+
+    hgLoadSqlTab ornAna2 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        ornAna2.chromAlias.tab
+
+#########################################################################

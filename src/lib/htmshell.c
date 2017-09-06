@@ -187,6 +187,52 @@ while (*from!='\0')
 return scrubbed;
 }
 
+char *htmlTextStripJavascriptCssAndTags(char *s)
+/* Returns a cloned string with all inline javascript, css, and html tags stripped out */
+{
+if (s == NULL)
+    return NULL;
+char *scrubbed = needMem(strlen(s));
+char *from=s;
+char *to=scrubbed;
+while (*from!='\0')
+    {
+    if (startsWithNoCase("<script", from))
+        {
+        from++;
+        while (*from!='\0' && !startsWithNoCase("</script>", from))
+            from++;
+        if (*from == '\0')  // The last open tag was never closed!
+            break;
+        from += strlen("</script>");
+        *to++ = ' ';
+        }
+    else if (startsWithNoCase("<style", from))
+        {
+        from++;
+        while (*from!='\0' && !startsWithNoCase("</style>", from))
+            from++;
+        if (*from == '\0')  // The last open tag was never closed!
+            break;
+        from += strlen("</style>");
+        *to++ = ' ';
+        }
+    else if (*from == '<')
+        {
+        from++;
+        while (*from!='\0' && *from != '>')
+            from++;
+        if (*from == '\0')  // The last open tag was never closed!
+            break;
+        from++;
+        *to++ = ' ';
+        }
+    else
+        *to++ = *from++;
+    }
+return scrubbed;
+}
+
 char *htmlTextReplaceTagsWithChar(char *s, char ch)
 /* Returns a cloned string with all html tags replaced with given char (useful for tokenizing) */
 {
@@ -573,7 +619,7 @@ struct dyString *dy = dyStringNew(2048);
 fprintf(f,"<center>"
             "<div id='warnBox' style='display:none;'>"
             "<CENTER><B id='warnHead'></B></CENTER>"
-            "<UL id='warnList'></UL>"
+            "<UL id='warnList'><li>&nbsp;</li></UL>"
             "<CENTER><button id='warnOK'></button></CENTER>"
             "</div></center>\n");
 // TODO we should just move these warnBox functions to utils.js or warning.js or something.
@@ -920,6 +966,7 @@ dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js");
 dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js");
+dyStringAppend(policy, " cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js");
 dyStringAppend(policy, " login.persona.org/include.js");
 // expMatrix
 dyStringAppend(policy, " ajax.googleapis.com/ajax");

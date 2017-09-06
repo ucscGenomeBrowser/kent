@@ -13,6 +13,8 @@
 #include "dystring.h"
 #include "genePred.h"
 #include "gpFx.h"
+#include "hdb.h"
+#include "hgHgvs.h"
 #include "htmshell.h"
 #include "pgSnp.h"
 #include "portable.h"
@@ -86,10 +88,16 @@ struct annoFormatVep
     int varAllelesIx;			// Index of alleles column from variant source, or -1
     int geneNameIx;			// Index of gene name (not tx name) from (big)genePred
     int exonCountIx;			// Index of exonCount from (big)genePred
+    int hgvsGIx;			// Index of HGVS g. column from annoGratorGpVar
+    int hgvsCNIx;			// Index of HGVS c./n. column from annoGratorGpVar
+    int hgvsPIx;			// Index of HGVS p. column from annoGratorGpVar
     int snpNameIx;			// Index of name column from dbSNP source, or -1
     boolean needHeader;			// TRUE if we should print out the header
     enum afVariantDataType variantType; // Are variants VCF or a flavor of pgSnp?
     boolean doHtml;			// TRUE if we should include html tags & make a <table>.
+    struct seqWindow *gSeqWin;          // genomic sequence fetcher for HGVS term generation
+    boolean hgvsMakeG;                  // Generate genomic (g.) HGVS terms only if this is set
+    boolean hgvsBreakDelIns;            // Include deleted sequence (not only ins) e.g. delGGinsAT
     };
 
 
@@ -643,13 +651,13 @@ static int ensTxIdIx=-1, altAl1Ix, score1Ix, altAl2Ix, score2Ix, altAl3Ix, score
 if (ensTxIdIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    ensTxIdIx = asColumnFindIx(columns, "ensTxId");
-    altAl1Ix = asColumnFindIx(columns, "altAl1");
-    score1Ix = asColumnFindIx(columns, "score1");
-    altAl2Ix = asColumnFindIx(columns, "altAl2");
-    score2Ix = asColumnFindIx(columns, "score2");
-    altAl3Ix = asColumnFindIx(columns, "altAl3");
-    score3Ix = asColumnFindIx(columns, "score3");
+    ensTxIdIx = asColumnMustFindIx(columns, "ensTxId");
+    altAl1Ix = asColumnMustFindIx(columns, "altAl1");
+    score1Ix = asColumnMustFindIx(columns, "score1");
+    altAl2Ix = asColumnMustFindIx(columns, "altAl2");
+    score2Ix = asColumnMustFindIx(columns, "score2");
+    altAl3Ix = asColumnMustFindIx(columns, "altAl3");
+    score3Ix = asColumnMustFindIx(columns, "score3");
     }
 
 struct annoRow *row;
@@ -697,22 +705,22 @@ static int aaPosIx=-1,
 if (aaPosIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    aaPosIx = asColumnFindIx(columns, "uniProtAaPos");
-    altAl1Ix = asColumnFindIx(columns, "altAl1");
-    hDivScore1Ix = asColumnFindIx(columns, "hDivScore1");
-    hDivPred1Ix = asColumnFindIx(columns, "hDivPred1");
-    hVarScore1Ix = asColumnFindIx(columns, "hVarScore1");
-    hVarPred1Ix = asColumnFindIx(columns, "hVarPred1");
-    altAl2Ix = asColumnFindIx(columns, "altAl2");
-    hDivScore2Ix = asColumnFindIx(columns, "hDivScore2");
-    hDivPred2Ix = asColumnFindIx(columns, "hDivPred2");
-    hVarScore2Ix = asColumnFindIx(columns, "hVarScore2");
-    hVarPred2Ix = asColumnFindIx(columns, "hVarPred2");
-    altAl3Ix = asColumnFindIx(columns, "altAl3");
-    hDivScore3Ix = asColumnFindIx(columns, "hDivScore3");
-    hDivPred3Ix = asColumnFindIx(columns, "hDivPred3");
-    hVarScore3Ix = asColumnFindIx(columns, "hVarScore3");
-    hVarPred3Ix = asColumnFindIx(columns, "hVarPred3");
+    aaPosIx = asColumnMustFindIx(columns, "uniProtAaPos");
+    altAl1Ix = asColumnMustFindIx(columns, "altAl1");
+    hDivScore1Ix = asColumnMustFindIx(columns, "hDivScore1");
+    hDivPred1Ix = asColumnMustFindIx(columns, "hDivPred1");
+    hVarScore1Ix = asColumnMustFindIx(columns, "hVarScore1");
+    hVarPred1Ix = asColumnMustFindIx(columns, "hVarPred1");
+    altAl2Ix = asColumnMustFindIx(columns, "altAl2");
+    hDivScore2Ix = asColumnMustFindIx(columns, "hDivScore2");
+    hDivPred2Ix = asColumnMustFindIx(columns, "hDivPred2");
+    hVarScore2Ix = asColumnMustFindIx(columns, "hVarScore2");
+    hVarPred2Ix = asColumnMustFindIx(columns, "hVarPred2");
+    altAl3Ix = asColumnMustFindIx(columns, "altAl3");
+    hDivScore3Ix = asColumnMustFindIx(columns, "hDivScore3");
+    hDivPred3Ix = asColumnMustFindIx(columns, "hDivPred3");
+    hVarScore3Ix = asColumnMustFindIx(columns, "hVarScore3");
+    hVarPred3Ix = asColumnMustFindIx(columns, "hVarPred3");
     }
 
 struct codingChange *cc = &(gpFx->details.codingChange);
@@ -781,16 +789,16 @@ static int ensTxIdIx=-1, altAl1Ix, score1Ix, pred1Ix,
 if (ensTxIdIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    ensTxIdIx = asColumnFindIx(columns, "ensTxId");
-    altAl1Ix = asColumnFindIx(columns, "altAl1");
-    score1Ix = asColumnFindIx(columns, "score1");
-    pred1Ix = asColumnFindIx(columns, "pred1");
-    altAl2Ix = asColumnFindIx(columns, "altAl2");
-    score2Ix = asColumnFindIx(columns, "score2");
-    pred2Ix = asColumnFindIx(columns, "pred2");
-    altAl3Ix = asColumnFindIx(columns, "altAl3");
-    score3Ix = asColumnFindIx(columns, "score3");
-    pred3Ix = asColumnFindIx(columns, "pred3");
+    ensTxIdIx = asColumnMustFindIx(columns, "ensTxId");
+    altAl1Ix = asColumnMustFindIx(columns, "altAl1");
+    score1Ix = asColumnMustFindIx(columns, "score1");
+    pred1Ix = asColumnMustFindIx(columns, "pred1");
+    altAl2Ix = asColumnMustFindIx(columns, "altAl2");
+    score2Ix = asColumnMustFindIx(columns, "score2");
+    pred2Ix = asColumnMustFindIx(columns, "pred2");
+    altAl3Ix = asColumnMustFindIx(columns, "altAl3");
+    score3Ix = asColumnMustFindIx(columns, "score3");
+    pred3Ix = asColumnMustFindIx(columns, "pred3");
     }
 
 struct annoRow *row;
@@ -842,16 +850,16 @@ static int ensTxIdIx=-1, altAl1Ix, score1Ix, pred1Ix,
 if (ensTxIdIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    ensTxIdIx = asColumnFindIx(columns, "ensTxId");
-    altAl1Ix = asColumnFindIx(columns, "altAl1");
-    score1Ix = asColumnFindIx(columns, "score1");
-    pred1Ix = asColumnFindIx(columns, "pred1");
-    altAl2Ix = asColumnFindIx(columns, "altAl2");
-    score2Ix = asColumnFindIx(columns, "score2");
-    pred2Ix = asColumnFindIx(columns, "pred2");
-    altAl3Ix = asColumnFindIx(columns, "altAl3");
-    score3Ix = asColumnFindIx(columns, "score3");
-    pred3Ix = asColumnFindIx(columns, "pred3");
+    ensTxIdIx = asColumnMustFindIx(columns, "ensTxId");
+    altAl1Ix = asColumnMustFindIx(columns, "altAl1");
+    score1Ix = asColumnMustFindIx(columns, "score1");
+    pred1Ix = asColumnMustFindIx(columns, "pred1");
+    altAl2Ix = asColumnMustFindIx(columns, "altAl2");
+    score2Ix = asColumnMustFindIx(columns, "score2");
+    pred2Ix = asColumnMustFindIx(columns, "pred2");
+    altAl3Ix = asColumnMustFindIx(columns, "altAl3");
+    score3Ix = asColumnMustFindIx(columns, "score3");
+    pred3Ix = asColumnMustFindIx(columns, "pred3");
     }
 
 struct annoRow *row;
@@ -902,13 +910,13 @@ static int ensTxIdIx=-1, altAl1Ix, score1Ix, altAl2Ix, score2Ix, altAl3Ix, score
 if (ensTxIdIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    ensTxIdIx = asColumnFindIx(columns, "ensTxId");
-    altAl1Ix = asColumnFindIx(columns, "altAl1");
-    score1Ix = asColumnFindIx(columns, "score1");
-    altAl2Ix = asColumnFindIx(columns, "altAl2");
-    score2Ix = asColumnFindIx(columns, "score2");
-    altAl3Ix = asColumnFindIx(columns, "altAl3");
-    score3Ix = asColumnFindIx(columns, "score3");
+    ensTxIdIx = asColumnMustFindIx(columns, "ensTxId");
+    altAl1Ix = asColumnMustFindIx(columns, "altAl1");
+    score1Ix = asColumnMustFindIx(columns, "score1");
+    altAl2Ix = asColumnMustFindIx(columns, "altAl2");
+    score2Ix = asColumnMustFindIx(columns, "score2");
+    altAl3Ix = asColumnMustFindIx(columns, "altAl3");
+    score3Ix = asColumnMustFindIx(columns, "score3");
     }
 
 struct annoRow *row;
@@ -946,7 +954,7 @@ static int domainsIx = -1;
 if (domainsIx == -1)
     {
     struct asColumn *columns = extraSrc->source->asObj->columnList;
-    domainsIx = asColumnFindIx(columns, "domains");
+    domainsIx = asColumnMustFindIx(columns, "domains");
     }
 
 struct annoRow *row;
@@ -1070,6 +1078,28 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
 	    errAbort("Unrecognized asObj->name '%s' from dbNSFP source '%s'",
 		     asObjName, extraSrc->source->name);
 	}
+    }
+}
+
+static void afVepPrintExtrasHgvs(struct annoFormatVep *self, struct annoRow *gpvRow,
+                                 boolean *pGotExtra)
+/* If not empty, print HGVS terms (last column of gpvRow). */
+{
+char **row = gpvRow->data;
+if (isNotEmpty(row[self->hgvsGIx]))
+    {
+    afVepNewExtra(self, pGotExtra);
+    fprintf(self->f, "HGVSG=%s", row[self->hgvsGIx]);
+    }
+if (isNotEmpty(row[self->hgvsCNIx]))
+    {
+    afVepNewExtra(self, pGotExtra);
+    fprintf(self->f, "HGVSCN=%s", row[self->hgvsCNIx]);
+    }
+if (isNotEmpty(row[self->hgvsPIx]))
+    {
+    afVepNewExtra(self, pGotExtra);
+    fprintf(self->f, "HGVSP=%s", row[self->hgvsPIx]);
     }
 }
 
@@ -1266,6 +1296,7 @@ afVepPrintPredictions(self, varRow, gpvRow, gpFx);
 afVepPrintExistingVar(self, varRow, gratorData, gratorCount);
 boolean gotExtra = FALSE;
 afVepPrintExtrasDbNsfp(self, varRow, gpvRow, gpFx, gratorData, gratorCount, &gotExtra);
+afVepPrintExtrasHgvs(self, gpvRow, &gotExtra);
 afVepPrintExtrasOther(self, varRow, gpvRow, gpFx, gratorData, gratorCount, FALSE, &gotExtra);
 afVepEndRow(self->f, self->doHtml);
 }
@@ -1310,11 +1341,11 @@ else if (self->variantType == afvdtPgSnpFile)
 return firstAltAllele(variant->alleles);
 }
 
-static void afVepPrintPredictionsReg(struct annoFormatVep *self, struct annoRow *varRow)
+static void afVepPrintPredictionsReg(struct annoFormatVep *self, char *alt)
 /* Print VEP allele, placeholder gene and item names, 'RegulatoryFeature',
  * 'regulatory_region_variant', and placeholder coding effect columns. */
 {
-afVepPuts(afVepGetFirstAltAllele(self, varRow), self);
+afVepPuts(alt, self);
 afVepNextColumn(self->f, self->doHtml);
 afVepPrintPlaceholders(self->f, 2, self->doHtml);
 fputs("RegulatoryFeature", self->f);
@@ -1323,6 +1354,21 @@ fputs(soTermToString(regulatory_region_variant), self->f);
 afVepNextColumn(self->f, self->doHtml);
 // Coding effect columns are N/A:
 afVepPrintPlaceholders(self->f, 5, self->doHtml);
+}
+
+static void afVepPrintExtrasHgvsGOnly(struct annoFormatVep *self, struct annoRow *varRow, char *alt,
+                                      boolean *pGotExtra)
+/* Make our own HGVS g. term (when we aren't taking HGVS terms from annoGratorGpVar). */
+{
+if (self->hgvsMakeG)
+    {
+    struct bed3 *variantBed = (struct bed3 *)varRow;
+    char *chromAcc = hRefSeqAccForChrom(self->assembly->name, varRow->chrom);
+    char *hgvsG = hgvsGFromVariant(self->gSeqWin, variantBed, alt, chromAcc, self->hgvsBreakDelIns);
+    afVepNewExtra(self, pGotExtra);
+    fprintf(self->f, "HGVSG=%s", hgvsG);
+    freeMem(hgvsG);
+    }
 }
 
 static void afVepPrintRegulatory(struct annoFormatVep *self, struct annoStreamRows *varData,
@@ -1336,9 +1382,11 @@ if (afVepIsRegulatory(self, gratorData, gratorCount))
     struct annoRow *varRow = varData->rowList;
     afVepStartRow(self->f, self->doHtml);
     afVepPrintNameAndLoc(self, varRow);
-    afVepPrintPredictionsReg(self, varRow);
+    char *alt = afVepGetFirstAltAllele(self, varRow);
+    afVepPrintPredictionsReg(self, alt);
     afVepPrintExistingVar(self, varRow, gratorData, gratorCount);
     boolean gotExtra = FALSE;
+    afVepPrintExtrasHgvsGOnly(self, varRow, alt, &gotExtra);
     afVepPrintExtrasOther(self, varRow, NULL, NULL, gratorData, gratorCount, TRUE, &gotExtra);
     afVepEndRow(self->f, self->doHtml);
     }
@@ -1372,6 +1420,7 @@ freeMem(self->fileName);
 carefulClose(&(self->f));
 lmCleanup(&(self->lm));
 dyStringFree(&(self->dyScratch));
+chromSeqWindowFree(&self->gSeqWin);
 annoFormatterFree(pFSelf);
 }
 
@@ -1389,7 +1438,7 @@ else if (asObjectsMatch(config->variantSource->asObj, pgSnpFileAsObj()))
 else if (asObjectsMatch(config->variantSource->asObj, vcfAsObj()))
     {
     self->variantType = afvdtVcf;
-    self->varNameIx = asColumnFindIx(varAsColumns, "id");
+    self->varNameIx = asColumnMustFindIx(varAsColumns, "id");
     }
 else
     errAbort("afVepSetConfig: variant source %s doesn't look like pgSnp or VCF",
@@ -1397,7 +1446,7 @@ else
 if (self->variantType == afvdtPgSnpTable || self->variantType == afvdtPgSnpFile)
     {
     // pgSnp's "name" column actually contains slash-separated alleles
-    self->varAllelesIx = asColumnFindIx(varAsColumns, "name");
+    self->varAllelesIx = asColumnMustFindIx(varAsColumns, "name");
     }
 if (config->gpVarSource == NULL)
     errAbort("afVepSetConfig: config must have a gpVarSource");
@@ -1420,10 +1469,13 @@ if (self->exonCountIx < 0)
 if (self->exonCountIx < 0)
     errAbort("afVepSetConfig: can't find exonCount or blockCount column in gpVarSource %s",
              config->gpVarSource->name);
+self->hgvsGIx = asColumnMustFindIx(gpvAsColumns, "hgvsG");
+self->hgvsCNIx = asColumnMustFindIx(gpvAsColumns, "hgvsCN");
+self->hgvsPIx = asColumnMustFindIx(gpvAsColumns, "hgvsP");
 if (config->snpSource != NULL)
     {
     struct asColumn *snpAsColumns = config->snpSource->asObj->columnList;
-    self->snpNameIx = asColumnFindIx(snpAsColumns, "name");
+    self->snpNameIx = asColumnMustFindIx(snpAsColumns, "name");
     }
 else
     self->snpNameIx = -1;
@@ -1515,7 +1567,7 @@ item->tag = cloneString(tag);
 item->description = cloneString(description);
 item->rowIx = -1;
 if (isNotEmpty(column))
-    item->rowIx = asColumnFindIx(extraSource->asObj->columnList, column);
+    item->rowIx = asColumnMustFindIx(extraSource->asObj->columnList, column);
 item->isRegulatory = isReg;
 item->isBoolean = isBoolean;
 slAddTail(&(src->items), item);
@@ -1538,4 +1590,21 @@ void annoFormatVepAddRegulatory(struct annoFormatter *fSelf, struct annoStreamer
  * The VEP header will include tag's description. */
 {
 afvAddExtraItemMaybeReg(fSelf, regSource, tag, description, column, FALSE, TRUE);
+struct annoFormatVep *self = (struct annoFormatVep *)fSelf;
+if (self->gSeqWin == NULL)
+    {
+    char *db = regSource->assembly->name;
+    self->gSeqWin = chromSeqWindowNew(db, NULL, 0, 0);
+    }
+}
+
+void annoFormatVepSetHgvsOutOptions(struct annoFormatter *fSelf, uint hgvsOutOptions)
+/* Import the HGVS output options described in hgHgvs.h */
+{
+struct annoFormatVep *self = (struct annoFormatVep *)fSelf;
+// We only do g. terms, for regulatory region variants, so no need for transcript/protein opts.
+if (hgvsOutOptions & HGVS_OUT_G)
+    self->hgvsMakeG = TRUE;
+if (hgvsOutOptions & HGVS_OUT_BREAK_DELINS)
+    self->hgvsBreakDelIns = TRUE;
 }

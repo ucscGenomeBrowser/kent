@@ -89,7 +89,6 @@ UTILS_APPLIST = \
 	stringify \
 	subChar \
 	subColumn \
-	tabQuery \
 	tailLines \
 	textHistogram \
 	tickToDate \
@@ -148,7 +147,8 @@ UCSC_APPS = \
 
 USER_APP_SCRIPTS = \
 	bedJoinTabOffset \
-	expMatrixToBarchartBed
+	expMatrixToBarchartBed \
+	webSync
 
 SCRIPT_FILES = \
 	agpToLift \
@@ -173,7 +173,7 @@ SCRIPT_FILES = \
 	uniprotToTab \
 	ggTables \
 	ggGeneClasses \
-	ggGpmlToTag \
+	ggGpmlToTab \
 	ggKgmlToTab \
 	ggMsrToTab \
 	ggPidToTab \
@@ -182,6 +182,7 @@ SCRIPT_FILES = \
 	bedNamePickFirst \
 	bedBestTranscript \
 	genePredToBed \
+	cgiSmokeTest \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build

@@ -300,8 +300,7 @@ static char *loginUrl()
 /* Return the URL for the login host. */
 {
 char buf[2048];
-safef(buf, sizeof(buf), "http%s://%s/cgi-bin/hgLogin",
-      loginUseHttps() ? "s" : "", wikiLinkHost());
+safef(buf, sizeof(buf), "%shgLogin", hLoginHostCgiBinUrl());
 return cloneString(buf);
 }
 
@@ -407,9 +406,8 @@ static char *encodedHgSessionReturnUrl(char *hgsid)
 /* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
 {
 char retBuf[1024];
-char *cgiDir = cgiScriptDirUrl();
-safef(retBuf, sizeof(retBuf), "http%s://%s%shgSession?hgsid=%s",
-      cgiAppendSForHttps(), cgiServerNamePort(), cgiDir, hgsid);
+safef(retBuf, sizeof(retBuf), "%shgSession?hgsid=%s",
+      hLocalHostCgiBinUrl(), hgsid);
 return cgiEncode(retBuf);
 }
 
@@ -432,6 +430,7 @@ else
     if (! wikiLinkEnabled())
         errAbort("wikiLinkUserLoginUrl called when wiki is not enabled (specified "
             "in hg.conf).");
+    // The following line of code is not used at UCSC anymore since 2014
     safef(buf, sizeof(buf),
         "http://%s/index.php?title=Special:UserloginUCSC&returnto=%s",
         wikiLinkHost(), returnUrl);
@@ -527,24 +526,6 @@ else
     }
 freez(&retEnc);
 return(cloneString(buf));
-}
-
-char *wikiServerAndCgiDir() 
-/* return the current full absolute URL up to the CGI name, like
- * http://genome.ucsc.edu/cgi-bin/. If login.relativeLink=on is
- * set, return only the empty string. Takes care of of non-root location of cgi-bin
- * and https. Result has to be free'd. */
-{
-boolean relativeLink = cfgOptionBooleanDefault(CFG_LOGIN_RELATIVE, FALSE);
-if (relativeLink)
-    return cloneString("");
-
-char *cgiDir = cgiScriptDirUrl();
-char buf[2048];
-char *hgLoginHost = wikiLinkHost();
-safef(buf, sizeof(buf), "http%s://%s%s", cgiAppendSForHttps(), hgLoginHost, cgiDir);
-
-return cloneString(buf);
 }
 
 void wikiFixLogoutLinkWithJs()

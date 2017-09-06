@@ -605,8 +605,9 @@ function installRedhat () {
     waitKey
     # make sure we have and EPEL and ghostscript and rsync (not installed on vagrant boxes)
     # imagemagick is required for the session gallery
+    # MySQL-python is required for hgGeneGraph
     yum -y install epel-release
-    yum -y install ghostscript rsync ImageMagick R-core
+    yum -y install ghostscript rsync ImageMagick R-core MySQL-python
 
     # centos 7 and fedora 20 do not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -842,7 +843,8 @@ function installDebian ()
     # ghostscript for PDF export
     # imagemagick for the session gallery
     # r-base-core for the gtex tracks
-    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core
+    # python-mysqldb for hgGeneGraph
+    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core python-mysqldb
 
     if [ ! -f $APACHECONF ]; then
         echo2
@@ -1405,27 +1407,27 @@ function downloadGenomes
     # now do the actual download of mysql files
     for db in $MYSQLDBS; do
        echo2 Downloading Mysql files for mysql database $db
-       $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ 
+       $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ 
        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/$db
     done
 
     if [ ! -z "$GENBANKTBLS" ]; then
         echo2 Downloading hgFixed tables
         for tbl in $GENBANKTBLS; do
-            $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/${tbl}.* $MYSQLDIR/hgFixed/
+            $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/${tbl}.* $MYSQLDIR/hgFixed/
         done
         chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
     fi
 
     echo2 Downloading hgFixed.refLink, required for all RefSeq tracks
-    $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
+    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
     chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
 
     # download /gbdb files
     for db in $DBS; do
        echo2 Downloading $GBDBDIR files for assembly $db
        mkdir -p $GBDBDIR
-       $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::gbdb/$db/ $GBDBDIR/$db/
+       $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::gbdb/$db/ $GBDBDIR/$db/
        chown -R $APACHEUSER:$APACHEUSER $GBDBDIR/$db
     done
 
@@ -1522,14 +1524,14 @@ function downloadMinimal
 
     for db in $DBS; do
        echo2 Downloading Mysql files for mysql database $db
-       $RSYNC $minRsyncOpt --exclude=* --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ 
+       $RSYNC $minRsyncOpt --exclude=* --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/ 
        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/$db
     done
 
     echo2 Copying hgFixed.trackVersion, required for most tracks
-    $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/trackVersion.* $MYSQLDIR/hgFixed/ 
+    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/trackVersion.* $MYSQLDIR/hgFixed/ 
     echo2 Copying hgFixed.refLink, required for RefSeq tracks across all species
-    $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
+    $RSYNC --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
 
     startMysql
 
@@ -1594,7 +1596,7 @@ function updateBrowser {
    echo updating GBDB: $DBS
    for db in $DBS; do 
        echo2 syncing gbdb: $db
-       rsync -avzp $RSYNCOPTS $HGDOWNLOAD::gbdb/$db/ $GBDBDIR/$db/ 
+       rsync -avp $RSYNCOPTS $HGDOWNLOAD::gbdb/$db/ $GBDBDIR/$db/ 
    done
 
    # update the mysql DBs
@@ -1602,7 +1604,7 @@ function updateBrowser {
    DBS=`ls /var/lib/mysql/ | egrep -v '(Trash$)|(hgTemp)|(^ib_)|(^ibdata)|(^aria)|(^mysql)|(performance)|(.flag$)|(hgcentral)'`
    for db in $DBS; do 
        echo2 syncing full mysql database: $db
-       $RSYNC --update --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/
+       $RSYNC --update --progress -avp $RSYNCOPTS $HGDOWNLOAD::mysql/$db/ $MYSQLDIR/$db/
    done
    startMysql
 
@@ -1765,6 +1767,12 @@ if [[ "$#" -gt "1" && ( "${2:0:1}" == "-" ) || ( "${lastArg:0:1}" == "-" )  ]]; 
   echo "Error: The options have to be specified before the command, not after it."
   echo
   echo "$HELP_STR"
+  exit 1
+fi
+
+if uname -m | grep -vq _64; then
+  echo "Your machine does not seem to be a 64bit system"
+  echo "Sorry, the Genome Browser requires a 64bit linux."
   exit 1
 fi
 

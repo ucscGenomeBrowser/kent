@@ -1898,3 +1898,26 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	real    313m43.659s
 
 #############################################################################
+# add chromAlias table (DONE - 2017-06-22 - Hiram)
+
+    mkdir /hive/data/genomes/ornAna1/bed/chromAlias
+    cd /hive/data/genomes/ornAna1/bed/chromAlias
+
+    join ../idKeys/ornAna1.idKeys.txt \
+ /hive/data/genomes/ornAna2/genbank/idKeys/GCA_000002275.2_ASM227v2.idKeys.txt \
+    | awk '{printf "%s\t%s\n", $2,$3}' | sort > ucsc.genbank.tab
+
+    join ../idKeys/ornAna1.idKeys.txt \
+ /hive/data/genomes/ornAna2/refseq/refseq.idKeys.txt \
+    | awk '{printf "%s\t%s\n", $2,$3}' | sort > ucsc.refseq.tab
+
+    join ../idKeys/ornAna1.idKeys.txt \
+ /hive/data/genomes/ornAna2/ensembl/ensOrnAna.idKeys.txt \
+    | awk '{printf "%s\t%s\n", $2,$3}' | sort > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+
+    hgLoadSqlTab ornAna1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        ornAna1.chromAlias.tab
+
+#########################################################################

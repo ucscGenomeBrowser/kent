@@ -14,13 +14,10 @@ export NOSQLTEST = 1
 
 all:  utils
 
-utils: libs
+utils: installEnvironment
 	cd kent/src && ${MAKE} userApps
 	cd kent/src/parasol && ${MAKE}
 	./kent/src/utils/userApps/mkREADME.sh ${DESTDIR}/${BINDIR} ${CURDIR}/kentUtils.Documentation.txt
-
-libs: installEnvironment
-	cd kent/src && ${MAKE} libs
 
 clean:
 	test ! -d kent/src || (cd kent/src && ${MAKE} -i -k clean)

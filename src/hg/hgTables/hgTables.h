@@ -750,6 +750,8 @@ char *bigWigFileName(char *table, struct sqlConnection *conn);
  * a custom or built-in track.  Do a freeMem on returned string when done. */
 #define bigBedFileName(table, conn) bigWigFileName(table, conn)
 
+struct hTableInfo *bigWigToHti(char *table);
+/* Get fields of bigWig into hti structure. */
 
 int mathWigOutRegion(struct trackDb *track, char *table, struct sqlConnection *conn,
 			     struct region *region, int maxOut,
@@ -768,6 +770,9 @@ struct bed *bigWigIntervalsToBed(struct sqlConnection *conn, char *table, struct
 				 struct lm *lm);
 /* Return a list of unfiltered, unintersected intervals in region as bed (for
  * secondary table in intersection). */
+
+void showSchemaBigWigNoTable(char *db, char *table, struct trackDb *tdb);
+/* Show schema on bigWig. */
 
 /* ----------- BigBed business in bigBed.c -------------------- */
 boolean isBigBed(char *database, char *table, struct trackDb *parent,

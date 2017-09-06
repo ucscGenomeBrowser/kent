@@ -31879,7 +31879,7 @@ EOF
 
 ##############################################################################
 # SNP149 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 3/24/17 angie)
-    # Redmine #17209
+    # Redmine #18330
     screen -S ortho -t ortho
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 149 -debug
 # *** Steps were performed in /hive/data/genomes/hg19/bed/snp149Ortho.2017-03-24
@@ -31891,7 +31891,7 @@ EOF
 
 ##############################################################################
 # SNPMASKED SEQUENCE FOR SNP149 (DONE 3/24/17 angie)
-    # Redmine #17209
+    # Redmine #18330
     screen -S mask -t mask
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 149 -debug
 # *** Steps were performed in /hive/data/genomes/hg19/snp149Mask.2017-03-24
@@ -31956,6 +31956,7 @@ bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg19/c
 # Link it up so the outside world can see it. 
 cd /gbdb/hg19/cosmic/
 ln -s /hive/data/outside/cosmic/hg19/v81/cosMutHg19V81.bb .
+
 
 ###########################################################################
 # Chimp Lastz run (DONE - 2017-05-04 - Hiram)
@@ -32039,7 +32040,8 @@ cd /hive/data/genomes/hg19/bed/interactions/
 cd ppi
 
 cd iref
-psiMtabToTab iref 9606.mitab.08122013.txt > ../iref.tab 
+# sorry don't know how exactly I downloaded this file. 
+# they are available on http://irefindex.org/wiki/index.php?title=README_MITAB2.6_for_iRefIndex
 psiMtabToTab iref 9606.mitab.08122013.txt > ../iref.tab 
 cat All.mitab.08122013.txt | cut -f9 | sed -e 's/pubmed://g' | tr '|' '\n' | grep -v pmids | grep -v ^-$ | uniq | sort | uniq > allPmids.txt
 
@@ -32070,7 +32072,269 @@ ggTables build pathways/ ppi/ text/ mysql/
 ggTables docs mysql/
 # load mysql/ into hgFixed
 ggTables load hgFixed
+
+# == CREATE THE GENE LOCATIONS ==
+cd geneModels
+# === hg19 ===
+
+# get best transcript for gencode basic
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from wgEncodeGencodeBasicV19' > gencode19.bed
+mysql hg19 -NBe 'select distinct name, name2 from wgEncodeGencodeBasicV19' > gencode19.names.tab
+bedBestTranscript gencode19.bed gencode19.names.tab -m > gencode19.best.bed
+
+# get best transcript for refGene
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from refGene' > refGene.bed
+mysql hg19 -NBe 'select distinct name, name2 from refGene' > refGene.names.tab
+bedBestTranscript refGene.bed refGene.names.tab -m > refGene.best.bed
+
+# get UCSC knownGene canonical transcripts
+hgsql hg19 -NBe 'select chrom, chromStart, chromEnd, geneSymbol from knownCanonical JOIN kgXref ON kgId=transcript' > knownCanon.best.bed
+
+# add all gencode comprehensive models, but only as a last resort
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from wgEncodeGencodeCompV19' > gencodeComp19.bed
+mysql hg19 -NBe 'select distinct name, name2 from wgEncodeGencodeCompV19' > gencodeComp19.names.tab
+bedBestTranscript -m gencodeComp19.bed gencodeComp19.names.tab > gencodeComp19.best.bed
+
+# finally, even add the pseudogenes
+mysql hg19 -NBe 'select chrom, txStart, txEnd, name from wgEncodeGencodePseudoGeneV19' > gencodePseudo19.bed
+mysql hg19 -NBe 'select distinct name, name2 from wgEncodeGencodePseudoGeneV19' > gencodePseudo19.names.tab
+bedBestTranscript -m gencodePseudo19.bed gencodePseudo19.names.tab > gencodePseudo19.best.bed
+
+# now take the first line for each gene from all files, in this order
+bedNamePickFirst gencode19.best.bed refGene.best.bed gencodeComp19.best.bed knownCanon.best.bed gencodePseudo19.bed | cut -f-4 | bedSort stdin stdout > bestGenes.hg19.bed 
+
+# == END GENE LOCATIONS ==
+
 # create the bigBed files
 ggTables bigBed mysql/ bigBed/ geneModels/bestGenes.hg19.bed hg19
 ln -s `pwd`/bigBed/geneInteractions.hg19.bb /gbdb/h19/bbi/interactions.bb
 #############################################################################
+
+##############################################################################
+# DBSNP B150 / SNP150 (DONE 5/6/17 angie)
+    # Redmine #19202
+    mkdir -p /hive/data/outside/dbSNP/150/human_hg19
+    cd /hive/data/outside/dbSNP/150/human_hg19
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/organisms/
+    # to find the subdir name to use as orgDir below (human_9606_b150_GRCh38p7 in this case).
+    # Go to that subdirectory, then to database/organism_data/ and look for files
+    # whose names start with b150_* and may or may not end with a suffix that identifies
+    # the build assembly version or some annotation version.  If there is a suffix shared
+    # by all b150_* files, add that to config.ra as the "buildAssembly".
+    # Since this build is on GRCh37.p13 like b144 above, use the liftUp.lft file
+    # and ignoreDbSnpContigsFile constructed for b144.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606_b150_GRCh37p13
+build 150
+buildAssembly 105
+liftUp ../../144/human_hg19/liftUp.lft
+refAssemblyLabel GRCh37.p13
+ignoreDbSnpContigsFile ../../144/human_hg19/patchContigs.txt
+EOF
+    # dbSNP does not make a complete set of download files for hg19 anymore, so
+    # do a "debug" run and link some files from hg38 before running the script.
+    # (hard link so wget doesn't get confused)
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -debug
+    ln ../human_hg38/data/{S*,B*} data/
+    # Edit the download script: put if(0) around download files that dbSNP doesn't dump.
+    # They changed database/organism_data to database/data/organism_data so edit that too.
+    vi ../download_human_hg19_150.csh
+    # Run the edited script manually:
+    csh -efx ../download_human_hg19_150.csh >& do.log & tail -f do.log
+    # Now continue the usual way at the next step after download:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue loadDbSnp >>& do.log &
+    tail -f do.log
+
+    # While that's running, compare rs IDs in rs_fasta with b147_SNPContigLoc_105 to see
+    # which IDs (if any) were omitted from the rs_fasta dump.
+    zcat rs_fasta/rs*.fas.gz \
+    | perl -wne 'if (/^>/) { s/^>gnl\|dbSNP\|(rs\d+) .*/$1/ || die; print; }' \
+    | sort -u > rsFastaIds.txt
+    zcat data/b150_SNPContigLoc_105.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    wc -l rsFastaIds.txt contigLocIds.txt
+# 325658303 rsFastaIds.txt
+# 231449737 contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#0 missingFromRsFasta
+    # Good!  If there are some missing in the future see "DBSNP B147" above for instructions.
+
+    # Yay, script completed:
+# *** All done!  (through the 'bigBed' step)
+
+
+##############################################################################
+# SNP150 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 5/8/17, REDONE 7/7/17 angie)
+    # Redmine #19202
+    # Redone 7/6/18 to use latest chimp & macaque assemblies
+    screen -S ortho -t ortho
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 150 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp150Ortho.2017-07-06
+    cd /hive/data/genomes/hg19/bed/snp150Ortho.2017-07-06
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 150 \
+      >>& do.log & tail -f do.log
+    # Oops, liftOver cluster run crashed because there was no hg19ToRheMac8 liftover file yet -
+    # added below.
+    ssh ku
+    cd /hive/data/genomes/hg19/bed/snp150Ortho.2017-07-06/run.liftOver
+    para push -retries=5
+    # wait for completion
+    para time >>& ../do.log
+    logout
+    # Continue at next step
+    cd /hive/data/genomes/hg19/bed/snp150Ortho.2017-07-06
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 150 \
+      -buildDir `pwd` -continue join \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP150 (DONE 5/8/17 angie)
+    # Redmine #19202
+    screen -S mask -t mask
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 150 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/snp150Mask.2017-05-08
+    cd /hive/data/genomes/hg19/snp150Mask.2017-05-08
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 150 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# LASTZ human/hg19 Tree chimp/rheMac8 - (DONE - 2017-07-08 - Angie)
+    mkdir /hive/data/genomes/hg19/bed/lastzRheMac8.2017-07-06
+    cd /hive/data/genomes/hg19/bed/lastzRheMac8.2017-07-06
+
+    printf '# human vs macaca mulatta
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Macaca mulatta rheMac8
+SEQ2_DIR=/hive/data/genomes/rheMac8/rheMac8.2bit
+SEQ2_LEN=/hive/data/genomes/rheMac8/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=600
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzRheMac8.2017-07-06
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    # real    243m19.420s
+
+    cat fb.hg19.chainRheMac8Link.txt
+    # 2508296679 bases of 2897316137 (86.573%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg19 rheMac8) > rbest.log 2>&1 &
+    # real    534m6.491s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/rheMac8/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rheMac8/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzRheMac8.2017-07-06/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real    268m2.274s
+
+    cat fb.rheMac8.chainHg19Link.txt
+    # 2495454040 bases of 3142093174 (79.420%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rheMac8 hg19) > rbest.log 2>&1
+    # real    1088m7.851s
+
+##############################################################################
+# Snpedia (DONE - 2016-07-03 - Max) - pushed in July 2017
+cd /hive/data/genomes/hg19/bed/snpedia
+wget http://www.snpedia.com/files/gbrowse/SNPedia.gff
+python download.py
+python filterPages.py > goodPages.txt
+python makeBed.py
+hgLoadBed hg19 snpedia snpedia.bed 
+hgLoadSqlTab hg19 snpediaHtml snpediaHtml.sql snpedia.htmlTab 
+##############################################################################
+# Gtex transcript track hg38->hg19 coordinate conversion (DONE - 2017-07-27 - Chris) 
+mkdir /hive/data/outside/gtex/barChartTrack/hg19backLift
+cd /hive/data/outside/gtex/barChartTrack/hg19backLift
+
+hgsql hg19 -e "select * from wgEncodeGencodeCompV24lift37" | awk '{print $2"\t"$5"\t"$6}' > foo
+cut -f 1 foo | cut -f 1 -d "." > foo2
+cut -f 2,3,4 foo > foo3
+paste foo2 foo3 > foo4
+
+cp ../sortedGtexTransExp.bed .
+cut -f 1,2,3 sortedGtexTransExp.bed > foo5
+cut -f 4 sortedGtexTransExp.bed > foo6
+cut -f 5- sortedGtexTransExp.bed > foo7
+paste foo6 foo5 > foo8
+paste foo8 foo7 > foo9
+ 
+
+join <(sort foo4) <(sort foo9) > foo10
+
+cat foo10 | awk '{print $4"\t"$2"\t"$3"\t"$1"\t"$8"\t"$9"\t"$10"\t"$11"\t"$12"\t"$13"\t"$14}' > foo11
+
+# Copy over the header line from sortedGtexTransExp.bed
+
+# Sort and convert into a bigBed file. 
+sort -k1,1 -k2,2n foo11 > sortedGtexTransExpHg19.bed
+bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGtexTransExpHg19.bed /hive/data/genomes/hg19/chrom.sizes gtexTranscExprHg19.bb
+
+# Link the files into gbdb
+# <2007-0-30 kate)
+cd /gbdb/hg19/gtex
+ln -s /hive/data/outside/gtex/barChartTrack/hg19backLift/gtexTranscExprHg19.bb gtexTranscExpr.bb
+
+##############################################################################
+# cosmicRegions (DONE - 2017-08-03 - Chris)  
+# Make a new COSCMIC track for hg19 v82 
+mkdir /hive/data/outside/cosmic/hg19/v82
+cd /hive/data/outside/cosmic/hg19/v82
+
+# Get the new data
+sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
+# Login to SFTP server (make an account online) then run this command
+get /files/grch37/cosmic/v82/CosmicMutantExport.tsv.gz
+
+# Get the schema from V81
+cp ../v81/cosmicNew.as . 
+
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
+
+# Use a script to convert to bed format.
+cosmicToBed cosMut.tsv cosMut.bed
+# This many lines were skipped, 128966 for not having genomic coordinate
+
+# Sort and convert to big bed using the .as file.  
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+bedToBigBed -type=bed8+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg19/chrom.sizes cosMutHg19V82.bb -tab -extraIndex=name,cosmLabel
+
+# Link it up so the outside world can see it. 
+cd /gbdb/hg19/cosmic/
+ln -s /hive/data/outside/cosmic/hg19/v82/cosMutHg19V82.bb .

@@ -30,6 +30,7 @@
 #include "fa.h"
 #include "cdwValid.h"
 #include "vcf.h"
+#include "csv.h"
 
 int maxErrCount = 1;	/* Set from command line. */
 int errCount;		/* Set as we run. */
@@ -528,6 +529,59 @@ char *labels[] = { "target_id",       "length",  "eff_length",      "est_counts"
 makeValidTabSepFile(conn, path, ef, vf, labels, ArraySize(labels));
 }
 
+void makeValidTsv( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+    struct cdwValidFile *vf)
+/* Make sure a tsv tab-separated values file looks all good */
+{
+struct lineFile *lf = lineFileOpen(path, TRUE);
+// get fieldCount from first line
+int fieldCount = 0;
+int lineSize;
+char *line;
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    if (line[0] == '#')
+        continue;
+    fieldCount = chopByChar(line, '\t', NULL, 0);
+    }
+lineFileClose(&lf);
+if (fieldCount == 0)
+    errAbort("0 columns in tsv %s", ef->submitFileName);
+makeValidTabSepFile(conn, path, ef, vf, NULL, fieldCount);
+}
+
+void makeValidCsv( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+    struct cdwValidFile *vf)
+/* Make sure a csv tab-separated values file looks all good */
+{
+struct lineFile *lf = lineFileOpen(path, TRUE);
+// get fieldCount from first line
+int fieldCount = 0;
+int lineSize;
+char *line;
+int lineNumber = 0;
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    ++lineNumber;
+    struct slName *list = csvParse(line);
+    int thisCount = slCount(list);
+    if (fieldCount == 0)
+	{
+	fieldCount = thisCount;
+	}
+    else
+	{
+	if (thisCount != fieldCount)
+	    errAbort("Line #%d of csv %s has %d columns. Previous rows had %d columns.", 
+		lineNumber, ef->submitFileName, thisCount, fieldCount);
+	}
+    slFreeList(list);
+    }
+lineFileClose(&lf);
+if (fieldCount == 0)
+    errAbort("0 columns in csv %s", ef->submitFileName);
+}
+
 void makeValidHtml(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
     struct cdwValidFile *vf)
 /* Fill in info about html file */
@@ -829,6 +883,14 @@ if (vf->format)	// We only can validate if we have something for format
     else if (sameString(format, "kallisto_abundance"))
 	{
         makeValidKallistoAbundance(conn, path, ef, vf);
+	}
+    else if (sameString(format, "tsv"))
+	{
+        makeValidTsv(conn, path, ef, vf);
+	}
+    else if (sameString(format, "csv"))
+	{
+        makeValidCsv(conn, path, ef, vf);
 	}
     else if (sameString(format, "html"))
         {

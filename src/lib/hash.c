@@ -372,6 +372,19 @@ hash->expansionFactor = defaultExpansionFactor;   /* Expand when elCount > size*
 return hash;
 }
 
+void hashReverseAllBucketLists(struct hash *hash)
+/* Reverse all hash bucket list.  You might do this to
+ * get them back in the same order things were added to the hash */
+{
+int i;
+for (i=0; i<hash->size; ++i)
+    {
+    struct hashEl *hel = hash->table[i];
+    if (hel != NULL && hel->next != NULL)	    
+	slReverse(&hash->table[i]);
+    }
+}
+
 void hashResize(struct hash *hash, int powerOfTwoSize)
 /* Resize the hash to a new size */
 {
@@ -405,12 +418,8 @@ for (i=0; i<oldHashSize; ++i)
 	}
     }
 /* restore original list order */
-for (i=0; i<hash->size; ++i)
-    {
-    struct hashEl *hel = hash->table[i];
-    if (hel != NULL && hel->next != NULL)	    
-	slReverse(&hash->table[i]);
-    }
+hashReverseAllBucketLists(hash);
+
 freeMem(oldTable);
 hash->numResizes++;
 }
@@ -760,4 +769,25 @@ for (kv = keyVals; kv != NULL; kv = kv->next)
     hashAdd(nameToVal, kv->name, kv->val);
 return nameToVal;
 }
+
+struct hash *hashFromNameArray(char **nameArray, int nameCount)
+/* Create a NULL valued hash on all names in array */
+{
+struct hash *hash = hashNew(0);
+int i;
+for (i=0; i<nameCount; ++i)
+    hashAdd(hash, nameArray[i], NULL);
+return hash;
+}
+
+struct hash *hashFromNameValArray(char *nameVal[][2], int nameValCount)
+/* Make up a hash from nameVal array */
+{
+struct hash *hash = newHash(0);
+int i;
+for (i=0; i<nameValCount; ++i)
+    hashAdd(hash, nameVal[i][0], nameVal[i][1]);
+return hash;
+}
+
 

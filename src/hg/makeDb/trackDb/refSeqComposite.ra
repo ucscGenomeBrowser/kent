@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel NCBI RefSeq
 longLabel RefSeq gene predictions from NCBI
 group genes
-visibility pack
+visibility dense
 type genePred
 dragAndDrop subTracks
 noInherit on
@@ -56,7 +56,7 @@ priority 2
 	longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
         priority 4
         searchIndex name
-        searchTrix /gbdb/hg38/ncbiRefSeq/ncbiRefSeqOther.ix
+        searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
         type bigBed 12
 
 	track ncbiRefSeqPsl
@@ -98,4 +98,4 @@ priority 2
 searchTable ncbiRefSeqOther
 searchPriority 2.07207
 searchType bigBed
-searchDescription ncbiRefSeq Other annotations
+searchDescription NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)

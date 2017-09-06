@@ -60,8 +60,8 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     genomicSuperDups.o geoMirror.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     ggTypes.o glDbRep.o goa.o goaPart.o googleAnalytics.o gpFx.o \
     growthCondition.o grp.o \
-    gtexAse.o gtexBoxplot.o gtexInfo.o gtexDonor.o gtexGeneBed.o gtexSample.o gtexSampleData.o \
-    gtexTissue.o gtexTissueData.o gtexTissueMedian.o gtexUi.o \
+    gtexAse.o gtexBoxplot.o gtexEqtlCluster.o gtexInfo.o gtexDonor.o gtexGeneBed.o gtexSample.o \
+    gtexSampleData.o gtexTissue.o gtexTissueData.o gtexTissueMedian.o gtexUi.o \
     gwasCatalog.o hAnno.o haplotypes.o \
     hapmapAllelesOrtho.o hapmapAllelesSummary.o hapmapPhaseIIISummary.o \
     hapmapSnps.o hapmapSnpsCombined.o \
@@ -69,8 +69,9 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
     hgFindSpec.o hgFindSpecCustom.o hgHgvs.o hgHgvsParse.o \
     hgGene.o hgMaf.o hgRelate.o hgSeq.o hgdpGeo.o hPrint.o hVarSubst.o hvGfx.o \
-    HInv.o hubConnect.o hui.o humanParalog.o \
-    imageClone.o isochores.o ispyTables.o itemAttr.o itemConf.o itemDetailsHtml.o jalview.o \
+    HInv.o hubConnect.o hubSearchText.o hui.o humanParalog.o \
+    imageClone.o indelShift.o isochores.o ispyTables.o \
+    itemAttr.o itemConf.o itemDetailsHtml.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
     jgiGene.o joinMixer.o \
     kgAlias.o kgColor.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
@@ -93,7 +94,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     roughAli.o transMapStuff.o transMapInfo.o transMapGene.o transMapSrc.o \
     sage.o sageCounts.o sageExp.o samAlignment.o sample.o \
     sanger22extra.o sangerGene.o sangerGeneToWBGeneID.o  sargassoSeaXra.o \
-    scopDes.o scoredRef.o search.o sessionThumbnail.o sgdAbundance.o \
+    scopDes.o scoredRef.o search.o seqWindow.o sessionThumbnail.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o snakeUi.o \
     snp.o snp125.o snp125CodingCoordless.o snp132Ext.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
     snpUi.o snp125Exceptions.o snp125Ui.o softPromoter.o softberryHom.o soTerm.o \
@@ -109,7 +110,8 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o txCluster.o txCommon.o txEdgeBed.o \
     txEdgeOrtho.o txGraph.o txInfo.o txRnaAccs.o ucscRetroInfo.o ucscRetroOrtho.o \
-    validateGisaid.o variant.o vcfUi.o vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
+    validateGisaid.o variant.o variantProjector.o vcfUi.o \
+    vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
     wabAli.o web.o ncRna.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
     wiggleCart.o wiggleUtils.o wikiLink.o wikiTrack.o yaleGencodeAssoc.o \
     zdobnovSynt.o oreganno.o \

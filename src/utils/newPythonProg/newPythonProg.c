@@ -28,10 +28,10 @@ void makeMakefile(char *progName, char *makeName)
 FILE *f = mustOpen(makeName, "w");
 
 fprintf(f, 
-"all::\n\t cp -p %s ${HOME}/bin\n\t cp -p %s ${HOME}/kent/src/pyLib/scripts\n"
+"all::\n\t cp -p %s ${HOME}/bin/scripts\n"
 "test::\n\t@if test -d tests -a -s tests/makefile; then (cd tests && ${MAKE} test); \\ " 
 "\n\telse echo \"# no tests directory (or perhaps no tests/makefile) in $(CURDIR)\"; fi"
-, progName, progName);
+, progName);
 
 fclose(f);
 }
@@ -41,18 +41,13 @@ void writeProgram(char *fileName, char *programName, char *usage)
 FILE *programFile = mustOpen(fileName, "w"); 
 // Write the python skeleton
 fprintf(programFile, "#!/usr/bin/env python2.7\n# %s\n\"\"\"%s\"\"\"\n", programName,  usage);
-fprintf(programFile, 
-    "import os\nimport sys\nimport collections\nimport argparse\n"
-    "\n"
-    "# import the UCSC kent python library\n"
-    "sys.path.append(os.path.dirname(__file__))\n"
-    "import common\n\n");
-fprintf(programFile, "def parseArgs(args):\n    \"\"\"\n    Parse the command line arguments.\n    \"\"\"\n    parser" 
-		    "= argparse.ArgumentParser(description = __doc__)\n    parser.add_argument (\"inpu"
-		    "tFile\",\n    help = \" The input file. \",\n    type = argparse.FileType(\"r\"))\n    ");
-fprintf(programFile, "parser.add_argument (\"outputFile\",\n    help = \" The output file. \",\n    type =" 
-		    "argparse.FileType(\"w\"))\n    if (len(sys.argv) == 1):\n        parser.print_help()\n"
-		    "        exit(1)\n    options = parser.parse_args()\n    return options\n\n"); 
+fprintf(programFile, "import os\nimport sys\nimport argparse\n\n");
+fprintf(programFile, "def parseArgs(args):\n\t\"\"\"\n\tParse the command line arguments.\n\t\"\"\"\n\tparser" 
+		    "= argparse.ArgumentParser(description = __doc__)\n\tparser.add_argument (\"inpu"
+		    "tFile\",\n\t\thelp = \" The input file. \",\n\t\ttype = argparse.FileType(\"r\"))\n\t");
+fprintf(programFile, "parser.add_argument (\"outputFile\",\n\t\thelp = \" The output file. \",\n\t\ttype =" 
+		    "argparse.FileType(\"w\"))\n\n\tif (len(sys.argv) == 1):\n\t\tparser.print_help()\n\t"
+		    "\texit(1)\n\toptions = parser.parse_args()\n\treturn options\n\n"); 
 fprintf(programFile, "def main(args):\n    \"\"\"\n    Initialized options and calls other functions.\n    \"\"\"\n    "
 		    "options = parseArgs(args)\n\nif __name__ == \""
 		    "__main__\" : \n    sys.exit(main(sys.argv))"); 

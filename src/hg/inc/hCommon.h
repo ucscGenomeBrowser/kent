@@ -34,7 +34,7 @@ char *hgVaiName();
 char *hgCustomName();
 /* Relative URL to custom tracks manager. */
 
-char *hgCompositeName();
+char *hgCollectionName();
 /* Relative URL to composite builder. */
 
 char *hgHubConnectName();

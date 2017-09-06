@@ -7,6 +7,8 @@ from itertools import chain, combinations
 from os.path import join, basename, dirname, isfile, expanduser
 import ujson
 
+# TODO: change indexPairs so it corrects synonyms to the current gene symbol
+
 # saves 20% of time when loading graph marshal
 import gc
 gc.disable()
@@ -18,6 +20,9 @@ LTPMAX=5 # maximum number of interactions a PMID can have to be declared low thr
 # not using right now, because a few pathway databases do not annotate ANY PMID. Increasing this filter would remove
 # all interactions from these pathways databases.
 MINSUPP=0
+
+# a cutoff on the number of documents required for text mined documents to show up in the UI
+UI_MINSUPP=2
 
 outFields = ["gene1", "gene2", "flags", "refs", "fwWeight", "revWeight", "snip"]
 
@@ -301,6 +306,7 @@ def writeGraphTable(allPairs, pairDocs, pairToDbs, pairMinResCounts, pwDirPairs,
     logging.info("writing merged graph to %s" % outFname)
     rows = []
     rows2 = []
+    allSyms = set()
     for pair,pairRows in allPairs.iteritems():
         gene1, gene2 = pair
 
@@ -336,6 +342,9 @@ def writeGraphTable(allPairs, pairDocs, pairToDbs, pairMinResCounts, pwDirPairs,
             str(len(allDocs)), pairDbs, str(pairMinResCount), snippet]
         rows.append(row)
 
+        allSyms.add(gene1)
+        allSyms.add(gene2)
+
         refs = list(refs)
         refs.sort()
         for ref in refs:
@@ -356,6 +365,8 @@ def writeGraphTable(allPairs, pairDocs, pairToDbs, pairMinResCounts, pwDirPairs,
         ofh2.write("\t".join(row))
         ofh2.write("\n")
     ofh2.close()
+
+    return allSyms
 
 def runCmd(cmd):
     """ run command in shell, exit if not successful """
@@ -400,7 +411,7 @@ def loadTable(db, tableDir, table):
     os.remove(tmpSqlFname)
 
 def hgsql(db, query):
-    assert('"' not in sql)
+    assert('"' not in query)
     cmd = "hgsql %s -NBe '%s'" % (db, query)
 
 def addIndexes(db):
@@ -411,9 +422,13 @@ def addIndexes(db):
     query = "ALTER TABLE ggEventText ADD INDEX docIdIdx (docId);"
     hgsql(db, query)
 
+    query = "alter table ggDocEvent add index eventIdIdx (eventId);"
+    hgsql(db, query)
+
 def loadTables(tableDir, db):
     " load graph tables into mysql "
 
+    loadTable(db, tableDir, "ggSymbol")
     loadTable(db, tableDir, "ggDoc")
     loadTable(db, tableDir, "ggDocEvent")
     loadTable(db, tableDir, "ggEventDb")
@@ -462,7 +477,11 @@ def writeEventTable(rowList, outFname, colCount=None):
     for rows in rowList:
         for row in rows:
             if colCount:
-                row = row[:colCount]
+                if len(row)+1 == colCount:
+                    row = list(row)
+                    row.append("")
+                #row = row[:colCount]
+                assert(len(row)==colCount)
             ofh.write("%s\n" % ("\t".join(row)))
     ofh.close()
 
@@ -972,6 +991,9 @@ def parseLinkTargets(outDir, validSyms):
     for row in lineFileNext(open(inFname), asFname=asPath):
         gene1, gene2 = row.gene1, row.gene2
         count = int(row.docCount)
+        # text mining documents needs some minimum support
+        if row.linkTypes=="text" and count<UI_MINSUPP:
+            continue
         if count==0:
             count = len(row.dbList.split("|"))
 
@@ -1146,7 +1168,7 @@ if cmd == "build":
 
     outFname = join(outDir, "ggLink.tmp.txt") # needs the addContext step to complete it
     eventFname = join(outDir, "ggLinkEvent.tab")
-    writeGraphTable(allPairs, pairDirDocs, pairDbs, pairMinResultCounts, pwDirPairs, \
+    allSyms = writeGraphTable(allPairs, pairDirDocs, pairDbs, pairMinResultCounts, pwDirPairs, \
         bestSentences, outFname, eventFname)
 
     pmidToId = indexPmids([dbRows,pwRows], textRows)
@@ -1154,7 +1176,7 @@ if cmd == "build":
     writeDocEvents(pmidToId, outFname)
 
     outFname = join(outDir, "ggEventDb.tab")
-    writeEventTable([dbRows, pwRows], outFname, colCount=13)
+    writeEventTable([dbRows, pwRows], outFname, colCount=14)
 
     outFname = join(outDir, "ggEventText.tab")
     writeEventTable([textRows], outFname)
@@ -1163,6 +1185,12 @@ if cmd == "build":
     linkFname = join(outDir, "ggLink.tab")
     if isfile(linkFname):
         os.remove(linkFname)
+
+    # hgGene does not like it if the gene symbols are in two different
+    # columns, so we create a very simple table with just the gene symbols
+    symFname = join(outDir, "ggSymbol.tab")
+    logging.info("Writing %s" % symFname)
+    open(symFname, "w").write("\n".join(allSyms))
 
 elif cmd == "medline":
     outDir = args[1]

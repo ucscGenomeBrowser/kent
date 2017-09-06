@@ -141,9 +141,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    hPrintf("<A HREF=\"%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
-	    hPrintf("&%s=%s", hgtaDatabase, db);
-	    hPrintf("&%s=%s", hgtaHistoTable, table);
-	    hPrintf("&%s=%s", hgtaDoValueHistogram, row[0]);
+	    hPrintf("&amp;%s=%s", hgtaDatabase, db);
+	    hPrintf("&amp;%s=%s", hgtaHistoTable, table);
+	    hPrintf("&amp;%s=%s", hgtaDoValueHistogram, row[0]);
 	    hPrintf("\">");
 	    hPrintf("values");
 	    hPrintf("</A>");
@@ -152,9 +152,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    hPrintf("<A HREF=\"%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
-	    hPrintf("&%s=%s", hgtaDatabase, db);
-	    hPrintf("&%s=%s", hgtaHistoTable, table);
-	    hPrintf("&%s=%s", hgtaDoValueRange, row[0]);
+	    hPrintf("&amp;%s=%s", hgtaDatabase, db);
+	    hPrintf("&amp;%s=%s", hgtaHistoTable, table);
+	    hPrintf("&amp;%s=%s", hgtaDoValueRange, row[0]);
 	    hPrintf("\">");
 	    hPrintf("range");
 	    hPrintf("</A>");
@@ -354,7 +354,7 @@ if (tdb != NULL && isNotEmpty(tdb->html))
 	// like details pages in which HR's bottom margin melts into H2's top margin:
 	char *s = skipLeadingSpaces(tdb->html);
 	if (startsWith("<H2>", s) || startsWith("<h2>", s))
-	    printf("<span style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</span>",
+	    printf("<div style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</div>",
 		   tdb->html);
 	else
 	    puts(tdb->html);
@@ -394,7 +394,7 @@ if (tdbForConn != NULL)
     {
     char *type = tdbForConn->type;
     if (startsWithWord("bigWig", type))
-	printf("<BR>This table simply points to a file in "
+	printf("<BR>This table points to a file in "
 	       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
 	       "BigWig</A> format.<BR>\n");
     }
@@ -674,6 +674,8 @@ else if (isCustomTrack(table))
     showSchemaCt(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
+else if (tdb &&startsWithWord("bigWig", tdb->type) && !hTableExists(db, table))
+	showSchemaBigWigNoTable(db, table, tdb);
 else
     showSchemaDb(db, tdb, table);
 }

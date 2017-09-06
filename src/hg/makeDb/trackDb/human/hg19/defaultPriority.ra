@@ -17,6 +17,8 @@ priority 1
 # mRNA and EST
 
 track mrna override
+group rna
+priority 5.5
 visibility hide
 
 track intronEst override
@@ -46,8 +48,7 @@ visibility hide
 
 track dgvPlus override
 group varRep
-visibility dense
-priority 1
+visibility hide
 
     track dgvMerged override
     parent dgvPlus on

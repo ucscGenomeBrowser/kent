@@ -59,18 +59,22 @@ SCRIPT_FILES = \
 	mergeSortedBed3Plus.pl \
 	${USER_APP_SCRIPTS}
 
+APP_SCRIPTS = ${SCRIPT_FILES}
+
 # List of directories to build of interest only at UCSC
 DIRS = ${buildRefresh} \
 	automation \
 	buildReleaseLog \
 	checkUrlsInTable \
 	geoMirrorNode \
+	hgvsToVcf \
 	makeTrackIndex \
 	mysqlSecurityCheck \
 	pslUniq \
 	refSeqGet \
 	safePush \
 	toDev64 \
+	vcfToHgvs \
 	wigBedToStep
 
 TEST_DIRS = \
@@ -79,20 +83,26 @@ TEST_DIRS = \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
+	hgvsToVcf \
 	hubCheck \
 	overlapSelect \
 	pslMap \
 	pslToBigPsl \
 	refSeqGet \
-	transMapPslToGenePred
+	transMapPslToGenePred \
+	vcfToHgvs
 
 APPS = $(DIRS) $(UTILS_APPLIST)
 
 all:: utils
 
-utils: $(APPS:%=%.utils)
+utils: $(APPS:%=%.utils) $(APP_SCRIPTS:%=%.appScript)
 %.utils:
 	cd $* && echo $* && $(MAKE)
+%.appScript:
+	chmod +x $*
+	rm -f ${DESTDIR}${SCRIPTS}/$*
+	cp -p $* ${DESTDIR}${SCRIPTS}/$*
 
 userApps: $(UTILS_APPLIST:%=%.userApp) $(USER_APP_SCRIPTS:%=%.userAppScript)
 %.userApp:

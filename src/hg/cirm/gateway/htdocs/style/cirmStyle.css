@@ -1,0 +1,253 @@
+input.form-control { width: 300px; }
+textarea.form-control { width: 500px; height: 200px;}
+
+/* Colors */
+.label-cescg
+{
+    background-color: #FF8C00 /* orange */
+}
+
+.label-access
+{
+    background-color: #4682B4 /* gray blue */
+}
+
+.label-files
+{
+    background-color: #C71585 /* magenta */
+}
+
+.label-projects
+{
+    background-color: #1E90FF /* smurf blue */
+}
+
+.label-tools
+{
+    background-color: #5cb85c /* lime green */
+}
+
+/*
+.header
+{
+    background-color: #aaaaaa // light gray
+}
+*/
+
+.footer
+{
+    width: 90%;
+    margin: 0% 5%;
+    background-color: #eaeaea
+}
+
+/* Styling for title bar and text */
+.cirm-page-title
+{
+    padding-left: 5px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.cirm-page-title-text
+{
+    color: #ffffff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.cirm-page-body
+{
+    width: 90%;
+    margin: 0% 5%;
+}
+
+/* Styling for text + links */
+.a-unstyled,
+.a-unstyled:link,
+.a-unstyled:visited
+{
+    color: inherit;
+}
+.a-unstyled:hover,
+.a-unstyled:active
+{
+    color: inherit;
+    text-decoration: none;
+}
+
+.standsout
+{
+    color: #ffffff;
+    background-color: #1E90FF;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.standsout:link,
+.standsout:visited
+{
+    color: #ffffff !important;
+    background-color: #1E90FF;
+}
+
+.standsout:hover
+{
+    color: #cccccc;
+    text-decoration: none !important;
+    background-color: #C71585;
+}
+
+.standsout:active
+{
+    color: #ffffff;
+    text-decoration: none !important;
+    background-color: #1E90FF;
+}
+
+.nopadding
+{
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.infoboxpadding
+{
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+}
+
+.btnexpand:after
+{
+    font-family: "Glyphicons Halflings";
+    content: "\e114";
+    float: right;
+    margin-left: 15px;
+}
+
+.btnexpand.collapsed:after
+{
+    content: "\e080";
+}
+ 
+/*.verticaltext { width: 20px; transform: rotate(-90deg); transform-origin: right, top; -ms-transform: rotate(-90deg); -ms-transform-origin:right, top; -webkit-transform: rotate(-90deg); -webkit-transform-origin:right, top; color: #ed217c; position: relative; }
+
+.verticaltext {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  left: -40px;
+  top: 35px;
+  position: absolute;
+  color: #FFF;
+  text-transform: uppercase;
+  font-size:26px;
+  font-weight:bold;
+}
+*/
+
+
+/* Coloring for experiments types on Projects page */
+.singlecell
+{
+    color: #ed217c;
+}
+.transcriptome
+{
+    color: #1E90FF;
+}
+.genome
+{
+    color: #C71585;
+}
+.epigenome
+{
+    color: #5cb85c;
+}
+.otherome
+{
+    color: #FF8C00;
+}
+
+
+/*Styling for Projects page table*/
+.table-header-rotated th.row-header{
+    width: auto;
+}
+
+.table-header-rotated td{
+    width: 40px;
+    border-top: 1px solid #dddddd; /* light gray */
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    vertical-align: middle;
+}
+
+.table-header-rotated th.rotate-45{
+    height: 80px;
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    position: relative;
+    vertical-align: bottom;
+    padding: 0;
+    font-size: 11px;
+    line-height: 0.8;
+}
+
+.table-header-rotated th.rotate-45 > div{
+    position: relative;
+    top: 0px;
+    left: 40px; /* 80 * tan(45) / 2 = 40 where 80 is the height on the cell and 45 is the transform angle*/
+    height: 100%;
+    -ms-transform:skew(-45deg,0deg);
+    -moz-transform:skew(-45deg,0deg);
+    -webkit-transform:skew(-45deg,0deg);
+    -o-transform:skew(-45deg,0deg);
+    transform:skew(-45deg,0deg);
+    overflow: hidden;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    border-top: 1px solid #dddddd;
+}
+
+.table-header-rotated th.rotate-45 span {
+    -ms-transform:skew(45deg,0deg) rotate(315deg);
+    -moz-transform:skew(45deg,0deg) rotate(315deg);
+    -webkit-transform:skew(45deg,0deg) rotate(315deg);
+    -o-transform:skew(45deg,0deg) rotate(315deg);
+    transform:skew(45deg,0deg) rotate(315deg);
+    position: absolute;
+    bottom: 30px; /* 40 cos(45) = 28 with an additional 2px margin*/
+    left: -25px; /*Because it looked good, but there is probably a mathematical link here as well*/
+    display: inline-block;
+    /* width: 100%;*/
+    width: 85px; /* 80 / cos(45) - 40 cos (45) = 85 where 80 is the height of the cell, 40 the width of the cell and 45 the transform angle*/
+    text-align: left;
+    /* white-space: nowrap;*/ /*whether to display in one line or not*/
+}
+
+
+.hideOverflow
+{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    width:100%;
+    display:block;
+}
+
+.popover {
+    max-width:800px;
+    /*
+    left: 10px !important;
+    margin-right: 10px;
+    */
+    }
+
+.popoveradjust {
+    padding: 5px 0;
+    margin-top: -3px;
+}

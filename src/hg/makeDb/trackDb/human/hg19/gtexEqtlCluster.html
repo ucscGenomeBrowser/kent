@@ -1,0 +1,40 @@
+<h2>Description</h2>
+<p>
+This track shows genetic variants likely affecting gene expression in multiple human tissues.
+Specifically, the data displayed are the gene expression quantitative trait loci within 1MB of 
+gene transcription start sites (cis-eQTL's) 
+identified as causal in the Genotype-Tissue Expression (GTEx) project V6 release by 
+CAVIAR analysis (95% credible set).  The track shows eQTL's identified in 44 GTEx tissues, along
+with the effect size on gene expression (in FPKM), along with the probability the eQTL is in the 95% credible set.
+</p>
+<p>
+NOTE: This track is under development, subject to change (and input is welcome!) 
+</p>
+
+<h2>Display Conventions</h2>
+Gene/variant pairs occuring in multiple tissues are merged into a single item in the display. 
+The item label provides the tissue name or number of tissues.
+Mouseover displays effect size and tissues affected by the eQTL.
+The item color indicates the greatest effect size noted for the eQTL:
+<ul>
+<table cellpadding='2'>
+<tr><td style='color: fuchsia;'>fuchsia</td><td>high positive</td></tr>
+<tr><td style='color: red;'>red</td><td>moderate positive</td></tr>
+<tr><td style='color: blue;'>blue</td><td>moderate negative</td></tr>
+<tr><td style='color: teal;'>teal</td><td>high negative</td></tr>
+</table>
+</ul>
+
+<h2>Credits</h2>
+Thanks to GTEx investigators and analysts -- particularly Farhad Hormozdiari 
+(currently at the Price lab, Harvard), the Eskin lab at UCLA, 
+and the GTEx LDACC and portal team for providing this data, and to Christopher Brown (U Penn) 
+for input on design of the track.
+
+<h2>References</h2>
+
+<ul>
+<li>GTEx portal documentation</li>
+<li>GTEx eQTL paper (in press)</li>
+<li>CAVIAR paper</li>
+</ul>

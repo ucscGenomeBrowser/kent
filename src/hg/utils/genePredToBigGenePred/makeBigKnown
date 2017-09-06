@@ -9,6 +9,7 @@ sort $tmp/knownCanon.txt $tmp/knownTag.txt | awk '{if ($1 != last) {print last, 
 hgsql $db -Ne "select * from kgColor" > $tmp/colors.txt
 hgsql $db -Ne "select * from knownGene" > $tmp/knownGene.txt
 hgsql $db -Ne "select kgId, geneSymbol, spID from kgXref" > $tmp/geneNames.txt
-genePredToBigGenePred -score=$tmp/knownScore.txt  -colors=$tmp/colors.txt -geneNames=$tmp/geneNames.txt  -known $tmp/knownGene.txt  $tmp/knownGene.bgpInput
+hgsql $db -Ne "select * from knownCds" > $tmp/knownCds.txt
+genePredToBigGenePred -cds=$tmp/knownCds.txt -score=$tmp/knownScore.txt  -colors=$tmp/colors.txt -geneNames=$tmp/geneNames.txt  -known $tmp/knownGene.txt  $tmp/knownGene.bgpInput
 bedToBigBed -type=bed12+8 -tab -as=$HOME/kent/src/hg/lib/bigGenePred.as $tmp/knownGene.bgpInput /cluster/data/$db/chrom.sizes $db.knownGene.bb
 rm -rf $tmp

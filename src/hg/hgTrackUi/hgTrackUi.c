@@ -3006,6 +3006,8 @@ else if (tdb->type != NULL)
         cfgByCfgType(cType,database, cart, tdb,tdb->track, NULL, boxed);
         if (startsWith("gtexGene", track))
             gtexGeneUi(cart, tdb, tdb->track, NULL, TRUE);
+        else if (startsWith("gtexEqtlCluster", track))
+            gtexEqtlClusterUi(cart, tdb, tdb->track, NULL, TRUE);
 #ifdef USE_HAL
 	if (cType == cfgSnake)
 	    cfgHalSnake(tdb, tdb->track);

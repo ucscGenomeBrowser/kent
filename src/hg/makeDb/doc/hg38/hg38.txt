@@ -3298,7 +3298,7 @@ hgLoadBed -tab hg38 tRNAs hg38-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.s
 
 ## tRNAs track (2015-10-04, Chris FINISHING BUILD FOR RELEASE)
     cd /hive/data/genomes/hg38/bed/tRNAs
-    cp /hive/users/pchan/gtrnadb2/Eukaryota/hg38/hg38-tRNAs.bed hg38-tRNAs2.bed
+    cat /hive/users/pchan/gtrnadb2/Eukaryota/hg38/hg38-tRNAs.bed | sed 's^</BLOCKQUOTE>^^g' | > hg38-tRNAs2.bed
     hgsql hg38 -e 'drop table if exists tRNAs'
     hgLoadBed -tab hg38 tRNAs hg38-tRNAs2.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
     mkdir gif
@@ -6539,11 +6539,11 @@ zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
 
 # Use a script to convert to bed format.
 cosmicToBed cosMut.tsv cosMut.bed
-# This many lines were skipped, 126756, for not having genomic coordinates. 
+# This many lines were skipped, 131597 for not having genomic coordinate
 
 # Sort and convert to big bed using the .as file.  
 sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
-bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/chrom.sizes cosMutHg38V81.bb -tab
+bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/chrom.sizes cosMutHg38V81.bb -tab -extraIndex=name,cosmLabel
 
 # Link it up so the outside world can see it. 
 cd /gbdb/hg38/cosmic/
@@ -6604,6 +6604,15 @@ ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaLargeSamples.tsv tcgaLarg
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaMatrix.tsv tcgaMatrix.tab
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaTransExp.bb .
 
+###########3
+# Reload bigBed with a schema that will be shared with genes track, to support
+# configuration as subtracks in a composite
+# (2007-08-30 kate)
+cd /hive/data/outside/tcgaBarcharts/transcripts
+bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartGeneExpr.as sortedTcgaTransExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaTranscExpr.hg38.bb
+mkdir /gbdb/hg38/tcga
+ln -s `pwd`/tcgaTranscExpr.hg38.bb /gbdb/hg38/tcga/tcgaTranscExpr.bb
+
 # TCGA gene level expression barChart track, from TOIL pipeline recompute (John Vivian)
 # tcgaGeneExpr
 mkdir ../genes 
@@ -6642,6 +6651,17 @@ bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartGeneExp.as sortedTcga
 cd /gbdb/hgFixed/human/expMatrix 
 ln -s /hive/data/outside/tcgaBarcharts/genes/tcgaGeneExp.bb .
 ln -s /hive/data/outside/tcgaBarcharts/genes/tcga.geneTpm.tab tcgaGeneMatrix.tab
+
+###########3
+# Reload bigBed with a schema that will be shared with transcript track, to support
+# configuration as subtracks in a composite
+# Apparently Chris actually loaded the #3 file (added gene names, adjusted end coord apparently)
+# (2007-08-30 kate)
+cd /hive/data/outside/tcgaBarcharts/genes
+bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartGeneExpr.as sortedTcgaGeneExp3.bed /hive/data/genomes/hg38/chrom.sizes tcgaGeneExpr.hg38.bb
+mkdir /gbdb/hg38/tcga
+ln -s `pwd`/tcgaGeneExpr.hg38.bb /gbdb/hg38/tcga/tcgaGeneExpr.bb
+
 #########################################################################
 # gtexTransExp Chris Eisenhart, done, 2017-05-23
 # TCGA transcript level RNA-seq, from TOIL pipeline recompute (John Vivian)
@@ -6689,5 +6709,131 @@ bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGt
 cd /gbdb/hgFixed/human/expMatrix 
 ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexSamples.tsv cleanGtexSamples.tab
 ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexMatrix.tsv cleanGtexMatris.tab
+
+# <2007-08-30 kate)
+cd /gbdb/hg38/gtex
 ln -s /hive/data/outside/gtex/barChartTrack/gtexTranscExpr.bb .
+
 #########################################################################
+# LASTZ human/hg38 vs. Zebrafish /danRer11
+#	(DONE - 2017-06-12 - Chris)
+
+    mkdir /hive/data/genomes/hg38/bed/lastzDanRer11.2017-06-12
+    cd /hive/data/genomes/hg38/bed/lastzDanRer11.2017-06-12
+
+    printf '# human vs zebrafish danRer11
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# QUERY: zebrafish danRer11
+SEQ2_DIR=/hive/data/genomes/danRer11/danRer11.2bit
+SEQ2_LEN=/hive/data/genomes/danRer11/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzDanRer11.2017-06-12
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > do.log 2>&1
+    # real    3327m39.074s
+    
+	cat fb.hg38.chainDanRer11Link.txt
+    # 41036733 bases of 3049335806 (1.346%) in intersection
+
+	973293331 bases of 3049335806 (31.918%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 danRer11) \
+       > rbest.log 2>&1 &
+
+    # and for the swap:
+    mkdir /hive/data/genomes/danRer11/bed/blastz.hg38.swap
+    cd /hive/data/genomes/danRer11/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzDanRer11.2017-06-12/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -noDbNameCheck -syntenicNet) > swap.log 2>&1
+	#  real	39m24.916s
+
+    cat fb.danRer11.chainHg38Link.txt
+    # 47869194 bases of 1674677181 (2.858%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` danRer11 hg38) \
+       > rbest.log 2>&1 &
+    # real	638m45.337s
+
+#########################################################################
+# refSeqFuncElems NCBI refSeq functional elements, DONE 2017-08-01 Chris
+mkdir /hive/data/outside/refSeqFuncElems
+cd /hive/data/outside/refSeqFuncElems
+
+# Get the data from their ftp server
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/GFF_interim/interim_GRCh38.p10_top_level_2017-05-03.gff3.gz
+gunzip interim_GRCh38.p10_top_level_2017-05-03.gff3.gz
+
+# Get a table to map refSeq chrom names to our chrom names
+hgsql hg38 -e "select * from ucscToRefSeq" | cut -f 1,4 ucscToRefSeq.tsv | awk '{print $2"\t"$1}' > refSeqToUcsc.tsv
+
+# Drop the header lines 
+tail -3610666 ../interim_GRCh38.p11_top_level_2017-06-27.gff3 | sort > foo2
+join foo2 <(sort refSeqToUcsc.tsv) -t $'\t' > join.foo
+
+# Join with the ucscToRefSeq table to get UCSC chromosomes 
+join <(tail -3610666 interim_GRCh38.p11_top_level_2017-06-27.gff3 | sort) <(sort refSeqToUcsc.tsv) -t $'\t' > join.foo
+
+# Python script to grab just the functional elements from this list (given to us by Terence),
+# move things into a bed order and subtract 1 from the chr start coordinates provided.  
+./parseRefSeqFuncElems join.foo bed 108.20170627
+
+sort -k1,1 -k2,2n bed > sorted.bed
+
+#wc sorted.bed 
+#6188  159382 1763350 sorted.bed
+
+bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed /hive/data/genomes/hg38/chrom.sizes refSeqFuncElems.bb -tab 
+
+cd /gbdb/hg38/ncbiRefSeq
+ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElems.bb . 
+###################################################################
+# cosmicRegions (DONE 2017-08-03 Chris)
+# Make a new COSCMIC track for hg38 v82
+mkdir /hive/data/outside/cosmic/hg38/v82
+cd /hive/data/outside/cosmic/hg38/v82
+
+# Get the new data
+sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
+# Login to SFTP server then run these commands 
+get /files/grch38/cosmic/v82/CosmicMutantExport.tsv.gz
+
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
+
+# Use a script to convert to bed format.
+cosmicToBed cosMut.tsv cosMut.bed
+# This many lines were skipped, 134601 for not having genomic coordinate
+
+# Sort and convert to big bed using the .as file.  
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+bedToBigBed -type=bed8+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/chrom.sizes cosMutHg38V82.bb -tab -extraIndex=name,cosmLabel
+
+
+# Link it up so the outside world can see it. 
+cd /gbdb/hg38/cosmic/
+ln -s /hive/data/outside/cosmic/hg38/v82/cosMutHg38V82.bb .
+

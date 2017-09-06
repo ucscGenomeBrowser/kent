@@ -1,7 +1,7 @@
 <H2>Description</H2>
 <P>This track shows genome matches to biomedical sequences submitted with patent application
 documents to patent offices around the world. The sequences, their mappings, and selected
-patent information were gratefully provided by <a
+patent information were graciously provided by <a
 href="https://www.lens.org/lens/bio" target="_blank">PatSeq</a>, a search tool part of <a
 href="https://www.lens.org" target="_blank">The Lens</a>,
 <a href="http://www.cambia.org" target="_blank">Cambia</a>.</P>
@@ -116,7 +116,7 @@ o&#114;&#103;">
 The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>.
 For automated download and analysis, the genome annotation is stored in a bigBed file that
 can be downloaded from
-<a href="http://hgdownload.cse.ucsc.edu/gbdb/$db/bbi/" target="_blank">our download server</a>.
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/" target="_blank">our download server</a>.
 The files for this track are called <tt>patNonBulk.bb</tt> and <tt>patBulk.bb</tt>. Individual
 regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
 which can be compiled from the source code or downloaded as a precompiled
@@ -126,7 +126,7 @@ binary for your system. Instructions for downloading source code and binaries ca
 
 <p>
 The command to obtain the data as a tab-separated table looks like this:<BR>
-<pre>bigBedToBed http://hgdownload.cse.ucsc.edu/gbdb/$db/bbi/patNonBulk.bb -chrom=chr5 -start=1000000 -end=2000000 output.tsv</pre>
+<pre>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/patNonBulk.bb -chrom=chr5 -start=1000000 -end=2000000 output.tsv</pre>
 A full log of the commands that were used to build this annotation is available
 from our <a
 href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">database

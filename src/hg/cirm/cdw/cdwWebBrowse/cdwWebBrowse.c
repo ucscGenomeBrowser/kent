@@ -889,8 +889,11 @@ printf("<img src=\"../images/magnify.png\">\n");
 jsInlineF(
     "$(function () {\n"
     "  $('#%s').watermark(\"type in words or starts of words to find specific %s\");\n" 
+    "  $('form').delegate('#%s','change keyup paste',function(e){\n"
+    "    $('[name=cdwBrowseFiles_page]').val('1');\n"
+    "  });\n"
     "});\n",
-    varName, itemPlural);
+    varName, itemPlural, varName);
 return varVal;
 }
 
@@ -964,11 +967,11 @@ for (ef = efList; ef != NULL; ef = ef->next)
         if ( (submitFname!=NULL) && (!isEmpty(submitFname)) && (*submitFname=='/') )
             submitFname += 1;
 
-        printf("curl 'http://%s/cgi-bin/cdwGetFile?acc=%s&token=%s' --create-dirs -o %s\n", \
+        printf("curl --netrc-file cirm_credentials 'https://%s/cgi-bin/cdwGetFile?acc=%s&token=%s' --create-dirs -o %s\n", \
             host, vf->licensePlate, token, submitFname);
         }
     else
-        printf("http://%s/cgi-bin/cdwGetFile?acc=%s&token=%s%s\n", \
+        printf("https://%s/cgi-bin/cdwGetFile?acc=%s&token=%s%s\n", \
             host, vf->licensePlate, token, optArg);
     }
 }
@@ -1033,17 +1036,19 @@ puts("To download the files:\n");
 puts("<ul>\n");
 puts("<li>With Firefox and <a href=\"https://addons.mozilla.org/en-US/firefox/addon/downthemall/\">DownThemAll</a>: Click Tools - DownThemAll! - Manager. Right click - Advanced - Import from file. Right-click - Select All. Right-click - Toogle All\n");
 puts("<li>With Chrome and <a href=\"https://chrome.google.com/webstore/detail/tab-save/lkngoeaeclaebmpkgapchgjdbaekacki\">TabToSave</a>: Click the T/S icon next to the URL bar, click the edit button at the bottom of the screen and paste the file contents\n");
-puts("<li>OSX/Linux: With curl and a single thread: <tt>xargs -n1 curl -JO < fileUrls.txt</tt>\n");
-puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt</tt>\n");
-puts("<li>With wget and 4 threads: <tt>xargs -n 1 -P 4 wget --content-disposition -q < fileUrls.txt</tt>\n");
-puts("<li>With aria2c, 16 threads and two threads per file: <tt>aria2c -x 16 -s 2 -i fileUrls.txt</tt>\n");
+puts("<li>OSX/Linux: With curl and a single thread: <tt>xargs -n1 curl -JO --user YOUREMAIL:YOURPASS < fileUrls.txt</tt>\n");
+puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt --user YOUREMAIL --password YOURPASS</tt>\n");
+puts("<li>With wget and 4 threads: <tt>xargs -n 1 -P 4 wget --content-disposition -q --user YOUREMAIL --password YOURPASS < fileUrls.txt</tt>\n");
+puts("<li>With aria2c, 16 threads and two threads per file: <tt>aria2c --http-user YOUREMAIL --http-password YOURPASS -x 16 -s 2 -i fileUrls.txt</tt>\n");
 puts("</ul>\n");
 puts("</div>\n");
 
 puts("<div id='scriptDoc' style='display:none'>\n");
 puts("When you click 'submit', a shell script that runs curl will get downloaded.\n");
 puts("The URLs are valid for one week.<p>\n");
-puts("To download the files:\n");
+puts("Before you start the download, create a file called cirm_credentials with your username and password like this:<br>\n");
+puts("<tt>echo 'default login <i>user@university.edu</i> password <i>mypassword</i>' > cirm_credentials</tt><p>\n");
+puts("Then, to download the files:\n");
 puts("<ul>\n");
 puts("<li>Linux/OSX: With curl and a single thread: <tt>sh downloadCirm.sh</tt>\n");
 puts("<li>Linux/OSX: With curl and four threads: <tt>parallel -j4 :::: downloadCirm.sh</tt>\n");
@@ -1770,10 +1775,9 @@ void localWebStartWrapper(char *titleString)
     jsIncludeFile("jquery.ui.colorPicker.js", NULL);
     jsIncludeFile("ajax.js", NULL);
     jsIncludeFile("d3pie.min.js", NULL);
+    jsIncludeFile("dagre-d3.js", NULL);
     printf("<script src=\"//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js\"></script>");
     printf("<script src=\"//cdnjs.cloudflare.com/ajax/libs/bowser/1.6.1/bowser.min.js\"></script>");
-    // http://cpettitt.github.io/project/dagre-d3/latest/dagre-d3.js redirects to:
-    printf("<script src='http://www.samsarin.com/project/dagre-d3/latest/dagre-d3.js'></script>\n");
     printf("</HEAD>\n");
     printBodyTag(stdout);
     }

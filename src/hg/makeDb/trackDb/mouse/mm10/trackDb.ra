@@ -1,6 +1,18 @@
 
-# not ready for this yet 2017-03-15
-# include ../../refSeqComposite.ra alpha
+include ../../refSeqComposite.ra alpha
+
+track refSeqFuncElems
+release alpha
+shortLabel RefSeq Func Elems
+longLabel NCBI RefSeq Functional Elements 
+type bigBed 8 +
+bigDataUrl /gbdb/hg38/ncbiRefSeq/refSeqFuncElemsMm10.bb
+labelFields soTerm
+group regulation
+url https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$
+urlLabel Gene ID: 
+urls pubMedIds=http://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
+mouseOverField _mouseOver
 
 # chainNet tracks
 include trackDb.gliresChainNet.ra
@@ -367,6 +379,7 @@ include wgEncodeGencodeVM10.ra
 include wgEncodeGencodeVM11.ra
 include wgEncodeGencodeVM12.ra
 include wgEncodeGencodeVM13.ra
+include wgEncodeGencodeVM14.ra
 
 include defaultPriority.ra
 
@@ -387,7 +400,10 @@ longLabel Annotated SNPs from mouse strain comparison analysis
 group varRep
 type vcfTabix
 visibility hide
+priority 11.5
 hapClusterHeight 78
+hapClusterEnabled off
+maxWindowToDraw 1000000
 
 track nestedRepeats override
 group varRep

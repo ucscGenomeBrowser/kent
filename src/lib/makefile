@@ -10,7 +10,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     blastOut.o blastParse.o boxClump.o boxLump.o bPlusTree.o \
     bwgCreate.o bwgQuery.o bwgValsOnChrom.o \
     cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o chainToPsl.o \
-    cheapcgi.o cirTree.o codebias.o colHash.o common.o correlate.o crTree.o \
+    cheapcgi.o cirTree.o codebias.o colHash.o common.o correlate.o crTree.o  csv.o \
     dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o dnaMotif.o dnaseq.o \
     dnautil.o dtdParse.o dyOut.o dystring.o elmTree.o \
     emblParse.o errCatch.o errAbort.o \
@@ -44,8 +44,8 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     servcis.o servcl.o servmsII.o servpws.o shaRes.o slog.o snof.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
     splatAli.o sqlList.o sqlNum.o sqlReserved.o subText.o sufa.o sufx.o synQueue.o \
-    tabRow.o tagStorm.o tagToSql.o textOut.o tokenizer.o trix.o twoBit.o \
-    udc.o vcf.o vcfBits.o vGfx.o vPng.o verbose.o \
+    tabRow.o tagSchema.o tagStorm.o tagToJson.o tagToSql.o textOut.o tokenizer.o trix.o twoBit.o \
+    udc.o uuid.o vcf.o vcfBits.o vGfx.o vPng.o verbose.o \
     wildcmp.o wormdna.o \
     xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o zlibFace.o
 

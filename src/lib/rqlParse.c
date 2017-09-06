@@ -146,7 +146,22 @@ else if (isalpha(c) || c == '_')
     {
     p->op = rqlOpSymbol;
     p->type = rqlTypeString;	/* String until promoted at least. */
-    p->val.s = cloneString(tok);
+    struct dyString *dy = dyStringNew(64);
+    for (;;)
+	{
+	dyStringAppend(dy, tok);
+	if ((tok = tokenizerNext(tkz)) == NULL)
+	    break;
+	if (tok[0] != '.')
+	    {
+	    tokenizerReuse(tkz);
+	    break;
+	    }
+	dyStringAppend(dy, tok);
+	if ((tok = tokenizerNext(tkz)) == NULL)
+	    break;
+	}
+    p->val.s = dyStringCannibalize(&dy);
     }
 else if (isdigit(c))
     {

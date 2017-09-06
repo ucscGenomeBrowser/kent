@@ -28,6 +28,8 @@ struct jsonWrite
      struct dyString *dy;	/* Most of this module is building json text in here */
      struct jwObjInfo objStack[128]; /* Make stack deep enough to handle nested objects and lists */
      int stackIx;		/* Current index in stack */
+     char sep;			/* Separator, defaults to ' ', but set to '\n' for human
+                                 * readability. */
      };
 
 struct jsonWrite *jsonWriteNew();

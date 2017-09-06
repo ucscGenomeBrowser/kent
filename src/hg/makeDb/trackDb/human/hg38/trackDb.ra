@@ -4,15 +4,59 @@ include barCharts.ra
 
 include hoffMap.ra
 
-track cosmicRegions
+include cancerExpr.ra
+
+track refSeqFuncElems
+release alpha
+shortLabel RefSeq Func Elems
+longLabel NCBI RefSeq Functional Elements 
+type bigBed 8 +
+bigDataUrl /gbdb/hg38/ncbiRefSeq/refSeqFuncElems.bb
+labelFields soTerm
+group regulation
+url https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$
+urlLabel Gene ID: 
+urls pubMedIds=http://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
+mouseOverField _mouseOver
+
+track cosmicRegionsUpdate
 release alpha
 shortLabel COSMIC Regions
-longLabel Catalogue of Somatic Mutations in Cancer
-type bigBed 4 +
-bigDataUrl /gbdb/hg38/cosmic/cosMutHg38V81.bb
+longLabel Catalogue of Somatic Mutations in Cancer V82
+type bigBed 8 +
+bigDataUrl /gbdb/hg38/cosmic/cosMutHg38V82.bb
+labelFields cosmLabel
 group phenDis
 color 200, 0, 0
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
+urlLabel COSMIC ID:
+searchIndex name,cosmLabel
+tableBrowser off
+mouseOverField _mouseOver
+html cosmicRegions
+
+searchTable cosmicRegionsUpdate
+searchPriority 2.07207
+searchType bigBed
+searchDescription COSMIC Regions
+
+track cosmicRegions
+shortLabel COSMIC Regions
+longLabel Catalogue of Somatic Mutations in Cancer V81
+type bigBed 4 +
+bigDataUrl /gbdb/hg38/cosmic/cosMutHg38V81.bb
+labelFields cosmLabel
+group phenDis
+color 200, 0, 0
+url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
+urlLabel COSMIC ID:
+searchIndex name,cosmLabel
+tableBrowser off
+
+searchTable cosmicRegions
+searchPriority 2.07207
+searchType bigBed
+searchDescription COSMIC Regions
 
 track coriellDelDup override
 origAssembly hg19 
@@ -398,62 +442,50 @@ searchPriority 3.53
 
 track snp141Mult override
 group varRep
-priority 6.5
 snpSeqFile /gbdb/hg38/snp/snp141.fa
 
 track snp141Flagged override
 group varRep
-priority 5.5
 snpSeqFile /gbdb/hg38/snp/snp141.fa
 
 track snp141Common override
 group varRep
-priority 3.4
 snpSeqFile /gbdb/hg38/snp/snp141.fa
 
 track snp141 override
 group varRep
-priority 2.5
 snpSeqFile /gbdb/hg38/snp/snp141.fa
 
 track snp142Mult override
 group varRep
-priority 6.4
 snpSeqFile /gbdb/hg38/snp/snp142.fa
 
 track snp142Flagged override
 group varRep
-priority 5.4
 snpSeqFile /gbdb/hg38/snp/snp142.fa
 
 track snp142Common override
 group varRep
-priority 3.3
 snpSeqFile /gbdb/hg38/snp/snp142.fa
 
 track snp142 override
 group varRep
-priority 2.4
 snpSeqFile /gbdb/hg38/snp/snp142.fa
 
 track snp144Mult override
 group varRep
-priority 6.3
 snpSeqFile /gbdb/hg38/snp/snp144.fa
 
 track snp144Flagged override
 group varRep
-priority 5.3
 snpSeqFile /gbdb/hg38/snp/snp144.fa
 
 track snp144Common override
 group varRep
-priority 3.2
 snpSeqFile /gbdb/hg38/snp/snp144.fa
 
 track snp144 override
 group varRep
-priority 2.3
 snpSeqFile /gbdb/hg38/snp/snp144.fa
 
 track genomicSuperDups override
@@ -470,9 +502,11 @@ url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg38&species=H.
 
 include trackDb.cloneEnd.ra
 
-include hg38Patch9.ra
+include hg38Patch9.ra beta,public
+include hg38Patch11.ra alpha
 
-include knownGene.ra 
+include knownGene.alpha.ra  alpha
+include knownGene.ra  beta,public
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
@@ -658,3 +692,7 @@ priority 2.2
 track dgvPlus override
 group varRep
 priority 4
+
+track gtexTranscExpr override
+bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb
+

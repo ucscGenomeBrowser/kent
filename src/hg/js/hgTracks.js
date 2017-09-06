@@ -378,6 +378,14 @@ var genomePos = {
         var mult = width / imgWidth;   // mult is bp/pixel multiplier
         var startDelta;   // startDelta is how many bp's to the right/left
         var x1;
+
+        // The magic number three appear at another place in the code 
+        // as LEFTADD. It was originally annotated as "borders or cgi item calc
+        // ?" by Larry. It has to be used when going any time when converting 
+        // between pixels and coordinates.
+        selStart -= 3;
+        selEnd -= 3;
+
         if (hgTracks.revCmplDisp) {
             x1 = Math.min(imgWidth, selStart);
             startDelta = Math.floor(mult * (imgWidth - x1));
@@ -2167,11 +2175,15 @@ jQuery.fn.panImages = function(){
                 } else if (newX >= rightLimit && newX < leftLimit)
                     beyondImage = false; // could have scrolled back without mouse up
 
-                newX = panUpdatePosition(newX,true);
+                posStatus = panUpdatePosition(newX,true);
+                newX = posStatus.newX;
+                // do not update highlights if we are at the end of a chromsome
+                if (!posStatus.isOutsideChrom)
+                    scrollHighlight(relativeX);
+
                 var nowPos = newX.toString() + "px";
                 $(".panImg").css( {'left': nowPos });
                 $('.tdData').css( {'backgroundPosition': nowPos } );
-                scrollHighlight(relativeX);
                 if (!only1xScrolling)
                     panAdjustHeight(newX);  // Will dynamically resize image while scrolling.
             }
@@ -2267,7 +2279,11 @@ jQuery.fn.panImages = function(){
             portalScrolledX = (closedPortalStart - newPortalStart) / hgTracks.imgBoxBasesPerPixel;
             newOffsetX = portalScrolledX - (hgTracks.imgBoxPortalOffsetX+hgTracks.imgBoxLeftLabel);
         }
-        return newOffsetX;
+
+        ret = {};
+        ret.newX = newOffsetX;
+        ret.isOutsideChrom = recalculate;
+        return ret;
     }
     function mapTopAndBottom(mapName,east,west)
     {
@@ -3775,8 +3791,12 @@ var popUp = {
             buttons: uiDialogButtons,
 
             // popup.ready() doesn't seem to work in open.
-            
-            open: function () {
+            open: function(event) {
+                // fix popup to a location -- near the top and somewhat centered on the browser image
+                $(event.target).parent().css('position', 'fixed');
+                $(event.target).parent().css('top', '18%');
+                $(event.target).parent().css('left', '30%');
+
                 if (!popUp.trackDescriptionOnly) {
                     $('#hgTrackUiDialog').find('.filterBy,.filterComp').each(
                         function(i) {

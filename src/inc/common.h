@@ -647,6 +647,10 @@ void slPairFreeVals(struct slPair *list);
 void slPairFreeValsAndList(struct slPair **pList);
 /* Free up all values on list and list itself */
 
+void slPairFreeValsAndListExt(struct slPair **pList, void (*freeFunc)());
+/* Free up all values on list using freeFunc and list itself.  freeFunc should take a simple
+ * pointer to free an item, and can be NULL. */
+
 struct slPair *slPairFind(struct slPair *list, char *name);
 /* Return list element of given name, or NULL if not found. */
 
@@ -812,6 +816,12 @@ char *stringBetween(char *start, char *end, char *haystack);
 /* Return string between start and end strings, or NULL if
  * none found.  The first such instance is returned.
  * String must be freed by caller. */
+
+char *nextStringBetween(char *start, char *end, char **pHaystack);
+/* Return next string that occurs between start and end strings
+ * starting seach at *pHaystack.  This will update *pHaystack to after 
+ * end, so it can be called repeatedly. Returns NULL when
+ * no more to be found*/
 
 char * findWordByDelimiter(char *word,char delimit, char *line);
 /* Return pointer to first word in line matching 'word' and delimited
@@ -979,8 +989,9 @@ char *skipLeadingSpaces(char *s);
 char *skipToSpaces(char *s);
 /* Return first white space. */
 
-void eraseTrailingSpaces(char *s);
-/* Replace trailing white space with zeroes. */
+int eraseTrailingSpaces(char *s);
+/* Replace trailing white space with zeroes. Returns number of
+ * spaces erased. */
 
 void eraseWhiteSpace(char *s);
 /* Remove white space from a string */

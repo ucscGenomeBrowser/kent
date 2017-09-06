@@ -37,6 +37,7 @@ static struct optionSpec optionSpecs[] = {
     {"repMatch", OPTION_INT},
     {"seqLog", OPTION_BOOLEAN},
     {"ipLog", OPTION_BOOLEAN},
+    {"debugLog", OPTION_BOOLEAN},
     {"stepSize", OPTION_INT},
     {"tileSize", OPTION_INT},
     {"trans", OPTION_BOOLEAN},
@@ -101,6 +102,7 @@ errAbort(
   "   -log=logFile    Keep a log file that records server requests.\n"
   "   -seqLog         Include sequences in log file (not logged with -syslog).\n"
   "   -ipLog          Include user's IP in log file (not logged with -syslog).\n"
+  "   -debugLog       Include debugging info in log file.\n"
   "   -syslog         Log to syslog.\n"
   "   -logFacility=facility  Log to the specified syslog facility - default local0.\n"
   "   -mask           Use masking from nib file.\n"
@@ -967,6 +969,8 @@ if (optionExists("log"))
     logOpenFile(argv[0], optionVal("log", NULL));
 if (optionExists("syslog"))
     logOpenSyslog(argv[0], optionVal("logFacility", NULL));
+if (optionExists("debugLog"))
+    logSetMinPriority("debug");
 
 if (sameWord(command, "direct"))
     {
