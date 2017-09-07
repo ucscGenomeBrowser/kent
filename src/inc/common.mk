@@ -24,9 +24,13 @@ UNAME_S := $(shell uname -s)
 # to check for builds on hgwdev
 FULLWARN = $(shell uname -n)
 
+ifeq (${PTHREADLIB},)
+  PTHREADLIB=-lpthread
+endif
+
 # pthreads is required
 ifneq ($(UNAME_S),Darwin)
-  L+=-pthread
+  L+=${PTHREADLIB}
 endif
 
 # autodetect if openssl is installed
@@ -63,6 +67,16 @@ ifeq (${FULLWARN},hgwdev)
    L+=/usr/lib64/libssl.a /usr/lib64/libcrypto.a -lkrb5
 else
    L+=-lssl -lcrypto
+endif
+
+# autodetect where libm is installed
+ifeq (${MLIB},)
+  ifneq ($(wildcard /usr/lib64/libm.a),)
+      MLIB=/usr/lib64/libm.a
+  endif
+endif
+ifeq (${MLIB},)
+  MLIB=-lm
 endif
 
 # autodetect where png is installed
@@ -230,7 +244,7 @@ endif
 #global external libraries
 L += $(kentSrc)/htslib/libhts.a
 
-L+=${PNGLIB} ${ZLIB} -lm
+L+=${PNGLIB} ${ZLIB} ${MLIB}
 HG_INC+=${PNGINCL}
 
 # pass through COREDUMP
