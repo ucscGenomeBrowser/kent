@@ -217,6 +217,7 @@ for (file = list; file != NULL; file = file->next)
     slNameAddTail(&lane->fileList, fileName);
     }
 slReverse(&laneList);
+slSort(&laneList, laneFilesCmp);
 
 /* Now make a lane array and go through lane list */
 boolean firstOut = TRUE;
@@ -273,75 +274,102 @@ fputc(']', f);
 slFreeList(&list);
 }
 
+boolean allDigitNames(struct ttjSubObj *list)
+/* Return TRUE if all names on list are composed of positive integers */
+{
+struct ttjSubObj *obj;
+for (obj = list; obj != NULL; obj = obj->next)
+    if (!isAllDigits(obj->name))
+        return FALSE;
+return TRUE;
+}
+
 void rWriteJson(FILE *f, struct tagStorm *storm, struct tagStanza *stanza, 
     struct ttjSubObj *obj, struct hash *schemaHash)
 /* Write out json object recursively */
 {
-fprintf(f, "{");
-struct ttjSubObj *field;
-boolean firstOut = TRUE;
-for (field = obj->children; field != NULL; field = field->next)
+boolean isArray = allDigitNames(obj->children);
+struct ttjSubObj *field; 
+if (isArray)
     {
-    char *fieldName = field->name;
-    if (field->children != NULL)
-	 {
-	 writeJsonTag(f, fieldName, &firstOut);
-	 rWriteJson(f, storm, stanza, field, schemaHash);
-	 }
-    else if (sameString("protocol_types", fieldName))
+    fprintf(f, "["); 
+    for (field = obj->children; field != NULL; field = field->next)
         {
-		// do nothing, this was handles by protocols 
+	if (field != obj->children)
+	   fprintf(f, ",");
+	rWriteJson(f, storm, stanza, field, schemaHash);
 	}
-    else
+    fprintf(f, "]");
+    }
+else
+    { 
+    fprintf(f, "{"); 
+    boolean firstOut = TRUE;
+    for (field = obj->children; field != NULL; field = field->next)
 	{
-	char *val = tagFindVal(stanza, field->fullName);
-	if (val != NULL)
+	char *fieldName = field->name;
+	if (field->children != NULL)
+	     {
+	     writeJsonTag(f, fieldName, &firstOut);
+	     rWriteJson(f, storm, stanza, field, schemaHash);
+	     }
+    #ifdef OLD
+	else if (sameString("protocol_types", fieldName))
 	    {
-	    boolean isNum = FALSE;
-	    struct tagSchema *schema = hashFindVal(schemaHash, field->fullName);
-	    if (schema != NULL)
-	       isNum = (schema->type == '#' || schema->type == '%');
-	    if (sameString(fieldName, "files"))
-	        {
-		writeJsonTag(f, "lane", &firstOut);
-		writeLaneArray(f, stanza, val);
-		}
-	    else if (sameString(fieldName, "protocols"))
-	        {
-		writeJsonTag(f, fieldName, &firstOut);
-		writeProtocolsArray(f, stanza, val);
-		}
-	    else
+		    // do nothing, this was handles by protocols 
+	    }
+    #endif /* OLD */
+	else
+	    {
+	    char *val = tagFindVal(stanza, field->fullName);
+	    if (val != NULL)
 		{
-		boolean isArray = FALSE;
-		writeJsonTag(f, fieldName, &firstOut);
+		boolean isNum = FALSE;
 		struct tagSchema *schema = hashFindVal(schemaHash, field->fullName);
 		if (schema != NULL)
-		    isArray = schema->isArray;
-		struct slName *list = csvParse(val);
-		if (isArray)
-		    fputc('[', f);
+		   isNum = (schema->type == '#' || schema->type == '%');
+		if (sameString(fieldName, "files"))
+		    {
+		    writeJsonTag(f, "lane", &firstOut);
+		    writeLaneArray(f, stanza, val);
+		    }
+		else if (sameString(fieldName, "protocols"))
+		    {
+		    writeJsonTag(f, fieldName, &firstOut);
+		    writeProtocolsArray(f, stanza, val);
+		    }
 		else
 		    {
-		    if (list->next != NULL)  // more than one element
-		       errAbort("Multiple vals for scalar tag %s in stanza starting line %d of %s",
-			    field->fullName, stanza->startLineIx, storm->fileName);
+		    boolean isArray = FALSE;
+		    writeJsonTag(f, fieldName, &firstOut);
+		    struct tagSchema *schema = hashFindVal(schemaHash, field->fullName);
+		    if (schema != NULL)
+			isArray = schema->isArray;
+		    struct slName *list = csvParse(val);
+		    if (isArray)
+			fputc('[', f);
+		    else
+			{
+			if (list->next != NULL)  // more than one element
+			   errAbort("Multiple vals for scalar tag %s in stanza starting line %d of %s",
+				field->fullName, stanza->startLineIx, storm->fileName);
+			}
+		    struct slName *el;
+		    for (el = list; el != NULL; el = el->next)
+			{
+			writeJsonVal(f, el->name, isNum);
+			if (el->next != NULL)
+			    fputc(',', f);
+			}
+		    if (isArray)
+			fputc(']', f);
+		    slFreeList(&list);
 		    }
-		struct slName *el;
-		for (el = list; el != NULL; el = el->next)
-		    {
-		    writeJsonVal(f, el->name, isNum);
-		    if (el->next != NULL)
-			fputc(',', f);
-		    }
-		if (isArray)
-		    fputc(']', f);
-		slFreeList(&list);
 		}
 	    }
 	}
+    fprintf(f, "}");
     }
-fprintf(f, "}");
 }
 
 void writeTopJson(char *fileName, struct tagStorm *storm, struct tagStanza *stanza, 
