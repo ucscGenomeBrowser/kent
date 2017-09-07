@@ -52,7 +52,7 @@ DELETE	project.array_express.term_source_name
 RENAME	project.contact.address	project.submitter.address
 RENAME	project.contact.city	project.submitter.city
 RENAME	project.contact.country	project.submitter.country
-DELETE	project.contacts.department
+DELETE	project.contact.department
 RENAME	project.contact.email	project.submitter.email
 RENAME	project.contact.institute	project.submitter.institution
 RENAME	project.contact.laboratory	project.submitter.laboratory
@@ -65,6 +65,7 @@ MODIFY	project.contributor	project.contributors
 RENAME	project.ddjb_trace_project	project.ddjb_trace
 KEEP	project.experimental_factor_name	project.experimental_factor_name
 DELETE	project.geo_doc_id
+DELETE  project.geo_parent_series
 RENAME	project.array_express.related_experiment project.related_projects
 KEEP	project.geo_series	project.geo_series
 RENAME	project.id	project.core.id
@@ -109,7 +110,7 @@ RENAME	sample.donor.ethnicity	sample.donor.ancestry.1.text
 KEEP	sample.donor.genotype	sample.donor.genotype
 RENAME	sample.donor.id	sample.donor.submitted_id
 KEEP	sample.donor.life_stage sample.donor.life_stage
-KEEP	sample.donor.medication	sample.donor.medication.1.text
+RENAME	sample.donor.medication	sample.donor.medication.1.text
 RENAME	sample.donor.ncbi_taxon	sample.donor.species.1.ontology
 KEEP	sample.donor.sex	sample.donor.sex
 RENAME	sample.donor.species	sample.donor.species.1.text
