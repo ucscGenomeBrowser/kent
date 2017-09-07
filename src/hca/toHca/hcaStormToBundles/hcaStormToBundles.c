@@ -330,7 +330,7 @@ else
 		   isNum = (schema->type == '#' || schema->type == '%');
 		if (sameString(fieldName, "files"))
 		    {
-		    writeJsonTag(f, "lane", &firstOut);
+		    writeJsonTag(f, "lanes", &firstOut);
 		    writeLaneArray(f, stanza, val);
 		    }
 		else if (sameString(fieldName, "protocols"))
