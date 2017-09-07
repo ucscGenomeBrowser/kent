@@ -30,7 +30,7 @@ static struct optionSpec options[] = {
 void  addFilesToSraRun(struct tagStorm *storm, struct tagStanza *stanza)
 /* If stanza has an srr_run tag add a files tag to it */
 {
-char *srrCsv = tagFindLocalVal(stanza, "assay.sra_run");
+char *srrCsv = tagFindLocalVal(stanza, "assay.seq.sra_run");
 if (srrCsv != NULL)
     {
     char *pairing = tagMustFindVal(stanza, "assay.seq.paired_ends");
@@ -70,7 +70,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 void  addBarcodeInfo(struct tagStorm *storm, struct tagStanza *stanza)
 /* If stanza has an srr_run tag add a files tag to it */
 {
-char *method = tagFindLocalVal(stanza, "assay.single_cell.method");
+char *method = tagFindLocalVal(stanza, "assay.single_cell.cell_handling");
 if (method != NULL)
     {
     verbose(2, "hcaAddSrrFiles method=%s\n", method);
@@ -99,9 +99,9 @@ if (method != NULL)
 	/* Add barcode tags */
 	tagStanzaUpdateTag(storm, stanza, "assay.seq.umi_barcode_size", umiBarcodeSize);
 	tagStanzaUpdateTag(storm, stanza, "assay.seq.umi_barcode_offset", umiBarcodeOffset);
-	tagStanzaUpdateTag(storm, stanza, "assay.single_cell.cell_barcode_size", 
+	tagStanzaUpdateTag(storm, stanza, "assay.single_cell.barcode_size", 
 		cellBarcodeSize);
-	tagStanzaUpdateTag(storm, stanza, "assay.single_cell.cell_barcode_offset", 
+	tagStanzaUpdateTag(storm, stanza, "assay.single_cell.barcode_offset", 
 		cellBarcodeOffset);
 	}
     }
