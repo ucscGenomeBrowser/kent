@@ -46,17 +46,17 @@ for line in open("build/%s/snpPos.bed" % db):
     bodyEl = el.cssselect("#bodyContent")[0]
 
     # remove the right hand box
-    boxEl = el.cssselect(".aside-right")[0]
+    boxEl = bodyEl.cssselect(".aside-right")[0]
     p = boxEl.getparent()
     p.remove(boxEl)
 
     # remove the right hand box
-    boxEl = el.cssselect(".printfooter")[0]
+    boxEl = bodyEl.cssselect(".printfooter")[0]
     p = boxEl.getparent()
     p.remove(boxEl)
 
     # remove the popul diversity box, the first table
-    tableEls = el.cssselect("table")
+    tableEls = bodyEl.cssselect("table")
     if len(tableEls)!=0:
         tableEl = tableEls[0]
         boxEl = tableEl.getparent()
@@ -70,7 +70,15 @@ for line in open("build/%s/snpPos.bed" % db):
             p = tableEl.getparent()
             p.remove(tableEl)
 
-    comments = el.xpath('//comment()')
+    # remove all divs
+    etree.strip_tags(bodyEl, "div")
+    #divEls = bodyEl.cssselect("div")
+    #if len(divEls)!=0:
+        #for el in divEls:
+            #p = el.getparent()
+            #p.remove(el)
+
+    comments = bodyEl.xpath('//comment()')
     for c in comments:
         p = c.getparent()
         p.remove(c)
