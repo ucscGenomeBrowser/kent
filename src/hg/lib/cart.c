@@ -29,6 +29,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "cgiApoptosis.h"
+#include "customComposite.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -301,6 +302,57 @@ dyStringFree(&dy);
 }
 
 #ifndef GBROWSE
+static void copyCustomComposites(struct cart *cart, struct hashEl *el)
+/* Copy a set of custom composites to a new hub file. Update the 
+ * relevant cart variables. */
+{
+struct tempName hubTn;
+char *hubFileVar = cloneString(el->name);
+char *db = el->name + sizeof(CUSTOM_COMPOSITE_SETTING);
+char *oldHubFileName = el->val;
+trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
+char *newHubFileName = cloneString(hubTn.forCgi);
+
+copyFile(oldHubFileName, newHubFileName);
+
+char *errorMessage;
+unsigned oldHubId =  hubFindOrAddUrlInStatusTable(db, cart, oldHubFileName, &errorMessage);
+unsigned newHubId =  hubFindOrAddUrlInStatusTable(db, cart, newHubFileName, &errorMessage);
+
+// need to change hgHubConnect.hub.#hubNumber# (connected hubs)
+struct slPair *hv, *hubVarList = cartVarsWithPrefix(cart, hgHubConnectHubVarPrefix);
+char buffer[4096];
+for(hv = hubVarList; hv; hv = hv->next)
+    {
+    unsigned hubId = sqlUnsigned(hv->name + strlen(hgHubConnectHubVarPrefix));
+    
+    if (hubId == oldHubId)
+        {
+        cartRemove(cart, hv->name);
+        safef(buffer, sizeof buffer, "%s%d", hgHubConnectHubVarPrefix, newHubId);
+        cartSetString(cart, buffer, "1");
+        }
+    }
+
+// need to change hub_#hubNumber#* (track visibilities)
+safef(buffer, sizeof buffer, "%s%d_", hubTrackPrefix, oldHubId);
+hubVarList = cartVarsWithPrefix(cart, buffer);
+for(hv = hubVarList; hv; hv = hv->next)
+    {
+    char *name = hv->name + strlen(buffer);
+    safef(buffer, sizeof buffer, "%s%d_%s", hubTrackPrefix, newHubId, name);
+    cartSetString(cart, buffer, cloneString(hv->val));
+    cartRemove(cart, hv->name);
+    }
+
+// need to change hgtgroup_hub_#hubNumber# (blue bar open )
+// need to change expOrder_hub_#hubNumber#, simOrder_hub_#hubNumber# (sorting)
+
+// need to change trackHubs #hubNumber#   
+cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+cartSetString(cart, hubFileVar, newHubFileName);
+}
+
 void cartCopyCustomTracks(struct cart *cart)
 /* If cart contains any live custom tracks, save off a new copy of them,
  * to prevent clashes by multiple uses of the same session.  */
@@ -309,6 +361,8 @@ struct hashEl *el, *elList = hashElListHash(cart->hash);
 
 for (el = elList; el != NULL; el = el->next)
     {
+    if (startsWith(CUSTOM_COMPOSITE_SETTING, el->name))
+        copyCustomComposites(cart, el);
     if (startsWith(CT_FILE_VAR_PREFIX, el->name))
 	{
 	char *db = &el->name[strlen(CT_FILE_VAR_PREFIX)];

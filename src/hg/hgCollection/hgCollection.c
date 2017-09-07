@@ -32,7 +32,7 @@ struct trackDb *fullTrackList = NULL;	/* List of all tracks in database. */
 
 
 // Null terminated list of CGI Variables we don't want to save permanently:
-char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", NULL,};
+char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", "jsonp", NULL,};
 
 struct track
 {
@@ -157,16 +157,12 @@ jsInlineF("</li>");
 static void outHubHeader(FILE *f, char *db, char *hubName)
 // output a track hub header
 {
-char *hubFile = strrchr(hubName, '/') + 1;
-
 fprintf(f,"hub hub1\n\
 shortLabel User Composite\n\
 longLabel User Composite\n\
-genomesFile %s\n\
-email braney@soe.ucsc.edu\n\
-descriptionUrl hub.html\n\n", hubFile);
-fprintf(f,"genome %s\n\
-trackDb %s\n\n", db, hubFile);  
+useOneFile on\n\
+email genome-www@soe.ucsc.edu\n\n");
+fprintf(f,"genome %s\n\n", db);  
 }
 
 
@@ -472,7 +468,7 @@ compositeTrack on\n\
 aggregate none\n\
 longLabel %s\n\
 %s on\n\
-\tcolor %ld,%ld,%ld \n\
+color %ld,%ld,%ld \n\
 type wig \n\
 visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
  0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color));
