@@ -35,14 +35,17 @@ errAbort(
   "options:\n"
   "   -ignoreQUniq - ignore everything after the last `-' in the qName field, that\n"
   "    is sometimes used to generate a unique identifier\n"
+  "   -ignoreQMissing - pass through the record if querySeq doesn't include qName\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"ignoreQUniq", OPTION_BOOLEAN},
+   {"ignoreQMissing", OPTION_BOOLEAN},
    {NULL, 0},
 };
 static boolean ignoreQUniq = FALSE;
+static boolean ignoreQMissing = FALSE;
 
 
 static char *getQName(char *qName)
@@ -130,8 +133,12 @@ while ((psl = pslNext(lf)) != NULL)
     int tSize;
     struct dnaSeq *tSeqPart = nibTwoCacheSeqPart(tCache,
     	psl->tName, psl->tStart, psl->tEnd - psl->tStart, &tSize);
-    struct dnaSeq *qSeq = hashMustFindVal(qHash, getQName(psl->qName));
-    recalcMatches(psl, tSeqPart, psl->tStart, qSeq);
+    char *qName = getQName(psl->qName);
+    struct dnaSeq *qSeq = hashFindVal(qHash, qName);
+    if (!ignoreQMissing && qSeq == NULL)
+        errAbort("Can't find sequence for qName '%s'", qName);
+    else if (qSeq)
+        recalcMatches(psl, tSeqPart, psl->tStart, qSeq);
     pslTabOut(psl, f);
     dnaSeqFree(&tSeqPart);
     }
@@ -146,6 +153,7 @@ optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
 ignoreQUniq = optionExists("ignoreQUniq");
+ignoreQMissing = optionExists("ignoreQMissing");
 pslRecalcMatch(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
