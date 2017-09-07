@@ -98,17 +98,27 @@ for (el = list; el != NULL; el = el->next)
 return FALSE;
 }
 
+void writeDescription(struct jsonWrite *jw, char *name)
+/* If gDescriptions is set, look up name in it and write it out as description tag */
+{
+if (gDescriptions != NULL)
+    {
+    char *description = hashFindVal(gDescriptions, name);
+    char missing[512];
+    if (description == NULL)
+	{
+	safef(missing, sizeof(missing), "please describe %s", name);
+	description = missing;
+	}
+    jsonWriteString(jw, "description", description);
+    }
+}
+
 void writeOneSchema(struct jsonWrite *jw, char *label, struct tagSchema *schema)
 /* Write out label for one schema item */
 {
 jsonWriteObjectStart(jw, label);
-if (gDescriptions != NULL)
-    {
-    char *description = hashFindVal(gDescriptions, schema->name);
-    if (description == NULL)
-        description = "describe_me_please";
-    jsonWriteString(jw, "description", description);
-    }
+writeDescription(jw, schema->name);
 if (schema->isArray)
     {
     jsonWriteString(jw, "type", "array");
@@ -162,14 +172,14 @@ if (schema->isArray)
 jsonWriteObjectEnd(jw);
 }
 
-char *findShortcut(char *fullName)
+struct slPair *findShortcut(char *fullName)
 /* Return shortcut from gShortcut list if fullName matches a prefix on shortcut list. */
 {
 struct slPair *pair;
 for (pair = gShortcuts; pair != NULL; pair = pair->next)
     {
     if (startsWith(pair->name, fullName))
-        return pair->val;
+        return pair;
     }
 return NULL;
 }
@@ -212,16 +222,29 @@ if (needFixed)
 	{
 	if (sub->children != NULL)
 	    {
+	    struct ttjSubObj *maybeArray = sub->children;
+	    boolean isArray = (maybeArray != NULL && sameString(maybeArray->name, "[]"));
 	    jsonWriteObjectStart(jw, sub->name);
-	    char *shortcut = findShortcut(sub->fullName);
+	    if (isArray)
+		{
+		jsonWriteString(jw, "type", "array");
+		jsonWriteObjectStart(jw, "items");
+		}
+	    struct slPair *shortcut = findShortcut(sub->fullName);
 	    if (shortcut != NULL)
-	        writeShortcut(jw, shortcut);
+		{
+		writeDescription(jw, shortcut->name);
+	        writeShortcut(jw, shortcut->val);
+		}
 	    else
 		{
 		char refText[512];
+		writeDescription(jw, sub->name);
 		safef(refText, sizeof(refText), "#/definitions/%s", sub->name);
 		jsonWriteString(jw, "$ref", refText);
 		}
+	    if (isArray)
+	        jsonWriteObjectEnd(jw);
 	    jsonWriteObjectEnd(jw);
 	    }
 	else
@@ -300,7 +323,7 @@ for (sub = obj->children; sub != NULL; sub = sub->next)
     {
     if (sub->children != NULL)
         {
-	char *shortcut = findShortcut(sub->fullName);
+	struct slPair *shortcut = findShortcut(sub->fullName);
 	if (shortcut == NULL)
 	    rWriteDefinitions(jw, sub, schemaHash);
 	if (!sameString(sub->name, "[]"))
