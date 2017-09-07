@@ -148,46 +148,97 @@ else
      return NULL;
 }
 
-void writeFilesArray(FILE *f, struct tagStanza *stanza, char *csvList)
+struct laneFiles
+/* The files associated with a lane. */
+    {
+    struct laneFiles *next;
+    int laneIx;
+    struct slName *fileList;
+    };
+
+
+int laneFilesCmp(const void *va, const void *vb)
+/* Compare to sort based on laneIx (ascending). */
+{
+const struct laneFiles *a = *((struct laneFiles **)va);
+const struct laneFiles *b = *((struct laneFiles **)vb);
+return a->laneIx - b->laneIx;
+}
+
+struct laneFiles *laneFilesFind(struct laneFiles *list, int laneIx)
+/* Return lane on list of given ix,  or NULL if no such lane. */
+{
+struct laneFiles *lane;
+for (lane = list; lane != NULL; lane = lane->next)
+    if (lane->laneIx == laneIx)
+        return lane;
+return NULL;
+}
+    
+void writeLaneArray(FILE *f, struct tagStanza *stanza, char *csvList)
 /* Write out an array of file objects base on file names in csvList */
 {
-int laneIx = 1;
+struct slName *list = csvParse(csvList), *file;
+
+/* Figure out number of files per lanes.  We'll take the lane number for the
+ * file names if available, but if not we'll assume list is sorted and will
+ * put the appropriate number of files in each lane. */
+int laneCounter = 1;
 int filesPerLane = 1;
 int curFileInLane = 0;
 char *pairedEnds = tagMustFindVal(stanza, "assay.seq.paired_ends");
 if (!sameString(pairedEnds, "no"))
     filesPerLane = 2;
 
-boolean firstOut = TRUE;
-struct slName *list = csvParse(csvList), *file;
-fputc('[', f);
+/* First pass, make a list of lanes */
+struct laneFiles *laneList = NULL, *lane;
 for (file = list; file != NULL; file = file->next)
     {
-    /* Write comma between file objects */
+    /* Figure out laneIx, from file name if possible, otherwise by counting */
+    char *fileName = file->name;
+    int laneIx = laneFromFileName(fileName);
+    if (laneIx == 0)
+	laneIx = laneCounter;
+    /* Update laneCounter */
+    if (++curFileInLane >= filesPerLane)
+	{
+	++laneCounter;
+	curFileInLane = 0;
+	}
+
+    /* Find lane in laneList, make new lane if it's not there. */
+    lane = laneFilesFind(laneList, laneIx);
+    if (lane == NULL)
+        {
+	AllocVar(lane);
+	lane->laneIx = laneIx;
+	slAddHead(&laneList, lane);
+	}
+    slNameAddTail(&lane->fileList, fileName);
+    }
+slReverse(&laneList);
+
+/* Now make a lane array and go through lane list */
+boolean firstOut = TRUE;
+fputc('[', f);
+for (lane = laneList; lane != NULL; lane = lane->next)
+    {
+    /* Write comma between lane objects */
     if (firstOut)
 	firstOut = FALSE;
     else
 	fputc(',', f);
 
-    /* Write file object starting with file name */
+    /* Write lane object starting with lane index*/
     fputc('{', f);
-    char *name = file->name;
-    fprintf(f, "\"%s\":", "name");
-    writeJsonVal(f, name, FALSE);
+    fprintf(f, "\"%s\": %d", "number", lane->laneIx);
 
-    /* If can recognize format from suffix write format. */
-    char *format = guessFormatFromName(name);
-    if (format != NULL)
-        {
-	fprintf(f, ",\"%s\":", "format");
-	writeJsonVal(f, format, FALSE);
-	}
+    /* Rest of lane fields are based on files we contain */
+    for (file = lane->fileList; file != NULL; file = file->next)
+	{
+	/* Calculate type */
+	char *fileName = file->name;
 
-    /* If it's a read format try to classify it to a type */
-    boolean isRead = sameString(format, ".fastq.gz");
-    if (isRead)
-        {
-	/* Calculate and write type */
 	char *type = NULL;
 	if (sameString(pairedEnds, "no"))
 	    {
@@ -195,40 +246,29 @@ for (file = list; file != NULL; file = file->next)
 	    }
 	else if (sameString(pairedEnds, "yes"))
 	    {
-	    int end = endFromFileName(name);
+	    int end = endFromFileName(fileName);
 	    if (end == 1)
-	        type = "read1";
+		type = "read1";
 	    else
-	        type = "read2";
+		type = "read2";
 	    }
 	else if (sameString(pairedEnds, "index1_reads2"))
 	    {
-	    int end = endFromFileName(name);
+	    int end = endFromFileName(fileName);
 	    if (end == 1)
 		type = "index";
 	    else
-	        type = "reads";
+		type = "reads";
 	    }
 	else
 	    errAbort("Unrecognized paired_ends %s", pairedEnds);
-	fprintf(f, ",\"%s\":", "type");
-	writeJsonVal(f, type, FALSE);
 
-	/* Write out lane info */
-	int lane = laneFromFileName(name);
-	if (lane == 0)
-	    lane = laneIx;
-	fprintf(f, ",\"%s\": %d", "lane", lane);
-
-	/* Update laneIx */
-	if (++curFileInLane >= filesPerLane)
-	    {
-	    ++laneIx;
-	    curFileInLane = 0;
-	    }
+	fprintf(f, ",\"%s\":", type);
+	writeJsonVal(f, fileName, FALSE);
 	}
     fputc('}', f);
     }
+
 fputc(']', f);
 slFreeList(&list);
 }
@@ -261,18 +301,20 @@ for (field = obj->children; field != NULL; field = field->next)
 	    struct tagSchema *schema = hashFindVal(schemaHash, field->fullName);
 	    if (schema != NULL)
 	       isNum = (schema->type == '#' || schema->type == '%');
-	    writeJsonTag(f, fieldName, &firstOut);
 	    if (sameString(fieldName, "files"))
 	        {
-		writeFilesArray(f, stanza, val);
+		writeJsonTag(f, "lane", &firstOut);
+		writeLaneArray(f, stanza, val);
 		}
 	    else if (sameString(fieldName, "protocols"))
 	        {
+		writeJsonTag(f, fieldName, &firstOut);
 		writeProtocolsArray(f, stanza, val);
 		}
 	    else
 		{
 		boolean isArray = FALSE;
+		writeJsonTag(f, fieldName, &firstOut);
 		struct tagSchema *schema = hashFindVal(schemaHash, field->fullName);
 		if (schema != NULL)
 		    isArray = schema->isArray;
