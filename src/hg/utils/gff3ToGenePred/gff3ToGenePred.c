@@ -259,12 +259,12 @@ return gp;
 }
 
 
-static void doOutAttrs(FILE *outAttrsFp, struct genePred *gp, struct gff3Ann *ann)
+static void doOutAttrs(FILE *outAttrsFp, char *name, struct gff3Ann *ann)
 /* Write attributes for -attrsOut */
 {
 struct gff3Attr *attr;
 for(attr=ann->attrs; attr; attr=attr->next)
-    fprintf(outAttrsFp, "%s\t%s\t%s\n",gp->name, attr->tag, attr->vals->name);
+    fprintf(outAttrsFp, "%s\t%s\t%s\n", name, attr->tag, attr->vals->name);
 }
 
 static void outputGenePred(struct gff3Ann *mrna, FILE *gpFh, struct genePred *gp)
@@ -284,7 +284,7 @@ if (warnAndContinue)
 	{
 	genePredTabOut(gp, gpFh);
 	if (outAttrsFp)
-	    doOutAttrs(outAttrsFp, gp,  mrna);
+	    doOutAttrs(outAttrsFp, gp->name,  mrna);
 	}
     else
 	{
@@ -298,7 +298,7 @@ else
     // output before checking so it can be examined
     genePredTabOut(gp, gpFh);
     if (outAttrsFp)
-	doOutAttrs(outAttrsFp, gp,  mrna);
+	doOutAttrs(outAttrsFp, gp->name,  mrna);
     if (ret != 0)
 	cnvError("invalid genePred created: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
     }
@@ -579,6 +579,8 @@ if (gp != NULL)
 static void processGeneTranscripts(FILE *gpFh, struct gff3Ann *gene, struct hash *processed)
 /* process transcript records of a gene */
 {
+if (outAttrsFp)
+    doOutAttrs(outAttrsFp, gene->id,  gene);
 struct gff3AnnRef *child;
 for (child = gene->children; child != NULL; child = child->next)
     {
