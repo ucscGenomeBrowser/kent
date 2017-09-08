@@ -264,7 +264,17 @@ static void doOutAttrs(FILE *outAttrsFp, char *name, struct gff3Ann *ann)
 {
 struct gff3Attr *attr;
 for(attr=ann->attrs; attr; attr=attr->next)
-    fprintf(outAttrsFp, "%s\t%s\t%s\n", name, attr->tag, attr->vals->name);
+    {
+    fprintf(outAttrsFp, "%s\t%s\t", name, attr->tag);
+    struct slName *val;
+    for (val = attr->vals; val; val = val->next)
+        {
+        if (val != attr->vals)
+            fputc(',', outAttrsFp);
+        fprintf(outAttrsFp, "%s", val->name);
+        }
+    fputc('\n', outAttrsFp);
+    }
 }
 
 static void outputGenePred(struct gff3Ann *mrna, FILE *gpFh, struct genePred *gp)
