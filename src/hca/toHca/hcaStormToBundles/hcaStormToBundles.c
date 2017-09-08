@@ -103,38 +103,6 @@ while ((s = stringIn(pat, s)) != NULL)
 return 0;
 }
 
-void writeProtocolsArray(FILE *f, struct tagStanza *stanza, char *protocolsCsv)
-/* Write up an array of protocols based on protocols and protocol_types tags in
- * stanza. */
-{
-char *typesCsv = tagFindVal(stanza, "sample.protocol_types");
-if (typesCsv == NULL)
-    errAbort("sample.protocol defined but not sample.protocol_types");
-
-struct slName *protocolList = csvParse(protocolsCsv), *proto;
-struct slName *typeList = csvParse(typesCsv), *type;
-if (slCount(protocolList) != slCount(typeList))
-    errAbort("Diffent sized protocols and protocol_types lists.");
-
-boolean firstProtocol = TRUE;
-fputc('[', f);
-for (proto = protocolList, type = typeList; proto != NULL; proto = proto->next, type = type->next)
-    {
-    if (firstProtocol)
-        firstProtocol = FALSE;
-    else 
-        fputc(',', f);
-    fputc('{', f);
-    boolean first = TRUE;
-    writeJsonTag(f, "description", &first);
-    writeJsonVal(f, proto->name, FALSE);
-    writeJsonTag(f, "type", &first);
-    writeJsonVal(f, type->name, FALSE);
-    fputc('}', f);
-    }
-fputc(']', f);
-}
-
 char *guessFormatFromName(char *name)
 /* Guess format from file extension */
 {
@@ -332,11 +300,6 @@ else
 		    {
 		    writeJsonTag(f, "lanes", &firstOut);
 		    writeLaneArray(f, stanza, val);
-		    }
-		else if (sameString(fieldName, "protocols"))
-		    {
-		    writeJsonTag(f, fieldName, &firstOut);
-		    writeProtocolsArray(f, stanza, val);
 		    }
 		else
 		    {
