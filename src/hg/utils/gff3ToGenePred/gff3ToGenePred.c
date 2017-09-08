@@ -96,7 +96,7 @@ static int maxParseErrors = 50;  // maximum number of errors during parse
 static int maxConvertErrors = 50;  // maximum number of errors during conversion
 static int convertErrCnt = 0;  // number of convert errors
 
-static FILE *outGeneMetaFp = NULL;
+static FILE *outAttrsFp = NULL;
 static FILE *outBadFp = NULL;
 static FILE *outUnprocessedRootsFp = NULL;
 
@@ -259,11 +259,12 @@ return gp;
 }
 
 
-static void doOutGeneMeta(FILE *outGeneMetaFp, struct genePred *gp, struct gff3Ann *parent)
+static void doOutAttrs(FILE *outAttrsFp, struct genePred *gp, struct gff3Ann *ann)
+/* Write attributes for -attrsOut */
 {
 struct gff3Attr *attr;
-for(attr=parent->attrs; attr; attr=attr->next)
-    fprintf(outGeneMetaFp, "%s\t%s\t%s\n",gp->name, attr->tag, attr->vals->name);
+for(attr=ann->attrs; attr; attr=attr->next)
+    fprintf(outAttrsFp, "%s\t%s\t%s\n",gp->name, attr->tag, attr->vals->name);
 }
 
 static void outputGenePred(struct gff3Ann *mrna, FILE *gpFh, struct genePred *gp)
@@ -282,8 +283,8 @@ if (warnAndContinue)
     if (ret == 0)
 	{
 	genePredTabOut(gp, gpFh);
-	if (outGeneMetaFp)
-	    doOutGeneMeta(outGeneMetaFp, gp,  mrna);
+	if (outAttrsFp)
+	    doOutAttrs(outAttrsFp, gp,  mrna);
 	}
     else
 	{
@@ -296,8 +297,8 @@ else
     {
     // output before checking so it can be examined
     genePredTabOut(gp, gpFh);
-    if (outGeneMetaFp)
-	doOutGeneMeta(outGeneMetaFp, gp,  mrna);
+    if (outAttrsFp)
+	doOutAttrs(outAttrsFp, gp,  mrna);
     if (ret != 0)
 	cnvError("invalid genePred created: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
     }
@@ -560,7 +561,8 @@ static boolean shouldProcessGeneAsTranscript(struct gff3Ann *gene)
 return allowMinimalGenes && haveChildFeature(gene, gff3FeatExon);
 }
 
-static void processMRna(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna, struct hash *processed)
+static void processTranscript(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna,
+                              struct hash *processed)
 /* process a mRNA/transcript node in the tree; gene can be NULL. Error count
    increment on error and genePred discarded */
 {
@@ -582,7 +584,7 @@ for (child = gene->children; child != NULL; child = child->next)
     {
     if (shouldProcessAsTranscript(child->ann) 
         && !isProcessed(processed, child->ann))
-        processMRna(gpFh, gene, child->ann, processed);
+        processTranscript(gpFh, gene, child->ann, processed);
     if (convertErrCnt >= maxConvertErrors)
         break;
     }
@@ -605,7 +607,7 @@ static void processGene(FILE *gpFh, struct gff3Ann *gene, struct hash *processed
 recProcessed(processed, gene);
 
 if (shouldProcessGeneAsTranscript(gene))
-    processMRna(gpFh, NULL, gene, processed);
+    processTranscript(gpFh, NULL, gene, processed);
 else if (shouldProcessGeneAsStandard(gene))
     processGeneTranscripts(gpFh, gene, processed);
 else if (allowMinimalGenes)
@@ -618,7 +620,7 @@ static void processRoot(FILE *gpFh, struct gff3Ann *node, struct hash *processed
 if (sameString(node->type, gff3FeatGene))
     processGene(gpFh, node, processed);
 else if (shouldProcessAsTranscript(node))
-    processMRna(gpFh, NULL, node, processed);
+    processTranscript(gpFh, NULL, node, processed);
 }
 
 static void processRoots(FILE *gpFh, struct gff3AnnRef *roots, struct hash *processed)
@@ -695,13 +697,13 @@ if (bad != NULL)
     outBadFp = mustOpen(bad, "w");
 char *attrsOut = optionVal("attrsOut", NULL);
 if (attrsOut != NULL)
-    outGeneMetaFp = mustOpen(attrsOut, "w");
+    outAttrsFp = mustOpen(attrsOut, "w");
 char *unprocessedRootsOut = optionVal("unprocessedRootsOut", NULL);
 if (unprocessedRootsOut != NULL)
     outUnprocessedRootsFp = mustOpen(unprocessedRootsOut, "w");
 gff3ToGenePred(argv[1], argv[2]);
 carefulClose(&outBadFp);
-carefulClose(&outGeneMetaFp);
+carefulClose(&outAttrsFp);
 carefulClose(&outUnprocessedRootsFp);
 return 0;
 }
