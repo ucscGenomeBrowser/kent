@@ -8,6 +8,7 @@
 #include "tagToJson.h"
 #include "portable.h"
 #include "csv.h"
+#include "uuid.h"
 #include "tagSchema.h"
 
 boolean gUrls;
@@ -19,7 +20,7 @@ errAbort(
   "hcaStormToBundles - Convert a HCA formatted tagStorm to a directory full of bundles.\n"
   "usage:\n"
   "   hcaStormToBundles in.tags http://path/to/data/files schema outDir\n"
-  "If the /path/to/data/files is 'urls' then it will just leave the assay.files[]\n"
+  "If the /path/to/data/files is 'urls' then it will just leave the assay.seq.files[]\n"
   "array as is.   The schema file is something in the format made by tagStormInfo -schema.\n"
   "options:\n"
   );
@@ -252,8 +253,37 @@ for (obj = list; obj != NULL; obj = obj->next)
 return TRUE;
 }
 
+boolean objNeedsCore(char *module)
+/* Return TRUE if module of given name needs core defined */
+{
+static char *needCore[] = {"project", "sample", "assay", "cell_line", "contact",
+    "death", "donor", "enrichment", "imaging", 
+    "preservation", "protocol", "publication", "rna", "seq", "single_cell", 
+    "well"};
+return (stringArrayIx(module, needCore, ArraySize(needCore)) >= 0);
+}
+
+void printCore(FILE *f, char *type, boolean *pFirstOut)
+/* Write up core module for object. */
+{
+writeJsonTag(f, "core", pFirstOut);
+fprintf(f, "{");
+boolean firstOut = TRUE;
+writeJsonTag(f, "type", &firstOut);
+writeJsonVal(f, type, FALSE);
+writeJsonTag(f, "schema_version", &firstOut);
+writeJsonVal(f, "3.0.0", FALSE);
+writeJsonTag(f, "schema_url", &firstOut);
+char schema_url[PATH_LEN];
+safef(schema_url, sizeof(schema_url), "http://hgwdev.soe.ucsc.edu/~kent/hca/schema/%s.json",
+    type);
+writeJsonVal(f, schema_url, FALSE);
+fprintf(f, "}");
+}
+
 void rWriteJson(FILE *f, struct tagStorm *storm, struct tagStanza *stanza, 
-    struct ttjSubObj *obj, struct hash *schemaHash)
+    struct ttjSubObj *obj, struct ttjSubObj *labeledObj, struct hash *schemaHash,
+    struct dyString *scratch)
 /* Write out json object recursively */
 {
 boolean isArray = allDigitNames(obj->children);
@@ -265,7 +295,7 @@ if (isArray)
         {
 	if (field != obj->children)
 	   fprintf(f, ",");
-	rWriteJson(f, storm, stanza, field, schemaHash);
+	rWriteJson(f, storm, stanza, field, labeledObj, schemaHash, scratch);
 	}
     fprintf(f, "]");
     }
@@ -273,27 +303,38 @@ else
     { 
     fprintf(f, "{"); 
     boolean firstOut = TRUE;
+
+    /* Figure out if we need to attach a core object and do so.  The figuring bit is
+     * frankly clunky. */
+    char *objType = labeledObj->name;
+    if (sameString(objType, "submitter") || sameString(objType, "contributors"))
+         objType = "contact";
+    else if (sameString(objType, "publications"))
+         objType = "publication";
+    else if (sameString(objType, "protocol"))  // protocol is actually just protocol_id
+         objType = "string";
+    else if (sameString(objType, "protocols")) // but protocols array is protocol
+         objType = "protocol";
+    if (objNeedsCore(objType))
+        printCore(f, objType, &firstOut);
+
+
     for (field = obj->children; field != NULL; field = field->next)
 	{
 	char *fieldName = field->name;
 	if (field->children != NULL)
 	     {
 	     writeJsonTag(f, fieldName, &firstOut);
-	     rWriteJson(f, storm, stanza, field, schemaHash);
+	     rWriteJson(f, storm, stanza, field, field, schemaHash, scratch);
 	     }
-    #ifdef OLD
-	else if (sameString("protocol_types", fieldName))
-	    {
-		    // do nothing, this was handles by protocols 
-	    }
-    #endif /* OLD */
 	else
 	    {
 	    char *val = tagFindVal(stanza, field->fullName);
 	    if (val != NULL)
 		{
 		boolean isNum = FALSE;
-		struct tagSchema *schema = hashFindVal(schemaHash, field->fullName);
+		char *schemaName = tagSchemaFigureArrayName(field->fullName, scratch);
+		struct tagSchema *schema = hashFindVal(schemaHash, schemaName);
 		if (schema != NULL)
 		   isNum = (schema->type == '#' || schema->type == '%');
 		if (sameString(fieldName, "files"))
@@ -305,7 +346,6 @@ else
 		    {
 		    boolean isArray = FALSE;
 		    writeJsonTag(f, fieldName, &firstOut);
-		    struct tagSchema *schema = hashFindVal(schemaHash, field->fullName);
 		    if (schema != NULL)
 			isArray = schema->isArray;
 		    struct slName *list = csvParse(val);
@@ -341,7 +381,8 @@ void writeTopJson(char *fileName, struct tagStorm *storm, struct tagStanza *stan
 {
 verbose(2, "Writing %s\n", fileName);
 FILE *f = mustOpen(fileName, "w");
-rWriteJson(f, storm, stanza, top, schemaHash);
+struct dyString *scratch = dyStringNew(0);
+rWriteJson(f, storm, stanza, top, top, schemaHash, scratch);
 fprintf(f, "\n");
 carefulClose(&f);
 }
@@ -380,7 +421,7 @@ writeJsonVal(f, "1", TRUE);
 writeJsonTag(f, "files", &firstOut);
 fputc('[', f);
 boolean firstFile = TRUE;
-struct slName *file, *list = tagMustFindValList(stanza, "assay.files");
+struct slName *file, *list = tagMustFindValList(stanza, "assay.seq.files");
 for (file = list; file != NULL; file = file->next)
     {
     if (firstFile)
@@ -432,6 +473,82 @@ safef(jsonFileName, sizeof(jsonFileName), "%s/manifest.json", dir);
 writeManifest(jsonFileName, stanza, dataDir);
 }
 
+void dupeValToNewTag(struct tagStorm *storm, struct tagStanza *stanzaList, 
+    char *oldTag, char *newTag)
+/* Everywhere see oldTag also make newTag with same value */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    char *val = tagFindLocalVal(stanza, oldTag);
+    if (val != NULL)
+        tagStanzaAppend(storm, stanza, newTag, val);
+    if (stanza->children)
+        dupeValToNewTag(storm, stanza->children, oldTag, newTag);
+    }
+}
+
+struct missingContext
+/* Keep track of statis while adding missing stuff */
+    {
+    char *idTag;	// Tag we use as ID
+    char *uuidTag;	// Tag we use as UUID
+    boolean dupeOk;	// If true we allow dupes
+    struct hash *idToUuid;  // Hash to convert id to UUID
+    int stanzaCount;	// Number of stanzas examined
+    int idFound;  // Number of times idTag found
+    int uuidFound; // Number of times existing uuidTag found
+    int uuidMade;   // Number of times UUID made
+    };
+
+void addToStanza(struct tagStorm *storm, struct tagStanza *stanza, void *context)
+/* Check up on one stanza, updating stats and if need be making a uuid */
+{
+struct missingContext *mc = context;
+mc->stanzaCount += 1;
+char *id = tagFindLocalVal(stanza, mc->idTag);
+if (id != NULL)
+    mc->idFound += 1;
+char *uuid = tagFindLocalVal(stanza, mc->uuidTag);
+if (uuid != NULL)
+    mc->uuidFound += 1;
+if (id != NULL && uuid == NULL)
+    {
+    uuid = hashFindVal(mc->idToUuid, id);
+    if (uuid == NULL)
+        {
+	uuid = needMem(UUID_STRING_SIZE);
+	makeUuidString(uuid);
+	mc->uuidMade += 1;
+	hashAdd(mc->idToUuid, id, uuid);
+	tagStanzaAppend(storm, stanza, mc->uuidTag, uuid);
+	}
+    else
+	{
+	if (!mc->dupeOk)
+	   errAbort("The %s %s is duplicated in %s", mc->idTag, id, storm->fileName);
+	}
+    }
+}
+
+void addMissingUuids(struct tagStorm *storm, char *idTag, char *uuidTag, boolean dupeOk)
+/* Add UUIDs to stanzas in storm that have given idTab but no uuidTag.  If dupe is ok
+ * then it's ok to see the same value for the ID tag more than once. */
+{
+verbose(2, "addMissingUuids() adding %s where missing and there is a %s tag\n", uuidTag, idTag);
+struct missingContext context;
+ZeroVar(&context);
+context.idTag = idTag;
+context.uuidTag = uuidTag;
+context.dupeOk = dupeOk;
+context.idToUuid = hashNew(0);
+tagStormTraverse(storm, storm->forest, &context, addToStanza);
+verbose(2, "stanzaCount %d, idFound %d, uuidFound %d, uuidMade %d\n", 
+    context.stanzaCount, context.idFound, context.uuidFound, context.uuidMade);
+if (context.uuidMade > 0)
+    verbose(1, "%s made %d times based on %s\n", uuidTag, context.uuidMade, idTag);
+}
+
 void hcaStormToBundles(char *inTags, char *dataUrl, char *schemaFile, char *outDir)
 /* hcaStormToBundles - Convert a HCA formatted tagStorm to a directory full of bundles.. */
 {
@@ -445,10 +562,17 @@ else if (!stringIn("://", dataUrl))
 struct tagSchema *schemaList = tagSchemaFromFile(schemaFile);
 struct hash *schemaHash = tagSchemaHash(schemaList);
 
-/* Load up tagStorm and get leaf list */
+/* Load up tagStorm get leaf list */
 struct tagStorm *storm = tagStormFromFile(inTags);
 struct tagStanzaRef *refList = tagStormListLeaves(storm);
 verbose(1, "Got %d leaf nodes in %s\n", slCount(refList), inTags);
+
+/* Add in assay.sample_id as just a dupe of sample.id */
+dupeValToNewTag(storm, storm->forest, "sample.id", "assay.sample_id");
+dupeValToNewTag(storm, storm->forest, "project.id", "sample.project_id");
+addMissingUuids(storm, "assay.seq.ena_experiment", "assay.id", FALSE);
+addMissingUuids(storm, "assay.seq.sra_experiment", "assay.id", FALSE);
+
 
 /* Do some figuring based on all fields available of what objects to make */
 struct slName *allFields = tagStormFieldList(storm);
@@ -474,7 +598,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
     {
     /* Fetch stanza and comma-separated list of files. */
     struct tagStanza *stanza = ref->stanza;
-    char *fileCsv = tagFindVal(stanza, "assay.files");
+    char *fileCsv = tagFindVal(stanza, "assay.seq.files");
     if (fileCsv == NULL)
         errAbort("Stanza without a files tag. Stanza starts line %d of %s",  
 		stanza->startLineIx, inTags); 
@@ -489,7 +613,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
     char localUrl[PATH_LEN*2];
     if (gUrls)
         {
-	struct slName *fileList = tagMustFindValList(stanza, "assay.files");
+	struct slName *fileList = tagMustFindValList(stanza, "assay.seq.files");
 	splitPath(fileList->name, localUrl, NULL, NULL);
 	dataUrl = localUrl;
 	slFreeList(&fileList);
