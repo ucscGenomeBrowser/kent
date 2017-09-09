@@ -5,13 +5,16 @@ use warnings;
 
 my $argc = scalar(@ARGV);
 if ($argc != 3) {
-  printf STDERR "usage: gff3ToRefLink.pl [status.tab] [descriptions.tab] [ncbi.gff] > refLink.tab\n";
-  printf STDERR "where status.tab is a two column file: name status\n";
-  printf STDERR "where descriptions.tab is a two column file: name description\n";
-  printf STDERR "and the ncbi.gff file is the gff3 file to scan\n";
-  printf STDERR "output to stdout is the tab separated data for each item\n";
+  printf STDERR "usage: gff3ToRefLink.pl [raFile.txt] [ncbi.gff.gz] [pragmaLabels.txt] > refLink.tab\n";
+  printf STDERR "- raFile.txt is the output of gbProcess \${asmId}_rna.gbff.gz\n";
+  printf STDERR "- ncbi.gff.gz is \${asmId}_genomic.gff.gz\n";
+  printf STDERR "- pragmaLabels.txt has words that appear before '::' within ##*-START/##*-END\n";
+  printf STDERR "  text in \${asmId}_rna.gbff.gz, one label per line.\n";
+  printf STDERR "output to stdout is the tab separated refLink data for each item\n";
   exit 255;
 }
+
+my ($raFile, $gffFile, $labelFile) = @ARGV;
 
 # this order list of items will keep the tab output consistent so all
 #  'columns' of the data in the tab output will be the same order always.
@@ -20,6 +23,14 @@ if ($argc != 3) {
 my @tabOrderOutput = ( 'name', 'product', 'mrnaAcc', 'protAcc', 'locusLinkId',
    'omimId', 'hgnc', 'genbank', 'pseudo', 'gbkey', 'source',
    'gene_biotype', 'gene_synonym', 'ncrna_class', 'note' );
+
+# raFile.txt has 3-letter abbreviated status (or no status given for model-only X[MR]_*)
+my %rssToStatus = ( inf => 'Inferred',
+                    ''  => 'Model',
+                    pre => 'Predicted',
+                    pro => 'Provisional',
+                    rev => 'Reviewed',
+                    val => 'Validated' );
 
 # list of tag names that have dynamic content for each line, no need to
 # record this in the global set of tags
@@ -32,47 +43,85 @@ my %idToParent;  # key is an id, value is its parent
 my %idData;    # key is an ID, value is a pointer to a hash for
                # for the tags and values on this id
 my %statusData;  # key is name, value is status
+my @pragmaLabelRe;  # compiled regexes for labels that appear in semi-structured description text
 my %descriptionData;  # key is name, value is description from gbProcess
 
-my $statusFile = shift;
-if ($statusFile =~ m/.gz$/) {
-  open (FH, "zcat $statusFile|") or die "can not read $statusFile";
-} elsif ($statusFile =~ m/^stdin$/) {
-  open (FH, "</dev/stdin") or die "can not read $statusFile";
-} else {
-  open (FH, "<$statusFile") or die "can not read $statusFile";
-}
-while (my $line = <FH>) {
-  chomp $line;
-  my ($name, $status) = split('\s+', $line);
-  $statusData{$name} = ucfirst(lc($status));
-}
-close (FH);
 
-my $descriptionFile = shift;
-if ($descriptionFile =~ m/.gz$/) {
-  open (FH, "zcat $descriptionFile|") or die "can not read $descriptionFile";
-} elsif ($descriptionFile =~ m/^stdin$/) {
-  open (FH, "</dev/stdin") or die "can not read $descriptionFile";
-} else {
-  open (FH, "<$descriptionFile") or die "can not read $descriptionFile";
-}
-while (my $line = <FH>) {
-  chomp $line;
-  my ($name, $description) = split('\t', $line, 2);
-  $descriptionData{$name} = $description if (defined($name));
-}
-close (FH);
+sub mustOpen ($) {
+  # Open possibly gzipped file or "stdin" for reading, return filehandle or die with error.
+  my ($fileName) = @_;
+  my $fh;
+  if ($fileName =~ m/.gz$/) {
+    open ($fh, "zcat $fileName |") or die "can not read $fileName: $!";
+  } elsif ($fileName =~ m/^stdin$/) {
+    open ($fh, "</dev/stdin") or die "can not read $fileName: $!";
+  } else {
+    open ($fh, "<$fileName") or die "can not read $fileName: $!";
+  }
+  return $fh;
+} # mustOpen
 
-my $file = shift;
-if ($file =~ m/.gz$/) {
-  open (FH, "zcat $file|") or die "can not read $file";
-} elsif ($file =~ m/^stdin$/) {
-  open (FH, "</dev/stdin") or die "can not read $file";
-} else {
-  open (FH, "<$file") or die "can not read $file";
+# Load @pragmaLabelRe (compiled regexes) for processing descriptions
+my $fh = mustOpen($labelFile);
+while (<$fh>) {
+  chomp;
+  my $escaped = $_;
+  $escaped =~ s/\(/\\(/g;
+  $escaped =~ s/\)/\\)/g;
+  $escaped =~ s/\./\\./g;
+  my $re = "\\s+($escaped)\\s+:: ";
+  push @pragmaLabelRe, qr{$re};
 }
-while (my $line = <FH>) {
+close ($fh);
+
+# Build %descriptionData and %statusData from raFile.txt
+$fh = mustOpen($raFile);
+my ($acc, $status, $description) = (undef, "", "");
+while (<$fh>) {
+  next if (/^\s*$/);
+  chomp;
+  my ($key, $val) = split(" ", $_, 2);
+  if ($key eq "acc") {
+    if (defined $acc) {
+      # Store info gathered from previous record
+      $statusData{$acc} = $rssToStatus{$status};
+      $descriptionData{$acc} = $description;
+    }
+    $acc = $val;
+    ($status, $description) = ("", "");
+  } elsif ($key eq "ver") {
+    # Add version to acc
+    $acc .= ".$val";
+  } elsif ($key eq "rss") {
+    # rss = RefSeq Status
+    $status = $val;
+  } elsif ($key eq "rsu") {
+    # rsu = RefSeq Summary
+    # Use @pragmaLabelRe to clean up semi-structured text that was flattened by gbProcess:
+    $description = $val;
+    while ($description =~ /##([\w-]+)-START## /) {
+      my $title = $1;
+      $title =~ tr/-/ /;
+      $description =~ s/##[\w-]+-START## /$title: /;
+    }
+    if ($description =~ s/\s+##[\w-]+-END##/./g) {
+      foreach my $re (@pragmaLabelRe) {
+        $description =~ s/$re/; $1: /;
+      }
+      $description =~ s/:;/:/g;
+    }
+  }
+}
+if (defined $acc) {
+  # Store info gathered from final record
+  $statusData{$acc} = $rssToStatus{$status};
+  $descriptionData{$acc} = $description;
+}
+close ($fh);
+
+# Process GFF3 attributes
+$fh = mustOpen($gffFile);
+while (my $line = <$fh>) {
   chomp $line;
   next if ($line =~ m/^#/);
   my @a = split('\t', $line);
@@ -162,7 +211,7 @@ while (my $line = <FH>) {
     }
   }
 }
-close (FH);
+close ($fh);
 
 my %addAlias;  # key is id from idData, value is name to alias
 
@@ -234,24 +283,15 @@ foreach my $aliasName (keys %addAlias) {
   }
 }
 
-open (FH, ">idTags.tab") or die "can not write to idTabs.tab";
+# Output tab-separated attributes
 foreach my $id (keys %idData) {
   my $idDataPtr = $idData{$id};
-  printf FH "%s\n", $id;
-  foreach my $dataTag (sort keys %$idDataPtr) {
-    printf FH "\t%s\t%s\n", $dataTag, $idDataPtr->{$dataTag}
-  }
-  my $idNoVersion = $id;
-  $idNoVersion =~ s/.[0-9]+$//;
-  my $description = "n/a";    # missing data says 'n/a'
-  if (exists($descriptionData{$idNoVersion})) {
-     $description = $descriptionData{$idNoVersion};
-  }
-  # stdout output is for refLink.tab table
+  my $missingData = "n/a";
+  # stdout output is for refLink.tab file - precursor of ncbiRefSeqLink.tab
   printf "%s", $id;    # first column
-  # first column is the gene reviewed 'status'
+  # second column is the gene reviewed 'status'
   if (exists($statusData{$id})) {
-       printf "\t%s", $statusData{$id};  # second column
+       printf "\t%s", $statusData{$id};
   } else { printf "\tUnknown"; }
   # the rest go in order according to tabOrderOutput
   foreach my $tag ( @tabOrderOutput ) {
@@ -261,8 +301,9 @@ foreach my $id (keys %idData) {
        $dataOut =~ s/%3B/;/g;
        $dataOut =~ s/%25/%/g;
        printf "\t%s", $dataOut;
-    } else { printf "\tn/a"; }    # missing data says 'n/a'
+    } else { printf "\t$missingData"; }
   }
-  printf "\t%s\n", $description;  # last column
+  if (exists($descriptionData{$id})) {
+    print "\t$descriptionData{$id}\n";
+  } else { print "\t$missingData\n"; }
 }
-close (FH);
