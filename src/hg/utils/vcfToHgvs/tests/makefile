@@ -42,7 +42,7 @@ PersonalisGroundTruth2017_disagree: mkdirs
 	diff -u /dev/null output/$@_matches.tab
 
 stopLoss:
-	${vcfToHgvs} hg38 input/$@.vcf output/$@.tab
+	${vcfToHgvs} hg38 input/$@.vcf stdout | sort -k1,1 -k2n,2n -k3,3 -k6,6 > output/$@.tab
 	diff -u expected/$@.tab output/$@.tab
 
 clean::
