@@ -281,6 +281,25 @@ writeJsonVal(f, schema_url, FALSE);
 fprintf(f, "}");
 }
 
+boolean prefixDotInStanza(char *prefix, struct tagStanza *stanza, struct dyString *scratch)
+/* Return true if there is a tag that starts with the given prefix followed by a dot 
+ * in the stanza or any ancestor. */
+{
+dyStringClear(scratch);
+dyStringAppend(scratch, prefix);
+dyStringAppendC(scratch, '.');
+char *prefixDot = scratch->string;
+struct tagStanza *ancestor;
+for (ancestor = stanza; ancestor != NULL; ancestor = ancestor->parent)
+    {
+    struct slPair *tag;
+    for (tag = ancestor->tagList; tag != NULL; tag = tag->next)
+        if (startsWith(prefixDot, tag->name))
+	    return TRUE;
+    }
+return FALSE;
+}
+
 void rWriteJson(FILE *f, struct tagStorm *storm, struct tagStanza *stanza, 
     struct ttjSubObj *obj, struct ttjSubObj *labeledObj, struct hash *schemaHash,
     struct dyString *scratch)
@@ -293,7 +312,7 @@ if (isArray)
     fprintf(f, "["); 
     for (field = obj->children; field != NULL; field = field->next)
         {
-	if (field != obj->children)
+	if (field != obj->children) // Only write comma separators after the first one
 	   fprintf(f, ",");
 	rWriteJson(f, storm, stanza, field, labeledObj, schemaHash, scratch);
 	}
@@ -324,8 +343,17 @@ else
 	char *fieldName = field->name;
 	if (field->children != NULL)
 	     {
-	     writeJsonTag(f, fieldName, &firstOut);
-	     rWriteJson(f, storm, stanza, field, field, schemaHash, scratch);
+	     /* Look for funny characteristics_ as these are largely up to user. */
+	     if (startsWith("characteristics_", field->name))
+	         errAbort("No '.' allowed in field name after characteristics_ in %s", 
+		    field->children->fullName);
+
+	     /* If actually have data in this stanza write our field. */
+	     if (prefixDotInStanza(field->fullName, stanza, scratch))
+		 {
+		 writeJsonTag(f, fieldName, &firstOut);
+		 rWriteJson(f, storm, stanza, field, field, schemaHash, scratch);
+		 }
 	     }
 	else
 	    {
