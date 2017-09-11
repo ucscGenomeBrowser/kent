@@ -465,6 +465,21 @@ if [ ! -f /usr/local/apache/cgi-bin/hg.conf.local ] ; then
    echo allowHgMirror=true > /usr/local/apache/cgi-bin/hg.conf.local
 fi
 
+# Sept 2017: check if genome-euro mysql server is closer
+if [ ! -f /usr/local/apache/trash/registration.txt ]; then
+   echo comparing latency: genome.ucsc.edu Vs. genome-euro.ucsc.edu
+   euroSpeed=$( (time -p (for i in `seq 10`; do curl -sSI genome-euro.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
+   ucscSpeed=$( (time -p (for i in `seq 10`; do curl -sSI genome.ucsc.edu /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
+   if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$euroSpeed $ucscSpeed") -eq 1 ]]; then
+      echo genome-euro seems to be closer
+      echo modifying gbib to pull data from genome-euro instead of genome
+      sed -i s/slow-db.host=genome-mysql.cse.ucsc.edu/slow-db.host=genome-euro-2.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
+   else
+      echo genome.ucsc.edu seems to be closer
+      echo not modifying /usr/local/apache/cgi-bin/hg.conf
+   fi
+fi
+
 touch /root/lastUpdateTime.flag
 echo - GBiB update done
 cat /etc/issue | tr -s '\n'
