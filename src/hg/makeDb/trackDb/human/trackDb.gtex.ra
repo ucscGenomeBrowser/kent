@@ -37,7 +37,6 @@ termPrefix gtex:
 shortCircuit 1
 
 track gtexTranscExpr
-release alpha,beta
 shortLabel GTEx Transcript
 longLabel Transcript Expression in 53 tissues from GTEx RNA-seq of 8555 samples/570 donors
 type bigBarChart
