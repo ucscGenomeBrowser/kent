@@ -426,6 +426,8 @@ You can use these tools to convert and extract data from your shared files with 
 your GBiB, you will have to ensure that the &quot;Read-only&quot; access for VirtualBox is turned 
 off. To do so, follow the directions in Step 2 of the <a href="#LocalTracks">Loading local big data 
 tracks</a> section, but deselect the checkbox next to &quot;Read-only&quot;.</p>
+<p>
+Please note that the gbibAddTools command requires sudo permissions.</p>
 
 <h3><em>Example: Indexing a local BAM file</em></h3>
 <p>
@@ -702,6 +704,20 @@ If there are domains or domain-suffices that should not be proxied, use <code>no
 The file /usr/local/apache/cgi-bin/hg.conf should already include a line like <code>include
 hg.conf.local</code> to incorporate the changes in hg.conf.local.</p>
 
+<p>
+<strong>Problem:</strong> "No space left on device" error when running gbibAddTools.</p>
+<p>
+In older GBiB's, there is an error in the <code>gbibAddTools</code> command. To fix this command, 
+edit the <code>/home/browser/.bashrc</code> file and change the following line:
+<pre><code>alias gbibAddTools='mkdir ~/bin -p; rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/'</code></pre>
+</p>
+<p>to:
+<pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
+</p>
+<p>
+This updated command installs the tools to a location with more disk space available.
+</p>
+
 <a name="Commands"></a>
 <h2>Genome Browser in a Box commands</h2>
 <!-- Explanation here 
@@ -734,7 +750,7 @@ GBiB terminal's home directory, which can also be accessed via
     <td>Enable the "Mirror tracks" tool</td>
   </tr><tr>
     <td><code>gbibAddTools</code></td>
-    <td>Download the UCSC genome command line tools into the ~bin directory</td>
+    <td>Download the UCSC genome command line tools into the ~bin directory. Requires sudo permissions</td>
   </tr>
 </table>
 
