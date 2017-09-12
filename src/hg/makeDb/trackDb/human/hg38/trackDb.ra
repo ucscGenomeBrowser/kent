@@ -34,6 +34,7 @@ searchIndex name,cosmLabel
 tableBrowser off
 mouseOverField _mouseOver
 html cosmicRegions
+noScoreFilter on
 
 track cosmicRegions
 release beta,public

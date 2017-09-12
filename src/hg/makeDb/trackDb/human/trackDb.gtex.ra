@@ -7,19 +7,6 @@ include trackDb.gtexAwgAse.ra
 # Gene expression
 
 track gtexGene
-release beta,public
-type bed 6 +
-shortLabel GTEx
-longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
-html gtexGeneExpr
-group expression
-priority 1
-maxItems 200
-spectrum on
-visibility pack
-
-track gtexGene
-release alpha
 shortLabel GTEx Gene
 longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 type bed 6 +
@@ -37,7 +24,6 @@ termPrefix gtex:
 shortCircuit 1
 
 track gtexTranscExpr
-release alpha,beta
 shortLabel GTEx Transcript
 longLabel Transcript Expression in 53 tissues from GTEx RNA-seq of 8555 samples/570 donors
 type bigBarChart
