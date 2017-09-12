@@ -473,7 +473,7 @@ if [ ! -f /usr/local/apache/trash/registration.txt ]; then
    if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$euroSpeed $ucscSpeed") -eq 1 ]]; then
       echo genome-euro seems to be closer
       echo modifying gbib to pull data from genome-euro instead of genome
-      sed -i s/slow-db.host=genome-mysql.cse.ucsc.edu/slow-db.host=genome-euro-2.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
+      sed -i s/slow-db.host=genome-mysql.cse.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ /usr/local/apache/cgi-bin/hg.conf
    else
       echo genome.ucsc.edu seems to be closer
       echo not modifying /usr/local/apache/cgi-bin/hg.conf

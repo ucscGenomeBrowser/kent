@@ -169,7 +169,6 @@ SCRIPT_FILES = \
 	pslProtCnv \
 	pslSameGene \
 	tabRepl \
-	uniprotLift \
 	uniprotToTab \
 	ggTables \
 	ggGeneClasses \
