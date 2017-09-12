@@ -20,7 +20,6 @@ urls pubMedIds=http://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceo
 mouseOverField _mouseOver
 
 track cosmicRegions
-release alpha
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
 type bigBed 8 +
@@ -35,20 +34,6 @@ tableBrowser off
 mouseOverField _mouseOver
 html cosmicRegions
 noScoreFilter on
-
-track cosmicRegions
-release beta,public
-shortLabel COSMIC Regions
-longLabel Catalogue of Somatic Mutations in Cancer V81
-type bigBed 4 +
-bigDataUrl /gbdb/hg38/cosmic/cosMutHg38V81.bb
-labelFields cosmLabel
-group phenDis
-color 200, 0, 0
-url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
-urlLabel COSMIC ID:
-searchIndex name,cosmLabel
-tableBrowser off
 
 searchTable cosmicRegions
 searchPriority 2.07207
