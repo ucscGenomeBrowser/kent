@@ -491,7 +491,7 @@ cfgEndBox(boxed);
 
 /* GTEx eQTL track configuration */
 
-void gtexEqtlGene(struct cart *cart, char *track, struct trackDb *tdb)
+void gtexEqtlUiGene(struct cart *cart, char *track, struct trackDb *tdb)
 /* Limit to selected gene */
 // TODO: autocomplete
 {
@@ -506,7 +506,7 @@ cgiMakeTextVar(cartVar, gene, 20);
 // Maximum V6p effect size for CAVIAR 95% eQTLs
 // TODO: add to gtexInfo table
 
-void gtexEqtlEffectSize(struct cart *cart, char *track, struct trackDb *tdb)
+void gtexEqtlUiEffectSize(struct cart *cart, char *track, struct trackDb *tdb)
 /* Limit to items with absolute value of effect size >= threshold.  Use largest
  * effect size in tissue list */
 {
@@ -518,7 +518,7 @@ cgiMakeDoubleVar(cartVar, effectMin, 7);
 printf(" FPKM (range 0-%0.1f)\n", GTEX_EQTL_EFFECT_MAX);
 }
 
-void gtexEqtlProbability(struct cart *cart, char *track, struct trackDb *tdb)
+void gtexEqtlUiProbability(struct cart *cart, char *track, struct trackDb *tdb)
 /* Limit to items with specified probability.  Use largest probability in tissue list,
  * which is score/1000, so use that */
 {
@@ -528,6 +528,16 @@ safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_EQTL_PROBABILITY);
 double probMin = cartCgiUsualDouble(cart, cartVar, GTEX_EQTL_PROBABILITY_DEFAULT);
 cgiMakeDoubleVar(cartVar, probMin, 3);
 printf(" (range 0-1.0)\n");
+}
+
+void gtexEqtlUiTissueColor(struct cart *cart, char *track, struct trackDb *tdb)
+/* Control visibility color patch to indicate tissue (can be distracting in large regions) */
+{
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_EQTL_TISSUE_COLOR);
+boolean showTissueColor = cartCgiUsualBoolean(cart, cartVar, GTEX_EQTL_TISSUE_COLOR_DEFAULT);
+cgiMakeCheckBox(cartVar, showTissueColor);
+puts("<b>Display tissue color (if single tissue eQTL)</b>\n");
 }
 
 void gtexEqtlClusterUi(struct cart *cart, struct trackDb *tdb, char *track, char *title, 
@@ -546,17 +556,23 @@ char cartVar[1024];
 
 /* Gene filter  */
 puts("<div>");
-gtexEqtlGene(cart, track, tdb);
+gtexEqtlUiGene(cart, track, tdb);
 puts("</div>\n");
 
 /* Absolute value of effect size */
 puts("<div>");
-gtexEqtlEffectSize(cart, track, tdb);
+gtexEqtlUiEffectSize(cart, track, tdb);
+puts("</div>\n");
 
 /* Probability eQTL is in CAVIAR 95% causal set */
+puts("<div>");
 puts("&nbsp;&nbsp;");
-gtexEqtlProbability(cart, track, tdb);
-puts("</div>");
+gtexEqtlUiProbability(cart, track, tdb);
+puts("&nbsp;&nbsp;&nbsp;&nbsp;");
+
+/* Display or hide tissue color patch for single-tissue eQTL's */
+gtexEqtlUiTissueColor(cart, track, tdb);
+puts("</div>\n");
 
 /* Tissue filter */
 printf("<br>");

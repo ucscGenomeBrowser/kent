@@ -16,6 +16,7 @@ struct gtexEqtlClusterTrack
 {
     struct gtexTissue *tissues; /*  Tissue names, descriptions */
     struct hash *tissueHash;    /* Tissue info, keyed by UCSC name, filtered by UI */
+    boolean doTissueColor;      /* Display tissue color (for single-tissue eQTL's) */
     double minEffect;           /* Effect size filter (abs value) */
     double minProb;             /* Probability filter */
 };
@@ -162,9 +163,13 @@ static void gtexEqtlClusterLoadItems(struct track *track)
 struct gtexEqtlClusterTrack *extras;
 AllocVar(extras);
 track->extraUiData = extras;
+char cartVar[64];
+
+// UI settings
+safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_TISSUE_COLOR);
+extras->doTissueColor = cartUsualBoolean(cart, cartVar, GTEX_EQTL_TISSUE_COLOR_DEFAULT);
 
 // filter by gene via SQL
-char cartVar[64];
 safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_GENE);
 char *gene = cartNonemptyString(cart, cartVar);
 char *where = NULL;
@@ -179,7 +184,7 @@ bedLoadItemWhere(track, track->table, where, (ItemLoader)loadOne);
 safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_EFFECT);
 extras->minEffect = fabs(cartUsualDouble(cart, cartVar, GTEX_EFFECT_MIN_DEFAULT));
 safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_PROBABILITY);
-extras->minProb = cartUsualDouble(cart, cartVar, 0.0);
+extras->minProb = cartUsualDouble(cart, cartVar, GTEX_EQTL_PROBABILITY_DEFAULT);
 boolean hasTissueFilter = filterTissuesFromCart(track, extras);
 if (!hasTissueFilter && extras->minEffect == 0.0 && extras->minProb == 0.0)
     return;
@@ -225,9 +230,12 @@ return MG_RED;
 
 /* Helper macros */
 
-#define tissueColorPatchSpacer()        (tl.nWidth/4)
+#define tissueColorPatchSpacer()        (max(2, tl.nWidth/4))
 
-#define tissueColorPatchWidth()         (tl.nWidth)
+//#define tissueColorPatchWidth()         (tl.nWidth)
+//#define tissueColorPatchWidth()         (tl.mWidth/2)
+//#define tissueColorPatchWidth()         (tl.mWidth * .75)
+#define tissueColorPatchWidth()         (tl.nWidth * .8)
 
 static int gtexEqtlClusterItemRightPixels(struct track *track, void *item)
 /* Return number of pixels we need to the right of an item (for sources label). */
@@ -250,19 +258,20 @@ if (vis != tvFull && vis != tvPack)
 
 /* Draw text to the right */
 struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
+struct gtexEqtlClusterTrack *extras = (struct gtexEqtlClusterTrack *)track->extraUiData;
 int x2 = round((double)((int)eqtl->chromEnd-winStart)*scale) + xOff;
 int x = x2 + tl.mWidth/2;
 char *label = eqtlSourcesLabel(eqtl);
 int w = mgFontStringWidth(font, label);
 hvGfxTextCentered(hvg, x, y, w, track->heightPer, MG_BLACK, font, label);
-if (eqtlTissueCount(eqtl) == 1)
+if (eqtlTissueCount(eqtl) == 1 && extras->doTissueColor)
     {
     // tissue color patch (box)
     x += w;
     int h = w = tissueColorPatchWidth();
     struct rgbColor tisColor = eqtlTissueColor(track, eqtl);
     int ix = hvGfxFindColorIx(hvg, tisColor.r, tisColor.g, tisColor.b);
-    hvGfxBox(hvg, x + tissueColorPatchSpacer(), y + (tl.fontHeight - h)/2 + tl.fontHeight/8, w, h, ix);
+    hvGfxBox(hvg, x + tissueColorPatchSpacer(), y + (tl.fontHeight - h)/2 + tl.fontHeight/10, w, h, ix);
     }
 }
 
