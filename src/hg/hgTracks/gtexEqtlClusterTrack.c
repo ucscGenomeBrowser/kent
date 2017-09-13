@@ -20,10 +20,6 @@ struct gtexEqtlClusterTrack
     double minProb;             /* Probability filter */
 };
 
-/* Track constants */
-
-#define TISSUE_COLOR_DOT        "*"
-
 /* Utility functions */
 
 static struct gtexEqtlCluster *loadOne(char **row)
@@ -227,13 +223,19 @@ if (maxEffect > cutoff)
 return MG_RED;
 }
 
+/* Helper macros */
+
+#define tissueColorPatchSpacer()        (tl.nWidth/4)
+
+#define tissueColorPatchWidth()         (tl.nWidth)
+
 static int gtexEqtlClusterItemRightPixels(struct track *track, void *item)
 /* Return number of pixels we need to the right of an item (for sources label). */
 {
 struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
 int ret = mgFontStringWidth(tl.font, eqtlSourcesLabel(eqtl));
 if (eqtlTissueCount(eqtl) == 1)
-    ret += mgFontStringWidth(tl.font, TISSUE_COLOR_DOT);
+    ret += tissueColorPatchWidth() + tissueColorPatchSpacer();
 return ret;
 }
 
@@ -255,13 +257,12 @@ int w = mgFontStringWidth(font, label);
 hvGfxTextCentered(hvg, x, y, w, track->heightPer, MG_BLACK, font, label);
 if (eqtlTissueCount(eqtl) == 1)
     {
-    // append asterisk in tissue color
-    struct rgbColor tisColor = eqtlTissueColor(track, eqtl);
+    // tissue color patch (box)
     x += w;
-    w = mgFontStringWidth(font, TISSUE_COLOR_DOT);
+    int h = w = tissueColorPatchWidth();
+    struct rgbColor tisColor = eqtlTissueColor(track, eqtl);
     int ix = hvGfxFindColorIx(hvg, tisColor.r, tisColor.g, tisColor.b);
-    font = mgFontForSizeAndStyle(tl.textSize, "bold");
-    hvGfxTextCentered(hvg, x, y, w, track->heightPer, ix, font, TISSUE_COLOR_DOT);
+    hvGfxBox(hvg, x + tissueColorPatchSpacer(), y + (tl.fontHeight - h)/2 + tl.fontHeight/8, w, h, ix);
     }
 }
 
