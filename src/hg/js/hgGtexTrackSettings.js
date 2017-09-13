@@ -315,9 +315,21 @@ var gtexTrackSettings = (function() {
     function submitForm() {
     // Submit the form (from GO button -- as in hgGateway.js)
     // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
-    $('.gbIconGo').removeClass('fa-play').addClass('fa-spinner fa-spin');
-    $form = $('form');
-    $form.submit();
+        $('.gbIconGo').removeClass('fa-play').addClass('fa-spinner fa-spin');
+        $form = $('form');
+        $form.submit();
+    }
+
+    function toggleShowSampleCount() {
+    // Show or hide sample counts in tissue table
+        var sampleCount = $('.gbmTissueSampleCount')[0];
+        if ($(sampleCount).is(':visible')) {
+            $('.gbmTissueTable').removeClass('gbmTissueTableWithSamples');
+            ($('.gbmTissueSampleCount').hide());
+        } else {
+            $('.gbmTissueTable').addClass('gbmTissueTableWithSamples');
+            ($('.gbmTissueSampleCount').show());
+        }
     }
 
     // Initialization
@@ -404,6 +416,10 @@ var gtexTrackSettings = (function() {
                 }, false);
             }
             $('.gbButtonGoContainer').click(submitForm);
+
+            // hide/show of sample counts
+            ($('.gbmTissueSampleCount').hide());
+            $('#showSampleCount').click(toggleShowSampleCount);
         });
     }
 
