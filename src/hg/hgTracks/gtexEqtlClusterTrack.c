@@ -42,13 +42,13 @@ for (tis = extras->tissues; tis != NULL; tis = tis->next)
 // if all tissues included, return full hash
 if (!cartListVarExistsAnyLevel(cart, track->tdb, FALSE, GTEX_TISSUE_SELECT))
     return FALSE;
+struct slName *selectedValues = cartOptionalSlNameListClosestToHome(cart, track->tdb,
+                                                    FALSE, GTEX_TISSUE_SELECT);
+if (selectedValues == NULL || slCount(selectedValues) == slCount(extras->tissues))
+    return FALSE;
 
 // create tissue hash with only included tissues
 struct hash *tisHash = hashNew(0);
-struct slName *selectedValues = cartOptionalSlNameListClosestToHome(cart, track->tdb,
-                                                    FALSE, GTEX_TISSUE_SELECT);
-if (selectedValues == NULL)
-    return FALSE;
 
 struct slName *name;
 for (name = selectedValues; name != NULL; name = name->next)
@@ -106,7 +106,7 @@ return TRUE;
 }
 
 static int eqtlTissueCount(struct gtexEqtlCluster *eqtl)
-/* Return count of non-excluded tissues in the item */
+    /* Return count of non-excluded tissues in the item */
 {
 int included = 0;
 int i;
@@ -168,6 +168,7 @@ char cartVar[64];
 // UI settings
 safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_TISSUE_COLOR);
 extras->doTissueColor = cartUsualBoolean(cart, cartVar, GTEX_EQTL_TISSUE_COLOR_DEFAULT);
+boolean isFiltered = FALSE;
 
 // filter by gene via SQL
 safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_GENE);
@@ -178,19 +179,24 @@ if (gene)
     struct dyString *ds = dyStringNew(0);
     sqlDyStringPrintfFrag(ds, "%s = '%s'", GTEX_EQTL_GENE_FIELD, gene); 
     where = dyStringCannibalize(&ds);
+    isFiltered = TRUE;
     }
 bedLoadItemWhere(track, track->table, where, (ItemLoader)loadOne);
 
+// more filtering
 safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_EFFECT);
 extras->minEffect = fabs(cartUsualDouble(cart, cartVar, GTEX_EFFECT_MIN_DEFAULT));
 safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_PROBABILITY);
 extras->minProb = cartUsualDouble(cart, cartVar, GTEX_EQTL_PROBABILITY_DEFAULT);
 boolean hasTissueFilter = filterTissuesFromCart(track, extras);
-if (!hasTissueFilter && extras->minEffect == 0.0 && extras->minProb == 0.0)
-    return;
-
-// more filtering
-filterItems(track, eqtlIncludeFilter, "include");
+        hasTissueFilter, extras->minEffect, extras->minProb);
+if (hasTissueFilter || extras->minEffect != 0.0 || extras->minProb != 0.0)
+    {
+    isFiltered = TRUE;
+    filterItems(track, eqtlIncludeFilter, "include");
+    }
+if (isFiltered)
+    labelTrackAsFiltered(track);
 }
 
 static char *gtexEqtlClusterItemName(struct track *track, void *item)
