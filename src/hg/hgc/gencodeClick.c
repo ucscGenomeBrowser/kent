@@ -229,8 +229,14 @@ static void prEnsIdAnchor(char *id, char *urlTemplate)
 {
 if (!isEmpty(id))
     {
-    char urlBuf[512];
-    safef(urlBuf, sizeof(urlBuf), urlTemplate, getScientificNameSym(), id);
+    char idBuf[64], urlBuf[512];
+    /* The lift37 releases append a '_N' modifier to the ids to indicate the are
+     * mapped. N is an integer mapping version. Don't include this in link if it exists. */
+    safecpy(idBuf, sizeof(idBuf), id);
+    char *p = strchr(idBuf, '_');
+    if (p != NULL)
+        *p = '\0';
+    safef(urlBuf, sizeof(urlBuf), urlTemplate, getScientificNameSym(), idBuf);
     printf("<a href=\"%s\" target=_blank>%s</a>", urlBuf, id);
     }
 }
