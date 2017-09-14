@@ -125,7 +125,7 @@ puts(
 "        <!-- row 1 -->\n"
 "        <div class='row'>\n"
 "            <div class='gbControl col-md-12'>\n");
-gtexEqtlGene(cart, track, tdb);
+gtexEqtlUiGene(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -133,7 +133,7 @@ puts(
 "        <!-- row 2 -->\n"
 "        <div class='row'>\n"
 "            <div class='gbControl col-md-12'>\n");
-gtexEqtlEffectSize(cart, track, tdb);
+gtexEqtlUiEffectSize(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -141,7 +141,9 @@ puts(
 "        <!-- row 3 -->\n"
 "        <div class='row'>\n"
 "            <div class='gbControl col-md-12'>\n");
-gtexEqtlProbability(cart, track, tdb);
+gtexEqtlUiProbability(cart, track, tdb);
+puts("&nbsp;&nbsp;&nbsp;&nbsp;");
+gtexEqtlUiTissueColor(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
