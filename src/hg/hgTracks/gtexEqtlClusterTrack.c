@@ -189,7 +189,6 @@ extras->minEffect = fabs(cartUsualDouble(cart, cartVar, GTEX_EFFECT_MIN_DEFAULT)
 safef(cartVar, sizeof cartVar, "%s.%s", track->track, GTEX_EQTL_PROBABILITY);
 extras->minProb = cartUsualDouble(cart, cartVar, GTEX_EQTL_PROBABILITY_DEFAULT);
 boolean hasTissueFilter = filterTissuesFromCart(track, extras);
-        hasTissueFilter, extras->minEffect, extras->minProb);
 if (hasTissueFilter || extras->minEffect != 0.0 || extras->minProb != 0.0)
     {
     isFiltered = TRUE;
