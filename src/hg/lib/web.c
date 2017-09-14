@@ -389,7 +389,7 @@ puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are cl
         "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
     "    <TABLE BGCOLOR='#" HG_COL_INSIDE
          "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n");
-puts("<div class='subheadingBar'>");
+puts("<div class='subheadingBar windowSize'>");
 }
 
 void webNewSectionHeaderEnd()
