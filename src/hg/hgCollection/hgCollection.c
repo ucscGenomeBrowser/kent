@@ -47,6 +47,13 @@ unsigned long color;
 char *viewFunc;
 };
 
+struct trackDbRef 
+{
+struct trackDbRef *next;
+struct trackDb *tdb;
+int order;
+};
+
 char *getString(char **input)
 // grab a quoted string out of text blob
 {
@@ -243,20 +250,59 @@ return vis;
 }
 
 
-void addVisibleTracks()
-// add the visible tracks table rows
+void checkForVisible(struct trackDbRef **list, struct trackDb *tdb)
+/* Walk the trackDb hierarchy looking for visible leaf tracks. */
 {
-jsInlineF("<ul>");
-jsInlineF("<li class='nodrop' name='%s'>%s", "visibile", "Visible Tracks");
-jsInlineF("<ul>");
-struct trackDb *tdb;
-for(tdb = fullTrackList; tdb; tdb = tdb->next)
+struct trackDb *subTdb;
+char buffer[4096];
+
+if (tdb->subtracks)
+    {
+    for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
+        checkForVisible(list, subTdb);
+    }
+else
     {
     if (isParentVisible(tdb) &&  isSubtrackVisible(tdb))
         {
-        printGroup("visible", tdb, FALSE, FALSE);
+        struct trackDbRef *tdbRef;
+        AllocVar(tdbRef);
+        tdbRef->tdb = tdb;
+        slAddHead(list, tdbRef);
+        safef(buffer, sizeof buffer, "%s_imgOrd", tdb->track);
+
+        tdbRef->order = cartUsualInt(cart, buffer, 0);
         }
     }
+}
+
+int tdbRefCompare (const void *va, const void *vb)
+// Compare to sort on imgTrack->order.
+{
+const struct trackDbRef *a = *((struct trackDbRef **)va);
+const struct trackDbRef *b = *((struct trackDbRef **)vb);
+return (a->order - b->order);
+}       
+
+void addVisibleTracks()
+// add the visible tracks table rows.
+{
+struct trackDb *tdb;
+struct trackDbRef *tdbRefList = NULL, *tdbRef;
+//checkForVisible(fullTrackList);
+for(tdb = fullTrackList; tdb; tdb = tdb->next)
+    {
+    checkForVisible(&tdbRefList, tdb);
+    }
+
+slSort(&tdbRefList, tdbRefCompare);
+
+jsInlineF("<ul>");
+jsInlineF("<li class='nodrop' name='%s'>%s", "visibile", "Visible Tracks");
+jsInlineF("<ul>");
+for(tdbRef = tdbRefList; tdbRef; tdbRef = tdbRef->next)
+    printGroup("visible", tdbRef->tdb, FALSE, FALSE);
+
 jsInlineF("</ul>");
 jsInlineF("</li>");
 jsInlineF("</ul>");

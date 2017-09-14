@@ -4774,7 +4774,17 @@ if ((sortTrack = cgiOptionalString( "sortExp")) != NULL)
     }
 
 if (wigOrder != NULL)
+    {
     orderedWiggles = slNameListFromString(wigOrder, ' ');
+    struct slName *name = orderedWiggles;
+    // if we're sorting, remove existing sort order for this composite
+    for(; name; name = name->next)
+        {
+        char buffer[1024];
+        safef(buffer, sizeof buffer,  "%s_imgOrd", name->name);
+        cartRemove(cart, buffer);
+        }
+    }
 
 // Construct flatTracks 
 for (track = trackList; track != NULL; track = track->next)
@@ -4808,6 +4818,18 @@ for (track = trackList; track != NULL; track = track->next)
     }
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
 
+if (orderedWiggles)
+    {
+    // save order to cart
+    struct flatTracks *ft;
+    char buffer[4096];
+    int count = 1;
+    for(ft = flatTracks; ft; ft = ft->next)
+        {
+        safef(buffer, sizeof buffer, "%s_imgOrd", ft->track->track);
+        cartSetInt(cart, buffer, count++);
+        }
+    }
 
 // for each track, figure out maximum height needed from all windows
 for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
@@ -7472,6 +7494,30 @@ if (sharedErrMsg)
 }
 
 
+void outCollectionsToJson()
+/* Output the current collections to the hgTracks JSON block. */
+{
+struct grp *groupList = NULL;
+struct trackDb *hubTdbs = hubCollectTracks( database,  &groupList);
+char buffer[4096];
+safef(buffer, sizeof buffer, "%s-%s", customCompositeCartName, database);
+char *hubFile = cartOptionalString(cart, buffer);
+char *hubName = hubNameFromUrl(hubFile);
+struct trackDb *tdb;
+struct jsonElement *jsonList = NULL;
+for(tdb = hubTdbs; tdb;  tdb = tdb->next)
+    {
+    if (sameString(tdb->grp, hubName))
+        {
+        if (jsonList == NULL)
+            jsonList = newJsonList(NULL);
+
+        jsonListAdd(jsonList, newJsonString(tdb->shortLabel));
+        }
+    }
+if (jsonList)
+    jsonObjectAdd(jsonForClient, "collections", jsonList);
+}
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
@@ -7842,6 +7888,7 @@ if (theImgBox)
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
+outCollectionsToJson();
 
 jsonObjectAdd(jsonForClient, "winStart", newJsonNumber(virtWinStart));
 jsonObjectAdd(jsonForClient, "winEnd", newJsonNumber(virtWinEnd));
