@@ -3,12 +3,12 @@ type bigBed
 compositeTrack on
 allButtonPair on
 dragAndDrop subTracks
-shortLabel GTEx eQTL Tissues
+shortLabel GTEx Tissue eQTL
 longLabel Expression QTLs in 44 tissues from GTEx (midpoint release, V6)
 darkerLabels on
 visibility dense
 showSubtrackColorOnUi on
-group expression
+group regulation
 #bedFilter on
 #mouseOverField mouseOver
 labelFields name, gene

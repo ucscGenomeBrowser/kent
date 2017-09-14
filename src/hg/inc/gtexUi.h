@@ -72,6 +72,7 @@
 /* GTEx eQTL track controls */
 
 #define GTEX_EQTL_EFFECT                "effect"
+#define GTEX_EQTL_EFFECT_DEFAULT        0.0
 #define GTEX_EQTL_PROBABILITY           "prob"
 #define GTEX_EQTL_PROBABILITY_DEFAULT   0.0
 #define GTEX_EQTL_GENE                  "gene"

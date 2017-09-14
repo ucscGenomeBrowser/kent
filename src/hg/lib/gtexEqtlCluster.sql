@@ -12,9 +12,11 @@ CREATE TABLE gtexEqtlCluster (
     name varchar(255) not null,	# Name of variant (rsID or GTEx identifier if none)
     score int unsigned not null,	# Score from 0-1000
     target varchar(255) not null,	# Name of target (gene or tissue)
+    distance int not null,	# Distance from TSS
     expCount int unsigned not null,	# Number of experiment values
     expNames longblob not null,	# Comma separated list of experiment names (e.g. tissue or gene)
     expScores longblob not null,	# Comma separated list of effect size values
+    expPvals longblob not null,	# Comma separated list of -log10 transformed p-values
     expProbs longblob not null,	# Comma separated list of probability variant is in causal set
               #Indices
     INDEX chrom (chrom,bin),

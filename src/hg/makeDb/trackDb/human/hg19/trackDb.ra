@@ -2481,9 +2481,9 @@ longLabel Peptide sequences identified by tandem MS from PeptideAtlas
 
 track gtexEqtlCluster
 type bed 5 +
-shortLabel GTEx eQTL Clusters
-longLabel Expression QTL Clusters in 44 Tissues from GTEx (midpoint release, V6)
-group expression
+shortLabel GTEx Combined eQTL
+longLabel Combined Expression QTLs from 44 Tissues from GTEx (midpoint release, V6)
+group regulation
 
 include gtexEqtl.ra
 

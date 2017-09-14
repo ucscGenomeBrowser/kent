@@ -6,7 +6,7 @@
 #define GTEXEQTLCLUSTER_H
 
 #include "jksql.h"
-#define GTEXEQTLCLUSTER_NUM_COLS 10
+#define GTEXEQTLCLUSTER_NUM_COLS 12
 
 extern char *gtexEqtlClusterCommaSepFieldNames;
 
@@ -20,9 +20,11 @@ struct gtexEqtlCluster
     char *name;	/* Name of variant (rsID or GTEx identifier if none) */
     unsigned score;	/* Score from 0-1000 */
     char *target;	/* Name of target (gene or tissue) */
+    int distance;	/* Distance from TSS */
     unsigned expCount;	/* Number of experiment values */
     char **expNames;	/* Comma separated list of experiment names (e.g. tissue or gene) */
     float *expScores;	/* Comma separated list of effect size values */
+    float *expPvals;	/* Comma separated list of -log10 transformed p-values */
     float *expProbs;	/* Comma separated list of probability variant is in causal set */
     };
 
@@ -80,8 +82,6 @@ void gtexEqtlClusterOutput(struct gtexEqtlCluster *el, FILE *f, char sep, char l
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #define GTEX_EQTL_GENE_FIELD    "target"
-
-#define GTEX_EFFECT_MIN_DEFAULT 0.0
 
 #endif /* GTEXEQTLCLUSTER_H */
 

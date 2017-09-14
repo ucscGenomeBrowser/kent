@@ -537,7 +537,7 @@ char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_EQTL_TISSUE_COLOR);
 boolean showTissueColor = cartCgiUsualBoolean(cart, cartVar, GTEX_EQTL_TISSUE_COLOR_DEFAULT);
 cgiMakeCheckBox(cartVar, showTissueColor);
-puts("<b>Display tissue color (if single tissue eQTL)</b>\n");
+puts("<b>Display tissue color (single tissue eQTL)</b>\n");
 }
 
 void gtexEqtlClusterUi(struct cart *cart, struct trackDb *tdb, char *track, char *title, 
