@@ -7888,7 +7888,7 @@ if (theImgBox)
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
-outCollectionsToJson();
+//outCollectionsToJson();
 
 jsonObjectAdd(jsonForClient, "winStart", newJsonNumber(virtWinStart));
 jsonObjectAdd(jsonForClient, "winEnd", newJsonNumber(virtWinEnd));
