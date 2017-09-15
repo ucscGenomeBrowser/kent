@@ -6561,6 +6561,20 @@ importTrackHub trackDb.txt hofMap.ra /gbdb/hg38/hoffmanMappability/ --trackDbPat
 # added the alpha tags, and removed the 'show' from 'superTrack on show'
 cp hofMap.ra ~/kent/src/hg/makeDb/trackDb/human/hg38
 # Include hofMap.ra in the trackDb.ra file
+
+# the importTrackHub failed on redirection, fetch all the files manually:
+# 2017-09-15 - Hiram
+
+cd /hive/data/outside/hoffmanMappability/hg38]
+
+grep bigDataUrl trackDb.txt | awk '{print $NF}' | sed -e 's#https://www.pmgenomics.ca/hoffmanlab/proj/bismap/trackhub/hg38/##;' | while read F
+do
+  echo $F
+  rm -f $F
+  wget --timestamping "https://www.pmgenomics.ca/hoffmanlab/proj/bismap/trackhub/hg38/${F}"
+done
+    # real    29m40.429s
+
 #########################################################################
 # tcgaExpr super track Chris Eisenhart, DONE, 2017-05-17
 # tcgaTranscExpr 
