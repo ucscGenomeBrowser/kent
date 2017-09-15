@@ -32342,3 +32342,31 @@ ln -s /hive/data/outside/cosmic/hg19/v82/cosMutHg19V82.bb .
 # snpedia (DONE - 2017-09-06 - Max)  
 # see ../hg38/snpedia.txt
 ##############################################################################
+2017-09-14: import of UCSC GENCODE group processing of GENCODE V27lift37 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg19/bed/gencodeV27lift37
+    pushd /hive/data/genomes/hg19/bed/gencodeV27lift37
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 27lift37 88 'August 2017'
+
+    # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg19/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg19
+
+    # edit  all.joiner to add ~/tmp/gencodeV27lift37.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg19/bed/gencodeV27lift37
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
+#########################################################################

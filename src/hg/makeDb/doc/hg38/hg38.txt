@@ -6837,3 +6837,31 @@ bedToBigBed -type=bed8+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/c
 cd /gbdb/hg38/cosmic/
 ln -s /hive/data/outside/cosmic/hg38/v82/cosMutHg38V82.bb .
 
+#########################################################################
+2017-09-14: import of UCSC GENCODE group processing of GENCODE V27 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV27
+    pushd /hive/data/genomes/hg38/bed/gencodeV27
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 27 90 'Aug 2017'
+
+    # Update human/hg38/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg38/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg38
+
+    # edit  all.joiner to add ~/tmp/gencodeV27.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg38/bed/gencodeV27
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
