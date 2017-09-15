@@ -1,19 +1,2 @@
-track wgEncodeGencodeSuper
-superTrack on
-trackHandler wgEncodeGencode
-group genes
-shortLabel All GENCODE
-longLabel All GENCODE transcripts include comprehensive set and previous versions
-# doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
-
-include wgEncodeGencodeV19.ra
-include wgEncodeGencodeV20.ra
-include wgEncodeGencodeV21.ra alpha
-include wgEncodeGencodeV22.ra
-include wgEncodeGencodeV23.ra
-include wgEncodeGencodeV24.ra
-include wgEncodeGencodeV25.ra
-include wgEncodeGencodeV26.ra
-include wgEncodeGencodeV27.ra
-
+include trackDb.gencode.ra
 include wgEncodeReg.ra

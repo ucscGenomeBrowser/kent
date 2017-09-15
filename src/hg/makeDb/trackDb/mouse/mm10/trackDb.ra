@@ -360,26 +360,7 @@ pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted vi
 track rmskJoinedBaseline override
 group varRep
 
-# GENCODE
-track wgEncodeGencodeSuper
-superTrack on show
-group genes
-shortLabel GENCODE (Ensembl)
-longLabel GENCODE Gene Annotations (Ensembl)
-priority 2
-
-# doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
-include wgEncodeGencodeVM2.ra
-include wgEncodeGencodeVM3.ra
-include wgEncodeGencodeVM4.ra
-include wgEncodeGencodeVM7.ra
-include wgEncodeGencodeVM8.ra
-include wgEncodeGencodeVM9.ra
-include wgEncodeGencodeVM10.ra
-include wgEncodeGencodeVM11.ra
-include wgEncodeGencodeVM12.ra
-include wgEncodeGencodeVM13.ra
-include wgEncodeGencodeVM14.ra
+include trackDb.gencode.ra
 
 include defaultPriority.ra
 
