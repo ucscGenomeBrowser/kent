@@ -33,8 +33,8 @@ mach = $(shell uname -m)
 # BEGIN EDIT THESE EACH RELEASE
 ##
 #db = mm10
-db = hg38
-#db = hg19
+#db = hg38
+db = hg19
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
     ver = M14
@@ -60,7 +60,7 @@ else ifeq (${db},hg38)
 	KV575246.1 KV575249.1 KV575248.1 KV575247.1 KV880766.1 KV575244.1 KV880768.1 KV575245.1 KV575252.1 KV575243.1 KV575254.1 KV575255.1 KV575259.1 KV575256.1 KV575257.1 KV575260.1 KV575258.1 KQ090019.1 KV766192.1 KV766193.1 KV766196.1 KV766195.1 KV766198.1 KV880763.1 KV575250.1 KV575251.1 KV880765.1 KV575253.1 KV880764.1
 else ifeq (${db},hg19)
     grcRefAssembly = GRCh37
-    verBase = 17
+    verBase = 27
     ver = ${verBase}lift37
     ftpReleaseSubdir = release_${verBase}/GRCh37_mapping
     prevVer = 19
@@ -266,7 +266,7 @@ ${tablePolyAGp}: ${polyAGtf} ${ensemblToUcscChain}
 	${gencodePolyaGxfToGenePred} ${skipPatchSeqOpts} $< ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta}
+${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta} ${gencodeTsv}
 	@mkdir -p $(dir $@)
 	((${metaFilterCmdGz} ${tableSwissProtMeta} | tawk '{print $$0,"SwissProt"}') && (${metaFilterCmdGz}  ${tableTrEMBLMeta} | tawk '{print $$0,"TrEMBL"}')) | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@

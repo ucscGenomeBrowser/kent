@@ -15457,3 +15457,31 @@ bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed.mm10 /hive/data/genom
 cd /gbdb/hg38/ncbiRefSeq
 ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb .
 ##############################################################################
+2017-05-31: import of UCSC GENCODE group processing of GENCODE VM14 (markd)
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM14
+    pushd /hive/data/genomes/mm10/bed/gencodeVM14
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    ##  gencode-cmp.tsv check to see if sizes make sense
+
+    # generate trackDb and joiner blurb
+    pushd kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M14 89 'May 2017'
+
+    # Update mouse/mm10/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit mouse/mm10/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=mm10
+
+    # edit  all.joiner to add ~/tmp/gencodeVM14.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm10/bed/gencodeVM14
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
+
+    # commit all
+##############################################################################
