@@ -689,7 +689,7 @@ def updateUniprot(args, options):
         relFh = open(relFname, "w")
         relFh.write(relString)
         relFh.close()
-        logging.debug("Wrote release version string '%s' to %s" % (relString, relFname))
+        logging.debug("Wrote release line '%s' to %s" % (relString, relFname))
 
     logging.info("Converting uniprot from %s to %s, using maps in %s" % (uprotDir, tabDir, mapDir))
     if not options.skipParse:
