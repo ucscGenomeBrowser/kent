@@ -1,0 +1,131 @@
+track uniprot
+shortLabel UniProt Proteins
+longLabel UniProt/SwissProt Annotations
+group genes
+visibility hide
+type bigBed 12 +
+itemRgb on
+exonNumbers off
+compositeTrack on
+mouseOverField comments
+noScoreFilter on
+urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipFullSeq
+        shortLabel Sequences
+        longLabel UniProt/SwissProt Sequences
+        priority 1
+        parent uniprot
+        visibility hide
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipFullSeq.bb
+
+        track unipLocSignal
+        shortLabel Signal Peptide
+        longLabel UniProt/SwissProt Signal Peptides
+        priority 2
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipLocSignal.bb
+
+        track unipLocExtra
+        shortLabel Extracellular
+        longLabel UniProt/SwissProt Extracellular Domain
+        priority 3
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipLocExtra.bb
+
+        track unipLocTransMemb
+        shortLabel Transmembrane
+        longLabel UniProt/SwissProt Transmembrane Domains
+        priority 4
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipLocTransMemb.bb
+
+        track unipLocCytopl
+        shortLabel Cytoplasmic
+        longLabel UniProt/SwissProt Cytoplasmic Domains
+        priority 5
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipLocCytopl.bb
+
+        track unipChain
+        shortLabel Chains
+        longLabel UniProt/SwissProt Polypeptide Chains
+        priority 6
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipChain.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipDisulfBond
+        shortLabel Disulf. Bonds
+        longLabel UniProt/SwissProt Disulfide Bonds
+        priority 7
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipDisulfBond.bb
+
+        track unipModif
+        shortLabel Modifications
+        longLabel UniProt/SwissProt Amino Acid Modifications
+        priority 8
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipModif.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipStruct
+        shortLabel Structure
+        longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
+        priority 9
+        parent uniprot off
+        group genes
+        visibility hide
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipStruct.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipOther
+        shortLabel Other Annot.
+        longLabel UniProt/SwissProt Other Annotations
+        priority 10
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipOther.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipRepeat
+        shortLabel Repeats
+        longLabel UniProt/SwissProt Repeats
+        priority 10
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipRepeats.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipConflict
+        shortLabel Conflicts
+        longLabel UniProt/SwissProt Sequence Conflicts
+        priority 10
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipConflict.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+searchTable unipFullSeq
+searchType bigBed
+searchDescription UniProt/SwissProt Protein annotations

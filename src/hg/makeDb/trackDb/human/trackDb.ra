@@ -4082,6 +4082,13 @@ termRegex rs[0-9]+
 searchPriority 11
 padding 250
 
+searchTable snpedia
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 11.001
+padding 250
 
 track darned
 shortLabel Human RNA Editing
@@ -5014,14 +5021,6 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9843
-padding 250
-
-searchTable snpedia
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.9845
 padding 250
 
 include cloneEnd.trackDb.ra

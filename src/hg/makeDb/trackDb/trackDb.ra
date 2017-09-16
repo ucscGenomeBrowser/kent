@@ -17,6 +17,7 @@ include trackDb.transMap.ra
 
 include trackDb.nt.ra
 include trackDb.genbank.ra 
+include trackDb.uniprot.ra alpha
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
@@ -2887,6 +2888,20 @@ urls variationId="http://www.uniprot.org/uniprot/$$" uniProtId="http://www.unipr
 mouseOverField comments
 exonNumbers off
 noScoreFilter on
+
+track spMut
+shortLabel UniProt Variants
+longLabel UniProt/SwissProt Amino Acid Substitutions
+group phenDis
+visibility hide
+type bigBed 12 +
+itemRgb on
+urls variationId="http://www.uniprot.org/uniprot/$$" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
+exonNumbers off
+noScoreFilter on
+bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+release alpha
 
 track spUniprot
 shortLabel UniProt
