@@ -313,6 +313,15 @@ char *oldHubFileName = el->val;
 trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
 char *newHubFileName = cloneString(hubTn.forCgi);
 
+// let's make sure the hub hasn't been cleaned up
+int fd = open(oldHubFileName, O_RDONLY);
+if (fd < 0)
+    {
+    cartRemove(cart, el->name);
+    return;
+    }
+
+close(fd);
 copyFile(oldHubFileName, newHubFileName);
 
 char *errorMessage;

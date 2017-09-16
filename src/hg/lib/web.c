@@ -375,7 +375,7 @@ puts("     </div></div>\n"
      );
 }
 
-void webNewSectionHeaderStart(boolean hasTitle)
+void webNewSectionHeaderStart()
 /* Start the header for a new section on the web page.
  * May be used to maintain table layout without a proper section header */
 {
@@ -389,20 +389,14 @@ puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are cl
         "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
     "    <TABLE BGCOLOR='#" HG_COL_INSIDE
          "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n");
-if (hasTitle)
-    puts("<div class='subheadingBar'><div class='windowSize'>");
-else
-    puts("<div>");
+puts("<div class='subheadingBar windowSize'>");
 }
 
-void webNewSectionHeaderEnd(boolean hasTitle)
+void webNewSectionHeaderEnd()
 /* Properly close header of collapsible section on web page */
 {
-if (hasTitle)
-    puts("     </div></div>\n");
-else
-    puts("     </div>\n");
-puts("     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
+puts("     </div>\n"
+     "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
           "<TR><TH HEIGHT=10></TH></TR>\n"
      "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n");
 }
@@ -412,17 +406,17 @@ void webNewSection(char* format, ...)
 {
 va_list args;
 va_start(args, format);
-webNewSectionHeaderStart(TRUE);
+webNewSectionHeaderStart();
 vprintf(format, args);
-webNewSectionHeaderEnd(TRUE);
+webNewSectionHeaderEnd();
 va_end(args);
 }
 
 void webNewEmptySection()
 /* create a new section on the web page to maintain table layout */
 {
-webNewSectionHeaderStart(FALSE);
-webNewSectionHeaderEnd(FALSE);
+webNewSectionHeaderStart();
+webNewSectionHeaderEnd();
 }
 
 void webEndSectionTables()

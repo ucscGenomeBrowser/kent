@@ -20,7 +20,6 @@ urls pubMedIds=http://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceo
 mouseOverField _mouseOver
 
 track cosmicRegions
-release alpha
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
 type bigBed 8 +
@@ -35,20 +34,6 @@ tableBrowser off
 mouseOverField _mouseOver
 html cosmicRegions
 noScoreFilter on
-
-track cosmicRegions
-release beta,public
-shortLabel COSMIC Regions
-longLabel Catalogue of Somatic Mutations in Cancer V81
-type bigBed 4 +
-bigDataUrl /gbdb/hg38/cosmic/cosMutHg38V81.bb
-labelFields cosmLabel
-group phenDis
-color 200, 0, 0
-url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
-urlLabel COSMIC ID:
-searchIndex name,cosmLabel
-tableBrowser off
 
 searchTable cosmicRegions
 searchPriority 2.07207
@@ -655,39 +640,30 @@ group expression
 
 track snp147Mult override
 group varRep
-priority 6.1
 
 track snp147Flagged override
 group varRep
-priority 5.1
 
 track snp147Common override 
 group varRep
-priority 1
 
 track snp147 override
 group varRep
-priority 2.1
 
 track snp146Mult override
 group varRep
-priority 6.2
 
 track snp146Flagged override
 group varRep
-priority 5.2
 
 track snp146Common override
 group varRep
-priority 3.1
 
 track snp146 override
 group varRep
-priority 2.2
 
 track dgvPlus override
 group varRep
-priority 4
 
 track gtexTranscExpr override
 bigDataUrl /gbdb/hg38/gtex/gtexTranscExpr.bb

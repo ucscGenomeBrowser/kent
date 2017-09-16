@@ -3462,7 +3462,7 @@ color 50,0,100
 type bed 4
 itemDetailsHtmlTable snpediaHtml
 url https://www.snpedia.com/index.php/$$
-release alpha
+release alpha,beta
 
 track clinvar
 compositeTrack on

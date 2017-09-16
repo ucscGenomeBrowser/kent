@@ -1,7 +1,6 @@
 #	"$Id: trackDb.ra,v 1.125 2010/06/11 22:12:18 mary Exp $";
 
 track cosmicRegions
-release alpha
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82
 type bigBed 8 +
@@ -16,20 +15,6 @@ tableBrowser off
 mouseOverField _mouseOver
 html cosmicRegions
 noScoreFilter on
-
-track cosmicRegions
-release beta,public
-shortLabel COSMIC Regions
-longLabel Catalogue of Somatic Mutations in Cancer V81
-type bigBed 4 +
-bigDataUrl /gbdb/hg19/cosmic/cosMutHg19V81.bb
-labelFields cosmLabel
-group phenDis
-color 200, 0, 0
-url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=$$
-urlLabel COSMIC ID:
-searchIndex name,cosmLabel
-tableBrowser off
 
 searchTable cosmicRegions
 searchPriority 2.07207
@@ -2481,9 +2466,9 @@ longLabel Peptide sequences identified by tandem MS from PeptideAtlas
 
 track gtexEqtlCluster
 type bed 5 +
-shortLabel GTEx eQTL Clusters
-longLabel Expression QTL Clusters in 44 Tissues from GTEx (midpoint release, V6)
-group expression
+shortLabel GTEx Combined eQTL
+longLabel Combined Expression QTLs from 44 Tissues from GTEx (midpoint release, V6)
+group regulation
 
 include gtexEqtl.ra
 

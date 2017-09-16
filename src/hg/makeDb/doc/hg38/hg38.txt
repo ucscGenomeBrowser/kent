@@ -6561,6 +6561,20 @@ importTrackHub trackDb.txt hofMap.ra /gbdb/hg38/hoffmanMappability/ --trackDbPat
 # added the alpha tags, and removed the 'show' from 'superTrack on show'
 cp hofMap.ra ~/kent/src/hg/makeDb/trackDb/human/hg38
 # Include hofMap.ra in the trackDb.ra file
+
+# the importTrackHub failed on redirection, fetch all the files manually:
+# 2017-09-15 - Hiram
+
+cd /hive/data/outside/hoffmanMappability/hg38]
+
+grep bigDataUrl trackDb.txt | awk '{print $NF}' | sed -e 's#https://www.pmgenomics.ca/hoffmanlab/proj/bismap/trackhub/hg38/##;' | while read F
+do
+  echo $F
+  rm -f $F
+  wget --timestamping "https://www.pmgenomics.ca/hoffmanlab/proj/bismap/trackhub/hg38/${F}"
+done
+    # real    29m40.429s
+
 #########################################################################
 # tcgaExpr super track Chris Eisenhart, DONE, 2017-05-17
 # tcgaTranscExpr 
@@ -6837,3 +6851,31 @@ bedToBigBed -type=bed8+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/c
 cd /gbdb/hg38/cosmic/
 ln -s /hive/data/outside/cosmic/hg38/v82/cosMutHg38V82.bb .
 
+#########################################################################
+2017-09-14: import of UCSC GENCODE group processing of GENCODE V27 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV27
+    pushd /hive/data/genomes/hg38/bed/gencodeV27
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    # generate trackDb and joiner blurb
+    pushd kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 27 90 'Aug 2017'
+
+    # Update human/hg38/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit human/hg38/trackDb.wgEncode.ra to add new .ra file include
+    make DBS=hg38
+
+    # edit  all.joiner to add ~/tmp/gencodeV27.joiner
+    # verify with:
+    pushd /hive/data/genomes/hg38/bed/gencodeV27
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+    # commit all
