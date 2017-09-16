@@ -2888,6 +2888,7 @@ urls variationId="http://www.uniprot.org/uniprot/$$" uniProtId="http://www.unipr
 mouseOverField comments
 exonNumbers off
 noScoreFilter on
+release beta,public
 
 track spMut
 shortLabel UniProt Variants
