@@ -3188,6 +3188,10 @@ if (!isCustomTrack(tdb->track))
     extraUiLinks(database,tdb);
     printTrackUiLink(tdb);
     struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
+    // also try the parent for composites/superTracks
+    if(trackVersion == NULL && (tdb->parent!=NULL))
+        trackVersion = getTrackVersion(database, tdb->parent->track);
+
     if(trackVersion == NULL)
         printDataVersion(tdb);
     else
