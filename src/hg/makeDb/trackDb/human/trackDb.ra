@@ -3452,17 +3452,40 @@ mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
 
-track snpedia
+track snpediaBoth
 shortLabel SNPedia
-longLabel SNPedia Text
-urlLabel SNPedia page:
+longLabel SNPedia
+urlLabel Link to SNPedia page
 group phenDis
 visibility hide
 color 50,0,100
 type bed 4
-itemDetailsHtmlTable snpediaHtml
 url https://www.snpedia.com/index.php/$$
+compositeTrack on
 release alpha,beta
+
+    track snpedia
+    parent snpediaBoth
+    shortLabel SNPedia with text
+    longLabel SNPedia pages with manually typed text
+    color 50,0,100
+    type bed 4
+    itemDetailsHtmlTable snpediaHtml
+    release alpha,beta
+
+    track snpediaAll
+    parent snpediaBoth
+    shortLabel SNPedia all
+    longLabel SNPedia all SNPs
+    color 50,0,100
+    type bigBed
+    bigDataUrl /gbdb/$D/bbi/snpediaAll.bb
+    release alpha,beta
+
+searchName snpediaAll
+searchTable snpediaAll
+searchMethod exact
+searchType bigBed
 
 track clinvar
 compositeTrack on
