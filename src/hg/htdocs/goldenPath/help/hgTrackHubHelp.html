@@ -811,10 +811,12 @@ your data and configuration files:</p>
   <li><a href="https://figshare.com/">Figshare</a></li>
 </ul>
 <p>
-Each of the providers above has a slightly different approach to hosting data to make things
-compatible with the UCSC Genome Browser. Additionally, as previously mentioned, any provider
-that supports byte-range access will work for hub hosting, and you are not limited to the above
-four sites. Below is a summarized guide for each of the providers mentioned above.</p>
+Each of the providers above has a slightly different approach to hosting data for
+compatibility with the UCSC Genome Browser, and may have different advantages and disadvantages,
+such as size limitations, usage statistics, and version control integration. Additionally, as 
+previously mentioned, any provider that supports byte-range access will work for hub hosting, 
+and you are not limited to the above sites. Below is a summarized guide for each of the providers 
+mentioned above.</p>
 
 <h3>Hosting Hubs on CyVerse</h3>
 <p>
@@ -824,9 +826,8 @@ needs. CyVerse supports free data hosting and byte-range access to hosted data, 
 perfect for hosting the binary data required for track hubs.</p>
 
 <p>In order to host your data on CyVerse, you first must create an account and then user their
-"Discovery Environment" to upload data:
-<a href="https://de.cyverse.org">https://de.cyverse.org</a>. After creating an account
-and uploading some data, you must give the data an "Info-Type". After giving an appropriate
+<a href="https://de.cyverse.org/de">Discovery Environment</a> to upload data. After creating an 
+account and uploading some data, you must give the data an "Info-Type". After giving an appropriate
 type (like &quot;bam&quot;), then you can click the <em>Share</em> menu item and click the 
 <em>Send to Genome Browser</em> link, which will result in a URL that you can use in the 
 <em>bigDataUrl</em> field of your trackDb.txt. Note this means after uploading your 
@@ -853,14 +854,30 @@ Galaxy is
 <p>
 <a href="https://github.com">Github</a> supports byte-range access to files when they are accessed
 via the <em><b>raw.githubusercontent.com</b></em> style URLs. To obtain a raw URL to a file already 
-uploaded on Github, click on a file in your repository and click the <em>Raw</em> button. Note that
+uploaded on Github, click on a file in your repository and click the <em>Raw</em> button:</p>
+<div class="text-center">
+  <img height="275px" width="55%" src="../../images/githubRawLink.png" alt="Location of the Raw button for generating a plaintext URL to a file hosted on Github.">
+</div>
+<p>
+The "Raw" button results in a plain text page like the following:</p>
+<div class="text-center">
+  <img width="65%" height="150px"  src="../../images/githubRawUrl.png" alt="Example of URL to a file on github">
+</div>
+<P>
+The <em>bigDataUrl</em> field (and any other statement pointing to a URL like 
+<em>bigDataIndex</em>, <em>refUrl</em>, <em>barChartMatrixUrl</em>, etc.) of your trackDb.txt file
+should use the "raw.githubusercontent.com" style URL as shown above.</p>
+<p>
+Note that
 similar to CyVerse, you will need to update your <em>trackDb.txt</em> <em>bigDataUrl</em> lines to
-point to their correct <em>"raw.githubusercontent.com</em> addresses. Please also note that HTML 
+point to their correct <em>raw.githubusercontent.com</em> addresses. Please also note that HTML 
 does not render properly from this address, and so you if you are also hosting your hub's 
-description page here, you will want to use a site like <a href="https://rawgit.com/">RawGit</a> as 
-your <em>descriptionUrl</em>. The advantage to hosting your data on Github is the built in version 
-control of the site, meaning you can view previous hub configurations and keep backups and history
-of your work automatically.
+description page here, you will want to use a site like <a href="https://rawgit.com/">RawGit</a> to 
+point to your <em>descriptionUrl</em>. The advantage to hosting your data on Github is the built in
+version control of the site, meaning you can view previous hub configurations and keep backups and
+history of your work automatically. The disadvantage of hosting on github is the 
+<a href="https://help.github.com/articles/what-is-my-disk-quota/">relatively small</a> file size 
+upload limit compared to other hosting providers.
 </p>
 
 <p>
@@ -877,10 +894,10 @@ to their <a href="https://github.com/contact">help desk</a>.
 <h3>Hosting hubs on figshare</h3>
 <p>
 <a href="https://figshare.com/">Figshare</a> is a site for researchers and institutions to upload
-and collect statistics on their data, as well as make their data shareable and discoverable. 
+and collect usage statistics on their data, as well as make their data shareable and discoverable. 
 The process for uploading a hub to Figshare is similar to process involved at CyVerse, where
 one must first create an account, upload the <em>bigDataUrl</em> files, create shareable links,
-and then edit your hub.txt, genomes.txt, and trackDb.txt appropriately. One advantage to using
+and then edit your <em>hub.txt</em>, <em>genomes.txt</em>, and <em>trackDb.txt</em> appropriately. One advantage to using
 Figshare is their emphasis on usage statistics, so institutional accounts can see how often
 their hubs and tracks are being accessed by others.</p>
 
