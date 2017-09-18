@@ -59,7 +59,7 @@ type bigBed 12 .
 visibility dense
 color 0,90,100
 priority 10
-urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField author
 
 track iedbBcellNeg
@@ -70,7 +70,7 @@ type bigBed 12 .
 visibility hide
 color 0,90,100
 priority 20
-urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField author
 
 track iedbTcellI
@@ -81,7 +81,7 @@ group immu
 type bigBed 12 .
 color 0,90,100
 visibility hide
-urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField mHCAlleleName
 
 track iedbTcellII
@@ -92,7 +92,7 @@ group immu
 color 0,90,100
 type bigBed 12 .
 visibility hide
-urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField mHCAlleleName
 
 track muPIT

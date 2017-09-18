@@ -454,12 +454,12 @@ files, try the ftp location first. If you find the files of interest are giving 
 errors, then one option is to download the files and locally load them from your own laptop. With 
 GBiB you can download these files to a local shared folder and then browse them. In the following
 example the URL of the bigWig (.bw) file was obtained for the wget by right clicking the http link 
-for this <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1186795">GSM1186795</a> 
+for this <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1186795">GSM1186795</a> 
 example, that only displays data on chrM and chrX.</p> 
 <pre><code>ssh browser@localhost -p 1235  (to enter GBiB from your computer terminal, password: browser)
 cd /folders
 sudo wget
-"http://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM1186795&format=file&file=GSM1186795%5FDZ012%5FTRA1%5FN2L3%5Ftr27%5Fce10%5FBTm1x200n%2Ebw" -O GSM1186795.bw </code></pre>
+"https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM1186795&format=file&file=GSM1186795%5FDZ012%5FTRA1%5FN2L3%5Ftr27%5Fce10%5FBTm1x200n%2Ebw" -O GSM1186795.bw </code></pre>
 <p>
 The file can then be found in the GBiB's 
 <a href="http://127.0.0.1:1234/folders/"><code>http://127.0.0.1:1234/folders/</code></a> location, 

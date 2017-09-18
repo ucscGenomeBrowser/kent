@@ -709,7 +709,7 @@ for (image = imageList; image != NULL; image = image->next)
     struct slName *geneList = geneProbeList(conn, paneId);
     struct slName *genbankRawList = visiGeneGenbank(conn, paneId);
     struct slName *genbankUrlList = wrapUrlList(genbankRawList, genbankRawList,
-        "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?"
+        "https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?"
 	"cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu");
     struct slName *probeList = getProbeList(conn, paneId);
     ce = captionElementNew(paneId, "Gene", makeCommaSpacedList(geneList));

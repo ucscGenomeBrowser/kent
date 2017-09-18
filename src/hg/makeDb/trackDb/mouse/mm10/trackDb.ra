@@ -11,7 +11,7 @@ labelFields soTerm
 group regulation
 url https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$
 urlLabel Gene ID: 
-urls pubMedIds=http://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
+urls pubMedIds=https://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
 mouseOverField _mouseOver
 
 # chainNet tracks
@@ -47,7 +47,7 @@ visibility hide
 colorByStrand 150,100,30 100,50,0
 type bed 6
 urlLabel NCBI Nucleotide:
-url http://www.ncbi.nlm.nih.gov/nuccore/$$
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 
 # different type of gold search here so the fragments can be found with
 #	or without their trailing .1

@@ -72,7 +72,7 @@ print STDERR "# working in: $here\n";
 
 if ($opt_mito) {
   print STDERR "# fetch mitochondrion sequence: $opt_mito";
-  print STDERR `wget -O $opt_mito.fa "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$opt_mito"`;
+  print STDERR `wget -O $opt_mito.fa "https://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$opt_mito"`;
   my @a = split('\s+', $sciName);
   my $seqCount = `grep ">" $opt_mito.fa | wc -l`;
   chomp $seqCount;

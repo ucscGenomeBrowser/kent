@@ -16,7 +16,7 @@ labelFields soTerm
 group regulation
 url https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$
 urlLabel Gene ID: 
-urls pubMedIds=http://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
+urls pubMedIds=https://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
 mouseOverField _mouseOver
 
 track cosmicRegions
@@ -112,7 +112,7 @@ longLabel Genome Reference Consortium Contigs
 group map
 visibility hide
 type ctgPos
-url http://www.ncbi.nlm.nih.gov/nuccore/$$
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 chromosomes chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chrX,chrY
 
 searchTable ctgPos2
@@ -155,7 +155,7 @@ scoreFilterByRange on
 itemRgb on
 color 0,0,0
 urlLabel Genbank accession:
-url http://www.ncbi.nlm.nih.gov/nuccore/$$
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 
 track centromeres
 shortLabel Centromeres
@@ -165,7 +165,7 @@ visibility hide
 type bed 4 .
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 color 255,0,0
-url http://www.ncbi.nlm.nih.gov/nuccore/$$
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel NCBI accession record:
 
 include ../chainNetPrimate.ra

@@ -115,7 +115,7 @@ printf("http://%s.nci.nih.gov/Reagents/CloneInfo?ORG=%s&IMAGE=%d",
 static void printOrderUrl(int gi)
 /* print out an URL to link to the NCBI order CGI for a full-length MGC clone */
 {
-printf("http://www.ncbi.nlm.nih.gov/genome/clone/orderclone.cgi?db=nucleotide&uid=%d", gi);
+printf("https://www.ncbi.nlm.nih.gov/genome/clone/orderclone.cgi?db=nucleotide&uid=%d", gi);
 }
 
 static void printImageUrl(int imageId)

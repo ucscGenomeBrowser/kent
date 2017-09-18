@@ -125,20 +125,22 @@ if (user)
         viewFunc = trackDbSetting(tdb, "viewFunc");
         if (viewFunc == NULL)
             viewFunc = "show all";
-        userString = "viewType='view' class='folder'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'viewType='view' class='folder'";
         }
     else if (tdb->subtracks)
-        userString = "viewType='track' class='folder'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track' class='folder'";
     else
-        userString = "viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/invisible16.png\\\"}' viewType='track'";
     }
 else
     {
     //prefix = "coll_";
     if (tdb->parent && tdb->subtracks) 
-        userString = "class='nodrop' viewType='view'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'class='nodrop' viewType='view'";
+    else if (tdb->subtracks)
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'class='nodrop' viewType='track'";
     else
-        userString = "class='nodrop' viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/invisible16.png\\\"}'class='nodrop' viewType='track'";
     }
     
         //userString = "viewType='track data-jstree='{'icon':'images/folderC.png'}''";
@@ -298,7 +300,7 @@ for(tdb = fullTrackList; tdb; tdb = tdb->next)
 slSort(&tdbRefList, tdbRefCompare);
 
 jsInlineF("<ul>");
-jsInlineF("<li class='nodrop' name='%s'>%s", "visibile", "Visible Tracks");
+jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' name='%s'>%s", "visibile", "Visible Tracks");
 jsInlineF("<ul>");
 for(tdbRef = tdbRefList; tdbRef; tdbRef = tdbRef->next)
     printGroup("visible", tdbRef->tdb, FALSE, FALSE);
@@ -342,7 +344,7 @@ if (curGroup != NULL)
         {
         if (sameString(tdb->grp, hubName))
             {
-            jsInlineF("<li class='nodrop' id='%s'  name='%s'>%s</li>", trackHubSkipHubName(tdb->track),trackHubSkipHubName(tdb->track), tdb->shortLabel);
+            jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' id='%s'  name='%s'>%s</li>", trackHubSkipHubName(tdb->track),trackHubSkipHubName(tdb->track), tdb->shortLabel);
             //printGroup("collections", tdb, TRUE, TRUE);
             }
         }
@@ -355,7 +357,7 @@ for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
         continue;
     jsInlineF("<ul>");
-    jsInlineF("<li class='nodrop' name='%s'>%s", curGroup->name, curGroup->label );
+    jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' name='%s'>%s", curGroup->name, curGroup->label );
     struct trackDb *tdb;
     jsInlineF("<ul>");
     for(tdb = fullTrackList; tdb;  tdb = tdb->next)
