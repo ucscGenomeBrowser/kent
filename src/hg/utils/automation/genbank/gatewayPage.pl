@@ -216,13 +216,13 @@ printf "<script type='text/javascript'>var asmId='%s';</script>\n", $asmId;
 
 printf "<p>
 <b>Common name: %s</b><br>
-<b>Taxonomic name: %s, taxonomy ID:</b> <a href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s\" target=_\"_blank\"> %s</a><br>
+<b>Taxonomic name: %s, taxonomy ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s\" target=_\"_blank\"> %s</a><br>
 <b>Sequencing/Assembly provider ID:</b> %s<br>
 <b>Assembly date:</b> %s<br>
 <b>Assembly type:</b> %s<br>
 <b>Assembly level:</b> %s<br>
-<b>Biosample:</b> <a href=\"http://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\"> %s</a><br>
-<b>Assembly accession ID:</b> <a href=\"http://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
+<b>Biosample:</b> <a href=\"https://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\"> %s</a><br>
+<b>Assembly accession ID:</b> <a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
 <b>Assembly FTP location:</b> <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/all/%s\" target=\"_blank\">%s</a><br>
 \n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
   $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $urlDirectory, $urlDirectory;

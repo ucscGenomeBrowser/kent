@@ -34,7 +34,7 @@ dataVersion GRCh38 Patch 3 update, Apr. 2015
         html hg38Patch3
         priority 1
         urlLabel NCBI Entrez Nucleotide record (GRCh38.p2):
-        url http://www.ncbi.nlm.nih.gov/nuccore/$$
+        url https://www.ncbi.nlm.nih.gov/nuccore/$$
 
         track hg38Patch3Patches
         parent hg38Patch3Location
@@ -45,7 +45,7 @@ dataVersion GRCh38 Patch 3 update, Apr. 2015
         html hg38Patch3
         priority 2
         urlLabel NCBI Entrez Nucleotide record (GRCh38.p2):
-        url http://www.ncbi.nlm.nih.gov/nuccore/$$
+        url https://www.ncbi.nlm.nih.gov/nuccore/$$
 
     track hg38Patch3Align
     shortLabel Alignment

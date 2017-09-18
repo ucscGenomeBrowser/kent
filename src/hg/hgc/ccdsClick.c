@@ -29,7 +29,7 @@ else
 void printCcdsExtUrl(char *ccdsId)
 /* Print out URL to link to CCDS database at NCBI */
 {
-printf("http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&BUILDS=ALLBUILDS&DATA=%s", ccdsId);
+printf("https://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&BUILDS=ALLBUILDS&DATA=%s", ccdsId);
 }
 
 static void printCcdsUrlForSrcDb(struct sqlConnection *conn, struct ccdsInfo *ccdsInfo)

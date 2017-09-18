@@ -60,7 +60,7 @@ while ((row = sqlNextRow(sr)) != NULL)
           printf("---------------------------------------------------------");
           printf("--------------------<BR>");
         }
-        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>", NBKid, grShort);
+        printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>", NBKid, grShort);
         if (strlen(grShort) <= 20) {
           for (i = 0; i <  20-strlen(grShort); i ++ )
              {
@@ -69,7 +69,7 @@ while ((row = sqlNextRow(sr)) != NULL)
            }
        printf("%s%s<BR>", spacer, grTitle);
 
-//        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>%s%s<BR>", NBKid, NBKid, spacer, grTitle);
+//        printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>%s%s<BR>", NBKid, NBKid, spacer, grTitle);
     }  /* end while */
  printf("</TT></PRE>");
  sqlFreeResult(&sr);
@@ -98,13 +98,13 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
           printf("<B>Related GeneReviews disease(s): </B>");
           firstTime = FALSE;
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>", NBKid, grShort);
+       printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>", NBKid, grShort);
         printf(" (");
        printf("%s", grTitle);
        printf(")");
         } else {
           printf(", ");
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+       printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
        printf(" (");
        printf("%s", grTitle);
        printf(")");

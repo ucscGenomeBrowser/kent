@@ -9,7 +9,7 @@ exonNumbers off
 compositeTrack on
 mouseOverField comments
 noScoreFilter on
-urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipFullSeq
         shortLabel Sequences
@@ -64,7 +64,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http:
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipChain.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipDisulfBond
         shortLabel Disulf. Bonds
@@ -83,7 +83,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http:
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipModif.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipStruct
         shortLabel Structure
@@ -94,7 +94,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http:
         visibility hide
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipStruct.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipOther
         shortLabel Other Annot.
@@ -104,7 +104,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http:
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipOther.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipRepeat
         shortLabel Repeats
@@ -114,7 +114,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http:
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipRepeats.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipConflict
         shortLabel Conflicts
@@ -124,7 +124,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http:
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipConflict.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
 searchTable unipFullSeq
 searchType bigBed
