@@ -61,7 +61,7 @@ class Submission(object):
 
 def getHtml(geoId):
     try:
-        response = urllib2.urlopen('http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s' % geoId)
+        response = urllib2.urlopen('https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s' % geoId)
     except:
         return None
     return response.read()

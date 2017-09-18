@@ -30,21 +30,21 @@ name refSeq
 shortLabel RefSeq
 tables ensXRefZfish
 idSql select refSeq from ensXRefZfish where ensGeneId = '%s'
-url http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
+url https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 priority 10
 
 name refSeqPep
 shortLabel RefSeq Peptide
 tables ensXRefZfish
 idSql select protAcc from ensXRefZfish where ensGeneId = '%s'
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=protein&term=%s&doptcmdl=GenPept&tool=genome.ucsc.edu
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=protein&term=%s&doptcmdl=GenPept&tool=genome.ucsc.edu
 priority 10
 
 name entrezGene
 shortLabel Entrez Gene
 tables ensXRefZfish
 idSql select geneId from ensXRefZfish where ensGeneId = '%s'
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s&tool=genome.ucsc.edu
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s&tool=genome.ucsc.edu
 priority 10
 
 name genBank

@@ -17,7 +17,7 @@ agpFiles /hive/data/genomes/rheMac8/ucsc/*.agp
 dbDbSpeciesDir rhesus
 photoCreditURL http://www.wakehealth.edu/Faculty/Kaplan-Jay-R.htm
 # photoCreditURL http://caplab.yale.edu/
-# http://www.ncbi.nlm.nih.gov/sutils/static/GP_IMAGE/rhesus.jpg
+# https://www.ncbi.nlm.nih.gov/sutils/static/GP_IMAGE/rhesus.jpg
 # photoCreditName Dr. Laurie Santos
 photoCreditName J.R. Kaplan
 ncbiGenomeId 215

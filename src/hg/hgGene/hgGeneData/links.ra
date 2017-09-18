@@ -67,21 +67,21 @@ priority 10
 #shortLabel RefSeq
 #tables kgXref
 #idSql select refseq from kgXref where kgID = '%s'
-#url http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
+#url https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 #priority 10
 
 name entrezGene
 shortLabel Entrez Gene
 tables kgXref hgFixed.refLink
 idSql select hgFixed.refLink.locusLinkId from kgXref,hgFixed.refLink where kgID = '%s' and kgXref.refseq = hgFixed.refLink.mrnaAcc
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
 priority 10
 
 #name genBank
 #shortLabel GenBank
 #tables kgXref
 #idSql select kgID from kgXref where kgID = '%s'
-#url http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
+#url https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 #priority 10
 
 name moped
@@ -95,7 +95,7 @@ name pubMed
 shortLabel PubMed
 tables kgXref
 idSql select geneSymbol from kgXref where kgID = '%s'
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
 priority 10
 
 name gepis
