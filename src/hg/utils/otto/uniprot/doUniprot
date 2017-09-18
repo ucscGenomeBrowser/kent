@@ -1,0 +1,799 @@
+#!/usr/bin/env python2
+import urllib2, time, os, datetime, optparse, sys, logging, subprocess, glob
+import sys, gzip, logging,re
+from ftputil import FTPHost # not found? run 'pip2.7 install ftputil'
+from urlparse import urlparse
+from os.path import *
+from os import system, makedirs, mkdir, remove
+from shutil import move
+from subprocess import PIPE
+import gzip
+from collections import defaultdict, namedtuple
+
+# main driver script for uniprot updates
+
+# Globals  ---
+upUrl = "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz"
+
+# mapping from uniProt taxon IDs to UCSC databases
+taxIdDbs = (
+    (9606 , ["hg19", "hg38"]), # human
+    (10090 , ["mm10"]), # mouse
+    (10116 , ["rn6"]), # rat
+    (8364 , ["xenTro9"]), # xenopus
+    (7227 , ["dm6"]), # fruitfly
+    (7955 , ["danRer10"]), # zebrafish
+    (4932 , ["sacCer3"]), # yeast
+    (6239 , ["ci3"]) # ciona
+)
+
+clusterFname = "/cluster/bin/scripts/cluster.txt"
+
+urls = {
+    #"var": "http://web.expasy.org/cgi-bin/variant_pages/get-sprot-variant.pl?",
+    "var": "http://www.uniprot.org/uniprot/",
+    "uniProt" : "http://www.uniprot.org/uniprot/",
+    "pubmed" : "http://www.ncbi.nlm.nih.gov/pubmed/"
+}
+
+# some feature types should not go into the bed name field. 
+# for these features, we use the 'comment' as the bed name
+# e.g. region of interest is not very interesting, the actual
+# description is usually much more interesting.
+useComment = set(["domain", "chain","region of interest","topological domain","short sequence motif"])
+
+# the feature type for the 'faked' full sequence features for the unipFullSeq track
+fullSeqType = "UniProt sequence"
+
+# mostly for the "other annotations" subtrack, to show the different types
+featTypeColors = {
+    "modified residue" : "200,200,0",
+    "glycosylation site" : "0,100,100",
+    "disulfide bond" : "100,100,100",
+    "topological domain" : "100,0,0"
+}
+
+# some very common disease codes are not in the diseases.txt file
+disShortNames = {
+    "hepatocellular carcinoma" : "HepatocC",
+    "a hepatocellular carcinoma" : "HepatocC",
+    "a hepatocellular carcinoma sample" : "HepatocC",
+    "hepatocellular carcinomas" : "HepatocC",
+    "ovarian cancer" : "OvC",
+    "colon cancer" : "ColC",
+    "colorectal cancer" : "ColrectC",
+    "hepatoblastoma" : "HepatoBl",
+    "a sporadic cancer": "sporadic",
+    "sporadic cancers": "sporadic",
+    "non-small cell lung cancer cell lines": "NSCLC-CL",
+    "a colon cancer cell line":"ColC-CL"
+}
+
+def parseArgs():
+    parser = optparse.OptionParser("""usage: %prog [options] [run] - run uniprot update: download UniProt, parse the annotations to .tab files, build liftOver .psls and lift the annotations to bigBed files, one set per genome db""")
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", \
+            help="show debug messages")
+    parser.add_option("", "--db", dest="db", action="store", \
+            help="only run on this database (debugging)")
+    parser.add_option("-l", "--skipDownload", dest="skipDownload", action="store_true", \
+            help="Skip the download step (debugging)")
+    parser.add_option("-p", "--skipParse", dest="skipParse", action="store_true", \
+            help="Skip the download and parsing step (debugging)")
+    parser.add_option("-u", "--uniprotDir", dest="uniprotDir", action="store", \
+            help="UniProt download data directory, default %default", default="/hive/data/outside/uniProt/current/")
+    parser.add_option("-t", "--tabDir", dest="tabDir", action="store", \
+            help="directory for Uniprot tab-sep and fasta files, default %default", default="tab")
+    parser.add_option("-m", "--mapDir", dest="mapDir", action="store", \
+            help="directory for pslMap (~liftOver) psl files, default %default", default="map")
+    parser.add_option("-b", "--bigBedDir", dest="bigBedDir", action="store", \
+            help="directory for bigBed files, one subdirectory per db will be created", default="bigBed")
+    parser.add_option("", "--onlyLinks", dest="onlyLinks", action="store_true", \
+            help="only create the /gbdb/ symlinks")
+
+    (options, args) = parser.parse_args()
+
+    if len(args)==0:
+        parser.print_help()
+        print("To actually run the pipeline, you need to specify the argument 'run'.")
+        print("Current databases: %s" % str(taxIdDbs))
+        sys.exit(1)
+
+    if options.debug:
+        consLevel = logging.DEBUG
+    else:
+        consLevel = logging.INFO
+
+    # '' is the root logger
+    logger = logging.getLogger('')
+    logger.setLevel(logging.DEBUG) #By default, logs all messages
+
+    # log to console
+    ch = logging.StreamHandler() #StreamHandler logs to console
+    ch.setLevel(consLevel)
+    ch_format = logging.Formatter('%(asctime)s - %(message)s')
+    ch.setFormatter(ch_format)
+
+    # also always log everything to file, appends by default
+    fname = abspath("doUniprot.log")
+    fh = logging.FileHandler(fname)
+    fh.setLevel(logging.DEBUG)
+    fh_format = logging.Formatter('%(asctime)s - %(lineno)d - %(levelname)-8s - %(message)s')
+    fh.setFormatter(fh_format)
+
+    logger.addHandler(fh)
+    logger.addHandler(ch)
+    logging.info("Logging debug messages to %s" % fname)
+
+    return args, options
+
+# -------------
+
+def iterTsvRows(inFile,encoding="utf8", fieldSep="\t", isGzip=False):
+    """ 
+        parses tab-sep file with headers as field names 
+        yields collection.namedtuples
+        strips "#"-prefix from header line
+    """
+
+    fh = inFile
+    line1 = fh.readline()
+    line1 = line1.strip("\n").strip("#")
+    headers = line1.split(fieldSep)
+    headers = [re.sub("[^a-zA-Z0-9_]","_", h) for h in headers]
+
+    Record = namedtuple('tsvRec', headers)
+    for line in fh:
+        line = line.rstrip("\n")
+        fields = line.split(fieldSep)
+        if encoding!=None:
+            fields = [f.decode(encoding) for f in fields]
+        try:
+            rec = Record(*fields)
+        except Exception, msg:
+            logging.error("Exception occured while parsing line, %s" % msg)
+            logging.error("Filename %s" % fh.name)
+            logging.error("Line was: %s" % line)
+            logging.error("Does number of fields match headers?")
+            logging.error("Headers are: %s" % headers)
+            raise Exception("wrong field count in line %s" % line)
+        # convert fields to correct data type
+        yield rec
+
+threeToOne = \
+    {'Cys': 'C', 'Asp': 'D', 'Ser': 'S', 'Gln': 'Q', 'Lys': 'K',
+     'Ile': 'I', 'Pro': 'P', 'Thr': 'T', 'Phe': 'F', 'Asn': 'N',
+     'Gly': 'G', 'His': 'H', 'Leu': 'L', 'Arg': 'R', 'Trp': 'W',
+     'Ala': 'A', 'Val':'V',  'Glu': 'E', 'Tyr': 'Y', 'Met': 'M',
+     'Sec': 'U' # very very rare amino acid (=stop codon)
+     }
+
+oneToThree = dict([[v,k] for k,v in threeToOne.items()])
+
+def aaToLong(seq):
+    " convert amino acid to three letter code "
+    res = []
+    for aa in seq:
+        longAa = oneToThree.get(aa, aa)
+        if longAa==aa:
+            print "unknown iupac", aa
+        res.append(longAa)
+    return "-".join(res)
+
+def shortenDisCodes(disCodes):
+    " some disease names are not shortened yet by UniProt. Do this now. "
+    #print "XX", disNames, disCodes
+    #assert(len(disNames)==len(disCodes))
+    newCodes = []
+    for code in disCodes:
+        if " and " in code:
+            splitCodes = code.split(" and ")
+            newCodes.append(disShortNames.get(splitCodes[0], splitCodes[0]))
+            newCodes.append(disShortNames.get(splitCodes[1], splitCodes[1]))
+        else:
+            newCodes.append(disShortNames.get(code, code))
+    return newCodes
+    #return list(set(newCodes))
+
+def htmlLink(urlType, accs):
+    # at the moment, not creating any html links, but this may be needed one day later, when
+    # the links are not as well-formed as they are at the moment
+    #strList = []
+    #for acc in accs:
+        #strList.append('<a href="%s%s">%s</a>' % (urls[urlType], acc, acc))
+    #return ", ".join(strList)
+    return ",".join(accs)
+
+def makeBedLine(annots, bed, isMut, pmids):
+    """ convert a list of annotation objects and a bed with their positions to a single BED
+    line with extra fields
+    """
+    firstAnnot = annots[-1]
+    disStatus = set([a.disRelated for a in annots])
+    comments = [a.comment for a in annots if a.comment!=""]
+    diseases = list([a.disease for a in annots if a.disease!=""])
+    disCodes = list([a.disCode for a in annots if a.disCode!=""])
+    disCodes = shortenDisCodes(disCodes)
+
+    acc = annots[0].acc
+    dbSnpIds = [a.dbSnpId for a in annots]
+
+    # set the bed name field to a disease, to the mutation or something else
+    if isMut and firstAnnot.origAa=="":
+        bed[3] = "%s-%sdel" % (firstAnnot.begin, firstAnnot.end)
+    else:
+        bed[3] = "%s%s%s" % (firstAnnot.origAa, firstAnnot.begin, firstAnnot.mutAa)
+
+    disName = ",".join(disCodes)
+    if len(disName)>30:
+        disName = disName[:30]+"..."
+    if len(disCodes)>0 and not "strain" in disName:
+        bed[3] += " in %s" % disName
+
+    if firstAnnot.featType=="sequence variant":
+        annoType = "Naturally occurring sequence variant"
+        bed[8] = "100,0,0"
+    elif firstAnnot.featType=="mutagenesis site":
+        annoType = "Experimental mutation of amino acids"
+        bed[8] = "0,0,100"
+    else:
+        bed[3] = firstAnnot.shortFeatType
+        if firstAnnot.featType in useComment:
+            bed[3] = firstAnnot.comment
+
+        if firstAnnot.featType=="signal peptide":
+            bed[3] = "Signal peptide"
+        if firstAnnot.featType=="lipid moiety-binding region":
+            bed[3] = "Lipidation"
+        if firstAnnot.featType=="transmembrane region":
+            bed[3] = "Transmembrane"
+        if firstAnnot.featType==fullSeqType:
+            bed[3] = firstAnnot.acc
+            
+        if firstAnnot.comment=="Nuclear localization signal":
+            bed[3] = "Nuclear loc"
+        if firstAnnot.comment=="Involved in receptor recognition and/or post-binding events":
+            bed[3] = "Recept recog"
+        if firstAnnot.comment=="Fibronectin type-III":
+            bed[3] = "FibronectIII"
+
+        # more general rules
+        if firstAnnot.comment.startswith("Zinc finger protein "):
+            bed[3] = firstAnnot.comment.replace("Zinc finger protein ", "ZF-")
+        if firstAnnot.comment.startswith("Necessary for the"):
+            bed[3] = firstAnnot.comment.replace("Necessary for the ", "")
+        if firstAnnot.comment.startswith("Interaction with "):
+            bed[3] = firstAnnot.comment.replace("Interaction with ", "Int:")
+        if firstAnnot.comment.startswith("Involved in the"):
+            bed[3] = firstAnnot.comment.replace("Involved in the ", "")
+        if firstAnnot.comment.startswith("Required for "):
+            bed[3] = firstAnnot.comment.replace("Required for ", "")
+        if firstAnnot.comment.startswith("Cleavage; by host "):
+            bed[3] = "Cleave:"+firstAnnot.comment.split()[-1]
+
+        if bed[3] == "Intrinsically disordered":
+            bed[3] = "Disordered"
+        
+        if len(bed[3])>17:
+            bed[3] = bed[3][:14]+"..."
+
+        annoType = firstAnnot.featType
+        bed[8] = featTypeColors.get(firstAnnot.featType, "0,0,0")
+
+        if annoType=="strand":
+            annoType="beta strand"
+
+    bed.append(annoType)
+    if isMut:
+        bed.append(",".join(diseases))
+
+    if isMut:
+        # create description of mutation
+        if int(firstAnnot.end)-int(firstAnnot.begin)==1:
+            posStr = "position %s" % firstAnnot.begin
+        else:
+            posStr = "position %s-%s" % (firstAnnot.begin, firstAnnot.end)
+
+        if firstAnnot.origAa=="":
+            bed.append("%s, removal of amino acids" % (posStr))
+        else:
+            bed.append("%s, %s changed to %s" % \
+                (posStr, aaToLong(firstAnnot.origAa), aaToLong(firstAnnot.mutAa)))
+    else:
+        #  just position of feature
+        if int(firstAnnot.end)-int(firstAnnot.begin)==1:
+            posStr = "amino acid %s" % str(int(firstAnnot.begin)) # show a 1-based coordinate
+        else:
+            posStr = "amino acids %s-%s" % (firstAnnot.begin, str(int(firstAnnot.end)-1))
+        posStr += " on protein %s" % firstAnnot.acc
+        bed.append(posStr)
+
+    comments = [com for com in comments if com.strip()!=""]
+    commentField = ", ".join(comments)
+    if len(diseases)!=0:
+        commentField = ",".join(diseases) + "; " + commentField
+    bed.append(commentField)
+    if isMut:
+        varIds = [firstAnnot.varId for firstAnnot in annots]
+        if varIds!=[""]:
+            varIds = ["%s#%s|%s" % (acc, x, x) for x in varIds] # Andrew Nightingale request that we link to UniProt, not SwissProt
+        bed.append(htmlLink('var', varIds))
+        dbSnpIds = [id for id in dbSnpIds if id.strip()!=""]
+        bed.append(",".join(dbSnpIds))
+    bed.append(htmlLink('uniProt', [acc]))
+    bed.append(htmlLink('pubmed', pmids))
+    bed[5] = "."
+    bedLine = "\t".join(bed)+"\n"
+    return bedLine
+
+def parseSizes(inFname):
+    # keep protein lengths for later, we'll add one feature for every protein sequence
+    seqSizes = {}
+    for line in open(inFname):
+        seq, size = line.rstrip("\n").split()
+        seqSizes[seq] = int(size)/3
+    return seqSizes
+
+def makeSeqSizes(uniprotFa, outFname):
+    " create a file with the lengths of the uniprot seqs "
+    if not isfile(uniprotFa):
+        raise Exception("Not found: %s" % uniprotFa)
+
+    print "writing nucleotide lengths of %s to %s" % (uniprotFa, outFname)
+    cmd = "faSize %s -detailed | gawk '{$2=$2*3; print}'> %s" % (uniprotFa, outFname)
+    run(cmd)
+
+def writeProtBed(uniProtAnnotName, protBedName, seqSizes):
+    " write bed file in prot coordinates, one bed per uniprot annotation "
+    logging.debug("converting UniProt tab %s to bed %s" % (uniProtAnnotName, protBedName))
+    ofh = open(protBedName, "w")
+
+    logging.debug("Reading %s" % uniProtAnnotName)
+    # index data by pos and write coords to BED
+    doneAnnots = set()
+    Record = None
+    for annot in iterTsvRows(open(uniProtAnnotName)):
+        if annot.acc not in seqSizes:
+            logging.warn("skipping %s, not in temp/chromSizes" % annot.acc)
+            continue
+        #annotName = annot.featType.replace(" ", "_")+":"+annot.acc+":"+annot.origAa+annot.begin+annot.mutAa
+        annotName = annotToString(annot)
+
+        annotPos = 3*(int(annot.begin)-1)
+        annotPosEnd = 3*(int(annot.end)-1)
+        if annotName not in doneAnnots:
+            ofh.write("\t".join([annot.acc, str(annotPos), str(annotPosEnd), annotName])+"\n")
+        doneAnnots.add(annotName)
+
+        if Record is None:
+            Record = namedtuple('fullSeqRec', annot._fields)
+
+    # add one line for every accession, 
+    for accId, accSize in seqSizes.iteritems():
+        annot = fakeAnnot(Record, accId, accSize)
+        annotName = annotToString(annot)
+        ofh.write("\t".join([accId, str(0), str(accSize*3), annotName]))
+        ofh.write("\n")
+
+    ofh.close()
+    
+def annotToString(annot):
+    annotName = "|".join(annot).replace(" ", "_")
+    assert("\t" not in annotName)
+    return annotName
+
+def fakeAnnot(Record, seqId, seqSize):
+    " create a faked uniProt annotation with just the full sequence "
+    empty = {k:"" for k in Record._fields}
+    empty["comment"] = "Complete sequence %s mapped to the genome" % seqId
+    empty["acc"] = seqId
+    empty["begin"] = str(1) # UniProt is 1-based, like most protein resources
+    empty["end"] = str(seqSize) # and inclusive?
+    empty["featType"] = fullSeqType
+    fakeAnnot = Record(**empty)
+    return fakeAnnot
+
+def parseAnnots(uniProtAnnotName, seqSizes):
+    """ return uniprot annots indexed by their featType:acc:from:to key 
+    adds pseudo features of featType fullSeq from first to last position.
+    """
+    logging.debug("Parsing %s" % uniProtAnnotName)
+    annotData = defaultdict(list)
+
+    Record = None
+    for annot in iterTsvRows(open(uniProtAnnotName)):
+        #annotName = annot.featType.replace(" ", "_")+":"+annot.acc+":"+annot.origAa+annot.begin+annot.mutAa
+        annotName = annotToString(annot)
+        annotData[annotName].append(annot)
+        # keep a copy of the fields for later
+        if Record is None:
+            Record = namedtuple('fullSeqRec', annot._fields)
+
+    logging.debug("Found %d annotations" % len(annotData))
+    # now add entries for all protein sequences
+    for seqId, seqSize in seqSizes.iteritems():
+        annot = fakeAnnot(Record, seqId, seqSize)
+        annotData[annotToString(annot)] = [annot]
+
+    logging.debug("Added entries for full sequences, now at %d annotations" % len(annotData))
+    return annotData
+
+#       0 temp/spDisulfBond.bed
+#       0 temp/spDomain.bed
+
+def convertToBigBed(bedFiles, genomeChromSizesFname, bigBedDir):
+    for f in bedFiles.values():
+        f.close()
+
+    bbFnames = []
+    for trackName, bedFile in bedFiles.iteritems():
+        asFname = "bed12UniProtAnnot.as"
+        if trackName=="unipMut":
+            asFname = "bed12UniProtMut.as"
+        bedFname = bedFile.name
+        assert(isfile(bedFname))
+        bbFname = join(bigBedDir, trackName+".bb")
+        bbFnames.append(bbFname)
+
+        addOpt = ""
+        if "FullSeq" in bedFname:
+            addOpt = "-extraIndex=uniProtId"
+        cmd = "bedToBigBed -as=%(asFname)s %(bedFname)s %(genomeChromSizesFname)s %(bbFname)s -type=bed12+ -tab %(addOpt)s" % locals()
+        run(cmd)
+        assert(isfile(bbFname))
+
+    return bbFnames
+
+def moveBigBedToOutDir(bbFnames, outDir):
+    for bbFname in bbFnames:
+        targetFname = join(outDir, basename(bbFname))
+        logging.debug("moving %s to %s" % (bbFname, targetFname))
+        if isfile(targetFname):
+            logging.debug("Removing old file %s" % targetFname)
+            remove(targetFname)
+        move(bbFname, targetFname)
+
+def uniprotLift(seqFname, annotFname, genomeChromSizesFname, liftFname, outDir):
+    " lift uniProt annotations from annotFname using liftFname and write bigBed files to outDir "
+
+    logging.debug("lifting %(annotFname)s using %(liftFname)s and writing bigBeds to %(outDir)s" % locals())
+    tempDir = "uniprotLift-"+basename(liftFname).split(".")[0]+".tmp"
+
+    protSizesFname = join(tempDir, "protein.sizes")
+    genomeBedName = join(tempDir, "genomeCoords.bed")
+    protBedName = join(tempDir, "protCoords.bed")
+
+    #if options.debug not isfile(genomeBedName):
+    logging.debug("Cleaning directory %s, used for all temp files" % tempDir)
+    cmd = "rm -rf %s; mkdir %s" % (tempDir, tempDir)
+    run(cmd)
+
+    makeSeqSizes(seqFname, protSizesFname)
+    seqSizes = parseSizes(protSizesFname)
+    writeProtBed(annotFname, protBedName, seqSizes)
+
+    logging.debug("lifting to genome coords")
+    cmd = "bedToPsl %(protSizesFname)s %(protBedName)s stdout | pslMap stdin %(liftFname)s stdout | pslToBed stdin stdout | LC_COLLATE=C sort -k1,1 -k2,2n | bedFixBlockOverlaps /dev/stdin > %(genomeBedName)s" % locals()
+    run(cmd)
+
+    seqSizes = parseSizes(protSizesFname)
+    annotData = parseAnnots(annotFname, seqSizes)
+
+    logging.debug("Adding extra fields to lifted coords")
+    # read lifted bed and add uniprot annotations to it as additional fields
+
+    tracks = [
+        "unipFullSeq", # full protein sequence on genome
+        "unipMut", # variants
+        "unipStruct", # structural features
+        "unipSplice", # splice variants
+        "unipRepeat", # repeated regions
+        "unipConflict", # sequence conflicts
+        #"unipBlacklist", #blacklisted high-throughput-only features
+        "unipLocSignal", "unipLocExtra", "unipLocTransMemb", "unipLocCytopl", # localization-related
+        "unipDomain", "unipModif", "unipChain", "unipDisulfBond", # domains, etc
+        "unipOther", # all other features
+    ]
+
+    bedFiles = {}
+    for t in tracks:
+        bedFiles[t] = open(join(tempDir, t+".bed"), "w")
+
+    count = 0 # total number of annotations
+    blackCount = 0 # number of blacklisted annotations
+
+    doneAnnots = set() # to indentify overlaps: a set with (seq, start, end, name)
+    # this is important because the pslMap file may use multiple transcripts for each protein and 
+    # as such can result in multiple mappings that all are exactly at the same place in the genome
+    # we use the original bed file keys to check if we have mapped something already to the same place
+    # (see below)
+
+    # bed name is featureType:accession:start:aminoAcidChange
+
+    logging.debug("parsing %s" % genomeBedName)
+    for line in open(genomeBedName):
+        bed = line.strip().split()
+
+        # pull out the original full annotation details for these coordinates
+        bedName = bed[3]
+        annots = annotData[bedName]
+
+        if len(annots)==0:
+            print bedName
+            raise Exception() # internal error
+
+        pmids = set()
+        for annot in annots:
+            pmids.update(annot.pmid.split(","))
+
+        if len(annots)>1:
+            logging.debug("? multiple annotations for key %s" % bedName)
+
+        annot = annots[0]
+        isMut = False
+
+        if annot.featType in ["mutagenesis site", "sequence variant"]:
+            isMut = True
+            ofh = bedFiles["unipMut"]
+        elif annot.featType in ["splice variant"]:
+            ofh = bedFiles["unipSplice"]
+        #elif len(pmidBlackList.intersection(pmids))==len(pmids):
+            #blackCount +=1
+            #ofh = bedFiles["unipBlacklist"]
+        elif annot.featType in ["strand","helix", "coiled-coil region", "turn"]:
+            ofh = bedFiles["unipStruct"]
+        # suggested by Regeneron: create four subtracks, for the subcell. localization indicators
+        elif annot.featType in ["transmembrane region"]:
+            ofh = bedFiles["unipLocTransMemb"]
+        elif annot.comment in ["Extracellular"]:
+            ofh = bedFiles["unipLocExtra"]
+        elif annot.comment in ["Cytoplasmic"]:
+            ofh = bedFiles["unipLocCytopl"]
+        elif annot.featType in ["signal peptide"]:
+            ofh = bedFiles["unipLocSignal"]
+        elif annot.featType in ["chain"]:
+            ofh = bedFiles["unipChain"]
+        elif annot.featType in ["repeat"]:
+            ofh = bedFiles["unipRepeat"]
+        elif annot.featType == "sequence conflict":
+            ofh = bedFiles["unipConflict"]
+        elif annot.featType in ["disulfide bond"]:
+            ofh = bedFiles["unipDisulfBond"]
+        elif annot.featType in ["zinc finger region", "topological domain"]:
+            ofh = bedFiles["unipDomain"]
+        elif annot.featType in ["glycosylation site", "modified residue", "lipid moiety-binding region"]:
+            ofh = bedFiles["unipModif"]
+        elif annot.featType==fullSeqType:
+            ofh = bedFiles["unipFullSeq"]
+        # everything else
+        else:
+            ofh = bedFiles["unipOther"]
+
+        bedLine = makeBedLine(annots, bed, isMut, pmids)
+
+        # skip annotations that we most likely have done before: same accession + genome position + protein position + same feature type
+        #keyFields = tuple(bedLine.split("\t")[:4])
+        keyFields = [bed[0], bed[1], bed[2]]
+        keyFields.extend(annot)
+        keyFields = tuple(keyFields)
+        if keyFields in doneAnnots:
+            #if "Q99697" in keyFields[-1]:
+                #logging.debug("PITX2 skip "+ keyFields)
+            continue
+
+        doneAnnots.add(keyFields)
+        ofh.write(bedLine)
+        count += 1
+
+    logging.info("%d features written to bedfiles in %s" % (count, tempDir))
+
+    bigBedDir = join(tempDir, "bigBed")
+    if not isdir(bigBedDir):
+        logging.debug("Making dir %s" % bigBedDir)
+        mkdir(bigBedDir)
+    bbFnames = convertToBigBed(bedFiles, genomeChromSizesFname, bigBedDir)
+
+    moveBigBedToOutDir(bbFnames, outDir)
+
+    #cmd = "rm -rf %s" % tempDir
+    #run(cmd)
+
+def isNewer(url, localFname):
+    " return true if url is more recent than localFname "
+    # little helper class to download only the http HEAD
+    class HeadRequest(urllib2.Request):
+        def get_method(self):
+            return "HEAD"
+
+    # get the mtime of the file on the server
+    if url.startswith("http"):
+        response = urllib2.urlopen(HeadRequest(url))
+        timeStr = response.headers.getheader("Last-Modified")
+        serverTime = datetime.datetime.fromtimestamp(time.mktime(time.strptime(timeStr, "%a, %d %b %Y %H:%M:%S GMT")))
+    elif url.startswith("ftp://"):
+        # https://stackoverflow.com/questions/25724497/getting-servers-date-using-ftp
+        u = urlparse(url)
+        with FTPHost(u.netloc, "anonymous", "genome-www@soe.ucsc.edu") as host:
+            mod_time = host.path.getmtime(u.path)
+            serverTime = datetime.datetime.fromtimestamp(1382189138.4196026)
+
+    # get the mtime of the flag file
+    localTime = datetime.datetime.fromtimestamp(0)
+    if os.path.isfile(localFname):
+        t = os.path.getmtime(localFname)
+        localTime = datetime.datetime.fromtimestamp(t)
+
+    if serverTime > localTime:
+        logging.debug("URL %s is newer than %s" % (url, localFname))
+        return True
+    else:
+        logging.debug("URL %s is not newer than %s" % (url, localFname))
+        return False
+
+def run(cmd, ignoreErr=False):
+    " run command, stop on error "
+    logging.debug(cmd)
+    cmd = "set -o pipefail; "+cmd
+    ret = os.system(cmd)
+    if ret!=0 and not ignoreErr:
+        logging.error("command returned error: %s" % cmd)
+        sys.exit(ret)
+
+def fastaMd5(fname):
+    " sort gzipped fasta by id and return its md5 "
+    logging.debug("Getting md5 of sorted seqs in %s" % fname)
+    cmd = """zcat %s | awk 'BEGIN{RS=">"}{print $1"\t"$2;}' | sort -k1,1 | md5sum""" % fname
+    proc = subprocess.Popen(cmd, stdout=PIPE, shell=True)
+    md5 = proc.stdout.readline().split()[0]
+    return md5
+
+def findBestGeneTable(db):
+    " find the best gene table for a given organism and return it "
+    for table in ["knownGene", "ensGene"]:
+        cmd = "hgsql %s -e 'DESCRIBE %s' > /dev/null 2>&1 " % (db, table)
+        ret = os.system(cmd)
+        if ret==0:
+            logging.debug("Best gene table for db %s is %s" % (db, table))
+            return table
+    return None
+
+def gz_is_empty(fname):
+    # from https://stackoverflow.com/questions/37874936/how-to-check-empty-gzip-file-in-python
+    ''' Test if gzip file fname is empty
+        Return True if the uncompressed data in fname has zero length
+        or if fname itself has zero length
+        Raises OSError if fname has non-zero length and is not a gzip file
+    '''
+    with gzip.open(fname, 'rb') as f:
+        data = f.read(1)
+    return len(data) == 0
+
+def updateUniprot(args, options):
+    uprotDir = options.uniprotDir
+    tabDir = options.tabDir
+    mapDir = options.mapDir
+    bigBedDir = options.bigBedDir
+
+    relFname = join(tabDir, "version.txt")
+
+    if not options.skipDownload and not options.skipParse:
+        localFname = join(uprotDir, "uniprot_sprot.xml.gz")
+        if not isNewer(upUrl, localFname):
+            logging.info("files at %s are not newer than file in %s, nothing to do. Specify -l to skip this check." % (upUrl, localFname))
+            sys.exit(0)
+
+        # use lftp to update uniprot and download only changed files
+        cmd = 'lftp ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/ -e "lcd %s && mirror --use-pget-n=10 --exclude-glob *.dat.gz -P 5 && exit' % uprotDir
+        run(cmd)
+
+        relString = open(join(uprotDir, "reldate.txt")).read().splitlines()[1]
+        relFh = open(relFname, "w")
+        relFh.write(relString)
+        relFh.close()
+        logging.debug("Wrote release line '%s' to %s" % (relString, relFname))
+
+    logging.info("Converting uniprot from %s to %s, using maps in %s" % (uprotDir, tabDir, mapDir))
+    if not options.skipParse:
+        # parsing the UniProt XML files
+        logging.info("Converting uniprot XML from %s to tab-sep in %s, ~15 minutes. Specify -p to skip this." % (uprotDir, tabDir))
+        dbToTaxIds = {}
+        if options.db:
+            for taxId, dbs in taxIdDbs:
+                for db in dbs:
+                    dbToTaxIds[db] = taxId
+            taxIds = [dbToTaxIds[options.db]]
+        else:
+            taxIds = [x for (x,y) in taxIdDbs] # just the taxIds themselves
+        taxIdStr = ",".join([str(x) for x in taxIds])
+        cmd="uniprotToTab %s %s %s" % (uprotDir, taxIdStr, tabDir)
+        run(cmd)
+
+    # if the uniprot update changed the sequences, update the corresponding pslMap files of that genome
+    logging.info("checking/creating pslMap files")
+    run("mkdir -p %s" % mapDir)
+
+    # parasol cluster name
+    #if isfile(clusterFname):
+    assert(isfile(clusterFname)) # not running at UCSC?
+    cluster = open(clusterFname).read().strip()
+
+    # get the uniProt version for the trackVersion entry
+    relFname = join(tabDir, "version.txt")
+    versionString = open(relFname).read().strip().split()[2]
+    assert(len(versionString)==7)
+    userName = os.getlogin()
+
+    for taxId, dbs in taxIdDbs:
+        if options.db and options.db not in dbs:
+            continue
+        logging.debug("Working on taxon ID %d" % taxId)
+        fa = join(tabDir,"uniprot.%d.fa.gz" % taxId)
+        if gz_is_empty(fa):
+            logging.warn("%s is empty, skipping this organism" % fa)
+            continue
+        md5 = fastaMd5(fa)[:15]
+        logging.debug("md5 is %s" % md5)
+
+        # find the best gene table for each database, create a mapping protein -> genome and lift the uniprot annotations to bigBed files
+        for db in dbs:
+            if options.db and db!=options.db:
+                continue
+            logging.debug("Working on %s" % db)
+            geneTable = findBestGeneTable(db)
+            mapFname = join(mapDir, "%(taxId)s_%(db)s_%(geneTable)s_%(md5)s.psl" % locals())
+            if isfile(mapFname):
+                logging.debug("%s already exists" % mapFname)
+            else:
+                logging.debug("%s does not exist" % mapFname)
+                if geneTable is None:
+                    logging.error("Could not find a gene table for %s" % db)
+                    continue
+                cmd = "time makeUniProtPsl.sh tab/uniprot.%(taxId)d.fa.gz %(db)s %(geneTable)s %(cluster)s %(mapFname)s" % locals()
+                run(cmd)
+
+            dbBigBedDir = join(bigBedDir, db)
+            if not isdir(dbBigBedDir):
+                mkdir(dbBigBedDir)
+            #cmd = "time uniprotLift tab/uniprot.%(taxId)d.fa.gz tab/uniprot.%(taxId)d.annots.tab /hive/data/genomes/%(db)s/chrom.sizes %(mapFname)s %(dbBigBedDir)s" % locals()
+            #run(cmd)
+            uniprotLift("tab/uniprot.%d.fa.gz" % taxId, "tab/uniprot.%d.annots.tab" % taxId, \
+                    "/hive/data/genomes/%s/chrom.sizes" % db, mapFname, dbBigBedDir)
+
+            # add a trackVersion entry
+            assert("'" not in versionString)
+            assert('"' not in versionString)
+            sql = '''INSERT INTO trackVersion values (NULL, '%s', 'uniprot', '%s', '%s', now(), '%s', 'doUniprot otto cronjob', '%s');''' % (db, userName, versionString, taxId, upUrl)
+            cmd = """hgsql hgFixed -e "%s";""" % sql
+            run(cmd)
+
+def makeLinks(bigBedDir, onlyDb):
+    " check the /gbdb symlinks "
+    for taxId, dbs in taxIdDbs:
+        for db in dbs:
+            if onlyDb is not None and db!=onlyDb:
+                continue
+            dbBigBedDir = join(bigBedDir, db)
+
+            bbTargetDir = join("/gbdb", db, "uniprot")
+            if not isdir(bbTargetDir):
+                logging.info("Making %s" % bbTargetDir)
+                os.mkdir(bbTargetDir)
+            bbFnames = glob.glob(join(dbBigBedDir, "*.bb"))
+            logging.info("Found %d bigBed files in %s" % (len(bbFnames), dbBigBedDir))
+
+            for bbFname in bbFnames:
+                bbLink = join(bbTargetDir, basename(bbFname))
+                if isfile(bbLink):
+                    continue
+                bbPath = abspath(bbFname)
+                cmd = "ln -sf %(bbPath)s %(bbLink)s " % locals()
+                logging.info("Running %s" % cmd)
+                run(cmd)
+
+def main():
+    args, options = parseArgs()
+
+    if not options.onlyLinks:
+        updateUniprot(args, options)
+    makeLinks(options.bigBedDir, options.db)
+
+main()

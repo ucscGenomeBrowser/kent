@@ -13,9 +13,9 @@ table bed12UniProtAnnot
     int blockCount;    "Number of blocks"
     int[blockCount] blockSizes; "Comma separated list of block sizes"
     int[blockCount] chromStarts; "Start positions relative to chromStart"
-    lstring annotationType;        "Annotation Type"
-    lstring position;       "Position"
+    string annotationType;        "Annotation Type"
+    string position;       "Position"
     lstring comments;       "Comment"
-    lstring uniProtId;       "UniProt record"
+    string uniProtId;       "UniProt record"
     lstring pmids;       "Source articles"
     )

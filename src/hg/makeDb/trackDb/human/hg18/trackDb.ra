@@ -1552,7 +1552,7 @@ longLabel SNPs from dbSNP that overlap regions masked by 1000 Genomes pilot
 group varRep
 type bed 6 +
 exonArrows off
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 
     track snp130BadApplesDepth
@@ -3721,7 +3721,7 @@ scoreFilterByRange on
 itemRgb on
 color 0,0,0
 urlLabel Genbank accession:
-url http://www.ncbi.nlm.nih.gov/nuccore/$$
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 
 track evoCpg
 shortLabel Evo Cpg
@@ -3784,7 +3784,7 @@ group varRep
 visibility hide
 type bedDetail 14
 itemRgb on
-url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&sendto=t&extrafeatpresent=1&list_uids=$$
+url https://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&sendto=t&extrafeatpresent=1&list_uids=$$
 
 track microCuratedVars
 shortLabel Curated variants

@@ -98,11 +98,11 @@ photoCreditName string for photo credit
 
 ncbiGenomeId nnnnn
   - A numeric NCBI identifier for the genome information reference at
-    http://www.ncbi.nlm.nih.gov/genome/nnnnn
+    https://www.ncbi.nlm.nih.gov/genome/nnnnn
 
 ncbiAssemblyId nnnnn
   - A numeric NCBI identifier for the assembly. To determine this, do an
-    NCBI Assembly query at http://www.ncbi.nlm.nih.gov/assembly/,
+    NCBI Assembly query at https://www.ncbi.nlm.nih.gov/assembly/,
     using the scientific name \"Xxxxxx yyyyyy\" and choose a project ID that 
     match the assembly name.
 
@@ -113,11 +113,11 @@ ncbiAssemblyName xxxxxrr
 
 ncbiBioProject nnnnn
   - The NCBI bioproject number to construct the URL:
-    http://www.ncbi.nlm.nih.gov/bioproject/nnnnn
+    https://www.ncbi.nlm.nih.gov/bioproject/nnnnn
 
 ncbiBioSample nnnnn
   - A numeric NCBI identifier for the genome information reference at
-    http://www.ncbi.nlm.nih.gov/biosample/nnnnn
+    https://www.ncbi.nlm.nih.gov/biosample/nnnnn
 
 genBankAccessionID GCA_nnn
   - The NCBI assembly accession identification from the ASSEMBLY_INFO file
@@ -372,9 +372,9 @@ sub getMito {
     $bossScript->add(<<_EOF_
 mkdir M
 wget -O $mitoFile \\
-  'http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc'
+  'https://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc'
 
-# old url  'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&rettype=fasta&id=$mitoAcc&retmode=text'
+# old url  'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&rettype=fasta&id=$mitoAcc&retmode=text'
 
 
 # Make sure there's exactly one fasta record:
@@ -1003,7 +1003,7 @@ sub makeDescription {
 <!-- Display image in righthand corner -->
 <TABLE ALIGN=RIGHT BORDER=0 WIDTH=$borderWidth>
   <TR><TD ALIGN=RIGHT>
-    <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET=_blank>
+    <A HREF="https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET=_blank>
     <IMG SRC="../images/$sciUnderscore.$imgExtn" WIDTH=$width HEIGHT=$height ALT="$genome"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
@@ -1021,13 +1021,13 @@ sub makeDescription {
 <B>Sequencing/Assembly provider ID:</B> $assemblyLabel $ncbiAssemblyName<BR>
 <B>Assembly date:</B> $assemblyDate<BR>
 <B>Accession ID:</B> $genBankAccessionID<BR>
-<B>NCBI Genome ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId"
+<B>NCBI Genome ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId"
 TARGET="_blank">$ncbiGenomeId</A> ($scientificName)<BR>
-<B>NCBI Assembly ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
+<B>NCBI Assembly ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
 TARGET="_blank">$ncbiAssemblyId</A> ($ncbiAssemblyName)<BR>
-<B>NCBI BioProject ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject"
+<B>NCBI BioProject ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject"
 TARGET="_blank">$ncbiBioProject</A><BR>
-<B>NCBI BioSample ID:</B> <A HREF="http://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample"
+<B>NCBI BioSample ID:</B> <A HREF="https://www.ncbi.nlm.nih.gov/biosample/$ncbiBioSample"
 TARGET="_blank">$ncbiBioSample</A>
 </P>
 <HR>
@@ -1130,10 +1130,10 @@ This track shows the gaps in the $assemblyDate $em\$organism$noEm genome assembl
 </P>
 <P>
 Genome assembly procedures are covered in the NCBI
-<A HREF="http://www.ncbi.nlm.nih.gov/assembly/basics/"
+<A HREF="https://www.ncbi.nlm.nih.gov/assembly/basics/"
 TARGET=_blank>assembly documentation</A>.<BR>
 NCBI also provides
-<A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
+<A HREF="https://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
 TARGET="_blank">specific information about this assembly</A>.
 </P>
 <P>
@@ -1235,7 +1235,7 @@ Genome assembly procedures are covered in the NCBI
 <A HREF="https://www.ncbi.nlm.nih.gov/assembly/basics/"
 TARGET=_blank>assembly documentation</A>.<BR>
 NCBI also provides
-<A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
+<A HREF="https://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
 TARGET="_blank">specific information about this assembly</A>.
 </P>
 <P>

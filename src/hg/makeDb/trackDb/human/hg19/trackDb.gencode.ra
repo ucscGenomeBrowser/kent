@@ -1,0 +1,28 @@
+track wgEncodeGencodeSuper
+superTrack on
+group genes
+shortLabel GENCODE
+longLabel GENCODE Gene Annotation 
+# doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
+
+# GENCODE genes on alpha only (wrangler: markd)
+include wgEncodeGencodeV3.ra alpha
+include wgEncodeGencodeV4.ra alpha
+include wgEncodeGencodeV9.ra alpha
+include wgEncodeGencodeV10.ra alpha
+include wgEncodeGencodeV11.ra alpha
+include wgEncodeGencodeV12.ra alpha
+include wgEncodeGencodeV13.ra alpha
+include wgEncodeGencodeV15.ra alpha
+include wgEncodeGencodeV16.ra alpha
+include wgEncodeGencodeV18.ra alpha
+
+# GENCODE public tracks
+include wgEncodeGencodeV7.ra
+include wgEncodeGencodeV14.ra
+include wgEncodeGencodeV17.ra
+include wgEncodeGencodeV19.ra
+include wgEncodeGencodeV24lift37.ra
+include wgEncodeGencodeV26lift37.ra
+include wgEncodeGencodeV27lift37.ra
+

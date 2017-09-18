@@ -17,6 +17,7 @@ include trackDb.transMap.ra
 
 include trackDb.nt.ra
 include trackDb.genbank.ra 
+include trackDb.uniprot.ra alpha
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
@@ -727,7 +728,7 @@ shortLabel UniGene
 longLabel UniGene Alignments
 group rna
 visibility hide
-url http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=
+url https://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=
 spectrum on
 type psl
 
@@ -1033,7 +1034,7 @@ shortLabel Common SNPs(148)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 148) Found in >= 1% of Samples
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp148Seq
 snpExceptionDesc snp148ExceptionDesc
@@ -1048,7 +1049,7 @@ shortLabel Flagged SNPs(148)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 148) Flagged by dbSNP as Clinically Assoc
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp148Seq
 snpExceptionDesc snp148ExceptionDesc
@@ -1062,7 +1063,7 @@ shortLabel Mult. SNPs(148)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 148) That Map to Multiple Genomic Loci
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp148Seq
 snpExceptionDesc snp148ExceptionDesc
@@ -1078,7 +1079,7 @@ shortLabel All SNPs(148)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 148)
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
@@ -1091,7 +1092,7 @@ shortLabel Common SNPs(147)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 147) Found in >= 1% of Samples
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp147Seq
 snpExceptionDesc snp147ExceptionDesc
@@ -1106,7 +1107,7 @@ shortLabel Flagged SNPs(147)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 147) Flagged by dbSNP as Clinically Assoc
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp147Seq
 snpExceptionDesc snp147ExceptionDesc
@@ -1120,7 +1121,7 @@ shortLabel Mult. SNPs(147)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 147) That Map to Multiple Genomic Loci
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp147Seq
 snpExceptionDesc snp147ExceptionDesc
@@ -1136,7 +1137,7 @@ shortLabel All SNPs(147)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 147)
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
@@ -1149,7 +1150,7 @@ shortLabel Common SNPs(139)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 139) Found in >= 1% of Samples
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp139Seq
 snpExceptionDesc snp139ExceptionDesc
@@ -1163,7 +1164,7 @@ shortLabel Mult. SNPs(139)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 139) That Map to Multiple Genomic Loci
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp139Seq
 snpExceptionDesc snp139ExceptionDesc
@@ -1178,7 +1179,7 @@ shortLabel All SNPs(139)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 139)
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
@@ -1190,7 +1191,7 @@ shortLabel Common SNPs(138)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Found in >= 1% of Samples
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp138Seq
 snpExceptionDesc snp138ExceptionDesc
@@ -1204,7 +1205,7 @@ shortLabel Mult. SNPs(138)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 138) That Map to Multiple Genomic Loci
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp138Seq
 snpExceptionDesc snp138ExceptionDesc
@@ -1219,7 +1220,7 @@ shortLabel All SNPs(138)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 138)
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
@@ -1231,7 +1232,7 @@ shortLabel Common SNPs(137)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Found in >= 1% of Samples
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp137Seq
 snpExceptionDesc snp137ExceptionDesc
@@ -1247,7 +1248,7 @@ shortLabel Mult. SNPs(137)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 137) That Map to Multiple Genomic Loci
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp137Seq
 snpExceptionDesc snp137ExceptionDesc
@@ -1264,7 +1265,7 @@ shortLabel All SNPs(137)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 137)
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
@@ -1278,7 +1279,7 @@ shortLabel Common SNPs(135)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 135) Found in >= 1% of Samples
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp135Seq
 snpExceptionDesc snp135ExceptionDesc
@@ -1291,7 +1292,7 @@ shortLabel Flagged SNPs(135)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 135) Flagged by dbSNP as Clinically Assoc
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp135Seq
 snpExceptionDesc snp135ExceptionDesc
@@ -1303,7 +1304,7 @@ shortLabel Mult. SNPs(135)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 135) That Map to Multiple Genomic Loci
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp135Seq
 snpExceptionDesc snp135ExceptionDesc
@@ -1317,7 +1318,7 @@ shortLabel All SNPs(135)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 135)
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
@@ -1329,7 +1330,7 @@ shortLabel Common SNPs(132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Found in >= 1% of Samples
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp132Seq
 snpExceptionDesc snp132ExceptionDesc
@@ -1342,7 +1343,7 @@ shortLabel Flagged SNPs(132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 132) Flagged by dbSNP as Clinically Assoc
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp132Seq
 snpExceptionDesc snp132ExceptionDesc
@@ -1354,7 +1355,7 @@ shortLabel Mult. SNPs(132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 132) That Map to Multiple Genomic Loci
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp132Seq
 snpExceptionDesc snp132ExceptionDesc
@@ -1368,7 +1369,7 @@ shortLabel All SNPs(132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 132)
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
@@ -1379,7 +1380,7 @@ shortLabel SNPs (131)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 131)
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
@@ -1390,7 +1391,7 @@ shortLabel SNPs (130)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 130)
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
@@ -1401,7 +1402,7 @@ shortLabel SNPs (129)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 129)
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
@@ -1412,7 +1413,7 @@ shortLabel SNPs (128)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 128)
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1422,7 +1423,7 @@ shortLabel SNPs (127)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 127)
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1432,7 +1433,7 @@ shortLabel SNPs (126)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 126)
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1442,7 +1443,7 @@ shortLabel SNPs
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 125)
 group varRep
 visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 maxWindowToDraw 10000000
 type bed 6 +
@@ -2722,7 +2723,7 @@ longLabel GRC Incident Database
 group map
 visibility hide
 type bigBed 4 +
-url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
+url https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
 urlLabel GRC Incident:
 
 track tRNAs
@@ -2857,7 +2858,7 @@ shortLabel INSDC
 longLabel Accession at INSDC - International Nucleotide Sequence Database Collaboration
 group map
 visibility hide
-url http://www.ncbi.nlm.nih.gov/nuccore/$$
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel INSDC link:
 type bed 4
 
@@ -2866,7 +2867,7 @@ shortLabel RefSeq Acc
 longLabel RefSeq Accession
 group map
 visibility hide
-url http://www.ncbi.nlm.nih.gov/nuccore/$$
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel RefSeq accession:
 type bed 4
 
@@ -2883,88 +2884,25 @@ group phenDis
 visibility hide
 type bigBed 12 +
 itemRgb on
-urls variationId="http://www.uniprot.org/uniprot/$$" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls variationId="http://www.uniprot.org/uniprot/$$" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
 exonNumbers off
 noScoreFilter on
+release beta,public
 
-#track spUniprot
-#shortLabel Protein Annotations
-#longLabel UniProt/SwissProt Annotations
-#group genes
-#visibility hide
-#type bigBed 12 +
-#itemRgb on
-#exonNumbers off
-#compositeTrack on
-#mouseOverField comments
-#noScoreFilter on
-#urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-#release alpha
-
-        #track spLocSignal
-        #shortLabel Signal Peptide
-        #longLabel UniProt/SwissProt Signal Peptides
-        #parent spUniprot
-        #visibility dense
-        #type bigBed 12 +
-
-        #track spLocExtra
-        #shortLabel Extracellular
-        #longLabel UniProt/SwissProt Extracellular Domain
-        #parent spUniprot
-        #visibility dense
-        #type bigBed 12 +
-
-        #track spLocTransMemb
-        #shortLabel Transmembrane
-        #longLabel UniProt/SwissProt Transmembrane Domains
-        #parent spUniprot
-        #visibility dense
-        #type bigBed 12 +
-
-        #track spLocCytopl
-        #shortLabel Cytoplasmic
-        #longLabel UniProt/SwissProt Cytoplasmic Domains
-        #parent spUniprot
-        #visibility dense
-        #type bigBed 12 +
-
-        #track spChain
-        #shortLabel Chains
-        #longLabel UniProt/SwissProt Polypeptide Chains
-        #parent spUniprot
-        #visibility dense
-        #type bigBed 12 +
-
-        #track spDisulfBond
-        #shortLabel Disulf. Bonds
-        #longLabel UniProt/SwissProt Disulfide Bonds
-        #parent spUniprot
-        #visibility dense
-        #type bigBed 12 +
-
-        #track spModif
-        #shortLabel Modifications
-        #longLabel UniProt/SwissProt Amino Acid Modifications
-        #parent spUniprot
-        #visibility dense
-        #type bigBed 12 +
-
-        #track spAnnot
-        #shortLabel Other Annot.
-        #longLabel UniProt/SwissProt Other Annotations
-        #parent spUniprot
-        #visibility hide
-        #type bigBed 12 +
-
-        #track spStruct
-        #shortLabel Structure
-        #longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
-        #parent spUniprot
-        #group genes
-        #visibility hide
-        #type bigBed 12 +
+track spMut
+shortLabel UniProt Variants
+longLabel UniProt/SwissProt Amino Acid Substitutions
+group phenDis
+visibility hide
+type bigBed 12 +
+itemRgb on
+urls variationId="http://www.uniprot.org/uniprot/$$" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
+exonNumbers off
+noScoreFilter on
+bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+release alpha
 
 track spUniprot
 shortLabel UniProt
@@ -2984,7 +2922,7 @@ compositeTrack on
         visibility hide
         type bigBed 12 +
         itemRgb on
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOverField comments
         noScoreFilter on
         exonNumbers off
@@ -2997,7 +2935,7 @@ compositeTrack on
         visibility hide
         type bigBed 12 +
         itemRgb on
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOverField comments
         noScoreFilter on
         exonNumbers off

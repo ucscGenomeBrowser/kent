@@ -495,7 +495,7 @@ if (regexMatch(rec->name, "^rs[0-9]+$"))
 else if (regexMatch(rec->name, "^[en]ss?v[0-9]+$"))
     {
     printf("<B>dbVar:</B> ");
-    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/dbvar/variants/%s/\" "
+    printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/\" "
 	   "TARGET=_BLANK>%s</A><BR>\n", rec->name, rec->name);
     }
 printCustomUrl(tdb, rec->name, TRUE);

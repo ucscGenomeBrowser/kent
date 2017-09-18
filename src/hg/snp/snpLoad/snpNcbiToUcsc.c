@@ -134,7 +134,7 @@ boolean classStringsUsed[MAX_CLASS+2+1];
  * and conflicts between observed & reference allele.  So we have a
  * lot of related exceptions to report...  This use of a single IUPAC
  * base for SNP of any size is described on this page:
- * http://www.ncbi.nlm.nih.gov/books/bv.fcgi?indexed=google&rid=helpsnpfaq.section.Build.The_dbSNP_Mapping_Pr
+ * https://www.ncbi.nlm.nih.gov/books/bv.fcgi?indexed=google&rid=helpsnpfaq.section.Build.The_dbSNP_Mapping_Pr
  * -- expand the "Reassigning loctype" section.
  */
 /* locType is determined by NCBI, from alignments to the reference genome
@@ -180,7 +180,7 @@ boolean validBitStringsUsed[VALID_BITS];
  * $ftpBcp/SnpFunctionCode.bcp.gz / ASN (but ASN doesn't have
  * the newer encodings (> 10). */
 /* See also
- * http://www.ncbi.nlm.nih.gov/books/bv.fcgi?rid=helpsnpfaq.section.Build.Data_Changes_that_Oc */
+ * https://www.ncbi.nlm.nih.gov/books/bv.fcgi?rid=helpsnpfaq.section.Build.Data_Changes_that_Oc */
 #define MAX_FUNC 75
 char *functionStrings[] = {
 /*  0 */ "unknown",

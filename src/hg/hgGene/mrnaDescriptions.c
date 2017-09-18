@@ -76,7 +76,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	description = sqlQuickString(conn, query);
 	if (description != NULL)
 	    {
-	    char *url = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi"
+	    char *url = "https://www.ncbi.nlm.nih.gov/entrez/query.fcgi"
 	    		"?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank"
 			"&tool=genome.ucsc.edu";
 	    hPrintf("<A HREF=\"");

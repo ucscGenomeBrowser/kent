@@ -16,11 +16,12 @@ import re
 import subprocess
 import argparse
 
+
 ##
 # templates use to generate ra file.  Not all sections are used for GRCh37
 # backmap
 ## 
-raTemplateSect1 = """\
+raTemplateSect1Both = """\
 track wgEncodeGencodeV{gencodeVer}
 compositeTrack on
 superTrack wgEncodeGencodeSuper pack
@@ -39,7 +40,11 @@ type genePred
 configurable off
 wgEncodeGencodeVersion {gencodeVer}
 wgEncodeGencodeAttrs wgEncodeGencodeAttrsV{gencodeVer}
+"""
+raTemplateSect2Std = """\
 wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV{gencodeVer}
+"""
+raTemplateSect3Both = """\
 wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV{gencodeVer}
 wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV{gencodeVer}
 wgEncodeGencodePdb wgEncodeGencodePdbV{gencodeVer}
@@ -119,7 +124,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV{gencodeVer}
         priority 3
 
 """    
-raTemplateSect2 = """\
+raTemplateSect4Std = """\
     track wgEncodeGencodeV{gencodeVer}View2Way 
     shortLabel 2-Way
     view b2-way
@@ -157,7 +162,7 @@ raTemplateSect2 = """\
         priority 5
 
 """    
-raTemplateSect3 = """\
+raTemplateSect5Both = """\
 # searches for basic
 searchName wgEncodeGencodeBasicV{gencodeVer}
 searchTable wgEncodeGencodeBasicV{gencodeVer}
@@ -285,7 +290,7 @@ xrefTable wgEncodeGencodeAttrsV{gencodeVer}
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
 
 """    
-raTemplateSect4 = """\
+raTemplateSect6Std = """\
 # searches for 2-way consensus
 searchName wgEncodeGencode2wayConsPseudoV{gencodeVer}
 searchTable wgEncodeGencode2wayConsPseudoV{gencodeVer}
@@ -295,7 +300,7 @@ termRegex {twoWayPseudoIdRegex}
 searchPriority {twoWayConsPseudoSearchPriority:.5f}
 """
 
-htmlTemplateSect1 = """\
+htmlTemplateSect1Both = """\
 <h2>Description</h2>
 <p>
 The GENCODE Genes track (version {gencodeVer}, {gencodeDate}) shows high-quality manual
@@ -307,17 +312,17 @@ between HAVANA manual annotation process and Ensembl automatic annotation pipeli
 Priority is given to the manually curated HAVANA annotation using predicted
 Ensembl annotations when there are no corresponding manual annotations.
 """
-htmlTemplateSect2a = """\
+htmlTemplateSect2Std = """\
 The {gencodeVer} annotation was carried out on genome assembly {orgGrcRel} ({orgHgDb}).
 </p>
 """
-htmlTemplateSect2b = """\
+htmlTemplateSect3Lift = """\
 The GENCODE V{gencodeSrcVer} annotations on the GRCh38 (hg38) primary assembly
 were mapped to GRCh37 (hg19) using the process
 <a href="http://www.gencodegenes.org/releases/grch37_mapped_releases.html" target="_blank">documented here</a>.
 </p>
 """
-htmlTemplateSect3 = """\
+htmlTemplateSect4Both = """\
 <p>
 The Ensembl human and mouse data sets are the same gene annotations as GENCODE for the
 corresponding release.
@@ -330,7 +335,7 @@ GENCODE GFF3 and GTF files are available from the
 <a href="{gencodeReleaseUrl}" target="_blank">GENCODE release {gencodeVer}</a> site.
 
 """
-htmlTemplateSect4 = """\
+htmlTemplateSect5StdHuman = """\
 <h2>Verification</h2>
 
 <P>
@@ -349,7 +354,7 @@ techniques.
 </P>
 
 """
-htmlTemplateSect5 = """\
+htmlTemplateSect6Both = """\
 <h2>Release Notes</h2>
 <p>
 <span style="font-weight: bold;">GENCODE version {gencodeVer} corresponds to Ensembl {ensemblVer}.</p> 
@@ -577,31 +582,38 @@ def getGencodeParams(orgHgDb, gencodeVer, ensemblVer, gencodeDate):
     else:
         raise Exception("unknown GENCODE hg db: {}".format(orgHgDb))
 
+def writePart(fh, templ, params):
+    "output one section, formatting params"
+    fh.write(templ.format(**vars(params)))
+    
 def generateRaFile(params):
     raFile = params.getTrackDbFileName("ra")
     print("generating {}".format(raFile))
-    with open(raFile, "w") as raFh:
-        raFh.write(raTemplateSect1.format(**vars(params)))
+    with open(raFile, "w") as fh:
+        writePart(fh, raTemplateSect1Both, params)
         if not params.isLifted():
-            raFh.write(raTemplateSect2.format(**vars(params)))
-        raFh.write(raTemplateSect3.format(**vars(params)))
+            writePart(fh, raTemplateSect2Std, params)
+        writePart(fh, raTemplateSect3Both, params)
         if not params.isLifted():
-            raFh.write(raTemplateSect4.format(**vars(params)))
+            writePart(fh, raTemplateSect4Std, params)
+        writePart(fh, raTemplateSect5Both, params)
+        if not params.isLifted():
+            writePart(fh, raTemplateSect6Std, params)
     gitAdd(raFile)
 
 def generateHtmlFile(params):
     htmlFile = params.getTrackDbFileName("html")
     print("generating {}".format(htmlFile))
-    with open(htmlFile, "w") as htmlFh:
-        htmlFh.write(htmlTemplateSect1.format(**vars(params)))
+    with open(htmlFile, "w") as fh:
+        writePart(fh, htmlTemplateSect1Both, params)
         if not params.isLifted():
-            htmlFh.write(htmlTemplateSect2a.format(**vars(params)))
-        else:
-            htmlFh.write(htmlTemplateSect2b.format(**vars(params)))
-        htmlFh.write(htmlTemplateSect3.format(**vars(params)))
-        if params.orgName == "human":
-            htmlFh.write(htmlTemplateSect4.format(**vars(params)))
-        htmlFh.write(htmlTemplateSect5.format(**vars(params)))
+            writePart(fh, htmlTemplateSect2Std, params)
+        writePart(fh, htmlTemplateSect3Lift, params)
+        if not params.isLifted():
+            writePart(fh, htmlTemplateSect4Both, params)
+            if params.orgName == "human":
+                writePart(fh, htmlTemplateSect5StdHuman, params)
+        writePart(fh, htmlTemplateSect6Both, params)
     gitAdd(htmlFile)
 
 def generateJoinerFile(params):
@@ -629,3 +641,5 @@ def parseArgs():
     return opts
 
 gencodeGenerateTrackDbs(parseArgs())
+
+

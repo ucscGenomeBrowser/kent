@@ -904,7 +904,7 @@ shortLabel Flagged SNPs(138)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 138) Flagged by dbSNP as Clinically Assoc
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp138Seq
 snpExceptionDesc snp138ExceptionDesc
@@ -954,7 +954,7 @@ shortLabel Flagged SNPs(137)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 137) Flagged by dbSNP as Clinically Assoc
 group varRep
 visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp137Seq
 snpExceptionDesc snp137ExceptionDesc
@@ -1601,7 +1601,7 @@ scoreFilterByRange on
 itemRgb on
 color 0,0,0
 urlLabel Genbank accession:
-url http://www.ncbi.nlm.nih.gov/nuccore/$$
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 
 track hg38ContigDiff
 shortLabel Hg38 Diff
@@ -1613,7 +1613,7 @@ scoreFilterByRange on
 itemRgb on
 color 0,0,0
 urlLabel Genbank accession:
-url http://www.ncbi.nlm.nih.gov/nuccore/$$
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 
 track evoCpg
 shortLabel Evo Cpg

@@ -34,7 +34,7 @@ dataVersion GRCm38 Patch 4 update, Dec. 2015
         html mm10Patch4
         priority 1
         urlLabel NCBI Entrez Nucleotide record (GRCm38.p4):
-        url http://www.ncbi.nlm.nih.gov/nuccore/$$
+        url https://www.ncbi.nlm.nih.gov/nuccore/$$
 
         track mm10Patch4Patches
         parent mm10Patch4Location
@@ -45,7 +45,7 @@ dataVersion GRCm38 Patch 4 update, Dec. 2015
         html mm10Patch4
         priority 2
         urlLabel NCBI Entrez Nucleotide record (GRCm38.p4):
-        url http://www.ncbi.nlm.nih.gov/nuccore/$$
+        url https://www.ncbi.nlm.nih.gov/nuccore/$$
 
     track mm10Patch4Align
     shortLabel Alignment

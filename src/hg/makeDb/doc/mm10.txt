@@ -15456,4 +15456,51 @@ bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed.mm10 /hive/data/genom
 
 cd /gbdb/hg38/ncbiRefSeq
 ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb .
+
+##############################################################################
+2017-09-15: import of UCSC GENCODE group processing of GENCODE VM15 (markd)
+    # not to push to the RR
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM15
+    pushd /hive/data/genomes/mm10/bed/gencodeVM15
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    ##  gencode-cmp.tsv check to see if sizes make sense
+
+    # generate trackDb and joiner blurb
+    pushd kent/src/hg/makeDb/trackDb
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs mm10 M15 90 'Aug 2017'
+
+    # Update mouse/mm10/wgEncodeGencodeSuper.html and update 'Release Notes'
+    # to describe new release. [ONLY if it's going to be pushed]
+
+    # edit mouse/mm10/trackDb.gencode.ra to add new .ra file include
+    make DBS=mm10
+
+    ## only if being pushed to RR:
+    # edit  all.joiner to add ~/tmp/gencodeVM15.joiner
+    # verify with:
+    pushd /hive/data/genomes/mm10/bed/gencodeVM15
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
+
+    # commit all
+
+##############################################################################
+# ncbiRefSeq composite (DONE - 2017-09-15 - Angie)
+
+    mkdir /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-09-15
+    cd /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-09-15
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      refseq vertebrate_mammalian Mus_musculus \
+      GCF_000001635.25_GRCm38.p5 mm10) > do.log 2>&1 & tail -f do.log
+    # *** All done !  Elapsed time: 14m8s
+    # real    14m7.535s
+
+    cat fb.ncbiRefSeq.mm10.txt
+    # 105504998 bases of 2652783500 (3.977%) in intersection
+
 ##############################################################################

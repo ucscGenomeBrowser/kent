@@ -491,7 +491,7 @@ int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int 
 // sr may be null for bigBeds.
 // Returns number of extra fields actually printed.
 
-#define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
+#define NUCCORE_SEARCH "https://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 void doJRepeat (struct trackDb *tdb, char *repeat);
 /* New RepeatMasker Visualization defined in joinedRmskClick.c */

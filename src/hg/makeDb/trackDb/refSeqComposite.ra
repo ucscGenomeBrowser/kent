@@ -57,7 +57,7 @@ priority 2
         priority 4
         searchIndex name,gene,ID,Name2,geneSynonym,product
         searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
-        urls GeneID="http://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/612091" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$"
+        urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/612091" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$"
         type bigBed 12 +
         labelFields gene
 

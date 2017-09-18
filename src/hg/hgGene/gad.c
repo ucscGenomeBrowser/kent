@@ -123,7 +123,7 @@ if (url != NULL && url[0] != 0)
 	    {
 	    printf(" [PubMed ");
 	    printf("<A HREF=\"%s%s%s'\" target=_blank>",
-	    "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=Abstract&list_uids=",
+	    "https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=Abstract&list_uids=",
 	    row[4],"&query_hl=1&itool=genome.ucsc.edu");
 	    printf("%s</B></A>]\n", row[4]);
 	    }

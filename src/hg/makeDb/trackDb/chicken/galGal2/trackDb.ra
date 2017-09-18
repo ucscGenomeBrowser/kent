@@ -30,7 +30,7 @@ group rna
 priority 70
 visibility hide
 type psl . 
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=unigene&term=$$[ClusterID]
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=unigene&term=$$[ClusterID]
 
 track multiz7way
 shortLabel Conservation

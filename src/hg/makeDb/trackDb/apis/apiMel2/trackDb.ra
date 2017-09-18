@@ -41,7 +41,7 @@ visibility dense
 color 154,154,187
 type genePred .
 urlLabel NCBI Entrez:
-url http://www.ncbi.nlm.nih.gov/nuccore/$$?report=GenBank
+url https://www.ncbi.nlm.nih.gov/nuccore/$$?report=GenBank
 
 track brhInparalog
 shortLabel Homologs (EMBL)
