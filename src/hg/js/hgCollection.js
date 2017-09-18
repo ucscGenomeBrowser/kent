@@ -95,6 +95,7 @@ var hgCollection = (function() {
         newNode.li_attr.color = "#0";
         newNode.li_attr.viewfunc = "add all";
         newNode.li_attr.viewtype = "view";
+        $(selectedTree).jstree("set_icon", newNode, '../images/folderC.png');
     }
 
     function newCollection() {
@@ -112,7 +113,7 @@ var hgCollection = (function() {
         attributes += "class='" +  "folder" + "' ";
 
         $('#collectionList').append("<li " + attributes +  "id='"+ourCollectionName+"'>A New Collection</li>");
-        $('#currentCollection').append("<div id='"+ourTreeName+"'><ul><li " + attributes+ ">A New Collection</li><ul></div>");
+        $('#currentCollection').append("<div id='"+ourTreeName+"'><ul><li data-jstree='{\"icon\":\"../images/folderC.png\"}' " + attributes+ ">A New Collection</li><ul></div>");
         var newTree = $('#currentCollection div:last');
         trees[ourCollectionName] = newTree;
         $(newTree).jstree({
