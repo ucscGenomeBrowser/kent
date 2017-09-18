@@ -553,7 +553,7 @@ def getAbstract(pmid):
     """ retrieve abstracts for pmid using NCBI Entrez API"""
 
     logging.info("Sending NCBI entrez request for PMID %s" % pmid)
-    url = '''http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&email=mhaeussl@ucsc.edu&retmode=xml&id=%s''' % pmid
+    url = '''https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&email=mhaeussl@ucsc.edu&retmode=xml&id=%s''' % pmid
     req = urllib2.Request(url)
     try:
         html = urllib2.urlopen(req)
@@ -821,7 +821,7 @@ def generateSummarySection(summData, htmlFh):
             strList = []
             for val, count in summData[myTag]:
                 if myTag=="geoAccs":
-                    val = '<a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s">%s</a>' % (val, val)
+                    val = '<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s">%s</a>' % (val, val)
                 if len(tagVals)==1:
                     strList.append(val)
                 else:
@@ -832,7 +832,7 @@ def generateSummarySection(summData, htmlFh):
     if "firstAuthor" in summData:
         summData["firstAuthor"] = summData["art_authors"].split(" ")[0]
         htmlFh.write("""
-        <br><b>Article:</b> %(firstAuthor)s et al: <a href="http://www.ncbi.nlm.nih.gov/pubmed/%(art_pmid)s">%(art_title)s</a><br>
+        <br><b>Article:</b> %(firstAuthor)s et al: <a href="https://www.ncbi.nlm.nih.gov/pubmed/%(art_pmid)s">%(art_title)s</a><br>
         <b>Journal:</b> %(art_journalShort)s %(art_year)s<br>
         <b>Article Abstract:</b> <span class="collapse in">%(art_abstract)s</span><br>
         """ % summData)

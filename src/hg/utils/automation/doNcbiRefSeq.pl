@@ -329,7 +329,7 @@ simpleChain -outPsl -maxGap=300000 \$asmId.psl stdout | pslSwap stdin stdout \\
    | gzip -c > \$db.psl.gz
 pslCheck -targetSizes=$HgAutomate::clusterData/\$db/chrom.sizes \\
    -querySizes=\$downloadDir/rna.sizes -db=\$db \$db.psl.gz
-genePredToFakePsl -qSizes=\$downloadDir/rna.sizes  \$db \$asmId.\$db.gp.gz \$db.fake.psl \$db.fake.cds
+genePredToFakePsl -qSizes=\$downloadDir/rna.sizes  \$db \$db.ncbiRefSeq.gp \$db.fake.psl \$db.fake.cds
 pslCat -nohead \$db.psl.gz | cut -f10,14 > \$db.psl.names
 pslSomeRecords -tToo -not \$db.fake.psl \$db.psl.names \$db.someRecords.psl
 pslSort dirs stdout \\

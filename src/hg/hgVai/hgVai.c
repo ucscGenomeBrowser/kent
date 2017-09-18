@@ -43,7 +43,7 @@
 
 #define GENCODE_TAG_DOC_URL "\"http://www.gencodegenes.org/gencode_tags.html\""
 #define GENCODE_BASIC_DOC_URL "\"http://www.gencodegenes.org/faq.html\""
-#define REFSEQ_STATUS_DOC_URL "\"http://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes\""
+#define REFSEQ_STATUS_DOC_URL "\"https://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes\""
 #define APPRIS_DOC_URL "\"http://appris.bioinfo.cnio.es/#/help/database\""
 
 /* Global Variables */
@@ -645,7 +645,7 @@ else if (sameString(tableName, "dbNsfpLrt"))
 			  "Likelihood ratio test (LRT)",
 			  "(D = deleterious, N = Neutral, U = unknown)", doHtml);
 else if (sameString(tableName, "dbNsfpVest"))
-    return formatDesc("http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665549/",
+    return formatDesc("https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665549/",
                       "Variant Effect Scoring Tool (VEST)",
                       "(scores [0-1] predict confidence that a change is deleterious", doHtml);
 else if (sameString(tableName, "dbNsfpGerpNr"))
@@ -786,7 +786,7 @@ if (!gotSnp)
     return;
 startCollapsibleSection("dbSnp", "Known variation", TRUE);
 cartMakeCheckBox(cart, "hgva_rsId", TRUE);
-printf("Include <A HREF='http://www.ncbi.nlm.nih.gov/projects/SNP/' TARGET=_BLANK>dbSNP</A> "
+printf("Include <A HREF='https://www.ncbi.nlm.nih.gov/projects/SNP/' TARGET=_BLANK>dbSNP</A> "
        "rs# ID if one exists<BR>\n");
 puts("<BR>");
 endCollapsibleSection();

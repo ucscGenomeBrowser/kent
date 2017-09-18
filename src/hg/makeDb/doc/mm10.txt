@@ -15456,6 +15456,7 @@ bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed.mm10 /hive/data/genom
 
 cd /gbdb/hg38/ncbiRefSeq
 ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb .
+
 ##############################################################################
 2017-09-15: import of UCSC GENCODE group processing of GENCODE VM15 (markd)
     # not to push to the RR
@@ -15486,4 +15487,20 @@ ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb .
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
 
     # commit all
+
+##############################################################################
+# ncbiRefSeq composite (DONE - 2017-09-15 - Angie)
+
+    mkdir /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-09-15
+    cd /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-09-15
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      refseq vertebrate_mammalian Mus_musculus \
+      GCF_000001635.25_GRCm38.p5 mm10) > do.log 2>&1 & tail -f do.log
+    # *** All done !  Elapsed time: 14m8s
+    # real    14m7.535s
+
+    cat fb.ncbiRefSeq.mm10.txt
+    # 105504998 bases of 2652783500 (3.977%) in intersection
+
 ##############################################################################

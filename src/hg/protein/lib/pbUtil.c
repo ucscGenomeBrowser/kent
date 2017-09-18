@@ -867,7 +867,7 @@ while (row3 != NULL)
 	{
 	/* display organism name */
 	hPrintf("<FONT SIZE=4><B>");
-	hPrintf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>%s</A>",
+	hPrintf("<A href=\"https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>%s</A>",
            cgiEncode(orgSciName), orgSciName);
 	hPrintf(" (%s):</B></FONT>\n", org);
 	hPrintf("<UL>");
@@ -977,7 +977,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
     		sqlSafefFrag(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", taxonId);
     		answer = sqlGetField(PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
 		hPrintf("<FONT SIZE=3><B>");
-		hPrintf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>%s</A>",
+		hPrintf("<A href=\"https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>%s</A>",
            		cgiEncode(protOrg), protOrg);
 		if (answer != NULL)
 		    {

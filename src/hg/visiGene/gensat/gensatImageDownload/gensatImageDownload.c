@@ -83,7 +83,7 @@ void gensatImageDownload(char *gensatXml, char *outDir, char *outLog)
 struct xap *xap;
 struct gsGensatImage *image;
 char *ftpUri = "ftp://ftp.ncbi.nih.gov/pub/gensat";
-char *jpgCgiUri = "http://www.ncbi.nlm.nih.gov/projects/gensat/gensat_img.cgi?action=image&mode=full&fmt=jpeg&id=";
+char *jpgCgiUri = "https://www.ncbi.nlm.nih.gov/projects/gensat/gensat_img.cgi?action=image&mode=full&fmt=jpeg&id=";
 char finalJpg[PATH_LEN];
 char finalDir[PATH_LEN];
 char wgetSource[PATH_LEN];

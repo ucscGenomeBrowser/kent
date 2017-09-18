@@ -47,7 +47,7 @@ while ((row = sqlNextRow(sr)) != NULL)
           printf("<B>GeneReviews article(s) related to gene  </B>%s:<BR>", row[0]);    
           firstTime = FALSE;
         }
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>",row[2], row[1]);
+       printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>",row[2], row[1]);
        printf(" ("); 
        printf("%s", row[3]);
        printf(")<BR>");
