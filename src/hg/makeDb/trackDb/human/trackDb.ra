@@ -3483,6 +3483,7 @@ release alpha,beta
     release alpha,beta
     urls name=https://www.snpedia.com/index.php/$$
     mouseOverField note
+    itemRgb on
 
 searchName snpediaAll
 searchTable snpediaAll
