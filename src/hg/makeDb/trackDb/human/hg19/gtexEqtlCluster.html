@@ -1,21 +1,25 @@
 <h2>Description</h2>
 <p>
 This track shows genetic variants likely affecting gene expression in multiple human tissues.
-Specifically, the data displayed are the gene expression quantitative trait loci within 1MB of 
+The data items displayed are gene expression quantitative trait loci within 1MB of 
 gene transcription start sites (cis-eQTL's) 
-identified as causal in the Genotype-Tissue Expression (GTEx) project V6 release by 
-CAVIAR analysis (95% credible set).  The track shows eQTL's identified in 44 GTEx tissues, along
-with the effect size on gene expression (in FPKM), along with the probability the eQTL is in the 95% credible set.
-</p>
-<p>
-NOTE: This track is under development, subject to change (and input is welcome!) 
+that have been identified as causal in the 
+<a target="_blank" href="https://www.genome.gov/27543767/">Genotype-Tissue Expression (GTEx) project</a> 
+V6 release by 
+<a target="_blank" href="http://genetics.cs.ucla.edu/caviar/">CAVIAR</a> analysis (95% credible set).  
+The track shows eQTL's identified in 44 GTEx tissues, along
+with the effect size on gene expression and the probability the eQTL is in the 95% credible set.
 </p>
 
 <h2>Display Conventions</h2>
-Gene/variant pairs occuring in multiple tissues are merged into a single item in the display. 
-The item label provides the tissue name or number of tissues.
-Mouseover displays effect size and tissues affected by the eQTL.
-The item color indicates the greatest effect size noted for the eQTL:
+<p>
+Gene/variant pairs occuring in multiple tissues are combined into a single item in the display. 
+The item label shows the number of tissues where the eQTL was identified, or the tissue name and
+GTEx-convention color if the eQTL was identified solely in one tissue.</>
+<p>
+Mouseover lists all tissues affected and the effect size.
+The item color indicates the greatest effect size found for the eQTL, 
+with a threshold of 2 FPKM delimiting high effect.
 <ul>
 <table cellpadding='2'>
 <tr><td style='color: fuchsia;'>fuchsia</td><td>high positive</td></tr>
@@ -26,15 +30,40 @@ The item color indicates the greatest effect size noted for the eQTL:
 </ul>
 
 <h2>Credits</h2>
-Thanks to GTEx investigators and analysts -- particularly Farhad Hormozdiari 
-(currently at the Price lab, Harvard), the Eskin lab at UCLA, 
-and the GTEx LDACC and portal team for providing this data, and to Christopher Brown (U Penn) 
+Thanks to GTEx investigators and analysts -- particularly 
+<a target="_blank" href="https://www.hsph.harvard.edu/farhad-hormozdiari/">Farhad Hormozdiari</a>
+(currently at the 
+<a target="_blank" href="https://www.hsph.harvard.edu/alkes-price/">Price lab, Harvard</a>), 
+the <a target="_blank" href="http://zarlab.cs.ucla.edu/">Eskin lab at UCLA</a>,
+the GTEx Laboratory, Data Analysis and Coordinating Center and portal team for providing this data, 
+and to <a target="_blank" href="http://www.med.upenn.edu/brownlab/">Christopher Brown (U Penn) </a>,
 for input on design of the track.
 
 <h2>References</h2>
-
-<ul>
-<li>GTEx portal documentation</li>
-<li>GTEx eQTL paper (in press)</li>
-<li>CAVIAR paper</li>
-</ul>
+<p>
+Aguet F, Brown AA, Castel S, Davis JR, Mohammadi P, Segre AV, Zappala Z, Abell NS, Fresard L, Gamazon ER. et al.
+<a target="_blank" href="https://doi.org/10.1101/074450">
+Local genetic effects on gene expression across 44 human tissues</a>.
+<em>Nature</em> (In press for October 2017 publication).
+bioRrxiv: <a target="_blank" href="http://www.biorxiv.org/content/early/2016/09/09/074450">074450</a>. 2016 Sept 9.
+</p>
+<p>
+Hormozdiari F, Kostem E, Kang EY, Pasaniuc B, Eskin E.
+<a href="http://www.genetics.org/cgi/pmidlookup?view=long&amp;pmid=25104515" target="_blank">
+Identifying causal variants at loci with multiple signals of association</a>.
+<em>Genetics</em>. 2014 Oct;198(2):497-508.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25104515" target="_blank">25104515</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4196608/" target="_blank">PMC4196608</a>
+</p>
+<p>
+GTEx Consortium.
+<a href="http://dx.doi.org/10.1038/ng.2653" target="_blank">
+The Genotype-Tissue Expression (GTEx) project</a>.
+<em>Nat Genet</em>. 2013 Jun;45(6):580-5.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23715323" target="_blank">23715323</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4010069/" target="_blank">PMC4010069</a>
+</p>
+<p>
+<a href="http://www.gtexportal.org/home/documentationPage">
+GTEx Portal Documentation</a>
+</p>
