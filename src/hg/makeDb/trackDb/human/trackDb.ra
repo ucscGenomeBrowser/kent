@@ -3478,10 +3478,11 @@ release alpha,beta
     shortLabel SNPedia all
     longLabel SNPedia all SNPs
     color 50,0,100
-    type bigBed
+    type bigBed 9 +
     bigDataUrl /gbdb/$D/bbi/snpediaAll.bb
     release alpha,beta
     urls name=https://www.snpedia.com/index.php/$$
+    mouseOverField note
 
 searchName snpediaAll
 searchTable snpediaAll
