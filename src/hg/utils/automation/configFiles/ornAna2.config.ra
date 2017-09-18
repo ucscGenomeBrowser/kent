@@ -8,7 +8,7 @@ assemblyDate Feb. 2007
 assemblyLabel WUGSC ASM227v2
 assemblyShortLabel ASM227v2
 orderKey 16409
-# chrMt: http://www.ncbi.nlm.nih.gov/bioproject/10802
+# chrMt: https://www.ncbi.nlm.nih.gov/bioproject/10802
 mitoAcc NC_000891.1
 fastaFiles /cluster/data/ornAna2/ucsc/chr*.fa
 agpFiles /cluster/data/ornAna2/ucsc/chr*.agp

@@ -3,7 +3,7 @@
 export mitoAcc=NC_008218.1
 
 wget -O ${mitoAcc}.fa \
- "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc"
+ "https://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc"
 
 echo ">chrM" > chrM.fa
 grep -v "^>" ${mitoAcc}.fa >> chrM.fa

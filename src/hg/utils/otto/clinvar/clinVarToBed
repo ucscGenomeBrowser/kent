@@ -254,20 +254,20 @@ if options.auto:
     today = date.today().isoformat()
     outSuffix = "%s." % today
     
-    url = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
+    url = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
     outFname = "archive/variant_summary.%s.txt.gz" % today
     logging.info("Downlading %s to %s" % (url, outFname))
     open(outFname, "w").write(urllib2.urlopen(url).read())
     filename = outFname
 
     # get the new variant allele file
-    varUrl = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variation_allele.txt.gz"
+    varUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variation_allele.txt.gz"
     varFname = join(dirname(filename), "variation_allele.%s.txt.gz" % today)
     logging.info("Downlading %s to %s" % (varUrl, varFname))
     open(varFname, "w").write(urllib2.urlopen(varUrl).read())
 
     # get the new hgvs allele file
-    hgvsUrl = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/hgvs4variation.txt.gz"
+    hgvsUrl = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/hgvs4variation.txt.gz"
     hgvsFname = join(dirname(filename), "hgvs4variation.%s.txt.gz" % today)
     logging.info("Downlading %s to %s" % (hgvsUrl, hgvsFname))
     open(hgvsFname, "w").write(urllib2.urlopen(hgvsUrl).read())

@@ -552,7 +552,7 @@
 
     <P><B>Examples:</B></P>
     <pre>
-    iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+    iframeUrl https://www.ncbi.nlm.nih.gov/nuccore/$$
     iframeOptions height='600' width='1024'</pre>
 </DIV>
 
@@ -781,7 +781,7 @@
     the obscure setting for them. -->
     <P><B>Example:</B></P>
     <pre>
-    url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
+    url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
     urlLabel NCBI Details:
     idInUrlSql select name from sibTxGraph where id=%s    </pre>
 </DIV>
@@ -819,7 +819,7 @@
     </P>
     <P><B>Example:</B></P>
     <pre>
-    url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
+    url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
     urlLabel NCBI Details:    </pre>
 </DIV>
 
@@ -846,12 +846,12 @@
     replace the $$ wildcard and the part after it as the label. This is similar
     to how Wikpedia markup encodes links. In the example below, a value for the
     field pmid of "115330|Doe, J. et al" would create a link with the URL
-    http://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J. et al" .
+    https://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J. et al" .
     </P>
 
     <P><B>Example:</B></P>
     <pre>
-    urls pmid="http://www.ncbi.nlm.nih.gov/pubmed/$$" spId="http://www.uniprot.org/uniprot/$$"
+    urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" spId="http://www.uniprot.org/uniprot/$$"
     </pre>
 </DIV>
 
@@ -2488,7 +2488,7 @@ There are no extra options that can appear on the type bigBarChart line.
     classes.  Note the base level coloring option.</P>
     <pre>
     type genePred . mrna
-    url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&amp;l=$$
+    url https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&amp;l=$$
     urlLabel AceView Gene Summary:    </pre>
     <P>This gene prediction
     track has associated representative mRNAs found in the "mrna"
@@ -3461,7 +3461,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <P><I>NOT FOR HUBS.  Nor are any of the settings in this section.</I></P>
     <P>This particular variant of bed 6, identified by table name,
     is for UCSC's subset of
-    <A HREF="http://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_BLANK>dbSNP</A>,
+    <A HREF="https://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_BLANK>dbSNP</A>,
     NCBI's database of short genetic variants.</P>
 </DIV>
 
@@ -3595,7 +3595,7 @@ There are no extra options that can appear on the type bigBarChart line.
     group varRep
     priority 99.0911
     visibility dense
-    url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+    url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
     urlLabel dbSNP: 
     snpSeq snp135Seq
     snpExceptionDesc snp135ExceptionDesc
@@ -3869,7 +3869,7 @@ There are no extra options that can appear on the type bigBarChart line.
     track microattrLoci
     type bedDetail 14
     itemRgb on
-    url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&amp;sendto=t&amp;extrafeatpresent=1&amp;list_uids=$$
+    url https://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&amp;sendto=t&amp;extrafeatpresent=1&amp;list_uids=$$
       ...    </pre>
     <P>This bedDetail contains details for each item
     formatted for HTML display.  In addition each item has an "id" as
