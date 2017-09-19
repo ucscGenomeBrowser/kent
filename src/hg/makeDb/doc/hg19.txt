@@ -32355,7 +32355,7 @@ ln -s /hive/data/outside/cosmic/hg19/v82/cosMutHg19V82.bb .
 
     # generate trackDb and joiner blurb
     pushd kent/src/hg/makeDb/trackDb
-    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 27lift37 88 'August 2017'
+    ../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg19 27lift37 90 'August 2017'
 
     # Update human/hg19/wgEncodeGencodeSuper.html and update 'Release Notes'
     # to describe new release. [ONLY if it's going to be pushed]
