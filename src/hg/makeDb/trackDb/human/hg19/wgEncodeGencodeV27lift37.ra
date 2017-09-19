@@ -2,7 +2,7 @@ track wgEncodeGencodeV27lift37
 compositeTrack on
 superTrack wgEncodeGencodeSuper pack
 shortLabel All GENCODE V27lift37
-longLabel All GENCODE annotations from V27lift37 (Ensembl 88)
+longLabel All GENCODE annotations from V27lift37 (Ensembl 90)
 group genes
 dragAndDrop subTracks
 priority 34.178
@@ -71,7 +71,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV27lift37
         subTrack wgEncodeGencodeV27lift37ViewGenes on
         shortLabel Basic
         subGroups view=aGenes name=Basic
-        longLabel Basic Gene Annotation Set from GENCODE Version 27lift37 (Ensembl 88)
+        longLabel Basic Gene Annotation Set from GENCODE Version 27lift37 (Ensembl 90)
         type genePred
         priority 1
     
@@ -80,7 +80,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV27lift37
         subTrack wgEncodeGencodeV27lift37ViewGenes off
         subGroups view=aGenes name=Comprehensive
         shortLabel Comprehensive
-        longLabel Comprehensive Gene Annotation Set from GENCODE Version 27lift37 (Ensembl 88)
+        longLabel Comprehensive Gene Annotation Set from GENCODE Version 27lift37 (Ensembl 90)
         type genePred
         priority 2
     
@@ -89,7 +89,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV27lift37
         subTrack wgEncodeGencodeV27lift37ViewGenes on
         subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
-        longLabel Pseudogene Annotation Set from GENCODE Version 27lift37 (Ensembl 88)
+        longLabel Pseudogene Annotation Set from GENCODE Version 27lift37 (Ensembl 90)
         type genePred
         color 255,51,255
         priority 3

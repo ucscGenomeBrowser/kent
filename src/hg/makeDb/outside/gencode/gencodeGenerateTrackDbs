@@ -608,11 +608,11 @@ def generateHtmlFile(params):
         writePart(fh, htmlTemplateSect1Both, params)
         if not params.isLifted():
             writePart(fh, htmlTemplateSect2Std, params)
-        writePart(fh, htmlTemplateSect3Lift, params)
-        if not params.isLifted():
-            writePart(fh, htmlTemplateSect4Both, params)
-            if params.orgName == "human":
-                writePart(fh, htmlTemplateSect5StdHuman, params)
+        if params.isLifted():
+            writePart(fh, htmlTemplateSect3Lift, params)
+        writePart(fh, htmlTemplateSect4Both, params)
+        if (not params.isLifted()) and (params.orgName == "human"):
+            writePart(fh, htmlTemplateSect5StdHuman, params)
         writePart(fh, htmlTemplateSect6Both, params)
     gitAdd(htmlFile)
 

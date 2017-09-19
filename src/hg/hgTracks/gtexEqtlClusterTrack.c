@@ -235,12 +235,8 @@ return MG_RED;
 
 /* Helper macros */
 
-#define tissueColorPatchSpacer()        (max(2, tl.nWidth/4))
-
-//#define tissueColorPatchWidth()         (tl.nWidth)
-//#define tissueColorPatchWidth()         (tl.mWidth/2)
-//#define tissueColorPatchWidth()         (tl.mWidth * .75)
-#define tissueColorPatchWidth()         (tl.nWidth * .8)
+#define tissueColorPatchSpacer          (max(2, tl.nWidth/4))
+#define tissueColorPatchWidth           (tl.nWidth * .8)
 
 static int gtexEqtlClusterItemRightPixels(struct track *track, void *item)
 /* Return number of pixels we need to the right of an item (for sources label). */
@@ -248,7 +244,7 @@ static int gtexEqtlClusterItemRightPixels(struct track *track, void *item)
 struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
 int ret = mgFontStringWidth(tl.font, eqtlSourcesLabel(eqtl));
 if (eqtlTissueCount(eqtl) == 1)
-    ret += tissueColorPatchWidth() + tissueColorPatchSpacer();
+    ret += tissueColorPatchWidth + tissueColorPatchSpacer;
 return ret;
 }
 
@@ -273,10 +269,10 @@ if (eqtlTissueCount(eqtl) == 1 && extras->doTissueColor)
     {
     // tissue color patch (box)
     x += w;
-    int h = w = tissueColorPatchWidth();
+    int h = w = tissueColorPatchWidth;
     struct rgbColor tisColor = eqtlTissueColor(track, eqtl);
     int ix = hvGfxFindColorIx(hvg, tisColor.r, tisColor.g, tisColor.b);
-    hvGfxBox(hvg, x + tissueColorPatchSpacer(), y + (tl.fontHeight - h)/2 + tl.fontHeight/10, w, h, ix);
+    hvGfxBox(hvg, x + tissueColorPatchSpacer, y + (tl.fontHeight - h)/2 + tl.fontHeight/10, w, h, ix);
     }
 }
 
