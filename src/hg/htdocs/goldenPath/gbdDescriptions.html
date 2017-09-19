@@ -10,16 +10,13 @@
 <!-- Page content -->
 <h1>This page is no longer maintained.</h1>
 <p>
-<span class="gbsWarnText">This page has been retired long ago where the table descriptions for
-the annotation database stopped being maintained since 2007.</span> To retrieve the schemas
+<span class="gbsWarnText">This page was retired long ago when the table descriptions
+for the annotation database stopped being updated.</span> To retrieve the schemas
 for tables underlying the Genome Browser annotation tracks one can use the Table Browser
 using the &quot;describe table schema&quot; button.</p>
 
-<h2>Previous example of refFlat on this page</h2>
+<h2>refFlat example</h2>
 <p>
-For example, on this page at one time there was the an entry like the following for
-the refFlat table:</p>
-
 <ol>
   <p>
   Gene Predictions and RefSeq Genes with Gene Names</p>
@@ -44,8 +41,8 @@ the refFlat table:</p>
       )</pre>
 </ol>
 <p>
-The text for this entry is not maintained and is old from before 2007.
-Rather one should use the Table Browser to access this information.</p>
+The text for this entry is deprecated. Please use the below
+Table Browser method below to access this information.</p>
 
 <h2>Current method to use Table Browser with refFlat example</h2>
 <p>
@@ -54,8 +51,8 @@ Rather one should use the Table Browser to access this information.</p>
 <ol>
   <li>
   Navigate to the Table Browser for the specific assembly you are interested in that has the
-  data you are seeking. For example, if for the human hg19 assembly, you would make that
-  selection:
+  data you are seeking. For example, if you are working with the hg19 assembly,
+  you would make that selection:
   <a href="/cgi-bin/hgTables?clade=mammal&org=Human&db=hg19"
   target="_blank">http://genome.ucsc.edu/cgi-bin/hgTables?clade=mammal&org=Human&db=hg19</a>
   </li>
@@ -77,7 +74,7 @@ target="_blank">Table Browser User's Guide</a>.</p>
 <p>
 There are also links to our source code in <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/hg/lib"
 target="_blank">src/hg/lib</a> to discover the autoSql files (.as) that define our tables.
-Here is an example link to the refFlat.as: <a href=" http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/refFlat.as"
+Here is an example link to the refFlat.as file: <a href=" http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/refFlat.as"
 target="_blank">http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/refFlat.as</a></p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
