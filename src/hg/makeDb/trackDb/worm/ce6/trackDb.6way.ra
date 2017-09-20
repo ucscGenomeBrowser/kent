@@ -30,8 +30,8 @@ html multiz6way
         altColor 0,90,10
         type wigMaf 0.0 1.0
         speciesCodonDefault ce6
-        speciesGroups Vertebrate
-        sGroup_Vertebrate caeRem3 cb3 caePb2 caeJap1 priPac1
+        speciesGroups Nematode
+        sGroup_Nematode caeRem3 cb3 caePb2 caeJap1 priPac1
         itemFirstCharCase noChange
         treeImage phylo/ce6_6way.gif
         priority 100
