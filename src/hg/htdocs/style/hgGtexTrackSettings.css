@@ -46,6 +46,16 @@
     font-size: 12px;
 }
 
+.gbmTissueTableWithSamples {
+    margin-left: 11px;
+}
+
+.gbmTissueSampleCount {
+    text-align: right;
+    font-size: 10px;
+    color: gray;
+}
+
 /* Miscellany -- candidates for generic CSS but still a little rough so keeping here */
 
 .gbInputScore {         /* TODO: add hooks for this to C/JS */

@@ -26,7 +26,7 @@ createLinks = False
 
 urls = {"var": "http://web.expasy.org/cgi-bin/variant_pages/get-sprot-variant.pl?",
         "uniProt" : "http://www.uniprot.org/uniprot/",
-        "pubmed" : "http://www.ncbi.nlm.nih.gov/pubmed/"
+        "pubmed" : "https://www.ncbi.nlm.nih.gov/pubmed/"
         }
 
 def htmlLink(urlType, accs):

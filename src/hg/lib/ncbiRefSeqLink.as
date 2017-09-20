@@ -9,7 +9,7 @@ table ncbiRefSeqLink
     string protAcc;             "protein_id"
     string locusLinkId;         "locus link identifier, from Dbxref"
     string omimId;              "OMIM identifier, from Dbxref"
-    string hgnc;                "HGNC identifier, from Dbxref"
+    string hgnc;                "HGNC identifier (or MGI for mouse), from Dbxref"
     string genbank;             "genbank identifier from Dbxref"
     string pseudo;              "'true' if pseudo gene, or n/a"
     string gbkey;               "genbank key: Gene, mRNA, ncRNA, rRNA, tRNA, etc..."

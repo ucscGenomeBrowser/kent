@@ -1,7 +1,7 @@
 #this keeps information for links for the hgc cgi
 
 name NCBIGene
-url http://www.ncbi.nlm.nih.gov/gene/%s
+url https://www.ncbi.nlm.nih.gov/gene/%s
 label NCBI Gene
 acc yes
 
@@ -11,7 +11,7 @@ label ORegAnno
 acc yes
 
 name PubMed
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&query_hl=1&list_uids=%s
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&query_hl=1&list_uids=%s
 label PubMED
 acc yes
 
@@ -36,7 +36,7 @@ label UniProtKB search
 acc yes
 
 name OMIM
-url http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%s
+url https://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%s
 label OMIM
 acc yes
 
@@ -47,7 +47,7 @@ acc yes
 needsEncoded yes
 
 name BGMUT
-url http://www.ncbi.nlm.nih.gov/gv/mhc/xslcgi.cgi?cmd=bgmut/allele_details&id=%s
+url https://www.ncbi.nlm.nih.gov/gv/mhc/xslcgi.cgi?cmd=bgmut/allele_details&id=%s
 label BGMUT
 acc yes
 
@@ -57,7 +57,7 @@ label CFMDB
 acc yes
 
 name dbSNP
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 label dbSNP
 acc yes
 
@@ -82,7 +82,7 @@ dataLinkCol 2
 
 name EntrezGene
 label Entrez Gene
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=full_report&list_uids=%s
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=full_report&list_uids=%s
 acc yes
 
 name EnsemblId
@@ -118,7 +118,7 @@ acc yes
 
 name PubMed2
 label PubMed
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Citation&list_uids=%s
+url https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Citation&list_uids=%s
 acc yes
 
 name FHCDB

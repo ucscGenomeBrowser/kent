@@ -2667,7 +2667,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *pmId = row[1];
     char label[512];
     safef(label, sizeof(label),
-	  "<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed"
+	  "<A HREF=\"https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed"
 	  "&list_uids=%s&dopt=Abstract&tool=genome.ucsc.edu\" TARGET=_BLANK>%s</A>", pmId, ref);
     labelArr[refCount] = cloneString(label);
     valueArr[refCount++] = cloneString(pmId);

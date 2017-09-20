@@ -108,7 +108,7 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     hashAdd(tissueHash, tis->name, tis);
 printf("<table id='eqtls' cellspacing=1 cellpadding=3>\n");
 printf("<style>#eqtls th {text-align: left; background-color: #F3E0BE;}</style>");
-printf("<tr><th>&nbsp;&nbsp;&nbsp;</th><th>Tissue</th><th>Effect &nbsp;&nbsp;</th><th>P-Value (-log10)</th><th>Probability </th></tr>\n");
+printf("<tr><th>&nbsp;&nbsp;&nbsp;</th><th>Tissue</th><th>Effect (FPKM)&nbsp;&nbsp;</th><th>P-Value (-log10)</th><th>Probability </th></tr>\n");
 int i;
 for (i=0; i<eqtl->expCount; i++)
     {

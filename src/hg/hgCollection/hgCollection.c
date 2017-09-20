@@ -125,20 +125,22 @@ if (user)
         viewFunc = trackDbSetting(tdb, "viewFunc");
         if (viewFunc == NULL)
             viewFunc = "show all";
-        userString = "viewType='view' class='folder'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'viewType='view' class='folder'";
         }
     else if (tdb->subtracks)
-        userString = "viewType='track' class='folder'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track' class='folder'";
     else
-        userString = "viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/invisible16.png\\\"}' viewType='track'";
     }
 else
     {
     //prefix = "coll_";
     if (tdb->parent && tdb->subtracks) 
-        userString = "class='nodrop' viewType='view'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'class='nodrop' viewType='view'";
+    else if (tdb->subtracks)
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'class='nodrop' viewType='track'";
     else
-        userString = "class='nodrop' viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/invisible16.png\\\"}'class='nodrop' viewType='track'";
     }
     
         //userString = "viewType='track data-jstree='{'icon':'images/folderC.png'}''";
@@ -298,7 +300,7 @@ for(tdb = fullTrackList; tdb; tdb = tdb->next)
 slSort(&tdbRefList, tdbRefCompare);
 
 jsInlineF("<ul>");
-jsInlineF("<li class='nodrop' name='%s'>%s", "visibile", "Visible Tracks");
+jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' name='%s'>%s", "visibile", "Visible Tracks");
 jsInlineF("<ul>");
 for(tdbRef = tdbRefList; tdbRef; tdbRef = tdbRef->next)
     printGroup("visible", tdbRef->tdb, FALSE, FALSE);
@@ -342,7 +344,7 @@ if (curGroup != NULL)
         {
         if (sameString(tdb->grp, hubName))
             {
-            jsInlineF("<li class='nodrop' id='%s'  name='%s'>%s</li>", trackHubSkipHubName(tdb->track),trackHubSkipHubName(tdb->track), tdb->shortLabel);
+            jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' id='%s'  name='%s'>%s</li>", trackHubSkipHubName(tdb->track),trackHubSkipHubName(tdb->track), tdb->shortLabel);
             //printGroup("collections", tdb, TRUE, TRUE);
             }
         }
@@ -355,7 +357,7 @@ for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
         continue;
     jsInlineF("<ul>");
-    jsInlineF("<li class='nodrop' name='%s'>%s", curGroup->name, curGroup->label );
+    jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' name='%s'>%s", curGroup->name, curGroup->label );
     struct trackDb *tdb;
     jsInlineF("<ul>");
     for(tdb = fullTrackList; tdb;  tdb = tdb->next)
@@ -487,7 +489,7 @@ fprintf(f, "%sshortLabel %s\n",tabs, track->shortLabel);
 fprintf(f, "%slongLabel %s\n",tabs, track->longLabel);
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "shortLabel")&& differentString(hel->name, "longLabel")&& differentString(hel->name, "color")&& differentString(hel->name, "visibility")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames")&& differentString(hel->name, "superTrack")&& differentString(hel->name, "priority"))
+    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "shortLabel")&& differentString(hel->name, "longLabel")&& differentString(hel->name, "color")&& differentString(hel->name, "visibility")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames")&& differentString(hel->name, "superTrack")&& differentString(hel->name, "priority")&& differentString(hel->name, "group"))
         fprintf(f, "%s%s %s\n", tabs,hel->name, (char *)hel->val);
     }
 if (bigDataUrl == NULL)
@@ -512,6 +514,7 @@ fprintf(f,"track %s\n\
 shortLabel %s\n\
 compositeTrack on\n\
 aggregate none\n\
+autoScale on\n\
 longLabel %s\n\
 %s on\n\
 color %ld,%ld,%ld \n\
@@ -544,8 +547,9 @@ fprintf(f,"\ttrack %s\n\
 \tautoScale on  \n\
 \tparent %s \n\
 \tcolor %ld,%ld,%ld \n\
+\tpriority %d\n\
 \tviewFunc %s \n\
-\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), view->viewFunc, view->visibility);
+\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), priority++, view->viewFunc, view->visibility);
 //fprintf(f,"\tequation +\n");
 fprintf(f, "\n");
 

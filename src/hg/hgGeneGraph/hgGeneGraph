@@ -1407,7 +1407,7 @@ def docLink(pmid, text=None, mouseOver=None):
     return linkStr
 
 def pubmedLink(pmid, text=None):
-    url = "http://www.ncbi.nlm.nih.gov/pubmed/%s" % pmid
+    url = "https://www.ncbi.nlm.nih.gov/pubmed/%s" % pmid
     if text==None:
         text = "PMID: %s" % str(pmid)
     linkStr = '<a href="%s">%s</a>' % (url, text)

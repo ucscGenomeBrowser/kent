@@ -56,7 +56,7 @@ priority 2.2
 visibility off
 type lookup knownToRefSeq name value
 search exact
-itemUrl http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
+itemUrl https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 
 name entrezGene
 shortLabel Entrez Gene
@@ -64,7 +64,7 @@ longLabel NCBI Entrez Gene/LocusLink ID
 priority 2.25
 visibility off
 type lookup knownToLocusLink name value
-itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
+itemUrl https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
 
 name acc
 shortLabel UCSC ID
@@ -78,7 +78,7 @@ shortLabel GenBank
 longLabel GenBank mRNA Accession
 priority 2.31
 visibility off
-itemUrl http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
+itemUrl https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 type lookup kgXref kgID mRNA
 
 name ensembl
@@ -276,7 +276,7 @@ type association knownToCdsSnp
 queryFull select name,value from knownToCdsSnp
 queryOne select value,value from knownToCdsSnp where name = '%s'
 invQueryOne select name from knownToCdsSnp where value = '%s'
-itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
+itemUrl https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
 
 name exonCount
 shortLabel Exon Count

@@ -8,7 +8,7 @@ idSql select target from hgBlastTab where query = '%s'
 pepTable knownGenePep
 geneTable knownGene
 genomeUrl ../cgi-bin/hgTracks?org=Human&position=%s
-otherUrl http://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
+otherUrl https://www.ncbi.nlm.nih.gov/nuccore/%s?report=GenBank
 otherIdSql select kgXref.mRNA from kgXref where kgID='%s'
 otherName GenBank
 priority 10
