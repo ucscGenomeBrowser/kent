@@ -20,7 +20,7 @@ html multiz9way
         track multiz9way
         subTrack cons9wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 9 Vertebrates
+        longLabel Multiz Alignments of 9 Species (5 mammals, 4 primates)
         subGroups view=align
         noInherit on
         summary multiz9waySummary
@@ -30,9 +30,9 @@ html multiz9way
         altColor 0,90,10
         type wigMaf 0.0 1.0
         speciesCodonDefault calJac1
-        speciesGroups Primates Vertebrate
+        speciesGroups Primates Mammals
         sGroup_Primates rheMac2 ponAbe2 panTro2 hg18
-        sGroup_Vertebrate mm9 canFam2 monDom4 ornAna1
+        sGroup_Mammals mm9 canFam2 monDom4 ornAna1
         itemFirstCharCase noChange
         treeImage phylo/calJac1_9way.gif
         priority 100
@@ -48,8 +48,8 @@ html multiz9way
         track phastCons9way
         subTrack cons9wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 9 Vertabrate Cons
-        longLabel 9 Vertabrate Conservation by PhastCons
+        shortLabel 9 Species Cons
+        longLabel 9 Species (5 mammals, 4 Primates) Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -71,8 +71,8 @@ html multiz9way
         track phastConsElements9way
         subTrack cons9wayViewelements on
         subGroups view=elements
-        shortLabel 9 Vertabrate El
-        longLabel 9 Vertabrate Conserved Elements
+        shortLabel 9 Species El
+        longLabel 9 Species (5 mammals, 4 Primates) Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
