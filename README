@@ -1,45 +1,63 @@
 CONTENTS AND COPYRIGHT
 
 This directory contains the entire source tree for the
-UCSC Genome Bioinformatics Group's suite of biological analysis 
-and web display programs as well as some of Jim Kent's own tools.  
-All files are copyrighted, but license is hereby granted for personal, 
-academic, and non-profit use. Please see the LICENSE file in the 
-current directory for more details. Note that this LICENSE file may 
+UCSC Genome Bioinformatics Group's suite of biological analysis
+and web display programs as well as some of Jim Kent's own tools.
+All files are copyrighted, but license is hereby granted for personal,
+academic, and non-profit use. Please see the LICENSE file in the
+current directory for more details. Note that this LICENSE file may
 be overridden by LICENSE files in other subdirectories. In
 particular the LICENSE file in the lib, inc, utils, and several other
 subdirectories allows for free commercial use as well.
 
-Commercial users should contact kent@soe.ucsc.edu for access to other modules.
+Commercial users should contact http://www.kentinformatics.com/ for access
+to other modules.
 Commercial users interested in the UCSC Genome Browser in particular please see
     http://genome.ucsc.edu/license/.
+    https://genome-store.ucsc.edu/
 
 If you want to run a local installation of the UCSC Genome Browser
-(we call this a mirror, even when it includes only a small 
+(we call this a mirror, even when it includes only a small
 part of the data), you do not need the whole source tree. We provide
-statically compiled binary CGI-bin executables, the apache htdocs folder, 
+statically compiled binary CGI-bin executables, the apache htdocs folder,
 binary MySQL databases and ancillary large data files in /gbdb via an Rsync
-download server. For install details see http://genome.ucsc.edu/admin/mirror.html
+download server.  For install details see
+    http://genome.ucsc.edu/admin/mirror.html
 
-Most source code users will only be interested in the src/inc and 
-src/lib directories, which contain the interfaces and implementations
+The pre-compiled user application binaries may function on your system
+without this build procedure.  For example to obtain the
+linux.x86_64 binaries:
+ rsync -azvP rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/linux.x86_64/ ./
+
+Mac OSX binaries available via:
+ rsync -azvP rsync://hgdownload.soe.ucsc.edu/genome/admin/exe/macOSX.x86_64/ ./
+
+Most source code users will only be interested in the kent/src/inc and
+kent/src/lib directories, which contain the interfaces and implementations
 to the library routines,  and in a few specific applications.
-The applications are scattered in other directories.  Many of them are web based.  
-The UCSC Genome Browser in particular is mostly found in src/hg/hgTracks.
+The applications are scattered in other directories.  Many of them are web based.
+The UCSC Genome Browser in particular is mostly found in kent/src/hg/hgTracks.
 
 GENERAL INSTALL INSTRUCTIONS
+
+SEE ALSO: http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads
+          https://genome-store.ucsc.edu/
 
 1. Get the code.  The best way to do this now for
    Unix users is via Git following the instructions at:
      http://genome.ucsc.edu/admin/git.html
    Or, fetch the entire source in a single file:
-     http://hgdownload.cse.ucsc.edu/admin/jksrc.zip
+     rsync -azvP rsync://hgdownload.soe.ucsc.edu/genome/admin/jksrc.zip ./
+     or:
+     wget --timestamping http://hgdownload.soe.ucsc.edu/admin/jksrc.zip
+   The unzip result from that file will establish a directory hierarchy:
+     ./kent/...
    Note further documentation for the build process in your
-   unpacked source tree in src/product/README.*
+   unpacked source tree in kent/src/product/README.*
    Especially note README.building.source and the "Known problems"
    for typical situations you may encounter.
 2. Check that the environment variable MACHTYPE
-   exists on your system.  It should exist on Unix/Linux.  
+   exists on your system.  It should exist on Unix/Linux.
    (And making this on non-Unix systems is beyond
    the scope of this README).  The default MACHTYPE is often a
    long string: "i386-redhat-linux-gnu"
@@ -51,8 +69,7 @@ GENERAL INSTALL INSTRUCTIONS
    uname options:  'uname -m' or 'uname -p' or 'uname -a'
    on your command line.  If necessary set this environment variable.
    Do this under the bash shell as so:
-       MACHTYPE=something
-       export MACHTYPE
+       export MACHTYPE=something
    or under tcsh as so:
        setenv MACHTYPE something
    and place this setting in your home directory .bashrc or .tcshrc
@@ -60,17 +77,14 @@ GENERAL INSTALL INSTRUCTIONS
    login.  Remember to "export" it as show here for the bash shell.
 3. Make the directory ~/bin/$MACHTYPE which is
    where the (non-web) executables will go.
-   Add this directory to your path.
-4. Go to the src/lib directory.  If it doesn't
-   already exist do a mkdir $MACHTYPE.
-5. Type make.  On Alphas there will be 
-   some warning messages about "crudeAli.c"
-   otherwise it should compile cleanly.
-   It's using gcc.
-6. Go to src/jkOwnLib and type make.
-7. Go to the application you want to make and type 
+   Add this directory to your path to access the built binaries.
+4. Go to the kent/src/lib directory.
+5. Type make.  The build expects to use the GNU gcc compiler.
+6. Go to kent/src/jkOwnLib and type make.
+7. Go to kent/src/htslib and type make.
+8. Go to the application you want to build and type
    make.  (If you're not sure, as a simple test
-   go to src/utils/fixcr and type make,
+   go to kent/src/utils/fixcr and type make,
    then 'rehash' if necessary so your shell
    can find the fixcr program in ~/bin/$(MACHTYPE).
    The fixcr program changes Microsoft style
@@ -79,25 +93,20 @@ GENERAL INSTALL INSTRUCTIONS
    file in the fixCr directory, and then
    do a "fixcr gotCr.c" on it.
 
-
 INSTALL INSTRUCTIONS FOR BLAT
 
 1. Follow the general install instructions above.
-2. If you're on an alpha system do a:
-     setenv SOCKETLIB -lxnet
-   on Solaris do
-     setenv SOCKETLIB "-lsocket -lnsl"
-   on SunOS do
-     setenv SOCKETLIB "-lsocket -lnsl -lresolv"
-   on Linux you can skip this step.
 3. Execute make in each of the following directories:
-     src/gfServer
-     src/gfClient
-     src/blat
-     src/utils/faToNib
+     kent/src/gfServer
+     kent/src/gfClient
+     kent/src/blat
+     kent/src/utils/faToNib
 
 INSTALL INSTRUCTIONS FOR CODE USING THE BROWSER DATABASE
-(and other code in the src/hg subdirectory)
+(and other code in the kent/src/hg subdirectory)
+
+SEE ALSO: http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads
+          https://genome-store.ucsc.edu/
 
 1. Follow the general install instructions above.
 2. Make the environment variable MYSQLINC point to
@@ -109,20 +118,20 @@ INSTALL INSTRUCTIONS FOR CODE USING THE BROWSER DATABASE
    When available, the commands: mysql_config --include
 	and mysql_config --libs
 	will display the required arguments for these environment settings.
-3. Execute make in src/hg/lib
+3. Execute make in kent/src/hg/lib
 4. Execute make in the directory containing the
    application you wish to build.
-5. See also: http://genome.ucsc.edu/admin/jk-install.html
+5. See also: http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads
    and more documentation in this source tree about setting up
    a working browser in README files:
-       src/product/README.building.source
-       src/product/README.local.git.source
-       src/product/README.mysql.setup
-       src/product/README.install
-       src/product/README.trackDb
-       src/hg/makeDb/trackDb/README
+       kent/src/product/README.building.source
+       kent/src/product/README.local.git.source
+       kent/src/product/README.mysql.setup
+       kent/src/product/README.install
+       kent/src/product/README.trackDb
+       kent/src/hg/makeDb/trackDb/README
    There are numerous README files in the source tree describing
    functions or modules in that area of the source tree.
-   The src/README in particular should be read by anyone modifying
+   The kent/src/README in particular should be read by anyone modifying
    the C source code, and python/README by anyone modifying the Python.
 

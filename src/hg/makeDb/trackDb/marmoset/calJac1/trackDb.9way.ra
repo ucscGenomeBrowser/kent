@@ -1,54 +1,55 @@
-track cons6way
+track cons9way
 compositeTrack on
 shortLabel Conservation
-longLabel Multiz Alignment & Conservation (6 nematodes)
+longLabel 9-Way Multiz Alignment & Conservation
 subGroup1 view Views align=Multiz_Alignments  phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full
 priority 104.2
 type bed 4
 group compGeno
-html multiz6way
+html multiz9way
 
-    track cons6wayViewalign
+    track cons9wayViewalign
     shortLabel Multiz Alignments
     view align
     visibility pack
     viewUi on
-    subTrack cons6way
+    subTrack cons9way
 
-        track multiz6way
-        subTrack cons6wayViewalign on
+        track multiz9way
+        subTrack cons9wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 6 Nematodes
+        longLabel Multiz Alignments of 9 Vertebrates
         subGroups view=align
         noInherit on
-        summary multiz6waySummary
-#        frames multiz6wayFrames
+        summary multiz9waySummary
+#        frames multiz9wayFrames
 #        irows on
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
-        speciesCodonDefault ce6
-        speciesGroups Nematode
-        sGroup_Nematode caeRem3 cb3 caePb2 caeJap1 priPac1
+        speciesCodonDefault calJac1
+        speciesGroups Primates Vertebrate
+        sGroup_Primates rheMac2 ponAbe2 panTro2 hg18
+        sGroup_Vertebrate mm9 canFam2 monDom4 ornAna1
         itemFirstCharCase noChange
-        treeImage phylo/ce6_6way.gif
+        treeImage phylo/calJac1_9way.gif
         priority 100
 
     # phastCons conservation
-    track cons6wayViewphastcons
+    track cons9wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
     visibility full
-    subTrack cons6way
+    subTrack cons9way
 
 
-        track phastCons6way
-        subTrack cons6wayViewphastcons on
+        track phastCons9way
+        subTrack cons9wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 6 Nematode Cons
-        longLabel 6 nematode conservation by PhastCons
+        shortLabel 9 Vertabrate Cons
+        longLabel 9 Vertabrate Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -61,19 +62,28 @@ html multiz6way
         priority 13
 
     # Conserved Elements (Most Conserved)
-    track cons6wayViewelements
+    track cons9wayViewelements
     shortLabel Conserved Elements
     view elements
     visibility dense
-    subTrack cons6way
+    subTrack cons9way
 
-        track phastConsElements6way
-        subTrack cons6wayViewelements on
+        track phastConsElements9way
+        subTrack cons9wayViewelements on
         subGroups view=elements
-        shortLabel 6 nematode El
-        longLabel 6 nematode Conserved Elements
+        shortLabel 9 Vertabrate El
+        longLabel 9 Vertabrate Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
         priority 23
-        html phastConsElements6way
+        html phastConsElements9way
+
+
+
+
+
+
+
+
+

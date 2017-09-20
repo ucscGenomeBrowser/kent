@@ -18,10 +18,10 @@ use HgAutomate;
 use HgRemoteScript;
 use HgStepManager;
 
+my $doIdKeys = "$Bin/doIdKeys.pl";
 my $gff3ToRefLink = "$Bin/gff3ToRefLink.pl";
 my $gbffToCds = "$Bin/gbffToCds.pl";
 my $ncbiRefSeqOtherAttrs = "$Bin/ncbiRefSeqOtherAttrs.pl";
-my $ncbiRefSeqOtherAs = "$Bin/../../inc/ncbiRefSeqOther.as";
 
 # Option variable names, both common and peculiar to this script:
 use vars @HgAutomate::commonOptionVars;
@@ -208,7 +208,7 @@ _EOF_
 
 mkdir -p \$runDir/idKeys
 cd \$runDir/idKeys
-time (doIdKeys.pl -buildDir=\$runDir/idKeys -twoBit=\$runDir/\$asmId.ncbi.2bit \$db) > idKeys.log 2>&1
+time ($doIdKeys -buildDir=\$runDir/idKeys -twoBit=\$runDir/\$asmId.ncbi.2bit \$db) > idKeys.log 2>&1
 
 cd \$runDir
 ln -s idKeys/\$db.idKeys.txt ./ncbi.\$asmId.idKeys.txt
@@ -306,7 +306,7 @@ genePredCheck -db=\$db \$db.other.gp
 genePredToBed \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
 
 $ncbiRefSeqOtherAttrs \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
-bedToBigBed -type=bed12+13 -as=$ncbiRefSeqOtherAs -tab \\
+bedToBigBed -type=bed12+13 -as=ncbiRefSeqOther.as -tab \\
   -extraIndex=name \\
   \$db.other.extras.bed $HgAutomate::clusterData/\$db/chrom.sizes \$db.other.bb
 
@@ -459,7 +459,7 @@ sub doCleanup {
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 gzip download/{rna.sizes,*.raFile.txt}
-gzip process/*.{tab,txt,gp,psl,cds}
+gzip process/*.{tab,txt,gp,gff,psl,cds,bed}
 _EOF_
   );
   $bossScript->execute();
