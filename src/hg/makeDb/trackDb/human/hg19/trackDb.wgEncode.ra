@@ -1,6 +1,9 @@
 # Genome-wide ENCODE tracks
 include wgEncodeSuper.release2.ra 
 
+# GENCODE genes tracks
+include trackDb.gencode.ra
+
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.release2.ra
 

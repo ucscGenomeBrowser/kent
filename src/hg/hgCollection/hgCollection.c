@@ -489,7 +489,7 @@ fprintf(f, "%sshortLabel %s\n",tabs, track->shortLabel);
 fprintf(f, "%slongLabel %s\n",tabs, track->longLabel);
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "shortLabel")&& differentString(hel->name, "longLabel")&& differentString(hel->name, "color")&& differentString(hel->name, "visibility")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames")&& differentString(hel->name, "superTrack")&& differentString(hel->name, "priority"))
+    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "shortLabel")&& differentString(hel->name, "longLabel")&& differentString(hel->name, "color")&& differentString(hel->name, "visibility")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames")&& differentString(hel->name, "superTrack")&& differentString(hel->name, "priority")&& differentString(hel->name, "group"))
         fprintf(f, "%s%s %s\n", tabs,hel->name, (char *)hel->val);
     }
 if (bigDataUrl == NULL)
@@ -514,6 +514,7 @@ fprintf(f,"track %s\n\
 shortLabel %s\n\
 compositeTrack on\n\
 aggregate none\n\
+autoScale on\n\
 longLabel %s\n\
 %s on\n\
 color %ld,%ld,%ld \n\
@@ -546,8 +547,9 @@ fprintf(f,"\ttrack %s\n\
 \tautoScale on  \n\
 \tparent %s \n\
 \tcolor %ld,%ld,%ld \n\
+\tpriority %d\n\
 \tviewFunc %s \n\
-\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), view->viewFunc, view->visibility);
+\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), priority++, view->viewFunc, view->visibility);
 //fprintf(f,"\tequation +\n");
 fprintf(f, "\n");
 
