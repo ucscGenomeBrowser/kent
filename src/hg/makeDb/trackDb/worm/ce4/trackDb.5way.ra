@@ -30,8 +30,8 @@ html multiz5way
         altColor 0,90,10
         type wigMaf 0.0 1.0
         speciesCodonDefault ce4
-        speciesGroups Vertebrate
-        sGroup_Vertebrate caePb1 caeRem2 cb3 priPac1
+        speciesGroups Nematode
+        sGroup_Nematode caePb1 caeRem2 cb3 priPac1
         itemFirstCharCase noChange
         treeImage phylo/ce4_5way.gif
         priority 100
