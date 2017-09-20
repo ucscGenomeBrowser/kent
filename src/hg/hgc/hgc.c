@@ -11934,7 +11934,13 @@ if (differentWord(nrl->protAcc, ""))
     printf("<a href='https://www.ncbi.nlm.nih.gov/protein/%s' target=_blank>", nrl->protAcc);
     printf("%s</a><br>\n", nrl->protAcc);
     }
-if (differentWord(nrl->hgnc, ""))
+if (startsWith("MGI", nrl->hgnc))
+    {
+    printf("<b>MGI:</b> "
+           "<a href=\"http://www.informatics.jax.org/marker/%s\" target=_blank>%s</a><br>\n",
+           nrl->hgnc, nrl->hgnc);
+    }
+else if (differentWord(nrl->hgnc, ""))
     {
     printf("<b>HGNC:</b> ");
     printf("<a href='http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s' target=_blank>", nrl->hgnc);

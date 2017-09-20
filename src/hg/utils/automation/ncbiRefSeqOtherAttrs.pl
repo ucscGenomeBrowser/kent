@@ -6,44 +6,50 @@
 # This script reads predigested attributes (gff3ToGenePred -attrsOut=...) and BED 12 input.
 # It outputs BED 12 + with attributes in extra fields.
 
-#*** Make command line args:
-my $bedFile = "hg38.other.bed";
-my $attrsFile = "GCF_000001405.37_GRCh38.p11.attrs.txt";
+use warnings;
+use strict;
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
+
+my $asFile = "ncbiRefSeqOther.as";
 
 sub usage {
   print STDERR "
 usage: $base \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
 
 Adds GFF3 attributes to BED to make BED+ for ncbiRefSeqOther bigBed.
+Generates $asFile autoSql file.
 See doNcbiRefSeq.pl.
 ";
 } # usage
 
-# NCBI GFF3 attribute (or derivative) names, in the order of extra fields:
-my @attrOrder = qw( gene
-                    GeneID
-                    MIM
-                    HGNC
-                    miRBase
-                    description
-                    Note
-                    exception
-                    product
-                    gene_synonym
-                    model_evidence
-                    gbkey
-                    gene_biotype
-                    pseudo
-                    partial
-                    anticodon
-                    codons
-                    start_range
-                    end_range
-                    ID
-                 );
+# NCBI GFF3 attribute (or derivative) names, bigBed column names and descriptions
+# (used as hgc table labels), in the order of extra fields:
+my @attributes = (['gene',           'gene',           "Gene name"],
+                  ['GeneID',         'GeneID',         "Entrez Gene"],
+                  ['MIM',            'MIM',            "OMIM"],
+                  ['HGNC',           'HGNC',           "HGNC"],
+                  ['MGI',            'MGI',            "MGI"],
+                  ['miRBase',        'miRBase',        "miRBase"],
+                  ['description',    'description',    "Description"],
+                  ['Note',           'Note',           "Note"],
+                  ['exception',      'exception',      "Exceptional properties"],
+                  ['product',        'product',        "Gene product"],
+                  ['gene_synonym',   'geneSynonym',    "Gene synonyms"],
+                  ['model_evidence', 'modelEvidence',  "Supporting evidence for gene model"],
+                  ['gbkey',          'gbkey',          "Feature type"],
+                  ['gene_biotype',   'geneBiotype',    "Gene biotype"],
+                  ['pseudo',         'pseudo',         "'true' if pseudogene"],
+                  ['partial',        'partial',        "'true' if partial"],
+                  ['anticodon',      'anticodon',      "Anticodon position within tRNA"],
+                  ['codons',         'codons',         "Number of codons in anticodon range"],
+                  ['start_range',    'startRange',     "Start range on genome"],
+                  ['end_range',      'endRange',       "End range on genome"],
+                  ['ID',             'ID',             "Unique ID in RefSeq GFF3"] );
+
+
+my @attrOrder = map { $_->[0] } @attributes;
 
 # Command line args
 my $bedFile = shift @ARGV;
@@ -55,8 +61,10 @@ if (not (defined $bedFile && defined $attrsFile && scalar @ARGV == 0)) {
 
 # Map attribute names to indexes in extra field order:
 my %attrToIx = ();
+my @attrFound = ();
 for (my $i = 0;  $i <= $#attrOrder;  $i++) {
   $attrToIx{$attrOrder[$i]} = $i;
+  $attrFound[$i] = 0;
 }
 
 # Map item IDs to extra columns:
@@ -72,10 +80,11 @@ while (<$ATTRS>) {
     # Dbxref is one attribute, but split it up into multiple output columns for URL generation
     my @xrefs = split(',', $val);
     foreach my $xref (@xrefs) {
-      foreach my $source qw(GeneID MIM HGNC miRBase) {
+      foreach my $source qw(GeneID MIM HGNC MGI miRBase) {
         if ($xref =~ s/^$source://) {
           my $ix = $attrToIx{$source};
           $itemAttrs{$id}->[$ix] = $xref if (! defined $itemAttrs{$id}->[$ix]);
+          $attrFound[$ix] = 1;
         }
       }
     }
@@ -88,6 +97,7 @@ while (<$ATTRS>) {
         $geneToId{$val} = $id;
       }
       $itemAttrs{$id}->[$ix] = $val;
+      $attrFound[$ix] = 1;
     } else {
       $ignoredAttrs{$attr}++;
     }
@@ -97,6 +107,43 @@ close($ATTRS);
 
 foreach my $attr (sort { $ignoredAttrs{$b} <=> $ignoredAttrs{$a} } keys %ignoredAttrs) {
   warn "Ignored attribute '$attr' " . $ignoredAttrs{$attr} . " times\n";
+}
+
+# Make autoSql
+open (my $AS, ">$asFile") || die "Can't open $asFile for writing: $!\n";
+print $AS <<_EOF_
+table ncbiRefSeqOther
+"Additional information for NCBI 'Other' annotation"
+    (
+    string chrom;      "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Placeholder for BED format (score 0-1000)"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "CDS start/end in chromosome if coding"
+    uint thickEnd;     "CDS start/end in chromosome if coding"
+    uint reserved;     "Placeholder for BED format (itemRgb)"
+    int blockCount;    "Number of alignment blocks"
+    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] chromStarts; "Block start positions relative to chromStart"
+
+_EOF_
+;
+for (my $ix = 0;  $ix <= $#attributes;  $ix++) {
+  if ($attrFound[$ix]) {
+    my ($attr, $colName, $desc) = @{$attributes[$ix]};
+    print $AS "    string $colName;   \"$desc\"\n";
+  }
+}
+print $AS ")\n";
+close($AS);
+
+# Make a list of indexes of empty columns, in descending order, for splicing out:
+for (my $ix = 0;  $ix <= $#attrOrder;  $ix++) {
+  if (! $attrFound[$ix]) {
+    warn "No values found for $attrOrder[$ix]; removing column from output.\n";
+  }
 }
 
 # Read BED and append extra columns:
@@ -112,26 +159,34 @@ while (<$BED>) {
   }
   die "No attributes for bed name '$bedCols[3]' (id '$id')" unless defined $extraCols;
   foreach my $ix (0..$#attrOrder) {
-    # If the desired attribute isn't there for $id, but $id has ancestors, look for attr there
-    my $parentId = $idToParent{$id};
-    while (! defined $extraCols->[$ix] && defined $parentId) {
-      my $parent = $itemAttrs{$parentId} || $itemAttrs{$geneToId{$parentId}};
-      if (defined $parent) {
-        if (defined $parent->[$ix]) {
-          $extraCols->[$ix] = $parent->[$ix];
+    if ($attrFound[$ix]) {
+      # If the desired attribute isn't there for $id, but $id has ancestors, look for attr there
+      my $parentId = $idToParent{$id};
+      while (! defined $extraCols->[$ix] && defined $parentId) {
+        my $parent = $itemAttrs{$parentId} || $itemAttrs{$geneToId{$parentId}};
+        if (defined $parent) {
+          if (defined $parent->[$ix]) {
+            $extraCols->[$ix] = $parent->[$ix];
+          } else {
+            $parentId = $idToParent{$parentId};
+          }
         } else {
-          $parentId = $idToParent{$parentId};
+          warn "Can't find parent for id '$id'\n";
+          last;
         }
-      } else {
-        warn "Can't find parent for id '$id'\n";
-        last;
+      }
+      if (! defined $extraCols->[$ix]) {
+        $extraCols->[$ix] = "";
       }
     }
-    if (! defined $extraCols->[$ix]) {
-      $extraCols->[$ix] = "";
+  }
+  print join ("\t", @bedCols);
+  # Print out only non-empty extra columns.
+  foreach my $ix (0..$#attrOrder) {
+    if ($attrFound[$ix]) {
+      print "\t" . $extraCols->[$ix];
     }
   }
-  print join ("\t", @bedCols, @{$extraCols}) . "\n";
+  print "\n";
 }
 close($BED);
-
