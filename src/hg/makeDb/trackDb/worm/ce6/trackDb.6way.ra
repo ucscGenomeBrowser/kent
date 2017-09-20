@@ -47,8 +47,8 @@ html multiz6way
         track phastCons6way
         subTrack cons6wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 11 Vertebrate Cons
-        longLabel 11 vertebrate conservation by PhastCons
+        shortLabel 6 Nematode Cons
+        longLabel 6 nematode conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
