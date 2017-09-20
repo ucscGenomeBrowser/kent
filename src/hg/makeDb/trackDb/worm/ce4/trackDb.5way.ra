@@ -29,7 +29,7 @@ html multiz5way
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
-        speciesCodonDefault ce6
+        speciesCodonDefault ce4
         speciesGroups Vertebrate
         sGroup_Vertebrate caePb1 caeRem2 cb3 priPac1
         itemFirstCharCase noChange
