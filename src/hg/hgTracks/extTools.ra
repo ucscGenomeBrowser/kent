@@ -264,7 +264,7 @@ param db $db
 tool RnaFold
 shortLabel RNAfold
 longLabel RNA secondary structure prediction
-url http://rna.tbi.univie.ac.at/cgi-bin/RNAfold.cgi
+url http://rna.tbi.univie.ac.at/cgi-bin/RNAWebSuite/RNAfold.cgi
 email rna@tbi.univie.ac.at
 maxSize 5000
 param SHAPEFILE 
