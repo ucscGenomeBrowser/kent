@@ -1,7 +1,7 @@
 track cons7way
 compositeTrack on
 shortLabel Conservation
-longLabel 7-Way Multiz Alignment & Conservation
+longLabel 7-Way Multiz Alignment & Conservation (Chicken/Human/Mouse/Opossum/Frog/Zebrafish/Tetraodon)
 subGroup1 view Views align=Multiz_Alignments  phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full
