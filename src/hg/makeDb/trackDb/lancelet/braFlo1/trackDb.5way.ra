@@ -30,8 +30,10 @@ html multiz5way
         altColor 0,90,10
         type wigMaf 0.0 1.0
         speciesCodonDefault braFlo1
-        speciesGroups Vertebrate
-        sGroup_Vertebrate hg18 mm9 galGal3 petMar1
+        speciesGroups Birds Mammals Vertebrates
+        sGroup_Vertebrates petMar1
+        sGroup_Birds galgal3
+        sGroup_Mammals hg18 mm9
         itemFirstCharCase noChange
         treeImage phylo/braFlo1_5way.gif
         priority 100
