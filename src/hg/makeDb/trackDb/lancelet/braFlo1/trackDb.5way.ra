@@ -49,8 +49,8 @@ html multiz5way
         track phastCons5way
         subTrack cons5wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 3 Vertabrate Cons
-        longLabel 3 Vertabrate Conservation by PhastCons
+        shortLabel 3 Vertebrate Cons
+        longLabel 3 Vertebrate Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -72,8 +72,8 @@ html multiz5way
         track phastConsElements5way
         subTrack cons5wayViewelements on
         subGroups view=elements
-        shortLabel 3 Vertabrate El
-        longLabel 3 Vertabrate Conserved Elements
+        shortLabel 3 Vertebrate El
+        longLabel 3 Vertebrate Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
