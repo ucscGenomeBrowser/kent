@@ -1,6 +1,7 @@
 #	"$Id: trackDb.ra,v 1.47 2010/04/30 23:54:51 rhead Exp $";
 
 include trackDb.chainNet.ra
+include trackDb.7way.ra
 
 track gold override
 shortLabel Scaffolds
@@ -66,31 +67,6 @@ color 12,12,120
 type genePred
 ensArchive dec2006
 dataVersion December 2006
-
-track multiz7way
-shortLabel Conservation 
-longLabel Vertebrate Multiz Alignment & Conservation
-group compGeno
-priority 104.1
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons7way
-pairwiseHeight 12
-spanList 1
-yLineOnOff Off
-autoScale Off
-windowingFunction mean
-summary multiz7waySummary
-frames multiz7wayFrames
-irows on
-speciesCodonDefault danRer4
-speciesGroups vertebrate mammal
-sGroup_vertebrate fr1 tetNig1 xenTro2
-sGroup_mammal monDom4 mm8 hg18
-treeImage phylo/danRer4_7way.gif
 
 track nscanGene override
 informant Zebrafish N-SCAN uses fugu (fr1) as the informant.
