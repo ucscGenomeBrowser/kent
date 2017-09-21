@@ -46,8 +46,8 @@ html multiz15way
         track phastCons15way
         subTrack cons15wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 15 Nematode Cons
-        longLabel 15 nematode conservation by PhastCons
+        shortLabel 15 Insect Cons
+        longLabel 15 Insect Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
