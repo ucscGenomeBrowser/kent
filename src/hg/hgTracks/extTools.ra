@@ -361,7 +361,7 @@ param user_email
 #param dnaFormat textarea
 
 tool crispor
-url http://tefor.net/crispor/crispor.cgi
+url http://crispor.tefor.net/crispor.py
 email services@tefor.net
 shortLabel CRISPOR
 longLabel CRISPR/Cas9 target selector: off-target, activity predictions and primer design 
@@ -369,7 +369,7 @@ param org $db
 param pos $position
 param pam NGG
 maxSize 1000
-onlyDbs hg19,hg38,ce10,dm3,mm10,oryLat2,rn5,sacCer3,xenTro3,galGal4,danRer7,danRer10
+onlyDbs hg19,hg38,ce10,dm3,mm10,oryLat2,rn5,rn6,sacCer3,xenTro3,galGal4,galGal5,danRer7,danRer10,ci2,ci3,equCab2,gasAcu1,loPe1,musFur1,oryLat2,panTro4,papAnu2,rheMac2
 
 tool chopchop
 url https://chopchop.rc.fas.harvard.edu/search.php

@@ -416,6 +416,10 @@ _EOF_
 &usage(1) if (scalar(@ARGV) != 1);
 ($db) = @ARGV;
 
+if (! $opt_trf409 ) {
+  die "Error: must supply -trf409 argument, e.g.: -trf409=6\n";
+}
+
 # Now that we know the $db, figure out our paths:
 my $date = `date +%Y-%m-%d`;
 chomp $date;
@@ -423,6 +427,7 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/simpleRepeat.$date";
 $unmaskedSeq = $opt_unmaskedSeq ? $opt_unmaskedSeq :
   "$HgAutomate::clusterData/$db/$db.unmasked.2bit";
+
 $trf409 = $opt_trf409 ? $opt_trf409 : "";
 
 if (! -e $unmaskedSeq) {

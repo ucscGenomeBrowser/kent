@@ -20,7 +20,7 @@ html multiz5way
         track multiz5way
         subTrack cons5wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments 3 Vertebrates
+        longLabel Multiz Alignments 3 Species
         subGroups view=align
         noInherit on
         summary multiz5waySummary
@@ -49,8 +49,8 @@ html multiz5way
         track phastCons5way
         subTrack cons5wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 3 Vertebrate Cons
-        longLabel 3 Vertebrate Conservation by PhastCons
+        shortLabel 3 Species Cons
+        longLabel 3 Species Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -72,8 +72,8 @@ html multiz5way
         track phastConsElements5way
         subTrack cons5wayViewelements on
         subGroups view=elements
-        shortLabel 3 Vertebrate El
-        longLabel 3 Vertebrate Conserved Elements
+        shortLabel 3 Species El
+        longLabel 3 Species Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
