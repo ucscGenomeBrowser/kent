@@ -110,6 +110,7 @@ DBS = \
 	macEug1 macEug2 \
 	macFas5 \
 	macNem1 \
+	manLeu1 \
 	manPen1 \
 	marVir1 \
 	melGal1 melGal5 \
