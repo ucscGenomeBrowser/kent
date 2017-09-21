@@ -36,6 +36,7 @@ DBS = \
 	ancCey1 \
 	anoCar1 anoCar2 \
 	anoGam1 \
+	aotNan1 \
 	apiMel1 \
 	apiMel2	\
 	aplCal1 \
