@@ -20,7 +20,7 @@ html multiz5way
         track multiz5way
         subTrack cons5wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 5 Vertebrates
+        longLabel Multiz Alignments of 5 Mammals
         subGroups view=align
         noInherit on
         summary multiz5waySummary
@@ -30,8 +30,8 @@ html multiz5way
         altColor 0,90,10
         type wigMaf 0.0 1.0
         speciesCodonDefault bosTau4
-        speciesGroups Vertebrate
-        sGroup_Vertebrate canFam2 hg18 mm9 ornAna1
+        speciesGroups Mammal
+        sGroup_Mammal canFam2 hg18 mm9 ornAna1
         itemFirstCharCase noChange
         treeImage phylo/bosTau4_5way.gif
         priority 100
@@ -47,8 +47,8 @@ html multiz5way
         track phastCons5way
         subTrack cons5wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 5 Vertabrate Cons
-        longLabel 5 Vertabrate Conservation by PhastCons
+        shortLabel 5 Mammals Cons
+        longLabel 5 Mammals Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -70,8 +70,8 @@ html multiz5way
         track phastConsElements5way
         subTrack cons5wayViewelements on
         subGroups view=elements
-        shortLabel 5 Vertabrate El
-        longLabel 5 Vertabrate Conserved Elements
+        shortLabel 5 Mammals El
+        longLabel 5 Mammals Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .

@@ -3,7 +3,7 @@ superTrack on
 trackHandler wgEncodeGencode
 group genes
 shortLabel All GENCODE
-longLabel All GENCODE transcripts include comprehensive set and previous versions
+longLabel All GENCODE transcripts, including comprehensive set and previous version
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 include wgEncodeGencodeV19.ra

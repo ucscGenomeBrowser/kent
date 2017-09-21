@@ -1,55 +1,54 @@
-track cons9way
+track cons4way
 compositeTrack on
 shortLabel Conservation
-longLabel 9-Way Multiz Alignment & Conservation
+longLabel 4-Way Multiz Alignment & Conservation
 subGroup1 view Views align=Multiz_Alignments  phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full
 priority 104.2
 type bed 4
 group compGeno
-html multiz9way
+html multiz4way
 
-    track cons9wayViewalign
+    track cons4wayViewalign
     shortLabel Multiz Alignments
     view align
     visibility pack
     viewUi on
-    subTrack cons9way
+    subTrack cons4way
 
-        track multiz9way
-        subTrack cons9wayViewalign on
+        track multiz4way
+        subTrack cons4wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 9 Species (5 mammals, 4 primates)
+        longLabel Multiz Alignments of 4 Mammals
         subGroups view=align
         noInherit on
-        summary multiz9waySummary
-#        frames multiz9wayFrames
+        summary multiz4waySummary
+#        frames multiz4wayFrames
 #        irows on
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
-        speciesCodonDefault calJac1
-        speciesGroups Primates Mammals
-        sGroup_Primates rheMac2 ponAbe2 panTro2 hg18
-        sGroup_Mammals mm9 canFam2 monDom4 ornAna1
+        speciesCodonDefault canFam2
+        speciesGroups Mammal
+        sGroup_Mammal hg17 mm6 rn3
         itemFirstCharCase noChange
-        treeImage phylo/calJac1_9way.gif
+        treeImage phylo/canFam2_4way.gif
         priority 100
 
     # phastCons conservation
-    track cons9wayViewphastcons
+    track cons4wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
     visibility full
-    subTrack cons9way
+    subTrack cons4way
 
 
-        track phastCons9way
-        subTrack cons9wayViewphastcons on
+        track phastCons4way
+        subTrack cons4wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 9 Species Cons
-        longLabel 9 Species (5 mammals, 4 Primates) Conservation by PhastCons
+        shortLabel 4 Mammal Cons
+        longLabel 4 Mammal Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -62,22 +61,22 @@ html multiz9way
         priority 13
 
     # Conserved Elements (Most Conserved)
-    track cons9wayViewelements
+    track cons4wayViewelements
     shortLabel Conserved Elements
     view elements
     visibility dense
-    subTrack cons9way
+    subTrack cons4way
 
-        track phastConsElements9way
-        subTrack cons9wayViewelements on
+        track phastConsElements4way
+        subTrack cons4wayViewelements on
         subGroups view=elements
-        shortLabel 9 Species El
-        longLabel 9 Species (5 mammals, 4 Primates) Conserved Elements
+        shortLabel 4 Mammal El
+        longLabel 4 Mammal Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
         priority 23
-        html phastConsElements9way
+        html phastConsElements4way
 
 
 
