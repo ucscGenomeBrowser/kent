@@ -77,7 +77,7 @@ maxLimit 8000
 barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaLargeSamples.tab
 barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/tcgaMatrix.tab
 labelFields name2, name
-defaultLabelFields name2, name
+defaultLabelFields name2
 visibility pack
 group phenDis
 
