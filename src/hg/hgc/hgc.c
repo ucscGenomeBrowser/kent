@@ -11547,7 +11547,7 @@ if (rl->locusLinkId != 0)
 	    printf("<B>Mouse Genome Informatics:</B> ");
 	    mgiID = cloneString(row[0]);
 
-	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
+	    printf("<A HREF=\"http://www.informatics.jax.org/marker/%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
 	    }
 	else
 	    {
@@ -11605,7 +11605,7 @@ if (hTableExists(database, "jaxOrtholog"))
         {
 	jaxOrthologStaticLoad(row, &jo);
 	printf("<B>MGI Mouse Ortholog:</B> ");
-	printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" target=_BLANK>", jo.mgiId);
+	printf("<A HREF=\"http://www.informatics.jax.org/marker/%s\" target=_BLANK>", jo.mgiId);
 	printf("%s</A><BR>\n", jo.mouseSymbol);
 	}
     sqlFreeResult(&sr);
@@ -11684,7 +11684,7 @@ if (rl->locusLinkId != 0)
 	    printf("<B>Mouse Genome Informatics:</B> ");
 	    mgiID = cloneString(row[0]);
 
-	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
+	    printf("<A HREF=\"http://www.informatics.jax.org/marker/%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
 	    }
 	else
 	    {
@@ -14805,9 +14805,9 @@ if (row != NULL)
 	htmlHorizontalLine();
 	printf("<TABLE>\n");
         printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B>MGI:</B>");
-	printf("<A HREF = \"http://www.informatics.jax.org/searches/accession_report.cgi?id=MGI:%d\" TARGET=_blank>%d</A></TD></TR>\n", infoRow->MGIMarkerID, infoRow->MGIMarkerID);
+	printf("<A HREF = \"http://www.informatics.jax.org/marker/MGI:%d\" TARGET=_blank>%d</A></TD></TR>\n", infoRow->MGIMarkerID, infoRow->MGIMarkerID);
         printf("<TR><TH ALIGN=left>MGI Probe ID:</TH><TD><B>MGI:</B>");
-	printf("<A HREF = \"http://www.informatics.jax.org/searches/accession_report.cgi?id=MGI:%d\" TARGET=_blank>%d</A></TD></TR>\n", infoRow->MGIPrimerID, infoRow->MGIPrimerID);
+	printf("<A HREF = \"http://www.informatics.jax.org/marker/MGI:%d\" TARGET=_blank>%d</A></TD></TR>\n", infoRow->MGIPrimerID, infoRow->MGIPrimerID);
 	printf("</TABLE>\n");
 	htmlHorizontalLine();
 	/* Print out primer information */
@@ -18822,7 +18822,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     jaxQTL = jaxQTL3Load(row);
     printf("<B>Jax/MGI Link: </B>");
-    printf("<a TARGET=\"_blank\" href=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\">%s</a><BR>\n",
+    printf("<a TARGET=\"_blank\" href=\"http://www.informatics.jax.org/marker/%s\">%s</a><BR>\n",
            jaxQTL->mgiID, jaxQTL->mgiID);
     printf("<B>QTL:</B> %s<BR>\n", jaxQTL->name);
     printf("<B>Description:</B> %s <BR>\n", jaxQTL->description);

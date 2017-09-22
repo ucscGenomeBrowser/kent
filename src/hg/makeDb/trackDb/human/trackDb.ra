@@ -2051,7 +2051,7 @@ visibility hide
 type bed 4 .
 otherDb mm8
 otherDbTable jaxQtl
-url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+url http://www.informatics.jax.org/marker/$$
 urlLabel MGI QTL Detail:
 
     track jaxQtlAsIs
