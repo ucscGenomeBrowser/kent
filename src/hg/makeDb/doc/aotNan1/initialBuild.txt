@@ -1,0 +1,722 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the aotNan1
+# Aotus nancymaae - Ma's night monkey
+
+# chrMT listed in assembly == NC_018116.1 == JN161100.1
+
+#############################################################################
+# obtain photograph (DONE - 2017-02-14 - Hiram)
+    mkdir -p /hive/data/genomes/aotNan1/photo
+    cd /hive/data/genomes/aotNan1/photo
+    wget -O photoFile "https://upload.wikimedia.org/wikipedia/commons/9/97/Aotus.jpeg"
+    convert -sharpen 0 -normalize -geometry 400x400 -quality 80 photoFile \
+       Aotus_nancymaae.jpg
+
+    printf "photoCreditURL  https://commons.wikimedia.org/wiki/File:Aotus.jpeg
+photoCreditName WikiMedia Commons: MarcSaCi
+"   > ../photoReference.txt
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2017-09-21 - Hiram)
+    mkdir -p /hive/data/genomes/aotNan1/refseq
+    cd /hive/data/genomes/aotNan1/refseq
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Aotus_nancymaae/all_assembly_versions/GCF_000952055.2_Anan_2.0/ ./
+
+    # real    2m17.562s
+    # sent 562 bytes  received 3175894662 bytes  23097419.81 bytes/sec
+    # total size is 3175504260  speedup is 1.00
+
+    # measure what we have here:
+    faSize *0_genomic.fna.gz
+# 2861684817 bases (147245328 N's 2714439489 real 1768539569 upper
+#	945899920 lower) in 28922 sequences in 1 files
+# Total size: mean 98944.9 sd 1012622.4 min 620 (NW_018502248.1)
+#	max 42888418 (NW_018505940.1) median 3826
+# %33.05 masked total, %34.85 masked real
+
+    faCount *0_genomic.fna.gz | tail
+# #seq    len             A       C          G       T         N       cpg
+# total   2861684817  804201968 552779694 553026611 804431216 147245328 26386584
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2017-09-21 - Hiram)
+    mkdir /hive/data/genomes/aotNan1/ucsc
+    cd /hive/data/genomes/aotNan1/ucsc
+
+    # verify no duplicate sequences:
+    time faToTwoBit ../refseq/*0_genomic.fna.gz refseq.2bit
+    #	real    1m22.482s
+
+    twoBitDup refseq.2bit
+    # should be silent output, otherwise the duplicates need to be removed
+
+    # since this is an unplaced contig assembly, verify all names are .1:
+    twoBitInfo refseq.2bit  stdout | awk '{print $1}' \
+	| sed -e 's/_[0-9]\+//;' | sort | uniq -c
+    #        1 NC.1
+    #    28921 NW.1
+
+    # in this case, all the .1's can be changed to: v1
+
+    zcat ../refseq/*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+       | grep -v "^#" | sed -e 's/\.1/v1/;' > chrUn.aotNan1.agp
+
+    zcat ../refseq/*0_assembly_structure/non-nuclear/assembled_chromosomes/AGP/chrMT.comp.agp.gz \
+       | grep -v "^#" | sed -e 's/^NC_[0-9.]\+/chrM/;' > chrM.aotNan1.agp
+
+    zcat ../refseq/*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Aotus .*/v1/;' > chrUn.aotNan1.fa
+
+    zcat ../refseq/*0_assembly_structure/non-nuclear/assembled_chromosomes/FASTA/chrMT.fna.gz \
+       | sed -e 's/NC_.*/chrM/;' > chrM.aotNan1.fa
+
+    gzip chr*.fa
+
+    # verify fasta and AGP match:
+    time faToTwoBit chr*.fa.gz test.2bit
+    # real    1m15.422s
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    #  All AGP and FASTA entries agree - both files are valid
+
+
+    # verify nothing lost compared to genbank:
+    time twoBitToFa test.2bit stdout | faSize stdin
+# 2861684817 bases (147245328 N's 2714439489 real 2714439489 upper 0 lower)
+#	in 28922 sequences in 1 files
+# Total size: mean 98944.9 sd 1012622.4 min 620 (NW_018502248v1)
+#	max 42888418 (NW_018505940v1) median 3826
+# %0.00 masked total, %0.00 masked real
+
+
+    # same totals as above:
+# 2861684817 bases (147245328 N's 2714439489 real 1768539569 upper
+#	945899920 lower) in 28922 sequences in 1 files
+# Total size: mean 98944.9 sd 1012622.4 min 620 (NW_018502248.1)
+#	max 42888418 (NW_018505940.1) median 3826
+# %33.05 masked total, %34.85 masked real
+
+#############################################################################
+#  Initial database build (DONE - 2017-09-21 - Hiram)
+
+    cd /hive/data/genomes/aotNan1
+
+    # establish the config.ra file:
+    ~/kent/src/hg/utils/automation/prepConfig.pl aotNan1 mammal primate \
+       refseq/*_assembly_report.txt > aotNan1.config.ra
+    
+    # verify this looks OK:
+
+    cat aotNan1.config.ra
+# config parameters for makeGenomeDb.pl:
+db aotNan1
+clade mammal
+genomeCladePriority 35
+scientificName Aotus nancymaae
+commonName Ma's night monkey
+assemblyDate Jun. 2017
+assemblyLabel Baylor College of Medicine
+assemblyShortLabel Anan_2.0
+orderKey 13320
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_018116.1
+mitoAcc none
+fastaFiles /hive/data/genomes/aotNan1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/aotNan1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir primate
+photoCreditURL  https://commons.wikimedia.org/wiki/File:Aotus.jpeg
+photoCreditName WikiMedia Commons: MarcSaCi
+ncbiGenomeId 14430
+ncbiAssemblyId 1130511
+ncbiAssemblyName Anan_2.0
+ncbiBioProject 251539
+ncbiBioSample SAMN03121886
+genBankAccessionID GCF_000952055.2
+taxId 37293
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp aotNan1.config.ra) > agp.log 2>&1
+    # real    2m44.493s
+
+    # verify it ran OK:
+    #   *** All done!  (through the 'agp' step)
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev \
+       -dbHost=hgwdev -fileServer=hgwdev -continue=db \
+           aotNan1.config.ra ) > db.log 2>&1
+    # real    21m54.488s
+
+    # trouble with the name "Ma's night monkey" due to the ' quote
+    # complete the SQL add:
+
+hgsql hgcentraltest -e "INSERT INTO defaultDb (genome, name) VALUES (\"Ma's night monkey\", \"aotNan1\")"
+
+hgsql hgcentraltest -e "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"Ma's night monkey\", \"mammal\", 35)"
+
+    # continuing
+    time (makeGenomeDb.pl -workhorse=hgwdev \
+       -dbHost=hgwdev -fileServer=hgwdev -continue=trackDb \
+           aotNan1.config.ra ) > trackDb.log 2>&1
+
+    # check in the trackDb files created and add to trackDb/makefile
+    # temporary symlink until after masking
+    ln -s `pwd`/aotNan1.unmasked.2bit /gbdb/aotNan1/aotNan1.2bit
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-09-21 - Hiram)
+    mkdir /hive/data/genomes/aotNan1/bed/cytoBand
+    cd /hive/data/genomes/aotNan1/bed/cytoBand
+    makeCytoBandIdeo.csh aotNan1
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2017-09-21 - Hiram)
+    mkdir /hive/data/genomes/aotNan1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/aotNan1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/aotNan1/aotNan1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku aotNan1) > do.log 2>&1
+XXX - running - Thu Sep 21 11:47:44 PDT 2017
+    # real    5m34.816s
+
+    cat fb.aotNan1.cpgIslandExtUnmasked.txt
+    # 44748680 bases of 2472073034 (1.810%) in intersection
+
+#############################################################################
+# running repeat masker (DONE - 2017-09-21 - Hiram)
+    mkdir /hive/data/genomes/aotNan1/bed/repeatMasker
+    cd /hive/data/genomes/aotNan1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku aotNan1) > do.log 2>&1 &
+XXX - running - Thu Sep 21 11:48:37 PDT 2017
+    # real    781m8.842s
+
+    cat faSize.rmsk.txt
+# 2501912388 bases (29864684 N's 2472047704 real 1352527731 upper
+#	1119519973 lower) in 613 sequences in 1 files
+# Total size: mean 4081423.1 sd 23780904.1 min 15096 (chrUn_NW_018085360v1)
+#	max 274330532 (chr1) median 49329
+# %44.75 masked total, %45.29 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps aotNan1 rmsk
+    # 1119521852 bases of 2501912388 (44.747%) in intersection
+    # real    0m42.868s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' aotNan1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1119521852.000000
+    #  real    0m35.755s
+
+##########################################################################
+# running simple repeat (TBD - 2017-07-25 - Hiram)
+
+    mkdir /hive/data/genomes/aotNan1/bed/simpleRepeat
+    cd /hive/data/genomes/aotNan1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 5 aotNan1) > do.log 2>&1 &
+XXX - running - Thu Sep 21 11:49:47 PDT 2017
+    # real    9m56.089s
+
+    cat fb.simpleRepeat
+    # 33056801 bases of 2472073034 (1.337%) in intersection
+
+    # add to this simple repeat to rmsk:
+    cd /hive/data/genomes/aotNan1
+    twoBitMask aotNan1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed aotNan1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa aotNan1.2bit stdout | faSize stdin > faSize.aotNan1.2bit.txt
+    cat faSize.aotNan1.2bit.txt
+    # 2501912388 bases (29864684 N's 2472047704 real 1351491909 upper
+    #	1120555795 lower) in 613 sequences in 1 files
+    # Total size: mean 4081423.1 sd 23780904.1
+    #	min 15096 (chrUn_NW_018085360v1) max 274330532 (chr1) median 49329
+    # %44.79 masked total, %45.33 masked real
+
+    rm /gbdb/aotNan1/aotNan1.2bit
+    ln -s `pwd`/aotNan1.2bit /gbdb/aotNan1/aotNan1.2bit
+
+#############################################################################
+# CREATE MICROSAT TRACK (TBD - 2017-07-27 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/aotNan1/bed/microsat
+    cd /cluster/data/aotNan1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed aotNan1 microsat microsat.bed
+
+#############################################################################
+# ucscToINSDC table/track (TBD - 2017-07-29 - Hiram)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
+
+    mkdir /hive/data/genomes/aotNan1/bed/ucscToINSDC
+    cd /hive/data/genomes/aotNan1/bed/ucscToINSDC
+
+    # find accession for chrM
+    grep chrM ../../aotNan1.agp
+# chrM    1       16613   1       O       NC_000845.1     1       16613   +
+
+    # use that accession here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../refseq/GCF_*structure/Primary_Assembly NC_000845.1
+    # this is actually ucscToRefSeq
+
+    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+    rm -f ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt | sort > refseqToUcsc.txt
+
+    # there is no INSDC name in the assembly_report for chrM/NC_000845.1
+    #  use the INSDC name from before: AF034253.1
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | sed -e 's/na\b/AF034253.1/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+         | sort > refseq.insdc.txt
+    # the sed \b means to match word
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    # the tr commands avoid the problem of trying to use the -t argument
+    # to the join command which doesn't accept -t'\t' but instead has
+    # to use the unseen/can not copy command ctrl-v i
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+           > ucscToRefSeq.bed
+
+    # verify chrM is correct:
+    grep chrM *.bed
+# ucscToINSDC.bed:chrM    0       16613   AF034253.1
+# ucscToRefSeq.bed:chrM   0       16613   NC_000845.1
+
+    # should be same line counts throughout:
+    wc -l *
+    # 613 name.coordinate.tab
+    # 613 refseq.insdc.txt
+    # 613 ucscToINSDC.bed
+    # 613 ucscToRefSeq.bed
+    # 613 ucscToRefSeq.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 26
+    # use the 26 in this sed
+    sed -e "s/21/26/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab aotNan1 ucscToINSDC stdin ucscToINSDC.bed
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    sed -e "s/21/26/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab aotNan1 ucscToRefSeq stdin ucscToRefSeq.bed
+    checkTableCoords aotNan1
+    # should cover %100 entirely:
+    featureBits -countGaps aotNan1 ucscToINSDC
+    # 2501912388 bases of 2501912388 (100.000%) in intersection
+    featureBits -countGaps aotNan1 ucscToRefSeq
+    # 2501912388 bases of 2501912388 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (TBD - 2017-07-29 - Hiram)
+
+    mkdir /hive/data/genomes/aotNan1/bed/chromAlias
+    cd /hive/data/genomes/aotNan1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' aotNan1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' aotNan1 \
+        > ucsc.genbank.tab
+
+    # verify chrM is correct:
+    grep chrM *
+# ucsc.genbank.tab:chrM   AF034253.1      genbank
+# ucsc.refseq.tab:chrM    NC_000845.1     refseq
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > aotNan1.chromAlias.tab
+
+    hgLoadSqlTab aotNan1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        aotNan1.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2017-07-29 - Hiram)
+
+    cd ~/kent/src/hg/makeDb/trackDb/pig/aotNan1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" aotNan1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+    705 AEMK.1
+      2 AJKK.1
+      2 CU.2
+     18 FO.1
+    234 FO.2
+    105 FO.3
+     52 FO.4
+     12 FO.5
+      3 FO.6
+      1 FO.7
+      1 FO.9
+      1 FP.2
+      1 FP.3
+      7 FQ.1
+     91 FQ.2
+     55 FQ.3
+      9 FQ.4
+     10 FQ.5
+      2 FQ.6
+      1 FQ.9
+      1 NC_.1
+
+    # implies a search rule of: '[ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?'
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" aotNan1 | wc -l
+    # 1313
+
+    hgsql -N -e "select frag from gold;" aotNan1 \
+       | egrep -e '[ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?' | wc -l
+    # 1313
+
+    hgsql -N -e "select frag from gold;" aotNan1 \
+       | egrep -v -e '[ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rhesus/aotNan1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    git commit -m 'add gold table search rule refs #19859' trackDb.ra
+
+    # verify searches work in the position box
+
+##########################################################################
+## WINDOWMASKER (TBD - 2017-07-27 - Hiram)
+
+    mkdir /hive/data/genomes/aotNan1/bed/windowMasker
+    cd /hive/data/genomes/aotNan1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev aotNan1) > do.log 2>&1
+    # real    158m14.091s
+
+    # Masking statistics
+    cat faSize.aotNan1.cleanWMSdust.txt
+# 2501912388 bases (29864684 N's 2472047704 real 1563211996 upper
+#	908835708 lower) in 613 sequences in 1 files
+# Total size: mean 4081423.1 sd 23780904.1 min 15096 (chrUn_NW_018085360v1)
+#	max 274330532 (chr1) median 49329
+# %36.33 masked total, %36.76 masked real
+
+    cat fb.aotNan1.rmsk.windowmaskerSdust.txt
+    # 677163594 bases of 2501912388 (27.066%) in intersection
+
+##########################################################################
+# cpgIslands - (TBD - 2017-07-27 - Hiram)
+    mkdir /hive/data/genomes/aotNan1/bed/cpgIslands
+    cd /hive/data/genomes/aotNan1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku aotNan1) > do.log 2>&1
+    # real    4m52.080s
+
+    cat fb.aotNan1.cpgIslandExt.txt
+    # 32550865 bases of 2472073034 (1.317%) in intersection
+
+##############################################################################
+# ncbiRefSeq gene track (TBD - 2016-05-05 - Hiram)
+    mkdir /hive/data/genomes/aotNan1/bed/ncbiRefSeq
+    cd /hive/data/genomes/aotNan1/bed/ncbiRefSeq
+
+    # working on this script, running step by step:
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -stop=download -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 aotNan1) > download.log 2>&1
+    # real    12m36.320s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -continue=process -stop=process -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 aotNan1) > process.log 2>&1
+    # real    4m22.621s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -continue=load -stop=load -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 aotNan1) > load.log 2>&1
+    # real    0m21.690s
+
+    cat fb.ncbiRefSeq.aotNan1.txt
+    # 74646536 bases of 2725937399 (2.738%) in intersection
+
+##############################################################################
+# genscan - (TBD - 2017-07-27 - Hiram)
+    mkdir /hive/data/genomes/aotNan1/bed/genscan
+    cd /hive/data/genomes/aotNan1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku aotNan1) > do.log 2>&1
+    # real    737m1.735s
+
+    cat fb.aotNan1.genscan.txt
+    #   55049663 bases of 2472073034 (2.227%) in intersection
+
+    cat fb.aotNan1.genscanSubopt.txt
+    #   48834412 bases of 2472073034 (1.975%) in intersection
+
+#############################################################################
+# augustus gene track (TBD - 2017-07-27 - Hiram)
+
+    mkdir /hive/data/genomes/aotNan1/bed/augustus
+    cd /hive/data/genomes/aotNan1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev aotNan1) > do.log 2>&1
+    # real    207m36.088s
+
+    cat fb.aotNan1.augustusGene.txt
+    # 47127389 bases of 2472073034 (1.906%) in intersection
+
+#############################################################################
+# Create kluster run files (TBD - 2017-07-27 - Hiram)
+
+    # numerator is aotNan1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap aotNan1 gap
+    # 29824354 bases of 2405454322 (1.240%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2405454322 / 2861349177 \) \* 1024
+    # ( 2405454322 / 2861349177 ) * 1024 = 860.847479
+
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 100
+    cd /hive/data/genomes/aotNan1
+    time blat aotNan1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/aotNan1.11.ooc \
+        -repMatch=800
+    #   Wrote 34181 overused 11-mers to jkStuff/aotNan1.11.ooc
+    #	real    0m44.366s
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' aotNan1 \
+        | sort -k7,7nr
+    #   minimum size is 50000
+    gapToLift -verbose=2 -minGap=50000 aotNan1 \
+	jkStuff/aotNan1.nonBridged.lft -bedFile=jkStuff/aotNan1.nonBridged.bed
+
+#########################################################################
+# LIFTOVER TO susScr3 (TBD - 2017-07-27 - Hiram )
+    mkdir /hive/data/genomes/aotNan1/bed/blat.susScr3.2017-07-27
+    cd /hive/data/genomes/aotNan1/bed/blat.susScr3.2017-07-27
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug \
+        -ooc /hive/data/genomes/aotNan1/jkStuff/aotNan1.11.ooc \
+	   aotNan1 susScr3
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc /hive/data/genomes/aotNan1/jkStuff/aotNan1.11.ooc \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	 aotNan1 susScr3) > do.log 2>&1 &
+    #   real    252m20.235s
+
+    # verify browser can run a view in other genomes to susScr3 from aotNan1
+
+#########################################################################
+# lastz/chain/net swap from hg38 (TBD - 2017-08-02 - Hiram)
+    # alignment to hg38
+    cd /hive/data/genomes/hg38/bed/lastzAotNan1.2017-07-31
+
+    cat fb.hg38.chainAotNan1Link.txt
+    # 1463754915 bases of 3049335806 (48.002%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/aotNan1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/aotNan1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzAotNan1.2017-07-31/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    107m7.364s
+
+    cat fb.aotNan1.chainHg38Link.txt
+    # 1387973267 bases of 2472073034 (56.146%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` aotNan1 hg38) \
+        > rbest.log 2>&1
+    # real    598m8.675s
+
+#########################################################################
+# lastz/chain/net swap from mm10 (TBD - 2017-08-02 - Hiram)
+    # alignment on mm10
+    cd /hive/data/genomes/mm10/bed/lastzAotNan1.2017-07-31
+    cat fb.mm10.chainAotNan1Link.txt
+    #	731012356 bases of 2652783500 (27.556%) in intersection
+
+    mkdir /hive/data/genomes/aotNan1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/aotNan1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzAotNan1.2017-07-31/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    61m6.153s
+
+    cat fb.aotNan1.chainMm10Link.txt
+    #	715277290 bases of 2472073034 (28.934%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev aotNan1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    358m15.340s
+
+##############################################################################
+# GENBANK AUTO UPDATE (TBD - 2017-07-29 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Sus scrofa      41240   1676416 4173
+
+    # edit etc/genbank.conf to add aotNan1 just before susScr3
+
+# aotNan1 (pig)
+aotNan1.serverGenome = /hive/data/genomes/aotNan1/aotNan1.2bit
+aotNan1.clusterGenome = /hive/data/genomes/aotNan1/aotNan1.2bit
+aotNan1.ooc = /hive/data/genomes/aotNan1/jkStuff/aotNan1.11.ooc
+aotNan1.lift = /hive/data/genomes/aotNan1/jkStuff/aotNan1.nonBridged.lft
+aotNan1.perChromTables = no
+aotNan1.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+aotNan1.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+aotNan1.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+aotNan1.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+aotNan1.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+aotNan1.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+aotNan1.downloadDir = aotNan1
+aotNan1.refseq.mrna.native.load  = yes
+aotNan1.refseq.mrna.xeno.load  = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+aotNan1.genbank.mrna.xeno.load = yes
+aotNan1.genbank.mrna.xeno.loadDesc = no
+aotNan1.genbank.est.native.load = yes
+# aotNan1.upstreamGeneTbl = ensGene
+# aotNan1.upstreamMaf = multiz12way
+# /hive/data/genomes/aotNan1/bed/multiz12way/species.list
+
+    git commit -m "Added aotNan1; refs #19879" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+# Edit src/lib/gbGenome.c to add new species.  Skipped
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial aotNan1
+    #  logFile: var/build/logs/2017.07.27-20:49:34.aotNan1.initalign.log
+
+    #   real    1486m19.233s
+
+    tail -2 var/build/logs/2017.07.27-20:49:34.aotNan1.initalign.log
+# hgwdev 2017.07.28-21:20:42 aotNan1.initalign: Succeeded: aotNan1
+# hgwdev 2017.07.28-21:35:53 aotNan1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.aotNan1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad aotNan1
+    # logFile: var/dbload/hgwdev/logs/2017.07.29-07:05:26.aotNan1.dbload.log
+    # real    81m41.107s
+
+    tail -1 var/dbload/hgwdev/logs/2017.07.29-07:05:26.aotNan1.dbload.log
+    # hgwdev 2017.07.29-08:27:07 aotNan1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add aotNan1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added aotNan1 - pig refs #19859" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+##############################################################################
+#  BLATSERVERS ENTRY (TBD - 2017-08-03 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("aotNan1", "blat1b", "17880", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("aotNan1", "blat1b", "17881", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+##############################################################################
+# set default position to OPN1SW gene displays  (TBD - 2017-08-03 - Hiram)
+# same as susScr3:
+    hgsql -e \
+'update dbDb set defaultPos="chr18:19836295-19840119" where name="aotNan1";' \
+	hgcentraltest
+
+##############################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2017-08-03 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=aotNan1 -tableCoverage all.joiner
+    joinerCheck -database=aotNan1 -times all.joiner
+    joinerCheck -database=aotNan1 -keys all.joiner
+
+    cd /hive/data/genomes/aotNan1
+    time (makeDownloads.pl aotNan1) > downloads.log 2>&1
+    # real    17m8.716s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/aotNan1/pushQ
+    cd /hive/data/genomes/aotNan1/pushQ
+    time (makePushQSql.pl -redmineList aotNan1) \
+	> aotNan1.pushQ.sql 2> stderr.out
+    # real    3m46.855s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # writing redmine listings to
+    # redmine.aotNan1.file.list
+    # redmine.aotNan1.table.list
+    # redmine.aotNan1.releaseLog.txt
+    # WARNING: aotNan1 does not have seq
+    # WARNING: aotNan1 does not have extFile
+
+#########################################################################

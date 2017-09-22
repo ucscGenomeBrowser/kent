@@ -196,6 +196,10 @@ while (my $line = <$fh>) {
                my ($tag, $tag2, $value) = split(':', $xref);
                $idDataPtr->{'hgnc'} = $value;
              }
+             if ($xref =~ m/^mgi:/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'mgi'} = uc($tag2).":$value";
+             }
           }
        }
        # a couple of renames for tag names
@@ -301,6 +305,8 @@ foreach my $id (keys %idData) {
        $dataOut =~ s/%3B/;/g;
        $dataOut =~ s/%25/%/g;
        printf "\t%s", $dataOut;
+    } elsif ($tag eq 'hgnc' && exists $idDataPtr->{mgi}) {
+       printf "\t" . $idDataPtr->{mgi};
     } else { printf "\t$missingData"; }
   }
   if (exists($descriptionData{$id})) {

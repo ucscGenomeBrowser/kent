@@ -36,6 +36,7 @@ DBS = \
 	ancCey1 \
 	anoCar1 anoCar2 \
 	anoGam1 \
+	aotNan1 \
 	apiMel1 \
 	apiMel2	\
 	aplCal1 \
@@ -62,6 +63,7 @@ DBS = \
 	cb1 cb2 cb3 cb4 \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \
 	centromeres1 \
+	cerAty1 \
 	cerSim1 \
 	chiLan1o \
 	chlSab2 \
@@ -110,6 +112,7 @@ DBS = \
 	macEug1 macEug2 \
 	macFas5 \
 	macNem1 \
+	manLeu1 \
 	manPen1 \
 	marVir1 \
 	melGal1 melGal5 \

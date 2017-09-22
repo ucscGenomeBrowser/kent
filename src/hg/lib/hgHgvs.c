@@ -2583,9 +2583,7 @@ else
 // protSeq may or may not end with X, so treat protSeq->size accordingly
 boolean hitsStopCodon = (vpPep->end > protSeq->size ||
                          ((protSeq->dna[protSeq->size-1] == 'X') && vpPep->end == protSeq->size));
-if (vpPep->likelyNoChange)
-    dyStringAppend(dy, "=");
-else if (vpPep->cantPredict || vpPep->spansUtrCds)
+if (vpPep->cantPredict || vpPep->spansUtrCds)
     dyStringAppend(dy, "?");
 else if (vpPep->frameshift)
     {

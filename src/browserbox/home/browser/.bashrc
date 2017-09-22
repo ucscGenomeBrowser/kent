@@ -115,7 +115,7 @@ fi
 
 # CHANGES IN BROWSERBOX
 
-export PATH=~/bin:$PATH:.
+export PATH=~/bin:~/bin/blat:$PATH:.
 
 # for a VM this is very useful
 if [ `tty` = '/dev/tty1' ]; then
@@ -177,3 +177,4 @@ if [ `tty` == "/dev/tty1" -a ! -e /root/noAutoUpdate ]; then
     sudo /root/updateBrowser.sh
 fi
 
+alias og='ls -ogrt'

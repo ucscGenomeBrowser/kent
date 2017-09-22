@@ -345,10 +345,11 @@ for(hv = hubVarList; hv; hv = hv->next)
 
 // need to change hub_#hubNumber#* (track visibilities)
 safef(buffer, sizeof buffer, "%s%d_", hubTrackPrefix, oldHubId);
+int oldNameLength = strlen(buffer);
 hubVarList = cartVarsWithPrefix(cart, buffer);
 for(hv = hubVarList; hv; hv = hv->next)
     {
-    char *name = hv->name + strlen(buffer);
+    char *name = hv->name + oldNameLength;
     safef(buffer, sizeof buffer, "%s%d_%s", hubTrackPrefix, newHubId, name);
     cartSetString(cart, buffer, cloneString(hv->val));
     cartRemove(cart, hv->name);

@@ -1,0 +1,610 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the manLeu1
+# Drill - Mandrillus leucophaeus
+
+# Assembly name:  Mleu.le_1.0
+# Organism name:  Mandrillus leucophaeus (drill)
+# Isolate:  KB7577
+# Sex:  female
+# Taxid:          9568
+# BioSample:      SAMN03121813
+# BioProject:     PRJNA279492
+# Submitter:      Baylor College of Medicine
+# Date:           2015-3-12
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    JYKQ01
+# Assembly method: AllPathsLG v. 48744; Atlas Link v. 1.1; Atlas GapFill v. 2.2
+# Expected final version: Yes
+# Genome coverage: 117.2x
+# Sequencing technology: Illumina
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000951045.1
+# RefSeq assembly accession: GCF_000951045.1
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000951085.1      GCF_000951085.1 Primary Assembly
+
+#############################################################################
+## There is a RefSeq mitochondrion sequence not included in this release:
+##  NC_028442.1 from Dec 2015, will have to add that after these contigs.
+#############################################################################
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2017-09-20 - Hiram)
+    mkdir -p /hive/data/genomes/manLeu1/refseq
+    cd /hive/data/genomes/manLeu1/refseq
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Mandrillus_leucophaeus/all_assembly_versions/GCF_000951045.1_Mleu.le_1.0/ ./
+
+    # measure what we have here:
+    faSize GCF_000951045.1_Mleu.le_1.0_genomic.fna.gz
+
+    # 3061992840 bases (340585302 N's 2721407538 real 1778481364 upper
+    #	942926174 lower) in 12821 sequences in 1 files
+    # Total size: mean 238826.4 sd 937352.3 min 304 (NW_012108651.1)
+    #	max 17385548 (NW_012098097.1) median 2228
+    # %30.79 masked total, %34.65 masked real
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2017-09-20 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/ucsc
+    cd /hive/data/genomes/manLeu1/ucsc
+
+    # add the mitochondrion sequence
+export mitoAcc=NC_028442.1
+
+wget -O ${mitoAcc}.fa \
+ "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc"
+
+echo ">chrM" > chrM.fa
+grep -v "^>" ${mitoAcc}.fa >> chrM.fa
+
+export mSize=`faCount chrM.fa | grep total | awk '{print $2}'`
+
+/bin/echo -e "chrM\t1\t$mSize\t1\tF\t$mitoAcc\t1\t$mSize\t+" > chrM.agp
+
+    # verify no duplicate sequences:
+    faToTwoBit ../refseq/GCF_000951045.1_Mleu.le_1.0_genomic.fna.gz refseq.2bit
+    twoBitDup refseq.2bit
+    # should be silent
+
+    # verify all names are .1:
+    twoBitInfo refseq.2bit  stdout | awk '{print $1}' \
+	| sed -e 's/_[0-9]\+//;' | sort | uniq -c
+    #	12821 NW.1
+
+    # since they are all .1, change the names to be v1:
+    zcat ../refseq/GCF_000951045.1_Mleu.le_1.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+       | grep -v "^#" | sed -e 's/\.1/v1/;' > chrUn.manLeu1.agp
+
+    zcat ../refseq/GCF_000951045.1_Mleu.le_1.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Mandrillus .*/v1/;' > chrUn.manLeu1.fa
+
+    gzip chrUn.manLeu1.fa chrM.fa
+
+    cat chrUn.manLeu1.agp chrM.agp > manLeu1.ucsc.agp
+
+    # verify these two files are compatible:
+    faToTwoBit chrUn.manLeu1.fa.gz chrM.fa.gz test.2bit
+    checkAgpAndFa manLeu1.ucsc.agp test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+
+    # no longer need these
+    rm -f test.2bit refseq.2bit manLeu1.ucsc.agp
+
+#############################################################################
+# photo (DONE - 2017-02-14 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/photo
+    cd /hive/data/genomes/manLeu1/photo
+
+    wget -O photoFile "https://upload.wikimedia.org/wikipedia/commons/e/e0/Drill_%28Mandrillus_leucophaeus%29.jpg"
+    convert -sharpen 0 -normalize -geometry 400x400 -quality 80 photoFile Mandrillus_leucophaeus.jpg
+
+    cd /hive/data/genomes/manLeu1
+printf "photoCreditURL  https://commons.wikimedia.org/wiki/User:Cl%C3%A9ment_Bardot
+photoCreditName WikiMedia Commons: Clément Bardot
+" > photoReference.txt
+
+    # the e acute doesn't work in that cut/paste, should be:
+    #	WikiMedia Commons: Cl&#233;ment Bardot
+    # for extended HTML markup
+
+    # check that Mandrillus_leucophaeus.jpg file into source tree
+    # src/hg/htdocs/images/ and copy to /usr/local/apache/htdocs/images/
+
+#############################################################################
+#  Initial database build (DONE - 2017-09-20 - Hiram)
+
+    cd /hive/data/genomes/manLeu1
+    ~/kent/src/hg/utils/automation/prepConfig.pl manLeu1 mammal primate \
+       refseq/*_assembly_report.txt > manLeu1.config.ra
+    # going to need a mitoAcc ?
+    # fixup the mitoAcc line:
+mitoAcc none
+    # since it is already setup
+
+    # verify it looks sane:
+    cat *.ra
+
+# config parameters for makeGenomeDb.pl:
+db manLeu1
+clade mammal
+genomeCladePriority 35
+scientificName Mandrillus leucophaeus
+commonName Drill
+assemblyDate Mar. 2015
+assemblyLabel Baylor College of Medicine
+assemblyShortLabel Mleu.le_1.0
+orderKey 4874
+mitoAcc none
+fastaFiles /hive/data/genomes/manLeu1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/manLeu1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir primate
+photoCreditURL  https://commons.wikimedia.org/wiki/User:Cl%C3%A9ment_Bardot
+photoCreditName WikiMedia Commons: Clément Bardot
+ncbiGenomeId 36538
+ncbiAssemblyId 311021
+ncbiAssemblyName Mleu.le_1.0
+ncbiBioProject 279492
+ncbiBioSample SAMN03121813
+genBankAccessionID GCF_000951045.1
+taxId 9568
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp manLeu1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    2m45.522s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db manLeu1.config.ra) > db.log 2>&1
+    # real    21m32.471s
+
+    # new trackDb dependencies, fix the script, continue:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+     -fileServer=hgwdev -continue=trackDb manLeu1.config.ra) > trackDb.log 2>&1
+    # real    0m9.862s
+
+    # fixup the description.html for the e acute:
+    #	WikiMedia Commons: Cl&#233;ment Bardot
+
+    # check in the trackDb files created and add to trackDb/makefile
+    # then, clean up:
+    rm -fr TemporaryTrackDbCheckout/
+
+##########################################################################
+# running repeat masker (TBD - 2014-08-15 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/bed/repeatMasker
+    cd /hive/data/genomes/manLeu1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev -useRMBlastn \
+       -smallClusterHub=ku manLeu1) > do.log 2>&1
+    # real    558m51.310s
+
+    cat faSize.rmsk.txt
+    # 2204741241 bases (205794437 N's 1998946804 real 1343043070 upper
+    #    655903734 lower) in 92770 sequences in 1 files
+    # Total size: mean 23765.7 sd 56958.6 min 200 (JPTV01206145)
+    #   max 1317973 (KN005617) median 598
+    # %29.75 masked total, %32.81 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps manLeu1 rmsk
+    # 655984124 bases of 2204741241 (29.753%) in intersection
+    # real    1m0.941s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (TBD - 2014-08-14 - Hiram)
+
+    mkdir /hive/data/genomes/manLeu1/bed/simpleRepeat
+    cd /hive/data/genomes/manLeu1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        manLeu1) > do.log 2>&1
+    # real    39m22.135s
+
+    cat fb.simpleRepeat
+    # 43106952 bases of 1999066070 (2.156%) in intersection
+
+    # using the Window Masker result:
+    cd /hive/data/genomes/manLeu1
+    twoBitMask bed/repeatMasker/manLeu1.rmsk.2bit \
+      -add bed/simpleRepeat/trfMask.bed  manLeu1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa manLeu1.2bit stdout | faSize stdin > faSize.manLeu1.2bit.txt
+    cat faSize.manLeu1.2bit.txt
+    # 2204741241 bases (205794437 N's 1998946804 real 1342683024 upper
+    #    656263780 lower) in 92770 sequences in 1 files
+    # Total size: mean 23765.7 sd 56958.6 min 200 (JPTV01206145)
+    #    max 1317973 (KN005617) median 598
+    # %29.77 masked total, %32.83 masked real
+
+    rm /gbdb/manLeu1/manLeu1.2bit
+    ln -s `pwd`/manLeu1.2bit /gbdb/manLeu1/manLeu1.2bit
+
+##########################################################################
+# CREATE MICROSAT TRACK (TBD - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/manLeu1/bed/microsat
+     cd /cluster/data/manLeu1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed manLeu1 microsat microsat.bed
+    #	Loaded 13365 elements of size 4
+
+##########################################################################
+## WINDOWMASKER (TBD - 2014-08-16 - Hiram)
+
+    mkdir /hive/data/genomes/manLeu1/bed/windowMasker
+    cd /hive/data/genomes/manLeu1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev manLeu1) > do.log 2>&1
+    # real    252m52.324s
+
+    # Masking statistics
+    cat faSize.manLeu1.cleanWMSdust.txt
+    # 2204741241 bases (205794437 N's 1998946804 real 1438998713 upper
+    #    559948091 lower) in 92770 sequences in 1 files
+    # Total size: mean 23765.7 sd 56958.6 min 200 (JPTV01206145)
+    #    max 1317973 (KN005617) median 598
+    # %25.40 masked total, %28.01 masked real
+
+    cat fb.manLeu1.rmsk.windowmaskerSdust.txt
+    # 276979736 bases of 2204741241 (12.563%) in intersection
+
+##########################################################################
+# cpgIslands - (TBD - 2014-08-19 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/bed/cpgIslands
+    cd /hive/data/genomes/manLeu1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku manLeu1) > do.log 2>&1 &
+    # real    169m34.228s
+
+    cat fb.manLeu1.cpgIslandExt.txt
+    # 11640846 bases of 1999066070 (0.582%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (TBD - 2014-08-20 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/manLeu1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/manLeu1/manLeu1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku manLeu1) > do.log 2>&1
+    # real    360m14.919s
+
+    cat fb.manLeu1.cpgIslandExtUnmasked.txt
+    # 12785608 bases of 1999066070 (0.640%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (TBD - 2015-06-10 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/bed/cytoBand
+    cd /hive/data/genomes/manLeu1/bed/cytoBand
+    makeCytoBandIdeo.csh manLeu1
+
+#########################################################################
+# augustus - (TBD - 2015-05-28 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/bed/augustus
+    cd /hive/data/genomes/manLeu1/bed/augustus
+
+export db="manLeu1"
+export species="human"
+doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+  -species=$species -dbHost=hgwdev -utr -workhorse=hgwdev $db
+
+    cat fb.manLeu1.augustusGene.txt
+    #  49832677 bases of 1999066070 (2.493%) in intersection
+
+#########################################################################
+# genscan - (TBD - 2014-08-22 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/bed/genscan
+    cd /hive/data/genomes/manLeu1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku manLeu1) > do.log 2>&1 &
+    # real    122m8.890s
+
+    cat fb.manLeu1.genscan.txt
+    #   55603181 bases of 1999066070 (2.781%) in intersection
+
+    cat fb.manLeu1.genscanSubopt.txt
+    #   62862446 bases of 1999066070 (3.145%) in intersection
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2015-06-22 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/bed/ucscToINSDC
+    cd /hive/data/genomes/manLeu1/bed/ucscToINSDC
+
+    # check for chrM accession:
+    grep chrM ../../manLeu1.agp
+# chrM    1       16578   1       F       NC_016008       1       16578   +
+
+    # use that accession as an argument to this command
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+         ../../genbank/Primary_Assembly NC_016008
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    # do not need the v1 in this case:
+    sed -e 's/v1//' ucscToINSDC.txt \
+      | join name.coordinate.tab - | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #    92770 name.coordinate.tab
+    #    92770 ucscToINSDC.bed
+    #    92773 ucscToINSDC.txt
+
+    # three missing ones are the dups that UCSC removed:
+     cat ../../ucsc/dup.list
+JPTV01168508
+JPTV01172399
+JPTV01172711
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 12
+    # use the 12 in this sed
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab manLeu1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords manLeu1
+    # should cover %100 entirely:
+    featureBits -countGaps manLeu1 ucscToINSDC
+    # 2204741241 bases of 2204741241 (100.000%) in intersection
+
+#########################################################################
+# Create kluster run files (TBD - 2015-06-10 - Hiram)
+
+    cd /hive/data/genomes/manLeu1
+    # numerator is manLeu1 gapless bases "real" as reported by:
+    head -1 faSize.manLeu1.2bit.txt
+# 2204741241 bases (205794437 N's 1998946804 real 1342683024 upper
+#    656263780 lower) in 92770 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1998946804 / 2861349177 \) \* 1024
+    # ( 1998946804 / 2861349177 ) * 1024 = 715.369359
+
+    # ==> use -repMatch=700 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/manLeu1
+    time blat manLeu1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/manLeu1.11.ooc \
+        -repMatch=700
+    # Wrote 25574 overused 11-mers to jkStuff/manLeu1.11.ooc
+    #   real    0m33.809s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' manLeu1
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 manLeu1 jkStuff/manLeu1.nonBridged.lft \
+#         -bedFile=jkStuff/manLeu1.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' manLeu1 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 92770, total size: 2204741241, one half size: 1102370620
+# cumulative    N50 count       contig  contig size
+# 1102318455      5267    KN010628        117930
+# 1102370620 one half size
+# 1102436375      5268    KN010629        117920
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-10 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows one mRNA:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Manis javanica  1       0       0
+
+    # edit etc/genbank.conf to add manLeu1 just before bosTau2
+
+# manLeu1 (Pangolin) 92770 contigs
+manLeu1.serverGenome = /hive/data/genomes/manLeu1/manLeu1.2bit
+manLeu1.clusterGenome = /hive/data/genomes/manLeu1/manLeu1.2bit
+manLeu1.ooc = /hive/data/genomes/manLeu1/jkStuff/manLeu1.11.ooc
+manLeu1.lift = no
+manLeu1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+manLeu1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+manLeu1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+manLeu1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+manLeu1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+manLeu1.downloadDir = manLeu1
+manLeu1.refseq.mrna.native.load  = no
+manLeu1.refseq.mrna.xeno.load = yes
+manLeu1.genbank.mrna.xeno.load = no
+manLeu1.genbank.mrna.native.load = no
+manLeu1.genbank.est.native.load = no
+manLeu1.perChromTables = no
+
+    git commit -m "Added manLeu1/Pangolin; refs #15515" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added manLeu Pangolin/Manis pentadactyla (javanica) refs #15515" \
+       src/lib/gbGenome.c
+    git push
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial manLeu1
+    # logFile: var/build/logs/2015.06.10-14:04:03.manLeu1.initalign.log
+    # real    34m30.608s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.manLeu1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad manLeu1
+    # logFile: var/dbload/hgwdev/logs/2015.06.15-09:40:01.manLeu1.dbload.log
+    # real    6m45.556s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add manLeu1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added manLeu1 - Pangolin/Manis pentadactyla (javanica)refs #15515" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2015-03-10 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/bed/ucscToINSDC
+    cd /hive/data/genomes/manLeu1/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly NC_012346.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #   450182 name.coordinate.tab
+    #   450182 ucscToINSDC.bed
+    #   450182 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab manLeu1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords manLeu1
+    # should cover %100 entirely:
+    featureBits -countGaps manLeu1 ucscToINSDC
+    # 1192725744 bases of 1192725744 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONT - 2017-03-28 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/pangolin/manLeu1
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" manLeu1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
+#  230927 JPTV.1
+#       1 NC_
+
+    # implies a rule: '[JN][CP][T_][V0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" manLeu1 | wc -l
+    # 230928
+
+    hgsql -N -e "select frag from gold;" manLeu1 \
+       | egrep -e '[JN][CP][T_][V0-9]+(\.[0-9]+)?' | wc -l
+    # 230928
+
+    hgsql -N -e "select frag from gold;" manLeu1 \
+       | egrep -v -e '[JN][CP][T_][V0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/manLeu1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [JN][CP][T_][V0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+############################################################################
+#  BLATSERVERS ENTRY (TBD - 2017-03-22 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("manLeu1", "blat1b", "17878", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("manLeu1", "blat1b", "17879", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to MAOA gene (Monoamine Oxidase A from monDom5)
+##  (TBD - 2017-03-22 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="KN007563:109071-158662"
+	where name="manLeu1";' hgcentraltest
+
+############################################################################
+# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Steve)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    git commit -m "Added manLeu1 - Chinese Pangolin/Manis pentadactyl arefs #15515" \
+       all.joiner
+    joinerCheck -database=manLeu1 -tableCoverage all.joiner
+    joinerCheck -database=manLeu1 -times all.joiner
+    joinerCheck -database=manLeu1 -keys all.joiner
+
+    cd /hive/data/genomes/manLeu1
+    time makeDownloads.pl manLeu1 > downloads.log 2>&1
+    # real    14m28.068s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/manLeu1/pushQ
+    cd /hive/data/genomes/manLeu1/pushQ
+    time makePushQSql.pl manLeu1 > manLeu1.pushQ.sql 2> stderr.out
+    # real    5m58.381s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/manLeu1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/manLeu1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/manLeu1/bbi/qualityBw/quality.bw
+    # WARNING: manLeu1 does not have seq
+    # WARNING: manLeu1 does not have extFile
+    # WARNING: manLeu1 does not have estOrientInfo
+    # WARNING: manLeu1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p manLeu1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/manLeu1.pushQ.sql"
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

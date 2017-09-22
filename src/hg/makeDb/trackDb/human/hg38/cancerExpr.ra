@@ -8,7 +8,7 @@ superTrack on
 group phenDis
 
 track tcgaGeneExpr
-parent cancerExpr on
+superTrack cancerExpr pack
 release alpha
 type bigBarChart
 shortLabel Cancer Gene Expr
@@ -45,7 +45,7 @@ visibility pack
 group phenDis
 
 track tcgaTranscExpr
-parent cancerExpr on
+superTrack cancerExpr pack
 release alpha
 type bigBarChart
 shortLabel Cancer Transc Expr
@@ -73,12 +73,11 @@ barChartColors \
 barChartUnit TPM
 barChartMetric median
 bigDataUrl /gbdb/hg38/tcga/tcgaTranscExpr.bb
-#bigDataUrl /gbdb/hgFixed/human/expMatrix/tcgaTransExp.bb
 maxLimit 8000
 barChartSampleUrl /gbdb/hgFixed/human/expMatrix/tcgaLargeSamples.tab
 barChartMatrixUrl /gbdb/hgFixed/human/expMatrix/tcgaMatrix.tab
 labelFields name2, name
-defaultLabelFields name2, name
+defaultLabelFields name2
 visibility pack
 group phenDis
 

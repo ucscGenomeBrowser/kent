@@ -1366,6 +1366,7 @@ src/hg/makeDb/trackDb/joinedRmskComposite.ra \\
 src/hg/makeDb/trackDb/joinedRmsk.ra \\
 src/hg/makeDb/trackDb/trackDb.genbank.ra \\
 src/hg/makeDb/trackDb/trackDb.genbank.new.ra \\
+src/hg/makeDb/trackDb/trackDb.uniprot.ra \\
 src/hg/makeDb/trackDb/tagTypes.tab \\
 src/hg/lib/trackDb.sql \\
 src/hg/lib/hgFindSpec.sql \\
