@@ -113,7 +113,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
         parent uniprot
         visibility dense
         type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipRepeats.bb
+        bigDataUrl /gbdb/$D/uniprot/unipRepeat.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipConflict
