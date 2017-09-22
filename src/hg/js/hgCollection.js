@@ -63,7 +63,7 @@ var hgCollection = (function() {
         $("#customVis").val(visibility);
         $("#customColorInput").val(color);
         $("#customColorPicker").spectrum("set", color);
-        $(selectedTree).jstree("open_node", selectedNode);
+        $(selectedTree).jstree("toggle_node", selectedNode);
    }
 
     function selectTreeNode(evt, data)             {
@@ -326,7 +326,9 @@ var hgCollection = (function() {
                 "check_callback" : checkCallback
             }
         });
-
+        $(treeDiv).on("select_node.jstree", function (evt, data)  {
+            $(evt.target).jstree("toggle_node", data.node);
+        });
 
         var firstElement = $("#collectionList li").first();
         selectElements($("#collectionList"), firstElement) ;
