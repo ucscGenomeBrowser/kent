@@ -114,7 +114,7 @@ assemblies.
         </tr>
 </table>
 <p>
-This table describes which training species was used for a partiuclar group of assemblies.
+This table describes which training species was used for a particular group of assemblies.
 When available, the closest related training species was used.
 </p>
 
