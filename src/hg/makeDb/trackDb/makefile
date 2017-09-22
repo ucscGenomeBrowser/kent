@@ -128,6 +128,7 @@ DBS = \
 	nasLar1 \
 	necAme1 \
 	nemVec1 \
+	neoSch1 \
 	nomLeu1 nomLeu2 nomLeu3 \
 	ochPri2 ochPri3 \
 	oncVol1 \
