@@ -5,11 +5,10 @@ longLabel Multiz Alignment & Conservation (5 Species)
 subGroup1 view Views align=Multiz_Alignments  phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full
-priority 104.2
+priority 1
 type bed 4
 group compGeno
 html multiz5way
-priority 1
 
     track cons5wayViewalign
     shortLabel Multiz Alignments
