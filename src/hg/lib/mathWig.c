@@ -60,6 +60,8 @@ for (jj=0; jj < count; jj++)
     {
     if (pushOpcode(&opcodeStack, words[jj]))
         continue;
+    if (startsWith("$", words[jj]))  // ignore native tracks for the moment
+        continue;
     struct bbiFile *bwf = bigWigFileOpen(words[jj]);
 
     struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, winStart, winEnd, lm);

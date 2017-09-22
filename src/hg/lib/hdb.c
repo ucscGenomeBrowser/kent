@@ -3779,6 +3779,10 @@ else
     {
     // we now allow references to native tracks in track hubs
     tdb->table = trackHubSkipHubName(tdb->table);
+
+    // if it's copied from a custom track, wait to find data later
+    if (isCustomTrack(tdb->table))
+        return TRUE; 
     return (hTableForTrack(database, tdb->table) != NULL);
     }
 }
