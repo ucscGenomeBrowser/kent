@@ -66,6 +66,16 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
         bigDataUrl /gbdb/$D/uniprot/unipChain.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
+        track unipDomain
+        shortLabel Domains
+        longLabel UniProt/SwissProt Domains
+        priority 6.5
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipDomain.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+
         track unipDisulfBond
         shortLabel Disulf. Bonds
         longLabel UniProt/SwissProt Disulfide Bonds
@@ -84,6 +94,16 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipModif.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+
+        track unipMut
+        shortLabel Mutations
+        longLabel UniProt/SwissProt Amino Acid Mutations
+        priority 8.5
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipStruct
         shortLabel Structure
