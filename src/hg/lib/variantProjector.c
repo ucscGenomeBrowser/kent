@@ -599,20 +599,6 @@ if (txStart < cds->end && txEnd > cds->start &&
         }
     dnaSeqFree((struct dnaSeq **)&txTrans);
     }
-else if (vpTx->end.region == vpTx->start.region &&
-         (vpTx->start.region == vpExon ||       // all UTR
-          vpTx->start.region == vpUpstream ||   // all upstream
-          vpTx->start.region == vpDownstream || // all downstream
-          (vpTx->start.region == vpIntron &&
-           vpTx->start.gDistance >= SPLICE_REGION_FUDGE &&
-           vpTx->start.intron3Distance >= SPLICE_REGION_FUDGE &&
-           vpTx->end.gDistance >= SPLICE_REGION_FUDGE &&
-           vpTx->end.intron3Distance >= SPLICE_REGION_FUDGE)))  // all non-splice intronic
-    {
-    // Mutalyzer predicts no change when variant is in tx but not cds or non-splice intron,
-    // monkey see, monkey do.  Then again, it predicts p.(=) for splice hits too, doh!
-    vpPep->likelyNoChange = TRUE;
-    }
 else
     {
     vpPep->cantPredict = TRUE;

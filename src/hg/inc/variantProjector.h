@@ -72,7 +72,6 @@ struct vpPep
     char *alt;                     // protein alternate allele
     int rightShiftedBases;         // # of pep bases by which transcript variant was right-shifted
     boolean txMismatch;            // true if translated transcript reference does not match ref
-    boolean likelyNoChange;        // true if variant is all in UTR or all non-splice intron
     boolean frameshift;            // true if variant is an indel that causes a frameshift
     boolean spansUtrCds;           // true if variant overlaps both UTR & CDS -- can't rlly predict
     boolean cantPredict;           // true if it's just too complicated e.g. exonic+intronic
