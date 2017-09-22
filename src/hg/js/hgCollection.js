@@ -15,7 +15,8 @@ var hgCollection = (function() {
             deleteItem: { // The "delete" menu item
                 label: "Delete",
                 action: function () {
-                    $(selectedTree).jstree( "delete_node", selectedNode);
+                    var nodes = $(selectedTree).jstree( "get_selected");
+                    $(selectedTree).jstree( "delete_node", nodes);
                 }
             }
         };
@@ -62,6 +63,7 @@ var hgCollection = (function() {
         $("#customVis").val(visibility);
         $("#customColorInput").val(color);
         $("#customColorPicker").spectrum("set", color);
+        $(selectedTree).jstree("open_node", selectedNode);
    }
 
     function selectTreeNode(evt, data)             {
@@ -314,7 +316,7 @@ var hgCollection = (function() {
 
         treeDiv=$('#tracks');
         treeDiv.jstree({
-               'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
+               'plugins' : ['dnd', 'conditionalselect'],
                'dnd': {
                 "check_callback" : checkCallback,
                'always_copy' : true,
