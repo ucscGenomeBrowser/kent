@@ -316,15 +316,15 @@ sGroup_Afrotheria wigMaf
 sGroup_Aves wigMaf
 sGroup_bird wigMaf
 sGroup_Birds wigMaf
-sGroup_Bundibugyo
+sGroup_Bundibugyo_2007 wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Chimp wigMaf
-sGroup_DRC
+sGroup_DRC_2007 wigMaf
 sGroup_Drosophila wigMaf
-sGroup_Ebola
+sGroup_Ebola_2014 wigMaf
 sGroup_Euarchontoglires wigMaf
-sGroup_Fish wigMaf
 sGroup_fish wigMaf
+sGroup_Fish wigMaf
 sGroup_Gabon wigMaf
 sGroup_Glires wigMaf
 sGroup_hiv wigMafProt wigMaf
@@ -333,29 +333,28 @@ sGroup_Laurasiatheria wigMaf
 sGroup_Mammal wigMaf
 sGroup_mammal wigMaf
 sGroup_Mammals wigMaf
-sGroup_Marburg
+sGroup_Marburg_1987 wigMaf
 sGroup_Nematode wigMaf
 sGroup_Nemotodes wigMaf
 sGroup_Others wigMaf
-sGroup_Placental
-sGroup_Placental wigMaf
 sGroup_placental wigMaf
-sGroup_Placental_Mammals wigMaf
+sGroup_Placental wigMaf
 sGroup_Placental_Mammal wigMaf
+sGroup_Placental_Mammals wigMaf
 sGroup_Primate wigMaf
+sGroup_Primates wigMaf
 sGroup_primate wigMaf
 sGroup_Primates wigMaf
-sGroup_Primates wigMaf
-sGroup_Reston
+sGroup_Reston_1989-90 wigMaf
 sGroup_Sarcopterygii wigMaf
-sGroup_Sudan
-sGroup_Vertebrate wigMaf
+sGroup_Sudan_1976-9 wigMaf
 sGroup_vertebrate wigMaf
+sGroup_Vertebrate wigMaf
 sGroup_Vertebrates wigMaf
 sGroup_Virus wigMaf
 sGroup_worm wigMaf
 sGroup_Zaire wigMaf
-sGroup_Zaire(DRC)
+sGroup_Zaire(DRC)_1976-7 wigMaf
 *Filter bed narrowPeak broadPeak
 *FilterLimits bed narrowPeak broadPeak
 *FilterByRange bed narrowPeak broadPeak
