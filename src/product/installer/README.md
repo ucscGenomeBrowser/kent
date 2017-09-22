@@ -61,7 +61,10 @@ and adapting the MySQL socket config.
 This will result in a Genome Browser accessible on localhost that loads its data 
 through genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If
 your geographic location is not on the US West Coast, the performance will be too slow for normal 
-use, though sufficient to test that the setup is functional. You can then use the program to download 
+use, though sufficient to test that the setup is functional. A special MySQL server is
+set up in Germany for users in Europe. You can change the `/usr/local/apache/cgi-bin/hg.conf`
+genome-mysql.soe.ucsc.edu lines to genome-euro-mysql.soe.ucsc.edu in order to get better
+performance. You can then use the program to download 
 assemblies of interest to your local Genome Browser, which will result in performance at least 
 as fast as the UCSC site.
 

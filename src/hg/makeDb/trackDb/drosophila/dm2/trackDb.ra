@@ -1,3 +1,6 @@
+include trackDb.15way.ra
+include trackDb.9way.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Low-res)
 longLabel Chromosome Bands (Low-resolution for Chromosome Ideogram)
@@ -288,35 +291,6 @@ visibility hide
 color 100,50,0
 type bed 4 +
 
-track multiz15way
-shortLabel Conservation
-longLabel 12 Flies, Mosquito, Honeybee, Beetle Multiz Alignments & phastCons Scores
-group compGeno
-priority 100
-visibility pack
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons15way
-yLineOnOff Off
-autoScale Off
-windowingFunction mean
-summary multiz15waySummary
-frames multiz15wayFrames
-irows on
-speciesCodonDefault dm2
-speciesOrder droSim1 droSec1 droYak2 droEre2 droAna3 dp4 droPer1 droWil1 droVir3 droMoj3 droGri2 anoGam1 apiMel2 triCas2
-treeImage phylo/dm2_15way.gif
-
-track phastConsElements15way
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements (12 Flies, Mosquito, Honeybee, Beetle)
-group compGeno
-priority 105
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
 track multiz12way
 shortLabel Conservation
 longLabel 9 Flies, Mosquito, Honeybee, Beetle Multiz Alignments & phastCons Scores
@@ -336,30 +310,6 @@ shortLabel Most Conserved
 longLabel PhastCons Conserved Elements (9 Flies, Mosquito, Honeybee, Beetle)
 group compGeno
 priority 105.001
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
-track multiz9way
-shortLabel Conservation (9)
-longLabel 7 Flies, Mosquito and Honeybee Multiz Alignments & phastCons Scores
-group compGeno
-priority 100.01
-visibility hide
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons9way
-yLineOnOff Off
-autoScale Off
-summary multiz9waySummary
-speciesOrder droSim1 droYak1 droAna1 dp3 droVir1 droMoj1 anoGam1 apiMel2
-
-track phastConsElements9way
-shortLabel Most Conserved (9)
-longLabel PhastCons Conserved Elements (7 Flies, Mosquito and Honeybee)
-group compGeno
-priority 105.01
 visibility hide
 exonArrows off
 showTopScorers 200

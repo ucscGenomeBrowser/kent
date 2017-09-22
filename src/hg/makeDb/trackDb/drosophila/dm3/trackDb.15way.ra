@@ -29,10 +29,10 @@ html multiz15way
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
-        speciesCodonDefault dm2
-        speciesOrder droSim1 droSec1 droYak2 droEre2 droAna3 dp4 droPer1 droWil1 droVir3 droMoj3 droGri2 anoGam1 apiMel2 triCas2
+        speciesCodonDefault dm3
+        speciesOrder droSim1 droSec1 droYak2 droEre2 droAna3 dp4 droPer1 droWil1 droVir3 droMoj3 droGri2 anoGam1 apiMel3 triCas2
         itemFirstCharCase noChange
-        treeImage phylo/dm2_15way.gif
+        treeImage phylo/dm3_15way.gif
         priority 100
 
     # phastCons conservation

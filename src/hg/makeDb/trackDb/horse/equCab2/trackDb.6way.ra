@@ -1,53 +1,55 @@
-track cons15way
+track cons6way
 compositeTrack on
-shortLabel Conservation (15)
-longLabel 12 Flies, Mosquito, Honeybee, Beetle Multiz Alignments & phastCons Scores
+shortLabel Conservation
+longLabel 6-way Multiz Alignment & Conservation
 subGroup1 view Views align=Multiz_Alignments  phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full
 priority 104.2
 type bed 4
 group compGeno
-html multiz15way
+html multiz6way
 
-    track cons15wayViewalign
+    track cons6wayViewalign
     shortLabel Multiz Alignments
     view align
     visibility pack
     viewUi on
-    subTrack cons15way
+    subTrack cons6way
 
-        track multiz15way
-        subTrack cons15wayViewalign on
+        track multiz6way
+        subTrack cons6wayViewalign on
         shortLabel Multiz Align
-        longLabel 12 Flies, Mosquito, Honeybee, Beetle Multiz Alignments & phastCons Scores
+        longLabel Multiz Alignments of 6 Species
         subGroups view=align
         noInherit on
-        summary multiz15waySummary
-#        frames multiz15wayFrames
+        summary multiz6waySummary
+#        frames multiz6wayFrames
 #        irows on
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
-        speciesCodonDefault dm2
-        speciesOrder droSim1 droSec1 droYak2 droEre2 droAna3 dp4 droPer1 droWil1 droVir3 droMoj3 droGri2 anoGam1 apiMel2 triCas2
+        speciesCodonDefault equCab2
+        speciesGroups Mammals Birds
+        sGroup_Mammals canFam2 hg18 mm9 ornAna1
+        sGroup_Birds galGal3
         itemFirstCharCase noChange
-        treeImage phylo/dm2_15way.gif
+        treeImage phylo/equCab2_6way.gif
         priority 100
 
     # phastCons conservation
-    track cons15wayViewphastcons
+    track cons6wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
     visibility full
-    subTrack cons15way
+    subTrack cons6way
 
 
-        track phastCons15way
-        subTrack cons15wayViewphastcons on
+        track phastCons6way
+        subTrack cons6wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 15 Insect Cons
-        longLabel 15 Insect Conservation by PhastCons
+        shortLabel 6 Species Cons
+        longLabel 6 Species Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -60,21 +62,21 @@ html multiz15way
         priority 13
 
     # Conserved Elements (Most Conserved)
-    track cons15wayViewelements
+    track cons6wayViewelements
     shortLabel Conserved Elements
     view elements
     visibility dense
-    subTrack cons15way
+    subTrack cons6way
 
-        track phastConsElements15way
-        subTrack cons15wayViewelements on
+        track phastConsElements6way
+        subTrack cons6wayViewelements on
         subGroups view=elements
-        shortLabel 15 Insect El
-        longLabel PhastCons Conserved Elements (12 Flies, Mosquito, Honeybee, Beetle)
+        shortLabel 6 Species El
+        longLabel 6 Species Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
         priority 23
-        html phastConsElements15way
+        html phastConsElements6way
 
 
