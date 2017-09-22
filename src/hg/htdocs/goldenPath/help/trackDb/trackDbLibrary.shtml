@@ -4670,7 +4670,8 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     "abc") can be declared with this setting as dimA, dimB, etc.</P>  
     <P>Note that the order of the subgroups in a dimension is exactly the same as 
     the order they appear in the <code>subGroup#</code> setting, regardless of whether
-    the subtrack list is sorted by tags.</P>
+    the subtrack list is sorted by tags. Please also note that if a hub is not going to use
+    the X,Y matrix, dimX should be the first dimension defined rather than dimA.</P>
 </DIV>
 
 <DIV class="filterComposite"><span class="types subGroups"></span>
@@ -4691,7 +4692,8 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     adding the "<code>=one</code>" option to the filter box definition.
     This might make sense when there are only 2 choices.  The choice
     of "all" is always available, while choosing nothing is an invalid
-    case.</P>
+    case. Please note that if a hub is not going to use the X,Y matrix,
+    then dimX should be the first dimension defined rather than dimA.</P>
 </DIV>
 
 <DIV class="dimensionAchecked"><span class="types subGroups"></span>
