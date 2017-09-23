@@ -1,41 +1,10 @@
 #	"$Id: trackDb.ra,v 1.28 2010/02/09 02:16:15 rhead Exp $";
 
 include trackDb.chainNet.ra
+include trackDb.7way.ra
 
 track quality override
 type wig 0 63
-
-track multiz7way
-shortLabel Conservation
-longLabel Vertebrate Multiz Alignment & Conservation 
-group compGeno
-priority 104.2
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons7
-spanList 1
-pairwiseHeight 12
-yLineOnOff Off
-frames multiz7wayFrames
-irows on
-autoScale Off
-summary multiz7waySummary
-speciesGroups vertebrate
-sGroup_vertebrate hg18 mm8 rn4 galGal2 xenTro2 danRer3
-treeImage phylo/monDom4_7way.gif
-
-track phastConsElements7way
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements
-group compGeno
-priority 105
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
 
 track hg18PileUps
 shortLabel hg18 Pile Ups
