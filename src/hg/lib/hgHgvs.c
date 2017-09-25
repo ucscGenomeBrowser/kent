@@ -2559,6 +2559,14 @@ hgvsAppendChangesFromNucRefAlt(dy, ref, vpTx->txAlt, dupLen, breakDelIns);
 return dyStringCannibalize(&dy);
 }
 
+static boolean isStartLoss(struct vpPep *vpPep)
+/* Return TRUE if vpPep shows that the start codon has been lost. */
+{
+return (vpPep->start == 0 &&
+        isNotEmpty(vpPep->ref) && vpPep->ref[0] == 'M' &&
+        (isEmpty(vpPep->alt) || vpPep->alt[0] != 'M'));
+}
+
 char *hgvsPFromVpPep(struct vpPep *vpPep, struct dnaSeq *protSeq, boolean addParens)
 /* Return an HGVS p. (protein) term for a variant projected into protein space.
  * Strict HGVS compliance requires parentheses around predicted protein changes, but
@@ -2583,7 +2591,7 @@ else
 // protSeq may or may not end with X, so treat protSeq->size accordingly
 boolean hitsStopCodon = (vpPep->end > protSeq->size ||
                          ((protSeq->dna[protSeq->size-1] == 'X') && vpPep->end == protSeq->size));
-if (vpPep->cantPredict || vpPep->spansUtrCds)
+if (vpPep->cantPredict || vpPep->spansUtrCds || isStartLoss(vpPep))
     dyStringAppend(dy, "?");
 else if (vpPep->frameshift)
     {
