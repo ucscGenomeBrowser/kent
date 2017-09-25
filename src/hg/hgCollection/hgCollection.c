@@ -513,7 +513,6 @@ char *longLabel = collection->longLabel;
 fprintf(f,"track %s\n\
 shortLabel %s\n\
 compositeTrack on\n\
-aggregate none\n\
 autoScale on\n\
 longLabel %s\n\
 %s on\n\
