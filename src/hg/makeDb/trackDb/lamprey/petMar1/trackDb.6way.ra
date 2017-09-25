@@ -1,0 +1,80 @@
+track cons6way
+compositeTrack on
+shortLabel Conservation
+longLabel 6-way Multiz Alignment & Conservation
+subGroup1 view Views align=Multiz_Alignments  phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+html multiz6way
+
+    track cons6wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons6way
+
+        track multiz6way
+        subTrack cons6wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 6 Species
+        subGroups view=align
+        noInherit on
+        summary multiz6waySummary
+#        frames multiz6wayFrames
+#        irows on
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault petMar1
+        speciesGroups Vertebrates
+        sGroup_Vertebrates hg18 mm9 galGal3 oryLat1 braFlo1
+        itemFirstCharCase noChange
+        treeImage phylo/petMar1_6way.gif
+        priority 100
+
+    # phastCons conservation
+    track cons6wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons6way
+
+
+        track phastCons6way
+        subTrack cons6wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel 6 Species Cons
+        longLabel 6 Species Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons6wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons6way
+
+        track phastConsElements6way
+        subTrack cons6wayViewelements on
+        subGroups view=elements
+        shortLabel 6 Species El
+        longLabel 6 Species Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
+        html phastConsElements6way
+
