@@ -283,20 +283,20 @@ zcat \$asmId.\$db.gp.gz | cut -f1 | sort -u > \$asmId.\$db.name.list
 join -t'\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRefSeqLink.tab
 
 # curated subset of all genes
-(zegrep "^N(M|R)_|^YP_" \$asmId.\$db.gp.gz || true) > \$db.curated.gp
+(zegrep "^[NY][MRP]_" \$asmId.\$db.gp.gz || true) > \$db.curated.gp
 # may not be any curated genes
 if [ ! -s \$db.curated.gp ]; then
   rm -f \$db.curated.gp
 fi
 
 # predicted subset of all genes
-zegrep "^X(M|R)_" \$asmId.\$db.gp.gz > \$db.predicted.gp
+zegrep "^X[MR]_" \$asmId.\$db.gp.gz > \$db.predicted.gp
 
 # not curated or predicted subset of all genes, the left overs
-zegrep -v "^N(M|R)_|^YP_|^X(M|R)_" \$asmId.\$db.gp.gz > \$db.other.gp
+zegrep -v "^[NXY][MRP]_" \$asmId.\$db.gp.gz > \$db.other.gp
 
 # curated and predicted without leftovers:
-zegrep "^N(M|R)_|^YP_|^X(M|R)_" \$asmId.\$db.gp.gz > \$db.ncbiRefSeq.gp
+zegrep "^[NXY][MRP]_" \$asmId.\$db.gp.gz > \$db.ncbiRefSeq.gp
 
 if [ -s \$db.curated.gp ]; then
   genePredCheck -db=\$db \$db.curated.gp

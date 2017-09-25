@@ -1,0 +1,723 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the cerAty1
+# Cercocebus atys (sooty mangabey)
+
+# chrMT not in this assmbly, but there is a RefSeq MT sequence:
+#   NC_028592.1 KT159932.1
+
+# Assembly name:  Caty_1.0
+# Organism name:  Cercocebus atys (sooty mangabey)
+# Isolate:  FAK
+# Sex:  female
+# Taxid:          9531
+# BioSample:      SAMN03379531
+# BioProject:     PRJNA279144
+# Submitter:      Human Genome Sequencing Center - BCM
+# Date:           2015-3-19
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    JZLG01
+# Assembly method: AllPathsLG v. 41070; Atlas Link v. 1.0; Atlas GapFill v. 2.0; PBJelly2 v. 14.9.9
+# Genome coverage: 192.0x
+# Sequencing technology: Illumina; PacBio RS
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000955945.1
+# RefSeq assembly accession: GCF_000955945.1
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000956035.1      GCF_000956035.1 Primary Assembly
+
+#############################################################################
+# obtain photograph (DONE - 2017-02-14 - Hiram)
+    mkdir -p /hive/data/genomes/cerAty1/photo
+    cd /hive/data/genomes/cerAty1/photo
+
+    wget -O photoFile "https://upload.wikimedia.org/wikipedia/commons/c/cc/Barcelona.Zoologico.Mangabey.Gris.jpg"
+
+    convert -sharpen 0 -normalize -geometry 400x400 -quality 80 photoFile \
+       Cercocebus_atys.jpg
+
+    printf "photoCreditURL  https://commons.wikimedia.org/wiki/User:Yearofthedragon
+photoCreditName WikiMedia Commons: Year of the Dragon
+" > ../photoReference.txt
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2017-09-21 - Hiram)
+    mkdir -p /hive/data/genomes/cerAty1/refseq
+    cd /hive/data/genomes/cerAty1/refseq
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Cercocebus_atys/all_assembly_versions/GCF_000955945.1_Caty_1.0/ ./
+    # real    2m7.344s
+
+    # sent 489 bytes  received 3323271315 bytes  26064876.89 bytes/sec
+    # total size is 3322863175  speedup is 1.00
+
+    # measure what we have here:
+    faSize *0_genomic.fna.gz
+# 2848246356 bases (60973514 N's 2787272842 real 1799626545 upper
+#	987646297 lower) in 11433 sequences in 1 files
+# Total size: mean 249125.0 sd 1962567.1 min 322 (NW_012003277.1)
+#	max 47169369 (NW_012006153.1) median 2053
+# %34.68 masked total, %35.43 masked real
+
+    faCount *0_genomic.fna.gz | tail
+# #seq    len             A       C          G       T         N       cpg
+# total 2848246356  823546436 570424967 570203779 823097660 60973514  29571474
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2017-09-21 - Hiram)
+    mkdir /hive/data/genomes/cerAty1/ucsc
+    cd /hive/data/genomes/cerAty1/ucsc
+
+    # add the mitochondrion sequence
+export mitoAcc=NC_028592.1
+
+wget -O ${mitoAcc}.fa \
+ "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc"
+
+echo ">chrM" > chrM.fa
+grep -v "^>" ${mitoAcc}.fa >> chrM.fa
+
+export mSize=`faCount chrM.fa | grep total | awk '{print $2}'`
+
+printf "chrM\t1\t$mSize\t1\tF\t$mitoAcc\t1\t$mSize\t+\n" > chrM.agp
+
+    # verify no duplicate sequences:
+    time faToTwoBit ../refseq/*0_genomic.fna.gz refseq.2bit
+    #	real    1m26.809s
+
+    twoBitDup refseq.2bit
+    # should be silent output, otherwise the duplicates need to be removed
+
+    # since this is an unplaced contig assembly, verify all names are .1:
+    twoBitInfo refseq.2bit  stdout | awk '{print $1}' \
+	| sed -e 's/_[0-9]\+//;' | sort | uniq -c
+    #    11433 NW.1
+
+    # in this case, all the .1's can be changed to: v1
+
+    zcat ../refseq/*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+       | grep -v "^#" | sed -e 's/\.1/v1/;' > chrUn.cerAty1.agp
+
+    zcat ../refseq/*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Cercocebus .*/v1/;' > chrUn.cerAty1.fa
+
+    time gzip chr*.fa
+    # real    15m9.994s
+
+    # verify fasta and AGP match:
+    time faToTwoBit chr*.fa.gz test.2bit
+    # real    1m15.704s
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    #  All AGP and FASTA entries agree - both files are valid
+
+    # verify nothing lost compared to genbank:
+    time twoBitToFa test.2bit stdout | faSize stdin
+
+# 2848262899 bases (60973514 N's 2787289385 real 2787289385 upper 0 lower)
+#	in 11434 sequences in 1 files
+# Total size: mean 249104.7 sd 1962482.5 min 322 (NW_012003277v1)
+#	max 47169369 (NW_012006153v1) median 2053
+# %0.00 masked total, %0.00 masked real
+
+# real    0m47.619s
+
+    # measure the original with the extra chrM sequence:
+    faSize ../refseq/GCF_000955945.1_Caty_1.0_genomic.fna.gz chrM.fa.gz
+
+# 2848262899 bases (60973514 N's 2787289385 real 1799643088 upper
+#	987646297 lower) in 11434 sequences in 2 files
+# Total size: mean 249104.7 sd 1962482.5 min 322 (NW_012003277.1)
+#	max 47169369 (NW_012006153.1) median 2053
+# %34.68 masked total, %35.43 masked real
+
+    # note same totals except for masking difference
+
+#############################################################################
+#  Initial database build (DONE - 2017-09-21 - Hiram)
+
+    cd /hive/data/genomes/cerAty1
+
+    # establish the config.ra file:
+    ~/kent/src/hg/utils/automation/prepConfig.pl cerAty1 mammal primate \
+       refseq/*_assembly_report.txt > cerAty1.config.ra
+    
+    # verify this looks OK:
+
+    cat cerAty1.config.ra
+
+# config parameters for makeGenomeDb.pl:
+db cerAty1
+clade mammal
+genomeCladePriority 35
+scientificName Cercocebus atys
+commonName Sooty mangabey
+assemblyDate Mar. 2015
+assemblyLabel Human Genome Sequencing Center - BCM
+assemblyShortLabel Caty_1.0
+orderKey 19597
+# chrM already added to source: NC_028592.1 KT159932.1
+mitoAcc none
+fastaFiles /hive/data/genomes/cerAty1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/cerAty1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir primate
+photoCreditURL  https://commons.wikimedia.org/wiki/User:Yearofthedragon
+photoCreditName WikiMedia Commons: Year of the Dragon
+ncbiGenomeId 13303
+ncbiAssemblyId 313491
+ncbiAssemblyName Caty_1.0
+ncbiBioProject 279144
+ncbiBioSample SAMN03379531
+genBankAccessionID GCF_000955945.1
+taxId 9531
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp cerAty1.config.ra) > agp.log 2>&1
+    # real    2m44.493s
+
+    # verify it ran OK:
+    #   *** All done!  (through the 'agp' step)
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev \
+       -dbHost=hgwdev -fileServer=hgwdev -continue=db \
+           cerAty1.config.ra ) > db.log 2>&1
+    # real    22m3.240s
+
+    # check in the trackDb files created and add to trackDb/makefile
+    # temporary symlink until after masking
+    ln -s `pwd`/cerAty1.unmasked.2bit /gbdb/cerAty1/cerAty1.2bit
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-09-21 - Hiram)
+    mkdir /hive/data/genomes/cerAty1/bed/cytoBand
+    cd /hive/data/genomes/cerAty1/bed/cytoBand
+    makeCytoBandIdeo.csh cerAty1
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2017-09-21 - Hiram)
+    mkdir /hive/data/genomes/cerAty1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/cerAty1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/cerAty1/cerAty1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku cerAty1) > do.log 2>&1
+    # real    18m37.676s
+
+    cat fb.cerAty1.cpgIslandExtUnmasked.txt
+    # 34770255 bases of 2787289397 (1.247%) in intersection
+
+#############################################################################
+# running repeat masker (DONE - 2017-09-21 - Hiram)
+    mkdir /hive/data/genomes/cerAty1/bed/repeatMasker
+    cd /hive/data/genomes/cerAty1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku cerAty1) > do.log 2>&1 &
+    # real    584m8.842s
+
+    cat faSize.rmsk.txt
+# 2848262899 bases (60973514 N's 2787289385 real 1397604894 upper
+#	1389684491 lower) in 11434 sequences in 1 files
+# Total size: mean 249104.7 sd 1962482.5 min 322 (NW_012003277v1)
+#	max 47169369 (NW_012006153v1) median 2053
+# %48.79 masked total, %49.86 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps cerAty1 rmsk
+    # 1390342282 bases of 2848262899 (48.814%) in intersection
+    # real    0m39.370s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' cerAty1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1390342282.000000
+    # real    0m40.694s
+
+##########################################################################
+# running simple repeat (DONE - 2017-09-21 - Hiram)
+
+    mkdir /hive/data/genomes/cerAty1/bed/simpleRepeat
+    cd /hive/data/genomes/cerAty1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409=5 cerAty1) > do.log 2>&1 &
+    # real    243m44.834s
+
+    cat fb.simpleRepeat
+    # 73558951 bases of 2787289397 (2.639%) in intersection
+
+    # add to this simple repeat to rmsk:
+    cd /hive/data/genomes/cerAty1
+    twoBitMask cerAty1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed cerAty1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa cerAty1.2bit stdout | faSize stdin > faSize.cerAty1.2bit.txt
+    cat faSize.cerAty1.2bit.txt
+# 2848262899 bases (60973514 N's 2787289385 real 1395908097 upper
+#	1391381288 lower) in 11434 sequences in 1 files
+# Total size: mean 249104.7 sd 1962482.5 min 322 (NW_012003277v1)
+#	max 47169369 (NW_012006153v1) median 2053
+# %48.85 masked total, %49.92 masked real
+
+    # reset gbdb symlink
+    rm /gbdb/cerAty1/cerAty1.2bit
+    ln -s `pwd`/cerAty1.2bit /gbdb/cerAty1/cerAty1.2bit
+
+#############################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-09-22 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/cerAty1/bed/microsat
+    cd /cluster/data/cerAty1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed cerAty1 microsat microsat.bed
+    # Read 26504 elements of size 4 from microsat.bed
+
+#############################################################################
+# ucscToINSDC table/track (DONE - 2017-09-25 - Hiram)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
+
+    mkdir /hive/data/genomes/cerAty1/bed/ucscToINSDC
+    cd /hive/data/genomes/cerAty1/bed/ucscToINSDC
+
+    # find accession for chrM
+    grep chrM ../../cerAty1.agp
+# chrM    1       16543   1       F       NC_028592.1     1       16543   +
+
+    # use that accession here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../refseq/GCF_*structure/Primary_Assembly NC_028592.1
+    # this is actually ucscToRefSeq since this is a refSeq assembly
+
+    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+    rm -f ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt | sort > refseqToUcsc.txt
+
+    # there is no entry for chrMT in the assembly report, hence the printf
+    (printf "%s\t%s\n" "NC_028592.1" "KT159932.1";
+       grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+          | awk '{printf "%s\t%s\n", $2, $1}') | sort > refseq.insdc.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    # the tr commands avoid the problem of trying to use the -t argument
+    # to the join command which doesn't accept -t'\t' but instead has
+    # to use the unseen/can not copy command ctrl-v i
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+           > ucscToRefSeq.bed
+
+    # verify chrM is correct:
+    grep chrM *.bed
+# ucscToINSDC.bed:chrM    0       16543   KT159932.1
+# ucscToRefSeq.bed:chrM   0       16543   NC_028592.1
+
+    # should be same line counts throughout:
+    wc -l *
+    #	11434 name.coordinate.tab
+    #	11434 refseq.insdc.txt
+    #	11434 refseqToUcsc.txt
+    #	11434 ucscToINSDC.bed
+    #	11434 ucscToRefSeq.bed
+    #	11434 ucscToRefSeq.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab cerAty1 ucscToINSDC stdin ucscToINSDC.bed
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab cerAty1 ucscToRefSeq stdin ucscToRefSeq.bed
+    # checkTableCoords should be silent for no errors
+    checkTableCoords cerAty1
+
+    # should cover %100 entirely:
+    featureBits -countGaps cerAty1 ucscToINSDC
+    # 2848262899 bases of 2848262899 (100.000%) in intersection
+
+    featureBits -countGaps cerAty1 ucscToRefSeq
+    # 2848262899 bases of 2848262899 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2017-09-25 - Hiram)
+
+    mkdir /hive/data/genomes/cerAty1/bed/chromAlias
+    cd /hive/data/genomes/cerAty1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' cerAty1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' cerAty1 \
+        > ucsc.genbank.tab
+
+    # verify chrM is correct:
+    grep chrM *
+# ucsc.genbank.tab:chrM   KT159932.1      genbank
+# ucsc.refseq.tab:chrM    NC_028592.1     refseq
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > cerAty1.chromAlias.tab
+
+    hgLoadSqlTab cerAty1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        cerAty1.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2017-09-25 - Hiram)
+
+    cd ~/kent/src/hg/makeDb/trackDb/primate/cerAty1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" cerAty1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+  76752 JZLG.1
+      1 NC_.1
+
+    # implies a search rule of: '[JN][CZ][GL0-9_]+(\.[0-9]+)?'
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" cerAty1 | wc -l
+    # 76753
+
+    hgsql -N -e "select frag from gold;" cerAty1 \
+       | egrep -e '[JN][CZ][GL0-9_]+(\.[0-9]+)?' | wc -l
+    # 76753
+
+    hgsql -N -e "select frag from gold;" cerAty1 \
+       | egrep -v -e '[JN][CZ][GL0-9_]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rhesus/cerAty1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [JN][CZ][GL0-9_]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+    git commit -m 'add gold table search rule refs #20199' trackDb.ra
+
+##########################################################################
+## WINDOWMASKER (DONE - 2017-09-22 - Hiram)
+
+    mkdir /hive/data/genomes/cerAty1/bed/windowMasker
+    cd /hive/data/genomes/cerAty1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev cerAty1) > do.log 2>&1
+    # real    197m1.909s
+
+    # Masking statistics
+    cat faSize.cerAty1.cleanWMSdust.txt
+# 2848262899 bases (60973514 N's 2787289385 real 1783052426 upper
+#	1004236959 lower) in 11434 sequences in 1 files
+# Total size: mean 249104.7 sd 1962482.5 min 322 (NW_012003277v1)
+#	max 47169369 (NW_012006153v1) median 2053
+# %35.26 masked total, %36.03 masked real
+
+    cat fb.cerAty1.rmsk.windowmaskerSdust.txt
+    # 760728332 bases of 2848262899 (26.709%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2017-09-22 - Hiram)
+    mkdir /hive/data/genomes/cerAty1/bed/cpgIslands
+    cd /hive/data/genomes/cerAty1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku cerAty1) > do.log 2>&1
+    # real    5m6.484s
+
+    cat fb.cerAty1.cpgIslandExt.txt
+    # 21140475 bases of 2787289397 (0.758%) in intersection
+
+##############################################################################
+# ncbiRefSeq gene track (TBD - 2016-05-05 - Hiram)
+    mkdir /hive/data/genomes/cerAty1/bed/ncbiRefSeq
+    cd /hive/data/genomes/cerAty1/bed/ncbiRefSeq
+
+    # working on this script, running step by step:
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -stop=download -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 cerAty1) > download.log 2>&1
+    # real    12m36.320s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -continue=process -stop=process -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 cerAty1) > process.log 2>&1
+    # real    4m22.621s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -continue=load -stop=load -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 cerAty1) > load.log 2>&1
+    # real    0m21.690s
+
+    cat fb.ncbiRefSeq.cerAty1.txt
+    # 74646536 bases of 2725937399 (2.738%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2017-09-22 - Hiram)
+    mkdir /hive/data/genomes/cerAty1/bed/genscan
+    cd /hive/data/genomes/cerAty1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku cerAty1) > do.log 2>&1
+    # real    36m26.564s
+
+    cat fb.cerAty1.genscan.txt
+    #   52826695 bases of 2787289397 (1.895%) in intersection
+
+    cat fb.cerAty1.genscanSubopt.txt
+    #   51741322 bases of 2787289397 (1.856%) in intersection
+
+#############################################################################
+# augustus gene track (DONE - 2017-09-22 - Hiram)
+
+    mkdir /hive/data/genomes/cerAty1/bed/augustus
+    cd /hive/data/genomes/cerAty1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev cerAty1) > do.log 2>&1
+    # real    82m50.229s
+
+    cat fb.cerAty1.augustusGene.txt
+    # 48318341 bases of 2787289397 (1.734%) in intersection
+
+#############################################################################
+# Create kluster run files (TBD - 2017-07-27 - Hiram)
+
+    # numerator is cerAty1 gapless bases "real" as reported by:
+    cd /hive/data/genomes/cerAty1
+    head -1 faSize.cerAty1.2bit.txt
+# 2848262899 bases (60973514 N's 2787289385 real 1395908097 upper
+#	1391381288 lower) in 11434 sequences in 1 files
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2787289385 / 2861349177 \) \* 1024
+    # ( 2787289385 / 2861349177 ) * 1024 = 997.495990
+
+    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 100
+    cd /hive/data/genomes/cerAty1
+    time blat cerAty1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/cerAty1.11.ooc \
+        -repMatch=900
+    #   Wrote 31843 overused 11-mers to jkStuff/cerAty1.11.ooc
+    #	real    0m50.689s
+
+    # there are no non-bridged gaps
+    #   check non-bridged gaps to see what the typical size is:
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' cerAty1 \
+#        | sort -k7,7nr
+    #   minimum size is 50000
+#    gapToLift -verbose=2 -minGap=50000 cerAty1 \
+#	jkStuff/cerAty1.nonBridged.lft -bedFile=jkStuff/cerAty1.nonBridged.bed
+
+#########################################################################
+# lastz/chain/net swap from hg38 (TBD - 2017-08-02 - Hiram)
+    # alignment to hg38
+    cd /hive/data/genomes/hg38/bed/lastzCerAty1.2017-07-31
+
+    cat fb.hg38.chainCerAty1Link.txt
+    # 1463754915 bases of 3049335806 (48.002%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/cerAty1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/cerAty1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzCerAty1.2017-07-31/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    107m7.364s
+
+    cat fb.cerAty1.chainHg38Link.txt
+    # 1387973267 bases of 2472073034 (56.146%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cerAty1 hg38) \
+        > rbest.log 2>&1
+    # real    598m8.675s
+
+#########################################################################
+# lastz/chain/net swap from mm10 (TBD - 2017-08-02 - Hiram)
+    # alignment on mm10
+    cd /hive/data/genomes/mm10/bed/lastzCerAty1.2017-07-31
+    cat fb.mm10.chainCerAty1Link.txt
+    #	731012356 bases of 2652783500 (27.556%) in intersection
+
+    mkdir /hive/data/genomes/cerAty1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/cerAty1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCerAty1.2017-07-31/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    61m6.153s
+
+    cat fb.cerAty1.chainMm10Link.txt
+    #	715277290 bases of 2472073034 (28.934%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev cerAty1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    358m15.340s
+
+##############################################################################
+# GENBANK AUTO UPDATE (DONE - 2017-09-25 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Cercocebus atys 222     0       38
+    # Cercocebus chrysogaster 2       0       0
+    # Cercocebus torquatus    30      0       0
+    # Cercocebus torquatus torquatus  2       0       0
+
+    # edit etc/genbank.conf to add cerAty1 just before susScr3
+
+# cerAty1 (Sooty mangabey - Cercocebus atys) taxId 9531
+cerAty1.serverGenome = /hive/data/genomes/cerAty1/cerAty1.2bit
+cerAty1.clusterGenome = /hive/data/genomes/cerAty1/cerAty1.2bit
+cerAty1.ooc = /hive/data/genomes/cerAty1/jkStuff/cerAty1.11.ooc
+cerAty1.lift = no
+cerAty1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+cerAty1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+cerAty1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+cerAty1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+cerAty1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+cerAty1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+cerAty1.downloadDir = cerAty1
+cerAty1.refseq.mrna.native.load  = yes
+cerAty1.refseq.mrna.xeno.load = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+cerAty1.genbank.mrna.xeno.load = no
+cerAty1.genbank.mrna.native.load = no
+cerAty1.genbank.est.native.load = no
+cerAty1.perChromTables = no
+
+# And edit src/lib/gbGenome.c to add new species.
+
+    git commit -m "Added cerAty1/Sooty mangabey; refs #20199" \
+       etc/genbank.conf src/lib/gbGenome.c
+    git push
+
+    # update /cluster/data/genbank/:
+    make etc-update
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial cerAty1
+    #  logFile: var/build/logs/2017.09.25-08:50:49.cerAty1.initalign.log
+XXX - running - Mon Sep 25 08:51:45 PDT 2017
+
+    #   real    1486m19.233s
+
+    tail -2 var/build/logs/2017.07.27-20:49:34.cerAty1.initalign.log
+# hgwdev 2017.07.28-21:20:42 cerAty1.initalign: Succeeded: cerAty1
+# hgwdev 2017.07.28-21:35:53 cerAty1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.cerAty1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad cerAty1
+    # logFile: var/dbload/hgwdev/logs/2017.07.29-07:05:26.cerAty1.dbload.log
+    # real    81m41.107s
+
+    tail -1 var/dbload/hgwdev/logs/2017.07.29-07:05:26.cerAty1.dbload.log
+    # hgwdev 2017.07.29-08:27:07 cerAty1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add cerAty1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added cerAty1 - pig refs #19859" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+##############################################################################
+#  BLATSERVERS ENTRY (TBD - 2017-08-03 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("cerAty1", "blat1b", "17880", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("cerAty1", "blat1b", "17881", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+##############################################################################
+# set default position to OPN1SW gene displays  (TBD - 2017-08-03 - Hiram)
+# same as susScr3:
+    hgsql -e \
+'update dbDb set defaultPos="chr18:19836295-19840119" where name="cerAty1";' \
+	hgcentraltest
+
+##############################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2017-08-03 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=cerAty1 -tableCoverage all.joiner
+    joinerCheck -database=cerAty1 -times all.joiner
+    joinerCheck -database=cerAty1 -keys all.joiner
+
+    cd /hive/data/genomes/cerAty1
+    time (makeDownloads.pl cerAty1) > downloads.log 2>&1
+    # real    17m8.716s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/cerAty1/pushQ
+    cd /hive/data/genomes/cerAty1/pushQ
+    time (makePushQSql.pl -redmineList cerAty1) \
+	> cerAty1.pushQ.sql 2> stderr.out
+    # real    3m46.855s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # writing redmine listings to
+    # redmine.cerAty1.file.list
+    # redmine.cerAty1.table.list
+    # redmine.cerAty1.releaseLog.txt
+    # WARNING: cerAty1 does not have seq
+    # WARNING: cerAty1 does not have extFile
+
+#########################################################################
