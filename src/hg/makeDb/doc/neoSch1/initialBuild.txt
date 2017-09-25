@@ -287,7 +287,6 @@ taxId 29088
     cat fb.simpleRepeat
     # 26133283 bases of 2400839308 (1.089%) in intersection
 
-XXX - ready for masking
     # add to this simple repeat to rmsk:
     cd /hive/data/genomes/neoSch1
     twoBitMask neoSch1.rmsk.2bit \
@@ -295,12 +294,13 @@ XXX - ready for masking
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa neoSch1.2bit stdout | faSize stdin > faSize.neoSch1.2bit.txt
     cat faSize.neoSch1.2bit.txt
-    # 2501912388 bases (29864684 N's 2472047704 real 1351491909 upper
-    #	1120555795 lower) in 613 sequences in 1 files
-    # Total size: mean 4081423.1 sd 23780904.1
-    #	min 15096 (chrUn_NW_018085360v1) max 274330532 (chr1) median 49329
-    # %44.79 masked total, %45.33 masked real
+# 2400839308 bases (53716773 N's 2347122535 real 1330493216 upper
+#	1016629319 lower) in 7872 sequences in 1 files
+# Total size: mean 304984.7 sd 3152710.5 min 1000 (NW_018732762v1)
+#	max 84771923 (NW_018734349v1) median 1998
+# %42.34 masked total, %43.31 masked real
 
+    # reset symlink
     rm /gbdb/neoSch1/neoSch1.2bit
     ln -s `pwd`/neoSch1.2bit /gbdb/neoSch1/neoSch1.2bit
 
@@ -412,52 +412,33 @@ ucscToRefSeq.bed:chrM   0       16754   NC_008421.1
         neoSch1.chromAlias.tab
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2017-07-29 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2017-09-23 - Hiram)
 
-    cd ~/kent/src/hg/makeDb/trackDb/pig/neoSch1
+    cd ~/kent/src/hg/makeDb/trackDb/seal/neoSch1
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" neoSch1 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
-    705 AEMK.1
-      2 AJKK.1
-      2 CU.2
-     18 FO.1
-    234 FO.2
-    105 FO.3
-     52 FO.4
-     12 FO.5
-      3 FO.6
-      1 FO.7
-      1 FO.9
-      1 FP.2
-      1 FP.3
-      7 FQ.1
-     91 FQ.2
-     55 FQ.3
-      9 FQ.4
-     10 FQ.5
-      2 FQ.6
-      1 FQ.9
       1 NC_.1
+   7871 NINY.1
 
-    # implies a search rule of: '[ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?'
+    # implies a search rule of: 'N[CI][NY0-9_]+(\.[0-9]+)?'
 
     # verify this rule will find them all or eliminate them all:
     hgsql -N -e "select frag from gold;" neoSch1 | wc -l
-    # 1313
+    # 7872
 
     hgsql -N -e "select frag from gold;" neoSch1 \
-       | egrep -e '[ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?' | wc -l
-    # 1313
+       | egrep -e 'N[CI][NY0-9_]+(\.[0-9]+)?' | wc -l
+    # 7872
 
     hgsql -N -e "select frag from gold;" neoSch1 \
-       | egrep -v -e '[ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?' | wc -l
+       | egrep -v -e 'N[CI][NY0-9_]+(\.[0-9]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/rhesus/neoSch1/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [ACFN][CEJOPQU][MK0-9_]++(\.[0-9]+)?
+termRegex N[CI][NY0-9_]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -472,29 +453,29 @@ searchPriority 8
     cd /hive/data/genomes/neoSch1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev neoSch1) > do.log 2>&1
-    # real    158m14.091s
+    # real    159m30.920s
 
     # Masking statistics
     cat faSize.neoSch1.cleanWMSdust.txt
-# 2501912388 bases (29864684 N's 2472047704 real 1563211996 upper
-#	908835708 lower) in 613 sequences in 1 files
-# Total size: mean 4081423.1 sd 23780904.1 min 15096 (chrUn_NW_018085360v1)
-#	max 274330532 (chr1) median 49329
-# %36.33 masked total, %36.76 masked real
+# 2400839308 bases (53716773 N's 2347122535 real 1552520352 upper
+#	794602183 lower) in 7872 sequences in 1 files
+# Total size: mean 304984.7 sd 3152710.5 min 1000 (NW_018732762v1)
+#	max 84771923 (NW_018734349v1) median 1998
+# %33.10 masked total, %33.85 masked real
 
     cat fb.neoSch1.rmsk.windowmaskerSdust.txt
-    # 677163594 bases of 2501912388 (27.066%) in intersection
+    # 545954348 bases of 2400839308 (22.740%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2017-07-27 - Hiram)
+# cpgIslands - (DONE - 2017-09-25 - Hiram)
     mkdir /hive/data/genomes/neoSch1/bed/cpgIslands
     cd /hive/data/genomes/neoSch1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku neoSch1) > do.log 2>&1
-    # real    4m52.080s
+    # real    4m51.761s
 
     cat fb.neoSch1.cpgIslandExt.txt
-    # 32550865 bases of 2472073034 (1.317%) in intersection
+    # 30655113 bases of 2400839308 (1.277%) in intersection
 
 ##############################################################################
 # ncbiRefSeq gene track (TBD - 2016-05-05 - Hiram)
@@ -527,11 +508,12 @@ searchPriority 8
     # 74646536 bases of 2725937399 (2.738%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2017-07-27 - Hiram)
+# genscan - (DONE - 2017-09-25 - Hiram)
     mkdir /hive/data/genomes/neoSch1/bed/genscan
     cd /hive/data/genomes/neoSch1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku neoSch1) > do.log 2>&1
+XXX - running - Mon Sep 25 10:19:05 PDT 2017
     # real    737m1.735s
 
     cat fb.neoSch1.genscan.txt
@@ -541,13 +523,14 @@ searchPriority 8
     #   48834412 bases of 2472073034 (1.975%) in intersection
 
 #############################################################################
-# augustus gene track (TBD - 2017-07-27 - Hiram)
+# augustus gene track (DONE - 2017-09-25 - Hiram)
 
     mkdir /hive/data/genomes/neoSch1/bed/augustus
     cd /hive/data/genomes/neoSch1/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev neoSch1) > do.log 2>&1
+XXX - running - Mon Sep 25 10:19:42 PDT 2017
     # real    207m36.088s
 
     cat fb.neoSch1.augustusGene.txt
@@ -556,16 +539,20 @@ searchPriority 8
 #############################################################################
 # Create kluster run files (TBD - 2017-07-27 - Hiram)
 
-    # numerator is neoSch1 gapless bases "real" as reported by:
-    featureBits -noRandom -noHap neoSch1 gap
-    # 29824354 bases of 2405454322 (1.240%) in intersection
+    # obtain 'real' numbers of this assembly:
+    cd /hive/data/genomes/neoSch1
+    head -1 faSize.neoSch1.2bit.txt
+# 2400839308 bases (53716773 N's 2347122535 real 1330493216 upper
+#	1016629319 lower) in 7872 sequences in 1 files
+
+    # numerator is neoSch1 gapless bases "real"
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2405454322 / 2861349177 \) \* 1024
-    # ( 2405454322 / 2861349177 ) * 1024 = 860.847479
+    calc \( 2347122535 / 2861349177 \) \* 1024
+    # ( 2347122535 / 2861349177 ) * 1024 = 839.972100
 
     # ==> use -repMatch=800 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 100
@@ -573,33 +560,17 @@ searchPriority 8
     time blat neoSch1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/neoSch1.11.ooc \
         -repMatch=800
-    #   Wrote 34181 overused 11-mers to jkStuff/neoSch1.11.ooc
-    #	real    0m44.366s
+    #   Wrote 30552 overused 11-mers to jkStuff/neoSch1.11.ooc
+    #	real    0m42.284s
 
+    #	there are no non-bridged gaps
     #   check non-bridged gaps to see what the typical size is:
-    hgsql -N \
-        -e 'select * from gap where bridge="no" order by size;' neoSch1 \
-        | sort -k7,7nr
+#     hgsql -N \
+#         -e 'select * from gap where bridge="no" order by size;' neoSch1 \
+#         | sort -k7,7nr
     #   minimum size is 50000
-    gapToLift -verbose=2 -minGap=50000 neoSch1 \
-	jkStuff/neoSch1.nonBridged.lft -bedFile=jkStuff/neoSch1.nonBridged.bed
-
-#########################################################################
-# LIFTOVER TO susScr3 (TBD - 2017-07-27 - Hiram )
-    mkdir /hive/data/genomes/neoSch1/bed/blat.susScr3.2017-07-27
-    cd /hive/data/genomes/neoSch1/bed/blat.susScr3.2017-07-27
-    # -debug run to create run dir, preview scripts...
-    doSameSpeciesLiftOver.pl -debug \
-        -ooc /hive/data/genomes/neoSch1/jkStuff/neoSch1.11.ooc \
-	   neoSch1 susScr3
-    # Real run:
-    time (doSameSpeciesLiftOver.pl -verbose=2 \
-        -ooc /hive/data/genomes/neoSch1/jkStuff/neoSch1.11.ooc \
-	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-	 neoSch1 susScr3) > do.log 2>&1 &
-    #   real    252m20.235s
-
-    # verify browser can run a view in other genomes to susScr3 from neoSch1
+#     gapToLift -verbose=2 -minGap=50000 neoSch1 \
+# 	jkStuff/neoSch1.nonBridged.lft -bedFile=jkStuff/neoSch1.nonBridged.bed
 
 #########################################################################
 # lastz/chain/net swap from hg38 (TBD - 2017-08-02 - Hiram)
@@ -657,45 +628,48 @@ searchPriority 8
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # organism       mrnaCnt estCnt  refSeqCnt
-    # Sus scrofa      41240   1676416 4173
+    # Neomonachus schauinslandi   (there are no entries for this name)
 
-    # edit etc/genbank.conf to add neoSch1 just before susScr3
+    # edit etc/genbank.conf to add neoSch1 just after manLeu1
 
-# neoSch1 (pig)
+# neoSch1 (Hawaiian monk seal - Neomonachus schauinslandi) taxId 29088
 neoSch1.serverGenome = /hive/data/genomes/neoSch1/neoSch1.2bit
 neoSch1.clusterGenome = /hive/data/genomes/neoSch1/neoSch1.2bit
 neoSch1.ooc = /hive/data/genomes/neoSch1/jkStuff/neoSch1.11.ooc
-neoSch1.lift = /hive/data/genomes/neoSch1/jkStuff/neoSch1.nonBridged.lft
-neoSch1.perChromTables = no
-neoSch1.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
-neoSch1.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
-neoSch1.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
-neoSch1.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
-neoSch1.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
-neoSch1.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+neoSch1.lift = no
+neoSch1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+neoSch1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+neoSch1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+neoSch1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+neoSch1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+neoSch1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
 neoSch1.downloadDir = neoSch1
-neoSch1.refseq.mrna.native.load  = yes
-neoSch1.refseq.mrna.xeno.load  = yes
+neoSch1.refseq.mrna.native.load  = no
+neoSch1.refseq.mrna.xeno.load = yes
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
-neoSch1.genbank.mrna.xeno.load = yes
-neoSch1.genbank.mrna.xeno.loadDesc = no
-neoSch1.genbank.est.native.load = yes
-# neoSch1.upstreamGeneTbl = ensGene
-# neoSch1.upstreamMaf = multiz12way
-# /hive/data/genomes/neoSch1/bed/multiz12way/species.list
+neoSch1.genbank.mrna.xeno.load = no
+neoSch1.genbank.mrna.native.load = no
+neoSch1.genbank.est.native.load = no
+neoSch1.perChromTables = no
 
-    git commit -m "Added neoSch1; refs #19879" etc/genbank.conf
+# And edit src/lib/gbGenome.c to add new species
+#	static char *neoSchNames[] = {"Neomonachus schauinslandi", NULL};
+#	    {"neoSch", neoSchNames},
+
+    git commit -m \
+  "Added neoSch1 Hawaiian monk seal/Neomonachus schauinslandi; refs #19883" \
+       etc/genbank.conf src/lib/gbGenome.c
     git push
     # update /cluster/data/genbank/:
     make etc-update
-
-# Edit src/lib/gbGenome.c to add new species.  Skipped
+    make install-server
 
     screen      #  control this business with a screen since it takes a while
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial neoSch1
-    #  logFile: var/build/logs/2017.07.27-20:49:34.neoSch1.initalign.log
+    #  logFile: var/build/logs/2017.09.25-10:31:15.neoSch1.initalign.log
+XXX - running - Mon Sep 25 10:31:26 PDT 2017
 
     #   real    1486m19.233s
 
