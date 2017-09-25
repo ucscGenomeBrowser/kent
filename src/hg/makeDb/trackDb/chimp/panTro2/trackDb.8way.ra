@@ -1,0 +1,85 @@
+track cons8way
+compositeTrack on
+shortLabel Conservation
+longLabel 8 Species Multiz Alignment & Conservation
+subGroup1 view Views align=Multiz_Alignments  phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+html multiz8way
+
+    track cons8wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons8way
+
+        track multiz8way
+        subTrack cons8wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 8 Species
+        subGroups view=align
+        noInherit on
+        summary multiz8waySummary
+#        frames multiz8wayFrames
+#        irows on
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault panTro2
+        speciesGroups Primates Mammals Vertebrates Birds
+        sGroup_Primates hg18 rheMac2
+        sGroup_Mammals mm8 canFam2 monDom4
+        sGroup_Vertebrates danRer4
+        sGroup_Birds galGal2
+        itemFirstCharCase noChange
+        treeImage phylo/panTro2_8way.gif
+        priority 100
+
+    # phastCons conservation
+    track cons8wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons8way
+
+        track phastCons8way
+        subTrack cons8wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel 8 Species Cons
+        longLabel 8 Species Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons8wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons8way
+
+        track phastConsElements8way
+        subTrack cons8wayViewelements on
+        subGroups view=elements
+        shortLabel 8 Species El
+        longLabel 8 Species Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
+        html phastConsElements8way
+
+
+
+
