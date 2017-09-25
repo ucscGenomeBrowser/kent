@@ -181,107 +181,8 @@ taxId 9568
     # then, clean up:
     rm -fr TemporaryTrackDbCheckout/
 
-##########################################################################
-# running repeat masker (TBD - 2014-08-15 - Hiram)
-    mkdir /hive/data/genomes/manLeu1/bed/repeatMasker
-    cd /hive/data/genomes/manLeu1/bed/repeatMasker
-    time (doRepeatMasker.pl -buildDir=`pwd` \
-      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev -useRMBlastn \
-       -smallClusterHub=ku manLeu1) > do.log 2>&1
-    # real    558m51.310s
-
-    cat faSize.rmsk.txt
-    # 2204741241 bases (205794437 N's 1998946804 real 1343043070 upper
-    #    655903734 lower) in 92770 sequences in 1 files
-    # Total size: mean 23765.7 sd 56958.6 min 200 (JPTV01206145)
-    #   max 1317973 (KN005617) median 598
-    # %29.75 masked total, %32.81 masked real
-
-    egrep -i "versi|relea" do.log
-    # RepeatMasker version open-4.0.5
-    #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;
-
-    time featureBits -countGaps manLeu1 rmsk
-    # 655984124 bases of 2204741241 (29.753%) in intersection
-    # real    1m0.941s
-
-    # why is it different than the faSize above ?
-    # because rmsk masks out some N's as well as bases, the count above
-    #   separates out the N's from the bases, it doesn't show lower case N's
-
-##########################################################################
-# running simple repeat (TBD - 2014-08-14 - Hiram)
-
-    mkdir /hive/data/genomes/manLeu1/bed/simpleRepeat
-    cd /hive/data/genomes/manLeu1/bed/simpleRepeat
-    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
-        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
-        manLeu1) > do.log 2>&1
-    # real    39m22.135s
-
-    cat fb.simpleRepeat
-    # 43106952 bases of 1999066070 (2.156%) in intersection
-
-    # using the Window Masker result:
-    cd /hive/data/genomes/manLeu1
-    twoBitMask bed/repeatMasker/manLeu1.rmsk.2bit \
-      -add bed/simpleRepeat/trfMask.bed  manLeu1.2bit
-    #   you can safely ignore the warning about fields >= 13
-    twoBitToFa manLeu1.2bit stdout | faSize stdin > faSize.manLeu1.2bit.txt
-    cat faSize.manLeu1.2bit.txt
-    # 2204741241 bases (205794437 N's 1998946804 real 1342683024 upper
-    #    656263780 lower) in 92770 sequences in 1 files
-    # Total size: mean 23765.7 sd 56958.6 min 200 (JPTV01206145)
-    #    max 1317973 (KN005617) median 598
-    # %29.77 masked total, %32.83 masked real
-
-    rm /gbdb/manLeu1/manLeu1.2bit
-    ln -s `pwd`/manLeu1.2bit /gbdb/manLeu1/manLeu1.2bit
-
-##########################################################################
-# CREATE MICROSAT TRACK (TBD - 2015-06-22 - Hiram)
-     ssh hgwdev
-     mkdir /cluster/data/manLeu1/bed/microsat
-     cd /cluster/data/manLeu1/bed/microsat
-     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
-	../simpleRepeat/simpleRepeat.bed > microsat.bed
-    hgLoadBed manLeu1 microsat microsat.bed
-    #	Loaded 13365 elements of size 4
-
-##########################################################################
-## WINDOWMASKER (TBD - 2014-08-16 - Hiram)
-
-    mkdir /hive/data/genomes/manLeu1/bed/windowMasker
-    cd /hive/data/genomes/manLeu1/bed/windowMasker
-    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
-        -dbHost=hgwdev manLeu1) > do.log 2>&1
-    # real    252m52.324s
-
-    # Masking statistics
-    cat faSize.manLeu1.cleanWMSdust.txt
-    # 2204741241 bases (205794437 N's 1998946804 real 1438998713 upper
-    #    559948091 lower) in 92770 sequences in 1 files
-    # Total size: mean 23765.7 sd 56958.6 min 200 (JPTV01206145)
-    #    max 1317973 (KN005617) median 598
-    # %25.40 masked total, %28.01 masked real
-
-    cat fb.manLeu1.rmsk.windowmaskerSdust.txt
-    # 276979736 bases of 2204741241 (12.563%) in intersection
-
-##########################################################################
-# cpgIslands - (TBD - 2014-08-19 - Hiram)
-    mkdir /hive/data/genomes/manLeu1/bed/cpgIslands
-    cd /hive/data/genomes/manLeu1/bed/cpgIslands
-    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
-      -workhorse=hgwdev -smallClusterHub=ku manLeu1) > do.log 2>&1 &
-    # real    169m34.228s
-
-    cat fb.manLeu1.cpgIslandExt.txt
-    # 11640846 bases of 1999066070 (0.582%) in intersection
-
 ##############################################################################
-# cpgIslands on UNMASKED sequence (TBD - 2014-08-20 - Hiram)
+# cpgIslands on UNMASKED sequence (DONE - 2017-09-21 - Hiram)
     mkdir /hive/data/genomes/manLeu1/bed/cpgIslandsUnmasked
     cd /hive/data/genomes/manLeu1/bed/cpgIslandsUnmasked
 
@@ -289,36 +190,143 @@ taxId 9568
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/manLeu1/manLeu1.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku manLeu1) > do.log 2>&1
+XXX - running - Thu Sep 21 16:37:27 PDT 2017
     # real    360m14.919s
 
     cat fb.manLeu1.cpgIslandExtUnmasked.txt
     # 12785608 bases of 1999066070 (0.640%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (TBD - 2015-06-10 - Hiram)
+# cytoBandIdeo - (DONE - 2017-09-21 - Hiram)
     mkdir /hive/data/genomes/manLeu1/bed/cytoBand
     cd /hive/data/genomes/manLeu1/bed/cytoBand
     makeCytoBandIdeo.csh manLeu1
 
-#########################################################################
-# augustus - (TBD - 2015-05-28 - Hiram)
+#############################################################################
+# running repeat masker (DONE - 2017-09-21 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/bed/repeatMasker
+    cd /hive/data/genomes/manLeu1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -smallClusterHub=ku manLeu1) > do.log 2>&1
+    # real    513m36.866s
+
+    cat faSize.rmsk.txt
+    # 3062009387 bases (340585302 N's 2721424085 real 1376487602 upper
+    #	1344936483 lower) in 12822 sequences in 1 files
+    # Total size: mean 238809.0 sd 937317.8 min 304 (NW_012108651v1)
+    #	max 17385548 (NW_012098097v1) median 2228
+    # %43.92 masked total, %49.42 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps manLeu1 rmsk
+    # 1346389644 bases of 3062009387 (43.971%) in intersection
+    # real    0m51.890s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2017-09-21 - Hiram)
+
+    mkdir /hive/data/genomes/manLeu1/bed/simpleRepeat
+    cd /hive/data/genomes/manLeu1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 5 manLeu1) > do.log 2>&1
+    # real    12m30.019s
+
+    cat fb.simpleRepeat
+    # 89300635 bases of 2721424086 (3.281%) in intersection
+
+    # using the rmsk result
+    cd /hive/data/genomes/manLeu1
+    twoBitMask bed/repeatMasker/manLeu1.rmsk.2bit \
+      -add bed/simpleRepeat/trfMask.bed  manLeu1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # if using windowMasker result:
+#     twoBitMask bed/windowMasker/manLeu1.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  manLeu1.2bit
+
+    twoBitToFa manLeu1.2bit stdout | faSize stdin > faSize.manLeu1.2bit.txt
+    cat faSize.manLeu1.2bit.txt
+# 3062009387 bases (340585302 N's 2721424085 real 1375191201 upper
+#	1346232884 lower) in 12822 sequences in 1 files
+# Total size: mean 238809.0 sd 937317.8 min 304 (NW_012108651v1)
+#	max 17385548 (NW_012098097v1) median 2228
+# %43.97 masked total, %49.47 masked real
+
+    rm /gbdb/manLeu1/manLeu1.2bit
+    ln -s `pwd`/manLeu1.2bit /gbdb/manLeu1/manLeu1.2bit
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-09-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/manLeu1/bed/microsat
+     cd /cluster/data/manLeu1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed manLeu1 microsat microsat.bed
+    #	Read 26827 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2017-09-21 - Hiram)
+
+    mkdir /hive/data/genomes/manLeu1/bed/windowMasker
+    cd /hive/data/genomes/manLeu1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev manLeu1) > do.log 2>&1
+    # real    265m59.904s
+
+    # Masking statistics
+    cat faSize.manLeu1.cleanWMSdust.txt
+# 3062009387 bases (340585302 N's 2721424085 real 1763962353 upper
+#	957461732 lower) in 12822 sequences in 1 files
+# Total size: mean 238809.0 sd 937317.8 min 304 (NW_012108651v1)
+#	max 17385548 (NW_012098097v1) median 2228
+# %31.27 masked total, %35.18 masked real
+
+    cat fb.manLeu1.rmsk.windowmaskerSdust.txt
+    # 727173946 bases of 3062009387 (23.748%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2017-09-22 - Hiram)
+    mkdir /hive/data/genomes/manLeu1/bed/cpgIslands
+    cd /hive/data/genomes/manLeu1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku manLeu1) > do.log 2>&1 &
+    # real    6m52.738s
+
+    cat fb.manLeu1.cpgIslandExt.txt
+    # 13635922 bases of 2721424086 (0.501%) in intersection
+
+##############################################################################
+# augustus - (DONE - 2017-09-22 - Hiram)
     mkdir /hive/data/genomes/manLeu1/bed/augustus
     cd /hive/data/genomes/manLeu1/bed/augustus
 
 export db="manLeu1"
 export species="human"
-doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
-  -species=$species -dbHost=hgwdev -utr -workhorse=hgwdev $db
+time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+  -species=$species -dbHost=hgwdev -utr -workhorse=hgwdev $db) > do.log 2>&1
+XXX - running - Fri Sep 22 11:12:54 PDT 2017
 
     cat fb.manLeu1.augustusGene.txt
     #  49832677 bases of 1999066070 (2.493%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2014-08-22 - Hiram)
+# genscan - (DONE - 2017-09-22 - Hiram)
     mkdir /hive/data/genomes/manLeu1/bed/genscan
     cd /hive/data/genomes/manLeu1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku manLeu1) > do.log 2>&1 &
+XXX - running - Fri Sep 22 11:13:42 PDT 2017
     # real    122m8.890s
 
     cat fb.manLeu1.genscan.txt
@@ -328,72 +336,126 @@ doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
     #   62862446 bases of 1999066070 (3.145%) in intersection
 
 #########################################################################
-# ucscToINSDC table/track (TBD - 2015-06-22 - Hiram)
+# ucscToINSDC table/track (DONE - 2017-09-22 - Hiram)
     mkdir /hive/data/genomes/manLeu1/bed/ucscToINSDC
     cd /hive/data/genomes/manLeu1/bed/ucscToINSDC
 
     # check for chrM accession:
     grep chrM ../../manLeu1.agp
-# chrM    1       16578   1       F       NC_016008       1       16578   +
+# chrM    1       16547   1       F       NC_028442.1     1       16547   +
 
     # use that accession as an argument to this command
 
     ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-         ../../genbank/Primary_Assembly NC_016008
+         ../../refseq/*0_assembly_structure/Primary_Assembly NC_028442.1
+
+    # this is actually ucscToRefSeq since this is a RefSeq assembly:
+    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+    rm -f ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt | sort > refseqToUcsc.txt
+
+    # need to add the chrM RefSeq and INSDC name with the extra printf:
+
+    ( printf "NC_028442.1\tKT696596.1\n";
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | awk '{printf "%s\t%s\n", $2, $1}') | sort > refseq.insdc.txt
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
-    # do not need the v1 in this case:
-    sed -e 's/v1//' ucscToINSDC.txt \
-      | join name.coordinate.tab - | tr '[ ]' '[\t]' \
-         > ucscToINSDC.bed
+
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+           > ucscToRefSeq.bed
+
     # verify all names are coming through, should be same line count:
     wc -l *
-    #    92770 name.coordinate.tab
-    #    92770 ucscToINSDC.bed
-    #    92773 ucscToINSDC.txt
+    #	12822 name.coordinate.tab
+    #	12822 refseq.insdc.txt
+    #	12822 refseqToUcsc.txt
+    #	12822 ucscToINSDC.bed
+    #	12822 ucscToINSDC.txt
+    #	12822 ucscToRefSeq.bed
+    #	12822 ucscToRefSeq.txt
 
-    # three missing ones are the dups that UCSC removed:
-     cat ../../ucsc/dup.list
-JPTV01168508
-JPTV01172399
-JPTV01172711
+    # verify chrM is correct:
+    grep chrM *.bed
+# ucscToINSDC.bed:chrM    0       16547   KT696596.1
+# ucscToRefSeq.bed:chrM   0       16547   NC_028442.1
 
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 12
-    # use the 12 in this sed
-    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab manLeu1 ucscToINSDC stdin ucscToINSDC.bed
+
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab manLeu1 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # checkTableCoords should be silent for no errors:
     checkTableCoords manLeu1
+
     # should cover %100 entirely:
     featureBits -countGaps manLeu1 ucscToINSDC
-    # 2204741241 bases of 2204741241 (100.000%) in intersection
+    # 3062009387 bases of 3062009387 (100.000%) in intersection
+    featureBits -countGaps manLeu1 ucscToRefSeq
+    # 3062009387 bases of 3062009387 (100.000%) in intersection
 
 #########################################################################
-# Create kluster run files (TBD - 2015-06-10 - Hiram)
+# add chromAlias table (DONE - 2017-09-22 - Hiram)
+
+    mkdir /hive/data/genomes/manLeu1/bed/chromAlias
+    cd /hive/data/genomes/manLeu1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' manLeu1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' manLeu1 \
+        > ucsc.genbank.tab
+
+    # verify chrM is correct:
+    grep chrM *
+ucsc.genbank.tab:chrM   KT696596.1      genbank
+ucsc.refseq.tab:chrM    NC_028442.1     refseq
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > manLeu1.chromAlias.tab
+
+    hgLoadSqlTab manLeu1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        manLeu1.chromAlias.tab
+
+#########################################################################
+# Create kluster run files (DONE - 2017-09-22 - Hiram)
 
     cd /hive/data/genomes/manLeu1
     # numerator is manLeu1 gapless bases "real" as reported by:
     head -1 faSize.manLeu1.2bit.txt
-# 2204741241 bases (205794437 N's 1998946804 real 1342683024 upper
-#    656263780 lower) in 92770 sequences in 1 files
+# 3062009387 bases (340585302 N's 2721424085 real 1375191201 upper
+#	1346232884 lower) in 12822 sequences in 1 files
 
     # numerator is 'real' base count
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1998946804 / 2861349177 \) \* 1024
-    # ( 1998946804 / 2861349177 ) * 1024 = 715.369359
+    calc \( 2721424085 / 2861349177 \) \* 1024
+    # ( 2721424085 / 2861349177 ) * 1024 = 973.924569
 
-    # ==> use -repMatch=700 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=950 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
     cd /hive/data/genomes/manLeu1
     time blat manLeu1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/manLeu1.11.ooc \
-        -repMatch=700
-    # Wrote 25574 overused 11-mers to jkStuff/manLeu1.11.ooc
-    #   real    0m33.809s
+        -repMatch=950
+    # Wrote 26979 overused 11-mers to jkStuff/manLeu1.11.ooc
+
+    #   real    0m46.946s
 
     # there are no non-bridged gaps, do not need to do this
     #   check non-bridged gaps to see what the typical size is:
@@ -417,25 +479,25 @@ JPTV01172711
 
     # survey sizes:
     n50.pl chrom.sizes
-#       reading: chrom.sizes
-#       contig count: 92770, total size: 2204741241, one half size: 1102370620
+#       contig count: 12822, total size: 3062009387, one half size: 1531004693
 # cumulative    N50 count       contig  contig size
-# 1102318455      5267    KN010628        117930
-# 1102370620 one half size
-# 1102436375      5268    KN010629        117920
+# 1530667727      284     NW_012102255v1  3188400
+# 1531004693 one half size
+# 1533854475      285     NW_012104798v1  3186748
 
 #############################################################################
-# GENBANK AUTO UPDATE (TBD - 2015-06-10 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-09-22 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
-    # /cluster/data/genbank/data/organism.lst shows one mRNA:
-    # #organism       mrnaCnt estCnt  refSeqCnt
-    # Manis javanica  1       0       0
+    # /cluster/data/genbank/data/organism.lst shows one mRNA, three refSeq:
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Mandrillus leucophaeus  1       0       3
+    # Mandrillus sphinx       12      0       0
 
-    # edit etc/genbank.conf to add manLeu1 just before bosTau2
+    # edit etc/genbank.conf to add manLeu1 just after criGri1
 
-# manLeu1 (Pangolin) 92770 contigs
+# manLeu1 (Drill - Mandrillus leucophaeus) taxId 9568
 manLeu1.serverGenome = /hive/data/genomes/manLeu1/manLeu1.2bit
 manLeu1.clusterGenome = /hive/data/genomes/manLeu1/manLeu1.2bit
 manLeu1.ooc = /hive/data/genomes/manLeu1/jkStuff/manLeu1.11.ooc
@@ -446,29 +508,32 @@ manLeu1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDna
 manLeu1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
 manLeu1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
 manLeu1.downloadDir = manLeu1
-manLeu1.refseq.mrna.native.load  = no
+manLeu1.refseq.mrna.native.load  = yes
 manLeu1.refseq.mrna.xeno.load = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
 manLeu1.genbank.mrna.xeno.load = no
 manLeu1.genbank.mrna.native.load = no
 manLeu1.genbank.est.native.load = no
 manLeu1.perChromTables = no
 
-    git commit -m "Added manLeu1/Pangolin; refs #15515" etc/genbank.conf
+    # And edit src/lib/gbGenome.c to add new species.  Adding lines:
+# static char *manLeuNames[] = {"Mandrillus leucophaeus", NULL};
+#     {"manLeu", manLeuNames},
+
+    git commit -m "Added manLeu1/Drill; refs #20190" \
+	etc/genbank.conf src/lib/gbGenome.c
     git push
+
     # update /cluster/data/genbank/:
     make etc-update
-
-    # Edit src/lib/gbGenome.c to add new species.
-    git commit -m "Added manLeu Pangolin/Manis pentadactyla (javanica) refs #15515" \
-       src/lib/gbGenome.c
-    git push
     make install-server
 
     screen      #  control this business with a screen since it takes a while
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial manLeu1
-    # logFile: var/build/logs/2015.06.10-14:04:03.manLeu1.initalign.log
+    # logFile: var/build/logs/2017.09.22-15:12:31.manLeu1.initalign.log
+XXX - running - Fri Sep 22 15:12:44 PDT 2017
     # real    34m30.608s
 
     #   To re-do, rm the dir first:
@@ -520,37 +585,44 @@ manLeu1.perChromTables = no
     # 1192725744 bases of 1192725744 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (DONT - 2017-03-28 - Hiram)
-    cd ~/kent/src/hg/makeDb/trackDb/pangolin/manLeu1
+# fixup search rule for assembly track/gold table (DONE - 2017-09-22 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/primate/manLeu1
 
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" manLeu1 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
-#  230927 JPTV.1
-#       1 NC_
+#  246054 JYKQ.1
+#       1 NC_.1
 
-    # implies a rule: '[JN][CP][T_][V0-9]+(\.[0-9]+)?'
+    # implies a rule: '[JN][CY][K_][Q0-9]+(\.[0-9]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" manLeu1 | wc -l
-    # 230928
+    # 246055
 
     hgsql -N -e "select frag from gold;" manLeu1 \
-       | egrep -e '[JN][CP][T_][V0-9]+(\.[0-9]+)?' | wc -l
-    # 230928
+       | egrep -e '[JN][CY][K_][Q0-9]+(\.[0-9]+)?' | wc -l
+    # 246055
 
     hgsql -N -e "select frag from gold;" manLeu1 \
-       | egrep -v -e '[JN][CP][T_][V0-9]+(\.[0-9]+)?' | wc -l
+       | egrep -v -e '[JN][CY][K_][Q0-9]+(\.[0-9]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/chicken/manLeu1/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [JN][CP][T_][V0-9]+(\.[0-9]+)?
+termRegex [JN][CY][K_][Q0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
-    # verify searches work in the position box
+    # verify searches work in the position box, check full accession name,
+    # accession name without .1
+    # truncated accession name produces multiple results
+    # and the two chrM accessions, with and without the .1 and partial name
+    # use: accessionName:n-m to display locations n to m on that accession
+
+    git commit -m 'add gold/assembly track search rule refs #20190' *.ra
+    git push
 
 ############################################################################
 #  BLATSERVERS ENTRY (TBD - 2017-03-22 - Hiram)

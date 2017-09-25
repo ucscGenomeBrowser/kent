@@ -2051,7 +2051,7 @@ visibility hide
 type bed 4 .
 otherDb mm8
 otherDbTable jaxQtl
-url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+url http://www.informatics.jax.org/marker/$$
 urlLabel MGI QTL Detail:
 
     track jaxQtlAsIs
@@ -3486,10 +3486,20 @@ release alpha,beta
     mouseOverField note
     itemRgb on
 
-searchName snpediaAll
 searchTable snpediaAll
 searchMethod exact
 searchType bigBed
+termRegex rs[0-9]+
+searchPriority 1
+padding 50
+
+searchTable snpediaText
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 11.001
+padding 50
 
 track clinvar
 compositeTrack on
@@ -4107,14 +4117,6 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 11
-padding 250
-
-searchTable snpedia
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 11.001
 padding 250
 
 track darned

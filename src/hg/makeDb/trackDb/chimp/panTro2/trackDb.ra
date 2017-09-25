@@ -1,6 +1,6 @@
 include trackDb.chainNet.ra 
-
 include defaultPriority.ra
+include trackDb.8way.ra
 
 track quality override
 type wig 0 98
@@ -32,44 +32,6 @@ altColor 255,240,200
 spectrum on
 type chain panTro4
 otherDb panTro4
-
-track multiz8way
-release alpha
-shortLabel Conservation
-longLabel Vertebrate Multiz Alignment & Conservation (8 Species)
-group compGeno
-priority 1
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons8way
-spanList 1
-pairwiseHeight 12
-yLineOnOff Off
-frames multiz8wayFrames
-#irows on
-autoScale Off
-windowingFunction mean
-summary multiz8waySummary
-speciesGroups primate mammal vertebrate
-sGroup_primate hg18 rheMac2
-sGroup_mammal mm8 canFam2 monDom4
-sGroup_vertebrate galGal2 danRer4
-treeImage phylo/panTro2_8way.gif
-speciesCodonDefault panTro2
-
-track phastConsElements8way
-release alpha
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements, 8-way Vertebrate Multiz Alignment
-group compGeno
-priority 104.4
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
 
 track chainHomIni13
 shortLabel $o_Organism Chain
