@@ -54,7 +54,8 @@ CREATE TABLE Builds (
         date_created datetime NOT NULL ,
         date_made_public datetime NULL ,
 	ncbi_nadb_accession_uid int NULL ,
-	ensembl_nadb_accession_uid int NULL 
+	ensembl_nadb_accession_uid int NULL ,
+	ccds_nadb_accession_uid int NULL 
 
 ) 
 ;
@@ -206,7 +207,7 @@ CREATE TABLE Locations_GroupVersions (
 DROP TABLE IF EXISTS NADB_Accessions;
 CREATE TABLE NADB_Accessions (
 	nadb_accession_uid int PRIMARY KEY  NOT NULL ,
-	organization_uid int NOT NULL ,
+	organization_uid int NULL ,
 	acc varchar (64) NOT NULL ,
 	version int NOT NULL
 ) 
