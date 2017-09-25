@@ -14201,7 +14201,10 @@ struct trackDb *subTdb;
 for (subTdb=subTracks; subTdb; subTdb = subTdb->next)
     {
     char *bigDataUrl = trackDbSetting(subTdb, "bigDataUrl");
-    dyStringPrintf(dy, "%s ",bigDataUrl);
+    if (bigDataUrl != NULL)
+        dyStringPrintf(dy, "%s ",bigDataUrl);
+    else // native tracks are prepended with '$'
+        dyStringPrintf(dy, "$%s ",subTdb->track);
     }
 
 hashAdd(tdb->settingsHash, "mathDataUrl", dy->string);

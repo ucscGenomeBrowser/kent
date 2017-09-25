@@ -21,7 +21,7 @@ pepTable knownGenePep
 geneTable knownGene
 genomeUrl ../cgi-bin/hgTracks?org=Mouse&position=%s
 otherName MGI
-otherUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=%s
+otherUrl http://www.informatics.jax.org/marker/%s
 otherIdSql select uniProt.extDbRef.extAcc1 from uniProt.extDbRef,uniProt.extDb,kgXref where uniProt.extDb.val = 'MGI' and uniProt.extDb.id = uniProt.extDbRef.extDb and uniProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
 otherIdSql2 select kgXref.mRNA from kgXref where kgID='%s'
 priority 20
