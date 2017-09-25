@@ -159,6 +159,7 @@ static char *colAngNames[] = {"Colobus angolensis", "Colobus angolensis palliatu
 static char *manLeuNames[] = {"Mandrillus leucophaeus", NULL};
 static char *cerAtyNames[] = {"Cercocebus atys", NULL};
 static char *neoSchNames[] = {"Neomonachus schauinslandi", NULL};
+static char *aotNanNames[] = {"Aotus nancymaae", NULL};
 static char *hbvNames[] = {"Hepatitis B virus", "Hepatitis B virus subtype adw", NULL};
 static char *hpvNames[] = {"Human papillomavirus", "Human papillomavirus type 16", "Human papillomavirus type 18", "Human papillomavirus type 197", "Human papillomavirus type 38", "Human papillomavirus type 45", "Human papillomavirus type 58", "Human papillomavirus type 68", "Human papillomavirus type 6b", NULL};
 static char *staAurNames[] = {"Staphylococcus", "Staphylococcus aureus", "Staphylococcus aureus subsp. aureus NCTC 8325", "Staphylococcus aureus subsp. aureus RN4220", NULL};
@@ -295,6 +296,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"manLeu", manLeuNames},
     {"cerAty", cerAtyNames},
     {"neoSch", neoSchNames},
+    {"aotNan", aotNanNames},
     {"hbv", hbvNames},
     {"hpv", hpvNames},
     {"staAur", staAurNames},
