@@ -3461,7 +3461,6 @@ visibility hide
 color 50,0,100
 type bed 4
 compositeTrack on
-release alpha,beta
 
     track snpediaText
     parent snpedia
@@ -3470,7 +3469,6 @@ release alpha,beta
     color 50,0,100
     type bed 4
     itemDetailsHtmlTable snpediaTextHtml
-    release alpha,beta
     url https://www.snpedia.com/index.php/$$
 
     track snpediaAll
@@ -3481,7 +3479,6 @@ release alpha,beta
     type bigBed 9 +
     searchIndex name
     bigDataUrl /gbdb/$D/bbi/snpediaAll.bb
-    release alpha,beta
     urls name=https://www.snpedia.com/index.php/$$
     mouseOverField note
     itemRgb on
