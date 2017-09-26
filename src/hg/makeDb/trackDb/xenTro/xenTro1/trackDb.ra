@@ -1,37 +1,12 @@
 #	"$Id: trackDb.ra,v 1.46 2010/05/11 01:42:14 kent Exp $";
 
 include trackDb.chainNet.ra
+include trackDb.5way.ra
 
 track blastHg17KG override
 shortLabel Human Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
 priority 49.5
-
-track multiz5way
-shortLabel Conservation
-longLabel Conservation in Frog/Chicken/Human/Mouse/Zebrafish
-group compGeno
-priority 110
-visibility pack
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons5
-spanList 1
-yLinOnOff Off
-autoScale Off
-pairwise netBlastz
-treeImage phylo/xenTro1_5way.gif
-speciesOrder galGal2 hg17 mm5 danRer1
-
-track mostConserved
-shortLabel Most Conserved
-longLabel Most Conserved (Top 3% of Genome) Elements
-group compGeno
-priority 111
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
 
 track uc16
 shortLabel Ultra Conserved

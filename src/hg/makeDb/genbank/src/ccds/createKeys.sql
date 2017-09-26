@@ -33,7 +33,7 @@ ALTER TABLE Accessions_GroupVersions ADD INDEX (accession_uid), ADD INDEX (ccds_
 ALTER TABLE BuildQualityTests ADD INDEX (build_uid);
 ALTER TABLE BuildQualityTests ADD INDEX (acc_rejection_uid);
 ALTER TABLE Builds ADD INDEX (prev_build_uid);
-ALTER TABLE Builds ADD INDEX (ncbi_nadb_accession_uid), ADD INDEX (ensembl_nadb_accession_uid);
+ALTER TABLE Builds ADD INDEX (ncbi_nadb_accession_uid), ADD INDEX (ensembl_nadb_accession_uid), ADD INDEX (ccds_nadb_accession_uid);
 ALTER TABLE CcdsStatistics ADD INDEX (statistics_type_uid);
 ALTER TABLE CcdsStatistics ADD INDEX (build_uid);
 ALTER TABLE CcdsUids ADD INDEX (group_uid);

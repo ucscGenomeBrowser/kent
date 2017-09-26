@@ -5,10 +5,10 @@ longLabel Multiz Alignment & Conservation (17 Species)
 subGroup1 view Views align=Multiz_Alignments  phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full
+priority 1
 type bed 4
 group compGeno
 html multiz17way
-priority 1
 
     track cons17wayViewalign
     shortLabel Multiz Alignments
@@ -29,13 +29,13 @@ priority 1
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
-        speciesCodonDefault ce6
+        speciesCodonDefault mm7
         speciesGroups Mammals Vertebrates Birds
-        sGroup_Mammals panTro1 rheMac2 mm7 rn3 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom2
-        sGroup_Vertebrates xenTro1 danRer3 tetNig1 fr1 
+        sGroup_Mammals rn3 oryCun1 hg17 panTro1 rheMac1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom2
+        sGroup_Vertebrates xenTro1 danRer3 tetNig1 fr1
         sGroup_Birds galGal2
         itemFirstCharCase noChange
-        treeImage phylo/hg17_17way.gif
+        treeImage phylo/mm7_17way.gif
         priority 100
 
     # phastCons conservation
@@ -46,7 +46,7 @@ priority 1
     subTrack cons17way
 
 
-        track phastCons17way
+        track phastCons17
         subTrack cons17wayViewphastcons on
         subGroups view=phastcons
         shortLabel 17 Species Cons
@@ -69,7 +69,7 @@ priority 1
     visibility dense
     subTrack cons17way
 
-        track phastConsElements17way
+        track phastConsElements
         subTrack cons17wayViewelements on
         subGroups view=elements
         shortLabel 17 Species El
@@ -79,5 +79,4 @@ priority 1
         type bed 5 .
         priority 23
         html phastConsElements17way
-        
 

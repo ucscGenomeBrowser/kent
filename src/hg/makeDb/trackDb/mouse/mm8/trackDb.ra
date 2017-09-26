@@ -1,8 +1,8 @@
 #	"$Id: trackDb.ra,v 1.70 2010/05/07 05:35:53 kent Exp $";
 
 include trackDb.chainNet.ra
-
 include defaultPriority.ra
+include trackDb.17way.ra
 
 track wssdCoverage
 shortLabel WSSD Coverage
@@ -29,32 +29,6 @@ url http://lgsun.grc.nia.nih.gov/geneindex/mm8/bin/giT.cgi?genename=$$
 
 track miRNA override
 type bed 6 .
-
-track multiz17way
-shortLabel Conservation
-longLabel Vertebrate Multiz Alignment & Conservation 
-group compGeno
-priority 1
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons17way
-spanList 1
-pairwiseHeight 12
-yLineOnOff Off
-frames multiz17wayFrames
-irows on
-autoScale Off
-windowingFunction mean
-summary multiz17waySummary
-speciesCodonDefault mm8
-speciesGroups mammal vertebrate
-sGroup_mammal rn4 oryCun1 hg18 panTro2 rheMac2 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom4
-sGroup_vertebrate galGal2 xenTro2 danRer4 tetNig1 fr1
-speciesDefaultOff oryCun1 panTro2 rheMac2 bosTau2 dasNov1 loxAfr1 echTel1 danRer4 fr1
-treeImage phylo/mm7_17way.gif
 
 track chainSelf
 shortLabel Self Chain 

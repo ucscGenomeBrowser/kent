@@ -1,56 +1,56 @@
-track cons17way
+track cons9way
 compositeTrack on
 shortLabel Conservation
-longLabel Multiz Alignment & Conservation (17 Species)
+longLabel 9-Way Multiz Alignment & Conservation
 subGroup1 view Views align=Multiz_Alignments  phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full
+priority 104.2
 type bed 4
 group compGeno
-html multiz17way
-priority 1
+html multiz9way
 
-    track cons17wayViewalign
+    track cons9wayViewalign
     shortLabel Multiz Alignments
     view align
     visibility pack
     viewUi on
-    subTrack cons17way
+    subTrack cons9way
 
-        track multiz17way
-        subTrack cons17wayViewalign on
+        track multiz9way
+        subTrack cons9wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 17 Species
+        longLabel Multiz Alignments of 9 Species
         subGroups view=align
         noInherit on
-        summary multiz17waySummary
-#        frames multiz17wayFrames
+        summary multiz9waySummary
+#        frames multiz9wayFrames
 #        irows on
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
-        speciesCodonDefault ce6
-        speciesGroups Mammals Vertebrates Birds
-        sGroup_Mammals panTro1 rheMac2 mm7 rn3 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom2
-        sGroup_Vertebrates xenTro1 danRer3 tetNig1 fr1 
-        sGroup_Birds galGal2
+        speciesCodonDefault monDom5
+        speciesGroups Mammals Birds Vertebrates
+        sGroup_Mammals hg18 mm9 canFam2 ornAna1
+        sGroup_Vertebrates xenTro2 danRer5
+        sGroup_Birds galGal3
         itemFirstCharCase noChange
-        treeImage phylo/hg17_17way.gif
+        treeImage phylo/monDom5_9way.gif
         priority 100
 
     # phastCons conservation
-    track cons17wayViewphastcons
+    track cons9wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
     visibility full
-    subTrack cons17way
+    subTrack cons9way
 
 
-        track phastCons17way
-        subTrack cons17wayViewphastcons on
+        track phastCons9way
+        subTrack cons9wayViewphastcons on
         subGroups view=phastcons
-        shortLabel 17 Species Cons
-        longLabel 17 Species Conservation by PhastCons
+        shortLabel 9 Species Cons
+        longLabel 9 Species Conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -63,21 +63,29 @@ priority 1
         priority 13
 
     # Conserved Elements (Most Conserved)
-    track cons17wayViewelements
+    track cons9wayViewelements
     shortLabel Conserved Elements
     view elements
     visibility dense
-    subTrack cons17way
+    subTrack cons9way
 
-        track phastConsElements17way
-        subTrack cons17wayViewelements on
+        track phastConsElements9way
+        subTrack cons9wayViewelements on
         subGroups view=elements
-        shortLabel 17 Species El
-        longLabel 17 Species Conserved Elements
+        shortLabel 9 Species El
+        longLabel 9 Species Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
         priority 23
-        html phastConsElements17way
-        
+        html phastConsElements9way
+
+
+
+
+
+
+
+
+
 
