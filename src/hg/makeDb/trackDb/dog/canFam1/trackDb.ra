@@ -1,6 +1,7 @@
 #	"$Id: trackDb.ra,v 1.41 2010/03/15 21:42:25 ann Exp $";
 
 include trackDb.chainNet.ra
+include trackDb.3way.ra
 
 track quality override
 type wig 0 51
@@ -24,20 +25,6 @@ priority 16
 visibility hide
 type bed 6 +
 exonArrows off
-
-track mzHg17Mm5_phast
-shortLabel Conservation
-longLabel Dog/Human/Mouse Multiz Alignments & phastCons Scores
-group compGeno
-priority 100
-visibility pack
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle mzHg17Mm5_phast2_wig
-yLineOnOff Off
-autoScale Off
-pairwise chm
-speciesOrder hg17 mm5
 
 track blastzBestEchTel0
 shortLabel Tenrec Best
