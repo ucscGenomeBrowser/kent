@@ -285,9 +285,6 @@ char *title = itemName;
 if (track->limitedVis != tvDense)
     {
     struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
-    // Experiment: construct list of tissues with colors and effect sizes for mouseover
-    //struct gtexEqtlClusterTrack *extras = (struct gtexEqtlClusterTrack *)track->extraUiData;
-    //struct hash *tissueHash = extras->tissueHash;
     struct dyString *ds = dyStringNew(0);
     dyStringPrintf(ds, "%s/%s: ", eqtl->name, eqtl->target);
     int i;
@@ -298,11 +295,6 @@ if (track->limitedVis != tvDense)
         double effect= eqtl->expScores[i];
         dyStringPrintf(ds, "%s(%s%0.2f)%s", eqtl->expNames[i], effect < 0 ? "" : "+", effect, 
                         i < eqtl->expCount - 1 ? ", " : "");
-        //struct gtexTissue *tis = (struct gtexTissue *)hashFindVal(tissueHash, eqtl->expNames[i]);
-        //unsigned color = tis ? tis->color : 0;       // BLACK
-        //char *name = tis ? tis->name : "unknown";
-        //#dyStringPrintf(ds,"<tr><td style='color: #%06X;'>*</td><td>%s</td><td>%s%0.2f</td></tr>\n", 
-                                //color, name, effect < 0 ? "" : "+", effect); 
         }
     title = dyStringCannibalize(&ds);
     }
