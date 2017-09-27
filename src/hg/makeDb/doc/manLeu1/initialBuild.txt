@@ -190,11 +190,10 @@ taxId 9568
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/manLeu1/manLeu1.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku manLeu1) > do.log 2>&1
-XXX - running - Thu Sep 21 16:37:27 PDT 2017
-    # real    360m14.919s
+    # real    6m48.049s
 
     cat fb.manLeu1.cpgIslandExtUnmasked.txt
-    # 12785608 bases of 1999066070 (0.640%) in intersection
+    # 19104884 bases of 2721424086 (0.702%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2017-09-21 - Hiram)
@@ -315,10 +314,10 @@ export db="manLeu1"
 export species="human"
 time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
   -species=$species -dbHost=hgwdev -utr -workhorse=hgwdev $db) > do.log 2>&1
-XXX - running - Fri Sep 22 11:12:54 PDT 2017
+    # real    116m47.705s
 
     cat fb.manLeu1.augustusGene.txt
-    #  49832677 bases of 1999066070 (2.493%) in intersection
+    #  45617591 bases of 2721424086 (1.676%) in intersection
 
 #########################################################################
 # genscan - (DONE - 2017-09-22 - Hiram)
@@ -326,14 +325,13 @@ XXX - running - Fri Sep 22 11:12:54 PDT 2017
     cd /hive/data/genomes/manLeu1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku manLeu1) > do.log 2>&1 &
-XXX - running - Fri Sep 22 11:13:42 PDT 2017
-    # real    122m8.890s
+    # real    162m41.174s
 
     cat fb.manLeu1.genscan.txt
-    #   55603181 bases of 1999066070 (2.781%) in intersection
+    #   50153337 bases of 2721424086 (1.843%) in intersection
 
     cat fb.manLeu1.genscanSubopt.txt
-    #   62862446 bases of 1999066070 (3.145%) in intersection
+    #   53430104 bases of 2721424086 (1.963%) in intersection
 
 #########################################################################
 # ucscToINSDC table/track (DONE - 2017-09-22 - Hiram)
@@ -532,9 +530,8 @@ manLeu1.perChromTables = no
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial manLeu1
-    # logFile: var/build/logs/2017.09.22-15:12:31.manLeu1.initalign.log
-XXX - running - Fri Sep 22 15:12:44 PDT 2017
-    # real    34m30.608s
+    # logFile: var/build/logs/2017.09.23-20:40:37.manLeu1.initalign.log
+    # real    32m58.945s
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.manLeu1
@@ -543,46 +540,18 @@ XXX - running - Fri Sep 22 15:12:44 PDT 2017
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad manLeu1
-    # logFile: var/dbload/hgwdev/logs/2015.06.15-09:40:01.manLeu1.dbload.log
-    # real    6m45.556s
+    # logFile: var/dbload/hgwdev/logs/2017.09.24-14:05:05.manLeu1.dbload.log
+    # real    5m30.217s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add manLeu1 to:
     #   vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added manLeu1 - Pangolin/Manis pentadactyla (javanica)refs #15515" \
+    git commit -m "Added manLeu1 - Drill/Mandrillus leucophaeus refs #20190" \
       etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
-
-#########################################################################
-# ucscToINSDC table/track (TBD - 2015-03-10 - Hiram)
-    mkdir /hive/data/genomes/manLeu1/bed/ucscToINSDC
-    cd /hive/data/genomes/manLeu1/bed/ucscToINSDC
-
-    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-       ../../genbank/GCA_*assembly_structure/Primary_Assembly NC_012346.1
-
-    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
-         | sort > name.coordinate.tab
-    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
-         > ucscToINSDC.bed
-    # verify all names are coming through, should be same line count:
-    wc -l *
-    #   450182 name.coordinate.tab
-    #   450182 ucscToINSDC.bed
-    #   450182 ucscToINSDC.txt
-
-    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 14
-    # use the 14 in this sed
-    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
-         | hgLoadSqlTab manLeu1 ucscToINSDC stdin ucscToINSDC.bed
-    checkTableCoords manLeu1
-    # should cover %100 entirely:
-    featureBits -countGaps manLeu1 ucscToINSDC
-    # 1192725744 bases of 1192725744 (100.000%) in intersection
 
 #########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2017-09-22 - Hiram)
@@ -624,59 +593,125 @@ searchPriority 8
     git commit -m 'add gold/assembly track search rule refs #20190' *.ra
     git push
 
-############################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-03-22 - Hiram)
+#########################################################################
+# lastz/chain/net swap from hg38 (DONE - 2017-09-25 - Hiram)
+    # alignment to hg38
+    cd /hive/data/genomes/hg38/bed/lastzManLeu1.2017-09-25
+
+    cat fb.hg38.chainManLeu1Link.txt
+    # 2515634714 bases of 3049335806 (82.498%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 manLeu1) \
+	> rbest.log 2>&1 &
+    # real    287m28.553s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/manLeu1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/manLeu1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzManLeu1.2017-09-25/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    79m34.951s
+
+    cat fb.manLeu1.chainHg38Link.txt
+    # 2409820927 bases of 2721424086 (88.550%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` manLeu1 hg38) \
+	> rbest.log 2>&1
+    # real    388m23.086s
+
+#########################################################################
+# lastz/chain/net swap from mm10 (DONE - 2017-09-25 - Hiram)
+    # alignment on mm10
+    cd /hive/data/genomes/mm10/bed/lastzManLeu1.2017-09-25
+
+    cat fb.mm10.chainManLeu1Link.txt
+    #	905203366 bases of 2652783500 (34.123%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 manLeu1) \
+	> rbest.log 2>&1 &
+    # real    362m58.840s
+
+    mkdir /hive/data/genomes/manLeu1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/manLeu1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzManLeu1.2017-09-25/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    64m55.226s
+
+    cat fb.manLeu1.chainMm10Link.txt
+    #	895668222 bases of 2721424086 (32.912%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` manLeu1 mm10) \
+	> rbest.log 2>&1
+    # real    338m57.422s
+
+##############################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-09-25 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("manLeu1", "blat1b", "17878", "1", "0"); \
+	VALUES ("manLeu1", "blat1a", "17878", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("manLeu1", "blat1b", "17879", "0", "1");' \
+	VALUES ("manLeu1", "blat1a", "17879", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to MAOA gene (Monoamine Oxidase A from monDom5)
-##  (TBD - 2017-03-22 - Hiram)
+## reset default position to similar location as hg38 default DONE
+##  (DONE - 2017-09-26 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="KN007563:109071-158662"
+    hgsql -e 'update dbDb set defaultPos="NW_012105586v1:3197838-3365219"
 	where name="manLeu1";' hgcentraltest
 
 ############################################################################
-# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Steve)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-09-26 - Hiram)
+
     cd $HOME/kent/src/hg/makeDb/schema
+
     # fixup all.joiner until this is a clean output
-    git commit -m "Added manLeu1 - Chinese Pangolin/Manis pentadactyl arefs #15515" \
-       all.joiner
     joinerCheck -database=manLeu1 -tableCoverage all.joiner
     joinerCheck -database=manLeu1 -times all.joiner
     joinerCheck -database=manLeu1 -keys all.joiner
 
+    git commit -m "Added manLeu1 - Drill/Mandrillus leucophaeus refs #20190" \
+       all.joiner
+    # to get this installed, run a 'make alpha' in the hgTables directory
+    # in a clean source tree that has been fully constructed
+
     cd /hive/data/genomes/manLeu1
-    time makeDownloads.pl manLeu1 > downloads.log 2>&1
-    # real    14m28.068s
+    time (makeDownloads.pl manLeu1) > downloads.log 2>&1
+    # real    18m27.907s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/manLeu1/pushQ
     cd /hive/data/genomes/manLeu1/pushQ
-    time makePushQSql.pl manLeu1 > manLeu1.pushQ.sql 2> stderr.out
+    time (makePushQSql.pl -redmineList manLeu1) \
+	> manLeu1.pushQ.sql 2> stderr.out
     # real    5m58.381s
 
     #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: hgwdev does not have /gbdb/manLeu1/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/manLeu1/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/manLeu1/bbi/qualityBw/quality.bw
+    # writing redmine listings to
+    # redmine.manLeu1.file.list
+    # redmine.manLeu1.table.list
+    # redmine.manLeu1.releaseLog.txt
     # WARNING: manLeu1 does not have seq
     # WARNING: manLeu1 does not have extFile
     # WARNING: manLeu1 does not have estOrientInfo
-    # WARNING: manLeu1 does not have mrnaOrientInfo
 
-    #   copy it to hgwbeta
-    scp -p manLeu1.pushQ.sql qateam@hgwbeta:/tmp
-    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/manLeu1.pushQ.sql"
-    #   in that pushQ entry walk through each entry and see if the
-    #   sizes will set properly
+    # Enter the full path names of these listing files:
+
+# /hive/data/genomes/manLeu1/pushQ/redmine.manLeu1.file.list
+# /hive/data/genomes/manLeu1/pushQ/redmine.manLeu1.releaseLog.txt
+# /hive/data/genomes/manLeu1/pushQ/redmine.manLeu1.table.list
+
+    # into the Redmine #20190 and set to QA Ready.
 
 #########################################################################
