@@ -3481,7 +3481,6 @@ release alpha,beta
     type bigBed 9 +
     searchIndex name
     bigDataUrl /gbdb/$D/bbi/snpediaAll.bb
-    release alpha,beta
     url https://www.snpedia.com/index.php/$$
     urlLabel Link to SNPedia page:
     mouseOverField note
