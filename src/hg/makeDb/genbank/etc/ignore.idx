@@ -1537,3 +1537,5 @@ BC132678	2016-08-02	GenBank	2016-08-19 changes organism "synthetic construct" to
 BC145745	2016-08-02	GenBank	2016-08-19 changes organism "synthetic construct" to "Mus musculus"
 BC167071	2016-08-02	GenBank	2016-08-19 changes organism "synthetic construct" to "Rattus norvegicus"
 AY855163	2016-06-26	GenBank	2016-06-26 changes organism "Gorilla gorilla" to "Gorilla"
+AM162277	2017-08-06	GenBank	2017-08-10 changes organism "Ciona intestinalis" to "Ciona robusta"
+AM162277	2006-10-17	GenBank	2017-08-10 changes organism "Ciona intestinalis" to "Ciona robusta"

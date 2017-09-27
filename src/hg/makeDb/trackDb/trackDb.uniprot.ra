@@ -1,6 +1,6 @@
 track uniprot
 shortLabel UniProt Proteins
-longLabel UniProt/SwissProt Annotations
+longLabel UniProt Protein Annotations
 group genes
 visibility hide
 type bigBed 12 +
@@ -13,16 +13,17 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 
         track unipFullSeq
         shortLabel Sequences
-        longLabel UniProt/SwissProt Sequences
+        longLabel UniProt Sequences
         priority 1
         parent uniprot
         visibility hide
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipFullSeq.bb
+        searchIndex uniProtId
 
         track unipLocSignal
         shortLabel Signal Peptide
-        longLabel UniProt/SwissProt Signal Peptides
+        longLabel UniProt Signal Peptides
         priority 2
         parent uniprot
         visibility dense
@@ -31,34 +32,40 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 
         track unipLocExtra
         shortLabel Extracellular
-        longLabel UniProt/SwissProt Extracellular Domain
+        longLabel UniProt Extracellular Domain
         priority 3
         parent uniprot
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipLocExtra.bb
+        itemRgb off
+        color 0,150,255
 
         track unipLocTransMemb
         shortLabel Transmembrane
-        longLabel UniProt/SwissProt Transmembrane Domains
+        longLabel UniProt Transmembrane Domains
         priority 4
         parent uniprot
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipLocTransMemb.bb
+        itemRgb off
+        color 0,150,0
 
         track unipLocCytopl
         shortLabel Cytoplasmic
-        longLabel UniProt/SwissProt Cytoplasmic Domains
+        longLabel UniProt Cytoplasmic Domains
         priority 5
         parent uniprot
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipLocCytopl.bb
+        itemRgb off
+        color 0,0,120
 
         track unipChain
         shortLabel Chains
-        longLabel UniProt/SwissProt Polypeptide Chains
+        longLabel UniProt Polypeptide Chains
         priority 6
         parent uniprot
         visibility dense
@@ -68,7 +75,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 
         track unipDomain
         shortLabel Domains
-        longLabel UniProt/SwissProt Domains
+        longLabel UniProt Domains
         priority 6.5
         parent uniprot
         visibility dense
@@ -78,7 +85,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 
         track unipDisulfBond
         shortLabel Disulf. Bonds
-        longLabel UniProt/SwissProt Disulfide Bonds
+        longLabel UniProt Disulfide Bonds
         priority 7
         parent uniprot
         visibility dense
@@ -87,7 +94,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 
         track unipModif
         shortLabel Modifications
-        longLabel UniProt/SwissProt Amino Acid Modifications
+        longLabel UniProt Amino Acid Modifications
         priority 8
         parent uniprot
         visibility dense
@@ -97,7 +104,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 
         track unipMut
         shortLabel Mutations
-        longLabel UniProt/SwissProt Amino Acid Mutations
+        longLabel UniProt Amino Acid Mutations
         priority 8.5
         parent uniprot
         visibility dense
@@ -107,7 +114,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 
         track unipStruct
         shortLabel Structure
-        longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
+        longLabel UniProt Protein Primary/Secondary Structure Annotations
         priority 9
         parent uniprot off
         group genes
@@ -118,7 +125,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 
         track unipOther
         shortLabel Other Annot.
-        longLabel UniProt/SwissProt Other Annotations
+        longLabel UniProt Other Annotations
         priority 10
         parent uniprot
         visibility dense
@@ -128,7 +135,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 
         track unipRepeat
         shortLabel Repeats
-        longLabel UniProt/SwissProt Repeats
+        longLabel UniProt Repeats
         priority 10
         parent uniprot
         visibility dense
@@ -138,7 +145,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 
         track unipConflict
         shortLabel Conflicts
-        longLabel UniProt/SwissProt Sequence Conflicts
+        longLabel UniProt Sequence Conflicts
         priority 10
         parent uniprot
         visibility dense
@@ -148,4 +155,4 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 
 searchTable unipFullSeq
 searchType bigBed
-searchDescription UniProt/SwissProt Protein annotations
+searchDescription UniProt Protein annotations
