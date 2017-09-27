@@ -2,6 +2,7 @@ track gtexEqtlCluster
 type bed 5 +
 shortLabel GTEx Combined eQTL
 longLabel Combined Expression QTLs from 44 Tissues from GTEx (midpoint release, V6)
+html gtexEqtl
 group regulation
 
 track gtexEqtlTissue
@@ -12,7 +13,6 @@ dragAndDrop subTracks
 shortLabel GTEx Tissue eQTL
 longLabel Expression QTLs in 44 tissues from GTEx (midpoint release, V6)
 darkerLabels on
-visibility dense
 showSubtrackColorOnUi on
 group regulation
 labelFields name, gene
@@ -21,6 +21,7 @@ maxItems 200
 itemRgb on
 altColor 0,0,0
 configurable off
+html gtexEqtl
 
     track gtexEqtlTissueAdiposeSubcut
     parent gtexEqtlTissue on
