@@ -3455,7 +3455,6 @@ noScoreFilter on
 track snpedia
 shortLabel SNPedia
 longLabel SNPedia
-urlLabel Link to SNPedia page
 group phenDis
 visibility hide
 color 50,0,100
@@ -3471,17 +3470,19 @@ release alpha,beta
     type bed 4
     itemDetailsHtmlTable snpediaTextHtml
     url https://www.snpedia.com/index.php/$$
+    urlLabel Link to SNPedia page:
     release alpha,beta
 
     track snpediaAll
     parent snpedia
     shortLabel SNPedia all
-    longLabel SNPedia all SNPs
+    longLabel SNPedia all SNPs (including empty pages)
     color 50,0,100
     type bigBed 9 +
     searchIndex name
     bigDataUrl /gbdb/$D/bbi/snpediaAll.bb
-    urls name=https://www.snpedia.com/index.php/$$
+    url https://www.snpedia.com/index.php/$$
+    urlLabel Link to SNPedia page:
     mouseOverField note
     itemRgb on
     release alpha,beta
