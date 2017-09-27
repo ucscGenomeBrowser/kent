@@ -150,6 +150,7 @@ DBS = \
 	ponAbe2 \
 	priExs1 \
 	priPac1 priPac2 priPac3 \
+	proCoq1 \
 	pteVam1 tarSyr1 tarSyr2 \
 	repeats2 \
 	rheMac2 rheMac3 rheMac7 rheMac8 \

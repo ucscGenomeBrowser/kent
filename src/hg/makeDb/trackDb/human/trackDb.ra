@@ -3471,6 +3471,7 @@ release alpha,beta
     itemDetailsHtmlTable snpediaTextHtml
     url https://www.snpedia.com/index.php/$$
     urlLabel Link to SNPedia page:
+    exonNumbers off 
     release alpha,beta
 
     track snpediaAll
@@ -3485,6 +3486,7 @@ release alpha,beta
     urlLabel Link to SNPedia page:
     mouseOverField note
     itemRgb on
+    exonNumbers off 
     release alpha,beta
 
 searchTable snpediaAll
@@ -3493,6 +3495,7 @@ searchType bigBed
 termRegex rs[0-9]+
 searchPriority 1
 padding 50
+semiShortCircuit 1
 release alpha,beta
 
 searchTable snpediaText
