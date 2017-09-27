@@ -3470,8 +3470,8 @@ release alpha,beta
     color 50,0,100
     type bed 4
     itemDetailsHtmlTable snpediaTextHtml
-    release alpha,beta
     url https://www.snpedia.com/index.php/$$
+    release alpha,beta
 
     track snpediaAll
     parent snpedia
@@ -3481,10 +3481,10 @@ release alpha,beta
     type bigBed 9 +
     searchIndex name
     bigDataUrl /gbdb/$D/bbi/snpediaAll.bb
-    release alpha,beta
     urls name=https://www.snpedia.com/index.php/$$
     mouseOverField note
     itemRgb on
+    release alpha,beta
 
 searchTable snpediaAll
 searchMethod exact
@@ -3492,6 +3492,7 @@ searchType bigBed
 termRegex rs[0-9]+
 searchPriority 1
 padding 50
+release alpha,beta
 
 searchTable snpediaText
 searchMethod exact
@@ -3500,6 +3501,7 @@ semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 11.001
 padding 50
+release alpha,beta
 
 track clinvar
 compositeTrack on
