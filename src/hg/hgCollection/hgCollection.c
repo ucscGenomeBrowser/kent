@@ -21,16 +21,7 @@
 #include "stdlib.h"
 
 /* Global Variables */
-struct cart *cart;		/* CGI and other variables */
 struct hash *oldVars = NULL;	/* The cart before new cgi stuff added. */
-char *genome = NULL;		/* Name of genome - mouse, human, etc. */
-char *database = NULL;		/* Current genome database - hg17, mm5, etc. */
-char *regionType = NULL;	/* genome, ENCODE pilot regions, or specific position range. */
-struct grp *fullGroupList = NULL;	/* List of all groups. */
-struct trackDb *fullTrackList = NULL;	/* List of all tracks in database. */
- struct pipeline *compressPipeline = (struct pipeline *)NULL;
-
-
 // Null terminated list of CGI Variables we don't want to save permanently:
 char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", "jsonp", NULL,};
 
@@ -54,31 +45,7 @@ struct trackDb *tdb;
 int order;
 };
 
-char *getString(char **input)
-// grab a quoted string out of text blob
-{
-char *ptr = *input;
-
-if (*ptr != '"')
-    errAbort("string must start with \"");
-ptr++;
-char *ret = ptr;
-for(; *ptr != '"'; ptr++)
-    ;
-*ptr = 0;
-ptr++;
-
-if (*ptr == ',')
-    ptr++;
-
-if (startsWith("coll_", ret))
-    ret = ret + 5;
-
-*input = ptr;
-return ret;
-}
-
-char *makeUnique(struct hash *nameHash, char *name)
+static char *makeUnique(struct hash *nameHash, char *name)
 // Make the name of this track unique.
 {
 char *skipHub = trackHubSkipHubName(name);
@@ -175,7 +142,7 @@ fprintf(f,"genome %s\n\n", db);
 }
 
 
-static char *getHubName(char *db)
+static char *getHubName(struct cart *cart, char *db)
 // get the name of the hub to use for user collections
 {
 struct tempName hubTn;
@@ -215,7 +182,7 @@ else
 return enabled;
 }
 
-bool isSubtrackVisible(struct trackDb *tdb)
+static bool isSubtrackVisible(struct cart *cart, struct trackDb *tdb)
 /* Has this subtrack not been deselected in hgTrackUi or declared with
  *  * "subTrack ... off"?  -- assumes composite track is visible. */
 {
@@ -230,13 +197,13 @@ return enabled;
 }
 
 
-bool isParentVisible( struct trackDb *tdb)
+static bool isParentVisible(struct cart *cart, struct trackDb *tdb)
 // Are this track's parents visible?
 {
 if (tdb->parent == NULL)
     return TRUE;
 
-if (!isParentVisible(tdb->parent))
+if (!isParentVisible(cart, tdb->parent))
     return FALSE;
 
 char *cartVis = cartOptionalString(cart, tdb->parent->track);
@@ -252,7 +219,7 @@ return vis;
 }
 
 
-void checkForVisible(struct trackDbRef **list, struct trackDb *tdb)
+static void checkForVisible(struct cart *cart, struct trackDbRef **list, struct trackDb *tdb)
 /* Walk the trackDb hierarchy looking for visible leaf tracks. */
 {
 struct trackDb *subTdb;
@@ -261,11 +228,11 @@ char buffer[4096];
 if (tdb->subtracks)
     {
     for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
-        checkForVisible(list, subTdb);
+        checkForVisible(cart, list, subTdb);
     }
 else
     {
-    if (isParentVisible(tdb) &&  isSubtrackVisible(tdb))
+    if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
         {
         struct trackDbRef *tdbRef;
         AllocVar(tdbRef);
@@ -278,7 +245,7 @@ else
     }
 }
 
-int tdbRefCompare (const void *va, const void *vb)
+static int tdbRefCompare (const void *va, const void *vb)
 // Compare to sort on imgTrack->order.
 {
 const struct trackDbRef *a = *((struct trackDbRef **)va);
@@ -286,15 +253,15 @@ const struct trackDbRef *b = *((struct trackDbRef **)vb);
 return (a->order - b->order);
 }       
 
-void addVisibleTracks()
+static void addVisibleTracks(struct cart *cart, struct trackDb *trackList)
 // add the visible tracks table rows.
 {
 struct trackDb *tdb;
 struct trackDbRef *tdbRefList = NULL, *tdbRef;
 //checkForVisible(fullTrackList);
-for(tdb = fullTrackList; tdb; tdb = tdb->next)
+for(tdb = trackList; tdb; tdb = tdb->next)
     {
-    checkForVisible(&tdbRefList, tdb);
+    checkForVisible(cart, &tdbRefList, tdb);
     }
 
 slSort(&tdbRefList, tdbRefCompare);
@@ -310,12 +277,12 @@ jsInlineF("</li>");
 jsInlineF("</ul>");
 }
 
-void doTable()
+static void doTable(struct cart *cart, char *db, struct grp *groupList, struct trackDb *trackList)
 // output the tree table
 {
-char *hubName = hubNameFromUrl(getHubName(database));
+char *hubName = hubNameFromUrl(getHubName(cart, db));
 struct grp *curGroup;
-for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
+for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
     {
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
         break;
@@ -325,7 +292,7 @@ if (curGroup != NULL)
     // print out all the tracks in this group
     struct trackDb *tdb;
     jsInlineF("$('#currentCollection').append(\"");
-    for(tdb = fullTrackList; tdb;  tdb = tdb->next)
+    for(tdb = trackList; tdb;  tdb = tdb->next)
         {
         if (sameString(tdb->grp, hubName))
             {
@@ -334,13 +301,15 @@ if (curGroup != NULL)
             printGroup("collections", tdb, TRUE, TRUE);
             jsInlineF("</ul>");
             jsInlineF("</div>");
+            printf("ignoring %s\n", tdb->track);
+            continue;
             }
         }
     jsInlineF("\");\n");
     
     // print out all the tracks in this group
     jsInlineF("$('#collectionList').append(\"");
-    for(tdb = fullTrackList; tdb;  tdb = tdb->next)
+    for(tdb = trackList; tdb;  tdb = tdb->next)
         {
         if (sameString(tdb->grp, hubName))
             {
@@ -351,8 +320,8 @@ if (curGroup != NULL)
     jsInlineF("\");\n");
     }
 jsInlineF("$('#tracks').append(\"");
-addVisibleTracks();
-for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
+addVisibleTracks(cart, trackList);
+for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
     {
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
         continue;
@@ -360,7 +329,7 @@ for(curGroup = fullGroupList; curGroup;  curGroup = curGroup->next)
     jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' name='%s'>%s", curGroup->name, curGroup->label );
     struct trackDb *tdb;
     jsInlineF("<ul>");
-    for(tdb = fullTrackList; tdb;  tdb = tdb->next)
+    for(tdb = trackList; tdb;  tdb = tdb->next)
         {
         if ( sameString(tdb->grp, curGroup->name))
             {
@@ -417,10 +386,10 @@ puts(
 "   </div>\n");
 }
 
-void doMainPage()
+static void doMainPage(struct cart *cart, char *db, struct grp *groupList, struct trackDb *trackList)
 /* Print out initial HTML of control page. */
 {
-webStartGbNoBanner(cart, database, "Collections");
+webStartGbNoBanner(cart, db, "Collections");
 webIncludeResourceFile("gb.css");
 webIncludeResourceFile("spectrum.min.css");
 webIncludeResourceFile("hgGtexTrackSettings.css");
@@ -428,7 +397,7 @@ webIncludeResourceFile("hgGtexTrackSettings.css");
 webIncludeFile("inc/hgCollection.html");
 
 printHelp();
-doTable();
+doTable(cart, db, groupList, trackList);
 
 puts("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css' />");
 puts("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js'></script>");
@@ -451,24 +420,7 @@ safef(buffer, sizeof buffer, "NOSQLINJ select fileName from %s", tdb->table);
 return sqlQuickString(conn, buffer);
 }
 
-char *getUrl(struct sqlConnection *conn, char *db,  struct track *track, struct hash *nameHash)
-// get the bigDataUrl for a track
-{
-struct trackDb *tdb = hashMustFindVal(nameHash, track->name);
-
-if (tdb == NULL)
-    errAbort("cannot find trackDb for %s\n", track->name);
-
-char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
-if (bigDataUrl == NULL)
-    {
-    if (startsWith("bigWig", tdb->type))
-        bigDataUrl = getSqlBigWig(conn, db, tdb);
-    }
-return bigDataUrl;
-}
-
-void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, char *visibility, unsigned int color, struct track *track, struct hash *nameHash, struct hash *collectionNameHash, int numTabs, int priority)
+static void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, char *visibility, unsigned int color, struct track *track, struct hash *nameHash, struct hash *collectionNameHash, int numTabs, int priority)
 // out the trackDb for one track
 {
 char *dataUrl = NULL;
@@ -523,11 +475,6 @@ visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
 
 }
 
-int snakePalette2[] =
-{
-0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5, 0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5
-};
-
 static char *skipColl(char *str)
 {
 if (startsWith("coll_", str))
@@ -565,10 +512,10 @@ for(; track; track = track->next)
 return priority;
 }
 
-void updateHub(char *db, struct track *collectionList, struct hash *nameHash)
+static void updateHub(struct cart *cart, char *db, struct track *collectionList, struct hash *nameHash)
 // save our state to the track hub
 {
-char *hubName = getHubName(db);
+char *hubName = getHubName(cart, db);
 
 chmod(hubName, 0666);
 FILE *f = mustOpen(hubName, "w");
@@ -607,7 +554,7 @@ fclose(f);
 hFreeConn(&conn);
 }
 
-unsigned long hexStringToLong(char *str)
+static unsigned long hexStringToLong(char *str)
 {
 /*
 char buffer[1024];
@@ -625,7 +572,7 @@ struct track **collectionList;
 struct hash *trackHash;
 };
 
-void jsonObjStart(struct jsonElement *ele, char *name,
+static void jsonObjStart(struct jsonElement *ele, char *name,
     boolean isLast, void *context)
 {
 struct jsonParseData *jpd = (struct jsonParseData *)context;
@@ -686,14 +633,14 @@ slReverse(&collectionList);
 return collectionList;
 }
 
-void doAjax(char *db, char *jsonText, struct hash *nameHash)
+static void doAjax(struct cart *cart, char *db, char *jsonText, struct hash *nameHash)
 // Save our state
 {
 cgiDecodeFull(jsonText, jsonText, strlen(jsonText));
 struct jsonElement *collectionElements = jsonParse(jsonText);
 struct track *collectionList = parseJsonElements(collectionElements);
 
-updateHub(db, collectionList, nameHash);
+updateHub(cart, db, collectionList, nameHash);
 }
 
 static void buildNameHash(struct hash *nameHash, struct trackDb *list)
@@ -760,30 +707,67 @@ slReverse(&newGroupList);
 *fullGroupList = newGroupList;
 }
 
-void doMiddle(struct cart *theCart)
+static struct trackDb *addSupers(struct trackDb *trackList)
+/* Insert supertracks into the hierarchy. */
+{
+struct trackDb *newList = NULL;
+struct trackDb *tdb, *nextTdb;
+struct hash *superHash = newHash(5);
+
+for(tdb = trackList; tdb;  tdb = nextTdb)
+    {
+    nextTdb = tdb->next;
+
+    if (tdb->parent)
+        {
+        // part of a super track
+        if (hashLookup(superHash, tdb->parent->track) == NULL)
+            {
+            hashStore(superHash, tdb->parent->track);
+
+            slAddHead(&newList, tdb->parent);
+            }
+        slAddHead(&tdb->parent->subtracks, tdb);
+        }
+    else
+        slAddHead(&newList, tdb);
+    }
+
+slReverse(&newList);
+
+return newList;
+}
+
+static void doMiddle(struct cart *cart)
 /* Set up globals and make web page */
 {
-cart = theCart;
-getDbAndGenome(cart, &database, &genome, oldVars);
+char *db;
+char *genome;
+getDbAndGenome(cart, &db, &genome, oldVars);
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 knetUdcInstall();
-cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
-pruneTrackList(&fullTrackList, &fullGroupList);
+
+struct trackDb *trackList;
+struct grp *groupList;
+cartTrackDbInit(cart, &trackList, &groupList, TRUE);
+pruneTrackList(&trackList, &groupList);
+
+struct trackDb *superList = addSupers(trackList);
 struct hash *nameHash = newHash(5);
-buildNameHash(nameHash, fullTrackList);
+buildNameHash(nameHash, superList);
 
 char *jsonIn = cgiUsualString("jsonp", NULL);
 fprintf(stderr, "BRANEY %s\n", jsonIn);
 if (jsonIn != NULL)
     {
-    doAjax(database, jsonIn, nameHash);
+    doAjax(cart, db, jsonIn, nameHash);
     apiOut("{\"serverSays\": \"Collections saved successfully.\"}", NULL);
     }
 else
     {
-    doMainPage();
+    doMainPage(cart, db, groupList, superList);
     }
 }
 
@@ -791,9 +775,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long enteredMainTime = clock1000();
-
-initGenbankTableNames(database);
-
 cgiSpoof(&argc, argv);
 
 boolean isCommandLine = (cgiOptionalString("cgiSpoof") != NULL);
