@@ -13,21 +13,32 @@ with the effect size on gene expression and the probability the eQTL is in the 9
 
 <h2>Display Conventions</h2>
 <p>
-Gene/variant pairs occuring in multiple tissues are combined into a single item in the display. 
-The item label shows the number of tissues where the eQTL was identified, or the tissue name and
-GTEx-convention color if the eQTL was identified solely in one tissue.</>
-<p>
-Mouseover lists all tissues affected and the effect size.
-The item color indicates the greatest effect size found for the eQTL, 
-with a threshold of 2 FPKM delimiting high effect.
-<ul>
+The eQTL item color indicatees the effect size attributed to the eQTL:
 <table cellpadding='2'>
 <tr><td style='color: fuchsia;'>fuchsia</td><td>&nbsp;&nbsp;high positive</td></tr>
 <tr><td style='color: red;'>red</td><td>&nbsp;&nbsp;moderate positive</td></tr>
 <tr><td style='color: blue;'>blue</td><td>&nbsp;&nbsp;moderate negative</td></tr>
-<tr><td style='color: teal;'>teal</td><td>&nbsp;&nbsp;high negative</td></tr>
+<tr><td style='color: cyan;'>cyan</td><td>&nbsp;&nbsp;high negative</td></tr>
 </table>
-</ul>
+An arbitrary cutoff of +- 2.0 FPKM was used to define high effect size.
+</p>
+<h3>Combined eQTL track</h3>
+<p>
+Gene/variant pairs occuring in multiple tissues are combined into a single item in the display. 
+The item label shows the number of tissues where the eQTL was identified, or the tissue name and
+the GTEx-convention tissue color if the eQTL was identified solely in one tissue.
+Mouseover lists all tissues affected and the effect size.
+The item color reflects the largest effect size in any tissue.
+<p>
+Track configuration supports filtering by gene, effect size, or probability.  
+Tissues can be selected via checkboxes or from the UCSC GTEx Body Map graphic.
+</p>
+</p>
+<h3>Tissue eQTL tracks</h3>
+<p>
+This track is a composite track containing 44 subtracks representing the GTEx eQTL tissues.
+Each subtrack contains all GTEx/CAVIAR eQTL's identified for that tissue.
+</p>
 
 <h2>Credits</h2>
 Thanks to GTEx investigators and analysts -- particularly 
