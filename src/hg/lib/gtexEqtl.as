@@ -12,7 +12,7 @@ table gtexEqtl
     uint reserved;     "R,G,B color: red for up-regulated, blue for down. Bright for high, grayed for low."
     string gene;       "Name of target gene"
     int distance;      "Distance from TSS"
-    float effectSize;  "Effect size (FPKM); regression slope calculated using quantile normalized expression"
+    float effectSize;  "Effect size (FPKM). Regression slope calculated using quantile normalized expression"
     float pValue;      "Nominal p-value"
     float causalProb;  "Probability variant is in 95% credible set"
     )
