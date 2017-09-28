@@ -8,7 +8,7 @@ visibility full
 priority 104.2
 type bed 4
 group compGeno
-html multiz5way
+html mzHg17Mm5_phast
 
     track cons3wayViewalign
     shortLabel Multiz Alignments
