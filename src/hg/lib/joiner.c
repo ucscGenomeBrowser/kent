@@ -1066,6 +1066,10 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+/* Forward declaration for mutual recursion: */
+void joinerPairFreeList(struct joinerPair **pList);
+/* Free up memory associated with list of joinerPairs. */
+
 void joinerPairFree(struct joinerPair **pJp)
 /* Free up memory associated with joiner pair. */
 {
@@ -1074,6 +1078,8 @@ if (jp != NULL)
     {
     joinerDtfFree(&jp->a);
     joinerDtfFree(&jp->b);
+    if (jp->child != NULL)
+        joinerPairFreeList(&jp->child);
     freez(pJp);
     }
 }
@@ -1091,15 +1097,26 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-void joinerPairDump(struct joinerPair *jpList, FILE *out)
+static void rJoinerPairDump(struct joinerPair *jpList, FILE *out, int level)
 /* Write out joiner pair list to file mostly for debugging. */
 {
 struct joinerPair *jp;
 for (jp = jpList; jp != NULL; jp = jp->next)
+    {
+    fprintf(out, "%*s", level*2, "");
     fprintf(out, "%s.%s.%s (via %s) %s.%s.%s\n",
     	jp->a->database, jp->a->table, jp->a->field,
 	jp->identifier->name,
     	jp->b->database, jp->b->table, jp->b->field);
+    if (jp->child != NULL)
+        rJoinerPairDump(jp->child, out, level+1);
+    }
+}
+
+void joinerPairDump(struct joinerPair *jpList, FILE *out)
+/* Write out joiner pair list to file mostly for debugging. */
+{
+rJoinerPairDump(jpList, out, 0);
 }
 
 static struct joinerField *joinerSetIncludesTable(struct joinerSet *js, 
@@ -1453,6 +1470,46 @@ for (dtf = first->next; dtf != NULL; dtf = dtf->next)
     }
 joinerPairRemoveDupes(&fullRoute);
 return fullRoute;
+}
+
+static boolean joinerDtfSameDt(struct joinerDtf *a, struct joinerDtf *b)
+/* Return true if a and b have same database and table (ignore field). */
+{
+return (a == b ||
+        (a && b && sameString(a->database, b->database) && sameString(a->table, b->table)));
+}
+
+void joinerPairListToTree(struct joinerPair *routeList)
+/* Convert a linear routeList (only next used, not child) to a tree structure in which
+ * pairs like {X,Y} and {Y,Z} (first b == second a) are connected using child instead of next. */
+{
+if (routeList == NULL)
+    return;
+struct hash *bHash = hashNew(0);
+struct joinerPair *pair;
+for (pair = routeList;  pair != NULL;  pair = pair->next)
+    {
+    if (pair->child)
+        errAbort("joinerPairListToTree: found non-NULL child.  Call this only on linear list.");
+    char bdt[4096];
+    safef(bdt, sizeof(bdt), "%s.%s", pair->b->database, pair->b->table);
+    hashAdd(bHash, bdt, pair);
+    }
+for (pair = routeList;  pair != NULL;  )
+    {
+    struct joinerPair *nextPair = pair->next;
+    if (nextPair && !joinerDtfSameDt(pair->a, nextPair->a))
+        {
+        char nextAdt[4096];
+        safef(nextAdt, sizeof(nextAdt), "%s.%s", nextPair->a->database, nextPair->a->table);
+        struct joinerPair *parent = hashMustFindVal(bHash, nextAdt);
+        pair->next = nextPair->next;
+        slAddTail(&parent->child, nextPair);
+        }
+    else
+        pair = pair->next;
+    }
+hashFree(&bHash);
 }
 
 char *joinerFieldChopKey(struct joinerField *jf, char *key)
