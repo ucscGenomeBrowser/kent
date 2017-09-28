@@ -212,11 +212,10 @@ hgsql hgcentraltest -e "INSERT INTO genomeClade (genome, clade, priority) VALUES
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/aotNan1/aotNan1.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku aotNan1) > do.log 2>&1
-XXX - running - Thu Sep 21 11:47:44 PDT 2017
-    # real    5m34.816s
+    # real    19m14.585s
 
     cat fb.aotNan1.cpgIslandExtUnmasked.txt
-    # 44748680 bases of 2472073034 (1.810%) in intersection
+    # 25664010 bases of 2714439490 (0.945%) in intersection
 
 #############################################################################
 # running repeat masker (DONE - 2017-09-21 - Hiram)
@@ -503,14 +502,13 @@ searchPriority 8
     cd /hive/data/genomes/aotNan1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku aotNan1) > do.log 2>&1
-XXX - running - Mon Sep 25 10:58:37 PDT 2017
-    # real    737m1.735s
+    # real    51m49.116s
 
     cat fb.aotNan1.genscan.txt
-    #   55049663 bases of 2472073034 (2.227%) in intersection
+    #   55052161 bases of 2714439490 (2.028%) in intersection
 
     cat fb.aotNan1.genscanSubopt.txt
-    #   48834412 bases of 2472073034 (1.975%) in intersection
+    #   55424862 bases of 2714439490 (2.042%) in intersection
 
 #############################################################################
 # augustus gene track (DONE - 2017-09-25 - Hiram)
@@ -520,11 +518,10 @@ XXX - running - Mon Sep 25 10:58:37 PDT 2017
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev aotNan1) > do.log 2>&1
-XXX - running - Mon Sep 25 10:59:04 PDT 2017
-    # real    207m36.088s
+    # real    242m45.000s
 
     cat fb.aotNan1.augustusGene.txt
-    # 47127389 bases of 2472073034 (1.906%) in intersection
+    # 49595111 bases of 2714439490 (1.827%) in intersection
 
 #############################################################################
 # Create kluster run files (DONE - 2017-09-25 - Hiram)
@@ -561,56 +558,57 @@ XXX - running - Mon Sep 25 10:59:04 PDT 2017
 # 	jkStuff/aotNan1.nonBridged.lft -bedFile=jkStuff/aotNan1.nonBridged.bed
 
 #########################################################################
-# lastz/chain/net swap from hg38 (TBD - 2017-08-02 - Hiram)
+# lastz/chain/net swap from hg38 (DONE - 2017-09-27 - Hiram)
     # alignment to hg38
-    cd /hive/data/genomes/hg38/bed/lastzAotNan1.2017-07-31
 
+    cd /hive/data/genomes/hg38/bed/lastzAotNan1.2017-09-25
     cat fb.hg38.chainAotNan1Link.txt
-    # 1463754915 bases of 3049335806 (48.002%) in intersection
+    # 2153726630 bases of 3049335806 (70.629%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/aotNan1/bed/blastz.hg38.swap
     cd /hive/data/genomes/aotNan1/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzAotNan1.2017-07-31/DEF \
-        -swap -chainMinScore=3000 -chainLinearGap=medium \
+      /hive/data/genomes/hg38/bed/lastzAotNan1.2017-09-25/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    107m7.364s
+    #  real    84m8.440s
 
     cat fb.aotNan1.chainHg38Link.txt
-    # 1387973267 bases of 2472073034 (56.146%) in intersection
+    # 2111600029 bases of 2714439490 (77.791%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` aotNan1 hg38) \
-        > rbest.log 2>&1
-    # real    598m8.675s
+	> rbest.log 2>&1
+    # real    427m26.453s
 
 #########################################################################
-# lastz/chain/net swap from mm10 (TBD - 2017-08-02 - Hiram)
+# lastz/chain/net swap from mm10 (DONE - 2017-08-27 - Hiram)
     # alignment on mm10
-    cd /hive/data/genomes/mm10/bed/lastzAotNan1.2017-07-31
+    cd /hive/data/genomes/mm10/bed/lastzAotNan1.2017-09-25
+
     cat fb.mm10.chainAotNan1Link.txt
-    #	731012356 bases of 2652783500 (27.556%) in intersection
+    #	889500682 bases of 2652783500 (33.531%) in intersection
 
     mkdir /hive/data/genomes/aotNan1/bed/blastz.mm10.swap
     cd /hive/data/genomes/aotNan1/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzAotNan1.2017-07-31/DEF \
+	/hive/data/genomes/mm10/bed/lastzAotNan1.2017-09-25/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    61m6.153s
+    #	real    68m48.755s
 
     cat fb.aotNan1.chainMm10Link.txt
-    #	715277290 bases of 2472073034 (28.934%) in intersection
+    #	893851318 bases of 2714439490 (32.929%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev aotNan1 mm10 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    358m15.340s
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` aotNan1 mm10) \
+	> rbest.log 2>&1
+    # real    383m10.761s
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-07-29 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-09-25 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -660,13 +658,11 @@ aotNan1.genbank.est.native.load = yes
 
     time ./bin/gbAlignStep -initial aotNan1
     #  logFile: var/build/logs/2017.09.25-11:17:45.aotNan1.initalign.log
-XXX - running - Mon Sep 25 11:18:02 PDT 2017
+    #   real    117m39.387s
 
-    #   real    1486m19.233s
-
-    tail -2 var/build/logs/2017.07.27-20:49:34.aotNan1.initalign.log
-# hgwdev 2017.07.28-21:20:42 aotNan1.initalign: Succeeded: aotNan1
-# hgwdev 2017.07.28-21:35:53 aotNan1.initalign: finish
+    tail -2  var/build/logs/2017.09.25-11:17:45.aotNan1.initalign.log
+# hgwdev 2017.09.25-13:12:38 aotNan1.initalign: Succeeded: aotNan1
+# hgwdev 2017.09.25-13:15:25 aotNan1.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.aotNan1
@@ -675,11 +671,11 @@ XXX - running - Mon Sep 25 11:18:02 PDT 2017
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad aotNan1
-    # logFile: var/dbload/hgwdev/logs/2017.07.29-07:05:26.aotNan1.dbload.log
-    # real    81m41.107s
+    # logFile: var/dbload/hgwdev/logs/2017.09.25-13:20:30.aotNan1.dbload.log
+    # about 5m 20s
 
-    tail -1 var/dbload/hgwdev/logs/2017.07.29-07:05:26.aotNan1.dbload.log
-    # hgwdev 2017.07.29-08:27:07 aotNan1.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2017.09.25-13:20:30.aotNan1.dbload.log
+    # hgwdev 2017.09.25-13:25:50 aotNan1.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -687,27 +683,28 @@ XXX - running - Mon Sep 25 11:18:02 PDT 2017
     # add aotNan1 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added aotNan1 - pig refs #19859" etc/align.dbs etc/hgwdev.dbs
+    git commit -m \
+"Added aotNan1 - Ma's night monkey - Aotus nancymaae refs #20196" \
+	etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 ##############################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-08-03 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-08-03 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("aotNan1", "blat1b", "17880", "1", "0"); \
+	VALUES ("aotNan1", "blat1b", "17886", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("aotNan1", "blat1b", "17881", "0", "1");' \
+	VALUES ("aotNan1", "blat1b", "17887", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ##############################################################################
-# set default position to OPN1SW gene displays  (TBD - 2017-08-03 - Hiram)
-# same as susScr3:
+# set default position similar location as hg38  (DONE - 2017-09-28 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="chr18:19836295-19840119" where name="aotNan1";' \
+'update dbDb set defaultPos="NW_018491462v1:1624307-1640434" where name="aotNan1";' \
 	hgcentraltest
 
 ##############################################################################
