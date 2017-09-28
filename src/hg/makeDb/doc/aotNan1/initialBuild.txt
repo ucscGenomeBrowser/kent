@@ -708,23 +708,23 @@ aotNan1.genbank.est.native.load = yes
 	hgcentraltest
 
 ##############################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-08-03 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-09-28 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
-    # fixup all.joiner until this is a clean output
+    # fixup all.joiner until these are all clean outputs:
     joinerCheck -database=aotNan1 -tableCoverage all.joiner
     joinerCheck -database=aotNan1 -times all.joiner
     joinerCheck -database=aotNan1 -keys all.joiner
 
     cd /hive/data/genomes/aotNan1
     time (makeDownloads.pl aotNan1) > downloads.log 2>&1
-    # real    17m8.716s
+    # real    19m4.103s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/aotNan1/pushQ
     cd /hive/data/genomes/aotNan1/pushQ
     time (makePushQSql.pl -redmineList aotNan1) \
 	> aotNan1.pushQ.sql 2> stderr.out
-    # real    3m46.855s
+    # real    3m43.115s
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # writing redmine listings to
@@ -733,5 +733,15 @@ aotNan1.genbank.est.native.load = yes
     # redmine.aotNan1.releaseLog.txt
     # WARNING: aotNan1 does not have seq
     # WARNING: aotNan1 does not have extFile
+    # WARNING: aotNan1 does not have estOrientInfo
+
+    # examine these files to make sure they appear sane,
+    # then enter the full path names of these listing files:
+
+# /hive/data/genomes/aotNan1/pushQ/redmine.aotNan1.file.list
+# /hive/data/genomes/aotNan1/pushQ/redmine.aotNan1.releaseLog.txt
+# /hive/data/genomes/aotNan1/pushQ/redmine.aotNan1.table.list
+
+    # into the Redmine #20196 and set to QA Ready.
 
 #########################################################################
