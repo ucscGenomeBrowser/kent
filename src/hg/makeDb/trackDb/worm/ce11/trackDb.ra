@@ -51,3 +51,6 @@ altColor 255,240,200
 spectrum on
 type chain ce11
 otherDb ce11
+
+track spMut override
+group varRep

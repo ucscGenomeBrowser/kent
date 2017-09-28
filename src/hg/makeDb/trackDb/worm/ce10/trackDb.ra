@@ -290,3 +290,6 @@ html crispr
     url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
     urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
     html crispr
+
+track spMut override
+group varRep
