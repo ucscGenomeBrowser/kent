@@ -22,3 +22,6 @@ visibility hide
 
 track oreganno override
 pennantIcon 1.jpg ../goldenPath/help/liftOver.html "lifted from sacCer1"
+
+track spMut override
+group varRep
