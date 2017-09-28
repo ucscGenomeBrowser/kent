@@ -62,6 +62,7 @@ DBS = \
 	canFam1 canFam2 canFamPoodle1 canFam3 \
 	cb1 cb2 cb3 cb4 \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \
+	cebCap1 \
 	centromeres1 \
 	cerAty1 \
 	cerSim1 \
@@ -150,6 +151,7 @@ DBS = \
 	ponAbe2 \
 	priExs1 \
 	priPac1 priPac2 priPac3 \
+	proCoq1 \
 	pteVam1 tarSyr1 tarSyr2 \
 	repeats2 \
 	rheMac2 rheMac3 rheMac7 rheMac8 \

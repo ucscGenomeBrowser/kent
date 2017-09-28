@@ -1,0 +1,715 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the proCoq1
+
+# Assembly name:  Pcoq_1.0
+# Organism name:  Propithecus coquereli (Coquerel's sifaka)
+# Isolate:  6110/MARCELLA
+# Sex:  female
+# Taxid:          379532
+# BioSample:      SAMN03121823
+# BioProject:     PRJNA281642
+# Submitter:      Baylor College of Medicine
+# Date:           2015-3-23
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    JZKE01
+# Assembly method: AllPathsLG v. R43839; Atlas Link v. 1.0; Atlas Gapfill v. 2.2
+# Genome coverage: 104.7x
+# Sequencing technology: Illumina
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000956105.1
+# RefSeq assembly accession: GCF_000956105.1
+# RefSeq assembly and GenBank assemblies identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000956115.1      GCF_000956115.1 Primary Assembly
+##      GCF_000073495.1 non-nuclear
+
+#############################################################################
+## The mitochondrion sequence: NC_011053.1 has a genbank ID of AB286049.1
+#############################################################################
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2017-09-27 - Hiram)
+    mkdir -p /hive/data/genomes/proCoq1/refseq
+    cd /hive/data/genomes/proCoq1/refseq
+
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Propithecus_coquereli/all_assembly_versions/GCF_000956105.1_Pcoq_1.0/ ./
+    # sent 562 bytes  received 2514962369 bytes  18028408.11 bytes/sec
+    # total size is 2514652560  speedup is 1.00
+
+    # real    2m19.428s
+
+
+    # measure what we have here:
+    faSize G*0_genomic.fna.gz
+
+# 2798152141 bases (714387616 N's 2083764525 real 1506203595 upper
+#	577560930 lower) in 22539 sequences in 1 files
+# Total size: mean 124147.1 sd 911840.2 min 307 (NW_012144527.1)
+#	max 29265399 (NW_012133857.1) median 6864
+# %20.64 masked total, %27.72 masked real
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2017-09-27 - Hiram)
+    mkdir /hive/data/genomes/proCoq1/ucsc
+    cd /hive/data/genomes/proCoq1/ucsc
+
+    # verify no duplicate sequences:
+    faToTwoBit ../refseq/G*0_genomic.fna.gz refseq.2bit
+    twoBitDup refseq.2bit
+    # should be silent
+
+    # verify all names are .1:
+    twoBitInfo refseq.2bit  stdout | awk '{print $1}' \
+	| sed -e 's/_[0-9]\+//;' | sort | uniq -c
+    #       1 NC.1
+    #   22538 NW.1
+
+    # since they are all .1, change the names to be v1:
+    zcat ../refseq/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+       | grep -v "^#" | sed -e 's/\.1/v1/;' > chrUn.proCoq1.agp
+
+    zcat ../refseq/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Propithecus .*/v1/;' > chrUn.proCoq1.fa
+
+    zcat ../refseq/G*0_assembly_structure/non-nuclear/assembled_chromosomes/AGP/chrMT.comp.agp.gz \
+       | grep -v "^#" | sed -e 's/^NC_[0-9.]\+/chrM/;' > chrM.proCoq1.agp
+
+    zcat ../refseq/G*0_assembly_structure/non-nuclear/assembled_chromosomes/FASTA/chrMT.fna.gz \
+       | sed -e 's/NC_.*/chrM/;' > chrM.proCoq1.fa
+
+    time gzip *.fa
+    # real    11m42.655s
+
+    # verify these two files are compatible:
+    faToTwoBit chrUn.proCoq1.fa.gz chrM.proCoq1.fa.gz test.2bit
+    cat chr*.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+
+    # no longer need these
+    rm -f test.2bit refseq.2bit
+
+#############################################################################
+# photo (DONE - 2017-02-14 - Hiram)
+    mkdir /hive/data/genomes/proCoq1/photo
+    cd /hive/data/genomes/proCoq1/photo
+
+    wget -O photoFile "http://maxpixel.freegreatpicture.com/static/photo/1x/Coquerels-Sifaka-Sifaka-Propithecus-Coquereli-1809664.jpg"
+    convert -sharpen 0 -normalize -geometry 400x400 -quality 80 photoFile Propithecus_coquereli.jpg
+
+    cd /hive/data/genomes/proCoq1
+printf "photoCreditURL  http://maxpixel.freegreatpicture.com/
+photoCreditName Max Pixel
+" > photoReference.txt
+
+    # check that Propithecus_coquereli.jpg file into source tree
+    # src/hg/htdocs/images/ and copy to /usr/local/apache/htdocs/images/
+
+#############################################################################
+#  Initial database build (DONE - 2017-09-27 - Hiram)
+
+    cd /hive/data/genomes/proCoq1
+    ~/kent/src/hg/utils/automation/prepConfig.pl proCoq1 mammal primate \
+       refseq/*_assembly_report.txt > proCoq1.config.ra
+
+    # going to have trouble with that quote mark in Coquerel's name:
+    # verify it looks sane:
+    cat proCoq.config.ra
+
+# config parameters for makeGenomeDb.pl:
+db proCoq1
+clade mammal
+genomeCladePriority 35
+scientificName Propithecus coquereli
+commonName Coquerel's sifaka
+assemblyDate Mar. 2015
+assemblyLabel Baylor College of Medicine
+assemblyShortLabel Pcoq_1.0
+orderKey 3623
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_011053.1
+mitoAcc none
+fastaFiles /hive/data/genomes/proCoq1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/proCoq1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir primate
+photoCreditURL  http://maxpixel.freegreatpicture.com/
+photoCreditName Max Pixel
+ncbiGenomeId 24390
+ncbiAssemblyId 315741
+ncbiAssemblyName Pcoq_1.0
+ncbiBioProject 281642
+ncbiBioSample SAMN03121823
+genBankAccessionID GCF_000956105.1
+taxId 379532
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp proCoq1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    2m35.718s
+
+    # this is going to fail on the dbDb insert:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db proCoq1.config.ra) > db.log 2>&1
+    # real    17m6.039s
+
+    # finish the insert statements:
+hgsql hgcentraltest -e "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"Coquerel's sifaka\", \"mammal\", 35)"
+hgsql hgcentraltest -e "INSERT INTO defaultDb (genome, name) VALUES (\"Coquerel's sifaka\", \"proCoq1\")"
+
+    # then continuing:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+     -fileServer=hgwdev -continue=trackDb proCoq1.config.ra) > trackDb.log 2>&1
+    # real    0m8.564s
+
+    # fixup the description.html for the e acute:
+    #	WikiMedia Commons: Cl&#233;ment Bardot
+
+    # check in the trackDb files created and add to trackDb/makefile
+    # then, clean up:
+    rm -fr TemporaryTrackDbCheckout/
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2017-09-27 - Hiram)
+    mkdir /hive/data/genomes/proCoq1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/proCoq1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/proCoq1/proCoq1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku proCoq1) > do.log 2>&1
+XXX - running - Wed Sep 27 16:02:13 PDT 2017
+    # real    6m48.049s
+
+    cat fb.proCoq1.cpgIslandExtUnmasked.txt
+    # 19104884 bases of 2721424086 (0.702%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-09-27 - Hiram)
+    mkdir /hive/data/genomes/proCoq1/bed/cytoBand
+    cd /hive/data/genomes/proCoq1/bed/cytoBand
+    makeCytoBandIdeo.csh proCoq1
+
+#############################################################################
+# running repeat masker (TBD - 2017-09-21 - Hiram)
+    mkdir /hive/data/genomes/proCoq1/bed/repeatMasker
+    cd /hive/data/genomes/proCoq1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -smallClusterHub=ku proCoq1) > do.log 2>&1
+XXX - running - Wed Sep 27 16:02:59 PDT 2017
+    # real    513m36.866s
+
+    cat faSize.rmsk.txt
+    # 3062009387 bases (340585302 N's 2721424085 real 1376487602 upper
+    #	1344936483 lower) in 12822 sequences in 1 files
+    # Total size: mean 238809.0 sd 937317.8 min 304 (NW_012108651v1)
+    #	max 17385548 (NW_012098097v1) median 2228
+    # %43.92 masked total, %49.42 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps proCoq1 rmsk
+    # 1346389644 bases of 3062009387 (43.971%) in intersection
+    # real    0m51.890s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (TBD - 2017-09-21 - Hiram)
+
+    mkdir /hive/data/genomes/proCoq1/bed/simpleRepeat
+    cd /hive/data/genomes/proCoq1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 5 proCoq1) > do.log 2>&1
+XXX - running - Wed Sep 27 16:02:59 PDT 2017
+    # real    12m30.019s
+
+    cat fb.simpleRepeat
+    # 89300635 bases of 2721424086 (3.281%) in intersection
+
+    # using the rmsk result
+    cd /hive/data/genomes/proCoq1
+    twoBitMask bed/repeatMasker/proCoq1.rmsk.2bit \
+      -add bed/simpleRepeat/trfMask.bed  proCoq1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # if using windowMasker result:
+#     twoBitMask bed/windowMasker/proCoq1.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  proCoq1.2bit
+
+    twoBitToFa proCoq1.2bit stdout | faSize stdin > faSize.proCoq1.2bit.txt
+    cat faSize.proCoq1.2bit.txt
+# 3062009387 bases (340585302 N's 2721424085 real 1375191201 upper
+#	1346232884 lower) in 12822 sequences in 1 files
+# Total size: mean 238809.0 sd 937317.8 min 304 (NW_012108651v1)
+#	max 17385548 (NW_012098097v1) median 2228
+# %43.97 masked total, %49.47 masked real
+
+    rm /gbdb/proCoq1/proCoq1.2bit
+    ln -s `pwd`/proCoq1.2bit /gbdb/proCoq1/proCoq1.2bit
+
+##########################################################################
+# CREATE MICROSAT TRACK (TBD - 2017-09-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/proCoq1/bed/microsat
+     cd /cluster/data/proCoq1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed proCoq1 microsat microsat.bed
+    #	Read 26827 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (TBD - 2017-09-21 - Hiram)
+
+    mkdir /hive/data/genomes/proCoq1/bed/windowMasker
+    cd /hive/data/genomes/proCoq1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev proCoq1) > do.log 2>&1
+    # real    265m59.904s
+
+    # Masking statistics
+    cat faSize.proCoq1.cleanWMSdust.txt
+# 3062009387 bases (340585302 N's 2721424085 real 1763962353 upper
+#	957461732 lower) in 12822 sequences in 1 files
+# Total size: mean 238809.0 sd 937317.8 min 304 (NW_012108651v1)
+#	max 17385548 (NW_012098097v1) median 2228
+# %31.27 masked total, %35.18 masked real
+
+    cat fb.proCoq1.rmsk.windowmaskerSdust.txt
+    # 727173946 bases of 3062009387 (23.748%) in intersection
+
+##########################################################################
+# cpgIslands - (TBD - 2017-09-22 - Hiram)
+    mkdir /hive/data/genomes/proCoq1/bed/cpgIslands
+    cd /hive/data/genomes/proCoq1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku proCoq1) > do.log 2>&1 &
+    # real    6m52.738s
+
+    cat fb.proCoq1.cpgIslandExt.txt
+    # 13635922 bases of 2721424086 (0.501%) in intersection
+
+##############################################################################
+# augustus - (TBD - 2017-09-22 - Hiram)
+    mkdir /hive/data/genomes/proCoq1/bed/augustus
+    cd /hive/data/genomes/proCoq1/bed/augustus
+
+export db="proCoq1"
+export species="human"
+time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+  -species=$species -dbHost=hgwdev -utr -workhorse=hgwdev $db) > do.log 2>&1
+    # real    116m47.705s
+
+    cat fb.proCoq1.augustusGene.txt
+    #  45617591 bases of 2721424086 (1.676%) in intersection
+
+#########################################################################
+# genscan - (TBD - 2017-09-22 - Hiram)
+    mkdir /hive/data/genomes/proCoq1/bed/genscan
+    cd /hive/data/genomes/proCoq1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku proCoq1) > do.log 2>&1 &
+    # real    162m41.174s
+
+    cat fb.proCoq1.genscan.txt
+    #   50153337 bases of 2721424086 (1.843%) in intersection
+
+    cat fb.proCoq1.genscanSubopt.txt
+    #   53430104 bases of 2721424086 (1.963%) in intersection
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2017-09-22 - Hiram)
+    mkdir /hive/data/genomes/proCoq1/bed/ucscToINSDC
+    cd /hive/data/genomes/proCoq1/bed/ucscToINSDC
+
+    # check for chrM accession:
+    grep chrM ../../proCoq1.agp
+# chrM    1       16547   1       F       NC_028442.1     1       16547   +
+
+    # use that accession as an argument to this command
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+         ../../refseq/*0_assembly_structure/Primary_Assembly NC_028442.1
+
+    # this is actually ucscToRefSeq since this is a RefSeq assembly:
+    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+    rm -f ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt | sort > refseqToUcsc.txt
+
+    # need to add the chrM RefSeq and INSDC name with the extra printf:
+
+    ( printf "NC_028442.1\tKT696596.1\n";
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | awk '{printf "%s\t%s\n", $2, $1}') | sort > refseq.insdc.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+           > ucscToRefSeq.bed
+
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #	12822 name.coordinate.tab
+    #	12822 refseq.insdc.txt
+    #	12822 refseqToUcsc.txt
+    #	12822 ucscToINSDC.bed
+    #	12822 ucscToINSDC.txt
+    #	12822 ucscToRefSeq.bed
+    #	12822 ucscToRefSeq.txt
+
+    # verify chrM is correct:
+    grep chrM *.bed
+# ucscToINSDC.bed:chrM    0       16547   KT696596.1
+# ucscToRefSeq.bed:chrM   0       16547   NC_028442.1
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab proCoq1 ucscToINSDC stdin ucscToINSDC.bed
+
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab proCoq1 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    # checkTableCoords should be silent for no errors:
+    checkTableCoords proCoq1
+
+    # should cover %100 entirely:
+    featureBits -countGaps proCoq1 ucscToINSDC
+    # 3062009387 bases of 3062009387 (100.000%) in intersection
+    featureBits -countGaps proCoq1 ucscToRefSeq
+    # 3062009387 bases of 3062009387 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (TBD - 2017-09-22 - Hiram)
+
+    mkdir /hive/data/genomes/proCoq1/bed/chromAlias
+    cd /hive/data/genomes/proCoq1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' proCoq1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' proCoq1 \
+        > ucsc.genbank.tab
+
+    # verify chrM is correct:
+    grep chrM *
+ucsc.genbank.tab:chrM   KT696596.1      genbank
+ucsc.refseq.tab:chrM    NC_028442.1     refseq
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+        | sort > proCoq1.chromAlias.tab
+
+    hgLoadSqlTab proCoq1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        proCoq1.chromAlias.tab
+
+#########################################################################
+# Create kluster run files (TBD - 2017-09-22 - Hiram)
+
+    cd /hive/data/genomes/proCoq1
+    # numerator is proCoq1 gapless bases "real" as reported by:
+    head -1 faSize.proCoq1.2bit.txt
+# 3062009387 bases (340585302 N's 2721424085 real 1375191201 upper
+#	1346232884 lower) in 12822 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2721424085 / 2861349177 \) \* 1024
+    # ( 2721424085 / 2861349177 ) * 1024 = 973.924569
+
+    # ==> use -repMatch=950 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/proCoq1
+    time blat proCoq1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/proCoq1.11.ooc \
+        -repMatch=950
+    # Wrote 26979 overused 11-mers to jkStuff/proCoq1.11.ooc
+
+    #   real    0m46.946s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' proCoq1
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 proCoq1 jkStuff/proCoq1.nonBridged.lft \
+#         -bedFile=jkStuff/proCoq1.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' proCoq1 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       contig count: 12822, total size: 3062009387, one half size: 1531004693
+# cumulative    N50 count       contig  contig size
+# 1530667727      284     NW_012102255v1  3188400
+# 1531004693 one half size
+# 1533854475      285     NW_012104798v1  3186748
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2017-09-22 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows one mRNA, three refSeq:
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Mandrillus leucophaeus  1       0       3
+    # Mandrillus sphinx       12      0       0
+
+    # edit etc/genbank.conf to add proCoq1 just after criGri1
+
+# proCoq1 (Drill - Mandrillus leucophaeus) taxId 9568
+proCoq1.serverGenome = /hive/data/genomes/proCoq1/proCoq1.2bit
+proCoq1.clusterGenome = /hive/data/genomes/proCoq1/proCoq1.2bit
+proCoq1.ooc = /hive/data/genomes/proCoq1/jkStuff/proCoq1.11.ooc
+proCoq1.lift = no
+proCoq1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+proCoq1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+proCoq1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+proCoq1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+proCoq1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+proCoq1.downloadDir = proCoq1
+proCoq1.refseq.mrna.native.load  = yes
+proCoq1.refseq.mrna.xeno.load = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+proCoq1.genbank.mrna.xeno.load = no
+proCoq1.genbank.mrna.native.load = no
+proCoq1.genbank.est.native.load = no
+proCoq1.perChromTables = no
+
+    # And edit src/lib/gbGenome.c to add new species.  Adding lines:
+# static char *manLeuNames[] = {"Mandrillus leucophaeus", NULL};
+#     {"manLeu", manLeuNames},
+
+    git commit -m "Added proCoq1/Drill; refs #20190" \
+	etc/genbank.conf src/lib/gbGenome.c
+    git push
+
+    # update /cluster/data/genbank/:
+    make etc-update
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial proCoq1
+    # logFile: var/build/logs/2017.09.23-20:40:37.proCoq1.initalign.log
+    # real    32m58.945s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.proCoq1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad proCoq1
+    # logFile: var/dbload/hgwdev/logs/2017.09.24-14:05:05.proCoq1.dbload.log
+    # real    5m30.217s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add proCoq1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added proCoq1 - Drill/Mandrillus leucophaeus refs #20190" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2017-09-22 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/primate/proCoq1
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" proCoq1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
+#  246054 JYKQ.1
+#       1 NC_.1
+
+    # implies a rule: '[JN][CY][K_][Q0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" proCoq1 | wc -l
+    # 246055
+
+    hgsql -N -e "select frag from gold;" proCoq1 \
+       | egrep -e '[JN][CY][K_][Q0-9]+(\.[0-9]+)?' | wc -l
+    # 246055
+
+    hgsql -N -e "select frag from gold;" proCoq1 \
+       | egrep -v -e '[JN][CY][K_][Q0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/proCoq1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [JN][CY][K_][Q0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box, check full accession name,
+    # accession name without .1
+    # truncated accession name produces multiple results
+    # and the two chrM accessions, with and without the .1 and partial name
+    # use: accessionName:n-m to display locations n to m on that accession
+
+    git commit -m 'add gold/assembly track search rule refs #20190' *.ra
+    git push
+
+#########################################################################
+# lastz/chain/net swap from hg38 (TBD - 2017-09-25 - Hiram)
+    # alignment to hg38
+    cd /hive/data/genomes/hg38/bed/lastzProCoq1.2017-09-25
+
+    cat fb.hg38.chainProCoq1Link.txt
+    # 2515634714 bases of 3049335806 (82.498%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 proCoq1) \
+	> rbest.log 2>&1 &
+    # real    287m28.553s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/proCoq1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/proCoq1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzProCoq1.2017-09-25/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    79m34.951s
+
+    cat fb.proCoq1.chainHg38Link.txt
+    # 2409820927 bases of 2721424086 (88.550%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` proCoq1 hg38) \
+	> rbest.log 2>&1
+    # real    388m23.086s
+
+#########################################################################
+# lastz/chain/net swap from mm10 (TBD - 2017-09-25 - Hiram)
+    # alignment on mm10
+    cd /hive/data/genomes/mm10/bed/lastzProCoq1.2017-09-25
+
+    cat fb.mm10.chainProCoq1Link.txt
+    #	905203366 bases of 2652783500 (34.123%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 proCoq1) \
+	> rbest.log 2>&1 &
+    # real    362m58.840s
+
+    mkdir /hive/data/genomes/proCoq1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/proCoq1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzProCoq1.2017-09-25/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    64m55.226s
+
+    cat fb.proCoq1.chainMm10Link.txt
+    #	895668222 bases of 2721424086 (32.912%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` proCoq1 mm10) \
+	> rbest.log 2>&1
+    # real    338m57.422s
+
+##############################################################################
+#  BLATSERVERS ENTRY (TBD - 2017-09-25 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("proCoq1", "blat1a", "17878", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("proCoq1", "blat1a", "17879", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to similar location as hg38 default TBD
+##  (TBD - 2017-09-26 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="NW_012105586v1:3197838-3365219"
+	where name="proCoq1";' hgcentraltest
+
+############################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2017-09-26 - Hiram)
+
+    cd $HOME/kent/src/hg/makeDb/schema
+
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=proCoq1 -tableCoverage all.joiner
+    joinerCheck -database=proCoq1 -times all.joiner
+    joinerCheck -database=proCoq1 -keys all.joiner
+
+    git commit -m "Added proCoq1 - Drill/Mandrillus leucophaeus refs #20190" \
+       all.joiner
+    # to get this installed, run a 'make alpha' in the hgTables directory
+    # in a clean source tree that has been fully constructed
+
+    cd /hive/data/genomes/proCoq1
+    time (makeDownloads.pl proCoq1) > downloads.log 2>&1
+    # real    18m27.907s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/proCoq1/pushQ
+    cd /hive/data/genomes/proCoq1/pushQ
+    time (makePushQSql.pl -redmineList proCoq1) \
+	> proCoq1.pushQ.sql 2> stderr.out
+    # real    5m58.381s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # writing redmine listings to
+    # redmine.proCoq1.file.list
+    # redmine.proCoq1.table.list
+    # redmine.proCoq1.releaseLog.txt
+    # WARNING: proCoq1 does not have seq
+    # WARNING: proCoq1 does not have extFile
+    # WARNING: proCoq1 does not have estOrientInfo
+
+    # Enter the full path names of these listing files:
+
+# /hive/data/genomes/proCoq1/pushQ/redmine.proCoq1.file.list
+# /hive/data/genomes/proCoq1/pushQ/redmine.proCoq1.releaseLog.txt
+# /hive/data/genomes/proCoq1/pushQ/redmine.proCoq1.table.list
+
+    # into the Redmine #20190 and set to QA Ready.
+
+#########################################################################

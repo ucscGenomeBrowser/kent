@@ -3,7 +3,7 @@
 # This file describes the construction of NCBI RefSeq track -- latest first
 
 #########################################################################
-# ncbiRefSeq.p11 Genes (DONE - 2017-09-09 - Angie)
+# ncbiRefSeq.p11 Genes (DONE - 2017-09-28 - Angie)
 
     mkdir /hive/data/genomes/hg38/bed/ncbiRefSeq.p11
     cd /hive/data/genomes/hg38/bed/ncbiRefSeq.p11
@@ -11,12 +11,11 @@
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       refseq vertebrate_mammalian Homo_sapiens \
       GCF_000001405.37_GRCh38.p11 hg38) > do.log 2>&1 & tail -f do.log
-    # *** All done !  Elapsed time: 23m14s
-    # real    23m13.985s
+    # *** All done !  Elapsed time: 19m38s
+    # real    19m38.332s
 
     cat fb.ncbiRefSeq.hg38.txt
     # 129593530 bases of 3049335806 (4.250%) in intersection
-
 
 #########################################################################
 
