@@ -7052,6 +7052,7 @@ tablesIgnored hg19
     dhcVcfHGDP01029
     dhcVcfHGDP01284
     dhcVcfHGDP01307
+    gtexEqtlCluster
     phastBiasTracts3
     phastBiasPosteriors3
     wgEncodeGencode2wayConsPseudo%
