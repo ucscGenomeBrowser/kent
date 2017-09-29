@@ -8,8 +8,9 @@ itemRgb on
 exonNumbers off
 compositeTrack on
 mouseOverField comments
-noScoreFilter on
 urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+scoreLabel Minimum Score (1000=SwissProt, 0=Trembl):
+scoreFilter 0
 
         track unipFullSeq
         shortLabel Sequences

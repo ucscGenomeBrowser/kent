@@ -4,6 +4,7 @@ shortLabel GTEx Combined eQTL
 longLabel Combined Expression QTLs from 44 Tissues from GTEx (midpoint release, V6)
 html gtexEqtl
 group regulation
+exonNumbers off
 
 searchTable gtexEqtlCluster
 searchMethod exact
@@ -30,6 +31,7 @@ itemRgb on
 altColor 0,0,0
 configurable off
 html gtexEqtl
+exonNumbers off
 
     track gtexEqtlTissueAdiposeSubcut
     parent gtexEqtlTissue on
