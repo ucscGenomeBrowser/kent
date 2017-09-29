@@ -1,26 +1,29 @@
 track uniprot
 shortLabel UniProt Proteins
-longLabel UniProt Protein Annotations
+longLabel UniProt SwissProt/TrEMBL Protein Annotations
 group genes
 visibility hide
 type bigBed 12 +
-itemRgb on
 exonNumbers off
 compositeTrack on
 mouseOverField comments
 urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 scoreLabel Minimum Score (1000=SwissProt, 0=Trembl):
 scoreFilter 0
+itemRgb on
 
-        track unipFullSeq
-        shortLabel Sequences
-        longLabel UniProt Sequences
+        track unipAli
+        shortLabel Alignment
+        longLabel UCSC alignment of UniProt proteins to genome
         priority 1
         parent uniprot
         visibility hide
-        type bigBed 12 +
-        bigDataUrl /gbdb/$D/uniprot/unipFullSeq.bb
-        searchIndex uniProtId
+        type bigPsl
+        bigDataUrl /gbdb/$D/uniprot/unipAli.bb
+        searchIndex name
+        urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+        labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
+        mouseOverField protFullNames
 
         track unipLocSignal
         shortLabel Signal Peptide
@@ -39,7 +42,6 @@ scoreFilter 0
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipLocExtra.bb
-        itemRgb off
         color 0,150,255
 
         track unipLocTransMemb
@@ -50,7 +52,6 @@ scoreFilter 0
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipLocTransMemb.bb
-        itemRgb off
         color 0,150,0
 
         track unipLocCytopl
@@ -61,7 +62,6 @@ scoreFilter 0
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipLocCytopl.bb
-        itemRgb off
         color 0,0,120
 
         track unipChain
