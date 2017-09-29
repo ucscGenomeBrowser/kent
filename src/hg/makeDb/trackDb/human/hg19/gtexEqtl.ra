@@ -5,6 +5,14 @@ longLabel Combined Expression QTLs from 44 Tissues from GTEx (midpoint release, 
 html gtexEqtl
 group regulation
 
+searchTable gtexEqtlCluster
+searchMethod exact
+searchType bed
+termRegex rs[0-9]+
+searchPriority 11.5
+padding 250
+semiShortCircuit 1
+
 track gtexEqtlTissue
 type bigBed 9 +
 compositeTrack on
