@@ -15729,3 +15729,117 @@ XXX - running - Thu Sep 28 13:05:19 PDT 2017
     # real    383m10.761s
 
 ##############################################################################
+# LASTZ Coquerel's sifaka to mouse/Mm10 (DONE - 2017-09-28 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzProCoq1.2017-09-28
+    cd /hive/data/genomes/mm10/bed/lastzProCoq1.2017-09-28
+
+    printf '# Coquerel_s sifaka vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: proCoq1 - Coquerel_s sifaka - Propithecus coquereli
+SEQ2_DIR=/hive/data/genomes/proCoq1/proCoq1.2bit
+SEQ2_LEN=/hive/data/genomes/proCoq1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm10/bed/lastzProCoq1.2017-09-28
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm10ProCoq1
+    time (doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+XXX - running - Thu Sep 28 17:26:18 PDT 2017
+    #   real    371m15.075s
+
+    cat fb.mm10.chainProCoq1Link.txt
+    #	917680202 bases of 2652783500 (34.593%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 proCoq1) \
+	> rbest.log 2>&1 &
+    # real    352m12.077s
+
+    mkdir /hive/data/genomes/proCoq1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/proCoq1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzProCoq1.2017-09-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    68m6.225s
+
+    cat fb.proCoq1.chainMm10Link.txt
+    #	903892923 bases of 2787289397 (32.429%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` proCoq1 mm10) \
+	> rbest.log 2>&1
+    # real    383m10.761s
+
+##############################################################################
+# LASTZ White-faced sapajou to mouse/Mm10 (DONE - 2017-09-28 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzCebCap1.2017-09-28
+    cd /hive/data/genomes/mm10/bed/lastzCebCap1.2017-09-28
+
+    printf '# White-faced sapajou vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: cebCap1 - White-faced sapajou -  Cebus capucinus imitator
+SEQ2_DIR=/hive/data/genomes/cebCap1/cebCap1.2bit
+SEQ2_LEN=/hive/data/genomes/cebCap1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/mm10/bed/lastzCebCap1.2017-09-28
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm10CebCap1
+    time (doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+XXX - running - Thu Sep 28 17:41:28 PDT 2017
+    #   real    371m15.075s
+
+    cat fb.mm10.chainCebCap1Link.txt
+    #	917680202 bases of 2652783500 (34.593%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 cebCap1) \
+	> rbest.log 2>&1 &
+    # real    352m12.077s
+
+    mkdir /hive/data/genomes/cebCap1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/cebCap1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCebCap1.2017-09-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    68m6.225s
+
+    cat fb.cebCap1.chainMm10Link.txt
+    #	903892923 bases of 2787289397 (32.429%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cebCap1 mm10) \
+	> rbest.log 2>&1
+    # real    383m10.761s
+
+##############################################################################
