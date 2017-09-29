@@ -1,19 +1,17 @@
 <h2>Description</h2>
 <p>
-This track shows genetic variants likely affecting gene expression in multiple human tissues.
+This track shows genetic variants likely affecting gene expression in 44 human tissues from the
+<a target="_blank" href="https://www.genome.gov/27543767/">Genotype-Tissue Expression (GTEx)</a> V6 
+data release. 
 The data items displayed are gene expression quantitative trait loci within 1MB of 
-gene transcription start sites (cis-eQTL's) 
-that have been identified as causal in the 
-<a target="_blank" href="https://www.genome.gov/27543767/">Genotype-Tissue Expression (GTEx) project</a> 
-V6 release by 
-<a target="_blank" href="http://genetics.cs.ucla.edu/caviar/">CAVIAR</a> analysis (95% credible set).  
-The track shows eQTL's identified in 44 GTEx tissues, along
-with the effect size on gene expression and the probability the eQTL is in the 95% credible set.
+gene transcription start sites (cis-eQTL's), identified as significant and likely causal (95% credible set).
+Each eQTL annotation includes the effect size on gene expression, the significance of the identification,
+and the probability the eQTL is in the credible set.
 </p>
 
 <h2>Display Conventions</h2>
 <p>
-The eQTL item color indicatees the effect size attributed to the eQTL:
+The eQTL item color indicates the effect size attributed to the eQTL:
 <ul>
 <table cellpadding='2'>
 <tr><td style='color: fuchsia;'>fuchsia</td><td>&nbsp;&nbsp;high positive</td></tr>
@@ -22,7 +20,9 @@ The eQTL item color indicatees the effect size attributed to the eQTL:
 <tr><td style='color: cyan;'>cyan</td><td>&nbsp;&nbsp;high negative</td></tr>
 </table>
 </ul>
-An arbitrary cutoff of +- 2.0 FPKM defines high effect size.
+Effect size is the regression slope, computed from the effect of the alternative allele vs. the reference in
+FPKM units, based on quantile normalized expression tables.
+For display purposes, An arbitrary cutoff of +- 2.0 FPKM defines high effect size.
 </p>
 <h3>Combined eQTL track</h3>
 <p>
@@ -34,12 +34,36 @@ The item color reflects the largest effect size in any tissue.
 <p>
 Track configuration supports filtering by gene, effect size, or probability.  
 Tissues can be selected via checkboxes or from the UCSC GTEx Body Map graphic.
+</br><a target="_self" href="../cgi-bin/hgGtexTrackSettings?db=hg19&g=gtexEqtlCluster">
+GTEx Combined eQTL Track Settings: hg19.</a>
 </p>
 </p>
 <h3>Tissue eQTL tracks</h3>
 <p>
 This track is a composite track containing 44 subtracks representing the GTEx eQTL tissues.
-Each subtrack contains all GTEx/CAVIAR eQTL's identified for that tissue.
+Each subtrack contains all GTEx/CAVIAR eQTL's identified for that tissue. 
+</br><a target="_self" href="../cgi-bin/hgTrackUi?db=hg19&g=gtexEqtlTissue">
+GTEx 44 Tissues eQTL Track Settings: hg19.</a>
+</p>
+
+<h2>Methods</h2>
+<p>
+Laboratory and RNA-seq analysis methods for GTEx V6 are summarized in the 
+<a target="_blank" href="/cgi-bin/hgGtexTrackSettings">GTEx Gene Track</a> description page.
+</p>
+<p>
+Cis-eQTL's were identified from GTEx RNA-seq and genotype data (variants with minor allele frequency >= 1%) 
+in 44 tissues (those with sample size >=70) using 
+the <a target="_blank" href="http://fastqtl.sourceforge.net">FastQTL</a> mapper at 5% FDR threshold, 
+by the GTEx Laboratory, Data Analysis and Coordinating Center (LDACC), as part of the GTEx project v6p analysis.  
+These cis-eQTL's were then analyzed together with genome variation information (LD) using the 
+<a target="_blank" href="http://genetics.cs.ucla.edu/caviar/">CAVIAR</a> statistical framework
+to quantify the probability a variant is causal, at the Eskin lab at UCLA, as part of GTEx downstream analysis.
+The UCSC track was created using the CAVIAR 95% credible set, with significance p-values and effect sizes 
+from the LDACC analysis.
+</p>
+<p>
+Raw data for these analyses are available from dbGaP (phs000424.v6.p1).
 </p>
 
 <h2>Credits</h2>
@@ -48,7 +72,7 @@ Thanks to GTEx investigators and analysts -- particularly
 (currently at the 
 <a target="_blank" href="https://www.hsph.harvard.edu/alkes-price/">Price lab, Harvard</a>), 
 the <a target="_blank" href="http://zarlab.cs.ucla.edu/">Eskin lab at UCLA</a>,
-the GTEx Laboratory, Data Analysis and Coordinating Center and portal team for providing this data, 
+the GTEx Laboratory, Data Analysis and Coordinating Center and analysts and portal team for providing this data, 
 and to <a target="_blank" href="http://www.med.upenn.edu/brownlab/">Christopher Brown (U Penn) </a>,
 for input on design of the track.
 
@@ -59,6 +83,15 @@ Aguet F, Brown AA, Castel S, Davis JR, Mohammadi P, Segre AV, Zappala Z, Abell N
 Local genetic effects on gene expression across 44 human tissues</a>.
 <em>Nature</em> (In press for October 2017 publication).
 bioRrxiv: <a target="_blank" href="http://www.biorxiv.org/content/early/2016/09/09/074450">074450</a>. 2016 Sept 9.
+</p>
+<p>
+Ongen H, Buil A, Brown AA, Dermitzakis ET, Delaneau O.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btv722"
+target="_blank">
+Fast and efficient QTL mapper for thousands of molecular phenotypes</a>.
+<em>Bioinformatics</em>. 2016 May 15;32(10):1479-85.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26708335" target="_blank">26708335</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4866519/" target="_blank">PMC4866519</a>
 </p>
 <p>
 Hormozdiari F, Kostem E, Kang EY, Pasaniuc B, Eskin E.
