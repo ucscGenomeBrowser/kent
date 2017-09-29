@@ -278,10 +278,6 @@ liftUp -extGenePred -type=.gp stdout \$downloadDir/\${asmId}To\${db}.lift drop \
   | gzip -c > \$asmId.\$db.gp.gz
 genePredCheck -db=\$db \$asmId.\$db.gp.gz
 
-# join the refLink metadata with the gene names
-zcat \$asmId.\$db.gp.gz | cut -f1 | sort -u > \$asmId.\$db.name.list
-join -t'\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRefSeqLink.tab
-
 # curated subset of all genes
 (zegrep "^[NY][MRP]_" \$asmId.\$db.gp.gz || true) > \$db.curated.gp
 # may not be any curated genes
@@ -303,8 +299,13 @@ if [ -s \$db.curated.gp ]; then
 fi
 genePredCheck -db=\$db \$db.predicted.gp
 genePredCheck -db=\$db \$db.other.gp
-genePredToBed \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
 
+# join the refLink metadata with curated+predicted names
+cut -f1 \$db.ncbiRefSeq.gp | sort -u > \$asmId.\$db.name.list
+join -t'\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRefSeqLink.tab
+
+# Make bigBed with attributes in extra columns for ncbiRefSeqOther:
+genePredToBed \$db.other.gp stdout | sort -k1,1 -k2n,2n > \$db.other.bed
 $ncbiRefSeqOtherAttrs \$db.other.bed \$asmId.attrs.txt > \$db.other.extras.bed
 bedToBigBed -type=bed12+13 -as=ncbiRefSeqOther.as -tab \\
   -extraIndex=name \\

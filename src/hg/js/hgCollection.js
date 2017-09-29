@@ -8,6 +8,30 @@ var hgCollection = (function() {
     var selectedTree = "collectionList"; // keep track of id of selected row
     var $tracks;  // the #tracks object
     var trees = [];
+    var isDirty = false;
+
+    function currentTrackItems(node) {
+        // populate the menu for the currentCollection tree
+        var items = {
+            addItem: { // The "delete" menu item
+                label: "Add",
+                action: function () {
+                    var nodeIds = $("#tracks").jstree( "get_selected");
+                    isDirty = true;
+                    var nodes = [];
+                    for(ii=0; ii < nodeIds.length;ii++)
+                        nodes.push($("#tracks").jstree('get_node', nodeIds[ii]));
+                    var parentId = $(selectedTree).jstree("get_node", "ul > li:first").id;
+                    $(selectedTree).jstree("copy_node", nodes, parentId,'last');
+                }
+            }
+        };
+
+        if ($(node).attr('children').length > 0)
+            delete items.addItem;
+
+        return items;
+    }
 
     function currentCollectionItems(node) {
         // populate the menu for the currentCollection tree
@@ -16,6 +40,7 @@ var hgCollection = (function() {
                 label: "Delete",
                 action: function () {
                     var nodes = $(selectedTree).jstree( "get_selected");
+                    isDirty = true;
                     $(selectedTree).jstree( "delete_node", nodes);
                 }
             }
@@ -89,6 +114,7 @@ var hgCollection = (function() {
 
         var newId = $(selectedTree).jstree("create_node", parent, newName + " (" + newDescription + ")");
         var newNode = $(selectedTree).jstree("get_node", newId);
+        isDirty = true;
         newNode.li_attr.class = "folder";
         newNode.li_attr.name = ourCalcName;
         newNode.li_attr.shortlabel = newName;
@@ -101,6 +127,7 @@ var hgCollection = (function() {
     }
 
     function newCollection() {
+        isDirty = true;
         // called when the "New Collection" button is pressed
         var ourCollectionName = getUniqueName("coll");
         var ourTreeName = getUniqueName("tree");
@@ -179,6 +206,7 @@ var hgCollection = (function() {
             success: catchErrorOrDispatch,
             error: errorHandler,
         });
+        isDirty = false;
     }
 
     function rebuildLabel() {
@@ -190,16 +218,19 @@ var hgCollection = (function() {
     function descriptionChange() {
         // change the description (longLabel) for a track
         selectedNode.li_attr.longlabel = $("#customDescription").val();
+        isDirty = true;
         rebuildLabel();
     }
 
     function viewFuncChange() {
         // change the view function for a track
+        isDirty = true;
         selectedNode.li_attr.viewfunc = $("#viewFunc").val();
         }
 
     function nameChange() {
         // change the name (shortLabel)  of a track
+        isDirty = true;
         selectedNode.li_attr.shortlabel = $("#customName").val();
         rebuildLabel();
         if (selectedNode.parent === '#') {
@@ -210,12 +241,14 @@ var hgCollection = (function() {
 
     function colorChange() {
         // change the color for a track
+        isDirty = true;
         var color = $("#customColorPicker").spectrum("get"); $('#customColorInput').val(color);
         selectedNode.li_attr.color = $("#customColorInput").val();
     }
 
     function visChange() {
         // change the visibility of a track
+        isDirty = true;
         selectedNode.li_attr.visibility = $("#customVis").val();
     }
 
@@ -247,6 +280,16 @@ var hgCollection = (function() {
     }
 
     function init() {
+        window.addEventListener("beforeunload", function (e) {
+            if (!isDirty)
+                return undefined;
+
+            var confirmationMessage = 'Do you want to leave this page without saving?';
+
+            (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+        });
+
         // called at initialization time
         $("#viewFunc").change(viewFuncChange);
         $("#customName").change(nameChange);
@@ -316,7 +359,8 @@ var hgCollection = (function() {
 
         treeDiv=$('#tracks');
         treeDiv.jstree({
-               'plugins' : ['dnd', 'conditionalselect'],
+               'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
+               'contextmenu': { "items" : currentTrackItems},
                'dnd': {
                 "check_callback" : checkCallback,
                'always_copy' : true,
