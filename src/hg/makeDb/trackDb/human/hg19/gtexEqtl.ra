@@ -5,6 +5,7 @@ longLabel Combined Expression QTLs from 44 Tissues from GTEx (midpoint release, 
 html gtexEqtl
 group regulation
 exonNumbers off
+dataVersion GTEx Analysis V6p (https://www.gtexportal.org/home/datasets)
 
 searchTable gtexEqtlCluster
 searchMethod exact
@@ -32,6 +33,7 @@ altColor 0,0,0
 configurable off
 html gtexEqtl
 exonNumbers off
+dataVersion GTEx Analysis V6p (https://www.gtexportal.org/home/datasets)
 
     track gtexEqtlTissueAdiposeSubcut
     parent gtexEqtlTissue on
