@@ -148,7 +148,7 @@ printf "chrM\t1\t$mSize\t1\tF\t$mitoAcc\t1\t$mSize\t+\n" > chrM.agp
     # establish the config.ra file:
     ~/kent/src/hg/utils/automation/prepConfig.pl cerAty1 mammal primate \
        refseq/*_assembly_report.txt > cerAty1.config.ra
-    
+
     # verify this looks OK:
 
     cat cerAty1.config.ra
@@ -394,7 +394,7 @@ taxId 9531
     cd ~/kent/src/hg/makeDb/trackDb/primate/cerAty1
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" cerAty1 \
-      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
   76752 JZLG.1
       1 NC_.1
 
@@ -512,7 +512,7 @@ searchPriority 8
     # 48318341 bases of 2787289397 (1.734%) in intersection
 
 #############################################################################
-# Create kluster run files (TBD - 2017-07-27 - Hiram)
+# Create kluster run files (DONE - 2017-09-28 - Hiram)
 
     # numerator is cerAty1 gapless bases "real" as reported by:
     cd /hive/data/genomes/cerAty1
@@ -546,53 +546,53 @@ searchPriority 8
 #	jkStuff/cerAty1.nonBridged.lft -bedFile=jkStuff/cerAty1.nonBridged.bed
 
 #########################################################################
-# lastz/chain/net swap from hg38 (TBD - 2017-08-02 - Hiram)
+# lastz/chain/net swap from hg38 (DONE - 2017-08-28 - Hiram)
     # alignment to hg38
-    cd /hive/data/genomes/hg38/bed/lastzCerAty1.2017-07-31
 
+    cd /hive/data/genomes/hg38/bed/lastzCerAty1.2017-09-27
     cat fb.hg38.chainCerAty1Link.txt
-    # 1463754915 bases of 3049335806 (48.002%) in intersection
+    # 2556764791 bases of 3049335806 (83.847%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/cerAty1/bed/blastz.hg38.swap
     cd /hive/data/genomes/cerAty1/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzCerAty1.2017-07-31/DEF \
-        -swap -chainMinScore=3000 -chainLinearGap=medium \
+      /hive/data/genomes/hg38/bed/lastzCerAty1.2017-09-27/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    107m7.364s
+    #  real    84m53.559s
 
     cat fb.cerAty1.chainHg38Link.txt
-    # 1387973267 bases of 2472073034 (56.146%) in intersection
+    # 2424226994 bases of 2787289397 (86.974%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cerAty1 hg38) \
-        > rbest.log 2>&1
-    # real    598m8.675s
+	> rbest.log 2>&1
+    # real    226m2.420s
 
 #########################################################################
-# lastz/chain/net swap from mm10 (TBD - 2017-08-02 - Hiram)
+# lastz/chain/net swap from mm10 (DONE - 2017-00-28 - Hiram)
     # alignment on mm10
-    cd /hive/data/genomes/mm10/bed/lastzCerAty1.2017-07-31
+    cd /hive/data/genomes/mm10/bed/lastzCerAty1.2017-09-27
     cat fb.mm10.chainCerAty1Link.txt
-    #	731012356 bases of 2652783500 (27.556%) in intersection
+    #	917680202 bases of 2652783500 (34.593%) in intersection
 
     mkdir /hive/data/genomes/cerAty1/bed/blastz.mm10.swap
     cd /hive/data/genomes/cerAty1/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzCerAty1.2017-07-31/DEF \
+	/hive/data/genomes/mm10/bed/lastzCerAty1.2017-09-27/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    61m6.153s
+    #	real    68m6.225s
 
     cat fb.cerAty1.chainMm10Link.txt
-    #	715277290 bases of 2472073034 (28.934%) in intersection
+    #	903892923 bases of 2787289397 (32.429%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev cerAty1 mm10 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    358m15.340s
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cerAty1 mm10) \
+	> rbest.log 2>&1
+    # real    305m14.804s
 
 ##############################################################################
 # GENBANK AUTO UPDATE (DONE - 2017-09-25 - Hiram)
@@ -643,13 +643,12 @@ cerAty1.perChromTables = no
 
     time ./bin/gbAlignStep -initial cerAty1
     #  logFile: var/build/logs/2017.09.25-08:50:49.cerAty1.initalign.log
-XXX - running - Mon Sep 25 08:51:45 PDT 2017
 
-    #   real    1486m19.233s
+    #   real    540m3.271s
 
-    tail -2 var/build/logs/2017.07.27-20:49:34.cerAty1.initalign.log
-# hgwdev 2017.07.28-21:20:42 cerAty1.initalign: Succeeded: cerAty1
-# hgwdev 2017.07.28-21:35:53 cerAty1.initalign: finish
+    tail -2 var/build/logs/2017.09.25-08:50:49.cerAty1.initalign.log
+# hgwdev 2017.09.25-17:50:23 cerAty1.initalign: Succeeded: cerAty1
+# hgwdev 2017.09.25-17:50:53 cerAty1.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.cerAty1
@@ -658,52 +657,54 @@ XXX - running - Mon Sep 25 08:51:45 PDT 2017
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad cerAty1
-    # logFile: var/dbload/hgwdev/logs/2017.07.29-07:05:26.cerAty1.dbload.log
-    # real    81m41.107s
+    # logFile: var/dbload/hgwdev/logs/2017.09.26-08:18:35.cerAty1.dbload.log
+    # real    4m47.307s
 
-    tail -1 var/dbload/hgwdev/logs/2017.07.29-07:05:26.cerAty1.dbload.log
-    # hgwdev 2017.07.29-08:27:07 cerAty1.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2017.09.26-08:18:35.cerAty1.dbload.log
+    # hgwdev 2017.09.26-08:23:22 cerAty1.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add cerAty1 to:
     #   etc/align.dbs etc/hgwdev.dbs
-    git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added cerAty1 - pig refs #19859" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added cerAty1/Sooty mangabey; refs #20199" \
+	etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 ##############################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-08-03 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-09-27 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("cerAty1", "blat1b", "17880", "1", "0"); \
+	VALUES ("cerAty1", "blat1b", "17884", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("cerAty1", "blat1b", "17881", "0", "1");' \
+	VALUES ("cerAty1", "blat1b", "17885", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ##############################################################################
-# set default position to OPN1SW gene displays  (TBD - 2017-08-03 - Hiram)
+# set default position similar to hg38 default (DONE - 2017-09-27 - Hiram)
 # same as susScr3:
     hgsql -e \
-'update dbDb set defaultPos="chr18:19836295-19840119" where name="cerAty1";' \
+'update dbDb set defaultPos="NW_012006482v1:1601032-1625412" where name="cerAty1";' \
 	hgcentraltest
 
 ##############################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-08-03 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-09-29 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
-    # fixup all.joiner until this is a clean output
+    # fixup all.joiner until these commands are clean output:
     joinerCheck -database=cerAty1 -tableCoverage all.joiner
     joinerCheck -database=cerAty1 -times all.joiner
     joinerCheck -database=cerAty1 -keys all.joiner
 
+    git commit -m 'adding rules for cerAty1 refs #20199' all.joiner
+
     cd /hive/data/genomes/cerAty1
     time (makeDownloads.pl cerAty1) > downloads.log 2>&1
-    # real    17m8.716s
+    # real    18m58.858s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/cerAty1/pushQ
@@ -719,5 +720,16 @@ XXX - running - Mon Sep 25 08:51:45 PDT 2017
     # redmine.cerAty1.releaseLog.txt
     # WARNING: cerAty1 does not have seq
     # WARNING: cerAty1 does not have extFile
+    # WARNING: cerAty1 does not have estOrientInfo
+
+    # examine these files to make sure they appear sane,
+    # then enter the full path names of these listing files:
+
+# /hive/data/genomes/cerAty1/pushQ/redmine.cerAty1.file.list
+# /hive/data/genomes/cerAty1/pushQ/redmine.cerAty1.releaseLog.txt
+# /hive/data/genomes/cerAty1/pushQ/redmine.cerAty1.table.list
+
+    # into the Redmine #20199 and set to QA Ready.
+
 
 #########################################################################
