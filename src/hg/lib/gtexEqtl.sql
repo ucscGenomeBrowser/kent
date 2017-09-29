@@ -3,25 +3,27 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#BED 9+ of eQTLs (variants affecting gene expression) with a target gene, effect size, p-value, and causal probability metric
+#BED 9+ of expression Quantitative Trait Loci (eQTL). These are variants affecting gene expression
 CREATE TABLE gtexEqtl (
-    bin smallint not null,		# Bin number for browser speedup
+    bin smallint not null,             # Bin number for browser speedup
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
-    name varchar(255) not null,	# Name of variant (rsID or GTEx identifier if none)
+    name varchar(255) not null,	        # Variant/gene
     score int unsigned not null,	# Score from 0-1000 (highest probabiliity in cluster * 1000)
     strand char(1) not null,	# .
     thickStart int unsigned not null,	# Start position
     thickEnd int unsigned not null,	# End position
-    reserved int unsigned not null,	# R,G,B color: red for up-regulated, blue for down. Bright for high, grayed for low.
-    gene varchar(255) not null,	# Name of target gene
+    reserved int unsigned not null,	# R,G,B color: red +effect, blue -effect. Bright for high, pale for lower (cutoff effectSize 2.0 RPKM).
+    variant varchar(255) not null,	# Variant (rsID or GTEx identifier if none)
+    gene varchar(255) not null,	# Target gene
     distance int not null,	# Distance from TSS
-    effectSize float not null,	# Effect size (FPKM). Regression slope calculated using quantile normalized expression
+    effectSize float not null,	# Effect size (FPKM)
     pValue float not null,	# Nominal p-value
     causalProb float not null,	# Probability variant is in 95% credible set
               #Indices
     INDEX (chrom,bin),
-    INDEX (name),
-    INDEX (gene)
+    PRIMARY KEY (name),
+    INDEX (gene),
+    INDEX (variant)
 );
