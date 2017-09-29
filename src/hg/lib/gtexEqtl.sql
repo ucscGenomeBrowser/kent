@@ -10,7 +10,7 @@ CREATE TABLE gtexEqtl (
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Name of variant (rsID or GTEx identifier if none)
-    score int unsigned not null,	# Score from 0-1000
+    score int unsigned not null,	# Score from 0-1000 (highest probabiliity in cluster * 1000)
     strand char(1) not null,	# .
     thickStart int unsigned not null,	# Start position
     thickEnd int unsigned not null,	# End position
