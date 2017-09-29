@@ -61,6 +61,27 @@ this track. Thanks to Mike Cariaso for assistance with the GFF download, and tha
 Haeussler at UCSC for building this track.</p>
 
 -->
+<a name="092917"></a>
+<h2>Sep. 29, 2017 &nbsp;&nbsp; VAI tool can now output HGVS terms</h2>
+<p>
+The UCSC Genome Browser has <a href="help/query.html#HGVS" target="_blank">continued to expand</a>
+the support for Human Genome Variation Society (HGVS) nomenclature. We have recently enhanced our
+<a href="/cgi-bin/hgVai" target="_blank">Variant Annotation Integrator (VAI) tool</a> to allow output of
+HGVS terms from inputed variants when the gene prediction source is set to annotate on RefSeq genes.</p>
+<p>
+For a quick experience click the &quot;Get results&quot; button in this
+<a href="http://genome.ucsc.edu/cgi-bin/hgVai?hgS_doOtherUser=submit&hgS_otherUserName=brianlee&hgS_otherUserSessionName=hg38.exampleVAI"
+target="_blank">example session</a>. This session is loaded with an artifical input of variants
+on the human hg38 assembly with NCBI RefSeq Genes track (curated NM_*, NR_*, and YP_* subset)
+filtered for coding exons and splice site roles and on DNase regulatory elements with output
+in HTML Variant Effect Predictor format where the &quot;Extra&quot; column will include
+HGVS notation. Please note that a semi-colon &quot;;&quot; will separate results in
+that field (HGVSG=NC_000010.11:g.27005592_27005594delAGA;
+HGVSCN=NM_014915.2:c.5129_5131delTCT; EXON=34/34).</p>
+<p>
+Credit goes to Angie Hinrichs and Christopher Lee for the implementation and testing of
+this feature.
+</p>
 
 <a name="092617"></a>
 <h2>Sep. 26, 2017 &nbsp;&nbsp; dbSNP video released</h2>
