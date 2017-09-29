@@ -2,14 +2,14 @@
 
 <p>
 This track shows protein sequence annotations from the <a
-href="http://www.uniprot.org/" target="_blank">UniProt/SwissProt</A> database,
+href="http://www.UniProt.org/" target="_blank">UniProt/SwissProt</A> database,
 mapped to genomic coordinates. It also shows how the protein sequences in this database 
 map to the genome.
 The data has been curated from scientific publications by the UniProt/SwissProt staff.
 The annotations are divided into multiple subtracks, based on their &quot;feature type&quot; in UniProt:
 </p> 
 
-<table>
+<table class="stdTbl">
   <tr>
     <th>Track Name</th>
     <th>Description</th>
@@ -20,61 +20,61 @@ The annotations are divided into multiple subtracks, based on their &quot;featur
   </tr>
   <tr>
     <td>UniProt Signal Peptides</td>
-    <td>Amino acids implicated </td>
+    <td><a href="http://www.UniProt.org/help/signal">Regions found in proteins targeted destined to be secreted, generally cleaved from mature protein</a>.</td>
   </tr>
   <tr>
     <td>UniProt Extracellular Domains</td>
-    <td>Protein domains with the comment "Extracellular" </td>
+    <td><a href="http://www.UniProt.org/help/topo_dom">Protein domains with the comment &quot;Extracellular&quot;</a>.</td>
   </tr>
   <tr>
     <td>UniProt Transmembrane Domains</td>
-    <td>Protein domains of the type "transmembrane"</td>
+    <td><a href="http://www.UniProt.org/help/transmem">Protein domains of the type &quot;Transmembrane&quot;</a>.</td>
   </tr>
   <tr>
     <td>UniProt Cytoplasmic Domains</td>
-    <td>Protein domains with the comment "Cytoplasmic"</td>
+    <td><a href="http://www.UniProt.org/help/topo_dom">Protein domains with the comment &quot;Cytoplasmic&quot;</a>.</td>
   </tr>
   <tr>
     <td>UniProt Polypeptide Chains</td>
-    <td>Protein features of the type "chain"</td>
+    <td><a href="http://www.UniProt.org/help/chain">Polypeptide chain in mature protein after post-processing</a>.</td>
   </tr>
   <tr>
     <td>UniProt Domains</td>
-    <td>Protein domains, zinc finger regions and topological domains</td>
+    <td><a href="http://www.UniProt.org/help/domain">Protein domains, zinc finger regions and topological domains</a>.</td>
   </tr>
   <tr>
     <td>UniProt Disulfide Bonds</td>
-    <td>Disulfide bonds</td>
+    <td><a href="http://www.UniProt.org/help/disulfid">Disulfide bonds</a>.</td>
   </tr>
   <tr>
     <td>UniProt Amino Acid Modifications</td>
-    <td>Glycosilation sites, modified residues and lipid moiety-binding regions</td>
+    <td><a href="http://www.UniProt.org/help/ptm_processing_section">Glycosilation sites, modified residues and lipid moiety-binding regions</a>.</td>
   </tr>
   <tr>
     <td>UniProt Amino Acid Mutations</td>
-    <td>Mutagenesis sites and sequence variants</td>
+    <td><a href="http://www.UniProt.org/help/mutagen">Mutagenesis sites and sequence variants</a>.</td>
   </tr>
   <tr>
     <td>UniProt Protein Primary/Secondary Structure Annotations</td>
-    <td>beta strands, helices, coild-coil regions and turns</td>
+    <td><a href="http://www.UniProt.org/help/structure_section">Beta strands, helices, coiled-coil regions and turns</a>.</td>
   </tr>
   <tr>
     <td>UniProt Sequence Conflicts</td>
-    <td>Differences between Genbank sequences and the UniProt sequence</td>
+    <td><a href="http://www.UniProt.org/help/conflict">Differences between Genbank sequences and the UniProt sequence</a>.</td>
+  </tr>
+  <tr>
+    <td>UniProt Repeats</td>
+    <td><a href="http://www.UniProt.org/help/repeat">Regions of repeated sequence motifs or repeated domains</a>.</td>
   </tr>
   <tr>
     <td>UniProt Other Annotations</td>
     <td>All other annotations</td>
   </tr>
-  <tr>
-    <td>UniProt Repeats</td>
-    <td>txet</td>
-  </tr>
 </table>
 <p>
 For consistency, the subtrack &quot;UniProt/SwissProt Variants&quot; is a copy of the track
 &quot;UniProt Variants&quot; in the track group &quot;Phenotype and Literature&quot;, or 
-&quot;Variation and Repeats&quot; depending on the assembly.
+&quot;Variation and Repeats&quot;, depending on the assembly.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -90,7 +90,7 @@ Mouse over a feature to see the full UniProt annotation comment. For variants, t
 </p>
 
 <p>
-In the "UniProt other track", modified residues are highlighted in light green
+In the &quot;UniProt other&quot; track, modified residues are highlighted in light green
 glycosylation sites in dark green, disulfide bonds in grey.</p>
 
 <p>
@@ -98,7 +98,7 @@ The subtracks for domains related to a subcellular location are sorted from outs
 </p>
 
 <p>
-Duplicate annotations are removed as far as possible: if a trembl annotation has the same genome position and same feature type, comment, disease and mutated amino acids as a SwissProt annotation, it is not shown again. Two annotations mapped through different transcripts but with the same genome coordinates are only shown once.
+Duplicate annotations are removed as far as possible: if a TrEMBL annotation has the same genome position and same feature type, comment, disease and mutated amino acids as a SwissProt annotation, it is not shown again. Two annotations mapped through different transcripts but with the same genome coordinates are only shown once.
 </p>
 
 <p>Note that only for the human hg38 assembly and SwissProt annotations, there also is a 
