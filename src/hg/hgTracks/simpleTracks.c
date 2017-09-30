@@ -13824,6 +13824,8 @@ if (sameWord(type, "bed"))
         pubsBlatMethods(track);
     if (startsWith("gtexEqtlCluster", track->track))
         gtexEqtlClusterMethods(track);
+    if (startsWith("gtexEqtlTissue", track->track))
+        gtexEqtlTissueMethods(track);
     }
 /*
 else if (sameWord(type, "bedLogR"))

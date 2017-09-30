@@ -205,32 +205,48 @@ struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
 return eqtl->target;
 }
 
+// blues
+#define EQTL_COLOR_HIGH_NEGATIVE   MAKECOLOR_32(0x0, 0x0, 0xff)
+#define EQTL_COLOR_LOW_NEGATIVE    MAKECOLOR_32(0xa0, 0xa0, 0xff)
+// reds
+#define EQTL_COLOR_HIGH_POSITIVE   MAKECOLOR_32(0xff, 0x0, 0x0)
+#define EQTL_COLOR_LOW_POSITIVE    MAKECOLOR_32(0xff, 0xa0, 0xa0)
+// gray
+#define EQTL_COLOR_MIXED           MAKECOLOR_32(0x69, 0x69, 0x69)
+
 static Color gtexEqtlClusterItemColor(struct track *track, void *item, struct hvGfx *hvg)
-/* Color by highest effect in list (blue -, red +), with brighter for higher effect (teal, fuschia) */
+/* Color by highest effect in list (blue -, red +), grayed for lower effect. Gray if mixed effect*/
 {
 struct gtexEqtlCluster *eqtl = (struct gtexEqtlCluster *)item;
 double maxEffect = 0.0;
+double minEffect = 0.0;
 int i;
 for (i=0; i<eqtl->expCount; i++)
     {
     if (eqtlIsExcludedTissue(eqtl, i))
         continue;
     double effect = eqtl->expScores[i];
-    if (fabs(effect) > fabs(maxEffect))
+    if (effect > maxEffect)
         maxEffect = effect;
+    else if (effect < minEffect)
+        minEffect = effect;
     }
+if (minEffect < 0.0 && maxEffect > 0.0)
+    // mixed effect
+    return EQTL_COLOR_MIXED;
+
 double cutoff = 2.0;
-if (maxEffect < 0.0)
+if (minEffect < 0.0)
     {
-    /* down-regulation displayed as blue */
-    if (maxEffect < 0.0 - cutoff)
-        return MG_CYAN;
-    return MG_BLUE;
+    // down-regulation displayed as blue
+    if (minEffect < 0.0 - cutoff)
+        return EQTL_COLOR_HIGH_NEGATIVE;
+    return EQTL_COLOR_LOW_NEGATIVE;
     }
-/* up-regulation displayed as red */
+// up-regulation displayed as red
 if (maxEffect > cutoff)
-    return MG_MAGENTA;
-return MG_RED;
+    return EQTL_COLOR_HIGH_POSITIVE;
+return EQTL_COLOR_LOW_POSITIVE;
 }
 
 /* Helper macros */
