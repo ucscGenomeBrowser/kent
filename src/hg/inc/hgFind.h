@@ -72,6 +72,7 @@ struct hgPos
      char *browserName;		/* name as in hgTracks tg->itemName(). */
      bool canonical;		/* The gene is the canonical version. */ 
      struct tsrPos *tp;		/* The trix search associated with the gene. */      
+     char *highlight;		/* If non-empty, new value for highlight cart variable */
      };
 
 
