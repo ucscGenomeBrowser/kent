@@ -8,23 +8,39 @@ exonNumbers off
 compositeTrack on
 mouseOverField comments
 urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
-scoreLabel Minimum Score (1000=SwissProt, 0=Trembl):
+scoreLabel Minimum Score (1000=SwissProt, 0=Trembl)
 scoreFilter 0
 itemRgb on
 
-        track unipAli
-        shortLabel Alignment
-        longLabel UCSC alignment of UniProt proteins to genome
+        track unipAliSwissprot
+        shortLabel SwissProt Aln.
+        longLabel UCSC alignment of SwissProt proteins to genome
         priority 1
         parent uniprot
         visibility hide
         type bigPsl
-        bigDataUrl /gbdb/$D/uniprot/unipAli.bb
+        bigDataUrl /gbdb/$D/uniprot/unipAliSwissprot.bb
         searchIndex name
         urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
         labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
         mouseOverField protFullNames
-        itemRgb on
+        itemRgb off
+        color 2,12,120
+
+        track unipAliTrembl
+        shortLabel TrEMBL Aln.
+        longLabel UCSC alignment of TrEMBL proteins to genome
+        priority 1.5
+        parent uniprot off
+        visibility hide
+        type bigPsl
+        bigDataUrl /gbdb/$D/uniprot/unipAliTrembl.bb
+        searchIndex name
+        urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+        labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
+        mouseOverField protFullNames
+        itemRgb off
+        color 0,150,250
 
         track unipLocSignal
         shortLabel Signal Peptide
@@ -95,7 +111,7 @@ itemRgb on
         bigDataUrl /gbdb/$D/uniprot/unipDisulfBond.bb
 
         track unipModif
-        shortLabel Modifications
+        shortLabel AA Modifications
         longLabel UniProt Amino Acid Modifications
         priority 8
         parent uniprot
@@ -146,7 +162,7 @@ itemRgb on
         urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
         track unipConflict
-        shortLabel Conflicts
+        shortLabel Seq. Conflicts
         longLabel UniProt Sequence Conflicts
         priority 10
         parent uniprot
