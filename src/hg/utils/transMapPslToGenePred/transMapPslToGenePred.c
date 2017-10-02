@@ -440,26 +440,25 @@ if (mappedGp->cdsStart >= mappedGp->cdsEnd)
 return mappedGp;
 }
 
-static boolean haveAdjacentFrames(struct genePred *mappedGp, int iExon)
-/* do two block have adjacent frames?  */
+static boolean haveAdjacentMergedFrames(struct genePred *mappedGp, int iExon)
+/* Do two block have adjacent frames and will merging them keep frames contiguous?  */
 {
 assert(mappedGp->exonFrames[iExon] >= 0);
 assert(mappedGp->exonFrames[iExon+1] >= 0);
+int gapSize = (mappedGp->exonStarts[iExon+1] - mappedGp->exonEnds[iExon]);
 if (mappedGp->strand[0] == '+')
     {
     // how much of CDS is in this exon
     int cdsOff = max(mappedGp->exonStarts[iExon], mappedGp->cdsStart) - mappedGp->exonStarts[iExon];
-    int cdsIncr = genePredExonSize(mappedGp, iExon) - cdsOff;
-    return (frameIncr(mappedGp->exonFrames[iExon], cdsIncr)
-            == mappedGp->exonFrames[iExon+1]);
+    int cdsIncr = (genePredExonSize(mappedGp, iExon) - cdsOff) + gapSize;
+    return (frameIncr(mappedGp->exonFrames[iExon], cdsIncr) == mappedGp->exonFrames[iExon+1]);
     }
 else
     {
-    // how much of CDS is in nezxt exon
+    // how much of CDS is in next exon
     int cdsOff = mappedGp->exonEnds[iExon+1] - min(mappedGp->exonEnds[iExon+1], mappedGp->cdsEnd);
-    int cdsIncr = genePredExonSize(mappedGp, iExon+1) - cdsOff;
-    return (frameIncr(mappedGp->exonFrames[iExon+1], cdsIncr)
-            == mappedGp->exonFrames[iExon]);
+    int cdsIncr = (genePredExonSize(mappedGp, iExon+1) - cdsOff)  + gapSize;
+    return (frameIncr(mappedGp->exonFrames[iExon+1], cdsIncr) == mappedGp->exonFrames[iExon]);
     }
 }
 
@@ -473,7 +472,7 @@ static boolean canMergeFrames(struct genePred *mappedGp, int iExon)
 /* check if frames can be merged, -1 frames merge with with any adjacent
  * frame */
 {
-return hasAdjacentNonCoding(mappedGp, iExon) || haveAdjacentFrames(mappedGp, iExon);
+return hasAdjacentNonCoding(mappedGp, iExon) || haveAdjacentMergedFrames(mappedGp, iExon);
 }
 
 static boolean canMergeBlocks(struct genePred *mappedGp, int iExon)
