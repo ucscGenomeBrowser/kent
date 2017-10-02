@@ -949,20 +949,22 @@ _EOF_
   &HgAutomate::run("$centDbSql < $dbDbInsert");
 
   # Add a row to defaultDb if this is the first usage of $genome.
-  my $sql = "'select count(*) from defaultDb where genome = \"$genome\"'";
+  my $quotedGenome = $genome;
+  $quotedGenome =~ s/'/'"'"'/g;
+  my $sql = "'select count(*) from defaultDb where genome = \"$quotedGenome\"'";
   if (`echo $sql | $centDbSql` == 0) {
     $sql = "'INSERT INTO defaultDb (genome, name) " .
-      "VALUES (\"$genome\", \"$db\")'";
+      "VALUES (\"$quotedGenome\", \"$db\")'";
     &HgAutomate::run("echo $sql | $centDbSql");
   }
 
   # If $genome does not already appear in genomeClade, warn user that
   # they will have to manually add it.
-  $sql = "'select count(*) from genomeClade where genome = \"$genome\"'";
+  $sql = "'select count(*) from genomeClade where genome = \"$quotedGenome\"'";
   if (`echo $sql | $centDbSql` == 0) {
     &requireCladeAndPriority($genome);
     $sql = "'INSERT INTO genomeClade (genome, clade, priority) " .
-      "VALUES (\"$genome\", \"$clade\", $genomeCladePriority)'";
+      "VALUES (\"$quotedGenome\", \"$clade\", $genomeCladePriority)'";
     &HgAutomate::run("echo $sql | $centDbSql");
   }
 } # makeDbDb
