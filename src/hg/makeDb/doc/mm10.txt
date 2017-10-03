@@ -15708,8 +15708,7 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 cerAty1) \
 	> rbest.log 2>&1 &
-XXX - running - Thu Sep 28 08:17:39 PDT 2017
-    # real    352m12.077s
+    # real    345m49.786s
 
     mkdir /hive/data/genomes/cerAty1/bed/blastz.mm10.swap
     cd /hive/data/genomes/cerAty1/bed/blastz.mm10.swap
@@ -15725,8 +15724,7 @@ XXX - running - Thu Sep 28 08:17:39 PDT 2017
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cerAty1 mm10) \
 	> rbest.log 2>&1
-XXX - running - Thu Sep 28 13:05:19 PDT 2017
-    # real    383m10.761s
+    # real    305m14.804s
 
 ##############################################################################
 # LASTZ Coquerel's sifaka to mouse/Mm10 (DONE - 2017-09-28 - Hiram)
@@ -15759,15 +15757,14 @@ TMPDIR=/dev/shm
 	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
-XXX - running - Thu Sep 28 17:26:18 PDT 2017
-    #   real    371m15.075s
+    #   real    294m43.931s
 
     cat fb.mm10.chainProCoq1Link.txt
-    #	917680202 bases of 2652783500 (34.593%) in intersection
+    #	882327683 bases of 2652783500 (33.260%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 proCoq1) \
 	> rbest.log 2>&1 &
-    # real    352m12.077s
+    # real    411m5.774s
 
     mkdir /hive/data/genomes/proCoq1/bed/blastz.mm10.swap
     cd /hive/data/genomes/proCoq1/bed/blastz.mm10.swap
@@ -15776,14 +15773,14 @@ XXX - running - Thu Sep 28 17:26:18 PDT 2017
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    68m6.225s
+    #	real    62m48.333s
 
     cat fb.proCoq1.chainMm10Link.txt
-    #	903892923 bases of 2787289397 (32.429%) in intersection
+    #	863635783 bases of 2083764538 (41.446%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` proCoq1 mm10) \
 	> rbest.log 2>&1
-    # real    383m10.761s
+    # real    357m54.198s
 
 ##############################################################################
 # LASTZ White-faced sapajou to mouse/Mm10 (DONE - 2017-09-28 - Hiram)
@@ -15816,15 +15813,14 @@ TMPDIR=/dev/shm
 	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
-XXX - running - Thu Sep 28 17:41:28 PDT 2017
-    #   real    371m15.075s
+    #   real    293m40.906s
 
     cat fb.mm10.chainCebCap1Link.txt
-    #	917680202 bases of 2652783500 (34.593%) in intersection
+    #	882776669 bases of 2652783500 (33.277%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 cebCap1) \
 	> rbest.log 2>&1 &
-    # real    352m12.077s
+    # real    334m0.458s
 
     mkdir /hive/data/genomes/cebCap1/bed/blastz.mm10.swap
     cd /hive/data/genomes/cebCap1/bed/blastz.mm10.swap
@@ -15833,13 +15829,13 @@ XXX - running - Thu Sep 28 17:41:28 PDT 2017
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    68m6.225s
+    #	real    63m12.596s
 
     cat fb.cebCap1.chainMm10Link.txt
-    #	903892923 bases of 2787289397 (32.429%) in intersection
+    #	871126707 bases of 2610518382 (33.370%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cebCap1 mm10) \
 	> rbest.log 2>&1
-    # real    383m10.761s
+    # real    299m3.923s
 
 ##############################################################################
