@@ -30,7 +30,7 @@ itemRgb on
         track unipAliTrembl
         shortLabel TrEMBL Aln.
         longLabel UCSC alignment of TrEMBL proteins to genome
-        priority 1.5
+        priority 2
         parent uniprot off
         visibility hide
         type bigPsl
@@ -45,7 +45,7 @@ itemRgb on
         track unipLocSignal
         shortLabel Signal Peptide
         longLabel UniProt Signal Peptides
-        priority 2
+        priority 3
         parent uniprot
         visibility dense
         type bigBed 12 +
@@ -54,7 +54,7 @@ itemRgb on
         track unipLocExtra
         shortLabel Extracellular
         longLabel UniProt Extracellular Domain
-        priority 3
+        priority 4
         parent uniprot
         visibility dense
         type bigBed 12 +
@@ -64,7 +64,7 @@ itemRgb on
         track unipLocTransMemb
         shortLabel Transmembrane
         longLabel UniProt Transmembrane Domains
-        priority 4
+        priority 5
         parent uniprot
         visibility dense
         type bigBed 12 +
@@ -74,7 +74,7 @@ itemRgb on
         track unipLocCytopl
         shortLabel Cytoplasmic
         longLabel UniProt Cytoplasmic Domains
-        priority 5
+        priority 6
         parent uniprot
         visibility dense
         type bigBed 12 +
@@ -84,7 +84,7 @@ itemRgb on
         track unipChain
         shortLabel Chains
         longLabel UniProt Polypeptide Chains
-        priority 6
+        priority 7
         parent uniprot
         visibility dense
         type bigBed 12 +
@@ -94,7 +94,7 @@ itemRgb on
         track unipDomain
         shortLabel Domains
         longLabel UniProt Domains
-        priority 6.5
+        priority 8
         parent uniprot
         visibility dense
         type bigBed 12 +
@@ -104,7 +104,7 @@ itemRgb on
         track unipDisulfBond
         shortLabel Disulf. Bonds
         longLabel UniProt Disulfide Bonds
-        priority 7
+        priority 8
         parent uniprot
         visibility dense
         type bigBed 12 +
@@ -113,7 +113,7 @@ itemRgb on
         track unipModif
         shortLabel AA Modifications
         longLabel UniProt Amino Acid Modifications
-        priority 8
+        priority 9
         parent uniprot
         visibility dense
         type bigBed 12 +
@@ -123,7 +123,7 @@ itemRgb on
         track unipMut
         shortLabel Mutations
         longLabel UniProt Amino Acid Mutations
-        priority 8.5
+        priority 10
         parent uniprot
         visibility dense
         type bigBed 12 +
@@ -133,7 +133,7 @@ itemRgb on
         track unipStruct
         shortLabel Structure
         longLabel UniProt Protein Primary/Secondary Structure Annotations
-        priority 9
+        priority 11
         parent uniprot off
         group genes
         visibility hide
@@ -144,7 +144,7 @@ itemRgb on
         track unipOther
         shortLabel Other Annot.
         longLabel UniProt Other Annotations
-        priority 10
+        priority 11
         parent uniprot
         visibility dense
         type bigBed 12 +
@@ -154,7 +154,7 @@ itemRgb on
         track unipRepeat
         shortLabel Repeats
         longLabel UniProt Repeats
-        priority 10
+        priority 12
         parent uniprot
         visibility dense
         type bigBed 12 +
@@ -164,7 +164,7 @@ itemRgb on
         track unipConflict
         shortLabel Seq. Conflicts
         longLabel UniProt Sequence Conflicts
-        priority 10
+        priority 13
         parent uniprot
         visibility dense
         type bigBed 12 +
