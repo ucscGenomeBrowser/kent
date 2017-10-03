@@ -3520,15 +3520,15 @@ mouseOverField clinSign
 noScoreFilter on
 
     track clinvarMain
-    shortLabel ClinVar Nucl.
-    longLabel ClinVar Nucleotide Variants
+    shortLabel ClinVar Short Variants
+    longLabel ClinVar Short Variants < 100bp
     visibility pack
     parent clinvar
     priority 1
 
     track clinvarCnv
-    shortLabel ClinVar CNVs
-    longLabel ClinVar Copy-Number Variants
+    shortLabel ClinVar Long Variants
+    longLabel ClinVar Long Variants > 100bp (mostly Copy-Number Variants)
     visibility pack
     parent clinvar
     priority 2

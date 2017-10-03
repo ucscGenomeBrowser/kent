@@ -373,7 +373,9 @@ for line in ifh:
     blockSizes = str(int(end)-int(start))
     blockStarts = "0"
 
-    if dbVarAcc.startswith("nsv") or "copy number" in allType:
+    # used until Oct 2017
+    # if dbVarAcc.startswith("nsv") or "copy number" in allType:
+    if (int(end)-int(start))>100:
         isCnv = True
     else:
         isCnv = False
@@ -397,12 +399,9 @@ for line in ifh:
             itemRgb = "200,200,200"
 
     geneStr = geneSymbol
-    #print "XX", geneId, geneSymbol
     if geneId.isdigit() and geneId!="-1":
-        #print "adding pipe"
         geneStr = geneId+"|"+geneSymbol
     if len(geneStr)>250:
-        #print "shortening"
         geneStr = "not shown, too many genes"
         
     name = varId+"|"+name
