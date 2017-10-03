@@ -1,7 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
 # This file describes browser build for the eulFla1
-# Aotus nancymaae - Ma's night monkey
 
 # Assembly name:  Eflavifronsk33QCA
 # Organism name:  Eulemur flavifrons (Sclater's lemur)
@@ -227,18 +226,19 @@ taxId 87288
 # running repeat masker (DONE - 2017-10-02 - Hiram)
     mkdir /hive/data/genomes/eulFla1/bed/repeatMasker
     cd /hive/data/genomes/eulFla1/bed/repeatMasker
+    # RM doesn't recognize the scientific name.  It does recognize
+    # the top-level name:
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -smallClusterHub=ku eulFla1) > do.log 2>&1 &
-XXX - running - Mon Oct  2 14:31:19 PDT 2017
-    # real    650m26.222s
+        -species=eulemur -smallClusterHub=ku eulFla1) > do.log 2>&1 &
+    # real    471m32.191s
 
     cat faSize.rmsk.txt
-# 2861684817 bases (147245328 N's 2714439489 real 1429443047 upper
-#	1284996442 lower) in 28922 sequences in 1 files
-# Total size: mean 98944.9 sd 1012622.4 min 620 (NW_018502248v1)
-#	max 42888418 (NW_018505940v1) median 3826
-# %44.90 masked total, %47.34 masked real
+# 2115567618 bases (21464219 N's 2094103399 real 1265558057 upper
+#	828545342 lower) in 38366 sequences in 1 files
+# Total size: mean 55141.7 sd 161503.1 min 200 (LGHW01019419v1)
+#	max 3296881 (LGHW01002226v1) median 829
+# %39.16 masked total, %39.57 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -246,8 +246,8 @@ XXX - running - Mon Oct  2 14:31:19 PDT 2017
     # CC   RELEASE 20140131;
 
     time featureBits -countGaps eulFla1 rmsk
-    # 1285173500 bases of 2861684817 (44.910%) in intersection
-    # real    0m44.054s
+    # 829162700 bases of 2115567618 (39.193%) in intersection
+    # real    0m39.973s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -256,8 +256,8 @@ XXX - running - Mon Oct  2 14:31:19 PDT 2017
     # faster way to get the same result for high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' eulFla1 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    # total 1285173500.000000
-    # real    0m38.223s
+    # total 829162700.000000
+    # real    0m26.279s
 
 ##########################################################################
 # running simple repeat (DONE - 2017-10-02 - Hiram)
@@ -267,11 +267,10 @@ XXX - running - Mon Oct  2 14:31:19 PDT 2017
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409=5 eulFla1) > do.log 2>&1 &
-XXX - running - Mon Oct  2 14:31:54 PDT 2017
-    # real    10m16.197s
+    # real    20m28.539s
 
     cat fb.simpleRepeat
-    # 57707811 bases of 2714439490 (2.126%) in intersection
+    # 36541207 bases of 2094103399 (1.745%) in intersection
 
     # add to this simple repeat to rmsk:
     cd /hive/data/genomes/eulFla1
@@ -280,18 +279,18 @@ XXX - running - Mon Oct  2 14:31:54 PDT 2017
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa eulFla1.2bit stdout | faSize stdin > faSize.eulFla1.2bit.txt
     cat faSize.eulFla1.2bit.txt
-# 2861684817 bases (147245328 N's 2714439489 real 1428220108 upper
-#	1286219381 lower) in 28922 sequences in 1 files
-# Total size: mean 98944.9 sd 1012622.4 min 620 (NW_018502248v1)
-#	max 42888418 (NW_018505940v1) median 3826
-# %44.95 masked total, %47.38 masked real
+# 2115567618 bases (21464219 N's 2094103399 real 1264862321 upper
+#	829241078 lower) in 38366 sequences in 1 files
+# Total size: mean 55141.7 sd 161503.1 min 200 (LGHW01019419v1)
+#	max 3296881 (LGHW01002226v1) median 829
+# %39.20 masked total, %39.60 masked real
 
     # reset the 2bit gbdb  symlink:
     rm /gbdb/eulFla1/eulFla1.2bit
     ln -s `pwd`/eulFla1.2bit /gbdb/eulFla1/eulFla1.2bit
 
 #############################################################################
-# CREATE MICROSAT TRACK (TBD - 2017-08-22 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2017-10-03 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/eulFla1/bed/microsat
     cd /cluster/data/eulFla1/bed/microsat
@@ -300,100 +299,68 @@ XXX - running - Mon Oct  2 14:31:54 PDT 2017
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed eulFla1 microsat microsat.bed
-    # Read 33659 elements of size 4 from microsat.bed
+    # Read 10681 elements of size 4 from microsat.bed
 
 #############################################################################
-# ucscToINSDC table/track (TBD - 2017-09-25 - Hiram)
+# ucscToINSDC table/track (DONE - 2017-10-03 - Hiram)
     # the sequence here is working for a 'refseq' assembly with a chrM
     # situation may be specific depending upon what is available in the assembly
 
     mkdir /hive/data/genomes/eulFla1/bed/ucscToINSDC
     cd /hive/data/genomes/eulFla1/bed/ucscToINSDC
 
+    # there is no chrM sequence in this assembly
     # find accession for chrM
     grep chrM ../../eulFla1.agp
-# chrM    1       16469   1       O       NC_018116.1     1       16469   +
+# empty result
 
-    # use that accession here:
-    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-        ../../refseq/GCF_*structure/Primary_Assembly NC_018116.1
-    # this is actually ucscToRefSeq since this is a RefSeq assembly
-
-    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
-    rm -f ucscToINSDC.txt
-
-    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt | sort > refseqToUcsc.txt
-
-    # there is no INSDC name in the assembly_report for chrM/NC_018116.1
-    #  use the INSDC name from before: JN161100.1
-    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
-      | sed -e 's/na\b/JN161100.1/;' | awk '{printf "%s\t%s\n", $2, $1}' \
-         | sort > refseq.insdc.txt
-    # the sed \b means to match word
+    # standard procedure does not wrk here, there is no Primary_Assembly/
+    # hierarchy.  Simply make the list manually:
+    grep -v "^#" \
+        ../../genbank/GCA_001262665.1_Eflavifronsk33QCA_assembly_report.txt \
+           | cut -f5 | sort | while read C
+do
+  U=`echo $C | sed -e 's/\.1/v1/;'`
+  printf "%s\t%s\n" "${U}" "${C}"
+done | grep -v `cat ../../ucsc/duplicate.list` > ucscToINSDC.txt
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
 
-    # the tr commands avoid the problem of trying to use the -t argument
-    # to the join command which doesn't accept -t'\t' but instead has
-    # to use the unseen/can not copy command ctrl-v i
-    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
-       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
-           > ucscToINSDC.bed
-    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
-       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
-           > ucscToRefSeq.bed
+    join ucscToINSDC.txt name.coordinate.tab \
+       | awk '{printf "%s\t%d\t%d\t%s\n", $1,$3,$4,$2}' > ucscToINSDC.bed
 
-    # verify chrM is correct:
-    grep chrM *.bed
-# ucscToINSDC.bed:chrM    0       16469   JN161100.1
-# ucscToRefSeq.bed:chrM   0       16469   NC_018116.1
 
     # should be same line counts throughout:
     wc -l *
-    #	28922 name.coordinate.tab
-    #	28922 refseq.insdc.txt
-    #	28922 refseqToUcsc.txt
-    #	28922 ucscToINSDC.bed
-    #	28922 ucscToRefSeq.bed
-    #	28922 ucscToRefSeq.txt
+    #	38366 name.coordinate.tab
+    #	38366 ucscToINSDC.bed
+    #	38366 ucscToINSDC.txt
+
 
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
     # 14
     # use the 14 in this sed
     sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab eulFla1 ucscToINSDC stdin ucscToINSDC.bed
-    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 14
-    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
-         | hgLoadSqlTab eulFla1 ucscToRefSeq stdin ucscToRefSeq.bed
 
     # checkTableCoords should be silent to indicate no errors
     checkTableCoords eulFla1
 
     # should cover %100 entirely:
     featureBits -countGaps eulFla1 ucscToINSDC
-    # 2861684817 bases of 2861684817 (100.000%) in intersection
-    featureBits -countGaps eulFla1 ucscToRefSeq
-    # 2861684817 bases of 2861684817 (100.000%) in intersection
+    # 2115567618 bases of 2115567618 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2017-09-25 - Hiram)
+# add chromAlias table (DONE - 2017-10-03 - Hiram)
 
     mkdir /hive/data/genomes/eulFla1/bed/chromAlias
     cd /hive/data/genomes/eulFla1/bed/chromAlias
 
-    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' eulFla1 \
-        > ucsc.refseq.tab
     hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' eulFla1 \
         > ucsc.genbank.tab
 
-    # verify chrM is correct:
-    grep chrM *
-# ucsc.genbank.tab:chrM   JN161100.1      genbank
-# ucsc.refseq.tab:chrM    NC_018116.1     refseq
-
-    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab \
         | sort > eulFla1.chromAlias.tab
 
     hgLoadSqlTab eulFla1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
@@ -401,37 +368,40 @@ XXX - running - Mon Oct  2 14:31:54 PDT 2017
 
     # verify in the browser that the names can be used in the search box
     # just as if they were chromosome names, e.g.:
-    #   NC_018116.1:400-500
-    #   JN161100.1:600-700
+    #   LGHW01000002.1:400-500
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2017-09-25 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2017-10-03 - Hiram)
 
     cd ~/kent/src/hg/makeDb/trackDb/primate/eulFla1
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" eulFla1 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
- 112850 JYKP.1
-      1 NC_.1
+  38366 LGHWv1_1
+   6536 LGHWv1_10
+    288 LGHWv1_100
+    279 LGHWv1_101
+    ... ... etc ...
 
-    # implies a search rule of: '[JN][CY][KP0-9_]+(\.[0-9]+)?'
+
+    # implies a search rule of: 'LGHW[0-9]+([v0-9_]+)?'
 
     # verify this rule will find them all or eliminate them all:
     hgsql -N -e "select frag from gold;" eulFla1 | wc -l
-    # 112851
+    # 292741
 
     hgsql -N -e "select frag from gold;" eulFla1 \
-       | egrep -e '[JN][CY][KP0-9_]+(\.[0-9]+)?' | wc -l
-    # 112851
+       | egrep -e 'LGHW[0-9]+([v0-9_]+)?' | wc -l
+    # 292741
 
     hgsql -N -e "select frag from gold;" eulFla1 \
-       | egrep -v -e '[JN][CY][KP0-9_]+(\.[0-9]+)?' | wc -l
+       | egrep -v -e 'LGHW[0-9]+([v0-9_]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/rhesus/eulFla1/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [JN][CY][KP0-9_]+(\.[0-9]+)?
+termRegex LGHW[0-9]+([v0-9_]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -441,34 +411,35 @@ searchPriority 8
     # and the two chrM accessions, with and without the .1 and partial name
     # use: accessionName:n-m to display locations n to m on that accession
 
-    git commit -m 'add gold table search rule refs #20196' trackDb.ra
+  git commit -m 'adding gold assembly table search rule refs #20265' trackDb.ra
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2017-09-22 - Hiram)
+## WINDOWMASKER (DONE - 2017-10-03 - Hiram)
 
     mkdir /hive/data/genomes/eulFla1/bed/windowMasker
     cd /hive/data/genomes/eulFla1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev eulFla1) > do.log 2>&1
-    # real    222m45.822s
+    # real    177m42.461s
 
     # Masking statistics
     cat faSize.eulFla1.cleanWMSdust.txt
-# 2861684817 bases (147245328 N's 2714439489 real 1752382601 upper
-#	962056888 lower) in 28922 sequences in 1 files
-# Total size: mean 98944.9 sd 1012622.4 min 620 (NW_018502248v1)
-#	max 42888418 (NW_018505940v1) median 3826
-# %33.62 masked total, %35.44 masked real
+# 2115567618 bases (21464219 N's 2094103399 real 1479955562 upper
+#	614147837 lower) in 38366 sequences in 1 files
+# Total size: mean 55141.7 sd 161503.1 min 200 (LGHW01019419v1)
+#	max 3296881 (LGHW01002226v1) median 829
+# %29.03 masked total, %29.33 masked real
 
     cat fb.eulFla1.rmsk.windowmaskerSdust.txt
-    # 701551294 bases of 2861684817 (24.515%) in intersection
+    # 365950058 bases of 2115567618 (17.298%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2017-09-25 - Hiram)
+# cpgIslands - (DONE - 2017-10-03 - Hiram)
     mkdir /hive/data/genomes/eulFla1/bed/cpgIslands
     cd /hive/data/genomes/eulFla1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku eulFla1) > do.log 2>&1
+XXX - running - Tue Oct  3 14:29:10 PDT 2017
     # real    6m41.678s
 
     cat fb.eulFla1.cpgIslandExt.txt
@@ -505,11 +476,12 @@ searchPriority 8
     # 74646536 bases of 2725937399 (2.738%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2017-09-25 - Hiram)
+# genscan - (DONE - 2017-10-03 - Hiram)
     mkdir /hive/data/genomes/eulFla1/bed/genscan
     cd /hive/data/genomes/eulFla1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku eulFla1) > do.log 2>&1
+XXX - running - Tue Oct  3 14:29:46 PDT 2017
     # real    51m49.116s
 
     cat fb.eulFla1.genscan.txt
@@ -519,42 +491,43 @@ searchPriority 8
     #   55424862 bases of 2714439490 (2.042%) in intersection
 
 #############################################################################
-# augustus gene track (TBD - 2017-09-25 - Hiram)
+# augustus gene track (DONE - 2017-10-03 - Hiram)
 
     mkdir /hive/data/genomes/eulFla1/bed/augustus
     cd /hive/data/genomes/eulFla1/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev eulFla1) > do.log 2>&1
+XXX - running - Tue Oct  3 14:30:07 PDT 2017
     # real    242m45.000s
 
     cat fb.eulFla1.augustusGene.txt
     # 49595111 bases of 2714439490 (1.827%) in intersection
 
 #############################################################################
-# Create kluster run files (TBD - 2017-09-25 - Hiram)
+# Create kluster run files (DONE - 2017-10-03 - Hiram)
 
     # find 'real' base count for this assembly:  (numerator below)
     cd /hive/data/genomes/eulFla1
     head -1 faSize.eulFla1.2bit.txt
-# 2861684817 bases (147245328 N's 2714439489 real 1428220108 upper
-#	1286219381 lower) in 28922 sequences in 1 files
+# 2115567618 bases (21464219 N's 2094103399 real 1264862321 upper
+#	829241078 lower) in 38366 sequences in 1 files
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2714439489 / 2861349177 \) \* 1024
-    # ( 2714439489 / 2861349177 ) * 1024 = 971.424969
+    calc \( 2094103399 / 2861349177 \) \* 1024
+    # ( 2094103399 / 2861349177 ) * 1024 = 749.423348
 
-    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=700 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 100
     cd /hive/data/genomes/eulFla1
     time blat eulFla1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/eulFla1.11.ooc \
-        -repMatch=900
-    #   Wrote 32349 overused 11-mers to jkStuff/eulFla1.11.ooc
-    #	real    0m49.778s
+        -repMatch=700
+    # Wrote 25954 overused 11-mers to jkStuff/eulFla1.11.ooc
+    # real    0m34.771s
 
     # there are no non-bridged gaps
     #   check non-bridged gaps to see what the typical size is:
@@ -622,40 +595,43 @@ searchPriority 8
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # organism       mrnaCnt estCnt  refSeqCnt
-    # Aotus nancymaae 352     0       16
+    # Eulemur albifrons       1       0       0
+    # Eulemur fulvus  8       0       0
+    # Eulemur fulvus collaris 2       0       0
+    # Eulemur mongoz  2       0       0
 
     # edit etc/genbank.conf to add eulFla1 just before susScr3
 
-# eulFla1 (Ma's night monkey / Aotus nancymaae / taxId 37293)
+# eulFla1 (Sclater's lemur / Eulemur flavifrons / taxId 87288)
 eulFla1.serverGenome = /hive/data/genomes/eulFla1/eulFla1.2bit
 eulFla1.clusterGenome = /hive/data/genomes/eulFla1/eulFla1.2bit
 eulFla1.ooc = /hive/data/genomes/eulFla1/jkStuff/eulFla1.11.ooc
-eulFla1.lift = /hive/data/genomes/eulFla1/jkStuff/eulFla1.nonBridged.lft
-eulFla1.perChromTables = no
-eulFla1.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
-eulFla1.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
-eulFla1.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
-eulFla1.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
-eulFla1.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
-eulFla1.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+eulFla1.lift = no
+eulFla1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+eulFla1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+eulFla1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+eulFla1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+eulFla1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+eulFla1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
 eulFla1.downloadDir = eulFla1
-eulFla1.refseq.mrna.native.load  = yes
-eulFla1.refseq.mrna.xeno.load  = yes
+# there are no refseq mrna native
+eulFla1.refseq.mrna.native.load  = no
+eulFla1.refseq.mrna.xeno.load = yes
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
-eulFla1.genbank.mrna.xeno.load = yes
-eulFla1.genbank.mrna.xeno.loadDesc = no
-eulFla1.genbank.est.native.load = yes
-# eulFla1.upstreamGeneTbl = ensGene
-# eulFla1.upstreamMaf = multiz12way
-# /hive/data/genomes/eulFla1/bed/multiz12way/species.list
+eulFla1.genbank.mrna.xeno.load = no
+eulFla1.genbank.mrna.native.load = no
+eulFla1.genbank.est.native.load = no
+eulFla1.perChromTables = no
+
 
 # And edit src/lib/gbGenome.c to add new species.  Skipped
-#	static char *eulFlaNames[] = {"Aotus nancymaae", NULL};
-#	    {"eulFla", eulFlaNames},
+#	static char *eulFlaNames[] = {"Eulemur flavifrons", NULL};
+#           {"eulFla", eulFlaNames},
 
-    git commit -m \
-"Added eulFla1 - Ma's night monkey - Aotus nancymaae refs #20196" \
-       etc/genbank.conf src/lib/gbGenome.c
+
+    git commit -m 'adding eulFla1 and eulMac1 refs #20265 #20266' \
+	etc/genbank.conf src/lib/gbGenome.c
+
     git push
     # update /cluster/data/genbank/:
     make etc-update
@@ -665,10 +641,11 @@ eulFla1.genbank.est.native.load = yes
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial eulFla1
-    #  logFile: var/build/logs/2017.09.25-11:17:45.eulFla1.initalign.log
+XXX - running - Tue Oct  3 14:58:40 PDT 2017
+    #	logFile: var/build/logs/2017.10.03-14:57:13.eulFla1.initalign.log
     #   real    117m39.387s
 
-    tail -2  var/build/logs/2017.09.25-11:17:45.eulFla1.initalign.log
+    tail -2  var/build/logs/2017.10.03-14:57:13.eulFla1.initalign.log
 # hgwdev 2017.09.25-13:12:38 eulFla1.initalign: Succeeded: eulFla1
 # hgwdev 2017.09.25-13:15:25 eulFla1.initalign: finish
 
