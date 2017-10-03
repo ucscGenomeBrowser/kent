@@ -33,7 +33,7 @@ errAbort(
   "\n"
 
   "Convert PSL alignments from transmap to genePred.  It specifically handles\n"
-  "alignments where the source gene is an genomic annotations in genePred\n"
+  "alignments where the source gene is a genomic annotations in genePred\n"
   "format, that are converted to PSL for mapping and using this program to\n"
   "create a new genePred.\n"
   "\n"
