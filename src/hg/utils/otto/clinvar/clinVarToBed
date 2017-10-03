@@ -27,31 +27,43 @@ clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSi
 # ==== FUNCTIONs =====
 
 def shortenName(name):
-    "make the clinvar name shorter "
+    "make the clinvar name shorter and keep a long version for the mouse over "
     cnvMatch = cnvRe.match(name)
     hgvsMatch = hgvsRe.match(name)
+
+    if ":" in name:
+        longName = name.split(":")[0]
+    else:
+        longName = name
+
+    shortName = name
+
     if cnvMatch != None:
         # some names include the original assembly as a prefix
         band, copy = cnvMatch.groups()
         if copy == None:
             copy = ""
-        name = band+copy
-    #elif hgvsMatch != None:
-        # some names include the whole hgvs desc, we strip the gene name + acc
-        #name = hgvsMatch.groups()[2]
+        shortName = band+copy
     elif name.startswith("GRCh"):
         print name
         assert False # name that starts with GRCh but does not match our regex should not happen
+    #elif "del" in name:
+        #shortName = "del"
+    #elif "ins" in name:
+        #shortName = "ins"
+    #elif "dup" in name:
+        #shortName = "dup"
     elif "." in name:
         # many names look like NM_000274.3(OAT):c.550_552delGCT (p.Ala184del)
         # so we remove the gene and the protein description
         if ":" in name:
             name = name.split(":")[1]
+            longName = name.split(" ")[0]
         name = name.split(" ")[0]
 
         delMatch = delRe.match(name)
         if delMatch!=None:
-            return name[-3:]
+            shortName = name[-3:]
 
         posMatch = posRe.match(name)
         if posMatch!=None:
@@ -62,8 +74,8 @@ def shortenName(name):
                 dele = ""
             if ins==None:
                 ins = ""
-            name = dup+dele+ins+pos
-    return name
+            shortName = dup+dele+ins+pos
+    return shortName, longName
 
 def lastMonth(d,x=1):
     """ returns same day as this month, but last month, e.g. for 2013-01-01 
@@ -241,7 +253,8 @@ def reviewStatusToHtmlStars(reviewStatus):
     htmlStr = "".join(htmlList)
     htmlStr += "&nbsp;&nbsp;<small>based on: %s</small>" % reviewStatus
 
-    return htmlStr
+    asciiDesc = "%d stars" % starCount
+    return htmlStr, asciiDesc, starCount
 
 # ----------- MAIN --------------
 if args==[] and not options.auto:
@@ -287,8 +300,8 @@ cnvRe = re.compile(r'GRCh[0-9]*/hg[0-9]* ([XY0-9pq.-]+)\([XYa-z_:0-9.-]+\)(x[0-9
 
 hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_()-]+)')
 
-# e.g.(13359800_13371688)_(13371779_13505931)del
-delRe = re.compile(r'g.\([?0-9()_-]+(del|dup|ins)')
+# e.g. g.(13359800_13371688)_(13371779_13505931)del
+delRe = re.compile(r'g\.\([?0-9()_-]+(del|dup|ins)')
 
 # e.g.
 # c.80_83delGGATinsTGCTGTAAACTGTAACTGTAAA
@@ -345,10 +358,14 @@ for line in ifh:
     if chrom=="chrMT": # why does NCBI use chrMT but we use chrM ?
         chrom = "chrM"
 
-    shortName = shortenName(name)
+    shortName, longName = shortenName(name)
+
     if len(shortName)>17:
         shortName = shortName[:15]+"..."
         longCount+=1
+
+    if len(longName)>60:
+        longName = longName[:60]+"..."
 
     if start=="" or end=="":
         print "undefined start or end coordinate. record %s"% irvcAcc
@@ -375,6 +392,7 @@ for line in ifh:
 
     # used until Oct 2017
     # if dbVarAcc.startswith("nsv") or "copy number" in allType:
+    # now using just size on genome, see #20268
     if (int(end)-int(start))>100:
         isCnv = True
     else:
@@ -409,13 +427,16 @@ for line in ifh:
 
     phenotypeIds = accListToHtml(phenotypeIds)
 
-    starRatingHtml = reviewStatusToHtmlStars(reviewStatus)
+    starRatingHtml, asciiStars, starCount = reviewStatusToHtmlStars(reviewStatus)
 
-    row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
+    mouseOverParts = [longName, clinSign, asciiStars]
+    mouseOver = ", ".join(mouseOverParts)
+
+    row = [chrom, start, end, shortName, str(starCount), strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
         name, clinSign, starRatingHtml, allType, geneStr,
         snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeList, phenotypeIds, origin, assembly, cytogenetic,
-        hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds]
+        hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, mouseOver]
 
     # replace clinvar's placeholders with real empty fields
     newRow = []

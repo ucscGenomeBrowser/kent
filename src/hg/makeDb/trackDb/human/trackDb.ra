@@ -3516,8 +3516,8 @@ visibility hide
 type bigBed 12 .
 itemRgb on
 urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.nlm.nih.gov/gene/$$" snpId="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="https://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
-mouseOverField clinSign
-noScoreFilter on
+mouseOverField _mouseOver
+scoreLabel ClinVar Star-Rating (0-4)
 
     track clinvarMain
     shortLabel ClinVar Short Variants
