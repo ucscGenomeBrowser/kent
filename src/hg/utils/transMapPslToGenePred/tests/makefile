@@ -35,7 +35,8 @@ fill30Test: mkdirs
 	genePredCheck -verbose=0 output/$@.mapped.gp
 	${diff} expected/$@.mapped.gp output/$@.mapped.gp
 
-# two base genomic insertion in CDS
+# ENST00000625058.1 - two base genomic insertion in CDS
+# ENST00000486585.1 - incomplete CDS start and maps to opposite strand
 cds2InsertTest: mkdirs
 	${transMapPslToGenePred} -nonCodingGapFillMax=30 -codingGapFillMax=30 input/chimp.src.gp input/chimp.mapped.psl output/$@.mapped.gp
 	genePredCheck -verbose=0 output/$@.mapped.gp
