@@ -95,6 +95,7 @@ DBS = \
 	equCab2 \
 	eriEur1 eriEur2 \
 	eulFla1 \
+	eulMac1 \
 	falciparum \
 	felCat3 felCat4 felCat5  felCat8 \
 	fr1 fr2 fr3 \
