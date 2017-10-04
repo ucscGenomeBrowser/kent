@@ -176,6 +176,10 @@ itemRgb on
         bigDataUrl /gbdb/$D/uniprot/unipConflict.bb
         urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 
-searchTable unipFullSeq
+searchTable unipAliSwissprot
 searchType bigBed
-searchDescription UniProt Protein annotations
+searchDescription SwissProt Proteins mapped to the genome by UCSC
+
+searchTable unipAliTrembl
+searchType bigBed
+searchDescription TrEMBL Proteins mapped to the genome by UCSC
