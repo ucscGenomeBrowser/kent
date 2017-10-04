@@ -422,6 +422,9 @@ for line in ifh:
     if len(geneStr)>250:
         geneStr = "not shown, too many genes"
         
+    if name=="":
+        name = "No display name was provided by ClinVar for this variant"
+
     name = varId+"|"+name
     otherIds = accListToHtml(otherIds)
 
