@@ -15839,3 +15839,117 @@ TMPDIR=/dev/shm
     # real    299m3.923s
 
 ##############################################################################
+# LASTZ White-faced spapjou/cebCap1 vs. mouse/Mm10 (DONE - 2017-10-03 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzCebCap1.2017-10-03
+    cd /hive/data/genomes/mm10/bed/lastzCebCap1.2017-10-03
+
+    printf '# White-faced sapajou vs. mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: cebCap1 - White-faced sapajou - Cebus capucinus imitator
+SEQ2_DIR=/hive/data/genomes/cebCap1/cebCap1.2bit
+SEQ2_LEN=/hive/data/genomes/cebCap1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=18
+
+BASE=/hive/data/genomes/mm10/bed/lastzCebCap1.2017-10-03
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm10CebCap1
+    time (doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #   real    206m12.413s
+
+    cat fb.mm10.chainCebCap1Link.txt
+    #	882776669 bases of 2652783500 (33.277%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 cebCap1) \
+	> rbest.log 2>&1 &
+XXX - running - Wed Oct  4 15:44:23 PDT 2017
+    # real    334m0.458s
+
+    mkdir /hive/data/genomes/cebCap1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/cebCap1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCebCap1.2017-10-03/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    63m12.596s
+
+    cat fb.cebCap1.chainMm10Link.txt
+    #	871126707 bases of 2610518382 (33.370%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cebCap1 mm10) \
+	> rbest.log 2>&1
+    # real    299m3.923s
+
+##############################################################################
+# LASTZ Sclater's lemur mouse/Mm10 (DONE - 2017-10-04 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzEulFla1.2017-10-04
+    cd /hive/data/genomes/mm10/bed/lastzEulFla1.2017-10-04
+
+    printf '# Sclater_s lemur vs. mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: eulFla1 - Sclater_s lemur - Eulemur flavifrons
+SEQ2_DIR=/hive/data/genomes/eulFla1/eulFla1.2bit
+SEQ2_LEN=/hive/data/genomes/eulFla1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=18
+
+BASE=/hive/data/genomes/mm10/bed/lastzEulFla1.2017-10-04
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm10EulFla1
+    time (doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+XXX - running - Wed Oct  4 15:53:30 PDT 2017
+    #   real    206m12.413s
+
+    cat fb.mm10.chainEulFla1Link.txt
+    #	882776669 bases of 2652783500 (33.277%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 eulFla1) \
+	> rbest.log 2>&1 &
+    # real    334m0.458s
+
+    mkdir /hive/data/genomes/eulFla1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/eulFla1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzEulFla1.2017-10-04/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    63m12.596s
+
+    cat fb.eulFla1.chainMm10Link.txt
+    #	871126707 bases of 2610518382 (33.370%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulFla1 mm10) \
+	> rbest.log 2>&1
+    # real    299m3.923s
+
+##############################################################################
