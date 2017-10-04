@@ -195,14 +195,17 @@ if (type == NULL)
     else
         errAbort("Unrecognized bigData type of file or url '%s'", fileOrUrl);
     }
-if (sameString(type, "bigBed") || sameString("bigGenePred", type))
-    streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
+if (startsWith("big", type))
+    {
+    if (startsWithWord("bigWig", type))
+        streamer = annoStreamBigWigNew(fileOrUrl, assembly);
+    else
+        streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
+    }
 else if (sameString(type, "vcfTabix"))
     streamer = annoStreamVcfNew(fileOrUrl, indexUrl, TRUE, assembly, maxOutRows);
 else if (sameString(type, "vcf"))
     streamer = annoStreamVcfNew(fileOrUrl, NULL, FALSE, assembly, maxOutRows);
-else if (sameString(type, "bigWig"))
-    streamer = annoStreamBigWigNew(fileOrUrl, assembly);
 else if (sameString(type, "pgSnp"))
     streamer = annoStreamTabNew(fileOrUrl, assembly, pgSnpFileAsObj(), maxOutRows);
 else if (sameString(type, "bam"))
@@ -250,15 +253,13 @@ else if (sameString("bam", tdb->type))
     {
     warn("Sorry, BAM is not yet supported");
     }
-else if (startsWith("bigBed", tdb->type) || sameString("bigGenePred", tdb->type))
+else if (startsWith("big", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
-    streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
-    }
-else if (startsWith("bigWig", tdb->type))
-    {
-    char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
-    streamer = annoStreamBigWigNew(fileOrUrl, assembly); //#*** no maxOutRows support
+    if (startsWithWord("bigWig", tdb->type))
+        streamer = annoStreamBigWigNew(fileOrUrl, assembly); //#*** no maxOutRows support
+    else
+        streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
     }
 else if (sameString("factorSource", tdb->type) &&
          dbTableMatchesAutoSql(dataDb, tdb->table, factorSourceAsObj()))
@@ -284,12 +285,12 @@ struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, char *indexUrl, st
 struct annoStreamer *streamer = NULL;
 struct annoGrator *grator = NULL;
 char *type = customTrackTypeFromBigFile(fileOrUrl);
-if (sameString(type, "bigBed") || sameString("bigGenePred", type))
+if (startsWithWord("bigWig", type))
+    grator = annoGrateBigWigNew(fileOrUrl, assembly, agwmAverage);
+else if (startsWith("big", type))
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
 else if (sameString(type, "vcfTabix"))
     streamer = annoStreamVcfNew(fileOrUrl, indexUrl, TRUE, assembly, maxOutRows);
-else if (sameString(type, "bigWig"))
-    grator = annoGrateBigWigNew(fileOrUrl, assembly, agwmAverage);
 else if (sameString(type, "bam"))
     errAbort("Sorry, BAM is not yet supported");
 else
@@ -362,15 +363,15 @@ static struct asObject *getAutoSqlForType(char *db, char *chrom, struct trackDb 
 /* Return an asObject for tdb->type if recognized as a hub or custom track type. */
 {
 struct asObject * asObj = NULL;
-if (startsWith("wig", tdb->type) || startsWith("bigWig", tdb->type))
+if (startsWith("wig", tdb->type) || startsWithWord("bigWig", tdb->type))
     asObj = annoStreamBigWigAsObject();
-else if (startsWith("vcf", tdb->type))
-    asObj = vcfAsObj();
-else if (startsWith("bigBed", tdb->type) || sameString("bigGenePred", tdb->type))
+else if (startsWith("big", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(db, tdb, tdb->table, chrom);
     asObj = bigBedFileAsObjOrDefault(fileOrUrl);
     }
+else if (startsWith("vcf", tdb->type))
+    asObj = vcfAsObj();
 else if (sameString("pgSnp", tdb->type))
     asObj = pgSnpAsObj();
 else if (sameString("bam", tdb->type) || sameString("maf", tdb->type))

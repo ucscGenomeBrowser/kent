@@ -365,7 +365,8 @@ var FieldSelect = React.createClass({
                 );
             } else {
                 return (
-                    <Modal title='Choose Fields'>
+                    <Modal title='Choose Fields'
+                           path={this.props.path} update={this.props.update}>
                       <Icon type='spinner' />
                     </Modal>
                 );
