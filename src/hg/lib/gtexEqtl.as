@@ -15,5 +15,5 @@ table gtexEqtl
     int distance;      "Distance from TSS"
     float effectSize;  "Effect size (FPKM)"
     float pValue;      "Nominal p-value"
-    float causalProb;  "Probability variant is in 95% credible set"
+    float causalProb;  "Probability variant is causal"
     )

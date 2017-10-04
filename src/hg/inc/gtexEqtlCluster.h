@@ -25,7 +25,7 @@ struct gtexEqtlCluster
     char **expNames;	/* Comma separated list of experiment names (e.g. tissue or gene) */
     float *expScores;	/* Comma separated list of effect size values */
     float *expPvals;	/* Comma separated list of -log10 transformed p-values */
-    float *expProbs;	/* Comma separated list of probability variant is in causal set */
+    float *expProbs;	/* Comma separated list of probability variant is causal */
     };
 
 struct gtexEqtlCluster *gtexEqtlClusterLoadByQuery(struct sqlConnection *conn, char *query);

@@ -17,7 +17,7 @@ CREATE TABLE gtexEqtlCluster (
     expNames longblob not null,	# Comma separated list of experiment names (e.g. tissue or gene)
     expScores longblob not null,	# Comma separated list of effect size values
     expPvals longblob not null,	# Comma separated list of -log10 transformed p-values
-    expProbs longblob not null,	# Comma separated list of probability variant is in causal set
+    expProbs longblob not null,	# Comma separated list of probabilities variant is causal
               #Indices
     INDEX chrom (chrom,bin),
     INDEX gene  (target)
