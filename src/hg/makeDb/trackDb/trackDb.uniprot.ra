@@ -1,5 +1,5 @@
 track uniprot
-shortLabel UniProt Proteins
+shortLabel UniProt
 longLabel UniProt SwissProt/TrEMBL Protein Annotations
 group genes
 visibility hide
