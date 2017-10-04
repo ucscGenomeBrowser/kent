@@ -1,12 +1,14 @@
 <h2>Description</h2>
 <p>
-This track shows genetic variants likely affecting gene expression in 44 human tissues from the
+This track shows genetic variants likely affecting proximal gene expression in 44 human tissues 
+from the
 <a target="_blank" href="https://www.genome.gov/27543767/">Genotype-Tissue Expression (GTEx)</a> V6 
 data release. 
 The data items displayed are gene expression quantitative trait loci within 1MB of 
-gene transcription start sites (cis-eQTL's), identified as significant and likely causal (95% credible set).
-Each eQTL annotation includes the effect size on gene expression, the significance of the identification,
-and the probability the eQTL is in the credible set.
+gene transcription start sites (cis-eQTLs), significantly associated with gene expression and in 
+the credible set of variants for the gene at a high confidence level (95%).
+Each eQTL annotation includes the significance of the association, effect size on gene expression, 
+and the probability the eQTL is causal.
 </p>
 
 <h2>Display Conventions</h2>
@@ -20,8 +22,8 @@ The eQTL item color indicates the effect size attributed to the eQTL:
 <tr><td style='color: cyan;'>cyan</td><td>&nbsp;&nbsp;high negative</td></tr>
 </table>
 </ul>
-Effect size is the regression slope, computed from the effect of the alternative allele vs. the reference in
-FPKM units, based on quantile normalized expression tables.
+Effect size is the regression slope, computed from the effect of the alternative allele vs. 
+the reference in FPKM units, based on quantile normalized expression tables.
 For display purposes, An arbitrary cutoff of +- 2.0 FPKM defines high effect size.
 </p>
 <h3>Combined eQTL track</h3>
@@ -41,7 +43,7 @@ GTEx Combined eQTL Track Settings: hg19.</a>
 <h3>Tissue eQTL tracks</h3>
 <p>
 This track is a composite track containing 44 subtracks representing the GTEx eQTL tissues.
-Each subtrack contains all GTEx/CAVIAR eQTL's identified for that tissue. 
+Each subtrack contains all GTEx/CAVIAR eQTLs identified for that tissue. 
 </br><a target="_self" href="../cgi-bin/hgTrackUi?db=hg19&g=gtexEqtlTissue">
 GTEx 44 Tissues eQTL Track Settings: hg19.</a>
 </p>
@@ -52,15 +54,16 @@ Laboratory and RNA-seq analysis methods for GTEx V6 are summarized in the
 <a target="_blank" href="/cgi-bin/hgGtexTrackSettings">GTEx Gene Track</a> description page.
 </p>
 <p>
-Cis-eQTL's were identified from GTEx RNA-seq and genotype data (variants with minor allele frequency >= 1%) 
-in 44 tissues (those with sample size >=70) using 
+Cis-eQTL's were identified from GTEx RNA-seq and genotype data (variants with minor allele 
+frequency >= 1%) in 44 tissues (those with sample size >=70) using 
 the <a target="_blank" href="http://fastqtl.sourceforge.net">FastQTL</a> mapper at 5% FDR threshold, 
 by the GTEx Laboratory, Data Analysis and Coordinating Center (LDACC), as part of the GTEx project v6p analysis.  
 These cis-eQTL's were then analyzed together with genome variation information (LD) using the 
 <a target="_blank" href="http://genetics.cs.ucla.edu/caviar/">CAVIAR</a> statistical framework
-to quantify the probability a variant is causal, at the Eskin lab at UCLA, as part of GTEx downstream analysis.
-The UCSC track was created using the CAVIAR 95% credible set, with significance p-values and effect sizes 
-from the LDACC analysis.
+to quantify the probability a variant is causal, at the Eskin lab at UCLA, as part of GTEx downstream 
+analysis.
+The UCSC track was created using the CAVIAR 95% credible set, with significance p-values and 
+effect sizes from the LDACC analysis.
 </p>
 <p>
 Raw data for these analyses are available from dbGaP (phs000424.v6.p1).
