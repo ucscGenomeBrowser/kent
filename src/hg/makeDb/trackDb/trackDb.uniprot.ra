@@ -50,6 +50,8 @@ itemRgb on
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipLocSignal.bb
+        color 255,0,150
+        itemRgb off
 
         track unipLocExtra
         shortLabel Extracellular
@@ -60,6 +62,7 @@ itemRgb on
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipLocExtra.bb
         color 0,150,255
+        itemRgb off
 
         track unipLocTransMemb
         shortLabel Transmembrane
@@ -70,6 +73,7 @@ itemRgb on
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipLocTransMemb.bb
         color 0,150,0
+        itemRgb off
 
         track unipLocCytopl
         shortLabel Cytoplasmic
@@ -79,7 +83,8 @@ itemRgb on
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipLocCytopl.bb
-        color 0,0,120
+        color 255,150,0
+        itemRgb off
 
         track unipChain
         shortLabel Chains

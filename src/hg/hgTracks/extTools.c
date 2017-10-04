@@ -31,7 +31,18 @@ void printExtMenuData(char *chromName)
 {
 if (!extToolsEnabled())
     return;
-struct extTool *extTools = readExtToolRa("extTools.ra");
+
+struct extTool *extTools = NULL;
+
+// we allow an alternative location in /gbdb/hgFixed
+// This means that we do not have to do a build patch when 
+// we have to change this .ra file and can do it with a simple
+// file push to the RR
+if (fileExists("/gbdb/hgFixed/extTools.ra"))
+    extTools = readExtToolRa("/gbdb/hgFixed/extTools.ra");
+else
+    extTools = readExtToolRa("extTools.ra");
+
 struct extTool *et;
 struct dyString *dy = dyStringNew(1024);
 dyStringAppend(dy, "extTools = [\n");
