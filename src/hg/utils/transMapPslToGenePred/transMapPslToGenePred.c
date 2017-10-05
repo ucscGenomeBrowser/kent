@@ -51,7 +51,7 @@ errAbort(
   "   in length.  Only coding gaps that are a multiple of three will be fill,\n"
   "   with the max rounded down.\n"
   "  -noBlockMerge - don't do any block merging of genePred, even of adjacent blocks.\n"
-  "   Mainly for debugging.\n"
+  "   This is mainly for debugging.\n"
   "\n");
 }
 

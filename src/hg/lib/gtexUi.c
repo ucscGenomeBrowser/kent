@@ -496,7 +496,7 @@ void gtexEqtlUiGene(struct cart *cart, char *track, struct trackDb *tdb)
 // TODO: autocomplete
 {
 char cartVar[1024];
-puts("<b>Limit to eQTLs for gene: </b>\n");
+puts("<b>Filter by gene: </b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_EQTL_GENE);
 char *gene = cartCgiUsualString(cart, cartVar, "");
 cgiMakeTextVar(cartVar, gene, 20);

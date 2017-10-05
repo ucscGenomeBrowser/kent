@@ -12,5 +12,5 @@ table gtexEqtlCluster
     string[expCount] expNames; "Comma separated list of experiment names (e.g. tissue or gene)"
     float[expCount] expScores; "Comma separated list of effect size values"
     float[expCount] expPvals; "Comma separated list of -log10 transformed p-values"
-    float[expCount] expProbs; "Comma separated list of probability variant is in 95% credible set"
+    float[expCount] expProbs; "Comma separated list of probabilities variant is causal"
     )
