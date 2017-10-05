@@ -1,0 +1,415 @@
+track gtexEqtlCluster
+type bed 5 +
+shortLabel GTEx Combined eQTL
+longLabel Combined Expression QTLs from 44 Tissues from GTEx (midpoint release, V6)
+html gtexEqtl
+group regulation
+exonNumbers off
+dataVersion GTEx Analysis V6p (https://www.gtexportal.org/home/datasets)
+
+searchTable gtexEqtlCluster
+searchMethod prefix
+searchType bed
+termRegex rs[0-9]+
+searchPriority 11.5
+padding 250
+semiShortCircuit 1
+
+track gtexEqtlTissue
+type bed 9 +
+compositeTrack on
+allButtonPair on
+dragAndDrop subTracks
+shortLabel GTEx Tissue eQTL
+longLabel Expression QTLs in 44 tissues from GTEx (midpoint release, V6)
+darkerLabels on
+visibility dense
+showSubtrackColorOnUi on
+group regulation
+exonNumbers off
+maxItems 200
+altColor 0,0,0
+effectSizeFilter -9265.0:15363.0
+effectSizeFilterLimits -9265.0:15363.0
+effectSizeFilterByRange on
+causalProbFilter 0:1.0
+causalProbFilterLimits 0:1.0
+noScoreFilter on
+url https://www.gtexportal.org/home/bubbleHeatmapPage/$$
+urlLabel GTEx portal eQTL visualizer: 
+bedNameLabel Variant/Gene
+html gtexEqtl
+itemRgb on
+dataVersion GTEx Analysis V6p (https://www.gtexportal.org/home/datasets)
+
+    track gtexEqtlTissueAdiposeSubcut
+    parent gtexEqtlTissue on
+    shortLabel adiposeSubcut
+    longLabel Expression QTL in Adipose_Subcutaneous from GTEx V6
+    color 255,165,79
+    idInUrlSql select gene from gtexEqtlTissueAdiposeSubcut where name='%s'
+
+    track gtexEqtlTissueAdiposeVisceral
+    parent gtexEqtlTissue on
+    shortLabel adiposeVisceral
+    longLabel Expression QTL in Adipose_Visceral_Omentum from GTEx V6
+    color 238,154,0
+    idInUrlSql select gene from gtexEqtlTissueAdiposeVisceral where name='%s'
+
+    track gtexEqtlTissueAdrenalGland
+    parent gtexEqtlTissue on
+    shortLabel adrenalGland
+    longLabel Expression QTL in Adrenal_Gland from GTEx V6
+    color 143,188,143
+    idInUrlSql select gene from gtexEqtlTissueAdrenalGland where name='%s'
+
+    track gtexEqtlTissueArteryAorta
+    parent gtexEqtlTissue on
+    shortLabel arteryAorta
+    longLabel Expression QTL in Artery_Aorta from GTEx V6
+    color 139,28,98
+    idInUrlSql select gene from gtexEqtlTissueArteryAorta where name='%s'
+
+    track gtexEqtlTissueArteryCoronary
+    parent gtexEqtlTissue on
+    shortLabel arteryCoronary
+    longLabel Expression QTL in Artery_Coronary from GTEx V6
+    color 238,106,80
+    idInUrlSql select gene from gtexEqtlTissueArteryCoronary where name='%s'
+
+    track gtexEqtlTissueArteryTibial
+    parent gtexEqtlTissue on
+    shortLabel arteryTibial
+    longLabel Expression QTL in Artery_Tibial from GTEx V6
+    color 255,0,0
+    idInUrlSql select gene from gtexEqtlTissueArteryTibial where name='%s'
+
+    track gtexEqtlTissueBladder
+    parent gtexEqtlTissue on
+    shortLabel bladder
+    longLabel Expression QTL in Bladder from GTEx V6
+    color 205,183,158
+    idInUrlSql select gene from gtexEqtlTissueBladder where name='%s'
+
+    track gtexEqtlTissueBrainAmygdala
+    parent gtexEqtlTissue on
+    shortLabel brainAmygdala
+    longLabel Expression QTL in Brain_Amygdala from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainAmygdala where name='%s'
+
+    track gtexEqtlTissueBrainAnCinCortex
+    parent gtexEqtlTissue on
+    shortLabel brainAnCinCortex
+    longLabel Expression QTL in Brain_Anterior_cingulate_cortex_BA24 from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainAnCinCortex where name='%s'
+
+    track gtexEqtlTissueBrainCaudate
+    parent gtexEqtlTissue on
+    shortLabel brainCaudate
+    longLabel Expression QTL in Brain_Caudate_basal_ganglia from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainCaudate where name='%s'
+
+    track gtexEqtlTissueBrainCerebelHemi
+    parent gtexEqtlTissue on
+    shortLabel brainCerebelHemi
+    longLabel Expression QTL in Brain_Cerebellar_Hemisphere from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainCerebelHemi where name='%s'
+
+    track gtexEqtlTissueBrainCerebellum
+    parent gtexEqtlTissue on
+    shortLabel brainCerebellum
+    longLabel Expression QTL in Brain_Cerebellum from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainCerebellum where name='%s'
+
+    track gtexEqtlTissueBrainCortex
+    parent gtexEqtlTissue on
+    shortLabel brainCortex
+    longLabel Expression QTL in Brain_Cortex from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainCortex where name='%s'
+
+    track gtexEqtlTissueBrainFrontCortex
+    parent gtexEqtlTissue on
+    shortLabel brainFrontCortex
+    longLabel Expression QTL in Brain_Frontal_Cortex_BA9 from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainFrontCortex where name='%s'
+
+    track gtexEqtlTissueBrainHippocampus
+    parent gtexEqtlTissue on
+    shortLabel brainHippocampus
+    longLabel Expression QTL in Brain_Hippocampus from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainHippocampus where name='%s'
+
+    track gtexEqtlTissueBrainHypothalamus
+    parent gtexEqtlTissue on
+    shortLabel brainHypothalamus
+    longLabel Expression QTL in Brain_Hypothalamus from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainHypothalamus where name='%s'
+
+    track gtexEqtlTissueBrainNucAccumbens
+    parent gtexEqtlTissue on
+    shortLabel brainNucAccumbens
+    longLabel Expression QTL in Brain_Nucleus_accumbens_basal_ganglia from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainNucAccumbens where name='%s'
+
+    track gtexEqtlTissueBrainPutamen
+    parent gtexEqtlTissue on
+    shortLabel brainPutamen
+    longLabel Expression QTL in Brain_Putamen_basal_ganglia from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainPutamen where name='%s'
+
+    track gtexEqtlTissueBrainSpinalcord
+    parent gtexEqtlTissue on
+    shortLabel brainSpinalcord
+    longLabel Expression QTL in Brain_Spinal_cord_cervical_c-1 from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainSpinalcord where name='%s'
+
+    track gtexEqtlTissueBrainSubstanNigra
+    parent gtexEqtlTissue on
+    shortLabel brainSubstanNigra
+    longLabel Expression QTL in Brain_Substantia_nigra from GTEx V6
+    color 238,238,0
+    idInUrlSql select gene from gtexEqtlTissueBrainSubstanNigra where name='%s'
+
+    track gtexEqtlTissueBreastMamTissue
+    parent gtexEqtlTissue on
+    shortLabel breastMamTissue
+    longLabel Expression QTL in Breast_Mammary_Tissue from GTEx V6
+    color 0,205,205
+    idInUrlSql select gene from gtexEqtlTissueBreastMamTissue where name='%s'
+
+    track gtexEqtlTissueXformedlymphocytes
+    parent gtexEqtlTissue on
+    shortLabel xformedlymphocytes
+    longLabel Expression QTL in Cells_EBV-transformed_lymphocytes from GTEx V6
+    color 238,130,238
+    idInUrlSql select gene from gtexEqtlTissueXformedlymphocytes where name='%s'
+
+    track gtexEqtlTissueXformedfibroblasts
+    parent gtexEqtlTissue on
+    shortLabel xformedfibroblasts
+    longLabel Expression QTL in Cells_Transformed_fibroblasts from GTEx V6
+    color 154,192,205
+    idInUrlSql select gene from gtexEqtlTissueXformedfibroblasts where name='%s'
+
+    track gtexEqtlTissueEctocervix
+    parent gtexEqtlTissue on
+    shortLabel ectocervix
+    longLabel Expression QTL in Cervix_Ectocervix from GTEx V6
+    color 238,213,210
+    idInUrlSql select gene from gtexEqtlTissueEctocervix where name='%s'
+
+    track gtexEqtlTissueEndocervix
+    parent gtexEqtlTissue on
+    shortLabel endocervix
+    longLabel Expression QTL in Cervix_Endocervix from GTEx V6
+    color 238,213,210
+    idInUrlSql select gene from gtexEqtlTissueEndocervix where name='%s'
+
+    track gtexEqtlTissueColonSigmoid
+    parent gtexEqtlTissue on
+    shortLabel colonSigmoid
+    longLabel Expression QTL in Colon_Sigmoid from GTEx V6
+    color 205,183,158
+    idInUrlSql select gene from gtexEqtlTissueColonSigmoid where name='%s'
+
+    track gtexEqtlTissueColonTransverse
+    parent gtexEqtlTissue on
+    shortLabel colonTransverse
+    longLabel Expression QTL in Colon_Transverse from GTEx V6
+    color 238,197,145
+    idInUrlSql select gene from gtexEqtlTissueColonTransverse where name='%s'
+
+    track gtexEqtlTissueEsophagusJunction
+    parent gtexEqtlTissue on
+    shortLabel esophagusJunction
+    longLabel Expression QTL in Esophagus_Gastroesophageal_Junction from GTEx V6
+    color 139,115,85
+    idInUrlSql select gene from gtexEqtlTissueEsophagusJunction where name='%s'
+
+    track gtexEqtlTissueEsophagusMucosa
+    parent gtexEqtlTissue on
+    shortLabel esophagusMucosa
+    longLabel Expression QTL in Esophagus_Mucosa from GTEx V6
+    color 139,115,85
+    idInUrlSql select gene from gtexEqtlTissueEsophagusMucosa where name='%s'
+
+    track gtexEqtlTissueEsophagusMuscular
+    parent gtexEqtlTissue on
+    shortLabel esophagusMuscular
+    longLabel Expression QTL in Esophagus_Muscularis from GTEx V6
+    color 205,170,125
+    idInUrlSql select gene from gtexEqtlTissueEsophagusMuscular where name='%s'
+
+    track gtexEqtlTissueFallopianTube
+    parent gtexEqtlTissue on
+    shortLabel fallopianTube
+    longLabel Expression QTL in Fallopian_Tube from GTEx V6
+    color 238,213,210
+    idInUrlSql select gene from gtexEqtlTissueFallopianTube where name='%s'
+
+    track gtexEqtlTissueHeartAtrialAppend
+    parent gtexEqtlTissue on
+    shortLabel heartAtrialAppend
+    longLabel Expression QTL in Heart_Atrial_Appendage from GTEx V6
+    color 180,82,205
+    idInUrlSql select gene from gtexEqtlTissueHeartAtrialAppend where name='%s'
+
+    track gtexEqtlTissueHeartLeftVentricl
+    parent gtexEqtlTissue on
+    shortLabel heartLeftVentricl
+    longLabel Expression QTL in Heart_Left_Ventricle from GTEx V6
+    color 122,55,139
+    idInUrlSql select gene from gtexEqtlTissueHeartLeftVentricl where name='%s'
+
+    track gtexEqtlTissueKidneyCortex
+    parent gtexEqtlTissue on
+    shortLabel kidneyCortex
+    longLabel Expression QTL in Kidney_Cortex from GTEx V6
+    color 205,183,158
+    idInUrlSql select gene from gtexEqtlTissueKidneyCortex where name='%s'
+
+    track gtexEqtlTissueLiver
+    parent gtexEqtlTissue on
+    shortLabel liver
+    longLabel Expression QTL in Liver from GTEx V6
+    color 205,183,158
+    idInUrlSql select gene from gtexEqtlTissueLiver where name='%s'
+
+    track gtexEqtlTissueLung
+    parent gtexEqtlTissue on
+    shortLabel lung
+    longLabel Expression QTL in Lung from GTEx V6
+    color 154,205,50
+    idInUrlSql select gene from gtexEqtlTissueLung where name='%s'
+
+    track gtexEqtlTissueMinorSalivGland
+    parent gtexEqtlTissue on
+    shortLabel minorSalivGland
+    longLabel Expression QTL in Minor_Salivary_Gland from GTEx V6
+    color 205,183,158
+    idInUrlSql select gene from gtexEqtlTissueMinorSalivGland where name='%s'
+
+    track gtexEqtlTissueMuscleSkeletal
+    parent gtexEqtlTissue on
+    shortLabel muscleSkeletal
+    longLabel Expression QTL in Muscle_Skeletal from GTEx V6
+    color 122,103,238
+    idInUrlSql select gene from gtexEqtlTissueMuscleSkeletal where name='%s'
+
+    track gtexEqtlTissueNerveTibial
+    parent gtexEqtlTissue on
+    shortLabel nerveTibial
+    longLabel Expression QTL in Nerve_Tibial from GTEx V6
+    color 255,215,0
+    idInUrlSql select gene from gtexEqtlTissueNerveTibial where name='%s'
+
+    track gtexEqtlTissueOvary
+    parent gtexEqtlTissue on
+    shortLabel ovary
+    longLabel Expression QTL in Ovary from GTEx V6
+    color 255,182,193
+    idInUrlSql select gene from gtexEqtlTissueOvary where name='%s'
+
+    track gtexEqtlTissuePancreas
+    parent gtexEqtlTissue on
+    shortLabel pancreas
+    longLabel Expression QTL in Pancreas from GTEx V6
+    color 205,155,29
+    idInUrlSql select gene from gtexEqtlTissuePancreas where name='%s'
+
+    track gtexEqtlTissuePituitary
+    parent gtexEqtlTissue on
+    shortLabel pituitary
+    longLabel Expression QTL in Pituitary from GTEx V6
+    color 180,238,180
+    idInUrlSql select gene from gtexEqtlTissuePituitary where name='%s'
+
+    track gtexEqtlTissueProstate
+    parent gtexEqtlTissue on
+    shortLabel prostate
+    longLabel Expression QTL in Prostate from GTEx V6
+    color 217,217,217
+    idInUrlSql select gene from gtexEqtlTissueProstate where name='%s'
+
+    track gtexEqtlTissueSkinNotExposed
+    parent gtexEqtlTissue on
+    shortLabel skinNotExposed
+    longLabel Expression QTL in Skin_Not_Sun_Exposed_Suprapubic from GTEx V6
+    color 58,95,205
+    idInUrlSql select gene from gtexEqtlTissueSkinNotExposed where name='%s'
+
+    track gtexEqtlTissueSkinExposed
+    parent gtexEqtlTissue on
+    shortLabel skinExposed
+    longLabel Expression QTL in Skin_Sun_Exposed_Lower_leg from GTEx V6
+    color 30,144,255
+    idInUrlSql select gene from gtexEqtlTissueSkinExposed where name='%s'
+
+    track gtexEqtlTissueSmallIntestine
+    parent gtexEqtlTissue on
+    shortLabel smallIntestine
+    longLabel Expression QTL in Small_Intestine_Terminal_Ileum from GTEx V6
+    color 205,183,158
+    idInUrlSql select gene from gtexEqtlTissueSmallIntestine where name='%s'
+
+    track gtexEqtlTissueSpleen
+    parent gtexEqtlTissue on
+    shortLabel spleen
+    longLabel Expression QTL in Spleen from GTEx V6
+    color 205,183,158
+    idInUrlSql select gene from gtexEqtlTissueSpleen where name='%s'
+
+    track gtexEqtlTissueStomach
+    parent gtexEqtlTissue on
+    shortLabel stomach
+    longLabel Expression QTL in Stomach from GTEx V6
+    color 255,211,155
+    idInUrlSql select gene from gtexEqtlTissueStomach where name='%s'
+
+    track gtexEqtlTissueTestis
+    parent gtexEqtlTissue on
+    shortLabel testis
+    longLabel Expression QTL in Testis from GTEx V6
+    color 166,166,166
+    idInUrlSql select gene from gtexEqtlTissueTestis where name='%s'
+
+    track gtexEqtlTissueThyroid
+    parent gtexEqtlTissue on
+    shortLabel thyroid
+    longLabel Expression QTL in Thyroid from GTEx V6
+    color 0,139,69
+    idInUrlSql select gene from gtexEqtlTissueThyroid where name='%s'
+
+    track gtexEqtlTissueUterus
+    parent gtexEqtlTissue on
+    shortLabel uterus
+    longLabel Expression QTL in Uterus from GTEx V6
+    color 238,213,210
+    idInUrlSql select gene from gtexEqtlTissueUterus where name='%s'
+
+    track gtexEqtlTissueVagina
+    parent gtexEqtlTissue on
+    shortLabel vagina
+    longLabel Expression QTL in Vagina from GTEx V6
+    color 238,213,210
+    idInUrlSql select gene from gtexEqtlTissueVagina where name='%s'
+
+    track gtexEqtlTissueWholeBlood
+    parent gtexEqtlTissue on
+    shortLabel wholeBlood
+    longLabel Expression QTL in Whole_Blood from GTEx V6
+    color 255,0,255
+    idInUrlSql select gene from gtexEqtlTissueWholeBlood where name='%s'
+
