@@ -20,7 +20,7 @@ itemRgb on
         visibility hide
         type bigPsl
         bigDataUrl /gbdb/$D/uniprot/unipAliSwissprot.bb
-        searchIndex name
+        searchIndex name,acc
         urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
         labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
         mouseOverField protFullNames
