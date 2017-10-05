@@ -2542,6 +2542,7 @@ var rightClick = {
         var row = null;
         var rows = null;
         var selectUpdated = null;
+                function mySuccess() {}
         if (menuObject.shown) {
             // warn("Spinning: menu is still shown");
             setTimeout(function() { rightClick.hitFinish(menuItemClicked, menuObject, cmd); }, 10);
@@ -2702,8 +2703,41 @@ var rightClick = {
             }
             location.assign(url);
 
-        } else if ((cmd === 'sortExp') || (cmd === 'sortSim')) {
+        } else if (cmd === 'newCollection') {
+            $.ajax({
+                type: "PUT",
+                async: false,
+                url: "../cgi-bin/hgCollection",
+                data:  "cmd=newCollection&track=" + id + "&hgsid=" + getHgsid(),
+                trueSuccess: mySuccess,
+                success: catchErrorOrDispatch,
+                error: errorHandler,
+            });
 
+            imageV2.fullReload();
+        } else if (cmd === 'addCollection') {
+            var shortLabel = $(menuItemClicked).text().substring(9).slice(0,-1); 
+            var ii;
+            var collectionName;
+            for(ii=0; ii < hgTracks.collections.length; ii++) {
+                if ( hgTracks.collections[ii].shortLabel === shortLabel) {
+                    collectionName = hgTracks.collections[ii].track;
+                    break;
+                }
+            }
+
+            $.ajax({
+                type: "PUT",
+                async: false,
+                url: "../cgi-bin/hgCollection",
+                data: "cmd=addTrack&track=" + id + "&collection=" + collectionName + "&hgsid=" + getHgsid(),
+                trueSuccess: mySuccess,
+                success: catchErrorOrDispatch,
+                error: errorHandler,
+            });
+
+            imageV2.fullReload();
+        } else if ((cmd === 'sortExp') || (cmd === 'sortSim')) {
             url = "hgTracks?hgsid=" + getHgsid() + "&" + cmd + "=";
             rec = hgTracks.trackDb[id];
             if (tdbHasParent(rec) && tdbIsLeaf(rec))
@@ -3229,6 +3263,31 @@ var rightClick = {
                     }
                     menu.push(o);
                 }
+            }
+
+            if (rec.isCustomComposite)
+                {
+                // add delete from composite
+                }
+            else if (!rec.hasChildren && rec.type.startsWith("bigWig")) {
+                o = {};
+                o[" Make a New Collection with \"" + rec.shortLabel + "\""] = {
+                    onclick: rightClick.makeHitCallback("newCollection")
+                };  
+                menu.push(o);
+
+                if (hgTracks.collections) {
+                    var ii;
+                    for(ii=0; ii < hgTracks.collections.length; ii++) {
+                        o = {};
+                        o[" Add to \"" + hgTracks.collections[ii].shortLabel + "\""] = {
+                            onclick: rightClick.makeHitCallback("addCollection")
+                        };  
+                        menu.push(o);
+                    }
+                }
+
+                menu.push($.contextMenu.separator);
             }
 
             // add sort options if this is a custom composite
