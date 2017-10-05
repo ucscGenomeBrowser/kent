@@ -8,7 +8,8 @@ The data items displayed are gene expression quantitative trait loci within 1MB 
 gene transcription start sites (cis-eQTLs), significantly associated with gene expression and in 
 the credible set of variants for the gene at a high confidence level (95%).
 Each eQTL annotation includes the significance of the association, effect size on gene expression, 
-and the probability the eQTL is causal.
+and the probability the eQTL is a member of the 95% credible set (the set containing all causal variants
+for the gene locus, at 95% confidence level).
 </p>
 
 <h2>Display Conventions</h2>
@@ -16,10 +17,11 @@ and the probability the eQTL is causal.
 The eQTL item color indicates the effect size attributed to the eQTL:
 <ul>
 <table cellpadding='2'>
-<tr><td style='color: fuchsia;'>fuchsia</td><td>&nbsp;&nbsp;high positive</td></tr>
-<tr><td style='color: red;'>red</td><td>&nbsp;&nbsp;moderate positive</td></tr>
-<tr><td style='color: blue;'>blue</td><td>&nbsp;&nbsp;moderate negative</td></tr>
-<tr><td style='color: cyan;'>cyan</td><td>&nbsp;&nbsp;high negative</td></tr>
+<tr><td style='color: red;'>red</td><td>&nbsp;&nbsp;high positive</td></tr>
+<tr><td style='color: #ffa0a0;'>light red</td><td>&nbsp;&nbsp;moderate positive</td></tr>
+<tr><td style='color: #0aa0ff;'>light blue</td><td>&nbsp;&nbsp;moderate negative</td></tr>
+<tr><td style='color: blue;'>blue</td><td>&nbsp;&nbsp;high negative</td></tr>
+<tr><td style='color: #696969;'>mixed</td><td>&nbsp;&nbsp;positive and negative effect in combined eQTL</td></tr>
 </table>
 </ul>
 Effect size is the regression slope, computed from the effect of the alternative allele vs. 

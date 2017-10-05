@@ -166,7 +166,7 @@ slReverse(&newList);
 return newList;
 }
 
-unsigned buildReleaseBits(char *rel)
+unsigned buildReleaseBits(char *rel, char *track)
 /* unpack the comma separated list of possible release tags */
 {
 if (rel == NULL)
@@ -189,7 +189,8 @@ while(rel)
     else if (sameString(rel, "public"))
 	bits |= RELEASE_PUBLIC;
     else
-	errAbort("track with release %s must have a release combination of alpha, beta, and public", oldString);
+	errAbort("track %s with release %s must have a release combination of alpha, beta, and public", 
+                        track, oldString);
 
     rel = end;
     }
@@ -209,7 +210,7 @@ struct hash *haveHash = hashNew(3);
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     char *rel = trackDbSetting(tdb, "release");
-    unsigned trackRelBits = buildReleaseBits(rel);
+    unsigned trackRelBits = buildReleaseBits(rel, tdb->track);
 
     if (trackRelBits & releaseBit)
 	{

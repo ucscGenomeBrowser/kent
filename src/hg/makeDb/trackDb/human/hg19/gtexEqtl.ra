@@ -342,3 +342,4 @@ dataVersion GTEx Analysis V6p (https://www.gtexportal.org/home/datasets)
     bigDataUrl /gbdb/hg19/gtex/gtexEqtlTissueXformedfibroblasts.bb
     shortLabel xformedfibroblasts
     longLabel Expression QTL in Cells_Transformed_fibroblasts from GTEx V6 
+

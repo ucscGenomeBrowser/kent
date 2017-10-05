@@ -20,7 +20,7 @@ CREATE TABLE gtexEqtl (
     distance int not null,	# Distance from TSS
     effectSize float not null,	# Effect size (FPKM)
     pValue float not null,	# Nominal p-value
-    causalProb float not null,	# Probability variant is causal
+    causalProb float not null,	# Probability variant is in 95 percent credible set
               #Indices
     INDEX (chrom,bin),
     PRIMARY KEY (name),
