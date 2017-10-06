@@ -23,7 +23,7 @@
 /* Global Variables */
 struct hash *oldVars = NULL;	/* The cart before new cgi stuff added. */
 // Null terminated list of CGI Variables we don't want to save permanently:
-char *excludeVars[] = {"Submit", "submit", "hgva_startQuery", "jsonp", NULL,};
+char *excludeVars[] = {"Submit", "submit", "cmd", "track", "collection", "jsonp", NULL,};
 
 struct track
 {
@@ -130,7 +130,7 @@ if (tdb->subtracks)
 jsInlineF("</li>");
 }
 
-static void outHubHeader(FILE *f, char *db, char *hubName)
+static void outHubHeader(FILE *f, char *db)
 // output a track hub header
 {
 fprintf(f,"hub hub1\n\
@@ -156,7 +156,7 @@ if (hubName == NULL)
     hubName = cloneString(hubTn.forCgi);
     cartSetString(cart, buffer, hubName);
     FILE *f = mustOpen(hubName, "a");
-    outHubHeader(f, db, hubName);
+    outHubHeader(f, db);
     fclose(f);
     cartSetString(cart, "hubUrl", hubName);
     cartSetString(cart, hgHubConnectRemakeTrackHub, hubName);
@@ -466,6 +466,7 @@ fprintf(f,"track %s\n\
 shortLabel %s\n\
 compositeTrack on\n\
 autoScale on\n\
+aggregate  none\n\
 longLabel %s\n\
 %s on\n\
 color %ld,%ld,%ld \n\
@@ -521,7 +522,7 @@ chmod(hubName, 0666);
 FILE *f = mustOpen(hubName, "w");
 struct hash *collectionNameHash = newHash(6);
 
-outHubHeader(f, db, hubName);
+outHubHeader(f, db);
 //int useColor = 0;
 struct track *collection;
 struct sqlConnection *conn = hAllocConn(db);
@@ -738,6 +739,87 @@ slReverse(&newList);
 return newList;
 }
 
+static void outOneTdb(char *db, struct sqlConnection *conn, FILE *f, struct trackDb *tdb, int numTabs)
+/* Put out a single trackDb entry to our collections hub. */
+{
+char *tabs = "";
+if (numTabs == 1)
+    tabs = "\t";
+else if (numTabs == 2)
+    tabs = "\t\t";
+else if (numTabs == 3)
+    tabs = "\t\t\t";
+
+struct hashEl *hel = hashLookup(tdb->settingsHash, "track");
+fprintf(f, "%s%s %s\n", tabs,hel->name, trackHubSkipHubName((char *)hel->val));
+
+char *dataUrl = NULL;
+char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+if (bigDataUrl == NULL)
+    {
+    if (startsWith("bigWig", tdb->type))
+        dataUrl = getSqlBigWig(conn, db, tdb);
+    }
+
+struct hashCookie cookie = hashFirst(tdb->settingsHash);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    if (sameString("parent", hel->name))
+        fprintf(f, "%s%s %s\n", tabs,hel->name, trackHubSkipHubName((char *)hel->val));
+    else if (!(sameString("track", hel->name) || sameString("polished", hel->name) || sameString("group", hel->name)))
+        fprintf(f, "%s%s %s\n", tabs,hel->name, (char *)hel->val);
+    }
+
+if (bigDataUrl == NULL)
+    {
+    if (dataUrl != NULL)
+        fprintf(f, "%sbigDataUrl %s\n", tabs,dataUrl);
+    }
+
+fprintf(f, "\n");
+}
+
+static void outTrackDbList(char *db, struct sqlConnection *conn, FILE *f, char *hubName, struct trackDb *list, char *collectionName, struct trackDb *newTdb,  int numTabs)
+/* Put a list of trackDb entries into a collection, adding a new track to the collection. */
+{
+if (list == NULL)
+    return;
+
+struct trackDb *tdb;
+for(tdb = list; tdb; tdb = tdb->next)
+    {
+    if (tdb->grp != NULL)
+        if ((hubName == NULL) || differentString(hubName, tdb->grp))
+                continue;
+
+    outOneTdb(db, conn, f, tdb, numTabs);
+
+    struct hashEl *hel = hashLookup(tdb->settingsHash, "track");
+    if ((hel != NULL) && (hel->val != NULL) &&  sameString((char *)hel->val, collectionName))
+        outOneTdb(db, conn, f, newTdb, numTabs + 1);
+
+    outTrackDbList(db, conn, f, hubName,  tdb->subtracks, collectionName, newTdb, numTabs + 1);
+    }
+}
+
+static void doAddTrack(struct cart *cart, char *db, struct trackDb *trackList,  char *trackName, char *collectionName, struct hash *nameHash)
+/* Add a track to a collection in a hub. */
+{
+char *fileName = getHubName(cart, db);
+char *hubName = hubNameFromUrl(fileName);
+FILE *f = fopen(fileName, "w");
+struct trackDb *newTdb = hashMustFindVal(nameHash, trackName);
+hashReplace(newTdb->settingsHash, "track", makeUnique(nameHash, trackName));
+hashReplace(newTdb->settingsHash, "parent", trackHubSkipHubName(collectionName));
+
+outHubHeader(f, db);
+struct sqlConnection *conn = hAllocConn(db);
+outTrackDbList(db, conn, f, hubName, trackList, collectionName, newTdb,  0);
+
+hFreeConn(&conn);
+fclose(f);
+}
+
 static void doMiddle(struct cart *cart)
 /* Set up globals and make web page */
 {
@@ -758,16 +840,50 @@ struct trackDb *superList = addSupers(trackList);
 struct hash *nameHash = newHash(5);
 buildNameHash(nameHash, superList);
 
-char *jsonIn = cgiUsualString("jsonp", NULL);
-fprintf(stderr, "BRANEY %s\n", jsonIn);
-if (jsonIn != NULL)
-    {
-    doAjax(cart, db, jsonIn, nameHash);
-    apiOut("{\"serverSays\": \"Collections saved successfully.\"}", NULL);
-    }
-else
+char *cmd = cartOptionalString(cart, "cmd");
+if (cmd == NULL)
     {
     doMainPage(cart, db, groupList, superList);
+    }
+else if (sameString("addTrack", cmd))
+    {
+    char *trackName = cgiString("track");
+    char *collectionName = cgiString("collection");
+    doAddTrack(cart, db, superList, trackName, collectionName, nameHash);
+    apiOut("{\"serverSays\": \"added %s to collection\"}", NULL);
+    }
+else if (sameString("newCollection", cmd))
+    {
+    char *trackName = cgiString("track");
+    char *collectionName = makeUnique(nameHash, "coll");
+    char *shortLabel = "New Collection";
+    char *longLabel = "Description of New Collection";
+    struct trackDb *tdb;
+
+    AllocVar(tdb);
+    slAddHead(&superList, tdb);
+    tdb->settingsHash = newHash(5);
+    tdb->type = cloneString("wig");
+
+    hashAdd(tdb->settingsHash, "track", collectionName);
+    hashAdd(tdb->settingsHash, "shortLabel", shortLabel);
+    hashAdd(tdb->settingsHash, "longLabel", longLabel);
+    hashAdd(tdb->settingsHash, "autoScale", "on");
+    hashAdd(tdb->settingsHash, "compositeTrack", "on");
+    hashAdd(tdb->settingsHash, "aggregate", "none");
+    hashAdd(tdb->settingsHash, "type", "wig");
+    hashAdd(tdb->settingsHash, "visibility", "full");
+    hashAdd(tdb->settingsHash, "color", "0,0,0");
+    hashAdd(tdb->settingsHash, CUSTOM_COMPOSITE_SETTING, "on");
+
+    doAddTrack(cart, db, superList, trackName, collectionName, nameHash);
+    apiOut("{\"serverSays\": \"new %s to collection\"}", NULL);
+    }
+else if (sameString("saveCollection", cmd))
+    {
+    char *jsonIn = cgiUsualString("jsonp", NULL);
+    doAjax(cart, db, jsonIn, nameHash);
+    apiOut("{\"serverSays\": \"Collections gaved successfully.\"}", NULL);
     }
 }
 

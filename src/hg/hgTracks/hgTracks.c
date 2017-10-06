@@ -475,6 +475,11 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 if (subtrack == NULL)
     return FALSE;
 
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    subtrack->mapsSelf = FALSE;	/* Round about way to tell wig not to do own mapping. */
+    }
+
 multiWigContainerMethods(track);
 //struct wigCartOptions *wigCart = wigCartOptionsNew(cart, track->tdb, 0, NULL);
 //track->wigCartData = (void *) wigCart;
@@ -7498,25 +7503,32 @@ void outCollectionsToJson()
 /* Output the current collections to the hgTracks JSON block. */
 {
 struct grp *groupList = NULL;
-struct trackDb *hubTdbs = hubCollectTracks( database,  &groupList);
 char buffer[4096];
 safef(buffer, sizeof buffer, "%s-%s", customCompositeCartName, database);
 char *hubFile = cartOptionalString(cart, buffer);
-char *hubName = hubNameFromUrl(hubFile);
-struct trackDb *tdb;
-struct jsonElement *jsonList = NULL;
-for(tdb = hubTdbs; tdb;  tdb = tdb->next)
-    {
-    if (sameString(tdb->grp, hubName))
-        {
-        if (jsonList == NULL)
-            jsonList = newJsonList(NULL);
 
-        jsonListAdd(jsonList, newJsonString(tdb->shortLabel));
+if (hubFile != NULL)
+    {
+    char *hubName = hubNameFromUrl(hubFile);
+    struct trackDb *hubTdbs = hubCollectTracks( database,  &groupList);
+    struct trackDb *tdb;
+    struct jsonElement *jsonList = NULL;
+    for(tdb = hubTdbs; tdb;  tdb = tdb->next)
+        {
+        if (sameString(tdb->grp, hubName))
+            {
+            if (jsonList == NULL)
+                jsonList = newJsonList(NULL);
+
+            struct jsonElement *collection = newJsonObject(newHash(4));
+            jsonObjectAdd(collection, "track", newJsonString(tdb->track));
+            jsonObjectAdd(collection, "shortLabel", newJsonString(tdb->shortLabel));
+            jsonListAdd(jsonList, collection);
+            }
         }
+    if (jsonList != NULL)
+        jsonObjectAdd(jsonForClient, "collections", jsonList);
     }
-if (jsonList)
-    jsonObjectAdd(jsonForClient, "collections", jsonList);
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -7888,7 +7900,7 @@ if (theImgBox)
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
-//outCollectionsToJson();
+outCollectionsToJson();
 
 jsonObjectAdd(jsonForClient, "winStart", newJsonNumber(virtWinStart));
 jsonObjectAdd(jsonForClient, "winEnd", newJsonNumber(virtWinEnd));
