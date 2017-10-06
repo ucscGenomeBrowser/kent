@@ -15876,8 +15876,7 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 cebCap1) \
 	> rbest.log 2>&1 &
-XXX - running - Wed Oct  4 15:44:23 PDT 2017
-    # real    334m0.458s
+    # real    331m49.541s
 
     mkdir /hive/data/genomes/cebCap1/bed/blastz.mm10.swap
     cd /hive/data/genomes/cebCap1/bed/blastz.mm10.swap
@@ -15926,15 +15925,14 @@ TMPDIR=/dev/shm
 	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
-XXX - running - Wed Oct  4 15:53:30 PDT 2017
-    #   real    206m12.413s
+    #   real    144m17.701s
 
     cat fb.mm10.chainEulFla1Link.txt
-    #	882776669 bases of 2652783500 (33.277%) in intersection
+    #	916687191 bases of 2652783500 (34.556%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 eulFla1) \
 	> rbest.log 2>&1 &
-    # real    334m0.458s
+    # real    330m53.327s
 
     mkdir /hive/data/genomes/eulFla1/bed/blastz.mm10.swap
     cd /hive/data/genomes/eulFla1/bed/blastz.mm10.swap
@@ -15943,13 +15941,69 @@ XXX - running - Wed Oct  4 15:53:30 PDT 2017
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    63m12.596s
+    #	real    65m26.113s
 
     cat fb.eulFla1.chainMm10Link.txt
-    #	871126707 bases of 2610518382 (33.370%) in intersection
+    #	887070088 bases of 2094103399 (42.360%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulFla1 mm10) \
 	> rbest.log 2>&1
-    # real    299m3.923s
+    # real    270m35.579s
+
+##############################################################################
+# LASTZ Black lemur mouse/Mm10 (DONE - 2017-10-05 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzEulMac1.2017-10-05
+    cd /hive/data/genomes/mm10/bed/lastzEulMac1.2017-10-05
+
+    printf '# Black lemur vs. mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: eulMac1 - Black lemur - Eulemur macaco
+SEQ2_DIR=/hive/data/genomes/eulMac1/eulMac1.2bit
+SEQ2_LEN=/hive/data/genomes/eulMac1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm10/bed/lastzEulMac1.2017-10-05
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm10EulMac1
+    time (doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #   real    167m31.736s
+
+    cat fb.mm10.chainEulMac1Link.txt
+    #	925968814 bases of 2652783500 (34.906%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 eulMac1) \
+	> rbest.log 2>&1 &
+    # real    334m49.287s
+
+    mkdir /hive/data/genomes/eulMac1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/eulMac1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzEulMac1.2017-10-05/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    64m52.738s
+
+    cat fb.eulMac1.chainMm10Link.txt
+    #	895308387 bases of 2101039320 (42.613%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulMac1 mm10) \
+	> rbest.log 2>&1
+    # real    267m17.552s
 
 ##############################################################################
