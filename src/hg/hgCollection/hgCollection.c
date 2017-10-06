@@ -301,7 +301,6 @@ if (curGroup != NULL)
             printGroup("collections", tdb, TRUE, TRUE);
             jsInlineF("</ul>");
             jsInlineF("</div>");
-            printf("ignoring %s\n", tdb->track);
             continue;
             }
         }
@@ -826,6 +825,7 @@ static void doMiddle(struct cart *cart)
 char *db;
 char *genome;
 getDbAndGenome(cart, &db, &genome, oldVars);
+initGenbankTableNames(db);
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);

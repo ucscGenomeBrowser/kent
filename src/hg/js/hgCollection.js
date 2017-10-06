@@ -13,7 +13,7 @@ var hgCollection = (function() {
     function currentTrackItems(node) {
         // populate the menu for the currentCollection tree
         var items = {
-            addItem: { // The "delete" menu item
+            addItem: { // The "add" menu item
                 label: "Add",
                 action: function () {
                     var nodeIds = $("#tracks").jstree( "get_selected");

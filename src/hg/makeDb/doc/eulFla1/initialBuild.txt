@@ -439,11 +439,10 @@ searchPriority 8
     cd /hive/data/genomes/eulFla1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku eulFla1) > do.log 2>&1
-XXX - running - Tue Oct  3 14:29:10 PDT 2017
-    # real    6m41.678s
+    # real    14m18.603s
 
     cat fb.eulFla1.cpgIslandExt.txt
-    # 22795786 bases of 2714439490 (0.840%) in intersection
+    # 30746846 bases of 2094103399 (1.468%) in intersection
 
 ##############################################################################
 # ncbiRefSeq gene track (TBD - 2016-05-05 - Hiram)
@@ -481,14 +480,13 @@ XXX - running - Tue Oct  3 14:29:10 PDT 2017
     cd /hive/data/genomes/eulFla1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku eulFla1) > do.log 2>&1
-XXX - running - Tue Oct  3 14:29:46 PDT 2017
-    # real    51m49.116s
+    # real    81m43.851s
 
     cat fb.eulFla1.genscan.txt
-    #   55052161 bases of 2714439490 (2.028%) in intersection
+    #   53866217 bases of 2094103399 (2.572%) in intersection
 
     cat fb.eulFla1.genscanSubopt.txt
-    #   55424862 bases of 2714439490 (2.042%) in intersection
+    #   57319829 bases of 2094103399 (2.737%) in intersection
 
 #############################################################################
 # augustus gene track (DONE - 2017-10-03 - Hiram)
@@ -498,11 +496,10 @@ XXX - running - Tue Oct  3 14:29:46 PDT 2017
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev eulFla1) > do.log 2>&1
-XXX - running - Tue Oct  3 14:30:07 PDT 2017
-    # real    242m45.000s
+    # real    75m39.619s
 
     cat fb.eulFla1.augustusGene.txt
-    # 49595111 bases of 2714439490 (1.827%) in intersection
+    # 49451995 bases of 2094103399 (2.361%) in intersection
 
 #############################################################################
 # Create kluster run files (DONE - 2017-10-03 - Hiram)
@@ -539,8 +536,36 @@ XXX - running - Tue Oct  3 14:30:07 PDT 2017
 # 	jkStuff/eulFla1.nonBridged.lft -bedFile=jkStuff/eulFla1.nonBridged.bed
 
 #########################################################################
-# lastz/chain/net swap from hg38 (TBD - 2017-09-27 - Hiram)
+# lastz/chain/net swap from hg38 (DONE - 2017-10-03 - Hiram)
     # alignment to hg38
+
+    cd /hive/data/genomes/hg38/bed/lastzEulFla1.2017-10-03
+    cat fb.hg38.chainEulFla1Link.txt
+    # 1016209837 bases of 3049335806 (33.326%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 eulFla1) \
+	> rbest.log 2>&1 &
+    # real    210m50.610s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/eulFla1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/eulFla1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzEulFla1.2017-10-03/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    76m58.704s
+
+    cat fb.eulFla1.chainHg38Link.txt
+    # 2053319068 bases of 2610518382 (78.656%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulFla1 hg38) \
+	> rbest.log 2>&1
+    # real    227m7.064s
+
+#########################################################################
 
     cd /hive/data/genomes/hg38/bed/lastzEulFla1.2017-09-25
     cat fb.hg38.chainEulFla1Link.txt
@@ -565,31 +590,35 @@ XXX - running - Tue Oct  3 14:30:07 PDT 2017
     # real    427m26.453s
 
 #########################################################################
-# lastz/chain/net swap from mm10 (TBD - 2017-08-27 - Hiram)
+# lastz/chain/net swap from mm10 (DONE - 2017-10-04 - Hiram)
     # alignment on mm10
-    cd /hive/data/genomes/mm10/bed/lastzEulFla1.2017-09-25
+    cd /hive/data/genomes/mm10/bed/lastzEulFla1.2017-10-04
 
     cat fb.mm10.chainEulFla1Link.txt
-    #	889500682 bases of 2652783500 (33.531%) in intersection
+    #	916687191 bases of 2652783500 (34.556%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 eulFla1) \
+	> rbest.log 2>&1 &
+    # real    330m53.327s
 
     mkdir /hive/data/genomes/eulFla1/bed/blastz.mm10.swap
     cd /hive/data/genomes/eulFla1/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzEulFla1.2017-09-25/DEF \
+	/hive/data/genomes/mm10/bed/lastzEulFla1.2017-10-04/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    68m48.755s
+    #	real    65m26.113s
 
     cat fb.eulFla1.chainMm10Link.txt
-    #	893851318 bases of 2714439490 (32.929%) in intersection
+    #	887070088 bases of 2094103399 (42.360%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulFla1 mm10) \
 	> rbest.log 2>&1
-    # real    383m10.761s
+    # real    270m35.579s
 
 ##############################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-09-25 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-10-03 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -641,13 +670,12 @@ eulFla1.perChromTables = no
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial eulFla1
-XXX - running - Tue Oct  3 14:58:40 PDT 2017
     #	logFile: var/build/logs/2017.10.03-14:57:13.eulFla1.initalign.log
-    #   real    117m39.387s
+    #   real    71m38.539s
 
     tail -2  var/build/logs/2017.10.03-14:57:13.eulFla1.initalign.log
-# hgwdev 2017.09.25-13:12:38 eulFla1.initalign: Succeeded: eulFla1
-# hgwdev 2017.09.25-13:15:25 eulFla1.initalign: finish
+# hgwdev 2017.10.03-16:07:52 eulFla1.initalign: Succeeded: eulFla1
+# hgwdev 2017.10.03-16:08:51 eulFla1.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.eulFla1
@@ -656,11 +684,11 @@ XXX - running - Tue Oct  3 14:58:40 PDT 2017
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad eulFla1
-    # logFile: var/dbload/hgwdev/logs/2017.09.25-13:20:30.eulFla1.dbload.log
-    # about 5m 20s
+    # logFile: var/dbload/hgwdev/logs/2017.10.04-15:38:39.eulFla1.dbload.log
+    # real    4m41.216s
 
-    tail -1 var/dbload/hgwdev/logs/2017.09.25-13:20:30.eulFla1.dbload.log
-    # hgwdev 2017.09.25-13:25:50 eulFla1.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2017.10.04-15:38:39.eulFla1.dbload.log
+    # hgwdev 2017.10.04-15:43:20 eulFla1.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -669,31 +697,33 @@ XXX - running - Tue Oct  3 14:58:40 PDT 2017
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
     git commit -m \
-"Added eulFla1 - Ma's night monkey - Aotus nancymaae refs #20196" \
+"Added eulFla1 - Sclater's lemur - Eulemur flavifrons refs #20265" \
 	etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 ##############################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-08-03 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-10-04 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("eulFla1", "blat1b", "17886", "1", "0"); \
+	VALUES ("eulFla1", "blat1d", "17886", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("eulFla1", "blat1b", "17887", "0", "1");' \
+	VALUES ("eulFla1", "blat1d", "17887", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ##############################################################################
-# set default position similar location as hg38  (TBD - 2017-09-28 - Hiram)
+# set default position similar location as hg38  (DONE - 2017-10-04 - Hiram)
+
+
     hgsql -e \
-'update dbDb set defaultPos="NW_018491462v1:1624307-1640434" where name="eulFla1";' \
+'update dbDb set defaultPos="LGHW01001035v1:72874-89024" where name="eulFla1";' \
 	hgcentraltest
 
 ##############################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-09-28 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2017-10-06 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until these are all clean outputs:
     joinerCheck -database=eulFla1 -tableCoverage all.joiner
@@ -702,23 +732,26 @@ XXX - running - Tue Oct  3 14:58:40 PDT 2017
 
     cd /hive/data/genomes/eulFla1
     time (makeDownloads.pl eulFla1) > downloads.log 2>&1
-    # real    19m4.103s
+    # real    15m6.200s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/eulFla1/pushQ
     cd /hive/data/genomes/eulFla1/pushQ
     time (makePushQSql.pl -redmineList eulFla1) \
 	> eulFla1.pushQ.sql 2> stderr.out
-    # real    3m43.115s
+    # real    3m44.165s
+
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # writing redmine listings to
     # redmine.eulFla1.file.list
     # redmine.eulFla1.table.list
     # redmine.eulFla1.releaseLog.txt
+    # WARNING: eulFla1 does not have ucscToRefSeq
     # WARNING: eulFla1 does not have seq
     # WARNING: eulFla1 does not have extFile
     # WARNING: eulFla1 does not have estOrientInfo
+    # WARNING: eulFla1 does not have mrnaOrientInfo
 
     # examine these files to make sure they appear sane,
     # then enter the full path names of these listing files:
@@ -727,6 +760,6 @@ XXX - running - Tue Oct  3 14:58:40 PDT 2017
 # /hive/data/genomes/eulFla1/pushQ/redmine.eulFla1.releaseLog.txt
 # /hive/data/genomes/eulFla1/pushQ/redmine.eulFla1.table.list
 
-    # into the Redmine #20196 and set to QA Ready.
+    # into the Redmine #20265 and set to QA Ready.
 
 #########################################################################
