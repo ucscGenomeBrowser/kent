@@ -9558,3 +9558,141 @@ TMPDIR=/dev/shm
     # real    227m7.064s
 
 #########################################################################
+# LASTZ human/hg38 vs. Sclater's lemur/eulFla1 - (DONE - 2017-10-03 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzEulFla1.2017-10-03
+    cd /hive/data/genomes/hg38/bed/lastzEulFla1.2017-10-03
+
+    printf '# human vs Sclater_s lemur
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: eulFla1 - Sclater_s lemur - Eulemur flavifrons
+SEQ2_DIR=/hive/data/genomes/eulFla1/eulFla1.2bit
+SEQ2_LEN=/hive/data/genomes/eulFla1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzEulFla1.2017-10-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    # real    130m37.028s
+
+    cat fb.hg38.chainEulFla1Link.txt
+    # 1016209837 bases of 3049335806 (33.326%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 eulFla1) \
+	> rbest.log 2>&1 &
+    # real    214m11.636s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/eulFla1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/eulFla1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzEulFla1.2017-10-03/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    48m20.179s
+
+    cat fb.eulFla1.chainHg38Link.txt
+    # 969761746 bases of 2094103399 (46.309%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulFla1 hg38) \
+	> rbest.log 2>&1
+    # real    199m39.734s
+
+#########################################################################
+# LASTZ human/hg38 vs. Black lemur/eulMac1 - (DONE - 2017-10-04 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzEulMac1.2017-10-04
+    cd /hive/data/genomes/hg38/bed/lastzEulMac1.2017-10-04
+
+    printf '# human vs Black lemur
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from panTro2 vs hg18 lastz on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: eulMac1 - Black lemur - Eulemur macaco
+SEQ2_DIR=/hive/data/genomes/eulMac1/eulMac1.2bit
+SEQ2_LEN=/hive/data/genomes/eulMac1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzEulMac1.2017-10-04
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    # real    66m41.057s
+
+    cat fb.hg38.chainEulMac1Link.txt
+    # 1027856175 bases of 3049335806 (33.708%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 eulMac1) \
+	> rbest.log 2>&1 &
+    # real    220m20.185s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/eulMac1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/eulMac1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzEulMac1.2017-10-04/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    47m2.650s
+
+    cat fb.eulMac1.chainHg38Link.txt
+    # 979925982 bases of 2101039320 (46.640%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulMac1 hg38) \
+	> rbest.log 2>&1
+    # real    200m34.710s
+
+#########################################################################

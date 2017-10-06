@@ -2580,7 +2580,8 @@ html crispr
 include defaultPriority.ra
 include trackDb.cloneEnd.ra
 
-include gtexEqtl.ra
+include gtexEqtl.ra beta,public
+include gtexEqtl.v1.ra alpha
 
 track gtexTranscExpr override
 bigDataUrl /gbdb/hg19/gtex/gtexTranscExpr.bb

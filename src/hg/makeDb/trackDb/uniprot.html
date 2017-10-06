@@ -24,7 +24,7 @@ The annotations are divided into multiple subtracks, based on their &quot;featur
   </tr>
   <tr>
     <td>UniProt Signal Peptides</td>
-    <td>Regions found in proteins targeted destined to be secreted, generally cleaved from mature protein.</td>
+    <td>Regions found in proteins destined to be secreted, generally cleaved from mature protein.</td>
   </tr>
   <tr>
     <td>UniProt Extracellular Domains</td>
@@ -85,21 +85,29 @@ For consistency, the subtrack &quot;UniProt/SwissProt Variants&quot; is a copy o
 
 <p>
 Genomic locations of UniProt/SwissProt annotations are labeled with a short name for
-the type of annotation (e.g. &quot;glyco&quot;, &quot;disul&quot;, &quot;signal pep&quot; etc.).
-A click on them shows the full annotation and provides a link to the UniProt/SwissProt
-record for more details. TrEMBL annotations are always shown in light-blue. </p>
+the type of annotation (e.g. &quot;glyco&quot;, &quot;disulf bond&quot;, &quot;Signal peptide&quot;
+etc.). A click on them shows the full annotation and provides a link to the UniProt/SwissProt
+record for more details. TrEMBL annotations are always shown in 
+<span style="color: rgb(0,150,250)">light blue</span>, except in the Signal Peptides,
+Extracellular Domains, Transmembrane Domains, and Cytoplamsic domains subtracks.</p>
 
 <p>
-Mouse over a feature to see the full UniProt annotation comment. For variants, the mouse over will show the full name of the UniProt disease acronym.
+Mouse over a feature to see the full UniProt annotation comment. For variants, the mouse over will
+show the full name of the UniProt disease acronym.
 </p>
 
 <p>
-In the &quot;UniProt other&quot; track, modified residues are highlighted in light green
-glycosylation sites in dark green, disulfide bonds in grey.</p>
+The subtracks for domains related to subcellular location are sorted from outside to inside of 
+the cell: <span style="color: rgb(255,0,150)">Signal peptide</span>, 
+<span style="color: rgb(0,150,255)">extracellular</span>, <span style="color: rgb(0,150,0)">
+transmembrane</span>, and <span style="color: rgb(255,150,0)">cytoplasmic</span>.
+</p>
 
 <p>
-The subtracks for domains related to a subcellular location are sorted from outside to inside of the cell: signal (yellow), extracellular (blue), transmembrane (green), cytoplasmic (orange), nucleus (red).
-</p>
+In the &quot;UniProt Modifications&quot; track, lipoification sites are highlighted in 
+<span style="color: rgb(12,12,120)">dark blue</span>, glycosylation sites in 
+<span style="color: rgb(0,100,100)">dark green</span>, and phosphorylation in 
+<span style="color: rgb(200,200,0)">light green</span>.</p>
 
 <p>
 Duplicate annotations are removed as far as possible: if a TrEMBL annotation has the same genome position and same feature type, comment, disease and mutated amino acids as a SwissProt annotation, it is not shown again. Two annotations mapped through different transcripts but with the same genome coordinates are only shown once.
@@ -118,12 +126,9 @@ BLAT, then lifted to genome positions with pslMap.  UniProt annotations were
 obtained from the UniProt XML file.  The annotations were then mapped to the genome
 through the alignment using the pslMap program.  This mapping approach
 draws heavily on the <A HREF="http://modbase.compbio.ucsf.edu/LS-SNP/"
-TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans. For human and mouse, the alignments were filtered again
-by retaining only proteins known to be linked to a given transcript from the meta data.
-The complete script is
-part of the kent source tree and is located in src/hg/utils/otto/uniprot. The exact commands
-that were used to build this track can be found on <a
-href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/uniprot/doUniprot">github</a>.
+TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans. For human and mouse, the alignments were filtered again by retaining only proteins known to be linked to a given transcript from the meta data. 
+The main script used to build this track can be found on 
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/uniprot/doUniprot">github</a>.
 </p>
 
 <h2>Data Access</h2>
