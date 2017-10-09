@@ -151,7 +151,10 @@ This example shows a simple annotation file containing one data set in the bigBe
 displays random sized blocks across chr21 in the human genome. The big data formats, such as the 
 bigBed format, can be uploaded using a bigDataUrl that is specified in the track line. For more 
 information on these track line parameters, refer to the <a href="#TRACK">Track Lines</a>
-section.</p> 
+section. When using bigDataUrls, data is cached and updated every 300 seconds. If you are updating
+your big data tracks with different displays and are not seeing your track changes in the browser,
+you may want to add the <a href="hgTrackHubHelp.html#Debug">udcTimeout</a>= parameter to prevent caching of your track data
+and force a reload.</p> 
 <p> 
 You may paste these two lines directly into the "Add Custom Tracks" page to view this example in the
 browser:</p> 
