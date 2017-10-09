@@ -1,0 +1,708 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the eulMac1
+
+# Assembly name:  Emacaco_refEf_BWA_oneround
+# Organism name:  Eulemur macaco (black lemur)
+# Isolate:  Harmonia
+# Sex:  female
+# Taxid:          30602
+# BioSample:      SAMN03699689
+# BioProject:     PRJNA284191
+# Submitter:      University of Chicago
+# Date:           2015-8-6
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    LGHX01
+# Assembly method: BWA/samtools v. Jan-2013
+# Genome coverage: 21.0x
+# Sequencing technology: Illumina HiSeq
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_001262655.1
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_001262675.1              Primary Assembly
+## GCA_001262695.1              non-nuclear
+
+#############################################################################
+## The non-nuclear sequence are 26 unassembled scaffolds
+# LGHX01026747.1 LGHX01026748.1 LGHX01026749.1 LGHX01026750.1 LGHX01026751.1 
+# LGHX01026752.1 LGHX01026753.1 LGHX01026754.1 LGHX01026755.1 LGHX01026756.1 
+# LGHX01026757.1 LGHX01026758.1 LGHX01026759.1 LGHX01026760.1 LGHX01026761.1 
+# LGHX01026762.1 LGHX01026763.1 LGHX01026764.1 LGHX01026765.1 LGHX01026766.1 
+# LGHX01026767.1 LGHX01026768.1 LGHX01026769.1 LGHX01026770.1 LGHX01026771.1 
+# LGHX01026772.1
+#############################################################################
+
+#############################################################################
+# obtain photograph (DONE - 2017-10-02 - Hiram)
+    mkdir -p /hive/data/genomes/eulMac1/photo
+    cd /hive/data/genomes/eulMac1/photo
+
+    # received photo in emal from David haring
+
+    convert -geometry 400x400 -quality 80 '_DSC1281emm5942 harmonia 19.jpg' \
+        Eulemur_macaco,jpg
+
+    printf "photoCreditURL\thttp://dukelemurcenter.zenfolio.com/
+photoCreditName\tDavid Haring/Duke Primate Center\n" > photoReference.txt
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2017-10-02 - Hiram)
+    mkdir -p /hive/data/genomes/eulMac1/genbank
+    cd /hive/data/genomes/eulMac1/genbank
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Eulemur_macaco/all_assembly_versions/GCA_001262655.1_Emacaco_refEf_BWA_oneround/ ./
+
+    # sent 260 bytes  received 1685753598 bytes  24609545.37 bytes/sec
+    # total size is 1685546289  speedup is 1.00
+
+    # measure what we have here:
+    faSize *round_genomic.fna.gz
+# 2119875225 bases (18835905 N's 2101039320 real 1503484919 upper
+#	597554401 lower) in 26772 sequences in 1 files
+# Total size: mean 79182.5 sd 187031.2 min 200 (LGHX01021690.1)
+#	max 3277563 (LGHX01002207.1) median 1872
+# %28.19 masked total, %28.44 masked real
+
+    faCount *round_genomic.fna.gz | tail
+# seq    len             A       C          G       T         N       cpg
+# total 2119875225 622450511 427776114 428150535 622662160 18835905 23174725
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2017-10-02 - Hiram)
+    mkdir /hive/data/genomes/eulMac1/ucsc
+    cd /hive/data/genomes/eulMac1/ucsc
+
+    # verify no duplicate sequences:
+    time faToTwoBit ../genbank/*round_genomic.fna.gz genbank.2bit
+    #	real    0m59.399s
+
+    twoBitDup genbank.2bit
+    # should be silent output, otherwise the duplicates need to be removed
+
+    # since this is an unplaced contig assembly, verify all names are .1:
+    twoBitInfo genbank.2bit  stdout | awk '{print $1}' \
+	| sed -e 's/X[0-9]\+/X/;' | sort | uniq -c
+    #    26772 LGHX.1
+
+    # in this case, all the .1's can be changed to: v1
+
+    time zcat ../genbank/*round_genomic.fna.gz \
+       | sed -e 's/.1 Eulemur .*/v1/;' \
+            | gzip -c > chrUn.eulMac1.fa.gz
+    # real    11m22.965s
+
+    # there is no supplied AGP file:
+    hgFakeAgp -minContigGap=1 chrUn.eulMac1.fa.gz chrUn.eulMac1.agp
+
+    # verify fasta and AGP match:
+    time faToTwoBit chr*.fa.gz test.2bit
+    # real    0m58.605s
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    #  All AGP and FASTA entries agree - both files are valid
+
+    # confirm no duplicates, should be silent output
+    twoBitDup test.2bit
+
+    # verify nothing lost compared to genbank:
+    time twoBitToFa test.2bit stdout | faSize stdin
+# 2119875225 bases (18835905 N's 2101039320 real 1503484919 upper
+#	597554401 lower) in 26772 sequences in 1 files
+# Total size: mean 79182.5 sd 187031.2 min 200 (LGHX01021690v1)
+#	max 3277563 (LGHX01002207v1) median 1872
+# %28.19 masked total, %28.44 masked real
+
+    # real    0m35.104s
+
+    # same totals as above:
+# 2119875225 bases (18835905 N's 2101039320 real 1503484919 upper
+#	597554401 lower) in 26772 sequences in 1 files
+
+#############################################################################
+#  Initial database build (DONE - 2017-10-03 - Hiram)
+
+    cd /hive/data/genomes/eulMac1
+
+    # establish the config.ra file:
+    ~/kent/src/hg/utils/automation/prepConfig.pl eulMac1 mammal primate \
+       genbank/*_assembly_report.txt > eulMac1.config.ra
+    # going to need a mitoAcc ?
+
+    # fixup the genBankAccessionID and the ncbiGenomeId
+    # set mitoAcc to none
+    # verify this looks OK:
+
+    cat eulMac1.config.ra
+# config parameters for makeGenomeDb.pl:
+db eulMac1
+clade mammal
+genomeCladePriority 35
+scientificName Eulemur macaco
+commonName Black lemur
+assemblyDate Aug. 2015
+assemblyLabel University of Chicago
+assemblyShortLabel Emacaco_refEf_BWA_oneround
+orderKey 2437
+mitoAcc none
+fastaFiles /hive/data/genomes/eulMac1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/eulMac1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir primate
+photoCreditURL  http://dukelemurcenter.zenfolio.com/
+photoCreditName David Haring/Duke Primate Center
+ncbiGenomeId 39850
+ncbiAssemblyId 469011
+ncbiAssemblyName Emacaco_refEf_BWA_oneround
+ncbiBioProject 284191
+ncbiBioSample SAMN03699689
+genBankAccessionID GCA_001262655.1
+taxId 30602
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp eulMac1.config.ra) > agp.log 2>&1
+    # real    2m12.324s
+
+    # verify it ran OK:
+    #   *** All done!  (through the 'agp' step)
+
+    # this is going to fail on the name "Sclater's lemur" name due to the 'quote
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev \
+       -dbHost=hgwdev -fileServer=hgwdev -continue=db \
+           eulMac1.config.ra ) > db.log 2>&1
+    # real    17m35.170s
+
+    # check in the trackDb files created and add to trackDb/makefile
+    # temporary symlink until after masking
+    ln -s `pwd`/eulMac1.unmasked.2bit /gbdb/eulMac1/eulMac1.2bit
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-10-03 - Hiram)
+    mkdir /hive/data/genomes/eulMac1/bed/cytoBand
+    cd /hive/data/genomes/eulMac1/bed/cytoBand
+    makeCytoBandIdeo.csh eulMac1
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2017-10-03 - Hiram)
+    mkdir /hive/data/genomes/eulMac1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/eulMac1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/eulMac1/eulMac1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku eulMac1) > do.log 2>&1
+    # real    8m28.848s
+
+    cat fb.eulMac1.cpgIslandExtUnmasked.txt
+    # 33641182 bases of 2101039320 (1.601%) in intersection
+
+#############################################################################
+# running repeat masker (DONE - 2017-10-03 - Hiram)
+    mkdir /hive/data/genomes/eulMac1/bed/repeatMasker
+    cd /hive/data/genomes/eulMac1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku eulMac1) > do.log 2>&1 &
+    # real    462m49.738s
+
+    cat faSize.rmsk.txt
+# 2119875225 bases (18835905 N's 2101039320 real 1273216740 upper
+#	827822580 lower) in 26772 sequences in 1 files
+# Total size: mean 79182.5 sd 187031.2 min 200 (LGHX01021690v1)
+#	max 3277563 (LGHX01002207v1) median 1872
+# %39.05 masked total, %39.40 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps eulMac1 rmsk
+    # 829692002 bases of 2119875225 (39.139%) in intersection
+    # real    0m37.883s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result for high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' eulMac1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 829692002.000000
+    # real    0m26.024s
+
+##########################################################################
+# running simple repeat (DONE - 2017-10-03 - Hiram)
+
+    mkdir /hive/data/genomes/eulMac1/bed/simpleRepeat
+    cd /hive/data/genomes/eulMac1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409=5 eulMac1) > do.log 2>&1 &
+    # real    12m4.537s
+
+    cat fb.simpleRepeat
+    # 16563239 bases of 2101039320 (0.788%) in intersection
+
+    # add to this simple repeat to rmsk:
+    cd /hive/data/genomes/eulMac1
+    twoBitMask eulMac1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed eulMac1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa eulMac1.2bit stdout | faSize stdin > faSize.eulMac1.2bit.txt
+    cat faSize.eulMac1.2bit.txt
+# 2119875225 bases (18835905 N's 2101039320 real 1272661555 upper
+#	828377765 lower) in 26772 sequences in 1 files
+# Total size: mean 79182.5 sd 187031.2 min 200 (LGHX01021690v1)
+#	max 3277563 (LGHX01002207v1) median 1872
+# %39.08 masked total, %39.43 masked real
+
+    # reset the 2bit gbdb  symlink:
+    rm /gbdb/eulMac1/eulMac1.2bit
+    ln -s `pwd`/eulMac1.2bit /gbdb/eulMac1/eulMac1.2bit
+
+#############################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-10-03 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/eulMac1/bed/microsat
+    cd /cluster/data/eulMac1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed eulMac1 microsat microsat.bed
+    # Read 9717 elements of size 4 from microsat.bed
+
+#############################################################################
+# ucscToINSDC table/track (DONE - 2017-10-03 - Hiram)
+
+    mkdir /hive/data/genomes/eulMac1/bed/ucscToINSDC
+    cd /hive/data/genomes/eulMac1/bed/ucscToINSDC
+
+    # there is no chrM sequence in this assembly
+    # find accession for chrM
+    grep chrM ../../eulMac1.agp
+# empty result
+
+    # standard procedure does not wrk here, there is no Primary_Assembly/
+    # hierarchy.  Simply make the list manually:
+    cut -f1 ../../chrom.sizes | sort | while read U
+do
+  C=`echo $U | sed -e 's/v1/.1/;'`
+  printf "%s\t%s\n" "${U}" "${C}"
+done > ucscToINSDC.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    join ucscToINSDC.txt name.coordinate.tab \
+       | awk '{printf "%s\t%d\t%d\t%s\n", $1,$3,$4,$2}' > ucscToINSDC.bed
+
+
+    # should be same line counts throughout:
+    wc -l *
+    #	26772 name.coordinate.tab
+    #	26772 ucscToINSDC.bed
+    #	26772 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab eulMac1 ucscToINSDC stdin ucscToINSDC.bed
+
+    # checkTableCoords should be silent to indicate no errors
+    checkTableCoords eulMac1
+
+    # should cover %100 entirely:
+    featureBits -countGaps eulMac1 ucscToINSDC
+    # 2119875225 bases of 2119875225 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2017-10-03 - Hiram)
+
+    mkdir /hive/data/genomes/eulMac1/bed/chromAlias
+    cd /hive/data/genomes/eulMac1/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' eulMac1 \
+        > ucsc.genbank.tab
+
+    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab \
+        | sort > eulMac1.chromAlias.tab
+
+    hgLoadSqlTab eulMac1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        eulMac1.chromAlias.tab
+
+    # verify in the browser that the names can be used in the search box
+    # just as if they were chromosome names, e.g.:
+    #   LGHX01000033.1:400-500
+
+#############################################################################
+# fixup search rule for assembly track/gold table (DONE - 2017-10-03 - Hiram)
+
+    cd ~/kent/src/hg/makeDb/trackDb/primate/eulMac1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" eulMac1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
+ 26772 LGHXv1_1
+   8443 LGHXv1_10
+   1828 LGHXv1_100
+    ... ... etc ...
+
+    # implies a search rule of: 'LGHX[0-9]+([v0-9_]+)?'
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" eulMac1 | wc -l
+    # 635422
+
+    hgsql -N -e "select frag from gold;" eulMac1 \
+       | egrep -e 'LGHX[0-9]+([v0-9_]+)?' | wc -l
+    # 635422
+
+    hgsql -N -e "select frag from gold;" eulMac1 \
+       | egrep -v -e 'LGHX[0-9]+([v0-9_]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rhesus/eulMac1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex LGHX[0-9]+([v0-9_]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box, check full accession name,
+    # accession name without .1
+    # truncated accession name produces multiple results
+    # and the two chrM accessions, with and without the .1 and partial name
+    # use: accessionName:n-m to display locations n to m on that accession
+
+    git commit -m 'add gold table search rule refs #20266' trackDb.ra
+
+##########################################################################
+## WINDOWMASKER (DONE - 2017-10-04 - Hiram)
+
+    mkdir /hive/data/genomes/eulMac1/bed/windowMasker
+    cd /hive/data/genomes/eulMac1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev eulMac1) > do.log 2>&1
+    # real    198m58.528s
+
+    # Masking statistics
+    cat faSize.eulMac1.cleanWMSdust.txt
+# 2119875225 bases (18835905 N's 2101039320 real 1491367473 upper
+#	609671847 lower) in 26772 sequences in 1 files
+# Total size: mean 79182.5 sd 187031.2 min 200 (LGHX01021690v1)
+#	max 3277563 (LGHX01002207v1) median 1872
+# %28.76 masked total, %29.02 masked real
+
+    cat fb.eulMac1.rmsk.windowmaskerSdust.txt
+    # 361342967 bases of 2119875225 (17.045%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2017-10-04 - Hiram)
+    mkdir /hive/data/genomes/eulMac1/bed/cpgIslands
+    cd /hive/data/genomes/eulMac1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku eulMac1) > do.log 2>&1
+    # real    5m36.111s
+
+    cat fb.eulMac1.cpgIslandExt.txt
+    # 29694380 bases of 2101039320 (1.413%) in intersection
+
+##############################################################################
+# ncbiRefSeq gene track (TBD - 2016-05-05 - Hiram)
+    mkdir /hive/data/genomes/eulMac1/bed/ncbiRefSeq
+    cd /hive/data/genomes/eulMac1/bed/ncbiRefSeq
+
+    # working on this script, running step by step:
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -stop=download -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      genbank vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 eulMac1) > download.log 2>&1
+    # real    12m36.320s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -continue=process -stop=process -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      genbank vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 eulMac1) > process.log 2>&1
+    # real    4m22.621s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -continue=load -stop=load -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      genbank vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 eulMac1) > load.log 2>&1
+    # real    0m21.690s
+
+    cat fb.ncbiRefSeq.eulMac1.txt
+    # 74646536 bases of 2725937399 (2.738%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2017-10-04 - Hiram)
+    mkdir /hive/data/genomes/eulMac1/bed/genscan
+    cd /hive/data/genomes/eulMac1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku eulMac1) > do.log 2>&1
+    # real    24m23.813s
+
+    cat fb.eulMac1.genscan.txt
+    #   52771608 bases of 2101039320 (2.512%) in intersection
+
+    cat fb.eulMac1.genscanSubopt.txt
+    #   56898232 bases of 2101039320 (2.708%) in intersection
+
+#############################################################################
+# augustus gene track (DONE - 2017-10-04 - Hiram)
+
+    mkdir /hive/data/genomes/eulMac1/bed/augustus
+    cd /hive/data/genomes/eulMac1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev eulMac1) > do.log 2>&1
+    # real    61m0.288s
+
+    cat fb.eulMac1.augustusGene.txt
+    # 49557505 bases of 2101039320 (2.359%) in intersection
+
+#############################################################################
+# Create kluster run files (DONE - 2017-10-04 - Hiram)
+
+    # find 'real' base count for this assembly:  (numerator below)
+    cd /hive/data/genomes/eulMac1
+    head -1 faSize.eulMac1.2bit.txt
+# 2119875225 bases (18835905 N's 2101039320 real 1272661555 upper
+#	828377765 lower) in 26772 sequences in 1 files
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2101039320 / 2861349177 \) \* 1024
+    # ( 2101039320 / 2861349177 ) * 1024 = 751.905528
+
+    # ==> use -repMatch=700 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 100
+    cd /hive/data/genomes/eulMac1
+    time blat eulMac1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/eulMac1.11.ooc \
+        -repMatch=700
+    #   Wrote 26018 overused 11-mers to jkStuff/eulMac1.11.ooc
+    #	real    0m37.223s
+
+    # there are no non-bridged gaps
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N \
+#         -e 'select * from gap where bridge="no" order by size;' eulMac1 \
+#         | sort -k7,7nr
+    #   minimum size is 50000
+#     gapToLift -verbose=2 -minGap=50000 eulMac1 \
+# 	jkStuff/eulMac1.nonBridged.lft -bedFile=jkStuff/eulMac1.nonBridged.bed
+
+#########################################################################
+# lastz/chain/net swap from hg38 (DONE - 2017-10-04 - Hiram)
+    # alignment to hg38
+
+    cd /hive/data/genomes/hg38/bed/lastzEulMac1.2017-10-04
+    cat fb.hg38.chainEulMac1Link.txt
+    # 1027856175 bases of 3049335806 (33.708%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 eulMac1) \
+	> rbest.log 2>&1 &
+    # real    220m20.185s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/eulMac1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/eulMac1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzEulMac1.2017-10-04/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    47m2.650s
+
+    cat fb.eulMac1.chainHg38Link.txt
+    # 979925982 bases of 2101039320 (46.640%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulMac1 hg38) \
+	> rbest.log 2>&1
+    # real    200m34.710s
+
+#########################################################################
+# lastz/chain/net swap from mm10 (DONE - 2017-10-05 - Hiram)
+    # alignment on mm10
+
+    cd /hive/data/genomes/mm10/bed/lastzEulMac1.2017-10-05
+    cat fb.mm10.chainEulMac1Link.txt
+    #	925968814 bases of 2652783500 (34.906%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 eulMac1) \
+	> rbest.log 2>&1 &
+    # real    334m49.287s
+
+    mkdir /hive/data/genomes/eulMac1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/eulMac1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzEulMac1.2017-10-05/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    64m52.738s
+
+    cat fb.eulMac1.chainMm10Link.txt
+    #	895308387 bases of 2101039320 (42.613%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulMac1 mm10) \
+	> rbest.log 2>&1
+    # real    267m17.552s
+
+##############################################################################
+# GENBANK AUTO UPDATE (DONE - 2017-10-04 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # organism       mrnaCnt estCnt  refSeqCnt
+    # Eulemur albifrons       1       0       0
+    # Eulemur fulvus  8       0       0
+    # Eulemur fulvus collaris 2       0       0
+    # Eulemur mongoz  2       0       0
+
+    # edit etc/genbank.conf to add eulMac1 just before susScr3
+
+# eulMac1 (Black lemur / Eulemur macaco / taxId 30602)
+eulMac1.serverGenome = /hive/data/genomes/eulMac1/eulMac1.2bit
+eulMac1.clusterGenome = /hive/data/genomes/eulMac1/eulMac1.2bit
+eulMac1.ooc = /hive/data/genomes/eulMac1/jkStuff/eulMac1.11.ooc
+eulMac1.lift = no
+eulMac1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+eulMac1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+eulMac1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+eulMac1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+eulMac1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+eulMac1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+eulMac1.downloadDir = eulMac1
+# there are no refseq mrna native
+eulMac1.refseq.mrna.native.load  = no
+eulMac1.refseq.mrna.xeno.load = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+eulMac1.genbank.mrna.xeno.load = no
+eulMac1.genbank.mrna.native.load = no
+eulMac1.genbank.est.native.load = no
+eulMac1.perChromTables = no
+
+# And edit src/lib/gbGenome.c to add new species two lines:
+#	static char *eulMacNames[] = {"Eulemur macaco", NULL};
+#	    {"eulMac", eulMacNames},
+
+    git commit -m \
+"adding eulFla1 and eulMac1 refs #20265 #20266" \
+       etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial eulMac1
+    #  logFile: var/build/logs/2017.10.04-19:56:27.eulMac1.initalign.log
+    #   real    41m14.159s
+
+    tail -2 var/build/logs/2017.10.04-19:56:27.eulMac1.initalign.log
+# hgwdev 2017.10.04-20:35:40 eulMac1.initalign: Succeeded: eulMac1
+# hgwdev 2017.10.04-20:37:41 eulMac1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.eulMac1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad eulMac1
+    # logFile: var/dbload/hgwdev/logs/2017.10.04-20:53:39.eulMac1.dbload.log
+    # real    4m52.237s
+
+    tail -1 var/dbload/hgwdev/logs/2017.10.04-20:53:39.eulMac1.dbload.log
+    # hgwdev 2017.10.04-20:58:32 eulMac1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add eulMac1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m \
+"Added eulMac1 - Black lemur - Eulemur macaco refs #20266" \
+	etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+##############################################################################
+#  BLATSERVERS ENTRY (DONE - 2017-10-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("eulMac1", "blat1d", "17888", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("eulMac1", "blat1d", "17889", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+##############################################################################
+# set default position similar location as hg38  (DONE - 2017-10-04 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="LGHX01001029v1:67346-92292" where name="eulMac1";' \
+	hgcentraltest
+
+##############################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2017-10-06 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until these are all clean outputs:
+    joinerCheck -database=eulMac1 -tableCoverage all.joiner
+    joinerCheck -database=eulMac1 -times all.joiner
+    joinerCheck -database=eulMac1 -keys all.joiner
+
+    cd /hive/data/genomes/eulMac1
+    time (makeDownloads.pl eulMac1) > downloads.log 2>&1
+    # real    15m27.413s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/eulMac1/pushQ
+    cd /hive/data/genomes/eulMac1/pushQ
+    time (makePushQSql.pl -redmineList eulMac1) \
+	> eulMac1.pushQ.sql 2> stderr.out
+    # real    3m49.428s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # writing redmine listings to
+    # redmine.eulMac1.file.list
+    # redmine.eulMac1.table.list
+    # redmine.eulMac1.releaseLog.txt
+    # WARNING: eulMac1 does not have ucscToRefSeq
+    # WARNING: eulMac1 does not have seq
+    # WARNING: eulMac1 does not have extFile
+    # WARNING: eulMac1 does not have estOrientInfo
+    # WARNING: eulMac1 does not have mrnaOrientInfo
+
+    # examine these files to make sure they appear sane,
+    # then enter the full path names of these listing files:
+
+# /hive/data/genomes/eulMac1/pushQ/redmine.eulMac1.file.list
+# /hive/data/genomes/eulMac1/pushQ/redmine.eulMac1.releaseLog.txt
+# /hive/data/genomes/eulMac1/pushQ/redmine.eulMac1.table.list
+
+    # into the Redmine #20266 and set to QA Ready.
+
+#########################################################################
