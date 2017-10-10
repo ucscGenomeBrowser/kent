@@ -800,7 +800,7 @@ else
     {
     /* Check type field. */
     char *type = requiredSetting(hub, genome, tdb, "type");
-    if (!( isCustomComposite(tdb) && startsWithWord("wig", type)))
+    if (!( isCustomComposite(tdb) && (startsWithWord("wig", type) ||  startsWithWord("bedGraph", type))))
         {
         if (startsWithWord("mathWig", type) )
             {
@@ -808,7 +808,7 @@ else
             }
         else 
             {
-            if (!startsWithWord("wig", type) )
+            if (!(startsWithWord("wig", type)||  startsWithWord("bedGraph", type)))
                 {
                 if (!(startsWithWord("bigWig", type) ||
                   startsWithWord("bigBed", type) ||

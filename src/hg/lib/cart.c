@@ -840,14 +840,14 @@ setUdcTimeout(cart);
 if (cartVarExists(cart, hgHubDoDisconnect))
     doDisconnectHub(cart);
 
-pushWarnHandler(cartHubWarn);
-char *newDatabase = hubConnectLoadHubs(cart);
-popWarnHandler();
-
 #ifndef GBROWSE
 if (didSessionLoad)
     cartCopyCustomTracks(cart);
 #endif /* GBROWSE */
+
+pushWarnHandler(cartHubWarn);
+char *newDatabase = hubConnectLoadHubs(cart);
+popWarnHandler();
 
 if (newDatabase != NULL)
     {
