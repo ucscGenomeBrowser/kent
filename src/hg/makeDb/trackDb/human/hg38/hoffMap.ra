@@ -16,6 +16,7 @@ html Umap
 	shortLabel Umap_S24
 	longLabel Single-read mappability with 24-mers
 	visibility dense
+	priority 1
 	html Umap
 	color 80,20,240
 	
@@ -29,6 +30,7 @@ html Umap
 	shortLabel Umap_S50
 	longLabel Single-read mappability with 50-mers
 	visibility hide
+	priority 3
 	html Umap
 	color 80,120,240
 	
@@ -42,6 +44,7 @@ html Umap
 	shortLabel Umap_S36
 	longLabel Single-read mappability with 36-mers
 	visibility hide
+	priority 2
 	html Umap
 	color 80,70,240
 	
@@ -55,6 +58,7 @@ html Umap
 	shortLabel Umap_S100
 	longLabel Single-read mappability with 100-mers
 	visibility hide
+	priority 4
 	html Umap
 	color 80,170,240
 	
@@ -69,6 +73,7 @@ html Umap
 	shortLabel Umap_M36
 	longLabel Multi-read mappability with 36-mers
 	visibility hide
+	priority 6
 	color 80,70,240
 	html Umap
 	
@@ -82,6 +87,7 @@ html Umap
 	shortLabel Umap_M24
 	longLabel Multi-read mappability with 24-mers
 	visibility full
+	priority 5
 	color 80,20,240
 	html Umap
 	
@@ -95,6 +101,7 @@ html Umap
 	shortLabel Umap_M50
 	longLabel Multi-read mappability with 50-mers
 	visibility hide
+	priority 7
 	color 80,120,240
 	html Umap
 	
@@ -108,6 +115,7 @@ html Umap
 	shortLabel Umap_M100
 	longLabel Multi-read mappability with 100-mers
 	visibility hide
+	priority 8
 	color 80,170,240
 	html Umap
 	
@@ -130,6 +138,7 @@ html Bismap
 	shortLabel Bismap_S50 -
 	longLabel Single-read mappability with 50-mers after bisulfite conversion (reverse strand)
 	visibility hide
+	priority 6
 	color 240,120,80
 	html Bismap
 	
@@ -143,6 +152,7 @@ html Bismap
 	shortLabel Bismap_S50 +
 	longLabel Single-read mappability with 50-mers after bisulfite conversion (forward strand)
 	visibility hide
+	priority 5
 	color 240,120,80
 	html Bismap
 	
@@ -156,6 +166,7 @@ html Bismap
 	shortLabel Bismap_S100 -
 	longLabel Single-read mappability with 100-mers after bisulfite conversion (reverse strand)
 	visibility hide
+	priority 7
 	color 240,170,80
 	html Bismap
 	
@@ -169,6 +180,7 @@ html Bismap
 	shortLabel Bismap_S24 +
 	longLabel Single-read mappability with 24-mers after bisulfite conversion (forward strand)
 	visibility dense
+	priority 1
 	color 240,20,80
 	html Bismap
 	
@@ -182,6 +194,7 @@ html Bismap
 	shortLabel Bismap_S36 +
 	longLabel Single-read mappability with 36-mers after bisulfite conversion (forward strand)
 	visibility hide
+	priority 3
 	color 240,70,80
 	html Bismap
 	
@@ -195,6 +208,7 @@ html Bismap
 	shortLabel Bismap_S36 -
 	longLabel Single-read mappability with 36-mers after bisulfite conversion (reverse strand)
 	visibility hide
+	priority 4
 	color 240,70,80
 	html Bismap
 	
@@ -208,6 +222,7 @@ html Bismap
 	shortLabel Bismap_S100 +
 	longLabel Single-read mappability with 100-mers after bisulfite conversion (forward strand)
 	visibility hide
+	priority 7
 	color 240,170,80
 	html Bismap
 	
@@ -221,6 +236,7 @@ html Bismap
 	shortLabel Bismap_S24 -
 	longLabel Single-read mappability with 24-mers after bisulfite conversion (reverse strand)
 	visibility dense
+	priority 2
 	color 240,20,80
 	html Bismap
 	
@@ -235,6 +251,7 @@ html Bismap
 	shortLabel Bismap_M50
 	longLabel Multi-read mappability with 50-mers after bisulfite conversion
 	visibility hide
+	priority 11
 	color 240,120,80
 	html Bismap
 	
@@ -248,6 +265,7 @@ html Bismap
 	shortLabel Bismap_M36
 	longLabel Multi-read mappability with 36-mers after bisulfite conversion
 	visibility hide
+	priority 10
 	color 240,70,80
 	html Bismap
 	
@@ -261,6 +279,7 @@ html Bismap
 	shortLabel Bismap_M100
 	longLabel Multi-read mappability with 100-mers after bisulfite conversion
 	visibility hide
+	priority 12
 	color 240,170,80
 	html Bismap
 	
@@ -274,5 +293,6 @@ html Bismap
 	shortLabel Bismap_M24
 	longLabel Multi-read mappability with 24-mers after bisulfite conversion
 	visibility full
+	priority 9
 	color 240,20,80
 	html Bismap
