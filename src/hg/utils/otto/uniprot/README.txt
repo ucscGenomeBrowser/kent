@@ -7,7 +7,7 @@ Our process is this (doUniprot):
 - compare local date against ftp and do nothing is not new
 - if the file has not been updated on the uniprot.org server, exit
 - parse the uniprot data from XML to tab files, one per organism
-- create an alignment uniprotId -> genome with MarkD's pslMap
+- create an alignment uniprotId -> genome with MarkD's pslMap and pslSelect
 - run uniprotLift and use this tab-sep file and the alignment to create the bigBed files
 
 - for genomes with no knownGene track, we cannot use the UniProt <-> gene mapping we already have.

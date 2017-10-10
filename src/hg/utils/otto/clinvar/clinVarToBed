@@ -63,7 +63,7 @@ def shortenName(name):
 
         delMatch = delRe.match(name)
         if delMatch!=None:
-            shortName = name[-3:]
+            shortName = name[-3:] # just the type: del,ins or dup
 
         posMatch = posRe.match(name)
         if posMatch!=None:
@@ -301,7 +301,8 @@ cnvRe = re.compile(r'GRCh[0-9]*/hg[0-9]* ([XY0-9pq.-]+)\([XYa-z_:0-9.-]+\)(x[0-9
 hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_()-]+)')
 
 # e.g. g.(13359800_13371688)_(13371779_13505931)del
-delRe = re.compile(r'g\.\([?0-9()_-]+(del|dup|ins)')
+# or c.340+11600_340+16200del
+delRe = re.compile(r'[gc]\.\(?[?0-9()_+-]+\)?(del|dup|ins)')
 
 # e.g.
 # c.80_83delGGATinsTGCTGTAAACTGTAACTGTAAA
