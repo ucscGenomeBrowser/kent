@@ -359,7 +359,7 @@ static void printHelp()
 {
 puts(
 "<a name='INFO_SECTION'></a>\n"
-"    <div class='row gbSectionBanner'>\n"
+"    <div class='row mygbSectionBanner'>\n"
 "        <div class='col-md-11'>Help</div>\n"
 "        <div class='col-md-1'>\n"
 );
@@ -398,6 +398,8 @@ webIncludeResourceFile("spectrum.min.css");
 webIncludeResourceFile("hgGtexTrackSettings.css");
 
 webIncludeFile("inc/hgCollection.html");
+char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
+jsInlineF("$('#assembly').text('%s');\n",assembly);
 
 printHelp();
 doTable(cart, db, groupList, trackList);
