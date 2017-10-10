@@ -484,6 +484,20 @@ visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
 
 }
 
+static void modifyName(struct trackDb *tdb, char *hubName, struct hash  *collectionNameHash)
+/* If this is a new track in the collection we want to make sure
+ * it gets a different name than the track in trackDb.
+ * If it's a custom track, we want to squirrel away the original track name. */
+{
+if ((tdb->grp == NULL) || differentString(tdb->grp, hubName))
+    {
+    hashStore(collectionNameHash,  tdb->track);
+
+    if (isCustomTrack(tdb->track))
+        hashAdd(tdb->settingsHash, "origTrackName", tdb->track);
+    }
+}
+
 static int outView(FILE *f, struct sqlConnection *conn, char *db, struct track *view, char *parent, struct hash *nameHash, struct hash *collectionNameHash, int priority, char *hubName)
 // output a view to a trackhub
 {
@@ -498,23 +512,15 @@ fprintf(f,"\ttrack %s\n\
 \tpriority %d\n\
 \tviewFunc %s \n\
 \tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), priority++, view->viewFunc, view->visibility);
-//fprintf(f,"\tequation +\n");
 fprintf(f, "\n");
 
-//int useColor = 0;
 struct track *track = view->trackList;
 for(; track; track = track->next)
     {
     struct trackDb *tdb = hashMustFindVal(nameHash, track->name);
-    if ((tdb->grp == NULL) || differentString(tdb->grp, hubName))
-        {
-        // this is a new track in the collection.  We want to make sure
-        // it gets a different name than the track in trackDb
-        hashStore(collectionNameHash,  tdb->track);
-        }
+    modifyName(tdb, hubName, collectionNameHash);
 
     outTdb(conn, db, f, track->name,tdb, view->name, track->visibility, track->color, track,  nameHash, collectionNameHash, 2, priority++);
-    //useColor++;
     }
 
 return priority;
@@ -549,12 +555,7 @@ for(collection = collectionList; collection; collection = collection->next)
         else
             {
             tdb = hashMustFindVal(nameHash, track->name);
-            if ((tdb->grp == NULL) || differentString(tdb->grp, hubName))
-                {
-                // this is a new track in the collection.  We want to make sure
-                // it gets a different name than the track in trackDb
-                hashStore(collectionNameHash,  tdb->track);
-                }
+            modifyName(tdb, hubName, collectionNameHash);
 
             outTdb(conn, db, f, track->name,tdb, collection->name, track->visibility, track->color, track,  nameHash, collectionNameHash, 1, priority++);
             }
