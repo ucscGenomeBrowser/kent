@@ -22,7 +22,8 @@ evidence. The track is updated after every ClinVar release, once a month.</p>
 We display the data obtained from ClinVar as-is to avoid discrepancies between UCSC and NCBI. 
 However, be aware that the ClinVar conventions are different from the VCF standard. 
 Variants may be right-aligned or may contain additional context, e.g. for
-inserts. ExAC/gnomAD make available <a href="https://github.com/macarthur-lab/clinvar">a converter</a> 
+inserts. ExAC/gnomAD make available <a href="https://github.com/macarthur-lab/clinvar"
+target="_blank">a converter</a>
 to make ClinVar more comparable to VCF files.</p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -34,8 +35,10 @@ variant's details page.  Leave the mouse over a feature for more than 2 seconds
 to show the clinical significance of a variant.
 </p>
 
-<p>The track is divided into two subtracks, one for copy number variants (CNVs), which are all variants longer than 100bp,
-and a second track for shorter substitutions and indels.<br>
+<p>The track is divided into two subtracks, one for copy number variants (CNVs), which are all 
+variants longer than 100bp, and a second track for shorter substitutions and indels.</p>
+
+<p>
 Until October 2017, all variants with the ClinVar types copy number gain/loss
 and DbVar "nsv" accessions were put in the CNV category.  Due
 to the ClinVar type not capturing this information anymore, anything longer
@@ -48,7 +51,8 @@ Entries in the ClinVar CNV track are colored
 </p>
 
 <p>
-The score of the variants is the number of "stars" in ClinVar. On the track configuration page (above), you can filter the track to show only variants with more than a certain number of stars. For more information on the star rating, see the <a href="https://www.ncbi.nlm.nih.gov/clinvar/docs/review_status/">ClinVar documentation</a>.
+The score of the variants is the number of "stars" in ClinVar. On the track configuration page (above), you can filter the track to show only variants with more than a certain number of stars. For more information on the star rating, see the <a href="https://www.ncbi.nlm.nih.gov/clinvar/docs/review_status/"
+target="_blank">ClinVar documentation</a>.
 </p>
 
 
@@ -81,7 +85,9 @@ download server <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/archive/
 <p>
 ClinVar files were reformatted at UCSC to the <a href="../goldenPath/help/bigBed.html">bigBed</a> format.
 The data is updated every month, one week after the ClinVar release date.
-The program that performs the update is available on <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/utils/otto/clinvar/clinVarToBed">Github</a>.
+The program that performs the update is available on
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/utils/otto/clinvar/clinVarToBed"
+target="_blank">Github</a>.
 </p>
 
 <h2>Credits</h2>
@@ -93,8 +99,7 @@ Thanks to NCBI for making the ClinVar data available on their FTP site as a tab-
 <p>
 Landrum MJ, Lee JM, Benson M, Brown G, Chao C, Chitipiralla S, Gu B, Hart J, Hoffman D, Hoover J
 <em>et al</em>.
-<a href="https://academic.oup.com/nar/article/44/D1/D862/2502702/ClinVar-public-archive-of-
-interpretations-of" target="_blank">
+<a href="https://academic.oup.com/nar/article/44/D1/D862/2502702/ClinVar-public-archive-of-interpretations-of" target="_blank">
 ClinVar: public archive of interpretations of clinically relevant variants</a>.
 <em>Nucleic Acids Res</em>. 2016 Jan 4;44(D1):D862-8.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26582918" target="_blank">26582918</a>; PMC: <a

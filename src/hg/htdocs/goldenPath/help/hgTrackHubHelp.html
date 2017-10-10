@@ -827,12 +827,46 @@ perfect for hosting the binary data required for track hubs.</p>
 
 <p>In order to host your data on CyVerse, you first must create an account and then user their
 <a href="https://de.cyverse.org/de">Discovery Environment</a> to upload data. After creating an 
-account and uploading some data, you must give the data an "Info-Type". After giving an appropriate
-type (like &quot;bam&quot;), then you can click the <em>Share</em> menu item and click the 
-<em>Send to Genome Browser</em> link, which will result in a URL that you can use in the 
-<em>bigDataUrl</em> field of your trackDb.txt. Note this means after uploading your 
-<em>hub.txt</em>, <em>genomes.txt</em>, <em>trackDb.txt</em>, and <em>bigDataUrl</em> files, 
-you will need to edit the files to point to their CyVerse locations.</p>
+account, use the &quot;Upload&quot; and &quot;Simple Upload&quot; buttons to upload files 
+individually as shown below:
+<div class="text-center">
+  <img src="../../images/cyverseUploadButton.png">
+</div>
+<p>
+Or use <a href="https://pods.iplantcollaborative.org/wiki/display/DS/Using+Cyberduck+for+Uploading+and+Downloading+to+the+Data+Store">
+Cyberduck</a> to bulk transfer up to 80GB of data in one go.</p>
+
+<p>
+After uploading some data, check the &quot;Info-Type&quot; of your BAM, bigWig, bigBed, etc. files.
+If an Info-Type has not been selected automatically or if it is incorrect, make sure it 
+is correct. If uploading an assembly hub, assign the Info-Type &quot;bed&quot; to the 2bit file.
+</p>
+
+<p>
+After giving an appropriate type (like &quot;bam&quot;) to your binary files, you must update any
+text files to point to CyVerse locations. For example, your <em>hub.txt</em> will contain a line
+like:
+<pre><code>genomesFile genomes.txt</code></pre>
+<p>Which must be edited to point to a CyVerse URL such as:</p>
+<pre><code>genomesFile https://de.cyverse.org/dl/....</code></pre>
+<p>Luckily, CyVerse allows you to edit these text files after uploading them, so you can create a 
+public link:</p>
+<div class="text-center">
+  <img src="../../images/cyverseCreatePublicLink.png">
+</div>
+<p>And then edit the fields of your <em>hub.txt</em>, <em>genomes.txt</em>, and <em>trackDb.txt</em> 
+files like so:</p>
+<div class="text-center">
+  <img src="../../images/cyverseEditedPaths.png">
+</div>
+<p>To get the correct links to bigData files, use the &quot;Send To: Genome Browser&quot; links in the
+menu:</p>
+<div class="text-center">
+  <img src="../../images/cyverseSendToGenomeBrowser.png">
+</div>
+<p>Which will result in a URL you can copy and paste into your <em>trackDb.txt</em>, similar to creating
+a public link.
+</p>
 
 <p>
 Please see the <a href="https://wiki.cyverse.org/wiki/display/DEmanual/Viewing+Genome+Files+in+a+Genome+Browser">

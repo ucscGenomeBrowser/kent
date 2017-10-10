@@ -74,7 +74,7 @@ return NULL;
 static boolean trackCanBeAdded(struct trackDb *tdb)
 // are we allowing this track into a custom composite
 {
-return  (tdb->subtracks == NULL) && !startsWith("wigMaf",tdb->type) &&  (startsWith("wig",tdb->type) || startsWith("bigWig",tdb->type)) ;
+return  (tdb->subtracks == NULL) && !startsWith("wigMaf",tdb->type) &&  (startsWith("wig",tdb->type) || startsWith("bigWig",tdb->type) || startsWith("bedGraph",tdb->type)) ;
 }
 
 static void printGroup(char *parent, struct trackDb *tdb, boolean folder, boolean user)
@@ -82,26 +82,22 @@ static void printGroup(char *parent, struct trackDb *tdb, boolean folder, boolea
 {
 char *userString = "";
 char *prefix = "";
-char *viewFunc = "show all";
+char *viewFunc = NULL;
 
 if (user)
     {
-    //prefix = "coll_";
     if (tdb->parent && tdb->subtracks) 
         {
         viewFunc = trackDbSetting(tdb, "viewFunc");
-        if (viewFunc == NULL)
-            viewFunc = "show all";
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'viewType='view' class='folder'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='view' class='folder'";
         }
     else if (tdb->subtracks)
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track' class='folder'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='track' class='folder'";
     else
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/invisible16.png\\\"}' viewType='track'";
     }
 else
     {
-    //prefix = "coll_";
     if (tdb->parent && tdb->subtracks) 
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'class='nodrop' viewType='view'";
     else if (tdb->subtracks)
@@ -114,7 +110,15 @@ else
     
 #define IMAKECOLOR_32(r,g,b) ( ((unsigned int)b<<0) | ((unsigned int)g << 8) | ((unsigned int)r << 16))
 
-jsInlineF("<li shortLabel='%s' longLabel='%s' color='#%06x' viewFunc='%s' visibility='%s'  name='%s%s' %s>%s",  tdb->shortLabel, tdb->longLabel,IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB), viewFunc, hStringFromTv(tdb->visibility), prefix,  trackHubSkipHubName(tdb->track),   userString,  tdb->shortLabel );
+char buffer[1024];
+char *viewFuncString = "";
+if (viewFunc != NULL)
+    {
+    safef(buffer, sizeof buffer, "viewFunc='%s' ", viewFunc);
+    viewFuncString = buffer;
+    }
+
+jsInlineF("<li shortLabel='%s' longLabel='%s' color='#%06x' %s visibility='%s'  name='%s%s' %s>%s",  tdb->shortLabel, tdb->longLabel,IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB), viewFuncString, hStringFromTv(tdb->visibility), prefix,  trackHubSkipHubName(tdb->track),   userString,  tdb->shortLabel );
 jsInlineF(" (%s)", tdb->longLabel);
 
 
@@ -289,7 +293,7 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
     }
 if (curGroup != NULL)
     {
-    // print out all the tracks in this group
+    // print out all the tracks in all the collections
     struct trackDb *tdb;
     jsInlineF("$('#currentCollection').append(\"");
     for(tdb = trackList; tdb;  tdb = tdb->next)
@@ -306,7 +310,7 @@ if (curGroup != NULL)
         }
     jsInlineF("\");\n");
     
-    // print out all the tracks in this group
+    // print out all the collections
     jsInlineF("$('#collectionList').append(\"");
     for(tdb = trackList; tdb;  tdb = tdb->next)
         {
@@ -355,7 +359,7 @@ static void printHelp()
 {
 puts(
 "<a name='INFO_SECTION'></a>\n"
-"    <div class='row gbSectionBanner'>\n"
+"    <div class='row mygbSectionBanner'>\n"
 "        <div class='col-md-11'>Help</div>\n"
 "        <div class='col-md-1'>\n"
 );
@@ -394,6 +398,8 @@ webIncludeResourceFile("spectrum.min.css");
 webIncludeResourceFile("hgGtexTrackSettings.css");
 
 webIncludeFile("inc/hgCollection.html");
+char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
+jsInlineF("$('#assembly').text('%s');\n",assembly);
 
 printHelp();
 doTable(cart, db, groupList, trackList);
@@ -433,6 +439,11 @@ if (bigDataUrl == NULL)
     if (startsWith("bigWig", tdb->type))
         dataUrl = getSqlBigWig(conn, db, tdb);
     }
+
+char *tdbType = trackDbSetting(tdb, "tdbType");
+if (tdbType != NULL)
+    hashReplace(tdb->settingsHash, "type", tdbType);
+
 struct hashCookie cookie = hashFirst(tdb->settingsHash);
 struct hashEl *hel;
 fprintf(f, "%strack %s\n",tabs, makeUnique(collectionNameHash, name));
@@ -475,14 +486,21 @@ visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
 
 }
 
-static char *skipColl(char *str)
+static void modifyName(struct trackDb *tdb, char *hubName, struct hash  *collectionNameHash)
+/* If this is a new track in the collection we want to make sure
+ * it gets a different name than the track in trackDb.
+ * If it's a custom track, we want to squirrel away the original track name. */
 {
-if (startsWith("coll_", str))
-    return &str[5];
-return str;
+if ((tdb->grp == NULL) || differentString(tdb->grp, hubName))
+    {
+    hashStore(collectionNameHash,  tdb->track);
+
+    if (isCustomTrack(tdb->track))
+        hashAdd(tdb->settingsHash, "origTrackName", tdb->track);
+    }
 }
 
-static int outView(FILE *f, struct sqlConnection *conn, char *db, struct track *view, char *parent, struct hash *nameHash, struct hash *collectionNameHash, int priority)
+static int outView(FILE *f, struct sqlConnection *conn, char *db, struct track *view, char *parent, struct hash *nameHash, struct hash *collectionNameHash, int priority, char *hubName)
 // output a view to a trackhub
 {
 fprintf(f,"\ttrack %s\n\
@@ -496,17 +514,15 @@ fprintf(f,"\ttrack %s\n\
 \tpriority %d\n\
 \tviewFunc %s \n\
 \tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), priority++, view->viewFunc, view->visibility);
-//fprintf(f,"\tequation +\n");
 fprintf(f, "\n");
 
-//int useColor = 0;
 struct track *track = view->trackList;
 for(; track; track = track->next)
     {
-    struct trackDb *tdb = hashMustFindVal(nameHash, skipColl(track->name));
+    struct trackDb *tdb = hashMustFindVal(nameHash, track->name);
+    modifyName(tdb, hubName, collectionNameHash);
 
-    outTdb(conn, db, f, skipColl(track->name),tdb, view->name, track->visibility, track->color, track,  nameHash, collectionNameHash, 2, priority++);
-    //useColor++;
+    outTdb(conn, db, f, track->name,tdb, view->name, track->visibility, track->color, track,  nameHash, collectionNameHash, 2, priority++);
     }
 
 return priority;
@@ -515,14 +531,15 @@ return priority;
 static void updateHub(struct cart *cart, char *db, struct track *collectionList, struct hash *nameHash)
 // save our state to the track hub
 {
-char *hubName = getHubName(cart, db);
+char *filename = getHubName(cart, db);
+char *hubName = hubNameFromUrl(filename);
 
-chmod(hubName, 0666);
-FILE *f = mustOpen(hubName, "w");
+FILE *f = mustOpen(filename, "w");
+chmod(filename, 0666);
+
 struct hash *collectionNameHash = newHash(6);
 
 outHubHeader(f, db);
-//int useColor = 0;
 struct track *collection;
 struct sqlConnection *conn = hAllocConn(db);
 for(collection = collectionList; collection; collection = collection->next)
@@ -533,20 +550,16 @@ for(collection = collectionList; collection; collection = collection->next)
     int priority = 1;
     for (track = collection->trackList; track; track = track->next)
         {
-        if (track->trackList != NULL)
+        if (track->viewFunc != NULL)
             {
-            priority = outView(f, conn, db, track, collection->name,  nameHash, collectionNameHash, priority);
+            priority = outView(f, conn, db, track, collection->name,  nameHash, collectionNameHash, priority, hubName);
             }
         else
             {
             tdb = hashMustFindVal(nameHash, track->name);
+            modifyName(tdb, hubName, collectionNameHash);
 
             outTdb(conn, db, f, track->name,tdb, collection->name, track->visibility, track->color, track,  nameHash, collectionNameHash, 1, priority++);
-            /*
-            useColor++;
-            if (useColor == (sizeof snakePalette2 / sizeof(int)))
-                useColor = 0;
-                */
             }
         }
     }
@@ -556,13 +569,6 @@ hFreeConn(&conn);
 
 static unsigned long hexStringToLong(char *str)
 {
-/*
-char buffer[1024];
-
-strcpy(buffer, "0x");
-strcat(buffer, &str[1]);
-*/
-
 return strtol(&str[1], NULL, 16);
 }
 
