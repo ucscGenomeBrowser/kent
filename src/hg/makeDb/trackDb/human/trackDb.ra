@@ -5055,6 +5055,9 @@ padding 250
 
 include cloneEnd.trackDb.ra
 
+track spMut override
+bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+
 track sgpGene override
 longLabel SGP Gene Predictions Using Mouse/$Organism Homology
 
