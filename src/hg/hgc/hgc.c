@@ -25916,6 +25916,12 @@ else if (sameWord(table, "softPromoter"))
     }
 else if (isCustomTrack(table))
     {
+    if (tdb != NULL)
+        {
+        char *origTrackName = trackDbSetting(tdb, "origTrackName");
+        if (origTrackName)
+            table = origTrackName;
+        }
     hgCustom(table, item);
     }
 else if (sameWord(table, "snpTsc") || sameWord(table, "snpNih") || sameWord(table, "snpMap"))
