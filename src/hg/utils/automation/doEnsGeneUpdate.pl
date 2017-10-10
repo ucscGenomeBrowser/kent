@@ -185,7 +185,7 @@ sub checkOptions {
 # * step: load [dbHost]
 sub doLoad {
   my $runDir = "$buildDir";
-  if (! -d "$buildDir/process") {
+  if (! -d "$buildDir/process" && ! $opt_debug) {
     die "ERROR: load: directory: '$buildDir/process' does not exist.\n" .
       "The process step appears to have not been done.\n" .
 	"Run with -continue=process before this step.\n";
@@ -197,18 +197,55 @@ sub doLoad {
 
   my $thisGenePred = "$buildDir" . "/process/$db.allGenes.gp.gz";
   my $prevGenePred = "$previousBuildDir" . "/process/$db.allGenes.gp.gz";
-  my $identicalToPrevious = 0;
-  if ( -f $prevGenePred ) {
-      my $thisGenePredSum = `zcat $thisGenePred | sort | sum`;
-      chomp $thisGenePredSum;
-      my $prevGenePredSum = `zcat $prevGenePred | sort | sum`;
-      chomp $prevGenePredSum;
-      print STDERR "prev: $prevGenePredSum, this: $thisGenePredSum\n";
-      if ($prevGenePredSum eq $thisGenePredSum) {
+  printf STDERR "# checking previous: $previousBuildDir\n";
+  my $thisGtp = "$buildDir" . "/process/ensGtp.tab";
+  my $prevGtp = "$previousBuildDir" . "/process/ensGtp.tab";
+  my $thisGeneName = "$buildDir" . "/process/ensemblToGeneName.tab";
+  my $prevGeneName = "$previousBuildDir" . "/process/ensemblToGeneName.tab";
+  my $thisSource = "$buildDir" . "/process/ensemblSource.tab";
+  my $prevSource = "$previousBuildDir" . "/process/ensemblSource.tab";
+  my $identicalToPrevious = 1;
+  if ( -f $prevGenePred && -f $prevGtp && -f $prevGeneName && -f $prevSource ) {
+      my $thisSum = `zcat $thisGenePred | sort | sum`;
+      chomp $thisSum;
+      my $prevSum = `zcat $prevGenePred | sort | sum`;
+      chomp $prevSum;
+      printf STDERR "# genePred prev: $prevSum %s this: $thisSum\n",
+         $prevSum eq $thisSum ? "==" : "!=";
+      $identicalToPrevious = 0 if ($prevSum ne $thisSum);
+
+      $thisSum = `sort $thisGtp | sum`;
+      chomp $thisSum;
+      $prevSum = `sort $prevGtp | sum`;
+      chomp $prevSum;
+      $identicalToPrevious = 0 if ($prevSum ne $thisSum);
+      printf STDERR "# ensGtp prev: $prevSum %s this: $thisSum\n",
+         $prevSum eq $thisSum ? "==" : "!=";
+
+      $thisSum = `sort $thisGeneName | sum`;
+      chomp $thisSum;
+      $prevSum = `sort $prevGeneName | sum`;
+      chomp $prevSum;
+      $identicalToPrevious = 0 if ($prevSum ne $thisSum);
+      printf STDERR "# ensemblToGeneName prev: $prevSum %s this: $thisSum\n",
+         $prevSum eq $thisSum ? "==" : "!=";
+
+      $thisSum = `sort $thisSource | sum`;
+      chomp $thisSum;
+      $prevSum = `sort $prevSource | sum`;
+      chomp $prevSum;
+      $identicalToPrevious = 0 if ($prevSum ne $thisSum);
+      printf STDERR "# ensemblSource prev: $prevSum %s this: $thisSum\n",
+         $prevSum eq $thisSum ? "==" : "!=";
+
+      if (1 == $identicalToPrevious) {
 	print STDERR "previous genes same as new genes";
-	$identicalToPrevious = 1;
       }
+  } else {
+    $identicalToPrevious = 0;
   }
+
+$identicalToPrevious = 0;
 
   if ($identicalToPrevious ) {
       $bossScript->add(<<_EOF_
@@ -333,7 +370,7 @@ _EOF_
       );
       }
   }
-  $bossScript->execute();
+  $bossScript->execute() if (! $opt_debug);
 } # doLoad
 
 #########################################################################
@@ -341,7 +378,7 @@ _EOF_
 sub doProcess {
   my $runDir = "$buildDir/process";
   # First, make sure we're starting clean.
-  if (-d "$runDir") {
+  if (-d "$runDir" && ! $opt_debug) {
     die "ERROR: process: looks like this was run successfully already\n" .
       "($runDir exists)\nEither run with -continue=load or some later\n" .
 	"stage, or move aside/remove\n$runDir\nand run again.\n";
@@ -513,7 +550,7 @@ ixIxx $db.ensGene.nameIndex.txt $db.ensGene.name.ix $db.ensGene.name.ixx
 _EOF_
 	  );
       }
-  $bossScript->execute();
+  $bossScript->execute() if (! $opt_debug);
 } # doProcess
 
 #########################################################################
@@ -521,7 +558,7 @@ _EOF_
 sub doDownload {
   my $runDir = "$buildDir/download";
   # First, make sure we're starting clean.
-  if (-d "$runDir") {
+  if (-d "$runDir" && ! $opt_debug) {
     die "ERROR: download: looks like this was run successfully already\n" .
       "($runDir exists)\nEither run with -continue=process or some later\n" .
 	"stage, or move aside/remove\n$runDir\nand run again.\n";
@@ -552,9 +589,8 @@ $ensMySqlUrl/assembly.txt.gz \\
 _EOF_
       );
   }
-  $bossScript->execute();
+  $bossScript->execute() if (! $opt_debug);
 } # doDownload
-
 
 #########################################################################
 # * step: cleanup [dbHost]
@@ -575,7 +611,7 @@ rm -f bed.tab ensPep.txt.gz ensPep.$db.fa.tab ensPep.name ensGene.name
 _EOF_
     );
   }
-  $bossScript->execute();
+  $bossScript->execute() if (! $opt_debug);
 } # doCleanup
 
 #########################################################################
@@ -780,9 +816,10 @@ $bedDir = "$topDir/$HgAutomate::trackBuild";
 # Force debug and verbose until this is looking pretty solid:
 # $opt_debug = 1;
 # $opt_verbose = 3 if ($opt_verbose < 3);
+printf STDERR "# running debug mode, will not execute scripts\n" if ($opt_debug);
 
 # Establish previous version
-$previousEnsVersion = `hgsql -Ne 'select max(version) from trackVersion where name="ensGene" AND db="$db";' hgFixed`;
+$previousEnsVersion = `hgsql -Ne 'select max(version) from trackVersion where name="ensGene" AND db="$db" AND version<$ensVersion;' hgFixed`;
 chomp $previousEnsVersion;
 if ( $previousEnsVersion eq 'NULL') { $previousEnsVersion=0;}
 
