@@ -16,8 +16,10 @@ def parseArgs():
 
     To create files.txt on the remote end, run this command:
       du -ab > files.txt
-    Or preferably this command (empty directories will lead to transmit errors):
-      find . -type f -exec du -ab {} +
+    Or preferably this command (otherwise empty directories will lead to "transmit" errors):
+      find . -type f -exec du -ab {} + > files.txt
+    Or this one if you have symlinks:
+      find -L . -type f -exec du -Lab {} + > files.txt
 
     Then run this in the download directory:
       webSync https://there.org/
