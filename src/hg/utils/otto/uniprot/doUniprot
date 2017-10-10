@@ -790,6 +790,8 @@ def concatFiles(fnames, outFname):
     accToDb = {}
     ofh = open(outFname, "w")
     for dbName, fname in fnames:
+        if not isfile(fname):
+            raise Exception("%s not found" % fname)
         ifh = gzip.open(fname)
         for line in ifh:
             ofh.write(line)
@@ -933,13 +935,6 @@ def updateUniprot(args, onlyDbs, options):
     bigBedDir = options.bigBedDir
     faDir = options.faDir
 
-    flagFname = join(uprotDir, "doUniprot.lock")
-    if isfile(flagFname):
-        logging.error("%s exists. Is a doUniprot process already running ?" % flagFname)
-        sys.exit(1)
-
-    open(flagFname, "w")
-
     relFname = join(tabDir, "version.txt")
 
     if not options.skipDownload and not options.skipParse:
@@ -952,6 +947,7 @@ def updateUniprot(args, onlyDbs, options):
         cmd = 'lftp ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/ -e "lcd %s && mirror . --use-pget-n=10 --exclude-glob *.dat.gz && exit"' % uprotDir
         run(cmd)
 
+        # UniProtKB/Swiss-Prot Release 2017_09 of 27-Sep-2017
         relString = open(join(uprotDir, "reldate.txt")).read().splitlines()[1]
         relFh = open(relFname, "w")
         relFh.write(relString)
@@ -990,11 +986,10 @@ def updateUniprot(args, onlyDbs, options):
 
     # get the uniProt version for the trackVersion table that we will update later
     relFname = join(tabDir, "version.txt")
-    versionString = open(relFname).read().strip().split()[2]
-    assert(len(versionString)==7)
+    versionString = open(relFname).read()
     userName = os.getlogin()
 
-    updateOfh = open("/hive/data/outside/otto/uniprot/trackVersionUpdate.sh", "w")
+    updateOfh = open(join(bigBedDir, "trackVersionUpdate.sh"), "w")
 
     for taxId, dbs in taxIdDbs:
         if onlyDbs is not None and len(set(dbs).intersection(onlyDbs))==0:
@@ -1056,13 +1051,14 @@ def updateUniprot(args, onlyDbs, options):
             # add a trackVersion entry
             assert("'" not in versionString)
             assert('"' not in versionString)
-            sql = '''INSERT INTO trackVersion values (NULL, '%s', 'uniprot', '%s', 'UniProt Release %s', now(), '%s', 'doUniprot Otto', '%s');''' % (db, userName, versionString, taxId, upUrl)
+            sql = '''INSERT INTO trackVersion values (NULL, '%s', 'uniprot', '%s', '%s', now(), '%s', 'doUniprot Otto', '%s');''' % (db, userName, versionString, taxId, upUrl)
             cmd = """hgsql hgFixed -e "%s";""" % sql
             run(cmd)
             updateOfh.write("%s\n"%cmd)
 
-    os.remove(flagFname)
-    logging.info("Created %s for cluster-admin's auto-pusher" % updateOfh.name)
+    updateOfh.close()
+    logging.debug("Created %s for cluster-admin's auto-pusher" % updateOfh.name)
+
 
 def makeSymlink(target, linkName):
     if isfile(linkName):
@@ -1256,6 +1252,17 @@ def mapQa(tabDir, faDir, mapDir, onlyDbs):
             faFname = join(tabDir, "trembl.%s.fa.gz" % taxId)
             checkPsl(pslName, faFname)
 
+def createVersionFile(tabDir, bigBedDir):
+    " update the release version file. This is the indicator for the auto-archiver to create a new archive "
+    relFname = join(tabDir, "version.txt")
+    versionString = open(relFname).read()
+    shortVersion = versionString.split()[2]
+    assert(len(shortVersion)==7)
+
+    versionOfh = open(join(bigBedDir, "version.txt"), "w")
+    versionOfh.write(shortVersion)
+    versionOfh.close()
+    logging.debug("Wrote short version to %s" % versionOfh.name)
 
 def main():
     args, options = parseArgs()
@@ -1268,10 +1275,21 @@ def main():
         mapQa(options.tabDir, options.faDir, options.mapDir, onlyDbs)
         sys.exit(0)
 
+    # create a lock file
+    flagFname = join(options.uniprotDir, "doUniprot.lock")
+    if isfile(flagFname):
+        logging.error("%s exists. Is a doUniprot process already running ?" % flagFname)
+        sys.exit(1)
+    open(flagFname, "w")
+
     if not options.onlyLinks:
         updateUniprot(args, onlyDbs, options)
         flipNewVersionCheckMaxDiff(options.bigBedDir, 0.1, options.force, onlyDbs)
 
     makeLinks(options.bigBedDir, options.faDir, onlyDbs)
+
+    createVersionFile(options.tabDir, options.bigBedDir)
+
+    os.remove(flagFname)
 
 main()
