@@ -808,7 +808,7 @@ else
             }
         else 
             {
-            if (!startsWithWord("wig", type) )
+            if (!(startsWithWord("wig", type)||  startsWithWord("bedGraph", type)))
                 {
                 if (!(startsWithWord("bigWig", type) ||
                   startsWithWord("bigBed", type) ||
