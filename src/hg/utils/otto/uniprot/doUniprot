@@ -694,8 +694,8 @@ def uniprotLift(seqFname, cdnaSizesFname, annotFnames, genomeChromSizesFname, li
     bbFnames = convertToBigBed(bedFiles, genomeChromSizesFname, bigBedDir)
     moveBigBedToOutDir(bbFnames, outDir)
 
-    #cmd = "rm -rf %s" % tempDir
-    #run(cmd)
+    cmd = "rm -rf %s" % tempDir
+    run(cmd)
 
 def isNewer(url, localFname):
     " return true if url is more recent than localFname "
@@ -1110,6 +1110,8 @@ def makeLinks(bigBedDir, faDir, onlyDbs):
                     continue # this has now been replaced by the bigPsl file
                 if "_" in bbFname:
                     continue # the bigPsl files need special treatment later
+                if "new.bb" in bbFname:
+                    continue # never link to a .new.bb file
                 bbLink = join(bbTargetDir, basename(bbFname))
                 makeSymlink(bbFname, bbLink)
 

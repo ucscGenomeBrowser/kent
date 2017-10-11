@@ -146,4 +146,4 @@ pslMap $WORKDIR/uniProtVsTranscripts.psl $WORKDIR/transcripts.psl $WORKDIR/uniPr
 # 2016: lowering to 99% identity due to hg38 alt loci sucking up our main (and more important) alignments from the
 # normal chromosomes
 sort -k10,10 $WORKDIR/uniProtVsGenome.psl | pslCDnaFilter stdin -globalNearBest=0.99  -bestOverlap -filterWeirdOverlapped stdout | sort | uniq > $OUTFNAME
-#rm -rf $WORKDIR
+rm -rf $WORKDIR

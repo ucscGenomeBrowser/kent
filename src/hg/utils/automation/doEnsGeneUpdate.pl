@@ -301,8 +301,12 @@ _EOF_
 	  $bossScript->add(<<_EOF_
 hgLoadGenePred $skipInv -genePredExt $db ensGene process/$db.allGenes.gp.gz \\
 	>& loadGenePred.errors.txt
-zcat process/ensemblGeneScaffolds.$db.bed.gz \\
+checkTableCoords $db -table=ensGene
+zcat process/ensemblGeneScaffolds.$db.bed.gz | sort > to.clean.GeneScaffolds.bed
+cut -f1 /hive/data/genomes/$db/chrom.sizes | sort > legitimate.names
+join -t'\t' legitimate.names to.clean.GeneScaffolds.bed \\
     | sed -e "s/GeneScaffold/GS/" | hgLoadBed $db ensemblGeneScaffold stdin
+checkTableCoords $db -table=ensemblGeneScaffold
 _EOF_
 	  );
       } else {
