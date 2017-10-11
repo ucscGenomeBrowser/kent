@@ -194,11 +194,10 @@ var hgCollection = (function() {
         });
         json = json.slice(0, -1);
         json += ']';
-        console.log(json);
         var requestData = 'jsonp=' + json;
         $.ajax({
             data:  requestData ,
-            async: false,
+            async: true,
             dataType: "JSON",
             type: "PUT",
             url: "hgCollection?cmd=saveCollection",
@@ -206,7 +205,6 @@ var hgCollection = (function() {
             success: catchErrorOrDispatch,
             error: errorHandler,
         });
-        isDirty = false;
     }
 
     function rebuildLabel() {
@@ -280,6 +278,14 @@ var hgCollection = (function() {
     }
 
     function init() {
+        $body = $("body");
+
+        $(document).on({
+            ajaxStart: function() { $body.addClass("loading");    },
+            ajaxStop: function() { $body.removeClass("loading"); }    
+        });
+        $('.gbButtonGoContainer').click(submitForm);
+       
         window.addEventListener("beforeunload", function (e) {
             if (!isDirty)
                 return undefined;
@@ -378,15 +384,23 @@ var hgCollection = (function() {
         selectElements($("#collectionList"), firstElement) ;
     }
 
+   function submitForm() {
+    // Submit the form (from GO button -- as in hgGateway.js)
+    // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
+        $('.gbIconGo').removeClass('fa-play').addClass('fa-spinner fa-spin');
+        saveCollections(trees);
+    }
+
     function updatePage(responseJson) {
         // called after AJAX call
+        isDirty = false;
         if (!responseJson) {
             return;
         }
-        var message = responseJson.serverSays;
-        if (message) {
-            alert(message);
-        }
+
+        // we go straight to hgTracks after save
+        $form = $('form');
+        $form.submit();
     }
 
     function getUniqueName(root) {

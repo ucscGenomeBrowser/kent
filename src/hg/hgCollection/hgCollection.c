@@ -813,7 +813,7 @@ static void doAddTrack(struct cart *cart, char *db, struct trackDb *trackList,  
 char *fileName = getHubName(cart, db);
 char *hubName = hubNameFromUrl(fileName);
 FILE *f = fopen(fileName, "w");
-struct trackDb *newTdb = hashMustFindVal(nameHash, trackName);
+struct trackDb *newTdb = hashMustFindVal(nameHash, trackHubSkipHubName(trackName));
 hashReplace(newTdb->settingsHash, "track", makeUnique(nameHash, trackName));
 hashReplace(newTdb->settingsHash, "parent", trackHubSkipHubName(collectionName));
 
