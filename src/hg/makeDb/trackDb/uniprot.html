@@ -16,12 +16,14 @@ The annotations are divided into multiple subtracks, based on their &quot;featur
   </tr>
   <tr>
     <td>UCSC Alignment, SwissProt</td>
-    <td>Protein sequences from SwissProt mapped onto the genome. All other tracks are (start,end) annotations mapped using this track.</td>
-  </tr>
+    <td>Protein sequences from SwissProt mapped onto the genome. All other
+        tracks are (start,end) annotations mapped using this track.</td> </tr>
   <tr>
     <td>UCSC Alignment, TrEMBL</td>
-    <td>Protein sequences from TrEMBL mapped onto the genome. All other tracks are (start,end) annotations mapped using this track. This track is hidden by default. To show it, click its checkbox on the track description page.</td>
-  </tr>
+    <td>Protein sequences from TrEMBL mapped onto the genome. All other tracks
+        are (start,end) annotations mapped using this track. This track is
+hidden by default. To show it, click its checkbox on the track description
+page.</td> </tr>
   <tr>
     <td>UniProt Signal Peptides</td>
     <td>Regions found in proteins destined to be secreted, generally cleaved from mature protein.</td>
@@ -110,24 +112,33 @@ In the &quot;UniProt Modifications&quot; track, lipoification sites are highligh
 <span style="color: rgb(200,200,0)">light green</span>.</p>
 
 <p>
-Duplicate annotations are removed as far as possible: if a TrEMBL annotation has the same genome position and same feature type, comment, disease and mutated amino acids as a SwissProt annotation, it is not shown again. Two annotations mapped through different transcripts but with the same genome coordinates are only shown once.
-</p>
+Duplicate annotations are removed as far as possible: if a TrEMBL annotation
+has the same genome position and same feature type, comment, disease and
+mutated amino acids as a SwissProt annotation, it is not shown again. Two
+annotations mapped through different transcripts but with the same genome
+coordinates are only shown once.  </p>
 
-<p>Note that only for the human hg38 assembly and SwissProt annotations, there also is a 
-<a href="hgTracks?db=hg38&hubUrl=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/genome_annotation_tracks/UP000005640_9606_hub/hub.txt">public track hub</a> prepared by UniProt itself, with 
+<p>Note that only for the human hg38 assembly and SwissProt annotations, there
+also is a <a
+href="hgTracks?db=hg38&hubUrl=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/genome_annotation_tracks/UP000005640_9606_hub/hub.txt">public
+track hub</a> prepared by UniProt itself, with 
 genome annotations maintained by UniProt using their own mapping
-method based on those Gencode/Ensembl gene models that are annotated in UniProt for a given protein.</p>
+method based on those Gencode/Ensembl gene models that are annotated in UniProt
+for a given protein.</p>
 
 <h2>Methods</h2>
 
 <p>
 UniProt sequences were aligned to UCSC/Gencode transcript sequences first with
-BLAT, then lifted to genome positions with pslMap.  UniProt annotations were
-obtained from the UniProt XML file.  The annotations were then mapped to the genome
-through the alignment using the pslMap program.  This mapping approach
+BLAT, filtered with pslReps (93% query coverage, within top 1% score), lifted
+to genome positions with pslMap and filtered again.  UniProt annotations were
+obtained from the UniProt XML file.  The annotations were then mapped to the
+genome through the alignment using the pslMap program.  This mapping approach
 draws heavily on the <A HREF="http://modbase.compbio.ucsf.edu/LS-SNP/"
-TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans. For human and mouse, the alignments were filtered again by retaining only proteins known to be linked to a given transcript from the meta data. 
-The main script used to build this track can be found on 
+TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans. For human and mouse, the
+alignments were filtered by retaining only proteins annotated with
+a given transcript in the Genome Browser table kgXref. Like all Genome Browser
+source code, the main script used to build this track can be found on 
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/uniprot/doUniprot">github</a>.
 </p>
 
@@ -140,7 +151,8 @@ The raw data can be explored interactively with the
 For automated analysis, the genome annotation is stored in a bigBed file that 
 can be downloaded from the
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/uniprot/" target="_blank">download server</a>.
-The exact filenames can be found in the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/trackDb.uniprot.ra">track configuration file</a>. 
+The exact filenames can be found in the 
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/trackDb.uniprot.ra">track configuration file</a>. 
 Annotations can be converted to ASCII text by our tool <tt>bigBedToBed</tt>
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
@@ -149,8 +161,11 @@ The tool can also be used to obtain only features within a given range, for exam
 <br> 
 <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/uniprot/unipStruct.bb -chrom=chr6 -start=0 -end=1000000 stdout</tt> 
 <br>
-Older releases of the data files can be downloaded from the <a href="http://hgdownload.cse.ucsc.edu/goldenPath/$db/archive/">archive folder</a> of our downloads server.
-<br>
+This track is updated every month. The MySQL table hgFixed.trackVersion
+contains the name of the currently available data on the website. Older
+versions of the data files can be downloaded from the <a
+href="http://hgdownload.cse.ucsc.edu/goldenPath/$db/archive/">archive
+folder</a> of our downloads server.  <br>
 Please refer to our
 <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
 for questions, or our
@@ -161,8 +176,10 @@ for more information.
 <h2>Credits</h2>
 
 <p>
-This track was created by Maximilian Haeussler, with advice from Mark Diekhans and Brian Raney, feedback from the UniProt staff and Alejo Mujica, Regeneron.
-Thanks to UniProt for making all data available for download.
+This track was created by Maximilian Haeussler at UCSC, with help from Chris
+Lee, Mark Diekhans and Brian Raney, feedback from the UniProt staff and Alejo
+Mujica, Regeneron Pharmaceuticals.  Thanks to UniProt for making all data
+available for download.
 </p>
 
 <h2>References</h2>
