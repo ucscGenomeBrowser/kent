@@ -1,6 +1,10 @@
 # chainNet tracks
 include trackDb.chainNet.ra
 
+track spMut override
+group varRep
+bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+
 track ctgPos2
 shortLabel Contigs
 longLabel Assembly Contigs

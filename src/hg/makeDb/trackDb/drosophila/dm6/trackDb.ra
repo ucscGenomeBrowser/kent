@@ -47,3 +47,4 @@ include flyBaseGene.ra alpha
 
 track spMut override
 group varRep
+bigDataUrl /gbdb/$D/uniprot/unipMut.bb

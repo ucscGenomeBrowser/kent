@@ -22,3 +22,4 @@ include trackDb.chainNet.ra
 
 track spMut override
 group varRep
+bigDataUrl /gbdb/$D/uniprot/unipMut.bb
