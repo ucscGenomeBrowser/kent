@@ -1,5 +1,4 @@
 PREFIX=/hive/data/outside/otto/uniprot/
 install: 
-	pylint -E uniprotLift
 	pylint -E doUniprot
-	cp uniprotLift *.as doUniprot makeUniProtPsl.sh ${PREFIX}
+	rsync -avpu *.as doUniprot makeUniProtPsl.sh mapUniprot_doBlast ${PREFIX} # never overwrite newer files

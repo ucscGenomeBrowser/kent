@@ -359,7 +359,7 @@ static void printHelp()
 {
 puts(
 "<a name='INFO_SECTION'></a>\n"
-"    <div class='row gbSectionBanner'>\n"
+"    <div class='row mygbSectionBanner'>\n"
 "        <div class='col-md-11'>Help</div>\n"
 "        <div class='col-md-1'>\n"
 );
@@ -398,6 +398,8 @@ webIncludeResourceFile("spectrum.min.css");
 webIncludeResourceFile("hgGtexTrackSettings.css");
 
 webIncludeFile("inc/hgCollection.html");
+char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
+jsInlineF("$('#assembly').text('%s');\n",assembly);
 
 printHelp();
 doTable(cart, db, groupList, trackList);
@@ -811,7 +813,7 @@ static void doAddTrack(struct cart *cart, char *db, struct trackDb *trackList,  
 char *fileName = getHubName(cart, db);
 char *hubName = hubNameFromUrl(fileName);
 FILE *f = fopen(fileName, "w");
-struct trackDb *newTdb = hashMustFindVal(nameHash, trackName);
+struct trackDb *newTdb = hashMustFindVal(nameHash, trackHubSkipHubName(trackName));
 hashReplace(newTdb->settingsHash, "track", makeUnique(nameHash, trackName));
 hashReplace(newTdb->settingsHash, "parent", trackHubSkipHubName(collectionName));
 

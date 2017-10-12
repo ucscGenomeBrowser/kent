@@ -3516,7 +3516,7 @@ scoreLabel ClinVar Star-Rating (0-4)
 
     track clinvarMain
     shortLabel ClinVar Short Variants
-    longLabel ClinVar Short Variants < 100bp
+    longLabel ClinVar Short Variants <= 100bp
     visibility pack
     parent clinvar
     priority 1
@@ -5054,6 +5054,9 @@ searchPriority 12.9843
 padding 250
 
 include cloneEnd.trackDb.ra
+
+track spMut override
+bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 
 track sgpGene override
 longLabel SGP Gene Predictions Using Mouse/$Organism Homology

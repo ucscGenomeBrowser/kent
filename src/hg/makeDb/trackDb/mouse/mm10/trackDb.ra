@@ -408,3 +408,4 @@ priority 17
 
 track spMut override
 group pub
+bigDataUrl /gbdb/$D/uniprot/unipMut.bb

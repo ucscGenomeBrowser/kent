@@ -3145,6 +3145,15 @@ const char *version = metadataFindValue(tdb,"dataVersion");
 if(version == NULL)
     version = trackDbSetting(tdb,"dataVersion");
 if (version != NULL)
+    if (startsWith("/", version))
+        {
+        char *path = replaceInUrl((char *)version, "", cart, database, seqName, winStart, winEnd, tdb->track, FALSE);
+        struct lineFile* lf = lineFileOpen(path, TRUE);
+        if (lf)
+            version = lineFileReadAll(lf);
+        }
+
+if (version != NULL)
     printf("<B>Data version:</B> %s <BR>\n", version);
 }
 

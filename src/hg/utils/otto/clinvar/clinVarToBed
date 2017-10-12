@@ -29,9 +29,9 @@ clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	HGNC_ID	ClinicalSi
 def shortenName(name):
     "make the clinvar name shorter and keep a long version for the mouse over "
     cnvMatch = cnvRe.match(name)
-    hgvsMatch = hgvsRe.match(name)
+    #hgvsMatch = hgvsRe.match(name)
 
-    if ":" in name:
+    if ":" in name and not "chr" in name:
         longName = name.split(":")[0]
     else:
         longName = name
@@ -61,20 +61,26 @@ def shortenName(name):
             longName = name.split(" ")[0]
         name = name.split(" ")[0]
 
-        delMatch = delRe.match(name)
-        if delMatch!=None:
-            shortName = name[-3:]
-
-        posMatch = posRe.match(name)
-        if posMatch!=None:
-            dup, dele, ins, pos = posMatch.groups()[-4:]
-            if dup==None:
-                dup= ""
-            if dele==None:
-                dele = ""
-            if ins==None:
-                ins = ""
-            shortName = dup+dele+ins+pos
+        #delMatch = delRe.match(name)
+        #if delMatch!=None:
+            #shortName = name[-3:] # just the type: del,ins or dup
+        if name.endswith("del"):
+            shortName = "del"
+        elif name.endswith("ins"):
+            shortName = "ins"
+        elif name.endswith("dup"):
+            shortName = "dup"
+        else:
+            posMatch = posRe.match(name)
+            if posMatch!=None:
+                dup, dele, ins, pos = posMatch.groups()[-4:]
+                if dup==None:
+                    dup= ""
+                if dele==None:
+                    dele = ""
+                if ins==None:
+                    ins = ""
+                shortName = dup+dele+ins+pos
     return shortName, longName
 
 def lastMonth(d,x=1):
@@ -301,7 +307,8 @@ cnvRe = re.compile(r'GRCh[0-9]*/hg[0-9]* ([XY0-9pq.-]+)\([XYa-z_:0-9.-]+\)(x[0-9
 hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_()-]+)')
 
 # e.g. g.(13359800_13371688)_(13371779_13505931)del
-delRe = re.compile(r'g\.\([?0-9()_-]+(del|dup|ins)')
+# or c.340+11600_340+16200del
+# delRe = re.compile(r'[gc]\.\(?[?0-9()_+-]+\)?(del|dup|ins)')
 
 # e.g.
 # c.80_83delGGATinsTGCTGTAAACTGTAACTGTAAA
