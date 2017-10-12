@@ -3516,7 +3516,7 @@ scoreLabel ClinVar Star-Rating (0-4)
 
     track clinvarMain
     shortLabel ClinVar Short Variants
-    longLabel ClinVar Short Variants < 100bp
+    longLabel ClinVar Short Variants <= 100bp
     visibility pack
     parent clinvar
     priority 1

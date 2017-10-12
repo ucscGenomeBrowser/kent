@@ -29,13 +29,42 @@
     font-weight: bold;  
     font-size: 15px;  
 }  
+
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    10000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('http://i.stack.imgur.com/FhHRx.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+
 </style>
+
+<form name='form' action='../cgi-bin/hgTracks'></form>
 
 <div class='row gbTrackTitleBanner'>
     <div class='col-md-4'>
         <span id='assembly' style='margin-left:6px' class='gbTrackName'></span>
     </div>
-    <div class='col-md-6'>
+    <div class='col-md-5'>
         <span class='gbTrackTitle'>Track Group Collections</span>
         <a href='#INFO_SECTION' title='Jump to the track description'>
             <span class='gbIconSmall fa-stack'>
@@ -43,12 +72,11 @@
                 <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>
             </span>
         </a>
-        <div class='gbButtonGoContainer text-right' title='Save Collections'> </div>
     </div>
-    <div class='col-md-2 text-right'>
+    <div style='font-size:12px' class='col-md-3 text-right'>
+        <div style='font-size:10px' class='gbButtonGo' id='discardChanges'>Discard Changes</div>
         <div class='gbButtonGoContainer text-right' title='Save or Discard'>
-            <div class='gbButtonGo' id='saveCollections' >Save</div>
-            <div class='gbButtonGo' id='discardChanges'>Discard Changes</div>
+            <div class='gbButtonGo' id='goButton'>GO</div><i style='margin-left:3px' class='gbIconGo fa fa-play fa-2x'></i> 
         </div>
     </div>
 </div>
@@ -136,3 +164,5 @@
 <ul class='collectionList-menu' style='display:none'>
     <li data-action="delete">Delete</li>
 </ul>
+
+<div class="modal"></div>

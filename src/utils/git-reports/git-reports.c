@@ -236,15 +236,37 @@ unlink("commits.tmp");
 return commits;
 }
 
+void makeParentPath(char *path)
+/* make a parent path if it does not exist already */
+{
+// create parent path
+char cmd[1024];
+char *r = strrchr(path, '/');
+if (r)
+    {
+    *r = 0;
+    /* make internal levels of subdirs */
+    if (!fileExists(path))
+	{
+	safef(cmd, sizeof(cmd), "mkdir -p %s", path);
+	runShell(cmd);
+	}
+    *r = '/';
+    }
+}
+
+
 int makeHtml(char *diffPath, char *htmlPath, char *path, char *commitId)
 /* Make a color-coded html diff 
  * Return the number of lines changed */
 {
 int linesChanged = 0;
 
+makeParentPath(htmlPath);  // may be needed with white-space only diffs
 FILE *h = mustOpen(htmlPath, "w");
 if (!fileExists(diffPath))  // this may happen with white-space only diffs 
     {
+    makeParentPath(diffPath);
     FILE *f = mustOpen(diffPath, "w"); // create an empty diff file
     fprintf(f, "white space only change\n");
     carefulClose(&f);
@@ -534,6 +556,7 @@ char *commonPath = NULL;
 
 struct commit *c = NULL;
 struct files *f = NULL;
+
 for(c = commits; c; c = c->next)
     {
     if (sameString(c->author, u))
@@ -912,6 +935,7 @@ for(u = users; u; u = u->next)
 
     userChangedLines = 0;
     userChangedFiles = 0;
+
 
     /* make user's reports */
     doUserCommits(u->name, commits, &userChangedLines, &userChangedFiles);
