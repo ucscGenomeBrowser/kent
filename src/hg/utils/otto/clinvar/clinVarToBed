@@ -435,7 +435,15 @@ for line in ifh:
         name = "No display name was provided by ClinVar for this variant"
         shortName = "NoName"
 
+    if len(name)>90:
+        name = name[:90]+"..."
     name = varId+"|"+name
+
+    if len(hgvsProt) > 90:
+        hgvsProt = hgvsProt[:90]+"..."
+    if len(hgvsCod) > 90:
+        hgvsCod = hgvsCod[:90]+"..."
+
     otherIds = accListToHtml(otherIds)
 
     phenotypeIds = accListToHtml(phenotypeIds)
