@@ -74,11 +74,14 @@ def shortenName(name):
         else:
             posMatch = posRe.match(name)
             if posMatch!=None:
-                dupDelIns, pos = posMatch.groups()
+                pos, dupDelIns, change = posMatch.groups()
                 if dupDelIns==None:
                     dupDelIns= ""
-                if pos!=None:
-                    shortName = dupDelIns+pos
+
+                if change==None or change=="":
+                    shortName = pos+dupDelIns
+                else:
+                    shortName = dupDelIns+change
 
     return shortName, longName
 
@@ -314,7 +317,7 @@ hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_(
 # c.80A>T
 # c.740+356C>T
 # c.3839_3855del17
-posRe = re.compile(r'^[mgcpdrn]\.[*0-9_?+-]+(delins|dup|del|ins|inv)?([>~ACTG0-9]*)$')
+posRe = re.compile(r'^([mgcpdrn]\.[*0-9_?+-]+)(delins|dup|del|ins|inv)?([>~ACTG0-9]*)$')
 
 ifh = gzip.open(filename)
 
@@ -430,6 +433,7 @@ for line in ifh:
         
     if name=="":
         name = "No display name was provided by ClinVar for this variant"
+        shortName = "NoName"
 
     name = varId+"|"+name
     otherIds = accListToHtml(otherIds)
