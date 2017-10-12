@@ -3269,7 +3269,8 @@ var rightClick = {
                 {
                 // add delete from composite
                 }
-            else if (!rec.hasChildren && rec.type.startsWith("bigWig")) {
+            else if (!rec.hasChildren && 
+                (rec.type.startsWith("bigWig") || rec.type.startsWith("wig") || rec.type.startsWith("bedGraph"))) {
                 o = {};
                 o[" Make a New Collection with \"" + rec.shortLabel + "\""] = {
                     onclick: rightClick.makeHitCallback("newCollection")

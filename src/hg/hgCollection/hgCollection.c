@@ -489,14 +489,19 @@ visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
 static void modifyName(struct trackDb *tdb, char *hubName, struct hash  *collectionNameHash)
 /* If this is a new track in the collection we want to make sure
  * it gets a different name than the track in trackDb.
- * If it's a custom track, we want to squirrel away the original track name. */
+ * If it's a native track, we want to squirrel away the original track name. */
 {
 if ((tdb->grp == NULL) || differentString(tdb->grp, hubName))
     {
     hashStore(collectionNameHash,  tdb->track);
 
-    if (isCustomTrack(tdb->track))
-        hashAdd(tdb->settingsHash, "origTrackName", tdb->track);
+    char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+    if (bigDataUrl == NULL)
+        {
+        char *table = trackDbSetting(tdb, "table");
+        if (table == NULL)
+            hashAdd(tdb->settingsHash, "table", tdb->track);
+        }
     }
 }
 
