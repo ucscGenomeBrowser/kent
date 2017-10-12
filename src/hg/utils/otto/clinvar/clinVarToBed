@@ -59,7 +59,8 @@ def shortenName(name):
         if ":" in name:
             name = name.split(":")[1]
             longName = name.split(" ")[0]
-        name = name.split(" ")[0]
+        name = name.split(" ")[0].split("[")[0].split("(")[0]
+        shortName = name
 
         #delMatch = delRe.match(name)
         #if delMatch!=None:
@@ -73,14 +74,12 @@ def shortenName(name):
         else:
             posMatch = posRe.match(name)
             if posMatch!=None:
-                dup, dele, ins, pos = posMatch.groups()[-4:]
-                if dup==None:
-                    dup= ""
-                if dele==None:
-                    dele = ""
-                if ins==None:
-                    ins = ""
-                shortName = dup+dele+ins+pos
+                dupDelIns, pos = posMatch.groups()
+                if dupDelIns==None:
+                    dupDelIns= ""
+                if pos!=None:
+                    shortName = dupDelIns+pos
+
     return shortName, longName
 
 def lastMonth(d,x=1):
@@ -315,7 +314,7 @@ hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_(
 # c.80A>T
 # c.740+356C>T
 # c.3839_3855del17
-posRe = re.compile(r'[mgcpdrn]\.[*0-9_+-]+(dup)?(del)?(ins)?([>ACTG0-9]+)')
+posRe = re.compile(r'^[mgcpdrn]\.[*0-9_?+-]+(delins|dup|del|ins|inv)?([>~ACTG0-9]*)$')
 
 ifh = gzip.open(filename)
 
@@ -367,8 +366,8 @@ for line in ifh:
 
     shortName, longName = shortenName(name)
 
-    if len(shortName)>17:
-        shortName = shortName[:15]+"..."
+    if len(shortName)>20:
+        shortName = shortName[:17]+"..."
         longCount+=1
 
     if len(longName)>60:
