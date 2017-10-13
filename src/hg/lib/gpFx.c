@@ -679,7 +679,8 @@ cc->pepPosition = pepPos;
 if (cdsBasesAdded % 3 == 0)
     {
     // Common case: substitution, same number of old/new codons/peps:
-    int numOldCodons = (1 + allele->length / 3), numNewCodons = (1 + allele->length / 3);
+    int refPepEnd = (endInCds + 2) / 3;
+    int numOldCodons = refPepEnd - pepPos, numNewCodons = numOldCodons;
     if (cdsBasesAdded > 0)
 	{
 	// insertion: more new codons than old
