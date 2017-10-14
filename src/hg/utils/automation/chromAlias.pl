@@ -13,7 +13,7 @@ die "expecting to be working in .../chromAlias/ directory" if ($baseDir !~ m/chr
 my $goodToGo = 0;
 $goodToGo = 1 if (-s "ucsc.refseq.tab");
 $goodToGo = 1 if (-s "ucsc.genbank.tab");
-$goodToGo = 1 if (-s "ucsc.refseq.tab");
+$goodToGo = 1 if (-s "ucsc.ensembl.tab");
 die "can not find any files ucsc.*.tab to work with\n" if (0 == $goodToGo);
 my %refseqNames;      # key is refseq name, value is ucsc name
 my %genbankNames;      # key is genbank name, value is ucsc name
