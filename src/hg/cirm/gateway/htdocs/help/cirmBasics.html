@@ -1,7 +1,9 @@
 <!DOCTYPE html> 
 <!--#set var="TITLE" value="CIRM CESCG People and Labs" -->
+<!--#set var="ROOT" value=".." -->
 
-<!--#include virtual="header.html" -->
+
+<!--#include virtual="$ROOT/header.html" -->
 
 <div class="cirm-page-body">
   <div class="cirm-page-title" style="background: #1E90FF;">
@@ -18,18 +20,17 @@
   <div class="row">
     <div class="col-md-12">
       <p>
-      <ul>
-        <li><a href="about">What is the SC Hub?</a></li>
-        <li><a href="account">Creating an account</a></li>
-        <li><a href="find">Finding data</a></li>
-        <li><a href="download">Downloading data</a></li>
-        <li><a href="contact">Contact us</a></li>
-        <li><a href="resources">Other CESCG resources</a></li>
-      </ul>
+        <h5><a href="#about">What is the SC Hub?</a></h5>
+        <h5><a href="#account">Creating an account</a></h5>
+        <h5><a href="#find">Finding data</a></h5>
+        <h5><a href="#download">Downloading data</a></h5>
+        <h5><a href="#contact">Contact us</a></h5>
+        <h5><a href="#resources">Other CESCG resources</a></h5>
+      </p>
     </div>
   </div>
         
-  <a name="about">
+  <a name="about"></a>
   <div class="row">
     <div class="col-md-12">
       <div class="cirm-page-title" style="background: #5cb85c">
@@ -56,7 +57,7 @@
     </div>
   </div>
 
-  <a name="account">
+  <a name="account"></a>
   <div class="row">
     <div class="col-md-12">
       <div class="cirm-page-title" style="background: #5cb85c">
@@ -66,11 +67,18 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-    
+    <p>
+    An account is not needed to access much of the data available through the SC Hub
+    <a href="http://cirm.ucsc.edu">public site</a>.</p>
+    <p>
+    An account is needed to access data stored on our <a href="https://cirmdcm.soe.ucsc.edu"
+    target="_blank">development server</a>, which is intended for CESCG contributing labs to
+    access their prepublication data. If you are associated with a contributing lab, please
+    <a href="#contact">contact us</a> for an account to access your data.</p>
     </div>
   </div>
 
-  <a name="find">
+  <a name="find"></a>
   <div class="row">
     <div class="col-md-12">
       <div class="cirm-page-title" style="background: #5cb85c">
@@ -89,16 +97,23 @@
     <p>
     The &quot;Files&quot; page by default displays a list of all available files in the
     SC Hub.
-    <img src="">
+    <img src="http://cirm.ucsc.edu/images/cdwImages/files.png">
     <p>
     This list of files can be filtered using the boxes at the top of each column. Note, a list
     of available filters for that column can be seen and selected from by clicking into the
     filter cell and pressing down on the keyboard.
-    <img src="">
+    <img src="http://cirm.ucsc.edu/images/cdwImages/dropdown.png">
+    <p>This filtering capability also takes advantage of UNIX wildcard syntax (&quot;*&quot;),
+    which means that it will look for anything that matches the text before or after the *.</p>
+    <img src="http://cirm.ucsc.edu/images/cdwImages/filtered.png">
+    <p>For example, if you wanted to find all datasets with &quot;Cardio&quot; in the name, you
+    might filter the &quot;data_set_id&quot; column by &quot;*Cardio*&quot;.
+
     <p>
-    
-   
-    <a name=privacy">
+    Once you've filtered your files to find those that you're interested in, you can
+    <a href="#download">download</a> them.</p>
+
+    <a name=privacy"></a>
     <p><b>Privacy</b></p>
     <p>
     Once data is submitted to the SC Hub, access is only allowed to members of that
@@ -114,7 +129,7 @@
     </div>
   </div>
 
-  <a name="download">
+  <a name="download"></a>
   <div class="row">
     <div class="col-md-12">
       <div class="cirm-page-title" style="background: #5cb85c">
@@ -125,11 +140,33 @@
   <div class="row">
     <div class="col-md-12">
     <p>
-    
+    Once you've filtered down the list of files to those that you are interested in, you can
+    download them in one of two ways:</p>
+    <ol>
+      <li>If you have only a few files to download, you can download them one-by-one. First,
+          click the file name in the first column to be take to the file details page. From
+          there click the &quot;download&quot; link next to the name in the &quot;accession&quot;
+          row to start the download. Files be named after the SC Hub applied accession.</li>
+      <li><p>If you have many files to download, or a few large files that may take hours to download,
+          you can use a variety of methods to download the files.</p>
+          <p>First, click the &quot;Download All&quot; link at the top of the page, from there
+          you will be taken a page that lists the total number of files and their combined size
+          as well as a few different download options:
+          <ul>
+            <li>Name files by accession, one single directory</li>
+            <li>Name files as submitted, one single directory</li>
+            <li>Name files as submitted and put into subdirectories</li>
+          </ul>
+          <p>
+          Follow the instructions on that page to download the files. There are options for
+          downloading your files using the command-line or web browser extensions. The URLs
+          provided to you are valid for a week.</p>
+          </li>
+    </ol>
     </div>
   </div>
 
-  <a name="contact">
+  <a name="contact"></a>
   <div class="row">
     <div class="col-md-12">
       <div class="cirm-page-title" style="background: #5cb85c">
@@ -141,14 +178,13 @@
     <div class="col-md-12">
     <p>
     Questions? Comments? Feel free to contact our
-    <a href="mailto:&#99;&#105;r&#109;&#45;&#119;&#114;&#97;n&#103;l&#101;
-    &#114;&#45;&#103;&#114;&#111;&#117;&#112;&#64;&#117;&#99;&#115;&#99;.&#101;&#100;u"
+    <a href="mailto:&#99;&#105;r&#109;&#45;&#119;&#114;&#97;n&#103;l&#101;&#114;&#45;&#103;&#114;&#111;&#117;&#112;&#64;&#117;&#99;&#115;&#99;.&#101;&#100;u"
     >support team</a>.
     <!-- above address is cirm-wrangler-group at ucsc.edu -->
     </div>
   </div>
 
-  <a name="resources">
+  <a name="resources"></a>
   <div class="row">
     <div class="col-md-12">
       <div class="cirm-page-title" style="background: #5cb85c">
@@ -158,11 +194,16 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-    <p>
+    <p> Additional resources from the CIRM CESCG
     <ul>
-      
+      <li><a href="http://www.cirm.ca.gov/" target="_blank">CIRM homepage</a></li>
+      <li><a href="http://med.stanford.edu/content/dam/sm/cescg/documents/CESCG_SequencingInformaticsCosts-102914.pdf"
+          target="_blank">CESCG Sequencing Services and Costs</a></li>
+      <li><a href="https://www.salk.edu/wp-content/uploads/2017/04/CESCG_CRP_Bioinformatics_Tasks_Document_v9.pdf"
+          target="_blank">CESCG Uniform processing Pipeline</a></li>
+    </ul>
     </div>
   </div>
 </div>
 
-<!--#include virtual="footer.html" -->
+<!--#include virtual="$ROOT/footer.html" -->
