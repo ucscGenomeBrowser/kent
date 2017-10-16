@@ -267,7 +267,7 @@ for (i = 0;  i < formatCount;  i++)
     const struct vcfInfoDef *def = vcfInfoDefForGtKey(vcff, formatKeys[i]);
     char *desc = def ? def->description : "<em>not described in VCF header</em>";
     printf("&nbsp;&nbsp;<B>%s:</B> %s<BR>\n", formatKeys[i], desc);
-    formatTypes[i] = def->type;
+    formatTypes[i] = def ? def->type : vcfInfoString;
     }
 hTableStart();
 puts("<TR><TH>Sample ID</TH><TH>Genotype</TH><TH>Phased?</TH>");

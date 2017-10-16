@@ -74,10 +74,9 @@ if (url != NULL && url[0] != 0)
     printf("%s</B></A>\n", itemName);
 
     printf("<BR><B>CDC HuGE Published Literature:  ");
-    printf("<A HREF=\"%s%s%s\" target=_blank>", 
-           "http://hugenavigator.net/HuGENavigator/searchSummary.do?firstQuery=",
-           itemName, 
-	   "&publitSearchType=now&whichContinue=firststart&check=n&dbType=publit&Mysubmit=go");
+    printf("<A HREF=\"https://phgkb.cdc.gov/PHGKB/searchSummary.action"
+        "?Mysubmit=Search&firstQuery=%s&__checkbox_gwas=true\" target=_blank>",
+        itemName);
     printf("%s</B></A>\n", itemName);
 
     /* List diseases associated with the gene */
