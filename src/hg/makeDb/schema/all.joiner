@@ -2247,11 +2247,6 @@ identifier wgEncodeGencodePseudoGeneAttrsV26lift37
     hg19.wgEncodeGencodePseudoGeneV26lift37.name
 
 # gencode association tables (joined through wgEncodeGencodeAttrsV26lift37)
-identifier wgEncodeGencodeExonSupportV26lift37
-"Link together Gencode Exon Support table with Attributes table"
-    hg19.wgEncodeGencodeExonSupportV26lift37.transcriptId dupeOk
-    hg19.wgEncodeGencodeAttrsV26lift37.transcriptId minCheck=0.95
-
 identifier wgEncodeGencodeGeneSourceV26lift37
 "Link together Gencode Gene Source table with Attributes table"
     hg19.wgEncodeGencodeGeneSourceV26lift37.geneId

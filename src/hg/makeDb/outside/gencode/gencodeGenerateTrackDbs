@@ -364,7 +364,7 @@ htmlTemplateSect6Both = """\
 <!--#insert file="../../wgEncodeGencodeCredits1.shared.html"-->
 """
 
-joinerTemplate = """\
+joinerTemplateSec1Both = """\
 # begin Gencode V{gencodeVer}
 
 # gencode genePred tables with no associations
@@ -388,11 +388,6 @@ identifier wgEncodeGencodePseudoGeneAttrsV{gencodeVer}
     {orgHgDb}.wgEncodeGencodePseudoGeneV{gencodeVer}.name
 
 # gencode association tables (joined through wgEncodeGencodeAttrsV{gencodeVer})
-identifier wgEncodeGencodeExonSupportV{gencodeVer}
-"Link together Gencode Exon Support table with Attributes table"
-    {orgHgDb}.wgEncodeGencodeExonSupportV{gencodeVer}.transcriptId dupeOk
-    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.95
-
 identifier wgEncodeGencodeGeneSourceV{gencodeVer}
 "Link together Gencode Gene Source table with Attributes table"
     {orgHgDb}.wgEncodeGencodeGeneSourceV{gencodeVer}.geneId
@@ -454,6 +449,16 @@ identifier wgEncodeGencodeEntrezGeneV{gencodeVer}
     {orgHgDb}.wgEncodeGencodeEntrezGeneV{gencodeVer}.transcriptId dupeOk
     {orgHgDb}.wgEncodeGencodeEntrezGeneV{gencodeVer}.transcriptId minCheck=0.358209
 
+"""
+
+joinerTemplateSec2Std = """\
+identifier wgEncodeGencodeExonSupportV{gencodeVer}
+"Link together Gencode Exon Support table with Attributes table"
+    {orgHgDb}.wgEncodeGencodeExonSupportV{gencodeVer}.transcriptId dupeOk
+    {orgHgDb}.wgEncodeGencodeAttrsV{gencodeVer}.transcriptId minCheck=0.95
+
+"""
+joinerTemplateSec3Both = """\
 # end Gencode V{gencodeVer}
 
 """
@@ -625,7 +630,10 @@ def generateJoinerFile(params):
     joinerFile = os.path.expanduser("~/tmp/gencodeV{}.joiner".format(params.gencodeVer))
     print("generating {}".format(joinerFile))
     with open(joinerFile, "w") as joinerFh:
-        joinerFh.write(joinerTemplate.format(**vars(params)))
+        joinerFh.write(joinerTemplateSec1Both.format(**vars(params)))
+        if not params.isLifted():
+            joinerFh.write(joinerTemplateSec2Std.format(**vars(params)))
+        joinerFh.write(joinerTemplateSec3Both.format(**vars(params)))
         
 def gencodeGenerateTrackDbs(opts):
     params = getGencodeParams(opts.hgDb, opts.gencodeVer, opts.ensemblVer, opts.gencodeDate)
