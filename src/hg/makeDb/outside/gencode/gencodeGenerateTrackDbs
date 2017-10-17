@@ -328,7 +328,7 @@ The Ensembl human and mouse data sets are the same gene annotations as GENCODE f
 corresponding release.
 </p>
 
-<!--#insert file="../../wgEncodeGencodeDisplay1.shared.html"-->
+<!--#insert file="{displayHtml}"-->
 
 <h2>Downloads</h2>
 GENCODE GFF3 and GTF files are available from the
@@ -540,6 +540,11 @@ class GencodeParams(object):
 
         self.twoWayConsPseudoSearchPriority = searchPriority + 0.00015
 
+        if self.isLifted():
+            self.displayHtml = "../../wgEncodeGencodeDisplayLift1.shared.html"
+        else:
+            self.displayHtml = "../../wgEncodeGencodeDisplay1.shared.html"
+        
 
     def getTrackDbFileName(self, ext):
         return os.path.join(self.orgName, self.orgHgDb, "wgEncodeGencodeV{}.{}".format(self.gencodeVer, ext))
