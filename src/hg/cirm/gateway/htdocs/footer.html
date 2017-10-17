@@ -1,3 +1,7 @@
+    <!--#if expr="!($ROOT)" -->
+        <!--#set var="ROOT" value=".." -->
+    <!--#endif -->
+
     <div class="footer"</div>
     <hr>
     <div class="container" style="width: 100%">
@@ -9,15 +13,14 @@
         </div>
         <div class="col-md-2">
             <p class="text-muted">
-                <a href="?page=footer&title=FAQ">FAQ</a><br />
-                <a href="http://cirm.ucsc.edu/cgi-bin/cdwWebBrowse?cdwCommand=help">Help</a><br />
+                <!--<a href="cirmFAQ.html">FAQ</a><br />-->
+                <a href="<!--#echo var="ROOT" -->/help/cirmBasics.html">Help</a><br />
             </p>
         </div>
 
         <div class="col-md-2">
             <p class="text-muted">
                 <a href="https://cirm-cescg.wikispaces.com/">CESCG Wiki</a><br />
-                <a href="CESCG_CRP_Bioinformatics_Tasks_Document_v9.pdf">CESCG Pipline</a><br />
                 <a href="CESCG_SequencingInformaticsCosts-102914.pdf">CESCG Services</a><br />
             </p>
         </div>

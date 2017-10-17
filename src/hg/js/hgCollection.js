@@ -155,6 +155,9 @@ var hgCollection = (function() {
                'dnd': {check_while_dragging: true}
         });
         $(newTree).on("select_node.jstree", selectTreeNode);
+        $(newTree).on("copy_node.jstree", function (evt, data)  {
+            $(evt.target).jstree("open_node", data.parent);
+        });
         var lastElement = $("#collectionList li").last();
         //lastElement.addClass("folder");
         selectElements($("#collectionList"), lastElement) ;
@@ -360,7 +363,10 @@ var hgCollection = (function() {
             });
             recordNames(newTree);
             trees[this.id] = $(newTree);
-           $(newTree).on("select_node.jstree", selectTreeNode);
+            $(newTree).on("select_node.jstree", selectTreeNode);
+            $(newTree).on("copy_node.jstree", function (evt, data)  {
+                $(evt.target).jstree("open_node", data.parent);
+            });
         });
 
         treeDiv=$('#tracks');
