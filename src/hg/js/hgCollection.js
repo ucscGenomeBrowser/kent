@@ -156,7 +156,7 @@ var hgCollection = (function() {
         });
         $(newTree).on("select_node.jstree", selectTreeNode);
         $(newTree).on("copy_node.jstree", function (evt, data)  {
-            $(evt.target).jstree("toggle_node", data.parent);
+            $(evt.target).jstree("open_node", data.parent);
         });
         var lastElement = $("#collectionList li").last();
         //lastElement.addClass("folder");
@@ -365,7 +365,7 @@ var hgCollection = (function() {
             trees[this.id] = $(newTree);
             $(newTree).on("select_node.jstree", selectTreeNode);
             $(newTree).on("copy_node.jstree", function (evt, data)  {
-                $(evt.target).jstree("toggle_node", data.parent);
+                $(evt.target).jstree("open_node", data.parent);
             });
         });
 
