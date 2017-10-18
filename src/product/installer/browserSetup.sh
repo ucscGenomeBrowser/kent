@@ -1292,6 +1292,19 @@ function installBrowser ()
        $SEDINPLACE "s|^#?db.socket.*|db.socket=$sockFile|" $CGIBINDIR/hg.conf
        $SEDINPLACE "s|^#?central.socket.*|central.socket=$sockFile|" $CGIBINDIR/hg.conf
     fi
+    # check if UCSC or genome-euro MySQL server is closer
+    echo comparing latency: genome.ucsc.edu Vs. genome-euro.ucsc.edu
+    eurospeed=$( (time -p (for i in `seq 10`; do curl -sSI genome-euro.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
+    ucscspeed=$( (time -p (for i in `seq 10`; do curl -sSI genome.ucsc.edu > /dev/null; done )) 2>&1 | grep real | cut -d' ' -f2 )
+    if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$eurospeed $ucscspeed") -eq 1 ]]; then
+       echo genome-euro seems to be closer
+       echo modifying mirror to pull data from genome-euro instead of genome
+       sed -i s/slow-db.host=genome-mysql.cse.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ $CGIBINDIR/hg.conf
+    else
+       echo genome.ucsc.edu seems to be closer
+       echo not modifying $CGIBINDIR/hg.conf
+    fi
+
 
     # download the CGIs
     if [[ "$OS" == "OSX" ]]; then

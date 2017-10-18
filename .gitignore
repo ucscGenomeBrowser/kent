@@ -11,3 +11,4 @@ core.*
 *.pyc
 *.pyo
 tags
+src/htslib/version.h
