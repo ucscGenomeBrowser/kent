@@ -1246,7 +1246,6 @@ else
             cartRemove(cart, hgCtDataFileName);
             }
         }
-    boolean ctParseError = FALSE;
     struct errCatch *catch = errCatchNew();
     if (errCatchStart(catch))
 	ctList = customTracksParseCartDetailed(database, cart, &browserLines, &ctFileName,
@@ -1256,7 +1255,6 @@ else
 	{
 	addWarning(dsWarn, err);
 	addWarning(dsWarn, catch->message->string);
-	ctParseError = TRUE;
 	}
     errCatchFree(&catch);
 
@@ -1339,7 +1337,6 @@ else
 	    {
 	    addWarning(dsWarn, err);
 	    addWarning(dsWarn, catch->message->string);
-	    ctParseError = TRUE;
 	    }
 	errCatchFree(&catch);
 
