@@ -6,7 +6,7 @@ html gtexEqtl
 group regulation
 exonNumbers off
 dataVersion GTEx Analysis V6p (https://www.gtexportal.org/home/datasets)
-priority 1
+priority 2
 
 searchTable gtexEqtlCluster
 searchMethod prefix
@@ -41,7 +41,7 @@ bedNameLabel Variant/Gene
 html gtexEqtl
 itemRgb on
 dataVersion GTEx Analysis V6p (https://www.gtexportal.org/home/datasets)
-priority 2
+priority 2.1
 
     track gtexEqtlTissueAdiposeSubcut
     parent gtexEqtlTissue on
