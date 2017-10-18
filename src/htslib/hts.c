@@ -1989,7 +1989,7 @@ static const char *test_and_fetch(const char *fn)
 #endif
         // Attempt to open remote file. Stay quiet on failure, it is OK to fail when trying first .csi then .tbi index.
         if ((fp_remote = hopen(fn, "r")) == 0) return 0;
-hclose(fp_remote);
+if (hclose(fp_remote) != 0) fprintf(stderr, "[E::%s] fail to close remote file '%s'\n", __func__, fn);
 return fn;
 #ifdef NOTNOW
         if ((fp = fopen(p, "w")) == 0) {
