@@ -2,7 +2,7 @@ track wgEncodeGencodeV27lift37
 compositeTrack on
 superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE Gene V27lift37
-longLabel Gene annotations from GENCODE V27lift37 (Ensembl 90)
+longLabel Gene Annotations from GENCODE Version 27lift37
 group genes
 dragAndDrop subTracks
 priority 34.178
