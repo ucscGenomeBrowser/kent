@@ -494,7 +494,6 @@ if (wigCart->aggregateFunction == wiggleAggregateAdd || wigCart->aggregateFuncti
     tg->subtracks->next = NULL;
     }
 int numTrack = 0;
-int height = tg->totalHeight(tg, vis); // use the parent track for the height
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
@@ -505,6 +504,7 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	       errMsgShown = TRUE;
 	    wgo->numTrack = numTrack++;
 	    subtrack->wigGraphOutput = wgo;
+	    int height = subtrack->totalHeight(subtrack, vis);
 	    hvGfxSetClip(hvg, xOff, y, width, height);
 	    if (wigCart->aggregateFunction != wiggleAggregateNone)
 		subtrack->lineHeight = tg->lineHeight;
