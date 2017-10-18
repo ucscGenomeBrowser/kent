@@ -19,5 +19,3 @@ endif
 docs:
 	umask 002; rsync --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='style/*' `$(FIND)` ${HTDOCSDIR}
 
-style:
-	umask 002; rsync --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' `style/$(FIND)` ${HTDOCSDIR}
