@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Stem Cell Hub, California Institute for Regenerative Medicine CESCG at UC Santa Cruz</title>
-    <link rel="shortcut icon" href="https://www.cirm.ca.gov/sites/default/files/favicon-cirm-2_0.png" type="image/png" />
+    <link rel="shortcut icon" href="<!--#echo var="ROOT" -->/images/schub.ico" type="image/png" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
     <!-- Local stylesheet -->
-    <link rel="stylesheet" href="../style/cirmStyle.css">
+    <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/cirmStyle.css">
 
     <!-- Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -40,26 +40,28 @@
     <div style="width: 100%; background-color: #4682B4; height: 20px"></div>
     <div class="container container-fluid container-table" style="width: 90%">
       <div class="row">
-        <a href="index"><img src="http://cirm.ucsc.edu/logo5.png" class="img-responsive"
-        style="margin-top: 15px;" /></a>
+        <a href="/index"><img src="<!--#echo var="ROOT" -->/images/cirmSChubLogo.png" class="img-responsive"
+        style="margin-top: 15px; max-width: 450px;" width="75%" height="75%"/></a>
         <h3 style="margin-bottom: 0px">
           <div style="float: right; width: 200px;" class="input-group">
-            <input type="text" class="form-control" placeholder="Search for...">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button">search</button>
-            </span>
+            <form action="https://google.com/search" method="get">
+              <input type="hidden" name="sitesearch" value="cirm.ucsc.edu" />
+              <input type="text" name="q" class="form-control" placeholder="press enter to search" />
+            </form>
           </div>
           <div style="line-height: 1.5em;">
-            <a class="a-unstyled" href="cescgOrg">
-            <span class="label label-cescg">CESCG Organization</span></a>
-            <a class="a-unstyled" href="?page=access">
-            <span class="label label-access">Research Access</span></a>
-            <a class="a-unstyled" href="../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles">
+            <a class="a-unstyled" href="/cgi-bin/cdwWebBrowse?cdwCommand=browseFiles">
             <span class="label label-files">Files</span></a>
-            <a class="a-unstyled" href="projects">
+            <a class="a-unstyled" href="/projects">
             <span class="label label-projects">Projects</span></a>
-            <a class="a-unstyled" href="tools.html">
+            <a class="a-unstyled" href="/tools">
             <span class="label label-tools">Tools</span></a>
+            <a class="a-unstyled" href="/cescg/cescgOrg">
+            <span class="label label-cescg">CESCG Organization</span></a>
+            <a class="a-unstyled" href="/cescg/cescgPeople">
+            <span class="label label-access">CESCG People</span></a>
+            <a class="a-unstyled" href="/help/cirmBasics">
+            <span class="label label-projects">Help</span></a>
           </div>
         </h3>
       </div>

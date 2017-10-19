@@ -44,23 +44,64 @@
 
 <!-- ============= 2017 archived news ============= -->
 <a name="2017"></a>
-<!--
-Staging for release:
-<a name="091517"></a>
-<h2>Sep. 12, 2017 &nbsp;&nbsp; New SNPedia track for hg19 and hg38</h2>
-<p>
-<a href="http://www.snpedia.com/" target="_blank">SNPedia</a> is a wiki-based site investigating
-human genetics with information about the effects of variations in DNA, citing peer-reviewed
-scientific publications. We are pleased to announce the release of the new SNPedia track, available on the two most recent human assemblies, 
-<a href="../cgi-bin/hgTrackUi?db=hg38&g=snpedia" target="_blank">GRCh38/hg38</a> and 
-<a href="../cgi-bin/hgTrackUi?db=hg19&g=snpedia"target="_blank">GRCh37/hg19</a>. 
-This track displays variation genomic regions from the SNPedia wiki, labeled with associated 
-rsIDs. Clicking on a region will display information from the SNPedia wiki, including a direct 
-link to the specific SNPedia wiki page. Only manually-created SNPedia wiki pages are displayed in 
-this track. Thanks to Mike Cariaso for assistance with the GFF download, and thanks to Max 
-Haeussler at UCSC for building this track.</p>
 
--->
+<a name="101817"></a>
+<h2>Oct. 18, 2017 &nbsp;&nbsp; New GTEx eQTL 44 tissues and summary tracks on hg19</h2>
+<p>
+We are pleased to announce two new GTEx eQTL tracks in the GRCh37/hg19 browser within 
+the &quot;Regulation&quot; track category. These tracks show genetic variants associated with and
+likely causal for differences in gene expression in 44 human tissues from the 
+<a href="https://www.genome.gov/27543767/" target="_blank">Genotype-Tissue Expression (GTEx)</a> 
+V6 data release. The data items displayed are gene expression quantitative trait loci within 1MB 
+of gene transcription start sites (cis-eQTLs), significantly associated with gene expression and 
+in the credible set of variants for the gene at a high confidence level (95%).</p>
+
+<p>
+<b><a href="../cgi-bin/hgGtexTrackSettings?db=hg19&g=gtexEqtlCluster"
+target="_blank">hg19: GTEx Combined eQTL</a></b></br>
+This "all in one" track displays all cis-eQTL's from the 44 tissues, collapsed into a single track
+for a summary view in the browser display. Gene/variant pairs occurring in multiple tissues are
+combined into a single item in the display. The item label shows the number of tissues where the
+eQTL was identified, or the tissue name and the GTEx-convention tissue color if the eQTL was
+identified solely in one tissue. Mouseover lists all tissues affected and the effect size. The item
+color reflects the largest effect size in any tissue (red for positive, blue for negative).
+Click-through on a combined eQTL shows for each tissue the significance of the association, effect
+size on gene expression, and the probability the eQTL belongs to the the 95% credible set. Track
+configuration supports filtering by gene, effect size, or probability. Tissues can be selected via
+checkboxes or from the UCSC GTEx Body Map graphic. </p>
+
+<p>
+<b><a href="../cgi-bin/hgTrackUi?db=hg19&g=gtexEqtlTissue" target="_blank">hg19: GTEx Tissue eQTL</a></b></br>
+This track is a composite track containing 44 subtracks representing the GTEx eQTL tissues. Each
+subtrack contains all eQTLs identified for that tissue. Filtering is available for all 44 subtracks.</p>
+
+<p>
+These two tracks join the previously released GTEx data tracks and track hubs in the UCSC Genome
+Browser:
+<ul>
+<li><a href="../cgi-bin/hgGtexTrackSettings?db=hg19&g=gtexGene"
+target="_blank">GTEx Gene</a></li>
+<li><a href="../cgi-bin/hgTrackUi?db=hg19&g=gtexTranscExpr" target="_blank">
+GTEx Transcript</a></li>
+<li><a href="http://hgdownload.soe.ucsc.edu/hubs/gtex/gtexHub.html" target="_blank">
+GTEx RNA-Seq Signal Hub</a> on <a href="
+../cgi-bin/hgTracks?db=hg38&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtex/hub.txt" target="_blank">hg19</a> and <a href="
+../cgi-bin/hgTracks?db=hg38&hubUrl=http://hgdownload.soe.ucsc.edu/hubs/gtex/hub.txt" target="_blank">hg38</a>.</li>
+<li><a href="http://hgdownload.soe.ucsc.edu/hubs/gtexAnalysis/gtexAse.html" target="_blank">
+GTEx Analysis Hub: Allele-Specific Expression</a> on <a href="
+../cgi-bin/hgTracks?db=hg38&hubUrl=
+http://hgdownload.soe.ucsc.edu/hubs/gtexAnalysis/gtexAnalysisHub.html" target="_blank">hg19</a> and <a href="
+../cgi-bin/hgTracks?db=hg38&hubUrl=
+http://hgdownload.soe.ucsc.edu/hubs/gtexAnalysis/gtexAnalysisHub.html" target="_blank">hg38</a>.</li>
+</ul>
+
+<p>
+Please see the related October 11, 2017 publication in <i>Nature</i>, &quot;<a href="https://www.nature.com/nature/journal/v550/n7675/full/nature24277.html" target="_blank">Genetic effects on gene expression across human tissues</a>&quot; for an in-depth article about these data.</p>
+
+<p>
+Acknowledgements to UCSC Genome Browser engineer, Kate Rosenbloom, for creating these tracks.
+</p>
+
 <a name="092917"></a>
 <h2>Sep. 29, 2017 &nbsp;&nbsp; VAI tool can now output HGVS terms</h2>
 <p>

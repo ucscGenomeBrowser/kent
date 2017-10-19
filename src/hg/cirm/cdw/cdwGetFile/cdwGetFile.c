@@ -78,7 +78,7 @@ void sendFile(char *format, char *filePath, char *suggestFileName)
 /* format is one of "fastq", "fasta", defined in cdw.as. if format is NULL, use file extension. */
 /* send file to user via Apache, using X-Sendfile or stdout, as needed */
 {
-if (format==NULL)
+if (format==NULL || sameWord(format, "unknown"))
 {
     char ext[FILEEXT_LEN];
     splitPath(filePath, NULL, NULL, ext);
@@ -161,6 +161,8 @@ if (useSubmitFname)
 else
     {
     char *formatExt = fileExtFromFormat(vf->format);
+    if (sameWord(vf->format, "unknown") && ef && ef->submitFileName && endsWith(ef->submitFileName, ".tar.gz"))
+        formatExt = cloneString(".tar.gz");
     safef(suggestName, sizeof(suggestName), "%s%s%s", vf->licensePlate, formatExt, addExt);
     freez(&formatExt);
     }

@@ -367,9 +367,12 @@ if (! vpTx->genomeMismatch && indelShiftIsApplicable(refLen, altLen))
         vpTxGetRef(vpTx, txSeq);
         vpTx->gRef = needMem(refLen+1);
         seqWindowCopy(gSeqWin, min(gTxStart, gTxEnd), refLen, vpTx->gRef, refLen+1);
-        if (isRc)
-            reverseComplement(vpTx->gRef, refLen);
         vpTx->txAlt = cloneString(gAltCpy);
+        if (isRc)
+            {
+            reverseComplement(vpTx->gRef, refLen);
+            reverseComplement(vpTx->txAlt, altLen);
+            }
         }
     if (hasAnomalousGaps(txAli, ambigStart, ambigEnd))
         {

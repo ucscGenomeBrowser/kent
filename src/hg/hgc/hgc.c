@@ -9719,9 +9719,7 @@ struct sqlResult *sr;
 char **row;
 char *chrom, *chromStart, *chromEnd;
 struct dyString *currentCgiUrl;
-char *upperDisease;
 char *diseaseClass;
-char *upperItemName;
 
 char *url = tdb->url;
 
@@ -9747,15 +9745,13 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     printf("<B>Genetic Association Database: ");
-    printf("<A HREF=\"%s'%s'\" target=_blank>", url, itemName);
-    printf("%s</B></A>\n", itemName);
+    printf("%s</B>\n", itemName);
 
     printf("<BR><B>CDC HuGE Published Literature:  ");
-    printf("<A HREF=\"%s%s%s\" target=_blank>",
-    "http://www.hugenavigator.net/HuGENavigator/searchSummary.do?firstQuery=",
-           itemName,
-    "&publitSearchType=now&whichContinue=firststart&check=n&dbType=publit&Mysubmit=go");
-    printf("%s</B></A>\n", itemName);
+    printf("<A HREF=\"https://phgkb.cdc.gov/PHGKB/searchSummary.action"
+    	"?Mysubmit=Search&firstQuery=%s&__checkbox_gwas=true\" target=_blank>",
+	itemName);
+    printf("%s</A></B>\n", itemName);
 
     sqlSafef(query, sizeof(query),
           "select distinct g.omimId, o.title from gadAll g, hgFixed.omimTitle o where g.geneSymbol='%s' and g.omimId <>'.' and g.omimId=o.omimId",
@@ -9804,29 +9800,14 @@ if (url != NULL && url[0] != 0)
 
     if (row != NULL)
         {
-        upperDisease = replaceChars(row[0], "'", "''");
-	touppers(upperDisease);
 	printf("<BR><B>Positive Disease Associations:  </B>");
-
-	printf("<A HREF=\"%s",
-	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25");
-	printf("%s", cgiEncode(upperDisease));
-
-	upperItemName = strdup(itemName);
-	touppers(upperItemName);
-	printf("%s%s%s\" target=_blank>", "%25'%20AND%20upper(GENE)%20%20like%20'%25", upperItemName, "%25'");
-	printf("%s</B></A>\n", row[0]);
+	printf("%s\n", row[0]);
         row = sqlNextRow(sr);
         }
 
     while (row != NULL)
         {
-        upperDisease = replaceChars(row[0], "'", "''");
-	touppers(upperDisease);
-	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
-	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
-	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
-	printf("%s</B></A>\n", row[0]);
+	printf(", %s\n", row[0]);
         row = sqlNextRow(sr);
 	}
     sqlFreeResult(&sr);

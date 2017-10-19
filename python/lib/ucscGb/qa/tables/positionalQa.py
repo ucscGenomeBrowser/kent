@@ -203,7 +203,9 @@ class PositionalQa(TableQa):
         self.sumRow.setFeatureBitsGaps(fbGapErr.rstrip("in intersection\n"))
 
         # Check overlap with gaps, both bridged and unbridged
-        gapOverlapOut = checkGapOverlap.checkGapOverlap(self.db, self.table, True)
+        gapOverlapOut = ''
+        if self.table != 'gap':
+            gapOverlapOut = checkGapOverlap.checkGapOverlap(self.db, self.table, True)
         self.reporter.writeLine(gapOverlapOut)
 
     def validate(self):
