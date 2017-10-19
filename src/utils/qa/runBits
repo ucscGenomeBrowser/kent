@@ -44,7 +44,7 @@ def main():
               " " + fbGapCmd[4] + "\n" + fbGapErr
 
     gapOverlapOut = ''
-    if checkUnbridged:
+    if table != 'gap':
         gapOverlapOut = checkGapOverlap.checkGapOverlap(db, table, checkUnbridged)
 
     print output + gapOverlapOut
