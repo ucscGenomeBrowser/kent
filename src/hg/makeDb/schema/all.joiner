@@ -27,6 +27,7 @@ set canFam canFam1,canFam2,canFam3
 set cavPor cavPor3
 set cb cb1,cb3,cb4
 set ce ce2,ce4,ce6,ce9,ce10,ce11
+set cebCap cebCap1
 set cerAty cerAty1
 set cerSim cerSim1
 set choHof choHof1
@@ -130,7 +131,7 @@ set xenTro xenTro1,xenTro2,xenTro3,xenTro7,xenTro9
 
 
 # Define all organism/assembly-specific databases.
-set gbd $ailMel,$allMis,$anoCar,$anoGam,$aotNan,$apiMel,$aplCal,$aptMan,$aquChr,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$cavPor,$cb,$ce,$cerAty,$cerSim,$choHof,$chlSab,$chrPic,$ci,$cioSav,$colAng,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$eulFla,$eulMac,$felCat,$fr,$gadMor,$galGal,$gasAcu,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanPar,$nasLar,$neoSch,$nomLeu,$ochPri,$orcOrc,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panManBai,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$xenLae,$xenTro
+set gbd $ailMel,$allMis,$anoCar,$anoGam,$aotNan,$apiMel,$aplCal,$aptMan,$aquChr,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$cavPor,$cb,$ce,$cebCap,$cerAty,$cerSim,$choHof,$chlSab,$chrPic,$ci,$cioSav,$colAng,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$eulFla,$eulMac,$felCat,$fr,$gadMor,$galGal,$gasAcu,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanPar,$nasLar,$neoSch,$nomLeu,$ochPri,$orcOrc,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panManBai,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$xenLae,$xenTro
 
 set metaGbd $gbd
 
@@ -139,7 +140,7 @@ set metaGbd $gbd
 set wgs $ailMel,$allMis,$aplCal,$balAcu,$bisBis,$bosTau,$bruMal,$calJac,$calMil,$canFam,$cavPor,$choHof,$chrPic,$cioSav,$colAng,$criGri,$dasNov,$dipOrd,$echTel,$eriEur,$eulFla,$eulMac,$felCat,$fr,$galGal,$haeCon,$hetGla,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$micMur,$monDom,$musFur,$myoLuc,$nanPar,$nasLar,$neoSch,$nomLeu,$ochPri,$otoGar,$oryCun,$oryLat,$oviAri,$panPan,$panTro,$proCap,$proCoq,$pteVam,$rn,$sarHar,$sorAra,$speTri,$susScr,$taeGut,$tarSyr,$tetNig,$tupBel,$tupChi,$turTru,$vicPac
 
 # Define organism databases for which we build a xenoRefGene track:
-set xrg $ailMel,$allMis,$anoCar,$aotNan,$aplCal,$aquChr,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$calJac,$calMil,$canFam,$cb,$ce,$cerAty,$cerSim,$chlSab,$choHof,$chrPic,$ci,$colAng,$criGri,danRer6,danRer7,danRer10,danRer11,$dasNov,$dipOrd,dm6,$dp,$droMult,$droYak,$echTel,$eriEur,$eulFla,$eulMac,$felCat,$gadMor,$galGal,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanPar,$nasLar,$neoSch,$nomLeu,$ornAna,$ochPri,$orcOrc,$oreNil,$oryCun,$oryLat,$otoGar,$oviAri,$panPan,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$xenLae,$xenTro
+set xrg $ailMel,$allMis,$anoCar,$aotNan,$aplCal,$aquChr,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$calJac,$calMil,$canFam,$cb,$ce,$cebCap,$cerAty,$cerSim,$chlSab,$choHof,$chrPic,$ci,$colAng,$criGri,danRer6,danRer7,danRer10,danRer11,$dasNov,$dipOrd,dm6,$dp,$droMult,$droYak,$echTel,$eriEur,$eulFla,$eulMac,$felCat,$gadMor,$galGal,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanPar,$nasLar,$neoSch,$nomLeu,$ornAna,$ochPri,$orcOrc,$oreNil,$oryCun,$oryLat,$otoGar,$oviAri,$panPan,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$xenLae,$xenTro
 
 # Ensembl gene track lists constructed from update procedure
 set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,canFam3,cavPor3,ce10,ce11,chlSab2,choHof1,ci2,ci3,cioSav2,criGri1,criGriChoV1,danRer7,danRer10,danRer11,dasNov2,dasNov3,dipOrd1,dm3,dm6,echTel1,echTel2,eriEur1,eriEur2,equCab2,felCat3,felCat5,fr2,fr3,gadMor1,galGal3,galGal4,gasAcu1,gorGor3,hg16,hg17,hg18,hg19,hg38,latCha1,loxAfr3,melGal1,micMur1,mm7,mm8,mm9,mm10,monDom5,musFur1,myoLuc2,nomLeu1,ochPri2,ochPri3,oreNil1,ornAna1,oryCun2,oryLat2,otoGar3,oviAri3,panTro2,panTro4,papAnu2,papAnu3,petMar2,ponAbe2,proCap1,pteVam1,rheMac2,rn3,rn4,rn5,rn6,sacCer3,sarHar1,sorAra1,sorAra2,speTri2,susScr1,susScr3,taeGut1,tarSyr1,tetNig2,tupBel1,turTru1,vicPac1,vicPac2,xenTro3
@@ -3852,7 +3853,7 @@ identifier wgsContigName
     $wgs.contigAcc.contig
     $wgs,!panTro1.gold.frag $split full
 
-set notProteinAccession !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!calJac3,!calMil1,!ce11,!cerAty1,!cerSim1,!chlSab2,!ci3,!colAng1,!criGriChoV1,criGri1,!eboVir3,!danRer7,!danRer10,!danRer11,!dasNov3,!dm3,!dm6,!echTel2,!eriEur2,!eulFla1,!eulMac1,!felCat8,!fr2,!galGal5,!galGal4,!gasAcu1,!galVar1,!gorGor5,!loxAfr3,!manPen1,!macFas5,!manLeu1,!micMur2,!micMur3,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!rheMac8,!rhiBie1,!rhiRox1,!rn5,!rn6,!rouAeg1,!sorAra2,!speTri2,!susScr3,!taeGut2,!tarSyr2,!vicPac2,!xenLae2,!xenTro7,!xenTro9
+set notProteinAccession !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!calJac3,!calMil1,!ce11,!cebCap1,!cerAty1,!cerSim1,!chlSab2,!ci3,!colAng1,!criGriChoV1,criGri1,!eboVir3,!danRer7,!danRer10,!danRer11,!dasNov3,!dm3,!dm6,!echTel2,!eriEur2,!eulFla1,!eulMac1,!felCat8,!fr2,!galGal5,!galGal4,!gasAcu1,!galVar1,!gorGor5,!loxAfr3,!manPen1,!macFas5,!manLeu1,!micMur2,!micMur3,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!rheMac8,!rhiBie1,!rhiRox1,!rn5,!rn6,!rouAeg1,!sorAra2,!speTri2,!susScr3,!taeGut2,!tarSyr2,!vicPac2,!xenLae2,!xenTro7,!xenTro9
 
 identifier proteinAccession typeOf=genbankAccession fuzzy
 "Genbank protein accession."
@@ -4422,7 +4423,7 @@ identifier humanFosmidEndId
 ## TYPED TO HERE %%%
 # Mapping Stuff, STS, etc.
 
-set notDbStsId !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!braFlo2,!bosTau8,!calJac3,!calMil1,!ce11,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!ci3,!colAng1,!criGriChoV1,criGri1,!dm6,!eboVir3,!danRer7,!danRer10,!danRer11,!dasNov3,!echTel2,!eriEur2,!fr2,!eulFla1,!eulMac1,!felCat8,!galGal5,!galGal4,!gasAcu1,!galVar1,!gorGor5,!loxAfr3,!mm10,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!oreNil3,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rn5,!rn6,!rouAeg1,!sacCer3,!sorAra2,!speTri2,!staAur1,!susScr3,!susScr11,!taeGut2,!tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
+set notDbStsId !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!braFlo2,!bosTau8,!calJac3,!calMil1,!ce11,!cebCap1,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!ci3,!colAng1,!criGriChoV1,criGri1,!dm6,!eboVir3,!danRer7,!danRer10,!danRer11,!dasNov3,!echTel2,!eriEur2,!fr2,!eulFla1,!eulMac1,!felCat8,!galGal5,!galGal4,!gasAcu1,!galVar1,!gorGor5,!loxAfr3,!mm10,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!oreNil3,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rn5,!rn6,!rouAeg1,!sacCer3,!sorAra2,!speTri2,!staAur1,!susScr3,!susScr11,!taeGut2,!tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
 
 identifier dbStsId external=dbSts fuzzy
 "NCBI dbSTS (Sequenced Tagged Site, aka mapping sequence) ID"
@@ -4443,7 +4444,7 @@ identifier ucscMouseStsId
     $mm.all_sts_primer.qName chopAfter=_ minCheck=0.99
     $mm.stsMapMouseNew.identNo
 
-set notStsName !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!calJac3,!calMil1,!ce11,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!ci3,!colAng1,!criGriChoV1,criGri1,!dm6,!eboVir3,!danRer7,!danRer10,!danRer11,!dasNov3,!echTel2,!eriEur2,!eulFla1,!eulMac1,!felCat8,!fr2,!galGal5,!galGal4,!gasAcu1,!galVar1,!gorGor5,!loxAfr3,!mm10,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!oreNil3,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rn5,!rn6,!rouAeg1,!sacCer3,!sorAra2,!speTri2,!staAur1,!susScr3,!susScr11,!taeGut2,!tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
+set notStsName !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!calJac3,!calMil1,!ce11,!cebCap1,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!ci3,!colAng1,!criGriChoV1,criGri1,!dm6,!eboVir3,!danRer7,!danRer10,!danRer11,!dasNov3,!echTel2,!eriEur2,!eulFla1,!eulMac1,!felCat8,!fr2,!galGal5,!galGal4,!gasAcu1,!galVar1,!gorGor5,!loxAfr3,!mm10,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!oreNil3,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rn5,!rn6,!rouAeg1,!sacCer3,!sorAra2,!speTri2,!staAur1,!susScr3,!susScr11,!taeGut2,!tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
 
 identifier stsName fuzzy
 "STS (Sequenced Tagged Site, aka mapping sequence) Name"
@@ -4552,7 +4553,7 @@ identifier wormBaseIsoformCluster
     $ce.sangerCanonical.clusterId
     $ce.sangerIsoforms.clusterId full
 
-set notWormBaseId !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!calJac3,!calMil1,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!ci3,!colAng1,!criGriChoV1,criGri1,!dm6,!eboVir3,!danRer7,!danRer10,!danRer11,!dasNov3,!echTel2,!eriEur2,!eulFla1,!eulMac1,!felCat8,!fr2,!galGal5,!galGal4,!gasAcu1,!hg38,!hg19,!galVar1,!gorGor5,!loxAfr3,!mm10,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!oreNil3,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rn3,!rn5,!rn6,!rouAeg1,!sorAra2,!speTri2,!staAur1,!susScr3,!susScr11,!taeGut2,!tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
+set notWormBaseId !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!calJac3,!calMil1,!cebCap1,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!ci3,!colAng1,!criGriChoV1,criGri1,!dm6,!eboVir3,!danRer7,!danRer10,!danRer11,!dasNov3,!echTel2,!eriEur2,!eulFla1,!eulMac1,!felCat8,!fr2,!galGal5,!galGal4,!gasAcu1,!hg38,!hg19,!galVar1,!gorGor5,!loxAfr3,!mm10,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!oreNil3,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rn3,!rn5,!rn6,!rouAeg1,!sorAra2,!speTri2,!staAur1,!susScr3,!susScr11,!taeGut2,!tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
 
 identifier wormBaseId external=WormBase dependency
 "WormBase (C. elegans) ORF ID"
@@ -4596,7 +4597,7 @@ identifier flyBaseAlleleId
     $dm.fbAllele.id
     $dm.fbPhenotype.fbAllele exclude=0
 
-set notFlyBaseGeneId !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!calJac3,!calMil1,!ce2,!ce4,!ce6,!ce9,!ce10,!ce11,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!ci3,!colAng1,!criGriChoV1,criGri1,!eboVir3,!danRer3,!danRer7,!danRer10,!danRer11,!dasNov3,!echTel2,!eriEur2,!eulFla1,!eulMac1,!felCat8,!fr2,!galGal5,!galGal4,!gasAcu1,!hg17,!hg18,!hg38,!hg19,!galVar1,!gorGor5,!loxAfr3,!mm7,!mm8,!mm9,!mm10,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!oreNil3,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rn3,!rn4,!rn5,!rn6,!rouAeg1,!sacCer1,!sacCer2,!sacCer3,!sorAra2,!speTri2,!staAur1,!susScr3,!susScr11,!taeGut2,tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
+set notFlyBaseGeneId !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!calJac3,!calMil1,!ce2,!ce4,!ce6,!ce9,!ce10,!ce11,!cebCap1,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!ci3,!colAng1,!criGriChoV1,criGri1,!eboVir3,!danRer3,!danRer7,!danRer10,!danRer11,!dasNov3,!echTel2,!eriEur2,!eulFla1,!eulMac1,!felCat8,!fr2,!galGal5,!galGal4,!gasAcu1,!hg17,!hg18,!hg38,!hg19,!galVar1,!gorGor5,!loxAfr3,!mm7,!mm8,!mm9,!mm10,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!oreNil3,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rn3,!rn4,!rn5,!rn6,!rouAeg1,!sacCer1,!sacCer2,!sacCer3,!sorAra2,!speTri2,!staAur1,!susScr3,!susScr11,!taeGut2,tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
 
 identifier flyBaseGeneId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
@@ -4714,7 +4715,7 @@ identifier sgdProtHomologId
 identifier sgdId external=SGD
 "Sacchromyces Genome Database ID - Coding or other"
 
-set notSgdCodingId !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!calJac3,!calMil1,!ce11,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!ci3,!colAng1,!criGriChoV1,criGri1,!dm6,!eboVir3,!danRer7,!danRer10,!danRer11,!dasNov3,!echTel2,!eriEur2,!eulFla1,!eulMac1,!felCat8,!fr2,!galGal5,!galGal4,!gasAcu1,!hg38,!hg19,!galVar1,!gorGor5,!loxAfr3,!mm10,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!oreNil3,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rn5,!rn6,!rouAeg1,!sorAra2,!speTri2,!staAur1,!susScr3,!susScr11,!taeGut2,tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
+set notSgdCodingId !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!calJac3,!calMil1,!ce11,!cebCap1,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!ci3,!colAng1,!criGriChoV1,criGri1,!dm6,!eboVir3,!danRer7,!danRer10,!danRer11,!dasNov3,!echTel2,!eriEur2,!eulFla1,!eulMac1,!felCat8,!fr2,!galGal5,!galGal4,!gasAcu1,!hg38,!hg19,!galVar1,!gorGor5,!loxAfr3,!mm10,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!oreNil3,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rn5,!rn6,!rouAeg1,!sorAra2,!speTri2,!staAur1,!susScr3,!susScr11,!taeGut2,tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
 
 identifier sgdCodingId typeOf=sgdId dependency
 "Sacchromyces Genome Database ID"
@@ -4855,7 +4856,7 @@ identifier ensemblProteinId3 external=Ensembl
     $gbd.ensemblXref3.protein dupeOk
     $gbd.sfAssign.seqID minCheck=0.01
 
-set notEnsemblTranscriptId !allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!ce10,!calMil1,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!$colAng,!eboVir3,!eulFla1,!eulMac1,!felCat3,!felCat8,!galGal5,!galVar1,!gorGor5,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!nanPar1,!nasLar1,!$orcOrc,!oreNil3,!ornAna2,!oxyTri2,!panPan1,!panPan2,!panTro5,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rouAeg1,!staAur1,!susScr11,!taeGut2,!tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
+set notEnsemblTranscriptId !allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!ce10,!calMil1,!cebCap1,!cerAty1,!cerSim1,!chlSab2,!chrPic2,!$colAng,!eboVir3,!eulFla1,!eulMac1,!felCat3,!felCat8,!galGal5,!galVar1,!gorGor5,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur2,!micMur3,!micOch1,!nanPar1,!nasLar1,!$orcOrc,!oreNil3,!ornAna2,!oxyTri2,!panPan1,!panPan2,!panTro5,!priPac3,!proCoq1,!rheMac8,!rhiBie1,!rhiRox1,!rouAeg1,!staAur1,!susScr11,!taeGut2,!tarSyr2,!tupChi1,!vicPac2,!xenLae2,!xenTro7,!xenTro9
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
