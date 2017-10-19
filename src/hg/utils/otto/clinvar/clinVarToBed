@@ -5,6 +5,15 @@ from collections import defaultdict
 from os.path import join, basename, dirname, isfile, abspath
 from datetime import date, datetime, timedelta
 
+dbToUrl = {
+    "dbVar": "https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/",
+    "UniProtKB (variants)" : "http://www.uniprot.org/uniprot/%s",
+    "OMIM Allelic Variant" : "http://www.omim.org/entry/%s",
+    "MedGen": "https://www.ncbi.nlm.nih.gov/medgen/%s",
+    "OMIM" : "http://www.omim.org/entry/%s",
+    "Orphanet" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert=%s"
+}
+
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
 parser = optparse.OptionParser("""usage: %prog [options] summaryFname varAllFname hgvsFname - check and convert the three main clinVar tab-sep files to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed
 
@@ -190,15 +199,6 @@ def accListToHtml(inStr):
     given a string of a list of db:acc tuples, like "dbVar:nssv578901, omim:12343", convert the accessions
     to HTML links to the databases
     """
-    dbToUrl = {
-    "dbVar": "https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/",
-    "UniProtKB (variants)" : "http://www.uniprot.org/uniprot/%s",
-    "OMIM Allelic Variant" : "http://www.omim.org/entry/%s",
-    "MedGen": "https://www.ncbi.nlm.nih.gov/medgen/%s",
-    "OMIM" : "http://www.omim.org/entry/%s",
-    "Orphanet" : "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?lng=EN&Expert=%s"
-    }
-
     newParts = []
     for part in inStr.split(","):
         fields = part.split(":")
@@ -213,7 +213,7 @@ def accListToHtml(inStr):
             if "OMIM" in db:
                 accForUrl = accForUrl.replace(".", "#")
             url = (dbToUrl[db] % accForUrl)
-            newPart = "<a href='%s'>%s:%s</a>" % (url, db, acc)
+            newPart = "<a target=_blank href='%s'>%s:%s</a>" % (url, db, acc)
         else:
             newPart = part
         newParts.append(newPart)
