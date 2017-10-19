@@ -15,7 +15,7 @@ debugMode=False
 
 # --- FASTA FILES ---
 class FastaReader:
-    """ a class to parse a fasta file 
+    """ a class to parse a fasta file
     Example:
         fr = FastaReader(filename)
         for (id, seq) in fr.parse():
@@ -655,7 +655,7 @@ def parseFeatures(entryEl, disRefs, defaultDisCodes, disToName, evidPmids, mainI
             if end==None:
                 logging.debug("Unknown end, skipping a feature")
                 continue
-            end = str(int(end)+1) # UniProt is 1-based, closed-end
+            end = str(int(end)+1) # UniProt is 1-based, open-end
 
         desc = featEl.attrib.get("description", None)
         if desc==None:
