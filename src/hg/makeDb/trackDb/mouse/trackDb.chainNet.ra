@@ -321,6 +321,11 @@ priority 590.3
 track chainNetLatCha1 override
 priority 595.3
 
+track chainNetDanRer11 override
+priority 600.3
+chainLinearGap medium
+chainMinScore 3000
+
 track chainNetDanRer7 override
 priority 600.3
 
