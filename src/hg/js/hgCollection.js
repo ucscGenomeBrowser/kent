@@ -145,7 +145,7 @@ var hgCollection = (function() {
         $('#currentCollection').append("<div id='"+ourTreeName+"'><ul><li data-jstree='{\"icon\":\"../images/folderC.png\"}' " + attributes+ ">A New Collection</li><ul></div>");
         var newTree = $('#currentCollection div:last');
         trees[ourCollectionName] = newTree;
-        $(newTree).jstree({
+        newTree.jstree({
                "core" : {
                      "check_callback" : checkCallback
                          },
@@ -154,10 +154,12 @@ var hgCollection = (function() {
                'contextmenu': { "items" : currentCollectionItems},
                'dnd': {check_while_dragging: true}
         });
-        $(newTree).on("select_node.jstree", selectTreeNode);
-        $(newTree).on("copy_node.jstree", function (evt, data)  {
+        newTree.on("select_node.jstree", selectTreeNode);
+        newTree.on("copy_node.jstree", function (evt, data)  {
             $(evt.target).jstree("open_node", data.parent);
+            $(evt.target).jstree("set_icon", data.node, 'fa fa-minus');
         });
+        newTree.on('click', '.jstree-themeicon ', minusHit);
         var lastElement = $("#collectionList li").last();
         //lastElement.addClass("folder");
         selectElements($("#collectionList"), lastElement) ;
@@ -280,6 +282,29 @@ var hgCollection = (function() {
         }
     }
 
+    function plusHit(event, data) {
+        // called with the plus icon is hit
+        var treeObject = $(event.currentTarget).parent().parent();
+        var id = treeObject.attr('id');
+        var node = treeObject.jstree("get_node", id);
+        if (node.children.length === 0) {
+            var parentId = $(selectedTree).jstree("get_node", "ul > li:first").id;
+            isDirty = true;
+            $(selectedTree).jstree("copy_node", node, parentId,'last');
+        }
+    }
+
+    function minusHit (event, data) {
+        // called with the minus icon is hit
+        var treeObject = $(event.currentTarget).parent().parent();
+        var id = treeObject.attr('id');
+        var node = treeObject.jstree("get_node", id);
+        if (node.children.length === 0) {
+            isDirty = true;
+            $(selectedTree).jstree( "delete_node", node);
+        }
+    }
+
     function init() {
         $body = $("body");
 
@@ -366,7 +391,9 @@ var hgCollection = (function() {
             $(newTree).on("select_node.jstree", selectTreeNode);
             $(newTree).on("copy_node.jstree", function (evt, data)  {
                 $(evt.target).jstree("open_node", data.parent);
+                $(evt.target).jstree("set_icon", data.node, 'fa fa-minus');
             });
+            $(newTree).on('click', '.jstree-themeicon ', minusHit);
         });
 
         treeDiv=$('#tracks');
@@ -382,9 +409,10 @@ var hgCollection = (function() {
                 "check_callback" : checkCallback
             }
         });
-        $(treeDiv).on("select_node.jstree", function (evt, data)  {
+        treeDiv.on("select_node.jstree", function (evt, data)  {
             $(evt.target).jstree("toggle_node", data.node);
         });
+        treeDiv.on('click', '.jstree-themeicon ', plusHit);
 
         var firstElement = $("#collectionList li").first();
         selectElements($("#collectionList"), firstElement) ;

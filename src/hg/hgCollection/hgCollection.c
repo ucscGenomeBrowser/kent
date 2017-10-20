@@ -94,19 +94,18 @@ if (user)
     else if (tdb->subtracks)
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='track' class='folder'";
     else
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/invisible16.png\\\"}' viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-minus\\\"}' viewType='track'";
     }
 else
     {
     if (tdb->parent && tdb->subtracks) 
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'class='nodrop' viewType='view'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' viewType='view'";
     else if (tdb->subtracks)
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'class='nodrop' viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' viewType='track'";
     else
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/invisible16.png\\\"}'class='nodrop' viewType='track'";
+        userString = "data-jstree='{ \\\"icon\\\":\\\"fa fa-plus\\\"}' class='nodrop' viewType='track'";
     }
     
-        //userString = "viewType='track data-jstree='{'icon':'images/folderC.png'}''";
     
 #define IMAKECOLOR_32(r,g,b) ( ((unsigned int)b<<0) | ((unsigned int)g << 8) | ((unsigned int)r << 16))
 
