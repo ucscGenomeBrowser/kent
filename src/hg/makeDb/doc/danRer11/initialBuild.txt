@@ -111,7 +111,6 @@ taxId 7955
     # new option required to ucscCompositeAgp.pl 2016-04-13
     time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
       ../genbank/*_genomic.fna.gz ../genbank/*_assembly_structure/Primary_Assembly
-# constructing genbank.2bit from ../genbank/GCF_000002315.4_Gallus_gallus-5.0_genomic.fna.gz
 # constructing refseq.2bit from ../genbank/GCA_000002035.4_GRCz11_genomic.fna.gz
 CM002885.2 chr1
 CM002886.2 chr2
@@ -272,293 +271,46 @@ user	8m33.194s
     # 1679203469 bases of 1679203469 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2016-04-14 - Chris)
+# fixup search rule for assembly track/gold table (DONE - 2016-10-20 - Hiram)
     cd ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer11
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" danRer11 \
-      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+      | sed -e 's/[0-9][0-9]*//; s/\.[0-9]\+$//' | sort | uniq -c 
 
-	67 AL.10
-	44 AL.11
-	38 AL.12
-	34 AL.13
-	40 AL.14
-	32 AL.15
-	28 AL.16
-	23 AL.17
-	14 AL.18
-	13 AL.19
-	2 AL.2
-	9 AL.20
-	15 AL.21
-	9 AL.22
-	5 AL.23
-	3 AL.24
-	3 AL.25
-	1 AL.26
-	6 AL.27
-	2 AL.28
-	2 AL.29
-	15 AL.3
-	4 AL.30
-	2 AL.31
-	1 AL.32
-	2 AL.33
-	1 AL.35
-	1 AL.36
-	3 AL.37
-	58 AL.4
-	2 AL.42
-	85 AL.5
-	1 AL.51
-	116 AL.6
-	123 AL.7
-	84 AL.8
-	96 AL.9
-	366 BX.10
-	255 BX.11
-	239 BX.12
-	247 BX.13
-	159 BX.14
-	142 BX.15
-	126 BX.16
-	93 BX.17
-	54 BX.18
-	53 BX.19
-	4 BX.2
-	56 BX.20
-	42 BX.21
-	22 BX.22
-	30 BX.23
-	31 BX.24
-	23 BX.25
-	14 BX.26
-	12 BX.27
-	12 BX.28
-	9 BX.29
-	100 BX.3
-	3 BX.30
-	1 BX.31
-	11 BX.32
-	6 BX.34
-	7 BX.35
-	5 BX.36
-	1 BX.37
-	6 BX.38
-	1 BX.39
-	230 BX.4
-	1 BX.44
-	2 BX.46
-	2 BX.47
-	1 BX.48
-	374 BX.5
-	433 BX.6
-	485 BX.7
-	468 BX.8
-	392 BX.9
-	5 CAAK.1
-	18560 CABZ.1
-	1 CR.1
-	301 CR.10
-	212 CR.11
-	191 CR.12
-	176 CR.13
-	116 CR.14
-	89 CR.15
-	99 CR.16
-	69 CR.17
-	65 CR.18
-	58 CR.19
-	8 CR.2
-	48 CR.20
-	37 CR.21
-	21 CR.22
-	20 CR.23
-	17 CR.24
-	21 CR.25
-	12 CR.26
-	10 CR.27
-	15 CR.28
-	15 CR.29
-	23 CR.3
-	15 CR.30
-	5 CR.31
-	4 CR.32
-	4 CR.33
-	2 CR.34
-	1 CR.35
-	1 CR.36
-	1 CR.37
-	3 CR.38
-	1 CR.39
-	83 CR.4
-	1 CR.40
-	1 CR.41
-	1 CR.44
-	2 CR.47
-	208 CR.5
-	310 CR.6
-	326 CR.7
-	338 CR.8
-	320 CR.9
-	1 CT.1
-	88 CT.10
-	42 CT.11
-	42 CT.12
-	47 CT.13
-	35 CT.14
-	25 CT.15
-	24 CT.16
-	13 CT.17
-	14 CT.18
-	6 CT.19
-	11 CT.20
-	6 CT.21
-	7 CT.22
-	4 CT.23
-	6 CT.24
-	6 CT.25
-	2 CT.26
-	1 CT.27
-	1 CT.28
-	1 CT.29
-	17 CT.3
-	1 CT.30
-	1 CT.31
-	1 CT.34
-	1 CT.39
-	37 CT.4
-	1 CT.41
-	94 CT.5
-	129 CT.6
-	139 CT.7
-	104 CT.8
-	108 CT.9
-	7 CU.1
-	198 CU.10
-	143 CU.11
-	117 CU.12
-	100 CU.13
-	62 CU.14
-	62 CU.15
-	37 CU.16
-	37 CU.17
-	31 CU.18
-	19 CU.19
-	34 CU.2
-	25 CU.20
-	11 CU.21
-	13 CU.22
-	8 CU.23
-	5 CU.24
-	4 CU.25
-	1 CU.26
-	6 CU.27
-	5 CU.28
-	1 CU.29
-	127 CU.3
-	1 CU.30
-	2 CU.31
-	1 CU.32
-	1 CU.34
-	3 CU.35
-	1 CU.36
-	2 CU.39
-	303 CU.4
-	1 CU.40
-	1 CU.42
-	439 CU.5
-	443 CU.6
-	348 CU.7
-	354 CU.8
-	260 CU.9
-	31 CZQB.1
-	362 FO.1
-	2 FO.10
-	3 FO.14
-	420 FO.2
-	97 FO.3
-	29 FO.4
-	12 FO.5
-	4 FO.6
-	2 FO.7
-	5 FO.8
-	9 FP.1
-	33 FP.10
-	28 FP.11
-	20 FP.12
-	14 FP.13
-	12 FP.14
-	5 FP.15
-	7 FP.16
-	2 FP.17
-	3 FP.18
-	3 FP.19
-	19 FP.2
-	2 FP.20
-	2 FP.21
-	2 FP.22
-	1 FP.23
-	2 FP.24
-	1 FP.26
-	1 FP.29
-	81 FP.3
-	1 FP.30
-	128 FP.4
-	154 FP.5
-	138 FP.6
-	87 FP.7
-	73 FP.8
-	45 FP.9
-	13 FQ.1
-	10 FQ.10
-	3 FQ.11
-	5 FQ.12
-	1 FQ.13
-	1 FQ.14
-	6 FQ.15
-	6 FQ.16
-	5 FQ.17
-	1 FQ.18
-	1 FQ.19
-	46 FQ.2
-	2 FQ.20
-	1 FQ.25
-	1 FQ.26
-	58 FQ.3
-	57 FQ.4
-	39 FQ.5
-	32 FQ.6
-	30 FQ.7
-	23 FQ.8
-	6 FQ.9
-	1 LK.1
-	671 LO.1
-	183 LO.2
-	20 LO.3
-	1 LO.4
-	1 LO.5
-	6 LT.1
-	1 NC_.2
-							
-    # implies a rule: '[A-N][A-Z][D0-9_][N0-9][0-9]+(\.[0-9]+)?'
+    984 AL
+   4518 BX
+      5 CAAK
+  18560 CABZ
+   3251 CR
+   1015 CT
+   3213 CU
+     31 CZQB
+    936 FO
+    873 FP
+    347 FQ
+      1 LK
+    876 LO
+      6 LT
+      1 NC_
+
+    # implies a rule: '[ABCFLN][A-Z]+[0-9_][0-9]+(\.[0-9]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" danRer11 | wc -l
     # 34617
 
-	hgsql -N -e "select frag from gold;" danRer11 \
-	| egrep -e '[A-N][A-Z]+[D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
-	# 34617
+    hgsql -N -e "select frag from gold;" danRer11 \
+	| egrep -e '[ABCFLN][A-Z]+[0-9_][0-9]+(\.[0-9]+)?' | wc -l
+    # 34617
 
     hgsql -N -e "select frag from gold;" danRer11 \
-       | egrep -v -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
+	| egrep -v -e '[ABCFLN][A-Z]+[0-9_][0-9]+(\.[0-9]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/zebrafish/danRer11/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [A-N][A-Z][D0-9_][N0-9][0-9]+(\.[0-9]+)?
+termRegex [ABCFLN][A-Z]+[0-9_][0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -689,15 +441,15 @@ searchPriority 8
 
 
 ##########################################################################
-# cpgIslands - (DONE - 2016-04-14 - Chris)
+# cpgIslands - (DONE - 2016-10-20 - Hiram)
     mkdir /hive/data/genomes/danRer11/bed/cpgIslands
     cd /hive/data/genomes/danRer11/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku danRer11) > do.log 2>&1
-    # real	25m38.539s
+    # real    5m24.930s
 
-    cat fb.danRer11.cpgIslandExtUnmasked.txt
-	# 34662385 bases of 1674677181 (2.070%) in intersection
+    cat  fb.danRer11.cpgIslandExt.txt
+    # 5261052 bases of 1674677181 (0.314%) in intersection
 
 ##############################################################################
 # genscan - (DONE - 2017-06-07 - Chris)
@@ -871,55 +623,25 @@ danRer11.downloadDir = danRer11
     cat fb.danRer11.augustusGene.txt
 	# 53437277 bases of 1674677181 (3.191%) in intersection
 
-
 #########################################################################
-# ncbiRefSeq (TBD - 2016-05-13 - Chris)
-
-    mkdir /hive/data/genomes/danRer11/bed/ncbiRefSeq
-    cd /hive/data/genomes/danRer11/bed/ncbiRefSeq
-    # running step wise as this script is still under development
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 danRer11) > download.log 2>&1
-    # real    16m29.536s
-
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 danRer11) > process.log 2>&1
-    # real    3m58.858s
-
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 danRer11) > load.log 2>&1
-    # real    0m33.205s
-
-    cat fb.ncbiRefSeq.danRer11.txt
-    #  82563006 bases of 1218501075 (6.776%) in intersection
-
-    featureBits -enrichment danRer11 refGene ncbiRefSeq 
-    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
-    #    enrich 14.68x
-
-#########################################################################
-# add chromAlias table (DONE for genbank- 2017-06-09 - Chris)
+# add chromAlias table (DONE - 2017-10-20 - Hiram)
 
     mkdir /hive/data/genomes/danRer11/bed/chromAlias
     cd /hive/data/genomes/danRer11/bed/chromAlias
 
-	# Put the chrM for refseq in manually. 
-    #hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' danRer11 \
-    #    > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' danRer11 \
+        > ucsc.refseq.tab
     hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' danRer11 \
         > ucsc.genbank.tab
 
     awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
         | sort > danRer11.chromAlias.tab
+
+    # verify chrM is OK:
+
+    grep chrM danRer11.chromAlias.tab
+# AC024175.3      chrM    genbank
+# NC_002333.2     chrM    refseq
 
     hgLoadSqlTab danRer11 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         danRer11.chromAlias.tab
@@ -990,45 +712,43 @@ danRer11.downloadDir = danRer11
 	# Put a path to the files produced here in the redmine ticket 
 
 #########################################################################
-# UCSC to RefSeq name correspondence (TBD - 2016-05-12 - Chris)
+# UCSC to RefSeq name correspondence (DONE - 2017-10-20 - Hiram)
 
     mkdir /hive/data/genomes/danRer11/bed/ucscToRefSeq
     cd /hive/data/genomes/danRer11/bed/ucscToRefSeq
 
-    ln -s /hive/data/outside/ncbi/genomes/refseq/vertebrate_other/Gallus_gallus/all_assembly_versions/GCF_000002315.4_Gallus_gallus-5.0/GCF_000002315.4_Gallus_gallus-5.0_assembly_report.txt .
+    # after constructing idKeys in ./refseq/ directory:
 
-    # this assembly_report has "UCSC-style-name" in column 10
-    # but it does not name anything, they are all "na"
+    join -t$'\t' ../idKeys/*.idKeys.txt  refseq/*.idKeys.txt \
+	| cut -f2- | sort > ucsc.refseq.tab
 
-    # columns 5 and 7 are the INSDC and RefSeq names
-    # chrMT fixup in the sed
-    grep -v "^#" GCF_000002315.4_Gallus_gallus-5.0_assembly_report.txt \
-      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}' |
-        sed -e 's/^na/NC_001323.1/;' | sort > insdc.refSeq.tab
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
 
-    # the sed fixes chrM since it doesn't have an INSDC name
-    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' \
-      danRer11 | sed -e 's/notAvailable/NC_001323.1/;' | sort  > insdc.ucsc.tab
+    join ucsc.refseq.tab name.coordinate.tab \
+       | awk '{printf "%s\t%d\t%d\t%s\n", $1,$3,$4,$2}' \
+          | sort -k1,1 -k2,2n > ucscToRefSeq.bed
 
-    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
-       | cut -f2- > ucsc.refSeq.tab
+    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
+           > ucscToRefSeq.bed
 
     # when working perfectly, all these tab files have the same line count:
-    wc -l *.tab
-#   23475 insdc.refSeq.tab
-#   23475 insdc.ucsc.tab
-#   23474 ucsc.refSeq.tab
+    wc -l *.tab *.bed
+#    1923 name.coordinate.tab
+#    1923 ucsc.refseq.tab
+#    1923 ucscToRefSeq.bed
 
-    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
-    #  27
+    #  20
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
        | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
-    hgLoadSqlTab danRer11 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+    hgLoadSqlTab danRer11 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
 
     checkTableCoords  danRer11 -table=ucscToRefSeq
     # should cover %100 all bases:
     featureBits -countGaps danRer11 ucscToRefSeq
-    # 1230258557 bases of 1230258557 (100.000%) in intersection
+    # 1679203469 bases of 1679203469 (100.000%) in intersection
 
 #########################################################################
