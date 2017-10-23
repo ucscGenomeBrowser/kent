@@ -490,9 +490,10 @@ static void modifyName(struct trackDb *tdb, char *hubName, struct hash  *collect
  * it gets a different name than the track in trackDb.
  * If it's a native track, we want to squirrel away the original track name. */
 {
-if ((tdb->grp == NULL) || differentString(tdb->grp, hubName))
+if ((tdb->grp == NULL) || (hubName == NULL) || differentString(tdb->grp, hubName))
     {
-    hashStore(collectionNameHash,  tdb->track);
+    if (collectionNameHash)
+        hashStore(collectionNameHash,  tdb->track);
 
     char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
     if (bigDataUrl == NULL)
@@ -823,6 +824,7 @@ hashReplace(newTdb->settingsHash, "parent", trackHubSkipHubName(collectionName))
 
 outHubHeader(f, db);
 struct sqlConnection *conn = hAllocConn(db);
+modifyName(newTdb, hubName, NULL);
 outTrackDbList(db, conn, f, hubName, trackList, collectionName, newTdb,  0);
 
 hFreeConn(&conn);
