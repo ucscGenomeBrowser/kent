@@ -74,6 +74,13 @@ static char *getGencodeTable(struct trackDb *tdb, char *tableBase)
 return trackDbRequiredSetting(tdb, tableBase);
 }
 
+static char* getGencodeVersion(struct trackDb *tdb)
+/* get the GENCODE version or NULL for < V7, which is not supported
+ * by this module. */
+{
+return trackDbSetting(tdb, "wgEncodeGencodeVersion");
+}
+
 static int transAnnoCmp(const void *va, const void *vb)
 /* Compare genePreds, sorting to keep select gene first.  The only cases
  * that annotations will be duplicated is if they are in the PAR and thus
@@ -798,7 +805,8 @@ struct wgEncodeGencodeTranscriptionSupportLevel *tsl = haveTsl ? metaDataLoad(td
 int geneChromStart, geneChromEnd;
 getGeneBounds(tdb, conn, transAnno, &geneChromStart, &geneChromEnd);
 
-char *title = "GENCODE Transcript Annotation";
+char title[256];
+safef(title, sizeof(title), "GENCODE V%s Transcript Annotation", getGencodeVersion(tdb));
 char header[256];
 safef(header, sizeof(header), "%s %s", title, gencodeId);
 if (!isEmpty(transAttrs->geneName))
@@ -885,9 +893,10 @@ genePredFreeList(&anno);
 hFreeConn(&conn);
 }
 
+
 bool isNewGencodeGene(struct trackDb *tdb)
 /* is this a new-style gencode (>= V7) track, as indicated by
  * the presence of the wgEncodeGencodeVersion setting */
 {
-return trackDbSetting(tdb, "wgEncodeGencodeVersion") != NULL;
+return getGencodeVersion(tdb) != NULL;
 }
