@@ -5056,7 +5056,9 @@ html chainNet
         type netAlign tarSyr2 chainTarSyr2
         html chainNet
 
+# tarSyr1 is not in any RR chainNet, release alpha will preserve it on hgwdev
 track chainNetTarSyr1
+release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
