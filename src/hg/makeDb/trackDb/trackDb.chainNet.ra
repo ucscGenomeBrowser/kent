@@ -5080,6 +5080,7 @@ chainLinearGap medium
 html chainNet
 
     track chainNetTarSyr1Viewchain
+    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -5087,6 +5088,7 @@ html chainNet
     spectrum on
 
         track chainTarSyr1
+        release alpha
         parent chainNetTarSyr1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -5095,12 +5097,14 @@ html chainNet
         html chainNet
 
     track chainNetTarSyr1Viewnet
+    release alpha
     shortLabel Net
     view net
     visibility full
     parent chainNetTarSyr1
 
         track netTarSyr1
+        release alpha
         parent chainNetTarSyr1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
