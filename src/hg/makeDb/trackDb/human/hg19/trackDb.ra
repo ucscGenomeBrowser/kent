@@ -581,8 +581,6 @@ include ../chainNetLegacy.ra alpha
 
 include ../chainNetStray.ra alpha
 
-include ../chainNetMicMur1.ra alpha
-
 track hg18cytoBand
 shortLabel hg18 Chromosome Band
 longLabel Chromosome Bands (hg18)

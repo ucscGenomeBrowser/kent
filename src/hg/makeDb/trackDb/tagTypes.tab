@@ -35,7 +35,7 @@ barChartMetric barChart bigBarChart
 barChartSampleUrl barChart bigBarChart
 barChartUnit barChart bigBarChart
 baseColorDefault *
-baseColorTickColor bed bigBed
+baseColorTickColor bed bigBed bigPsl
 baseColorUseCds bed psl genePred bigPsl
 baseColorUseSequence *
 baseQualRange bam
