@@ -11,7 +11,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 scoreLabel Minimum Score (1000=SwissProt, 0=Trembl)
 scoreFilter 0
 itemRgb on
-dataVersion /gbdb/$D/uniprot/version.txt
+#dataVersion /gbdb/$D/uniprot/version.txt
 
         track unipAliSwissprot
         shortLabel SwissProt Aln.
@@ -27,12 +27,8 @@ dataVersion /gbdb/$D/uniprot/version.txt
         mouseOverField protFullNames
         itemRgb off
         color 2,12,120
-        baseColorDefault diffCodons
-        baseColorUseCds given
-        baseColorUseSequence lfExtra
         indelDoubleInsert on
         indelQueryInsert on
-        showDiffBasesAllScales .
         baseColorTickColor contrastingColor
 
         track unipAliTrembl
@@ -49,12 +45,8 @@ dataVersion /gbdb/$D/uniprot/version.txt
         mouseOverField protFullNames
         itemRgb off
         color 0,150,250
-        baseColorDefault diffCodons
-        baseColorUseCds given
-        baseColorUseSequence lfExtra
         indelDoubleInsert on
         indelQueryInsert on
-        showDiffBasesAllScales .
         baseColorTickColor contrastingColor
 
         track unipLocSignal
@@ -148,7 +140,7 @@ dataVersion /gbdb/$D/uniprot/version.txt
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipMut.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
 
         track unipStruct
         shortLabel Structure
