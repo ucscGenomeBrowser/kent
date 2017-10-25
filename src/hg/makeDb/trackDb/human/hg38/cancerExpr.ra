@@ -5,6 +5,7 @@ track cancerExpr
 shortLabel Cancer Gene Expr
 longLabel Gene Expression in 33 TCGA Cancer Tissues (GENCODE v23)
 superTrack on
+html tcgaExpr
 group phenDis
 
 track tcgaGeneExpr

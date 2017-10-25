@@ -11,6 +11,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https
 scoreLabel Minimum Score (1000=SwissProt, 0=Trembl)
 scoreFilter 0
 itemRgb on
+#dataVersion /gbdb/$D/uniprot/version.txt
 
         track unipAliSwissprot
         shortLabel SwissProt Aln.
@@ -26,6 +27,9 @@ itemRgb on
         mouseOverField protFullNames
         itemRgb off
         color 2,12,120
+        indelDoubleInsert on
+        indelQueryInsert on
+        baseColorTickColor contrastingColor
 
         track unipAliTrembl
         shortLabel TrEMBL Aln.
@@ -41,6 +45,9 @@ itemRgb on
         mouseOverField protFullNames
         itemRgb off
         color 0,150,250
+        indelDoubleInsert on
+        indelQueryInsert on
+        baseColorTickColor contrastingColor
 
         track unipLocSignal
         shortLabel Signal Peptide
@@ -133,13 +140,13 @@ itemRgb on
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipMut.bb
-        urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
 
         track unipStruct
         shortLabel Structure
         longLabel UniProt Protein Primary/Secondary Structure Annotations
         priority 11
-        parent uniprot off
+        parent uniprot
         group genes
         visibility hide
         type bigBed 12 +
@@ -170,7 +177,7 @@ itemRgb on
         shortLabel Seq. Conflicts
         longLabel UniProt Sequence Conflicts
         priority 13
-        parent uniprot
+        parent uniprot off
         visibility dense
         type bigBed 12 +
         bigDataUrl /gbdb/$D/uniprot/unipConflict.bb

@@ -14,6 +14,7 @@
 #include "wiggle.h"
 #include "wigCommon.h"
 #include "hui.h"
+#include "customComposite.h"
 
 struct floatPic
 /* A picture that stores RGB values in floating point. */
@@ -494,7 +495,10 @@ if (wigCart->aggregateFunction == wiggleAggregateAdd || wigCart->aggregateFuncti
     tg->subtracks->next = NULL;
     }
 int numTrack = 0;
-int height = tg->totalHeight(tg, vis); // use the parent track for the height
+boolean customComposite = FALSE;
+if (isCustomComposite(tg->tdb))
+    customComposite = TRUE;
+
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
@@ -505,6 +509,12 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	       errMsgShown = TRUE;
 	    wgo->numTrack = numTrack++;
 	    subtrack->wigGraphOutput = wgo;
+            int height;
+            if (customComposite)
+                height = tg->totalHeight(tg, vis);
+            else
+                height = subtrack->totalHeight(subtrack, vis);
+
 	    hvGfxSetClip(hvg, xOff, y, width, height);
 	    if (wigCart->aggregateFunction != wiggleAggregateNone)
 		subtrack->lineHeight = tg->lineHeight;

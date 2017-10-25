@@ -86,8 +86,15 @@ for (i=0; i<eqtl->expCount; i++)
     {
     if (hashFindVal(extras->tissueHash, eqtl->expNames[i]))
         {
-        maxEffect = fmax(maxEffect, fabs(eqtl->expScores[i]));
-        maxProb = fmax(maxProb, fabs(eqtl->expProbs[i]));
+        double effect = eqtl->expScores[i];
+        double prob = eqtl->expProbs[i];
+        maxEffect = fmax(maxEffect, fabs(effect));
+        maxProb = fmax(maxProb, fabs(prob));
+        if (effect < extras->minEffect || prob < extras->minProb)
+            {
+            eqtlExcludeTissue(eqtl, i);
+            excluded++;
+            }
         }
     else
         {

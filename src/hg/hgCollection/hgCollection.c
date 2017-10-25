@@ -94,19 +94,18 @@ if (user)
     else if (tdb->subtracks)
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='track' class='folder'";
     else
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/invisible16.png\\\"}' viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-minus\\\"}' viewType='track'";
     }
 else
     {
     if (tdb->parent && tdb->subtracks) 
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'class='nodrop' viewType='view'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' viewType='view'";
     else if (tdb->subtracks)
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}'viewType='track'class='nodrop' viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' viewType='track'";
     else
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/invisible16.png\\\"}'class='nodrop' viewType='track'";
+        userString = "data-jstree='{ \\\"icon\\\":\\\"fa fa-plus\\\"}' class='nodrop' viewType='track'";
     }
     
-        //userString = "viewType='track data-jstree='{'icon':'images/folderC.png'}''";
     
 #define IMAKECOLOR_32(r,g,b) ( ((unsigned int)b<<0) | ((unsigned int)g << 8) | ((unsigned int)r << 16))
 
@@ -476,6 +475,7 @@ fprintf(f,"track %s\n\
 shortLabel %s\n\
 compositeTrack on\n\
 autoScale on\n\
+maxHeightPixels 100:30:11 \n\
 aggregate  none\n\
 longLabel %s\n\
 %s on\n\
@@ -491,9 +491,10 @@ static void modifyName(struct trackDb *tdb, char *hubName, struct hash  *collect
  * it gets a different name than the track in trackDb.
  * If it's a native track, we want to squirrel away the original track name. */
 {
-if ((tdb->grp == NULL) || differentString(tdb->grp, hubName))
+if ((tdb->grp == NULL) || (hubName == NULL) || differentString(tdb->grp, hubName))
     {
-    hashStore(collectionNameHash,  tdb->track);
+    if (collectionNameHash)
+        hashStore(collectionNameHash,  tdb->track);
 
     char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
     if (bigDataUrl == NULL)
@@ -824,6 +825,7 @@ hashReplace(newTdb->settingsHash, "parent", trackHubSkipHubName(collectionName))
 
 outHubHeader(f, db);
 struct sqlConnection *conn = hAllocConn(db);
+modifyName(newTdb, hubName, NULL);
 outTrackDbList(db, conn, f, hubName, trackList, collectionName, newTdb,  0);
 
 hFreeConn(&conn);
