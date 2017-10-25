@@ -1,7 +1,7 @@
 track primateChainNet
 compositeTrack on
 shortLabel primates Chain/NetChainNet
-longLabel primatesChainNet, Chain and Net Alignments
+longLabel primateChainNet, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species s000=Chimp s001=Chimp s002=Bonobo s003=Bonobo s004=Gorilla s005=Gorilla s006=Orangutan s007=Gibbon s008=Proboscis_monkey s009=Black_snub-nosed_monkey s010=Golden_snub-nosed_monkey s011=Angolan_colobus s012=Crab-eating_macaque s013=Rhesus s014=Rhesus s015=Baboon s016=Baboon s017=Baboon s018=Pig-tailed_macaque s019=Sooty_mangabey s020=Green_monkey s021=Drill s022=Sclater's_lemur s023=Black_lemur s024=Coquerel's_sifaka s025=Mouse_lemur s026=Mouse_lemur s027=Mouse_lemur s028=Bushbaby s029=Bushbaby s030= s031= s032=Squirrel_monkey s033=Ma's_night_monkey s034=Marmoset s035=White-faced_sapajou s036=Tarsier
 subGroup3 clade Clade c00=hominidae c01=cercopithecinae c02=strepsirrhini c03=haplorrhini
@@ -17,17 +17,17 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species
 sortOrder  species=+ view=+ clade=+
 configurable on
-html primatesChainNet
+html primateChainNet
 
-    track primatesChainNetViewchain
+    track primateChainNetViewchain
     shortLabel Chains
     view chain
     visibility pack
-    subTrack primatesChainNet
+    subTrack primateChainNet
     spectrum on
 
         track chainPanTro5
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s000 clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -35,7 +35,7 @@ html primatesChainNet
         otherDb panTro5
 
         track chainPanTro4
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s001 clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -43,7 +43,7 @@ html primatesChainNet
         otherDb panTro4
 
         track chainPanPan2
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s002 clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -51,7 +51,7 @@ html primatesChainNet
         otherDb panPan2
 
         track chainPanPan1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s003 clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -59,7 +59,7 @@ html primatesChainNet
         otherDb panPan1
 
         track chainGorGor5
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s004 clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -67,7 +67,7 @@ html primatesChainNet
         otherDb gorGor5
 
         track chainGorGor4
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s005 clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -75,7 +75,7 @@ html primatesChainNet
         otherDb gorGor4
 
         track chainPonAbe2
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s006 clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -83,7 +83,7 @@ html primatesChainNet
         otherDb ponAbe2
 
         track chainNomLeu3
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s007 clade=c00
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -91,7 +91,7 @@ html primatesChainNet
         otherDb nomLeu3
 
         track chainNasLar1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s008 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -99,7 +99,7 @@ html primatesChainNet
         otherDb nasLar1
 
         track chainRhiBie1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s009 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -107,7 +107,7 @@ html primatesChainNet
         otherDb rhiBie1
 
         track chainRhiRox1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s010 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -115,7 +115,7 @@ html primatesChainNet
         otherDb rhiRox1
 
         track chainColAng1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s011 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -123,7 +123,7 @@ html primatesChainNet
         otherDb colAng1
 
         track chainMacFas5
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s012 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -131,7 +131,7 @@ html primatesChainNet
         otherDb macFas5
 
         track chainRheMac8
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s013 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -139,7 +139,7 @@ html primatesChainNet
         otherDb rheMac8
 
         track chainRheMac3
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s014 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -147,7 +147,7 @@ html primatesChainNet
         otherDb rheMac3
 
         track chainPapAnu3
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s015 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -155,7 +155,7 @@ html primatesChainNet
         otherDb papAnu3
 
         track chainPapAnu2
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s016 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -163,7 +163,7 @@ html primatesChainNet
         otherDb papAnu2
 
         track chainPapHam1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s017 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -171,7 +171,7 @@ html primatesChainNet
         otherDb papHam1
 
         track chainMacNem1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s018 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -179,7 +179,7 @@ html primatesChainNet
         otherDb macNem1
 
         track chainCerAty1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s019 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -187,7 +187,7 @@ html primatesChainNet
         otherDb cerAty1
 
         track chainChlSab2
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s020 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -195,7 +195,7 @@ html primatesChainNet
         otherDb chlSab2
 
         track chainManLeu1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s021 clade=c01
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -203,7 +203,7 @@ html primatesChainNet
         otherDb manLeu1
 
         track chainEulFla1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s022 clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -211,7 +211,7 @@ html primatesChainNet
         otherDb eulFla1
 
         track chainEulMac1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s023 clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -219,7 +219,7 @@ html primatesChainNet
         otherDb eulMac1
 
         track chainProCoq1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s024 clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -227,7 +227,7 @@ html primatesChainNet
         otherDb proCoq1
 
         track chainMicMur3
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s025 clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -235,7 +235,7 @@ html primatesChainNet
         otherDb micMur3
 
         track chainMicMur2
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s026 clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -243,7 +243,7 @@ html primatesChainNet
         otherDb micMur2
 
         track chainOtoGar1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s028 clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -251,7 +251,7 @@ html primatesChainNet
         otherDb otoGar1
 
         track chainOtoGar3
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s029 clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -259,7 +259,7 @@ html primatesChainNet
         otherDb otoGar3
 
         track chainRBestOtoGar1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s030 clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -267,7 +267,7 @@ html primatesChainNet
         otherDb rBestOtoGar1
 
         track chainRBestOtoGar3
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s031 clade=c02
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -275,7 +275,7 @@ html primatesChainNet
         otherDb rBestOtoGar3
 
         track chainSaiBol1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s032 clade=c03
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -283,7 +283,7 @@ html primatesChainNet
         otherDb saiBol1
 
         track chainAotNan1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s033 clade=c03
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -291,7 +291,7 @@ html primatesChainNet
         otherDb aotNan1
 
         track chainCalJac3
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s034 clade=c03
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -299,7 +299,7 @@ html primatesChainNet
         otherDb calJac3
 
         track chainCebCap1
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s035 clade=c03
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -307,21 +307,21 @@ html primatesChainNet
         otherDb cebCap1
 
         track chainTarSyr2
-        subTrack primatesChainNetViewchain off
+        subTrack primateChainNetViewchain off
         subGroups view=chain species=s036 clade=c03
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain tarSyr2
         otherDb tarSyr2
 
-    track primatesChainNetViewnet
+    track primateChainNetViewnet
     shortLabel Nets
     view net
     visibility dense
-    subTrack primatesChainNet
+    subTrack primateChainNet
 
         track netPanTro5
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s000 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -329,7 +329,7 @@ html primatesChainNet
         otherDb panTro5
 
         track netPanTro4
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s001 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -337,7 +337,7 @@ html primatesChainNet
         otherDb panTro4
 
         track netPanPan2
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s002 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -345,7 +345,7 @@ html primatesChainNet
         otherDb panPan2
 
         track netPanPan1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s003 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -353,7 +353,7 @@ html primatesChainNet
         otherDb panPan1
 
         track netGorGor5
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s004 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -361,7 +361,7 @@ html primatesChainNet
         otherDb gorGor5
 
         track netGorGor4
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s005 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -369,7 +369,7 @@ html primatesChainNet
         otherDb gorGor4
 
         track netPonAbe2
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s006 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -377,7 +377,7 @@ html primatesChainNet
         otherDb ponAbe2
 
         track netNomLeu3
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s007 clade=c00
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -385,7 +385,7 @@ html primatesChainNet
         otherDb nomLeu3
 
         track netNasLar1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s008 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -393,7 +393,7 @@ html primatesChainNet
         otherDb nasLar1
 
         track netRhiBie1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s009 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -401,7 +401,7 @@ html primatesChainNet
         otherDb rhiBie1
 
         track netRhiRox1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s010 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -409,7 +409,7 @@ html primatesChainNet
         otherDb rhiRox1
 
         track netColAng1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s011 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -417,7 +417,7 @@ html primatesChainNet
         otherDb colAng1
 
         track netMacFas5
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s012 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -425,7 +425,7 @@ html primatesChainNet
         otherDb macFas5
 
         track netRheMac8
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s013 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -433,7 +433,7 @@ html primatesChainNet
         otherDb rheMac8
 
         track netRheMac3
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s014 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -441,7 +441,7 @@ html primatesChainNet
         otherDb rheMac3
 
         track netPapAnu3
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s015 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -449,7 +449,7 @@ html primatesChainNet
         otherDb papAnu3
 
         track netPapAnu2
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s016 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -457,7 +457,7 @@ html primatesChainNet
         otherDb papAnu2
 
         track netPapHam1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s017 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -465,7 +465,7 @@ html primatesChainNet
         otherDb papHam1
 
         track netMacNem1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s018 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -473,7 +473,7 @@ html primatesChainNet
         otherDb macNem1
 
         track netCerAty1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s019 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -481,7 +481,7 @@ html primatesChainNet
         otherDb cerAty1
 
         track netChlSab2
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s020 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -489,7 +489,7 @@ html primatesChainNet
         otherDb chlSab2
 
         track netManLeu1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s021 clade=c01
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -497,7 +497,7 @@ html primatesChainNet
         otherDb manLeu1
 
         track netEulFla1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s022 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -505,7 +505,7 @@ html primatesChainNet
         otherDb eulFla1
 
         track netEulMac1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s023 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -513,7 +513,7 @@ html primatesChainNet
         otherDb eulMac1
 
         track netProCoq1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s024 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -521,7 +521,7 @@ html primatesChainNet
         otherDb proCoq1
 
         track netMicMur3
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s025 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -529,7 +529,7 @@ html primatesChainNet
         otherDb micMur3
 
         track netMicMur2
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s026 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -537,7 +537,7 @@ html primatesChainNet
         otherDb micMur2
 
         track netOtoGar1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s028 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -545,7 +545,7 @@ html primatesChainNet
         otherDb otoGar1
 
         track netOtoGar3
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s029 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -553,7 +553,7 @@ html primatesChainNet
         otherDb otoGar3
 
         track netRBestOtoGar1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s030 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -561,7 +561,7 @@ html primatesChainNet
         otherDb rBestOtoGar1
 
         track netRBestOtoGar3
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s031 clade=c02
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -569,7 +569,7 @@ html primatesChainNet
         otherDb rBestOtoGar3
 
         track netSaiBol1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s032 clade=c03
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -577,7 +577,7 @@ html primatesChainNet
         otherDb saiBol1
 
         track netAotNan1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s033 clade=c03
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -585,7 +585,7 @@ html primatesChainNet
         otherDb aotNan1
 
         track netCalJac3
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s034 clade=c03
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -593,7 +593,7 @@ html primatesChainNet
         otherDb calJac3
 
         track netCebCap1
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s035 clade=c03
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
@@ -601,7 +601,7 @@ html primatesChainNet
         otherDb cebCap1
 
         track netTarSyr2
-        subTrack primatesChainNetViewnet off
+        subTrack primateChainNetViewnet off
         subGroups view=net species=s036 clade=c03
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
