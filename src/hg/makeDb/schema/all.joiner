@@ -4,6 +4,7 @@
 # Define databases used for various organisms
 set ailMel ailMel1
 set allMis allMis1
+set anaPla anaPla1
 set anoCar anoCar1,anoCar2
 set anoGam anoGam1
 set aotNan aotNan1
@@ -132,7 +133,7 @@ set xenTro xenTro1,xenTro2,xenTro3,xenTro7,xenTro9
 
 
 # Define all organism/assembly-specific databases.
-set gbd $ailMel,$allMis,$anoCar,$anoGam,$aotNan,$apiMel,$aplCal,$aptMan,$aquChr,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$cavPor,$cb,$ce,$cebCap,$cerAty,$cerSim,$choHof,$chlSab,$chrPic,$ci,$cioSav,$colAng,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$eulFla,$eulMac,$felCat,$fr,$gadMor,$galGal,$gasAcu,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$mesAur,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanPar,$nasLar,$neoSch,$nomLeu,$ochPri,$orcOrc,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panManBai,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$xenLae,$xenTro
+set gbd $ailMel,$allMis,$anaPla,$anoCar,$anoGam,$aotNan,$apiMel,$aplCal,$aptMan,$aquChr,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$cavPor,$cb,$ce,$cebCap,$cerAty,$cerSim,$choHof,$chlSab,$chrPic,$ci,$cioSav,$colAng,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$eulFla,$eulMac,$felCat,$fr,$gadMor,$galGal,$gasAcu,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$mesAur,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanPar,$nasLar,$neoSch,$nomLeu,$ochPri,$orcOrc,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panManBai,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$xenLae,$xenTro
 
 set metaGbd $gbd
 
