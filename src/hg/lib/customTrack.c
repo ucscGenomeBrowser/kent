@@ -148,6 +148,8 @@ boolean ctDbTableExists(struct sqlConnection *conn, char *table)
 boolean status = sqlTableExists(conn, table);
 ctTouchLastUse(conn, table, status);
 return status;
+/* NOTE: the function customFactoryTestExistence() in customFactory.c
+ * is depending on this ctTouchLastUse() operation here, do not delete this */
 }
 
 boolean ctDbUseAll()
