@@ -12,6 +12,7 @@ set apiMel apiMel1,apiMel2
 set aplCal aplCal1
 set aptMan aptMan1
 set aquChr aquChr2
+set astMex astMex1
 set balAcu balAcu1
 set bisBis bisBis1
 set bosTau bosTau2,bosTau3,bosTau4,bosTau5,bosTau6,bosTau7,bosTau8
@@ -25,22 +26,24 @@ set caeSp11 caeSp111
 set calJac calJac1,calJac3
 set calMil calMil1
 set canFam canFam1,canFam2,canFam3
+set cavApe cavApe1
 set cavPor cavPor3
 set cb cb1,cb3,cb4
 set ce ce2,ce4,ce6,ce9,ce10,ce11
 set cebCap cebCap1
 set cerAty cerAty1
 set cerSim cerSim1
+set chiLan chiLan1
 set choHof choHof1
 set chlSab chlSab2
 set chrPic chrPic1,chrPic2
 set ci ci1,ci2,ci3
 set cioSav cioSav1,cioSav2
 set colAng colAng1
-set criGri criGri1,criGriChoV1
+set criGri criGri1,criGriChoV1,criGriChoV2
 set danRer danRer3,danRer4,danRer5,danRer6,danRer7,danRer10,danRer11
 set dasNov dasNov2,dasNov3
-set dipOrd dipOrd1
+set dipOrd dipOrd1,dipOrd2
 set dm dm1,dm2,dm3,dm6
 set dp dp2,dp3
 set droEre droEre1
@@ -55,7 +58,9 @@ set eriEur eriEur1,eriEur2
 set eulFla eulFla1
 set eulMac eulMac1
 set felCat felCat3,felCat4,felCat5,felCat8
+set ficAlb ficAlb1
 set fr fr1,fr2,fr3
+set fukDam fukDam1
 set gadMor gadMor1
 set galGal galGal2,galGal3,galGal4,galGal5
 set galVar galVar1
@@ -66,7 +71,9 @@ set gorGor gorGor1,gorGor3,gorGor4,gorGor5
 set haeCon haeCon1
 set hetGla hetGla1,hetGla2
 set hg hg16,hg17,hg18,hg19,hg38
+set jacJac jacJac1
 set latCha latCha1
+set lepOcu lepOcu1
 set loxAfr loxAfr3
 set manPen manPen1
 set macEug macEug1,macEug2
@@ -83,11 +90,13 @@ set mm mm7,mm8,mm9,mm10
 set monDom monDom1,monDom4,monDom5
 set musFur musFur1
 set myoLuc myoLuc1,myoLuc2
+set nanGal nanGal1
 set nanPar nanPar1
 set nasLar nasLar1
 set neoSch neoSch1
 set nomLeu nomLeu1,nomLeu2,nomLeu3
 set ochPri ochPri2,ochPri3
+set octDeg octDeg1
 set orcOrc orcOrc1
 set oreNil oreNil1,oreNil2,oreNil3
 set ornAna ornAna1,ornAna2
@@ -102,6 +111,9 @@ set panTro panTro1,panTro2,panTro3,panTro4,panTro5
 set papAnu papAnu2,papAnu3
 set papHam papHam1
 set petMar petMar1,petMar2
+set pelSin pelSin1
+set perMan perManBai1
+set poeFor poeFor1
 set ponAbe ponAbe2
 set priPac priPac1,priPac2,priPac3
 set proCap proCap1
@@ -130,10 +142,11 @@ set turTru turTru1,turTru2
 set vicPac vicPac1,vicPac2
 set xenLae xenLae2
 set xenTro xenTro1,xenTro2,xenTro3,xenTro7,xenTro9
+set xipMac xipMac1
 
 
 # Define all organism/assembly-specific databases.
-set gbd $ailMel,$allMis,$anaPla,$anoCar,$anoGam,$aotNan,$apiMel,$aplCal,$aptMan,$aquChr,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$cavPor,$cb,$ce,$cebCap,$cerAty,$cerSim,$choHof,$chlSab,$chrPic,$ci,$cioSav,$colAng,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$eulFla,$eulMac,$felCat,$fr,$gadMor,$galGal,$gasAcu,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$mesAur,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanPar,$nasLar,$neoSch,$nomLeu,$ochPri,$orcOrc,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panManBai,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$xenLae,$xenTro
+set gbd $ailMel,$allMis,$anaPla,$anoCar,$anoGam,$aotNan,$apiMel,$aplCal,$aptMan,$aquChr,$astMex,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$cavApe,$cavPor,$cb,$ce,$cebCap,$cerAty,$cerSim,$chiLan,$choHof,$chlSab,$chrPic,$ci,$cioSav,$colAng,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$eulFla,$eulMac,$felCat,$fr,$fukDam,$gadMor,$galGal,$gasAcu,$galVar,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$jacJac,$latCha,$lepOcu,$loxAfr,$manPen,$macEug,$macNem,$macFas,$manLeu,$melGal,$melHap,$melInc,$melUnd,$mesAur,$micMur,$micOch,$mm,$monDom,$musFur,$myoLuc,$nanGal,$nanPar,$nasLar,$neoSch,$nomLeu,$ochPri,$octDeg,$orcOrc,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panManBai,$panTro,$papAnu,$papHam,$pelSin,$petMar,$perMan,$poeFor,$ponAbe,$priPac,$proCap,$proCoq,$pteVam,$rheMac,$rhiBie,$rhiRox,$rn,$rouAeg,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$staAur,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$tupChi,$turTru,$vicPac,$xenLae,$xenTro,$xipMac
 
 set metaGbd $gbd
 
