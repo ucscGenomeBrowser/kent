@@ -1720,18 +1720,29 @@ struct sqlConnection *cacheConn = sqlTableCacheFindConn(sc);
 if (cacheConn)
     return sqlTableCacheTableExists(cacheConn, table);
 
+char *err;
+unsigned int errNo;
+
 sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(table));  
-if ((sr = sqlUseOrStore(sc, query, DEFAULTGETTER, FALSE)) == NULL)
+
+if ((sr = sqlGetResultExt(sc, query, &errNo, &err)) == NULL)
     {
-    if (!sc->failoverConn)
+    if (errNo == 1146) // table not found
         return FALSE;
-    // if not found but we have a main connection, check the main connection, too
-    else if ((sr = sqlUseOrStore(sc->failoverConn, query, DEFAULTGETTER, FALSE)) == NULL)
-        return FALSE;
+    if (sc->failoverConn)
+	{
+	// if not found but we have a main connection, check the main connection, too
+	if ((sr = sqlGetResultExt(sc->failoverConn, query, &errNo, &err)) == NULL)
+	    {
+	    if (errNo == 1146) // table not found
+		return FALSE;
+	    }
+	}
     }
-// TODO consider using sqlGetResultExt or something that would
-// allow you to abort on all errors except the actual table not found:
-// ERROR 1146 (42S02): Table 'hg19.chr_est' doesn't exist
+
+if (!sr)
+    errAbort("Mysql error during sqlTableExists(%s) %d: %s", table, errNo, err);
+
 sqlFreeResult(&sr);
 return TRUE;
 }

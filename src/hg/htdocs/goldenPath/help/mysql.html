@@ -56,7 +56,7 @@ The MySQL database can also be used by the numerous utilities in the
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Genome Browser source</a> 
 tree. Some of these utilities require a password, so you will need to add the following 
 specifications to your $HOME/.hg.conf file (remember to chmod your .hg.conf file to 600 
-permissions):</p> 
+permissions) if you would like to access the US public MySQL server:</p>
 <pre><code>#US MySQL server
 db.host=genome-mysql.soe.ucsc.edu
 db.user=genomep
@@ -64,16 +64,17 @@ db.password=password
 central.db=hgcentral
 central.host=genome-mysql.soe.ucsc.edu
 central.user=genomep
-central.password=password
-
-#European MySQL server
+central.password=password</code></pre>
+<p>
+Or these lines if you'd like to access the European MySQL server:</p>
+<pre><code>#European MySQL server
 db.host=genome-euro-mysql.soe.ucsc.edu
 db.user=genomep
 db.password=password
 central.db=hgcentral
 central.host=genome-euro-mysql.soe.ucsc.edu
 central.user=genomep
-central.password=password </code></pre> 
+central.password=password</code></pre>
 
 <p>
 If you have set up your .hg.conf file as above, you can use the <code>hgsql</code> utility,
