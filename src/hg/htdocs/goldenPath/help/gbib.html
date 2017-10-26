@@ -71,10 +71,18 @@ improve performance in these situations, GBiB includes a simple tool that allows
 information about this tool in the <a href="#GbibMirroring">Improving Speed and Performance</a> 
 section.</p>
 <p>
-For more background on GBiB see: Haeussler M <em>et al.</em>
-<a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/btu712?ijkey=oQ6TgaxqQRIaHXY&keytype=ref"
-target="_blank">Navigating protected genomics data with UCSC Genome Browser in a Box</a>. 
-<em>Bioinformatics</em> 2014; doi: 10.1093/bioinformatics/btu712. </p>
+For more background on GBiB see:
+<p>
+Haeussler M, Raney BJ, Hinrichs AS, Clawson H, Zweig AS, Karolchik D, Casper J, Speir ML, Haussler
+D, Kent WJ.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btu712"
+target="_blank">
+Navigating protected genomics data with UCSC Genome Browser in a Box</a>.
+<em>Bioinformatics</em>. 2015 Mar 1;31(5):764-6.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25348212" target="_blank">25348212</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4341066/" target="_blank">PMC4341066</a>
+</p>
+
 
 <a name="GetStarted"></a>
 <h2>Getting Started: Setting up Genome Browser in a Box</h2>
@@ -97,9 +105,11 @@ GBiB will run on most modern PCs and major operating systems that meet these bas
   <li>
   Your network firewall must allow outgoing connections to the following servers and ports:
   <ul>
-    <li>
-    Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174), used by MySQL to load tracks not 
-    local to your computer</li>
+    <li>MySQL connections, used to load tracks not local to your computer:
+    <ul>
+      <li>US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)</li>
+      <li>European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)</li>
+    </ul>
     <li>
     TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163), used by rsync to download track 
     data</li>
