@@ -132,8 +132,9 @@ char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct gtexEqtlCluster *eqtl = getGtexEqtl(item, chrom, start, end, tdb->table);
+if (eqtl == NULL)
+    errAbort("Can't find eQTL cluster '%s'", item);
 char *geneName = eqtl->target;
-
 
 genericHeader(tdb, item);
 printf("<b>Gene: </b>");
@@ -147,8 +148,7 @@ else
                         hgGeneName(), database, geneName, geneName);
     printf("<b>Description:</b> %s\n", desc);
     }
-
-// TODO: Consider adding Ensembl gene ID, GENCODE biotype and class (as in gtexGene track)
+printf("<br><b>Ensembl gene ID:</b> %s\n", eqtl->targetId);
 printf("<br><b>Variant: </b>%s ", eqtl->name);
 if (startsWith("rs", eqtl->name))
     {
@@ -166,7 +166,6 @@ safef(posLink, sizeof posLink,"<a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d<
             eqtl->chrom, eqtl->chromStart+1, eqtl->chromEnd,
             eqtl->chrom, eqtl->chromStart+1, eqtl->chromEnd);
 printf("<br><b>Position:</b> %s\n", posLink);
-
 printf("<br><b>Score:</b> %d\n", eqtl->score);
 
 printEqtlRegion(eqtl, tdb->table, conn);
