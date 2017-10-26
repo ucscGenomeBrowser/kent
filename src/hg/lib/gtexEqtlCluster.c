@@ -10,7 +10,7 @@
 
 
 
-char *gtexEqtlClusterCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,target,distance,expCount,expNames,expScores,expPvals,expProbs";
+char *gtexEqtlClusterCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,targetId,target,distance,maxEffect,effectType,maxPvalue,expCount,expNames,expScores,expPvals,expProbs";
 
 struct gtexEqtlCluster *gtexEqtlClusterLoadByQuery(struct sqlConnection *conn, char *query)
 /* Load all gtexEqtlCluster from table that satisfy the query given.  
@@ -47,8 +47,8 @@ expNamesArray = sqlStringArrayToString(el->expNames, el->expCount);
 expScoresArray = sqlFloatArrayToString(el->expScores, el->expCount);
 expPvalsArray = sqlFloatArrayToString(el->expPvals, el->expCount);
 expProbsArray = sqlFloatArrayToString(el->expProbs, el->expCount);
-sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%d,%u,'%s','%s','%s','%s')", 
-	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->target,  el->distance,  el->expCount,  expNamesArray ,  expScoresArray ,  expPvalsArray ,  expProbsArray );
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s',%d,%g,'%s',%g,%u,'%s','%s','%s','%s')", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->targetId,  el->target,  el->distance,  el->maxEffect,  el->effectType,  el->maxPvalue,  el->expCount,  expNamesArray ,  expScoresArray ,  expPvalsArray ,  expProbsArray );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&expNamesArray);
@@ -64,32 +64,36 @@ struct gtexEqtlCluster *gtexEqtlClusterLoad(char **row)
 struct gtexEqtlCluster *ret;
 
 AllocVar(ret);
-ret->expCount = sqlUnsigned(row[7]);
+ret->expCount = sqlUnsigned(row[11]);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
-ret->target = cloneString(row[5]);
-ret->distance = sqlSigned(row[6]);
+ret->targetId = cloneString(row[5]);
+ret->target = cloneString(row[6]);
+ret->distance = sqlSigned(row[7]);
+ret->maxEffect = sqlFloat(row[8]);
+safecpy(ret->effectType, sizeof(ret->effectType), row[9]);
+ret->maxPvalue = sqlFloat(row[10]);
 {
 int sizeOne;
-sqlStringDynamicArray(row[8], &ret->expNames, &sizeOne);
+sqlStringDynamicArray(row[12], &ret->expNames, &sizeOne);
 assert(sizeOne == ret->expCount);
 }
 {
 int sizeOne;
-sqlFloatDynamicArray(row[9], &ret->expScores, &sizeOne);
+sqlFloatDynamicArray(row[13], &ret->expScores, &sizeOne);
 assert(sizeOne == ret->expCount);
 }
 {
 int sizeOne;
-sqlFloatDynamicArray(row[10], &ret->expPvals, &sizeOne);
+sqlFloatDynamicArray(row[14], &ret->expPvals, &sizeOne);
 assert(sizeOne == ret->expCount);
 }
 {
 int sizeOne;
-sqlFloatDynamicArray(row[11], &ret->expProbs, &sizeOne);
+sqlFloatDynamicArray(row[15], &ret->expProbs, &sizeOne);
 assert(sizeOne == ret->expCount);
 }
 return ret;
@@ -101,7 +105,7 @@ struct gtexEqtlCluster *gtexEqtlClusterLoadAll(char *fileName)
 {
 struct gtexEqtlCluster *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -119,7 +123,7 @@ struct gtexEqtlCluster *gtexEqtlClusterLoadAllByChar(char *fileName, char choppe
 {
 struct gtexEqtlCluster *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -145,8 +149,12 @@ ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
+ret->targetId = sqlStringComma(&s);
 ret->target = sqlStringComma(&s);
 ret->distance = sqlSignedComma(&s);
+ret->maxEffect = sqlFloatComma(&s);
+sqlFixedStringComma(&s, ret->effectType, sizeof(ret->effectType));
+ret->maxPvalue = sqlFloatComma(&s);
 ret->expCount = sqlUnsignedComma(&s);
 {
 int i;
@@ -205,6 +213,7 @@ struct gtexEqtlCluster *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
+freeMem(el->targetId);
 freeMem(el->target);
 /* All strings in expNames are allocated at once, so only need to free first. */
 if (el->expNames != NULL)
@@ -247,10 +256,22 @@ fputc(sep,f);
 fprintf(f, "%u", el->score);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->targetId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->target);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->distance);
+fputc(sep,f);
+fprintf(f, "%g", el->maxEffect);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->effectType);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%g", el->maxPvalue);
 fputc(sep,f);
 fprintf(f, "%u", el->expCount);
 fputc(sep,f);
