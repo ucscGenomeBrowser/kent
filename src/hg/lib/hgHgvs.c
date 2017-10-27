@@ -5,10 +5,12 @@
  * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hgHgvs.h"
+#include "bPlusTree.h"
 #include "chromInfo.h"
 #include "genbank.h"
 #include "hdb.h"
 #include "indelShift.h"
+#include "lrg.h"
 #include "pslTransMap.h"
 #include "regexHelper.h"
 #include "trackHub.h"
@@ -27,8 +29,9 @@ if (pHgvs && *pHgvs)
 }
 
 // Regular expressions for HGVS-recognized sequence accessions: LRG or versioned RefSeq:
-#define lrgTranscriptExp "(LRG_[0-9]+t[0-9+])"
-#define lrgRegionExp "(LRG_[0-9+])"
+#define lrgTranscriptExp "(LRG_[0-9]+t[0-9]+)"
+#define lrgProteinExp "(LRG_[0-9]+p[0-9]+)"
+#define lrgRegionExp "(LRG_[0-9]+)"
 
 // NC = RefSeq reference assembly chromosome
 // NG = RefSeq incomplete genomic region (e.g. gene locus)
@@ -102,6 +105,18 @@ if (pHgvs && *pHgvs)
 
 // Complete HGVS term regexes combining sequence identifiers and change operations
 #define hgvsFullRegex(seq, op) "^" seq "[ :]+" op
+
+#define hgvsLrgGDotPosExp hgvsFullRegex(lrgRegionExp, hgvsGMDotPosExp)
+#define hgvsLrgGDotExp hgvsLrgGDotPosExp "(.*)"
+// substring numbering:
+//      0.....................................  whole matching string
+//      1.......................                LRG region
+//                              2.              g or m
+//                                3..           1-based start position
+//                                   4...       optional range separator and end position
+//                                     5..      1-based end position
+//                                        6...  change description
+
 
 #define hgvsRefSeqNCGDotPosExp hgvsFullRegex(versionedRefSeqNCExp, hgvsGMDotPosExp)
 #define hgvsRefSeqNCGDotExp hgvsRefSeqNCGDotPosExp "(.*)"
@@ -193,6 +208,14 @@ if (pHgvs && *pHgvs)
 //                                                         15...          offset number
 //                                                             16........ sequence change
 
+#define hgvsLrgPDotSubstExp hgvsFullRegex(lrgProteinExp, hgvsPDotSubstExp)
+// substring numbering:
+//      0.....................................................  whole matching string
+//      1............................                           LRG protein
+//                                   2.....                     original sequence
+//                                           3......            1-based position
+//                                                     4......  replacement sequence
+
 #define hgvsRefSeqNPPDotSubstExp hgvsFullRegex(versionedRefSeqNPExp, hgvsPDotSubstExp)
 // substring numbering:
 //      0.....................................................  whole matching string
@@ -203,6 +226,17 @@ if (pHgvs && *pHgvs)
 //                                   5.....                     original sequence
 //                                           6......            1-based position
 //                                                     7......  replacement sequence
+
+#define hgvsLrgPDotRangeExp hgvsFullRegex(lrgProteinExp, hgvsPDotRangeExp)
+// substring numbering:
+//      0.....................................................  whole matching string
+//      1..........................                             accession and optional dot version
+//                                 2...                         original start AA
+//                                       3...                   1-based start position
+//                                          4.................  optional range sep and AA+pos
+//                                            5...              original end AA
+//                                                 6...         1-based end position
+//                                                     7......  change description
 
 #define hgvsRefSeqNPPDotRangeExp hgvsFullRegex(versionedRefSeqNPExp, hgvsPDotRangeExp)
 // substring numbering:
@@ -295,13 +329,26 @@ static struct hgvsVariant *hgvsParseGDotPos(char *term)
 /* If term is parseable as an HGVS NC_...g. term, return the parsed representation, else NULL. */
 {
 struct hgvsVariant *hgvs = NULL;
+int accIx = 1;
+int startPosIx = 3;
+int endPosIx = 5;
+int changeIx = 6;
+boolean matches = FALSE;
 regmatch_t substrs[17];
-if (regexMatchSubstr(term, hgvsRefSeqNCGDotExp, substrs, ArraySize(substrs)))
+if (regexMatchSubstr(term, hgvsLrgGDotExp, substrs, ArraySize(substrs)))
+    matches = TRUE;
+else if (regexMatchSubstr(term, hgvsRefSeqNCGDotExp, substrs, ArraySize(substrs)))
     {
-    int accIx = 1;
-    int startPosIx = 6;
-    int endPosIx = 8;
-    int changeIx = 9;
+    matches = TRUE;
+    // The LRG accession regex has only one substring but the RefSeq acc regex has 4, so that
+    // affects all substring offsets after the accession.
+    int refSeqExtra = 3;
+    startPosIx += refSeqExtra;
+    endPosIx += refSeqExtra;
+    changeIx += refSeqExtra;
+    }
+if (matches)
+    {
     AllocVar(hgvs);
     // HGVS recommendation May 2017: replace m. with g. since mitochondrion is genomic too
     hgvs->type = hgvstGenomic;
@@ -417,14 +464,28 @@ static struct hgvsVariant *hgvsParsePDotSubst(char *term)
  * otherwise NULL. */
 {
 struct hgvsVariant *hgvs = NULL;
+boolean matches = FALSE;
+int accIx = 1;
+int refIx = 2;
+int posIx = 3;
+int altIx = 4;
+int geneSymbolIx = -1;
 regmatch_t substrs[8];
-if (regexMatchSubstr(term, hgvsRefSeqNPPDotSubstExp, substrs, ArraySize(substrs)))
+if (regexMatchSubstr(term, hgvsLrgPDotSubstExp, substrs, ArraySize(substrs)))
+    matches = TRUE;
+else if (regexMatchSubstr(term, hgvsRefSeqNPPDotSubstExp, substrs, ArraySize(substrs)))
     {
-    int accIx = 1;
-    int geneSymbolIx = 4;
-    int refIx = 5;
-    int posIx = 6;
-    int altIx = 7;
+    matches = TRUE;
+    // The LRG accession regex has only one substring but the RefSeq acc regex has 4, so that
+    // affects all substring offsets after the accession.
+    int refSeqExtra = 3;
+    refIx += refSeqExtra;
+    posIx += refSeqExtra;
+    altIx += refSeqExtra;
+    geneSymbolIx = 4;
+    }
+if (matches)
+    {
     AllocVar(hgvs);
     hgvs->type = hgvstProtein;
     hgvs->seqAcc = regexSubstringClone(term, substrs[accIx]);
@@ -434,7 +495,7 @@ if (regexMatchSubstr(term, hgvsRefSeqNPPDotSubstExp, substrs, ArraySize(substrs)
     char change[len+1];
     safencpy(change, sizeof(change), term+changeStart, len);
     hgvs->changes = cloneString(change);
-    if (regexSubstrMatched(substrs[geneSymbolIx]))
+    if (geneSymbolIx >= 0 && regexSubstrMatched(substrs[geneSymbolIx]))
         hgvs->seqGeneSymbol = regexSubstringClone(term, substrs[geneSymbolIx]);
     hgvs->start1 = regexSubstringInt(term, substrs[posIx]);
     hgvs->end = hgvs->start1;
@@ -447,15 +508,30 @@ static struct hgvsVariant *hgvsParsePDotRange(char *term)
  * otherwise NULL. */
 {
 struct hgvsVariant *hgvs = NULL;
+boolean matches = FALSE;
+int accIx = 1;
+int startRefIx = 2;
+int startPosIx = 3;
+int endPosIx = 6;
+int changeIx = 7;
+int geneSymbolIx = -1;
 regmatch_t substrs[11];
-if (regexMatchSubstr(term, hgvsRefSeqNPPDotRangeExp, substrs, ArraySize(substrs)))
+if (regexMatchSubstr(term, hgvsLrgPDotRangeExp, substrs, ArraySize(substrs)))
+    matches = TRUE;
+else if (regexMatchSubstr(term, hgvsRefSeqNPPDotRangeExp, substrs, ArraySize(substrs)))
     {
-    int accIx = 1;
-    int geneSymbolIx = 4;
-    int startRefIx = 5;
-    int startPosIx = 6;
-    int endPosIx = 9;
-    int changeIx = 10;
+    matches = TRUE;
+    // The LRG accession regex has only one substring but the RefSeq acc regex has 4, so that
+    // affects all substring offsets after the accession.
+    int refSeqExtra = 3;
+    startRefIx += refSeqExtra;
+    startPosIx += refSeqExtra;
+    endPosIx += refSeqExtra;
+    changeIx += refSeqExtra;
+    geneSymbolIx = 4;
+    }
+if (matches)
+    {
     AllocVar(hgvs);
     hgvs->type = hgvstProtein;
     hgvs->seqAcc = regexSubstringClone(term, substrs[accIx]);
@@ -465,7 +541,7 @@ if (regexMatchSubstr(term, hgvsRefSeqNPPDotRangeExp, substrs, ArraySize(substrs)
     char change[len+1];
     safencpy(change, sizeof(change), term+changeStart, len);
     hgvs->changes = cloneString(change);
-    if (regexSubstrMatched(substrs[geneSymbolIx]))
+    if (geneSymbolIx >= 0 && regexSubstrMatched(substrs[geneSymbolIx]))
         hgvs->seqGeneSymbol = regexSubstringClone(term, substrs[geneSymbolIx]);
     hgvs->start1 = regexSubstringInt(term, substrs[startPosIx]);
     if (regexSubstrMatched(substrs[endPosIx]))
@@ -570,6 +646,18 @@ hFreeConn(&conn);
 return npAcc;
 }
 
+static char *lrgProteinToTx(char *db, char *protAcc)
+/* Return the LRG_ transcript accession for protAcc.  Each LRG_NpM has a corresponding LRG_NtM. */
+{
+int accLen = strlen(protAcc);
+char txAcc[accLen+1];
+safecpy(txAcc, sizeof(txAcc), protAcc);
+char *p = strrchr(txAcc, 'p');
+if (p)
+    *p = 't';
+return cloneString(txAcc);
+}
+
 static char *getProteinSeq(char *db, char *acc)
 /* Return amino acid sequence for acc, or NULL if not found. */
 {
@@ -581,10 +669,13 @@ if (startsWith("LRG_", acc))
     if (hTableExists(db, "lrgPep"))
         {
         char query[2048];
-        sqlSafef(query, sizeof(query), "select seq from lrgPep where name = '%s'", acc);
+        // lrgPep is indexed by transcript ID not protein ID
+        char *txAcc = lrgProteinToTx(db, acc);
+        sqlSafef(query, sizeof(query), "select seq from lrgPep where name = '%s'", txAcc);
         struct sqlConnection *conn = hAllocConn(db);
         seq = sqlQuickString(conn, query);
         hFreeConn(&conn);
+        freeMem(txAcc);
         }
     }
 else
@@ -734,6 +825,51 @@ else if (regexMatchSubstr(term, pseudoHgvsChrGDotExp, substrs, ArraySize(substrs
 return hgvs;
 }
 
+static struct bbiFile *getLrgBbi(char *db)
+/* Return bbiFile for LRG regions or NULL if not found. */
+{
+struct bbiFile *bbi = NULL;
+// I don't think this will be called often enough to warrant caching open bbi file (and index?).
+// I expect it to be called a couple times when the user enters a LRG genomic HGVS pos/search term.
+// It would be cleaner to get fileName from tdb or db -- but this is much quicker & easier:
+char fileName[1024];
+safef(fileName, sizeof(fileName), "/gbdb/%s/bbi/lrg.bb", db);
+char *fileNameRep = hReplaceGbdb(fileName);
+if (fileExists(fileNameRep))
+    bbi = bigBedFileOpen(fileNameRep);
+freeMem(fileNameRep);
+return bbi;
+}
+
+static struct lrg *loadLrgByName(char *db, char *lrgId)
+/* Retrieve lrg data from bigBed. */
+{
+struct lrg *lrg = NULL;
+struct bbiFile *bbi = getLrgBbi(db);
+if (bbi)
+    {
+    int fieldIx = 0;
+    struct bptFile *index = bigBedOpenExtraIndex(bbi, "name", &fieldIx);
+    if (index)
+        {
+        struct lm *lm = lmInit(0);
+        struct bigBedInterval *bb = bigBedNameQuery(bbi, index, fieldIx, lrgId, lm);
+        if (bb)
+            {
+            char *fields[bbi->fieldCount];
+            char chrom[512], startBuf[16], endBuf[16];
+            bigBedIntervalToRowLookupChrom(bb, NULL, bbi, chrom, sizeof(chrom),
+                                           startBuf, endBuf, fields, bbi->fieldCount);
+            lrg = lrgLoad(fields);
+            }
+        lmCleanup(&lm);
+        }
+    // Don't bptFileClose(&index) -- index shares pointers with bbi!
+    }
+bigBedFileClose(&bbi);
+return lrg;
+}
+
 static char refBaseFromNucSubst(char *change)
 /* If sequence change is a nucleotide substitution, return the reference base, else null char. */
 {
@@ -762,32 +898,54 @@ if (retEnd)
 static boolean hgvsValidateGenomic(char *db, struct hgvsVariant *hgvs,
                                    char **retFoundAcc, int *retFoundVersion,
                                    char **retDiffRefAllele)
-/* Return TRUE if hgvs->seqAcc can be mapped to a chrom in db and coords are legal for the chrom.
+/* Return TRUE if hgvs->seqAcc can be mapped to a chrom/LRG in db and coords are in range.
  * If retFoundAcc is non-NULL, set it to the versionless seqAcc if chrom is found, else NULL.
- * If retFoundVersion is non-NULL, set it to seqAcc's version if chrom is found, else NULL.
+ * If retFoundVersion is non-NULL, set to seqAcc's version if chrom is found, -1 for LRG, else NULL.
  * If retDiffRefAllele is non-NULL and hgvs specifies a reference allele then compare it to
  * the genomic sequence at that location; set *retDiffRefAllele to NULL if they match, or to
  * genomic sequence if they differ. */
 {
 boolean coordsOK = FALSE;
+char hgvsBase = '\0';
 if (retDiffRefAllele)
+    {
+    hgvsBase = refBaseFromNucSubst(hgvs->changes);
     *retDiffRefAllele = NULL;
+    }
 if (retFoundAcc)
     *retFoundAcc = NULL;
 if (retFoundVersion)
     *retFoundVersion = 0;
-char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
-if (isNotEmpty(chrom))
+int start, end;
+hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
+if (startsWith("LRG_", hgvs->seqAcc))
     {
-    struct chromInfo *ci = hGetChromInfo(db, chrom);
-    int start, end;
-    hgvsStartEndToZeroBasedHalfOpen(hgvs, &start, &end);
-    if (start >= 0 && start < ci->size && end > 0 && end < ci->size)
+    struct lrg *lrg = loadLrgByName(db, hgvs->seqAcc);
+    if (lrg && start >= 0 && start < lrg->lrgSize && end > 0 && end <= lrg->lrgSize)
         {
         coordsOK = TRUE;
-        if (retDiffRefAllele)
+        if (hgvsBase != '\0')
             {
-            char hgvsBase = refBaseFromNucSubst(hgvs->changes);
+            struct dnaSeq *lrgSeq = lrgReconstructSequence(lrg, db);
+            lrgSeq->dna[start] = toupper(lrgSeq->dna[start]);
+            if (lrgSeq->dna[start] != hgvsBase)
+                *retDiffRefAllele = cloneStringZ(lrgSeq->dna+start, 1);
+            dnaSeqFree(&lrgSeq);
+            }
+        if (retFoundAcc)
+            *retFoundAcc = cloneString(hgvs->seqAcc);
+        }
+    lrgFree(&lrg);
+    }
+else
+    {
+    char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
+    if (isNotEmpty(chrom))
+        {
+        struct chromInfo *ci = hGetChromInfo(db, chrom);
+        if (start >= 0 && start < ci->size && end > 0 && end <= ci->size)
+            {
+            coordsOK = TRUE;
             if (hgvsBase != '\0')
                 {
                 struct dnaSeq *refBase = hFetchSeq(ci->fileName, chrom, start, end);
@@ -797,17 +955,17 @@ if (isNotEmpty(chrom))
                 dnaSeqFree(&refBase);
                 }
             }
+        // Since we found hgvs->seqAcc, split it into versionless and version parts.
+        if (retFoundAcc)
+            *retFoundAcc = cloneFirstWordByDelimiter(hgvs->seqAcc, '.');
+        if (retFoundVersion)
+            {
+            char *p = strchr(hgvs->seqAcc, '.');
+            if (p)
+                *retFoundVersion = atoi(p+1);
+            }
+        // Don't free chromInfo, it's cached!
         }
-    // Since we found hgvs->seqAcc, split it into versionless and version parts.
-    if (retFoundAcc)
-        *retFoundAcc = cloneFirstWordByDelimiter(hgvs->seqAcc, '.');
-    if (retFoundVersion)
-        {
-        char *p = strchr(hgvs->seqAcc, '.');
-        if (p)
-            *retFoundVersion = atoi(p+1);
-        }
-    // Don't free chromInfo, it's cached!
     }
 return coordsOK;
 }
@@ -1075,6 +1233,39 @@ bed6->strand[0] = strand;
 return bed6;
 }
 
+static int pslMapQStartToT(struct psl *psl, int qStartIn)
+/* Map a query start coord to a target start coord; return -1 if qStart is not in the alignment. */
+{
+int t = -1, qStart = qStartIn, ix;
+boolean isRc = pslQStrand(psl) == '-';
+if (isRc)
+    {
+    int qEnd = qStart + 1;
+    qStart = psl->qSize - qEnd;
+    }
+for (ix = 0;  ix < psl->blockCount;  ix++)
+    {
+    int qOffset = qStart - pslQStart(psl, ix);
+    if (qOffset >= 0 && qStart < pslQEnd(psl, ix))
+        {
+        t = pslTStart(psl, ix) + qOffset;
+        break;
+        }
+    }
+return t;
+}
+
+static int pslMapQEndToT(struct psl *psl, int qEnd)
+/* Map a query end coord to a target end coord; return -1 if qEnd is not in the alignment. */
+{
+int tEnd = -1;
+int qStart = qEnd - 1;
+int tStart = pslMapQStartToT(psl, qStart);
+if (tStart >= 0)
+    tEnd = tStart + 1;
+return tEnd;
+}
+
 boolean hgvsIsInsertion(struct hgvsVariant *hgvs)
 /* Return TRUE if hgvs is an insertion (end == start1+1, change starts with "ins"). */
 {
@@ -1093,15 +1284,31 @@ if (hgvsIsInsertion(hgvs))
 }
 
 static struct bed *hgvsMapGDotToGenome(char *db, struct hgvsVariant *hgvs, char **retPslTable)
-/* Given an NC_*g. term, if we can map NC_ to chrom then return the region, else NULL. */
+/* Given an NC_*g. or LRG_*g. term, if we can map to chrom then return the region, else NULL. */
 {
 struct bed *region = NULL;
-char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
-if (isNotEmpty(chrom) && hgvs->start1 > 0)
+if (startsWith("LRG_", hgvs->seqAcc))
     {
-    region = bed6New(chrom, hgvs->start1 - 1, hgvs->end, "", 0, '+');
-    adjustInsStartEnd(hgvs, &region->chromStart, &region->chromEnd);
+    struct lrg *lrg = loadLrgByName(db, hgvs->seqAcc);
+    if (lrg)
+        {
+        uint chromSize = hChromSize(db, lrg->chrom);
+        struct psl *psl = lrgToPsl(lrg, chromSize);
+        int start = pslMapQStartToT(psl, hgvs->start1 - 1);
+        int end = pslMapQEndToT(psl, hgvs->end);
+        if (start >= 0 && end >= 0)
+            region = bed6New(lrg->chrom, start, end, "", 0, '+');
+        pslFree(&psl);
+        }
     }
+else
+    {
+    char *chrom = hgOfficialChromName(db, hgvs->seqAcc);
+    if (isNotEmpty(chrom) && hgvs->start1 > 0)
+        region = bed6New(chrom, hgvs->start1 - 1, hgvs->end, "", 0, '+');
+    }
+if (region)
+    adjustInsStartEnd(hgvs, &region->chromStart, &region->chromEnd);
 if (retPslTable)
     *retPslTable = NULL;
 return region;
@@ -1449,11 +1656,15 @@ static struct bed *hgvsMapPDotToGenome(char *db, struct hgvsVariant *hgvs, char 
 /* Return a bed6 with the variant's span on the genome and strand, or NULL if unable to map.
  * If successful and retPslTable is not NULL, set it to the name of the PSL table used. */
 {
-struct bed *region = NULL;
 char *acc = normalizeVersion(db, hgvs->seqAcc, NULL);
-if (acc && (startsWith("NP_", acc) || startsWith("XP_", acc)))
+if (isEmpty(acc))
+    return NULL;
+struct bed *region = NULL;
+char *txAcc = NULL;
+if (startsWith("LRG_", acc))
+    txAcc = lrgProteinToTx(db, acc);
+else if (startsWith("NP_", acc) || startsWith("XP_", acc))
     {
-    // Translate the NP_*:p. to NM_*:c. and map NM_*:c. to the genome.
     struct sqlConnection *conn = hAllocConn(db);
     char query[2048];
     if (hDbHasNcbiRefSeq(db))
@@ -1464,20 +1675,21 @@ if (acc && (startsWith("NP_", acc) || startsWith("XP_", acc)))
                  "where l.protAcc = '%s' and r.name = l.mrnaAcc", refLinkTable, acc);
     else
         return NULL;
-    char *nmAcc = sqlQuickString(conn, query);
+    txAcc = sqlQuickString(conn, query);
     hFreeConn(&conn);
-    if (nmAcc)
-        {
-        struct hgvsVariant cDot;
-        zeroBytes(&cDot, sizeof(cDot));
-        cDot.type = hgvstCoding;
-        cDot.seqAcc = nmAcc;
-        cDot.start1 = ((hgvs->start1 - 1) * 3) + 1;
-        cDot.end = ((hgvs->end - 1) * 3) + 3;
-        cDot.changes = hgvs->changes;
-        region = hgvsMapNucToGenome(db, &cDot, retPslTable);
-        freeMem(nmAcc);
-        }
+    }
+if (txAcc)
+    {
+    // Translate the p. to c. and map c. to the genome.
+    struct hgvsVariant cDot;
+    zeroBytes(&cDot, sizeof(cDot));
+    cDot.type = hgvstCoding;
+    cDot.seqAcc = txAcc;
+    cDot.start1 = ((hgvs->start1 - 1) * 3) + 1;
+    cDot.end = ((hgvs->end - 1) * 3) + 3;
+    cDot.changes = hgvs->changes;
+    region = hgvsMapNucToGenome(db, &cDot, retPslTable);
+    freeMem(txAcc);
     }
 return region;
 }

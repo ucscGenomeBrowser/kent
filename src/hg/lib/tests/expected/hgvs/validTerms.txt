@@ -2,8 +2,10 @@
 # inputFile: input/hgvs/validTerms.txt
 # A variant that is famously known as "MTHFR C677T" or "MTHFR 677C>T" -- but the 677 is incorrect (from an old sequence ~1995):
 chr1	11796320	11796321	NM_005957.4:c.665C>T	0	-
-# Same variant in LRG transcript coords:
+# Same variant in LRG transcript, protein and genomic coords:
 chr1	11796320	11796321	LRG_726t1:c.665C>T	0	-
+chr1	11796319	11796322	LRG_726p1:p.Ala222Val	0	-
+chr1	11796320	11796321	LRG_726:g.14783C>T	0	+
 
 # These three are equivalent (although p. is less specific):
 chr11	112088972	112088973	NM_003002.3:c.276C>A	0	+
