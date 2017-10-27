@@ -137,6 +137,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 rhiRox1) \
        > rbest.log 2>&1 &
     # real    53m54.908s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 rhiRox1) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestRhiRox1Link.txt
+    # 2400873699 bases of 3049335806 (78.734%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/rhiRox1/bed/blastz.hg38.swap
@@ -216,6 +220,10 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 nomLeu3) > rbest.log 2>&1 &
     # real    77m44.300s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 nomLeu3) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestNomLeu3Link.txt
+    # 2442160816 bases of 3049335806 (80.088%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/nomLeu3/bed/blastz.hg38.swap
@@ -294,6 +302,10 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 saiBol1) > rbest.log 2>&1 &
     # real    129m56.144s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 saiBol1) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestSaiBol1Link.txt
+    # 1986661464 bases of 3049335806 (65.151%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/saiBol1/bed/blastz.hg38.swap
@@ -372,6 +384,10 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 macFas5) > rbest.log 2>&1 &
     # real    47m25.375s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 macFas5) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestMacFas5Link.txt
+    # 2423088291 bases of 3049335806 (79.463%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/macFas5/bed/blastz.hg38.swap
@@ -445,6 +461,13 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 otoGar3) \
        > rbest.log 2>&1 &
     # real    59m25.363s
+    # mistakenly destroyed the rbest.log file:
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 otoGar3) > rbest.log 2>&1 &
+    # real    13m9.418s
+
+    cat fb.hg38.chainRBestOtoGar3Link.txt
+    # 1482204777 bases of 3049335806 (48.607%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/otoGar3/bed/blastz.hg38.swap
@@ -526,6 +549,10 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 calJac3) > rbest.log 2>&1 &
     # real    50m52.928s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 calJac3) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestCalJac3Link.txt
+    # 2019861688 bases of 3049335806 (66.239%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/calJac3/bed/blastz.hg38.swap
@@ -758,6 +785,10 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 nasLar1) > rbest.log 2>&1 &
     # real    55m14.954s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 nasLar1) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestNasLar1Link.txt
+    # 2091196276 bases of 3049335806 (68.579%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/nasLar1/bed/blastz.hg38.swap
@@ -7455,6 +7486,10 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 rheMac8) > rbest.log 2>&1 &
     # real    182m11.216s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 rheMac8) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestRheMac8Link.txt
+    # 2401566032 bases of 3049335806 (78.757%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/rheMac8/bed/blastz.hg38.swap
@@ -7672,6 +7707,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 panPan2) \
       > rbest.log 2>&1 &
     # real    184m43.685s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 panPan2) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestPanPan2Link.txt
+    # 2653262611 bases of 3049335806 (87.011%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/panPan2/bed/blastz.hg38.swap
@@ -7807,6 +7846,11 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 gorGor5) \
         > rbest.log 2>&1 &
     # real    101m55.329s
+    # load up the recip best chainNet tables
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 gorGor5) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestGorGor5Link.txt
+    # 2708011335 bases of 3049335806 (88.807%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/gorGor5/bed/blastz.hg38.swap
@@ -7882,6 +7926,13 @@ TMPDIR=/dev/shm
         hg38 panTro5) > rbest.log 2>&1
     # real    195m53.750s
 
+    time ($HOME/kent/src/hg/utils/automation/doRecipBest.pl -load -continue=load -workhorse=hgwdev -buildDir=`pwd` hg38 panTro5) \
+	> loadRBest.log 2>&1
+    # real    2m36.993s
+
+    cat fb.hg38.chainRBestPanTro5Link.txt
+    # 2737882959 bases of 3049335806 (89.786%) in intersection
+
     # running the swap
     mkdir /hive/data/genomes/panTro5/bed/blastz.hg38.swap
     cd /hive/data/genomes/panTro5/bed/blastz.hg38.swap
@@ -7951,6 +8002,11 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg38 chlSab2
+
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 chlSab2) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestChlSab2Link.txt
+    # 2397287473 bases of 3049335806 (78.617%) in intersection
 
     # running the swap
     mkdir /hive/data/genomes/chlSab2/bed/blastz.hg38.swap
@@ -8298,6 +8354,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg38 colAng1) > rbest.log 2>&1
     # real    240m0.041s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 colAng1) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestColAng1Link.txt
+    # 2323958368 bases of 3049335806 (76.212%) in intersection
 
     # running the swap
     mkdir /hive/data/genomes/colAng1/bed/blastz.hg38.swap
@@ -8370,6 +8430,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg38 macNem1) > rbest.log 2>&1
     # real    201m54.795s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 macNem1) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestMacNem1Link.txt
+    # 2376010543 bases of 3049335806 (77.919%) in intersection
 
     # running the swap
     mkdir /hive/data/genomes/macNem1/bed/blastz.hg38.swap
@@ -8439,6 +8503,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 micMur3) \
           > rbest.log 2>&1 &
     # real    265m38.806s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 micMur3) > rbest.log 2>&1 &
+    cat fb.hg38.chainRBestMicMur3Link.txt
+    # 857684217 bases of 3049335806 (28.127%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/micMur3/bed/blastz.hg38.swap
@@ -8707,6 +8775,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg38 rhiBie1) > rbest.log 2>&1
     # real    457m19.209s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 rhiBie1) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestRhiBie1Link.txt
+    # 2356179781 bases of 3049335806 (77.269%) in intersection
 
     # running the swap
     mkdir /hive/data/genomes/rhiBie1/bed/blastz.hg38.swap
@@ -8981,6 +9053,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 papAnu3) \
         > rbest.log 2>&1 &
     # real    488m59.447s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 papAnu3) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestPapAnu3Link.txt
+    # 2430072678 bases of 3049335806 (79.692%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/papAnu3/bed/blastz.hg38.swap
@@ -9192,6 +9268,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 manLeu1) \
 	> rbest.log 2>&1 &
     # real    287m28.553s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 manLeu1) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestManLeu1Link.txt
+    # 2346062769 bases of 3049335806 (76.937%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/manLeu1/bed/blastz.hg38.swap
@@ -9262,6 +9342,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 aotNan1) \
 	> rbest.log 2>&1 &
     # real    269m4.216s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 aotNan1) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestAotNan1Link.txt
+    # 2013684675 bases of 3049335806 (66.037%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/aotNan1/bed/blastz.hg38.swap
@@ -9400,6 +9484,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 cerAty1) \
 	> rbest.log 2>&1 &
     # real    188m38.348s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 cerAty1) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestCerAty1Link.txt
+    # 2383692825 bases of 3049335806 (78.171%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/cerAty1/bed/blastz.hg38.swap
@@ -9469,6 +9557,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 proCoq1) \
 	> rbest.log 2>&1 &
     # real    330m51.520s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 proCoq1) > rbest.log 2>&1 &
+    cat fb.hg38.chainRBestProCoq1Link.txt
+    # 935801596 bases of 3049335806 (30.689%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/proCoq1/bed/blastz.hg38.swap
@@ -9538,6 +9630,10 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 cebCap1) \
 	> rbest.log 2>&1 &
     # real    210m50.610s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 cebCap1) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestCebCap1Link.txt
+    # 2011508311 bases of 3049335806 (65.965%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/cebCap1/bed/blastz.hg38.swap
@@ -9607,6 +9703,12 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 eulFla1) \
 	> rbest.log 2>&1 &
     # real    214m11.636s
+    # loading the recip best results
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev -buildDir=`pwd` hg38 eulFla1) \
+	> loadRBest.log 2>&1 &
+    # real    5m38.039s
+    cat fb.hg38.chainRBestEulFla1Link.txt
+    # 961423111 bases of 3049335806 (31.529%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/eulFla1/bed/blastz.hg38.swap
@@ -9625,6 +9727,11 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulFla1 hg38) \
 	> rbest.log 2>&1
     # real    199m39.734s
+    time ($HOME/kent/src/hg/utils/automation/doRecipBest.pl -load -continue=load -workhorse=hgwdev -buildDir=`pwd` eulFla1 hg38) \
+	> loadRBest.log 2>&1
+    # real    6m23.578s
+    cat fb.eulFla1.chainRBestHg38Link.txt
+    # 961226273 bases of 2094103399 (45.902%) in intersection
 
 #########################################################################
 # LASTZ human/hg38 vs. Black lemur/eulMac1 - (DONE - 2017-10-04 - Hiram)
@@ -9676,6 +9783,12 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 eulMac1) \
 	> rbest.log 2>&1 &
     # real    220m20.185s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 eulMac1) > rbest.log 2>&1 &
+    # real    6m20.657s
+
+    cat fb.hg38.chainRBestEulMac1Link.txt
+    972709793 bases of 3049335806 (31.899%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/eulMac1/bed/blastz.hg38.swap
@@ -9694,5 +9807,84 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulMac1 hg38) \
 	> rbest.log 2>&1
     # real    200m34.710s
+
+#########################################################################
+# LASTZ Human/hg38 - Tarsier TarSyr2 (DONE - 2014-12-11 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzTarSyr2.2014-12-11
+    cd /hive/data/genomes/hg38/bed/lastzTarSyr2.2014-12-11
+
+    cat << '_EOF_' > DEF
+# human vs tarsier
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.tarSyr2/hg38.tarSyr2.tuning.top400.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=50
+BLASTZ_X=1000
+BLASTZ_Y=3400
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzTarSyr2.2014-12-11/hg38.tarSyr2.tuning.Q.txt
+#       A     C     G     T
+# A   100  -172   -29  -118
+# C  -172    98  -170   -29
+# G   -29  -170    98  -172
+# T  -118   -29  -172   100
+
+# TARGET: Human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=80
+SEQ1_LAP=10000
+
+# QUERY: Tarsier tarSyr2
+SEQ2_DIR=/hive/data/genomes/tarSyr2/tarSyr2.2bit
+SEQ2_LEN=/hive/data/genomes/tarSyr2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzTarSyr2.2014-12-11
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    1223m11.846s
+
+    cat fb.hg38.chainTarSyr2Link.txt
+    # 1708294423 bases of 3049335806 (56.022%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 tarSyr2) > rbest.log 2>&1 &
+    # real    46m29.975s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 tarSyr2) > loadRBest.log 2>&1 &
+    # real    12m28.565s
+
+    cat fb.hg38.chainRBestTarSyr2Link.txt
+    # 1563421915 bases of 3049335806 (51.271%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/tarSyr2/bed/blastz.hg38.swap
+    cd /hive/data/genomes/tarSyr2/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzTarSyr2.2014-12-11/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    452m27.264s
+
+    cat fb.tarSyr2.chainHg38Link.txt
+    # 1781378574 bases of 3405755564 (52.305%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` tarSyr2 hg38) > rbest.log 2>&1
+    # real    115m47.619s
 
 #########################################################################

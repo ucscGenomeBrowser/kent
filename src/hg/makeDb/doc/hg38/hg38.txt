@@ -5851,6 +5851,12 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg38 ponAbe2) > rbest.log 2>&1
     # real    60m1.060s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 ponAbe2) > loadRBest.log 2>&1 &
+    # real    3m35.834s
+
+    cat fb.hg38.chainRBestPonAbe2Link.txt
+    # 2538296592 bases of 3049335806 (83.241%) in intersection
 
     # running the swap
     mkdir /hive/data/genomes/ponAbe2/bed/blastz.hg38.swap
@@ -6531,29 +6537,29 @@ cd /hive/data/outside/cosmic/hg38/v81
 
 # Get the new data
 sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
-# Login to SFTP server then run these commands 
+# Login to SFTP server then run these commands
 get /files/grch38/cosmic/v81/CosmicMutantExport.tsv.gz
 
-# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts.
 zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
 
 # Use a script to convert to bed format.
 cosmicToBed cosMut.tsv cosMut.bed
 # This many lines were skipped, 131597 for not having genomic coordinate
 
-# Sort and convert to big bed using the .as file.  
-sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+# Sort and convert to big bed using the .as file.
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed
 bedToBigBed -type=bed4+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/chrom.sizes cosMutHg38V81.bb -tab -extraIndex=name,cosmLabel
 
-# Link it up so the outside world can see it. 
+# Link it up so the outside world can see it.
 cd /gbdb/hg38/cosmic/
 ln -s /hive/data/outside/cosmic/hg38/v81/cosMutHg38V81.bb .
 #########################################################################
-# hoffmanMappability hub import (2 super tracks) DONE Chris Eisenhart 2017-05-16 
+# hoffmanMappability hub import (2 super tracks) DONE Chris Eisenhart 2017-05-16
 mkdir /hive/data/outside/hoffmanMappability/hg38
 cd /hive/data/outside/hoffmanMappability/hg38
 wget https://www.pmgenomics.ca/hoffmanlab/proj/bismap/trackhub/hg38/trackDb.txt
-# Get the trackDb file 
+# Get the trackDb file
 importTrackHub trackDb.txt hofMap.ra /gbdb/hg38/hoffmanMappability/ --trackDbPath=$HOME/kent/src/hg/makeDb/trackDb/human/hg38/ --test
 # Check that the commands are what we want, then run for real
 importTrackHub trackDb.txt hofMap.ra /gbdb/hg38/hoffmanMappability/ --trackDbPath=$HOME/kent/src/hg/makeDb/trackDb/human/hg38/
@@ -6577,7 +6583,7 @@ done
 
 #########################################################################
 # tcgaExpr super track Chris Eisenhart, DONE, 2017-05-17
-# tcgaTranscExpr 
+# tcgaTranscExpr
 # TCGA transcript level expression barChart track, from TOIL pipeline recompute (John Vivian)
 # biorxiv.org/content/biorxiv/early/2016/07/07/062497.full.pdf
 mkdir /hive/data/outside/tcgaBarcharts/
@@ -6585,7 +6591,7 @@ mkdir /hive/data/outside/tcgaBarcharts/transcripts
 cd /hive/data/outside/tcgaBarcharts/transcripts
 
 # Get all the meta data
-cp ~max/projects/cirm/datasetPages/tcgaGtex/tcgaMeta.tab . 
+cp ~max/projects/cirm/datasetPages/tcgaGtex/tcgaMeta.tab .
 # Cut out the meta data the script wants, sample name and group.
 cut -f 1,5 tcgaMeta.tab | sed 's/ /_/g' > tcgaLargeSamples.tsv
 
@@ -6593,27 +6599,27 @@ cut -f 1,5 tcgaMeta.tab | sed 's/ /_/g' > tcgaLargeSamples.tsv
 cp ~max/projects/cirm/datasetPages/tcgaGtex/tcga.tpm.tab .
 # Clean up the transcript names (remove the .#)
 cut -f 1 tcga.tpm.tab | cut -f 1 -d "." > tcgaTranscripts.txt
-cut -f 2- tcga.tpm.tab > tcgaTpmValues.tsv 
+cut -f 2- tcga.tpm.tab > tcgaTpmValues.tsv
 paste tcgaTranscripts.txt tcgaTpmValues.tsv > tcgaMatrix.tsv
 
 # Build a coordinate map
 hgsql hg38 -e "select * from ensGene" | cut -f 2- | sort > ensGene
 hgsql hg38 -e "select * from ensemblToGeneName" | sort >  ensemblToGeneName
-join ensGene ensemblToGeneName | awk '{print $2"\t"$4"\t"$5"\t"$1"\t0\t"$3"\t"$16}' > coord.bed 
+join ensGene ensemblToGeneName | awk '{print $2"\t"$4"\t"$5"\t"$1"\t0\t"$3"\t"$16}' > coord.bed
 
 # Use the meta data, matrix, and coordinate map to generate a barchart bed
 time expMatrixToBarchartBed tcgaLargeSamples.tsv tcgaMatrix.tsv coord.bed tcgaTransExp.bed --groupOrder tcgaGroupOrder.txt
 
 # NOTE: Use the header line of the bed file to populate the barChartBars field in the trackDb.
-# The order of the labels in the barChartBars field should match the order of the labels in the 
-# expScores column in the bed file header. 
+# The order of the labels in the barChartBars field should match the order of the labels in the
+# expScores column in the bed file header.
 
-# Sort and convert into a bigBed file. 
+# Sort and convert into a bigBed file.
 sort -k1,1 -k2,2n tcgaTransExp.bed > sortedTcgaTransExp.bed
 bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartTranscExp.as sortedTcgaTransExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaTransExp.bb
 
 # Link the files into gbdb
-cd /gbdb/hgFixed/human/expMatrix 
+cd /gbdb/hgFixed/human/expMatrix
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaLargeSamples.tsv tcgaLargeSamples.tab
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaMatrix.tsv tcgaMatrix.tab
 ln -s /hive/data/outside/tcgaBarcharts/transcripts/tcgaTransExp.bb .
@@ -6629,30 +6635,30 @@ ln -s `pwd`/tcgaTranscExpr.hg38.bb /gbdb/hg38/tcga/tcgaTranscExpr.bb
 
 # TCGA gene level expression barChart track, from TOIL pipeline recompute (John Vivian)
 # tcgaGeneExpr
-mkdir ../genes 
+mkdir ../genes
 cd ../genes
 
-# Get the gene matrix.  
+# Get the gene matrix.
 cp ~max/projects/cirm/datasetPages/tcgaGtex/tcga.geneTpm.tab .
 
-# Make a coordinate file, the genes in gtexGeneModelV6 have .# versions which are 
-# removed with the temp fils.  
+# Make a coordinate file, the genes in gtexGeneModelV6 have .# versions which are
+# removed with the temp fils.
 hgsql hg38 -e "select * from hg38.gtexGeneModelV6" | awk '{print $3"\t"$5"\t"$6"\t"$2"\t0\t"$4"\t"$2}' > coord6+1.bed.temp
 cut -f 4 coord6+1.bed.temp | cut -f 1 -d "." > foo
 cut -f 1-3 coord6+1.bed.temp > foo2
 paste foo2 foo > foo3
 cut -f 5- coord6+1.bed.temp > foo4
 paste foo3 foo4 > coord6+1.bed
-# This bed file didn't have the right gene names (ENS rather than Hugo), fix it. 
+# This bed file didn't have the right gene names (ENS rather than Hugo), fix it.
 hgsql hg38 -e "select * From knownCanonical" > foo
 wc foo
-cut -f 6 foo | cut -f 1 -d "." 
+cut -f 6 foo | cut -f 1 -d "."
 cut -f 6 foo | cut -f 1 -d "." > foo2
 head foo
 cut -f 1-3 foo > foo3
 paste foo2 foo3 > foo4
 cut -f 4- coord6+1.bed > foo5
-join <(sort foo5) <(sort foo4) | awk '{print $5"\t"$6"\t"$7"\t"$1"\t0\t"$3"\t"$4}' > coord6+1.3.bed 
+join <(sort foo5) <(sort foo4) | awk '{print $5"\t"$6"\t"$7"\t"$1"\t0\t"$3"\t"$4}' > coord6+1.3.bed
 
 # Generate the bed file, can use the same transcript file
 time expMatrixToBarchartBed ../transcripts/tcgaLargeSamples.tsv tcga.geneTpm.tab coord6+1.3.bed tcgaGeneExp.bed --groupOrder=../transcripts/tcgaGroupOrder.txt
@@ -6661,8 +6667,8 @@ time expMatrixToBarchartBed ../transcripts/tcgaLargeSamples.tsv tcga.geneTpm.tab
 sort -k1,1 -k2,2n tcgaGeneExp.bed > sortedTcgaGeneExp.bed
 bedToBigBed -type=bed6+5 -as=$HOME/kent/src/hg/lib/barChartGeneExp.as sortedTcgaGeneExp.bed /hive/data/genomes/hg38/chrom.sizes tcgaGeneExp.bb
 
-# Link to gbdb 
-cd /gbdb/hgFixed/human/expMatrix 
+# Link to gbdb
+cd /gbdb/hgFixed/human/expMatrix
 ln -s /hive/data/outside/tcgaBarcharts/genes/tcgaGeneExp.bb .
 ln -s /hive/data/outside/tcgaBarcharts/genes/tcga.geneTpm.tab tcgaGeneMatrix.tab
 
@@ -6683,44 +6689,44 @@ ln -s `pwd`/tcgaGeneExpr.hg38.bb /gbdb/hg38/tcga/tcgaGeneExpr.bb
 mkdir /hive/data/outside/gtex/barChartTrack
 cd /hive/data/outside/gtex/barChartTrack
 
-# Seems John included some TCGA data (CML) in the GTEx matrix and samples, the cleaning steps remove this. 
+# Seems John included some TCGA data (CML) in the GTEx matrix and samples, the cleaning steps remove this.
 # Make a clean sample file
 cat ../johnVivianRecompute/sraToSample.txt | sed 's/ male /\tmale\t/g' | sed 's/ female /\tfemale\t/g' | cut -f 3 | sed 's/ - /-/g' | sed 's/ /_/g' > gtexSampleGroups.txt
 cat ../johnVivianRecompute/sraToSample.txt | cut -f 1 -d " " > gtexSampleNames.txt
 paste gtexSampleNames.txt gtexSampleGroups.txt > gtexSamples.txt
-grep -v '(CML)' gtexSamples.tsv > cleanGtexSamples.tsv 
+grep -v '(CML)' gtexSamples.tsv > cleanGtexSamples.tsv
 
 # Make a clean matrix
 cut -f 1 ../johnVivianRecompute/gtex.tpm.tab | cut -f 1 -d "." > gtexTranscripts.txt
-cut -f 2- ../johnVivianRecompute/gtex.tpm.tab > gtexTpmValues.tsv 
+cut -f 2- ../johnVivianRecompute/gtex.tpm.tab > gtexTpmValues.tsv
 paste gtexTranscripts.txt gtexTpmValues.tsv > gtexMatrix.tsv
 rowsToCols gtexMatrix.tsv tspsdGtexMatrix.tsv
 sort tspsdGtexMatrix.tsv > sortedTspsdGtexMatrix.tsv
 grep -v '(CML)' gtexSamples.tsv | cut -f 1 | sed 's/Run_s/#transcript/g' | sort > sortedCleanGtexSamples.tsv
 join sortedCleanGtexSamples.tsv sortedTspsdGtexMatrix.tsv > cleanTspsdGtexMatrix.tsv
-rowsToCols cleanTspsdMatrix.tsv cleanGtexMatrix.tsv 
+rowsToCols cleanTspsdMatrix.tsv cleanGtexMatrix.tsv
 
 # Build a coordinate map
 hgsql hg38 -e "select * from ensGene" | cut -f 2- | sort > ensGene
 hgsql hg38 -e "select * from ensemblToGeneName" | sort >  ensemblToGeneName
-join ensGene ensemblToGeneName | awk '{print $2"\t"$4"\t"$5"\t"$1"\t0\t"$3"\t"$16}' > coord.bed 
+join ensGene ensemblToGeneName | awk '{print $2"\t"$4"\t"$5"\t"$1"\t0\t"$3"\t"$16}' > coord.bed
 
-# Get the gtex ordering 
+# Get the gtex ordering
 hgsql hgFixed -e "select * from gtexTissue" | cut -f 3 | sed 's/ - /-/g' | sed 's/ /_/g' | sed '1D' > gtexGroupOrder.txt
 
 # Use the meta data, matrix, and coordinate map to generate a barchart bed
 time expMatrixToBarchartBed cleanGtexSamples.tsv cleanGtexMatrix.tsv coord.bed gtexTransExp.bed --groupOrderFile gtexGroupOrder.txt
 
 # NOTE: Use the header line of the bed file to populate the barChartBars field in the trackDb.
-# The order of the labels in the barChartBars field should match the order of the labels in the 
-# expScores column in the bed file header. 
+# The order of the labels in the barChartBars field should match the order of the labels in the
+# expScores column in the bed file header.
 
-# Sort and convert into a bigBed file. 
+# Sort and convert into a bigBed file.
 sort -k1,1 -k2,2n gtexTransExp.bed > sortedGtexTransExp.bed
 bedToBigBed -as=$HOME/kent/src/hg/lib/barChartTranscExp.as -type=bed6+5 sortedGtexTransMed.bed /hive/data/genomes/hg38/chrom.sizes gtexTranscExpr.bb
 
 # Link the files into gbdb
-cd /gbdb/hgFixed/human/expMatrix 
+cd /gbdb/hgFixed/human/expMatrix
 ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexSamples.tsv cleanGtexSamples.tab
 ln -s /hive/data/outside/gtex/barChartTrack/cleanGtexMatrix.tsv cleanGtexMatris.tab
 
@@ -6765,7 +6771,7 @@ TMPDIR=/dev/shm
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -noDbNameCheck -syntenicNet) > do.log 2>&1
     # real    3327m39.074s
-    
+
 	cat fb.hg38.chainDanRer11Link.txt
     # 41036733 bases of 3049335806 (1.346%) in intersection
 
@@ -6804,26 +6810,26 @@ gunzip interim_GRCh38.p10_top_level_2017-05-03.gff3.gz
 # Get a table to map refSeq chrom names to our chrom names
 hgsql hg38 -e "select * from ucscToRefSeq" | cut -f 1,4 ucscToRefSeq.tsv | awk '{print $2"\t"$1}' > refSeqToUcsc.tsv
 
-# Drop the header lines 
+# Drop the header lines
 tail -3610666 ../interim_GRCh38.p11_top_level_2017-06-27.gff3 | sort > foo2
 join foo2 <(sort refSeqToUcsc.tsv) -t $'\t' > join.foo
 
-# Join with the ucscToRefSeq table to get UCSC chromosomes 
+# Join with the ucscToRefSeq table to get UCSC chromosomes
 join <(tail -3610666 interim_GRCh38.p11_top_level_2017-06-27.gff3 | sort) <(sort refSeqToUcsc.tsv) -t $'\t' > join.foo
 
 # Python script to grab just the functional elements from this list (given to us by Terence),
-# move things into a bed order and subtract 1 from the chr start coordinates provided.  
+# move things into a bed order and subtract 1 from the chr start coordinates provided.
 ./parseRefSeqFuncElems join.foo bed 108.20170627
 
 sort -k1,1 -k2,2n bed > sorted.bed
 
-#wc sorted.bed 
+#wc sorted.bed
 #6188  159382 1763350 sorted.bed
 
-bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed /hive/data/genomes/hg38/chrom.sizes refSeqFuncElems.bb -tab 
+bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed /hive/data/genomes/hg38/chrom.sizes refSeqFuncElems.bb -tab
 
 cd /gbdb/hg38/ncbiRefSeq
-ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElems.bb . 
+ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElems.bb .
 ###################################################################
 # cosmicRegions (DONE 2017-08-03 Chris)
 # Make a new COSCMIC track for hg38 v82
@@ -6832,22 +6838,22 @@ cd /hive/data/outside/cosmic/hg38/v82
 
 # Get the new data
 sftp ceisenha@ucsc.edu@sftp-cancer.sanger.ac.uk
-# Login to SFTP server then run these commands 
+# Login to SFTP server then run these commands
 get /files/grch38/cosmic/v82/CosmicMutantExport.tsv.gz
 
-# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts. 
+# Remove the 'NS' fields, search for the \t after to exclude the E'NS'ST transcripts.
 zcat CosmicMutantExport.tsv.gz | sed 's/NS\t/\t/g' > cosMut.tsv
 
 # Use a script to convert to bed format.
 cosmicToBed cosMut.tsv cosMut.bed
 # This many lines were skipped, 134601 for not having genomic coordinate
 
-# Sort and convert to big bed using the .as file.  
-sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed 
+# Sort and convert to big bed using the .as file.
+sort -k1,1 -k2,2n cosMut.bed > sCosMut.bed
 bedToBigBed -type=bed8+31 -as=cosmicNew.as sCosMut.bed /hive/data/genomes/hg38/chrom.sizes cosMutHg38V82.bb -tab -extraIndex=name,cosmLabel
 
 
-# Link it up so the outside world can see it. 
+# Link it up so the outside world can see it.
 cd /gbdb/hg38/cosmic/
 ln -s /hive/data/outside/cosmic/hg38/v82/cosMutHg38V82.bb .
 
