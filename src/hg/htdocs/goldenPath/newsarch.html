@@ -45,6 +45,28 @@
 <!-- ============= 2017 archived news ============= -->
 <a name="2017"></a>
 
+<a name="102717"></a>
+<h2>Oct. 27, 2017 &nbsp;&nbsp; Public European UCSC MySQL server now available!</h2>
+<p>
+We are pleased to announce that a public MySQL server of UCSC Genome Browser
+data is now available in Europe! This should speed up programmatic access to
+the underlying MySQL databases for users in Europe. Connect to this new MySQL
+server using the command:</p>
+<pre><code> mysql --user=genome --host=genome-euro-mysql.soe.ucsc.edu -A</code></pre>
+
+<p>
+More information about connecting to our public MySQL servers can be found on our
+<a href="help/mysql.html">MySQL access</a> page.</p>
+
+<p>
+Additionally, we have configured both the <a href="help/gbib.html">Genome Browser in a Box</a>
+(GBiB) and <a href="help/gbic.html"> Genome Browser in the Cloud</a> (GBiC) to
+take advantage of this new server. If you are in Europe and have auto-updates
+enabled for your GBiB, it should automatically switch to using this new server
+the next time it updates. The GBiC will only auto-configure this
+connection when first created, otherwise, you will need to manually configure
+which MySQL server you want your mirror to use.</p>
+
 <a name="101817"></a>
 <h2>Oct. 18, 2017 &nbsp;&nbsp; New GTEx eQTL 44 tissues and summary tracks on hg19</h2>
 <p>
