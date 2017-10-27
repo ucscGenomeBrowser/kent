@@ -6571,7 +6571,7 @@ cp hofMap.ra ~/kent/src/hg/makeDb/trackDb/human/hg38
 # the importTrackHub failed on redirection, fetch all the files manually:
 # 2017-09-15 - Hiram
 
-cd /hive/data/outside/hoffmanMappability/hg38]
+cd /hive/data/outside/hoffmanMappability/hg38
 
 grep bigDataUrl trackDb.txt | awk '{print $NF}' | sed -e 's#https://www.pmgenomics.ca/hoffmanlab/proj/bismap/trackhub/hg38/##;' | while read F
 do
