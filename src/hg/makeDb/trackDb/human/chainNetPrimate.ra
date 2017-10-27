@@ -258,22 +258,6 @@ html primateChainNet
         type chain otoGar3
         otherDb otoGar3
 
-        track chainRBestOtoGar1
-        subTrack primateChainNetViewchain off
-        subGroups view=chain species=s030 clade=c02
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain rBestOtoGar1
-        otherDb rBestOtoGar1
-
-        track chainRBestOtoGar3
-        subTrack primateChainNetViewchain off
-        subGroups view=chain species=s031 clade=c02
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain rBestOtoGar3
-        otherDb rBestOtoGar3
-
         track chainSaiBol1
         subTrack primateChainNetViewchain off
         subGroups view=chain species=s032 clade=c03
@@ -551,22 +535,6 @@ html primateChainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign otoGar3 chainOtoGar3
         otherDb otoGar3
-
-        track netRBestOtoGar1
-        subTrack primateChainNetViewnet off
-        subGroups view=net species=s030 clade=c02
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign rBestOtoGar1 chainRBestOtoGar1
-        otherDb rBestOtoGar1
-
-        track netRBestOtoGar3
-        subTrack primateChainNetViewnet off
-        subGroups view=net species=s031 clade=c02
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign rBestOtoGar3 chainRBestOtoGar3
-        otherDb rBestOtoGar3
 
         track netSaiBol1
         subTrack primateChainNetViewnet off
