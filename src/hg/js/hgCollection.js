@@ -19,9 +19,13 @@ var hgCollection = (function() {
                     var nodeIds = $("#tracks").jstree( "get_selected");
                     isDirty = true;
                     var nodes = [];
-                    for(ii=0; ii < nodeIds.length;ii++)
-                        nodes.push($("#tracks").jstree('get_node', nodeIds[ii]));
-                    var parentId = $(selectedTree).jstree("get_node", "ul > li:first").id;
+                    var node;
+                    for(ii=0; ii < nodeIds.length;ii++) {
+                        node = $("#tracks").jstree('get_node', nodeIds[ii]);
+                        if (node.children.length === 0)
+                            nodes.push(node);
+                    }
+                    var parentId = $(selectedNode).attr('id');
                     $(selectedTree).jstree("copy_node", nodes, parentId,'last');
                 }
             }
@@ -105,12 +109,18 @@ var hgCollection = (function() {
         return true;
     }
 
+    function dialogCalcTrack() {
+        $( "#newCalcTrackDialog" ).dialog("open");
+    } 
+
     function newCalcTrack() {
         // create a new view under a collection
+        $( "#newCalcTrackDialog" ).dialog("close");
         var ourCalcName = getUniqueName("calc");
         var newName = "Calc Track";
         var newDescription = "Description of Calculated Track";
         var parent = $(selectedTree).find("li").first();
+        var children = $(selectedTree).jstree("get_children_dom",$(selectedTree).jstree("get_node", $(parent).attr('id')));
 
         var newId = $(selectedTree).jstree("create_node", parent, newName + " (" + newDescription + ")");
         var newNode = $(selectedTree).jstree("get_node", newId);
@@ -121,9 +131,29 @@ var hgCollection = (function() {
         newNode.li_attr.longlabel = newDescription;
         newNode.li_attr.visibility = "full";
         newNode.li_attr.color = "#0";
+        newNode.li_attr.missing = $("input:radio[name ='missingData']:checked").val();
         newNode.li_attr.viewfunc = "add all";
         newNode.li_attr.viewtype = "view";
         $(selectedTree).jstree("set_icon", newNode, '../images/folderC.png');
+
+        var nodes = [];
+        for(ii=0; ii < children.length;ii++) {
+            if (!$(children[ii]).hasClass('folder'))
+                nodes.push(children[ii]);
+        }
+
+        switch($("input:radio[name ='defaultContents']:checked").val()) {
+            case "move":
+                // move_node causes havoc
+                $(selectedTree).jstree('copy_node', nodes, newNode, 'last');
+                $(selectedTree).jstree('delete_node', nodes);
+                break;
+            case "copy":
+                $(selectedTree).jstree('copy_node', nodes, newNode);
+                break;
+            case "empty":
+                break;
+        }
     }
 
     function newCollection() {
@@ -288,7 +318,7 @@ var hgCollection = (function() {
         var id = treeObject.attr('id');
         var node = treeObject.jstree("get_node", id);
         if (node.children.length === 0) {
-            var parentId = $(selectedTree).jstree("get_node", "ul > li:first").id;
+            var parentId = $(selectedNode).attr('id');
             isDirty = true;
             $(selectedTree).jstree("copy_node", node, parentId,'last');
         }
@@ -334,6 +364,11 @@ var hgCollection = (function() {
         $("#discardChanges").click ( function () { window.location.reload(); });
 
         $("#newCollection").click ( newCollection );
+        $( "#newCalcTrackDialog" ).dialog({ modal: true, 
+            width: "50%", 
+            autoOpen: false,
+            });
+        $("#newCalcTrackButton").click ( dialogCalcTrack );
         $("#newCalcTrack").click ( newCalcTrack );
         $('#collectionList').selectable({selected : selectCollection});
         
