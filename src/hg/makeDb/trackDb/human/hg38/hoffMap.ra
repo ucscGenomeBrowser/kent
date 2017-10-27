@@ -5,7 +5,7 @@ type bigBed 6
 group map
 shortLabel Umap
 longLabel Single-read and multi-read mappability by Umap
-html Umap
+html umap
 
 
 	track umap_24
@@ -17,7 +17,7 @@ html Umap
 	longLabel Single-read mappability with 24-mers
 	visibility dense
 	priority 1
-	html Umap
+	html umap
 	color 80,20,240
 	
 
@@ -31,7 +31,7 @@ html Umap
 	longLabel Single-read mappability with 50-mers
 	visibility hide
 	priority 3
-	html Umap
+	html umap
 	color 80,120,240
 	
 
@@ -45,7 +45,7 @@ html Umap
 	longLabel Single-read mappability with 36-mers
 	visibility hide
 	priority 2
-	html Umap
+	html umap
 	color 80,70,240
 	
 
@@ -59,7 +59,7 @@ html Umap
 	longLabel Single-read mappability with 100-mers
 	visibility hide
 	priority 4
-	html Umap
+	html umap
 	color 80,170,240
 	
 
@@ -75,7 +75,7 @@ html Umap
 	visibility hide
 	priority 6
 	color 80,70,240
-	html Umap
+	html umap
 	
 
 	track umap_24_quantitative
@@ -89,7 +89,7 @@ html Umap
 	visibility full
 	priority 5
 	color 80,20,240
-	html Umap
+	html umap
 	
 
 	track umap_50_quantitative
@@ -103,7 +103,7 @@ html Umap
 	visibility hide
 	priority 7
 	color 80,120,240
-	html Umap
+	html umap
 	
 
 	track umap_100_quantitative
@@ -117,7 +117,7 @@ html Umap
 	visibility hide
 	priority 8
 	color 80,170,240
-	html Umap
+	html umap
 	
 
 track bismap
@@ -127,7 +127,7 @@ type bigBed 6
 group map
 shortLabel Bismap
 longLabel Single-read and multi-read mappability after bisulfite conversion
-html Bismap
+html bismap
 
 
 	track bismap_50_Neg
@@ -140,7 +140,7 @@ html Bismap
 	visibility hide
 	priority 6
 	color 240,120,80
-	html Bismap
+	html bismap
 	
 
 
@@ -154,7 +154,7 @@ html Bismap
 	visibility hide
 	priority 5
 	color 240,120,80
-	html Bismap
+	html bismap
 	
 
 
@@ -168,7 +168,7 @@ html Bismap
 	visibility hide
 	priority 7
 	color 240,170,80
-	html Bismap
+	html bismap
 	
 
 
@@ -182,7 +182,7 @@ html Bismap
 	visibility dense
 	priority 1
 	color 240,20,80
-	html Bismap
+	html bismap
 	
 
 
@@ -196,7 +196,7 @@ html Bismap
 	visibility hide
 	priority 3
 	color 240,70,80
-	html Bismap
+	html bismap
 	
 
 
@@ -210,7 +210,7 @@ html Bismap
 	visibility hide
 	priority 4
 	color 240,70,80
-	html Bismap
+	html bismap
 	
 
 
@@ -224,7 +224,7 @@ html Bismap
 	visibility hide
 	priority 7
 	color 240,170,80
-	html Bismap
+	html bismap
 	
 
 
@@ -238,7 +238,7 @@ html Bismap
 	visibility dense
 	priority 2
 	color 240,20,80
-	html Bismap
+	html bismap
 	
 
 
@@ -253,7 +253,7 @@ html Bismap
 	visibility hide
 	priority 11
 	color 240,120,80
-	html Bismap
+	html bismap
 	
 
 	track bismap_36_quantitative
@@ -267,7 +267,7 @@ html Bismap
 	visibility hide
 	priority 10
 	color 240,70,80
-	html Bismap
+	html bismap
 	
 
 	track bismap_100_quantitative
@@ -281,7 +281,7 @@ html Bismap
 	visibility hide
 	priority 12
 	color 240,170,80
-	html Bismap
+	html bismap
 	
 
 	track bismap_24_quantitative
@@ -295,4 +295,4 @@ html Bismap
 	visibility full
 	priority 9
 	color 240,20,80
-	html Bismap
+	html bismap

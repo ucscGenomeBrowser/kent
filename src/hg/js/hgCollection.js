@@ -9,6 +9,8 @@ var hgCollection = (function() {
     var $tracks;  // the #tracks object
     var trees = [];
     var isDirty = false;
+    var goTracks = false;
+    var doAjaxAsync = true;
 
     function currentTrackItems(node) {
         // populate the menu for the currentCollection tree
@@ -232,7 +234,7 @@ var hgCollection = (function() {
         var requestData = 'jsonp=' + json;
         $.ajax({
             data:  requestData ,
-            async: true,
+            async: doAjaxAsync,
             dataType: "JSON",
             type: "PUT",
             url: "hgCollection?cmd=saveCollection",
@@ -338,20 +340,21 @@ var hgCollection = (function() {
     function init() {
         $body = $("body");
 
+        // block user input when ajax is running
         $(document).on({
             ajaxStart: function() { $body.addClass("loading");    },
             ajaxStop: function() { $body.removeClass("loading"); }    
         });
+
         $('.gbButtonGoContainer').click(submitForm);
        
         window.addEventListener("beforeunload", function (e) {
-            if (!isDirty)
-                return undefined;
+            if (isDirty) {
+                doAjaxAsync = false;
+                saveCollections(trees);
+            }
 
-            var confirmationMessage = 'Do you want to leave this page without saving?';
-
-            (e || window.event).returnValue = confirmationMessage; //Gecko + IE
-            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+            return undefined;
         });
 
         // called at initialization time
@@ -361,7 +364,7 @@ var hgCollection = (function() {
         $("#customVis").change(visChange);
         //$("#customColorInput").change(colorChange);
         $("#saveCollections").click ( function() {saveCollections(trees);} );
-        $("#discardChanges").click ( function () { window.location.reload(); });
+        $("#discardChanges").click ( function () { isDirty = false; window.location.reload(); });
 
         $("#newCollection").click ( newCollection );
         $( "#newCalcTrackDialog" ).dialog({ modal: true, 
@@ -457,6 +460,7 @@ var hgCollection = (function() {
     // Submit the form (from GO button -- as in hgGateway.js)
     // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
         $('.gbIconGo').removeClass('fa-play').addClass('fa-spinner fa-spin');
+        goTracks = true;
         saveCollections(trees);
     }
 
@@ -467,9 +471,11 @@ var hgCollection = (function() {
             return;
         }
 
-        // we go straight to hgTracks after save
-        $form = $('form');
-        $form.submit();
+        if (goTracks) {
+            // we go straight to hgTracks after save
+            $form = $('form');
+            $form.submit();
+        }
     }
 
     function getUniqueName(root) {
