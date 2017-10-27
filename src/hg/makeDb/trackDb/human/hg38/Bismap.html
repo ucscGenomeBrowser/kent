@@ -1,52 +1,52 @@
-    <h1>Bismap: Unique mappability of the bisulfite converted genomes</h1>
-    <h2>Description</h2>
-    <p>These tracks indicate regions with uniquely mappable reads of particular lengths after bisulfite conversion.</p>
-    <h3>Bismap single-read mappability</h3>
-    <ul>
-        <li><i>Bismap S24 +</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 24 nucleotides on the forward strand</li>
-        <li><i>Bismap S24 -</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 24 nucleotides on the reverse strand</li>
-        <li><i>Bismap S36 +</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 36 nucleotides on the forward strand</li>
-        <li><i>Bismap S36 -</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 36 nucleotides on the reverse strand</li>
-        <li><i>Bismap S50 +</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 50 nucleotides on the forward strand</li>
-        <li><i>Bismap S50 -</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 50 nucleotides on the reverse strand</li>
-        <li><i>Bismap S100 +</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 100 nucleotides on the forward strand</li>
-        <li><i>Bismap S100 -</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 100 nucleotides on the reverse strand</li>
-    </ul>
-    <h3>Bismap multi-read mappability</h3>
-    <ul>
-        <li><i>Bismap M24</i>: Multi-read mappability of the bisulfite converted genome with a read length of 24 nucleotides</li>
-        <li><i>Bismap M36</i>: Multi-read mappability of the bisulfite converted genome with a read length of 36 nucleotides</li>
-        <li><i>Bismap M50</i>: Multi-read mappability of the bisulfite converted genome with a read length of 50 nucleotides</li>
-        <li><i>Bismap M100</i>: Multi-read mappability of the bisulfite converted genome with a read length of 100 nucleotides</li>
-    </ul>
-    <p>You can use these tracks for many purposes, including filtering unreliable signal from
-    sequencing assays involving bisulfite conversion,
-    such as whole-genome bisulfite sequencing or reduced representation bisulfite sequencing.</p>
-    <p><b>Bismap single-read mappability</b> tracks mark any region of the bisulfite-converted genome that is
-    uniquely mappable by at least one <i>k</i>-mer on the specified strand.
-    We generated the mappability of the forward strand by converting all instances of cytosine to Thymine.
-    Similarly, we generated the mappability of the reverse strand by by converting all instances of guanine to adenine.
-    To calculate the single-read mappability, you must find the overlap of a given region with the region that is uniquely mappable on both strands.
-    Regions not uniquely mappable on both strands or have a low multi-read mappability might bias the downstream analysis.
+<h1>Bismap: Unique mappability of the bisulfite converted genomes</h1>
+<h2>Description</h2>
+<p>These tracks indicate regions with uniquely mappable reads of particular lengths after bisulfite conversion.</p>
+<h3>Bismap single-read mappability</h3>
+<ul>
+    <li><i>Bismap S24 +</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 24 nucleotides on the forward strand</li>
+    <li><i>Bismap S24 -</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 24 nucleotides on the reverse strand</li>
+    <li><i>Bismap S36 +</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 36 nucleotides on the forward strand</li>
+    <li><i>Bismap S36 -</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 36 nucleotides on the reverse strand</li>
+    <li><i>Bismap S50 +</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 50 nucleotides on the forward strand</li>
+    <li><i>Bismap S50 -</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 50 nucleotides on the reverse strand</li>
+    <li><i>Bismap S100 +</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 100 nucleotides on the forward strand</li>
+    <li><i>Bismap S100 -</i>: Uniquely mappable regions of the bisulfite converted genome with a read length of 100 nucleotides on the reverse strand</li>
+</ul>
+<h3>Bismap multi-read mappability</h3>
+<ul>
+    <li><i>Bismap M24</i>: Multi-read mappability of the bisulfite converted genome with a read length of 24 nucleotides</li>
+    <li><i>Bismap M36</i>: Multi-read mappability of the bisulfite converted genome with a read length of 36 nucleotides</li>
+    <li><i>Bismap M50</i>: Multi-read mappability of the bisulfite converted genome with a read length of 50 nucleotides</li>
+    <li><i>Bismap M100</i>: Multi-read mappability of the bisulfite converted genome with a read length of 100 nucleotides</li>
+</ul>
+<p>You can use these tracks for many purposes, including filtering unreliable signal from
+sequencing assays involving bisulfite conversion,
+such as whole-genome bisulfite sequencing or reduced representation bisulfite sequencing.</p>
+<p><b>Bismap single-read mappability</b> tracks mark any region of the bisulfite-converted genome that is
+uniquely mappable by at least one <i>k</i>-mer on the specified strand.
+We generated the mappability of the forward strand by converting all instances of cytosine to Thymine.
+Similarly, we generated the mappability of the reverse strand by by converting all instances of guanine to adenine.
+To calculate the single-read mappability, you must find the overlap of a given region with the region that is uniquely mappable on both strands.
+Regions not uniquely mappable on both strands or have a low multi-read mappability might bias the downstream analysis.
 
-    <b>Bismap multi-read mappability</b> tracks represent the probability that
-    a randomly selected <i>k</i>-mer which overlaps with a given position is uniquely mappable.
-    Multi-read mappability track is calculated for <i>k</i>-mers that are uniquely mappable on both strands, and thus there is no strand specification.</p>
+<b>Bismap multi-read mappability</b> tracks represent the probability that
+a randomly selected <i>k</i>-mer which overlaps with a given position is uniquely mappable.
+Multi-read mappability track is calculated for <i>k</i>-mers that are uniquely mappable on both strands, and thus there is no strand specification.</p>
 
 
-    <p>For greater detail and explanatory diagrams, see the 
-    <a href="http://biorxiv.org/content/early/2016/12/20/095463">preprint</a>,
-    the <a href="http://bismap.hoffmanlab.org">Umap and Bismap project website</a>
-    , or the <a href="https://bitbucket.org/hoffmanlab/umap">Umap and Bismap software documentation</a>.</p>
-    <h2>Track format</h2>
-    <p>Single-read mappability tracks: bigBed 6-column format</p>
-    <p>Multi-read mappability tracks: bigWig</p>
-    <h2>Credits</h2>
-    <p><a href="https://sites.google.com/site/anshulkundaje/">Anshul Kundaje</a> (Stanford university)
-    created the original Umap software in MATLAB.
-    Mehran Karimzadeh (<a href="https://www.pmgenomics.ca/hoffmanlab/">Michael Hoffman lab</a>,
-    Princess Margaret Cancer Centre) implemented the Python version of Umap and added features, including Bismap.</p>
-    <h2>Contact, support and questions</h2>
-    <p>Please ask your questions about the Umap software and this track hub using the <a href="https://groups.google.com/forum/#!forum/ubismap">Umap and Bismap mailing list</a>.
-    To report a bug or request,
-    please use the <a href="https://bitbucket.org/hoffmanlab/umap/issues">Umap and Bismap issue tracker</a>.</p>
+<p>For greater detail and explanatory diagrams, see the 
+<a href="http://biorxiv.org/content/early/2016/12/20/095463">preprint</a>,
+the <a href="http://bismap.hoffmanlab.org">Umap and Bismap project website</a>
+, or the <a href="https://bitbucket.org/hoffmanlab/umap">Umap and Bismap software documentation</a>.</p>
+<h2>Track format</h2>
+<p>Single-read mappability tracks: bigBed 6-column format</p>
+<p>Multi-read mappability tracks: bigWig</p>
+<h2>Credits</h2>
+<p><a href="https://sites.google.com/site/anshulkundaje/">Anshul Kundaje</a> (Stanford university)
+created the original Umap software in MATLAB.
+Mehran Karimzadeh (<a href="https://www.pmgenomics.ca/hoffmanlab/">Michael Hoffman lab</a>,
+Princess Margaret Cancer Centre) implemented the Python version of Umap and added features, including Bismap.</p>
+<h2>Contact, support and questions</h2>
+<p>Please ask your questions about the Umap software and this track hub using the <a href="https://groups.google.com/forum/#!forum/ubismap">Umap and Bismap mailing list</a>.
+To report a bug or request,
+please use the <a href="https://bitbucket.org/hoffmanlab/umap/issues">Umap and Bismap issue tracker</a>.</p>
