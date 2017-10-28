@@ -3189,30 +3189,6 @@ type netAlign
     type netAlign tarSyr1 chainTarSyr1
     otherDb tarSyr1
 
-    track netRBestOtoGar1
-    release alpha
-    parent rBestNet
-    shortLabel $o_Organism RBest Net
-    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
-    group compGeno
-    priority 4
-    visibility hide
-    spectrum on
-    type netAlign otoGar1 chainOtoGar1
-    otherDb otoGar1
-
-    track netRBestMicMur1
-    release alpha
-    parent rBestNet
-    shortLabel $o_Organism RBest Net
-    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
-    group compGeno
-    priority 5
-    visibility hide
-    spectrum on
-    type netAlign micMur1 chainMicMur1
-    otherDb micMur1
-
     track netRBestTupBel1
     release alpha
     parent rBestNet
