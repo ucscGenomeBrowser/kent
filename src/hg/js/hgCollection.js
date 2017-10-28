@@ -189,7 +189,7 @@ var hgCollection = (function() {
         newTree.on("select_node.jstree", selectTreeNode);
         newTree.on("copy_node.jstree", function (evt, data)  {
             $(evt.target).jstree("open_node", data.parent);
-            $(evt.target).jstree("set_icon", data.node, 'fa fa-minus');
+            $(evt.target).jstree("set_icon", data.node, 'fa fa-minus-square');
         });
         newTree.on('click', '.jstree-themeicon ', minusHit);
         var lastElement = $("#collectionList li").last();
@@ -429,7 +429,7 @@ var hgCollection = (function() {
             $(newTree).on("select_node.jstree", selectTreeNode);
             $(newTree).on("copy_node.jstree", function (evt, data)  {
                 $(evt.target).jstree("open_node", data.parent);
-                $(evt.target).jstree("set_icon", data.node, 'fa fa-minus');
+                $(evt.target).jstree("set_icon", data.node, 'fa fa-minus-square');
             });
             $(newTree).on('click', '.jstree-themeicon ', minusHit);
         });

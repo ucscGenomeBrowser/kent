@@ -97,7 +97,7 @@ if (user)
     else if (tdb->subtracks)
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='track' class='folder'";
     else
-        userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-minus\\\"}' viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-minus-square\\\"}' viewType='track'";
     }
 else
     {
