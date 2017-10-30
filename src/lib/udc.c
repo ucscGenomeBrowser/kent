@@ -843,9 +843,10 @@ if (bits != NULL)
 	}
     version = bits->version;
     if (bits->remoteUpdate != file->updateTime || bits->fileSize != file->size ||
-	!fileExists(file->sparseFileName))
+	!fileExists(file->sparseFileName) ||
+	(fileSize(file->sparseFileName) == 0 && file->size > 0 && fileSize(file->bitmapFileName) > udcBitmapHeaderSize))
 	{
-	verbose(4, "removing stale version (%lld! = %lld or %lld! = %lld or %s doesn't exist), "
+	verbose(4, "removing stale version (%lld! = %lld or %lld! = %lld or %s doesn't exist or should not be size 0), "
 		"new version %d\n",
 		bits->remoteUpdate, (long long)file->updateTime, bits->fileSize, file->size,
 		file->sparseFileName, version);

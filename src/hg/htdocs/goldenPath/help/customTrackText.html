@@ -151,7 +151,10 @@ This example shows a simple annotation file containing one data set in the bigBe
 displays random sized blocks across chr21 in the human genome. The big data formats, such as the 
 bigBed format, can be uploaded using a bigDataUrl that is specified in the track line. For more 
 information on these track line parameters, refer to the <a href="#TRACK">Track Lines</a>
-section.</p> 
+section. When using bigDataUrls, data is cached and updated every 300 seconds. If you are updating
+your big data tracks with different displays and are not seeing your track changes in the browser,
+you may want to add the <a href="hgTrackHubHelp.html#Debug">udcTimeout</a>= parameter to prevent caching of your track data
+and force a reload.</p> 
 <p> 
 You may paste these two lines directly into the "Add Custom Tracks" page to view this example in the
 browser:</p> 
@@ -539,9 +542,15 @@ The following track line attribute=value pairs are defined in the Genome Browser
   required for <a href="/FAQ/FAQformat.html#format5.1" target="_blank">BAM</a>,
   <a href="/FAQ/FAQformat.html#format1.7" target="_blank">BED detail</a>,
   <a href="/FAQ/FAQformat.html#format1.8" target="_blank">bedGraph</a>,
+  <a href="/FAQ/FAQformat.html#format21" target="_blank">bigBarChart</a>,
   <a href="/FAQ/FAQformat.html#format1.5" target="_blank">bigBed</a>,
+  <a href="/FAQ/FAQformat.html#format9.4" target="_blank">bigChain</a>,
+  <a href="/FAQ/FAQformat.html#format9.1" target="_blank">bigGenePred</a>,
+  <a href="/FAQ/FAQformat.html#format9.3" target="_blank">bigMaf</a>,
+  <a href="/FAQ/FAQformat.html#format9.2" target="_blank">bigPsl</a>,
   <a href="/FAQ/FAQformat.html#format6.1" target="_blank">bigWig</a>,
   <a href="/FAQ/FAQformat.html#format13" target="_blank">broadPeak</a>,
+  <a href="/FAQ/FAQformat.html#format5.2" target="_blank">CRAM</a>,
   <a href="/FAQ/FAQformat.html#format12" target="_blank">narrowPeak</a>,
   <a href="/FAQ/FAQformat.html#format6.5" target="_blank">Microarray</a>,
   <a href="/FAQ/FAQformat.html#format10.1" target="_blank">VCF</a> and
@@ -607,8 +616,10 @@ The following track line attribute=value pairs are defined in the Genome Browser
   group &quot;Custom Tracks".  The value for &quot;group&quot; <strong>must</strong> be the 
   &quot;name&quot; of one of the predefined track groups. To get a list of allowable group names for
   an assembly, go to the table browser and select &quot;group: All Tables&quot; &quot;table: 
-  grp&quot; and &quot;get output&quot; Entries in the &quot;name&quot; column may be used.<br> 
-  (Note that mirrors may define other group names in the grp table.)</li>
+  grp&quot; and &quot;get output&quot; where entries in the &quot;name&quot; column may be used
+  and some examples include &quot;genes&quot;,&quot;regulation&quot; and &quot;rna&quot;.<br> 
+  (Note that mirrors may define other group names in the grp table and that the group setting does
+  not work in track hubs, but does apply for assembly hubs.)</li>
   <li>
   <strong>priority=<<em>priority</em>></strong> - When the <em>group</em> attribute is set, defines 
   the display position of the track relative to other tracks within the same group in the Genome 
@@ -892,7 +903,7 @@ that are of the type <a href="../../FAQ/FAQformat.html#format13">broadPeak</a> o
 special columns at the end of each line. Your track type entry should consist of two lines: the 
 first to define the track type and the second to specify the URL. For example:</p>
 <pre><code>track type=<font color="000099">broadPeak</font>
-http://www.ncbi.nlm.nih.gov/geosuppl/...</code></pre>
+https://www.ncbi.nlm.nih.gov/geosuppl/...</code></pre>
 <p>
 <strong><em>Problem:</em></strong> I've gotten my annotation track to display, but now I can't make 
 it go away! How do I remove an annotation track from my Genome Browser display?<br>

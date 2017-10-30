@@ -1,0 +1,46 @@
+# Wed Sep  6 16:09:32 PDT 2017 - Max
+
+# This is a hacky pipeline for a very small database. Snpedia has tens of thousands of pages, but most have been
+# auto-generated. These scripts try their best to only show SNPs where something has been manually typed into the
+# SNPedia page. They start from the Snpedia GFF file, use the SNPedia API (which we can hammer a bit, they're not picky 
+# about that) get wikimedia markup, use that to reduce the number of pages, then download their html (because wikimedia 
+# is very hard to translate to html), fix the positions for hg19 and hg38 and load up everything.
+
+cd /hive/data/genomes/hg19/bed/snpedia
+SRC=~/kent/src/hg/makeDb/scripts/snpedia
+wget http://www.snpedia.com/files/gbrowse/SNPedia.gff
+
+mkdir -p build/hg38 buid/hg19 build/pages
+
+# download all pages from the GFF file in wikimedia format
+python $SRC/download.py > build/download.log
+
+# remove all pages without any visible typed text
+python $SRC/filterPages.py > build/goodPages.txt
+
+# fix the positions using our own snp150 tracks
+python $SRC/getPos.py > build/getPos.log
+
+# get the html of the final list
+python $SRC/downloadHtml.py
+
+# strip down the html and create a bed and the htmlTab files
+python $SRC/makeBed.py hg19 && python makeBed.py hg38
+
+# also make bigBed file with the GFF contents, but fix the positions
+python $SRC/makeAll.py # takes 5 hours, stupid fgrep
+
+# load up everything
+hgLoadBed hg19 snpedia build/hg19/snpedia.bed -allowStartEqualEnd 
+hgLoadBed hg38 snpedia build/hg38/snpedia.bed -allowStartEqualEnd
+hgLoadSqlTab hg19 snpediaHtml $SRC/snpediaHtml.sql build/hg19/snpedia.htmlTab
+hgLoadSqlTab hg38 snpediaHtml $SRC/snpediaHtml.sql build/hg38/snpedia.htmlTab 
+
+bedSort build/hg19/snpAll.bed build/hg19/snpAll.bed 
+bedToBigBed build/hg19/snpAll.bed /scratch/data/hg19/chrom.sizes -type=bed4+ -tab -as=$SRC/bed4Note.as snpediaAll.hg19.bb -extraIndex=name
+
+bedSort build/hg38/snpAll.bed build/hg38/snpAll.bed 
+bedToBigBed build/hg38/snpAll.bed /scratch/data/hg38/chrom.sizes -type=bed4+ -tab -as=$SRC/bed4Note.as snpediaAll.hg38.bb -extraIndex=name
+
+ln -s `pwd`/snpediaAll.hg19.bb /gbdb/hg19/bbi/snpediaAll.bb
+ln -s `pwd`/snpediaAll.hg38.bb /gbdb/hg38/bbi/snpediaAll.bb

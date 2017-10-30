@@ -154,7 +154,7 @@ def createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series, 
         if audit:
             print seriesStanza.name + ': no overall design'
             
-    seriesStanza['!Series_web_link'] = [ compositeTrack.url, 'http://www.ncbi.nlm.nih.gov/geo/info/ENCODE.html' ]
+    seriesStanza['!Series_web_link'] = [ compositeTrack.url, 'https://www.ncbi.nlm.nih.gov/geo/info/ENCODE.html' ]
     
     if '!Series_contributor' in replace:
         seriesStanza['!Series_contributor'] = replace['!Series_contributor']

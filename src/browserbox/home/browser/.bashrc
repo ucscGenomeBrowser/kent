@@ -115,7 +115,7 @@ fi
 
 # CHANGES IN BROWSERBOX
 
-export PATH=~/bin:$PATH:.
+export PATH=~/bin:~/bin/blat:$PATH:.
 
 # for a VM this is very useful
 if [ `tty` = '/dev/tty1' ]; then
@@ -136,8 +136,8 @@ alias autoUpdateOn=gbibAutoUpdateOn
 # rm and zero the disk
 alias rmIt='sudo shred -n 1 -zu'
 # update the update script
-alias gbibUpdateUpdate='sudo wget http://genome-test.cse.ucsc.edu:/browserbox/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
-alias gbibUpdateUpdateBeta='sudo wget http://hgwdev.cse.ucsc.edu:/gbib/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
+alias gbibCoreUpdate='sudo wget http://genome-test.cse.ucsc.edu:/browserbox/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
+alias gbibCoreUpdateBeta='sudo wget http://hgwdev.cse.ucsc.edu:/gbib/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
 
 # repair all tables, first while mysql is running, then with a full server stop
 alias gbibFixMysql1='sudo mysqlcheck --all-databases --auto-repair --fast'
@@ -153,17 +153,23 @@ alias gbibUcscGbdbLog='sudo find /data/trash/udcCache/http/hgdownload.cse.ucsc.e
 alias gbibUcscGbdbReset='rm -rf /data/trash/udcCache/http/hgdownload.cse.ucsc.edu/*'
 
 # remove or add the ucsc mysql server for testing
-alias gbibOffline='sudo cp /usr/local/apache/cgi-bin/hg.conf /root/hg.conf.online; sudo cp /root/hg.conf.offline /usr/local/apache/cgi-bin/hg.conf; gbibAutoUpdateOff; echo remote access to UCSC and auto updates switched off.'
-alias gbibOnline='sudo cp /root/hg.conf.online /usr/local/apache/cgi-bin/hg.conf; gbibAutoUpdateOn; remote access to UCSC and auto updates switched on'
+alias gbibOffline='sudo sed -i "s/^slow-db/#slow-db/" /usr/local/apache/cgi-bin/hg.conf; sudo sed -i "s/^showTableCache/#showTableCache/" /usr/local/apache/cgi-bin/hg.conf; gbibAutoUpdateOff; echo remote access to UCSC off.'
+alias gbibOnline='sudo sed -i "s/^#slow-db/slow-db/" /usr/local/apache/cgi-bin/hg.conf; sudo sed -i "s/^#showTableCache/showTableCache/" /usr/local/apache/cgi-bin/hg.conf; gbibAutoUpdateOn; echo remote access to UCSC on.'
 alias boxOffline=gbibOffline
 alias boxOnline=gbibOnline
 
 # enable or disable hgMirror support on this VM
-alias gbibMirrorOff='sudo sed -i /allowHgMirror/d /usr/local/apache/cgi-bin/hg.conf.local; sudo bash -c "echo allowHgMirror=false >> /usr/local/apache/cgi-bin/hg.conf.local"'
-alias gbibMirrorOn='sudo sed -i /allowHgMirror/d /usr/local/apache/cgi-bin/hg.conf.local; sudo bash -c "echo allowHgMirror=true >> /usr/local/apache/cgi-bin/hg.conf.local"'
+alias gbibMirrorTracksOff='sudo sed -i /allowHgMirror/d /usr/local/apache/cgi-bin/hg.conf.local; sudo bash -c "echo allowHgMirror=false >> /usr/local/apache/cgi-bin/hg.conf.local"'
+alias gbibMirrorTracksOn='sudo sed -i /allowHgMirror/d /usr/local/apache/cgi-bin/hg.conf.local; sudo bash -c "echo allowHgMirror=true >> /usr/local/apache/cgi-bin/hg.conf.local"'
 
 # for consistency
 alias gbibUpdate='/home/browser/updateBrowser'
+alias sshNewKey='shred -n 1 -zu /home/browser/.ssh/dsa*; cat /dev/zero | ssh-keygen -t dsa -N ""'
+alias gbibUcscLog='sudo tail -f /var/log/apache2/error.log'
+alias og='ls -ogrt'
+
+# get the kent tools
+alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'
 
 function trackSize() { rsync -hvn  hgdownload.cse.ucsc.edu::mysql/hg19/$1.* ./ ; }
 
@@ -171,3 +177,4 @@ if [ `tty` == "/dev/tty1" -a ! -e /root/noAutoUpdate ]; then
     sudo /root/updateBrowser.sh
 fi
 
+alias og='ls -ogrt'

@@ -45,11 +45,15 @@ return sqlQuickString(conn, query);
 static void printMinorAlleleFreq(char *rsId, struct sqlConnection *conn)
 /* Print minor allele frequency for a SNP (from UCSC dbSNP table) */
 {
-#define ALLELE_COUNT 10
+#define SNP_COMMON_SUFFIX       "Common"
+#define MAX_ALLELE_COUNT 10
+char *snpTable = hFindLatestSnpTableConn(conn, SNP_COMMON_SUFFIX);
+if (!snpTable)
+    return;
 char query[256];
-sqlSafef(query, sizeof query, "SELECT alleleFreqs FROM snp147 WHERE name='%s'", rsId);
-double freqs[ALLELE_COUNT];
-int count = sqlDoubleArray(sqlQuickString(conn, query), freqs, ALLELE_COUNT);
+sqlSafef(query, sizeof query, "SELECT alleleFreqs FROM %s WHERE name='%s'", snpTable, rsId);
+double freqs[MAX_ALLELE_COUNT];
+int count = sqlDoubleArray(sqlQuickString(conn, query), freqs, MAX_ALLELE_COUNT);
 doubleSort(count, freqs);
 printf("<br><b>Minor allele frequency (1000 Genomes):</b> %.0f%%\n", 100.0 * freqs[count-2]);
 }
@@ -104,17 +108,18 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     hashAdd(tissueHash, tis->name, tis);
 printf("<table id='eqtls' cellspacing=1 cellpadding=3>\n");
 printf("<style>#eqtls th {text-align: left; background-color: #F3E0BE;}</style>");
-printf("<tr><th>&nbsp;&nbsp;&nbsp;</th><th>Tissue</th><th>Effect &nbsp;&nbsp;</th><th>Probability </th></tr>\n");
+printf("<tr><th>&nbsp;&nbsp;&nbsp;</th><th>Tissue</th><th>Effect (FPKM)&nbsp;&nbsp;</th><th>P-Value (-log10)</th><th>Probability </th></tr>\n");
 int i;
 for (i=0; i<eqtl->expCount; i++)
     {
-    double effect= eqtl->expScores[i];
+    double effect = eqtl->expScores[i];
+    double pval = eqtl->expPvals[i];
     double prob = eqtl->expProbs[i];
     struct gtexTissue *tis = (struct gtexTissue *)hashFindVal(tissueHash, eqtl->expNames[i]);
     unsigned color = tis ? tis->color : 0;       // BLACK
     char *name = tis ? tis->description : "Unknown";
-    printf("<tr><td bgcolor=#%06X></td><td>%s</td><td>%s%0.2f</td><td>%0.2f</td></tr>\n", 
-                                color, name, effect < 0 ? "" : "+", effect, prob); 
+    printf("<tr><td bgcolor=#%06X></td><td>%s</td><td>%s%0.2f</td><td>%0.2f</td><td>%0.2f</td></tr>\n", 
+                                color, name, effect < 0 ? "" : "+", effect, pval, prob); 
     }
 printf("</table>");
 webEndSection();
@@ -127,8 +132,9 @@ char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 struct gtexEqtlCluster *eqtl = getGtexEqtl(item, chrom, start, end, tdb->table);
+if (eqtl == NULL)
+    errAbort("Can't find eQTL cluster '%s'", item);
 char *geneName = eqtl->target;
-
 
 genericHeader(tdb, item);
 printf("<b>Gene: </b>");
@@ -142,8 +148,7 @@ else
                         hgGeneName(), database, geneName, geneName);
     printf("<b>Description:</b> %s\n", desc);
     }
-
-// TODO: Consider adding Ensembl gene ID, GENCODE biotype and class (as in gtexGene track)
+printf("<br><b>Ensembl gene ID:</b> %s\n", eqtl->targetId);
 printf("<br><b>Variant: </b>%s ", eqtl->name);
 if (startsWith("rs", eqtl->name))
     {
@@ -153,6 +158,7 @@ if (startsWith("rs", eqtl->name))
     }
 else
     printf("%s\n", eqtl->name);
+printf("<br><b>Distance from TSS:</b> %d\n", eqtl->distance);
 
 char posLink[1024];
 safef(posLink, sizeof posLink,"<a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a>",
@@ -160,16 +166,15 @@ safef(posLink, sizeof posLink,"<a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d<
             eqtl->chrom, eqtl->chromStart+1, eqtl->chromEnd,
             eqtl->chrom, eqtl->chromStart+1, eqtl->chromEnd);
 printf("<br><b>Position:</b> %s\n", posLink);
-
 printf("<br><b>Score:</b> %d\n", eqtl->score);
 
 printEqtlRegion(eqtl, tdb->table, conn);
+printf("<br><b>Number of tissues with this eQTL:</b> %d\n", eqtl->expCount);
 
 // print link to GTEx portal
 printf("<br><a target='_blank' href='https://www.gtexportal.org/home/bubbleHeatmapPage/%s'>"
-        "View eQTLs for this gene at the GTEx portal<a>\n", 
+        "View eQTL Visualizer for this gene at the GTEx Portal<a>\n", 
                 geneName);
-printf("<br><b>Number of tissues with this eQTL:</b> %d\n", eqtl->expCount);
 hFreeConn(&conn);
 
 printClusterDetails(eqtl, tdb->table);

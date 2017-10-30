@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<!-- Page header -->
+<!--#set var="TITLE" value="UCSC Genome Browser: Document Styles" -->
+<!--#set var="ROOT" value="../" -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<!-- Page content -->
+<h1>This page is no longer maintained.</h1>
+<p>
+<span class="gbsWarnText">This page was retired long ago when the table descriptions
+for the annotation database stopped being updated.</span> To retrieve the schemas
+for tables underlying the Genome Browser annotation tracks one can use the Table Browser
+using the &quot;describe table schema&quot; button.</p>
+
+<h2>refFlat example</h2>
+<p>
+<ol>
+  <p>
+  Gene Predictions and RefSeq Genes with Gene Names</p>
+  <p>
+  A version of genePred that associates the gene name with the gene prediction information.
+  In alternative splicing situations each transcript has a row in this table.</p>
+  <pre>
+  table refFlat
+  "A gene prediction with additional geneName field." 
+      (
+      string  geneName;           "Name of gene as it appears in Genome Browser." 
+      string  name;               "Name of gene" 
+      string  chrom;              "Chromosome name" 
+      char[1] strand;             "+ or - for strand" 
+      uint    txStart;            "Transcription start position" 
+      uint    txEnd;              "Transcription end position" 
+      uint    cdsStart;           "Coding region start" 
+      uint    cdsEnd;             "Coding region end" 
+      uint    exonCount;          "Number of exons" 
+      uint[exonCount] exonStarts; "Exon start positions" 
+      uint[exonCount] exonEnds;   "Exon end positions" 
+      )</pre>
+</ol>
+<p>
+The text for this entry is deprecated. Please use the below
+Table Browser method to access this information.</p>
+
+<h2>Current method to use Table Browser with refFlat example</h2>
+<p>
+<span class="gbsWarnText">Here is the current way to retrieve table descriptions.</span></p>
+
+<ol>
+  <li>
+  Navigate to the Table Browser for the specific assembly you are interested in that has the
+  data you are seeking. For example, if you are working with the hg19 assembly,
+  you would make that selection:
+  <a href="/cgi-bin/hgTables?clade=mammal&org=Human&db=hg19"
+  target="_blank">http://genome.ucsc.edu/cgi-bin/hgTables?clade=mammal&org=Human&db=hg19</a>
+  </li>
+  <li>
+  Select the table from the appropriate group. Or set the group to &quot;All Tables&quot;
+  and find the table you are interested in finding the description of, in this case the
+  refFlat table: 
+  <a href="/cgi-bin/hgTables?clade=mammal&org=Human&db=hg19&hgta_group=allTables&hgta_track=hg19&hgta_table=refFlat"
+  target="_blank">http://genome.ucsc.edu/cgi-bin/hgTables?clade=mammal&org=Human&db=hg19&hgta_group=allTables&hgta_track=hg19&hgta_table=refFlat</a>
+  </li>
+  <li>
+  Click the &quot;describe table schema&quot; button and find the table description along
+  with example data displayed and the related Track Description if available.
+  </li>
+</ol>
+<p>
+For more information on using the Table Browser, see the  <a href="help/hgTablesHelp.html"
+target="_blank">Table Browser User's Guide</a>.</p>
+<p>
+There are also links to our source code in <a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/hg/lib"
+target="_blank">src/hg/lib</a> to discover the autoSql files (.as) that define our tables.
+Here is an example link to the refFlat.as file: <a href=" http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/refFlat.as"
+target="_blank">http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/hg/lib/refFlat.as</a></p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
+

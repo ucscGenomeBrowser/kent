@@ -50,6 +50,8 @@
 #include "fieldedTable.h"
 #include "barChartUi.h"
 #include "customComposite.h"
+#include "trackVersion.h"
+#include "hubConnect.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -5093,7 +5095,6 @@ double minY;        /*  from trackDb or cart    */
 double maxY;        /*  from trackDb or cart    */
 double tDbMinY;     /*  data range limits from trackDb type line */
 double tDbMaxY;     /*  data range limits from trackDb type line */
-int defaultHeight;  /*  pixels per item */
 char *horizontalGrid = NULL;    /*  Grid lines, off by default */
 char *transformFunc = NULL;    /* function to transform data points */
 char *alwaysZero = NULL;    /* Always include 0 in range */
@@ -5105,6 +5106,7 @@ char *yLineMarkOnOff;   /*  user defined Y marker line to draw */
 double yLineMark;       /*  from trackDb or cart    */
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
+int defaultHeight = maxHeightPixels;  /*  pixels per item */
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
@@ -5825,7 +5827,8 @@ if (scoreFilterOk)
         }
     else
         {
-        printf("<b>Show only items with score at or above:</b> ");
+        char* scoreLabel = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_LABEL, "score");
+        printf("<b>Show only items with %s at or above:</b> ", scoreLabel);
         safef(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
         cgiMakeIntVarWithLimits(option, minVal, "Minimum score",0, minLimit,maxLimit);
         printf("&nbsp;&nbsp;(range: %d to %d)\n", minLimit, maxLimit);
@@ -8891,7 +8894,7 @@ if (stringIn(":", idInUrl)) {
 // URL may now contain item boundaries
 ins[9] = "${";
 ins[10] = "$}";
-if (cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
+if (cart!=NULL && cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
     {
     char *itemBeg = cartString(cart, "o"); // unexpected commas?
     char *itemEnd = cartString(cart, "t");
@@ -8917,5 +8920,48 @@ freeDyString(&uUrl);
 freeMem(eItem);
 freeMem(scName);
 return eUrl->string;
+}
+
+void printDataVersion(char *database, struct trackDb *tdb)
+/* If this annotation has a dataVersion setting, print it.
+ * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
+{
+char *version = NULL;
+
+// try the hgFixed.trackVersion table
+struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
+// try trackVersion table with parent, for composites/superTracks
+if(trackVersion == NULL && (tdb->parent!=NULL))
+    trackVersion = getTrackVersion(database, tdb->parent->track);
+
+// try the metadata
+if(trackVersion == NULL) 
+    {
+    metadataForTable(database, tdb,NULL);
+    version = (char *)metadataFindValue(tdb, "dataVersion");
+    }
+else
+    version = trackVersion->version;
+
+// try trackDb itself, this automatically will go up the hierarchy
+if (version == NULL)
+{
+    version = trackDbSetting(tdb, "dataVersion");
+}
+
+if (version == NULL)
+    return;
+
+// On the RR, dataVersion can also be the path to a local file, for otto tracks
+if (!trackHubDatabase(database) && !isHubTrack(tdb->table) && startsWith("/", version))
+    {
+    char *path = replaceInUrl((char *)version, "", NULL, database, "", 0, 0, tdb->track, FALSE);
+    struct lineFile* lf = lineFileOpen(path, TRUE);
+    if (lf)
+        version = lineFileReadAll(lf);
+    }
+
+if (version != NULL)
+    printf("<B>Data version:</B> %s <BR>\n", version);
 }
 

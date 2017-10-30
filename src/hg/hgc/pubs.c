@@ -451,7 +451,7 @@ if (!isEmpty(journal))
     }
 if (!isEmpty(pmid) && strcmp(pmid, "0")!=0 )
     {
-    printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
+    printf(", <A HREF=\"https://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
     didPrint = TRUE;
     }
 printf("</small></span>\n");
@@ -671,7 +671,7 @@ printf("</DIV>\n");
 
 printf("<P style=\"width:1024px; font-size:80%%\">%s", cit);
 if (strlen(pmid)!=0 && strcmp(pmid, "0"))
-    printf(", <A HREF=\"http://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
+    printf(", <A HREF=\"https://www.ncbi.nlm.nih.gov/pubmed/%s\">PMID%s</A>\n", pmid, pmid);
 printf("</P>\n");
 printf("<P style=\"width:1024px; font-size:100%%\">%s</P>\n", abstract);
 

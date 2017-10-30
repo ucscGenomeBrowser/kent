@@ -45,6 +45,7 @@ UTILS_APPLIST = \
 	pslToBigPsl \
 	pslMap \
 	pslMapPostChain \
+	pslRc \
 	tdbQuery \
 	transMapPslToGenePred \
 	twoBitMask
@@ -67,12 +68,14 @@ DIRS = ${buildRefresh} \
 	buildReleaseLog \
 	checkUrlsInTable \
 	geoMirrorNode \
+	hgvsToVcf \
 	makeTrackIndex \
 	mysqlSecurityCheck \
 	pslUniq \
 	refSeqGet \
 	safePush \
 	toDev64 \
+	vcfToHgvs \
 	wigBedToStep
 
 TEST_DIRS = \
@@ -81,12 +84,15 @@ TEST_DIRS = \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
+	hgvsToVcf \
 	hubCheck \
 	overlapSelect \
 	pslMap \
+	pslRc \
 	pslToBigPsl \
 	refSeqGet \
-	transMapPslToGenePred
+	transMapPslToGenePred \
+	vcfToHgvs
 
 APPS = $(DIRS) $(UTILS_APPLIST)
 

@@ -115,13 +115,13 @@ bam_hdr_t *bam_hdr_read(BGZF *fp)
 {
     bam_hdr_t *h;
     char buf[4];
-    int magic_len; // has_EOF;
+    int magic_len;
     int32_t i, name_len, num_names = 0;
     size_t bufsize;
     ssize_t bytes;
 #ifndef UCSC_CRAM
     // check EOF
-    has_EOF = bgzf_check_EOF(fp);
+    int has_EOF = bgzf_check_EOF(fp);
     if (has_EOF < 0) {
         perror("[W::bam_hdr_read] bgzf_check_EOF");
     } else if (has_EOF == 0 && hts_verbose >= 2)

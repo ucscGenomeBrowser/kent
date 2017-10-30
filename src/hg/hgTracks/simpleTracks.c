@@ -13824,6 +13824,8 @@ if (sameWord(type, "bed"))
         pubsBlatMethods(track);
     if (startsWith("gtexEqtlCluster", track->track))
         gtexEqtlClusterMethods(track);
+    if (startsWith("gtexEqtlTissue", track->track))
+        gtexEqtlTissueMethods(track);
     }
 /*
 else if (sameWord(type, "bedLogR"))
@@ -14178,10 +14180,61 @@ const struct track *b = *((struct track **)vb);
 return (a->priority - b->priority);
 }
 
+void buildMathWig(struct trackDb *tdb)
+/* Turn a mathWig view into a mathWig track. */
+{
+char *viewFunc =  trackDbSetting(tdb, "viewFunc");
+
+if ((viewFunc == NULL) || sameString("show all", viewFunc))
+    return;
+
+struct trackDb *subTracks = tdb->subtracks;
+
+tdb->subtracks = NULL;
+tdb->type = "mathWig";
+
+struct dyString *dy = newDyString(1024);
+
+if (sameString("add all", viewFunc))
+    dyStringPrintf(dy, "+ ");
+else
+    dyStringPrintf(dy, "- ");
+struct trackDb *subTdb;
+for (subTdb=subTracks; subTdb; subTdb = subTdb->next)
+    {
+    char *bigDataUrl = trackDbSetting(subTdb, "bigDataUrl");
+    if (bigDataUrl != NULL)
+        dyStringPrintf(dy, "%s ",bigDataUrl);
+    else // native tracks are prepended with '$'
+        dyStringPrintf(dy, "$%s ",subTdb->track);
+    }
+
+hashAdd(tdb->settingsHash, "mathDataUrl", dy->string);
+}
+
+void fixupMathWigs(struct trackDb *tdb)
+/* Look through a container to see if it has a mathWig view and convert it. */
+{
+struct trackDb *subTdb;
+
+for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
+    {
+    char *type;
+    if ((type = trackDbSetting(subTdb, "container")) != NULL)
+        {
+        if (sameString(type, "mathWig"))
+            {
+            buildMathWig(subTdb);
+            }
+        }
+    }
+}
+
 void makeCompositeTrack(struct track *track, struct trackDb *tdb)
 /* Construct track subtrack list from trackDb entry.
  * Sets up color gradient in subtracks if requested */
 {
+fixupMathWigs(tdb);
 unsigned char finalR = track->color.r, finalG = track->color.g,
                             finalB = track->color.b;
 unsigned char altR = track->altColor.r, altG = track->altColor.g,

@@ -52,5 +52,5 @@ priority 132
 visibility pack
 color 75,75,120
 type psl .
-url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$$
+url https://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$$
 

@@ -615,5 +615,12 @@ char *cartGetPosition(struct cart *cart, char *database, struct cart **pLastDbPo
 void cartSetDbPosition(struct cart *cart, char *database, struct cart *lastDbPosCart);
 /* Set the 'position.db' variable in the cart.*/
 
+void cartTdbFetchMinMaxPixels(struct cart *theCart, struct trackDb *tdb,
+                                int defaultMin, int defaultMax, int defaultDefault,
+                                int *retMin, int *retMax, int *retDefault, int *retCurrent);
+/* Configure maximum track height for variable height tracks (e.g. wiggle, barchart)
+ *      Initial height and limits may be defined in trackDb with the maxHeightPixels string,
+ *      Or user requested limits are defined in the cart. */
+
 #endif /* CART_H */
 

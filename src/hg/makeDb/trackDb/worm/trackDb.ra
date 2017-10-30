@@ -1,6 +1,10 @@
 # chainNet tracks
 include trackDb.chainNet.ra
 
+track spMut override
+group varRep
+bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+
 track ctgPos2
 shortLabel Contigs
 longLabel Assembly Contigs
@@ -488,7 +492,7 @@ priority 32
 visibility pack
 color 0,0,200
 type genePred
-url http://www.ncbi.nlm.nih.gov/protein/?term=$$
+url https://www.ncbi.nlm.nih.gov/protein/?term=$$
 urlLabel NCBI:
 
 searchName ncbiGenes

@@ -56,9 +56,9 @@ Rather than installing the entire UCSC genome annotation database (several terab
 instead depends upon remote connections to various UCSC servers for much of its functionality and 
 data. It connects to the UCSC <a href="http://hgdownload.soe.ucsc.edu/downloads.html" 
 target="_blank">download server</a> to obtain genomic sequences, liftOver files, and many of the 
-other large data files, and connects to UCSC's <a href="mysql.html">public MySQL server</a> to 
-download data displayed by the various annotation tracks. A few Genome Browser tracks are 
-unavailable on the UCSC public MySQL server due to agreements with the data distributors (DECIPHER 
+other large data files, and connects to one of UCSC's <a href="mysql.html">public MySQL servers</a>
+to download data displayed by the various annotation tracks. A few Genome Browser tracks are
+unavailable on the UCSC public MySQL servers due to agreements with the data distributors (DECIPHER
 and LOVD Variants), and thus are unavailable for use with GBiB.</p>
 <p>
 The majority of protected data use in the research community currently focuses on the human genomes,
@@ -71,10 +71,18 @@ improve performance in these situations, GBiB includes a simple tool that allows
 information about this tool in the <a href="#GbibMirroring">Improving Speed and Performance</a> 
 section.</p>
 <p>
-For more background on GBiB see: Haeussler M <em>et al.</em>
-<a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/btu712?ijkey=oQ6TgaxqQRIaHXY&keytype=ref"
-target="_blank">Navigating protected genomics data with UCSC Genome Browser in a Box</a>. 
-<em>Bioinformatics</em> 2014; doi: 10.1093/bioinformatics/btu712. </p>
+For more background on GBiB see:
+<p>
+Haeussler M, Raney BJ, Hinrichs AS, Clawson H, Zweig AS, Karolchik D, Casper J, Speir ML, Haussler
+D, Kent WJ.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btu712"
+target="_blank">
+Navigating protected genomics data with UCSC Genome Browser in a Box</a>.
+<em>Bioinformatics</em>. 2015 Mar 1;31(5):764-6.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25348212" target="_blank">25348212</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4341066/" target="_blank">PMC4341066</a>
+</p>
+
 
 <a name="GetStarted"></a>
 <h2>Getting Started: Setting up Genome Browser in a Box</h2>
@@ -97,9 +105,11 @@ GBiB will run on most modern PCs and major operating systems that meet these bas
   <li>
   Your network firewall must allow outgoing connections to the following servers and ports:
   <ul>
-    <li>
-    Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174), used by MySQL to load tracks not 
-    local to your computer</li>
+    <li>MySQL connections, used to load tracks not local to your computer:
+    <ul>
+      <li>US server: Port 3306 on genome-mysql.soe.ucsc.edu (128.114.119.174)</li>
+      <li>European server: Port 3306 on genome-euro-mysql.soe.ucsc.edu (129.70.40.120)</li>
+    </ul>
     <li>
     TCP port 873 on hgdownload.soe.ucsc.edu (128.114.119.163), used by rsync to download track 
     data</li>
@@ -426,6 +436,8 @@ You can use these tools to convert and extract data from your shared files with 
 your GBiB, you will have to ensure that the &quot;Read-only&quot; access for VirtualBox is turned 
 off. To do so, follow the directions in Step 2 of the <a href="#LocalTracks">Loading local big data 
 tracks</a> section, but deselect the checkbox next to &quot;Read-only&quot;.</p>
+<p>
+Please note that the gbibAddTools command requires sudo permissions.</p>
 
 <h3><em>Example: Indexing a local BAM file</em></h3>
 <p>
@@ -452,12 +464,12 @@ files, try the ftp location first. If you find the files of interest are giving 
 errors, then one option is to download the files and locally load them from your own laptop. With 
 GBiB you can download these files to a local shared folder and then browse them. In the following
 example the URL of the bigWig (.bw) file was obtained for the wget by right clicking the http link 
-for this <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1186795">GSM1186795</a> 
+for this <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1186795">GSM1186795</a> 
 example, that only displays data on chrM and chrX.</p> 
 <pre><code>ssh browser@localhost -p 1235  (to enter GBiB from your computer terminal, password: browser)
 cd /folders
 sudo wget
-"http://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM1186795&format=file&file=GSM1186795%5FDZ012%5FTRA1%5FN2L3%5Ftr27%5Fce10%5FBTm1x200n%2Ebw" -O GSM1186795.bw </code></pre>
+"https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM1186795&format=file&file=GSM1186795%5FDZ012%5FTRA1%5FN2L3%5Ftr27%5Fce10%5FBTm1x200n%2Ebw" -O GSM1186795.bw </code></pre>
 <p>
 The file can then be found in the GBiB's 
 <a href="http://127.0.0.1:1234/folders/"><code>http://127.0.0.1:1234/folders/</code></a> location, 
@@ -702,6 +714,20 @@ If there are domains or domain-suffices that should not be proxied, use <code>no
 The file /usr/local/apache/cgi-bin/hg.conf should already include a line like <code>include
 hg.conf.local</code> to incorporate the changes in hg.conf.local.</p>
 
+<p>
+<strong>Problem:</strong> "No space left on device" error when running gbibAddTools.</p>
+<p>
+In older GBiB's, there is an error in the <code>gbibAddTools</code> command. To fix this command, 
+edit the <code>/home/browser/.bashrc</code> file and change the following line:
+<pre><code>alias gbibAddTools='mkdir ~/bin -p; rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/ ~/bin/'</code></pre>
+</p>
+<p>to:
+<pre><code>alias gbibAddTools='sudo mkdir -p /data/tools; sudo rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /data/tools/ && ln -s /data/tools ~/bin'</code></pre>
+</p>
+<p>
+This updated command installs the tools to a location with more disk space available.
+</p>
+
 <a name="Commands"></a>
 <h2>Genome Browser in a Box commands</h2>
 <!-- Explanation here 
@@ -734,7 +760,7 @@ GBiB terminal's home directory, which can also be accessed via
     <td>Enable the "Mirror tracks" tool</td>
   </tr><tr>
     <td><code>gbibAddTools</code></td>
-    <td>Download the UCSC genome command line tools into the ~bin directory</td>
+    <td>Download the UCSC genome command line tools into the ~bin directory. Requires sudo permissions</td>
   </tr>
 </table>
 

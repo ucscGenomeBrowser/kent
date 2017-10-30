@@ -81,6 +81,19 @@ struct trackDb *tdb = hashMustFindVal(fullTableToTdbHash, table);
 return tdbBigFileName(conn, tdb);
 }
 
+struct hTableInfo *bigWigToHti(char *table)
+/* Get fields of bigWig into hti structure. */
+{
+struct hTableInfo *hti;
+AllocVar(hti);
+hti->rootName = cloneString(table);
+hti->isPos= TRUE;
+safecpy(hti->chromField, sizeof(hti->chromField), "chrom");
+safecpy(hti->startField, sizeof(hti->startField), "chromStart");
+safecpy(hti->endField, sizeof(hti->endField), "chromEnd");
+return hti;
+}
+
 struct bbiInterval *intersectedFilteredBbiIntervalsOnRegion(struct sqlConnection *conn,
 	struct bbiFile *bwf, struct region *region, enum wigCompare filterCmp, double filterLl,
 	double filterUl, struct lm *lm)

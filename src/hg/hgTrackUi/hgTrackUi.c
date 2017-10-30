@@ -2667,7 +2667,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *pmId = row[1];
     char label[512];
     safef(label, sizeof(label),
-	  "<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed"
+	  "<A HREF=\"https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed"
 	  "&list_uids=%s&dopt=Abstract&tool=genome.ucsc.edu\" TARGET=_BLANK>%s</A>", pmId, ref);
     labelArr[refCount] = cloneString(label);
     valueArr[refCount++] = cloneString(pmId);
@@ -2788,9 +2788,9 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         }
     printf("</TD>\n");
     printf("<TD>%s", tdb->longLabel);
-    char *dataVersion = trackDbSetting(tdb, "dataVersion");
-    if (dataVersion)
-        printf("&nbsp&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
+
+    printDataVersion(database, tdb);
+    //printf("&nbsp&nbsp;<EM style='color:#666666; font-size:smaller;'>%s</EM>", dataVersion);
     printf("</TD></TR>");
     }
 printf("</TABLE>");
@@ -3365,18 +3365,12 @@ if (ct)
 
 if (!ct)
     {
-    /* Print data version trackDB setting, if any */
-    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
-    char *version = trackVersion == NULL ? trackDbSetting(tdb, "dataVersion")
-                                         : trackVersion->version;
-    if (version)
-        {
-        cgiDown(0.7);
-        printf("<B>Data version:</B> %s <BR>\n", version);
-        }
+    /* Print data version setting, if any */
+    cgiDown(0.7);
+    printDataVersion(database, tdb);
 
-   /* Print lift information from trackDb, if any */
-   trackDbPrintOrigAssembly(tdb, database);
+    /* Print lift information from trackDb, if any */
+    trackDbPrintOrigAssembly(tdb, database);
 
     printUpdateTime(database, tdb, NULL);
     }

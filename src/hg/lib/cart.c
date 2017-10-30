@@ -29,6 +29,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "cgiApoptosis.h"
+#include "customComposite.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -301,6 +302,67 @@ dyStringFree(&dy);
 }
 
 #ifndef GBROWSE
+static void copyCustomComposites(struct cart *cart, struct hashEl *el)
+/* Copy a set of custom composites to a new hub file. Update the 
+ * relevant cart variables. */
+{
+struct tempName hubTn;
+char *hubFileVar = cloneString(el->name);
+char *db = el->name + sizeof(CUSTOM_COMPOSITE_SETTING);
+char *oldHubFileName = el->val;
+trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
+char *newHubFileName = cloneString(hubTn.forCgi);
+
+// let's make sure the hub hasn't been cleaned up
+int fd = open(oldHubFileName, O_RDONLY);
+if (fd < 0)
+    {
+    cartRemove(cart, el->name);
+    return;
+    }
+
+close(fd);
+copyFile(oldHubFileName, newHubFileName);
+
+char *errorMessage;
+unsigned oldHubId =  hubFindOrAddUrlInStatusTable(db, cart, oldHubFileName, &errorMessage);
+unsigned newHubId =  hubFindOrAddUrlInStatusTable(db, cart, newHubFileName, &errorMessage);
+
+// need to change hgHubConnect.hub.#hubNumber# (connected hubs)
+struct slPair *hv, *hubVarList = cartVarsWithPrefix(cart, hgHubConnectHubVarPrefix);
+char buffer[4096];
+for(hv = hubVarList; hv; hv = hv->next)
+    {
+    unsigned hubId = sqlUnsigned(hv->name + strlen(hgHubConnectHubVarPrefix));
+    
+    if (hubId == oldHubId)
+        {
+        cartRemove(cart, hv->name);
+        safef(buffer, sizeof buffer, "%s%d", hgHubConnectHubVarPrefix, newHubId);
+        cartSetString(cart, buffer, "1");
+        }
+    }
+
+// need to change hub_#hubNumber#* (track visibilities)
+safef(buffer, sizeof buffer, "%s%d_", hubTrackPrefix, oldHubId);
+int oldNameLength = strlen(buffer);
+hubVarList = cartVarsWithPrefix(cart, buffer);
+for(hv = hubVarList; hv; hv = hv->next)
+    {
+    char *name = hv->name + oldNameLength;
+    safef(buffer, sizeof buffer, "%s%d_%s", hubTrackPrefix, newHubId, name);
+    cartSetString(cart, buffer, cloneString(hv->val));
+    cartRemove(cart, hv->name);
+    }
+
+// need to change hgtgroup_hub_#hubNumber# (blue bar open )
+// need to change expOrder_hub_#hubNumber#, simOrder_hub_#hubNumber# (sorting)
+
+// need to change trackHubs #hubNumber#   
+cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+cartSetString(cart, hubFileVar, newHubFileName);
+}
+
 void cartCopyCustomTracks(struct cart *cart)
 /* If cart contains any live custom tracks, save off a new copy of them,
  * to prevent clashes by multiple uses of the same session.  */
@@ -309,6 +371,8 @@ struct hashEl *el, *elList = hashElListHash(cart->hash);
 
 for (el = elList; el != NULL; el = el->next)
     {
+    if (startsWith(CUSTOM_COMPOSITE_SETTING, el->name))
+        copyCustomComposites(cart, el);
     if (startsWith(CT_FILE_VAR_PREFIX, el->name))
 	{
 	char *db = &el->name[strlen(CT_FILE_VAR_PREFIX)];
@@ -776,14 +840,14 @@ setUdcTimeout(cart);
 if (cartVarExists(cart, hgHubDoDisconnect))
     doDisconnectHub(cart);
 
-pushWarnHandler(cartHubWarn);
-char *newDatabase = hubConnectLoadHubs(cart);
-popWarnHandler();
-
 #ifndef GBROWSE
 if (didSessionLoad)
     cartCopyCustomTracks(cart);
 #endif /* GBROWSE */
+
+pushWarnHandler(cartHubWarn);
+char *newDatabase = hubConnectLoadHubs(cart);
+popWarnHandler();
 
 if (newDatabase != NULL)
     {
@@ -2955,3 +3019,109 @@ struct dyString *dbPosValue = newDyString(4096);
 cartEncodeState(lastDbPosCart, dbPosValue);
 cartSetString(cart, dbPosKey, dbPosValue->string);
 }
+
+void cartTdbFetchMinMaxPixels(struct cart *theCart, struct trackDb *tdb,
+                                int defaultMin, int defaultMax, int defaultVal,
+                                int *retMin, int *retMax, int *retDefault, int *retCurrent)
+/* Configure maximum track height for variable height tracks (e.g. wiggle, barchart)
+ *      Initial height and limits may be defined in trackDb with the maxHeightPixels string,
+ *	Or user requested limits are defined in the cart. */
+{
+boolean parentLevel = isNameAtParentLevel(tdb, tdb->track);
+char *heightPer = NULL; /*	string from cart	*/
+int minHeightPixels = defaultMin;
+int maxHeightPixels = defaultMax;
+int defaultHeightPixels = defaultVal;
+int defaultHeight;      /*      truncated by limits     */
+char defaultDefault[16];
+safef(defaultDefault, sizeof defaultDefault, "%d", defaultVal);
+char *tdbDefault = cloneString(
+    trackDbSettingClosestToHomeOrDefault(tdb, MAXHEIGHTPIXELS, defaultDefault));
+
+if (sameWord(defaultDefault, tdbDefault))
+    {
+    struct hashEl *hel;
+    /*	no maxHeightPixels from trackDb, maybe it is in tdb->settings
+     *	(custom tracks keep settings here)
+     */
+    if ((tdb->settings != (char *)NULL) &&
+	(tdb->settingsHash != (struct hash *)NULL))
+	{
+	if ((hel = hashLookup(tdb->settingsHash, MAXHEIGHTPIXELS)) != NULL)
+	    {
+	    freeMem(tdbDefault);
+	    tdbDefault = cloneString((char *)hel->val);
+	    }
+	}
+    }
+
+/*      the maxHeightPixels string can be one, two, or three words
+ *      separated by :
+ *      All three would be:     max:default:min
+ *      When only two:          max:default
+ *      When only one:          max
+ *      (this works too:        min:default:max)
+ *      Where min is minimum allowed, default is initial default setting
+ *      and max is the maximum allowed
+ *	If it isn't available, these three have already been set
+ *	in their declarations above
+ */
+if (differentWord(defaultDefault, tdbDefault))
+    {
+    char *words[3];
+    char *sep = ":";
+    int wordCount;
+    wordCount=chopString(tdbDefault,sep,words,ArraySize(words));
+    switch (wordCount)
+	{
+	case 3:
+	    minHeightPixels = atoi(words[2]);
+	    defaultHeightPixels = atoi(words[1]);
+	    maxHeightPixels = atoi(words[0]);
+
+            // flip max and min if min>max
+            if (maxHeightPixels < minHeightPixels)
+                {
+                int pixels;
+                pixels = maxHeightPixels;
+                maxHeightPixels = minHeightPixels;
+                minHeightPixels = pixels;
+                }
+
+	    if (defaultHeightPixels > maxHeightPixels)
+		defaultHeightPixels = maxHeightPixels;
+	    if (minHeightPixels > defaultHeightPixels)
+		minHeightPixels = defaultHeightPixels;
+	    break;
+	case 2:
+	    defaultHeightPixels = atoi(words[1]);
+	    maxHeightPixels = atoi(words[0]);
+	    if (defaultHeightPixels > maxHeightPixels)
+		defaultHeightPixels = maxHeightPixels;
+	    if (minHeightPixels > defaultHeightPixels)
+		minHeightPixels = defaultHeightPixels;
+	    break;
+	case 1:
+	    maxHeightPixels = atoi(words[0]);
+	    defaultHeightPixels = maxHeightPixels;
+	    if (minHeightPixels > defaultHeightPixels)
+		minHeightPixels = defaultHeightPixels;
+	    break;
+	default:
+	    break;
+	}
+    }
+heightPer = cartOptionalStringClosestToHome(theCart, tdb, parentLevel, HEIGHTPER);
+/*      Clip the cart value to range [minHeightPixels:maxHeightPixels] */
+if (heightPer) defaultHeight = min( maxHeightPixels, atoi(heightPer));
+else defaultHeight = defaultHeightPixels;
+defaultHeight = max(minHeightPixels, defaultHeight);
+
+*retMin = minHeightPixels;
+*retMax = maxHeightPixels;
+*retDefault = defaultHeightPixels;
+*retCurrent = defaultHeight;
+
+freeMem(tdbDefault);
+} 
+

@@ -266,12 +266,12 @@ fprintf(f, "acknowledgement Thanks to Michael Dicuccio at NCBI for helping "
 	   "load these images into VisiGene.\n");
 fprintf(f, "contributor Heintz N., Curran T., Hatten M., Magdaleno S., Jensen P., Gong S., Mehta S., Wang C., Concepcion A., Kowalic E., Losos K., Feng H., Thompson T., Ford B., Baker S., Doughty M., Dinzey J., Dyer A., Grevstad C., Hinkle A., Kizima L., Madden C., Pariser E., Zheng C., Kus L., Milosevic A., Didkovsky N., Nowak N., Joyner A., Lehman K., Cheung T., Asbury A., Eden C., Batten D.,\n");
 fprintf(f, "publication A gene expression atlas of the central nervous system based on bacterial artificial chromosomes\n");
-fprintf(f, "pubUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=14586460\n");
+fprintf(f, "pubUrl https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=14586460\n");
 fprintf(f, "journal Nature\n");
 fprintf(f, "journalUrl http://www.nature.com\n");
 fprintf(f, "year 2003\n");
-fprintf(f, "setUrl http://www.ncbi.nlm.nih.gov/projects/gensat/\n");
-fprintf(f, "itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?CMD=search&DB=gensat&term=%%s\n");
+fprintf(f, "setUrl https://www.ncbi.nlm.nih.gov/projects/gensat/\n");
+fprintf(f, "itemUrl https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?CMD=search&DB=gensat&term=%%s\n");
 fprintf(f, "taxon 10090\n");
 
 

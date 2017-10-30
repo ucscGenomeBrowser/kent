@@ -59,7 +59,7 @@ sub endHtml() {
 printf "<h2>References</h2>\n";
 printf "<p>
 Data obtained from the
-   <a href=\"http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/patches.shtml\" target=\"_blank\">
+   <a href=\"https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/patches.shtml\" target=\"_blank\">
    Genome Reference Consortium:</a>&nbsp;&nbsp;
    <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Mus_musculus/all_assembly_versions/${asmName}/\" target=\"_blank\">FTP</a>.
 </p>\n";
@@ -107,8 +107,8 @@ while (my $line = <FH>) {
   }
 # printf STDERR  "# checking for ncbi: '%s'\n", $ncbi;
   printf "<tr><td><a href=\"../cgi-bin/hgTracks?db=mm10&position=%s:%d-%d\">%s:%d-%d</a></td>\n", $chr, $start+1, $end, $chr, $start+1, $end;
-  printf "    <td><a href=\"http://www.ncbi.nlm.nih.gov/nuccore/%s\" target=\"_blank\">%s</a></td>\n", $ncbi, $name;
-  printf "    <td><a href=\"http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=%s&asm=GRCm38.p${patchLevel}\" target=\"_blank\">%s</a></td>\n", $region{$ncbi}, $region{$ncbi};
+  printf "    <td><a href=\"https://www.ncbi.nlm.nih.gov/nuccore/%s\" target=\"_blank\">%s</a></td>\n", $ncbi, $name;
+  printf "    <td><a href=\"https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=%s&asm=GRCm38.p${patchLevel}\" target=\"_blank\">%s</a></td>\n", $region{$ncbi}, $region{$ncbi};
   printf "    <td>%s</td><td>%s</td>\n</tr>\n", $seqName{$ncbi}, $seqRole{$ncbi};
   ++$partCount;
 }

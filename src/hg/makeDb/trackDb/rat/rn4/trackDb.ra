@@ -1,6 +1,6 @@
 include trackDb.chainNet.ra
-
 include defaultPriority.ra
+include trackDb.9way.ra
 
 track quality override
 type wig 0 99
@@ -22,42 +22,6 @@ color 0,100,180
 type genePred rgdGene2Pep
 symbolTable rgdGene2Xref
 
-track multiz9way
-shortLabel Conservation
-longLabel Vertebrate Multiz Alignment & Conservation
-group compGeno
-priority 1
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons9way
-pairwiseHeight 12
-spanList 1
-yLineOnOff Off
-autoScale Off
-windowingFunction mean
-summary multiz9waySummary
-frames multiz9wayFrames
-irows on
-speciesCodonDefault rn4
-speciesGroups mammal vertebrate
-sGroup_mammal mm8 hg18 canFam2 bosTau2 monDom4
-sGroup_vertebrate galGal2 xenTro1 danRer3
-speciesDefaultOff bosTau2 danRer3
-treeImage phylo/rn4_9way.gif
-
-track phastConsElements9way
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
-group compGeno
-priority 101.3
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
 track nscanGene override
 visibility pack
 informant Rat N-SCAN uses human (hg18) as the informant and iterative pseudogene masking.
@@ -71,7 +35,7 @@ group varRep
 priority 2
 visibility dense
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 type bed 6 +
 

@@ -22,6 +22,7 @@ static struct optionSpec optionSpecs[] =
     {"pass", OPTION_STRING},
     {"fail", OPTION_STRING},
     {"ignoreQUniq", OPTION_BOOLEAN},
+    {"skipInsertCounts", OPTION_BOOLEAN},
     {NULL, 0}
 };
 static char *db = NULL;
@@ -31,6 +32,7 @@ static boolean noCountCheck = FALSE;
 static char *passFile = NULL;
 static char *failFile = NULL;
 static boolean ignoreQUniq = FALSE;
+static boolean skipInsertCounts = FALSE;
 static struct hash *targetSizes = NULL;
 static struct hash *querySizes = NULL;
 
@@ -57,6 +59,8 @@ errAbort(
   "   -targetSizes=sizesFile - tab file with columns of target and size.\n"
   "    If specified, psl is check to have a valid target and target\n"
   "    coordinates.\n"
+  "   -skipInsertCounts - Don't validate insert counts.  Useful for BLAT protein\n"
+  "    PSLs where these are not computed consistently.\n"
   "   -querySizes=sizesFile - file with query sizes.\n"
   "   -ignoreQUniq - ignore everything after the last `-' in the qName field, that\n"
   "    is sometimes used to generate a unique identifier\n"
@@ -167,7 +171,7 @@ else
     return 0;
 }
 
-static void checkPsl(struct lineFile *lf, char *tbl, struct psl *psl,
+static void checkPsl(struct lineFile *lf, char *tbl, unsigned opts, struct psl *psl,
                      FILE *errFh, FILE *passFh, FILE *failFh)
 /* check a psl */
 {
@@ -177,7 +181,7 @@ if (lf != NULL)
     safef(pslDesc, sizeof(pslDesc), "%s:%u", lf->fileName, lf->lineIx);
 else
     safef(pslDesc, sizeof(pslDesc), "%s", tbl);
-numErrs += pslCheck(pslDesc, errFh, psl);
+numErrs += pslCheck2(opts, pslDesc, errFh, psl);
 if (!noCountCheck)
     numErrs += checkCounts(psl, pslDesc, numErrs, errFh);
 if (protCheck && !pslIsProtein(psl))
@@ -201,7 +205,7 @@ if (numErrs > 0)
     failCount++;
 }
 
-static void checkPslFile(char *fileName, FILE *errFh,
+static void checkPslFile(char *fileName, unsigned opts, FILE *errFh,
                          FILE *passFh, FILE *failFh)
 /* Check one psl file */
 {
@@ -210,13 +214,13 @@ struct psl *psl;
 
 while ((psl = pslNext(lf)) != NULL)
     {
-    checkPsl(lf, NULL, psl, errFh, passFh, failFh);
+    checkPsl(lf, NULL, opts, psl, errFh, passFh, failFh);
     pslFree(&psl);
     }
 lineFileClose(&lf);
 }
 
-static void checkPslTbl(struct sqlConnection *conn, char *tbl, FILE *errFh,
+static void checkPslTbl(struct sqlConnection *conn, char *tbl, unsigned opts, FILE *errFh,
                          FILE *passFh, FILE *failFh)
 /* Check one psl table */
 {
@@ -228,7 +232,7 @@ int rowOff = (sqlFieldColumn(sr, "bin") >= 0) ? 1 : 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOff);
-    checkPsl(NULL, tbl, psl, errFh, passFh, failFh);
+    checkPsl(NULL, tbl, opts, psl, errFh, passFh, failFh);
     pslFree(&psl);
     }
 sqlFreeResult(&sr);
@@ -238,12 +242,15 @@ void checkFileTbl(struct sqlConnection *conn, char *fileTblName,
                   FILE *errFh, FILE *passFh, FILE *failFh)
 /* check a PSL file or table. */
 {
+unsigned opts = 0;
+if (skipInsertCounts)
+    opts |= PSL_CHECK_IGNORE_INSERT_CNTS;
 if (fileExists(fileTblName))
-    checkPslFile(fileTblName, errFh, passFh, failFh);
+    checkPslFile(fileTblName, opts, errFh, passFh, failFh);
 else if (conn == NULL)
     errAbort("file %s does not exist and no database specified", fileTblName);
 else
-    checkPslTbl(conn, fileTblName, errFh, passFh, failFh);
+    checkPslTbl(conn, fileTblName, opts, errFh, passFh, failFh);
 }
 
 void checkFilesTbls(struct sqlConnection *conn,
@@ -274,6 +281,7 @@ quiet = optionExists("quiet");
 passFile = optionVal("pass", NULL);
 failFile = optionVal("fail", NULL);
 ignoreQUniq = optionExists("ignoreQUniq");
+skipInsertCounts = optionExists("skipInsertCounts");
 struct sqlConnection *conn = NULL;
 if (db != NULL)
     conn = sqlConnect(db);

@@ -44,7 +44,7 @@ bigDataUrl bbi/%s.assembly.bb
 type bigBed 6
 html html/%s.assembly
 searchIndex name%s
-url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
+url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
 group map\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 $scriptDir/asmHubAssembly.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz ../hubs/ncbiAssemblies/$genbankRefseq/$asmId > $buildDir/html/$asmId.assembly.html
@@ -281,7 +281,7 @@ searchIndex name%s
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 fi
 
-# url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
+# url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
 # urlLabel NCBI Nucleotide database
 
 ###################################################################

@@ -1,6 +1,7 @@
 #	"$Id: trackDb.ra,v 1.591 2010/05/07 05:35:52 kent Exp $";
 
 include trackDb.chainNet.ra
+include trackDb.5way.ra
 include defaultPriority.ra
 
 # ENCODE tracks
@@ -64,7 +65,7 @@ priority 2
 visibility dense
 color 155,0,125
 type genePred acemblyPep acemblyMrna
-url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg16&l=$$
+url https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg16&l=$$
 urlLabel AceView Gene Summary:
 
 track evofold override
@@ -903,31 +904,6 @@ yLineOnOff Off
 autoScale Off
 pairwise hmrg 
 speciesOrder mm3 rn3 galGal2
-
-track mzPt1Mm3Rn3Gg2_pHMM
-shortLabel Conservation
-longLabel Human/Chimp/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
-group compGeno
-priority 1
-visibility pack
-#color 0, 10, 100
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle mzPt1Mm3Rn3Gg2_pHMM_wig
-spanList 1
-yLineOnOff Off
-autoScale Off
-pairwise hmrg
-speciesOrder panTro1 mm3 rn3 galGal2
-treeImage phylo/hg16_5way.gif
-
-track pHMM_5_WayTop5
-shortLabel Thresholded Cons
-longLabel Top 5 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
-priority 100.1
-group compGeno
-visibility hide
-type bed 5 .
 
 track cns
 shortLabel CNS

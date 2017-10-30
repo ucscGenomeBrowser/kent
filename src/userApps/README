@@ -37,6 +37,7 @@ gnu make - http://www.gnu.org/software/make/
 MySQL development system and libraries - http://dev.mysql.com/
 libpng runtime and development packages - http://www.libpng.org/
 libssl runtime and development packages - http://www.openssl.org/
+libuuid-devel - https://rpmfind.net/linux/rpm2html/search.php?query=libuuid-devel
 
 Optional:
 'git' source code management: http://git-scm.com/downloads
@@ -169,11 +170,15 @@ the additional packages required (and helpful):
 
   sudo port install git-core gnutls rsync libpng mysql55 openssl curl wget
 
+You may need to install ossp-uuid if the system does not already have
+the /usr/include/uuid/ directory install:
+  sudo port install ossp-uuid
+
 On a typical Linux system, for example Ubuntu, use the apt-get command
 to install additional packages:
 
    sudo apt-get install git libssl-dev openssl mysql-client-5.5 \
-      mysql-client-core-5.5 libmysqlclient-dev
+      mysql-client-core-5.5 libmysqlclient-dev libuuid-devel
 
 Depending upon the version of your Linux/Ubuntu/CentOS operating system,
 the specific version of packages you need may be different than this example.

@@ -267,7 +267,7 @@ for (i = 0;  i < formatCount;  i++)
     const struct vcfInfoDef *def = vcfInfoDefForGtKey(vcff, formatKeys[i]);
     char *desc = def ? def->description : "<em>not described in VCF header</em>";
     printf("&nbsp;&nbsp;<B>%s:</B> %s<BR>\n", formatKeys[i], desc);
-    formatTypes[i] = def->type;
+    formatTypes[i] = def ? def->type : vcfInfoString;
     }
 hTableStart();
 puts("<TR><TH>Sample ID</TH><TH>Genotype</TH><TH>Phased?</TH>");
@@ -495,7 +495,7 @@ if (regexMatch(rec->name, "^rs[0-9]+$"))
 else if (regexMatch(rec->name, "^[en]ss?v[0-9]+$"))
     {
     printf("<B>dbVar:</B> ");
-    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/dbvar/variants/%s/\" "
+    printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/dbvar/variants/%s/\" "
 	   "TARGET=_BLANK>%s</A><BR>\n", rec->name, rec->name);
     }
 printCustomUrl(tdb, rec->name, TRUE);

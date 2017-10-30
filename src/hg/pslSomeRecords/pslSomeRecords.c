@@ -50,6 +50,18 @@ lineFileClose(&lf);
 return hash;
 }
 
+boolean hashFindNameVal(struct hash *hash, char *name, char *value)
+/* Return TRUE if name is found in hash and some element for name has given string value. */
+{
+struct hashEl *hel;
+for (hel = hashLookup(hash, name); hel != NULL; hel = hashLookupNext(hel))
+    {
+    if (sameOk(hel->val, value))
+        return TRUE;
+    }
+return FALSE;
+}
+
 void pslSomeRecords(char *pslIn, char *listName, char *pslOut)
 /* pslSomeRecords - Extract multiple psl records. */
 {
@@ -66,8 +78,7 @@ while ((psl = pslNext(lf) ) != NULL)
     {
     if (tToo)
         {
-	char *tName = hashFindVal(hash, psl->qName);
-	if (tName != NULL && sameString(psl->tName, tName))
+	if (not ^ hashFindNameVal(hash, psl->qName, psl->tName))
 	    pslTabOut(psl, f);
 	}
     else

@@ -4015,7 +4015,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    if (isLive)
 		{
 		/* Touch database table to keep it alive. */
-		ctTouchLastUse(ctConn, track->dbTableName, TRUE);
+		/* this was already done in the ctDbTableExists() above */
+		/* ctTouchLastUse(ctConn, track->dbTableName, TRUE); */
 		verbose(4, "customTrash db table: %s\n", track->dbTableName);
 		}
 	    }

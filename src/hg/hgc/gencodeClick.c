@@ -74,6 +74,13 @@ static char *getGencodeTable(struct trackDb *tdb, char *tableBase)
 return trackDbRequiredSetting(tdb, tableBase);
 }
 
+static char* getGencodeVersion(struct trackDb *tdb)
+/* get the GENCODE version or NULL for < V7, which is not supported
+ * by this module. */
+{
+return trackDbSetting(tdb, "wgEncodeGencodeVersion");
+}
+
 static int transAnnoCmp(const void *va, const void *vb)
 /* Compare genePreds, sorting to keep select gene first.  The only cases
  * that annotations will be duplicated is if they are in the PAR and thus
@@ -229,8 +236,14 @@ static void prEnsIdAnchor(char *id, char *urlTemplate)
 {
 if (!isEmpty(id))
     {
-    char urlBuf[512];
-    safef(urlBuf, sizeof(urlBuf), urlTemplate, getScientificNameSym(), id);
+    char idBuf[64], urlBuf[512];
+    /* The lift37 releases append a '_N' modifier to the ids to indicate the are
+     * mapped. N is an integer mapping version. Don't include this in link if it exists. */
+    safecpy(idBuf, sizeof(idBuf), id);
+    char *p = strchr(idBuf, '_');
+    if (p != NULL)
+        *p = '\0';
+    safef(urlBuf, sizeof(urlBuf), urlTemplate, getScientificNameSym(), idBuf);
     printf("<a href=\"%s\" target=_blank>%s</a>", urlBuf, id);
     }
 }
@@ -792,7 +805,8 @@ struct wgEncodeGencodeTranscriptionSupportLevel *tsl = haveTsl ? metaDataLoad(td
 int geneChromStart, geneChromEnd;
 getGeneBounds(tdb, conn, transAnno, &geneChromStart, &geneChromEnd);
 
-char *title = "GENCODE Transcript Annotation";
+char title[256];
+safef(title, sizeof(title), "GENCODE V%s Transcript Annotation", getGencodeVersion(tdb));
 char header[256];
 safef(header, sizeof(header), "%s %s", title, gencodeId);
 if (!isEmpty(transAttrs->geneName))
@@ -879,9 +893,10 @@ genePredFreeList(&anno);
 hFreeConn(&conn);
 }
 
+
 bool isNewGencodeGene(struct trackDb *tdb)
 /* is this a new-style gencode (>= V7) track, as indicated by
  * the presence of the wgEncodeGencodeVersion setting */
 {
-return trackDbSetting(tdb, "wgEncodeGencodeVersion") != NULL;
+return getGencodeVersion(tdb) != NULL;
 }

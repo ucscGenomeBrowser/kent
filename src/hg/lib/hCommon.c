@@ -19,7 +19,7 @@ static char *_hgTextName = "../cgi-bin/hgText"; /* Path back to the text browser
 static char *_hgTablesName = "../cgi-bin/hgTables"; /* Path back to the table browser. */
 static char *_hgVaiName = "../cgi-bin/hgVai"; /* Path back to the variant annotation integrator. */
 static char *_hgCustomName = "../cgi-bin/hgCustom"; /* Path back to the custom tracks manager. */
-static char *_hgCompositeName = "../cgi-bin/hgComposite"; /* Path back to the composite builder */
+static char *_hgCollectionName = "../cgi-bin/hgCollection"; /* Path back to the composite builder */
 static char *_hgHubConnectName = "../cgi-bin/hgHubConnect"; /* Path back to the track hub manager. */
 static char *_hgSessionName = "../cgi-bin/hgSession";	/* Path to session manager. */
 static char *_hgPalName = "../cgi-bin/hgPal"; /* Path back to the protein aligner */
@@ -81,10 +81,10 @@ char *hgCustomName()
 return _hgCustomName;
 }
 
-char *hgCompositeName()
+char *hgCollectionName()
 /* Relative URL to composite builder. */
 {
-return _hgCompositeName;
+return _hgCollectionName;
 }
 
 char *hgHubConnectName()

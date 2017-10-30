@@ -42,7 +42,10 @@ NM_000310.3(PPT1):c.*526_*529delATCA
 NM_007375.3(TARDBP):c.*83T>C
 NM_006172.3(NPPA):c.456_*1delAA
 NM_000095.2(COMP):c.1405_1407GAC[7]
-NM_000218.2(KCNQ1):c.1071G>Y
+#
+# 8/25/17 -- Temporarily commenting out test case due to hgwdev vs hgwbeta ncbiRefSeqPsl diffs:
+#
+#NM_000218.2(KCNQ1):c.1071G>Y
 NM_001033952.2(CALCA):c.*727_*730T[4]
 NM_001127713.1(ATL1):c.1519dupA
 NM_003159.2(CDKL5):c.145+4_145+5AT[15]

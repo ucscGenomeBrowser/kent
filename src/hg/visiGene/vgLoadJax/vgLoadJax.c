@@ -369,7 +369,7 @@ sqlDyStringPrintf(query,
    "and ACC_LogicalDB.name = 'PubMed'", ref);
 pubMed = sqlQuickStringVerbose(conn, query->string);
 if (pubMed != NULL)
-    fprintf(ra, "pubUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=%s\n", pubMed);
+    fprintf(ra, "pubUrl https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=%s\n", pubMed);
 freez(&pubMed);
 
 dyStringClear(query);

@@ -287,7 +287,7 @@ boolean exprBedColorsMade = FALSE; /* Have the shades of red been made? */
 int maxRGBShade = 16;
 
 struct bed *sageExpList = NULL;
-char ncbiOmimUrl[255] = {"http://www.ncbi.nlm.nih.gov/omim/"};
+char ncbiOmimUrl[255] = {"https://www.ncbi.nlm.nih.gov/omim/"};
 
 struct palInfo
 {
@@ -298,21 +298,21 @@ struct palInfo
 };
 
 /* See this NCBI web doc for more info about entrezFormat:
- * http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
-char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=%s&term=%s&doptcmdl=%s&tool=genome.ucsc.edu";
-char *entrezPureSearchFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=PureSearch&db=%s&details_term=%s[%s] ";
-char *ncbiGeneFormat = "http://www.ncbi.nlm.nih.gov/gene/%s";
-char *entrezUidFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=%s&list_uids=%d&dopt=%s&tool=genome.ucsc.edu";
+ * https://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
+char *entrezFormat = "https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=%s&term=%s&doptcmdl=%s&tool=genome.ucsc.edu";
+char *entrezPureSearchFormat = "https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=PureSearch&db=%s&details_term=%s[%s] ";
+char *ncbiGeneFormat = "https://www.ncbi.nlm.nih.gov/gene/%s";
+char *entrezUidFormat = "https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=%s&list_uids=%d&dopt=%s&tool=genome.ucsc.edu";
 /* db=unists is not mentioned in NCBI's doc... so stick with this usage: */
-char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
-char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
+char *unistsnameScript = "https://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
+char *unistsScript = "https://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
 char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
-char *cloneDbScript = "http://www.ncbi.nlm.nih.gov/clone?term=";
-char *traceScript = "http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=retrieve&val=";
+char *cloneDbScript = "https://www.ncbi.nlm.nih.gov/clone?term=";
+char *traceScript = "https://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=retrieve&val=";
 char *genMapDbScript = "http://genomics.med.upenn.edu/perl/genmapdb/byclonesearch.pl?clone=";
 char *uniprotFormat = "http://www.uniprot.org/uniprot/%s";
-char *dbSnpFormat = "http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s";
-char *clinVarFormat = "http://www.ncbi.nlm.nih.gov/clinvar/?term=%s[clv_acc]";
+char *dbSnpFormat = "https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s";
+char *clinVarFormat = "https://www.ncbi.nlm.nih.gov/clinvar/?term=%s[clv_acc]";
 
 /* variables for gv tables */
 char *gvPrevCat = NULL;
@@ -434,7 +434,7 @@ static void printOmimUrl(FILE *f, char *term)
 {
 if (term != NULL)
     {
-    fprintf(f, "\"http://www.ncbi.nlm.nih.gov/omim/%s\"", term);
+    fprintf(f, "\"https://www.ncbi.nlm.nih.gov/omim/%s\"", term);
     }
 }
 
@@ -3135,19 +3135,6 @@ printf("<P><A HREF=\"%s?g=%s&%s\">"
        hTrackUiForTrack(tdb->track), trackName, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
-static void printDataVersion(struct trackDb *tdb)
-/* If this annotation has a dataVersion trackDb setting, print it */
-{
-if (trackHubDatabase(database))
-    return;
-metadataForTable(database,tdb,NULL);
-const char *version = metadataFindValue(tdb,"dataVersion");
-if(version == NULL)
-    version = trackDbSetting(tdb,"dataVersion");
-if (version != NULL)
-    printf("<B>Data version:</B> %s <BR>\n", version);
-}
-
 void printDataRestrictionDate(struct trackDb *tdb)
 /* If this annotation has a dateUnrestricted trackDb setting, print it */
 {
@@ -3185,14 +3172,10 @@ void printTrackHtml(struct trackDb *tdb)
 {
 if (!isCustomTrack(tdb->track))
     {
-    extraUiLinks(database,tdb);
+    extraUiLinks(database, tdb);
     printTrackUiLink(tdb);
-    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
-    if(trackVersion == NULL)
-        printDataVersion(tdb);
-    else
-        printf("<B>Data version:</B> %s <BR>\n", trackVersion->version);
     printOrigAssembly(tdb);
+    printDataVersion(database, tdb);
     printUpdateTime(database, tdb, NULL);
     printDataRestrictionDate(tdb);
     }
@@ -4420,7 +4403,7 @@ char *traceUrl(char *traceId)
 /* Make up URL for trace archive. */
 {
 struct dyString *url = dyStringNew(0);
-dyStringAppend(url, "http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?");
+dyStringAppend(url, "https://www.ncbi.nlm.nih.gov/Traces/trace.cgi?");
 dyStringPrintf(url, "cmd=retrieve&size=1&val=%s&", traceId);
 dyStringAppend(url, "file=trace&dopt=trace");
 return dyStringCannibalize(&url);
@@ -4830,7 +4813,7 @@ if (hIsGsidServer())
     puts("<P>Copying and pasting the web page output to a text editor such as Word "
 	 "will retain upper case but lose colors and other formatting. That is still "
 	 "useful because other web tools such as "
-	 "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast\" TARGET=_BLANK>NCBI Blast</A> "
+	 "<A HREF=\"https://www.ncbi.nlm.nih.gov/blast\" TARGET=_BLANK>NCBI Blast</A> "
 	 "can be set to ignore lower case.  To fully capture formatting such as color "
 	 "and underlining, view the output as \"source\" in your web browser, or download "
 	 "it, or copy the output page into an html editor.</P>");
@@ -4870,7 +4853,7 @@ else
     puts("<P>Copying and pasting the web page output to a text editor such as Word "
 	 "will retain upper case but lose colors and other formatting. That is still "
 	 "useful because other web tools such as "
-	 "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast\" TARGET=_BLANK>NCBI Blast</A> "
+	 "<A HREF=\"https://www.ncbi.nlm.nih.gov/blast\" TARGET=_BLANK>NCBI Blast</A> "
 	 "can be set to ignore lower case.  To fully capture formatting such as color "
 	 "and underlining, view the output as \"source\" in your web browser, or download "
 	 "it, or copy the output page into an html editor.</P>");
@@ -5823,7 +5806,7 @@ if (row != NULL)
     gbToEntrezAuthor(author, dy);
     medlineLinkedLine("Author", author, dy->string);
     printf("<B>Organism:</B> ");
-    printf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>",
+    printf("<A href=\"https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>",
 	   cgiEncode(orgFullName));
     printf("%s</A><BR>\n", orgFullName);
     printf("<B>Tissue:</B> %s<BR>\n", tissue);
@@ -6657,7 +6640,7 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 agpFragStaticLoad(row+hasBin, &frag);
 
-printf("<B>Entrez nucleotide:</B><A TARGET=_blank HREF='http://www.ncbi.nlm.nih.gov/nuccore/%s'> %s</A><BR>\n", fragName, fragName);
+printf("<B>Entrez nucleotide:</B><A TARGET=_blank HREF='https://www.ncbi.nlm.nih.gov/nuccore/%s'> %s</A><BR>\n", fragName, fragName);
 printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
 printf("<B>Clone Fragment Type:</B> %s<BR>\n", frag.type);
 printf("<B>Clone Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
@@ -7992,7 +7975,9 @@ if (offset >= 0)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	ro = rmskOutLoad(row+hasBin);
-	printf("<B>Name:</B> %s<BR>\n", ro->repName);
+	printf("<B>Name:</B> <A HREF='http://www.girinst.org/protected/repbase_extract.php?access=%s'>%s</A>\n", 
+            ro->repName, ro->repName);
+    printf("(link requires <A HREF='http://www.girinst.org/accountservices/register.php'>registration</A>)<BR>");
 	printf("<B>Family:</B> %s<BR>\n", ro->repFamily);
 	printf("<B>Class:</B> %s<BR>\n", ro->repClass);
 	printf("<B>SW Score:</B> %d<BR>\n", ro->swScore);
@@ -9704,9 +9689,7 @@ struct sqlResult *sr;
 char **row;
 char *chrom, *chromStart, *chromEnd;
 struct dyString *currentCgiUrl;
-char *upperDisease;
 char *diseaseClass;
-char *upperItemName;
 
 char *url = tdb->url;
 
@@ -9732,15 +9715,13 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     printf("<B>Genetic Association Database: ");
-    printf("<A HREF=\"%s'%s'\" target=_blank>", url, itemName);
-    printf("%s</B></A>\n", itemName);
+    printf("%s</B>\n", itemName);
 
     printf("<BR><B>CDC HuGE Published Literature:  ");
-    printf("<A HREF=\"%s%s%s\" target=_blank>",
-    "http://www.hugenavigator.net/HuGENavigator/searchSummary.do?firstQuery=",
-           itemName,
-    "&publitSearchType=now&whichContinue=firststart&check=n&dbType=publit&Mysubmit=go");
-    printf("%s</B></A>\n", itemName);
+    printf("<A HREF=\"https://phgkb.cdc.gov/PHGKB/searchSummary.action"
+    	"?Mysubmit=Search&firstQuery=%s&__checkbox_gwas=true\" target=_blank>",
+	itemName);
+    printf("%s</A></B>\n", itemName);
 
     sqlSafef(query, sizeof(query),
           "select distinct g.omimId, o.title from gadAll g, hgFixed.omimTitle o where g.geneSymbol='%s' and g.omimId <>'.' and g.omimId=o.omimId",
@@ -9751,7 +9732,7 @@ if (url != NULL && url[0] != 0)
     while (row != NULL)
         {
 	printf("<A HREF=\"%s%s\" target=_blank>",
-		"http://www.ncbi.nlm.nih.gov/omim/", row[0]);
+		"https://www.ncbi.nlm.nih.gov/omim/", row[0]);
 	printf("%s</B></A> %s\n", row[0], row[1]);
 	row = sqlNextRow(sr);
         }
@@ -9789,29 +9770,14 @@ if (url != NULL && url[0] != 0)
 
     if (row != NULL)
         {
-        upperDisease = replaceChars(row[0], "'", "''");
-	touppers(upperDisease);
 	printf("<BR><B>Positive Disease Associations:  </B>");
-
-	printf("<A HREF=\"%s",
-	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25");
-	printf("%s", cgiEncode(upperDisease));
-
-	upperItemName = strdup(itemName);
-	touppers(upperItemName);
-	printf("%s%s%s\" target=_blank>", "%25'%20AND%20upper(GENE)%20%20like%20'%25", upperItemName, "%25'");
-	printf("%s</B></A>\n", row[0]);
+	printf("%s\n", row[0]);
         row = sqlNextRow(sr);
         }
 
     while (row != NULL)
         {
-        upperDisease = replaceChars(row[0], "'", "''");
-	touppers(upperDisease);
-	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
-	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
-	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
-	printf("%s</B></A>\n", row[0]);
+	printf(", %s\n", row[0]);
         row = sqlNextRow(sr);
 	}
     sqlFreeResult(&sr);
@@ -11173,7 +11139,7 @@ if (rl->omimId != 0)
 if (rl->locusLinkId != 0)
     {
     printf("<B>Entrez Gene:</B> ");
-    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%d\" TARGET=_blank>",
+    printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%d\" TARGET=_blank>",
            rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
     }
@@ -11525,7 +11491,7 @@ if (rl->omimId != 0)
 if (rl->locusLinkId != 0)
     {
     printf("<B>Entrez Gene:</B> ");
-    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%d\" TARGET=_blank>",
+    printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%d\" TARGET=_blank>",
            rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
 
@@ -11541,7 +11507,7 @@ if (rl->locusLinkId != 0)
 	    printf("<B>Mouse Genome Informatics:</B> ");
 	    mgiID = cloneString(row[0]);
 
-	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
+	    printf("<A HREF=\"http://www.informatics.jax.org/marker/%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
 	    }
 	else
 	    {
@@ -11599,7 +11565,7 @@ if (hTableExists(database, "jaxOrtholog"))
         {
 	jaxOrthologStaticLoad(row, &jo);
 	printf("<B>MGI Mouse Ortholog:</B> ");
-	printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" target=_BLANK>", jo.mgiId);
+	printf("<A HREF=\"http://www.informatics.jax.org/marker/%s\" target=_BLANK>", jo.mgiId);
 	printf("%s</A><BR>\n", jo.mouseSymbol);
 	}
     sqlFreeResult(&sr);
@@ -11608,7 +11574,7 @@ if (startsWith("hg", database))
     {
     printf("\n");
     printf("<B>AceView:</B> ");
-    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s\" TARGET=_blank>",
+    printf("<A HREF = \"https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s\" TARGET=_blank>",
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
@@ -11662,7 +11628,7 @@ if (rl->omimId != 0)
 if (rl->locusLinkId != 0)
     {
     printf("<B>Entrez Gene:</B> ");
-    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%d\" TARGET=_blank>",
+    printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%d\" TARGET=_blank>",
            rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
 
@@ -11678,7 +11644,7 @@ if (rl->locusLinkId != 0)
 	    printf("<B>Mouse Genome Informatics:</B> ");
 	    mgiID = cloneString(row[0]);
 
-	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
+	    printf("<A HREF=\"http://www.informatics.jax.org/marker/%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
 	    }
 	else
 	    {
@@ -11913,22 +11879,28 @@ if (differentWord(nrl->omimId, ""))
 if (differentWord(nrl->mrnaAcc, "") && differentWord(nrl->mrnaAcc,nrl->id))
     {
     printf("<b>mRNA:</b> ");
-    printf("<a href='http://www.ncbi.nlm.nih.gov/nuccore/%s' target=_blank>", nrl->mrnaAcc);
+    printf("<a href='https://www.ncbi.nlm.nih.gov/nuccore/%s' target=_blank>", nrl->mrnaAcc);
     printf("%s</a><br>\n", nrl->mrnaAcc);
     }
 if (differentWord(nrl->genbank, "") && differentWord(nrl->genbank,nrl->id))
     {
     printf("<b>Genbank:</b> ");
-    printf("<a href='http://www.ncbi.nlm.nih.gov/nuccore/%s' target=_blank>", nrl->genbank);
+    printf("<a href='https://www.ncbi.nlm.nih.gov/nuccore/%s' target=_blank>", nrl->genbank);
     printf("%s</a><br>\n", nrl->genbank);
     }
 if (differentWord(nrl->protAcc, ""))
     {
     printf("<b>Protein:</b> ");
-    printf("<a href='http://www.ncbi.nlm.nih.gov/protein/%s' target=_blank>", nrl->protAcc);
+    printf("<a href='https://www.ncbi.nlm.nih.gov/protein/%s' target=_blank>", nrl->protAcc);
     printf("%s</a><br>\n", nrl->protAcc);
     }
-if (differentWord(nrl->hgnc, ""))
+if (startsWith("MGI", nrl->hgnc))
+    {
+    printf("<b>MGI:</b> "
+           "<a href=\"http://www.informatics.jax.org/marker/%s\" target=_blank>%s</a><br>\n",
+           nrl->hgnc, nrl->hgnc);
+    }
+else if (differentWord(nrl->hgnc, ""))
     {
     printf("<b>HGNC:</b> ");
     printf("<a href='http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s' target=_blank>", nrl->hgnc);
@@ -11938,7 +11910,7 @@ if (differentWord(nrl->hgnc, ""))
 if (differentWord(nrl->locusLinkId, ""))
     {
     printf("<b>Entrez Gene:</b> ");
-    printf("<a href='http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s' TARGET=_blank>",
+    printf("<a href='https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s' TARGET=_blank>",
            nrl->locusLinkId);
     printf("%s</a><br>\n", nrl->locusLinkId);
     }
@@ -11949,7 +11921,7 @@ if (differentWord(nrl->name,""))
     if (startsWith("hg", database))
         {
         printf("<b>AceView:</b> ");
-        printf("<a href = 'http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s' target=_blank>",
+        printf("<a href = 'https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s' target=_blank>",
 	   nrl->name);
         printf("%s</a><br>\n", nrl->name);
         }
@@ -11979,7 +11951,7 @@ if (pslList)
     char * result= sqlQuickString(conn, query);
     if (isEmpty(result))
         {
-        printf ("<h4>there is NO alignment for %s</h4>\n", itemName);
+        printf ("<h4>No sequence available for %s, can't display alignment.</h4>\n", itemName);
         hasSequence = FALSE;
         }
     else
@@ -11991,7 +11963,7 @@ if (pslList)
     }
 else
     {
-    printf ("<h4>there is NO alignment for %s</h4><br>\n", itemName);
+    printf ("<h4>Missing alignment for %s</h4><br>\n", itemName);
     }
 
 htmlHorizontalLine();
@@ -13639,7 +13611,7 @@ printf("<H1>Information on Mouse %s %s</H1>",
 if (tiNum != NULL)
     {
     printf("Link to ");
-    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?val=%s\" TARGET=_blank>", tiNum);
+    printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/Traces/trace.cgi?val=%s\" TARGET=_blank>", tiNum);
     printf("NCBI Trace Repository for %s\n</A><BR>\n", itemName);
     }
 printf("Get ");
@@ -14793,9 +14765,9 @@ if (row != NULL)
 	htmlHorizontalLine();
 	printf("<TABLE>\n");
         printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B>MGI:</B>");
-	printf("<A HREF = \"http://www.informatics.jax.org/searches/accession_report.cgi?id=MGI:%d\" TARGET=_blank>%d</A></TD></TR>\n", infoRow->MGIMarkerID, infoRow->MGIMarkerID);
+	printf("<A HREF = \"http://www.informatics.jax.org/marker/MGI:%d\" TARGET=_blank>%d</A></TD></TR>\n", infoRow->MGIMarkerID, infoRow->MGIMarkerID);
         printf("<TR><TH ALIGN=left>MGI Probe ID:</TH><TD><B>MGI:</B>");
-	printf("<A HREF = \"http://www.informatics.jax.org/searches/accession_report.cgi?id=MGI:%d\" TARGET=_blank>%d</A></TD></TR>\n", infoRow->MGIPrimerID, infoRow->MGIPrimerID);
+	printf("<A HREF = \"http://www.informatics.jax.org/marker/MGI:%d\" TARGET=_blank>%d</A></TD></TR>\n", infoRow->MGIPrimerID, infoRow->MGIPrimerID);
 	printf("</TABLE>\n");
 	htmlHorizontalLine();
 	/* Print out primer information */
@@ -14928,7 +14900,7 @@ if (row != NULL)
         printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
         if (infoRow->UiStsId != 0)
             printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD>"
-                   "<A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" "
+                   "<A HREF=\"https://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" "
                    "TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
         if (infoRow->MGIId != 0)
             printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B>"
@@ -15110,7 +15082,7 @@ if (row != NULL)
         printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
         if (infoRow->UiStsId != 0)
             printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD>"
-                   "<A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" "
+                   "<A HREF=\"https://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" "
                    "TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
         if (infoRow->RGDId != 0)
             printf("<TR><TH ALIGN=left>RGD Marker ID:</TH><TD><B>"
@@ -15810,25 +15782,25 @@ if (rsId) /* a valid rsId exists */
 	printf("<BR>\n");
 	if(snp->avHetSE>0)
 	    {
-	    printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
+	    printf("<B><A HREF=\"https://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
 	    printf("Average Heterozygosity</A>:</B> %f<BR>\n",snp->avHet);
-	    printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
+	    printf("<B><A HREF=\"https://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
 	    printf("Standard Error of Avg. Het.</A>: </B> %f<BR>\n", snp->avHetSE);
 	    }
 	else
 	    {
-	    printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
+	    printf("<B><A HREF=\"https://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
 	    printf("Average Heterozygosity</A>:</B> Not Known<BR>\n");
-	    printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
+	    printf("<B><A HREF=\"https://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html\" target=\"_blank\">");
 	    printf("Standard Error of Avg. Het.</A>: </B> Not Known<BR>\n");
             }
-//      printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=snpFxnColor\" "
+//      printf("<B><A HREF=\"https://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=snpFxnColor\" "
 //             "target=\"_blank\">");
 //      printf("Functional Status</A>:</B> <span style='font-family:Courier;'>%s<BR></span>\n",
 //             snp->func);
         printf("<B>Functional Status:</B> <span style='font-family:Courier;'>%s<BR></span>\n",
                snp->func);
-        printf("<B><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=validation\" "
+        printf("<B><A HREF=\"https://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=validation\" "
                "target=\"_blank\">");
         printf("Validation Status</A>:</B> <span style='font-family:Courier;'>%s<BR></span>\n",
                snp->valid);
@@ -15889,7 +15861,7 @@ if (hTableExists(database, "knownGene") && sqlTableExists(conn, refLinkTable) &&
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+	printf("<BR><A HREF=\"https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 	printf("geneId=%s\" TARGET=_blank>Entrez Gene for ", row[0]);
 	printf("%s</A><BR>\n", row[1]);
 	}
@@ -17962,7 +17934,7 @@ void printSnp132ExtraColumns(struct trackDb *tdb, struct snp132Ext *snp)
 printf("<TR><TD><B><A HREF=\"#Submitters\">Submitter Handles</A>&nbsp;&nbsp;</TD><TD></B>");
 int i;
 for (i=0;  i < snp->submitterCount;  i++)
-    printf("%s<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_viewTable.cgi?h=%s\" TARGET=_BLANK>"
+    printf("%s<A HREF=\"https://www.ncbi.nlm.nih.gov/SNP/snp_viewTable.cgi?h=%s\" TARGET=_BLANK>"
 	   "%s</A>", (i > 0 ? ", " : ""), snp->submitters[i], snp->submitters[i]);
 printf("</TD></TR>\n");
 if (snp->alleleFreqCount > 0)
@@ -18810,7 +18782,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     jaxQTL = jaxQTL3Load(row);
     printf("<B>Jax/MGI Link: </B>");
-    printf("<a TARGET=\"_blank\" href=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\">%s</a><BR>\n",
+    printf("<a TARGET=\"_blank\" href=\"http://www.informatics.jax.org/marker/%s\">%s</a><BR>\n",
            jaxQTL->mgiID, jaxQTL->mgiID);
     printf("<B>QTL:</B> %s<BR>\n", jaxQTL->name);
     printf("<B>Description:</B> %s <BR>\n", jaxQTL->description);
@@ -19298,7 +19270,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     if (gbProtAnn->note[0] != 0)
 	printf("<B>Note:</B> %s <BR>\n", gbProtAnn->note);
     printf("<B>GenBank Protein: </B>");
-    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=%s\"",
+    printf("<A HREF=\"https://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=%s\"",
 	    gbProtAnn->proteinId);
     printf(" TARGET=_blank>%s</A><BR>\n", gbProtAnn->proteinId);
 
@@ -20509,7 +20481,7 @@ for(sg = sgList; sg != NULL; sg = sg->next)
     char url[256];
     safef(buff, sizeof buff, "Hs.%d", sg->uni);
     printf("<td valign=top align=center>\n");
-    safef(url, sizeof url, "http://www.ncbi.nlm.nih.gov/SAGE/SAGEcid.cgi?cid=%d&org=Hs",sg->uni);
+    safef(url, sizeof url, "https://www.ncbi.nlm.nih.gov/SAGE/SAGEcid.cgi?cid=%d&org=Hs",sg->uni);
     printTableHeaderName(buff, itemName, url);
     printf("</td>");
     }
@@ -24133,9 +24105,11 @@ printf("</DL>\n");
 
 /* split code from printTrackHtml */
 printTBSchemaLink(tdb);
-printDataVersion(tdb);
+
 printOrigAssembly(tdb);
+printDataVersion(database, tdb);
 printUpdateTime(database, tdb, NULL);
+
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();
@@ -25904,6 +25878,12 @@ else if (sameWord(table, "softPromoter"))
     }
 else if (isCustomTrack(table))
     {
+    if (tdb != NULL)
+        {
+        char *origTrackName = trackDbSetting(tdb, "origTrackName");
+        if (origTrackName)
+            table = origTrackName;
+        }
     hgCustom(table, item);
     }
 else if (sameWord(table, "snpTsc") || sameWord(table, "snpNih") || sameWord(table, "snpMap"))

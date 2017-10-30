@@ -117,7 +117,7 @@ type psl xeno
 baseColorUseSequence genbank
 indelDoubleInsert on
 indelQueryInsert on
-url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
+url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track xenoRefGene
 shortLabel Other RefSeq

@@ -1533,28 +1533,64 @@ sqlSafef(query, sizeof(query), "insert into %s select * from  %s", table2, table
 sqlUpdate(sc, query);
 }
 
-void sqlGetLock(struct sqlConnection *sc, char *name)
-/* Sets an advisory lock on the process for 1000s returns 1 if successful,*/
-/* 0 if name already locked or NULL if error occurred */
-/* blocks another client from obtaining a lock with the same name */
+void sqlGetLockWithTimeout(struct sqlConnection *sc, char *name, int wait)
+/* Tries to get an advisory lock on the process, waiting for wait seconds. */
+/* Blocks another client from obtaining a lock with the same name. */
 {
 char query[256];
 struct sqlResult *res;
 char **row = NULL;
 
-sqlSafef(query, sizeof(query), "select get_lock('%s', 1000)", name);
+sqlSafef(query, sizeof(query), "select get_lock('%s', %d)", name, wait);
 res = sqlGetResult(sc, query);
 while ((row=sqlNextRow(res)))
     {
-    if (sameWord(*row, "1"))
+    if (sameWord(*row, "1")) // success
         break;
-    else if (sameWord(*row, "0"))
+    else if (sameWord(*row, "0"))  // timed out
         errAbort("Attempt to GET_LOCK timed out.\nAnother client may have locked this name, %s\n.", name);
-    else if (*row == NULL)
+    else if (*row == NULL) // other error
         errAbort("Attempt to GET_LOCK of name, %s, caused an error\n", name);
     }
 sqlFreeResult(&res);
 }
+
+void sqlGetLock(struct sqlConnection *sc, char *name)
+/* Gets an advisory lock created by GET_LOCK in sqlGetLock. Waits up to 1000 seconds. */
+{
+sqlGetLockWithTimeout(sc, name, 1000);
+}
+
+boolean sqlIsLocked(struct sqlConnection *sc, char *name)
+/* Tests if an advisory lock on the given name has been set. 
+ * Returns true if lock has been set, otherwise returns false. */
+{
+char query[256];
+struct sqlResult *res;
+char **row = NULL;
+boolean result = FALSE;
+
+sqlSafef(query, sizeof(query), "select is_free_lock('%s')", name);
+res = sqlGetResult(sc, query);
+while ((row=sqlNextRow(res)))
+    {
+    if (sameWord(*row, "1")) // lock is free (not locked)
+	{
+	result = FALSE;
+        break;
+	}
+    else if (sameWord(*row, "0"))  // lock is not free (locked)
+	{
+	result = TRUE;
+        break;
+	}
+    else if (*row == NULL) // other error
+        errAbort("Attempt to GET_LOCK of name, %s, caused an error\n", name);
+    }
+sqlFreeResult(&res);
+return result;
+}
+
 
 void sqlReleaseLock(struct sqlConnection *sc, char *name)
 /* Releases an advisory lock created by GET_LOCK in sqlGetLock */
@@ -1684,18 +1720,29 @@ struct sqlConnection *cacheConn = sqlTableCacheFindConn(sc);
 if (cacheConn)
     return sqlTableCacheTableExists(cacheConn, table);
 
+char *err;
+unsigned int errNo;
+
 sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(table));  
-if ((sr = sqlUseOrStore(sc, query, DEFAULTGETTER, FALSE)) == NULL)
+
+if ((sr = sqlGetResultExt(sc, query, &errNo, &err)) == NULL)
     {
-    if (!sc->failoverConn)
+    if (errNo == 1146) // table not found
         return FALSE;
-    // if not found but we have a main connection, check the main connection, too
-    else if ((sr = sqlUseOrStore(sc->failoverConn, query, DEFAULTGETTER, FALSE)) == NULL)
-        return FALSE;
+    if (sc->failoverConn)
+	{
+	// if not found but we have a main connection, check the main connection, too
+	if ((sr = sqlGetResultExt(sc->failoverConn, query, &errNo, &err)) == NULL)
+	    {
+	    if (errNo == 1146) // table not found
+		return FALSE;
+	    }
+	}
     }
-// TODO consider using sqlGetResultExt or something that would
-// allow you to abort on all errors except the actual table not found:
-// ERROR 1146 (42S02): Table 'hg19.chr_est' doesn't exist
+
+if (!sr)
+    errAbort("Mysql error during sqlTableExists(%s) %d: %s", table, errNo, err);
+
 sqlFreeResult(&sr);
 return TRUE;
 }

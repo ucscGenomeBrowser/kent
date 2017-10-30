@@ -216,6 +216,14 @@ span#home-link {
     cursor: pointer;
 }
 
+.gbInputLabel { /* Text in input boxes */
+    padding-top: 10px;
+    color: #003a72;     /* dark blue, as above */
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 0.050em;
+}
+
 /* Track UI
  *    These are used by hgGtexTrackSettings, but are good candidates for
  *    use by other UI pages.  And other use as well (e.g. static pages)
@@ -251,6 +259,15 @@ span#home-link {
     margin: 0 20px 0 40px;
 }
 
+.gbSectionBanner {
+    padding: 3px;
+    margin-top: 6px;
+    background-color: #4c759c;  /* light blue */
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+
 /* Track Description section */
 
 .gbTrackDescription {
@@ -278,5 +295,3 @@ span#home-link {
     margin-top: 0;
     background-color: #f5f5f5;
 }
-
-

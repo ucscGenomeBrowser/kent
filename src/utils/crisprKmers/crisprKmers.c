@@ -72,26 +72,28 @@ errAbort(
   "options:\n"
   "   where <sequence> is a .2bit file or .fa fasta sequence\n"
   "   -verbose=N - for debugging control processing steps with level of verbose:\n"
+  "              - verbose < 2 - scan sequence only, no comparisons\n"
+  "              - verbose > 1 - run comparisons\n"
   "   -bed=<file> - output results to given bed9+ file\n"
   "   -offTargets=<file> - output off target data to given file\n"
   "   -ranges=<file> - use specified bed3 file to limit which guides are\n"
   "                  - measured, only those with any overlap to these bed items.\n"
-  "   -memLimit=N - N number of gigabytes for each thread, default: no threading\n"
-  "               when memory size goes beyond N gB program will thread gB/N times\n"
-  "   -dumpKmers=<file> - NOT VALID after scan of sequence, output kmers to file\n"
-  "                     - process will exit after this, use -loadKmers to continue\n"
-  "   -loadKmers=<file> - NOT VALID load kmers from previous scan of sequence from -dumpKmers"
+  "   -threads=N - N number of threads to run, default: no threading\n"
+  "              - use when ku is going to allocate more CPUs for big mem jobs.\n"
+  "   -dumpGuides=<file> - after scan of sequence, output guide sequences to file"
   );
 }
+
+//  "   -loadKmers=<file> - NOT VALID load kmers from previous scan of sequence from -dumpKmers"
 
 static char *bedFileOut = NULL;	/* set with -bed=<file> argument, kmer output */
 static char *offTargets = NULL;	/* write offTargets to <file> */
 static FILE *offFile = NULL;	/* file handle to write off targets */
 static char *ranges = NULL;	/* use ranges <file> to limit scanning */
 static struct hash *rangesHash = NULL;	/* ranges into hash + binkeeper */
-static char *dumpKmers = NULL;	/* file name to write out kmers from scan */
+static char *dumpGuides = NULL;	/* file name to write out guides from scan */
 static char *loadKmers = NULL;	/* file name to read in kmers from previous scan */
-static int memLimit = 0;	/* gB limit before going into thread mode */
+static int threads = 0;	/* number of threads to run */
 static int threadCount = 1;	/* will be adjusted depending upon vmPeak */
 
 /* Command line validation table. */
@@ -99,8 +101,8 @@ static struct optionSpec options[] = {
    {"bed", OPTION_STRING},
    {"offTargets", OPTION_STRING},
    {"ranges", OPTION_STRING},
-   {"memLimit", OPTION_INT},
-   {"dumpKmers", OPTION_STRING},
+   {"threads", OPTION_INT},
+   {"dumpGuides", OPTION_STRING},
    {"loadKmers", OPTION_STRING},
    {NULL, 0},
 };
@@ -108,6 +110,7 @@ static struct optionSpec options[] = {
 #define	guideSize	20	// 20 bases
 #define	pamSize		3	//  3 bases
 #define negativeStrand	0x0000800000000000
+#define duplicateGuide	0x0001000000000000
 
 #define fortyEightBits	0xffffffffffff
 #define fortySixBits	0x3fffffffffff
@@ -132,12 +135,13 @@ static struct optionSpec options[] = {
 // bits 5-0 - PAM sequence in 2bit encoding for 3 bases
 // bits 45-6 - 20 base sequence in 2bit encoding format
 // bit 47 - negative strand indication
+// bit 48 - duplicate guide indication
 // considering using other bits during processing to mark
 // an item for no more consideration
 
 // sizeof(struct crispr): 32
 struct crispr
-/* one chromosome set of crisprs */
+/* one chromosome set of guides */
     {
     struct crispr *next;		/* Next in list. */
     long long sequence;	/* sequence value in 2bit format */
@@ -146,13 +150,13 @@ struct crispr
 
 // sizeof(struct crisprList): 72
 struct crisprList
-/* all chromosome sets of crisprs */
+/* all chromosome sets of guides */
     {
     struct crisprList *next;	/* Next in list. */
     char *chrom;		/* chrom name */
     int size;			/* chrom size */
-    struct crispr *chromCrisprs;	/* all the crisprs on this chrom */
-    long long crisprCount;	/* number of crisprs on this chrom */
+    struct crispr *chromCrisprs;	/* all the guides on this chrom */
+    long long crisprCount;	/* number of guides on this chrom */
     long long *sequence;	/* array of the sequences */
     long long *start;		/* array of the starts */
     int **offBy;		/* offBy[5][n] */
@@ -211,17 +215,19 @@ bases[T_BASE] = 'T';
 }	//	static void initOrderedNtVal()
 
 static void timingMessage(char *prefix, long long count, char *message,
-    long ms, char *units, char *invUnits)
+    long startMs, char *units, char *invUnits)
 {
+long elapsedMs = clock1000() - startMs;
 double perSecond = 0.0;
 double inverse = 0.0;
-if ((ms > 0) && (count > 0))
+if ((elapsedMs > 0) && (count > 0))
     {
-    perSecond = 1000.0 * count / ms;
+    perSecond = 1000.0 * count / elapsedMs;
     inverse = 1.0 / perSecond;
     }
 
-verbose(1, "# %s: %lld %s @ %ld ms\n#\t%.2f %s == %g %s\n", prefix, count, message, ms, perSecond, units, inverse, invUnits);
+verbose(1, "# %s: %lld %s @ %ld ms\n#\t%.2f %s == %g %s\n", prefix, count,
+    message, elapsedMs, perSecond, units, inverse, invUnits);
 }
 
 static void setLoopEnds(struct loopControl *control, long long listSize,
@@ -351,25 +357,27 @@ static void copyToArray(struct crisprList *list)
 /* copy the crispr list data into arrays */
 {
 long startTime = clock1000();
-struct crisprList *cl = NULL;
+struct crisprList *cl;
 long long itemsCopied = 0;
+long long chromsCopied = 0;
 
 for (cl = list; cl; cl = cl->next)
     {
+    ++chromsCopied;
     size_t memSize = cl->crisprCount * sizeof(long long);
     cl->sequence = (long long *)needLargeMem(memSize);
     cl->start = (long long *)needLargeMem(memSize);
     memSize = 5 * sizeof(int *);
     cl->offBy = (int **)needLargeMem(memSize);
     memSize = cl->crisprCount * sizeof(int);
-    int r = 0;
+    int r;
     for (r = 0; r < 5; ++r)
         cl->offBy[r] = (int *)needLargeZeroedMem(memSize);
     memSize = cl->crisprCount * sizeof(float);
     cl->mitSum = (float *)needLargeMem(memSize);
 
     long long i = 0;
-    struct crispr *c = NULL;
+    struct crispr *c;
     for (c = cl->chromCrisprs; c; c = c->next)
         {
 	++itemsCopied;
@@ -379,8 +387,11 @@ for (cl = list; cl; cl = cl->next)
 	++i;
         }
     }
-long elapsedMs = clock1000() - startTime;
-timingMessage("copyToArray", itemsCopied, "items copied", elapsedMs, "items/sec", "seconds/item");
+
+verbose(1, "# copyToArray: copied %lld chromosome lists\n", chromsCopied);
+timingMessage("copyToArray", itemsCopied, "items copied", startTime,
+    "items/sec", "seconds/item");
+
 }	//	static void copyToArray(struct crisprList *list)	*/
 
 static struct crisprList *generateKmers(struct dnaSeq *seq)
@@ -398,10 +409,9 @@ long long gapCount = 0;
 int kmerLength = 0;
 long long kmerVal = 0;
 long long reverseMask = (long long)0xf << 42;
-verbose(4, "#  46 bits: %032llx\n", (long long) fortySixBits);
 
 dna=seq->dna;
-for (i=0; i < seq->size; ++i)
+for (i = 0; i < seq->size; ++i)
     {
     int val = orderedNtVal[(int)dna[i]];
     if (val >= 0)
@@ -448,56 +458,50 @@ for (i=0; i < seq->size; ++i)
             kmerVal = 0;
             }	// else if (val >= 0)
     ++chromPosition;
-    }	// for (i=0; i < seq->size; ++i)
+    }	// for (i = 0; i < seq->size; ++i)
 // slReverse(&crisprSet);	// save time, order not important at this time
 returnList->chromCrisprs = crisprSet;
 returnList->crisprCount = slCount(crisprSet);
 return returnList;
 }	// static struct crisprList *generateKmers(struct dnaSeq *seq)
 
-static char *itemColor(int **offBy, long long index)
-/* temporary itemColor, post processing will do this correctly */
+// for future reference, note the Cpf1 system:
+//	https://benchling.com/pub/cpf1
+
+static char *scoreToColor(long mitScore)
+/* following scheme from Max's python scripts */
 {
-static char *notUnique = "150,150,150";
-// static char *notUniqueAlt = "150,150,150";
-static char *twoMany = "120,120,120";
-// static char *twoManyAlt = "120,120,120";
-static char *highScore = "0,255,0";	// > 70
-static char *mediumScore = "128,128,0";	// > 50
-static char *lowScore = "255,0,0";	// >= 50
-// static char *lowestScore = "80,80,80";	// < 50
-// static char *lowestScoreAlt = "80,80,80";	// < 50
-if (offBy[0][index])
-    return notUnique;
+static char *green = "50,205,50";	/* #32cd32 */
+static char *yellow = "255,255,0";	/* #ffff00 */
+static char *black = "0,0,0";
+static char *red = "170,1,20";		/* #aa0114 */
+if (mitScore > 50)
+    return green;
+else if (mitScore > 20)
+    return yellow;
+else if (mitScore == -1)
+    return black;
 else
-    {
-    int offSum = offBy[1][index] + offBy[2][index] + offBy[3][index] +
-		offBy[4][index];
-    if (offSum < 100)
-       return highScore;
-    else if (offSum < 150)
-       return mediumScore;
-    else if (offSum < 250)
-       return lowScore;
-    else
-       return twoMany;
-    }
+    return red;
 }
 
 static void countsOutput(struct crisprList *all, FILE *bedFH)
-/* everything has been scanned and counted, print out all the data from arrays*/
+/* all done scanning and counting, print out all the guide data */
 {
 long startTime = clock1000();
 long long itemsOutput = 0;
+long long duplicatesMarked = 0;
 
 struct crisprList *list;
 long long totalOut = 0;
 for (list = all; list; list = list->next)
     {
-    long long c = 0;
+    long long c;
     for (c = 0; c < list->crisprCount; ++c)
         {
 	++itemsOutput;
+	if (list->sequence[c] & duplicateGuide)
+	    ++duplicatesMarked;
 	int negativeOffset = 0;
         char strand = '+';
         if (negativeStrand & list->sequence[c])
@@ -511,7 +515,6 @@ for (list = all; list; list = list->next)
         int mitScoreCount = + list->offBy[1][c] +
 	    list->offBy[2][c] + list->offBy[3][c] + list->offBy[4][c];
 
-        char *color = itemColor(list->offBy, c);
         char kmerString[33];
         kmerValToString(kmerString, list->sequence[c], pamSize);
         char pamString[33];
@@ -519,10 +522,20 @@ for (list = all; list; list = list->next)
 
 	if (bedFH)
 	    {
-	    long mitScore = 0;
+	    long mitScore = 1.0;
             if (mitScoreCount > 0)  /* note: interger <- float conversion  */
+	    {
 		mitScore = roundf((list->mitSum[c] / (float) mitScoreCount));
-	    fprintf(bedFH, "%s\t%lld\t%lld\t%d,%d,%d,%d,%d\t%d\t%c\t%lld\t%lld\t%s\t%s\t%s\t%ld\t%d\t%d\t%d\t%d\n", list->chrom, list->start[c], list->start[c]+pamSize+guideSize, list->offBy[0][c], list->offBy[1][c], list->offBy[2][c], list->offBy[3][c], list->offBy[4][c], list->offBy[0][c], strand, txStart, txEnd, color, kmerString, pamString, mitScore, list->offBy[1][c], list->offBy[2][c], list->offBy[3][c], list->offBy[4][c]);
+	    }
+	    else if (list->sequence[c] & duplicateGuide)
+	    {
+		mitScore = 0.0;
+	    }
+            char *color = scoreToColor(mitScore);
+	    /* the end zero will be filled in by post-processing, it will be
+	     *   the _offset into the crisprDetails.tab file
+	     */
+	    fprintf(bedFH, "%s\t%lld\t%lld\t\t%ld\t%c\t%lld\t%lld\t%s\t%s\t%s\t%d,%d,%d,%d,%d\t0\n", list->chrom, list->start[c], list->start[c]+pamSize+guideSize, mitScore, strand, txStart, txEnd, color, kmerString, pamString, list->offBy[0][c], list->offBy[1][c], list->offBy[2][c], list->offBy[3][c], list->offBy[4][c]);
 	    }
 	++totalOut;
 	}
@@ -530,24 +543,26 @@ for (list = all; list; list = list->next)
 if (bedFH)
     carefulClose(&bedFH);
 
-long elapsedMs = clock1000() - startTime;
-timingMessage("countsOutput:", itemsOutput, "items output", elapsedMs, "items/sec", "seconds/item");
+verbose(1, "# countsOutput: %lld guides marked as duplicate sequence\n",
+    duplicatesMarked);
+timingMessage("countsOutput:", itemsOutput, "items output", startTime,
+    "items/sec", "seconds/item");
+
 }	//	static void countsOutput(struct crisprList *all, FILE *bedFH)
 
 static struct crisprList *scanSequence(char *inFile)
-/* scan the given file, return list of crisprs */
+/* scan the given file, return list of guides */
 {
-verbose(1, "#\tscanning sequence file: %s\n", inFile);
+verbose(1, "# scanning sequence file: %s\n", inFile);
 dnaUtilOpen();
 struct dnaLoad *dl = dnaLoadOpen(inFile);
 struct dnaSeq *seq;
 struct crisprList *listReturn = NULL;
 
-long elapsedMs = 0;
-long scanStart = clock1000();
+long startTime = clock1000();
 long long totalCrisprs = 0;
 
-/* scanning all sequences, setting up crisprs on the listReturn */
+/* scanning all sequences, setting up guides on the listReturn */
 while ((seq = dnaLoadNext(dl)) != NULL)
     {
     if (startsWithNoCase("chrUn", seq->name) ||
@@ -561,33 +576,32 @@ while ((seq = dnaLoadNext(dl)) != NULL)
     struct crisprList *oneList = generateKmers(seq);
     slAddHead(&listReturn, oneList);
     totalCrisprs += oneList->crisprCount;
-    elapsedMs = clock1000() - startTime;
     if (verboseLevel() > 3)
-	timingMessage(seq->name, oneList->crisprCount, "crisprs", elapsedMs, "crisprs/sec", "seconds/crispr");
+	timingMessage(seq->name, oneList->crisprCount, "guides", startTime,
+	    "guides/sec", "seconds/guide");
     }
 
-elapsedMs = clock1000() - scanStart;
-timingMessage("scanSequence", totalCrisprs, "total crisprs", elapsedMs, "crisprs/sec", "seconds/crispr");
+timingMessage("scanSequence", totalCrisprs, "total guides", startTime,
+    "guides/sec", "seconds/guide");
 
 return listReturn;
 }	/*	static crisprList *scanSequence(char *inFile)	*/
 
 static struct crisprList *rangeExtraction(struct crisprList **allReference)
-/* given ranges in global rangesHash, construct new list of crisprs that
+/* given ranges in global rangesHash, construct new list of guides that
  *     have any type of overlap with the ranges, also extract those items from
  *         the all list.  Returns new list.
  */
 {
 struct crisprList *all = *allReference;
 struct crisprList *listReturn = NULL;
-struct crisprList *list = NULL;
+struct crisprList *list;
 int inputChromCount = slCount(all);
 long long returnListCrisprCount = 0;
 long long examinedCrisprCount = 0;
 struct crisprList *prevChromList = NULL;
 
-long elapsedMs = 0;
-long scanStart = clock1000();
+long startTime = clock1000();
 
 struct crisprList *nextList = NULL;
 for (list = all; list; list = nextList)
@@ -595,17 +609,22 @@ for (list = all; list; list = nextList)
     nextList = list->next;	// remember before perhaps lost
     long long beforeCrisprCount = list->crisprCount;
     examinedCrisprCount += list->crisprCount;
-    struct crispr *c = NULL;
     struct binKeeper *bk = hashFindVal(rangesHash, list->chrom);
     struct crispr *newCrispr = NULL;
     if (bk != NULL)
         {
 	struct crispr *prevCrispr = NULL;
 	struct crispr *next = NULL;
+	struct crispr *c;
         for (c = list->chromCrisprs; c; c = next)
             {
-            struct binElement *hitList = NULL;
 	    next = c->next;	// remember before perhaps lost
+	    if (endsAG == (c->sequence & 0xf))
+		{
+		prevCrispr = c;	// remains on 'all' list
+		continue;	// only check guides endsGG
+		}
+            struct binElement *hitList = NULL;
 	    // select any guide that is at least half contained in any range
 	    int midPoint = c->start + ((pamSize + guideSize) >> 1);
 //            if (negativeStrand & c->sequence)
@@ -647,20 +666,24 @@ for (list = all; list; list = nextList)
 	    {
 	    list->crisprCount = slCount(list->chromCrisprs);
             long long removedCrisprs = beforeCrisprCount - list->crisprCount;
-	    verbose(1, "# range scan chrom %s had %lld crisprs, removed %lld leaving %lld target\n",
+	    verbose(1, "# range scan chrom %s had %lld guides, removed %lld leaving %lld target\n",
 		list->chrom, beforeCrisprCount, removedCrisprs, list->crisprCount);
 	    }
 	}
     prevChromList = list;
     }	//	for (list = all; list; list = list->next)
 
-elapsedMs = clock1000() - scanStart;
 verbose(1, "# range scanning %d chroms, return %d selected chroms, leaving %d chroms\n",
     inputChromCount, slCount(listReturn), slCount(all));
+
 long long targetCrisprCount = examinedCrisprCount - returnListCrisprCount;
-timingMessage("range scan", examinedCrisprCount, "examined crisprs", elapsedMs, "crisprs/sec", "seconds/crispr");
-timingMessage("range scan", targetCrisprCount, "remaining target crisprs", elapsedMs, "crisprs/sec", "seconds/crispr");
-timingMessage("range scan", returnListCrisprCount, "returned query crisprs", elapsedMs, "crisprs/sec", "seconds/crispr");
+timingMessage("range scan", examinedCrisprCount, "examined guides",
+    startTime, "guides/sec", "seconds/guide");
+timingMessage("range scan", targetCrisprCount, "remaining target guides",
+    startTime, "guides/sec", "seconds/guide");
+timingMessage("range scan", returnListCrisprCount, "returned query guides",
+    startTime, "guides/sec", "seconds/guide");
+
 if (NULL == all)
     {
     allReference = NULL;	// they have all been removed
@@ -691,12 +714,12 @@ int mmCount = 0;
 int lastMmPos = -1;
 /* the XOR determines differences in two sequences, the shift
  * right 6 removes the PAM sequence and the 'fortyBits &' eliminates
- * the negativeStrand bit
+ * the negativeStrand and duplicateGuide bits
  */
 long long misMatch = fortyBits & ((sequence1 ^ sequence2) >> 6);
 int distCount = 0;
 int distSum = 0;
-int pos = 0;
+int pos;
 for (pos = 0; pos < guideSize; ++pos)
     {
     int diff = misMatch & 0x3;
@@ -870,7 +893,7 @@ static float calcCfdScore(long long sequence1, long long sequence2)
 float score = 1.0;
 /* the XOR determine differences in two sequences, the
  * shift right 6 removes the PAM sequence and
- * the 'fortyBits &' eliminates the negativeStrand bit
+ * the 'fortyBits &' eliminates the negativeStrand and duplicateGuide bits
  */
 long long misMatch = fortyBits & ((sequence1 ^ sequence2) >> 6);
 long long misMatchBitMask = 0xc000000000;
@@ -923,6 +946,8 @@ float mitScore =
     calcHitScore(query->sequence[qIndex], target->sequence[tIndex]);
 float cfdScore =
     calcCfdScore(query->sequence[qIndex], target->sequence[tIndex]);
+/* note: interger cfdInt <- cfdScore float conversion  */
+int cfdInt = round(cfdScore * 1000);
 
 /* Note from Max's script:
  *	this is a heuristic based on the guideSeq data where alternative
@@ -947,23 +972,25 @@ if (offFile)
     char targetPAM[33];	/* local storage for string */
     char misMatch[33];	/* ...*.....*.*... ascii string represent misMatch */
 
-    int i = 0;
-    int bitsOnSum = 0;
+    int i;
+    int offTargetCount = 0;
     for (i = 1; i < 5; ++i)
-        bitsOnSum += query->offBy[i][qIndex];
+        offTargetCount += query->offBy[i][qIndex];
 
-    if (bitsOnSum < 1000)	// could be command line option limit
+    if (offTargetCount < 1000)	// could be command line option limit
         {
         misMatchString(misMatch, twoBitMisMatch);
         kmerValToString(queryString, query->sequence[qIndex], pamSize);
         kmerValToString(targetString, target->sequence[tIndex], pamSize);
 	kmerPAMString(queryPAM, query->sequence[qIndex]);
 	kmerPAMString(targetPAM, target->sequence[tIndex]);
-        fprintf(offFile, "%s:%lld %c %s%s %s%s %s %d %.8f %.8f\t%s:%lld %c\n",
+        fprintf(offFile, "%s:%lld %c %s %s %s %s %s;%lld%c;%d %s %d %.8f %.8f %s:%lld %c\n",
 	    query->chrom, query->start[qIndex],
 		negativeStrand & query->sequence[qIndex] ? '-' : '+',
                 queryString, queryPAM, targetString, targetPAM,
-                misMatch, bitsOn, mitScore, cfdScore, target->chrom,
+                target->chrom, target->start[tIndex],
+		negativeStrand & target->sequence[tIndex] ? '-' : '+', cfdInt,
+		misMatch, bitsOn, mitScore, cfdScore, target->chrom,
 		target->start[tIndex],
 		negativeStrand & target->sequence[tIndex] ? '-' : '+');
         }
@@ -973,26 +1000,23 @@ if (offFile)
 	//		long long tIndex)
 
 
-/* this queryVsTarget can be used by threads, it should be safe,
- * remains to be proven.
- */
+/* this queryVsTarget can be used by threads, appears to be safe */
 static void queryVsTarget(struct crisprList *query, struct crisprList *target,
     int threadCount, int threadId)
-/* run the query crisprs list against the target list in the array structures */
+/* run the query guides list against the target list in the array structures */
 {
-struct crisprList *qList = NULL;
+struct crisprList *qList;
 long long totalCrisprsQuery = 0;
 long long totalCrisprsTarget = 0;
 long long totalCompares = 0;
 struct loopControl *control = NULL;
 AllocVar(control);
 
-long processStart = clock1000();
-long elapsedMs = 0;
+long startTime = clock1000();
+long long duplicatesMarked = 0;
 
 for (qList = query; qList; qList = qList->next)
     {
-    long long qCount = 0;
     totalCrisprsQuery += qList->crisprCount;
     if (threadCount > 1)
 	{
@@ -1010,19 +1034,23 @@ for (qList = query; qList; qList = qList->next)
 	    control->listEnd - control->listStart, control->listStart,
 		control->listEnd);
     totalCrisprsTarget += control->listEnd - control->listStart;
+    long long qCount;
     for (qCount = control->listStart; qCount < control->listEnd; ++qCount)
 	{
-        struct crisprList *tList = NULL;
+        if (qList->sequence[qCount] & duplicateGuide)
+	    continue;	/* already marked as duplicate */
+        struct crisprList *tList;
         for (tList = target; tList; tList = tList->next)
             {
-            long long tCount = 0;
-	    totalCompares += tList->crisprCount;
+            long long tCount;
+            totalCompares += tList->crisprCount;
             for (tCount = 0; tCount < tList->crisprCount; ++tCount)
                 {
-		/* the XOR determine differences in two sequences, the
-		 * shift right 6 removes the PAM sequence and
-		 * the 'fortyBits &' eliminates the negativeStrand bit
-		 */
+                /* the XOR determine differences in two sequences, the
+                 * shift right 6 removes the PAM sequence and
+                 * the 'fortyBits &' eliminates the negativeStrand and
+		 * duplicateGuide bits
+                 */
                 long long misMatch = fortyBits &
                     ((qList->sequence[qCount] ^ tList->sequence[tCount]) >> 6);
                 if (misMatch)
@@ -1032,61 +1060,73 @@ for (qList = query; qList; qList = qList->next)
                      */
                     misMatch = (misMatch | (misMatch >> 1)) & 0x5555555555;
                     int bitsOn = _mm_popcnt_u64(misMatch);
-		    if (bitsOn < 5)
-			{
-			recordOffTargets(qList, tList, bitsOn, qCount, tCount, misMatch);
-			qList->offBy[bitsOn][qCount] += 1;
+                    if (bitsOn < 5)
+                        {
+                        recordOffTargets(qList, tList, bitsOn, qCount,
+			    tCount, misMatch);
+                        qList->offBy[bitsOn][qCount] += 1;
 //			tList->offBy[bitsOn][tCount] += 1; not needed
-			}
+                        }
                     }
                 else
-                    { 	/* no misMatch, identical crisprs */
+                    { 	/* no misMatch, identical guides */
                     qList->offBy[0][qCount] += 1;
+                    qList->sequence[qCount] |= duplicateGuide;
+		    ++duplicatesMarked;
 //                  tList->offBy[0][tCount] += 1;	not needed
                     }
                 } // for (tCount = 0; tCount < tList->crisprCount; ++tCount)
             }	//	for (tList = target; tList; tList = tList->next)
 	}	//	for (qCount = 0; qCount < qList->crisprCount; ++qCount)
     }	//	for (qList = query; qList; qList = qList->next)
-verbose(1, "# done with scanning, check timing\n");
-elapsedMs = clock1000() - processStart;
-timingMessage("queryVsTarget", totalCrisprsQuery, "query crisprs processed", elapsedMs, "crisprs/sec", "seconds/crispr");
-timingMessage("queryVsTarget", totalCrisprsTarget, "vs target crisprs", elapsedMs, "crisprs/sec", "seconds/crispr");
-timingMessage("queryVsTarget", totalCompares, "total comparisons", elapsedMs, "compares/sec", "seconds/compare");
+
+verbose(1, "# queryVsTarget: an additional %lld duplicates marked\n",
+    duplicatesMarked);
+timingMessage("queryVsTarget", totalCrisprsQuery, "query guides processed",
+    startTime, "guides/sec", "seconds/guide");
+timingMessage("queryVsTarget", totalCrisprsTarget, "vs target guides",
+    startTime, "guides/sec", "seconds/guide");
+timingMessage("queryVsTarget", totalCompares, "total comparisons",
+    startTime, "compares/sec", "seconds/compare");
+
 }	/* static struct crisprList *queryVsTarget(struct crisprList *query,
 	    struct crisprList *target) */
 
 static void queryVsSelf(struct crisprList *all)
 /* run this 'all' list vs. itself avoiding self to self comparisons */
 {
-struct crisprList *qList = NULL;
+struct crisprList *qList;
 long long totalCrisprsQuery = 0;
 long long totalCrisprsCompare = 0;
 
-long processStart = clock1000();
-long elapsedMs = 0;
+long startTime = clock1000();
+
+long long duplicatesMarked = 0;
 
 /* query runs through all chroms */
 for (qList = all; qList; qList = qList->next)
     {
-    long long qCount = 0;
+    long long qCount;
     totalCrisprsQuery += qList->crisprCount;
-    verbose(1, "# queryVsSelf %lld query crisprs on chrom %s\n", qList->crisprCount, qList->chrom);
+    verbose(1, "# queryVsSelf %lld query guides on chrom %s\n", qList->crisprCount, qList->chrom);
     for (qCount = 0; qCount < qList->crisprCount; ++qCount)
 	{
 	/* target starts on same chrom as query, and
 	   at next kmer after query for this first chrom */
         long long tStart = qCount+1;
-        struct crisprList *tList = NULL;
+        struct crisprList *tList;
+        if (qList->sequence[qCount] & duplicateGuide)
+	    continue;	/* already marked as duplicate */
         for (tList = qList; tList; tList = tList->next)
             {
-            long long tCount = tStart;
+            long long tCount;
 	    totalCrisprsCompare += tList->crisprCount - tStart;
             for (tCount = tStart; tCount < tList->crisprCount; ++tCount)
                 {
 		/* the XOR determine differences in two sequences, the
 		 * shift right 6 removes the PAM sequence and
-		 * the 'fortyBits &' eliminates the negativeStrand bit
+		 * the 'fortyBits &' eliminates the negativeStrand and
+		 * duplicateGuide bits
 		 */
                 long long misMatch = fortyBits &
                     ((qList->sequence[qCount] ^ tList->sequence[tCount]) >> 6);
@@ -1105,32 +1145,39 @@ for (qList = all; qList; qList = qList->next)
 			}
                     }
                 else
-                    { 	/* no misMatch, identical crisprs */
+                    { 	/* no misMatch, identical guides */
+                    qList->sequence[qCount] |= duplicateGuide;
+                    tList->sequence[tCount] |= duplicateGuide;
                     qList->offBy[0][qCount] += 1;
                     tList->offBy[0][tCount] += 1;
+		    ++duplicatesMarked;
                     }
                 } // for (tCount = 0; tCount < tList->crisprCount; ++tCount)
                 tStart = 0;	/* following chroms run through all */
             }	//	for (tList = target; tList; tList = tList->next)
 	}	//	for (qCount = 0; qCount < qList->crisprCount; ++qCount)
     }	//	for (qList = query; qList; qList = qList->next)
-elapsedMs = clock1000() - processStart;
-timingMessage("queryVsSelf", totalCrisprsQuery, "crisprs processed", elapsedMs, "crisprs/sec", "seconds/crispr");
-timingMessage("queryVsSelf", totalCrisprsCompare, "total comparisons", elapsedMs, "compares/sec", "seconds/compare");
+
+verbose(1, "# queryVsSelf: counted %lld duplicate guides\n", duplicatesMarked);
+timingMessage("queryVsSelf", totalCrisprsQuery, "guides processed",
+    startTime, "guides/sec", "seconds/guide");
+timingMessage("queryVsSelf", totalCrisprsCompare, "total comparisons",
+    startTime, "compares/sec", "seconds/compare");
+
 }	/* static void queryVsSelf(struct crisprList *all) */
 
 static struct crisprList *readKmers(char *fileIn)
 /* read in kmer list from 'fileIn', return list structure */
 {
 errAbort("# XXX readKmers function not implemented\n");
-verbose(1, "# reading crisprs from: %s\n", fileIn);
+verbose(1, "# reading guides from: %s\n", fileIn);
 struct crisprList *listReturn = NULL;
 struct lineFile *lf = lineFileOpen(fileIn, TRUE);
 char *row[10];
 int wordCount = 0;
 long long crisprsInput = 0;
 
-long startMs = clock1000();
+long startTime = clock1000();
 
 while (0 < (wordCount = lineFileChopNextTab(lf, row, ArraySize(row))) )
     {
@@ -1165,30 +1212,30 @@ while (0 < (wordCount = lineFileChopNextTab(lf, row, ArraySize(row))) )
 
 lineFileClose(&lf);
 
-long elapsedMs = clock1000() - startMs;
-timingMessage("readKmers", crisprsInput, "crisprs read in", elapsedMs, "crisprs/sec", "seconds/crispr");
+timingMessage("readKmers", crisprsInput, "guides read in", startTime,
+    "guides/sec", "seconds/guide");
 
 return listReturn;
 }	//	static struct crisprList *readKmers(char *fileIn)
 
-static void writeKmers(struct crisprList *all, char *fileOut)
-/* write kmer list 'all' to 'fileOut' */
+static void writeGuides(struct crisprList *all, char *fileOut)
+/* write guide list 'all' to 'fileOut' */
 {
-errAbort("# XXX writeKmers function not implemented\n");
 FILE *fh = mustOpen(fileOut, "w");
-struct crisprList *list = NULL;
+struct crisprList *list;
 long long crisprsWritten = 0;
 char kmerString[33];
 char pamString[33];
 
-long startMs = clock1000();
+long startTime = clock1000();
 
-slReverse(&all);
+/* slReverse(&all);   * can not do this here, destroy's caller's list,
+                      * caller's value of all doesn't change */
+
 for (list = all; list; list = list->next)
     {
     fprintf(fh, "%s\t%lld\t%d\n", list->chrom, list->crisprCount, list->size);
-    struct crispr *c = NULL;
-    slReverse(&list->chromCrisprs);
+    struct crispr *c;
     for (c = list->chromCrisprs; c; c = c->next)
 	{
         kmerValToString(kmerString, c->sequence, pamSize);
@@ -1200,9 +1247,9 @@ for (list = all; list; list = list->next)
     }
 carefulClose(&fh);
 
-long elapsedMs = clock1000() - startMs;
-timingMessage("writeKmers", crisprsWritten, "crisprs written", elapsedMs, "crisprs/sec", "seconds/crispr");
-}	//	static void writeKmers(struct crisprList *all, char *fileOut)
+timingMessage("writeGuides", crisprsWritten, "guides written", startTime,
+    "guides/sec", "seconds/guide");
+}	//	static void writeGuides(struct crisprList *all, char *fileOut)
 
 static void *threadFunction(void *id)
 /* thread entry */
@@ -1223,7 +1270,7 @@ AllocArray(threadIds, threadCount);
 pthread_t *threads = NULL;
 AllocArray(threads, threadCount);
 
-int pt = 0;
+int pt;
 for (pt = 0; pt < threadCount; ++pt)
     {
     struct threadControl *threadData;
@@ -1256,16 +1303,16 @@ if (loadKmers)
 else
     allGuides = scanSequence(sequence);
 
-if (dumpKmers)
-    {
-    writeKmers(allGuides, dumpKmers);
-    return;
-    }
+// if (dumpGuides)
+//     {
+//     writeGuides(allGuides, dumpGuides);
+//     return;
+//     }
 
 long long vmPeak = currentVmPeak();
 verbose(1, "# vmPeak after scanSequence: %lld kB\n", vmPeak);
 
-/* processing those crisprs */
+/* processing those guides */
 if (verboseLevel() > 1)
     {
     if (offTargets)
@@ -1274,8 +1321,10 @@ if (verboseLevel() > 1)
     if (rangesHash)
         {
 	/* result here is two exclusive sets: query, and allGuides
-	 *    the query crisprs have been extracted from the allGuides */
+	 *    the query guides have been extracted from the allGuides */
         queryGuides = rangeExtraction(& allGuides);
+	if (dumpGuides)
+	    writeGuides(queryGuides, dumpGuides);
         }
     if (queryGuides)
         copyToArray(queryGuides);
@@ -1284,22 +1333,23 @@ if (verboseLevel() > 1)
     vmPeak = currentVmPeak();
     verbose(1, "# vmPeak after copyToArray: %lld kB\n", vmPeak);
     /* larger example: 62646196 kB */
-    if ((memLimit > 0) && ((vmPeak >> 20) > memLimit))	// the >> 20 converts kB to gB
+    if (threads > 1)
 	{
-	threadCount = 1 + ((vmPeak >> 20) / memLimit);
-	verbose(1, "# over %d Gb at %lld kB, threadCount: %d\n", memLimit, vmPeak, threadCount);
+	int gB = vmPeak >> 20;	/* convert kB to Gb */
+	threadCount = threads;
+	verbose(1, "# at %d Gb (%lld kB), running %d threads\n", gB, vmPeak, threadCount);
 	}
     if (queryGuides)	// when range selected some query sequences
 	{
+	/* the query vs. itself avoiding self vs. self and marking dups */
+        queryVsSelf(queryGuides);
 	if (allGuides) // if there are any left on the all list
 	    {
 	    if (threadCount > 1)
 		runThreads(threadCount, queryGuides, allGuides);
 	    else
-		queryVsTarget(queryGuides, allGuides, 1, 0);
+		queryVsTarget(queryGuides, allGuides, 0, 0);
 	    }
-	/* then run up the query vs. itself avoiding self vs. self */
-        queryVsSelf(queryGuides);
         countsOutput(queryGuides, bedFH);
         }
     else
@@ -1322,17 +1372,24 @@ if (argc != 2)
 verbose(0, "# running verboseLevel: %d\n", verboseLevel());
 
 bedFileOut = optionVal("bed", bedFileOut);
-dumpKmers = optionVal("dumpKmers", dumpKmers);
+dumpGuides = optionVal("dumpGuides", dumpGuides);
 loadKmers = optionVal("loadKmers", loadKmers);
 offTargets = optionVal("offTargets", offTargets);
-memLimit = optionInt("memLimit", memLimit);
+threads = optionInt("threads", threads);
+if (threads < 0)
+    errAbort("specified threads is less than 0: %d\n", threads);
+if (threads > 0)
+    verbose(1, "# requesting threads: %d\n", threads);
 ranges = optionVal("ranges", ranges);
 if (ranges)
     rangesHash = readRanges(ranges);
 
 FILE *bedFH = NULL;
 if (bedFileOut)
+    {
     bedFH = mustOpen(bedFileOut, "w");
+    verbose(1, "# output to bed file: %s\n", bedFileOut);
+    }
 
 initOrderedNtVal();	/* set up orderedNtVal[] */
 crisprKmers(argv[1], bedFH);

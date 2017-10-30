@@ -81,6 +81,7 @@ chainLinearGap medium
 priority 270.3
 
 track chainNetTarSyr1 override
+release alpha
 chainMinScore 3000
 chainLinearGap medium
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91

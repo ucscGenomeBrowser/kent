@@ -147,7 +147,8 @@ UCSC_APPS = \
 
 USER_APP_SCRIPTS = \
 	bedJoinTabOffset \
-	expMatrixToBarchartBed
+	expMatrixToBarchartBed \
+	webSync
 
 SCRIPT_FILES = \
 	agpToLift \
@@ -168,11 +169,10 @@ SCRIPT_FILES = \
 	pslProtCnv \
 	pslSameGene \
 	tabRepl \
-	uniprotLift \
 	uniprotToTab \
 	ggTables \
 	ggGeneClasses \
-	ggGpmlToTag \
+	ggGpmlToTab \
 	ggKgmlToTab \
 	ggMsrToTab \
 	ggPidToTab \

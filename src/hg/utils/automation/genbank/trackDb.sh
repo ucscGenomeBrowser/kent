@@ -39,7 +39,7 @@ bigDataUrl bbi/%s.assembly%s.bb
 type bigBed 6
 html %s.assembly
 searchIndex name%s
-url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
+url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
 group map\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}" "${searchTrix}"
 fi
@@ -67,7 +67,7 @@ bigDataUrl bbi/%s.ncbiGene%s.bb
 type bigGenePred
 html %s.ncbiGene
 searchIndex name%s
-url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
+url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
 group genes\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}" "${searchTrix}"
   fi
@@ -87,7 +87,7 @@ bigDataUrl bbi/%s.ncbiGene%s.bb
 type bigGenePred
 html %s.ncbiGene
 searchIndex name%s
-url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
+url https://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
 group genes\n\n" "${dbPrefix}" ".ucsc" "${dbPrefix}" "${searchTrix}"
   fi

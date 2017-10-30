@@ -3237,37 +3237,6 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
 return hti;
 }
 
-struct hTableInfo *hFindBigWigTrackInfo(char *db, char *chrom, char *rootName)
-/* Get track information on a big* file that has no table */
-{
-struct sqlConnection *conn;
-conn = hAllocConn(db);
-static struct hash *dbHash = NULL; 
-struct hash *hash;
-struct hTableInfo *hti;
-char fullName[HDB_MAX_TABLE_STRING];
-chrom = hDefaultChrom(db);
-dbHash = newHash(8);
-hash = hashFindVal(dbHash, db);
-if (hash == NULL)
-    {
-    hash = newHash(8);
-    hashAdd(dbHash, db, hash);
-    }
-if ((hti = hashFindVal(hash, rootName)) == NULL)
-    {
-    safecpy(fullName, sizeof(fullName), rootName);
-    safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
-    AllocVar(hti);
-    hashAddSaveName(hash, rootName, hti, &hti->rootName);
-    hti->isSplit = FALSE;
-    hFreeConn(&conn);
-    return hti; 
-    }
-hFreeConn(&conn);
-return hti; 
-}
-
 int hTableInfoBedFieldCount(struct hTableInfo *hti)
 /* Return number of BED fields needed to save hti. */
 {
@@ -3810,6 +3779,10 @@ else
     {
     // we now allow references to native tracks in track hubs
     tdb->table = trackHubSkipHubName(tdb->table);
+
+    // if it's copied from a custom track, wait to find data later
+    if (isCustomTrack(tdb->table))
+        return TRUE; 
     return (hTableForTrack(database, tdb->table) != NULL);
     }
 }
@@ -5558,4 +5531,46 @@ for (table = snpNNNTables;  table != NULL;  table = table->next)
         return tdb;
     }
 return NULL;
+}
+
+boolean hDbHasNcbiRefSeq(char *db)
+/* Return TRUE if db has NCBI's RefSeq alignments and annotations. */
+{
+// hTableExists() caches results so this shouldn't make for loads of new SQL queries if called
+// more than once.
+return (hTableExists(db, "ncbiRefSeq") && hTableExists(db, "ncbiRefSeqPsl") &&
+        hTableExists(db, "ncbiRefSeqCds") && hTableExists(db, "ncbiRefSeqLink") &&
+        hTableExists(db, "ncbiRefSeqPepTable") &&
+        hTableExists(db, "seqNcbiRefSeq") && hTableExists(db, "extNcbiRefSeq"));
+}
+
+char *hRefSeqAccForChrom(char *db, char *chrom)
+/* Return the RefSeq NC_000... accession for chrom if we can find it, else just chrom.
+ * db must never change. */
+{
+static char *firstDb = NULL;
+static struct hash *accHash = NULL;
+static boolean checkExistence = TRUE;
+if (firstDb && !sameString(firstDb, db))
+    errAbort("hRefSeqAccForChrom: only works for one db.  %s was passed in earlier, now %s.",
+             firstDb, db);
+char *seqAcc = NULL;
+if (checkExistence && !trackHubDatabase(db) && hTableExists(db, "chromAlias"))
+    // Will there be a chromAlias for hubs someday??
+    {
+    firstDb = db;
+    struct sqlConnection *conn = hAllocConn(db);
+    accHash = sqlQuickHash(conn,
+                           NOSQLINJ "select chrom, alias from chromAlias where source = 'refseq'");
+    if (hashNumEntries(accHash) == 0)
+        // No RefSeq accessions -- make accHash NULL
+        hashFree(&accHash);
+    hFreeConn(&conn);
+    checkExistence = FALSE;
+    }
+if (accHash)
+    seqAcc = cloneString(hashFindVal(accHash, chrom));
+if (seqAcc == NULL)
+    seqAcc = cloneString(chrom);
+return seqAcc;
 }

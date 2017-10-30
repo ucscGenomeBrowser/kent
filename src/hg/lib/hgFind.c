@@ -2450,6 +2450,12 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 			fprintf(f, "%s_sel=1&", tdb->parent->track);
 			}
 		    }
+                if (isNotEmpty(pos->highlight))
+                    {
+                    char *encHighlight = cgiEncode(pos->highlight);
+                    fprintf(f, "highlight=%s&", encHighlight);
+                    freeMem(encHighlight);
+                    }
 		fprintf(f, "hgFind.matches=%s,\">", encMatches);
 		// Bold canonical genes. 
 		if(pos->canonical) {
@@ -2514,7 +2520,8 @@ for (i = 0;  i < termCount;  i++)
     if (hgp == NULL || hgp->posCount == 0)
 	{
 	hgPositionsFree(&hgp);
-	warn("Sorry, couldn't locate %s in genome database\n", terms[i]);
+	warn("Sorry, couldn't locate %s in %s %s\n", terms[i],
+             trackHubSkipHubName(hOrganism(db)), hFreezeDate(db));
 	if (multiTerm)
 	    hUserAbort("%s not uniquely determined -- "
 		     "can't do multi-position search.", terms[i]);
@@ -2735,26 +2742,31 @@ if (xrefList == NULL && hgFindSpecSetting(hfs, "searchBoth") != NULL)
 return(xrefList);
 }
 
-static void addHighlight(struct cart *cart, char *db, char *chrom, unsigned start, unsigned end)
-/* Add the given region to the cart variable highlight. */
+static char *addHighlight(struct cart *cart, char *db, char *chrom, unsigned start, unsigned end)
+/* Add the given region to the existing value of the cart variable highlight.
+ * Return new value for highlight, or NULL if no change is necessary (already highlighted). */
 {
 char *color = "fcfcac";
 struct dyString *dy = dyStringCreate("%s.%s:%u-%u#%s", db, chrom, start+1, end, color);
+boolean alreadySet = FALSE;
 char *existing = cartOptionalString(cart, "highlight");
-if (isEmpty(existing))
-    cartSetString(cart, "highlight", dyStringContents(dy));
-else
+if (isNotEmpty(existing))
     {
     // Don't add region if it is already in the existing highlight setting.
     char *alreadyIn = strstr(existing, dyStringContents(dy));
-    if (!alreadyIn ||
-        !(alreadyIn[dyStringLen(dy)] == '|' || alreadyIn[dyStringLen(dy)] == '\0'))
-        {
+    if (alreadyIn &&
+        (alreadyIn[dyStringLen(dy)] == '|' || alreadyIn[dyStringLen(dy)] == '\0'))
+        alreadySet = TRUE;
+    else
         dyStringPrintf(dy, "|%s", existing);
-        cartSetString(cart, "highlight", dyStringContents(dy));
-        }
     }
-dyStringFree(&dy);
+if (alreadySet)
+    {
+    dyStringFree(&dy);
+    return NULL;
+    }
+else
+    return dyStringCannibalize(&dy);
 }
 
 static boolean doQuery(char *db, struct hgFindSpec *hfs, char *xrefTerm, char *term,
@@ -2835,7 +2847,7 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 	else if (padding > 0 && !multiTerm)
 	    {
             // highlight the item bases to distinguish from padding
-            addHighlight(cart, db, pos->chrom, pos->chromStart, pos->chromEnd);
+            pos->highlight = addHighlight(cart, db, pos->chrom, pos->chromStart, pos->chromEnd);
 	    int chromSize = hChromSize(db, pos->chrom);
 	    pos->chromStart -= padding;
 	    pos->chromEnd   += padding;
@@ -3091,7 +3103,8 @@ if (hgvs)
         singlePos(hgp, "HGVS", NULL, trackTable, term, "",
                   mapping->chrom, mapping->chromStart-padding, mapping->chromEnd+padding);
         // highlight the mapped bases to distinguish from padding
-        addHighlight(cart, db, mapping->chrom, mapping->chromStart, mapping->chromEnd);
+        hgp->tableList->posList->highlight = addHighlight(cart, db, mapping->chrom,
+                                                          mapping->chromStart, mapping->chromEnd);
         foundIt = TRUE;
         }
     dyStringFree(&dyWarn);
@@ -3264,6 +3277,8 @@ slReverse(&hgp->tableList);
 if (multiTerm)
     collapseSamePos(hgp);
 fixSinglePos(hgp);
+if (cart && hgp->singlePos && isNotEmpty(hgp->singlePos->highlight))
+    cartSetString(cart, "highlight", hgp->singlePos->highlight);
 return hgp;
 }
 

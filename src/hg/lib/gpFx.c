@@ -679,7 +679,8 @@ cc->pepPosition = pepPos;
 if (cdsBasesAdded % 3 == 0)
     {
     // Common case: substitution, same number of old/new codons/peps:
-    int numOldCodons = (1 + allele->length / 3), numNewCodons = (1 + allele->length / 3);
+    int refPepEnd = (endInCds + 2) / 3;
+    int numOldCodons = refPepEnd - pepPos, numNewCodons = numOldCodons;
     if (cdsBasesAdded > 0)
 	{
 	// insertion: more new codons than old
@@ -818,8 +819,8 @@ if (variant->chromEnd > intronStart && variant->chromStart < intronEnd)
     if (variant->chromEnd > intronEnd-2 && variant->chromStart < intronEnd)
 	// Within 2 bases of intron end(/start for '-'):
 	soNumber = minusStrand ? splice_donor_variant : splice_acceptor_variant;
-    else if ((variant->chromEnd > intronStart+3 && variant->chromStart < intronStart+8) ||
-	     (variant->chromEnd > intronEnd-8 && variant->chromStart < intronEnd+3))
+    else if ((variant->chromEnd >= intronStart+2 && variant->chromStart < intronStart+8) ||
+	     (variant->chromEnd > intronEnd-8 && variant->chromStart <= intronEnd-2))
 	// Within 3 to 8 bases of intron start or end:
 	soNumber = splice_region_variant;
     if (predIsNmd)

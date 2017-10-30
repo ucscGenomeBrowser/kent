@@ -19,6 +19,7 @@
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
+char *database = NULL;
 
 static void printGoButton()
 /* HTML for GO button and 'play' icon */
@@ -65,7 +66,27 @@ puts(
 "                   <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>\n"
 "                   <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>\n"
 "               </span></a>\n"
+);
+
+if (tdb->parent)
+    {
+    // link to supertrack
+    char *encodedMapName = cgiEncode(tdb->parent->track);
+    char *chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
+    puts("&nbsp;");
+    printf(
+    "       <a href='%s?%s=%s&c=%s&g=%s' title='Go to container track (%s)'>\n"
+    "           <i class='gbIconLevelUp fa fa-level-up'></i>\n"
+    "       </a>\n",
+                hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                chromosome, encodedMapName, tdb->parent->shortLabel
+    );
+    freeMem(encodedMapName);
+    }
+puts(
 "       </div>\n"
+);
+puts(
 "       <div class='col-md-2 text-right'>\n"
 );
 printGoButton();
@@ -105,7 +126,7 @@ puts(
 "        <!-- row 1 -->\n"
 "        <div class='row'>\n"
 "            <div class='gbControl col-md-12'>\n");
-gtexEqtlGene(cart, track, tdb);
+gtexEqtlUiGene(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -113,7 +134,7 @@ puts(
 "        <!-- row 2 -->\n"
 "        <div class='row'>\n"
 "            <div class='gbControl col-md-12'>\n");
-gtexEqtlEffectSize(cart, track, tdb);
+gtexEqtlUiEffectSize(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -121,7 +142,9 @@ puts(
 "        <!-- row 3 -->\n"
 "        <div class='row'>\n"
 "            <div class='gbControl col-md-12'>\n");
-gtexEqtlProbability(cart, track, tdb);
+gtexEqtlUiProbability(cart, track, tdb);
+puts("&nbsp;&nbsp;&nbsp;&nbsp;");
+gtexEqtlUiTissueColor(cart, track, tdb);
 puts(
 "            </div>\n"
 "        </div>\n");
@@ -218,17 +241,25 @@ int cols = 2;
 int last = count/2 + 1;
 
 puts(
- " <!-- Tissue list -->\n"
- "<div class='row gbSectionBanner'>\n"
- "  <div class='col-md-1'>Tissues</div>\n"
- "  <div class='col-md-7 gbSectionInfo'>\n"
- "      Click label below or in Body Map to set or clear a tissue\n"
- "  </div>\n"
- "  <div class='col-md-4 gbButtonContainer text-right'>\n"
- "      <div id='setAll' class='gbButtonSetClear gbButton'>set all</div>\n"
- "      <div id='clearAll' class='gbButtonSetClear gbButton'>clear all</div>\n"
- "  </div>\n"
- "</div>\n"
+" <!-- Tissue list -->\n"
+"<div class='row gbSectionBanner'>\n"
+"  <div class='col-md-2'>Tissues\n"
+"    <!-- Info icon built from stacked fa icons -->\n"
+"    <span id='showSampleCount' title='Show sample counts'>\n"
+"      <span class='gbIconSmall fa-stack'>\n"
+"        <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>\n"
+"        <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>\n"
+"      </span></a>\n"
+"    </span>\n"
+"  </div>\n"
+"  <div class='col-md-6 gbSectionInfo'>\n"
+"      Click below or in Body Map to change tissues\n"
+"  </div>\n"
+"  <div class='col-md-4 gbButtonContainer text-right'>\n"
+"    <div id='setAll' class='gbButtonSetClear gbButton'>set all</div>\n"
+"    <div id='clearAll' class='gbButtonSetClear gbButton'>clear all</div>\n"
+"  </div>\n"
+"</div>\n"
 );
 
 puts(
@@ -244,10 +275,14 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     tisTable[i] = tis;
     }
 boolean all = (hashNumEntries(selectedHash) == 0) ? TRUE : FALSE;
+struct hash *tscHash = gtexGetTissueSampleCount(version);
 for (i=0; i<count; i++)
     {
     tis = tisTable[i];
     boolean isChecked = all || (hashLookup(selectedHash, tis->name) != NULL);
+    printf(
+            "<td class='gbmTissueSampleCount'>%s%d</td>\n ", 
+                i == 0 ? "N= ":"", hashIntValDefault(tscHash, tis->name, 0));
     printf(
             "<td class='gbmTissueColorPatch %s' "
                 "data-tissueColor=#%06X ",
@@ -381,8 +416,18 @@ char where[256];
 safef(where, sizeof(where), "tableName='%s'", track);
 // WARNING: this will break in sandboxes unless trackDb entry is pushed to hgwdev.
 // The fix of using hTrackDbList() would slow for all users, so leaving as is.
-struct trackDb *tdb = trackDbLoadWhere(conn, "trackDb", where);
+#define TRACKDB "trackDb"
+struct trackDb *tdb = trackDbLoadWhere(conn, TRACKDB, where);
 trackDbAddTableField(tdb);
+char *parent = trackDbLocalSetting(tdb, "parent");
+struct trackDb *parentTdb;
+if (parent)
+    {
+    safef(where, sizeof(where), "tableName='%s'", parent);
+    parentTdb = trackDbLoadWhere(conn, TRACKDB, where);
+    if (parentTdb)
+        tdb->parent = parentTdb;
+    }
 sqlDisconnect(&conn);
 return tdb;
 }
@@ -393,6 +438,7 @@ static void doMiddle(struct cart *theCart)
 cart = theCart;
 char *db = NULL, *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+database = db;
 
 // Start web page with new-style header
 webStartGbNoBanner(cart, db, "Genome Browser GTEx Track Settings");

@@ -79,8 +79,8 @@ Benson G.
 <a href="http://nar.oxfordjournals.org/content/27/2/573.abstract" target="_blank">
 Tandem repeats finder: a program to analyze DNA sequences</a>.
 <em>Nucleic Acids Res</em>. 1999 Jan 15;27(2):573-80.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/9862982" target="_blank">9862982</a>; PMC: <a
-href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC148217/" target="_blank">PMC148217</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/9862982" target="_blank">9862982</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC148217/" target="_blank">PMC148217</a>
 </p>
 <h2>Credits</h2>
 
@@ -94,7 +94,7 @@ Gardiner-Garden M, Frommer M.
 <a href="http://www.sciencedirect.com/science/article/pii/0022283687906899" target="_blank">
 CpG islands in vertebrate genomes</a>.
 <em>J Mol Biol</em>. 1987 Jul 20;196(2):261-82.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/3656447" target="_blank">3656447</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/3656447" target="_blank">3656447</a>
 </p>
 _EOF_
    ;

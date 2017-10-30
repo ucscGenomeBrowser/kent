@@ -35,4 +35,7 @@ void annoFormatVepAddRegulatory(struct annoFormatter *self, struct annoStreamer 
  * with regSource, and to include the given column of regSource in the EXTRAS column.
  * The VEP header will include tag's description. */
 
+void annoFormatVepSetHgvsOutOptions(struct annoFormatter *fSelf, uint hgvsOutOptions);
+/* Import the HGVS output options described in hgHgvs.h */
+
 #endif//ndef ANNOFORMATVEP_H

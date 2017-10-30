@@ -62,7 +62,7 @@ while (my $line = <FH>) {
   if ($line =~ m/^#\s+Assembly name:/i) {
     $asmName = $line;
     $asmName =~ s/.*y name:\s+//i;
-    $ncbiAssemblyId = `wget -O /dev/stdout "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=assembly&term=$asmName" 2> /dev/null | grep "<Id>" | head -1 | sed -e 's/[<>Id/]//g;'`;
+    $ncbiAssemblyId = `wget -O /dev/stdout "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=assembly&term=$asmName" 2> /dev/null | grep "<Id>" | head -1 | sed -e 's/[<>Id/]//g;'`;
     chomp $ncbiAssemblyId;
   } elsif ($line =~ m/^#\s+Organism name:/) {
     if ($line =~ m/\s+\(/) {
@@ -95,7 +95,7 @@ while (my $line = <FH>) {
   } elsif ($line =~ m/^#\s+BioProject:/) {
     $ncbiBioProject = $line;
     $ncbiBioProject =~ s/.*BioProject:\s+//;
-    $ncbiGenomeId = `wget -O /dev/stdout "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=$ncbiBioProject" 2> /dev/null | grep "<Id>" |  sed -e 's/[<>Id/]//g;'`;
+    $ncbiGenomeId = `wget -O /dev/stdout "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=$ncbiBioProject" 2> /dev/null | grep "<Id>" |  sed -e 's/[<>Id/]//g;'`;
     $ncbiBioProject =~ s/PRJNA//;
     chomp $ncbiGenomeId;
   }
@@ -133,7 +133,7 @@ if ( $genomeCladeExists != 1 ) {
 if ($ncbiGenomeId eq "notFound") {
   my $searchTerm = $sciName;
   $searchTerm =~ s/ /+/g;
-  $ncbiGenomeId = `wget -O /dev/stdout "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=$searchTerm" 2> /dev/null | grep "<Id>" |  sed -e 's/[<>Id/]//g;'`;
+  $ncbiGenomeId = `wget -O /dev/stdout "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=genome&term=$searchTerm" 2> /dev/null | grep "<Id>" |  sed -e 's/[<>Id/]//g;'`;
   chomp $ncbiGenomeId;
 }
 

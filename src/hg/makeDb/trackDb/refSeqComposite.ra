@@ -55,9 +55,12 @@ priority 2
         subGroups view=aNcbiRefSeq
 	longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
         priority 4
-        searchIndex name
-        searchTrix /gbdb/hg38/ncbiRefSeq/ncbiRefSeqOther.ix
-        type bigBed 12
+        searchIndex name,gene,ID,Name2,geneSynonym,product
+        searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
+	bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.bb
+        urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/612091" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" MGI="http://www.informatics.jax.org/marker/$$"
+        type bigBed 12 +
+        labelFields gene
 
 	track ncbiRefSeqPsl
         priority 5
@@ -98,4 +101,4 @@ priority 2
 searchTable ncbiRefSeqOther
 searchPriority 2.07207
 searchType bigBed
-searchDescription ncbiRefSeq Other annotations
+searchDescription NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)

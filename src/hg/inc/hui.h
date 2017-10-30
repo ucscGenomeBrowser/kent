@@ -1045,6 +1045,7 @@ void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb);
 
 #define NO_SCORE_FILTER  "noScoreFilter"
 #define  SCORE_FILTER      "scoreFilter"
+#define  SCORE_LABEL      "scoreLabel"
 #define SIGNAL_FILTER      "signalFilter"
 #define PVALUE_FILTER      "pValueFilter"
 #define QVALUE_FILTER      "qValueFilter"
@@ -1413,4 +1414,6 @@ char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* 
 
 struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as);
 /* Build up a hash of a list of fields in an AS file. */
+
+void printDataVersion(char *database, struct trackDb *tdb);
 #endif /* HUI_H */

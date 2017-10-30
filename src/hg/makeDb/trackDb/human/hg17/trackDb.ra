@@ -1,6 +1,7 @@
 #	"$Id: trackDb.ra,v 1.458 2010/05/07 05:35:52 kent Exp $";
 
 include defaultPriority.ra
+include trackDb.17way.ra
 
 # chain/net composites
 include trackDb.chainNet.ra
@@ -41,7 +42,7 @@ priority 41
 visibility hide
 color 155,0,125
 type genePred acemblyPep acemblyMrna
-url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&l=$$
+url https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&l=$$
 itemClassTbl acemblyClass
 geneClasses main putative
 gClass_main 128,0,125
@@ -522,104 +523,66 @@ dataVersion March 2007
     priority 2
     color 0,128,0
 
-track multiz17way
-release beta,public
-wiggle phastCons17way
-shortLabel Conservation 
-longLabel Vertebrate Multiz Alignment & Conservation
-group compGeno
-priority 1
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-pairwiseHeight 12
-spanList 1
-yLineOnOff Off
-autoScale Off
-windowingFunction mean
-summary multiz17waySummary
-frames multiz17wayFrames
-irows on
-speciesCodonDefault hg17
-speciesGroups mammal vertebrate
-sGroup_mammal panTro1 rheMac2 mm7 rn3 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom2
-sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1 fr1 
-speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
-treeImage phylo/hg17_17way.gif
+#track multiz17way
+#release alpha
+#shortLabel Conservation 
+#longLabel Vertebrate Multiz Alignment & Conservation
+#group compGeno
+#priority 1
+#visibility pack
+#color 0, 10, 100
+#altColor 0,90,10
+#type wigMaf 0.0 1.0
+#maxHeightPixels 100:40:11
+#wiggle phastCons17way 
+##wiggle phastCons17way Vertebrate_Cons phastConsPlacental Mammal_Cons
+#pairwiseHeight 12
+#spanList 1
+#yLineOnOff Off
+#autoScale Off
+#windowingFunction mean
+#summary multiz17waySummary
+#frames multiz17wayFrames
+#irows on
+#speciesCodonDefault hg17
+#speciesGroups mammal vertebrate
+#sGroup_mammal panTro1 rheMac2 mm7 rn3 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom2
+#sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1 fr1 
+#speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
+#treeImage phylo/hg17_17way.gif
 
-track multiz17way
-release alpha
-shortLabel Conservation 
-longLabel Vertebrate Multiz Alignment & Conservation
-group compGeno
-priority 1
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons17way 
-#wiggle phastCons17way Vertebrate_Cons phastConsPlacental Mammal_Cons
-pairwiseHeight 12
-spanList 1
-yLineOnOff Off
-autoScale Off
-windowingFunction mean
-summary multiz17waySummary
-frames multiz17wayFrames
-irows on
-speciesCodonDefault hg17
-speciesGroups mammal vertebrate
-sGroup_mammal panTro1 rheMac2 mm7 rn3 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom2
-sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1 fr1 
-speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
-treeImage phylo/hg17_17way.gif
+#track consElements
+#release alpha
+#shortLabel Most Conserved
+#longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
+#compositeTrack on
+#group compGeno
+#priority 2
+#visibility hide
+#exonArrows off
+#showTopScorers 200
+#type bed 5 .
 
-track phastConsElements17way
-release beta,public 
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
-group compGeno
-priority 2
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
+    #track phastConsElements17way
+    #release alpha
+    #parent consElements
+    #shortLabel Vertebrate Cons (dev)
+    #longLabel PhastCons Vertebrate Conserved Elements (5.1%, len=14,cov=.2,rho=2.8)
+    #priority 1
 
-track consElements
-release alpha
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
-compositeTrack on
-group compGeno
-priority 2
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
+     #track phastConsElementsPlacental_14_008_28
+     #release alpha
+     #parent consElements
+     #shortLabel Mammal Cons
+     #longLabel PhastCons Placental Mammal Conserved Elements (3.8%, len=14,cov=.008, rho=2.8)
+     #priority 2
 
-    track phastConsElements17way
-    release alpha
-    parent consElements
-    shortLabel Vertebrate Cons
-    longLabel PhastCons Vertebrate Conserved Elements (5.1%, len=14,cov=.2,rho=2.8)
-    priority 1
-
-    track phastConsElementsPlacental_14_008_28
-    release alpha
-    parent consElements
-    shortLabel Mammal Cons
-    longLabel PhastCons Placental Mammal Conserved Elements (3.8%, len=14,cov=.008, rho=2.8)
-    priority 2
-
-    track phastConsElementsPlacental
-    release alpha
-    parent consElements
-    shortLabel Mammal Cons 5%
-    longLabel PhastCons Placental Mammal Conserved Elements (5.2%, len=14,cov=.2, rho=2.8)
-    priority 3
+    #track phastConsElementsPlacental
+    #release alpha
+    #parent consElements
+    #shortLabel Mammal Cons 5%
+    #longLabel PhastCons Placental Mammal Conserved Elements (5.2%, len=14,cov=.2, rho=2.8)
+    #priority 3
 
 track multiz8way
 release alpha

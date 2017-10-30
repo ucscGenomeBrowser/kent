@@ -3,10 +3,12 @@
 use strict;
 use warnings;
 
+##############################################################################
 # adjust values here for new patch level
-my $patchLevel = 9;
-my $asmId = "GCA_000001405.24_GRCh38.p${patchLevel}";
-my $patchOrdinal = "ninth";
+my $patchLevel = 11;
+my $asmId = "GCA_000001405.26_GRCh38.p${patchLevel}";
+my $patchOrdinal = "eleventh";
+##############################################################################
 
 
 my $haploCount = `cat hg38Patch${patchLevel}Haplotypes.bed | wc -l`;
@@ -54,7 +56,7 @@ sub endHtml() {
 printf "<h2>References</h2>\n";
 printf "<p>
 Data obtained from the
-   <a href=\"http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/patches.shtml\" target=\"_blank\">
+   <a href=\"https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/patches.shtml\" target=\"_blank\">
    Genome Reference Consortium:</a>&nbsp;&nbsp;
    <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/${asmId}/\" target=\"_blank\">FTP</a>.
 </p>\n";
@@ -97,8 +99,8 @@ while (my $line = <FH>) {
   $ncbi =~ s/chr.*_//;
   $ncbi =~ s/v/./;
   printf "<tr><td><a href=\"../cgi-bin/hgTracks?db=hg38&position=%s:%d-%d\">%s:%d-%d</a></td>\n", $chr, $start+1, $end, $chr, $start+1, $end;
-  printf "    <td><a href=\"http://www.ncbi.nlm.nih.gov/nuccore/%s\" target=\"_blank\">%s</a></td>\n", $ncbi, $name;
-  printf "    <td><a href=\"http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=%s&asm=GRCh38.p${patchLevel}\" target=\"_blank\">%s</a></td>\n", $region{$ncbi}, $region{$ncbi};
+  printf "    <td><a href=\"https://www.ncbi.nlm.nih.gov/nuccore/%s\" target=\"_blank\">%s</a></td>\n", $ncbi, $name;
+  printf "    <td><a href=\"https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=%s&asm=GRCh38.p${patchLevel}\" target=\"_blank\">%s</a></td>\n", $region{$ncbi}, $region{$ncbi};
   printf "    <td>%s</td><td>%s</td>\n</tr>\n", $seqName{$ncbi}, $seqRole{$ncbi};
   ++$partCount;
 }
@@ -110,9 +112,9 @@ endHtml;
 printf STDERR "total items: %d\n", $partCount;
 
 __END__
-http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION108&asm=GRCh38.p2
+https://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/region.cgi?name=REGION108&asm=GRCh38.p2
 
-http://www.ncbi.nlm.nih.gov/nuccore/$$
+https://www.ncbi.nlm.nih.gov/nuccore/$$
 
 # Sequence-Name	Sequence-Role	Assigned-Molecule	Assigned-Molecule-Location/Type	GenBank-Accn	Relationship	RefSeq-Accn	Assembly-Unit
 1	assembled-molecule	1	Chromosome	CM000663.2	=	NC_000001.11	Primary Assembly

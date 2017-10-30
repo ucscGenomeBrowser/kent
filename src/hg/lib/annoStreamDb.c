@@ -942,7 +942,7 @@ if (hel == NULL)
     if (asObj == NULL)
         errAbort("annoStreamDb: No autoSql for %s.%s.%s",
                  dtf->database, dtf->table, dtf->field);
-    hel = hashAdd(hash, dtf->table, asObj);
+    hel = hashAdd(hash, dbTable, asObj);
     }
 else
     asObj = hel->val;

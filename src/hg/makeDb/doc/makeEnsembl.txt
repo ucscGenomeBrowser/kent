@@ -5,6 +5,86 @@
 #	Robert's experiments with an automated process.
 #
 ############################################################################
+# ensembl 90 update (DONE - 2017-10-18 - Hiram)
+############################################################################
+# when all done, reset the dateReference:  (DONE - 2017-10-18 - Hiram)
+     # next time, this first one will be v90 at 'aut2017'
+     hgsql -e \
+'update trackVersion set dateReference="may2017" where name="ensGene" AND version="89";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="current" where name="ensGene" AND version="90";' hgFixed
+
+############################################################################
+# ensembl 90 update (DONE - 2016-06-09 - Hiram)
+
+    # to pick up the new file listings from Ensembl, in the source tree:
+    cd ~/kent/src/hg/utils/automation
+
+    ./findEnsFtpNames.sh 90
+# -rw-rw-r-- 1 6709 Oct  9 13:46 release.90.gtf.names
+# -rw-rw-r-- 1 3919 Oct  9 13:48 release.90.MySQL.names
+# -rw-rw-r-- 1 7476 Oct  9 13:49 release.90.fasta.names
+
+    # which are edited into: EnsGeneAutomate.pm, verify it is good:
+    ./ensVersions 90 2> /dev/null | grep -v "NOT FOUND" | wc -l
+    #  79
+    # when it is good and checked in, it is copied to /cluster/bin/scripts
+    # then, working in:
+    mkdir /hive/data/outside/ensembl/ensGene/v90
+    cd /hive/data/outside/ensembl/ensGene/v90
+    # construct db work list:
+    ../mkList.sh
+    # creates the file: ens.90.update.list
+    # the scripts work off of this list:
+    time ../runUpdate.sh > update.log.0 2>&1
+    # real    144m6.678s
+
+    # the doEnsGeneUpdate.pl script was fixed to correctly recognize all
+    # possible new files and therefore tables.  It was previously only
+    # recognizing ensGene.  This go around found new tables for all of the
+    # ensemblToGeneName tables, and therefore *all* tables have been reloaded.
+    # Much side work was involved in creating new chromAlias tables and checking
+    # ucscToEnsembl tables.  There were a number of new assemblies included,
+    # including many that we do not have browsers for yet.
+
+    # to verify done, and find the broken ones:
+    ../checkStatus.sh | grep -v "ALL DONE"
+    # there were a couple of fixups for:
+    # gasAcu1 gadMor1
+
+    # gadMor1 fixups:
+    cd /hive/data/genomes/gadMor1/bed/ensGene.90/process
+    cp -p ../../ensGene.89/process/extraLifting.sh .
+    ./extraLifting.sh
+# Got 554869 lifts in ../../ucscToEnsembl/componentsToCAEA01.lift
+# Lifting gadMor1.all.needLifting.gp
+# Got 554870 lifts in ../../ucscToEnsembl/contigScaffold.lift
+# Lifting gadMor1.all.contigs.gp
+# Got 554869 lifts in ../../ucscToEnsembl/componentsToCAEA01.lift
+# Lifting ensemblGeneScaffolds.gadMor1.needLifting.bed
+# Got 554870 lifts in ../../ucscToEnsembl/contigScaffold.lift
+# Lifting ensemblGeneScaffolds.gadMor1.lifting.bed
+
+    cd /hive/data/genomes/gadMor1
+    time (doEnsGeneUpdate.pl -continue=load -ensVersion=90 \
+       gadMor1.ensGene.ra ) >> ensGene.90.log 2>&1
+
+    # fixup for gasAcu1
+    cd /hive/data/genomes/gasAcu1/bed/ensGene.90/process
+    cp ../../ensGene.89/process/extraLift.sh .
+    ./extraLift.sh
+# Got 1935 lifts in ../../../jkStuff/UCSC.chromToScaffoldSansGaps.lft
+# Lifting gasAcu1.allGenes.gp.needLifting.gz
+# checked: 29245 failed: 0
+# pass1 - making usageList (23 chroms): 25 millis
+# pass2 - checking and writing primary data (29245 records, 12 fields): 817 millis
+# Sorting and writing extra index 0: 19 millis
+
+    cd /hive/data/genomes/gasAcu1
+    time (doEnsGeneUpdate.pl -continue=load  -ensVersion=90 \
+       gasAcu1.ensGene.ra) >> ensGene.90.log 2>&1
+
+############################################################################
 # ensembl 89 update (DONE - 2017-06-22 - Hiram)
 ############################################################################
 # when all done, reset the dateReference:  (DONE - 2017-06-22 - Hiram)
