@@ -212,23 +212,15 @@ for (lane = laneList; lane != NULL; lane = lane->next)
 	char *type = NULL;
 	if (sameString(pairedEnds, "no"))
 	    {
-	    type = "reads";
+	    type = "r1";
 	    }
 	else if (sameString(pairedEnds, "yes"))
 	    {
 	    int end = endFromFileName(fileName);
 	    if (end == 1)
-		type = "read1";
+		type = "r1";
 	    else
-		type = "read2";
-	    }
-	else if (sameString(pairedEnds, "index1_reads2"))
-	    {
-	    int end = endFromFileName(fileName);
-	    if (end == 1)
-		type = "index";
-	    else
-		type = "reads";
+		type = "r2";
 	    }
 	else
 	    errAbort("Unrecognized paired_ends %s", pairedEnds);
@@ -256,7 +248,7 @@ return TRUE;
 boolean objNeedsCore(char *module)
 /* Return TRUE if module of given name needs core defined */
 {
-static char *needCore[] = {"project", "sample", "assay", "cell_line", "contact",
+static char *needCore[] = {"project", "sample", "assay", "barcode", "cell_line", "contact",
     "death", "donor", "enrichment", "imaging", 
     "preservation", "protocol", "publication", "rna", "seq", "single_cell", 
     "well"};
@@ -334,6 +326,8 @@ else
          objType = "string";
     else if (sameString(objType, "protocols")) // but protocols array is protocol
          objType = "protocol";
+    else if (sameString(objType, "umi_barcode"))
+         objType = "barcode";
     if (objNeedsCore(objType))
         printCore(f, objType, &firstOut);
 

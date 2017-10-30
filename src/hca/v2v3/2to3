@@ -111,9 +111,9 @@ KEEP	sample.donor.genotype	sample.donor.genotype
 RENAME	sample.donor.id	sample.donor.submitted_id
 KEEP	sample.donor.life_stage sample.donor.life_stage
 RENAME	sample.donor.medication	sample.donor.medication.1.text
-RENAME	sample.donor.ncbi_taxon	sample.donor.species.1.ontology
+RENAME	sample.donor.ncbi_taxon	sample.donor.species.ontology
 KEEP	sample.donor.sex	sample.donor.sex
-RENAME	sample.donor.species	sample.donor.species.1.text
+RENAME	sample.donor.species	sample.donor.species.text
 RENAME	sample.donor.strain	sample.donor.strain.1.text
 RENAME	sample.donor.uuid	sample.donor.core.id
 KEEP	sample.ena_sample	sample.ena_sample
@@ -123,8 +123,8 @@ RENAME	sample.last_update_date	sample.update_date
 RENAME	sample.long_label	sample.title
 KEEP	sample.ncbi_biosample	sample.ncbi_biosample
 RENAME	sample.passage_number	sample.cell_line.passage_number
-RENAME	sample.protocol_types	sample.supplementary_protocols.1.type
-RENAME	sample.protocols	sample.supplementary_protocols.1.description
+MODIFY	sample.protocol_types	project.protocols.1.type
+MODIFY	sample.protocols	project.protocols.1.description
 RENAME	sample.short_label	sample.name
 RENAME	sample.storage	sample.preservation.storage_protocol.description
 RENAME	sample.submission_date	sample.submit_date

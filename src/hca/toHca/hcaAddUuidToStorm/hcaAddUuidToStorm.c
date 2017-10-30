@@ -211,13 +211,10 @@ void hcaAddUuidToStorm(char *input, char *output)
 struct tagStorm *storm = tagStormFromFile(input);
 
 addMissingUuids(storm, "project.title", "project.id", FALSE);
-addMissingUuidsToMidArray(storm, "sample.donor.", ".submitted_id", "sample.donor.", ".id", TRUE);
+addMissingUuids(storm, "sample.submitted_id", "sample.id", TRUE);
 addMissingUuidsToMidArray(storm, "project.protocols.", ".description", "project.protocols.", ".id", TRUE);
-addMissingUuids(storm, "sample.id", "sample.uuid", FALSE);
 addMissingUuids(storm, "sample.ena_sample", "sample.id", FALSE);
 addMissingUuids(storm, "sample.geo_sample", "sample.id", FALSE);
-addMissingUuids(storm, "assay.ena_experiment", "assay.id", FALSE);
-addMissingUuids(storm, "assay.sra_experiment", "assay.id", FALSE);
 char *needed[] = {"project.id", "sample.id", };
 checkLeavesForNeededTags(storm, needed, ArraySize(needed));
 
