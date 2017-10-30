@@ -1,10 +1,15 @@
+pmid is an array with at least 3 vals
+file is an array with at least 2 vals
 access $ *
-age # 1 10
+age # 1 100
 age_units $ *
 assay $ *
 biosample_date $ *
-donor # 0 0
-file $ *
+donor # 0 1
+drug.[].dose $ *
+drug.[].expense $ *
+drug.[].name $ *
+file [$] *
 format $ bam fastq "tag storm"
 lab $ *
 lab_kent_disassociation_protocol $ *
@@ -13,5 +18,8 @@ life_stage $ *
 map_ratio % 0 1
 organ $ brain liver
 part # 1 10
+person.[].name $ *
+person.[].state $ *
+pmid [#] 1 10000000
 q # -1 10
 sex $ *

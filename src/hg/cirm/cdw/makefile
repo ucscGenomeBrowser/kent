@@ -1,7 +1,7 @@
 kentSrc = ../../..
 # Build all subdirectories we care about
 
-include ../../../inc/common.mk
+include $(kentSrc)/inc/common.mk
 
 
 # List of directories to build

@@ -1482,7 +1482,25 @@ row[3] = cloneString(trueTotal);
 fieldedTableAdd(table, row, ArraySize(row), 0);
 }
 
-void drawPrettyPieGraph(struct slPair *data, char *id, char *title, char *subtitle)
+struct tagCount
+/* A tag name and how many things are associated with it. */
+    {
+    struct tagCount *next;
+    char *tag;
+    long count;	
+    };
+
+struct tagCount *tagCountNew(char *tag, int count)
+/* Return fresh new tag */
+{
+struct tagCount *tc;
+AllocVar(tc);
+tc->tag = cloneString(tag);
+tc->count = count;
+return tc;
+}
+
+void drawPrettyPieGraph(struct tagCount *tcList, char *id, char *title, char *subtitle)
 /* Draw a pretty pie graph using D3. Import D3 and D3pie before use. */
 {
 // Some D3 administrative stuff, the title, subtitle, sizing etc. 
@@ -1509,17 +1527,16 @@ dyStringPrintf(dy,"\"font\": \"open sans\",");
 dyStringPrintf(dy,"\"location\": \"bottom-left\",},\n");
 dyStringPrintf(dy,"\"size\": { \"canvasWidth\": 270, \"canvasHeight\": 220},\n");
 dyStringPrintf(dy,"\"data\": { \"sortOrder\": \"value-desc\", \"content\": [\n");
-struct slPair *start = NULL;
+struct tagCount *tc = NULL;
 float colorOffset = 1;
-int totalFields =  slCount(data);
-for (start=data; start!=NULL; start=start->next)
+int totalFields =  slCount(tcList);
+for (tc=tcList; tc!=NULL; tc=tc->next)
     {
     float currentColor = colorOffset/totalFields;
     struct rgbColor color = saturatedRainbowAtPos(currentColor);
-    char *temp = start->val;
-    dyStringPrintf(dy,"\t{\"label\": \"%s\",\n\t\"value\": %s,\n\t\"color\": \"rgb(%i,%i,%i)\"}", 
-	start->name, temp, color.r, color.b, color.g);
-    if (start->next!=NULL) 
+    dyStringPrintf(dy,"\t{\"label\": \"%s\",\n\t\"value\": %ld,\n\t\"color\": \"rgb(%i,%i,%i)\"}", 
+	tc->tag, tc->count, color.r, color.b, color.g);
+    if (tc->next!=NULL) 
 	dyStringPrintf(dy,",\n");
     ++colorOffset;
     }
@@ -1541,14 +1558,72 @@ jsInline(dy->string);
 dyStringFree(&dy);
 }
 
+struct tagCount *tagCountListFromQuery(struct sqlConnection *conn, char *query)
+/* Return a tagCount list from a query that had tag/count values */
+{
+struct tagCount *list = NULL, *tc;
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tc = tagCountNew(row[0], sqlUnsigned(row[1]));
+    slAddHead(&list, tc);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
+
+struct tagCount *tagCountMajorPlusOther(struct tagCount *list, double minRatio)
+/* Return a list of only the tags that are over minRatio of total tags.
+ * If there are tags that have smaller amounts than this, lump them together
+ * under "other".  Returns a new list independend of old list */
+{
+/* Figure out total and minimum count to not be lumped into other */
+long total = 0;
+struct tagCount *tc;
+for (tc = list; tc != NULL; tc = tc->next)
+    total += tc->count;
+long minCount = round(minRatio * total);
+
+/* Loop through and copy ones over threshold to new list, and lump rest
+ * into other */
+struct tagCount *newList = NULL, *newTc;
+struct tagCount *other = NULL;
+for (tc = list; tc != NULL; tc = tc->next)
+    {
+    if (tc->count >= minCount)
+        {
+	newTc = tagCountNew(tc->tag, tc->count);
+	slAddHead(&newList, newTc);
+	}
+    else
+        {
+	if (other == NULL)
+	    other = tagCountNew("other", 0);
+	other->count += tc->count;
+	}
+    }
+
+/* Put other onto new list if it exists */
+if (other != NULL)
+    slAddHead(&newList, other);
+
+/* Restore reversed order and return result */
+slReverse(&newList);
+return newList;
+}
+
 void pieOnTag(struct sqlConnection *conn, char *tag, char *divId)
 /* Write a pie chart base on the values of given tag in storm */
 {
 char query[PATH_LEN]; 
 sqlSafef(query, sizeof(query), "select %s, count(*) as count from cdwFileTags where %s is not NULL group by %s order by count desc", tag, tag, tag); 
-struct slPair *pairList = sqlQuickPairList(conn, query);
-drawPrettyPieGraph(pairList, divId, tag, NULL);
+struct tagCount *tagList = tagCountListFromQuery(conn, query);
+struct tagCount *majorTags = tagCountMajorPlusOther(tagList, 0.01);
+drawPrettyPieGraph(majorTags, divId, tag, NULL);
 }
+
 
 char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...", "files",};
 
