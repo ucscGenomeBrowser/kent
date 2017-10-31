@@ -30,7 +30,7 @@ static struct optionSpec options[] = {
 void  addFilesToSraRun(struct tagStorm *storm, struct tagStanza *stanza)
 /* If stanza has an srr_run tag add a files tag to it */
 {
-char *srrCsv = tagFindLocalVal(stanza, "assay.sra_run");
+char *srrCsv = tagFindLocalVal(stanza, "assay.seq.sra_run");
 if (srrCsv != NULL)
     {
     char *pairing = tagMustFindVal(stanza, "assay.seq.paired_ends");
@@ -50,7 +50,7 @@ if (srrCsv != NULL)
 	    dyStringPrintf(filesDy, "%s_%d.fastq.gz", srr, i+1);
 	    }
 	}
-    tagStanzaAppend(storm, stanza, "assay.files", filesDy->string);
+    tagStanzaAppend(storm, stanza, "assay.seq.files", filesDy->string);
     dyStringFree(&scratch);
     dyStringFree(&filesDy);
     }
@@ -67,56 +67,6 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
-void  addBarcodeInfo(struct tagStorm *storm, struct tagStanza *stanza)
-/* If stanza has an srr_run tag add a files tag to it */
-{
-char *method = tagFindLocalVal(stanza, "assay.single_cell.method");
-if (method != NULL)
-    {
-    verbose(2, "hcaAddSrrFiles method=%s\n", method);
-
-    /* Set up default values for things that control output based on method */
-    char *umiBarcodeSize = "0", *cellBarcodeSize = "0";
-    char umiBarcodeOffset[8], cellBarcodeOffset[8];
-
-    /* Figure out more or less what to do based on method and pairing */
-    if (sameString(method, "drop-seq"))
-	{
-	safef(umiBarcodeOffset, sizeof(umiBarcodeOffset), "12");
-	safef(cellBarcodeOffset, sizeof(cellBarcodeOffset), "0");
-	umiBarcodeSize = "8";
-	cellBarcodeSize = "12";
-	}
-    else if (sameString(method, "10x_v2"))
-	{
-	safef(umiBarcodeOffset, sizeof(umiBarcodeOffset), "16");
-	safef(cellBarcodeOffset, sizeof(cellBarcodeOffset), "0");
-	umiBarcodeSize = "10";
-	cellBarcodeSize = "16";
-	}
-    if (differentString("0", umiBarcodeSize))
-        {
-	/* Add barcode tags */
-	tagStanzaUpdateTag(storm, stanza, "assay.seq.umi_barcode_size", umiBarcodeSize);
-	tagStanzaUpdateTag(storm, stanza, "assay.seq.umi_barcode_offset", umiBarcodeOffset);
-	tagStanzaUpdateTag(storm, stanza, "assay.single_cell.cell_barcode_size", 
-		cellBarcodeSize);
-	tagStanzaUpdateTag(storm, stanza, "assay.single_cell.cell_barcode_offset", 
-		cellBarcodeOffset);
-	}
-    }
-}
-
-void rAddBarcodeInfo(struct tagStorm *storm, struct tagStanza *list)
-/* Recursively do addFilesToSraRun to all stanzas in storm */
-{
-struct tagStanza *stanza;
-for (stanza = list; stanza != NULL; stanza = stanza->next)
-    {
-    addBarcodeInfo(storm, stanza);
-    rAddBarcodeInfo(storm, stanza->children);
-    }
-}
 
 
 void hcaAddSrrFiles(char *inTags, char *outTags)
@@ -124,7 +74,6 @@ void hcaAddSrrFiles(char *inTags, char *outTags)
 {
 struct tagStorm *storm = tagStormFromFile(inTags);
 
-rAddBarcodeInfo(storm, storm->forest);
 verbose(1, "Added barcode sizes and offsets\n");
 
 rAddFilesToSraRun(storm, storm->forest);

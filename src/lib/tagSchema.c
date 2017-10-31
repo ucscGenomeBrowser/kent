@@ -7,6 +7,46 @@
 #include "tagSchema.h"
 
 
+static struct slName *makeObjArrayPieces(char *name)
+/* Given something like this.[].that return a list of "this." ".that".  That is
+ * return a list of all strings before between and after the []'s Other
+ * examples:
+ *        [] returns "" ""
+ *        this.[] return "this." ""
+ *        [].that returns "" ".that"
+ *        this.[].that.and.[].more returns "this." ".that.and." ".more" */
+{
+struct slName *list = NULL;	// Result list goes here
+char *pos = name;
+
+/* Handle special case of leading "[]" */
+if (startsWith("[]", name))
+     {
+     slNameAddHead(&list, "");
+     pos += 2;
+     }
+
+char *aStart;
+for (;;)
+    {
+    aStart = strchr(pos, '[');
+    if (aStart == NULL)
+        {
+	slNameAddHead(&list, pos);
+	break;
+	}
+    else
+        {
+	struct slName *el = slNameNewN(pos, aStart-pos);
+	slAddHead(&list, el);
+	pos = aStart + 2;
+	}
+    }
+slReverse(&list);
+return list;
+}
+
+
 struct tagSchema *tagSchemaFromFile(char *fileName)
 /* Read in a tagSchema file */
 {
@@ -85,6 +125,11 @@ while (lineFileNextReal(lf, &line))
         errAbort("Unrecognized type character %s line %d of %s", 
 	    typeString, lf->lineIx, lf->fileName);
 	}
+
+    if (strchr(schema->name, '['))
+        {
+	schema->objArrayPieces = makeObjArrayPieces(schema->name);
+	}
     slAddHead(&list, schema);
     }
 slReverse(&list);
@@ -99,5 +144,81 @@ struct tagSchema *schema;
 for (schema = list; schema != NULL; schema = schema->next)
     hashAdd(hash, schema->name, schema);
 return hash;
+}
+
+int tagSchemaDigitsUpToDot(char *s)
+/* Return number of digits if is all digit up to next dot or end of string.
+ * Otherwise return 0.  A specialized function but used by a couple of tag
+ * storm modules. */
+{
+char c;
+int digitCount = 0;
+for (;;)
+    {
+    c = *s++;
+    if (c == '.' || c == 0)
+       return digitCount;
+    if (!isdigit(c))
+       return FALSE;
+    ++digitCount;
+    }
+}
+
+static int nonDotSize(char *s)
+/* Return number of chars up to next dot or end of string */
+{
+char c;
+int size = 0;
+for (;;)
+    {
+    c = *s++;
+    if (c == '.' || c == 0)
+       return size;
+    ++size;
+    }
+}
+
+char *tagSchemaFigureArrayName(char *tagName, struct dyString *scratch)
+/* Return tagName modified to indicate the array
+ * status. For names with .# in them substitute a '[]' for
+ * the number.   Example:
+ *      person.12.name becomes person.[].name
+ *      animal.13.children.4.name becomes animal.[].children.[].name
+ *      person.12.cars.1 becomes person.[].cars.[]
+ */
+{
+char dot = '.';
+char *s = tagName;
+dyStringClear(scratch);
+
+for (;;)
+    {
+    /* Check for end of string */
+    char firstChar = *s;
+    if (firstChar == 0)
+        break;
+
+    /* If leading char is a dot and if so skip it. */
+    boolean startsWithDot = (firstChar == dot);
+    if (startsWithDot)
+       {
+       dyStringAppendC(scratch, dot);
+       ++s;
+       }
+
+    int numSize = tagSchemaDigitsUpToDot(s);
+    if (numSize > 0)
+        {
+	dyStringAppend(scratch, "[]");
+	s += numSize;
+	}
+    else
+        {
+	int partSize = nonDotSize(s);
+	dyStringAppendN(scratch, s, partSize);
+	s += partSize;
+	}
+    }
+return scratch->string;
 }
 

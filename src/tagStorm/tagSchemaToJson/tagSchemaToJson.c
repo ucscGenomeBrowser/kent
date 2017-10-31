@@ -13,6 +13,7 @@
 struct hash *gDescriptions = NULL;
 char *gInName = NULL;
 boolean gOneFile = FALSE;
+struct slPair *gShortcuts = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -26,6 +27,7 @@ errAbort(
   "   -descriptions=twoCol.txt - first col is tag, second description\n"
   "   -oneFile - just make one file for whole schema, not one for each high level tag\n"
   "              If this is the case the outDir parameter is instead the one file name\n"
+  "   -shortcuts=twoCol.txt - first col is prefix to match including last dot. second is url\n"
   );
 }
 
@@ -33,6 +35,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"descriptions", OPTION_STRING},
    {"oneFile", OPTION_BOOLEAN},
+   {"shortcuts", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -95,17 +98,27 @@ for (el = list; el != NULL; el = el->next)
 return FALSE;
 }
 
+void writeDescription(struct jsonWrite *jw, char *name)
+/* If gDescriptions is set, look up name in it and write it out as description tag */
+{
+if (gDescriptions != NULL)
+    {
+    char *description = hashFindVal(gDescriptions, name);
+    char missing[512];
+    if (description == NULL)
+	{
+	safef(missing, sizeof(missing), "please describe %s", name);
+	description = missing;
+	}
+    jsonWriteString(jw, "description", description);
+    }
+}
+
 void writeOneSchema(struct jsonWrite *jw, char *label, struct tagSchema *schema)
 /* Write out label for one schema item */
 {
 jsonWriteObjectStart(jw, label);
-if (gDescriptions != NULL)
-    {
-    char *description = hashFindVal(gDescriptions, schema->name);
-    if (description == NULL)
-        description = "describe_me_please";
-    jsonWriteString(jw, "description", description);
-    }
+writeDescription(jw, schema->name);
 if (schema->isArray)
     {
     jsonWriteString(jw, "type", "array");
@@ -159,9 +172,36 @@ if (schema->isArray)
 jsonWriteObjectEnd(jw);
 }
 
+struct slPair *findShortcut(char *fullName)
+/* Return shortcut from gShortcut list if fullName matches a prefix on shortcut list. */
+{
+struct slPair *pair;
+for (pair = gShortcuts; pair != NULL; pair = pair->next)
+    {
+    if (startsWith(pair->name, fullName))
+        return pair;
+    }
+return NULL;
+}
+
+void writeShortcut(struct jsonWrite *jw, char *url)
+/* Write out shortcut refence to url */
+{
+jsonWriteString(jw, "$ref", url);
+}
+
 void writeHighFields(struct jsonWrite *jw, struct ttjSubObj *obj, struct hash *schemaHash)
 /* Write out type, properties, patternProperties, required, and so forth to jw  */
 {
+boolean isMidArray = FALSE;
+if (obj->children != NULL && sameString(obj->children->name, "[]"))
+    {
+    isMidArray = TRUE;
+    jsonWriteString(jw, "type", "array");
+    jsonWriteObjectStart(jw, "items");
+    obj = obj->children;
+    }
+
 jsonWriteString(jw, "type", "object");
 struct ttjSubObj *sub;
 
@@ -182,10 +222,29 @@ if (needFixed)
 	{
 	if (sub->children != NULL)
 	    {
+	    struct ttjSubObj *maybeArray = sub->children;
+	    boolean isArray = (maybeArray != NULL && sameString(maybeArray->name, "[]"));
 	    jsonWriteObjectStart(jw, sub->name);
-	    char refText[512];
-	    safef(refText, sizeof(refText), "#/definitions/%s", sub->name);
-	    jsonWriteString(jw, "$ref", refText);
+	    if (isArray)
+		{
+		jsonWriteString(jw, "type", "array");
+		jsonWriteObjectStart(jw, "items");
+		}
+	    struct slPair *shortcut = findShortcut(sub->fullName);
+	    if (shortcut != NULL)
+		{
+		writeDescription(jw, shortcut->name);
+	        writeShortcut(jw, shortcut->val);
+		}
+	    else
+		{
+		char refText[512];
+		writeDescription(jw, sub->name);
+		safef(refText, sizeof(refText), "#/definitions/%s", sub->name);
+		jsonWriteString(jw, "$ref", refText);
+		}
+	    if (isArray)
+	        jsonWriteObjectEnd(jw);
 	    jsonWriteObjectEnd(jw);
 	    }
 	else
@@ -235,6 +294,8 @@ for (sub = obj->children; sub != NULL; sub = sub->next)
 	    }
 	}
     }
+if (isMidArray)
+   jsonWriteObjectEnd(jw);
 
 /* If have any requirements write out in array */
 if (needsRequired)
@@ -253,6 +314,7 @@ if (needsRequired)
     }
 }
 
+
 void rWriteDefinitions(struct jsonWrite *jw, struct ttjSubObj *obj, struct hash *schemaHash)
 /* Recursiveley (bottom first) write out definitions for things with subobjects */
 {
@@ -261,10 +323,18 @@ for (sub = obj->children; sub != NULL; sub = sub->next)
     {
     if (sub->children != NULL)
         {
-	rWriteDefinitions(jw, sub, schemaHash);
-	jsonWriteObjectStart(jw, sub->name);
-	writeHighFields(jw, sub, schemaHash);
-	jsonWriteObjectEnd(jw);
+	struct slPair *shortcut = findShortcut(sub->fullName);
+	if (shortcut == NULL)
+	    rWriteDefinitions(jw, sub, schemaHash);
+	if (!sameString(sub->name, "[]"))
+	    {
+	    if (shortcut == NULL)
+		{
+		jsonWriteObjectStart(jw, sub->name);
+		writeHighFields(jw, sub, schemaHash);
+		jsonWriteObjectEnd(jw);
+		}
+	    }
 	}
     }
 }
@@ -379,6 +449,13 @@ char *descriptions = optionVal("descriptions", NULL);
 if (descriptions != NULL)
    gDescriptions = hashDescriptions(descriptions);
 gOneFile = optionExists("oneFile");
+char *shortcuts = optionVal("shortcuts", NULL);
+if (shortcuts != NULL)
+    {
+    gShortcuts = slPairTwoColumnFile(shortcuts);
+    verbose(1, "Read %d shortcuts from %s\n", slCount(gShortcuts), shortcuts);
+    }
+    
 tagSchemaToJson(argv[1], argv[2]);
 return 0;
 }

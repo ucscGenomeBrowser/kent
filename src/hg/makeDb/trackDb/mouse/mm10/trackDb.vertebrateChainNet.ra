@@ -177,6 +177,14 @@ html vertebrateChainNet
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain danRer7
         otherDb danRer7
+        
+        track chainDanRer11
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=nZebrafish clade=dTeleostei
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain danRer11
+        otherDb danRer11
 
         track chainOryLat2
         subTrack vertebrateChainNetViewchain off
@@ -353,6 +361,14 @@ include chainNetGalGal5.ra
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign danRer7 chainDanRer7
         otherDb danRer7
+        
+        track netDanRer11
+        subTrack vertebrateChainNetViewnet on
+        subGroups view=net species=nZebrafish clade=dTeleostei
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign danRer11 chainDanRer11
+        otherDb danRer11
 
         track netOryLat2
         subTrack vertebrateChainNetViewnet on

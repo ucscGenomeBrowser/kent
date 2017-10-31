@@ -1,14 +1,23 @@
 lab lab_1
+pmid 1234567,2345678,7654321
 assay RNA-seq
 access all
 organ brain
+person.1.name Jerry Garcia
+person.1.state California
+person.3.name Janis Joplin
+person.3.state Texas
+person.2.name Bono Judd
+person.2.state homeless
 
     donor 000
     age 5
-    age_units weeks
-    life_stage embryo
+    age_units year
+    life_stage child
     sex male
     biosample_date 2015-01-00
+    drug.1.expense $55.00
+    drug.2.dose 100 mg 2x/day
 
         organ brain
         lab_kent_disassociation_protocol fetal_brain_digest.pdf
@@ -17,7 +26,7 @@ organ brain
 
             part 1
 	    format fastq
-            file ex00do00or00fa00.fq.gz
+            file ex00do00or00fa00.fq.gz,ex00do00r01fa00.fq.gz
 	    map_ratio 0.83
 
             file ex00do00or00fa01.fq.gz
@@ -92,12 +101,14 @@ assay RNA-seq
 access all
 organ brain
 
-    donor 000
-    age 5
-    age_units weeks
-    life_stage embryo
+    donor 001
+    age 70
+    age_units year
+    life_stage adult
     sex male
-    biosample_date 2015-01-00
+    biosample_date 2015-01-10
+    drug.1.expense $55.00
+    drug.1.name ibuprofin
 
         organ brain
         lab_kent_disassociation_protocol fetal_brain_digest.pdf
