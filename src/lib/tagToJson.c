@@ -19,12 +19,7 @@ for (fieldEl = fieldList; fieldEl != NULL; fieldEl = fieldEl->next)
 	 }
      char *dotPos = strchr(field, '.');
      if (dotPos == NULL)
-	{
-	if (prefixLen == 0)
-	    errAbort("Field %s has no '.'", field);
-	else
-	    dotPos = field + strlen(field);
-	}
+	dotPos = field + strlen(field);
      int prefixSize = dotPos - field;
      char prefix[prefixSize+1];
      memcpy(prefix, field, prefixSize);
@@ -44,13 +39,16 @@ struct ttjSubObj *ttjMakeSubObj(struct slName *fieldList, char *objName, char *p
 {
 struct ttjSubObj *obj;
 AllocVar(obj);
-obj->name = cloneString(objName);
+obj->name = cloneString(emptyForNull(objName));
 obj->fullName = cloneString(prefix);
 verbose(3, "Making ttjSubObj %s %s\n", obj->name, obj->fullName);
 
 /* Make a string that is prefix plus a dot */
 char prefixDot[512];
-safef(prefixDot, sizeof(prefixDot), "%s.", prefix);
+if (isEmpty(prefix))
+    prefixDot[0] = 0;
+else
+    safef(prefixDot, sizeof(prefixDot), "%s.", prefix);
 int prefixDotLen = strlen(prefixDot);
 
 struct slName *subList = ttjUniqToDotList(fieldList, prefixDot, prefixDotLen);

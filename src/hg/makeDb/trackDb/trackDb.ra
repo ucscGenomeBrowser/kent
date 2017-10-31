@@ -1029,6 +1029,19 @@ useScore 1
 exonArrows on
 type bed 6 .
 
+track refSeqFuncElems
+release alpha
+shortLabel RefSeq Func Elems
+longLabel NCBI RefSeq Functional Elements 
+type bigBed 8 +
+bigDataUrl /gbdb/$D/ncbiRefSeq/refSeqFuncElems.bb
+labelFields soTerm
+group regulation
+url https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$
+urlLabel Gene ID: 
+urls pubMedIds=https://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
+mouseOverField _mouseOver
+
 track snp148Common
 shortLabel Common SNPs(148)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 148) Found in >= 1% of Samples

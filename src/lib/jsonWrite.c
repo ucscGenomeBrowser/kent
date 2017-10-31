@@ -116,7 +116,7 @@ void jsonWriteDouble(struct jsonWrite *jw, char *var, double val)
 {
 struct dyString *dy = jw->dy;
 jsonWriteTag(jw, var);
-dyStringPrintf(dy, "%lf", val);
+dyStringPrintf(dy, "%g", val);
 }
 
 void jsonWriteLink(struct jsonWrite *jw, char *var, char *objRoot, char *name)

@@ -1,7 +1,9 @@
 # A variant that is famously known as "MTHFR C677T" or "MTHFR 677C>T" -- but the 677 is incorrect (from an old sequence ~1995):
 NM_005957.4:c.665C>T
-# Same variant in LRG transcript coords:
+# Same variant in LRG transcript, protein and genomic coords:
 LRG_726t1:c.665C>T
+LRG_726p1:p.Ala222Val
+LRG_726:g.14783C>T
 
 # These three are equivalent (although p. is less specific):
 NM_003002.3:c.276C>A

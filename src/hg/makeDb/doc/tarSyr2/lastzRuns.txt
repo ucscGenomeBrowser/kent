@@ -53,6 +53,12 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 tarSyr2) > rbest.log 2>&1 &
     # real    46m29.975s
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 tarSyr2) > loadRBest.log 2>&1 &
+    # real    12m28.565s
+
+    cat fb.hg38.chainRBestTarSyr2Link.txt
+    # 1563421915 bases of 3049335806 (51.271%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/tarSyr2/bed/blastz.hg38.swap
