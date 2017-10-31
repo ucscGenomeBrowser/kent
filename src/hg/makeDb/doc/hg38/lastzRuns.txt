@@ -2198,6 +2198,29 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -buildDir=`pwd` hg38 equCab2) > rbest.log 2>&1 &
     # real    81m49.399s
 
+    # load up the recip best chainNet tables
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 equCab2) > loadRBest.log 2>&1 &
+    # real    11m38.247s
+    cat fb.hg38.chainRBestEquCab2Link.txt
+# 1547949213 bases of 3049335806 (50.763%) in intersection
+
+    # create and load up the syntenic chainNet tables 2017-10-30
+cd /hive/data/genomes/hg38/bed/lastzEquCab2.2015-02-22/axtChain
+netToAxt hg38.equCab2.syn.net.gz hg38.equCab2.all.chain.gz \
+/scratch/data/hg38/hg38.2bit /hive/data/genomes/equCab2/equCab2.2bit stdout \
+  | axtSort stdin stdout \
+     | axtToChain stdin /hive/data/genomes/hg38/chrom.sizes \
+        /hive/data/genomes/equCab2/chrom.sizes stdout \
+            | gzip -c > hg38.equCab2.syn.chain.gz
+hgLoadChain -tIndex hg38 chainSynEquCab2 hg38.equCab2.syn.chain.gz
+netFilter -minGap=10 hg38.equCab2.syn.net.gz \
+  | hgLoadNet -verbose=0 hg38 netSynEquCab2 stdin
+cd /hive/data/genomes/hg38/bed/lastzEquCab2.2015-02-22
+featureBits hg38 chainSynEquCab2Link > fb.hg38.chainSynEquCab2Link.txt 2>&1
+cat fb.hg38.chainSynEquCab2Link.txt
+# 1625260798 bases of 3049335806 (53.299%) in intersection
+
     # and for the swap:
     mkdir /hive/data/genomes/equCab2/bed/blastz.hg38.swap
     cd /hive/data/genomes/equCab2/bed/blastz.hg38.swap
@@ -3302,7 +3325,32 @@ TMPDIR=/dev/shm
     # 1287831558 bases of 3049335806 (42.233%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 dasNov3) > rbest.log 2>&1 &
-    # real    447m34.314s
+    # real    491m51.020s
+
+    # load up the recip best chainNet tables
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 dasNov3) > loadRBest.log 2>&1 &
+    # real    12m39.283s
+
+    cat fb.hg38.chainRBestDasNov3Link.txt
+    # 1267819323 bases of 3049335806 (41.577%) in intersection
+
+    # create and load up the syntenic chainNet tables 2017-10-30
+cd /hive/data/genomes/hg38/bed/lastzDasNov3.2015-04-28/axtChain
+netToAxt hg38.dasNov3.syn.net.gz hg38.dasNov3.all.chain.gz \
+/scratch/data/hg38/hg38.2bit /hive/data/genomes/dasNov3/dasNov3.2bit stdout \
+  | axtSort stdin stdout \
+     | axtToChain stdin /hive/data/genomes/hg38/chrom.sizes \
+        /hive/data/genomes/dasNov3/chrom.sizes stdout \
+            | gzip -c > hg38.dasNov3.syn.chain.gz
+hgLoadChain -tIndex hg38 chainSynDasNov3 hg38.dasNov3.syn.chain.gz
+netFilter -minGap=10 hg38.dasNov3.syn.net.gz \
+  | hgLoadNet -verbose=0 hg38 netSynDasNov3 stdin
+cd /hive/data/genomes/hg38/bed/lastzDasNov3.2015-04-28
+featureBits hg38 chainSynDasNov3Link > fb.hg38.chainSynDasNov3Link.txt 2>&1
+cat fb.hg38.chainSynDasNov3Link.txt
+# 1302517110 bases of 3049335806 (42.715%) in intersection
+
 
     # and for the swap:
     mkdir /hive/data/genomes/dasNov3/bed/blastz.hg38.swap
@@ -7232,6 +7280,28 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -buildDir=`pwd` hg38 mm10) > rbest.log 2>&1 &
     # real    32m22.990s
 
+    # load up the recip best chainNet tables
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 mm10) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestMm10Link.txt
+# 891562094 bases of 3049335806 (29.238%) in intersection
+
+    # create and load up the syntenic chainNet tables 2017-10-30
+cd /hive/data/genomes/hg38/bed/lastzMm10.2015-04-08/axtChain
+netToAxt hg38.mm10.syn.net.gz hg38.mm10.all.chain.gz \
+/scratch/data/hg38/hg38.2bit /hive/data/genomes/mm10/mm10.2bit stdout \
+  | axtSort stdin stdout \
+     | axtToChain stdin /hive/data/genomes/hg38/chrom.sizes \
+        /hive/data/genomes/mm10/chrom.sizes stdout \
+            | gzip -c > hg38.mm10.syn.chain.gz
+hgLoadChain -tIndex hg38 chainSynMm10 hg38.mm10.syn.chain.gz
+netFilter -minGap=10 hg38.mm10.syn.net.gz \
+  | hgLoadNet -verbose=0 hg38 netSynMm10 stdin
+cd /hive/data/genomes/hg38/bed/lastzMm10.2015-04-08
+featureBits hg38 chainSynMm10Link > fb.hg38.chainSynMm10Link.txt 2>&1
+cat fb.hg38.chainSynMm10Link.txt
+# 913707143 bases of 3049335806 (29.964%) in intersection
+
     # and for the swap:
     mkdir /hive/data/genomes/mm10/bed/blastz.hg38.swap
     cd /hive/data/genomes/mm10/bed/blastz.hg38.swap
@@ -7294,6 +7364,28 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 canFam3) > rbest.log 2>&1 &
     # real    42m21.276s
+
+    # load up the recip best chainNet tables
+    time (doRecipBest.pl -load -continue=load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 canFam3) > loadRBest.log 2>&1 &
+    cat fb.hg38.chainRBestCanFam3Link.txt
+# 1415877801 bases of 3049335806 (46.432%) in intersection
+
+    # create and load up the syntenic chainNet tables 2017-10-30
+cd /hive/data/genomes/hg38/bed/lastzCanFam3.2015-04-08/axtChain
+netToAxt hg38.canFam3.syn.net.gz hg38.canFam3.all.chain.gz \
+/scratch/data/hg38/hg38.2bit /hive/data/genomes/canFam3/canFam3.2bit stdout \
+  | axtSort stdin stdout \
+     | axtToChain stdin /hive/data/genomes/hg38/chrom.sizes \
+        /hive/data/genomes/canFam3/chrom.sizes stdout \
+            | gzip -c > hg38.canFam3.syn.chain.gz
+hgLoadChain -tIndex hg38 chainSynCanFam3 hg38.canFam3.syn.chain.gz
+netFilter -minGap=10 hg38.canFam3.syn.net.gz \
+  | hgLoadNet -verbose=0 hg38 netSynCanFam3 stdin
+cd /hive/data/genomes/hg38/bed/lastzCanFam3.2015-04-08
+featureBits hg38 chainSynCanFam3Link > fb.hg38.chainSynCanFam3Link.txt 2>&1
+cat fb.hg38.chainSynCanFam3Link.txt
+# 1478843439 bases of 3049335806 (48.497%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/canFam3/bed/blastz.hg38.swap
