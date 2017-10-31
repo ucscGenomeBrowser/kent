@@ -23,11 +23,12 @@ for a list of database installations and the respective curators. </p></div>
 <p>
 This track shows the genomic positions of all <b>public</b> entries in public
 installations of the Leiden Open Variation Database system (<a
-href="http://www.lovd.nl/" target="_blank">LOVD</a>).  
-UCSC does not host any further information.  To get details on a mutation
+href="http://www.lovd.nl/" target="_blank">LOVD</a>) and the effect of the 
+variant, if annotated.  
+UCSC does not host any further information.  To get details on a variant
 (bibliographic reference, phenotype, disease, patient, etc.), follow the
 &quot;Link to LOVD&quot; to the central server at Leiden, which will then redirect you
-to the details page on the particular LOVD server for the variant you selected.
+to the details page on the particular LOVD server reporting this variant.
 </p>
 
 <p>
@@ -35,10 +36,12 @@ LOVD is a flexible, freely-available tool for gene-centered collection and
 display of DNA variations.  It is not a database itself, but rather a platform
 where curators store and analyze data.  While the LOVD team and the biggest LOVD
 sites are run at the Leiden University Medical Center, LOVD installations and their
-curators are spread over the whole world.
+curators are spread over the whole world. Most LOVD databases report at least 
+some of their content back to Leiden to allow global cross-database search, which
+is, among others, exported to this UCSC Genome Browser track every month.
 </p>
 <p>A few LOVD databases are entirely missing from this track. Reasons include configuration issues and 
-intentionally blocked data exports. During the last check in June 2015, the following databases did not export any variants:
+intentionally blocked data search. During the last check in June 2015, the following databases did not export any variants:
 http://www.ucl.ac.uk/ldlr/Current/,
 http://brca.iarc.fr/LOVD/,
 http://bioinf4.fcm.unicamp.br/LOVD/,
@@ -76,6 +79,15 @@ mutated from G to A at position 172.
 </p>
 
 <p>
+Since October 2017, the functional effect for variants is shown on the
+details page, if annotated. The possible
+values are: notClassified, functionAffected, notThisDisease, notAnyDisease,
+functionProbablyAffected, functionProbablyNotAffected, functionNotAffected
+unknown. LOVD does not use the term "pathogenic", please see the <a
+href="http://varnomen.hgvs.org/bg-material/basics/">HGVS Terminology page</a> for more details.
+</p>
+
+<p>
 All other information is shown on the respective LOVD variation page, accessible via the
 &quot;Link to LOVD&quot; above.
 </p>
@@ -89,7 +101,7 @@ The mappings displayed in this track were provided by LOVD.
 <h2>Credits</h2>
 
 <p>
-Thanks to the LOVD team, Ivo Fokkema, Peter Taschner, Johan den Dunnen, and all LOVD curators for permission to 
+Thanks to the LOVD team, Ivo Fokkema, Peter Taschner, Johan den Dunnen, and all LOVD curators who gave permission to 
 show their data.
 </p>
 

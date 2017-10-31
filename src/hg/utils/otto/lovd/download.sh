@@ -20,8 +20,15 @@ mkdir -p $today
 cd $today
 
 # http request needs to come from hgwdev IP address otherwise file not found error
-wget -q http://varcache.lovd.nl/bed/hg19 -O - | grep -v track | grep -v ^$ > lovd.hg19.bed
-wget -q http://varcache.lovd.nl/bed/hg18 -O - | grep -v track | grep -v ^$ > lovd.hg18.bed
+wget -q 'http://varcache.lovd.nl/bed/hg19?add_id_ncbi=1&add_annotation=1' -O - | grep -v track | grep -v ^$ > lovd.hg19.bed
+wget -q 'http://varcache.lovd.nl/bed/hg18?add_id_ncbi=1&add_annotation=1' -O - | grep -v track | grep -v ^$ > lovd.hg18.bed
 
 sed -i s/^/chr/g lovd.hg19.bed
 sed -i s/^/chr/g lovd.hg18.bed
+
+# effect:;lovd_count:1
+sed -i 's/effect:/Variant Effect: /g' lovd.hg19.bed
+sed -i 's/effect:/Variant Effect: /g' lovd.hg18.bed
+
+sed -i 's/;lovd_count:/<br>Number of LOVD Installations reporting this variant: /g' lovd.hg19.bed
+sed -i 's/;lovd_count:/<br>Number of LOVD Installations reporting this variant: /g' lovd.hg18.bed
