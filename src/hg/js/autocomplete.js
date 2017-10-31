@@ -72,7 +72,8 @@ var suggestBox = {
         } else {
             waterMark = "enter position or search terms";
         }
-        if ($posInput[0] != document.activeElement) {
+
+        if ($posInput[0] !== document.activeElement) {
             // Reset value before adding watermark -- only if user is not already typing here
             $posInput.val("");
         }
