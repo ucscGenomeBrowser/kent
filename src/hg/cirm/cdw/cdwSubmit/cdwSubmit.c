@@ -2,6 +2,7 @@
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
+#include <sys/stat.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -20,6 +21,7 @@
 #include "portable.h"
 #include "obscure.h"
 #include "hex.h"
+#include "filePath.h"
 #include "fieldedTable.h"
 #include "cdw.h"
 #include "cdwValid.h"
@@ -39,7 +41,7 @@ errAbort(
   "usage:\n"
   "   cdwSubmit email manifest.txt meta.txt\n"
   "where email is the email address associated with the data set, typically from the lab, not the\n"
-  "wrangler.  You need to do a cdwAddUser with the email address if it's the first submission \n"
+  "wrangler.  You need to run cdwCreateUser with the email address if it's the first submission \n"
   "from that user.  Manifest.txt is a tab separated file with a header line and then one line \n"
   "per file. Meta.txt is in tagStorm format.\n"
   "\n"
@@ -377,7 +379,7 @@ if (user->primaryGroup != 0)
 }
 
 int cdwFileFetch(struct sqlConnection *conn, struct cdwFile *ef, int fd, 
-	char *submitUrl, unsigned submitId, unsigned submitDirId, unsigned hostId,
+	char *submitDir, char *submitUrl, unsigned submitId, unsigned submitDirId, unsigned hostId,
 	struct cdwUser *user, struct fieldedTable *table, struct fieldedRow *row, 
 	int metaIx, struct hash *metaHash)
 /* Fetch file and if successful update a bunch of the fields in ef with the result. 
@@ -390,8 +392,18 @@ ef->id = makeNewEmptyFileRecord(conn, user->id, submitId, submitDirId,
 char cdwFile[PATH_LEN] = "", cdwPath[PATH_LEN];
 cdwMakeFileNameAndPath(ef->id, ef->submitFileName,  cdwFile, cdwPath);
 ef->startUploadTime = cdwNow();
+
+// keep copy so that we can be sure to own the target file
+verbose(3, "cdwFile=%s\n", cdwFile);  // DEBUG
+verbose(3, "copyFile submitFileName=%s to cdwPath=%s\n", ef->submitFileName, cdwPath);  // DEBUG
 copyFile(ef->submitFileName, cdwPath);
+// and owner can chmod it
 chmod(cdwPath, 0444);
+
+// save space by finding the last real file in symlinks chain
+// and replace IT with a symlink to the new file. 
+replaceOriginalWithSymlink(ef->submitFileName, submitDir, cdwPath);
+
 ef->cdwFileName = cloneString(cdwFile);
 ef->endUploadTime = cdwNow();
 char *access = metaManiFieldVal("access", table, row, metaIx, metaHash);
@@ -592,10 +604,10 @@ if (errCatchStart(errCatch))
 
     prefetchChecks(format, ef->submitFileName);
     verbose(1, "copying %s\n", ef->submitFileName);
-    int fileId = cdwFileFetch(conn, ef, fd, submitUrl, submitId, submitDirId, hostId, user,
+    int fileId = cdwFileFetch(conn, ef, fd, submitDir, submitUrl, submitId, submitDirId, hostId, user,
 	table, row, metaIx, metaHash);
     close(fd);
-    cdwAddQaJob(conn, fileId, submitId);
+    //cdwAddQaJob(conn, fileId, submitId);  // DEBUG RESTORE GALT
     tellSubscribers(conn, submitDir, ef->submitFileName, fileId);
     }
 errCatchEnd(errCatch);
@@ -981,7 +993,9 @@ void cdwSubmit(char *email, char *manifestFile, char *metaFile)
 /* cdwSubmit - Submit URL with validated.txt to warehouse. */
 {
 char query[4*1024];
-char *submitDir = getCurrentDir();
+char *submitDir = cloneString(getCurrentDir());
+if (strchr(manifestFile,'/') || strchr(metaFile,'/'))
+    errAbort("Do not specify a directory in the path of the manifest or meta files. Change to the directory they are in instead.");
 
 /* Get table with the required fields and calculate field positions */
 

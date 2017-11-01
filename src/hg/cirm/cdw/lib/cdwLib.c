@@ -16,6 +16,7 @@
 #include "basicBed.h"
 #include "bigBed.h"
 #include "portable.h"
+#include "filePath.h"
 #include "genomeRangeTree.h"
 #include "md5.h"
 #include "htmshell.h"
@@ -1137,6 +1138,15 @@ if (retJobId != NULL)
 return aheadOfUs;
 }
 
+struct cdwSubmitDir *cdwSubmitDirFromId(struct sqlConnection *conn, long long id)
+/* Return submissionDir with given ID or NULL if no such submission. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from cdwSubmitDir where id=%lld", id);
+return cdwSubmitDirLoadByQuery(conn, query);
+}
+
+
 struct cdwSubmit *cdwSubmitFromId(struct sqlConnection *conn, long long id)
 /* Return submission with given ID or NULL if no such submission. */
 {
@@ -1481,9 +1491,146 @@ sqlSafef(query, sizeof(query),
 sqlUpdate(conn, query);
 }
 
-void cdwReallyRemoveFile(struct sqlConnection *conn, long long fileId, boolean really)
+void replaceOriginalWithSymlink(char *submitFileName, char *submitDir, char *cdwPath)
+/* For a file that was just copied, remove original and symlink to new one instead
+ * to save space. Follows symlinks if any to the real file and replaces it with a symlink */
+{
+struct stat sb;
+char *path = cloneString(submitFileName);
+
+// apply path to submitDir, giving an absolute path
+char *newPath = expandRelativePath(submitDir, path);
+verbose(3, "submitDir=%s\npath=%s\nnewPath=%s\n", submitDir, path, newPath);
+if (!newPath)
+    errAbort("Too many .. in path %s to make relative to submitDir %s\n", path, submitDir);
+freeMem(path);
+path = newPath;
+
+int symlinkLevels = 0;
+while (TRUE)
+    {
+    if (lstat(path, &sb) == -1) 
+	errnoAbort("stat failure on %s", path);
+    if ((sb.st_mode & S_IFMT) != S_IFLNK)
+	break;
+
+    // follow the symlink
+    ++symlinkLevels;
+    if (symlinkLevels > 10)
+	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
+
+    // read the symlink
+    ssize_t nbytes, bufsiz;
+    // determine whether the buffer returned was truncated.
+    bufsiz = sb.st_size + 1;
+    char *symPath = needMem(bufsiz);
+    nbytes = readlink(path, symPath, bufsiz);
+    if (nbytes == -1) 
+	errnoAbort("readlink failure on symlink %s", path);
+    if (nbytes == bufsiz)
+        errAbort("readlink returned buffer truncated\n");
+
+    // apply symPath to path
+    newPath = pathRelativeToFile(path, symPath);
+    verbose(3, "path=%s\nsymPath=%s\nnewPath=%s\n", path, symPath, newPath);
+    if (!newPath)
+        errAbort("Too many .. in symlink path %s to make relative to %s\n", symPath, path);
+    freeMem(path);
+    freeMem(symPath);
+    path = newPath;
+    }
+if ((sb.st_mode & S_IFMT) != S_IFREG)
+    errAbort("Expecting regular file. Followed symlinks to %s but it is not a regular file.", path);
+if (startsWith(cdwRootDir, path))
+    errAbort("Unexpected operation. The path %s should not point to a file under cdwRoot %s", path, cdwRootDir);
+if (unlink(path) == -1)  // save space
+    errnoAbort("unlink failure %s", path);
+if (symlink(cdwPath, path) == -1)  // replace with symlink
+    errnoAbort("symlink failure from %s to %s", path, cdwPath);
+verbose(1, "%s converted to symlink to %s\n", path, cdwPath);
+freeMem(path);
+}
+
+
+char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath)
+/* Find the last symlink in the chain from submitDir/submitFileName.
+ * This is useful for when target of symlink in cdw/ gets renamed 
+ * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). */
+{
+struct stat sb;
+char *lastPath = NULL;
+char *path = cloneString(submitFileName);
+
+// apply path to submitDir, giving an absolute path
+char *newPath = expandRelativePath(submitDir, path);
+verbose(3, "submitDir=%s\npath=%s\nnewPath=%s\n", submitDir, path, newPath);
+if (!newPath)
+    errAbort("Too many .. in path %s to make relative to submitDir %s\n", path, submitDir);
+freeMem(path);
+path = newPath;
+
+int symlinkLevels = 0;
+while (TRUE)
+    {
+    if (!fileExists(path))
+	{
+	warn("path=[%s] does not exist following submitDir/submitFileName through sylinks.", path);
+	return NULL;
+	}
+    if (lstat(path, &sb) == -1)
+	errnoAbort("stat failure on %s", path);
+    if ((sb.st_mode & S_IFMT) != S_IFLNK)
+	break;
+
+    // follow the symlink
+    ++symlinkLevels;
+    if (symlinkLevels > 10)
+	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
+
+    // read the symlink
+    ssize_t nbytes, bufsiz;
+    // determine whether the buffer returned was truncated.
+    bufsiz = sb.st_size + 1;
+    char *symPath = needMem(bufsiz);
+    nbytes = readlink(path, symPath, bufsiz);
+    if (nbytes == -1) 
+	errnoAbort("readlink failure on symlink %s", path);
+    if (nbytes == bufsiz)
+        errAbort("readlink returned buffer truncated\n");
+
+    // apply symPath to path
+    newPath = pathRelativeToFile(path, symPath);
+    verbose(3, "path=%s\nsymPath=%s\nnewPath=%s\n", path, symPath, newPath);
+    if (!newPath)
+        errAbort("Too many .. in symlink path %s to make relative to %s\n", symPath, path);
+    if (lastPath)
+	freeMem(lastPath);
+    lastPath = path;
+    freeMem(symPath);
+    path = newPath;
+    }
+if ((sb.st_mode & S_IFMT) != S_IFREG)
+    errAbort("Expecting regular file. Followed symlinks to %s but it is not a regular file.", path);
+if (symlinkLevels < 1)
+    {
+    warn("Too few symlinks followed: %d symlinks. Where is the symlink created by cdwSubmit?", symlinkLevels);
+    return NULL;
+    }
+if (!sameString(path, oldPath))
+    {
+    warn("Found symlinks point to %s, expecting to find symlink pointing to old path %s", path, oldPath);
+    return NULL;
+    }
+
+freeMem(path);
+return lastPath;
+}
+
+
+void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long fileId, boolean really)
 /* Remove all records of file from database and from Unix file system if 
- * the really flag is set.  Otherwise just print some info on the file. */
+ * the really flag is set.  Otherwise just print some info on the file.
+ * Tries to find original submitdir and replace symlink with real file to restore it. */
 {
 struct cdwFile *ef = cdwFileFromId(conn, fileId);
 char *path = cdwPathForFileId(conn, fileId);
@@ -1492,6 +1639,8 @@ verbose(1, "removing id=%u, submitFileName=%s, path=%s\n",
 if (really)
     {
     char query[1024];
+    struct cdwSubmit *es = cdwSubmitFromId(conn, ef->submitId);
+
     cdwRemoveQaRecords(conn, fileId);
     sqlSafef(query, sizeof(query),
 	"delete from cdwGroupFile where fileId=%lld", fileId);
@@ -1500,6 +1649,21 @@ if (really)
     sqlUpdate(conn, query);
     sqlSafef(query, sizeof(query), "delete from cdwFile where id=%lld", fileId);
     sqlUpdate(conn, query);
+
+    char *lastPath = NULL;
+    // skip symlink check if meta or manifest which do not get validated or license plate or symlink
+    if (!((fileId == es->manifestFileId) || (fileId == es->metaFileId)))
+	lastPath = findSubmitSymlink(ef->submitFileName, submitDir, path);
+    if (lastPath)
+	{
+	verbose(3, "lastPath=%s path=%s\n", lastPath, path);
+	if (unlink(lastPath) == -1)  // drop about to be invalid symlink
+	    errnoAbort("unlink failure %s", lastPath);
+	copyFile(path, lastPath);
+	chmod(lastPath, 0664);
+	freeMem(lastPath);
+	}
+
     mustRemove(path);
     }
 freez(&path);
