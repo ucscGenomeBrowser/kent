@@ -3144,6 +3144,7 @@ type netAlign
     otherDb bosTau3
 
 track rBestNet
+release alpha
 shortLabel Reciprocal Best Nets
 longLabel Reciprocal Best Alignment Nets
 compositeTrack on
@@ -3153,6 +3154,7 @@ spectrum on
 type netAlign
 
     track netRBestGorGor1
+    release alpha
     parent rBestNet
     shortLabel $o_Organism RBest Net
     longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
@@ -3164,6 +3166,7 @@ type netAlign
     otherDb gorGor1
 
     track netRBestCalJac1
+    release alpha
     parent rBestNet
     shortLabel $o_Organism RBest Net
     longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
@@ -3175,6 +3178,7 @@ type netAlign
     otherDb calJac1
 
     track netRBestTarSyr1
+    release alpha
     parent rBestNet
     shortLabel $o_Organism RBest Net
     longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
@@ -3185,29 +3189,8 @@ type netAlign
     type netAlign tarSyr1 chainTarSyr1
     otherDb tarSyr1
 
-    track netRBestOtoGar1
-    parent rBestNet
-    shortLabel $o_Organism RBest Net
-    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
-    group compGeno
-    priority 4
-    visibility hide
-    spectrum on
-    type netAlign otoGar1 chainOtoGar1
-    otherDb otoGar1
-
-    track netRBestMicMur1
-    parent rBestNet
-    shortLabel $o_Organism RBest Net
-    longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
-    group compGeno
-    priority 5
-    visibility hide
-    spectrum on
-    type netAlign micMur1 chainMicMur1
-    otherDb micMur1
-
     track netRBestTupBel1
+    release alpha
     parent rBestNet
     shortLabel $o_Organism RBest Net
     longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
@@ -3219,6 +3202,7 @@ type netAlign
     otherDb tupBel1
 
     track netRBestOryCun1
+    release alpha
     parent rBestNet
     shortLabel Rabbit RBest Net
     longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
@@ -3230,6 +3214,7 @@ type netAlign
     otherDb oryCun1
 
     track netRBestCavPor2
+    release alpha
     parent rBestNet
     shortLabel Guineapig RBest Net
     longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
@@ -3241,6 +3226,7 @@ type netAlign
     otherDb cavPor2
 
     track netRBestEchTel1
+    release alpha
     parent rBestNet
     shortLabel Tenrec RBest Net
     longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
@@ -3252,6 +3238,7 @@ type netAlign
     otherDb echTel1
 
     track netRBestLoxAfr1
+    release alpha
     parent rBestNet
     shortLabel Elephant RBest Net
     longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
@@ -3263,6 +3250,7 @@ type netAlign
     otherDb loxAfr1
 
     track netRBestDasNov1
+    release alpha
     parent rBestNet
     shortLabel Armadillo RBest Net
     longLabel $o_Organism ($o_date) Reciprocal Best Alignment Net
@@ -3272,7 +3260,6 @@ type netAlign
     spectrum on
     type netAlign dasNov1 chainDasNov1
     otherDb dasNov1
-
 
 track stanfordChip
 compositeTrack on

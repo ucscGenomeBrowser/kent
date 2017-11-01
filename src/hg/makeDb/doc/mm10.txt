@@ -15438,10 +15438,15 @@ TMPDIR=/dev/shm
 ##############################################################################
 # refSeqFuncElems NCBI refSeq functional elements, DONE 2017-08-08 Chris
 # Mouse
+
+#TODO next time: build in /hive/data/genomes/mm10/bed/refSeqFuncElems/$date; don't include 'Mm10' in file names
+
 cd /hive/data/outside/refSeqFuncElems
 
 wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Mus_musculus/GFF_interim/interim_GRCm38.p5_top_level_2017-05-19.gff3.gz
 gunzip interim_GRCm38.p5_top_level_2017-05-19.gff3.gz
+
+#TODO next time: consider using chromAlias instead of ucscToRefSeq:
 
 hgsql mm10 -e "select * from ucscToRefSeq" | cut -f 1,4 | awk '{print $2"\t"$1}' > refSeqToUcscMM10.tsv
 
@@ -15453,8 +15458,8 @@ join <(sort foo2.mm10) <(sort refSeqToUcscMM10.tsv) -t $'\t' > join.foo.mm10
 sort -k1,1 -k2,2n bed.mm10 > sorted.bed.mm10
 bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed.mm10 /hive/data/genomes/mm10/chrom.sizes refSeqFuncElemsMm10.bb -tab
 
-cd /gbdb/hg38/ncbiRefSeq
-ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb .
+mkdir -p /gbdb/mm10/ncbiRefSeq
+ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb /gbdb/mm10/ncbiRefSeq/refSeqFuncElems.bb
 
 ##############################################################################
 2017-09-15: import of UCSC GENCODE group processing of GENCODE VM15 (markd)

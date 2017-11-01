@@ -3135,28 +3135,6 @@ printf("<P><A HREF=\"%s?g=%s&%s\">"
        hTrackUiForTrack(tdb->track), trackName, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
-static void printDataVersion(struct trackDb *tdb)
-/* If this annotation has a dataVersion trackDb setting, print it */
-{
-if (trackHubDatabase(database))
-    return;
-metadataForTable(database,tdb,NULL);
-const char *version = metadataFindValue(tdb,"dataVersion");
-if(version == NULL)
-    version = trackDbSetting(tdb,"dataVersion");
-if (version != NULL)
-    if (startsWith("/", version))
-        {
-        char *path = replaceInUrl((char *)version, "", cart, database, seqName, winStart, winEnd, tdb->track, FALSE);
-        struct lineFile* lf = lineFileOpen(path, TRUE);
-        if (lf)
-            version = lineFileReadAll(lf);
-        }
-
-if (version != NULL)
-    printf("<B>Data version:</B> %s <BR>\n", version);
-}
-
 void printDataRestrictionDate(struct trackDb *tdb)
 /* If this annotation has a dateUnrestricted trackDb setting, print it */
 {
@@ -3194,18 +3172,10 @@ void printTrackHtml(struct trackDb *tdb)
 {
 if (!isCustomTrack(tdb->track))
     {
-    extraUiLinks(database,tdb);
+    extraUiLinks(database, tdb);
     printTrackUiLink(tdb);
-    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
-    // also try the parent for composites/superTracks
-    if(trackVersion == NULL && (tdb->parent!=NULL))
-        trackVersion = getTrackVersion(database, tdb->parent->track);
-
-    if(trackVersion == NULL)
-        printDataVersion(tdb);
-    else
-        printf("<B>Data version:</B> %s <BR>\n", trackVersion->version);
     printOrigAssembly(tdb);
+    printDataVersion(database, tdb);
     printUpdateTime(database, tdb, NULL);
     printDataRestrictionDate(tdb);
     }
@@ -24135,9 +24105,11 @@ printf("</DL>\n");
 
 /* split code from printTrackHtml */
 printTBSchemaLink(tdb);
-printDataVersion(tdb);
+
 printOrigAssembly(tdb);
+printDataVersion(database, tdb);
 printUpdateTime(database, tdb, NULL);
+
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();

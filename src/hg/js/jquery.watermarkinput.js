@@ -73,8 +73,9 @@
 				input.focus(clearMessage);
 				input.blur(insertMessage);								
 				input.change(insertMessage);
-				
-				insertMessage();
+				if (input[0] !== document.activeElement) {
+					insertMessage();
+				}
 			}
 		);
 	};

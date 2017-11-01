@@ -56,6 +56,13 @@ body.loading .modal {
     display: block;
 }
 
+.fa-minus-square:before {
+    color:      #f00;
+    }
+
+.fa-plus:before {
+    color:      #0f0;
+    }
 </style>
 
 <form name='form' action='../cgi-bin/hgTracks'></form>
@@ -136,7 +143,7 @@ body.loading .modal {
         <div class='row mygbSectionBanner'>
             <div class='col-md-6'>Collected Tracks</div>
                 <div class='' style='float:right'  title='Make New Calculated Track'>
-                    <div style='font-size:13px' id='newCalcTrack' class='gbButton'>Make New Calculated Track</div>
+                    <div style='font-size:13px' id='newCalcTrackButton' class='gbButton'>Make New Calculated Track</div>
                 </div>
         </div>
         <div style='margin:12px; font-size:12px'> 
@@ -165,4 +172,25 @@ body.loading .modal {
     <li data-action="delete">Delete</li>
 </ul>
 
-<div class="modal"></div>
+<div class='modal'></div>
+
+<div id='newCalcTrackDialog' title='Create Calculated Track' style='background:white; width:512px; display:none'>
+    <p>
+    Calculated tracks are wiggle tracks that are built by performing arithmetic on a set of wiggles.
+    </p>
+
+    <div>
+        <input type="radio" name="defaultContents" checked="checked" value="copy" > Copy current tracks in collection to calculated track. <br>
+        <input type="radio" name="defaultContents" value="move"> Move current tracks in collection to calculated track. <br>
+        <input type="radio" name="defaultContents" value="empty"> Create empty calculated track. <br>
+    </div>
+
+    <div style="padding: 5px; border: 1px solid black; margin: 10px" value="Missing Data">
+        <input type="radio" name="missingData" value="missing" checked="checked" > math with missing values results in missing values<br>
+        <input type="radio" name="missingData" value="zero" > treat missing data as a zero<br>
+    </div>
+
+    <div>
+        <input id="newCalcTrack" type="submit" value="Go!"   tabindex="-1" >
+    </div>
+</div>

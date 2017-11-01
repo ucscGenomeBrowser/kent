@@ -1414,4 +1414,6 @@ char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* 
 
 struct slPair *buildFieldList(struct trackDb *tdb, char *trackDbVar, struct asObject *as);
 /* Build up a hash of a list of fields in an AS file. */
+
+void printDataVersion(char *database, struct trackDb *tdb);
 #endif /* HUI_H */

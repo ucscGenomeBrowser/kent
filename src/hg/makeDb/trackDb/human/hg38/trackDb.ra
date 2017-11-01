@@ -6,19 +6,6 @@ include hoffMap.ra
 
 include cancerExpr.ra
 
-track refSeqFuncElems
-release alpha
-shortLabel RefSeq Func Elems
-longLabel NCBI RefSeq Functional Elements 
-type bigBed 8 +
-bigDataUrl /gbdb/hg38/ncbiRefSeq/refSeqFuncElems.bb
-labelFields soTerm
-group regulation
-url https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$
-urlLabel Gene ID: 
-urls pubMedIds=https://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
-mouseOverField _mouseOver
-
 track cosmicRegions
 shortLabel COSMIC Regions
 longLabel Catalogue of Somatic Mutations in Cancer V82

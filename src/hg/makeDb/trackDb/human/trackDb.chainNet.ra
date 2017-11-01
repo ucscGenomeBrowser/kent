@@ -309,3 +309,6 @@ chainMinScore 2000
 
 track chainNetStrPur2 override
 priority 670.3
+
+include chainNetSynPrimate.ra alpha
+include chainNetRBestPrimate.ra alpha

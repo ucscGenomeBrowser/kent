@@ -5,8 +5,9 @@ use warnings;
 
 my $argc = scalar(@ARGV);
 
-if ($argc < 2) {
- printf STDERR "usage: compositeChainNet.pl <name> <clade1.list> \\\n\t[clade2.list ...etc...] > nameChainNet.ra\n";
+if ($argc < 3) {
+ printf STDERR "usage: compositeChainNet.pl [net|syn|rbest] <name> <clade1.list> \\\n\t[clade2.list ...etc...] > nameChainNet.ra\n";
+ printf STDERR "[net|syn|rbest] select one of these for lowest level chainNet\n\tor syntenic or reciprocal best chainNet\n";
  printf STDERR "name is the name of the composite track, examples:\n";
  printf STDERR "\tplacental, mammal, vertebrate\n";
  printf STDERR "The clade lists are lists of species dbs to put\n";
@@ -16,6 +17,7 @@ if ($argc < 2) {
    exit 255;
 }
 
+my $netType = shift;
 my $trackName = shift;
 my @cladeLists;
 my @cladeNames;
@@ -71,12 +73,19 @@ foreach my $clade (@cladeNames) {
 printf STDERR "# %s\n", $subGroup2;
 printf STDERR "# %s\n", $subGroup3;
 
-printf 'track %sChainNet
+my $trackType = "";
+$trackType = "Syn" if ($netType =~ m/syn/);
+$trackType = "RBest" if ($netType =~ m/rbest/);
+my $trackLabel = "";
+$trackLabel = "Syntenic" if ($netType =~ m/syn/);
+$trackLabel = "RecipBest" if ($netType =~ m/rbest/);
+
+printf 'track %s%sChainNet
 compositeTrack on
-shortLabel %s Chain/NetChainNet
-longLabel %sChainNet, Chain and Net Alignments
+shortLabel %s %s Chain/Net
+longLabel %s %s Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-', $trackName, $trackName, $trackName;
+', $trackName, $trackType, $trackName, $trackLabel, $trackName, $trackLabel;
 
 printf "subGroup2 %s\nsubGroup3 %s\n", $subGroup2, $subGroup3;
 
@@ -92,20 +101,20 @@ chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species
 sortOrder  species=+ view=+ clade=+
 configurable on
-html %sChainNet
+html %s%sChainNet
 
-', $trackName;
+', $trackName, $trackType;
 
 
 
-printf '    track %sChainNetViewchain
-    shortLabel Chains
+printf '    track %s%sChainNetViewchain
+    shortLabel %s Chains
     view chain
     visibility pack
-    subTrack %sChainNet
+    subTrack %s%sChainNet
     spectrum on
 
-', $trackName, $trackName;
+', $trackName, $trackType, $trackLabel, $trackName, $trackType;
 
 for (my $i = 0; $i < scalar(@cladeNames); ++$i) {
   my $clade = $cladeNames[$i];
@@ -113,25 +122,25 @@ for (my $i = 0; $i < scalar(@cladeNames); ++$i) {
   for (my $j = 0; $j < scalar(@$dbs); ++$j) {
       my $db = $dbs->[$j];
       my $Db = ucfirst($db);
-      printf '        track chain%s
-        subTrack %sChainNetViewchain off
+      printf '        track chain%s%s
+        subTrack %s%sChainNetViewchain off
         subGroups view=chain species=%s clade=%s
-        shortLabel $o_Organism Chain
+        shortLabel $o_Organism %s Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain %s
         otherDb %s
 
-', $Db, $trackName, $speciesOrder{$db}, $cladeOrder{$clade}, $db, $db;
+', $trackType, $Db, $trackName, $trackType, $speciesOrder{$db}, $cladeOrder{$clade}, $trackLabel, $db, $db;
   }
 }
 
-    printf '    track %sChainNetViewnet
-    shortLabel Nets
+    printf '    track %s%sChainNetViewnet
+    shortLabel %s Nets
     view net
     visibility dense
-    subTrack %sChainNet
+    subTrack %s%sChainNet
 
-', $trackName, $trackName;
+', $trackName, $trackType, $trackLabel, $trackName, $trackType;
 
 
 for (my $i = 0; $i < scalar(@cladeNames); ++$i) {
@@ -140,15 +149,15 @@ for (my $i = 0; $i < scalar(@cladeNames); ++$i) {
   for (my $j = 0; $j < scalar(@$dbs); ++$j) {
       my $db = $dbs->[$j];
       my $Db = ucfirst($db);
-      printf '        track net%s
-        subTrack %sChainNetViewnet off
+      printf '        track net%s%s
+        subTrack %s%sChainNetViewnet off
         subGroups view=net species=%s clade=%s
-        shortLabel $o_Organism Net
+        shortLabel $o_Organism %s Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign %s chain%s
+        type netAlign %s chain%s%s
         otherDb %s
 
-', $Db, $trackName, $speciesOrder{$db}, $cladeOrder{$clade}, $db, $Db, $db;
+', $trackType, $Db, $trackName, $trackType, $speciesOrder{$db}, $cladeOrder{$clade}, $trackLabel, $db, $trackType, $Db, $db;
   }
 }
 

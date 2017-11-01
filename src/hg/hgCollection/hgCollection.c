@@ -35,7 +35,8 @@ char *shortLabel;
 char *longLabel;
 char *visibility;
 unsigned long color;
-char *viewFunc;
+char *viewFunc;        // The method by which calculated tracks should be calculated
+char *missingMethod;   // How should missing data be treated in calculated tracks
 };
 
 struct trackDbRef 
@@ -83,18 +84,20 @@ static void printGroup(char *parent, struct trackDb *tdb, boolean folder, boolea
 char *userString = "";
 char *prefix = "";
 char *viewFunc = NULL;
+char *missingMethod = NULL;
 
 if (user)
     {
     if (tdb->parent && tdb->subtracks) 
         {
         viewFunc = trackDbSetting(tdb, "viewFunc");
+        missingMethod = trackDbSetting(tdb, "missingMethod");
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='view' class='folder'";
         }
     else if (tdb->subtracks)
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='track' class='folder'";
     else
-        userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-minus\\\"}' viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-minus-square\\\"}' viewType='track'";
     }
 else
     {
@@ -114,10 +117,17 @@ char *viewFuncString = "";
 if (viewFunc != NULL)
     {
     safef(buffer, sizeof buffer, "viewFunc='%s' ", viewFunc);
-    viewFuncString = buffer;
+    viewFuncString = cloneString(buffer);
     }
 
-jsInlineF("<li shortLabel='%s' longLabel='%s' color='#%06x' %s visibility='%s'  name='%s%s' %s>%s",  tdb->shortLabel, tdb->longLabel,IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB), viewFuncString, hStringFromTv(tdb->visibility), prefix,  trackHubSkipHubName(tdb->track),   userString,  tdb->shortLabel );
+char *missingString = "";
+if (missingMethod != NULL)
+    {
+    safef(buffer, sizeof buffer, "missingMethod='%s' ", missingMethod);
+    missingString = cloneString(buffer);
+    }
+
+jsInlineF("<li shortLabel='%s' longLabel='%s' color='#%06x' %s %s visibility='%s'  name='%s%s' %s>%s",  tdb->shortLabel, tdb->longLabel,IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB), viewFuncString, missingString, hStringFromTv(tdb->visibility), prefix,  trackHubSkipHubName(tdb->track),   userString,  tdb->shortLabel );
 jsInlineF(" (%s)", tdb->longLabel);
 
 
@@ -403,9 +413,9 @@ jsInlineF("$('#assembly').text('%s');\n",assembly);
 printHelp();
 doTable(cart, db, groupList, trackList);
 
+puts("<link rel='stylesheet' href='https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'>");
 puts("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css' />");
 puts("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js'></script>");
-//puts("<script src=\"//code.jquery.com/jquery-1.12.1.min.js\"></script>");
 puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
 puts("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.4/jstree.min.js\"></script>\n");
 jsIncludeFile("utils.js", NULL);
@@ -519,7 +529,8 @@ fprintf(f,"\ttrack %s\n\
 \tcolor %ld,%ld,%ld \n\
 \tpriority %d\n\
 \tviewFunc %s \n\
-\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), priority++, view->viewFunc, view->visibility);
+\tmissingMethod %s \n\
+\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), priority++, view->viewFunc, view->missingMethod, view->visibility);
 fprintf(f, "\n");
 
 struct track *track = view->trackList;
@@ -629,6 +640,9 @@ if ((name == NULL) && (ele->type == jsonObject))
         strEle = (struct jsonElement *)hashFindVal(attrHash, "viewfunc");
         if (strEle)
             track->viewFunc = jsonStringEscape(strEle->val.jeString);
+        strEle = (struct jsonElement *)hashFindVal(attrHash, "missingMethod");
+        if (strEle)
+            track->missingMethod = jsonStringEscape(strEle->val.jeString);
         }
     }
 }

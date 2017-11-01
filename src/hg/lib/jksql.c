@@ -1722,19 +1722,20 @@ if (cacheConn)
 
 char *err;
 unsigned int errNo;
+const int tableNotFoundCode = 1146;
 
 sqlSafef(query, sizeof(query), "SELECT 1 FROM %-s LIMIT 0", sqlCkIl(table));  
 
 if ((sr = sqlGetResultExt(sc, query, &errNo, &err)) == NULL)
     {
-    if (errNo == 1146) // table not found
+    if (errNo == tableNotFoundCode)
         return FALSE;
     if (sc->failoverConn)
 	{
 	// if not found but we have a main connection, check the main connection, too
 	if ((sr = sqlGetResultExt(sc->failoverConn, query, &errNo, &err)) == NULL)
 	    {
-	    if (errNo == 1146) // table not found
+	    if (errNo == tableNotFoundCode)
 		return FALSE;
 	    }
 	}

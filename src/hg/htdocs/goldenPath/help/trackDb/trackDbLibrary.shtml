@@ -477,7 +477,9 @@
     useful to declare the current version of the track.  Use
     this setting to display a version statement on the track
     configuration page and item details page of a track.  The string
-    will support limited HTML.</P>
+    will support limited HTML. For native tracks, not track hubs, 
+    this setting can also be a local absolute filename to read the version 
+    string from.</P>
     <P><B>Example:</B></P>
     <pre>   dataVersion May 2011 &lt;em&gt;beta&lt;/em&gt;</pre>
 </DIV>

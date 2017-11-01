@@ -391,7 +391,7 @@ include wgEncodeRegDnase.ra
     type factorSource
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     origAssembly hg19
-    superTrack wgEncodeReg dense
+    superTrack wgEncodeReg hide
     sourceTable wgEncodeRegTfbsCellsV3
     inputTrackTable wgEncodeRegTfbsClusteredInputsV3
     inputTableFieldDisplay cellType factor antibody treatment lab

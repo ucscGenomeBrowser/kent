@@ -11,9 +11,10 @@ table gtexEqtl
     uint thickEnd;     "End position"
     uint reserved;     "R,G,B color: red +effect, blue -effect. Bright for high, pale for lower (cutoff effectSize 2.0 RPKM)."
     string variant;    "Variant (rsID or GTEx identifier if none)"
-    string gene;       "Target gene"
+    string geneId;     "Target gene identifier"
+    string gene;       "Target gene symbol"
     int distance;      "Distance from TSS"
     float effectSize;  "Effect size (FPKM)"
     float pValue;      "Nominal p-value"
-    float causalProb;  "Probability variant is in 95 percent credible set"
+    float causalProb;  "Probability variant is in high confidence causal set"
     )
