@@ -22,7 +22,7 @@ var hgCollection = (function() {
                     isDirty = true;
                     var nodes = [];
                     var node;
-                    for(ii=0; ii < nodeIds.length;ii++) {
+                    for(ii=0; ii < nodeIds.length; ii++) {
                         node = $("#tracks").jstree('get_node', nodeIds[ii]);
                         if (node.children.length === 0)
                             nodes.push(node);
@@ -133,13 +133,13 @@ var hgCollection = (function() {
         newNode.li_attr.longlabel = newDescription;
         newNode.li_attr.visibility = "full";
         newNode.li_attr.color = "#0";
-        newNode.li_attr.missing = $("input:radio[name ='missingData']:checked").val();
+        newNode.li_attr.missingMethod = $("input:radio[name ='missingData']:checked").val();
         newNode.li_attr.viewfunc = "add all";
         newNode.li_attr.viewtype = "view";
         $(selectedTree).jstree("set_icon", newNode, '../images/folderC.png');
 
         var nodes = [];
-        for(ii=0; ii < children.length;ii++) {
+        for(ii=0; ii < children.length; ii++) {
             if (!$(children[ii]).hasClass('folder'))
                 nodes.push(children[ii]);
         }
@@ -363,7 +363,7 @@ var hgCollection = (function() {
         $("#customDescription").change(descriptionChange);
         $("#customVis").change(visChange);
         //$("#customColorInput").change(colorChange);
-        $("#saveCollections").click ( function() {saveCollections(trees);} );
+        $("#saveCollections").click ( function() { saveCollections(trees); } );
         $("#discardChanges").click ( function () { isDirty = false; window.location.reload(); });
 
         $("#newCollection").click ( newCollection );
@@ -486,7 +486,7 @@ var hgCollection = (function() {
         } else {
             var counter = 1;
 
-            for(;;counter++) {
+            for(; ; counter++) {
                 var name  = root + counter;
                 if (!names[name]) {
                     names[name] = true;
