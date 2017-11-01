@@ -28,6 +28,7 @@
 #include "cdw.h"
 #include "cdwLib.h"
 #include "fa.h"
+#include "filePath.h"
 #include "cdwValid.h"
 #include "vcf.h"
 #include "csv.h"
@@ -552,7 +553,7 @@ makeValidTabSepFile(conn, path, ef, vf, NULL, fieldCount);
 
 void makeValidCsv( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
     struct cdwValidFile *vf)
-/* Make sure a csv tab-separated values file looks all good */
+/* Make sure a csv comma-separated values file looks all good */
 {
 struct lineFile *lf = lineFileOpen(path, TRUE);
 // get fieldCount from first line
@@ -933,12 +934,34 @@ if (vf->format)	// We only can validate if we have something for format
 	    char oldPath[PATH_LEN], newPath[PATH_LEN];
 	    safef(oldPath, sizeof(oldPath), "%s%s", cdwRootDir, fileName);
 	    safef(newPath, sizeof(newPath), "%s%s", cdwRootDir, newName->string);
+
+	    char query[PATH_LEN+256];
+
+	    // rename symlink to it in submitDir
+	    sqlSafef(query, sizeof(query), "select url from cdwSubmitDir where id='%d'", ef->submitDirId);
+	    char *submitDir = sqlQuickString(conn, query);
+	    if (!submitDir)
+		errAbort("submitDir not found for id %d", ef->submitDirId);
+
+	    char *lastPath = findSubmitSymlink(ef->submitFileName, submitDir, oldPath);
+	    freeMem(submitDir);
+	    if (!lastPath)
+		noWarnAbort();
+
+	    verbose(3, "lastPath=%s newPath=%s\n", lastPath, newPath);
+	    if (unlink(lastPath) == -1)  // drop about to be invalid symlink
+		errnoAbort("unlink failure %s", lastPath);
+
 	    mustRename(oldPath, newPath);
+
+	    if (symlink(newPath, lastPath) == -1)  // replace with symlink
+		errnoAbort("symlink failure from %s to %s", lastPath, newPath);
+	    freeMem(lastPath);
+
 	    verbose(2, "Renamed %s to %s\n", oldPath, newPath);
 
 	    /* Update database with new name - small window of vulnerability here sadly 
 	     * two makeValidates running at same time stepping on each other. */
-	    char query[PATH_LEN+256];
 	    sqlSafef(query, sizeof(query), "update cdwFile set cdwFileName='%s' where id=%lld",
 		newName->string, (long long)ef->id);
 	    sqlUpdate(conn, query);

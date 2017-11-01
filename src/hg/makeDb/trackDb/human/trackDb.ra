@@ -3542,6 +3542,7 @@ searchType bed
 searchPriority 10
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
 termRegex COSM[0-9]+
+release alpha
 
 searchTable wgRnaOld
 searchMethod fuzzy
