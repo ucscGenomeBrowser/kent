@@ -394,8 +394,8 @@ cdwMakeFileNameAndPath(ef->id, ef->submitFileName,  cdwFile, cdwPath);
 ef->startUploadTime = cdwNow();
 
 // keep copy so that we can be sure to own the target file
-verbose(3, "cdwFile=%s\n", cdwFile);  // DEBUG
-verbose(3, "copyFile submitFileName=%s to cdwPath=%s\n", ef->submitFileName, cdwPath);  // DEBUG
+verbose(3, "cdwFile=%s\n", cdwFile);
+verbose(3, "copyFile submitFileName=%s to cdwPath=%s\n", ef->submitFileName, cdwPath);
 copyFile(ef->submitFileName, cdwPath);
 // and owner can chmod it
 chmod(cdwPath, 0444);
@@ -607,7 +607,7 @@ if (errCatchStart(errCatch))
     int fileId = cdwFileFetch(conn, ef, fd, submitDir, submitUrl, submitId, submitDirId, hostId, user,
 	table, row, metaIx, metaHash);
     close(fd);
-    //cdwAddQaJob(conn, fileId, submitId);  // DEBUG RESTORE GALT
+    cdwAddQaJob(conn, fileId, submitId);
     tellSubscribers(conn, submitDir, ef->submitFileName, fileId);
     }
 errCatchEnd(errCatch);
