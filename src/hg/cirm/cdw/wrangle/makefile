@@ -1,7 +1,6 @@
 #Borrowing a bit of code from one of Hiram's makefiles (src/utils)
 WRANGLE_APPLIST = \
 	addMetaDataToJson\
-	addToStepTables\
 	cdwSnyderomeStepLink\
 	cdwWrangleIsaacInput\
 	condenseMatrix\
