@@ -157,7 +157,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 	    longLabel Single-read mappability with 50-mers after bisulfite conversion (reverse strand)
 	    visibility hide
             subGroups view=SR
-	    priority 6
+	    priority 7
 	    color 240,120,80
 
 	    track bismap_50_Pos
@@ -169,13 +169,13 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 	    longLabel Single-read mappability with 50-mers after bisulfite conversion (forward strand)
 	    visibility hide
             subGroups view=SR
-	    priority 5
+	    priority 3
 	    color 240,120,80
 	    
 	    track bismap_100_Neg
 	    parent bismap_bigBed off
 	    release alpha
-	    type bigBed 6
+	    type bigBed 8
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k100.G2A-Converted.bb
 	    shortLabel Bismap_S100 -
 	    longLabel Single-read mappability with 100-mers after bisulfite conversion (reverse strand)
@@ -205,7 +205,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 	    longLabel Single-read mappability with 36-mers after bisulfite conversion (forward strand)
 	    visibility hide
             subGroups view=SR
-	    priority 3
+	    priority 2
 	    color 240,70,80
 	    
 	    track bismap_36_Neg
@@ -217,7 +217,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 	    longLabel Single-read mappability with 36-mers after bisulfite conversion (reverse strand)
 	    visibility hide
             subGroups view=SR
-	    priority 4
+	    priority 6
 	    color 240,70,80
 	    
 	    track bismap_100_Pos
@@ -229,7 +229,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 	    longLabel Single-read mappability with 100-mers after bisulfite conversion (forward strand)
 	    visibility hide
             subGroups view=SR
-	    priority 7
+	    priority 4
 	    color 240,170,80
 
 	    track bismap_24_Neg
@@ -241,7 +241,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 	    longLabel Single-read mappability with 24-mers after bisulfite conversion (reverse strand)
 	    visibility dense
             subGroups view=SR
-	    priority 2
+	    priority 5
 	    color 240,20,80
 
         track bismap_bigWig
