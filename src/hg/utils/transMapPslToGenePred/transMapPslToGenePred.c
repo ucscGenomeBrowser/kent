@@ -1,7 +1,7 @@
 /* transMapPslToGenePred - convert PSL alignments of mRNAs to gene annotation.
  */
 
-/* Copyright (C) 2016 The Regents of the University of California 
+/* Copyright (C) 2016 The Regents of the University of California
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
@@ -33,7 +33,7 @@ errAbort(
   "\n"
 
   "Convert PSL alignments from transmap to genePred.  It specifically handles\n"
-  "alignments where the source gene is a genomic annotations in genePred\n"
+  "alignments where the source genes are genomic annotations in genePred\n"
   "format, that are converted to PSL for mapping and using this program to\n"
   "create a new genePred.\n"
   "\n"
@@ -250,7 +250,7 @@ if (tCds.start >= tCds.end)
     srcQueryExon->qCdsStart = srcQueryExon->qCdsEnd = 0;
     srcQueryExon->hasCdsStart = srcQueryExon->hasCdsEnd = FALSE;
     }
-else 
+else
     {
     // part or all of exon is CDS
     if (srcGp->strand[0] == '+')
@@ -360,7 +360,7 @@ mappedCdsBounds->cdsStart = pslBlockQueryToTarget(mappedPsl, iBlock, mappedQCds.
 if (srcQueryExon->hasCdsStart && (mappedQCds.start == srcQueryExon->qCdsStart))
     mappedCdsBounds->cdsStartIsMapped = TRUE;
 }
-    
+
 static void convertPslBlockCdsEnd(struct psl *mappedPsl, int iBlock, struct genePred* srcGp,
                                   struct srcQueryExon* srcQueryExon, struct range mappedQCds,
                                   struct genePred *mappedGp, struct mappedCdsBounds* mappedCdsBounds)
@@ -551,7 +551,7 @@ else
         ? mappedGp->exonFrames[iExon+1]
         : mappedGp->exonFrames[iExon];
     }
-}   
+}
 
 static void shiftBlock(struct genePred *mappedGp, int iExon)
 /* shift up block arrays by one, overwriting iExon entry */
@@ -645,4 +645,3 @@ char *mappedGenePredFile = argv[3];
 transMapPslToGenePred(srcGenePredFile, mappedPslFile, mappedGenePredFile);
 return 0;
 }
-
