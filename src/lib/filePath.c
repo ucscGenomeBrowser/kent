@@ -115,6 +115,18 @@ else
 return result;
 }
 
+char *mustExpandRelativePath(char *dir, char* relPath)
+/* Given a dir and relative path, expand path.
+ * Handy for processing symlinks. errAbort if expand fails.
+ * Result should be freeMem'd.*/
+{
+char *path = expandRelativePath(dir, relPath);
+verbose(3, "dir=%s\nrelPath=%s\npath=%s\n", dir, relPath, path);
+if (!path)
+    errAbort("Too many .. in path %s to make relative to submitDir %s\n", relPath, dir);
+return path;
+}
+
 char *pathRelativeToFile(char *baseFile, char *relPath)
 /* Given a base file name and a path relative to that, return
  * relative path interpreted as if it were seen from the
@@ -131,6 +143,16 @@ int dirLen = strlen(dir);
 if (dirLen > 0 && dir[dirLen-1] == '/')
      dir[dirLen-1] = 0;
 return expandRelativePath(dir, relPath);
+}
+
+char *mustPathRelativeToFile(char *baseFile, char *relPath)
+/* Make Path Relative To File or Abort. */
+{
+char *path = pathRelativeToFile(baseFile, relPath);
+verbose(3, "baseFile=%s\nrelPath=%s\npath=%s\n", baseFile, relPath, path);
+if (!path)
+    errAbort("Too many .. in symlink path %s to make relative to %s\n", relPath, baseFile);
+return path;
 }
 
 char *makeRelativePath(char *from, char *to)

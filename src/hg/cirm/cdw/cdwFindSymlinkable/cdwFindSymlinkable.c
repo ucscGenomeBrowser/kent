@@ -133,10 +133,7 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 
 	// apply submitFileName to submitDir, giving an absolute path
 	freeMem(newPath);
-	newPath = expandRelativePath(ed->url, ef->submitFileName);
-	verbose(3, "submitDir=%s\npath=%s\nnewPath=%s\n", ed->url, ef->submitFileName, newPath);
-	if (!newPath)
-	    errAbort("Too many .. in path %s to make relative to submitDir %s\n", ef->submitFileName, ed->url);
+        newPath = mustExpandRelativePath(ed->url, ef->submitFileName);
 
 	if (!fileExists(newPath))
 	    {
