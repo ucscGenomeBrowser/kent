@@ -15,62 +15,63 @@ longLabel Hoffman Lab Umap and Bismap Mappability
     longLabel Single-read and multi-read mappability by Umap
     visibility full
 
-        track umap_bigBed
+        track umapBigBed
         parent umap on
+	release alpha
         type bigBed 6
         visibility dense
         shortLabel Single-read mappability
 	view SR
         viewUi on
 
-	    track umap_24
-	    parent umap_bigBed on
+	    track umap24
+	    parent umapBigBed on
 	    release alpha
 	    type bigBed 6
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k24.Unique.Mappability.bb
-	    shortLabel Umap_S24
+	    shortLabel Umap S24
 	    longLabel Single-read mappability with 24-mers
             subGroups view=SR
 	    priority 1
 	    color 80,20,240
 
-	    track umap_50
-	    parent umap_bigBed off
+	    track umap50
+	    parent umapBigBed off
 	    release alpha
 	    type bigBed 6
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Unique.Mappability.bb
-	    shortLabel Umap_S50
+	    shortLabel Umap S50
 	    longLabel Single-read mappability with 50-mers
 	    visibility hide
             subGroups view=SR
 	    priority 3
 	    color 80,120,240
 
-	    track umap_36
-	    parent umap_bigBed off
+	    track umap36
+	    parent umapBigBed off
 	    release alpha
 	    type bigBed 6
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k36.Unique.Mappability.bb
-	    shortLabel Umap_S36
+	    shortLabel Umap S36
 	    longLabel Single-read mappability with 36-mers
 	    visibility hide
             subGroups view=SR
 	    priority 2
 	    color 80,70,240
 
-	    track umap_100
-	    parent umap_bigBed off
+	    track umap100
+	    parent umapBigBed off
 	    release alpha
 	    type bigBed 6
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k100.Unique.Mappability.bb
-	    shortLabel Umap_S100
+	    shortLabel Umap S100
 	    longLabel Single-read mappability with 100-mers
 	    visibility hide
             subGroups view=SR
 	    priority 4
 	    color 80,170,240
 
-        track umap_bigWig
+        track umapBigWig
         parent umap on
         type bigWig
         visibility full
@@ -78,51 +79,51 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 	view MR
         viewUi on
 
-	    track umap_36_quantitative
-	    parent umap_bigWig off
+	    track umap36Quantitative
+	    parent umapBigWig off
 	    release alpha
 	    type bigWig
 	    viewLimits 0:1
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k36.Umap.MultiTrackMappability.bw
-	    shortLabel Umap_M36
+	    shortLabel Umap M36
 	    longLabel Multi-read mappability with 36-mers
 	    visibility hide
             subGroups view=MR
 	    priority 6
 	    color 80,70,240
 
-	    track umap_24_quantitative
-	    parent umap_bigWig on
+	    track umap24Quantitative
+	    parent umapBigWig on
 	    release alpha
 	    type bigWig
 	    viewLimits 0:1
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k24.Umap.MultiTrackMappability.bw
-	    shortLabel Umap_M24
+	    shortLabel Umap M24
 	    longLabel Multi-read mappability with 24-mers
             subGroups view=MR
 	    priority 5
 	    color 80,20,240
 
-	    track umap_50_quantitative
-	    parent umap_bigWig off
+	    track umap550Quantitative
+	    parent umapBigWig off
 	    release alpha
 	    type bigWig
 	    viewLimits 0:1
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Umap.MultiTrackMappability.bw
-	    shortLabel Umap_M50
+	    shortLabel Umap M50
 	    longLabel Multi-read mappability with 50-mers
 	    visibility hide
             subGroups view=MR
 	    priority 7
 	    color 80,120,240
 
-	    track umap_100_quantitative
-	    parent umap_bigWig off
+	    track umap100Quantitative
+	    parent umapBigWig off
 	    release alpha
 	    type bigWig
 	    viewLimits 0:1
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k100.Umap.MultiTrackMappability.bw
-	    shortLabel Umap_M100
+	    shortLabel Umap M100
 	    longLabel Multi-read mappability with 100-mers
 	    visibility hide
             subGroups view=MR
@@ -140,164 +141,166 @@ longLabel Hoffman Lab Umap and Bismap Mappability
     longLabel Single-read and multi-read mappability after bisulfite conversion
     visibility full
 
-        track bismap_bigBed
+        track bismapBigBed
         parent bismap
+        release alpha
         type bigBed 6
         visibility dense
         shortLabel Single-read mappability
         view SR
         viewUi on
 
-	    track bismap_50_Neg
-	    parent bismap_bigBed off
+	    track bismap50Neg
+	    parent bismapBigBed off
 	    release alpha
 	    type bigBed 6
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k50.G2A-Converted.bb
-	    shortLabel Bismap_S50 -
+	    shortLabel Bismap S50 -
 	    longLabel Single-read mappability with 50-mers after bisulfite conversion (reverse strand)
 	    visibility hide
             subGroups view=SR
 	    priority 7
 	    color 240,120,80
 
-	    track bismap_50_Pos
-	    parent bismap_bigBed off
+	    track bismap50Pos
+	    parent bismapBigBed off
 	    release alpha
 	    type bigBed 6
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k50.C2T-Converted.bb
-	    shortLabel Bismap_S50 +
+	    shortLabel Bismap S50 +
 	    longLabel Single-read mappability with 50-mers after bisulfite conversion (forward strand)
 	    visibility hide
             subGroups view=SR
 	    priority 3
 	    color 240,120,80
 	    
-	    track bismap_100_Neg
-	    parent bismap_bigBed off
+	    track bismap100Neg
+	    parent bismapBigBed off
 	    release alpha
 	    type bigBed 8
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k100.G2A-Converted.bb
-	    shortLabel Bismap_S100 -
+	    shortLabel Bismap S100 -
 	    longLabel Single-read mappability with 100-mers after bisulfite conversion (reverse strand)
 	    visibility hide
             subGroups view=SR
 	    priority 7
 	    color 240,170,80
 	    
-	    track bismap_24_Pos
-	    parent bismap_bigBed on
+	    track bismap24Pos
+	    parent bismapBigBed on
 	    release alpha
 	    type bigBed 6
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k24.C2T-Converted.bb
-	    shortLabel Bismap_S24 +
+	    shortLabel Bismap S24 +
 	    longLabel Single-read mappability with 24-mers after bisulfite conversion (forward strand)
 	    visibility dense
             subGroups view=SR
 	    priority 1
 	    color 240,20,80
 	    
-	    track bismap_36_Pos
-	    parent bismap_bigBed off
+	    track bismap36Pos
+	    parent bismapBigBed off
 	    release alpha
 	    type bigBed 6
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k36.C2T-Converted.bb
-	    shortLabel Bismap_S36 +
+	    shortLabel Bismap S36 +
 	    longLabel Single-read mappability with 36-mers after bisulfite conversion (forward strand)
 	    visibility hide
             subGroups view=SR
 	    priority 2
 	    color 240,70,80
 	    
-	    track bismap_36_Neg
-	    parent bismap_bigBed off
+	    track bismap36Neg
+	    parent bismapBigBed off
 	    release alpha
 	    type bigBed 6
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k36.G2A-Converted.bb
-	    shortLabel Bismap_S36 -
+	    shortLabel Bismap S36 -
 	    longLabel Single-read mappability with 36-mers after bisulfite conversion (reverse strand)
 	    visibility hide
             subGroups view=SR
 	    priority 6
 	    color 240,70,80
 	    
-	    track bismap_100_Pos
-	    parent bismap_bigBed off
+	    track bismap100Pos
+	    parent bismapBigBed off
 	    release alpha
 	    type bigBed 6
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k100.C2T-Converted.bb
-	    shortLabel Bismap_S100 +
+	    shortLabel Bismap S100 +
 	    longLabel Single-read mappability with 100-mers after bisulfite conversion (forward strand)
 	    visibility hide
             subGroups view=SR
 	    priority 4
 	    color 240,170,80
 
-	    track bismap_24_Neg
-	    parent bismap_bigBed on
+	    track bismap24Neg
+	    parent bismapBigBed on
 	    release alpha
 	    type bigBed 6
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k24.G2A-Converted.bb
-	    shortLabel Bismap_S24 -
+	    shortLabel Bismap S24 -
 	    longLabel Single-read mappability with 24-mers after bisulfite conversion (reverse strand)
 	    visibility dense
             subGroups view=SR
 	    priority 5
 	    color 240,20,80
 
-        track bismap_bigWig
+        track bismapBigWig
         parent bismap on
+	release alpha
         type bigWig
         visibility full
         shortLabel Multi-read mappability
 	view MR
         viewUi on
 
-	    track bismap_50_quantitative
-	    parent bismap_bigWig off
+	    track bismap50Quantitative
+	    parent bismapBigWig off
 	    release alpha
 	    type bigWig
 	    viewLimits 0:1
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Bismap.MultiTrackMappability.bw
-	    shortLabel Bismap_M50
+	    shortLabel Bismap M50
 	    longLabel Multi-read mappability with 50-mers after bisulfite conversion
 	    visibility hide
             subGroups view=MR
 	    priority 11
 	    color 240,120,80
 
-	    track bismap_36_quantitative
-	    parent bismap_bigWig off
+	    track bismap36Quantitative
+	    parent bismapBigWig off
 	    release alpha
 	    type bigWig
 	    viewLimits 0:1
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k36.Bismap.MultiTrackMappability.bw
-	    shortLabel Bismap_M36
+	    shortLabel Bismap M36
 	    longLabel Multi-read mappability with 36-mers after bisulfite conversion
 	    visibility hide
             subGroups view=MR
 	    priority 10
 	    color 240,70,80
 	    
-	    track bismap_100_quantitative
-	    parent bismap_bigWig off
+	    track bismap100Quantitative
+	    parent bismapBigWig off
 	    release alpha
 	    type bigWig
 	    viewLimits 0:1
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k100.Bismap.MultiTrackMappability.bw
-	    shortLabel Bismap_M100
+	    shortLabel Bismap M100
 	    longLabel Multi-read mappability with 100-mers after bisulfite conversion
 	    visibility hide
             subGroups view=MR
 	    priority 12
 	    color 240,170,80
 
-	    track bismap_24_quantitative
-	    parent bismap_bigWig on
+	    track bismap24Quantitative
+	    parent bismapBigWig on
 	    release alpha
 	    type bigWig
 	    viewLimits 0:1
 	    bigDataUrl /gbdb/hg38/hoffmanMappability/k24.Bismap.MultiTrackMappability.bw
-	    shortLabel Bismap_M24
+	    shortLabel Bismap M24
 	    longLabel Multi-read mappability with 24-mers after bisulfite conversion
 	    visibility full
             subGroups view=MR
