@@ -1,4 +1,17 @@
 track gtexEqtlCluster
+release alpha
+pennantIcon new red ../goldenPath/releaseLog.html "Released October 19, 2017"
+type bed 5 +
+shortLabel GTEx Combined eQTL
+longLabel Combined Expression QTLs from 44 Tissues from GTEx (midpoint release, V6)
+html gtexEqtl
+group regulation
+exonNumbers off
+dataVersion GTEx Analysis V6p (https://www.gtexportal.org/home/datasets)
+priority 2
+
+track gtexEqtlCluster
+release beta,public
 type bed 5 +
 shortLabel GTEx Combined eQTL
 longLabel Combined Expression QTLs from 44 Tissues from GTEx (midpoint release, V6)
@@ -17,6 +30,7 @@ padding 250
 semiShortCircuit 1
 
 track gtexEqtlTissue
+#pennantIcon new red ../goldenPath/releaseLog.html "Released October 19, 2017"
 type bed 9 +
 compositeTrack on
 allButtonPair on
