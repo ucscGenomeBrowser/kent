@@ -296,9 +296,9 @@ close (FH);
 
     sed 's/[()]//g; s/,/ /g' tree.nh > species.list
     cat species.list | fold -s -w 76 | sed -e 's/^/# /;'
-# hg38 panTro5 panPan2 gorGor5 ponAbe2 nomLeu3 rheMac8 macFas5 macNem1 
-# cerAty1 papAnu3 chlSab2 manLeu1 nasLar1 colAng1 rhiRox1 rhiBie1 calJac3 
-# saiBol1 cebCap1 aotNan1 tarSyr2 micMur3 proCoq1 eulMac1 eulFla1 otoGar3 
+# hg38 panTro5 panPan2 gorGor5 ponAbe2 nomLeu3 rheMac8 macFas5 macNem1
+# cerAty1 papAnu3 chlSab2 manLeu1 nasLar1 colAng1 rhiRox1 rhiBie1 calJac3
+# saiBol1 cebCap1 aotNan1 tarSyr2 micMur3 proCoq1 eulMac1 eulFla1 otoGar3
 # mm10 canFam3 dasNov3
 
     #	bash shell syntax here ...
@@ -632,7 +632,7 @@ mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/hg38/hg38.2bit {check out l
     # Load into database
     rm -f /gbdb/hg38/multiz30way/maf/*
     cd /hive/data/genomes/hg38/bed/multiz30way/anno/result
-   
+
     ln -s `pwd`/*.maf /gbdb/hg38/multiz30way/maf/
 
     # this generates an immense multiz30way.tab file in the directory
@@ -684,36 +684,36 @@ end
 
     chmod +x ./showGenes.csh
     time ./showGenes.csh
-# hg38: ensGene: 208239, knownGene: 196838, mgcGenes: 35312, ncbiRefSeq: 159322, refGene: 74391, xenoRefGene: 186565, 
-# panTro5: refGene: 2901, xenoRefGene: 232448, 
-# panPan2: ncbiRefSeq: 59356, refGene: 130, xenoRefGene: 222742, 
-# gorGor5: refGene: 444, xenoRefGene: 315030, 
-# ponAbe2: ensGene: 29447, refGene: 3572, xenoRefGene: 329566, 
-# nomLeu3: xenoRefGene: 220286, 
-# rheMac8: ensGene: 56743, refGene: 6481, xenoRefGene: 223255, 
-# macFas5: refGene: 2164, xenoRefGene: 314695, 
-# macNem1: refGene: 64, xenoRefGene: 316886, 
-# cerAty1: refGene: 450, xenoRefGene: 492070, 
-# papAnu3: ensGene: 31109, refGene: 513, xenoRefGene: 324140, 
-# chlSab2: ensGene: 28078, xenoRefGene: 245054, 
-# manLeu1: refGene: 3, xenoRefGene: 456179, 
-# nasLar1: xenoRefGene: 360558, 
-# colAng1: ncbiRefSeq: 47349, refGene: 3, xenoRefGene: 332184, 
-# rhiRox1: xenoRefGene: 364268, 
-# rhiBie1: xenoRefGene: 342566, 
-# calJac3: ensGene: 55116, refGene: 228, xenoRefGene: 346395, 
-# saiBol1: xenoRefGene: 506909, 
-# cebCap1: refGene: 293, xenoRefGene: 457440, 
-# aotNan1: refGene: 17, xenoRefGene: 471455, 
-# tarSyr2: xenoRefGene: 349126, 
-# micMur3: xenoRefGene: 224817, 
-# proCoq1: xenoRefGene: 449845, 
-# eulMac1: xenoRefGene: 427352, 
-# eulFla1: xenoRefGene: 434365, 
-# otoGar3: ensGene: 28565, xenoRefGene: 470891, 
-# mm10: ensGene: 103734, knownGene: 63759, mgcGenes: 27612, ncbiRefSeq: 106520, refGene: 38421, xenoRefGene: 183274, 
-# canFam3: ensGene: 39074, refGene: 2297, xenoRefGene: 268480, 
-# dasNov3: ensGene: 37723, xenoRefGene: 500914, 
+# hg38: ensGene: 208239, knownGene: 196838, mgcGenes: 35312, ncbiRefSeq: 159322, refGene: 74391, xenoRefGene: 186565,
+# panTro5: refGene: 2901, xenoRefGene: 232448,
+# panPan2: ncbiRefSeq: 59356, refGene: 130, xenoRefGene: 222742,
+# gorGor5: refGene: 444, xenoRefGene: 315030,
+# ponAbe2: ensGene: 29447, refGene: 3572, xenoRefGene: 329566,
+# nomLeu3: xenoRefGene: 220286,
+# rheMac8: ensGene: 56743, refGene: 6481, xenoRefGene: 223255,
+# macFas5: refGene: 2164, xenoRefGene: 314695,
+# macNem1: refGene: 64, xenoRefGene: 316886,
+# cerAty1: refGene: 450, xenoRefGene: 492070,
+# papAnu3: ensGene: 31109, refGene: 513, xenoRefGene: 324140,
+# chlSab2: ensGene: 28078, xenoRefGene: 245054,
+# manLeu1: refGene: 3, xenoRefGene: 456179,
+# nasLar1: xenoRefGene: 360558,
+# colAng1: ncbiRefSeq: 47349, refGene: 3, xenoRefGene: 332184,
+# rhiRox1: xenoRefGene: 364268,
+# rhiBie1: xenoRefGene: 342566,
+# calJac3: ensGene: 55116, refGene: 228, xenoRefGene: 346395,
+# saiBol1: xenoRefGene: 506909,
+# cebCap1: refGene: 293, xenoRefGene: 457440,
+# aotNan1: refGene: 17, xenoRefGene: 471455,
+# tarSyr2: xenoRefGene: 349126,
+# micMur3: xenoRefGene: 224817,
+# proCoq1: xenoRefGene: 449845,
+# eulMac1: xenoRefGene: 427352,
+# eulFla1: xenoRefGene: 434365,
+# otoGar3: ensGene: 28565, xenoRefGene: 470891,
+# mm10: ensGene: 103734, knownGene: 63759, mgcGenes: 27612, ncbiRefSeq: 106520, refGene: 38421, xenoRefGene: 183274,
+# canFam3: ensGene: 39074, refGene: 2297, xenoRefGene: 268480,
+# dasNov3: ensGene: 37723, xenoRefGene: 500914,
 
 # real    0m1.505s
 
@@ -1530,7 +1530,7 @@ rm -f $2.running
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
     grep BACK ../../4d/all.mod
-    #   BACKGROUND: 0.207173 0.328301 0.237184 0.227343 
+    #   BACKGROUND: 0.207173 0.328301 0.237184 0.227343
 
     grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
     #	0.565
@@ -1538,7 +1538,7 @@ rm -f $2.running
 	../../4d/all.mod 0.565 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.217500 0.282500 0.282500 0.217500 
+    #   BACKGROUND: 0.217500 0.282500 0.282500 0.217500
 
     printf '#!/bin/csh -fe
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
@@ -1681,7 +1681,7 @@ done
 
     # xaxis range:
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=2 stdin \
-	| sed -e 's/^/# /;' 
+	| sed -e 's/^/# /;'
 # Q1 -10.953050
 # median -6.861155
 # Q3 -2.769245
@@ -1768,7 +1768,7 @@ done
     mkdir maf
     rsync -a -P ../../anno/result/ ./maf/
     du -hsc maf/
-    # 789G    maf
+    # 156G    maf
     cd maf
     time gzip *.maf &
     # real    135m1.784s
@@ -1777,10 +1777,14 @@ done
     #  18G     maf
 
     cd maf
-    md5sum *.gz > md5sum.txt
+    md5sum *.maf.gz *.nh > md5sum.txt
 
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz30way/maf
+    cd maf
     ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz30way/maf
+    cd --
+    ln -s `pwd`/*.maf.gz `pwd`/*.nh `pwd`/*.txt \
+         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz30way/
 
     ###########################################################################
 
@@ -1805,8 +1809,9 @@ done
     # 156G    ../../anno/result
 
     # obtain the README.txt from hg38/multiz20way and update for this
-XXX - working - Mon Nov  6 18:52:27 PST 2017
     #   situation
+    ln -s `pwd`/*.txt \
+         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz30way/
 
     #####################################################################
     cd /hive/data/genomes/hg38/bed/multiz30way/downloads/phastCons30way
@@ -1822,27 +1827,42 @@ XXX - working - Mon Nov  6 18:52:27 PST 2017
     time md5sum *.mod *.bw > md5sum.txt
     #   real    0m20.354s
 
-    # obtain the README.txt from hg38/phastCons30way and update for this
-XXX - working - Mon Nov  6 18:52:27 PST 2017
+    # obtain the README.txt from hg38/phastCons20way and update for this
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phastCons30way/hg38.30way.phastCons
+    cd hg38.30way.phastCons
+    ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phastCons30way/hg38.30way.phastCons
+
+    cd ..
     #   situation
-    ln -s `pwd`/*.gz `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phastCons30way
 
     #####################################################################
     cd /hive/data/genomes/hg38/bed/multiz30way/downloads/phyloP30way
 
-    ln -s ../../consPhyloP/all/downloads/phyloP30way.wigFix.gz \
-        ./hg38.phyloP30way.wigFix.gz
+    mkdir hg38.30way.phyloP
+    cd hg38.30way.phyloP
+
+    ln -s ../../../consPhyloP/all/downloads/*.wigFix.gz .
+    md5sum *.wigFix.gz > md5sum.txt
+
+    cd ..
+
     ln -s ../../consPhyloP/run.phyloP/all.mod hg38.phyloP30way.mod
     ln -s ../../consPhyloP/all/phyloP30way.bw hg38.phyloP30way.bw
 
-    time md5sum *.mod *.bw *.gz > md5sum.txt
-    #   real    0m29.662s
+    md5sum *.mod *.bw > md5sum.txt
 
-    # obtain the README.txt from hg38/phyloP17way and update for this
-XXX - working - Mon Nov  6 18:52:27 PST 2017
-    #   situation
+    # obtain the README.txt from hg38/phyloP20way and update for this
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phyloP30way/hg38.30way.phyloP
+    cd hg38.30way.phyloP
     ln -s `pwd`/* \
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phyloP30way/hg38.30way.phyloP
+
+    cd ..
+
+    #   situation
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phyloP30way
 
 #############################################################################
@@ -1945,5 +1965,19 @@ XXX - working - Mon Nov  6 18:52:27 PST 2017
 
     # when you view the first one you enter, it will have links to the
     # missing two.
+
+############################################################################
+# pushQ readmine (DONE - 2017-11-07 - Hiram)
+
+  cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg38
+  find -L `pwd`/multiz30way `pwd`/phastCons30way `pwd`/phyloP30way \
+	/gbdb/hg38/multiz30way -type f \
+    > /hive/data/genomes/hg38/bed/multiz30way/downloads/redmine.20216.fileList
+  wc -l /hive/data/genomes/hg38/bed/multiz30way/downloads/redmine.20216.fileList
+# 1450 /hive/data/genomes/hg38/bed/multiz30way/downloads/redmine.20216.fileList
+
+  cd /hive/data/genomes/hg38/bed/multiz30way/downloads
+  hgsql -e 'show tables;' hg38 | grep 30way \
+	| sed -e 's/^/hg38./;' > redmine.20216.table.list
 
 ############################################################################
