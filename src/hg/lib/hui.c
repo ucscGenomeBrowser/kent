@@ -156,7 +156,7 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 #define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s" \
 		  "&hgta_table=%s&hgta_doSchema=describe+table+schema\" " \
 		  "TARGET=ucscSchema%s>%s</A>"
-if (!trackHubDatabase(db) && hTableOrSplitExists(db, tdb->table))
+if (trackDataAccessible(db, tdb))
     {
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
     if (isNotEmpty(tbOff) && sameString(nextWord(&tbOff), "off"))
@@ -403,9 +403,7 @@ boolean hasMetadata = (tagStormFile != NULL) || (tabSepFile != NULL) || (!tdbIsC
 if (hasMetadata)
     printf("<b>Metadata:</b><br>%s\n", metadataAsHtmlTable(db, tdb, FALSE, FALSE));
 
-boolean schemaLink = (!tdbIsDownloadsOnly(tdb) && !trackHubDatabase(db)
-	      && isCustomTrack(tdb->table) == FALSE)
-	      && (hTableOrSplitExists(db, tdb->table));
+boolean schemaLink = trackDataAccessible(db, tdb);
 boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL && !tdbIsSuperTrack(tdb));
 int links = 0;
 if (schemaLink)
