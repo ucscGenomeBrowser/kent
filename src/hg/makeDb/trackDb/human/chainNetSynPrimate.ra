@@ -1,7 +1,7 @@
 track primatesSynChainNet
 compositeTrack on
-shortLabel primates Syntenic Chain/Net
-longLabel primates Syntenic Chain and Net Alignments
+shortLabel Primates Syn Chain/Net
+longLabel Primates Syntenic Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
 subGroup2 species Species s000=Chimp s001=Chimp s002=Bonobo s003=Bonobo s004=Gorilla s005=Gorilla s006=Orangutan s007=Gibbon s008=Proboscis_monkey s009=Black_snub-nosed_monkey s010=Golden_snub-nosed_monkey s011=Angolan_colobus s012=Crab-eating_macaque s013=Rhesus s014=Rhesus s015=Baboon s016=Baboon s017=Baboon s018=Pig-tailed_macaque s019=Sooty_mangabey s020=Green_monkey s021=Drill s022=Squirrel_monkey s023=Ma's_night_monkey s024=Marmoset s025=White-faced_sapajou s026=Tarsier s027=Sclater's_lemur s028=Black_lemur s029=Coquerel's_sifaka s030=Mouse_lemur s031=Mouse_lemur s032=Mouse_lemur s033=Bushbaby s034=Bushbaby
 subGroup3 clade Clade c00=hominidae c01=cercopithecinae c02=haplorrhini c03=strepsirrhini
