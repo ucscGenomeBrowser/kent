@@ -4776,7 +4776,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4806,7 +4806,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4880,7 +4880,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4910,7 +4910,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -5066,7 +5066,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     subGroup1 view Views PK=Peaks SIG=Signals
     subGroup2 cell Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup3 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
