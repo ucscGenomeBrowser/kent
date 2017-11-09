@@ -291,7 +291,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     puts("<tr>");
 
     ourCellStart();
-    safef(id, sizeof id, "hubDisconnectButton%d", count);
+    safef(id, sizeof id, "hubDisconnectButtonU%d", count);
     printf("<input name=\"hubDisconnectButton\" id='%s' "
 	"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", id);
     jsOnEventByIdF("click", id, 
@@ -587,7 +587,7 @@ if (id != 0)
     safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
     if (cartUsualBoolean(cart, hubName, FALSE))
         {
-        safef(jsId, sizeof jsId, "hubDisconnectButton%d", count);
+        safef(jsId, sizeof jsId, "hubDisconnectButtonP%d", count);
         printf("<input name=\"hubDisconnectButton\" id='%s' "
             "class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", jsId);
         jsOnEventByIdF("click", jsId, 
