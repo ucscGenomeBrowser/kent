@@ -123,14 +123,6 @@ priority 7
         type chain gorGor3
         otherDb gorGor3
 
-        track chainGorGor1
-        subTrack primateChainNetViewchain off
-        subGroups view=chain species=s012 clade=c00
-        shortLabel $o_db Chain
-        longLabel $o_db ($o_date) Chained Alignments
-        type chain gorGor1
-        otherDb gorGor1
-
         track chainPonAbe2
         subTrack primateChainNetViewchain off
         subGroups view=chain species=s013 clade=c00
@@ -504,14 +496,6 @@ priority 7
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign gorGor3 chainGorGor3
         otherDb gorGor3
-
-        track netGorGor1
-        subTrack primateChainNetViewnet off
-        subGroups view=net species=s012 clade=c00
-        shortLabel $o_db Net
-        longLabel $o_db ($o_date) Alignment Net
-        type netAlign gorGor1 chainGorGor1
-        otherDb gorGor1
 
         track netPonAbe2
         subTrack primateChainNetViewnet off
