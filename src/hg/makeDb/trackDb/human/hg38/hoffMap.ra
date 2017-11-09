@@ -13,6 +13,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
     shortLabel Umap
     longLabel Single-read and multi-read mappability by Umap
     visibility full
+    html mappability
 
         track umapBigBed
         parent umap on
@@ -129,6 +130,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
     shortLabel Bismap
     longLabel Single-read and multi-read mappability after bisulfite conversion
     visibility full
+    html mappability
 
         track bismapBigBed
         parent bismap

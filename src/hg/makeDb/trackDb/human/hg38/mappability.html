@@ -1,0 +1,73 @@
+<h2>Description</h2>
+<p>
+These tracks indicate regions with uniquely mappable reads of particular lengths before and after
+bisulfite conversion. Both Umap and Bismap tracks contain single-read mappability and multi-read
+mappability tracks for four different read lengths: 24 bp, 36 bp, 50 bp, and 100 bp.</p>
+<p>
+You can use these tracks for many purposes, including filtering unreliable signal from
+sequencing assays. The Bismap track can help filter unreliable signal from sequencing assays
+involving bisulfite conversion, such as whole-genome bisulfite sequencing or reduced representation
+bisulfite sequencing.</p>
+
+<a name="bismap"></a>
+<h3>Bismap single-read and multi-read mappability</h3>
+<dl>
+  <dt><em>Bismap single-read mappability</em></dt> 
+    <dd>These tracks mark any region of the bisulfite-converted genome that is uniquely mappable by
+    at least one <i>k</i>-mer on the specified strand. We generated the mappability of the forward
+    strand by converting all instances of cytosine to thymine. Similarly, we generated the
+    mappability of the reverse strand by by converting all instances of guanine to adenine. To
+    calculate the single-read mappability, you must find the overlap of a given region with the
+    region that is uniquely mappable on both strands. Regions not uniquely mappable on both strands
+    or have a low multi-read mappability might bias the downstream analysis.</dd>
+<br>
+  <dt><em>Bismap multi-read mappability</em></dt>
+    <dd>These tracks represent the probability that a randomly selected <i>k</i>-mer which overlaps
+    with a given position is uniquely mappable. Multi-read mappability track is calculated for
+    <i>k</i>-mers that are uniquely mappable on both strands, and thus there is no strand
+    specification.</dd>
+</dl>
+
+<a name="umap"></a>
+<h3>Umap single-read and multi-read mappability</h3>
+<dl>
+  <dt><em>Umap single-read mappability</em></dt>
+    <dd>These tracks mark any region of the genome that is uniquely mappable by at least one
+    <i>k</i>-mer. To calculate the single-read mappability, you must find the overlap of a given
+    region with this track.</dd>
+<br>
+  <dt><em>Umap multi-read mappability</em></dt>
+    <dd>These tracks represent the probability that a randomly selected <i>k</i>-mer which overlaps
+    with a given position is uniquely mappable.</dd>
+</dl>
+
+<p>For greater detail and explanatory diagrams, see the
+<a href="http://biorxiv.org/content/early/2016/12/20/095463" target="_blank">preprint</a>, the
+<a href="http://bismap.hoffmanlab.org" target="_blank">Umap and Bismap project website</a>, or the
+<a href="https://bitbucket.org/hoffmanlab/umap" target="_blank">Umap and Bismap software
+documentation</a>.
+
+<h2>Credits</h2>
+<p>
+<a href="https://sites.google.com/site/anshulkundaje/" target="_blank">Anshul Kundaje</a> (Stanford
+University) created the original Umap software in MATLAB. The original Umap repository is available
+<a href="https://sites.google.com/site/anshulkundaje/projects/mappability" target="_blank">here</a>.
+Mehran Karimzadeh (<a href="https://www.pmgenomics.ca/hoffmanlab/" target="_blank">Michael Hoffman
+lab</a>, Princess Margaret Cancer Centre) implemented the Python version of Umap and added features,
+including Bismap.</p>
+
+<h2>Contact, support and questions</h2>
+<p>
+Please ask your questions about the Umap software and this track hub using the
+<a href="https://groups.google.com/forum/#!forum/ubismap" target="_blank">Umap and Bismap mailing
+list</a>. To report a bug or request, please use the
+<a href="https://bitbucket.org/hoffmanlab/umap/issues" target="_blank">Umap and Bismap issue
+tracker</a>.</p>
+
+<h2>References</h2>
+<p>
+Karimzadeh M, Ernst C, Kundaje A, Hoffman MM.,
+<a href="http://biorxiv.org/content/early/2017/06/04/095463" target="_blank">Umap and Bismap:
+quantifying genome and methylome mappability</a>
+<em>bioRxiv</em> bioRxiv, p. 095463, 2016.; doi: <a href="https://doi.org/10.1101/095463"
+target="_blank">https://doi.org/10.1101/095463</a>.</p> 
