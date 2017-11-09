@@ -1204,7 +1204,17 @@ char *compressType = cartString(cart, hgsSaveLocalFileCompress);
 struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);
+
+// if we're normally outputing the cart in table form, we want to turn that off
+// and turn it back on after we're through.
+char *tableSetting = cartOptionalString(cart,CART_DUMP_AS_TABLE);
+if (tableSetting != NULL)
+    cartRemove(cart,CART_DUMP_AS_TABLE);
+
 cartDump(cart);
+
+if (tableSetting != NULL)
+    cartSetString(cart, CART_DUMP_AS_TABLE, tableSetting);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, NULL);
