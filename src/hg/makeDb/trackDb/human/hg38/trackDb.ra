@@ -158,11 +158,6 @@ urlLabel NCBI accession record:
 include ../chainNetPrimate.ra
 include ../chainNetPlacental.ra
 include ../chainNetVertebrate.ra
-include ../chainNetLegacy.ra alpha
-include ../newChainNet.ra alpha
-include ../chainNetXenTro3.ra beta,public
-include ../chainNetXenTro7.ra
-include ../chainNetFelCat8.ra
 
 track contigAlignmentSegments
 shortLabel ContigSegments
