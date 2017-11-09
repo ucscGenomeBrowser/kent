@@ -11772,7 +11772,7 @@ if (version == NULL)
     sqlSafef(query, sizeof(query), "select * from %s  where mrnaAcc = '%s'", refLinkTable, sqlRnaName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) == NULL)
-	errAbort("Couldn't find %s in %s table - this accession may no longer be available.", rnaName, refLinkTable);
+        errAbort("This accession (%s) is no longer in our database. Check NCBI for status on this accession.", rnaName); 
     rl = refLinkLoad(row);
     sqlFreeResult(&sr);
     }

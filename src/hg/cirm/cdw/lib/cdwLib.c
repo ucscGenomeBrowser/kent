@@ -1491,20 +1491,28 @@ sqlSafef(query, sizeof(query),
 sqlUpdate(conn, query);
 }
 
+static char *mustReadSymlink(char *path, struct stat *sb)
+/* Read symlink or abort. FreeMem the returned value. */
+{
+ssize_t nbytes, bufsiz;
+// determine whether the buffer returned was truncated.
+bufsiz = sb->st_size + 1;
+char *symPath = needMem(bufsiz);
+nbytes = readlink(path, symPath, bufsiz);
+if (nbytes == -1) 
+    errnoAbort("readlink failure on symlink %s", path);
+if (nbytes == bufsiz)
+    errAbort("readlink returned buffer truncated\n");
+return symPath;
+}
+
 void replaceOriginalWithSymlink(char *submitFileName, char *submitDir, char *cdwPath)
 /* For a file that was just copied, remove original and symlink to new one instead
  * to save space. Follows symlinks if any to the real file and replaces it with a symlink */
 {
 struct stat sb;
-char *path = cloneString(submitFileName);
 
-// apply path to submitDir, giving an absolute path
-char *newPath = expandRelativePath(submitDir, path);
-verbose(3, "submitDir=%s\npath=%s\nnewPath=%s\n", submitDir, path, newPath);
-if (!newPath)
-    errAbort("Too many .. in path %s to make relative to submitDir %s\n", path, submitDir);
-freeMem(path);
-path = newPath;
+char *path = mustExpandRelativePath(submitDir, submitFileName);
 
 int symlinkLevels = 0;
 while (TRUE)
@@ -1520,21 +1528,10 @@ while (TRUE)
 	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
 
     // read the symlink
-    ssize_t nbytes, bufsiz;
-    // determine whether the buffer returned was truncated.
-    bufsiz = sb.st_size + 1;
-    char *symPath = needMem(bufsiz);
-    nbytes = readlink(path, symPath, bufsiz);
-    if (nbytes == -1) 
-	errnoAbort("readlink failure on symlink %s", path);
-    if (nbytes == bufsiz)
-        errAbort("readlink returned buffer truncated\n");
+    char *symPath = mustReadSymlink(path, &sb);
 
     // apply symPath to path
-    newPath = pathRelativeToFile(path, symPath);
-    verbose(3, "path=%s\nsymPath=%s\nnewPath=%s\n", path, symPath, newPath);
-    if (!newPath)
-        errAbort("Too many .. in symlink path %s to make relative to %s\n", symPath, path);
+    char *newPath = mustPathRelativeToFile(path, symPath);
     freeMem(path);
     freeMem(symPath);
     path = newPath;
@@ -1559,15 +1556,7 @@ char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath)
 {
 struct stat sb;
 char *lastPath = NULL;
-char *path = cloneString(submitFileName);
-
-// apply path to submitDir, giving an absolute path
-char *newPath = expandRelativePath(submitDir, path);
-verbose(3, "submitDir=%s\npath=%s\nnewPath=%s\n", submitDir, path, newPath);
-if (!newPath)
-    errAbort("Too many .. in path %s to make relative to submitDir %s\n", path, submitDir);
-freeMem(path);
-path = newPath;
+char *path = mustExpandRelativePath(submitDir, submitFileName);
 
 int symlinkLevels = 0;
 while (TRUE)
@@ -1588,23 +1577,11 @@ while (TRUE)
 	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
 
     // read the symlink
-    ssize_t nbytes, bufsiz;
-    // determine whether the buffer returned was truncated.
-    bufsiz = sb.st_size + 1;
-    char *symPath = needMem(bufsiz);
-    nbytes = readlink(path, symPath, bufsiz);
-    if (nbytes == -1) 
-	errnoAbort("readlink failure on symlink %s", path);
-    if (nbytes == bufsiz)
-        errAbort("readlink returned buffer truncated\n");
+    char *symPath = mustReadSymlink(path, &sb);
 
     // apply symPath to path
-    newPath = pathRelativeToFile(path, symPath);
-    verbose(3, "path=%s\nsymPath=%s\nnewPath=%s\n", path, symPath, newPath);
-    if (!newPath)
-        errAbort("Too many .. in symlink path %s to make relative to %s\n", symPath, path);
-    if (lastPath)
-	freeMem(lastPath);
+    char *newPath = mustPathRelativeToFile(path, symPath);
+    freeMem(lastPath);
     lastPath = path;
     freeMem(symPath);
     path = newPath;

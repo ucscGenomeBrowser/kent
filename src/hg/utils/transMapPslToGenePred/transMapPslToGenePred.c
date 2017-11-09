@@ -1,7 +1,7 @@
 /* transMapPslToGenePred - convert PSL alignments of mRNAs to gene annotation.
  */
 
-/* Copyright (C) 2016 The Regents of the University of California 
+/* Copyright (C) 2016 The Regents of the University of California
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
@@ -33,7 +33,7 @@ errAbort(
   "\n"
 
   "Convert PSL alignments from transmap to genePred.  It specifically handles\n"
-  "alignments where the source gene is a genomic annotations in genePred\n"
+  "alignments where the source genes are genomic annotations in genePred\n"
   "format, that are converted to PSL for mapping and using this program to\n"
   "create a new genePred.\n"
   "\n"
@@ -194,8 +194,8 @@ struct srcQueryExon
     int qCdsStart;      // query range of CDS in exon
     int qCdsEnd;
     int frame;
-    boolean cdsBegin;   // is the the start/end of full cds?
-    boolean cdsEnd;
+    boolean hasCdsStart;   // is this the start/end of full cds?
+    boolean hasCdsEnd;
 };
 
 static void srcQueryExonMakeCdsPos(struct genePred* srcGp,
@@ -208,9 +208,9 @@ srcQueryExon->qCdsStart = qStart + (tCds.start - srcGp->exonStarts[iExon]);
 srcQueryExon->qCdsEnd = qStart + (tCds.end - srcGp->exonStarts[iExon]);
 
 // is full cds being/end in this exon?
-srcQueryExon->cdsBegin = (srcGp->exonStarts[iExon] <= srcGp->cdsStart)
+srcQueryExon->hasCdsStart = (srcGp->exonStarts[iExon] <= srcGp->cdsStart)
     && (srcGp->cdsStart < srcGp->exonEnds[iExon]);
-srcQueryExon->cdsEnd = (srcGp->exonStarts[iExon] < srcGp->cdsEnd)
+srcQueryExon->hasCdsEnd = (srcGp->exonStarts[iExon] < srcGp->cdsEnd)
     && (srcGp->cdsEnd <= srcGp->exonEnds[iExon]);
 }
 
@@ -224,9 +224,9 @@ srcQueryExon->qCdsStart = qEnd - (tCds.end - srcGp->exonStarts[iExon]);
 srcQueryExon->qCdsEnd = qEnd - (tCds.start - srcGp->exonStarts[iExon]);
 
 // is full cds being/end in this exon?
-srcQueryExon->cdsBegin = (srcGp->exonStarts[iExon] < srcGp->cdsEnd)
+srcQueryExon->hasCdsStart = (srcGp->exonStarts[iExon] < srcGp->cdsEnd)
     && (srcGp->cdsEnd <= srcGp->exonEnds[iExon]);
-srcQueryExon->cdsEnd = (srcGp->exonStarts[iExon] <= srcGp->cdsStart)
+srcQueryExon->hasCdsEnd = (srcGp->exonStarts[iExon] <= srcGp->cdsStart)
     && (srcGp->cdsStart < srcGp->exonEnds[iExon]);
 }
 
@@ -248,9 +248,9 @@ if (tCds.start >= tCds.end)
     {
     // no CDS in exon
     srcQueryExon->qCdsStart = srcQueryExon->qCdsEnd = 0;
-    srcQueryExon->cdsBegin = srcQueryExon->cdsEnd = FALSE;
+    srcQueryExon->hasCdsStart = srcQueryExon->hasCdsEnd = FALSE;
     }
-else 
+else
     {
     // part or all of exon is CDS
     if (srcGp->strand[0] == '+')
@@ -270,7 +270,7 @@ static void srcQueryExonBuild(struct genePred* srcGp,
 /* create a list of query positions to frames.  Array should hold all
  * be the length of the src */
 {
-// building in strand-order generates coorect coordinate
+// building in strand-order generates correct coordinate
 int qStart = 0;
 int qSize = genePredSize(srcGp);
 int iExon;
@@ -295,7 +295,7 @@ if (rev.qCdsStart < rev.qCdsEnd)
     reverseIntRange(&rev.qCdsStart, &rev.qCdsEnd, rev.qSize);
 // note: frame is always in direction of transcription
 rev.frame = srcQueryExon->frame;
-swapBoolean(&rev.cdsBegin, &rev.cdsEnd);
+swapBoolean(&rev.hasCdsStart, &rev.hasCdsEnd);
 return rev;
 }
 
@@ -337,31 +337,46 @@ mappedQCds.end = min(srcQueryExon->qCdsEnd, mappedQRange.end);
 return mappedQCds;
 }
 
+struct mappedCdsBounds
+/* used to record either the mapping of the start or end of the CDS so bounds and cdsStatus can
+ * be recorded once the whole gene is mapped. */
+{
+    int cdsStart;               // start of CDS in mapped
+    boolean cdsStartIsMapped;   // was the source CDS start mapped?
+    int cdsEnd;                 // end of CDS in mapped
+    boolean cdsEndIsMapped;     // was the source cds end mapped?
+};
+static struct mappedCdsBounds mappedCdsBoundsInit = {-1, FALSE, -1, FALSE};
+
 static void convertPslBlockCdsStart(struct psl *mappedPsl, int iBlock, struct genePred* srcGp,
                                     struct srcQueryExon* srcQueryExon, struct range mappedQCds,
-                                    struct genePred *mappedGp)
-/* set CDS start info on first CDS block */
+                                    struct genePred *mappedGp, struct mappedCdsBounds* mappedCdsBounds)
+/* set CDS start info on first CDS block that was mapped */
 {
-mappedGp->cdsStart = pslBlockQueryToTarget(mappedPsl, iBlock, mappedQCds.start);
-// complete if query cds start is in this first block and src is complete
-boolean isComplete = (srcQueryExon->qCdsStart == mappedQCds.start) && srcQueryExon->cdsBegin;
-mappedGp->cdsStartStat = (isComplete && (srcGp->cdsStartStat == cdsComplete)) ? cdsComplete : cdsIncomplete;
+mappedCdsBounds->cdsStart = pslBlockQueryToTarget(mappedPsl, iBlock, mappedQCds.start);
+
+// Is the query CDS start is in this first block and the src CDS contained
+// in this mapped block?
+if (srcQueryExon->hasCdsStart && (mappedQCds.start == srcQueryExon->qCdsStart))
+    mappedCdsBounds->cdsStartIsMapped = TRUE;
 }
-    
+
 static void convertPslBlockCdsEnd(struct psl *mappedPsl, int iBlock, struct genePred* srcGp,
                                   struct srcQueryExon* srcQueryExon, struct range mappedQCds,
-                                  struct genePred *mappedGp)
+                                  struct genePred *mappedGp, struct mappedCdsBounds* mappedCdsBounds)
 /* update CDS end info, called in order, on all blocks with CDS */
 {
-mappedGp->cdsEnd = pslBlockQueryToTarget(mappedPsl, iBlock, mappedQCds.end);
-// complete if query cds is in the block and src is complete, subsequent blocks update this till end reached
-boolean isComplete = (srcQueryExon->qCdsEnd == mappedQCds.end) && srcQueryExon->cdsEnd;
-mappedGp->cdsEndStat = (isComplete && (srcGp->cdsEndStat == cdsComplete)) ? cdsComplete : cdsIncomplete;
+mappedCdsBounds->cdsEnd = pslBlockQueryToTarget(mappedPsl, iBlock, mappedQCds.end);
+
+// Is the query CDS end is in this block and the src CDS contained
+// in this mapped block?
+if (srcQueryExon->hasCdsEnd && (mappedQCds.end == srcQueryExon->qCdsEnd))
+    mappedCdsBounds->cdsEndIsMapped = TRUE;
 }
-    
+
 static void convertPslBlockCds(struct psl *mappedPsl, int iBlock, struct genePred* srcGp,
                                struct srcQueryExon* srcQueryExon, struct range mappedQCds,
-                               struct genePred *mappedGp, int iExon)
+                               struct genePred *mappedGp, int iExon, struct mappedCdsBounds* mappedCdsBounds)
 /* Update CDS bounds and frame for a block with CDS */
 {
 // on the positive strand, frame is adjusted from the start, on the negative strand, from the end.
@@ -370,14 +385,14 @@ int cdsOff = (pslQStrand(mappedPsl) == '+')
     : (srcQueryExon->qCdsEnd - mappedQCds.end);
 mappedGp->exonFrames[iExon] = frameIncr(srcQueryExon->frame, cdsOff);
 
-if (mappedGp->cdsStart == mappedGp->txEnd)
-    convertPslBlockCdsStart(mappedPsl, iBlock, srcGp, srcQueryExon, mappedQCds, mappedGp);
-convertPslBlockCdsEnd(mappedPsl, iBlock, srcGp, srcQueryExon, mappedQCds, mappedGp);
+if (mappedCdsBounds->cdsStart < 0)
+    convertPslBlockCdsStart(mappedPsl, iBlock, srcGp, srcQueryExon, mappedQCds, mappedGp, mappedCdsBounds);
+convertPslBlockCdsEnd(mappedPsl, iBlock, srcGp, srcQueryExon, mappedQCds, mappedGp, mappedCdsBounds);
 }
 
 static int convertPslBlockRegion(struct psl *mappedPsl, int iBlock, int qNext, struct genePred* srcGp,
                                  struct srcQueryExon* srcQueryExons, struct genePred *mappedGp,
-                                 unsigned *currentExonSpace)
+                                 unsigned *currentExonSpace, struct mappedCdsBounds* mappedCdsBounds)
 /* Convert a region of one block to an genePred exon, return the offset of the
  * next part of the block to convert.  Regions must be converted because
  * blocks can be merged by transmap and not have a one-to-one mapping to the
@@ -397,7 +412,7 @@ assert(mappedQRange.start < mappedQRange.end);
 
 struct range mappedQCds = srcQueryExonMappedQueryCds(&srcQueryExon, mappedQRange);
 if (mappedQCds.start < mappedQCds.end)
-    convertPslBlockCds(mappedPsl, iBlock, srcGp, &srcQueryExon, mappedQCds, mappedGp, iExon);
+    convertPslBlockCds(mappedPsl, iBlock, srcGp, &srcQueryExon, mappedQCds, mappedGp, iExon, mappedCdsBounds);
 else
     mappedGp->exonFrames[iExon] = -1; // no CDS in block
 mappedGp->exonStarts[iExon] = pslBlockQueryToTarget(mappedPsl, iBlock, mappedQRange.start);
@@ -408,18 +423,52 @@ return mappedQRange.end;
 
 static void convertPslBlock(struct psl *mappedPsl, int iBlock, struct genePred* srcGp,
                             struct srcQueryExon* srcQueryExons, struct genePred *mappedGp,
-                            unsigned *currentExonSpace)
+                            unsigned *currentExonSpace, struct mappedCdsBounds* mappedCdsBounds)
 /* convert one block to an genePred exon, including setting frame and CDS bounds */
 {
 int qNext = pslQStart(mappedPsl, iBlock);
 while (qNext < pslQEnd(mappedPsl, iBlock))
-    qNext = convertPslBlockRegion(mappedPsl, iBlock, qNext, srcGp, srcQueryExons, mappedGp, currentExonSpace);
+    qNext = convertPslBlockRegion(mappedPsl, iBlock, qNext, srcGp, srcQueryExons, mappedGp, currentExonSpace, mappedCdsBounds);
+}
+
+static void finishWithCds(struct genePred* srcGp, struct genePred *mappedGp, struct mappedCdsBounds* mappedCdsBounds)
+/* finish CDS annotation when we have a CDS mapped */
+{
+mappedGp->cdsStart = mappedCdsBounds->cdsStart;
+mappedGp->cdsEnd = mappedCdsBounds->cdsEnd;
+
+// copy initial status from source, noting that start/end is in chromosome coordinates
+if (sameString(srcGp->strand, mappedGp->strand))
+    {
+    mappedGp->cdsStartStat = srcGp->cdsStartStat;
+    mappedGp->cdsEndStat = srcGp->cdsEndStat;
+    }
+else
+    {
+    mappedGp->cdsStartStat = srcGp->cdsEndStat;
+    mappedGp->cdsEndStat = srcGp->cdsStartStat;
+    }
+
+// If start/end didn't get mapped, force to incomplete
+if (!mappedCdsBounds->cdsStartIsMapped)
+    mappedGp->cdsStartStat = cdsIncomplete;
+if (!mappedCdsBounds->cdsEndIsMapped)
+    mappedGp->cdsEndStat = cdsIncomplete;
+}
+
+static void finishWithOutCds(struct genePred *mappedGp)
+/* finish CDS annotation when we have don't have a CDS mapped (non-coding or CDS regions didn't map */
+{
+// use common representation of no CDS.
+mappedGp->cdsStart = mappedGp->cdsEnd = mappedGp->txEnd;
+mappedGp->cdsStartStat = mappedGp->cdsEndStat = cdsNone;
 }
 
 static struct genePred* createGenePred(struct genePred* srcGp, struct srcQueryExon *srcQueryExons,
                                        struct psl *mappedPsl)
 /* create genePred from mapped PSL */
 {
+struct mappedCdsBounds mappedCdsBounds = mappedCdsBoundsInit;
 unsigned currentExonSpace = mappedPsl->blockCount;
 // setup cdsStart and cdsEnd as txEnd, 0 to indicate not yet set
 struct genePred *mappedGp = genePredNew(mappedPsl->qName, mappedPsl->tName, pslQStrand(mappedPsl),
@@ -428,15 +477,15 @@ struct genePred *mappedGp = genePredNew(mappedPsl->qName, mappedPsl->tName, pslQ
                                         genePredAllFlds, currentExonSpace);
 mappedGp->score = srcGp->score;
 mappedGp->name2 = cloneString(srcGp->name2);
+
 int iBlock;
 for (iBlock = 0; iBlock < mappedPsl->blockCount; iBlock++)
-    convertPslBlock(mappedPsl, iBlock, srcGp, srcQueryExons, mappedGp, &currentExonSpace);
-if (mappedGp->cdsStart >= mappedGp->cdsEnd)
-    {
-    // use common representation of no CDS.
-    mappedGp->cdsStart = mappedGp->cdsEnd = mappedGp->txEnd;
-    mappedGp->cdsStartStat = mappedGp->cdsEndStat = cdsNone;
-    }
+    convertPslBlock(mappedPsl, iBlock, srcGp, srcQueryExons, mappedGp, &currentExonSpace,
+                    &mappedCdsBounds);
+if (mappedCdsBounds.cdsStart < 0)
+    finishWithOutCds(mappedGp);
+else
+    finishWithCds(srcGp, mappedGp, &mappedCdsBounds);
 return mappedGp;
 }
 
@@ -502,7 +551,7 @@ else
         ? mappedGp->exonFrames[iExon+1]
         : mappedGp->exonFrames[iExon];
     }
-}   
+}
 
 static void shiftBlock(struct genePred *mappedGp, int iExon)
 /* shift up block arrays by one, overwriting iExon entry */
@@ -596,4 +645,3 @@ char *mappedGenePredFile = argv[3];
 transMapPslToGenePred(srcGenePredFile, mappedPslFile, mappedGenePredFile);
 return 0;
 }
-

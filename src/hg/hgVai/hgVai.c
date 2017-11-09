@@ -798,7 +798,7 @@ struct slName *getGencodeTagVersions()
 /* Return a list of version strings from the ends of wgEncodeGencodeTag% tables. */
 {
 static struct slName *tagVersions = NULL;
-if (tagVersions == NULL)
+if (tagVersions == NULL && !startsWith(hubTrackPrefix, database))
     {
     struct sqlConnection *conn = hAllocConn(database);
     struct slName *tagTables = sqlQuickList(conn,

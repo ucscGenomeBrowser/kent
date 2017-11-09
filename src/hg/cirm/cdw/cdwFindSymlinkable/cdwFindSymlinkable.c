@@ -80,6 +80,7 @@ verbose(1, "%d submits\n", slCount(submitIdList));
 char *newPath = NULL;
 int filesSymlinked = 0;
 off_t fileSpaceSaved = 0;
+struct stat sb;
 struct slInt *sel;
 for (sel = submitIdList; sel != NULL; sel = sel->next)
     {
@@ -132,14 +133,36 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 
 	// apply submitFileName to submitDir, giving an absolute path
 	freeMem(newPath);
-	newPath = expandRelativePath(ed->url, ef->submitFileName);
-	verbose(3, "submitDir=%s\npath=%s\nnewPath=%s\n", ed->url, ef->submitFileName, newPath);
-	if (!newPath)
-	    errAbort("Too many .. in path %s to make relative to submitDir %s\n", ef->submitFileName, ed->url);
+        newPath = mustExpandRelativePath(ed->url, ef->submitFileName);
 
 	if (!fileExists(newPath))
 	    {
 	    verbose(1, "Original submit path %s does not exist or is a broken symlink.\n", newPath);
+	    continue;
+	    }
+
+	// Check that the target is not already a symlink.
+        // If so, report it and skip it. This is an unexpected case.
+        // Cannot be certain that it does not through some chain of links point back to the original file.
+	if (lstat(path, &sb) == -1) 
+	    errnoAbort("stat failure on %s", path);
+	if ((sb.st_mode & S_IFMT) != S_IFREG) // regular file?
+	    {
+	    char *ftype = "";
+	    if ((sb.st_mode & S_IFMT) == S_IFLNK) ftype = "symlink";
+	    if ((sb.st_mode & S_IFMT) == S_IFDIR) ftype = "directory";
+	    if ((sb.st_mode & S_IFMT) == S_IFDIR) ftype = "special file";  // some other special file type
+	    verbose(1, "skipping since target %s is not a regular file, but a %s.\n", path, ftype);
+	    continue;
+	    }
+
+	// check if file sizes match since it is quick
+	off_t subFSize = fileSize(newPath);
+	off_t cdwFSize = fileSize(path);
+	if (subFSize != cdwFSize)
+	    {
+	    verbose(1, "skipping since file sizes do not match between %s (%llu) and %s (%llu)\n", 
+		newPath, (long long unsigned)subFSize, path, (long long unsigned)cdwFSize);
 	    continue;
 	    }
 
@@ -150,7 +173,6 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 	    verbose(1, "skipping since md5 does not match between %s and %s\n", newPath, path);
 	    continue;
 	    }
-	
 
 	// save space by finding the last real file in symlinks chain
 	// and replace IT with a symlink to the submitted file under cdwFileName. 
@@ -167,8 +189,8 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 	}
     }
 
-verbose(1, "\n\n%d files symlinked.\n", filesSymlinked);
-verbose(1, "\n\n%llu space saved.\n", (unsigned long long) fileSpaceSaved);
+verbose(1, "\n\n%d files %ssymlinked.\n", filesSymlinked, fix ? "":"would have been ");
+verbose(1, "\n%llu space %ssaved.\n", (unsigned long long) fileSpaceSaved, fix ? "":"would have been ");
 
 if (!fix)
     verbose(1, "\nfix command was not specified. Dry run only.\n\n");

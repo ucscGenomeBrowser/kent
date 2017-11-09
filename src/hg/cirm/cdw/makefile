@@ -45,6 +45,7 @@ UTIL_DIRS = \
     cdwSwapInSymLink \
     cdwTextForIndex \
     cdwUndeprecate \
+    cdwUnlockSubmittedFile \
     utils/cdwFastqPolyFilter \
     utils/cdwVcfStats
 

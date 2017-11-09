@@ -1300,6 +1300,8 @@ function installBrowser ()
        echo genome-euro seems to be closer
        echo modifying mirror to pull data from genome-euro instead of genome
        sed -i s/slow-db.host=genome-mysql.cse.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ $CGIBINDIR/hg.conf
+       sed -i "s#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#" $CGIBINDIR/hg.conf
+       HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
     else
        echo genome.ucsc.edu seems to be closer
        echo not modifying $CGIBINDIR/hg.conf
@@ -1651,7 +1653,7 @@ if [[ $# -eq 0 ]] ; then
    exit 0
 fi
 
-while getopts ":baut:hof" opt; do
+while getopts ":baeut:hof" opt; do
   case $opt in
     h)
       echo "$HELP_STR"
@@ -1664,6 +1666,9 @@ while getopts ":baut:hof" opt; do
       ;;
     a)
       HGDOWNLOAD=hgdownload-sd.sdsc.edu
+      ;;
+    e)
+      HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
       ;;
     t)
       val=${OPTARG}

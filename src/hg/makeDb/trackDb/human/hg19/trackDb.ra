@@ -572,14 +572,8 @@ sGroup_mammal rheMac2 mm9 canFam2
 treeImage phylo/hg19_4way.gif
 
 include ../chainNetPrimate.ra
-
 include ../chainNetPlacental.ra
-
 include ../chainNetVertebrate.ra
-
-include ../chainNetLegacy.ra alpha
-
-include ../chainNetStray.ra alpha
 
 track hg18cytoBand
 shortLabel hg18 Chromosome Band

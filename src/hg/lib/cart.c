@@ -1899,27 +1899,19 @@ void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart
 struct cart *cart;
 char *db, *org, *pos;
 char titlePlus[2048];
-char extra[2048];
 pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org, oldVars);
 pos = cartGetPosition(cart, db, NULL);
 pos = addCommasToPos(db, stripCommas(pos));
-if(pos != NULL && oldVars != NULL)
+if (pos != NULL && oldVars != NULL)
     {
-    struct hashEl *oldpos = hashLookup(oldVars, positionCgiName);
-    if(oldpos != NULL && differentString(pos,oldpos->val))
-        cartSetString(cart,"lastPosition",oldpos->val);
+    struct hashEl *oldPos = hashLookup(oldVars, positionCgiName);
+    if (oldPos != NULL && differentString(pos, oldPos->val))
+        cartSetString(cart, "lastPosition", oldPos->val);
     }
-*extra = 0;
-if (pos == NULL && org != NULL)
-    safef(titlePlus,sizeof(titlePlus), "%s%s - %s",trackHubSkipHubName(org), extra, title );
-else if (pos != NULL && org == NULL)
-    safef(titlePlus,sizeof(titlePlus), "%s - %s",pos, title );
-else if (pos == NULL && org == NULL)
-    safef(titlePlus,sizeof(titlePlus), "%s", title );
-else
-    safef(titlePlus,sizeof(titlePlus), "%s%s %s - %s",trackHubSkipHubName(org), extra,pos, title );
+safef(titlePlus, sizeof(titlePlus), "%s %s %s %s", 
+                    org ? trackHubSkipHubName(org) : "", db ? db : "",  pos ? pos : "", title);
 popWarnHandler();
 setThemeFromCart(cart);
 htmStartWithHead(stdout, head, titlePlus);
