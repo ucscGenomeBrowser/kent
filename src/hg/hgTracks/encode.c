@@ -172,6 +172,78 @@ if (sameString(extraWhere->string, ""))
 return dyStringCannibalize(&extraWhere);
 }
 
+struct bigBedFilter
+/* Filter on a field in a bigBed file. */
+{
+struct bigBedFilter *next;
+int field;   // the field number
+enum {COMPARE_DOUBLE, COMPARE_INT} comparisonType;  // the type of the comparison
+union   // the value to compare to
+    {
+    double dvalue;
+    int ivalue;
+    };
+};
+
+struct bigBedFilter *bigBedMakeFilter(struct cart *cart, struct trackDb *tdb, char *tdbName, char *fieldName)
+/* Make a filter on this column if the trackDb or cart wants us to. */
+{
+return NULL;
+}
+
+boolean bigBedFilterInterval(char **bedRow, struct bigBedFilter *filters)
+/* Go through a row and filter based on filters.  Return TRUE if all filters are passed. */
+{
+return TRUE;
+}
+
+void bigNarrowPeakLoadItems(struct track *tg)
+/* Load a set of narrowPeaks from a bigNarrowPeak file. */
+{
+struct linkedFeatures *lfList = NULL;
+enum encodePeakType pt = 0;
+int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
+pt = narrowPeak;
+
+tg->customInt = pt;
+struct bbiFile *bbi =  fetchBbiForTrack(tg);
+
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+int fieldCount = 10;
+char *bedRow[fieldCount];
+char startBuf[16], endBuf[16];
+struct bigBedFilter *filters = NULL;
+struct bigBedFilter *filter;
+
+if ((filter = bigBedMakeFilter(cart, tg->tdb, SCORE_FILTER, "score")) != NULL)
+    slAddHead(&filters, filter);
+if ((filter = bigBedMakeFilter(cart, tg->tdb, SIGNAL_FILTER, "signalValue")) != NULL)
+    slAddHead(&filters, filter);
+if ((filter = bigBedMakeFilter(cart, tg->tdb, PVALUE_FILTER, "pValue")) != NULL)
+    slAddHead(&filters, filter);
+if ((filter = bigBedMakeFilter(cart, tg->tdb, QVALUE_FILTER, "qValue")) != NULL)
+    slAddHead(&filters, filter);
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    if (bigBedFilterInterval(bedRow, filters))
+        {
+        struct encodePeak *peak = encodePeakGeneralLoad(bedRow, pt);
+        struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, tg->tdb, scoreMin, scoreMax);
+
+        if (lf)
+            slAddHead(&lfList, lf);
+        }
+    }
+
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+}
+
 static void encodePeakLoadItemsBoth(struct track *tg, struct customTrack *ct)
 /* Load up an encodePeak table from the regular database or the customTrash one. */
 {

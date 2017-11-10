@@ -583,7 +583,8 @@ struct hTableInfo *hubTrackTableInfo(struct trackDb *tdb)
 struct hTableInfo *hti = NULL;
 if (tdb->subtracks == NULL)
     {
-    if (startsWithWord("bigBed", tdb->type) || startsWithWord("bigGenePred", tdb->type))
+    if (startsWithWord("bigBed", tdb->type) || startsWithWord("bigGenePred", tdb->type) ||
+        startsWithWord("bigNarrowPeak", tdb->type))
 	hti = bigBedToHti(tdb->table, NULL);
     else if (startsWithWord("longTabix", tdb->type))
 	hti = longTabixToHti(tdb->table);
