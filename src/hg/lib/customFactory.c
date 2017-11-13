@@ -2369,6 +2369,14 @@ static boolean bigBarChartRecognizer(struct customFactory *fac,
 return (sameType(type, "bigBarChart"));
 }
 
+static boolean bigNarrowPeakRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigNarrowPeak track */
+{
+return (sameType(type, "bigNarrowPeak"));
+}
+
 static boolean bigGenePredRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2510,6 +2518,15 @@ static struct customFactory bigPslFactory =
     NULL,
     "bigPsl",
     bigPslRecognizer,
+    bigBedLoader,
+    };
+
+static struct customFactory bigNarrowPeakFactory =
+/* Factory for bigNarrowPeak tracks */
+    {
+    NULL,
+    "bigNarrowPeak",
+    bigNarrowPeakRecognizer,
     bigBedLoader,
     };
 
@@ -3004,6 +3021,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &pgSnpFactory);
     slAddTail(&factoryList, &bedFactory);
     slAddTail(&factoryList, &bigGenePredFactory);
+    slAddTail(&factoryList, &bigNarrowPeakFactory);
     slAddTail(&factoryList, &bigPslFactory);
     slAddTail(&factoryList, &bedTabixFactory);
     slAddTail(&factoryList, &longTabixFactory);

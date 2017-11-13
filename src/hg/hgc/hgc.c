@@ -4267,6 +4267,10 @@ else if (wordCount > 0)
 	{
 	doEncodePeak(tdb, NULL, item);
 	}
+    else if (sameString(type, "bigNarrowPeak"))
+	{
+	doBigEncodePeak(tdb, NULL, item);
+	}
     else if (sameString(type, "encodeFiveC"))
 	{
 	doEncodeFiveC(conn, tdb);
@@ -21121,6 +21125,8 @@ else if ( startsWith( "longTabix", type))
     doLongTabix(ct->tdb, item);
 else if (sameWord(type, "encodePeak"))
     doEncodePeak(ct->tdb, ct, fileName);
+else if (sameWord(type, "bigNarrowPeak"))
+    doBigEncodePeak(ct->tdb, NULL, item);
 else if (sameWord(type, "bigWig"))
     bigWigCustomClick(ct->tdb);
 else if (sameWord(type, "bigChain"))

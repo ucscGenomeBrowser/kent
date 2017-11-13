@@ -613,6 +613,7 @@ return startsWithWord("bigBed", tdb->type) ||
         startsWithWord("bigGenePred", tdb->type) || 
         startsWithWord("bigMaf", tdb->type) || 
         startsWithWord("bigPsl", tdb->type) || 
+        startsWithWord("bigNarrowPeak", tdb->type) || 
         startsWithWord("bigBarChart", tdb->type) || 
         startsWithWord("bigChain", tdb->type);
 }

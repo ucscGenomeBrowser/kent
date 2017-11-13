@@ -391,6 +391,9 @@ void customMafClick(struct sqlConnection *conn,
 	struct sqlConnection *conn2, struct trackDb *tdb);
 /* handle clicks on a custom maf */
 
+void doBigEncodePeak(struct trackDb *tdb, struct customTrack *cti, char *item);
+/*  details for encodePeak type tracks.  */
+
 void doEncodePeak(struct trackDb *tdb, struct customTrack *cti, char *item);
 /*  details for encodePeak type tracks.  */
 

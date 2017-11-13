@@ -6111,7 +6111,7 @@ else if (sameString(type, "bigWig"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain") || sameString(type, "bigBarChart"))
+else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred")|| sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain") || sameString(type, "bigBarChart"))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
@@ -6120,6 +6120,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameStr
     char typeBuf[64];
     if (sameString(type, "bigGenePred"))
 	safef(typeBuf, sizeof(typeBuf), "bigGenePred");
+    else if (sameString(type, "bigNarrowPeak"))
+	safef(typeBuf, sizeof(typeBuf), "bigNarrowPeak");
     else if (sameString(type, "bigChain"))
 	safef(typeBuf, sizeof(typeBuf), "bigChain");
     else if (sameString(type, "bigMaf"))
@@ -7087,6 +7089,7 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("mathWig"  , track->tdb->type)
      || startsWithWord("bigBed"  , track->tdb->type)
      || startsWithWord("bigPsl"  , track->tdb->type)
+     || startsWithWord("bigNarrowPeak"  , track->tdb->type)
      || startsWithWord("bigGenePred"  , track->tdb->type)
      || startsWithWord("bigChain"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)

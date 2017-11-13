@@ -13884,6 +13884,15 @@ else if (sameWord(type, "bigBarChart"))
     track->isBigBed = TRUE;
     barChartMethods(track);
     }
+else if (sameWord(type, "bigNarrowPeak"))
+    {
+    tdb->canPack = TRUE;
+    track->isBigBed = TRUE;
+    encodePeakMethods(track);
+    track->loadItems = bigNarrowPeakLoadItems;
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
 else if (sameWord(type, "bigPsl"))
     {
     tdb->canPack = TRUE;

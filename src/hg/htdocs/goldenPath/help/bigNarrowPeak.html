@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser bigNarrowPeak Track Format" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>bigNarrowPeak Track Format</h1> 
+<p>
+The bigNarrowPeak format stores annotation items that are a linked collection of exons, much as 
+<a href="../../FAQ/FAQformat.html#format1">BED</a> files indexed as bigBeds do. However, the
+bigNarrowPeak format includes 8 additional fields that contain details about coding frames and other 
+gene-specific information.</p>
+<p>
+The bigNarrowPeak files are created using the program <code>bedToBigBed</code>, run with the
+<code>-as</code> option to pull in a special 
+<a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a> (<em>.as</em>) file 
+that defines the extra fields of the bigNarrowPeak.</p> 
+<p>
+The bigNarrowPeak files are in an indexed binary format. The main advantage of this format is that 
+only those portions of the file needed to display a particular region are transferred to the Genome 
+Browser server. Because of this, indexed binary files have considerably faster display performance 
+than regular BED format files when working with large data sets. The bigNarrowPeak file remains on 
+your local web-accessible server (http, https or ftp), not on the UCSC server, and only the portion 
+needed for the currently displayed chromosomal position is locally cached as a &quot;sparse 
+file&quot;.</p>
+
+<a name="bigNarrowPeak"></a>
+<h2>bigNarrowPeak file definition</h2>
+<p>
+The following autoSql definition is used to specify bigNarrowPeak gene prediction files. This 
+definition, contained in the file <a href="examples/bigNarrowPeak.as"><em>bigNarrowPeak.as</em></a>, 
+is pulled in when the <code>bedToBigBed</code> utility is run with the 
+<code>-as=bigNarrowPeak.as</code> option. 
+<pre><code>table bigNarrowPeak
+"bigNarrowPeak gene models"
+    (
+    string chrom;       	"Reference sequence chromosome or scaffold"
+    uint   chromStart;  	"Start position in chromosome" 
+    uint   chromEnd;    	"End position in chromosome"
+    string name;        	"Name or ID of item, ideally both human-readable and unique"
+    uint score;         	"Score (0-1000)"
+    char[1] strand;     	"+ or - for strand"
+    uint thickStart;    	"Start of where display should be thick (start codon)"
+    uint thickEnd;      	"End of where display should be thick (stop codon)"
+    uint reserved;       	"RGB value (use R,G,B string in input file)"
+    int blockCount;     	"Number of blocks"
+    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] chromStarts;"Start positions relative to chromStart"
+    string name2;       	"Alternative/human readable name"
+    string cdsStartStat; 	"enum('none','unk','incmpl','cmpl')"
+    string cdsEndStat;   	"enum('none','unk','incmpl','cmpl')"
+    int[blockCount] exonFrames; "Exon frame {0,1,2}, or -1 if no frame for exon"
+    string type;        	"Transcript type"
+    string geneName;    	"Primary identifier for gene"
+    string geneName2;   	"Alternative/human-readable gene name"
+    string geneType;    	"Gene type"
+    )  </code></pre>
+
+<p>
+Click <a href="examples/bigNarrowPeak.txt">here</a> to view an example of a bigNarrowPeak (bed12+8) 
+input file. In alternative-splicing situations, each transcript has its own row.</p>
+<p>
+Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory: approximately 
+25% more RAM than the uncompressed BED input file.</p>
+
+<h2>Creating a bigNarrowPeak track</h2>
+<p>
+To create a bigNarrowPeak track, follow these steps:</p>
+<p>
+<strong>Step 1.</strong> 
+Create a bigNarrowPeak file. The first 12 fields of the bigNarrowPeak bed12+8 format are 
+described by the basic BED file format shown <a href="../../FAQ/FAQformat.html#format1">here</a>. 
+(You can also read
+about genePred <a href="../../FAQ/FAQformat.html#format9">here</a>.) 
+Your bigNarrowPeak file must also contain the 8 extra fields described in the autoSql file definition 
+shown above: <code>name2, cdsStartStat, cdsEndStat, exonFrames, type, geneName, geneName2, 
+geneType</code>. Your bigNarrowPeak file must be sorted first on the <code>chrom</code> field, and 
+secondarily on the <code>chromStart</code> field. You can use the UNIX <code>sort</code> command to 
+do this:</p> 
+<pre><code>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</code></pre>
+<p>
+<strong>Step 2.</strong> 
+Download the <code>bedToBigBed</code> program from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<p>
+<strong>Step 3.</strong> 
+Use the <code>fetchChromSizes</code> script from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">same directory</a> to create a 
+<em>chrom.sizes</em> file for the UCSC database with which you are working (e.g., hg38).
+Alternatively, you can download the <em>chrom.sizes</em> file for any assembly hosted at UCSC from 
+our <a href="http://hgdownload.soe.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full 
+data set&quot; for any assembly). For example, the <em>hg38.chrom.sizes</em> file for the hg38
+database is located at 
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes"
+target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</p>
+<p>
+<strong>Step 4.</strong> 
+Create the bigNarrowPeak file from your sorted input file using the <code>bedToBigBed</code> 
+utility:</p> 
+<pre><code><strong>bedToBigBed</strong> -as=bigNarrowPeak.as -type=bed12+8 bigNarrowPeak.txt chrom.sizes myBigGenePred.bb</code></pre>
+<p>
+<strong>Step 5.</strong> 
+Move the newly created bigNarrowPeak file (<em>myBigGenePred.bb</em>) to a web-accessible http, https,
+or ftp location.</p>
+<p>
+<strong>Step 6.</strong> 
+Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> using a single 
+<a href="hgTracksHelp.html#TRACK">track line</a>. Note that any of the track attributes listed
+<a href="customTrack.html#TRACK">here</a> are applicable to tracks of type bigBed. The basic 
+version of the track line will look something like this:</p>
+<pre><code>track type=bigNarrowPeak name="My Big GenePred" description="A Gene Set Built from Data from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigGenePred.bb</code></pre>
+<p>
+<strong>Step 7.</strong> 
+Paste this custom track line into the text box on the <a href="../../cgi-bin/hgCustom">custom 
+track management page</a>.</p>
+<p>
+The <code>bedToBigBed</code> program can be run with several additional options. For a full list of 
+the available options, type <code>bedToBigBed</code> (with no arguments) on the command line to 
+display the usage message.</p>
+
+<h2>Examples</h2>
+<h3>Example &num;1</h3>
+<p>
+In this example, you will create a bigNarrowPeak custom track using a bigNarrowPeak file,
+<em>bigNarrowPeak.bb</em>, located on the UCSC Genome Browser http server. This file contains data for
+the hg38 assembly.</p>
+<p>
+To create a custom track using this bigNarrowPeak file: 
+<ol>
+  <li>
+  Construct a track line that references the file:</p>
+  <pre><code>track type=bigNarrowPeak name=&quot;bigNarrowPeak Example One&quot; description=&quot;A bigNarrowPeak file&quot; bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigNarrowPeak.bb</code></pre>
+  <li>
+  Paste the track line into the <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
+  page</a> for the human assembly hg38 (Dec. 2013).</li> 
+  <li>
+  Click the &quot;submit&quot; button.</li> 
+</ol>
+<p>
+Custom tracks can also be loaded via one URL line. The link below loads the same bigNarrowPeak track 
+and sets additional parameters in the URL:</p>
+<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigNarrowPeak%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigNarrowPeak.bb"
+target="_blank"><pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigNarrowPeak %20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigNarrowPeak.bb</code></pre></a>
+<p>
+After this example bigNarrowPeak track is loaded in the Genome Browser, click on a gene in the
+browser's track display to view the details page for that gene. Note that the page offers links to
+several sequence types, including translated protein, predicted mRNA, and genomic
+sequence.</p>
+
+<h3>Example &num;2</h3>
+<p>
+In this example, you will configure the bigNarrowPeak track loaded in Example #1 to display codons and
+amino acid numbering:
+<ol>
+  <li>
+  On the track's gene details page, click the &quot;Go to ... track controls&quot; link.</li>
+  <li>
+  Change the &quot;Color track by codons:&quot; option from &quot;OFF&quot; to &quot;genomic 
+  codons&quot; and check that the display mode is set to &quot;full&quot.</li>
+  <li>
+  Click &quot;submit&quot;. 
+  <li>
+  On the Genome Browser tracks display, zoom to a track region where amino acids display, such as 
+  <code>chr9:133,255,650-133,255,700</code>, and note that the track now displays codons. 
+  <li>
+  Return to the track controls page and click the box next to &quot;Show codon numbering&quot;, 
+  then click &quot;submit&quot;.</li> 
+  <li>
+  The browser tracks display will now show amino acid numbering.</li>
+</ol>
+<p>
+You can also add a parameter in the custom track line, <code>baseColorDefault=genomicCodons</code>, 
+to set display codons by default:</p>
+<pre><code>browser position chr10:67,884,600-67,884,900
+track type=bigNarrowPeak baseColorDefault=genomicCodons name="bigNarrowPeak Example Two" description="A bigNarrowPeak file" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigNarrowPeak.bb </code></pre>
+<p>
+Paste the above into the hg38 <a href="../../cgi-bin/hgCustom?db=hg38">custom track management 
+page</a> to view an example of bigNarrowPeak amino acid display at the beginning of the SIRT1 gene on 
+chromosome 10.</p>
+
+<h3>Example &num;3</h3>
+<p>
+In this example, you will create your own bigNarrowPeak file from an existing bigNarrowPeak input 
+file.</p>
+<ol>
+  <li> 
+  Save the example bed12+8 input file, 
+  <em><a href="examples/bigNarrowPeak.txt">bigNarrowPeak.txt</a></em>, to your computer (<em>Step 1</em>
+  in <em>Creating a bigNarrowPeak track</em>, above).</li>
+  <li> 
+  Download the <a href="http://hgdownload.soe.ucsc.edu/admin/exe/"><code>bedToBigBed</code></a>
+  utility (<em>Step 2</em>, above).</li>
+  <li> 
+  Save the <a href="hg38.chrom.sizes"><em>hg38.chrom.sizes</em> text file</a> to your computer.
+  This file  contains the chrom.sizes for the human hg38 assembly (<em>Step 3</em>, above).</li>
+  <li> 
+  Save the autoSql file <a href="examples/bigNarrowPeak.as"><em>bigNarrowPeak.as</em></a> to your 
+  computer.</li>
+  <li> 
+  Run the <code>bedToBigBed</code> utility to create the bigNarrowPeak output file (<em>step 4</em>, 
+  above):
+  <pre><code><B>bedToBigBed</B> -type=bed12+8 -tab -as=bigNarrowPeak.as bigNarrowPeak.txt hg38.chrom.sizes bigNarrowPeak.bb</code></pre></li>
+  <li> 
+  Place the newly created bigNarrowPeak file (<em>bigNarrowPeak.bb</em>) on a web-accessible server 
+  (<em>Step 5</em>, above).</li>
+  <li> 
+  Construct a track line that points to the bigNarrowPeak file (<em>Step 6</em>, above).</li>
+  <li> 
+  Create the custom track on the human assembly hg38 (Dec. 2013), and view it in the Genome Browser 
+  (<em>step 7</em>, above).</li>
+</ol>
+
+<h2>Sharing your data with others</h2>
+<p>
+If you would like to share your bigNarrowPeak data track with a colleague, learn how to create a URL 
+by looking at Example #11 on <a href="customTrack.html#EXAMPLE11">this page</a>.</p>
+
+<h2>Extracting data from bigBed format</h2>
+<p>
+Because the bigNarrowPeak files are an extension of bigBed files, which are indexed binary files, it 
+can be difficult to extract data from them. UCSC has developed the following programs to
+assist in working with bigBed formats, available from the 
+<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<ul>
+  <li>
+  <code>bigBedToBed</code> &mdash; converts a bigBed file to ASCII BED format.</li>
+  <li>
+  <code>bigBedSummary</code> &mdash; extracts summary information from a bigBed 
+  file.</li>
+  <li>
+  <code>bigBedInfo</code> &mdash; prints out information about a bigBed file.</li>
+</ul>
+<p>
+As with all UCSC Genome Browser programs, simply type the program name (with no parameters) at the 
+command line to view the usage statement.</p>
+
+<h2>Troubleshooting</h2>
+<p>
+If you encounter an error when you run the <code>bedToBigBed</code> program, check your input 
+file for data coordinates that extend past the end of the chromosome. If these are 
+present, run the <code>bedClip</code> program 
+(<a href="http://hgdownload.soe.ucsc.edu/admin/exe/">available here</a>) to remove the problematic 
+row(s) before running the <code>bedToBigBed</code> program. </p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

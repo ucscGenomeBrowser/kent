@@ -1596,7 +1596,10 @@ var hgGateway = (function() {
         if (! position || position === '' || position === positionWatermark ||
             position === selectedGene) {
             position = posDisplay;
+        } else {
+            position = position.replace(/\u2013|\u2014/g, "-");  // replace en-dash and em-dash with hyphen
         }
+
         // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
         $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
         // Make a form and submit it.  In order for this to work in IE, the form
