@@ -1563,7 +1563,7 @@ while (TRUE)
     {
     if (!fileExists(path))
 	{
-	warn("path=[%s] does not exist following submitDir/submitFileName through sylinks.", path);
+	warn("path=[%s] does not exist following submitDir/submitFileName through symlinks.", path);
 	return NULL;
 	}
     if (lstat(path, &sb) == -1)

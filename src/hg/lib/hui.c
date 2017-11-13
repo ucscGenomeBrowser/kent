@@ -7607,8 +7607,8 @@ if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL
     #define PM_BUTTON_FILTER_COMP "<input type='button' class='inOutButton' id='%s' value='%c'>"
     #define PM_BUTTON_FILTER_COMP_JS "waitOnFunction(filterCompositeSet,this,%s);return false;"
     #define MAKE_PM_BUTTON_FILTER_COMP(tf,fc,plmi) \
+    safef(id, sizeof id, "btn_%s", (fc)); \
     printf(PM_BUTTON_FILTER_COMP, id, (plmi)); \
-    safef(id, sizeof id, "'btn_%s", (fc)); \
     safef(javascript, sizeof javascript, PM_BUTTON_FILTER_COMP_JS, (tf)); \
     jsOnEventById("click", id, javascript);
 
