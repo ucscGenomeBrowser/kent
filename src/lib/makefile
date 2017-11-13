@@ -46,7 +46,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     splatAli.o sqlList.o sqlNum.o sqlReserved.o subText.o sufa.o sufx.o synQueue.o \
     tabRow.o tagSchema.o tagStorm.o tagToJson.o tagToSql.o textOut.o tokenizer.o trix.o twoBit.o \
     udc.o uuid.o vcf.o vcfBits.o vGfx.o vPng.o verbose.o \
-    wildcmp.o wormdna.o \
+    wildcmp.o windowsToAscii.o wormdna.o \
     xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o zlibFace.o
 
 $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
