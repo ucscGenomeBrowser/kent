@@ -122,6 +122,8 @@ var suggestBox = {
                 // handles case where users zeroes out positionInput; in that case we revert to currently displayed position
                 if (!val || val.length === 0 || val === waterMark)
                     val = $('#positionDisplay').text();
+                else
+                    val = val.replace(/\u2013|\u2014/g, "-");  // replace en-dash and em-dash with hyphen
                 $('#position').val(val);
                 suggestBox.clearFindMatches();
             }
