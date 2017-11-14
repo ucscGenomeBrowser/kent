@@ -32370,3 +32370,91 @@ ln -s /hive/data/outside/cosmic/hg19/v82/cosMutHg19V82.bb .
 
     # commit all
 #########################################################################
+# LASTZ human/hg19 Gorilla/gorGor5 - (DONE - 2017-11-08 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzGorGor5.2017-11-08
+    cd /hive/data/genomes/hg19/bed/lastzGorGor5.2017-11-08
+
+    printf '# human vs gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: gorilla gorGor5
+SEQ2_DIR=/hive/data/genomes/gorGor5/gorGor5.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/hg19/bed/lastzGorGor5.2017-11-08
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    151m54.643s
+
+    cat fb.hg19.chainGorGor5Link.txt
+    # 2805809292 bases of 2897316137 (96.842%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg19 gorGor5) \
+        > rbest.log 2>&1 &
+    # real    101m0.033s
+
+    cat fb.hg19.chainRBestGorGor5Link.txt
+    # 2704000429 bases of 2897316137 (93.328%) in intersection
+
+XXX - can be done - Mon Nov 13 18:42:27 PST 2017
+    # create and load up syntenic chainNet:
+cd /hive/data/genomes/hg19/bed/lastzGorGor5.2017-11-08/axtChain
+netToAxt hg19.gorGor5.syn.net.gz hg19.gorGor5.all.chain.gz \
+/scratch/data/hg19/hg19.2bit /hive/data/genomes/gorGor5/gorGor5.2bit stdout \
+  | axtSort stdin stdout \
+     | axtToChain stdin /hive/data/genomes/hg19/chrom.sizes \
+        /hive/data/genomes/gorGor5/chrom.sizes stdout \
+            | gzip -c > hg19.gorGor5.syn.chain.gz
+hgLoadChain -tIndex hg19 chainSynGorGor5 hg19.gorGor5.syn.chain.gz
+netFilter -minGap=10 hg19.gorGor5.syn.net.gz \
+  | hgLoadNet -verbose=0 hg19 netSynGorGor5 stdin
+cd /hive/data/genomes/hg19/bed/lastzGorGor5.2017-11-08
+featureBits hg19 chainSynGorGor5Link > fb.hg19.chainSynGorGor5Link.txt 2>&1
+cat fb.hg19.chainSynGorGor5Link.txt
+# 2868720234 bases of 3049335806 (94.077%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/gorGor5/bed/blastz.hg19.swap
+    cd /hive/data/genomes/gorGor5/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzGorGor5.2017-11-08/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    96m1.816s
+
+    cat fb.gorGor5.chainHg19Link.txt
+    # 2762099017 bases of 3080431298 (89.666%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` gorGor5 hg19) \
+       > rbest.log 2>&1
+    # real    106m51.054s
+
+###########################################################################
