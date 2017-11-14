@@ -47,10 +47,11 @@ set temp = "#define CGI_VERSION "'"'"$BRANCHNN"'"'
 echo "/* Copyright (C) 2014 The Regents of the University of California \
  * See README in this or parent directory for licensing information. */" > versionInfo.h
 echo $temp >> versionInfo.h
+sed -e 's/CGI_VERSION/SRC_VERSION/;' versionInfo.h > ../../inc/srcVersion.h
 grep CGI_VERSION versionInfo.h
 set temp = "New version number v$BRANCHNN"
-git add versionInfo.h
-git commit -m "$temp" versionInfo.h
+git add versionInfo.h ../../inc/srcVersion.h
+git commit -m "$temp" versionInfo.h ../../inc/srcVersion.h
 if ( $status ) then
  echo "git commit failed for versionInfo.h with new version# on $HOST [${0}: `date`]"
  exit 1
