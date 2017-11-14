@@ -32457,4 +32457,7 @@ cat fb.hg19.chainSynGorGor5Link.txt
        > rbest.log 2>&1
     # real    106m51.054s
 
+    cat fb.gorGor5.chainRBestHg19Link.txt
+# 2708063590 bases of 3080431298 (87.912%) in intersection
+
 ###########################################################################
