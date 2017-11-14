@@ -37,13 +37,22 @@ to download all of the files from one of these admin/exe/ directories,
 
 ================================================================" > "${RESULT}"
 
+# a few of the commands do not understand just a -verbose=2 argument
+# some of those could be fixed TBD
+
 find . -mindepth 1 -type f | grep -v -w hgsql | sed -e "s/^.\///; /mkREADME.sh/d" | sort | \
 while read F
 do
     if [ -x "${F}" ]; then
 	echo "========   ${F}   ===================================="
 	echo "================================================================"
-	./${F}
+        case "${F}" in
+           ameme|aveCols|catUncomment|fetchChromSizes|gmtime|localtime|hgsqldump|pslPairs|qaToQac)
+	     ./${F}
+             ;;
+           *)
+	     ./${F} -verbose=2
+        esac
 	echo "================================================================"
 	fi
 done >> "${RESULT}" 2>&1
