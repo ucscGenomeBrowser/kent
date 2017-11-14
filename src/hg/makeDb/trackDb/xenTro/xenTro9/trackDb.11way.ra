@@ -1,6 +1,6 @@
 track cons11way
 compositeTrack on
-shortLabel 11-way Vertebrate
+shortLabel Conservation
 longLabel Multiz Alignment & Conservation (11 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
