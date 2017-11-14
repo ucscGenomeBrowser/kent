@@ -1,6 +1,6 @@
 track cons11way
 compositeTrack on
-shortLabel 11-way Vertebrate
+shortLabel Conservation
 longLabel Multiz Alignment & Conservation (11 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
@@ -30,7 +30,7 @@ group compGeno
         type wigMaf 0.0 1.0
         speciesCodonDefault xenTro9
         speciesGroups Vertebrate
-        sGroup_Vertebrate xenLae2 nanPar1 chrPic2 monDom5 anoCar2 canFam3 hg38 mm10 fr3
+        sGroup_Vertebrate xenLae2 nanPar1 chrPic2 monDom5 galGal5 anoCar2 canFam3 hg38 mm10 fr3
         itemFirstCharCase noChange
         treeImage phylo/xenTro9_11way.png
         priority 100
