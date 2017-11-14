@@ -12,7 +12,9 @@
 #include "verbose.h"
 #include "options.h"
 #include <limits.h>
+#include "srcVersion.h"
 
+static char *srcVersion = "kent source version " SRC_VERSION;
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -324,6 +326,7 @@ if (options == NULL)
     struct hash *hash = parseOptions(pArgc, argv, FALSE, optionSpecs, FALSE);
     setOptions(hash);
     optionSpecification = optionSpecs;
+    verbose(2, "### %s ###\n", srcVersion);
     }
 }
 
