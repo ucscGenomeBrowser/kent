@@ -687,7 +687,7 @@ cgiMakeButton("submit", "go");
 puts("</FORM>");
 }
 
-static void manageCustomForm(char *warn)
+static void manageCustomForm(char *warnMsg)
 /* list custom tracks and display checkboxes so user can select for delete */
 {
 
@@ -750,9 +750,9 @@ else
 if (measureTiming && (loadTime > 0))
     printf("\n<BR>load time: %ld ms<BR>\n", loadTime);
 /* place for warning messages to appear */
-if (isNotEmpty(warn))
+if (isNotEmpty(warnMsg))
     {
-    char *encoded = htmlEncode(warn);
+    char *encoded = htmlEncode(warnMsg);
     printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;%s", encoded);
     freeMem(encoded);
     }
@@ -948,13 +948,13 @@ helpCustom();
 cartWebEnd(cart);
 }
 
-static void doManageCustom(char *warn)
+static void doManageCustom(char *warnMsg)
 /* display form for deleting & updating custom tracks.
  * Include warning message, if any */
 {
 cartWebStart(cart, database, "Manage Custom Tracks");
 jsIncludeFile("jquery.js", NULL);
-manageCustomForm(warn);
+manageCustomForm(warnMsg);
 webNewSection("Managing Custom Tracks");
 webIncludeHelpFile("customTrackManage", FALSE);
 cartWebEnd(cart);
@@ -1006,7 +1006,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
-void doRefreshCustom(char **warn)
+void doRefreshCustom(char **warnMsg)
 /* reparse custom tracks from URLs based on cart variables */
 {
 struct customTrack *ct;
@@ -1031,8 +1031,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	}
     }
 ctList = customTrackAddToList(ctList, refreshCts, &replacedCts, FALSE);
-if (warn)
-    *warn = replacedTracksMsg(replacedCts);
+if (warnMsg)
+    *warnMsg = replacedTracksMsg(replacedCts);
 customTrackHandleLift(database, ctList);
 }
 
@@ -1121,7 +1121,7 @@ void doMiddle(struct cart *theCart)
 char *ctFileName = NULL;
 struct slName *browserLines = NULL;
 struct customTrack *replacedCts = NULL;
-char *err = NULL, *warn = NULL;
+char *err = NULL, *warnMsg = NULL;
 char *selectedTable = NULL;
 struct customTrack *ct = NULL;
 boolean ctUpdated = FALSE;
@@ -1295,8 +1295,8 @@ else
             }
         }
     addWarning(dsWarn, replacedTracksMsg(replacedCts));
-    doBrowserLines(browserLines, &warn);
-    addWarning(dsWarn, warn);
+    doBrowserLines(browserLines, &warnMsg);
+    addWarning(dsWarn, warnMsg);
     if (err)
 	{
         char *selectedTable = NULL;
@@ -1319,8 +1319,8 @@ else
         }
     if (cartVarExists(cart, hgCtDoRefresh))
 	{
-	doRefreshCustom(&warn);
-	addWarning(dsWarn, warn);
+	doRefreshCustom(&warnMsg);
+	addWarning(dsWarn, warnMsg);
         ctUpdated = TRUE;
 	}
     if (ctUpdated || ctConfigUpdate(ctFileName))
@@ -1341,16 +1341,16 @@ else
 	errCatchFree(&catch);
 
 	}
-    warn = dyStringCannibalize(&dsWarn);
+    warnMsg = dyStringCannibalize(&dsWarn);
     if (measureTiming)
 	{
 	long lastTime = clock1000();
 	loadTime = lastTime - thisTime;
 	}
     if (ctList || cartVarExists(cart, hgCtDoDelete))
-        doManageCustom(warn);
+        doManageCustom(warnMsg);
     else
-	doAddCustom(warn);
+	doAddCustom(warnMsg);
     }
 cartRemovePrefix(cart, hgCt);
 cartRemove(cart, CT_CUSTOM_TEXT_VAR);
