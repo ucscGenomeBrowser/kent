@@ -47,7 +47,7 @@ do
 	echo "========   ${F}   ===================================="
 	echo "================================================================"
         case "${F}" in
-           ameme|aveCols|catUncomment|fetchChromSizes|gmtime|localtime|hgsqldump|pslPairs|qaToQac)
+           ameme|aveCols|catUncomment|fetchChromSizes|gmtime|localtime|hgsqldump|pslPairs|qaToQac|bedJoinTabOffset|expMatrixToBarchartBed|webSync|vai.pl)
 	     ./${F}
              ;;
            *)
