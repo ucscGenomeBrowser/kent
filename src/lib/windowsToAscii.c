@@ -18,7 +18,6 @@ char *outString = buffer;
 char *inPtr = input;  
 iconv(convType, &inPtr, &inSize, &outString, &outSize);  
 *outString = 0;  
-fprintf(stderr, "BRANEY converted %s to %s\n", input, buffer);
 
 return cloneString(buffer);
 }
