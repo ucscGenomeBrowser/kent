@@ -13,32 +13,34 @@ bisulfite sequencing.</p>
 <h3>Bismap single-read and multi-read mappability</h3>
 <dl>
   <dt><em>Bismap single-read mappability</em></dt> 
-    <dd>These tracks mark any region of the bisulfite-converted genome that is uniquely mappable by
+    <dd>
+    <p>These tracks mark any region of the bisulfite-converted genome that is uniquely mappable by
     at least one <i>k</i>-mer on the specified strand. We generated the mappability of the forward
     strand by converting all instances of cytosine to thymine. Similarly, we generated the
-    mappability of the reverse strand by by converting all instances of guanine to adenine. To
-    calculate the single-read mappability, you must find the overlap of a given region with the
-    region that is uniquely mappable on both strands. Regions not uniquely mappable on both strands
-    or have a low multi-read mappability might bias the downstream analysis.</dd>
-<br>
+    mappability of the reverse strand by by converting all instances of guanine to adenine.</p>
+    <p>To calculate the single-read mappability, you must find the overlap of a given region with
+    the region that is uniquely mappable on both strands. Regions not uniquely mappable on both
+    strands or have a low multi-read mappability might bias the downstream analysis.</p></dd>
   <dt><em>Bismap multi-read mappability</em></dt>
-    <dd>These tracks represent the probability that a randomly selected <i>k</i>-mer which overlaps
+    <dd>
+    <p>These tracks represent the probability that a randomly selected <i>k</i>-mer which overlaps
     with a given position is uniquely mappable. Multi-read mappability track is calculated for
     <i>k</i>-mers that are uniquely mappable on both strands, and thus there is no strand
-    specification.</dd>
+    specification.</p></dd>
 </dl>
 
 <a name="umap"></a>
 <h3>Umap single-read and multi-read mappability</h3>
 <dl>
   <dt><em>Umap single-read mappability</em></dt>
-    <dd>These tracks mark any region of the genome that is uniquely mappable by at least one
+    <dd>
+    <p>These tracks mark any region of the genome that is uniquely mappable by at least one
     <i>k</i>-mer. To calculate the single-read mappability, you must find the overlap of a given
-    region with this track.</dd>
-<br>
+    region with this track.</p></dd>
   <dt><em>Umap multi-read mappability</em></dt>
-    <dd>These tracks represent the probability that a randomly selected <i>k</i>-mer which overlaps
-    with a given position is uniquely mappable.</dd>
+    <dd>
+    <p>These tracks represent the probability that a randomly selected <i>k</i>-mer which overlaps
+    with a given position is uniquely mappable.</p></dd>
 </dl>
 
 <p>For greater detail and explanatory diagrams, see the
