@@ -19,13 +19,11 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         parent umap on
         type bigBed 6
         visibility squish
-        shortLabel Single-read mappability
         view SR
         viewUi on
 
             track umap24
             parent umapBigBed on
-            type bigBed 6
             bigDataUrl /gbdb/hg38/hoffmanMappability/k24.Unique.Mappability.bb
             shortLabel Umap S24
             longLabel Single-read mappability with 24-mers
@@ -35,7 +33,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 
             track umap50
             parent umapBigBed off
-            type bigBed 6
             bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Unique.Mappability.bb
             shortLabel Umap S50
             longLabel Single-read mappability with 50-mers
@@ -46,7 +43,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 
             track umap36
             parent umapBigBed off
-            type bigBed 6
             bigDataUrl /gbdb/hg38/hoffmanMappability/k36.Unique.Mappability.bb
             shortLabel Umap S36
             longLabel Single-read mappability with 36-mers
@@ -57,7 +53,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 
             track umap100
             parent umapBigBed off
-            type bigBed 6
             bigDataUrl /gbdb/hg38/hoffmanMappability/k100.Unique.Mappability.bb
             shortLabel Umap S100
             longLabel Single-read mappability with 100-mers
@@ -70,14 +65,12 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         parent umap on
         type bigWig
         visibility full
-        shortLabel Single-read mappability
+        viewLimits 0:1
         view MR
         viewUi on
 
             track umap36Quantitative
             parent umapBigWig off
-            type bigWig
-            viewLimits 0:1
             bigDataUrl /gbdb/hg38/hoffmanMappability/k36.Umap.MultiTrackMappability.bw
             shortLabel Umap M36
             longLabel Multi-read mappability with 36-mers
@@ -88,8 +81,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 
             track umap24Quantitative
             parent umapBigWig on
-            type bigWig
-            viewLimits 0:1
             bigDataUrl /gbdb/hg38/hoffmanMappability/k24.Umap.MultiTrackMappability.bw
             shortLabel Umap M24
             longLabel Multi-read mappability with 24-mers
@@ -99,8 +90,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 
             track umap550Quantitative
             parent umapBigWig off
-            type bigWig
-            viewLimits 0:1
             bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Umap.MultiTrackMappability.bw
             shortLabel Umap M50
             longLabel Multi-read mappability with 50-mers
@@ -111,8 +100,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 
             track umap100Quantitative
             parent umapBigWig off
-            type bigWig
-            viewLimits 0:1
             bigDataUrl /gbdb/hg38/hoffmanMappability/k100.Umap.MultiTrackMappability.bw
             shortLabel Umap M100
             longLabel Multi-read mappability with 100-mers
@@ -142,7 +129,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 
             track bismap50Neg
             parent bismapBigBed off
-            type bigBed 6
             bigDataUrl /gbdb/hg38/hoffmanMappability/k50.G2A-Converted.bb
             shortLabel Bismap S50 -
             longLabel Single-read mappability with 50-mers after bisulfite conversion (reverse strand)
@@ -153,7 +139,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 
             track bismap50Pos
             parent bismapBigBed off
-            type bigBed 6
             bigDataUrl /gbdb/hg38/hoffmanMappability/k50.C2T-Converted.bb
             shortLabel Bismap S50 +
             longLabel Single-read mappability with 50-mers after bisulfite conversion (forward strand)
@@ -164,7 +149,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         
             track bismap100Neg
             parent bismapBigBed off
-            type bigBed 8
             bigDataUrl /gbdb/hg38/hoffmanMappability/k100.G2A-Converted.bb
             shortLabel Bismap S100 -
             longLabel Single-read mappability with 100-mers after bisulfite conversion (reverse strand)
@@ -175,7 +159,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         
             track bismap24Pos
             parent bismapBigBed on
-            type bigBed 6
             bigDataUrl /gbdb/hg38/hoffmanMappability/k24.C2T-Converted.bb
             shortLabel Bismap S24 +
             longLabel Single-read mappability with 24-mers after bisulfite conversion (forward strand)
@@ -186,7 +169,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         
             track bismap36Pos
             parent bismapBigBed off
-            type bigBed 6
             bigDataUrl /gbdb/hg38/hoffmanMappability/k36.C2T-Converted.bb
             shortLabel Bismap S36 +
             longLabel Single-read mappability with 36-mers after bisulfite conversion (forward strand)
@@ -197,7 +179,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         
             track bismap36Neg
             parent bismapBigBed off
-            type bigBed 6
             bigDataUrl /gbdb/hg38/hoffmanMappability/k36.G2A-Converted.bb
             shortLabel Bismap S36 -
             longLabel Single-read mappability with 36-mers after bisulfite conversion (reverse strand)
@@ -208,7 +189,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         
             track bismap100Pos
             parent bismapBigBed off
-            type bigBed 6
             bigDataUrl /gbdb/hg38/hoffmanMappability/k100.C2T-Converted.bb
             shortLabel Bismap S100 +
             longLabel Single-read mappability with 100-mers after bisulfite conversion (forward strand)
@@ -219,7 +199,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 
             track bismap24Neg
             parent bismapBigBed on
-            type bigBed 6
             bigDataUrl /gbdb/hg38/hoffmanMappability/k24.G2A-Converted.bb
             shortLabel Bismap S24 -
             longLabel Single-read mappability with 24-mers after bisulfite conversion (reverse strand)
@@ -234,12 +213,11 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         visibility full
         shortLabel Multi-read mappability
         view MR
+        viewLimits 0:1
         viewUi on
 
             track bismap50Quantitative
             parent bismapBigWig off
-            type bigWig
-            viewLimits 0:1
             bigDataUrl /gbdb/hg38/hoffmanMappability/k50.Bismap.MultiTrackMappability.bw
             shortLabel Bismap M50
             longLabel Multi-read mappability with 50-mers after bisulfite conversion
@@ -250,8 +228,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 
             track bismap36Quantitative
             parent bismapBigWig off
-            type bigWig
-            viewLimits 0:1
             bigDataUrl /gbdb/hg38/hoffmanMappability/k36.Bismap.MultiTrackMappability.bw
             shortLabel Bismap M36
             longLabel Multi-read mappability with 36-mers after bisulfite conversion
@@ -262,8 +238,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         
             track bismap100Quantitative
             parent bismapBigWig off
-            type bigWig
-            viewLimits 0:1
             bigDataUrl /gbdb/hg38/hoffmanMappability/k100.Bismap.MultiTrackMappability.bw
             shortLabel Bismap M100
             longLabel Multi-read mappability with 100-mers after bisulfite conversion
@@ -274,8 +248,6 @@ longLabel Hoffman Lab Umap and Bismap Mappability
 
             track bismap24Quantitative
             parent bismapBigWig on
-            type bigWig
-            viewLimits 0:1
             bigDataUrl /gbdb/hg38/hoffmanMappability/k24.Bismap.MultiTrackMappability.bw
             shortLabel Bismap M24
             longLabel Multi-read mappability with 24-mers after bisulfite conversion
