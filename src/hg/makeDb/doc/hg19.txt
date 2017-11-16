@@ -32460,4 +32460,132 @@ cat fb.hg19.chainSynGorGor5Link.txt
     cat fb.gorGor5.chainRBestHg19Link.txt
 # 2708063590 bases of 3080431298 (87.912%) in intersection
 
+##############################################################################
+# GTEx cis eQTL tracks from GTEx release V6p  (DONE 10/25/17 kate)
+    # Redmines #15646, #20236
+
+# This data published in Oct 12 Nature special issue:
+#       Genetic effects on gene expression across human tissues, doi:10.1038/nature24277
+
+# Data sources:
+#       * GTEx V6p LDACC files, posted to GTEx portal portal downloads:
+#               1. eQTL identifications, with effect sizes, pvalue, by LDACC, downloaded from G
+#               2. GTEx variant ID's, mapped to dbSNP
+#       * GTEx V6p cis-eQTL '95% credible set' by Caviar analysis (package 2)
+#               Provided via dropbox, 2/27/17 by Farhad Hormozdiari, at Eleazar Eskin lab, UCLA
+#
+# The track is based on the CAVIAR analysis 95% credible set, with effect sizes from the LDACC analysis.
+# Advising on data sources and track display from Casey Brown, U Penn, and JK
+
+########
+# Download LDACC cis-eQTL calls from GTEx portal
+
+cd /hive/data/outside/GTEx/V6p
+mkdir eQtl; cd eQtl
+mkdir cis; cd cis
+
+wget http://gtexportal.org/static/datasets/gtex_analysis_v6p/single_tissue_eqtl_data/README_eQTL_v6p.txt
+wget http://gtexportal.org/static/datasets/gtex_analysis_v6p/single_tissue_eqtl_data/GTEx_Analysis_v6p_eQTL.tar
+tar xvf /GTEx_Analysis_v6p_eQTL.tar
+cd GTEx_Analysis_v6p_eQTL
+gunzip *.gz
+
+# using these files (effect size and p-value for snp/gene pairs):
+# <tissue>_Analysis.v6p.signif_snpgene_pairs.txt.gz
+
+#variant_id      gene_id tss_distance    pval_nominal    slope   slope_se        slope_fpkm      slope_fpkm_se   pval_nominal_threshold       min_pval_nominal        pval_beta
+#1_739528_G_A_b37        ENSG00000239906.1       599189  0.000201091     -0.583341       0.154452        -0.473059   0.114987 0.000234483     4.42635e-06     0.00461693
+
+########
+# Download GTEx SNPs reference -- map imputed SNP's to dbSNP rsID's
+
+cd /hive/data/outside/GTEx/V6p/eQtl
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v6/reference/GTEx_Analysis_2015-01-12_OMNI_2.5M_5M_450Indiv_chr1-22+X_genot_imput_info04_maf01_HWEp1E6_variant_id_lookup.txt.gz
+gunzip *.gz
+
+wc -l *variant*txt
+11959406 GTEx_Analysis_2015-01-12_OMNI_2.5M_5M_450Indiv_chr1-22+X_genot_imput_info04_maf01_HWEp1E6_variant_id_lookup.txt
+# ~12M variants
+
+########
+# Set up build area to process CAVIAR dataset
+
+mkdir /hive/data/outside/GTEx/V6p/eQtl/Caviar2
+cd /hive/data/outside/GTEx/V6p/eQtl/Caviar2
+
+tar xvfz CAVIAR_output_checked.tar.gz
+
+find CAVIAR_output -print | head
+#...
+#CAVIAR_output/Pancreas_Analysis/out/file_ENSG00000141258.8_Pancreas_Analysis_post
+#CAVIAR_output/Pancreas_Analysis/out/file_ENSG00000136982.5_Pancreas_Analysis_set
+#CAVIAR_output/Pancreas_Analysis/out/file_ENSG00000197345.8_Pancreas_Analysis_set
+#CAVIAR_output/Pancreas_Analysis/out/file_ENSG00000172543.3_Pancreas_Analysis_hist
+
+# A directory for each tissue, with files per gene, named out/file_<geneId>_<tis>_Analysis_<type>
+#               with types:
+#       set:   Variants causal with probability of 95% (95% credible set)
+#       post:  Probability that a variant is causal
+#       hist:  Probability that gene has 0, 1, 2... 6 variants
+
+head CAVIAR_output/Pancreas_Analysis/out/file_ENSG00000108947.4_Pancreas_Analysis_set
+
+#17_7581271_C_T_b37
+#17_7596802_C_T_b37
+# Format: chrom_start_nucs_build
+
+head CAVIAR_output/Pancreas_Analysis/out/file_ENSG00000108947.4_Pancreas_Analysis_post
+
+#17_7439510_A_AT_b37     0.0039097
+#17_7571452_G_A_b37      0.00049001
+
+cat CAVIAR_output/Pancreas_Analysis/out/file_ENSG00000108947.4_Pancreas_Analysis_hist
+#2.81096e-13 0.227802 0.69627 0.0737158 0.00217832 3.3476e-05 3.35718e-07
+
+#NOTE: no files for 9 tissues:
+#* Bladder, Brain-Amygdala, Brain-Spinal cord, Brain-Substantia nigra, Cervix - Ectocervix, Cervix - Endocervix, Fallopian Tube, Kidney, Minor Salivary Gland.
+# This leaves 44 tissues, the 'eQTL tissues' listed on the GTEx portal.  Above were rejected as lacking sufficient samples with genotype (<70).
+
+########
+# Pull GTEx tissue table to file for input to track builder
+
+hgsql hgFixed -e 'select * from gtexTissue' > gtexTissue.tab
+
+########
+# Create link to variant mapping file
+
+ln -s ../GTEx_Analysis_2015-01-12_OMNI_2.5M_5M_450Indiv_chr1-22+X_genot_imput_info04_maf01_HWEp1E6_variant_id_lookup.txt gtexVariant.tab
+
+########
+# Run parser and create BED files to load
+
+mkdir UCSC_output
+set bin = ~/kent/src/hg/makeDb/outside/gtexEqtl
+perl $bin/gtexEqtlMakeBeds.pl >& makeEqtlBeds.log &
+
+########
+# Load 'cluster' summary track
+
+cd UCSC_output
+bedSort gtexEqtlGeneCluster.bed gtexEqtlGeneCluster.sorted.bed
+set dir = /cluster/home/kate/kent/src/hg/lib
+hgLoadBed hg19 -noSort -tab -renameSqlTable -allowStartEqualEnd \
+        -type=bed5+11 -as=$dir/gtexEqtlCluster.as -sqlTable=$dir/gtexEqtlCluster.sql \
+        gtexEqtlCluster gtexEqtlGeneCluster.sorted.bed
+#Read 1622952 elements of size 16 from gtexEqtlGeneCluster.sorted.bed
+
+# # this caused a load problem.  One instance in the entire file where tissues not combined, ugh
+chr21   45650008        45650009        rs56323213      5       ENSG00000160223.12      ICOSLG  -10840  -0.484  -       0       1       skinExposed,    -0.484, 7.064,  0.005,
+chr21   45650008        45650008        rs145424134     8       ENSG00000160223.12      ICOSLG  -10841  -0.070  -       0       1       esophagusMuscular,      -0.070, 5.106,  0.008,
+
+# refine generated trackDb.gtexEqtl.ra file and install in makeDb/trackDb/human/hg19
+
+########
+# Load 44 per-tissue tracks: gtexEqtlTissue<tissueName>
+csh $bin/getxEqtlLoadTissues.csh UCSC_output >&! loadTissuesV2.log &
+
+#NOTE: V2 was a second release that followed immediately after first release (which was timed to coincide
+#  with Nature paper pub.  V2 revised schema (added ensembl gene ID, additional summary fields) 
+# and color conventions.
+
 ###########################################################################
