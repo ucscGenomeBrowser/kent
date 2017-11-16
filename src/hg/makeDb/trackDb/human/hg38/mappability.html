@@ -49,6 +49,29 @@ bisulfite sequencing.</p>
 <a href="https://bitbucket.org/hoffmanlab/umap" target="_blank">Umap and Bismap software
 documentation</a>.
 
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables"
+target="_blank">Table Browser</a>, or the <a href="../cgi-bin/hgIntegrator"
+target="_blank">Data Integrator</a>. For automated analysis, genome annotation is stored in a bigBed
+or bigWig file that can be downloaded from the
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/hoffmanMappability/" target="_blank">download
+server</a>. Individual regions or the whole genome annotation can be obtained using our tool
+<em>bigBedToBed</em> or <em>bigWigToWig</em>, which can be compiled from the source code or
+downloaded as a precompiled binary for your system. Instructions for downloading source code and
+binaries can be found <a href="http://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">here</a>.
+The tool can also be used to obtain only features within a given range, for example:</p> 
+<tt>bigBedToBed -chrom=chr6 -start=0 -end=1000000
+http://hgdownload.soe.ucsc.edu/gbdb/$db/k24.Unique.Mappability.bb stdout</tt> 
+<br>
+<tt>bigWigToWig -chrom=chr6 -start=0 -end=1000000
+http://hgdownload.soe.ucsc.edu/gbdb/$db/k24.Umap.MultiTrackMappability.bw stdout</tt> 
+<p>
+Please refer to our <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome"
+target="_blank">mailing list archives</a> for questions, or our
+<a href="../FAQ/FAQdownloads.html#download36" target="_blank">Data Access FAQ</a> for more
+information.</p>
+
 <h2>Credits</h2>
 <p>
 <a href="https://sites.google.com/site/anshulkundaje/" target="_blank">Anshul Kundaje</a> (Stanford
