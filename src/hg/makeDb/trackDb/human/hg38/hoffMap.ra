@@ -18,7 +18,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
         track umapBigBed
         parent umap on
         type bigBed 6
-        visibility dense
+        visibility squish
         shortLabel Single-read mappability
         view SR
         viewUi on
