@@ -32547,9 +32547,10 @@ cat CAVIAR_output/Pancreas_Analysis/out/file_ENSG00000108947.4_Pancreas_Analysis
 # This leaves 44 tissues, the 'eQTL tissues' listed on the GTEx portal.  Above were rejected as lacking sufficient samples with genotype (<70).
 
 ########
-# Pull GTEx tissue table to file for input to track builder
+# Pull GTEx tissue and gene info to files for input to track builder
 
 hgsql hgFixed -e 'select * from gtexTissue' > gtexTissue.tab
+hgsql hg19 -Ne 'select name, geneId from gtexGene' > gtexGeneName.tab
 
 ########
 # Create link to variant mapping file
