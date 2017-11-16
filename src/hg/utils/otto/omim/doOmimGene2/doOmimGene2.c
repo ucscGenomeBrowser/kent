@@ -68,7 +68,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
 
     /* get different chroms from RefSeq for each geneId */
     sqlSafef(query3, sizeof query3, 
-    "select distinct r.chrom from refGene r, refLink where mrnaAcc=r.name and locusLinkId = %s order by chrom", geneId);
+    "select distinct r.chrom from refGene r, hgFixed.refLink where mrnaAcc=r.name and locusLinkId = %s order by chrom", geneId);
     sr3 = sqlMustGetResult(conn3, query3);
     row3 = sqlNextRow(sr3);
     while (row3 != NULL)
@@ -78,7 +78,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
     	// added mrnaAcc as the 2nd ordering condition
     	// added txStart as the 3rd ordering condition
     	sqlSafef(query2, sizeof query2, 
-    	"select r.chrom, r.txStart, r.txEnd, r.name, r.txEnd-r.txStart, mrnaAcc from refGene r, refLink where mrnaAcc=r.name and locusLinkId = %s and r.chrom = '%s' order by txEnd-txStart desc, mrnaAcc desc, txStart asc", geneId, chrom);
+    	"select r.chrom, r.txStart, r.txEnd, r.name, r.txEnd-r.txStart, mrnaAcc from refGene r, hgFixed.refLink where mrnaAcc=r.name and locusLinkId = %s and r.chrom = '%s' order by txEnd-txStart desc, mrnaAcc desc, txStart asc", geneId, chrom);
     	sr2 = sqlMustGetResult(conn2, query2);
     	row2 = sqlNextRow(sr2);
     
