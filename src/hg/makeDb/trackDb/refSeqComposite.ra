@@ -98,7 +98,36 @@ priority 2
         idXref hgFixed.refLink mrnaAcc name
         priority 6
 
+searchTable ncbiRefSeqCurated
+searchMethod exact
+searchType genePred
+semiShortCircuit 1
+termRegex N(M|R)_[0-9]{6}[0-9]*(\.[0-9]+)?
+searchPriority 9.5
+
+searchName ncbiRefSeqCuratedNoVersion
+searchTable ncbiRefSeqCurated
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
+semiShortCircuit 1
+termRegex N(M|R)_[0-9]{6}[0-9]*
+dontCheck N(M|R)_[0-9]{6}[0-9]*(\.[0-9]+)?
+searchPriority 9.5
+
+searchTable ncbiRefSeqPredicted
+searchMethod exact
+searchType genePred
+semiShortCircuit 1
+termRegex X(M|R)_[0-9]{6}[0-9]*(\.[0-9]+)?
+searchPriority 9.5
+
+searchName ncbiRefSeqPredictedNoVersion
+searchTable ncbiRefSeqPredicted
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
+semiShortCircuit 1
+termRegex X(M|R)_[0-9]{6}[0-9]*
+dontCheck X(M|R)_[0-9]{6}[0-9]*(\.[0-9]+)?
+searchPriority 9.5
+
 searchTable ncbiRefSeqOther
 searchPriority 2.07207
 searchType bigBed
-searchDescription NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
