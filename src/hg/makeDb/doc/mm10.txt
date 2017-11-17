@@ -15493,16 +15493,17 @@ ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb /gbdb/mm10/ncbiR
     # commit all
 
 ##############################################################################
-# ncbiRefSeq composite (DONE - 2017-09-28 - Angie)
+# ncbiRefSeq composite (DONE - 2017-11-16 - Angie)
+# Previously done 2017-09-28; redone 11-16 to include mito "rna" from chrM genomic seq
 
-    mkdir /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-09-28
-    cd /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-09-28
+    mkdir /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-11-16
+    cd /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-11-16
 
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       refseq vertebrate_mammalian Mus_musculus \
       GCF_000001635.25_GRCm38.p5 mm10) > do.log 2>&1 & tail -f do.log
-    # *** All done !  Elapsed time: 14m27s
-    # real    14m27.423s
+    #  *** All done !  Elapsed time: 17m36s
+    # real    real    17m35.651s
 
     cat fb.ncbiRefSeq.mm10.txt
     # 105516336 bases of 2652783500 (3.978%) in intersection
