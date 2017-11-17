@@ -4,17 +4,17 @@ include ../../../inc/common.mk
 PROG = bedClip
 
 test:
-	@${PROG} -verbose=2 clipExample.bed.gz ce6.chrom.sizes stdout > clip.bed 2>&1
+	@${PROG} -verbose=2 clipExample.bed.gz ce6.chrom.sizes stdout 2>&1 | grep -v "kent source version" > clip.bed
 	@diff clip.bed clip.result
-	@${PROG} -truncate -verbose=2 clipExample.bed.gz ce6.chrom.sizes stdout > truncate.bed 2>&1
+	@${PROG} -truncate -verbose=2 clipExample.bed.gz ce6.chrom.sizes stdout 2>&1 | grep -v "kent source version" > truncate.bed
 	@diff truncate.bed truncate.result
-	@${PROG} -truncate -verbose=2 twoFieldsExample.bed.gz ce6.chrom.sizes stdout > twoFields.bed 2>&1 || true
+	@${PROG} -truncate -verbose=2 twoFieldsExample.bed.gz ce6.chrom.sizes stdout 2>&1 | grep -v "kent source version" > twoFields.bed || true
 	@diff twoFields.bed twoFields.result
-	@${PROG} -verbose=2 badStartExample.bed.gz ce6.chrom.sizes stdout > badStart.bed 2>&1 || true
+	@${PROG} -verbose=2 badStartExample.bed.gz ce6.chrom.sizes stdout 2>&1 | grep -v "kent source version" > badStart.bed || true
 	@diff badStart.bed badStart.result
-	@${PROG} -verbose=2 badEndExample.bed.gz ce6.chrom.sizes stdout > badEnd.bed 2>&1 || true
+	@${PROG} -verbose=2 badEndExample.bed.gz ce6.chrom.sizes stdout 2>&1 | grep -v "kent source version" > badEnd.bed || true
 	@diff badEnd.bed badEnd.result
-	@${PROG} -verbose=2 badNameExample.bed.gz ce6.chrom.sizes stdout > badName.bed 2>&1 || true
+	@${PROG} -verbose=2 badNameExample.bed.gz ce6.chrom.sizes stdout 2>&1 | grep -v "kent source version" > badName.bed || true
 	@diff badName.bed badName.result
 
 clean:
