@@ -3566,7 +3566,7 @@ if (colonPairToStrings(colonPair,&a,&b))
 return FALSE;
 }
 
-static boolean colonPairToDoubles(char * colonPair,double *first,double *second)
+boolean colonPairToDoubles(char * colonPair,double *first,double *second)
 { // Non-destructive. Only sets values if found. No colon: value goes to *first
 char *a=NULL;
 char *b=NULL;
@@ -5501,7 +5501,7 @@ if (max && limitMin
 && *limitMin != NO_VALUE &&                      *max < *limitMin)  *max = *limitMin;
 }
 
-static void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
+void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
                          char *scoreName, double *limitMin,double *limitMax,double*min,double*max)
 // gets an double score range from the cart, but the limits from trackDb
 // for any of the pointers provided, will return a value found, if found, else it's contents
@@ -6279,6 +6279,7 @@ boolean encodePeakHasCfgUi(struct trackDb *tdb)
 {
 if (sameWord("narrowPeak",tdb->type)
 ||  sameWord("broadPeak", tdb->type)
+||  sameWord("bigNarrowPeak", tdb->type)
 ||  sameWord("encodePeak",tdb->type)
 ||  sameWord("gappedPeak",tdb->type))
     {
