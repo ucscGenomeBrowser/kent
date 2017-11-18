@@ -363,6 +363,7 @@ sub doLoad {
   my $gffFile = "${asmId}_genomic.gff.gz";
   my $releaseDate = `ls -L --full-time $buildDir/download/$gffFile | awk '{print \$6;}'`;
   chomp $releaseDate;
+  my $dbTwoBit = "$HgAutomate::clusterData/$db/$db.2bit";
 
   $bossScript->add(<<_EOF_
 # establish all variables to use here
@@ -395,8 +396,7 @@ ln -s `pwd`/process/ncbiRefSeqOther.ix{,x} $gbdbDir/
 
 # select only coding genes to have CDS records
 
-zcat process/\$asmId.\$db.gp.gz \\
-  | awk -F"\t" '\$6 != \$7 {print \$1;}' \\
+awk -F"\t" '\$6 != \$7 {print \$1;}' process/\$db.ncbiRefSeq.gp \\
   | sort -u > coding.cds.name.list
 
 join -t'\t' coding.cds.name.list process/\$asmId.rna.cds \\
@@ -423,11 +423,24 @@ pslCat -nohead process/\$asmId.\$db.psl.gz | cut -f10 \\
    | sort -u > \$db.psl.used.rna.list
 cut -f5 process/\$asmId.\$db.ncbiRefSeqLink.tab | grep -v "n/a" | sort -u > \$db.mrnaAcc.name.list
 sort -u \$db.psl.used.rna.list \$db.mrnaAcc.name.list > \$db.rna.select.list
-zcat process/\$asmId.\$db.gp.gz | cut -f1 | sort -u > \$db.gp.name.list
+cut -f1 process/\$db.ncbiRefSeq.gp | sort -u > \$db.gp.name.list
 comm -12 \$db.rna.select.list \$db.gp.name.list > \$db.toLoad.rna.list
 comm -23 \$db.rna.select.list \$db.gp.name.list > \$db.not.used.rna.list
-comm -13 \$db.rna.select.list \$db.gp.name.list > \$db.noRna.available.list
 faSomeRecords download/\$asmId.rna.fa.gz \$db.toLoad.rna.list \$db.rna.fa
+grep '^>' \$db.rna.fa | sed -e 's/^>//' | sort > \$db.rna.found.list
+comm -13 \$db.rna.found.list \$db.gp.name.list > \$db.noRna.available.list
+
+# If $db.noRna.available.list is not empty but items are on chrM, make fake cDNA sequence
+# for them using chrM sequence since NCBI puts proteins, not coding RNAs, in the GFF.
+if [ -s \$db.noRna.available.list ]; then
+  pslCat -nohead process/\$asmId.\$db.psl.gz \\
+    | grep -Fwf \$db.noRna.available.list \\
+      | grep chrM > missingChrMFa.psl
+  if [ -s missingChrMFa.psl ]; then
+    pslToBed missingChrMFa.psl stdout \\
+      | twoBitToFa -bed=stdin $dbTwoBit stdout >> \$db.rna.fa
+  fi
+fi
 
 mkdir -p $gbdbDir
 rm -f $gbdbDir/seqNcbiRefSeq.rna.fa

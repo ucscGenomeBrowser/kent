@@ -328,7 +328,7 @@ while (lineFileNextReal(lf, &line))
     {
     if (customTrackLoader && lineLimit > 0 && lf->lineIx > lineLimit)
 	{
-	errAbort("ERROR: number of input data lines over limit %d\nSee also:\nhttp://genome.ucsc.edu/goldenPath/help/bigWig.html for large bedGraph files, and\nhttp://genome.ucsc.edu/goldenPath/help/bigBed.html for large bed files.", lineLimit);
+	errAbort("ERROR: number of input data lines over limit %d\n\nSee also:\nhttp://genome.ucsc.edu/goldenPath/help/bigWig.html for converting large bed files using bedToBigBed\nhttp://genome.ucsc.edu/goldenPath/help/bigBed.html for converting large bedGraph files using bedGraphToBigWig\nhttp://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html#Hosting for bigDataUrl data hosting solutions", lineLimit);
 	}
     if (hasBin)
 	nextWord(&line);

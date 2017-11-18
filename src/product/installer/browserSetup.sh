@@ -607,7 +607,7 @@ function installRedhat () {
     # imagemagick is required for the session gallery
     # MySQL-python is required for hgGeneGraph
     yum -y install epel-release
-    yum -y install ghostscript rsync ImageMagick R-core MySQL-python
+    yum -y install ghostscript rsync ImageMagick R-core MySQL-python curl
 
     # centos 7 and fedora 20 do not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -844,7 +844,7 @@ function installDebian ()
     # imagemagick for the session gallery
     # r-base-core for the gtex tracks
     # python-mysqldb for hgGeneGraph
-    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core python-mysqldb
+    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core python-mysqldb curl
 
     if [ ! -f $APACHECONF ]; then
         echo2
@@ -1337,7 +1337,7 @@ function installBrowser ()
     echo2
     echo2 Notice that this mirror is still configured to use Mysql and data files loaded
     echo2 through the internet from UCSC. From most locations on the world, this is very slow.
-    echo2 It also requires an open outgoing TCP port 3306 for Mysql to genome-mysql.soe.ucsc.edu/genome-mysql-euro.soe.ucsc.edu,
+    echo2 It also requires an open outgoing TCP port 3306 for Mysql to genome-mysql.soe.ucsc.edu/genome-euro-mysql.soe.ucsc.edu,
     echo2 and open TCP port 80 to hgdownload.soe.ucsc.edu/hgdownload-euro.soe.ucsc.edu.
     echo2
     echo2 To speed up the installation, you need to download genome data to the local
@@ -1568,7 +1568,7 @@ function downloadMinimal
     echo2 - to genome-mysql.soe.ucsc.edu, port 3306, to load MySQL tables
     echo2 - to hgdownload.soe.ucsc.edu, port 80, to download non-MySQL data files
     echo2 - or the above two servers European counterparts:
-    echo2   genome-mysql-euro.soe.ucsc.edu and hgdownload-euro.soe.ucsc.edu
+    echo2   genome-euro-mysql.soe.ucsc.edu and hgdownload-euro.soe.ucsc.edu
     echo2
     showMyAddress
     goOnline
