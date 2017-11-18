@@ -786,6 +786,7 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringFree(&dy);
 
     /* Prevent modification of custom tracks just saved to namedSessionDb: */
+    cartCopyCustomComposites(cart);
     cartCopyCustomTracks(cart);
 
     if (useCount > INITIAL_USE_COUNT)
@@ -1133,6 +1134,7 @@ if (hel != NULL)
 		   getSessionEmailLink(encUserName, encSessionName));
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
     cartHideDefaultTracks(cart);
+    cartCopyCustomComposites(cart);
     hubConnectLoadHubs(cart);
     cartCopyCustomTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
@@ -1188,6 +1190,7 @@ dyStringPrintf(dyMessage,
 	       getSessionEmailLink(encOtherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
 cartHideDefaultTracks(cart);
+cartCopyCustomComposites(cart);
 hubConnectLoadHubs(cart);
 cartCopyCustomTracks(cart);
 cartCheckForCustomTracks(cart, dyMessage);
@@ -1301,6 +1304,7 @@ if (lf != NULL)
     {
     cartLoadSettings(lf, cart, NULL, actionVar);
     cartHideDefaultTracks(cart);
+    cartCopyCustomComposites(cart);
     hubConnectLoadHubs(cart);
     cartCopyCustomTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
