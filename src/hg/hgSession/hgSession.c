@@ -1303,10 +1303,10 @@ else
 if (lf != NULL)
     {
     cartLoadSettings(lf, cart, NULL, actionVar);
-    cartHideDefaultTracks(cart);
     cartCopyCustomComposites(cart);
     hubConnectLoadHubs(cart);
     cartCopyCustomTracks(cart);
+    cartHideDefaultTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
     lineFileClose(&lf);
     }
