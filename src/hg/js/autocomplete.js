@@ -72,7 +72,8 @@ var suggestBox = {
         } else {
             waterMark = "enter position or search terms";
         }
-        if ($posInput[0] != document.activeElement) {
+
+        if ($posInput[0] !== document.activeElement) {
             // Reset value before adding watermark -- only if user is not already typing here
             $posInput.val("");
         }
@@ -121,6 +122,8 @@ var suggestBox = {
                 // handles case where users zeroes out positionInput; in that case we revert to currently displayed position
                 if (!val || val.length === 0 || val === waterMark)
                     val = $('#positionDisplay').text();
+                else
+                    val = val.replace(/\u2013|\u2014/g, "-");  // replace en-dash and em-dash with hyphen
                 $('#position').val(val);
                 suggestBox.clearFindMatches();
             }

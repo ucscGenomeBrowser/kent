@@ -2970,22 +2970,6 @@ termRegex ^[a-zA-Z0-9]+([a-zA-Z0-9:/.-]+[a-zA-Z0-9:/.-_%]+)*
 searchMethod fuzzy
 searchPriority 50
 
-searchName ncbiRefCurated
-searchTable ncbiRefCurated
-searchMethod exact
-searchType genePred
-#semiShortCircuit 1
-termRegex N(M|R)_[0-9]{6}[0-9]*.[0-9]*
-searchPriority 9.5
-
-searchName ncbiRefPredicted
-searchTable ncbiRefPredicted
-searchMethod exact
-searchType genePred
-#semiShortCircuit 1
-termRegex X(M|R)_[0-9]{6}[0-9]*.[0-9]*
-searchPriority 9.5
-
 track augustusGene
 shortLabel AUGUSTUS
 longLabel AUGUSTUS ab initio gene predictions v3.1

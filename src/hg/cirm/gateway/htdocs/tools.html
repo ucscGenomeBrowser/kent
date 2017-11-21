@@ -2,14 +2,14 @@
 <!--#set var="TITLE" value="CIRM Stem Cell Hub at UCSC Homepage" -->
 <!--#set var="ROOT" value="" -->
 
-<!--#include virtual="header.html" -->
+<!--#include virtual="$ROOT/inc/header.html" -->
 
 <div class="cirm-page-body">
   <div class="cirm-page-title" style="background: #5cb85c;">
        <h4 class="cirm-page-title-text">Tools from the CESCG groups</h4>
   </div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 padded">
       <a name="tagStorm"></a>
       <h4>Tag Storm</h4>
         <p><b>Metadata made simple</b></p>
@@ -28,17 +28,28 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-12">
-      <a name="tagStorm"></a>
+    <div class="col-md-12 padded">
+      <a name="samplePsychic"></a>
       <h4>SamplePsychic</h4>
         <p><b>See how your cells compare</b></p>
         <p>
-        Coming soon!</p>
+        Sample Psychic can take your gene expression data and compare it to curated references.
+        This comparison is used to produce a scorecard which shows how closely your data maps
+        up to the curated cell types.</a>
+
+        <p>
+        The Brain of Cells is a collection of single brain data from multiple projects which
+        has been carefully annotated and made through an Analysis Working Group (AWG). This
+        data set is used as the reference for brain-related classifiers in Sample Psychic.
+        A heart of cells AWG is underway in producing classifiers for heart cell types, and it
+        is likely that a Pancreas of Cells AWG will be next.</a>
+
+        <p><i>Website coming soon!</i></p>
     </div>
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 padded">
       <a name="SCIMITAR"></a>
       <h4>SCIMITAR</h4>
         <p><b>Single Cell Inference of MorphIng Trajectories and their Associated Regulation</b></p>
@@ -60,33 +71,51 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 padded">
       <a name="RIGGLE"></a>
       <h4>RIGGLE</h4>
-        <p><b>Regulator Inference by Graph-Guided LASSO Estimation</b></p>
-        <p>
-        More coming soon!</p>
-        <!--<p>
-        Sounds like there should be a paper soon, so that means it'll be easier to make this
-        section. If there's a github or location to download this tool, it would nice to be
-        link that here.-->
+      <p><b>Regulator Inference by Graph-Guided LASSO Estimation</b></p>
+      <p>
+      RIGGLE (Regulatory Inference by Graph-Guided LASSO Estimation) is a machine
+      learning framework designed to discover the transcription factor regulators of
+      a cell development trajectory by taking in expression data, known transcription
+      factor targets, and a cell development graph.</p>
+      <p style="text-align: center">
+      <img src="<!--#echo var="ROOT"-->/images/RIGGLE_demo.png" height="75%" width="75%"></p>
+      <p>
+      This process produces predictions for the transcription factor's
+      activities in each of the cell types represented in the graph based on the
+      coordinated expression of its targets, while respecting the developmental
+      relationships between the cells.</p>
     </div>
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 padded">
       <a name="MISCE"></a>
       <h4>MISCE</h4>
-        <p><b>A Minimum Information About a Stem Cell Experiment</b></p>
-        <p>
-        More coming soon!</p>
-        <!--<p>
-        This is a spreadsheet that attempts to collection a useful set of information about
-        an experiment involving stem cells, whether the experiment was to ___ or ___ or
-        anything else. It would be nice to include some info about what the sheet captures
-        plus a link to the sheet itself.-->
+      <p><b>A Minimum Information About a Stem Cell Experiment</b></p>
+      <p>
+      MISCE, or Minimum Information about a Stem Cell Expriment, is a
+      spreadsheet that attempts to collect a rich set of useful information (metadata) about
+      any experiment involving stem cells. The hope is that in using MISCE, the detailed
+      metadata will make the experimental data useful to others attempting to use it
+      in the future.</p>
+
+      <p>
+      MISCE consists of a number of different modules with each module describing a
+      different experimental process, e.g. celluar reprogramming or RNA sequencing,
+      and all of the important information related to this process, e.g. &quot;Biosample
+      disease stage&quot; or &quot;Assay platform&quot;. Each module can
+      be included or excluded based on the type of experiment being performed. For
+      example, you might not include the &quot;Assay_DNAMethyl&quot; module if you
+      are not performing DNA methylation assays as part of your experiment.</p>
+
+      <p>
+      <a href="<!--#echo var="ROOT"-->/MISCEv1.1.pdf">View PDF of MISCE modules</a>
+      </p>
     </div>
   </div>
 </div>
 
-<!--#include virtual="footer.html" -->
+<!--#include virtual="$ROOT/inc/footer.html" -->

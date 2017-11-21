@@ -51,6 +51,7 @@ options:
   print STDERR <<_EOF_
     -buildDir dir         Use dir instead of default
                           $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/blastz.\$qDb
+    -load                 load the resulting chainNet into database
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,

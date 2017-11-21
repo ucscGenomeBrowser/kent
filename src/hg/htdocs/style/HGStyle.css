@@ -416,6 +416,15 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
         border: gray 1px solid;
 }
 
+.pennantIconText {
+    text-decoration: none;
+    text-transform: capitalize;
+    font-size: 70%;
+    font-style: italic;
+    font-weight: bold;
+    vertical-align: text-top;
+}
+
 /*
    Styles for hgHubConnect (formerly in separate .css)
    by Greg Roe

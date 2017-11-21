@@ -151,7 +151,9 @@ if (strict)
     for (hfs = hfsList; hfs != NULL; hfs = hfsNext)
         {
 	hfsNext = hfs->next;
-        if (! hTableOrSplitExists(database, hfs->searchTable))
+        // for bigBed searchType's we don't check for the table because
+        // it might not exist for bigDataUrl only tracks
+        if (differentString(hfs->searchType, "bigBed") && ! hTableOrSplitExists(database, hfs->searchTable))
             {
 	    if (verboseLevel() > 1)
 		printf("%s missing\n", hfs->searchTable);

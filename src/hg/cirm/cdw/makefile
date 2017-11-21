@@ -20,6 +20,7 @@ UTIL_DIRS = \
     cdwCreateUser \
     cdwDumpManiFiles \
     cdwFakeManifestFromSubmit \
+    cdwFindSymlinkable \
     cdwGroupUser \
     cdwJob \
     cdwMakeContaminationQa \
@@ -44,6 +45,7 @@ UTIL_DIRS = \
     cdwSwapInSymLink \
     cdwTextForIndex \
     cdwUndeprecate \
+    cdwUnlockSubmittedFile \
     utils/cdwFastqPolyFilter \
     utils/cdwVcfStats
 

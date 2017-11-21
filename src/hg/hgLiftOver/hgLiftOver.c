@@ -19,6 +19,7 @@
 #include "hash.h"
 #include "liftOver.h"
 #include "liftOverChain.h"
+#include "windowsToAscii.h"
 
 
 /* CGI Variables */
@@ -447,6 +448,7 @@ if (cartOptionalString(cart, "SubmitFile"))
     userData = cartOptionalString(cart, HGLFT_DATAFILE_VAR);
 else
     userData = cartOptionalString(cart, HGLFT_USERDATA_VAR);
+userData = windowsToAscii(userData);
 cartWebStart(cart, NULL, "Lift Genome Annotations");
 
 getDbAndGenome(cart, &db, &organism, oldVars);

@@ -7,3 +7,6 @@ all:
 	chmod +x cdwBackup;
 	rm -f ${SCRIPTS}/cdwBackup;
 	@cp -p cdwBackup ${SCRIPTS};
+
+clean::
+	rm -f ${SCRIPTS}/cdwBackup;

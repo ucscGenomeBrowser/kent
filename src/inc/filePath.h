@@ -14,6 +14,11 @@ void splitPath(char *path, char dir[PATH_LEN], char name[FILENAME_LEN],
 char *expandRelativePath(char *baseDir, char *relPath);
 /* Expand relative path to more absolute one. */
 
+char *mustExpandRelativePath(char *dir, char* relPath);
+/* Given a dir and relative path, expand path.
+ * Handy for processing symlinks. errAbort if expand fails.
+ * Result should be freeMem'd.*/
+
 char *pathRelativeToFile(char *baseFile, char *relPath);
 /* Given a base file name and a path relative to that, return
  * relative path interpreted as if it were seen from the
@@ -23,6 +28,9 @@ char *pathRelativeToFile(char *baseFile, char *relPath);
  * source file, and the relPath would be from the include
  * statement.  The returned result could then be used to
  * open the include file. */
+
+char *mustPathRelativeToFile(char *baseFile, char *relPath);
+/* Make Path Relative To File or Abort. */
 
 void undosPath(char *path);
 /* Convert '\' to '/' in path. (DOS/Windows is typically ok with

@@ -35,8 +35,8 @@ char *shortLabel;
 char *longLabel;
 char *visibility;
 unsigned long color;
-char *viewFunc;
-char *missing;
+char *viewFunc;        // The method by which calculated tracks should be calculated
+char *missingMethod;   // How should missing data be treated in calculated tracks
 };
 
 struct trackDbRef 
@@ -84,14 +84,14 @@ static void printGroup(char *parent, struct trackDb *tdb, boolean folder, boolea
 char *userString = "";
 char *prefix = "";
 char *viewFunc = NULL;
-char *missing = NULL;
+char *missingMethod = NULL;
 
 if (user)
     {
     if (tdb->parent && tdb->subtracks) 
         {
         viewFunc = trackDbSetting(tdb, "viewFunc");
-        missing = trackDbSetting(tdb, "missing");
+        missingMethod = trackDbSetting(tdb, "missingMethod");
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='view' class='folder'";
         }
     else if (tdb->subtracks)
@@ -121,9 +121,9 @@ if (viewFunc != NULL)
     }
 
 char *missingString = "";
-if (missing != NULL)
+if (missingMethod != NULL)
     {
-    safef(buffer, sizeof buffer, "missing='%s' ", missing);
+    safef(buffer, sizeof buffer, "missingMethod='%s' ", missingMethod);
     missingString = cloneString(buffer);
     }
 
@@ -413,7 +413,7 @@ jsInlineF("$('#assembly').text('%s');\n",assembly);
 printHelp();
 doTable(cart, db, groupList, trackList);
 
-puts("<link rel='stylesheet' href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'>");
+puts("<link rel='stylesheet' href='https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'>");
 puts("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css' />");
 puts("<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js'></script>");
 puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
@@ -529,8 +529,8 @@ fprintf(f,"\ttrack %s\n\
 \tcolor %ld,%ld,%ld \n\
 \tpriority %d\n\
 \tviewFunc %s \n\
-\tmissing %s \n\
-\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), priority++, view->viewFunc, view->missing, view->visibility);
+\tmissingMethod %s \n\
+\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), priority++, view->viewFunc, view->missingMethod, view->visibility);
 fprintf(f, "\n");
 
 struct track *track = view->trackList;
@@ -640,9 +640,9 @@ if ((name == NULL) && (ele->type == jsonObject))
         strEle = (struct jsonElement *)hashFindVal(attrHash, "viewfunc");
         if (strEle)
             track->viewFunc = jsonStringEscape(strEle->val.jeString);
-        strEle = (struct jsonElement *)hashFindVal(attrHash, "missing");
+        strEle = (struct jsonElement *)hashFindVal(attrHash, "missingMethod");
         if (strEle)
-            track->missing = jsonStringEscape(strEle->val.jeString);
+            track->missingMethod = jsonStringEscape(strEle->val.jeString);
         }
     }
 }

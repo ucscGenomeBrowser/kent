@@ -265,6 +265,9 @@ void cdwAddJob(struct sqlConnection *conn, char *command, int submitId);
 void cdwAddQaJob(struct sqlConnection *conn, long long fileId, int submitId);
 /* Create job to do QA on this and add to queue */
 
+struct cdwSubmitDir *cdwSubmitDirFromId(struct sqlConnection *conn, long long id);
+/* Return submissionDir with given ID or NULL if no such submission. */
+
 struct cdwSubmit *cdwSubmitFromId(struct sqlConnection *conn, long long id);
 /* Return submission with given ID or NULL if no such submission. */
 
@@ -489,7 +492,16 @@ struct cgiParsedVars *cdwMetaVarsList(struct sqlConnection *conn, struct cdwFile
 /* Return list of cgiParsedVars dictionaries for metadata for file.  Free this up 
  * with cgiParsedVarsFreeList() */
 
-void cdwReallyRemoveFile(struct sqlConnection *conn, long long fileId, boolean really);
+void replaceOriginalWithSymlink(char *submitFileName, char *submitDir, char *cdwPath);
+/* For a file that was just copied, remove original and symlink to new one instead
+ * to save space. Follows symlinks if any to the real file and replaces it with a symlink */
+
+char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath);
+/* Find the last symlink in the chain from submitDir/submitFileName.
+ * This is useful for when target of symlink in cdw/ gets renamed 
+ * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). */
+
+void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long fileId, boolean really);
 /* Remove all records of file from database and from Unix file system if 
  * the really flag is set.  Otherwise just print some info on the file. */
 

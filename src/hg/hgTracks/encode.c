@@ -172,6 +172,164 @@ if (sameString(extraWhere->string, ""))
 return dyStringCannibalize(&extraWhere);
 }
 
+struct bigBedFilter
+/* Filter on a field in a bigBed file. */
+{
+struct bigBedFilter *next;
+int fieldNum;   // the field number
+enum {COMPARE_LESS, COMPARE_MORE, COMPARE_BETWEEN} comparisonType;  // the type of the comparison
+double value1, value2;
+};
+
+struct bigBedFilter *bigBedMakeFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field)
+/* Make a filter on this column if the trackDb or cart wants us to. */
+{
+struct bigBedFilter *ret = NULL;
+char *setting = trackDbSettingClosestToHome(tdb, filter);
+int fieldNum =  bbExtraFieldIndex(bbi, field) + 3;
+if (setting)
+    {
+    boolean invalid = FALSE;
+    double minValueTdb = 0,maxValueTdb = NO_VALUE;
+    colonPairToDoubles(setting,&minValueTdb,&maxValueTdb);
+    double minLimit=NO_VALUE,maxLimit=NO_VALUE,min=minValueTdb,max=maxValueTdb;
+    colonPairToDoubles(defaultLimits,&minLimit,&maxLimit);
+    getScoreFloatRangeFromCart(cart,tdb,FALSE,filter,&minLimit,&maxLimit,&min,&max);
+    if ((int)minLimit != NO_VALUE || (int)maxLimit != NO_VALUE)
+        {
+        // assume tdb default values within range!
+        // (don't give user errors that have no consequence)
+        if ((min != minValueTdb && (((int)minLimit != NO_VALUE && min < minLimit)
+                                || ((int)maxLimit != NO_VALUE && min > maxLimit)))
+        ||  (max != maxValueTdb && (((int)minLimit != NO_VALUE && max < minLimit)
+                                || ((int)maxLimit != NO_VALUE && max > maxLimit))))
+            {
+            invalid = TRUE;
+            char value[64];
+            if ((int)max == NO_VALUE) // min only is allowed, but max only is not
+                safef(value, sizeof(value), "entered minimum (%g)", min);
+            else
+                safef(value, sizeof(value), "entered range (min:%g and max:%g)", min, max);
+            char limits[64];
+            if ((int)minLimit != NO_VALUE && (int)maxLimit != NO_VALUE)
+                safef(limits, sizeof(limits), "violates limits (%g to %g)", minLimit, maxLimit);
+            else if ((int)minLimit != NO_VALUE)
+                safef(limits, sizeof(limits), "violates lower limit (%g)", minLimit);
+            else //if ((int)maxLimit != NO_VALUE)
+                safef(limits, sizeof(limits), "violates uppper limit (%g)", maxLimit);
+            warn("invalid filter by %s: %s %s for track %s", field, value, limits, tdb->track);
+            }
+        }
+    if (invalid)
+        {
+        char filterLimitName[64];
+        safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MIN);
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
+        safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MAX);
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
+        }
+    else if (((int)min != NO_VALUE && ((int)minLimit == NO_VALUE || minLimit != min))
+         ||  ((int)max != NO_VALUE && ((int)maxLimit == NO_VALUE || maxLimit != max)))
+         // Assumes min==NO_VALUE or min==minLimit is no filter
+         // Assumes max==NO_VALUE or max==maxLimit is no filter!
+        {
+        AllocVar(ret);
+        ret->fieldNum = fieldNum;
+        if ((int)max == NO_VALUE || ((int)maxLimit != NO_VALUE && maxLimit == max))
+            {
+            ret->comparisonType = COMPARE_MORE;
+            ret->value1 = min;
+            }
+        else if ((int)min == NO_VALUE || ((int)minLimit != NO_VALUE && minLimit == min))
+            {
+            ret->comparisonType = COMPARE_LESS;
+            ret->value1 = max;
+            }
+        else
+            {
+            ret->comparisonType = COMPARE_BETWEEN;
+            ret->value1 = min;
+            ret->value2 = max;
+            }
+        }
+    }
+return ret;
+}
+
+boolean bigBedFilterInterval(char **bedRow, struct bigBedFilter *filters)
+/* Go through a row and filter based on filters.  Return TRUE if all filters are passed. */
+{
+struct bigBedFilter *filter;
+for(filter = filters; filter; filter = filter->next)
+    {
+    double val = atof(bedRow[filter->fieldNum]);
+
+    switch(filter->comparisonType)
+        {
+        case COMPARE_LESS:
+            if (!(val <= filter->value1))
+                return FALSE;
+            break;
+        case COMPARE_MORE:
+            if (!(val >= filter->value1))
+                return FALSE;
+            break;
+        case COMPARE_BETWEEN:
+            if (!((val >= filter->value1) && (val <= filter->value2)))
+                return FALSE;
+            break;
+        }
+    }
+return TRUE;
+}
+
+void bigNarrowPeakLoadItems(struct track *tg)
+/* Load a set of narrowPeaks from a bigNarrowPeak file. */
+{
+struct linkedFeatures *lfList = NULL;
+enum encodePeakType pt = 0;
+int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
+pt = narrowPeak;
+
+tg->customInt = pt;
+struct bbiFile *bbi =  fetchBbiForTrack(tg);
+
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+int fieldCount = 10;
+char *bedRow[fieldCount];
+char startBuf[16], endBuf[16];
+struct bigBedFilter *filters = NULL;
+struct bigBedFilter *filter;
+
+if ((filter = bigBedMakeFilter(cart, bbi, tg->tdb, SCORE_FILTER, "0:1000", "score")) != NULL)
+    slAddHead(&filters, filter);
+if ((filter = bigBedMakeFilter(cart, bbi, tg->tdb, SIGNAL_FILTER, NULL, "signalValue")) != NULL)
+    slAddHead(&filters, filter);
+if ((filter = bigBedMakeFilter(cart, bbi, tg->tdb, PVALUE_FILTER, NULL, "pValue")) != NULL)
+    slAddHead(&filters, filter);
+if ((filter = bigBedMakeFilter(cart, bbi, tg->tdb, QVALUE_FILTER, NULL, "qValue")) != NULL)
+    slAddHead(&filters, filter);
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    if (bigBedFilterInterval(bedRow, filters))
+        {
+        struct encodePeak *peak = encodePeakGeneralLoad(bedRow, pt);
+        struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)peak, tg->tdb, scoreMin, scoreMax);
+
+        if (lf)
+            slAddHead(&lfList, lf);
+        }
+    }
+
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+}
+
 static void encodePeakLoadItemsBoth(struct track *tg, struct customTrack *ct)
 /* Load up an encodePeak table from the regular database or the customTrash one. */
 {

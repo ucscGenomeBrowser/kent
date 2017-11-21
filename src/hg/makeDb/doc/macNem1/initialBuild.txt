@@ -706,14 +706,14 @@ macNem1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDna
     #    enrich 14.68x
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-01-17 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-11-17 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("macNem1", "blat1d", "17878", "1", "0"); \
+	VALUES ("macNem1", "blat1a", "17884", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("macNem1", "blat1d", "17879", "0", "1");' \
+	VALUES ("macNem1", "blat1a", "17885", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 

@@ -38,6 +38,7 @@
 #include "annoFormatVep.h"
 #include "annoStreamBigBed.h"
 #include "annoStreamDb.h"
+#include "windowsToAscii.h"
 
 #include "libifyMe.h"
 
@@ -798,7 +799,7 @@ struct slName *getGencodeTagVersions()
 /* Return a list of version strings from the ends of wgEncodeGencodeTag% tables. */
 {
 static struct slName *tagVersions = NULL;
-if (tagVersions == NULL)
+if (tagVersions == NULL && !startsWith(hubTrackPrefix, database))
     {
     struct sqlConnection *conn = hAllocConn(database);
     struct slName *tagTables = sqlQuickList(conn,
@@ -1846,7 +1847,7 @@ if (cartUsualBoolean(cart, "hgva_require_consEl", FALSE))
 static void getCartPosOrDie(char **retChrom, uint *retStart, uint *retEnd)
 /* Get chrom:start-end from cart, errAbort if any problems. */
 {
-char *position = cartString(cart, hgvaRange);
+char *position = windowsToAscii(cartString(cart, hgvaRange));
 if (! parsePosition(position, retChrom, retStart, retEnd))
     errAbort("Expected position to be chrom:start-end but got '%s'", position);
 }
