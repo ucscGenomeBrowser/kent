@@ -11,7 +11,7 @@ track xenoRefGene override
 priority 3
 
 track refGene override
-release beta,public
+release public
 priority 4
 
 # mRNA and EST
