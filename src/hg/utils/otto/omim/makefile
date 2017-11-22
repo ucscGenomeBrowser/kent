@@ -19,3 +19,8 @@ make-prefix: check-prefix
 
 check-prefix:
 	@test -n "${PREFIX}" || (echo "must specify PREFIX= to install"; exit 1)
+
+clean:
+	rm -f doOmimGene2/doOmimGene2
+	rm -f doOmimGeneSymbols/doOmimGeneSymbols
+	rm -f doOmimLocation/doOmimLocation

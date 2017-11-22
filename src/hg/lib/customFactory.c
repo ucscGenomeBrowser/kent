@@ -195,11 +195,11 @@ static struct pipeline *bedLoaderPipe(struct customTrack *track)
  *	-allowStartEqualEnd -allowNegativeScores -verbose=0
  */
 struct dyString *tmpDy = newDyString(0);
+int index = 3; /* verify this references the first NULL as cmd1[index] */
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+	"-lineLimit=50000000", NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
-int index = 2;
 
 if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"

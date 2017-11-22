@@ -34,6 +34,7 @@
 #include "web.h"
 #include "annoFormatTab.h"
 #include "annoGratorQuery.h"
+#include "windowsToAscii.h"
 
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
@@ -846,7 +847,7 @@ char *regionType = cartUsualString(cart, hgiRegionType, hgiRegionTypeDefault);
 if (sameString(regionType, hgiRegionTypePosition) ||
     (sameString(regionType, hgtaRegionTypeGenome) && hasTBNoGenome(dataSources, db, fullTrackList)))
     {
-    char *position = cartUsualString(cart, "position", hDefaultPos(db));
+    char *position = windowsToAscii(cartUsualString(cart, "position", hDefaultPos(db)));
     regionList = positionToBed4(position);
     safef(retRegionDesc, retRegionDescSize, "%s:%d-%d",
           regionList->chrom, regionList->chromStart+1, regionList->chromEnd);

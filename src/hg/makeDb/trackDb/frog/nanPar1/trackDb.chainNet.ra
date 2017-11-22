@@ -1,7 +1,10 @@
-
 track chainNetXenTro7 override
 visibility squish
 priority 200.3
 chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetXenTro9 override
 chainMinScore 1000
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91

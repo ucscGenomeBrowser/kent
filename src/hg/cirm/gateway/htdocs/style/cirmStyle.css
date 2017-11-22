@@ -121,6 +121,12 @@ textarea.form-control { width: 500px; height: 200px;}
     text-align: right;
 }
 
+.padded
+{
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
 .btnexpand:after
 {
     font-family: "Glyphicons Halflings";
