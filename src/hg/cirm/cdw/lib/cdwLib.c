@@ -124,7 +124,7 @@ if (submitDirId <= 0)
 sqlSafef(query, sizeof(query), 
     "select id from cdwFile "
     "where submitFileName='%s' and submitDirId = %d and errorMessage = '' and deprecated=''"
-    " and (endUploadTime > startUploadTime or startUploadTime < %lld) "
+    " and (endUploadTime >= startUploadTime or startUploadTime < %lld) "
     "order by submitId desc limit 1"
     , submitFileName, submitDirId
     , (long long)cdwNow() - cdwSingleFileTimeout);
@@ -1506,7 +1506,93 @@ if (nbytes == bufsiz)
 return symPath;
 }
 
+static int findSubmitSymlinkExt(char *submitFileName, char *submitDir, char **pPath, char **pLastPath, int *pSymlinkLevels)
+/* Find the last symlink and real file in the chain from submitDir/submitFileName.
+ * This is useful for when target of symlink in cdw/ gets renamed 
+ * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). 
+ * Returns 0 for success. /
+ * Returns -1 if path does not exist. */
+{
+int result = 0;
+struct stat sb;
+char *lastPath = NULL;
+char *path = mustExpandRelativePath(submitDir, submitFileName);
+
+int symlinkLevels = 0;
+while (TRUE)
+    {
+    if (!fileExists(path))
+	{
+	//path=does not exist
+	result = -1;
+	break;
+	}
+    if (lstat(path, &sb) == -1)
+	errnoAbort("stat failure on %s", path);
+    if ((sb.st_mode & S_IFMT) != S_IFLNK)
+	break;
+
+    // follow the symlink
+    ++symlinkLevels;
+    if (symlinkLevels > 10)
+	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
+
+    // read the symlink
+    char *symPath = mustReadSymlink(path, &sb);
+
+    // apply symPath to path
+    char *newPath = mustPathRelativeToFile(path, symPath);
+    freeMem(lastPath);
+    lastPath = path;
+    freeMem(symPath);
+    path = newPath;
+    }
+if (result == 0 && ((sb.st_mode & S_IFMT) != S_IFREG))
+    errAbort("Expecting regular file. Followed symlinks to %s but it is not a regular file.", path);
+
+*pPath = path;
+*pLastPath = lastPath;
+*pSymlinkLevels = symlinkLevels;
+return result;
+}
+
+char *testOriginalSymlink(char *submitFileName, char *submitDir)
+/* Follows submitted symlinks to real file.
+ * Aborts if real file path starts with cdwRootDir
+ * since it should not point to a file already under cdwRoot. */
+{
+char *lastPath = NULL;
+char *path = NULL;
+int symlinkLevels = 0;
+
+int result = findSubmitSymlinkExt(submitFileName, submitDir, &path, &lastPath, &symlinkLevels);
+if (result == -1)  // path does not exist
+    {
+    errAbort("path=[%s] does not exist following submitDir/submitFileName through symlinks.", path);
+    }
+if (startsWith(cdwRootDir, path))
+    errAbort("Unexpected operation. The symlink %s points to %s. It should not point to a file already under cdwRoot %s", submitFileName, path, cdwRootDir);
+freeMem(lastPath);
+return path;
+}
+
+
 void replaceOriginalWithSymlink(char *submitFileName, char *submitDir, char *cdwPath)
+/* For a file that was just copied, remove original and symlink to new one instead
+ * to save space. Follows symlinks if any to the real file and replaces it with a symlink */
+{
+char *path = testOriginalSymlink(submitFileName, submitDir);
+if (unlink(path) == -1)  // save space
+    errnoAbort("unlink failure %s", path);
+if (symlink(cdwPath, path) == -1)  // replace with symlink
+    errnoAbort("symlink failure from %s to %s", path, cdwPath);
+verbose(1, "%s converted to symlink to %s\n", path, cdwPath);
+freeMem(path);
+}
+
+
+
+void replaceOriginalWithSymlinkOrig(char *submitFileName, char *submitDir, char *cdwPath)
 /* For a file that was just copied, remove original and symlink to new one instead
  * to save space. Follows symlinks if any to the real file and replaces it with a symlink */
 {
@@ -1550,6 +1636,37 @@ freeMem(path);
 
 
 char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath)
+/* Find the last symlink in the chain from submitDir/submitFileName.
+ * This is useful for when target of symlink in cdw/ gets renamed 
+ * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). */
+{
+char *lastPath = NULL;
+char *path = NULL;
+int symlinkLevels = 0;
+
+int result = findSubmitSymlinkExt(submitFileName, submitDir, &path, &lastPath, &symlinkLevels);
+if (result == -1)  // path does not exist
+    {
+    warn("path=[%s] does not exist following submitDir/submitFileName through symlinks.", path);
+    return NULL;
+    }
+if (symlinkLevels < 1)
+    {
+    warn("Too few symlinks followed: %d symlinks. Where is the symlink created by cdwSubmit?", symlinkLevels);
+    return NULL;
+    }
+if (!sameString(path, oldPath))
+    {
+    warn("Found symlinks point to %s, expecting to find symlink pointing to old path %s", path, oldPath);
+    return NULL;
+    }
+
+freeMem(path);
+return lastPath;
+}
+
+
+char *findSubmitSymlinkOrig(char *submitFileName, char *submitDir, char *oldPath)
 /* Find the last symlink in the chain from submitDir/submitFileName.
  * This is useful for when target of symlink in cdw/ gets renamed 
  * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). */
@@ -1603,29 +1720,31 @@ freeMem(path);
 return lastPath;
 }
 
-
-void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long fileId, boolean really)
-/* Remove all records of file from database and from Unix file system if 
+void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long fileId, boolean unSymlinkOnly, boolean really)
+/* If unSymlinkOnly is NOT specified, removes all records of file from database and from Unix file system if 
  * the really flag is set.  Otherwise just print some info on the file.
  * Tries to find original submitdir and replace symlink with real file to restore it. */
 {
 struct cdwFile *ef = cdwFileFromId(conn, fileId);
 char *path = cdwPathForFileId(conn, fileId);
-verbose(1, "removing id=%u, submitFileName=%s, path=%s\n", 
-    ef->id, ef->submitFileName, path);
+verbose(1, "%s id=%u, submitFileName=%s, path=%s\n", 
+    unSymlinkOnly ? "unlocking" : "removing", ef->id, ef->submitFileName, path);
 if (really)
     {
     char query[1024];
     struct cdwSubmit *es = cdwSubmitFromId(conn, ef->submitId);
 
-    cdwRemoveQaRecords(conn, fileId);
-    sqlSafef(query, sizeof(query),
-	"delete from cdwGroupFile where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwValidFile where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwFile where id=%lld", fileId);
-    sqlUpdate(conn, query);
+    if (!unSymlinkOnly)
+	{
+	cdwRemoveQaRecords(conn, fileId);
+	sqlSafef(query, sizeof(query),
+	    "delete from cdwGroupFile where fileId=%lld", fileId);
+	sqlUpdate(conn, query);
+	sqlSafef(query, sizeof(query), "delete from cdwValidFile where fileId=%lld", fileId);
+	sqlUpdate(conn, query);
+	sqlSafef(query, sizeof(query), "delete from cdwFile where id=%lld", fileId);
+	sqlUpdate(conn, query);
+	}
 
     char *lastPath = NULL;
     // skip symlink check if meta or manifest which do not get validated or license plate or symlink
@@ -1641,7 +1760,8 @@ if (really)
 	freeMem(lastPath);
 	}
 
-    mustRemove(path);
+    if (!unSymlinkOnly)
+	mustRemove(path);
     }
 freez(&path);
 cdwFileFree(&ef);
