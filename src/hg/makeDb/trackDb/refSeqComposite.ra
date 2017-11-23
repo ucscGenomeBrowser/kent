@@ -9,6 +9,7 @@ dragAndDrop subTracks
 noInherit on
 subGroup1 view Views aNcbiRefSeq=NCBI_RefSeq zUcscRefSeq=UCSC_RefSeq
 allButtonPair on
+dataVersion /gbdb/$D/ncbiRefSeq/ncbiRefSeqVersion.txt
 priority 2
 
     track ncbiRefSeqView
@@ -96,6 +97,7 @@ priority 2
         color 12,12,120
         type genePred refPep refMrna
         idXref hgFixed.refLink mrnaAcc name
+        dataVersion 
         priority 6
 
 searchName ncbiRefSeqCuratedName2
