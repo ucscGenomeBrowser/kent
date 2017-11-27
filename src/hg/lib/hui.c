@@ -156,7 +156,9 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 #define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s" \
 		  "&hgta_table=%s&hgta_doSchema=describe+table+schema\" " \
 		  "TARGET=ucscSchema%s>%s</A>"
-if (trackDataAccessible(db, tdb))
+if (trackDataAccessible(db, tdb) && differentString("longTabix", tdb->type))
+    // FIXME: hgTables.showSchmaLongTabix is a currently a dummy routine, so let's not got here
+    // until it's implemented
     {
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
     if (isNotEmpty(tbOff) && sameString(nextWord(&tbOff), "off"))
@@ -416,7 +418,9 @@ if (links > 0)
 if (links > 1)
     printf("<table><tr><td nowrap>View table: ");
 
-if (schemaLink)
+if (schemaLink && differentString("longTabix", tdb->type))
+    // FIXME: hgTables.showSchmaLongTabix is a currently a dummy routine, so let's not got here
+    // until it's implemented
     {
     makeSchemaLink(db,tdb,(links > 1 ? "schema":"View table schema"));
     if (downloadLink)

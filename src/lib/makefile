@@ -3,8 +3,8 @@ include ../inc/localEnvironment.mk
 include ../inc/common.mk
 
 O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
-    annoGrator.o annoGrateWig.o annoGratorQuery.o annoOption.o annoRow.o \
-    annoStreamer.o annoStreamBigBed.o annoStreamBigWig.o annoStreamTab.o annoStreamTabix.o annoStreamVcf.o \
+    annoGrator.o annoGrateWig.o annoGratorQuery.o annoOption.o annoRow.o annoStreamer.o \
+    annoStreamBigBed.o annoStreamBigWig.o annoStreamTab.o annoStreamLongTabix.o annoStreamVcf.o \
     apacheLog.o asParse.o aveStats.o axt.o axtAffine.o bamFile.o base64.o \
     basicBed.o bbiRead.o bbiWrite.o bedTabix.o bigBed.o binRange.o bits.o \
     blastOut.o blastParse.o boxClump.o boxLump.o bPlusTree.o \
@@ -29,7 +29,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     hacTree.o hash.o hex.o histogram.o hmmPfamParse.o hmmstats.o htmlColor.o htmlPage.o htmshell.o \
     hmac.o https.o intExp.o intValTree.o internet.o itsa.o iupac.o \
     jointalign.o jpegSize.o jsonParse.o jsonWrite.o \
-    keys.o knetUdc.o kxTok.o linefile.o lineFileOnBigBed.o localmem.o log.o longToList.o \
+    keys.o knetUdc.o kxTok.o linefile.o lineFileOnBigBed.o localmem.o log.o longTabix.o longToList.o \
     maf.o mafFromAxt.o mafScore.o mailViaPipe.o md5.o memalloc.o \
     memgfx.o meta.o metaWig.o mgCircle.o \
     mgPolygon.o mime.o net.o nib.o nibTwo.o nt4.o numObscure.o \
