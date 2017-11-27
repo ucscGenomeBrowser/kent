@@ -22,7 +22,7 @@
 #include "annoStreamDbFactorSource.h"
 #include "annoStreamTab.h"
 #include "annoStreamVcf.h"
-#include "annoStreamTabix.h"
+#include "annoStreamLongTabix.h"
 #include "annoStreamWig.h"
 #include "annoGrateWigDb.h"
 #include "annoFormatTab.h"
@@ -236,7 +236,7 @@ if (startsWithWord("wig", tdb->type))
 else if (sameString("longTabix", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
-    streamer = annoStreamTabixNew(fileOrUrl,  assembly, maxOutRows);
+    streamer = annoStreamLongTabixNew(fileOrUrl,  assembly, maxOutRows);
     }
 else if (sameString("vcfTabix", tdb->type))
     {
