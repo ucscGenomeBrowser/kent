@@ -19,6 +19,7 @@
 #include "trackHub.h"
 #include "udc.h"
 #include "vcf.h"
+#include "bedTabix.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -469,7 +470,6 @@ if (relativeUrl != NULL)
         struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
         bbiFileClose(&bbi);
         }
-    // KRR FIX: from table
     else if (startsWithWord("bigBed", type) || startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)|| startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) || startsWithWord("bigBarChart", type))
         {
         /* Just open and close to verify file exists and is correct type. */
@@ -498,6 +498,13 @@ if (relativeUrl != NULL)
     else if (startsWithWord("bam", type))
         {
         bamFileAndIndexMustExist(bigDataUrl, bigDataIndex);
+        }
+    else if (startsWithWord("longTabix", type))
+        {
+        struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
+        if (btf == NULL)
+            errAbort("Couldn't open %s and/or its tabix index (.tbi) file.", bigDataUrl);
+        bedTabixFileClose(&btf);
         }
 #ifdef USE_HAL
     else if (startsWithWord("halSnake", type))
