@@ -7995,7 +7995,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
         if (formName)
             {
 	    char id[256];
-	    safef(id, sizeof id, "cpmUiNoMtx_but_%d", i);
+	    safef(id, sizeof id, "cpmUiNoMtx_but_%d_%d", i, j);
             makeAddClearButtonPair(id, name,"</TD><TD>");
             }
         else
