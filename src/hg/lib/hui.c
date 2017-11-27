@@ -8921,42 +8921,40 @@ void printDataVersion(char *database, struct trackDb *tdb)
 /* If this annotation has a dataVersion setting, print it.
  * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
 {
-char *version = NULL;
-
-// try the hgFixed.trackVersion table
-struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
-// try trackVersion table with parent, for composites/superTracks
-if(trackVersion == NULL && (tdb->parent!=NULL))
-    trackVersion = getTrackVersion(database, tdb->parent->track);
-
 // try the metadata
-if(trackVersion == NULL) 
-    {
-    metadataForTable(database, tdb,NULL);
-    version = (char *)metadataFindValue(tdb, "dataVersion");
-    }
-else
-    version = trackVersion->version;
+metadataForTable(database, tdb, NULL);
+char *version = (char *)metadataFindValue(tdb, "dataVersion");
 
 // try trackDb itself, this automatically will go up the hierarchy
 if (version == NULL)
-{
     version = trackDbSetting(tdb, "dataVersion");
-}
-
-if (version == NULL)
-    return;
-
-// On the RR, dataVersion can also be the path to a local file, for otto tracks
-if (!trackHubDatabase(database) && !isHubTrack(tdb->table) && startsWith("/", version))
-    {
-    char *path = replaceInUrl((char *)version, "", NULL, database, "", 0, 0, tdb->track, FALSE);
-    struct lineFile* lf = lineFileOpen(path, TRUE);
-    if (lf)
-        version = lineFileReadAll(lf);
-    }
 
 if (version != NULL)
+    {
+    // dataVersion can also be the path to a local file, for otto tracks
+    if (!trackHubDatabase(database) && !isHubTrack(tdb->table) && startsWith("/", version))
+        {
+        char *path = replaceInUrl(version, "", NULL, database, "", 0, 0, tdb->track, FALSE);
+        struct lineFile* lf = lineFileMayOpen(path, TRUE);
+        if (lf)
+            version = lineFileReadAll(lf);
+        else
+            version = NULL;
+        lineFileClose(&lf);
+        }
+    }
+if (version == NULL)
+    {
+    // try the hgFixed.trackVersion table
+    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
+    // try trackVersion table with parent, for composites/superTracks
+    if (trackVersion == NULL && tdb->parent != NULL)
+        trackVersion = getTrackVersion(database, tdb->parent->track);
+    if (trackVersion != NULL)
+        version = trackVersion->version;
+    }
+
+if (isNotEmpty(version))
     printf("<B>Data version:</B> %s <BR>\n", version);
 }
 
