@@ -8,7 +8,7 @@ trap "echo Error: $(hostname) ccds import failed >&2; exit 1" ERR
 exec </dev/null
 
 # initialize
-gbRoot=/hive/data/outside/genbank
+gbRoot=/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 

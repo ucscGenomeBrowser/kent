@@ -50,6 +50,7 @@ void tabQuery(char *query)
 {
 /* Parse statement and make sure that it just references one table */
 struct rqlStatement *rql = rqlStatementParseString(query);
+verbose(2, "parsed %s ok\n", query);
 int tableCount = slCount(rql->tableList);
 if (tableCount != 1)
     errAbort("One and only one file allowed in the from clause\n");

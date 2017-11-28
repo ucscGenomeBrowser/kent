@@ -1116,7 +1116,7 @@ height = tgFixedTotalHeightOptionalOverflow(tg, vis, lineHeight, heightPer, FALS
 if ((vis == tvPack) || (vis == tvFull))
     {
     // set variable height rows
-    if (tg->ss->rowCount != 0)
+    if (tg->ss && tg->ss->rowCount != 0)
         {
         if (!tg->ss->rowSizes)
 	    {

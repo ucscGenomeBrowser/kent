@@ -10,7 +10,9 @@
 #include "sqlNum.h"
 #include "obscure.h"
 #include "sqlReserved.h"
+#include "csv.h"
 #include "tagStorm.h"
+#include "tagSchema.h"
 #include "tagToSql.h"
 
 struct tagTypeInfo *tagTypeInfoNew(char *name)
@@ -116,7 +118,8 @@ if (tti->isInt)
     }
 }
 
-static void rInfer(struct tagStanza *list, struct hash *hash, struct tagTypeInfo **pList)
+static void rInfer(struct tagStanza *list, struct hash *hash, struct dyString *scratch,
+    struct tagTypeInfo **pList)
 /* Traverse recursively updating hash with type of each field. */
 {
 struct tagStanza *stanza;
@@ -125,8 +128,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     struct slPair *pair;
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
-	char *tag = pair->name;
-	char *val = pair->val;
+	char *tag = tagSchemaFigureArrayName(pair->name, scratch);
 	struct tagTypeInfo *tti = hashFindVal(hash, tag);
 	if (tti == NULL)
 	     {
@@ -134,10 +136,19 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	     hashAdd(hash, tag, tti);
 	     slAddHead(pList, tti);
 	     }
-	tagTypeInfoAdd(tti, val);
+	char *pos = pair->val;
+	char *val;
+	int valCount = 0;
+	while ((val = csvParseNext(&pos, scratch)) != NULL)
+	    {
+	    tagTypeInfoAdd(tti, val);
+	    ++valCount;
+	    }
+	if (valCount > 1)
+	    tti->isArray= TRUE;
 	}
     if (stanza->children)
-        rInfer(stanza->children, hash, pList);
+        rInfer(stanza->children, hash, scratch, pList);
     }
 }
 
@@ -148,7 +159,8 @@ void tagStormInferTypeInfo(struct tagStorm *tagStorm,
 {
 struct hash *hash = hashNew(0);
 struct tagTypeInfo *list = NULL;
-rInfer(tagStorm->forest, hash, &list);
+struct dyString *scratch = dyStringNew(0);
+rInfer(tagStorm->forest, hash, scratch, &list);
 slSort(&list, tagTypeInfoCmpName);
 *retList = list;
 *retHash = hash;
@@ -367,6 +379,8 @@ void tagTypeInfoPrintSchemaLine(struct tagTypeInfo *tti, int useCount, struct ha
 {
 struct hashEl *valEl, *valList = hashElListHash(valHash);
 fprintf(f, "%s ", tti->name);
+if (tti->isArray)
+    fputc('[', f);
 if (tti->isNum)
     {
     double minVal = tti->minVal, maxVal = tti->maxVal;
@@ -374,6 +388,8 @@ if (tti->isNum)
 	 fputc('#', f);
     else 
 	 fputc('%', f);
+    if (tti->isArray)
+	fputc(']', f);
     if (!doLooseSchema)
 	{
 	if (!doTightSchema)
@@ -391,6 +407,8 @@ else  /* Not numerical */
     {
     /* Decide by a heuristic whether to make it an enum or not */
     fputc('$', f);
+    if (tti->isArray)
+	fputc(']', f);
     if (!doLooseSchema)
 	{
 	int distinctCount = valHash->elCount;

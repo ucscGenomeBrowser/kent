@@ -13,6 +13,7 @@
 #include "joiner.h"
 
 #include "libifyMe.h"
+#include "windowsToAscii.h"
 
 static boolean searchPosition(char *range, struct cart *cart, char *cartVar)
 /* Try and fill in region via call to hgFind. Return FALSE
@@ -48,7 +49,7 @@ boolean lookupPosition(struct cart *cart, char *cartVar)
  * up multiple positions. */
 {
 char *db = cartString(cart, "db");
-char *range = cartUsualString(cart, cartVar, "");
+char *range = windowsToAscii(cartUsualString(cart, cartVar, ""));
 boolean isSingle = TRUE;
 range = trimSpaces(range);
 if (range[0] != 0)

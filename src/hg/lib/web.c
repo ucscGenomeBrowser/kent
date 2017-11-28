@@ -375,7 +375,7 @@ puts("     </div></div>\n"
      );
 }
 
-void webNewSectionHeaderStart(boolean hasTitle)
+void webNewSectionHeaderStart()
 /* Start the header for a new section on the web page.
  * May be used to maintain table layout without a proper section header */
 {
@@ -389,10 +389,7 @@ puts(  // TODO: Replace nested tables with CSS (difficulty is that tables are cl
         "' BORDER='0' CELLSPACING='0' CELLPADDING='1'><TR><TD>\n"
     "    <TABLE BGCOLOR='#" HG_COL_INSIDE
          "' WIDTH='100%'  BORDER='0' CELLSPACING='0' CELLPADDING='0'><TR><TD>\n");
-if (hasTitle)
-    puts("<div class='subheadingBar' class='windowSize'>");
-else
-    puts("<div>");
+puts("<div class='subheadingBar windowSize'>");
 }
 
 void webNewSectionHeaderEnd()
@@ -409,7 +406,7 @@ void webNewSection(char* format, ...)
 {
 va_list args;
 va_start(args, format);
-webNewSectionHeaderStart(TRUE);
+webNewSectionHeaderStart();
 vprintf(format, args);
 webNewSectionHeaderEnd();
 va_end(args);
@@ -418,7 +415,7 @@ va_end(args);
 void webNewEmptySection()
 /* create a new section on the web page to maintain table layout */
 {
-webNewSectionHeaderStart(FALSE);
+webNewSectionHeaderStart();
 webNewSectionHeaderEnd();
 }
 
@@ -1363,7 +1360,7 @@ for(offset = 0; offset < len && !regexec(&re, oldString + offset, ArraySize(matc
 	dyStringAppend(dy, "?");
     dyStringAppend(dy, uiVars);
     if(match[1].rm_so != match[1].rm_eo)
-	dyStringAppend(dy, "&");
+	dyStringAppend(dy, "&amp;");
     }
 if(offset < len)
     dyStringAppend(dy, oldString + offset);

@@ -211,5 +211,7 @@ return bedList;
 
 void showSchemaLongTabix(char *table, struct trackDb *tdb)
 /* Show schema on long tabix. */
+// FIXME: restore 'View schema' and 'schema' links for longTabix type (in hui.c) 
+//      when this is implemented
 {
 }

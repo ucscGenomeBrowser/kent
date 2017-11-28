@@ -7,8 +7,8 @@ all: ${SUBDIRS:%=%.suball}
 
 install: check-prefix installSub
 	cut -f 1-4 /cluster/data/hg18/bed/snp130/snp130.bed | sort -k4,4 > ${PREFIX}/snp130Coords.bed
-	zcat /cluster/data/hg19/bed/snp144/snp144.bed.gz | cut -f 1-4,6,8,18,21-24   | sort -T ${PREFIX}  -k4,4  > ${PREFIX}/snp144Coords.bed
-	zcat /cluster/data/hg38/bed/snp144/snp144.bed.gz | cut -f 1-4,6,8,18,21-24   | sort -T ${PREFIX}  -k4,4  > ${PREFIX}/hg38.snp144Coords.bed
+	zcat /cluster/data/hg19/bed/snp150/snp150.bed.gz | cut -f 1-4,6,8,18,21-24   | sort -T ${PREFIX}  -k4,4  > ${PREFIX}/snp150Coords.bed
+	zcat /cluster/data/hg38/bed/snp150/snp150.bed.gz | cut -f 1-4,6,8,18,21-24   | sort -T ${PREFIX}  -k4,4  > ${PREFIX}/hg38.snp150Coords.bed
 	cp gwasWrapper.sh checkGwas.sh validateGwas.sh perlParser.pl expectedColumns.txt ${PREFIX}
 
 installSub: ${SUBDIRS:%=%.install}

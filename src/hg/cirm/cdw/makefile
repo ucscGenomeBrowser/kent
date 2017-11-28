@@ -1,7 +1,7 @@
 kentSrc = ../../..
 # Build all subdirectories we care about
 
-include ../../../inc/common.mk
+include $(kentSrc)/inc/common.mk
 
 
 # List of directories to build
@@ -12,6 +12,7 @@ UTIL_DIRS = \
     cdwAddQaContamTarget \
     cdwAddQaEnrichTarget \
     cdwAddSubscriber \
+    cdwBackup \
     cdwChangeFormat \
     cdwCheckDataset \
 	cdwCheckValidation \
@@ -19,9 +20,9 @@ UTIL_DIRS = \
     cdwCreateUser \
     cdwDumpManiFiles \
     cdwFakeManifestFromSubmit \
+    cdwFindSymlinkable \
     cdwGroupUser \
     cdwJob \
-    cdwSummary \
     cdwMakeContaminationQa \
     cdwMakeEnrichments \
     cdwMakeFileTags \
@@ -40,9 +41,11 @@ UTIL_DIRS = \
     cdwRunDaemon \
     cdwRunOnIds \
     cdwSubmit \
+    cdwSummary \
     cdwSwapInSymLink \
     cdwTextForIndex \
     cdwUndeprecate \
+    cdwUnlockSubmittedFile \
     utils/cdwFastqPolyFilter \
     utils/cdwVcfStats
 

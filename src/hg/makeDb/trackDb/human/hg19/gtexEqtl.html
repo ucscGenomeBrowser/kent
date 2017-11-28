@@ -1,0 +1,124 @@
+<h2>Description</h2>
+<p>
+This track shows genetic variants likely affecting proximal gene expression in 44 human tissues 
+from the
+<a target="_blank" href="https://www.genome.gov/27543767/">Genotype-Tissue Expression (GTEx)</a> V6 
+data release. 
+The data items displayed are gene expression quantitative trait loci within 1MB of 
+gene transcription start sites (cis-eQTLs), significantly associated with gene expression and in 
+the credible set of variants for the gene at a high confidence level (95%).
+Each eQTL annotation includes the significance of the association, effect size on gene expression, 
+and the probability the eQTL is a member of the 95% credible set (the set containing all causal variants
+for the gene locus, at 95% confidence level).
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+The eQTL item color indicates the effect size attributed to the eQTL:
+<ul>
+<table cellpadding='2'>
+<tr><td style='color: red;'>red</td><td>&nbsp;&nbsp;high positive</td></tr>
+<tr><td style='color: #ffa0a0;'>light red</td><td>&nbsp;&nbsp;moderate positive</td></tr>
+<tr><td style='color: #0aa0ff;'>light blue</td><td>&nbsp;&nbsp;moderate negative</td></tr>
+<tr><td style='color: blue;'>blue</td><td>&nbsp;&nbsp;high negative</td></tr>
+<tr><td style='color: #696969;'>mixed</td><td>&nbsp;&nbsp;positive and negative effect in combined eQTL</td></tr>
+</table>
+</ul>
+Effect size is the regression slope, computed from the effect of the alternative allele vs. 
+the reference in FPKM units, based on quantile normalized expression tables.
+For display purposes, An arbitrary cutoff of +- 2.0 FPKM defines high effect size.
+</p>
+<h3>Combined eQTL track</h3>
+<p>
+Gene/variant pairs occurring in multiple tissues are combined into a single item in the display. 
+The item label shows the number of tissues where the eQTL was identified, or the tissue name and
+the GTEx-convention tissue color if the eQTL was identified solely in one tissue.
+Mouseover lists all tissues affected and the effect size.
+The item color reflects the largest effect size in any tissue.
+<p>
+Track configuration supports filtering by gene, effect size, or probability.  
+Tissues can be selected via checkboxes or from the UCSC GTEx Body Map graphic.
+</br><a target="_self" href="../cgi-bin/hgGtexTrackSettings?db=hg19&g=gtexEqtlCluster">
+GTEx Combined eQTL Track Settings: hg19.</a>
+</p>
+</p>
+<h3>Tissue eQTL tracks</h3>
+<p>
+This track is a composite track containing 44 subtracks representing the GTEx eQTL tissues.
+Each subtrack contains all GTEx/CAVIAR eQTLs identified for that tissue. 
+</br><a target="_self" href="../cgi-bin/hgTrackUi?db=hg19&g=gtexEqtlTissue">
+GTEx 44 Tissues eQTL Track Settings: hg19.</a>
+</p>
+
+<h2>Methods</h2>
+<p>
+Laboratory and RNA-seq analysis methods for GTEx V6 are summarized in the 
+<a target="_blank" href="/cgi-bin/hgGtexTrackSettings">GTEx Gene Track</a> description page.
+</p>
+<p>
+Cis-eQTL's were identified from GTEx RNA-seq and genotype data (variants with minor allele 
+frequency >= 1%) in 44 tissues (those with sample size >=70) using 
+the <a target="_blank" href="http://fastqtl.sourceforge.net">FastQTL</a> mapper at 5% FDR threshold, 
+by the GTEx Laboratory, Data Analysis and Coordinating Center (LDACC), as part of the GTEx project v6p analysis.  
+These cis-eQTL's were then analyzed together with genome variation information (LD) using the 
+<a target="_blank" href="http://genetics.cs.ucla.edu/caviar/">CAVIAR</a> statistical framework
+to quantify the probability a variant is causal, at the Eskin lab at UCLA, as part of GTEx downstream 
+analysis.
+The UCSC track was created using the CAVIAR 95% credible set, with significance p-values and 
+effect sizes from the LDACC analysis.
+</p>
+<p>
+Raw data for these analyses are available from dbGaP (phs000424.v6.p1).
+</p>
+
+<h2>Credits</h2>
+Thanks to GTEx investigators and analysts -- particularly 
+<a target="_blank" href="https://www.hsph.harvard.edu/farhad-hormozdiari/">Farhad Hormozdiari</a>
+(currently at the 
+<a target="_blank" href="https://www.hsph.harvard.edu/alkes-price/">Price lab, Harvard</a>), 
+the <a target="_blank" href="http://zarlab.cs.ucla.edu/">Eskin lab at UCLA</a>,
+the GTEx Laboratory, Data Analysis and Coordinating Center and analysts and portal team for providing this data, 
+and to <a target="_blank" href="http://www.med.upenn.edu/brownlab/">Christopher Brown (U Penn) </a>,
+for input on design of the track.
+
+<h2>References</h2>
+<p>
+<p>
+GTEx Consortium., Laboratory, Data Analysis &amp;Coordinating Center (LDACC)&#8212;Analysis Working
+Group., Statistical Methods groups&#8212;Analysis Working Group., Enhancing GTEx (eGTEx) groups.,
+NIH Common Fund., NIH/NCI., NIH/NHGRI., NIH/NIMH., NIH/NIDA., Biospecimen Collection Source
+Site&#8212;NDRI. <em>et al</em>.
+<a href="http://dx.doi.org/10.1038/nature24277" target="_blank">
+Genetic effects on gene expression across human tissues</a>.
+<em>Nature</em>. 2017 Oct 11;550(7675):204-213.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29022597" target="_blank">29022597</a>
+</p>
+<p>
+Ongen H, Buil A, Brown AA, Dermitzakis ET, Delaneau O.
+<a href="https://academic.oup.com/bioinformatics/article-lookup/doi/10.1093/bioinformatics/btv722"
+target="_blank">
+Fast and efficient QTL mapper for thousands of molecular phenotypes</a>.
+<em>Bioinformatics</em>. 2016 May 15;32(10):1479-85.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26708335" target="_blank">26708335</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4866519/" target="_blank">PMC4866519</a>
+</p>
+<p>
+Hormozdiari F, Kostem E, Kang EY, Pasaniuc B, Eskin E.
+<a href="http://www.genetics.org/cgi/pmidlookup?view=long&amp;pmid=25104515" target="_blank">
+Identifying causal variants at loci with multiple signals of association</a>.
+<em>Genetics</em>. 2014 Oct;198(2):497-508.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25104515" target="_blank">25104515</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4196608/" target="_blank">PMC4196608</a>
+</p>
+<p>
+GTEx Consortium.
+<a href="http://dx.doi.org/10.1038/ng.2653" target="_blank">
+The Genotype-Tissue Expression (GTEx) project</a>.
+<em>Nat Genet</em>. 2013 Jun;45(6):580-5.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23715323" target="_blank">23715323</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4010069/" target="_blank">PMC4010069</a>
+</p>
+<p>
+<a href="http://www.gtexportal.org/home/documentationPage">
+GTEx Portal Documentation</a>
+</p>

@@ -88,12 +88,12 @@ while (my $line = <FH>) {
   chomp $line;
   my ($taxId, $commonName, $submitter, $asmName, $sciName, $bioSample, $asmType, $asmLevel, $asmDate, $asmAccession) = split('\t', $line);
   $asmDate =~ s/ /&nbsp;/g;
-  printf "<tr align=\"right\"><td><a href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%d\" target=_\"_blank\"> %d</a>", $taxId, $taxId;
+  printf "<tr align=\"right\"><td><a href=\"https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%d\" target=_\"_blank\"> %d</a>", $taxId, $taxId;
   printf "<td>%s</td>", $asmDate;
   printf "<td><a href='' class='hgGateway' hubTxt='%s/%s'  asmId='%s_%s' target='_blank'>%s</a></td>", $hubLink, $hubText, $asmAccession, $asmName, $commonName;
   printf "<td>%s</td>", $sciName;
   if ($bioSample ne "(n/a)") {
-    printf "<td><a href=\"http://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\"> %s</a></td>", $bioSample, $bioSample;
+    printf "<td><a href=\"https://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\"> %s</a></td>", $bioSample, $bioSample;
   } else {
     printf "<td>(n/a)</td>";
   }
@@ -103,7 +103,7 @@ while (my $line = <FH>) {
   printf "<td align=\"right\">%%&nbsp;%.2f</td>", $gcContent;
   printf "<td align=\"right\">%s<br>%%&nbsp;%.2f</td>", commify($gapsN), $NperCent;
   printf "<td align=\"right\">%s<br>%s<br>%%&nbsp;%.2f</td>", commify($geneCount), commify($geneBasesCovered), $genePercentCoverage;
-  printf "<td><a href=\"http://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a></td>", $asmAccession, $asmAccession;
+  printf "<td><a href=\"https://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a></td>", $asmAccession, $asmAccession;
   printf "<td><a href=\"ftp://ftp.ncbi.nlm.nih.gov/%s\" target=\"_blank\">%s</a></td>", $ftpName, $asmName;
   printf "<td>%s</td>", $asmType;
   printf "<td>%s</td>", $asmLevel;

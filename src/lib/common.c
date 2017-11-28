@@ -990,12 +990,33 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-void slPairFreeVals(struct slPair *list)
-/* Free up all values on list. */
+void slPairFreeValsExt(struct slPair *list, void (*freeFunc)())
+/* Free up all values on list using freeFunc.
+ * freeFunc should take a simple pointer to free an item, and can be NULL. */
 {
 struct slPair *el;
 for (el = list; el != NULL; el = el->next)
-    freez(&el->val);
+    {
+    if (freeFunc)
+        freeFunc(el->val);
+    else
+        freez(&el->val);
+    }
+}
+
+void slPairFreeVals(struct slPair *list)
+/* Free up all values on list. */
+{
+slPairFreeValsExt(list, NULL);
+}
+
+void slPairFreeValsAndListExt(struct slPair **pList, void (*freeFunc)())
+/* Free up all values on list using freeFunc and list itself.
+ * freeFunc should take a simple pointer to free an item, and can be NULL. */
+{
+if (pList)
+    slPairFreeValsExt(*pList, freeFunc);
+slPairFreeList(pList);
 }
 
 void slPairFreeValsAndList(struct slPair **pList)

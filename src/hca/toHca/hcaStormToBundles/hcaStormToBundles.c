@@ -8,6 +8,7 @@
 #include "tagToJson.h"
 #include "portable.h"
 #include "csv.h"
+#include "uuid.h"
 #include "tagSchema.h"
 
 boolean gUrls;
@@ -19,7 +20,7 @@ errAbort(
   "hcaStormToBundles - Convert a HCA formatted tagStorm to a directory full of bundles.\n"
   "usage:\n"
   "   hcaStormToBundles in.tags http://path/to/data/files schema outDir\n"
-  "If the /path/to/data/files is 'urls' then it will just leave the assay.files[]\n"
+  "If the /path/to/data/files is 'urls' then it will just leave the assay.seq.files[]\n"
   "array as is.   The schema file is something in the format made by tagStormInfo -schema.\n"
   "options:\n"
   );
@@ -103,38 +104,6 @@ while ((s = stringIn(pat, s)) != NULL)
 return 0;
 }
 
-void writeProtocolsArray(FILE *f, struct tagStanza *stanza, char *protocolsCsv)
-/* Write up an array of protocols based on protocols and protocol_types tags in
- * stanza. */
-{
-char *typesCsv = tagFindVal(stanza, "sample.protocol_types");
-if (typesCsv == NULL)
-    errAbort("sample.protocol defined but not sample.protocol_types");
-
-struct slName *protocolList = csvParse(protocolsCsv), *proto;
-struct slName *typeList = csvParse(typesCsv), *type;
-if (slCount(protocolList) != slCount(typeList))
-    errAbort("Diffent sized protocols and protocol_types lists.");
-
-boolean firstProtocol = TRUE;
-fputc('[', f);
-for (proto = protocolList, type = typeList; proto != NULL; proto = proto->next, type = type->next)
-    {
-    if (firstProtocol)
-        firstProtocol = FALSE;
-    else 
-        fputc(',', f);
-    fputc('{', f);
-    boolean first = TRUE;
-    writeJsonTag(f, "description", &first);
-    writeJsonVal(f, proto->name, FALSE);
-    writeJsonTag(f, "type", &first);
-    writeJsonVal(f, type->name, FALSE);
-    fputc('}', f);
-    }
-fputc(']', f);
-}
-
 char *guessFormatFromName(char *name)
 /* Guess format from file extension */
 {
@@ -148,158 +117,284 @@ else
      return NULL;
 }
 
-void writeFilesArray(FILE *f, struct tagStanza *stanza, char *csvList)
+struct laneFiles
+/* The files associated with a lane. */
+    {
+    struct laneFiles *next;
+    int laneIx;
+    struct slName *fileList;
+    };
+
+
+int laneFilesCmp(const void *va, const void *vb)
+/* Compare to sort based on laneIx (ascending). */
+{
+const struct laneFiles *a = *((struct laneFiles **)va);
+const struct laneFiles *b = *((struct laneFiles **)vb);
+return a->laneIx - b->laneIx;
+}
+
+struct laneFiles *laneFilesFind(struct laneFiles *list, int laneIx)
+/* Return lane on list of given ix,  or NULL if no such lane. */
+{
+struct laneFiles *lane;
+for (lane = list; lane != NULL; lane = lane->next)
+    if (lane->laneIx == laneIx)
+        return lane;
+return NULL;
+}
+    
+void writeLaneArray(FILE *f, struct tagStanza *stanza, char *csvList)
 /* Write out an array of file objects base on file names in csvList */
 {
-int laneIx = 1;
+struct slName *list = csvParse(csvList), *file;
+
+/* Figure out number of files per lanes.  We'll take the lane number for the
+ * file names if available, but if not we'll assume list is sorted and will
+ * put the appropriate number of files in each lane. */
+int laneCounter = 1;
 int filesPerLane = 1;
 int curFileInLane = 0;
 char *pairedEnds = tagMustFindVal(stanza, "assay.seq.paired_ends");
 if (!sameString(pairedEnds, "no"))
     filesPerLane = 2;
 
-boolean firstOut = TRUE;
-struct slName *list = csvParse(csvList), *file;
-fputc('[', f);
+/* First pass, make a list of lanes */
+struct laneFiles *laneList = NULL, *lane;
 for (file = list; file != NULL; file = file->next)
     {
-    /* Write comma between file objects */
+    /* Figure out laneIx, from file name if possible, otherwise by counting */
+    char *fileName = file->name;
+    int laneIx = laneFromFileName(fileName);
+    if (laneIx == 0)
+	laneIx = laneCounter;
+    /* Update laneCounter */
+    if (++curFileInLane >= filesPerLane)
+	{
+	++laneCounter;
+	curFileInLane = 0;
+	}
+
+    /* Find lane in laneList, make new lane if it's not there. */
+    lane = laneFilesFind(laneList, laneIx);
+    if (lane == NULL)
+        {
+	AllocVar(lane);
+	lane->laneIx = laneIx;
+	slAddHead(&laneList, lane);
+	}
+    slNameAddTail(&lane->fileList, fileName);
+    }
+slReverse(&laneList);
+slSort(&laneList, laneFilesCmp);
+
+/* Now make a lane array and go through lane list */
+boolean firstOut = TRUE;
+fputc('[', f);
+for (lane = laneList; lane != NULL; lane = lane->next)
+    {
+    /* Write comma between lane objects */
     if (firstOut)
 	firstOut = FALSE;
     else
 	fputc(',', f);
 
-    /* Write file object starting with file name */
+    /* Write lane object starting with lane index*/
     fputc('{', f);
-    char *name = file->name;
-    fprintf(f, "\"%s\":", "name");
-    writeJsonVal(f, name, FALSE);
+    fprintf(f, "\"%s\": %d", "number", lane->laneIx);
 
-    /* If can recognize format from suffix write format. */
-    char *format = guessFormatFromName(name);
-    if (format != NULL)
-        {
-	fprintf(f, ",\"%s\":", "format");
-	writeJsonVal(f, format, FALSE);
-	}
+    /* Rest of lane fields are based on files we contain */
+    for (file = lane->fileList; file != NULL; file = file->next)
+	{
+	/* Calculate type */
+	char *fileName = file->name;
 
-    /* If it's a read format try to classify it to a type */
-    boolean isRead = sameString(format, ".fastq.gz");
-    if (isRead)
-        {
-	/* Calculate and write type */
 	char *type = NULL;
 	if (sameString(pairedEnds, "no"))
 	    {
-	    type = "reads";
+	    type = "r1";
 	    }
 	else if (sameString(pairedEnds, "yes"))
 	    {
-	    int end = endFromFileName(name);
+	    int end = endFromFileName(fileName);
 	    if (end == 1)
-	        type = "read1";
+		type = "r1";
 	    else
-	        type = "read2";
-	    }
-	else if (sameString(pairedEnds, "index1_reads2"))
-	    {
-	    int end = endFromFileName(name);
-	    if (end == 1)
-		type = "index";
-	    else
-	        type = "reads";
+		type = "r2";
 	    }
 	else
 	    errAbort("Unrecognized paired_ends %s", pairedEnds);
-	fprintf(f, ",\"%s\":", "type");
-	writeJsonVal(f, type, FALSE);
 
-	/* Write out lane info */
-	int lane = laneFromFileName(name);
-	if (lane == 0)
-	    lane = laneIx;
-	fprintf(f, ",\"%s\": %d", "lane", lane);
-
-	/* Update laneIx */
-	if (++curFileInLane >= filesPerLane)
-	    {
-	    ++laneIx;
-	    curFileInLane = 0;
-	    }
+	fprintf(f, ",\"%s\":", type);
+	writeJsonVal(f, fileName, FALSE);
 	}
     fputc('}', f);
     }
+
 fputc(']', f);
 slFreeList(&list);
 }
 
+boolean allDigitNames(struct ttjSubObj *list)
+/* Return TRUE if all names on list are composed of positive integers */
+{
+struct ttjSubObj *obj;
+for (obj = list; obj != NULL; obj = obj->next)
+    if (!isAllDigits(obj->name))
+        return FALSE;
+return TRUE;
+}
+
+boolean objNeedsCore(char *module)
+/* Return TRUE if module of given name needs core defined */
+{
+static char *needCore[] = {"project", "sample", "assay", "barcode", "cell_line", "contact",
+    "death", "donor", "enrichment", "imaging", 
+    "preservation", "protocol", "publication", "rna", "seq", "single_cell", 
+    "well"};
+return (stringArrayIx(module, needCore, ArraySize(needCore)) >= 0);
+}
+
+void printCore(FILE *f, char *type, boolean *pFirstOut)
+/* Write up core module for object. */
+{
+writeJsonTag(f, "core", pFirstOut);
+fprintf(f, "{");
+boolean firstOut = TRUE;
+writeJsonTag(f, "type", &firstOut);
+writeJsonVal(f, type, FALSE);
+writeJsonTag(f, "schema_version", &firstOut);
+writeJsonVal(f, "3.0.0", FALSE);
+writeJsonTag(f, "schema_url", &firstOut);
+char schema_url[PATH_LEN];
+safef(schema_url, sizeof(schema_url), "http://hgwdev.soe.ucsc.edu/~kent/hca/schema/%s.json",
+    type);
+writeJsonVal(f, schema_url, FALSE);
+fprintf(f, "}");
+}
+
+boolean prefixDotInStanza(char *prefix, struct tagStanza *stanza, struct dyString *scratch)
+/* Return true if there is a tag that starts with the given prefix followed by a dot 
+ * in the stanza or any ancestor. */
+{
+dyStringClear(scratch);
+dyStringAppend(scratch, prefix);
+dyStringAppendC(scratch, '.');
+char *prefixDot = scratch->string;
+struct tagStanza *ancestor;
+for (ancestor = stanza; ancestor != NULL; ancestor = ancestor->parent)
+    {
+    struct slPair *tag;
+    for (tag = ancestor->tagList; tag != NULL; tag = tag->next)
+        if (startsWith(prefixDot, tag->name))
+	    return TRUE;
+    }
+return FALSE;
+}
+
 void rWriteJson(FILE *f, struct tagStorm *storm, struct tagStanza *stanza, 
-    struct ttjSubObj *obj, struct hash *schemaHash)
+    struct ttjSubObj *obj, struct ttjSubObj *labeledObj, struct hash *schemaHash,
+    struct dyString *scratch)
 /* Write out json object recursively */
 {
-fprintf(f, "{");
-struct ttjSubObj *field;
-boolean firstOut = TRUE;
-for (field = obj->children; field != NULL; field = field->next)
+boolean isArray = allDigitNames(obj->children);
+struct ttjSubObj *field; 
+if (isArray)
     {
-    char *fieldName = field->name;
-    if (field->children != NULL)
-	 {
-	 writeJsonTag(f, fieldName, &firstOut);
-	 rWriteJson(f, storm, stanza, field, schemaHash);
-	 }
-    else if (sameString("protocol_types", fieldName))
+    fprintf(f, "["); 
+    for (field = obj->children; field != NULL; field = field->next)
         {
-		// do nothing, this was handles by protocols 
+	if (field != obj->children) // Only write comma separators after the first one
+	   fprintf(f, ",");
+	rWriteJson(f, storm, stanza, field, labeledObj, schemaHash, scratch);
 	}
-    else
+    fprintf(f, "]");
+    }
+else
+    { 
+    fprintf(f, "{"); 
+    boolean firstOut = TRUE;
+
+    /* Figure out if we need to attach a core object and do so.  The figuring bit is
+     * frankly clunky. */
+    char *objType = labeledObj->name;
+    if (sameString(objType, "submitter") || sameString(objType, "contributors"))
+         objType = "contact";
+    else if (sameString(objType, "publications"))
+         objType = "publication";
+    else if (sameString(objType, "protocol"))  // protocol is actually just protocol_id
+         objType = "string";
+    else if (sameString(objType, "protocols")) // but protocols array is protocol
+         objType = "protocol";
+    else if (sameString(objType, "umi_barcode"))
+         objType = "barcode";
+    if (objNeedsCore(objType))
+        printCore(f, objType, &firstOut);
+
+
+    for (field = obj->children; field != NULL; field = field->next)
 	{
-	char *val = tagFindVal(stanza, field->fullName);
-	if (val != NULL)
+	char *fieldName = field->name;
+	if (field->children != NULL)
+	     {
+	     /* Look for funny characteristics_ as these are largely up to user. */
+	     if (startsWith("characteristics_", field->name))
+	         errAbort("No '.' allowed in field name after characteristics_ in %s", 
+		    field->children->fullName);
+
+	     /* If actually have data in this stanza write our field. */
+	     if (prefixDotInStanza(field->fullName, stanza, scratch))
+		 {
+		 writeJsonTag(f, fieldName, &firstOut);
+		 rWriteJson(f, storm, stanza, field, field, schemaHash, scratch);
+		 }
+	     }
+	else
 	    {
-	    boolean isNum = FALSE;
-	    struct tagSchema *schema = hashFindVal(schemaHash, field->fullName);
-	    if (schema != NULL)
-	       isNum = (schema->type == '#' || schema->type == '%');
-	    writeJsonTag(f, fieldName, &firstOut);
-	    if (sameString(fieldName, "files"))
-	        {
-		writeFilesArray(f, stanza, val);
-		}
-	    else if (sameString(fieldName, "protocols"))
-	        {
-		writeProtocolsArray(f, stanza, val);
-		}
-	    else
+	    char *val = tagFindVal(stanza, field->fullName);
+	    if (val != NULL)
 		{
-		boolean isArray = FALSE;
-		struct tagSchema *schema = hashFindVal(schemaHash, field->fullName);
+		boolean isNum = FALSE;
+		char *schemaName = tagSchemaFigureArrayName(field->fullName, scratch);
+		struct tagSchema *schema = hashFindVal(schemaHash, schemaName);
 		if (schema != NULL)
-		    isArray = schema->isArray;
-		struct slName *list = csvParse(val);
-		if (isArray)
-		    fputc('[', f);
+		   isNum = (schema->type == '#' || schema->type == '%');
+		if (sameString(fieldName, "files"))
+		    {
+		    writeJsonTag(f, "lanes", &firstOut);
+		    writeLaneArray(f, stanza, val);
+		    }
 		else
 		    {
-		    if (list->next != NULL)  // more than one element
-		       errAbort("Multiple vals for scalar tag %s in stanza starting line %d of %s",
-			    field->fullName, stanza->startLineIx, storm->fileName);
+		    boolean isArray = FALSE;
+		    writeJsonTag(f, fieldName, &firstOut);
+		    if (schema != NULL)
+			isArray = schema->isArray;
+		    struct slName *list = csvParse(val);
+		    if (isArray)
+			fputc('[', f);
+		    else
+			{
+			if (list->next != NULL)  // more than one element
+			   errAbort("Multiple vals for scalar tag %s in stanza starting line %d of %s",
+				field->fullName, stanza->startLineIx, storm->fileName);
+			}
+		    struct slName *el;
+		    for (el = list; el != NULL; el = el->next)
+			{
+			writeJsonVal(f, el->name, isNum);
+			if (el->next != NULL)
+			    fputc(',', f);
+			}
+		    if (isArray)
+			fputc(']', f);
+		    slFreeList(&list);
 		    }
-		struct slName *el;
-		for (el = list; el != NULL; el = el->next)
-		    {
-		    writeJsonVal(f, el->name, isNum);
-		    if (el->next != NULL)
-			fputc(',', f);
-		    }
-		if (isArray)
-		    fputc(']', f);
-		slFreeList(&list);
 		}
 	    }
 	}
+    fprintf(f, "}");
     }
-fprintf(f, "}");
 }
 
 void writeTopJson(char *fileName, struct tagStorm *storm, struct tagStanza *stanza, 
@@ -308,7 +403,8 @@ void writeTopJson(char *fileName, struct tagStorm *storm, struct tagStanza *stan
 {
 verbose(2, "Writing %s\n", fileName);
 FILE *f = mustOpen(fileName, "w");
-rWriteJson(f, storm, stanza, top, schemaHash);
+struct dyString *scratch = dyStringNew(0);
+rWriteJson(f, storm, stanza, top, top, schemaHash, scratch);
 fprintf(f, "\n");
 carefulClose(&f);
 }
@@ -347,7 +443,7 @@ writeJsonVal(f, "1", TRUE);
 writeJsonTag(f, "files", &firstOut);
 fputc('[', f);
 boolean firstFile = TRUE;
-struct slName *file, *list = tagMustFindValList(stanza, "assay.files");
+struct slName *file, *list = tagMustFindValList(stanza, "assay.seq.files");
 for (file = list; file != NULL; file = file->next)
     {
     if (firstFile)
@@ -399,6 +495,82 @@ safef(jsonFileName, sizeof(jsonFileName), "%s/manifest.json", dir);
 writeManifest(jsonFileName, stanza, dataDir);
 }
 
+void dupeValToNewTag(struct tagStorm *storm, struct tagStanza *stanzaList, 
+    char *oldTag, char *newTag)
+/* Everywhere see oldTag also make newTag with same value */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    char *val = tagFindLocalVal(stanza, oldTag);
+    if (val != NULL)
+        tagStanzaAppend(storm, stanza, newTag, val);
+    if (stanza->children)
+        dupeValToNewTag(storm, stanza->children, oldTag, newTag);
+    }
+}
+
+struct missingContext
+/* Keep track of statis while adding missing stuff */
+    {
+    char *idTag;	// Tag we use as ID
+    char *uuidTag;	// Tag we use as UUID
+    boolean dupeOk;	// If true we allow dupes
+    struct hash *idToUuid;  // Hash to convert id to UUID
+    int stanzaCount;	// Number of stanzas examined
+    int idFound;  // Number of times idTag found
+    int uuidFound; // Number of times existing uuidTag found
+    int uuidMade;   // Number of times UUID made
+    };
+
+void addToStanza(struct tagStorm *storm, struct tagStanza *stanza, void *context)
+/* Check up on one stanza, updating stats and if need be making a uuid */
+{
+struct missingContext *mc = context;
+mc->stanzaCount += 1;
+char *id = tagFindLocalVal(stanza, mc->idTag);
+if (id != NULL)
+    mc->idFound += 1;
+char *uuid = tagFindLocalVal(stanza, mc->uuidTag);
+if (uuid != NULL)
+    mc->uuidFound += 1;
+if (id != NULL && uuid == NULL)
+    {
+    uuid = hashFindVal(mc->idToUuid, id);
+    if (uuid == NULL)
+        {
+	uuid = needMem(UUID_STRING_SIZE);
+	makeUuidString(uuid);
+	mc->uuidMade += 1;
+	hashAdd(mc->idToUuid, id, uuid);
+	tagStanzaAppend(storm, stanza, mc->uuidTag, uuid);
+	}
+    else
+	{
+	if (!mc->dupeOk)
+	   errAbort("The %s %s is duplicated in %s", mc->idTag, id, storm->fileName);
+	}
+    }
+}
+
+void addMissingUuids(struct tagStorm *storm, char *idTag, char *uuidTag, boolean dupeOk)
+/* Add UUIDs to stanzas in storm that have given idTab but no uuidTag.  If dupe is ok
+ * then it's ok to see the same value for the ID tag more than once. */
+{
+verbose(2, "addMissingUuids() adding %s where missing and there is a %s tag\n", uuidTag, idTag);
+struct missingContext context;
+ZeroVar(&context);
+context.idTag = idTag;
+context.uuidTag = uuidTag;
+context.dupeOk = dupeOk;
+context.idToUuid = hashNew(0);
+tagStormTraverse(storm, storm->forest, &context, addToStanza);
+verbose(2, "stanzaCount %d, idFound %d, uuidFound %d, uuidMade %d\n", 
+    context.stanzaCount, context.idFound, context.uuidFound, context.uuidMade);
+if (context.uuidMade > 0)
+    verbose(1, "%s made %d times based on %s\n", uuidTag, context.uuidMade, idTag);
+}
+
 void hcaStormToBundles(char *inTags, char *dataUrl, char *schemaFile, char *outDir)
 /* hcaStormToBundles - Convert a HCA formatted tagStorm to a directory full of bundles.. */
 {
@@ -412,10 +584,17 @@ else if (!stringIn("://", dataUrl))
 struct tagSchema *schemaList = tagSchemaFromFile(schemaFile);
 struct hash *schemaHash = tagSchemaHash(schemaList);
 
-/* Load up tagStorm and get leaf list */
+/* Load up tagStorm get leaf list */
 struct tagStorm *storm = tagStormFromFile(inTags);
 struct tagStanzaRef *refList = tagStormListLeaves(storm);
 verbose(1, "Got %d leaf nodes in %s\n", slCount(refList), inTags);
+
+/* Add in assay.sample_id as just a dupe of sample.id */
+dupeValToNewTag(storm, storm->forest, "sample.id", "assay.sample_id");
+dupeValToNewTag(storm, storm->forest, "project.id", "sample.project_id");
+addMissingUuids(storm, "assay.seq.ena_experiment", "assay.id", FALSE);
+addMissingUuids(storm, "assay.seq.sra_experiment", "assay.id", FALSE);
+
 
 /* Do some figuring based on all fields available of what objects to make */
 struct slName *allFields = tagStormFieldList(storm);
@@ -441,7 +620,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
     {
     /* Fetch stanza and comma-separated list of files. */
     struct tagStanza *stanza = ref->stanza;
-    char *fileCsv = tagFindVal(stanza, "assay.files");
+    char *fileCsv = tagFindVal(stanza, "assay.seq.files");
     if (fileCsv == NULL)
         errAbort("Stanza without a files tag. Stanza starts line %d of %s",  
 		stanza->startLineIx, inTags); 
@@ -456,7 +635,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
     char localUrl[PATH_LEN*2];
     if (gUrls)
         {
-	struct slName *fileList = tagMustFindValList(stanza, "assay.files");
+	struct slName *fileList = tagMustFindValList(stanza, "assay.seq.files");
 	splitPath(fileList->name, localUrl, NULL, NULL);
 	dataUrl = localUrl;
 	slFreeList(&fileList);

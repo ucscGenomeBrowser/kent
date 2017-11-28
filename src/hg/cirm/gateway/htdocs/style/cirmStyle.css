@@ -52,8 +52,7 @@ textarea.form-control { width: 500px; height: 200px;}
 .cirm-page-title-text
 {
     color: #ffffff;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding: 5px;
 }
 
 .cirm-page-body
@@ -117,6 +116,17 @@ textarea.form-control { width: 500px; height: 200px;}
     margin-right: 0 !important;
 }
 
+.imagebox
+{
+    text-align: right;
+}
+
+.padded
+{
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
 .btnexpand:after
 {
     font-family: "Glyphicons Halflings";
@@ -173,11 +183,13 @@ textarea.form-control { width: 500px; height: 200px;}
 
 
 /*Styling for Projects page table*/
-.table-header-rotated th.row-header{
+.table-header-rotated th.row-header
+{
     width: auto;
 }
 
-.table-header-rotated td{
+.table-header-rotated td
+{
     width: 40px;
     border-top: 1px solid #dddddd; /* light gray */
     border-left: 1px solid #dddddd;
@@ -185,7 +197,8 @@ textarea.form-control { width: 500px; height: 200px;}
     vertical-align: middle;
 }
 
-.table-header-rotated th.rotate-45{
+.table-header-rotated th.rotate-45
+{
     height: 80px;
     width: 40px;
     min-width: 40px;
@@ -197,7 +210,8 @@ textarea.form-control { width: 500px; height: 200px;}
     line-height: 0.8;
 }
 
-.table-header-rotated th.rotate-45 > div{
+.table-header-rotated th.rotate-45 > div
+{
     position: relative;
     top: 0px;
     left: 40px; /* 80 * tan(45) / 2 = 40 where 80 is the height on the cell and 45 is the transform angle*/
@@ -213,7 +227,8 @@ textarea.form-control { width: 500px; height: 200px;}
     border-top: 1px solid #dddddd;
 }
 
-.table-header-rotated th.rotate-45 span {
+.table-header-rotated th.rotate-45 span
+{
     -ms-transform:skew(45deg,0deg) rotate(315deg);
     -moz-transform:skew(45deg,0deg) rotate(315deg);
     -webkit-transform:skew(45deg,0deg) rotate(315deg);
@@ -239,15 +254,17 @@ textarea.form-control { width: 500px; height: 200px;}
     display:block;
 }
 
-.popover {
+.popover
+{
     max-width:800px;
     /*
     left: 10px !important;
     margin-right: 10px;
     */
-    }
+}
 
-.popoveradjust {
+.popoveradjust
+{
     padding: 5px 0;
     margin-top: -3px;
 }

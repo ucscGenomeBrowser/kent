@@ -1,41 +1,10 @@
 #	"$Id: trackDb.ra,v 1.22 2010/02/08 19:28:30 rhead Exp $";
 
 include trackDb.chainNet.ra
+include trackDb.7way.ra
 
 track quality override
 type wig 0 99
-
-track multiz7way
-shortLabel Conservation
-longLabel Vertebrate Multiz Alignments & Cons.
-group compGeno
-priority 100
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons7way
-pairwiseHeight 12
-spanList 1
-yLineOnOff Off
-autoScale Off
-summary multiz7waySummary
-frames multiz7wayFrames
-irows on
-speciesCodonDefault galGal3
-speciesOrder hg18 mm8 rn4 monDom4 xenTro2 danRer4
-treeImage phylo/galGal3_7way.gif
-
-track phastConsElements7way
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements
-group compGeno
-priority 105.1
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
 
 track chainSelf
 shortLabel Self Chain

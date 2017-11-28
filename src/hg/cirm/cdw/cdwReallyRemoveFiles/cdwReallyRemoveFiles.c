@@ -139,8 +139,10 @@ for (i=0; i<fileCount; ++i)
 /* OK - paranoid checking is done, now let's remove each file from the tables it is in. */
 for (i=0; i<fileCount; ++i)
     {
-    cdwReallyRemoveFile(conn, ids[i], really);
+    cdwReallyRemoveFile(conn, submitDir, ids[i], FALSE, really);
     }
+if (!really)
+    verbose(1, "-really not specified. Dry run only.\n");
 }
 
 int main(int argc, char *argv[])

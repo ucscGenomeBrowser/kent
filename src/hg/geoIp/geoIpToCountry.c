@@ -22,7 +22,7 @@ void usage(char *p)
 /* display correct usage/syntax */
 {
 errAbort("Usage:\n"
-    "%s geoipCvsFile\n"
+    "%s geoipCsvFile\n"
     "Processes the IP ranges from decimal form to IP-string form, ignores comments and country-code ZZ Reserved.\n"
     ,p);
 }

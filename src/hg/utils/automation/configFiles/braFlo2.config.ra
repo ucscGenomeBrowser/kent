@@ -13,7 +13,7 @@ fastaFiles /hive/data/genomes/braFlo2/jgi/Branchiostoma_floridae_v2.0.assembly.f
 agpFiles /hive/data/genomes/braFlo2/jgi/braFlo2.agp
 # qualFiles none
 dbDbSpeciesDir lancelet
-# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEP01
+# https://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEP01
 photoCreditURL http://www.obs-banyuls.fr/UMR7628/
 photoCreditName Photo courtesy of Michael Fuentes and Héctor Escrivà, Observatoire Océanologique de Banyuls sur mer, All rights reserved.
 ncbiGenomeId 11839

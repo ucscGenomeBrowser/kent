@@ -36,6 +36,7 @@ DBS = \
 	ancCey1 \
 	anoCar1 anoCar2 \
 	anoGam1 \
+	aotNan1 \
 	apiMel1 \
 	apiMel2	\
 	aplCal1 \
@@ -61,7 +62,9 @@ DBS = \
 	canFam1 canFam2 canFamPoodle1 canFam3 \
 	cb1 cb2 cb3 cb4 \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \
+	cebCap1 \
 	centromeres1 \
+	cerAty1 \
 	cerSim1 \
 	chiLan1o \
 	chlSab2 \
@@ -91,6 +94,8 @@ DBS = \
 	equCab1 \
 	equCab2 \
 	eriEur1 eriEur2 \
+	eulFla1 \
+	eulMac1 \
 	falciparum \
 	felCat3 felCat4 felCat5  felCat8 \
 	fr1 fr2 fr3 \
@@ -103,13 +108,14 @@ DBS = \
 	haeCon1 haeCon2 \
 	hetBac1 \
 	hetGla1 hetGla2 \
-	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Patch10 hg38Patch7 hg38Patch9 \
+	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Patch10 hg38Patch7 hg38Patch9 hg38Patch11 \
 	latCha1 \
 	loaLoa1 \
 	loxAfr1 loxAfr2 loxAfr3 \
 	macEug1 macEug2 \
 	macFas5 \
 	macNem1 \
+	manLeu1 \
 	manPen1 \
 	marVir1 \
 	melGal1 melGal5 \
@@ -125,6 +131,7 @@ DBS = \
 	nasLar1 \
 	necAme1 \
 	nemVec1 \
+	neoSch1 \
 	nomLeu1 nomLeu2 nomLeu3 \
 	ochPri2 ochPri3 \
 	oncVol1 \
@@ -146,6 +153,7 @@ DBS = \
 	ponAbe2 \
 	priExs1 \
 	priPac1 priPac2 priPac3 \
+	proCoq1 \
 	pteVam1 tarSyr1 tarSyr2 \
 	repeats2 \
 	rheMac2 rheMac3 rheMac7 rheMac8 \

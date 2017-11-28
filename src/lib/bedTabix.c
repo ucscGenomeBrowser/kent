@@ -1,3 +1,9 @@
+/* bedTabix.c: Routines for reading bedTabix formatted files. bedTabix files are bed files indexed by tabix.  Indexing
+ * works like vcfTabix does.
+ *
+ * This file is copyright 2016 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "bedTabix.h"
 
 struct bedTabixFile *bedTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int end)

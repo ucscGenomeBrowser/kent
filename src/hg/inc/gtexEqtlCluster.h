@@ -6,12 +6,12 @@
 #define GTEXEQTLCLUSTER_H
 
 #include "jksql.h"
-#define GTEXEQTLCLUSTER_NUM_COLS 10
+#define GTEXEQTLCLUSTER_NUM_COLS 16
 
 extern char *gtexEqtlClusterCommaSepFieldNames;
 
 struct gtexEqtlCluster
-/* BED5+ of eQTLs (variants affecting gene expression) with a target (gene or tissue), and lists of secondary targets (e.g. tissues or genes) */
+/* BED5+ of eQTLs (variants affecting gene expression) with a target (gene or tissue), and lists of values related to combined factors (e.g. tissues or genes) */
     {
     struct gtexEqtlCluster *next;  /* Next in singly linked list. */
     char *chrom;	/* Reference sequence chromosome or scaffold */
@@ -19,11 +19,17 @@ struct gtexEqtlCluster
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name of variant (rsID or GTEx identifier if none) */
     unsigned score;	/* Score from 0-1000 */
+    char *targetId;	/* Identifier of target (gene or tissue) */
     char *target;	/* Name of target (gene or tissue) */
+    int distance;	/* Distance from TSS */
+    float maxEffect;	/* Maximum absolute value effect size in cluster */
+    char effectType[2];	/* +, -, 0 (for mixed) */
+    float maxPvalue;	/* Maximum -log10 pValue in cluster */
     unsigned expCount;	/* Number of experiment values */
     char **expNames;	/* Comma separated list of experiment names (e.g. tissue or gene) */
     float *expScores;	/* Comma separated list of effect size values */
-    float *expProbs;	/* Comma separated list of probability variant is in causal set */
+    float *expPvals;	/* Comma separated list of -log10 transformed p-values */
+    float *expProbs;	/* Comma separated list of probabilities variant is in high confidence causal set */
     };
 
 struct gtexEqtlCluster *gtexEqtlClusterLoadByQuery(struct sqlConnection *conn, char *query);
@@ -80,8 +86,6 @@ void gtexEqtlClusterOutput(struct gtexEqtlCluster *el, FILE *f, char sep, char l
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #define GTEX_EQTL_GENE_FIELD    "target"
-
-#define GTEX_EFFECT_MIN_DEFAULT 0.0
 
 #endif /* GTEXEQTLCLUSTER_H */
 

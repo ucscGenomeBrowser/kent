@@ -3,6 +3,9 @@ age # 1 10
 age_units $ weeks days
 assay $ *
 biosample_date $ *
+!contributor.[].name $ *
+contributor.[].id # 
+!i.[].core.[].id $
 donor # 0 0
 ^file $ *
 !format $ bam fastq "tag storm"
@@ -15,3 +18,5 @@ part # 1 10
 q # -1 10
 sex $ male female
 user_* $ *
+![].id #
+[].title $

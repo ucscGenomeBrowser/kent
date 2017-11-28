@@ -29,7 +29,7 @@ priority 41
 visibility dense
 color 155,0,125
 type genePred acemblyPep acemblyMrna
-url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg13&l=$$
+url https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg13&l=$$
 
 track vegaPseudoGene
 #replaces record vegaPseudoGene in parent dir missing/extra release

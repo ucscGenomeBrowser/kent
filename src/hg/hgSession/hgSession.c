@@ -786,6 +786,7 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringFree(&dy);
 
     /* Prevent modification of custom tracks just saved to namedSessionDb: */
+    cartCopyCustomComposites(cart);
     cartCopyCustomTracks(cart);
 
     if (useCount > INITIAL_USE_COUNT)
@@ -1133,6 +1134,7 @@ if (hel != NULL)
 		   getSessionEmailLink(encUserName, encSessionName));
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
     cartHideDefaultTracks(cart);
+    cartCopyCustomComposites(cart);
     hubConnectLoadHubs(cart);
     cartCopyCustomTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
@@ -1188,6 +1190,7 @@ dyStringPrintf(dyMessage,
 	       getSessionEmailLink(encOtherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
 cartHideDefaultTracks(cart);
+cartCopyCustomComposites(cart);
 hubConnectLoadHubs(cart);
 cartCopyCustomTracks(cart);
 cartCheckForCustomTracks(cart, dyMessage);
@@ -1204,7 +1207,17 @@ char *compressType = cartString(cart, hgsSaveLocalFileCompress);
 struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);
+
+// if we're normally outputing the cart in table form, we want to turn that off
+// and turn it back on after we're through.
+char *tableSetting = cartOptionalString(cart,CART_DUMP_AS_TABLE);
+if (tableSetting != NULL)
+    cartRemove(cart,CART_DUMP_AS_TABLE);
+
 cartDump(cart);
+
+if (tableSetting != NULL)
+    cartSetString(cart, CART_DUMP_AS_TABLE, tableSetting);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, NULL);
@@ -1290,9 +1303,10 @@ else
 if (lf != NULL)
     {
     cartLoadSettings(lf, cart, NULL, actionVar);
-    cartHideDefaultTracks(cart);
+    cartCopyCustomComposites(cart);
     hubConnectLoadHubs(cart);
     cartCopyCustomTracks(cart);
+    cartHideDefaultTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
     lineFileClose(&lf);
     }

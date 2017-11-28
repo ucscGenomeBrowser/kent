@@ -49,7 +49,8 @@ CREATE TABLE [dbo].[Builds] (
         [date_created] [datetime] NOT NULL ,
         [date_made_public] [datetime] NULL ,
 	[ncbi_nadb_accession_uid] [int] NULL ,
-	[ensembl_nadb_accession_uid] [int] NULL 
+	[ensembl_nadb_accession_uid] [int] NULL ,
+	[ccds_nadb_accession_uid] [int] NULL 
 
 ) ON [PRIMARY]
 go
@@ -189,7 +190,7 @@ go
 
 CREATE TABLE [dbo].[NADB_Accessions] (
 	[nadb_accession_uid] [int] IDENTITY (1, 1) NOT FOR REPLICATION  NOT NULL ,
-	[organization_uid] [int] NOT NULL ,
+	[organization_uid] [int] NULL ,
 	[acc] [varchar] (64) COLLATE Latin1_General_BIN NOT NULL ,
 	[version] [int] NOT NULL
 ) ON [PRIMARY]

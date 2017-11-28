@@ -20,4 +20,5 @@ bdfToGem 100dpi/helvR24.bdf mgHelvetica34.c -name=Helvetica34
 bdfToGem 100dpi/helvB24.bdf mgHelveticaBold34.c -name=HelveticaBold34
 bdfToGem 100dpi/timR24.bdf mgTimes34.c -name=Times34
 
-Two additional fonts - sail and sixhi - were from other sources now lost in the midsts of time.
+Two additional fonts - sail and sixhi - were from other sources now lost
+in the mists of time.

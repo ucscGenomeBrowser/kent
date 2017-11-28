@@ -113,6 +113,18 @@ cgiMakeHiddenVar(buf, "0");
 
 /* Convenience functions for hgTrackUi */
 
+void barChartUiLogTransform(struct cart *cart, char *track, struct trackDb *tdb)
+/* Checkbox to select log-transformed RPKM values */
+/* NOTE: this code from gtexUi.c.  Consider sharing. */
+{
+char cartVar[1024];
+puts("<b>Log10(x+1) transform:</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
+boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSFORM_DEFAULT);
+cgiMakeCheckBoxWithId(cartVar, isLogTransform, cartVar);
+jsOnEventByIdF("change", cartVar, "barChartUiTransformChanged('%s');", track);
+}
+
 double barChartUiMaxMedianScore(struct trackDb *tdb)
 /* Max median score, for scaling */
 {
@@ -126,49 +138,22 @@ if (setting != NULL)
 return BAR_CHART_MAX_LIMIT_DEFAULT;
 }
 
-void barChartUiViewTransform(struct cart *cart, char *track, struct trackDb *tdb)
-/* Checkboxes to select log-transform or autoscale RPKM values, or text input for view limits */
+void barChartUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
+/* Set viewing limits if log transform not checked */
+/* NOTE: this code from gtexUi.c.  Consider sharing. */
 {
-char buf[512];
 char cartVar[1024];
-puts("<b>Log10(x+1) transform:</b>\n");
+char buf[512];
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_LOG_TRANSFORM_DEFAULT);
-cgiMakeCheckBoxWithId(cartVar, isLogTransform, cartVar);
-jsOnEventByIdF("change", cartVar, "barChartTransformChanged(event);");
-
-puts("&nbsp;&nbsp;");
-puts("<b>Autoscale:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_AUTOSCALE);
-boolean isAutoScale = cartCgiUsualBoolean(cart, cartVar, BAR_CHART_AUTOSCALE_DEFAULT);
-cgiMakeCheckBoxWithId(cartVar, isAutoScale, cartVar);
-jsOnEventByIdF("change", cartVar, "barChartTransformChanged(event);");
-
-boolean isViewLimits = !isAutoScale && !isLogTransform;
-safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, !isViewLimits ? "disabled" : "");
-puts("&nbsp;&nbsp;");
+safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
 printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
 safef(cartVar, sizeof(cartVar), "%s.%s", track, BAR_CHART_MAX_VIEW_LIMIT);
 int viewMax = cartCgiUsualInt(cart, cartVar, BAR_CHART_MAX_VIEW_LIMIT_DEFAULT);
-cgiMakeIntVarWithExtra(cartVar, viewMax, 4, !isViewLimits ? "disabled" : "");
+cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
 char *unit = trackDbSettingClosestToHomeOrDefault(tdb, BAR_CHART_UNIT, "");
 printf("<span class='%s'> %s (range 0-%d)</span>\n", buf, unit, 
                                 round(barChartUiMaxMedianScore(tdb)));
-}
-
-void barChartUiMaxHeight(struct cart *cart, char *track, struct trackDb *tdb)
-/* Input to change maximum track height */
-{
-int min = BAR_CHART_MAX_HEIGHT_MIN;
-int deflt = BAR_CHART_MAX_HEIGHT_DEFAULT;
-int max = BAR_CHART_MAX_HEIGHT_MAX;
-int settingsDefault;
-wigFetchMinMaxPlusPixelsWithCart(cart, tdb, track, &min, &max, &deflt, &settingsDefault);
-puts("<b>Track height maximum:</b>\n");
-char cartVar[1024];
-safef(cartVar, sizeof(cartVar), "%s.%s", track, HEIGHTPER);
-cgiMakeIntVarWithLimits(cartVar, deflt, "Track height maximum", 0, min, max);
-printf("pixels&nbsp;(range: %d to %d, default: %d)", min, max, settingsDefault);
 }
 
 struct barChartCategory *barChartUiGetCategories(char *database, struct trackDb *tdb)
@@ -267,17 +252,21 @@ if (cartVarExists(cart, "ajax"))
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 if (startsWith("big", tdb->type))
     labelCfgUi(database, cart, tdb);
+printf("\n<table id=barChartControls style='font-size:%d%%' %s>\n<tr><td>", 
+        isPopup ? 75 : 100, boxed ?" width='100%'":"");
 
-/* Data transform (log, autoscale or viewlimits) */
 char cartVar[1024];
-puts("<p>");
-barChartUiViewTransform(cart, track, tdb);
-puts("</p>");
 
-/* Maximum track height */
-puts("<p>");
-barChartUiMaxHeight(cart, track, tdb);
-puts("</p>");
+/* Data transform. When selected, the next control (view limits max) is disabled */
+
+puts("<div>");
+barChartUiLogTransform(cart, track, tdb);
+
+/* Viewing limits max.  This control is disabled if log transform is selected */
+// construct class so JS can toggle
+puts("&nbsp;&nbsp;");
+barChartUiViewLimits(cart, track, tdb);
+puts("</div>");
 
 /* Category filter */
 printf("<br>");
@@ -303,5 +292,7 @@ struct slName *selectedValues = NULL;
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, BAR_CHART_CATEGORY_SELECT))
     selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, BAR_CHART_CATEGORY_SELECT);
 makeCategoryCheckboxes(cartVar, categs, selectedValues);
+
+puts("\n</table>\n");
 cfgEndBox(boxed);
 }

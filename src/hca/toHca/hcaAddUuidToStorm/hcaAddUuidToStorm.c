@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "tagStorm.h"
+#include "tagSchema.h"
 #include "uuid.h"
 
 boolean clDry;	// Just a dry run?
@@ -58,7 +59,25 @@ struct missingContext
     int uuidMade;   // Number of times UUID made
     };
 
-void checkStanza(struct tagStorm *storm, struct tagStanza *stanza, void *context)
+struct missingArrayContext
+/* Keep track of statis while adding missing stuff to an array */
+    {
+    char *idPrefix;	// Start of tag we use as ID
+    int idPrefixSize;	// Size of above string
+    char *idSuffix;	// End of tag we use as ID
+    char *uuidPrefix;	// Start of tag we use as UUID
+    int uuidPrefixSize;  // Size of above string;
+    char *uuidSuffix;	// End of tag we use as UUID
+    int uuidSuffixSize;  // Size of above string;
+    boolean dupeOk;	// If true we allow dupes
+    struct hash *idToUuid;  // Hash to convert id to UUID
+    int stanzaCount;	// Number of stanzas examined
+    int idFound;  // Number of times idTag found
+    int uuidFound; // Number of times existing uuidTag found
+    int uuidMade;   // Number of times UUID made
+    };
+
+void addToStanza(struct tagStorm *storm, struct tagStanza *stanza, void *context)
 /* Check up on one stanza, updating stats and if need be making a uuid */
 {
 struct missingContext *mc = context;
@@ -88,6 +107,55 @@ if (id != NULL && uuid == NULL)
     }
 }
 
+
+void arrayAddToStanza(struct tagStorm *storm, struct tagStanza *stanza, void *context)
+/* Check up on one stanza, updating stats and if need be making a uuid */
+{
+struct missingArrayContext *mc = context;
+mc->stanzaCount += 1;
+struct slPair *field;
+for (field = stanza->tagList; field != NULL; field = field->next)
+    {
+    if (memcmp(field->name, mc->idPrefix, mc->idPrefixSize) == 0)
+        {
+	char *digitStart = field->name + mc->idPrefixSize;
+	int digitCount = tagSchemaDigitsUpToDot(digitStart);
+	if (digitCount > 0 && sameString(digitStart + digitCount, mc->idSuffix))
+	    {
+	    int newNameSize = mc->uuidPrefixSize + digitCount + mc->uuidSuffixSize;
+	    char newName[newNameSize+1];
+	    memcpy(newName, mc->uuidPrefix, mc->uuidPrefixSize);
+	    memcpy(newName + mc->uuidPrefixSize, digitStart, digitCount);
+	    memcpy(newName + mc->uuidPrefixSize + digitCount, mc->uuidSuffix, mc->uuidSuffixSize);
+	    newName[newNameSize] = 0;
+	    verbose(2, "Adding %s because of %s\n", newName, field->name);
+
+	    char *id = field->val;
+	    char *uuid = tagFindLocalVal(stanza, newName);
+	    if (uuid != NULL)
+		mc->uuidFound += 1;
+	    else
+		{
+		uuid = hashFindVal(mc->idToUuid, id);
+		if (uuid == NULL)
+		    {
+		    uuid = needMem(UUID_STRING_SIZE);
+		    makeUuidString(uuid);
+		    mc->uuidMade += 1;
+		    hashAdd(mc->idToUuid, id, uuid);
+		    tagStanzaAppend(storm, stanza, newName, uuid);
+		    }
+		else
+		    {
+		    if (!mc->dupeOk)
+		       errAbort("The %s %s is duplicated in %s", field->name, id, storm->fileName);
+		    }
+		}
+	    }
+	}
+    }
+}
+
 void tagStormTraverse(struct tagStorm *storm, struct tagStanza *stanzaList, void *context,
     void (*doStanza)(struct tagStorm *storm, struct tagStanza *stanza, void *context));
 /* Traverse tagStormStanzas recursively applying doStanza with to each stanza in
@@ -104,11 +172,37 @@ context.idTag = idTag;
 context.uuidTag = uuidTag;
 context.dupeOk = dupeOk;
 context.idToUuid = hashNew(0);
-tagStormTraverse(storm, storm->forest, &context, checkStanza);
+tagStormTraverse(storm, storm->forest, &context, addToStanza);
 verbose(2, "stanzaCount %d, idFound %d, uuidFound %d, uuidMade %d\n", 
     context.stanzaCount, context.idFound, context.uuidFound, context.uuidMade);
 if (context.uuidMade > 0)
     verbose(1, "%s made %d times based on %s\n", uuidTag, context.uuidMade, idTag);
+}
+
+void addMissingUuidsToMidArray(struct tagStorm *storm, char *idPrefix, char *idSuffix,
+    char *uuidPrefix, char *uuidSuffix, boolean dupeOk)
+/* On stanzas where idPrefix.N.idSuffix exists, make up a uuidPrefix.N.uuidSuffix
+ * tag */
+{
+verbose(2, "addMissingUuidsToMidArray() adding %s.N.%s where missing and there is a %s.N.%s tag\n", 
+    uuidPrefix, uuidSuffix, idPrefix, idSuffix);
+struct missingArrayContext context;
+ZeroVar(&context);
+context.idPrefix = idPrefix;
+context.idPrefixSize = strlen(idPrefix);
+context.idSuffix = idSuffix;
+context.uuidPrefix = uuidPrefix;
+context.uuidPrefixSize = strlen(uuidPrefix);
+context.uuidSuffix = uuidSuffix;
+context.uuidSuffixSize = strlen(uuidSuffix);
+context.dupeOk = dupeOk;
+context.idToUuid = hashNew(0);
+tagStormTraverse(storm, storm->forest, &context, arrayAddToStanza);
+verbose(2, "stanzaCount %d, idFound %d, uuidFound %d, uuidMade %d\n", 
+    context.stanzaCount, context.idFound, context.uuidFound, context.uuidMade);
+if (context.uuidMade > 0)
+    verbose(1, "%s.N.%s made %d times based on %s.N.%s\n", 
+	uuidPrefix, uuidSuffix, context.uuidMade, idPrefix, idSuffix);
 }
 
 void hcaAddUuidToStorm(char *input, char *output)
@@ -116,17 +210,12 @@ void hcaAddUuidToStorm(char *input, char *output)
 {
 struct tagStorm *storm = tagStormFromFile(input);
 
-addMissingUuids(storm, "project.title", "project.uuid", FALSE);
-addMissingUuids(storm, "project.id", "project.uuid", FALSE);
-addMissingUuids(storm, "sample.donor.id", "sample.donor.uuid", TRUE);
-addMissingUuids(storm, "sample.id", "sample.uuid", FALSE);
-addMissingUuids(storm, "sample.ena_sample", "sample.uuid", FALSE);
-addMissingUuids(storm, "sample.geo_sample", "sample.uuid", FALSE);
-#ifdef MAYBE_SOME_DAY
-addMissingUuids(storm, "assay.ena_experiment", "assay.uuid", FALSE);
-addMissingUuids(storm, "assay.sra_experiment", "assay.uuid", FALSE);
-#endif
-char *needed[] = {"project.uuid", "sample.uuid", };
+addMissingUuids(storm, "project.title", "project.id", FALSE);
+addMissingUuids(storm, "sample.submitted_id", "sample.id", TRUE);
+addMissingUuidsToMidArray(storm, "project.protocols.", ".description", "project.protocols.", ".id", TRUE);
+addMissingUuids(storm, "sample.ena_sample", "sample.id", FALSE);
+addMissingUuids(storm, "sample.geo_sample", "sample.id", FALSE);
+char *needed[] = {"project.id", "sample.id", };
 checkLeavesForNeededTags(storm, needed, ArraySize(needed));
 
 if (!clDry)

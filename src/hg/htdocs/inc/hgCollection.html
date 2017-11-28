@@ -1,106 +1,111 @@
+<style>
+  #CustomTrackOptions {margin:12px}
+  #collectionList .ui-selecting { background: #FECA40; }
+  #collectionList .ui-selected { background: #B0E6FF; color: black; }
+  #collectionList { list-style-type: none; margin: 12px; padding: 0;  }
+.collectionList-menu li:hover {
+    background-color: #DEF;
+}
+.collectionList-menu {
+    display: none;
+    z-index: 1000;
+    position: absolute;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    white-space: nowrap;
+    font-family: sans-serif;
+    background: #FFF;
+    color: #333;
+    border-radius: 5px;
+    padding: 0;
+}
+.mygbSectionBanner {
+    padding: 3px;
+    margin-top: 6px;  
+    margin-left: 0px;  
+    margin-right: 0px;  
+    background-color: #4c759c;  /* light blue */  
+    color: white;  
+    font-weight: bold;  
+    font-size: 15px;  
+}  
+
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    10000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .0 ) 
+                url('http://i.stack.imgur.com/FhHRx.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+
+.fa-minus-square:before {
+    color:      #f00;
+    }
+
+.fa-plus:before {
+    color:      #0f0;
+    }
+</style>
+
+<form name='form' action='../cgi-bin/hgTracks'></form>
+
 <div class='row gbTrackTitleBanner'>
-    <div class='col-md-10'>
-        <span class='gbTrackName'>My Collections </span>           
-        <span class='gbTrackTitle'> Build Custom Collections of Tracks </span>
+    <div class='col-md-4'>
+        <span id='assembly' style='margin-left:6px' class='gbTrackName'></span>
+    </div>
+    <div class='col-md-5'>
+        <span class='gbTrackTitle'>Track Group Collections</span>
         <a href='#INFO_SECTION' title='Jump to the track description'>
             <span class='gbIconSmall fa-stack'>
                 <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>
                 <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>
             </span>
         </a>
-        <div class='gbButtonGoContainer text-right' title='Save Collections'> </div>
     </div>
-    <div class='col-md-2 text-right'>
-        <div class='gbButtonGoContainer text-right' title='Save or Discard'>
-            <div class='gbButtonGo' id='saveCollections' >Save</div>
-            <div class='gbButtonGo' id='discardChanges'>Discard Changes</div>
+    <div style='font-size:12px' class='col-md-3 text-right'>
+        <div style='font-size:10px' class='gbButtonGo' id='discardChanges'>Discard Changes</div>
+        <div class='gbButtonGoContainer text-right' title='Save and Go To Browser'>
+            <div class='gbButtonGo' id='goButton'>GO</div><i style='margin-left:3px' class='gbIconGo fa fa-play fa-2x'></i> 
         </div>
     </div>
 </div>
 
 <div class='row'>
     <div class='col-md-6'>
-        <div class='row gbSectionBanner'>
-            <div class='col-md-8'>All Tracks</div>
-            <div class='col-md-12 text-right'>
-                <div class='gbButtonGoContainer text-right' title='Make New Collection'>
-                    <div id='newCollection' class='gbButton'>Make New Collection </div>
-                    <div id='deleteTrack' class='gbButton'>Delete Track</div>
+        <div class='row mygbSectionBanner'>
+            <div class='col-md-6'>My Collections</div>
+                <div class='' style='float:right'  title='Make New Collection'>
+                    <div style='font-size:13px' id='newCollection' class='gbButton'>Make New Collection </div>
                 </div>
-            </div>
         </div>
 
-        <table id='tracks'><tbody>
-        <tr data-tt-id='coll_collections'><td><span class='file'>My Collections</td> <td>Your collected tracks.</td></tr>
-        </tbody></table>
+        <ol id='collectionList'>
+        </ol>
     </div>
 
-    <div class='col-md-6'>
+    <div class='col-md-6' style="height:200px;">
     <!-- Configuration panel -->
-        <div class='row gbSectionBanner'>
-            <div class='col-md-8'>Set Attributes</div>
+        <div class='row mygbSectionBanner'>
+            <div class='col-md-8'>Set Collection Attributes</div>
             <div class='col-md-4 text-right'> </div>
-        </div>
-
-        <!-- trackDb track setting widgets (none) -->
-        <div id='TrackDbOptions' style="display: none;">Drag to custom composite to copy to Collections</div>
-
-        <!-- view track widgets -->
-        <div id='viewOptions' style="display: none;">
-            <label class='gbInputLabel'  for='name'>Name:</label>
-            <input type='text' name='viewName' id='viewName' value='' class='text ui-widget-content ui-corner-all'>
-
-            <br><label class='gbInputLabel'  for='description'>Description:</label>
-            <input type='text' name='viewDescription' id='viewDescription' value='' class='text ui-widget-content ui-corner-all'>
-
-            <br><label for='viewVis'>Visibility:</label>
-            <select ID='viewVis' >
-                <option>hide</option>
-                <option selectED>dense</option>
-                <option>squish</option>
-                <option>pack</option>
-                <option>full</option>
-            </select>
-
-            <br><label for='viewFunc'>Function:</label>
-            <select ID='viewFunc' >
-                <option selectED>show all</option>
-                <option >add all</option>
-                <option >subtract from the first</option>
-            </select>
-
-            <br> <p>Color: <input type='text' id='viewColorInput' value='0xffffff'>&nbsp;&nbsp;
-            <input id='viewColorPicker'>           
-
-            <div class='gbButtonGoContainer text-right' title='Apply'>
-                <div id='viewApply' class='gbButton'>Apply</div>
-            </div>
-            <div class='gbButtonGoContainer text-right' title='Reset'>
-                <div id='viewReset' class='gbButton'>Reset</div>
-            </div>
-        </div>
-
-        <!-- custom composite widgets -->
-        <div id='CustomCompositeOptions' style="display: none;">
-            <label class='gbInputLabel'  for='name'>Name:</label>
-            <input type='text' name='collectionName' id='collectionName' value='' class='text ui-widget-content ui-corner-all'>
-            <br><label for='description'>Description:</label>
-            <input type='text' name='collectionDescription' id='collectionDescription' value='' class='text ui-widget-content ui-corner-all'>
-            <br><label for='collectionVis'>Visibility:</label>
-            <select ID='collectionVis' style='width: 70px'>
-                <option>hide</option>
-                <option selectED>dense</option>
-                <option>squish</option>
-                <option>pack</option>
-                <option>full</option>
-            </select>
-            <br><input type='button' value='Create View' name='createView' id='createView'>
-            <div class='gbButtonGoContainer text-right' title='Apply'>
-                <div id='collectionApply' class='gbButton'>Apply</div>
-            </div>
-            <div class='gbButtonGoContainer text-right' title='Reset'>
-                <div id='collectionReset' class='gbButton'>Reset</div>
-            </div>
         </div>
 
         <!-- custom track composite widgets -->
@@ -108,8 +113,8 @@
             <label class='gbInputLabel'  for='name'>Name:</label>
             <input type='text' name='customName' id='customName' value='' class='text ui-widget-content ui-corner-all'>
             <br><label class='gbInputLabel'  for='description'>Description:</label>
-            <input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all'>
-            <br><label for='customVis'>Visibility:</label>
+            <input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all' style='width:80%'>
+            <br><label for='customVis' class='gbInputLabel'>Visibility:</label>
             <select ID='customVis' style='width: 70px'>
                 <option>hide</option>
                 <option selectED>dense</option>
@@ -118,15 +123,74 @@
                 <option>full</option>
             </select>
 
-            <br> <p>Color: <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
+            <div id='viewFuncDiv' style='display:none;height:20px'>
+                <br><label class='gbInputLabel'  for='viewFunc'>Function:</label>
+                <select ID='viewFunc' >
+                    <option selectED>show all</option>
+                    <option >add all</option>
+                    <option >subtract from the first</option>
+                </select>
+            </div>
+
+            <br> <p><span class='gbInputLabel'> Color:</span> <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
             <input id='customColorPicker'>           
 
-            <div class='gbButtonGoContainer text-right' title='Apply'>
-                <div id='customApply' class='gbButton'>Apply</div>
-            </div>
-            <div class='gbButtonGoContainer text-right' title='Reset'>
-                <div id='customReset' class='gbButton'>Reset</div>
-            </div>
         </div>
+    </div>
+
+    <div class='col-md-6'>
+    <!-- Configuration panel -->
+        <div class='row mygbSectionBanner'>
+            <div class='col-md-6'>Collected Tracks</div>
+                <div class='' style='float:right'  title='Make New Calculated Track'>
+                    <div style='font-size:13px' id='newCalcTrackButton' class='gbButton'>Make New Calculated Track</div>
+                </div>
+        </div>
+        <div style='margin:12px; font-size:12px'> 
+        Below are tracks in <i><span id='collectedTracksTitle'></span></i>. To add tracks to this collection, drag and drop from "Available Tracks".  Right-click on the track to remove it.
+        </div>
+        <div id='currentCollection' style='overflow:auto' >
+        </div>
+    </div>
+
+    <div class='col-md-6'>
+    <!-- Configuration panel -->
+        <div class='row mygbSectionBanner'>
+            <div class='col-md-8'>Available Tracks</div>
+        </div>
+        <div>
+        <div style='margin:12px; font-size:12px'> Below are tracks are available to add to collections. To add new tracks from hubs or custom tracks, load the hub or custom track into the browser and then return to this list. </div>
+
+        </div>
+        <div id='tracks'>
+        </div>
+    </div>
+
+</div>
+
+<ul class='collectionList-menu' style='display:none'>
+    <li data-action="delete">Delete</li>
+</ul>
+
+<div class='modal'></div>
+
+<div id='newCalcTrackDialog' title='Create Calculated Track' style='background:white; width:512px; display:none'>
+    <p>
+    Calculated tracks are wiggle tracks that are built by performing arithmetic on a set of wiggles.
+    </p>
+
+    <div>
+        <input type="radio" name="defaultContents" checked="checked" value="copy" > Copy current tracks in collection to calculated track. <br>
+        <input type="radio" name="defaultContents" value="move"> Move current tracks in collection to calculated track. <br>
+        <input type="radio" name="defaultContents" value="empty"> Create empty calculated track. <br>
+    </div>
+
+    <div style="padding: 5px; border: 1px solid black; margin: 10px" value="Missing Data">
+        <input type="radio" name="missingData" value="missing" checked="checked" > math with missing values results in missing values<br>
+        <input type="radio" name="missingData" value="zero" > treat missing data as a zero<br>
+    </div>
+
+    <div>
+        <input id="newCalcTrack" type="submit" value="Go!"   tabindex="-1" >
     </div>
 </div>

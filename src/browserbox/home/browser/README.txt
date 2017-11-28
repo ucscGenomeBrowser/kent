@@ -8,7 +8,7 @@ gbibOffline         = switch off remote access to UCSC for tables or files
 gbibOnline          = reactivte remote access to UCSC for tables or files
 gbibMirrorTracksOff = disable the "Mirror tracks" tool
 gbibMirrorTracksOn  = enable the "Mirror tracks" tool
-gbibAddTools        = download the UCSC genome command line tools into the ~bin directory
+gbibAddTools        = download the UCSC genome command line tools into the /data/tools directory. Requires sudo permissions
 
 advanced commands:
 

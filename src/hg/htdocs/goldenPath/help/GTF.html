@@ -1,9 +1,11 @@
 <!-- GTF format description.  This is used in the FAQ and custom tracks documentation -->
 <p>
-GTF (Gene Transfer Format) is a refinement to GFF that tightens the specification. The first eight 
-GTF fields are the same as GFF. The <em>group</em> field has been expanded into a list of 
-<em>attributes</em>. Each attribute consists of a type/value pair. Attributes must end in a 
-semi-colon, and be separated from any following attribute by exactly one space.</p>
+GTF (Gene Transfer Format, GTF2.2) is an extension to, and backward compatible with, GFF2. The first eight 
+GTF fields are the same as GFF. The <em>feature</em> field is the same as GFF, with the exception that
+it also includes the following optional values: <em>5UTR, 3UTR, inter, inter_CNS,</em> and 
+<em>intron_CNS</em>. The <em>group</em> field has been expanded into a list of <em>attributes</em>. 
+Each attribute consists of a type/value pair. Attributes must end in a semi-colon, and be 
+separated from any following attribute by exactly one space.</p>
 <p>
 The attribute list must begin with the two mandatory attributes:</p>
 <ul>
@@ -22,8 +24,8 @@ Here is an example of the ninth field in a GTF data line:
 The Genome Browser groups together GTF lines that have the same <em>transcript_id</em> value. It 
 only looks at features of type <em>exon</em> and <em>CDS</em>.</p>
 <p>
-For more information on this format, see <a href="http://mblab.wustl.edu/GTF2.html" 
-target="_blank">http://mblab.wustl.edu/GTF2.html</a>. If you would like to obtain browser data in 
+For more information regarding the GTF2.2 UCSC supported format, see <a href="http://mblab.wustl.edu/GTF22.html" 
+target="_blank">http://mblab.wustl.edu/GTF22.html</a>. If you would like to obtain browser data in 
 GTF format, please refer to 
 <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format" target="_blank">Genes in 
 gtf or gff format</a> on the wiki</a>.</p>

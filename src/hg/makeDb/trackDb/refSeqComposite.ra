@@ -9,6 +9,7 @@ dragAndDrop subTracks
 noInherit on
 subGroup1 view Views aNcbiRefSeq=NCBI_RefSeq zUcscRefSeq=UCSC_RefSeq
 allButtonPair on
+dataVersion /gbdb/$D/ncbiRefSeq/ncbiRefSeqVersion.txt
 priority 2
 
     track ncbiRefSeqView
@@ -55,9 +56,12 @@ priority 2
         subGroups view=aNcbiRefSeq
 	longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
         priority 4
-        searchIndex name
-        searchTrix /gbdb/hg38/ncbiRefSeq/ncbiRefSeqOther.ix
-        type bigBed 12
+        searchIndex name,gene,ID,Name2,geneSynonym,product
+        searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
+	bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.bb
+        urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/612091" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" MGI="http://www.informatics.jax.org/marker/$$"
+        type bigBed 12 +
+        labelFields gene
 
 	track ncbiRefSeqPsl
         priority 5
@@ -93,9 +97,85 @@ priority 2
         color 12,12,120
         type genePred refPep refMrna
         idXref hgFixed.refLink mrnaAcc name
+        dataVersion 
         priority 6
+
+searchName ncbiRefSeqCuratedName2
+searchTable ncbiRefSeqCurated
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name2 like '%s%%'
+searchPriority 1.07200
+
+searchName ncbiRefSeqPredictedName2
+searchTable ncbiRefSeqPredicted
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name2 like '%s%%'
+searchPriority 1.07201
+
+searchName ncbiRefSeqCuratedProtAcc
+searchTable ncbiRefSeqCurated
+searchType genePred
+searchMethod prefix
+xrefTable ncbiRefSeqLink
+xrefQuery select id,protAcc from %s where protAcc like '%s%%'
+termRegex [NY]P_[0-9]+(\.[0-9]+)?
+searchPriority 2.07201
+
+searchName ncbiRefSeqPredictedProtAcc
+searchTable ncbiRefSeqPredicted
+searchType genePred
+searchMethod prefix
+xrefTable ncbiRefSeqLink
+xrefQuery select id,protAcc from %s where protAcc like '%s%%'
+termRegex XP_[0-9]+(\.[0-9]+)?
+searchPriority 2.07203
+
+searchName ncbiRefSeqCuratedProduct
+searchTable ncbiRefSeqCurated
+searchType genePred
+searchMethod fuzzy
+xrefTable ncbiRefSeqLink
+xrefQuery select id,product from %s where product like '%%%s%%'
+searchPriority 2.07201
+
+searchName ncbiRefSeqPredictedProduct
+searchTable ncbiRefSeqPredicted
+searchType genePred
+searchMethod fuzzy
+xrefTable ncbiRefSeqLink
+xrefQuery select id,product from %s where product like '%%%s%%'
+searchPriority 2.07203
+
+searchTable ncbiRefSeqCurated
+searchMethod exact
+searchType genePred
+semiShortCircuit 1
+termRegex [NY][MRP]_[0-9]{6}[0-9]*\.[0-9]+
+searchPriority 2.07202
+
+searchName ncbiRefSeqCuratedNoVersion
+searchTable ncbiRefSeqCurated
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
+semiShortCircuit 1
+termRegex [NY][MRP]_[0-9]{6}[0-9]*
+dontCheck [NY][MRP]_[0-9]{6}[0-9]*\.[0-9]+
+searchPriority 2.07202
+
+searchTable ncbiRefSeqPredicted
+searchMethod exact
+searchType genePred
+semiShortCircuit 1
+termRegex X[MR]_[0-9]{6}[0-9]*\.[0-9]+
+searchPriority 2.07204
+
+searchName ncbiRefSeqPredictedNoVersion
+searchTable ncbiRefSeqPredicted
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
+semiShortCircuit 1
+termRegex X[MR]_[0-9]{6}[0-9]*
+dontCheck X[MR]_[0-9]{6}[0-9]*\.[0-9]+
+searchPriority 2.07204
 
 searchTable ncbiRefSeqOther
 searchPriority 2.07207
 searchType bigBed
-searchDescription ncbiRefSeq Other annotations

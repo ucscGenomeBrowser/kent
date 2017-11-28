@@ -1,0 +1,118 @@
+track hg38Patch11
+compositeTrack on
+shortLabel GRC Patch Release
+longLabel GRCh38 patch release 11, alternate sequences and reference sequence patches
+subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
+dragAndDrop subTracks
+# sortOrder view=+
+visibility hide
+type bed 4
+noInherit on
+group map
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr15_KI270905v1_alt,chr16,chr17,chr18,chr19,chr2,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
+otherDb hg38Patch11
+chainMinScore 2000
+chainLinearGap medium
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+html hg38Patch11
+dataVersion GRCh38 Patch 11 update, Jun. 2017
+
+    track hg38Patch11Location
+    shortLabel Patch/Haplotype
+    view location
+    visibility pack
+    parent hg38Patch11
+    noScoreFilter .
+
+        track hg38Patch11Haplotypes
+        parent hg38Patch11Location
+        subGroups view=location
+        color 32,32,190
+        shortLabel Haplotypes
+        longLabel New haplotype sequences to GRCh38 Reference Sequence
+        html hg38Patch11
+        priority 1
+        urlLabel NCBI Entrez Nucleotide record (GRCh38.p11):
+        url https://www.ncbi.nlm.nih.gov/nuccore/$$
+
+        track hg38Patch11Patches
+        parent hg38Patch11Location
+        subGroups view=location
+        color 190,32,32
+        shortLabel Patches
+        longLabel Patches to GRCh38 Reference Sequence
+        html hg38Patch11
+        priority 2
+        urlLabel NCBI Entrez Nucleotide record (GRCh38.p11):
+        url https://www.ncbi.nlm.nih.gov/nuccore/$$
+
+    track hg38Patch11Align
+    shortLabel Alignment
+    view psl
+    visibility hide
+    parent hg38Patch11
+    type psl
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsMaxZoom 10000.0
+    showCdsAllScales .
+    baseColorDefault itemBases
+    pslSequence no
+    baseColorUseSequence extFile seqHg38Patch11 extHg38Patch11
+
+        track altSeqLiftOverPslP11
+        parent hg38Patch11Align
+        subGroups view=psl
+        shortLabel Alignment
+        longLabel Alignments of the patch 11 sequences to the reference GRCh38 
+        html hg38Patch11
+        priority 3
+
+    track hg38Patch11Chain
+    shortLabel Chain
+    view chain
+    visibility hide
+    parent hg38Patch11
+    spectrum on
+
+        track chainHg38Patch11
+        parent hg38Patch11Chain
+        subGroups view=chain
+        shortLabel Chain
+        longLabel GRCh38 patch 11 Sequence Chained Alignments
+        type chain hg38Patch11
+        html chainNet
+        priority 4
+
+    track hg38Patch11Net
+    shortLabel Net
+    view net
+    visibility hide
+    parent hg38Patch11
+
+        track netHg38Patch11
+        parent hg38Patch11Net
+        subGroups view=net
+        shortLabel Net
+        longLabel GRCh38 patch 11 Sequence Alignment Net
+        type netAlign hg38Patch11 chainHg38Patch11
+        html chainNet
+        priority 5
+
+
+searchTable hg38Patch11Patches
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex K[NQVZ][0-9]+(\.[0-9]+)?
+searchPriority 18
+
+searchTable hg38Patch11Haplotypes
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex K[NQVZ][0-9]+(\.[0-9]+)?
+searchPriority 18

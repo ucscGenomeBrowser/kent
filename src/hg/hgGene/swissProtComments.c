@@ -76,7 +76,7 @@ if (acc != NULL)
 return list != NULL;
 }
 
-static char *omimUrl = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=OMIM&term=%d&doptcmdl=Detailed&tool=genome.ucsc.edu";
+static char *omimUrl = "https://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=OMIM&term=%d&doptcmdl=Detailed&tool=genome.ucsc.edu";
 
 static void mimSubPrint(char *s)
 /* Print out putting in hyperlinks for OMIM. */

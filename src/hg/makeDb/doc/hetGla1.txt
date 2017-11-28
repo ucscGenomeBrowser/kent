@@ -686,4 +686,80 @@ done
     cd /hive/data/genomes/hetGla2/bed
     ln -s blastz.mm10.swap lastz.mm10
 
+#########################################################################
+# add chromAlias table (DONE - 2017-10-18 - Hiram)
+
+    mkdir /hive/data/genomes/hetGla1/bed/chromAlias
+    cd /hive/data/genomes/hetGla1/bed/chromAlias
+
+    # after the genbank idKeys are generated:
+
+    # missing the chrM sequence which is in the genbank, thus the printf:
+    (join -t$'\t' ../idKeys/hetGla1.idKeys.txt \
+	genbank/GCA_000230455.1.idKeys.txt \
+	  | cut -f2- ; printf "chrM\tJN242813.1") | sort > ucsc.genbank.tab
+
+
+    join -t$'\t' ../idKeys/hetGla1.idKeys.txt \
+/hive/data/outside/ensembl/ensGene/v90/fasta/idKeys/hetGla1/hetGla1.idKeys.txt \
+      | cut -f2- | sort > ucsc.ensembl.tab
+
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+
+    # the two lists are identical except for chrM
+    wc -l *.tab
+  39268 hetGla1.chromAlias.tab
+  39267 ucsc.ensembl.tab
+  39267 ucsc.genbank.tab
+
+
+    # verify chrM is correct:
+    grep chrM *
+# hetGla1.chromAlias.tab:JN242813.1       chrM    genbank
+# hetGla1.chromAlias.tab:MT       chrM    ensembl
+# ucsc.ensembl.tab:chrM   MT
+# ucsc.genbank.tab:chrM   JN242813.1
+
+    hgLoadSqlTab hetGla1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        hetGla1.chromAlias.tab
+
+##############################################################################
+# ucscToINSDC table/track (DONE - 2017-10-18 - Hiram)
+    # after the chromAlias table was generated
+
+    cd /hive/data/genomes/hetGla1/bed/ucscToINSDC
+
+    hgsql -N -e \
+  'select chrom,alias from chromAlias where source like "%genbank%";' \
+	hetGla1 | sort > ucscToGenbank.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    join ucscToGenbank.txt name.coordinate.tab \
+       | awk '{printf "%s\t%d\t%d\t%s\n", $1, $3, $4, $2}' \
+	| sort -k1,1 -k2,2n > ucscToINSDC.bed
+
+
+    # verify chrM is correct:
+    grep chrM *.bed
+# chrM    0       16386   JN242813.1
+
+    # should be same line counts throughout:
+    wc -l *
+    #	39267 name.coordinate.tab
+    #	39267 ucscToGenbank.txt
+    #	39267 ucscToINSDC.bed
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 8
+    # use the 8 in this sed
+    sed -e "s/21/8/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab hetGla1 ucscToINSDC stdin ucscToINSDC.bed
+
+    # should cover %100 entirely:
+    featureBits -countGaps hetGla1 ucscToINSDC
+    # 2643978223 bases of 2643978223 (100.000%) in intersection
+
 ##############################################################################

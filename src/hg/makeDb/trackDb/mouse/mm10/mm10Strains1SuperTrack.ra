@@ -17,7 +17,7 @@ html mm10Strains1
     type bedDetail 8
     noScoreFilter .
     urlLabel NCBI Nucleotide:
-    url http://www.ncbi.nlm.nih.gov/nuccore/$$
+    url https://www.ncbi.nlm.nih.gov/nuccore/$$
     html mm10Strains1
 
     track altSeqLiftOverPslStrains1

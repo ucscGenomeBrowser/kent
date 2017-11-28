@@ -1,43 +1,10 @@
 #	"$Id: trackDb.ra,v 1.35 2010/05/11 01:42:13 kent Exp $";
 
 include trackDb.chainNet.ra
+include trackDb.9way.ra
 
 track quality override
 type wig 0 63
-
-track multiz9way
-shortLabel Conservation
-longLabel Vertebrate Multiz Alignment & Conservation 
-group compGeno
-priority 104.2
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons9way
-spanList 1
-pairwiseHeight 12
-yLineOnOff Off
-frames multiz9wayFrames
-irows on
-autoScale Off
-summary multiz9waySummary
-speciesGroups vertebrate
-speciesCodonDefault monDom5
-sGroup_vertebrate macEug1 hg18 mm9 canFam2 ornAna1 galGal3 xenTro2 danRer5
-treeImage phylo/monDom5_9way.gif
-
-track phastConsElements9way
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements
-group compGeno
-priority 105
-visibility hide
-exonArrows off
-showTopScorers 200
-html phastConsElements
-type bed 5 .
 
 track nscanGene override
 visibility pack

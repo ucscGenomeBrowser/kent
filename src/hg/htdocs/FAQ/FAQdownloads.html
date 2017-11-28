@@ -142,7 +142,8 @@ These tables are also accessible from: </p>
   The <a href="../cgi-bin/hgTables" >Table Browser</a>, as connected tables and joined fields 
   described when clicking the &quot;describe table schema &quot; button</li>
   <li>
-  The <a href="../goldenPath/help/mysql.html" <a>public access MySQL server</a></li> 
+  One of our two <a href="../goldenPath/help/mysql.html">public access MySQL servers</a>
+  in the US and Europe</li>
 </ul>
 
 <a name="download32"></a>
@@ -375,7 +376,7 @@ EST.</p>
 <p> 
 It may have been added after we last downloaded data from GenBank, or it may have been replaced or 
 removed. You can check the submission date and status of an accession on the 
-<a href="http://www.ncbi.nlm.nih.gov:80/entrez/" target="_blank">NCBI Entrez Nucleotide
+<a href="https://www.ncbi.nlm.nih.gov:80/entrez/" target="_blank">NCBI Entrez Nucleotide
 site</a>.</p>
 
 <a name="download9"></a>
@@ -734,8 +735,10 @@ Browser interface?</h6>
 Yes. See our documentation on <a href="../goldenPath/help/mysql.html">Downloading Data using 
 MySQL</a>.</p> 
 <p>
-Connect to the MySQL server using the command:</p>
+Connect to the US MySQL server using the command:</p>
 <pre><code>mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A </code></pre>
+<p>Or to the European MySQL server using the command:</p>
+<pre><code>mysql --user=genome --host=genome-euro-mysql.soe.ucsc.edu -A </code></pre>
 
 <a name="download34"></a>
 <h2>Name of fourth column in BED output</h2>
@@ -784,8 +787,8 @@ The raw data underlying a track can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a>, <a href="../cgi-bin/hgIntegrator">Data 
 Integrator</a>, or <a href="../cgi-bin/hgVai">Variant Annotation Integrator</a>. For automated 
 analysis, the genome annotation can be downloaded from the 
-<a href="http://hgdownload.soe.ucsc.edu/">downloads server</a> or the 
-<a href="http://genome.ucsc.edu/goldenPath/help/mysql.html">public MySQL server</a>.</p> 
+<a href="http://hgdownload.soe.ucsc.edu/">downloads server</a> or one of our two
+<a href="http://genome.ucsc.edu/goldenPath/help/mysql.html">public MySQL servers</a>.</p>
 <p> 
 <strong>bigBed data:</strong> For <a href="FAQformat.html#format1.5">bigBed</a> files, individual 
 regions or the whole genome annotation can be obtained using our tool bigBedToBed which can be 
@@ -795,7 +798,7 @@ for downloading source code and binaries can be found
 also be used to obtain only features within a given range, example:</p> 
 <pre><code>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/path/to/file/bigBedfile.bb -chrom=chr21 -start=0 -end=1000000 stdout </code></pre> 
 <p> 
-<strong>SNP data:</strong> If queries against the SNP table on our public MySQL server or on your 
+<strong>SNP data:</strong> If queries against the SNP table on one of our public MySQL servers or on your
 own MySQL installation are slow, then they can be sped up by using the &quot;bin&quot; field; you 
 can <a href="../contacts.html">contact us</a> for more information.</p>
 
@@ -804,16 +807,24 @@ can <a href="../contacts.html">contact us</a> for more information.</p>
 <h6>Known issues with Table Browser GTF output: What is the best method for obtaining GTF output?</h6>
 <p>
 Currently, the <a href="../cgi-bin/hgTables">Table Browser</a> option to output as
-<a href="../FAQ/FAQformat.html#format4">GTF</a> is limited, and in some cases, may contain bugs.
-For now, the best method to obtain GTF output is to convert genePred to GTF using the
-command-line utility, <code>genePredToGtf</code>.</p>
+<a href="../FAQ/FAQformat.html#format4">GTF</a> is limited. For now, the best method to obtain 
+GTF output is to convert genePred to GTF using the command-line utility, <code>genePredToGtf</code>.</p>
 <p>
+<p>Summary of Table Browser limitations:</p>
+<ul>
+  <li>The Table Browser has transcript IDs only, so although it includes both &quot;gene_id&quot;
+and &quot;transcript_id&quot; fields in its output, the value for transcript ID (e.g., ENST#) is 
+used for both fields.</li>
+  <li>The Table Browser adds start and stop codon annotations whether or not the transcript alignment 
+includes proper start and stop codons.</li>
+  <li>Some tables in older genome assemblies are not supported.</li>
+</ul>
             <a href="../FAQ/FAQformat#format9">GenePred</a> (short for Gene Predictions) is a table
 format commonly used for gene tracks in the UCSC Genome Browser where each transcript has a single
 row. Tables are not stored in GTF as it would require many rows to describe a single transcript
 since each gene feature (i.e., exon) requires a separate line. The <code>genePredToGtf</code> command-line
-utility can be used to convert genePred to GTF. Download the <code>genePredToGtf</code> operating-specific
-command-line utility from the
+utility can be used to convert genePred to GTF. Download the <code>genePredToGtf</code> operating 
+system-specific command-line utility from the
 <a href="http://hgdownload.soe.ucsc.edu/admin/exe/">utilities directory</a>.</p>
 <p>
 Please see the <a href="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format"> Genes in GTF

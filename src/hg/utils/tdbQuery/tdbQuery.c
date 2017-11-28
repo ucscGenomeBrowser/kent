@@ -202,7 +202,10 @@ for (org = orgList; org != NULL; org = org->next)
 	        {
 		char trackDbPath[PATH_LEN];
 		safef(trackDbPath, sizeof(trackDbPath), "%s/trackDb.ra", db->name);
-		if (fileExists(trackDbPath))
+		char descriptionHtmlPath[PATH_LEN];
+		safef(descriptionHtmlPath, sizeof(descriptionHtmlPath), "%s/description.html",
+                      db->name);
+		if (fileExists(trackDbPath) || fileExists(descriptionHtmlPath))
 		    {
 		    char *s = strrchr(db->name, '/');
 		    assert(s != NULL);

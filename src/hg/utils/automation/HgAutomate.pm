@@ -13,6 +13,7 @@ use Carp;
 use vars qw(@ISA @EXPORT_OK);
 use Exporter;
 use File::Basename;
+use File::Spec;
 
 @ISA = qw(Exporter);
 
@@ -48,8 +49,14 @@ use File::Basename;
 
 use vars qw( %cluster %clusterFilesystem $defaultDbHost );
 
+
+sub readMainCluster(); # forward declaration to keep code order
+
+# the name of the cluster is in a separate text file, so it's easier to
+# use from bash scripts
+
 %cluster =
-    ( 'ku' =>
+    ( readMainCluster() =>
         { 'enabled' => 1, 'gigaHz' => 1.4, 'ram' => 8,
 	  'hostCount' => 512, },
     );
@@ -93,6 +100,20 @@ my %obsoleteClusterFilesystem =
     );
 
 $defaultDbHost = 'hgwdev';
+
+sub readMainCluster() {
+    # return the first line of the file cluster.txt in same directory as
+    # HgAutomate.pm. This file is easy to parse from bash scripts and
+    # other languages, easier than to have the value in this .pm file
+    #
+    my ($volume, $directory, $file) = File::Spec->splitpath(__FILE__);
+    my $mainClusterFname = $directory."cluster.txt";
+    open (my $clusterFile, '<', $mainClusterFname) || die "Couldn't open \"$mainClusterFname\": $!\n";
+    my $mainCluster = <$clusterFile>; 
+    close $clusterFile;
+    chomp $mainCluster;
+    return $mainCluster;
+}
 
 sub choosePermanentStorage {
   # Return the disk drive with the most available space.

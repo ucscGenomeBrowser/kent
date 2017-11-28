@@ -11,6 +11,7 @@
 #include "portable.h"
 #include "obscure.h"
 #include "hmmstats.h"
+#include "jsonWrite.h"
 
 /* A note on randomness: This program is used on paired end data.  This data is represented
  * as two separate fastq files where the forward reads are in one file and the reverse in
@@ -31,6 +32,7 @@
 int sampleSize = 100000;
 int seed = 0;
 boolean smallOk = FALSE;
+boolean json = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -45,6 +47,8 @@ errAbort(
   "   -sampleSize=N - default %d\n"
   "   -seed=N - Use given seed for random number generator.  Default %d.\n"
   "   -smallOk - Not an error if less than sampleSize reads.  out.fastq will be entire in.fastq\n"
+  "   -json - out.stats will be in json rather than text format\n"
+  "Use /dev/null for out.fastq and/or out.stats if not interested in these outputs\n"
   , sampleSize, seed
   );
 }
@@ -54,6 +58,7 @@ static struct optionSpec options[] = {
    {"sampleSize", OPTION_INT},
    {"seed", OPTION_INT},
    {"smallOk", OPTION_BOOLEAN},
+   {"json", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -104,24 +109,48 @@ for (i=0; i<arraySize; ++i)
 return total;
 }
 
-void printAveDoubleArray(FILE *f, char *label, double *a, long long *totalAtPos, int aSize)
+void printAveDoubleArray(struct jsonWrite *jw, 
+    FILE *f, char *label, double *a, long long *totalAtPos, int aSize)
 /* Print a[i]/counts[i] for all elements in array */
 {
-fprintf(f, "%s ", label);
-int i;
-for (i=0; i<aSize; ++i)
-    fprintf(f, "%g,", a[i]/totalAtPos[i]);
-fprintf(f, "\n");
+if (jw != NULL)
+    {
+    jsonWriteListStart(jw, label);
+    int i;
+    for (i=0; i<aSize; ++i)
+	jsonWriteDouble(jw, NULL, a[i]/totalAtPos[i]);
+    jsonWriteListEnd(jw);
+    }
+else
+    {
+    fprintf(f, "%s ", label);
+    int i;
+    for (i=0; i<aSize; ++i)
+	fprintf(f, "%g,", a[i]/totalAtPos[i]);
+    fprintf(f, "\n");
+    }
 }
 
-void printAveIntArray(FILE *f, char *label, int *a, long long *totalAtPos, int aSize)
+void printAveIntArray(struct jsonWrite *jw, 
+    FILE *f, char *label, int *a, long long *totalAtPos, int aSize)
 /* Print a[i]/totalAtPos[i] for all elements in array */
 {
-fprintf(f, "%s ", label);
-int i;
-for (i=0; i<aSize; ++i)
-    fprintf(f, "%g,", ((double)a[i])/totalAtPos[i]);
-fprintf(f, "\n");
+if (jw != NULL)
+    {
+    jsonWriteListStart(jw, label);
+    int i;
+    for (i=0; i<aSize; ++i)
+	jsonWriteDouble(jw, NULL, (double)a[i]/totalAtPos[i]);
+    jsonWriteListEnd(jw);
+    }
+else
+    {
+    fprintf(f, "%s ", label);
+    int i;
+    for (i=0; i<aSize; ++i)
+	fprintf(f, "%g,", ((double)a[i])/totalAtPos[i]);
+    fprintf(f, "\n");
+    }
 }
 
 static boolean isAllSpace(char *s, int size)
@@ -169,7 +198,7 @@ if (!lineFileNextRealWithSize(lf, &line, &lineSize))
     return FALSE;
 if (line[0] != '@')
     {
-    errAbort("Expecting line starting with '@' got %s line %d of %s (ugh!)", 
+    errAbort("Expecting line starting with '@' got '%s' line %d of %s", 
 	line, lf->lineIx, lf->fileName);
     }
 if (copy)
@@ -346,6 +375,33 @@ lineFileClose(&lf);
 return basesInSample;
 }
 
+void saveString(struct jsonWrite *jw, FILE *f, char *label, char *val)
+/* Write labeled string to jw if non-NULL, else f. */
+{
+if (jw != NULL)
+    jsonWriteString(jw, label, val);
+else
+    fprintf(f, "%s %s\n", label, val);
+}
+
+void saveNumber(struct jsonWrite *jw, FILE *f, char *label, long long val)
+/* Write labeled number to jw if non-NULL, else f. */
+{
+if (jw != NULL)
+    jsonWriteNumber(jw, label, val);
+else
+    fprintf(f, "%s %lld\n", label, val);
+}
+
+void saveDouble(struct jsonWrite *jw, FILE *f, char *label, double val)
+/* Write labeled number to jw if non-NULL, else f. */
+{
+if (jw != NULL)
+    jsonWriteDouble(jw, label, val);
+else
+    fprintf(f, "%s %g\n", label, val);
+}
+
 void fastqStatsAndSubsample(char *inFastq, char *outStats, char *outFastq)
 /* fastqStatsAndSubsample - Go through a fastq file doing sanity checks and collecting 
  * statistics,  and also producing a smaller fastq out of a sample of the data. */
@@ -444,29 +500,37 @@ if (outFastq != NULL)
     }
 
 FILE *f = mustOpen(outStats, "w");
+struct jsonWrite *jw = NULL;
+if (json)
+    {
+    jw = jsonWriteNew();
+    jsonWriteObjectStart(jw, NULL);
+    }
+
 int posCount = maxReadBases;
-fprintf(f, "readCount %d\n", totalReads);
-fprintf(f, "baseCount %lld\n", sumReadBases);
-fprintf(f, "sampleCount %d\n", sampleSize);
-fprintf(f, "basesInSample %lld\n", basesInSample);
-fprintf(f, "readSizeMean %g\n", (double)sumReadBases/totalReads);
+saveNumber(jw, f, "readCount", totalReads);
+saveNumber(jw, f, "baseCount", sumReadBases);
+saveNumber(jw, f, "sampleCount", sampleSize);
+saveNumber(jw, f, "basesInSample", basesInSample);
+saveDouble(jw, f, "readSizeMean", (double)sumReadBases/totalReads);
 if (minReadBases != maxReadBases)
-    fprintf(f, "readSizeStd %g\n", calcStdFromSums(sumReadBases, sumSquaredReadBases, totalReads));
+    saveDouble(jw, f, "readSizeStd", 
+	calcStdFromSums(sumReadBases, sumSquaredReadBases, totalReads));
 else
-    fprintf(f, "readSizeStd 0\n");
-fprintf(f, "readSizeMin %d\n", minReadBases);
-fprintf(f, "readSizeMax %d\n", maxReadBases);
+    saveDouble(jw, f, "readSizeStd", 0);
+saveNumber(jw, f, "readSizeMin", minReadBases);
+saveNumber(jw, f, "readSizeMax", maxReadBases);
 double qSum = sumDoubleArray(sumQuals, maxReadBases);
 double qSumSquared = sumDoubleArray(sumSquaredQuals, maxReadBases);
-fprintf(f, "qualMean %g\n", qSum/sumReadBases - qualZero);
+saveDouble(jw, f, "qualMean", qSum/sumReadBases - qualZero);
 if (minQual != maxQual)
-    fprintf(f, "qualStd %g\n", calcStdFromSums(qSum, qSumSquared, sumReadBases));
+    saveDouble(jw, f, "qualStd", calcStdFromSums(qSum, qSumSquared, sumReadBases));
 else
-    fprintf(f, "qualStd 0\n");
-fprintf(f, "qualMin %d\n", minQual - qualZero);
-fprintf(f, "qualMax %d\n", maxQual - qualZero);
-fprintf(f, "qualType %s\n", qualType);
-fprintf(f, "qualZero %d\n", qualZero);
+    saveDouble(jw, f, "qualStd",  0);
+saveNumber(jw, f, "qualMin", minQual - qualZero);
+saveNumber(jw, f, "qualMax", maxQual - qualZero);
+saveString(jw, f, "qualType", qualType);
+saveNumber(jw, f, "qualZero", qualZero);
 
 /* Compute overall total nucleotide stats from count arrays. */
 long long aSum = sumIntArray(aCount, maxReadBases);
@@ -474,15 +538,15 @@ long long cSum = sumIntArray(cCount, maxReadBases);
 long long gSum = sumIntArray(gCount, maxReadBases);
 long long tSum = sumIntArray(tCount, maxReadBases);
 long long nSum = sumIntArray(nCount, maxReadBases);
-fprintf(f, "atRatio %g\n", (double)(aSum + tSum)/(aSum + cSum + gSum + tSum));
-fprintf(f, "aRatio %g\n", (double)aSum/sumReadBases);
-fprintf(f, "cRatio %g\n", (double)cSum/sumReadBases);
-fprintf(f, "gRatio %g\n", (double)gSum/sumReadBases);
-fprintf(f, "tRatio %g\n", (double)tSum/sumReadBases);
-fprintf(f, "nRatio %g\n", (double)nSum/sumReadBases);
+saveDouble(jw, f, "atRatio", (double)(aSum + tSum)/(aSum + cSum + gSum + tSum));
+saveDouble(jw, f, "aRatio", (double)aSum/sumReadBases);
+saveDouble(jw, f, "cRatio", (double)cSum/sumReadBases);
+saveDouble(jw, f, "gRatio", (double)gSum/sumReadBases);
+saveDouble(jw, f, "tRatio", (double)tSum/sumReadBases);
+saveDouble(jw, f, "nRatio", (double)nSum/sumReadBases);
 
 /* Now deal with array outputs.   First make up count of all bases we've seen. */
-fprintf(f, "posCount %d\n", posCount);
+saveNumber(jw, f, "posCount", posCount);
 long long totalAtPos[posCount];
 int pos;
 for (pos=0; pos<posCount; ++pos)
@@ -492,13 +556,18 @@ for (pos=0; pos<posCount; ++pos)
 for (pos=0; pos<posCount; ++pos)
     sumQuals[pos] -= totalAtPos[pos] * qualZero;
 
-printAveDoubleArray(f, "qualPos", sumQuals, totalAtPos, posCount);
-printAveIntArray(f, "aAtPos", aCount, totalAtPos, posCount);
-printAveIntArray(f, "cAtPos", cCount, totalAtPos, posCount);
-printAveIntArray(f, "gAtPos", gCount, totalAtPos, posCount);
-printAveIntArray(f, "tAtPos", tCount, totalAtPos, posCount);
-printAveIntArray(f, "nAtPos", nCount, totalAtPos, posCount);
-
+printAveDoubleArray(jw, f, "qualPos", sumQuals, totalAtPos, posCount);
+printAveIntArray(jw, f, "aAtPos", aCount, totalAtPos, posCount);
+printAveIntArray(jw, f, "cAtPos", cCount, totalAtPos, posCount);
+printAveIntArray(jw, f, "gAtPos", gCount, totalAtPos, posCount);
+printAveIntArray(jw, f, "tAtPos", tCount, totalAtPos, posCount);
+printAveIntArray(jw, f, "nAtPos", nCount, totalAtPos, posCount);
+if (json)
+    {
+    jsonWriteObjectEnd(jw);
+    fprintf(f, "%s\n", jw->dy->string);
+    }
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
@@ -511,6 +580,7 @@ sampleSize = optionInt("sampleSize", sampleSize);
 seed = optionInt("seed", seed);
 srand(seed);
 smallOk = optionExists("smallOk");
+json = optionExists("json");
 fastqStatsAndSubsample(argv[1], argv[2], argv[3]);
 return 0;
 }

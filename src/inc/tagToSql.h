@@ -19,6 +19,7 @@ struct tagTypeInfo
     double minVal;	    /* Min val */
     double maxVal;	    /* Max val */
     int maxChars;	    /* Maximum width of string representation */
+    boolean isArray;	    /* True if is an array */
     };
 
 struct tagTypeInfo *tagTypeInfoNew(char *name);

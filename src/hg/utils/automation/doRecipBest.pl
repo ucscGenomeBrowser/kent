@@ -22,12 +22,14 @@ use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
+    $opt_load
     /;
 
 # Specify the steps supported with -continue / -stop:
 my $stepper = new HgStepManager(
-    [ { name => 'recipBest',   func => \&doRecipBest },
-      { name => 'download', func => \&doDownload },
+    [ { name => 'recipBest',  func => \&doRecipBest },
+      { name => 'download',   func => \&doDownload },
+      { name => 'load',       func => \&loadRBest },
     ]
 				);
 
@@ -49,6 +51,7 @@ options:
   print STDERR <<_EOF_
     -buildDir dir         Use dir instead of default
                           $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/blastz.\$qDb
+    -load                 load the resulting chainNet into database
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -58,6 +61,7 @@ Automates addition of reciprocal best chains/nets to regular chains/nets which
 have already been created using doBlastzChainNet.pl.  Steps:
     recipBest: Net in both directions to get reciprocal best.
     download: Make a reciprocalBest subdir of the existing download dir.
+    load:     load reciprocal best chain/net tables.
 All work is done in the axtChain subdir of the build directory:
 $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/blastz.\$qDb unless -buildDir is given.
 ";
@@ -88,6 +92,7 @@ sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
+		      'load',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -301,6 +306,60 @@ _EOF_
   );
   $bossScript->execute();
 } # doDownload
+
+sub loadRBest {
+  if (! $opt_load) {
+    &HgAutomate::verbose(1, "# specify -load to perform load step\n");
+    return;
+  }
+  # Load chains; add repeat/gap stats to net; load nets.
+  my $runDir = "$buildDir/axtChain";
+  my $QDbLink = "chainRBest$QDb" . "Link";
+  # First, make sure we're starting clean.
+  if (-e "$buildDir/fb.$tDb.$QDbLink.txt") {
+    die "loadRBest looks like this was run successfully already " .
+      "(fb.$tDb.$QDbLink.txt exists).\n";
+  }
+  # Make sure previous stage was successful.
+  my $successDir = "$runDir/$tDb.$qDb.rbest.net.gz";
+  if (! -e $successDir && ! $opt_debug) {
+    die "loadRBest looks like previous stage was not successful " .
+      "(can't find $successDir).\n";
+  }
+  my $whatItDoes =
+"It loads the recip best chain tables into $tDb, adds gap/repeat stats to the recip best .net file,
+and loads the recip net table.";
+  my $bossScript = new HgRemoteScript("$runDir/loadRBest.csh", $dbHost,
+				      $runDir, $whatItDoes);
+  $bossScript->add(<<_EOF_
+# Load reciprocal best chains:
+_EOF_
+  );
+  $bossScript->add(<<_EOF_
+cd $runDir
+hgLoadChain -tIndex $tDb chainRBest$QDb $tDb.$qDb.rbest.chain.gz
+_EOF_
+  );
+
+    $bossScript->add(<<_EOF_
+
+# Add gap/repeat stats to the net file using database tables:
+cd $runDir
+netClass -verbose=0 -noAr $tDb.$qDb.rbest.net.gz $tDb $qDb stdout \\
+    | gzip -c > $tDb.$qDb.rbest.classed.net.gz
+
+# Load nets:
+netFilter -minGap=10 $tDb.$qDb.rbest.classed.net.gz \\
+| hgLoadNet -verbose=0 $tDb netRBest$QDb stdin
+
+cd $buildDir
+featureBits $tDb $QDbLink >&fb.$tDb.$QDbLink.txt
+cat fb.$tDb.$QDbLink.txt
+_EOF_
+      );
+
+  $bossScript->execute();
+}	#	sub loadRBest {}
 
 #########################################################################
 # main

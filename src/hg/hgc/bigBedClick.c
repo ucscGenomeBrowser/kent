@@ -70,6 +70,14 @@ static void extFieldCrisprOfftargets(char *val, struct slPair *extraFields)
  a score
  e.g. chr15;63615585-;71|chr16;8835640+;70 */
 {
+if (NULL == val)
+    {
+    printf("<br><table class='bedExtraTbl'>\n");
+    printf("<tr><td>Potential Off-targets</td>\n");
+    printf("<td>No Off-targets found for this guide</td></tr>\n");
+    printf("</table>\n");
+    return;
+    }
 printf("<tr><td>Potential Off-targets</td>\n");
 
 printf("<td>\n");
@@ -301,8 +309,13 @@ for (pair = detailsUrls; pair != NULL; pair = pair->next)
     char *offsetStr = (char*)p;
 
     if (offsetStr==NULL || sameWord(offsetStr, "0"))
+	{
+	/* need to show the empty off-targets for crispr tracks */
+	if (startsWith("crispr", tdb->track))
+	    extFieldCrisprOfftargets(NULL, NULL);
         // empty or "0" value in bigBed means that the lookup should not be performed
         continue;
+	}
     off_t offset = atoll(offsetStr);
 
     seekAndPrintTable(detailsUrl, offset, extraFields);

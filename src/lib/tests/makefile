@@ -314,6 +314,11 @@ udcTest: udcTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/udcTest udcTest.o ${MYLIBS} ${L}
 	${BIN_DIR}/udcTest
 
+# udc (not part of the top-level test target at this point):
+udcCacheSizesCheck: udcCacheSizesCheck.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/udcCacheSizesCheck udcCacheSizesCheck.o ${MYLIBS} ${L}
+	${BIN_DIR}/udcCacheSizesCheck
+
 testOutOfMem: testOutOfMem.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/testOutOfMem testOutOfMem.o ${MYLIBS} ${L}
 	# we expect this to errAbort because we allocate one byte too much beyond limit

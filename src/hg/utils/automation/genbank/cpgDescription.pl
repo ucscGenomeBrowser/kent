@@ -122,7 +122,7 @@ Gardiner-Garden M, Frommer M.
 <a href="http://www.sciencedirect.com/science/article/pii/0022283687906899" target="_blank">
 CpG islands in vertebrate genomes</a>.
 <em>J Mol Biol</em>. 1987 Jul 20;196(2):261-82.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/3656447" target="_blank">3656447</a>
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/3656447" target="_blank">3656447</a>
 </p>
 _EOF_
    ;

@@ -477,7 +477,9 @@
     useful to declare the current version of the track.  Use
     this setting to display a version statement on the track
     configuration page and item details page of a track.  The string
-    will support limited HTML.</P>
+    will support limited HTML. For native tracks, not track hubs, 
+    this setting can also be a local absolute filename to read the version 
+    string from.</P>
     <P><B>Example:</B></P>
     <pre>   dataVersion May 2011 &lt;em&gt;beta&lt;/em&gt;</pre>
 </DIV>
@@ -552,7 +554,7 @@
 
     <P><B>Examples:</B></P>
     <pre>
-    iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+    iframeUrl https://www.ncbi.nlm.nih.gov/nuccore/$$
     iframeOptions height='600' width='1024'</pre>
 </DIV>
 
@@ -649,22 +651,25 @@
 </DIV>
 
 <DIV class="pennantIcon"><span class="types all"></span>
-<div class="format"><code>pennantIcon &lt;icon&gt; [html [tip]]</code></div>
-    <P>Certain tracks can be visually flagged in the Browser by use of an icon and
-    a link to a description of the icon's meaning.  The icon is displayed next to the track's
+<div class="format"><code>pennantIcon &lt;iconFile&gt;/&lt;text color&gt; [html [tip]]</code></div>
+    <P>Certain tracks can be visually flagged in the Browser menu by use of an icon or text label 
+    and a link to a description of the flags meaning.  The icon is displayed next to the track's
     short label in the track groups section below the Browser image, and on the track's 
     description and configuration pages.
     This setting has three parts:</P>
     <UL>
     <LI>icon -  Can be fully qualified URL (http, https, ftp) to an image file,  or the name of an image in the Browser's images directory in the 
     Browser source tree.</LI>
+    <LI>text - A single word label. Case is ignored; the label is displayed capitalized lower case.</LI>
+    <LI>color - An HTML color name to color the text label</LI>
     <LI>html - A relative or full html path to a description document explaining the
     icon's meaning.  This page displays when the user clicks on the icon.</LI>
-    <LI>Tip - A "quoted string" tip that will be seen
+    <LI>tip - A "quoted string" tip that will be seen
     when the user's mouse pointer hovers over the icon.</LI>
     </UL>
-    <P><B>Example:</B></P>
+    <P><B>Examples:</B></P>
     <pre>    pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"</pre>
+    <pre>    pennantIcon New red ../goldenPath/releaseLog.html "Released October 19, 2017"</pre>
 </DIV>
 
 <DIV class="priority"><span class="types all"></span>
@@ -781,7 +786,7 @@
     the obscure setting for them. -->
     <P><B>Example:</B></P>
     <pre>
-    url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
+    url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
     urlLabel NCBI Details:
     idInUrlSql select name from sibTxGraph where id=%s    </pre>
 </DIV>
@@ -819,7 +824,7 @@
     </P>
     <P><B>Example:</B></P>
     <pre>
-    url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
+    url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&amp;db=n&amp;term=$$
     urlLabel NCBI Details:    </pre>
 </DIV>
 
@@ -846,12 +851,12 @@
     replace the $$ wildcard and the part after it as the label. This is similar
     to how Wikpedia markup encodes links. In the example below, a value for the
     field pmid of "115330|Doe, J. et al" would create a link with the URL
-    http://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J. et al" .
+    https://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J. et al" .
     </P>
 
     <P><B>Example:</B></P>
     <pre>
-    urls pmid="http://www.ncbi.nlm.nih.gov/pubmed/$$" spId="http://www.uniprot.org/uniprot/$$"
+    urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" spId="http://www.uniprot.org/uniprot/$$"
     </pre>
 </DIV>
 
@@ -2488,7 +2493,7 @@ There are no extra options that can appear on the type bigBarChart line.
     classes.  Note the base level coloring option.</P>
     <pre>
     type genePred . mrna
-    url http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&amp;l=$$
+    url https://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&amp;l=$$
     urlLabel AceView Gene Summary:    </pre>
     <P>This gene prediction
     track has associated representative mRNAs found in the "mrna"
@@ -3461,7 +3466,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <P><I>NOT FOR HUBS.  Nor are any of the settings in this section.</I></P>
     <P>This particular variant of bed 6, identified by table name,
     is for UCSC's subset of
-    <A HREF="http://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_BLANK>dbSNP</A>,
+    <A HREF="https://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_BLANK>dbSNP</A>,
     NCBI's database of short genetic variants.</P>
 </DIV>
 
@@ -3595,7 +3600,7 @@ There are no extra options that can appear on the type bigBarChart line.
     group varRep
     priority 99.0911
     visibility dense
-    url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+    url https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
     urlLabel dbSNP: 
     snpSeq snp135Seq
     snpExceptionDesc snp135ExceptionDesc
@@ -3869,7 +3874,7 @@ There are no extra options that can appear on the type bigBarChart line.
     track microattrLoci
     type bedDetail 14
     itemRgb on
-    url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&amp;sendto=t&amp;extrafeatpresent=1&amp;list_uids=$$
+    url https://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&amp;sendto=t&amp;extrafeatpresent=1&amp;list_uids=$$
       ...    </pre>
     <P>This bedDetail contains details for each item
     formatted for HTML display.  In addition each item has an "id" as
@@ -4670,7 +4675,8 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     "abc") can be declared with this setting as dimA, dimB, etc.</P>  
     <P>Note that the order of the subgroups in a dimension is exactly the same as 
     the order they appear in the <code>subGroup#</code> setting, regardless of whether
-    the subtrack list is sorted by tags.</P>
+    the subtrack list is sorted by tags. Please also note that if a hub is not going to use
+    the X,Y matrix, dimX should be the first dimension defined rather than dimA.</P>
 </DIV>
 
 <DIV class="filterComposite"><span class="types subGroups"></span>
@@ -4691,7 +4697,8 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     adding the "<code>=one</code>" option to the filter box definition.
     This might make sense when there are only 2 choices.  The choice
     of "all" is always available, while choosing nothing is an invalid
-    case.</P>
+    case. Please note that if a hub is not going to use the X,Y matrix,
+    then dimX should be the first dimension defined rather than dimA.</P>
 </DIV>
 
 <DIV class="dimensionAchecked"><span class="types subGroups"></span>
@@ -4769,7 +4776,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4799,7 +4806,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4873,7 +4880,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4903,7 +4910,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -5059,7 +5066,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     subGroup1 view Views PK=Peaks SIG=Signals
     subGroup2 cell Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup3 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;

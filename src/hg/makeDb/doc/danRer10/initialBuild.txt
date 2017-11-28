@@ -461,8 +461,20 @@ searchPriority 8
      #	test it with some sequence
 
 ############################################################################
+# LIFTOVER TO danRer11 (DONE - 2015-01-29 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer10/bed/blat.danRer11.2017-10-20
+    cd /hive/data/genomes/danRer10/bed/blat.danRer11.2017-10-20
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/danRer10/jkStuff/danRer10.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         danRer10 danRer11) > do.log 2>&1
+    # real    194m46.839s
 
-#########################################################################
+    # verify the convert link on the test browser is now active from danRer10 to
+    # danRer11
+
+############################################################################
 # LIFTOVER TO danRer7 (DONE - 2015-01-29 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/danRer10/bed/blat.danRer7.2015-01-29

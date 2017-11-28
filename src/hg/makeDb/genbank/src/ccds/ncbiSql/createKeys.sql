@@ -291,6 +291,12 @@ ALTER TABLE [dbo].[Builds] ADD
 		[ensembl_nadb_accession_uid]
 	) REFERENCES [dbo].[NADB_Accessions] (
 		[nadb_accession_uid]
+	),
+	CONSTRAINT [FK_Builds_NADB_Accessions_ccds] FOREIGN KEY 
+	(
+		[ccds_nadb_accession_uid]
+	) REFERENCES [dbo].[NADB_Accessions] (
+		[nadb_accession_uid]
 	)
 go
 

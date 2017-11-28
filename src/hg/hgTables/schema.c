@@ -141,9 +141,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    hPrintf("<A HREF=\"%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
-	    hPrintf("&%s=%s", hgtaDatabase, db);
-	    hPrintf("&%s=%s", hgtaHistoTable, table);
-	    hPrintf("&%s=%s", hgtaDoValueHistogram, row[0]);
+	    hPrintf("&amp;%s=%s", hgtaDatabase, db);
+	    hPrintf("&amp;%s=%s", hgtaHistoTable, table);
+	    hPrintf("&amp;%s=%s", hgtaDoValueHistogram, row[0]);
 	    hPrintf("\">");
 	    hPrintf("values");
 	    hPrintf("</A>");
@@ -152,9 +152,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    hPrintf("<A HREF=\"%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
-	    hPrintf("&%s=%s", hgtaDatabase, db);
-	    hPrintf("&%s=%s", hgtaHistoTable, table);
-	    hPrintf("&%s=%s", hgtaDoValueRange, row[0]);
+	    hPrintf("&amp;%s=%s", hgtaDatabase, db);
+	    hPrintf("&amp;%s=%s", hgtaHistoTable, table);
+	    hPrintf("&amp;%s=%s", hgtaDoValueRange, row[0]);
 	    hPrintf("\">");
 	    hPrintf("range");
 	    hPrintf("</A>");
@@ -354,7 +354,7 @@ if (tdb != NULL && isNotEmpty(tdb->html))
 	// like details pages in which HR's bottom margin melts into H2's top margin:
 	char *s = skipLeadingSpaces(tdb->html);
 	if (startsWith("<H2>", s) || startsWith("<h2>", s))
-	    printf("<span style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</span>",
+	    printf("<div style='position:relative; top:-1.2em; margin-bottom:0em;'>%s\n</div>",
 		   tdb->html);
 	else
 	    puts(tdb->html);

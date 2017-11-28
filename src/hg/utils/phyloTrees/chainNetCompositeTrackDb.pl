@@ -5,8 +5,9 @@ use warnings;
 
 my $argc = scalar(@ARGV);
 
-if ($argc < 2) {
- printf STDERR "usage: compositeChainNet.pl <name> <clade1.list> \\\n\t[clade2.list ...etc...] > nameChainNet.ra\n";
+if ($argc < 3) {
+ printf STDERR "usage: compositeChainNet.pl [net|syn|rbest] <name> <clade1.list> \\\n\t[clade2.list ...etc...] > nameChainNet.ra\n";
+ printf STDERR "[net|syn|rbest] select one of these for lowest level chainNet\n\tor syntenic or reciprocal best chainNet\n";
  printf STDERR "name is the name of the composite track, examples:\n";
  printf STDERR "\tplacental, mammal, vertebrate\n";
  printf STDERR "The clade lists are lists of species dbs to put\n";
@@ -16,6 +17,7 @@ if ($argc < 2) {
    exit 255;
 }
 
+my $netType = shift;
 my $trackName = shift;
 my @cladeLists;
 my @cladeNames;
@@ -24,6 +26,36 @@ my %commonNames;	# key is db, value is common name
 my %speciesOrder;	# key is db, value is sNNN to get species order
 my %cladeOrder;		# key is clade name, value is cNNN to get clade order
 my %dbClade;		# key is db, value is clade
+my %rrActive;		# key is db, value is 1 for active on RR
+my %chainNetHg;		# chainNet tracks on hg38, hg19, key is db, value is 1
+
+open (FH, "HGDB_CONF=$ENV{'HOME'}/.hg.mysqlrr.conf hgsql -e 'show tables;' hg19 | grep -i chain | grep Link | egrep -i -v 'self|patch' | sed -e 's/chain//; s/Link//;'|") or die "can not hgsql show tables hg19";
+while (my $line = <FH>) {
+  chomp $line;
+#  printf STDERR "# %s\n", lcfirst($line);
+  $chainNetHg{lcfirst($line)} = 1;
+}
+close (FH);
+
+open (FH, "HGDB_CONF=$ENV{'HOME'}/.hg.mysqlrr.conf hgsql -e 'show tables;' hg38 | grep -i chain | grep Link | egrep -i -v 'self|patch' | sed -e 's/chain//; s/Link//;'|") or die "can not hgsql show tables hg38";
+while (my $line = <FH>) {
+  chomp $line;
+#  printf STDERR "# %s\n", lcfirst($line);
+  $chainNetHg{lcfirst($line)} = 1;
+}
+close (FH);
+
+# foreach my $db (sort keys %chainNetHg) {
+#   printf STDERR "# %s\n", $db;
+# }
+# exit 255;
+
+open (FH, "hgsql -N -hgenome-centdb -e 'select name from dbDb where active=1' hgcentral | sort|") or die "can not hgsql select name from hgcentral.dbDb";
+while (my $line = <FH>) {
+  chomp $line;
+  $rrActive{$line} = 1;
+}
+close (FH);
 
 for (my $i = 0; $i < scalar(@ARGV); ++$i) {
     push @cladeLists, $ARGV[$i];
@@ -71,12 +103,22 @@ foreach my $clade (@cladeNames) {
 printf STDERR "# %s\n", $subGroup2;
 printf STDERR "# %s\n", $subGroup3;
 
-printf 'track %sChainNet
+my $trackType = "";
+$trackType = "Syn" if ($netType =~ m/syn/);
+$trackType = "RBest" if ($netType =~ m/rbest/);
+my $trackLabel = "";
+$trackLabel = "Syntenic" if ($netType =~ m/syn/);
+$trackLabel = "RecipBest" if ($netType =~ m/rbest/);
+my $shortLabel = "";
+$shortLabel = "sy" if ($netType =~ m/syn/);
+$shortLabel = "rb" if ($netType =~ m/rbest/);
+
+printf 'track %s%sChainNet
 compositeTrack on
-shortLabel %s Chain/NetChainNet
-longLabel %sChainNet, Chain and Net Alignments
+shortLabel %s %s Chain/Net
+longLabel %s %s Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-', $trackName, $trackName, $trackName;
+', $trackName, $trackType, ucfirst($trackName), $trackLabel, ucfirst($trackName), $trackLabel;
 
 printf "subGroup2 %s\nsubGroup3 %s\n", $subGroup2, $subGroup3;
 
@@ -90,22 +132,22 @@ type bed 3
 chainLinearGap loose
 chainMinScore 5000
 dimensions dimensionX=clade dimensionY=species
-sortOrder  species=+ view=+ clade=+
+sortOrder species=+ view=+ clade=+
 configurable on
-html %sChainNet
+html %s%sChainNet
 
-', $trackName;
+', $trackName, $trackType;
 
 
 
-printf '    track %sChainNetViewchain
-    shortLabel Chains
+printf '    track %s%sChainNetViewchain
+    shortLabel %s Chains
     view chain
     visibility pack
-    subTrack %sChainNet
+    subTrack %s%sChainNet
     spectrum on
 
-', $trackName, $trackName;
+', $trackName, $trackType, $trackLabel, $trackName, $trackType;
 
 for (my $i = 0; $i < scalar(@cladeNames); ++$i) {
   my $clade = $cladeNames[$i];
@@ -113,25 +155,31 @@ for (my $i = 0; $i < scalar(@cladeNames); ++$i) {
   for (my $j = 0; $j < scalar(@$dbs); ++$j) {
       my $db = $dbs->[$j];
       my $Db = ucfirst($db);
-      printf '        track chain%s
-        subTrack %sChainNetViewchain off
+      # for track on dev, use o_db
+      my $organism = "\$o_db";
+      # if track on RR, use o_Organism
+      if (exists($chainNetHg{$db})) {
+         $organism = "\$o_Organism";
+      }
+      printf '        track chain%s%s
+        subTrack %s%sChainNetViewchain off
         subGroups view=chain species=%s clade=%s
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
+        shortLabel %s %sChain
+        longLabel %s ($o_date) Chained Alignments
         type chain %s
         otherDb %s
 
-', $Db, $trackName, $speciesOrder{$db}, $cladeOrder{$clade}, $db, $db;
+', $trackType, $Db, $trackName, $trackType, $speciesOrder{$db}, $cladeOrder{$clade}, $organism, $shortLabel, $organism, $db, $db;
   }
 }
 
-    printf '    track %sChainNetViewnet
-    shortLabel Nets
+    printf '    track %s%sChainNetViewnet
+    shortLabel %s Nets
     view net
     visibility dense
-    subTrack %sChainNet
+    subTrack %s%sChainNet
 
-', $trackName, $trackName;
+', $trackName, $trackType, $trackLabel, $trackName, $trackType;
 
 
 for (my $i = 0; $i < scalar(@cladeNames); ++$i) {
@@ -140,15 +188,21 @@ for (my $i = 0; $i < scalar(@cladeNames); ++$i) {
   for (my $j = 0; $j < scalar(@$dbs); ++$j) {
       my $db = $dbs->[$j];
       my $Db = ucfirst($db);
-      printf '        track net%s
-        subTrack %sChainNetViewnet off
+      # for track on dev, use o_db
+      my $organism = "\$o_db";
+      # if track on RR, use o_Organism
+      if (exists($chainNetHg{$db})) {
+         $organism = "\$o_Organism";
+      }
+      printf '        track net%s%s
+        subTrack %s%sChainNetViewnet off
         subGroups view=net species=%s clade=%s
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign %s chain%s
+        shortLabel %s %sNet
+        longLabel %s ($o_date) Alignment Net
+        type netAlign %s chain%s%s
         otherDb %s
 
-', $Db, $trackName, $speciesOrder{$db}, $cladeOrder{$clade}, $db, $Db, $db;
+', $trackType, $Db, $trackName, $trackType, $speciesOrder{$db}, $cladeOrder{$clade}, $organism, $shortLabel, $organism, $db, $trackType, $Db, $db;
   }
 }
 

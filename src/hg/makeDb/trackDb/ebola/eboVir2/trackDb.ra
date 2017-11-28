@@ -64,7 +64,7 @@ html gap
 
 track ncbiGene
 shortLabel NCBI Genes
-longLabel NCBI Genes from http://www.ncbi.nlm.nih.gov/nuccore/674810552
+longLabel NCBI Genes from https://www.ncbi.nlm.nih.gov/nuccore/674810552
 group genes
 visibility pack
 priority 1
@@ -81,7 +81,7 @@ group genes
 visibility hide
 type bigBed 12 +
 itemRgb on
-urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
 release alpha
 
@@ -91,7 +91,7 @@ longLabel Immune Epitope Database and Analysis Resource (IEDB) curated T-Cell Ep
 group immu
 type bigBed 12 .
 visibility hide
-urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField mHC_Allele_Name
 
 track iedbTcellLong
@@ -100,7 +100,7 @@ longLabel Immune Epitope Database and Analysis Resource (IEDB) curated T-Cell Ep
 group immu
 type bigBed 12 .
 visibility hide
-urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField mHC_Allele_Name
 
 track iedbPred
@@ -117,7 +117,7 @@ group immu
 type bigBed 12 .
 visibility dense
 color 0,90,100
-urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+urls pubMedID=https://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=https://www.ncbi.nlm.nih.gov/protein/$$
 
 track arjun
 shortLabel Pred MHCI-binding
@@ -140,7 +140,7 @@ longLabel Sequence matches in Genbank for Ebola Zaire with length < 10kbp
 group genes
 type psl
 visibility hide
-iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+iframeUrl https://www.ncbi.nlm.nih.gov/nuccore/$$
 iframeOptions width='800' height='800' scrolling='yes'
 priority 10
 
@@ -150,7 +150,7 @@ longLabel Sequence matches in Genbank for non-Ebola/Zaire Viruses with length < 
 group genes
 type psl
 visibility hide
-iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+iframeUrl https://www.ncbi.nlm.nih.gov/nuccore/$$
 iframeOptions width='1000' height='800' scrolling='yes'
 priority 20
 

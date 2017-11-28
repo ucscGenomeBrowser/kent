@@ -72,9 +72,12 @@
 /* GTEx eQTL track controls */
 
 #define GTEX_EQTL_EFFECT                "effect"
+#define GTEX_EQTL_EFFECT_DEFAULT        0.0
 #define GTEX_EQTL_PROBABILITY           "prob"
-#define GTEX_EQTL_PROBABILITY_DEFAULT   0.5
+#define GTEX_EQTL_PROBABILITY_DEFAULT   0.0
 #define GTEX_EQTL_GENE                  "gene"
+#define GTEX_EQTL_TISSUE_COLOR          "tissueColor"
+#define GTEX_EQTL_TISSUE_COLOR_DEFAULT  TRUE
 
 /* Identify GTEx tracks that use special trackUI. 
  * NOTE: trackDb must follow this naming convention unless/until there is
@@ -121,16 +124,19 @@ void gtexGeneUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb);
 void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* GTEx (Genotype Tissue Expression) per gene data */
 
-void gtexEqtlGene(struct cart *cart, char *track, struct trackDb *tdb);
+void gtexEqtlUiGene(struct cart *cart, char *track, struct trackDb *tdb);
 /* Limit to selected gene */
 
-void gtexEqtlEffectSize(struct cart *cart, char *track, struct trackDb *tdb);
+void gtexEqtlUiEffectSize(struct cart *cart, char *track, struct trackDb *tdb);
 /* Limit to items with absolute value of effect size >= threshold.  Use largest
  * effect size in tissue list */
 
-void gtexEqtlProbability(struct cart *cart, char *track, struct trackDb *tdb);
+void gtexEqtlUiProbability(struct cart *cart, char *track, struct trackDb *tdb);
 /* Limit to items with specified probability.  Use largest probability in tissue list,
  * which is score/1000, so use that */
+
+void gtexEqtlUiTissueColor(struct cart *cart, char *track, struct trackDb *tdb);
+/* Control visibility color patch to indicate tissue (can be distracting in large regions) */
 
 void gtexEqtlClusterUi(struct cart *cart, struct trackDb *tdb, char *track, char *title, 
                         boolean boxed);
