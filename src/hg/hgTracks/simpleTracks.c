@@ -13849,6 +13849,7 @@ else if (sameWord(type, "longTabix"))
     char *words[2];
     words[0] = type;
     words[1] = "5";
+    knetUdcInstall();
     complexBedMethods(track, tdb, FALSE, 2, words);
     longRangeMethods(track, tdb);
     if (trackShouldUseAjaxRetrieval(tg))
