@@ -12,10 +12,15 @@ void longRangeCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *ti
 /* Complete track controls for long range interaction. */
 {
 char buffer[1024];
-safef(buffer, sizeof buffer, "%s.%s", tdb->track, LONG_HEIGHT );
-unsigned height = sqlUnsigned(cartUsualString(cart, buffer, LONG_DEFHEIGHT));
-printf("<BR><b>Track height:&nbsp;</b>");
-cgiMakeIntVar(buffer, height, 3);
+int min, max, deflt, current;
+cartTdbFetchMinMaxPixels(cart, tdb, LONG_MINHEIGHT, LONG_MAXHEIGHT, atoi(LONG_DEFHEIGHT),
+                                &min, &max, &deflt, &current);
+safef(buffer, sizeof buffer, "%s.%s", tdb->track, LONG_HEIGHT);
+printf("<br><b>Track height:&nbsp;</b>");
+cgiMakeIntVar(buffer, current, 3);
+printf("&nbsp;<span>pixels&nbsp;(range: %d to %d, default: %d)<span>", 
+        min, max, deflt);
+
 safef(buffer, sizeof buffer, "%s.%s", tdb->track, LONG_MINSCORE);
 double minScore = sqlDouble(cartUsualString(cart, buffer, LONG_DEFMINSCORE));
 printf("<BR><BR><b>Minimum score:&nbsp;</b>");

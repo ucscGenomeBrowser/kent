@@ -15,6 +15,7 @@ tableBrowser off
 mouseOverField _mouseOver
 html cosmicRegions
 noScoreFilter on
+maxItems 2000
 
 searchTable cosmicRegions
 searchPriority 2.07207

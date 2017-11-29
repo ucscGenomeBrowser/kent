@@ -10,10 +10,6 @@ visibility hide
 track xenoRefGene override
 priority 3
 
-track refGene override
-release beta,public
-priority 4
-
 # mRNA and EST
 
 track mrna override

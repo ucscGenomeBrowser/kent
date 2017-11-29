@@ -250,13 +250,17 @@ sub doProcess {
 
 export asmId=$asmId
 export downloadDir=$downloadDir
+export ncbiGffGz=\$downloadDir/\${asmId}_genomic.gff.gz
 export db=$db
 export gff3ToRefLink=$gff3ToRefLink
 export gbffToCds=$gbffToCds
 
+export versionDate=`ls -L --full-time \$ncbiGffGz | awk '{print \$6;}'`
+echo "\$asmId (\$versionDate)" > ncbiRefSeqVersion.txt
+
 # this produces the genePred in NCBI coordinates
 # 8/23/17: gff3ToGenePred quits over illegal attribute SO_type... make it legal (so_type):
-zcat \$downloadDir/\${asmId}_genomic.gff.gz \\
+zcat \$ncbiGffGz \\
   | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
   | gff3ToGenePred -useName -attrsOut=\$asmId.attrs.txt -allowMinimalGenes \\
       -processAllGeneChildren -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
@@ -270,7 +274,7 @@ zcat \$downloadDir/\${asmId}_rna.gbff.gz \\
         > pragmaLabels.txt
 
 # extract cross reference text for refLink
-\$gff3ToRefLink \$downloadDir/\$asmId.raFile.txt \$downloadDir/\${asmId}_genomic.gff.gz pragmaLabels.txt 2> \$db.refLink.stderr.txt \\
+\$gff3ToRefLink \$downloadDir/\$asmId.raFile.txt \$ncbiGffGz pragmaLabels.txt 2> \$db.refLink.stderr.txt \\
   | sort > \$asmId.refLink.tab
 
 # converting the NCBI coordinates to UCSC coordinates
@@ -320,8 +324,8 @@ cut -f4,14,17,21,22,31 \$db.other.extras.bed \\
 ixIxx ncbiRefSeqOther.ix.tab ncbiRefSeqOther.ix{,x}
 
 # PSL data will be loaded into a psl type track to show the alignments
-(zgrep "^#" \$downloadDir/\${asmId}_genomic.gff.gz | head || true) > gffForPsl.gff
-zegrep -v "NG_" \$downloadDir/\${asmId}_genomic.gff.gz \\
+(zgrep "^#" \$ncbiGffGz | head || true) > gffForPsl.gff
+zegrep -v "NG_" \$ncbiGffGz \\
   | awk -F'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
 gff3ToPsl -dropT \$downloadDir/\$asmId.chrom.sizes \$downloadDir/rna.sizes \\
   gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
@@ -360,9 +364,7 @@ sub doLoad {
 				      $runDir, $whatItDoes);
 
   my $gbdbDir = "$HgAutomate::gbdb/\$db/ncbiRefSeq";
-  my $gffFile = "${asmId}_genomic.gff.gz";
-  my $releaseDate = `ls -L --full-time $buildDir/download/$gffFile | awk '{print \$6;}'`;
-  chomp $releaseDate;
+  my $dbTwoBit = "$HgAutomate::clusterData/$db/$db.2bit";
 
   $bossScript->add(<<_EOF_
 # establish all variables to use here
@@ -392,11 +394,11 @@ ln -s `pwd`/process/\$db.other.bb $gbdbDir/ncbiRefSeqOther.bb
 hgBbiDbLink \$db ncbiRefSeqOther $gbdbDir/ncbiRefSeqOther.bb
 rm -f $gbdbDir/ncbiRefSeqOther.ix{,x}
 ln -s `pwd`/process/ncbiRefSeqOther.ix{,x} $gbdbDir/
+ln -s `pwd`/process/ncbiRefSeqVersion.txt $gbdbDir/
 
 # select only coding genes to have CDS records
 
-zcat process/\$asmId.\$db.gp.gz \\
-  | awk -F"\t" '\$6 != \$7 {print \$1;}' \\
+awk -F"\t" '\$6 != \$7 {print \$1;}' process/\$db.ncbiRefSeq.gp \\
   | sort -u > coding.cds.name.list
 
 join -t'\t' coding.cds.name.list process/\$asmId.rna.cds \\
@@ -423,11 +425,24 @@ pslCat -nohead process/\$asmId.\$db.psl.gz | cut -f10 \\
    | sort -u > \$db.psl.used.rna.list
 cut -f5 process/\$asmId.\$db.ncbiRefSeqLink.tab | grep -v "n/a" | sort -u > \$db.mrnaAcc.name.list
 sort -u \$db.psl.used.rna.list \$db.mrnaAcc.name.list > \$db.rna.select.list
-zcat process/\$asmId.\$db.gp.gz | cut -f1 | sort -u > \$db.gp.name.list
+cut -f1 process/\$db.ncbiRefSeq.gp | sort -u > \$db.gp.name.list
 comm -12 \$db.rna.select.list \$db.gp.name.list > \$db.toLoad.rna.list
 comm -23 \$db.rna.select.list \$db.gp.name.list > \$db.not.used.rna.list
-comm -13 \$db.rna.select.list \$db.gp.name.list > \$db.noRna.available.list
 faSomeRecords download/\$asmId.rna.fa.gz \$db.toLoad.rna.list \$db.rna.fa
+grep '^>' \$db.rna.fa | sed -e 's/^>//' | sort > \$db.rna.found.list
+comm -13 \$db.rna.found.list \$db.gp.name.list > \$db.noRna.available.list
+
+# If $db.noRna.available.list is not empty but items are on chrM, make fake cDNA sequence
+# for them using chrM sequence since NCBI puts proteins, not coding RNAs, in the GFF.
+if [ -s \$db.noRna.available.list ]; then
+  pslCat -nohead process/\$asmId.\$db.psl.gz \\
+    | grep -Fwf \$db.noRna.available.list \\
+      | grep chrM > missingChrMFa.psl
+  if [ -s missingChrMFa.psl ]; then
+    pslToBed missingChrMFa.psl stdout \\
+      | twoBitToFa -bed=stdin $dbTwoBit stdout >> \$db.rna.fa
+  fi
+fi
 
 mkdir -p $gbdbDir
 rm -f $gbdbDir/seqNcbiRefSeq.rna.fa
@@ -438,13 +453,6 @@ hgLoadPsl \$db -table=ncbiRefSeqPsl process/\$asmId.\$db.psl.gz
 
 featureBits \$db ncbiRefSeq > fb.ncbiRefSeq.\$db.txt 2>&1
 cat fb.ncbiRefSeq.\$db.txt 2>&1
-
-hgsql -e 'INSERT INTO trackVersion \\
-    (db, name, who, version, updateTime, comment, source, dateReference) \\
-    VALUES("$db", "ncbiRefSeq", "$ENV{'USER'}", "$releaseDate", now(), \\
-	"ftp://ftp.ncbi.nlm.nih.gov/$ftpDir/$gffFile", \\
-	"ftp://ftp.ncbi.nlm.nih.gov/$ftpDir/$gffFile", \\
-	"$releaseDate" );' hgFixed
 _EOF_
   );
   $bossScript->execute();

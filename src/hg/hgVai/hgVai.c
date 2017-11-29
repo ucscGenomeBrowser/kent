@@ -38,6 +38,7 @@
 #include "annoFormatVep.h"
 #include "annoStreamBigBed.h"
 #include "annoStreamDb.h"
+#include "windowsToAscii.h"
 
 #include "libifyMe.h"
 
@@ -1846,7 +1847,7 @@ if (cartUsualBoolean(cart, "hgva_require_consEl", FALSE))
 static void getCartPosOrDie(char **retChrom, uint *retStart, uint *retEnd)
 /* Get chrom:start-end from cart, errAbort if any problems. */
 {
-char *position = cartString(cart, hgvaRange);
+char *position = windowsToAscii(cartString(cart, hgvaRange));
 if (! parsePosition(position, retChrom, retStart, retEnd))
     errAbort("Expected position to be chrom:start-end but got '%s'", position);
 }

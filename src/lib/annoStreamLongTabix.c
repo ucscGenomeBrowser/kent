@@ -1,54 +1,34 @@
-/* annoStreamTabix -- subclass of annoStreamer for VCF files */
+/* annoStreamLongTabix -- subclass of annoStreamer for longTabix files */
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
-#include "annoStreamTabix.h"
+#include "annoStreamLongTabix.h"
 #include "twoBit.h"
 #include "bedTabix.h"
 #include "sqlNum.h"
 
-static char *longTabixAutoSqlString =
-"table longTabix\n"
-"\"Long Range Tabix file\"\n"
-"   (\n"
-"   string chrom;      \"Reference sequence chromosome or scaffold\"\n"
-"   uint   chromStart; \"Start position in chromosome\"\n"
-"   uint   chromEnd;   \"End position in chromosome\"\n"
-"   string interactingRegion;       \"(e.g. chrX:123-456,3.14, where chrX:123-456 is the coordinate of the mate, and 3.14 is the score of the interaction)\"\n"
-"   uint   id;      \"Unique Id\"\n"
-"   char[1] strand;    \"+ or -\"\n"
-"   )\n"
-;
-
-struct asObject *longTabixAsObj()
-// Return asObject describing fields of longTabix file
-{
-return asParseText(longTabixAutoSqlString);
-}
-
-struct annoStreamTabix
+struct annoStreamLongTabix
     {
     struct annoStreamer streamer;	// Parent class members & methods
     // Private members
-    char *asWords[6];	          // Current row of VCF with genotypes squashed for autoSql
-    struct bedTabixFile *btf;		// VCF parsed header and file object
-    int numFileCols;			// Number of columns in tabix file.
+    char *asWords[6];	          // Current row of longTabix with genotypes squashed for autoSql
+    struct bedTabixFile *btf;		// longTabix parsed header and file object
+    int numFileCols;			// Number of columns in longTabix file.
     int maxRecords;			// Maximum number of annoRows to return.
     int recordCount;			// Number of annoRows we have returned so far.
     boolean eof;			// True when we have hit end of file or maxRecords
     };
 
-
 static void asxSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionStart, uint regionEnd)
 /* Set region and reset internal state. */
 {
 annoStreamerSetRegion(vSelf, chrom, regionStart, regionEnd);
-struct annoStreamTabix *self = (struct annoStreamTabix *)vSelf;
+struct annoStreamLongTabix *self = (struct annoStreamLongTabix *)vSelf;
 self->eof = FALSE;
 if (chrom != NULL)
     {
-    // If this region is not in tabix index, set self->eof so we won't keep grabbing rows
+    // If this region is not in longTabix index, set self->eof so we won't keep grabbing rows
     // from the old position.
     boolean gotRegion = lineFileSetTabixRegion(self->btf->lf, chrom, regionStart, regionEnd);
     if (! gotRegion)
@@ -57,17 +37,17 @@ if (chrom != NULL)
 }
 
 static char *asxGetHeader(struct annoStreamer *vSelf)
-/* Return VCF header (e.g. for use by formatter) */
+/* Return longTabix header (e.g. for use by formatter) */
 {
 #ifdef NOTNOW
-struct annoStreamTabix *self = (struct annoStreamTabix *)vSelf;
+struct annoStreamLongTabix *self = (struct annoStreamLongTabix *)vSelf;
 return cloneString(self->btf->headerString);
 #endif
 return NULL;
 }
 
-static char **nextRowRaw(struct annoStreamTabix *self)
-/* Get the next VCF record and put the row text into autoSql words.
+static char **nextRowRaw(struct annoStreamLongTabix *self)
+/* Get the next longTabix record and put the row text into autoSql words.
  * Return pointer to self->asWords if we get a row, otherwise NULL. */
 {
 char *words[self->numFileCols];
@@ -76,7 +56,7 @@ if ((wordCount = lineFileChop(self->btf->lf, words)) <= 0)
     return NULL;
 lineFileExpectWords(self->btf->lf, self->numFileCols, wordCount);
 int i;
-// First 6 columns are always in the VCF file:
+// First 6 columns are always in the longTabix file:
 for (i = 0;  i < 6;  i++)
     {
     freeMem(self->asWords[i]);
@@ -87,8 +67,8 @@ return self->asWords;
 }
 
 #ifdef NOTNOW
-static char *getProperChromName(struct annoStreamTabix *self, char *vcfChrom)
-/* We tolerate chr-less chrom names in VCF and BAM ("1" for "chr1" etc); to avoid
+static char *getProperChromName(struct annoStreamLongTabix *self, char *vcfChrom)
+/* We tolerate chr-less chrom names in longTabix and BAM ("1" for "chr1" etc); to avoid
  * confusing the rest of the system, return the chr-ful version if it exists. */
 {
 char *name = hashFindVal(self->chromNameHash, vcfChrom);
@@ -110,8 +90,8 @@ return name;
 }
 #endif
 
-static char **nextRowUnfiltered(struct annoStreamTabix *self, char *minChrom, uint minEnd)
-/* Get the next VCF record and put the row text into autoSql words.
+static char **nextRowUnfiltered(struct annoStreamLongTabix *self, char *minChrom, uint minEnd)
+/* Get the next longTabix record and put the row text into autoSql words.
  * Return pointer to self->asWords if we get a row, otherwise NULL. */
 {
 struct annoStreamer *sSelf = (struct annoStreamer *)self;
@@ -151,7 +131,7 @@ if (words == NULL || (self->maxRecords > 0 && self->recordCount >= self->maxReco
 return words;
 }
 
-static struct annoRow *nextRowFiltered(struct annoStreamTabix *self, char *minChrom, uint minEnd,
+static struct annoRow *nextRowFiltered(struct annoStreamLongTabix *self, char *minChrom, uint minEnd,
 				       struct lm *callerLm)
 /* Get the next record that passes our filters. */
 {
@@ -178,14 +158,14 @@ return annoRowFromStringArray(words[0], sqlUnsigned(words[1]), sqlUnsigned(words
 
 static struct annoRow *asxNextRow(struct annoStreamer *sSelf, char *minChrom, uint minEnd,
 				  struct lm *callerLm)
-/* Return an annoRow encoding the next VCF record, or NULL if there are no more items.
- * Use queues to save indels aside until we get to the following base, because VCF's
- * indel encoding starts one base to the left of the actual indel.  Thus, sorted VCF might
+/* Return an annoRow encoding the next longTabix record, or NULL if there are no more items.
+ * Use queues to save indels aside until we get to the following base, because longTabix's
+ * indel encoding starts one base to the left of the actual indel.  Thus, sorted longTabix might
  * not be sorted in our internal coords, but it won't be off by more than one base. */
 {
-struct annoStreamTabix *self = (struct annoStreamTabix *)sSelf;
+struct annoStreamLongTabix *self = (struct annoStreamLongTabix *)sSelf;
 if (minChrom != NULL && sSelf->chrom != NULL && differentString(minChrom, sSelf->chrom))
-    errAbort("annoStreamTabix %s: nextRow minChrom='%s' but region chrom='%s'",
+    errAbort("annoStreamLongTabix %s: nextRow minChrom='%s' but region chrom='%s'",
 	     sSelf->name, minChrom, sSelf->chrom);
 if (self->eof)
     return NULL;
@@ -197,21 +177,21 @@ return NULL;
 
 
 static void asxClose(struct annoStreamer **pVSelf)
-/* Close VCF file and free self. */
+/* Close longTabix file and free self. */
 {
 if (pVSelf == NULL)
     return;
-struct annoStreamTabix *self = *(struct annoStreamTabix **)pVSelf;
+struct annoStreamLongTabix *self = *(struct annoStreamLongTabix **)pVSelf;
 bedTabixFileClose(&(self->btf));
 annoStreamerFree(pVSelf);
 }
 
-struct annoStreamer *annoStreamTabixNew(char *fileOrUrl,  struct annoAssembly *aa, int maxRecords)
-/* Create an annoStreamer (subclass) object from a tabix indexed tab file */
+struct annoStreamer *annoStreamLongTabixNew(char *fileOrUrl,  struct annoAssembly *aa, int maxRecords)
+/* Create an annoStreamer (subclass) object from a longTabix indexed tab file */
 {
 struct bedTabixFile *btf = bedTabixFileMayOpen(fileOrUrl, NULL, 0, 0);
 
-struct annoStreamTabix *self;
+struct annoStreamLongTabix *self;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
 struct asObject *asObj = longTabixAsObj();

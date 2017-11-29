@@ -1307,7 +1307,8 @@ printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
 printf(
     "<P>Track data hubs are collections of external tracks that can be imported into the UCSC Genome Browser. "
     "Hub tracks show up under the hub's own blue label bar on the main browser page, "
-    "as well as on the configure page. For more information, see the "
+    "as well as on the configure page. For more information, including where to "
+    "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html#Hosting\">host</A> your track hub, see the "
     "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank>"
     "User's Guide</A>."
     "To import a public hub click its \"Connect\" button below.</P>"

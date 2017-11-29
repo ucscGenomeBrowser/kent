@@ -156,7 +156,9 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 #define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s" \
 		  "&hgta_table=%s&hgta_doSchema=describe+table+schema\" " \
 		  "TARGET=ucscSchema%s>%s</A>"
-if (trackDataAccessible(db, tdb))
+if (trackDataAccessible(db, tdb) && differentString("longTabix", tdb->type))
+    // FIXME: hgTables.showSchmaLongTabix is a currently a dummy routine, so let's not got here
+    // until it's implemented
     {
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
     if (isNotEmpty(tbOff) && sameString(nextWord(&tbOff), "off"))
@@ -416,7 +418,9 @@ if (links > 0)
 if (links > 1)
     printf("<table><tr><td nowrap>View table: ");
 
-if (schemaLink)
+if (schemaLink && differentString("longTabix", tdb->type))
+    // FIXME: hgTables.showSchmaLongTabix is a currently a dummy routine, so let's not got here
+    // until it's implemented
     {
     makeSchemaLink(db,tdb,(links > 1 ? "schema":"View table schema"));
     if (downloadLink)
@@ -3566,7 +3570,7 @@ if (colonPairToStrings(colonPair,&a,&b))
 return FALSE;
 }
 
-static boolean colonPairToDoubles(char * colonPair,double *first,double *second)
+boolean colonPairToDoubles(char * colonPair,double *first,double *second)
 { // Non-destructive. Only sets values if found. No colon: value goes to *first
 char *a=NULL;
 char *b=NULL;
@@ -5501,7 +5505,7 @@ if (max && limitMin
 && *limitMin != NO_VALUE &&                      *max < *limitMin)  *max = *limitMin;
 }
 
-static void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
+void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
                          char *scoreName, double *limitMin,double *limitMax,double*min,double*max)
 // gets an double score range from the cart, but the limits from trackDb
 // for any of the pointers provided, will return a value found, if found, else it's contents
@@ -6279,6 +6283,7 @@ boolean encodePeakHasCfgUi(struct trackDb *tdb)
 {
 if (sameWord("narrowPeak",tdb->type)
 ||  sameWord("broadPeak", tdb->type)
+||  sameWord("bigNarrowPeak", tdb->type)
 ||  sameWord("encodePeak",tdb->type)
 ||  sameWord("gappedPeak",tdb->type))
     {
@@ -7607,8 +7612,8 @@ if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL
     #define PM_BUTTON_FILTER_COMP "<input type='button' class='inOutButton' id='%s' value='%c'>"
     #define PM_BUTTON_FILTER_COMP_JS "waitOnFunction(filterCompositeSet,this,%s);return false;"
     #define MAKE_PM_BUTTON_FILTER_COMP(tf,fc,plmi) \
+    safef(id, sizeof id, "btn_%s", (fc)); \
     printf(PM_BUTTON_FILTER_COMP, id, (plmi)); \
-    safef(id, sizeof id, "'btn_%s", (fc)); \
     safef(javascript, sizeof javascript, PM_BUTTON_FILTER_COMP_JS, (tf)); \
     jsOnEventById("click", id, javascript);
 
@@ -7994,7 +7999,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
         if (formName)
             {
 	    char id[256];
-	    safef(id, sizeof id, "cpmUiNoMtx_but_%d", i);
+	    safef(id, sizeof id, "cpmUiNoMtx_but_%d_%d", i, j);
             makeAddClearButtonPair(id, name,"</TD><TD>");
             }
         else
@@ -8920,42 +8925,40 @@ void printDataVersion(char *database, struct trackDb *tdb)
 /* If this annotation has a dataVersion setting, print it.
  * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
 {
-char *version = NULL;
-
-// try the hgFixed.trackVersion table
-struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
-// try trackVersion table with parent, for composites/superTracks
-if(trackVersion == NULL && (tdb->parent!=NULL))
-    trackVersion = getTrackVersion(database, tdb->parent->track);
-
 // try the metadata
-if(trackVersion == NULL) 
-    {
-    metadataForTable(database, tdb,NULL);
-    version = (char *)metadataFindValue(tdb, "dataVersion");
-    }
-else
-    version = trackVersion->version;
+metadataForTable(database, tdb, NULL);
+char *version = (char *)metadataFindValue(tdb, "dataVersion");
 
 // try trackDb itself, this automatically will go up the hierarchy
 if (version == NULL)
-{
     version = trackDbSetting(tdb, "dataVersion");
-}
-
-if (version == NULL)
-    return;
-
-// On the RR, dataVersion can also be the path to a local file, for otto tracks
-if (!trackHubDatabase(database) && !isHubTrack(tdb->table) && startsWith("/", version))
-    {
-    char *path = replaceInUrl((char *)version, "", NULL, database, "", 0, 0, tdb->track, FALSE);
-    struct lineFile* lf = lineFileOpen(path, TRUE);
-    if (lf)
-        version = lineFileReadAll(lf);
-    }
 
 if (version != NULL)
+    {
+    // dataVersion can also be the path to a local file, for otto tracks
+    if (!trackHubDatabase(database) && !isHubTrack(tdb->table) && startsWith("/", version))
+        {
+        char *path = replaceInUrl(version, "", NULL, database, "", 0, 0, tdb->track, FALSE);
+        struct lineFile* lf = lineFileMayOpen(path, TRUE);
+        if (lf)
+            version = lineFileReadAll(lf);
+        else
+            version = NULL;
+        lineFileClose(&lf);
+        }
+    }
+if (version == NULL)
+    {
+    // try the hgFixed.trackVersion table
+    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
+    // try trackVersion table with parent, for composites/superTracks
+    if (trackVersion == NULL && tdb->parent != NULL)
+        trackVersion = getTrackVersion(database, tdb->parent->track);
+    if (trackVersion != NULL)
+        version = trackVersion->version;
+    }
+
+if (isNotEmpty(version))
     printf("<B>Data version:</B> %s <BR>\n", version);
 }
 

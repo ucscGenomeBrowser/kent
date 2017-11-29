@@ -11,7 +11,9 @@
 #include "trackDb.h"
 #include "bed.h"
 
-#define LONG_HEIGHT "height"
+#define LONG_HEIGHT "heightPer"
+#define LONG_MINHEIGHT 20
+#define LONG_MAXHEIGHT 300
 #define LONG_DEFHEIGHT "200"
 #define LONG_MINSCORE "minScore"
 #define LONG_DEFMINSCORE "0"

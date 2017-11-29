@@ -654,14 +654,14 @@ colAng1.downloadDir = colAng1
     # real    296m19.689s
 
 #############################################################################
-#  BLATSERVERS ENTRY (TBD - 2016-06-02 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-11-17 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("colAng1", "blat1a", "17862", "1", "0"); \
+	VALUES ("colAng1", "blat1a", "17882", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("colAng1", "blat1a", "17863", "0", "1");' \
+	VALUES ("colAng1", "blat1a", "17883", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 

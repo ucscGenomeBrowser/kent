@@ -43,7 +43,7 @@ MYSQL=mysql
 SET_MYSQL_ROOT="0"
 
 # default download server, can be changed with -a
-HGDOWNLOAD='hgdownload.cse.ucsc.edu'
+HGDOWNLOAD='hgdownload.soe.ucsc.edu'
 
 # default GBDB dir
 GBDBDIR=/gbdb
@@ -201,7 +201,7 @@ gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/
 # The location of the mysql server that is used if data cannot be found locally
 # (e.g. chromosome annotations, alignment summaries, etc)
 # To disable on-the-fly loading of mysql data, comment out these lines. 
-slow-db.host=genome-mysql.cse.ucsc.edu
+slow-db.host=genome-mysql.soe.ucsc.edu
 slow-db.user=genomep
 slow-db.password=password
 
@@ -576,7 +576,7 @@ function setupCgiOsx ()
     # get samtools patched for UCSC and compile it
     cd kent
     if [ ! -d samtabix ]; then
-       git clone http://genome-source.cse.ucsc.edu/samtabix.git
+       git clone http://genome-source.soe.ucsc.edu/samtabix.git
     else
        cd samtabix
        git pull
@@ -607,7 +607,7 @@ function installRedhat () {
     # imagemagick is required for the session gallery
     # MySQL-python is required for hgGeneGraph
     yum -y install epel-release
-    yum -y install ghostscript rsync ImageMagick R-core MySQL-python
+    yum -y install ghostscript rsync ImageMagick R-core MySQL-python curl
 
     # centos 7 and fedora 20 do not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -844,7 +844,7 @@ function installDebian ()
     # imagemagick for the session gallery
     # r-base-core for the gtex tracks
     # python-mysqldb for hgGeneGraph
-    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core python-mysqldb
+    apt-get --no-install-recommends --assume-yes install ghostscript imagemagick wget rsync r-base-core python-mysqldb curl
 
     if [ ! -f $APACHECONF ]; then
         echo2
@@ -1129,7 +1129,7 @@ function mysqlDbSetup ()
     $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hgFixed;' # empty db needed for gencode tracks
     downloadFile http://$HGDOWNLOAD/admin/hgcentral.sql | $MYSQL hgcentral
     # the blat servers don't have fully qualified dom names in the download data
-    $MYSQL hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".cse.ucsc.edu");'
+    $MYSQL hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".soe.ucsc.edu");'
     
     echo2
     echo2 "Will now grant permissions to browser database access users:"
@@ -1299,7 +1299,7 @@ function installBrowser ()
     if [[ $(awk '{if ($1 <= $2) print 1;}' <<< "$eurospeed $ucscspeed") -eq 1 ]]; then
        echo genome-euro seems to be closer
        echo modifying mirror to pull data from genome-euro instead of genome
-       sed -i s/slow-db.host=genome-mysql.cse.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ $CGIBINDIR/hg.conf
+       sed -i s/slow-db.host=genome-mysql.soe.ucsc.edu/slow-db.host=genome-euro-mysql.soe.ucsc.edu/ $CGIBINDIR/hg.conf
        sed -i "s#gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/#gbdbLoc2=http://hgdownload-euro.soe.ucsc.edu/gbdb/#" $CGIBINDIR/hg.conf
        HGDOWNLOAD=hgdownload-euro.soe.ucsc.edu
     else
@@ -1337,8 +1337,8 @@ function installBrowser ()
     echo2
     echo2 Notice that this mirror is still configured to use Mysql and data files loaded
     echo2 through the internet from UCSC. From most locations on the world, this is very slow.
-    echo2 It also requires an open outgoing TCP port 3306 for Mysql to genome-mysql.cse.ucsc.edu
-    echo2 and open TCP port 80 to hgdownload.soe.ucsc.edu.
+    echo2 It also requires an open outgoing TCP port 3306 for Mysql to genome-mysql.soe.ucsc.edu/genome-euro-mysql.soe.ucsc.edu,
+    echo2 and open TCP port 80 to hgdownload.soe.ucsc.edu/hgdownload-euro.soe.ucsc.edu.
     echo2
     echo2 To speed up the installation, you need to download genome data to the local
     echo2 disk. To download a genome assembly and all its files now, call this script again with
@@ -1567,6 +1567,8 @@ function downloadMinimal
     echo2 two open ports, outgoing, TCP, from this machine:
     echo2 - to genome-mysql.soe.ucsc.edu, port 3306, to load MySQL tables
     echo2 - to hgdownload.soe.ucsc.edu, port 80, to download non-MySQL data files
+    echo2 - or the above two servers European counterparts:
+    echo2   genome-euro-mysql.soe.ucsc.edu and hgdownload-euro.soe.ucsc.edu
     echo2
     showMyAddress
     goOnline
@@ -1627,11 +1629,11 @@ function updateBrowser {
 }
 
 function addTools {
-   rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/ /usr/local/bin/
+   rsync -avP hgdownload.soe.ucsc.edu::genome/admin/exe/linux.x86_64/ /usr/local/bin/
    echo2 The UCSC User Tools were copied to /usr/local/bin
    echo2 Please note that most of the tools require an .hg.conf file in the users
    echo2 home directory. A very minimal .hg.conf file can be found here:
-   echo2 "http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/minimal.hg.conf"
+   echo2 "http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/minimal.hg.conf"
 }
 
 # ------------ end of utility functions ----------------

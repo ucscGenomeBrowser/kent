@@ -574,7 +574,7 @@ if (startsWith("bed_", format))
 return cdwIsSupportedBigBedFormat(format);
 }
 
-void prefetchChecks(char *format, char *fileName)
+void prefetchChecks(char *format, char *fileName, char *submitDir)
 /* Perform some basic format checks. */
 {
 if (sameString(format, "fastq") || sameString(format, "vcf"))
@@ -582,6 +582,19 @@ if (sameString(format, "fastq") || sameString(format, "vcf"))
     if (!cdwIsGzipped(fileName))
         errAbort("%s file %s must be gzipped", format, fileName);
     }
+
+// Aborts early if fileName points to a file already under cdwRootDir
+char *path = testOriginalSymlink(fileName, submitDir);  
+
+// check if parent dir is writable, needed for symlinking
+char dir[PATH_LEN];
+splitPath(path, dir, NULL, NULL);
+if (sameString(dir, ""))
+    safecpy(dir, PATH_LEN, ".");
+if (access(dir, R_OK | W_OK) == -1)
+    errnoAbort("%s directory must be writable to enable symlinking.", dir);
+
+freeMem(path);
 }
 
 void getSubmittedFile(struct sqlConnection *conn, char *format,
@@ -602,7 +615,7 @@ if (errCatchStart(errCatch))
     int fd = cdwOpenAndRecordInDir(conn, submitDir, ef->submitFileName, submitUrl,
 	&hostId, &submitDirId);
 
-    prefetchChecks(format, ef->submitFileName);
+    prefetchChecks(format, ef->submitFileName, submitDir);
     verbose(1, "copying %s\n", ef->submitFileName);
     int fileId = cdwFileFetch(conn, ef, fd, submitDir, submitUrl, submitId, submitDirId, hostId, user,
 	table, row, metaIx, metaHash);

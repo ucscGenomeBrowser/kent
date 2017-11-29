@@ -363,6 +363,18 @@ cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 cartSetString(cart, hubFileVar, newHubFileName);
 }
 
+void cartCopyCustomComposites(struct cart *cart)
+/* Find any custom composite hubs and copy them so they can be modified. */
+{
+struct hashEl *el, *elList = hashElListHash(cart->hash);
+
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (startsWith(CUSTOM_COMPOSITE_SETTING, el->name))
+        copyCustomComposites(cart, el);
+    }
+}
+
 void cartCopyCustomTracks(struct cart *cart)
 /* If cart contains any live custom tracks, save off a new copy of them,
  * to prevent clashes by multiple uses of the same session.  */
@@ -840,14 +852,17 @@ setUdcTimeout(cart);
 if (cartVarExists(cart, hgHubDoDisconnect))
     doDisconnectHub(cart);
 
-#ifndef GBROWSE
 if (didSessionLoad)
-    cartCopyCustomTracks(cart);
-#endif /* GBROWSE */
+    cartCopyCustomComposites(cart);
 
 pushWarnHandler(cartHubWarn);
 char *newDatabase = hubConnectLoadHubs(cart);
 popWarnHandler();
+
+#ifndef GBROWSE
+if (didSessionLoad)
+    cartCopyCustomTracks(cart);
+#endif /* GBROWSE */
 
 if (newDatabase != NULL)
     {

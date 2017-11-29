@@ -35,3 +35,7 @@ priority 600.3
 chainMinScore 5000
 chainLinearGap loose
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+
+track chainNetXenTro9 override
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
