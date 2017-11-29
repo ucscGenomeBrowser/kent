@@ -121,6 +121,8 @@ def main(args):
             boundMoiety = attributes.get("bound_moiety")
             if gbkey and boundMoiety:
                 name = gbkey + ": " + boundMoiety
+            # bound_moiety is sometimes too long to display properly as a label,
+            # so add it to mouseOver.
             if boundMoiety:
                 if mouseOver != "":
                     mouseOver += " | "
@@ -142,7 +144,7 @@ def main(args):
             name = attributes.get("rpt_type", name)
         elif gffType == "sequence_feature":
             color = rgbMagenta
-            name = attributes.get("feat_class", note)
+            name = attributes.get("feat_class", attributes.get("standard_name", note))
         else:
             color = rgbBlack
             if gbkey and note:
