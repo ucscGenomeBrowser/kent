@@ -12,7 +12,7 @@ table refSeqFuncElems
     uint reserved;         "Used as itemRgb: color based on type of element"
     string soTerm;         "Sequence ontology (SO) term"
     lstring note;          "A note describing the element"
-    lstring geneIds;       "Entrez Gene ID of associated gene(s)"
+    lstring geneIds;       "Entrez Gene ID of element and/or associated gene(s)"
     lstring pubMedIds;     "PubMed ID of associated publication(s)"
     lstring experiment;    "Experimental evidence"
     lstring function;      "Predicted function"
