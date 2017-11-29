@@ -180,7 +180,7 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 	if (fix)
 	    replaceOriginalWithSymlink(ef->submitFileName, ed->url, path);
 	else
-	    verbose(1, "fix command not specified,  skipping symlink between %s and %s\n", newPath, path);
+	    verbose(1, "fix command not specified,  skipping symlink from %s to %s\n", newPath, path);
 	    
 
 	filesSymlinked++;
