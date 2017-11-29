@@ -13,7 +13,7 @@
 #include "cdw.h"
 #include "cdwLib.h"
 
-char *symLink;    /* If set then just symlink the twobit file rather than copy */
+char *givenMd5;    /* If set then just symlink the twobit file rather than copy */
 
 void usage()
 /* Explain usage and exit. */
@@ -23,14 +23,14 @@ errAbort(
   "usage:\n"
   "   cdwAddAssembly taxon name ucscDb twoBitFile\n"
   "options:\n"
-  "   -symLink=MD5SUM - if set then make symlink rather than copy and use MD5SUM\n"
-  "                     rather than calculating it.  Just to speed up testing"
+  "   -givenMd5=MD5SUM - if set then use the given MD5SUM\n"
+  "                     rather than calculating it.  Just to speed up testing."
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {"symLink", OPTION_STRING},
+   {"givenMd5", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -58,7 +58,7 @@ int seqCount = tbf->seqCount;
 twoBitClose(&tbf);
 
 /* Create file record and add tags. */
-struct cdwFile *ef= cdwGetLocalFile(conn, twoBitFile, symLink);
+struct cdwFile *ef= cdwGetLocalFile(conn, twoBitFile, givenMd5);
 struct dyString *tags = dyStringNew(0);
 cgiEncodeIntoDy("ucsc_db", ucscDb, tags);
 cgiEncodeIntoDy("format", "2bit", tags);
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
-symLink = optionVal("symLink", NULL);
+givenMd5 = optionVal("givenMd5", NULL);
 cdwAddAssembly(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

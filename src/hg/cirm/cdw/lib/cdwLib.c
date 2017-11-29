@@ -830,7 +830,7 @@ dyStringFree(&query);
 }
 
 struct cdwFile *cdwGetLocalFile(struct sqlConnection *conn, char *localAbsolutePath, 
-    char *symLinkMd5Sum)
+    char *givenMd5Sum)
 /* Get record of local file from database, adding it if it doesn't already exist.
  * Can make it a symLink rather than a copy in which case pass in valid MD5 sum
  * for symLinkM5dSum. */
@@ -873,16 +873,17 @@ cdwMakeFileNameAndPath(fileId, localAbsolutePath, cdwFile, cdwPath);
 char *md5;
 
 /* Do copy or symbolic linking of file into warehouse managed dir. */
-if (symLinkMd5Sum)
+if (givenMd5Sum)
     {
-    md5 = symLinkMd5Sum;
-    makeSymLink(localAbsolutePath, cdwPath);  
+    md5 = givenMd5Sum;
     }
 else
     {
-    copyFile(localAbsolutePath, cdwPath);
     md5 = md5HexForFile(localAbsolutePath);
     }
+copyFile(localAbsolutePath, cdwPath);
+chmod(cdwPath, 0444);
+replaceOriginalWithSymlink(localAbsolutePath, "", cdwPath);
 
 /* Update file record. */
 sqlSafef(query, sizeof(query), 
@@ -1592,49 +1593,6 @@ freeMem(path);
 
 
 
-void replaceOriginalWithSymlinkOrig(char *submitFileName, char *submitDir, char *cdwPath)
-/* For a file that was just copied, remove original and symlink to new one instead
- * to save space. Follows symlinks if any to the real file and replaces it with a symlink */
-{
-struct stat sb;
-
-char *path = mustExpandRelativePath(submitDir, submitFileName);
-
-int symlinkLevels = 0;
-while (TRUE)
-    {
-    if (lstat(path, &sb) == -1) 
-	errnoAbort("stat failure on %s", path);
-    if ((sb.st_mode & S_IFMT) != S_IFLNK)
-	break;
-
-    // follow the symlink
-    ++symlinkLevels;
-    if (symlinkLevels > 10)
-	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
-
-    // read the symlink
-    char *symPath = mustReadSymlink(path, &sb);
-
-    // apply symPath to path
-    char *newPath = mustPathRelativeToFile(path, symPath);
-    freeMem(path);
-    freeMem(symPath);
-    path = newPath;
-    }
-if ((sb.st_mode & S_IFMT) != S_IFREG)
-    errAbort("Expecting regular file. Followed symlinks to %s but it is not a regular file.", path);
-if (startsWith(cdwRootDir, path))
-    errAbort("Unexpected operation. The path %s should not point to a file under cdwRoot %s", path, cdwRootDir);
-if (unlink(path) == -1)  // save space
-    errnoAbort("unlink failure %s", path);
-if (symlink(cdwPath, path) == -1)  // replace with symlink
-    errnoAbort("symlink failure from %s to %s", path, cdwPath);
-verbose(1, "%s converted to symlink to %s\n", path, cdwPath);
-freeMem(path);
-}
-
-
 char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath)
 /* Find the last symlink in the chain from submitDir/submitFileName.
  * This is useful for when target of symlink in cdw/ gets renamed 
@@ -1665,60 +1623,6 @@ freeMem(path);
 return lastPath;
 }
 
-
-char *findSubmitSymlinkOrig(char *submitFileName, char *submitDir, char *oldPath)
-/* Find the last symlink in the chain from submitDir/submitFileName.
- * This is useful for when target of symlink in cdw/ gets renamed 
- * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). */
-{
-struct stat sb;
-char *lastPath = NULL;
-char *path = mustExpandRelativePath(submitDir, submitFileName);
-
-int symlinkLevels = 0;
-while (TRUE)
-    {
-    if (!fileExists(path))
-	{
-	warn("path=[%s] does not exist following submitDir/submitFileName through symlinks.", path);
-	return NULL;
-	}
-    if (lstat(path, &sb) == -1)
-	errnoAbort("stat failure on %s", path);
-    if ((sb.st_mode & S_IFMT) != S_IFLNK)
-	break;
-
-    // follow the symlink
-    ++symlinkLevels;
-    if (symlinkLevels > 10)
-	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
-
-    // read the symlink
-    char *symPath = mustReadSymlink(path, &sb);
-
-    // apply symPath to path
-    char *newPath = mustPathRelativeToFile(path, symPath);
-    freeMem(lastPath);
-    lastPath = path;
-    freeMem(symPath);
-    path = newPath;
-    }
-if ((sb.st_mode & S_IFMT) != S_IFREG)
-    errAbort("Expecting regular file. Followed symlinks to %s but it is not a regular file.", path);
-if (symlinkLevels < 1)
-    {
-    warn("Too few symlinks followed: %d symlinks. Where is the symlink created by cdwSubmit?", symlinkLevels);
-    return NULL;
-    }
-if (!sameString(path, oldPath))
-    {
-    warn("Found symlinks point to %s, expecting to find symlink pointing to old path %s", path, oldPath);
-    return NULL;
-    }
-
-freeMem(path);
-return lastPath;
-}
 
 void cdwReallyRemoveFile(struct sqlConnection *conn, char *submitDir, long long fileId, boolean unSymlinkOnly, boolean really)
 /* If unSymlinkOnly is NOT specified, removes all records of file from database and from Unix file system if 
