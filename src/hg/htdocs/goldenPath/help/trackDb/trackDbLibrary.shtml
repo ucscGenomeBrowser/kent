@@ -980,11 +980,11 @@
 <DIV class="bigNarrowPeak_intro">
 <H3>bigNarrowPeak: Peaks</H3>
     <P>
-    The bigNarrowPeak format stores annotation items that are a linked collection of exons, much as BED files indexed as bigBeds do, but bigGenePred has additional information about the coding frames and other gene specific information in eight additional fields.
+    The bigNarrowPeak format stores peaks over a range with a single basepair central peak. bigNarrowPeak files are based on the bigBed format.  The first six fields are the same as bed.  The other four include three scores, and the base-pair offset of the central peak.
 
-    bigGenePred files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigGenePred. The resulting bigBed files are in an indexed binary format. The main advantage of the bigBed files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigBed is considerably faster than regular BED files. The bigBed file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
-    For complete bigGenePred format definitions please see the
-    <A HREF="../bigGenePred.html">bigGenePred help page</A>.</P>
+    bigNarrowPeak files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigNarrowPeak. The resulting bigBed files are in an indexed binary format. The main advantage of the bigBed files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigBed is considerably faster than regular BED files. The bigBed file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigNarrowPeak format definitions please see the
+    <A HREF="../bigNarrowPeak.html">bigNarrowPeak help page</A>.</P>
 </DIV>
 
 <DIV class="bigMaf_intro">
