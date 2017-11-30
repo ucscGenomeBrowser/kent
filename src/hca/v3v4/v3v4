@@ -68,22 +68,21 @@ KEEP	project.experimental_design.[].text	project.experimental_design.[].text
 KEEP	project.experimental_factor_name.[]	project.experimental_factor_name.[]
 KEEP	project.geo_series	project.geo_series
 RENAME	project.id	project.project_id
-ugly *****************  CHecked to here
-DELETE	project.ncbi_bioproject
-DELETE	project.protocols.[].batch_number
-DELETE	project.protocols.[].core.schema_url
-DELETE	project.protocols.[].core.schema_version
-DELETE	project.protocols.[].core.type
-RENAME	project.protocols.[].description	project.description
-DELETE	project.protocols.[].id
-DELETE	project.protocols.[].pdf
-DELETE	project.protocols.[].retail_name
-DELETE	project.protocols.[].submit_date
-DELETE	project.protocols.[].submitter_id
-RENAME	project.protocols.[].type.ontology	project.experimental_design.[].ontology
-RENAME	project.protocols.[].type.text	project.experimental_design.[].text
-DELETE	project.protocols.[].update_date
-DELETE	project.protocols.[].updater_id
+DELETE	project.ncbi_bioproject	project.insdc_study
+RENAME	project.protocols.[].batch_number protocols.[].batch_number
+RENAME	project.protocols.[].core.schema_url	protocols.[].core.schema_url
+RENAME	project.protocols.[].core.schema_version	protocols.[].core.schema_version
+RENAME	project.protocols.[].core.type	protocols.[].core.type
+RENAME	project.protocols.[].description	protocols.[].description
+RENAME	project.protocols.[].id	protocols.[].id
+RENAME	project.protocols.[].pdf	protocols.[].pdf
+RENAME	project.protocols.[].retail_name	protocols.[].retail_name
+RENAME	project.protocols.[].submit_date	protocols.[].submit_date
+RENAME	project.protocols.[].submitter_id	protocols.[].submitter_id
+RENAME	project.protocols.[].type.ontology		rotocols.[].type.ontology	
+RENAME	project.protocols.[].type.text		rotocols.[].type.text	
+RENAME	project.protocols.[].update_date	protocols.[].update_date
+RENAME	project.protocols.[].updater_id	protocols.[].updater_id
 KEEP	project.publications.[].authors.[]	project.publications.[].authors.[]
 DELETE	project.publications.[].core.schema_url
 DELETE	project.publications.[].core.schema_version
@@ -93,35 +92,36 @@ KEEP	project.publications.[].pmid	project.publications.[].pmid
 KEEP	project.publications.[].title	project.publications.[].title
 KEEP	project.publications.[].url	project.publications.[].url
 KEEP	project.related_projects.[]	project.related_projects.[]
-DELETE	project.sra_project
-DELETE	project.submit_date
-RENAME	project.submitter.address	project.contributors.[].address
-RENAME	project.submitter.city	project.contributors.[].city
+RENAME	project.sra_project	project.insdc_project
+KEEP	project.submit_date	project.submit_date
+RENAME	project.submitter.address	project.submitters.[].address
+RENAME	project.submitter.city	project.submitters.[].city
 DELETE	project.submitter.core.schema_url
 DELETE	project.submitter.core.schema_version
 DELETE	project.submitter.core.type
-RENAME	project.submitter.country	project.contributors.[].country
-RENAME	project.submitter.country_division	project.contributors.[].country_division
-RENAME	project.submitter.email	project.contributors.[].email
+RENAME	project.submitter.country	project.submitters.[].country
+RENAME	project.submitter.country_division	project.submitters.[].country_division
+RENAME	project.submitter.email	project.submitters.[].email
 DELETE	project.submitter.id
-RENAME	project.submitter.institution	project.contributors.[].institution
-RENAME	project.submitter.laboratory	project.contributors.[].laboratory
-RENAME	project.submitter.name	project.contributors.[].name
+RENAME	project.submitter.institution	project.submitters.[].institution
+RENAME	project.submitter.laboratory	project.submitters.[].laboratory
+RENAME	project.submitter.name	project.submitters.[].name
+NEW		project.submitters.[].phone
 KEEP	project.supplementary_files.[]	project.supplementary_files.[]
-RENAME	project.title	project.publications.[].title
-DELETE	project.update_date
-RENAME	project.updater.address	project.contributors.[].address
-RENAME	project.updater.city	project.contributors.[].city
+RENAME	project.title	project.name
+KEEP	project.update_date	project.update_date
+DELETE	project.updater.address
+DELETE	project.updater.city
 DELETE	project.updater.core.schema_url
 DELETE	project.updater.core.schema_version
 DELETE	project.updater.core.type
-RENAME	project.updater.country	project.contributors.[].country
-RENAME	project.updater.country_division	project.contributors.[].country_division
-RENAME	project.updater.email	project.contributors.[].email
+DELETE	project.updater.country
+DELETE	project.updater.country_division
+DELETE	project.updater.email
 DELETE	project.updater.id
-RENAME	project.updater.institution	project.contributors.[].institution
-RENAME	project.updater.laboratory	project.contributors.[].laboratory
-RENAME	project.updater.name	project.contributors.[].name
+DELETE	project.updater.institution
+DELETE	project.updater.laboratory
+DELETE	project.updater.name
 DELETE	sample.biosd_sample
 RENAME	sample.body_part.ontology	sample.specimen_from_organism.body_part.ontology
 RENAME	sample.body_part.text	sample.specimen_from_organism.body_part.text
@@ -136,12 +136,12 @@ DELETE	sample.cell_line.core.schema_version
 DELETE	sample.cell_line.core.type
 DELETE	sample.cell_line.culture_protocol
 RENAME	sample.cell_line.date_established	sample.immortalized_cell_line.date_established
-RENAME	sample.cell_line.derived_from	sample.derived_from
-RENAME	sample.cell_line.disease.ontology	sample.donor.disease.[].ontology
-RENAME	sample.cell_line.disease.text	sample.donor.disease.[].text
+RENAME	sample.cell_line.derived_from	sample.immortalized_cell_line.derived_from
+RENAME	sample.cell_line.disease.ontology	sample.immortalized_cell_line.disease.ontology
+RENAME	sample.cell_line.disease.text	sample.immortalized_cell_line.disease.text
 RENAME	sample.cell_line.karyotype	sample.immortalized_cell_line.karyotype
-RENAME	sample.cell_line.name.ontology	sample.cell_suspension.target_cell_type.[].ontology
-RENAME	sample.cell_line.name.text	sample.cell_suspension.target_cell_type.[].text
+RENAME	sample.cell_line.name.ontology	sample.immortalized_cell_line.name.ontology
+RENAME	sample.cell_line.name.text	sample.immortalized_cell_line.name.text
 RENAME	sample.cell_line.passage_number	sample.immortalized_cell_line.passage_number
 RENAME	sample.cell_line.publication.authors.[]	sample.immortalized_cell_line.publication.authors.[]
 DELETE	sample.cell_line.publication.core.schema_url
@@ -164,7 +164,8 @@ KEEP	sample.donor.body_mass_index	sample.donor.body_mass_index
 DELETE	sample.donor.core.schema_url
 DELETE	sample.donor.core.schema_version
 DELETE	sample.donor.core.type
-DELETE	sample.donor.death.cause_of_death
+RENAME	sample.donor.death.cause_of_death	sample.donor.death.cause_of_death.text
+NEW		sample.donor.death.cause_of_death.ontology
 KEEP	sample.donor.death.cold_perfused	sample.donor.death.cold_perfused
 DELETE	sample.donor.death.core.schema_url
 DELETE	sample.donor.death.core.schema_version
@@ -178,6 +179,7 @@ KEEP	sample.donor.disease.[].ontology	sample.donor.disease.[].ontology
 KEEP	sample.donor.disease.[].text	sample.donor.disease.[].text
 KEEP	sample.donor.genotype	sample.donor.genotype
 KEEP	sample.donor.height	sample.donor.height
+ugly ---- checked above here
 DELETE	sample.donor.id
 KEEP	sample.donor.is_living	sample.donor.is_living
 KEEP	sample.donor.life_stage	sample.donor.life_stage
@@ -248,22 +250,12 @@ NEW		assay.imaging.microscope
 NEW		assay.imaging.probes
 NEW		assay.name
 NEW		project.contributors.[].phone
+NEW		project.experimental_design.[].ontology
+NEW		project.experimental_design.[].text
 NEW		project.insdc_project
-NEW		project.insdc_study
 NEW		project.name
-NEW		project.submitters.[].address
-NEW		project.submitters.[].city
-NEW		project.submitters.[].country
-NEW		project.submitters.[].country_division
-NEW		project.submitters.[].email
-NEW		project.submitters.[].institution
-NEW		project.submitters.[].laboratory
-NEW		project.submitters.[].name
-NEW		project.submitters.[].phone
 NEW		sample.description
 NEW		sample.donor.alcohol_history
-NEW		sample.donor.death.cause_of_death.ontology
-NEW		sample.donor.death.cause_of_death.text
 NEW		sample.donor.nutritional_state
 NEW		sample.donor.smoking_history
 NEW		sample.genus_species.ontology
