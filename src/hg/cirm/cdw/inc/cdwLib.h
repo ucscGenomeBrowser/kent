@@ -45,9 +45,6 @@ struct sqlConnection *cdwConnect();
 struct sqlConnection *cdwConnectReadWrite();
 /* Returns read/write connection to database. */
 
-char *cdwLicensePlatePrefix(struct sqlConnection *conn);
-/* Return license plate prefix for current database - something like TST or DEV or ENCFF */
-
 long long cdwGotFile(struct sqlConnection *conn, char *submitDir, char *submitFileName, 
     char *md5, long long size);
 /* See if we already got file.  Return fileId if we do,  otherwise 0.  This returns
