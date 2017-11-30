@@ -1,0 +1,284 @@
+KEEP	assay.core.schema_url	assay.core.schema_url
+KEEP	assay.core.schema_version	assay.core.schema_version
+KEEP	assay.core.type	assay.core.type
+RENAME	assay.id	assay.assay_id
+DELETE	assay.rna.core.schema_url
+DELETE	assay.rna.core.schema_version
+DELETE	assay.rna.core.type
+KEEP	assay.rna.end_bias	assay.rna.end_bias
+KEEP	assay.rna.library_construction	assay.rna.library_construction
+KEEP	assay.rna.library_protocol	assay.rna.library_protocol
+KEEP	assay.rna.primer	assay.rna.primer
+KEEP	assay.rna.spike_in	assay.rna.spike_in
+KEEP	assay.rna.spike_in_dilution	assay.rna.spike_in_dilution
+KEEP	assay.rna.strand	assay.rna.strand
+KEEP	assay.sample_id	assay.sample_id
+DELETE	assay.seq.core.schema_url
+DELETE	assay.seq.core.schema_version
+DELETE	assay.seq.core.type
+RENAME	assay.seq.ena_experiment	assay.seq.insdc_experiment
+RENAME	assay.seq.ena_run.[]	assay.seq.insdc_run.[]
+KEEP	assay.seq.instrument_model	assay.seq.instrument_model
+KEEP	assay.seq.instrument_platform	assay.seq.instrument_platform
+KEEP	assay.seq.library_construction	assay.seq.library_construction
+KEEP	assay.seq.library_protocol	assay.seq.library_protocol
+KEEP	assay.seq.local_machine_name	assay.seq.local_machine_name
+KEEP	assay.seq.molecule	assay.seq.molecule
+KEEP	assay.seq.paired_ends	assay.seq.paired_ends
+RENAME	assay.seq.sra_experiment	assay.seq.insdc_experiment
+RENAME	assay.seq.sra_run.[]	assay.seq.insdc_run.[]
+DELETE	assay.seq.umi_barcode.core.schema_url
+DELETE	assay.seq.umi_barcode.core.schema_version
+DELETE	assay.seq.umi_barcode.core.type
+KEEP	assay.seq.umi_barcode.offset	assay.seq.umi_barcode.offset
+KEEP	assay.seq.umi_barcode.read	assay.seq.umi_barcode.read
+KEEP	assay.seq.umi_barcode.size	assay.seq.umi_barcode.size
+KEEP	assay.seq.umi_barcode.white_list_file	assay.seq.umi_barcode.white_list_file
+DELETE	assay.single_cell.barcode.core.schema_url
+DELETE	assay.single_cell.barcode.core.schema_version
+DELETE	assay.single_cell.barcode.core.type
+RENAME	assay.single_cell.barcode.offset	assay.single_cell.cell_barcode.offset
+RENAME	assay.single_cell.barcode.read	assay.single_cell.cell_barcode.read
+RENAME	assay.single_cell.barcode.size	assay.single_cell.cell_barcode.size
+RENAME	assay.single_cell.barcode.white_list_file	assay.single_cell.cell_barcode.white_list_file
+KEEP	assay.single_cell.cell_handling	assay.single_cell.cell_handling
+DELETE	assay.single_cell.core.schema_url
+DELETE	assay.single_cell.core.schema_version
+DELETE	assay.single_cell.core.type
+KEEP	project.array_express_investigation	project.array_express_investigation
+KEEP	project.contributors.[].address	project.contributors.[].address
+KEEP	project.contributors.[].city	project.contributors.[].city
+DELETE	project.contributors.[].core.schema_url
+DELETE	project.contributors.[].core.schema_version
+DELETE	project.contributors.[].core.type
+KEEP	project.contributors.[].country	project.contributors.[].country
+KEEP	project.contributors.[].country_division	project.contributors.[].country_division
+KEEP	project.contributors.[].email	project.contributors.[].email
+DELETE	project.contributors.[].id
+KEEP	project.contributors.[].institution	project.contributors.[].institution
+KEEP	project.contributors.[].laboratory	project.contributors.[].laboratory
+KEEP	project.contributors.[].name	project.contributors.[].name
+KEEP	project.core.schema_url	project.core.schema_url
+KEEP	project.core.schema_version	project.core.schema_version
+KEEP	project.core.type	project.core.type
+DELETE	project.ddjb_trace
+KEEP	project.description	project.description
+KEEP	project.experimental_design.[].ontology	project.experimental_design.[].ontology
+KEEP	project.experimental_design.[].text	project.experimental_design.[].text
+KEEP	project.experimental_factor_name.[]	project.experimental_factor_name.[]
+KEEP	project.geo_series	project.geo_series
+RENAME	project.id	project.project_id
+ugly *****************  CHecked to here
+DELETE	project.ncbi_bioproject
+DELETE	project.protocols.[].batch_number
+DELETE	project.protocols.[].core.schema_url
+DELETE	project.protocols.[].core.schema_version
+DELETE	project.protocols.[].core.type
+RENAME	project.protocols.[].description	project.description
+DELETE	project.protocols.[].id
+DELETE	project.protocols.[].pdf
+DELETE	project.protocols.[].retail_name
+DELETE	project.protocols.[].submit_date
+DELETE	project.protocols.[].submitter_id
+RENAME	project.protocols.[].type.ontology	project.experimental_design.[].ontology
+RENAME	project.protocols.[].type.text	project.experimental_design.[].text
+DELETE	project.protocols.[].update_date
+DELETE	project.protocols.[].updater_id
+KEEP	project.publications.[].authors.[]	project.publications.[].authors.[]
+DELETE	project.publications.[].core.schema_url
+DELETE	project.publications.[].core.schema_version
+DELETE	project.publications.[].core.type
+KEEP	project.publications.[].doi	project.publications.[].doi
+KEEP	project.publications.[].pmid	project.publications.[].pmid
+KEEP	project.publications.[].title	project.publications.[].title
+KEEP	project.publications.[].url	project.publications.[].url
+KEEP	project.related_projects.[]	project.related_projects.[]
+DELETE	project.sra_project
+DELETE	project.submit_date
+RENAME	project.submitter.address	project.contributors.[].address
+RENAME	project.submitter.city	project.contributors.[].city
+DELETE	project.submitter.core.schema_url
+DELETE	project.submitter.core.schema_version
+DELETE	project.submitter.core.type
+RENAME	project.submitter.country	project.contributors.[].country
+RENAME	project.submitter.country_division	project.contributors.[].country_division
+RENAME	project.submitter.email	project.contributors.[].email
+DELETE	project.submitter.id
+RENAME	project.submitter.institution	project.contributors.[].institution
+RENAME	project.submitter.laboratory	project.contributors.[].laboratory
+RENAME	project.submitter.name	project.contributors.[].name
+KEEP	project.supplementary_files.[]	project.supplementary_files.[]
+RENAME	project.title	project.publications.[].title
+DELETE	project.update_date
+RENAME	project.updater.address	project.contributors.[].address
+RENAME	project.updater.city	project.contributors.[].city
+DELETE	project.updater.core.schema_url
+DELETE	project.updater.core.schema_version
+DELETE	project.updater.core.type
+RENAME	project.updater.country	project.contributors.[].country
+RENAME	project.updater.country_division	project.contributors.[].country_division
+RENAME	project.updater.email	project.contributors.[].email
+DELETE	project.updater.id
+RENAME	project.updater.institution	project.contributors.[].institution
+RENAME	project.updater.laboratory	project.contributors.[].laboratory
+RENAME	project.updater.name	project.contributors.[].name
+DELETE	sample.biosd_sample
+RENAME	sample.body_part.ontology	sample.specimen_from_organism.body_part.ontology
+RENAME	sample.body_part.text	sample.specimen_from_organism.body_part.text
+RENAME	sample.cell_cycle.ontology	sample.immortalized_cell_line.cell_cycle.ontology
+RENAME	sample.cell_cycle.text	sample.immortalized_cell_line.cell_cycle.text
+RENAME	sample.cell_line.catalog_number	sample.immortalized_cell_line.catalog_number
+RENAME	sample.cell_line.catalog_url	sample.immortalized_cell_line.catalog_url
+RENAME	sample.cell_line.cell_type.ontology	sample.immortalized_cell_line.cell_type.ontology
+RENAME	sample.cell_line.cell_type.text	sample.immortalized_cell_line.cell_type.text
+DELETE	sample.cell_line.core.schema_url
+DELETE	sample.cell_line.core.schema_version
+DELETE	sample.cell_line.core.type
+DELETE	sample.cell_line.culture_protocol
+RENAME	sample.cell_line.date_established	sample.immortalized_cell_line.date_established
+RENAME	sample.cell_line.derived_from	sample.derived_from
+RENAME	sample.cell_line.disease.ontology	sample.donor.disease.[].ontology
+RENAME	sample.cell_line.disease.text	sample.donor.disease.[].text
+RENAME	sample.cell_line.karyotype	sample.immortalized_cell_line.karyotype
+RENAME	sample.cell_line.name.ontology	sample.cell_suspension.target_cell_type.[].ontology
+RENAME	sample.cell_line.name.text	sample.cell_suspension.target_cell_type.[].text
+RENAME	sample.cell_line.passage_number	sample.immortalized_cell_line.passage_number
+RENAME	sample.cell_line.publication.authors.[]	sample.immortalized_cell_line.publication.authors.[]
+DELETE	sample.cell_line.publication.core.schema_url
+DELETE	sample.cell_line.publication.core.schema_version
+DELETE	sample.cell_line.publication.core.type
+RENAME	sample.cell_line.publication.doi	sample.immortalized_cell_line.publication.doi
+RENAME	sample.cell_line.publication.pmid	sample.immortalized_cell_line.publication.pmid
+RENAME	sample.cell_line.publication.title	sample.immortalized_cell_line.publication.title
+RENAME	sample.cell_line.publication.url	sample.immortalized_cell_line.publication.url
+KEEP	sample.core.schema_url	sample.core.schema_url
+KEEP	sample.core.schema_version	sample.core.schema_version
+KEEP	sample.core.type	sample.core.type
+DELETE	sample.culture_type
+DELETE	sample.disassociation_protocol
+KEEP	sample.donor.age	sample.donor.age
+KEEP	sample.donor.age_unit	sample.donor.age_unit
+KEEP	sample.donor.ancestry.[].ontology	sample.donor.ancestry.[].ontology
+KEEP	sample.donor.ancestry.[].text	sample.donor.ancestry.[].text
+KEEP	sample.donor.body_mass_index	sample.donor.body_mass_index
+DELETE	sample.donor.core.schema_url
+DELETE	sample.donor.core.schema_version
+DELETE	sample.donor.core.type
+DELETE	sample.donor.death.cause_of_death
+KEEP	sample.donor.death.cold_perfused	sample.donor.death.cold_perfused
+DELETE	sample.donor.death.core.schema_url
+DELETE	sample.donor.death.core.schema_version
+DELETE	sample.donor.death.core.type
+KEEP	sample.donor.death.days_on_ventilator	sample.donor.death.days_on_ventilator
+KEEP	sample.donor.death.hardy_scale	sample.donor.death.hardy_scale
+KEEP	sample.donor.death.time_of_death	sample.donor.death.time_of_death
+KEEP	sample.donor.development_stage.ontology	sample.donor.development_stage.ontology
+KEEP	sample.donor.development_stage.text	sample.donor.development_stage.text
+KEEP	sample.donor.disease.[].ontology	sample.donor.disease.[].ontology
+KEEP	sample.donor.disease.[].text	sample.donor.disease.[].text
+KEEP	sample.donor.genotype	sample.donor.genotype
+KEEP	sample.donor.height	sample.donor.height
+DELETE	sample.donor.id
+KEEP	sample.donor.is_living	sample.donor.is_living
+KEEP	sample.donor.life_stage	sample.donor.life_stage
+KEEP	sample.donor.medication.[].ontology	sample.donor.medication.[].ontology
+KEEP	sample.donor.medication.[].text	sample.donor.medication.[].text
+KEEP	sample.donor.sex	sample.donor.sex
+RENAME	sample.donor.species.ontology	sample.donor.ancestry.[].ontology
+RENAME	sample.donor.species.text	sample.donor.ancestry.[].text
+KEEP	sample.donor.strain.[].ontology	sample.donor.strain.[].ontology
+KEEP	sample.donor.strain.[].text	sample.donor.strain.[].text
+DELETE	sample.donor.submitted_id
+KEEP	sample.donor.weight	sample.donor.weight
+DELETE	sample.ena_sample
+DELETE	sample.enrichment.[].core.schema_url
+DELETE	sample.enrichment.[].core.schema_version
+DELETE	sample.enrichment.[].core.type
+RENAME	sample.enrichment.[].markers	sample.cell_suspension.enrichment.[].markers
+RENAME	sample.enrichment.[].protocol.[]	sample.immortalized_cell_line.publication.authors.[]
+RENAME	sample.enrichment.[].size_max	sample.cell_suspension.enrichment.[].size_max
+RENAME	sample.enrichment.[].size_min	sample.cell_suspension.enrichment.[].size_min
+RENAME	sample.enrichment.[].type	sample.cell_suspension.enrichment.[].type
+DELETE	sample.geo_sample
+DELETE	sample.id
+KEEP	sample.name	sample.name
+DELETE	sample.ncbi_biosample
+RENAME	sample.organ.ontology	sample.specimen_from_organism.organ.ontology
+RENAME	sample.organ.text	sample.specimen_from_organism.organ.text
+RENAME	sample.preservation.autolysis_score	sample.specimen_from_organism.state_of_specimen.autolysis_score
+DELETE	sample.preservation.core.schema_url
+DELETE	sample.preservation.core.schema_version
+DELETE	sample.preservation.core.type
+RENAME	sample.preservation.gross_description	sample.specimen_from_organism.state_of_specimen.gross_description
+RENAME	sample.preservation.gross_image.[]	sample.specimen_from_organism.state_of_specimen.gross_image.[]
+RENAME	sample.preservation.ischemic_time	sample.specimen_from_organism.state_of_specimen.ischemic_time
+RENAME	sample.preservation.microscopic_description	sample.specimen_from_organism.state_of_specimen.microscopic_description
+RENAME	sample.preservation.microscopic_image.[]	sample.specimen_from_organism.state_of_specimen.microscopic_image.[]
+RENAME	sample.preservation.postmortem_interval	sample.specimen_from_organism.state_of_specimen.postmortem_interval
+DELETE	sample.preservation.preservation_protocol
+DELETE	sample.preservation.storage_protocol
+RENAME	sample.project_id	project.project_id
+RENAME	sample.protocol_ids.[]	sample.immortalized_cell_line.publication.authors.[]
+DELETE	sample.submit_date
+DELETE	sample.submitter_id
+KEEP	sample.supplementary_files.[]	sample.supplementary_files.[]
+RENAME	sample.title	sample.immortalized_cell_line.publication.title
+RENAME	sample.total_estimated_cells	sample.cell_suspension.total_estimated_cells
+DELETE	sample.update_date
+DELETE	sample.updater_id
+RENAME	sample.well.cell_type.ontology	sample.immortalized_cell_line.cell_type.ontology
+RENAME	sample.well.cell_type.text	sample.immortalized_cell_line.cell_type.text
+RENAME	sample.well.col	sample.cell_suspension.well.col
+DELETE	sample.well.core.schema_url
+DELETE	sample.well.core.schema_version
+DELETE	sample.well.core.type
+RENAME	sample.well.name	sample.cell_suspension.well.name
+RENAME	sample.well.plate	sample.cell_suspension.well.plate
+DELETE	sample.well.plating_protocol
+RENAME	sample.well.quality	sample.cell_suspension.well.quality
+RENAME	sample.well.row	sample.cell_suspension.well.row
+NEW		assay.description
+NEW		assay.imaging.embedding
+NEW		assay.imaging.exposure_time
+NEW		assay.imaging.field_counts.[]
+NEW		assay.imaging.field_microns.[]
+NEW		assay.imaging.field_resolution.[]
+NEW		assay.imaging.fixation
+NEW		assay.imaging.microscope
+NEW		assay.imaging.probes
+NEW		assay.name
+NEW		project.contributors.[].phone
+NEW		project.insdc_project
+NEW		project.insdc_study
+NEW		project.name
+NEW		project.submitters.[].address
+NEW		project.submitters.[].city
+NEW		project.submitters.[].country
+NEW		project.submitters.[].country_division
+NEW		project.submitters.[].email
+NEW		project.submitters.[].institution
+NEW		project.submitters.[].laboratory
+NEW		project.submitters.[].name
+NEW		project.submitters.[].phone
+NEW		sample.description
+NEW		sample.donor.alcohol_history
+NEW		sample.donor.death.cause_of_death.ontology
+NEW		sample.donor.death.cause_of_death.text
+NEW		sample.donor.nutritional_state
+NEW		sample.donor.smoking_history
+NEW		sample.genus_species.ontology
+NEW		sample.genus_species.text
+NEW		sample.immortalized_cell_line.disease.ontology
+NEW		sample.immortalized_cell_line.disease.text
+NEW		sample.ncbi_taxon_id
+NEW		sample.organoid.model_for_organ.ontology
+NEW		sample.organoid.model_for_organ.text
+NEW		sample.primary_cell_line.cell_cycle.ontology
+NEW		sample.primary_cell_line.cell_cycle.text
+NEW		sample.primary_cell_line.cell_type.ontology
+NEW		sample.primary_cell_line.cell_type.text
+NEW		sample.primary_cell_line.date_established
+NEW		sample.primary_cell_line.disease.ontology
+NEW		sample.primary_cell_line.disease.text
+NEW		sample.primary_cell_line.passage_number
+NEW		sample.sample_accessions
