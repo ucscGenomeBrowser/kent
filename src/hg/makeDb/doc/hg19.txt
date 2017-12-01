@@ -32422,7 +32422,8 @@ TMPDIR=/dev/shm
     cat fb.hg19.chainRBestGorGor5Link.txt
     # 2704000429 bases of 2897316137 (93.328%) in intersection
 
-XXX - can be done - Mon Nov 13 18:42:27 PST 2017
+    # this syntenic procedure is work in progress to get it into the
+    # the primary doBlastzChainNet.pl script - Mon Nov 13 18:42:27 PST 2017
     # create and load up syntenic chainNet:
 cd /hive/data/genomes/hg19/bed/lastzGorGor5.2017-11-08/axtChain
 netToAxt hg19.gorGor5.syn.net.gz hg19.gorGor5.all.chain.gz \
