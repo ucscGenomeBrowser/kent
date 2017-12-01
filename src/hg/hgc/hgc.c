@@ -4267,6 +4267,10 @@ else if (wordCount > 0)
 	{
 	doEncodePeak(tdb, NULL, item);
 	}
+    else if (sameString(type, "bigNarrowPeak"))
+	{
+	doBigEncodePeak(tdb, NULL, item);
+	}
     else if (sameString(type, "encodeFiveC"))
 	{
 	doEncodeFiveC(conn, tdb);
@@ -11772,7 +11776,7 @@ if (version == NULL)
     sqlSafef(query, sizeof(query), "select * from %s  where mrnaAcc = '%s'", refLinkTable, sqlRnaName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) == NULL)
-	errAbort("Couldn't find %s in %s table - this accession may no longer be available.", rnaName, refLinkTable);
+        errAbort("This accession (%s) is no longer in our database. Check NCBI for status on this accession.", rnaName); 
     rl = refLinkLoad(row);
     sqlFreeResult(&sr);
     }
@@ -21121,6 +21125,8 @@ else if ( startsWith( "longTabix", type))
     doLongTabix(ct->tdb, item);
 else if (sameWord(type, "encodePeak"))
     doEncodePeak(ct->tdb, ct, fileName);
+else if (sameWord(type, "bigNarrowPeak"))
+    doBigEncodePeak(ct->tdb, NULL, item);
 else if (sameWord(type, "bigWig"))
     bigWigCustomClick(ct->tdb);
 else if (sameWord(type, "bigChain"))

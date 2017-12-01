@@ -223,7 +223,7 @@ def webSync(url, options):
         run(cmd)
 
     if not isfile(filesHereName):
-        cmd = "du -ab > %s" % filesHereName
+        cmd = "find -L . -type f -exec du -Lab {} + > %s" % filesHereName
         run(cmd)
 
     hereFiles, hereDirs = parseFileList(filesHereName)

@@ -58,12 +58,12 @@ hgLoadBed hg18 gwasCatalogNew gwasCatalog.bed -tab -sqlTable=$HOME/kent/src/hg/l
 
 
 # Mapping to hg19 by joining hg19 SNP coords with catalog flatfile (see hg18.txt)
-join -t "	" -1 4 ../snp144Coords.bed noCoords.tab -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19,1.5,1.6,1.7,1.8,1.9,1.10,1.11 | sort -k1,1 -k2n,2n > gwasCatalogPlus.bed
+join -t "	" -1 4 ../snp150Coords.bed noCoords.tab -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19,1.5,1.6,1.7,1.8,1.9,1.10,1.11 | sort -k1,1 -k2n,2n > gwasCatalogPlus.bed
 
 
 cut -f 1-22 gwasCatalogPlus.bed | hgLoadBed hg19 gwasCatalogNew stdin -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd -renameSqlTable
 
-join -t "	" -1 4 ../hg38.snp144Coords.bed noCoords.tab -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19,1.5,1.6,1.7,1.8,1.9,1.10,1.11 | sort -k1,1 -k2n,2n > hg38.gwasCatalog.bed
+join -t "	" -1 4 ../hg38.snp150Coords.bed noCoords.tab -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19,1.5,1.6,1.7,1.8,1.9,1.10,1.11 | sort -k1,1 -k2n,2n > hg38.gwasCatalog.bed
 cut -f 1-22 hg38.gwasCatalog.bed | hgLoadBed hg38 gwasCatalogNew stdin -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd -renameSqlTable
 
 ../validateGwas.sh hg18

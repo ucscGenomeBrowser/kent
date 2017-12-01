@@ -9,9 +9,10 @@ static int longRangeHeight(struct track *tg, enum trackVisibility vis)
 {
 if ( tg->visibility == tvDense)
     return  tl.fontHeight;
-char buffer[1024];
-safef(buffer, sizeof buffer, "%s.%s", tg->tdb->track, LONG_HEIGHT );
-return tg->height = sqlUnsigned(cartUsualString(cart, buffer, LONG_DEFHEIGHT));
+int min, max, deflt, current; 
+cartTdbFetchMinMaxPixels(cart, tg->tdb, LONG_MINHEIGHT, LONG_MAXHEIGHT, atoi(LONG_DEFHEIGHT),
+                                &min, &max, &deflt, &current);
+return tg->height = current;
 }
 
 

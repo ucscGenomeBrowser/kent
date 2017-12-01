@@ -39,6 +39,7 @@
 #include "knetUdc.h"
 #include "trashDir.h"
 #include "genbank.h"
+#include "windowsToAscii.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -407,7 +408,7 @@ boolean lookupPosition()
 /* Look up position (aka range) if need be.  Return FALSE if it puts
  * up multiple positions. */
 {
-char *range = cartUsualString(cart, hgtaRange, "");
+char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
 boolean isSingle = TRUE;
 range = trimSpaces(range);
 if (range[0] != 0)
@@ -583,7 +584,8 @@ struct hTableInfo *hubTrackTableInfo(struct trackDb *tdb)
 struct hTableInfo *hti = NULL;
 if (tdb->subtracks == NULL)
     {
-    if (startsWithWord("bigBed", tdb->type) || startsWithWord("bigGenePred", tdb->type))
+    if (startsWithWord("bigBed", tdb->type) || startsWithWord("bigGenePred", tdb->type) ||
+        startsWithWord("bigNarrowPeak", tdb->type))
 	hti = bigBedToHti(tdb->table, NULL);
     else if (startsWithWord("longTabix", tdb->type))
 	hti = longTabixToHti(tdb->table);

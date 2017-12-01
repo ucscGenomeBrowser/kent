@@ -1850,28 +1850,33 @@ baseColorDrawOptDropDown(cart, tdb);
 void refGeneUI(struct trackDb *tdb)
 /* Put up refGene or xenoRefGene gene ID track controls, with checkboxes */
 {
-/* Figure out if OMIM database is available. */
-int omimAvail = 0;
-if (sameString(tdb->track, "refGene"))
+// Show label options only if top-level track; ncbiRefSeqUI (for refSeqComposite) shows
+// label options for all subtracks.
+if (tdb->parent == NULL)
     {
-    struct sqlConnection *conn = hAllocConn(database);
-    char query[128];
-    sqlSafef(query, sizeof(query), "select r.omimId from %s r, refGene where r.mrnaAcc = refGene.name and r.omimId != 0 limit 1", refLinkTable);
-    omimAvail = sqlQuickNum(conn, query);
-    hFreeConn(&conn);
-    }
+    /* Figure out if OMIM database is available. */
+    int omimAvail = 0;
+    if (sameString(tdb->track, "refGene"))
+        {
+        struct sqlConnection *conn = hAllocConn(database);
+        char query[128];
+        sqlSafef(query, sizeof(query), "select r.omimId from %s r, refGene where r.mrnaAcc = refGene.name and r.omimId != 0 limit 1", refLinkTable);
+        omimAvail = sqlQuickNum(conn, query);
+        hFreeConn(&conn);
+        }
 
-/* Put up label line  - boxes for gene, accession or maybe OMIM. */
-printf("<BR><B>Label:</B> ");
-labelMakeCheckBox(tdb, "gene", "gene", TRUE);
-labelMakeCheckBox(tdb, "acc", "accession", FALSE);
-if (omimAvail != 0)
-    {
-    char sym[32];
-    safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
-    labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
+    /* Put up label line  - boxes for gene, accession or maybe OMIM. */
+    printf("<BR><B>Label:</B> ");
+    labelMakeCheckBox(tdb, "gene", "gene", TRUE);
+    labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+    if (omimAvail != 0)
+        {
+        char sym[32];
+        safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
+        labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
+        }
+    printf("<BR>\n");
     }
-printf("<BR>\n");
 
 /* Put up noncoding option and codon coloring stuff. */
 hideNoncodingOpt(tdb);
@@ -1910,29 +1915,21 @@ baseColorDrawOptDropDown(cart, tdb);
 void ncbiRefSeqUI(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
-struct sqlConnection *conn = hAllocConn(database);
-char query[256];
-char *omimAvail = NULL;
-if (sqlTableExists(conn, "kgXref"))
-    {
-    sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,%s r where kgXref.refseq = r.mrnaAcc and r.omimId != 0 limit 1", refLinkTable);
-    omimAvail = sqlQuickString(conn, query);
-    }
-else if (sqlTableExists(conn, "ncbiRefSeqLink"))
-    omimAvail = "yes";
-
-char varName[64];
+char varName[256];
 safef(varName, sizeof(varName), "%s.label", tdb->track);
 printf("<br><b>Label:</b> ");
 labelMakeCheckBox(tdb, "gene", "gene symbol", TRUE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+struct sqlConnection *conn = hAllocConn(database);
+boolean omimAvail = sqlQuickNum(conn,
+                                NOSQLINJ"select 1 from ncbiRefSeqLink where omimId != 0 limit 1");
 if (omimAvail)
     {
     char sym[32];
     safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
     labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
     }
-printf("&nbsp;&nbsp;(select gene symbol(s) to display)<br>");
+hFreeConn(&conn);
 }
 
 void ensGeneUI(struct trackDb *tdb)

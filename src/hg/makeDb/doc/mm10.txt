@@ -15434,32 +15434,46 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev gorGor5 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
     # real    297m3.002s
-
+_EOF_
 ##############################################################################
-# refSeqFuncElems NCBI refSeq functional elements, DONE 2017-08-08 Chris
-# Mouse
+# refSeqFuncElems NCBI refSeq functional elements, REDONE 2017-11-29 Angie
+# previously done 2017-08-08 by Chris E
 
-#TODO next time: build in /hive/data/genomes/mm10/bed/refSeqFuncElems/$date; don't include 'Mm10' in file names
+mkdir /hive/data/genomes/mm10/bed/refSeqFuncElems.2017-11-29
+cd /hive/data/genomes/mm10/bed/refSeqFuncElems.2017-11-29
 
-cd /hive/data/outside/refSeqFuncElems
+# NOTE FOR NEXT TIME: instead of using interim GFF, in the future these annotations might be
+# folded into the same main release GFF3 from which the ncbiRefSeq* tables are extracted by
+# doNcbiRefSeq.pl.
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Mus_musculus/GFF_interim/interim_GRCm38.p6_top_level_2017-09-26.gff3.gz
 
-wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Mus_musculus/GFF_interim/interim_GRCm38.p5_top_level_2017-05-19.gff3.gz
-gunzip interim_GRCm38.p5_top_level_2017-05-19.gff3.gz
+# Get mapping of RefSeq NC_* chromosome accs (and NT_*, NW_*) to mm10 chrom names
+hgsql mm10 -NBe 'select alias, chrom from chromAlias where source = "refseq" order by alias' \
+> refSeqToChrom.tab
+cut -f 2 refSeqToChrom.tab | sed -e 's/^/^/' > chrom.tab
 
-#TODO next time: consider using chromAlias instead of ucscToRefSeq:
+# Use Terence Murphy's list of feature types (and the multi-type attribute regulatory_class)
+# to identify Functional Elements and swap in mm10 chrom names.
+# Use subColumn -miss so it doesn't quit when it sees a patch contig that doesn't map to an
+# mm10 chrom.  Use grep -f chrom.tab to filter out patch contig annotations.
+zcat interim_GRCm38.p6_top_level_2017-09-26.gff3.gz \
+| grep -P "(\t(CAAT_signal|GC_rich_promoter_region|TATA_box|enhancer|insulator|locus_control_region|mobile_genetic_element|origin_of_replication|promoter|protein_binding_site|recombination_feature|regulatory_region|repeat_region|sequence_feature|sequence_secondary_structure|silencer|stem_loop)\t|regulatory_class=)" \
+| subColumn -miss=/dev/null 1 stdin refSeqToChrom.tab stdout \
+| grep -f chrom.tab > funcElems.gff
+wc -l funcElems.gff
+#1968 funcElems.gff
 
-hgsql mm10 -e "select * from ucscToRefSeq" | cut -f 1,4 | awk '{print $2"\t"$1}' > refSeqToUcscMM10.tsv
+# Transform GFF to BED+
+~/kent/src/hg/utils/automation/parseRefSeqFuncElems funcElems.gff /dev/stdout \
+| sort -k1,1 -k2n,2n > refSeqFuncElems.bed
+wc -l refSeqFuncElems.bed
+#1968 refSeqFuncElems.bed
 
-tail -2373040 interim_GRCm38.p5_top_level_2017-05-19.gff3 > foo2.mm10
-
-join <(sort foo2.mm10) <(sort refSeqToUcscMM10.tsv) -t $'\t' > join.foo.mm10
-
-./parseRefSeqFuncElems join.foo.mm10 bed.mm10 108.20170627
-sort -k1,1 -k2,2n bed.mm10 > sorted.bed.mm10
-bedToBigBed -type=bed8+8 -as=refSeqFuncElems.as sorted.bed.mm10 /hive/data/genomes/mm10/chrom.sizes refSeqFuncElemsMm10.bb -tab
-
-mkdir -p /gbdb/mm10/ncbiRefSeq
-ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb /gbdb/mm10/ncbiRefSeq/refSeqFuncElems.bb
+# Make bigBed and link from /gbdb
+bedToBigBed -tab -type=bed9+7 -as=$HOME/kent/src/hg/lib/refSeqFuncElems.as \
+  refSeqFuncElems.bed /hive/data/genomes/mm10/chrom.sizes refSeqFuncElems.bb
+rm -f /gbdb/mm10/ncbiRefSeq/refSeqFuncElems.bb
+ln -s `pwd`/refSeqFuncElems.bb /gbdb/mm10/ncbiRefSeq/
 
 ##############################################################################
 2017-09-15: import of UCSC GENCODE group processing of GENCODE VM15 (markd)
@@ -15493,16 +15507,17 @@ ln -s /hive/data/outside/refSeqFuncElems/refSeqFuncElemsMm10.bb /gbdb/mm10/ncbiR
     # commit all
 
 ##############################################################################
-# ncbiRefSeq composite (DONE - 2017-09-28 - Angie)
+# ncbiRefSeq composite (DONE - 2017-11-16 - Angie)
+# Previously done 2017-09-28; redone 11-16 to include mito "rna" from chrM genomic seq
 
-    mkdir /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-09-28
-    cd /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-09-28
+    mkdir /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-11-16
+    cd /hive/data/genomes/mm10/bed/ncbiRefSeq.p5.2017-11-16
 
     time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
       refseq vertebrate_mammalian Mus_musculus \
       GCF_000001635.25_GRCm38.p5 mm10) > do.log 2>&1 & tail -f do.log
-    # *** All done !  Elapsed time: 14m27s
-    # real    14m27.423s
+    #  *** All done !  Elapsed time: 17m36s
+    # real    real    17m35.651s
 
     cat fb.ncbiRefSeq.mm10.txt
     # 105516336 bases of 2652783500 (3.978%) in intersection

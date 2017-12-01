@@ -195,11 +195,11 @@ static struct pipeline *bedLoaderPipe(struct customTrack *track)
  *	-allowStartEqualEnd -allowNegativeScores -verbose=0
  */
 struct dyString *tmpDy = newDyString(0);
+int index = 3; /* verify this references the first NULL as cmd1[index] */
 char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
-	NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+	"-lineLimit=50000000", NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
-int index = 2;
 
 if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
@@ -2369,6 +2369,14 @@ static boolean bigBarChartRecognizer(struct customFactory *fac,
 return (sameType(type, "bigBarChart"));
 }
 
+static boolean bigNarrowPeakRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigNarrowPeak track */
+{
+return (sameType(type, "bigNarrowPeak"));
+}
+
 static boolean bigGenePredRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2510,6 +2518,15 @@ static struct customFactory bigPslFactory =
     NULL,
     "bigPsl",
     bigPslRecognizer,
+    bigBedLoader,
+    };
+
+static struct customFactory bigNarrowPeakFactory =
+/* Factory for bigNarrowPeak tracks */
+    {
+    NULL,
+    "bigNarrowPeak",
+    bigNarrowPeakRecognizer,
     bigBedLoader,
     };
 
@@ -3004,6 +3021,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &pgSnpFactory);
     slAddTail(&factoryList, &bedFactory);
     slAddTail(&factoryList, &bigGenePredFactory);
+    slAddTail(&factoryList, &bigNarrowPeakFactory);
     slAddTail(&factoryList, &bigPslFactory);
     slAddTail(&factoryList, &bedTabixFactory);
     slAddTail(&factoryList, &longTabixFactory);

@@ -3269,27 +3269,6 @@ var rightClick = {
                 {
                 // add delete from composite
                 }
-            else if (!rec.hasChildren && 
-                (rec.type.startsWith("bigWig") || rec.type.startsWith("wig") || rec.type.startsWith("bedGraph"))) {
-                o = {};
-                o[" Make a New Collection with \"" + rec.shortLabel + "\""] = {
-                    onclick: rightClick.makeHitCallback("newCollection")
-                };  
-                menu.push(o);
-
-                if (hgTracks.collections) {
-                    var ii;
-                    for(ii=0; ii < hgTracks.collections.length; ii++) {
-                        o = {};
-                        o[" Add to \"" + hgTracks.collections[ii].shortLabel + "\""] = {
-                            onclick: rightClick.makeHitCallback("addCollection")
-                        };  
-                        menu.push(o);
-                    }
-                }
-
-                menu.push($.contextMenu.separator);
-            }
 
             // add sort options if this is a custom composite
             if (rec.isCustomComposite) {

@@ -350,7 +350,7 @@
     <P>The setting is either the full URL (including <code>http:</code> or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
-    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigMaf, bigPsl, bigGenePred,  bigWig or
+    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigMaf, bigPsl, bigGenePred, bigNarrowPeak, bigWig or
     vcfTabix.  Note that bam/cram and vcfTabix types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless <A
@@ -651,22 +651,25 @@
 </DIV>
 
 <DIV class="pennantIcon"><span class="types all"></span>
-<div class="format"><code>pennantIcon &lt;icon&gt; [html [tip]]</code></div>
-    <P>Certain tracks can be visually flagged in the Browser by use of an icon and
-    a link to a description of the icon's meaning.  The icon is displayed next to the track's
+<div class="format"><code>pennantIcon &lt;iconFile&gt;/&lt;text color&gt; [html [tip]]</code></div>
+    <P>Certain tracks can be visually flagged in the Browser menu by use of an icon or text label 
+    and a link to a description of the flags meaning.  The icon is displayed next to the track's
     short label in the track groups section below the Browser image, and on the track's 
     description and configuration pages.
     This setting has three parts:</P>
     <UL>
     <LI>icon -  Can be fully qualified URL (http, https, ftp) to an image file,  or the name of an image in the Browser's images directory in the 
     Browser source tree.</LI>
+    <LI>text - A single word label. Case is ignored; the label is displayed capitalized lower case.</LI>
+    <LI>color - An HTML color name to color the text label</LI>
     <LI>html - A relative or full html path to a description document explaining the
     icon's meaning.  This page displays when the user clicks on the icon.</LI>
-    <LI>Tip - A "quoted string" tip that will be seen
+    <LI>tip - A "quoted string" tip that will be seen
     when the user's mouse pointer hovers over the icon.</LI>
     </UL>
-    <P><B>Example:</B></P>
+    <P><B>Examples:</B></P>
     <pre>    pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"</pre>
+    <pre>    pennantIcon New red ../goldenPath/releaseLog.html "Released October 19, 2017"</pre>
 </DIV>
 
 <DIV class="priority"><span class="types all"></span>
@@ -857,7 +860,7 @@
     </pre>
 </DIV>
 
-<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>skipEmptyFields on</code><BR>
     </div>
@@ -867,7 +870,7 @@
     fields but only few of them have a value.</P> 
 </DIV>
 
-<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>skipFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
@@ -881,7 +884,7 @@
     </pre>
 </DIV>
 
-<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
+<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigNarrowPeak bigMaf bigChain"></span>
     <div class="format">
         <code>sepFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
@@ -974,6 +977,16 @@
     <A HREF="../bigGenePred.html">bigGenePred help page</A>.</P>
 </DIV>
 
+<DIV class="bigNarrowPeak_intro">
+<H3>bigNarrowPeak: Peaks</H3>
+    <P>
+    The bigNarrowPeak format stores peaks over a range with a single basepair central peak. bigNarrowPeak files are based on the bigBed format.  The first six fields are the same as bed.  The other four include three scores, and the base-pair offset of the central peak.
+
+    bigNarrowPeak files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigNarrowPeak. The resulting bigBed files are in an indexed binary format. The main advantage of the bigBed files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigBed is considerably faster than regular BED files. The bigBed file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigNarrowPeak format definitions please see the
+    <A HREF="../bigNarrowPeak.html">bigNarrowPeak help page</A>.</P>
+</DIV>
+
 <DIV class="bigMaf_intro">
 <H3>bigMaf: Multiple Alignments</H3>
     <P>
@@ -1049,6 +1062,12 @@ There are no extra options that can appear on the type bigPsl line.
 <div class="format">
     <code>type bigChain</code></div>
 There are no extra options that can appear on the type bigChain line.
+</DIV>
+
+<DIV class="bigNarrowPeak"><span class="types bigNarrowPeak"></span>
+<div class="format">
+    <code>type bigNarrowPeak</code></div>
+There are no extra options that can appear on the type bigNarrowPeak line.
 </DIV>
 
 <DIV class="bigGenePred"><span class="types bigGenePred"></span>
@@ -1598,7 +1617,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>   bedNameLabel Gene Id</pre>
 </DIV>
 
-<DIV class="scoreLabel"><span class="types bed bigBed bigPsl bigGenePred"></span>
+<DIV class="scoreLabel"><span class="types bed bigBed bigPsl bigGenePred bigNarrowPeak"></span>
 <div class="format"><code>scoreLabel &lt;label&gt;</code></div>
     <P>When a user clicks on a track item in the Browser image, 
     the item detail page is shown. This setting specifies an 
@@ -3680,19 +3699,19 @@ There are no extra options that can appear on the type bigBarChart line.
     </P>
 </DIV>
 
-<DIV class="labelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
+<DIV class="labelFields"><span class="types bigBarChart bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>labelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
     <P>A list of fields from the bigBed based file that can be used as a label. The special value <B>none</B> can be specified if no labels are desired.
     </P>
 </DIV>
 
-<DIV class="defaultLabelFields"><span class="types bigBarChart bigBed bigGenePred bigPsl"></span>
+<DIV class="defaultLabelFields"><span class="types bigBarChart bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>defaultLabelFields &lt;<EM>fieldName[,fieldName]</EM>&gt;</code></div>
     <P>A list of fields from the bigBed based file that should be used as a label by default.  Only applicable if <B>labelFields</B> is set.  If <B>defaultLabelFields</B> is not specified, the first field in labelFields is used as the default. The special value <B>none</B> can be specified if no label should be the default.
     </P>
 </DIV>
 
-<DIV class="labelSeparator"><span class="types bigBed bigGenePred bigPsl"></span>
+<DIV class="labelSeparator"><span class="types bigBed bigGenePred bigNarrowPeak bigPsl"></span>
 <div class="format"><code>labelSeparator &lt;<EM>text</EM>&gt;</code></div>
     <P>One or more characters to use as the field separator between multiple labels.  A slash (/) by default, this string can have double quotes around it if it should have white spaces in it.
     </P>
@@ -4773,7 +4792,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4803,7 +4822,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4877,7 +4896,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -4907,7 +4926,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     compositeTrack on
     subGroup1 cellLine Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup2 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;
@@ -5063,7 +5082,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     subGroup1 view Views PK=Peaks SIG=Signals
     subGroup2 cell Cell_Line \
             A1GM12=GM12878 \
-            CD14=CD14&amp;#43; &hellip;
+            CD14=CD14+ &hellip;
     subGroup3 ab Antibody \
             H3K04ME3=H3K4me3 \
             H3K36ME3=H3K36me3 &hellip;

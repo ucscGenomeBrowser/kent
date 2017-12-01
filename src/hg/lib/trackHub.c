@@ -821,6 +821,7 @@ else
                   startsWithWord("bigMaf", type) ||
                   startsWithWord("longTabix", type) ||
                   startsWithWord("bigGenePred", type) ||
+                  startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
                   startsWithWord("bigBarChart", type) ||
                   startsWithWord("bam", type)))

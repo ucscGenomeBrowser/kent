@@ -80,12 +80,12 @@ then
   snpTbl="snp130";
 elif [ "$db" == "hg19" ]
 then
-#  hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp144 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
-  snpTbl="snp144";
+#  hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp150 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
+  snpTbl="snp150";
 elif [ "$db" == "hg38" ]
 then
-#  hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp144 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
-  snpTbl="snp144";
+#  hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp150 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
+  snpTbl="snp150";
 else
   echo "Error in buildOmimTracks.csh: unable to construct omimAvSnp for $db.  Do not know which SNP table to use."
   exit 255;

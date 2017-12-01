@@ -2,91 +2,214 @@
 <!--#set var="TITLE" value="CIRM Stem Cell Hub at UCSC Homepage" -->
 <!--#set var="ROOT" value="" -->
 
-<!--#include virtual="header.html" -->
+<!--#include virtual="$ROOT/inc/header.html" -->
 
 <div class="cirm-page-body">
   <div class="cirm-page-title" style="background: #5cb85c;">
        <h4 class="cirm-page-title-text">Tools from the CESCG groups</h4>
   </div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 padded">
       <a name="tagStorm"></a>
-      <h4>Tag Storm</h4>
-        <p><b>Metadata made simple</b></p>
-        <p>
-        The tag storm format offers an easy way to describe a hierarchical set of metadata for
-        your data. The format is presented along with a
-        <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm"
-        target="_blank">suite of utilities</a> that allow you to manipulate and interrogate
-        your tag storm files.</p>
-        <!--Example here-->
-        <p>
-        The format and utilities were developed by Jim Kent at the UCSC Genomics Institute.</p>
-        <!--<p>
-        A better explanation plus some tag storm examples would be useful here.-->
+      <!--<button type="button" class="btn-primary btn-block" data-toggle="collapse"
+      data-target="#tags">-->
+      <p class="lead"><span style="color: #1E90FF">Tag Storm:</span> Metadata made
+      simple</p><!--</button>-->
+      <!--<h4>Tag Storm</h4>
+      <p><b>Metadata made simple</b></p>-->
+      <!--<div id="tags" class="collapse">-->
+      <p>
+      The tag storm format offers an easy way to describe a hierarchical set of metadata for
+      your data. The format is presented along with a
+      <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/tagStorm"
+      target="_blank">suite of utilities</a> that allow you to manipulate and interrogate
+      your tag storm files.</p>
+      <!--Example here-->
+      <p>
+      The Tag Storm format and utilities were developed by Jim Kent.</p>
+      <!--<p>
+      A better explanation plus some tag storm examples would be useful here.-->
     </div>
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-12">
-      <a name="tagStorm"></a>
-      <h4>SamplePsychic</h4>
-        <p><b>See how your cells compare</b></p>
-        <p>
-        Coming soon!</p>
+    <div class="col-md-12 padded">
+      <a name="samplePsychic"></a>
+      <p class="lead toollead"><span style="color: #1E90FF">Sample Psychic:</span> See how your
+      cells compare</p>
+      <!--<h4>SamplePsychic</h4>
+      <p><b>See how your cells compare</b></p>-->
+      <p>
+      Sample Psychic can take your gene expression data and compare it to curated references.
+      This comparison is used to produce a scorecard which shows how closely your data maps
+      up to the curated cell types.</p>
+      <div class="row">
+          <div class="col-md-4">
+             <p style="text-align: center">
+             <img src="<!--#echo var="ROOT"-->/images/SamplePsychicReportCard.png"
+             height="75%" width="75%"><br>
+             Report Card view, showing matches grouped by sample. Has CSV download.
+             </p>
+          </div>
+          <div class="col-md-4">
+             <p style="text-align: center">
+             <img src="<!--#echo var="ROOT"-->/images/SamplePsychicDetailedView.png"
+             height="75%" width="75%"><br>
+             By-sample view. Similar to Report Card but easier to navigate.
+             </p>
+          </div>
+          <div class="col-md-4">
+             <p style="text-align: center">
+             <img src="<!--#echo var="ROOT"-->/images/SamplePsychicPlot.png"
+             height="75%" width="75%"><br>
+             Experimental tSNE clustering of input samples.
+             </p>
+          </div>
+      </div>
+      <p>
+      The Sample Psychic web application allows
+      users to upload gene expression data and gain insights into those samples by
+      applying suites of pre-trained concept classifiers to each sample. The
+      resulting set of classification scores is presented as a report card that can
+      be used to validate the identity of the samples and explore similarity between
+      these samples and target concepts represented in in the Sample Psychic suite.
+      For CIRM, classifiers were built for both fetal tissue clusters and hand
+      labeled brain regions. One binary classifier is created for tissue
+      type/cluster. A total of 96 fetal tissue clusters are represented in the
+      Sample Psychic classifier compendium along with 30 classifiers representing
+      hand-labeled brain regions. The pattern of individual classifier scores can
+      give a picture of how user samples map to brain regions and to previously
+      analyzed clusters.</p>
+
+
+      <p><i>Website coming soon!</i></p>
+
+      <p>Sample Psychic was created by James Durbin.</a>
     </div>
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 padded">
       <a name="SCIMITAR"></a>
-      <h4>SCIMITAR</h4>
-        <p><b>Single Cell Inference of MorphIng Trajectories and their Associated Regulation</b></p>
-        <p>
-        The <a href="https://github.com/dimenwarper/scimitar" target="_blank">SCIMITAR</a>
-        package contains a number of tools to help scientists analyze cell trajectory maps based
-        on single cell sequencing data. Read more:</p>
-        <p>
-        Cordero P, Stuart JM.
-        <a href="http://dx.doi.org/10.1142/9789813207813_0053" target="_blank">
-        Tracing co-regulatory network dynamics in noisy, single-cell transcriptome trajectories</a>
-        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>.
-        <em>Pac Symp Biocomput</em>. 2016;22:576-587.
-        PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27897008" target="_blank">27897008</a>; PMC: <a
-        href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5203771/" target="_blank">PMC5203771</a>
-        </p>
-        <!-- Example here-->
+      <p class="lead toollead"><span style="color: #1E90FF">SCIMITAR:</span> Single Cell Inference of
+      MorphIng Trajectories and their Associated Regulation</p>
+      <!--<h4>SCIMITAR</h4>
+      <p><b>Single Cell Inference of MorphIng Trajectories and their Associated Regulation</b></p>-->
+      <p>
+      The <a href="https://github.com/dimenwarper/scimitar" target="_blank">SCIMITAR</a>
+      package contains a number of tools to help scientists analyze cell trajectory maps based
+      on single cell sequencing data. Read more:</p>
+      <p>
+      Cordero P, Stuart JM.
+      <a href="http://dx.doi.org/10.1142/9789813207813_0053" target="_blank">
+      Tracing co-regulatory network dynamics in noisy, single-cell transcriptome trajectories</a>
+      <i class="fa fa-file-pdf-o" aria-hidden="true"></i>.
+      <em>Pac Symp Biocomput</em>. 2016;22:576-587.
+      PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27897008" target="_blank">27897008</a>; PMC: <a
+      href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5203771/" target="_blank">PMC5203771</a>
+      </p>
+
+      <p>SCIMITAR was created Pablo Cordero.</p>
     </div>
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 padded">
       <a name="RIGGLE"></a>
-      <h4>RIGGLE</h4>
-        <p><b>Regulator Inference by Graph-Guided LASSO Estimation</b></p>
-        <p>
-        More coming soon!</p>
-        <!--<p>
-        Sounds like there should be a paper soon, so that means it'll be easier to make this
-        section. If there's a github or location to download this tool, it would nice to be
-        link that here.-->
+      <p class="lead"><span style="color: #1E90FF">RIGGLE:</span> Regulator Inference by
+      Graph-Guided LASSO Estimation</p>
+      <!--<h4>RIGGLE</h4>
+      <p><b>Regulator Inference by Graph-Guided LASSO Estimation</b></p>-->
+      <p>
+      RIGGLE (Regulatory Inference by Graph-Guided LASSO Estimation) is a machine
+      learning framework designed to discover the transcription factor regulators of
+      a cell development trajectory by taking in expression data, known transcription
+      factor targets, and a cell development graph.</p>
+      <p style="text-align: center">
+      <img src="<!--#echo var="ROOT"-->/images/RIGGLE_demo.png" height="75%" width="75%"></p>
+      <p>
+      This process produces predictions for the transcription factor's
+      activities in each of the cell types represented in the graph based on the
+      coordinated expression of its targets, while respecting the developmental
+      relationships between the cells.</p>
+
+      <p><i>More coming soon!</i></p>
+
+      <p>RIGGLE was created by Dan Carlin.</p>
     </div>
   </div>
   <hr>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 padded">
       <a name="MISCE"></a>
-      <h4>MISCE</h4>
-        <p><b>A Minimum Information About a Stem Cell Experiment</b></p>
-        <p>
-        More coming soon!</p>
-        <!--<p>
-        This is a spreadsheet that attempts to collection a useful set of information about
-        an experiment involving stem cells, whether the experiment was to ___ or ___ or
-        anything else. It would be nice to include some info about what the sheet captures
-        plus a link to the sheet itself.-->
+      <p class="lead"><span style="color: #1E90FF">MISCE:</span> A Minimum Information
+      About a Stem Cell Experiment</p>
+      <!--<h4>MISCE</h4>
+      <p><b>A Minimum Information About a Stem Cell Experiment</b></p>-->
+      <p>
+      MISCE, or Minimum Information about a Stem Cell Expriment, is a
+      spreadsheet that attempts to collect a rich set of useful information (metadata) about
+      any experiment involving stem cells. The hope is that in using MISCE, the detailed
+      metadata will make the experimental data useful to others attempting to use it
+      in the future.</p>
+
+      <p>
+      MISCE consists of a number of different modules with each module describing a
+      different experimental process, e.g. celluar reprogramming or RNA sequencing,
+      and all of the important information related to this process, e.g. &quot;Biosample
+      disease stage&quot; or &quot;Assay platform&quot;. Each module can
+      be included or excluded based on the type of experiment being performed. For
+      example, you might not include the &quot;Assay_DNAMethyl&quot; module if you
+      are not performing DNA methylation assays as part of your experiment.</p>
+
+      <p><a href="<!--#echo var="ROOT"-->/MISCEv1.1.pdf">View PDF of MISCE modules</a></p>
+
+      <p>
+      MISCE was created by Sagar Jain and Richard Scheuermann;
+      it is currently maintained by UCSC.</p>
     </div>
   </div>
 </div>
+<!--<<div class="row">
+  <div class="col-md-4">
+    <div class="tab">
+      <input id="tab-one" type="checkbox" name="tabs">
+      <label for="tab-one">Label One</label>
+      <div class="tab-content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur,
+        architecto, explicabo perferendis nostrum, maxime impedit atque odit sunt
+        pariatur illo obcaecati soluta molestias iure facere dolorum adipisci eum?
+        Saepe, itaque.</p>
+      </div>
+    </div>
+  </div>
 
-<!--#include virtual="footer.html" -->
+  <div class="col-md-4">
+    <div class="tab">
+      <input id="tab-two" type="checkbox" name="tabs">
+      <label for="tab-two">Label Two</label>
+      <div class="tab-content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur,
+        architecto, explicabo perferendis nostrum, maxime impedit atque odit sunt
+        pariatur illo obcaecati soluta molestias iure facere dolorum adipisci eum?
+        Saepe, itaque.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="tab">
+      <input id="tab-three" type="checkbox" name="tabs">
+      <label for="tab-three">Label Three</label>
+      <div class="tab-content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur,
+        architecto, explicabo perferendis nostrum, maxime impedit atque odit sunt
+        pariatur illo obcaecati soluta molestias iure facere dolorum adipisci eum?
+        Saepe, itaque.</p>
+      </div>
+    </div>
+  </div>
+</div>-->
+</div>
+
+<!--#include virtual="$ROOT/inc/footer.html" -->

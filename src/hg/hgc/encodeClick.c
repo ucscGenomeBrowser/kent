@@ -51,6 +51,89 @@ for (sub = tdb->subtracks; sub != NULL; sub = sub->next)
 }
 #endif//def UNUSED
 
+static void printPeak(char **row, int rowOffset, char *item, char *chrom, int start, int end, enum encodePeakType peakType)
+{
+char **rowPastOffset = row + rowOffset;
+if ((sqlUnsigned(rowPastOffset[1]) != start) ||  (sqlUnsigned(rowPastOffset[2]) != end))
+    return;
+if (!sameString(rowPastOffset[3], item))
+    return;
+
+float signal = -1;
+float pValue = -1;
+float qValue = -1;
+
+
+/* Name */
+if (rowPastOffset[3][0] != '.')
+    printf("<B>Name:</B> %s<BR>\n", rowPastOffset[3]);
+/* Position */
+printf("<B>Position:</B> "
+   "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+   hgTracksPathAndSettings(), database, chrom, start+1, end, chrom, start+1, end);
+/* Print peak base */
+if ((peakType == narrowPeak) || (peakType == encodePeak))
+    {
+    int peak = sqlSigned(rowPastOffset[9]);
+    if (peak > -1)
+        printf("<B>Peak point:</B> %d<BR>\n", start + peak + 1); // one based
+    }
+/* Strand, score */
+if (rowPastOffset[5][0] != '.')
+        printf("<B>Strand:</B> %c<BR>\n", rowPastOffset[5][0]);
+printf("<B>Score:</B> %d<BR>\n", sqlUnsigned(rowPastOffset[4]));
+/* signalVal, pVal */
+if (peakType != gappedPeak)
+    {
+    signal = sqlFloat(rowPastOffset[6]);
+    pValue = sqlFloat(rowPastOffset[7]);
+    qValue = sqlFloat(rowPastOffset[8]);
+    }
+else
+    {
+    signal = sqlFloat(rowPastOffset[12]);
+    pValue = sqlFloat(rowPastOffset[13]);
+    qValue = sqlFloat(rowPastOffset[14]);
+    }
+if (signal >= 0)
+    printf("<B>Signal value:</B> %.3f<BR>\n", signal);
+if (pValue >= 0)
+    printf("<B>P-value (-log10):</B> %.3f<BR>\n", pValue);
+if (qValue >= 0)
+    printf("<B>Q-value (FDR): </B> %.3f<BR>\n", qValue);
+}
+
+void doBigEncodePeak(struct trackDb *tdb, struct customTrack *ct, char *item)
+/*  details for encodePeak type tracks. */
+{
+enum encodePeakType peakType = narrowPeak;
+char *chrom = cartString(cart,"c");
+int start = cgiInt("o");
+int end = cgiInt("t");
+boolean firstTime = TRUE;
+//peakType = encodePeakInferTypeFromTable(db, table, tdb->type);
+if (peakType == 0)
+    errAbort("unrecognized peak type from table %s", tdb->table);
+genericHeader(tdb, NULL);  // genericClickHandlerPlus gets there first anyway (maybe except for encodePeak custom tracks).
+char *fileName = bbiNameFromSettingOrTable(tdb, NULL, tdb->table);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+int fieldCount = 10;
+char *bedRow[fieldCount];
+char startBuf[16], endBuf[16];
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    if (firstTime)
+        firstTime = FALSE;
+    else // print separator
+        printf("<BR>\n");
+    printPeak(bedRow, 0, item, chrom, start, end, peakType);
+    }
+}
+
 void doEncodePeak(struct trackDb *tdb, struct customTrack *ct, char *item)
 /*  details for encodePeak type tracks. */
 {
@@ -82,58 +165,11 @@ sr = hOrderedRangeQuery(conn, table, chrom, start, end,
 			NULL, &rowOffset);
 while((row = sqlNextRow(sr)) != NULL)
     {
-    char **rowPastOffset = row + rowOffset;
-    if ((sqlUnsigned(rowPastOffset[1]) != start) ||  (sqlUnsigned(rowPastOffset[2]) != end))
-	continue;
-    if (!sameString(rowPastOffset[3], item))
-	continue;
-
-    float signal = -1;
-    float pValue = -1;
-    float qValue = -1;
-
     if (firstTime)
-	firstTime = FALSE;
+        firstTime = FALSE;
     else // print separator
-	printf("<BR>\n");
-
-    /* Name */
-    if (rowPastOffset[3][0] != '.')
-	printf("<B>Name:</B> %s<BR>\n", rowPastOffset[3]);
-    /* Position */
-    printf("<B>Position:</B> "
-       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
-       hgTracksPathAndSettings(), database, chrom, start+1, end, chrom, start+1, end);
-    /* Print peak base */
-    if ((peakType == narrowPeak) || (peakType == encodePeak))
-	{
-	int peak = sqlSigned(rowPastOffset[9]);
-	if (peak > -1)
-	    printf("<B>Peak point:</B> %d<BR>\n", start + peak + 1); // one based
-	}
-    /* Strand, score */
-    if (rowPastOffset[5][0] != '.')
-	    printf("<B>Strand:</B> %c<BR>\n", rowPastOffset[5][0]);
-    printf("<B>Score:</B> %d<BR>\n", sqlUnsigned(rowPastOffset[4]));
-    /* signalVal, pVal */
-    if (peakType != gappedPeak)
-	{
-	signal = sqlFloat(rowPastOffset[6]);
-	pValue = sqlFloat(rowPastOffset[7]);
-	qValue = sqlFloat(rowPastOffset[8]);
-	}
-    else
-	{
-	signal = sqlFloat(rowPastOffset[12]);
-	pValue = sqlFloat(rowPastOffset[13]);
-	qValue = sqlFloat(rowPastOffset[14]);
-	}
-    if (signal >= 0)
-	printf("<B>Signal value:</B> %.3f<BR>\n", signal);
-    if (pValue >= 0)
-	printf("<B>P-value (-log10):</B> %.3f<BR>\n", pValue);
-    if (qValue >= 0)
-	printf("<B>Q-value (FDR): </B> %.3f<BR>\n", qValue);
+        printf("<BR>\n");
+    printPeak(row, rowOffset, item, chrom, start, end, peakType);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
