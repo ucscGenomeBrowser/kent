@@ -15,6 +15,20 @@ cartTdbFetchMinMaxPixels(cart, tg->tdb, LONG_MINHEIGHT, LONG_MAXHEIGHT, atoi(LON
 return tg->height = current;
 }
 
+static Color longRangeItemColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color to draw a long range item */
+{
+struct longRange *lr = item;
+if (lr->hasColor)
+    {
+    struct rgbColor itemRgb;
+    itemRgb.r = (lr->rgb & 0xff0000) >> 16;
+    itemRgb.g = (lr->rgb & 0xff00) >> 8;
+    itemRgb.b = lr->rgb & 0xff;
+    return hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b);
+    }
+return tg->ixColor;
+}
 
 static void longRangeDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
@@ -37,7 +51,7 @@ for(longRange=longRangeList; longRange; longRange=longRange->next)
     {
     safef(itemBuf, sizeof itemBuf, "%d", longRange->id);
     safef(statusBuf, sizeof statusBuf, "%g %s:%d %s:%d", longRange->score, longRange->sChrom, longRange->s, longRange->eChrom, longRange->e);
-
+    color = longRangeItemColor(tg, longRange, hvg);
     boolean sOnScreen = (longRange->s >= seqStart) && (longRange->s < seqEnd);
     unsigned sx = 0, ex = 0;
     if (sOnScreen)
@@ -50,13 +64,13 @@ for(longRange=longRangeList; longRange; longRange=longRange->next)
 
         // draw the foot
         int footWidth = scale * (longRange->sw / 2);
-        hvGfxLine(hvg, sx - footWidth, yOff, sx + footWidth, yOff, MG_BLUE);
+        hvGfxLine(hvg, sx - footWidth, yOff, sx + footWidth, yOff, color);
 
         int height = tg->height/2;
         if (tg->visibility == tvDense)
             height = tg->height;
         unsigned yPos = yOff + height;
-        hvGfxLine(hvg, sx, yOff, sx, yPos, MG_BLUE);
+        hvGfxLine(hvg, sx, yOff, sx, yPos, color);
         if (tg->visibility == tvFull)
             {
             mapBoxHgcOrHgGene(hvg, longRange->s, longRange->s, sx - 2, yOff, 4, tg->height/2,

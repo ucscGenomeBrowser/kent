@@ -33,6 +33,9 @@ char *eChrom;
 unsigned height;
 double score;
 unsigned id;
+// Ensembl extension -- RGB color can be supplied instead of score
+boolean hasColor;
+unsigned rgb;
 };
 
 void longRangeCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);

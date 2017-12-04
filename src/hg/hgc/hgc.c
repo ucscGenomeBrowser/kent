@@ -4046,10 +4046,10 @@ for(longRange = longRangeList; longRange; longRange = longRange->next, ii++)
 if (ourLongRange == NULL)
     errAbort("cannot find long range item with id %d\n", itemNum);
 
-struct aveStats *as = aveStatsCalc(doubleArray, count);
-
 printf("Item you clicked on:<BR>\n");
-printf("<B>Score:</B> %g<BR>\n", ourLongRange->score);
+if (!ourLongRange->hasColor)
+    // if there's color, then there's no score in this format
+    printf("<B>Score:</B> %g<BR>\n", ourLongRange->score);
 printf("<B>ID:</B> %u<BR>\n", ourLongRange->id);
 unsigned padding =  (ourLongRange->e - ourLongRange->s) / 10;
 int s = ourLongRange->s - padding; 
@@ -4092,6 +4092,11 @@ else
     printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)<BR></A><BR>\n",  
         ourLongRange->eChrom, num1Buf, num4Buf, ourLongRange->eChrom, num1Buf, num4Buf, num7Buf);
     }
+
+if (ourLongRange->hasColor)
+    return;
+
+struct aveStats *as = aveStatsCalc(doubleArray, count);
 
 printf("<BR>Statistics on the scores of all items in window (go to track controls to set minimum score to display):\n");
 
