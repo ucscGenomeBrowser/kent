@@ -122,7 +122,7 @@ DELETE	project.updater.id
 DELETE	project.updater.institution
 DELETE	project.updater.laboratory
 DELETE	project.updater.name
-DELETE	sample.biosd_sample
+RENAME	sample.biosd_sample	sample.sample_accessions.biosd_sample
 RENAME	sample.body_part.ontology	sample.specimen_from_organism.body_part.ontology
 RENAME	sample.body_part.text	sample.specimen_from_organism.body_part.text
 RENAME	sample.cell_cycle.ontology	sample.immortalized_cell_line.cell_cycle.ontology
@@ -179,20 +179,22 @@ KEEP	sample.donor.disease.[].ontology	sample.donor.disease.[].ontology
 KEEP	sample.donor.disease.[].text	sample.donor.disease.[].text
 KEEP	sample.donor.genotype	sample.donor.genotype
 KEEP	sample.donor.height	sample.donor.height
-ugly ---- checked above here
-DELETE	sample.donor.id
+NEW		sample.donor.alcohol_history
+NEW		sample.donor.nutritional_state
+NEW		sample.donor.smoking_history
 KEEP	sample.donor.is_living	sample.donor.is_living
 KEEP	sample.donor.life_stage	sample.donor.life_stage
 KEEP	sample.donor.medication.[].ontology	sample.donor.medication.[].ontology
 KEEP	sample.donor.medication.[].text	sample.donor.medication.[].text
 KEEP	sample.donor.sex	sample.donor.sex
-RENAME	sample.donor.species.ontology	sample.donor.ancestry.[].ontology
-RENAME	sample.donor.species.text	sample.donor.ancestry.[].text
+RENAME	sample.donor.species.ontology	sample.genus_species.ontology
+RENAME	sample.donor.species.text	sample.genus_species.text
 KEEP	sample.donor.strain.[].ontology	sample.donor.strain.[].ontology
 KEEP	sample.donor.strain.[].text	sample.donor.strain.[].text
-DELETE	sample.donor.submitted_id
 KEEP	sample.donor.weight	sample.donor.weight
-DELETE	sample.ena_sample
+TODO	sample.donor.id	sample.sample_id
+TODO	sample.donor.submitted_id	sample.name
+DELETE	sample.ena_sample	sample_accessions.insdc_sample
 DELETE	sample.enrichment.[].core.schema_url
 DELETE	sample.enrichment.[].core.schema_version
 DELETE	sample.enrichment.[].core.type
@@ -202,9 +204,9 @@ RENAME	sample.enrichment.[].size_max	sample.cell_suspension.enrichment.[].size_m
 RENAME	sample.enrichment.[].size_min	sample.cell_suspension.enrichment.[].size_min
 RENAME	sample.enrichment.[].type	sample.cell_suspension.enrichment.[].type
 DELETE	sample.geo_sample
-DELETE	sample.id
+RENAME	sample.id	sample.sample_id
 KEEP	sample.name	sample.name
-DELETE	sample.ncbi_biosample
+RENAME	sample.ncbi_biosample	sample.sample_accessions.biosd_sample
 RENAME	sample.organ.ontology	sample.specimen_from_organism.organ.ontology
 RENAME	sample.organ.text	sample.specimen_from_organism.organ.text
 RENAME	sample.preservation.autolysis_score	sample.specimen_from_organism.state_of_specimen.autolysis_score
@@ -219,17 +221,17 @@ RENAME	sample.preservation.microscopic_image.[]	sample.specimen_from_organism.st
 RENAME	sample.preservation.postmortem_interval	sample.specimen_from_organism.state_of_specimen.postmortem_interval
 DELETE	sample.preservation.preservation_protocol
 DELETE	sample.preservation.storage_protocol
-RENAME	sample.project_id	project.project_id
-RENAME	sample.protocol_ids.[]	sample.immortalized_cell_line.publication.authors.[]
+DELETE	sample.project_id
+KEEP	sample.protocol_ids.[]	sample.protocol_ids.[]
 DELETE	sample.submit_date
 DELETE	sample.submitter_id
 KEEP	sample.supplementary_files.[]	sample.supplementary_files.[]
-RENAME	sample.title	sample.immortalized_cell_line.publication.title
+RENAME	sample.title	sample.description
 RENAME	sample.total_estimated_cells	sample.cell_suspension.total_estimated_cells
 DELETE	sample.update_date
 DELETE	sample.updater_id
-RENAME	sample.well.cell_type.ontology	sample.immortalized_cell_line.cell_type.ontology
-RENAME	sample.well.cell_type.text	sample.immortalized_cell_line.cell_type.text
+TODO	sample.well.cell_type.ontology	sample.immortalized_cell_line.cell_type.ontology
+TODO	sample.well.cell_type.text	sample.immortalized_cell_line.cell_type.text
 RENAME	sample.well.col	sample.cell_suspension.well.col
 DELETE	sample.well.core.schema_url
 DELETE	sample.well.core.schema_version
@@ -254,12 +256,9 @@ NEW		project.experimental_design.[].ontology
 NEW		project.experimental_design.[].text
 NEW		project.insdc_project
 NEW		project.name
-NEW		sample.description
 NEW		sample.donor.alcohol_history
 NEW		sample.donor.nutritional_state
 NEW		sample.donor.smoking_history
-NEW		sample.genus_species.ontology
-NEW		sample.genus_species.text
 NEW		sample.immortalized_cell_line.disease.ontology
 NEW		sample.immortalized_cell_line.disease.text
 NEW		sample.ncbi_taxon_id
@@ -273,4 +272,3 @@ NEW		sample.primary_cell_line.date_established
 NEW		sample.primary_cell_line.disease.ontology
 NEW		sample.primary_cell_line.disease.text
 NEW		sample.primary_cell_line.passage_number
-NEW		sample.sample_accessions
