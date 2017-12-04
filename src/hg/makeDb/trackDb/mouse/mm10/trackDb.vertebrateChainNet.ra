@@ -114,6 +114,14 @@ html vertebrateChainNet
         type chain chrPic1
         otherDb chrPic1
 
+        track chainXenLae2
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=kFrog clade=cEutel
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain xenLae2
+        otherDb xenLae2
+
         track chainXenTro9
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=kFrog clade=cEutel
@@ -305,6 +313,14 @@ include chainNetGalGal5.ra
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign chrPic1 chainChrPic1
         otherDb chrPic1
+
+        track netXenLae2
+        subTrack vertebrateChainNetViewnet on
+        subGroups view=net species=kFrog clade=cEutel
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign xenLae2 chainXenLae2
+        otherDb xenLae2
 
         track netXenTro9
         subTrack vertebrateChainNetViewnet on
