@@ -72,7 +72,7 @@ for(; beds; beds=beds->next)
     {
     double score;
     unsigned otherS, otherE;
-    unsigned rgb;
+    unsigned rgb = 0;
     boolean hasColor;
     char *otherChrom = getOther(beds, &otherS, &otherE, &hasColor, &score, &rgb);
     if (score < minScore)
