@@ -55,5 +55,5 @@ do
         esac
 	echo "================================================================"
 	fi
-done | grep -v "^ERROR:" >> "${RESULT}" 2>&1
+done 2>&1 | grep -v "^ERROR:" >> "${RESULT}"
 
