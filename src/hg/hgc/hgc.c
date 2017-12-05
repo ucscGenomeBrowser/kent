@@ -4047,10 +4047,11 @@ if (ourLongRange == NULL)
     errAbort("cannot find long range item with id %d\n", itemNum);
 
 printf("Item you clicked on:<BR>\n");
+printf("&nbsp;&nbsp;&nbsp;&nbsp;<B>ID:</B> %u<BR>\n", ourLongRange->id);
 if (!ourLongRange->hasColor)
     // if there's color, then there's no score in this format
-    printf("<B>Score:</B> %g<BR>\n", ourLongRange->score);
-printf("<B>ID:</B> %u<BR>\n", ourLongRange->id);
+    printf("&nbsp;&nbsp;&nbsp;<B>Score:</B> %g<BR>\n", ourLongRange->score);
+
 unsigned padding =  (ourLongRange->e - ourLongRange->s) / 10;
 int s = ourLongRange->s - padding; 
 int e = ourLongRange->e + padding; 
@@ -4060,44 +4061,49 @@ int chromSize = hChromSize(database, seqName);
 if (e > chromSize)
     e = chromSize;
 
-char num1Buf[1024],num2Buf[1024];
-char num3Buf[1024],num4Buf[1024];
-char num5Buf[1024],num6Buf[1024];
-char num7Buf[1024];
-sprintLongWithCommas(num1Buf, ourLongRange->s - ourLongRange->sw/2);
-sprintLongWithCommas(num2Buf, ourLongRange->s + ourLongRange->sw/2);
-sprintLongWithCommas(num3Buf, ourLongRange->e - ourLongRange->ew/2);
-sprintLongWithCommas(num4Buf, ourLongRange->e + ourLongRange->ew/2);
-sprintLongWithCommas(num5Buf, ourLongRange->sw);
-sprintLongWithCommas(num6Buf, ourLongRange->ew);
-sprintLongWithCommas(num7Buf, ourLongRange->ew + ourLongRange->e - ourLongRange->s);
+char sStartPosBuf[1024], sEndPosBuf[1024];
+char eStartPosBuf[1024], eEndPosBuf[1024];
+// FIXME:  longRange should store region starts, not centers
+sprintLongWithCommas(sStartPosBuf, ourLongRange->s - ourLongRange->sw/2 + 1);
+sprintLongWithCommas(sEndPosBuf, ourLongRange->s + ourLongRange->sw/2 + 1);
+sprintLongWithCommas(eStartPosBuf, ourLongRange->e - ourLongRange->ew/2 + 1);
+sprintLongWithCommas(eEndPosBuf, ourLongRange->e + ourLongRange->ew/2 + 1);
+char sWidthBuf[1024], eWidthBuf[1024];
+char regionWidthBuf[1024];
+sprintLongWithCommas(sWidthBuf, ourLongRange->sw);
+sprintLongWithCommas(eWidthBuf, ourLongRange->ew);
+sprintLongWithCommas(regionWidthBuf, ourLongRange->ew + ourLongRange->e - ourLongRange->s);
+
 if (differentString(ourLongRange->sChrom, ourLongRange->eChrom))
     {
     printf("<B>Current region: </B>");
-    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)</A><BR>\n",  
-        ourLongRange->sChrom, num1Buf,num2Buf,ourLongRange->sChrom, num1Buf,num2Buf, num5Buf);
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%s bp)</A><BR>\n",  
+            ourLongRange->sChrom, sStartPosBuf, sEndPosBuf,
+            ourLongRange->sChrom, sStartPosBuf,sEndPosBuf, sWidthBuf);
     printf("<B>Paired region: </B>");
-    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)<BR></A><BR>\n",  
-        ourLongRange->eChrom, num3Buf, num4Buf, ourLongRange->eChrom, num3Buf, num4Buf, num6Buf);
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%s bp)<BR></A><BR>\n",  
+            ourLongRange->eChrom, eStartPosBuf, eEndPosBuf, 
+            ourLongRange->eChrom, eStartPosBuf, eEndPosBuf, eWidthBuf);
     }
 else
     {
     printf("<B>Lower region: </B>");
-    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)</A><BR>\n",  
-        ourLongRange->sChrom, num1Buf,num2Buf, ourLongRange->sChrom, num1Buf,num2Buf, num5Buf);
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%s bp)</A><BR>\n",  
+            ourLongRange->sChrom, sStartPosBuf,sEndPosBuf, 
+            ourLongRange->sChrom, sStartPosBuf,sEndPosBuf, sWidthBuf);
     printf("<B>Upper region: </B>");
-    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)<BR></A><BR>\n",  
-        ourLongRange->eChrom, num3Buf, num4Buf, ourLongRange->eChrom, num3Buf, num4Buf, num6Buf);
-    printf("<B>Intrachromasomal interaction region: </B>");
-    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)<BR></A><BR>\n",  
-        ourLongRange->eChrom, num1Buf, num4Buf, ourLongRange->eChrom, num1Buf, num4Buf, num7Buf);
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%s bp)<BR></A><BR>\n",  
+            ourLongRange->eChrom, eStartPosBuf, eEndPosBuf, 
+            ourLongRange->eChrom, eStartPosBuf, eEndPosBuf, eWidthBuf);
+    printf("<B>Interaction region: </B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%s bp)<BR></A><BR>\n",  
+            ourLongRange->eChrom, sStartPosBuf, eEndPosBuf, 
+            ourLongRange->eChrom, sStartPosBuf, eEndPosBuf, regionWidthBuf);
     }
-
 if (ourLongRange->hasColor)
     return;
 
 struct aveStats *as = aveStatsCalc(doubleArray, count);
-
 printf("<BR>Statistics on the scores of all items in window (go to track controls to set minimum score to display):\n");
 
 printf("<TABLE BORDER=1>\n");
