@@ -21,14 +21,6 @@ exonNumbers off
 dataVersion GTEx Analysis V6p (https://www.gtexportal.org/home/datasets)
 priority 2
 
-searchTable gtexEqtlCluster
-searchMethod exact
-searchType bed
-termRegex (rs[0-9]+)|([0-9][0-9]?[1-9][0-9]*_[ATCGN][ATCGN]*_[ATCGN][ATCGN]*_b37)
-searchPriority 11.5
-padding 250
-semiShortCircuit 1
-
 track gtexEqtlTissue
 #pennantIcon new red ../goldenPath/releaseLog.html "Released October 19, 2017"
 type bed 9 +
@@ -364,4 +356,364 @@ priority 2.1
     longLabel Expression QTL in Whole_Blood from GTEx V6
     color 255,0,255
     idInUrlSql select gene from gtexEqtlTissueWholeBlood where name='%s'
+
+searchTable gtexEqtlCluster
+searchMethod exact
+searchType bed
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+searchPriority 11.5
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueAdiposeSubcut
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueAdiposeVisceral
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueAdrenalGland
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueArteryAorta
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueArteryCoronary
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueArteryTibial
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueBrainAnCinCortex
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueBrainCaudate
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueBrainCerebelHemi
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueBrainCerebellum
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueBrainCortex
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueBrainFrontCortex
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueBrainHippocampus
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueBrainHypothalamus
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueBrainNucAccumbens
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueBrainPutamen
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueBreastMamTissue
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueXformedlymphocytes
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueXformedfibroblasts
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueColonSigmoid
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueColonTransverse
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueEsophagusJunction
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueEsophagusMucosa
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueEsophagusMuscular
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueHeartAtrialAppend
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueHeartLeftVentricl
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueLiver
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueLung
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueMuscleSkeletal
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueNerveTibial
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueOvary
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissuePancreas
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissuePituitary
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueProstate
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueSkinNotExposed
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueSkinExposed
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueSmallIntestine
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueSpleen
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueStomach
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueTestis
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueThyroid
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueUterus
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueVagina
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
+
+searchTable gtexEqtlTissueWholeBlood
+searchMethod exact
+termRegex (rs[0-9]+)|([1-9][0-9]?_[1-9][0-9]*_[ATCGN]+_[ATCGN]+_b37)
+query select chrom,chromStart,chromEnd,name from %s where variant like '%s'
+searchPriority 12.97
+padding 250
+semiShortCircuit 1
 
