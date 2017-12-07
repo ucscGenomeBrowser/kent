@@ -73,7 +73,6 @@ struct vpPep
     int rightShiftedBases;         // # of pep bases by which transcript variant was right-shifted
     boolean txMismatch;            // true if translated transcript reference does not match ref
     boolean frameshift;            // true if variant is an indel that causes a frameshift
-    boolean spansUtrCds;           // true if variant overlaps both UTR & CDS -- can't rlly predict
     boolean cantPredict;           // true if it's just too complicated e.g. exonic+intronic
     // maybe someday:
     // int altStartCodonShift;        // # of transcript bases shifted to find alternate start codon
