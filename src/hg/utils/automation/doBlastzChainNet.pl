@@ -604,9 +604,11 @@ sub doBlastzClusterRun {
   my $whatItDoes = "It sets up and performs the big cluster blastz run.";
   my $bossScript = new HgRemoteScript("$runDir/doClusterRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
-$HgAutomate::gensub2 $targetList $queryList gsub jobList
-$HgAutomate::paraRun
+$gensub2 $targetList $queryList gsub jobList
+$paraRun
 _EOF_
     );
   $bossScript->execute();
@@ -655,13 +657,15 @@ _EOF_
 each subdirectory of $outRoot into a per-target-chunk file.";
   my $bossScript = new HgRemoteScript("$runDir/doCatRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 (cd $outRoot; find . -maxdepth 1 -type d | grep '^./') \\
         | sed -e 's#/\$##; s#^./##' > tParts.lst
 chmod a+x cat.csh
-$HgAutomate::gensub2 tParts.lst single gsub jobList
+$gensub2 tParts.lst single gsub jobList
 mkdir ../pslParts
-$HgAutomate::paraRun
+$paraRun
 _EOF_
     );
   $bossScript->execute();
@@ -782,11 +786,13 @@ _EOF_
 to each target sequence.";
   my $bossScript = new HgRemoteScript("$runDir/doChainRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 chmod a+x chain.csh
-$HgAutomate::gensub2 pslParts.lst single gsub jobList
+$gensub2 pslParts.lst single gsub jobList
 mkdir chain liftedChain
-$HgAutomate::paraRun
+$paraRun
 rmdir liftedChain
 _EOF_
   );
@@ -1575,6 +1581,11 @@ _EOF_
 # filter net for synteny and create syntenic net mafs
     $bossScript->add(<<_EOF_
 netFilter -syn $tDb.$qDb.net.gz | gzip -c > $tDb.$qDb.syn.net.gz
+netChainSubset -verbose=0 $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz stdout \\
+  | chainStitchId stdin stdout | gzip -c > $tDb.$qDb.syn.chain.gz
+hgLoadChain -tIndex $tDb chainSyn$QDb $tDb.$qDb.syn.chain.gz
+netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\
+  | hgLoadNet -verbose=0 $tDb netSyn$QDb stdin
 netToAxt $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz \\
     $defVars{'SEQ1_DIR'} $defVars{'SEQ2_DIR'} stdout \\
   | axtSort stdin stdout \\
@@ -1591,6 +1602,9 @@ cat $runDir/synNet.md5sum.txt >> md5sum.txt
 sort -u md5sum.txt > tmp.sum
 cat tmp.sum > md5sum.txt
 rm -f tmp.sum
+cd "$buildDir"
+featureBits $tDb chainSyn${QDb}Link >&fb.$tDb.chainSyn${QDb}Link.txt
+cat fb.$tDb.chainSyn${QDb}Link.txt
 _EOF_
       );
   }
