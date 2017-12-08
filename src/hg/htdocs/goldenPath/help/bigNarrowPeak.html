@@ -120,6 +120,7 @@ space for your bigNarrowPeak files, please see the <a href="hgTrackHubHelp.html#
 section of the Track Hub Help documentation.</p>
 
 <h2>Examples</h2>
+<a name="example1"></a>
 <h3>Example &num;1</h3>
 <p>
 In this example, you will create a bigNarrowPeak custom track using a bigNarrowPeak file,
@@ -146,7 +147,7 @@ target="_blank"><pre><code>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_
 After this example bigNarrowPeak track is loaded in the Genome Browser, click on a peak in the
 browser's track display to view the details page for that peak.</p>
 
-
+<a name="example2"></a>
 <h3>Example &num;2</h3>
 <p>
 In this example, you will create your own bigNarrowPeak file from an existing bigNarrowPeak input 
@@ -178,6 +179,48 @@ file.</p>
   Create the custom track on the human assembly hg38 (Dec. 2013), and view it in the Genome Browser 
   (<em>step 7</em>, above).</li>
 </ol>
+
+<a name="example3"></a>
+<h3>Example &num;3</h3>
+<p>
+In this example, you will see the additional filtering options available for the
+<code>signalValue, pValue, qValue</code> fields in the bigNarrowPeak format.</p>
+<ol>
+  <li>
+  Look to the above constructed track line in <a href ="#example1">example one</a>
+  that references the <em>bigNarrowPeak.bb</em> file.
+  <li> Now look at the below version that adds the following filters
+  <code>signalFilter, pValueFilter, qValueFilter</code> to the track line as
+  well as setting limitations on those filters with additional
+  <code>signalFilterLimits, pValueFilterLimits, qValueFilterLimits</code> settings.
+  <pre><code>track type=bigNarrowPeak name="bigNarrowPeak Example One" description="A bigNarrowPeak file with additional Filter Settings" signalFilter=0 signalFilterLimits=0:18241 pValueFilter=2 pValueFilterLimits=0:300 qValueFilter=2 qValueFilterLimits=0:300 bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigNarrowPeak.bb</code></pre>
+  These values are simply added to the earlier track line in pairs, such as
+  <code>pValueFilterLimits=0:300</code>, and can be given a set value for where the filter should
+  start such as <code>pValueFilter=2</code>.
+  <li>
+  Paste the track line from above into the <a href="../../cgi-bin/hgCustom?db=hg38">custom
+  track management page</a> for the human assembly hg38 (Dec. 2013).</li>
+  <li>
+  Click the &quot;submit&quot; button.</li>
+  <li> When viewing the track, right-click the track and then select the &quot;Configure
+  bigNarrowPeak Example One&quot; option and you will see you can enter different filtering
+  options.
+</ol>
+<p>These same options could also be used in a track hub using the bigNarrowPeak format.
+Here is an example track hub stanza:
+  <pre><code>  track exBigNarrowPeakTrack
+  type bigNarrowPeak
+  visibility full
+  signalFilter 0
+  signalFilterLimits 0:10000
+  pValueFilter 0
+  pValueFilterLimits 0:300
+  qValueFilter 0
+  qValueFilterLimits 0:300
+  shortLabel Ex bigNPk
+  longLabel bigNarrowPeak Example
+  bigDataUrl http://genome.ucsc.edu/goldenPath/help/examples/bigNarrowPeak.bb</pre></code>
+</p>
 
 <h2>Sharing your data with others</h2>
 <p>
