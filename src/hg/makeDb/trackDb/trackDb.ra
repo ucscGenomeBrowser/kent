@@ -1030,7 +1030,7 @@ exonArrows on
 type bed 6 .
 
 track refSeqFuncElems
-release alpha
+release alpha,beta
 shortLabel RefSeq Func Elems
 longLabel NCBI RefSeq Functional Elements 
 type bigBed 9 +
