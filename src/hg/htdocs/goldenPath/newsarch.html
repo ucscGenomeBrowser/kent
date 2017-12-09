@@ -45,6 +45,26 @@
 <!-- ============= 2017 archived news ============= -->
 <a name="2017"></a>
 
+<a name="121117"></a>
+<h2>Dec. 11, 2017 &nbsp;&nbsp;New bigNarrowPeak track format</h2>
+<p>
+We're happy to announce support for a new binary indexed track type called
+<a href="help/bigNarrowPeak.html">bigNarrowPeak</a>. This new track type joins
+the ranks of other recent &quot;big&quot; track types: bigMaf, bigChain, bigPsl,
+and bigGenePred</p>
+<p>
+With bigNarrowPeak, any narrowPeak files that were previously already made into bigBeds
+in the past with the bedToBigBed utility and the proper narrowPeak.as definitions should
+now display just as though they were narrowPeak custom tracks. For example here is a file
+from the ENCODE 2012 AWG Hub that can be pasted into the
+<a href="../../cgi-bin/hgCustom?db=hg19" target="_blank">Custom Tracks page</a> with
+<code>type=bigNarrowPeak</code> instead of <code>type=bigBed</code> used previously:</p>
+<pre><code>track type=bigNarrowPeak visibility=full db=hg19 name="nPk" description="AWG ENCODE narrowPeak Example" bigDataUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/byDataType/peaks/jan2011/spp/optimal/hub/spp.optimal.wgEncodeOpenChromChipGm12878Pol2AlnRep0_VS_wgEncodeOpenChromChipGm12878InputAln.bb
+</pre></code>
+<p>
+These tracks and also support additional filter options for their additional fields,
+see more with this illustrated <a href="help/bigNarrowPeak.html#example3">example</a>.</p>
+
 <a name="120817"></a>
 <h2>Dec. 8, 2017 &nbsp;&nbsp;BLAT directly from the search box</h2>
 <p>
