@@ -11,6 +11,8 @@
 boolean fix = FALSE;
 char *idList = NULL;
 char *submitDirFilter = NULL;
+boolean inodeReport = FALSE;
+struct hash *hash = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -25,6 +27,10 @@ errAbort(
   "options:\n"
   "   -idList=290,291 limits operation to a comma-separated list of submitId's.\n"
   "   -submitDir=/my/submitDir limits operation to submits belonging to submitDir.\n"
+  "\n"
+  "   -inodeReport causes it to track and report on inodes used by multiple submitFileName paths.\n"
+  "     Creates inodeReport.log in the current directory. Handy for debugging symlinking issues.\n"
+  "     Only use with \"find\" comand.\n"
   );
 }
 
@@ -32,9 +38,60 @@ errAbort(
 static struct optionSpec options[] = {
    {"idList", OPTION_STRING},
    {"submitDir", OPTION_STRING},
+   {"inodeReport", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
+void showInodeReport()
+/* print out the inode report, find inode collisions */
+{
+// want to loop through all members of the hash, skipping things that have single count.
+struct hashEl *el, *list = hashElListHash(hash);
+slSort(&list, hashElCmp);
+char *inodeName = "";
+FILE *f = mustOpen("inodeReport.log", "w");
+verbose(1, "inodes list length=%d\n", slCount(list));
+int uniqueInodes = 0;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (sameString(inodeName, el->name))
+	continue;    // skip until unique name found
+    ++uniqueInodes;
+    inodeName = el->name;
+    struct hashEl *hEl;
+    struct slRef *pathList = NULL, *r = NULL;
+    char *lastVal = "";
+    for (hEl = hashLookup(hash, inodeName); hEl; hEl = hashLookupNext(hEl))
+	{
+	// because if a file is edited and resubmitted, it will get a new cdwFile record,
+        // modifed and resubmitted files (like some html files) will appear multiple times,
+        // filter out the false duplicates
+	if (!sameString(lastVal, hEl->val))
+	    refAdd(&pathList, hEl->val);
+	lastVal = hEl->val;
+	}
+    // only want inodes that are shared by 2 or more files.
+    if (slCount(pathList) >= 2)  
+	{
+	if (slCount(pathList) > 3)
+	    {
+	    verbose(1, "inode %s with %d paths found.\n", inodeName, slCount(pathList));
+	    }
+      	
+	fprintf(f, "%s", inodeName);
+	for (r=pathList;r;r=r->next)
+	    {
+	    fprintf(f, " %s",(char *)r->val);
+	    }
+	fprintf(f, "\n");
+	}
+    slFreeList(&pathList);
+    }
+hashElFreeList(&list);
+hashFree(&hash);
+carefulClose(&f);
+verbose(1, "unique inodes count=%d\n", uniqueInodes);
+}
 
 void cdwFindSymlinkable()
 /* Find files that have not been symlinked to cdw/ yet to save space. */
@@ -77,6 +134,13 @@ if (submitDirFilter)
 
 struct slInt *submitIdList = sqlQuickNumList(conn, query);
 verbose(1, "%d submits\n", slCount(submitIdList));
+
+if (inodeReport)
+    {
+    hash = newHash(12);
+    }
+
+
 char *newPath = NULL;
 int filesSymlinked = 0;
 off_t fileSpaceSaved = 0;
@@ -121,16 +185,6 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 	if ((el->val == es->manifestFileId) || (el->val == es->metaFileId))
 	    continue;
 
-        // test for already-symlinked case
-	char *lastPath = NULL;
-	lastPath = findSubmitSymlink(ef->submitFileName, ed->url, path);
-	if (lastPath)
-	    {
-	    verbose(1, "Already symlinked to file under cdw/ lastPath=%s path=%s\n", lastPath, path);
-	    freeMem(lastPath);
-	    continue;
-	    }
-
 	// apply submitFileName to submitDir, giving an absolute path
 	freeMem(newPath);
         newPath = mustExpandRelativePath(ed->url, ef->submitFileName);
@@ -141,11 +195,33 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 	    continue;
 	    }
 
+	if (inodeReport)
+	    {
+	    if (stat(newPath, &sb) == -1) 
+		errnoAbort("stat failure on %s", newPath);
+	    unsigned long long x = sb.st_ino;
+	    char key[256];
+	    char *val = cloneString(newPath);
+	    safef(key, sizeof key, "%llu", x);
+	    verbose(4, "newPath=%s on inode=%s\n", newPath, key);
+	    hashAdd(hash, key, val);
+	    }
+
+        // test for already-symlinked case
+	char *lastPath = NULL;
+	lastPath = findSubmitSymlink(ef->submitFileName, ed->url, path);
+	if (lastPath)
+	    {
+	    verbose(1, "Already symlinked to file under cdw/ lastPath=%s path=%s\n", lastPath, path);
+	    freeMem(lastPath);
+	    continue;
+	    }
+
 	// Check that the target is not already a symlink.
         // If so, report it and skip it. This is an unexpected case.
         // Cannot be certain that it does not through some chain of links point back to the original file.
 	if (lstat(path, &sb) == -1) 
-	    errnoAbort("stat failure on %s", path);
+	    errnoAbort("lstat failure on %s", path);
 	if ((sb.st_mode & S_IFMT) != S_IFREG) // regular file?
 	    {
 	    char *ftype = "";
@@ -166,12 +242,15 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 	    continue;
 	    }
 
-	verbose(1, "calculating md5 for %s\n", newPath);
-	char *md5 = md5HexForFile(newPath);
-	if (!sameString(md5, ef->md5))
+	if (!inodeReport)
 	    {
-	    verbose(1, "skipping since md5 does not match between %s and %s\n", newPath, path);
-	    continue;
+	    verbose(1, "calculating md5 for %s\n", newPath);
+	    char *md5 = md5HexForFile(newPath);
+	    if (!sameString(md5, ef->md5))
+		{
+		verbose(1, "skipping since md5 does not match between %s and %s\n", newPath, path);
+		continue;
+		}
 	    }
 
 	// save space by finding the last real file in symlinks chain
@@ -195,6 +274,12 @@ verbose(1, "\n%llu space %ssaved.\n", (unsigned long long) fileSpaceSaved, fix ?
 if (!fix)
     verbose(1, "\nfix command was not specified. Dry run only.\n\n");
 
+
+if (inodeReport)
+    {
+    showInodeReport();
+    verbose(1, "\nmd5 was skipped for speed for inodeReport.\n\n");
+    }
 }
 
 int main(int argc, char *argv[])
@@ -214,6 +299,15 @@ else
 
 idList = optionVal("idList", NULL);
 submitDirFilter = optionVal("submitDir", NULL);
+inodeReport = optionExists("inodeReport");
+
+if (inodeReport & fix)
+    {
+    warn("cannot use -inodeReport with fix, only allowed with find.");
+    usage();
+    }
+
 cdwFindSymlinkable();
+
 return 0;
 }
