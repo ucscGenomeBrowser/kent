@@ -41,6 +41,15 @@ PersonalisGroundTruth2017_disagree: mkdirs
 	diff -u expected/$@.tab output/$@.tab
 	diff -u /dev/null output/$@_matches.tab
 
+PersonalisGroundTruth2017_patches: mkdirs
+	${vcfToHgvs} hg38 input/$@.vcf output/$@.tab
+	sed -re 's/:/\t/g' output/$@.tab \
+	| awk -F"\t" '{ $$8 = gensub(/[.].*/, "", "", $$8); \
+                        if (index($$4, $$8) == 1 && $$14 != $$5) {print;} }' \
+	  > output/$@_differences.tab
+	diff -u expected/$@.tab output/$@.tab
+	diff -u /dev/null output/$@_differences.tab
+
 stopLoss:
 	${vcfToHgvs} hg38 input/$@.vcf stdout | sort -k1,1 -k2n,2n -k3,3 -k6,6 > output/$@.tab
 	diff -u expected/$@.tab output/$@.tab

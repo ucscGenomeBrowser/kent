@@ -45,6 +45,74 @@
 <!-- ============= 2017 archived news ============= -->
 <a name="2017"></a>
 
+<a name="121117"></a>
+<h2>Dec. 11, 2017 &nbsp;&nbsp;New bigNarrowPeak track format</h2>
+<p>
+We're happy to announce support for a new binary indexed track type called
+<a href="help/bigNarrowPeak.html">bigNarrowPeak</a>. This new track type joins
+the ranks of other recent &quot;big&quot; track types: bigMaf, bigChain, bigPsl,
+and bigGenePred</p>
+<p>
+With bigNarrowPeak, any narrowPeak files that were previously already made into bigBeds
+in the past with the bedToBigBed utility and the proper narrowPeak.as definitions should
+now display just as though they were narrowPeak custom tracks. For example here is a file
+from the ENCODE 2012 AWG Hub that can be pasted into the
+<a href="../../cgi-bin/hgCustom?db=hg19" target="_blank">Custom Tracks page</a> with
+<code>type=bigNarrowPeak</code> instead of <code>type=bigBed</code> used previously:</p>
+<pre><code>track type=bigNarrowPeak visibility=full db=hg19 name="nPk" description="AWG ENCODE narrowPeak Example" bigDataUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/byDataType/peaks/jan2011/spp/optimal/hub/spp.optimal.wgEncodeOpenChromChipGm12878Pol2AlnRep0_VS_wgEncodeOpenChromChipGm12878InputAln.bb
+</pre></code>
+<p>
+These tracks also support additional filter options for their additional fields,
+see more with this illustrated <a href="help/bigNarrowPeak.html#example3">example</a>.</p>
+
+<a name="120817"></a>
+<h2>Dec. 8, 2017 &nbsp;&nbsp;BLAT directly from the search box</h2>
+<p>
+Did you know you could BLAT from the search box?</p>
+<p>
+If you have short sequences (less than 2000 characters) you can directly search
+for them when Browsing without first visiting the BLAT tool to input the sequence.
+You can <a href ="#050417">also output your BLAT results as a custom track</a>,
+giving the results a name and description, and then save special results into Sessions
+allowing you to return to those findings when you wish to see them at a later date.</p>
+
+<a name="120617"></a>
+<h2>Dec. 6, 2017 &nbsp;&nbsp; New genome browser: <em>Xenopus tropicalis</em>, xenTro9</h2>
+<p>A genome browser is now available for the <em>X. tropicalis</em> assembly released in July
+2016 by the <a href="http://genome.jgi.doe.gov/">US DOE Joint Genome Institute</a> (JGI v9.1,
+UCSC version xenTro9).</p>
+<h3>About the assembly:</h3>
+<ul>
+<li><b>UCSC Genome Browser assembly ID:</b> xenTro9</li>
+<li><b>Sequencing/Assembly provider ID:</b> <a href="http://genome.jgi.doe.gov/">US DOE Joint 
+Genome Institute</a></li>
+<li><b>Assembly date:</b> July 2016</li>
+<li><b>Accession ID:</b> GCF_000004195.3</li>
+<li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/80" 
+target="_blank" > NCBI genome/80</a> <em>(Xenopus tropicalis)</em></li>
+<li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/768701" 
+target="_blank" >  NCBI assembly/768701 (US DOE Joint Genome Institute) </a></li>
+<li><b>BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/12348" 
+target="_blank" > NCBI Bioproject: 12348</a></li>
+<li><b>BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN00000117" 
+target="_blank" > NCBI Biosample: SAMN00000117</a></li>
+<li><b>Contig+scaffold count:</b> 68,152</li>
+<li><b>Total size:</b> 1,440,398,454</li>
+<li><a href="../goldenPath/credits.html#xentro_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+<li><a href="../goldenPath/credits.html#xentro_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+<li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and 
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/xenTro9/" 
+target="_blank" >FTP</a></li>
+<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#xentro"
+target="_blank" >Downloads page</a></li>
+</ul>
+
 <a name="112117"></a>
 <h2>Nov. 21, 2017 &nbsp;&nbsp; New NCBI RefSeq tracks for mouse, mm10</h2>
 <p>
@@ -949,7 +1017,7 @@ bringing this track to life.</p>
 Please welcome the newest additions to the UCSC Genome Browser keyboard shortcuts menu, 
 now providing over 40 shortcuts. To view a menu of shortcuts, simply press the &quot;?&quot; 
 key on your keyboard while on an assembly&apos;s browser display page (e.g., 
-<a href="../cgi-bin/hgTracks?db=hg38" target=_blank">GRCh38/hg38 assembly display</a>). 
+<a href="../cgi-bin/hgTracks?db=hg38" target="_blank">GRCh38/hg38 assembly display</a>). 
 The new shortcut set utilizes the keyboard keys 1 - 6 to provide six levels of zoom views 
 for tracks in the browser display, as listed below:</p>
 <ul>
@@ -1892,7 +1960,7 @@ Lastly, at the bottom of the section for each selected track, you will see a dro
 labeled "Related tables" which allows you to select and add various tables to your output.
 <p>
 <img src="../images/hgIntegratorRelatedTablesAnnouncement.png" alt="hgIntegrator related
-tables"" width="684" height="418"></p>
+tables" width="684" height="418"></p>
 <p>
 For more information about using the Data Integrator, please see the 
 <a href="help/hgIntegratorHelp.html">User Guide</a>.</p>
@@ -9335,7 +9403,7 @@ the past month.</p>
 To take full advantage of the new display features in this release, we recommend that you reset your
 browser to the new default settings. NOTE: you may not want to reset your browser if you have 
 customized settings that you wish to preserve. You can reset your browser by clicking the
-&quot;Click here to reset" link on the Browser Gateway page.</p>  
+&quot;Click here to reset&quot; link on the Browser Gateway page.</p>  
 <p> 
 We hope this new release facilitates your work with the UCSC Genome Browser. If you have any 
 questions or comments about the new release, send email to 
@@ -9390,7 +9458,7 @@ effort. The assembly process resulted in a 6.5-fold coverage of the rat genome, 
 to be approximately 2.8 Gigabases in size.</p> 
 <p> 
 Downloads of the rat data and annotations are available through our 
-ftp site at <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/rn1" target="_blank:>downloads 
+ftp site at <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/rn1" target="_blank">downloads 
 server</a>. This data contains <a href="credits.html#rat_use">specific conditions for use</a>. The 
 sequence is also available from the <a href="http://www.hgsc.bcm.tmc.edu/projects/rat" 
 target="_blank">Rat Genome Project website</a> for the Human Genome Sequencing Center at Baylor 

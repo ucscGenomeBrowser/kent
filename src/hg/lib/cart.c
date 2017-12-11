@@ -383,8 +383,6 @@ struct hashEl *el, *elList = hashElListHash(cart->hash);
 
 for (el = elList; el != NULL; el = el->next)
     {
-    if (startsWith(CUSTOM_COMPOSITE_SETTING, el->name))
-        copyCustomComposites(cart, el);
     if (startsWith(CT_FILE_VAR_PREFIX, el->name))
 	{
 	char *db = &el->name[strlen(CT_FILE_VAR_PREFIX)];
@@ -1453,11 +1451,18 @@ void cartSaveSession(struct cart *cart)
 cgiMakeHiddenVar(sessionVar, cartSessionId(cart));
 }
 
-static void cartDumpItem(struct hashEl *hel,boolean asTable)
+static void cartDumpItem(struct hashEl *hel,boolean asTable, boolean doHtmlEncode)
 /* Dump one item in cart hash */
 {
-char *var = htmlEncode(hel->name);
-char *val = htmlEncode((char *)(hel->val));
+char *var = hel->name;
+char *val = (char *)(hel->val);
+
+if (doHtmlEncode)
+    {
+    var = htmlEncode(hel->name);
+    val = htmlEncode((char *)(hel->val));
+    }
+
 if (asTable)
     {
     printf("<TR><TD>%s</TD><TD>", var);
@@ -1471,11 +1476,14 @@ if (asTable)
 else
     printf("%s %s\n", var, val);
 
-freeMem(var);
-freeMem(val);
+if (doHtmlEncode)
+    {
+    freeMem(var);
+    freeMem(val);
+    }
 }
 
-void cartDumpList(struct hashEl *elList,boolean asTable)
+void cartDumpList(struct hashEl *elList,boolean asTable, boolean doHtmlEncode)
 /* Dump list of cart variables optionally as a table with ajax update support. */
 {
 struct hashEl *el;
@@ -1486,7 +1494,7 @@ slSort(&elList, hashElCmp);
 if (asTable)
     printf("<table>\n");
 for (el = elList; el != NULL; el = el->next)
-    cartDumpItem(el,asTable);
+    cartDumpItem(el, asTable, doHtmlEncode);
 if (asTable)
     {
     printf("<tr><td colspan=2>&nbsp;&nbsp;<em>count: %d</em></td></tr>\n",slCount(elList));
@@ -1495,25 +1503,32 @@ if (asTable)
 hashElFreeList(&elList);
 }
 
+void cartDumpNoEncode(struct cart *cart)
+/* Dump contents of cart without HTML encoding. */
+{
+struct hashEl *elList = hashElListHash(cart->hash);
+cartDumpList(elList,FALSE, FALSE);
+}
+
 void cartDump(struct cart *cart)
 /* Dump contents of cart. */
 {
 struct hashEl *elList = hashElListHash(cart->hash);
-cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE), TRUE);
 }
 
 void cartDumpPrefix(struct cart *cart, char *prefix)
 /* Dump all cart variables with prefix */
 {
 struct hashEl *elList = cartFindPrefix(cart, prefix);
-cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE), TRUE);
 }
 
 void cartDumpLike(struct cart *cart, char *wildcard)
 /* Dump all cart variables matching wildcard */
 {
 struct hashEl *elList = cartFindLike(cart, wildcard);
-cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE), TRUE);
 }
 
 char *cartFindFirstLike(struct cart *cart, char *wildCard)

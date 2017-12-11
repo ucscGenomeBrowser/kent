@@ -32,7 +32,7 @@ group compGeno
         type wigMaf 0.0 1.0
         speciesCodonDefault hg38
         speciesGroups Primates
-        sGroup_Primates panTro5 panPan2 gorGor5 ponAbe2 nomLeu3 rheMac8 macFas5 macNem1 cerAty1 papAnu3 chlSab2 manLeu1 nasLar1 colAng1 rhiRox1 rhiBie1 calJac3 saiBol1 cebCap1 aotNan1 tarSyr2 micMur3 proCoq1 eulMac1 eulFla1 otoGar3 mm10 canFam3 dasNov3
+sGroup_Primates panTro5 panPan2 gorGor5 ponAbe2 nomLeu3 nasLar1 rhiBie1 rhiRox1 colAng1 macFas5 rheMac8 papAnu3 macNem1 cerAty1 chlSab2 manLeu1 saiBol1 aotNan1 calJac3 cebCap1 tarSyr2 eulFla1 eulMac1 proCoq1 micMur3 otoGar3 mm10 canFam3 dasNov3        
         itemFirstCharCase noChange
         treeImage phylo/hg38_30way.png
         priority 100

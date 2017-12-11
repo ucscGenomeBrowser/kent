@@ -27,7 +27,8 @@ printf("<BR><BR><b>Minimum score:&nbsp;</b>");
 cgiMakeDoubleVar(buffer, minScore, 0);
 }
 
-static char *getOther(struct bed *bed, unsigned *s, unsigned *e, double *score)
+static char *getOther(struct bed *bed, unsigned *s, unsigned *e, 
+                        boolean *hasColor, double *score, unsigned *rgb)
 /* parse the name field of longTabix to get the other location */
 {
 char *otherChrom = cloneString(bed->name);
@@ -45,8 +46,20 @@ ptr = strchr(ptr, ',');
 if (ptr == NULL)
     errAbort("bad longTabix bed name %s\n", bed->name);
 ptr++;
-*score = sqlDouble(ptr);
 
+// parse value or RGB (value after comma in name field)
+*score = 0;
+*hasColor = FALSE;
+int rgbRet = -1;
+if (strchr(ptr, ','))
+    rgbRet = bedParseRgb(ptr);
+if (rgbRet != -1)
+    {
+    *rgb = rgbRet;
+    *hasColor = TRUE;
+    }
+else
+    *score = sqlDouble(ptr);
 return otherChrom;
 }
 
@@ -58,26 +71,28 @@ struct longRange *longRangeList = NULL;
 for(; beds; beds=beds->next)
     {
     double score;
-    unsigned otherS;
-    unsigned otherE;
-    char *otherChrom = getOther(beds, &otherS, &otherE, &score);
+    unsigned otherS, otherE;
+    unsigned rgb = 0;
+    boolean hasColor;
+    char *otherChrom = getOther(beds, &otherS, &otherE, &hasColor, &score, &rgb);
     if (score < minScore)
         continue;
-
     struct longRange *longRange;
     AllocVar(longRange);
     slAddHead(&longRangeList, longRange);
+
+    // don't have oriented feet at the moment
+    longRange->sOrient = longRange->eOrient = 0;
+    longRange->id = beds->score;        // Id is field 5 in this format
+    longRange->score = score;
+    longRange->hasColor = hasColor;
+    longRange->rgb = rgb;
+    longRange->name = beds->name;
 
     unsigned otherCenter = (otherS + otherE)/2;
     unsigned otherWidth = otherE - otherS;
     unsigned thisWidth = beds->chromEnd - beds->chromStart;
     unsigned center = (beds->chromEnd + beds->chromStart) / 2;
-
-    // don't have oriented feet at the moment
-    longRange->sOrient = longRange->eOrient = 0;
-    longRange->id = beds->score;
-    longRange->score = score;
-    longRange->name = beds->name;
     
     if (sameString(beds->chrom, otherChrom) && (otherCenter < center))
         {

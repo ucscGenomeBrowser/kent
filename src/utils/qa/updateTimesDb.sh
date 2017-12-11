@@ -132,6 +132,9 @@ tablesSortedUnique=$(echo "$(echo ${tablesDev[@]} ${tablesBeta[@]})" | \
 
 output=". DEV BETA\ntableName $dbDev $dbBeta\n"
 
+# if there's errors, the *** is causing wildcard expansion, so disable globbing
+set -f
+
 for tbl in $(echo ${tablesSortedUnique[@]})
 do
 	# Underscores added between date and time to that way "column" command later on works correctly
