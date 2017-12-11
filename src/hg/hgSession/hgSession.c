@@ -989,6 +989,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     struct sqlConnection *conn2 = hConnectCentral();
     cartLoadUserSession(conn2, userName, sessionName, tmpCart, NULL, NULL);
     hDisconnectCentral(&conn2);
+    hubConnectLoadHubs(tmpCart);
     cartCheckForCustomTracks(tmpCart, dyMessage);
 
     if (gotSettings)
@@ -1133,10 +1134,10 @@ if (hel != NULL)
 		   getSessionLink(encUserName, encSessionName),
 		   getSessionEmailLink(encUserName, encSessionName));
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
-    cartHideDefaultTracks(cart);
     cartCopyCustomComposites(cart);
     hubConnectLoadHubs(cart);
     cartCopyCustomTracks(cart);
+    cartHideDefaultTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
     didSomething = TRUE;
     }
@@ -1189,10 +1190,10 @@ dyStringPrintf(dyMessage,
 	       getSessionLink(otherUser, encSessionName),
 	       getSessionEmailLink(encOtherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
-cartHideDefaultTracks(cart);
 cartCopyCustomComposites(cart);
 hubConnectLoadHubs(cart);
 cartCopyCustomTracks(cart);
+cartHideDefaultTracks(cart);
 cartCheckForCustomTracks(cart, dyMessage);
 hDisconnectCentral(&conn);
 return dyStringCannibalize(&dyMessage);
@@ -1208,16 +1209,7 @@ struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);
 
-// if we're normally outputing the cart in table form, we want to turn that off
-// and turn it back on after we're through.
-char *tableSetting = cartOptionalString(cart,CART_DUMP_AS_TABLE);
-if (tableSetting != NULL)
-    cartRemove(cart,CART_DUMP_AS_TABLE);
-
-cartDump(cart);
-
-if (tableSetting != NULL)
-    cartSetString(cart, CART_DUMP_AS_TABLE, tableSetting);
+cartDumpNoEncode(cart);
 
 // Now add all the default visibilities to output.
 outDefaultTracks(cart, NULL);

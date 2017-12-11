@@ -202,13 +202,15 @@ _EOF_
   my $whatItDoes = "Run /scratch/data/cpgIslandExt/cpglh on masked sequence.";
   my $bossScript = new HgRemoteScript("$runDir/doCpg.csh", $paraHub,
 				      $runDir, $whatItDoes);
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 mkdir -p results
 chmod a+x runCpg.csh
 rm -f file.list
 find ./hardMaskedFa -type f > file.list
-$HgAutomate::gensub2 file.list single gsub jobList
-$HgAutomate::paraRun
+$gensub2 file.list single gsub jobList
+$paraRun
 _EOF_
   );
   $bossScript->execute();

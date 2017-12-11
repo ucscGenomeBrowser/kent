@@ -509,11 +509,9 @@ vpPep->name = cloneString(protSeq->name);
 uint txStart = vpTx->start.txOffset;
 uint txEnd = vpTx->end.txOffset;
 // If the variant starts and ends within exon(s) and overlaps CDS then predict protein change.
-if (txStart < cds->end && txEnd > cds->start &&
+if (txStart >= cds->start && txStart < cds->end && txEnd > cds->start &&
     vpTx->start.region == vpExon && vpTx->end.region == vpExon)
     {
-    if (txStart < cds->start)
-        vpPep->spansUtrCds = TRUE;
     uint startInCds = max(txStart, cds->start) - cds->start;
     uint endInCds = min(txEnd, cds->end) - cds->start;
     vpPep->start = startInCds / 3;
@@ -551,7 +549,7 @@ if (txStart < cds->end && txEnd > cds->start &&
         // Copy in the alternate allele
         safencpy(altCodons+startPadding, sizeof(altCodons)-startPadding,
                  vpTx->txAlt + utr5Bases, txAltLen - utr5Bases);
-    if (!vpPep->spansUtrCds && (txRefLen - txAltLen) % 3 != 0)
+    if ((txRefLen - txAltLen) % 3 != 0)
         {
         vpPep->frameshift = TRUE;
         // Extend ref to the end of the protein.
@@ -579,26 +577,23 @@ if (txStart < cds->end && txEnd > cds->start &&
         alt = translateString(altCodons);
         }
     vpPep->alt = alt;
-    if (!vpPep->spansUtrCds)
+    int refLen = strlen(vpPep->ref), altLen = strlen(vpPep->alt);
+    if (differentString(vpPep->ref, vpPep->alt))
         {
-        int refLen = strlen(vpPep->ref), altLen = strlen(vpPep->alt);
-        if (differentString(vpPep->ref, vpPep->alt))
-            {
-            // If alt has a stop codon, temporarily disguise it so it can't get trimmed
-            char *altStop = strchr(vpPep->alt, 'X');
-            if (altStop)
-                *altStop = 'Z';
-            trimRefAlt(vpPep->ref, vpPep->alt, &vpPep->start, &vpPep->end, &refLen, &altLen);
-            if (altStop)
-                *strchr(vpPep->alt, 'Z') = 'X';
-            }
-        if (indelShiftIsApplicable(refLen, altLen))
-            {
-            struct seqWindow *pSeqWin = memSeqWindowNew(vpPep->name, pSeq);
-            vpPep->rightShiftedBases = indelShift(pSeqWin, &vpPep->start, &vpPep->end,
-                                                  vpPep->alt, INDEL_SHIFT_NO_MAX, isdRight);
-            memSeqWindowFree(&pSeqWin);
-            }
+        // If alt has a stop codon, temporarily disguise it so it can't get trimmed
+        char *altStop = strchr(vpPep->alt, 'X');
+        if (altStop)
+            *altStop = 'Z';
+        trimRefAlt(vpPep->ref, vpPep->alt, &vpPep->start, &vpPep->end, &refLen, &altLen);
+        if (altStop)
+            *strchr(vpPep->alt, 'Z') = 'X';
+        }
+    if (indelShiftIsApplicable(refLen, altLen))
+        {
+        struct seqWindow *pSeqWin = memSeqWindowNew(vpPep->name, pSeq);
+        vpPep->rightShiftedBases = indelShift(pSeqWin, &vpPep->start, &vpPep->end,
+                                              vpPep->alt, INDEL_SHIFT_NO_MAX, isdRight);
+        memSeqWindowFree(&pSeqWin);
         }
     dnaSeqFree((struct dnaSeq **)&txTrans);
     }

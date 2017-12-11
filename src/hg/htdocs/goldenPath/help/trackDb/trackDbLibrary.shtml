@@ -358,7 +358,7 @@
     All occurrences of the  string <code>$D</code> in the URL will be
     substituted with the genome assembly database name.  This allows a
     trackDb entry to be used with for multiple assemblies.  <code>$D</code>
-    substitution is not implement for track hubs.
+    substitution is not implemented for track hubs.
 
     </P> <P><B>Example:</B></P>
     <pre>   bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb</pre>

@@ -106,7 +106,7 @@ else
     else if (tdb->subtracks)
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' viewType='track'";
     else
-        userString = "data-jstree='{ \\\"icon\\\":\\\"fa fa-plus\\\"}' class='nodrop' viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-plus\\\"}' class='nodrop' viewType='track'";
     }
     
     
@@ -300,37 +300,26 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
         break;
     }
+
+jsInlineF("$('#currentCollection').append(\"");
+jsInlineF("<div id='root'>");
 if (curGroup != NULL)
     {
     // print out all the tracks in all the collections
     struct trackDb *tdb;
-    jsInlineF("$('#currentCollection').append(\"");
     for(tdb = trackList; tdb;  tdb = tdb->next)
         {
         if (sameString(tdb->grp, hubName))
             {
-            jsInlineF("<div id='%s' shortLabel='%s'>", trackHubSkipHubName(tdb->track), tdb->shortLabel);
             jsInlineF("<ul>");
             printGroup("collections", tdb, TRUE, TRUE);
             jsInlineF("</ul>");
-            jsInlineF("</div>");
-            continue;
             }
         }
-    jsInlineF("\");\n");
-    
-    // print out all the collections
-    jsInlineF("$('#collectionList').append(\"");
-    for(tdb = trackList; tdb;  tdb = tdb->next)
-        {
-        if (sameString(tdb->grp, hubName))
-            {
-            jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' id='%s'  name='%s'>%s</li>", trackHubSkipHubName(tdb->track),trackHubSkipHubName(tdb->track), tdb->shortLabel);
-            //printGroup("collections", tdb, TRUE, TRUE);
-            }
-        }
-    jsInlineF("\");\n");
     }
+jsInlineF("</div>");
+jsInlineF("\");\n");
+
 jsInlineF("$('#tracks').append(\"");
 addVisibleTracks(cart, trackList);
 for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
