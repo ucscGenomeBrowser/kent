@@ -33,7 +33,7 @@ if (pHgvs && *pHgvs)
 #define lrgProteinExp "(LRG_[0-9]+p[0-9]+)"
 #define lrgRegionExp "(LRG_[0-9]+)"
 
-// NC = RefSeq reference assembly chromosome
+// NC = RefSeq reference assembly chromosome (NT = contig (e.g. alt), NW = patch)
 // NG = RefSeq incomplete genomic region (e.g. gene locus)
 // NM = RefSeq curated mRNA
 // NP = RefSeq curated protein
@@ -45,7 +45,7 @@ if (pHgvs && *pHgvs)
 //                                              ...........       optional dot version
 //                                                         ...... optional gene symbol in ()s
 //                                                          ....  optional gene symbol
-#define versionedRefSeqNCExp versionedAccPrefixExp("[NX]C")
+#define versionedRefSeqNCExp versionedAccPrefixExp("[NX][CTW]")
 #define versionedRefSeqNGExp versionedAccPrefixExp("[NX]G")
 #define versionedRefSeqNMExp versionedAccPrefixExp("[NX]M")
 #define versionedRefSeqNPExp versionedAccPrefixExp("[NX]P")
@@ -2803,7 +2803,7 @@ else
 // protSeq may or may not end with X, so treat protSeq->size accordingly
 boolean hitsStopCodon = (vpPep->end > protSeq->size ||
                          ((protSeq->dna[protSeq->size-1] == 'X') && vpPep->end == protSeq->size));
-if (vpPep->cantPredict || vpPep->spansUtrCds || isStartLoss(vpPep))
+if (vpPep->cantPredict || isStartLoss(vpPep))
     dyStringAppend(dy, "?");
 else if (vpPep->frameshift)
     {

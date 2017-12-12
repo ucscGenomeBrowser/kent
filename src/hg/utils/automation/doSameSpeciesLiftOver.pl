@@ -272,6 +272,8 @@ _EOF_
   my $minTpSize = 10000000;
   $tpSize = $minTpSize if ($tpSize < $minTpSize);
 
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 # Compute partition (coordinate ranges) for cluster job.  This does
 # not need to be run on the build fileserver because it does not actually
@@ -290,9 +292,9 @@ foreach f (`cat t.lst`)
   mkdir $pslDir/\$f:t
 end
 
-$HgAutomate::gensub2 t.lst q.lst gsub jobList
+$gensub2 t.lst q.lst gsub jobList
 
-$HgAutomate::paraRun
+$paraRun
 _EOF_
   );
   $bossScript->execute();
@@ -394,14 +396,16 @@ _EOF_
   my $whatItDoes = "It does a cluster run to chain the blat alignments.";
   my $bossScript = new HgRemoteScript("$runDir/doChain.csh", $paraHub,
 				      $runDir, $whatItDoes);
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 mkdir chainRaw
 foreach d ($pslDir/*)
   mkdir chainRaw/\$d:t
 end
 
-$HgAutomate::gensub2 pslParts.lst single gsub jobList
-$HgAutomate::paraRun
+$gensub2 pslParts.lst single gsub jobList
+$paraRun
 _EOF_
   );
   $bossScript->execute();

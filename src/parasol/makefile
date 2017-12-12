@@ -26,6 +26,9 @@ lib.all:
 install:
 	@echo 'parasol install, please copy ./bin/*  where desired ...'
 
+userApps: all
+	rsync -a ./bin/ ${DESTDIR}/${BINDIR}/
+
 clean:
 	rm -f */*.o lib/*/*.a
 	rm -f bin/*

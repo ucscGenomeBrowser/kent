@@ -229,11 +229,13 @@ sub doGuides {
   my $bossScript = newBash HgRemoteScript("$runDir/runGuides.bash",
 		$paraHub, $runDir, $whatItDoes);
 
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 mkdir -p tmp
 find $inFaDir -type f | grep "\.fa\$" > fa.list
-$HgAutomate::gensub2 fa.list single gsub jobList
-$HgAutomate::paraRun
+$gensub2 fa.list single gsub jobList
+$paraRun
 catDir -suffix=.fa tmp | grep -v "^>" > ../allGuides.txt
 catDir -suffix=.bed tmp > ../allGuides.bed
 _EOF_
@@ -277,13 +279,15 @@ sub doSpecScores {
   &HgAutomate::verbose(1,
          "# preparing the specificity alignment cluster run\n");
 
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 mkdir -p tmp/inFa tmp/outGuides tmp/outOffs
 twoBitToFa -noMask $twoBit $db.fa
 /cluster/bin/samtools-0.1.19/samtools faidx $db.fa
 $python $crisprScripts/splitGuidesSpecScore.py ../allGuides.txt tmp/inFa jobNames.txt
-$HgAutomate::gensub2 jobNames.txt single gsub jobList
-$HgAutomate::paraRun
+$gensub2 jobNames.txt single gsub jobList
+$paraRun
 find tmp/outGuides -type f | xargs cut -f3-6 > ../specScores.tab
 printf "# Number of specScores: %d\\n" "`cat ../specScores.tab | wc -l`" 1>&1
 _EOF_
@@ -323,10 +327,12 @@ sub doEffScores {
   my $bossScript = newBash HgRemoteScript("$runDir/runEffScores.bash",
 		$paraHub, $runDir, $whatItDoes);
 
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 $python $crisprScripts/splitGuidesEffScore.py $chromSizes ../allGuides.bed tmp jobNames.txt
-$HgAutomate::gensub2 jobNames.txt single gsub jobList
-$HgAutomate::paraRun
+$gensub2 jobNames.txt single gsub jobList
+$paraRun
 find tmp/out -type f | xargs cat > ../effScores.tab
 printf "# Number of effScores: %d\\n" "`cat ../effScores.tab | wc -l`" 1>&2
 _EOF_
@@ -367,6 +373,8 @@ sub doOffTargets {
   my $bossScript = newBash HgRemoteScript("$runDir/runOffTargets.bash",
 		$paraHub, $runDir, $whatItDoes);
 
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 # to allow the crisprScripts to find their python2.7 version:
 export PATH=/cluster/software/bin:\$PATH
@@ -375,8 +383,8 @@ mkdir -p tmp/inFnames tmp/out/
 find $specScores/tmp/outOffs -type f | sed -e 's#.*/tmp/#../specScores/tmp/#;' > otFnames.txt
 splitFile otFnames.txt 20 tmp/inFnames/otJob
 find ./tmp/inFnames -type f | sed -e 's#^./##;' > file.list
-$HgAutomate::gensub2 file.list single gsub jobList
-$HgAutomate::paraRun
+$gensub2 file.list single gsub jobList
+$paraRun
 $crisprScripts/catAndIndex tmp/out ../crisprDetails.tab ../offtargets.offsets.tab --headers=_mismatchCounts,_crisprOfftargets
 _EOF_
   );
@@ -395,12 +403,6 @@ sub doLoad {
      &HgAutomate::verbose(1,
          "# step load is already completed, continuing...\n");
      return;
-    } else {
-      die "step load may have been attempted and failed," .
-        "directory $runDir exists, however the crispr.bb result does not " .
-        "exist.  Either run with -continue cleanup or some later " .
-        "stage, or move aside/remove $runDir and run again, " .
-        "or determine the failure to complete this step.\n";
     }
   }
 
@@ -438,9 +440,7 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -rf run.template/raw/
-rm -rf templateOtherBigTempFilesOrDirectories
-gzip template
+echo "nothing to do for cleanup yet"
 _EOF_
   );
   $bossScript->execute();
