@@ -118,3 +118,12 @@ for(; beds; beds=beds->next)
     }
 return longRangeList;
 }
+
+int longRangeCmp(const void *va, const void *vb)
+/* Compare based on coord position of s field */
+{
+const struct longRange *a = *((struct longRange **)va);
+const struct longRange *b = *((struct longRange **)vb);
+return (a->s - b->s);
+}
+

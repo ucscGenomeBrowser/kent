@@ -45,8 +45,43 @@ char itemBuf[2048];
 safef(buffer, sizeof buffer, "%s.%s", tg->tdb->track, LONG_MINSCORE);
 double minScore = sqlDouble(cartUsualString(cart, buffer, LONG_DEFMINSCORE));
 struct longRange *longRangeList = parseLongTabix(beds, &maxWidth, minScore);
+slSort(&longRangeList, longRangeCmp);
 
-for(longRange=longRangeList; longRange; longRange=longRange->next)
+// Determine if there are mixed inter and intra-chromosomal
+int nSame = 0, nOther = 0;
+int prevLabelEnd = 0, prevLabelStart = 0;
+char *prevLabel = 0;
+boolean doOtherLabels = TRUE;   // suppress interchromosomal item labels if they overlap
+for (longRange=longRangeList; longRange; longRange=longRange->next)
+    {
+    if (sameString(longRange->sChrom, longRange->eChrom))
+        nSame++;
+    else
+        {
+        nOther++;
+        if (!doOtherLabels)
+            continue;
+        int labelWidth = vgGetFontStringWidth(hvg->vg, font, longRange->eChrom);
+        int sx = ((longRange->s - seqStart) + .5) * scale + xOff; // x coord of center
+        int labelStart = sx - labelWidth/2;
+        int labelEnd = labelStart + labelWidth - 1;
+/*uglyf("<br>chromStart: %d, label: %s, labelStart: %d, labelEnd: %d, prevLabel: %s, prevLabelStart: %d, prevLabelEnd: %d. ", 
+                longRange->s, longRange->eChrom, labelStart, labelEnd, 
+                prevLabel, prevLabelStart, prevLabelEnd);
+*/
+        if (labelStart <= prevLabelEnd && 
+                !(labelStart == prevLabelStart && labelEnd == prevLabelEnd && 
+                    sameString(longRange->eChrom, prevLabel)))
+            doOtherLabels = FALSE;
+        prevLabelStart = labelStart;
+        prevLabelEnd = labelEnd;
+        prevLabel = longRange->eChrom;
+        }
+    }
+int fontHeight = vgGetFontPixelHeight(hvg->vg, font);
+int otherHeight = (nOther) ? 3 * fontHeight : 0;
+int sameHeight = (nSame) ? tg->height - otherHeight: 0;
+for (longRange=longRangeList; longRange; longRange=longRange->next)
     {
     safef(itemBuf, sizeof itemBuf, "%d", longRange->id);
     struct dyString *ds = dyStringNew(0);
@@ -64,28 +99,40 @@ for(longRange=longRangeList; longRange; longRange=longRange->next)
     if (differentString(longRange->sChrom, longRange->eChrom))
         {
         // different chromosomes
-        // FIXME: Most of this code should be shared with same chrom display
+        //      draw below same chrom items, if any
+        unsigned yPos = 0;
+        int height = 0;
+        int yOffOther = yOff;
+        if (tg->visibility == tvDense)
+            {
+            height = tg->height;
+            }
+        else
+            {
+            height = otherHeight/2;
+            yOffOther = yOff + sameHeight;
+            }
+        yPos = yOffOther + height;
 
         // draw the foot
         int footWidth = sFootWidth;
-        hvGfxLine(hvg, sx - footWidth, yOff, sx + footWidth, yOff, color);
+        hvGfxLine(hvg, sx - footWidth, yOffOther, sx + footWidth, yOffOther, color);
 
-        int height = tg->height/2;
-        if (tg->visibility == tvDense)
-            height = tg->height;
-        unsigned yPos = yOff + height;
-        hvGfxLine(hvg, sx, yOff, sx, yPos, color);
+        // draw the vertical
+        hvGfxLine(hvg, sx, yOffOther, sx, yPos, color);
         if (tg->visibility == tvFull)
             {
-            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->s, sx - 2, yOff, 4, tg->height/2,
+            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->s, sx - 2, yOffOther, 4, height,
                                    tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
 
-            safef(buffer, sizeof buffer, "%s:%d",  longRange->eChrom, longRange->e);
-            hvGfxTextCentered(hvg, sx, yPos + 2, 4, 4, MG_BLUE, font, buffer);
-            int width = vgGetFontStringWidth(hvg->vg, font, buffer);
-            int height = vgGetFontPixelHeight(hvg->vg, font);
-            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->s, sx - width/2, yPos, width, height,
-                                   tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
+            safef(buffer, sizeof buffer, "%s",  longRange->eChrom);
+            if (doOtherLabels)
+                {
+                hvGfxTextCentered(hvg, sx, yPos + 2, 4, 4, MG_BLUE, font, buffer);
+                int width = vgGetFontStringWidth(hvg->vg, font, buffer);
+                mapBoxHgcOrHgGene(hvg, longRange->s, longRange->s, sx - width/2, yPos, 
+                                width, fontHeight, tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
+                }
             }
         continue;
         }
@@ -97,7 +144,7 @@ for(longRange=longRangeList; longRange; longRange=longRange->next)
         continue;
 
     double longRangeWidth = longRange->e - longRange->s;
-    int peak = (tg->height - 15) * ((double)longRangeWidth / maxWidth) + yOff + 10;
+    int peak = (sameHeight - 15) * ((double)longRangeWidth / maxWidth) + yOff + 10;
     if (tg->visibility == tvDense)
         peak = yOff + tg->height;
 
