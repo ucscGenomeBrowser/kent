@@ -4050,7 +4050,7 @@ printf("Item you clicked on:<BR>\n");
 printf("&nbsp;&nbsp;&nbsp;&nbsp;<B>ID:</B> %u<BR>\n", ourLongRange->id);
 if (!ourLongRange->hasColor)
     // if there's color, then there's no score in this format
-    printf("&nbsp;&nbsp;&nbsp;<B>Score:</B> %g<BR>\n", ourLongRange->score);
+    printf("<B>Score:</B> %g<BR>\n", ourLongRange->score);
 
 unsigned padding =  (ourLongRange->e - ourLongRange->s) / 10;
 int s = ourLongRange->s - padding; 
