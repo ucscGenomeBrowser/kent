@@ -147,6 +147,8 @@ _EOF_
   my $bossScript = new HgRemoteScript("$runDir/doHardMask.csh", $paraHub,
 				      $runDir, $whatItDoes);
 
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 mkdir -p $outRoot
 chmod a+x runOne.csh
@@ -170,8 +172,8 @@ foreach chrom ( `twoBitInfo $maskedSeq stdout | cut -f1` )
   endif
   echo \$dirName/\$chrom.fa >> chr.list
 end
-$HgAutomate::gensub2 chr.list single gsub jobList
-$HgAutomate::paraRun
+$gensub2 chr.list single gsub jobList
+$paraRun
 _EOF_
   );
   $bossScript->execute();
@@ -224,12 +226,14 @@ _EOF_
   my $whatItDoes = "Run gsBig on masked sequence.";
   my $bossScript = new HgRemoteScript("$runDir/doGenscan.csh", $paraHub,
 				      $runDir, $whatItDoes);
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 chmod a+x runGsBig.csh
 rm -f file.list
 find ./hardMaskedFa -type f > file.list
-$HgAutomate::gensub2 file.list single gsub jobList
-$HgAutomate::paraRun
+$gensub2 file.list single gsub jobList
+$paraRun
 _EOF_
   );
   $bossScript->execute();

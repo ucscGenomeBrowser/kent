@@ -940,8 +940,10 @@ static void filterControlsForTableDb(char *db, char *rootTable)
 struct sqlConnection *conn =  NULL;
 if (!trackHubDatabase(db))
     conn = hAllocConn(db);
-char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
+char *table = rootTable;
+if (! (tdb && trackDbSetting(tdb, "bigDataUrl")))
+    table = chromTable(conn, rootTable);
 boolean isSmallWig = isWiggle(db, table);
 boolean isBigWig = tdb ? tdbIsBigWig(tdb) : isBigWigTable(table);
 boolean isWig = isSmallWig || isBigWig;

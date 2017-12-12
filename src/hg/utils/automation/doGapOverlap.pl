@@ -207,10 +207,12 @@ sub doBlat {
   my $bossScript = newBash HgRemoteScript("$runDir/blat.bash",
 		$paraHub, $runDir, $whatItDoes);
 
+  my $paraRun = &HgAutomate::paraRun();
+  my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 chmod +x runOne
-$HgAutomate::gensub2 blatPairs/pair.list single template jobList
-$HgAutomate::paraRun
+$gensub2 blatPairs/pair.list single template jobList
+$paraRun
 
 find ./psl -type f | grep "\.psl\$" | xargs cat | gzip -c > $db.gapOverlap.psl.gz
 count=`zcat $db.gapOverlap.psl.gz | wc -l`
