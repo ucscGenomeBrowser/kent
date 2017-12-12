@@ -143,7 +143,7 @@ RENAME	sample.cell_line.karyotype	sample.immortalized_cell_line.karyotype
 RENAME	sample.cell_line.name.ontology	sample.immortalized_cell_line.name.ontology
 RENAME	sample.cell_line.name.text	sample.immortalized_cell_line.name.text
 RENAME	sample.cell_line.passage_number	sample.immortalized_cell_line.passage_number
-RENAME	sample.cell_line.publication.authors.sample.immortalized_cell_line.publication.authors
+RENAME	sample.cell_line.publication.authors	sample.immortalized_cell_line.publication.authors
 DELETE	sample.cell_line.publication.core.schema_url
 DELETE	sample.cell_line.publication.core.schema_version
 DELETE	sample.cell_line.publication.core.type
