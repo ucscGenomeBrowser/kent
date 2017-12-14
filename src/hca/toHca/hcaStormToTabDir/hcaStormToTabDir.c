@@ -459,6 +459,19 @@ for (subtype = subtypeList; subtype != NULL; subtype = subtype->next)
 tagStormDeleteTags(tags, "sample.genus_species.ontology");
 tagStormDeleteTags(tags, "sample.genus_species.text");
 
+/* Move several "naked" sample fields to the last sample part in the chain. */
+char *fieldsForLastSample[] = {"supplementary_files", "protocol_ids", "name", "description",
+    "sample_accessions.biosd_sample", "well.cell_type.ontology", "well.cell_type.text" };
+for (i=0; i<ArraySize(fieldsForLastSample); ++i)
+    {
+    char *field = fieldsForLastSample[i];
+    char *lastType = lastSubtype->name;
+    char oldTag[128], newTag[128];
+    safef(oldTag, sizeof(oldTag), "sample.%s", field);
+    safef(newTag, sizeof(newTag), "sample.%s.%s", lastType, field);
+    tagStormRenameTags(tags, oldTag, newTag);
+    }
+
 /* Make initial cut of our conversion tag list */
 struct convert *convList = makeConvertList();
 
