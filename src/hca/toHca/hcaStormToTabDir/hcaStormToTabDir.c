@@ -231,20 +231,20 @@ for (i=0; i<table->fieldCount; ++i)
     table->fields[i] += trimSize;
 }
 
-struct addIdContext
-/* Information for recursive tagStorm traversing function collectFields and fillInTable */
+struct copyTagContext
+/* Information for recursive tagStorm traversing function copyToNewTag*/
     {
-    char *idTag;	  // Tag name to add if it doesn't exist
-    char *derivedFromTag; // Tag to put derived from in
+    char *oldTag;   // Existing tag name
+    char *newTag;   // New tag name
     };
 
-void addDerivedFrom(struct tagStorm *storm, struct tagStanza *stanza, void *context)
+void copyToNewTag(struct tagStorm *storm, struct tagStanza *stanza, void *context)
 /* Add fields from stanza to list of converts in context */
 {
-struct addIdContext *aic = context;
-char *idVal = tagFindLocalVal(stanza, aic->idTag);
-if (idVal)
-    tagStanzaAdd(storm, stanza, aic->derivedFromTag, idVal);
+struct copyTagContext *copyContext = context;
+char *val = tagFindLocalVal(stanza, copyContext->oldTag);
+if (val)
+    tagStanzaAdd(storm, stanza, copyContext->newTag, val);
 }
 
 
@@ -421,7 +421,7 @@ for (subtype = subtypeList; subtype != NULL; subtype = nextSubtype)
         {
 	char derivedTag[128];
 	safef(derivedTag, sizeof(derivedTag), "sample.%s.derived_from", nextSubtype->name);
-	struct addIdContext aic;
+	struct copyTagContext copyContext;
 	if (!isDonor)
 	    {
 	    struct hash *uniqHash = hashNew(0);
@@ -435,11 +435,29 @@ for (subtype = subtypeList; subtype != NULL; subtype = nextSubtype)
 	    dyStringFree(&scratch);
 	    hashFree(&uniqHash);
 	    }
-	aic.idTag = idTag;
-	aic.derivedFromTag = derivedTag;
-	tagStormTraverse(tags, tags->forest, &aic, addDerivedFrom);
+	copyContext.oldTag = idTag;
+	copyContext.newTag = derivedTag;
+	tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
 	}
     }
+
+/* Add in any species tags to all types of samples and delete original. */
+for (subtype = subtypeList; subtype != NULL; subtype = subtype->next)
+    {
+    struct copyTagContext copyContext;
+    char *name = subtype->name;
+    char newTag[128];
+    safef(newTag, sizeof(newTag), "sample.%s.genus_species.ontology", name);
+    copyContext.oldTag = "sample.genus_species.ontology";
+    copyContext.newTag = newTag;
+    tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
+    safef(newTag, sizeof(newTag), "sample.%s.genus_species.text", name);
+    copyContext.oldTag = "sample.genus_species.text";
+    copyContext.newTag = newTag;
+    tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
+    }
+tagStormDeleteTags(tags, "sample.genus_species.ontology");
+tagStormDeleteTags(tags, "sample.genus_species.text");
 
 /* Make initial cut of our conversion tag list */
 struct convert *convList = makeConvertList();
