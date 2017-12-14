@@ -10,6 +10,7 @@
 #include "tagStorm.h"
 #include "tagSchema.h"
 #include "fieldedTable.h"
+#include "csv.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -88,6 +89,24 @@ struct shortcut shortcuts[] =
    {"assay.seq.barcode", "seq.barcode"},
 };
 
+char *sampleSubtypePrefixes[] = 
+    {
+    "sample.donor.",
+    "sample.specimen_from_organism.",
+    "sample.organoid.",
+    "sample.immortalized_cell_line.",
+    "sample.primary_cell_line.",
+    "sample.cell_suspension.",
+    };
+
+struct sampleSubtype
+/* A type of sample, we'll make a separate tab for each of these that exist */
+    {
+    struct sampleSubtype *next;
+    char *name;	    /* Name of subtype,  excludes both sample. and trailing dot */
+    char *fieldPrefix;  /* An element in sampleSubtypePrefixes array */
+    };
+
 char *findShortcut(char *fullName)
 /* Look up full name and return shortcut if it exists */
 {
@@ -117,7 +136,7 @@ return list;
 }
 
 struct convContext
-/* Information for recursive tagStorm traversing function collectFields */
+/* Information for recursive tagStorm traversing function collectFields and fillInTable */
     {
     struct convert *convList;
     struct dyString *scratch;
@@ -203,20 +222,229 @@ if (stanza->children == NULL)  // Only do leaf stanzas
     }
 }
 
+void trimFieldNames(struct fieldedTable *table, char *objectName)
+/* Remove objectName from table's field names */
+{
+int trimSize = strlen(objectName) + 1;
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    table->fields[i] += trimSize;
+}
+
+struct addIdContext
+/* Information for recursive tagStorm traversing function collectFields and fillInTable */
+    {
+    char *idTag;	  // Tag name to add if it doesn't exist
+    char *derivedFromTag; // Tag to put derived from in
+    };
+
+void addDerivedFrom(struct tagStorm *storm, struct tagStanza *stanza, void *context)
+/* Add fields from stanza to list of converts in context */
+{
+struct addIdContext *aic = context;
+char *idVal = tagFindLocalVal(stanza, aic->idTag);
+if (idVal)
+    tagStanzaAdd(storm, stanza, aic->derivedFromTag, idVal);
+}
+
+
+void oneRowTableSideways(struct fieldedTable *table, char *path)
+/* Write out a table of a single row as a two column table with label/value */
+{
+if (table->rowCount != 1)
+    errAbort("Expecting exactly one row in %s table, got %d\n", table->name, table->rowCount);
+FILE *f = mustOpen(path, "w");
+char **row = table->rowList->row;
+int i;
+struct dyString *scratch = dyStringNew(0);
+for (i=0; i<table->fieldCount; ++i)
+    {
+    fprintf(f, "%s", table->fields[i]);
+    char *pos = row[i], *val;
+    while ((val = csvParseNext(&pos, scratch)) != NULL)
+        fprintf(f, "\t%s", val);
+    fprintf(f, "\n");
+    }
+dyStringFree(&scratch);
+carefulClose(&f);
+}
+
+boolean anyStartWithPrefix(char *prefix, struct slName *list)
+/* Return TRUE if anything of the names in list start with prefix */
+{
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+   if (startsWith(prefix, el->name))
+       return TRUE;
+return FALSE;
+}
+
+void addIdForUniqueVals(struct tagStorm *tags, struct tagStanza *stanzaList,
+    struct slName *fieldList, char *idTag, char *objType, struct hash *uniqueHash,
+    struct dyString *scratch)
+/* Go through tagStorm creating and adding IDs on leaf nodes making it so that
+ * leaves that have the same value for all fields that begin with conv->fieldPrefix
+ * have the same id. */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    if (stanza->children != NULL)
+        addIdForUniqueVals(tags, stanza->children, fieldList, idTag, objType, uniqueHash, scratch);
+    else
+        {
+	/* Create concatenation of all fields in scratch */
+	dyStringClear(scratch);
+	struct slName *field;
+	for (field = fieldList; field != NULL; field = field->next)
+	    {
+	    dyStringAppendC(scratch, 1);  // use ascii 1 as rare separator
+	    dyStringAppend(scratch, emptyForNull(tagFindVal(stanza, field->name)));
+	    }
+
+	/* Use it to look up id, creating a new ID if need be. */
+	char *idVal = hashFindVal(uniqueHash, scratch->string);
+	if (idVal == NULL)
+	    {
+	    char buf[64];
+	    safef(buf, sizeof(buf), "%s_%d", objType, uniqueHash->elCount + 1);
+	    idVal = cloneString(buf);
+	    hashAdd(uniqueHash, scratch->string, idVal);
+	    }
+	/* Add id tag to stanza. */
+	tagStanzaAdd(tags, stanza, idTag, idVal);
+	}
+    }
+}
+
+static void rDeleteTags(struct tagStanza *stanzaList, char *tagName)
+/* Recursively delete tag from all stanzas */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    tagStanzaDeleteTag(stanza, tagName);
+    if (stanza->children)
+	rDeleteTags(stanza->children, tagName);
+    }
+}
+
+void tagStormDeleteTags(struct tagStorm *tagStorm, char *tagName)
+/* Delete all tags of given name from tagStorm */
+{
+rDeleteTags(tagStorm->forest, tagName);
+}
+
+static void rRenameTags(struct tagStanza *stanzaList, char *oldName, char *newName)
+/* Recursively rename tag in all stanzas */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    struct slPair *pair = slPairFind(stanza->tagList, oldName);
+    if (pair != NULL)
+        pair->name = newName;
+    if (stanza->children)
+        rRenameTags(stanza->children, oldName, newName);
+    }
+}
+
+void tagStormRenameTags(struct tagStorm *tagStorm, char *oldName, char *newName)
+/* Rename all tags with oldName to newName */
+{
+rRenameTags(tagStorm->forest, oldName, newName);
+}
+
+struct slName *subsetMatchingPrefix(struct slName *fullList, char *prefix)
+/* Return a new list that contains all elements of fullList that start with prefix */
+{
+struct slName *subList = NULL, *el;
+for (el = fullList; el != NULL; el = el->next)
+    {
+    if (startsWith(prefix, el->name))
+       slNameAddHead(&subList, el->name);
+    }
+uglyf("Found %d of %d that start with %s\n", slCount(subList), slCount(fullList), prefix);
+slReverse(&subList);
+return subList;
+}
+
 void hcaStormToTabDir(char *inTags, char *outDir)
 /* hcaStormToTabDir - Convert a tag storm file to a directory full of tab separated files that 
  * express pretty much the same thing from the point of view of HCA V4 ingest. */
 {
-/* Load in tagStorm and report some stats to help reassure user */
+/* Load in tagStorm, list fields and report some stats to help reassure user */
 struct tagStorm *tags = tagStormFromFile(inTags);
-verbose(1, "Got %d tags in %d fields from %s\n", tagStormCountTags(tags), tagStormCountFields(tags),
-    inTags);
+struct slName *origFieldList = tagStormFieldList(tags);
+verbose(1, "Got %d tags and %d fields in %s\n", tagStormCountTags(tags), 
+    slCount(origFieldList), inTags);
+
+/* Figure out what types of samples we have */
+struct sampleSubtype *subtypeList = NULL, *subtype;
+int i;
+int skipSampleSize = strlen("sample.");
+for (i=0; i<ArraySize(sampleSubtypePrefixes);  ++i)
+    {
+    char *prefix = sampleSubtypePrefixes[i];
+    if (anyStartWithPrefix(prefix, origFieldList))
+        {
+	AllocVar(subtype);
+	subtype->fieldPrefix = prefix;
+	int prefixSize = strlen(prefix);
+	int nameSize = prefixSize - skipSampleSize - 1;  // 1 for trailing dot
+	subtype->name = cloneStringZ(prefix + skipSampleSize, nameSize);
+	slAddHead(&subtypeList, subtype);
+	}
+    }
+struct sampleSubtype *lastSubtype = subtypeList;
+slReverse(&subtypeList);
+verbose(1, "First sample subtype is %s, last is %s\n", subtypeList->name, lastSubtype->name);
+
+/* Add in any missing IDs or derived from tags */
+struct sampleSubtype *nextSubtype;
+for (subtype = subtypeList; subtype != NULL; subtype = nextSubtype)
+    {
+    nextSubtype = subtype->next;
+    boolean isDonor = sameString("donor", subtype->name);
+    char idTag[128];
+    safef(idTag, sizeof(idTag), "sample.%s.id", subtype->name);
+    if (nextSubtype == NULL)
+        {
+	// End of the line, we'll use the existing sample.sample_id tag
+	// and nobody derives from us.
+	if (isDonor)
+	    tagStormDeleteTags(tags, "sample.sample_id");
+	else
+	    tagStormRenameTags(tags, "sample.sample_id", idTag);
+	}
+    else
+        {
+	char derivedTag[128];
+	safef(derivedTag, sizeof(derivedTag), "sample.%s.derived_from", nextSubtype->name);
+	struct addIdContext aic;
+	if (!isDonor)
+	    {
+	    struct hash *uniqHash = hashNew(0);
+	    struct dyString *scratch = dyStringNew(0);
+	    struct slName *allFields = tagStormFieldList(tags);
+	    struct slName *ourFields = subsetMatchingPrefix(allFields, subtype->fieldPrefix);
+	    addIdForUniqueVals(tags, tags->forest, ourFields, idTag, subtype->name, 
+		uniqHash, scratch);
+	    slNameFreeList(&allFields);
+	    slNameFreeList(&ourFields);
+	    dyStringFree(&scratch);
+	    hashFree(&uniqHash);
+	    }
+	aic.idTag = idTag;
+	aic.derivedFromTag = derivedTag;
+	tagStormTraverse(tags, tags->forest, &aic, addDerivedFrom);
+	}
+    }
 
 /* Make initial cut of our conversion tag list */
 struct convert *convList = makeConvertList();
-verbose(1, "Potentially making %d files in %s\n", slCount(convList), outDir);
 
-/* Make a pass through storm to figure out which fields belong to which tab-sep-file */
+/* Make a pass through tagStorm to figure out which fields belong to which tab-sep-file */
 struct dyString *scratch = dyStringNew(0);
 struct convContext cc = {convList, scratch};
 tagStormTraverse(tags, tags->forest, &cc, collectFields);
@@ -224,12 +452,15 @@ verbose(2, "Collected fields ok it seems\n");
 
 /* Fill in most of the rest of the convert data structure */
 struct convert *conv;
+int realConvCount = 0;
 for (conv = convList; conv != NULL; conv = conv->next)
     {
     int fieldCount = conv->fieldHash->elCount;
     verbose(2, "%s has %d fields\n", conv->objectName, fieldCount);
     if (fieldCount > 0)
 	{
+	++realConvCount;
+
 	/* Build up an array of fields from list */
 	char *fieldArray[fieldCount];
 	int i;
@@ -243,6 +474,7 @@ for (conv = convList; conv != NULL; conv = conv->next)
 	conv->uniqRowHash = hashNew(0);
 	}
     }
+verbose(1, "%d of %d tabs have data\n", realConvCount, slCount(convList));
 
 /* Make a second pass through storm filling in tables */
 tagStormTraverse(tags, tags->forest, &cc, fillInTables);
@@ -260,9 +492,14 @@ for (conv = convList; conv != NULL; conv = conv->next)
 	verbose(2, "Creating %s with %d columns and %d rows\n", path, 
 	    table->fieldCount, table->rowCount);
 	table->startsSharp = FALSE;
-	fieldedTableToTabFile(table, path);
+	trimFieldNames(table, conv->objectName);
+	if (sameString(conv->objectName, "project"))
+	   oneRowTableSideways(table, path);
+	else
+	   fieldedTableToTabFile(table, path);
 	}
     }
+verbose(1, "Wrote %d files to %s\n", realConvCount, outDir);
 }
 
 int main(int argc, char *argv[])
