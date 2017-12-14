@@ -222,8 +222,19 @@ puts("<P>");
 
 /* row for error message */
 if (isNotEmpty(err))
+    {
     printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:RED; font-style:italic;'>"
            "Error</span>&nbsp;%s</B><P>", err);
+    /* send two lines of the message to the apache error log also: */
+    char *tmpString = cloneString(err);
+    char *lineBreak = strchr(tmpString, '\n');
+    if (lineBreak)  /* first line break becomes a blank */
+        *lineBreak = ' ';
+    lineBreak = strchr(tmpString, '\n');
+    if (lineBreak)  /* second one becomes end of string */
+        *lineBreak = (char) 0;
+    fprintf(stderr, "hgCustom load error: %s\n", tmpString);
+    }
 
 cgiSimpleTableStart();
 

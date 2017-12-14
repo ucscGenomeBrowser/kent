@@ -1030,7 +1030,6 @@ exonArrows on
 type bed 6 .
 
 track refSeqFuncElems
-release alpha,beta
 shortLabel RefSeq Func Elems
 longLabel NCBI RefSeq Functional Elements 
 type bigBed 9 +
@@ -1038,7 +1037,7 @@ noScoreFilter .
 itemRgb on
 bigDataUrl /gbdb/$D/ncbiRefSeq/refSeqFuncElems.bb
 group regulation
-pennantIcon New red ../goldenPath/releaseLog.html "Released December 2017"
+pennantIcon New red ../goldenPath/releaseLog.html "Released December 13, 2017"
 urls geneIds=https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$ pubMedIds=https://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
 mouseOverField _mouseOver
 

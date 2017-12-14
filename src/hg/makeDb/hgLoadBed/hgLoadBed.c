@@ -328,7 +328,9 @@ while (lineFileNextReal(lf, &line))
     {
     if (customTrackLoader && lineLimit > 0 && lf->lineIx > lineLimit)
 	{
-	errAbort("ERROR: number of input data lines over limit %d\n\nSee also:\nhttp://genome.ucsc.edu/goldenPath/help/bigWig.html for converting large bed files using bedToBigBed\nhttp://genome.ucsc.edu/goldenPath/help/bigBed.html for converting large bedGraph files using bedGraphToBigWig\nhttp://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html#Hosting for bigDataUrl data hosting solutions", lineLimit);
+        char commaString[256];
+        sprintLongWithCommas(commaString, lineLimit);
+	errAbort("ERROR: number of input data lines over limit: %s\n\nSee also:\nhttp://genome.ucsc.edu/goldenPath/help/bigWig.html for converting large bed files using bedToBigBed\nhttp://genome.ucsc.edu/goldenPath/help/bigBed.html for converting large bedGraph files using bedGraphToBigWig\nhttp://genome.ucsc.edu/goldenPath/help/hgTrackHubHelp.html#Hosting for bigDataUrl data hosting solutions", commaString);
 	}
     if (hasBin)
 	nextWord(&line);
