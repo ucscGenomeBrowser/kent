@@ -14,7 +14,7 @@ H3 {
 H2.leftAlign { text-align: left; }
 
 /* From our standard BODY tag */
-BODY { background-color:#FFF9D2; }
+BODY { background-color:#fff; }
 Alink { color:#0000CC; }
 A:visited { color:#330066; }
 A:active.topbar { color:#330066; }
@@ -99,7 +99,7 @@ table.matrixTable {
 table.matrixTable th {
     text-align: center;
     color: black;
-    background-color: #FFFEE8;
+    background-color: ##ededed;
     width: 1.9em;
 }
 
@@ -119,7 +119,7 @@ table.matrixTable th {
 }
 .contentBorder {
     border: 1px solid black;
-    background-color:#FFFEE8;
+    background-color:##ededed;
     margin-bottom:1em;
 }
 .borderGuard { padding:10px; }

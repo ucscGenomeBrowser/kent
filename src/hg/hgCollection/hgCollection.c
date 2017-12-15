@@ -95,7 +95,10 @@ if (user)
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='view' class='folder'";
         }
     else if (tdb->subtracks)
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='track' class='folder'";
+        {
+        viewFunc = trackDbSetting(tdb, "viewFunc");
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='collection' class='folder'";
+        }
     else
         userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-minus-square\\\"}' viewType='track'";
     }
@@ -104,7 +107,7 @@ else
     if (tdb->parent && tdb->subtracks) 
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' viewType='view'";
     else if (tdb->subtracks)
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='collection' viewType='track'";
     else
         userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-plus\\\"}' class='nodrop' viewType='track'";
     }
@@ -479,9 +482,10 @@ aggregate  none\n\
 longLabel %s\n\
 %s on\n\
 color %ld,%ld,%ld \n\
-type wig \n\
+viewFunc %s\n\
+type mathWig\n\
 visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
- 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color));
+ 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color), collection->viewFunc);
 
 }
 
@@ -550,6 +554,8 @@ struct track *collection;
 struct sqlConnection *conn = hAllocConn(db);
 for(collection = collectionList; collection; collection = collection->next)
     {
+    if (collection->trackList == NULL)  // don't output composites without children
+        continue;
     outComposite(f, collection);
     struct trackDb *tdb;
     struct track *track;

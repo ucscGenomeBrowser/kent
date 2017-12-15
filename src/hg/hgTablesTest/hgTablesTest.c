@@ -348,7 +348,10 @@ void checkExpectedSimpleRows(struct htmlPage *outPage, int expectedRows)
 {
 if (outPage != NULL)
     {
-    int rowCount = countNoncommentLines(outPage->htmlText);
+    char *results = outPage->htmlText;
+    if (startsWith(NO_RESULTS, results))
+        results += strlen(NO_RESULTS);
+    int rowCount = countNoncommentLines(results);
     if (rowCount != expectedRows)
 	qaStatusSoftError(tablesTestList->status, 
 		"Got %d rows, expected %d", rowCount, expectedRows);
