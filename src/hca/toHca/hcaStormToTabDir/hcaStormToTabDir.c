@@ -610,6 +610,9 @@ a2ssc.arrayName = "project.experimental_design";
 a2ssc.separator = "||";
 stanzaArrayToSeparatedString(tags, tags->forest, &a2ssc);
 
+/* Maybe this renaming should go into tagStorm, but it's a little ugly */
+tagStormRenameTags(tags, "sample.donor.id", "sample.donor.sample_id");
+
 /* Figure out what types of samples we have */
 struct sampleSubtype *subtypeList = NULL, *subtype;
 int i;
@@ -638,12 +641,10 @@ for (subtype = subtypeList; subtype != NULL; subtype = nextSubtype)
     nextSubtype = subtype->next;
     boolean isDonor = sameString("donor", subtype->name);
     char idTag[128];
-    safef(idTag, sizeof(idTag), "sample.%s.sample_id", subtype->name);
+    safef(idTag, sizeof(idTag), "sample.%s.sample_id", subtype->name); 
     if (nextSubtype == NULL)
         {
-	// End of the line, we'll use the existing sample.sample_id tag
-	// and nobody derives from us.
-	if (isDonor)
+	if (isDonor)  // Just use donor id
 	    tagStormDeleteTags(tags, "sample.sample_id");
 	else
 	    tagStormRenameTags(tags, "sample.sample_id", idTag);
@@ -653,7 +654,7 @@ for (subtype = subtypeList; subtype != NULL; subtype = nextSubtype)
 	char derivedTag[128];
 	safef(derivedTag, sizeof(derivedTag), "sample.%s.derived_from", nextSubtype->name);
 	struct copyTagContext copyContext;
-	if (!isDonor)
+	if (!isDonor)  // Donor already has donor.sample_id
 	    {
 	    struct hash *uniqHash = hashNew(0);
 	    struct dyString *scratch = dyStringNew(0);
