@@ -355,7 +355,7 @@ for (i=0; i<table->fieldCount; ++i)
     if (!hashLookup(uniqHash, field))
 	{
 	hashAddInt(uniqHash, field, uniqHash->elCount);
-	slNameAddTail(&fieldList, field);
+	slNameAddHead(&fieldList, field);
 	}
     }
 slReverse(&fieldList);
