@@ -273,6 +273,29 @@ for (i=0; i<table->fieldCount; ++i)
     table->fields[i] += trimSize;
 }
 
+void trimSampleFieldNames(struct fieldedTable *table, char *objectName)
+/* Simplify some of sample field names. */
+{
+int sampleTrimSize = strlen("sample.");
+int fullTrimSize = strlen(objectName) + 1;
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    {
+    char *field = table->fields[i];
+    if (  endsWith(field, ".genus_species") 
+       || endsWith(field, ".derived_from")
+       || endsWith(field, ".supplementary_files")
+       || (endsWith(field, ".name") && !stringIn(".well.name", field))
+       || endsWith(field, ".ncbi_taxon_id")
+       || endsWith(field, ".sample_id")
+       || endsWith(field, ".sample_accessions"))
+	table->fields[i] = field + fullTrimSize;
+    else
+	table->fields[i] = field + sampleTrimSize;
+    }
+}
+
+
 struct copyTagContext
 /* Information for recursive tagStorm traversing function copyToNewTag*/
     {
@@ -571,17 +594,17 @@ for (subtype = subtypeList; subtype != NULL; subtype = subtype->next)
     struct copyTagContext copyContext;
     char *name = subtype->name;
     char newTag[128];
-    safef(newTag, sizeof(newTag), "sample.%s.genus_species.ontology", name);
-    copyContext.oldTag = "sample.genus_species.ontology";
+    safef(newTag, sizeof(newTag), "sample.%s.ncbi_taxon_id", name);
+    copyContext.oldTag = "sample.ncbi_taxon_id";
     copyContext.newTag = newTag;
     tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
-    safef(newTag, sizeof(newTag), "sample.%s.genus_species.text", name);
-    copyContext.oldTag = "sample.genus_species.text";
+    safef(newTag, sizeof(newTag), "sample.%s.genus_species", name);
+    copyContext.oldTag = "sample.genus_species";
     copyContext.newTag = newTag;
     tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
     }
-tagStormDeleteTags(tags, "sample.genus_species.ontology");
-tagStormDeleteTags(tags, "sample.genus_species.text");
+tagStormDeleteTags(tags, "sample.ncbi_taxon_id");
+tagStormDeleteTags(tags, "sample.genus_species");
 
 /* Move several "naked" sample fields to the last sample part in the chain. */
 char *fieldsForLastSample[] = {"supplementary_files", "protocol_ids", "name", "description",
@@ -639,6 +662,20 @@ verbose(1, "%d of %d tabs have data\n", realConvCount, slCount(convList));
 tagStormTraverse(tags, tags->forest, &cc, fillInTables);
 verbose(2, "Survived fillInTables\n");
 
+/* Massage field names in tables a bit */
+for (conv = convList; conv != NULL; conv = conv->next)
+    {
+    struct fieldedTable *table = conv->table;
+    if (table != NULL)
+	{
+	char *objectName = conv->objectName;
+	if (startsWith("sample.", objectName))
+	    trimSampleFieldNames(table, objectName);
+	else
+	    trimFieldNames(table, objectName);
+	}
+    }
+
 /* Do output */
 makeDirsOnPath(outDir);
 for (conv = convList; conv != NULL; conv = conv->next)
@@ -651,19 +688,19 @@ for (conv = convList; conv != NULL; conv = conv->next)
 	verbose(2, "Creating %s with %d columns and %d rows\n", path, 
 	    table->fieldCount, table->rowCount);
 	table->startsSharp = FALSE;
-	trimFieldNames(table, conv->objectName);
-	if (sameString(conv->objectName, "project"))
+	char *objectName = conv->objectName;
+	if (sameString(objectName, "project"))
 	   oneRowTableSideways(table, path);
-	else if (sameString(conv->objectName, "project.publications"))
+	else if (sameString(objectName, "project.publications"))
 	   {
 	   oneRowTableUnarray(table, path);
 	   }
-	else if (sameString(conv->objectName, "project.submitters"))
+	else if (sameString(objectName, "project.submitters"))
 	   {
 	   safef(path, sizeof(path), "%s/%s.tsv", outDir, "contact.submitter");
 	   oneRowTableUnarray(table, path);
 	   }
-	else if (sameString(conv->objectName, "project.contributors"))
+	else if (sameString(objectName, "project.contributors"))
 	   {
 	   safef(path, sizeof(path), "%s/%s.tsv", outDir, "contact.contributors");
 	   oneRowTableUnarray(table, path);
