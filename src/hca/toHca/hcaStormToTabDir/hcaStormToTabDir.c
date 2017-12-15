@@ -655,7 +655,19 @@ for (conv = convList; conv != NULL; conv = conv->next)
 	if (sameString(conv->objectName, "project"))
 	   oneRowTableSideways(table, path);
 	else if (sameString(conv->objectName, "project.publications"))
+	   {
 	   oneRowTableUnarray(table, path);
+	   }
+	else if (sameString(conv->objectName, "project.submitters"))
+	   {
+	   safef(path, sizeof(path), "%s/%s.tsv", outDir, "contact.submitter");
+	   oneRowTableUnarray(table, path);
+	   }
+	else if (sameString(conv->objectName, "project.contributors"))
+	   {
+	   safef(path, sizeof(path), "%s/%s.tsv", outDir, "contact.contributors");
+	   oneRowTableUnarray(table, path);
+	   }
 	else
 	   fieldedTableToTabFile(table, path);
 	}
