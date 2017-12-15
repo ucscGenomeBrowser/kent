@@ -32,10 +32,18 @@
  * which makes a separate fieldedTable for each prefix in out_objs[] and merges identical
  * rows in each table into a single row.
  *
- * Finally the program does a little renaming of some of the fields in the table,  stripping
+ * Then the program does a little renaming of some of the fields in the table,  stripping
  * out the table prefix so that you get something like "description" in the project table rather
  * than table.description.  This is a bit complicated by the sample.donor and the like but not
- * too badly.   Most of the tabs are just named after the objects, but in a few cases,
+ * too badly.   
+ *
+ * The last step is outputting the tables from memory into tab-separated-files.  For most of the
+ * tables the simple fieldedTableToTabFile() library call suffices for this.  In the case of
+ * the project though, rather than a single row spreadsheet that is very wide, EBI chose
+ * to make a two column spreadsheet with labels in the first column and values on the second.
+ * Also for the publications and contacts the array gets unpacked to one row per element.
+ *
+ * Most of the tab-sep-files are just named after the objects, but in a few cases,
  * for the contact related fields,  EBI chose to name the table in part after the object type
  * (contact) rather than where it occurs (project.contributors becomes contact.contributors)
  *
@@ -630,7 +638,7 @@ for (subtype = subtypeList; subtype != NULL; subtype = nextSubtype)
     nextSubtype = subtype->next;
     boolean isDonor = sameString("donor", subtype->name);
     char idTag[128];
-    safef(idTag, sizeof(idTag), "sample.%s.id", subtype->name);
+    safef(idTag, sizeof(idTag), "sample.%s.sample_id", subtype->name);
     if (nextSubtype == NULL)
         {
 	// End of the line, we'll use the existing sample.sample_id tag
@@ -695,8 +703,9 @@ for (i=0; i<ArraySize(fieldsForLastSample); ++i)
     tagStormRenameTags(tags, oldTag, newTag);
     }
 
-/* Do some misc small changes */
+/* Do some misc small changes to donor tab. */
 tagStormRenameTags(tags, "sample.donor.submitted_id", "sample.donor.name");
+tagStormRenameTags(tags, "sample.donor.id", "sample.donor.sample_id");
 
 /* Make initial cut of our conversion tag list */
 struct convert *convList = makeConvertList();
