@@ -222,6 +222,48 @@ if (stanza->children == NULL)  // Only do leaf stanzas
     }
 }
 
+struct slName *namesMatchingPrefix(struct slPair *pairList, char *prefix)
+/* Return a list of the name fields on pairList that start with prefix */
+{
+struct slName *retList = NULL;
+struct slPair *pair;
+for (pair = pairList; pair != NULL; pair = pair->next)
+    {
+    if (startsWith(prefix, pair->name))
+       slNameAddHead(&retList, pair->name);
+    }
+slReverse(&retList);
+return retList;
+}
+
+void stanzaArrayToSeparatedString(struct tagStorm *tags, struct tagStanza *stanza,
+    char *arrayName, char *separator)
+/* Convert somethigns like
+ *     experimental_array.1 this
+ *     experimental_array.2 that
+ * to
+ *     experimental_array   this<separator>that */
+{
+char prefix[128];
+safef(prefix, sizeof(prefix), "%s.", arrayName);
+struct slName *arrayTags = namesMatchingPrefix(stanza->tagList, prefix);
+if (arrayTags != NULL)
+    {
+    slSort(&arrayTags, slNameCmpStringsWithEmbeddedNumbers);
+    struct dyString *dy = dyStringNew(0);
+    struct slName *el;
+    for (el = arrayTags; el != NULL; el = el->next)
+        {
+	if (dy->stringSize != 0)
+	    dyStringAppend(dy, separator);
+	dyStringAppend(dy, tagFindLocalVal(stanza, el->name));
+	tagStanzaDeleteTag(stanza, el->name);
+	}
+    tagStanzaAppend(tags, stanza, arrayName, dy->string);
+    dyStringFree(&dy);
+    }
+}
+
 void trimFieldNames(struct fieldedTable *table, char *objectName)
 /* Remove objectName from table's field names */
 {
@@ -267,6 +309,88 @@ for (i=0; i<table->fieldCount; ++i)
     }
 dyStringFree(&scratch);
 carefulClose(&f);
+}
+
+void slNameListToStringArray(struct slName *list, char ***retArray, int *retSize)
+/* Given a slName list return an array of the names in it*/
+{
+char **array = NULL;
+int size = slCount(list);
+if (size > 0)
+    {
+    AllocArray(array, size);
+    int i;
+    struct slName *el;
+    for (i=0, el=list; i<size; ++i, el=el->next)
+        array[i] = el->name;
+    }
+*retArray = array;
+*retSize = size;
+}
+
+
+void oneRowTableUnarray(struct fieldedTable *table, char *path)
+/* Table has one row that look like:
+ *    1.this 1.that 2.this 2.that
+ * Convert this instead to multiple row table (in this case 2)
+ *    this   that  */
+{
+/* Make sure we have exactly one row, and put that row in inRow variable. */
+if (table->rowCount != 1)
+    errAbort("Expecting exactly one row in %s table, got %d\n", table->name, table->rowCount);
+char **inRow = table->rowList->row;
+
+/* First make list of all fields after number is stripped off */
+int i;
+struct slName *fieldList = NULL;
+struct hash *uniqHash = hashNew(0);
+for (i=0; i<table->fieldCount; ++i)
+    {
+    char *numField = table->fields[i];
+    char *field = strchr(numField, '.');
+    if (!isdigit(numField[0]) || field == NULL)
+        errAbort("Expecting something of format number.field,  got %s while making %s", 
+	    numField, path);
+    field += 1;  // Skip over dot.
+    if (!hashLookup(uniqHash, field))
+	{
+	hashAddInt(uniqHash, field, uniqHash->elCount);
+	slNameAddTail(&fieldList, field);
+	}
+    }
+slReverse(&fieldList);
+
+/* Create new fielded table */
+char **fieldArray;
+int fieldCount;
+slNameListToStringArray(fieldList, &fieldArray, &fieldCount);
+struct fieldedTable *ft = fieldedTableNew(table->name, fieldArray, fieldCount);
+for (i=1; ; ++i)
+    {
+    char numPrefix[16];
+    safef(numPrefix, sizeof(numPrefix), "%d.", i);
+    int numPrefixSize = strlen(numPrefix);
+    char *outRow[fieldCount];
+    zeroBytes(outRow, sizeof(outRow));
+    int j;
+    int itemsInRow = 0;
+    for (j=0; j<table->fieldCount; ++j)
+        {
+	char *numField = table->fields[j];
+	if (startsWith(numPrefix, numField))
+	    {
+	    ++itemsInRow;
+	    char *outField = numField + numPrefixSize;
+	    int outRowIx = hashIntVal(uniqHash, outField);
+	    outRow[outRowIx] = inRow[j];
+	    }
+	}
+    if (itemsInRow == 0)
+        break;
+    fieldedTableAdd(ft, outRow, fieldCount, i);
+    }
+fieldedTableToTabFile(ft, path);
+fieldedTableFree(&ft);
 }
 
 boolean anyStartWithPrefix(char *prefix, struct slName *list)
@@ -472,6 +596,10 @@ for (i=0; i<ArraySize(fieldsForLastSample); ++i)
     tagStormRenameTags(tags, oldTag, newTag);
     }
 
+/* Do some misc small changes */
+tagStormRenameTags(tags, "sample.donor.submitted_id", "sample.donor.name");
+stanzaArrayToSeparatedString(tags, tags->forest, "project.experimental_design", "||");
+
 /* Make initial cut of our conversion tag list */
 struct convert *convList = makeConvertList();
 
@@ -526,6 +654,8 @@ for (conv = convList; conv != NULL; conv = conv->next)
 	trimFieldNames(table, conv->objectName);
 	if (sameString(conv->objectName, "project"))
 	   oneRowTableSideways(table, path);
+	else if (sameString(conv->objectName, "project.publications"))
+	   oneRowTableUnarray(table, path);
 	else
 	   fieldedTableToTabFile(table, path);
 	}
