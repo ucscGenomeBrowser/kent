@@ -1236,7 +1236,6 @@ There are no extra options that can appear on the type bigBarChart line.
     <code>&lt;column&gt;FilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
     <code>&lt;column&gt;FilterByRange &lt;off/on&gt;</code>
     </div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>A number of
     numerical filters are available for bed tracks.  These are
     conveniently named by the field that is filtered on.  The most
