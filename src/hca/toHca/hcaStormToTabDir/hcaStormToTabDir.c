@@ -93,7 +93,8 @@ struct convert
     };
     
 char *outObjs[] = 
-/* One of these for each table in output. */
+/* One of these for each table in output. It's necessary that the more specific
+ * ones be ahead of the less specific.*/
 {
     "project.publications",
     "project.submitters",   // shortcut
@@ -109,11 +110,12 @@ char *outObjs[] =
     "sample.immortalized_cell_line",
     "sample.primary_cell_line",
     "sample",
-    "assay.single_cell",		    // shortcut
     "assay.single_cell.cell_barcode",	// shortcut
+    "assay.single_cell",		    // shortcut
     "assay.rna",    // shortcut
-    "assay.seq",    // shortcut
     "assay.seq.umi_barcode", // shortcut
+    "assay.seq",    // shortcut
+    "assay",
     "file",
     "protocols",
 };
@@ -553,6 +555,33 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     }
 }
 
+struct slName *subsetMatchingPrefix(struct slName *fullList, char *prefix)
+/* Return a new list that contains all elements of fullList that start with prefix */
+{
+struct slName *subList = NULL, *el;
+for (el = fullList; el != NULL; el = el->next)
+    {
+    if (startsWith(prefix, el->name))
+       slNameAddHead(&subList, el->name);
+    }
+slReverse(&subList);
+return subList;
+}
+
+void addIdFieldForSubtype(struct tagStorm *tags, char *fieldPrefix, char *idValPrefix, char *idTag)
+/* Add idTag to leaf nodes where have uniq values of fields starting with fieldPrefix. */
+{
+struct hash *uniqHash = hashNew(0);
+struct dyString *scratch = dyStringNew(0);
+struct slName *allFields = tagStormFieldList(tags);
+struct slName *ourFields = subsetMatchingPrefix(allFields, fieldPrefix);
+addIdForUniqueVals(tags, tags->forest, ourFields, idTag, idValPrefix, uniqHash, scratch);
+slNameFreeList(&allFields);
+slNameFreeList(&ourFields);
+dyStringFree(&scratch);
+hashFree(&uniqHash);
+}
+
 static void rDeleteTags(struct tagStanza *stanzaList, char *tagName)
 /* Recursively delete tag from all stanzas */
 {
@@ -602,24 +631,29 @@ for (i=1; i<=maxIndex; ++i)
     char oldTag[128], newTag[128];
     safef(oldTag, sizeof(oldTag), "%s%d%s", oldPrefix, i,oldSuffix);
     safef(newTag, sizeof(newTag), "%s%d%s", newPrefix, i, newSuffix);
-    uglyf("oldTag %s, newTag %s\n", oldTag, newTag);
     tagStormRenameTags(tags, oldTag, newTag);
     }
 }
 
 
-struct slName *subsetMatchingPrefix(struct slName *fullList, char *prefix)
-/* Return a new list that contains all elements of fullList that start with prefix */
+boolean tagStormInAllFlattenedLeaves(struct tagStorm *tags, struct tagStanza *stanzaList, char *tag)
+/* Return TRUE if tag is found in all leaf nodes either directly or via inheritance */
 {
-struct slName *subList = NULL, *el;
-for (el = fullList; el != NULL; el = el->next)
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     {
-    if (startsWith(prefix, el->name))
-       slNameAddHead(&subList, el->name);
+    if (tagFindLocalVal(stanza, tag) == NULL)
+        {
+	if (stanza->children)
+	    {
+	    if (!tagStormInAllFlattenedLeaves(tags, stanza->children, tag))
+		return FALSE;
+	    }
+	else
+	    return FALSE;
+	}
     }
-uglyf("Found %d of %d that start with %s\n", slCount(subList), slCount(fullList), prefix);
-slReverse(&subList);
-return subList;
+return TRUE;
 }
 
 void hcaStormToTabDir(char *inTags, char *outDir)
@@ -643,7 +677,7 @@ a2ssc.arrayName = "project.experimental_design";
 a2ssc.separator = "||";
 stanzaArrayToSeparatedString(tags, tags->forest, &a2ssc);
 
-/* Maybe this renaming should go into tagStorm, but it's a little ugly */
+/* Maybe this renaming should go into tagStorm, but it's a little not very pretty  */
 tagStormRenameTags(tags, "sample.donor.id", "sample.donor.sample_id");
 
 /* Figure out what types of samples we have */
@@ -652,7 +686,6 @@ struct entitySubtype *sampleSubtypeList =
 	    origFieldList, "sample.");
 struct entitySubtype *lastSubtype = slLastEl(sampleSubtypeList);
 verbose(1, "First sample subtype is %s, last is %s\n", sampleSubtypeList->name, lastSubtype->name);
-
 
 /* Add in any missing IDs or derived from tags */
 struct entitySubtype *subtype, *nextSubtype;
@@ -676,16 +709,7 @@ for (subtype = sampleSubtypeList; subtype != NULL; subtype = nextSubtype)
 	struct copyTagContext copyContext;
 	if (!isDonor)  // Donor already has donor.sample_id
 	    {
-	    struct hash *uniqHash = hashNew(0);
-	    struct dyString *scratch = dyStringNew(0);
-	    struct slName *allFields = tagStormFieldList(tags);
-	    struct slName *ourFields = subsetMatchingPrefix(allFields, subtype->fieldPrefix);
-	    addIdForUniqueVals(tags, tags->forest, ourFields, idTag, subtype->name, 
-		uniqHash, scratch);
-	    slNameFreeList(&allFields);
-	    slNameFreeList(&ourFields);
-	    dyStringFree(&scratch);
-	    hashFree(&uniqHash);
+	    addIdFieldForSubtype(tags, subtype->fieldPrefix, subtype->name, idTag);
 	    }
 	copyContext.oldTag = idTag;
 	copyContext.newTag = derivedTag;
@@ -728,6 +752,44 @@ for (i=0; i<ArraySize(fieldsForLastSample); ++i)
 /* Do some misc small changes to donor tab. */
 tagStormRenameTags(tags, "sample.donor.submitted_id", "sample.donor.name");
 tagStormRenameTags(tags, "sample.donor.id", "sample.donor.sample_id");
+
+/* Figure out what types of assays we have */
+struct entitySubtype *assaySubtypeList = 
+	createEntitySubtypes(assaySubtypePrefixes, ArraySize(assaySubtypePrefixes), 
+	    origFieldList, "assay.");
+uglyf("Got %d different assaySubtypes\n", slCount(assaySubtypeList));
+
+/* Make sure that assay.assay_id field is there, copying it from 
+ * assay.seq.insdc_run if that is available, otherwise generate it from
+ * all assay fields. */
+if (!tagStormInAllFlattenedLeaves(tags, tags->forest, "assay.assay_id"))
+    {
+    if (tagStormInAllFlattenedLeaves(tags, tags->forest, "assay.seq.insdc_run"))
+	{
+	uglyf("looks like got insdc_run everywhere\n");
+	struct copyTagContext copyContext;
+	copyContext.oldTag = "assay.seq.insdc_run";
+	copyContext.newTag = "assay.assay_id";
+	tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
+	}
+    else
+	{
+	uglyf("making up assay.assay_id\n");
+	addIdFieldForSubtype(tags, "assay.", "assay", "assay.assay_id");
+	}
+    }
+
+/* Copy assay.assay_id to all assay subtypes and then delete it. */
+for (subtype = assaySubtypeList; subtype != NULL; subtype = subtype->next)
+    {
+    char idTag[128];
+    safef(idTag, sizeof(idTag), "assay.%s.assay_id", subtype->name); 
+    struct copyTagContext copyContext;
+    copyContext.oldTag = "assay.assay_id";
+    copyContext.newTag = idTag;
+    tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
+    }
+tagStormDeleteTags(tags, "assay.assay_id");
 
 /* Make initial cut of our conversion tag list */
 struct convert *convList = makeConvertList();
