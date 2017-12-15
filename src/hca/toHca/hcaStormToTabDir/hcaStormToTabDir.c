@@ -1,10 +1,53 @@
 /* hcaStormToTabDir - Convert a tag storm file to a directory full of tab separated files that 
- * express pretty much the same thing from the point of view of HCA V4 ingest.. */
+ * express pretty much the same thing from the point of view of HCA V4 ingest. 
+ *
+ * Overall doing this involves a several things.  Most of the simple conversion of
+ * tag names from V3 to V4 format is done before this program runs.  However a little
+ * bit is saved for this program mostly for one of the following reasons:
+ *    1) V4 has multiple sample outputs, not a single one.  Instead of having
+ *       one sample with donor, and other major subobjects, there are multiple
+ *       samples, chained together with a derived_from field.  There is basically
+ *       only one major subobject per sample,  and there is a seperate tab for each.
+ *       This begs the question of what to do with the fields of sample that aren't
+ *       part of a major subobject.  EBI's solution is to duplicate the genus_species and
+ *       ncbi_taxon_id field on each sample.  Other fields such as id and name are
+ *       also now outside of the major subobject.   These fields are kept as sample.donor.id
+ *       and so forth in the tag storm, and then resolved to sample.id's and the like
+ *       here.   Also there are some fields like protocol_ids that are moved to the last
+ *       sample in the chain.
+ *    2) Some fields are specified as arrays in the json schema but are in the spreadsheet
+ *       as single fields with various, inconsistent delimiters.  I don't want to mess up the
+ *       tagStorm representation with these, so I save that conversion for here.
+ *    3) Some of the fields are ontologies in the json schema, with .text and .ontology subfields
+ *       but in the spreadsheet they are simple fields and the .ontology bit is lost.  Again
+ *       not wanting to mess up the tagStorm I save that conversion for here.
+ *
+ * Beyond the tag name conversion, the spreadsheet conversion means that we have to put in
+ * id's in many cases to link an what is an embedded subobject in the tagStorm and JSON-schema
+ * view to the parent tab.  Similarly we have to put in the derived_from links in the sample
+ * subobjects.
+ *
+ * When all the new fields are added the core of the program runs.  This is the call to
+ *      tagStormTraverse(tags, tags->forest, &cc, fillInTables);
+ * which makes a separate fieldedTable for each prefix in out_objs[] and merges identical
+ * rows in each table into a single row.
+ *
+ * Finally the program does a little renaming of some of the fields in the table,  stripping
+ * out the table prefix so that you get something like "description" in the project table rather
+ * than table.description.  This is a bit complicated by the sample.donor and the like but not
+ * too badly.   Most of the tabs are just named after the objects, but in a few cases,
+ * for the contact related fields,  EBI chose to name the table in part after the object type
+ * (contact) rather than where it occurs (project.contributors becomes contact.contributors)
+ *
+ * Well, quite a bit of work for a version that I can't say I like as well as V3.  Hopefully
+ * I'll be able to convince folks to smooth out the worst kinks in V5. 
+ *     -Jim Kent   Dec 15, 2017 */
 
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "localmem.h"
 #include "dystring.h"
 #include "portable.h"
 #include "tagStorm.h"
@@ -20,8 +63,6 @@ errAbort(
   "express pretty much the same thing from the point of view of HCA V4 ingest.\n"
   "usage:\n"
   "   hcaStormToTabDir in.tag outdir\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
@@ -236,16 +277,23 @@ slReverse(&retList);
 return retList;
 }
 
-void stanzaArrayToSeparatedString(struct tagStorm *tags, struct tagStanza *stanza,
-    char *arrayName, char *separator)
+struct arrayToSepStringContext
+/* Context structure for traversal function stanzaArrayToSeparatedString */
+   {
+   char *arrayName;  /* Name of array without .# at end */
+   char *separator;  /* String to use for separator */
+   };
+
+void stanzaArrayToSeparatedString(struct tagStorm *tags, struct tagStanza *stanza, void *context)
 /* Convert somethigns like
  *     experimental_array.1 this
  *     experimental_array.2 that
  * to
  *     experimental_array   this<separator>that */
 {
+struct arrayToSepStringContext *con = context;
 char prefix[128];
-safef(prefix, sizeof(prefix), "%s.", arrayName);
+safef(prefix, sizeof(prefix), "%s.", con->arrayName);
 struct slName *arrayTags = namesMatchingPrefix(stanza->tagList, prefix);
 if (arrayTags != NULL)
     {
@@ -255,11 +303,11 @@ if (arrayTags != NULL)
     for (el = arrayTags; el != NULL; el = el->next)
         {
 	if (dy->stringSize != 0)
-	    dyStringAppend(dy, separator);
+	    dyStringAppend(dy, con->separator);
 	dyStringAppend(dy, tagFindLocalVal(stanza, el->name));
 	tagStanzaDeleteTag(stanza, el->name);
 	}
-    tagStanzaAppend(tags, stanza, arrayName, dy->string);
+    tagStanzaAppend(tags, stanza, con->arrayName, dy->string);
     dyStringFree(&dy);
     }
 }
@@ -499,8 +547,25 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
 void tagStormRenameTags(struct tagStorm *tagStorm, char *oldName, char *newName)
 /* Rename all tags with oldName to newName */
 {
-rRenameTags(tagStorm->forest, oldName, newName);
+char *newCopy = lmCloneString(tagStorm->lm, newName);
+rRenameTags(tagStorm->forest, oldName, newCopy);
 }
+
+void renameArrayField(struct tagStorm *tags, char *oldPrefix, int maxIndex, char *oldSuffix,
+    char *newPrefix, char *newSuffix)
+/* Rename some array fields */
+{
+int i;
+for (i=1; i<=maxIndex; ++i)
+    {
+    char oldTag[128], newTag[128];
+    safef(oldTag, sizeof(oldTag), "%s%d%s", oldPrefix, i,oldSuffix);
+    safef(newTag, sizeof(newTag), "%s%d%s", newPrefix, i, newSuffix);
+    uglyf("oldTag %s, newTag %s\n", oldTag, newTag);
+    tagStormRenameTags(tags, oldTag, newTag);
+    }
+}
+
 
 struct slName *subsetMatchingPrefix(struct slName *fullList, char *prefix)
 /* Return a new list that contains all elements of fullList that start with prefix */
@@ -525,6 +590,17 @@ struct tagStorm *tags = tagStormFromFile(inTags);
 struct slName *origFieldList = tagStormFieldList(tags);
 verbose(1, "Got %d tags and %d fields in %s\n", tagStormCountTags(tags), 
     slCount(origFieldList), inTags);
+
+/* Rename some tags that are arrays or ontologies or arrays of ontologies 
+ * but represented as simple or character delimited fields in the spreadsheet */
+renameArrayField(tags, "sample.donor.disease.", 3, ".text", "sample.donor.disease.", "");
+struct arrayToSepStringContext a2ssc;
+a2ssc.arrayName = "sample.donor.disease";
+a2ssc.separator = ",";
+tagStormTraverse(tags, tags->forest, &a2ssc, stanzaArrayToSeparatedString);
+a2ssc.arrayName = "project.experimental_design";
+a2ssc.separator = "||";
+stanzaArrayToSeparatedString(tags, tags->forest, &a2ssc);
 
 /* Figure out what types of samples we have */
 struct sampleSubtype *subtypeList = NULL, *subtype;
@@ -621,7 +697,6 @@ for (i=0; i<ArraySize(fieldsForLastSample); ++i)
 
 /* Do some misc small changes */
 tagStormRenameTags(tags, "sample.donor.submitted_id", "sample.donor.name");
-stanzaArrayToSeparatedString(tags, tags->forest, "project.experimental_design", "||");
 
 /* Make initial cut of our conversion tag list */
 struct convert *convList = makeConvertList();
@@ -692,9 +767,9 @@ for (conv = convList; conv != NULL; conv = conv->next)
 	if (sameString(objectName, "project"))
 	   oneRowTableSideways(table, path);
 	else if (sameString(objectName, "project.publications"))
-	   {
 	   oneRowTableUnarray(table, path);
-	   }
+	else if (sameString(objectName, "protocols"))
+	   oneRowTableUnarray(table, path);
 	else if (sameString(objectName, "project.submitters"))
 	   {
 	   safef(path, sizeof(path), "%s/%s.tsv", outDir, "contact.submitter");
