@@ -110,10 +110,10 @@ char *outObjs[] =
     "sample.primary_cell_line",
     "sample",
     "assay.single_cell",		    // shortcut
-    "assay.single_cell.barcode",	// shortcut
+    "assay.single_cell.cell_barcode",	// shortcut
     "assay.rna",    // shortcut
     "assay.seq",    // shortcut
-    "assay.seq.barcode", // shortcut
+    "assay.seq.umi_barcode", // shortcut
     "file",
     "protocols",
 };
@@ -148,13 +148,56 @@ char *sampleSubtypePrefixes[] =
     "sample.cell_suspension.",
     };
 
-struct sampleSubtype
+char *assaySubtypePrefixes[] = 
+    {
+    "assay.single_cell.",
+    "assay.rna.",
+    "assay.seq.",
+    "assay.single_cell.cell_barcode.",
+    "assay.seq.umi_barcode."
+    };
+
+struct entitySubtype
 /* A type of sample, we'll make a separate tab for each of these that exist */
     {
-    struct sampleSubtype *next;
+    struct entitySubtype *next;
     char *name;	    /* Name of subtype,  excludes both sample. and trailing dot */
     char *fieldPrefix;  /* An element in sampleSubtypePrefixes array */
     };
+
+boolean anyStartWithPrefix(char *prefix, struct slName *list)
+/* Return TRUE if anything of the names in list start with prefix */
+{
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+   if (startsWith(prefix, el->name))
+       return TRUE;
+return FALSE;
+}
+
+struct entitySubtype *createEntitySubtypes(char **subtypePrefixes, int subtypeCount, 
+    struct slName *origFieldList, char *entityPrefix)
+/* Create an entity subtype list for sample or assay */
+{
+struct entitySubtype *subtypeList = NULL, *subtype;
+int i;
+int skipSize = strlen(entityPrefix);
+for (i=0; i<subtypeCount;  ++i)
+    {
+    char *prefix = subtypePrefixes[i];
+    if (anyStartWithPrefix(prefix, origFieldList))
+        {
+	AllocVar(subtype);
+	subtype->fieldPrefix = prefix;
+	int prefixSize = strlen(prefix);
+	int nameSize = prefixSize - skipSize - 1;  // 1 for trailing dot
+	subtype->name = cloneStringZ(prefix + skipSize, nameSize);
+	slAddHead(&subtypeList, subtype);
+	}
+    }
+slReverse(&subtypeList);
+return subtypeList;
+}
 
 char *findShortcut(char *fullName)
 /* Look up full name and return shortcut if it exists */
@@ -472,16 +515,6 @@ fieldedTableToTabFile(ft, path);
 fieldedTableFree(&ft);
 }
 
-boolean anyStartWithPrefix(char *prefix, struct slName *list)
-/* Return TRUE if anything of the names in list start with prefix */
-{
-struct slName *el;
-for (el = list; el != NULL; el = el->next)
-   if (startsWith(prefix, el->name))
-       return TRUE;
-return FALSE;
-}
-
 void addIdForUniqueVals(struct tagStorm *tags, struct tagStanza *stanzaList,
     struct slName *fieldList, char *idTag, char *objType, struct hash *uniqueHash,
     struct dyString *scratch)
@@ -614,29 +647,16 @@ stanzaArrayToSeparatedString(tags, tags->forest, &a2ssc);
 tagStormRenameTags(tags, "sample.donor.id", "sample.donor.sample_id");
 
 /* Figure out what types of samples we have */
-struct sampleSubtype *subtypeList = NULL, *subtype;
-int i;
-int skipSampleSize = strlen("sample.");
-for (i=0; i<ArraySize(sampleSubtypePrefixes);  ++i)
-    {
-    char *prefix = sampleSubtypePrefixes[i];
-    if (anyStartWithPrefix(prefix, origFieldList))
-        {
-	AllocVar(subtype);
-	subtype->fieldPrefix = prefix;
-	int prefixSize = strlen(prefix);
-	int nameSize = prefixSize - skipSampleSize - 1;  // 1 for trailing dot
-	subtype->name = cloneStringZ(prefix + skipSampleSize, nameSize);
-	slAddHead(&subtypeList, subtype);
-	}
-    }
-struct sampleSubtype *lastSubtype = subtypeList;
-slReverse(&subtypeList);
-verbose(1, "First sample subtype is %s, last is %s\n", subtypeList->name, lastSubtype->name);
+struct entitySubtype *sampleSubtypeList = 
+	createEntitySubtypes(sampleSubtypePrefixes, ArraySize(sampleSubtypePrefixes), 
+	    origFieldList, "sample.");
+struct entitySubtype *lastSubtype = slLastEl(sampleSubtypeList);
+verbose(1, "First sample subtype is %s, last is %s\n", sampleSubtypeList->name, lastSubtype->name);
+
 
 /* Add in any missing IDs or derived from tags */
-struct sampleSubtype *nextSubtype;
-for (subtype = subtypeList; subtype != NULL; subtype = nextSubtype)
+struct entitySubtype *subtype, *nextSubtype;
+for (subtype = sampleSubtypeList; subtype != NULL; subtype = nextSubtype)
     {
     nextSubtype = subtype->next;
     boolean isDonor = sameString("donor", subtype->name);
@@ -674,7 +694,7 @@ for (subtype = subtypeList; subtype != NULL; subtype = nextSubtype)
     }
 
 /* Add in any species tags to all types of samples and delete original. */
-for (subtype = subtypeList; subtype != NULL; subtype = subtype->next)
+for (subtype = sampleSubtypeList; subtype != NULL; subtype = subtype->next)
     {
     struct copyTagContext copyContext;
     char *name = subtype->name;
@@ -694,6 +714,7 @@ tagStormDeleteTags(tags, "sample.genus_species");
 /* Move several "naked" sample fields to the last sample part in the chain. */
 char *fieldsForLastSample[] = {"supplementary_files", "protocol_ids", "name", "description",
     "sample_accessions.biosd_sample", "well.cell_type.ontology", "well.cell_type.text" };
+int i;
 for (i=0; i<ArraySize(fieldsForLastSample); ++i)
     {
     char *field = fieldsForLastSample[i];
