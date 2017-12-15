@@ -1507,7 +1507,7 @@ if (nbytes == bufsiz)
 return symPath;
 }
 
-static int findSubmitSymlinkExt(char *submitFileName, char *submitDir, char **pPath, char **pLastPath, int *pSymlinkLevels)
+int findSubmitSymlinkExt(char *submitFileName, char *submitDir, char **pPath, char **pLastPath, int *pSymlinkLevels)
 /* Find the last symlink and real file in the chain from submitDir/submitFileName.
  * This is useful for when target of symlink in cdw/ gets renamed 
  * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). 
