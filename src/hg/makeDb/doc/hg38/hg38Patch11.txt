@@ -376,11 +376,10 @@ VALUES ("GRCh38.p11", "haplotypes", 134);'
     cd /hive/data/genomes/hg38Patch11/bed/simpleRepeat
     time (doSimpleRepeat.pl -bigClusterHub=ku -workhorse=hgwdev \
         -trf409=6 -smallClusterHub=ku -buildDir=`pwd` hg38Patch11) > do.log 2>&1
-XXX - running - Wed Aug  9 08:44:49 PDT 2017
-    # real    10m48.418s
+    # real    5m36.925s
 
     cat fb.simpleRepeat
-    # 1654412 bases of 27757875 (5.960%) in intersection
+    # 2049146 bases of 43164255 (4.747%) in intersection
 
     # the simpleRepeat procedure fails in the cleanup step since there
     # is no TrfPart directory
@@ -389,34 +388,34 @@ XXX - running - Wed Aug  9 08:44:49 PDT 2017
     cd /hive/data/genomes/hg38Patch11/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev hg38Patch11) > do.log 2>&1 &
-XXX - running - Wed Aug  9 08:44:49 PDT 2017
-    # real    2m0.987s
+    # real    2m7.148s
 
     cat faSize.hg38Patch11.cleanWMSdust.txt
 
-# 29155919 bases (1398272 N's 27757647 real 19795880 upper 7961767 lower)
-#	in 96 sequences in 1 files
-# Total size: mean 302607.5 sd 545150.2 min 14347 (chr10_KN538365v1_fix)
-#	max 4998962 (chr15_KN538264v1_fix) median 196940
-# %27.31 masked total, %28.68 masked real
+# 44562299 bases (1398372 N's 43163927 real 31289187 upper 11874740 lower)
+#	in 123 sequences in 1 files
+# Total size: mean 362295.1 sd 750382.1 min 14347 (chr10_KN538365v1_fix)
+#	max 6367528 (chr8_KZ208915v1_fix) median 186494
+# %26.65 masked total, %27.51 masked real
 
     cat fb.hg38Patch11.rmsk.windowmaskerSdust.txt
-# 6188600 bases of 29155919 (21.226%) in intersection
+# 9423450 bases of 44562299 (21.147%) in intersection
 
     cd /hive/data/genomes/hg38Patch11
     twoBitMask hg38Patch11.rmsk.2bit \
         -add bed/simpleRepeat/trfMask.bed hg38Patch11.2bit
     twoBitToFa hg38Patch11.2bit stdout | faSize stdin
 
-# 29155919 bases (1398272 N's 27757647 real 13230319 upper 14527328 lower)
-#	in 96 sequences in 1 files
-# Total size: mean 302607.5 sd 545150.2 min 14347 (chr10_KN538365v1_fix)
-#	max 4998962 (chr15_KN538264v1_fix) median 196940
-# %49.83 masked total, %52.34 masked real
+# 44562299 bases (1398372 N's 43163927 real 20794645 upper 22369282 lower)
+#	in 123 sequences in 1 files
+# Total size: mean 362295.1 sd 750382.1 min 14347 (chr10_KN538365v1_fix)
+#	max 6367528 (chr8_KZ208915v1_fix) median 186494
+# %50.20 masked total, %51.82 masked real
 
     # same size as above in original source:
 
-# 29155919 bases (1398272 N's 27757647 real 17190793 upper 10566854 lower)
+# 44562299 bases (1398372 N's 43163927 real 27133515 upper 16030412 lower)
+#	in 123 sequences in 1 files
 
     ln -s `pwd`/hg38Patch11.2bit /gbdb/hg38Patch11
 
@@ -428,11 +427,10 @@ XXX - running - Wed Aug  9 08:44:49 PDT 2017
     time (doIdKeys.pl \
       -twoBit=/hive/data/genomes/hg38Patch11/hg38Patch11.unmasked.2bit \
         -buildDir=`pwd`  hg38Patch11) > do.log 2>&1
-XXX - running - Wed Aug  9 08:45:43 PDT 2017
-    # real    0m18.229s
+    # real    0m18.300s
 
     cat hg38Patch11.keySignature.txt
-    #   7391829db7413d44356009cbaf68f5af
+    #   74497a30967b27ea68a7fad40cc01de5
 
 #########################################################################
 # ncbiRefSeq Genes (TBD - 2016-05-19 - Hiram)
