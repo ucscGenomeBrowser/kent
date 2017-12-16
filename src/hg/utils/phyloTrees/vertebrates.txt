@@ -34,6 +34,9 @@ monDom	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Metath
 # Platypus Ornithorhynchus anatinus
 ornAna	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Prototheria; Monotremata; Ornithorhynchidae; Ornithorhynchus
 
+# Tibetan ground-tit - Pseudopodoces humilis
+pseHum	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Archelosauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Passeriformes; Paridae; Pseudopodoces
+
 # Rock pigeon - Columba livia
 colLiv	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Columbiformes; Columbidae; Columba
 
@@ -192,10 +195,6 @@ takFla	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Teleostei; Osteog
 
 # tiger puffer Fugu Takifugu rubripes
 fr	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Takifugu
-
-# Spotted Gar - Lepisosteus oculatus
-lepOcu	Euteleostomi; Actinopterygii; Actinopteri; Neopterygii; Semionotiformes; Lepisosteidae; Lepisosteus
-
 
 # spotted green pufferfish Tetraodon nigroviridis
 tetNig	Euteleostei; Neognathi; Neoteleostei; Eurypterygii; Ctenosquamata; Acanthomorpha; Euacanthomorpha; Holacanthopterygii; Acanthopterygii; Euacanthopterygii; Percomorpha; Tetraodontiformes; Tetraodontoidei; Tetradontoidea; Tetraodontidae; Tetraodon

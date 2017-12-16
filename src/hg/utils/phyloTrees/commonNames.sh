@@ -193,6 +193,7 @@ nanPar1 -> Tibetan_frog ;
 nasLar1 -> Proboscis_monkey ;
 necAme1 -> N__americanus;
 neoBri1 -> Princess_of_Burundi ;
+neoSch1 -> Hawaiian_monk_seal ;
 nesNot1 -> Kea ;
 nipNip1 -> Crested_ibis;
 nomLeu1 -> Gibbon ;
@@ -201,6 +202,7 @@ notCor1 -> Black_rockcod ;
 ochPri2 -> Pika ;
 ochPri3 -> Pika ;
 octDeg1 -> Brush_tailed_rat ;
+odoTex1 -> White_tailed_deer ;
 odoRosDiv1 -> Pacific_walrus ;
 oncVol1 -> O__volvulus;
 opiHoa1 -> Hoatzin ;
@@ -217,6 +219,7 @@ otoGar1 -> Bushbaby ;
 otoGar3 -> Bushbaby ;
 oviAri1 -> Sheep ;
 oviAri3 -> Sheep ;
+oviMus1 -> Muflon ;
 panHod1 -> Tibetan_antelope ;
 panPan1 -> Bonobo ;
 panPar1 -> Leopard ;
@@ -233,6 +236,7 @@ perManBai1 -> Prairie_deer_mouse ;
 petMar1 -> Lamprey ;
 petMar2 -> Lamprey ;
 phaCar1 -> Great_cormorant ;
+phaCin1 -> Koala ;
 phaLep1 -> White_tailed_tropicbird ;
 phoRub1 -> American_flamingo ;
 phyCat1 -> Sperm_whale ;
@@ -312,4 +316,4 @@ xenTro7 -> Frog_X_tropicalis ;
 xenTro9 -> Frog_X_tropicalis ;
 xipMac1 -> Southern_platyfish ;
 zonAlb1 -> White_throated_sparrow ;" \
-	${F} | sed -e "s/long_finger/long-finger/; s/rel_s/rel's/; s/Ma_s/Ma's/; s/White_faced/White-faced/; s/Pig_tailed/Pig-tailed/; s/X_trop/X._trop/; s/Burton_s/Burton's/; s/Brand_s/Brand's/; s/David_s/David's/; s/Parnell_s/Parnell's/; s/queen_s/queen's/; s/will_s/will's/; s/Anna_s/Anna's/; s/_nosed/-nosed/; s/00*)/)/g; s/00*,/,/g; s/Schlegel_s/Schlegel's/;"
+	${F} | sed -e "s/long_finger/long-finger/; s/rel_s/rel's/; s/Ma_s/Ma's/; s/White_faced/White-faced/; s/White_tailed_deer/White-tailed_deer/; s/Pig_tailed/Pig-tailed/; s/X_trop/X._trop/; s/Burton_s/Burton's/; s/Brand_s/Brand's/; s/David_s/David's/; s/Parnell_s/Parnell's/; s/queen_s/queen's/; s/will_s/will's/; s/Anna_s/Anna's/; s/_nosed/-nosed/; s/00*)/)/g; s/00*,/,/g; s/Schlegel_s/Schlegel's/;"
