@@ -6205,4 +6205,68 @@ done
     ln -s `pwd`/upstream*.gz README.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/cavPor3/multiz5way
 
+##############################################################################
+# LASTZ Guinea pig/cavPor3 - Chinese tree shrew/tupChi1
+#      (DONE - 2017-11-17 - Hiram)
+    mkdir /hive/data/genomes/cavPor3/bed/lastzTupChi1.2017-11-17
+    cd /hive/data/genomes/cavPor3/bed/lastzTupChi1.2017-11-17
+
+    printf '# Guinea pig vs. Chinese tree shrew
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Guinea pig cavPor3
+SEQ1_DIR=/hive/data/genomes/cavPor3/cavPor3.wmTrf.2bit
+SEQ1_LEN=/hive/data/genomes/cavPor3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=30
+
+# QUERY: Chinese tree shrew
+SEQ2_DIR=/hive/data/genomes/tupChi1/tupChi1.2bit
+SEQ2_LEN=/hive/data/genomes/tupChi1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/cavPor3/bed/lastzTupChi1.2017-11-17
+TMPDIR=/dev/shm
+' > DEF
+    # << happy emacs
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -stop=partition -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    # real    201m20.581s
+
+    cat fb.cavPor3.chainTupChi1Link.txt
+    # 1105585848 bases of 2663369733 (41.511%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` \
+	cavPor3 tupChi1) > rbest.log 2>&1 &
+    # real    357m30.385s
+    cat fb.cavPor3.chainRBestTupChi1Link.txt
+    # 965471669 bases of 2663369733 (36.250%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/tupChi1/bed/blastz.cavPor3.swap
+    cd /hive/data/genomes/tupChi1/bed/blastz.cavPor3.swap
+
+    time ($HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/cavPor3/bed/lastzTupChi1.2017-11-17/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    120m19.543s
+
+    cat fb.tupChi1.chainCavPor3Link.txt
+    # 1115700960 bases of 2706389135 (41.225%) in intersection
+
+    cat fb.tupChi1.chainSynCavPor3Link.txt
+    # 936793671 bases of 2706389135 (34.614%) in intersection
+
+    time (~/kent/src/hg/utils/automation/doRecipBest.pl \
+	-buildDir=`pwd` tupChi1 cavPor3) > rbest.log 2>&1
+    # real    262m6.256s
+
 #############################################################################
