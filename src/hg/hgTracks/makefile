@@ -2,7 +2,7 @@ kentSrc = ../..
 include ../../inc/common.mk
 
 HG_INC += -I../../optimalLeaf
-L += ${HALLIBS} ${MYSQLLIBS} -lm
+L += ${HALLIBS} ${MYSQLLIBS}
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/optimalLeaf.a
 
