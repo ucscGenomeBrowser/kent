@@ -192,7 +192,7 @@ taxId 87288
     time (makeGenomeDb.pl -workhorse=hgwdev \
        -dbHost=hgwdev -fileServer=hgwdev -continue=dbDb \
            -stop=dbDb eulFla1.config.ra ) > dbDb.log 2>&1
-    
+
     # and now finishing:
     time (makeGenomeDb.pl -workhorse=hgwdev \
        -dbHost=hgwdev -fileServer=hgwdev -continue=trackDb \
@@ -588,6 +588,10 @@ searchPriority 8
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` eulFla1 hg38) \
 	> rbest.log 2>&1
     # real    427m26.453s
+
+    # working up a load procedure for rbest
+    time ($HOME/kent/src/hg/utils/automation/doRecipBest.pl -load -continue=load -workhorse=hgwdev -buildDir=`pwd` eulFla1 hg38) \
+	> loadRBest.log 2>&1
 
 #########################################################################
 # lastz/chain/net swap from mm10 (DONE - 2017-10-04 - Hiram)
