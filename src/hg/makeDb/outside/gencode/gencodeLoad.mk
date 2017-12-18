@@ -206,7 +206,7 @@ loadedDir = loaded
 # directory for output and flags for sanity checks
 checkDir = check
 
-all: fetch mkTables loadTables checkSanity cmpRelease
+all: fetch mkTables loadTables checkSanity cmpRelease listTables
 
 
 ##
@@ -426,15 +426,26 @@ ${checkDir}/${tableComp}.pseudo.checked: ${loadedDir}/${tableComp}.genePredExt.l
 	@$(checkForIncorrect)
 	touch $@
 
+# create table list to past into redmine
+listTables: tables.lst
+
+tables.lst: loadTables
+	hgsql -Ne 'show tables like "wgEncodeGencode%V${ver}"' ${db} >$@.tmp
+	mv -f $@.tmp $@
+
+
 ##
 # compare number of tracks with previous
 ##
-cmpRelease: loadTables
-	@echo 'table	V${prevVer}	V${ver}'  >gencode-cmp.tsv
+cmpRelease: gencode-cmp.tsv
+
+gencode-cmp.tsv: loadTables
+	@echo 'table	V${prevVer}	V${ver}'  >$@.tmp
 	@for tab in ${allTables} ; do \
 	    prevTab=$$(echo "$$tab" | sed 's/V${ver}/V${prevVer}/g') ; \
 	    echo "$${tab}	"$$(hgsql -Ne "select count(*) from $${prevTab}" ${db})"	"$$(hgsql -Ne "select count(*) from $${tab}" ${db}) ; \
-	done >>gencode-cmp.tsv
+	done >>o$@.tmp
+	mv -f $@.tmp $@
 
 joinerCheck: loadTables
 	@mkdir -p check

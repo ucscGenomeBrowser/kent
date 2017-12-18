@@ -16055,6 +16055,6 @@ TMPDIR=/dev/shm
     pushd /hive/data/genomes/mm10/bed/gencodeVM16
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck db=mm10
 
-    # commit all
-
+    # commit all and make push request, the file tables.lst will have the
+    # list of tables for the push request.
 ##############################################################################
