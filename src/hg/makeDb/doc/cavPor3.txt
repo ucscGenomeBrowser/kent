@@ -6989,6 +6989,8 @@ endif
 #       tupBel1  0.46482         0.40998         0.05484        13.37633
 #       mm10     0.50607         0.49120         0.01487         3.02726
 
+XXX - ready to continue - Sun Dec 17 21:00:07 PST 2017
+
 #########################################################################
 # phastCons 6-way (TBD - 2016-06-06 - Hiram)
     # split 6way mafs into 10M chunks and generate sufficient statistics
@@ -7555,19 +7557,21 @@ plot "histogram.data" using 2:6 title " RelFreq" with impulses, \
     mkdir multiz6way phastCons6way phyloP6way
     cd multiz6way
     time cp -p ../../anno/cavPor3.6way.maf .
-    #   real    0m21.607s
+    #   real    0m21.617s
 
-    # -rw-rw-r-- 1 13063660432 May  4 10:33 cavPor3.6way.maf
+    # -rw-rw-r-- 1 13600527773 Dec 16 23:23 cavPor3.6way.maf
 
     du -hsc *
     #  13G     cavPor3.6way.maf
 
     time gzip *.maf
-    #   real    40m20.076s
+    #   real    37m41.433s
 
-    # -rw-rw-r-- 1 3142766006 May  4 10:33 cavPor3.6way.maf.gz
-    du -hsc *.maf.gz
+    # -rw-rw-r-- 1 3122744783 Dec 16 23:23 cavPor3.6way.maf.gz
+
+    du -hsc *.maf.gz ../../anno/*.maf
     #  3.0G    cavPor3.6way.maf.gz
+    #  13G     ../../anno/cavPor3.6way.maf
 
     grep TREE ../../4d/all.mod | awk '{print $NF}' \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
@@ -7639,7 +7643,7 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-    #   about 20 minutes
+    #   real    12m47.636s
 
     md6sum *.maf.gz *.nh upstream*.gz README.txt >> md6sum.txt
 
