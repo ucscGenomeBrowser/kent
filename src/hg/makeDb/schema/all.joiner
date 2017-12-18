@@ -704,7 +704,7 @@ identifier knownGeneRetro dependency
 identifier ucscRetroInfo[1,2,4,5,6,9] dependency
 "Link together Ucsc Retrogenes and ucsc retroGene alignments"
     $ucscRetroDb.ucscRetroInfo[].name unique
-    $ucscRetroDb.ucscRetroAli[].qName 
+    $ucscRetroDb.ucscRetroAli[].qName
     $ucscRetroDb.ucscRetroOrtho[].name
     $ucscRetroDb.ucscRetroExpressed[].name
 
@@ -720,42 +720,42 @@ identifier ucscRetroExtFileId[1,2,4,5,6,9]
 
 identifier ucscRetroSeq4
 "Sequences for GenBank sequences used as retrogene parents for version 4"
-    hg19.ucscRetroSeq4.acc unique 
+    hg19.ucscRetroSeq4.acc unique
     hg19.ucscRetroCds4.id
     hg19.ucscRetroAli4.qName chopAfter=-
     hg19.ucscRetroInfo4.name chopAfter=-
 
 identifier ucscRetroSeq5
 "Sequences for GenBank sequences used as retrogene parents for version 5"
-    hg19.ucscRetroSeq5.acc unique 
+    hg19.ucscRetroSeq5.acc unique
     hg19.ucscRetroCds5.id
     hg19.ucscRetroAli5.qName chopAfter=-
     hg19.ucscRetroInfo5.name chopAfter=-
-    
+
 identifier ucscRetroSeq9
 "Sequences for GenBank sequences used as retrogene parents for version 9"
-    hg38.ucscRetroSeq9.acc unique 
+    hg38.ucscRetroSeq9.acc unique
     hg38.ucscRetroCds9.id
     hg38.ucscRetroAli9.qName chopAfter=-
     hg38.ucscRetroInfo9.name chopAfter=-
 
 identifier ucscRetroSeq1
 "Sequences for GenBank sequences used as retrogene parents for version 1"
-    mm9.ucscRetroSeq1.acc unique 
+    mm9.ucscRetroSeq1.acc unique
     mm9.ucscRetroCds1.id
     mm9.ucscRetroAli1.qName chopAfter=-
     mm9.ucscRetroInfo1.name chopAfter=-
 
 identifier ucscRetroSeq2
 "Sequences for GenBank sequences used as retrogene parents for version 2"
-    mm10.ucscRetroSeq2.acc unique 
+    mm10.ucscRetroSeq2.acc unique
     mm10.ucscRetroCds2.id
     mm10.ucscRetroAli2.qName chopAfter=-
     mm10.ucscRetroInfo2.name chopAfter=-
 
 identifier ucscRetroSeq6
 "Sequences for GenBank sequences used as retrogene parents for version 6"
-    mm10.ucscRetroSeq6.acc unique 
+    mm10.ucscRetroSeq6.acc unique
     mm10.ucscRetroCds6.id
     mm10.ucscRetroAli6.qName chopAfter=-
     mm10.ucscRetroInfo6.name chopAfter=-
@@ -960,7 +960,7 @@ identifier wgEncodeGencodeUniProtV10
 identifier wgEncodeGencodeAnnotationRemarkV10
 "Link together Gencode Annotation Remark table with Attributes table"
     hg19.wgEncodeGencodeAnnotationRemarkV10.transcriptId dupeOk
-    hg19.wgEncodeGencodeAttrsV10.transcriptId minCheck=0.10 
+    hg19.wgEncodeGencodeAttrsV10.transcriptId minCheck=0.10
 
 # end Gencode V10
 
@@ -1040,7 +1040,7 @@ identifier wgEncodeGencodeUniProtV11
 identifier wgEncodeGencodeAnnotationRemarkV11
 "Link together Gencode Annotation Remark table with Attributes table"
     hg19.wgEncodeGencodeAnnotationRemarkV11.transcriptId dupeOk
-    hg19.wgEncodeGencodeAttrsV11.transcriptId minCheck=0.10 
+    hg19.wgEncodeGencodeAttrsV11.transcriptId minCheck=0.10
 
 # end Gencode V11
 
@@ -1120,7 +1120,7 @@ identifier wgEncodeGencodeUniProtV12
 identifier wgEncodeGencodeAnnotationRemarkV12
 "Link together Gencode Annotation Remark table with Attributes table"
     hg19.wgEncodeGencodeAnnotationRemarkV12.transcriptId dupeOk
-    hg19.wgEncodeGencodeAttrsV12.transcriptId minCheck=0.10 
+    hg19.wgEncodeGencodeAttrsV12.transcriptId minCheck=0.10
 
 # end Gencode V12
 
@@ -1200,7 +1200,7 @@ identifier wgEncodeGencodeUniProtV14
 identifier wgEncodeGencodeAnnotationRemarkV14
 "Link together Gencode Annotation Remark table with Attributes table"
     hg19.wgEncodeGencodeAnnotationRemarkV14.transcriptId dupeOk
-    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.10 
+    hg19.wgEncodeGencodeAttrsV14.transcriptId minCheck=0.10
 
 # end Gencode V14
 
@@ -1280,7 +1280,7 @@ identifier wgEncodeGencodeUniProtV16
 identifier wgEncodeGencodeAnnotationRemarkV16
 "Link together Gencode Annotation Remark table with Attributes table"
     hg19.wgEncodeGencodeAnnotationRemarkV16.transcriptId dupeOk
-    hg19.wgEncodeGencodeAttrsV16.transcriptId minCheck=0.10 
+    hg19.wgEncodeGencodeAttrsV16.transcriptId minCheck=0.10
 
 # end Gencode V16
 
@@ -1360,7 +1360,7 @@ identifier wgEncodeGencodeUniProtV17
 identifier wgEncodeGencodeAnnotationRemarkV17
 "Link together Gencode Annotation Remark table with Attributes table"
     hg19.wgEncodeGencodeAnnotationRemarkV17.transcriptId dupeOk
-    hg19.wgEncodeGencodeAttrsV17.transcriptId minCheck=0.10 
+    hg19.wgEncodeGencodeAttrsV17.transcriptId minCheck=0.10
 
 # end Gencode V17
 
@@ -1446,7 +1446,7 @@ identifier wgEncodeGencodeUniProtV19
 identifier wgEncodeGencodeAnnotationRemarkV19
 "Link together Gencode Annotation Remark table with Attributes table"
     hg19,hg38.wgEncodeGencodeAnnotationRemarkV19.transcriptId dupeOk
-    hg19,hg38.wgEncodeGencodeAttrsV19.transcriptId minCheck=0.10 
+    hg19,hg38.wgEncodeGencodeAttrsV19.transcriptId minCheck=0.10
 
 # end Gencode V19
 
@@ -1526,7 +1526,7 @@ identifier wgEncodeGencodeUniProtV20
 identifier wgEncodeGencodeAnnotationRemarkV20
 "Link together Gencode Annotation Remark table with Attributes table"
     hg38.wgEncodeGencodeAnnotationRemarkV20.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV20.transcriptId minCheck=0.10 
+    hg38.wgEncodeGencodeAttrsV20.transcriptId minCheck=0.10
 
 # end Gencode V20
 
@@ -1606,7 +1606,7 @@ identifier wgEncodeGencodeUniProtV21
 identifier wgEncodeGencodeAnnotationRemarkV21
 "Link together Gencode Annotation Remark table with Attributes table"
     hg38.wgEncodeGencodeAnnotationRemarkV21.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV21.transcriptId minCheck=0.10 
+    hg38.wgEncodeGencodeAttrsV21.transcriptId minCheck=0.10
 
 # end Gencode V21
 
@@ -1686,7 +1686,7 @@ identifier wgEncodeGencodeUniProtV22
 identifier wgEncodeGencodeAnnotationRemarkV22
 "Link together Gencode Annotation Remark table with Attributes table"
     hg38.wgEncodeGencodeAnnotationRemarkV22.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV22.transcriptId minCheck=0.10 
+    hg38.wgEncodeGencodeAttrsV22.transcriptId minCheck=0.10
 
 identifier wgEncodeGencodeEntrezGeneV22
 "Link together Gencode UniProt Support table with Attributes table"
@@ -1777,7 +1777,7 @@ identifier wgEncodeGencodeUniProtV23
 identifier wgEncodeGencodeAnnotationRemarkV23
 "Link together Gencode Annotation Remark table with Attributes table"
     hg38.wgEncodeGencodeAnnotationRemarkV23.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV23.transcriptId minCheck=0.10 
+    hg38.wgEncodeGencodeAttrsV23.transcriptId minCheck=0.10
 
 identifier wgEncodeGencodeEntrezGeneV23
 "Link together Gencode UniProt Support table with Attributes table"
@@ -2495,7 +2495,7 @@ identifier wgEncodeGencodeUniProtVM2
 identifier wgEncodeGencodeAnnotationRemarkVM2
 "Link together Gencode Annotation Remark table with Attributes table"
     mm10.wgEncodeGencodeAnnotationRemarkVM2.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM2.transcriptId minCheck=0.10 
+    mm10.wgEncodeGencodeAttrsVM2.transcriptId minCheck=0.10
 
 # end Gencode VM2
 
@@ -2575,7 +2575,7 @@ identifier wgEncodeGencodeUniProtVM3
 identifier wgEncodeGencodeAnnotationRemarkVM3
 "Link together Gencode Annotation Remark table with Attributes table"
     mm10.wgEncodeGencodeAnnotationRemarkVM3.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM3.transcriptId minCheck=0.10 
+    mm10.wgEncodeGencodeAttrsVM3.transcriptId minCheck=0.10
 
 # end Gencode VM3
 
@@ -2655,7 +2655,7 @@ identifier wgEncodeGencodeUniProtVM4
 identifier wgEncodeGencodeAnnotationRemarkVM4
 "Link together Gencode Annotation Remark table with Attributes table"
     mm10.wgEncodeGencodeAnnotationRemarkVM4.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM4.transcriptId minCheck=0.10 
+    mm10.wgEncodeGencodeAttrsVM4.transcriptId minCheck=0.10
 
 # end Gencode VM4
 
@@ -2735,7 +2735,7 @@ identifier wgEncodeGencodeUniProtVM7
 identifier wgEncodeGencodeAnnotationRemarkVM7
 "Link together Gencode Annotation Remark table with Attributes table"
     mm10.wgEncodeGencodeAnnotationRemarkVM7.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM7.transcriptId minCheck=0.10 
+    mm10.wgEncodeGencodeAttrsVM7.transcriptId minCheck=0.10
 
 identifier wgEncodeGencodeEntrezGeneVM7
 "Link together Gencode UniProt Support table with Attributes table"
@@ -2820,7 +2820,7 @@ identifier wgEncodeGencodeUniProtVM8
 identifier wgEncodeGencodeAnnotationRemarkVM8
 "Link together Gencode Annotation Remark table with Attributes table"
     mm10.wgEncodeGencodeAnnotationRemarkVM8.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM8.transcriptId minCheck=0.10 
+    mm10.wgEncodeGencodeAttrsVM8.transcriptId minCheck=0.10
 
 identifier wgEncodeGencodeEntrezGeneVM8
 "Link together Gencode UniProt Support table with Attributes table"
@@ -2905,7 +2905,7 @@ identifier wgEncodeGencodeUniProtVM9
 identifier wgEncodeGencodeAnnotationRemarkVM9
 "link together Gencode Annotation Remark table with Attributes table"
     mm10.wgEncodeGencodeAnnotationRemarkVM9.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM9.transcriptId minCheck=0.10 
+    mm10.wgEncodeGencodeAttrsVM9.transcriptId minCheck=0.10
 
 identifier wgEncodeGencodeEntrezGeneVM9
 "Link together Gencode UniProt Support table with Attributes table"
@@ -2990,7 +2990,7 @@ identifier wgEncodeGencodeUniProtVM10
 identifier wgEncodeGencodeAnnotationRemarkVM10
 "link together Gencode Annotation Remark table with Attributes table"
     mm10.wgEncodeGencodeAnnotationRemarkVM10.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM10.transcriptId minCheck=0.10 
+    mm10.wgEncodeGencodeAttrsVM10.transcriptId minCheck=0.10
 
 identifier wgEncodeGencodeEntrezGeneVM10
 "Link together Gencode UniProt Support table with Attributes table"
@@ -3075,7 +3075,7 @@ identifier wgEncodeGencodeUniProtVM11
 identifier wgEncodeGencodeAnnotationRemarkVM11
 "link together Gencode Annotation Remark table with Attributes table"
     mm10.wgEncodeGencodeAnnotationRemarkVM11.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM11.transcriptId minCheck=0.10 
+    mm10.wgEncodeGencodeAttrsVM11.transcriptId minCheck=0.10
 
 identifier wgEncodeGencodeEntrezGeneVM11
 "Link together Gencode UniProt Support table with Attributes table"
@@ -3265,6 +3265,97 @@ identifier wgEncodeGencodeEntrezGeneVM14
     mm10.wgEncodeGencodeEntrezGeneVM14.transcriptId minCheck=0.358209
 
 # end Gencode VM14
+
+# begin Gencode VM16
+
+# gencode genePred tables with no associations
+# wgEncodeGencodePolyaVM16
+# wgEncodeGencode2wayConsPseudoVM16
+
+# gencode genePred tables with joining through wgEncodeGencodeAttrsVM16
+identifier wgEncodeGencodeBasicAttrsVM16
+"Link together Gencode Basic Table with Attributes table"
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId
+    mm10.wgEncodeGencodeBasicVM16.name
+
+identifier wgEncodeGencodeCompAttrsVM16
+"Link together Gencode Comprehensive Table with Attributes table"
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId
+    mm10.wgEncodeGencodeCompVM16.name
+
+identifier wgEncodeGencodePseudoGeneAttrsVM16
+"Link together Gencode PseudoGene Table with Attributes table"
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId
+    mm10.wgEncodeGencodePseudoGeneVM16.name
+
+# gencode association tables (joined through wgEncodeGencodeAttrsVM16)
+identifier wgEncodeGencodeGeneSourceVM16
+"Link together Gencode Gene Source table with Attributes table"
+    mm10.wgEncodeGencodeGeneSourceVM16.geneId
+    mm10.wgEncodeGencodeAttrsVM16.geneId
+
+identifier wgEncodeGencodePdbVM16
+"Link together Gencode Pdb table with Attributes table"
+    mm10.wgEncodeGencodePdbVM16.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId minCheck=0.015
+
+identifier wgEncodeGencodePubMedVM16
+"Link together Gencode Pubmed table with Attributes table"
+    mm10.wgEncodeGencodePubMedVM16.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId  minCheck=0.63
+
+identifier wgEncodeGencodeRefSeqVM16
+"Link together Gencode RefSeq table with Attributes table"
+    mm10.wgEncodeGencodeRefSeqVM16.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId minCheck=0.05
+
+identifier wgEncodeGencodeRefSeqToRefGeneVM16
+"Link together Gencode RefSeq table with refGene track"
+    mm10.wgEncodeGencodeRefSeqVM16.rnaAcc dupeOk chopAfter=.
+    mm10.refGene.name minCheck=0.77
+
+identifier wgEncodeGencodeTagVM16
+"Link together Gencode Tag table with Attributes table"
+    mm10.wgEncodeGencodeTagVM16.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId minCheck=0.373378
+    mm10.wgEncodeGencodeRefSeqVM16.transcriptId minCheck=0.9
+
+identifier wgEncodeGencodeTranscriptSourceVM16
+"Link together Gencode Transcript Source table with Attributes table"
+    mm10.wgEncodeGencodeTranscriptSourceVM16.transcriptId
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId
+
+identifier wgEncodeGencodeTranscriptSupportVM16
+"Link together Gencode Transcript Support table with Attributes table"
+    mm10.wgEncodeGencodeTranscriptSupportVM16.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId minCheck=0.20
+
+identifier wgEncodeGencodeTranscriptionSupportLevelVM16
+"Link together Gencode Transcription Support Level table with Attributes table"
+    mm10.wgEncodeGencodeTranscriptionSupportLevelVM16.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId minCheck=0.30
+
+identifier wgEncodeGencodeUniProtVM16
+"Link together Gencode UniProt Support table with Attributes table"
+    mm10.wgEncodeGencodeUniProtVM16.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId minCheck=0.358209
+
+identifier wgEncodeGencodeAnnotationRemarkVM16
+"Link together Gencode Annotation Remark table with Attributes table"
+    mm10.wgEncodeGencodeAnnotationRemarkVM16.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId minCheck=0.10
+
+identifier wgEncodeGencodeEntrezGeneVM16
+"Link together Gencode UniProt Support table with Attributes table"
+    mm10.wgEncodeGencodeEntrezGeneVM16.transcriptId dupeOk
+    mm10.wgEncodeGencodeEntrezGeneVM16.transcriptId minCheck=0.358209
+
+identifier wgEncodeGencodeExonSupportVM16
+"Link together Gencode Exon Support table with Attributes table"
+    mm10.wgEncodeGencodeExonSupportVM16.transcriptId dupeOk
+    mm10.wgEncodeGencodeAttrsVM16.transcriptId minCheck=0.95
+
+# end Gencode VM16
 
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"
@@ -3962,7 +4053,7 @@ identifier metaRefSeqId typeOf=mrnaAccession
     $metaGbd.refGene.name
     $metaGbd.refMrna.name
     $metaGbd.refSeqAli.qName
-    hgFixed.refSeqSummary.mrnaAcc 
+    hgFixed.refSeqSummary.mrnaAcc
 
 identifier refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
@@ -4799,7 +4890,7 @@ identifier rgdSslpId external=RGD
 identifier rgdGene2IdRaw external=RGD
 "Raw RGD Genes ID"
     $rn.rgdGene2.name chopBefore=RGD:
-    $rn.genes_rat.gene_rgd_id minCheck=0.40 
+    $rn.genes_rat.gene_rgd_id minCheck=0.40
 
 identifier rgdGene2Id external=RGD
 "RGD Genes ID"
@@ -4955,7 +5046,7 @@ set notEnsemblTranscriptId2 !ce6,!ce9,!ce10,!ce11,!choHof1,!dipOrd1,!echTel1,!ec
 identifier ensemblTranscriptId2 external=Ensembl
 "Ensembl Transcript ID"
     $gbd,$notEnsemblTranscriptId2.ensGene.name chopAfter=.
-    $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30 
+    $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30
 
 identifier ensemblTranscriptIdCe external=Ensembl dependency
 "Ensembl Transcript ID for C. elegans"
@@ -5443,7 +5534,7 @@ identifier locusLinkId external=LocusLink
 identifier omimLocationId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) Location ID"
     $hg.omimLocation.name dupeOk exclude=0
-    $hg.omimGeneMap.omimId full minCheck=0.08 
+    $hg.omimGeneMap.omimId full minCheck=0.08
 
 identifier omimAvSnpId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) AV SNP ID"
@@ -6051,7 +6142,7 @@ identifier transMapExtFileSplicedEstId
 # transMap and knownGenes
 identifier transMapGeneUcscGenesId fuzzy
 "UCSC Genes and transMapGene table"
-    hgFixed.transMapGeneUcscGenes.id 
+    hgFixed.transMapGeneUcscGenes.id
     $kgDb3.knownGene.name
 
 identifier transMapAlnKnownGeneHgId
@@ -6253,7 +6344,7 @@ identifier consIndelsId
     hg17,hg18,hg19.consIndelsHgMmCanFam.name
     hg17,hg18,hg19.consIndelsHgMmCanFamConf.id
 
-# publication track info 
+# publication track info
 
 identifier pubsArticleId external=pubTools
 "internal ID of article, this is different from pubmed, doi or piis, generated during download "
@@ -6272,9 +6363,9 @@ identifier pubsSequenceId external=pubTools
 identifier pubsMarkerId
 "keyword ('marker') found in an article, like a SNP/band/gene/etc"
     hgFixed.pubsMarkerAnnot.markerId dupeOk
-    $gbd.pubsMarkerBand.name 
-    $gbd.pubsMarkerSnp.name 
-    $gbd.pubsMarkerGene.name 
+    $gbd.pubsMarkerBand.name
+    $gbd.pubsMarkerSnp.name
+    $gbd.pubsMarkerGene.name
 
 # web sequences track
 identifier pubsBingArticleId external=pubTools
@@ -6296,7 +6387,7 @@ identifier ceuBcellRNASeqId
 
 identifier geneReviewsId
 "GeneReviews article ID"
-    hg18,hg19,hg38.kgXref.geneSymbol dupeOk 
+    hg18,hg19,hg38.kgXref.geneSymbol dupeOk
     hg18,hg19,hg38.geneReviews.name minCheck=0.85
 
 identifier geneReviewsRefGeneId
@@ -6383,7 +6474,7 @@ identifier ncbiRefSeqRna
     $ncbiRefSeq.extNcbiRefSeq.id
     $ncbiRefSeq.seqNcbiRefSeq.extFile full
 
-# GTEx (Genotype-Tissue Expression)   
+# GTEx (Genotype-Tissue Expression)
 
 identifier gtexDonor
 "GTEx donor ID"
@@ -7137,12 +7228,12 @@ tablesIgnored $danRer
     grcIncidentDb
     phastConsElements
     wz_ests
-    UMassInput 
-    UMassME1 
-    UMassME1Hotspot 
-    UMassME1Peak 
-    UMassME3 
-    UMassME3Hotspot 
+    UMassInput
+    UMassME1
+    UMassME1Hotspot
+    UMassME1Peak
+    UMassME3
+    UMassME3Hotspot
     UMassME3Peak
 
 tablesIgnored $canFam
