@@ -329,64 +329,13 @@ if (differentWord(database,"susScr2"))
     }
 hFreeConn(&conn);
 
-if (sameString(database, "hg38"))
+char *gcfId = hNcbiGcfId(database);
+if (isNotEmpty(gcfId))
     {
-    safef(buf, sizeof(buf), "https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d",
-          skipChr(chromName), winStart+1, winEnd);
-    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-    }
-else if (sameString(database, "hg19"))
-    {
-    safef(buf, sizeof(buf), "https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&build=previous&CHR=%s&BEG=%d&END=%d",
-          skipChr(chromName), winStart+1, winEnd);
-    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-    }
-else if (sameString(database, "mm8"))
-    {
-    safef(buf, sizeof(buf), "https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d",
-          skipChr(chromName), winStart+1, winEnd);
-    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-    }
-else if (sameString(database, "danRer2"))
-    {
-    safef(buf, sizeof(buf), "https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7955&CHR=%s&BEG=%d&END=%d",
-          skipChr(chromName), winStart+1, winEnd);
-    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-    }
-else if (sameString(database, "galGal3"))
-    {
-    safef(buf, sizeof(buf), "https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d",
-          skipChr(chromName), winStart+1, winEnd);
-    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-    }
-else if (sameString(database, "canFam2"))
-    {
-    safef(buf, sizeof(buf), "https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9615&CHR=%s&BEG=%d&END=%d",
-          skipChr(chromName), winStart+1, winEnd);
-    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-    }
-else if (sameString(database, "rheMac2"))
-    {
-    safef(buf, sizeof(buf), "https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9544&CHR=%s&BEG=%d&END=%d",
-          skipChr(chromName), winStart+1, winEnd);
-    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-    }
-else if (sameString(database, "panTro2"))
-    {
-    safef(buf, sizeof(buf), "https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9598&CHR=%s&BEG=%d&END=%d",
-          skipChr(chromName), winStart+1, winEnd);
-    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-    }
-else if (sameString(database, "anoGam1"))
-    {
-    safef(buf, sizeof(buf), "https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7165&CHR=%s&BEG=%d&END=%d",
-          skipChr(chromName), winStart+1, winEnd);
-    appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
-    }
-else if (sameString(database, "bosTau6"))
-    {
-    safef(buf, sizeof(buf), "https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9913&CHR=%s&BEG=%d&END=%d",
-          skipChr(chromName), winStart+1, winEnd);
+    safef(buf, sizeof(buf),
+          "https://www.ncbi.nlm.nih.gov/genome/gdv/browser/"
+          "?id=%s&chr=%s&from=%d&to=%d&context=genome",
+          gcfId, skipChr(chromName), winStart+1, winEnd);
     appendLink(&links, buf, "NCBI", "ncbiLink", TRUE);
     }
 else if (startsWith("oryLat", database))
