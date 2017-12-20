@@ -54,4 +54,7 @@ struct longRange *parseLongTabix(struct bed *beds, unsigned *maxWidth, double mi
 struct asObject *longTabixAsObj();
 /* Return asObject describing fields of longTabix file. */
 
+int longRangeCmp(const void *va, const void *vb);
+/* Compare based on coord position of s field */
+
 #endif//def LONGRANGE_H
