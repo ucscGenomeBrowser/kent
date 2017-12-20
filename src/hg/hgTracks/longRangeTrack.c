@@ -65,10 +65,6 @@ for (longRange=longRangeList; longRange; longRange=longRange->next)
         int sx = ((longRange->s - seqStart) + .5) * scale + xOff; // x coord of center
         int labelStart = sx - labelWidth/2;
         int labelEnd = labelStart + labelWidth - 1;
-/*uglyf("<br>chromStart: %d, label: %s, labelStart: %d, labelEnd: %d, prevLabel: %s, prevLabelStart: %d, prevLabelEnd: %d. ", 
-                longRange->s, longRange->eChrom, labelStart, labelEnd, 
-                prevLabel, prevLabelStart, prevLabelEnd);
-*/
         if (labelStart <= prevLabelEnd && 
                 !(labelStart == prevLabelStart && labelEnd == prevLabelEnd && 
                     sameString(longRange->eChrom, prevLabel)))
