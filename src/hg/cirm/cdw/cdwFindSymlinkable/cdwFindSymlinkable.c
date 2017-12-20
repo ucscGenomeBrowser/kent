@@ -291,6 +291,24 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 	    continue;
 	    }
 
+
+	// check if old failed validation but a newer valid one exists.
+	if (ef->errorMessage && !sameString(ef->errorMessage,""))
+	    {
+	    char query3[256];
+	    sqlSafef(query3, sizeof query3, "select count(*) from cdwFile"
+		" where submitDirId=%d"
+		" and submitFileName='%s'"
+		" and (cdwFile.errorMessage = '' or cdwFile.errorMessage is null)"
+		, ef->submitDirId, ef->submitFileName);
+	    if (sqlQuickNum(conn, query3) > 0) 
+		{
+		verbose(1, "skipping %s since it failed validation but a newer valid one was submitted.\n", newPath);
+	        continue;
+		}
+	    }
+
+
 	// check if file sizes match since it is quick
 	off_t subFSize = fileSize(newPath);
 	off_t cdwFSize = fileSize(path);
