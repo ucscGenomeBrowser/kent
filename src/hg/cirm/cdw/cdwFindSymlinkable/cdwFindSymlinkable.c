@@ -37,6 +37,7 @@ errAbort(
   "     Only use with \"find\" comand.\n"
   "\n"
   "   -fixCdwMtimes causes it to set mtime on cdwFile.cdwFileName using cdwFile.updateTime.\n"
+  "     Current implementation requires that this be run as root which makes it fast and preserves original ownership.\n"
   );
 }
 
