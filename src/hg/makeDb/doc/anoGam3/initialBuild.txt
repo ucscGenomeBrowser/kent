@@ -53,148 +53,153 @@ photoCreditName\tphoto courtesy CDC/James D. Gathany\n" > photoReference.txt
 ##      GCF_000183175.1 non-nuclear
 
 #############################################################################
-# establish config.ra file (TBD - Hiram - 2017-05-24)
+# establish config.ra file (DONE - 2017-12-19 - Hiram)
     cd /hive/data/genomes/anoGam3
-    ~/kent/src/hg/utils/automation/prepConfig.pl anoGam3 vertebrate zebrafish \
-       genbank/*_assembly_report.txt > anoGam3.config.ra
+  ~/kent/src/hg/utils/automation/prepConfig.pl anoGam3 invertebrate anopheles \
+       refseq/*_assembly_report.txt > anoGam3.config.ra
+
+    # change the scientificName from Anopheles gambiae str. PEST
+    # to simply: Anopheles gambiae
+    # and reset the fastaFiles and agpFiles names to:
+    # ucsc/chr*.fa.gz and ucsc/chr*.agp since there will be some extra files
+    # in ucsc/*
 
     # verify it looks sane
     cat anoGam3.config.ra
 # config parameters for makeGenomeDb.pl:
 db anoGam3
-clade vertebrate
-scientificName Danio rerio
-commonName Zebrafish
-assemblyDate May 2017
-assemblyLabel Genome Reference Consortium
-assemblyShortLabel GRCz11
-orderKey 26172
-mitoAcc NC_002333.2
-fastaFiles /hive/data/genomes/anoGam3/ucsc/*.fa.gz
-agpFiles /hive/data/genomes/anoGam3/ucsc/*.agp
+clade insect
+genomeCladePriority 70
+scientificName Anopheles gambiae
+commonName African malaria mosquito
+assemblyDate Oct. 2006
+assemblyLabel The International Consortium for the Sequencing of Anopheles Genome
+assemblyShortLabel AgamP3
+orderKey 1237
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_002084.1
+mitoAcc none
+fastaFiles /hive/data/genomes/anoGam3/ucsc/chr*.fa.gz
+agpFiles /hive/data/genomes/anoGam3/ucsc/chr*.agp
 # qualFiles none
-dbDbSpeciesDir zebrafish
-photoCreditURL	http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Zebrafish&id=79130
-photoCreditName	NHGRI Press Photos
-ncbiGenomeId 50
-ncbiAssemblyId 1104621
-ncbiAssemblyName GRCz11
-ncbiBioProject 11776
-ncbiBioSample SAMN06930106
-genBankAccessionID GCA_000002035.4
-taxId 7955
+dbDbSpeciesDir anopheles
+photoCreditURL  https://phil.cdc.gov/Details.aspx?pid=444
+photoCreditName photo courtesy CDC/James D. Gathany
+ncbiGenomeId 46
+ncbiAssemblyId 305108
+ncbiAssemblyName AgamP3
+ncbiBioProject 1438
+ncbiBioSample SAMN02952903
+genBankAccessionID GCF_000005575.2
+taxId 180454
 
 #############################################################################
-# setup UCSC named files (TBD - 2017-06-01 - Hiram)
+# setup UCSC named files (DONE - 2017-12-19 - Hiram)
 
     mkdir /hive/data/genomes/anoGam3/ucsc
     cd /hive/data/genomes/anoGam3/ucsc
     # measure what is in the refseq release:
-    faSize ../genbank/*genomic.fna.gz
+    faSize ../refseq/*3_genomic.fna.gz
 
-#1679186873 bases (4693618 N's 1674493255 real 861444935 upper 813048320 lower) in 1922 sequences in 1 files
-#Total size: mean 873666.4 sd 6187603.1 min 650 (KN150525.1) max 78093715 (CM002888.2) median 149621
-#N count: mean 2442.0 sd 64890.9
-#U count: mean 448202.4 sd 3139997.1
-#L count: mean 423022.0 sd 3024074.2
-#%48.42 masked total, %48.55 masked real
+# 265027044 bases (12572948 N's 252454096 real 197549571 upper 54904525 lower) in 8090 sequences in 1 files
+# Total size: mean 32759.8 sd 1187387.3 min 349 (NW_158375.1) max 61545105 (NT_078266.2) median 1523
+# %20.72 masked total, %21.75 masked real
 
     # check for duplicate sequences:
-    time faToTwoBit -noMask ../genbank/*_genomic.fna.gz genbank.2bit
+    time faToTwoBit -noMask ../refseq/*3_genomic.fna.gz refseq.2bit
     #  real    0m52.302s
-    twoBitDup genbank.2bit
-    # no output is a good result, otherwise, would have to eliminate duplicates
-    # the scripts creating the fasta here will be using this genbank.2bit file
-    # remove it later
+    twoBitDup refseq.2bit
+    # there are 49 duplicates, will need to eliminate them
+    twoBitDup refseq.2bit > dup.list
+    awk '{print $1}' dup.list | sort > eliminate.list
+
 
     # new option required to ucscCompositeAgp.pl 2016-04-13
     time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
-      ../genbank/*_genomic.fna.gz ../genbank/*_assembly_structure/Primary_Assembly
-# constructing refseq.2bit from ../genbank/GCA_000002035.4_GRCz11_genomic.fna.gz
-CM002885.2 chr1
-CM002886.2 chr2
-CM002887.2 chr3
-CM002888.2 chr4
-CM002889.2 chr5
-CM002890.2 chr6
-CM002891.2 chr7
-CM002892.2 chr8
-CM002893.2 chr9
-CM002894.2 chr10
-CM002895.2 chr11
-CM002896.2 chr12
-CM002897.2 chr13
-CM002898.2 chr14
-CM002899.2 chr15
-CM002900.2 chr16
-CM002901.2 chr17
-CM002902.2 chr18
-CM002903.2 chr19
-CM002904.2 chr20
-CM002905.2 chr21
-CM002906.2 chr22
-CM002907.2 chr23
-CM002908.2 chr24
-CM002909.2 chr25
+     ../refseq/*3_genomic.fna.gz ../refseq/*_assembly_structure/Primary_Assembly
+# NC_004818.2 chrX
+# NT_078265.2 chr2L
+# NT_078266.2 chr2R
+# NT_078267.5 chr3L
+# NT_078268.4 chr3R
+# real    1m21.125s
 
-real	8m20.666s
-user	8m33.194s
-    
-	time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
-       ../genbank/*_assembly_structure/Primary_Assembly
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+	../refseq/*_assembly_structure/Primary_Assembly
 
-    # Are no unlocalized
-	#./unlocalizedWithChroms.pl ../genbank/*_assembly_structure/Primary_Assembly
+    time ~/kent/src/hg/utils/automation/unlocalizedWithChroms.pl \
+	../refseq/*_assembly_structure/Primary_Assembly
 
-    # Handle the alternative sequences
-	time ucscAltAgp ../genbank/GCA_000002035.4_GRCz11_assembly_structure/all_alt_scaffold_placement.txt ../genbank/GCA_000002035.4_GRCz11_assembly_structure/
-	# Finished creating alt_4.agp
-	# Finished creatingalt_4.fa.gz
-	# Finished creating alt_2.agp
-	# Finished creatingalt_2.fa.gz
-	# Finished creating alt_1.agp
-	# Finished creatingalt_1.fa.gz
-	# Finished creating alt_3.agp
-	# Finished creatingalt_3.fa.gz
+    # the chrUn sequence has the duplicates:
+    faToTwoBit chrUn.fa.gz chrUn.2bit
+    twoBitDup chrUn.2bit | awk '{print $1}' > duplicates.chrUn.list
+    mv chrUn.fa.gz dups.chrUn.fa.gz
+    faSomeRecords -exclude dups.chrUn.fa.gz \
+	duplicates.chrUn.list stdout | gzip -c > chrUn.fa.gz
+    mv chrUn.agp dups.chrUn.agp
+    egrep -v -f duplicates.chrUn.list dups.chrUn.agp > chrUn.agp
+    rm -f chrUn.2bit
 
-	# real	1m49.141s
-	# user	1m47.337s
-	# sys	0m1.237s
-	
-	# verify fasta and AGPs agree
-	time faToTwoBit *.fa.gz test.2bit
-    # real    0m46.414s
+    # also need chrM:
+    echo ">chrM" > chrM.fa
+    zgrep -v "^>" ../refseq/GCF_000005575.2_AgamP3_assembly_structure/non-nuclear/assembled_chromosomes/FASTA/chrMT.fna.gz >> chrM.fa
+    gzip chrM.fa
 
-    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    zgrep -v "^#" ../refseq/GCF_000005575.2_AgamP3_assembly_structure/non-nuclear/assembled_chromosomes/AGP/chrMT.comp.agp.gz \
+	| sed -e 's/NC_002084.1/chrM/;' > chrM.agp
+
+    # verify sequence and AGP match:
+    faToTwoBit chr*.fa.gz test.2bit
+    cat chr*.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -2
+    # Valid Fasta file entry
     # All AGP and FASTA entries agree - both files are valid
 
-    # and no sequence lost from orginal:
+    # and we have all the sequence as the original (minus the duplicates)
     twoBitToFa test.2bit stdout | faSize stdin
-	# 1679186873 bases (4693618 N's 1674493255 real 1674493255 upper 0 lower) in 1922 sequences in 1 files
-	# Total size: mean 873666.4 sd 6187603.1 min 650 (chrUn_KN150525v1) max 78093715 (chr4) median 149621
-	# N count: mean 2442.0 sd 64890.9
-	# U count: mean 871224.4 sd 6162220.4
-	# L count: mean 0.0 sd 0.0
-	# %0.00 masked total, %0.00 masked real
-	
-    # same numbers as above (except for upper/lower masking)
+# 264974304 bases (12572948 N's 252401356 real 252401356 upper 0 lower)
+#	in 8041 sequences in 1 files
 
-    # no longer need these temporary 2bit files
-    rm test.2bit genbank.2bit
+    # original refseq was:
+# 265027044 bases (12572948 N's 252454096 real 197549571 upper 54904525 lower)
+#	in 8090 sequences in 1 files
+
+    # 49 missing sequences is correct:
+    calc 8090 - 8041
+    #  8090 - 8041 = 49.000000
+
+    # size of duplicate sequence:
+    faSomeRecords dups.chrUn.fa.gz duplicates.chrUn.list stdout | faSize stdin
+# 52740 bases (0 N's 52740 real 52740 upper 0 lower) in 49 sequences in 1 files
+
+    # amount of removed sequence is correct:
+
+    calc 265027044 - 52740
+    # 265027044 - 52740 = 264974304.000000
+
+    # no longer need these
+    rm refseq.2bit test.2bit
 
 #############################################################################
-#  Initial database build (TBD - 2016-06-01 - Hiram)
+#  Initial database build (DONE - 2017-12-19 - Hiram)
 
-	cd /hive/data/genomes/anoGam3
+    cd /hive/data/genomes/anoGam3
     # verify sequence and AGP are OK:
     time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
          -stop=agp anoGam3.config.ra) > agp.log 2>&1
-    # real	1m40.249s
+    # verify OK:
+    tail agp.log
+    # *** All done!  (through the 'agp' step)
+    # real    0m26.234s
 
     # then finish it off:
     time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
        -fileServer=hgwdev -continue=db anoGam3.config.ra) > db.log 2>&1
     # real    11m9.465s
+
+    # had to fixup names in dbDb to get it into the same pull-down menu
+    # on the gateway page as is anoGam1:
+hgsql -e 'update dbDb set organism="A. gambiae" where name like "anoGam3";' hgcentraltest
+hgsql -e 'update dbDb set genome="A. gambiae" where name like "anoGam3";' hgcentraltest
 
     # check in the trackDb files created in TemporaryTrackDbCheckout/
     #    and add anoGam3 to trackDb/makefile
@@ -204,7 +209,7 @@ user	8m33.194s
     ln -s `pwd`/anoGam3.unmasked.2bit /gbdb/anoGam3/anoGam3.2bit
 
 ##############################################################################
-# cpgIslands on UNMASKED sequence (TBD - 2017-06-01 - Hiram)
+# cpgIslands on UNMASKED sequence (DONE - 2017-12-19 - Hiram)
     mkdir /hive/data/genomes/anoGam3/bed/cpgIslandsUnmasked
     cd /hive/data/genomes/anoGam3/bed/cpgIslandsUnmasked
 
@@ -212,120 +217,143 @@ user	8m33.194s
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/anoGam3/anoGam3.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku anoGam3) > do.log 2>&1
-    # real    6m59.252s
+    # real    1m45.616s
 
     cat fb.anoGam3.cpgIslandExtUnmasked.txt
-	# 34662385 bases of 1674677181 (2.070%) in intersection
+    # 21871673 bases of 264424304 (8.271%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (TBD - 2017-06-02 - Hiram)
+# cytoBandIdeo - (DONE - 2017-12-19 - Hiram)
     mkdir /hive/data/genomes/anoGam3/bed/cytoBand
     cd /hive/data/genomes/anoGam3/bed/cytoBand
     makeCytoBandIdeo.csh anoGam3
 
 #########################################################################
-# ucscToINSDC table/track (TBD - 2016-04-14 - Hiram)
+# ucscToRefSeq table/track (DONE - 2016-04-14 - Hiram)
     # the sequence here is working for a 'refseq' assembly with a chrM
     # situation may be specific depending upon what is available in the assembly
+
+    mkdir /hive/data/genomes/anoGam3/bed/ucscToRefSeq
+    cd /hive/data/genomes/anoGam3/bed/ucscToRefSeq
+
+    # find accession for chrM
+    grep chrM ../../anoGam3.agp
+# chrM    1       15363   1       O       NC_002084.1     1       15363   +
+
+    # use that accession here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../refseq/GCF_*structure/Primary_Assembly NC_002084.1
+    # this is actually refseq, not genbank, and need to remove duplicates:
+    egrep -v -f ../../ucsc/duplicates.chrUn.list ucscToINSDC.txt \
+	> ucscToRefSeq.txt
+    rm ucscToINSDC.txt
+    
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    
+    join -t$'\t' name.coordinate.tab ucscToRefSeq.txt > ucscToRefSeq.bed
+
+    # should all be the same number of items:
+    wc -l *
+    # 8041 name.coordinate.tab
+    # 8041 ucscToRefSeq.bed
+    # 8041 ucscToRefSeq.txt
+
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 23
+    # use the 23 in this sed
+    sed -e "s/21/23/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab anoGam3 ucscToRefSeq stdin ucscToRefSeq.bed
+
+    checkTableCoords anoGam3
+    # should cover %100 entirely:
+    featureBits -countGaps anoGam3 ucscToRefSeq
+    # 264974304 bases of 264974304 (100.000%) in intersection
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2017-12-19 - Hiram)
+    # using the idKeys constructed
 
     mkdir /hive/data/genomes/anoGam3/bed/ucscToINSDC
     cd /hive/data/genomes/anoGam3/bed/ucscToINSDC
 
-    # find accession for chrM
-    grep chrM ../../anoGam3.agp
-	#chrM	1	16596	2	F	NC_002333.2	1	16596	+
-
-    # use that accession here:
-    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-        ../../genbank/GCA_*structure/Primary_Assembly NC_002333.2
-    
-	# Copy over the ucscToINSDC.txt file from idKeys
-	cp ../idKeys/idMap.txt .
+    twoBitDup ../idKeys/genbank/genbank.anoGam3.2bit \
+	| awk '{print $1}' > genbank.duplicate.list
+    join -t$'\t' ../idKeys/anoGam3.idKeys.txt \
+	../idKeys/genbank/refseqAnoGam3.idKeys.txt \
+	| egrep -v -f genbank.duplicate.list | cut -f2- \
+	| sort > ucscToINSDC.txt
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
     
-	# Put in the chrm refseq: NC_002333.2, INSDC: AC024175.3 manually
+    join -t$'\t' name.coordinate.tab ucscToINSDC.txt > ucscToINSDC.bed
+    # lookup the chrM sequence an Entrez nuclotide NC_002084.1 -> L20934.1
+    # adding this chrM to the .bed file:
+    grep chrM ../../*.sizes
+    # chrM    15363
+    printf "chrM\t0\t15363\tL20934.1\n" >> ucscToINSDC.bed
 
-	join name.coordinate.tab <(sort idMap.txt) | tr '[ ]' '[\t]' \
-         > ucscToINSDC.bed
-
-    # should be same line counts throughout:
+    # should all be the same row counts
     wc -l *
-    #   1922   3844  46128 insdc.refseq.txt
-	#   1922   3844  56859 insdcToUcsc.txt
-	#   1923   5769  51957 name.coordinate.tab
-	#   1923   7688  73086 ucscToINSDC.bed
-	#   1922   3844  56859 ucscToINSDC.txt
+    # 8041 name.coordinate.tab
+    # 8041 ucscToINSDC.bed
+    # 8040 ucscToINSDC.txt
+
+    # the ucscToINSDC.txt is missing the chrM identifier
 
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 20
-    # use the 20 in this sed
-    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    # 23
+    # use the 23 in this sed
+    sed -e "s/21/23/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab anoGam3 ucscToINSDC stdin ucscToINSDC.bed
 
-	checkTableCoords anoGam3
+    checkTableCoords anoGam3
     # should cover %100 entirely:
     featureBits -countGaps anoGam3 ucscToINSDC
-    # 1679203469 bases of 1679203469 (100.000%) in intersection
+    # 264974304 bases of 264974304 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2016-10-20 - Hiram)
-    cd ~/kent/src/hg/makeDb/trackDb/zebrafish/anoGam3
+# fixup search rule for assembly track/gold table (DONE - 2017-12-19 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/anopheles/anoGam3
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" anoGam3 \
       | sed -e 's/[0-9][0-9]*//; s/\.[0-9]\+$//' | sort | uniq -c 
+#    8115 AAAB
+#       1 NC_
 
-    984 AL
-   4518 BX
-      5 CAAK
-  18560 CABZ
-   3251 CR
-   1015 CT
-   3213 CU
-     31 CZQB
-    936 FO
-    873 FP
-    347 FQ
-      1 LK
-    876 LO
-      6 LT
-      1 NC_
-
-    # implies a rule: '[ABCFLN][A-Z]+[0-9_][0-9]+(\.[0-9]+)?'
+    # implies a rule: '[AN][ABC_]+[0-9]+(\.[0-9]+)?'
 
     # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" anoGam3 | wc -l
-    # 34617
+    # 8116
 
     hgsql -N -e "select frag from gold;" anoGam3 \
-	| egrep -e '[ABCFLN][A-Z]+[0-9_][0-9]+(\.[0-9]+)?' | wc -l
-    # 34617
+	| egrep -e '[AN][ABC_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 8116
 
     hgsql -N -e "select frag from gold;" anoGam3 \
-	| egrep -v -e '[ABCFLN][A-Z]+[0-9_][0-9]+(\.[0-9]+)?' | wc -l
+	| egrep -v -e '[AN][ABC_]+[0-9]+(\.[0-9]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/zebrafish/anoGam3/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [ABCFLN][A-Z]+[0-9_][0-9]+(\.[0-9]+)?
+termRegex [AN][ABC_]+[0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
     # verify searches work in the position box
 
 ##########################################################################
-# running repeat masker (TBD - 2017-06-07 - Hiram)
+# running repeat masker (DONE - 2017-12-19 - Hiram)
     mkdir /hive/data/genomes/anoGam3/bed/repeatMasker
     cd /hive/data/genomes/anoGam3/bed/repeatMasker
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku anoGam3) > do.log 2>&1
+XXX - running - Tue Dec 19 15:47:47 PST 2017
     # real    254m18.208s
-
-	# 9 jobs (out of 3664) crashed in the cluster, they were re run manually and
-	# completed fine, taking ~90 minute each. 
 
     cat faSize.rmsk.txt
 # 1679203469 bases (4693618 N's 1674509851 real 809208275 upper 865301576 lower) in 1923 sequences in 1 files
@@ -357,17 +385,19 @@ searchPriority 8
 	# real	0m28.896s
 
 ##########################################################################
-# running simple repeat (TBD - 2017-06-07 - Hiram)
+# running simple repeat (DONE - 2017-12-19 - Hiram)
 
     mkdir /hive/data/genomes/anoGam3/bed/simpleRepeat
     cd /hive/data/genomes/anoGam3/bed/simpleRepeat
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409 3 anoGam3) > do.log 2>&1
-    # real	14m55.497s
+    # real    5m39.782s
 
     cat fb.simpleRepeat
-	# 108632714 bases of 1674677181 (6.487%) in intersection
+    # 6341048 bases of 264424304 (2.398%) in intersection
+
+XXX - waiting for RM/WindowMasker
 
     cd /hive/data/genomes/anoGam3
     # using the Window Masker result:
@@ -422,22 +452,18 @@ searchPriority 8
     # 638473395 bases of 1679203469 (38.022%) in intersection
 
 ##########################################################################
-# run up idKeys files for ncbiRefSeq (TBD - 2017-03-28 - Hiram)
+# run up idKeys files for chromAlias (DONE - 2017-12-19 - Hiram)
     mkdir /hive/data/genomes/anoGam3/bed/idKeys
     cd /hive/data/genomes/anoGam3/bed/idKeys
 
-    time (doIdKeys.pl -buildDir=`pwd`  anoGam3) > do.log 2>&1 &
-    # real    12m20.939s
+    time (doIdKeys.pl -buildDir=`pwd` -twoBit=/hive/data/genomes/anoGam3/anoGam3.unmasked.2bit anoGam3) > do.log 2>&1 &
+    # real    5m6.175s
 
     cat anoGam3.keySignature.txt
-    #   8ae219619932349bebc17364408bf9d0
+    #   ae5975a59b0fd10409ed20280a0188df
 
-	mkdir genbank
-	time (doIdKeys.pl -buildDir=`pwd` -twoBit=`pwd`/genbank.2bit genbank) > do.log 2>&1 &
-
-	cd ../
-	join anoGam3.idKeys.txt genbank/genbank.idKeys.txt | awk '{print $2"\t"$3}' > idMap.txt 
-
+    # genbank and flybase sequences were also run up here in ./genbank/
+    # and ./flybase/
 
 ##########################################################################
 # cpgIslands - (TBD - 2016-10-20 - Hiram)
@@ -628,13 +654,12 @@ anoGam3.downloadDir = anoGam3
     mkdir /hive/data/genomes/anoGam3/bed/chromAlias
     cd /hive/data/genomes/anoGam3/bed/chromAlias
 
-    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' anoGam3 \
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' anoGam3 \
         > ucsc.refseq.tab
-    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' anoGam3 \
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' anoGam3 \
         > ucsc.genbank.tab
-
-    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
-        | sort > anoGam3.chromAlias.tab
+XXX - can the duplicates be added to this ?
+XXX - and check for flyBase IDs and Ensembl names
 
     # verify chrM is OK:
 
