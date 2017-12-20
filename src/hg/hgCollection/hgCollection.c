@@ -398,6 +398,8 @@ webIncludeResourceFile("gb.css");
 webIncludeResourceFile("spectrum.min.css");
 webIncludeResourceFile("hgGtexTrackSettings.css");
 
+jsReloadOnBackButton(cart);
+
 webIncludeFile("inc/hgCollection.html");
 char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
 jsInlineF("$('#assembly').text('%s');\n",assembly);
@@ -467,7 +469,7 @@ fprintf(f, "%spriority %d\n",tabs,priority);
 fprintf(f, "\n");
 }
 
-static void outComposite(FILE *f, struct track *collection)
+static void outComposite(FILE *f, struct track *collection, int priority)
 // output a composite header for user composite
 {
 char *parent = collection->name;
@@ -484,8 +486,9 @@ longLabel %s\n\
 color %ld,%ld,%ld \n\
 viewFunc %s\n\
 type mathWig\n\
+\tpriority %d\n\
 visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
- 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color), collection->viewFunc);
+ 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color), collection->viewFunc, priority);
 
 }
 
@@ -552,14 +555,14 @@ struct hash *collectionNameHash = newHash(6);
 outHubHeader(f, db);
 struct track *collection;
 struct sqlConnection *conn = hAllocConn(db);
+int priority = 1;
 for(collection = collectionList; collection; collection = collection->next)
     {
     if (collection->trackList == NULL)  // don't output composites without children
         continue;
-    outComposite(f, collection);
+    outComposite(f, collection, priority++);
     struct trackDb *tdb;
     struct track *track;
-    int priority = 1;
     for (track = collection->trackList; track; track = track->next)
         {
         if (track->viewFunc != NULL)
