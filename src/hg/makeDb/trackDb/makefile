@@ -35,7 +35,7 @@ DBS = \
 	amaVit1 geoFor1 melUnd1 \
 	ancCey1 \
 	anoCar1 anoCar2 \
-	anoGam1 \
+	anoGam1 anoGam3 \
 	aotNan1 \
 	apiMel1 \
 	apiMel2	\

@@ -14,7 +14,7 @@ H3 {
 H2.leftAlign { text-align: left; }
 
 /* From our standard BODY tag */
-BODY { background-color:#fff; }
+BODY { background-color:#FFF; }
 Alink { color:#0000CC; }
 A:visited { color:#330066; }
 A:active.topbar { color:#330066; }

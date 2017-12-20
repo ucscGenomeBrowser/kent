@@ -579,6 +579,45 @@ hFreeConn(&conn);
 return count;
 }
 
+// This maps db names to the latest NCBI RefSeq assembly+annotation GCF_ IDs as of
+// 12/19/2017.
+struct dbToGcf
+    {
+    char *db;
+    char *gcf;
+    };
+static struct dbToGcf dbToGcf[] =
+    {
+    { "hg38", "GCF_000001405.37" },
+    { "hg19", "GCF_000001405.25" },
+    { "mm10", "GCF_000001635.26" },
+    { "danRer11", "GCF_000002035.6" },
+    { "galGal5", "GCF_000002315.4" },
+    { "canFam3", "GCF_000002285.3" },
+    { "rheMac8", "GCF_000772875.2" },
+    { "panTro5", "GCF_000001515.7" },
+    { "bosTau8", "GCF_000003055.6" },
+    { "rn6", "GCF_000001895.5" },
+    { "xenTro9", "GCF_000004195.3" },
+    { "susScr11", "GCF_000003025.6" },
+    { "equCab2", "GCF_000002305.2" },
+    { NULL, NULL }
+    };
+
+char *hNcbiGcfId(char *db)
+/* Return the NCBI RefSeq assembly+annotations ID (GCF_...) for db, or NULL if we don't know it. */
+{
+char *gcf = NULL;
+int i;
+for (i = 0;  dbToGcf[i].db != NULL;  i++)
+    if (sameString(db, dbToGcf[i].db))
+        {
+        gcf = cloneString(dbToGcf[i].gcf);
+        break;
+        }
+return gcf;
+}
+
 struct sqlConnection *hAllocConn(char *db)
 /* Get free connection if possible. If not allocate a new one. */
 {

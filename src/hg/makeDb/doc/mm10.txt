@@ -16028,7 +16028,7 @@ TMPDIR=/dev/shm
 
 ##############################################################################
 2017-12-17: import of UCSC GENCODE group processing of GENCODE VM16 (markd)
-    # not to push to the RR
+    # being push to the RR
 
     # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
 
