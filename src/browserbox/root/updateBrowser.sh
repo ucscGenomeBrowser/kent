@@ -244,6 +244,16 @@ if apt-cache policy python-mysqldb | grep "Installed: .none." > /dev/null; then
    apt-get -y autoremove
 fi
 
+# install curl for checking if we are closer to European or US mirror
+if apt-cache policy curl | grep "Installed: .none." > /dev/null; then
+   echo - Installing curl
+   apt-get update
+   apt-get --no-install-recommends install -y curl
+   apt-get -y autoremove
+   # make sure that the mysql server is re-configured now
+   rm -f /usr/local/apache/trash/registration.txt
+fi
+
 echo
 echo - Updating the genome browser software via rsync:
 

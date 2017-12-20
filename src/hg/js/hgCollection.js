@@ -53,8 +53,8 @@ var hgCollection = (function() {
         };
 
         // can't delete root
-        if ($(node).attr('parent') === '#')
-            delete items.deleteItem;
+        //if ($(node).attr('parent') === '#')
+            //delete items.deleteItem;
 
         return items;
         }
@@ -161,10 +161,11 @@ var hgCollection = (function() {
         newNode.li_attr.missingMethod = $("input:radio[name ='missingData']:checked").val();
         newNode.li_attr.viewfunc = $("#viewFunc").val();
         newNode.li_attr.viewtype = "collection";
-        rebuildLabel();
+        //selectedNode = newNode;
         $(selectedTree).jstree("set_icon", newNode, '../images/folderC.png');
         $(selectedTree).jstree("deselect_node", selectedNode);
         $(selectedTree).jstree("select_node", newNode.id);
+        rebuildLabel();
     }
 
     function addCollection(trees, list) {
@@ -276,7 +277,7 @@ var hgCollection = (function() {
         window.addEventListener("beforeunload", function (e) {
             if (isDirty) {
                 doAjaxAsync = false;
-                //saveCollections(trees);
+                saveCollections(trees);
             }
 
             return undefined;
@@ -377,7 +378,7 @@ var hgCollection = (function() {
 
         if (goTracks) {
             // we go straight to hgTracks after save
-            $form = $('form');
+            $form = $('#redirectForm');
             $form.submit();
         }
     }

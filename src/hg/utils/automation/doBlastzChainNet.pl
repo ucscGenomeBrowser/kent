@@ -1079,10 +1079,10 @@ sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11,
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $defVars{SEQ1_LEN} chain${QDb}.bb
 awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
 bedToBigBed -type=bed4+1 -as=bigLink.as -tab chain${QDb}Link.tab $defVars{SEQ1_LEN} chain${QDb}Link.bb
-totalBases=`ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | sed -e 's/.000000\$//;'`
-basesCovered=`bedSingleCover.pl chain${QDb}Link.tab | ave -col=4 stdin | grep "^total" | sed -e 's/.000000\$//;'`
-percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-printf "%d bases of %d (%s%%) in intersection\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chain.${QDb}Link.txt
+set totalBases = `ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
+set basesCovered = `bedSingleCover.pl chain${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{printf "%d", \$2}'`
+set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chain.${QDb}Link.txt
 rm -f link.tab
 rm -f chain.tab
 _EOF_
@@ -1661,10 +1661,10 @@ sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11,
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainSyn${QDb}.tab $defVars{SEQ1_LEN} chainSyn${QDb}.bb
 awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainSyn${QDb}Link.tab
 bedToBigBed -type=bed4+1 -as=bigLink.as -tab chainSyn${QDb}Link.tab $defVars{SEQ1_LEN} chainSyn${QDb}Link.bb
-totalBases=`ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | sed -e 's/.000000\$//;'`
-basesCovered=`bedSingleCover.pl chainSyn${QDb}Link.tab | ave -col=4 stdin | grep "^total" | sed -e 's/.000000\$//;'`
-percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-printf "%d bases of %d (%s%%) in intersection\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainSyn.${QDb}Link.txt
+set totalBases = `ave -col=2 $defVars{SEQ1_LEN} | grep "^total" | awk '{printf "%d", \$2}'`
+set basesCovered = `bedSingleCover.pl chainSyn${QDb}Link.tab | ave -col=4 stdin | grep "^total" | awk '{print "%d", \$2}'`
+set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > ../fb.$tDb.chainSyn.${QDb}Link.txt
 rm -f link.tab
 rm -f chain.tab
 netFilter -minGap=10 $tDb.$qDb.syn.net.gz \\

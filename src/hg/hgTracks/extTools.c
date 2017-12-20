@@ -235,11 +235,11 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
     char* val = slp->val;
     if (sameWord(val, "$db"))
         val = db;
-    if (sameWord(val, "$position"))
+    else if (sameWord(val, "$position"))
         val = pos;
-    if (sameWord(val, "$start1"))
+    else if (sameWord(val, "$start1"))
         val = start1;
-    if (sameWord(val, "$returnUrl"))
+    else if (sameWord(val, "$returnUrl"))
         {
         // get the full URL of this hgTracks page, so external page can construct a custom track
         // and link back to us
@@ -255,13 +255,13 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
         val = url;
         }
     // half the current window size
-    if (stringIn("$halfLen", val))
+    else if (stringIn("$halfLen", val))
         {
         char buf[64];
         safef(buf, sizeof(buf), "%d", len/2);
         val = replaceChars(val, "$halfLen", buf);
         }
-    if (sameWord(val, "$seq") || sameWord(val, "$faSeq"))
+    else if (sameWord(val, "$seq") || sameWord(val, "$faSeq"))
         {
         static struct dnaSeq *seq = NULL;
         seq = hDnaFromSeq(db, chromName, winStart, winEnd, dnaLower);
@@ -273,8 +273,17 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
             freez(&seq);
             }
         }
+    else if (sameWord(val, "$ncbiGcf"))
+        {
+        char *gcf = hNcbiGcfId(db);
+        if (gcf)
+            val = gcf;
+        else
+            // Really we shouldn't be making this entire form... pass db as hail-mary
+            val = db;
+        }
     // any remaining $-expression might be one of the general ones
-    if (stringIn("$", val))
+    else if (stringIn("$", val))
         {
         val = replaceInUrl(val, "", cart, db, chromName, winStart, winEnd, NULL, TRUE);
         }

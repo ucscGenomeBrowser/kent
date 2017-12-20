@@ -156,7 +156,7 @@ stsHash = newHash(16);
 
 while (lineFileChopCharNext(sf, '\t', words, 5))
     {
-      verbose(2, "# line %d words1-4: '%s' '%s' '%s' '%s'\n", sf->lineIx, words[1], words[2], words[3], words[4]);
+//      verbose(2, "# line %d words1-4: '%s' '%s' '%s' '%s'\n", sf->lineIx, words[1], words[2], words[3], words[4]);
       if (words[1] && words[2] && words[3] && words[4])
 	{
 	  AllocVar(sts);
@@ -213,6 +213,7 @@ struct sts *sts;
 
 while (lineFileChopNext(ef, words, 4))
     {
+    verbose(2, "# line %d words0-3: '%s' '%s' '%s' '%s'\n", ef->lineIx, words[0], words[1], words[2], words[3]);
     if (words[3])
       {
 	AllocVar(epcr);
@@ -226,8 +227,8 @@ while (lineFileChopNext(ef, words, 4))
 	  errAbort("Not parsing epcr as expeceted\n");
 	epcr->start = sqlUnsigned(pos[0]);
 	epcr->end = sqlUnsigned(pos[2]);
-	sts = hashMustFindVal(stsHash, epcr->dbstsId);
-	if (!epcrInList(sts->epcr, epcr))
+	sts = hashFindVal(stsHash, epcr->dbstsId);
+	if (sts && !epcrInList(sts->epcr, epcr))
 	  {
 	    slAddHead(&sts->epcr, epcr);
 	    sts->epcrCount++;

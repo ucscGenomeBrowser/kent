@@ -146,3 +146,31 @@ chmod +x ${D}/run.${D}.sh
 done
 
 ######################################################################
+# run up the protein alignments
+
+for db in ce11 dm6 hg38 mm10 rn6 sacCer3
+do
+  cd /hive/data/genomes/danRer10/bed/ensGene.89/blastTab/${db}
+  ./run.${db}.sh
+  tail do.log
+done
+
+ce11/do.log
+real    65m9.385s
+
+dm6/do.log
+real    101m12.864s
+
+hg38/do.log
+real    241m19.969s
+
+mm10/do.log
+real    161m18.066s
+
+rn6/do.log
+real    102m2.132s
+
+sacCer3/do.log
+real    19m21.203s
+
+######################################################################

@@ -388,6 +388,42 @@ taxId 9531
     hgLoadSqlTab cerAty1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         cerAty1.chromAlias.tab
 
+    # adding ensembl names 2017-12-13
+    cd /hive/data/genomes/cerAty1/bed/chromAlias
+    mkdir previous
+    mv *.tab previous
+    cut -f1,2 previous/ucsc.genbank.tab| sort > ucsc.genbank.tab
+    cut -f1,2 previous/ucsc.refseq.tab| sort > ucsc.refseq.tab
+
+    join -t$'\t' ../idKeys/cerAty1.idKeys.txt \
+	../../ensembl/ensemblCerAty1.idKeys.txt | cut -f2,3 \
+	| sort > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o cerAty1.chromAlias.tab cerAty1.chromAlias.tab
+
+    for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t cerAty1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 11434 =? 11434 OK
+# checking genbank: 11434 =? 11434 OK
+# checking ensembl: 11433 =? 11433 OK
+    # ensembl does not have chrM
+
+    grep chrM *.tab
+ucsc.genbank.tab:chrM   KT159932.1
+ucsc.refseq.tab:chrM    NC_028592.1
+
+    hgLoadSqlTab cerAty1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        cerAty1.chromAlias.tab
+
 #########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2017-09-25 - Hiram)
 
@@ -442,6 +478,17 @@ searchPriority 8
 
     cat fb.cerAty1.rmsk.windowmaskerSdust.txt
     # 760728332 bases of 2848262899 (26.709%) in intersection
+
+##########################################################################
+# run up idKeys files for ncbiRefSeq/chromAlias (DONE - 2017-12-12 - Hiram)
+    mkdir /hive/data/genomes/cerAty1/bed/idKeys
+    cd /hive/data/genomes/cerAty1/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd` cerAty1) > do.log 2>&1 &
+    # real    12m20.939s
+
+    cat cerAty1.keySignature.txt
+    #   8ae219619932349bebc17364408bf9d0
 
 ##########################################################################
 # cpgIslands - (DONE - 2017-09-22 - Hiram)
