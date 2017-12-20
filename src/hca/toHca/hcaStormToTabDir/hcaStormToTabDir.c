@@ -548,6 +548,105 @@ fieldedTableToTabFile(ft, path);
 fieldedTableFree(&ft);
 }
 
+int endFromFileName(char *fileName)
+/* Try and figure out end from file name */
+{
+if (stringIn("_R1_", fileName))
+    return 1;
+else if (stringIn("_R2_", fileName))
+    return 2;
+else if (stringIn("_1.", fileName))
+    return 1;
+else if (stringIn("_2.", fileName))
+    return 2;
+return 1;
+}
+
+int laneFromFileName(char *fileName)
+/* Deduce lane from file name.  If there is something of form _L123_ in the midst of
+ * file name we'll call it lane.  Otherwise return 0 (they start counting at 1) */
+{
+char *pat = "_L";
+int patLen = strlen(pat);
+char *s = fileName;
+while ((s = stringIn(pat, s)) != NULL)
+    {
+    s += patLen;
+    char *e = strchr(s, '_');
+    if (e == NULL)
+        break;
+    int midSize = e - s;
+    if (midSize == 3)
+        {
+	char midBuf[midSize+1];
+	memcpy(midBuf, s, midSize);
+	midBuf[midSize] = 0;
+	if (isAllDigits(midBuf))
+	    return atoi(midBuf);
+	}
+    }
+return 0;
+}
+
+void outputFileTable(struct fieldedTable *table, char *path)
+/* Output file table.  Mostly this has to do with unpacking the files[] array */
+{
+/* Open output file, we'll create it ourselves rather than going through fieldedTable */
+FILE *f = mustOpen(path, "w");
+
+/* Most of this routine involves unpacking the files field, which may be an
+ * array.  So, let's figure out where the files field is: */
+int filesIx = stringArrayIx("files", table->fields, table->fieldCount);
+if (filesIx < 0)
+    errAbort("Can't find files field");
+
+/* We'll output the fields we derive from files first, and then the rest of them, starting
+ * here with the label row. */
+fprintf(f, "filename\tfile_format\tseq.lanes.number\tseq.lanes.run");
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    {
+    if (i != filesIx)
+        fprintf(f, "\t%s", table->fields[i]);
+    }
+fprintf(f, "\n");
+       
+/* Now loop through the rows... */
+struct dyString *csvScratch = dyStringNew(0);
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    char **row = fr->row;
+    char *files = row[filesIx];
+    struct slName *urlList = csvParse(files);
+    char *fileUrl;
+    while ((fileUrl = csvParseNext(&files, csvScratch)) != NULL)
+	{
+	struct slName *url;
+	for (url = urlList; url != NULL; url = url->next)
+	    {
+	    char baseName[FILENAME_LEN], ext[FILEEXT_LEN];
+	    splitPath(url->name, NULL, baseName, ext);
+	    fprintf(f, "%s%s\tfastq.gz\t", baseName, ext);
+	    int lane = laneFromFileName(baseName);
+	    if (lane > 0)
+		fprintf(f, "%d", lane);
+	    int end = endFromFileName(baseName);
+	    fprintf(f, "\tr%d\t", end);
+	    for (i=0; i<table->fieldCount; ++i)
+		{
+		if (i != filesIx)
+		    fprintf(f, "\t%s", row[i]);
+		}
+	    fprintf(f, "\n");
+	    }
+	}
+    slFreeList(urlList);
+    }
+carefulClose(&f);
+}
+
+
 void addIdForUniqueVals(struct tagStorm *tags, struct tagStanza *stanzaList,
     struct slName *fieldList, char *idTag, char *objType, struct hash *uniqueHash,
     struct dyString *scratch)
@@ -781,7 +880,6 @@ tagStormRenameTags(tags, "sample.donor.id", "sample.donor.sample_id");
 struct entitySubtype *assaySubtypeList = 
 	createEntitySubtypes(assaySubtypePrefixes, ArraySize(assaySubtypePrefixes), 
 	    origFieldList, "assay.");
-uglyf("Got %d different assaySubtypes\n", slCount(assaySubtypeList));
 
 /* Make sure that assay.assay_id field is there, copying it from 
  * assay.seq.insdc_run if that is available, otherwise generate it from
@@ -899,6 +997,10 @@ for (conv = convList; conv != NULL; conv = conv->next)
 	   {
 	   safef(path, sizeof(path), "%s/%s.tsv", outDir, "contact.contributors");
 	   oneRowTableUnarray(table, path);
+	   }
+	else if (sameString(objectName, "file"))
+	   {
+	   outputFileTable(table, path);
 	   }
 	else
 	   fieldedTableToTabFile(table, path);
