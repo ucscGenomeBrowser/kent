@@ -162,8 +162,18 @@ boolean maybeTouchFile(char *fileName);
 /* If file exists, set its access and mod times to now.  If it doesn't exist, create it.
  * Return FALSE if we have a problem doing so. */
 
+void touchFileFromFile(const char *oldFile, const char *newFile);
+/* Set access and mod time of newFile from oldFile. */
+
 boolean isRegularFile(char *fileName);
 /* Return TRUE if fileName is a regular file. */
+
+char *mustReadSymlinkExt(char *path, struct stat *sb);
+/* Read symlink or abort. FreeMem the returned value. */
+
+char *mustReadSymlink(char *path);
+/* Read symlink or abort. Checks that path is a symlink. 
+FreeMem the returned value. */
 
 void makeSymLink(char *oldName, char *newName);
 /* Return a symbolic link from newName to oldName or die trying */

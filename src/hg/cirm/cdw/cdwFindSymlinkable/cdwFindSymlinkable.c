@@ -1,7 +1,9 @@
 /* cdwFindSymlinkable - Find files under wrangle dir that could be symlinked to the file under cdw/ to save space. */
+#include <utime.h>
 #include "common.h"
 #include "linefile.h"
 #include "filePath.h"
+#include "portable.h"
 #include "md5.h"
 #include "hash.h"
 #include "options.h"
@@ -12,6 +14,8 @@ boolean fix = FALSE;
 char *idList = NULL;
 char *submitDirFilter = NULL;
 boolean inodeReport = FALSE;
+boolean fixCdwMtimes = FALSE;
+
 struct hash *hash = NULL;
 
 void usage()
@@ -31,6 +35,8 @@ errAbort(
   "   -inodeReport causes it to track and report on inodes used by multiple submitFileName paths.\n"
   "     Creates inodeReport.log in the current directory. Handy for debugging symlinking issues.\n"
   "     Only use with \"find\" comand.\n"
+  "\n"
+  "   -fixCdwMtimes causes it to set mtime on cdwFile.cdwFileName using cdwFile.updateTime.\n"
   );
 }
 
@@ -39,6 +45,7 @@ static struct optionSpec options[] = {
    {"idList", OPTION_STRING},
    {"submitDir", OPTION_STRING},
    {"inodeReport", OPTION_BOOLEAN},
+   {"fixCdwMtimes", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -93,6 +100,38 @@ carefulClose(&f);
 verbose(1, "unique inodes count=%d\n", uniqueInodes);
 }
 
+int fixMTimeForCdwFile(char *path, long long updateTime, boolean fix)
+/* Fix the modified time of the cdw path to match the updateTime */
+{
+int result = 0;
+struct stat buf;
+if (stat(path, &buf) != 0)
+    errnoAbort("stat failure on %s", path);
+if (updateTime == buf.st_mtime)
+    {
+    verbose(1, "mtime already correct on %s\n", path);
+    }
+else
+    {
+    if (fix)
+	{
+	struct utimbuf puttime;
+	puttime.modtime = updateTime;
+	puttime.actime  = buf.st_atime;
+	if (utime(path, &puttime) != 0)
+	    errnoAbort("utime failure on %s", path);
+	verbose(1, "mtime fixed on %s to %lld\n", path, updateTime);
+	}
+    else
+	{
+	verbose(1, "fix command not specified, skipping mtime fix on %s from %lld to %lld\n", 
+	    path,  (long long)buf.st_mtime, updateTime);
+	}
+    result = 1;
+    }
+return result;
+}
+
 void cdwFindSymlinkable()
 /* Find files that have not been symlinked to cdw/ yet to save space. */
 {
@@ -142,6 +181,7 @@ if (inodeReport)
 
 
 char *newPath = NULL;
+int filesMTimed = 0;
 int filesSymlinked = 0;
 off_t fileSpaceSaved = 0;
 struct stat sb;
@@ -181,6 +221,18 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 	verbose(1, "id=%u, submitFileName=%s path=%s cdwFileName=%s\n", 
 	    ef->id, ef->submitFileName, path, ef->cdwFileName);
 
+	if (!fileExists(path))
+	    {
+	    verbose(1, "cdwFile path %s does not exist.\n", path);
+	    continue;
+	    }
+
+	if (fixCdwMtimes)
+	    {
+	    filesMTimed += fixMTimeForCdwFile(path, ef->updateTime, fix);
+	    continue;
+	    }
+
 	// skip if meta or manifest which do not get symlink
 	if ((el->val == es->manifestFileId) || (el->val == es->metaFileId))
 	    continue;
@@ -206,6 +258,13 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 	    verbose(4, "newPath=%s on inode=%s\n", newPath, key);
 	    hashAdd(hash, key, val);
 	    }
+
+	// compare file times
+	long long fmtp = fileModTime(path);
+	long long fmtnp = fileModTime(newPath);
+	if (!(fmtp == ef->updateTime && fmtnp == ef->updateTime))
+	    verbose(1, "File Modified Times do not match: updateTime=%lld cdwFile=%lld submitFile=%lld\n", 
+		ef->updateTime, fmtp, fmtnp);
 
         // test for already-symlinked case
 	char *lastPath = NULL;
@@ -270,6 +329,8 @@ for (sel = submitIdList; sel != NULL; sel = sel->next)
 
 verbose(1, "\n\n%d files %ssymlinked.\n", filesSymlinked, fix ? "":"would have been ");
 verbose(1, "\n%llu space %ssaved.\n", (unsigned long long) fileSpaceSaved, fix ? "":"would have been ");
+if (fixCdwMtimes)
+    verbose(1, "\n\n%d cdw file mtimes %sfixed.\n", filesMTimed, fix ? "":"would have been ");
 
 if (!fix)
     verbose(1, "\nfix command was not specified. Dry run only.\n\n");
@@ -300,6 +361,7 @@ else
 idList = optionVal("idList", NULL);
 submitDirFilter = optionVal("submitDir", NULL);
 inodeReport = optionExists("inodeReport");
+fixCdwMtimes = optionExists("fixCdwMtimes");
 
 if (inodeReport & fix)
     {
