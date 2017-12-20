@@ -21,6 +21,8 @@
  *    3) Some of the fields are ontologies in the json schema, with .text and .ontology subfields
  *       but in the spreadsheet they are simple fields and the .ontology bit is lost.  Again
  *       not wanting to mess up the tagStorm I save that conversion for here.
+ *    4) The files tab is a real hodgepodge of things because EBI wants file to be a high level
+ *       entity and the json schema represents files as just file names.
  *
  * Beyond the tag name conversion, the spreadsheet conversion means that we have to put in
  * id's in many cases to link an what is an embedded subobject in the tagStorm and JSON-schema
@@ -30,7 +32,11 @@
  * When all the new fields are added the core of the program runs.  This is the call to
  *      tagStormTraverse(tags, tags->forest, &cc, fillInTables);
  * which makes a separate fieldedTable for each prefix in out_objs[] and merges identical
- * rows in each table into a single row.
+ * rows in each table into a single row.  
+ *
+ * Since everything is prefix driven, before the "fillInTables" traversal, there is some gaming
+ * to add prefixes to some things to direct them to a specific tab.  This is most dramatic for 
+ * the files tab.
  *
  * Then the program does a little renaming of some of the fields in the table,  stripping
  * out the table prefix so that you get something like "description" in the project table rather
@@ -396,6 +402,22 @@ for (i=0; i<table->fieldCount; ++i)
     }
 }
 
+void trimAssayFieldNames(struct fieldedTable *table, char *objectName)
+/* Simplify some of assay field names. */
+{
+int sampleTrimSize = strlen("assay.");
+int fullTrimSize = strlen(objectName) + 1;
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    {
+    char *field = table->fields[i];
+    if (endsWith(field, ".assay_id"))
+	table->fields[i] = field + fullTrimSize;
+    else
+	table->fields[i] = field + sampleTrimSize;
+    }
+}
+
 
 struct copyTagContext
 /* Information for recursive tagStorm traversing function copyToNewTag*/
@@ -411,6 +433,15 @@ struct copyTagContext *copyContext = context;
 char *val = tagFindLocalVal(stanza, copyContext->oldTag);
 if (val)
     tagStanzaAdd(storm, stanza, copyContext->newTag, val);
+}
+
+void tagStormCopyTags(struct tagStorm *tagStorm, char *oldTag, char *newTag)
+/* Make a newTag that has same value as oldTag every place oldTag occurs */
+{
+struct copyTagContext copyContext; 
+copyContext.oldTag = oldTag;
+copyContext.newTag = newTag;
+tagStormTraverse(tagStorm, tagStorm->forest, &copyContext, copyToNewTag);
 }
 
 
@@ -621,6 +652,7 @@ char *newCopy = lmCloneString(tagStorm->lm, newName);
 rRenameTags(tagStorm->forest, oldName, newCopy);
 }
 
+
 void renameArrayField(struct tagStorm *tags, char *oldPrefix, int maxIndex, char *oldSuffix,
     char *newPrefix, char *newSuffix)
 /* Rename some array fields */
@@ -706,31 +738,23 @@ for (subtype = sampleSubtypeList; subtype != NULL; subtype = nextSubtype)
         {
 	char derivedTag[128];
 	safef(derivedTag, sizeof(derivedTag), "sample.%s.derived_from", nextSubtype->name);
-	struct copyTagContext copyContext;
 	if (!isDonor)  // Donor already has donor.sample_id
 	    {
 	    addIdFieldForSubtype(tags, subtype->fieldPrefix, subtype->name, idTag);
 	    }
-	copyContext.oldTag = idTag;
-	copyContext.newTag = derivedTag;
-	tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
+	tagStormCopyTags(tags, idTag, derivedTag);
 	}
     }
 
 /* Add in any species tags to all types of samples and delete original. */
 for (subtype = sampleSubtypeList; subtype != NULL; subtype = subtype->next)
     {
-    struct copyTagContext copyContext;
     char *name = subtype->name;
     char newTag[128];
     safef(newTag, sizeof(newTag), "sample.%s.ncbi_taxon_id", name);
-    copyContext.oldTag = "sample.ncbi_taxon_id";
-    copyContext.newTag = newTag;
-    tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
+    tagStormCopyTags(tags, "sample.ncbi_taxon_id", newTag);
     safef(newTag, sizeof(newTag), "sample.%s.genus_species", name);
-    copyContext.oldTag = "sample.genus_species";
-    copyContext.newTag = newTag;
-    tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
+    tagStormCopyTags(tags, "sample.genus_species", newTag);
     }
 tagStormDeleteTags(tags, "sample.ncbi_taxon_id");
 tagStormDeleteTags(tags, "sample.genus_species");
@@ -766,30 +790,31 @@ if (!tagStormInAllFlattenedLeaves(tags, tags->forest, "assay.assay_id"))
     {
     if (tagStormInAllFlattenedLeaves(tags, tags->forest, "assay.seq.insdc_run"))
 	{
-	uglyf("looks like got insdc_run everywhere\n");
-	struct copyTagContext copyContext;
-	copyContext.oldTag = "assay.seq.insdc_run";
-	copyContext.newTag = "assay.assay_id";
-	tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
+	tagStormCopyTags(tags, "assay.seq.insdc_run", "assay.assay_id");
 	}
     else
 	{
-	uglyf("making up assay.assay_id\n");
 	addIdFieldForSubtype(tags, "assay.", "assay", "assay.assay_id");
 	}
     }
 
-/* Copy assay.assay_id to all assay subtypes and then delete it. */
+/* Copy assay.assay_id to all assay subtypes. */
 for (subtype = assaySubtypeList; subtype != NULL; subtype = subtype->next)
     {
     char idTag[128];
     safef(idTag, sizeof(idTag), "assay.%s.assay_id", subtype->name); 
-    struct copyTagContext copyContext;
-    copyContext.oldTag = "assay.assay_id";
-    copyContext.newTag = idTag;
-    tagStormTraverse(tags, tags->forest, &copyContext, copyToNewTag);
+    tagStormCopyTags(tags, "assay.assay_id", idTag);
     }
-tagStormDeleteTags(tags, "assay.assay_id");
+
+/* Add file prefix to a lot of things we want in file tab. */
+char sampleId[128];
+safef(sampleId, sizeof(sampleId), "sample.%s.sample_id", lastSubtype->name);
+tagStormCopyTags(tags, sampleId, "file.sample_id");
+tagStormRenameTags(tags, "assay.assay_id", "file.assay_id");
+tagStormRenameTags(tags, "assay.seq.insdc_experiment", "file.seq.insdc_experiment");
+tagStormRenameTags(tags, "assay.seq.insdc_run", "file.seq.insdc_run");
+tagStormRenameTags(tags, "assay.seq.files", "file.files");
+
 
 /* Make initial cut of our conversion tag list */
 struct convert *convList = makeConvertList();
@@ -839,6 +864,8 @@ for (conv = convList; conv != NULL; conv = conv->next)
 	char *objectName = conv->objectName;
 	if (startsWith("sample.", objectName))
 	    trimSampleFieldNames(table, objectName);
+	else if (startsWith("assay.", objectName))
+	    trimAssayFieldNames(table, objectName);
 	else
 	    trimFieldNames(table, objectName);
 	}
