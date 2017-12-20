@@ -250,6 +250,8 @@ if apt-cache policy curl | grep "Installed: .none." > /dev/null; then
    apt-get update
    apt-get --no-install-recommends install -y curl
    apt-get -y autoremove
+   # make sure that the mysql server is re-configured now
+   rm -f /usr/local/apache/trash/registration.txt
 fi
 
 echo
