@@ -1,6 +1,6 @@
 track wgEncodeGencodeVM14
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper off
 shortLabel All GENCODE VM14
 longLabel All GENCODE annotations from VM14 (Ensembl 89)
 group genes
