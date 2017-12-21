@@ -703,7 +703,15 @@ done
 	    hgcentraltest
     #	test it with some sequence
 
-#########################################################################
+############################################################################
+## reset default position to same as anoGam1
+##  (DONE - 2017-12-21 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr2R:6479796-6482329"
+	where name="anoGam3";' hgcentraltest
+
+############################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2017-12-20 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
