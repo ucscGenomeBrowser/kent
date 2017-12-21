@@ -120,6 +120,9 @@ char *hDefaultChrom(char *db);
 int hChromCount(char *db);
 /* Return the number of chromosomes (scaffolds etc.) in the given db. */
 
+char *hNcbiGcfId(char *db);
+/* Return the NCBI RefSeq assembly+annotations ID (GCF_...) for db, or NULL if we don't know it. */
+
 struct sqlConnection *hAllocConn(char *db);
 /* Get free connection if possible. If not allocate a new one. */
 

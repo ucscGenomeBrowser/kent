@@ -299,6 +299,10 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
 $twoBit = $opt_twoBit ? $opt_twoBit :
   "$HgAutomate::clusterData/$db/$db.2bit";
 
+if ( ! -s "$twoBit" ) {
+  die "can not find 2bit file:\n\t$twoBit";
+}
+
 # Do everything.
 $stepper->execute();
 

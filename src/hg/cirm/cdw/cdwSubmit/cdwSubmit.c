@@ -397,7 +397,8 @@ ef->startUploadTime = cdwNow();
 verbose(3, "cdwFile=%s\n", cdwFile);
 verbose(3, "copyFile submitFileName=%s to cdwPath=%s\n", ef->submitFileName, cdwPath);
 copyFile(ef->submitFileName, cdwPath);
-// and owner can chmod it
+// and owner can touch and chmod it
+touchFileFromFile(ef->submitFileName, cdwPath); // preserve mtime.
 chmod(cdwPath, 0444);
 
 // save space by finding the last real file in symlinks chain
@@ -870,6 +871,7 @@ char cdwFile[PATH_LEN] = "", cdwPath[PATH_LEN];
 cdwMakeFileNameAndPath(fileId, submitFileName,  cdwFile, cdwPath);
 long long startUploadTime = cdwNow();
 copyFile(submitFileName, cdwPath);
+touchFileFromFile(submitFileName, cdwPath);
 chmod(cdwPath, 0444);
 long long endUploadTime = cdwNow();
 

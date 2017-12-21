@@ -1234,7 +1234,8 @@ long startTime = clock1000();
 
 for (list = all; list; list = list->next)
     {
-    fprintf(fh, "%s\t%lld\t%d\n", list->chrom, list->crisprCount, list->size);
+    fprintf(fh, "# chrom\tcrisprCount\tchromSize\n");
+    fprintf(fh, "# %s\t%lld\t%d\n", list->chrom, list->crisprCount, list->size);
     struct crispr *c;
     for (c = list->chromCrisprs; c; c = c->next)
 	{

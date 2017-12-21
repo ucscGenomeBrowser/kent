@@ -47,7 +47,7 @@ sGroup_Primates panTro5 panPan2 gorGor5 ponAbe2 nomLeu3 nasLar1 rhiBie1 rhiRox1 
     viewLimitsMax -14.191:1.199
 
         track phyloP30way
-        subTrack cons30wayViewphyloP off
+        subTrack cons30wayViewphyloP on
         subGroups view=phyloP
         shortLabel Cons 30 Mammals
         longLabel 30 mammals Basewise Conservation by PhyloP (27 primates)
@@ -71,7 +71,7 @@ sGroup_Primates panTro5 panPan2 gorGor5 ponAbe2 nomLeu3 nasLar1 rhiBie1 rhiRox1 
     subTrack cons30way
 
         track phastCons30way
-        subTrack cons30wayViewphastcons off
+        subTrack cons30wayViewphastcons on
         subGroups view=phastcons
         shortLabel Cons 30 Mammals
         longLabel 30 mammals conservation by PhastCons (27 primates)

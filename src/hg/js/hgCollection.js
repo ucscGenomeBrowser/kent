@@ -53,8 +53,8 @@ var hgCollection = (function() {
         };
 
         // can't delete root
-        if ($(node).attr('parent') === '#')
-            delete items.deleteItem;
+        //if ($(node).attr('parent') === '#')
+            //delete items.deleteItem;
 
         return items;
         }
@@ -81,7 +81,7 @@ var hgCollection = (function() {
         var type = node.li_attr.viewtype;
         var viewFunc = node.li_attr.viewfunc;
 
-        if (type == 'view') 
+        if (type == 'collection') 
             $("#viewFuncDiv").show();
         else
             $("#viewFuncDiv").hide();
@@ -117,16 +117,28 @@ var hgCollection = (function() {
     function checkCallback( operation, node, node_parent, node_position, more) {
         // called during a drag and drop action to see if the target is droppable
         if ((operation === "copy_node") ||  (operation === "move_node")) {
-            if (node_parent.li_attr.class !== "folder")
+            if (node.li_attr.class === "folder") {
+                if (node_parent.id !== '#') {
+                    return false;
+                }
+            }
+            else if (node_parent.li_attr.class !== "folder") {
                 return false;
+            }
         }
-
         return true;
     }
 
     function dialogCollection() {
         $("#doNewCollection").off ( "click" );
         $("#doNewCollection").click ( newCollection );
+        $("#viewFuncDiv").show();
+        $("#customName").val("A New Collection");
+        $("#customDescription").val("A New Collection Description");
+        $("#customVis").val("full");
+        $("#customColorInput").val("#0");
+        //$("input:radio[name ='missingData']:checked").val();
+        $("#viewFunc").val("show all");
         $( "#newCollectionDialog" ).dialog("open");
     } 
 
@@ -148,10 +160,12 @@ var hgCollection = (function() {
         newNode.li_attr.color = $("#customColorInput").val();
         newNode.li_attr.missingMethod = $("input:radio[name ='missingData']:checked").val();
         newNode.li_attr.viewfunc = $("#viewFunc").val();
-        //newNode.li_attr.viewtype = "view";
-        selectedNode = newNode;
-        rebuildLabel();
+        newNode.li_attr.viewtype = "collection";
+        //selectedNode = newNode;
         $(selectedTree).jstree("set_icon", newNode, '../images/folderC.png');
+        $(selectedTree).jstree("deselect_node", selectedNode);
+        $(selectedTree).jstree("select_node", newNode.id);
+        rebuildLabel();
     }
 
     function addCollection(trees, list) {
@@ -166,6 +180,19 @@ var hgCollection = (function() {
        // called when the "Save" button is pressed
        var json = "[";
         var v = $(selectedTree).jstree(true).get_json('#', {flat:true, no_data:true, no_state:true, no_a_attr:true});
+        var children;
+        var parents = {};
+        for(ii=0; ii < v.length; ii++) {
+            if (v[ii].parent !== '#') {
+                parents[v[ii].parent] = 1;
+            }
+        }
+        for(ii=0; ii < v.length; ii++) { 
+            if (v[ii].li_attr.class === "folder") {
+                if (parents[v[ii].id] !== 1)
+                    alert(v[ii].text + " does not have any wiggles.  Not saved");
+            }
+        }
         json += JSON.stringify(v);
         json += ']';
         var requestData = 'jsonp=' + json;
@@ -250,7 +277,7 @@ var hgCollection = (function() {
         window.addEventListener("beforeunload", function (e) {
             if (isDirty) {
                 doAjaxAsync = false;
-                //saveCollections(trees);
+                saveCollections(trees);
             }
 
             return undefined;
@@ -301,6 +328,10 @@ var hgCollection = (function() {
                 $(evt.target).jstree("set_icon", data.node, 'fa fa-minus-square');
             });
             $(newTree).on('click', '.jstree-themeicon ', minusHit);
+
+            // select the first cild
+            var firstChild = $(newTree).find("li").first();
+            $(newTree).jstree("select_node", $(firstChild).attr("id"));
             selectedTree = newTree;
         });
 
@@ -347,7 +378,7 @@ var hgCollection = (function() {
 
         if (goTracks) {
             // we go straight to hgTracks after save
-            $form = $('form');
+            $form = $('#redirectForm');
             $form.submit();
         }
     }

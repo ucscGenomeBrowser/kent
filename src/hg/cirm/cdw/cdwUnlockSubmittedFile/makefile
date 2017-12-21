@@ -1,13 +1,8 @@
 kentSrc = ../../../..
-include ${kentSrc}/inc/common.mk
+A = cdwUnlockSubmittedFile
+preMyLibs += ../lib/$(MACHTYPE)/cdwlib.a
+include $(kentSrc)/inc/userApp.mk
 
-A = cdwUnlockSubmittedFile.csh
-
-all:
-	@${MKDIR} ${SCRIPTS}
-	chmod a+rx ${A}
-	rm -f ${SCRIPTS}/${A}
-	cp -pf ${A} ${SCRIPTS}/
-
+# clean out the old script version since we have new c version now.
 clean::
-	@echo nothing to clean 
+	rm -f ${SCRIPTS}/${A}.csh

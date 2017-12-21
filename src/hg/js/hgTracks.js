@@ -313,9 +313,13 @@ var genomePos = {
             // http://www.ensembl.org/Homo_sapiens/contigview?chr=21&start=33031934&end=33041241
             genomePos.linkFixup(pos, "ensemblLink", new RegExp("(.+start=)[0-9]+"), "end");
 
-            // Example NCBI link:
+            // Example NCBI Map Viewer link (obsolete):
             // https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=21&BEG=33031934&END=33041241
             genomePos.linkFixup(pos, "ncbiLink", new RegExp("(.+BEG=)[0-9]+"), "END");
+
+            // Example NCBI Genome Data Viewer link
+            // https://www.ncbi.nlm.nih.gov/genome/gdv/browser/?id=GCF_000001405.37&chr=4&from=45985744&to=45991655&context=genome
+            genomePos.linkFixup(pos, "ncbiLink", new RegExp("(.+from=)[0-9]+"), "to");
 
             // Example medaka link: 
             // http://utgenome.org/medakabrowser_ens_jump.php?revision=version1.0&chr=chromosome18&start=14435198&end=14444829

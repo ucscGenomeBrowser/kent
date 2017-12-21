@@ -65,7 +65,7 @@ body.loading .modal {
     }
 </style>
 
-<form name='form' action='../cgi-bin/hgTracks'></form>
+<form id='redirectForm' action='../cgi-bin/hgTracks'></form>
 
 <div class='row gbTrackTitleBanner'>
     <div class='col-md-4'>
@@ -109,7 +109,7 @@ body.loading .modal {
                 </div>
         </div>
         <div style='margin:12px; font-size:12px'> 
-        Below are tracks in <i><span id='collectedTracksTitle'></span></i>. To add tracks to this collection, drag and drop from "Available Tracks".  Right-click on the track to remove it.
+         To add tracks to collections, drag and drop from "Available Tracks".  Right-click on the track to remove it.
         </div>
         <div id='currentCollection' style='overflow:auto' >
         </div>
@@ -131,30 +131,38 @@ body.loading .modal {
 
 
     <div id='CustomTrackOptions' >
-        <label class='gbInputLabel'  for='name'>Name:</label>
-        <input type='text' name='customName' id='customName' value='' class='text ui-widget-content ui-corner-all'>
-        <br><label class='gbInputLabel'  for='description'>Description:</label>
-        <input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all' style='width:80%'>
-        <br><label for='customVis' class='gbInputLabel'>Visibility:</label>
-        <select ID='customVis' style='width: 70px'>
-            <option>hide</option>
-            <option selectED>dense</option>
-            <option>squish</option>
-            <option>pack</option>
-            <option>full</option>
-        </select>
+        <div>
+            <label class='gbInputLabel'  for='name'>Name:</label>
+            <input type='text' name='customName' id='customName' value='' class='text ui-widget-content ui-corner-all'>
+        </div>
+        <div>
+            <br><label class='gbInputLabel'  for='description'>Description:</label>
+            <input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all' style='width:80%'>
+        </div>
+        <div>
+            <br><label for='customVis' class='gbInputLabel'>Visibility:</label>
+            <select ID='customVis' style='width: 70px'>
+                <option>hide</option>
+                <option selected>dense</option>
+                <option>squish</option>
+                <option>pack</option>
+                <option>full</option>
+            </select>
+        </div>
 
-        <div id='viewFuncDiv' style='display:none;height:20px'>
-            <br><label class='gbInputLabel'  for='viewFunc'>Function:</label>
+        <div id='viewFuncDiv'>
+            <br><label class='gbInputLabel'  for='viewFunc'>Math Function:</label>
             <select ID='viewFunc' >
-                <option selectED>show all</option>
+                <option selected>show all</option>
                 <option >add all</option>
                 <option >subtract from the first</option>
             </select>
         </div>
 
-        <br> <p><span class='gbInputLabel'> Color:</span> <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
-        <input id='customColorPicker'>           
+        <div>
+            <br> <p><span class='gbInputLabel'> Color:</span> <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
+            <input id='customColorPicker'>           
+        </div>
 
     </div>
 
