@@ -8,6 +8,8 @@
 #include "dystring.h"
 #include "tagSchema.h"
 
+boolean clNoArray = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -20,11 +22,14 @@ errAbort(
   "first column is the old tag name, and the second the new tag name.\n"
   "   If in.tags and out.tags are the same, it will create a backup of\n"
   "in.tags in in.tags.bak\n"
+  "Options:\n"
+  "   -noArray - if set then don't treat .1. .2. and so forth as array indexes\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"noArray", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -71,7 +76,9 @@ while (lineFileNext(lf, &line, NULL))
 	char *newTag = NULL;
 
 	// Handle array bits which are a bit complex, then easy non-array case to find new symbol
-	int indexCount = tagSchemaParseIndexes(tag, indexes, ArraySize(indexes));
+	int indexCount = 0;
+	if (!clNoArray)
+	    indexCount = tagSchemaParseIndexes(tag, indexes, ArraySize(indexes));
 	if (indexCount > 0)
 	    {
 	    char *oldBracketed = tagSchemaFigureArrayName(tag, bracketedDy);
@@ -99,6 +106,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+clNoArray = optionExists("noArray");
 tagStormRenameTags(argv[1], argv[2], argv[3]);
 return 0;
 }
