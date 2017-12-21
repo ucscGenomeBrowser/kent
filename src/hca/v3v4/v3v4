@@ -61,10 +61,10 @@ KEEP	project.contributors.[].name	project.contributors.[].name
 KEEP	project.core.schema_url	project.core.schema_url
 KEEP	project.core.schema_version	project.core.schema_version
 KEEP	project.core.type	project.core.type
-DELETE	project.ddjb_trace
+RENAME	project.ddjb_trace	project.insdc_project
 KEEP	project.description	project.description
-KEEP	project.experimental_design.[].ontology	project.experimental_design.[].ontology
-KEEP	project.experimental_design.[].text	project.experimental_design.[].text
+DELETE	project.experimental_design.[].ontology
+RENAME	project.experimental_design.[].text	project.experimental_design.[]
 KEEP	project.experimental_factor_name	project.experimental_factor_name
 KEEP	project.geo_series	project.geo_series
 RENAME	project.id	project.project_id
@@ -79,7 +79,7 @@ RENAME	project.protocols.[].pdf	protocols.[].pdf
 RENAME	project.protocols.[].retail_name	protocols.[].retail_name
 RENAME	project.protocols.[].submit_date	protocols.[].submit_date
 RENAME	project.protocols.[].submitter_id	protocols.[].submitter_id
-RENAME	project.protocols.[].type.ontology		rotocols.[].type.ontology	
+RENAME	project.protocols.[].type.ontology	protocols.[].type.ontology	
 RENAME	project.protocols.[].type.text		rotocols.[].type.text	
 RENAME	project.protocols.[].update_date	protocols.[].update_date
 RENAME	project.protocols.[].updater_id	protocols.[].updater_id
@@ -93,20 +93,20 @@ KEEP	project.publications.[].title	project.publications.[].title
 KEEP	project.publications.[].url	project.publications.[].url
 KEEP	project.related_projects	project.related_projects
 RENAME	project.sra_project	project.insdc_project
-KEEP	project.submit_date	project.submit_date
-RENAME	project.submitter.address	project.submitters.[].address
-RENAME	project.submitter.city	project.submitters.[].city
+DELETE	project.submit_date	project.submit_date
+RENAME	project.submitter.address	project.submitters.0.address
+RENAME	project.submitter.city	project.submitters.0.city
 DELETE	project.submitter.core.schema_url
 DELETE	project.submitter.core.schema_version
 DELETE	project.submitter.core.type
-RENAME	project.submitter.country	project.submitters.[].country
-RENAME	project.submitter.country_division	project.submitters.[].country_division
-RENAME	project.submitter.email	project.submitters.[].email
+RENAME	project.submitter.country	project.submitters.0.country
+RENAME	project.submitter.country_division	project.submitters.0.country_division
+RENAME	project.submitter.email	project.submitters.0.email
 DELETE	project.submitter.id
-RENAME	project.submitter.institution	project.submitters.[].institution
-RENAME	project.submitter.laboratory	project.submitters.[].laboratory
-RENAME	project.submitter.name	project.submitters.[].name
-NEW		project.submitters.[].phone
+RENAME	project.submitter.institution	project.submitters.0.institution
+RENAME	project.submitter.laboratory	project.submitters.0.laboratory
+RENAME	project.submitter.name	project.submitters.0.name
+NEW		project.submitters.0.phone
 KEEP	project.supplementary_files	project.supplementary_files
 RENAME	project.title	project.name
 KEEP	project.update_date	project.update_date
@@ -187,13 +187,13 @@ KEEP	sample.donor.life_stage	sample.donor.life_stage
 KEEP	sample.donor.medication.[].ontology	sample.donor.medication.[].ontology
 KEEP	sample.donor.medication.[].text	sample.donor.medication.[].text
 KEEP	sample.donor.sex	sample.donor.sex
-RENAME	sample.donor.species.ontology	sample.genus_species.ontology
-RENAME	sample.donor.species.text	sample.genus_species.text
+RENAME	sample.donor.species.ontology	sample.ncbi_taxon_id
+RENAME	sample.donor.species.text	sample.genus_species
 KEEP	sample.donor.strain.[].ontology	sample.donor.strain.[].ontology
 KEEP	sample.donor.strain.[].text	sample.donor.strain.[].text
 KEEP	sample.donor.weight	sample.donor.weight
-TODO	sample.donor.id	sample.sample_id
-TODO	sample.donor.submitted_id	sample.name
+COMPLEX	sample.donor.id	sample.sample_id
+COMPLEX	sample.donor.submitted_id	sample.name
 DELETE	sample.ena_sample	sample_accessions.insdc_sample
 DELETE	sample.enrichment.[].core.schema_url
 DELETE	sample.enrichment.[].core.schema_version
@@ -230,8 +230,8 @@ RENAME	sample.title	sample.description
 RENAME	sample.total_estimated_cells	sample.cell_suspension.total_estimated_cells
 DELETE	sample.update_date
 DELETE	sample.updater_id
-TODO	sample.well.cell_type.ontology	sample.immortalized_cell_line.cell_type.ontology
-TODO	sample.well.cell_type.text	sample.immortalized_cell_line.cell_type.text
+COMPLEX	sample.well.cell_type.ontology	sample.immortalized_cell_line.cell_type.ontology
+COMPLEX	sample.well.cell_type.text	sample.immortalized_cell_line.cell_type.text
 RENAME	sample.well.col	sample.cell_suspension.well.col
 DELETE	sample.well.core.schema_url
 DELETE	sample.well.core.schema_version
