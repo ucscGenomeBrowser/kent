@@ -76,7 +76,7 @@ DBS = \
 	criGri1 \
 	danRer3 danRer4 danRer5 danRer6 danRer7 danRer10 danRer11 \
 	dasNov1 dasNov2 dasNov3 \
-	dipOrd1 dipOrd1 \
+	dipOrd1 dipOrd2 \
 	dirImm1 \
 	dm1 dm2 dm3 dm6 \
 	dp2 dp3 \
