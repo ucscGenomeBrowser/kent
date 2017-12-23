@@ -97,6 +97,7 @@ if (user)
     else if (tdb->subtracks)
         {
         viewFunc = trackDbSetting(tdb, "viewFunc");
+        missingMethod = trackDbSetting(tdb, "missingMethod");
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='collection' class='folder'";
         }
     else
@@ -485,10 +486,11 @@ longLabel %s\n\
 %s on\n\
 color %ld,%ld,%ld \n\
 viewFunc %s\n\
+missingMethod %s\n\
 type mathWig\n\
-\tpriority %d\n\
+priority %d\n\
 visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
- 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color), collection->viewFunc, priority);
+ 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color), collection->viewFunc, collection->missingMethod, priority);
 
 }
 
@@ -638,7 +640,7 @@ if ((name == NULL) && (ele->type == jsonObject))
         strEle = (struct jsonElement *)hashFindVal(attrHash, "viewfunc");
         if (strEle)
             track->viewFunc = jsonStringEscape(strEle->val.jeString);
-        strEle = (struct jsonElement *)hashFindVal(attrHash, "missingMethod");
+        strEle = (struct jsonElement *)hashFindVal(attrHash, "missingmethod");
         if (strEle)
             track->missingMethod = jsonStringEscape(strEle->val.jeString);
         }

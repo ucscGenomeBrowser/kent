@@ -66,7 +66,7 @@ var hgCollection = (function() {
         selectedNode.li_attr.longlabel = $("#customDescription").val();
         selectedNode.li_attr.visibility = $("#customVis").val();
         selectedNode.li_attr.color = $("#customColorInput").val();
-        selectedNode.li_attr.missingMethod = $("input:radio[name ='missingData']:checked").val();
+        selectedNode.li_attr.missingmethod = $("input:radio[name ='missingData']:checked").val();
         selectedNode.li_attr.viewfunc = $("#viewFunc").val();
         //newNode.li_attr.viewtype = "view";
         rebuildLabel();
@@ -93,6 +93,13 @@ var hgCollection = (function() {
         $("#customVis").val(visibility);
         $("#customColorInput").val(color);
         $("#customColorPicker").spectrum("set", color);
+        if ( node.li_attr.missingmethod === 'zero') {
+            $("input[name='missingData'][value='zero']").prop("checked",true);
+            $("input[name='missingData'][value='missing']").prop("checked",false);
+        } else {
+            $("input[name='missingData'][value='zero']").prop("checked",false);
+            $("input[name='missingData'][value='missing']").prop("checked",true);
+        }
 
         $("#doNewCollection").off ( "click" );
         $("#doNewCollection").click ( changeCollection );
@@ -139,6 +146,7 @@ var hgCollection = (function() {
         $("#customColorInput").val("#0");
         //$("input:radio[name ='missingData']:checked").val();
         $("#viewFunc").val("show all");
+        $( "#customName" ).select();
         $( "#newCollectionDialog" ).dialog("open");
     } 
 
@@ -158,7 +166,7 @@ var hgCollection = (function() {
         newNode.li_attr.longlabel = $("#customDescription").val();
         newNode.li_attr.visibility = $("#customVis").val();
         newNode.li_attr.color = $("#customColorInput").val();
-        newNode.li_attr.missingMethod = $("input:radio[name ='missingData']:checked").val();
+        newNode.li_attr.missingmethod = $("input:radio[name ='missingData']:checked").val();
         newNode.li_attr.viewfunc = $("#viewFunc").val();
         newNode.li_attr.viewtype = "collection";
         //selectedNode = newNode;

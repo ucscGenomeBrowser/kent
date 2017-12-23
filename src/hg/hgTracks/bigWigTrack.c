@@ -224,10 +224,20 @@ else
 static void mathWigLoadItems(struct track *tg)
 /* Fill up tg->items with bedGraphItems derived from a bigWig file */
 {
+char *missingSetting;
+boolean missingIsZero = FALSE;
+if ((missingSetting = trackDbSetting(tg->tdb, "missingMethod")) != NULL)
+    {
+    missingIsZero = sameString(missingSetting, "missing");
+    }
 char *equation = cloneString(trackDbSetting(tg->tdb, "mathDataUrl"));
 
 struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(insideWidth);
-double *data = mathWigGetValues(equation, chromName, winStart, winEnd);
+double *data;
+if (missingIsZero)
+    data = mathWigGetValuesMissing(equation, chromName, winStart, winEnd);
+else
+    data = mathWigGetValues(equation, chromName, winStart, winEnd);
 dataToPixels(data, pre);
 
 free(data);
