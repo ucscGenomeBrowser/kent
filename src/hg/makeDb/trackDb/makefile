@@ -76,7 +76,7 @@ DBS = \
 	criGri1 \
 	danRer3 danRer4 danRer5 danRer6 danRer7 danRer10 danRer11 \
 	dasNov1 dasNov2 dasNov3 \
-	dipOrd1 proCap1 \
+	dipOrd1 dipOrd1 \
 	dirImm1 \
 	dm1 dm2 dm3 dm6 \
 	dp2 dp3 \
@@ -153,6 +153,7 @@ DBS = \
 	ponAbe2 \
 	priExs1 \
 	priPac1 priPac2 priPac3 \
+	proCap1 \
 	proCoq1 \
 	pteVam1 tarSyr1 tarSyr2 \
 	repeats2 \
