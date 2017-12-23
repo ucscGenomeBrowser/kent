@@ -229,7 +229,7 @@ hgsql -e 'update dbDb set genome="A. gambiae" where name like "anoGam3";' hgcent
     makeCytoBandIdeo.csh anoGam3
 
 #########################################################################
-# ucscToRefSeq table/track (DONE - 2016-04-14 - Hiram)
+# ucscToRefSeq table/track (DONE - 2017-12-19 - Hiram)
     # the sequence here is working for a 'refseq' assembly with a chrM
     # situation may be specific depending upon what is available in the assembly
 
@@ -352,16 +352,13 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku anoGam3) > do.log 2>&1
-XXX - running - Tue Dec 19 15:47:47 PST 2017
-    # real    254m18.208s
+    # real    60m3.969s
 
     cat faSize.rmsk.txt
-# 1679203469 bases (4693618 N's 1674509851 real 809208275 upper 865301576 lower) in 1923 sequences in 1 files
-# Total size: mean 873220.7 sd 6186024.0 min 650 (chrUn_KN150525v1) max 78093715 (chr4) median 146921
-# N count: mean 2440.8 sd 64874.0
-# U count: mean 420805.1 sd 2950984.7
-# L count: mean 449974.8 sd 3210628.1
-# %51.53 masked total, %51.67 masked real
+# 264974304 bases (12572948 N's 252401356 real 216585988 upper 35815368 lower) in 8041 sequences in 1 files
+# Total size: mean 32952.9 sd 1190997.5 min 349 (chrUn_NW_158375v1) max 61545105 (chr2R) median 1529
+# %13.52 masked total, %14.19 masked real
+
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -371,18 +368,18 @@ XXX - running - Tue Dec 19 15:47:47 PST 2017
 	# CC   RELEASE 20140131;  
 
     time featureBits -countGaps anoGam3 rmsk
-    # 865410761 bases of 1679203469 (51.537%) in intersection
-	# real	0m28.805s
+    # 35874857 bases of 264974304 (13.539%) in intersection
+    # real    0m5.461s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
     #   separates out the N's from the bases, it doesn't show lower case N's
 
-    # faster way to get the same result:
+    # faster way to get the same result for high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' anoGam3 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    #  total 865410761.000000
-	# real	0m28.896s
+    # total 35874857.000000
+    # real    0m1.798s
 
 ##########################################################################
 # running simple repeat (DONE - 2017-12-19 - Hiram)
@@ -397,8 +394,6 @@ XXX - running - Tue Dec 19 15:47:47 PST 2017
     cat fb.simpleRepeat
     # 6341048 bases of 264424304 (2.398%) in intersection
 
-XXX - waiting for RM/WindowMasker
-
     cd /hive/data/genomes/anoGam3
     # using the Window Masker result:
     #twoBitMask bed/windowMasker/anoGam3.cleanWMSdust.2bit \
@@ -411,15 +406,15 @@ XXX - waiting for RM/WindowMasker
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa anoGam3.2bit stdout | faSize stdin > faSize.anoGam3.2bit.txt
     cat faSize.anoGam3.2bit.txt
-# 1679203469 bases (4693618 N's 1674509851 real 807728713 upper 866781138 lower) in 1923 sequences in 1 files
-# Total size: mean 873220.7 sd 6186024.0 min 650 (chrUn_KN150525v1) max 78093715 (chr4) median 146921
-# %51.62 masked total, %51.76 masked real
+# 264974304 bases (12572948 N's 252401356 real 216346487 upper 36054869 lower) in 8041 sequences in 1 files
+# Total size: mean 32952.9 sd 1190997.5 min 349 (chrUn_NW_158375v1) max 61545105 (chr2R) median 1529
+# %13.61 masked total, %14.28 masked real
 
     rm /gbdb/anoGam3/anoGam3.2bit
     ln -s `pwd`/anoGam3.2bit /gbdb/anoGam3/anoGam3.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2017-06-04 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2017-12-19 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/anoGam3/bed/microsat
     cd /cluster/data/anoGam3/bed/microsat
@@ -428,28 +423,27 @@ XXX - waiting for RM/WindowMasker
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed anoGam3 microsat microsat.bed
-    # Read 127131 elements of size 4 from microsat.bed
+    # Read 3959 elements of size 4 from microsat.bed
+    featureBits -countGaps anoGam3 microsat
+    # 226144 bases of 264974304 (0.085%) in intersection
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2017-06-07 - Hiram)
+## WINDOWMASKER (DONE - 2017-12-19 - Hiram)
 
     mkdir /hive/data/genomes/anoGam3/bed/windowMasker
     cd /hive/data/genomes/anoGam3/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev anoGam3) > do.log 2>&1
-    # real    53m45.183s
+    # real    12m20.317s
 
     # Masking statistics
     cat faSize.anoGam3.cleanWMSdust.txt
-# 1679203469 bases (4693618 N's 1674509851 real 844135283 upper 830374568 lower) in 1923 sequences in 1 files
-# Total size: mean 873220.7 sd 6186024.0 min 650 (chrUn_KN150525v1) max 78093715 (chr4) median 146921
-# N count: mean 2440.8 sd 64874.0
-# U count: mean 438967.9 sd 3081301.2
-# L count: mean 431812.0 sd 3080639.1
-# %49.45 masked total, %49.59 masked real
+# 264974304 bases (12572948 N's 252401356 real 196003243 upper 56398113 lower) in 8041 sequences in 1 files
+# Total size: mean 32952.9 sd 1190997.5 min 349 (chrUn_NW_158375v1) max 61545105 (chr2R) median 1529
+# %21.28 masked total, %22.34 masked real
 
     cat fb.anoGam3.rmsk.windowmaskerSdust.txt
-    # 638473395 bases of 1679203469 (38.022%) in intersection
+    # 19279994 bases of 264974304 (7.276%) in intersection
 
 ##########################################################################
 # run up idKeys files for chromAlias (DONE - 2017-12-19 - Hiram)
@@ -462,124 +456,77 @@ XXX - waiting for RM/WindowMasker
     cat anoGam3.keySignature.txt
     #   ae5975a59b0fd10409ed20280a0188df
 
-    # genbank and flybase sequences were also run up here in ./genbank/
+    # genbank and flybase idKeys were also run up here in ./genbank/
     # and ./flybase/
 
 ##########################################################################
-# cpgIslands - (TBD - 2016-10-20 - Hiram)
+# cpgIslands - (DONE - 2017-12-19 - Hiram)
     mkdir /hive/data/genomes/anoGam3/bed/cpgIslands
     cd /hive/data/genomes/anoGam3/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku anoGam3) > do.log 2>&1
-    # real    5m24.930s
+    # real    1m15.884s
 
     cat  fb.anoGam3.cpgIslandExt.txt
-    # 5261052 bases of 1674677181 (0.314%) in intersection
+    # 19703582 bases of 264424304 (7.452%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2017-06-07 - Hiram)
+# genscan - (DONE - 2017-12-19 - Hiram)
     mkdir /hive/data/genomes/anoGam3/bed/genscan
     cd /hive/data/genomes/anoGam3/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku anoGam3) > do.log 2>&1
-    # real	66m57.728s
+    # real    34m10.304s
 
     cat fb.anoGam3.genscan.txt
-    # 57461966 bases of 1674677181 (3.431%) in intersection
+    # 35064324 bases of 264424304 (13.261%) in intersection
 
     cat fb.anoGam3.genscanSubopt.txt
-    # 45875776 bases of 1674677181 (2.739%) in intersection
+    # 2488274 bases of 264424304 (0.941%) in intersection
 
 #############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2017-03-30 - Hiram)
-    # original alignment
-	mkdir /hive/data/genomes/hg38/bed/lastzAnoGam3.2017-06-12
-	cd /hive/data/genomes/hg38/bed/lastzAnoGam3.2017-06-12
-	# 41036733 bases of 3049335806 (1.346%) in intersection
-
-	mkdir /hive/data/genomes/anoGam3/bed/blastz.hg38.swap
-    cd /hive/data/genomes/anoGam3/bed/blastz.hg38.swap
-
-    time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzAnoGam3.2017-06-12/DEF \
-        -swap -chainMinScore=3000 -chainLinearGap=medium \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -noDbNameCheck -syntenicNet) > swap.log 2>&1
-	#  real	39m24.916s
-
-    cat fb.anoGam3.chainHg38Link.txt
-    # 47869194 bases of 1674677181 (2.858%) in intersection
-
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` anoGam3 hg38) \
-       > rbest.log 2>&1 &
-    # real	638m45.337s
-
-#############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2017-03-30 - Hiram)
-
-    cd /hive/data/genomes/mm10/bed/lastzAnoGam3.2017-06-12
-    cat fb.mm10.chainAnoGam3Link.txt
-    # 36448414 bases of 2652783500 (1.374%) in intersection
-
-    #	and for the swap
-    mkdir /hive/data/genomes/anoGam3/bed/blastz.mm10.swap
-    cd /hive/data/genomes/anoGam3/bed/blastz.mm10.swap
-    time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzAnoGam3.2017-06-12/DEF \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-        -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
-	> swap.log 2>&1 &
-    #	real    53m19.485s
-
-    cat  fb.anoGam3.chainMm10Link.txt
-    #	90150612 bases of 1369865365 (6.581%) in intersection
-
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` anoGam3 mm10) \
-         > rbest.log 2>&1 &
-    #	real    597m52.740s
-
-#########################################################################
-# Create kluster run files (TBD - 2017-06-08 - Hiram)
+# Create kluster run files (DONE - 2017-12-20 - Hiram)
 
     # numerator is anoGam3 gapless bases "real" as reported by:
     featureBits -noRandom -noHap anoGam3 gap
-    # 4323788 bases of 1340794641 (0.322%) in intersection
+    # 550000 bases of 229932020 (0.239%) in intersection
     #                   ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1340794641 / 2861349177 \) \* 1024
-    #  ( 1340794641 / 2861349177 ) * 1024 = 479.834381
+    calc \( 229932020 / 2861349177 \) \* 1024
+    #  ( 229932020 / 2861349177 ) * 1024 = 82.286493
 
-    # ==> use -repMatch=500 according to size scaled down from 1024 for human.
-    #   and rounded down to nearest 50
+    # ==> use -repMatch=100 according to size scaled down from 1024 for human.
+    #   and rounded up to nearest 100
     cd /hive/data/genomes/anoGam3
     blat anoGam3.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/anoGam3.11.ooc \
-        -repMatch=500
-	# Wrote 57994 overused 11-mers to jkStuff/anoGam3.11.ooc
+        -repMatch=100
+    # Wrote 10653 overused 11-mers to jkStuff/anoGam3.11.ooc
+
 
     #   check non-bridged gaps to see what the typical size is:
     hgsql -N \
         -e 'select * from gap where bridge="no" order by size;' anoGam3 \
         | sort -k7,7nr | ave -col=7 stdin
-    # minimum gap size is 10 and produces a reasonable number of lifts
-    gapToLift -verbose=2 -minGap=100 anoGam3 jkStuff/nonBridged.lft \
+    # all these non-bridged gaps are 10,000
+    gapToLift -verbose=2 -minGap=10000 anoGam3 jkStuff/nonBridged.lft \
         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-06-14 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-12-20 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # #organism       mrnaCnt estCnt  refSeqCnt
-	# Danio rerio	30816	1488354	15648
+    # organism               mrnaCnt estCnt  refSeqCnt
+    # Anopheles gambiae       64151   153332  0
 
     # edit etc/genbank.conf to add anoGam3 just before rheMac2
-# anoGam3 (zebrafish)
+# anoGam3 (A. gambiae)
 anoGam3.serverGenome = /hive/data/genomes/anoGam3/anoGam3.2bit
 anoGam3.clusterGenome = /hive/data/genomes/anoGam3/anoGam3.2bit
 anoGam3.ooc = /hive/data/genomes/anoGam3/jkStuff/anoGam3.11.ooc
@@ -591,16 +538,14 @@ anoGam3.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCD
 anoGam3.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
 anoGam3.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
-# defaults are fine: genbank.mrna.native refseq.mrna.native refseq.mrna.xeno yes
-# and genbank.est.native
-anoGam3.genbank.mrna.xeno.load  = yes
-anoGam3.refseq.mrna.xeno.load  = yes
+# anoGam1 had genbank.mrna.xeno.load as yes
+# defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
+# genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
+# refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
+anoGam3.genbank.mrna.xeno.load = yes
 anoGam3.downloadDir = anoGam3
-# anoGam3.upstreamGeneTbl = refGene
-# anoGam3.upstreamMaf = multiz7way
-# /hive/data/genomes/danRer10/bed/multiz7way/species.lst
 
-    git commit -m "Added anoGam3; refs #19459" etc/genbank.conf
+    git commit -m "Added anoGam3; no redmine" etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
     make etc-update
@@ -609,11 +554,11 @@ anoGam3.downloadDir = anoGam3
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial anoGam3
-	# logFile: var/build/logs/2017.06.07-13:49:34.anoGam3.initalign.log
-	# real    2983m0.012s
-	tail var/build/logs/2017.06.07-13:49:34.anoGam3.initalign.log
-    # hgwdev 2017.06.09-15:24:14 anoGam3.initalign: Succeeded: anoGam3
-	# hgwdev 2017.06.09-15:32:33 anoGam3.initalign: finish
+    # logFile: var/build/logs/2017.12.20-08:12:09.anoGam3.initalign.log
+
+    tail var/build/logs/2017.12.20-08:12:09.anoGam3.initalign.log
+# hgwdev 2017.12.20-18:35:09 anoGam3.initalign: Succeeded: anoGam3
+# hgwdev 2017.12.20-18:40:13 anoGam3.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.anoGam3
@@ -622,9 +567,10 @@ anoGam3.downloadDir = anoGam3
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad anoGam3
-	
-    tail -1 var/build/logs/2017.06.07-13:49:34.anoGam3.initalign.log
-	# hgwdev 2017.06.09-15:32:33 anoGam3.initalign: finish
+    # logFile: var/dbload/hgwdev/logs/2017.12.20-19:54:42.anoGam3.dbload.log
+    # real    71m51.995s
+    tail -1 var/dbload/hgwdev/logs/2017.12.20-19:54:42.anoGam3.dbload.log
+    # hgwdev 2017.12.20-21:06:34 anoGam3.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -632,90 +578,141 @@ anoGam3.downloadDir = anoGam3
     # add anoGam3 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added anoGam3 - zebrafish refs #19459" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added anoGam3 - malaria mosquito refs #20743" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #############################################################################
-# augustus gene track (TBD - 2017-06-09 - Hiram)
+# augustus gene track (DONE - 2017-12-20 - Hiram)
 
     mkdir /hive/data/genomes/anoGam3/bed/augustus
     cd /hive/data/genomes/anoGam3/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=zebrafish -dbHost=hgwdev \
            -workhorse=hgwdev anoGam3) > do.log 2>&1
+    # real    65m0.735s
 
     cat fb.anoGam3.augustusGene.txt
-	# 53437277 bases of 1674677181 (3.191%) in intersection
+    # 20832482 bases of 264424304 (7.878%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2017-10-20 - Hiram)
+# add chromAlias table (DONE - 2017-12-20 - Hiram)
 
     mkdir /hive/data/genomes/anoGam3/bed/chromAlias
     cd /hive/data/genomes/anoGam3/bed/chromAlias
 
-    hgsql -N -e 'select chrom,name from ucscToRefSeq;' anoGam3 \
-        > ucsc.refseq.tab
-    hgsql -N -e 'select chrom,name from ucscToINSDC;' anoGam3 \
-        > ucsc.genbank.tab
-XXX - can the duplicates be added to this ?
-XXX - and check for flyBase IDs and Ensembl names
+    # working up new procedure here to allow in the duplicates from the
+    # others to the single names at UCSC
+
+    # the corresponding lists with duplicates are made from the idKeys
+    # run up for the various assemblies:
+    join -t$'\t' ../idKeys/anoGam3.idKeys.txt \
+	../../../anoGam2/flybase/both.idKeys.txt | cut -f2- \
+	| sort > ucsc.ensembl.tab
+
+    (printf "chrM\tL20934.1\n"; join -t$'\t'  ../idKeys/anoGam3.idKeys.txt \
+	../idKeys/genbank/refseqAnoGam3.idKeys.txt | cut -f2-) \
+	| sort > ucsc.genbank.tab
+
+    join -t$'\t'  ../idKeys/anoGam3.idKeys.txt \
+	../idKeys/refseq/refseqAnoGam3.idKeys.txt | cut -f2- \
+	| sort > ucsc.refseq.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.genbank.tab \
+	ucsc.refseq.tab ucsc.ensembl.tab \
+	  > anoGam3.chromAlias.tab
 
     # verify chrM is OK:
-
     grep chrM anoGam3.chromAlias.tab
-# AC024175.3      chrM    genbank
-# NC_002333.2     chrM    refseq
+# L20934.1        chrM    genbank
+# Mt      chrM    ensembl
+# NC_002084.1     chrM    refseq
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t anoGam3.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 8090 =? 8090 OK
+# checking genbank: 8090 =? 8090 OK
+# checking ensembl: 8090 =? 8090 OK
 
     hgLoadSqlTab anoGam3 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         anoGam3.chromAlias.tab
 
-#########################################################################
-# LIFTOVER TO danRer10 (TBD - 2017-10-25 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/anoGam3/bed/blat.danRer10.2017-10-25
-    cd /hive/data/genomes/anoGam3/bed/blat.danRer10.2017-10-25
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/anoGam3/jkStuff/anoGam3.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         danRer10 danRer10) > do.log 2>&1
-    # real    230m19.256s
+##############################################################################
+# lastz/chain/net swap D. melanogaster/dm6 (DONE - 2017-12-20 - Hiram)
 
-    # verify the convert link on the test browser is now active from anoGam3 to
-    # danRer10
+    # alignment to dm6
+    cd /hive/data/genomes/dm6/bed/lastzAnoGam3.2017-12-20
 
-#########################################################################
-# LIFTOVER TO danRer10 (TBD - 2017-06-12 - Hiram)
+    cat fb.dm6.chainAnoGam3Link.txt
+    # 19641460 bases of 142573024 (13.776%) in intersection
+
+    cat fb.dm6.chainRBestAnoGam3Link.txt
+    # 15964959 bases of 142573024 (11.198%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/anoGam3/bed/blastz.dm6.swap
+    cd /hive/data/genomes/anoGam3/bed/blastz.dm6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/dm6/bed/lastzAnoGam3.2017-12-20/DEF \
+        -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > swap.log 2>&1
+    # real    2m0.901s
+
+    cat fb.anoGam3.chainDm6Link.txt
+    # 20168390 bases of 264424304 (7.627%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` anoGam3 dm6) > rBest.log 2>&1 &
+    # real    46m7.441s
+
+    cat fb.anoGam3.chainRBestDm6Link.txt
+    # 16040573 bases of 264424304 (6.066%) in intersection
+
+###########################################################################
+# LIFTOVER TO anoGam1 (DONE - 2017-12-20 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/anoGam3/bed/blat.danRer10.2017-06-09
-    cd /hive/data/genomes/anoGam3/bed/blat.danRer10.2017-06-09
+    mkdir /hive/data/genomes/anoGam3/bed/blat.anoGam1.2017-12-20
+    cd /hive/data/genomes/anoGam3/bed/blat.anoGam1.2017-12-20
     time (doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/anoGam3/jkStuff/anoGam3.11.ooc \
-         anoGam3 danRer10) > doLiftOverToDanRer10.log 2>&1
-    # real    86m43.038s
+         anoGam3 anoGam1) > doLiftOverToAnoGam1.log 2>&1
+    # real    20m45.302s
 
-    # see if the liftOver menus function in the browser from anoGam3 to danRer10
+    # see if the liftOver menus function in the browser from anoGam3 to anoGam1
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-05-19 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2017-12-20 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
-	# Haifang 
-	# Done.
-
-	# Starting trans gfServer for anoGam3 on host blat1a, port 17874
-	# Starting untrans gfServer for anoGam3 on host blat1a, port 17875
+   # Starting trans gfServer for anoGam3 on host blat1d, port 17890
+   # Starting untrans gfServer for anoGam3 on host blat1d, port 17891
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("anoGam3", "blat1a", "17874", "1", "0"); \
+	VALUES ("anoGam3", "blat1d", "17890", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("anoGam3", "blat1a", "17875", "0", "1");' \
+	VALUES ("anoGam3", "blat1d", "17891", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
-#########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-06-09 - Hiram)
+############################################################################
+## reset default position to same as anoGam1
+##  (DONE - 2017-12-21 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr2R:6479796-6482329"
+	where name="anoGam3";' hgcentraltest
+
+############################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2017-12-20 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=anoGam3 -tableCoverage all.joiner
@@ -724,55 +721,39 @@ XXX - and check for flyBase IDs and Ensembl names
 
     cd /hive/data/genomes/anoGam3
     time (makeDownloads.pl anoGam3) > downloads.log 2>&1
-    #  real    27m1.207s
+    #  real    2m14.288s
 
-
-	# New Redmine pushQ System
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/anoGam3/pushQ
     cd /hive/data/genomes/anoGam3/pushQ
     time (makePushQSql.pl -redmineList anoGam3) > anoGam3.pushQ.sql 2> stderr.out
-    #real	3m32.847s
-	# Put a path to the files produced here in the redmine ticket 
+    # real    3m51.650s
 
-#########################################################################
-# UCSC to RefSeq name correspondence (TBD - 2017-10-20 - Hiram)
+    # the chainRBest and chainSyn tables do not go out, they are
+    # not on the redmine tables listing.  The reciprocalBest download
+    # files are released and are on the redmine files listing
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#   chainRBestDm6
+#   chainRBestDm6Link
+#   chainSynDm6
+#   chainSynDm6Link
+#   netRBestDm6
+#   netSynDm6
 
-    mkdir /hive/data/genomes/anoGam3/bed/ucscToRefSeq
-    cd /hive/data/genomes/anoGam3/bed/ucscToRefSeq
+    # verify the file listings are valid, should be no output to stderr:
+    cat redmine.anoGam3.file.list \
+	| while read L; do ls -ogL $L; done  > /dev/null
 
-    # after constructing idKeys in ./refseq/ directory:
+    # to verify the database.table list is correct, should be the same
+    # line count for these two commands:
+    wc -l redmine.anoGam3.table.list 
+    # 62 redmine.anoGam3.table.list
+    awk -F'.' '{
+printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
+}' redmine.anoGam3.table.list | while read L; do eval $L; done | wc -l
+    # 62
 
-    join -t$'\t' ../idKeys/*.idKeys.txt  refseq/*.idKeys.txt \
-	| cut -f2- | sort > ucsc.refseq.tab
-
-    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
-         | sort > name.coordinate.tab
-
-    join ucsc.refseq.tab name.coordinate.tab \
-       | awk '{printf "%s\t%d\t%d\t%s\n", $1,$3,$4,$2}' \
-          | sort -k1,1 -k2,2n > ucscToRefSeq.bed
-
-    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
-       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
-           > ucscToRefSeq.bed
-
-    # when working perfectly, all these tab files have the same line count:
-    wc -l *.tab *.bed
-#    1923 name.coordinate.tab
-#    1923 ucsc.refseq.tab
-#    1923 ucscToRefSeq.bed
-
-    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
-    echo $chrSize
-    #  20
-    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
-       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
-    hgLoadSqlTab anoGam3 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
-
-    checkTableCoords  anoGam3 -table=ucscToRefSeq
-    # should cover %100 all bases:
-    featureBits -countGaps anoGam3 ucscToRefSeq
-    # 1679203469 bases of 1679203469 (100.000%) in intersection
+    # Put a path to the files produced here in the redmine ticket 
 
 #########################################################################

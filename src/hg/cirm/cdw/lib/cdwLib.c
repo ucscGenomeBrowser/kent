@@ -882,6 +882,7 @@ else
     md5 = md5HexForFile(localAbsolutePath);
     }
 copyFile(localAbsolutePath, cdwPath);
+touchFileFromFile(localAbsolutePath, cdwPath);
 chmod(cdwPath, 0444);
 replaceOriginalWithSymlink(localAbsolutePath, "", cdwPath);
 
@@ -1492,21 +1493,6 @@ sqlSafef(query, sizeof(query),
 sqlUpdate(conn, query);
 }
 
-static char *mustReadSymlink(char *path, struct stat *sb)
-/* Read symlink or abort. FreeMem the returned value. */
-{
-ssize_t nbytes, bufsiz;
-// determine whether the buffer returned was truncated.
-bufsiz = sb->st_size + 1;
-char *symPath = needMem(bufsiz);
-nbytes = readlink(path, symPath, bufsiz);
-if (nbytes == -1) 
-    errnoAbort("readlink failure on symlink %s", path);
-if (nbytes == bufsiz)
-    errAbort("readlink returned buffer truncated\n");
-return symPath;
-}
-
 int findSubmitSymlinkExt(char *submitFileName, char *submitDir, char **pPath, char **pLastPath, int *pSymlinkLevels)
 /* Find the last symlink and real file in the chain from submitDir/submitFileName.
  * This is useful for when target of symlink in cdw/ gets renamed 
@@ -1529,7 +1515,7 @@ while (TRUE)
 	break;
 	}
     if (lstat(path, &sb) == -1)
-	errnoAbort("stat failure on %s", path);
+	errnoAbort("lstat failure on %s", path);
     if ((sb.st_mode & S_IFMT) != S_IFLNK)
 	break;
 
@@ -1539,7 +1525,7 @@ while (TRUE)
 	errAbort("Too many symlinks followed: %d symlinks. Probably a symlink loop.", symlinkLevels);
 
     // read the symlink
-    char *symPath = mustReadSymlink(path, &sb);
+    char *symPath = mustReadSymlinkExt(path, &sb);
 
     // apply symPath to path
     char *newPath = mustPathRelativeToFile(path, symPath);
@@ -1572,7 +1558,8 @@ if (result == -1)  // path does not exist
     errAbort("path=[%s] does not exist following submitDir/submitFileName through symlinks.", path);
     }
 if (startsWith(cdwRootDir, path))
-    errAbort("Unexpected operation. The symlink %s points to %s. It should not point to a file already under cdwRoot %s", submitFileName, path, cdwRootDir);
+    errAbort("Unexpected operation. The symlink %s points to %s. It should not point to a file already under cdwRoot %s", 
+	submitFileName, path, cdwRootDir);
 freeMem(lastPath);
 return path;
 }
@@ -1585,8 +1572,7 @@ void replaceOriginalWithSymlink(char *submitFileName, char *submitDir, char *cdw
 char *path = testOriginalSymlink(submitFileName, submitDir);
 if (unlink(path) == -1)  // save space
     errnoAbort("unlink failure %s", path);
-if (symlink(cdwPath, path) == -1)  // replace with symlink
-    errnoAbort("symlink failure from %s to %s", path, cdwPath);
+makeSymLink(cdwPath, path);
 verbose(1, "%s converted to symlink to %s\n", path, cdwPath);
 freeMem(path);
 }
@@ -1660,6 +1646,7 @@ if (really)
 	if (unlink(lastPath) == -1)  // drop about to be invalid symlink
 	    errnoAbort("unlink failure %s", lastPath);
 	copyFile(path, lastPath);
+	touchFileFromFile(path, lastPath);
 	chmod(lastPath, 0664);
 	freeMem(lastPath);
 	}

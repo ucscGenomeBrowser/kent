@@ -30,7 +30,7 @@ static struct optionSpec options[] = {
 void  addFilesToSraRun(struct tagStorm *storm, struct tagStanza *stanza)
 /* If stanza has an srr_run tag add a files tag to it */
 {
-char *srrCsv = tagFindLocalVal(stanza, "assay.seq.sra_run");
+char *srrCsv = tagFindLocalVal(stanza, "assay.seq.insdc_run");
 if (srrCsv != NULL)
     {
     char *pairing = tagMustFindVal(stanza, "assay.seq.paired_ends");

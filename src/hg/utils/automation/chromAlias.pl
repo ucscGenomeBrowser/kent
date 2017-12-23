@@ -4,141 +4,77 @@ use strict;
 use warnings;
 use File::Basename;
 
-# this needs to be fixed up with arguments
+my $argc = scalar(@ARGV);
+if ($argc < 1) {
+  printf STDERR "usage: chromAlias.pl <ucsc.refseq.tab> <ucsc.genbank.tab> \\\n\t<ucsc.ensembl.tab> <ucsc.others.tab> > <db>.chromAlias.tab\n";
+  printf STDERR "must have at least one of these input files, others when available\n";
+  printf STDERR "the names of the input files must be of this pattern so\n";
+  printf STDERR "the name of the alias can be identified\n";
+  printf STDERR "expecting to find ../../chrom.sizes\n";
+  exit 255;
+}
 
-my $wrkDir = `pwd`;
-chomp $wrkDir;
-my $baseDir = basename($wrkDir);
-die "expecting to be working in .../chromAlias/ directory" if ($baseDir !~ m/chromAlias/);
-my $goodToGo = 0;
-$goodToGo = 1 if (-s "ucsc.refseq.tab");
-$goodToGo = 1 if (-s "ucsc.genbank.tab");
-$goodToGo = 1 if (-s "ucsc.ensembl.tab");
-die "can not find any files ucsc.*.tab to work with\n" if (0 == $goodToGo);
-my %refseqNames;      # key is refseq name, value is ucsc name
-my %genbankNames;      # key is genbank name, value is ucsc name
-my %ensemblNames;      # key is ensembl name, value is ucsc name
-my %overallNames;	# key is external name, value is ucsc name
-my %srcReference;	# key is external name, value is csv list of sources
-chomp $wrkDir;
-my $ucscDb = $wrkDir;
-$ucscDb =~ s#/hive/data/genomes/##;
-$ucscDb =~ s#/bed/.*##;
 my %chromSizes;  # key is UCSC chrom name, value is size
-chdir "$wrkDir";
-printf STDERR "# working in $wrkDir\n";
-printf STDERR "# %s\n", `pwd`;
-# read 'master' list of everything in this DB
 open (CS, "<../../chrom.sizes") or die "can not read ../../chrom.sizes";
 while (my $cs = <CS>) {
-chomp $cs;
-my ($chr, $size) = split('\s', $cs);
-$chromSizes{$chr} = $size;
+  chomp $cs;
+  my ($chr, $size) = split('\s', $cs);
+  $chromSizes{$chr} = $size;
 }
 close (CS);
-my %refseqIds;  # key is UCSC chrom.name, value is refseq name
-if (-s "ucsc.refseq.tab") {
- open (FH, "<ucsc.refseq.tab") or die "can not read ucsc.refseq.tab";
- while (my $line = <FH>) {
-   chomp $line;
-   my ($chr, $refseq) = split('\t+', $line);
-   $refseqIds{$chr} = $refseq;
-   if (exists($refseqNames{$refseq})) {
-       printf STDERR "# ERROR: $ucscDb refseq dup name $refseq for $chr\n";
-   } else {
-       $refseqNames{$refseq} = $chr;
-       $overallNames{$refseq} = $chr;
-       $srcReference{$refseq} = "refseq";
+
+my %names;  # key is name identifier (refseq, genbank, ensembl, flybase, etc...)
+		#  value is a hash with key identifer name, value ucsc chr name
+my %chrNames;	# key is UCSC chrom name, value is number of times seen
+
+while (my $file = shift @ARGV) {
+  my $name = $file;
+  $name =~ s/ucsc.//;
+  $name =~ s/.tab//;
+  printf STDERR "# working: %s\n", $name;
+  my $namePtr;
+  if (exists($names{$name})) {
+     $namePtr = $names{$name};
+  } else {
+     my %nameHash;
+     $namePtr = \%nameHash;
+     $names{$name} = $namePtr;
+  }
+  open (FH, "<$file") or die "can not read $file";
+  while (my $line = <FH>) {
+     chomp $line;
+     my ($chr, $other) = split('\t+', $line);
+     if (exists($namePtr->{$chr})) {
+       printf STDERR "# warning, identical UCSC chrom $chr in $name for $other\n";
+       $namePtr->{$chr} = sprintf("%s\t%s", $namePtr->{$chr}, $other);
+     } else {
+       $namePtr->{$chr} = $other;
+     }
+     $chrNames{$chr} += 1;
    }
- }
- close (FH);
-}
-my %genbankIds;  # key is UCSC chrom.name, value is genbank name
-if (-s "ucsc.genbank.tab") {
- open (FH, "<ucsc.genbank.tab") or die "can not read ucsc.genbank.tab";
- while (my $line = <FH>) {
-   chomp $line;
-   my ($chr, $genbank) = split('\t+', $line);
-   $genbankIds{$chr} = $genbank;
-   if (exists($genbankNames{$genbank})) {
-      printf STDERR "# ERROR: $ucscDb genbank dup name $genbank for $chr\n";
-   } else {
-       $genbankNames{$genbank} = $chr;
-       if (exists($overallNames{$genbank})) {
-          if ($genbankNames{$genbank} ne $overallNames{$genbank}) {
-            printf STDERR "# ERROR: $ucscDb dup genbank refseq key $genbank NE chr $genbankNames{$genbank} != $overallNames{$genbank}\n";
-          } else {
-            if (exists($srcReference{$genbank})) {
-              $srcReference{$genbank} .= ",genbank";
-            } else {
-              $srcReference{$genbank} = "genbank";
-            }
-          }
-       } else {
-         $overallNames{$genbank} = $chr;
-         if (exists($srcReference{$genbank})) {
-           $srcReference{$genbank} .= ",genbank";
-         } else {
-           $srcReference{$genbank} = "genbank";
-         }
-       }
-   }
- }
- close (FH);
-}
-my %ensemblIds;  # key is UCSC chrom.name, value is ensembl name
-if (-s "ucsc.ensembl.tab") {
- open (FH, "<ucsc.ensembl.tab") or die "can not read ucsc.ensembl.tab";
- while (my $line = <FH>) {
-   chomp $line;
-   my ($chr, $ensembl) = split('\t+', $line);
-   $ensemblIds{$chr} = $ensembl;
-   if (exists($ensemblNames{$ensembl})) {
-      printf STDERR "# ERROR: $ucscDb ensembl dup name $ensembl for $chr\n";
-   } else {
-       $ensemblNames{$ensembl} = $chr;
-       if (exists($overallNames{$ensembl})) {
-          if ($ensemblNames{$ensembl} ne $overallNames{$ensembl}) {
-            printf STDERR "# ERROR: $ucscDb dup ensembl genbank refseq key $ensembl NE chr $ensemblNames{$ensembl} != $overallNames{$ensembl}\n";
-          } else {
-            if (exists($srcReference{$ensembl})) {
-              $srcReference{$ensembl} .= ",ensembl";
-            } else {
-              $srcReference{$ensembl} = "ensembl";
-            }
-          }
-       } else {
-         $overallNames{$ensembl} = $chr;
-         if (exists($srcReference{$ensembl})) {
-           $srcReference{$ensembl} .= ",ensembl";
-         } else {
-           $srcReference{$ensembl} = "ensembl";
-         }
-       }
-   }
- }
- close (FH);
+   close (FH);
 }
 
-open (FH, ">$ucscDb.chromAlias.tab") or die "can not write to $ucscDb.Alias.tab\n";
-
-foreach my $chr (sort keys %chromSizes) {
- my $idDone = "";
- my $idDone2 = "";
- if (exists($refseqIds{$chr})) {
-    printf FH "%s\t%s\t%s\n", $refseqIds{$chr}, $chr, $srcReference{$refseqIds{$chr}};
-    $idDone = $refseqIds{$chr};
- }
- if (exists($genbankIds{$chr})) {
-    if ($idDone ne $genbankIds{$chr}) {
-      printf FH "%s\t%s\t%s\n", $genbankIds{$chr}, $chr, $srcReference{$genbankIds{$chr}};
-      $idDone2 = $genbankIds{$chr};
+foreach my $chr (sort keys %chrNames) {
+  my %outNames;	# key is other identifier, value is csv list of sources
+  foreach my $name (sort keys %names) {
+    my $namePtr = $names{$name};
+    my $otherId = $namePtr->{$chr};
+    my @a;
+    if ($otherId =~ m/\t/) {
+	@a = split('\t', $otherId);
+    } else {
+	$a[0] = $otherId;
     }
- }
- if (exists($ensemblIds{$chr})) {
-    if ($ensemblIds{$chr} ne $idDone && $ensemblIds{$chr} ne $idDone2) {
-      printf FH "%s\t%s\t%s\n", $ensemblIds{$chr}, $chr, $srcReference{$ensemblIds{$chr}};
+    for (my $i = 0; $i < scalar(@a); ++$i) {
+       if (exists($outNames{$a[$i]})) {
+	  $outNames{$a[$i]} = sprintf("%s,%s", $outNames{$a[$i]}, $name);
+       } else {
+	  $outNames{$a[$i]} = $name;
+       }
     }
- }
+  }
+  foreach my $otherName (sort keys %outNames) {
+	printf "%s\t%s\t%s\n", $otherName, $chr, $outNames{$otherName};
+  }
 }
-close (FH);

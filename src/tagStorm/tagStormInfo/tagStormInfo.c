@@ -57,7 +57,6 @@ struct tagInfo
     struct hash *tagVals;   /* Hash of tag values, integer valued */
     };
 
-char *csvParseNext(char **pos, struct dyString *scratch);
 void tagInfoAdd(struct tagInfo *tagInfo, char *tagVal, struct dyString *scratch)
 /* Add information about tag to tagInfo */
 {

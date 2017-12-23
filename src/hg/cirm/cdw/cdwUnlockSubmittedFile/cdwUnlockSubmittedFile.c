@@ -57,6 +57,7 @@ if (!startsWith(cdwRootDir, path))
 if (unlink(lastPath) == -1)  // drop about to be invalid symlink
     errnoAbort("unlink failure %s", lastPath);
 copyFile(path, lastPath);
+touchFileFromFile(path, lastPath);
 chmod(lastPath, 0664);
 
 freeMem(lastPath);
