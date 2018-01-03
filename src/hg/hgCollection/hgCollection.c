@@ -435,6 +435,7 @@ static void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  s
 char *dataUrl = NULL;
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 char *tabs = "\t";
+char *type = "bigWig";
 if (numTabs == 2)
     tabs = "\t\t";
 
@@ -442,6 +443,8 @@ if (bigDataUrl == NULL)
     {
     if (startsWith("bigWig", tdb->type))
         dataUrl = getSqlBigWig(conn, db, tdb);
+    else 
+        type = "wig";
     }
 
 char *tdbType = trackDbSetting(tdb, "tdbType");
@@ -451,11 +454,12 @@ if (tdbType != NULL)
 struct hashCookie cookie = hashFirst(tdb->settingsHash);
 struct hashEl *hel;
 fprintf(f, "%strack %s\n",tabs, makeUnique(collectionNameHash, name));
+fprintf(f, "%stype %s\n",tabs, type);
 fprintf(f, "%sshortLabel %s\n",tabs, track->shortLabel);
 fprintf(f, "%slongLabel %s\n",tabs, track->longLabel);
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "shortLabel")&& differentString(hel->name, "longLabel")&& differentString(hel->name, "color")&& differentString(hel->name, "visibility")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames")&& differentString(hel->name, "superTrack")&& differentString(hel->name, "priority")&& differentString(hel->name, "group"))
+    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "shortLabel")&& differentString(hel->name, "longLabel")&& differentString(hel->name, "color")&& differentString(hel->name, "visibility")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames")&& differentString(hel->name, "superTrack")&& differentString(hel->name, "priority")&& differentString(hel->name, "group")&& differentString(hel->name, "type"))
         fprintf(f, "%s%s %s\n", tabs,hel->name, (char *)hel->val);
     }
 if (bigDataUrl == NULL)
