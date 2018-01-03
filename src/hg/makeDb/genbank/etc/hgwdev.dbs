@@ -14,7 +14,7 @@ ailMel1
 allMis1
 ancCey1
 anoCar2
-anoGam1
+anoGam3
 aotNan1
 apiMel2
 aplCal1
@@ -50,7 +50,7 @@ criGriChoV1
 danRer10
 danRer11
 dasNov3
-dipOrd1
+dipOrd2
 dm3
 dm6
 dp3
@@ -70,6 +70,7 @@ eulFla1
 eulMac1
 felCat8
 fr3
+fukDam1
 gadMor1
 galGal5
 galVar1
@@ -142,6 +143,7 @@ xenTro9
 # this is the beginning of the list of secondary assemblies
 #
 anoCar1
+anoGam1
 apiMel1
 bosTau6
 bosTau4
@@ -166,6 +168,7 @@ danRer5
 danRer4
 danRer3
 dasNov1
+dipOrd1
 dm2
 dm1
 dp2

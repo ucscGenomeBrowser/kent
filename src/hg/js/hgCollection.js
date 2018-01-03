@@ -53,8 +53,8 @@ var hgCollection = (function() {
         };
 
         // can't delete root
-        if ($(node).attr('parent') === '#')
-            delete items.deleteItem;
+        //if ($(node).attr('parent') === '#')
+            //delete items.deleteItem;
 
         return items;
         }
@@ -66,7 +66,7 @@ var hgCollection = (function() {
         selectedNode.li_attr.longlabel = $("#customDescription").val();
         selectedNode.li_attr.visibility = $("#customVis").val();
         selectedNode.li_attr.color = $("#customColorInput").val();
-        selectedNode.li_attr.missingMethod = $("input:radio[name ='missingData']:checked").val();
+        selectedNode.li_attr.missingmethod = $("input:radio[name ='missingData']:checked").val();
         selectedNode.li_attr.viewfunc = $("#viewFunc").val();
         //newNode.li_attr.viewtype = "view";
         rebuildLabel();
@@ -93,6 +93,13 @@ var hgCollection = (function() {
         $("#customVis").val(visibility);
         $("#customColorInput").val(color);
         $("#customColorPicker").spectrum("set", color);
+        if ( node.li_attr.missingmethod === 'zero') {
+            $("input[name='missingData'][value='zero']").prop("checked",true);
+            $("input[name='missingData'][value='missing']").prop("checked",false);
+        } else {
+            $("input[name='missingData'][value='zero']").prop("checked",false);
+            $("input[name='missingData'][value='missing']").prop("checked",true);
+        }
 
         $("#doNewCollection").off ( "click" );
         $("#doNewCollection").click ( changeCollection );
@@ -139,6 +146,7 @@ var hgCollection = (function() {
         $("#customColorInput").val("#0");
         //$("input:radio[name ='missingData']:checked").val();
         $("#viewFunc").val("show all");
+        $( "#customName" ).select();
         $( "#newCollectionDialog" ).dialog("open");
     } 
 
@@ -158,13 +166,14 @@ var hgCollection = (function() {
         newNode.li_attr.longlabel = $("#customDescription").val();
         newNode.li_attr.visibility = $("#customVis").val();
         newNode.li_attr.color = $("#customColorInput").val();
-        newNode.li_attr.missingMethod = $("input:radio[name ='missingData']:checked").val();
+        newNode.li_attr.missingmethod = $("input:radio[name ='missingData']:checked").val();
         newNode.li_attr.viewfunc = $("#viewFunc").val();
         newNode.li_attr.viewtype = "collection";
-        rebuildLabel();
+        //selectedNode = newNode;
         $(selectedTree).jstree("set_icon", newNode, '../images/folderC.png');
         $(selectedTree).jstree("deselect_node", selectedNode);
         $(selectedTree).jstree("select_node", newNode.id);
+        rebuildLabel();
     }
 
     function addCollection(trees, list) {
@@ -276,7 +285,7 @@ var hgCollection = (function() {
         window.addEventListener("beforeunload", function (e) {
             if (isDirty) {
                 doAjaxAsync = false;
-                //saveCollections(trees);
+                saveCollections(trees);
             }
 
             return undefined;
@@ -377,7 +386,7 @@ var hgCollection = (function() {
 
         if (goTracks) {
             // we go straight to hgTracks after save
-            $form = $('form');
+            $form = $('#redirectForm');
             $form.submit();
         }
     }

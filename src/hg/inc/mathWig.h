@@ -6,6 +6,10 @@
 
 #include "cart.h"
 
+double *mathWigGetValuesMissing(char *equation, char *chrom, unsigned start, unsigned end);
+/* Build an array of doubles that is calculated from bigWig's listed
+ * in equation in the requested region. Math with missing data results in missing data. */
+
 double *mathWigGetValues(char *equation, char *chrom, unsigned start, unsigned end);
 /* Build an array of doubles that is calculated from bigWig's listed
  * in equation in the requested region. */

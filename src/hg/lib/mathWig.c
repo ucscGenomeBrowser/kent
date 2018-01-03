@@ -120,3 +120,88 @@ for (jj=0; jj < count; jj++)
 
 return data;
 }
+
+double *mathWigGetValuesMissing(char *equation, char *chrom, unsigned winStart, unsigned winEnd)
+/* Build an array of doubles that is calculated from bigWig's listed
+ * in equation in the requested region. */
+{
+static char lastOpcode = 0;
+char *words[100];
+int count = chopByWhite(equation, words, sizeof(words)/sizeof(char *));
+int jj,ii;
+unsigned width = winEnd - winStart;
+struct lm *lm = lmInit(0);
+double *data = needHugeMem(width * sizeof(double));
+double *data2 = needHugeMem(width * sizeof(double));
+for(ii=0; ii < width; ii++)
+    data[ii] = NAN;
+struct opcodeStack opcodeStack;
+bzero(&opcodeStack, sizeof opcodeStack);
+
+boolean firstTime = TRUE;
+for (jj=0; jj < count; jj++)
+    {
+    if (pushOpcode(&opcodeStack, words[jj]))
+        continue;
+    if (startsWith("$", words[jj]))  // ignore native tracks for the moment
+        continue;
+    struct bbiFile *bwf = bigWigFileOpen(words[jj]);
+    if (!firstTime)
+        for(ii=0; ii < width; ii++)
+            data2[ii] = NAN;
+
+    struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, winStart, winEnd, lm);
+
+    for (iv = ivList; iv != NULL; iv = iv->next)
+        {
+        unsigned start = max(0, iv->start - winStart);
+        unsigned end = min(width, iv->end - winStart);
+
+        if (firstTime)
+            for (ii = start; ii < end; ii++)
+                data[ii] = iv->val;
+        else
+            for (ii = start; ii < end; ii++)
+                data2[ii] = iv->val;
+        }
+
+    if (firstTime)
+        {
+        firstTime = FALSE;
+        continue;
+        }
+
+    char opcode;
+    if (opcodeStack.depth == 0)
+        {
+        opcode = lastOpcode;
+        if (opcode == 0)
+            opcode = '+';
+
+        //errAbort("underflow in opcode stack");
+        }
+    else
+        lastOpcode = opcode = opcodeStack.stack[--opcodeStack.depth];
+
+    for(ii=0; ii < width; ii++)
+        {
+        switch(opcode)
+            {
+            case '+':
+                data[ii] += data2[ii];
+                break;
+            case '-':
+                data[ii] -= data2[ii];
+                break;
+            case '*':
+                data[ii] *= data2[ii];
+                break;
+            case '/':
+                data[ii] /= data2[ii];
+                break;
+            }
+        }
+    }
+
+return data;
+}

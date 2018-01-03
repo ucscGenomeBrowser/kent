@@ -14101,7 +14101,7 @@ return (a->priority - b->priority);
 }
 
 void buildMathWig(struct trackDb *tdb)
-/* Turn a mathWig view into a mathWig track. */
+/* Turn a mathWig composite into a mathWig track. */
 {
 char *viewFunc =  trackDbSetting(tdb, "viewFunc");
 
@@ -14132,6 +14132,7 @@ for (subTdb=subTracks; subTdb; subTdb = subTdb->next)
 hashAdd(tdb->settingsHash, "mathDataUrl", dy->string);
 }
 
+#ifdef NOTNOW   /// for the moment, mathWigs are made at the composite level.  Since we may go back to having them at the view level I'm leaving this in
 void fixupMathWigs(struct trackDb *tdb)
 /* Look through a container to see if it has a mathWig view and convert it. */
 {
@@ -14149,12 +14150,13 @@ for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
         }
     }
 }
+#endif
 
 void makeCompositeTrack(struct track *track, struct trackDb *tdb)
 /* Construct track subtrack list from trackDb entry.
  * Sets up color gradient in subtracks if requested */
 {
-fixupMathWigs(tdb);
+buildMathWig(tdb);
 unsigned char finalR = track->color.r, finalG = track->color.g,
                             finalB = track->color.b;
 unsigned char altR = track->altColor.r, altG = track->altColor.g,

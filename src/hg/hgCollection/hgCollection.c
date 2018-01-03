@@ -97,6 +97,7 @@ if (user)
     else if (tdb->subtracks)
         {
         viewFunc = trackDbSetting(tdb, "viewFunc");
+        missingMethod = trackDbSetting(tdb, "missingMethod");
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='collection' class='folder'";
         }
     else
@@ -398,6 +399,8 @@ webIncludeResourceFile("gb.css");
 webIncludeResourceFile("spectrum.min.css");
 webIncludeResourceFile("hgGtexTrackSettings.css");
 
+jsReloadOnBackButton(cart);
+
 webIncludeFile("inc/hgCollection.html");
 char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
 jsInlineF("$('#assembly').text('%s');\n",assembly);
@@ -467,7 +470,7 @@ fprintf(f, "%spriority %d\n",tabs,priority);
 fprintf(f, "\n");
 }
 
-static void outComposite(FILE *f, struct track *collection)
+static void outComposite(FILE *f, struct track *collection, int priority)
 // output a composite header for user composite
 {
 char *parent = collection->name;
@@ -483,9 +486,11 @@ longLabel %s\n\
 %s on\n\
 color %ld,%ld,%ld \n\
 viewFunc %s\n\
+missingMethod %s\n\
 type mathWig\n\
+priority %d\n\
 visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
- 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color), collection->viewFunc);
+ 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color), collection->viewFunc, collection->missingMethod, priority);
 
 }
 
@@ -552,14 +557,14 @@ struct hash *collectionNameHash = newHash(6);
 outHubHeader(f, db);
 struct track *collection;
 struct sqlConnection *conn = hAllocConn(db);
+int priority = 1;
 for(collection = collectionList; collection; collection = collection->next)
     {
     if (collection->trackList == NULL)  // don't output composites without children
         continue;
-    outComposite(f, collection);
+    outComposite(f, collection, priority++);
     struct trackDb *tdb;
     struct track *track;
-    int priority = 1;
     for (track = collection->trackList; track; track = track->next)
         {
         if (track->viewFunc != NULL)
@@ -635,7 +640,7 @@ if ((name == NULL) && (ele->type == jsonObject))
         strEle = (struct jsonElement *)hashFindVal(attrHash, "viewfunc");
         if (strEle)
             track->viewFunc = jsonStringEscape(strEle->val.jeString);
-        strEle = (struct jsonElement *)hashFindVal(attrHash, "missingMethod");
+        strEle = (struct jsonElement *)hashFindVal(attrHash, "missingmethod");
         if (strEle)
             track->missingMethod = jsonStringEscape(strEle->val.jeString);
         }
