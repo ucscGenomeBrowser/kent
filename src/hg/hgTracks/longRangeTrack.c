@@ -1,5 +1,6 @@
 
 #include "common.h"
+#include "memgfx.h"
 #include "hgTracks.h"
 #include "longRange.h"
 
@@ -140,7 +141,10 @@ for (longRange=longRangeList; longRange; longRange=longRange->next)
         continue;
 
     double longRangeWidth = longRange->e - longRange->s;
-    int peak = (sameHeight - 15) * ((double)longRangeWidth / maxWidth) + yOff + 10;
+    //int peak = (sameHeight - 15) * ((double)longRangeWidth / maxWidth) + yOff + 10;
+    int peakHeight = (sameHeight - 15) * ((double)longRangeWidth / maxWidth) + 10;
+    int peak = yOff + peakHeight;
+//uglyf("peak: %d. ", peak);
     if (tg->visibility == tvDense)
         peak = yOff + tg->height;
 
@@ -150,7 +154,8 @@ for (longRange=longRangeList; longRange; longRange=longRange->next)
         hvGfxLine(hvg, sx - sFootWidth, yOff, sx + sFootWidth, yOff, color);
 
         // draw vertical
-        hvGfxLine(hvg, sx, yOff, sx, peak, color);
+        if (!eOnScreen)
+            hvGfxLine(hvg, sx, yOff, sx, peak, color);
         }
     if (eOnScreen)
         {
@@ -158,15 +163,37 @@ for (longRange=longRangeList; longRange; longRange=longRange->next)
         hvGfxLine(hvg, ex - eFootWidth, yOff, ex + eFootWidth, yOff, color);
 
         // draw vertical
-        hvGfxLine(hvg, ex, yOff, ex, peak, color); //OLD
+        if (!sOnScreen)
+            hvGfxLine(hvg, ex, yOff, ex, peak, color); //OLD
         }
+    if (sOnScreen && eOnScreen)
+        {
+        // draw arc
+        //int xTop = (ex - sx + 1)/2 + sx;        // TODO
+        //int xTop = ex; // demo
+        //int yTop = (sameHeight - 15) * ((double)longRangeWidth / maxWidth) - yOff - 10;
+        //int yTop = peak + 10;   // full ellipse test
+        //int yLeft = yOff; // full ellipse test
+        //int yTop = peak + 10;   // demo
+        //int yLeft = yOff - 10; // demo
+        //hvGfxEllipse(hvg, sx, yLeft, ex, yTop, color); // demo
+        //hvGfxEllipse(hvg, sx, yOff - peakHeight, ex, peak + 10, color); // demo
+        int yLeft = yOff + peakHeight;
+        int yTop = yOff - peakHeight;
+    hvGfxEllipseDraw(hvg, sx, yLeft, ex, yTop, color, ELLIPSE_BOTTOM); // demo
+        //uglyf("(%d,%d) (%d,%d) (%d,%d).  ", sx, yOff, (ex-sx+1)/2 + sx, peak, ex, yOff);
 
+    //hvGfxCurve(hvg, sx, yOff, (ex-sx+1)/2 + sx, peak+60, ex, yOff, color);
+        //hvGfxLine(hvg, sx, yLeft, MG_RED);
+        //hvGfxLine(hvg, xTop, yTop, MG_GREEN);
+        }
     if (tg->visibility == tvFull)
         {
         // draw link between regions (dense mode just shows feet ??)
         unsigned ePeak = eOnScreen ? ex : xOff + width;
         unsigned sPeak = sOnScreen ? sx : xOff;
-        hvGfxLine(hvg, sPeak, peak, ePeak, peak, color);
+        if (!sOnScreen || !eOnScreen)
+            hvGfxLine(hvg, sPeak, peak, ePeak, peak, color);
 
         if (sOnScreen)
             mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e, sx - 2, yOff, 4, peak - yOff,
