@@ -1,0 +1,788 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the criGriChoV2
+
+#########################################################################
+# reuse photograph obtained for dipOrd1 previous versions
+#    (DONE - 2018-01-03 - Hiram)
+
+mkdir /hive/data/genomes/criGriChoV2
+cd /hive/data/genomes/criGriChoV2
+cp -p ../criGriChoV1/photoReference.txt .
+
+cat photoReference.txt
+
+photoCreditURL  https://commons.wikimedia.org/wiki/File:Cho_cells_adherend2.jpg
+photoCreditName WikiMedia Commons: Alcibiades
+
+#########################################################################
+#  Initial steps (DONE - 2018-01-03 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/criGriChoV2
+cd ~/kent/src/hg/makeDb/doc/criGriChoV2
+
+# best to use a most recent document since it has the latest features and
+# procedures:
+sed -e 's/dipOrd2/criGriChoV2/g; s/DipOrd2/CriGriChoV2/g; s/DONE/TBD/g;' \
+    ../dipOrd2/initialBuild.txt > initialBuild.txt
+
+mkdir /hive/data/genomes/criGriChoV2/genbank
+cd /hive/data/genomes/criGriChoV2/genbank
+
+time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Cricetulus_griseus/all_assembly_versions/GCA_900186095.1_CHOK1S_HZDv1/ ./
+
+# sent 375 bytes  received 2498014353 bytes  23904447.16 bytes/sec
+# total size is 2497707390  speedup is 1.00
+# real    1m44.683s
+
+# check assembly size for later reference:
+
+faSize G*1_genomic.fna.gz
+# 2358151106 bases (34242448 N's 2323908658 real 1600198499 upper
+#	723710159 lower) in 8264 sequences in 1 files
+# Total size: mean 285352.3 sd 4732404.3 min 2000 (LT891927.1)
+#	max 224834208 (LT883664.1) median 3141
+# %30.69 masked total, %31.14 masked real
+
+# this information is from the top of 
+#    criGriChoV2/genbank/GCA_900186095.1_CHOK1S_HZDv1_assembly_report.txt
+
+# Assembly name:  CHOK1S_HZDv1
+# Organism name:  Cricetulus griseus (Chinese hamster)
+# Taxid:          10029
+# BioSample:      SAMEA104116709
+# BioProject:     PRJEB21211
+# Submitter:      Eagle Genomics Ltd
+# Date:           2017-6-30
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    FYBK01
+# Genome coverage: 74x
+# GenBank assembly accession: GCA_900186095.1
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_900186094.1              Primary Assembly
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2018-01-03)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/criGriChoV2
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl criGriChoV2 mammal \
+         criGri ./genbank/*_assembly_report.txt > criGriChoV2.config.ra
+
+    # ensembl has used the mito sequence: NC_020006.2
+    # add that to this generated .ra file
+
+    # verify it looks sane
+    cat criGriChoV2.config.ra
+# config parameters for makeGenomeDb.pl:
+db criGriChoV2
+clade mammal
+scientificName Cricetulus griseus
+commonName Chinese hamster
+assemblyDate Jun. 2017
+assemblyLabel Eagle Genomics Ltd
+assemblyShortLabel CHOK1S_HZDv1
+orderKey 3348
+mitoAcc NC_020006.2
+fastaFiles /hive/data/genomes/criGriChoV2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/criGriChoV2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir criGri
+photoCreditURL  https://commons.wikimedia.org/wiki/File:Cho_cells_adherend2.jpg
+photoCreditName WikiMedia Commons: Alcibiades
+ncbiGenomeId 2791
+ncbiAssemblyId 1422381
+ncbiAssemblyName CHOK1S_HZDv1
+ncbiBioProject PRJEB21211
+ncbiBioSample SAMEA104116709
+genBankAccessionID GCA_900186095.1
+taxId 10029
+
+#############################################################################
+# setup UCSC named files (DONE - 2018-01-03 - Hiram)
+
+    mkdir /hive/data/genomes/criGriChoV2/ucsc
+    cd /hive/data/genomes/criGriChoV2/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../genbank/G*1_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz genbank.2bit
+    #  real    0m51.705s
+
+    twoBitDup genbank.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this genbank.2bit file
+
+    # simple assembly of unplaced contigs, change the .1 names to v1:
+    time zcat ../genbank/G*1_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz  \
+	| sed -e 's/\.1 Crice.*/v1/;' | gzip -c > chrUn.fa.gz
+    # real    12m47.519s
+
+    time zcat ../genbank/G*1_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz  \
+	| sed -e 's/\.1\t/v1\t/;' > chrUn.agp
+    # real    0m0.097s
+
+    # ensembl included this sequence for chrM:
+
+    export mitoAcc=NC_007936.1
+
+    wget -O ${mitoAcc}.fa \
+ "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc"
+
+    echo ">chrM" > chrM.fa
+    grep -v "^>" ${mitoAcc}.fa >> chrM.fa
+    gzip chrM.fa
+
+    export mSize=`faCount chrM.fa.gz | grep total | awk '{print $2}'`
+
+    printf "chrM\t1\t$mSize\t1\tF\t$mitoAcc\t1\t$mSize\t+\n" > chrM.agp
+
+    # verify fasta and AGPs agree
+    time faToTwoBit chr*.fa.gz test.2bit
+    # real    1m3.740s
+
+    time cat chr*.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+    # real    0m10.898s
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 2358151106 bases (34242448 N's 2323908658 real 2323908658 upper 0 lower)
+#	in 8264 sequences in 1 files
+# Total size: mean 285352.3 sd 4732404.3 min 2000 (LT891927v1)
+#	max 224834208 (LT883664v1) median 3141
+
+    # same numbers as above
+# 2358151106 bases (34242448 N's 2323908658 real 1600198499 upper
+#	723710159 lower) in 8264 sequences in 1 files
+
+    # no longer need these temporary 2bit files
+    rm genbank.2bit test.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2018-01-03 - Hiram)
+
+    cd /hive/data/genomes/criGriChoV2
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp criGriChoV2.config.ra) > agp.log 2>&1
+    #  *** All done!  (through the 'agp' step)
+    # real    2m8.978s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db criGriChoV2.config.ra) > db.log 2>&1
+    # real    18m56.856s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add criGriChoV2 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/criGriChoV2
+    ln -s `pwd`/criGriChoV2.unmasked.2bit /gbdb/criGriChoV2/criGriChoV2.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2018-01-03 - Hiram)
+    mkdir /hive/data/genomes/criGriChoV2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/criGriChoV2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/criGriChoV2/criGriChoV2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku criGriChoV2) > do.log 2>&1
+XXX - running - Wed Jan  3 16:55:55 PST 2018
+    # real    7m12.778s
+
+    cat fb.criGriChoV2.cpgIslandExtUnmasked.txt
+    # 79664500 bases of 2065314047 (3.857%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2018-01-03 - Hiram)
+    mkdir /hive/data/genomes/criGriChoV2/bed/cytoBand
+    cd /hive/data/genomes/criGriChoV2/bed/cytoBand
+    makeCytoBandIdeo.csh criGriChoV2
+
+##########################################################################
+# run up idKeys files for chromAlias (DONE - 2018-01-03 - Hiram)
+    mkdir /hive/data/genomes/criGriChoV2/bed/idKeys
+    cd /hive/data/genomes/criGriChoV2/bed/idKeys
+
+    time (doIdKeys.pl -twoBit=/hive/data/genomes/criGriChoV2/criGriChoV2.unmasked.2bit -buildDir=`pwd`  criGriChoV2) > do.log 2>&1 &
+XXX - running - Wed Jan  3 16:57:09 PST 2018
+    # real    12m20.939s
+
+    cat criGriChoV2.keySignature.txt
+    #   8ae219619932349bebc17364408bf9d0
+
+##########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (TBD - 2018-12-22 - Hiram)
+    # the sequence here is working for a 'refseq' assembly
+    # beware of a chrM situation may be specific depending upon what is
+    # available in the assembly
+
+    mkdir /hive/data/genomes/criGriChoV2/bed/ucscToINSDC
+    cd /hive/data/genomes/criGriChoV2/bed/ucscToINSDC
+
+    # there is no chrM sequence in this assembly
+
+    # if there is a chrM, use its INSDC name as a second argument:
+    # this is a RefSeq assembly, use the chrM refSeq name:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+      ../../refseq/GCF_*structure/Primary_Assembly
+
+    # this is actually ucscToRefSeq since this is a RefSeq assembly
+    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+
+    rm -f ucscToINSDC.txt
+    # there is also a genbank release, need to make idKeys to match it
+    mkdir /hive/data/genomes/criGriChoV2/bed/ucscToINSDC/genbank
+    cd /hive/data/genomes/criGriChoV2/bed/ucscToINSDC/genbank
+    ln -s ../../../genbank/*ure/Pri*/unplaced_scaffolds/FASTA/*.fna.gz .
+    faToTwoBit unplaced.scaf.fna.gz genbank.criGriChoV2.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+	-twoBit=`pwd`/genbank.criGriChoV2.2bit genbankCriGriChoV2) > do.log 2>&1 &
+    # real    30m4.448s
+
+    cd /hive/data/genomes/criGriChoV2/bed/ucscToINSDC
+    join -t$'\t' \
+      ../idKeys/criGriChoV2.idKeys.txt genbank/genbankCriGriChoV2.idKeys.txt \
+	| cut -f2- | sort > ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt \
+       | sort > refSeqToUcsc.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > ucsc.coordinate.tab
+
+    join -t$'\t' ucsc.coordinate.tab ucscToRefSeq.txt > ucscToRefSeq.bed
+    join -t$'\t' ucsc.coordinate.tab ucscToINSDC.txt > ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    # in this case one is missing in the final result due to the duplicate
+    # contig being removed
+    wc -l *
+    # 65193 ucsc.coordinate.tab
+    # 65193 ucscToINSDC.bed
+    # 65193 ucscToINSDC.txt
+    # 65193 ucscToRefSeq.bed
+    # 65193 ucscToRefSeq.txt
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab criGriChoV2 ucscToINSDC stdin ucscToINSDC.bed
+    # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  14
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab criGriChoV2 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords criGriChoV2
+    # each should cover %100 entirely:
+    featureBits -countGaps criGriChoV2 ucscToINSDC
+    # 2236368823 bases of 2236368823 (100.000%) in intersection
+
+    featureBits -countGaps criGriChoV2 ucscToRefSeq
+    # 2236368823 bases of 2236368823 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (TBD - 2018-12-22 - Hiram)
+
+    mkdir /hive/data/genomes/criGriChoV2/bed/chromAlias
+    cd /hive/data/genomes/criGriChoV2/bed/chromAlias
+
+    # after ensembl idKeys have been made:
+    join -t$'\t'  ../idKeys/criGriChoV2.idKeys.txt \
+	../../ensembl/ensemblCriGriChoV2.idKeys.txt | cut -f2- > ucsc.ensembl.tab
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' criGriChoV2 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' criGriChoV2 \
+        > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+	> criGriChoV2.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t criGriChoV2.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 65193 =? 65193 OK
+# checking genbank: 65193 =? 65193 OK
+# checking ensembl: 65193 =? 65193 OK
+
+    hgLoadSqlTab criGriChoV2 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        criGriChoV2.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2018-12-22 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/kangarooRat/criGriChoV2
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" criGriChoV2 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+#   148226 ABRO.1
+
+    # implies a rule: 'ABRO[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" criGriChoV2 | wc -l
+    # 148226
+
+    hgsql -N -e "select frag from gold;" criGriChoV2 \
+       | egrep -e 'ABRO[0-9]+(\.[0-9]+)?' | wc -l
+    # 148226
+
+    hgsql -N -e "select frag from gold;" criGriChoV2 \
+       | egrep -v -e 'ABRO[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/criGriChoV2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex ABRO[0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box for these name patterns
+
+##########################################################################
+# running repeat masker (DONE - 2018-01-03 - Hiram)
+    mkdir /hive/data/genomes/criGriChoV2/bed/repeatMasker
+    cd /hive/data/genomes/criGriChoV2/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku criGriChoV2) > do.log 2>&1 &
+XXX - running - Wed Jan  3 16:58:06 PST 2018
+    # real    462m52.098s
+    # XXX 8 jobs could not finish, cross_match does not complete
+    # they were broken up into 50,000 base chunks and run separately
+    # the results were placed into RMPart/005/000/
+# -rw-rw-r-- 1  1095629 Dec 30 21:21 lift8bits.fa.out
+# -rw-rw-r-- 1 10233429 Dec 30 21:21 lift8bits.fa.align
+
+    # see if cat step will work correctly
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=cat -stop=cat -smallClusterHub=ku criGriChoV2) > cat.log 2>&1
+    # real    9m20.559s
+
+    # seems to be OK, continuing:
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=mask -smallClusterHub=ku criGriChoV2) > mask.log 2>&1
+    # real    14m37.290s
+
+
+    cat faSize.rmsk.txt
+# 2236368823 bases (171054779 N's 2065314044 real 1321230680 upper
+#	744083364 lower) in 65193 sequences in 1 files
+# Total size: mean 34303.8 sd 716613.2 min 200 (NW_012315564v1)
+#	max 68039765 (NW_012267217v1) median 2275
+# %33.27 masked total, %36.03 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;                                            *
+
+    time featureBits -countGaps criGriChoV2 rmsk
+    # 744619771 bases of 2236368823 (33.296%) in intersection
+    # real    0m47.760s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' criGriChoV2 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    #	total 744619771.000000
+    #   real    0m33.003s
+
+##########################################################################
+# running simple repeat (DONE - 2018-01-03 - Hiram)
+
+    mkdir /hive/data/genomes/criGriChoV2/bed/simpleRepeat
+    cd /hive/data/genomes/criGriChoV2/bed/simpleRepeat
+    # using trf409 5 here a bit smaller genome (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 5 criGriChoV2) > do.log 2>&1 &
+XXX - running - Wed Jan  3 16:58:06 PST 2018
+    # real    394m21.273s
+
+    cat fb.simpleRepeat
+    # 170021835 bases of 2065314047 (8.232%) in intersection
+
+    # adding this trfMask to the other masking
+    cd /hive/data/genomes/criGriChoV2
+
+    # when using the Window Masker result:
+#    twoBitMask bed/windowMasker/criGriChoV2.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  criGriChoV2.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # when using Rmsk results, add to rmsk after it is done:
+    twoBitMask criGriChoV2.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed criGriChoV2.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa criGriChoV2.2bit stdout | faSize stdin > faSize.criGriChoV2.2bit.txt
+    cat faSize.criGriChoV2.2bit.txt
+# 2236368823 bases (171054779 N's 2065314044 real 1290537444 upper
+#	774776600 lower) in 65193 sequences in 1 files
+# Total size: mean 34303.8 sd 716613.2 min 200 (NW_012315564v1)
+#	max 68039765 (NW_012267217v1) median 2275
+# %34.64 masked total, %37.51 masked real
+
+    # reset the symlink
+    rm /gbdb/criGriChoV2/criGriChoV2.2bit
+    ln -s `pwd`/criGriChoV2.2bit /gbdb/criGriChoV2/criGriChoV2.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (TBD - 2018-12-30 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/criGriChoV2/bed/microsat
+    cd /cluster/data/criGriChoV2/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed criGriChoV2 microsat microsat.bed
+    # Read 104987 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (TBD - 2018-12-30 - Hiram)
+
+    mkdir /hive/data/genomes/criGriChoV2/bed/windowMasker
+    cd /hive/data/genomes/criGriChoV2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev criGriChoV2) > do.log 2>&1
+    # real    199m45.928s
+
+    # Masking statistics
+    cat faSize.criGriChoV2.cleanWMSdust.txt
+# 2236368823 bases (171054779 N's 2065314044 real 1246991941 upper
+#	818322103 lower) in 65193 sequences in 1 files
+# Total size: mean 34303.8 sd 716613.2 min 200 (NW_012315564v1)
+#	max 68039765 (NW_012267217v1) median 2275
+# %36.59 masked total, %39.62 masked real
+
+
+    cat fb.criGriChoV2.rmsk.windowmaskerSdust.txt
+    # 542455834 bases of 2236368823 (24.256%) in intersection
+
+##########################################################################
+# cpgIslands - (TBD - 2018-12-31 - Hiram)
+    mkdir /hive/data/genomes/criGriChoV2/bed/cpgIslands
+    cd /hive/data/genomes/criGriChoV2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku criGriChoV2) > do.log 2>&1 &
+    # real    7m7.765s
+
+    cat fb.criGriChoV2.cpgIslandExt.txt
+    # 20939057 bases of 2065314047 (1.014%) in intersection
+
+##############################################################################
+# genscan - (TBD - 2018-12-31 - Hiram)
+    mkdir /hive/data/genomes/criGriChoV2/bed/genscan
+    cd /hive/data/genomes/criGriChoV2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku criGriChoV2) > do.log 2>&1 &
+    # real    395m13.441s
+
+    cat fb.criGriChoV2.genscan.txt
+    # 50439107 bases of 2065314047 (2.442%) in intersection
+
+    cat fb.criGriChoV2.genscanSubopt.txt
+    # 44013285 bases of 2065314047 (2.131%) in intersection
+
+#############################################################################
+# augustus gene track (TBD - 2018-12-31 - Hiram)
+
+    mkdir /hive/data/genomes/criGriChoV2/bed/augustus
+    cd /hive/data/genomes/criGriChoV2/bed/augustus
+
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -species=human -dbHost=hgwdev -workhorse=hgwdev criGriChoV2) > do.log 2>&1 &
+    # real    162m42.872s
+
+    cat fb.criGriChoV2.augustusGene.txt
+    # 44381136 bases of 2065314047 (2.149%) in intersection
+
+    featureBits -enrichment criGriChoV2 augustusGene ensGene
+# augustusGene 2.149%, ensGene 1.670%, both 1.212%, cover 56.42%, enrich 33.77x
+
+#############################################################################
+# lastz/chain/net swap human/hg38 (TBD - 2018-01-02 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzCriGriChoV2.2018-01-01
+
+    cat fb.hg38.chainCriGriChoV2Link.txt
+    # 1001007354 bases of 3049335806 (32.827%) in intersection
+    cat fb.hg38.chainSynCriGriChoV2Link.txt
+    # 934602735 bases of 3049335806 (30.649%) in intersection
+    cat fb.hg38.chainRBestCriGriChoV2Link.txt
+    # 921538020 bases of 3049335806 (30.221%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/criGriChoV2/bed/blastz.hg38.swap
+    cd /hive/data/genomes/criGriChoV2/bed/blastz.hg38.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg38/bed/lastzCriGriChoV2.2018-01-01/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -swap -syntenicNet) > swap.log 2>&1 &
+    # real    97m8.750s
+
+    cat fb.criGriChoV2.chainHg38Link.txt
+    # 957281496 bases of 2065314047 (46.350%) in intersection
+    cat fb.criGriChoV2.chainSynHg38Link.txt
+    # 905805640 bases of 2065314047 (43.858%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` criGriChoV2 hg38) > rbest.log 2>&1 &
+    # real    431m28.226s
+
+    cat fb.criGriChoV2.chainRBestHg38Link.txt
+    # 923041001 bases of 2065314047 (44.693%) in intersection
+
+##############################################################################
+# lastz/chain/net swap mouse/mm10 (TBD - 2018-01-02 - Hiram)
+    # original alignment to mm10
+    cd /hive/data/genomes/mm10/bed/lastzCriGriChoV2.2018-01-01
+
+    cat fb.mm10.chainCriGriChoV2Link.txt
+    #	645178768 bases of 2652783500 (24.321%) in intersection
+    cat fb.mm10.chainRBestCriGriChoV2Link.txt
+    # 605074450 bases of 2652783500 (22.809%) in intersection
+
+    mkdir /hive/data/genomes/criGriChoV2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/criGriChoV2/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCriGriChoV2.2018-01-01/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    79m46.564s
+
+    cat fb.criGriChoV2.chainMm10Link.txt
+    # 631879699 bases of 2065314047 (30.595%) in intersection
+    cat fb.criGriChoV2.chainSynMm10Link.txt
+    # 581661824 bases of 2065314047 (28.163%) in intersection
+
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` criGriChoV2 mm10) \
+	> rbest.log 2>&1
+    # real    412m53.879s
+
+    cat fb.criGriChoV2.chainRBestMm10Link.txt
+    # 605056621 bases of 2065314047 (29.296%) in intersection
+
+##############################################################################
+# Create kluster run files (TBD - 2018-12-31 - Hiram)
+
+    # numerator is criGriChoV2 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap criGriChoV2 gap
+    # 171054776 bases of 2065314047 (8.282%) in intersection
+    #                     ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2065314047 / 2861349177 \) \* 1024
+    #  ( 2065314047 / 2861349177 ) * 1024 = 739.120413
+
+    # ==> use -repMatch=750 according to size scaled down from 1024 for human.
+    #   and rounded up to nearest 50
+    cd /hive/data/genomes/criGriChoV2
+    blat criGriChoV2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/criGriChoV2.11.ooc \
+        -repMatch=750
+    #   Wrote 29353 overused 11-mers to jkStuff/criGriChoV2.11.ooc
+    # dipOrd1 was: -repMatch=700
+    #	Wrote 33062 overused 11-mers to dipOrd1.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' criGriChoV2 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # there are no non-bridged gaps in this assembly
+
+    # # all these gap sizes are 100
+    # # minimum gap size is 100 and produces a reasonable number of lifts
+    # gapToLift -verbose=2 -minGap=10 criGriChoV2 jkStuff/nonBridged.lft \
+    #    -bedFile=jkStuff/nonBridged.bed
+
+#########################################################################
+# LIFTOVER TO dipOrd1 (TBD - 2018-12-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/criGriChoV2/bed/blat.dipOrd1.2018-12-31
+    cd /hive/data/genomes/criGriChoV2/bed/blat.dipOrd1.2018-12-31
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/criGriChoV2/jkStuff/criGriChoV2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         criGriChoV2 dipOrd1) > do.log 2>&1
+    # real    1026m23.658s
+
+    # verify the convert link on the test browser is now active from criGriChoV2 to
+    # dipOrd1
+
+#########################################################################
+# GENBANK AUTO UPDATE (TBD - 2018-12-31 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism             mrnaCnt   estCnt  refSeqCnt
+    # Dipodomys merriami      5       0       0
+    # Dipodomys spectabilis   7       0       0
+
+    # there appear to be none for Dipodomys ordii
+
+    # edit etc/genbank.conf to add criGriChoV2 just before dipOrd1
+# criGriChoV2 (Kangaroo rat)
+criGriChoV2.serverGenome = /hive/data/genomes/criGriChoV2/criGriChoV2.2bit
+criGriChoV2.clusterGenome = /hive/data/genomes/criGriChoV2/criGriChoV2.2bit
+criGriChoV2.ooc = /hive/data/genomes/criGriChoV2/jkStuff/criGriChoV2.11.ooc
+criGriChoV2.lift = no
+criGriChoV2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+criGriChoV2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+criGriChoV2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+criGriChoV2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+criGriChoV2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+# there are zero native mrna or est for dipOrd
+criGriChoV2.refseq.mrna.native.load = no
+criGriChoV2.refseq.mrna.xeno.load = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+criGriChoV2.genbank.mrna.xeno.load = yes
+criGriChoV2.genbank.est.native.load = no
+criGriChoV2.downloadDir = criGriChoV2
+criGriChoV2.perChromTables = no
+
+    git commit -m 'adding criGriChoV2 Dipodomys ordii refs #20751' etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial criGriChoV2
+    # logFile: var/build/logs/2018.12.31-08:55:07.criGriChoV2.initalign.log
+    #   real    1098m37.667s
+
+    tail -2 var/build/logs/2018.12.31-08:55:07.criGriChoV2.initalign.log
+    #	hgwdev 2018.01.01-03:04:33 criGriChoV2.initalign: Succeeded: criGriChoV2
+    #	hgwdev 2018.01.01-03:13:45 criGriChoV2.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.criGriChoV2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad criGriChoV2
+    # logFile: var/dbload/hgwdev/logs/2018.01.01-13:04:41.criGriChoV2.dbload.log
+    #  real    98m36.682s
+
+    tail -1 var/dbload/hgwdev/logs/2018.01.01-13:04:41.criGriChoV2.dbload.log
+    #  hgwdev 2018.01.01-14:43:18 criGriChoV2.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add criGriChoV2 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding criGriChoV2 to the update alignments refs #19151' etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+#  BLATSERVERS ENTRY (TBD - 2018-01-03 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("criGriChoV2", "blat1d", "17894", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("criGriChoV2", "blat1d", "17895", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to same protein location as hg38
+##  found by blat (TBD - 2018-01-03 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="NW_012267222v1:6911344-7030779"
+	where name="criGriChoV2";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2018-03-06 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=criGriChoV2 -tableCoverage all.joiner
+    joinerCheck -database=criGriChoV2 -times all.joiner
+    joinerCheck -database=criGriChoV2 -keys all.joiner
+
+    cd /hive/data/genomes/criGriChoV2
+    time (makeDownloads.pl -workhorse=hgwdev criGriChoV2) > downloads.log 2>&1
+    #  real    19m11.136s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/criGriChoV2/pushQ
+    cd /hive/data/genomes/criGriChoV2/pushQ
+  time (makePushQSql.pl -redmineList criGriChoV2) > criGriChoV2.pushQ.sql 2> stderr.out
+    #  real    3m55.668s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: criGriChoV2 does not have seq
+    # WARNING: criGriChoV2 does not have extFile
+    # WARNING: criGriChoV2 does not have estOrientInfo
+
+    ## there are warnings about the RBest and Syn chainNet tables, which we
+    ## are not interested in at this time.  They can be left out.
+
+    # verify the file listings are valid, should be no output to stderr:
+    cat redmine.criGriChoV2.file.list \
+        | while read L; do ls -ogL $L; done  > /dev/null
+
+    # to verify the database.table list is correct, should be the same
+    # line count for these two commands:
+    wc -l redmine.criGriChoV2.table.list
+    # 70 redmine.criGriChoV2.table.list
+    awk -F'.' '{
+printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
+}' redmine.criGriChoV2.table.list | while read L; do eval $L; done | wc -l
+    # 70
+
+    # enter the path names to these files in the redmine issue to
+    # make QA Ready:
+    ls `pwd`/redmine*
+
+/hive/data/genomes/criGriChoV2/pushQ/redmine.criGriChoV2.file.list
+/hive/data/genomes/criGriChoV2/pushQ/redmine.criGriChoV2.releaseLog.txt
+/hive/data/genomes/criGriChoV2/pushQ/redmine.criGriChoV2.table.list
+
+#########################################################################
