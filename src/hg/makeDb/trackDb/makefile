@@ -60,6 +60,7 @@ DBS = \
 	calJac1 calJac3 \
 	calMil1 \
 	canFam1 canFam2 canFamPoodle1 canFam3 \
+	cavApe1 cavPor3 \
 	cb1 cb2 cb3 cb4 \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \
 	cebCap1 \
@@ -73,7 +74,7 @@ DBS = \
 	ci1 ci2 ci3 cioSav2 \
 	cioSav1 \
 	colAng1 \
-	criGri1 \
+	criGri1 criGriChoV1 criGriChoV2 \
 	danRer3 danRer4 danRer5 danRer6 danRer7 danRer10 danRer11 \
 	dasNov1 dasNov2 dasNov3 \
 	dipOrd1 dipOrd2 \
@@ -168,7 +169,7 @@ DBS = \
 	sarHar1 \
 	sc1 \
 	sorAra1 sorAra2 \
-	speTri1 speTri2 cavPor3 \
+	speTri1 speTri2 \
 	strPur1 strPur2 strPur4 \
 	strRat1 strRat2 \
 	susScr1 susScr2 susScr3 susScr11 \
