@@ -371,33 +371,14 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku criGriChoV2) > do.log 2>&1 &
-XXX - running - Wed Jan  3 16:58:06 PST 2018
-    # real    462m52.098s
-    # XXX 8 jobs could not finish, cross_match does not complete
-    # they were broken up into 50,000 base chunks and run separately
-    # the results were placed into RMPart/005/000/
-# -rw-rw-r-- 1  1095629 Dec 30 21:21 lift8bits.fa.out
-# -rw-rw-r-- 1 10233429 Dec 30 21:21 lift8bits.fa.align
+    # real    527m48.098s
 
-    # see if cat step will work correctly
-    time  (doRepeatMasker.pl -buildDir=`pwd` \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -continue=cat -stop=cat -smallClusterHub=ku criGriChoV2) > cat.log 2>&1
-    # real    9m20.559s
-
-    # seems to be OK, continuing:
-    time  (doRepeatMasker.pl -buildDir=`pwd` \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -continue=mask -smallClusterHub=ku criGriChoV2) > mask.log 2>&1
-    # real    14m37.290s
-
-
-    cat faSize.rmsk.txt
-# 2236368823 bases (171054779 N's 2065314044 real 1321230680 upper
-#	744083364 lower) in 65193 sequences in 1 files
-# Total size: mean 34303.8 sd 716613.2 min 200 (NW_012315564v1)
-#	max 68039765 (NW_012267217v1) median 2275
-# %33.27 masked total, %36.03 masked real
+    egrep "bases|Total|masked" faSize.rmsk.txt | fold -s  | sed -e 's/^/# /;'
+# 2358167390 bases (34242448 N's 2323924942 real 1653255004 upper 670669938 
+# lower) in 8265 sequences in 1 files
+# Total size: mean 285319.7 sd 4732118.9 min 2000 (LT891927v1) max 224834208 
+# (LT883664v1) median 3141
+# %28.44 masked total, %28.86 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -405,8 +386,8 @@ XXX - running - Wed Jan  3 16:58:06 PST 2018
     # CC   RELEASE 20140131;                                            *
 
     time featureBits -countGaps criGriChoV2 rmsk
-    # 744619771 bases of 2236368823 (33.296%) in intersection
-    # real    0m47.760s
+    # 670778708 bases of 2358167390 (28.445%) in intersection
+    # real    0m30.782s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -415,8 +396,8 @@ XXX - running - Wed Jan  3 16:58:06 PST 2018
     # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' criGriChoV2 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    #	total 744619771.000000
-    #   real    0m33.003s
+    #	total 670778708.000000
+    #	real    0m33.728s
 
 ##########################################################################
 # running simple repeat (DONE - 2018-01-03 - Hiram)
@@ -427,11 +408,10 @@ XXX - running - Wed Jan  3 16:58:06 PST 2018
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409 5 criGriChoV2) > do.log 2>&1 &
-XXX - running - Wed Jan  3 16:58:06 PST 2018
-    # real    394m21.273s
+    # real    17m40.267s
 
     cat fb.simpleRepeat
-    # 170021835 bases of 2065314047 (8.232%) in intersection
+    # 60139576 bases of 2323924942 (2.588%) in intersection
 
     # adding this trfMask to the other masking
     cd /hive/data/genomes/criGriChoV2
@@ -446,20 +426,24 @@ XXX - running - Wed Jan  3 16:58:06 PST 2018
         -add bed/simpleRepeat/trfMask.bed criGriChoV2.2bit
     #   you can safely ignore the warning about fields >= 13
 
-    twoBitToFa criGriChoV2.2bit stdout | faSize stdin > faSize.criGriChoV2.2bit.txt
+    twoBitToFa criGriChoV2.2bit stdout | faSize stdin \
+	> faSize.criGriChoV2.2bit.txt
+
     cat faSize.criGriChoV2.2bit.txt
-# 2236368823 bases (171054779 N's 2065314044 real 1290537444 upper
-#	774776600 lower) in 65193 sequences in 1 files
-# Total size: mean 34303.8 sd 716613.2 min 200 (NW_012315564v1)
-#	max 68039765 (NW_012267217v1) median 2275
-# %34.64 masked total, %37.51 masked real
+    egrep "bases|Total|masked" faSize.criGriChoV2.2bit.txt \
+	| fold -s  | sed -e 's/^/# /;'
+# 2358167390 bases (34242448 N's 2323924942 real 1651719544 upper 672205398 
+# lower) in 8265 sequences in 1 files
+# Total size: mean 285319.7 sd 4732118.9 min 2000 (LT891927v1) max 224834208 
+# (LT883664v1) median 3141
+# %28.51 masked total, %28.93 masked real
 
     # reset the symlink
     rm /gbdb/criGriChoV2/criGriChoV2.2bit
     ln -s `pwd`/criGriChoV2.2bit /gbdb/criGriChoV2/criGriChoV2.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2018-12-30 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2018-01-04 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/criGriChoV2/bed/microsat
     cd /cluster/data/criGriChoV2/bed/microsat
@@ -468,46 +452,48 @@ XXX - running - Wed Jan  3 16:58:06 PST 2018
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed criGriChoV2 microsat microsat.bed
-    # Read 104987 elements of size 4 from microsat.bed
+    # Read 246828 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2018-12-30 - Hiram)
+## WINDOWMASKER (DONE - 2018-01-04 - Hiram)
 
     mkdir /hive/data/genomes/criGriChoV2/bed/windowMasker
     cd /hive/data/genomes/criGriChoV2/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev criGriChoV2) > do.log 2>&1
-    # real    199m45.928s
+XXX - running - Thu Jan  4 07:18:12 PST 2018
+    # real    156m25.617s
 
     # Masking statistics
-    cat faSize.criGriChoV2.cleanWMSdust.txt
-# 2236368823 bases (171054779 N's 2065314044 real 1246991941 upper
-#	818322103 lower) in 65193 sequences in 1 files
-# Total size: mean 34303.8 sd 716613.2 min 200 (NW_012315564v1)
-#	max 68039765 (NW_012267217v1) median 2275
-# %36.59 masked total, %39.62 masked real
-
+    egrep "bases|Total|masked" faSize.criGriChoV2.cleanWMSdust.txt | fold -s  | sed -e 's/^/# /;'
+# 2358167390 bases (34242448 N's 2323924942 real 1586707959 upper 737216983 
+# lower) in 8265 sequences in 1 files
+# Total size: mean 285319.7 sd 4732118.9 min 2000 (LT891927v1) max 224834208 
+# (LT883664v1) median 3141
+# %31.26 masked total, %31.72 masked real
 
     cat fb.criGriChoV2.rmsk.windowmaskerSdust.txt
-    # 542455834 bases of 2236368823 (24.256%) in intersection
+    # 377692568 bases of 2358167390 (16.016%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2018-12-31 - Hiram)
+# cpgIslands - (DONE - 2018-01-04 - Hiram)
     mkdir /hive/data/genomes/criGriChoV2/bed/cpgIslands
     cd /hive/data/genomes/criGriChoV2/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku criGriChoV2) > do.log 2>&1 &
+XXX - running - Thu Jan  4 11:50:33 PST 2018
     # real    7m7.765s
 
     cat fb.criGriChoV2.cpgIslandExt.txt
     # 20939057 bases of 2065314047 (1.014%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2018-12-31 - Hiram)
+# genscan - (DONE - 2018-01-04 - Hiram)
     mkdir /hive/data/genomes/criGriChoV2/bed/genscan
     cd /hive/data/genomes/criGriChoV2/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku criGriChoV2) > do.log 2>&1 &
+XXX - running - Thu Jan  4 11:50:33 PST 2018
     # real    395m13.441s
 
     cat fb.criGriChoV2.genscan.txt
@@ -517,13 +503,14 @@ XXX - running - Wed Jan  3 16:58:06 PST 2018
     # 44013285 bases of 2065314047 (2.131%) in intersection
 
 #############################################################################
-# augustus gene track (TBD - 2018-12-31 - Hiram)
+# augustus gene track (DONE - 2018-01-04 - Hiram)
 
     mkdir /hive/data/genomes/criGriChoV2/bed/augustus
     cd /hive/data/genomes/criGriChoV2/bed/augustus
 
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
      -species=human -dbHost=hgwdev -workhorse=hgwdev criGriChoV2) > do.log 2>&1 &
+XXX - running - Thu Jan  4 11:51:56 PST 2018
     # real    162m42.872s
 
     cat fb.criGriChoV2.augustusGene.txt
@@ -599,7 +586,7 @@ XXX - running - Wed Jan  3 16:58:06 PST 2018
     # 605056621 bases of 2065314047 (29.296%) in intersection
 
 ##############################################################################
-# Create kluster run files (TBD - 2018-12-31 - Hiram)
+# Create kluster run files (TBD - 2018-01-01 - Hiram)
 
     # numerator is criGriChoV2 gapless bases "real" as reported by:
     featureBits -noRandom -noHap criGriChoV2 gap
@@ -635,10 +622,10 @@ XXX - running - Wed Jan  3 16:58:06 PST 2018
     #    -bedFile=jkStuff/nonBridged.bed
 
 #########################################################################
-# LIFTOVER TO dipOrd1 (TBD - 2018-12-31 - Hiram)
+# LIFTOVER TO dipOrd1 (TBD - 2018-01-01 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/criGriChoV2/bed/blat.dipOrd1.2018-12-31
-    cd /hive/data/genomes/criGriChoV2/bed/blat.dipOrd1.2018-12-31
+    mkdir /hive/data/genomes/criGriChoV2/bed/blat.dipOrd1.2018-01-01
+    cd /hive/data/genomes/criGriChoV2/bed/blat.dipOrd1.2018-01-01
     time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
 	-ooc=/hive/data/genomes/criGriChoV2/jkStuff/criGriChoV2.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
@@ -649,7 +636,7 @@ XXX - running - Wed Jan  3 16:58:06 PST 2018
     # dipOrd1
 
 #########################################################################
-# GENBANK AUTO UPDATE (TBD - 2018-12-31 - Hiram)
+# GENBANK AUTO UPDATE (TBD - 2018-01-01 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
