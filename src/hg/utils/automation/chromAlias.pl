@@ -59,19 +59,21 @@ foreach my $chr (sort keys %chrNames) {
   my %outNames;	# key is other identifier, value is csv list of sources
   foreach my $name (sort keys %names) {
     my $namePtr = $names{$name};
-    my $otherId = $namePtr->{$chr};
-    my @a;
-    if ($otherId =~ m/\t/) {
-	@a = split('\t', $otherId);
-    } else {
-	$a[0] = $otherId;
-    }
-    for (my $i = 0; $i < scalar(@a); ++$i) {
-       if (exists($outNames{$a[$i]})) {
-	  $outNames{$a[$i]} = sprintf("%s,%s", $outNames{$a[$i]}, $name);
-       } else {
-	  $outNames{$a[$i]} = $name;
-       }
+    if (exists($namePtr->{$chr})) {
+      my $otherId = $namePtr->{$chr};
+      my @a;
+      if ($otherId =~ m/\t/) {
+	  @a = split('\t', $otherId);
+      } else {
+	  $a[0] = $otherId;
+      }
+      for (my $i = 0; $i < scalar(@a); ++$i) {
+         if (exists($outNames{$a[$i]})) {
+	    $outNames{$a[$i]} = sprintf("%s,%s", $outNames{$a[$i]}, $name);
+         } else {
+	    $outNames{$a[$i]} = $name;
+         }
+      }
     }
   }
   foreach my $otherName (sort keys %outNames) {
