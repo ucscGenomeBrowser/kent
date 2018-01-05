@@ -7,7 +7,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
     track umap
     parent mappability
     compositeTrack on 
-    type bigBed 6
+    type bigWig
     subGroup1 view Views SR=Single-read MR=Multi-read
     group map
     shortLabel Umap
@@ -116,7 +116,7 @@ longLabel Hoffman Lab Umap and Bismap Mappability
     parent mappability
     compositeTrack on 
     subGroup1 view Views SR=Single-read MR=Multi-read
-    type bed 3
+    type bigWig
     noInherit on
     group map
     shortLabel Bismap
