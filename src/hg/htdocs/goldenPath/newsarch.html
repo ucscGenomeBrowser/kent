@@ -45,6 +45,40 @@
 <!-- ============= 2017 archived news ============= -->
 <a name="2017"></a>
 
+<a name="010518"></a>
+<h2>Jan. 05, 2018 &nbsp;&nbsp; New mappability data for human, hg38</h2>
+<p>
+We are pleased to announce the release of a new set of annotations from the
+<a href="https://hoffmanlab.org/" target="_blank">Hoffman Lab</a> that contains mappability data for
+both the reference genome and bisulfite-converted genome of
+<a href="../../cgi-bin/hgGateway?db=hg38" target="_blank">hg38/GRCh38</a>. These tracks indicate
+regions with uniquely mappable reads of particular lengths before and after bisulfite conversion.
+</p>
+
+<p>
+The <a href="../../cgi-bin/hgTrackUi?db=hg38&g=mappability" target="_blank">Mappability</a>
+supertrack contains two composite tracks, <a href="../../cgi-bin/hgTrackUi?db=hg38&g=mappability"
+target="_blank">Bismap</a> and <a href="../../cgi-bin/hgTrackUi?db=hg38&g=mappability"
+target="_blank">Umap</a>. Both Umap and Bismap tracks contain single-read and multi-read mappability
+tracks for four different read lengths: 24 bp, 36 bp, 50 bp, and 100 bp. You can use these tracks
+for many purposes, including filtering unreliable signal from sequencing assays. The Bismap track
+can help filter unreliable signal from sequencing assays involving bisulfite conversion, such as
+whole-genome bisulfite sequencing or reduced representation bisulfite sequencing.</p>
+
+<p>
+For greater detail and explanatory diagrams, see the
+<a href="https://www.biorxiv.org/content/early/2016/12/20/095463" target="_blank">preprint</a>,
+the <a href="http://bismap.hoffmanlab.org/" target="_blank">Umap and Bismap project website</a>,
+or the <a href="https://bitbucket.org/hoffmanlab/umap" target="_blank">Umap and Bismap software
+documentation</a>.</p>
+<p>
+A huge thank you to <a href="https://sites.google.com/site/anshulkundaje/"
+target="_blank">Anshul Kundaje</a> (Stanford University) who created the original Umap software in
+MATLAB and Mehran Karimzadeh (<a href="https://hoffmanlab.org/" target="_blank">Michael Hoffman
+lab</a>, Princess Margaret Cancer Centre) who implemented the Python version of Umap and added
+features, including Bismap. Thanks to Hiram Clawson, Chris Esienhart, and Jairo Navarro of the UCSC
+Genome Browser group for their work in creating and releasing these tracks.</p>
+
 <a name="121917"></a>
 <h2>Dec. 19, 2017 &nbsp;&nbsp; New genome browser: <em>Pan paniscus</em>, panPan2</h2>
 <p>A genome browser is now available for the <em>Pan paniscus</em> assembly released in August
