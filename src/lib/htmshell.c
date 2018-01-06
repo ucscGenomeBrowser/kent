@@ -706,7 +706,7 @@ void htmlVaBadRequestAbort(char *format, va_list args)
  * then exit with error.  For use as an errAbort handler. */
 {
 puts("Status: 400\r");
-puts("Content-Type: text/plain; charset=UTF-8\r");
+puts("Content-Type: text/plain; charset=iso-8859-1\r");
 puts("\r");
 if (format != NULL)
     {
@@ -737,7 +737,6 @@ if (!initted && !errorsNoHeader)
     initted = TRUE;
     }
 printf("%s", htmlWarnStartPattern());
-// old way htmlVaParagraph(format,args); cannot use without XSS-protections
 fputs("<P>", stdout);
 htmlVaEncodeErrorText(format,args);
 fputs("</P>\n", stdout);
@@ -1079,7 +1078,7 @@ fputs("<HEAD>\n", f);
 // CSP header
 generateCspMetaHeader(f);
 
-fputs(head, f); // TODO "head" var. not XSS safe
+fputs(head, f);
 htmlFprintf(f,"<TITLE>%s</TITLE>\n", title); 
 if (endsWith(title,"Login - UCSC Genome Browser")) 
     fprintf(f,"\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n");
