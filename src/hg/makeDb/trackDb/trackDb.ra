@@ -347,8 +347,7 @@ html crispors
     itemRgb on
     priority 2
 
-## including later
-## include crispr10K.ra
+include crispr10K.ra
 
 track augustus
 shortLabel Augustus
