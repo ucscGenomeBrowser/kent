@@ -247,10 +247,10 @@ hgsql -e 'update dbDb set genome="A. gambiae" where name like "anoGam3";' hgcent
     egrep -v -f ../../ucsc/duplicates.chrUn.list ucscToINSDC.txt \
 	> ucscToRefSeq.txt
     rm ucscToINSDC.txt
-    
+
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
-    
+
     join -t$'\t' name.coordinate.tab ucscToRefSeq.txt > ucscToRefSeq.bed
 
     # should all be the same number of items:
@@ -286,7 +286,7 @@ hgsql -e 'update dbDb set genome="A. gambiae" where name like "anoGam3";' hgcent
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
-    
+
     join -t$'\t' name.coordinate.tab ucscToINSDC.txt > ucscToINSDC.bed
     # lookup the chrM sequence an Entrez nuclotide NC_002084.1 -> L20934.1
     # adding this chrM to the .bed file:
@@ -318,7 +318,7 @@ hgsql -e 'update dbDb set genome="A. gambiae" where name like "anoGam3";' hgcent
     cd ~/kent/src/hg/makeDb/trackDb/anopheles/anoGam3
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" anoGam3 \
-      | sed -e 's/[0-9][0-9]*//; s/\.[0-9]\+$//' | sort | uniq -c 
+      | sed -e 's/[0-9][0-9]*//; s/\.[0-9]\+$//' | sort | uniq -c
 #    8115 AAAB
 #       1 NC_
 
@@ -365,7 +365,7 @@ searchPriority 8
 	# grep version of RepeatMasker$ /scratch/data/RepeatMasker/RepeatMasker
 	#    January 31 2015 (open-4-0-5) version of RepeatMasker
 	# grep RELEASE /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
-	# CC   RELEASE 20140131;  
+	# CC   RELEASE 20140131;
 
     time featureBits -countGaps anoGam3 rmsk
     # 35874857 bases of 264974304 (13.539%) in intersection
@@ -747,13 +747,258 @@ done
 
     # to verify the database.table list is correct, should be the same
     # line count for these two commands:
-    wc -l redmine.anoGam3.table.list 
+    wc -l redmine.anoGam3.table.list
     # 62 redmine.anoGam3.table.list
     awk -F'.' '{
 printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
 }' redmine.anoGam3.table.list | while read L; do eval $L; done | wc -l
     # 62
 
-    # Put a path to the files produced here in the redmine ticket 
+    # Put a path to the files produced here in the redmine ticket
 
-#########################################################################
+#############################################################################
+# Ensembl genes (DONE - 2018-01-06 - Hiram)
+    # after chromAlias work is done:
+
+    cd /hive/data/genomes/anoGam3/jkStuff
+    join -t$'\t' <(sort -k1,1 ../chrom.sizes) \
+      <(sort ../bed/chromAlias/ucsc.ensembl.tab) \
+        | awk '{printf "0\t%s\t%d\t%s\t%d\n", $3,$2,$1,$2}' > ensToUcsc.lift
+
+    mkdir /hive/data/genomes/anoGam3/bed/ensGene.37/download
+    cd /hive/data/genomes/anoGam3/bed/ensGene.37/download
+
+    wget --tries=2 --user=anonymous --password=ucscGenomeBrowser@ucsc.edu \
+ftp://ftp.ensemblgenomes.org/pub/metazoa/release-37/gtf/anopheles_gambiae/Anopheles_gambiae.AgamP4.37.gtf.gz \
+-O Anopheles_gambiae.AgamP4.37.gtf.gz
+
+    wget --tries=2 --user=anonymous --password=ucscGenomeBrowser@ucsc.edu \
+ftp://ftp.ensemblgenomes.org/pub/metazoa/release-37/fasta/anopheles_gambiae/pep/Anopheles_gambiae.AgamP4.pep.all.fa.gz \
+-O Anopheles_gambiae.AgamP4.pep.all.fa.gz
+
+
+    mkdir /hive/data/genomes/anoGam3/bed/ensGene.37/process
+    cd /hive/data/genomes/anoGam3/bed/ensGene.37/process
+    printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<ucscToFlyBase.lift") or die "can not read ucscToFlyBase.lift";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($start, $contig, $size, $flyName, $flySize) = split('"'"'\\t'"'"', $line);
+  printf "%%s\\t%%d\\t%%d\\t%%s\\t0\\t+\\n", $flyName, $start, $start+$size, $contig;
+}
+close (FH);
+' > liftToLiftAcross.pl
+
+    chmod +x liftToLiftAcross.pl
+    ln -s ../../flybase/ucscToFlyBase.lift .
+
+    # procedure here is patterned after:
+    #     /hive/data/genomes/vicPac1/bed/ensGene.91/process/doProcess.csh
+    # with the names changed and added special liftAcross/liftUp
+
+zcat ../download/Anopheles_gambiae.AgamP4.37.gtf.gz \
+        | gzip > allGenes.gtf.gz
+gtfToGenePred -includeVersion -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \
+    | gzip > anoGam3.allGenes.gp.gz
+/cluster/bin/scripts/extractGtf.pl infoOut.txt > ensGtp.tab
+/cluster/bin/scripts/ensemblInfo.pl infoOut.txt > ensemblToGeneName.tab
+/cluster/bin/scripts/extractSource.pl allGenes.gtf.gz | sort -u > ensemblSource.tab
+set NL = `awk 'BEGIN{max=0}{if (length($1) > max) max=length($1)}END{print max}' ensemblToGeneName.tab`
+set VL = `awk 'BEGIN{max=0}{if (length($2) > max) max=length($2)}END{print max}' ensemblToGeneName.tab`
+sed -e "s/ knownTo / ensemblToGeneName /; s/known gene/ensGen/; s/INDEX(name(12)/PRIMARY KEY(name($NL)/; s/value(12)/value($VL)/" \
+      /cluster/home/hiram/kent/src/hg/lib/knownTo.sql > ensemblToGeneName.sql
+sed -e "s/name(15)/name($NL)/" \
+      /cluster/home/hiram/kent/src/hg/lib/ensemblSource.sql > ensemblSource.sql
+mv anoGam3.allGenes.gp.gz anoGam3.allGenes.beforeLiftAcross.gp.gz
+
+./liftToLiftAcross.pl | gzip -c > anoGam3.ensGene.liftAcross.gz
+liftAcross -warn -bedOut=ensemblGeneScaffolds.anoGam3.bed \
+    anoGam3.ensGene.liftAcross.gz \
+        anoGam3.allGenes.beforeLiftAcross.gp.gz \
+            anoGam3.allGenes.beforeLiftUp.gp >& liftAcross.err.out
+
+# one gene has bad cds business
+# Error: anoGam3.allGenes.gp:15373: AGAP012697-RA cdsEnd 3384 not in tx bounds 1961-2981
+# Error: anoGam3.allGenes.gp:15373: AGAP012697-RA cdsEnd 3384 not in an exon
+# checked: 15633 failed: 2
+
+liftUp -extGenePred -type=.gp stdout \
+  /hive/data/genomes/anoGam3/jkStuff/ensToUcsc.lift carry \
+    anoGam3.allGenes.beforeLiftUp.gp | grep -v AGAP012697-RA \
+       > anoGam3.allGenes.gp
+
+gzip ensemblGeneScaffolds.anoGam3.bed anoGam3.allGenes.gp liftAcross.err.out \
+    anoGam3.allGenes.beforeLiftUp.gp
+
+genePredCheck -db=anoGam3 anoGam3.allGenes.gp.gz
+# construct bigBed and index for assembly hub
+mkdir -p bbi
+genePredToBed anoGam3.allGenes.gp.gz stdout | sort -k1,1 -k2,2n > anoGam3.ensGene.bed
+bedToBigBed -extraIndex=name anoGam3.ensGene.bed ../../../chrom.sizes bbi/anoGam3.ensGene.bb
+grep -v "^#" infoOut.txt | awk '{printf "%s\t%s,%s,%s,%s,%s\n", $1,$2,$3,$8,$9,$10}' > anoGam3.ensGene.nameIndex.txt
+ixIxx anoGam3.ensGene.nameIndex.txt anoGam3.ensGene.name.ix anoGam3.ensGene.name.ixx
+
+    # procedure here is patterned after:
+    #     /hive/data/genomes/vicPac1/bed/ensGene.91/doLoad.csh
+hgLoadGenePred  -genePredExt anoGam3 ensGene process/anoGam3.allGenes.gp.gz \
+        >& loadGenePred.errors.txt
+checkTableCoords anoGam3 -table=ensGene
+genePredCheck -db=anoGam3 ensGene
+zcat process/ensemblGeneScaffolds.anoGam3.bed.gz | sort > to.clean.GeneScaffolds.bed
+cut -f1 /hive/data/genomes/anoGam3/chrom.sizes | sort > legitimate.names
+join -t'        ' legitimate.names to.clean.GeneScaffolds.bed \
+    | sed -e "s/GeneScaffold/GS/" | hgLoadBed anoGam3 ensemblGeneScaffold stdin
+checkTableCoords anoGam3 -table=ensemblGeneScaffold
+zcat download/Anopheles_gambiae.AgamP4.pep.all.fa.gz \
+        | sed -e 's/^>.* transcript:/>/; s/ CCDS.*$//; s/ .*$//' | gzip > ensPep.txt.gz
+zcat ensPep.txt.gz \
+    | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+         | sed -e '/^$/d; s/*$//' | sort > ensPep.anoGam3.fa.tab
+hgPepPred anoGam3 tab ensPep ensPep.anoGam3.fa.tab
+hgLoadSqlTab anoGam3 ensGtp ~/kent/src/hg/lib/ensGtp.sql process/ensGtp.tab
+hgLoadSqlTab anoGam3 ensemblToGeneName process/ensemblToGeneName.sql process/ensemblToGeneName.tab
+hgLoadSqlTab anoGam3 ensemblSource process/ensemblSource.sql process/ensemblSource.tab
+# verify names in ensGene is a superset of names in ensPep
+hgsql -N -e "select name from ensPep;" anoGam3 | sort > ensPep.name
+hgsql -N -e "select name from ensGene;" anoGam3 | sort > ensGene.name
+set geneCount = `cat ensGene.name | wc -l`
+set pepCount = `cat ensPep.name | wc -l`
+set commonCount = `comm -12 ensPep.name ensGene.name | wc -l`
+set percentId = \
+    `echo $commonCount $pepCount | awk '{printf "%d", 100.0*$1/$2}'`
+echo "gene count: $geneCount, peptide count: $pepCount, common name count: $commonCount"
+echo "percentId: $percentId"
+if (! ($percentId > 95)) then
+    echo "ERROR: percent coverage of peptides to genes: $percentId"
+    echo "ERROR: should be greater than 95"
+    exit 255
+endif
+
+exit $status
+
+XXX need to fixup this entry:
+
+hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) \
+    VALUES("anoGam3", "ensGene", "hiram", "91", now(), \
+        "with peptides Vicugna_pacos.anoGam3.pep.all.fa.gz", \
+        "ftp://ftp.ensembl.org/pub/release-91/gtf/vicugna_pacos/Vicugna_pacos.anoGam3.91.gtf.gz", \
+        "dec2017" );' hgFixed
+
+
+    cd /hive/data/genomes/cavApe1
+    printf "# required db variable
+db cavApe1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/cavApe1/jkStuff/ensToUcsc.lift
+" > cavApe1.ensGene.ra
+
+    time (doEnsGeneUpdate.pl -ensVersion=91 cavApe1.ensGene.ra) \
+	> ensGene.91.log 2>&1
+    # real    1m31.613s
+
+    featureBits cavApe1 ensGene
+    # 21842310 bases of 2716396567 (0.804%) in intersection
+
+##############################################################################
+# crispr10K track (DONE - 2018-01-06 - Hiram)
+    mkdir /hive/data/genomes/anoGam3/bed/crispr.2018-01-06
+    cd /hive/data/genomes/anoGam3/bed/crispr.2018-01-06
+
+    # construct index for new genome, the index ends up in:
+    #    /hive/data/outside/crisprTrack/crispor/genomes/anoGam3/
+
+    export PATH=/hive/data/outside/crisprTrack/crispor/tools/usrLocalBin:$PATH
+    export TMPDIR=/dev/shm
+
+    time (/hive/data/outside/crisprTrack/crispor/tools/crisprAddGenome \
+	ucscLocal anoGam3 --geneTable=ensGene --baseDir \
+	    /hive/data/outside/crisprTrack/crispor/genomes) \
+        > createIndex.log 2>&1
+    # real    7m53.047s
+    # result in /hive/data/outside/crisprTrack/crispor/genomes/anoGam3/
+# total 1050624
+# -rw-rw-r-- 1  68409555 Jan  6 22:21 anoGam3.2bit
+# -rw-rw-r-- 1 264974392 Jan  6 22:26 anoGam3.fa.bwt
+# -rw-rw-r-- 1  66243578 Jan  6 22:26 anoGam3.fa.pac
+# -rw-rw-r-- 1    354910 Jan  6 22:26 anoGam3.fa.ann
+# -rw-rw-r-- 1    135831 Jan  6 22:26 anoGam3.fa.amb
+# -rw-rw-r-- 1 132487208 Jan  6 22:28 anoGam3.fa.sa
+# -rw-rw-r-- 1    185978 Jan  6 22:28 anoGam3.sizes
+# -rw-rw-r-- 1   5007758 Jan  6 22:28 anoGam3.segments.bed
+# -rw-rw-r-- 1       371 Jan  6 22:28 genomeInfo.tab
+
+    # running step wise to be careful and see if this works OK
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -stop=ranges \
+	-buildDir=`pwd` anoGam3 ensGene) > ranges.log 2>&1
+    # real    0m8.964s
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=guides \
+	-stop=guides -buildDir=`pwd` anoGam3 ensGene) > guides.log 2>&1
+    # real    0m57.600s
+    cat guides/run.time | sed -e 's/^/# /;' | head -6
+# Completed: 99 of 99 jobs
+# CPU time in finished jobs:        742s      12.36m     0.21h    0.01d  0.000 y
+# IO & Wait Time:                   228s       3.81m     0.06h    0.00d  0.000 y
+# Average job time:                  10s       0.16m     0.00h    0.00d
+# Longest finished job:              13s       0.22m     0.00h    0.00d
+# Submission to last job:            25s       0.42m     0.01h    0.00d
+
+    # this is the big cluster job
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=specScores \
+	-stop=specScores -buildDir=`pwd` anoGam3 ensGene) > specScores.log 2>&1
+    # real    1110m57.233s
+# Completed: 186799 of 186799 jobs
+# CPU time in finished jobs:   12910905s  215181.76m  3586.36h  149.43d  0.409 y
+# IO & Wait Time:              47964247s  799404.11m 13323.40h  555.14d  1.521 y
+# Average job time:                 326s       5.43m     0.09h    0.00d
+# Longest finished job:             580s       9.67m     0.16h    0.01d
+# Submission to last job:         63574s    1059.57m    17.66h    0.74d
+
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=effScores \
+	-stop=offTargets -buildDir=`pwd` anoGam3 ensGene) \
+	> effScores.offTargets.log 2>&1
+    # real    251m21.154s
+# effScores
+# Completed: 1413 of 1413 jobs
+# CPU time in finished jobs:     793726s   13228.77m   220.48h    9.19d  0.025 y
+# IO & Wait Time:                 10053s     167.55m     2.79h    0.12d  0.000 y
+# Average job time:                 569s       9.48m     0.16h    0.01d
+# Longest finished job:           13440s     224.00m     3.73h    0.16d
+# Submission to last job:         14019s     233.65m     3.89h    0.16d
+
+# offTargets
+# Completed: 9340 of 9340 jobs
+# CPU time in finished jobs:      14042s     234.03m     3.90h    0.16d  0.000 y
+# IO & Wait Time:                 37970s     632.84m    10.55h    0.44d  0.001 y
+# Average job time:                   6s       0.09m     0.00h    0.00d
+# Longest finished job:              10s       0.17m     0.00h    0.00d
+# Submission to last job:            66s       1.10m     0.02h    0.00d
+
+    time (~/kent/src/hg/utils/automation/doCrispr.pl -continue=load \
+	-stop=load -buildDir=`pwd` anoGam3 ensGene) \
+	> load.log 2>&1
+    # real    13m52.830s
+
+    featureBits -countGaps anoGam3 crispr10KRanges
+    # 147498676 bases of 264974304 (55.665%) in intersection
+
+    # XXX this does not work: Mon Jan  8 13:29:18 PST 2018
+    ~/kent/src/utils/doLocusName -o anoGam3 ensGene
+
+sh: tabRepl: command not found
+Usage: bedOverlapMerge [options] file - merge overlapping bed features, join their names
+
+bedOverlapMerge: error: no such option: -o
+Usage: bedBetween [options] inSortedBedFile outfile (stdout ok): given sorted feats., create features between them and annotated these with the neighboring bednames. Regions around chromosomes are limited to 50kbp.
+
+bedBetween: error: no such option: -m
+
+
+##############################################################################
