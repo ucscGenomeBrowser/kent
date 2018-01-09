@@ -183,7 +183,8 @@ for (longRange=longRangeList; longRange; longRange=longRange->next)
         if (sOnScreen && eOnScreen && draw != DRAW_LINE)
             {
             if (draw == DRAW_CURVE)
-                hvGfxCurve(hvg, sx, yOff, (ex-sx+1)/2 + sx, peak+60, ex, yOff, color);
+                //hvGfxCurve(hvg, sx, yOff, (ex-sx+1)/2 + sx, peak+60, ex, yOff, color);
+                hvGfxCurveAA(hvg, sx, yOff, (ex-sx+1)/2 + sx, peak+60, ex, yOff, color);
             else if (draw == DRAW_ELLIPSE)
                 {
                 int yLeft = yOff + peakHeight;
