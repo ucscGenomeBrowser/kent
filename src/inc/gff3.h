@@ -210,6 +210,7 @@ extern char *gff3AttrOntologyTerm;
 
 /* commonly used features names */
 extern char *gff3FeatGene;
+extern char *gff3FeatPseudogene;
 extern char *gff3FeatMRna;
 extern char *gff3FeatNCRna;
 extern char *gff3FeatRRna;

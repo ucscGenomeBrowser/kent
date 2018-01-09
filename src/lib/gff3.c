@@ -45,6 +45,7 @@ char *gff3AttrIsCircular = "Is_circular";
 
 /* commonly used features names */
 char *gff3FeatGene = "gene";
+char *gff3FeatPseudogene = "pseudogene";
 char *gff3FeatNCRna ="ncRNA";
 char *gff3FeatRRna = "rRNA";
 char *gff3FeatTRna = "tRNA";

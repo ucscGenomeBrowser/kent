@@ -540,8 +540,10 @@ static boolean shouldProcessAsTranscript(struct gff3Ann *node)
 /* Decide if we should process this feature as a transcript and turn it into a
  * genePred. */
 {
+char *parentType = node->parents ? node->parents->ann->type : NULL;
 return (processAllGeneChildren
-        && node->parents && sameString(node->parents->ann->type, gff3FeatGene))
+        && node->parents
+        && (sameString(parentType, gff3FeatGene) || sameString(parentType, gff3FeatPseudogene)))
     || sameString(node->type, gff3FeatMRna) 
     || sameString(node->type, gff3FeatNCRna)
     || sameString(node->type, gff3FeatCDS)
@@ -629,7 +631,7 @@ else if (allowMinimalGenes)
 static void processRoot(FILE *gpFh, struct gff3Ann *node, struct hash *processed)
 /* process a root node in the tree */
 {
-if (sameString(node->type, gff3FeatGene))
+if (sameString(node->type, gff3FeatGene) || sameString(node->type, gff3FeatPseudogene))
     processGene(gpFh, node, processed);
 else if (shouldProcessAsTranscript(node))
     processTranscript(gpFh, NULL, node, processed);
