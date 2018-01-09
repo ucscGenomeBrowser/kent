@@ -6,11 +6,15 @@
 /* Copyright (C) 2016 The Regents of the University of California 
  *  * See README in this or parent directory for licensing information. */
 
+#include "hui.h"
 #include "longRange.h"
 
 void longRangeCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Complete track controls for long range interaction. */
 {
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+
+// track height control
 char buffer[1024];
 int min, max, deflt, current;
 cartTdbFetchMinMaxPixels(cart, tdb, LONG_MINHEIGHT, LONG_MAXHEIGHT, atoi(LONG_DEFHEIGHT),
@@ -21,10 +25,13 @@ cgiMakeIntVar(buffer, current, 3);
 printf("&nbsp;<span>pixels&nbsp;(range: %d to %d, default: %d)<span>", 
         min, max, deflt);
 
+// score control
 safef(buffer, sizeof buffer, "%s.%s", tdb->track, LONG_MINSCORE);
 double minScore = sqlDouble(cartUsualString(cart, buffer, LONG_DEFMINSCORE));
 printf("<BR><BR><b>Minimum score:&nbsp;</b>");
 cgiMakeDoubleVar(buffer, minScore, 0);
+
+cfgEndBox(boxed);
 }
 
 static char *getOther(struct bed *bed, unsigned *s, unsigned *e, 
