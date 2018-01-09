@@ -75,7 +75,6 @@ for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)
             x2 = width ;
         if (x1 < width)
             {
-            printf("x %d %d\n", x1, x2);
             for (; x1 < x2; ++x1)
                 {
                 if ((x1 >= 0))
