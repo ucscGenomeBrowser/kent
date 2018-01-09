@@ -62,6 +62,7 @@ static char *calJacNames[] = {"Callithrix jacchus", NULL};
 static char *danRerNames[] = {"Danio rerio", NULL};
 static char *echTelNames[] = {"Echinops telfairi", NULL};
 static char *oryCunNames[] = {"Oryctolagus cuniculus", NULL};
+static char *cavApeNames[] = {"Cavia aperea", NULL};
 static char *cavPorNames[] = {"Cavia porcellus", NULL};
 static char *loxAfrNames[] = {"Loxodonta africana", NULL};
 static char *macEugNames[] = {"Macropus eugenii", "Notamacropus eugenii", NULL};
@@ -216,6 +217,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"dasNov", dasNovNames},
     {"echTel", echTelNames},
     {"oryCun", oryCunNames},
+    {"cavApe", cavApeNames},
     {"cavPor", cavPorNames},
     {"equCab", equCabNames},
     {"cerSim", cerSimNames},
