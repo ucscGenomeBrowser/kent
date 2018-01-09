@@ -269,7 +269,7 @@ else if (sameString("factorSource", tdb->type) &&
     streamer = annoStreamDbFactorSourceNew(dataDb, tdb->track, sourceTable, inputsTable, assembly,
 					   maxOutRows);
     }
-else if (trackHubDatabase(db))
+else if (trackHubDatabase(db) && !isCustomTrack(selTable))
     errAbort("Unrecognized type '%s' for hub track '%s'", tdb->type, tdb->track);
 if (streamer == NULL)
     {
