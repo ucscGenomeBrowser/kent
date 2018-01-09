@@ -40,7 +40,7 @@ static char *panPanNames[] = {"Pan paniscus", NULL};
 static char *panTroNames[] = {"Pan troglodytes", "Pan troglodytes troglodytes", 
                               "Pan troglodytes verus", NULL};
 static char *gorGorNames[] = {"Gorilla gorilla", "Gorilla gorilla gorilla", "Gorilla gorilla uellensis", "Gorilla gorilla diehli", "Gorilla gorilla graueri", "Gorilla berengi", NULL};
-static char *papAnuNames[] = {"Papio anubis", "Papio hamadryas", "Papio hamadryas hamadryas", NULL};
+static char *papAnuNames[] = {"Papio anubis", "Papio anubis anubis", "Papio hamadryas", "Papio hamadryas hamadryas", NULL};
 static char *papHamNames[] = {"Papio hamadryas", "Papio hamadryas hamadryas", "Papio anubis", NULL};
 static char *ponAbeNames[] = {"Pongo abelii", "Pongo pygmaeus",
 		"Pongo pygmaeus pygmaeus", "Pongo pygmaeus abelii", NULL};
