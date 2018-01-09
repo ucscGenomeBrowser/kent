@@ -161,10 +161,10 @@ printf STDERR "# checking $outsideCopy\n";
     $bossScript->add(<<_EOF_
 # local file copies exist, use symlinks
 
-ln -s \$outsideCopy/\${asmId}_genomic.gff.gz .
-ln -s \$outsideCopy/\${asmId}_rna.fna.gz .
-ln -s \$outsideCopy/\${asmId}_rna.gbff.gz .
-ln -s \$outsideCopy/\${asmId}_protein.faa.gz .
+ln -f -s \$outsideCopy/\${asmId}_genomic.gff.gz .
+ln -f -s \$outsideCopy/\${asmId}_rna.fna.gz .
+ln -f -s \$outsideCopy/\${asmId}_rna.gbff.gz .
+ln -f -s \$outsideCopy/\${asmId}_protein.faa.gz .
 _EOF_
     );
   } else {
@@ -183,7 +183,7 @@ _EOF_
 printf STDERR "# checking $local2Bit\n";
   if ( -s $local2Bit ) {
     $bossScript->add(<<_EOF_
-ln -s $local2Bit .
+ln -f -s $local2Bit .
 _EOF_
     );
   } elsif ( -s "$outsideCopy/${asmId}_genomic.fna.gz") {
@@ -206,13 +206,14 @@ _EOF_
   $bossScript->add(<<_EOF_
 # generate idKeys for the NCBI sequence to translate names to UCSC equivalents
 
+rm -rf \$runDir/idKeys
 mkdir -p \$runDir/idKeys
 cd \$runDir/idKeys
 time ($doIdKeys -buildDir=\$runDir/idKeys -twoBit=\$runDir/\$asmId.ncbi.2bit \$db) > idKeys.log 2>&1
 
 cd \$runDir
-ln -s idKeys/\$db.idKeys.txt ./ncbi.\$asmId.idKeys.txt
-ln -s /hive/data/genomes/\$db/bed/idKeys/\$db.idKeys.txt ./ucsc.\$db.idKeys.txt
+ln -f -s idKeys/\$db.idKeys.txt ./ncbi.\$asmId.idKeys.txt
+ln -f -s /hive/data/genomes/\$db/bed/idKeys/\$db.idKeys.txt ./ucsc.\$db.idKeys.txt
 twoBitInfo \$asmId.ncbi.2bit stdout | sort -k2nr > \$asmId.chrom.sizes
 zcat \${asmId}_rna.fna.gz | sed -e 's/ .*//;' | gzip -c > \$asmId.rna.fa.gz
 faSize -detailed $asmId.rna.fa.gz | sort -k2nr > rna.sizes
@@ -389,12 +390,10 @@ hgLoadGenePred -genePredExt \$db ncbiRefSeqPredicted process/\$db.predicted.gp
 genePredCheck -db=\$db ncbiRefSeqPredicted
 
 mkdir -p $gbdbDir
-rm -f $gbdbDir/ncbiRefSeqOther.bb
-ln -s `pwd`/process/\$db.other.bb $gbdbDir/ncbiRefSeqOther.bb
+ln -f -s `pwd`/process/\$db.other.bb $gbdbDir/ncbiRefSeqOther.bb
 hgBbiDbLink \$db ncbiRefSeqOther $gbdbDir/ncbiRefSeqOther.bb
-rm -f $gbdbDir/ncbiRefSeqOther.ix{,x}
-ln -s `pwd`/process/ncbiRefSeqOther.ix{,x} $gbdbDir/
-ln -s `pwd`/process/ncbiRefSeqVersion.txt $gbdbDir/
+ln -f -s `pwd`/process/ncbiRefSeqOther.ix{,x} $gbdbDir/
+ln -f -s `pwd`/process/ncbiRefSeqVersion.txt $gbdbDir/
 
 # select only coding genes to have CDS records
 
@@ -445,8 +444,7 @@ if [ -s \$db.noRna.available.list ]; then
 fi
 
 mkdir -p $gbdbDir
-rm -f $gbdbDir/seqNcbiRefSeq.rna.fa
-ln -s `pwd`/\$db.rna.fa $gbdbDir/seqNcbiRefSeq.rna.fa
+ln -f -s `pwd`/\$db.rna.fa $gbdbDir/seqNcbiRefSeq.rna.fa
 hgLoadSeq -drop -seqTbl=seqNcbiRefSeq -extFileTbl=extNcbiRefSeq \$db $gbdbDir/seqNcbiRefSeq.rna.fa
 
 hgLoadPsl \$db -table=ncbiRefSeqPsl process/\$asmId.\$db.psl.gz
@@ -467,8 +465,8 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-gzip download/{rna.sizes,*.raFile.txt}
-gzip process/*.{tab,txt,gp,gff,psl,cds,bed}
+gzip -f download/{rna.sizes,*.raFile.txt}
+gzip -f process/*.{tab,txt,gp,gff,psl,cds,bed}
 _EOF_
   );
   $bossScript->execute();
