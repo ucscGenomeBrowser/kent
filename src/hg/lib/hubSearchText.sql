@@ -13,5 +13,6 @@ CREATE TABLE hubSearchText (
     text longtext,	# Description text
               #Indices
     KEY (textLength),
+    INDEX (track),
     FULLTEXT INDEX (text)
 );
