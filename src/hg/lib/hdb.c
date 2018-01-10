@@ -44,6 +44,7 @@
 #include "net.h"
 #include "udc.h"
 #include "paraFetch.h"
+#include "regexHelper.h"
 #include "filePath.h"
 #include "wikiLink.h"
 #include "cheapcgi.h"
@@ -616,6 +617,28 @@ for (i = 0;  dbToGcf[i].db != NULL;  i++)
         break;
         }
 return gcf;
+}
+
+char *hNcbiGcaId(char *db)
+/* Return the NCBI GenBank assembly id (GCA_...) for db, or NULL if we don't know it. */
+{
+char *gca = NULL;
+if (! trackHubDatabase(db))
+    {
+    struct sqlConnection *conn = hConnectCentral();
+    char query[1024];
+    sqlSafef(query, sizeof(query), "select sourceName from dbDb where name = '%s'", db);
+    char sourceName[2048];
+    sqlQuickQuery(conn, query, sourceName, sizeof(sourceName));
+    regmatch_t substrs[2];
+    if (isNotEmpty(sourceName) &&
+        regexMatchSubstr(sourceName, "GCA_[0-9]+\\.[0-9]+", substrs, ArraySize(substrs)))
+        {
+        gca = regexSubstringClone(sourceName, substrs[0]);
+        }
+    hDisconnectCentral(&conn);
+    }
+return gca;
 }
 
 struct sqlConnection *hAllocConn(char *db)

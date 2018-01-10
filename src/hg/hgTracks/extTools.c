@@ -273,6 +273,15 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
             freez(&seq);
             }
         }
+    else if (sameWord(val, "$ncbiGca"))
+        {
+        char *gca = hNcbiGcaId(db);
+        if (gca)
+            val = gca;
+        else
+            // Really we shouldn't be making this entire form... pass db as hail-mary
+            val = db;
+        }
     else if (sameWord(val, "$ncbiGcf"))
         {
         char *gcf = hNcbiGcfId(db);
