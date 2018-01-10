@@ -334,15 +334,15 @@ void hvGfxCurveSegAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, 
          cur = fmin(dx+xy,-xy-dy);
          ed = fmax(dx+xy,-xy-dy);               /* approximate error distance */
          ed += 2*ed*cur*cur/(4*ed*ed+cur*cur);
-         mixDot(hvg, x0,y0, 255*fabs(err-dx-dy-xy)/ed, color);          /* plot curve */
+         mixDot(hvg, x0,y0, 1-fabs(err-dx-dy-xy)/ed, color);          /* plot curve */
          if (x0 == x2 || y0 == y2) break;     /* last pixel -> curve finished */
          x1 = x0; cur = dx-err; y1 = 2*err+dy < 0;
          if (2*err+dx > 0) {                                        /* x step */
-            if (err-dy < ed) mixDot(hvg, x0,y0+sy, 255*fabs(err-dy)/ed, color);
+            if (err-dy < ed) mixDot(hvg, x0,y0+sy, 1-fabs(err-dy)/ed, color);
             x0 += sx; dx -= xy; err += dy += yy;
          }
          if (y1) {                                                  /* y step */
-            if (cur < ed) mixDot(hvg, x1+sx,y0, 255*fabs(cur)/ed, color);
+            if (cur < ed) mixDot(hvg, x1+sx,y0, 1-fabs(cur)/ed, color);
             y0 += sy; dy -= xy; err += dx += xx;
          }
       } while (dy < dx);                  /* gradient negates -> close curves */
