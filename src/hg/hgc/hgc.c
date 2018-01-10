@@ -4155,20 +4155,6 @@ if (container == NULL && wordCount > 0)
         headerItem = NULL;
     }
 
-// doNcbiRefSeq
-if (sameWord(tdb->table, "ncbiRefSeqOther"))
-    {
-    struct dyString *dy = newDyString(1024);
-    dyStringPrintf(dy, "%s", item);
-
-    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
-    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-        dyStringPrintf(dy, " - Release %s", trackVersion->version);
-
-    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, dyStringCannibalize(&dy));
-    headerItem = cloneString("ncbiRefSeqOther");
-    }
-
 /* Print header. */
 genericHeader(tdb, headerItem);
 
@@ -11834,14 +11820,7 @@ char **row;
 char query[256];
 struct ncbiRefSeqLink *nrl;
 
-struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, "%s - %s ", tdb->longLabel, itemName);
-
-struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
-if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-    dyStringPrintf(dy, "- Release %s\n", trackVersion->version);
-
-cartWebStart(cart, database, "%s", dy->string);
+cartWebStart(cart, database, "%s - %s ", tdb->longLabel, itemName);
 
 /* get refLink entry */
 sqlSafef(query, sizeof(query), "select * from ncbiRefSeqLink where id = '%s'", itemName);
@@ -11941,11 +11920,6 @@ if (differentWord(nrl->name,""))
         printf("%s</a><br>\n", nrl->name);
         }
     }
-if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-    {
-    printf("<B>Annotation Release:</B> <A href='%s' TARGET=_blank> %s <BR></A>", trackVersion->comment, trackVersion->version);
-    }
-
 htmlHorizontalLine();
 if (differentWord("", nrl->description))
     {
