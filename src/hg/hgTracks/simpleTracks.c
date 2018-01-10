@@ -14216,7 +14216,7 @@ for (subTdb=subTracks; subTdb; subTdb = subTdb->next)
     if (bigDataUrl != NULL)
         dyStringPrintf(dy, "%s ",bigDataUrl);
     else // native tracks are prepended with '$'
-        dyStringPrintf(dy, "$%s ",subTdb->track);
+        dyStringPrintf(dy, "$%s ",trackDbSetting(subTdb, "table"));
     }
 
 hashAdd(tdb->settingsHash, "mathDataUrl", dy->string);

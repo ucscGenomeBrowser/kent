@@ -3,6 +3,9 @@
 
 #include "common.h"
 #include "bigWig.h"
+#include "hdb.h"
+#include "wiggle.h"
+#include "trackHub.h"
 
 // stack of arithmetic operators
 struct opcodeStack
@@ -40,89 +43,95 @@ switch(*word)
 return ret;
 }
 
-double *mathWigGetValues(char *equation, char *chrom, unsigned winStart, unsigned winEnd)
-/* Build an array of doubles that is calculated from bigWig's listed
- * in equation in the requested region. */
+void getWigDataFromFile(struct wiggle *wi, double *array, int winStart, int winEnd)
+/* Read a wib file to get wiggle values for a range. */
 {
-static char lastOpcode = 0;
-char *words[100];
-int count = chopByWhite(equation, words, sizeof(words)/sizeof(char *));
-int jj,ii;
-unsigned width = winEnd - winStart;
-struct lm *lm = lmInit(0);
-double *data = needHugeMem(width * sizeof(double));
-bzero(data, width * sizeof(double));
-struct opcodeStack opcodeStack;
-bzero(&opcodeStack, sizeof opcodeStack);
+static char *fileName = NULL;
+static struct udcFile *wibFH = NULL;
+unsigned char *readData;    /* the bytes read in from the file */
+int dataOffset;
 
-boolean firstTime = TRUE;
-for (jj=0; jj < count; jj++)
+if ((fileName == NULL) || differentString(fileName, wi->file))
     {
-    if (pushOpcode(&opcodeStack, words[jj]))
-        continue;
-    if (startsWith("$", words[jj]))  // ignore native tracks for the moment
-        continue;
-    struct bbiFile *bwf = bigWigFileOpen(words[jj]);
-
-    struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, winStart, winEnd, lm);
-
-    if (firstTime)
-        {
-        for (iv = ivList; iv != NULL; iv = iv->next)
-            {
-            unsigned start = max(0, iv->start - winStart);
-            unsigned end = min(width, iv->end - winStart);
-
-            for (ii = start; ii < end; ii++)
-                data[ii] = iv->val;
-            }
-
-        firstTime = FALSE;
-        }
-    else
-        {
-        char opcode;
-        if (opcodeStack.depth == 0)
-            {
-            opcode = lastOpcode;
-            if (opcode == 0)
-                opcode = '+';
-
-            //errAbort("underflow in opcode stack");
-            }
-        else
-            lastOpcode = opcode = opcodeStack.stack[--opcodeStack.depth];
-        for (iv = ivList; iv != NULL; iv = iv->next)
-            {
-            unsigned start = max(0, iv->start - winStart);
-            unsigned end = min(width, iv->end - winStart);
-            for (ii = start; ii < end; ii++)
-                {
-                switch(opcode)
-                    {
-                    case '+':
-                        data[ii] += iv->val;
-                        break;
-                    case '-':
-                        data[ii] -= iv->val;
-                        break;
-                    case '*':
-                        data[ii] *= iv->val;
-                        break;
-                    case '/':
-                        data[ii] /= iv->val;
-                        break;
-                    }
-                }
-            }
-        }
+    if (wibFH != NULL)
+        udcFileClose(&wibFH);
+    fileName = cloneString(wi->file);
+    wibFH = udcFileOpen(hReplaceGbdb(fileName), NULL);
     }
-
-return data;
+udcSeek(wibFH, wi->offset);
+readData = (unsigned char *) needMem((size_t) (wi->count + 1));
+udcRead(wibFH, readData,
+    (size_t) wi->count * (size_t) sizeof(unsigned char));
+/*  walk through all the data in this block */
+int width = winEnd - winStart;
+for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)
+    {
+    unsigned char datum = readData[dataOffset];
+    if (datum != WIG_NO_DATA)
+        {
+        int x1 = ((wi->chromStart - winStart) + (dataOffset * wi->span));
+        int x2 = x1 + wi->span;
+        if (x2 >= width )
+            x2 = width ;
+        if (x1 < width)
+            {
+            for (; x1 < x2; ++x1)
+                {
+                if ((x1 >= 0))
+                    {
+                    array[x1] = BIN_TO_VALUE(datum,wi->lowerLimit,wi->dataRange);
+                    }
+                }   
+            }   
+        }   
+    }   
 }
 
-double *mathWigGetValuesMissing(char *equation, char *chrom, unsigned winStart, unsigned winEnd)
-/* Build an array of doubles that is calculated from bigWig's listed
+void getWigData(char *db, char *table, char *chrom, unsigned winStart, unsigned winEnd, double *array)
+/* Query the database to find the regions in the WIB file we need to read to get data for a specified range. */
+{
+struct sqlConnection *conn = hAllocConn(db);
+int rowOffset;
+struct sqlResult *sr;
+char **row;
+struct wiggle wiggle;
+int span = 0;
+
+sr = hRangeQuery(conn, table, chrom, winStart, winEnd,
+        NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    wiggleStaticLoad(row + rowOffset, &wiggle);
+    getWigDataFromFile(&wiggle, array, winStart, winEnd);
+    if (span == 0)
+        span = wiggle.span;
+    else
+        if (span != wiggle.span)
+            errAbort("multiple spans in wiggle table");
+    }
+}
+
+void getBigWigData(char *file, char *chrom, unsigned winStart, unsigned winEnd, double *array)
+/* Query a bigBed file to find the wiggle values we need for a specified range. */
+{
+struct lm *lm = lmInit(0);
+struct bbiFile *bwf = bigWigFileOpen(file);
+struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, winStart, winEnd, lm);
+unsigned width = winEnd - winStart;
+
+for (iv = ivList; iv != NULL; iv = iv->next)
+    {
+    unsigned start = max(0, iv->start - winStart);
+    unsigned end = min(width, iv->end - winStart);
+    int ii;
+
+    for (ii = start; ii < end; ii++)
+        array[ii] = iv->val;
+    }
+}
+
+double *mathWigGetValues(char *db, char *equation, char *chrom, unsigned winStart, unsigned winEnd, boolean missingIsZero)
+/* Build an array of doubles that is calculated from bigWig or wig listed
  * in equation in the requested region. */
 {
 static char lastOpcode = 0;
@@ -130,41 +139,33 @@ char *words[100];
 int count = chopByWhite(equation, words, sizeof(words)/sizeof(char *));
 int jj,ii;
 unsigned width = winEnd - winStart;
-struct lm *lm = lmInit(0);
-double *data = needHugeMem(width * sizeof(double));
-double *data2 = needHugeMem(width * sizeof(double));
-for(ii=0; ii < width; ii++)
-    data[ii] = NAN;
+double *accumulator = needHugeMem(width * sizeof(double));
+double *operand = needHugeMem(width * sizeof(double));
 struct opcodeStack opcodeStack;
 bzero(&opcodeStack, sizeof opcodeStack);
 
 boolean firstTime = TRUE;
 for (jj=0; jj < count; jj++)
     {
+    double *dataLoad = operand;
+    if (firstTime)
+        dataLoad = accumulator;
+
     if (pushOpcode(&opcodeStack, words[jj]))
         continue;
-    if (startsWith("$", words[jj]))  // ignore native tracks for the moment
-        continue;
-    struct bbiFile *bwf = bigWigFileOpen(words[jj]);
-    if (!firstTime)
+
+    if (missingIsZero)
         for(ii=0; ii < width; ii++)
-            data2[ii] = NAN;
+            dataLoad[ii] = 0;
+    else
+        for(ii=0; ii < width; ii++)
+            dataLoad[ii] = NAN;
 
-    struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bwf, chrom, winStart, winEnd, lm);
-
-    for (iv = ivList; iv != NULL; iv = iv->next)
-        {
-        unsigned start = max(0, iv->start - winStart);
-        unsigned end = min(width, iv->end - winStart);
-
-        if (firstTime)
-            for (ii = start; ii < end; ii++)
-                data[ii] = iv->val;
-        else
-            for (ii = start; ii < end; ii++)
-                data2[ii] = iv->val;
-        }
-
+    if (startsWith("$", words[jj]))  // ignore native tracks for the moment
+        getWigData(db, &words[jj][1], chrom, winStart, winEnd, dataLoad);
+    else
+        getBigWigData(words[jj], chrom, winStart, winEnd, dataLoad);
+        
     if (firstTime)
         {
         firstTime = FALSE;
@@ -188,20 +189,20 @@ for (jj=0; jj < count; jj++)
         switch(opcode)
             {
             case '+':
-                data[ii] += data2[ii];
+                accumulator[ii] += operand[ii];
                 break;
             case '-':
-                data[ii] -= data2[ii];
+                accumulator[ii] -= operand[ii];
                 break;
             case '*':
-                data[ii] *= data2[ii];
+                accumulator[ii] *= operand[ii];
                 break;
             case '/':
-                data[ii] /= data2[ii];
+                accumulator[ii] /= operand[ii];
                 break;
             }
         }
     }
 
-return data;
+return accumulator;
 }
