@@ -19,7 +19,7 @@ char buffer[1024];
 int min, max, deflt, current;
 cartTdbFetchMinMaxPixels(cart, tdb, LONG_MINHEIGHT, LONG_MAXHEIGHT, atoi(LONG_DEFHEIGHT),
                                 &min, &max, &deflt, &current);
-safef(buffer, sizeof buffer, "%s.%s", tdb->track, LONG_HEIGHT);
+safef(buffer, sizeof buffer, "%s.%s", name, LONG_HEIGHT);
 printf("<br><b>Track height:&nbsp;</b>");
 cgiMakeIntVar(buffer, current, 3);
 printf("&nbsp;<span>pixels&nbsp;(range: %d to %d, default: %d)<span>", 
