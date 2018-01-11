@@ -47,7 +47,7 @@ faSize G*0_genomic.fna.gz
 #	max 217458864 (NC_018152.2) median 1406
 # %38.14 masked total, %38.43 masked real
 
-# this information is from the top of 
+# this information is from the top of
 #    papAnu4/refseq/GCF_000264685.3_Panu_3.0_assembly_report.txt
 
 # Assembly name:  Panu_3.0
@@ -223,6 +223,9 @@ hgsql -e 'update dbDb set genome="Baboon" where name = "papAnu4";' hgcentraltest
 
     hgsql -e 'delete from defaultDb where name="papAnu4";' hgcentraltest
 
+    # reset the orderKey due to common name confusion:
+    hgsql -e 'update dbDb set orderKey=2048 where name="papAnu4";' hgcentraltest
+
 ##############################################################################
 # cpgIslands on UNMASKED sequence (DONE - 2018-01-03 - Hiram)
     mkdir /hive/data/genomes/papAnu4/bed/cpgIslandsUnmasked
@@ -380,7 +383,7 @@ done
 
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" papAnu4 \
-      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
 #  118810 AHZZ.1
 #       1 NC_.2
 
@@ -418,9 +421,9 @@ searchPriority 8
 
     egrep "bases|Total|masked" faSize.rmsk.txt \
 	| fold -s  | sed -e 's/^/# /;'
-# 2959373024 bases (22371497 N's 2937001527 real 1396495695 upper 1540505832 
+# 2959373024 bases (22371497 N's 2937001527 real 1396495695 upper 1540505832
 # lower) in 63235 sequences in 1 files
-# Total size: mean 46799.6 sd 2508983.7 min 200 (chrUn_NW_018761261v1) max 
+# Total size: mean 46799.6 sd 2508983.7 min 200 (chrUn_NW_018761261v1) max
 # 217458864 (chr1) median 1406
 # %52.06 masked total, %52.45 masked real
 
@@ -473,9 +476,9 @@ searchPriority 8
     twoBitToFa papAnu4.2bit stdout | faSize stdin > faSize.papAnu4.2bit.txt
     egrep "bases|Total|masked" faSize.papAnu4.2bit.txt \
 	| fold -s  | sed -e 's/^/# /;'
-# 2959373024 bases (22371497 N's 2937001527 real 1394997875 upper 1542003652 
+# 2959373024 bases (22371497 N's 2937001527 real 1394997875 upper 1542003652
 # lower) in 63235 sequences in 1 files
-# Total size: mean 46799.6 sd 2508983.7 min 200 (chrUn_NW_018761261v1) max 
+# Total size: mean 46799.6 sd 2508983.7 min 200 (chrUn_NW_018761261v1) max
 # 217458864 (chr1) median 1406
 # %52.11 masked total, %52.50 masked real
 
@@ -508,9 +511,9 @@ searchPriority 8
     cat faSize.papAnu4.cleanWMSdust.txt
     egrep "bases|Total|masked" faSize.papAnu4.cleanWMSdust.txt \
 	| fold -s  | sed -e 's/^/# /;'
-# 2959373024 bases (22371497 N's 2937001527 real 1791437797 upper 1145563730 
+# 2959373024 bases (22371497 N's 2937001527 real 1791437797 upper 1145563730
 # lower) in 63235 sequences in 1 files
-# Total size: mean 46799.6 sd 2508983.7 min 200 (chrUn_NW_018761261v1) max 
+# Total size: mean 46799.6 sd 2508983.7 min 200 (chrUn_NW_018761261v1) max
 # 217458864 (chr1) median 1406
 # %38.71 masked total, %39.00 masked real
 
@@ -590,168 +593,189 @@ skipInvalid yes
     featureBits -enrichment papAnu4 augustusGene ensGene
 # augustusGene 1.640%, ensGene 1.508%, both 0.998%, cover 60.84%, enrich 40.35x
 
-#############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2018-01-02 - Hiram)
+##############################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2018-01-08 - Hiram)
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzPapAnu4.2018-01-01
+    cd /hive/data/genomes/hg38/bed/lastzPapAnu4.2018-01-08
 
     cat fb.hg38.chainPapAnu4Link.txt
-    # 1001007354 bases of 3049335806 (32.827%) in intersection
-    cat fb.hg38.chainSynPapAnu4Link.txt
-    # 934602735 bases of 3049335806 (30.649%) in intersection
+    # 2665048631 bases of 3049335806 (87.398%) in intersection
     cat fb.hg38.chainRBestPapAnu4Link.txt
-    # 921538020 bases of 3049335806 (30.221%) in intersection
+    # 2462004619 bases of 3049335806 (80.739%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/papAnu4/bed/blastz.hg38.swap
     cd /hive/data/genomes/papAnu4/bed/blastz.hg38.swap
+
     time (doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hg38/bed/lastzPapAnu4.2018-01-01/DEF \
-        -chainMinScore=3000 -chainLinearGap=medium \
+      /hive/data/genomes/hg38/bed/lastzPapAnu4.2018-01-08/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -swap -syntenicNet) > swap.log 2>&1 &
-    # real    97m8.750s
+          -syntenicNet) > swap.log 2>&1
+    #  real    166m16.865s
 
     cat fb.papAnu4.chainHg38Link.txt
-    # 957281496 bases of 2065314047 (46.350%) in intersection
+    # 2539481835 bases of 2937004939 (86.465%) in intersection
     cat fb.papAnu4.chainSynHg38Link.txt
-    # 905805640 bases of 2065314047 (43.858%) in intersection
+    # 2485777123 bases of 2937004939 (84.636%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev \
-	-buildDir=`pwd` papAnu4 hg38) > rbest.log 2>&1 &
-    # real    431m28.226s
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` papAnu4 hg38) \
+      > rbest.log 2>&1 &
+    # real    483m48.216s
 
     cat fb.papAnu4.chainRBestHg38Link.txt
-    # 923041001 bases of 2065314047 (44.693%) in intersection
+    # 2465241931 bases of 2937004939 (83.937%) in intersection
 
 ##############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2018-01-02 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-01-08 - Hiram)
     # original alignment to mm10
-    cd /hive/data/genomes/mm10/bed/lastzPapAnu4.2018-01-01
+    cd /hive/data/genomes/mm10/bed/lastzPapAnu4.2018-01-08
 
     cat fb.mm10.chainPapAnu4Link.txt
-    #	645178768 bases of 2652783500 (24.321%) in intersection
+    #	919405716 bases of 2652783500 (34.658%) in intersection
     cat fb.mm10.chainRBestPapAnu4Link.txt
-    # 605074450 bases of 2652783500 (22.809%) in intersection
+    # 875366631 bases of 2652783500 (32.998%) in intersection
 
+    # and for the swap:
     mkdir /hive/data/genomes/papAnu4/bed/blastz.mm10.swap
     cd /hive/data/genomes/papAnu4/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzPapAnu4.2018-01-01/DEF \
+	/hive/data/genomes/mm10/bed/lastzPapAnu4.2018-01-08/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    79m46.564s
+    #	real    80m51.648s
 
     cat fb.papAnu4.chainMm10Link.txt
-    # 631879699 bases of 2065314047 (30.595%) in intersection
+    #	907806517 bases of 2937004939 (30.909%) in intersection
     cat fb.papAnu4.chainSynMm10Link.txt
-    # 581661824 bases of 2065314047 (28.163%) in intersection
+    #	866781916 bases of 2937004939 (29.512%) in intersection
 
-
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` papAnu4 mm10) \
-	> rbest.log 2>&1
-    # real    412m53.879s
+    time (doRecipBest.pl -load -workhorse=hgwdev papAnu4 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    521m7.590s
 
     cat fb.papAnu4.chainRBestMm10Link.txt
-    # 605056621 bases of 2065314047 (29.296%) in intersection
+    # 874097827 bases of 2937004939 (29.762%) in intersection
 
 ##############################################################################
-# Create kluster run files (TBD - 2018-01-01 - Hiram)
+# Create kluster run files (DONE - 2018-01-08 - Hiram)
 
     # numerator is papAnu4 gapless bases "real" as reported by:
     featureBits -noRandom -noHap papAnu4 gap
-    # 171054776 bases of 2065314047 (8.282%) in intersection
+    # 9485884 bases of 2728012961 (0.348%) in intersection
     #                     ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2065314047 / 2861349177 \) \* 1024
-    #  ( 2065314047 / 2861349177 ) * 1024 = 739.120413
+    calc \( 2728012961 / 2861349177 \) \* 1024
+    #  ( 2728012961 / 2861349177 ) * 1024 = 976.282550
 
-    # ==> use -repMatch=750 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=1000 according to size scaled down from 1024 for human.
     #   and rounded up to nearest 50
     cd /hive/data/genomes/papAnu4
     blat papAnu4.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/papAnu4.11.ooc \
-        -repMatch=750
-    #   Wrote 29353 overused 11-mers to jkStuff/papAnu4.11.ooc
-    # dipOrd1 was: -repMatch=700
-    #	Wrote 33062 overused 11-mers to dipOrd1.11.ooc
+        -repMatch=1000
+    #   Wrote 31544 overused 11-mers to jkStuff/papAnu4.11.ooc
+    # papAnu3 was: -repMatch=1025
+    #   Wrote 29129 overused 11-mers to jkStuff/papAnu3.11.ooc
+    # papAnu2 at repMatch=1025 was:
+    #   Wrote 29128 overused 11-mers to jkStuff/papAnu2.11.ooc
 
     #   check non-bridged gaps to see what the typical size is:
     hgsql -N \
         -e 'select * from gap where bridge="no" order by size;' papAnu4 \
         | sort -k7,7nr | ave -col=7 stdin
-    # there are no non-bridged gaps in this assembly
 
-    # # all these gap sizes are 100
-    # # minimum gap size is 100 and produces a reasonable number of lifts
-    # gapToLift -verbose=2 -minGap=10 papAnu4 jkStuff/nonBridged.lft \
-    #    -bedFile=jkStuff/nonBridged.bed
+    # all these gap sizes are 100
+    # minimum gap size is 100 and produces a reasonable number of lifts
+    gapToLift -verbose=2 -minGap=10 papAnu4 jkStuff/nonBridged.lft \
+       -bedFile=jkStuff/nonBridged.bed
 
 #########################################################################
-# LIFTOVER TO dipOrd1 (TBD - 2018-01-01 - Hiram)
+# LIFTOVER TO papAnu3 (DONE - 2018-01-08 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/papAnu4/bed/blat.dipOrd1.2018-01-01
-    cd /hive/data/genomes/papAnu4/bed/blat.dipOrd1.2018-01-01
+    mkdir /hive/data/genomes/papAnu4/bed/blat.papAnu3.2018-01-08
+    cd /hive/data/genomes/papAnu4/bed/blat.papAnu3.2018-01-08
     time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
 	-ooc=/hive/data/genomes/papAnu4/jkStuff/papAnu4.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         papAnu4 dipOrd1) > do.log 2>&1
-    # real    1026m23.658s
+         papAnu4 papAnu3) > do.log 2>&1
+    # real    598m36.466s
 
     # verify the convert link on the test browser is now active from papAnu4 to
-    # dipOrd1
+    # papAnu3
 
 #########################################################################
-# GENBANK AUTO UPDATE (TBD - 2018-01-01 - Hiram)
+# LIFTOVER TO papAnu2 (DONE - 2018-01-08 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/papAnu4/bed/blat.papAnu2.2018-01-08
+    cd /hive/data/genomes/papAnu4/bed/blat.papAnu2.2018-01-08
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/papAnu4/jkStuff/papAnu4.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         papAnu4 papAnu2) > do.log 2>&1 &
+    # real    574m29.473s
+
+    # verify the convert link on the test browser is now active from papAnu4 to
+    # papAnu2
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2018-01-08 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism             mrnaCnt   estCnt  refSeqCnt
-    # Dipodomys merriami      5       0       0
-    # Dipodomys spectabilis   7       0       0
+    # Papio anubis    512     145626  505
+    # Papio anubis anubis     6       0       0
+    # Papio cynocephalus      23      0       0
+    # Papio cynocephalus x Papio anubis       3       0       0
+    # Papio hamadryas 102     0       0
+    # Papio hamadryas hamadryas       1       0       0
+    # Papio papio     10      0       0
+    # Papio sp.       2       0       0
+    # Papio ursinus   24      0       0
 
-    # there appear to be none for Dipodomys ordii
+    # edit etc/genbank.conf to add papAnu4 just before papAnu3
 
-    # edit etc/genbank.conf to add papAnu4 just before dipOrd1
-# papAnu4 (Kangaroo rat)
+# papAnu4 (Papio anubis - olive baboon taxId: 9555)
 papAnu4.serverGenome = /hive/data/genomes/papAnu4/papAnu4.2bit
 papAnu4.clusterGenome = /hive/data/genomes/papAnu4/papAnu4.2bit
 papAnu4.ooc = /hive/data/genomes/papAnu4/jkStuff/papAnu4.11.ooc
-papAnu4.lift = no
-papAnu4.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-papAnu4.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
-papAnu4.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
-papAnu4.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
-papAnu4.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
-# there are zero native mrna or est for dipOrd
-papAnu4.refseq.mrna.native.load = no
-papAnu4.refseq.mrna.xeno.load = yes
-# DO NOT NEED genbank.mrna.xeno except for human, mouse
-papAnu4.genbank.mrna.xeno.load = yes
-papAnu4.genbank.est.native.load = no
-papAnu4.downloadDir = papAnu4
+papAnu4.lift = /hive/data/genomes/papAnu4/jkStuff/nonBridged.lft
 papAnu4.perChromTables = no
+papAnu4.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+papAnu4.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+papAnu4.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+papAnu4.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+papAnu4.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+papAnu4.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+papAnu4.downloadDir = papAnu4
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
+# genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
+# refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
 
-    git commit -m 'adding papAnu4 Dipodomys ordii refs #20751' etc/genbank.conf
+    git commit -m 'adding papAnu4 Papio anubis - olive baboon refs #20769' \
+	etc/genbank.conf src/lib/gbGenome.c
     git push
     # update /cluster/data/genbank/:
+    make install-server
     make etc-update
 
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial papAnu4
-    # logFile: var/build/logs/2017.12.31-08:55:07.papAnu4.initalign.log
-    #   real    1098m37.667s
+    # logFile: var/build/logs/2018.01.08-18:58:03.papAnu4.initalign.log
+    #   real    295m57.046s
 
-    tail -2 var/build/logs/2017.12.31-08:55:07.papAnu4.initalign.log
-    #	hgwdev 2018.01.01-03:04:33 papAnu4.initalign: Succeeded: papAnu4
-    #	hgwdev 2018.01.01-03:13:45 papAnu4.initalign: finish
+    tail -2 var/build/logs/2018.01.08-18:58:03.papAnu4.initalign.log
+    # hgwdev 2018.01.08-23:51:41 papAnu4.initalign: Succeeded: papAnu4
+    # hgwdev 2018.01.08-23:54:00 papAnu4.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.papAnu4
@@ -760,11 +784,11 @@ papAnu4.perChromTables = no
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad papAnu4
-    # logFile: var/dbload/hgwdev/logs/2018.01.01-13:04:41.papAnu4.dbload.log
-    #  real    98m36.682s
+    # logFile: var/dbload/hgwdev/logs/2018.01.09-07:47:01.papAnu4.dbload.log
+    #  real    18m48.462s
 
-    tail -1 var/dbload/hgwdev/logs/2018.01.01-13:04:41.papAnu4.dbload.log
-    #  hgwdev 2018.01.01-14:43:18 papAnu4.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2018.01.09-07:47:01.papAnu4.dbload.log
+    #  hgwdev 2018.01.09-08:05:49 papAnu4.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -772,32 +796,33 @@ papAnu4.perChromTables = no
     # add papAnu4 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding papAnu4 to the update alignments refs #19151' etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding papAnu4 to the update alignments refs #20769' \
+	etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #############################################################################
-#  BLATSERVERS ENTRY (TBD - 2018-01-03 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2018-01-09 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("papAnu4", "blat1d", "17894", "1", "0"); \
+	VALUES ("papAnu4", "blat1b", "17890", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("papAnu4", "blat1d", "17895", "0", "1");' \
+	VALUES ("papAnu4", "blat1b", "17891", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to same protein location as hg38
-##  found by blat (TBD - 2018-01-03 - Hiram)
+## reset default position to similar position as papAnu2
+##  found by liftOver view in other (DONE - 2018-01-09 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="NW_012267222v1:6911344-7030779"
+    hgsql -e 'update dbDb set defaultPos="chr1:106647222-106657040"
 	where name="papAnu4";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-03-06 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2018-01-10 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=papAnu4 -tableCoverage all.joiner
@@ -806,18 +831,17 @@ papAnu4.perChromTables = no
 
     cd /hive/data/genomes/papAnu4
     time (makeDownloads.pl -workhorse=hgwdev papAnu4) > downloads.log 2>&1
-    #  real    19m11.136s
+    #  real    26m41.219s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/papAnu4/pushQ
     cd /hive/data/genomes/papAnu4/pushQ
   time (makePushQSql.pl -redmineList papAnu4) > papAnu4.pushQ.sql 2> stderr.out
-    #  real    3m55.668s
+    #  real    5m7.875s
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: papAnu4 does not have seq
     # WARNING: papAnu4 does not have extFile
-    # WARNING: papAnu4 does not have estOrientInfo
 
     ## there are warnings about the RBest and Syn chainNet tables, which we
     ## are not interested in at this time.  They can be left out.
@@ -829,11 +853,11 @@ papAnu4.perChromTables = no
     # to verify the database.table list is correct, should be the same
     # line count for these two commands:
     wc -l redmine.papAnu4.table.list
-    # 70 redmine.papAnu4.table.list
+    # 75 redmine.papAnu4.table.list
     awk -F'.' '{
 printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
 }' redmine.papAnu4.table.list | while read L; do eval $L; done | wc -l
-    # 70
+    # 75
 
     # enter the path names to these files in the redmine issue to
     # make QA Ready:
