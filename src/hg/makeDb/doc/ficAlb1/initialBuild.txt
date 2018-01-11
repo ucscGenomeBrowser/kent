@@ -47,7 +47,7 @@ faSize G*5_genomic.fna.gz
 #	max 157563209 (NC_021673.1) median 460
 # %22.86 masked total, %23.19 masked real
 
-# this information is from the top of 
+# this information is from the top of
 #    ficAlb1/refseq/GCF_000247815.1_FicAlb1.5_assembly_report.txt
 
 # Assembly name:  FicAlb1.5
@@ -197,7 +197,6 @@ NC_021703.1 chrLGE22
     mitoAcc=`grep "^# mitoAcc" ../ficAlb1.config.ra | awk '{print $NF}'`
     printf "# mitoAcc %s\n" "$mitoAcc"
 # mitoAcc NC_021621.1
-
 
     zcat \
   ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
@@ -403,7 +402,7 @@ done
 
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" ficAlb1 \
-      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
 #  30842 AGTO.1
 #      1 NC_.1
 
@@ -441,9 +440,9 @@ searchPriority 8
 
     egrep "bases|Total|masked" faSize.rmsk.txt \
 	| fold -w 75 -s  | sed -e 's/^/# /;'
-# 1118343587 bases (16019705 N's 1102323882 real 989514048 upper 112809834 
+# 1118343587 bases (16019705 N's 1102323882 real 989514048 upper 112809834
 # lower) in 21428 sequences in 1 files
-# Total size: mean 52190.8 sd 1925906.4 min 200 (chrUn_NW_004797270v1) max 
+# Total size: mean 52190.8 sd 1925906.4 min 200 (chrUn_NW_004797270v1) max
 # 157563209 (chr2) median 460
 # %10.09 masked total, %10.23 masked real
 
@@ -497,9 +496,9 @@ searchPriority 8
     cat faSize.ficAlb1.2bit.txt
     egrep "bases|Total|masked" faSize.ficAlb1.2bit.txt \
 	| fold -w 78 -s  | sed -e 's/^/# /;'
-# 1118343587 bases (16019705 N's 1102323882 real 837369763 upper 264954119 
+# 1118343587 bases (16019705 N's 1102323882 real 837369763 upper 264954119
 # lower) in 21428 sequences in 1 files
-# Total size: mean 52190.8 sd 1925906.4 min 200 (chrUn_NW_004797270v1) max 
+# Total size: mean 52190.8 sd 1925906.4 min 200 (chrUn_NW_004797270v1) max
 # 157563209 (chr2) median 460
 # %23.69 masked total, %24.04 masked real
 
@@ -532,9 +531,9 @@ searchPriority 8
     cat faSize.ficAlb1.cleanWMSdust.txt
     egrep "bases|Total|masked" faSize.ficAlb1.cleanWMSdust.txt \
 	| fold -w 78 -s  | sed -e 's/^/# /;'
-# 1118343587 bases (16019705 N's 1102323882 real 838249378 upper 264074504 
+# 1118343587 bases (16019705 N's 1102323882 real 838249378 upper 264074504
 # lower) in 21428 sequences in 1 files
-# Total size: mean 52190.8 sd 1925906.4 min 200 (chrUn_NW_004797270v1) max 
+# Total size: mean 52190.8 sd 1925906.4 min 200 (chrUn_NW_004797270v1) max
 # 157563209 (chr2) median 460
 # %23.61 masked total, %23.96 masked real
 
@@ -547,11 +546,10 @@ searchPriority 8
     cd /hive/data/genomes/ficAlb1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku ficAlb1) > do.log 2>&1 &
-XXX - running - Fri Jan  5 15:49:56 PST 2018
-    # real    7m7.765s
+    # real    3m25.988s
 
     cat fb.ficAlb1.cpgIslandExt.txt
-    # 20939057 bases of 2065314047 (1.014%) in intersection
+    # 10735328 bases of 1102325870 (0.974%) in intersection
 
 ##############################################################################
 # genscan - (DONE - 2018-01-05 - Hiram)
@@ -559,17 +557,24 @@ XXX - running - Fri Jan  5 15:49:56 PST 2018
     cd /hive/data/genomes/ficAlb1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku ficAlb1) > do.log 2>&1 &
-XXX - running - Fri Jan  5 15:50:24 PST 2018
-    # real    395m13.441s
+    # real    22m10.156s
+    # 2 jobs failed, running with 2000000 size window
+    # real    3m24.459s
+
+    # continuing
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku ficAlb1) > makeBed.log 2>&1 &
+    # real    1m44.308s
 
     cat fb.ficAlb1.genscan.txt
-    # 50439107 bases of 2065314047 (2.442%) in intersection
+    # 19263301 bases of 1102325870 (1.748%) in intersection
 
     cat fb.ficAlb1.genscanSubopt.txt
-    # 44013285 bases of 2065314047 (2.131%) in intersection
+    # 22956236 bases of 1102325870 (2.083%) in intersection
 
 #############################################################################
-# Ensembl genes (DONE - 2018-01-05 - Hiram)
+# Ensembl genes (TBD - 2018-01-05 - Hiram)
+    # the v91 release for Ensembl is for a previous assembly from this one
     # does not work on this assembly, the Ensembl genome is an older
     # obsolete assembly
 
@@ -589,7 +594,6 @@ liftUp /hive/data/genomes/ficAlb1/jkStuff/ensToUcsc.lift
 
     time (doEnsGeneUpdate.pl -ensVersion=91 ficAlb1.ensGene.ra) \
 	> ensGene.91.log 2>&1
-XXX - there is trouble - Fri Jan  5 12:08:10 PST 2018
     # real    1m31.613s
 
     featureBits cavApe1 ensGene
@@ -603,177 +607,159 @@ XXX - there is trouble - Fri Jan  5 12:08:10 PST 2018
 
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
      -species=chicken -dbHost=hgwdev -workhorse=hgwdev ficAlb1) > do.log 2>&1 &
-XXX - running - Fri Jan  5 15:52:07 PST 2018
-    # real    162m42.872s
+    # real    51m31.630s
 
     cat fb.ficAlb1.augustusGene.txt
-    # 44381136 bases of 2065314047 (2.149%) in intersection
+    # 23463182 bases of 1102325870 (2.129%) in intersection
 
-    featureBits -enrichment ficAlb1 augustusGene ensGene
-# augustusGene 2.149%, ensGene 1.670%, both 1.212%, cover 56.42%, enrich 33.77x
-
-#############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2018-01-02 - Hiram)
+##############################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2018-01-08 - Hiram)
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzFicAlb1.2018-01-01
+    cd /hive/data/genomes/hg38/bed/lastzFicAlb1.2018-01-08
 
     cat fb.hg38.chainFicAlb1Link.txt
-    # 1001007354 bases of 3049335806 (32.827%) in intersection
+    # 147048785 bases of 3049335806 (4.822%) in intersection
     cat fb.hg38.chainSynFicAlb1Link.txt
-    # 934602735 bases of 3049335806 (30.649%) in intersection
+    # 88694039 bases of 3049335806 (2.909%) in intersection
     cat fb.hg38.chainRBestFicAlb1Link.txt
-    # 921538020 bases of 3049335806 (30.221%) in intersection
+    # 103439671 bases of 3049335806 (3.392%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/ficAlb1/bed/blastz.hg38.swap
     cd /hive/data/genomes/ficAlb1/bed/blastz.hg38.swap
+
     time (doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hg38/bed/lastzFicAlb1.2018-01-01/DEF \
-        -chainMinScore=3000 -chainLinearGap=medium \
+      /hive/data/genomes/hg38/bed/lastzFicAlb1.2018-01-08/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -swap -syntenicNet) > swap.log 2>&1 &
-    # real    97m8.750s
+            -syntenicNet) > swap.log 2>&1
+    #  real    14m32.727s
 
     cat fb.ficAlb1.chainHg38Link.txt
-    # 957281496 bases of 2065314047 (46.350%) in intersection
+    # 118476285 bases of 1102325870 (10.748%) in intersection
     cat fb.ficAlb1.chainSynHg38Link.txt
-    # 905805640 bases of 2065314047 (43.858%) in intersection
+    # 86852014 bases of 1102325870 (7.879%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev \
-	-buildDir=`pwd` ficAlb1 hg38) > rbest.log 2>&1 &
-    # real    431m28.226s
+    time (doRecipBest.pl -load  -workhorse=hgwdev -buildDir=`pwd` \
+	ficAlb1 hg38) > rbest.log 2>&1
+    # real    265m12.990s
 
     cat fb.ficAlb1.chainRBestHg38Link.txt
-    # 923041001 bases of 2065314047 (44.693%) in intersection
+    # 103174487 bases of 1102325870 (9.360%) in intersection
 
 ##############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2018-01-02 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-01-09 - Hiram)
     # original alignment to mm10
-    cd /hive/data/genomes/mm10/bed/lastzFicAlb1.2018-01-01
+    cd /hive/data/genomes/mm10/bed/lastzFicAlb1.2018-01-09
 
     cat fb.mm10.chainFicAlb1Link.txt
-    #	645178768 bases of 2652783500 (24.321%) in intersection
+    #   98177848 bases of 2652783500 (3.701%) in intersection
     cat fb.mm10.chainRBestFicAlb1Link.txt
-    # 605074450 bases of 2652783500 (22.809%) in intersection
+    # 76370866 bases of 2652783500 (2.879%) in intersection
 
+    #	and for the swap
     mkdir /hive/data/genomes/ficAlb1/bed/blastz.mm10.swap
     cd /hive/data/genomes/ficAlb1/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzFicAlb1.2018-01-01/DEF \
-	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #	real    79m46.564s
+	/hive/data/genomes/mm10/bed/lastzFicAlb1.2018-01-09/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    # real    8m5.637s
 
-    cat fb.ficAlb1.chainMm10Link.txt
-    # 631879699 bases of 2065314047 (30.595%) in intersection
-    cat fb.ficAlb1.chainSynMm10Link.txt
-    # 581661824 bases of 2065314047 (28.163%) in intersection
+    cat  fb.ficAlb1.chainMm10Link.txt
+    #   85384367 bases of 1102325870 (7.746%) in intersection
 
-
-    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` ficAlb1 mm10) \
-	> rbest.log 2>&1
-    # real    412m53.879s
+    time (doRecipBest.pl -load -workhorse=hgwdev ficAlb1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    209m22.159s
 
     cat fb.ficAlb1.chainRBestMm10Link.txt
-    # 605056621 bases of 2065314047 (29.296%) in intersection
+    # 76183235 bases of 1102325870 (6.911%) in intersection
 
 ##############################################################################
-# Create kluster run files (TBD - 2018-01-01 - Hiram)
+# Create kluster run files (DONE - 2018-01-08 - Hiram)
 
     # numerator is ficAlb1 gapless bases "real" as reported by:
     featureBits -noRandom -noHap ficAlb1 gap
-    # 171054776 bases of 2065314047 (8.282%) in intersection
+    # 9190038 bases of 1034892040 (0.888%) in intersection
     #                     ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2065314047 / 2861349177 \) \* 1024
-    #  ( 2065314047 / 2861349177 ) * 1024 = 739.120413
+    calc \( 1034892040 / 2861349177 \) \* 1024
+    #  ( 1034892040 / 2861349177 ) * 1024 = 370.360059
 
-    # ==> use -repMatch=750 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=400 according to size scaled down from 1024 for human.
     #   and rounded up to nearest 50
     cd /hive/data/genomes/ficAlb1
     blat ficAlb1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/ficAlb1.11.ooc \
-        -repMatch=750
-    #   Wrote 29353 overused 11-mers to jkStuff/ficAlb1.11.ooc
-    # dipOrd1 was: -repMatch=700
-    #	Wrote 33062 overused 11-mers to dipOrd1.11.ooc
+        -repMatch=400
+    #   Wrote 14865 overused 11-mers to jkStuff/ficAlb1.11.ooc
 
     #   check non-bridged gaps to see what the typical size is:
     hgsql -N \
         -e 'select * from gap where bridge="no" order by size;' ficAlb1 \
         | sort -k7,7nr | ave -col=7 stdin
-    # there are no non-bridged gaps in this assembly
 
-    # # all these gap sizes are 100
-    # # minimum gap size is 100 and produces a reasonable number of lifts
-    # gapToLift -verbose=2 -minGap=10 ficAlb1 jkStuff/nonBridged.lft \
-    #    -bedFile=jkStuff/nonBridged.bed
+    # all these gap sizes are 5000
+    gapToLift -verbose=2 -minGap=5000 ficAlb1 jkStuff/nonBridged.lft \
+       -bedFile=jkStuff/nonBridged.bed
 
 #########################################################################
-# LIFTOVER TO dipOrd1 (TBD - 2018-01-01 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/ficAlb1/bed/blat.dipOrd1.2018-01-01
-    cd /hive/data/genomes/ficAlb1/bed/blat.dipOrd1.2018-01-01
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/ficAlb1/jkStuff/ficAlb1.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         ficAlb1 dipOrd1) > do.log 2>&1
-    # real    1026m23.658s
-
-    # verify the convert link on the test browser is now active from ficAlb1 to
-    # dipOrd1
-
-#########################################################################
-# GENBANK AUTO UPDATE (TBD - 2018-01-01 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2018-01-08 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism             mrnaCnt   estCnt  refSeqCnt
-    # Dipodomys merriami      5       0       0
-    # Dipodomys spectabilis   7       0       0
+    # Ficedula albicollis     0       0       8
+    # Ficedula hypoleuca      8       0       0
 
-    # there appear to be none for Dipodomys ordii
-
-    # edit etc/genbank.conf to add ficAlb1 just before dipOrd1
-# ficAlb1 (Kangaroo rat)
+    # edit etc/genbank.conf to add ficAlb1 just before geoFor1
+# ficAlb1 (Ficedula albicollis - collard flycatcher) - taxId: 59894
 ficAlb1.serverGenome = /hive/data/genomes/ficAlb1/ficAlb1.2bit
 ficAlb1.clusterGenome = /hive/data/genomes/ficAlb1/ficAlb1.2bit
 ficAlb1.ooc = /hive/data/genomes/ficAlb1/jkStuff/ficAlb1.11.ooc
-ficAlb1.lift = no
-ficAlb1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-ficAlb1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
-ficAlb1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
-ficAlb1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
-ficAlb1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
-# there are zero native mrna or est for dipOrd
-ficAlb1.refseq.mrna.native.load = no
-ficAlb1.refseq.mrna.xeno.load = yes
+ficAlb1.lift = /hive/data/genomes/ficAlb1/jkStuff/nonBridged.lft
+ficAlb1.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+ficAlb2.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+ficAlb1.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+ficAlb1.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+ficAlb1.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+# defaults yes: genbank.mrna.native.load and loadDesc
+# defaults yes: genbank.est.native.load
+# defaults yes: refseq.mrna.native.load, refseq.mrna.native.loadDesc
+# defaults yes: refseq.mrna.xeno.load, refseq.mrna.xeno.loadDesc
+# defaults no: genbank.mrna.xeno.load and loadDesc
+# defaults no: genbank.est.xeno.load, genbank.est.xeno.loadDesc
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
-ficAlb1.genbank.mrna.xeno.load = yes
+# there are no genbank.est natives:
 ficAlb1.genbank.est.native.load = no
 ficAlb1.downloadDir = ficAlb1
 ficAlb1.perChromTables = no
 
+    git commit -m \
+     'adding ficAlb1 - Ficedula albicollis - collard flycatcher refs #9870' \
+	 etc/genbank.conf src/lib/gbGenome.c
+    git push
     git commit -m 'adding ficAlb1 Dipodomys ordii refs #20751' etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
+    make install-server
     make etc-update
 
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial ficAlb1
-    # logFile: var/build/logs/2017.12.31-08:55:07.ficAlb1.initalign.log
-    #   real    1098m37.667s
+    # logFile: var/build/logs/2018.01.08-18:45:24.ficAlb1.initalign.log
+    #   real    184m19.477s
 
-    tail -2 var/build/logs/2017.12.31-08:55:07.ficAlb1.initalign.log
-    #	hgwdev 2018.01.01-03:04:33 ficAlb1.initalign: Succeeded: ficAlb1
-    #	hgwdev 2018.01.01-03:13:45 ficAlb1.initalign: finish
+    tail -2 var/build/logs/2018.01.08-18:45:24.ficAlb1.initalign.log
+    #	hgwdev 2018.01.08-21:49:03 ficAlb1.initalign: Succeeded: ficAlb1
+    #	hgwdev 2018.01.08-21:49:44 ficAlb1.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.ficAlb1
@@ -782,11 +768,12 @@ ficAlb1.perChromTables = no
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad ficAlb1
-    # logFile: var/dbload/hgwdev/logs/2018.01.01-13:04:41.ficAlb1.dbload.log
-    #  real    98m36.682s
+    # logFile: var/dbload/hgwdev/logs/2018.01.08-22:05:29.ficAlb1.dbload.log
+    #  real    7m1.853s
 
-    tail -1 var/dbload/hgwdev/logs/2018.01.01-13:04:41.ficAlb1.dbload.log
-    #  hgwdev 2018.01.01-14:43:18 ficAlb1.dbload: finish
+
+    tail -1 var/dbload/hgwdev/logs/2018.01.08-22:05:29.ficAlb1.dbload.log
+    #  hgwdev 2018.01.08-22:12:31 ficAlb1.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -794,32 +781,32 @@ ficAlb1.perChromTables = no
     # add ficAlb1 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding ficAlb1 to the update alignments refs #19151' etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding ficAlb1 to the update alignments refs #9870' etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #############################################################################
-#  BLATSERVERS ENTRY (TBD - 2018-01-03 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2018-01-09 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("ficAlb1", "blat1d", "17894", "1", "0"); \
+	VALUES ("ficAlb1", "blat1b", "17892", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("ficAlb1", "blat1d", "17895", "0", "1");' \
+	VALUES ("ficAlb1", "blat1b", "17893", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
 ## reset default position to same protein location as hg38
-##  found by blat (TBD - 2018-01-03 - Hiram)
+##  found by blat (DONE - 2018-01-09 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="NW_012267222v1:6911344-7030779"
+    hgsql -e 'update dbDb set defaultPos="chr21:2266579-2296356"
 	where name="ficAlb1";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2017-03-06 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2018-01-10 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=ficAlb1 -tableCoverage all.joiner
@@ -828,13 +815,13 @@ ficAlb1.perChromTables = no
 
     cd /hive/data/genomes/ficAlb1
     time (makeDownloads.pl -workhorse=hgwdev ficAlb1) > downloads.log 2>&1
-    #  real    19m11.136s
+    #  real    11m8.483s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/ficAlb1/pushQ
     cd /hive/data/genomes/ficAlb1/pushQ
   time (makePushQSql.pl -redmineList ficAlb1) > ficAlb1.pushQ.sql 2> stderr.out
-    #  real    3m55.668s
+    #  real    3m53.381s
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: ficAlb1 does not have seq
@@ -851,11 +838,11 @@ ficAlb1.perChromTables = no
     # to verify the database.table list is correct, should be the same
     # line count for these two commands:
     wc -l redmine.ficAlb1.table.list
-    # 70 redmine.ficAlb1.table.list
+    # 66 redmine.ficAlb1.table.list
     awk -F'.' '{
 printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
 }' redmine.ficAlb1.table.list | while read L; do eval $L; done | wc -l
-    # 70
+    # 66
 
     # enter the path names to these files in the redmine issue to
     # make QA Ready:
