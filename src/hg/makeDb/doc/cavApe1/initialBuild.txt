@@ -1,0 +1,954 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the cavApe1
+
+#########################################################################
+# photograph obtained from flickr
+#    (DONE - 2018-01-04 - Hiram)
+
+https://farm5.staticflickr.com/4032/4712570295_c6988e9197_o_d.jpg
+
+mkdir -p /hive/data/genomes/cavApe1/photo
+wget --timestamping 'https://farm5.staticflickr.com/4032/4712570295_c6988e9197_o_d.jpg'
+convert -geometry 400x300 -quality 80 4712570295_c6988e9197_o_d.jpg \
+   Cavia_aperea.jpg
+
+# Gustavo Fernando Durán
+
+# from jhead on that file:
+# Comment  : Perfil de Cuis por Gustavo Fernando DurÃ¡n, Santa Fe, Argentina
+# Comment  : http://www.flickr.com/photos/trekman
+
+cd /hive/data/genomes/cavApe1
+printf "photoCreditURL\thttps://www.flickr.com/photos/trekman/4712570295
+photoCreditName\tGustavo Fernando Dur&aacute;n
+" > photoReference.txt
+
+cat -A photoReference.txt
+
+photoCreditURL^Ihttps://www.flickr.com/photos/trekman/4712570295$
+photoCreditName^IGustavo Fernando Dur&aacute;n$
+
+# checked into source tree forgot refs #20770
+git commit -m 'phot from flickr www.flickr.com/photos/trekman/4712570295 Gustavo Fernando Durán' Cavia_aperea.jpg
+
+#########################################################################
+#  Initial steps (DONE - 2018-01-04 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/cavApe1
+cd ~/kent/src/hg/makeDb/doc/cavApe1
+
+# best to use a most recent document since it has the latest features and
+# procedures:
+sed -e 's/criGriChoV2/cavApe1/g; s/CriGriChoV2/CavApe1/g; s/DONE/TBD/g;' \
+    ../criGriChoV2/initialBuild.txt > initialBuild.txt
+
+mkdir /hive/data/genomes/cavApe1/genbank
+cd /hive/data/genomes/cavApe1/genbank
+
+time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Cricetulus_griseus/all_assembly_versions/GCA_900186095.1_CHOK1S_HZDv1/ ./
+
+# sent 375 bytes  received 2067921475 bytes  18060452.84 bytes/sec
+# total size is 2067666931  speedup is 1.00
+# real    1m54.975s
+
+# check assembly size for later reference:
+
+faSize G*0_genomic.fna.gz
+# 2716396567 bases (967255733 N's 1749140834 real 1188865985 upper
+#	560274849 lower) in 3131 sequences in 1 files
+# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008.1)
+#	max 88624873 (AVPZ01000001.1) median 11564
+# %20.63 masked total, %32.03 masked real
+
+# NOTE: XXX This is %35 N bases in this assembly, not a good sign:
+    calc 100 \* 967255733 / 2716396567 
+    # 100 * 967255733 / 2716396567 = 35.608046
+# and then it was later discovered that none of these gaps are annotated
+# in the AGP definition . . .  Yikes
+
+# from the top of genbank/GCA_000688575.1_CavAp1.0_assembly_report.txt
+
+# Assembly name:  CavAp1.0
+# Description:    Cavia aperea 1.0
+# Organism name:  Cavia aperea (Brazilian guinea pig)
+# Sex:  male
+# Taxid:          37548
+# BioSample:      SAMN02252454
+# BioProject:     PRJNA212237
+# Submitter:      Leibniz Institute for Zoo and Wildlife research
+# Date:           2014-1-21
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    AVPZ01
+# Assembly method: custom python scripts and SAM files v. 2013
+# Expected final version: no
+# Reference guided assembly: reference-guided
+# Genome coverage: 333.0x
+# Sequencing technology: Illumina HiSeq
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000688575.1
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000688585.1              Primary Assembly
+
+
+#############################################################################
+# establish config.ra file (DONE -  2018-01-04 - Hiram)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/cavApe1
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl cavApe1 mammal \
+         guineaPig ./genbank/*_assembly_report.txt > cavApe1.config.ra
+
+    # set mitoAcc to none, ensembl did not add MT sequence
+
+    # verify it looks sane
+    cat cavApe1.config.ra
+# config parameters for makeGenomeDb.pl:
+db cavApe1
+clade mammal
+genomeCladePriority 35
+scientificName Cavia aperea
+commonName Brazilian guinea pig
+assemblyDate Jan. 2014
+assemblyLabel Leibniz Institute for Zoo and Wildlife research
+assemblyShortLabel CavAp1.0
+orderKey 2712
+mitoAcc none
+fastaFiles /hive/data/genomes/cavApe1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/cavApe1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir guineaPig
+photoCreditURL  https://www.flickr.com/photos/trekman/4712570295
+photoCreditName Gustavo Fernando Dur&aacute;n
+ncbiGenomeId 31959
+ncbiAssemblyId 177331
+ncbiAssemblyName CavAp1.0
+ncbiBioProject 212237
+ncbiBioSample SAMN02252454
+genBankAccessionID GCA_000688575.1
+taxId 37548
+
+#############################################################################
+# setup UCSC named files (DONE - 2018-01-04 - Hiram)
+
+    mkdir /hive/data/genomes/cavApe1/ucsc
+    cd /hive/data/genomes/cavApe1/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../genbank/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz genbank.2bit
+    #  real    0m51.705s
+
+    twoBitDup genbank.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+    # the scripts creating the fasta here will be using this genbank.2bit file
+
+    # simple assembly of unplaced contigs, change the .1 names to v1:
+    time zcat ../genbank/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz  \
+	| sed -e 's/\.1 Cavia.*/v1/;' | gzip -c > chrUn.fa.gz
+
+    time zcat ../genbank/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz  \
+	| sed -e 's/\.1\t/v1\t/;' > chrUn.agp
+    # real    0m0.027s
+
+    # verify fasta and AGPs agree
+    time faToTwoBit chr*.fa.gz test.2bit
+    # real    1m8.438s
+
+    time cat chr*.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+    # real    0m8.824s
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 2716396567 bases (967255733 N's 1749140834 real 1749140834 upper 0 lower)
+#	in 3131 sequences in 1 files
+# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1)
+#	max 88624873 (AVPZ01000001v1) median 11564
+
+# 2716396567 bases (967255733 N's 1749140834 real 1188865985 upper
+#	560274849 lower) in 3131 sequences in 1 files
+
+    # no longer need these temporary 2bit files
+    rm genbank.2bit test.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2018-01-04 - Hiram)
+
+    cd /hive/data/genomes/cavApe1
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp cavApe1.config.ra) > agp.log 2>&1
+    #  *** All done!  (through the 'agp' step)
+    # real    2m16.384s
+
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db cavApe1.config.ra) > db.log 2>&1
+    # real    14m49.759s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add cavApe1 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/cavApe1
+    ln -s `pwd`/cavApe1.unmasked.2bit /gbdb/cavApe1/cavApe1.2bit
+
+##############################################################################
+# fixup gap definitions and AGP (DONE - 2018-01-06 - Hiram)
+    # after the build, it was discovered the %35 of this assembly that
+    # is gap was not at all marked as gap in the original AGP file.
+    # rebuild the gap track, agp file and gold/assembly tables:
+    mkdir /hive/data/genomes/cavApe1/bed/gap
+    cd /hive/data/genomes/cavApe1/bed/gap
+
+    # question, does findMotif and twoBitInfo -nBed say the same thing
+    # about N's in the sequence:
+
+    time findMotif -verbose=4 -motif=gattaca -strand=+ \
+	../../cavApe1.2bit > findMotif.txt 2>&1 &
+    # real    1m25.014s
+
+    time (twoBitInfo -nBed ../../cavApe1.2bit cavApe1.N.bed) \
+	2> twoBitInfo.stderr &
+    # real    0m1.236s
+
+    grep "^#GAP" findMotif.txt | sed -e 's/.*GAP //;' \
+	| sort -k1,1 -k2,2n > findMotif.gap.bed
+
+    # yes, they appear to be identical:
+
+    wc -l *.bed
+    #	2565595 cavApe1.N.bed
+    #	2565595 findMotif.gap.bed
+
+    bedSingleCover.pl cavApe1.N.bed | ave -col=4 stdin \
+	| egrep "^total|^min|^max"
+    # min 1.000000
+    # max 170621.000000
+    # total 967255733.000000
+
+    bedSingleCover.pl findMotif.gap.bed | ave -col=4 stdin | grep "^total"
+    # total 967255733.000000
+
+    awk '{print $3-$2}' cavApe1.N.bed | ave stdin | grep -w total
+    #	total 967255733.000000
+    awk '{print $3-$2}' findMotif.gap.bed | ave stdin | grep -w total
+    #	total 967255733.000000
+
+    twoBitToFa ../../cavApe1.2bit stdout \
+	| hgFakeAgp -minContigGap=1 stdin cavApe1.fake.agp
+    # the gaps larger than 50,000 bases are marked non-bridged
+    # this looks like:
+    head -3 cavApe1.fake.agp
+# AVPZ01000001v1  1       406     1       D   AVPZ01000001v1_1    1   406   +
+# AVPZ01000001v1  407     480     2       N       74      contig  yes
+# AVPZ01000001v1  481     1015    3       D   AVPZ01000001v1_2    1   535   +
+
+    # test what hgGoldGapGl would make:
+    hgGoldGapGl -noLoad cavApe1 cavApe1.fake.agp
+
+    # makes two files:
+    head -3 gold.tab
+585  AVPZ01000001v1  0    406  1  D  AVPZ01000001v1_1  0 406  +
+585  AVPZ01000001v1  480  1015 3  D  AVPZ01000001v1_2  0 535  +
+585  AVPZ01000001v1  1327 1533 5  D  AVPZ01000001v1_3  0 206  +
+
+    head -3 gap.tab
+# 585     AVPZ01000001v1  406     480     2       N       74      contig  yes
+# 585     AVPZ01000001v1  1015    1327    4       N       312     contig  yes
+# 585     AVPZ01000001v1  1533    1732    6       N       199     contig  yes
+
+    # current table contents:
+    hgsql -e 'select count(*) from gap;' cavApe1
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+    hgsql -e 'select count(*) from gold;' cavApe1
++----------+
+| count(*) |
++----------+
+|     3131 |
++----------+
+
+    # which would change to:
+    wc -l *.tab
+    #	2565595 gap.tab
+    #	2568726 gold.tab
+
+    # and this new gap table really is all the N's
+    ave -col=7 gap.tab
+# Q1 39.000000
+# median 185.000000
+# Q3 457.000000
+# average 377.010297
+# min 1.000000
+# max 170621.000000
+# count 2565595
+# total 967255733.000000
+
+    # reload gold and gap tables
+    # verify only the gold and gap tables change:
+    hgsql -e 'show table status;' cavApe1 | grep "2018-01-06 17"
+    # that is empty, no new tables at this hour
+
+    time hgGoldGapGl -verbose=2 cavApe1 cavApe1.fake.agp
+
+#       simple gold gap, no .gl files produced, from agp file: cavApe1.fake.agp
+NOSQLINJ CREATE TABLE gold (
+   bin smallint not null,   chrom varchar(255) not null,        # which chromosome
+   chromStart int unsigned not null,   # start position in chromosome
+   chromEnd int unsigned not null,     # end position in chromosome
+   ix int not null,    # ix of this fragment (useless)
+   type char(1) not null,      # (P)redraft, (D)raft, (F)inished or (O)ther
+   frag varchar(255) not null, # which fragment
+   fragStart int unsigned not null,    # start position in frag
+   fragEnd int unsigned not null,      # end position in frag
+   strand char(1) not null,    # + or - (orientation of fragment)
+             #Indices
+   INDEX(chrom(14),bin),
+   UNIQUE(chrom(14),chromStart),
+   INDEX(frag(20))
+)
+NOSQLINJ CREATE TABLE gap (
+   bin smallint not null,   chrom varchar(255) not null,        # which chromosome
+   chromStart int unsigned not null,    # start position in chromosome
+   chromEnd int unsigned not null,      # end position in chromosome
+   ix int not null,     # ix of this fragment (useless)
+   n char(1) not null,  # always 'N'
+   size int unsigned not null,  # size of gap
+   type varchar(255) not null,  # contig, clone, fragment, etc.
+   bridge varchar(255) not null,        # yes, no, mrna, bacEndPair, etc.
+             #Indices
+   INDEX(chrom(14),bin),
+   UNIQUE(chrom(14),chromStart)
+)
+
+    # real    2m39.273s
+
+    # now should show only two new tables during this hour:
+    hgsql -e 'show table status;' cavApe1 | grep "2018-01-06 17"
+# gap     MyISAM  10      Dynamic 2565595 51      133410932       28147497671065530537728 0       NULL    2018-01-06 17:06:40     2018-01-06 17:07:44     2018-01-06 17:07:52     latin1_swedish_ci       NULL
+# gold    MyISAM  10      Dynamic 2568726 59      154019852       28147497671065561730816 0       NULL    2018-01-06 17:05:22     2018-01-06 17:06:25     2018-01-06 17:06:40     latin1_swedish_ci       NULL
+
+    featureBits -countGaps cavApe1 gap
+    # 967255733 bases of 2716396567 (35.608%) in intersection
+
+    # check for tracks already built that may need fixups due to this
+    # change:
+# tried cytoBandIdeo - no change
+# updated trackDb gold/assembly track search rule
+#    time featureBits cavApe1 rmsk
+# 452920016 bases of 1749140834 (25.894%) in intersection
+# rebuilding clean windowMasker
+#    did not change the masking
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2018-01-04 - Hiram)
+    mkdir /hive/data/genomes/cavApe1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/cavApe1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/cavApe1/cavApe1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku cavApe1) > do.log 2>&1
+    # real    5m4.595s
+
+    cat fb.cavApe1.cpgIslandExtUnmasked.txt
+    # 8289821 bases of 2716396567 (0.305%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2018-01-04 - Hiram)
+    mkdir /hive/data/genomes/cavApe1/bed/cytoBand
+    cd /hive/data/genomes/cavApe1/bed/cytoBand
+    makeCytoBandIdeo.csh cavApe1
+
+##########################################################################
+# run up idKeys files for chromAlias (DONE - 2018-01-04 - Hiram)
+    mkdir /hive/data/genomes/cavApe1/bed/idKeys
+    cd /hive/data/genomes/cavApe1/bed/idKeys
+
+    time (doIdKeys.pl -twoBit=/hive/data/genomes/cavApe1/cavApe1.unmasked.2bit -buildDir=`pwd`  cavApe1) > do.log 2>&1 &
+    # real    4m35.537s
+
+    cat cavApe1.keySignature.txt
+    #   0915658a777fa5e75546dc2b7bf7d94c
+
+##########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2018-01-04 - Hiram)
+    # the sequence here is working for a 'genbank' assembly
+    # beware of a chrM situation may be specific depending upon what is
+    # available in the assembly
+
+    mkdir /hive/data/genomes/cavApe1/bed/ucscToINSDC
+    cd /hive/data/genomes/cavApe1/bed/ucscToINSDC
+
+    # there is no chrM sequence in this assembly
+
+    # if there is a chrM, use its INSDC name as a second argument:
+    # this is a RefSeq assembly, use the chrM refSeq name:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+      ../../genbank/GC*structure/Primary_Assembly
+
+    cd /hive/data/genomes/cavApe1/bed/ucscToINSDC
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > ucsc.coordinate.tab
+
+    join -t$'\t' ucsc.coordinate.tab ucscToINSDC.txt > ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    # in this case one is missing in the final result due to the duplicate
+    # contig being removed
+    wc -l *
+    # 3131 ucsc.coordinate.tab
+    # 3131 ucscToINSDC.bed
+    # 3131 ucscToINSDC.txt
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab cavApe1 ucscToINSDC stdin ucscToINSDC.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords cavApe1
+    # each should cover %100 entirely:
+    featureBits -countGaps cavApe1 ucscToINSDC
+    # 2716396567 bases of 2716396567 (100.000%) in intersection
+
+#########################################################################
+# add chromAlias table (DONE - 2018-01-03 - Hiram)
+
+    mkdir /hive/data/genomes/cavApe1/bed/chromAlias
+    cd /hive/data/genomes/cavApe1/bed/chromAlias
+
+    # after ensembl idKeys have been made:
+    join -t$'\t'  ../idKeys/cavApe1.idKeys.txt \
+	../../ensembl/ensemblCavApe1.idKeys.txt | cut -f2- > ucsc.ensembl.tab
+
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' cavApe1 \
+        > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+	> cavApe1.chromAlias.tab
+
+for t in genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t cavApe1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking genbank: 3131 =? 3131 OK
+# checking ensembl: 3131 =? 3131 OK
+
+    hgLoadSqlTab cavApe1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        cavApe1.chromAlias.tab
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2018-01-06 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/guineaPig/cavApe1
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" cavApe1 \
+      | sed -e 's/[0-9][0-9]*//g;' | sort | uniq -c 
+#   2568726 AVPZv_
+
+
+    # implies a rule: 'AVPZ[0-9]+(v1_[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" cavApe1 | wc -l
+    # 2568726
+
+
+    hgsql -N -e "select frag from gold;" cavApe1 \
+       | egrep -e 'AVPZ[0-9]+(v1_[0-9]+)?' | wc -l
+    # 2568726
+
+    hgsql -N -e "select frag from gold;" cavApe1 \
+       | egrep -v -e 'AVPZ[0-9]+(v1_[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/cavApe1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex AVPZ[0-9]+(v1_[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box for these name patterns
+
+##########################################################################
+# running repeat masker (DONE - 2018-01-04 - Hiram)
+    mkdir /hive/data/genomes/cavApe1/bed/repeatMasker
+    cd /hive/data/genomes/cavApe1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku cavApe1) > do.log 2>&1 &
+    # real    500m12.265s
+
+    egrep "bases|Total|masked" faSize.rmsk.txt \
+	| fold -s  | sed -e 's/^/# /;'
+# 2716396567 bases (967255733 N's 1749140834 real 1316631357 upper 432509477 
+# lower) in 3131 sequences in 1 files
+# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873 
+# (AVPZ01000001v1) median 11564
+# %15.92 masked total, %24.73 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;                                            *
+
+    time featureBits -countGaps cavApe1 rmsk
+    # 452920016 bases of 2716396567 (16.674%) in intersection
+    # real    0m21.051s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' cavApe1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    #	total 452920016.000000
+    #	real    0m19.886s
+
+    # after fixing the gap table:
+    time featureBits cavApe1 rmsk
+# 452920016 bases of 1749140834 (25.894%) in intersection
+# real    0m33.427s
+
+##########################################################################
+# running simple repeat (DONE - 2018-01-04 - Hiram)
+
+    mkdir /hive/data/genomes/cavApe1/bed/simpleRepeat
+    cd /hive/data/genomes/cavApe1/bed/simpleRepeat
+    # using trf409 5 here a bit smaller genome (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 5 cavApe1) > do.log 2>&1 &
+    # real    3m17.641s
+
+    cat fb.simpleRepeat
+    # 17919988 bases of 2716396567 (0.660%) in intersection
+
+    # adding this trfMask to the other masking
+    cd /hive/data/genomes/cavApe1
+
+    # when using the Window Masker result:
+    twoBitMask bed/windowMasker/cavApe1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  cavApe1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # when using Rmsk results, add to rmsk after it is done:
+#     twoBitMask cavApe1.rmsk.2bit \
+#         -add bed/simpleRepeat/trfMask.bed cavApe1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa cavApe1.2bit stdout | faSize stdin > faSize.cavApe1.2bit.txt
+    egrep "bases|Total|masked" faSize.cavApe1.2bit.txt \
+	| fold -w 78 -s  | sed -e 's/^/# /;'
+# 2716396567 bases (967255733 N's 1749140834 real 1177135716 upper 572005118 
+# lower) in 3131 sequences in 1 files
+# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873 
+# (AVPZ01000001v1) median 11564
+# %21.06 masked total, %32.70 masked real
+
+    # reset the symlink
+    rm /gbdb/cavApe1/cavApe1.2bit
+    ln -s `pwd`/cavApe1.2bit /gbdb/cavApe1/cavApe1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2018-01-05 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/cavApe1/bed/microsat
+    cd /cluster/data/cavApe1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed cavApe1 microsat microsat.bed
+    # Read 31475 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2018-01-05 - Hiram)
+
+    mkdir /hive/data/genomes/cavApe1/bed/windowMasker
+    cd /hive/data/genomes/cavApe1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev cavApe1) > do.log 2>&1
+    # real    348m42.248s
+
+    # Masking statistics
+    cat faSize.cavApe1.cleanWMSdust.txt
+    egrep "bases|Total|masked" faSize.cavApe1.cleanWMSdust.txt \
+	| fold -w 78 -s  | sed -e 's/^/# /;'
+# 2716396567 bases (967255733 N's 1749140834 real 1177337139 upper 571803695 
+# lower) in 3131 sequences in 1 files
+# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873 
+# (AVPZ01000001v1) median 11564
+# %21.05 masked total, %32.69 masked real
+
+    cat fb.cavApe1.rmsk.windowmaskerSdust.txt
+    # 240643247 bases of 2716396567 (8.859%) in intersection
+
+    # rerunning after fixing the gap/assembly tables/tracks:
+    # same masking:
+    egrep "bases|Total|masked" faSize.cavApe1.cleanWMSdust.txt \
+        | fold -w 78 -s  | sed -e 's/^/# /;'
+# 2716396567 bases (967255733 N's 1749140834 real 1177337139 upper 571803695 
+# lower) in 3131 sequences in 1 files
+# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873 
+# (AVPZ01000001v1) median 11564
+# %21.05 masked total, %32.69 masked real
+
+    # slightly different:
+    cat fb.cavApe1.rmsk.windowmaskerSdust.txt
+    # 220350049 bases of 2716396567 (8.112%) in intersection
+
+
+##########################################################################
+# cpgIslands - (DONE - 2018-01-08 - Hiram)
+    mkdir /hive/data/genomes/cavApe1/bed/cpgIslands
+    cd /hive/data/genomes/cavApe1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku cavApe1) > do.log 2>&1 &
+    # real    5m27.506s
+
+    cat fb.cavApe1.cpgIslandExt.txt
+    # 3790089 bases of 1749140834 (0.217%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2018-01-08 - Hiram)
+    mkdir /hive/data/genomes/cavApe1/bed/genscan
+    cd /hive/data/genomes/cavApe1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku cavApe1) > do.log 2>&1 &
+    # real    13m9.015s
+    # 1 job did not complete, running with window size 2000000:
+    # real    1m16.297s
+
+    # continuing:
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku cavApe1) > makeBed.log 2>&1 &
+
+    cat fb.cavApe1.genscan.txt
+    # 32771963 bases of 1749140834 (1.874%) in intersection
+
+    cat fb.cavApe1.genscanSubopt.txt
+    # 38379458 bases of 1749140834 (2.194%) in intersection
+
+#############################################################################
+# Ensembl genes (DONE - 2018-01-04 - Hiram)
+    # after chromAlias work is done:
+
+    cd /hive/data/genomes/cavApe1/jkStuff
+    join -t$'\t' <(sort -k1,1 ../chrom.sizes) \
+      <(sort ../bed/chromAlias/ucsc.ensembl.tab) \
+        | awk '{printf "0\t%s\t%d\t%s\t%d\n", $3,$2,$1,$2}' > ensToUcsc.lift
+
+    cd /hive/data/genomes/cavApe1
+    printf "# required db variable
+db cavApe1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/cavApe1/jkStuff/ensToUcsc.lift
+" > cavApe1.ensGene.ra
+
+    time (doEnsGeneUpdate.pl -ensVersion=91 cavApe1.ensGene.ra) \
+	> ensGene.91.log 2>&1
+    # real    1m31.613s
+
+    featureBits cavApe1 ensGene
+    # 21842310 bases of 2716396567 (0.804%) in intersection
+
+#############################################################################
+# augustus gene track (DONE - 2018-01-08 - Hiram)
+
+    mkdir /hive/data/genomes/cavApe1/bed/augustus
+    cd /hive/data/genomes/cavApe1/bed/augustus
+
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -species=human -dbHost=hgwdev -workhorse=hgwdev cavApe1) > do.log 2>&1 &
+    # real    436m59.950s
+
+    cat fb.cavApe1.augustusGene.txt
+    # 23318568 bases of 1749140834 (1.333%) in intersection
+
+    featureBits -enrichment cavApe1 augustusGene ensGene
+# augustusGene 1.333%, ensGene 1.249%, both 0.825%, cover 61.86%, enrich 49.54x
+
+##############################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2018-01-08 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzCavApe1.2018-01-08
+
+    cat fb.hg38.chainCavApe1Link.txt
+    # 804449430 bases of 3049335806 (26.381%) in intersection
+    cat fb.hg38.chainSynCavApe1Link.txt
+    # 746370799 bases of 3049335806 (24.477%) in intersection
+    cat fb.hg38.chainRBestCavApe1Link.txt
+    # 735739254 bases of 3049335806 (24.128%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/cavApe1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/cavApe1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzCavApe1.2018-01-08/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    61m35.236s
+
+    cat fb.cavApe1.chainHg38Link.txt
+    # 767670846 bases of 1749140834 (43.888%) in intersection
+    cat fb.cavApe1.chainSynHg38Link.txt
+    # 734822213 bases of 1749140834 (42.010%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	cavApe1 hg38) > rbest.log 2>&1
+    # real    327m9.529s
+
+    cat fb.cavApe1.chainRBestHg38Link.txt
+    # 737288411 bases of 1749140834 (42.151%) in intersection
+
+##############################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-01-08 - Hiram)
+    # original alignment to mm10
+    cd /hive/data/genomes/mm10/bed/lastzCavApe1.2018-01-08
+
+    cat fb.mm10.chainCavApe1Link.txt
+    #	424603451 bases of 2652783500 (16.006%) in intersection
+    cat fb.mm10.chainRBestCavApe1Link.txt
+    # 394844156 bases of 2652783500 (14.884%) in intersection
+
+    # and for the swap
+    mkdir /hive/data/genomes/cavApe1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/cavApe1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCavApe1.2018-01-08/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    38m53.866s
+
+    cat fb.cavApe1.chainMm10Link.txt
+    #	420563721 bases of 1749140834 (24.044%) in intersection
+    cat fb.cavApe1.chainSynMm10Link.txt
+    # 364825271 bases of 1749140834 (20.857%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev cavApe1 mm10 \
+      -buildDir=`pwd`) > rbest.log 2>&1 &
+    # real    438m45.544s
+
+    cat fb.cavApe1.chainRBestMm10Link.txt
+    # 395976886 bases of 1749140834 (22.638%) in intersection
+
+##############################################################################
+# Create kluster run files (DONE - 2018-01-08 - Hiram)
+
+    # numerator is cavApe1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap cavApe1 gap
+    # 967255733 bases of 1749140834 (55.299%) in intersection
+    #                     ^^^
+    # this is a high intersection count because %35 of the assembly is gap,
+    # and this featureBits is done without counting gaps for the intersection
+    # thus it amplifies the large number of bases.  When done with -countGaps:
+    featureBits -countGaps cavApe1 gap 
+    #  967255733 bases of 2716396567 (35.608%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1749140834 / 2861349177 \) \* 1024
+    #  ( 1749140834 / 2861349177 ) * 1024 = 625.970514
+
+    # ==> use -repMatch=650 according to size scaled down from 1024 for human.
+    #   and rounded up to nearest 50
+    cd /hive/data/genomes/cavApe1
+    blat cavApe1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/cavApe1.11.ooc \
+        -repMatch=650
+    #   Wrote 27692 overused 11-mers to jkStuff/cavApe1.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' cavApe1 \
+        | sort -k7,7nr | ave -col=7 stdin
+
+    # There are 66 gaps larger than 50,000 bases, thus minimum size 50000
+    gapToLift -verbose=2 -minGap=50000 cavApe1 jkStuff/nonBridged.lft \
+       -bedFile=jkStuff/nonBridged.bed
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2018-01-08 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism             mrnaCnt   estCnt  refSeqCnt
+    # Cavia   19      0       0
+    # Cavia cutleri   8       0       0
+    # Cavia porcellus 769     19976   488
+    # Cavia sp.       16      0       0
+
+# Organism name:  Cavia aperea (Brazilian guinea pig)
+
+    # there appear to be none for Cavia aperea
+
+    # edit etc/genbank.conf to add cavApe1 just before cavPor3
+
+# cavApe1 Cavia aperea (Brazilian guinea pig) taxId: 37548
+cavApe1.serverGenome = /hive/data/genomes/cavApe1/cavApe1.2bit
+cavApe1.clusterGenome = /scratch/data/cavApe1/cavApe1.2bit
+cavApe1.ooc = /scratch/data/cavApe1/cavApe1.11.ooc
+cavApe1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+cavApe1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+cavApe1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+cavApe1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+cavApe1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+cavApe1.lift = /hive/data/genomes/cavApe1/jkStuff/nonBridged.lft
+cavApe1.downloadDir = cavApe1
+cavApe1.perChromTables = no
+# there are no native anything
+cavApe1.refseq.mrna.native.load = no
+cavApe1.refseq.mrna.native.loadDesc = no
+cavApe1.genbank.mrna.native.load = no
+cavApe1.genbank.mrna.native.loadDesc = no
+# defaults yes: genbank.mrna.native.load and loadDesc
+# defaults yes: genbank.est.native.load
+# defaults yes: refseq.mrna.native.load, refseq.mrna.native.loadDesc
+# defaults yes: refseq.mrna.xeno.load, refseq.mrna.xeno.loadDesc
+# defaults no: genbank.mrna.xeno.load and loadDesc
+# defaults no: genbank.est.xeno.load, genbank.est.xeno.loadDesc
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+
+ git commit -m 'adding cavApe1 Cavia aperea Brizilian guinea pig refs #20770' \
+	 etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/:
+    make install-server
+    make etc-update
+
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial cavApe1
+    # logFile: var/build/logs/2018.01.09-10:31:08.cavApe1.initalign.log
+    #   real    82m4.909s
+
+    tail -2 var/build/logs/2018.01.09-10:31:08.cavApe1.initalign.log
+    # hgwdev 2018.01.09-11:50:14 cavApe1.initalign: Succeeded: cavApe1
+    # hgwdev 2018.01.09-11:53:13 cavApe1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.cavApe1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad cavApe1
+    # logFile: var/dbload/hgwdev/logs/2018.01.09-14:16:52.cavApe1.dbload.log
+    #  real    11m3.873s
+
+    tail -1 var/dbload/hgwdev/logs/2018.01.09-14:16:52.cavApe1.dbload.log
+    #  hgwdev 2018.01.09-14:27:56 cavApe1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add cavApe1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding cavApe1 to the update alignments refs #20770' \
+	etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+#  BLATSERVERS ENTRY (DONE - 2018-01-09 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("cavApe1", "blat1b", "17894", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("cavApe1", "blat1b", "17895", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to same location as criGriChoV1
+##  found by liftOver view in other (DONE - 2018-01-09 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="LT883666v1:7863909-8000102"
+	where name="cavApe1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2018-01-10 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=cavApe1 -tableCoverage all.joiner
+    joinerCheck -database=cavApe1 -times all.joiner
+    joinerCheck -database=cavApe1 -keys all.joiner
+
+    cd /hive/data/genomes/cavApe1
+    time (makeDownloads.pl -workhorse=hgwdev cavApe1) > downloads.log 2>&1
+    #  real    17m42.961s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/cavApe1/pushQ
+    cd /hive/data/genomes/cavApe1/pushQ
+  time (makePushQSql.pl -redmineList cavApe1) > cavApe1.pushQ.sql 2> stderr.out
+XXX - running - Wed Jan 10 11:41:43 PST 2018
+    #  real    3m54.325s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: cavApe1 does not have ucscToRefSeq
+    # WARNING: cavApe1 does not have seq
+    # WARNING: cavApe1 does not have extFile
+    # WARNING: cavApe1 does not have estOrientInfo
+    # WARNING: cavApe1 does not have mrnaOrientInfo
+
+    ## there are warnings about the RBest and Syn chainNet tables, which we
+    ## are not interested in at this time.  They can be left out.
+
+    # verify the file listings are valid, should be no output to stderr:
+    cat redmine.cavApe1.file.list \
+        | while read L; do ls -ogL $L; done  > /dev/null
+
+    # to verify the database.table list is correct, should be the same
+    # line count for these two commands:
+    wc -l redmine.cavApe1.table.list
+    # 66 redmine.cavApe1.table.list
+    awk -F'.' '{
+printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
+}' redmine.cavApe1.table.list | while read L; do eval $L; done | wc -l
+    # 66
+
+    # enter the path names to these files in the redmine issue to
+    # make QA Ready:
+    ls `pwd`/redmine*
+
+/hive/data/genomes/cavApe1/pushQ/redmine.cavApe1.file.list
+/hive/data/genomes/cavApe1/pushQ/redmine.cavApe1.releaseLog.txt
+/hive/data/genomes/cavApe1/pushQ/redmine.cavApe1.table.list
+
+#########################################################################
