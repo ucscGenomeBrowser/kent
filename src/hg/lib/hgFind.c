@@ -3256,22 +3256,28 @@ else if (!matchesHgvs(cart, db, term, hgp))
 	}
     hgFindSpecFreeList(&shortList);
     hgFindSpecFreeList(&longList);
-    if(hgpMatchNames == NULL)
-	hgpMatchNames = newDyString(256);
-    for(hgpItem = hgp; hgpItem != NULL; hgpItem = hgpItem->next)
-	{
-	struct hgPosTable *hpTable = NULL;
-	for(hpTable = hgpItem->tableList; hpTable != NULL; hpTable = hpTable->next)
-	    {
-	    struct hgPos *pos = NULL;
-	    for(pos = hpTable->posList; pos != NULL; pos = pos->next)
-		{
-		dyStringPrintf(hgpMatchNames, "%s,", pos->browserName);
-		}
-	    }
-	}
     if (cart != NULL)
+        {
+        if(hgpMatchNames == NULL)
+            hgpMatchNames = newDyString(256);
+        dyStringClear(hgpMatchNames);
+        int matchCount = 0;
+        for(hgpItem = hgp; hgpItem != NULL; hgpItem = hgpItem->next)
+            {
+            struct hgPosTable *hpTable = NULL;
+            for(hpTable = hgpItem->tableList; hpTable != NULL; hpTable = hpTable->next)
+                {
+                struct hgPos *pos = NULL;
+                for(pos = hpTable->posList; pos != NULL; pos = pos->next)
+                    {
+                    if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED && matchCount++ >= limitResults)
+                        break;
+                    dyStringPrintf(hgpMatchNames, "%s,", pos->browserName);
+                    }
+                }
+            }
         cartSetString(cart, "hgFind.matches", hgpMatchNames->string);
+        }
     }
 slReverse(&hgp->tableList);
 if (multiTerm)
