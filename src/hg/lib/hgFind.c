@@ -2772,7 +2772,7 @@ else
 static boolean doQuery(char *db, struct hgFindSpec *hfs, char *xrefTerm, char *term,
 		       struct hgPositions *hgp,
 		       boolean relativeFlag, int relStart, int relEnd,
-		       boolean multiTerm)
+		       boolean multiTerm, int limitResults)
 /* Perform a query as specified in hfs, assuming table existence has been 
  * checked and xref'ing has been taken care of. */
 {
@@ -2811,6 +2811,8 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
     // we do not have control over the original sql since it comes from trackDb.ra or elsewhere?
     char query[2048];
     sqlSafef(query, sizeof(query), hfs->query, tPtr->name, term);
+    if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
+        sqlSafefAppend(query, sizeof(query), " limit %d", limitResults);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -2919,7 +2921,7 @@ else
 for (xrefPtr = xrefList;  xrefPtr != NULL;  xrefPtr = xrefPtr->next)
     {
     found |= doQuery(db, hfs, xrefPtr->name, (char *)xrefPtr->val, hgp,
-		     relativeFlag, relStart, relEnd, multiTerm);
+		     relativeFlag, relStart, relEnd, multiTerm, limitResults);
     }
 slPairFreeValsAndList(&xrefList);
 return(found);
