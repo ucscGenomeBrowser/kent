@@ -1433,7 +1433,7 @@ done
     rm -rf exonAA exonNuc
 
 #############################################################################
-# wiki page for 5-way (TBD - 2016-05-11 - Hiram)
+# wiki page for 5-way (DONE - 2017-12-18 - Hiram)
     mkdir /hive/users/hiram/bigWays/tupChi1.5way
     cd /hive/users/hiram/bigWays
     echo "tupChi1" > tupChi1.5way/ordered.list
