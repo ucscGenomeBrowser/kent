@@ -65,7 +65,7 @@ faSize G*0_genomic.fna.gz
 # %20.63 masked total, %32.03 masked real
 
 # NOTE: XXX This is %35 N bases in this assembly, not a good sign:
-    calc 100 \* 967255733 / 2716396567 
+    calc 100 \* 967255733 / 2716396567
     # 100 * 967255733 / 2716396567 = 35.608046
 # and then it was later discovered that none of these gaps are annotated
 # in the AGP definition . . .  Yikes
@@ -465,7 +465,7 @@ done
 
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" cavApe1 \
-      | sed -e 's/[0-9][0-9]*//g;' | sort | uniq -c 
+      | sed -e 's/[0-9][0-9]*//g;' | sort | uniq -c
 #   2568726 AVPZv_
 
 
@@ -504,9 +504,9 @@ searchPriority 8
 
     egrep "bases|Total|masked" faSize.rmsk.txt \
 	| fold -s  | sed -e 's/^/# /;'
-# 2716396567 bases (967255733 N's 1749140834 real 1316631357 upper 432509477 
+# 2716396567 bases (967255733 N's 1749140834 real 1316631357 upper 432509477
 # lower) in 3131 sequences in 1 files
-# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873 
+# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873
 # (AVPZ01000001v1) median 11564
 # %15.92 masked total, %24.73 masked real
 
@@ -564,9 +564,9 @@ searchPriority 8
     twoBitToFa cavApe1.2bit stdout | faSize stdin > faSize.cavApe1.2bit.txt
     egrep "bases|Total|masked" faSize.cavApe1.2bit.txt \
 	| fold -w 78 -s  | sed -e 's/^/# /;'
-# 2716396567 bases (967255733 N's 1749140834 real 1177135716 upper 572005118 
+# 2716396567 bases (967255733 N's 1749140834 real 1177135716 upper 572005118
 # lower) in 3131 sequences in 1 files
-# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873 
+# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873
 # (AVPZ01000001v1) median 11564
 # %21.06 masked total, %32.70 masked real
 
@@ -599,9 +599,9 @@ searchPriority 8
     cat faSize.cavApe1.cleanWMSdust.txt
     egrep "bases|Total|masked" faSize.cavApe1.cleanWMSdust.txt \
 	| fold -w 78 -s  | sed -e 's/^/# /;'
-# 2716396567 bases (967255733 N's 1749140834 real 1177337139 upper 571803695 
+# 2716396567 bases (967255733 N's 1749140834 real 1177337139 upper 571803695
 # lower) in 3131 sequences in 1 files
-# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873 
+# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873
 # (AVPZ01000001v1) median 11564
 # %21.05 masked total, %32.69 masked real
 
@@ -612,9 +612,9 @@ searchPriority 8
     # same masking:
     egrep "bases|Total|masked" faSize.cavApe1.cleanWMSdust.txt \
         | fold -w 78 -s  | sed -e 's/^/# /;'
-# 2716396567 bases (967255733 N's 1749140834 real 1177337139 upper 571803695 
+# 2716396567 bases (967255733 N's 1749140834 real 1177337139 upper 571803695
 # lower) in 3131 sequences in 1 files
-# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873 
+# Total size: mean 867581.1 sd 5324953.7 min 210 (AVPZ01003008v1) max 88624873
 # (AVPZ01000001v1) median 11564
 # %21.05 masked total, %32.69 masked real
 
@@ -770,7 +770,7 @@ liftUp /hive/data/genomes/cavApe1/jkStuff/ensToUcsc.lift
     # this is a high intersection count because %35 of the assembly is gap,
     # and this featureBits is done without counting gaps for the intersection
     # thus it amplifies the large number of bases.  When done with -countGaps:
-    featureBits -countGaps cavApe1 gap 
+    featureBits -countGaps cavApe1 gap
     #  967255733 bases of 2716396567 (35.608%) in intersection
 
     # denominator is hg19 gapless bases as reported by:
@@ -917,7 +917,6 @@ cavApe1.genbank.mrna.native.loadDesc = no
     mkdir /hive/data/genomes/cavApe1/pushQ
     cd /hive/data/genomes/cavApe1/pushQ
   time (makePushQSql.pl -redmineList cavApe1) > cavApe1.pushQ.sql 2> stderr.out
-XXX - running - Wed Jan 10 11:41:43 PST 2018
     #  real    3m54.325s
 
     #   check for errors in stderr.out, some are OK, e.g.:
