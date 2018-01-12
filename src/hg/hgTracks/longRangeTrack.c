@@ -188,7 +188,7 @@ for (longRange=longRangeList; longRange; longRange=longRange->next)
                 {
                 int yLeft = yOff + peakHeight;
                 int yTop = yOff - peakHeight;
-                hvGfxEllipseDraw(hvg, sx, yLeft, ex, yTop, color, ELLIPSE_BOTTOM); // demo
+                hvGfxEllipseDrawAA(hvg, sx, yLeft, ex, yTop, color, ELLIPSE_BOTTOM); // demo
                 }
             // TODO: map boxes for curves -- perhaps a colored dot at peak ?
             }

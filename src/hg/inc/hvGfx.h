@@ -323,8 +323,8 @@ void hvGfxEllipse(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color
  * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
  */
 
-void hvGfxEllipseAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color);
-/* Draw an anti-aliased ellipse specified by rectangle, using Bresenham algorithm.
+void hvGfxEllipseDrawAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color, int mode);
+/* Draw an anti-aliased ellipse or half (top or bottom) using Bresenham algorithm.
  * Point 0 is left, point 1 is top of rectangle
  * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
  */
