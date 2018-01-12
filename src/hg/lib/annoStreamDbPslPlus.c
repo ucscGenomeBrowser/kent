@@ -59,7 +59,8 @@ struct annoStreamDbPslPlus
 
 static char *ncbiRefSeqConfigJsonFormat =
     "{ \"naForMissing\": false,"
-    "  \"rightJoinTable\": \"%s\","
+    "  \"rightJoinDtf\": \"%s.\%s.name\","
+    "  \"rightJoinMainField\": \"qName\","
     "  \"relatedTables\": [ { \"table\": \"ncbiRefSeqCds\","
     "                         \"fields\": [\"cds\"] },"
     "                       { \"table\": \"ncbiRefSeqLink\","
@@ -162,7 +163,7 @@ if (sameString("refGene", gpTable))
 else if (startsWith("ncbiRefSeq", gpTable))
     {
     pslTable = "ncbiRefSeqPsl";
-    struct dyString *dy = dyStringCreate(ncbiRefSeqConfigJsonFormat, gpTable);
+    struct dyString *dy = dyStringCreate(ncbiRefSeqConfigJsonFormat, aa->name, gpTable);
     configJson = dyStringCannibalize(&dy);
     }
 else
