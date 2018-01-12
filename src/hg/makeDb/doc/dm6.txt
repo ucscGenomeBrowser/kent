@@ -3627,8 +3627,8 @@ mkdir -p result
 ls -1 splitProt > prot.list
 # /hive/data/outside/pfam/hmmpfam -E 0.1 /hive/data/outside/pfam/current/Pfam_fs \
 cat << '_EOF_' > doPfam
-#!/bin/csh -ef  
-/hive/data/outside/pfam/Pfam29.0/PfamScan/hmmer-3.1b2-linux-intel-x86_64/binaries/hmmsearch   --domtblout /scratch/tmp/pfam.$2.pf --noali -o /dev/null -E 0.1 /hive/data/outside/pfam/Pfam29.0/Pfam-A.hmm     splitProt/$1 
+#!/bin/csh -ef
+/hive/data/outside/pfam/Pfam29.0/PfamScan/hmmer-3.1b2-linux-intel-x86_64/binaries/hmmsearch   --domtblout /scratch/tmp/pfam.$2.pf --noali -o /dev/null -E 0.1 /hive/data/outside/pfam/Pfam29.0/Pfam-A.hmm     splitProt/$1
 mv /scratch/tmp/pfam.$2.pf $3
 _EOF_
     # << happy emacs
@@ -3663,7 +3663,7 @@ _EOF_
 awk -f makePfamRa.awk  /hive/data/outside/pfam/Pfam29.0/Pfam-A.hmm  > pfamDesc.ra
 raToTab -cols=ACC,NAME,DESC,TC pfamDesc.ra stdout |  awk -F '\t' '{printf("%s\t%s\t%s\t%g\n", $1, $2, $3, $4);}' | sort > pfamDesc.tab
 
-# Convert output to tab-separated file. 
+# Convert output to tab-separated file.
 cd $dir
 catDir result | sed '/^#/d' > allResults.tab
 awk 'BEGIN {OFS="\t"} { print $5,$1,$18-1,$19,$4,$14}' allResults.tab | sort > allUcscPfam.tab
@@ -3677,7 +3677,7 @@ sort ucscPfam.tab | sed 's/\.[0-9]*//' > sortPfam.tab
 faCount refSeq.noVers.faa | awk '{print $1, $2}' > protein.sizes
 
 hgsql dm6 -Ne "select protAcc, mrnaAcc from refLink, refGene where mrnaAcc=refGene.name" | awk '{if (NF == 2) print}' |sort > sortMap.txt
-while read prot mrna 
+while read prot mrna
 do
 echo ./doBlat $prot $mrna
 done > blat.jobs < sortMap.txt
@@ -3689,10 +3689,77 @@ tawk '{print $10, $16, $17}'  proteinToMrna.psl | sort > sortCdsOut.tab
 awk '{print $10, $11}' refGene.psl > gene.sizes
 join sortCdsOut.tab sortPfam.tab |  join /dev/stdin sortMap.txt | awk '{print $9, $2 + 3 * $4, $2  + 3 * $5, $6}' | bedToPsl gene.sizes stdin domainToGene.psl
 
-pslMap domainToGene.psl refGene.psl stdout | pslToBed stdin stdout | bedOrBlocks -useName stdin domainToGenome.bed 
+pslMap domainToGene.psl refGene.psl stdout | pslToBed stdin stdout | bedOrBlocks -useName stdin domainToGenome.bed
 
 hgLoadBed dm6 refGenePfam domainToGenome.bed
 
+##############################################################################
 # Crispr track. See ../crisprTrack/README.txt (2016-09-15 max)
 # Command: doCrispr.sh dm6 ensGene
+
 ##############################################################################
+# LASTZ A. gambiae AnoGam3 (DONE 2017-12-20 - Hiram)
+    screen -S anoGam3-dm6
+    mkdir /hive/data/genomes/dm6/bed/lastzAnoGam3.2017-12-20
+    cd /hive/data/genomes/dm6/bed/lastzAnoGam3.2017-12-20
+
+    printf '# D. melanogaster vs. A. gambiae
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/hive/data/genomes/dm6/dm6.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/hive/data/genomes/dm6/chrom.sizes
+
+# QUERY - A. gambiae
+SEQ2_DIR=/hive/data/genomes/anoGam3/anoGam3.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/hive/data/genomes/anoGam3/chrom.sizes
+
+BASE=/hive/data/genomes/dm6/bed/lastzAnoGam3.2017-12-20
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF \
+	-syntenicNet -fileServer=hgwdev \
+	-chainMinScore=3000  -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    # real    8m50.927s
+
+    cat fb.dm6.chainAnoGam3Link.txt
+    # 19641460 bases of 142573024 (13.776%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` dm6 anoGam3) > rBest.log 2>&1 &
+    # real    44m34.312s
+
+    cat fb.dm6.chainRBestAnoGam3Link.txt
+    # 15964959 bases of 142573024 (11.198%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/anoGam3/bed/blastz.dm6.swap
+    cd /hive/data/genomes/anoGam3/bed/blastz.dm6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/dm6/bed/lastzAnoGam3.2017-12-20/DEF \
+        -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > swap.log 2>&1
+    # real    2m0.901s
+
+    cat fb.anoGam3.chainDm6Link.txt
+    # 20168390 bases of 264424304 (7.627%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` anoGam3 dm6) > rBest.log 2>&1 &
+    # real    46m7.441s
+
+    cat fb.anoGam3.chainRBestDm6Link.txt
+    # 16040573 bases of 264424304 (6.066%) in intersection
+
+###########################################################################

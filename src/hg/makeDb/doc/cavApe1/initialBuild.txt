@@ -898,7 +898,7 @@ cavApe1.genbank.mrna.native.loadDesc = no
 ##  found by liftOver view in other (DONE - 2018-01-09 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="LT883666v1:7863909-8000102"
+    hgsql -e 'update dbDb set defaultPos="AVPZ01000178v1:22942465-22969826"
 	where name="cavApe1";' hgcentraltest
 
 #########################################################################
