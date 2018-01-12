@@ -329,15 +329,9 @@ void hvGfxEllipseAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color col
  * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
  */
 
-void hvGfxCurveAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, Color color);
+void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, Color color);
 /* Draw a an anti-aliased curve within 3 points (quadratic Bezier)
  * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html */
- /* Thanks to author  * @author Zingl Alois
- * @date 22.08.2016 */
-
-void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, Color color);
-/* Draw curve within 3 points (quadratic Bezier)
- * Adapted trivially from code posted on github and at http://members.chello.at/~easyfilter/bresenham.html */
  /* Thanks to author  * @author Zingl Alois
  * @date 22.08.2016 */
 

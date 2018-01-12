@@ -265,9 +265,6 @@ hvGfxDot(hvg, x, y, MAKECOLOR_32(r,g,b));
 hvGfxDot(hvg, x, y, MAKECOLOR_32(r,g,b));
 }
 
-#define fraction(X) (((double)(X))-(double)(int)(X))
-#define invFraction(X) (1.0-fraction(X))
-
 void hvGfxCurveSeg(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, Color color)
 /* Draw a segment of a curve within 3 points (quadratic Bezier)
  * Adapted trivially from code posted on github and at http://members.chello.at/~easyfilter/bresenham.html */
@@ -350,7 +347,7 @@ void hvGfxCurveSegAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, 
    hvGfxLine(hvg, x0,y0, x2,y2, color);                  /* plot remaining needle to end */
 }
 
-void hvGfxCurveAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, Color color)
+void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, Color color)
 /* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
  * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html */
 {
@@ -384,41 +381,8 @@ void hvGfxCurveAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int
    hvGfxCurveSegAA(hvg,x0,y0, x1,y1, x2,y2, color);                  /* remaining part */
 }
 
-void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, Color color)
-/* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
- * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html */
-{
-   int x = x0-x1, y = y0-y1;
-   double t = x0-2*x1+x2, r;
-
-   if ((long)x*(x2-x1) > 0) {                        /* horizontal cut at P4? */
-      if ((long)y*(y2-y1) > 0)                     /* vertical cut at P6 too? */
-         if (fabs((y0-2*y1+y2)/t*x) > abs(y)) {               /* which first? */
-            x0 = x2; x2 = x+x1; y0 = y2; y2 = y+y1;            /* swap points */
-         }                            /* now horizontal cut at P4 comes first */
-      t = (x0-x1)/t;
-      r = (1-t)*((1-t)*y0+2.0*t*y1)+t*t*y2;                       /* By(t=P4) */
-      t = (x0*x2-x1*x1)*t/(x0-x1);                       /* gradient dP4/dx=0 */
-      x = floor(t+0.5); y = floor(r+0.5);
-      r = (y1-y0)*(t-x0)/(x1-x0)+y0;                  /* intersect P3 | P0 P1 */
-      hvGfxCurveSeg(hvg,x0,y0, x,floor(r+0.5), x,y, color);
-      r = (y1-y2)*(t-x2)/(x1-x2)+y2;                  /* intersect P4 | P1 P2 */
-      x0 = x1 = x; y0 = y; y1 = floor(r+0.5);             /* P0 = P4, P1 = P8 */
-   }
-   if ((long)(y0-y1)*(y2-y1) > 0) {                    /* vertical cut at P6? */
-      t = y0-2*y1+y2; t = (y0-y1)/t;
-      r = (1-t)*((1-t)*x0+2.0*t*x1)+t*t*x2;                       /* Bx(t=P6) */
-      t = (y0*y2-y1*y1)*t/(y0-y1);                       /* gradient dP6/dy=0 */
-      x = floor(r+0.5); y = floor(t+0.5);
-      r = (x1-x0)*(t-y0)/(y1-y0)+x0;                  /* intersect P6 | P0 P1 */
-      hvGfxCurveSeg(hvg,x0,y0, floor(r+0.5),y, x,y, color);
-      r = (x1-x2)*(t-y2)/(y1-y2)+x2;                  /* intersect P7 | P1 P2 */
-      x0 = x; x1 = floor(r+0.5); y0 = y1 = y;             /* P0 = P6, P1 = P7 */
-   }
-   hvGfxCurveSeg(hvg,x0,y0, x1,y1, x2,y2, color);                  /* remaining part */
-}
-
-#ifdef INFINITE
+#ifdef PROBLEM
+// TODO: Tame anti-aliasing with Braney help, or drop
 void hvGfxEllipseAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color)
 /* Draw an anti-aliased ellipse specified by rectangle, using Bresenham algorithm.
  * Point 0 is left, point 1 is top of rectangle
@@ -445,6 +409,8 @@ void hvGfxEllipseAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color col
       i = ed*fabs(err+dx-dy);           /* get intensity value by pixel error */
       mixDot(hvg, x0,y0, i, color); mixDot(hvg, x0,y1, i, color);
       mixDot(hvg, x1,y0, i, color); mixDot(hvg, x1,y1, i, color);
+
+      //mixDot(hvg, x0,y0, 1-fabs(err-dx-dy-xy)/ed, color);          /* plot curve */
 
       if ((f = 2*err+dy) >= 0) {                  /* x step, remember condition */
          if (x0 >= x1) break;
