@@ -1,5 +1,6 @@
 track cons30way
 compositeTrack on
+pennantIcon New red ../goldenPath/releaseLog.html "Released January 11, 2018"
 shortLabel Cons 30 Primates
 longLabel Mammals Multiz Alignment & Conservation (27 primates)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
