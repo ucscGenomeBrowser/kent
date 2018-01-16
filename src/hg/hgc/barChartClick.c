@@ -51,20 +51,14 @@ static struct barChartBed *getBarChartFromFile(struct trackDb *tdb, char *file,
                                                 struct asObject **retAs)
 /* Retrieve barChart BED item from big file */
 {
-struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-struct asObject *as = NULL;
 boolean hasOffsets = TRUE;
-if (conn != NULL)
-    {
-    as = asForTdb(conn, tdb);
-    if (retAs != NULL)
-        *retAs = as;
-    hasOffsets = (
-        asColumnFind(as, BARCHART_OFFSET_COLUMN) != NULL && 
-        asColumnFind(as, BARCHART_LEN_COLUMN) != NULL);
-    hFreeConn(&conn);
-    }
 struct bbiFile *bbi = bigBedFileOpen(file);
+struct asObject *as = bigBedAsOrDefault(bbi);
+if (retAs != NULL)
+    *retAs = as;
+hasOffsets = (
+    asColumnFind(as, BARCHART_OFFSET_COLUMN) != NULL && 
+    asColumnFind(as, BARCHART_LEN_COLUMN) != NULL);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 for (bb = bbList; bb != NULL; bb = bb->next)
