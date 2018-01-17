@@ -12,6 +12,7 @@
 #include "hui.h"
 #include "asParse.h"
 #include "hgc.h"
+#include "trackHub.h"
 
 #include "barChartBed.h"
 #include "barChartCategory.h"
@@ -198,6 +199,9 @@ static struct sqlConnection *getConnectionAndTable(struct trackDb *tdb, char *su
 /* Look for <table><suffix> in database or hgFixed and set up connection */
 {
 char table[256];
+if (trackHubDatabase(database))
+    return NULL;
+
 assert(retTable);
 safef(table, sizeof(table), "%s%s", tdb->table, suffix);
 *retTable = cloneString(table);
