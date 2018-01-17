@@ -24176,13 +24176,15 @@ if ((row = sqlNextRow(sr)) != NULL)
         printf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", all[i], freq[i], score[i]);
         }
     printf("</table>");
-    printPgDbLink(database, tdb, el);
+    if (!trackHubDatabase(database))
+        printPgDbLink(database, tdb, el);
     if (siftTab != NULL)
         printPgSiftPred(database, siftTab, el);
     if (polyTab != NULL)
         printPgPolyphenPred(database, polyTab, el);
     char *genePredTable = "knownGene";
-    printSeqCodDisplay(database, el, genePredTable);
+    if (!trackHubDatabase(database))
+        printSeqCodDisplay(database, el, genePredTable);
     }
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
