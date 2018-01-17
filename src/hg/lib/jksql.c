@@ -1892,7 +1892,7 @@ sqlFreeResult(&sr);
 }
 
 int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched)
-/* Execute an update query, returning the number of rows change.  If matched
+/* Execute an update query, returning the number of rows changed.  If matched
  * is not NULL, it gets the total number matching the query. */
 {
 int numChanged = 0;
