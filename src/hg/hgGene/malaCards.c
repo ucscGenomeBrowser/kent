@@ -43,7 +43,7 @@ sqlSafef(query, sizeof(query), "select k.geneSymbol from kgXref k, malacards m"
 itemName = sqlQuickString(conn, query);
 
 printf("<B>MalaCards Gene Search: ");
-printf("<A HREF='http://www.malacards.org/search/bySymbol/%s' target=_blank>", itemName);
+printf("<A HREF='http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s' target=_blank>", itemName);
 printf("%s</B></A>\n", itemName);
 
 /* List diseases associated with the gene */
@@ -60,7 +60,8 @@ int eliteCount = 0;
 
 while (row != NULL)
     {
-    char *maladySym = row[0];
+    //char *maladySym = row[0];
+    char *urlSuffix = row[1];
     char *mainName = row[2];
     char *score = row[3];
     char *isElite = row[4];
@@ -72,7 +73,7 @@ while (row != NULL)
         }
 
     printf("<A HREF='http://www.malacards.org/card/%s' target=_blank>%s</a>%s (%s)",
-        maladySym, mainName, isEliteChar, score);
+        urlSuffix, mainName, isEliteChar, score);
     row = sqlNextRow(sr);
     if (row!=NULL)
         printf(", ");
