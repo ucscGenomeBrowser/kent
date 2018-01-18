@@ -14028,6 +14028,10 @@ else if (sameWord(type, "barChart"))
     {
     barChartMethods(track);
     }
+else if (sameWord(type, "interact"))
+    {
+    interactMethods(track);
+    }
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);
