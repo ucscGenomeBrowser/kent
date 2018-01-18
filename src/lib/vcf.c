@@ -761,14 +761,23 @@ static boolean allelesHavePaddingBase(char **alleles, int alleleCount)
  * must be an initial padding base that we'll need to trim from non-symbolic
  * alleles. */
 {
+if (sameString(alleles[0], "-"))
+    return FALSE;
 boolean hasPaddingBase = TRUE;
 char firstBase = '\0';
-if (isAllNt(alleles[0], strlen(alleles[0])))
+if (isAllNt(alleles[0], strlen(alleles[0])
+            +1)) //#*** FIXME isAllNt ignores last base in string!!! always TRUE for len=1
     firstBase = alleles[0][0];
 int i;
 for (i = 1;  i < alleleCount;  i++)
     {
-    if (isAllNt(alleles[i], strlen(alleles[i])))
+    if (sameString(alleles[i], "-"))
+        {
+        hasPaddingBase = FALSE;
+        break;
+        }
+    else if (isAllNt(alleles[i], strlen(alleles[i])
+                     +1)) //#*** FIXME isAllNt ignores last base in string!!! always TRUE for len=1
 	{
 	if (firstBase == '\0')
 	    firstBase = alleles[i][0];
@@ -816,7 +825,8 @@ if (rec->alleleCount > 1)
 	    {
 	    if (rec->alleles[i][1] == '\0')
 		rec->alleles[i] = vcfFilePooledStr(vcff, "-");
-	    else if (isAllNt(rec->alleles[i], strlen(rec->alleles[i])))
+	    else if (isAllNt(rec->alleles[i], strlen(rec->alleles[i])
+                             +1)) //#*** FIXME isAllNt ignores last base in string!!! always TRUE for len=1
 		rec->alleles[i] = vcfFilePooledStr(vcff, rec->alleles[i]+1);
 	    else // don't trim first character of symbolic allele
 		rec->alleles[i] = vcfFilePooledStr(vcff, rec->alleles[i]);
@@ -850,7 +860,9 @@ for (i = 0;  i < alCount;  i++)
     {
     int alLen = strlen(alleles[i]);
     // If any allele is symbolic, don't try to trim.
-    if (!isAllNt(alleles[i], alLen))
+    if (sameString(alleles[i], "-") ||
+        !isAllNt(alleles[i], alLen
+                 +1)) //#*** FIXME isAllNt ignores last base in string!!! always TRUE for len=1
 	return 0;
     alleleEnds[i] = alleles[i] + alLen-1;
     }
@@ -1466,7 +1478,8 @@ if (allelesHavePaddingBase(alleles, alCount))
     {
     // Skip padding base (unless we have a symbolic allele):
     for (i = 0;  i < alCount;  i++)
-	if (isAllNt(alleles[i], strlen(alleles[i])))
+	if (isAllNt(alleles[i], strlen(alleles[i])
+                    +1)) //#*** FIXME isAllNt ignores last base in string!!! always TRUE for len=1
 	    alleles[i]++;
     }
 // Having dealt with left padding base, now look for identical bases on the right:
