@@ -176,19 +176,19 @@ for (longRange=longRangeList; longRange; longRange=longRange->next)
 
         // draw vertical
         if (!sOnScreen || draw == DRAW_LINE)
-            hvGfxLine(hvg, ex, yOff, ex, peak, color); //OLD
+            hvGfxLine(hvg, ex, yOff, ex, peak, color);
         }
     if (tg->visibility == tvFull)
         {
         if (sOnScreen && eOnScreen && draw != DRAW_LINE)
             {
             if (draw == DRAW_CURVE)
-                hvGfxCurve(hvg, sx, yOff, (ex-sx+1)/2 + sx, peak+60, ex, yOff, color);
+                hvGfxCurve(hvg, sx, yOff, (ex-sx+1)/2 + sx, peak+60, ex, yOff, color, FALSE);
             else if (draw == DRAW_ELLIPSE)
                 {
                 int yLeft = yOff + peakHeight;
                 int yTop = yOff - peakHeight;
-                hvGfxEllipseDrawAA(hvg, sx, yLeft, ex, yTop, color, ELLIPSE_BOTTOM); // demo
+                hvGfxEllipseDraw(hvg, sx, yLeft, ex, yTop, color, ELLIPSE_BOTTOM, FALSE);
                 }
             // TODO: map boxes for curves -- perhaps a colored dot at peak ?
             }

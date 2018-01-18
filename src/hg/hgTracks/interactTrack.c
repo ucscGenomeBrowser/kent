@@ -187,7 +187,10 @@ for (inter=inters; inter; inter=inter->next)
         hvGfxLine(hvg, sx - footWidth, yOffOther, sx + footWidth, yOffOther, color);
 
         // draw the vertical
-        hvGfxLine(hvg, sx, yOffOther, sx, yPos, color);
+        if (inter->strand[0] == '+')
+            hvGfxLine(hvg, sx, yOffOther, sx, yPos, color);
+        else
+            hvGfxDottedLine(hvg, sx, yOffOther, sx, yPos, color);
         if (tg->visibility == tvFull)
             {
             mapBoxHgcOrHgGene(hvg, s, s, sx - 2, yOffOther, 4, height,
@@ -229,7 +232,12 @@ for (inter=inters; inter; inter=inter->next)
                             tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         // draw vertical
         if (!eOnScreen || draw == DRAW_LINE)
-            hvGfxLine(hvg, sx, yOff, sx, peak, color);
+            {
+            if (inter->strand[0] == '-')
+                hvGfxDottedLine(hvg, sx, yOff, sx, peak, color);
+            else
+                hvGfxLine(hvg, sx, yOff, sx, peak, color);
+            }
         }
     if (eOnScreen)
         {
@@ -241,34 +249,41 @@ for (inter=inters; inter; inter=inter->next)
 
         // draw vertical
         if (!sOnScreen || draw == DRAW_LINE)
-            hvGfxLine(hvg, ex, yOff, ex, peak, color); //OLD
+            {
+            if (inter->strand[0] == '-')
+                hvGfxDottedLine(hvg, ex, yOff, ex, peak, color); //OLD
+            else
+                hvGfxLine(hvg, ex, yOff, ex, peak, color); //OLD
+            }
         }
     if (tg->visibility == tvFull)
         {
         if (sOnScreen && eOnScreen && draw != DRAW_LINE)
             {
+            boolean isDotted = (inter->strand[0] == '-');
             if (draw == DRAW_CURVE)
                 {
                 int peakX = ((ex - sx + 1) / 2) + sx;
                 int peakY = peak + 60;
-                hvGfxCurve(hvg, sx, yOff, peakX, peakY, ex, yOff, color);
+                hvGfxCurve(hvg, sx, yOff, peakX, peakY, ex, yOff, color, isDotted);
                 // map box on peak
                 // FIXME: not working
-                mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd,
+                /*mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd,
                                     peakX - 2, peakY - 2, 4, 4,
                                     tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
+*/
                 }
             else if (draw == DRAW_ELLIPSE)
                 {
                 int yLeft = yOff + peakHeight;
                 int yTop = yOff - peakHeight;
-                //hvGfxEllipseDrawAA(hvg, sx, yLeft, ex, yTop, color, ELLIPSE_BOTTOM); // demo
-                hvGfxEllipseDraw(hvg, sx, yLeft, ex, yTop, color, ELLIPSE_BOTTOM); // demo
+                hvGfxEllipseDraw(hvg, sx, yLeft, ex, yTop, color, ELLIPSE_BOTTOM, isDotted);
                 // map box on peak
                 // FIXME: not working
-                mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd,
+                /*mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd,
                                     sx - sFootWidth - 2, yOff + peakHeight, 4, 4,
                                     tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
+*/
                 }
             }
         else
@@ -276,7 +291,10 @@ for (inter=inters; inter; inter=inter->next)
             // draw link horizontal line between regions (dense mode just shows feet ??)
             unsigned ePeak = eOnScreen ? ex : xOff + width;
             unsigned sPeak = sOnScreen ? sx : xOff;
-            hvGfxLine(hvg, sPeak, peak, ePeak, peak, color);
+            if (inter->strand[0] == '-')
+                hvGfxDottedLine(hvg, sPeak, peak, ePeak, peak, color);
+            else
+                hvGfxLine(hvg, sPeak, peak, ePeak, peak, color);
 
             // map box on horizontal line
             mapBoxHgcOrHgGene(hvg, s, e, sPeak, peak-2, ePeak - sPeak, 4,
