@@ -755,6 +755,14 @@ wordCount = checkWordCount(vcff, words, wordCount);
 return vcfRecordFromRow(vcff, words);
 }
 
+static boolean noAltAllele(char **alleles, int alleleCount)
+/* Return true if there is no alternate allele (missing value ".") or the given alternate allele
+ * is the same as the reference allele. */
+{
+return (alleleCount == 2 &&
+        (sameString(alleles[0], alleles[1]) || sameString(".", alleles[1])));
+}
+
 static boolean allelesHavePaddingBase(char **alleles, int alleleCount)
 /* Examine alleles to see if they either a) all start with the same base or
  * b) include a symbolic or 0-length allele.  In either of those cases, there
@@ -762,6 +770,9 @@ static boolean allelesHavePaddingBase(char **alleles, int alleleCount)
  * alleles. */
 {
 if (sameString(alleles[0], "-"))
+    return FALSE;
+else if (noAltAllele(alleles, alleleCount))
+    // Don't trim assertion of no change (ref == alt)
     return FALSE;
 boolean hasPaddingBase = TRUE;
 char firstBase = '\0';
@@ -854,6 +865,9 @@ return TRUE;
 static int countIdenticalBasesRight(char **alleles, int alCount)
 /* Return the number of bases that are identical at the end of each allele (usually 0). */
 {
+if (noAltAllele(alleles, alCount))
+    // Don't trim assertion of no change (ref == alt)
+    return 0;
 char *alleleEnds[alCount];
 int i;
 for (i = 0;  i < alCount;  i++)
@@ -1486,13 +1500,19 @@ if (allelesHavePaddingBase(alleles, alCount))
 int trimmedBases = countIdenticalBasesRight(alleles, alCount);
 // Build a /-separated allele string, trimming bases on the right if necessary:
 dyStringClear(dy);
+if (noAltAllele(alleles, alCount))
+    alCount = 1;
 for (i = 0;  i < alCount;  i++)
     {
     char *allele = alleles[i];
     if (!sameString(allele, "."))
         {
-        if (i > 0)
+        if (i != 0)
+            {
+            if (sameString(alleles[0], allele))
+                continue;
             dyStringAppendC(dy, '/');
+            }
         if (allele[trimmedBases] == '\0')
             dyStringAppendC(dy, '-');
         else
