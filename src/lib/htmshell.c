@@ -706,7 +706,7 @@ void htmlVaBadRequestAbort(char *format, va_list args)
  * then exit with error.  For use as an errAbort handler. */
 {
 puts("Status: 400\r");
-puts("Content-Type: text/plain; charset=iso-8859-1\r");
+puts("Content-Type: text/plain; charset=UTF-8\r");
 puts("\r");
 if (format != NULL)
     {
