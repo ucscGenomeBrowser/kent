@@ -14193,9 +14193,9 @@ return (a->priority - b->priority);
 void buildMathWig(struct trackDb *tdb)
 /* Turn a mathWig composite into a mathWig track. */
 {
-char *viewFunc = cartOrTdbString(cart, tdb, "viewFunc" , FALSE);
+char *aggregateFunc = cartOrTdbString(cart, tdb, "aggregate" , FALSE);
 
-if ((viewFunc == NULL) || sameString("showAll", viewFunc))
+if ((aggregateFunc == NULL) || !(sameString("add", aggregateFunc) || sameString("subtract", aggregateFunc)))
     return;
 
 struct trackDb *subTracks = tdb->subtracks;
@@ -14205,9 +14205,9 @@ tdb->type = "mathWig";
 
 struct dyString *dy = newDyString(1024);
 
-if (sameString("addAll", viewFunc))
+if (sameString("add", aggregateFunc))
     dyStringPrintf(dy, "+ ");
-else
+else // subtract
     dyStringPrintf(dy, "- ");
 struct trackDb *subTdb;
 for (subTdb=subTracks; subTdb; subTdb = subTdb->next)
