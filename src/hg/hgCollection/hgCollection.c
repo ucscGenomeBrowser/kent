@@ -429,48 +429,75 @@ safef(buffer, sizeof buffer, "NOSQLINJ select fileName from %s", tdb->table);
 return sqlQuickString(conn, buffer);
 }
 
+void dumpTdbAndParents(struct dyString *dy, struct trackDb *tdb, struct hash *existHash, struct hash *wantHash)
+/* Put a trackDb entry into a dyString, stepping up the tree for some variables. */
+{
+struct hashCookie cookie = hashFirst(tdb->settingsHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    if (!hashLookup(existHash, hel->name) && ((wantHash == NULL) || hashLookup(wantHash, hel->name)))
+        {
+        dyStringPrintf(dy, "%s %s\n", hel->name, (char *)hel->val);
+        hashStore(existHash, hel->name);
+        }
+    }
+
+struct hash *newWantHash = newHash(4);
+hashStore(newWantHash, "type"); // right now we only want type from parents
+if (tdb->parent)
+    dumpTdbAndParents(dy, tdb->parent, existHash, newWantHash);
+}
+
+struct dyString *trackDbString(struct trackDb *tdb)
+/* Convert a trackDb entry into a dyString. */
+{
+struct dyString *dy;
+struct hash *existHash = newHash(5);
+struct hashEl *hel;
+
+hel = hashLookup(tdb->settingsHash, "track");
+if (hel == NULL)
+    errAbort("can't find track variable in tdb");
+
+dy = newDyString(200);
+dyStringPrintf(dy, "track %s\n", (char *)hel->val);
+hashStore(existHash, "track");
+
+dumpTdbAndParents(dy, tdb, existHash, NULL);
+
+return dy;
+}
+
+
 static void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, char *visibility, unsigned int color, struct track *track, struct hash *nameHash, struct hash *collectionNameHash, int numTabs, int priority)
 // out the trackDb for one track
 {
 char *dataUrl = NULL;
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
-char *tabs = "\t";
-char *type = "bigWig";
-if (numTabs == 2)
-    tabs = "\t\t";
 
 if (bigDataUrl == NULL)
     {
     if (startsWith("bigWig", tdb->type))
+        {
         dataUrl = getSqlBigWig(conn, db, tdb);
-    else 
-        type = "wig";
+        hashReplace(tdb->settingsHash, "bigDataUrl", dataUrl);
+        }
     }
 
 char *tdbType = trackDbSetting(tdb, "tdbType");
 if (tdbType != NULL)
     hashReplace(tdb->settingsHash, "type", tdbType);
 
-struct hashCookie cookie = hashFirst(tdb->settingsHash);
-struct hashEl *hel;
-fprintf(f, "%strack %s\n",tabs, makeUnique(collectionNameHash, name));
-fprintf(f, "%stype %s\n",tabs, type);
-fprintf(f, "%sshortLabel %s\n",tabs, track->shortLabel);
-fprintf(f, "%slongLabel %s\n",tabs, track->longLabel);
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    if (differentString(hel->name, "parent") && differentString(hel->name, "polished")&& differentString(hel->name, "shortLabel")&& differentString(hel->name, "longLabel")&& differentString(hel->name, "color")&& differentString(hel->name, "visibility")&& differentString(hel->name, "track")&& differentString(hel->name, "trackNames")&& differentString(hel->name, "superTrack")&& differentString(hel->name, "priority")&& differentString(hel->name, "group")&& differentString(hel->name, "type"))
-        fprintf(f, "%s%s %s\n", tabs,hel->name, (char *)hel->val);
-    }
-if (bigDataUrl == NULL)
-    {
-    if (dataUrl != NULL)
-        fprintf(f, "%sbigDataUrl %s\n", tabs,dataUrl);
-    }
-fprintf(f, "%sparent %s\n",tabs,parent);
-fprintf(f, "%scolor %d,%d,%d\n", tabs,(color >> 16) & 0xff,(color >> 8) & 0xff,color & 0xff);
-fprintf(f, "%svisibility %s\n",tabs,visibility);
-fprintf(f, "%spriority %d\n",tabs,priority);
+hashReplace(tdb->settingsHash, "parent", parent);
+hashReplace(tdb->settingsHash, "track", makeUnique(collectionNameHash, name));
+char colorString[64];
+safef(colorString, sizeof colorString, "%d,%d,%d", (color >> 16) & 0xff,(color >> 8) & 0xff,color & 0xff);
+hashReplace(tdb->settingsHash, "color", colorString);
+
+struct dyString *dy = trackDbString(tdb);
+
+fprintf(f, "%s",  dy->string);
 fprintf(f, "\n");
 }
 
@@ -485,16 +512,15 @@ shortLabel %s\n\
 compositeTrack on\n\
 autoScale on\n\
 maxHeightPixels 100:30:11 \n\
+showSubtrackColorOnUi on\n\
 aggregate  none\n\
 longLabel %s\n\
 %s on\n\
 color %ld,%ld,%ld \n\
-viewFunc %s\n\
-missingMethod %s\n\
 type mathWig\n\
 priority %d\n\
 visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
- 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color), collection->viewFunc, collection->missingMethod, priority);
+ 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color),  priority);
 
 }
 
@@ -637,6 +663,10 @@ if ((name == NULL) && (ele->type == jsonObject))
         track->shortLabel = jsonStringEscape(strEle->val.jeString);
         strEle = (struct jsonElement *)hashMustFindVal(attrHash, "longlabel");
         track->longLabel = jsonStringEscape(strEle->val.jeString);
+        track->visibility = "pack";
+        strEle = (struct jsonElement *)hashMustFindVal(attrHash, "color");
+        track->color = hexStringToLong(jsonStringEscape(strEle->val.jeString));
+        /*
         strEle = (struct jsonElement *)hashMustFindVal(attrHash, "visibility");
         track->visibility = jsonStringEscape(strEle->val.jeString);
         strEle = (struct jsonElement *)hashMustFindVal(attrHash, "color");
@@ -647,6 +677,7 @@ if ((name == NULL) && (ele->type == jsonObject))
         strEle = (struct jsonElement *)hashFindVal(attrHash, "missingmethod");
         if (strEle)
             track->missingMethod = jsonStringEscape(strEle->val.jeString);
+            */
         }
     }
 }
