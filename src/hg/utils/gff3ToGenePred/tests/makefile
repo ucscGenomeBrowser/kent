@@ -11,7 +11,7 @@ all::
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
 	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
 	minimalGenesTest geneDefaultStatusUnknownTest useNameTest nameAttrIdTest nameAttrNameTest \
-	frameShiftTest mm10GencodeTest
+	frameShiftTest mm10GencodeTest ncbiSegmentsTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -95,6 +95,12 @@ frameShiftTest: mkout
 # gencode conversion
 mm10GencodeTest: mkout
 	${gff3ToGenePred} -rnaNameAttr=transcript_id -geneNameAttr=gene_id -honorStartStopCodons -attrsOut=output/$@.attrs input/mm10Gencode.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+	diff expected/$@.attrs output/$@.attrs
+
+# NCBI [CDJV]_gene_segment annotations
+ncbiSegmentsTest: mkout
+	${gff3ToGenePred} -rnaNameAttr=transcript_id -geneNameAttr=gene -honorStartStopCodons -attrsOut=output/$@.attrs input/mm10Gencode.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 	diff expected/$@.attrs output/$@.attrs
 

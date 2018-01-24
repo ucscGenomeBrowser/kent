@@ -100,6 +100,37 @@ static FILE *outAttrsFp = NULL;
 static FILE *outBadFp = NULL;
 static FILE *outUnprocessedRootsFp = NULL;
 
+static char **cdsFeatures[] = {
+    &gff3FeatCDS,
+    NULL
+};
+static char **cdjvFeatures[] = {
+    &gff3FeatCGeneSegment,
+    &gff3FeatDGeneSegment,
+    &gff3FeatJGeneSegment,
+    &gff3FeatVGeneSegment,
+    NULL
+};
+static char** geneFeatures[] = {
+    &gff3FeatGene,
+    &gff3FeatPseudogene,
+    NULL
+};
+static char** transFeatures[] = {
+    &gff3FeatMRna,
+    &gff3FeatNCRna,
+    &gff3FeatCDS,
+    &gff3FeatRRna,
+    &gff3FeatTRna,
+    &gff3FeatCGeneSegment,
+    &gff3FeatDGeneSegment,
+    &gff3FeatJGeneSegment,
+    &gff3FeatVGeneSegment,
+    &gff3FeatTranscript,
+    &gff3FeatPrimaryTranscript,
+    NULL
+};
+
 static void cnvError(char *format, ...)
 /* print a GFF3 to gene conversion error.  This will return.  Code must check
  * for error count to be exceeded and unwind to the top level to print a usefull
@@ -143,18 +174,6 @@ if (gff3File->errCnt > 0)
 return gff3File;
 }
 
-static boolean haveChildFeature(struct gff3Ann *parent, char *featName)
-/* does a child feature of the specified they exist as a child */
-{
-struct gff3AnnRef *child;
-for (child = parent->children; child != NULL; child = child->next)
-    {
-    if (sameString(child->ann->type, featName))
-        return TRUE;
-    }
-return FALSE;
-}
-
 static struct gff3AnnRef *getChildFeatures(struct gff3Ann *parent, char *featName)
 /* build sorted list of the specified children */
 {
@@ -166,6 +185,48 @@ for (child = parent->children; child != NULL; child = child->next)
     }
 slSort(&feats, gff3AnnRefLocCmp);
 return feats;
+}
+
+static boolean featTypeMatch(char *type, char** types[])
+/* check if type is in NULL terminated list of feature type name.
+ * This has one extra level of indirection to allow initializing
+ * from GFF3 feature definitions. */
+{
+int i;
+for (i = 0; types[i] != NULL; i++)
+    if (sameString(type, *(types[i])))
+        return TRUE;
+return FALSE;
+}
+
+static struct gff3Ann *findChildTypeMatch(struct gff3Ann *node, struct gff3AnnRef *prevChildRef, char** types[])
+/* Find the first or next child of node of one of the particular types.  The prevChild arg should
+ * be NULL on the first call */
+{
+struct gff3AnnRef *child;
+for (child = ((prevChildRef == NULL) ? node->children : prevChildRef);
+     child != NULL; child = child->next)
+    if (featTypeMatch(child->ann->type, types))
+        return child->ann;
+return NULL;
+}
+
+static boolean haveChildTypeMatch(struct gff3Ann *node, char** types[])
+/* Does the node have a child matching one of the types. */
+{
+return findChildTypeMatch(node, NULL, types) != NULL;
+}
+
+static boolean haveChildFeature(struct gff3Ann *parent, char *featName)
+/* does a child feature of the specified they exist as a child */
+{
+struct gff3AnnRef *child;
+for (child = parent->children; child != NULL; child = child->next)
+    {
+    if (sameString(child->ann->type, featName))
+        return TRUE;
+    }
+return FALSE;
 }
 
 static void setCdsStatFromCodons(struct genePred *gp, struct gff3Ann *mrna)
@@ -536,26 +597,45 @@ if (gp != NULL)
 return gp;  // NULL if error above
 }
 
+static boolean isNcbiLikeSegmentGene(struct gff3Ann *gene)
+/* NCBI annotates [CDJV]_gene_segment genes as a gene with a CDJV]_gene_segment
+ * child with exon children. However the CDS features are direct children of the gene
+ * rather than the [CDJV]_gene_segment.  This is different than all other
+ * transcript for some reason.  This will find NCBI annotations and imitations.   */
+{
+return haveChildTypeMatch(gene, cdsFeatures)
+    && haveChildTypeMatch(gene, cdjvFeatures);
+}
+
+static void fixNcbiLikeSegmentGene(struct gff3Ann *gene)
+/* adjust gene structure (see above) to move CDS under [CDJV]_gene_segment
+ * features */
+{
+struct gff3Ann *cdjvAnn = findChildTypeMatch(gene, NULL, cdjvFeatures);
+
+// move each CDS, always starting search from start due to removing child
+struct gff3Ann *cdsAnn;
+while ((cdsAnn = findChildTypeMatch(gene, NULL, cdsFeatures)) != NULL)
+    {
+    gff3UnlinkChild(gene, cdsAnn);
+    gff3LinkChild(cdjvAnn, cdsAnn);
+    }
+}
+
 static boolean shouldProcessAsTranscript(struct gff3Ann *node)
 /* Decide if we should process this feature as a transcript and turn it into a
  * genePred. */
 {
 char *parentType = node->parents ? node->parents->ann->type : NULL;
 return (processAllGeneChildren
-        && node->parents
-        && (sameString(parentType, gff3FeatGene) || sameString(parentType, gff3FeatPseudogene)))
-    || sameString(node->type, gff3FeatMRna) 
-    || sameString(node->type, gff3FeatNCRna)
-    || sameString(node->type, gff3FeatCDS)
-    || sameString(node->type, gff3FeatRRna)
-    || sameString(node->type, gff3FeatTRna)
-    || sameString(node->type, gff3FeatVGeneSegment)
-    || sameString(node->type, gff3FeatTranscript)
-    || sameString(node->type, gff3FeatPrimaryTranscript);
+        && (node->parents != NULL)
+        && featTypeMatch(parentType, geneFeatures))
+    || featTypeMatch(node->type, transFeatures);
 }
 
 static boolean shouldProcessGeneAsStandard(struct gff3Ann *gene)
-/* does a gene have the standard structure of transcript children? */
+/* does a gene have the standard structure of transcript or transcript-related
+   annotations (like CDS) children? */
 {
 struct gff3AnnRef *child;
 for (child = gene->children; child != NULL; child = child->next)
@@ -619,6 +699,8 @@ static void processGene(FILE *gpFh, struct gff3Ann *gene, struct hash *processed
 /* process a gene node in the tree.  Stop process if maximum errors reached */
 {
 recProcessed(processed, gene);
+if (isNcbiLikeSegmentGene(gene))
+    fixNcbiLikeSegmentGene(gene);
 
 if (shouldProcessGeneAsTranscript(gene))
     processTranscript(gpFh, NULL, gene, processed);

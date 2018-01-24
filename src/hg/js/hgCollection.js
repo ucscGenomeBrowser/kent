@@ -42,6 +42,11 @@ var hgCollection = (function() {
     function currentCollectionItems(node) {
         // populate the menu for the currentCollection tree
         var items = {
+            duplicateItem: { // The "duplicate" menu item
+                label: "Duplicate",
+                action: function () { 
+                }
+            },
             deleteItem: { // The "delete" menu item
                 label: "Delete",
                 action: function () {
@@ -314,9 +319,11 @@ var hgCollection = (function() {
         $.jstree.defaults.core.check_callback = checkCallback;
         $.jstree.defaults.core.themes.dots = true;
         $.jstree.defaults.contextmenu.show_at_node = false;
-        var addedOne = false;
+        var addedOne = true;
+        if ( $("#currentCollection ul").length === 0) {
+            addedOne = false;
+        }
         $("#currentCollection div").each(function(index) {
-            addedOne = true;
             var newTree = this;
 
             $(newTree).jstree({
@@ -343,9 +350,6 @@ var hgCollection = (function() {
             selectedTree = newTree;
         });
 
-        if (!addedOne) {
-            dialogCollection();
-        }
 
         treeDiv=$('#tracks');
         treeDiv.jstree({
@@ -367,6 +371,9 @@ var hgCollection = (function() {
 
         //var firstElement = $("#collectionList li").first();
         //selectElements($("#collectionList"), firstElement) ;
+        if (!addedOne) {
+            dialogCollection();
+        }
     }
 
    function submitForm() {
