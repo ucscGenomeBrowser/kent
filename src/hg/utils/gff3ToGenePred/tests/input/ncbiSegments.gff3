@@ -1,0 +1,35 @@
+##gff-version 3
+
+# Examples from:
+# genome-build ASM185804v2
+# genome-build-accession NCBI_Assembly:GCF_001858045.1
+# annotation-source NCBI Oreochromis niloticus Annotation Release 103
+
+
+# V_gene_segment has CDS as gene children
+NC_031969.1	Gnomon	gene	532792	533929	.	+	.	ID=gene4957;Dbxref=GeneID:109201834;Name=LOC109201834;gbkey=Gene;gene=LOC109201834;gene_biotype=V_segment
+NC_031969.1	Gnomon	V_gene_segment	532792	533929	.	+	.	ID=id86045;Parent=gene4957;Dbxref=GeneID:109201834;gbkey=V_segment;gene=LOC109201834;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 100%25 coverage of the annotated genomic feature by RNAseq alignments%2C including 21 samples with support for all annotated introns
+NC_031969.1	Gnomon	exon	532792	533146	.	+	.	ID=id86046;Parent=id86045;Dbxref=GeneID:109201834;gbkey=V_segment;gene=LOC109201834;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 100%25 coverage of the annotated genomic feature by RNAseq alignments%2C including 21 samples with support for all annotated introns
+NC_031969.1	Gnomon	exon	533255	533929	.	+	.	ID=id86047;Parent=id86045;Dbxref=GeneID:109201834;gbkey=V_segment;gene=LOC109201834;model_evidence=Supporting evidence includes similarity to: 1 Protein%2C and 100%25 coverage of the annotated genomic feature by RNAseq alignments%2C including 21 samples with support for all annotated introns
+NC_031969.1	Gnomon	CDS	533092	533146	.	+	0	ID=cds6864;Parent=gene4957;Dbxref=GeneID:109201834;exception=rearrangement required for product;gbkey=CDS;gene=LOC109201834;product=immunoglobulin kappa variable 1-39-like
+NC_031969.1	Gnomon	CDS	533255	533628	.	+	2	ID=cds6864;Parent=gene4957;Dbxref=GeneID:109201834;exception=rearrangement required for product;gbkey=CDS;gene=LOC109201834;product=immunoglobulin kappa variable 1-39-like
+
+# Examples from:
+# genome-build GRCh38.p11
+# genome-build-accession NCBI_Assembly:GCF_000001405.37
+# annotation-source NCBI Homo sapiens Annotation Release 108
+
+NC_000007.14	Curated Genomic	gene	142786213	142786224	.	+	.	ID=gene22372;Dbxref=GeneID:28637,HGNC:HGNC:12158,IMGT/GENE-DB:TRBD1,MIM:615447;Name=TRBD1;description=T cell receptor beta diversity 1;gbkey=Gene;gene=TRBD1;gene_biotype=D_segment;gene_synonym=TCRBD1
+NC_000007.14	Curated Genomic	D_gene_segment	142786213	142786224	.	+	.	ID=id775054;Parent=gene22372;Dbxref=GeneID:28637,HGNC:HGNC:12158,IMGT/GENE-DB:TRBD1,MIM:615447;gbkey=D_segment;gene=TRBD1;standard_name=TRBD1
+NC_000007.14	Curated Genomic	exon	142786213	142786224	.	+	.	ID=id775055;Parent=id775054;Dbxref=GeneID:28637,HGNC:HGNC:12158,IMGT/GENE-DB:TRBD1,MIM:615447;gbkey=D_segment;gene=TRBD1;standard_name=TRBD1
+NC_000007.14	Curated Genomic	CDS	142786213	142786224	.	+	0	ID=cds44585;Parent=gene22372;Dbxref=GeneID:28637,HGNC:HGNC:12158,IMGT/GENE-DB:TRBD1,MIM:615447;end_range=142786224,.;exception=rearrangement required for product;gbkey=CDS;gene=TRBD1;partial=true;start_range=.,142786213
+
+NC_000007.14	Curated Genomic	gene	142786880	142786927	.	+	.	ID=gene22373;Dbxref=GeneID:28635,HGNC:HGNC:12162,IMGT/GENE-DB:TRBJ1-1;Name=TRBJ1-1;description=T cell receptor beta joining 1-1;gbkey=Gene;gene=TRBJ1-1;gene_biotype=J_segment;gene_synonym=TCRBJ1S1,TRBJ11
+NC_000007.14	Curated Genomic	J_gene_segment	142786880	142786927	.	+	.	ID=id775056;Parent=gene22373;Dbxref=GeneID:28635,HGNC:HGNC:12162,IMGT/GENE-DB:TRBJ1-1;gbkey=J_segment;gene=TRBJ1-1;standard_name=TRBJ1-1
+NC_000007.14	Curated Genomic	exon	142786880	142786927	.	+	.	ID=id775057;Parent=id775056;Dbxref=GeneID:28635,HGNC:HGNC:12162,IMGT/GENE-DB:TRBJ1-1;gbkey=J_segment;gene=TRBJ1-1;standard_name=TRBJ1-1
+NC_000007.14	Curated Genomic	CDS	142786880	142786927	.	+	2	ID=cds44586;Parent=gene22373;Dbxref=GeneID:28635,HGNC:HGNC:12162,IMGT/GENE-DB:TRBJ1-1;end_range=142786927,.;exception=rearrangement required for product;gbkey=CDS;gene=TRBJ1-1;partial=true;start_range=.,142786880
+
+NC_000001.11	BestRefSeq	gene	450740	451678	.	-	.	ID=gene23;Dbxref=GeneID:729759,HGNC:HGNC:31275;Name=OR4F29;description=olfactory receptor family 4 subfamily F member 29;gbkey=Gene;gene=OR4F29;gene_biotype=protein_coding;gene_synonym=OR7-21
+NC_000001.11	BestRefSeq	mRNA	450740	451678	.	-	.	ID=rna47;Parent=gene23;Dbxref=GeneID:729759,Genbank:NM_001005221.2,HGNC:HGNC:31275;Name=NM_001005221.2;gbkey=mRNA;gene=OR4F29;product=olfactory receptor family 4 subfamily F member 29;transcript_id=NM_001005221.2
+NC_000001.11	BestRefSeq	exon	450740	451678	.	-	.	ID=id271;Parent=rna47;Dbxref=GeneID:729759,Genbank:NM_001005221.2,HGNC:HGNC:31275;gbkey=mRNA;gene=OR4F29;product=olfactory receptor family 4 subfamily F member 29;transcript_id=NM_001005221.2
+NC_000001.11	BestRefSeq	CDS	450740	451678	.	-	0	ID=cds6;Parent=rna47;Dbxref=CCDS:CCDS72675.1,GeneID:729759,Genbank:NP_001005221.2,HGNC:HGNC:31275;Name=NP_001005221.2;gbkey=CDS;gene=OR4F29;product=olfactory receptor 4F3/4F16/4F29;protein_id=NP_001005221.2
