@@ -359,7 +359,7 @@ if (warnAndContinue)
 	}
     else
 	{
-	warn("dropping invalid genePred: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
+	warn("Warning: dropping invalid genePred: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
 	if (outBadFp)
 	    genePredTabOut(gp, outBadFp);
 	}
@@ -608,18 +608,17 @@ return haveChildTypeMatch(gene, cdsFeatures)
 }
 
 static void fixNcbiLikeSegmentGene(struct gff3Ann *gene)
-/* adjust gene structure (see above) to move CDS under [CDJV]_gene_segment
- * features */
+/* adjust gene structure (see above) dropping CDS annotation and keeping
+ * [CDJV]_gene_segment features as `transcripts' along with their exons.
+ * Sometimes the CDS extends outside of exon bounds.  For multi-transcript
+ * genes it is hard to figure out where to put the CDS. */
 {
-struct gff3Ann *cdjvAnn = findChildTypeMatch(gene, NULL, cdjvFeatures);
-
-// move each CDS, always starting search from start due to removing child
+// Drop CDS, always starting search from start due to removing
+warn("Warning: dropping CDS from %s at %s:%d-%d as we are unable to convert this form of annotation to genePred",
+     gene->type, gene->seqid, gene->start, gene->end);
 struct gff3Ann *cdsAnn;
 while ((cdsAnn = findChildTypeMatch(gene, NULL, cdsFeatures)) != NULL)
-    {
     gff3UnlinkChild(gene, cdsAnn);
-    gff3LinkChild(cdjvAnn, cdsAnn);
-    }
 }
 
 static boolean shouldProcessAsTranscript(struct gff3Ann *node)

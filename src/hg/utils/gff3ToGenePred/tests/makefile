@@ -100,9 +100,10 @@ mm10GencodeTest: mkout
 
 # NCBI [CDJV]_gene_segment annotations
 ncbiSegmentsTest: mkout
-	${gff3ToGenePred} -rnaNameAttr=transcript_id -geneNameAttr=gene -honorStartStopCodons -attrsOut=output/$@.attrs input/mm10Gencode.gff3 output/$@.gp
+	${gff3ToGenePred} -rnaNameAttr=transcript_id -geneNameAttr=gene -honorStartStopCodons -attrsOut=output/$@.attrs input/ncbiSegments.gff3 output/$@.gp > output/$@.out 2>&1
 	diff expected/$@.gp output/$@.gp
 	diff expected/$@.attrs output/$@.attrs
+	diff expected/$@.out output/$@.out
 
 mkout:
 	@mkdir -p output
