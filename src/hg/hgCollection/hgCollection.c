@@ -284,7 +284,7 @@ for(tdb = trackList; tdb; tdb = tdb->next)
 slSort(&tdbRefList, tdbRefCompare);
 
 jsInlineF("<ul>");
-jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' name='%s'>%s", "visibile", "Visible Tracks");
+jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop folder' name='%s'>%s", "visibile", "Visible Tracks");
 jsInlineF("<ul>");
 for(tdbRef = tdbRefList; tdbRef; tdbRef = tdbRef->next)
     printGroup("visible", tdbRef->tdb, FALSE, FALSE);
@@ -331,7 +331,7 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
         continue;
     jsInlineF("<ul>");
-    jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' name='%s'>%s", curGroup->name, curGroup->label );
+    jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop folder' name='%s'>%s", curGroup->name, curGroup->label );
     struct trackDb *tdb;
     jsInlineF("<ul>");
     for(tdb = trackList; tdb;  tdb = tdb->next)
@@ -643,19 +643,13 @@ if ((name == NULL) && (ele->type == jsonObject))
     char *parentName = jsonStringEscape(parentEle->val.jeString);
 
     AllocVar(track);
-    if (sameString(parentName, "#"))
-        slAddHead(collectionList, track);
-    else
-        {
-        struct track *parent = hashMustFindVal(trackHash, parentName);
-        slAddTail(&parent->trackList, track);
-        }
-
     struct jsonElement *attEle = hashFindVal(objHash, "li_attr");
     if (attEle)
         {
         struct hash *attrHash = jsonObjectVal(attEle, "name");
-        struct jsonElement *strEle = (struct jsonElement *)hashMustFindVal(attrHash, "name");
+        struct jsonElement *strEle = (struct jsonElement *)hashFindVal(attrHash, "name");
+        if (strEle == NULL)
+            return;
         track->name = jsonStringEscape(strEle->val.jeString);
         hashAdd(trackHash, parentId, track);
 
@@ -679,6 +673,15 @@ if ((name == NULL) && (ele->type == jsonObject))
             track->missingMethod = jsonStringEscape(strEle->val.jeString);
             */
         }
+
+    if (sameString(parentName, "#"))
+        slAddHead(collectionList, track);
+    else
+        {
+        struct track *parent = hashMustFindVal(trackHash, parentName);
+        slAddTail(&parent->trackList, track);
+        }
+
     }
 }
 

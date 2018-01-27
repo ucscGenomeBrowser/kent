@@ -1,16 +1,18 @@
-// hgCollection.js - Interactive features for GTEX Body Map version of GTEx Gene track UI page
+// hgCollection.js - custom collection builder
 
-// Copyright (C) 2017 The Regents of the University of California
+// Copyright (C) 2018 The Regents of the University of California
 
 var hgCollection = (function() {
     var names = []; // a list of names that have been used
-    var selectedNode = "collectionList"; // keep track of id of selected row
-    var selectedTree = "collectionList"; // keep track of id of selected row
+    var selectedNode;
+    var selectedTree;
     var $tracks;  // the #tracks object
     var trees = [];
     var isDirty = false;
     var goTracks = false;
     var doAjaxAsync = true;
+    var emptyCollectionText;
+    var addWithoutCollectionText;
 
     function currentTrackItems(node) {
         // populate the menu for the currentCollection tree
@@ -42,11 +44,6 @@ var hgCollection = (function() {
     function currentCollectionItems(node) {
         // populate the menu for the currentCollection tree
         var items = {
-            duplicateItem: { // The "duplicate" menu item
-                label: "Duplicate",
-                action: function () { 
-                }
-            },
             deleteItem: { // The "delete" menu item
                 label: "Delete",
                 action: function () {
@@ -57,23 +54,18 @@ var hgCollection = (function() {
             }
         };
 
-        // can't delete root
-        //if ($(node).attr('parent') === '#')
-            //delete items.deleteItem;
-
         return items;
         }
 
     function changeCollection() {
         $( "#newCollectionDialog" ).dialog("close");
         selectedNode.li_attr.class = "folder";
-        selectedNode.li_attr.shortlabel = $("#customName").val();
-        selectedNode.li_attr.longlabel = $("#customDescription").val();
+        selectedNode.li_attr.shortlabel = $("#customName").val().trim();
+        selectedNode.li_attr.longlabel = $("#customDescription").val().trim();
         selectedNode.li_attr.visibility = $("#customVis").val();
         selectedNode.li_attr.color = $("#customColorInput").val();
         selectedNode.li_attr.missingmethod = $("input:radio[name ='missingData']:checked").val();
         selectedNode.li_attr.viewfunc = $("#viewFunc").val();
-        //newNode.li_attr.viewtype = "view";
         rebuildLabel();
     }
 
@@ -108,6 +100,16 @@ var hgCollection = (function() {
 
         $("#doNewCollection").off ( "click" );
         $("#doNewCollection").click ( changeCollection );
+        if (type == 'collection')  {
+            $( "#newCollectionDialog" ).dialog( 'option', 'title', 'Edit Collection');
+            $('#collectionDialogHelp').show();
+            $('#trackDialogHelp').hide();
+        } else {
+            $( "#newCollectionDialog" ).dialog( 'option', 'title', 'Edit Track');
+            $('#collectionDialogHelp').hide();
+            $('#trackDialogHelp').show();
+        }
+
         $( "#newCollectionDialog" ).dialog("open");
     }
 
@@ -115,7 +117,7 @@ var hgCollection = (function() {
         // called when a node in the currentCollection tree is selected
         selectedNode = node;
         selectedTree = tree;
-        $(selectedTree).jstree("toggle_node", selectedNode);
+        $(selectedTree).jstree("open_node", selectedNode);
    }
 
     function doubleClickTreeNode(evt, data)             {
@@ -129,12 +131,12 @@ var hgCollection = (function() {
     function checkCallback( operation, node, node_parent, node_position, more) {
         // called during a drag and drop action to see if the target is droppable
         if ((operation === "copy_node") ||  (operation === "move_node")) {
-            if (node.li_attr.class === "folder") {
+            if (node.li_attr.class.includes("folder")) {
                 if (node_parent.id !== '#') {
                     return false;
                 }
             }
-            else if (node_parent.li_attr.class !== "folder") {
+            else if (!node_parent.li_attr.class.includes("folder")) {
                 return false;
             }
         }
@@ -149,32 +151,40 @@ var hgCollection = (function() {
         $("#customDescription").val("A New Collection Description");
         $("#customVis").val("full");
         $("#customColorInput").val("#0");
-        //$("input:radio[name ='missingData']:checked").val();
         $("#viewFunc").val("show all");
         $( "#customName" ).select();
+        $('#collectionDialogHelp').show();
+        $('#trackDialogHelp').hide();
+        $( "#newCollectionDialog" ).dialog( 'option', 'title', 'Create New Collection');
         $( "#newCollectionDialog" ).dialog("open");
     } 
 
     function newCollection() {
-        $( "#newCollectionDialog" ).dialog("close");
+        var newName = $("#customName").val().trim();
+        if (!validateLabel(newName))
+            return;
+
+        var newDescription = $("#customDescription").val().trim();
+        if (!validateLabel(newDescription))
+            return;
         var ourCollectionName = getUniqueName("coll");
-        var newName = $("#customName").val();
-        var newDescription = $("#customDescription").val();
         var parent = $(selectedTree).find("li").first();
+        $( "#newCollectionDialog" ).dialog("close");
 
         var newId = $(selectedTree).jstree("create_node", "#", newName + " (" + newDescription + ")");
+        var newId2 = $(selectedTree).jstree("create_node", newId, emptyCollectionText);
+        $("#newCollectionHint").hide();
         var newNode = $(selectedTree).jstree("get_node", newId);
         isDirty = true;
-        newNode.li_attr.class = "folder";
+        newNode.li_attr.class = "folder empty";
         newNode.li_attr.name = ourCollectionName;
-        newNode.li_attr.shortlabel = $("#customName").val();
-        newNode.li_attr.longlabel = $("#customDescription").val();
+        newNode.li_attr.shortlabel = newName;
+        newNode.li_attr.longlabel = newDescription;
         newNode.li_attr.visibility = $("#customVis").val();
         newNode.li_attr.color = $("#customColorInput").val();
         newNode.li_attr.missingmethod = $("input:radio[name ='missingData']:checked").val();
         newNode.li_attr.viewfunc = $("#viewFunc").val();
         newNode.li_attr.viewtype = "collection";
-        //selectedNode = newNode;
         $(selectedTree).jstree("set_icon", newNode, '../images/folderC.png');
         $(selectedTree).jstree("deselect_node", selectedNode);
         $(selectedTree).jstree("select_node", newNode.id);
@@ -196,14 +206,13 @@ var hgCollection = (function() {
         var children;
         var parents = {};
         for(ii=0; ii < v.length; ii++) {
-            if (v[ii].parent !== '#') {
-                parents[v[ii].parent] = 1;
+            if (v[ii].parent === '#') {
+                parents[v[ii].id] = v[ii].text;
             }
         }
         for(ii=0; ii < v.length; ii++) { 
-            if (v[ii].li_attr.class === "folder") {
-                if (parents[v[ii].id] !== 1)
-                    alert(v[ii].text + " does not have any wiggles.  Not saved");
+            if (v[ii].li_attr.class === undefined) {
+                alert(parents[v[ii].parent] + " does not have any wiggles.  Not saved.");
             }
         }
         json += JSON.stringify(v);
@@ -225,6 +234,7 @@ var hgCollection = (function() {
         // rebuild the label for tree item
         var newText = selectedNode.li_attr.shortlabel + "   (" + selectedNode.li_attr.longlabel + ")";
         $(selectedTree).jstree('rename_node', selectedNode, newText);
+        isDirty = true;
     }
 
     function colorChange() {
@@ -253,11 +263,24 @@ var hgCollection = (function() {
 
     function plusHit(event, data) {
         // called with the plus icon is hit
+        if (selectedNode === undefined) {
+            alert(addWithoutCollectionText);
+            return;
+        }
+
         var treeObject = $(event.currentTarget).parent().parent();
         var id = treeObject.attr('id');
         var node = treeObject.jstree("get_node", id);
         if (node.children.length === 0) {
             var parentId = $(selectedNode).attr('id');
+            var parentNode = $(selectedTree).jstree('get_node', parentId);
+            if ($('#'+parentId).hasClass('empty')) {
+                var stub = parentNode.children[0];
+                $(selectedTree).jstree('delete_node', stub);
+                $('#'+parentId).removeClass('empty');
+                parentNode.li_attr.class = 'folder';
+            }
+
             isDirty = true;
             $(selectedTree).jstree("copy_node", node, parentId,'last');
         }
@@ -271,6 +294,11 @@ var hgCollection = (function() {
         //if (node.children.length === 0) {
         if (node.li_attr.class !== "folder") {
             isDirty = true;
+            var parentNode = treeObject.jstree("get_node", node.parent);
+            if (parentNode.children.length === 1) {
+                treeObject.jstree("create_node", node.parent, emptyCollectionText);
+                parentNode.li_attr.class = "folder empty";
+            }
             $(selectedTree).jstree( "delete_node", node);
         }
     }
@@ -278,6 +306,9 @@ var hgCollection = (function() {
     function init() {
         // called at initialization time
         $body = $("body");
+
+        emptyCollectionText = $('#emptyCollectionText').text();
+        addWithoutCollectionText = $('#addWithoutCollectionText').text();
 
         // block user input when ajax is running
         $(document).on({
@@ -319,18 +350,22 @@ var hgCollection = (function() {
         $.jstree.defaults.core.check_callback = checkCallback;
         $.jstree.defaults.core.themes.dots = true;
         $.jstree.defaults.contextmenu.show_at_node = false;
-        var addedOne = true;
-        if ( $("#currentCollection ul").length === 0) {
-            addedOne = false;
+        var addedOne = false;
+        if ( $("#currentCollection ul").length !== 0) {
+            addedOne = true;
         }
         $("#currentCollection div").each(function(index) {
             var newTree = this;
 
             $(newTree).jstree({
-               'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
+               //'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
+               'plugins' : [ 'conditionalselect', 'contextmenu'],
                'contextmenu': { "items" : currentCollectionItems},
+               'core': {
+                   "dblclick_toggle" : false,
+                },
                'dnd': {
-                "check_callback" : checkCallback,
+                    "check_callback" : checkCallback,
                 }
             });
             recordNames(newTree);
@@ -353,26 +388,27 @@ var hgCollection = (function() {
 
         treeDiv=$('#tracks');
         treeDiv.jstree({
-               'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
+               'plugins' : ['conditionalselect', 'contextmenu'],
                'contextmenu': { "items" : currentTrackItems},
                'dnd': {
-                "check_callback" : checkCallback,
-               'always_copy' : true,
-                is_draggable: isDraggable,
+                    "check_callback" : checkCallback,
+                   'always_copy' : true,
+                    is_draggable: isDraggable,
                },
                'core' :  {
-                "check_callback" : checkCallback
-            }
+                   "check_callback" : checkCallback,
+                   "dblclick_toggle" : false,
+                },
         });
         treeDiv.on("select_node.jstree", function (evt, data)  {
-            $(evt.target).jstree("toggle_node", data.node);
+            $(evt.target).jstree("open_node", data.node);
         });
         treeDiv.on('click', '.jstree-themeicon ', plusHit);
+        var firstChild = $(treeDiv).find("li").first();
+        $(treeDiv).jstree("select_node", $(firstChild).attr("id"));
 
-        //var firstElement = $("#collectionList li").first();
-        //selectElements($("#collectionList"), firstElement) ;
-        if (!addedOne) {
-            dialogCollection();
+        if (addedOne) {
+            $("#newCollectionHint").hide();
         }
     }
 

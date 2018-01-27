@@ -560,6 +560,17 @@ function validateFloat(obj,min,max)
     }
 }
 
+function validateLabel(label)
+{   // returns true if label is valid
+
+    var regexp = /^[a-z0-9][ a-z0-9]*$/i;
+    if (regexp.test(label)) {
+        return true;
+    } else {
+        alert(label + " is an invalid label");
+        return false;
+    }
+}
 function validateUrl(url)
 {   // returns true if url is a valid url, otherwise returns false and shows an alert
 
