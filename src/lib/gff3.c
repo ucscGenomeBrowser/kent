@@ -58,6 +58,9 @@ char *gff3FeatStartCodon = "start_codon";
 char *gff3FeatStopCodon = "stop_codon";
 char *gff3FeatTranscript = "transcript";
 char *gff3FeatPrimaryTranscript = "primary_transcript";
+char *gff3FeatCGeneSegment = "C_gene_segment";
+char *gff3FeatDGeneSegment = "D_gene_segment";
+char *gff3FeatJGeneSegment = "J_gene_segment";
 char *gff3FeatVGeneSegment = "V_gene_segment";
 
 static bool gff3FileStopDueToErrors(struct gff3File *g3f)
@@ -1114,3 +1117,30 @@ if (diff == 0)
     diff = a->end - b->end;
 return diff;
 }
+
+void gff3UnlinkChild(struct gff3Ann *g3a,
+                     struct gff3Ann *child)
+/* unlink the child from it's parent (do not free) */
+{
+struct gff3AnnRef *childRef;
+for (childRef = g3a->children; childRef != NULL; childRef = childRef->next)
+    if (childRef->ann == child)
+        break;
+if (childRef == NULL)
+    errAbort("gff3UnlinkChild: not a child of specified parent");
+slRemoveEl(&g3a->children, childRef);
+child->parentIds = NULL;
+child->parents = NULL;
+}
+
+void gff3LinkChild(struct gff3Ann *g3a,
+                   struct gff3Ann *child)
+/* Add a child to new parent */
+{
+struct gff3AnnRef *childRef = gff3AnnRefAlloc(child);
+slSafeAddHead(&g3a->children, childRef);
+slSort(&g3a->children, gff3AnnRefLocCmp);
+slAddHead(&child->parentIds, gff3FileSlNameNew(g3a->file, g3a->id));
+slAddHead(&child->parents, gff3AnnRefAlloc(g3a));
+}
+
