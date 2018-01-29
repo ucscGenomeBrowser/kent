@@ -30,6 +30,7 @@ var hgCollection = (function() {
                             nodes.push(node);
                     }
                     var parentId = $(selectedNode).attr('id');
+                    checkEmpty(parentId);
                     $(selectedTree).jstree("copy_node", nodes, parentId,'last');
                 }
             }
@@ -48,8 +49,14 @@ var hgCollection = (function() {
                 label: "Delete",
                 action: function () {
                     var nodes = $(selectedTree).jstree( "get_selected");
+                    var parentNode = $(selectedTree).jstree("get_node", node.parent);
                     isDirty = true;
+                    if (parentNode.children.length === nodes.length) {
+                        $(selectedTree).jstree("create_node", node.parent, emptyCollectionText);
+                        parentNode.li_attr.class = "folder empty";
+                    }
                     $(selectedTree).jstree( "delete_node", nodes);
+                    $(selectedTree).jstree( "select_node", parentNode.id);
                 }
             }
         };
@@ -261,6 +268,16 @@ var hgCollection = (function() {
         }
     }
 
+    function checkEmpty(parentId) {
+        if ($('#'+parentId).hasClass('empty')) {
+            var parentNode = $(selectedTree).jstree('get_node', parentId);
+            var stub = parentNode.children[0];
+            $(selectedTree).jstree('delete_node', stub);
+            $('#'+parentId).removeClass('empty');
+            parentNode.li_attr.class = 'folder';
+        }
+    }
+
     function plusHit(event, data) {
         // called with the plus icon is hit
         if (selectedNode === undefined) {
@@ -273,14 +290,7 @@ var hgCollection = (function() {
         var node = treeObject.jstree("get_node", id);
         if (node.children.length === 0) {
             var parentId = $(selectedNode).attr('id');
-            var parentNode = $(selectedTree).jstree('get_node', parentId);
-            if ($('#'+parentId).hasClass('empty')) {
-                var stub = parentNode.children[0];
-                $(selectedTree).jstree('delete_node', stub);
-                $('#'+parentId).removeClass('empty');
-                parentNode.li_attr.class = 'folder';
-            }
-
+            checkEmpty(parentId);
             isDirty = true;
             $(selectedTree).jstree("copy_node", node, parentId,'last');
         }

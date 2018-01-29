@@ -101,7 +101,7 @@ if (user)
         userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='collection' class='folder'";
         }
     else
-        userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-minus-square\\\"}' viewType='track'";
+        userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-minus-square\\\"}' class='track' viewType='track'";
     }
 else
     {
