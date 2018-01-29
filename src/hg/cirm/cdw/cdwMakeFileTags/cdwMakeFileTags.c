@@ -61,13 +61,13 @@ while ((row = sqlNextRow(sr)) != NULL)
      if (!hashLookup(hash, id))
          {
 	 if (deleteAny)
-	     dyStringAppendC(dy, ',');
+	     sqlDyStringPrintf(dy, ",");
 	 else
 	     deleteAny = TRUE;
-	 dyStringAppend(dy, id);
+	 sqlDyStringPrintf(dy, "'%s'", id);
 	 }
      }
-dyStringPrintf(dy, ")");
+sqlDyStringPrintf(dy, ")");
 sqlFreeResult(&sr);
 
 if (deleteAny)

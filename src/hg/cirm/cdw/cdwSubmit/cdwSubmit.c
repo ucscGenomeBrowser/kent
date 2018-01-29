@@ -430,9 +430,8 @@ sqlDyStringPrintf(dy, "update cdwFile set "
        , ef->cdwFileName, ef->startUploadTime, ef->endUploadTime
        , ef->md5, ef->size, ef->updateTime, ef->metaTagsId
        , ef->userAccess, ef->groupAccess, ef->allAccess);
-dyStringAppend(dy, ", tags='");
-dyStringAppend(dy, ef->tags);
-dyStringPrintf(dy, "' where id=%d", ef->id);
+sqlDyStringPrintf(dy, ", tags='%s'", ef->tags);
+sqlDyStringPrintf(dy, " where id=%d", ef->id);
 sqlUpdate(conn, dy->string);
 
 /* We also will add file to the group */

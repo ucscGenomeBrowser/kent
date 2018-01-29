@@ -45,8 +45,7 @@ void cdwRunOnIds(char *program, char *queryString)
  * putting it on cdwJob queue. */
 {
 struct dyString *wrappedQuery = dyStringNew(0);
-sqlDyStringPrintf(wrappedQuery, " ");
-dyStringAppend(wrappedQuery, queryString);
+sqlDyStringPrintf(wrappedQuery, "%-s", queryString); // trust
 struct sqlConnection *conn = cdwConnectReadWrite();
 struct slName *id, *idList = sqlQuickList(conn, wrappedQuery->string);
 for (id = idList; id != NULL; id = id->next)
