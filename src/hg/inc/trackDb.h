@@ -425,6 +425,7 @@ typedef enum _eCfgType
     cfgSnake    =12,
     cfgLong     =13,
     cfgBarChart =14,
+    cfgInteract =15,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 

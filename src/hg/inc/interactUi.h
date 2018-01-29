@@ -13,4 +13,14 @@
 #define INTERACT_MINSCORE "minScore"
 #define INTERACT_DEFMINSCORE "0"
 
+#define INTERACT_DRAW           "draw"
+#define INTERACT_DRAW_LINE      "line"
+#define INTERACT_DRAW_ELLIPSE   "ellipse"
+#define INTERACT_DRAW_CURVE     "curve"
+#define INTERACT_DRAW_DEFAULT   INTERACT_DRAW_CURVE
+
+void interactCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char *track,
+                        char *title, boolean boxed);
+/* Bar chart track type */
+
 #endif

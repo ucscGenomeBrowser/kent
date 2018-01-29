@@ -47,11 +47,12 @@ static void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a list of interact structures. */
 {
-/* Choose drawing style by cart var (at least for now) */
 #define DRAW_LINE       0
 #define DRAW_CURVE      1
 #define DRAW_ELLIPSE    2
-char *drawMode = cartUsualString(cart, "interaction", "line");
+
+char *drawMode = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
+                                INTERACT_DRAW, INTERACT_DRAW_DEFAULT);
 int draw  = DRAW_LINE;
 if (sameString(drawMode, "curve"))
     draw = DRAW_CURVE;
@@ -92,9 +93,8 @@ for (inter=inters; inter; inter=inter->next)
             continue;
         int labelWidth = vgGetFontStringWidth(hvg->vg, font, inter->chrom2);
         // TODO: simplify now that center approach is abandoned
-        int s = (inter->chromEnd1 - inter->chromStart1 + .5) / 2;
-        int sx = ((s - seqStart) + .5) * scale + xOff; // x coord of center
-        int labelStart = sx - labelWidth/2;
+        int sx = ((inter->chromStart1 - seqStart) + .5) * scale + xOff; // x coord of center
+        int labelStart = (double)sx - labelWidth/2;
         int labelEnd = labelStart + labelWidth - 1;
         if (labelStart <= prevLabelEnd && 
                 !(labelStart == prevLabelStart && labelEnd == prevLabelEnd && 
@@ -195,8 +195,9 @@ for (inter=inters; inter; inter=inter->next)
             {
             mapBoxHgcOrHgGene(hvg, s, s, sx - 2, yOffOther, 4, height,
                                    tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
+            safef(buffer, sizeof buffer, "%s", inter->strand[0] == '+' ? 
+                                        inter->chrom2 : inter->chrom1);
 
-            safef(buffer, sizeof buffer, "%s", inter->chrom2);
             if (doOtherLabels)
                 {
                 hvGfxTextCentered(hvg, sx, yPos + 2, 4, 4, MG_BLUE, font, buffer);

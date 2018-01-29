@@ -49,6 +49,7 @@
 #include "tagRepo.h"
 #include "fieldedTable.h"
 #include "barChartUi.h"
+#include "interactUi.h"
 #include "customComposite.h"
 #include "trackVersion.h"
 #include "hubConnect.h"
@@ -4184,6 +4185,8 @@ switch(cType)
     case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgBarChart:   barChartCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
+    case cfgInteract:   interactCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
