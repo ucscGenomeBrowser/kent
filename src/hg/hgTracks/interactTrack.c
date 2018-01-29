@@ -93,12 +93,13 @@ for (inter=inters; inter; inter=inter->next)
             continue;
         int labelWidth = vgGetFontStringWidth(hvg->vg, font, inter->chrom2);
         // TODO: simplify now that center approach is abandoned
-        int sx = ((inter->chromStart1 - seqStart) + .5) * scale + xOff; // x coord of center
+        int sx = ((inter->chromStart - seqStart) + .5) * scale + xOff; // x coord of center
         int labelStart = (double)sx - labelWidth/2;
         int labelEnd = labelStart + labelWidth - 1;
+        char *otherChrom = (inter->strand[0] == '+') ? inter->chrom2 : inter->chrom1;
         if (labelStart <= prevLabelEnd && 
                 !(labelStart == prevLabelStart && labelEnd == prevLabelEnd && 
-                    sameString(inter->chrom1, prevLabel)))
+                    sameString(otherChrom, prevLabel)))
             doOtherLabels = FALSE;
         prevLabelStart = labelStart;
         prevLabelEnd = labelEnd;
@@ -142,6 +143,12 @@ for (inter=inters; inter; inter=inter->next)
         lowEnd = inter->chromEnd2;
         highStart = inter->chromStart1;
         highEnd = inter->chromEnd1;
+        }
+    // TODO: cleanup
+    if (differentString(inter->chrom1, inter->chrom2))
+        {
+        lowStart = inter->chromStart;
+        lowEnd = inter->chromEnd;
         }
     unsigned s = lowStart + ((double)(lowEnd - lowStart + .5) / 2);
     int sx = ((s - seqStart) + .5) * scale + xOff; // x coord of center (lower region)
