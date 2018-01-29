@@ -282,6 +282,7 @@ int *wiggleSpanList(struct sqlConnection *conn, struct trackDb *tdb);
 #define AUTOSCALEDEFAULT "autoScaleDefault"
 #define LINEBAR "lineBar"
 #define AGGREGATE "aggregate"
+#define VIEWFUNC "viewFunc"
 #define GRAPHTYPE "graphType"
 #define GRAPHTYPEDEFAULT "graphTypeDefault"
 #define WINDOWINGFUNCTION "windowingFunction"

@@ -69,7 +69,7 @@ body.loading .modal {
 
 <div class='row gbTrackTitleBanner'>
     <div class='col-md-4'>
-        <span id='assembly' style='margin-left:6px' class='gbTrackName'></span>
+        <span id='assembly' class='gbTrackName'></span>
     </div>
     <div class='col-md-5'>
         <span class='gbTrackTitle'>Track Group Collections</span>
@@ -83,7 +83,7 @@ body.loading .modal {
     <div style='font-size:12px' class='col-md-3 text-right'>
         <div style='font-size:10px' class='gbButtonGo' id='discardChanges'>Discard Changes</div>
         <div class='gbButtonGoContainer text-right' title='Save and Go To Browser'>
-            <div class='gbButtonGo' id='goButton'>GO</div><i style='margin-left:3px' class='gbIconGo fa fa-play fa-2x'></i> 
+            <div class='gbButtonGo' id='goButton'>GO</div><i class='gbIconGo fa fa-play fa-2x'></i> 
         </div>
     </div>
 </div>
@@ -94,28 +94,23 @@ body.loading .modal {
             <div class='col-md-8'>Available Tracks</div>
         </div>
         <div>
-        <div style='margin:12px; font-size:12px'> Below are tracks are available to add to collections. To add new tracks from hubs or custom tracks, load the hub or custom track into the browser and then return to this list. </div>
-
+        <div > Below are tracks are available to add to collections. To add new tracks from hubs or custom tracks, load the hub or custom track into the browser and then return to this list. </div>
         </div>
-        <div id='tracks'>
+        <div id='tracks' style='overflow:auto'>
         </div>
     </div>
 
     <div class='col-md-6'>
         <div class='row mygbSectionBanner'>
-            <div class='col-md-6'>Collected Tracks</div>
-                <div class='' style='float:right'  title='Make New Collection'>
-                    <div style='font-size:13px' id='newCollection' class='gbButton'>Make New Collection</div>
+            <div class='col-md-3'>Collected Tracks</div>
+                <div class='col-md-7' id='newCollectionHint'>Press this button to make a new collection --></div>
+                <div class='' style='float:right' title='New Collection'>
+                    <div style='font-size:13px' id='newCollection' class='gbButton'>New Collection</div>
                 </div>
-        </div>
-        <div style='margin:12px; font-size:12px'> 
-         To add tracks to collections, drag and drop from "Available Tracks".  Right-click on the track to remove it.
         </div>
         <div id='currentCollection' style='overflow:auto' >
         </div>
     </div>
-
-
 </div>
 
 <ul class='collectionList-menu' style='display:none'>
@@ -126,9 +121,13 @@ body.loading .modal {
 
 <div id='newCollectionDialog' title='Create Collection' style='background:white; width:512px; display:none'>
     <p>
-    Collections contain wiggles.
+    <label style='display:none' id='trackDialogHelp'>
+    Enter the name and description of the copied track.
+    </label>
+    <label style='display:none' id='collectionDialogHelp'>
+    Enter the name and description of the collection.
+    </label>
     </p>
-
 
     <div id='CustomTrackOptions' >
         <div>
@@ -139,25 +138,6 @@ body.loading .modal {
             <br><label class='gbInputLabel'  for='description'>Description:</label>
             <input type='text' name='customDescription' id='customDescription' value='' class='text ui-widget-content ui-corner-all' style='width:80%'>
         </div>
-        <div>
-            <br><label for='customVis' class='gbInputLabel'>Visibility:</label>
-            <select ID='customVis' style='width: 70px'>
-                <option>hide</option>
-                <option selected>dense</option>
-                <option>squish</option>
-                <option>pack</option>
-                <option>full</option>
-            </select>
-        </div>
-
-        <div id='viewFuncDiv'>
-            <br><label class='gbInputLabel'  for='viewFunc'>Math Function:</label>
-            <select ID='viewFunc' >
-                <option selected>show all</option>
-                <option >add all</option>
-                <option >subtract from the first</option>
-            </select>
-        </div>
 
         <div>
             <br> <p><span class='gbInputLabel'> Color:</span> <input type='text' id='customColorInput' value='0xffffff'>&nbsp;&nbsp;
@@ -166,12 +146,11 @@ body.loading .modal {
 
     </div>
 
-    <div style="padding: 5px; border: 1px solid black; margin: 10px" value="Missing Data">
-        <input type="radio" name="missingData" value="missing" checked="checked" > math with missing values results in missing values<br>
-        <input type="radio" name="missingData" value="zero" > treat missing data as a zero<br>
-    </div>
-
     <div>
-        <input id="doNewCollection" type="submit" value="Go!"   tabindex="-1" >
+        <input id="doNewCollection" type="submit" value="Save"   >
     </div>
 </div>
+
+<label style='display:none' id='emptyCollectionText'>Empty Collection. To add tracks select in Available Tracks window</label>
+<label style='display:none' id='addWithoutCollectionText'>You have no collections. Press 'New Collection' button in 'Collected Tracks' pane</label>
+

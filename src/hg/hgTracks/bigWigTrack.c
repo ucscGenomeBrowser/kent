@@ -235,7 +235,7 @@ static void mathWigLoadItems(struct track *tg)
 {
 char *missingSetting;
 boolean missingIsZero = TRUE;
-if ((missingSetting = trackDbSetting(tg->tdb, "missingMethod")) != NULL)
+if ((missingSetting = cartOrTdbString(cart, tg->tdb, "missingMethod", NULL)) != NULL)
     {
     missingIsZero = differentString(missingSetting, "missing");
     }

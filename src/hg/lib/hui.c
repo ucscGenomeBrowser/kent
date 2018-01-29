@@ -1836,6 +1836,42 @@ cgiMakeDropListFull(var, aggregateLabels, aggregateValues,
     ArraySize(aggregateValues), curVal, NULL, NULL);
 }
 
+static char *viewFuncLabels[] =
+{
+"show all",
+"add all",
+"subtract from the first",
+};
+
+static char *viewFuncValues[] =
+{
+WIG_VIEWFUNC_SHOW_ALL,
+WIG_VIEWFUNC_ADD_ALL,
+WIG_VIEWFUNC_SUBTRACT_ALL,
+};
+
+char *wiggleViewFuncEnumToString(enum wiggleViewFuncEnum x)
+/* Convert from enum to string representation. */
+{
+return viewFuncLabels[x];
+}
+
+enum wiggleViewFuncEnum wiggleViewFuncStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, viewFuncValues);
+if (x < 0)
+    errAbort("hui::wiggleViewFuncStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+void viewFuncDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropListFull(var, viewFuncLabels, viewFuncValues,
+ArraySize(viewFuncValues), curVal, NULL, NULL);
+}
+
 static char *wiggleTransformFuncOptions[] = 
     {
     "NONE",
@@ -5141,9 +5177,17 @@ if (parentLevel)
     if (aggregate != NULL && parentLevel)
         {
         char *aggregateVal = cartOrTdbString(cart, tdb->parent, "aggregate", NULL);
-        printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
         safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
-        aggregateDropDown(option, aggregateVal);
+        if (isCustomComposite(tdb))
+            {
+            printf("<TR valign=center><th align=right>Merge method:</th><td align=left>");
+            aggregateExtraDropDown(option, aggregateVal);
+            }
+        else
+            {
+            printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
+            aggregateDropDown(option, aggregateVal);
+            }
         puts("</td></TR>");
 
 	if (sameString(aggregateVal, WIG_AGGREGATE_STACKED)  &&
@@ -5153,6 +5197,26 @@ if (parentLevel)
 	    }
 
 	didAggregate = TRUE;
+        }
+    if (isCustomComposite(tdb))
+        {
+        /*
+        char *viewFuncVal = cartOrTdbString(cart, tdb->parent, "viewFunc", NULL);
+        printf("<TR valign=center><th align=right>Math method:</th><td align=left>");
+        safef(option, sizeof(option), "%s.%s", name, VIEWFUNC);
+        viewFuncDropDown(option, viewFuncVal);
+        */
+
+        printf("<TR valign=center><th align=right>Missing data treatment:</th><td align=left>");
+        char *missingMethodVal = cartOrTdbString(cart, tdb->parent, "missingMethod", NULL);
+        boolean missingIsZero = (missingMethodVal == NULL) ||  differentString(missingMethodVal, "missing");
+        char buffer[1024];
+        safef(buffer, sizeof buffer, "%s.missingMethod",name);
+
+        cgiMakeOnEventRadioButtonWithClass(buffer, "zero", missingIsZero, "allOrOnly", "click", NULL);
+        puts("missing is zero&nbsp;&nbsp;");
+        cgiMakeOnEventRadioButtonWithClass(buffer, "missing", !missingIsZero, "allOrOnly", "click", NULL);
+        printf("math with missing values is missing</B>");
         }
     }
 
