@@ -54,9 +54,9 @@ static void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
 char *drawMode = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
                                 INTERACT_DRAW, INTERACT_DRAW_DEFAULT);
 int draw  = DRAW_LINE;
-if (sameString(drawMode, "curve"))
+if (sameString(drawMode, INTERACT_DRAW_CURVE))
     draw = DRAW_CURVE;
-else if (sameString(drawMode, "ellipse"))
+else if (sameString(drawMode, INTERACT_DRAW_ELLIPSE))
     draw = DRAW_ELLIPSE;
 
 double scale = scaleForWindow(width, seqStart, seqEnd);
@@ -272,7 +272,7 @@ for (inter=inters; inter; inter=inter->next)
             if (draw == DRAW_CURVE)
                 {
                 int peakX = ((ex - sx + 1) / 2) + sx;
-                int peakY = peak + 60;
+                int peakY = peak + 30;
                 hvGfxCurve(hvg, sx, yOff, peakX, peakY, ex, yOff, color, isDotted);
                 // map box on peak
                 // FIXME: not working
