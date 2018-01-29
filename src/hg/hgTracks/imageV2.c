@@ -43,10 +43,10 @@ static int topOrder  = IMG_ORDERTOP; // keep track of the order added to top of 
 static int lastOrder = IMG_ORDEREND; // keep track of the order added and beyond end
 if ( flatTrack->order == IMG_ANYORDER)
     {
+    int index;
     if (track->customTrack)
         flatTrack->order = ++topOrder; // Custom tracks go to top
-    int index;
-    if ((orderedWiggles != NULL) && ((index = slNameFindIx(orderedWiggles, track->track)) != -1))
+    else if ((orderedWiggles != NULL) && ((index = slNameFindIx(orderedWiggles, track->track)) != -1))
         flatTrack->order = topOrder + index + 1;
     else
         flatTrack->order = ++lastOrder;
