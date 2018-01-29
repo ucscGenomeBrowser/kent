@@ -350,14 +350,17 @@ static void addRangeToQuery(struct annoStreamDb *self, struct dyString *query,
                             char *chrom, uint start, uint end, boolean hasWhere)
 /* Add position constraints to query. */
 {
-sqlDyStringAppend(query, hasWhere ? " and " : " where ");
+if (hasWhere)
+    sqlDyStringPrintf(query, " and ");
+else
+    sqlDyStringPrintf(query, " where ");
 sqlDyStringPrintf(query, "%s.%s='%s'", self->table, self->chromField, chrom);
 uint chromSize = annoAssemblySeqSize(self->streamer.assembly, chrom);
 boolean addStartConstraint = (start > 0);
 boolean addEndConstraint = (end < chromSize);
 if (addStartConstraint || addEndConstraint)
     {
-    sqlDyStringAppend(query, "and ");
+    sqlDyStringPrintf(query, "and ");
     if (self->hasBin)
         addBinToQuery(self, start, end, query);
     if (addStartConstraint)
@@ -374,7 +377,7 @@ if (addStartConstraint || addEndConstraint)
     if (addEndConstraint)
         {
         if (addStartConstraint)
-            sqlDyStringAppend(query, "and ");
+            sqlDyStringPrintf(query, "and ");
         // Make sure to include insertions at end:
         sqlDyStringPrintf(query, "(%s.%s < %u or (%s.%s = %s.%s and %s.%s = %u)) ",
                           self->table, self->startField, end,

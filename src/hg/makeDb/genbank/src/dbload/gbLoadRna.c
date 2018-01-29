@@ -710,7 +710,6 @@ void moveAll(char *srcDb, char* destDb)
 struct slName *tables, *tbl;
 struct sqlConnection *conn;
 struct dyString* sqlCmd = dyStringNew(256);
-char *sep;
 
 gbVerbEnter(1, "moveAll");
 conn = hAllocConn(srcDb);
@@ -721,13 +720,15 @@ copyChromInfo(conn, destDb);
 
 /* using one does rename atomically */
 tables = getTableList(conn);
-sqlDyStringAppend(sqlCmd, "rename table");
-sep = " "; /* before first table arg */
+sqlDyStringPrintf(sqlCmd, "rename table");
 for (tbl = tables; tbl != NULL; tbl = tbl->next)
     {
-    dyStringPrintf(sqlCmd, "%s%s to %s.%s",
-                   sep,tbl->name, destDb, tbl->name);
-    sep = ", "; /* before other table arg */
+    if (tbl==tables) // first
+	sqlDyStringPrintf(sqlCmd, " ");
+    else
+	sqlDyStringPrintf(sqlCmd, ",");
+    sqlDyStringPrintf(sqlCmd, "%s to %s.%s",
+                   tbl->name, destDb, tbl->name);
     }
 sqlUpdate(conn, sqlCmd->string);
 dyStringFree(&sqlCmd);

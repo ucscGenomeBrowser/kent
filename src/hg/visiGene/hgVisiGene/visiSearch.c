@@ -140,7 +140,7 @@ char **row;
 int passCount = 0;
 
 /* Construct query to fetch all non-private imageId's in matchList. */
-sqlDyStringAppend(query, "select image.id from image,submissionSet "
+sqlDyStringPrintf(query, "select image.id from image,submissionSet "
                       "where submissionSet.privateUser = 0 "
 		      "and submissionSet.id = image.submissionSet "
 		      "and image.id in (");
@@ -150,12 +150,12 @@ for (match = searcher->matchList; match != NULL; match = next)
     if (bitCountRange(match->wordBits, 0, wordCount) == wordCount)
 	{
 	if (passCount != 0)
-	    dyStringAppendC(query, ',');
-	dyStringPrintf(query, "%d", match->imageId);
+	    sqlDyStringPrintf(query, ",");
+	sqlDyStringPrintf(query, "%d", match->imageId);
 	++passCount;
 	}
     }
-dyStringAppendC(query, ')');
+sqlDyStringPrintf(query, ")");
 
 /* Execute query, and put corresponding images on newList. */
 if (passCount > 0)
@@ -542,10 +542,10 @@ int wordIx;
 for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     {
     dyStringClear(query);
-    sqlDyStringAppend(query, "select image.id from sex,specimen,image ");
+    sqlDyStringPrintf(query, "select image.id from sex,specimen,image ");
     sqlDyStringPrintf(query, "where sex.name = '%s' ",  word->name);
-    dyStringAppend(query, "and sex.id = specimen.sex ");
-    dyStringAppend(query, "and specimen.id = image.specimen");
+    sqlDyStringPrintf(query, "and sex.id = specimen.sex ");
+    sqlDyStringPrintf(query, "and specimen.id = image.specimen");
     addImagesMatchingQuery(searcher, conn, query->string, NULL, NULL,
     	wordIx, 1);
     } 

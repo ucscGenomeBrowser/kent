@@ -687,7 +687,7 @@ sqlFreeResult(&sr);
 for (geneEl = geneList; geneEl != NULL; geneEl = geneEl->next)
     {
     dyStringClear(dy);
-    sqlDyStringAppend(dy, "select imageProbe.image from probe,imageProbe");
+    sqlDyStringPrintf(dy, "select imageProbe.image from probe,imageProbe");
     dyStringPrintf(dy, " where probe.gene = %s ", geneEl->name);
     dyStringAppend(dy, " and probe.id = imageProbe.probe");
     sr = sqlGetResult(conn, dy->string);

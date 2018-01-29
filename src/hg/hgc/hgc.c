@@ -5737,7 +5737,7 @@ struct gbWarn *gbWarn = checkGbWarn(conn, acc);
  *
  * Uses the gbSeq table if available, otherwise use seq for older databases.
  */
-sqlDyStringAppend(dy,
+sqlDyStringPrintf(dy,
                "select g.type,g.direction,"
                "so.name,o.name,l.name,m.name,"
                "se.name,t.name,dev.name,ce.name,cd.name,"
@@ -5747,7 +5747,7 @@ sqlDyStringAppend(dy,
 /* If the gbCdnaInfoTAble table has a "version" column then will show it */
 if (hasVersion)
     {
-    dyStringAppend(dy,
+    sqlDyStringPrintf(dy,
                    ", g.version ");
     }
 
@@ -5756,7 +5756,7 @@ sqlDyStringPrintf(dy,
                "%s dev,%s ce,%s cd,%s des,%s a,%s gene,%s p"
                " where g.acc = '%s' and g.id = gbS.id ",
                gbCdnaInfoTable,seqTbl, sourceTable, organismTable, libraryTable, mrnaCloneTable, sexTable, tissueTable, developmentTable, cellTable, cdsTable, descriptionTable, authorTable, geneNameTable, productNameTable,  acc);
-dyStringAppend(dy,
+sqlDyStringPrintf(dy,
                "and g.source = so.id and g.organism = o.id "
                "and g.library = l.id and g.mrnaClone = m.id "
                "and g.sex = se.id and g.tissue = t.id "
