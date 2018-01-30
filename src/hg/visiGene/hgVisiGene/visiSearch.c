@@ -576,8 +576,8 @@ sqlDyStringPrintf(dy, "select image.id from specimen,image ");
 sqlDyStringPrintf(dy, "where specimen.age >= '%s' ", minAge);
 if (maxAge != NULL)
     sqlDyStringPrintf(dy, "and specimen.age < '%s' ", maxAge);
-dyStringPrintf(dy, "and specimen.taxon = %d ", taxon);
-dyStringPrintf(dy, "and specimen.id = image.specimen");
+sqlDyStringPrintf(dy, "and specimen.taxon = %d ", taxon);
+sqlDyStringPrintf(dy, "and specimen.id = image.specimen");
 addImagesMatchingQuery(searcher, conn, dy->string, NULL, NULL,
 	wordIx, wordCount);
 
@@ -616,7 +616,7 @@ for (word = wordList, wordIx=0; word != NULL && word->next != NULL;
 	dyStringClear(dy);
 	sqlDyStringPrintf(dy, "select age from lifeStage where name = '%s' ", 
 		specificStage);
-	dyStringPrintf(dy, "and lifeStageScheme = %d\n", schemeId);
+	sqlDyStringPrintf(dy, "and lifeStageScheme = %d\n", schemeId);
 	minAge = sqlQuickString(conn, dy->string);
 	if (minAge != NULL)
 	    addImagesMatchingStage(searcher, conn, schemeId, taxon, minAge,

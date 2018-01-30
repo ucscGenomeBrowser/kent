@@ -736,19 +736,19 @@ if (!isEmpty(searchString))
  * if any. */
 struct dyString *where = dyStringNew(0);
 if (!isEmpty(initialWhere))
-     dyStringPrintf(where, "(%s) and ", initialWhere);
-dyStringPrintf(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
+     sqlDyStringPrintfFrag(where, "(%-s) and ", initialWhere); // trust
+sqlDyStringPrintfFrag(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
 int accessCount = 0;
 struct cdwFile *ef;
 for (ef = efList; ef != NULL; ef = ef->next)
     {
     if (searchPassTree == NULL || intValTreeFind(searchPassTree, ef->id) != NULL)
 	{
-	dyStringPrintf(where, ",%u", ef->id);
+	sqlDyStringPrintf(where, ",%u", ef->id);
 	++accessCount;
 	}
     }
-dyStringAppendC(where, ')');
+sqlDyStringPrintf(where, ")");
 
 rbTreeFree(&searchPassTree);
 
@@ -775,15 +775,13 @@ struct dyString *filteredWhere;
 webTableBuildQuery(cart, "cdwFileTags", accWhere->string, "cdwBrowseFiles", FILETABLEFIELDS, TRUE, &dummy, &filteredWhere);
 
 // get their fileIds
-struct dyString *tagQuery = dyStringNew(0);
-dyStringAppend(tagQuery, NOSQLINJ "SELECT file_id from cdwFileTags "); // XX ask Jim is secure query needed / how to do.
-dyStringAppend(tagQuery, filteredWhere->string);
+struct dyString *tagQuery = sqlDyStringCreate("SELECT file_id from cdwFileTags %-s", filteredWhere->string); // trust
 struct slName *fileIds = sqlQuickList(conn, tagQuery->string);
 
 // retrieve the cdwFiles objects for these
-char *idListStr = slNameListToString(fileIds, ',');
-struct dyString *fileQuery = dyStringNew(0);
-dyStringPrintf(fileQuery, NOSQLINJ "SELECT * FROM cdwFile WHERE id IN (%s) ", idListStr);
+struct dyString *fileQuery = sqlDyStringCreate("SELECT * FROM cdwFile WHERE id IN (");
+sqlDyStringPrintValuesList(fileQuery, fileIds);
+sqlDyStringPrintf(fileQuery, ")");
 return cdwFileLoadByQuery(conn, fileQuery->string);
 }
 
@@ -1133,7 +1131,8 @@ printf("</FORM>\n");
 struct hash* loadDatasetDescs(struct sqlConnection *conn)
 /* Load cdwDataset table and return hash with name -> cdwDataset */
 {
-char* query = NOSQLINJ "SELECT * FROM cdwDataset;";
+char query[256];
+sqlSafef(query, sizeof query, "SELECT * FROM cdwDataset");
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct hash *descs = hashNew(7);
 char **row;

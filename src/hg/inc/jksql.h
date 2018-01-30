@@ -737,6 +737,12 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
+void sqlDyStringPrintIdList(struct dyString *ds, char *fields);
+/* Append a comma-separated list of field identifiers. Aborts if invalid characters in list. */
+
+void sqlDyStringPrintValuesList(struct dyString *ds, struct slName *values);
+/* Append a comma-separated, quoted and escaped list of values. */
+
 void sqlCheckError(char *format, ...)
 /* A sql injection error has occurred. Check for settings and respond
  * as appropriate with error, warning, logOnly, ignore, dumpstack.
