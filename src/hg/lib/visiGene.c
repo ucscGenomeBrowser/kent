@@ -688,8 +688,8 @@ for (geneEl = geneList; geneEl != NULL; geneEl = geneEl->next)
     {
     dyStringClear(dy);
     sqlDyStringPrintf(dy, "select imageProbe.image from probe,imageProbe");
-    dyStringPrintf(dy, " where probe.gene = %s ", geneEl->name);
-    dyStringAppend(dy, " and probe.id = imageProbe.probe");
+    sqlDyStringPrintf(dy, " where probe.gene = %s ", geneEl->name);
+    sqlDyStringPrintf(dy, " and probe.id = imageProbe.probe");
     sr = sqlGetResult(conn, dy->string);
     while ((row = sqlNextRow(sr)) != NULL)
         {
