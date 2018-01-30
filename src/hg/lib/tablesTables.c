@@ -419,11 +419,10 @@ struct dyString *query = dyStringNew(0);
 struct dyString *where = dyStringNew(0);
 struct slName *field, *fieldList = commaSepToSlNames(fields);
 boolean gotWhere = FALSE;
-sqlDyStringPrintf(query, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
-dyStringPrintf(query, "select %s from %s", fields, from);
+sqlDyStringPrintf(query, "select %-s from %s", sqlCkIl(fields), from);
 if (!isEmpty(initialWhere))
     {
-    dyStringPrintf(where, " where ");
+    sqlDyStringPrintfFrag(where, " where ");
     sqlSanityCheckWhere(initialWhere, where);
     gotWhere = TRUE;
     }
@@ -439,44 +438,51 @@ if (withFilters)
 	if (!isEmpty(val))
 	    {
 	    if (gotWhere)
-		dyStringPrintf(where, " and ");
+		sqlDyStringPrintf(where, " and ");
 	    else
 		{
-	        dyStringPrintf(where, " where ");
+	        sqlDyStringPrintf(where, " where ");
 		gotWhere = TRUE;
 		}
 	    if (anyWild(val))
-	         {
-		 char *converted = sqlLikeFromWild(val);
-		 char *escaped = makeEscapedString(converted, '"');
-		 dyStringPrintf(where, "%s like \"%s\"", field->name, escaped);
-		 freez(&escaped);
-		 freez(&converted);
-		 }
+		{
+		char *converted = sqlLikeFromWild(val);
+		sqlDyStringPrintf(where, "%s like '%s'", field->name, converted);
+		freez(&converted);
+		}
 	    else if (val[0] == '>' || val[0] == '<')
-	         {
-		 char *remaining = val+1;
-		 if (remaining[0] == '=')
-		     remaining += 1;
-		 remaining = skipLeadingSpaces(remaining);
-		 if (isNumericString(remaining))
-		     dyStringPrintf(where, "%s %s", field->name, val);
-		 else
-		     {
-		     warn("Filter for %s doesn't parse:  %s", field->name, val);
-		     dyStringPrintf(where, "%s is not null", field->name); // Let query continue
-		     }
-		 }
+		{
+		char *remaining = val+1;
+		if (remaining[0] == '=')
+		    {
+		    remaining += 1;
+		    }
+		remaining = skipLeadingSpaces(remaining);
+		if (isNumericString(remaining))
+		    {
+		    sqlDyStringPrintf(where, "%s ", field->name);
+		    if (val[0] == '>')
+			sqlDyStringPrintf(where, ">");
+		    if (val[0] == '<')
+			sqlDyStringPrintf(where, "<");
+		    if (val[1] == '=')
+			sqlDyStringPrintf(where, "=");
+		    sqlDyStringPrintf(where, "%s", remaining);
+		    }
+		else
+		    {
+		    warn("Filter for %s doesn't parse:  %s", field->name, val);
+		    sqlDyStringPrintf(where, "%s is not null", field->name); // Let query continue
+		    }
+		}
 	    else
-	         {
-		 char *escaped = makeEscapedString(val, '"');
-		 dyStringPrintf(where, "%s = \"%s\"", field->name, escaped);
-		 freez(&escaped);
-		 }
+		{
+		sqlDyStringPrintf(where, "%s = '%s'", field->name, val);
+		}
 	    }
 	}
     }
-dyStringAppend(query, where->string);
+sqlDyStringPrintf(query, "%-s", where->string);  // trust
 
 /* We do order here so as to keep order when working with tables bigger than a page. */
 char orderVar[256];
@@ -485,9 +491,9 @@ char *orderFields = cartUsualString(cart, orderVar, "");
 if (!isEmpty(orderFields))
     {
     if (orderFields[0] == '-')
-	dyStringPrintf(query, " order by %s desc", orderFields+1);
+	sqlDyStringPrintf(query, " order by %s desc", orderFields+1);
     else
-	dyStringPrintf(query, " order by %s", orderFields);
+	sqlDyStringPrintf(query, " order by %s", orderFields);
     }
 
 // return query and where expression
@@ -514,10 +520,8 @@ struct dyString *where;
 webTableBuildQuery(cart, from, initialWhere, varPrefix, fields, withFilters, &query, &where);
 
 /* Figure out size of query result */
-struct dyString *countQuery = dyStringNew(0);
-sqlDyStringPrintf(countQuery, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
-dyStringPrintf(countQuery, "select count(*) from %s", from);
-dyStringAppend(countQuery, where->string);
+struct dyString *countQuery = sqlDyStringCreate("select count(*) from %s", from);
+sqlDyStringPrintf(countQuery, "%-s", where->string);   // trust
 int resultsSize = sqlQuickNum(conn, countQuery->string);
 dyStringFree(&countQuery);
 
@@ -534,7 +538,7 @@ if (resultsSize > pageSize)
     if (page > lastPage)
         page = lastPage;
     context.tableOffset = page * pageSize;
-    dyStringPrintf(query, " limit %d offset %d", pageSize, context.tableOffset);
+    sqlDyStringPrintf(query, " limit %d offset %d", pageSize, context.tableOffset);
     }
 
 struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
