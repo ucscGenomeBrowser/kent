@@ -578,14 +578,16 @@ char *words[gffNumCols+1];
 int numWords = chopString(line, "\t", words, gffNumCols+1);
 if (numWords != gffNumCols)
     gff3FileErr(g3f, "expected %d tab-separated columns: %s", gffNumCols, line);
-
-struct gff3Ann *g3a = gff3FileAlloc(g3f, sizeof(struct gff3Ann));
-g3a->file = g3f;
-g3a->lineNum = g3f->lf->lineIx;
-parseFields(g3a, words);
-parseAttrs(g3a, words[8]);
-parseStdAttrs(g3a);
-slAddHead(&g3f->anns, gff3AnnRefNew(g3a));
+else
+    {
+    struct gff3Ann *g3a = gff3FileAlloc(g3f, sizeof(struct gff3Ann));
+    g3a->file = g3f;
+    g3a->lineNum = g3f->lf->lineIx;
+    parseFields(g3a, words);
+    parseAttrs(g3a, words[8]);
+    parseStdAttrs(g3a);
+    slAddHead(&g3f->anns, gff3AnnRefNew(g3a));
+    }
 }
 
 static void writeAttr(struct gff3Attr *attr, FILE *fh)

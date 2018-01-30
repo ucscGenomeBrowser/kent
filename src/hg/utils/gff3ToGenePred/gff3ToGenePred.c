@@ -136,7 +136,10 @@ static void cnvError(char *format, ...)
  * for error count to be exceeded and unwind to the top level to print a usefull
  * error message and abort. */
 {
-fputs("Error: ", stderr);
+if (warnAndContinue)
+    fputs("Warning: skipping: ", stderr);
+else
+    fputs("Error: ", stderr);
 va_list args;
 va_start(args, format);
 vfprintf(stderr, format, args);
@@ -349,29 +352,17 @@ safef(description, sizeof(description), "genePred from GFF3: %s:%d",
       ((mrna->file != NULL) ? mrna->file->fileName : "<unknown>"),
       mrna->lineNum);
 int ret = genePredCheck(description, stderr, -1, gp);
-if (warnAndContinue)
+if (ret == 0)
     {
-    if (ret == 0)
-	{
-	genePredTabOut(gp, gpFh);
-	if (outAttrsFp)
-	    doOutAttrs(outAttrsFp, gp->name,  mrna);
-	}
-    else
-	{
-	warn("Warning: dropping invalid genePred: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
-	if (outBadFp)
-	    genePredTabOut(gp, outBadFp);
-	}
+    genePredTabOut(gp, gpFh);
+    if (outAttrsFp)
+        doOutAttrs(outAttrsFp, gp->name,  mrna);
     }
 else
     {
-    // output before checking so it can be examined
-    genePredTabOut(gp, gpFh);
-    if (outAttrsFp)
-	doOutAttrs(outAttrsFp, gp->name,  mrna);
-    if (ret != 0)
-	cnvError("invalid genePred created: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
+    if (outBadFp)
+        genePredTabOut(gp, outBadFp);
+    cnvError("invalid genePred created: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
     }
 }
 
@@ -614,8 +605,8 @@ static void fixNcbiLikeSegmentGene(struct gff3Ann *gene)
  * genes it is hard to figure out where to put the CDS. */
 {
 // Drop CDS, always starting search from start due to removing
-warn("Warning: dropping CDS from %s at %s:%d-%d as we are unable to convert this form of annotation to genePred",
-     gene->type, gene->seqid, gene->start, gene->end);
+warn("Warning: dropping CDS from %s %s at %s:%d-%d as we are unable to convert this form of annotation to genePred",
+     gene->type, getGeneName(gene), gene->seqid, gene->start, gene->end);
 struct gff3Ann *cdsAnn;
 while ((cdsAnn = findChildTypeMatch(gene, NULL, cdsFeatures)) != NULL)
     gff3UnlinkChild(gene, cdsAnn);
@@ -678,7 +669,7 @@ for (child = gene->children; child != NULL; child = child->next)
     if (shouldProcessAsTranscript(child->ann) 
         && !isProcessed(processed, child->ann))
         processTranscript(gpFh, gene, child->ann, processed);
-    if (convertErrCnt >= maxConvertErrors)
+    if ((convertErrCnt >= maxConvertErrors) && !warnAndContinue)
         break;
     }
 }
@@ -756,7 +747,12 @@ carefulClose(&gpFh);
 if (outUnprocessedRootsFp != NULL)
     writeUnprocessedRoots(gff3File->roots,  processed);
 if (convertErrCnt > 0)
-    errAbort("%d errors converting GFF3 file: %s", convertErrCnt, inGff3File); 
+    {
+    if (warnAndContinue)
+        warn("%d warnings converting GFF3 file: %s", convertErrCnt, inGff3File);
+    else
+        errAbort("%d errors converting GFF3 file: %s", convertErrCnt, inGff3File);
+    }
 
 #if LEAK_CHECK  // free memory for leak debugging if 1
 gff3FileFree(&gff3File);
