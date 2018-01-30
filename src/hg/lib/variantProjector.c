@@ -456,12 +456,14 @@ static void spliceInBlk(struct seqWindow *gSeqWin, uint blkStart, uint blkEnd,
  * sequence to txAlt and update *pSplicedLen -- except for [varStart,varEnd) where we add
  * gAlt instead and update *pAddedGalt. */
 {
-if (ambigStart < blkEnd && ambigEnd > blkStart)
+if ((ambigStart < blkEnd && ambigEnd > blkStart) ||
+    // both var and ambig are zero-length insertion points
+    (ambigStart == ambigEnd && ambigStart <= blkEnd && ambigEnd >= blkStart))
     {
     // Add in blk's sequence between ambigStart and varStart, if any
     appendOverlap(gSeqWin, blkStart, blkEnd, ambigStart, varStart, txAlt, txAltSize, pSplicedLen);
     // If gAlt hasn't already been added, and blk overlaps [varStart,varEnd), add gAlt
-    if (varStart >= blkStart && varStart < blkEnd && !*pAddedGAlt)
+    if (varStart >= blkStart && varEnd <= blkEnd && !*pAddedGAlt)
         {
         safecpy(txAlt+*pSplicedLen, txAltSize-*pSplicedLen, gAlt);
         *pSplicedLen += strlen(gAlt);

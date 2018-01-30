@@ -1,0 +1,27 @@
+##gff-version 3
+
+# ----
+# genome-build Felis_catus-6.2
+# genome-build-accession NCBI_Assembly:GCF_000181335.1
+# ----
+
+# tRNA GENE and CDS records without strand and CDS as a child of gene. Also tRNA/exons of gene on opposite strand
+NC_001700.1	RefSeq	gene	15038	16177	.	.	.	ID=gene25009;Dbxref=GeneID:807931;Name=CYTB;gbkey=Gene;gene=CYTB;gene_synonym=cytB
+NC_001700.1	RefSeq	CDS	15038	16177	.	.	0	ID=cds29481;Parent=gene25009;Dbxref=Genbank:NP_008263.1;Name=NP_008263.1;gbkey=CDS;gene=CYTB;product=cytochrome b;protein_id=NP_008263.1;transl_table=2
+NC_001700.1	RefSeq	tRNA	16178	16247	.	+	.	ID=rna33063;gbkey=tRNA;product=tRNA-Thr
+NC_001700.1	RefSeq	exon	16178	16247	.	+	.	ID=id354132;Parent=rna33063;gbkey=tRNA;product=tRNA-Thr
+NC_001700.1	RefSeq	tRNA	16248	16314	.	-	.	ID=rna33064;gbkey=tRNA;product=tRNA-Pro
+NC_001700.1	RefSeq	exon	16248	16314	.	-	.	ID=id354133;Parent=rna33064;gbkey=tRNA;product=tRNA-Pro
+
+# ----
+# genome-build dere_caf1
+# genome-build-accession NCBI_Assembly:GCF_000005135.1
+# ----
+
+# overlapping exons
+NW_001956548.1	RefSeq	pseudogene	26531107	26534144	.	+	.	ID=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;Name=Dere\GG10940;gbkey=Gene;gene=Dere\GG10940;gene_biotype=pseudogene;gene_synonym=dere_GLEANR_10935,GG10940;locus_tag=Dere_GG10940;pseudo=true
+NW_001956548.1	RefSeq	exon	26531107	26531132	.	+	.	ID=id122119;Parent=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;exon_number=1;gbkey=exon;gene=Dere\GG10940;number=1;pseudo=true
+NW_001956548.1	RefSeq	exon	26532889	26533060	.	+	.	ID=id122120;Parent=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;exon_number=2;gbkey=exon;gene=Dere\GG10940;number=2;pseudo=true
+NW_001956548.1	RefSeq	exon	26533060	26533133	.	+	.	ID=id122121;Parent=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;exon_number=3;gbkey=exon;gene=Dere\GG10940;number=3;pseudo=true
+NW_001956548.1	RefSeq	exon	26533185	26533357	.	+	.	ID=id122122;Parent=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;exon_number=4;gbkey=exon;gene=Dere\GG10940;number=4;pseudo=true
+NW_001956548.1	RefSeq	exon	26533936	26534144	.	+	.	ID=id122123;Parent=gene14757;Dbxref=FLYBASE:FBgn0103243,GeneID:6542396;exon_number=5;gbkey=exon;gene=Dere\GG10940;number=5;pseudo=true

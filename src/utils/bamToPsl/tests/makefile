@@ -6,6 +6,7 @@ PROG = bamToPsl
 test:
 	${PROG} chr9.NM_020469.2.blat.bam testOut.psl
 	@diff expectedOut.psl testOut.psl
+	${MAKE} clean
 
 clean:
 	rm -f testOut.psl

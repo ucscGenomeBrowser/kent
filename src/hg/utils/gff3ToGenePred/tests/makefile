@@ -11,7 +11,7 @@ all::
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
 	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
 	minimalGenesTest geneDefaultStatusUnknownTest useNameTest nameAttrIdTest nameAttrNameTest \
-	frameShiftTest mm10GencodeTest ncbiSegmentsTest
+	frameShiftTest mm10GencodeTest ncbiSegmentsTest ncbiProblemsTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -101,6 +101,13 @@ mm10GencodeTest: mkout
 # NCBI [CDJV]_gene_segment annotations
 ncbiSegmentsTest: mkout
 	${gff3ToGenePred} -rnaNameAttr=transcript_id -geneNameAttr=gene -honorStartStopCodons -attrsOut=output/$@.attrs input/ncbiSegments.gff3 output/$@.gp > output/$@.out 2>&1
+	diff expected/$@.gp output/$@.gp
+	diff expected/$@.attrs output/$@.attrs
+	diff expected/$@.out output/$@.out
+
+# various NCBI problem cases
+ncbiProblemsTest: mkout
+	${gff3ToGenePred} -warnAndContinue -geneNameAttr=gene -allowMinimalGenes -processAllGeneChildren -attrsOut=output/$@.attrs input/ncbiProblems.gff3 output/$@.gp > output/$@.out 2>&1
 	diff expected/$@.gp output/$@.gp
 	diff expected/$@.attrs output/$@.attrs
 	diff expected/$@.out output/$@.out
