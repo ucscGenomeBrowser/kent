@@ -39,11 +39,11 @@ param from $start1
 param to $]
 param context genome
 
-tool ensemblArch
+tool ensemblHg19
 shortLabel Ensembl
 longLabel Ensembl Genome Browser
-url http://dec2014.archive.ensembl.org/$n/contigview
-onlyDbs hg38
+url http://grch37.ensembl.org/$n/contigview
+onlyDbs hg19
 email helpdesk@ensembl.org
 isHttpGet true
 param chr $s
@@ -55,7 +55,7 @@ shortLabel Ensembl
 longLabel Ensembl Genome Browser
 url http://www.ensembl.org/$n/contigview
 email helpdesk@ensembl.org
-notDbs hg38
+notDbs hg19
 isHttpGet true
 param chr $s
 param start $start1
