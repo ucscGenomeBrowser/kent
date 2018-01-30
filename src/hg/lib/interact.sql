@@ -11,16 +11,18 @@ CREATE TABLE interact (
     chromEnd int unsigned not null,	# End position in chromosome of upper region. For interchromosomal, set to chromStart+1
     name varchar(255) not null,	# Name of item, for display.  Usually 'name1/name2' or empty
     score int unsigned not null,	# Score from 0-1000
-    strand char(1) not null,	# Direction of interaction (+ or -)
-    color int unsigned not null,	# Item color, as itemRgb in bed9
-    chrom1 varchar(255) not null,	# Chromosome of first region
-    chromStart1 int unsigned not null,	# Start position in chromosome of first region
-    chromEnd1 int unsigned not null,	# End position in chromosome of first region
-    name1 varchar(255) not null,	# Identifier of first region. Can be used as link to related table
-    chrom2 varchar(255) not null,	# Chromosome of second region
-    chromStart2 int unsigned not null,	# Start position in chromosome of second region
-    chromEnd2 int unsigned not null,	# End position in chromosome of second region
-    name2 varchar(255) not null,	# Identifier of second region. Can be used as link to related table
+    value double not null,	# Strength of interaction or other data value. Typically basis for score
+    exp varchar(255) not null,	# Experiment name (metadata for filtering) or empty.
+    color int unsigned not null,	# Item color, as itemRgb in bed9. Typically based on strenght or filter
+    sourceChrom varchar(255) not null,	# Chromosome of source region (directional) or lower region.
+    sourceStart int unsigned not null,	# Start position in chromosome of source/lower region
+    sourceEnd int unsigned not null,	# End position in chromosome of source/lower region
+    sourceName varchar(255) not null,	# Identifier of source/lower region. Can be used as link to related table
+    targetChrom varchar(255) not null,	# Chromosome of target region (directional) or upper region
+    targetStart int unsigned not null,	# Start position in chromosome of target/upper region
+    targetEnd int unsigned not null,	# End position in chromosome of target/upper region
+    targetName varchar(255) not null,	# Identifier of target/upper region. Can be used as link to related table
               #Indices
-    INDEX(chrom(20), chromStart)
+    INDEX(chrom(20), chromStart),
+    INDEX(name)
 );

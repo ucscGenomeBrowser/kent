@@ -10,27 +10,29 @@
 
 
 
-char *interactCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,color,chrom1,chromStart1,chromEnd1,name1,chrom2,chromStart2,chromEnd2,name2";
+char *interactCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,value,exp,color,sourceChrom,sourceStart,sourceEnd,sourceName,targetChrom,targetStart,targetEnd,targetName";
 
 void interactStaticLoad(char **row, struct interact *ret)
 /* Load a row from interact table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
+
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->score = sqlUnsigned(row[4]);
-safecpy(ret->strand, sizeof(ret->strand), row[5]);
-ret->color = sqlUnsigned(row[6]);
-ret->chrom1 = row[7];
-ret->chromStart1 = sqlUnsigned(row[8]);
-ret->chromEnd1 = sqlUnsigned(row[9]);
-ret->name1 = row[10];
-ret->chrom2 = row[11];
-ret->chromStart2 = sqlUnsigned(row[12]);
-ret->chromEnd2 = sqlUnsigned(row[13]);
-ret->name2 = row[14];
+ret->value = sqlDouble(row[5]);
+ret->exp = row[6];
+ret->color = sqlUnsigned(row[7]);
+ret->sourceChrom = row[8];
+ret->sourceStart = sqlUnsigned(row[9]);
+ret->sourceEnd = sqlUnsigned(row[10]);
+ret->sourceName = row[11];
+ret->targetChrom = row[12];
+ret->targetStart = sqlUnsigned(row[13]);
+ret->targetEnd = sqlUnsigned(row[14]);
+ret->targetName = row[15];
 }
 
 struct interact *interactLoadByQuery(struct sqlConnection *conn, char *query)
@@ -63,8 +65,8 @@ void interactSaveToDb(struct sqlConnection *conn, struct interact *el, char *tab
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,'%s',%u,%u,'%s','%s',%u,%u,'%s')", 
-	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->color,  el->chrom1,  el->chromStart1,  el->chromEnd1,  el->name1,  el->chrom2,  el->chromStart2,  el->chromEnd2,  el->name2);
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,%g,'%s',%u,'%s',%u,%u,'%s','%s',%u,%u,'%s')", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->value,  el->exp,  el->color,  el->sourceChrom,  el->sourceStart,  el->sourceEnd,  el->sourceName,  el->targetChrom,  el->targetStart,  el->targetEnd,  el->targetName);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -81,16 +83,17 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
-safecpy(ret->strand, sizeof(ret->strand), row[5]);
-ret->color = sqlUnsigned(row[6]);
-ret->chrom1 = cloneString(row[7]);
-ret->chromStart1 = sqlUnsigned(row[8]);
-ret->chromEnd1 = sqlUnsigned(row[9]);
-ret->name1 = cloneString(row[10]);
-ret->chrom2 = cloneString(row[11]);
-ret->chromStart2 = sqlUnsigned(row[12]);
-ret->chromEnd2 = sqlUnsigned(row[13]);
-ret->name2 = cloneString(row[14]);
+ret->value = sqlDouble(row[5]);
+ret->exp = cloneString(row[6]);
+ret->color = sqlUnsigned(row[7]);
+ret->sourceChrom = cloneString(row[8]);
+ret->sourceStart = sqlUnsigned(row[9]);
+ret->sourceEnd = sqlUnsigned(row[10]);
+ret->sourceName = cloneString(row[11]);
+ret->targetChrom = cloneString(row[12]);
+ret->targetStart = sqlUnsigned(row[13]);
+ret->targetEnd = sqlUnsigned(row[14]);
+ret->targetName = cloneString(row[15]);
 return ret;
 }
 
@@ -100,7 +103,7 @@ struct interact *interactLoadAll(char *fileName)
 {
 struct interact *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -118,7 +121,7 @@ struct interact *interactLoadAllByChar(char *fileName, char chopper)
 {
 struct interact *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -144,16 +147,17 @@ ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
-sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
+ret->value = sqlDoubleComma(&s);
+ret->exp = sqlStringComma(&s);
 ret->color = sqlUnsignedComma(&s);
-ret->chrom1 = sqlStringComma(&s);
-ret->chromStart1 = sqlUnsignedComma(&s);
-ret->chromEnd1 = sqlUnsignedComma(&s);
-ret->name1 = sqlStringComma(&s);
-ret->chrom2 = sqlStringComma(&s);
-ret->chromStart2 = sqlUnsignedComma(&s);
-ret->chromEnd2 = sqlUnsignedComma(&s);
-ret->name2 = sqlStringComma(&s);
+ret->sourceChrom = sqlStringComma(&s);
+ret->sourceStart = sqlUnsignedComma(&s);
+ret->sourceEnd = sqlUnsignedComma(&s);
+ret->sourceName = sqlStringComma(&s);
+ret->targetChrom = sqlStringComma(&s);
+ret->targetStart = sqlUnsignedComma(&s);
+ret->targetEnd = sqlUnsignedComma(&s);
+ret->targetName = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -167,10 +171,11 @@ struct interact *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
-freeMem(el->chrom1);
-freeMem(el->name1);
-freeMem(el->chrom2);
-freeMem(el->name2);
+freeMem(el->exp);
+freeMem(el->sourceChrom);
+freeMem(el->sourceName);
+freeMem(el->targetChrom);
+freeMem(el->targetName);
 freez(pEl);
 }
 
@@ -204,34 +209,36 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->score);
 fputc(sep,f);
+fprintf(f, "%g", el->value);
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->strand);
+fprintf(f, "%s", el->exp);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->color);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom1);
+fprintf(f, "%s", el->sourceChrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->chromStart1);
+fprintf(f, "%u", el->sourceStart);
 fputc(sep,f);
-fprintf(f, "%u", el->chromEnd1);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name1);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%u", el->sourceEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom2);
+fprintf(f, "%s", el->sourceName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->chromStart2);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->targetChrom);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->chromEnd2);
+fprintf(f, "%u", el->targetStart);
+fputc(sep,f);
+fprintf(f, "%u", el->targetEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name2);
+fprintf(f, "%s", el->targetName);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

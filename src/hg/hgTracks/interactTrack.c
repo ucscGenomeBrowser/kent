@@ -42,6 +42,16 @@ void interactLoadItems(struct track *tg)
 loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoad);
 }
 
+char *getOtherChrom(struct interact *inter)
+/* Get other chromosome from an interaaction. Return NULL if same chromosome */
+{
+if (sameString(inter->sourceChrom, inter->targetChrom))
+    return NULL;
+if (inter->chromStart == inter->sourceStart)
+    return cloneString(inter->targetChrom);
+return cloneString(inter->sourceChrom);
+}
+
 static void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -75,6 +85,7 @@ int nSame = 0, nOther = 0;
 int prevLabelEnd = 0, prevLabelStart = 0;
 char *prevLabel = 0;
 boolean doOtherLabels = TRUE;
+char *otherChrom = NULL;
 for (inter=inters; inter; inter=inter->next)
     {
     int width = inter->chromEnd - inter->chromStart;
@@ -84,26 +95,26 @@ for (inter=inters; inter; inter=inter->next)
 //uglyf("Max width is %d. ", maxWidth);
 for (inter=inters; inter; inter=inter->next)
     {
-    if (sameString(inter->chrom1, inter->chrom2))
+    otherChrom = getOtherChrom(inter);
+    if (otherChrom == NULL)
         nSame++;
     else
         {
         nOther++;
         if (!doOtherLabels)
             continue;
-        int labelWidth = vgGetFontStringWidth(hvg->vg, font, inter->chrom2);
+        int labelWidth = vgGetFontStringWidth(hvg->vg, font, otherChrom);
         // TODO: simplify now that center approach is abandoned
         int sx = ((inter->chromStart - seqStart) + .5) * scale + xOff; // x coord of center
         int labelStart = (double)sx - labelWidth/2;
         int labelEnd = labelStart + labelWidth - 1;
-        char *otherChrom = (inter->strand[0] == '+') ? inter->chrom2 : inter->chrom1;
         if (labelStart <= prevLabelEnd && 
                 !(labelStart == prevLabelStart && labelEnd == prevLabelEnd && 
                     sameString(otherChrom, prevLabel)))
             doOtherLabels = FALSE;
         prevLabelStart = labelStart;
         prevLabelEnd = labelEnd;
-        prevLabel = inter->chrom2;
+        prevLabel = otherChrom;
         }
     }
 int fontHeight = vgGetFontPixelHeight(hvg->vg, font);
@@ -114,6 +125,7 @@ int sameHeight = (nSame) ? tg->height - otherHeight: 0;
 //uglyf("IN seqStart=%d", seqStart);
 for (inter=inters; inter; inter=inter->next)
     {
+    char *otherChrom = getOtherChrom(inter);
     safef(itemBuf, sizeof itemBuf, "%s", inter->name);
     struct dyString *ds = dyStringNew(0);
     dyStringPrintf(ds, "%s", inter->name);
@@ -126,30 +138,27 @@ for (inter=inters; inter; inter=inter->next)
     
     // TODO: simplify by using start/end instead of center and width
     // This is a holdover from longRange track implementation
-
-    // set lower and upper regions from item1 and item2, which may be ordered by type rather
-    // than genomic position (e.g. item1 are snp's, item2 are genes)
     unsigned lowStart, lowEnd, highStart, highEnd;
-    if (inter->chromStart1 < inter->chromStart2)
-        {
-        lowStart = inter->chromStart1;
-        lowEnd = inter->chromEnd1;
-        highStart = inter->chromStart2;
-        highEnd = inter->chromEnd2;
-        }
-    else
-        {
-        lowStart = inter->chromStart2;
-        lowEnd = inter->chromEnd2;
-        highStart = inter->chromStart1;
-        highEnd = inter->chromEnd1;
-        }
-    // TODO: cleanup
-    if (differentString(inter->chrom1, inter->chrom2))
+    if (otherChrom)
         {
         lowStart = inter->chromStart;
         lowEnd = inter->chromEnd;
         }
+    else if (inter->sourceStart < inter->targetStart)
+        {
+        lowStart = inter->sourceStart;
+        lowEnd = inter->sourceEnd;
+        highStart = inter->targetStart;
+        highEnd = inter->targetEnd;
+        }
+    else
+        {
+        lowStart = inter->targetStart;
+        lowEnd = inter->targetEnd;
+        highStart = inter->sourceStart;
+        highEnd = inter->sourceEnd;
+        }
+
     unsigned s = lowStart + ((double)(lowEnd - lowStart + .5) / 2);
     int sx = ((s - seqStart) + .5) * scale + xOff; // x coord of center (lower region)
 //uglyf("<br>IN seqStart=%d, start=%d, start1=%d, end1=%d, start2=%d, end2=%d, end=%d, s=%d, sx=%d. ", 
@@ -171,7 +180,7 @@ for (inter=inters; inter; inter=inter->next)
 //uglyf("<br>&nbsp;&nbsp;IN start1=%d, end1=%d, start2=%d, end2=%d.",
                 //inter->chromStart1, inter->chromEnd1, inter->chromStart2, inter->chromEnd2);
 
-    if (differentString(inter->chrom1, inter->chrom2))
+    if (otherChrom)
         {
         // different chromosomes
         //      draw below same chrom items, if any
@@ -190,26 +199,35 @@ for (inter=inters; inter; inter=inter->next)
         yPos = yOffOther + height;
 
         // draw the foot
-        int footWidth = sFootWidth;
-        hvGfxLine(hvg, sx - footWidth, yOffOther, sx + footWidth, yOffOther, color);
+        hvGfxLine(hvg, sx - sFootWidth, yOffOther, sx + sFootWidth, yOffOther, color);
 
         // draw the vertical
-        if (inter->strand[0] == '+')
+        if (sameString(inter->chrom, inter->sourceChrom))
             hvGfxLine(hvg, sx, yOffOther, sx, yPos, color);
         else
             hvGfxDottedLine(hvg, sx, yOffOther, sx, yPos, color);
         if (tg->visibility == tvFull)
             {
-            mapBoxHgcOrHgGene(hvg, s, s, sx - 2, yOffOther, 4, height,
-                                   tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
-            safef(buffer, sizeof buffer, "%s", inter->strand[0] == '+' ? 
-                                        inter->chrom2 : inter->chrom1);
+            // add map box to foot
+            char *nameBuf = (inter->chromStart == inter->sourceStart ?      
+                            inter->sourceName : inter->targetName);
+uglyf("foot name: %s. ", nameBuf);
+            mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, 
+                            sx - sFootWidth, yOffOther, sFootWidth * 2, 4,
+                            tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
 
+            // add map box to vertical
+            mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, sx - 2, yOffOther, 4, height,
+                                   tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
             if (doOtherLabels)
                 {
+                safef(buffer, sizeof buffer, "%s", sameString(inter->chrom, inter->sourceChrom) ?
+                                            inter->targetChrom : inter->sourceChrom);
                 hvGfxTextCentered(hvg, sx, yPos + 2, 4, 4, MG_BLUE, font, buffer);
                 int width = vgGetFontStringWidth(hvg->vg, font, buffer);
-                mapBoxHgcOrHgGene(hvg, s, s, sx - width/2, yPos, 
+
+                // add mapBox to label
+                mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, sx - width/2, yPos, 
                                 width, fontHeight, tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
                 }
             }
@@ -233,15 +251,12 @@ for (inter=inters; inter; inter=inter->next)
 
     if (sOnScreen)
         {
-        // draw foot of first region and mapbox
+        // draw foot of lower region
         hvGfxLine(hvg, sx - sFootWidth, yOff, sx + sFootWidth, yOff, color);
-        mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, 
-                            sx - sFootWidth - 2, yOff, sx + sFootWidth + 2, 4,
-                            tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
         // draw vertical
         if (!eOnScreen || draw == DRAW_LINE)
             {
-            if (inter->strand[0] == '-')
+            if (inter->chromStart == inter->targetStart)
                 hvGfxDottedLine(hvg, sx, yOff, sx, peak, color);
             else
                 hvGfxLine(hvg, sx, yOff, sx, peak, color);
@@ -249,26 +264,42 @@ for (inter=inters; inter; inter=inter->next)
         }
     if (eOnScreen)
         {
-        // draw foot and mapbox of second region
+        // draw foot of upper region
         hvGfxLine(hvg, ex - eFootWidth, yOff, ex + eFootWidth, yOff, color);
-        mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, 
-                            ex - eFootWidth - 2, yOff, ex + eFootWidth + 2, 4,
-                            tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
 
         // draw vertical
         if (!sOnScreen || draw == DRAW_LINE)
             {
-            if (inter->strand[0] == '-')
-                hvGfxDottedLine(hvg, ex, yOff, ex, peak, color); //OLD
+            if (inter->chromStart == inter->targetStart)
+                hvGfxDottedLine(hvg, ex, yOff, ex, peak, color);
             else
-                hvGfxLine(hvg, ex, yOff, ex, peak, color); //OLD
+                hvGfxLine(hvg, ex, yOff, ex, peak, color);
             }
         }
     if (tg->visibility == tvFull)
         {
+        char *nameBuf = NULL;
+        if (sOnScreen)
+            {
+            /* add mapbox to lower region */
+            nameBuf = (inter->chromStart == inter->sourceStart ?      
+                            inter->sourceName : inter->targetName);
+            mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, 
+                            sx - sFootWidth, yOff, sFootWidth * 2, 4,
+                            tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
+            }
+        if (eOnScreen)
+            {
+            /* add mapbox to upper region */
+            nameBuf = (inter->chromEnd == inter->targetEnd ?      
+                            inter->targetName : inter->sourceName);
+            mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, 
+                            ex - eFootWidth, yOff, eFootWidth * 2, 4,
+                            tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
+            }
         if (sOnScreen && eOnScreen && draw != DRAW_LINE)
             {
-            boolean isDotted = (inter->strand[0] == '-');
+            boolean isDotted = (inter->sourceStart > inter->targetStart);
             if (draw == DRAW_CURVE)
                 {
                 int peakX = ((ex - sx + 1) / 2) + sx;
@@ -299,7 +330,7 @@ for (inter=inters; inter; inter=inter->next)
             // draw link horizontal line between regions (dense mode just shows feet ??)
             unsigned ePeak = eOnScreen ? ex : xOff + width;
             unsigned sPeak = sOnScreen ? sx : xOff;
-            if (inter->strand[0] == '-')
+            if (inter->sourceStart > inter->targetStart)
                 hvGfxDottedLine(hvg, sPeak, peak, ePeak, peak, color);
             else
                 hvGfxLine(hvg, sPeak, peak, ePeak, peak, color);

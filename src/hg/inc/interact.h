@@ -6,28 +6,30 @@
 #define INTERACT_H
 
 #include "jksql.h"
-#define INTERACT_NUM_COLS 15
+#define INTERACT_NUM_COLS 16
 
-extern char *interactCommaSepFieldNames; 
+extern char *interactCommaSepFieldNames;
+
 struct interact
-/* Interaction between two regions, BED 6+9 */
-{
+/* Interaction between two regions */
+    {
     struct interact *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome (or contig, scaffold, etc.). For interchromosomal, use 2 records */
     unsigned chromStart;	/* Start position in chromosome of lower region */
     unsigned chromEnd;	/* End position in chromosome of upper region. For interchromosomal, set to chromStart+1 */
     char *name;	/* Name of item, for display.  Usually 'name1/name2' or empty */
     unsigned score;	/* Score from 0-1000 */
-    char strand[2];	/* Direction of interaction (+ or -) */
-    unsigned color;	/* Item color, as itemRgb in bed9 */
-    char *chrom1;	/* Chromosome of first region */
-    unsigned chromStart1;	/* Start position in chromosome of first region */
-    unsigned chromEnd1;	/* End position in chromosome of first region */
-    char *name1;	/* Identifier of first region. Can be used as link to related table */
-    char *chrom2;	/* Chromosome of second region */
-    unsigned chromStart2;	/* Start position in chromosome of second region */
-    unsigned chromEnd2;	/* End position in chromosome of second region */
-    char *name2;	/* Identifier of second region. Can be used as link to related table */
+    double value;	/* Strength of interaction or other data value. Typically basis for score */
+    char *exp;	/* Experiment name (metadata for filtering) or empty. */
+    unsigned color;	/* Item color, as itemRgb in bed9. Typically based on strenght or filter */
+    char *sourceChrom;	/* Chromosome of source region (directional) or lower region. */
+    unsigned sourceStart;	/* Start position in chromosome of source/lower region */
+    unsigned sourceEnd;	/* End position in chromosome of source/lower region */
+    char *sourceName;	/* Identifier of source/lower region. Can be used as link to related table */
+    char *targetChrom;	/* Chromosome of target region (directional) or upper region */
+    unsigned targetStart;	/* Start position in chromosome of target/upper region */
+    unsigned targetEnd;	/* End position in chromosome of target/upper region */
+    char *targetName;	/* Identifier of target/upper region. Can be used as link to related table */
     };
 
 void interactStaticLoad(char **row, struct interact *ret);
