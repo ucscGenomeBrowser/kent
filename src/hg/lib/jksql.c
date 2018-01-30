@@ -3649,6 +3649,8 @@ if (!init)
     // NOTE it is important for security that no other characters be allowed here
     init = TRUE;
     }
+if (sameString(identifiers, "*"))  // exception allowed
+    return identifiers;
 if (!sqlCheckAllowedChars(identifiers, allowed))
     {
     sqlCheckError("Illegal character found in identifier list %s", identifiers);
@@ -4184,6 +4186,24 @@ va_end(args);
 return ds;
 }
 
+void sqlDyStringPrintIdList(struct dyString *ds, char *fields)
+/* Append a comma-separated list of fields identifiers. Aborts if invalid characters in list. */
+{
+sqlDyStringPrintf(ds, "%-s", sqlCkIl(fields));
+}
+
+
+void sqlDyStringPrintValuesList(struct dyString *ds, struct slName *list)
+/* Append a comma-separated, quoted and escaped list of values. */
+{
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (el != list)
+	sqlDyStringPrintf(ds, ",");
+    sqlDyStringPrintf(ds, "'%s'", el->name);
+    }
+}
 
 void sqlCheckError(char *format, ...)
 /* A sql injection error has occurred. Check for settings and respond

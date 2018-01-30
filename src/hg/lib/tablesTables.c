@@ -419,7 +419,7 @@ struct dyString *query = dyStringNew(0);
 struct dyString *where = dyStringNew(0);
 struct slName *field, *fieldList = commaSepToSlNames(fields);
 boolean gotWhere = FALSE;
-sqlDyStringPrintf(query, "select %s from %s", fields, from);
+sqlDyStringPrintf(query, "select %-s from %s", sqlCkIl(fields), from);
 if (!isEmpty(initialWhere))
     {
     sqlDyStringPrintfFrag(where, " where ");
@@ -520,8 +520,7 @@ struct dyString *where;
 webTableBuildQuery(cart, from, initialWhere, varPrefix, fields, withFilters, &query, &where);
 
 /* Figure out size of query result */
-struct dyString *countQuery = dyStringNew(0);
-sqlDyStringPrintf(countQuery, "select count(*) from %s", from);
+struct dyString *countQuery = sqlDyStringCreate("select count(*) from %s", from);
 sqlDyStringPrintf(countQuery, "%-s", where->string);   // trust
 int resultsSize = sqlQuickNum(conn, countQuery->string);
 dyStringFree(&countQuery);

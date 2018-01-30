@@ -775,14 +775,13 @@ struct dyString *filteredWhere;
 webTableBuildQuery(cart, "cdwFileTags", accWhere->string, "cdwBrowseFiles", FILETABLEFIELDS, TRUE, &dummy, &filteredWhere);
 
 // get their fileIds
-struct dyString *tagQuery = dyStringNew(0);
-sqlDyStringPrintf(tagQuery, "SELECT file_id from cdwFileTags %-s", filteredWhere->string); // trust
+struct dyString *tagQuery = sqlDyStringCreate("SELECT file_id from cdwFileTags %-s", filteredWhere->string); // trust
 struct slName *fileIds = sqlQuickList(conn, tagQuery->string);
 
 // retrieve the cdwFiles objects for these
-char *idListStr = slNameListToString(fileIds, ',');
-struct dyString *fileQuery = dyStringNew(0);
-sqlDyStringPrintf(fileQuery, "SELECT * FROM cdwFile WHERE id IN (%s) ", idListStr);
+struct dyString *fileQuery = sqlDyStringCreate("SELECT * FROM cdwFile WHERE id IN (");
+sqlDyStringPrintValuesList(fileQuery, fileIds);
+sqlDyStringPrintf(fileQuery, ")");
 return cdwFileLoadByQuery(conn, fileQuery->string);
 }
 
@@ -1325,15 +1324,14 @@ cgiMakeHiddenVar("cdwCommand", "analysisQuery");
 /* Fields clause */
 char *fieldsVar = "cdwQueryFields";
 char *fields = cartUsualString(cart, fieldsVar, "*");
-struct dyString *rqlQuery = dyStringNew(0); 
-sqlDyStringPrintf(rqlQuery,"select %s from files ", fields);
+struct dyString *rqlQuery = dyStringCreate("select %s from files ", fields);
 
 /* Where clause */
 char *whereVar = "cdwQueryWhere";
 char *where = cartUsualString(cart, whereVar, "");
-sqlDyStringPrintfFrag(rqlQuery, "where accession");
+dyStringPrintf(rqlQuery, "where accession");
 if (!isEmpty(where))
-    sqlDyStringPrintf(rqlQuery, " and (%-s)", where); // trust
+    dyStringPrintf(rqlQuery, " and (%s)", where);
 
 /* Limit clause */
 char *limitVar = "cdwQueryLimit";
