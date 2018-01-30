@@ -44,6 +44,11 @@
                 no-repeat;
 }
 
+.myTitleClass .ui-dialog-titlebar {
+    color: white;
+    background: #4c759c;
+}
+
 /* When the body has the loading class, we turn
    the scrollbar off with overflow:hidden */
 body.loading {
@@ -119,7 +124,7 @@ body.loading .modal {
 
 <div class='modal'></div>
 
-<div id='newCollectionDialog' title='Create Collection' style='background:white; width:512px; display:none'>
+<div id='newCollectionDialog' class='myTitleClass' title='Create Collection' style='background:white; width:512px; display:none'>
     <p>
     <label style='display:none' id='trackDialogHelp'>
     Enter the name and description of the copied track.
@@ -147,7 +152,7 @@ body.loading .modal {
     </div>
 
     <div>
-        <input id="doNewCollection" type="submit" value="Save"   >
+        <input class='gbButton'  id="doNewCollection" type="submit" value="Save"   >
     </div>
 </div>
 

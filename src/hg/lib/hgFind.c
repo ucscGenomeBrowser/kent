@@ -665,9 +665,9 @@ for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     {
     sqlDyStringPrintf(dy, "'%s'", tsr->itemId);
     if (tsr->next != NULL)
-        dyStringAppendC(dy, ',');
+        sqlDyStringPrintf(dy, ",");
     }
-dyStringAppend(dy, ")");
+sqlDyStringPrintf(dy, ")");
 
 sr = sqlGetResult(conn, dy->string);
 
@@ -693,9 +693,9 @@ for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     {
     sqlDyStringPrintf(dy, "'%s'", tsr->itemId);
     if (tsr->next != NULL)
-        dyStringAppendC(dy, ',');
+        sqlDyStringPrintf(dy, ",");
     }
-dyStringAppend(dy, ")");
+sqlDyStringPrintf(dy, ")");
 
 sr = sqlGetResult(conn, dy->string);
 

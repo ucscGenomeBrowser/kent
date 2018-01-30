@@ -197,14 +197,14 @@ struct joinerDtf *dtf;
 for (dtf = fieldList;  dtf != NULL;  dtf = dtf->next)
     {
     if (dtf != fieldList)
-        dyStringAppendC(query, ',');
+        sqlDyStringPrintf(query, ",");
     if (useSplitTable(self, dtf))
-        dyStringPrintf(query, "%s.%s", self->table, dtf->field);
+        sqlDyStringPrintf(query, "%s.%s", self->table, dtf->field);
     else
         {
         char dtfString[PATH_LEN];
         joinerDtfToSqlFieldString(dtf, self->db, dtfString, sizeof(dtfString));
-        dyStringAppend(query, dtfString);
+        sqlDyStringPrintf(query, "%s", dtfString);
         }
     }
 }
@@ -286,11 +286,11 @@ else
     }
 if (self->rightJoinDtf)
     {
-    dyStringAppend(query, " join ");
+    sqlDyStringPrintf(query, " join ");
     appendOneTable(self, self->rightJoinDtf, query);
     char rjField[PATH_LEN];
     joinerDtfToSqlFieldString(self->rightJoinDtf, self->db, rjField, sizeof(rjField));
-    dyStringPrintf(query, " on %s = %s.%s", rjField, self->table, self->rightJoinMainField);
+    sqlDyStringPrintf(query, " on %s = %s.%s", rjField, self->table, self->rightJoinMainField);
     }
 return hasLeftJoin;
 }
@@ -347,7 +347,7 @@ static void asdUpdateBaselineQuery(struct annoStreamDb *self)
 {
 struct dyString *query = sqlDyStringCreate("select ");
 appendFieldList(self, query);
-dyStringAppend(query, " from ");
+sqlDyStringPrintf(query, " from ");
 self->hasLeftJoin = appendTableList(self, query);
 boolean hasWhere = FALSE;
 self->baselineQuery = dyStringCannibalize(&query);

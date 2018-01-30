@@ -51,12 +51,17 @@ var hgCollection = (function() {
                     var nodes = $(selectedTree).jstree( "get_selected");
                     var parentNode = $(selectedTree).jstree("get_node", node.parent);
                     isDirty = true;
-                    if (parentNode.children.length === nodes.length) {
+                    if ((parentNode.id !== '#') && (parentNode.children.length === nodes.length) ){
                         $(selectedTree).jstree("create_node", node.parent, emptyCollectionText);
                         parentNode.li_attr.class = "folder empty";
                     }
                     $(selectedTree).jstree( "delete_node", nodes);
-                    $(selectedTree).jstree( "select_node", parentNode.id);
+                    if (parentNode.id === '#') {
+                        var firstChild = $(selectedTree).find("li").first();
+                        $(selectedTree).jstree("select_node", $(firstChild).attr("id"));
+                    } else {
+                        $(selectedTree).jstree( "select_node", parentNode.id);
+                    }
                 }
             }
         };
@@ -138,14 +143,9 @@ var hgCollection = (function() {
     function checkCallback( operation, node, node_parent, node_position, more) {
         // called during a drag and drop action to see if the target is droppable
         if ((operation === "copy_node") ||  (operation === "move_node")) {
-            if (node.li_attr.class.includes("folder")) {
-                if (node_parent.id !== '#') {
-                    return false;
-                }
-            }
-            else if (!node_parent.li_attr.class.includes("folder")) {
-                return false;
-            }
+            if (node_parent.parent === '#')
+                return true;
+            return false;
         }
         return true;
     }
@@ -301,8 +301,7 @@ var hgCollection = (function() {
         var treeObject = $(event.currentTarget).parent().parent();
         var id = treeObject.attr('id');
         var node = treeObject.jstree("get_node", id);
-        //if (node.children.length === 0) {
-        if (node.li_attr.class !== "folder") {
+        if (node.children.length === 0) {
             isDirty = true;
             var parentNode = treeObject.jstree("get_node", node.parent);
             if (parentNode.children.length === 1) {
@@ -343,6 +342,7 @@ var hgCollection = (function() {
         $( "#newCollectionDialog" ).dialog({ modal: true, 
             width: "50%", 
             autoOpen: false,
+            dialogClass: 'myTitleClass'
             });
         $("#newCollection").click ( dialogCollection );
         $("#doNewCollection").click ( newCollection );
@@ -368,8 +368,8 @@ var hgCollection = (function() {
             var newTree = this;
 
             $(newTree).jstree({
-               //'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
-               'plugins' : [ 'conditionalselect', 'contextmenu'],
+               'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
+               //'plugins' : [ 'conditionalselect', 'contextmenu'],
                'contextmenu': { "items" : currentCollectionItems},
                'core': {
                    "dblclick_toggle" : false,
