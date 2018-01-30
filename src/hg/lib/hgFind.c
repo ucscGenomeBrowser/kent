@@ -659,7 +659,7 @@ for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
 
 /* Stream through knownGenes table and make up a pos
  * for each mapping of each gene matching search. */
-sqlDyStringAppend(dy, 
+sqlDyStringPrintf(dy, 
 	"select name,chrom,txStart,txEnd from knownGene where name in (");
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     {
@@ -687,7 +687,7 @@ sqlFreeResult(&sr);
 
 /* Stream through kgXref table adding description and geneSymbol */
 dyStringClear(dy);
-sqlDyStringAppend(dy, 
+sqlDyStringPrintf(dy, 
 	"select kgID,geneSymbol,description from kgXref where kgID in (");
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     {

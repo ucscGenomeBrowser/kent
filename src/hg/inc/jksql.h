@@ -692,17 +692,20 @@ __attribute__((format(printf, 3, 4)))
 void vaSqlDyStringPrintfExt(struct dyString *ds, boolean isFrag, char *format, va_list args);
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string and isFrag is FALSE. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string and isFrag is FALSE.
+ * Appends to existing string. */
 
 void vaSqlDyStringPrintf(struct dyString *ds, char *format, va_list args);
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string.
+ * Appends to existing string. */
 
 void sqlDyStringPrintf(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  
- * NOSLQINJ tag is added to beginning if it is a new empty string. */
+ * NOSLQINJ tag is added to beginning if it is a new empty string.
+ * Appends to existing string. */
 #ifdef __GNUC__
 __attribute__((format(printf, 2, 3)))
 #endif
@@ -712,23 +715,19 @@ void vaSqlDyStringPrintfFrag(struct dyString *ds, char *format, va_list args);
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 
 void sqlDyStringPrintfFrag(struct dyString *ds, char *format, ...)
 /* Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
- * the entire sql string. */
+ * the entire sql string. Appends to existing string. */
 #ifdef __GNUC__
 __attribute__((format(printf, 2, 3)))
 #endif
 ;
 
 #define NOSQLINJ "NOSQLINJ "
-
-void sqlDyStringAppend(struct dyString *ds, char *string);
-/* Append zero terminated string to end of dyString.
- * Adds the NOSQLINJ prefix if dy string is empty. */
 
 struct dyString *sqlDyStringCreate(char *format, ...)
 /* Create a dyString with a printf style initial content

@@ -604,25 +604,25 @@ slReverse(&fieldList);
 
 /* Build up sql query to fetch all our fields */
 struct dyString *query = dyStringNew(0);
-sqlDyStringPrintf(query, "%s", "");   // Get header correct
-char *separator = "select ";  // This will get printed before first one
+sqlDyStringPrintf(query, "select ");
 for (field = fieldList; field != NULL; field = field->next)
     {
-    dyStringPrintf(query, "%s%s", separator, field->name);
-    separator = ",";
+    if (field != fieldList) // not first one
+	sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "%s", field->name);
     }
 
 /* Put where on it to limit it to accessible files */
-dyStringPrintf(query, " from cdwFileTags where file_id in (");
+sqlDyStringPrintf(query, " from cdwFileTags where file_id in (");
 
 struct cdwFile *ef;
-separator = "";
 for (ef = efList; ef != NULL; ef = ef->next)
     {
-    dyStringPrintf(query, "%s%u", separator, ef->id);
-    separator = ",";
+    if (ef != efList) // not first one
+	sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "%u", ef->id);
     }
-dyStringPrintf(query, ")");
+sqlDyStringPrintf(query, ")");
 
 struct sqlResult *sr = sqlGetResult(conn, query->string);
 char **row;

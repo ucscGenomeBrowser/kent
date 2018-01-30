@@ -16,7 +16,7 @@ enum soTerm	// the various variant effects
     {
     regulatory_region_variant=1566,
     stop_retained_variant=1567,
-    exon_loss=1572,
+    exon_loss_variant=1572,
     splice_acceptor_variant=1574,
     splice_donor_variant=1575,
     complex_transcript_variant=1577,
@@ -47,6 +47,7 @@ enum soTerm	// the various variant effects
     inframe_insertion=1821,
     inframe_deletion=1822,
     feature_variant=1878,
+    transcript_ablation=1893,
     no_sequence_alteration=2073,
     };
 

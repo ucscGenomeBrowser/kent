@@ -57,12 +57,12 @@ sqlDyStringPrintf(query, "select %s", fields[0]);
 int i;
 for (i=1; i<fieldCount; ++i)
     {
-    dyStringAppendC(query, ',');
-    dyStringAppend(query, fields[i]);
+    sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "%s", fields[i]);
     }
-dyStringPrintf(query, " from %s", table);
+sqlDyStringPrintf(query, " from %s", table);
 if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
+    sqlDyStringPrintf(query, " where %-s", where); // trusting where-clause
 
 /* Create facetField list and table. */
 struct facetField *ffArray[fieldCount], *ffList = NULL, *ff;

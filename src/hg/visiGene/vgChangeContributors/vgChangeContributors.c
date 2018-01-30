@@ -58,16 +58,15 @@ struct sqlConnection *conn = sqlConnect(database);
 struct slName *contrib, *contribList = slNameListFromComma(contributors);
 struct dyString *dy = dyStringNew(0);
 
-sqlDyStringAppend(dy, "update submissionSet set contributors='");
-dyStringAppend(dy, contributors);
-dyStringPrintf(dy, "' where id=%d", submissionSetId);
-verbose(2, dy->string);
+sqlDyStringPrintf(dy, "update submissionSet set contributors='%s'", contributors);
+sqlDyStringPrintf(dy, " where id=%d", submissionSetId);
+verbose(2, "%s", dy->string);
 sqlUpdate(conn, dy->string);
 
 dyStringClear(dy);
 sqlDyStringPrintf(dy, "delete from submissionContributor where submissionSet=%d", 
     submissionSetId);
-verbose(2, dy->string);
+verbose(2, "%s", dy->string);
 sqlUpdate(conn, dy->string);
 
 for (contrib = contribList; contrib != NULL; contrib = contrib->next)
