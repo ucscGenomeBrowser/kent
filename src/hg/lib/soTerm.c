@@ -16,7 +16,7 @@ struct soStringToId
 static struct soStringToId soStringToId[] = {
     { "regulatory_region_variant", regulatory_region_variant },
     { "stop_retained_variant", stop_retained_variant },
-    { "exon_loss", exon_loss },
+    { "exon_loss_variant", exon_loss_variant },
     { "splice_acceptor_variant", splice_acceptor_variant },
     { "splice_donor_variant", splice_donor_variant },
     { "complex_transcript_variant", complex_transcript_variant },
@@ -47,6 +47,7 @@ static struct soStringToId soStringToId[] = {
     { "inframe_insertion", inframe_insertion },
     { "inframe_deletion", inframe_deletion },
     { "feature_variant", feature_variant },
+    { "transcript_ablation", transcript_ablation },
     { "no_sequence_alteration", no_sequence_alteration },
     { NULL, 0 }
 };

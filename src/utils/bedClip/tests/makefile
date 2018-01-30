@@ -16,6 +16,7 @@ test:
 	@diff badEnd.bed badEnd.result
 	@${PROG} -verbose=2 badNameExample.bed.gz ce6.chrom.sizes stdout 2>&1 | grep -v "kent source version" > badName.bed || true
 	@diff badName.bed badName.result
+	${MAKE} clean
 
 clean:
 	rm -f clip.bed truncate.bed twoFields.bed badStart.bed badEnd.bed badName.bed

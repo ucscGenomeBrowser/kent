@@ -14,7 +14,7 @@ BIN_DIR = bin/${MACHTYPE}
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     ${TABIX_TESTS} hacTreeTest testSumDoubles
-	rm -r output fetchUrlTest 
+	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
 

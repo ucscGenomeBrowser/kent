@@ -8,6 +8,7 @@
 #include "annoFormatVep.h"
 #include "annoGratorGpVar.h"
 #include "annoGratorQuery.h"
+#include "annoStreamDbPslPlus.h"
 #include "asParse.h"
 #include "bigGenePred.h"
 #include "dystring.h"
@@ -86,8 +87,8 @@ struct annoFormatVep
     int lmRowCount;			// counter for periodic localmem cleanup
     int varNameIx;			// Index of name column from variant source, or -1 if N/A
     int varAllelesIx;			// Index of alleles column from variant source, or -1
-    int geneNameIx;			// Index of gene name (not tx name) from (big)genePred
-    int exonCountIx;			// Index of exonCount from (big)genePred
+    int txNameIx;                       // Index of transcript name from (big)genePred/PSL
+    int geneNameIx;			// Index of gene name from (big)genePred/PSL+ if included
     int hgvsGIx;			// Index of HGVS g. column from annoGratorGpVar
     int hgvsCNIx;			// Index of HGVS c./n. column from annoGratorGpVar
     int hgvsPIx;			// Index of HGVS p. column from annoGratorGpVar
@@ -412,8 +413,7 @@ if (len > 2*baseCount + elipsLen + strlen(lengthNote))
 }
 
 static void tweakStopCodonAndLimitLength(char *aaSeq, char *codonSeq)
-/* If aa from gpFx has a stop 'Z', replace it with '*' and truncate 
- * codons following the stop if necessary just in case they run on.
+/* If aa from gpFx has a stop 'Z', replace it with "*".
  * If the strings are very long, truncate with a note about how long they are. */
 {
 char *earlyStop = strchr(aaSeq, 'Z');
@@ -421,8 +421,6 @@ if (earlyStop)
     {
     earlyStop[0] = '*';
     earlyStop[1] = '\0';
-    int earlyStopIx = (earlyStop - aaSeq + 1) * 3;
-    codonSeq[earlyStopIx] = '\0';
     }
 limitLength(aaSeq, 5, "aa");
 limitLength(codonSeq, 12, "nt");
@@ -441,10 +439,8 @@ static void afVepPrintPredictions(struct annoFormatVep *self, struct annoRow *va
 				  struct annoRow *gpvRow, struct gpFx *gpFx)
 /* Print VEP columns computed by annoGratorGpVar (or placeholders) */
 {
-boolean isInsertion = (varRow->start == varRow->end);
-boolean isDeletion = isEmpty(gpFx->allele);
 // variant allele used to calculate the consequence (or first alternate allele)
-char *abbrevAllele = cloneString(gpFx->allele);
+char *abbrevAllele = cloneString(gpFx->gAllele);
 limitLength(abbrevAllele, 24, "nt");
 afVepPuts(placeholderForEmpty(abbrevAllele), self);
 afVepNextColumn(self->f, self->doHtml);
@@ -467,6 +463,9 @@ afVepNextColumn(self->f, self->doHtml);
 if (gpFx->detailType == codingChange)
     {
     struct codingChange *change = &(gpFx->details.codingChange);
+    uint refLen = strlen(change->txRef), altLen = strlen(change->txAlt);
+    boolean isInsertion = (refLen == 0);
+    boolean isDeletion = altLen < refLen;
     if (isInsertion)
 	{
 	fprintf(self->f, "%u-%u", change->cDnaPosition, change->cDnaPosition+1);
@@ -475,10 +474,9 @@ if (gpFx->detailType == codingChange)
 	}
     else if (isDeletion)
 	{
-	uint altLength = varRow->end - varRow->start;
-	fprintf(self->f, "%u-%u", change->cDnaPosition+1, change->cDnaPosition+altLength);
+	fprintf(self->f, "%u-%u", change->cDnaPosition+1, change->cDnaPosition+refLen);
 	afVepNextColumn(self->f, self->doHtml);
-	fprintf(self->f, "%u-%u", change->cdsPosition+1, change->cdsPosition+altLength);
+	fprintf(self->f, "%u-%u", change->cdsPosition+1, change->cdsPosition+refLen);
 	}
     else
 	{
@@ -491,14 +489,14 @@ if (gpFx->detailType == codingChange)
     afVepNextColumn(self->f, self->doHtml);
     int variantFrame = change->cdsPosition % 3;
     strLower(change->codonOld);
-    int upLen = min(strlen(change->codonOld+variantFrame), varRow->end - varRow->start);
+    int upLen = min(strlen(change->codonOld+variantFrame), refLen);
     toUpperN(change->codonOld+variantFrame, upLen);
     strLower(change->codonNew);
-    int alleleLength = strlen(gpFx->allele);
-    // watch out for symbolic alleles:
-    if (sameString(gpFx->allele, "<X>") || sameString(gpFx->allele, "<*>"))
+    int alleleLength = altLen;
+    // watch out for symbolic alleles [actually now that we're using txAlt we shouldn't see these]:
+    if (sameString(change->txAlt, "<X>") || sameString(change->txAlt, "<*>"))
         alleleLength = upLen;
-    else if (startsWith("<", gpFx->allele))
+    else if (startsWith("<", change->txAlt))
         alleleLength = 0;
     toUpperN(change->codonNew+variantFrame, alleleLength);
     tweakStopCodonAndLimitLength(change->aaOld, change->codonOld);
@@ -510,9 +508,15 @@ if (gpFx->detailType == codingChange)
     }
 else if (gpFx->detailType == nonCodingExon)
     {
-    int cDnaPosition = gpFx->details.nonCodingExon.cDnaPosition;
+    struct nonCodingExon *change = &(gpFx->details.nonCodingExon);
+    uint refLen = strlen(change->txRef), altLen = strlen(change->txAlt);
+    boolean isInsertion = (refLen == 0);
+    boolean isDeletion = altLen < refLen;
+    int cDnaPosition = change->cDnaPosition;
     if (isInsertion)
 	fprintf(self->f, "%u-%u", cDnaPosition, cDnaPosition+1);
+    else if (isDeletion)
+	fprintf(self->f, "%u-%u", cDnaPosition+1, cDnaPosition+refLen);
     else
 	fprintf(self->f, "%u", cDnaPosition+1);
     afVepNextColumn(self->f, self->doHtml);
@@ -563,12 +567,15 @@ else
 static boolean isCodingSnv(struct annoRow *primaryRow, struct gpFx *gpFx)
 /* Return TRUE if this is a single-nucleotide non-synonymous change. */
 {
-if (primaryRow->end != primaryRow->start + 1)
-    return FALSE;
-if (gpFx == NULL || gpFx->allele == NULL ||
-    strlen(gpFx->allele) != 1 || sameString(gpFx->allele, "-") ||
+if (gpFx == NULL ||
     gpFx->detailType != codingChange ||
     gpFx->soNumber == synonymous_variant)
+    return FALSE;
+char *txRef = gpFx->details.codingChange.txRef;
+char *txAlt = gpFx->details.codingChange.txAlt;
+if (txRef == NULL || txAlt == NULL ||
+    strlen(txRef) != 1 || sameString(txRef, "-") ||
+    strlen(txAlt) != 1 || sameString(txAlt, "-"))
     return FALSE;
 return TRUE;
 }
@@ -671,11 +678,11 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	continue;
     struct annoFormatVepExtraItem *extraItem = extraSrc->items;
     char *scoreStr = NULL;
-    if (sameString(gpFx->allele, words[altAl1Ix]))
+    if (sameString(gpFx->gAllele, words[altAl1Ix]))
 	scoreStr = words[score1Ix];
-    else if (sameString(gpFx->allele, words[altAl2Ix]))
+    else if (sameString(gpFx->gAllele, words[altAl2Ix]))
 	scoreStr = words[score2Ix];
-    else if (sameString(gpFx->allele, words[altAl3Ix]))
+    else if (sameString(gpFx->gAllele, words[altAl3Ix]))
 	scoreStr = words[score3Ix];
     double score = atof(scoreStr);
     char prediction = '?';
@@ -740,17 +747,17 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	{
 	boolean isHdiv = (stringIn("HDIV", extraItem->tag) != NULL);
 	int predIx = -1, scoreIx = -1;
-	if (sameString(gpFx->allele, words[altAl1Ix]))
+	if (sameString(gpFx->gAllele, words[altAl1Ix]))
 	    {
 	    predIx = isHdiv ? hDivPred1Ix : hVarPred1Ix;
 	    scoreIx = isHdiv ? hDivScore1Ix : hVarScore1Ix;
 	    }
-	else if (sameString(gpFx->allele, words[altAl2Ix]))
+	else if (sameString(gpFx->gAllele, words[altAl2Ix]))
 	    {
 	    predIx = isHdiv ? hDivPred2Ix : hVarPred2Ix;
 	    scoreIx = isHdiv ? hDivScore2Ix : hVarScore2Ix;
 	    }
-	else if (sameString(gpFx->allele, words[altAl3Ix]))
+	else if (sameString(gpFx->gAllele, words[altAl3Ix]))
 	    {
 	    predIx = isHdiv ? hDivPred3Ix : hVarPred3Ix;
 	    scoreIx = isHdiv ? hDivScore3Ix : hVarScore3Ix;
@@ -812,17 +819,17 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	continue;
     struct annoFormatVepExtraItem *extraItem = extraSrc->items;
     char *score = NULL, *pred = NULL;
-    if (sameString(gpFx->allele, words[altAl1Ix]))
+    if (sameString(gpFx->gAllele, words[altAl1Ix]))
 	{
 	score = words[score1Ix];
 	pred = words[pred1Ix];
 	}
-    else if (sameString(gpFx->allele, words[altAl2Ix]))
+    else if (sameString(gpFx->gAllele, words[altAl2Ix]))
 	{
 	score = words[score2Ix];
 	pred = words[pred2Ix];
 	}
-    else if (sameString(gpFx->allele, words[altAl3Ix]))
+    else if (sameString(gpFx->gAllele, words[altAl3Ix]))
 	{
 	score = words[score3Ix];
 	pred = words[pred3Ix];
@@ -873,17 +880,17 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	continue;
     struct annoFormatVepExtraItem *extraItem = extraSrc->items;
     char *score = NULL, *pred = NULL;
-    if (sameString(gpFx->allele, words[altAl1Ix]))
+    if (sameString(gpFx->gAllele, words[altAl1Ix]))
 	{
 	score = words[score1Ix];
 	pred = words[pred1Ix];
 	}
-    else if (sameString(gpFx->allele, words[altAl2Ix]))
+    else if (sameString(gpFx->gAllele, words[altAl2Ix]))
 	{
 	score = words[score2Ix];
 	pred = words[pred2Ix];
 	}
-    else if (sameString(gpFx->allele, words[altAl3Ix]))
+    else if (sameString(gpFx->gAllele, words[altAl3Ix]))
 	{
 	score = words[score3Ix];
 	pred = words[pred3Ix];
@@ -929,11 +936,11 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	continue;
     struct annoFormatVepExtraItem *extraItem = extraSrc->items;
     char *score = NULL;
-    if (sameString(gpFx->allele, words[altAl1Ix]))
+    if (sameString(gpFx->gAllele, words[altAl1Ix]))
 	score = words[score1Ix];
-    else if (sameString(gpFx->allele, words[altAl2Ix]))
+    else if (sameString(gpFx->gAllele, words[altAl2Ix]))
 	score = words[score2Ix];
-    else if (sameString(gpFx->allele, words[altAl3Ix]))
+    else if (sameString(gpFx->gAllele, words[altAl3Ix]))
 	score = words[score3Ix];
     if (isNotEmpty(score) && differentString(score, "."))
 	{
@@ -1018,7 +1025,7 @@ for (i = 0;  i < gratorCount;  i++)
 	char **words = row->data;
 	if (strcasecmp(cc->codonOld, words[7]) != 0)
 	    continue;
-	if (!allelesAgree(gpFx->allele[0], cc->aaNew[0], words))
+	if (!allelesAgree(gpFx->gAllele[0], cc->aaNew[0], words))
 	    continue;
 	int txIx = commaSepFindIntIx(cc->pepPosition+1, words[10]);
 	if (txIx >= 0)
@@ -1163,7 +1170,7 @@ static void afVepPrintExtraWords(struct annoFormatVepExtraSource *extraSrc,
 if (extraItem->rowIx < 0)
     errAbort("annoFormatVep: invalid rowIx for tag %s", extraItem->tag);
 char **gpvWords = gpvRow ? gpvRow->data : NULL;
-char *gpvTranscript = gpvWords ? gpvWords[0] : NULL;
+char *gpvTranscript = gpvWords ? gpvWords[self->txNameIx] : NULL;
 boolean gotGpvTx = FALSE;
 int i;
 struct annoRow *row;
@@ -1248,22 +1255,27 @@ if (includeExonNumber && gpFx)
     {
     // Add Exon or intron number if applicable
     enum detailType deType = gpFx->detailType;
-    int exonNum = -1;
+    int num = -1, count = 0;
     if (deType == codingChange)
-	exonNum = gpFx->details.codingChange.exonNumber;
+        {
+	num = gpFx->details.codingChange.exonNumber;
+	count = gpFx->details.codingChange.exonCount;
+        }
     else if (deType == nonCodingExon)
-	exonNum = gpFx->details.nonCodingExon.exonNumber;
+        {
+	num = gpFx->details.nonCodingExon.exonNumber;
+	count = gpFx->details.nonCodingExon.exonCount;
+        }
     else if (deType == intron)
-	exonNum = gpFx->details.intron.intronNumber;
-    if (exonNum >= 0)
+        {
+	num = gpFx->details.intron.intronNumber;
+        count = gpFx->details.intron.intronCount;
+        }
+    if (num >= 0)
 	{
 	afVepNewExtra(self, pGotExtra);
-	int exonCount = atoi(((char **)(gpvRow->data))[self->exonCountIx]);
-	if (deType == intron)
-	    fprintf(self->f, "INTRON=%d/%d", exonNum+1, exonCount-1);
-	else
-	    fprintf(self->f, "EXON=%d/%d", exonNum+1, exonCount);
-	}
+        fprintf(self->f, "%s=%d/%d", (deType == intron) ? "INTRON" : "EXON", num+1, count);
+        }
     }
 if (!*pGotExtra)
     afVepPrintPlaceholders(self->f, 0, self->doHtml);
@@ -1451,11 +1463,19 @@ if (self->variantType == afvdtPgSnpTable || self->variantType == afvdtPgSnpFile)
 if (config->gpVarSource == NULL)
     errAbort("afVepSetConfig: config must have a gpVarSource");
 else if (! asColumnNamesMatchFirstN(config->gpVarSource->asObj, genePredAsObj(), 10) &&
-         ! asColumnNamesMatchFirstN(config->gpVarSource->asObj, bigGenePredAsObj(), 16))
-    errAbort("afVepSetConfig: gpVarSource %s doesn't look like genePred",
+         ! asColumnNamesMatchFirstN(config->gpVarSource->asObj, bigGenePredAsObj(), 16) &&
+         ! asColumnNamesMatchFirstN(config->gpVarSource->asObj, annoStreamDbPslPlusAsObj(),
+                                    PSLPLUS_NUM_COLS))
+    errAbort("afVepSetConfig: gpVarSource %s doesn't look like genePred or pslPlus",
 	     config->gpVarSource->name);
 // refGene and augmented knownGene have extra name fields that have the HGNC gene symbol:
 struct asColumn *gpvAsColumns = config->gpVarSource->asObj->columnList;
+self->txNameIx = asColumnFindIx(gpvAsColumns, "name");
+if (self->txNameIx < 0)
+    self->txNameIx = asColumnFindIx(gpvAsColumns, "qName");
+if (self->txNameIx < 0)
+    errAbort("afVepSetConfig: can't find name or qName column in gpVarSource %s",
+             config->gpVarSource->name);
 self->geneNameIx = asColumnFindIx(gpvAsColumns, "geneSymbol");
 if (self->geneNameIx < 0)
     self->geneNameIx = asColumnFindIx(gpvAsColumns, "kgXref_geneSymbol");
@@ -1463,12 +1483,6 @@ if (self->geneNameIx < 0)
     self->geneNameIx = asColumnFindIx(gpvAsColumns, "name2");
 if (self->geneNameIx < 0)
     self->geneNameIx = asColumnFindIx(gpvAsColumns, "proteinID");
-self->exonCountIx = asColumnFindIx(gpvAsColumns, "exonCount");
-if (self->exonCountIx < 0)
-    self->exonCountIx = asColumnFindIx(gpvAsColumns, "blockCount");
-if (self->exonCountIx < 0)
-    errAbort("afVepSetConfig: can't find exonCount or blockCount column in gpVarSource %s",
-             config->gpVarSource->name);
 self->hgvsGIx = asColumnMustFindIx(gpvAsColumns, "hgvsG");
 self->hgvsCNIx = asColumnMustFindIx(gpvAsColumns, "hgvsCN");
 self->hgvsPIx = asColumnMustFindIx(gpvAsColumns, "hgvsP");

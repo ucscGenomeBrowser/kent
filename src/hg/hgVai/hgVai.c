@@ -2210,14 +2210,15 @@ boolean needLeftBase = isEmpty(refAl) || sameString(refAl, "-");
 for (i = 0;  i < obsCount;  i++)
     {
     char *altAl = obsWords[i];
+    if (sameString(altAl, "-"))
+        altAl[0] = '\0';
     int altAlLen = strlen(altAl);
     if (minusStrand && isAllNt(altAl, altAlLen))
 	reverseComplement(altAl, altAlLen);
     if (differentString(altAl, refAl))
 	{
-	if (sameString(altAl, "-"))
+	if (isEmpty(altAl))
 	    {
-	    altAls[altCount] = "";
 	    needLeftBase = TRUE;
 	    }
 	else
@@ -2241,6 +2242,7 @@ for (i = 0;  i < obsCount;  i++)
 		}
 	    altAls[altCount] = altAl;
 	    }
+        altAls[altCount] = altAl;
 	altCount++;
 	}
     }
