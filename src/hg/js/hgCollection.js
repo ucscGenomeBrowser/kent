@@ -343,6 +343,7 @@ var hgCollection = (function() {
         $( "#newCollectionDialog" ).dialog({ modal: true, 
             width: "50%", 
             autoOpen: false,
+            dialogClass: 'myTitleClass'
             });
         $("#newCollection").click ( dialogCollection );
         $("#doNewCollection").click ( newCollection );
