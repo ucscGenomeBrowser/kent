@@ -4187,7 +4187,7 @@ return ds;
 }
 
 void sqlDyStringPrintIdList(struct dyString *ds, char *fields)
-/* Append a comma-separated list of fields identifiers. Aborts if invalid characters in list. */
+/* Append a comma-separated list of field identifiers. Aborts if invalid characters in list. */
 {
 sqlDyStringPrintf(ds, "%-s", sqlCkIl(fields));
 }
