@@ -89,5 +89,8 @@ void interactOutput(struct interact *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+char *interactOtherChrom(struct interact *inter);
+/* Get other chromosome from an interaaction. Return NULL if same chromosome */
+
 #endif /* INTERACT_H */
 

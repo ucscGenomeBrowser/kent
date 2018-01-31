@@ -42,16 +42,6 @@ void interactLoadItems(struct track *tg)
 loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoad);
 }
 
-char *getOtherChrom(struct interact *inter)
-/* Get other chromosome from an interaaction. Return NULL if same chromosome */
-{
-if (sameString(inter->sourceChrom, inter->targetChrom))
-    return NULL;
-if (inter->chromStart == inter->sourceStart)
-    return cloneString(inter->targetChrom);
-return cloneString(inter->sourceChrom);
-}
-
 static void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -95,7 +85,7 @@ for (inter=inters; inter; inter=inter->next)
 //uglyf("Max width is %d. ", maxWidth);
 for (inter=inters; inter; inter=inter->next)
     {
-    otherChrom = getOtherChrom(inter);
+    otherChrom = interactOtherChrom(inter);
     if (otherChrom == NULL)
         nSame++;
     else
@@ -125,7 +115,7 @@ int sameHeight = (nSame) ? tg->height - otherHeight: 0;
 //uglyf("IN seqStart=%d", seqStart);
 for (inter=inters; inter; inter=inter->next)
     {
-    char *otherChrom = getOtherChrom(inter);
+    char *otherChrom = interactOtherChrom(inter);
     safef(itemBuf, sizeof itemBuf, "%s", inter->name);
     struct dyString *ds = dyStringNew(0);
     dyStringPrintf(ds, "%s", inter->name);

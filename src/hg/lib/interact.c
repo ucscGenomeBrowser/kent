@@ -245,3 +245,12 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+char *interactOtherChrom(struct interact *inter)
+/* Get other chromosome from an interaaction. Return NULL if same chromosome */
+{
+if (sameString(inter->sourceChrom, inter->targetChrom))
+    return NULL;
+if (inter->chromStart == inter->sourceStart)
+    return cloneString(inter->targetChrom);
+return cloneString(inter->sourceChrom);
+}
