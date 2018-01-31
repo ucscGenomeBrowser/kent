@@ -38,3 +38,7 @@ shortCircuit 1
 xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENSTRUP0000[0-9]+(\.[0-9]+)?
+
+track ensGene override
+visibility pack
+ensemblIdUrl http://www.ensembl.org/Takifugu_rubripes

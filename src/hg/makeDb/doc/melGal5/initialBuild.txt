@@ -33,7 +33,7 @@ printf "photoCreditURL %s\nphotoCreditName %s\n" \
 'http://www.ars.usda.gov/is/graphics/photos/jul98/k7043-16.htm' \
 "Photo courtesy of USDA Agricultural Research Service" > photoReference.txt
 
-# this information is from the top of 
+# this information is from the top of
 #    melGal5/refseq/*_assembly_report.txt
 #    ( aka: melGal5/refseq/GCF_000146605.2_Turkey_5.0_assembly_report.txt )
 
@@ -379,7 +379,7 @@ real    5m46.391s
     cd ~/kent/src/hg/makeDb/trackDb/turkey/melGal5
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" melGal5 \
-      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c
  296330 ADDD.1
       1 NC_.2
 
@@ -707,7 +707,7 @@ melGal5.downloadDir = melGal5
     cat fb.ncbiRefSeq.melGal5.txt
     #  82563006 bases of 1218501075 (6.776%) in intersection
 
-    featureBits -enrichment melGal5 refGene ncbiRefSeq 
+    featureBits -enrichment melGal5 refGene ncbiRefSeq
     # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
     #    enrich 14.68x
 
@@ -780,5 +780,38 @@ melGal5.downloadDir = melGal5
 
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
+
+#########################################################################
+# add chromAlias table (DONE - 2018-01-31 - Hiram)
+
+    mkdir /hive/data/genomes/melGal5/bed/chromAlias
+    cd /hive/data/genomes/melGal5/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' melGal5 \
+        | sort -k1,1 > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' melGal5 \
+        | sort -k1,1 > ucsc.genbank.tab
+
+    awk '{printf "%s\t%s\n", $1,$2}' ../ensLift/ucscToEns.txt \
+        | sort -k1,1 > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl *.tab \
+	> melGal5.chromAlias.tab
+
+for t in refseq genbank
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t melGal5.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 231286 =? 231286 OK
+# checking genbank: 231286 =? 231286 OK
+
+    hgLoadSqlTab melGal5 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        melGal5.chromAlias.tab
 
 #########################################################################
