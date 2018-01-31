@@ -25,7 +25,7 @@ printf("&nbsp;%s&nbsp;", "curve");
 cgiMakeRadioButton(cartVar, INTERACT_DRAW_ELLIPSE, sameString(INTERACT_DRAW_ELLIPSE, drawMode));
 printf("&nbsp;%s&nbsp;", "ellipse");
 cgiMakeRadioButton(cartVar, INTERACT_DRAW_LINE, sameString(INTERACT_DRAW_LINE, drawMode));
-printf("&nbsp;%s&nbsp;", "line");
+printf("&nbsp;%s&nbsp;", "rectangle");
 }
 
 void interactUiTrackHeight(struct cart *cart, char *track, struct trackDb *tdb)
