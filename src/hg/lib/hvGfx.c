@@ -265,16 +265,16 @@ hvGfxDot(hvg, x, y, MAKECOLOR_32(r,g,b));
 hvGfxDot(hvg, x, y, MAKECOLOR_32(r,g,b));
 }
 
-void hvGfxDottedLine(struct hvGfx *hvg, int x1, int y1, int x2, int y2, Color color)
-/* Brezenham line algorithm, alternating dots */
+void hvGfxDottedLine(struct hvGfx *hvg, int x1, int y1, int x2, int y2, Color color, boolean isDash)
+/* Brezenham line algorithm, alternating dots, by 1 pixel or two (isDash true) */
 {   
 int duty_cycle;
 int incy;
 int delta_x, delta_y;
 int dots;
+int dotFreq = (isDash ? 3 : 2);
 delta_y = y2-y1;
 delta_x = x2-x1;
-boolean putDot = TRUE;
 if (delta_y < 0)  
     {   
     delta_y = -delta_y;
@@ -297,14 +297,8 @@ if (delta_x >= delta_y)
     dots = delta_x+1;
     while (--dots >= 0)
         {   
-        if (putDot)
-            {
+        if (dots % dotFreq)
             hvGfxDot(hvg,x1,y1,color);
-            putDot = FALSE;
-            }
-        else
-            putDot = TRUE;
-        // try putDot = !putDot;
         duty_cycle -= delta_y;
         x1 += 1;
         if (duty_cycle < 0)
@@ -319,13 +313,8 @@ else
     dots = delta_y+1;
     while (--dots >= 0)
         {   
-        if (putDot)
-            {
+        if (dots % dotFreq)
             hvGfxDot(hvg,x1,y1,color);
-            putDot = FALSE;
-            }
-        else
-            putDot = TRUE;
         duty_cycle += delta_x;
         y1+=incy;
         if (duty_cycle > 0)
@@ -338,7 +327,7 @@ else
 }   
 
 void hvGfxCurveSegAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, 
-                        Color color, boolean isDotted)
+                        Color color, boolean isDashed)
 /* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
  * Optionally alternate dots.
  * Adapted trivially from code posted on github and at http://members.chello.at/~easyfilter/bresenham.html */
@@ -365,21 +354,18 @@ void hvGfxCurveSegAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, 
       dx = 4.0*sy*(x1-x0)*cur+xx-xy;                /* differences 1st degree */
       dy = 4.0*sx*(y0-y1)*cur+yy-xy;
       xx += xx; yy += yy; err = dx+dy+xy;                   /* error 1st step */
-      boolean putDot = TRUE;
+      int dots = 0;
       do {
          cur = fmin(dx+xy,-xy-dy);
          ed = fmax(dx+xy,-xy-dy);               /* approximate error distance */
          ed += 2*ed*cur*cur/(4*ed*ed+cur*cur);
-         if (isDotted && !putDot) {
-            putDot = TRUE;
-         } else {
+         if (!isDashed || (++dots % 3))
             mixDot(hvg, x0,y0, 1-fabs(err-dx-dy-xy)/ed, color);          /* plot curve */
-            putDot = FALSE;
-         }
          if (x0 == x2 || y0 == y2) break;     /* last pixel -> curve finished */
          x1 = x0; cur = dx-err; y1 = 2*err+dy < 0;
          if (2*err+dx > 0) {                                        /* x step */
-            if (err-dy < ed) mixDot(hvg, x0,y0+sy, 1-fabs(err-dy)/ed, color);
+            if (err-dy < ed) 
+                mixDot(hvg, x0,y0+sy, 1-fabs(err-dy)/ed, color);
             x0 += sx; dx -= xy; err += dy += yy;
          }
          if (y1) {                                                  /* y step */
@@ -392,7 +378,7 @@ void hvGfxCurveSegAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, 
 }
 
 void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, 
-                        Color color, boolean isDotted)
+                        Color color, boolean isDashed)
 /* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
  * Optionally alternate dots.
  * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html */
@@ -410,7 +396,7 @@ void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y
       t = (x0*x2-x1*x1)*t/(x0-x1);                       /* gradient dP4/dx=0 */
       x = floor(t+0.5); y = floor(r+0.5);
       r = (y1-y0)*(t-x0)/(x1-x0)+y0;                  /* intersect P3 | P0 P1 */
-      hvGfxCurveSegAA(hvg,x0,y0, x,floor(r+0.5), x,y, color, isDotted);
+      hvGfxCurveSegAA(hvg,x0,y0, x,floor(r+0.5), x,y, color, isDashed);
       r = (y1-y2)*(t-x2)/(x1-x2)+y2;                  /* intersect P4 | P1 P2 */
       x0 = x1 = x; y0 = y; y1 = floor(r+0.5);             /* P0 = P4, P1 = P8 */
    }
@@ -420,15 +406,15 @@ void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y
       t = (y0*y2-y1*y1)*t/(y0-y1);                       /* gradient dP6/dy=0 */
       x = floor(r+0.5); y = floor(t+0.5);
       r = (x1-x0)*(t-y0)/(y1-y0)+x0;                  /* intersect P6 | P0 P1 */
-      hvGfxCurveSegAA(hvg,x0,y0, floor(r+0.5),y, x,y, color, isDotted);
+      hvGfxCurveSegAA(hvg,x0,y0, floor(r+0.5),y, x,y, color, isDashed);
       r = (x1-x2)*(t-y2)/(y1-y2)+x2;                  /* intersect P7 | P1 P2 */
       x0 = x; x1 = floor(r+0.5); y0 = y1 = y;             /* P0 = P6, P1 = P7 */
    }
-   hvGfxCurveSegAA(hvg,x0,y0, x1,y1, x2,y2, color, isDotted); /* remaining part */
+   hvGfxCurveSegAA(hvg,x0,y0, x1,y1, x2,y2, color, isDashed); /* remaining part */
 }
 
 void hvGfxEllipseDraw(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color, 
-                        int mode, boolean isDotted)
+                        int mode, boolean isDashed)
 /* Draw an ellipse (or limit to top or bottom) specified by rectangle, using Bresenham algorithm.
  * Optionally, alternate dots.
  * Point 0 is left, point 1 is top of rectangle
@@ -443,12 +429,10 @@ void hvGfxEllipseDraw(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color c
    if (y0 > y1) y0 = y1; /* .. exchange them */
    y0 += (b+1)/2; y1 = y0-b1;   /* starting pixel */
    a *= 8*a; b1 = 8*b*b;
-   boolean putDot = TRUE;
 
+   int dots = 0;
    do {
-       if (isDotted && !putDot)
-            putDot = TRUE;
-       else
+       if (!isDashed || (++dots % 3))
            {
            if (mode == ELLIPSE_BOTTOM || mode == ELLIPSE_FULL) 
                {
@@ -460,18 +444,14 @@ void hvGfxEllipseDraw(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color c
                hvGfxDot(hvg, x0, y1, color); /* III. Quadrant */
                hvGfxDot(hvg, x1, y1, color); /*  IV. Quadrant */
                }
-           putDot = FALSE;
            }
        e2 = 2*err;
        if (e2 <= dy) { y0++; y1--; err += dy += a; }  /* y step */
        if (e2 >= dx || 2*err > dy) { x0++; x1--; err += dx += b1; } /* x step */
    } while (x0 <= x1);
 
-   putDot = TRUE;
    while (y0-y1 < b) {  /* too early stop of flat ellipses a=1 */
-       if (isDotted && !putDot)
-           putDot = TRUE;
-       else
+       if (!isDashed && (++dots % 3))
            {
            hvGfxDot(hvg, x0-1, y0, color); /* -> finish tip of ellipse */
            hvGfxDot(hvg, x1+1, y0++, color);

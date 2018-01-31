@@ -205,13 +205,12 @@ for (inter=inters; inter; inter=inter->next)
         if (sameString(inter->chrom, inter->sourceChrom))
             hvGfxLine(hvg, sx, yOffOther, sx, yPos, color);
         else
-            hvGfxDottedLine(hvg, sx, yOffOther, sx, yPos, color);
+            hvGfxDottedLine(hvg, sx, yOffOther, sx, yPos, color, TRUE);
         if (tg->visibility == tvFull)
             {
             // add map box to foot
             char *nameBuf = (inter->chromStart == inter->sourceStart ?      
                             inter->sourceName : inter->targetName);
-uglyf("foot name: %s. ", nameBuf);
             mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd, 
                             sx - sFootWidth, yOffOther, sFootWidth * 2, 4,
                             tg->track, itemBuf, nameBuf, NULL, TRUE, NULL);
@@ -257,7 +256,7 @@ uglyf("foot name: %s. ", nameBuf);
         if (!eOnScreen || draw == DRAW_LINE)
             {
             if (inter->chromStart == inter->targetStart)
-                hvGfxDottedLine(hvg, sx, yOff, sx, peak, color);
+                hvGfxDottedLine(hvg, sx, yOff, sx, peak, color, TRUE);
             else
                 hvGfxLine(hvg, sx, yOff, sx, peak, color);
             }
@@ -271,7 +270,7 @@ uglyf("foot name: %s. ", nameBuf);
         if (!sOnScreen || draw == DRAW_LINE)
             {
             if (inter->chromStart == inter->targetStart)
-                hvGfxDottedLine(hvg, ex, yOff, ex, peak, color);
+                hvGfxDottedLine(hvg, ex, yOff, ex, peak, color, TRUE);
             else
                 hvGfxLine(hvg, ex, yOff, ex, peak, color);
             }
@@ -299,12 +298,12 @@ uglyf("foot name: %s. ", nameBuf);
             }
         if (sOnScreen && eOnScreen && draw != DRAW_LINE)
             {
-            boolean isDotted = (inter->sourceStart > inter->targetStart);
+            boolean isDashed = (inter->sourceStart > inter->targetStart);
             if (draw == DRAW_CURVE)
                 {
                 int peakX = ((ex - sx + 1) / 2) + sx;
                 int peakY = peak + 30;
-                hvGfxCurve(hvg, sx, yOff, peakX, peakY, ex, yOff, color, isDotted);
+                hvGfxCurve(hvg, sx, yOff, peakX, peakY, ex, yOff, color, isDashed);
                 // map box on peak
                 // FIXME: not working
                 /*mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd,
@@ -316,7 +315,7 @@ uglyf("foot name: %s. ", nameBuf);
                 {
                 int yLeft = yOff + peakHeight;
                 int yTop = yOff - peakHeight;
-                hvGfxEllipseDraw(hvg, sx, yLeft, ex, yTop, color, ELLIPSE_BOTTOM, isDotted);
+                hvGfxEllipseDraw(hvg, sx, yLeft, ex, yTop, color, ELLIPSE_BOTTOM, isDashed);
                 // map box on peak
                 // FIXME: not working
                 /*mapBoxHgcOrHgGene(hvg, inter->chromStart, inter->chromEnd,
@@ -331,7 +330,7 @@ uglyf("foot name: %s. ", nameBuf);
             unsigned ePeak = eOnScreen ? ex : xOff + width;
             unsigned sPeak = sOnScreen ? sx : xOff;
             if (inter->sourceStart > inter->targetStart)
-                hvGfxDottedLine(hvg, sPeak, peak, ePeak, peak, color);
+                hvGfxDottedLine(hvg, sPeak, peak, ePeak, peak, color, TRUE);
             else
                 hvGfxLine(hvg, sPeak, peak, ePeak, peak, color);
 

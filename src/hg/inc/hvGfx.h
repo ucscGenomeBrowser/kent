@@ -333,7 +333,7 @@ void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y
  /* Thanks to author  * @author Zingl Alois
  * @date 22.08.2016 */
 
-void hvGfxDottedLine(struct hvGfx *hvg, int x1, int y1, int x2, int y2, Color color);
-/* Brezenham line algorithm, alternating dots */
+void hvGfxDottedLine(struct hvGfx *hvg, int x1, int y1, int x2, int y2, Color color, boolean isDash);
+/* Brezenham line algorithm, alternating dots, by 1 pixel or two (isDash true) */
 
 #endif 
