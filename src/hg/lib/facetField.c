@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "jksql.h"
 #include "facetField.h"
+#include "csv.h"
 
 static int facetValCmpUseCountDesc(const void *va, const void *vb)
 /* Compare two facetVal so as to sort them based on useCount with most used first */
@@ -23,18 +24,28 @@ facetVal->useCount = useCount;
 return facetVal;
 }
 
-static void facetFieldAdd(struct facetField *facetField, char *tagVal)
+static void facetFieldAdd(struct facetField *facetField, char *tagVal, boolean selecting)
 /* Add information about tag to facetField */
 {
-facetField->useCount += 1;
+if (!selecting)
+    facetField->useCount += 1;
 struct facetVal *facetVal = hashFindVal(facetField->valHash, tagVal);
 if (facetVal == NULL)
     {
     AllocVar(facetVal);
     hashAddSaveName(facetField->valHash, tagVal, facetVal, &facetVal->val);
     slAddHead(&facetField->valList, facetVal);
+    if (selecting)
+	{
+	facetVal->selected = TRUE;
+	facetField->allSelected = FALSE;
+	}
+    if (facetField->allSelected)
+	facetVal->selected = TRUE;
     }
-facetVal->useCount += 1;
+if (!selecting)
+    facetVal->useCount += 1;
+facetField->currentVal = facetVal;
 }
 
 static struct facetField *facetFieldNew(char *fieldName)
@@ -44,13 +55,15 @@ struct facetField *facetField;
 AllocVar(facetField);
 facetField->fieldName = cloneString(fieldName);
 facetField->valHash = hashNew(0);
+facetField->allSelected = TRUE;  // default to all values selected
 return facetField;
 }
 
 struct facetField *facetFieldsFromSqlTable(struct sqlConnection *conn, char *table, char *fields[], int fieldCount, 
-    char *nullVal, char *where)
+    char *nullVal, char *where, char *selectedFields)
 /* Return a list of facetField, one for each field of given table */
 {
+
 /* Make query string */
 struct dyString *query = dyStringNew(0);
 sqlDyStringPrintf(query, "select %s", fields[0]);
@@ -73,19 +86,78 @@ for (i=0; i<fieldCount; ++i)
     }
 slReverse(&ffList);
 
+/* Initialize selected facet values */
+if (selectedFields)
+    {
+    boolean done = FALSE;
+    while (!done)
+	{
+	if (sameString(selectedFields, ""))
+	    break;
+	char *end = strchr(selectedFields, '\n');
+	if (!end)
+	    {
+	    end = selectedFields + strlen(selectedFields);
+	    done = TRUE;
+	    }
+	*end = 0;
+	char *spc = strchr(selectedFields, ' ');
+	if (!spc)
+	    errAbort("expected space separating fieldname from values");
+	*spc = 0;
+	char *vals = spc+1;
+	if (*vals == 0)
+	    errAbort("expected values after space");
+	struct slName *valList = csvParse(vals);
+
+	for (i=0; i<fieldCount; ++i)
+	    {
+	    if (sameString(ffArray[i]->fieldName, selectedFields))
+		{
+		struct slName *el;
+		for (el=valList; el; el=el->next)
+		    {
+		    uglyf("adding selected field %s val %s\n", selectedFields, el->name);
+		    facetFieldAdd(ffArray[i], el->name, TRUE);
+		    }
+		}
+	    }
+	selectedFields = end+1;
+	}
+    }
+
+
 /* Scan through result saving it in list. */
 struct sqlResult *sr = sqlGetResult(conn, query->string);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    int totalSelectedFacets = 0;
     for (i=0; i<fieldCount; ++i)
 	{
 	char *val = row[i];
 	if (val == NULL)
 	    val = nullVal;
 	if (val != NULL)
-	    facetFieldAdd(ffArray[i], val);
+	    {
+	    facetFieldAdd(ffArray[i], val, FALSE);
+	    if (ffArray[i]->currentVal->selected)
+		++totalSelectedFacets;
+	    }
 	}
+
+    if (totalSelectedFacets == fieldCount)
+	{
+	// include this row in the final resultset
+	}
+    for (i=0; i<fieldCount; ++i)
+	{
+	// disregard one's self.
+	if ((totalSelectedFacets - (int)ffArray[i]->currentVal->selected) == (fieldCount - 1))
+	    ffArray[i]->currentVal->selectCount++;
+	    // shown on GUI to guide choosing by user
+	}
+
     }
 
 /* Sort lists */

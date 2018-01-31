@@ -1695,7 +1695,7 @@ printf("<BR>\n");
 static char *pieTags[] = 
     {"lab", "format", "assay", };
 struct facetField *pieFacetList = facetFieldsFromSqlTable(conn, "cdwFileFacets", 
-						    pieTags, ArraySize(pieTags), "N/A", NULL);
+						    pieTags, ArraySize(pieTags), "N/A", NULL, NULL);
 struct facetField *ff;
 int i;
 printf("<TABLE style=\"display:inline\"><TR>\n");
@@ -1715,7 +1715,7 @@ static char *highLevelTags[] =
     {"data_set_id", "lab", "assay", "format", "read_size",
     "sample_label", "species"};
 struct facetField *highFacetList = facetFieldsFromSqlTable(conn, "cdwFileFacets", 
-						highLevelTags, ArraySize(highLevelTags), NULL, NULL);
+						highLevelTags, ArraySize(highLevelTags), NULL, NULL, NULL);
 
 struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
     ArraySize(tagPopularityFields));
@@ -1772,7 +1772,7 @@ static char *fields[] =
     {"data_set_id", "lab", "assay", "format", "read_size", "species", "organ"};
 uglyTime(NULL);
 struct facetField *fieldList = facetFieldsFromSqlTable(conn, "cdwFileTags", 
-						fields, ArraySize(fields), NULL, NULL);
+						fields, ArraySize(fields), NULL, NULL, NULL);
 uglyTime("listing facets");
 printf("got info on %d fields<BR>\n", slCount(fieldList));
 struct facetField *field;
