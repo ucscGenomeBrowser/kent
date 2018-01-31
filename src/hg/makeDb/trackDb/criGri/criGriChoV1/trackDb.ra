@@ -18,7 +18,7 @@ searchPriority 8
 
 track ensGene override
 visibility pack
-ensemblIdUrl http://pre.ensembl.org
+ensemblIdUrl http://www.ensembl.org/Cricetulus_griseus_crigri
 
 track chainNetCriGri1 override
 chainMinScore 1000

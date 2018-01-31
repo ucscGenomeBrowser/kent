@@ -9017,7 +9017,15 @@ if (sameString(ensemblIdUrl, "http://www.ensembl.org") && archive != NULL)
     safef(ensUrl, sizeof(ensUrl), "http://%s.archive.ensembl.org/%s",
             archive, genomeStrEnsembl);
 else
-    safef(ensUrl, sizeof(ensUrl), "%s/%s", ensemblIdUrl, genomeStrEnsembl);
+    {
+    /* trackDb ensemblIdUrl might be more than just top level URL,
+     * simply take it as given, e.g. criGriChoV1
+     */
+    if (countChars(ensemblIdUrl, '/') > 2)
+      safef(ensUrl, sizeof(ensUrl), "%s", ensemblIdUrl);
+    else
+      safef(ensUrl, sizeof(ensUrl), "%s/%s", ensemblIdUrl, genomeStrEnsembl);
+    }
 
 char query[512];
 char *geneName = NULL;
