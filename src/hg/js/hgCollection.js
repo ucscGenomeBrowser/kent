@@ -301,8 +301,7 @@ var hgCollection = (function() {
         var treeObject = $(event.currentTarget).parent().parent();
         var id = treeObject.attr('id');
         var node = treeObject.jstree("get_node", id);
-        //if (node.children.length === 0) {
-        if (node.li_attr.class !== "folder") {
+        if (node.children.length === 0) {
             isDirty = true;
             var parentNode = treeObject.jstree("get_node", node.parent);
             if (parentNode.children.length === 1) {
