@@ -145,7 +145,7 @@ slFreeList(&stanzaList);
 /* Make facetTable as a subset of fullTable */
 verbose(2, "making %s table for faceting\n", facetTable);
 struct dyString *facetCreate = dyStringNew(0);
-sqlDyStringPrintf(facetCreate, "create table %s as select %s from %s", facetTable, facetFieldsCsv, fullTable);
+sqlDyStringPrintf(facetCreate, "create table %s as select %-s from %s", facetTable, sqlCkIl(facetFieldsCsv), fullTable);
 sqlRemakeTable(conn, facetTable, facetCreate->string);
 dyStringFree(&facetCreate);
 
