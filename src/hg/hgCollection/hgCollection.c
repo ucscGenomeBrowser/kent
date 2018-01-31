@@ -491,6 +491,9 @@ if (tdbType != NULL)
 
 hashReplace(tdb->settingsHash, "parent", parent);
 hashReplace(tdb->settingsHash, "track", makeUnique(collectionNameHash, name));
+char priBuf[128];
+safef(priBuf, sizeof priBuf, "%d", priority);
+hashReplace(tdb->settingsHash, "priority", cloneString(priBuf));
 char colorString[64];
 safef(colorString, sizeof colorString, "%d,%d,%d", (color >> 16) & 0xff,(color >> 8) & 0xff,color & 0xff);
 hashReplace(tdb->settingsHash, "color", colorString);
