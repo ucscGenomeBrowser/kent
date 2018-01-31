@@ -4337,6 +4337,8 @@ else if (wordCount > 0)
 	doBamDetails(tdb, item);
     else if ( startsWith("longTabix", type))
 	doLongTabix(tdb, item);
+    else if (sameWord("interact", type))
+	doInteractDetails(tdb, item);
     }
 if (imagePath)
     {
