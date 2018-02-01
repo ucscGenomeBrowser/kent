@@ -37,7 +37,7 @@ void facetFieldTest(char *selectedFields)
 /* Test something */
 {
 char *db = "cdw";
-char *table = "cdwFileFacets"; // "slimFoo";
+char *table = "cdwFileFacets";
 char *fields[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
     "sample_label", "species"};
@@ -45,7 +45,8 @@ int fieldCount = ArraySize(fields);
 /* Print out high level tags table */
 
 struct sqlConnection *conn = sqlConnect(db);
-struct facetField *ffList = facetFieldsFromSqlTable(conn, table, fields, fieldCount, "N/A", NULL, selectedFields);
+int selectedRowCount = 0; 
+struct facetField *ffList = facetFieldsFromSqlTable(conn, table, fields, fieldCount, "N/A", NULL, selectedFields, &selectedRowCount);
 uglyf("Got %d tags\n", slCount(ffList) );
 sqlDisconnect(&conn);
 
@@ -54,11 +55,24 @@ for (ff = ffList; ff != NULL; ff = ff->next)
     {
     printf("%s:\n", ff->fieldName);
     struct facetVal *facetVal;
+    int valuesCount = 0;
     for (facetVal = ff->valList; facetVal != NULL; facetVal = facetVal->next)
 	{
-	printf("\t%s (%d) %s %d\n", facetVal->val, facetVal->useCount, facetVal->selected ? "SELECTED" : "NOT", facetVal->selectCount);
+	if (facetVal->selectCount > 0) // filter to reduce output
+	    {
+	    ++valuesCount;
+	    if (valuesCount <= 50)
+		{
+		printf("\t%s (%d) %s %d\n", facetVal->val, facetVal->useCount, facetVal->selected ? "SELECTED" : "NOT", facetVal->selectCount);
+
+		}
+	    }
 	}
+    if (valuesCount > 50)
+	printf("[... %d other values not shown] \n", (valuesCount - 50));
+
     }
+printf("\ntotal rows in selected set = %d\n", selectedRowCount);
 }
 
 int main(int argc, char *argv[])

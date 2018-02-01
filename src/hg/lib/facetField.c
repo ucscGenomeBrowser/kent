@@ -60,7 +60,7 @@ return facetField;
 }
 
 struct facetField *facetFieldsFromSqlTable(struct sqlConnection *conn, char *table, char *fields[], int fieldCount, 
-    char *nullVal, char *where, char *selectedFields)
+    char *nullVal, char *where, char *selectedFields, int *pSelectedRowCount)
 /* Return a list of facetField, one for each field of given table */
 {
 
@@ -126,6 +126,7 @@ if (selectedFields)
 	}
     }
 
+int selectedRowCount = 0;
 
 /* Scan through result saving it in list. */
 struct sqlResult *sr = sqlGetResult(conn, query->string);
@@ -149,6 +150,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (totalSelectedFacets == fieldCount)
 	{
 	// include this row in the final resultset
+	++selectedRowCount;
 	}
     for (i=0; i<fieldCount; ++i)
 	{
@@ -167,6 +169,8 @@ for (ff = ffList; ff != NULL; ff = ff->next)
 /* Clean up and go home */
 dyStringFree(&query);
 sqlFreeResult(&sr);
+if (pSelectedRowCount)
+    *pSelectedRowCount = selectedRowCount;
 return ffList;
 }
 

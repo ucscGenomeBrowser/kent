@@ -25,7 +25,7 @@ struct facetField
     };
 
 struct facetField *facetFieldsFromSqlTable(struct sqlConnection *conn, char *table, char *fields[], int fieldCount, 
-    char *nullVal, char *where, char *selectedFields);
+    char *nullVal, char *where, char *selectedFields, int *pSelectedRowCount);
 /* Return a list of facetField, one for each field of given table */
 
 struct facetVal *facetValMajorPlusOther(struct facetVal *list, double minRatio);
