@@ -490,6 +490,8 @@ if (tdbType != NULL)
     hashReplace(tdb->settingsHash, "type", tdbType);
 
 hashReplace(tdb->settingsHash, "parent", parent);
+hashReplace(tdb->settingsHash, "shortLabel", track->shortLabel);
+hashReplace(tdb->settingsHash, "longLabel", track->longLabel);
 hashReplace(tdb->settingsHash, "track", makeUnique(collectionNameHash, name));
 char priBuf[128];
 safef(priBuf, sizeof priBuf, "%d", priority);

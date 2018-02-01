@@ -14213,10 +14213,28 @@ struct trackDb *subTdb;
 for (subTdb=subTracks; subTdb; subTdb = subTdb->next)
     {
     char *bigDataUrl = trackDbSetting(subTdb, "bigDataUrl");
+    char *useDb;
+    char *table;
     if (bigDataUrl != NULL)
         dyStringPrintf(dy, "%s ",bigDataUrl);
-    else // native tracks are prepended with '$'
-        dyStringPrintf(dy, "$%s ",trackDbSetting(subTdb, "table"));
+    else 
+        {
+        if (isCustomTrack(trackHubSkipHubName(subTdb->track)))
+            {
+            useDb = CUSTOM_TRASH;
+            table = trackDbSetting(subTdb, "dbTableName");
+            }
+        else
+            {
+            useDb = database;
+            table = trackDbSetting(subTdb, "table");
+            }
+
+        if (startsWith("bedGraph", subTdb->type))
+            dyStringPrintf(dy, "^%s.%s ",useDb, table);
+        else
+            dyStringPrintf(dy, "$%s.%s ",useDb, table);
+        }
     }
 
 hashAdd(tdb->settingsHash, "mathDataUrl", dy->string);

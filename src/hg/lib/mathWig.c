@@ -87,27 +87,58 @@ for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)
     }   
 }
 
-void getWigData(char *db, char *table, char *chrom, unsigned winStart, unsigned winEnd, double *array)
-/* Query the database to find the regions in the WIB file we need to read to get data for a specified range. */
+void getBedGraphData(char *db, char *table, char *chrom, unsigned winStart, unsigned winEnd, double *array)
+/* Query a bedGraph table and fill in the values in the array. */
 {
 struct sqlConnection *conn = hAllocConn(db);
 int rowOffset;
 struct sqlResult *sr;
 char **row;
-struct wiggle wiggle;
-int span = 0;
+unsigned width = winEnd - winStart;
 
 sr = hRangeQuery(conn, table, chrom, winStart, winEnd,
         NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    wiggleStaticLoad(row + rowOffset, &wiggle);
-    getWigDataFromFile(&wiggle, array, winStart, winEnd);
-    if (span == 0)
-        span = wiggle.span;
-    else
-        if (span != wiggle.span)
-            errAbort("multiple spans in wiggle table");
+    unsigned chromStart = sqlUnsigned(row[rowOffset + 1]);
+    unsigned chromEnd  = sqlUnsigned(row[rowOffset + 2]);
+    unsigned start = max(0, chromStart - winStart);
+    unsigned end = min(width, chromEnd - winStart);
+    int ii;
+
+    for (ii = start; ii < end; ii++)
+        array[ii] = sqlFloat(row[rowOffset + 3]);
+    }
+
+}
+
+void getWigData(char *db, char *table, char *chrom, unsigned winStart, unsigned winEnd, double *array)
+/* Query the database to find the regions in the WIB file we need to read to get data for a specified range. Only use the smallest of spans. */
+{
+struct sqlConnection *conn = hAllocConn(db);
+int rowOffset;
+struct sqlResult *sr;
+char **row;
+struct wiggle *wiggleList = NULL, *wiggle;
+int minSpan = 1000000000;
+
+sr = hRangeQuery(conn, table, chrom, winStart, winEnd,
+        NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    wiggle = wiggleLoad(row + rowOffset);
+    slAddHead(&wiggleList, wiggle);
+    if (wiggle->span < minSpan)
+        minSpan = wiggle->span;
+    }
+
+struct wiggle *nextWiggle;
+for(wiggle = wiggleList; wiggle; wiggle = nextWiggle)
+    {
+    nextWiggle = wiggle->next;
+    if (wiggle->span == minSpan)
+        getWigDataFromFile(wiggle, array, winStart, winEnd);
+    freez(&wiggle);
     }
 }
 
@@ -161,8 +192,24 @@ for (jj=0; jj < count; jj++)
         for(ii=0; ii < width; ii++)
             dataLoad[ii] = NAN;
 
-    if (startsWith("$", words[jj]))  // ignore native tracks for the moment
-        getWigData(db, &words[jj][1], chrom, winStart, winEnd, dataLoad);
+    boolean isWiggle = FALSE;
+    boolean isBedGraph = FALSE;
+    if (startsWith("$", words[jj]))  
+        isWiggle = TRUE;
+    else if (startsWith("^", words[jj]))  
+        isBedGraph = TRUE;
+
+    if (isBedGraph || isWiggle)
+        {
+        char *useDb = &words[jj][1];
+        char *dot = strchr( &words[jj][1], '.');
+        *dot = 0;
+        char *useTable = dot + 1;
+        if (isWiggle)
+            getWigData(useDb, useTable, chrom, winStart, winEnd, dataLoad);
+        else
+            getBedGraphData(useDb, useTable, chrom, winStart, winEnd, dataLoad);
+        }
     else
         getBigWigData(words[jj], chrom, winStart, winEnd, dataLoad);
         
