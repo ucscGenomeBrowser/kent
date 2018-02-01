@@ -62,7 +62,7 @@ close (FH);
 my @orderCut = sort { $a <=> $b } @columns;
 my $cutString = join ',', @orderCut;
 
-printf STDERR "# cut -f $cutString\n";
+printf STDERR "# cut -f $cutString $extrasBed\n";
 
 if ($extrasBed =~ m/.gz$/) {
    open (FH, "zcat $extrasBed | cut -f $cutString|") or die "can not zcat $extrasBed";
@@ -83,20 +83,23 @@ while (my $line = <FH>) {
   my $itemPtr = $itemsOut{$itemName};
   my @others = split('\s+', $otherNames);
   for (my $i = 0; $i < scalar(@others); ++$i) {
+     $others[$i] =~ s/^MGI://;
+     $others[$i] =~ s/^Em://;
      $itemPtr->{$others[$i]} = 1;
+     my $noSuffix=$others[$i];
+     $noSuffix =~ s/\.[0-9]+$//;
+     $itemPtr->{$noSuffix} = 1;
   }
 }
 close (FH);
 
 foreach my $itemName (sort keys %itemsOut) {
   my $itemPtr = $itemsOut{$itemName};
-  printf "%s\t", $itemName;
-  my $space = "";
+  my $othersOut = "";
   foreach my $otherName (sort keys %$itemPtr) {
      if ($otherName ne $itemName && length($otherName) > 1) {
-        printf "%s%s", $space, $otherName;
-        $space = " ";
+        $othersOut .= " " . $otherName;
      }
   }
-  printf "\n";
+  printf "%s%s\n", $itemName, $othersOut if (length($othersOut) > 1)
 }
