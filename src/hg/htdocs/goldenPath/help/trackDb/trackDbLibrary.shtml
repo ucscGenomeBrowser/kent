@@ -1534,8 +1534,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>
     spectrum on
     scoreMin 700
-    scoreMax 900
-    color 0,0,128    </pre>
+    scoreMax 900</pre>
     <P>In this example, the track description will be
     displayed in blue, but the track will remain a gray scale.
     Items with scores less than or equal to 700 will be shown in very
@@ -4468,7 +4467,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 <div class="format"><B>Example of a Supertrack</B></div>
     <pre>
     track myFolder
-    superTrack on
+    superTrack on show
     group regulation
     shortLabel My Folder
     longLabel My folder keeps my tracks together
@@ -4486,7 +4485,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     <P>The supertrack called "My Folder"
     contains two children.  All will be grouped under 
     "regulation".  Notice that the first track is visible by
-    default (if the supertrack itself is visible), but the second
+    default (if the supertrack itself is visible by adding &quot;show&quot;), but the second
     track is not.</P>
 </DIV>
 
