@@ -1148,7 +1148,7 @@ int ix;
 for (ix = startIx;  ix < endIx ;  ix++)
     {
     struct gpFx *fx = gpFxNew(gAlt, txName, exon_loss_variant, nonCodingExon, lm);
-    // Instead of start.txOffset it would be better to compute the actual exon start coord
+    // Instead of start.txOffset it would be better to compute the specific exon start coord
     gpFxSetNoncodingInfo(fx, ix, exonCount, vpTx->start.txOffset, vpTx->txRef, vpTx->txAlt, lm);
     slAddHead(&fxList, fx);
     }
@@ -1174,7 +1174,7 @@ return fx;
 
 static struct gpFx *vpTxToFxIntron(struct vpTx *vpTx, struct psl *psl, struct genbankCds *cds,
                                    char *txName, struct lm *lm)
-/* Return a list of gpFx for intronic variant (splice? exon_loss?) */
+/* Return a list of gpFx for intronic variant (could include splice, exon_loss) */
 {
 // Is it also a splice donor/acceptor/region variant?
 uint intronStartDistance = vpTx->start.gDistance;
@@ -1194,22 +1194,62 @@ fxList = slCat(fxList, addLostExons(vpTx, psl, txName, gAlt, lm));
 return fxList;
 }
 
+static boolean txPosIsExonSpliceRegion(struct vpTxPosition *txPos, struct psl *psl, boolean isGEnd)
+/* Return TRUE if vpTxPos falls within 3bp of a true intron boundary.  If isGEnd, this is
+ * the genomic end position (tx end for + strand, tx start for - strand). */
+{
+int leftBlkIx = txPos->aliBlkIx, rightBlkIx = txPos->aliBlkIx;
+while (leftBlkIx > 0 && pslIntronTooShort(psl, leftBlkIx-1, MIN_INTRON))
+    leftBlkIx--;
+while (rightBlkIx < psl->blockCount - 1 && pslIntronTooShort(psl, rightBlkIx, MIN_INTRON))
+    rightBlkIx++;
+if (leftBlkIx > 0)
+    {
+    // Check exon left edge
+    int gLeft = psl->tStarts[leftBlkIx];
+    int distance = txPos->gOffset - gLeft;
+    if (isGEnd)
+        distance--;
+    if (distance < 3)
+        return TRUE;
+    }
+if (rightBlkIx < psl->blockCount - 1)
+    {
+    // Check exon right edge
+    int gRight = psl->tStarts[rightBlkIx] + psl->blockSizes[rightBlkIx];
+    int distance = gRight - txPos->gOffset;
+    if (!isGEnd)
+        distance++;
+    if (distance < 3)
+        return TRUE;
+    }
+return FALSE;
+}
+
+static boolean vpTxIsExonSpliceRegion(struct vpTx *vpTx, struct psl *psl)
+/* Return TRUE if vpTx start or end falls within 3bp of a true intron boundary. */
+{
+boolean isRc = (pslQStrand(psl) == '-');
+return (txPosIsExonSpliceRegion(&vpTx->start, psl, isRc) ||
+        txPosIsExonSpliceRegion(&vpTx->end, psl, !isRc));
+}
+
 static struct gpFx *vpTxToFxExon(struct vpTx *vpTx, struct psl *psl, struct genbankCds *cds,
                                  struct dnaSeq *txSeq, struct vpPep *vpPep,
                                  struct dnaSeq *protSeq, struct lm *lm)
 /* Variant's start and end are both exonic (possibly not the same exon). */
 {
-
-//#*** TODO: transcript_ablation
-
 struct gpFx *fxList = NULL;
-int startExonIx = 0;
-//if (vpTx->start.aliBlkIx >= 0)
-    startExonIx = pslBlkIxToExonIx(psl, vpTx->start.aliBlkIx, MIN_INTRON);
+int startExonIx = pslBlkIxToExonIx(psl, vpTx->start.aliBlkIx, MIN_INTRON);
 int exonCount = pslCountExons(psl, MIN_INTRON);
 char *txName = txSeq->name;
 char *gAlt = getGAlt(vpTx, psl);
-if (cds && cds->end > cds->start)
+if (vpTx->start.gOffset == psl->tStart && vpTx->end.gOffset == psl->tEnd)
+    {
+    // Entire transcript is deleted -- no need to go into details.
+    fxList = gpFxNew(gAlt, txName, transcript_ablation, none, lm);
+    }
+else if (cds && cds->end > cds->start)
     {
     // coding transcript exon -- UTR, CDS or both?
     if (vpTx->start.txOffset < cds->start)
@@ -1248,9 +1288,13 @@ else
     gpFxSetNoncodingInfo(fxList, startExonIx, exonCount, vpTx->start.txOffset,
                          vpTx->txRef, vpTx->txAlt, lm);
     }
-
-//#*** TODO: find exonic splice_region_variant
-
+if (vpTxIsExonSpliceRegion(vpTx, psl))
+    {
+    struct gpFx *fx = gpFxNew(gAlt, txName, splice_region_variant, nonCodingExon, lm);
+    gpFxSetNoncodingInfo(fx, startExonIx, exonCount, vpTx->start.txOffset,
+                         vpTx->txRef, vpTx->txAlt, lm);
+    fxList = slCat(fxList, fx);
+    }
 fxList = slCat(fxList, addLostExons(vpTx, psl, txName, gAlt, lm));
 return fxList;
 }
@@ -1628,15 +1672,15 @@ char *txName = txSeq->name;
 if (vpTx->end.region == vpUpstream)
     fxList = gpFxNew(gAlt, txName, upstream_gene_variant, none, lm);
 if (vpTx->start.region == vpExon || vpTx->end.region == vpExon)
-    slAddTail(&fxList, vpTxToFxExon(vpTx, psl, cds, txSeq, vpPep, protSeq, lm));
+    fxList = slCat(fxList, vpTxToFxExon(vpTx, psl, cds, txSeq, vpPep, protSeq, lm));
 // Insertions at intron boundaries don't disrupt the splice site sequence.  So in
 // the spirit of HGVS's "3' exception rule", assume the change is to the exon and
 // don't report a splice hit, i.e. ignore vpIntron here and don't consider intron/exon
 // boundary insertions complex.  (Still note if the insertion could also be up/downstream.)
 if (vpTx->start.region == vpDownstream)
-    slAddTail(&fxList, gpFxNew(gAlt, txName, downstream_gene_variant, none, lm));
+    fxList = slCat(fxList, gpFxNew(gAlt, txName, downstream_gene_variant, none, lm));
 if (vpTx->end.region == vpUpstream || vpTx->start.region == vpDownstream)
-    slAddTail(&fxList, gpFxNew(gAlt, txName, complex_transcript_variant, none, lm));
+    fxList = slCat(fxList, gpFxNew(gAlt, txName, complex_transcript_variant, none, lm));
 if (vpTx->start.region == vpUpstream || vpTx->end.region == vpDownstream)
     errAbort("Unexpected combo of start and end region for insertion: "
              "start==%s, end==%s",
@@ -1668,10 +1712,11 @@ else
     struct vpTx *vpTxList = vpTxSplitByRegion(vpTx, psl, cds, txSeq, vpPep, protSeq);
     struct vpTx *vpTxPart;
     for (vpTxPart = vpTxList;  vpTxPart != NULL;  vpTxPart = vpTxPart->next)
-        slAddTail(&fxList, vpTxToFxSingleRegion(vpTxPart, psl, cds, txSeq, vpPep, protSeq, lm));
+        fxList = slCat(fxList, vpTxToFxSingleRegion(vpTxPart, psl, cds, txSeq, vpPep, protSeq, lm));
 //#*** If it's too complicated for vpTxSplitByRegion, should we at least say whether it overlaps
 //#*** UTR/coding region/introns??
-    slAddTail(&fxList, gpFxNew(gAlt, txName, complex_transcript_variant, none, lm));
+    fxList = slCat(fxList, addLostExons(vpTx, psl, txName, gAlt, lm));
+    fxList = slCat(fxList, gpFxNew(gAlt, txName, complex_transcript_variant, none, lm));
     vpTxFreeList(&vpTxList);
     }
 return fxList;
