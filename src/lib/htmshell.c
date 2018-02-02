@@ -375,7 +375,8 @@ do
 	    char *pf = prefix;
 	    while ((x = *pf++) != 0)
 		*out++ = x;
-	    char h1 = (c >> 4 ) + 0x30; if (h1 > 0x39) h1 += 7;
+	    // use (unsigned char) to shift without sign-extension. We want zeros to be added on left side.
+	    char h1 = ((unsigned char) c >> 4 ) + 0x30; if (h1 > 0x39) h1 += 7; 
 	    *out++ = h1;
 	    char h2 = (c & 0xF) + 0x30; if (h2 > 0x39) h2 += 7;
 	    *out++ = h2;
