@@ -4155,20 +4155,6 @@ if (container == NULL && wordCount > 0)
         headerItem = NULL;
     }
 
-// doNcbiRefSeq
-if (sameWord(tdb->table, "ncbiRefSeqOther"))
-    {
-    struct dyString *dy = newDyString(1024);
-    dyStringPrintf(dy, "%s", item);
-
-    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
-    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-        dyStringPrintf(dy, " - Release %s", trackVersion->version);
-
-    cartWebStart(cart, database, "%s (%s)", tdb->longLabel, dyStringCannibalize(&dy));
-    headerItem = cloneString("ncbiRefSeqOther");
-    }
-
 /* Print header. */
 genericHeader(tdb, headerItem);
 
@@ -5751,7 +5737,7 @@ struct gbWarn *gbWarn = checkGbWarn(conn, acc);
  *
  * Uses the gbSeq table if available, otherwise use seq for older databases.
  */
-sqlDyStringAppend(dy,
+sqlDyStringPrintf(dy,
                "select g.type,g.direction,"
                "so.name,o.name,l.name,m.name,"
                "se.name,t.name,dev.name,ce.name,cd.name,"
@@ -5761,7 +5747,7 @@ sqlDyStringAppend(dy,
 /* If the gbCdnaInfoTAble table has a "version" column then will show it */
 if (hasVersion)
     {
-    dyStringAppend(dy,
+    sqlDyStringPrintf(dy,
                    ", g.version ");
     }
 
@@ -5770,7 +5756,7 @@ sqlDyStringPrintf(dy,
                "%s dev,%s ce,%s cd,%s des,%s a,%s gene,%s p"
                " where g.acc = '%s' and g.id = gbS.id ",
                gbCdnaInfoTable,seqTbl, sourceTable, organismTable, libraryTable, mrnaCloneTable, sexTable, tissueTable, developmentTable, cellTable, cdsTable, descriptionTable, authorTable, geneNameTable, productNameTable,  acc);
-dyStringAppend(dy,
+sqlDyStringPrintf(dy,
                "and g.source = so.id and g.organism = o.id "
                "and g.library = l.id and g.mrnaClone = m.id "
                "and g.sex = se.id and g.tissue = t.id "
@@ -9031,7 +9017,15 @@ if (sameString(ensemblIdUrl, "http://www.ensembl.org") && archive != NULL)
     safef(ensUrl, sizeof(ensUrl), "http://%s.archive.ensembl.org/%s",
             archive, genomeStrEnsembl);
 else
-    safef(ensUrl, sizeof(ensUrl), "%s/%s", ensemblIdUrl, genomeStrEnsembl);
+    {
+    /* trackDb ensemblIdUrl might be more than just top level URL,
+     * simply take it as given, e.g. criGriChoV1
+     */
+    if (countChars(ensemblIdUrl, '/') > 2)
+      safef(ensUrl, sizeof(ensUrl), "%s", ensemblIdUrl);
+    else
+      safef(ensUrl, sizeof(ensUrl), "%s/%s", ensemblIdUrl, genomeStrEnsembl);
+    }
 
 char query[512];
 char *geneName = NULL;
@@ -11834,14 +11828,7 @@ char **row;
 char query[256];
 struct ncbiRefSeqLink *nrl;
 
-struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, "%s - %s ", tdb->longLabel, itemName);
-
-struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
-if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-    dyStringPrintf(dy, "- Release %s\n", trackVersion->version);
-
-cartWebStart(cart, database, "%s", dy->string);
+cartWebStart(cart, database, "%s - %s ", tdb->longLabel, itemName);
 
 /* get refLink entry */
 sqlSafef(query, sizeof(query), "select * from ncbiRefSeqLink where id = '%s'", itemName);
@@ -11941,11 +11928,6 @@ if (differentWord(nrl->name,""))
         printf("%s</a><br>\n", nrl->name);
         }
     }
-if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-    {
-    printf("<B>Annotation Release:</B> <A href='%s' TARGET=_blank> %s <BR></A>", trackVersion->comment, trackVersion->version);
-    }
-
 htmlHorizontalLine();
 if (differentWord("", nrl->description))
     {
@@ -24202,13 +24184,15 @@ if ((row = sqlNextRow(sr)) != NULL)
         printf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", all[i], freq[i], score[i]);
         }
     printf("</table>");
-    printPgDbLink(database, tdb, el);
+    if (!trackHubDatabase(database))
+        printPgDbLink(database, tdb, el);
     if (siftTab != NULL)
         printPgSiftPred(database, siftTab, el);
     if (polyTab != NULL)
         printPgPolyphenPred(database, polyTab, el);
     char *genePredTable = "knownGene";
-    printSeqCodDisplay(database, el, genePredTable);
+    if (!trackHubDatabase(database))
+        printSeqCodDisplay(database, el, genePredTable);
     }
 sqlFreeResult(&sr);
 printTrackHtml(tdb);

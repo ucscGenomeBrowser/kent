@@ -44,7 +44,7 @@ else if (sameString(theType,"IL"))
 else if (sameString(theType,"ES"))
     {
     struct dyString *dy = dyStringNew(0);
-    sqlDyStringAppend(dy, "INSERT INTO TABLE VALUES ('");
+    sqlDyStringPrintf(dy, "INSERT INTO TABLE VALUES ('");
     sqlDyAppendEscaped(dy, value);  // typically used when there are unusual characters that need escaping.
     dyStringAppend(dy, "');");
     printf("%s\n", dy->string);
@@ -52,7 +52,7 @@ else if (sameString(theType,"ES"))
 else if (sameString(theType,"EE"))
     {
     struct dyString *dy = dyStringNew(0);
-    sqlDyStringAppend(dy, "INSERT INTO TABLE VALUES ('");
+    sqlDyStringPrintf(dy, "INSERT INTO TABLE VALUES ('");
     sqlDyAppendEscaped(dy, value);  // typically used when there are unusual characters that need escaping.
     sqlDyAppendEscaped(dy, "\x1a\n\r\\\'\"");  // typically used when there are unusual characters that need escaping.
     dyStringAppend(dy, "');");

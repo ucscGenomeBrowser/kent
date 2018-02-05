@@ -153,13 +153,14 @@ struct joinerDtf *joinerDtfFromDottedTriple(char *triple);
 /* Get joinerDtf from something in db.table.field format. */
 
 struct joinerPair
-/* A pair of linked fields. */
+/* A pair of linked fields (possibly with a child whose a->table is the same as this b->table. */
     {
     struct joinerPair *next;	/* Next in list. */
     struct joinerDtf *a;	/* Typically contains field from input table */
     struct joinerDtf *b;	/* Field in another table */
     struct joinerSet *identifier;	/* Identifier this is based on,
                                          * not allocated here. */
+    struct joinerPair *child;   /* Optional tree structure for representing hierarchical routes. */
     };
 
 void joinerPairFree(struct joinerPair **pJp);
@@ -192,12 +193,17 @@ boolean joinerDtfAllSameTable(struct joinerDtf *fieldList);
 struct joinerPair *joinerFindRoute(struct joiner *joiner, 
 	struct joinerDtf *a,  struct joinerDtf *b);
 /* Find route between a and b.  Note the field element of a and b
- * are unused. */
+ * are unused.  No tree structure (joinerPair->child not used). */
 
 struct joinerPair *joinerFindRouteThroughAll(struct joiner *joiner, 
 	struct joinerDtf *tableList);
 /* Return route that gets to all tables in fieldList.  Note that
- * the field element of the items in tableList can be NULL. */
+ * the field element of the items in tableList can be NULL.
+ * No tree structure (joinerPair->child not used). */
+
+void joinerPairListToTree(struct joinerPair *routeList);
+/* Convert a linear routeList (only next used, not child) to a tree structure in which
+ * pairs like {X,Y} and {Y,Z} (first b == second a) are connected using child instead of next. */
 
 char *joinerFieldChopKey(struct joinerField *jf, char *key);
 /* If jf includes chopBefore and/or chopAfter, apply those to key and return a starting

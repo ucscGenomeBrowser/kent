@@ -200,6 +200,10 @@ while (my $line = <$fh>) {
                my ($tag, $tag2, $value) = split(':', $xref);
                $idDataPtr->{'mgi'} = uc($tag2).":$value";
              }
+             if ($xref =~ m/^wormbase/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'wormbase'} = uc($tag2).":$value";
+             }
           }
        }
        # a couple of renames for tag names
@@ -306,7 +310,9 @@ foreach my $id (keys %idData) {
        $dataOut =~ s/%25/%/g;
        printf "\t%s", $dataOut;
     } elsif ($tag eq 'hgnc' && exists $idDataPtr->{mgi}) {
-       printf "\t" . $idDataPtr->{mgi};
+       printf "\t" . $idDataPtr->{mgi};	# overloading/multiple use hgnc column
+    } elsif ($tag eq 'hgnc' && exists $idDataPtr->{wormbase}) {
+       printf "\t" . $idDataPtr->{wormbase};	# overloading hgnc column
     } else { printf "\t$missingData"; }
   }
   if (exists($descriptionData{$id})) {

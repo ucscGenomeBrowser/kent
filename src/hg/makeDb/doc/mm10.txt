@@ -15434,7 +15434,7 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev gorGor5 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
     # real    297m3.002s
-_EOF_
+
 ##############################################################################
 # refSeqFuncElems NCBI refSeq functional elements, REDONE 2017-11-29 Angie
 # previously done 2017-08-08 by Chris E
@@ -16057,4 +16057,390 @@ TMPDIR=/dev/shm
 
     # commit all and make push request, the file tables.lst will have the
     # list of tables for the push request.
+
 ##############################################################################
+# LASTZ Damara mole rat vs. mouse/Mm10 (DONE - 2018-01-01 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzFukDam1.2018-01-01
+    cd /hive/data/genomes/mm10/bed/lastzFukDam1.2018-01-01
+
+    printf '# Damara mole rat vs. mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Damara mole rat
+SEQ2_DIR=/hive/data/genomes/fukDam1/fukDam1.2bit
+SEQ2_LEN=/hive/data/genomes/fukDam1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzFukDam1.2018-01-01
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    time (doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #   real    403m29.477s
+
+    cat fb.mm10.chainFukDam1Link.txt
+    # 803448015 bases of 2652783500 (30.287%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 fukDam1) \
+	> rbest.log 2>&1 &
+    # real    391m52.435s
+
+    cat fb.mm10.chainRBestFukDam1Link.txt
+    # 760138280 bases of 2652783500 (28.654%) in intersection
+
+    mkdir /hive/data/genomes/fukDam1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/fukDam1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzFukDam1.2018-01-01/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    79m46.564s
+
+    cat fb.fukDam1.chainMm10Link.txt
+    # 803988546 bases of 2285984782 (35.170%) in intersection
+    cat fb.fukDam1.chainSynMm10Link.txt
+    # 741604346 bases of 2285984782 (32.441%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` fukDam1 mm10) \
+	> rbest.log 2>&1
+    # real    417m52.847s
+
+    cat fb.fukDam1.chainRBestMm10Link.txt
+    # 760190877 bases of 2285984782 (33.254%) in intersection
+
+##############################################################################
+# LASTZ Kangaroo rat vs. mouse/Mm10 (DONE - 2018-01-01 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzDipOrd2.2018-01-01
+    cd /hive/data/genomes/mm10/bed/lastzDipOrd2.2018-01-01
+
+    printf '# Kangaroo rat vs. mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Kangaroo rat
+SEQ2_DIR=/hive/data/genomes/dipOrd2/dipOrd2.2bit
+SEQ2_LEN=/hive/data/genomes/dipOrd2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzDipOrd2.2018-01-01
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    time (doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #   real    351m30.983s
+
+    cat fb.mm10.chainDipOrd2Link.txt
+    #	645178768 bases of 2652783500 (24.321%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 dipOrd2) \
+	> rbest.log 2>&1 &
+    # real    439m56.601s
+
+    cat fb.mm10.chainRBestDipOrd2Link.txt
+    # 605074450 bases of 2652783500 (22.809%) in intersection
+
+    mkdir /hive/data/genomes/dipOrd2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/dipOrd2/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzDipOrd2.2018-01-01/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    79m46.564s
+
+    cat fb.dipOrd2.chainMm10Link.txt
+    # 631879699 bases of 2065314047 (30.595%) in intersection
+    cat fb.dipOrd2.chainSynMm10Link.txt
+    # 581661824 bases of 2065314047 (28.163%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` dipOrd2 mm10) \
+	> rbest.log 2>&1
+    # real    412m53.879s
+
+    cat fb.dipOrd2.chainRBestMm10Link.txt
+    # 605056621 bases of 2065314047 (29.296%) in intersection
+
+##############################################################################
+# LASTZ Chinese hamster ovary cell line CHO-K1  criGriChoV2
+#	(DONE - 2018-01-05 - Hiram)
+    #	establish a screen to control this job
+    screen -S mm10criGriChoV2
+    mkdir /hive/data/genomes/mm10/bed/lastzCriGriChoV2.2018-01-05
+    cd /hive/data/genomes/mm10/bed/lastzCriGriChoV2.2018-01-05
+
+    printf '# Chinese hamster ovary cell line vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Chinese hamster ovary cell line CHO-K1  criGriChoV2
+SEQ2_DIR=/hive/data/genomes/criGriChoV2/criGriChoV2.2bit
+SEQ2_LEN=/hive/data/genomes/criGriChoV2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzCriGriChoV2.2018-01-05
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-noDbNameCheck -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    575m28.254s
+
+    cat fb.mm10.chainCriGriChoV2Link.txt
+    #	1583859515 bases of 2652783500 (59.706%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 criGriChoV2 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    #	real    1098m32.629s
+
+    cat fb.mm10.chainRBestCriGriChoV2Link.txt
+    # 1451345011 bases of 2652783500 (54.710%) in intersection
+
+    mkdir /hive/data/genomes/criGriChoV2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/criGriChoV2/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCriGriChoV2.2018-01-05/DEF \
+	-noDbNameCheck -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    196m59.409s
+
+    cat fb.criGriChoV2.chainMm10Link.txt
+    #	1605002950 bases of 2323924942 (69.064%) in intersection
+    cat fb.criGriChoV2.chainSynMm10Link.txt
+    #   1443603212 bases of 2323924942 (62.119%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev criGriChoV2 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    1187m10.728s
+
+    cat fb.criGriChoV2.chainRBestMm10Link.txt
+    # 1452526554 bases of 2323924942 (62.503%) in intersection
+
+##############################################################################
+# LASTZ Baboon papAnu4 (DONE - 2018-01-08 - Hiram)
+    #	establish a screen to control this job
+    screen -S mm10papAnu4
+    mkdir /hive/data/genomes/mm10/bed/lastzPapAnu4.2018-01-08
+    cd /hive/data/genomes/mm10/bed/lastzPapAnu4.2018-01-08
+
+    printf '# mouse vs. baboon
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: baboon papAnu4
+SEQ2_DIR=/hive/data/genomes/papAnu4/papAnu4.2bit
+SEQ2_LEN=/hive/data/genomes/papAnu4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=180
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzPapAnu4.2018-01-08
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    783m49.438s
+
+    cat fb.mm10.chainPapAnu4Link.txt
+    #	919405716 bases of 2652783500 (34.658%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 papAnu4 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    582m15.183s
+
+    cat fb.mm10.chainRBestPapAnu4Link.txt
+    # 875366631 bases of 2652783500 (32.998%) in intersection
+
+    mkdir /hive/data/genomes/papAnu4/bed/blastz.mm10.swap
+    cd /hive/data/genomes/papAnu4/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzPapAnu4.2018-01-08/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    80m51.648s
+
+    cat fb.papAnu4.chainMm10Link.txt
+    #	907806517 bases of 2937004939 (30.909%) in intersection
+    cat fb.papAnu4.chainSynMm10Link.txt
+    #	866781916 bases of 2937004939 (29.512%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev papAnu4 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    521m7.590s
+
+    cat fb.papAnu4.chainRBestMm10Link.txt
+    # 874097827 bases of 2937004939 (29.762%) in intersection
+
+##############################################################################
+# LASTZ guinea pig cavApe1 (DONE - 2018-01-08 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10CavApe1
+    mkdir /hive/data/genomes/mm10/bed/lastzCavApe1.2018-01-08
+    cd /hive/data/genomes/mm10/bed/lastzCavApe1.2018-01-08
+
+    printf '# guinea pig vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: guinea pig CavApe1
+SEQ2_DIR=/hive/data/genomes/cavApe1/cavApe1.2bit
+SEQ2_LEN=/hive/data/genomes/cavApe1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=10
+
+BASE=/hive/data/genomes/mm10/bed/lastzCavApe1.2018-01-08
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1 &
+    #	real    514m28.099s
+
+    cat fb.mm10.chainCavApe1Link.txt
+    #	424603451 bases of 2652783500 (16.006%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 cavApe1 \
+      -buildDir=`pwd`) > rbest.log 2>&1 &
+    # real    481m13.804s
+
+    cat fb.mm10.chainRBestCavApe1Link.txt
+    # 394844156 bases of 2652783500 (14.884%) in intersection
+
+    # and for the swap
+    mkdir /hive/data/genomes/cavApe1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/cavApe1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzCavApe1.2018-01-08/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1 &
+    #	real    38m53.866s
+
+    cat fb.cavApe1.chainMm10Link.txt
+    #	420563721 bases of 1749140834 (24.044%) in intersection
+    cat fb.cavApe1.chainSynMm10Link.txt
+    # 364825271 bases of 1749140834 (20.857%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev cavApe1 mm10 \
+      -buildDir=`pwd`) > rbest.log 2>&1 &
+    # real    438m45.544s
+
+    cat fb.cavApe1.chainRBestMm10Link.txt
+    # 395976886 bases of 1749140834 (22.638%) in intersection
+
+##############################################################################
+# lastz Medium Ground Finch ficAlb1 (DONE - 2018-01-09 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10
+    mkdir /hive/data/genomes/mm10/bed/lastzFicAlb1.2018-01-09
+    cd /hive/data/genomes/mm10/bed/lastzFicAlb1.2018-01-09
+
+    printf '# Mouse vs.  Collared flycatcher
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Collard flycatcher/FicAlb1
+SEQ2_DIR=/hive/data/genomes/ficAlb1/ficAlb1.2bit
+SEQ2_LEN=/hive/data/genomes/ficAlb1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm10/bed/lastzFicAlb1.2018-01-09
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1 &
+    #   real    167m34.472s
+
+    cat fb.mm10.chainFicAlb1Link.txt
+    #   98177848 bases of 2652783500 (3.701%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev mm10 ficAlb1 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    246m1.019s
+
+    cat fb.mm10.chainRBestFicAlb1Link.txt
+    # 76370866 bases of 2652783500 (2.879%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/ficAlb1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/ficAlb1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzFicAlb1.2018-01-09/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    # real    8m5.637s
+
+    cat  fb.ficAlb1.chainMm10Link.txt
+    #   85384367 bases of 1102325870 (7.746%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev ficAlb1 mm10 \
+      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
+    # real    209m22.159s
+
+    cat fb.ficAlb1.chainRBestMm10Link.txt
+    # 76183235 bases of 1102325870 (6.911%) in intersection
+
+#########################################################################

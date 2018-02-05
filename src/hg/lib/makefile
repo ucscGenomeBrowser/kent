@@ -7,7 +7,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
     altGraphX.o ancientRref.o \
     annoFormatVep.o annoGratorGpVar.o annoGrateWigDb.o \
-    annoStreamDb.o annoStreamDbFactorSource.o annoStreamWig.o \
+    annoStreamDb.o annoStreamDbFactorSource.o annoStreamDbPslPlus.o annoStreamWig.o \
     api.o atomDb.o autoUpgrade.o axtInfo.o axtLib.o bactigPos.o hgBam.o \
     barChartBed.o barChartCategory.o barChartUi.o barChartData.o barChartSample.o \
     baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \

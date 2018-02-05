@@ -347,8 +347,7 @@ html crispors
     itemRgb on
     priority 2
 
-## including later
-## include crispr10K.ra
+include crispr10K.ra
 
 track augustus
 shortLabel Augustus
@@ -1037,7 +1036,6 @@ noScoreFilter .
 itemRgb on
 bigDataUrl /gbdb/$D/ncbiRefSeq/refSeqFuncElems.bb
 group regulation
-pennantIcon New red ../goldenPath/releaseLog.html "Released December 13, 2017"
 urls geneIds=https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&dopt=full_report&list_uids=$$ pubMedIds=https://www.ncbi.nlm.nih.gov/pubmed/$$ soTerm=http://www.sequenceontology.org/browser/obob.cgi?rm=term_list&release=current_svn&obo_query=$$
 mouseOverField _mouseOver
 

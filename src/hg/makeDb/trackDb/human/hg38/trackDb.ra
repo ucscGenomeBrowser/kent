@@ -2,7 +2,7 @@ include ../../refSeqComposite.ra
 
 include barCharts.ra
 
-include hoffMap.ra alpha
+include hoffMap.ra
 
 include cancerExpr.ra
 

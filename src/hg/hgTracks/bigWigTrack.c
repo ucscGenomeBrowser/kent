@@ -17,6 +17,7 @@
 #include "container.h"
 #include "bigWarn.h"
 #include "mathWig.h"
+#include "float.h"
 
 struct preDrawContainer *bigWigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
 /* Do bits that load the predraw buffer tg->preDrawContainer. */
@@ -164,37 +165,45 @@ for (pixel=0; pixel<insideWidth; ++pixel)
     double realCount, realSum, realSumSquares, max, min;
 
     realCount = realSum = realSumSquares = 0.0;
-    max = min = data[startUns];
+    max = -DBL_MAX;
+    min = DBL_MAX;
 
     assert(startUns != endUns);
     unsigned ceilUns = ceil(startReal);
 
-    if (ceilUns != startUns)
+    if ((ceilUns != startUns) && !isnan(data[startUns]))
 	{
 	/* need a fraction of the first count */
 	double frac = (double)ceilUns - startReal;
 	realCount = frac;
 	realSum = frac * data[startUns];
 	realSumSquares = realSum * realSum;
+        if (max < data[startUns])
+            max = data[startUns];
+        if (min > data[startUns])
+            min = data[startUns];
 	startUns++;
 	}
 
     // add in all the data that are totally in this pixel
     for(; startUns < endUns; startUns++)
 	{
-	realCount += 1.0;
-	realSum += data[startUns];
-	realSumSquares += data[startUns] * data[startUns];
-	if (max < data[startUns])
-	    max = data[startUns];
-	if (min > data[startUns])
-	    min = data[startUns];
+        if (!isnan(data[startUns]))
+            {
+            realCount += 1.0;
+            realSum += data[startUns];
+            realSumSquares += data[startUns] * data[startUns];
+            if (max < data[startUns])
+                max = data[startUns];
+            if (min > data[startUns])
+                min = data[startUns];
+            }
 	}
 
     // add any fraction of the count that's only partially in this pixel
     double lastFrac = endReal - endUns;
     double lastSum = lastFrac * data[endUns];
-    if ((lastFrac > 0.0) && (endUns < size))
+    if ((lastFrac > 0.0) && (endUns < size) && !isnan(data[endUns]))
 	{
 	if (max < data[endUns])
 	    max = data[endUns];
@@ -225,19 +234,16 @@ static void mathWigLoadItems(struct track *tg)
 /* Fill up tg->items with bedGraphItems derived from a bigWig file */
 {
 char *missingSetting;
-boolean missingIsZero = FALSE;
-if ((missingSetting = trackDbSetting(tg->tdb, "missingMethod")) != NULL)
+boolean missingIsZero = TRUE;
+if ((missingSetting = cartOrTdbString(cart, tg->tdb, "missingMethod", NULL)) != NULL)
     {
-    missingIsZero = sameString(missingSetting, "missing");
+    missingIsZero = differentString(missingSetting, "missing");
     }
 char *equation = cloneString(trackDbSetting(tg->tdb, "mathDataUrl"));
 
 struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(insideWidth);
 double *data;
-if (missingIsZero)
-    data = mathWigGetValuesMissing(equation, chromName, winStart, winEnd);
-else
-    data = mathWigGetValues(equation, chromName, winStart, winEnd);
+data = mathWigGetValues(database, equation, chromName, winStart, winEnd, missingIsZero);
 dataToPixels(data, pre);
 
 free(data);

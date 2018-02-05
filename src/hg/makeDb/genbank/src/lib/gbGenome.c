@@ -40,7 +40,7 @@ static char *panPanNames[] = {"Pan paniscus", NULL};
 static char *panTroNames[] = {"Pan troglodytes", "Pan troglodytes troglodytes", 
                               "Pan troglodytes verus", NULL};
 static char *gorGorNames[] = {"Gorilla gorilla", "Gorilla gorilla gorilla", "Gorilla gorilla uellensis", "Gorilla gorilla diehli", "Gorilla gorilla graueri", "Gorilla berengi", NULL};
-static char *papAnuNames[] = {"Papio anubis", "Papio hamadryas", "Papio hamadryas hamadryas", NULL};
+static char *papAnuNames[] = {"Papio anubis", "Papio anubis anubis", "Papio hamadryas", "Papio hamadryas hamadryas", NULL};
 static char *papHamNames[] = {"Papio hamadryas", "Papio hamadryas hamadryas", "Papio anubis", NULL};
 static char *ponAbeNames[] = {"Pongo abelii", "Pongo pygmaeus",
 		"Pongo pygmaeus pygmaeus", "Pongo pygmaeus abelii", NULL};
@@ -62,6 +62,7 @@ static char *calJacNames[] = {"Callithrix jacchus", NULL};
 static char *danRerNames[] = {"Danio rerio", NULL};
 static char *echTelNames[] = {"Echinops telfairi", NULL};
 static char *oryCunNames[] = {"Oryctolagus cuniculus", NULL};
+static char *cavApeNames[] = {"Cavia aperea", NULL};
 static char *cavPorNames[] = {"Cavia porcellus", NULL};
 static char *loxAfrNames[] = {"Loxodonta africana", NULL};
 static char *macEugNames[] = {"Macropus eugenii", "Notamacropus eugenii", NULL};
@@ -165,6 +166,7 @@ static char *cebCapNames[] = {"Cebus capucinus imitator", "Cebus capucinus", NUL
 static char *eulFlaNames[] = {"Eulemur flavifrons", NULL};
 static char *eulMacNames[] = {"Eulemur macaco", NULL};
 static char *fukDamNames[] = {"Fukomys damarensis", NULL};
+static char *ficAlbNames[] = {"Ficedula albicollis", NULL};
 static char *hbvNames[] = {"Hepatitis B virus", "Hepatitis B virus subtype adw", NULL};
 static char *hpvNames[] = {"Human papillomavirus", "Human papillomavirus type 16", "Human papillomavirus type 18", "Human papillomavirus type 197", "Human papillomavirus type 38", "Human papillomavirus type 45", "Human papillomavirus type 58", "Human papillomavirus type 68", "Human papillomavirus type 6b", NULL};
 static char *staAurNames[] = {"Staphylococcus", "Staphylococcus aureus", "Staphylococcus aureus subsp. aureus NCTC 8325", "Staphylococcus aureus subsp. aureus RN4220", NULL};
@@ -215,6 +217,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"dasNov", dasNovNames},
     {"echTel", echTelNames},
     {"oryCun", oryCunNames},
+    {"cavApe", cavApeNames},
     {"cavPor", cavPorNames},
     {"equCab", equCabNames},
     {"cerSim", cerSimNames},
@@ -307,6 +310,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"eulFla", eulFlaNames},
     {"eulMac", eulMacNames},
     {"fukDam", fukDamNames},
+    {"ficAlb", ficAlbNames},
     {"hbv", hbvNames},
     {"hpv", hpvNames},
     {"staAur", staAurNames},

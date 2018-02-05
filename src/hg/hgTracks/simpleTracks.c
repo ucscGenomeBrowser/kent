@@ -14103,9 +14103,9 @@ return (a->priority - b->priority);
 void buildMathWig(struct trackDb *tdb)
 /* Turn a mathWig composite into a mathWig track. */
 {
-char *viewFunc =  trackDbSetting(tdb, "viewFunc");
+char *aggregateFunc = cartOrTdbString(cart, tdb, "aggregate" , FALSE);
 
-if ((viewFunc == NULL) || sameString("show all", viewFunc))
+if ((aggregateFunc == NULL) || !(sameString("add", aggregateFunc) || sameString("subtract", aggregateFunc)))
     return;
 
 struct trackDb *subTracks = tdb->subtracks;
@@ -14115,18 +14115,36 @@ tdb->type = "mathWig";
 
 struct dyString *dy = newDyString(1024);
 
-if (sameString("add all", viewFunc))
+if (sameString("add", aggregateFunc))
     dyStringPrintf(dy, "+ ");
-else
+else // subtract
     dyStringPrintf(dy, "- ");
 struct trackDb *subTdb;
 for (subTdb=subTracks; subTdb; subTdb = subTdb->next)
     {
     char *bigDataUrl = trackDbSetting(subTdb, "bigDataUrl");
+    char *useDb;
+    char *table;
     if (bigDataUrl != NULL)
         dyStringPrintf(dy, "%s ",bigDataUrl);
-    else // native tracks are prepended with '$'
-        dyStringPrintf(dy, "$%s ",subTdb->track);
+    else 
+        {
+        if (isCustomTrack(trackHubSkipHubName(subTdb->track)))
+            {
+            useDb = CUSTOM_TRASH;
+            table = trackDbSetting(subTdb, "dbTableName");
+            }
+        else
+            {
+            useDb = database;
+            table = trackDbSetting(subTdb, "table");
+            }
+
+        if (startsWith("bedGraph", subTdb->type))
+            dyStringPrintf(dy, "^%s.%s ",useDb, table);
+        else
+            dyStringPrintf(dy, "$%s.%s ",useDb, table);
+        }
     }
 
 hashAdd(tdb->settingsHash, "mathDataUrl", dy->string);

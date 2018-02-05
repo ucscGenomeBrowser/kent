@@ -75,7 +75,7 @@
     display: inline-block;      /* limits item width so background color doesn't span window */
     padding: 6px 20px;
     margin-bottom: 0;           /* needed to avoid stacking margins with inline-block */
-    background-color: #dde6ee;  /* light slate gray (lightened h2 color) */
+    background-color: #dde6ee;  /* light slate blue-gray (lightened h2 color) */
     font-size: 17px;
     font-weight: bold;
 }

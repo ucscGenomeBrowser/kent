@@ -123,6 +123,9 @@ int hChromCount(char *db);
 char *hNcbiGcfId(char *db);
 /* Return the NCBI RefSeq assembly+annotations ID (GCF_...) for db, or NULL if we don't know it. */
 
+char *hNcbiGcaId(char *db);
+/* Return the NCBI GenBank assembly id (GCA_...) for db, or NULL if we don't know it. */
+
 struct sqlConnection *hAllocConn(char *db);
 /* Get free connection if possible. If not allocate a new one. */
 

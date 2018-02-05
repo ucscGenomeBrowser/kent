@@ -592,6 +592,22 @@ char *wiggleGridEnumToString(enum wiggleGridOptEnum x);
 void wiggleGridDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+#define WIG_VIEWFUNC_SHOW_ALL "showAll"
+#define WIG_VIEWFUNC_ADD_ALL "addAll"
+#define WIG_VIEWFUNC_SUBTRACT_ALL "subtractAll"
+
+/*	Wiggle track aggregate option	*/
+enum wiggleViewFuncEnum {
+   wiggleViewFuncShowAll = 0,
+   wiggleViewFuncAddAll = 1,
+   wiggleViewFuncSubtractAll = 2,
+};
+
+char *wiggleViewFuncEnumToString(enum wiggleViewFuncEnum x);
+/* Convert from enum to string representation. */
+
+enum wiggleViewFuncEnum wiggleViewFuncStringToEnum(char *string);
+
 #define WIG_AGGREGATE_NONE "none"
 #define WIG_AGGREGATE_TRANSPARENT "transparentOverlay"
 #define WIG_AGGREGATE_SOLID "solidOverlay"

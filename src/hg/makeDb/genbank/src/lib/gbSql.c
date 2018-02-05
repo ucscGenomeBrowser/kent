@@ -164,14 +164,14 @@ for (i = 0; tables[i] != NULL; i++)
     tblBldDrop(conn, tables[i], TBLBLD_OLD_TABLE);
 
 struct dyString* sql = dyStringNew(1024);
-sqlDyStringAppend(sql, "RENAME TABLE ");
+sqlDyStringPrintf(sql, "RENAME TABLE ");
 for (i = 0; tables[i] != NULL; i++)
     {
     if (i > 0)
-        dyStringAppend(sql, ", ");
+        sqlDyStringPrintf(sql, ", ");
     if (sqlTableExists(conn, tables[i]))
-        dyStringPrintf(sql, "%s TO %s_old, ", tables[i], tables[i]);
-    dyStringPrintf(sql, "%s_tmp TO %s", tables[i], tables[i]);
+        sqlDyStringPrintf(sql, "%s TO %s_old, ", tables[i], tables[i]);
+    sqlDyStringPrintf(sql, "%s_tmp TO %s", tables[i], tables[i]);
     }
 sqlUpdate(conn, sql->string);
 dyStringFree(&sql);

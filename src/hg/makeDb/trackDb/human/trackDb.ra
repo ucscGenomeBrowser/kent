@@ -3314,9 +3314,10 @@ shortLabel HGMD Variants
 longLabel Human Gene Mutation Database Public Variants
 group phenDis
 visibility hide
-type bigBed 8 .
+itemRgb on
+type bigBed 9 .
 url http://www.hgmd.cf.ac.uk/ac/gene.php?gene=$P&accession=$p
-urlLabel Link to HGMD:
+urlLabel Link to HGMD
 mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on

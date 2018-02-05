@@ -659,15 +659,15 @@ for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
 
 /* Stream through knownGenes table and make up a pos
  * for each mapping of each gene matching search. */
-sqlDyStringAppend(dy, 
+sqlDyStringPrintf(dy, 
 	"select name,chrom,txStart,txEnd from knownGene where name in (");
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     {
     sqlDyStringPrintf(dy, "'%s'", tsr->itemId);
     if (tsr->next != NULL)
-        dyStringAppendC(dy, ',');
+        sqlDyStringPrintf(dy, ",");
     }
-dyStringAppend(dy, ")");
+sqlDyStringPrintf(dy, ")");
 
 sr = sqlGetResult(conn, dy->string);
 
@@ -687,15 +687,15 @@ sqlFreeResult(&sr);
 
 /* Stream through kgXref table adding description and geneSymbol */
 dyStringClear(dy);
-sqlDyStringAppend(dy, 
+sqlDyStringPrintf(dy, 
 	"select kgID,geneSymbol,description from kgXref where kgID in (");
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     {
     sqlDyStringPrintf(dy, "'%s'", tsr->itemId);
     if (tsr->next != NULL)
-        dyStringAppendC(dy, ',');
+        sqlDyStringPrintf(dy, ",");
     }
-dyStringAppend(dy, ")");
+sqlDyStringPrintf(dy, ")");
 
 sr = sqlGetResult(conn, dy->string);
 
@@ -2772,7 +2772,7 @@ else
 static boolean doQuery(char *db, struct hgFindSpec *hfs, char *xrefTerm, char *term,
 		       struct hgPositions *hgp,
 		       boolean relativeFlag, int relStart, int relEnd,
-		       boolean multiTerm)
+		       boolean multiTerm, int limitResults)
 /* Perform a query as specified in hfs, assuming table existence has been 
  * checked and xref'ing has been taken care of. */
 {
@@ -2811,6 +2811,8 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
     // we do not have control over the original sql since it comes from trackDb.ra or elsewhere?
     char query[2048];
     sqlSafef(query, sizeof(query), hfs->query, tPtr->name, term);
+    if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
+        sqlSafefAppend(query, sizeof(query), " limit %d", limitResults);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -2919,7 +2921,7 @@ else
 for (xrefPtr = xrefList;  xrefPtr != NULL;  xrefPtr = xrefPtr->next)
     {
     found |= doQuery(db, hfs, xrefPtr->name, (char *)xrefPtr->val, hgp,
-		     relativeFlag, relStart, relEnd, multiTerm);
+		     relativeFlag, relStart, relEnd, multiTerm, limitResults);
     }
 slPairFreeValsAndList(&xrefList);
 return(found);
@@ -3256,22 +3258,28 @@ else if (!matchesHgvs(cart, db, term, hgp))
 	}
     hgFindSpecFreeList(&shortList);
     hgFindSpecFreeList(&longList);
-    if(hgpMatchNames == NULL)
-	hgpMatchNames = newDyString(256);
-    for(hgpItem = hgp; hgpItem != NULL; hgpItem = hgpItem->next)
-	{
-	struct hgPosTable *hpTable = NULL;
-	for(hpTable = hgpItem->tableList; hpTable != NULL; hpTable = hpTable->next)
-	    {
-	    struct hgPos *pos = NULL;
-	    for(pos = hpTable->posList; pos != NULL; pos = pos->next)
-		{
-		dyStringPrintf(hgpMatchNames, "%s,", pos->browserName);
-		}
-	    }
-	}
     if (cart != NULL)
+        {
+        if(hgpMatchNames == NULL)
+            hgpMatchNames = newDyString(256);
+        dyStringClear(hgpMatchNames);
+        int matchCount = 0;
+        for(hgpItem = hgp; hgpItem != NULL; hgpItem = hgpItem->next)
+            {
+            struct hgPosTable *hpTable = NULL;
+            for(hpTable = hgpItem->tableList; hpTable != NULL; hpTable = hpTable->next)
+                {
+                struct hgPos *pos = NULL;
+                for(pos = hpTable->posList; pos != NULL; pos = pos->next)
+                    {
+                    if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED && matchCount++ >= limitResults)
+                        break;
+                    dyStringPrintf(hgpMatchNames, "%s,", pos->browserName);
+                    }
+                }
+            }
         cartSetString(cart, "hgFind.matches", hgpMatchNames->string);
+        }
     }
 slReverse(&hgp->tableList);
 if (multiTerm)

@@ -192,11 +192,10 @@ taxId 10020
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/dipOrd2/dipOrd2.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku dipOrd2) > do.log 2>&1
-XXX - running - Fri Dec 22 21:43:36 PST 2017
-    # real    41m47.778s
+    # real    7m12.778s
 
     cat fb.dipOrd2.cpgIslandExtUnmasked.txt
-    # 14956579 bases of 1369865365 (1.092%) in intersection
+    # 79664500 bases of 2065314047 (3.857%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2017-12-22 - Hiram)
@@ -216,7 +215,7 @@ XXX - running - Fri Dec 22 21:43:36 PST 2017
     #   8ae219619932349bebc17364408bf9d0
 
 ##########################################################################
-# ucscToINSDC and ucscToRefSeq table/track (TBD - 2017-03-27 - Hiram)
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2017-12-22 - Hiram)
     # the sequence here is working for a 'refseq' assembly
     # beware of a chrM situation may be specific depending upon what is
     # available in the assembly
@@ -224,74 +223,61 @@ XXX - running - Fri Dec 22 21:43:36 PST 2017
     mkdir /hive/data/genomes/dipOrd2/bed/ucscToINSDC
     cd /hive/data/genomes/dipOrd2/bed/ucscToINSDC
 
-    # find accession for chrM
-    grep chrM ../../dipOrd2.agp
-# chrM    1       17610   1       O       NC_006839.1     1       17610   +
-
-    # find the genbank accession for NC_006839.1 at Entrez nucleotide
-    # The NC_006839.1 name is the RefSeq name, the genbank name is: AY789013.1
-    # the assembly_report does not have this AY name since the chrM sequence
-    # is not in the genbank assembly:
-    grep NC_006839.1 ../../refseq/GCF*v9.1_assembly_report.txt
-# MT      assembled-molecule      MT      Mitochondrion   na      <>      NC_006839.1     non-nuclear     17610   chrM
+    # there is no chrM sequence in this assembly
 
     # if there is a chrM, use its INSDC name as a second argument:
     # this is a RefSeq assembly, use the chrM refSeq name:
     ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-      ../../refseq/GCF_*structure/Primary_Assembly NC_028718.1
+      ../../refseq/GCF_*structure/Primary_Assembly
 
     # this is actually ucscToRefSeq since this is a RefSeq assembly
     sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+
     rm -f ucscToINSDC.txt
+    # there is also a genbank release, need to make idKeys to match it
+    mkdir /hive/data/genomes/dipOrd2/bed/ucscToINSDC/genbank
+    cd /hive/data/genomes/dipOrd2/bed/ucscToINSDC/genbank
+    ln -s ../../../genbank/*ure/Pri*/unplaced_scaffolds/FASTA/*.fna.gz .
+    faToTwoBit unplaced.scaf.fna.gz genbank.dipOrd2.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+	-twoBit=`pwd`/genbank.dipOrd2.2bit genbankDipOrd2) > do.log 2>&1 &
+    # real    30m4.448s
+
+    cd /hive/data/genomes/dipOrd2/bed/ucscToINSDC
+    join -t$'\t' \
+      ../idKeys/dipOrd2.idKeys.txt genbank/genbankDipOrd2.idKeys.txt \
+	| cut -f2- | sort > ucscToINSDC.txt
+
     awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt \
        | sort > refSeqToUcsc.txt
 
-    # chrM processing needs special help, fixup with the sed
-    # extract the refseq vs. genbank names from the assembly_report
-    # columns 5 and 7 are the INSDC and RefSeq names
-    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
-      | awk '{printf "%s\t%s\n", $2, $1}' | sed -e 's/na/AY789013.1/' \
-          | sort > refseq.insdc.txt
-
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > ucsc.coordinate.tab
-    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
-       | join -2 3 ucsc.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-4 \
-           > ucscToRefSeq.bed
-    printf "chrM\t0\t17610\tNC_006839.1\n" >> ucscToRefSeq.bed
 
-    join -2 2 refseq.insdc.txt ucscToRefSeq.txt | tr '[ ]' '[\t]' | sort -k3 \
-       | join -2 3 ucsc.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
-           > ucscToINSDC.bed
-    printf "chrM\t0\t17610\tAY789013.1\n" >> ucscToINSDC.bed
-
-    # verify chrM is correct:
-    grep chrM *.bed
-    # ucscToINSDC.bed:chrM    AY789013.1
-    # ucscToRefSeq.bed:chrM   NC_006839.1
-
+    join -t$'\t' ucsc.coordinate.tab ucscToRefSeq.txt > ucscToRefSeq.bed
+    join -t$'\t' ucsc.coordinate.tab ucscToINSDC.txt > ucscToINSDC.bed
 
     # should be same line counts throughout:
     # in this case one is missing in the final result due to the duplicate
     # contig being removed
     wc -l *
-    #	6822 refSeqToUcsc.txt
-    #	6822 refseq.insdc.txt
-    #	6822 ucsc.coordinate.tab
-    #	6822 ucscToINSDC.bed
-    #	6822 ucscToRefSeq.bed
-    #	6822 ucscToRefSeq.txt
+    # 65193 ucsc.coordinate.tab
+    # 65193 ucscToINSDC.bed
+    # 65193 ucscToINSDC.txt
+    # 65193 ucscToRefSeq.bed
+    # 65193 ucscToRefSeq.txt
 
     export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
-    # 20
-    # use the 25 in this sed
+    # 14
+    # use the 14 in this sed
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab dipOrd2 ucscToINSDC stdin ucscToINSDC.bed
     # should be the same for ucscToRefSeq:
     export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
     echo $chrSize
-    #  20
+    #  14
     sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
        | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
     hgLoadSqlTab dipOrd2 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
@@ -300,24 +286,42 @@ XXX - running - Fri Dec 22 21:43:36 PST 2017
     checkTableCoords dipOrd2
     # each should cover %100 entirely:
     featureBits -countGaps dipOrd2 ucscToINSDC
-    # 1440398454 bases of 1440398454 (100.000%) in intersection
+    # 2236368823 bases of 2236368823 (100.000%) in intersection
 
     featureBits -countGaps dipOrd2 ucscToRefSeq
-    # 1440398454 bases of 1440398454 (100.000%) in intersection
+    # 2236368823 bases of 2236368823 (100.000%) in intersection
 
 #########################################################################
-# add chromAlias table (TBD - 2017-03-27 - Hiram)
+# add chromAlias table (DONE - 2017-12-22 - Hiram)
 
     mkdir /hive/data/genomes/dipOrd2/bed/chromAlias
     cd /hive/data/genomes/dipOrd2/bed/chromAlias
 
-    hgsql -N -e 'select chrom,name,"refseq" from ucscToRefSeq;' dipOrd2 \
+    # after ensembl idKeys have been made:
+    join -t$'\t'  ../idKeys/dipOrd2.idKeys.txt \
+	../../ensembl/ensemblDipOrd2.idKeys.txt | cut -f2- > ucsc.ensembl.tab
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' dipOrd2 \
         > ucsc.refseq.tab
-    hgsql -N -e 'select chrom,name,"genbank" from ucscToINSDC;' dipOrd2 \
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' dipOrd2 \
         > ucsc.genbank.tab
 
-    awk '{printf "%s\t%s\t%s\n", $2,$1,$3}' ucsc.genbank.tab ucsc.refseq.tab \
-        | sort > dipOrd2.chromAlias.tab
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+	> dipOrd2.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t dipOrd2.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 65193 =? 65193 OK
+# checking genbank: 65193 =? 65193 OK
+# checking ensembl: 65193 =? 65193 OK
 
     hgLoadSqlTab dipOrd2 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
         dipOrd2.chromAlias.tab
@@ -361,15 +365,32 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku dipOrd2) > do.log 2>&1 &
-XXX - running - Fri Dec 22 21:49:37 PST 2017
     # real    462m52.098s
+    # XXX 8 jobs could not finish, cross_match does not complete
+    # they were broken up into 50,000 base chunks and run separately
+    # the results were placed into RMPart/005/000/
+# -rw-rw-r-- 1  1095629 Dec 30 21:21 lift8bits.fa.out
+# -rw-rw-r-- 1 10233429 Dec 30 21:21 lift8bits.fa.align
+
+    # see if cat step will work correctly
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=cat -stop=cat -smallClusterHub=ku dipOrd2) > cat.log 2>&1
+    # real    9m20.559s
+
+    # seems to be OK, continuing:
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=mask -smallClusterHub=ku dipOrd2) > mask.log 2>&1
+    # real    14m37.290s
+
 
     cat faSize.rmsk.txt
-# 1440398454 bases (70533089 N's 1369865365 real 899399454 upper
-#	470465911 lower) in 6822 sequences in 1 files
-# Total size: mean 211140.2 sd 5118536.3 min 226 (chrUn_NW_016690147v1)
-#	max 194866763 (chr1) median 4812
-# %32.66 masked total, %34.34 masked real
+# 2236368823 bases (171054779 N's 2065314044 real 1321230680 upper
+#	744083364 lower) in 65193 sequences in 1 files
+# Total size: mean 34303.8 sd 716613.2 min 200 (NW_012315564v1)
+#	max 68039765 (NW_012267217v1) median 2275
+# %33.27 masked total, %36.03 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -377,8 +398,8 @@ XXX - running - Fri Dec 22 21:49:37 PST 2017
     # CC   RELEASE 20140131;                                            *
 
     time featureBits -countGaps dipOrd2 rmsk
-    #	471365620 bases of 1440398454 (32.725%) in intersection
-    #	real    0m20.783s
+    # 744619771 bases of 2236368823 (33.296%) in intersection
+    # real    0m47.760s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
@@ -387,8 +408,8 @@ XXX - running - Fri Dec 22 21:49:37 PST 2017
     # faster way to get the same result on high contig count assemblies:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' dipOrd2 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    #	total 471365620.000000
-    #	real    0m16.203s
+    #	total 744619771.000000
+    #   real    0m33.003s
 
 ##########################################################################
 # running simple repeat (DONE - 2017-12-22 - Hiram)
@@ -399,11 +420,10 @@ XXX - running - Fri Dec 22 21:49:37 PST 2017
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         -trf409 5 dipOrd2) > do.log 2>&1 &
-XXX - running - Fri Dec 22 21:51:53 PST 2017
-    # real    53m53.100s
+    # real    394m21.273s
 
     cat fb.simpleRepeat
-    # 118499828 bases of 1369865365 (8.650%) in intersection
+    # 170021835 bases of 2065314047 (8.232%) in intersection
 
     # adding this trfMask to the other masking
     cd /hive/data/genomes/dipOrd2
@@ -420,18 +440,18 @@ XXX - running - Fri Dec 22 21:51:53 PST 2017
 
     twoBitToFa dipOrd2.2bit stdout | faSize stdin > faSize.dipOrd2.2bit.txt
     cat faSize.dipOrd2.2bit.txt
-# 1440398454 bases (70533089 N's 1369865365 real 898405355 upper
-#	471460010 lower) in 6822 sequences in 1 files
-# Total size: mean 211140.2 sd 5118536.3 min 226 (chrUn_NW_016690147v1)
-#	max 194866763 (chr1) median 4812
-# %32.73 masked total, %34.42 masked real
+# 2236368823 bases (171054779 N's 2065314044 real 1290537444 upper
+#	774776600 lower) in 65193 sequences in 1 files
+# Total size: mean 34303.8 sd 716613.2 min 200 (NW_012315564v1)
+#	max 68039765 (NW_012267217v1) median 2275
+# %34.64 masked total, %37.51 masked real
 
     # reset the symlink
     rm /gbdb/dipOrd2/dipOrd2.2bit
     ln -s `pwd`/dipOrd2.2bit /gbdb/dipOrd2/dipOrd2.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2017-03-27 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2017-12-30 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/dipOrd2/bed/microsat
     cd /cluster/data/dipOrd2/bed/microsat
@@ -440,142 +460,160 @@ XXX - running - Fri Dec 22 21:51:53 PST 2017
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed dipOrd2 microsat microsat.bed
-    # Read 13167 elements of size 4 from microsat.bed
+    # Read 104987 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2017-03-27 - Hiram)
+## WINDOWMASKER (DONE - 2017-12-30 - Hiram)
 
     mkdir /hive/data/genomes/dipOrd2/bed/windowMasker
     cd /hive/data/genomes/dipOrd2/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev dipOrd2) > do.log 2>&1
-    # real    129m31.454s
+    # real    199m45.928s
 
     # Masking statistics
     cat faSize.dipOrd2.cleanWMSdust.txt
-# 1440398454 bases (70533089 N's 1369865365 real 830396076 upper
-#	539469289 lower) in 6822 sequences in 1 files
-# Total size: mean 211140.2 sd 5118536.3 min 226 (chrUn_NW_016690147v1)
-#	max 194866763 (chr1) median 4812
-# %37.45 masked total, %39.38 masked real
+# 2236368823 bases (171054779 N's 2065314044 real 1246991941 upper
+#	818322103 lower) in 65193 sequences in 1 files
+# Total size: mean 34303.8 sd 716613.2 min 200 (NW_012315564v1)
+#	max 68039765 (NW_012267217v1) median 2275
+# %36.59 masked total, %39.62 masked real
 
 
     cat fb.dipOrd2.rmsk.windowmaskerSdust.txt
-    # 361644174 bases of 1440398454 (25.107%) in intersection
+    # 542455834 bases of 2236368823 (24.256%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2017-03-28 - Hiram)
+# cpgIslands - (DONE - 2017-12-31 - Hiram)
     mkdir /hive/data/genomes/dipOrd2/bed/cpgIslands
     cd /hive/data/genomes/dipOrd2/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku dipOrd2) > do.log 2>&1 &
-    # real    3m28.088s
+    # real    7m7.765s
 
     cat fb.dipOrd2.cpgIslandExt.txt
-    # 4735284 bases of 1369865365 (0.346%) in intersection
+    # 20939057 bases of 2065314047 (1.014%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2017-03-28 - Hiram)
+# genscan - (DONE - 2017-12-31 - Hiram)
     mkdir /hive/data/genomes/dipOrd2/bed/genscan
     cd /hive/data/genomes/dipOrd2/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku dipOrd2) > do.log 2>&1 &
-    # real    105m32.304s
+    # real    395m13.441s
 
     cat fb.dipOrd2.genscan.txt
-    # 49227165 bases of 1369865365 (3.594%) in intersection
+    # 50439107 bases of 2065314047 (2.442%) in intersection
 
     cat fb.dipOrd2.genscanSubopt.txt
-    # 37665356 bases of 1369865365 (2.750%) in intersection
-
+    # 44013285 bases of 2065314047 (2.131%) in intersection
 
 #############################################################################
-# augustus gene track (TBD - 2017-03-28 - Hiram)
+# augustus gene track (DONE - 2017-12-31 - Hiram)
 
     mkdir /hive/data/genomes/dipOrd2/bed/augustus
     cd /hive/data/genomes/dipOrd2/bed/augustus
+
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
-     -species=chicken -dbHost=hgwdev -workhorse=hgwdev dipOrd2) > do.log 2>&1 &
-    # real    79m25.311s
+     -species=human -dbHost=hgwdev -workhorse=hgwdev dipOrd2) > do.log 2>&1 &
+    # real    162m42.872s
 
     cat fb.dipOrd2.augustusGene.txt
-    # 38938672 bases of 1369865365 (2.843%) in intersection
+    # 44381136 bases of 2065314047 (2.149%) in intersection
 
+    featureBits -enrichment dipOrd2 augustusGene ensGene
+# augustusGene 2.149%, ensGene 1.670%, both 1.212%, cover 56.42%, enrich 33.77x
 
 #############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2017-03-30 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2018-01-02 - Hiram)
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzDipOrd2.2017-03-29
+    cd /hive/data/genomes/hg38/bed/lastzDipOrd2.2018-01-01
 
     cat fb.hg38.chainDipOrd2Link.txt
-    # 117720401 bases of 3049335806 (3.861%) in intersection
+    # 1001007354 bases of 3049335806 (32.827%) in intersection
+    cat fb.hg38.chainSynDipOrd2Link.txt
+    # 934602735 bases of 3049335806 (30.649%) in intersection
+    cat fb.hg38.chainRBestDipOrd2Link.txt
+    # 921538020 bases of 3049335806 (30.221%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/dipOrd2/bed/blastz.hg38.swap
     cd /hive/data/genomes/dipOrd2/bed/blastz.hg38.swap
-
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzDipOrd2.2017-03-29/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
+        /hive/data/genomes/hg38/bed/lastzDipOrd2.2018-01-01/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > swap.log 2>&1
-    #  real    61m0.707s
+            -swap -syntenicNet) > swap.log 2>&1 &
+    # real    97m8.750s
 
     cat fb.dipOrd2.chainHg38Link.txt
-    # 108900066 bases of 1369865365 (7.950%) in intersection
+    # 957281496 bases of 2065314047 (46.350%) in intersection
+    cat fb.dipOrd2.chainSynHg38Link.txt
+    # 905805640 bases of 2065314047 (43.858%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dipOrd2 hg38) \
-       > rbest.log 2>&1
-    # real    749m24.229s
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` dipOrd2 hg38) > rbest.log 2>&1 &
+    # real    431m28.226s
 
-#############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2017-03-30 - Hiram)
+    cat fb.dipOrd2.chainRBestHg38Link.txt
+    # 923041001 bases of 2065314047 (44.693%) in intersection
 
-    cd /hive/data/genomes/mm10/bed/lastzDipOrd2.2017-03-29
+##############################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-01-02 - Hiram)
+    # original alignment to mm10
+    cd /hive/data/genomes/mm10/bed/lastzDipOrd2.2018-01-01
+
     cat fb.mm10.chainDipOrd2Link.txt
-    #	87053836 bases of 2652783500 (3.282%) in intersection
+    #	645178768 bases of 2652783500 (24.321%) in intersection
+    cat fb.mm10.chainRBestDipOrd2Link.txt
+    # 605074450 bases of 2652783500 (22.809%) in intersection
 
-    #	and for the swap
     mkdir /hive/data/genomes/dipOrd2/bed/blastz.mm10.swap
     cd /hive/data/genomes/dipOrd2/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzDipOrd2.2017-03-29/DEF \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-        -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
-	> swap.log 2>&1 &
-    #	real    53m19.485s
+	/hive/data/genomes/mm10/bed/lastzDipOrd2.2018-01-01/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    79m46.564s
 
-    cat  fb.dipOrd2.chainMm10Link.txt
-    #	90150612 bases of 1369865365 (6.581%) in intersection
+    cat fb.dipOrd2.chainMm10Link.txt
+    # 631879699 bases of 2065314047 (30.595%) in intersection
+    cat fb.dipOrd2.chainSynMm10Link.txt
+    # 581661824 bases of 2065314047 (28.163%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dipOrd2 mm10) \
-         > rbest.log 2>&1 &
-    #	real    597m52.740s
 
-#############################################################################
-# Create kluster run files (TBD - 2017-03-28 - Hiram)
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` dipOrd2 mm10) \
+	> rbest.log 2>&1
+    # real    412m53.879s
+
+    cat fb.dipOrd2.chainRBestMm10Link.txt
+    # 605056621 bases of 2065314047 (29.296%) in intersection
+
+##############################################################################
+# Create kluster run files (DONE - 2017-12-31 - Hiram)
 
     # numerator is dipOrd2 gapless bases "real" as reported by:
     featureBits -noRandom -noHap dipOrd2 gap
-    # 45444714 bases of 1227082306 (3.703%) in intersection
-    #                   ^^^
+    # 171054776 bases of 2065314047 (8.282%) in intersection
+    #                     ^^^
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1227082306 / 2861349177 \) \* 1024
-    #  ( 1227082306 / 2861349177 ) * 1024 = 439.139792
+    calc \( 2065314047 / 2861349177 \) \* 1024
+    #  ( 2065314047 / 2861349177 ) * 1024 = 739.120413
 
-    # ==> use -repMatch=500 according to size scaled down from 1024 for human.
-    #   and rounded up to nearest 100
+    # ==> use -repMatch=750 according to size scaled down from 1024 for human.
+    #   and rounded up to nearest 50
     cd /hive/data/genomes/dipOrd2
     blat dipOrd2.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/dipOrd2.11.ooc \
-        -repMatch=500
-    #   Wrote 31375 overused 11-mers to jkStuff/dipOrd2.11.ooc
-    # xenTro7 was:
-    #   Wrote 31229 overused 11-mers to jkStuff/xenTro7.11.ooc
+        -repMatch=750
+    #   Wrote 29353 overused 11-mers to jkStuff/dipOrd2.11.ooc
+    # dipOrd1 was: -repMatch=700
+    #	Wrote 33062 overused 11-mers to dipOrd1.11.ooc
 
     #   check non-bridged gaps to see what the typical size is:
     hgsql -N \
@@ -589,64 +627,52 @@ XXX - running - Fri Dec 22 21:51:53 PST 2017
     #    -bedFile=jkStuff/nonBridged.bed
 
 #########################################################################
-# LIFTOVER TO xenTro7 (TBD - 2017-03-28 - Hiram)
+# LIFTOVER TO dipOrd1 (DONE - 2017-12-31 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/dipOrd2/bed/blat.xenTro7.2017-03-27
-    cd /hive/data/genomes/dipOrd2/bed/blat.xenTro7.2017-03-27
+    mkdir /hive/data/genomes/dipOrd2/bed/blat.dipOrd1.2017-12-31
+    cd /hive/data/genomes/dipOrd2/bed/blat.dipOrd1.2017-12-31
     time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
 	-ooc=/hive/data/genomes/dipOrd2/jkStuff/dipOrd2.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         dipOrd2 xenTro7) > do.log 2>&1
-    # real    407m17.792s
+         dipOrd2 dipOrd1) > do.log 2>&1
+    # real    1026m23.658s
 
     # verify the convert link on the test browser is now active from dipOrd2 to
-    # xenTro7
+    # dipOrd1
 
 #########################################################################
-# LIFTOVER TO xenTro3 (TBD - 2017-03-28 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/dipOrd2/bed/blat.xenTro3.2017-03-28
-    cd /hive/data/genomes/dipOrd2/bed/blat.xenTro3.2017-03-28
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-	-ooc=/hive/data/genomes/dipOrd2/jkStuff/dipOrd2.11.ooc \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         dipOrd2 xenTro3) > do.log 2>&1
-    # real    422m44.841s
-
-    # verify the convert link on the test browser is now active from dipOrd2 to
-    # xenTro3
-
-########################################################################
-# GENBANK AUTO UPDATE (TBD - 2017-03-28 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2017-12-31 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism             mrnaCnt   estCnt  refSeqCnt
-    # Xenopus tropicalis      18478   1271480 8612
+    # Dipodomys merriami      5       0       0
+    # Dipodomys spectabilis   7       0       0
 
-    # edit etc/genbank.conf to add dipOrd2 just before macFas5
-# dipOrd2 'Xenopus tropicalis' 11 chroms + 6811 contigs
+    # there appear to be none for Dipodomys ordii
+
+    # edit etc/genbank.conf to add dipOrd2 just before dipOrd1
+# dipOrd2 (Kangaroo rat)
 dipOrd2.serverGenome = /hive/data/genomes/dipOrd2/dipOrd2.2bit
 dipOrd2.clusterGenome = /hive/data/genomes/dipOrd2/dipOrd2.2bit
 dipOrd2.ooc = /hive/data/genomes/dipOrd2/jkStuff/dipOrd2.11.ooc
 dipOrd2.lift = no
-dipOrd2.perChromTables = no
-dipOrd2.downloadDir = dipOrd2
-# dipOrd2.mgc = yes
-dipOrd2.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
-dipOrd2.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
-dipOrd2.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
-dipOrd2.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
-dipOrd2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+dipOrd2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+dipOrd2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+dipOrd2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+dipOrd2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+dipOrd2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+# there are zero native mrna or est for dipOrd
+dipOrd2.refseq.mrna.native.load = no
+dipOrd2.refseq.mrna.xeno.load = yes
 # DO NOT NEED genbank.mrna.xeno except for human, mouse
-# defaults yes: genbank.mrna.native.load, genbank.mrna.native.loadDesc,
-# genbank.est.native.load, refseq.mrna.native.load, refseq.mrna.native.loadDesc,
-# refseq.mrna.xeno.load , refseq.mrna.xeno.loadDesc
-# xenTro7.upstreamGeneTbl = ensGene
-# xenTro7.upstreamMaf = multiz9way /hive/data/genomes/xenTro7/bed/multiz9way/species.list
+dipOrd2.genbank.mrna.xeno.load = yes
+dipOrd2.genbank.est.native.load = no
+dipOrd2.downloadDir = dipOrd2
+dipOrd2.perChromTables = no
 
-    git commit -m 'adding dipOrd2 X, tropicalis refs #19151' etc/genbank.conf
+    git commit -m 'adding dipOrd2 Dipodomys ordii refs #20751' etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
     make etc-update
@@ -654,12 +680,12 @@ dipOrd2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial dipOrd2
-    # logFile: var/build/logs/2017.03.28-10:19:21.dipOrd2.initalign.log
-    #   real    424m59.280s
+    # logFile: var/build/logs/2017.12.31-08:55:07.dipOrd2.initalign.log
+    #   real    1098m37.667s
 
-    tail -2 var/build/logs/2017.03.28-10:19:21.dipOrd2.initalign.log
-    #	hgwdev 2017.03.28-17:22:09 dipOrd2.initalign: Succeeded: dipOrd2
-    #   hgwdev 2017.03.28-17:24:20 dipOrd2.initalign: finish
+    tail -2 var/build/logs/2017.12.31-08:55:07.dipOrd2.initalign.log
+    #	hgwdev 2018.01.01-03:04:33 dipOrd2.initalign: Succeeded: dipOrd2
+    #	hgwdev 2018.01.01-03:13:45 dipOrd2.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.dipOrd2
@@ -668,11 +694,11 @@ dipOrd2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad dipOrd2
-    # logFile: var/dbload/hgwdev/logs/2017.03.28-18:08:41.dipOrd2.dbload.log
-    #  real    30m42.283s
+    # logFile: var/dbload/hgwdev/logs/2018.01.01-13:04:41.dipOrd2.dbload.log
+    #  real    98m36.682s
 
-    tail -1 var/dbload/hgwdev/logs/2017.03.28-18:08:41.dipOrd2.dbload.log
-    #  hgwdev 2017.03.28-18:39:24 dipOrd2.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2018.01.01-13:04:41.dipOrd2.dbload.log
+    #  hgwdev 2018.01.01-14:43:18 dipOrd2.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -685,57 +711,23 @@ dipOrd2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
     make etc-update
 
 #############################################################################
-# ncbiRefSeq (TBD - 2016-05-13 - Hiram)
-
-    mkdir /hive/data/genomes/dipOrd2/bed/ncbiRefSeq
-    cd /hive/data/genomes/dipOrd2/bed/ncbiRefSeq
-    # running step wise as this script is still under development
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 dipOrd2) > download.log 2>&1
-    # real    16m29.536s
-
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 dipOrd2) > process.log 2>&1
-    # real    3m58.858s
-
-    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
-      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
-      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
-      refseq vertebrate_other Gallus_gallus \
-      GCF_000002315.4_Gallus_gallus-5.0 dipOrd2) > load.log 2>&1
-    # real    0m33.205s
-
-    cat fb.ncbiRefSeq.dipOrd2.txt
-    #  82563006 bases of 1218501075 (6.776%) in intersection
-
-    featureBits -enrichment dipOrd2 refGene ncbiRefSeq 
-    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
-    #    enrich 14.68x
-
-#########################################################################
-#  BLATSERVERS ENTRY (TBD - 2017-03-29 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2018-01-03 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("dipOrd2", "blat1d", "17884", "1", "0"); \
+	VALUES ("dipOrd2", "blat1d", "17894", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("dipOrd2", "blat1d", "17885", "0", "1");' \
+	VALUES ("dipOrd2", "blat1d", "17895", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to same as xenTro7
-##  (TBD - 2017-03-29 - Hiram)
+## reset default position to same protein location as hg38
+##  found by blat (DONE - 2018-01-03 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr9:15945953-15959305"
+    hgsql -e 'update dbDb set defaultPos="NW_012267222v1:6911344-7030779"
 	where name="dipOrd2";' hgcentraltest
 
 #########################################################################
@@ -748,27 +740,41 @@ dipOrd2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDn
 
     cd /hive/data/genomes/dipOrd2
     time (makeDownloads.pl -workhorse=hgwdev dipOrd2) > downloads.log 2>&1
-    #  real    14m41.395s
-
+    #  real    19m11.136s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/dipOrd2/pushQ
     cd /hive/data/genomes/dipOrd2/pushQ
-    time (makePushQSql.pl -redmineList dipOrd2) > dipOrd2.pushQ.sql 2> stderr.out
-    #  real    7m21.629s
+  time (makePushQSql.pl -redmineList dipOrd2) > dipOrd2.pushQ.sql 2> stderr.out
+    #  real    3m55.668s
 
     #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: hgwdev does not have /gbdb/dipOrd2/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/dipOrd2/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/dipOrd2/bbi/quality.bw
     # WARNING: dipOrd2 does not have seq
     # WARNING: dipOrd2 does not have extFile
+    # WARNING: dipOrd2 does not have estOrientInfo
 
-    #   copy it to hgwbeta
-    scp -p dipOrd2.pushQ.sql qateam@hgwbeta:/tmp/
-    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/dipOrd2.pushQ.sql"
+    ## there are warnings about the RBest and Syn chainNet tables, which we
+    ## are not interested in at this time.  They can be left out.
 
-    #   in that pushQ entry walk through each entry and see if the
-    #   sizes will set properly
+    # verify the file listings are valid, should be no output to stderr:
+    cat redmine.dipOrd2.file.list \
+        | while read L; do ls -ogL $L; done  > /dev/null
+
+    # to verify the database.table list is correct, should be the same
+    # line count for these two commands:
+    wc -l redmine.dipOrd2.table.list
+    # 70 redmine.dipOrd2.table.list
+    awk -F'.' '{
+printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
+}' redmine.dipOrd2.table.list | while read L; do eval $L; done | wc -l
+    # 70
+
+    # enter the path names to these files in the redmine issue to
+    # make QA Ready:
+    ls `pwd`/redmine*
+
+/hive/data/genomes/dipOrd2/pushQ/redmine.dipOrd2.file.list
+/hive/data/genomes/dipOrd2/pushQ/redmine.dipOrd2.releaseLog.txt
+/hive/data/genomes/dipOrd2/pushQ/redmine.dipOrd2.table.list
 
 #########################################################################

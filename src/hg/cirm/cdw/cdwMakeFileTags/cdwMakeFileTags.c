@@ -61,13 +61,13 @@ while ((row = sqlNextRow(sr)) != NULL)
      if (!hashLookup(hash, id))
          {
 	 if (deleteAny)
-	     dyStringAppendC(dy, ',');
+	     sqlDyStringPrintf(dy, ",");
 	 else
 	     deleteAny = TRUE;
-	 dyStringAppend(dy, id);
+	 sqlDyStringPrintf(dy, "'%s'", id);
 	 }
      }
-dyStringPrintf(dy, ")");
+sqlDyStringPrintf(dy, ")");
 sqlFreeResult(&sr);
 
 if (deleteAny)
@@ -86,8 +86,7 @@ if (facetCount <= 0)
 // See if somebody is already running this utility. Should only happen rarely.
 struct sqlConnection *conn = cdwConnect(database);
 if (sqlIsLocked(conn, "makeFileTags"))
-    errAbort("Another user is already running cdwMakeFileTags. Advisory lock found.");
-sqlGetLockWithTimeout(conn, "makeFileTags", 1);
+    errAbort("Another user is already running cdwMakeFileTags. Advisory lock found."); sqlGetLockWithTimeout(conn, "makeFileTags", 1);
 
 removeUnusedMetaTags(conn);
 
@@ -121,6 +120,9 @@ static char *keyFields[] =  {
 };
 
 struct dyString *query = dyStringNew(0);
+// Functions in src/lib/tabToSql.c cannot use functions like sqlSafef
+// since they are in src/hg/lib/ which is not available. 
+// That is why we see NOSQLINJ exposed here.
 dyStringAppend(query, NOSQLINJ);
 tagStormToSqlCreate(tagStorm, fullTable, ttiList, ttiHash, 
     keyFields, ArraySize(keyFields), query);
@@ -143,8 +145,7 @@ slFreeList(&stanzaList);
 /* Make facetTable as a subset of fullTable */
 verbose(2, "making %s table for faceting\n", facetTable);
 struct dyString *facetCreate = dyStringNew(0);
-dyStringAppend(facetCreate, NOSQLINJ);
-dyStringPrintf(facetCreate, "create table %s as select %s from %s", facetTable, facetFieldsCsv, fullTable);
+sqlDyStringPrintf(facetCreate, "create table %s as select %-s from %s", facetTable, sqlCkIl(facetFieldsCsv), fullTable);
 sqlRemakeTable(conn, facetTable, facetCreate->string);
 dyStringFree(&facetCreate);
 

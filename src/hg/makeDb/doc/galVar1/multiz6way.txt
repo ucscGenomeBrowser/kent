@@ -1452,7 +1452,7 @@ done
     rm -rf exonAA exonNuc
 
 #############################################################################
-# wiki page for 6-way (TBD - 2016-06-11 - Hiram)
+# wiki page for 6-way (DONE - 2017-12-18 - Hiram)
     mkdir /hive/users/hiram/bigWays/galVar1.6way
     cd /hive/users/hiram/bigWays
     echo "galVar1" > galVar1.6way/ordered.list
@@ -1475,9 +1475,10 @@ done
     ./defCheck.pl galVar1 6way
 
     # this constructs the html pages in galVar1.6way/:
-# -rw-rw-r-- 1 3317 May 11 11:08 GalVar1_6-way_conservation_alignment.html
-# -rw-rw-r-- 1 4827 May 11 11:08 GalVar1_6-way_Genome_size_statistics.html
-# -rw-rw-r-- 1 3308 May 11 11:08 GalVar1_6-way_conservation_lastz_parameters.html
+# -rw-rw-r--    3848 Dec 18 14:05 GalVar1_6-way_conservation_alignment.html
+# -rw-rw-r--    5500 Dec 18 14:05 GalVar1_6-way_Genome_size_statistics.html
+# -rw-rw-r--    3613 Dec 18 14:05 GalVar1_6-way_conservation_lastz_parameters.html
+
     # add those pages to the genomewiki.  Their page names are the
     # names of the .html files without the .html:
 #  GalVar1_6-way_conservation_alignment

@@ -1,0 +1,588 @@
+command=find
+profile=rrcentral hgcentral.gbMembers.userName
+-----------------------------------------
+30度
+30度 has non-ASCII characters
+30度 has valid UTF8 characters
+Unknown utf8 multi-byte char: 度 codePoint=24230
+fix command not specified, skipping fix. fixedVal=30&#24230;
+-----------------------------------------
+37度
+37度 has non-ASCII characters
+37度 has valid UTF8 characters
+Unknown utf8 multi-byte char: 度 codePoint=24230
+fix command not specified, skipping fix. fixedVal=37&#24230;
+-----------------------------------------
+Ainhoa Goñi
+Ainhoa Goñi has non-ASCII characters
+Ainhoa Goñi has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Ainhoa Go�i
+-----------------------------------------
+Ana Fernández-Miñán
+Ana Fernández-Miñán has non-ASCII characters
+Ana Fernández-Miñán has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Ana Fern�ndez-Mi��n
+-----------------------------------------
+Anaïs
+Anaïs has non-ASCII characters
+Anaïs has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Ana�s
+-----------------------------------------
+AnaïsTest
+AnaïsTest has non-ASCII characters
+AnaïsTest has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Ana�sTest
+-----------------------------------------
+André Rendeiro
+André Rendeiro has non-ASCII characters
+André Rendeiro has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Andr� Rendeiro
+-----------------------------------------
+Andr�anneMorin
+Andr�anneMorin has non-ASCII characters
+Andr�anneMorin Does NOT have valid UTF8 characters
+-----------------------------------------
+Anne-Sophie Denommé
+Anne-Sophie Denommé has non-ASCII characters
+Anne-Sophie Denommé has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Anne-Sophie Denomm�
+-----------------------------------------
+Aurélie
+Aurélie has non-ASCII characters
+Aurélie has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Aur�lie
+-----------------------------------------
+Aurélien Griffon
+Aurélien Griffon has non-ASCII characters
+Aurélien Griffon has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Aur�lien Griffon
+-----------------------------------------
+awt1471§
+awt1471§ has non-ASCII characters
+awt1471§ has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=awt1471�
+-----------------------------------------
+ÁngelÁlvarez
+ÁngelÁlvarez has non-ASCII characters
+ÁngelÁlvarez has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=�ngel�lvarez
+-----------------------------------------
+いらっし
+いらっし has non-ASCII characters
+いらっし has valid UTF8 characters
+Unknown utf8 multi-byte char: い codePoint=12356
+Unknown utf8 multi-byte char: ら codePoint=12425
+Unknown utf8 multi-byte char: っ codePoint=12387
+Unknown utf8 multi-byte char: し codePoint=12375
+fix command not specified, skipping fix. fixedVal=&#12356;&#12425;&#12387;&#12375;
+-----------------------------------------
+Érica
+Érica has non-ASCII characters
+Érica has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=�rica
+-----------------------------------------
+Björn-Fischer-Zirnsak
+Björn-Fischer-Zirnsak has non-ASCII characters
+Björn-Fischer-Zirnsak has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Bj�rn-Fischer-Zirnsak
+-----------------------------------------
+Céline BONNET
+Céline BONNET has non-ASCII characters
+Céline BONNET has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=C�line BONNET
+-----------------------------------------
+Chloé GM
+Chloé GM has non-ASCII characters
+Chloé GM has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Chlo� GM
+-----------------------------------------
+Cornelia Siebenkäs
+Cornelia Siebenkäs has non-ASCII characters
+Cornelia Siebenkäs has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Cornelia Siebenk�s
+-----------------------------------------
+Débora
+Débora has non-ASCII characters
+Débora has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=D�bora
+-----------------------------------------
+Dorthe Ørnskov
+Dorthe Ørnskov has non-ASCII characters
+Dorthe Ørnskov has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Dorthe �rnskov
+-----------------------------------------
+Dr Sabrina Böhm
+Dr Sabrina Böhm has non-ASCII characters
+Dr Sabrina Böhm has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Dr Sabrina B�hm
+-----------------------------------------
+Efrén Riu
+Efrén Riu has non-ASCII characters
+Efrén Riu has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Efr�n Riu
+-----------------------------------------
+Eric Duch�ne
+Eric Duch�ne has non-ASCII characters
+Eric Duch�ne Does NOT have valid UTF8 characters
+-----------------------------------------
+Erik Södersten
+Erik Södersten has non-ASCII characters
+Erik Södersten has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Erik S�dersten
+-----------------------------------------
+eyyüp
+eyyüp has non-ASCII characters
+eyyüp has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=eyy�p
+-----------------------------------------
+贺超
+贺超 has non-ASCII characters
+贺超 has valid UTF8 characters
+Unknown utf8 multi-byte char: 贺 codePoint=36154
+Unknown utf8 multi-byte char: 超 codePoint=36229
+fix command not specified, skipping fix. fixedVal=&#36154;&#36229;
+-----------------------------------------
+fäncy_woöl
+fäncy_woöl has non-ASCII characters
+fäncy_woöl has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=f�ncy_wo�l
+-----------------------------------------
+fäncy_woöt
+fäncy_woöt has non-ASCII characters
+fäncy_woöt has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=f�ncy_wo�t
+-----------------------------------------
+françois
+françois has non-ASCII characters
+françois has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=fran�ois
+-----------------------------------------
+François Sigaux
+François Sigaux has non-ASCII characters
+François Sigaux has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Fran�ois Sigaux
+-----------------------------------------
+françois.lecoquierre
+françois.lecoquierre has non-ASCII characters
+françois.lecoquierre has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=fran�ois.lecoquierre
+-----------------------------------------
+Fränze Vorreiter
+Fränze Vorreiter has non-ASCII characters
+Fränze Vorreiter has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Fr�nze Vorreiter
+-----------------------------------------
+Frédéric Cremazy
+Frédéric Cremazy has non-ASCII characters
+Frédéric Cremazy has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Fr�d�ric Cremazy
+-----------------------------------------
+f�ncy_p�nts
+f�ncy_p�nts has non-ASCII characters
+f�ncy_p�nts Does NOT have valid UTF8 characters
+-----------------------------------------
+Gaëlla
+Gaëlla has non-ASCII characters
+Gaëlla has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Ga�lla
+-----------------------------------------
+Gaëlle
+Gaëlle has non-ASCII characters
+Gaëlle has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Ga�lle
+-----------------------------------------
+Gaëtan MAURER
+Gaëtan MAURER has non-ASCII characters
+Gaëtan MAURER has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Ga�tan MAURER
+-----------------------------------------
+Gàri
+Gàri has non-ASCII characters
+Gàri has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=G�ri
+-----------------------------------------
+Georgina Gómez Saldivar
+Georgina Gómez Saldivar has non-ASCII characters
+Georgina Gómez Saldivar has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Georgina G�mez Saldivar
+-----------------------------------------
+Gernot L�ngst
+Gernot L�ngst has non-ASCII characters
+Gernot L�ngst Does NOT have valid UTF8 characters
+-----------------------------------------
+hiram ����
+hiram ���� has non-ASCII characters
+hiram ���� Does NOT have valid UTF8 characters
+-----------------------------------------
+Iñigo
+Iñigo has non-ASCII characters
+Iñigo has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=I�igo
+-----------------------------------------
+Ilária
+Ilária has non-ASCII characters
+Ilária has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Il�ria
+-----------------------------------------
+Inês Conceição
+Inês Conceição has non-ASCII characters
+Inês Conceição has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=In�s Concei��o
+-----------------------------------------
+Irene Martínez Rodríguez
+Irene Martínez Rodríguez has non-ASCII characters
+Irene Martínez Rodríguez has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Irene Mart�nez Rodr�guez
+-----------------------------------------
+Jana Böhmová
+Jana Böhmová has non-ASCII characters
+Jana Böhmová has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Jana B�hmov�
+-----------------------------------------
+Jérôme
+Jérôme has non-ASCII characters
+Jérôme has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=J�r�me
+-----------------------------------------
+Jörn Walter
+Jörn Walter has non-ASCII characters
+Jörn Walter has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=J�rn Walter
+-----------------------------------------
+Jean-François Soucy
+Jean-François Soucy has non-ASCII characters
+Jean-François Soucy has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Jean-Fran�ois Soucy
+-----------------------------------------
+Jordi Vélez
+Jordi Vélez has non-ASCII characters
+Jordi Vélez has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Jordi V�lez
+-----------------------------------------
+José F. Rodríguez Molina
+José F. Rodríguez Molina has non-ASCII characters
+José F. Rodríguez Molina has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Jos� F. Rodr�guez Molina
+-----------------------------------------
+José Oliveira Santos
+José Oliveira Santos has non-ASCII characters
+José Oliveira Santos has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Jos� Oliveira Santos
+-----------------------------------------
+Jos� Antonio Cornejo-Garcia
+Jos� Antonio Cornejo-Garcia has non-ASCII characters
+Jos� Antonio Cornejo-Garcia Does NOT have valid UTF8 characters
+-----------------------------------------
+Judith Escarr�
+Judith Escarr� has non-ASCII characters
+Judith Escarr� Does NOT have valid UTF8 characters
+-----------------------------------------
+Karel Fišer
+Karel Fišer has non-ASCII characters
+Karel Fišer has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Karel Fi�er
+-----------------------------------------
+Kévin MOREAU
+Kévin MOREAU has non-ASCII characters
+Kévin MOREAU has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=K�vin MOREAU
+-----------------------------------------
+MadsJørgensen
+MadsJørgensen has non-ASCII characters
+MadsJørgensen has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=MadsJ�rgensen
+-----------------------------------------
+Majken Siersbæk
+Majken Siersbæk has non-ASCII characters
+Majken Siersbæk has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Majken Siersb�k
+-----------------------------------------
+Mar González
+Mar González has non-ASCII characters
+Mar González has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Mar Gonz�lez
+-----------------------------------------
+María 
+María  has non-ASCII characters
+María  has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Mar�a 
+-----------------------------------------
+Marc Friedländer
+Marc Friedländer has non-ASCII characters
+Marc Friedländer has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Marc Friedl�nder
+-----------------------------------------
+marpeña
+marpeña has non-ASCII characters
+marpeña has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=marpe�a
+-----------------------------------------
+Mathilde Jørgensen
+Mathilde Jørgensen has non-ASCII characters
+Mathilde Jørgensen has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Mathilde J�rgensen
+-----------------------------------------
+Mette Jørgensen
+Mette Jørgensen has non-ASCII characters
+Mette Jørgensen has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Mette J�rgensen
+-----------------------------------------
+Miñan
+Miñan has non-ASCII characters
+Miñan has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Mi�an
+-----------------------------------------
+Michaël 
+Michaël  has non-ASCII characters
+Michaël  has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Micha�l 
+-----------------------------------------
+Miriam Marqués
+Miriam Marqués has non-ASCII characters
+Miriam Marqués has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Miriam Marqu�s
+-----------------------------------------
+NAÏBO Pierre
+NAÏBO Pierre has non-ASCII characters
+NAÏBO Pierre has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=NA�BO Pierre
+-----------------------------------------
+Natali Castro Díaz
+Natali Castro Díaz has non-ASCII characters
+Natali Castro Díaz has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Natali Castro D�az
+-----------------------------------------
+Núria
+Núria has non-ASCII characters
+Núria has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=N�ria
+-----------------------------------------
+Noemí
+Noemí has non-ASCII characters
+Noemí has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Noem�
+-----------------------------------------
+P�mela A. Alexandre
+P�mela A. Alexandre has non-ASCII characters
+P�mela A. Alexandre Does NOT have valid UTF8 characters
+-----------------------------------------
+Paul Anderson Souza Guimarães
+Paul Anderson Souza Guimarães has non-ASCII characters
+Paul Anderson Souza Guimarães has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Paul Anderson Souza Guimar�es
+-----------------------------------------
+Paula Kuser Falcão
+Paula Kuser Falcão has non-ASCII characters
+Paula Kuser Falcão has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Paula Kuser Falc�o
+-----------------------------------------
+Paula Miramón
+Paula Miramón has non-ASCII characters
+Paula Miramón has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Paula Miram�n
+-----------------------------------------
+Pedro Antonio Ávila López 
+Pedro Antonio Ávila López  has non-ASCII characters
+Pedro Antonio Ávila López  has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Pedro Antonio �vila L�pez 
+-----------------------------------------
+pernille bach j�rgensen
+pernille bach j�rgensen has non-ASCII characters
+pernille bach j�rgensen Does NOT have valid UTF8 characters
+-----------------------------------------
+Ramon Cierco Jiménez
+Ramon Cierco Jiménez has non-ASCII characters
+Ramon Cierco Jiménez has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Ramon Cierco Jim�nez
+-----------------------------------------
+Sara Monzón
+Sara Monzón has non-ASCII characters
+Sara Monzón has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Sara Monz�n
+-----------------------------------------
+Saul Zuñiga
+Saul Zuñiga has non-ASCII characters
+Saul Zuñiga has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Saul Zu�iga
+-----------------------------------------
+Sigurjón
+Sigurjón has non-ASCII characters
+Sigurjón has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Sigurj�n
+-----------------------------------------
+Sten Vissing Fahnøe Hansen
+Sten Vissing Fahnøe Hansen has non-ASCII characters
+Sten Vissing Fahnøe Hansen has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Sten Vissing Fahn�e Hansen
+-----------------------------------------
+Stutz Françoise
+Stutz Françoise has non-ASCII characters
+Stutz Françoise has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Stutz Fran�oise
+-----------------------------------------
+Tarmo Äijö
+Tarmo Äijö has non-ASCII characters
+Tarmo Äijö has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Tarmo �ij�
+-----------------------------------------
+Thomas Günther
+Thomas Günther has non-ASCII characters
+Thomas Günther has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Thomas G�nther
+-----------------------------------------
+Torill Høiby
+Torill Høiby has non-ASCII characters
+Torill Høiby has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Torill H�iby
+-----------------------------------------
+Uku Hämarik
+Uku Hämarik has non-ASCII characters
+Uku Hämarik has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Uku H�marik
+-----------------------------------------
+Vanessa Rodrigues Paixão-Côrtes
+Vanessa Rodrigues Paixão-Côrtes has non-ASCII characters
+Vanessa Rodrigues Paixão-Côrtes has valid UTF8 characters
+FYI translated with hash
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Vanessa Rodrigues Paix�o-C�rtes
+-----------------------------------------
+Víctor Latorre
+Víctor Latorre has non-ASCII characters
+Víctor Latorre has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=V�ctor Latorre
+-----------------------------------------
+Verónica ponce
+Verónica ponce has non-ASCII characters
+Verónica ponce has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Ver�nica ponce
+-----------------------------------------
+Viktor S. Poór
+Viktor S. Poór has non-ASCII characters
+Viktor S. Poór has valid UTF8 characters
+FYI translated with hash
+fix command not specified, skipping fix. fixedVal=Viktor S. Po�r
+-----------------------------------------
+増田裕太
+増田裕太 has non-ASCII characters
+増田裕太 has valid UTF8 characters
+Unknown utf8 multi-byte char: 増 codePoint=22679
+Unknown utf8 multi-byte char: 田 codePoint=30000
+Unknown utf8 multi-byte char: 裕 codePoint=35029
+Unknown utf8 multi-byte char: 太 codePoint=22826
+fix command not specified, skipping fix. fixedVal=&#22679;&#30000;&#35029;&#22826;
+-----------------------------------------
+安妮
+安妮 has non-ASCII characters
+安妮 has valid UTF8 characters
+Unknown utf8 multi-byte char: 安 codePoint=23433
+Unknown utf8 multi-byte char: 妮 codePoint=22958
+fix command not specified, skipping fix. fixedVal=&#23433;&#22958;
+-----------------------------------------
+朱胜男
+朱胜男 has non-ASCII characters
+朱胜男 has valid UTF8 characters
+Unknown utf8 multi-byte char: 朱 codePoint=26417
+Unknown utf8 multi-byte char: 胜 codePoint=32988
+Unknown utf8 multi-byte char: 男 codePoint=30007
+fix command not specified, skipping fix. fixedVal=&#26417;&#32988;&#30007;
+
+
+86 utf-8 field values would have been converted to windows-1252 (a superset of iso-8859-1).
+30912 rows in hgcentral.gbMembers.userName
+17 times a utf-8 multi-byte character was missing from the translation hash.
+0 times a duplicate fixed value was found.
+
+fix command was not specified. Dry run only.
+

@@ -11,6 +11,7 @@
 #include "basicBed.h"
 #include "dnaseq.h"
 #include "genbank.h"
+#include "gpFx.h"
 #include "psl.h"
 #include "seqWindow.h"
 
@@ -43,8 +44,11 @@ struct vpTxPosition
                                    // but not when genome has a deletion - then this isn't intron!
     uint intron3Distance;          // For intron, the distance to intron3TxOffset
     uint gOffset;                  // Genomic position that was projected onto this tx position
-    int aliBlkIx;                  // Aligned block in or after which g pos falls or -1 if up/down;
+    int aliBlkIx;                  // Aligned block in or after which g pos falls or beginning/end
+                                   // block if up/downstream;
                                    // this is often the exon number (or complement) but not always!
+    uint gInsBases;                // Number of bases inserted into the reference genome relative
+                                   // to transcript, 5' if start or 3' if end
     };
 
 struct vpTx
@@ -55,8 +59,9 @@ struct vpTx
     struct vpTxPosition start;     // transcript-relative coords of variant start-in-transcript
     struct vpTxPosition end;       // transcript-relative coords of variant end-in-transcript
     char *gRef;                    // genomic reference allele (on tx strand)
+    char *gAlt;                    // genomic alternate allele (on tx strand); usually same as txAlt
     char *txRef;                   // transcript reference allele (if variant overlaps transcript)
-    char *txAlt;                   // alternate allele
+    char *txAlt;                   // transcript alternate allele
     int basesShifted;              // # of bases by which genomic variant was shifted in dir of tx
     boolean genomeMismatch;        // true if the genomic reference does not match txRef
     };
@@ -117,5 +122,15 @@ void vpTxPosSlideInSameRegion(struct vpTxPosition *txPos, int bases);
 
 boolean vpTxPosRangeIsSingleBase(struct vpTxPosition *startPos, struct vpTxPosition *endPos);
 /* Return true if [startPos, endPos) is a single-base region. */
+
+char *vpTxGetRef(struct vpTx *vpTx);
+/* If vpTx->txRef is non-NULL and both start & end are exonic, return txRef;
+ * otherwise return genomic.  For example, if a deletion spans exon/intron boundary, use genomic
+ * ref because it includes the intron bases.  Do not free the returned value. */
+
+struct gpFx *vpTranscriptToGpFx(struct vpTx *vpTx, struct psl *psl, struct genbankCds *cds,
+                                struct dnaSeq *txSeq, struct vpPep *vpPep, struct dnaSeq *protSeq,
+                                struct lm *lm);
+/* Make gpFx functional prediction(s) (SO term & additional data) from vpTx and sequence. */
 
 #endif /* VARIANTPROJECTOR_H */

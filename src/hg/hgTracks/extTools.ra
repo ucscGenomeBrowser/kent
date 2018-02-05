@@ -14,6 +14,7 @@
 # $returnUrl - full URL of current hgTracks page
 # $position - current position, format chr:start-end
 # $halfLen - 1/2 of the current window size (for pointing external tools to the current center)
+# $ncbiGca - NCBI's GenBank Assembly version, e.g. GCA_000001405.15 for hg38
 # $ncbiGcf - NCBI's RefSeq Assembly (+ annotations) version, e.g. GCF_000001405.25 for hg19
 
 # If something doesn't work, Hit "Esc" when the redirection takes place and append 
@@ -32,17 +33,17 @@ longLabel NCBI Genome Data Viewer
 url https://www.ncbi.nlm.nih.gov/genome/gdv/browser/
 email info@ncbi.nlm.nih.gov
 isHttpGet true
-param id $ncbiGcf
+param acc $ncbiGca
 param chr $s
 param from $start1
 param to $]
 param context genome
 
-tool ensemblArch
+tool ensemblHg19
 shortLabel Ensembl
 longLabel Ensembl Genome Browser
-url http://dec2014.archive.ensembl.org/$n/contigview
-onlyDbs hg38
+url http://grch37.ensembl.org/$n/contigview
+onlyDbs hg19
 email helpdesk@ensembl.org
 isHttpGet true
 param chr $s
@@ -54,7 +55,7 @@ shortLabel Ensembl
 longLabel Ensembl Genome Browser
 url http://www.ensembl.org/$n/contigview
 email helpdesk@ensembl.org
-notDbs hg38
+notDbs hg19
 isHttpGet true
 param chr $s
 param start $start1
