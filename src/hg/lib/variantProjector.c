@@ -1037,15 +1037,24 @@ cc->cdsPosition = (txStart > cds->start) ? txStart - cds->start : 0;
 cc->exonNumber = pslBlkIxToExonIx(psl, vpTx->start.aliBlkIx, MIN_INTRON);
 cc->exonCount = pslCountExons(psl, MIN_INTRON);
 getRefAltCodon(vpTx, cds, txSeq, cc, lm);
-cc->pepPosition = vpPep->start;
-uint pepRefLen = strlen(vpPep->ref);
-uint pepAltLen = strlen(vpPep->alt);
-cc->aaOld = lmCloneStringZ(lm, vpPep->ref, pepRefLen);
-if (pepRefLen > 0 && cc->aaOld[pepRefLen-1] == 'X')
-    cc->aaOld[pepRefLen-1] = '*';
-cc->aaNew = lmCloneStringZ(lm, vpPep->alt, pepAltLen);
-if (pepAltLen > 0 && cc->aaNew[pepAltLen-1] == 'X')
-    cc->aaNew[pepAltLen-1] = '*';
+if (vpPep->cantPredict)
+    {
+    cc->pepPosition = cc->cdsPosition / 3;
+    cc->aaOld = lmCloneString(lm, "?");
+    cc->aaNew = lmCloneString(lm, "?");
+    }
+else
+    {
+    cc->pepPosition = vpPep->start;
+    uint pepRefLen = strlen(vpPep->ref);
+    uint pepAltLen = strlen(vpPep->alt);
+    cc->aaOld = lmCloneStringZ(lm, vpPep->ref, pepRefLen);
+    if (pepRefLen > 0 && cc->aaOld[pepRefLen-1] == 'X')
+        cc->aaOld[pepRefLen-1] = '*';
+    cc->aaNew = lmCloneStringZ(lm, vpPep->alt, pepAltLen);
+    if (pepAltLen > 0 && cc->aaNew[pepAltLen-1] == 'X')
+        cc->aaNew[pepAltLen-1] = '*';
+    }
 }
 
 static struct gpFx *vpTxToFxCds(struct vpTx *vpTx, struct psl *psl, struct genbankCds *cds,
@@ -1056,37 +1065,40 @@ static struct gpFx *vpTxToFxCds(struct vpTx *vpTx, struct psl *psl, struct genba
 char *txName = txSeq->name;
 char *gAlt = getGAlt(vpTx, psl);
 struct gpFx *fx = gpFxNew(gAlt, txName, coding_sequence_variant, codingChange, lm);
-uint pepRefLen = strlen(vpPep->ref);
-uint pepAltLen = strlen(vpPep->alt);
-char lastPepRef = (pepRefLen > 0) ? vpPep->ref[pepRefLen-1] : '\0';
-// Alt pep base at position of last ref pep base, if applicable:
-char lastPepRefAlt = (pepRefLen > 0 && pepRefLen <= pepAltLen) ? vpPep->alt[pepRefLen-1] : '\0';
-if (vpPep->start == 0 && vpPep->ref[0] == 'M')
-    fx->soNumber = initiator_codon_variant;
-else if (sameString(vpPep->alt, "X") && differentString(vpPep->ref, "X"))
-    fx->soNumber = stop_gained;
-else if (sameString(vpPep->alt, "X") && sameString(vpPep->ref, "X"))
-    fx->soNumber = stop_retained_variant;
-else if (vpPep->frameshift)
-    fx->soNumber = frameshift_variant;
-else if (endsWith(vpPep->alt, "X") && lastPepRef != 'X')
-    fx->soNumber = stop_gained;
-else if (lastPepRef == 'X' && lastPepRefAlt != 0)
+if (! vpPep->cantPredict)
     {
-    // Stop codon variant -- did it actually change?
-    if (lastPepRefAlt != 'X')
-        fx->soNumber = stop_lost;
-    else
+    uint pepRefLen = strlen(vpPep->ref);
+    uint pepAltLen = strlen(vpPep->alt);
+    char lastPepRef = (pepRefLen > 0) ? vpPep->ref[pepRefLen-1] : '\0';
+    // Alt pep base at position of last ref pep base, if applicable:
+    char lastPepRefAlt = (pepRefLen > 0 && pepRefLen <= pepAltLen) ? vpPep->alt[pepRefLen-1] : '\0';
+    if (vpPep->start == 0 && vpPep->ref[0] == 'M')
+        fx->soNumber = initiator_codon_variant;
+    else if (sameString(vpPep->alt, "X") && differentString(vpPep->ref, "X"))
+        fx->soNumber = stop_gained;
+    else if (sameString(vpPep->alt, "X") && sameString(vpPep->ref, "X"))
         fx->soNumber = stop_retained_variant;
+    else if (vpPep->frameshift)
+        fx->soNumber = frameshift_variant;
+    else if (endsWith(vpPep->alt, "X") && lastPepRef != 'X')
+        fx->soNumber = stop_gained;
+    else if (lastPepRef == 'X' && lastPepRefAlt != 0)
+        {
+        // Stop codon variant -- did it actually change?
+        if (lastPepRefAlt != 'X')
+            fx->soNumber = stop_lost;
+        else
+            fx->soNumber = stop_retained_variant;
+        }
+    else if (sameString(vpPep->ref, vpPep->alt))
+        fx->soNumber = synonymous_variant;
+    else if (pepRefLen > pepAltLen)
+        fx->soNumber = inframe_deletion;
+    else if (pepRefLen < pepAltLen)
+        fx->soNumber = inframe_insertion;
+    else
+        fx->soNumber = missense_variant;
     }
-else if (sameString(vpPep->ref, vpPep->alt))
-    fx->soNumber = synonymous_variant;
-else if (pepRefLen > pepAltLen)
-    fx->soNumber = inframe_deletion;
-else if (pepRefLen < pepAltLen)
-    fx->soNumber = inframe_insertion;
-else
-    fx->soNumber = missense_variant;
 setCodingInfo(fx, vpTx, psl, cds, txSeq, vpPep, lm);
 return fx;
 }
@@ -1147,9 +1159,10 @@ int exonCount = pslCountExons(psl, MIN_INTRON);
 int ix;
 for (ix = startIx;  ix < endIx ;  ix++)
     {
-    struct gpFx *fx = gpFxNew(gAlt, txName, exon_loss_variant, nonCodingExon, lm);
-    // Instead of start.txOffset it would be better to compute the specific exon start coord
-    gpFxSetNoncodingInfo(fx, ix, exonCount, vpTx->start.txOffset, vpTx->txRef, vpTx->txAlt, lm);
+    // It would be better to compute nonCodingExon details: actual tx position and txRef of exon
+    struct gpFx *fx = gpFxNew(gAlt, txName, exon_loss_variant, intron, lm);
+    fx->details.intron.intronNumber = ix;
+    fx->details.intron.intronCount = exonCount - 1;
     slAddHead(&fxList, fx);
     }
 slReverse(&fxList);
