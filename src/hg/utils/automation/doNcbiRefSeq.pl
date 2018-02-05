@@ -370,7 +370,11 @@ pslCheck -targetSizes=$HgAutomate::clusterData/\$db/chrom.sizes \\
    -querySizes=\$downloadDir/rna.sizes -db=\$db \$db.psl.gz
 genePredToFakePsl -qSizes=\$downloadDir/rna.sizes  \$db \$db.ncbiRefSeq.gp \$db.fake.psl \$db.fake.cds
 pslCat -nohead \$db.psl.gz | cut -f10,14 > \$db.psl.names
-pslSomeRecords -tToo -not \$db.fake.psl \$db.psl.names \$db.someRecords.psl
+if [ -s \$db.psl.names ]; then
+  pslSomeRecords -tToo -not \$db.fake.psl \$db.psl.names \$db.someRecords.psl
+else
+  cp -p \$db.fake.psl \$db.someRecords.psl
+fi
 pslSort dirs stdout \\
  ./tmpdir \$db.psl.gz \$db.someRecords.psl \\
    | (pslCheck -quiet -db=\$db -pass=stdout -fail=\$asmId.\$db.fail.psl stdin || true) \\
