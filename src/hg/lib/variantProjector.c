@@ -749,8 +749,15 @@ AllocVar(vpPep);
 vpPep->name = cloneString(protSeq->name);
 uint txStart = vpTx->start.txOffset;
 uint txEnd = vpTx->end.txOffset;
-// If the variant overlaps CDS then predict protein change.
-if (txStart < cds->end && txEnd > cds->start)
+// If the variant starts and ends within exon(s) and overlaps CDS then predict protein change.
+if (txStart >= cds->start && txStart < cds->end && txEnd > cds->start &&
+    ((vpTx->start.region == vpExon && vpTx->end.region == vpExon) ||
+     // Insertion at exon boundary -- it doesn't disrupt the splice site so assume its effect
+     // is on the exon, in the spirit of HGVS's 3' exception rule
+     (vpTxPosIsInsertion(&vpTx->start, &vpTx->end) &&
+      (vpTx->start.region == vpExon || vpTx->end.region == vpExon)) ||
+     (vpTx->start.region == vpUpstream && vpTx->end.region == vpDownstream && isEmpty(vpTx->txAlt))
+     ))
     {
     uint startInCds = max(txStart, cds->start) - cds->start;
     uint endInCds = min(txEnd, cds->end) - cds->start;
