@@ -3321,6 +3321,7 @@ urlLabel Link to HGMD
 mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
+maxItems 1000
 
 track snpedia
 shortLabel SNPedia
