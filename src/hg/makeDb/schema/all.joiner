@@ -3913,12 +3913,12 @@ identifier rBestChainPanTro1Id
     hg16.rBestChainPanTro1Link.chainId $split full
     hg16.rBestNetPanTro1.chainId exclude=0
 
-# Genbank/trEMBL Accessions and meaningful subsets thereof
-identifier genbankAccession external=genbank
-"Generic Genbank Accession.  More specific Genbank accessions follow"
+# Sequences added using hgLoadSeq (seq+extFile)
+identifier seqExtFile
+"External sequences from various sources e.g. STS, fosEnds, microarray probes"
     $gbd.seq.acc
 
-identifier stsAccession external=genbank typeOf=genbankAccession
+identifier stsAccession external=genbank typeOf=seqExtFile
 "Genbank accession of a Sequence Tag Site (STS) sequence."
     $gbd.stsInfo2.genbank dupeOk
 
@@ -3944,7 +3944,7 @@ identifier danRerBacSangerName
     danRer3,danRer4.bacCloneXRef.sangerName dupeOk
     danRer3,danRer4.bacCloneAlias.sangerName minCheck=0.97
 
-identifier bacAccession typeOf=genbankAccession external=genbank
+identifier bacAccession typeOf=seqExtFile external=genbank
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
 
 identifier humanBacAccession typeOf=bacAccession
@@ -3966,7 +3966,7 @@ identifier humanBacAccessionVersion typeOf=bacAccession
     hg18.gl.frag $split chopAfter=_ minCheck=0.95
     hg18.gold.frag $split minCheck=0.90
 
-identifier wgsContigAccession typeOf=genbankAccession
+identifier wgsContigAccession typeOf=seqExtFile
 "Genbank accession.version of whole-genome shotgun contig"
     $wgs.contigAcc.acc
 
@@ -3977,14 +3977,14 @@ identifier wgsContigName
 
 set notProteinAccession !ailMel1,!allMis1,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!calJac3,!calMil1,!ce11,!cebCap1,!cerAty1,!cerSim1,!chlSab2,!ci3,!colAng1,!criGriChoV1,criGri1,!eboVir3,!danRer7,!danRer10,!danRer11,!dasNov3,!dm3,!dm6,!echTel2,!eriEur2,!eulFla1,!eulMac1,!felCat8,!fr2,!galGal5,!galGal4,!gasAcu1,!galVar1,!gorGor5,!loxAfr3,!manPen1,!macFas5,!manLeu1,!micMur2,!micMur3,!myoLuc2,!nanPar1,!nasLar1,!neoSch1,!nomLeu1,!ochPri3,!$orcOrc,!ornAna1,!ornAna2,!otoGar3,!oviAri3,!oxyTri2,!panPan1,!panPan2,!panTro5,!papAnu2,!papAnu3,!petMar2,!priPac3,!rheMac8,!rhiBie1,!rhiRox1,!rn5,!rn6,!rouAeg1,!sorAra2,!speTri2,!susScr3,!taeGut2,!tarSyr2,!vicPac2,!xenLae2,!xenTro7,!xenTro9
 
-identifier proteinAccession typeOf=genbankAccession fuzzy
+identifier proteinAccession fuzzy
 "Genbank protein accession."
     $kgDb.kgProtAlias.alias
     $kgDb.kgSpAlias.alias minCheck=0.1
     $kgDb.kgXref.protAcc
     hgFixed.refLink.protAcc
 
-identifier estOrMrnaAccession typeOf=genbankAccession
+identifier estOrMrnaAccession
 "Genbank EST or mRNA accession."
     hgFixed.gbSeq.acc
     hgFixed.gbCdnaInfo.acc unique
