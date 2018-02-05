@@ -268,7 +268,7 @@ void gff3UnlinkChild(struct gff3Ann *g3a,
                      struct gff3Ann *child);
 /* unlink the child from it's parent (do not free) */
 
-void gff3LinkChild(struct gff3Ann *g2a,
+void gff3LinkChild(struct gff3Ann *g3a,
                     struct gff3Ann *child);
 /* Add a child to a parent */
 

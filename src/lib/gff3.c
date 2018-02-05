@@ -199,6 +199,16 @@ ref->ann = g3a;
 return ref;
 }
 
+struct gff3AnnRef *gff3RefFind(struct gff3AnnRef *refList, struct gff3Ann *ann)
+/* Return ref if ann is already on list, otherwise NULL. */
+{
+struct gff3AnnRef *ref;
+for (ref = refList; ref != NULL; ref = ref->next)
+    if (ref->ann == ann)
+        return ref;
+return NULL;
+}
+
 static void raiseInvalidEscape(struct gff3Ann *g3a, char *str)
 /* raise an error about an invalid escape in a string */
 {
@@ -1124,15 +1134,18 @@ void gff3UnlinkChild(struct gff3Ann *g3a,
                      struct gff3Ann *child)
 /* unlink the child from it's parent (do not free) */
 {
-struct gff3AnnRef *childRef;
-for (childRef = g3a->children; childRef != NULL; childRef = childRef->next)
-    if (childRef->ann == child)
-        break;
+struct gff3AnnRef *childRef = gff3RefFind(g3a->children, child);
 if (childRef == NULL)
     errAbort("gff3UnlinkChild: not a child of specified parent");
 slRemoveEl(&g3a->children, childRef);
-child->parentIds = NULL;
-child->parents = NULL;
+
+// assume correct linked now that relationship is verfied
+struct gff3AnnRef *parentRef = gff3RefFind(child->parents, g3a);
+slRemoveEl(&child->parents, parentRef);
+
+struct slName *parentId = slNameFind(child->parentIds, g3a->id);
+slRemoveEl(&child->parentIds, parentId);
+// don't free, links are in localmem
 }
 
 void gff3LinkChild(struct gff3Ann *g3a,

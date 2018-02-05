@@ -193,7 +193,7 @@ return feats;
 static boolean featTypeMatch(char *type, char** types[])
 /* check if type is in NULL terminated list of feature type name.
  * This has one extra level of indirection to allow initializing
- * from GFF3 feature definitions. */
+ * from GFF3 feature definitions (gff3FeatCds, etc). */
 {
 int i;
 for (i = 0; types[i] != NULL; i++)
