@@ -148,6 +148,7 @@ src/hg/pslCDnaFilter \
 src/hg/pslPretty \
 src/hg/pslReps \
 src/hg/pslSort \
+src/hg/pslSomeRecords \
 src/hg/pslDropOverlap > part${partNumber}Src.zip
 
 unzip -o -q part${partNumber}Src.zip
