@@ -1458,7 +1458,6 @@ for (ix = 0;ix<count;ix++)
 
 slReverse(&pairList);
 
-free(clone);
 return pairList;
 }
 

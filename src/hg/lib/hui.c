@@ -339,7 +339,7 @@ void extraUiLinks(char *db,struct trackDb *tdb)
 struct slPair *pairs = trackDbMetaPairs(tdb);
 if (pairs != NULL)
     printf("<b>Metadata:</b><br>%s\n", pairsAsHtmlTable( pairs, tdb, FALSE, FALSE));
-else if (!tdbIsComposite(tdb) && !trackHubDatabase(db))
+else if (!tdbIsComposite(tdb) && !trackHubDatabase(db) && (metadataForTable(db, tdb, NULL) != NULL))
     printf("<b>Metadata:</b><br>%s\n", metadataAsHtmlTable(db, tdb, FALSE, FALSE));
 
 boolean schemaLink = trackDataAccessible(db, tdb);
