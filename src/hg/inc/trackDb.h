@@ -651,5 +651,10 @@ return startsWithWord("bedGraph", tdb->type);
 boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb, boolean onlyAjax);
 // Configuration dialogs may be explicitly blocked in tracDb settings
 
+struct slPair *trackDbMetaPairs(struct trackDb *tdb);
+/* Read in metadata given a trackDb entry.  This routine understands the three ways
+ * that metadata can be represented in a trackDb stanza: "metadata" lines per stanza,
+ * or a  tab-separated or tagStorm file with a foreign key specified by the "meta" tag.
+ */
 #endif /* TRACKDB_H */
 
