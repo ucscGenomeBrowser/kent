@@ -200,6 +200,18 @@ while (my $line = <$fh>) {
                my ($tag, $tag2, $value) = split(':', $xref);
                $idDataPtr->{'mgi'} = uc($tag2).":$value";
              }
+             if ($xref =~ m/^rgd/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'rgd'} = uc($tag2).":$value";
+             }
+             if ($xref =~ m/^sgd/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'sgd'} = uc($tag2).":$value";
+             }
+             if ($xref =~ m/^zfin/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'zfin'} = uc($tag2).":$value";
+             }
              if ($xref =~ m/^wormbase/i) {
                my ($tag, $tag2, $value) = split(':', $xref);
                $idDataPtr->{'wormbase'} = uc($tag2).":$value";
@@ -313,6 +325,12 @@ foreach my $id (keys %idData) {
        printf "\t" . $idDataPtr->{mgi};	# overloading/multiple use hgnc column
     } elsif ($tag eq 'hgnc' && exists $idDataPtr->{wormbase}) {
        printf "\t" . $idDataPtr->{wormbase};	# overloading hgnc column
+    } elsif ($tag eq 'hgnc' && exists $idDataPtr->{rgd}) {
+       printf "\t" . $idDataPtr->{rgd};	# overloading hgnc column
+    } elsif ($tag eq 'hgnc' && exists $idDataPtr->{sgd}) {
+       printf "\t" . $idDataPtr->{sgd};	# overloading hgnc column
+    } elsif ($tag eq 'hgnc' && exists $idDataPtr->{zfin}) {
+       printf "\t" . $idDataPtr->{zfin};	# overloading hgnc column
     } else { printf "\t$missingData"; }
   }
   if (exists($descriptionData{$id})) {

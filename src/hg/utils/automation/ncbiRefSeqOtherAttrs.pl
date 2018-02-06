@@ -32,6 +32,9 @@ my @attributes = (['gene',           'gene',           "Gene name"],
                   ['HGNC',           'HGNC',           "HGNC"],
                   ['MGI',            'MGI',            "MGI"],
                   ['WormBase',            'WormBase',            "WormBase"],
+                  ['RGD',            'RGD',            "RGD"],
+                  ['SGD',            'SGD',            "SGD"],
+                  ['ZFIN',           'ZFIN',           "ZFIN"],
                   ['miRBase',        'miRBase',        "miRBase"],
                   ['description',    'description',    "Description"],
                   ['Note',           'Note',           "Note"],
@@ -81,7 +84,7 @@ while (<$ATTRS>) {
     # Dbxref is one attribute, but split it up into multiple output columns for URL generation
     my @xrefs = split(',', $val);
     foreach my $xref (@xrefs) {
-      foreach my $source qw(GeneID MIM HGNC MGI miRBase WormBase) {
+      foreach my $source qw(GeneID MIM HGNC MGI miRBase WormBase RGD SGD ZFIN) {
         if ($xref =~ s/^$source://) {
           my $ix = $attrToIx{$source};
           $itemAttrs{$id}->[$ix] = $xref if (! defined $itemAttrs{$id}->[$ix]);
@@ -134,7 +137,11 @@ _EOF_
 for (my $ix = 0;  $ix <= $#attributes;  $ix++) {
   if ($attrFound[$ix]) {
     my ($attr, $colName, $desc) = @{$attributes[$ix]};
-    print $AS "    string $colName;   \"$desc\"\n";
+    if ($colName eq "Note" || $colName eq "geneSynonym") {
+      print $AS "    lstring $colName;   \"$desc\"\n";
+    } else {
+      print $AS "    string $colName;   \"$desc\"\n";
+    }
   }
 }
 print $AS ")\n";
