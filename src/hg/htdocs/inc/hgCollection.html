@@ -63,58 +63,64 @@ body.loading .modal {
 
 .fa-minus-square:before {
     color:      #f00;
-    }
+}
 
 .fa-plus:before {
     color:      #0f0;
-    }
+}
 </style>
 
+<div class='container-fluid gbPage'>
 <form id='redirectForm' action='../cgi-bin/hgTracks'></form>
 
 <div class='row gbTrackTitleBanner'>
-    <div class='col-md-4'>
-        <span id='assembly' class='gbTrackName'></span>
-    </div>
-    <div class='col-md-5'>
-        <span class='gbTrackTitle'>Track Group Collections</span>
-        <a href='#INFO_SECTION' title='Jump to the track description'>
+    <div class='col-md-9'>
+        <span class='gbTrackName'>Track Collections
+            <span id='assembly' class='gbAssembly'></span>
+        </span>
+        &nbsp;&nbsp;&nbsp;
+        <a href='#INFO_SECTION' title='Jump to help section'>
             <span class='gbIconSmall fa-stack'>
                 <i class='gbBlueDarkColor fa fa-circle fa-stack-2x'></i>
                 <i class='gbWhiteColor fa fa-info fa-stack-1x'></i>
             </span>
         </a>
     </div>
-    <div style='font-size:12px' class='col-md-3 text-right'>
-        <div style='font-size:10px' class='gbButtonGo' id='discardChanges'>Discard Changes</div>
-        <div class='gbButtonGoContainer text-right' title='Save and Go To Browser'>
-            <div class='gbButtonGo' id='goButton'>GO</div><i class='gbIconGo fa fa-play fa-2x'></i> 
+    <div class='col-md-3 text-right'>
+        <div class='gbButton' id='discardChanges'>Discard Changes</div>
+        <div class='gbButtonGoContainer text-right' title='Save and go to the Genome Browser'>
+            <div class='gbButtonGo' id='goButton'>GO</div>
+            <i class='gbIconGo fa fa-play fa-2x'></i> 
         </div>
     </div>
 </div>
 
 <div class='row'>
     <div class='col-md-6'>
-        <div class='row mygbSectionBanner'>
-            <div class='col-md-8'>Available Tracks</div>
+        <div class='row gbSectionBanner'>
+            <div class='col-md-12'>Available Tracks</div>
         </div>
-        <div>
-        <div > Below are tracks are available to add to collections. To add new tracks from hubs or custom tracks, load the hub or custom track into the browser and then return to this list. </div>
-        </div>
-        <div id='tracks' style='overflow:auto'>
+        <p> Below are tracks you can add to collections. To create a new collection, use the Collected Tracks panel.
+To add new tracks from hubs or custom tracks, load the hub or custom track 
+into the browser and then return to this list. </p>
+        <p>
+        <div id='tracks' style='overflow:auto'></p>
         </div>
     </div>
 
     <div class='col-md-6'>
-        <div class='row mygbSectionBanner'>
+        <div class='row gbSectionBanner'>
             <div class='col-md-3'>Collected Tracks</div>
-                <div class='col-md-7' id='newCollectionHint'>Press this button to make a new collection --></div>
-                <div class='' style='float:right' title='New Collection'>
-                    <div style='font-size:13px' id='newCollection' class='gbButton'>New Collection</div>
+                <div class='col-md-6 gbSectionInfo' id='newCollectionHint'>
+                        Click to create your first collection
                 </div>
-        </div>
-        <div id='currentCollection' style='overflow:auto' >
-        </div>
+                <div class='col-md-3' style='float:right' title='New Collection'>
+                    <div style='font-size:13px' id='newCollection' class='gbButton'>
+                        New Collection
+                    </div>
+                </div>
+            </div>
+        <div id='currentCollection' style='overflow:auto' ></div>
     </div>
 </div>
 
@@ -154,6 +160,7 @@ body.loading .modal {
     <div>
         <input class='gbButton'  id="doNewCollection" type="submit" value="Save"   >
     </div>
+</div>
 </div>
 
 <label style='display:none' id='emptyCollectionText'>Empty Collection. To add tracks select in Available Tracks window</label>
