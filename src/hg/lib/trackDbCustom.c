@@ -19,6 +19,8 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 #include "regexHelper.h"
+#include "fieldedTable.h"
+#include "tagRepo.h"
 
 
 /* ----------- End of AutoSQL generated code --------------------- */
@@ -1377,3 +1379,109 @@ if (SETTING_IS_OFF(trackDbSettingClosestToHome(tdb, "configurable")))
 return (onlyAjax && SETTING_IS_OFF(trackDbSettingClosestToHome(tdb,"configureByPopup")));
 }
 
+
+struct slPair *tabSepMetaPairs(char *tabSepMeta, struct trackDb *tdb, char *metaTag)
+{
+// If there's no file, there's no data.
+if (tabSepMeta == NULL)
+    return NULL;
+
+// If the trackDb entry doesn't have a foreign key, there's no data.
+if (metaTag == NULL)
+    return NULL;
+
+static char *cachedTableName = NULL;
+static struct hash *cachedHash = NULL;
+static struct fieldedTable *cachedTable = NULL;
+
+// Cache this table because there's a good chance we'll get called again with it.
+if ((cachedTableName == NULL) || differentString(tabSepMeta, cachedTableName))
+    {
+    char *requiredFields[] = {"meta"};
+    cachedTable = fieldedTableFromTabFile(tabSepMeta, NULL, requiredFields, sizeof requiredFields / sizeof (char *));
+    cachedHash = fieldedTableUniqueIndex(cachedTable, requiredFields[0]);
+    cachedTableName = cloneString(tabSepMeta);
+    }
+
+// Look for this tag in the metadata.
+struct fieldedRow *fr = hashFindVal(cachedHash, metaTag);
+if (fr == NULL)
+    return NULL;
+
+int ii;
+struct slPair *pairList = NULL;
+for(ii=0; ii < cachedTable->fieldCount; ii++)
+    {
+    char *fieldName = cachedTable->fields[ii];
+    char *fieldVal = fr->row[ii];
+    if (!isEmpty(fieldVal))
+        slAddHead(&pairList, slPairNew(fieldName, cloneString(fieldVal)));
+    }
+slReverse(&pairList);
+
+return pairList;
+}
+
+
+static struct slPair *convertNameValueString(char *string)
+/* Convert a string composed of name=value pairs separated by white space. */
+{
+char *clone = cloneString(string);
+int count = chopByWhiteRespectDoubleQuotes(clone,NULL,0);
+char **words = needMem(sizeof(char *) * count);
+count = chopByWhiteRespectDoubleQuotes(clone,words,count);
+if (count < 1 || words[0] == NULL)
+    {
+    errAbort("This is not formatted var=val pairs:\n\t%s\n",string);
+    }
+
+int ix;
+struct slPair *pairList = NULL, *pair;
+
+for (ix = 0;ix<count;ix++)
+    {
+    if (*words[ix] == '#')
+        break;
+    
+    if (strchr(words[ix], '=') == NULL) // treat this the same as "var="
+        {
+        pair = slPairNew(words[ix], NULL);
+        }   
+    else
+        {   
+        char *name = cloneNextWordByDelimiter(&(words[ix]),'=');
+        char *value = cloneString(words[ix]);
+        pair = slPairNew(name, value);
+        }
+    slAddHead(&pairList, pair);
+    }
+
+slReverse(&pairList);
+
+return pairList;
+}
+
+struct slPair *trackDbMetaPairs(struct trackDb *tdb)
+/* Read in metadata given a trackDb entry.  This routine understands the three ways
+ * that metadata can be represented in a trackDb stanza: "metadata" lines per stanza,
+ * or a  tab-separated or tagStorm file with a foreign key specified by the "meta" tag.
+ */
+{
+char *metaTag = trackDbSetting(tdb, "meta");
+if (metaTag != NULL)
+    {
+    char *tabSepMeta = trackDbSetting(tdb, "metaTab");
+    if (tabSepMeta)
+        return tabSepMetaPairs(tabSepMeta, tdb, metaTag);
+
+    char *tagStormFile = trackDbSetting(tdb, "metaDb");
+    if (tagStormFile)
+        return tagRepoPairs(tagStormFile, "meta", metaTag);
+    }
+
+char *metadataInTdb = trackDbSetting(tdb, "metadata");
+if (metadataInTdb)
+    return convertNameValueString(metadataInTdb);
+
+return NULL;
+}
