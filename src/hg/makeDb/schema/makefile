@@ -7,11 +7,12 @@ USE_DIRS = $(DIRS)
 
 DIRS = \
 	joinerCheck \
+	joinerRoute \
 	joinableFields \
 	makeTableDescriptions \
 	dbFindFieldsWith \
 	dbSnoop
-	
+
 all: $(USE_DIRS:%=%.all)
 
 %.all:
