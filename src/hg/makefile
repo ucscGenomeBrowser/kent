@@ -104,6 +104,7 @@ UTILS_APPLIST = \
 	pslRecalcMatch \
 	pslReps \
 	pslSelect \
+	pslSomeRecords \
 	pslSort \
 	pslStats \
 	pslSwap \

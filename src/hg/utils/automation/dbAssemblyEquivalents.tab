@@ -146,6 +146,7 @@ pytBiv1	refseq	vertebrate_other	Python_bivittatus	GCF_000186305.1	Python_molurus
 rheMac8	refseq	vertebrate_mammalian	Macaca_mulatta	GCF_000772875.2	Mmul_8.0.1
 rhiRox1	refseq	vertebrate_mammalian	Rhinopithecus_roxellana	GCF_000769185.1	Rrox_v1
 rouAeg1	refseq	vertebrate_mammalian	Rousettus_aegyptiacus	GCF_001466805.2	Raegyp2.0
+sarCer3	refseq	fungi	Saccharomyces_cerevisiae	GCF_000146045.2	R64
 sarHar1	refseq	vertebrate_mammalian	Sarcophilus_harrisii	GCF_000189315.1	Devil_ref_v7.0
 solInv0	refseq	invertebrate	Solenopsis_invicta	GCF_000188075.1	Si_gnG
 sorAra2	refseq	vertebrate_mammalian	Sorex_araneus	GCF_000181275.1	SorAra2.0

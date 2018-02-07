@@ -9253,92 +9253,6 @@ struct linkedFeatures *lf = item;
 return getSeqColorDefault(lf->name, hvg, tg->ixColor);
 }
 
-Color interactionColor(struct track *tg, void *item, struct hvGfx *hvg)
-{
-struct linkedFeatures *lf = item;
-return  tg->colorShades[lf->grayIx];
-
-#ifdef NOTNOW  // leaving this in the code in case we want chrom color again
-
-char *name = tg->itemName(tg, item);
-struct linkedFeatures *lf = item;
-if (slCount(lf->components) == 2)
-    return MG_BLACK;
-return getSeqColorDefault(name, hvg, tg->ixColor);
-#endif
-}
-
-void interactionLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-	boolean withCenterLabels, MgFont *font, Color color,
-	enum trackVisibility vis)
-{
-/*
-struct linkedFeatures *lf, *lfList = track->items;
-for (lf = lfList; lf != NULL; lf = lf->next)
-    {
-    if (tg->itemLabelColor != NULL)
-	color = tg->itemLabelColor(track, lf, hvg);
-    int itemHeight = tg->itemHeight(track, lf);
-    hvGfxTextRight(hvg, xOff, y, width - 1,
-	itemHeight, color, font, tg->itemName(tg, lf));
-    }
-    track->bigBedraLeftLabels = bigBedLeftLabels;
-    */
-}
-
-void interactionLoad(struct track *tg)
-{
-loadGappedBed(tg);
-}
-
-char *interactionName(struct track *tg, void *item)
-{
-struct linkedFeatures *lf = item;
-if (slCount(lf->components) == 2)
-    return "";
-
-char buffer[10 * 1024], *name = buffer;
-safef(buffer, sizeof buffer, "%s", lf->name);
-char *ptr;
-
-if (startsWith(chromName, buffer))
-    {
-    name = strchr(buffer,'-');
-    name++;
-    ptr = strchr(name,':');
-    *ptr = 0;
-    }
-else
-    {
-    ptr = strchr(buffer,':');
-    *ptr = 0;
-    }
-
-return cloneString(name);
-}
-
-void interactionMethods(struct track *tg)
-{
-tg->freeItems = linkedFeaturesFreeItems;
-tg->drawItems = linkedFeaturesDraw;
-tg->drawItemAt = linkedFeaturesDrawAt;
-tg->mapItemName = linkedFeaturesName;
-tg->totalHeight = tgFixedTotalHeightNoOverflow;
-tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = linkedFeaturesItemStart;
-tg->itemEnd = linkedFeaturesItemEnd;
-tg->itemNameColor = linkedFeaturesNameColor;
-tg->nextPrevExon = linkedFeaturesNextPrevItem;
-tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
-tg->loadItems = interactionLoad;
-tg->itemName = interactionName;
-tg->itemColor = interactionColor;
-tg->itemNameColor = linkedFeaturesNameColor;
-//tg->drawLeftLabels = interactionLeftLabels;
-tg->canPack = TRUE;
-}
-
 #ifndef GBROWSE
 void loadRnaGene(struct track *tg)
 /* Load up rnaGene from database table to track items. */
@@ -14105,10 +14019,6 @@ else if (sameWord(type, "remote"))
 else if (sameWord(type, "bamWig"))
     {
     bamWigMethods(track, tdb, wordCount, words);
-    }
-else if (sameWord(type, "interaction"))
-    {
-    interactionMethods(track);
     }
 else if (sameWord(type, "gvf"))
     {

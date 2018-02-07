@@ -262,6 +262,7 @@ span#home-link {
 .gbSectionBanner {
     padding: 3px;
     margin-top: 6px;
+    margin-right: 0;
     background-color: #4c759c;  /* light blue */
     color: white;
     font-weight: bold;
