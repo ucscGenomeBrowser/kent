@@ -104,6 +104,11 @@ static char **cdsFeatures[] = {
     &gff3FeatCDS,
     NULL
 };
+static char **cdsExonFeatures[] = {
+    &gff3FeatExon,
+    &gff3FeatCDS,
+    NULL
+};
 static char **cdjvFeatures[] = {
     &gff3FeatCGeneSegment,
     &gff3FeatDGeneSegment,
@@ -640,7 +645,7 @@ static boolean shouldProcessGeneAsTranscript(struct gff3Ann *gene)
 /* should this gene be processed as a transcripts? */
 {
 // check for any exon children
-return allowMinimalGenes && haveChildFeature(gene, gff3FeatExon);
+return allowMinimalGenes && haveChildTypeMatch(gene, cdsExonFeatures);
 }
 
 static void processTranscript(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna,
