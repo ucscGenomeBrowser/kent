@@ -34,3 +34,5 @@ include cloneEnd.trackDb.ra
 track spMut override
 group varRep
 bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+
+include ../../refSeqComposite.ra

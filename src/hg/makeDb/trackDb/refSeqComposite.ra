@@ -11,6 +11,7 @@ subGroup1 view Views aNcbiRefSeq=NCBI_RefSeq zUcscRefSeq=UCSC_RefSeq
 allButtonPair on
 dataVersion /gbdb/$D/ncbiRefSeq/ncbiRefSeqVersion.txt
 priority 2
+urls hg="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" dm="http://flybase.org/reports/$$" ce="http://www.wormbase.org/db/gene/gene?name=$$" rn="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" sacCer="https://www.yeastgenome.org/locus/$$" danRer="https://zfin.org/$$" mm="http://www.informatics.jax.org/marker/$$"
 
     track ncbiRefSeqView
     shortLabel NCBI RefSeq genes and alignments
@@ -19,7 +20,7 @@ priority 2
     configurable on
     baseColorDefault genomicCodons
 
-	track ncbiRefSeq
+        track ncbiRefSeq
         parent ncbiRefSeqView off
         color 12,12,120
         shortLabel RefSeq All
@@ -29,46 +30,47 @@ priority 2
         baseColorUseCds given
         priority 1
 
-	track ncbiRefSeqCurated
+        track ncbiRefSeqCurated
         color 12,12,120
         parent ncbiRefSeqView on
-	shortLabel RefSeq Curated
+        shortLabel RefSeq Curated
         subGroups view=aNcbiRefSeq
-	longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, and YP_*)
+        longLabel NCBI RefSeq genes, curated subset (NM_*, NR_*, and YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
         priority 2
 
-	track ncbiRefSeqPredicted
+        track ncbiRefSeqPredicted
         color 109,109,174
         parent ncbiRefSeqView off
-	shortLabel RefSeq Predicted
+        shortLabel RefSeq Predicted
         subGroups view=aNcbiRefSeq
-	longLabel NCBI RefSeq genes, predicted subset (XM_* and XR_*)
+        longLabel NCBI RefSeq genes, predicted subset (XM_* and XR_*)
         idXref ncbiRefSeqLink mrnaAcc name
         baseColorUseCds given
         priority 3
 
-	track ncbiRefSeqOther
+        track ncbiRefSeqOther
         color 32,32,32
         parent ncbiRefSeqView off
-	shortLabel RefSeq Other
+        shortLabel RefSeq Other
         subGroups view=aNcbiRefSeq
-	longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
+        longLabel NCBI RefSeq other annotations (not NM_*, NR_*, XM_*, XR_*, or YP_*)
         priority 4
         searchIndex name,gene,ID,Name2,geneSynonym,product
         searchTrix /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.ix
-	bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.bb
-        urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/612091" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" MGI="http://www.informatics.jax.org/marker/$$"
+        bigDataUrl /gbdb/$D/ncbiRefSeq/ncbiRefSeqOther.bb
         type bigBed 12 +
         labelFields gene
+        skipEmptyFields on
+        urls GeneID="https://www.ncbi.nlm.nih.gov/gene/$$" MIM="https://www.ncbi.nlm.nih.gov/omim/612091" HGNC="http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" FlyBase="http://flybase.org/reports/$$" WormBase="http://www.wormbase.org/db/gene/gene?name=$$" RGD="https://rgd.mcw.edu/rgdweb/search/search.html?term=$$" SGD="https://www.yeastgenome.org/locus/$$" miRBase="http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=$$" ZFIN="https://zfin.org/$$" MGI="http://www.informatics.jax.org/marker/$$"
 
-	track ncbiRefSeqPsl
+        track ncbiRefSeqPsl
         priority 5
-	parent ncbiRefSeqView off
-	shortLabel RefSeq Alignments
+        parent ncbiRefSeqView off
+        shortLabel RefSeq Alignments
         subGroups view=aNcbiRefSeq
-	longLabel RefSeq Alignments of RNAs
+        longLabel RefSeq Alignments of RNAs
         type psl
         indelDoubleInsert on
         indelQueryInsert on
@@ -90,7 +92,7 @@ priority 2
     view zUcscRefSeq
 
         track refGene override
-	parent ucscRefSeqView off
+        parent ucscRefSeqView off
         shortLabel UCSC RefSeq
         longLabel UCSC annotations of RefSeq RNAs (NM_* and NR_*)
         subGroups view=zUcscRefSeq

@@ -445,7 +445,7 @@ url2 bed genePred
 url2Label bed genePred
 urlLabel *
 urlName genePred psl bigPsl
-urls bigBed bed bigPsl
+urls bigBed bed bigPsl genePred psl
 useScore *
 view *
 viewLimits *
