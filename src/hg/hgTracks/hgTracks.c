@@ -8400,7 +8400,7 @@ if (!hideControls)
 
             if (isHubTrack(group->name))
 		{
-                if (strstr(group->label, "Composite"))
+                if (strstr(group->label, "Collections"))
                     {
                     safef(idText, sizeof idText, "%s_edit", group->name);
                     hPrintf("<input name=\"hubEditButton\" id='%s'"

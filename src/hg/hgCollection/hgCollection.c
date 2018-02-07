@@ -151,8 +151,8 @@ static void outHubHeader(FILE *f, char *db)
 // output a track hub header
 {
 fprintf(f,"hub hub1\n\
-shortLabel User Composite\n\
-longLabel User Composite\n\
+shortLabel Track Collections\n\
+longLabel Track Collections\n\
 useOneFile on\n\
 email genome-www@soe.ucsc.edu\n\n");
 fprintf(f,"genome %s\n\n", db);  
@@ -403,7 +403,8 @@ jsReloadOnBackButton(cart);
 
 webIncludeFile("inc/hgCollection.html");
 char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
-jsInlineF("$('#assembly').text('%s');\n",assembly);
+if (assembly != NULL)
+    jsInlineF("$('#assembly').text('%s');\n",assembly);
 
 printHelp();
 doTable(cart, db, groupList, trackList);
@@ -480,6 +481,8 @@ if (bigDataUrl == NULL)
     {
     if (startsWith("bigWig", tdb->type))
         {
+        if (conn == NULL)
+            errAbort("track hub has bigWig without bigDataUrl");
         dataUrl = getSqlBigWig(conn, db, tdb);
         hashReplace(tdb->settingsHash, "bigDataUrl", dataUrl);
         }
@@ -591,7 +594,9 @@ struct hash *collectionNameHash = newHash(6);
 
 outHubHeader(f, db);
 struct track *collection;
-struct sqlConnection *conn = hAllocConn(db);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(db))
+    conn = hAllocConn(db);
 int priority = 1;
 for(collection = collectionList; collection; collection = collection->next)
     {

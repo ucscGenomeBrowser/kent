@@ -180,7 +180,6 @@ var hgCollection = (function() {
 
         var newId = $(selectedTree).jstree("create_node", "#", newName + " (" + newDescription + ")");
         var newId2 = $(selectedTree).jstree("create_node", newId, emptyCollectionText);
-        $("#newCollectionHint").hide();
         var newNode = $(selectedTree).jstree("get_node", newId);
         isDirty = true;
         newNode.li_attr.class = "folder empty";
@@ -425,10 +424,6 @@ var hgCollection = (function() {
         treeDiv.on('click', '.jstree-themeicon ', plusHit);
         var firstChild = $(treeDiv).find("li").first();
         $(treeDiv).jstree("select_node", $(firstChild).attr("id"));
-
-        if (addedOne) {
-            $("#newCollectionHint").hide();
-        }
     }
 
    function submitForm() {
