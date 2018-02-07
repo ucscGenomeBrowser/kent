@@ -398,7 +398,7 @@ if (tdbForConn != NULL)
 	       "<A HREF=\"/goldenPath/help/bigWig.html\" TARGET=_BLANK>"
 	       "BigWig</A> format.<BR>\n");
     }
-jpList = joinerRelate(joiner, db, table);
+jpList = joinerRelate(joiner, db, table, NULL);
 
 /* sort and unique list */
 slUniqify(&jpList, joinerPairCmpOnAandB, joinerPairFree);

@@ -1258,9 +1258,10 @@ return TRUE;
 }
 
 struct joinerPair *joinerRelate(struct joiner *joiner, char *database, 
-	char *table)
+                                char *table, char *exclusiveDb)
 /* Get list of all ways to link table in given database to other tables,
- * possibly in other databases. */
+ * possibly in other databases.
+ * If exclusiveDb is not NULL then apply joinerExclusiveCheck to it in addition to database. */
 {
 struct joinerSet *js, *jsChain;
 struct joinerField *jf, *jfBase;
@@ -1286,7 +1287,9 @@ for (js = joiner->jsList; js != NULL; js = js->next)
 		struct slName *db;
 		for (db = jf->dbList; db != NULL; db = db->next)
 		    {
-		    if (joinerExclusiveCheck(joiner, database, db->name))
+		    if (joinerExclusiveCheck(joiner, database, db->name) &&
+                        (isEmpty(exclusiveDb) ||
+                         joinerExclusiveCheck(joiner, exclusiveDb, db->name)))
 			{
 			if (!sameString(database, db->name) 
 				|| !sameString(table, jf->table))
@@ -1345,13 +1348,13 @@ return FALSE;
 static struct joinerSet *identifierStack[4];	/* Help keep search from looping. */
 
 static struct joinerPair *rFindRoute(struct joiner *joiner, 
-	struct joinerDtf *a,  struct joinerDtf *b, int level, int maxLevel)
+	struct joinerDtf *a,  struct joinerDtf *b, char *exclusiveDb, int level, int maxLevel)
 /* Find a path that connects the two fields if possible.  Do limited
  * recursion. */
 {
 struct joinerPair *jpList, *jp;
 struct joinerPair *path = NULL;
-jpList = joinerRelate(joiner, a->database, a->table);
+jpList = joinerRelate(joiner, a->database, a->table, exclusiveDb);
 for (jp = jpList; jp != NULL; jp = jp->next)
     {
     if (joinerDtfSameTable(jp->b, b))
@@ -1368,7 +1371,7 @@ if (path == NULL && level < maxLevel)
 	if (!identifierInArray(jp->identifier, identifierStack, level))
 	    {
 	    identifierStack[level] = jp->identifier;
-	    path = rFindRoute(joiner, jp->b, b, level+1, maxLevel);
+	    path = rFindRoute(joiner, jp->b, b, exclusiveDb, level+1, maxLevel);
 	    if (path != NULL)
 		{
 		struct joinerPair *jpClone = joinerPairClone(jp);
@@ -1391,7 +1394,7 @@ int i;
 struct joinerPair *jpList = NULL;
 for (i=1; i<ArraySize(identifierStack); ++i)
     {
-    jpList = rFindRoute(joiner, a, b, 0, i);
+    jpList = rFindRoute(joiner, a, b, a->database, 0, i);
     if (jpList != NULL)
         break;
     }

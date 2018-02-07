@@ -949,7 +949,7 @@ else if (track != NULL && !tdbIsComposite(track))
     else if (hti != NULL && trackHti != NULL && trackHti->nameField[0] != 0)
         {
         struct joinerPair *jp, *jpList;
-        jpList = joinerRelate(allJoiner, db, track->table);
+        jpList = joinerRelate(allJoiner, db, track->table, NULL);
         for (jp = jpList; jp != NULL; jp = jp->next)
             {
             if (sameString(jp->a->field, trackHti->nameField))

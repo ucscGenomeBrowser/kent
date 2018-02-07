@@ -173,9 +173,10 @@ void joinerPairDump(struct joinerPair *jpList, FILE *out);
 /* Write out joiner pair list to file mostly for debugging. */
 
 struct joinerPair *joinerRelate(struct joiner *joiner, char *database, 
-	char *table);
+                                char *table, char *exclusiveDb);
 /* Get list of all ways to link table in given database to other tables,
- * possibly in other databases. */
+ * possibly in other databases.
+ * If exclusiveDb is not NULL then apply joinerExclusiveCheck to it in addition to database. */
 
 struct slRef *joinerSetInheritanceChain(struct joinerSet *js);
 /* Return list of self, children, and parents (but not siblings).

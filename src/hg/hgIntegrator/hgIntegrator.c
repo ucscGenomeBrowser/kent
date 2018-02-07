@@ -326,7 +326,7 @@ for (dbTable = dbTableList;  dbTable != NULL;  dbTable = dbTable->next)
     if (isEmpty(db))
         safecpy(db, sizeof(db), cartDb);
     addAll_PrefixForJoiner(table, sizeof(table));
-    struct joinerPair *jp, *jpList = joinerRelate(joiner, db, table);
+    struct joinerPair *jp, *jpList = joinerRelate(joiner, db, table, cartDb);
     for (jp = jpList; jp != NULL; jp = jp->next)
         {
         // omit the main table from the list if some related table links back to the main table:

@@ -179,7 +179,7 @@ for (in = inList; in != NULL; in = in->next)
 
     /* Scan through joining information and add tables,
      * avoiding duplicate additions. */
-    jpList = joinerRelate(joiner, in->db, in->table);
+    jpList = joinerRelate(joiner, in->db, in->table, database);
     for (jp = jpList; jp != NULL; jp = jp->next)
         {
 	safef(dtName, sizeof(dtName), "%s.%s",
