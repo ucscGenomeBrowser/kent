@@ -134,6 +134,7 @@ char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int totalSelectedFacets = 0;
+    int facetCount = 0;  // non-NULL facet count
     for (i=0; i<fieldCount; ++i)
 	{
 	char *val = row[i];
@@ -144,20 +145,28 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    facetFieldAdd(ffArray[i], val, FALSE);
 	    if (ffArray[i]->currentVal->selected)
 		++totalSelectedFacets;
+	    ++facetCount;
+	    }
+	else
+	    {
+	    ffArray[i]->currentVal = NULL;
 	    }
 	}
 
-    if (totalSelectedFacets == fieldCount)
+    if ((totalSelectedFacets == facetCount) && (facetCount > 0))
 	{
 	// include this row in the final resultset
 	++selectedRowCount;
 	}
     for (i=0; i<fieldCount; ++i)
 	{
-	// disregard one's self.
-	if ((totalSelectedFacets - (int)ffArray[i]->currentVal->selected) == (fieldCount - 1))
-	    ffArray[i]->currentVal->selectCount++;
-	    // shown on GUI to guide choosing by user
+	if (ffArray[i]->currentVal) // disregard null values
+	    {
+	    // disregard one's self.
+	    if ((totalSelectedFacets - (int)ffArray[i]->currentVal->selected) == (facetCount - 1))
+		ffArray[i]->currentVal->selectCount++;
+		// shown on GUI to guide choosing by user
+	    }
 	}
 
     }
