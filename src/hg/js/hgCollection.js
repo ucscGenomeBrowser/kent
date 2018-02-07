@@ -278,6 +278,14 @@ var hgCollection = (function() {
         }
     }
 
+    function findCollection(parentNode) {
+        while(parentNode.parent !== '#') {
+            parentNode = $(selectedTree).jstree("get_node", parentNode.parent);
+        }
+
+        return parentNode.id;
+    }
+    
     function plusHit(event, data) {
         // called with the plus icon is hit
         if (selectedNode === undefined) {
@@ -290,6 +298,7 @@ var hgCollection = (function() {
         var node = treeObject.jstree("get_node", id);
         if (node.children.length === 0) {
             var parentId = $(selectedNode).attr('id');
+            parentId = findCollection(selectedNode);
             checkEmpty(parentId);
             isDirty = true;
             $(selectedTree).jstree("copy_node", node, parentId,'last');
