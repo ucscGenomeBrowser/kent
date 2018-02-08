@@ -70,10 +70,17 @@ var hgCollection = (function() {
         }
 
     function changeCollection() {
+        var newName = $("#customName").val().trim();
+        if (!validateLabel(newName))
+            return;
+
+        var newDescription = $("#customDescription").val().trim();
+        if (!validateLabel(newDescription))
+            return;
         $( "#newCollectionDialog" ).dialog("close");
         selectedNode.li_attr.class = "folder";
-        selectedNode.li_attr.shortlabel = $("#customName").val().trim();
-        selectedNode.li_attr.longlabel = $("#customDescription").val().trim();
+        selectedNode.li_attr.shortlabel = newName;
+        selectedNode.li_attr.longlabel = newDescription;
         selectedNode.li_attr.visibility = $("#customVis").val();
         selectedNode.li_attr.color = $("#customColorInput").val();
         selectedNode.li_attr.missingmethod = $("input:radio[name ='missingData']:checked").val();
