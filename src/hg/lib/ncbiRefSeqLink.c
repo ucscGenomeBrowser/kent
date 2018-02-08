@@ -10,7 +10,7 @@
 
 
 
-char *ncbiRefSeqLinkCommaSepFieldNames = "id,status,name,product,mrnaAcc,protAcc,locusLinkId,omimId,hgnc,genbank,pseudo,gbkey,source,gene_biotype,gene_synonym,ncrna_class,note,description";
+char *ncbiRefSeqLinkCommaSepFieldNames = "id,status,name,product,mrnaAcc,protAcc,locusLinkId,omimId,hgnc,genbank,pseudo,gbkey,source,gene_biotype,gene_synonym,ncrna_class,note,description,externalId";
 
 void ncbiRefSeqLinkStaticLoad(char **row, struct ncbiRefSeqLink *ret)
 /* Load a row from ncbiRefSeqLink table into ret.  The contents of ret will
@@ -35,6 +35,7 @@ ret->gene_synonym = row[14];
 ret->ncrna_class = row[15];
 ret->note = row[16];
 ret->description = row[17];
+ret->externalId = row[18];
 }
 
 struct ncbiRefSeqLink *ncbiRefSeqLinkLoad(char **row)
@@ -62,6 +63,7 @@ ret->gene_synonym = cloneString(row[14]);
 ret->ncrna_class = cloneString(row[15]);
 ret->note = cloneString(row[16]);
 ret->description = cloneString(row[17]);
+ret->externalId = cloneString(row[18]);
 return ret;
 }
 
@@ -71,7 +73,7 @@ struct ncbiRefSeqLink *ncbiRefSeqLinkLoadAll(char *fileName)
 {
 struct ncbiRefSeqLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[19];
 
 while (lineFileRow(lf, row))
     {
@@ -89,7 +91,7 @@ struct ncbiRefSeqLink *ncbiRefSeqLinkLoadAllByChar(char *fileName, char chopper)
 {
 struct ncbiRefSeqLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[19];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -128,6 +130,7 @@ ret->gene_synonym = sqlStringComma(&s);
 ret->ncrna_class = sqlStringComma(&s);
 ret->note = sqlStringComma(&s);
 ret->description = sqlStringComma(&s);
+ret->externalId = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -157,6 +160,7 @@ freeMem(el->gene_synonym);
 freeMem(el->ncrna_class);
 freeMem(el->note);
 freeMem(el->description);
+freeMem(el->externalId);
 freez(pEl);
 }
 
@@ -246,6 +250,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->description);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->externalId);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
