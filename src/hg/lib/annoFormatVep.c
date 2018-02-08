@@ -1182,6 +1182,7 @@ for (i = 0, row = extraRows;  row != NULL;  row = row->next)
     // transcript, and use it only once.
     if (extraSrc->source == self->config->gpVarSource)
         {
+        extraTranscript = words[self->txNameIx];
         if (gpvTranscript == NULL || differentString(extraTranscript, gpvTranscript) || gotGpvTx)
             continue;
         gotGpvTx = TRUE;

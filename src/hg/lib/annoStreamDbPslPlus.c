@@ -93,7 +93,9 @@ static char *refSeqAliConfigJson =
     "                         \"fields\": [\"file_offset\", \"file_size\"] } ] }";
 
 struct asObject *annoStreamDbPslPlusAsObj()
-/* Return an autoSql object with PSL, gene name, protein acc, CDS and sequence file info fields. */
+/* Return an autoSql object with PSL, gene name, protein acc, CDS and sequence file info fields.
+ * An annoStreamDbPslPlus instance may return additional additional columns if configured, but
+ * these columns will always be present. */
 {
 return asParseText(pslPlusAutoSqlString);
 }
@@ -112,7 +114,7 @@ static struct annoRow *asdppNextRow(struct annoStreamer *sSelf, char *minChrom, 
 {
 struct annoStreamDbPslPlus *self = (struct annoStreamDbPslPlus *)sSelf;
 char **ppWords;
-lmAllocArray(lm, ppWords, PSLPLUS_NUM_COLS);
+lmAllocArray(lm, ppWords, sSelf->numCols);
 struct annoRow *ppRow;
 boolean rightJoinFail = FALSE;
 while ((ppRow = self->mySource->nextRow(self->mySource, minChrom, minEnd, lm)) != NULL)
@@ -121,7 +123,7 @@ while ((ppRow = self->mySource->nextRow(self->mySource, minChrom, minEnd, lm)) !
     // If there are filters on experiment attributes, apply them, otherwise just return aRow.
     if (sSelf->filters)
 	{
-	boolean fails = annoFilterRowFails(sSelf->filters, ppWords, PSLPLUS_NUM_COLS,
+	boolean fails = annoFilterRowFails(sSelf->filters, ppWords, sSelf->numCols,
 					   &rightJoinFail);
 	// If this row passes the filter, or fails but is rightJoin, then we're done looking.
 	if (!fails || rightJoinFail)
@@ -133,7 +135,7 @@ while ((ppRow = self->mySource->nextRow(self->mySource, minChrom, minEnd, lm)) !
     }
 if (ppRow != NULL)
     return annoRowFromStringArray(ppRow->chrom, ppRow->start, ppRow->end, rightJoinFail,
-				  ppWords, PSLPLUS_NUM_COLS, lm);
+				  ppWords, sSelf->numCols, lm);
 else
     return NULL;
 }
@@ -149,7 +151,58 @@ self->mySource->close(&(self->mySource));
 annoStreamerFree(pSSelf);
 }
 
-struct annoStreamer *annoStreamDbPslPlusNew(struct annoAssembly *aa, char *gpTable, int maxOutRows)
+static struct asColumn *asColumnClone(struct asColumn *colIn)
+/* Return a full clone of colIn, or NULL if colIn is NULL. */
+{
+if (colIn == NULL)
+    return NULL;
+if (colIn->obType != NULL || colIn->index != NULL)
+    errAbort("asColumnClone: support for obType and index not implemented");
+struct asColumn *colOut;
+AllocVar(colOut);
+colOut->name = cloneString(colIn->name);
+colOut->comment = cloneString(colIn->comment);
+colOut->lowType = colIn->lowType; // static struct in asParse.c
+colOut->obName = cloneString(colIn->obName);
+colOut->fixedSize = colIn->fixedSize;
+colOut->linkedSizeName = cloneString(colIn->linkedSizeName);
+colOut->linkedSize = asColumnClone(colIn->linkedSize);
+colOut->isSizeLink = colIn->isSizeLink;
+colOut->isList = colIn->isList;
+colOut->isArray = colIn->isArray;
+colOut->autoIncrement = colIn->autoIncrement;
+colOut->values = slNameCloneList(colIn->values);
+return colOut;
+}
+
+static void asObjAppendExtraColumns(struct asObject *asObjTarget, struct asObject *asObjSource)
+/* If asObjSource has more columns than asObjTarget then clone and append those additional columns
+ * to asObjTarget. */
+{
+int tColCount = slCount(asObjTarget->columnList);
+int sColCount = slCount(asObjSource->columnList);
+if (tColCount < 1)
+    errAbort("asObjAppendExtraColumns: support for empty target columnList not implemented");
+if (sColCount > tColCount)
+    {
+    struct asColumn *tCol = asObjTarget->columnList, *sCol = asObjSource->columnList;
+    int i;
+    for (i = 0;  i < tColCount-1;  i++)
+        {
+        tCol = tCol->next;
+        sCol = sCol->next;
+        }
+    while (sCol->next != NULL)
+        {
+        tCol->next = asColumnClone(sCol->next);
+        tCol = tCol->next;
+        sCol = sCol->next;
+        }
+    }
+}
+
+struct annoStreamer *annoStreamDbPslPlusNew(struct annoAssembly *aa, char *gpTable, int maxOutRows,
+                                            struct jsonElement *extraConfig)
 /* Create an annoStreamer (subclass) object that streams PSL, CDS and seqFile info.
  * gpTable is a genePred table that has associated PSL, CDS and sequence info
  * (i.e. refGene, ncbiRefSeq, ncbiRefSeqCurated or ncbiRefSeqPredicted). */
@@ -170,14 +223,18 @@ else
     errAbort("annoStreamDbPslPlusNew: unrecognized table \"%s\"", gpTable);
 struct annoStreamDbPslPlus *self;
 AllocVar(self);
-struct annoStreamer *streamer = &(self->streamer);
+// Get internal streamer for joining PSL with other tables.
+struct jsonElement *config = jsonParse(configJson);
+jsonObjectMerge(config, extraConfig);
+self->mySource = annoStreamDbNew(aa->name, pslTable, aa, maxOutRows, config);
+struct asObject *asObj = annoStreamDbPslPlusAsObj();
+if (extraConfig)
+    asObjAppendExtraColumns(asObj, self->mySource->asObj);
 // Set up external streamer interface
-annoStreamerInit(streamer, aa, annoStreamDbPslPlusAsObj(), pslTable);
+struct annoStreamer *streamer = &(self->streamer);
+annoStreamerInit(streamer, aa, asObj, pslTable);
 streamer->rowType = arWords;
 self->gpTable = cloneString(gpTable);
-// Get internal streamer for joining PSL with other tables.
-struct jsonElement *configEl = jsonParse(configJson);
-self->mySource = annoStreamDbNew(aa->name, pslTable, aa, maxOutRows, configEl);
 // Override methods that need to pass through to internal source:
 streamer->setRegion = asdppSetRegion;
 streamer->nextRow = asdppNextRow;

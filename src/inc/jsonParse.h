@@ -51,6 +51,12 @@ struct jsonElement *newJsonNull();
 void jsonObjectAdd(struct jsonElement *h, char *name, struct jsonElement *ele);
 // Add a new element to a jsonObject; existing values are replaced.
 
+void jsonObjectMerge(struct jsonElement *objA, struct jsonElement *objB);
+/* Recursively merge fields of objB into objA.  If objA and objB each have a list child with
+ * the same key then concatenate the lists.  If objA and objB each have an object child with
+ * the same key then merge the object children.  If objA and objB each have a child of some
+ * other type then objB's child replaces objA's child. */
+
 void jsonListAdd(struct jsonElement *list, struct jsonElement *ele);
 // Add a new element to a jsonList
 
