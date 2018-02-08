@@ -449,9 +449,9 @@ char subject[256];
 char msg[4096];
 char *remoteAddr=getenv("REMOTE_ADDR");
 
-safef(subject, sizeof(subject),"Your user name at the %s", brwName);
+safef(subject, sizeof(subject),"Your username at the %s", brwName);
 safef(msg, sizeof(msg), 
-    "  Someone (probably you, from IP address %s) has requested user name(s) associated with this email address at the %s: \n\n  %s\n\n%s\n%s", 
+    "  Someone (probably you, from IP address %s) has requested username(s) associated with this email address at the %s: \n\n  %s\n\n%s\n%s", 
    remoteAddr, brwName, users, signature, returnAddr);
 sendMailOut(email, subject, msg);
 }
@@ -910,7 +910,7 @@ hPrintf("<div class=\"inputGroup\">"
 
 if (sqlFieldIndex(conn, "gbMembers", "recovEmail") != -1)
     hPrintf("<div class=\"inputGroup\">"
-        "<label for=\"recovEmail\">Recovery Email address e.g. personal email</label>"
+        "<label for=\"recovEmail\">Optional Secondary Recovery Email</label>"
         "<input type=text name=\"hgLogin_recovEmail\" size=\"30\" id=\"recovEmail\">"
         "</div>"
         "\n");
