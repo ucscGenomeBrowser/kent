@@ -52,7 +52,7 @@ int sumCompare(const void *vone, const void *vtwo)
 struct trackSum *one = (struct trackSum *)vone;
 struct trackSum *two = (struct trackSum *)vtwo;
 
-return one->sum - two->sum;
+return two->sum - one->sum;
 }
 
 void calcWiggleOrdering(struct cart *cart, struct flatTracks *flatTracks)
