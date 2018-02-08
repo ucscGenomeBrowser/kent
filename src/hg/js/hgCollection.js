@@ -161,8 +161,8 @@ var hgCollection = (function() {
         $("#doNewCollection").off ( "click" );
         $("#doNewCollection").click ( newCollection );
         $("#viewFuncDiv").show();
-        $("#customName").val("A New Collection");
-        $("#customDescription").val("A New Collection Description");
+        $("#customName").val("New Collection");
+        $("#customDescription").val("New Collection description");
         $("#customVis").val("full");
         $("#customColorInput").val("#0");
         $("#viewFunc").val("show all");
