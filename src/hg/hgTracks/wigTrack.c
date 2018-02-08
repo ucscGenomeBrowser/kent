@@ -1010,7 +1010,7 @@ for (x1 = 0; x1 < width; ++x1)
 
 		    // negative data value exactly equal to top pixel
 		    // make sure it draws something
-		    if ((boxTop+boxHeight) == 0)
+		    if (((boxTop+boxHeight) == 0) && !isnan(dataValue))
 			boxHeight += 1;
 		    doLine(image,x, yOff+boxTop, boxHeight, drawColor);
 		    }
