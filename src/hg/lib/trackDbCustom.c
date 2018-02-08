@@ -1423,6 +1423,14 @@ return pairList;
 }
 
 
+int cmpPairAlpha(const void *e1, const void *e2)
+/* used with slSort to sort slPairs alphabetically */
+{
+const struct slPair *a = *((struct slPair **)e1);
+const struct slPair *b = *((struct slPair **)e2);
+return strcmp(a->name, b->name);
+}
+
 static struct slPair *convertNameValueString(char *string)
 /* Convert a string composed of name=value pairs separated by white space. */
 {
@@ -1456,7 +1464,7 @@ for (ix = 0;ix<count;ix++)
     slAddHead(&pairList, pair);
     }
 
-slReverse(&pairList);
+slSort(&pairList, cmpPairAlpha);
 
 return pairList;
 }
