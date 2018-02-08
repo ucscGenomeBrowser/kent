@@ -49,6 +49,7 @@
 #include "gtexUi.h"
 #include "genbank.h"
 #include "botDelay.h"
+#include "customComposite.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -3280,6 +3281,11 @@ if (!tdbIsDownloadsOnly(tdb))
 	    jsOnEventByIdF("click", "htui_reset",
                    "setVarAndPostForm('%s','1','mainForm'); return false;", setting);
 	    }
+        if ( isCustomComposite(tdb))
+            {
+            printf("\n&nbsp;&nbsp;<a href='%s' >Go to Track Collection Builder</a>\n", hgCollectionName());
+            }
+
         }
 
     if (ct)

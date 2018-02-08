@@ -4096,8 +4096,9 @@ void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *td
 if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by ajax do we
     {                                  // consider this option
     if (tdbIsComposite(tdb)                       // called for the composite
-    && !tdbIsCompositeView(tdb->subtracks)        // and there is no view level
-    && slCount(tdb->subtracks) == 1)              // and there is only one subtrack
+        && !isCustomComposite(tdb)
+        && !tdbIsCompositeView(tdb->subtracks)        // and there is no view level
+        && slCount(tdb->subtracks) == 1)              // and there is only one subtrack
 	{
 	tdb = tdb->subtracks; // show subtrack cfg instead
 	prefix = tdb->track;
