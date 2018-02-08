@@ -1,42 +1,90 @@
+<!-- This file appears as an 'include' in hgCollectionHelp.html -->
+
 <h2>Contents</h2>
   
-<h5><a href="#Intro">Introduction</a></h6>
-<h5><a href="#Features">Key Features</a></h6>
-<h5><a href="#GetStarted">Getting Started</a></h6>
-<h5><a href="#Support">Resources and Support</a></h6>
+<ul class='gbNoBullet gbsNoBullet'>
+<li><h5><a href="#Intro">Introduction</a></h5></li>
+<!--<h5><a href="#Features">Key Features</a></h5>-->
+<li><h5><a href="#GetStarted">Getting Started</a></h5></li>
+<li><h5><a href="#Support">Resources and Support</a></h5></li>
+</ul>
 
 <a name="Intro"></a>	
 <h2>Introduction</h2> 
 
-<p>The <a href="/cgi-bin/hgComposite" target="_blank">Custom Composite Builder</a> is a tool which provides a way to build a custom composite track grouping of wiggles that can be sorted, displayed in a variety of ways, and saved in a session for sharing or later viewing.
-Wiggles can be collected from disparate sources including track hubs, custom tracks, and native tracks into one central location based on differing dimensions of metadata, or any other criteria that is useful.
-<p> 
+<p>This Track Collection Builder is a tool which allows multiple tracks to be grouped together into 
+one composite track</a> or &quot;collection.&quot; A <a href="trackDb/trackDbHub.html#compositeTrack" 
+target="_blank" >composite track</a> can be thought of as a container for grouping a set of 
+similar-type annotation tracks.</p> 
 
+<h3>Supported Data Types</h3> 
 <p>
-A <a href="/goldenpath/help/trackDb/trackDbHub.html#compositeTrack" 
-target="_blank" >composite track</a> is a grouping for a set of similar-type annotation tracks. A set of tracks within a composite track are referred to 
-as &quot;sub-tracks.&quot; 
-<a name="Features"></a>	
-<h2>Key Features</h2> 
+The following continuous-value graphing track types can be added to a collection:
+<ul>
+  <li><a href="../goldenpath/help/wiggle.html">Wiggle Track Format (WIG)</a></li>
+  <li><a href="../goldenpath/help/bigWig.html">bigWig Track Format</a></li>
+  <li><a href="../goldenpath/help/bedGraph.html">bedGraph Track Format</a></li>
+</ul>
+
+<!--<a name="Features"></a>	
+<h3>Key Features</h3> 
 <p> 
 <ul>
-  <li>The Custom Composite Builder builds <a href="/goldenpath/help/trackDb/trackDbHub.html#compositeTrack" target="_blank" >composites</a> for a single genome assembly.
-  <li>Wiggles can be copied into collections from a tree view with a list of all the available wiggles, or added individually from the genome browser.
-  <li>A single wiggle track can occur multiple times in a collection and in multiple collections so data can be viewed with multiple viewing options at the same time.
-  <li>Wiggles in a custom composite can be displayed with multiwig overlay methods (stacked, transparent, etc.)
-  <li>Wiggles in a custom composite can be sorted by similarity or expression in the genome browser.
-  <li>Simple math (addition and subtraction) can be done on wiggles in a collection.
-  <li>Custom composites have user-defined names and descriptions.
-  <li>Wiggle tracks within custom composites can be renamed and new descriptions added.
-  <li>All wiggle types are supported: bigWig, wig, and bedgraph.
-  <li>Tracks from trackhubs can be collected and displayed without connecting to the hubs.
+  <li>The Track Collection Builder builds 
+  <a href="/goldenpath/help/trackDb/trackDbHub.html#compositeTrack" target="_blank">composites</a> 
+  for a single genome assembly.
+  <li>Tracks within collections can be renamed and new descriptions added.
+  <li>A single track can be added/duplicated multiple times into a single collection.</li>
+  <li>A single track can be added to multiple collections, thus allowing for different views
+  to be applied to copies of the same data track. These various same-data views can be seen in the
+  browser alongside each other for convenient visual comparisons.</li>
+  <li>Tracks in collections can be displayed with <a href="/goldenpath/help/trackDb/trackDbHub.html#multiWig">multiwig 
+  aggregate/overlay</a> "merge" methods (stacked, transparent, etc.)
+  <li>Tracks in collections can be sorted by similarity or magnitude.
+  <li>Simple math (addition and subtraction) can be applied to tracks within a collection, creating 
+  a new "merge method" view. For example, applying the &quot;addition&quot; function will generate
+  a view that is similar to a stacked graph. 
+  overlay.
+  <li>Tracks from track hubs can be collected and displayed without connecting to the hub.
+</ul></p>
+-->
+
+<h3>Track Sources</h3>
+<p>
+To add tracks into a new collection, they must first be visible in the browser. The following track
+sources can be added to a <i>single</i> genome browser (e.g., tracks from various sources can be 
+loaded onto the human GRCh38/hg38 genome browser, but not both the GRCh37/hg19 <i>and</i> the hg38 
+browser):</p>
+<p> 
+<ul>
+  <li>Native tracks (tracks natively hosted by the UCSC Genome Browser)</li>
+  <li><a href="/goldenpath/help/customTrack.html" target="_blank">Custom tracks</a>(user-generated)
+  </li>
+  <li><a href="/goldenPath/help/hgTrackHubHelp.html#Intro" target="_blank">Hub tracks</a>
+  from your own <a href="/goldenPath/help/hgTrackHubHelp.html#View" target="_blank">
+  unlisted hub</a> or from a <a href="../cgi-bin/hgHubConnect" target="_blank">public hub</a>.</li>
+  </ul></p>
+  
+<h3>Viewing Options</h3>
+<p>
+A collection, and thus the tracks it contains, can be configured for various viewing options:</p>
+
+<ul>
+<li><strong>Track Color</strong></li>
+<p>Blurb about track color here.</p>
+
+<li><strong>Sorting by similarity</strong></li>
+<p>Blurb about similarity sorting here.</p> 
+
+<li><strong>Sorting by magnitude</strong></li>
+<p>Blurb about magnitude sorting sorting here.</p>
 </ul>
         
-<a name="GetStarted"></a>	
+<a name="GetStarted"></a>
+	
 <h2>Getting Started</h2> 
-<p>The following section is a guide for getting started with the Composite Builder tool. By 
-following the steps provided in the example below, you'll be able to create your own composite
-track, customize it, and view it with the UCSC Genome Browser. 
+
+<p>Blurb for getting started </p>
 
 <p>
 <strong>Step 1. </strong> </p>  
@@ -69,20 +117,22 @@ Text about Step 3.</p>
 <p> 
 
 <ul>
-  <li>Questions? Please <a href="../../contacts.html" target="_blank">contact us</a>.</li>
-  <li>Supported data types: Information about the <a href="../../FAQ/FAQformat.html#format6.1" 
-  target="_blank">bigWig</a> format.</li> 
-  <li>Documentation for composite tracks: 
+  <li>Questions? Please <a href="../../contacts.html" target="_blank">contact us</a>.</li> 
+  <li>Go to the Track Collection Builder <a href="/goldenPath/newsarch.html"target="_blank">
+  News Release.</a></li>
+  <li>Learn more about composite tracks: 
   <a href="/goldenpath/help/hubQuickStartGroups.html#composite" target="_blank">
-  Quick Start Guide to Hubs</a> and the 
+  Quick Start Guide to Hubs</a> &amp; 
   <a href="/goldenpath/help/trackDb/trackDbHub.html#Composite_Track_Settings"
-  target-"_blank"> Hub Track Database Definition</a> guide.</li> 
-  <li>View the Composite Builder <a href="/goldenPath/newsarch.html"target="_blank">News Release</a></li>
-  <li>Credit to Dr. Bar-Joseph for assisting with wiggle sorting development: 
-</br>Bar-Joseph Z, Demaine ED, Gifford DK, Srebro N, Hamel AM, Jaakkola TS.
+  target-"_blank"> Hub Track Database Definition guide</a>.</li> 
+  <li>Credit to Dr. Bar-Joseph for assisting with wiggle sorting development: Bar-Joseph Z, Demaine 
+  ED, Gifford DK, Srebro N, Hamel AM, Jaakkola TS.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target="_blank">
 K-ary clustering with optimal leaf ordering for gene expression data</a>.
 <em>Bioinformatics</em>. 2003 Jun 12;19(9):1070-8.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target="_blank">12801867</a>
   </li>
 </ul>
+
+
+
