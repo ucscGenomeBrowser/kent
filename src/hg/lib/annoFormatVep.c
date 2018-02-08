@@ -472,7 +472,7 @@ if (gpFx->detailType == codingChange)
 	afVepNextColumn(self->f, self->doHtml);
 	fprintf(self->f, "%u-%u", change->cdsPosition, change->cdsPosition+1);
 	}
-    else if (isDeletion)
+    else if (isDeletion && refLen > 1)
 	{
 	fprintf(self->f, "%u-%u", change->cDnaPosition+1, change->cDnaPosition+refLen);
 	afVepNextColumn(self->f, self->doHtml);
