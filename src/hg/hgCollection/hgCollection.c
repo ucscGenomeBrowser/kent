@@ -175,9 +175,10 @@ if (hubName == NULL)
     FILE *f = mustOpen(hubName, "a");
     outHubHeader(f, db);
     fclose(f);
-    cartSetString(cart, "hubUrl", hubName);
-    cartSetString(cart, hgHubConnectRemakeTrackHub, hubName);
     }
+
+cartSetString(cart, "hubUrl", hubName);
+cartSetString(cart, hgHubConnectRemakeTrackHub, hubName);
 return hubName;
 }
 
@@ -954,7 +955,7 @@ else if (sameString("saveCollection", cmd))
     {
     char *jsonIn = cgiUsualString("jsonp", NULL);
     doAjax(cart, db, jsonIn, nameHash);
-    apiOut("{\"serverSays\": \"Collections gaved successfully.\"}", NULL);
+    apiOut("{\"serverSays\": \"Collections saved successfully.\"}", NULL);
     }
 }
 
