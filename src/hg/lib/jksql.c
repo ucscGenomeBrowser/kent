@@ -3552,18 +3552,10 @@ while((c = *s++) != 0)
     {
     if (disAllowed[c])
 	{
-	// DEBUG REMOVE Temporary for trying to track down some weird error 
-	//  because the stackdump should appear but does not.
-	//if (sameOk(cfgOption("noSqlInj.dumpStack"), "on"))
-	//    dumpStack("character %c disallowed in sql string part %s\n", c, sOriginal);  // DEBUG REMOVE GALT 
-
-	// TODO for some reason the warn stack is messed up sometimes very eary. -- happening in hgTables position search on brca
-	//warn("character %c disallowed in sql string part %s", c, sOriginal);
-
 	// just using this as a work-around
 	// until the problem with early errors and warn/abort stacks has been fixed.
-	char *noSqlInjLevel = cfgOption("noSqlInj.level");
-	if (noSqlInjLevel && !sameString(noSqlInjLevel, "ignore"))
+	char *noSqlInjLevel = cfgOptionDefault("noSqlInj.level", "abort");
+	if (!sameString(noSqlInjLevel, "ignore"))
 	    {
     	    fprintf(stderr, "character %c disallowed in sql string part %s\n", c, sOriginal);  
 	    fflush(stderr);
@@ -4213,48 +4205,32 @@ void sqlCheckError(char *format, ...)
 va_list args;
 va_start(args, format);
 
-char *noSqlInjLevel = cfgOption("noSqlInj.level");
+char *noSqlInjLevel = cfgOptionDefault("noSqlInj.level", "abort");
 char *noSqlInjDumpStack = cfgOption("noSqlInj.dumpStack");
-// I tried to incorporate this setting so as to avoid duplicate dumpStacks
-// but it is not working that well, and I would rather have two than zero dumps.
-//char *browserDumpStack = cfgOption("browser.dumpStack");
-//char *scriptName = cgiScriptName();
 
-if (noSqlInjLevel)
-    { 
-    // don't dump if if we are going to do it during errAbort anyway
-    if (sameOk(noSqlInjDumpStack, "on"))
-	/* && (!(sameString(noSqlInjLevel, "abort") 
-	      && cgiIsOnWeb() 
-	      && sameOk(browserDumpStack, "on"))
-	    || endsWith(scriptName, "hgSuggest")
-           ) // note: this doesn't work for hgSuggest because it doesn't set the dumpStack handler.
-               // TODO find or add a better method to tell if it would already dumpStack on abort.
-       )
-        */
-	{
-	va_list dump_args;
-    	va_copy(dump_args, args);
-	vaDumpStack(format, dump_args);
-	va_end(dump_args);
-	}
+if (sameOk(noSqlInjDumpStack, "on"))
+    {
+    va_list dump_args;
+    va_copy(dump_args, args);
+    vaDumpStack(format, dump_args);
+    va_end(dump_args);
+    }
 
-    if (sameString(noSqlInjLevel, "logOnly"))
-	{
-	vfprintf(stderr, format, args);
-	fprintf(stderr, "\n");
-	fflush(stderr);
-	}
+if (sameString(noSqlInjLevel, "logOnly"))
+    {
+    vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
+    fflush(stderr);
+    }
 
-    if (sameString(noSqlInjLevel, "warn"))
-	{
-	vaWarn(format, args);
-	}
+if (sameString(noSqlInjLevel, "warn"))
+    {
+    vaWarn(format, args);
+    }
 
-    if (sameString(noSqlInjLevel, "abort"))
-	{
-	vaErrAbort(format, args);
-	}
+if (sameString(noSqlInjLevel, "abort"))
+    {
+    vaErrAbort(format, args);
     }
 
 va_end(args);
