@@ -31,10 +31,13 @@ my @attributes = (['gene',           'gene',           "Gene name"],
                   ['MIM',            'MIM',            "OMIM"],
                   ['HGNC',           'HGNC',           "HGNC"],
                   ['MGI',            'MGI',            "MGI"],
-                  ['WormBase',            'WormBase',            "WormBase"],
+                  ['WormBase',       'WormBase',       "WormBase"],
+                  ['XenBase',        'XenBase',        "XenBase"],
+                  ['BGD',            'BGD',            "BGD"],
                   ['RGD',            'RGD',            "RGD"],
                   ['SGD',            'SGD',            "SGD"],
                   ['ZFIN',           'ZFIN',           "ZFIN"],
+                  ['FlyBase',        'FlyBase',        "FlyBase"],
                   ['miRBase',        'miRBase',        "miRBase"],
                   ['description',    'description',    "Description"],
                   ['Note',           'Note',           "Note"],
@@ -84,7 +87,7 @@ while (<$ATTRS>) {
     # Dbxref is one attribute, but split it up into multiple output columns for URL generation
     my @xrefs = split(',', $val);
     foreach my $xref (@xrefs) {
-      foreach my $source qw(GeneID MIM HGNC MGI miRBase WormBase RGD SGD ZFIN) {
+      foreach my $source qw(GeneID MIM HGNC MGI miRBase WormBase XenBase BGD RGD SGD ZFIN FLYBASE) {
         if ($xref =~ s/^$source://) {
           my $ix = $attrToIx{$source};
           $itemAttrs{$id}->[$ix] = $xref if (! defined $itemAttrs{$id}->[$ix]);

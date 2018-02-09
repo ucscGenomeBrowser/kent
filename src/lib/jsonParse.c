@@ -76,6 +76,51 @@ if(h->type != jsonObject)
 hashReplace(h->val.jeHash, name, ele);
 }
 
+void jsonListCat(struct jsonElement *listA, struct jsonElement *listB)
+/* Add all values of listB to the end of listA. Neither listA nor listB can be NULL. */
+{
+if (!listA || !listB || listA->type != jsonList || listB->type != jsonList)
+    errAbort("jsonListMerge: both arguments must be non-NULL and have type jsonList");
+struct slRef *listAVals = jsonListVal(listA, "jsonListCat:listA");
+struct slRef *listBVals = jsonListVal(listB, "jsonListCat:listB");
+if (listAVals == NULL)
+    listA->val.jeList = listBVals;
+else
+    {
+    struct slRef *ref = listAVals;
+    while (ref && ref->next)
+        ref = ref->next;
+    ref->next = listBVals;
+    }
+}
+
+void jsonObjectMerge(struct jsonElement *objA, struct jsonElement *objB)
+/* Recursively merge fields of objB into objA.  Neither objA nor objB can be NULL.
+ * If objA and objB each have a list child with the same key then concatenate the lists.
+ * If objA and objB each have an object child with the same key then merge the object children.
+ * If objA and objB each have a child of some other type then objB's child replaces objA's child. */
+{
+if (!objA || !objB || objA->type != jsonObject || objB->type != jsonObject)
+    errAbort("jsonObjectMerge: both arguments must be non-NULL and have type jsonObject");
+struct hash *objAHash = jsonObjectVal(objA, "jsonObjectMerge:objA");
+struct hash *objBHash = jsonObjectVal(objB, "jsonObjectMerge:objB");
+struct hashCookie cookie = hashFirst(objBHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct jsonElement *elA = hashFindVal(objAHash, hel->name);
+    struct jsonElement *elB = hel->val;
+    if (elA == NULL || elA->type != elB->type)
+        jsonObjectAdd(objA, hel->name, elB);
+    else if (elA->type == jsonObject)
+        jsonObjectMerge(elA, elB);
+    else if (elA->type == jsonList)
+        jsonListCat(elA, elB);
+    else
+        elA->val = elB->val;
+    }
+}
+
 void jsonListAdd(struct jsonElement *list, struct jsonElement *ele)
 {
 if(list->type != jsonList)

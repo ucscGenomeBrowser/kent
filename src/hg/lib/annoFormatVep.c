@@ -472,7 +472,7 @@ if (gpFx->detailType == codingChange)
 	afVepNextColumn(self->f, self->doHtml);
 	fprintf(self->f, "%u-%u", change->cdsPosition, change->cdsPosition+1);
 	}
-    else if (isDeletion)
+    else if (isDeletion && refLen > 1)
 	{
 	fprintf(self->f, "%u-%u", change->cDnaPosition+1, change->cDnaPosition+refLen);
 	afVepNextColumn(self->f, self->doHtml);
@@ -1182,6 +1182,7 @@ for (i = 0, row = extraRows;  row != NULL;  row = row->next)
     // transcript, and use it only once.
     if (extraSrc->source == self->config->gpVarSource)
         {
+        extraTranscript = words[self->txNameIx];
         if (gpvTranscript == NULL || differentString(extraTranscript, gpvTranscript) || gotGpvTx)
             continue;
         gotGpvTx = TRUE;

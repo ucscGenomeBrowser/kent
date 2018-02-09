@@ -5,7 +5,7 @@
 #ifndef NCBIREFSEQLINK_H
 #define NCBIREFSEQLINK_H
 
-#define NCBIREFSEQLINK_NUM_COLS 18
+#define NCBIREFSEQLINK_NUM_COLS 19
 
 extern char *ncbiRefSeqLinkCommaSepFieldNames;
 
@@ -14,13 +14,13 @@ struct ncbiRefSeqLink
     {
     struct ncbiRefSeqLink *next;  /* Next in singly linked list. */
     char *id;	/* id for this gene or curated item */
-    char *status;	/* Inferrred, Model, Predicted, Provisional, Reviewed, Validated, Unknown */
+    char *status;	/* Inferred, Model, Predicted, Provisional, Reviewed, Validated, Unknown */
     char *name;	/* gene name */
     char *product;	/* product */
     char *mrnaAcc;	/* transcript_id */
     char *protAcc;	/* protein_id */
     char *locusLinkId;	/* locus link identifier, from Dbxref */
-    char *omimId;	/* omim identifier, from Dbxref */
+    char *omimId;	/* OMIM identifier, from Dbxref */
     char *hgnc;	/* HGNC identifier, from Dbxref */
     char *genbank;	/* genbank identifier from Dbxref */
     char *pseudo;	/* 'true' if pseudo gene, or n/a */
@@ -31,6 +31,7 @@ struct ncbiRefSeqLink
     char *ncrna_class;	/* type of RNA: miRNA, lncRNA, snoRNA, etc... */
     char *note;	/* other notes from genbank record */
     char *description;	/* description from rna gbff record via gbProcess */
+    char *externalId;	/* for outside URL link, WormBase, FlyBase, RGD, SGD, etc... from Dbxref */
     };
 
 void ncbiRefSeqLinkStaticLoad(char **row, struct ncbiRefSeqLink *ret);

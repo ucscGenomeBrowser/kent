@@ -150,7 +150,7 @@ var hgCollection = (function() {
     function checkCallback( operation, node, node_parent, node_position, more) {
         // called during a drag and drop action to see if the target is droppable
         if ((operation === "copy_node") ||  (operation === "move_node")) {
-            if (node_parent.parent === '#')
+            if ((node.parent != '#') && (node_parent.parent === '#'))
                 return true;
             return false;
         }
