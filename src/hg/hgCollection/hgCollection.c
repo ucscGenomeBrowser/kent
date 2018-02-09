@@ -881,6 +881,9 @@ FILE *f = fopen(fileName, "w");
 struct trackDb *newTdb = hashMustFindVal(nameHash, trackHubSkipHubName(trackName));
 hashReplace(newTdb->settingsHash, "track", makeUnique(nameHash, trackName));
 hashReplace(newTdb->settingsHash, "parent", trackHubSkipHubName(collectionName));
+char *tdbType = trackDbSetting(newTdb, "tdbType");
+if (tdbType != NULL)
+    hashReplace(newTdb->settingsHash, "type", tdbType);
 
 outHubHeader(f, db);
 struct sqlConnection *conn = hAllocConn(db);
