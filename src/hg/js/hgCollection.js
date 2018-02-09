@@ -70,10 +70,17 @@ var hgCollection = (function() {
         }
 
     function changeCollection() {
+        var newName = $("#customName").val().trim();
+        if (!validateLabel(newName))
+            return;
+
+        var newDescription = $("#customDescription").val().trim();
+        if (!validateLabel(newDescription))
+            return;
         $( "#newCollectionDialog" ).dialog("close");
         selectedNode.li_attr.class = "folder";
-        selectedNode.li_attr.shortlabel = $("#customName").val().trim();
-        selectedNode.li_attr.longlabel = $("#customDescription").val().trim();
+        selectedNode.li_attr.shortlabel = newName;
+        selectedNode.li_attr.longlabel = newDescription;
         selectedNode.li_attr.visibility = $("#customVis").val();
         selectedNode.li_attr.color = $("#customColorInput").val();
         selectedNode.li_attr.missingmethod = $("input:radio[name ='missingData']:checked").val();
@@ -143,7 +150,7 @@ var hgCollection = (function() {
     function checkCallback( operation, node, node_parent, node_position, more) {
         // called during a drag and drop action to see if the target is droppable
         if ((operation === "copy_node") ||  (operation === "move_node")) {
-            if (node_parent.parent === '#')
+            if ((node.parent != '#') && (node_parent.parent === '#'))
                 return true;
             return false;
         }
@@ -154,8 +161,8 @@ var hgCollection = (function() {
         $("#doNewCollection").off ( "click" );
         $("#doNewCollection").click ( newCollection );
         $("#viewFuncDiv").show();
-        $("#customName").val("A New Collection");
-        $("#customDescription").val("A New Collection Description");
+        $("#customName").val("New Collection");
+        $("#customDescription").val("New Collection description");
         $("#customVis").val("full");
         $("#customColorInput").val("#0");
         $("#viewFunc").val("show all");

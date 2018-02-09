@@ -563,11 +563,11 @@ function validateFloat(obj,min,max)
 function validateLabel(label)
 {   // returns true if label is valid
 
-    var regexp = /^[a-z0-9][ a-z0-9]*$/i;
+    var regexp = /^[a-z0-9][ a-z0-9'!\$()*,\-.:;<=>?@\[\]^_`{|}~]*$/i;
     if (regexp.test(label)) {
         return true;
     } else {
-        alert(label + " is an invalid label");
+        alert(label + " is an invalid label. Legal characters are alphanumeric and the following puncuation ~`!@$^*.()_-=[{]}?|;:'<,>");
         return false;
     }
 }

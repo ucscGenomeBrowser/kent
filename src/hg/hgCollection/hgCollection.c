@@ -361,17 +361,17 @@ static void printHelp()
 {
 puts(
 "<a name='INFO_SECTION'></a>\n"
-"    <div class='row mygbSectionBanner'>\n"
+"    <div class='row gbSectionBanner'>\n"
 "        <div class='col-md-11'>Help</div>\n"
 "        <div class='col-md-1'>\n"
 );
-#define DATA_INFO_JUMP_ARROW_ID    "hgGtexDataInfo_jumpArrow"
+#define HELP_JUMP_ARROW_ID    "hgCollectionHelp_jumpArrow"
 printf(
 "            <i id='%s' title='Jump to top of page' \n"
 "               class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n",
-DATA_INFO_JUMP_ARROW_ID
+HELP_JUMP_ARROW_ID
 );
-onclickJumpToTop(DATA_INFO_JUMP_ARROW_ID);
+onclickJumpToTop(HELP_JUMP_ARROW_ID);
 puts(
 "       </div>\n"
 "    </div>\n"
@@ -379,16 +379,11 @@ puts(
 puts(
 "    <div class='row gbTrackDescriptionPanel'>\n"
 "       <div class='gbTrackDescription'>\n");
-puts("<div class='dataInfo'>");
-puts("</div>");
-webIncludeHelpFileSubst("hgCollectionHelp", NULL, FALSE);
-
-puts("<div class='dataInfo'>");
-puts("</div>");
-
+webIncludeFile("inc/hgCollectionHelpInclude.html");
 puts(
-"     </div>\n"
-"   </div>\n");
+"       </div>"
+"    </div>\n"
+);
 }
 
 static void doMainPage(struct cart *cart, char *db, struct grp *groupList, struct trackDb *trackList)
@@ -401,12 +396,13 @@ webIncludeResourceFile("hgGtexTrackSettings.css");
 
 jsReloadOnBackButton(cart);
 
+// Write the page HTML: the application, followed by its help doc
 webIncludeFile("inc/hgCollection.html");
 char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
 if (assembly != NULL)
     jsInlineF("$('#assembly').text('%s');\n",assembly);
-
 printHelp();
+
 doTable(cart, db, groupList, trackList);
 
 puts("<link rel='stylesheet' href='https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'>");

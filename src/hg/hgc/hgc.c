@@ -1590,7 +1590,7 @@ if (as == NULL)
 int start = extraFieldsStart(tdb, fieldCount, as);
 
 struct asColumn *col = as->columnList;
-char *urlsStr = trackDbSetting(tdb, "urls");
+char *urlsStr = trackDbSettingClosestToHomeOrDefault(tdb, "urls", NULL);
 struct hash* fieldToUrl = hashFromString(urlsStr);
 boolean skipEmptyFields = trackDbSettingOn(tdb, "skipEmptyFields");
 
@@ -11896,17 +11896,56 @@ if (differentWord(nrl->protAcc, ""))
     printf("<a href='https://www.ncbi.nlm.nih.gov/protein/%s' target=_blank>", nrl->protAcc);
     printf("%s</a><br>\n", nrl->protAcc);
     }
-if (startsWith("MGI", nrl->hgnc))
-    {
-    printf("<b>MGI:</b> "
+
+if (differentWord(nrl->hgnc, ""))
+    {  /* legacy support of mm10 override of hgnc column until this table
+        * is updated on the RR */
+    if (startsWith("MGI", nrl->hgnc))
+        {
+        printf("<b>MGI:</b> "
            "<a href=\"http://www.informatics.jax.org/marker/%s\" target=_blank>%s</a><br>\n",
            nrl->hgnc, nrl->hgnc);
+        }
+    else
+        {
+         printf("<b>HGNC:</b> ");
+         printf("<a href='http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s' target=_blank>", nrl->hgnc);
+
+         printf("%s</a><br>\n", nrl->hgnc);
+        }
     }
-else if (differentWord(nrl->hgnc, ""))
+
+if (sqlColumnExists(conn, "ncbiRefSeqLink", "externalId"))
     {
-    printf("<b>HGNC:</b> ");
-    printf("<a href='http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s' target=_blank>", nrl->hgnc);
-    printf("%s</a><br>\n", nrl->hgnc);
+    if (differentWord(nrl->externalId, ""))
+	{
+	char *urlsStr = trackDbSetting(tdb, "dbPrefixUrls");
+	struct hash* dbToUrl = hashFromString(urlsStr);
+	char *labelsStr = trackDbSetting(tdb, "dbPrefixLabels");
+	struct hash* dbToLabel = hashFromString(labelsStr);
+	if (dbToUrl)
+	    {
+	    if (!dbToLabel)
+	        errAbort("can not find trackDb dbPrefixLabels to correspond with dbPrefixUrls\n");
+	    char *databasePrefix = cloneString(database);
+	    while (strlen(databasePrefix) && isdigit(lastChar(databasePrefix)))
+	        trimLastChar(databasePrefix);
+	    struct hashEl *hel = hashLookup(dbToUrl, databasePrefix);
+	    if (hel)
+		{
+		struct hashEl *label = hashLookup(dbToLabel, databasePrefix);
+		if (!label)
+		    errAbort("missing trackDb dbPrefixLabels for database prefix: '%s'\n", databasePrefix);
+		char *url = (char *)hel->val;
+		char *labelStr = (char *)label->val;
+		char *idUrl = replaceInUrl(url, nrl->externalId, cart, database,
+		    nrl->externalId, winStart, winEnd, tdb->track, TRUE);
+		printf("<b>%s:</b> ", labelStr);
+		printf("<a href='%s' target='_blank'>%s</a><br>\n",
+		    idUrl, nrl->externalId);
+                }
+	    }
+	}
     }
 
 if (differentWord(nrl->locusLinkId, ""))

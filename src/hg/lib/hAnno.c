@@ -359,7 +359,7 @@ else
             // We have PSL+CDS+seq for these tracks -- pass that instead of genePred
             // to annoGratorGpVar
             streamer->close(&streamer);
-            streamer = annoStreamDbPslPlusNew(assembly, tdb->table, maxOutRows);
+            streamer = annoStreamDbPslPlusNew(assembly, tdb->table, maxOutRows, config);
             }
 	grator = annoGratorGpVarNew(streamer);
         }
