@@ -29,3 +29,5 @@ searchPriority 8
 track ensGene override
 visibility pack
 ensemblIdUrl http://www.ensembl.org/Heterocephalus_glaber_female
+
+include ../../refSeqComposite.ra alpha

@@ -125,3 +125,5 @@ altColor 0,90,10
 type wigMaf 0.0 1.0
 speciesCodonDefault anoCar2
 speciesOrder thaSir0 pytBiv0 gekJap0
+
+include ../../refSeqComposite.ra alpha
