@@ -37,6 +37,9 @@
 mkdir /hive/data/genomes/<db>/refseq/idKeys/
 cd /hive/data/genomes/<db>/refseq/idKeys/
 faToTwoBit ../G*_genomic.fna.gz ./refseq.<db>.2bit
+# verify no duplicates:
+twoBitDup refseq.<db>.2bit
+# should be silent.  See notes below if there are duplicates
 
 time (doIdKeys.pl -buildDir=`pwd` -twoBit=`pwd`/refseq.<db>.2bit refseq<Db>) \
 	> do.log 2>&1
@@ -48,6 +51,10 @@ time (doIdKeys.pl -buildDir=`pwd` -twoBit=`pwd`/refseq.<db>.2bit refseq<Db>) \
 
 mkdir /hive/data/genomes/<db>/bed/idKeys
 cd /hive/data/genomes/<db>/bed/idKeys
+
+# verify no duplicates:
+twoBitDup ../../<db>.2bit
+# should be silent.  See notes below if there are duplicates
 
 time (doIdKeys.pl -buildDir=`pwd` \
 	-twoBit=/hive/data/genomes/<db>/<db>.2bit <db>)  > do.log 2>&1
