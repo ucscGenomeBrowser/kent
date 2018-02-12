@@ -173,9 +173,6 @@ set ensGeneWgs chlSab2,choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,f
 
 set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,felCat3,gadMor1,micMur1,ochPri2,ochPri3,otoGar1,proCap1,pteVam1,sorAra1,sorAra2,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,vicPac2
 
-# Define organism databases for which we host the ncbiRefSeq genes
-set ncbiRefSeq $colAng,galGal5,galVar1,hg38,micMur2,mm10,$orcOrc,panPan2,panManBai1,rouAeg1
-
 # Define organism databases for which we host the vegaGenes
 set vegaGeneDbs hg18,hg19,hg38,mm9,mm10
 
@@ -6469,23 +6466,23 @@ identifier ws245Genes
 
 identifier ncbiRefSeq
 "NCBI RefSeq gene track"
-    $ncbiRefSeq.ncbiRefSeq.name dupeOk
-    $ncbiRefSeq.ncbiRefSeqLink.id full
-    $ncbiRefSeq.ncbiRefSeqCurated.name
-    $ncbiRefSeq.ncbiRefSeqPredicted.name
-    $ncbiRefSeq.ncbiRefSeqPsl.qName
-    $ncbiRefSeq.ncbiRefSeqCds.id
-    $ncbiRefSeq.seqNcbiRefSeq.acc
+    $gbd.ncbiRefSeq.name dupeOk
+    $gbd.ncbiRefSeqLink.id full
+    $gbd.ncbiRefSeqCurated.name
+    $gbd.ncbiRefSeqPredicted.name
+    $gbd.ncbiRefSeqPsl.qName
+    $gbd.ncbiRefSeqCds.id
+    $gbd.seqNcbiRefSeq.acc
 
 identifier ncbiRefSeqPepTable
 "NCBI RefSeq protein sequences"
-    $ncbiRefSeq.ncbiRefSeqPepTable.name
-    $ncbiRefSeq.ncbiRefSeqLink.protAcc full exclude=
+    $gbd.ncbiRefSeqPepTable.name
+    $gbd.ncbiRefSeqLink.protAcc full exclude=
 
 identifier ncbiRefSeqRna
 "NCBI RefSeq RNA sequences"
-    $ncbiRefSeq.extNcbiRefSeq.id
-    $ncbiRefSeq.seqNcbiRefSeq.extFile full
+    $gbd.extNcbiRefSeq.id
+    $gbd.seqNcbiRefSeq.extFile full
 
 # GTEx (Genotype-Tissue Expression)
 
