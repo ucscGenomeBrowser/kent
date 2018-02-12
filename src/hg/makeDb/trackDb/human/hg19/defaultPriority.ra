@@ -5,9 +5,6 @@
 # This priority is defined in human/hg19/trackDb.ra
 # If this priority changes, please change it here and there as well
 
-track refGene override
-priority 2
-
 # Phenotype and Literature
 
 track pubs override

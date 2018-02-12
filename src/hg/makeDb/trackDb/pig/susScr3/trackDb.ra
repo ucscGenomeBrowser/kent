@@ -16,9 +16,6 @@ visibility full
 track genscan override
 visibility pack
 
-track refGene override
-visibility pack
-
 track xenoRefGene override
 visibility dense
 
@@ -39,3 +36,6 @@ track animalQtl override
 url http://www.animalgenome.org/cgi-bin/QTLdb/SS/qdetails?QTL_ID=$p
 urlLabel Animal Genome QTL db:
 
+# change these two to switch to the new refSeqComposite 2018-02
+include trackDb.refGene.ra beta,public
+include ../../refSeqComposite.ra alpha

@@ -13,8 +13,7 @@ visibility full
 track xenoRefGene override
 visibility hide
 
-track refSeqComposite override
-visibility pack
+include ../../refSeqComposite.ra alpha
 
 searchTable gold
 shortCircuit 1

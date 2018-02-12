@@ -158,8 +158,7 @@ void singleAlleleToHgvsOut(char *db, struct bed3 *gBed3, char *ref, char *alt, c
 {
 if (sameString(alt, "."))
     alt = ref;
-else if (!isAllNt(alt, strlen(alt)
-                  +1)) //#*** FIXME isAllNt ignores last base in string!!! always TRUE for len=1
+else if (!isAllNt(alt, strlen(alt)))
     {
     fprintf(f, "# %s:%d:%s/%s: alt is non-[AGCTN] '%s', skipping.\n",
             gBed3->chrom, gBed3->chromStart+1, ref, alt, alt);
