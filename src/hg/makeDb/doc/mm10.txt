@@ -16443,4 +16443,78 @@ TMPDIR=/dev/shm
     cat fb.ficAlb1.chainRBestMm10Link.txt
     # 76183235 bases of 1102325870 (6.911%) in intersection
 
+##########################################################################
+# lastz Lamprey petMar3 (DONE - 2018-01-25 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S petMar3
+    mkdir /hive/data/genomes/mm10/bed/lastzPetMar3.2018-01-25
+    cd /hive/data/genomes/mm10/bed/lastzPetMar3.2018-01-25
+
+    printf '# Mouse vs. Lamprey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Lamprey PetMar3
+SEQ2_DIR=/hive/data/genomes/petMar3/petMar3.2bit
+SEQ2_LEN=/hive/data/genomes/petMar3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=60
+
+BASE=/hive/data/genomes/mm10/bed/lastzPetMar3.2018-01-25
+TMPDIR=/dev/shm
+' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1 &
+    #   real    119m5.528s
+
+    cat fb.mm10.chainPetMar3Link.txt
+    #   36835173 bases of 2652783500 (1.389%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` mm10 petMar3) \
+	> rbest.log 2>&1 &
+    # real    201m40.789s
+
+    cat fb.mm10.chainRBestPetMar3Link.txt
+    # 21623456 bases of 2652783500 (0.815%) in intersection
+
+    #	and for the swap
+    mkdir /hive/data/genomes/petMar3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/petMar3/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzPetMar3.2018-01-25/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    # real    7m57.582s
+
+    #   real    7m2.754s
+    cat  fb.petMar3.chainMm10Link.txt
+    #	39217857 bases of 1043181598 (3.759%) in intersection
+
+    cat fb.petMar3.chainSynMm10Link.txt
+    # 1381239 bases of 1043181598 (0.132%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` petMar3 mm10) \
+	> rbest.log 2>&1 &
+    # real    206m59.727s
+
+    cat fb.petMar3.chainRBestMm10Link.txt
+    # 21335101 bases of 1043181598 (2.045%) in intersection
+
 #########################################################################
