@@ -365,7 +365,7 @@ puts(
 "    </div>\n"
 );
 puts(
-"    <div class='row gbsPage'>\n"
+"    <div class='container-fluid'>\n"
 "       <div class='gbsPage'>\n");
 
 webIncludeFile("inc/hgCollectionHelpInclude.html");
