@@ -713,6 +713,9 @@ enum baseColorDrawOpt
 #define GENEPRED_CLASS_CLASS_COLUMN "itemClassClassColumn"
 #define GENEPRED_CLASS_CLASS_COLUMN_DEFAULT "class"
 
+/* genbank track cart variable suffixes: */
+#define SHOW_PATENT_SEQUENCES_SUFFIX "showPatentSequences"
+
 void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb);
 /* Make appropriately labeled drop down of options if any are applicable.*/
 
