@@ -901,7 +901,7 @@ if (likeExpr==NULL)
     sqlSafef(query, sizeof(query), "SELECT DISTINCT tableName FROM %s ORDER BY tableName", tableList);
 else
     sqlSafef(query, sizeof(query), 
-        "SELECT DISTINCT tableName FROM %s WHERE tableName %s ORDER BY tableName", tableList, likeExpr);
+        "SELECT DISTINCT tableName FROM %s WHERE tableName LIKE '%s' ORDER BY tableName", tableList, likeExpr);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -923,7 +923,7 @@ char query[256];
 if (likeExpr == NULL)
     safef(query, sizeof(query), NOSQLINJ "SHOW TABLES");
 else
-    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES %s", likeExpr);
+    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES LIKE '%s'", likeExpr);
 
 struct slName *list = NULL, *el;
 
