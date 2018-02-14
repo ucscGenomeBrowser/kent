@@ -257,6 +257,7 @@
 #include "trix.h"
 #include "bPlusTree.h"
 #include "customFactory.h"
+#include "iupac.h"
 
 static char *rootDir = "hgcData";
 
@@ -16228,12 +16229,10 @@ char *variation = NULL;
 
 char *line;
 struct lineFile *lf = NULL;
-int lineSize;
 static int maxFlank = 1000;
 static int lineWidth = 100;
 
 boolean gotVar = FALSE;
-boolean isNucleotide = TRUE;
 boolean leftFlankTrimmed = FALSE;
 boolean rightFlankTrimmed = FALSE;
 
@@ -16250,7 +16249,6 @@ struct dnaSeq *dnaSeqDbSnp3 = NULL;
 struct dnaSeq *seqDbSnp = NULL;
 struct dnaSeq *seqNib = NULL;
 
-int spaces = 0;
 int len5 = 0;
 int len3 = 0;
 int start = 0;
@@ -16270,31 +16268,26 @@ if (offset == -1)
 lf = lineFileOpen(fileName, TRUE);
 lineFileSeek(lf, offset, SEEK_SET);
 /* skip the header line */
-lineFileNext(lf, &line, &lineSize);
+lineFileNext(lf, &line, NULL);
 if (!startsWith(">rs", line))
     errAbort("Expected FASTA header, got this line:\n%s\nat offset %lld "
 	     "in file %s", line, (long long)offset, fileName);
 
-while (lineFileNext(lf, &line, &lineSize))
+while (lineFileNext(lf, &line, NULL))
     {
-    spaces = countChars(line, ' ');
     stripString(line, " ");
-    lineSize = lineSize - spaces;
-    if (sameString(line, "N"))
-        isNucleotide = FALSE;
-    else
-        isNucleotide = isAllDna(line, lineSize);
-    if (lineSize > 2 && gotVar)
-        dyStringAppend(seqDbSnp3,line);
-    else if (lineSize > 2 && !gotVar)
-        dyStringAppend(seqDbSnp5,line);
-    else if (lineSize == 2 && !isNucleotide)
+    int len = strlen(line);
+    if (len == 0)
+        break;
+    else if (len == 1 && isIupacAmbiguous(line[0]))
         {
 	gotVar = TRUE;
 	variation = cloneString(line);
 	}
-    else if (lineSize == 1)
-        break;
+    else if (gotVar)
+        dyStringAppend(seqDbSnp3, line);
+    else
+        dyStringAppend(seqDbSnp5, line);
     }
 lineFileClose(&lf);
 

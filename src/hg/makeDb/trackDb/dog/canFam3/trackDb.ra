@@ -13,3 +13,5 @@ searchType genePred
 searchMethod prefix
 termRegex chr[0-9MUXn]+[AEJHX0-9_]+(\.[0-9]+)?
 searchPriority 50
+
+include ../../refSeqComposite.ra alpha

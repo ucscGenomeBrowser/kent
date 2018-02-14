@@ -399,3 +399,45 @@ if (psl->strand[1] == '-')
 return genomeCds;
 }
 
+/* Accession prefixes indicating patent sequences, taken from:
+ * https://www.ncbi.nlm.nih.gov/Sequin/acc.html
+ */
+static char *genbankPatentPrefixes[] =
+{
+    "E", "BD", "DD", "DI", "DJ", "DL", "DM", "FU", "FV", "FW", "FZ", "GB",
+    "HV", "HW", "HZ", "LF", "LG", "LV", "LX", "LY", "LZ", "MA", "MB", "A",
+    "AX", "CQ", "CS", "FB", "GM", "GN", "HA", "HB", "HC", "HD", "HH", "HI",
+    "JA", "JB", "JC", "JD", "JE", "LP", "LQ", "MP", "MQ", "MR", "MS", "I",
+    "AR", "DZ", "EA", "GC", "GP", "GV", "GX", "GY", "GZ", "HJ", "HK", "HL",
+    "KH", "MI", NULL
+};
+
+static struct hash *genbankPatentPrefixesHash = NULL;
+
+static void makeGenbenkPatentPrefixHash(void)
+/* build hash of genbank accession prefixes on first uses */
+{
+int i;
+genbankPatentPrefixesHash = hashNew(0);
+for (i = 0; genbankPatentPrefixes[i] != NULL; i++)
+    hashAddInt(genbankPatentPrefixesHash, genbankPatentPrefixes[i], TRUE);
+}
+
+boolean isGenbenkPatentAccession(char *acc)
+/* Is this an accession prefix allocated to patent sequences. */
+{
+if (genbankPatentPrefixesHash == NULL)
+    makeGenbenkPatentPrefixHash();
+
+if (strlen(acc) >= GENBANK_ACC_BUFSZ)
+    return FALSE;  // too big, shouldn't happen
+
+// drop numeric part
+char accbuf[GENBANK_ACC_BUFSZ];
+safecpy(accbuf, sizeof(accbuf), acc);
+char *numPtr = skipToNumeric(accbuf);
+if (numPtr == NULL)
+    return FALSE;  // doesn't look like genbank acc
+*numPtr = '\0';
+return hashLookup(genbankPatentPrefixesHash, accbuf) != NULL;
+}

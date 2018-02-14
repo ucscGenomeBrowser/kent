@@ -86,9 +86,6 @@ while ((hel = hashNext(&cookie)) != NULL)
     {
     struct sortGroup *sg = hel->val;
     int numRows = slCount(sg->trackBins);
-    if (numRows < 3)
-        continue;
-
     int numCols = sg->trackBins->bin->binCount;
     float **rows;
     AllocArray(rows, numRows);
@@ -126,7 +123,16 @@ while ((hel = hashNext(&cookie)) != NULL)
     dyStringClear(dy);
 
     safef(group, sizeof group, "simOrder_%s", hel->name);
-    int *order = optimalLeafOrder(numRows, numCols, 0, rows, wigNames, NULL, NULL);
+    int *order;
+    if (numRows < 3)  // optimal leaf order crashes with 2 or 1
+        {
+        AllocArray(order, numRows);
+        int ii;
+        for(ii=0; ii < numRows; ii++)
+            order[ii] = ii + 1;
+        }
+    else
+        order = optimalLeafOrder(numRows, numCols, 0, rows, wigNames, NULL, NULL);
     for(ii=0; ii < numRows; ii++)
         dyStringPrintf(dy, "%s ", wigNames[order[ii] - 1]);
 

@@ -175,9 +175,10 @@ if (hubName == NULL)
     FILE *f = mustOpen(hubName, "a");
     outHubHeader(f, db);
     fclose(f);
-    cartSetString(cart, "hubUrl", hubName);
-    cartSetString(cart, hgHubConnectRemakeTrackHub, hubName);
     }
+
+cartSetString(cart, "hubUrl", hubName);
+cartSetString(cart, hgHubConnectRemakeTrackHub, hubName);
 return hubName;
 }
 
@@ -350,35 +351,23 @@ jsInlineF("\");\n");
 jsInlineF("hgCollection.init();\n");
 }
 
-static void onclickJumpToTop(char *id)
-/* CSP-safe click handler arrows that cause scroll to top */
-{
-jsOnEventById("click", id, "$('html,body').scrollTop(0);");
-}
-
 static void printHelp()
 // print out the help page
 {
 puts(
-"<a name='INFO_SECTION'></a>\n"
-"    <div class='row gbSectionBanner'>\n"
-"        <div class='col-md-11'>Help</div>\n"
-"        <div class='col-md-1'>\n"
+"<br><a name='INFO_SECTION'></a>\n"
+"    <div class='row gbsPage'>\n"
+"        <div ><h1>Track Collection Builder Help</h1></div>\n"
+"        <div >\n"
 );
-#define HELP_JUMP_ARROW_ID    "hgCollectionHelp_jumpArrow"
-printf(
-"            <i id='%s' title='Jump to top of page' \n"
-"               class='gbIconArrow fa fa-lg fa-arrow-circle-up'></i>\n",
-HELP_JUMP_ARROW_ID
-);
-onclickJumpToTop(HELP_JUMP_ARROW_ID);
 puts(
 "       </div>\n"
 "    </div>\n"
 );
 puts(
-"    <div class='row gbTrackDescriptionPanel'>\n"
-"       <div class='gbTrackDescription'>\n");
+"    <div class='container-fluid'>\n"
+"       <div class='gbsPage'>\n");
+
 webIncludeFile("inc/hgCollectionHelpInclude.html");
 puts(
 "       </div>"
@@ -391,6 +380,8 @@ static void doMainPage(struct cart *cart, char *db, struct grp *groupList, struc
 {
 webStartGbNoBanner(cart, db, "Collections");
 webIncludeResourceFile("gb.css");
+//webIncludeResourceFile("../staticStyle/gbStatic.css");
+webIncludeResourceFile("gbStatic.css");
 webIncludeResourceFile("spectrum.min.css");
 webIncludeResourceFile("hgGtexTrackSettings.css");
 
@@ -880,6 +871,9 @@ FILE *f = fopen(fileName, "w");
 struct trackDb *newTdb = hashMustFindVal(nameHash, trackHubSkipHubName(trackName));
 hashReplace(newTdb->settingsHash, "track", makeUnique(nameHash, trackName));
 hashReplace(newTdb->settingsHash, "parent", trackHubSkipHubName(collectionName));
+char *tdbType = trackDbSetting(newTdb, "tdbType");
+if (tdbType != NULL)
+    hashReplace(newTdb->settingsHash, "type", tdbType);
 
 outHubHeader(f, db);
 struct sqlConnection *conn = hAllocConn(db);
@@ -954,7 +948,7 @@ else if (sameString("saveCollection", cmd))
     {
     char *jsonIn = cgiUsualString("jsonp", NULL);
     doAjax(cart, db, jsonIn, nameHash);
-    apiOut("{\"serverSays\": \"Collections gaved successfully.\"}", NULL);
+    apiOut("{\"serverSays\": \"Collections saved successfully.\"}", NULL);
     }
 }
 

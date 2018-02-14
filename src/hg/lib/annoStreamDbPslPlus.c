@@ -225,7 +225,8 @@ struct annoStreamDbPslPlus *self;
 AllocVar(self);
 // Get internal streamer for joining PSL with other tables.
 struct jsonElement *config = jsonParse(configJson);
-jsonObjectMerge(config, extraConfig);
+if (extraConfig)
+    jsonObjectMerge(config, extraConfig);
 self->mySource = annoStreamDbNew(aa->name, pslTable, aa, maxOutRows, config);
 struct asObject *asObj = annoStreamDbPslPlusAsObj();
 if (extraConfig)

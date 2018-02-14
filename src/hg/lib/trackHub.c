@@ -615,7 +615,7 @@ struct trackHub *hub = grabHashedHub(hubName);
 if (hub != NULL)
     return hub;
 
-struct lineFile *lf = udcWrapShortLineFile(url, NULL, 256*1024);
+struct lineFile *lf = udcWrapShortLineFile(url, NULL, 16*1024*1024);
 struct hash *hubRa = raNextRecord(lf);
 if (hubRa == NULL)
     errAbort("empty %s in trackHubOpen", url);

@@ -656,8 +656,7 @@ struct vpTx *vpGenomicToTranscript(struct seqWindow *gSeqWin, struct bed3 *gBed3
 if (sameString(gAlt, "<DEL>"))
     gAlt[0] = '\0';
 int altLen = strlen(gAlt);
-if (!isAllNt(gAlt, altLen
-             +1)) //#*** FIXME isAllNt ignores last base in string!!! always TRUE for len=1
+if (!isAllNt(gAlt, altLen))
     errAbort("vpGenomicToTranscript: alternate allele must be sequence of IUPAC DNA characters "
              "but is '%s'", gAlt);
 gSeqWin->fetch(gSeqWin, gBed3->chrom, gBed3->chromStart, gBed3->chromEnd);

@@ -35,4 +35,6 @@ track spMut override
 group varRep
 bigDataUrl /gbdb/$D/uniprot/unipMut.bb
 
-include ../../refSeqComposite.ra
+# change these two to switch to the new refSeqComposite 2018-02
+include trackDb.refGene.ra beta,public
+include ../../refSeqComposite.ra alpha

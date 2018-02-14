@@ -322,6 +322,9 @@ chrM    16201   5227    3863    2182    4929    0       296
     checkTableCoords petMar3
     # each should cover %100 entirely:
     featureBits -countGaps petMar3 ucscToINSDC
+g
+
+
     # 1130433897 bases of 1130433897 (100.000%) in intersection
 
     featureBits -countGaps petMar3 ucscToRefSeq
@@ -524,21 +527,21 @@ searchPriority 8
     cd /hive/data/genomes/petMar3/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku petMar3) > do.log 2>&1 &
-XXX - running - Fri Jan 12 21:03:16 PST 2018
-    # real    22m10.156s
+    # real    89m3.857s
+
     # 2 jobs failed, running with 2000000 size window
-    # real    3m24.459s
+    # real    37m54.704s
 
     # continuing
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -continue=makeBed -bigClusterHub=ku petMar3) > makeBed.log 2>&1 &
-    # real    1m44.308s
+    # real    2m48.899s
 
     cat fb.petMar3.genscan.txt
-    # 19263301 bases of 1102325870 (1.748%) in intersection
+    # 35050947 bases of 1043181598 (3.360%) in intersection
 
     cat fb.petMar3.genscanSubopt.txt
-    # 22956236 bases of 1102325870 (2.083%) in intersection
+    # 27257669 bases of 1043181598 (2.613%) in intersection
 
 #############################################################################
 # augustus gene track (DONE - 2018-01-12 - Hiram)
@@ -549,75 +552,84 @@ XXX - running - Fri Jan 12 21:03:16 PST 2018
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
      -species=zebrafish -dbHost=hgwdev -workhorse=hgwdev petMar3) \
 	> do.log 2>&1 &
-XXX - running - Fri Jan 12 21:43:39 PST 2018
-    # real    51m31.630s
+    # real    127m8.330s
 
     cat fb.petMar3.augustusGene.txt
-    # 23463182 bases of 1102325870 (2.129%) in intersection
+    # 46980983 bases of 1043181598 (4.504%) in intersection
 
 ##############################################################################
-# lastz/chain/net swap human/hg38 (TBD - 2018-01-08 - Hiram)
+# lastz/chain/net swap human/hg38 (DONE - 2018-02-01 - Hiram)
+
     # original alignment
-    cd /hive/data/genomes/hg38/bed/lastzPetMar3.2018-01-08
+    cd /hive/data/genomes/hg38/bed/lastzPetMar3.2018-01-25
 
     cat fb.hg38.chainPetMar3Link.txt
-    # 147048785 bases of 3049335806 (4.822%) in intersection
+    # 52661859 bases of 3049335806 (1.727%) in intersection
+
     cat fb.hg38.chainSynPetMar3Link.txt
-    # 88694039 bases of 3049335806 (2.909%) in intersection
+    # 1508338 bases of 3049335806 (0.049%) in intersection
+
     cat fb.hg38.chainRBestPetMar3Link.txt
-    # 103439671 bases of 3049335806 (3.392%) in intersection
+    # 25411380 bases of 3049335806 (0.833%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/petMar3/bed/blastz.hg38.swap
     cd /hive/data/genomes/petMar3/bed/blastz.hg38.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/hg38/bed/lastzPetMar3.2018-01-08/DEF \
+      /hive/data/genomes/hg38/bed/lastzPetMar3.2018-01-25/DEF \
         -swap -chainMinScore=5000 -chainLinearGap=loose \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    14m32.727s
+    #  real    12m51.092s
 
     cat fb.petMar3.chainHg38Link.txt
-    # 118476285 bases of 1102325870 (10.748%) in intersection
-    cat fb.petMar3.chainSynHg38Link.txt
-    # 86852014 bases of 1102325870 (7.879%) in intersection
+    # 51300303 bases of 1043181598 (4.918%) in intersection
 
-    time (doRecipBest.pl -load  -workhorse=hgwdev -buildDir=`pwd` \
-	petMar3 hg38) > rbest.log 2>&1
-    # real    265m12.990s
+    cat fb.petMar3.chainSynHg38Link.txt
+    # 1425757 bases of 1043181598 (0.137%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` petMar3 hg38) \
+	> rbest.log 2>&1 &
+    # real    264m26.880s
 
     cat fb.petMar3.chainRBestHg38Link.txt
-    # 103174487 bases of 1102325870 (9.360%) in intersection
+    # 25154743 bases of 1043181598 (2.411%) in intersection
 
 ##############################################################################
-# lastz/chain/net swap mouse/mm10 (TBD - 2018-01-09 - Hiram)
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-01-28 - Hiram)
     # original alignment to mm10
-    cd /hive/data/genomes/mm10/bed/lastzPetMar3.2018-01-09
+
+    cd /hive/data/genomes/mm10/bed/lastzPetMar3.2018-01-25
 
     cat fb.mm10.chainPetMar3Link.txt
-    #   98177848 bases of 2652783500 (3.701%) in intersection
+    #   36835173 bases of 2652783500 (1.389%) in intersection
+
     cat fb.mm10.chainRBestPetMar3Link.txt
-    # 76370866 bases of 2652783500 (2.879%) in intersection
+    # 21623456 bases of 2652783500 (0.815%) in intersection
 
     #	and for the swap
     mkdir /hive/data/genomes/petMar3/bed/blastz.mm10.swap
     cd /hive/data/genomes/petMar3/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/mm10/bed/lastzPetMar3.2018-01-09/DEF \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	/hive/data/genomes/mm10/bed/lastzPetMar3.2018-01-25/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
-    # real    8m5.637s
+    # real    7m57.582s
 
+    #   real    7m2.754s
     cat  fb.petMar3.chainMm10Link.txt
-    #   85384367 bases of 1102325870 (7.746%) in intersection
+    #	39217857 bases of 1043181598 (3.759%) in intersection
 
-    time (doRecipBest.pl -load -workhorse=hgwdev petMar3 mm10 \
-      -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
-    # real    209m22.159s
+    cat fb.petMar3.chainSynMm10Link.txt
+    # 1381239 bases of 1043181598 (0.132%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` petMar3 mm10) \
+	> rbest.log 2>&1 &
+    # real    206m59.727s
 
     cat fb.petMar3.chainRBestMm10Link.txt
-    # 76183235 bases of 1102325870 (6.911%) in intersection
+    # 21335101 bases of 1043181598 (2.045%) in intersection
 
 ##############################################################################
 # Create kluster run files (DONE - 2018-01-12 - Hiram)
@@ -663,7 +675,7 @@ XXX - running - Fri Jan 12 21:43:39 PST 2018
        -bedFile=jkStuff/nonBridged.bed
 
 #########################################################################
-# GENBANK AUTO UPDATE (TBD - 2018-01-08 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2018-01-13 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -704,13 +716,11 @@ petMar3.perChromTables = no
 
     time ./bin/gbAlignStep -initial petMar3
     # logFile: var/build/logs/2018.01.12-21:18:31.petMar3.initalign.log
-XXX - running - Fri Jan 12 21:18:57 PST 2018
-    #   real    184m19.477s
+    #   approximately 3 hours
 
     tail -2 var/build/logs/2018.01.12-21:18:31.petMar3.initalign.log
-
-    #	hgwdev 2018.01.08-21:49:03 petMar3.initalign: Succeeded: petMar3
-    #	hgwdev 2018.01.08-21:49:44 petMar3.initalign: finish
+    # hgwdev 2018.01.13-00:16:58 petMar3.initalign: Succeeded: petMar3
+    # hgwdev 2018.01.13-00:18:27 petMar3.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.petMar3
@@ -719,12 +729,11 @@ XXX - running - Fri Jan 12 21:18:57 PST 2018
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad petMar3
-    # logFile: var/dbload/hgwdev/logs/2018.01.08-22:05:29.petMar3.dbload.log
-    #  real    7m1.853s
+    # logFile: var/dbload/hgwdev/logs/2018.01.14-00:30:59.petMar3.dbload.log
+    #  real    18m50.768s
 
-
-    tail -1 var/dbload/hgwdev/logs/2018.01.08-22:05:29.petMar3.dbload.log
-    #  hgwdev 2018.01.08-22:12:31 petMar3.dbload: finish
+    tail -1 var/dbload/hgwdev/logs/2018.01.14-00:30:59.petMar3.dbload.log
+    #  hgwdev 2018.01.14-00:49:50 petMar3.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -732,7 +741,7 @@ XXX - running - Fri Jan 12 21:18:57 PST 2018
     # add petMar3 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m 'adding petMar3 to the update alignments refs #9870' etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding petMar3 to the update alignments refs #20819' etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -745,8 +754,7 @@ XXX - running - Fri Jan 12 21:18:57 PST 2018
 	-ooc=/hive/data/genomes/petMar3/jkStuff/petMar3.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          petMar3 petMar2) > do.log 2>&1
-XXX - running - Fri Jan 12 21:22:04 PST 2018
-    # real    598m36.466s
+    # real    266m54.816s
 
     # verify the convert link on the test browser is now active from petMar3 to
     # petMar2
@@ -760,34 +768,33 @@ XXX - running - Fri Jan 12 21:22:04 PST 2018
 	-ooc=/hive/data/genomes/petMar3/jkStuff/petMar3.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          petMar3 petMar1) > do.log 2>&1
-XXX - running - Fri Jan 12 21:22:04 PST 2018
-    # real    598m36.466s
+    # real    275m20.049s
 
     # verify the convert link on the test browser is now active from petMar3 to
     # petMar1
 
 #############################################################################
-#  BLATSERVERS ENTRY (TBD - 2018-01-09 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2018-02-13 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("petMar3", "blat1b", "17892", "1", "0"); \
+	VALUES ("petMar3", "blat1c", "17898", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("petMar3", "blat1b", "17893", "0", "1");' \
+	VALUES ("petMar3", "blat1c", "17899", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## reset default position to same protein location as hg38
-##  found by blat (TBD - 2018-01-09 - Hiram)
+## reset default position to location as petMar2 as found from liftOver
+##  (DONE - 2018-02-13 - Hiram)
 
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr21:2266579-2296356"
+    hgsql -e 'update dbDb set defaultPos="PIZI01000016v1:9749699-10085980"
 	where name="petMar3";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2018-01-10 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2018-02-13 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=petMar3 -tableCoverage all.joiner
@@ -796,18 +803,17 @@ XXX - running - Fri Jan 12 21:22:04 PST 2018
 
     cd /hive/data/genomes/petMar3
     time (makeDownloads.pl -workhorse=hgwdev petMar3) > downloads.log 2>&1
-    #  real    11m8.483s
+    #  real    9m36.528s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/petMar3/pushQ
     cd /hive/data/genomes/petMar3/pushQ
   time (makePushQSql.pl -redmineList petMar3) > petMar3.pushQ.sql 2> stderr.out
-    #  real    3m53.381s
+    #  real    3m59.567s
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: petMar3 does not have seq
     # WARNING: petMar3 does not have extFile
-    # WARNING: petMar3 does not have estOrientInfo
 
     ## there are warnings about the RBest and Syn chainNet tables, which we
     ## are not interested in at this time.  They can be left out.
@@ -819,11 +825,11 @@ XXX - running - Fri Jan 12 21:22:04 PST 2018
     # to verify the database.table list is correct, should be the same
     # line count for these two commands:
     wc -l redmine.petMar3.table.list
-    # 66 redmine.petMar3.table.list
+    # 67 redmine.petMar3.table.list
     awk -F'.' '{
 printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
 }' redmine.petMar3.table.list | while read L; do eval $L; done | wc -l
-    # 66
+    # 67
 
     # enter the path names to these files in the redmine issue to
     # make QA Ready:

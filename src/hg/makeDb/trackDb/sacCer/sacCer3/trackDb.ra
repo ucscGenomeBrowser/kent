@@ -26,4 +26,4 @@ pennantIcon 1.jpg ../goldenPath/help/liftOver.html "lifted from sacCer1"
 track spMut override
 group varRep
 
-include ../../refSeqComposite.ra
+include ../../refSeqComposite.ra alpha

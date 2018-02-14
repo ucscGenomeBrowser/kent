@@ -3,7 +3,6 @@ superTrack on hide
 group map
 shortLabel Mappability
 longLabel Hoffman Lab Umap and Bismap Mappability
-pennantIcon New red ../goldenPath/releaseLog.html "Released January 05, 2018"
 
     track umap
     parent mappability

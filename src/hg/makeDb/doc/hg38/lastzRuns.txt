@@ -10938,3 +10938,85 @@ TMPDIR=/dev/shm
     # 103174487 bases of 1102325870 (9.360%) in intersection
 
 #########################################################################
+# LASTZ human/hg38 vs. lamprey/petMar3 - (DONE - 2018-01-25 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzPetMar3.2018-01-25
+    cd /hive/data/genomes/hg38/bed/lastzPetMar3.2018-01-25
+
+    printf '# human vs lamprey
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=3
+SEQ1_LAP=10000
+
+# QUERY: lamprey petMar3
+SEQ2_DIR=/hive/data/genomes/petMar3/petMar3.2bit
+SEQ2_LEN=/hive/data/genomes/petMar3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzPetMar3.2018-01-25
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    117m35.788s
+
+    cat fb.hg38.chainPetMar3Link.txt
+    # 52661859 bases of 3049335806 (1.727%) in intersection
+
+    cat fb.hg38.chainSynPetMar3Link.txt
+    # 1508338 bases of 3049335806 (0.049%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` hg38 petMar3) \
+	> rbest.log 2>&1 &
+    # real    259m50.083s
+
+    cat fb.hg38.chainRBestPetMar3Link.txt
+    # 25411380 bases of 3049335806 (0.833%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/petMar3/bed/blastz.hg38.swap
+    cd /hive/data/genomes/petMar3/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzPetMar3.2018-01-25/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    12m51.092s
+
+    cat fb.petMar3.chainHg38Link.txt
+    # 51300303 bases of 1043181598 (4.918%) in intersection
+
+    cat fb.petMar3.chainSynHg38Link.txt
+    # 1425757 bases of 1043181598 (0.137%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` petMar3 hg38) \
+	> rbest.log 2>&1 &
+    # real    264m26.880s
+
+    cat fb.petMar3.chainRBestHg38Link.txt
+    # 25154743 bases of 1043181598 (2.411%) in intersection
+
+#########################################################################

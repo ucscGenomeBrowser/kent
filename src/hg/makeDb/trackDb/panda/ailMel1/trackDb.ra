@@ -7,3 +7,5 @@ track gap override
 html gap
 
 include trackDb.chainNet.ra
+
+include ../../refSeqComposite.ra alpha
