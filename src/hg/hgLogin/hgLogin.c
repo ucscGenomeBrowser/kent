@@ -418,7 +418,7 @@ cartRemove(cart, "hgLogin_sendMailContain");
 }
 
 void sendMailOut(char *email, char *subject, char *msg)
-/* send mail to email address */
+/* send username reminder email to email address */
 {
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
@@ -1106,7 +1106,7 @@ if (sameString(helpWith,"username"))
     else 
         {
         sqlSafef(query,sizeof(query),
-            "SELECT password FROM gbMembers WHERE email='%s'", email);
+            "SELECT password FROM gbMembers WHERE email='%s' or recovEmail='%s'", email, email);
         char *password = sqlQuickString(conn, query);
         cartSetString(cart, "hgLogin_sendMailTo", email);
         cartSetString(cart, "hgLogin_sendMailContain", "username(s)");
