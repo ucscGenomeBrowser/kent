@@ -1174,8 +1174,7 @@ else if (gotCds)
     if (curOpt == baseColorDrawOff)
         disabled = "disabled";
     printf("<br /><b><span id='%sCodonNumberingLabel' %s>Show codon numbering</b>:</span>\n", 
-                name, curOpt == baseColorDrawOff ? "class='disabled'" : "");
-    cgiMakeCheckBoxMore(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE), disabled);
+                name, curOpt == baseColorDrawOff ? "class='disabled'" : "");    cgiMakeCheckBoxMore(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE), disabled);
     }
 else if (gotSeq)
     {
@@ -5299,6 +5298,15 @@ endControlGrid(&cg);
 cfgEndBox(boxed);
 }
 
+void genbankShowPatentControl(struct cart *cart, struct trackDb *tdb, char *prefix)
+/* controls for enabling display of GENBANK RNA patent sequences */
+{
+char name[256];
+safef(name, sizeof(name), "%s.%s", prefix, SHOW_PATENT_SEQUENCES_SUFFIX);
+printf("<P><B>Show patent sequences</B>:");
+cgiMakeCheckBox(name, cartUsualBoolean(cart, name, FALSE));
+}
+
 void mrnaCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
 /* Put up UI for an mRNA (or EST) track. */
 {
@@ -5334,6 +5342,8 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 baseColorDrawOptDropDown(cart, tdb);
 indelShowOptions(cart, tdb);
+if (sameString(tdb->track, "mrna") || sameString(tdb->track, "xenoMrna"))
+    genbankShowPatentControl(cart, tdb, prefix);
 wigOption(cart, prefix, title, tdb);
 cfgEndBox(boxed);
 }
