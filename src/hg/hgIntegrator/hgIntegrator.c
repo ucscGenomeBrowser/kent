@@ -234,7 +234,7 @@ for (tableGroup = tableGroups;  tableGroup != NULL;  tableGroup = tableGroup->ne
             else
                 {
                 char likeExpr[PATH_LEN];
-                safef(likeExpr, sizeof(likeExpr), "like 'chr%%\\_%s'", tableName);
+                safef(likeExpr, sizeof(likeExpr), "chr%%\\_%s", tableName);
                 realTables = sqlListTablesLike(conn, likeExpr);
                 if (realTables != NULL)
                     realTable = realTables->name;

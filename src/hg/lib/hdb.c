@@ -5550,7 +5550,7 @@ static struct slName *hListSnpNNNTables(struct sqlConnection *conn, char *suffix
  * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
 {
 char likeExpr[64];
-safef(likeExpr, sizeof(likeExpr), "LIKE 'snp___%s'", suffix ? suffix : "");
+safef(likeExpr, sizeof(likeExpr), "snp___%s", suffix ? suffix : "");
 struct slName *snpNNNTables = sqlListTablesLike(conn, likeExpr);
 slReverse(&snpNNNTables);
 // Trim non-snpNNN tables e.g. snpSeq in hg17, hg18:
