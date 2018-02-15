@@ -2726,6 +2726,20 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>   showNames off</pre>
 </DIV>
 
+<div class="doWiggle"><span class="types bam"></span>
+<div class="format"><code>doWiggle on</code></div>
+    <p>The doWiggle setting enables the BAM data to be displayed as a bar graph where the
+    height is proportional to the number of reads mapped to each genomic position. Through
+    dynamic calculation of items in the current window, this feature plots a line similar
+    to a wiggle graph that can be customized with a number of graph-based configuration options
+    such as drawing indicator lines, smoothing plots, adjusting graph height and vertical range,
+    and switching from bars to points. Please note that the feature is best displayed with
+    &quot;Display mode&quot; set to full and that the default &quot;Data view scaling&quot;
+    is &quot;auto-scale to data view.&quot;</p>
+    <p><b>Example:</b></p>
+    <pre>   doWiggle on</pre>
+</div>
+
 <DIV class="bam_example"><span class="types bam"></span>
 <div class="format"><B>Example of a bam track</B></div>
     <pre>

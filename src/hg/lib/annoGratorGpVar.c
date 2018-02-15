@@ -702,6 +702,17 @@ if (isAllNt(gpFx->gAllele, strlen(gpFx->gAllele)))
 gpFx->soNumber = term;
 gpFx->detailType = none;
 aggvStringifyGpFx(&wordsOut[gpColCount], gpFx, self->lm);
+if (self->hgvsMakeG)
+    {
+    // Add HGVS genomic term
+    struct bed3 *variantBed = (struct bed3 *)variant;
+    char *chromAcc = hRefSeqAccForChrom(sSelf->assembly->name, variant->chrom);
+    char *hgvsG = hgvsGFromVariant(self->gSeqWin, variantBed, gpFx->gAllele, chromAcc,
+                                   self->hgvsBreakDelIns);
+    wordsOut[sSelf->numCols-3] = lmCloneString(callerLm, hgvsG);
+    freeMem(chromAcc);
+    freeMem(hgvsG);
+    }
 return annoRowFromStringArray(variant->chrom, variant->chromStart, variant->chromEnd, rjFail,
 			      wordsOut, sSelf->numCols, callerLm);
 }

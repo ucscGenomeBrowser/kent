@@ -248,7 +248,7 @@ static void filterGenbankPatentSequences(struct track *tg, struct linkedFeatures
 struct linkedFeatures *lf, *newLf = NULL;
 while ((lf = slPopHead(pLfList)) != NULL)
     {
-    if (!isGenbenkPatentAccession(lf->name))
+    if (!isGenbankPatentAccession(lf->name))
         slAddHead(&newLf, lf);
     }
 slReverse(&newLf);

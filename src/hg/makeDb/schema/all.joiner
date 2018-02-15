@@ -6469,23 +6469,23 @@ identifier ws245Genes
 
 identifier ncbiRefSeq
 "NCBI RefSeq gene track"
-    $ncbiRefSeq.ncbiRefSeq.name dupeOk
-    $ncbiRefSeq.ncbiRefSeqLink.id full
-    $ncbiRefSeq.ncbiRefSeqCurated.name
-    $ncbiRefSeq.ncbiRefSeqPredicted.name
-    $ncbiRefSeq.ncbiRefSeqPsl.qName
-    $ncbiRefSeq.ncbiRefSeqCds.id
-    $ncbiRefSeq.seqNcbiRefSeq.acc
+    $gbd.ncbiRefSeq.name dupeOk
+    $gbd.ncbiRefSeqLink.id full
+    $gbd.ncbiRefSeqCurated.name
+    $gbd.ncbiRefSeqPredicted.name
+    $gbd.ncbiRefSeqPsl.qName
+    $gbd.ncbiRefSeqCds.id
+    $gbd.seqNcbiRefSeq.acc
 
 identifier ncbiRefSeqPepTable
 "NCBI RefSeq protein sequences"
-    $ncbiRefSeq.ncbiRefSeqPepTable.name
-    $ncbiRefSeq.ncbiRefSeqLink.protAcc full exclude=
+    $gbd.ncbiRefSeqPepTable.name
+    $gbd.ncbiRefSeqLink.protAcc full exclude=
 
 identifier ncbiRefSeqRna
 "NCBI RefSeq RNA sequences"
-    $ncbiRefSeq.extNcbiRefSeq.id
-    $ncbiRefSeq.seqNcbiRefSeq.extFile full
+    $gbd.extNcbiRefSeq.id
+    $gbd.seqNcbiRefSeq.extFile full
 
 # GTEx (Genotype-Tissue Expression)
 
