@@ -666,7 +666,7 @@ struct slName *findDbNsfpTables()
 if (startsWith(hubTrackPrefix, database))
     return NULL;
 struct sqlConnection *conn = hAllocConn(database);
-struct slName *dbNsfpTables = sqlListTablesLike(conn, "LIKE 'dbNsfp%'");
+struct slName *dbNsfpTables = sqlListTablesLike(conn, "dbNsfp%");
 hFreeConn(&conn);
 return dbNsfpTables;
 }
