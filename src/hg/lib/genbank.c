@@ -414,7 +414,7 @@ static char *genbankPatentPrefixes[] =
 
 static struct hash *genbankPatentPrefixesHash = NULL;
 
-static void makeGenbenkPatentPrefixHash(void)
+static void makeGenbankPatentPrefixHash(void)
 /* build hash of genbank accession prefixes on first uses */
 {
 int i;
@@ -423,11 +423,11 @@ for (i = 0; genbankPatentPrefixes[i] != NULL; i++)
     hashAddInt(genbankPatentPrefixesHash, genbankPatentPrefixes[i], TRUE);
 }
 
-boolean isGenbenkPatentAccession(char *acc)
+boolean isGenbankPatentAccession(char *acc)
 /* Is this an accession prefix allocated to patent sequences. */
 {
 if (genbankPatentPrefixesHash == NULL)
-    makeGenbenkPatentPrefixHash();
+    makeGenbankPatentPrefixHash();
 
 if (strlen(acc) >= GENBANK_ACC_BUFSZ)
     return FALSE;  // too big, shouldn't happen
