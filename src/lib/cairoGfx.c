@@ -136,12 +136,18 @@ for (i=0; i<width; ++i)
     }
 }
 
+static void setSourceRgb(cairo_t *cr, Color color)
+/* set the rgb color */
+{
+    struct rgbColor col = mgcColorIxToRgb(NULL, color);
+    cairo_set_source_rgb(cr, col.r/255.0, col.g/255.0, col.b/255.0);
+}
+
 void mgcDrawBox(struct memGfx *mgc, int x, int y, int width, int height, Color color)
 {
 cairo_t *cr = mgc->cr;
 cairo_set_line_width(cr, 1);
-struct rgbColor col = mgcColorIxToRgb(mgc, color);
-cairo_set_source_rgb(cr, col.r/255.0, col.g/255.0, col.b/255.0);
+setSourceRgb(cr, color);
 cairo_rectangle(cr, x, y, width, height);
 //cairo_stroke_preserve(cr);
 cairo_fill(cr);
@@ -151,28 +157,39 @@ void mgcDrawLine(struct memGfx *mg, int x1, int y1, int x2, int y2, Color color)
 /* Draw a line from one point to another. */
 {
 cairo_t *cr = mg->cr;
-struct rgbColor col = mgcColorIxToRgb(mg, color);
-cairo_set_source_rgb(cr, col.r/255.0, col.g/255.0, col.b/255.0);
+setSourceRgb(cr, color);
 cairo_set_line_width(cr, 1);
 cairo_move_to(cr, x1, y1);
 cairo_line_to(cr, x2, y2);
 cairo_stroke(cr);
 }
 
-void mgcDrawPoly(struct memGfx *mg, struct gfxPoly *poly, Color color,
-	boolean filled)
+void mgcDrawPoly(struct memGfx *mgc, struct gfxPoly *poly, Color color, boolean filled)
 {
-struct gfxPoint *a, *b, *end;
+cairo_t *cr = mgc->cr;
+setSourceRgb(cr, color);
 
-a = end = poly->ptList;
-b = a->next;
-for (;;)
+struct gfxPoint *p = poly->ptList;
+struct gfxPoint *end = p;
+
+if (p != NULL)
     {
-    mgcDrawLine(mg, a->x, a->y, b->x, b->y, color);
-    a = b;
-    b = b->next;
-    if (a == end)
-        break;
+    cairo_move_to(cr, p->x, p->y);
+    p = p->next;
+    }
+
+while (p != end) 
+    {
+    cairo_line_to(cr, p->x, p->y);
+    p = p->next;
+    }
+
+cairo_close_path(cr);
+
+if (filled) 
+    {
+    cairo_stroke_preserve(cr);
+    cairo_fill(cr);
     }
 }
 
@@ -247,8 +264,7 @@ cairo_t *cr = mgc->cr;
 // For cairo, the only data we use from the MgFont object is the size
 int fontSize = font->size;
 cairo_set_font_size(cr, fontSize);
-struct rgbColor col = mgcColorIxToRgb(mgc, color);
-cairo_set_source_rgb(cr, col.r/255.0, col.g/255.0, col.b/255.0);
+setSourceRgb(mgc->cr, color);
 // XX currenly only supporting the Sans font - should we extend this? Guess no one ever changes the font
 cairo_select_font_face(cr, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
 cairo_move_to(cr, x, y+fontSize);
