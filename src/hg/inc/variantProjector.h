@@ -85,12 +85,19 @@ struct vpPep
     // boolean riboFrameShift;        // CDS encodes ribosomal frameshift (complex translation)
     };
 
+void vpExpandIndelGaps(struct psl *txAli, struct seqWindow *gSeqWin, struct dnaSeq *txSeq);
+/* If txAli has any gaps that are too short to be introns, they are often indels that could be
+ * shifted left and/or right.  If so, turn those gaps into double-sided gaps that span the
+ * ambiguous region. This may change gSeqWin's range. */
+
 struct vpTx *vpGenomicToTranscript(struct seqWindow *gSeqWin, struct bed3 *gBed3, char *gAlt,
                                    struct psl *txAli, struct dnaSeq *txSeq);
 /* Project a genomic variant onto a transcript, trimming identical bases at the beginning and/or
  * end of ref and alt alleles and shifting ambiguous indel placements in the direction of
  * transcription except across an exon-intron boundary.
  * Both ref and alt must be [ACGTN]-only (no symbolic alleles like "." or "-" or "<DEL>").
+ * Calling vpExpandIndelGaps on txAli before calling this will improve detection of variants
+ * near ambiguously placed indels between genome and transcript.
  * This may change gSeqWin's range. */
 
 void vpTxFree(struct vpTx **pVt);
