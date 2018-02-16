@@ -23,7 +23,7 @@ It is best to install these packages with your standard operating
 system package management tools:
 
 * Debian/Ubuntu: `apt-get install ghostscript apache2 mysql-server gmt r-base uuid-dev`
-* Redhat/Fedora/CentOS: `yum install libpng12 httpd ghostscript GMT hdf5 R libuuid`
+* Redhat/Fedora/CentOS: `yum install libpng12 httpd ghostscript GMT hdf5 R libuuid-devel`
 
 # Hardware and disk space requirements
 
