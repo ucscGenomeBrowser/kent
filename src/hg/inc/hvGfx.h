@@ -22,6 +22,9 @@ struct hvGfx
     int clipMaxY;
 };
 
+void hvGfxDoUseCairo();
+/* use Cairo from now on */
+
 struct hvGfx *hvGfxOpenPng(int width, int height, char *fileName, boolean useTransparency);
 /* Open up something that we'll write out as a PNG someday.
  * If useTransparency, then the first color in memgfx's colormap/palette is

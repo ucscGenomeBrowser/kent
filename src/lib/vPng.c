@@ -9,6 +9,9 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
+#ifdef USE_CAIRO
+#include "cairoGfx.h"
+#endif
 
 struct memPng
 /* Something that handles a PNG. */
@@ -25,9 +28,20 @@ struct memPng *g = *pG;
 if (g != NULL)
     {
     struct memGfx *mg = (struct memGfx *)g;
-    mgSavePng(mg, g->fileName, g->useTransparency);
+#ifdef USE_CAIRO
+    if (mg->cr != NULL)
+    {
+        mgcSavePng(mg, g->fileName, g->useTransparency);
+        mgcFree(&mg);
+    }
+    else
+#endif
+    {
+        mgSavePng(mg, g->fileName, g->useTransparency);
+        mgFree(&mg);
+    }
+
     freez(&g->fileName);
-    mgFree(&mg);
     *pG = NULL;
     }
 }
@@ -65,4 +79,37 @@ freez(&mg);	/* We don't need this copy any more. */
 vg->data = png;
 return vg;
 }
+
+#ifdef USE_CAIRO
+
+struct vGfx *vgOpenPngCairo(int width, int height, char *fileName, boolean useTransparency)
+/* Open up a Cairo canvas, make it look like a memGfx object */
+{
+struct memPng *png;
+struct memGfx *mg;
+
+AllocVar(png);
+mg = mgcNew(width, height, fileName);
+png->fileName = cloneString(fileName);
+png->mg = *mg;
+freez(&mg);	/* We don't need this copy any more. */
+
+struct vGfx *vg;
+vg = vgHalfInit(width, height);
+vgMgcMethods(vg);
+vg->close = (vg_close)memPngClose;
+vg->data = png;
+return vg;
+}
+
+#else
+
+struct vGfx *vgOpenPngCairo(int width, int height, char *fileName, boolean useTransparency)
+/* dummy function */
+{
+printf("Error: Cairo activated, but not compiled with Cairo");
+return vgOpenPng(width, height, fileName, useTransparency);
+}
+
+#endif
 

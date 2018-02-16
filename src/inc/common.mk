@@ -28,6 +28,15 @@ ifeq (${PTHREADLIB},)
   PTHREADLIB=-lpthread
 endif
 
+ifneq (${USE_CAIRO},)
+  # for dynamic build, for some reason -lpng is required, probably because the CentOs cairo needs the CentOs png library
+  L+=-lcairo -lpng
+  # for a static build, one needs static versions of quite a few other libraries. The number could be reduced, if freetype was not used.
+  # pixman is definitely required, it's cairo's bitmap
+  #L+=~max/usr/lib/libcairo.a ~max/usr/lib/libpixman-1.a ~max/usr/lib/libfreetype.a ~max/usr/lib/libfontconfig.a ~max/usr/lib/libbz2.a ~max/usr/lib/libexpat.a ~max/usr/lib/libfreetype.a ~max/usr/lib/libpng.a
+  HG_DEFS+=-DUSE_CAIRO
+endif
+
 # pthreads is required
 ifneq ($(UNAME_S),Darwin)
   L+=${PTHREADLIB}

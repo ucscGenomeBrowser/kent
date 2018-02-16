@@ -9,6 +9,7 @@
 #include "hvGfx.h"
 #include "obscure.h"
 
+bool hvGfxUseCairo = FALSE;  /* shall hvGfxOpenPng use the Cairo drawing engine ? */
 
 static struct hvGfx *hvGfxAlloc(struct vGfx *vg)
 /* allocate a hvgGfx object */
@@ -24,10 +25,19 @@ hvg->clipMaxY = vg->height;
 return hvg;
 }
 
+void hvGfxDoUseCairo()
+/* use Cairo from now on */
+{
+    hvGfxUseCairo = TRUE;
+}
+
 struct hvGfx *hvGfxOpenPng(int width, int height, char *fileName, boolean useTransparency)
 /* Open up something that we'll write out as a PNG someday. */
 {
-return hvGfxAlloc(vgOpenPng(width, height, fileName, useTransparency));
+if (hvGfxUseCairo)
+    return hvGfxAlloc(vgOpenPngCairo(width, height, fileName, useTransparency));
+else
+    return hvGfxAlloc(vgOpenPng(width, height, fileName, useTransparency));
 }
 
 struct hvGfx *hvGfxOpenPostScript(int width, int height, char *fileName)

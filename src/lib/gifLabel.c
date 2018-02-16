@@ -54,20 +54,6 @@ return mg;
 }
 
 
-boolean sameGifContents(struct memGfx *n1, struct memGfx *n2)
-/* compare two files and return true if their contents are identical using binary compare */
-{
-if (n1 == NULL) {  return FALSE; }
-if (n2 == NULL) { return FALSE; }
-if (n1->width != n2->width) { return FALSE; }
-if (n1->height != n2->height) { return FALSE; }
-if (n1->colorsUsed != n2->colorsUsed) { return FALSE; }
-if (memcmp(n1->colorMap, n2->colorMap, 256 * 3)!=0) { return FALSE; } /* gif colormaps differ */
-long bytes = (long)n1->width * n1->height;
-if (memcmp(n1->pixels, n2->pixels, bytes)!=0) { return FALSE; } /* gif contents differ */
-return TRUE;
-}
-
 void gifLabelVerticalText(char *fileName, char **labels, int labelCount, 
 	int height)
 /* Make a gif file with given labels.  This will check to see if fileName

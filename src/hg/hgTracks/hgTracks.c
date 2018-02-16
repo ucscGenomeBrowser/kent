@@ -9889,6 +9889,10 @@ getDbAndGenome(cart, &database, &organism, oldVars);
 
 initGenbankTableNames(database);
 
+// activate cairo only if activated in hg.conf or with a cart variable
+if (cartBoolean(cart, "cairo") || cfgOptionBooleanDefault("cairo", FALSE))
+    hvGfxDoUseCairo();
+
 protDbName = hPdbFromGdb(database);
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))

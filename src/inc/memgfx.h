@@ -13,6 +13,10 @@
 #include "gfxPoly.h"
 #endif
 
+#ifdef USE_CAIRO
+#include "cairo/cairo.h"
+#endif
+
 typedef unsigned int Color;
 
 
@@ -89,7 +93,11 @@ extern struct rgbColor mgFixedColors[9];  /* Contains MG_WHITE - MG_GRAY */
 
 struct memGfx
     {
-    Color *pixels;
+    Color *pixels;              /* not NULL if using our own drawing code */
+    #ifdef USE_CAIRO
+    cairo_t *cr;         /* not NULL if cairo drawing is used */
+    #endif
+
     int width, height;
     struct rgbColor colorMap[256];
     int colorsUsed;
@@ -149,6 +157,14 @@ void _mgPutDotMultiply(struct memGfx *mg, int x, int y,Color color);
 
 INLINE void mgPutDot(struct memGfx *mg, int x, int y,Color color)
 {
+#ifdef USE_CAIRO
+if (mg->cr!=NULL)
+    {
+    printf("mgPutDot not implemented for Cairo");
+    return;
+    }
+#endif
+
 if ((x)>=(mg)->clipMinX && (x) < (mg)->clipMaxX && (y)>=(mg)->clipMinY  && (y) < (mg)->clipMaxY) 
     {
         switch(mg->writeMode)
@@ -166,6 +182,7 @@ if ((x)>=(mg)->clipMinX && (x) < (mg)->clipMaxX && (y)>=(mg)->clipMinY  && (y) <
         }
     }
 }
+
 /* Clipped put dot */
 
 #define mgGetDot(mg,x,y) ((x)>=(mg)->clipMinX && (x) < (mg)->clipMaxX && (y)>=(mg)->clipMinY  && (y) < (mg)->clipMaxY) ? _mgGetDot(mg,x,y) : 0

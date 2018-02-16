@@ -99,6 +99,9 @@ struct vGfx *vgOpenPng(int width, int height, char *fileName, boolean useTranspa
  * assumed to be the image background color, and pixels of that color
  * are made transparent. */
 
+struct vGfx *vgOpenPngCairo(int width, int height, char *fileName, boolean useTransparency);
+/* Like vgOpenPng, but using the Cairo library */
+
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName);
 /* Open up something that will someday be a PostScript file. */
 
