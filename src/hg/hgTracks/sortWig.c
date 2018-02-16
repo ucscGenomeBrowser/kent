@@ -40,12 +40,20 @@ else
 return sortGroup;
 }
 
-
 struct trackSum
     {
     char *name;
     unsigned long long sum;
     };
+
+int nameCompare(const void *vone, const void *vtwo)
+/* Compares two trackBins by their track name */
+{
+struct trackBins *one = *((struct trackBins **)vone);
+struct trackBins *two = *((struct trackBins **)vtwo);
+
+return strcmp(one->name, two->name);
+}
 
 int sumCompare(const void *vone, const void *vtwo)
 {
@@ -93,6 +101,10 @@ while ((hel = hashNext(&cookie)) != NULL)
     AllocArray(wigNames, numRows);
 
     struct trackBins *tb = sg->trackBins;
+    
+    // make sure initial state is always the same.
+    slSort(&tb, nameCompare);
+
     int ii, jj;
     struct trackSum *sums;
     AllocArray(sums, numRows);
@@ -137,8 +149,6 @@ while ((hel = hashNext(&cookie)) != NULL)
         dyStringPrintf(dy, "%s ", wigNames[order[ii] - 1]);
 
     cartSetString(cart, group, dy->string);
-
-    //printf("%s\n",buffer);
     }
 }
 
