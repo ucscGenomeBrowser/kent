@@ -348,6 +348,7 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
 
     }
 jsInlineF("\");\n");
+jsReloadOnBackButton(cart);
 jsInlineF("hgCollection.init();\n");
 }
 
@@ -873,7 +874,12 @@ hashReplace(newTdb->settingsHash, "track", makeUnique(nameHash, trackName));
 hashReplace(newTdb->settingsHash, "parent", trackHubSkipHubName(collectionName));
 char *tdbType = trackDbSetting(newTdb, "tdbType");
 if (tdbType != NULL)
+    {
     hashReplace(newTdb->settingsHash, "type", tdbType);
+    hashReplace(newTdb->settingsHash, "shortLabel", trackDbSetting(newTdb, "name"));
+    hashReplace(newTdb->settingsHash, "longLabel", trackDbSetting(newTdb, "description"));
+    }
+
 
 outHubHeader(f, db);
 struct sqlConnection *conn = hAllocConn(db);
