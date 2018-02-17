@@ -95,7 +95,8 @@ struct vpTx *vpGenomicToTranscript(struct seqWindow *gSeqWin, struct bed3 *gBed3
 /* Project a genomic variant onto a transcript, trimming identical bases at the beginning and/or
  * end of ref and alt alleles and shifting ambiguous indel placements in the direction of
  * transcription except across an exon-intron boundary.
- * Both ref and alt must be [ACGTN]-only (no symbolic alleles like "." or "-" or "<DEL>").
+ * Both ref and alt must be [ACGTN]-only (no symbolic alleles like "." or "-" or "<DUP>"
+ * but "<DEL>" is OK).
  * Calling vpExpandIndelGaps on txAli before calling this will improve detection of variants
  * near ambiguously placed indels between genome and transcript.
  * This may change gSeqWin's range. */
