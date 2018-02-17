@@ -166,6 +166,7 @@ else if (!isAllNt(alt, strlen(alt)))
     }
 char *chromAcc = hRefSeqAccForChrom(db, gBed3->chrom);
 char *hgvsG = hgvsGFromVariant(gSeqWin, gBed3, alt, chromAcc, breakDelIns);
+vpExpandIndelGaps(psl, gSeqWin, txSeq);
 struct vpTx *vpTx = vpGenomicToTranscript(gSeqWin, gBed3, alt, psl, txSeq);
 char *hgvsN = hgvsNFromVpTx(vpTx, gSeqWin, psl, txSeq, breakDelIns);
 char *hgvsC = NULL;

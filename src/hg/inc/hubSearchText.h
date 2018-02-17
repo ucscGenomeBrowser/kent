@@ -13,6 +13,7 @@ enum hubSearchTextTextLength
     {
     hubSearchTextShort = 0,
     hubSearchTextLong = 1,
+    hubSearchTextMeta = 2,
     };
 struct hubSearchText
 /* Track hub descriptions */
@@ -22,7 +23,7 @@ struct hubSearchText
     char *db;	/* Assembly name (UCSC format) for Assembly and Track descriptions, NULL for hub descriptions */
     char *track;	/* Track name for track descriptions, NULL for others */
     char *label;	/* Name to display in search results */
-    enum hubSearchTextTextLength textLength;	/* Length of text (short for labels, long for description pages) */
+    enum hubSearchTextTextLength textLength;	/* Length of text (short for labels, long for description pages, meta for metadata) */
     char *text;	/* Description text */
     };
 

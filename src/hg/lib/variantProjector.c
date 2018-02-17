@@ -62,16 +62,16 @@ txPos->intron3Distance = intronEnd - gOffset;
 }
 
 static boolean genomeHasDeletion(struct psl *txAli, int ix)
-/* Return TRUE if block ix has a gap to the right that skips 0 bases on target (reference genome)
- * and >0 bases on query (transcript) -- i.e. not an intron, but rather some missing base(s)
+/* Return TRUE if block ix has a gap to the right that skips fewer bases on target (genome)
+ * than on query (transcript) -- i.e. not an intron, but rather some missing base(s)
  * in the reference genome. */
 {
 if (ix < 0 || ix >= txAli->blockCount - 1)
     return FALSE;
 int blockSize = txAli->blockSizes[ix];
-return (txAli->tStarts[ix+1] == txAli->tStarts[ix] + blockSize &&
-        txAli->qStarts[ix+1] > txAli->qStarts[ix] + blockSize);
-
+int tGapSize = txAli->tStarts[ix+1] - txAli->tStarts[ix] - blockSize;
+int qGapSize = txAli->qStarts[ix+1] - txAli->qStarts[ix] - blockSize;
+return (tGapSize < qGapSize);
 }
 
 // Google search on "minimal intron size" turned up a study of shortest known introns, ~48-50 in
@@ -463,7 +463,9 @@ if ((ambigStart < blkEnd && ambigEnd > blkStart) ||
     // Add in blk's sequence between ambigStart and varStart, if any
     appendOverlap(gSeqWin, blkStart, blkEnd, ambigStart, varStart, txAlt, txAltSize, pSplicedLen);
     // If gAlt hasn't already been added, and blk overlaps [varStart,varEnd), add gAlt
-    if (varStart >= blkStart && varEnd <= blkEnd && !*pAddedGAlt)
+    if (!*pAddedGAlt &&
+        ((varStart < blkEnd && varEnd > blkStart) ||
+         (varStart == varEnd && varStart <= blkEnd && varEnd >= blkStart)))
         {
         safecpy(txAlt+*pSplicedLen, txAltSize-*pSplicedLen, gAlt);
         *pSplicedLen += strlen(gAlt);
@@ -645,12 +647,64 @@ else if (hasAnomalousGaps(txAli, gStart, gEnd))
     }
 }
 
+void vpExpandIndelGaps(struct psl *txAli, struct seqWindow *gSeqWin, struct dnaSeq *txSeq)
+/* If txAli has any gaps that are too short to be introns, they are often indels that could be
+ * shifted left and/or right.  If so, turn those gaps into double-sided gaps that span the
+ * ambiguous region. This may change gSeqWin's range. */
+{
+int ix;
+for (ix = 0;  ix < txAli->blockCount - 1;  ix++)
+    {
+    if (pslIntronTooShort(txAli, ix, MIN_INTRON))
+        {
+        gSeqWin->fetch(gSeqWin, txAli->tName, txAli->tStart, txAli->tEnd);
+        // See if it is possible to shift the gap left and/or right on the genome.
+        uint gStartL = txAli->tStarts[ix] + txAli->blockSizes[ix];
+        uint gEndL = txAli->tStarts[ix+1];
+        uint gStartR = gStartL, gEndR = gEndL;
+        uint qLen = txAli->qStarts[ix+1] - txAli->qStarts[ix] - txAli->blockSizes[ix];
+        char txCpyL[qLen+1], txCpyR[qLen+1];
+        if (pslQStrand(txAli) == '-')
+            {
+            // Change query sequence to genome + strand
+            uint qGapStart = txAli->qSize - txAli->qStarts[ix+1];
+            safencpy(txCpyL, sizeof(txCpyL), txSeq->dna+qGapStart, qLen);
+            reverseComplement(txCpyL, qLen);
+            }
+        else
+            safencpy(txCpyL, sizeof(txCpyL), txSeq->dna+txAli->qStarts[ix+1]-qLen, qLen);
+        safencpy(txCpyR, sizeof(txCpyR), txCpyL, qLen);
+        uint shiftL = indelShift(gSeqWin, &gStartL, &gEndL, txCpyL, INDEL_SHIFT_NO_MAX, isdLeft);
+        uint shiftR = indelShift(gSeqWin, &gStartR, &gEndR, txCpyR, INDEL_SHIFT_NO_MAX, isdRight);
+        if (shiftL)
+            {
+            // Expand gap to the left -- decrease blockSizes[ix].
+            if (txAli->blockSizes[ix] < shiftL)
+                errAbort("vpExpandIndelGaps: support for deleting/merging blocks not implemented");
+            txAli->blockSizes[ix] -= shiftL;
+            }
+        if (shiftR)
+            {
+            // Expand gap to the right -- increase {t,q}Starts[ix+1], decrease blockSizes[ix+1]
+            if (txAli->blockSizes[ix] < shiftR)
+                errAbort("vpExpandIndelGaps: support for deleting/merging blocks not implemented");
+            txAli->tStarts[ix+1] += shiftR;
+            txAli->qStarts[ix+1] += shiftR;
+            txAli->blockSizes[ix+1] -= shiftR;
+            }
+        }
+    }
+}
+
 struct vpTx *vpGenomicToTranscript(struct seqWindow *gSeqWin, struct bed3 *gBed3, char *gAlt,
                                    struct psl *txAli, struct dnaSeq *txSeq)
 /* Project a genomic variant onto a transcript, trimming identical bases at the beginning and/or
  * end of ref and alt alleles and shifting ambiguous indel placements in the direction of
  * transcription except across an exon-intron boundary.
- * Both ref and alt must be [ACGTN]-only (no symbolic alleles like "." or "-" or "<DEL>").
+ * Both ref and alt must be [ACGTN]-only (no symbolic alleles like "." or "-" or "<DUP>"
+ * but "<DEL>" is OK).
+ * Calling vpExpandIndelGaps on txAli before calling this will improve detection of variants
+ * near ambiguously placed indels between genome and transcript.
  * This may change gSeqWin's range. */
 {
 if (sameString(gAlt, "<DEL>"))
