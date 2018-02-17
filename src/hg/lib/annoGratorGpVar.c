@@ -648,6 +648,7 @@ struct allele *allele;
 for (allele = variant->alleles;  allele != NULL;  allele = allele->next)
     {
     char *alt = allele->sequence;
+    vpExpandIndelGaps(psl, self->gSeqWin, txSeq);
     struct vpTx *vpTx = vpGenomicToTranscript(self->gSeqWin, variantBed, alt, psl, txSeq);
     if (!allele->isReference || vpTx->genomeMismatch)
         {
@@ -673,6 +674,7 @@ for (allele = variant->alleles;  allele != NULL;  allele = allele->next)
         }
     vpTxFree(&vpTx);
     }
+pslFree(&psl);
 freeMem(chromAcc);
 return rowList;
 }
