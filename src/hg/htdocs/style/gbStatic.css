@@ -1,0 +1,349 @@
+/* Genome Browser CSS for static pages
+ *      Look and feel based on hgGateway/JWestDesign and GB menu styling
+ *      This file is intended to be updateable outside of GB release cycle
+ *      (settings here should not affect CGIs).
+ *
+ * Copyright (C) 2016 The Regents of the University of California
+ */
+
+/* For conventions followed in this file, see README.txt */
+
+/* Colors */
+
+.gbsBlueLight{
+    background-color: #4c759c;
+}
+
+.gbsGold {
+     background-color: #eaca92;
+}
+
+.gbsGreyLight {
+    background-color: #ededed;
+}
+
+.gbsGreyLighter {
+    background-color: #f5f5f5;
+}
+
+.gbsYellowLight {
+    background-color: #ffffe5;
+}
+
+.gbsRedDark {
+    background-color: #7e1f16;
+}
+
+/* Text styling */
+
+.gbsWarnText {
+    color: red;
+    font-weight: bold;
+}
+
+/* Overall page styling */
+
+.gbsPage {
+    line-height: 1.3;   /* current browser pages are 1.4 (a little dense), bootstrap is 1.2 */
+    font-size: 15px;
+    color: black;
+}
+
+/* Page header */
+.gbsPage h1 {
+    padding: 5px 30px;
+    /* needed to adjust margins after menu?  copying jwest.css here, with odd neg. margin */
+    margin: 0 -16px 5px -16px; 
+    background-color: #eaca92;  /* gold */
+    color: black;
+    font-size: 21px;    /* same as current static pages */
+    font-weight: bold;
+    /* font-weight: 500;   /* a little more subtle than bold */
+}
+
+/* Section header */
+.gbsPage h2 {
+    padding: 6px 20px;
+    background-color: #4c759c;  /* light blue */
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+/* Subsection header */
+.gbsPage h3 {
+    display: inline-block;      /* limits item width so background color doesn't span window */
+    padding: 6px 20px;
+    margin-bottom: 0;           /* needed to avoid stacking margins with inline-block */
+    background-color: #dde6ee;  /* light slate blue-gray (lightened h2 color) */
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.gbsPage hr {
+    margin-left: 16px;
+    border-style: inset;
+}
+
+/* Paragraph title */
+
+.gbsPage h6 {
+    margin-top: 15px;
+    margin-left: 15px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* Paragraph */
+.gbsPage p {
+    margin: 15px 12px 0 15px;
+}
+
+/* Link */
+.gbsPage a {
+     font-weight: bold;
+}
+
+/* Code */
+
+.gbsPage code {
+    font-size: 15px;
+    background-color: #ededed;          /* light gray */
+    padding: 0 5px;
+}
+
+.gbsPage pre {
+    /* width: 85%; */
+    padding: 5px;
+    padding-left: 8px;
+    margin-left: 30px;
+    line-height: normal;
+    background-color: #ededed;          /* light gray */
+}
+
+.gbsPage pre > code {
+    padding: 0;
+}
+
+/* Lists */
+
+.gbsPage li {
+    margin-top: 8px;
+}
+
+/* Bulleted list */
+
+.gbsPage ul {
+    margin-top: 8px;
+    margin-left: 15px;
+    list-style-type: none;      /* Use custom icons instead of bullets */
+}
+
+.gbsPage ul li {
+    position: relative; /* from hgGateway */
+}
+
+.gbsPage ul li::before {   /* square bullets, from hgGateway */
+    position: absolute;
+    top: 0.4em;
+    left: -1em;
+    width: 8px;
+    height: 8px;
+    background-color: #7e1f16;  /* dark red */
+    content: '';
+}
+
+/* List without bullets */
+
+.gbsPage ul.gbsNoBullet {
+    padding-left: 20px;
+}
+
+.gbsPage ul.gbsNoBullet li::before {
+    content: none;
+}
+
+/* Numbered list */
+
+.gbsPage ol {
+    margin-top: 15px;
+    margin-left: 6px;
+}
+
+.gbsPage ol li {
+    margin-left: 10px;
+}
+
+/* Definition list */
+
+.gbsPage dl {
+    margin: 0 12px 0 15px;
+}
+.gbsPage dt {
+    margin-top: 15px;
+}
+
+/* Consider using this to reduce indents on lists within lists
+.gbsPage li li {
+    margin-left: -15px;
+}
+*/
+
+/* Tables */
+
+.gbsPage table {
+    border: 2px solid gray;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-left: 15px;
+    font-size: 13px;
+}
+
+table.gbsNoBorder {
+    border: none;
+}
+
+table.gbsCenterText td {
+    text-align: center;
+}
+
+.gbsPage th, td {
+    text-align: left;
+    padding: 1px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.gbsPage tr:hover {
+    background-color: #ffffe5;          /* light yellow */
+}
+
+.gbsPage th {
+    border-bottom: 2px solid gray;
+    background-color: #ededed;          /* light gray */
+}
+
+/* Images */
+
+/* large images, e.g. figures, photos */
+
+.gbsPage img {
+    border: 1px solid black;
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+/* small embedded image, e.g. for special characters or symbols */
+
+img.gbsInlineImg {
+    border: 0;
+    margin: 0;
+}
+
+p.gbsCaption {
+    margin-top: 5px;
+}
+
+/* TODO: remove these two -- we should use bootstrap class text-right in wrapper element instead */
+
+p.gbsAlignRight {
+    text-align: right;
+}
+
+img.gbsAlignRight {
+    float: right !important;
+}
+
+/* Text alignment in table cells requires override in our version of bootstrap (revisit later) */
+/* TODO: Remove if confirmed unneeded.
+.gbsPage table text-center {
+    text-align: center;
+}
+.gbsPage table text-right {
+    text-align: right;
+}
+*/
+
+/* Use UCSC Genome Browser 'bridge' logo as home link.
+ * Suitable for static pages and CGI's without a top banner with logo.
+ *
+ * Copyright (C) 2016 The Regents of the University of California
+ */
+
+/* TODO: Move to style/gbLogoInMenu.css for sharing with CGI's
+
+/* NOTE: negative positioning compensates for indents in parent rules */
+span#home-link {
+    background-position: 0 0 !important;
+    background-size: contain !important;
+    background-image: url("../images/ucscHelixLogo.png") !important;
+    background-repeat: no-repeat !important;
+    top: -8px !important;
+    width: 84px !important;
+    height: 32px !important;
+    background-color: white !important;
+    margin-left: -9px !important;
+}
+
+/* Override nice-menu: from jWest*  */
+
+/* TODO: Move out of here after static page push. 
+ * This is shared with CGI's. Currently also in gbAfterMenu.css */
+
+#main-menu-whole {
+    background-color: #003a72 !important;
+    font-family: Lato,Arial,Helvetica,sans-serif !important;
+}
+
+ul.nice-menu a {
+    font-weight: normal !important;
+    font-family: Lato,Arial,Helvetica,sans-serif !important;
+}
+
+ul.nice-menu ul li a {
+    font-weight: normal !important;
+    font-family: Lato,Arial,Helvetica,sans-serif !important;
+}
+
+/* Override (for now -- until gb.css can be updated in a release cycle */
+
+.gbDonateButton {
+    margin-top: 3px;
+    width: auto;
+    height: auto;
+    padding: 5px 20px;
+}
+
+/* Styling for bootstrap collapsible section, used as follows:
+
+<div class="collapse-section">
+<a class="collapse-toggle" data-toggle="collapse" href=#collapseMe">Collapsible section</div>
+<div class="collapse" id="collapseMe">
+Stuff here
+</div>
+
+requires: jQuery.js and bootstrap.js
+*/
+
+.collapse-section .collapse-toggle {
+    text-decoration: none;
+    margin: 15px 12px 0 0;
+}
+
+div.collapse-section .collapse-toggle {
+    margin-left: 15px;  /* same as paragraph */
+}
+
+.collapse-section .collapse-toggle:after {
+    vertical-align: -3px;
+    font-family: Glyphicons Halflings;
+    margin-left: 2px;
+    color: lightgray;
+}
+
+.collapse-section .collapse-toggle:not(.collapsed):after {
+    content: "\e252";
+}
+
+.collapse-section .collapse-toggle.collapsed:after {
+    content: "\e250";
+}
