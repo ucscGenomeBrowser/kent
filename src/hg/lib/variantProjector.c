@@ -83,7 +83,9 @@ static boolean pslIntronTooShort(struct psl *psl, int blkIx, int minIntronSize)
 {
 if (blkIx >= psl->blockCount - 1 || blkIx < 0)
     errAbort("pslIntronTooShort: blkIx %d is out of range [0, %d]", blkIx, psl->blockCount - 1);
-int intronLen = psl->tStarts[blkIx+1] - (psl->tStarts[blkIx] + psl->blockSizes[blkIx]);
+int tGapLen = psl->tStarts[blkIx+1] - psl->tStarts[blkIx] - psl->blockSizes[blkIx];
+int qGapLen = psl->qStarts[blkIx+1] - psl->qStarts[blkIx] - psl->blockSizes[blkIx];
+int intronLen = tGapLen - qGapLen;
 return (intronLen < minIntronSize);
 }
 
@@ -1055,7 +1057,9 @@ for (ix = 0;  ix < psl->blockCount-1;  ix++)
         // t coords are now on the reverse strand and in reverse order; intron size works the same
         int exonTEnd = psl->tStarts[ix] + psl->blockSizes[ix];
         int nextExonTStart = psl->tStarts[ix+1];
-        int intronSize = nextExonTStart - exonTEnd;
+        int tGapLen = nextExonTStart - exonTEnd;
+        int qGapLen = psl->qStarts[ix+1] - exonQEnd;
+        int intronSize = tGapLen - qGapLen;
         if (intronSize > minIntronSize)
             {
             if (numIntronsPastCds == 0)
