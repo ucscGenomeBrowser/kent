@@ -20,6 +20,10 @@ var hgCollection = (function() {
             addItem: { // The "add" menu item
                 label: "Add",
                 action: function () {
+                    if (selectedNode === undefined) {
+                        alert(addWithoutCollectionText);
+                        return;
+                    }
                     var nodeIds = $("#tracks").jstree( "get_selected");
                     isDirty = true;
                     var nodes = [];
