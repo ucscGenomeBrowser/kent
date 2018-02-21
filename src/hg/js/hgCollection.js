@@ -136,6 +136,16 @@ var hgCollection = (function() {
         $( "#newCollectionDialog" ).dialog("open");
     }
 
+    function moveNode(evt, data) {
+        // called when a node is moved
+        checkEmpty(data.parent);
+        var oldParentNode = $(selectedTree).jstree('get_node', data.old_parent);
+        if (oldParentNode.children.length === 0) {
+            oldParentNode.li_attr.class = "folder empty";
+            $(selectedTree).jstree("create_node", data.old_parent, emptyCollectionText);
+        }
+    }
+
     function selectNode(tree, node) {
         // called when a node in the currentCollection tree is selected
         selectedNode = node;
@@ -205,6 +215,7 @@ var hgCollection = (function() {
         $(selectedTree).jstree("set_icon", newNode, '../images/folderC.png');
         $(selectedTree).jstree("deselect_node", selectedNode);
         $(selectedTree).jstree("select_node", newNode.id);
+        $(selectedTree).on("move.jstree", moveNode);
         rebuildLabel();
     }
 
@@ -281,7 +292,16 @@ var hgCollection = (function() {
     function checkEmpty(parentId) {
         if ($('#'+parentId).hasClass('empty')) {
             var parentNode = $(selectedTree).jstree('get_node', parentId);
-            var stub = parentNode.children[0];
+            var stub;
+            for (i = 0; i < parentNode.children.length; i++) {
+                stub = $(selectedTree).jstree('get_node', parentNode.children[i]);
+                if (stub.icon === true)
+                    break;
+            }
+
+            if (i === parentNode.children.length)
+                return;
+
             $(selectedTree).jstree('delete_node', stub);
             $('#'+parentId).removeClass('empty');
             parentNode.li_attr.class = 'folder';
@@ -401,6 +421,7 @@ var hgCollection = (function() {
             trees[this.id] = $(newTree);
             $(newTree).on("select_node.jstree", selectTreeNode);
             $(newTree).on("dblclick.jstree", doubleClickTreeNode);
+            $(newTree).on("move_node.jstree", moveNode);
 
             $(newTree).on("copy_node.jstree", function (evt, data)  {
                 $(evt.target).jstree("open_node", data.parent);
