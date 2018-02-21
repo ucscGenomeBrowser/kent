@@ -1150,9 +1150,13 @@ if (searchEnabled && !isEmpty(hubSearchTerms))
             hashAdd(searchResultHash, hst->hubUrl, hst);
             }
         else
-            slAddTail(&(hubHashEnt->val), hst);
+            slAddHead(&(hubHashEnt->val), hst);
         hst = nextHst;
         }
+    struct hashEl *hel;
+    struct hashCookie cookie = hashFirst(searchResultHash);
+    while ((hel = hashNext(&cookie)) != NULL)
+        slReverse(&(hel->val));
     }
 else
     {
