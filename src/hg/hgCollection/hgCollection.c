@@ -250,7 +250,19 @@ if (tdb->subtracks)
     }
 else
     {
-    if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
+    boolean isVisible = FALSE;
+    if (tdb->parent == NULL) 
+        {
+        char *cartVis = cartOptionalString(cart, tdb->track);
+        if (cartVis == NULL)
+            isVisible =  tdb->visibility != tvHide;
+        else
+            isVisible =  differentString(cartVis, "hide");
+        }
+    else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
+        isVisible = TRUE;
+
+    if (isVisible)
         {
         struct trackDbRef *tdbRef;
         AllocVar(tdbRef);
