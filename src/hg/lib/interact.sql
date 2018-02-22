@@ -5,7 +5,7 @@
 
 #Interaction between two regions
 CREATE TABLE interact (
-    bin smallint not null,              # Bin number for browser speedup
+    #bin smallint not null,              # Bin number for browser speedup
     chrom varchar(255) not null,	# Chromosome (or contig, scaffold, etc.). For interchromosomal, use 2 records
     chromStart int unsigned not null,	# Start position in chromosome of lower region
     chromEnd int unsigned not null,	# End position in chromosome of upper region. For interchromosomal, set to chromStart+1

@@ -5,12 +5,14 @@
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
+#include "asParse.h"
 #include "jksql.h"
 #include "interact.h"
 
 
 
 char *interactCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,value,exp,color,sourceChrom,sourceStart,sourceEnd,sourceName,targetChrom,targetStart,targetEnd,targetName";
+
 
 void interactStaticLoad(char **row, struct interact *ret)
 /* Load a row from interact table into ret.  The contents of ret will
@@ -244,6 +246,37 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+static char *interactAutoSqlString =
+"table interact"
+"\"BED5+11 interaction between two regions\""
+"    ("
+"   string chrom;       \"Reference sequence chromosome or scaffold\""
+"   uint   chromStart;  \"Start position of lower region\""
+"   uint   chromEnd;    \"End position of upper region. For interchromsomal, set to chromStart+1.\""
+"   string name;        \"Name or ID of item. Usually name1/name2 or name1/name2/exp or empty\""
+"   uint   score;       \"Score from 0-1000, typically derived from value\""
+"   double value;       \"Strength of interaction or other data value\""
+"   string exp;         \"Experiment name for filtering, or empty\""
+"   uint   color;       \"Item color, as itemRgb in bed9.  Typically based on value or exp\""
+
+"   string sourceChrom; \"Chromosome of source region (directional) or lower region\""
+"   uint   sourceStart; \"Start position of source/lower region\""
+"   uint   sourceEnd;   \"End position of source/lower region\""
+"   string sourceName;  \"Identifier of source/lower region. Can be used as link to related table.\""
+
+"   string targetChrom; \"Chromosome of target region (directional) or lower region\""
+"   uint   targetStart; \"Start position of target/lower region\""
+"   uint   targetEnd;   \"End position of target/lower region\""
+"   string targetName;  \"Identifier of target/lower region. Can be used as link to related table.\""
+"   )"
+;
+
+struct asObject *interactAsObj()
+/* Return asObject describing fields of interact object */
+{   
+return asParseText(interactAutoSqlString);
+}   
 
 char *interactOtherChrom(struct interact *inter)
 /* Get other chromosome from an interaaction. Return NULL if same chromosome */

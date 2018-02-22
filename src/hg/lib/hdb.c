@@ -3580,7 +3580,7 @@ int rowOffset = 0;
 if (fields == NULL) fields = "*";
 if (hti == NULL)
     {
-    warn("table %s doesn't exist or hFindTableInfoDb failed", rootTable);
+    warn("table %s doesn't exist in %s database, or hFindTableInfoDb failed", rootTable, db);
     }
 else
     {

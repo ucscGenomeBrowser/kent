@@ -8743,6 +8743,8 @@ else if (sameWord("pgSnp", tdb->type))
     asObj = pgSnpAsObj();
 else if (sameWord("barChart", tdb->type))
     asObj = asParseText(barChartAutoSqlString);
+else if (sameWord("interact", tdb->type))
+    asObj = asParseText(barChartAutoSqlString);
 else
     asObj = asFromTableDescriptions(conn, tdb->table);
 return asObj;

@@ -13799,6 +13799,11 @@ else if (sameWord(type, "bigBarChart"))
     track->isBigBed = TRUE;
     barChartMethods(track);
     }
+else if (sameWord(type, "bigInteract"))
+    {
+    track->isBigBed = TRUE;
+    interactMethods(track);
+    }
 else if (sameWord(type, "bigNarrowPeak"))
     {
     tdb->canPack = TRUE;

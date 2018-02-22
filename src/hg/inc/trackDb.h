@@ -609,13 +609,14 @@ void tdbSetCartVisibility(struct trackDb *tdb, struct cart *cart, char *vis);
 INLINE boolean tdbIsBigBed(struct trackDb *tdb)
 // Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
 {
-// KRR TODO: replace with table lookup  (same as bigBedFind ?)
+// TODO: replace with table lookup  (same as bigBedFind ?)
 return startsWithWord("bigBed", tdb->type) || 
         startsWithWord("bigGenePred", tdb->type) || 
         startsWithWord("bigMaf", tdb->type) || 
         startsWithWord("bigPsl", tdb->type) || 
         startsWithWord("bigNarrowPeak", tdb->type) || 
         startsWithWord("bigBarChart", tdb->type) || 
+        startsWithWord("bigInteract", tdb->type) || 
         startsWithWord("bigChain", tdb->type);
 }
 

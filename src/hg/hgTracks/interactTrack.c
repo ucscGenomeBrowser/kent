@@ -17,9 +17,6 @@ int min, max, deflt, current;
 cartTdbFetchMinMaxPixels(cart, tg->tdb, 
                                 INTERACT_MINHEIGHT, INTERACT_MAXHEIGHT, atoi(INTERACT_DEFHEIGHT),
                                 &min, &max, &deflt, &current);
-//uglyf("IN totalHeight=%d. ", current);
-// FIXME DEBUG
-//return 300;
 return tg->height = current;
 }
 
@@ -32,7 +29,6 @@ struct rgbColor itemRgb;
 itemRgb.r = (inter->color & 0xff0000) >> 16;
 itemRgb.g = (inter->color & 0xff00) >> 8;
 itemRgb.b = inter->color & 0xff;
-//uglyf("IN color=%X", hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b));
 return hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b);
 }
 
@@ -61,13 +57,11 @@ else if (sameString(drawMode, INTERACT_DRAW_ELLIPSE))
 
 double scale = scaleForWindow(width, seqStart, seqEnd);
 struct interact *inters = tg->items;
-//uglyf("Found %d items. ", slCount(inters));
 unsigned int maxWidth = 0;
 struct interact *inter;
 char buffer[1024];
 char itemBuf[2048];
 safef(buffer, sizeof buffer, "%s.%s", tg->tdb->track, INTERACT_MINSCORE);
-//double minScore = sqlDouble(cartUsualString(cart, buffer, INTERACT_DEFMINSCORE));
 
 // Determine if there are mixed inter and intra-chromosomal 
 // Suppress interchromosomal labels if they overlap
@@ -82,7 +76,6 @@ for (inter=inters; inter; inter=inter->next)
     if (width > maxWidth)
         maxWidth = width;
     }
-//uglyf("Max width is %d. ", maxWidth);
 for (inter=inters; inter; inter=inter->next)
     {
     otherChrom = interactOtherChrom(inter);
@@ -112,7 +105,6 @@ int otherHeight = (nOther) ? 3 * fontHeight : 0;
 int sameHeight = (nSame) ? tg->height - otherHeight: 0;
 
 // Draw items
-//uglyf("IN seqStart=%d", seqStart);
 for (inter=inters; inter; inter=inter->next)
     {
     char *otherChrom = interactOtherChrom(inter);
@@ -122,7 +114,6 @@ for (inter=inters; inter; inter=inter->next)
     if (inter->score)
         dyStringPrintf(ds, " %d", inter->score);
     char *statusBuf = dyStringCannibalize(&ds);
-//uglyf("statusBuf: %s. ", statusBuf);
 
     color = interactItemColor(tg, inter, hvg);
     
@@ -151,9 +142,6 @@ for (inter=inters; inter; inter=inter->next)
 
     unsigned s = lowStart + ((double)(lowEnd - lowStart + .5) / 2);
     int sx = ((s - seqStart) + .5) * scale + xOff; // x coord of center (lower region)
-//uglyf("<br>IN seqStart=%d, start=%d, start1=%d, end1=%d, start2=%d, end2=%d, end=%d, s=%d, sx=%d. ", 
-        //seqStart, inter->chromStart, inter->chromStart1, inter->chromEnd1, 
-        //inter->chromStart2, inter->chromEnd2, inter->chromEnd, s, sx);
     unsigned sw = lowEnd - lowStart;
     int sFootWidth = scale * (double)sw / 2;       // width in pixels of half foot (lower)
     if (sFootWidth == 0)
@@ -165,10 +153,6 @@ for (inter=inters; inter; inter=inter->next)
     int eFootWidth = scale * (double)ew / 2;
     if (eFootWidth == 0)
         eFootWidth = 1;
-//uglyf("<br>IN s=%d, sx=%d, sw=%d, sFootWidth=%d.   e=%d, ex=%d, ew=%d, eFootWidth=%d, chromStart=%d",
-                //s, sx, sw, sFootWidth, e, ex, ew, eFootWidth, inter->chromStart);
-//uglyf("<br>&nbsp;&nbsp;IN start1=%d, end1=%d, start2=%d, end2=%d.",
-                //inter->chromStart1, inter->chromEnd1, inter->chromStart2, inter->chromEnd2);
 
     if (otherChrom)
         {
@@ -226,11 +210,6 @@ for (inter=inters; inter; inter=inter->next)
     // draw same chromosome interaction
     boolean sOnScreen = (s >= seqStart) && (s < seqEnd);
     boolean eOnScreen = (e >= seqStart) && (e < seqEnd);
-//uglyf("<br>IN s=%d, e=%d, sOn: %d, eOn: %d. ", s, e, sOnScreen, eOnScreen);
-//if (s>e)
-    //uglyf("<br>   IN s>e start=%d, start1=%d, end1=%d, start2=%d, end2=%d, end=%d, s=%d, sx=%d. ", 
-        //inter->chromStart, inter->chromStart1, inter->chromEnd1, 
-        //inter->chromStart2, inter->chromEnd2, inter->chromEnd, s, sx);
 
     double interWidth = e - s;
     int peakHeight = (sameHeight - 15) * ((double)interWidth / maxWidth) + 10;
@@ -351,12 +330,16 @@ void interactDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 void interactMethods(struct track *tg)
 /* Interact track type methods */
 {
-//tg->bedSize = 6;
-//bedMethods(tg);
 tg->loadItems = interactLoadItems;
 tg->drawItems = interactDrawItems;
 tg->drawLeftLabels = interactDrawLeftLabels;
 tg->totalHeight = interactTotalHeight;
 tg->mapsSelf = TRUE;
+}
+
+void interactCtMethods(struct track *tg)
+/* Interact track methods for custom track */
+{
+interactMethods(tg);
 }
 

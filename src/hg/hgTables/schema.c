@@ -28,6 +28,7 @@
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "barChartBed.h"
+#include "interact.h"
 #include "hubConnect.h"
 #include "errCatch.h"
 
@@ -619,6 +620,12 @@ else if (sameWord("pgSnp", type))
 else if (sameWord("barChart", type))
     {
     struct asObject *asObj = barChartAsObj();
+    showSchemaWithAsObj(db, table, ct, asObj);
+    asObjectFree(&asObj);
+    }
+else if (sameWord("interact", type))
+    {
+    struct asObject *asObj = interactAsObj();
     showSchemaWithAsObj(db, table, ct, asObj);
     asObjectFree(&asObj);
     }

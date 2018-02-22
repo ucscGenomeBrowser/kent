@@ -4524,6 +4524,8 @@ if (
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
+|| sameWord(type, "interact")
+|| sameWord(type, "bigInteract")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
 ) 
@@ -6111,7 +6113,10 @@ else if (sameString(type, "bigWig"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred")|| sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain") || sameString(type, "bigBarChart"))
+else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || 
+        sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") || 
+        sameString(type, "bigMaf")|| sameString(type, "bigChain") || 
+        sameString(type, "bigBarChart") || sameString(type, "bigInteract"))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
@@ -6130,6 +6135,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred")|| sameStri
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
     else if (sameString(type, "bigBarChart"))
 	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
+    else if (sameString(type, "bigInteract"))
+	safef(typeBuf, sizeof(typeBuf), "bigInteract");
     else
 	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
     tdb->type = cloneString(typeBuf);
@@ -6279,6 +6286,12 @@ else if (sameString(type, "barChart"))
     {
     tg = trackFromTrackDb(tdb);
     barChartCtMethods(tg);
+    tg->customPt = ct;
+    }
+else if (sameString(type, "interact"))
+    {
+    tg = trackFromTrackDb(tdb);
+    interactCtMethods(tg);
     tg->customPt = ct;
     }
 else

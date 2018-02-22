@@ -51,6 +51,8 @@ void interactCfgUi(char *database, struct cart *cart, struct trackDb *tdb, char 
 if (cartVarExists(cart, "ajax"))
     isPopup = TRUE;
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+if (startsWith("big", tdb->type))
+    labelCfgUi(database, cart, tdb);
 //printf("\n<table id=interactControls style='font-size:%d%%' %s>\n<tr><td>",
         //isPopup ? 75 : 100, boxed ?" width='100%'":"");
 interactUiTrackHeight(cart, track, tdb);

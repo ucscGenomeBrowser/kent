@@ -89,6 +89,9 @@ void interactOutput(struct interact *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct asObject *interactAsObj();
+/* Return asObject describing fields of barChart database table (includes bin) */
+
 char *interactOtherChrom(struct interact *inter);
 /* Get other chromosome from an interaaction. Return NULL if same chromosome */
 
