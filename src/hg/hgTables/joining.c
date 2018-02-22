@@ -281,6 +281,7 @@ struct slName *fieldList = NULL;
 if (startsWithWord("makeItems", type) || 
         sameWord("bedDetail", type) || 
         sameWord("barChart", type) || 
+        sameWord("interact", type) || 
         sameWord("pgSnp", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);

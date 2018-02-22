@@ -28,7 +28,6 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
-#include "barChartBed.h"
 #include "samAlignment.h"
 #include "trackHub.h"
 
@@ -1039,6 +1038,7 @@ else if (type != NULL &&
         (startsWithWord("makeItems", type) || 
         sameWord("bedDetail", type) || 
         sameWord("barChart", type) || 
+        sameWord("interact", type) || 
         sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);

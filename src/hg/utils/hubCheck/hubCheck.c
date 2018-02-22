@@ -473,7 +473,10 @@ if (relativeUrl != NULL)
         struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
         bbiFileClose(&bbi);
         }
-    else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) || startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)|| startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) || startsWithWord("bigBarChart", type))
+    else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) || 
+                startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)|| 
+                startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) || 
+                startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type))
         {
         /* Just open and close to verify file exists and is correct type. */
         struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);

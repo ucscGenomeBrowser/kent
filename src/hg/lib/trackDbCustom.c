@@ -719,6 +719,8 @@ else if (sameWord("halSnake",type))
     cType = cfgSnake;
 else if (sameWord("barChart", type) || sameWord("bigBarChart", type))
     cType = cfgBarChart;
+else if (sameWord("interact", type) || sameWord("bigInteract", type))
+    cType = cfgInteract;
 // TODO: Only these are configurable so far
 
 if (cType == cfgNone && warnIfNecessary)

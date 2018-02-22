@@ -47,6 +47,7 @@
 #include "htmlPage.h"
 #include "longRange.h"
 #include "barChartUi.h"
+#include "interactUi.h"
 #include "customComposite.h"
 #include "trackVersion.h"
 #include "hubConnect.h"
@@ -4157,6 +4158,8 @@ switch(cType)
     case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgBarChart:   barChartCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
+    case cfgInteract:   interactCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
@@ -8755,6 +8758,8 @@ else if (sameWord("bedDetail", tdb->type))
 else if (sameWord("pgSnp", tdb->type))
     asObj = pgSnpAsObj();
 else if (sameWord("barChart", tdb->type))
+    asObj = asParseText(barChartAutoSqlString);
+else if (sameWord("interact", tdb->type))
     asObj = asParseText(barChartAutoSqlString);
 else
     asObj = asFromTableDescriptions(conn, tdb->table);

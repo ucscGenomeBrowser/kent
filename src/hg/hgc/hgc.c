@@ -807,95 +807,6 @@ printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 
 }
 
-void interactionPrintPos( struct bed *bed, int bedSize, struct trackDb *tdb)
-/* Print first bedSize fields of a bed type structure in
- * standard format. */
-{
-
-if (bed->blockCount == 2)
-    {
-    printf("<B>Intrachromosomal interaction:</B> <br>\n");
-    printf("<B>Positions:</B><br> ");
-    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-           hgTracksPathAndSettings(), database, bed->chrom,
-           bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
-    printf("%s:%d-%d</A>    \n",
-	   bed->chrom,
-           bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
-    printf("Size: %d   \n", bed->blockSizes[0]);
-    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
-
-    //printf("<BR>\n");
-    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-           hgTracksPathAndSettings(), database, bed->chrom,
-           bed->chromStarts[1]+bed->chromStart,
-	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
-    printf("%s:%d-%d</A>     \n",
-	   bed->chrom,
-           bed->chromStarts[1]+bed->chromStart,
-	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
-    printf("Size: %d   \n", bed->blockSizes[0]);
-    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1], FALSE);
-
-    printf("<BR>\n");
-    printf("<B>Distance apart:</B>\n");
-    printLongWithCommas(stdout,
-	bed->chromStarts[1] - bed->chromStarts[0] + bed->blockSizes[0]);
-
-    printf("bp<BR>\n");
-    }
-else
-    {
-    printf("<B>Interchromosomal interaction:</B> <br>\n");
-    printf("<B>Positions:</B><br> ");
-    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-           hgTracksPathAndSettings(), database, bed->chrom,
-           bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
-    printf("%s:%d-%d</A>    \n",
-	   bed->chrom,
-           bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
-    printf("Size: %d   \n", bed->blockSizes[0]);
-    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
-	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
-
-    char buffer[10 * 1024], *otherChrom = buffer;
-    safef(buffer, sizeof buffer, "%s", bed->name);
-    char *ptr;
-    int otherStart, otherEnd;
-
-    if (startsWith(bed->chrom, buffer))
-	{
-	otherChrom = strchr(buffer,'-');
-	otherChrom++;
-	}
-
-    ptr = strchr(otherChrom,':');
-    *ptr++ = 0;
-    otherStart = atoi(ptr);
-    ptr = strchr(ptr,'.');
-    ptr++;
-    ptr++;
-    otherEnd = atoi(ptr);
-    //printf("<BR>\n");
-    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-	   hgTracksPathAndSettings(), database, otherChrom,
-	   otherStart, otherEnd);
-    printf("%s:%d-%d</A>     \n",
-	   otherChrom, otherStart, otherEnd);
-    printf("Size: %d   \n", otherEnd - otherStart);
-    printBand( otherChrom, otherStart, otherEnd, FALSE);
-
-    printf("<BR>\n");
-    }
-}
-
-
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
 {
@@ -1714,12 +1625,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
-    if ((tdb->type != NULL) && sameString(tdb->type, "interaction"))
-	{
-	interactionPrintPos( bed, bedSize, tdb);
-        }
-    else
-        bedPrintPos(bed, bedSize, tdb);
+    bedPrintPos(bed, bedSize, tdb);
 
     extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
 
@@ -4324,6 +4230,8 @@ else if (wordCount > 0)
 	doBamDetails(tdb, item);
     else if ( startsWith("longTabix", type))
 	doLongTabix(tdb, item);
+    else if (sameWord("interact", type) || sameWord("bigInteract", type))
+	doInteractDetails(tdb, item);
     }
 if (imagePath)
     {
@@ -21164,6 +21072,8 @@ else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
 else if (sameWord(type, "bigBarChart") || sameWord(type, "barChart"))
     doBarChartDetails(ct->tdb, item);
+else if (sameWord(type, "bigInteract") || sameWord(type, "interact"))
+    doInteractDetails(ct->tdb, item);
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
 else if (sameWord(type, "vcfTabix"))

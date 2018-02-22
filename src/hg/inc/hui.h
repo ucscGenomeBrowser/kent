@@ -6,6 +6,7 @@
 #ifndef HUI_H
 #define HUI_H
 
+#include "common.h"
 #include "cart.h"
 #include "trackDb.h"
 #include "customTrack.h"
