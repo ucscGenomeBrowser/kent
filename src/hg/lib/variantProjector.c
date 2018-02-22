@@ -335,13 +335,13 @@ static boolean genomeTxMismatch(char *txRef, struct seqWindow *gSeqWin,
  * and vpTxSetTxAlt to detect indel mismatches. */
 {
 boolean mismatch = FALSE;
-if (txRef != NULL)
+if (isNotEmpty(txRef))
     {
     int bufLen = gEnd - gStart + 1;
     char splicedGSeq[bufLen];
     splicedGSeq[0] = '\0';
     spliceGenomicInRange(gSeqWin, gStart, gEnd, txAli, FALSE, splicedGSeq, sizeof(splicedGSeq));
-    if (differentString(splicedGSeq, txRef))
+    if (isNotEmpty(splicedGSeq) && differentString(splicedGSeq, txRef))
         mismatch = TRUE;
     }
 return mismatch;
