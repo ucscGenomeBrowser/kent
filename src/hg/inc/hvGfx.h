@@ -22,6 +22,10 @@ struct hvGfx
     int clipMaxY;
 };
 
+#define ELLIPSE_FULL    0
+#define ELLIPSE_TOP     1
+#define ELLIPSE_BOTTOM  2
+
 struct hvGfx *hvGfxOpenPng(int width, int height, char *fileName, boolean useTransparency);
 /* Open up something that we'll write out as a PNG someday.
  * If useTransparency, then the first color in memgfx's colormap/palette is
@@ -306,5 +310,30 @@ void hvGfxNextItemButton(struct hvGfx *hvg, int x, int y, int w, int h,
 /* Draw a button that looks like a fast-forward or rewind button on */
 /* a remote control. If nextItem is TRUE, it points right, otherwise */
 /* left. color is the outline color, and hvgColor is the fill color. */
+
+void hvGfxEllipseDraw(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color, 
+                        int mode, boolean isDotted);
+/* Draw an ellipse (or limit to top or bottom) specified by rectangle, using Bresenham algorithm.
+ * Optionally, alternate dots.
+ * Point 0 is left, point 1 is top of rectangle
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
+ */
+
+void hvGfxEllipse(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color);
+/* Draw an ellipse using Bresenham algorithm.
+ * Point 0 is left, point 1 is top
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
+ */
+
+void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, 
+                        Color color, boolean isDotted);
+/* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
+ * Optionally alternate dots.
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html */
+ /* Thanks to author  * @author Zingl Alois
+ * @date 22.08.2016 */
+
+void hvGfxDottedLine(struct hvGfx *hvg, int x1, int y1, int x2, int y2, Color color, boolean isDash);
+/* Brezenham line algorithm, alternating dots, by 1 pixel or two (isDash true) */
 
 #endif 

@@ -1,3 +1,12 @@
+#track gtexTransEqtl1Mb
+track gtexTransEqtl
+type interact
+maxHeightPixels 300:100:20
+group regulation
+shortLabel GTEx Trans eQTL
+longLabel Distant SNP-Gene Interactions (Trans eQTLs) from GTEx Analysis
+color 100, 0, 0
+
 track gtexEqtlCluster
 type bed 5 +
 shortLabel GTEx Combined eQTL
