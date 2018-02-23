@@ -148,6 +148,7 @@ if (regionChrom != NULL && words != NULL)
 	// If lineFileSetTabixRegion fails, just keep the current file position
 	// -- hopefully we'll just be skipping to the next row after region{Chrom,Start,End}.
 	lineFileSetTabixRegion(self->vcff->lf, regionChrom, regionStart, regionEnd);
+        rowChrom = regionChrom;
 	}
     // Skip to next row if this is on a previous chromosome, or is on regionChrom but
     // ends before regionStart or ends at regionStart and is not an insertion.
@@ -159,6 +160,7 @@ if (regionChrom != NULL && words != NULL)
               (rec->chromStart != rec->chromEnd && rec->chromEnd == regionStart)))))
         {
 	words = nextRowRaw(self);
+        rowChrom = getProperChromName(self, words[0]);
         rec = self->record;
         }
     }

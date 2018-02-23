@@ -69,7 +69,8 @@
 	<li><a id="sessionsMenuLink" href="../cgi-bin/hgSession?hgS_doMainPage=1">My Sessions</a></li>
 	<li><a id="publicSessionsMenuLink" href="../cgi-bin/hgPublicSessions">Public Sessions</a></li>
 	<li><a id="trackHubsMenuLink" href="../cgi-bin/hgHubConnect">Track Hubs</a></li>
-	<li class="last"><a id="customTracksMenuLink" href="../cgi-bin/hgCustom">Custom Tracks</a></li>
+	<li><a id="customTracksMenuLink" href="../cgi-bin/hgCustom">Custom Tracks</a></li>
+	<li class="last"><a id="customCompositeMenuLink" href="../cgi-bin/hgCollection">Track Collection Builder</a></li>
 	</ul>
 </li>
 

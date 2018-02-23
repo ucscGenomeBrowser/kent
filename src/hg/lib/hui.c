@@ -47,6 +47,7 @@
 #include "htmlPage.h"
 #include "longRange.h"
 #include "barChartUi.h"
+#include "interactUi.h"
 #include "customComposite.h"
 #include "trackVersion.h"
 #include "hubConnect.h"
@@ -4158,6 +4159,8 @@ switch(cType)
                         break;
     case cfgBarChart:   barChartCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
+    case cfgInteract:   interactCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
 			break;
@@ -5001,9 +5004,7 @@ void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
 {
 printf("<BR><BR><B>Display data as a density graph:</B> ");
 char varName[1024];
-safef(varName, sizeof(varName), "%s.doWiggle", name);
-boolean parentLevel = isNameAtParentLevel(tdb,varName);
-boolean option = cartUsualBooleanClosestToHome(cart, tdb, parentLevel,"doWiggle", FALSE);
+boolean option = cartOrTdbBoolean(cart, tdb, "doWiggle", FALSE);
 
 cgiMakeCheckBox(varName, option);
 printf("<BR>\n");
@@ -5169,9 +5170,14 @@ puts("</td></TR>");
 
 printf("<TR valign=center><th align=right>Track height:</th><td align=left colspan=3>");
 safef(option, sizeof(option), "%s.%s", name, HEIGHTPER );
+if (isCustomComposite(tdb))
+    maxHeightPixels = 10000;
 cgiMakeIntVarWithLimits(option, defaultHeight, "Track height",0, minHeightPixels, maxHeightPixels);
-printf("pixels&nbsp;(range: %d to %d)",
-       minHeightPixels, maxHeightPixels);
+if (isCustomComposite(tdb))
+    printf("pixels");
+else
+    printf("pixels&nbsp;(range: %d to %d)",
+           minHeightPixels, maxHeightPixels);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
@@ -5190,8 +5196,9 @@ cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);
 printf("</td><td align=leftv colspan=2>max:&nbsp;");
 safef(option, sizeof(option), "%s.%s", name, MAX_Y );
 cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, NO_VALUE, NO_VALUE);
-printf("&nbsp;(range: %g to %g)",
-       tDbMinY, tDbMaxY);
+if (!isCustomComposite(tdb))
+    printf("&nbsp;(range: %g to %g)",
+           tDbMinY, tDbMaxY);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Transform function:</th><td align=left>");
@@ -8751,6 +8758,8 @@ else if (sameWord("bedDetail", tdb->type))
 else if (sameWord("pgSnp", tdb->type))
     asObj = pgSnpAsObj();
 else if (sameWord("barChart", tdb->type))
+    asObj = asParseText(barChartAutoSqlString);
+else if (sameWord("interact", tdb->type))
     asObj = asParseText(barChartAutoSqlString);
 else
     asObj = asFromTableDescriptions(conn, tdb->table);

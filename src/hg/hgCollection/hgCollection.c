@@ -250,7 +250,19 @@ if (tdb->subtracks)
     }
 else
     {
-    if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
+    boolean isVisible = FALSE;
+    if (tdb->parent == NULL) 
+        {
+        char *cartVis = cartOptionalString(cart, tdb->track);
+        if (cartVis == NULL)
+            isVisible =  tdb->visibility != tvHide;
+        else
+            isVisible =  differentString(cartVis, "hide");
+        }
+    else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb))
+        isVisible = TRUE;
+
+    if (isVisible)
         {
         struct trackDbRef *tdbRef;
         AllocVar(tdbRef);
@@ -348,6 +360,7 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
 
     }
 jsInlineF("\");\n");
+jsReloadOnBackButton(cart);
 jsInlineF("hgCollection.init();\n");
 }
 
@@ -873,7 +886,12 @@ hashReplace(newTdb->settingsHash, "track", makeUnique(nameHash, trackName));
 hashReplace(newTdb->settingsHash, "parent", trackHubSkipHubName(collectionName));
 char *tdbType = trackDbSetting(newTdb, "tdbType");
 if (tdbType != NULL)
+    {
     hashReplace(newTdb->settingsHash, "type", tdbType);
+    hashReplace(newTdb->settingsHash, "shortLabel", trackDbSetting(newTdb, "name"));
+    hashReplace(newTdb->settingsHash, "longLabel", trackDbSetting(newTdb, "description"));
+    }
+
 
 outHubHeader(f, db);
 struct sqlConnection *conn = hAllocConn(db);

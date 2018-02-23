@@ -13799,6 +13799,11 @@ else if (sameWord(type, "bigBarChart"))
     track->isBigBed = TRUE;
     barChartMethods(track);
     }
+else if (sameWord(type, "bigInteract"))
+    {
+    track->isBigBed = TRUE;
+    interactMethods(track);
+    }
 else if (sameWord(type, "bigNarrowPeak"))
     {
     tdb->canPack = TRUE;
@@ -14027,6 +14032,10 @@ else if (sameWord(type, "gvf"))
 else if (sameWord(type, "barChart"))
     {
     barChartMethods(track);
+    }
+else if (sameWord(type, "interact"))
+    {
+    interactMethods(track);
     }
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
