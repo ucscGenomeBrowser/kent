@@ -688,7 +688,7 @@ for (ix = 0;  ix < txAli->blockCount - 1;  ix++)
         if (shiftR)
             {
             // Expand gap to the right -- increase {t,q}Starts[ix+1], decrease blockSizes[ix+1]
-            if (txAli->blockSizes[ix] < shiftR)
+            if (txAli->blockSizes[ix+1] < shiftR)
                 errAbort("vpExpandIndelGaps: support for deleting/merging blocks not implemented");
             txAli->tStarts[ix+1] += shiftR;
             txAli->qStarts[ix+1] += shiftR;
