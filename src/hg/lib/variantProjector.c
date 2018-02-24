@@ -714,7 +714,7 @@ if (sameString(gAlt, "<DEL>"))
 int altLen = strlen(gAlt);
 if (!isAllNt(gAlt, altLen))
     errAbort("vpGenomicToTranscript: alternate allele must be sequence of IUPAC DNA characters "
-             "but is '%s'", gAlt);
+             "or '<DEL>' but is '%s'", gAlt);
 gSeqWin->fetch(gSeqWin, gBed3->chrom, gBed3->chromStart, gBed3->chromEnd);
 struct vpTx *vpTx;
 AllocVar(vpTx);
