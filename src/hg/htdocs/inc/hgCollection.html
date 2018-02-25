@@ -38,8 +38,8 @@
     left:       0;
     height:     100%;
     width:      100%;
-    background: rgba( 255, 255, 255, .0 ) 
-                url('http://i.stack.imgur.com/FhHRx.gif') 
+    background: rgba( 255, 255, 255, 0.2 ) 
+                url('http://i.stack.imgur.com/FhHRx.gif')
                 50% 50% 
                 no-repeat;
 }
@@ -127,7 +127,7 @@ body.loading .modal {
             <strong>Note: You must <a href="../goldenPath/help/hgSessionHelp.html" target="_blank">
             save your session</a> to preserve collections long-term.
             </br></strong></p>
-        <div id='currentCollection' style='overflow:auto' ></div>
+        <div id='currentCollection' style='overflow:auto' ><div id='root'></div></div>
     </div>
 </div>
 
@@ -135,7 +135,9 @@ body.loading .modal {
     <li data-action="delete">Delete</li>
 </ul>
 
-<div class='modal'></div>
+<div class='modal' style="display:block" id='workScreen'>
+<div class="loader" ></div>
+</div>
 
 <div id='newCollectionDialog' class='myTitleClass' title='Create Collection' style='background:white; width:512px; display:none'>
     <p>
