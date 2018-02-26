@@ -204,6 +204,8 @@ if (row != NULL)
 	hubUpdateStatus( hub->errorMessage, hub);
 	if (!isEmpty(hub->errorMessage))
 	    {
+            // we need to do something special here to 
+            // not warn about local hubs disappearing
 	    warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
 	    }
 	}
@@ -762,11 +764,8 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 	    }
 	else
 	    {
-	    if (!trackHubDatabase(database))
-		{
-		struct grp *grp = grpFromHub(hub);
-		slAddHead(&hubGroups, grp);
-		}
+            struct grp *grp = grpFromHub(hub);
+            slAddHead(&hubGroups, grp);
 	    hubUpdateStatus(NULL, hub);
 	    }
 
