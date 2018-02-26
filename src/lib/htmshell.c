@@ -951,7 +951,7 @@ dyStringAppend(policy, "default-src 'self';");
 dyStringAppend(policy, "  child-src 'self';");
 */
 
-dyStringAppend(policy, " script-src 'self'");
+dyStringAppend(policy, " script-src 'self' blob:");
 // Trick for backwards compatibility with browsers that understand CSP1 but not nonces (CSP2).
 dyStringAppend(policy, " 'unsafe-inline'");
 // For browsers that DO understand nonces and CSP2, they ignore 'unsafe-inline' in script if nonce is present.

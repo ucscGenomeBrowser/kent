@@ -38,8 +38,8 @@
     left:       0;
     height:     100%;
     width:      100%;
-    background: rgba( 255, 255, 255, .0 ) 
-                url('http://i.stack.imgur.com/FhHRx.gif') 
+    background: rgba( 255, 255, 255, 0.2 ) 
+                url('http://i.stack.imgur.com/FhHRx.gif')
                 50% 50% 
                 no-repeat;
 }
@@ -101,9 +101,9 @@ body.loading .modal {
             <div class='col-md-12'>Available Tracks</div>
         </div>
         <p> Below are all available graphing tracks that can be added to any collection. Click the 
-        arrow to the left of each folder below to expand/contract it's contents. Click the green 
-        "plus" (+) symbol to add a track to any <i>selected</i> collection. See "Getting Started" 
-        below for tips. </p>
+        tiny arrow to the left of each folder below to show/hide tracks. Click the green 
+        "plus" <button type="button"> + </button> symbol to add a track to any <i>selected</i> collection in the right window. See 
+        "Getting Started" below for tips. </p>
         <p>
         <div id='tracks' style='overflow:auto'></p>
         </div>
@@ -118,16 +118,16 @@ body.loading .modal {
                     </div>
                 </div>
             </div>
-            <p>To make a new collection of tracks, click the "Add Collection" button above. Once 
+            <p>To make a new collection of tracks, click the 'Add Collection' button above. Once 
             saved, double-click the new collection to edit the name and description. To remove a 
-            track from a collection, click the red "minus" (-) symbol to the left of each track. 
+            track from a collection, click the red "minus" <button type="button"> - </button> symbol to the left of each track. 
             See "Getting Started" below for tips. Click <strong>"GO"</strong> (upper right) to see 
             collections in the browser. </p>
             <p>
             <strong>Note: You must <a href="../goldenPath/help/hgSessionHelp.html" target="_blank">
             save your session</a> to preserve collections long-term.
             </br></strong></p>
-        <div id='currentCollection' style='overflow:auto' ></div>
+        <div id='currentCollection' style='overflow:auto' ><div id='root'></div></div>
     </div>
 </div>
 
@@ -135,7 +135,9 @@ body.loading .modal {
     <li data-action="delete">Delete</li>
 </ul>
 
-<div class='modal'></div>
+<div class='modal' style="display:block" id='workScreen'>
+<div class="loader" ></div>
+</div>
 
 <div id='newCollectionDialog' class='myTitleClass' title='Create Collection' style='background:white; width:512px; display:none'>
     <p>

@@ -122,8 +122,8 @@ for (inter=inters; inter; inter=inter->next)
     unsigned lowStart, lowEnd, highStart, highEnd;
     if (otherChrom)
         {
-        lowStart = inter->chromStart;
-        lowEnd = inter->chromEnd;
+        lowStart = highStart = inter->chromStart;
+        lowEnd = highEnd = inter->chromEnd;
         }
     else if (inter->sourceStart < inter->targetStart)
         {

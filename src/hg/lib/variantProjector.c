@@ -335,13 +335,13 @@ static boolean genomeTxMismatch(char *txRef, struct seqWindow *gSeqWin,
  * and vpTxSetTxAlt to detect indel mismatches. */
 {
 boolean mismatch = FALSE;
-if (txRef != NULL)
+if (isNotEmpty(txRef))
     {
     int bufLen = gEnd - gStart + 1;
     char splicedGSeq[bufLen];
     splicedGSeq[0] = '\0';
     spliceGenomicInRange(gSeqWin, gStart, gEnd, txAli, FALSE, splicedGSeq, sizeof(splicedGSeq));
-    if (differentString(splicedGSeq, txRef))
+    if (isNotEmpty(splicedGSeq) && differentString(splicedGSeq, txRef))
         mismatch = TRUE;
     }
 return mismatch;
@@ -688,7 +688,7 @@ for (ix = 0;  ix < txAli->blockCount - 1;  ix++)
         if (shiftR)
             {
             // Expand gap to the right -- increase {t,q}Starts[ix+1], decrease blockSizes[ix+1]
-            if (txAli->blockSizes[ix] < shiftR)
+            if (txAli->blockSizes[ix+1] < shiftR)
                 errAbort("vpExpandIndelGaps: support for deleting/merging blocks not implemented");
             txAli->tStarts[ix+1] += shiftR;
             txAli->qStarts[ix+1] += shiftR;
@@ -714,7 +714,7 @@ if (sameString(gAlt, "<DEL>"))
 int altLen = strlen(gAlt);
 if (!isAllNt(gAlt, altLen))
     errAbort("vpGenomicToTranscript: alternate allele must be sequence of IUPAC DNA characters "
-             "but is '%s'", gAlt);
+             "or '<DEL>' but is '%s'", gAlt);
 gSeqWin->fetch(gSeqWin, gBed3->chrom, gBed3->chromStart, gBed3->chromEnd);
 struct vpTx *vpTx;
 AllocVar(vpTx);
