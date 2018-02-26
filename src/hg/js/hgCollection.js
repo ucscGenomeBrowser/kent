@@ -3,13 +3,13 @@
 // Copyright (C) 2018 The Regents of the University of California
 
 var hgCollection = (function() {
-    //$("#workScreen").css("display","block");
     var selectedNode;
     var selectedTree;
     var $tracks;  // the #tracks object
     var trees = [];
     var isDirty = false;
     var goTracks = false;
+    var loadFinished = false;
     var doAjaxAsync = true;
     var emptyCollectionText;
     var addWithoutCollectionText;
@@ -263,10 +263,9 @@ var hgCollection = (function() {
     }
 
     function saveCollections(trees) {
-       // called when the "Save" button is pressed
+        // called when the "Save" button is pressed
         $("#workScreen").css("display","block");
-        $(selectedTree).on("open_all.jstree", finishSaving);
-        $(selectedTree).jstree('open_all');
+        finishSaving();
     }
 
     function rebuildLabel() {
@@ -364,8 +363,17 @@ var hgCollection = (function() {
         cb.call(this, trackData[node.id]);
     }
 
-    function treeReady() {
-        // called when either the track or collection tree has been loaded
+    function trackTreeReady() {
+        // called when the track tree has been loaded
+        var firstChild = $(this).find("li").first();
+        $(this).jstree("select_node", $(firstChild).attr("id"));
+    }
+
+    function collectionTreeReady() {
+        // called when the collection tree has been loaded
+        //$(selectedTree).on("load_all.jstree", collectionLoadFinished);
+        var rootNode = $(selectedTree).jstree("get_node", '#');
+        $(selectedTree).jstree('load_all', rootNode, collectionLoadFinished);
         var firstChild = $(this).find("li").first();
         $(this).jstree("select_node", $(firstChild).attr("id"));
     }
@@ -373,6 +381,11 @@ var hgCollection = (function() {
     function colorInputChange () {
         // called when the color text edit box changes
         $("#customColorPicker").spectrum("set",$("#customColorInput").val());
+    }
+
+    function collectionLoadFinished() {
+        loadFinished = true;
+        $("#workScreen").css("display","none");
     }
 
     function init() {
@@ -394,10 +407,11 @@ var hgCollection = (function() {
         window.addEventListener("beforeunload", function (e) {
             if (isDirty) {
                 doAjaxAsync = false;
-                saveCollections(trees);
+                if (loadFinished)
+                    saveCollections(trees);
+                else
+                    e.returnValue = "ask to leave";
             }
-
-            return undefined;
         });
 
         $("#saveCollections").click ( function() { saveCollections(trees); } );
@@ -430,7 +444,7 @@ var hgCollection = (function() {
         }
 
         var newTree=$('#currentCollection');
-        newTree.on("ready.jstree", treeReady);
+        newTree.on("ready.jstree", collectionTreeReady);
         newTree.jstree({
            'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
            //'plugins' : [ 'conditionalselect', 'contextmenu'],
@@ -470,12 +484,11 @@ var hgCollection = (function() {
                    "dblclick_toggle" : false,
                 },
         });
-        treeDiv.on("ready.jstree", treeReady);
+        treeDiv.on("ready.jstree", trackTreeReady);
         treeDiv.on("select_node.jstree", function (evt, data)  {
             $(evt.target).jstree("open_node", data.node);
         });
         treeDiv.on('click', '.jstree-themeicon ', plusHit);
-        $("#workScreen").css("display","none");
     }
 
    function submitForm() {

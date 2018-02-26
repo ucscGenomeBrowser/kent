@@ -827,7 +827,11 @@ char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 if (bigDataUrl == NULL)
     {
     if (startsWith("bigWig", tdb->type))
+        {
+        if (conn == NULL)
+            errAbort("track hub has bigWig without bigDataUrl");
         dataUrl = getSqlBigWig(conn, db, tdb);
+        }
     }
 
 struct hashCookie cookie = hashFirst(tdb->settingsHash);
@@ -890,7 +894,9 @@ if (tdbType != NULL)
 
 
 outHubHeader(f, db);
-struct sqlConnection *conn = hAllocConn(db);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(db))
+    conn = hAllocConn(db);
 modifyName(newTdb, hubName, NULL);
 outTrackDbList(db, conn, f, hubName, trackList, collectionName, newTdb,  0);
 
