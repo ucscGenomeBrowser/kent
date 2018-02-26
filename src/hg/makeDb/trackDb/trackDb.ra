@@ -293,7 +293,7 @@ longLabel CRISPR/Cas9 Sp. Pyog. target sites
 group genes
 visibility hide
 type bed 3
-compositeTrack on
+superTrack on
 html crispr
 
     track crisprRanges
@@ -308,7 +308,7 @@ html crispr
     track crisprTargets
     shortLabel CRISPR Targets
     longLabel CRISPR/Cas9 -NGG Targets
-    visibility pack
+    visibility dense
     type bigBed 9 +
     itemRgb on
     parent crispr

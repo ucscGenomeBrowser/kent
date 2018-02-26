@@ -2710,7 +2710,7 @@ var rightClick = {
         } else if (cmd === 'newCollection') {
             $.ajax({
                 type: "PUT",
-                async: true,
+                async: false,
                 url: "../cgi-bin/hgCollection",
                 data:  "cmd=newCollection&track=" + id + "&hgsid=" + getHgsid(),
                 trueSuccess: mySuccess,
@@ -2732,7 +2732,7 @@ var rightClick = {
 
             $.ajax({
                 type: "PUT",
-                async: true,
+                async: false,
                 url: "../cgi-bin/hgCollection",
                 data: "cmd=addTrack&track=" + id + "&collection=" + collectionName + "&hgsid=" + getHgsid(),
                 trueSuccess: mySuccess,
