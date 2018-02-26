@@ -161,6 +161,10 @@ void doHelp()
 puts(
 "In-Silico PCR searches a sequence database with a pair of\n"
 "PCR primers, using an indexing strategy for fast performance.\n"
+"See an example\n"
+"<a href='https://youtu.be/U8_QYwmdGYU?feature=player_detailpage&v=8ATcoDTOc0g&list=UUQnUJepyNOw0p8s2otX4RYQ'"
+"target='_blank'>video</a>\n"
+"on our YouTube channel.\n"
 "\n"
 "<H3>Configuration Options</H3>\n"
 "<B>Genome and Assembly</B> - The sequence database to search.<BR>\n"

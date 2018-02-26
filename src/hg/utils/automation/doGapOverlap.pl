@@ -244,7 +244,7 @@ sub doLoad {
         "to complete this procedure.\n";
   }
   # And, must have something to load
-  if ( ! $opt_debug && ( -s "$runDir/$db.gapOverlap.bed" ) ) {
+  if ( ! $opt_debug && ( ! -s "$runDir/$db.gapOverlap.bed" ) ) {
     die "doLoad does not find result from blat run: $db.gapOverlap.bed, " .
       "Can run with: -continue blat or check why blat run was empty.\n";
   }
