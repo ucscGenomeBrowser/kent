@@ -292,6 +292,7 @@ var hgCollection = (function() {
     }
 
     function checkEmpty(parentId) {
+        // add or remove the "empty collection" stub
         if ($('#'+parentId).hasClass('empty')) {
             var parentNode = $(selectedTree).jstree('get_node', parentId);
             var stub;
@@ -320,21 +321,23 @@ var hgCollection = (function() {
     
     function plusHit(event, data) {
         // called with the plus icon is hit
-        if (selectedNode === undefined) {
+        var treeObject = $(event.currentTarget).parent().parent();
+        var id = treeObject.attr('id');
+        var node = treeObject.jstree("get_node", id);
+
+        if (node.icon !== 'fa fa-plus')  // if this isn't a leaf, then return
+            return;
+
+        if (selectedNode === undefined) {   // if there are no collections
             alert(addWithoutCollectionText);
             return;
         }
 
-        var treeObject = $(event.currentTarget).parent().parent();
-        var id = treeObject.attr('id');
-        var node = treeObject.jstree("get_node", id);
-        if (node.children.length === 0) {
-            var parentId = $(selectedNode).attr('id');
-            parentId = findCollection(selectedNode);
-            checkEmpty(parentId);
-            isDirty = true;
-            $(selectedTree).jstree("copy_node", node, parentId,'last');
-        }
+        var parentId = $(selectedNode).attr('id');
+        parentId = findCollection(selectedNode);
+        checkEmpty(parentId);
+        isDirty = true;
+        $(selectedTree).jstree("copy_node", node, parentId,'last');
     }
 
     function minusHit (event, data) {
