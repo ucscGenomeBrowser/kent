@@ -2710,7 +2710,7 @@ var rightClick = {
         } else if (cmd === 'newCollection') {
             $.ajax({
                 type: "PUT",
-                async: false,
+                async: true,
                 url: "../cgi-bin/hgCollection",
                 data:  "cmd=newCollection&track=" + id + "&hgsid=" + getHgsid(),
                 trueSuccess: mySuccess,
@@ -3589,6 +3589,9 @@ function addKeyboardHelpEntries() {
 
     html = '<span class="shortcut">c t</span>';
     $('#customTracksMenuLink').after(html);
+
+    html = '<span class="shortcut">t c</span>';
+    $('#customCompositeMenuLink').after(html);
 
     html = '<span class="shortcut">t h</span>';
     $('#trackHubsMenuLink').after(html);

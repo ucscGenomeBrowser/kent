@@ -78,73 +78,21 @@ static boolean trackCanBeAdded(struct trackDb *tdb)
 return  (tdb->subtracks == NULL) && !startsWith("wigMaf",tdb->type) &&  (startsWith("wig",tdb->type) || startsWith("bigWig",tdb->type) || startsWith("bedGraph",tdb->type)) ;
 }
 
-static void printGroup(char *parent, struct trackDb *tdb, boolean folder, boolean user)
+static void printTrack(char *parent, struct trackDb *tdb,  boolean user)
 // output list elements for a group
 {
 char *userString = "";
-char *prefix = "";
-char *viewFunc = NULL;
-char *missingMethod = NULL;
 
-if (user)
-    {
-    if (tdb->parent && tdb->subtracks) 
-        {
-        viewFunc = trackDbSetting(tdb, "viewFunc");
-        missingMethod = trackDbSetting(tdb, "missingMethod");
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='view' class='folder'";
-        }
-    else if (tdb->subtracks)
-        {
-        viewFunc = trackDbSetting(tdb, "viewFunc");
-        missingMethod = trackDbSetting(tdb, "missingMethod");
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' viewType='collection' class='folder'";
-        }
-    else
-        userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-minus-square\\\"}' class='track' viewType='track'";
-    }
+if (tdb->subtracks)
+    userString = "icon:'../images/folderC.png',children:true,";
+else if (user)
+    userString = "icon:'fa fa-minus-square',";
 else
-    {
-    if (tdb->parent && tdb->subtracks) 
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop' viewType='view'";
-    else if (tdb->subtracks)
-        userString = "data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='collection' viewType='track'";
-    else
-        userString = "data-jstree='{\\\"icon\\\":\\\"fa fa-plus\\\"}' class='nodrop' viewType='track'";
-    }
-    
+    userString = "icon:'fa fa-plus',";
     
 #define IMAKECOLOR_32(r,g,b) ( ((unsigned int)b<<0) | ((unsigned int)g << 8) | ((unsigned int)r << 16))
 
-char buffer[1024];
-char *viewFuncString = "";
-if (viewFunc != NULL)
-    {
-    safef(buffer, sizeof buffer, "viewFunc='%s' ", viewFunc);
-    viewFuncString = cloneString(buffer);
-    }
-
-char *missingString = "";
-if (missingMethod != NULL)
-    {
-    safef(buffer, sizeof buffer, "missingMethod='%s' ", missingMethod);
-    missingString = cloneString(buffer);
-    }
-
-jsInlineF("<li shortLabel='%s' longLabel='%s' color='#%06x' %s %s visibility='%s'  name='%s%s' %s>%s",  tdb->shortLabel, tdb->longLabel,IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB), viewFuncString, missingString, hStringFromTv(tdb->visibility), prefix,  trackHubSkipHubName(tdb->track),   userString,  tdb->shortLabel );
-jsInlineF(" (%s)", tdb->longLabel);
-
-
-if (tdb->subtracks)
-    {
-    struct trackDb *subTdb;
-
-    jsInlineF("<ul>");
-    for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
-        printGroup(trackHubSkipHubName(tdb->track), subTdb, user && (subTdb->subtracks != NULL), user);
-    jsInlineF("</ul>");
-    }
-jsInlineF("</li>");
+jsInlineF("{%s id:'%s',li_attr:{shortlabel:'%s', longlabel:'%s',color:'#%06x',name:'%s'},text:'%s (%s)',parent:'%s'}",userString, trackHubSkipHubName(tdb->track), tdb->shortLabel, tdb->longLabel, IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB),trackHubSkipHubName(tdb->track),tdb->shortLabel,tdb->longLabel,parent);
 }
 
 static void outHubHeader(FILE *f, char *db)
@@ -270,7 +218,7 @@ else
         slAddHead(list, tdbRef);
         safef(buffer, sizeof buffer, "%s_imgOrd", tdb->track);
 
-        tdbRef->order = cartUsualInt(cart, buffer, 0);
+        tdbRef->order = cartUsualInt(cart, buffer, tdb->priority);
         }
     }
 }
@@ -283,28 +231,64 @@ const struct trackDbRef *b = *((struct trackDbRef **)vb);
 return (a->order - b->order);
 }       
 
-static void addVisibleTracks(struct cart *cart, struct trackDb *trackList)
+static void addVisibleTracks(struct dyString *rootChildren, struct cart *cart, struct trackDb *trackList)
 // add the visible tracks table rows.
 {
 struct trackDb *tdb;
 struct trackDbRef *tdbRefList = NULL, *tdbRef;
-//checkForVisible(fullTrackList);
 for(tdb = trackList; tdb; tdb = tdb->next)
     {
     checkForVisible(cart, &tdbRefList, tdb);
     }
 
 slSort(&tdbRefList, tdbRefCompare);
+if (!isEmpty(rootChildren->string))
+    dyStringPrintf(rootChildren, ",");
+dyStringPrintf(rootChildren, "{icon:'../images/folderC.png',id:'visible', text:'Visible Tracks', parent:'#'");
+if (tdbRefList != NULL)
+    dyStringPrintf(rootChildren, ",children:true");
+dyStringPrintf(rootChildren, "}");
 
-jsInlineF("<ul>");
-jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop folder' name='%s'>%s", "visibile", "Visible Tracks");
-jsInlineF("<ul>");
+jsInlineF("trackData['visible'] = [");
 for(tdbRef = tdbRefList; tdbRef; tdbRef = tdbRef->next)
-    printGroup("visible", tdbRef->tdb, FALSE, FALSE);
+    {
+    printTrack("visible", tdbRef->tdb,  FALSE);
+    if (tdbRef->next != NULL)
+        jsInlineF(",");
+    }
+jsInlineF("];");
+}
 
-jsInlineF("</ul>");
-jsInlineF("</li>");
-jsInlineF("</ul>");
+void printSubtracks(char *arrayName, struct trackDb *parentTdb, boolean user)
+{
+if (parentTdb->subtracks == NULL)
+    return;
+jsInlineF("%s['%s'] = [", arrayName, trackHubSkipHubName(parentTdb->track));
+boolean first = TRUE;
+struct trackDb *tdb;
+for(tdb = parentTdb->subtracks; tdb;  tdb = tdb->next)
+    {
+    if (!first)
+        jsInlineF(",");
+    printTrack(trackHubSkipHubName(parentTdb->track), tdb, user);
+    first = FALSE;
+    }
+jsInlineF("];");
+for(tdb = parentTdb->subtracks; tdb;  tdb = tdb->next)
+    printSubtracks(arrayName,tdb, user);
+}
+
+void addSubtrackNames(struct dyString *dy, struct trackDb *parentTdb)
+{
+if (parentTdb->subtracks == NULL)
+    return;
+
+struct trackDb *tdb;
+for(tdb = parentTdb->subtracks; tdb;  tdb = tdb->next)
+    {
+    dyStringPrintf(dy, ",'%s'", trackHubSkipHubName(tdb->track));
+    addSubtrackNames(dy, tdb);
+    }
 }
 
 static void doTable(struct cart *cart, char *db, struct grp *groupList, struct trackDb *trackList)
@@ -318,49 +302,74 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
         break;
     }
 
-jsInlineF("$('#currentCollection').append(\"");
-jsInlineF("<div id='root'>");
+jsInlineF("var collectionData = []; ");
+struct dyString *dy = newDyString(100);
 if (curGroup != NULL)
     {
     // print out all the tracks in all the collections
     struct trackDb *tdb;
+    jsInlineF("collectionData['#'] = [");
+    boolean first = TRUE;
     for(tdb = trackList; tdb;  tdb = tdb->next)
         {
         if (sameString(tdb->grp, hubName))
             {
-            jsInlineF("<ul>");
-            printGroup("collections", tdb, TRUE, TRUE);
-            jsInlineF("</ul>");
+            if (!first)
+                {
+                jsInlineF(",");
+                dyStringPrintf(dy, ",");
+                }
+            printTrack("#", tdb,  TRUE);
+            dyStringPrintf(dy, "'%s'", trackHubSkipHubName(tdb->track));
+            first = FALSE;
             }
         }
-    }
-jsInlineF("</div>");
-jsInlineF("\");\n");
-
-jsInlineF("$('#tracks').append(\"");
-addVisibleTracks(cart, trackList);
-for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
-    {
-    if ((hubName != NULL) && sameString(curGroup->name, hubName))
-        continue;
-    jsInlineF("<ul>");
-    jsInlineF("<li data-jstree='{\\\"icon\\\":\\\"../images/folderC.png\\\"}' class='nodrop folder' name='%s'>%s", curGroup->name, curGroup->label );
-    struct trackDb *tdb;
-    jsInlineF("<ul>");
+    jsInlineF("];");
     for(tdb = trackList; tdb;  tdb = tdb->next)
         {
         if ( sameString(tdb->grp, curGroup->name))
             {
-            printGroup(curGroup->name, tdb, FALSE, FALSE);
+            printSubtracks("collectionData", tdb, TRUE);
+            addSubtrackNames(dy, tdb);
             }
         }
-    jsInlineF("</ul>");
-    jsInlineF("</li>");
-    jsInlineF("</ul>");
-
     }
-jsInlineF("\");\n");
-jsReloadOnBackButton(cart);
+else
+    jsInlineF("collectionData['#'] = [];");
+
+jsInlineF("var collectionNames = new Set([%s]);", dy->string);
+
+jsInlineF("var trackData = []; ");
+struct dyString *rootChildren = newDyString(512);
+addVisibleTracks(rootChildren, cart, trackList);
+for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
+    {
+    if ((hubName != NULL) && sameString(curGroup->name, hubName))
+        continue;
+    if (!isEmpty(rootChildren->string))
+        dyStringPrintf(rootChildren, ",");
+    dyStringPrintf(rootChildren, "{icon:'../images/folderC.png',id:'%s', text:'%s', parent:'#', children:true}", curGroup->name, curGroup->label);
+    struct trackDb *tdb;
+    jsInlineF("trackData['%s'] = [", curGroup->name);
+    boolean first = TRUE;
+    for(tdb = trackList; tdb;  tdb = tdb->next)
+        {
+        if ( sameString(tdb->grp, curGroup->name))
+            {
+            if (!first)
+                jsInlineF(",");
+            printTrack(curGroup->name, tdb, FALSE);
+            first = FALSE;
+            }
+        }
+    jsInlineF("];");
+    for(tdb = trackList; tdb;  tdb = tdb->next)
+        {
+        if ( sameString(tdb->grp, curGroup->name))
+            printSubtracks("trackData", tdb, FALSE);
+        }
+    }
+jsInlineF("trackData['#'] = [%s];", rootChildren->string);
 jsInlineF("hgCollection.init();\n");
 }
 
@@ -670,18 +679,6 @@ if ((name == NULL) && (ele->type == jsonObject))
         track->visibility = "pack";
         strEle = (struct jsonElement *)hashMustFindVal(attrHash, "color");
         track->color = hexStringToLong(jsonStringEscape(strEle->val.jeString));
-        /*
-        strEle = (struct jsonElement *)hashMustFindVal(attrHash, "visibility");
-        track->visibility = jsonStringEscape(strEle->val.jeString);
-        strEle = (struct jsonElement *)hashMustFindVal(attrHash, "color");
-        track->color = hexStringToLong(jsonStringEscape(strEle->val.jeString));
-        strEle = (struct jsonElement *)hashFindVal(attrHash, "viewfunc");
-        if (strEle)
-            track->viewFunc = jsonStringEscape(strEle->val.jeString);
-        strEle = (struct jsonElement *)hashFindVal(attrHash, "missingmethod");
-        if (strEle)
-            track->missingMethod = jsonStringEscape(strEle->val.jeString);
-            */
         }
 
     if (sameString(parentName, "#"))
@@ -691,7 +688,6 @@ if ((name == NULL) && (ele->type == jsonObject))
         struct track *parent = hashMustFindVal(trackHash, parentName);
         slAddTail(&parent->trackList, track);
         }
-
     }
 }
 
@@ -801,7 +797,7 @@ for(tdb = trackList; tdb;  tdb = nextTdb)
 
             slAddHead(&newList, tdb->parent);
             }
-        slAddHead(&tdb->parent->subtracks, tdb);
+        slAddTail(&tdb->parent->subtracks, tdb);
         }
     else
         slAddHead(&newList, tdb);

@@ -3,7 +3,7 @@
 // Copyright (C) 2018 The Regents of the University of California
 
 var hgCollection = (function() {
-    var names = []; // a list of names that have been used
+    //$("#workScreen").css("display","block");
     var selectedNode;
     var selectedTree;
     var $tracks;  // the #tracks object
@@ -182,6 +182,7 @@ var hgCollection = (function() {
         $("#customDescription").val("New Collection description");
         $("#customVis").val("full");
         $("#customColorInput").val("#0");
+        $("#customColorPicker").spectrum("set", "#0");
         $("#viewFunc").val("show all");
         $( "#customName" ).select();
         $('#collectionDialogHelp').show();
@@ -230,8 +231,8 @@ var hgCollection = (function() {
         return mytext;
     }
 
-    function saveCollections(trees) {
-       // called when the "Save" button is pressed
+    function finishSaving() {
+        // save the collection tree to the server
        var json = "[";
         var v = $(selectedTree).jstree(true).get_json('#', {flat:true, no_data:true, no_state:true, no_a_attr:true});
         var children;
@@ -242,7 +243,7 @@ var hgCollection = (function() {
             }
         }
         for(ii=0; ii < v.length; ii++) { 
-            if (v[ii].li_attr.class === undefined) {
+            if (v[ii].li_attr.name === undefined) {
                 alert(parents[v[ii].parent] + " does not have any wiggles.  Not saved.");
             }
         }
@@ -261,6 +262,13 @@ var hgCollection = (function() {
         });
     }
 
+    function saveCollections(trees) {
+       // called when the "Save" button is pressed
+        $("#workScreen").css("display","block");
+        $(selectedTree).on("open_all.jstree", finishSaving);
+        $(selectedTree).jstree('open_all');
+    }
+
     function rebuildLabel() {
         // rebuild the label for tree item
         var newText = selectedNode.li_attr.shortlabel + "   (" + selectedNode.li_attr.longlabel + ")";
@@ -271,7 +279,8 @@ var hgCollection = (function() {
     function colorChange() {
         // change the color for a track
         isDirty = true;
-        var color = $("#customColorPicker").spectrum("get"); $('#customColorInput').val(color);
+        var color = $("#customColorPicker").spectrum("get"); 
+        $('#customColorInput').val(color);
     }
 
     function isDraggable(nodes) {
@@ -281,15 +290,6 @@ var hgCollection = (function() {
             if (nodes[ii].children.length !== 0)
                 return false;
         return true;
-    }
-
-    function recordNames(tree) {
-        // keep an accounting of track names that have been used
-        var v = $(tree).jstree(true).get_json('#', {'flat': true});
-        for (i = 0; i < v.length; i++) {
-            var z = v[i];
-            names[z.li_attr.name] = 1;
-        }
     }
 
     function checkEmpty(parentId) {
@@ -343,7 +343,7 @@ var hgCollection = (function() {
         var treeObject = $(event.currentTarget).parent().parent();
         var id = treeObject.attr('id');
         var node = treeObject.jstree("get_node", id);
-        if (node.children.length === 0) {
+        if (node.parent !== '#') {
             isDirty = true;
             var parentNode = treeObject.jstree("get_node", node.parent);
             if (parentNode.children.length === 1) {
@@ -354,9 +354,31 @@ var hgCollection = (function() {
         }
     }
 
+    function buildCollections(node, cb) {
+        // called when jstree wants data to open a node for the collection tree
+        cb.call(this, collectionData[node.id]);
+    }
+
+    function buildTracks(node, cb) {
+        // called when jstree wants data to open a node for the tracks tree
+        cb.call(this, trackData[node.id]);
+    }
+
+    function treeReady() {
+        // called when either the track or collection tree has been loaded
+        var firstChild = $(this).find("li").first();
+        $(this).jstree("select_node", $(firstChild).attr("id"));
+    }
+
+    function colorInputChange () {
+        // called when the color text edit box changes
+        $("#customColorPicker").spectrum("set",$("#customColorInput").val());
+    }
+
     function init() {
         // called at initialization time
         $body = $("body");
+        $("#customColorInput").change(colorInputChange);
 
         emptyCollectionText = $('#emptyCollectionText').text();
         addWithoutCollectionText = $('#addWithoutCollectionText').text();
@@ -406,38 +428,32 @@ var hgCollection = (function() {
         if ( $("#currentCollection ul").length !== 0) {
             addedOne = true;
         }
-        $("#currentCollection div").each(function(index) {
-            var newTree = this;
 
-            $(newTree).jstree({
-               'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
-               //'plugins' : [ 'conditionalselect', 'contextmenu'],
-               'contextmenu': { "items" : currentCollectionItems},
-               'core': {
-                   "dblclick_toggle" : false,
-                },
-               'dnd': {
-                    "check_callback" : checkCallback,
-                }
-            });
-            recordNames(newTree);
-            trees[this.id] = $(newTree);
-            $(newTree).on("select_node.jstree", selectTreeNode);
-            $(newTree).on("dblclick.jstree", doubleClickTreeNode);
-            $(newTree).on("move_node.jstree", moveNode);
-
-            $(newTree).on("copy_node.jstree", function (evt, data)  {
-                $(evt.target).jstree("open_node", data.parent);
-                $(evt.target).jstree("set_icon", data.node, 'fa fa-minus-square');
-            });
-            $(newTree).on('click', '.jstree-themeicon ', minusHit);
-
-            // select the first cild
-            var firstChild = $(newTree).find("li").first();
-            $(newTree).jstree("select_node", $(firstChild).attr("id"));
-            selectedTree = newTree;
+        var newTree=$('#currentCollection');
+        newTree.on("ready.jstree", treeReady);
+        newTree.jstree({
+           'plugins' : ['dnd', 'conditionalselect', 'contextmenu'],
+           //'plugins' : [ 'conditionalselect', 'contextmenu'],
+           'contextmenu': { "items" : currentCollectionItems},
+           'core': {
+               "data" : buildCollections,
+               "dblclick_toggle" : false,
+            },
+           'dnd': {
+                "check_callback" : checkCallback,
+            }
         });
+        $(newTree).on("select_node.jstree", selectTreeNode);
+        $(newTree).on("dblclick.jstree", doubleClickTreeNode);
+        $(newTree).on("move_node.jstree", moveNode);
 
+        $(newTree).on("copy_node.jstree", function (evt, data)  {
+            $(evt.target).jstree("open_node", data.parent);
+            $(evt.target).jstree("set_icon", data.node, 'fa fa-minus-square');
+        });
+        $(newTree).on('click', '.jstree-themeicon ', minusHit);
+
+        selectedTree = newTree;
 
         treeDiv=$('#tracks');
         treeDiv.jstree({
@@ -449,16 +465,17 @@ var hgCollection = (function() {
                     is_draggable: isDraggable,
                },
                'core' :  {
+                   "data" : buildTracks,
                    "check_callback" : checkCallback,
                    "dblclick_toggle" : false,
                 },
         });
+        treeDiv.on("ready.jstree", treeReady);
         treeDiv.on("select_node.jstree", function (evt, data)  {
             $(evt.target).jstree("open_node", data.node);
         });
         treeDiv.on('click', '.jstree-themeicon ', plusHit);
-        var firstChild = $(treeDiv).find("li").first();
-        $(treeDiv).jstree("select_node", $(firstChild).attr("id"));
+        $("#workScreen").css("display","none");
     }
 
    function submitForm() {
@@ -485,16 +502,16 @@ var hgCollection = (function() {
 
     function getUniqueName(root) {
         // make sure name is unique in track hub
-        if (!names[root]) {
-            names[root] = true;
+        if (!collectionNames.has(root)) {
+            collectionNames.add(root);
             return root;
         } else {
             var counter = 1;
 
             for(; ; counter++) {
                 var name  = root + counter;
-                if (!names[name]) {
-                    names[name] = true;
+                if (!collectionNames.has(name)) {
+                    collectionNames.add(name);
                     return name;
                 }
             }
