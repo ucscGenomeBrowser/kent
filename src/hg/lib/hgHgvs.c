@@ -2856,7 +2856,10 @@ else
             aaToAbbr('X', refLastAbbr, sizeof(refLastAbbr));
         else
             aaToAbbr(pSeq[rangeEnd-1], refLastAbbr, sizeof(refLastAbbr));
-        dyStringPrintf(dy, "%s%d_%s%d", refStartAbbr, rangeStart+1, refLastAbbr, rangeEnd);
+        if (dupLen == 1)
+            dyStringPrintf(dy, "%s%d", refStartAbbr, rangeStart+1);
+        else
+            dyStringPrintf(dy, "%s%d_%s%d", refStartAbbr, rangeStart+1, refLastAbbr, rangeEnd);
         }
     hgvsAppendChangesFromPepRefAlt(dy, vpPep->ref, vpPep->alt, dupLen);
     }

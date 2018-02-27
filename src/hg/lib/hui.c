@@ -5003,9 +5003,10 @@ void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
 /* let the user choose to see the track in wiggle mode */
 {
 printf("<BR><BR><B>Display data as a density graph:</B> ");
-char varName[1024];
 boolean option = cartOrTdbBoolean(cart, tdb, "doWiggle", FALSE);
 
+char varName[1024];
+safef(varName, sizeof(varName), "%s.doWiggle", name);
 cgiMakeCheckBox(varName, option);
 printf("<BR>\n");
 char *style = option ? "display:block" : "display:none";

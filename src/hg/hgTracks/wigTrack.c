@@ -402,7 +402,7 @@ void wigLoadItems(struct track *tg)
 struct sqlConnection *conn = NULL ;
 
 // if this is a custom track we don't need an SQL connection to the database
-if (!(isCustomTrack(tg->table) && tg->customPt))
+if (!isCustomTrack(tg->table))
     conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
