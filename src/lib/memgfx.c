@@ -329,7 +329,7 @@ INLINE void mixDot(struct memGfx *img, int x, int y,  float frac, Color col)
 /* Puts a single dot on the image, mixing it with what is already there
  * based on the frac argument. */
 {
-if ((x < img->clipMinX) || (x > img->clipMaxX) || (y < img->clipMinY) || (y > img->clipMaxY))
+if ((x < img->clipMinX) || (x >= img->clipMaxX) || (y < img->clipMinY) || (y >= img->clipMaxY))
     return;
 
 Color *pt = _mgPixAdr(img,x,y);
