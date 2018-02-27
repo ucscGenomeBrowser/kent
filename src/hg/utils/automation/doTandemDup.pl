@@ -255,7 +255,7 @@ $Bin/kmerCollapsePairedEnds.pl $kmersMinus1 ../pairedEnds/tmp/\$chrName.bed.gz \
 ' > runOne
 chmod +x runOne
 gensub2 part.list single gsub jobList
-$HgAutomate::paraRun
+$paraRun
 _EOF_
   );
   $bossScript->execute();

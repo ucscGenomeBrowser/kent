@@ -2,30 +2,30 @@
 
 <h2>Contents</h2>
   
-<ul class='gbNoBullet gbsNoBullet'>
-<li><h5><a href="#Intro">Introduction</a></h5></li>
+
+<h6><a href="#Intro">Introduction</a></h6>
   <ul>
     <li><h5><a href="#SupportedData">Supported Data Types</a></h5></li>
     <li><h5><a href="#TrackSources">Track Sources</a></h5></li>
   </ul>
-<li><h5><a href="#GetStarted">Getting Started</a></h5></li>
+<h6><a href="#GetStarted">Getting Started</a></h6>
   <ul>
-      <li><h5><a href="#AddCollection">Create a new collection</a></h5></li>
-      <li><h5><a href="#AddTracks">Add tracks to a collection</a></h5></li>
-      <li><h5><a href="#BrowserOptions">Browser viewing options</a></h5></li>
-      <li><h5><a href="#Configure">Configure collection</a></h5></li>
-      <li><h5><a href="#SaveAndShare">Saving and sharing collections</a></h5></li>
+      <li><a href="#AddCollection">Create a new collection</a></li>
+      <li><a href="#AddTracks">Add tracks to a collection</a></li>
+      <li><a href="#BrowserOptions">Browser viewing options</a></li>
+      <li><a href="#Configure">Configure collection</a></li>
+      <li><a href="#SaveAndShare">Saving and sharing collections</a></li>
   </ul>
-<li><h5><a href="#Support">Resources and Support</a></h5></li>
-</ul>
+<h6><a href="#Support">Resources and Support</a></h6>
+
 
 
 <a name="Intro"></a>	
 <h2>Introduction</h2> 
 
 <p>The <a href="../cgi-bin/hgCollection">Track Collection Builder</a> (My Data > Track Collection 
-Builder) is a tool which allows multiple tracks to be copied and grouped together into one composite 
-track</a> or &quot;collection.&quot; A <a href="trackDb/trackDbHub.html#compositeTrack" target="_blank" >
+Builder) is a tool that allows multiple tracks to be copied and grouped together into one composite 
+track</a> or &quot;collection.&quot; A <a href="../goldenPath/help/trackDb/trackDbHub.html#compositeTrack" target="_blank" >
 composite track</a> can be thought of as a container for grouping a set of similar-type annotation 
 tracks.</p> 
 
@@ -34,9 +34,9 @@ tracks.</p>
 <p>
 Only the following continuous-value graphing track types can be added to a collection:
 <ul>
-  <li><a href="../goldenpath/help/wiggle.html">Wiggle Track Format (WIG)</a></li>
-  <li><a href="../goldenpath/help/bigWig.html">bigWig Track Format</a></li>
-  <li><a href="../goldenpath/help/bedGraph.html">bedGraph Track Format</a></li>
+  <li><a href="../goldenpath/help/wiggle.html" target="_blank">Wiggle Track Format (WIG)</a></li>
+  <li><a href="../goldenpath/help/bigWig.html" target="_blank">bigWig Track Format</a></li>
+  <li><a href="../goldenpath/help/bedgraph.html" target="_blank">bedGraph Track Format</a></li>
 </ul>
 
 <a name="TrackSources"></a>
@@ -54,8 +54,7 @@ Supported tracks from the following sources can be added to a <i>single</i> geno
   <li><a href="/goldenPath/help/hgTrackHubHelp.html#Intro" target="_blank">Hub tracks</a>
   from any <a href="../cgi-bin/hgHubConnect" target="_blank">public hub</a>.</li>
   </ul></p>
-  
-        
+          
 <a name="GetStarted"></a>
 <h2>Getting Started</h2>
 
@@ -63,8 +62,6 @@ Supported tracks from the following sources can be added to a <i>single</i> geno
 <h3>Step 1: Create a new collection</h3>  
 <p>
 The &quot;Collected Tracks&quot; top right pane displays all created collections.</p>
-<p>
-Guide & key features:</p>
 <p>
 <ul>
 <li>Click the <button type="button">Add Collection</button> button to make a new collection.</li> 
@@ -74,7 +71,7 @@ Guide & key features:</p>
 <li>To remove a collection: select it, right-click (or select multiple, 'command + click', 
 'shift + click') and click 'Delete.'</li>
 <li>To remove all collections, click <button type="button">Discard Changes</button> (upper right).</li> 
-<li>Click <button type="button">GO</button>  (upper right) to see collections in the browser.</li>
+<li>Click <button class="gbButtonGo" type="button">GO</button>  (upper right) to see collections in the browser.</li>
 <li>From the browser, right-click to configure the collection (see 'Step 3' below).</li>
 </ul></p>
 
@@ -83,8 +80,7 @@ Guide & key features:</p>
 <p>
 The 'Available Tracks' top left pane displays all available graphing tracks that can be added to any 
 collection.</p>
-<p>
-Guide & Key features:</p>
+
 <p>
 <ul>
 <li>'Visible Tracks' folder: Lists tracks that are visible (not set to 'hide') in the browser.</li>
@@ -106,21 +102,45 @@ applied (see 'Step 4' below).</li>
 <a name="BrowserOptions"></a>
 <h3>Step 3: Browser viewing options</h3>
 
-<p>Once a collection has been created and tracks have been added to it, click 
-<button type="button">GO</button> in the upper right to view the collection in the browser window. 
-In the browser, mouse-over the gray vertical buttons at the left window frame to see the name of 
-each collection. 
 
-<p> 
-<img src="../../images/hgCollectionMouseOver.jpg" alt="hgCollection Mouse-over in browser window.jpg"></p>
+
+
+
+
+
+<div class="row">
+
+
+<!-- Left column -->
+  <div class="col-md-4" >
+  <p> 
+  <img src="../../images/hgCollectionMouseOver.jpg" alt="hgCollection Mouse-over in browser window.jpg"></p>
+  </div> <!-- end left column -->
+
+<!-- Middle column -->
+  <div class="col-md-4" style="background-color:#eef0f2;">
+
+  <p>
+  </br>Once a collection has been created and tracks have been added to it, click 
+<button class="gbButtonGo" type="button">GO</button> (upper right) to view the collection in the 
+browser window. In the browser, mouse-over the gray vertical buttons at the left window frame to 
+see the name of each collection. </p>
+</br>
+
+ </div> <!-- end middle column -->
+ 
+ <!-- Right column -->
+  <div class="col-md-4">
+  <p> 
+  </p>
+  </div> <!-- end right column -->
+</div> <!-- end row -->
+</br>
 <p>
 When viewing collections within the browser, the following viewing options are 
 available:</p>
-<p>
-Guide & Key features:</p>
 
 <ul>
-
 <li><strong>Re-order collections within the browser</strong></li>
 <p>Drag and drop collections (composite tracks) <i>within the browser</i> to rearrange the order 
 in which they appear in the browser.</p> 
@@ -141,8 +161,6 @@ the browser window region is changed.</p>
 
 <a name="Configure"></a>
 <h3>Step 4: Configure collection</h3>
-<p>
-Guide & Key features:</p>
 
 <ul>
 <p>
@@ -153,12 +171,18 @@ pop-up dialog, a color can be set for the subtracks in the collection. Color is 
 gradient to subtracks in the collection (e.g., if red is selected, the subtracks graph will appear 
 in varied shades of red within the browser window).</p>
 <li><strong>Merge methods (aggregate/overlay graphing view options):</strong></li>
+
+
+
+
+
 <p>Tracks in collections can be displayed with 
-<a href="/goldenpath/help/trackDb/trackDbHub.html#multiWig">multiWig aggregate/overlay</a> &quot;
+<a href="/goldenpath/help/trackDb/trackDbHub.html#multiWig" target="_blank">multiWig aggregate/overlay</a> &quot;
 merge&quot; methods (stacked, transparent, etc.) as well as new add & subtract options:</p>
 
 <p> 
-<img src="../../images/hgCollectionMergeMethod.png" alt="hgCollection Mouse-over in browser window.jpg"></p>
+<img src="../../images/hgCollectionMergeMethod.jpg"  alt="hgCollection Mouse-over in browser window.jpg"></p>
+</br>
 
   <ul>
   <li><strong>Default - 'none'</strong>&nbsp;&nbsp;>&nbsp;&nbsp;Default setting; no overlay/merge 
@@ -200,6 +224,7 @@ preserve collections long-term and to allow
 Even after saving collections and their configurations in a session, it is still highly recommended 
 to keep local back-ups of your session contents and any associated custom tracks. 
 
+<a name="Support"></a>
 <h2>Resources & Support</h2> 
 <p> 
 
@@ -212,7 +237,7 @@ to keep local back-ups of your session contents and any associated custom tracks
   <a href="/goldenpath/help/hubQuickStartGroups.html#composite" target="_blank">
   Quick Start Guide to Hubs</a> &amp; 
   <a href="/goldenpath/help/trackDb/trackDbHub.html#Composite_Track_Settings"
-  target-"_blank"> Hub Track Database Definition guide</a>.</li> 
+  target="_blank"> Hub Track Database Definition guide</a>.</li> 
   <li>Credit to Dr. Bar-Joseph for assisting with wiggle sorting development: Bar-Joseph Z, Demaine 
   ED, Gifford DK, Srebro N, Hamel AM, Jaakkola TS.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target="_blank">
@@ -222,28 +247,5 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12801867" target="_blank">128
   </li>
 </ul>
 
-<!-- Notes to self (cath), will remove before production:
-<img src="../../images/hgCompositeImage1.png" alt="alt text 1" width="799"
-height="201">
 
-Make sure these points are mentioned:
-
-  <li>The Track Collection Builder builds 
-  <a href="/goldenpath/help/trackDb/trackDbHub.html#compositeTrack" target="_blank">composites</a> 
-  for a single genome assembly.
-  <li>Tracks within collections can be renamed and new descriptions added.
-  <li>A single track can be added/duplicated multiple times into a single collection.</li>
-  <li>A single track can be added to multiple collections, thus allowing for different views
-  to be applied to copies of the same data track. These various same-data views can be seen in the
-  browser alongside each other for convenient visual comparisons.</li>
-  <li>Tracks in collections can be displayed with <a href="/goldenpath/help/trackDb/trackDbHub.html#multiWig">multiwig 
-  aggregate/overlay</a> "merge" methods (stacked, transparent, etc.)
-  <li>Tracks in collections can be sorted by similarity or magnitude.
-  <li>Simple math (addition and subtraction) can be applied to tracks within a collection, creating 
-  a new "merge method" view. For example, applying the &quot;addition&quot; function will generate
-  a view that is similar to a stacked graph. 
-  overlay.
-  <li>Tracks from track hubs can be collected and displayed without connecting to the hub.
-</ul></p>
--->
 

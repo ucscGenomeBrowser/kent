@@ -98,7 +98,7 @@ DBS = \
 	eulFla1 \
 	eulMac1 \
 	falciparum \
-	felCat3 felCat4 felCat5  felCat8 \
+	felCat3 felCat4 felCat5 felCat8 felCat9 \
 	ficAlb1 \
 	fr1 fr2 fr3 \
 	fukDam1 \
