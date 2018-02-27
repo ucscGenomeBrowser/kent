@@ -38,8 +38,7 @@
     left:       0;
     height:     100%;
     width:      100%;
-    background: rgba( 255, 255, 255, 0.2 ) 
-                url('http://i.stack.imgur.com/FhHRx.gif')
+    background: rgba( 255, 255, 255, 0.5 ) 
                 50% 50% 
                 no-repeat;
 }
@@ -102,8 +101,8 @@ body.loading .modal {
         </div>
         <p> Below are all available graphing tracks that can be added to any collection. Click the 
         tiny arrow to the left of each folder below to show/hide tracks. Click the green 
-        "plus" <button type="button"> + </button> symbol to add a track to any <i>selected</i> collection in the right window. See 
-        "Getting Started" below for tips. </p>
+        "plus" <i class="jstree-icon jstree-themeicon fa fa-plus jstree-themeicon-custom"></i> symbol to add a track to any <i>selected</i> 
+        collection in the right window. See "Getting Started" below for tips. </p>
         <p>
         <div id='tracks' style='overflow:auto'></p>
         </div>
@@ -120,8 +119,8 @@ body.loading .modal {
             </div>
             <p>To make a new collection of tracks, click the 'Add Collection' button above. Once 
             saved, double-click the new collection to edit the name and description. To remove a 
-            track from a collection, click the red "minus" <button type="button"> - </button> symbol to the left of each track. 
-            See "Getting Started" below for tips. Click <strong>"GO"</strong> (upper right) to see 
+            track from a collection, click the red "minus" <i class="jstree-icon jstree-themeicon fa fa-minus-square jstree-themeicon-custom"></i> 
+            symbol to the left of each track. Click <strong>"GO"</strong> (upper right) to see 
             collections in the browser. </p>
             <p>
             <strong>Note: You must <a href="../goldenPath/help/hgSessionHelp.html" target="_blank">
@@ -136,7 +135,11 @@ body.loading .modal {
 </ul>
 
 <div class='modal' style="display:block" id='workScreen'>
-<div class="loader" ></div>
+    <table style='width:100%; height: 100%'>
+        <td style="text-align:center;">
+            <i class="fa fa-spinner fa-spin" style="font-size:48px"></i>
+        </td>
+    </table>
 </div>
 
 <div id='newCollectionDialog' class='myTitleClass' title='Create Collection' style='background:white; width:512px; display:none'>
