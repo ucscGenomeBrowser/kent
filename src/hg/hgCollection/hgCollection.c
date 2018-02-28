@@ -44,6 +44,7 @@ struct trackDbRef
 struct trackDbRef *next;
 struct trackDb *tdb;
 struct grp *grp;
+double priority;
 int order;
 };
 
@@ -186,7 +187,7 @@ return vis;
 }
 
 
-static void checkForVisible(struct cart *cart, struct hash *groupHash, struct trackDbRef **list, struct trackDb *tdb)
+static void checkForVisible(struct cart *cart, struct hash *groupHash, struct trackDbRef **list, struct trackDb *tdb, double priority, double multiplier)
 /* Walk the trackDb hierarchy looking for visible leaf tracks. */
 {
 struct trackDb *subTdb;
@@ -195,7 +196,7 @@ char buffer[4096];
 if (tdb->subtracks)
     {
     for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
-        checkForVisible(cart, groupHash, list, subTdb);
+        checkForVisible(cart, groupHash, list, subTdb, priority + tdb->priority * multiplier, multiplier / 100.0);
     }
 else
     {
@@ -220,7 +221,8 @@ else
         slAddHead(list, tdbRef);
         safef(buffer, sizeof buffer, "%s_imgOrd", tdb->track);
 
-        tdbRef->order = cartUsualInt(cart, buffer, tdb->priority);
+        tdbRef->order = cartUsualInt(cart, buffer,  0);
+        tdbRef->priority = priority + multiplier * tdb->priority;
         }
     }
 }
@@ -231,9 +233,19 @@ static int tdbRefCompare (const void *va, const void *vb)
 const struct trackDbRef *a = *((struct trackDbRef **)va);
 const struct trackDbRef *b = *((struct trackDbRef **)vb);
 
-int dif = a->grp->priority - b->grp->priority;
+int dif = a->order - b->order;
+
 if (dif == 0)
-    dif = a->order - b->order;
+    {
+    double ddif = a->priority - b->priority ;
+    if (ddif < 0)
+        dif = -1;
+    else if (ddif > 0)
+        dif = 1;
+    }
+if (dif == 0)
+    dif = strcasecmp(a->tdb->shortLabel, b->tdb->shortLabel);
+
 return dif;
 }       
 
@@ -242,9 +254,13 @@ static void addVisibleTracks(struct hash *groupHash, struct dyString *rootChildr
 {
 struct trackDb *tdb;
 struct trackDbRef *tdbRefList = NULL, *tdbRef;
+
 for(tdb = trackList; tdb; tdb = tdb->next)
     {
-    checkForVisible(cart, groupHash, &tdbRefList, tdb);
+    struct grp *grp = hashMustFindVal(groupHash, tdb->grp);
+    double priority =  grp->priority + tdb->priority/100.0;
+
+    checkForVisible(cart, groupHash, &tdbRefList, tdb,  priority, 1.0/100.0);
     }
 
 slSort(&tdbRefList, tdbRefCompare);
@@ -303,9 +319,14 @@ static void doTable(struct cart *cart, char *db, struct grp *groupList, struct t
 char *hubName = hubNameFromUrl(getHubName(cart, db));
 struct grp *curGroup;
 struct hash *groupHash = newHash(10);
+int count = 0;
 
 for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
+    {
+    if (curGroup->priority == 0)
+        curGroup->priority = count--;
     hashAdd(groupHash, curGroup->name, curGroup);
+    }
 
 curGroup = NULL;
 if (hubName != NULL)
