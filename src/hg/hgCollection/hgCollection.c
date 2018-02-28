@@ -43,6 +43,7 @@ struct trackDbRef
 {
 struct trackDbRef *next;
 struct trackDb *tdb;
+struct grp *grp;
 int order;
 };
 
@@ -185,7 +186,7 @@ return vis;
 }
 
 
-static void checkForVisible(struct cart *cart, struct trackDbRef **list, struct trackDb *tdb)
+static void checkForVisible(struct cart *cart, struct hash *groupHash,  struct trackDbRef **list, struct trackDb *tdb)
 /* Walk the trackDb hierarchy looking for visible leaf tracks. */
 {
 struct trackDb *subTdb;
@@ -194,7 +195,7 @@ char buffer[4096];
 if (tdb->subtracks)
     {
     for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
-        checkForVisible(cart, list, subTdb);
+        checkForVisible(cart, groupHash,  list, subTdb);
     }
 else
     {
@@ -215,6 +216,7 @@ else
         struct trackDbRef *tdbRef;
         AllocVar(tdbRef);
         tdbRef->tdb = tdb;
+        tdbRef->grp = hashMustFindVal(groupHash, tdb->grp);
         slAddHead(list, tdbRef);
         safef(buffer, sizeof buffer, "%s_imgOrd", tdb->track);
 
@@ -228,17 +230,22 @@ static int tdbRefCompare (const void *va, const void *vb)
 {
 const struct trackDbRef *a = *((struct trackDbRef **)va);
 const struct trackDbRef *b = *((struct trackDbRef **)vb);
-return (a->order - b->order);
+
+int dif = a->grp->priority - b->grp->priority;
+if (dif == 0)
+    return (a->order - b->order);
+
+return dif;
 }       
 
-static void addVisibleTracks(struct dyString *rootChildren, struct cart *cart, struct trackDb *trackList)
+static void addVisibleTracks(struct hash *groupHash, struct dyString *rootChildren, struct cart *cart, struct trackDb *trackList)
 // add the visible tracks table rows.
 {
 struct trackDb *tdb;
 struct trackDbRef *tdbRefList = NULL, *tdbRef;
 for(tdb = trackList; tdb; tdb = tdb->next)
     {
-    checkForVisible(cart, &tdbRefList, tdb);
+    checkForVisible(cart, groupHash,  &tdbRefList, tdb);
     }
 
 slSort(&tdbRefList, tdbRefCompare);
@@ -291,16 +298,13 @@ for(tdb = parentTdb->subtracks; tdb;  tdb = tdb->next)
     }
 }
 
-static void doTable(struct cart *cart, char *db, struct grp *groupList, struct trackDb *trackList)
+static void doTable(struct cart *cart, char *db, struct hash *groupHash, struct trackDb *trackList)
 // output the tree table
 {
 char *hubName = hubNameFromUrl(getHubName(cart, db));
-struct grp *curGroup;
-for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
-    {
-    if ((hubName != NULL) && sameString(curGroup->name, hubName))
-        break;
-    }
+struct grp *curGroup = NULL;
+if (hubName != NULL)
+    curGroup = hashFindVal(groupHash, hubName);
 
 jsInlineF("var collectionData = []; ");
 struct dyString *dy = newDyString(100);
@@ -341,9 +345,13 @@ jsInlineF("var collectionNames = new Set([%s]);", dy->string);
 
 jsInlineF("var trackData = []; ");
 struct dyString *rootChildren = newDyString(512);
-addVisibleTracks(rootChildren, cart, trackList);
-for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
+addVisibleTracks(groupHash, rootChildren, cart, trackList);
+
+struct hashCookie cookie = hashFirst(groupHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
     {
+    curGroup = (struct grp *)hel->val;
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
         continue;
     if (!isEmpty(rootChildren->string))
@@ -397,7 +405,7 @@ puts(
 );
 }
 
-static void doMainPage(struct cart *cart, char *db, struct grp *groupList, struct trackDb *trackList)
+static void doMainPage(struct cart *cart, char *db, struct hash *groupHash, struct trackDb *trackList)
 /* Print out initial HTML of control page. */
 {
 webStartGbNoBanner(cart, db, "Collections");
@@ -416,7 +424,7 @@ if (assembly != NULL)
     jsInlineF("$('#assembly').text('%s');\n",assembly);
 printHelp();
 
-doTable(cart, db, groupList, trackList);
+doTable(cart, db, groupHash, trackList);
 
 puts("<link rel='stylesheet' href='https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'>");
 puts("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css' />");
@@ -726,7 +734,7 @@ for(tdb = list; tdb;  tdb = tdb->next)
     }
 }
 
-static struct trackDb *traverseTree(struct trackDb *oldList, struct hash *groupHash)
+static struct trackDb *traverseTree(struct trackDb *oldList, struct hash *allGroupHash, struct hash *groupHash)
 // add acceptable tracks to our tree
 {
 struct trackDb *newList = NULL, *tdb, *tdbNext;
@@ -736,11 +744,12 @@ for(tdb = oldList;  tdb ; tdb = tdbNext)
     tdbNext = tdb->next;
     if (tdb->subtracks)
         {
-        tdb->subtracks = traverseTree(tdb->subtracks, groupHash);
+        tdb->subtracks = traverseTree(tdb->subtracks, allGroupHash, groupHash);
 
         if (tdb->subtracks)
             {
-            hashStore(groupHash, tdb->grp);
+            if (hashLookup(groupHash, tdb->grp) == NULL)
+                hashAdd(groupHash, tdb->grp, hashMustFindVal(allGroupHash, tdb->grp));
             slAddHead(&newList, tdb);
             }
         }
@@ -748,7 +757,8 @@ for(tdb = oldList;  tdb ; tdb = tdbNext)
         {
         if (trackCanBeAdded(tdb))
             {
-            hashStore(groupHash, tdb->grp);
+            if (hashLookup(groupHash, tdb->grp) == NULL)
+                hashAdd(groupHash, tdb->grp, hashMustFindVal(allGroupHash, tdb->grp));
             slAddHead(&newList, tdb);
             }
         }
@@ -758,13 +768,20 @@ slReverse(&newList);
 return newList;
 }
 
-static void pruneTrackList(struct trackDb **fullTrackList, struct grp **fullGroupList)
+static struct hash *pruneTrackList(struct trackDb **fullTrackList, struct grp **fullGroupList)
 // drop track types we don't grok yet
 {
+struct hash *allGroupHash = newHash(5);
 struct hash *groupHash = newHash(5);
-
-*fullTrackList = traverseTree(*fullTrackList, groupHash);
 struct grp *newGroupList = NULL, *grp, *nextGrp;
+
+for (grp = *fullGroupList; grp; grp = nextGrp)
+    {
+    nextGrp = grp->next;
+    hashAdd(allGroupHash, grp->name, grp);
+    }
+
+*fullTrackList = traverseTree(*fullTrackList, allGroupHash, groupHash);
 
 for (grp = *fullGroupList; grp; grp = nextGrp)
     {
@@ -775,6 +792,8 @@ for (grp = *fullGroupList; grp; grp = nextGrp)
     }
 slReverse(&newGroupList);
 *fullGroupList = newGroupList;
+
+return groupHash;
 }
 
 static struct trackDb *addSupers(struct trackDb *trackList)
@@ -919,7 +938,7 @@ knetUdcInstall();
 struct trackDb *trackList;
 struct grp *groupList;
 cartTrackDbInit(cart, &trackList, &groupList, TRUE);
-pruneTrackList(&trackList, &groupList);
+struct hash *groupHash = pruneTrackList(&trackList, &groupList);
 
 struct trackDb *superList = addSupers(trackList);
 struct hash *nameHash = newHash(5);
@@ -928,7 +947,7 @@ buildNameHash(nameHash, superList);
 char *cmd = cartOptionalString(cart, "cmd");
 if (cmd == NULL)
     {
-    doMainPage(cart, db, groupList, superList);
+    doMainPage(cart, db, groupHash, superList);
     }
 else if (sameString("addTrack", cmd))
     {
