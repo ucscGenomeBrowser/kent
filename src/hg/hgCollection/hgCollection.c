@@ -43,6 +43,7 @@ struct trackDbRef
 {
 struct trackDbRef *next;
 struct trackDb *tdb;
+struct grp *grp;
 int order;
 };
 
@@ -185,7 +186,7 @@ return vis;
 }
 
 
-static void checkForVisible(struct cart *cart, struct trackDbRef **list, struct trackDb *tdb)
+static void checkForVisible(struct cart *cart, struct hash *groupHash, struct trackDbRef **list, struct trackDb *tdb)
 /* Walk the trackDb hierarchy looking for visible leaf tracks. */
 {
 struct trackDb *subTdb;
@@ -194,7 +195,7 @@ char buffer[4096];
 if (tdb->subtracks)
     {
     for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
-        checkForVisible(cart, list, subTdb);
+        checkForVisible(cart, groupHash, list, subTdb);
     }
 else
     {
@@ -215,6 +216,7 @@ else
         struct trackDbRef *tdbRef;
         AllocVar(tdbRef);
         tdbRef->tdb = tdb;
+        tdbRef->grp = hashMustFindVal(groupHash, tdb->grp);;
         slAddHead(list, tdbRef);
         safef(buffer, sizeof buffer, "%s_imgOrd", tdb->track);
 
@@ -228,17 +230,21 @@ static int tdbRefCompare (const void *va, const void *vb)
 {
 const struct trackDbRef *a = *((struct trackDbRef **)va);
 const struct trackDbRef *b = *((struct trackDbRef **)vb);
-return (a->order - b->order);
+
+int dif = a->grp->priority - b->grp->priority;
+if (dif == 0)
+    dif = a->order - b->order;
+return dif;
 }       
 
-static void addVisibleTracks(struct dyString *rootChildren, struct cart *cart, struct trackDb *trackList)
+static void addVisibleTracks(struct hash *groupHash, struct dyString *rootChildren, struct cart *cart, struct trackDb *trackList)
 // add the visible tracks table rows.
 {
 struct trackDb *tdb;
 struct trackDbRef *tdbRefList = NULL, *tdbRef;
 for(tdb = trackList; tdb; tdb = tdb->next)
     {
-    checkForVisible(cart, &tdbRefList, tdb);
+    checkForVisible(cart, groupHash, &tdbRefList, tdb);
     }
 
 slSort(&tdbRefList, tdbRefCompare);
@@ -296,11 +302,14 @@ static void doTable(struct cart *cart, char *db, struct grp *groupList, struct t
 {
 char *hubName = hubNameFromUrl(getHubName(cart, db));
 struct grp *curGroup;
+struct hash *groupHash = newHash(10);
+
 for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
-    {
-    if ((hubName != NULL) && sameString(curGroup->name, hubName))
-        break;
-    }
+    hashAdd(groupHash, curGroup->name, curGroup);
+
+curGroup = NULL;
+if (hubName != NULL)
+    curGroup = hashFindVal(groupHash, hubName);
 
 jsInlineF("var collectionData = []; ");
 struct dyString *dy = newDyString(100);
@@ -341,7 +350,7 @@ jsInlineF("var collectionNames = new Set([%s]);", dy->string);
 
 jsInlineF("var trackData = []; ");
 struct dyString *rootChildren = newDyString(512);
-addVisibleTracks(rootChildren, cart, trackList);
+addVisibleTracks(groupHash, rootChildren, cart, trackList);
 for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
     {
     if ((hubName != NULL) && sameString(curGroup->name, hubName))
