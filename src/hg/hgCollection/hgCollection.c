@@ -558,7 +558,7 @@ fprintf(f,"track %s\n\
 shortLabel %s\n\
 compositeTrack on\n\
 autoScale on\n\
-maxHeightPixels 100:30:11 \n\
+maxHeightPixels 10000:30:11 \n\
 showSubtrackColorOnUi on\n\
 aggregate  none\n\
 longLabel %s\n\
