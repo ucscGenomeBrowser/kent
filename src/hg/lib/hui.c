@@ -5172,11 +5172,8 @@ puts("</td></TR>");
 printf("<TR valign=center><th align=right>Track height:</th><td align=left colspan=3>");
 safef(option, sizeof(option), "%s.%s", name, HEIGHTPER );
 cgiMakeIntVarWithLimits(option, defaultHeight, "Track height",0, minHeightPixels, maxHeightPixels);
-if (isCustomComposite(tdb))
-    printf("pixels");
-else
-    printf("pixels&nbsp;(range: %d to %d)",
-           minHeightPixels, maxHeightPixels);
+printf("pixels&nbsp;(range: %d to %d)",
+       minHeightPixels, maxHeightPixels);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
