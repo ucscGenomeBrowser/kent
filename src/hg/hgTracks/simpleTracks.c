@@ -14109,6 +14109,21 @@ const struct track *b = *((struct track **)vb);
 return (a->priority - b->priority);
 }
 
+
+static bool isSubtrackVisibleTdb(struct cart *cart, struct trackDb *tdb)
+/* Has this subtrack not been deselected in hgTrackUi or declared with
+ *  * "subTrack ... off"?  -- assumes composite track is visible. */
+{
+boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
+bool enabledInTdb = TRUE; // assume that this track is enabled in tdb
+char option[1024];
+safef(option, sizeof(option), "%s_sel", tdb->track);
+boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+if (overrideComposite)
+    enabled = TRUE;
+return enabled;
+}
+
 void buildMathWig(struct trackDb *tdb)
 /* Turn a mathWig composite into a mathWig track. */
 {
@@ -14131,6 +14146,9 @@ else // subtract
 struct trackDb *subTdb;
 for (subTdb=subTracks; subTdb; subTdb = subTdb->next)
     {
+    if (!isSubtrackVisibleTdb(cart, subTdb) )
+        continue;
+
     char *bigDataUrl = trackDbSetting(subTdb, "bigDataUrl");
     char *useDb;
     char *table;
