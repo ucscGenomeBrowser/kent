@@ -477,6 +477,7 @@ fi
 
 # Sept 2017: check if genome-euro mysql server is closer
 if [ ! -f /usr/local/apache/trash/registration.txt ]; then
+   # Mar 2018:  check if we can connect to genome-euro before checking what is closest
    curl -sSI genome-euro.ucsc.edu 2>&1 > /dev/null
    if [[ $? -eq 0 ]]; then
       echo comparing latency: genome.ucsc.edu Vs. genome-euro.ucsc.edu
