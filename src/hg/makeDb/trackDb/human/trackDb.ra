@@ -107,6 +107,17 @@ tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
 prevExonText Left edge
 nextExonText Right edge
 
+track phegeni
+shortLabel dbGap SNPs
+longLabel dbGap GWAS SNPs from the Phenotype-Genotype Integrator
+group phenDis
+visibility hide
+color 0,100,0
+type bigBed 8 +
+mouseOverField trait
+bigDataUrl /gbdb/$D/bbi/phegeni.bb
+urls studyId=https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=$$ geneId1=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D geneId2=https://www.ncbi.nlm.nih.gov/gene/?term=$$%5Buid%5D
+
 track caseControl
 compositeTrack on
 shortLabel Case Control

@@ -182,6 +182,7 @@ SCRIPT_FILES = \
 	bedBestTranscript \
 	genePredToBed \
 	cgiSmokeTest \
+	phegenToBed \
 	${USER_APP_SCRIPTS}
 
 # List of all directories to build
