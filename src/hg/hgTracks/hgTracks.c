@@ -9873,6 +9873,30 @@ hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");
 }
 
+static void checkAddHighlight()
+/* If the cart variable addHighlight is set, merge it into the highlight variable. */
+{
+char *newHighlight = cartOptionalString(cart, "addHighlight");
+if (newHighlight)
+    {
+    char *existing = cartOptionalString(cart, "highlight");
+    if (isNotEmpty(existing))
+        {
+        // Add region only if it is not already in the existing highlight setting.
+        char *alreadyIn = strstr(existing, newHighlight);
+        int len = strlen(newHighlight);
+        if (! (alreadyIn && (alreadyIn[len] == '|' || alreadyIn[len] == '\0')))
+            {
+            struct dyString *dy = dyStringCreate("%s|%s", newHighlight, existing);
+            cartSetString(cart, "highlight", dy->string);
+            }
+        }
+    else
+        cartSetString(cart, "highlight", newHighlight);
+    cartRemove(cart, "addHighlight");
+    }
+}
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -9927,6 +9951,8 @@ initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 char *configMultiRegionPageCall = cartCgiUsualString(cart, "hgTracksConfigMultiRegionPage", "notSet");
+
+checkAddHighlight();
 
 /* Do main display. */
 

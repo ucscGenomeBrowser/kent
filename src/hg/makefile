@@ -74,6 +74,7 @@ UTILS_APPLIST = \
 	encode3/validateManifest \
 	estOrient \
 	featureBits \
+	geneBounds/clusterGenes \
 	genePredHisto \
 	genePredSingleCover \
 	genePredToBed \
