@@ -2453,7 +2453,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
                 if (isNotEmpty(pos->highlight))
                     {
                     char *encHighlight = cgiEncode(pos->highlight);
-                    fprintf(f, "highlight=%s&", encHighlight);
+                    fprintf(f, "addHighlight=%s&", encHighlight);
                     freeMem(encHighlight);
                     }
 		fprintf(f, "hgFind.matches=%s,\">", encMatches);
@@ -2748,25 +2748,7 @@ static char *addHighlight(struct cart *cart, char *db, char *chrom, unsigned sta
 {
 char *color = "fcfcac";
 struct dyString *dy = dyStringCreate("%s.%s:%u-%u#%s", db, chrom, start+1, end, color);
-boolean alreadySet = FALSE;
-char *existing = cartOptionalString(cart, "highlight");
-if (isNotEmpty(existing))
-    {
-    // Don't add region if it is already in the existing highlight setting.
-    char *alreadyIn = strstr(existing, dyStringContents(dy));
-    if (alreadyIn &&
-        (alreadyIn[dyStringLen(dy)] == '|' || alreadyIn[dyStringLen(dy)] == '\0'))
-        alreadySet = TRUE;
-    else
-        dyStringPrintf(dy, "|%s", existing);
-    }
-if (alreadySet)
-    {
-    dyStringFree(&dy);
-    return NULL;
-    }
-else
-    return dyStringCannibalize(&dy);
+return dyStringCannibalize(&dy);
 }
 
 static boolean doQuery(char *db, struct hgFindSpec *hfs, char *xrefTerm, char *term,
@@ -3286,7 +3268,7 @@ if (multiTerm)
     collapseSamePos(hgp);
 fixSinglePos(hgp);
 if (cart && hgp->singlePos && isNotEmpty(hgp->singlePos->highlight))
-    cartSetString(cart, "highlight", hgp->singlePos->highlight);
+    cartSetString(cart, "addHighlight", hgp->singlePos->highlight);
 return hgp;
 }
 
