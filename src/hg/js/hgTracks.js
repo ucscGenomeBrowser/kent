@@ -3295,7 +3295,7 @@ var rightClick = {
             }
 
             // add sort options if this is a custom composite
-            if (rec.isCustomComposite) {
+            if (rec.isCustomComposite && tdbHasParent(rec) && tdbIsLeaf(rec)) {
 
                 o = {};
                 o[" Sort by Magnitude "] = {
