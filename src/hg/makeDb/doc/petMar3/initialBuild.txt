@@ -322,8 +322,6 @@ chrM    16201   5227    3863    2182    4929    0       296
     checkTableCoords petMar3
     # each should cover %100 entirely:
     featureBits -countGaps petMar3 ucscToINSDC
-g
-
 
     # 1130433897 bases of 1130433897 (100.000%) in intersection
 

@@ -83,6 +83,7 @@ var hgCollection = (function() {
             return;
         $( "#newCollectionDialog" ).dialog("close");
         selectedNode.li_attr.class = "folder";
+        selectedNode.li_attr.title = collectionTitle;
         selectedNode.li_attr.shortlabel = newName;
         selectedNode.li_attr.longlabel = newDescription;
         selectedNode.li_attr.visibility = $("#customVis").val();
@@ -467,6 +468,8 @@ var hgCollection = (function() {
         $(newTree).on("copy_node.jstree", function (evt, data)  {
             $(evt.target).jstree("open_node", data.parent);
             $(evt.target).jstree("set_icon", data.node, 'fa fa-minus-square');
+            data.node.li_attr.title = collectionTitle;
+            $(evt.target).jstree("redraw", "true");
         });
         $(newTree).on('click', '.jstree-themeicon ', minusHit);
 
