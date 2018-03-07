@@ -6,6 +6,9 @@ html gold
 track gap override
 html gap
 
+track chainNetHg38 override
+visibility dense
+
 searchTable gold
 shortCircuit 1
 termRegex [NP][CIZ_]+[0-9]{6}[0-9]*(v1_[0-9]+)?
