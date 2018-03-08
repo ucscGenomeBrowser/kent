@@ -25,5 +25,6 @@ CREATE TABLE wgEncodeGencodeAttrs (
     PRIMARY KEY(transcriptId),
     index(havanaGeneId),
     index(havanaTranscriptId),
-    index(ccdsId)
+    index(ccdsId),
+    index(proteinId)
 );
