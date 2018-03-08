@@ -5595,6 +5595,56 @@ for (table = snpNNNTables;  table != NULL;  table = table->next)
 return NULL;
 }
 
+static int getVVersion(const char *name)
+/* If name ends in V[0-9]+, return the number, else 0. */
+{
+int version = 0;
+char *p = strrchr(name, 'V');
+if (p)
+    {
+    char *versionStr = p + 1;
+    if (isAllDigits(versionStr))
+        version = atoi(versionStr);
+    }
+return version;
+}
+
+static int cmpVDesc(const void *va, const void *vb)
+/* Compare by version number, descending, e.g. tableV2 < tableV1. */
+{
+const struct slName *a = *((struct slName **)va);
+const struct slName *b = *((struct slName **)vb);
+int aVersion = getVVersion(a->name);
+int bVersion = getVVersion(b->name);
+int dif = bVersion - aVersion;
+if (dif == 0)
+    dif = strcmp(b->name, a->name);
+return dif;
+}
+
+static struct slName *hListGencodeTables(struct sqlConnection *conn, char *suffix)
+/* Return a list of 'wgEncodeGencode<suffix>V<version>' tables, if any, highest version first.
+ * If suffix is NULL, it defaults to Basic. */
+{
+char likeExpr[128];
+safef(likeExpr, sizeof(likeExpr), "wgEncodeGencode%sV%%", suffix ? suffix : "Basic");
+struct slName *gencodeTables = sqlListTablesLike(conn, likeExpr);
+slSort(&gencodeTables, cmpVDesc);
+return gencodeTables;
+}
+
+char *hFindLatestGencodeTableConn(struct sqlConnection *conn, char *suffix)
+/* Return the 'wgEncodeGencode<suffix>V<version>' table with the highest version number, if any.
+ * If suffix is NULL, it defaults to Basic. */
+{
+char *tableName = NULL;
+struct slName *gencodeTables = hListGencodeTables(conn, suffix);
+if (gencodeTables)
+    tableName = cloneString(gencodeTables->name);
+slNameFreeList(&gencodeTables);
+return tableName;
+}
+
 boolean hDbHasNcbiRefSeq(char *db)
 /* Return TRUE if db has NCBI's RefSeq alignments and annotations. */
 {

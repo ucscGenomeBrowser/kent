@@ -3082,6 +3082,19 @@ if (hgvs)
             trackTable = "chromInfo";
         else if (startsWith("lrg", pslTable))
             trackTable = "lrgTranscriptAli";
+        else if (startsWith("wgEncodeGencode", pslTable))
+            trackTable = pslTable;
+        else if (startsWith("ncbiRefSeqPsl", pslTable))
+            {
+            if (startsWith("NM_", hgvs->seqAcc) || startsWith("NR_", hgvs->seqAcc) ||
+                startsWith("NP_", hgvs->seqAcc) || startsWith("YP_", hgvs->seqAcc))
+                trackTable = "ncbiRefSeqCurated";
+            else if (startsWith("XM_", hgvs->seqAcc) || startsWith("XR_", hgvs->seqAcc) ||
+                     startsWith("XP_", hgvs->seqAcc))
+                trackTable = "ncbiRefSeqPredicted";
+            else
+                trackTable = "ncbiRefSeq";
+            }
         else
             trackTable = "refGene";
         singlePos(hgp, "HGVS", NULL, trackTable, term, "",
