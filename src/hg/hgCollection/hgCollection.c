@@ -220,7 +220,7 @@ return vis;
 }
 
 
-static void checkForVisible(struct cart *cart, struct hash *groupHash, struct trackDbRef **list, struct trackDb *tdb, double priority, double multiplier)
+static void checkForVisible(struct cart *cart, struct grp *grp, struct trackDbRef **list, struct trackDb *tdb, double priority, double multiplier)
 /* Walk the trackDb hierarchy looking for visible leaf tracks. */
 {
 struct trackDb *subTdb;
@@ -229,7 +229,7 @@ char buffer[4096];
 if (tdb->subtracks)
     {
     for(subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
-        checkForVisible(cart, groupHash, list, subTdb, priority + tdb->priority * multiplier, multiplier / 100.0);
+        checkForVisible(cart, grp, list, subTdb, priority + tdb->priority * multiplier, multiplier / 100.0);
     }
 else
     {
@@ -250,7 +250,7 @@ else
         struct trackDbRef *tdbRef;
         AllocVar(tdbRef);
         tdbRef->tdb = tdb;
-        tdbRef->grp = hashMustFindVal(groupHash, tdb->grp);;
+        tdbRef->grp = grp;
         slAddHead(list, tdbRef);
         safef(buffer, sizeof buffer, "%s_imgOrd", tdb->track);
 
@@ -293,7 +293,7 @@ for(tdb = trackList; tdb; tdb = tdb->next)
     struct grp *grp = hashMustFindVal(groupHash, tdb->grp);
     double priority =  grp->priority + tdb->priority/100.0;
 
-    checkForVisible(cart, groupHash, &tdbRefList, tdb,  priority, 1.0/100.0);
+    checkForVisible(cart, grp, &tdbRefList, tdb,  priority, 1.0/100.0);
     }
 
 slSort(&tdbRefList, tdbRefCompare);
