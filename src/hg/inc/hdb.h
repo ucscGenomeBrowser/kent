@@ -1008,6 +1008,10 @@ char *hFindLatestSnpTableConn(struct sqlConnection *conn, char *suffix);
 /* Return the name of the 'snp1__<suffix>' table with the highest build number, if any.
  * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
 
+char *hFindLatestGencodeTableConn(struct sqlConnection *conn, char *suffix);
+/* Return the 'wgEncodeGencode<suffix>V<version>' table with the highest version number, if any.
+ * If suffix is NULL, it defaults to Basic. */
+
 boolean hDbHasNcbiRefSeq(char *db);
 /* Return TRUE if db has NCBI's RefSeq alignments and annotations. */
 

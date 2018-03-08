@@ -2,13 +2,12 @@
  * generated wgEncodeGencodeAttrs.c and wgEncodeGencodeAttrs.sql.  This header links the database and
  * the RAM representation of objects. */
 
-/* Copyright (C) 2011 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
-
 #ifndef WGENCODEGENCODEATTRS_H
 #define WGENCODEGENCODEATTRS_H
 
-#define WGENCODEGENCODEATTRS_NUM_COLS 13
+#define WGENCODEGENCODEATTRS_NUM_COLS 14
+
+extern char *wgEncodeGencodeAttrsCommaSepFieldNames;
 
 struct wgEncodeGencodeAttrs
 /* Basic set of attributes associated with all Gencode transcripts. */
@@ -27,13 +26,14 @@ struct wgEncodeGencodeAttrs
     char *ccdsId;	/* CCDS identifier if transcript is in CCDS */
     int level;	/* GENCODE level: 1 = experimental confirmed, 2 = manual, 3 = automated */
     char *transcriptClass;	/* high level type of transcript */
+    char *proteinId;	/* Protein identifier (not loaded on many older versions of GENCODE) */
     };
 
-void wgEncodeGencodeAttrsStaticLoad(char **row, struct wgEncodeGencodeAttrs *ret);
+void wgEncodeGencodeAttrsStaticLoad(char **row, int numColumns, struct wgEncodeGencodeAttrs *ret);
 /* Load a row from wgEncodeGencodeAttrs table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct wgEncodeGencodeAttrs *wgEncodeGencodeAttrsLoad(char **row);
+struct wgEncodeGencodeAttrs *wgEncodeGencodeAttrsLoad(char **row, int numColumns);
 /* Load a wgEncodeGencodeAttrs from row fetched with select * from wgEncodeGencodeAttrs
  * from database.  Dispose of this with wgEncodeGencodeAttrsFree(). */
 
