@@ -15,20 +15,20 @@ struct interact
     {
     struct interact *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome (or contig, scaffold, etc.). For interchromosomal, use 2 records */
-    unsigned chromStart;	/* Start position in chromosome of lower region */
-    unsigned chromEnd;	/* End position in chromosome of upper region. For interchromosomal, set to chromStart+1 */
+    unsigned chromStart;	/* Start position in chromosome of lower region. For interchromsomal, chromStart of this region */
+    unsigned chromEnd;	/* End position in chromosome of upper region. For interchromosomal, set to chromEnd of this region */
     char *name;	/* Name of item, for display.  Usually 'name1/name2' or empty */
     unsigned score;	/* Score from 0-1000 */
     double value;	/* Strength of interaction or other data value. Typically basis for score */
     char *exp;	/* Experiment name (metadata for filtering) or empty. */
-    unsigned color;	/* Item color, as itemRgb in bed9. Typically based on strenght or filter */
-    char *sourceChrom;	/* Chromosome of source region (directional) or lower region. */
-    unsigned sourceStart;	/* Start position in chromosome of source/lower region */
-    unsigned sourceEnd;	/* End position in chromosome of source/lower region */
-    char *sourceName;	/* Identifier of source/lower region. Can be used as link to related table */
-    char *targetChrom;	/* Chromosome of target region (directional) or upper region */
-    unsigned targetStart;	/* Start position in chromosome of target/upper region */
-    unsigned targetEnd;	/* End position in chromosome of target/upper region */
+    unsigned color;	/* Item color, as itemRgb in bed9. Typically based on strength or filter */
+    char *sourceChrom;	/* Chromosome of source region (directional) or lower region. For interchromosomal, set to chrom of this region*/
+    unsigned sourceStart;	/* Start position in chromosome of source/lower/this region */
+    unsigned sourceEnd;	/* End position in chromosome of source/lower/this region */
+    char *sourceName;	/* Identifier of source/lower/this region. Can be used as link to related table */
+    char *targetChrom;	/* Chromosome of target region (directional) or upper region. for interchromsomal, set to chrom of other region */
+    unsigned targetStart;	/* Start position in chromosome of target/upper/other region */
+    unsigned targetEnd;	/* End position in chromosome of target/upper/other region */
     char *targetName;	/* Identifier of target/upper region. Can be used as link to related table */
     };
 
