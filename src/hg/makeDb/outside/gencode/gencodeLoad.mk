@@ -32,8 +32,8 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-db = mm10
-#db = hg38
+#db = mm10
+db = hg38
 #db = hg19
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38

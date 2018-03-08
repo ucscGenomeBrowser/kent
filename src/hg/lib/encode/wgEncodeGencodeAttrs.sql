@@ -18,6 +18,7 @@ CREATE TABLE wgEncodeGencodeAttrs (
     ccdsId varchar(255) not null,	# CCDS identifier if transcript is in CCDS
     level int not null,	# GENCODE level: 1 = experimental confirmed, 2 = manual, 3 = automated
     transcriptClass varchar(255) not null,	# high level type of transcript
+    proteinId varchar(255) not null,	# Protein identifier (not loaded on many older versions of GENCODE)
               #Indices
     index(geneId),
     index(geneName),
