@@ -85,6 +85,26 @@ static boolean trackCanBeAdded(struct trackDb *tdb)
 return  (tdb->subtracks == NULL) && !startsWith("wigMaf",tdb->type) &&  (startsWith("wig",tdb->type) || startsWith("bigWig",tdb->type) || startsWith("bedGraph",tdb->type)) ;
 }
 
+static char *escapeLabel(char *label)
+// put a blackslash in front of any single quotes in the input
+{
+char buffer[4096], *eptr = buffer;
+for(; *label; label++)
+    {
+    if (*label == '\'')
+        {
+        *eptr++ = '\\';
+        *eptr++ = '\'';
+        }
+    else
+        *eptr++ = *label;
+    }
+
+*eptr = 0;
+
+return cloneString(buffer);
+}
+
 static void printTrack(char *parent, struct trackDb *tdb,  boolean user)
 // output list elements for a group
 {
@@ -107,7 +127,7 @@ else
     
 #define IMAKECOLOR_32(r,g,b) ( ((unsigned int)b<<0) | ((unsigned int)g << 8) | ((unsigned int)r << 16))
 
-jsInlineF("{%s id:'%s',li_attr:{title:'%s',shortlabel:'%s', longlabel:'%s',color:'#%06x',name:'%s'},text:'%s (%s)',parent:'%s'}",userString, trackHubSkipHubName(tdb->track),title, tdb->shortLabel, tdb->longLabel, IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB),trackHubSkipHubName(tdb->track),tdb->shortLabel,tdb->longLabel,parent);
+jsInlineF("{%s id:'%s',li_attr:{title:'%s',shortlabel:'%s', longlabel:'%s',color:'#%06x',name:'%s'},text:'%s (%s)',parent:'%s'}",userString, trackHubSkipHubName(tdb->track),title, escapeLabel(tdb->shortLabel), escapeLabel(tdb->longLabel), IMAKECOLOR_32(tdb->colorR,tdb->colorG,tdb->colorB),trackHubSkipHubName(tdb->track),escapeLabel(tdb->shortLabel),escapeLabel(tdb->longLabel),parent);
 }
 
 static void outHubHeader(FILE *f, char *db)
