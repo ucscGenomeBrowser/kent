@@ -10094,6 +10094,7 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
 
 jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 // js code needs to know if a highlightRegion is defined for this db
+checkAddHighlight(); // call again in case tracksDisplay's call to findGenomePos changed vars
 char *highlightDef = cartOptionalString(cart, "highlight");
 if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(database)] == '.')
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));
