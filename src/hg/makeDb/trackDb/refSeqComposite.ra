@@ -42,7 +42,7 @@ dbPrefixLabels hg="HGNC" dm="FlyBase" ce="WormBase" rn="RGD" sacCer="SGD" danRer
         priority 2
 
         track ncbiRefSeqPredicted
-        color 109,109,174
+        color 12,12,120
         parent ncbiRefSeqView off
         shortLabel RefSeq Predicted
         subGroups view=aNcbiRefSeq

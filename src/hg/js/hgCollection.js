@@ -521,16 +521,16 @@ var hgCollection = (function() {
 
     function getUniqueName(root) {
         // make sure name is unique in track hub
-        if (!collectionNames.has(root)) {
-            collectionNames.add(root);
+        if (!collectionNames[root]) {
+            collectionNames[root] = 1;
             return root;
         } else {
             var counter = 1;
 
             for(; ; counter++) {
                 var name  = root + counter;
-                if (!collectionNames.has(name)) {
-                    collectionNames.add(name);
+                if (!collectionNames[name]) {
+                    collectionNames[name] = 1;
                     return name;
                 }
             }
