@@ -46,6 +46,7 @@
 #include "barChartBed.h"
 #include "barChartUi.h"
 #include "interact.h"
+#include "interactUi.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -1441,12 +1442,12 @@ pipelineFree(&dataPipe);
 return track;
 }
 
-static struct customTrack *interactLoader(struct customFactory *fac,
-        struct hash *chromHash,
+static struct customTrack *interactLoader(struct customFactory *fac, struct hash *chromHash,
         struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up interact data until next track line. */
 {
 char *line;
+interactUiDirectional(track->tdb);
 char *db = ctGenomeOrCurrent(track);
 struct interact *itemList = NULL;
 if (!dbRequested)
@@ -2629,6 +2630,7 @@ static struct customTrack *bigInteractLoader(struct customFactory *fac,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up bigInteract data until get next track line. */
 {
+interactUiDirectional(track->tdb);
 return bigBedLoader(fac, chromHash, cpp, track, dbRequested);
 }
 
