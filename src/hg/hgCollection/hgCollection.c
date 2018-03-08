@@ -341,7 +341,7 @@ if (parentTdb->subtracks == NULL)
 struct trackDb *tdb;
 for(tdb = parentTdb->subtracks; tdb;  tdb = tdb->next)
     {
-    dyStringPrintf(dy, ",'%s'", trackHubSkipHubName(tdb->track));
+    dyStringPrintf(dy, "collectionNames['%s']=1;", trackHubSkipHubName(tdb->track));
     addSubtrackNames(dy, tdb);
     }
 }
@@ -366,7 +366,8 @@ if (hubName != NULL)
     curGroup = hashFindVal(groupHash, hubName);
 
 jsInlineF("var collectionData = []; ");
-struct dyString *dy = newDyString(100);
+struct dyString *dy = newDyString(1024);
+jsInlineF("var collectionNames = [];");
 if (curGroup != NULL)
     {
     // print out all the tracks in all the collections
@@ -380,10 +381,9 @@ if (curGroup != NULL)
             if (!first)
                 {
                 jsInlineF(",");
-                dyStringPrintf(dy, ",");
                 }
             printTrack("#", tdb,  TRUE);
-            dyStringPrintf(dy, "'%s'", trackHubSkipHubName(tdb->track));
+            dyStringPrintf(dy, "collectionNames['%s']=1;", trackHubSkipHubName(tdb->track));
             first = FALSE;
             }
         }
@@ -400,7 +400,7 @@ if (curGroup != NULL)
 else
     jsInlineF("collectionData['#'] = [];");
 
-jsInlineF("var collectionNames = new Set([%s]);", dy->string);
+jsInlineF("%s", dy->string);
 
 jsInlineF("var trackData = []; ");
 struct dyString *rootChildren = newDyString(512);
