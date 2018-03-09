@@ -149,8 +149,9 @@ struct tempName hubTn;
 char buffer[4096];
 safef(buffer, sizeof buffer, "%s-%s", customCompositeCartName, db);
 char *hubName = cartOptionalString(cart, buffer);
+int fd = -1;
 
-if (hubName == NULL)
+if ((hubName == NULL) || ((fd = open(hubName, 0)) < 0))
     {
     trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
     hubName = cloneString(hubTn.forCgi);
@@ -159,6 +160,9 @@ if (hubName == NULL)
     outHubHeader(f, db);
     fclose(f);
     }
+
+if (fd >= 0)
+    close(fd);
 
 cartSetString(cart, "hubUrl", hubName);
 cartSetString(cart, hgHubConnectRemakeTrackHub, hubName);
