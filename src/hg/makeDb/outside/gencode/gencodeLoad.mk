@@ -33,8 +33,8 @@ mach = $(shell uname -m)
 # BEGIN EDIT THESE EACH RELEASE
 ##
 #db = mm10
-db = hg38
-#db = hg19
+#db = hg38
+db = hg19
 ifeq (${db},mm10)
     grcRefAssembly = GRCm38
     ver = M16
@@ -266,7 +266,7 @@ ${tablePolyAGp}: ${polyAGtf} ${ensemblToUcscChain}
 	${gencodePolyaGxfToGenePred} ${skipPatchSeqOpts} $< ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta} ${gencodeTsv}
+${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta}
 	@mkdir -p $(dir $@)
 	((${metaFilterCmdGz} ${tableSwissProtMeta} | tawk '{print $$0,"SwissProt"}') && (${metaFilterCmdGz}  ${tableTrEMBLMeta} | tawk '{print $$0,"TrEMBL"}')) | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
@@ -296,39 +296,39 @@ ${metaFilterCmd} $< > $@.${tmpExt}
 mv -f $@.${tmpExt} $@
 endef
 
-${tableGeneSourceTab}: ${tableGeneSourceMeta} ${gencodeTsv}
+${tableGeneSourceTab}: ${tableGeneSourceMeta}
 	${copyMetadataTabGz}
-${tableTranscriptSourceTab}: ${tableTranscriptSourceMeta} ${gencodeTsv}
+${tableTranscriptSourceTab}: ${tableTranscriptSourceMeta}
 	${copyMetadataTabGz}
-${tableTranscriptSupportTab}: ${tableTranscriptSupportMeta} ${gencodeTsv}
+${tableTranscriptSupportTab}: ${tableTranscriptSupportMeta}
 	${copyMetadataTabGz}
 ${tableExonSupportTab}: ${tableExonSupportMeta} ${ensemblToUcscChain}
 	@mkdir -p $(dir $@)
 	${gencodeExonSupportToTable} ${skipPatchSeqOpts} ${tableExonSupportMeta} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
-${tablePdbTab}: ${tablePdbMeta} ${gencodeTsv}
+${tablePdbTab}: ${tablePdbMeta}
 	${copyMetadataTabGz}
-${tablePubMedTab}: ${tablePubMedMeta} ${gencodeTsv}
+${tablePubMedTab}: ${tablePubMedMeta}
 	${copyMetadataTabGz}
-${tableRefSeqTab}: ${tableRefSeqMeta} ${gencodeTsv}
+${tableRefSeqTab}: ${tableRefSeqMeta}
 	${copyMetadataTabGz}
 
-${tableTranscriptionSupportLevelTab}: ${tableTranscriptionSupportLevelData} ${gencodeTsv}
+${tableTranscriptionSupportLevelTab}: ${tableTranscriptionSupportLevelData}
 	mkdir -p $(dir $@)
 	cp $< $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 # convert to zero-based, 1/2 open
-${tablePolyAFeatureTab}: ${tablePolyAFeatureMeta} ${gencodeTsv}
+${tablePolyAFeatureTab}: ${tablePolyAFeatureMeta}
 	@mkdir -p $(dir $@)
 	zcat $< | tawk '{print $$1,$$2-1,$$3,$$4,$$5-1,$$6,$$7,$$8}' | sort -k 4,4 -k 5,5n > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
-${tableAnnotationRemarkTab}: ${tableAnnotationRemarkMeta} ${gencodeTsv}
+${tableAnnotationRemarkTab}: ${tableAnnotationRemarkMeta}
 	@mkdir -p $(dir $@)
 	${metaFilterCmdGz} $<  | tawk '{print $$1,gensub("\\\\n|\\\\","","g",$$2)}' | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 # drop ENSTR entries that are a hack to support PAR sequences in GTF
-${tableEntrezGeneTab}: ${tableEntrezGeneMeta} ${gencodeTsv}
+${tableEntrezGeneTab}: ${tableEntrezGeneMeta}
 	@mkdir -p $(dir $@)
 	zcat $< | tawk '$$1!~/^ENSTR/' | sort -k 1,1 > $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
