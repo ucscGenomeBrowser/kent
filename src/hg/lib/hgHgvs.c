@@ -753,13 +753,92 @@ if (p)
 return cloneString(txAcc);
 }
 
+static char *gencodeProteinToTx(char *db, char *protAcc)
+/* Return the ENS*T transcript accession for protAcc, or NULL if not found. */
+{
+char *txAcc = NULL;
+struct sqlConnection *conn = hAllocConn(db);
+char *attrsTable = hFindLatestGencodeTableConn(conn, "Attrs");
+if (attrsTable && hHasField(db, attrsTable, "proteinId"))
+    {
+    char query[2048];
+    sqlSafef(query, sizeof(query), "select transcriptId from %s where proteinId = '%s'",
+             attrsTable, protAcc);
+    txAcc = sqlQuickString(conn, query);
+    }
+hFreeConn(&conn);
+return txAcc;
+}
+
+static struct genePred *getGencodeGp(char *db, char *acc)
+/* Return the genePred for acc in the latest wgEncodeGencodeBasicV* table, or NULL if not found. */
+{
+struct genePred *gp = NULL;
+struct sqlConnection *conn = hAllocConn(db);
+char *gencodeTable = hFindLatestGencodeTableConn(conn, "Basic");
+if (gencodeTable)
+    {
+    int hasBin = 1;
+    char query[2048];
+    sqlSafef(query, sizeof(query), "select * from %s where name = '%s'", gencodeTable, acc);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    if ((row = sqlNextRow(sr)) != NULL)
+        gp = genePredExtLoad(row+hasBin, GENEPREDX_NUM_COLS);
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+return gp;
+}
+
+static char *txProtFromGp(char *db, struct genePred *gp)
+/* Return a string containing the translated CDS portion of gp using genomic sequence. */
+{
+int cdsLen = 0;
+int i, eCdsStart, eCdsEnd;
+for (i = 0;  i < gp->exonCount;  i++)
+    {
+    if (genePredCdsExon(gp, i, &eCdsStart, &eCdsEnd))
+        cdsLen += (eCdsEnd - eCdsStart);
+    }
+char cdsSeq[cdsLen+1];
+int offset = 0;
+for (i = 0;  i < gp->exonCount;  i++)
+    {
+    if (genePredCdsExon(gp, i, &eCdsStart, &eCdsEnd))
+        {
+        struct dnaSeq *exonSeq = hChromSeq(db, gp->chrom, eCdsStart, eCdsEnd);
+        safencpy(cdsSeq+offset, cdsLen+1-offset, exonSeq->dna, exonSeq->size);
+        offset += exonSeq->size;
+        dnaSeqFree(&exonSeq);
+        }
+    }
+if (gp->strand[0] == '-')
+    reverseComplement(cdsSeq, cdsLen);
+char *seq = needMem(cdsLen+1);
+dnaTranslateSome(cdsSeq, seq, cdsLen+1);
+return seq;
+}
+
 static char *getProteinSeq(char *db, char *acc)
 /* Return amino acid sequence for acc, or NULL if not found. */
 {
 if (trackHubDatabase(db))
     return NULL;
 char *seq = NULL;
-if (startsWith("LRG_", acc))
+if (startsWith("ENS", acc))
+    {
+    char *txAcc = gencodeProteinToTx(db, acc);
+    if (txAcc)
+        {
+        struct genePred *gp = getGencodeGp(db, txAcc);
+        if (gp)
+            seq = txProtFromGp(db, gp);
+        genePredFree(&gp);
+        freeMem(txAcc);
+        }
+    }
+else if (startsWith("LRG_", acc))
     {
     if (hTableExists(db, "lrgPep"))
         {
@@ -791,7 +870,6 @@ else
             seq = aaSeq->dna;
         }
     }
-
 return seq;
 }
 
@@ -1086,27 +1164,6 @@ for (i = 0;  i < gp->exonCount;  i++)
 if (gp->strand[0] == '-')
     reverseComplement(seq, seqLen);
 return seq;
-}
-
-static struct genePred *getGencodeGp(char *db, char *acc)
-/* Return the genePred for acc in the latest wgEncodeGencodeBasicV* table, or NULL if not found. */
-{
-struct genePred *gp = NULL;
-struct sqlConnection *conn = hAllocConn(db);
-char *gencodeTable = hFindLatestGencodeTableConn(conn, "Basic");
-if (gencodeTable)
-    {
-    int hasBin = 1;
-    char query[2048];
-    sqlSafef(query, sizeof(query), "select * from %s where name = '%s'", gencodeTable, acc);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
-    if ((row = sqlNextRow(sr)) != NULL)
-        gp = genePredExtLoad(row+hasBin, GENEPREDX_NUM_COLS);
-    sqlFreeResult(&sr);
-    }
-hFreeConn(&conn);
-return gp;
 }
 
 static char *getGencodeSeq(char *db, char *acc)
@@ -1887,12 +1944,7 @@ char *txAcc = NULL;
 if (startsWith("LRG_", acc))
     txAcc = lrgProteinToTx(db, acc);
 else if (startsWith("ENS", acc))
-    {
-    // Look up ENS*T* txAcc for ENS*P* acc
-
-    //#*** TODO when we have a Gencode table analogous to ensGtp
-
-    }
+    txAcc = gencodeProteinToTx(db, acc);
 else if (startsWith("NP_", acc) || startsWith("XP_", acc))
     {
     struct sqlConnection *conn = hAllocConn(db);

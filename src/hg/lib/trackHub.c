@@ -48,6 +48,7 @@
 #include "htmshell.h"
 #include "bigBedFind.h"
 #include "customComposite.h"
+#include "interactUi.h"
 
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
@@ -836,6 +837,9 @@ else
 
         if (sameString("barChart", type) || sameString("bigBarChart", type))
             requireBarChartBars(hub, genome, tdb);
+        // TODO: Consider removing requirement for this (default to no direction)
+        if (sameString("interact", type) || sameString("bigInteract", type))
+            requiredSetting(hub, genome, tdb, INTERACT_DIRECTIONAL);
         }
     }
 }

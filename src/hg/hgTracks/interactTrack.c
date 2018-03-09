@@ -55,6 +55,8 @@ if (sameString(drawMode, INTERACT_DRAW_CURVE))
 else if (sameString(drawMode, INTERACT_DRAW_ELLIPSE))
     draw = DRAW_ELLIPSE;
 
+boolean isDirectional = interactUiDirectional(tg->tdb);
+
 double scale = scaleForWindow(width, seqStart, seqEnd);
 struct interact *inters = tg->items;
 unsigned int maxWidth = 0;
@@ -176,10 +178,12 @@ for (inter=inters; inter; inter=inter->next)
         hvGfxLine(hvg, sx - sFootWidth, yOffOther, sx + sFootWidth, yOffOther, color);
 
         // draw the vertical
-        if (sameString(inter->chrom, inter->sourceChrom))
-            hvGfxLine(hvg, sx, yOffOther, sx, yPos, color);
-        else
+        // TODO: modularize directional/non-directional draws
+        if (differentString(inter->chrom, inter->sourceChrom) && isDirectional)
             hvGfxDottedLine(hvg, sx, yOffOther, sx, yPos, color, TRUE);
+        else
+            hvGfxLine(hvg, sx, yOffOther, sx, yPos, color);
+        
         if (tg->visibility == tvFull)
             {
             // add map box to foot
@@ -224,7 +228,7 @@ for (inter=inters; inter; inter=inter->next)
         // draw vertical
         if (!eOnScreen || draw == DRAW_LINE)
             {
-            if (inter->chromStart == inter->targetStart)
+            if (inter->chromStart == inter->targetStart && isDirectional)
                 hvGfxDottedLine(hvg, sx, yOff, sx, peak, color, TRUE);
             else
                 hvGfxLine(hvg, sx, yOff, sx, peak, color);
@@ -238,7 +242,7 @@ for (inter=inters; inter; inter=inter->next)
         // draw vertical
         if (!sOnScreen || draw == DRAW_LINE)
             {
-            if (inter->chromStart == inter->targetStart)
+            if (inter->chromStart == inter->targetStart && isDirectional)
                 hvGfxDottedLine(hvg, ex, yOff, ex, peak, color, TRUE);
             else
                 hvGfxLine(hvg, ex, yOff, ex, peak, color);
@@ -298,7 +302,7 @@ for (inter=inters; inter; inter=inter->next)
             // draw link horizontal line between regions (dense mode just shows feet ??)
             unsigned ePeak = eOnScreen ? ex : xOff + width;
             unsigned sPeak = sOnScreen ? sx : xOff;
-            if (inter->sourceStart > inter->targetStart)
+            if (inter->sourceStart > inter->targetStart && isDirectional)
                 hvGfxDottedLine(hvg, sPeak, peak, ePeak, peak, color, TRUE);
             else
                 hvGfxLine(hvg, sPeak, peak, ePeak, peak, color);

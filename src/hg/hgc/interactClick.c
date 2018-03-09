@@ -116,25 +116,57 @@ if (isNotEmpty(inter->exp))
     printf("<b>Experiment:</b> %s<br>\n", inter->exp);
 puts("<p>");
 
-sprintLongWithCommas(startBuf, inter->sourceStart+1);
-sprintLongWithCommas(endBuf, inter->sourceEnd);
-sprintLongWithCommas(sizeBuf, inter->sourceEnd - inter->sourceStart);
-// TODO: Change labels if non-directional
-printf("<b>Source region:</b> %s&nbsp;&nbsp;"
+/* print info for both regions */
+/* Use different labels:
+        1) directional (source/target)
+        2) non-directional same chrom (lower/upper)
+        3) non-directional other chrom (this/other)
+*/
+char *region1Label = "Source";
+char *region1Chrom = inter->sourceChrom;
+int region1Start = inter->sourceStart;
+int region1End = inter->sourceEnd;
+char *region1Name = inter->sourceName;
+
+char *region2Label = "Target";
+char *region2Chrom = inter->targetChrom;
+int region2Start = inter->targetStart;
+int region2End = inter->targetEnd;
+char *region2Name = inter->targetName;
+
+if (!interactUiDirectional(tdb))
+    {
+    if (interactOtherChrom(inter))
+        {
+        region1Label = "This";
+        region2Label = "Other";
+        }
+    else
+        {
+        region1Label = "Lower";
+        region2Label = "Upper";
+        }
+    }
+
+sprintLongWithCommas(startBuf, region1Start + 1);
+sprintLongWithCommas(endBuf, region1End);
+sprintLongWithCommas(sizeBuf, region1End - region1Start);
+printf("<b>%s region:</b> %s&nbsp;&nbsp;"
                 "<a href='hgTracks?position=%s:%d-%d' target='_blank'>%s:%s-%s</a>",
-                inter->sourceName, inter->sourceChrom, inter->sourceStart+1, inter->sourceEnd,
-                inter->sourceChrom, startBuf, endBuf);
+                region1Label, region1Name, region1Chrom, region1Start+1, region1End,
+                region1Chrom, startBuf, endBuf);
 printf("&nbsp;&nbsp;%s bp<br>\n", sizeBuf);
-sprintLongWithCommas(startBuf, inter->targetStart+1);
-sprintLongWithCommas(endBuf, inter->targetEnd);
-sprintLongWithCommas(sizeBuf, inter->targetEnd - inter->targetStart);
-printf("<b>Target region:</b> %s&nbsp;&nbsp;"
+
+sprintLongWithCommas(startBuf, region2Start+1);
+sprintLongWithCommas(endBuf, region2End);
+sprintLongWithCommas(sizeBuf, region2End - region2Start);
+printf("<b>%s region:</b> %s&nbsp;&nbsp;"
                 "<a href='hgTracks?position=%s:%d-%d' target='_blank'>%s:%s-%s</a>",
-                inter->targetName, inter->targetChrom, inter->targetStart+1, inter->targetEnd,
-                inter->targetChrom, startBuf, endBuf);
+                region2Label, region2Name, region2Chrom, region2Start+1, region2End,
+                region2Chrom, startBuf, endBuf);
 printf("&nbsp;&nbsp;%s bp<br>\n", sizeBuf);
-#ifdef TODO
-/* TODO: get count and score stats of all interactions in window ?*/
+
+#ifdef TODO /* TODO: get count and score stats of all interactions in window ?*/
 double *scores;
 AllocArray(scores, count);
 #endif
