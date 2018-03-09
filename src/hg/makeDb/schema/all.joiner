@@ -1418,7 +1418,7 @@ identifier wgEncodeGencodeRefSeqV19
 identifier wgEncodeGencodeRefSeqToRefGeneV19
 "Link together Gencode RefSeq table with refGene track"
     hg19.wgEncodeGencodeRefSeqV19.rnaAcc dupeOk chopAfter=.
-    hg19.refGene.name minCheck=0.75
+    hg19.refGene.name minCheck=0.59
 
 identifier wgEncodeGencodeTagV19
 "Link together Gencode Tag table with Attributes table"
