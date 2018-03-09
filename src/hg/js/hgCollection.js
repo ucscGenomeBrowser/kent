@@ -200,7 +200,7 @@ var hgCollection = (function() {
         var newDescription = $("#customDescription").val().trim();
         if (!validateLabel(newDescription))
             return;
-        var ourCollectionName = getUniqueName("coll");
+        var ourCollectionName = getUniqueName();
         var parent = $(selectedTree).find("li").first();
         $( "#newCollectionDialog" ).dialog("close");
 
@@ -519,8 +519,10 @@ var hgCollection = (function() {
         }
     }
 
-    function getUniqueName(root) {
+    function getUniqueName() {
         // make sure name is unique in track hub
+        var seconds =  Math.floor( Date.now() / 1000 ) - 1520631071;
+        var root = "coll" + seconds;
         if (!collectionNames[root]) {
             collectionNames[root] = 1;
             return root;

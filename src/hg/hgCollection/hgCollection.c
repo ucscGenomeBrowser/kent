@@ -63,12 +63,15 @@ if (hashLookup(nameHash, skipHub) == NULL)
     return skipHub;
     }
 
+char base[4096];
+safef(base, sizeof base, "%s_%lx",skipHub, time(NULL) - 1520629086);
+
 unsigned count = 0;
 char buffer[4096];
 
 for(;; count++)
     {
-    safef(buffer, sizeof buffer, "%s%d", skipHub, count);
+    safef(buffer, sizeof buffer, "%s%d", base, count);
     if (hashLookup(nameHash, buffer) == NULL)
         {
         hashStore(nameHash, buffer);
