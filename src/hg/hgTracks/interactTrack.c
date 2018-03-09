@@ -24,6 +24,7 @@ static Color interactItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw an interaction */
 {
 struct interact *inter = item;
+
 struct rgbColor itemRgb;
 // There must be a better way...
 itemRgb.r = (inter->color & 0xff0000) >> 16;
@@ -119,7 +120,10 @@ for (inter=inters; inter; inter=inter->next)
         dyStringPrintf(ds, " %d", inter->score);
     char *statusBuf = dyStringCannibalize(&ds);
 
-    color = interactItemColor(tg, inter, hvg);
+    if (vis == tvDense && interactOtherChrom(inter))
+        color = MG_MAGENTA;
+    else
+        color = interactItemColor(tg, inter, hvg);
     
     // TODO: simplify by using start/end instead of center and width
     // This is a holdover from longRange track implementation
