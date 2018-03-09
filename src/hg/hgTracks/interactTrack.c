@@ -47,14 +47,16 @@ static void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
 #define DRAW_CURVE      1
 #define DRAW_ELLIPSE    2
 
-char *drawMode = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
+int draw = DRAW_LINE;
+if (vis != tvDense)
+    {
+    char *drawMode = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
                                 INTERACT_DRAW, INTERACT_DRAW_DEFAULT);
-int draw  = DRAW_LINE;
-if (sameString(drawMode, INTERACT_DRAW_CURVE))
-    draw = DRAW_CURVE;
-else if (sameString(drawMode, INTERACT_DRAW_ELLIPSE))
-    draw = DRAW_ELLIPSE;
-
+    if (sameString(drawMode, INTERACT_DRAW_CURVE))
+        draw = DRAW_CURVE;
+    else if (sameString(drawMode, INTERACT_DRAW_ELLIPSE))
+        draw = DRAW_ELLIPSE;
+    }
 boolean isDirectional = interactUiDirectional(tg->tdb);
 
 double scale = scaleForWindow(width, seqStart, seqEnd);
