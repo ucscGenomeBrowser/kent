@@ -107,7 +107,7 @@ ncbiSegmentsTest: mkout
 
 # various NCBI problem cases
 ncbiProblemsTest: mkout
-	${gff3ToGenePred} -warnAndContinue -geneNameAttr=gene -allowMinimalGenes -processAllGeneChildren -attrsOut=output/$@.attrs input/ncbiProblems.gff3 output/$@.gp > output/$@.out 2>&1
+	${gff3ToGenePred} -warnAndContinue -geneNameAttr=gene -refseqHacks -attrsOut=output/$@.attrs input/ncbiProblems.gff3 output/$@.gp > output/$@.out 2>&1
 	diff expected/$@.gp output/$@.gp
 	diff expected/$@.attrs output/$@.attrs
 	diff expected/$@.out output/$@.out
