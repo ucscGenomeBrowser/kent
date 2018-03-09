@@ -204,9 +204,11 @@ if (row != NULL)
 	hubUpdateStatus( hub->errorMessage, hub);
 	if (!isEmpty(hub->errorMessage))
 	    {
-            // we need to do something special here to 
-            // not warn about local hubs disappearing
-	    warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
+            boolean isCollection = (strstr(hub->hubUrl, "hgComposite") != NULL);
+            if (isCollection)
+                warn("Your Track Collections have been removed by our trash collectors.  If you'd like your Track Collections to stay on our servers, you need to save them in a session." );
+            else
+                warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
 	    }
 	}
     }
@@ -247,7 +249,16 @@ for (name = nameList; name != NULL; name = name->next)
     hub = hubConnectStatusForId(conn, id);
     if (hub != NULL)
 	{
-        slAddHead(&hubList, hub);
+	if (!isEmpty(hub->errorMessage) && (strstr(hub->hubUrl, "hgComposite") != NULL))
+            {
+            // custom collection hub has disappeared.   Remove it from cart
+            cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+            char buffer[1024];
+            safef(buffer, sizeof buffer, "hgHubConnect.hub.%d", id);
+            cartRemove(cart, buffer);
+            }
+        else
+            slAddHead(&hubList, hub);
 	}
     }
 slFreeList(&nameList);

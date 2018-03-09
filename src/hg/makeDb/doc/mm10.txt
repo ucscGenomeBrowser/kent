@@ -16518,3 +16518,20 @@ TMPDIR=/dev/shm
     # 21335101 bases of 1043181598 (2.045%) in intersection
 
 #########################################################################
+2018-03-08: update UCSC GENCODE VM16 to include protein id (for VAI) and fix PAR tag
+
+cd /hive/data/genomes/mm10/bed/gencodeVM16
+
+# save existing data
+mkdir -p prev/pre-proteinId
+mv tables/wgEncodeGencodeAttrsVM16.tab tables/wgEncodeGencodeTagVM16.tab prev/pre-proteinId/
+mv loaded/wgEncodeGencodeAttrsVM16.tab.loaded loaded/wgEncodeGencodeTagVM16.tab.loaded prev/pre-proteinId/
+mv data/gencode.tsv prev/pre-proteinId/
+cp -p data/gencode.vM16.transcriptionSupportLevel.tab prev/pre-proteinId/
+
+# edit gencodeLoad.mk to set mm10 as target
+
+# get gencode.tsv without rebuild TSL file or loading tables that don't change
+~markd/compbio/ccds/ccds2/output/bin/x86_64/opt/gencodeGxfToAttrs --keepGoing data/release_M16/gencode.vM16.chr_patch_hapl_scaff.annotation.gtf.gz data/gencode.tsv
+make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk   loaded/wgEncodeGencodeAttrsVM16.tab.loaded  loaded/wgEncodeGencodeTagVM16.tab.loaded
+#########################################################################
