@@ -120,10 +120,9 @@ for (inter=inters; inter; inter=inter->next)
         dyStringPrintf(ds, " %d", inter->score);
     char *statusBuf = dyStringCannibalize(&ds);
 
-    if (vis == tvDense && interactOtherChrom(inter))
+    color = interactItemColor(tg, inter, hvg);
+    if (vis == tvDense && interactOtherChrom(inter) && color == MG_BLACK)
         color = MG_MAGENTA;
-    else
-        color = interactItemColor(tg, inter, hvg);
     
     // TODO: simplify by using start/end instead of center and width
     // This is a holdover from longRange track implementation
