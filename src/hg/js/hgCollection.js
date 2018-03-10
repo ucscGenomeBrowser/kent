@@ -175,12 +175,15 @@ var hgCollection = (function() {
         return true;
     }
 
+
     function dialogCollection() {
         $("#doNewCollection").off ( "click" );
         $("#doNewCollection").click ( newCollection );
         $("#viewFuncDiv").show();
-        $("#customName").val("New Collection");
-        $("#customDescription").val("New Collection description");
+
+        var collectionLabel = getUniqueLabel();
+        $("#customName").val(collectionLabel);
+        $("#customDescription").val(collectionLabel + " description");
         $("#customVis").val("full");
         $("#customColorInput").val("#0");
         $("#customColorPicker").spectrum("set", "#0");
@@ -516,6 +519,24 @@ var hgCollection = (function() {
             // we go straight to hgTracks after save
             $form = $('#redirectForm');
             $form.submit();
+        }
+    }
+
+    function getUniqueLabel() {
+        var root = "New Collection";
+        if (!collectionLabels[root]) {
+            collectionLabels[root] = 1;
+            return root;
+        } else {
+            var counter = 1;
+
+            for(; ; counter++) {
+                var label  = root + ' (' + counter + ')';
+                if (!collectionLabels[label]) {
+                    collectionLabels[label] = 1;
+                    return label;
+                }
+            }
         }
     }
 
