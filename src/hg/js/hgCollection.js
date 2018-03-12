@@ -175,12 +175,15 @@ var hgCollection = (function() {
         return true;
     }
 
+
     function dialogCollection() {
         $("#doNewCollection").off ( "click" );
         $("#doNewCollection").click ( newCollection );
         $("#viewFuncDiv").show();
-        $("#customName").val("New Collection");
-        $("#customDescription").val("New Collection description");
+
+        var collectionLabel = getUniqueLabel();
+        $("#customName").val(collectionLabel);
+        $("#customDescription").val(collectionLabel + " description");
         $("#customVis").val("full");
         $("#customColorInput").val("#0");
         $("#customColorPicker").spectrum("set", "#0");
@@ -200,7 +203,7 @@ var hgCollection = (function() {
         var newDescription = $("#customDescription").val().trim();
         if (!validateLabel(newDescription))
             return;
-        var ourCollectionName = getUniqueName("coll");
+        var ourCollectionName = getUniqueName();
         var parent = $(selectedTree).find("li").first();
         $( "#newCollectionDialog" ).dialog("close");
 
@@ -519,8 +522,28 @@ var hgCollection = (function() {
         }
     }
 
-    function getUniqueName(root) {
+    function getUniqueLabel() {
+        var root = "New Collection";
+        if (!collectionLabels[root]) {
+            collectionLabels[root] = 1;
+            return root;
+        } else {
+            var counter = 1;
+
+            for(; ; counter++) {
+                var label  = root + ' (' + counter + ')';
+                if (!collectionLabels[label]) {
+                    collectionLabels[label] = 1;
+                    return label;
+                }
+            }
+        }
+    }
+
+    function getUniqueName() {
         // make sure name is unique in track hub
+        var seconds =  Math.floor( Date.now() / 1000 ) - 1520631071;
+        var root = "coll" + seconds;
         if (!collectionNames[root]) {
             collectionNames[root] = 1;
             return root;

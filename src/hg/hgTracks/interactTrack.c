@@ -4,6 +4,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
+#include "obscure.h"
 #include "hgTracks.h"
 #include "interact.h"
 #include "interactUi.h"
@@ -24,6 +25,7 @@ static Color interactItemColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Return color to draw an interaction */
 {
 struct interact *inter = item;
+
 struct rgbColor itemRgb;
 // There must be a better way...
 itemRgb.r = (inter->color & 0xff0000) >> 16;
@@ -114,12 +116,30 @@ for (inter=inters; inter; inter=inter->next)
     char *otherChrom = interactOtherChrom(inter);
     safef(itemBuf, sizeof itemBuf, "%s", inter->name);
     struct dyString *ds = dyStringNew(0);
-    dyStringPrintf(ds, "%s", inter->name);
+    if (isEmpty(inter->name))
+        {
+        if (isNotEmpty(inter->exp))
+            dyStringPrintf(ds, "%s ", inter->exp);
+        if (otherChrom)
+            dyStringPrintf(ds, "%s", otherChrom);
+        else
+            {
+            char buf[4096];
+            sprintLongWithCommas(buf, inter->chromEnd - inter->chromStart);
+            dyStringPrintf(ds, "%s bp", buf);
+            }
+        }
+    else
+        dyStringPrintf(ds, "%s", inter->name);
     if (inter->score)
         dyStringPrintf(ds, " %d", inter->score);
+    if (inter->value != 0.0)
+        dyStringPrintf(ds, " %0.2f", inter->value);
     char *statusBuf = dyStringCannibalize(&ds);
 
     color = interactItemColor(tg, inter, hvg);
+    if (vis == tvDense && interactOtherChrom(inter) && color == MG_BLACK)
+        color = MG_MAGENTA;
     
     // TODO: simplify by using start/end instead of center and width
     // This is a holdover from longRange track implementation

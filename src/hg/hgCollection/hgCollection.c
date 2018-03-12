@@ -53,7 +53,32 @@ double priority;
 int order;
 };
 
-static char *makeUnique(struct hash *nameHash, char *name)
+static char *makeUniqueLabel(struct hash *labelHash, char *label)
+// Make the short label  of this track unique.
+{
+if (hashLookup(labelHash, label) == NULL)
+    {
+    hashStore(labelHash, label);
+    return label;
+    }
+
+unsigned count = 1;
+char buffer[4096];
+
+for(;; count++)
+    {
+    safef(buffer, sizeof buffer, "%s (%d)", label, count);
+    if (hashLookup(labelHash, buffer) == NULL)
+        {
+        hashStore(labelHash, buffer);
+        return cloneString(buffer);
+        }
+    }
+
+return NULL;
+}
+
+static char *makeUniqueName(struct hash *nameHash, char *name)
 // Make the name of this track unique.
 {
 char *skipHub = trackHubSkipHubName(name);
@@ -63,12 +88,15 @@ if (hashLookup(nameHash, skipHub) == NULL)
     return skipHub;
     }
 
+char base[4096];
+safef(base, sizeof base, "%s_%lx",skipHub, time(NULL) - 1520629086);
+
 unsigned count = 0;
 char buffer[4096];
 
 for(;; count++)
     {
-    safef(buffer, sizeof buffer, "%s%d", skipHub, count);
+    safef(buffer, sizeof buffer, "%s%d", base, count);
     if (hashLookup(nameHash, buffer) == NULL)
         {
         hashStore(nameHash, buffer);
@@ -370,8 +398,10 @@ if (hubName != NULL)
     curGroup = hashFindVal(groupHash, hubName);
 
 jsInlineF("var collectionData = []; ");
-struct dyString *dy = newDyString(1024);
+struct dyString *dyNames = newDyString(1024);
+struct dyString *dyLabels = newDyString(1024);
 jsInlineF("var collectionNames = [];");
+jsInlineF("var collectionLabels = [];");
 if (curGroup != NULL)
     {
     // print out all the tracks in all the collections
@@ -387,7 +417,8 @@ if (curGroup != NULL)
                 jsInlineF(",");
                 }
             printTrack("#", tdb,  TRUE);
-            dyStringPrintf(dy, "collectionNames['%s']=1;", trackHubSkipHubName(tdb->track));
+            dyStringPrintf(dyNames, "collectionNames['%s']=1;", trackHubSkipHubName(tdb->track));
+            dyStringPrintf(dyLabels, "collectionLabels['%s']=1;", tdb->shortLabel);
             first = FALSE;
             }
         }
@@ -397,14 +428,15 @@ if (curGroup != NULL)
         if ( sameString(tdb->grp, curGroup->name))
             {
             printSubtracks("collectionData", tdb, TRUE);
-            addSubtrackNames(dy, tdb);
+            addSubtrackNames(dyNames, tdb);
             }
         }
     }
 else
     jsInlineF("collectionData['#'] = [];");
 
-jsInlineF("%s", dy->string);
+jsInlineF("%s", dyNames->string);
+jsInlineF("%s", dyLabels->string);
 
 jsInlineF("var trackData = []; ");
 struct dyString *rootChildren = newDyString(512);
@@ -575,7 +607,7 @@ hashRemove(tdb->settingsHash, "superTrack");
 hashReplace(tdb->settingsHash, "parent", parent);
 hashReplace(tdb->settingsHash, "shortLabel", track->shortLabel);
 hashReplace(tdb->settingsHash, "longLabel", track->longLabel);
-hashReplace(tdb->settingsHash, "track", makeUnique(collectionNameHash, name));
+hashReplace(tdb->settingsHash, "track", makeUniqueName(collectionNameHash, name));
 char priBuf[128];
 safef(priBuf, sizeof priBuf, "%d", priority);
 hashReplace(tdb->settingsHash, "priority", cloneString(priBuf));
@@ -794,7 +826,7 @@ struct track *collectionList = parseJsonElements(collectionElements);
 updateHub(cart, db, collectionList, nameHash);
 }
 
-static void buildNameHash(struct hash *nameHash, struct trackDb *list)
+static void buildNameHash(struct hash *nameHash, struct hash *labelHash, struct trackDb *list)
 {
 if (list == NULL)
     return;
@@ -803,7 +835,9 @@ struct trackDb *tdb = list;
 for(tdb = list; tdb;  tdb = tdb->next)
     {
     hashAdd(nameHash, trackHubSkipHubName(tdb->track), tdb);
-    buildNameHash(nameHash, tdb->subtracks);
+    if (labelHash)
+        hashAdd(labelHash, tdb->shortLabel, tdb);
+    buildNameHash(nameHash, NULL,  tdb->subtracks);
     }
 }
 
@@ -981,13 +1015,13 @@ if (newTdb->subtracks)
     struct trackDb *subTdb;
     for(subTdb = newTdb->subtracks; subTdb; subTdb = subTdb->next)
         {
-        hashReplace(subTdb->settingsHash, "track", makeUnique(nameHash, subTdb->track));
+        hashReplace(subTdb->settingsHash, "track", makeUniqueName(nameHash, subTdb->track));
         hashReplace(subTdb->settingsHash, "parent", trackHubSkipHubName(collectionName));
         }
     }
 else
     {
-    hashReplace(newTdb->settingsHash, "track", makeUnique(nameHash, trackName));
+    hashReplace(newTdb->settingsHash, "track", makeUniqueName(nameHash, trackName));
     hashReplace(newTdb->settingsHash, "parent", trackHubSkipHubName(collectionName));
     }
 char *tdbType = trackDbSetting(newTdb, "tdbType");
@@ -1029,7 +1063,8 @@ pruneTrackList(&trackList, &groupList);
 
 struct trackDb *superList = addSupers(trackList);
 struct hash *nameHash = newHash(5);
-buildNameHash(nameHash, superList);
+struct hash *labelHash = newHash(5);
+buildNameHash(nameHash, labelHash, superList);
 
 char *cmd = cartOptionalString(cart, "cmd");
 if (cmd == NULL)
@@ -1046,9 +1081,11 @@ else if (sameString("addTrack", cmd))
 else if (sameString("newCollection", cmd))
     {
     char *trackName = cgiString("track");
-    char *collectionName = makeUnique(nameHash, "coll");
-    char *shortLabel = "New Collection";
-    char *longLabel = "Description of New Collection";
+    char *collectionName = makeUniqueName(nameHash, "coll");
+    char *shortLabel = makeUniqueLabel(labelHash, "New Collection");
+    char buffer[4096];
+    safef(buffer, sizeof buffer, "%s description", shortLabel);
+    char *longLabel = cloneString(buffer);
     struct trackDb *tdb;
 
     AllocVar(tdb);
