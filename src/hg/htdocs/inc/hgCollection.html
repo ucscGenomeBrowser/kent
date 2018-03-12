@@ -86,7 +86,11 @@ body.loading .modal {
         </a>
     </div>
     <div class='col-md-3 text-right'>
-        <div class='gbButton' id='discardChanges'>Discard Changes</div>
+        <div class='gbButton' 
+             id='discardChanges'
+             title='Discard all the changes since you entered this application' >
+             Discard Changes
+        </div>
         <div class='gbButtonGoContainer text-right' title='Save and go to the Genome Browser'>
             <div class='gbButtonGo' id='goButton'>GO</div>
             <i class='gbIconGo fa fa-play fa-2x'></i> 
@@ -113,7 +117,9 @@ body.loading .modal {
         <div class='row gbSectionBanner'>
             <div class='col-md-3'>Collected Tracks</div>
                 <div class='col-md-3' style='float:right' title='New Collection'>
-                    <div style='font-size:13px' id='newCollection' class='gbButton'>
+                    <div 
+                        style='font-size:13px' id='newCollection' class='gbButton'
+                        title='Create a new collection' >
                         Add Collection
                     </div>
                 </div>

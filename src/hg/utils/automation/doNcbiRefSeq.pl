@@ -294,8 +294,8 @@ echo "\$asmId (\$versionDate)" > ncbiRefSeqVersion.txt
 # 8/23/17: gff3ToGenePred quits over illegal attribute SO_type... make it legal (so_type):
 zcat \$ncbiGffGz \\
   | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
-  | gff3ToGenePred -useName -attrsOut=\$asmId.attrs.txt -allowMinimalGenes \\
-      -processAllGeneChildren -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+  | gff3ToGenePred -refseqHacks -attrsOut=\$asmId.attrs.txt \\
+      -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
 genePredCheck \$asmId.gp
 
 # extract labels from semi-structured text in gbff COMMENT/description sections:
