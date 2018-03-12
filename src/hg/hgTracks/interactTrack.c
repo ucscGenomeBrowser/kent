@@ -38,6 +38,21 @@ void interactLoadItems(struct track *tg)
 /* Load all interact items in region */
 {
 loadSimpleBedWithLoader(tg, (bedItemLoader)interactLoad);
+
+// filters
+char buf[1024];
+safef(buf, sizeof buf, "%s.%s", tg->tdb->track, INTERACT_MINSCORE);
+int minScore = cartUsualInt(cart, buf, INTERACT_DEFMINSCORE);
+struct interact *inter, *next, *filteredItems = NULL;
+for (inter = tg->items; inter; inter = next)
+    {
+    next = inter->next;
+    if (inter->score < minScore)
+        continue;
+    slAddHead(&filteredItems, inter);
+    }
+slReverse(&filteredItems);
+tg->items = filteredItems;
 }
 
 static void interactDrawItems(struct track *tg, int seqStart, int seqEnd,
@@ -67,7 +82,6 @@ unsigned int maxWidth = 0;
 struct interact *inter;
 char buffer[1024];
 char itemBuf[2048];
-safef(buffer, sizeof buffer, "%s.%s", tg->tdb->track, INTERACT_MINSCORE);
 
 // Determine if there are mixed inter and intra-chromosomal 
 // Suppress interchromosomal labels if they overlap
@@ -116,9 +130,9 @@ for (inter=inters; inter; inter=inter->next)
     char *otherChrom = interactOtherChrom(inter);
     safef(itemBuf, sizeof itemBuf, "%s", inter->name);
     struct dyString *ds = dyStringNew(0);
-    if (isEmpty(inter->name))
+    if (isEmpty(inter->name) || sameString(".", inter->name))
         {
-        if (isNotEmpty(inter->exp))
+        if (isNotEmpty(inter->exp) && differentString(".", inter->name))
             dyStringPrintf(ds, "%s ", inter->exp);
         if (otherChrom)
             dyStringPrintf(ds, "%s", otherChrom);

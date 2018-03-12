@@ -95,7 +95,7 @@ if (inter == NULL)
 genericHeader(tdb, item);
 
 char startBuf[1024], endBuf[1024], sizeBuf[1024];
-if (isNotEmpty(inter->name))
+if (isNotEmpty(inter->name) && differentString(".", inter->name))
     printf("<b>Interaction name:</b> %s<br>\n", inter->name);
 printf("<b>Interaction region:</b> ");
 if (interactOtherChrom(inter))
@@ -112,7 +112,7 @@ else
     }
 printf("<b>Score:</b> %d<br>\n", inter->score);
 printf("<b>Value:</b> %0.3f<br>\n", inter->value);
-if (isNotEmpty(inter->exp))
+if (isNotEmpty(inter->exp) && differentString(".", inter->name))
     printf("<b>Experiment:</b> %s<br>\n", inter->exp);
 puts("<p>");
 
@@ -127,12 +127,16 @@ char *region1Chrom = inter->sourceChrom;
 int region1Start = inter->sourceStart;
 int region1End = inter->sourceEnd;
 char *region1Name = inter->sourceName;
+if (sameString(".", inter->sourceName))
+    region1Name = "";
 
 char *region2Label = "Target";
 char *region2Chrom = inter->targetChrom;
 int region2Start = inter->targetStart;
 int region2End = inter->targetEnd;
 char *region2Name = inter->targetName;
+if (sameString(".", inter->targetName))
+    region2Name = "";
 
 if (!interactUiDirectional(tdb))
     {
