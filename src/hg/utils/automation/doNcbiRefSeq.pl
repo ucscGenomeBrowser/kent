@@ -32,6 +32,7 @@ use vars qw/
     $opt_genbank
     $opt_subgroup
     $opt_species
+    $opt_toGpWarnOnly
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -78,6 +79,8 @@ options:
     -buildDir dir         Use dir instead of default
                           $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ncbiRefSeq.\$date
                           (necessary when continuing at a later date).
+    -toGpWarnOnly         add -warnAndContinue to the gff3ToGenePred operation
+                          to avoid gene definitions that will not convert
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -115,13 +118,14 @@ Assumptions:
 # Command line args: genbankRefseq subGroup species asmId db
 my ($genbankRefseq, $subGroup, $species, $asmId, $db, $ftpDir);
 # Other:
-my ($buildDir, $dbExists);
+my ($buildDir, $toGpWarnOnly, $dbExists);
 my ($secondsStart, $secondsEnd);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
+		      'toGpWarnOnly',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -276,6 +280,9 @@ sub doProcess {
   my $bossScript = newBash HgRemoteScript("$runDir/doProcess.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
+  my $warnOnly = "";
+  $warnOnly = "-warnAndContinue" if ($toGpWarnOnly);
+
   my $dbTwoBit = "$HgAutomate::clusterData/$db/$db.2bit";
   $bossScript->add(<<_EOF_
 # establish all variables to use here
@@ -294,7 +301,7 @@ echo "\$asmId (\$versionDate)" > ncbiRefSeqVersion.txt
 # 8/23/17: gff3ToGenePred quits over illegal attribute SO_type... make it legal (so_type):
 zcat \$ncbiGffGz \\
   | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
-  | gff3ToGenePred -refseqHacks -attrsOut=\$asmId.attrs.txt \\
+  | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
       -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
 genePredCheck \$asmId.gp
 
@@ -522,6 +529,9 @@ _EOF_
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
 &usage(1) if (scalar(@ARGV) != 5);
+
+$toGpWarnOnly = 0;
+$toGpWarnOnly = 1 if ($opt_toGpWarnOnly);
 
 $secondsStart = `date "+%s"`;
 chomp $secondsStart;
