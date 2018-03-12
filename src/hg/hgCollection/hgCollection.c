@@ -603,7 +603,10 @@ char *tdbType = trackDbSetting(tdb, "tdbType");
 if (tdbType != NULL)
     hashReplace(tdb->settingsHash, "type", tdbType);
 
-hashRemove(tdb->settingsHash, "maxHeightPixels");
+if (hashLookup(tdb->settingsHash, "customized") == NULL)
+    hashRemove(tdb->settingsHash, "maxHeightPixels");
+
+hashReplace(tdb->settingsHash, "customized", "on");
 hashRemove(tdb->settingsHash, "superTrack");
 hashReplace(tdb->settingsHash, "parent", parent);
 hashReplace(tdb->settingsHash, "shortLabel", track->shortLabel);
@@ -951,12 +954,16 @@ if (bigDataUrl == NULL)
         }
     }
 
+if (hashLookup(tdb->settingsHash, "customized") == NULL)
+    hashRemove(tdb->settingsHash, "maxHeightPixels");
+hashReplace(tdb->settingsHash, "customized", "on");
+
 struct hashCookie cookie = hashFirst(tdb->settingsHash);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     if (sameString("parent", hel->name))
         fprintf(f, "%s%s %s\n", tabs,hel->name, trackHubSkipHubName((char *)hel->val));
-    else if (!(sameString("track", hel->name) || sameString("polished", hel->name)|| sameString("group", hel->name) || sameString("priority", hel->name) || sameString("subTrack", hel->name) || sameString("maxHeightPixels", hel->name)))
+    else if (!(sameString("track", hel->name) || sameString("polished", hel->name)|| sameString("group", hel->name) || sameString("priority", hel->name) || sameString("subTrack", hel->name) ))
         fprintf(f, "%s%s %s\n", tabs,hel->name, (char *)hel->val);
     }
 
@@ -1092,7 +1099,7 @@ else if (sameString("newCollection", cmd))
     AllocVar(tdb);
     slAddHead(&superList, tdb);
     tdb->settingsHash = newHash(5);
-    tdb->type = cloneString("wig");
+    tdb->type = cloneString("mathWig");
 
     hashAdd(tdb->settingsHash, "track", collectionName);
     hashAdd(tdb->settingsHash, "shortLabel", shortLabel);
@@ -1103,6 +1110,8 @@ else if (sameString("newCollection", cmd))
     hashAdd(tdb->settingsHash, "type", "mathWig");
     hashAdd(tdb->settingsHash, "visibility", "full");
     hashAdd(tdb->settingsHash, "color", "0,0,0");
+    hashAdd(tdb->settingsHash, "customized", "on");
+    hashAdd(tdb->settingsHash, "maxHeightPixels", "10000:30:11");
     hashAdd(tdb->settingsHash, CUSTOM_COMPOSITE_SETTING, "on");
 
     doAddTrack(cart, db, superList, trackName, collectionName, nameHash);
