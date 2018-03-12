@@ -603,6 +603,7 @@ char *tdbType = trackDbSetting(tdb, "tdbType");
 if (tdbType != NULL)
     hashReplace(tdb->settingsHash, "type", tdbType);
 
+hashRemove(tdb->settingsHash, "maxHeightPixels");
 hashRemove(tdb->settingsHash, "superTrack");
 hashReplace(tdb->settingsHash, "parent", parent);
 hashReplace(tdb->settingsHash, "shortLabel", track->shortLabel);
@@ -955,7 +956,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     {
     if (sameString("parent", hel->name))
         fprintf(f, "%s%s %s\n", tabs,hel->name, trackHubSkipHubName((char *)hel->val));
-    else if (!(sameString("track", hel->name) || sameString("polished", hel->name)|| sameString("group", hel->name) || sameString("priority", hel->name) || sameString("subTrack", hel->name)))
+    else if (!(sameString("track", hel->name) || sameString("polished", hel->name)|| sameString("group", hel->name) || sameString("priority", hel->name) || sameString("subTrack", hel->name) || sameString("maxHeightPixels", hel->name)))
         fprintf(f, "%s%s %s\n", tabs,hel->name, (char *)hel->val);
     }
 
