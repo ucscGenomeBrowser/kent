@@ -32,6 +32,7 @@ use vars qw/
     $opt_genbank
     $opt_subgroup
     $opt_species
+    $opt_toGpWarnOnly
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -78,6 +79,8 @@ options:
     -buildDir dir         Use dir instead of default
                           $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ncbiRefSeq.\$date
                           (necessary when continuing at a later date).
+    -toGpWarnOnly         add -warnAndContinue to the gff3ToGenePred operation
+                          to avoid gene definitions that will not convert
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -115,13 +118,14 @@ Assumptions:
 # Command line args: genbankRefseq subGroup species asmId db
 my ($genbankRefseq, $subGroup, $species, $asmId, $db, $ftpDir);
 # Other:
-my ($buildDir, $dbExists);
+my ($buildDir, $toGpWarnOnly, $dbExists);
 my ($secondsStart, $secondsEnd);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
+		      'toGpWarnOnly',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -276,6 +280,9 @@ sub doProcess {
   my $bossScript = newBash HgRemoteScript("$runDir/doProcess.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
+  my $warnOnly = "";
+  $warnOnly = "-warnAndContinue" if ($toGpWarnOnly);
+
   my $dbTwoBit = "$HgAutomate::clusterData/$db/$db.2bit";
   $bossScript->add(<<_EOF_
 # establish all variables to use here
@@ -294,8 +301,8 @@ echo "\$asmId (\$versionDate)" > ncbiRefSeqVersion.txt
 # 8/23/17: gff3ToGenePred quits over illegal attribute SO_type... make it legal (so_type):
 zcat \$ncbiGffGz \\
   | sed -re 's/([;\\t])SO_type=/\\1so_type=/;' \\
-  | gff3ToGenePred -useName -attrsOut=\$asmId.attrs.txt -allowMinimalGenes \\
-      -processAllGeneChildren -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
+  | gff3ToGenePred $warnOnly -refseqHacks -attrsOut=\$asmId.attrs.txt \\
+      -unprocessedRootsOut=\$asmId.unprocessedRoots.txt stdin \$asmId.gp
 genePredCheck \$asmId.gp
 
 # extract labels from semi-structured text in gbff COMMENT/description sections:
@@ -368,7 +375,20 @@ simpleChain -outPsl -maxGap=300000 \$asmId.psl stdout | pslSwap stdin stdout \\
    | gzip -c > \$db.psl.gz
 pslCheck -targetSizes=$HgAutomate::clusterData/\$db/chrom.sizes \\
    -querySizes=\$downloadDir/rna.sizes -db=\$db \$db.psl.gz
-genePredToFakePsl -qSizes=\$downloadDir/rna.sizes  \$db \$db.ncbiRefSeq.gp \$db.fake.psl \$db.fake.cds
+
+# extract RNA CDS information from genbank record
+# Note: $asmId.raFile.txt could be used instead of _rna.gbff.gz
+\$gbffToCds \$downloadDir/\${asmId}_rna.gbff.gz | sort > \$asmId.rna.cds
+
+# the NCBI _genomic.gff.gz file only contains cDNA_match records for transcripts
+# that do not *exactly* match the reference genome.  For all other transcripts
+# construct 'fake' PSL records representing the alignments of all cDNAs
+# that would be perfect matches to the reference genome.  The pslFixCdsJoinGap
+# will fixup those records with unusual alignments due to frameshifts of
+# various sorts as found in the rna.cds file:
+genePredToFakePsl -qSizes=\$downloadDir/rna.sizes  \$db \$db.ncbiRefSeq.gp \\
+  stdout \$db.fake.cds \\
+     | pslFixCdsJoinGap stdin \$asmId.rna.cds \$db.fake.psl
 pslCat -nohead \$db.psl.gz | cut -f10,14 > \$db.psl.names
 if [ -s \$db.psl.names ]; then
   pslSomeRecords -tToo -not \$db.fake.psl \$db.psl.names \$db.someRecords.psl
@@ -382,10 +402,6 @@ pslSort dirs stdout \\
      | sort -k14,14 -k16,16n | gzip -c > \$asmId.\$db.psl.gz
 rm -fr ./tmpdir
 pslCheck -db=\$db \$asmId.\$db.psl.gz
-
-# extract RNA CDS information from genbank record
-# Note: $asmId.raFile.txt could be used instead of _rna.gbff.gz
-\$gbffToCds \$downloadDir/\${asmId}_rna.gbff.gz | sort > \$asmId.rna.cds
 _EOF_
   );
   $bossScript->execute();
@@ -522,6 +538,9 @@ _EOF_
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
 &usage(1) if (scalar(@ARGV) != 5);
+
+$toGpWarnOnly = 0;
+$toGpWarnOnly = 1 if ($opt_toGpWarnOnly);
 
 $secondsStart = `date "+%s"`;
 chomp $secondsStart;
