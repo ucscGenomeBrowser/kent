@@ -103,6 +103,8 @@ if (skippedBase >= 0)
         psl->qEnd++;
         if (psl->qSize < psl->qEnd)
             psl->qSize++;
+        psl->qNumInsert++;
+        psl->qBaseInsert++;
         }
     if (isRc)
         pslRc(psl);
