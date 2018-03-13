@@ -14,17 +14,7 @@ boolean isPopup = FALSE;
 boolean interactUiDirectional(struct trackDb *tdb)
 /* Determine if interactions are directional */
 {
-// TODO: make this setting optional (default to false)
-boolean isDirectional = FALSE;
-char *setting = trackDbSettingClosestToHome(tdb, INTERACT_DIRECTIONAL);
-if (setting == NULL)
-    errAbort("interact track %s missing required %s setting\n", tdb->track, INTERACT_DIRECTIONAL);
-if (sameString(setting, "true"))
-    isDirectional = TRUE;
-else if (differentString(setting, "false"))
-    errAbort("interact track %s setting %s must be set true or false\n", 
-                tdb->track, INTERACT_DIRECTIONAL);
-return isDirectional;
+return trackDbSettingClosestToHomeOn(tdb, INTERACT_DIRECTIONAL);
 }
 
 void interactUiMinScore(struct cart *cart, char *track, struct trackDb *tdb)
