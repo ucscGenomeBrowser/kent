@@ -4973,7 +4973,7 @@ identifier ensemblProteinId3 external=Ensembl
     $gbd.sfAssign.seqID minCheck=0.01
 
 
-set notEnsemblTranscriptId !allMis1,!anoGam3,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!ce10,!calMil1,!cebCap1,!cerAty1,!cerSim1,!chrPic2,!$colAng,!eboVir3,!eulFla1,!eulMac1,!felCat8,!galVar1,!gorGor5,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur3,!nanPar1,!nasLar1,!$orcOrc,!oreNil3,!oxyTri2,!panPan1,!panPan2,!panTro5,!petMar3,!priPac3,!proCoq1,!rhiBie1,!rhiRox1,!rouAeg1,!staAur1,!taeGut2,!tarSyr2,!tupChi1,!xenLae2,!xenTro7,!xenTro9
+set notEnsemblTranscriptId !allMis1,!anoGam3,!aotNan1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!ce10,!calMil1,!cebCap1,!cerAty1,!cerSim1,!chrPic2,!$colAng,!eboVir3,!eulFla1,!eulMac1,!felCat8,!galVar1,!gorGor5,!manPen1,!macNem1,!macFas5,!manLeu1,!melGal5,!micMur3,!nanPar1,!nasLar1,!neoSch1,!$orcOrc,!oreNil3,!oxyTri2,!panPan1,!panPan2,!panTro5,!petMar3,!priPac3,!proCoq1,!rhiBie1,!rhiRox1,!rouAeg1,!staAur1,!taeGut2,!tarSyr2,!tupChi1,!xenLae2,!xenTro7,!xenTro9
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
