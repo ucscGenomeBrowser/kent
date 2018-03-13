@@ -61,6 +61,7 @@ int minScore = cartUsualInt(cart, buf, INTERACT_DEFMINSCORE);
 int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
 struct interact *inter, *next, *filteredItems = NULL;
+int count = slCount(tg->items);
 for (inter = tg->items; inter; inter = next)
     {
     next = inter->next;
@@ -75,6 +76,8 @@ for (inter = tg->items; inter; inter = next)
     }
 slReverse(&filteredItems);
 // consider sorting by score/value so highest scored items draw last (on top)
+if (slCount(filteredItems) != count)
+    labelTrackAsFiltered(tg);
 tg->items = filteredItems;
 }
 
