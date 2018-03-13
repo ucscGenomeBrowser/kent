@@ -375,7 +375,20 @@ simpleChain -outPsl -maxGap=300000 \$asmId.psl stdout | pslSwap stdin stdout \\
    | gzip -c > \$db.psl.gz
 pslCheck -targetSizes=$HgAutomate::clusterData/\$db/chrom.sizes \\
    -querySizes=\$downloadDir/rna.sizes -db=\$db \$db.psl.gz
-genePredToFakePsl -qSizes=\$downloadDir/rna.sizes  \$db \$db.ncbiRefSeq.gp \$db.fake.psl \$db.fake.cds
+
+# extract RNA CDS information from genbank record
+# Note: $asmId.raFile.txt could be used instead of _rna.gbff.gz
+\$gbffToCds \$downloadDir/\${asmId}_rna.gbff.gz | sort > \$asmId.rna.cds
+
+# the NCBI _genomic.gff.gz file only contains cDNA_match records for transcripts
+# that do not *exactly* match the reference genome.  For all other transcripts
+# construct 'fake' PSL records representing the alignments of all cDNAs
+# that would be perfect matches to the reference genome.  The pslFixCdsJoinGap
+# will fixup those records with unusual alignments due to frameshifts of
+# various sorts as found in the rna.cds file:
+genePredToFakePsl -qSizes=\$downloadDir/rna.sizes  \$db \$db.ncbiRefSeq.gp \\
+  stdout \$db.fake.cds \\
+     | pslFixCdsJoinGap stdin \$asmId.rna.cds \$db.fake.psl
 pslCat -nohead \$db.psl.gz | cut -f10,14 > \$db.psl.names
 if [ -s \$db.psl.names ]; then
   pslSomeRecords -tToo -not \$db.fake.psl \$db.psl.names \$db.someRecords.psl
@@ -389,10 +402,6 @@ pslSort dirs stdout \\
      | sort -k14,14 -k16,16n | gzip -c > \$asmId.\$db.psl.gz
 rm -fr ./tmpdir
 pslCheck -db=\$db \$asmId.\$db.psl.gz
-
-# extract RNA CDS information from genbank record
-# Note: $asmId.raFile.txt could be used instead of _rna.gbff.gz
-\$gbffToCds \$downloadDir/\${asmId}_rna.gbff.gz | sort > \$asmId.rna.cds
 _EOF_
   );
   $bossScript->execute();

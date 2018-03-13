@@ -2469,7 +2469,6 @@ for (e = 0; e < gp->exonCount; ++e)
         i++;
         psl->blockSizes[i] = (gp->exonEnds[e] - gp->exonStarts[e]);
         psl->qStarts[i] = i==0 ? 0 + sizeAdjust : psl->qStarts[i-1] + psl->blockSizes[i-1];
-//#*** TODO: use exonFrame to detect ribosomal frameshift that makes us skip a base on t
         psl->tStarts[i] = gp->exonStarts[e];
         }
     else
