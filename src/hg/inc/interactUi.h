@@ -11,7 +11,7 @@
 #define INTERACT_MAXHEIGHT 300
 #define INTERACT_DEFHEIGHT "200"
 #define INTERACT_MINSCORE "minScore"
-#define INTERACT_DEFMINSCORE "0"
+#define INTERACT_DEFMINSCORE 0
 
 #define INTERACT_DIRECTIONAL    "interactDirectional"
 
