@@ -325,10 +325,10 @@ void hvGfxEllipse(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color
  * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
  */
 
-void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, 
+int hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, 
                         Color color, boolean isDotted);
 /* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
- * Optionally alternate dots.
+ * Return max y value. Optionally alternate dots.
  * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html */
  /* Thanks to author  * @author Zingl Alois
  * @date 22.08.2016 */

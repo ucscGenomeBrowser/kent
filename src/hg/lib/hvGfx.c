@@ -326,14 +326,15 @@ else
     }   
 }   
 
-void hvGfxCurveSegAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, 
+int hvGfxCurveSegAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, 
                         Color color, boolean isDashed)
 /* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
- * Optionally alternate dots.
+ * Return max y value. Optionally alternate dots.
  * Adapted trivially from code posted on github and at http://members.chello.at/~easyfilter/bresenham.html */
  /* Thanks to author  * @author Zingl Alois
  * @date 22.08.2016 */
 {
+   int yMax = 0;
    int sx = x2-x1, sy = y2-y1;
    long xx = x0-x1, yy = y0-y1, xy;             /* relative values for checks */
    double dx, dy, err, ed, cur = xx*sy-yy*sx;                    /* curvature */
@@ -360,32 +361,49 @@ void hvGfxCurveSegAA(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, 
          ed = fmax(dx+xy,-xy-dy);               /* approximate error distance */
          ed += 2*ed*cur*cur/(4*ed*ed+cur*cur);
          if (!isDashed || (++dots % 3))
+            {
             mixDot(hvg, x0,y0, 1-fabs(err-dx-dy-xy)/ed, color);          /* plot curve */
+            if (y0 > yMax)
+                yMax = y0;
+            }
          if (x0 == x2 || y0 == y2) break;     /* last pixel -> curve finished */
          x1 = x0; cur = dx-err; y1 = 2*err+dy < 0;
          if (2*err+dx > 0) {                                        /* x step */
             if (err-dy < ed) 
+                {
                 mixDot(hvg, x0,y0+sy, 1-fabs(err-dy)/ed, color);
+                if (y0 > yMax)
+                    yMax = y0;
+                }
             x0 += sx; dx -= xy; err += dy += yy;
          }
          if (y1) {                                                  /* y step */
-            if (cur < ed) mixDot(hvg, x1+sx,y0, 1-fabs(cur)/ed, color);
+            if (cur < ed) 
+                {
+                mixDot(hvg, x1+sx,y0, 1-fabs(cur)/ed, color);
+                if (y0 > yMax)
+                    yMax = y0;
+                }
             y0 += sy; dy -= xy; err += dx += xx;
          }
       } while (dy < dx);                  /* gradient negates -> close curves */
    }
    hvGfxLine(hvg, x0,y0, x2,y2, color);                  /* plot remaining needle to end */
+   if (y0 > yMax)
+       yMax = y0;
+   return yMax;
 }
 
-void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, 
+int hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y2, 
                         Color color, boolean isDashed)
 /* Draw a segment of an anti-aliased curve within 3 points (quadratic Bezier)
- * Optionally alternate dots.
- * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html */
+ * Return max y value. Optionally alternate dots.
+ * Adapted trivially from code posted at http://members.chello.at/~easyfilter/bresenham.html
+ */
 {
    int x = x0-x1, y = y0-y1;
    double t = x0-2*x1+x2, r;
-
+   int yMax = 0, yMaxRet = 0;
    if ((long)x*(x2-x1) > 0) {                        /* horizontal cut at P4? */
       if ((long)y*(y2-y1) > 0)                     /* vertical cut at P6 too? */
          if (fabs((y0-2*y1+y2)/t*x) > abs(y)) {               /* which first? */
@@ -396,7 +414,7 @@ void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y
       t = (x0*x2-x1*x1)*t/(x0-x1);                       /* gradient dP4/dx=0 */
       x = floor(t+0.5); y = floor(r+0.5);
       r = (y1-y0)*(t-x0)/(x1-x0)+y0;                  /* intersect P3 | P0 P1 */
-      hvGfxCurveSegAA(hvg,x0,y0, x,floor(r+0.5), x,y, color, isDashed);
+      yMax = hvGfxCurveSegAA(hvg,x0,y0, x,floor(r+0.5), x,y, color, isDashed);
       r = (y1-y2)*(t-x2)/(x1-x2)+y2;                  /* intersect P4 | P1 P2 */
       x0 = x1 = x; y0 = y; y1 = floor(r+0.5);             /* P0 = P4, P1 = P8 */
    }
@@ -406,11 +424,16 @@ void hvGfxCurve(struct hvGfx *hvg, int x0, int y0, int x1, int y1, int x2, int y
       t = (y0*y2-y1*y1)*t/(y0-y1);                       /* gradient dP6/dy=0 */
       x = floor(r+0.5); y = floor(t+0.5);
       r = (x1-x0)*(t-y0)/(y1-y0)+x0;                  /* intersect P6 | P0 P1 */
-      hvGfxCurveSegAA(hvg,x0,y0, floor(r+0.5),y, x,y, color, isDashed);
+      yMaxRet = hvGfxCurveSegAA(hvg,x0,y0, floor(r+0.5),y, x,y, color, isDashed);
+      if (yMaxRet > yMax)
+        yMax = yMaxRet;
       r = (x1-x2)*(t-y2)/(y1-y2)+x2;                  /* intersect P7 | P1 P2 */
       x0 = x; x1 = floor(r+0.5); y0 = y1 = y;             /* P0 = P6, P1 = P7 */
    }
-   hvGfxCurveSegAA(hvg,x0,y0, x1,y1, x2,y2, color, isDashed); /* remaining part */
+   yMaxRet = hvGfxCurveSegAA(hvg,x0,y0, x1,y1, x2,y2, color, isDashed); /* remaining part */
+   if (yMaxRet > yMax)
+     yMax = yMaxRet;
+   return yMax;
 }
 
 void hvGfxEllipseDraw(struct hvGfx *hvg, int x0, int y0, int x1, int y1, Color color, 

@@ -1376,6 +1376,12 @@ else
     return strcmp(a,b) != 0;
 }
 
+boolean isEmptyTextField(char *s)
+/* Recognize NULL or dot as empty text */
+{
+return (isEmpty(s) || sameString(".", s));
+}
+
 boolean startsWith(const char *start, const char *string)
 /* Returns TRUE if string begins with start. */
 {
