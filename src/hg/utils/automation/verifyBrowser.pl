@@ -101,7 +101,7 @@ my %gbCheckList = ( 'gbLoaded' => 1,
 'ccdsInfo' => 1,
 'ccdsNotes' => 1,
 'ccdsKgMap' => 1
-);
+);	# my %gbCheckList
 
 sub checkTableExists($$) {
   my ($db, $table) = @_;
@@ -114,7 +114,11 @@ sub checkTableExists($$) {
   }
 }
 
+#############################################################################
+## main() starts here
+
 my $db = shift;
+my $Db = ucfirst($db);
 
 my $dbDbNames = `hgsql -N -e 'select organism,scientificName from dbDb where name="$db";' hgcentraltest`;
 chomp $dbDbNames;
@@ -180,11 +184,15 @@ my %missingTables;
 my $missingTableCount = 0;
 $tablesFound = 0;
 
+my $chainSelf = "chain.*" . $Db . "*";
+my $netSelf = "net.*" . $Db . "*";
+
 foreach my $table (sort keys %tableCheckList) {
   if (defined($tableList{$table})) {
     ++$tablesFound;
   } else {
-    if (! ($table =~ m/^ccds|^mgc/) ) {
+    next if ($table =~ m/$chainSelf|$netSelf/);
+    if ($table !~ m/^ccds|^mgc/) {
       $missingTables{$table} = 1;
       ++$missingTableCount;
     } elsif ( ($table =~ m/^ccds/) && ($db =~ m/^hg|^mm/) ) {
@@ -208,12 +216,12 @@ foreach my $table (sort keys %missingTables) {
 
 my @chainTypes = ("", "RBest", "Syn");
 my @otherDbs = ("hg38", "mm10");
-my $Db = ucfirst($db);
 for (my $i = 0; $i < scalar(@chainTypes); ++$i) {
    my $chainTable = "chain" . $chainTypes[$i] .  $Db;
    my $chainLinkTable = "chain" . $chainTypes[$i] .  $Db . "Link";
    my $netTable = "net" . $chainTypes[$i] . $Db;
    for (my $j = 0; $j < scalar(@otherDbs); ++$j) {
+      next if ($db eq $otherDbs[$j]);
       # mm10 Syntenics do not exist (yet)
       next if ($otherDbs[$j] eq "mm10" && $chainTypes[$i] eq "Syn");
       printf STDERR "# missing $otherDbs[$j].$chainTable\n" if (! checkTableExists($otherDbs[$j], $chainTable));
