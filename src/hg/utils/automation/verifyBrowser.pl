@@ -125,8 +125,18 @@ foreach my $table (sort keys %tableList) {
 
 printf STDERR "# verified %d tables, %d extra tables\n", $tablesFound, $extraTableCount;
 
+my $shownTables = 0;
 foreach my $table (sort keys %extraTables) {
-  printf STDERR "# %s\n", $table;
+  ++$shownTables;
+  if ($extraTableCount > 10) {
+    if ( ($shownTables < 5) || ($shownTables > ($extraTableCount - 4)) ) {
+       printf STDERR "# %d\t%s\n", $shownTables, $table;
+    } elsif ($shownTables == 5) {
+       printf STDERR "# . . . etc . . .\n";
+    }
+  } else {
+    printf STDERR "# %d\t%s\n", $shownTables, $table;
+  }
 }
 
 my %missingTables;
@@ -137,13 +147,24 @@ foreach my $table (sort keys %tableCheckList) {
   if (defined($tableList{$table})) {
     ++$tablesFound;
   } else {
-    $missingTables{$table} = 1;
-    ++$missingTableCount;
+    if (! ($table =~ m/^ccds|^mgc/) ) {
+      $missingTables{$table} = 1;
+      ++$missingTableCount;
+    } elsif ( ($table =~ m/^ccds/) && ($db =~ m/^hg|^mm/) ) {
+      $missingTables{$table} = 1;
+      ++$missingTableCount;
+    } elsif ( ($table =~ m/^mgc/) &&
+                 ($db =~ m/^bosTau|^danRer|^hg|^mm|^rn|^xenTro/) ) {
+      $missingTables{$table} = 1;
+      ++$missingTableCount;
+    }
   }
 }
 
 printf STDERR "# verified %d tables, %d missing tables\n", $tablesFound, $missingTableCount;
 
+my $missedOut = 0;
 foreach my $table (sort keys %missingTables) {
-  printf STDERR "# %s\n", $table;
+  ++$missedOut;
+  printf STDERR "# %d\t%s\n", $missedOut, $table;
 }
