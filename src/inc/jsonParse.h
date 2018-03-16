@@ -63,6 +63,15 @@ void jsonListAdd(struct jsonElement *list, struct jsonElement *ele);
 struct jsonElement *jsonParse(char *str);
 // parse string into an in-memory json representation
 
+int jsonStringEscapeSize(char *inString);
+/* Return the size in bytes including terminal '\0' for escaped string. */
+
+void jsonStringEscapeBuf(char *inString, char *buf, size_t bufSize);
+/* backslash escape a string for use in a double quoted json string.
+ * More conservative than javaScriptLiteralEncode because
+ * some json parsers complain if you escape & or '.
+ * bufSize must be at least jsonStringEscapeSize(inString). */
+
 char *jsonStringEscape(char *inString);
 /* backslash escape a string for use in a double quoted json string.
  * More conservative than javaScriptLiteralEncode because
