@@ -47,7 +47,7 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     struct slPair *pair;
     // Print out the tags associated with the current object
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
-        jsonWriteString(jw, replaceChars(pair->name, "\"", "\\\""), replaceChars(pair->val, "\"", "\\\""));
+        jsonWriteString(jw, replaceChars(pair->name, "\"", "\\\""), pair->val);
     // Check for children, if they exist start the process again. 
     if (stanza->children != NULL)
         rWriteJson(jw, "children", stanza->children);

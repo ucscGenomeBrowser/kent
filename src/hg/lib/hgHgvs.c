@@ -771,11 +771,11 @@ return txAcc;
 }
 
 static struct genePred *getGencodeGp(char *db, char *acc)
-/* Return the genePred for acc in the latest wgEncodeGencodeBasicV* table, or NULL if not found. */
+/* Return the genePred for acc in the latest wgEncodeGencodeCompV* table, or NULL if not found. */
 {
 struct genePred *gp = NULL;
 struct sqlConnection *conn = hAllocConn(db);
-char *gencodeTable = hFindLatestGencodeTableConn(conn, "Basic");
+char *gencodeTable = hFindLatestGencodeTableConn(conn, "Comp");
 if (gencodeTable)
     {
     int hasBin = 1;
@@ -1864,7 +1864,7 @@ if (startsWith("ENS", acc))
             {
             // Well, it's not PSL but it's the track table:
             struct sqlConnection *conn = hAllocConn(db);
-            *retPslTable = hFindLatestGencodeTableConn(conn, "Basic");
+            *retPslTable = hFindLatestGencodeTableConn(conn, "Comp");
             hFreeConn(&conn);
             }
         }

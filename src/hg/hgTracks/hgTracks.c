@@ -9092,10 +9092,10 @@ if (!startsWith("virt:", position) && (virtualSingleChrom()))
 
      // try to find the nearest match
     if (!(chromName && findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd)))
-	{ // create 1k window near middle of vchrom
-	warn("Unable to find any region near the position on the chromosome in the multi-regions. Now using middle of view.");
+	{ // create 10k window near middle of vchrom
+	warn("Your new regions are not near previous location. Using middle of new coordinates.");
 	virtWinStart = virtSeqBaseCount / 2;
-	virtWinEnd = virtWinStart + 1000;
+	virtWinEnd = virtWinStart + 10000;
 	if (virtWinEnd > virtSeqBaseCount)
 	    virtWinEnd = virtSeqBaseCount;
 	}
@@ -9186,10 +9186,10 @@ else
 	    // trying to find best vchrom location corresponding to chromName, winStart, winEnd);
 	    // try to find the nearest match
 	    if (!(chromName && findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd))) 
-		{ // create 1k window near middle of vchrom
-		warn("Unable to find any region near the position on the chromosome in the multi-regions. Now using middle of view.");
+		{ // create 10k window near middle of vchrom
+		warn("Your new regions are not near previous location. Using middle of new coordinates.");
 		virtWinStart = virtSeqBaseCount / 2;
-		virtWinEnd = virtWinStart + 1000;
+		virtWinEnd = virtWinStart + 10000;
 		if (virtWinEnd > virtSeqBaseCount)
 		    virtWinEnd = virtSeqBaseCount;
 		}

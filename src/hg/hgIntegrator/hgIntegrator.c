@@ -50,11 +50,8 @@ struct hash *oldVars = NULL;          /* Old contents of cart before it was upda
 
 static void writeCartVar(struct cartJson *cj, char *varName)
 {
-//#*** TODO: move jsonStringEscape inside jsonWriteString
 char *val = cartOptionalString(cj->cart, varName);
-char *encoded = jsonStringEscape(val);
-jsonWriteString(cj->jw, varName, encoded);
-freeMem(encoded);
+jsonWriteString(cj->jw, varName, val);
 }
 
 static void getQueryState(struct cartJson *cj, struct hash *paramHash)
@@ -393,9 +390,7 @@ for (tableGroup = tableGroups;  tableGroup != NULL;  tableGroup = tableGroup->ne
             if (sameString(dtf->database, cartDb))
                 tdb = tdbForTrack(cartDb, dtf->table, &fullTrackList);
             char *description = getRelatedTableLabel(dtf->database, dtf->table, tdb);
-            //#*** TODO: move jsonStringEscape inside jsonWriteString
-            char *encoded = jsonStringEscape(description);
-            jsonWriteString(cj->jw, NULL, encoded);
+            jsonWriteString(cj->jw, NULL, description);
             jsonWriteBoolean(cj->jw, NULL, cartTrackDbIsNoGenome(dtf->database, dtf->table));
             jsonWriteListEnd(cj->jw);
             }
@@ -491,12 +486,8 @@ char *regionsDb = cartOptionalString(cart, hgtaUserRegionsDb);
 if (sameOk(regionsDb, db) && userRegionsExist())
     {
     char *userRegions = cartUsualString(cart, hgtaEnteredUserRegions, "");
-    //#*** TODO: move jsonStringEscape inside jsonWriteString
-    char *encoded = jsonStringEscape(userRegions);
-    jsonWriteString(jw, resultName, encoded);
-    //#*** TODO: move jsonStringEscape inside jsonWriteString
-    encoded = jsonStringEscape(summarizeUserRegions());
-    jsonWriteString(jw, "userRegionsSummary", encoded);
+    jsonWriteString(jw, resultName, userRegions);
+    jsonWriteString(jw, "userRegionsSummary", summarizeUserRegions());
     }
 else
     {
@@ -573,11 +564,7 @@ else
             getUserRegions(cj, paramHash);
             }
         if (warnText != NULL)
-            {
-            //#*** TODO: move jsonStringEscape inside jsonWriteString
-            char *encoded = jsonStringEscape(warnText);
-            jsonWriteString(jw, "userRegionsWarn", encoded);
-            }
+            jsonWriteString(jw, "userRegionsWarn", warnText);
         }
     else
         jsonWriteStringf(jw, "error", "Could not find any regions in input: %s", warnText);
