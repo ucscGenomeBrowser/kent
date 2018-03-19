@@ -12,7 +12,12 @@ if ($argc != 1) {
   exit 255;
 }
 
-my %optionalCheckList = ( 'extNcbiRefSeq' => 1,
+my %optionalCheckList = ( 'ensGene' => 1,
+'ensGtp' => 1,
+'ensPep' => 1,
+'ensemblSource' => 1,
+'ensemblToGeneName' => 1,
+'extNcbiRefSeq' => 1,
 'ncbiRefSeq' => 1,
 'ncbiRefSeqCds' => 1,
 'ncbiRefSeqCurated' => 1,
@@ -23,6 +28,8 @@ my %optionalCheckList = ( 'extNcbiRefSeq' => 1,
 'ncbiRefSeqPsl' => 1,
 'seqNcbiRefSeq' => 1
 );
+
+
 
 my %tableCheckList = ( 'augustusGene' => 1,
 'chainHg38' => 1,
