@@ -5595,14 +5595,17 @@ for (table = snpNNNTables;  table != NULL;  table = table->next)
 return NULL;
 }
 
-static int getVVersion(const char *name)
-/* If name ends in V[0-9]+, return the number, else 0. */
+static int getGencodeVersion(const char *name)
+/* If name ends in VM?[0-9]+, return the number, else 0. */
 {
 int version = 0;
 char *p = strrchr(name, 'V');
 if (p)
     {
     char *versionStr = p + 1;
+    // GENCODE mouse versions begin with "VM", skip the M if present.
+    if (isalpha(*versionStr))
+        versionStr++;
     if (isAllDigits(versionStr))
         version = atoi(versionStr);
     }
@@ -5614,8 +5617,8 @@ static int cmpVDesc(const void *va, const void *vb)
 {
 const struct slName *a = *((struct slName **)va);
 const struct slName *b = *((struct slName **)vb);
-int aVersion = getVVersion(a->name);
-int bVersion = getVVersion(b->name);
+int aVersion = getGencodeVersion(a->name);
+int bVersion = getGencodeVersion(b->name);
 int dif = bVersion - aVersion;
 if (dif == 0)
     dif = strcmp(b->name, a->name);
