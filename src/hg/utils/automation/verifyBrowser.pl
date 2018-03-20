@@ -259,3 +259,8 @@ if ($dbVersion > 1) {
     printf STDERR "# ERROR: liftOvers to/from previous versions not complete\n";
   }
 }
+
+my $blatServers=`hgsql -N -e 'select * from blatServers where db="$db";' hgcentraltest | wc -l`;
+if ($blatServers != 2) {
+  printf STDERR "# ERROR: blat server not found in hgcentraltest.blatServers ?\n";
+}
