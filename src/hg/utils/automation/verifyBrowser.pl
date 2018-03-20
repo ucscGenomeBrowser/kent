@@ -13,23 +13,21 @@ if ($argc != 1) {
 }
 
 my %optionalCheckList = ( 'ensGene' => 1,
-'ensGtp' => 1,
-'ensPep' => 1,
-'ensemblSource' => 1,
-'ensemblToGeneName' => 1,
-'extNcbiRefSeq' => 1,
-'ncbiRefSeq' => 1,
-'ncbiRefSeqCds' => 1,
-'ncbiRefSeqCurated' => 1,
-'ncbiRefSeqLink' => 1,
-'ncbiRefSeqOther' => 1,
-'ncbiRefSeqPepTable' => 1,
-'ncbiRefSeqPredicted' => 1,
-'ncbiRefSeqPsl' => 1,
-'seqNcbiRefSeq' => 1
+'ensGtp' => "Ensembl genes",
+'ensPep' => "Ensembl genes",
+'ensemblSource' => "Ensembl genes",
+'ensemblToGeneName' => "Ensembl genes",
+'extNcbiRefSeq' => "NCBI RefSeq genes",
+'ncbiRefSeq' => "NCBI RefSeq genes",
+'ncbiRefSeqCds' => "NCBI RefSeq genes",
+'ncbiRefSeqCurated' => "NCBI RefSeq genes",
+'ncbiRefSeqLink' => "NCBI RefSeq genes",
+'ncbiRefSeqOther' => "NCBI RefSeq genes",
+'ncbiRefSeqPepTable' => "NCBI RefSeq genes",
+'ncbiRefSeqPredicted' => "NCBI RefSeq genes",
+'ncbiRefSeqPsl' => "NCBI RefSeq genes",
+'seqNcbiRefSeq' => "NCBI RefSeq genes"
 );
-
-
 
 my %tableCheckList = ( 'augustusGene' => 1,
 'chainHg38' => 1,
@@ -153,11 +151,15 @@ my %extraTables;
 my $extraTableCount = 0;
 my $tablesFound = 0;
 my $optionalCount = 0;
+my %optionsFound;	# key is category, value is count of tables
 
 foreach my $table (sort keys %tableList) {
   if (defined($tableCheckList{$table}) || defined($gbCheckList{$table}) || defined($optionalCheckList{$table}) ) {
     ++$tablesFound;
-    $optionalCount += 1 if (defined($optionalCheckList{$table}));
+    if (defined($optionalCheckList{$table})) {
+       $optionalCount += 1;
+       $optionsFound{$optionalCheckList{$table}} += 1;
+    }
   } else {
     $extraTables{$table} = 1;
     ++$extraTableCount;
@@ -165,6 +167,11 @@ foreach my $table (sort keys %tableList) {
 }
 
 printf STDERR "# verified %d tables, %d extra tables, %d optional tables\n", $tablesFound, $extraTableCount, $optionalCount;
+if ($optionalCount > 0) {
+   foreach my $category (sort keys %optionsFound) {
+     printf "# %s\t%d tables\n", $category, $optionsFound{$category};
+   }
+}
 
 my $shownTables = 0;
 foreach my $table (sort keys %extraTables) {
