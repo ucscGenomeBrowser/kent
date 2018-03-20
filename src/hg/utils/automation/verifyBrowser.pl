@@ -126,6 +126,10 @@ sub checkTableExists($$) {
 
 my $db = shift;
 my $Db = ucfirst($db);
+my $dbVersion = $db;
+$dbVersion =~ s/^[a-z]+//i;
+my $dbPrefix = $db;
+$dbPrefix =~ s/[0-9]+$//;
 
 my $dbDbNames = `hgsql -N -e 'select organism,scientificName from dbDb where name="$db";' hgcentraltest`;
 chomp $dbDbNames;
@@ -237,18 +241,14 @@ for (my $i = 0; $i < scalar(@chainTypes); ++$i) {
    }
 }
 
-__END__
-printf STDERR "# missing hg38.$chainTable\n" if (! checkTableExists("hg38", $chainTable));
-printf STDERR "# missing hg38.$chainLinkTable\n" if (! checkTableExists("hg38", $chainLinkTable));
-printf STDERR "# missing hg38.$netTable\n" if (! checkTableExists("hg38", $netTable));
-printf STDERR "# missing mm10.$chainTable\n" if (! checkTableExists("mm10", $chainTable));
-printf STDERR "# missing mm10.$chainLinkTable\n" if (! checkTableExists("mm10", $chainLinkTable));
-printf STDERR "# missing mm10.$netTable\n" if (! checkTableExists("mm10", $netTable));
-
-chainRBestThaSir1
-chainRBestThaSir1Link
-chainSynThaSir1
-chainSynThaSir1Link
-netRBestThaSir1
-netSynThaSir1
-
+if ($dbVersion > 1) {
+  my $toOthers = `hgsql -N -e 'select fromDb,toDb from liftOverChain where fromDb = "$db" AND toDb like "${dbPrefix}%";' hgcentraltest | wc -l`;
+  chomp $toOthers;
+  my $fromOthers = `hgsql -N -e 'select fromDb,toDb from liftOverChain where fromDb like "${dbPrefix}%" AND toDb = "${db}";' hgcentraltest | wc -l`;
+  chomp $fromOthers;
+  if (($toOthers > 0) && ($fromOthers > 0)) {
+    printf STDERR "# liftOver to previous versions: $toOthers, from previous versions: $fromOthers\n";
+  } else {
+    printf STDERR "# ERROR: liftOvers to/from previous versions not complete\n";
+  }
+}
