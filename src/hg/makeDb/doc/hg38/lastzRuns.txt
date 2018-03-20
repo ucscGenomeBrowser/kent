@@ -9819,7 +9819,7 @@ TMPDIR=/dev/shm
     cat fb.hg38.chainNeoSch1Link.txt
     # 1586260720 bases of 3049335806 (52.020%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg38 neoSch1) \
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg38 neoSch1) \
 	> rbest.log 2>&1 &
     # real    475m3.278s
 
@@ -9837,7 +9837,7 @@ TMPDIR=/dev/shm
     cat fb.neoSch1.chainHg38Link.txt
     # 1483929997 bases of 2400839308 (61.809%) in intersection
 
-    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` neoSch1 hg38) \
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` neoSch1 hg38) \
         > rbest.log 2>&1
     # real    404m14.530s
 
@@ -11020,3 +11020,253 @@ TMPDIR=/dev/shm
     # 25154743 bases of 1043181598 (2.411%) in intersection
 
 #########################################################################
+# LASTZ human/hg38 vs. garter snake/thaSir1 - (DONE - 2018-02-13 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzThaSir1.2018-02-13
+    cd /hive/data/genomes/hg38/bed/lastzThaSir1.2018-02-13
+
+    # note: first time with this new 1.04.00 version of lastz
+
+    printf '# human vs garter snake
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=3
+SEQ1_LAP=10000
+
+# QUERY: garter snake thaSir1
+SEQ2_DIR=/hive/data/genomes/thaSir1/thaSir1.2bit
+SEQ2_LEN=/hive/data/genomes/thaSir1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=28
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzThaSir1.2018-02-13
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    124m58.650s
+
+    cat fb.hg38.chainThaSir1Link.txt
+    # 99838535 bases of 3049335806 (3.274%) in intersection
+
+    cat fb.hg38.chainSynThaSir1Link.txt
+    # 29432396 bases of 3049335806 (0.965%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` hg38 thaSir1)\
+	> rbest.log 2>&1 &
+    # real    315m43.227s
+
+    cat fb.hg38.chainRBestThaSir1Link.txt
+    # 66452884 bases of 3049335806 (2.179%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/thaSir1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/thaSir1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzThaSir1.2018-02-13/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1 &
+    #  real    16m52.956s
+
+    cat fb.thaSir1.chainHg38Link.txt
+    # 75915958 bases of 1122701795 (6.762%) in intersection
+
+    cat fb.thaSir1.chainSynHg38Link.txt
+    # 28865261 bases of 1122701795 (2.571%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -load -buildDir=`pwd` thaSir1 hg38)\
+	 > rbest.log 2>&1
+    # real    269m56.160s
+
+    cat fb.thaSir1.chainRBestHg38Link.txt
+    # 66545073 bases of 1122701795 (5.927%) in intersection
+
+#########################################################################
+# LASTZ human/hg38 vs. cat/felCat9 - (DONE - 2018-03-14 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzFelCat9.2018-03-14
+    cd /hive/data/genomes/hg38/bed/lastzFelCat9.2018-03-14
+
+    # note: first time with this new 1.04.00 version of lastz
+
+    printf '# human vs cat
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: cat felCat9
+SEQ2_DIR=/hive/data/genomes/felCat9/felCat9.2bit
+SEQ2_LEN=/hive/data/genomes/felCat9/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzFelCat9.2018-03-14
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    1256m48.240s
+
+    cat fb.hg38.chainFelCat9Link.txt
+    # 1579231929 bases of 3049335806 (51.789%) in intersection
+    cat fb.hg38.chainSynFelCat9Link.txt
+    # 1516804589 bases of 3049335806 (49.742%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg38 \
+	felCat9) > rbest.log 2>&1 &
+    # real    704m43.342s
+
+    cat fb.hg38.chainRBestFelCat9Link.txt
+    # 1449222744 bases of 3049335806 (47.526%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/felCat9/bed/blastz.hg38.swap
+    cd /hive/data/genomes/felCat9/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzFelCat9.2018-03-14/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    142m37.100s
+
+    cat fb.felCat9.chainHg38Link.txt
+    # 1486134443 bases of 2476453204 (60.011%) in intersection
+    cat fb.felCat9.chainSynHg38Link.txt
+    # 1452577988 bases of 2476453204 (58.656%) in intersection
+
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` \
+	felCat9 hg38) > rbest.log 2>&1 &
+    # real    623m28.676s
+
+    cat fb.felCat9.chainRBestHg38Link.txt
+    # 1449521349 bases of 2476453204 (58.532%) in intersection
+
+##############################################################################
+# LASTZ Beaver CasCan1 (DONE - 2018-03-19 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzCasCan1.2018-03-19
+    cd /hive/data/genomes/hg38/bed/lastzCasCan1.2018-03-19
+
+    # note: first time with this new 1.04.00 version of lastz
+
+    printf '# Human vs. Beaver
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.04.00/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: Human Hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=80
+SEQ1_LAP=10000
+
+# QUERY: Beaver
+SEQ2_DIR=/hive/data/genomes/casCan1/casCan1.2bit
+SEQ2_LEN=/hive/data/genomes/casCan1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=80
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzCasCan1.2018-03-19
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1 &
+    #	real    568m56.951s
+
+    cat fb.hg38.chainCasCan1Link.txt
+    # 1440538496 bases of 3049335806 (47.241%) in intersection
+    cat fb.hg38.chainSynCasCan1Link.txt
+    # 1348638697 bases of 3049335806 (44.227%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` hg38 casCan1) > rbest.log 2>&1 &
+XXX - running - Tue Mar 20 06:52:40 PDT 2018
+    #	real    424m7.155s
+
+    cat fb.hg38.chainRBestCasCan1Link.txt
+    # 921538020 bases of 3049335806 (30.221%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/casCan1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/casCan1/bed/blastz.hg38.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg38/bed/lastzCasCan1.2018-03-19/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -swap -syntenicNet) > swap.log 2>&1 &
+    # real    141m44.555s
+
+    cat fb.casCan1.chainHg38Link.txt
+    # 1440839903 bases of 2517974654 (57.222%) in intersection
+    cat fb.casCan1.chainSynHg38Link.txt
+    # 1348477433 bases of 2517974654 (53.554%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` casCan1 hg38) > rbest.log 2>&1 &
+XXX - running - Tue Mar 20 09:35:58 PDT 2018
+    # real    431m28.226s
+
+    cat fb.casCan1.chainRBestHg38Link.txt
+    # 923041001 bases of 2065314047 (44.693%) in intersection
+
+##############################################################################
