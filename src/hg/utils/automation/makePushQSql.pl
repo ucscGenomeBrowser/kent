@@ -196,21 +196,16 @@ sub getGenbankEntry {
   # then these lists will have to be updated.  But hopefully warning messages
   # to the user will help diagnose.  Mark has been maintaining a list of
   # regexes in kent/src/hg/makeDb/genbank/etc/genbank.tbls .
+  # /cluster/data/genbank/etc/gbMetadataTables.txt - tables in hgFixed
+  # /cluster/data/genbank/etc/gbPerAssemblyTables.txt - tables in a db
   my @genbankTrackTables = qw(
     all_est all_mrna ccdsGene ccdsInfo ccdsKgMap ccdsNotes
-    chr*_est chr*_intronEst chr*_mrna intronEst mgcFailedEst mgcFullMrna
-    mgcFullStatus mgcGenes mgcIncompleteMrna mgcPickedEst mgcStatus
-    mgcUnpickedEst orfeomeGenes orfeomeMrna
-    refFlat refGene refLink refSeqAli refSeqStatus refSeqSummary
+    chr*_est chr*_intronEst chr*_mrna estOrientInfo gbMiscDiff gbWarn
+    intronEst mgcFailedEst mgcFullMrna mgcFullStatus mgcGenes
+    mgcIncompleteMrna mgcPickedEst mgcStatus
+    mgcUnpickedEst mrnaOrientInfo orfeomeGenes orfeomeMrna
+    refFlat refGene refLink refSeqAli
     xenoEst xenoMrna xenoRefFlat xenoRefGene xenoRefSeqAli
-    );
-  my @genbankRequiredTables = qw(
-    author cds cell description development gbCdnaInfo
-    gbExtFile gbLoaded gbSeq gbStatus geneName imageClone keyword
-    library mrnaClone organism productName sex source tissue
-    );
-  my @genbankHelpfulTables = qw(
-    estOrientInfo gbMiscDiff gbWarn mrnaOrientInfo
     );
   my @genbankTablesInDb = ();
   my @redmineGenbankTablesInDb = ();
@@ -222,25 +217,8 @@ sub getGenbankEntry {
       &HgAutomate::verbose(3, "Deleted $t\n");
     }
   }
-  if (scalar(@genbankTablesInDb) > 0) {
-    foreach my $t (@genbankRequiredTables) {
-      if (defined $allTables->{$t}) {
-	push @genbankTablesInDb, $t;
-	push @redmineGenbankTablesInDb, "$db.$t";
-	delete $allTables->{$t};
-      } else {
-	die "\nERROR: $db does not have required genbank table $t\n\n";
-      }
-    }
-    foreach my $t (@genbankHelpfulTables) {
-      if (defined $allTables->{$t}) {
-	push @genbankTablesInDb, $t;
-	push @redmineGenbankTablesInDb, "$db.$t";
-	delete $allTables->{$t};
-      } else {
-	&HgAutomate::verbose(1, "WARNING: $db does not have $t\n");
-      }
-    }
+  if (scalar(@genbankTablesInDb) < 0) {
+    &HgAutomate::verbose(1, "WARNING: $db does not have any genbank tables\n");
   }
   my %entry = ();
   $entry{'shortLabel'} = 'Genbank-process tracks and supporting tables';
