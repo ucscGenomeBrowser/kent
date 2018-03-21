@@ -72,6 +72,7 @@ DIRS = ${buildRefresh} \
 	makeTrackIndex \
 	mysqlSecurityCheck \
 	pslFixCdsJoinGap \
+	pslMismatchGapToBed \
 	pslUniq \
 	refSeqGet \
 	safePush \
