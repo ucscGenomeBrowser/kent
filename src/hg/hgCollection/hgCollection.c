@@ -38,10 +38,7 @@ struct trackDb *tdb;
 char *name;
 char *shortLabel;
 char *longLabel;
-char *visibility;
 unsigned long color;
-char *viewFunc;        // The method by which calculated tracks should be calculated
-char *missingMethod;   // How should missing data be treated in calculated tracks
 };
 
 struct trackDbRef 
@@ -82,12 +79,6 @@ static char *makeUniqueName(struct hash *nameHash, char *name)
 // Make the name of this track unique.
 {
 char *skipHub = trackHubSkipHubName(name);
-if (hashLookup(nameHash, skipHub) == NULL)
-    {
-    hashStore(nameHash, name);
-    return skipHub;
-    }
-
 char base[4096];
 safef(base, sizeof base, "%s_%lx",skipHub, time(NULL) - 1520629086);
 
@@ -105,6 +96,38 @@ for(;; count++)
     }
 
 return NULL;
+}
+
+static struct trackDb *createComposite(char *collectionName, char *shortLabel, char *longLabel, long color, int priority)
+// Create a trackDb entry for a new composite
+{
+struct trackDb *tdb;
+char buffer[512];
+
+AllocVar(tdb);
+tdb->settingsHash = newHash(5);
+tdb->type = cloneString("mathWig");
+
+safef(buffer, sizeof buffer, "%ld,%ld,%ld", 0xff & (color >> 16),0xff & (color >> 8),0xff & color);
+hashAdd(tdb->settingsHash, "color", cloneString(buffer));
+
+safef(buffer, sizeof buffer, "%d", priority);
+hashAdd(tdb->settingsHash, "priority", cloneString(buffer));
+
+hashAdd(tdb->settingsHash, "track", collectionName);
+hashAdd(tdb->settingsHash, "shortLabel", shortLabel);
+hashAdd(tdb->settingsHash, "longLabel", longLabel);
+hashAdd(tdb->settingsHash, "autoScale", "on");
+hashAdd(tdb->settingsHash, "compositeTrack", "on");
+hashAdd(tdb->settingsHash, "aggregate", "none");
+hashAdd(tdb->settingsHash, "type", "mathWig");
+hashAdd(tdb->settingsHash, "visibility", "full");
+hashAdd(tdb->settingsHash, "customized", "on");
+hashAdd(tdb->settingsHash, "maxHeightPixels", "10000:30:11");
+hashAdd(tdb->settingsHash, "showSubtrackColorOnUi", "on");
+hashAdd(tdb->settingsHash, CUSTOM_COMPOSITE_SETTING, "on");
+
+return tdb;
 }
 
 static boolean trackCanBeAdded(struct trackDb *tdb)
@@ -133,7 +156,7 @@ for(; *label; label++)
 return cloneString(buffer);
 }
 
-static void printTrack(char *parent, struct trackDb *tdb,  boolean user)
+static void trackToClient(char *parent, struct trackDb *tdb,  boolean user)
 // output list elements for a group
 {
 char *userString = "";
@@ -339,14 +362,14 @@ dyStringPrintf(rootChildren, "}");
 jsInlineF("trackData['visible'] = [");
 for(tdbRef = tdbRefList; tdbRef; tdbRef = tdbRef->next)
     {
-    printTrack("visible", tdbRef->tdb,  FALSE);
+    trackToClient("visible", tdbRef->tdb,  FALSE);
     if (tdbRef->next != NULL)
         jsInlineF(",");
     }
 jsInlineF("];");
 }
 
-void printSubtracks(char *arrayName, struct trackDb *parentTdb, boolean user)
+void subTracksToClient(char *arrayName, struct trackDb *parentTdb, boolean user)
 {
 if (parentTdb->subtracks == NULL)
     return;
@@ -357,12 +380,12 @@ for(tdb = parentTdb->subtracks; tdb;  tdb = tdb->next)
     {
     if (!first)
         jsInlineF(",");
-    printTrack(trackHubSkipHubName(parentTdb->track), tdb, user);
+    trackToClient(trackHubSkipHubName(parentTdb->track), tdb, user);
     first = FALSE;
     }
 jsInlineF("];");
 for(tdb = parentTdb->subtracks; tdb;  tdb = tdb->next)
-    printSubtracks(arrayName,tdb, user);
+    subTracksToClient(arrayName,tdb, user);
 }
 
 void addSubtrackNames(struct dyString *dy, struct trackDb *parentTdb)
@@ -416,7 +439,7 @@ if (curGroup != NULL)
                 {
                 jsInlineF(",");
                 }
-            printTrack("#", tdb,  TRUE);
+            trackToClient("#", tdb,  TRUE);
             dyStringPrintf(dyNames, "collectionNames['%s']=1;", trackHubSkipHubName(tdb->track));
             dyStringPrintf(dyLabels, "collectionLabels['%s']=1;", tdb->shortLabel);
             first = FALSE;
@@ -427,7 +450,7 @@ if (curGroup != NULL)
         {
         if ( sameString(tdb->grp, curGroup->name))
             {
-            printSubtracks("collectionData", tdb, TRUE);
+            subTracksToClient("collectionData", tdb, TRUE);
             addSubtrackNames(dyNames, tdb);
             }
         }
@@ -457,7 +480,7 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
             {
             if (!first)
                 jsInlineF(",");
-            printTrack(curGroup->name, tdb, FALSE);
+            trackToClient(curGroup->name, tdb, FALSE);
             first = FALSE;
             }
         }
@@ -465,7 +488,7 @@ for(curGroup = groupList; curGroup;  curGroup = curGroup->next)
     for(tdb = trackList; tdb;  tdb = tdb->next)
         {
         if ( sameString(tdb->grp, curGroup->name))
-            printSubtracks("trackData", tdb, FALSE);
+            subTracksToClient("trackData", tdb, FALSE);
         }
     }
 jsInlineF("trackData['#'] = [%s];", rootChildren->string);
@@ -555,10 +578,12 @@ while ((hel = hashNext(&cookie)) != NULL)
         }
     }
 
-struct hash *newWantHash = newHash(4);
-hashStore(newWantHash, "type"); // right now we only want type from parents
 if (tdb->parent)
+    {
+    struct hash *newWantHash = newHash(4);
+    hashStore(newWantHash, "type"); // right now we only want type from parents
     dumpTdbAndParents(dy, tdb->parent, existHash, newWantHash);
+    }
 }
 
 struct dyString *trackDbString(struct trackDb *tdb)
@@ -573,7 +598,7 @@ if (hel == NULL)
     errAbort("can't find track variable in tdb");
 
 dy = newDyString(200);
-dyStringPrintf(dy, "track %s\n", (char *)hel->val);
+dyStringPrintf(dy, "track %s\n", trackHubSkipHubName((char *)hel->val));
 hashStore(existHash, "track");
 
 dumpTdbAndParents(dy, tdb, existHash, NULL);
@@ -582,7 +607,7 @@ return dy;
 }
 
 
-static void outTdb(struct sqlConnection *conn, char *db, FILE *f, char *name,  struct trackDb *tdb, char *parent, char *visibility, unsigned int color, struct track *track, struct hash *nameHash, struct hash *collectionNameHash, int numTabs, int priority)
+static void printTdbToHub(char *db, struct sqlConnection *conn,  FILE *f,   struct trackDb *tdb, int numTabs, int priority)
 // out the trackDb for one track
 {
 char *dataUrl = NULL;
@@ -603,62 +628,41 @@ char *tdbType = trackDbSetting(tdb, "tdbType");
 if (tdbType != NULL)
     hashReplace(tdb->settingsHash, "type", tdbType);
 
+// remove variables that will confuse us
 if (hashLookup(tdb->settingsHash, "customized") == NULL)
+    {
     hashRemove(tdb->settingsHash, "maxHeightPixels");
+    hashRemove(tdb->settingsHash, "superTrack");
+    hashRemove(tdb->settingsHash, "subGroups");
+    hashRemove(tdb->settingsHash, "polished");
+    hashRemove(tdb->settingsHash, "noInherit");
+    hashRemove(tdb->settingsHash, "group");
+    }
 
 hashReplace(tdb->settingsHash, "customized", "on");
-hashRemove(tdb->settingsHash, "superTrack");
-hashReplace(tdb->settingsHash, "parent", parent);
-hashReplace(tdb->settingsHash, "shortLabel", track->shortLabel);
-hashReplace(tdb->settingsHash, "longLabel", track->longLabel);
-hashReplace(tdb->settingsHash, "track", makeUniqueName(collectionNameHash, name));
+
 char priBuf[128];
 safef(priBuf, sizeof priBuf, "%d", priority);
 hashReplace(tdb->settingsHash, "priority", cloneString(priBuf));
-char colorString[64];
-safef(colorString, sizeof colorString, "%d,%d,%d", (color >> 16) & 0xff,(color >> 8) & 0xff,color & 0xff);
-hashReplace(tdb->settingsHash, "color", colorString);
+
+struct hashEl *hel = hashLookup(tdb->settingsHash, "parent");
+if (hel != NULL)
+    hashReplace(tdb->settingsHash, "parent", trackHubSkipHubName((char *)hel->val));
 
 struct dyString *dy = trackDbString(tdb);
 
-fprintf(f, "%s",  dy->string);
-fprintf(f, "\n");
+fprintf(f, "%s\n",  dy->string);
 }
 
-static void outComposite(FILE *f, struct track *collection, int priority)
-// output a composite header for user composite
-{
-char *parent = collection->name;
-char *shortLabel = collection->shortLabel;
-char *longLabel = collection->longLabel;
-fprintf(f,"track %s\n\
-shortLabel %s\n\
-compositeTrack on\n\
-autoScale on\n\
-maxHeightPixels 10000:30:11 \n\
-showSubtrackColorOnUi on\n\
-aggregate  none\n\
-longLabel %s\n\
-%s on\n\
-color %ld,%ld,%ld \n\
-type mathWig\n\
-priority %d\n\
-visibility full\n\n", parent, shortLabel, longLabel, CUSTOM_COMPOSITE_SETTING,
- 0xff& (collection->color >> 16),0xff& (collection->color >> 8),0xff& (collection->color),  priority);
-
-}
-
-static void modifyName(struct trackDb *tdb, char *hubName, struct hash  *collectionNameHash)
-/* If this is a new track in the collection we want to make sure
- * it gets a different name than the track in trackDb.
- * If it's a native track, we want to squirrel away the original track name. */
+static void saveTrackName(struct trackDb *tdb, char *hubName, struct hash  *collectionNameHash)
+/* If this is a native track, we want to squirrel away the original track name. Also add it to the name hash. */
 {
 if (tdb->subtracks)
     {
     struct trackDb *subTdb;
     for (subTdb = tdb->subtracks; subTdb; subTdb = subTdb->next)
         {
-        modifyName(subTdb, hubName, collectionNameHash);
+        saveTrackName(subTdb, hubName, collectionNameHash);
         }
     return;
     }
@@ -676,35 +680,6 @@ if ((tdb->grp == NULL) || (hubName == NULL) || differentString(tdb->grp, hubName
             hashAdd(tdb->settingsHash, "table", tdb->track);
         }
     }
-}
-
-static int outView(FILE *f, struct sqlConnection *conn, char *db, struct track *view, char *parent, struct hash *nameHash, struct hash *collectionNameHash, int priority, char *hubName)
-// output a view to a trackhub
-{
-fprintf(f,"\ttrack %s\n\
-\tshortLabel %s\n\
-\tlongLabel %s\n\
-\tview %s \n\
-\tcontainer mathWig\n\
-\tautoScale on  \n\
-\tparent %s \n\
-\tcolor %ld,%ld,%ld \n\
-\tpriority %d\n\
-\tviewFunc %s \n\
-\tmissingMethod %s \n\
-\tvisibility %s\n", view->name, view->shortLabel, view->longLabel, view->name, parent, 0xff& (view->color >> 16),0xff& (view->color >> 8),0xff& (view->color), priority++, view->viewFunc, view->missingMethod, view->visibility);
-fprintf(f, "\n");
-
-struct track *track = view->trackList;
-for(; track; track = track->next)
-    {
-    struct trackDb *tdb = hashMustFindVal(nameHash, track->name);
-    modifyName(tdb, hubName, collectionNameHash);
-
-    outTdb(conn, db, f, track->name,tdb, view->name, track->visibility, track->color, track,  nameHash, collectionNameHash, 2, priority++);
-    }
-
-return priority;
 }
 
 static void updateHub(struct cart *cart, char *db, struct track *collectionList, struct hash *nameHash)
@@ -728,22 +703,27 @@ for(collection = collectionList; collection; collection = collection->next)
     {
     if (collection->trackList == NULL)  // don't output composites without children
         continue;
-    outComposite(f, collection, priority++);
-    struct trackDb *tdb;
+
+    struct trackDb *tdb = createComposite(collection->name, collection->shortLabel, collection->longLabel, collection->color, priority++);
+    struct dyString *dy = trackDbString(tdb);
+    fprintf(f, "%s\n",  dy->string);
+
     struct track *track;
     for (track = collection->trackList; track; track = track->next)
         {
-        if (track->viewFunc != NULL)
-            {
-            priority = outView(f, conn, db, track, collection->name,  nameHash, collectionNameHash, priority, hubName);
-            }
-        else
-            {
-            tdb = hashMustFindVal(nameHash, track->name);
-            modifyName(tdb, hubName, collectionNameHash);
+        tdb = hashMustFindVal(nameHash, track->name);
+        saveTrackName(tdb, hubName, collectionNameHash);
 
-            outTdb(conn, db, f, track->name,tdb, collection->name, track->visibility, track->color, track,  nameHash, collectionNameHash, 1, priority++);
-            }
+        char colorString[64];
+        safef(colorString, sizeof colorString, "%ld,%ld,%ld", (track->color >> 16) & 0xff,(track->color >> 8) & 0xff,track->color & 0xff);
+        hashReplace(tdb->settingsHash, "color", colorString);
+
+        hashReplace(tdb->settingsHash, "shortLabel", track->shortLabel);
+        hashReplace(tdb->settingsHash, "longLabel", track->longLabel);
+        hashReplace(tdb->settingsHash, "track", makeUniqueName(collectionNameHash, track->name));
+        hashReplace(tdb->settingsHash, "parent", collection->name);
+
+        printTdbToHub(db, conn, f, tdb, 1, priority++);
         }
     }
 fclose(f);
@@ -793,7 +773,6 @@ if ((name == NULL) && (ele->type == jsonObject))
         track->shortLabel = jsonStringEscape(strEle->val.jeString);
         strEle = (struct jsonElement *)hashMustFindVal(attrHash, "longlabel");
         track->longLabel = jsonStringEscape(strEle->val.jeString);
-        track->visibility = "pack";
         strEle = (struct jsonElement *)hashMustFindVal(attrHash, "color");
         track->color = hexStringToLong(jsonStringEscape(strEle->val.jeString));
         }
@@ -927,56 +906,7 @@ slReverse(&newList);
 return newList;
 }
 
-static void outOneTdb(char *db, struct sqlConnection *conn, FILE *f, struct trackDb *tdb, int numTabs, int priority)
-/* Put out a single trackDb entry to our collections hub. */
-{
-char *tabs = "";
-if (numTabs == 1)
-    tabs = "\t";
-else if (numTabs == 2)
-    tabs = "\t\t";
-else if (numTabs == 3)
-    tabs = "\t\t\t";
-
-struct hashEl *hel = hashLookup(tdb->settingsHash, "track");
-fprintf(f, "%s%s %s\n", tabs,hel->name, trackHubSkipHubName((char *)hel->val));
-fprintf(f, "%s%s %d\n", tabs, "priority", priority);
-
-char *dataUrl = NULL;
-char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
-if (bigDataUrl == NULL)
-    {
-    if (startsWith("bigWig", tdb->type))
-        {
-        if (conn == NULL)
-            errAbort("track hub has bigWig without bigDataUrl");
-        dataUrl = getSqlBigWig(conn, db, tdb);
-        }
-    }
-
-if (hashLookup(tdb->settingsHash, "customized") == NULL)
-    hashRemove(tdb->settingsHash, "maxHeightPixels");
-hashReplace(tdb->settingsHash, "customized", "on");
-
-struct hashCookie cookie = hashFirst(tdb->settingsHash);
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    if (sameString("parent", hel->name))
-        fprintf(f, "%s%s %s\n", tabs,hel->name, trackHubSkipHubName((char *)hel->val));
-    else if (!(sameString("track", hel->name) || sameString("polished", hel->name)|| sameString("group", hel->name) || sameString("priority", hel->name) || sameString("subTrack", hel->name) ))
-        fprintf(f, "%s%s %s\n", tabs,hel->name, (char *)hel->val);
-    }
-
-if (bigDataUrl == NULL)
-    {
-    if (dataUrl != NULL)
-        fprintf(f, "%sbigDataUrl %s\n", tabs,dataUrl);
-    }
-
-fprintf(f, "\n");
-}
-
-static void outTrackDbList(char *db, struct sqlConnection *conn, FILE *f, char *hubName, struct trackDb *list, char *collectionName, struct trackDb *newTdb,  int numTabs, int priority)
+static void printTrackDbListToHub(char *db, struct sqlConnection *conn, FILE *f, char *hubName, struct trackDb *list, char *collectionName, struct trackDb *newTdb,  int numTabs, int priority)
 /* Put a list of trackDb entries into a collection, adding a new track to the collection. */
 {
 if (list == NULL)
@@ -989,7 +919,7 @@ for(tdb = list; tdb; tdb = tdb->next)
         if ((hubName == NULL) || differentString(hubName, tdb->grp))
                 continue;
 
-    outOneTdb(db, conn, f, tdb, numTabs, priority++);
+    printTdbToHub(db, conn, f, tdb, numTabs, priority++);
 
     struct hashEl *hel = hashLookup(tdb->settingsHash, "track");
     if ((hel != NULL) && (hel->val != NULL) &&  sameString((char *)hel->val, collectionName))
@@ -1000,14 +930,14 @@ for(tdb = list; tdb; tdb = tdb->next)
             slReverse(&newTdb->subtracks);
             for(subTdb = newTdb->subtracks; subTdb; subTdb = subTdb->next)
                 {
-                outOneTdb(db, conn, f, subTdb, numTabs + 1, priority++);
+                printTdbToHub(db, conn, f, subTdb, numTabs + 1, priority++);
                 }
             }
         else
-            outOneTdb(db, conn, f, newTdb, numTabs + 1, priority++);
+            printTdbToHub(db, conn, f, newTdb, numTabs + 1, priority++);
         }
 
-    outTrackDbList(db, conn, f, hubName,  tdb->subtracks, collectionName, newTdb, numTabs + 1, priority);
+    printTrackDbListToHub(db, conn, f, hubName,  tdb->subtracks, collectionName, newTdb, numTabs + 1, priority);
     }
 }
 
@@ -1045,8 +975,8 @@ outHubHeader(f, db);
 struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(db))
     conn = hAllocConn(db);
-modifyName(newTdb, hubName, NULL);
-outTrackDbList(db, conn, f, hubName, trackList, collectionName, newTdb,  0, 0);
+saveTrackName(newTdb, hubName, NULL);
+printTrackDbListToHub(db, conn, f, hubName, trackList, collectionName, newTdb,  0, 0);
 
 hFreeConn(&conn);
 fclose(f);
@@ -1094,25 +1024,9 @@ else if (sameString("newCollection", cmd))
     char buffer[4096];
     safef(buffer, sizeof buffer, "%s description", shortLabel);
     char *longLabel = cloneString(buffer);
-    struct trackDb *tdb;
 
-    AllocVar(tdb);
+    struct trackDb *tdb = createComposite(collectionName, shortLabel, longLabel, 0, 0);
     slAddHead(&superList, tdb);
-    tdb->settingsHash = newHash(5);
-    tdb->type = cloneString("mathWig");
-
-    hashAdd(tdb->settingsHash, "track", collectionName);
-    hashAdd(tdb->settingsHash, "shortLabel", shortLabel);
-    hashAdd(tdb->settingsHash, "longLabel", longLabel);
-    hashAdd(tdb->settingsHash, "autoScale", "on");
-    hashAdd(tdb->settingsHash, "compositeTrack", "on");
-    hashAdd(tdb->settingsHash, "aggregate", "none");
-    hashAdd(tdb->settingsHash, "type", "mathWig");
-    hashAdd(tdb->settingsHash, "visibility", "full");
-    hashAdd(tdb->settingsHash, "color", "0,0,0");
-    hashAdd(tdb->settingsHash, "customized", "on");
-    hashAdd(tdb->settingsHash, "maxHeightPixels", "10000:30:11");
-    hashAdd(tdb->settingsHash, CUSTOM_COMPOSITE_SETTING, "on");
 
     doAddTrack(cart, db, superList, trackName, collectionName, nameHash);
     apiOut("{\"serverSays\": \"new %s to collection\"}", NULL);

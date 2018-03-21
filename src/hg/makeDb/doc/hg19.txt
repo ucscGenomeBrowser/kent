@@ -32604,4 +32604,8 @@ mv loaded/wgEncodeGencodeAttrsV19.tab.loaded loaded/wgEncodeGencodeTagV19.tab.lo
   SELECT count(*) FROM wgEncodeGencodeAttrsV19 WHERE transcriptClass="coding" AND proteinId = "";
   -> 0 !!! got them all
   DROP DATABASE markd_ens;
+
+# 2018-03-19: update search to include protein id
+edit kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeGencodeV19.ra
+
 #############################################################################

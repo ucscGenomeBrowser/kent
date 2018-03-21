@@ -82,11 +82,17 @@ if (var != NULL)
 }
 
 void jsonWriteString(struct jsonWrite *jw, char *var, char *string)
-/* Print out "var": "val".  If var is NULL, print val only.  If string is NULL, "var": null . */
+/* Print out "var": "val" -- or rather, jsonStringEscape(val).
+ * If var is NULL, print val only.  If string is NULL, "var": null . */
 {
 jsonWriteTag(jw, var);
 if (string)
-    dyStringPrintf(jw->dy, "\"%s\"", string);
+    {
+    size_t encSize = jsonStringEscapeSize(string);
+    char encoded[encSize];
+    jsonStringEscapeBuf(string, encoded, encSize);
+    dyStringPrintf(jw->dy, "\"%s\"", encoded);
+    }
 else
     dyStringAppend(jw->dy, "null");
 }
@@ -178,16 +184,14 @@ jsonWritePopObjStack(jw, TRUE);
 void jsonWriteStringf(struct jsonWrite *jw, char *var, char *format, ...)
 /* Write "var": "val" where val is jsonStringEscape'd formatted string. */
 {
-// Since we're using jsonStringEscape(), we need to use a temporary dyString
-// instead of jw->dy.
+// In order to use jsonStringEscape(), we need to use a temporary dyString
+// instead of jw->dy in the dyStringVaPrintf, and pass that to jsonWriteString.
 struct dyString *tmpDy = dyStringNew(0);
 va_list args;
 va_start(args, format);
 dyStringVaPrintf(tmpDy, format, args);
 va_end(args);
-char *escaped = jsonStringEscape(tmpDy->string);
-jsonWriteString(jw, var, escaped);
-freeMem(escaped);
+jsonWriteString(jw, var, tmpDy->string);
 dyStringFree(&tmpDy);
 }
 
