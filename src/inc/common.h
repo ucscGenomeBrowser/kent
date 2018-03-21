@@ -548,7 +548,7 @@ boolean slNameInListUseCase(struct slName *list, char *string);
 
 void *slNameFind(void *list, char *string);
 /* Return first element of slName list (or any other list starting
- * with next/name fields) that matches string. */
+ * with next/name fields) that matches string. This is case insensitive. */
 
 int slNameFindIx(struct slName *list, char *string);
 /* Return index of first element of slName list (or any other
