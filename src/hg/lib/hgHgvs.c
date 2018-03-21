@@ -2905,7 +2905,7 @@ if (dupLen == 0 && isIns)
 return dupLen;
 }
 
-static uint hgvsTxToCds(uint txOffset, struct genbankCds *cds, boolean isStart, char pPrefix[2])
+uint hgvsTxToCds(uint txOffset, struct genbankCds *cds, boolean isStart, char pPrefix[2])
 /* Return the cds-relative HGVS coord and prefix corresponding to 0-based txOffset & cds. */
 {
 // Open end adjustment for determining CDS/UTR region:
