@@ -414,7 +414,7 @@ for (usage = usageList; usage != NULL; usage = usage->next)
 	    }
 
 	/* If start past existing block then output it. */
-	if (sum != NULL && sum->end <= start)
+	if (sum != NULL && sum->end <= start && sum->end < usage->size)
 	    {
 	    bbiOutputOneSummaryFurtherReduce(sum, &twiceReducedList, doubleReductionSize, 
 		&boundsPt, boundsEnd, lm, stream);
