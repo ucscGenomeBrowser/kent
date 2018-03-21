@@ -16685,7 +16685,7 @@ TMPDIR=/dev/shm
     # 760753851 bases of 2476453204 (30.719%) in intersection
 
 ##############################################################################
-# LASTZ Beaver vs. mouse/Mm10 (DONE - 2018-03-19 - Hiram)
+# LASTZ Beaver casCan1 vs. mouse/Mm10 (DONE - 2018-03-19 - Hiram)
     mkdir /hive/data/genomes/mm10/bed/lastzCasCan1.2018-03-19
     cd /hive/data/genomes/mm10/bed/lastzCasCan1.2018-03-19
 
@@ -16724,11 +16724,10 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` mm10 casCan1) \
 	> rbest.log 2>&1 &
-XXX - running - Tue Mar 20 06:50:56 PDT 2018
-    # real    439m56.601s
+    # real    981m12.451s
 
     cat fb.mm10.chainRBestCasCan1Link.txt
-    # 605074450 bases of 2652783500 (22.809%) in intersection
+    # 912108399 bases of 2652783500 (34.383%) in intersection
 
     mkdir /hive/data/genomes/casCan1/bed/blastz.mm10.swap
     cd /hive/data/genomes/casCan1/bed/blastz.mm10.swap
@@ -16746,10 +16745,9 @@ XXX - running - Tue Mar 20 06:50:56 PDT 2018
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` casCan1 mm10) \
 	> rbest.log 2>&1
-XXX - running - Tue Mar 20 09:33:12 PDT 2018
-    # real    412m53.879s
+    # real    1280m7.127s
 
     cat fb.casCan1.chainRBestMm10Link.txt
-    # 605056621 bases of 2065314047 (29.296%) in intersection
+    # 911437520 bases of 2517974654 (36.197%) in intersection
 
 ##############################################################################
