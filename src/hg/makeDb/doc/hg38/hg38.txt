@@ -6893,3 +6893,21 @@ ln -s /hive/data/outside/cosmic/hg38/v82/cosMutHg38V82.bb .
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
     # commit all
+
+#########################################################################
+2018-03-07: update UCSC GENCODE V27 to include protein id (for VAI) and fix PAR tag
+
+# save existing data, move a
+mkdir -p prev/pre-proteinId
+mv data/gencode.tab prev/pre-proteinId/
+mv tables/wgEncodeGencodeAttrsV27.tab tables/wgEncodeGencodeTagV27.tab prev/pre-proteinId/
+mv loaded/wgEncodeGencodeAttrsV27.tab.loaded loaded/wgEncodeGencodeTagV27.tab.loaded prev/pre-proteinId/
+
+# rebuild, getting protein ids.
+make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk loadTables >&prot-ids.log
+
+# 2018-03-19: update search to include protein id
+cd kent/src/hg/makeDb/trackDb
+../../makeDb/outside/gencode/gencodeGenerateTrackDbs hg38 27 90 'Aug 2017'
+
+#########################################################################

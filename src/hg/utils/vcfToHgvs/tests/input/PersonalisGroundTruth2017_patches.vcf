@@ -1,0 +1,32 @@
+##fileformat=VCFv4.1
+##fileDate=201600825								
+##reference=hg38
+##resource_version=v1.0.8
+##phasing=partial									
+##source=JenniferYen
+##source=A_variant_by_any_name:quantifying_annotation_discordance_across_tools_and_clinical_databases
+##source=Modified_by_AngieHinrichs_for_UCSC_testing
+##updates=https://github.com/personalis/hgvslib
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+#
+# Unfortunately hg19 does not have these patch sequences:
+#
+# HG536_PATCH is NW_003571046.1 which starts with a chunk of AP006345.4 at chr11:69800017
+# HG536_PATCH	10391	PTV116:NM_005247.2:c.616delG	AC	A	56	PASS	.
+NC_000011.10	69810408	PTV116:NM_005247.2:c.616delG	AC	A	56	PASS	.
+# HG865_PATCH is NW_004070871.1 which starts with AP001271.4[0,188184) at chr11:70455787
+# HG865_PATCH	33547	PTV117:NM_012309.3:c.2566C>T	G	A	.	PASS	.
+NC_000011.10	70489334	PTV117:NM_012309.3:c.2566C>T	G	A	.	PASS	.
+# complement(AC234421.2:1..41090) starts at NW_004070871.1[549909], chr11[71055696] (also compl)
+# HG865_PATCH	569441	PTV118:NM_012309.3:c.960C>A	G	T	77	PASS	.
+# 569440 - 549909 = 19531 bases into complement(AC234421.2:1..41090)
+# 71055696 + 19531 + 1 = 71075228
+NC_000011.10	71075228	PTV118:NM_012309.3:c.960C>A	G	T	77	PASS	.
+# HG865_PATCH	574546	PTV119:NM_012309.3:c.899A>G	C	T	75	PASS	.
+# 574546 - 569441 = 5015
+# 71075228 + 5105 = 71080333
+# -- aha, 574546 was incorrect, supposed to be 586648!
+NC_000011.10	71092435	PTV119:NM_012309.3:c.899A>G	T	C	75	PASS	.
+# HSCHR1_1_CTG31 is NW_003315905.1 --> hg38 chr1_GL383518v1_alt
+# HSCHR1_1_CTG31	133178	PTV120:NM_020699.2:c.1254_1255delGC	TAG	T	109	PASS	.
+chr1_GL383518v1_alt	133178	PTV120:NM_020699.2:c.1010_1011delCT	TAG	T	109	PASS	.

@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species s000=Wallaby s001=Wallaby s002=Tasmanian_devil s003=Opossum s004=Platypus s005=Platypus s006=Turkey s007=Turkey s008=Chicken s009=Chicken s010=Chicken s011=Mallard_duck s012=Scarlet_macaw s013=Medium_ground_finch s014=White-throated_sparrow s015=Collared_flycatcher s016=Golden_eagle s017=Peregrine_falcon s018=Saker_falcon s019=Rock_pigeon s020=Parrot s021=Budgerigar s022=Tibetan_ground_jay s023=Zebra_finch s024=Zebra_finch s025=American_alligator s026=Chinese_alligator s027=Lizard s028=Lizard s029=X._tropicalis s030=X._tropicalis s031=X._tropicalis s032=X._tropicalis s033=X._tropicalis s034=African_clawed_frog s035=Spiny_softshell_turtle s036=Chinese_softshell_turtle s037=Painted_turtle s038=Painted_turtle s039=Green_seaturtle s040=Coelacanth s041=Spotted_gar s042=Mexican_tetra_(cavefish) s043=Zebrafish s044=Zebrafish s045=Zebrafish s046=Zebrafish s047=Zebrafish s048=Atlantic_cod s049=Stickleback s050=Southern_platyfish s051=Medaka s052=Pundamilia_nyererei s053=Zebra_mbuna s054=Princess_of_Burundi s055=Burton's_mouthbreeder s056=Nile_tilapia s057=Nile_tilapia s058=Nile_tilapia s059=Yellowbelly_pufferfish s060=Fugu s061=Fugu s062=Tetraodon s063=Tetraodon s064=Lamprey s065=Lamprey s066=Arctic_lamprey
+subGroup2 species Species s000=Wallaby s001=Wallaby s002=Tasmanian_devil s003=Opossum s004=Platypus s005=Platypus s006=Turkey s007=Turkey s008=Chicken s009=Chicken s010=Chicken s011=Mallard_duck s012=Scarlet_macaw s013=Medium_ground_finch s014=White-throated_sparrow s015=Collared_flycatcher s016=Golden_eagle s017=Peregrine_falcon s018=Saker_falcon s019=Rock_pigeon s020=Parrot s021=Budgerigar s022=Tibetan_ground_jay s023=Zebra_finch s024=Zebra_finch s025=American_alligator s026=Chinese_alligator s027=Lizard s028=Lizard s028b=Garter_snake s029=X._tropicalis s030=X._tropicalis s031=X._tropicalis s032=X._tropicalis s033=X._tropicalis s034=African_clawed_frog s035=Spiny_softshell_turtle s036=Chinese_softshell_turtle s037=Painted_turtle s038=Painted_turtle s039=Green_seaturtle s040=Coelacanth s041=Spotted_gar s042=Mexican_tetra_(cavefish) s043=Zebrafish s044=Zebrafish s045=Zebrafish s046=Zebrafish s047=Zebrafish s048=Atlantic_cod s049=Stickleback s050=Southern_platyfish s051=Medaka s052=Pundamilia_nyererei s053=Zebra_mbuna s054=Princess_of_Burundi s055=Burton's_mouthbreeder s056=Nile_tilapia s057=Nile_tilapia s058=Nile_tilapia s059=Yellowbelly_pufferfish s060=Fugu s061=Fugu s062=Tetraodon s063=Tetraodon s064a=Lamprey s064b=Lamprey s065=Lamprey s066=Arctic_lamprey
 subGroup3 clade Clade c00=mammalia c01=dinosauria c02=lepidosauria c03=amphibia c04=cryptodira c05=coelancanthimorpha c06=neopterygii c07=hyperoartia
 dragAndDrop subTracks
 visibility hide
@@ -258,6 +258,14 @@ priority 9
         longLabel $o_db ($o_date) Chained Alignments
         type chain anoCar1
         otherDb anoCar1
+
+        track chainThaSir1
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=s028b clade=c02
+        shortLabel $o_db Chain
+        longLabel $o_db ($o_date) Chained Alignments
+        type chain thaSir1
+        otherDb thaSir1
 
         track chainXenTro9
         subTrack vertebrateChainNetViewchain off
@@ -539,9 +547,17 @@ priority 9
         type chain tetNig1
         otherDb tetNig1
 
+        track chainPetMar3
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=s064a clade=c07
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain petMar3
+        otherDb petMar3
+
         track chainPetMar2
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=s064 clade=c07
+        subGroups view=chain species=s064b clade=c07
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain petMar2
@@ -800,6 +816,14 @@ priority 9
         longLabel $o_db ($o_date) Alignment Net
         type netAlign anoCar1 chainAnoCar1
         otherDb anoCar1
+
+        track netThaSir1
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=s028b clade=c02
+        shortLabel $o_db Net
+        longLabel $o_db ($o_date) Alignment Net
+        type netAlign anoCar1 chainAnoCar1
+        otherDb thaSir1
 
         track netXenTro9
         subTrack vertebrateChainNetViewnet off
@@ -1081,9 +1105,17 @@ priority 9
         type netAlign tetNig1 chainTetNig1
         otherDb tetNig1
 
+        track netPetMar3
+        subTrack vertebrateChainNetViewnet off
+        subGroups view=net species=s064a clade=c07
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign petMar3 chainPetMar3
+        otherDb petMar3
+
         track netPetMar2
         subTrack vertebrateChainNetViewnet off
-        subGroups view=net species=s064 clade=c07
+        subGroups view=net species=s064b clade=c07
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign petMar2 chainPetMar2

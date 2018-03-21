@@ -604,25 +604,25 @@ slReverse(&fieldList);
 
 /* Build up sql query to fetch all our fields */
 struct dyString *query = dyStringNew(0);
-sqlDyStringPrintf(query, "%s", "");   // Get header correct
-char *separator = "select ";  // This will get printed before first one
+sqlDyStringPrintf(query, "select ");
 for (field = fieldList; field != NULL; field = field->next)
     {
-    dyStringPrintf(query, "%s%s", separator, field->name);
-    separator = ",";
+    if (field != fieldList) // not first one
+	sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "%s", field->name);
     }
 
 /* Put where on it to limit it to accessible files */
-dyStringPrintf(query, " from cdwFileTags where file_id in (");
+sqlDyStringPrintf(query, " from cdwFileTags where file_id in (");
 
 struct cdwFile *ef;
-separator = "";
 for (ef = efList; ef != NULL; ef = ef->next)
     {
-    dyStringPrintf(query, "%s%u", separator, ef->id);
-    separator = ",";
+    if (ef != efList) // not first one
+	sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "%u", ef->id);
     }
-dyStringPrintf(query, ")");
+sqlDyStringPrintf(query, ")");
 
 struct sqlResult *sr = sqlGetResult(conn, query->string);
 char **row;
@@ -736,19 +736,19 @@ if (!isEmpty(searchString))
  * if any. */
 struct dyString *where = dyStringNew(0);
 if (!isEmpty(initialWhere))
-     dyStringPrintf(where, "(%s) and ", initialWhere);
-dyStringPrintf(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
+     sqlDyStringPrintfFrag(where, "(%-s) and ", initialWhere); // trust
+sqlDyStringPrintfFrag(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
 int accessCount = 0;
 struct cdwFile *ef;
 for (ef = efList; ef != NULL; ef = ef->next)
     {
     if (searchPassTree == NULL || intValTreeFind(searchPassTree, ef->id) != NULL)
 	{
-	dyStringPrintf(where, ",%u", ef->id);
+	sqlDyStringPrintf(where, ",%u", ef->id);
 	++accessCount;
 	}
     }
-dyStringAppendC(where, ')');
+sqlDyStringPrintf(where, ")");
 
 rbTreeFree(&searchPassTree);
 
@@ -775,15 +775,13 @@ struct dyString *filteredWhere;
 webTableBuildQuery(cart, "cdwFileTags", accWhere->string, "cdwBrowseFiles", FILETABLEFIELDS, TRUE, &dummy, &filteredWhere);
 
 // get their fileIds
-struct dyString *tagQuery = dyStringNew(0);
-dyStringAppend(tagQuery, NOSQLINJ "SELECT file_id from cdwFileTags "); // XX ask Jim is secure query needed / how to do.
-dyStringAppend(tagQuery, filteredWhere->string);
+struct dyString *tagQuery = sqlDyStringCreate("SELECT file_id from cdwFileTags %-s", filteredWhere->string); // trust
 struct slName *fileIds = sqlQuickList(conn, tagQuery->string);
 
 // retrieve the cdwFiles objects for these
-char *idListStr = slNameListToString(fileIds, ',');
-struct dyString *fileQuery = dyStringNew(0);
-dyStringPrintf(fileQuery, NOSQLINJ "SELECT * FROM cdwFile WHERE id IN (%s) ", idListStr);
+struct dyString *fileQuery = sqlDyStringCreate("SELECT * FROM cdwFile WHERE id IN (");
+sqlDyStringPrintValuesList(fileQuery, fileIds);
+sqlDyStringPrintf(fileQuery, ")");
 return cdwFileLoadByQuery(conn, fileQuery->string);
 }
 
@@ -1133,7 +1131,8 @@ printf("</FORM>\n");
 struct hash* loadDatasetDescs(struct sqlConnection *conn)
 /* Load cdwDataset table and return hash with name -> cdwDataset */
 {
-char* query = NOSQLINJ "SELECT * FROM cdwDataset;";
+char query[256];
+sqlSafef(query, sizeof query, "SELECT * FROM cdwDataset");
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct hash *descs = hashNew(7);
 char **row;
@@ -1696,7 +1695,7 @@ printf("<BR>\n");
 static char *pieTags[] = 
     {"lab", "format", "assay", };
 struct facetField *pieFacetList = facetFieldsFromSqlTable(conn, "cdwFileFacets", 
-						    pieTags, ArraySize(pieTags), "N/A", NULL);
+						    pieTags, ArraySize(pieTags), "N/A", NULL, NULL, NULL);
 struct facetField *ff;
 int i;
 printf("<TABLE style=\"display:inline\"><TR>\n");
@@ -1716,7 +1715,7 @@ static char *highLevelTags[] =
     {"data_set_id", "lab", "assay", "format", "read_size",
     "sample_label", "species"};
 struct facetField *highFacetList = facetFieldsFromSqlTable(conn, "cdwFileFacets", 
-						highLevelTags, ArraySize(highLevelTags), NULL, NULL);
+						highLevelTags, ArraySize(highLevelTags), NULL, NULL, NULL, NULL);
 
 struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
     ArraySize(tagPopularityFields));
@@ -1773,7 +1772,7 @@ static char *fields[] =
     {"data_set_id", "lab", "assay", "format", "read_size", "species", "organ"};
 uglyTime(NULL);
 struct facetField *fieldList = facetFieldsFromSqlTable(conn, "cdwFileTags", 
-						fields, ArraySize(fields), NULL, NULL);
+						fields, ArraySize(fields), NULL, NULL, NULL, NULL);
 uglyTime("listing facets");
 printf("got info on %d fields<BR>\n", slCount(fieldList));
 struct facetField *field;

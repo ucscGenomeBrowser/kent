@@ -12,3 +12,5 @@ visibility pack
 
 track rmsk override
 visibility full
+
+include ../../refSeqComposite.ra alpha

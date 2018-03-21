@@ -317,8 +317,11 @@ void cartSaveSession(struct cart *cart);
 void cartDump(struct cart *cart);
 /* Dump contents of cart. */
 
+void cartDumpNoEncode(struct cart *cart);
+/* Dump contents of cart without HTML encoding. */
+
 #define CART_DUMP_AS_TABLE "cartDumpAsTable"
-void cartDumpList(struct hashEl *elList,boolean asTable);
+void cartDumpList(struct hashEl *elList,boolean asTable, boolean doHtmlEncode);
 /* Dump list of cart variables optionally as a table with ajax update support. */
 
 void cartDumpPrefix(struct cart *cart, char *prefix);

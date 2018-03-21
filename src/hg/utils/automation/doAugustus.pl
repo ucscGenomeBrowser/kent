@@ -247,6 +247,7 @@ _EOF_
   $whatItDoes = "Run augustus on chunked fasta sequences.";
   $bossScript = newBash HgRemoteScript("$runDir/runAugustus.bash", $paraHub,
 				      $runDir, $whatItDoes);
+  my $paraRun = &HgAutomate::paraRun();
   $bossScript->add(<<_EOF_
 (grep -v partBundles ../partition/part.list || /bin/true) | while read twoBit
 do
@@ -264,7 +265,7 @@ done >> jobList
 
 chmod +x runOne
 
-$HgAutomate::paraRun
+$paraRun
 _EOF_
   );
   $bossScript->execute();

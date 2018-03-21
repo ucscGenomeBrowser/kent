@@ -18,6 +18,7 @@
 #include "udc.h"
 #include "vcf.h"
 #include "vcfUi.h"
+#include "trackHub.h"
 
 #define NA "<em>n/a</em>"
 
@@ -573,7 +574,9 @@ void doVcfTabixDetails(struct trackDb *tdb, char *item)
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
-struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(database))
+    conn = hAllocConnTrack(database, tdb);
 char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, tdb->table, seqName);
 hFreeConn(&conn);
 doVcfDetailsCore(tdb, fileOrUrl, TRUE);

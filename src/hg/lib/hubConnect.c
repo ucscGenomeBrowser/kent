@@ -204,7 +204,11 @@ if (row != NULL)
 	hubUpdateStatus( hub->errorMessage, hub);
 	if (!isEmpty(hub->errorMessage))
 	    {
-	    warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
+            boolean isCollection = (strstr(hub->hubUrl, "hgComposite") != NULL);
+            if (isCollection)
+                warn("Your Track Collections have been removed by our trash collectors.  If you'd like your Track Collections to stay on our servers, you need to save them in a session." );
+            else
+                warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
 	    }
 	}
     }
@@ -245,7 +249,16 @@ for (name = nameList; name != NULL; name = name->next)
     hub = hubConnectStatusForId(conn, id);
     if (hub != NULL)
 	{
-        slAddHead(&hubList, hub);
+	if (!isEmpty(hub->errorMessage) && (strstr(hub->hubUrl, "hgComposite") != NULL))
+            {
+            // custom collection hub has disappeared.   Remove it from cart
+            cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
+            char buffer[1024];
+            safef(buffer, sizeof buffer, "hgHubConnect.hub.%d", id);
+            cartRemove(cart, buffer);
+            }
+        else
+            slAddHead(&hubList, hub);
 	}
     }
 slFreeList(&nameList);
@@ -762,11 +775,8 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 	    }
 	else
 	    {
-	    if (!trackHubDatabase(database))
-		{
-		struct grp *grp = grpFromHub(hub);
-		slAddHead(&hubGroups, grp);
-		}
+            struct grp *grp = grpFromHub(hub);
+            slAddHead(&hubGroups, grp);
 	    hubUpdateStatus(NULL, hub);
 	    }
 

@@ -18,7 +18,8 @@
 <h6><a href="#GettingStarted">Getting started - simple queries</a></h6> 
 <ul> 
   <li><a href="#PositionQuery"><strong>Simple position-based query</strong></a></li> 
-  <li><a href="#BatchQuery"><strong>Batch query using identifiers</strong></a></li> 
+  <li><a href="#BatchQuery"><strong>Batch query using identifiers</strong></a></li>
+  <li><a href="#GetGeneSymbols"><strong>Query to get gene symbols</strong></a></li> 
 </ul> 
 <h6><a href="#Filter">Filtering output by constraining field values</a></h6> 
 <ul> 
@@ -311,6 +312,30 @@ query output.
 <em><strong>Example:</strong></em><br> 
 [FIXME - add example]
 -->
+<!-- ====Query to get gene symbols========================== -->
+
+<a name="GetGeneSymbols"></a>
+<h3>Get gene symbols in a query</h3>
+
+<p>
+Follow the example below to obtain gene symbols in your query:
+<p> 
+<ul>
+<li>1. Select the clade, genome, assembly, group, table, and region as desired.</li> 
+<li>2. Change the <code>output format</code> to <em>selected fields from primary
+and related tables</em>.</li>
+<li>3. Click <code> get output</code> to go to the next step of selecting fields from 
+related tables.</li>
+<li>4. Select the fields you would like from your primary table.</li>
+<li>5. On the same <em>Select Fields</em> form, find the table for the related 
+<em>kgXref</em> table<em>. For example, look for the <em>hg38.kgXref</em> table, and then
+check the checkbox next to <em>Gene Symbol</em> to add gene symbols to your query
+results.</li>
+<li>6. Click <code> get output</code> again to get the final query output.</li>
+</ul>
+</p>
+ 
+
 
 <!-- ====Filtering Output================== -->
 <a name="Filter"></a>

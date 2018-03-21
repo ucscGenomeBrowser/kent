@@ -44,9 +44,6 @@ visibility hide
 track intronEst override
 visibility hide
 
-track refGene override
-visibility hide
-
 track ctgPos2
 shortLabel Scaffolds
 longLabel Assembly Scaffolds
@@ -192,3 +189,6 @@ priority 1
         type bed 5 .
         priority 23
 
+# change these two to switch to the new refSeqComposite 2018-02
+include trackDb.refGene.ra beta,public
+include ../../refSeqComposite.ra alpha

@@ -356,6 +356,49 @@ tarSyr2.perChromTables = no
     # 3453864774 bases of 3453864774 (100.000%) in intersection
 
 #########################################################################
+# add chromAlias table (DONE - 2016-10-20 - Hiram)
+
+    mkdir /hive/data/genomes/tarSyr2/bed/chromAlias
+    cd /hive/data/genomes/tarSyr2/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' tarSyr2 \
+        > ucsc.refseq.tab
+    printf "chrM\tNC_012774.1\n" >> ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' tarSyr2 \
+        | grep -v chrM > ucsc.genbank.tab
+    printf "chrM\tAB371090.1\n" >> ucsc.genbank.tab
+
+    join -t$'\t' ../idKeys/tarSyr2.idKeys.txt \
+	../../ensembl/ensemblTarSyr2.idKeys.txt \
+	| cut -f2,3 | sort > ucsc.ensembl.tab
+
+    # verify chrM is correct:
+    grep chrM *.tab
+ucsc.ensembl.tab:chrM   MT
+ucsc.genbank.tab:chrM   AB371090.1
+ucsc.refseq.tab:chrM    NC_012774.1
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o tarSyr2.chromAlias.tab tarSyr2.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t tarSyr2.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 337189 =? 337189 OK
+# checking genbank: 337189 =? 337189 OK
+# checking ensembl: 337189 =? 337189 OK
+
+    hgLoadSqlTab tarSyr2 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        tarSyr2.chromAlias.tab
+
+#########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2014-05-01 - Hiram)
     hgsql -N -e "select frag from gold;" tarSyr2 | sort | head -1
 ABRT02000001.1

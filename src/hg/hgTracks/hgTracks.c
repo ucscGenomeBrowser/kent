@@ -4524,6 +4524,8 @@ if (
 || sameWord(type, "psl")
 || sameWord(type, "barChart")
 || sameWord(type, "bigBarChart")
+|| sameWord(type, "interact")
+|| sameWord(type, "bigInteract")
 //|| track->loadItems == loadSimpleBed
 //|| track->bedSize >= 3 // should pick up several ENCODE BED-Plus types.
 ) 
@@ -6111,7 +6113,10 @@ else if (sameString(type, "bigWig"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred")|| sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain") || sameString(type, "bigBarChart"))
+else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || 
+        sameString(type, "bigNarrowPeak") || sameString(type, "bigPsl") || 
+        sameString(type, "bigMaf")|| sameString(type, "bigChain") || 
+        sameString(type, "bigBarChart") || sameString(type, "bigInteract"))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
@@ -6130,6 +6135,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred")|| sameStri
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
     else if (sameString(type, "bigBarChart"))
 	safef(typeBuf, sizeof(typeBuf), "bigBarChart");
+    else if (sameString(type, "bigInteract"))
+	safef(typeBuf, sizeof(typeBuf), "bigInteract");
     else
 	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
     tdb->type = cloneString(typeBuf);
@@ -6279,6 +6286,12 @@ else if (sameString(type, "barChart"))
     {
     tg = trackFromTrackDb(tdb);
     barChartCtMethods(tg);
+    tg->customPt = ct;
+    }
+else if (sameString(type, "interact"))
+    {
+    tg = trackFromTrackDb(tdb);
+    interactCtMethods(tg);
     tg->customPt = ct;
     }
 else
@@ -8400,7 +8413,7 @@ if (!hideControls)
 
             if (isHubTrack(group->name))
 		{
-                if (strstr(group->label, "Composite"))
+                if (strstr(group->label, "Collections"))
                     {
                     safef(idText, sizeof idText, "%s_edit", group->name);
                     hPrintf("<input name=\"hubEditButton\" id='%s'"
@@ -9079,10 +9092,10 @@ if (!startsWith("virt:", position) && (virtualSingleChrom()))
 
      // try to find the nearest match
     if (!(chromName && findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd)))
-	{ // create 1k window near middle of vchrom
-	warn("Unable to find any region near the position on the chromosome in the multi-regions. Now using middle of view.");
+	{ // create 10k window near middle of vchrom
+	warn("Your new regions are not near previous location. Using middle of new coordinates.");
 	virtWinStart = virtSeqBaseCount / 2;
-	virtWinEnd = virtWinStart + 1000;
+	virtWinEnd = virtWinStart + 10000;
 	if (virtWinEnd > virtSeqBaseCount)
 	    virtWinEnd = virtSeqBaseCount;
 	}
@@ -9173,10 +9186,10 @@ else
 	    // trying to find best vchrom location corresponding to chromName, winStart, winEnd);
 	    // try to find the nearest match
 	    if (!(chromName && findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd))) 
-		{ // create 1k window near middle of vchrom
-		warn("Unable to find any region near the position on the chromosome in the multi-regions. Now using middle of view.");
+		{ // create 10k window near middle of vchrom
+		warn("Your new regions are not near previous location. Using middle of new coordinates.");
 		virtWinStart = virtSeqBaseCount / 2;
-		virtWinEnd = virtWinStart + 1000;
+		virtWinEnd = virtWinStart + 10000;
 		if (virtWinEnd > virtSeqBaseCount)
 		    virtWinEnd = virtSeqBaseCount;
 		}
@@ -9458,7 +9471,7 @@ for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     unsigned size = hChromSize(database, chromPtr->name);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
+    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromPtr->name, chromPtr->name);
     cgiTableFieldEnd();
@@ -9507,7 +9520,7 @@ for(;count-- && (chromInfo != NULL); chromInfo = chromInfo->next)
     unsigned size = chromInfo->size;
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
+    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            chromInfo->chrom,chromInfo->chrom);
     cgiTableFieldEnd();
@@ -9597,7 +9610,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     unsigned size = sqlUnsigned(row[1]);
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"%s?%s=%s&position=%s\">%s</A>",
+    htmlPrintf("<A HREF=\"%s|none|?%s|url|=%s|url|&position=%s|url|\">%s</A>",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart),
            row[0], row[0]);
     cgiTableFieldEnd();
@@ -9787,6 +9800,7 @@ dyStringPrintf(dy,"Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\
 dyStringPrintf(dy,"Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
+dyStringPrintf(dy,"Mousetrap.bind('t c', function() { document.editHubForm.submit();return false; }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
 dyStringPrintf(dy,"Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
@@ -9833,6 +9847,7 @@ hPrintf("<tr><td> left 1/2 screen</td><td class=\"hotkey\">j</td>   <td> default
 hPrintf("<tr><td> left one screen</td><td class=\"hotkey\">J</td>   <td> default order</td><td class=\"hotkey\">d then o</td>              </tr>\n");
 hPrintf("<tr><td> right 10&#37;</td><td class=\"hotkey\">ctrl+l</td><td> hide all</td><td class=\"hotkey\">h then a</td>                   </tr>\n"); // percent sign
 hPrintf("<tr><td> right 1/2 screen</td><td class=\"hotkey\">l</td>  <td> custom tracks</td><td class=\"hotkey\">c then t</td>              </tr>\n");
+hPrintf("<tr><td> right one screen</td><td class=\"hotkey\">L</td>  <td> track collections</td><td class=\"hotkey\">t then c</td>                 </tr>\n");
 hPrintf("<tr><td> right one screen</td><td class=\"hotkey\">L</td>  <td> track hubs</td><td class=\"hotkey\">t then h</td>                 </tr>\n");
 hPrintf("<tr><td> zoom in 1.5x</td><td class=\"hotkey\">ctrl+i</td> <td> configure</td><td class=\"hotkey\">c then f</td>                  </tr>\n"); 
 hPrintf("<tr><td> zoom in 3x</td><td class=\"hotkey\">i</td>        <td> reverse</td><td class=\"hotkey\">r then v</td>                    </tr>\n");
@@ -9856,6 +9871,30 @@ hPrintf("<tr><td>Highlight all (mark)</td><td class=\"hotkey\">h then m</td><td>
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
 hPrintf("</div>\n");
+}
+
+static void checkAddHighlight()
+/* If the cart variable addHighlight is set, merge it into the highlight variable. */
+{
+char *newHighlight = cartOptionalString(cart, "addHighlight");
+if (newHighlight)
+    {
+    char *existing = cartOptionalString(cart, "highlight");
+    if (isNotEmpty(existing))
+        {
+        // Add region only if it is not already in the existing highlight setting.
+        char *alreadyIn = strstr(existing, newHighlight);
+        int len = strlen(newHighlight);
+        if (! (alreadyIn && (alreadyIn[len] == '|' || alreadyIn[len] == '\0')))
+            {
+            struct dyString *dy = dyStringCreate("%s|%s", newHighlight, existing);
+            cartSetString(cart, "highlight", dy->string);
+            }
+        }
+    else
+        cartSetString(cart, "highlight", newHighlight);
+    cartRemove(cart, "addHighlight");
+    }
 }
 
 void doMiddle(struct cart *theCart)
@@ -9912,6 +9951,8 @@ initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 char *configMultiRegionPageCall = cartCgiUsualString(cart, "hgTracksConfigMultiRegionPage", "notSet");
+
+checkAddHighlight();
 
 /* Do main display. */
 
@@ -10053,6 +10094,7 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
 
 jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 // js code needs to know if a highlightRegion is defined for this db
+checkAddHighlight(); // call again in case tracksDisplay's call to findGenomePos changed vars
 char *highlightDef = cartOptionalString(cart, "highlight");
 if (highlightDef && startsWith(database,highlightDef) && highlightDef[strlen(database)] == '.')
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));

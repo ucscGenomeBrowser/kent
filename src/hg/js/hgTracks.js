@@ -313,9 +313,13 @@ var genomePos = {
             // http://www.ensembl.org/Homo_sapiens/contigview?chr=21&start=33031934&end=33041241
             genomePos.linkFixup(pos, "ensemblLink", new RegExp("(.+start=)[0-9]+"), "end");
 
-            // Example NCBI link:
+            // Example NCBI Map Viewer link (obsolete):
             // https://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=21&BEG=33031934&END=33041241
             genomePos.linkFixup(pos, "ncbiLink", new RegExp("(.+BEG=)[0-9]+"), "END");
+
+            // Example NCBI Genome Data Viewer link
+            // https://www.ncbi.nlm.nih.gov/genome/gdv/browser/?id=GCF_000001405.37&chr=4&from=45985744&to=45991655&context=genome
+            genomePos.linkFixup(pos, "ncbiLink", new RegExp("(.+from=)[0-9]+"), "to");
 
             // Example medaka link: 
             // http://utgenome.org/medakabrowser_ens_jump.php?revision=version1.0&chr=chromosome18&start=14435198&end=14444829
@@ -3269,12 +3273,32 @@ var rightClick = {
                 {
                 // add delete from composite
                 }
+            else if ((!rec.type.startsWith("wigMaf")) &&
+                (rec.type.startsWith("bigWig") || rec.type.startsWith("multiWig") || rec.type.startsWith("wig") || rec.type.startsWith("bedGraph"))) {
+                o = {};
+                o[" Make a New Collection with \"" + rec.shortLabel + "\""] = {
+                    onclick: rightClick.makeHitCallback("newCollection")
+                };  
+                menu.push(o);
+
+                if (hgTracks.collections) {
+                    var ii;
+                    for(ii=0; ii < hgTracks.collections.length; ii++) {
+                        o = {};
+                        o[" Add to \"" + hgTracks.collections[ii].shortLabel + "\""] = {
+                            onclick: rightClick.makeHitCallback("addCollection")
+                        };  
+                        menu.push(o);
+                    }
+                }
+                menu.push($.contextMenu.separator);
+            }
 
             // add sort options if this is a custom composite
-            if (rec.isCustomComposite) {
+            if (rec.isCustomComposite && tdbHasParent(rec) && tdbIsLeaf(rec)) {
 
                 o = {};
-                o[" Sort by Expression "] = {
+                o[" Sort by Magnitude "] = {
                     onclick: function(menuItemClicked, menuObject) {
                         rightClick.hit(menuItemClicked, menuObject, "sortExp");
                         return true; }
@@ -3565,6 +3589,9 @@ function addKeyboardHelpEntries() {
 
     html = '<span class="shortcut">c t</span>';
     $('#customTracksMenuLink').after(html);
+
+    html = '<span class="shortcut">t c</span>';
+    $('#customCompositeMenuLink').after(html);
 
     html = '<span class="shortcut">t h</span>';
     $('#trackHubsMenuLink').after(html);

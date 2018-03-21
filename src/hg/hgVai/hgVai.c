@@ -666,7 +666,7 @@ struct slName *findDbNsfpTables()
 if (startsWith(hubTrackPrefix, database))
     return NULL;
 struct sqlConnection *conn = hAllocConn(database);
-struct slName *dbNsfpTables = sqlListTablesLike(conn, "LIKE 'dbNsfp%'");
+struct slName *dbNsfpTables = sqlListTablesLike(conn, "dbNsfp%");
 hFreeConn(&conn);
 return dbNsfpTables;
 }
@@ -2210,14 +2210,15 @@ boolean needLeftBase = isEmpty(refAl) || sameString(refAl, "-");
 for (i = 0;  i < obsCount;  i++)
     {
     char *altAl = obsWords[i];
+    if (sameString(altAl, "-"))
+        altAl[0] = '\0';
     int altAlLen = strlen(altAl);
     if (minusStrand && isAllNt(altAl, altAlLen))
 	reverseComplement(altAl, altAlLen);
     if (differentString(altAl, refAl))
 	{
-	if (sameString(altAl, "-"))
+	if (isEmpty(altAl))
 	    {
-	    altAls[altCount] = "";
 	    needLeftBase = TRUE;
 	    }
 	else
@@ -2241,6 +2242,7 @@ for (i = 0;  i < obsCount;  i++)
 		}
 	    altAls[altCount] = altAl;
 	    }
+        altAls[altCount] = altAl;
 	altCount++;
 	}
     }

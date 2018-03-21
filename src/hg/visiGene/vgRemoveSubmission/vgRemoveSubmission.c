@@ -47,14 +47,14 @@ void intInClause(struct dyString *query, struct slInt *list)
 /* Add in clause to query for all integers in list. */
 {
 struct slInt *el;
-dyStringAppend(query, " in(");
+sqlDyStringPrintf(query, " in (");
 for (el = list; el != NULL; el = el->next)
     {
-    dyStringPrintf(query, "%d", el->val);
+    sqlDyStringPrintf(query, "%d", el->val);
     if (el->next != NULL)
-	dyStringAppendC(query, ',');
+	sqlDyStringPrintf(query, ",");
     }
-dyStringAppend(query, ") ");
+sqlDyStringPrintf(query, ") ");
 }
 
 void vgRemoveSubmission(char *database, char *submissionSetId)
@@ -99,7 +99,7 @@ imageList = sqlQuickNumList(conn, query->string);
 if (imageList != NULL)
     {
     dyStringClear(query);
-    sqlDyStringAppend(query, 
+    sqlDyStringPrintf(query, 
 	"select id from imageProbe where image ");
     intInClause(query, imageList);
     imageProbeList = sqlQuickNumList(conn, query->string);
@@ -112,7 +112,7 @@ if (imageProbeList != NULL)
     int oldExpLevel = sqlQuickNum(conn, NOSQLINJ "select count(*) from expressionLevel");
     int newExpLevel;
     dyStringClear(query);
-    sqlDyStringAppend(query, 
+    sqlDyStringPrintf(query, 
 	"delete from expressionLevel where imageProbe ");
     intInClause(query, imageProbeList);
     maybeUpdate(conn, query->string);
@@ -124,7 +124,7 @@ if (imageProbeList != NULL)
 if (imageProbeList != NULL)
     {
     dyStringClear(query);
-    sqlDyStringAppend(query, 
+    sqlDyStringPrintf(query, 
 	"delete from imageProbe where image ");
     intInClause(query, imageList);
     maybeUpdate(conn, query->string);

@@ -308,7 +308,7 @@ html crispr
     track crisprTargets
     shortLabel CRISPR Targets
     longLabel CRISPR/Cas9 -NGG Targets
-    visibility pack
+    visibility dense
     type bigBed 9 +
     itemRgb on
     parent crispr
@@ -347,8 +347,7 @@ html crispors
     itemRgb on
     priority 2
 
-## including later
-## include crispr10K.ra
+include crispr10K.ra
 
 track augustus
 shortLabel Augustus
@@ -1030,7 +1029,6 @@ exonArrows on
 type bed 6 .
 
 track refSeqFuncElems
-release alpha
 shortLabel RefSeq Func Elems
 longLabel NCBI RefSeq Functional Elements 
 type bigBed 9 +

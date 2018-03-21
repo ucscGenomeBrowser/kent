@@ -13,14 +13,15 @@ visibility full
 track xenoRefGene override
 visibility hide
 
-track refSeqComposite override
-visibility pack
+include ../../refSeqComposite.ra alpha
 
 searchTable gold
 shortCircuit 1
 termRegex [JN][MC][Z_][W0]0[0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
+
+include trackDb.6way.ra
 
 include trackDb.5way.ra
 

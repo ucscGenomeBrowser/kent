@@ -498,6 +498,13 @@ void replaceOriginalWithSymlink(char *submitFileName, char *submitDir, char *cdw
 /* For a file that was just copied, remove original and symlink to new one instead
  * to save space. Follows symlinks if any to the real file and replaces it with a symlink */
 
+int findSubmitSymlinkExt(char *submitFileName, char *submitDir, char **pPath, char **pLastPath, int *pSymlinkLevels);
+/* Find the last symlink and real file in the chain from submitDir/submitFileName.
+ * This is useful for when target of symlink in cdw/ gets renamed 
+ * (e.g. license plate after passes validation), or removed (e.g. cdwReallyRemove* commands). 
+ * Returns 0 for success. /
+ * Returns -1 if path does not exist. */
+
 char *findSubmitSymlink(char *submitFileName, char *submitDir, char *oldPath);
 /* Find the last symlink in the chain from submitDir/submitFileName.
  * This is useful for when target of symlink in cdw/ gets renamed 

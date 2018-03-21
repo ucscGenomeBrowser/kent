@@ -46,9 +46,8 @@
 #include "genbank.h"
 #include "htmlPage.h"
 #include "longRange.h"
-#include "tagRepo.h"
-#include "fieldedTable.h"
 #include "barChartUi.h"
+#include "interactUi.h"
 #include "customComposite.h"
 #include "trackVersion.h"
 #include "hubConnect.h"
@@ -199,64 +198,9 @@ freeMem(encValue);
 return dyStringCannibalize(&dyLink);
 }
 
-char *tabSepMetaAsHtmlTable(char *tabSepMeta, struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
-/* Return a string which is an HTML table of the tags for this track which are stored as a fielded table. */
-{
-// If there's no file, there's no data.
-if (tabSepMeta == NULL)
-    return "";
-
-// If the trackDb entry doesn't have a foreign key, there's no data.
-char *metaTag = trackDbSetting(tdb, "meta");
-if (metaTag == NULL)
-    return "";
-
-static char *cachedTableName = NULL;
-static struct hash *cachedHash = NULL;
-static struct fieldedTable *cachedTable = NULL;
-
-// Cache this table because there's a good chance we'll get called again with it.
-if ((cachedTableName == NULL) || differentString(tabSepMeta, cachedTableName))
-    {
-    char *requiredFields[] = {"meta"};
-    cachedTable = fieldedTableFromTabFile(tabSepMeta, NULL, requiredFields, sizeof requiredFields / sizeof (char *));
-    cachedHash = fieldedTableUniqueIndex(cachedTable, requiredFields[0]);
-    cachedTableName = cloneString(tabSepMeta);
-    }
-
-// Look for this tag in the metadata.
-struct fieldedRow *fr = hashFindVal(cachedHash, metaTag);
-if (fr == NULL)
-    return "";
-
-struct dyString *dyTable = dyStringCreate("<table style='display:inline-table;'>");
-if (showLongLabel)
-    dyStringPrintf(dyTable,"<tr valign='bottom'><td colspan=2 nowrap>%s</td></tr>",tdb->longLabel);
-if (showShortLabel)
-    dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>shortLabel:</i></td>"
-			   "<td nowrap>%s</td></tr>",tdb->shortLabel);
-
-int ii;
-for(ii=0; ii < cachedTable->fieldCount; ii++)
-    {
-    char *fieldName = cachedTable->fields[ii];
-    char *fieldVal = fr->row[ii];
-    if (!sameString(fieldName, "meta")  && !isEmpty(fieldVal))
-        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td>"
-                           "<td nowrap>%s</td></tr>",fieldName, fieldVal);
-    }
-dyStringAppend(dyTable,"</table>");
-return dyStringCannibalize(&dyTable);
-}
-
-char *tagStormAsHtmlTable(char *tagStormFile, struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
+char *pairsAsHtmlTable( struct slPair *pairs, struct trackDb *tdb, boolean showLongLabel,boolean showShortLabel)
 /* Return a string which is an HTML table of the tags for this track. */
 {
-char *metaTag = trackDbSetting(tdb, "meta");
-if (metaTag == NULL)
-    return "";
-struct slPair *pairs = tagRepoPairs(tagStormFile, "meta", metaTag);
-
 if (pairs == NULL)
     return "";
 
@@ -281,15 +225,10 @@ return dyStringCannibalize(&dyTable);
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
 // If metadata from metaDb exists, return string of html with table definition
 {
-char *tabSepMeta = trackDbSetting(tdb, "metaTab");
+struct slPair *pairs = NULL;
 
-if (tabSepMeta)
-    return tabSepMetaAsHtmlTable(tabSepMeta, tdb, showLongLabel, showShortLabel);
-
-char *tagStormFile = trackDbSetting(tdb, "metaDb");
-
-if (tagStormFile)
-    return tagStormAsHtmlTable(tagStormFile, tdb, showLongLabel, showShortLabel);
+if ((pairs = trackDbMetaPairs(tdb)) != NULL)
+    return pairsAsHtmlTable(pairs, tdb, showLongLabel, showShortLabel);
 
 const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
 if (safeObj == NULL || safeObj->vars == NULL)
@@ -398,11 +337,10 @@ return TRUE;
 void extraUiLinks(char *db,struct trackDb *tdb)
 // Show metadata, and downloads, schema links where appropriate
 {
-char *tagStormFile = trackDbSetting(tdb, "metaDb");
-char *tabSepFile = trackDbSetting(tdb, "metaTab");
-boolean hasMetadata = (tagStormFile != NULL) || (tabSepFile != NULL) || (!tdbIsComposite(tdb) && !trackHubDatabase(db)
-                        && metadataForTable(db, tdb, NULL) != NULL);
-if (hasMetadata)
+struct slPair *pairs = trackDbMetaPairs(tdb);
+if (pairs != NULL)
+    printf("<b>Metadata:</b><br>%s\n", pairsAsHtmlTable( pairs, tdb, FALSE, FALSE));
+else if (!tdbIsComposite(tdb) && !trackHubDatabase(db) && (metadataForTable(db, tdb, NULL) != NULL))
     printf("<b>Metadata:</b><br>%s\n", metadataAsHtmlTable(db, tdb, FALSE, FALSE));
 
 boolean schemaLink = trackDataAccessible(db, tdb);
@@ -418,7 +356,7 @@ if (links > 0)
 if (links > 1)
     printf("<table><tr><td nowrap>View table: ");
 
-if (schemaLink && differentString("longTabix", tdb->type))
+if (schemaLink && differentString("longTabix", tdb->type) && !isCustomComposite(tdb))
     // FIXME: hgTables.showSchmaLongTabix is a currently a dummy routine, so let's not got here
     // until it's implemented
     {
@@ -1237,8 +1175,7 @@ else if (gotCds)
     if (curOpt == baseColorDrawOff)
         disabled = "disabled";
     printf("<br /><b><span id='%sCodonNumberingLabel' %s>Show codon numbering</b>:</span>\n", 
-                name, curOpt == baseColorDrawOff ? "class='disabled'" : "");
-    cgiMakeCheckBoxMore(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE), disabled);
+                name, curOpt == baseColorDrawOff ? "class='disabled'" : "");    cgiMakeCheckBoxMore(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE), disabled);
     }
 else if (gotSeq)
     {
@@ -1834,6 +1771,42 @@ void aggregateDropDown(char *var, char *curVal)
 {
 cgiMakeDropListFull(var, aggregateLabels, aggregateValues,
     ArraySize(aggregateValues), curVal, NULL, NULL);
+}
+
+static char *viewFuncLabels[] =
+{
+"show all",
+"add all",
+"subtract from the first",
+};
+
+static char *viewFuncValues[] =
+{
+WIG_VIEWFUNC_SHOW_ALL,
+WIG_VIEWFUNC_ADD_ALL,
+WIG_VIEWFUNC_SUBTRACT_ALL,
+};
+
+char *wiggleViewFuncEnumToString(enum wiggleViewFuncEnum x)
+/* Convert from enum to string representation. */
+{
+return viewFuncLabels[x];
+}
+
+enum wiggleViewFuncEnum wiggleViewFuncStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, viewFuncValues);
+if (x < 0)
+    errAbort("hui::wiggleViewFuncStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+void viewFuncDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropListFull(var, viewFuncLabels, viewFuncValues,
+ArraySize(viewFuncValues), curVal, NULL, NULL);
 }
 
 static char *wiggleTransformFuncOptions[] = 
@@ -4123,8 +4096,9 @@ void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *td
 if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by ajax do we
     {                                  // consider this option
     if (tdbIsComposite(tdb)                       // called for the composite
-    && !tdbIsCompositeView(tdb->subtracks)        // and there is no view level
-    && slCount(tdb->subtracks) == 1)              // and there is only one subtrack
+        && !isCustomComposite(tdb)
+        && !tdbIsCompositeView(tdb->subtracks)        // and there is no view level
+        && slCount(tdb->subtracks) == 1)              // and there is only one subtrack
 	{
 	tdb = tdb->subtracks; // show subtrack cfg instead
 	prefix = tdb->track;
@@ -4184,6 +4158,8 @@ switch(cType)
     case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgBarChart:   barChartCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
+    case cfgInteract:   interactCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ",
 			     cType);
@@ -5027,11 +5003,10 @@ void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
 /* let the user choose to see the track in wiggle mode */
 {
 printf("<BR><BR><B>Display data as a density graph:</B> ");
+boolean option = cartOrTdbBoolean(cart, tdb, "doWiggle", FALSE);
+
 char varName[1024];
 safef(varName, sizeof(varName), "%s.doWiggle", name);
-boolean parentLevel = isNameAtParentLevel(tdb,varName);
-boolean option = cartUsualBooleanClosestToHome(cart, tdb, parentLevel,"doWiggle", FALSE);
-
 cgiMakeCheckBox(varName, option);
 printf("<BR>\n");
 char *style = option ? "display:block" : "display:none";
@@ -5141,9 +5116,17 @@ if (parentLevel)
     if (aggregate != NULL && parentLevel)
         {
         char *aggregateVal = cartOrTdbString(cart, tdb->parent, "aggregate", NULL);
-        printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
         safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
-        aggregateDropDown(option, aggregateVal);
+        if (isCustomComposite(tdb))
+            {
+            printf("<TR valign=center><th align=right>Merge method:</th><td align=left>");
+            aggregateExtraDropDown(option, aggregateVal);
+            }
+        else
+            {
+            printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
+            aggregateDropDown(option, aggregateVal);
+            }
         puts("</td></TR>");
 
 	if (sameString(aggregateVal, WIG_AGGREGATE_STACKED)  &&
@@ -5153,6 +5136,26 @@ if (parentLevel)
 	    }
 
 	didAggregate = TRUE;
+        }
+    if (isCustomComposite(tdb))
+        {
+        /*
+        char *viewFuncVal = cartOrTdbString(cart, tdb->parent, "viewFunc", NULL);
+        printf("<TR valign=center><th align=right>Math method:</th><td align=left>");
+        safef(option, sizeof(option), "%s.%s", name, VIEWFUNC);
+        viewFuncDropDown(option, viewFuncVal);
+        */
+
+        printf("<TR valign=center><th align=right>Missing data treatment:</th><td align=left>");
+        char *missingMethodVal = cartOrTdbString(cart, tdb->parent, "missingMethod", NULL);
+        boolean missingIsZero = (missingMethodVal == NULL) ||  differentString(missingMethodVal, "missing");
+        char buffer[1024];
+        safef(buffer, sizeof buffer, "%s.missingMethod",name);
+
+        cgiMakeOnEventRadioButtonWithClass(buffer, "zero", missingIsZero, "allOrOnly", "click", NULL);
+        puts("missing is zero&nbsp;&nbsp;");
+        cgiMakeOnEventRadioButtonWithClass(buffer, "missing", !missingIsZero, "allOrOnly", "click", NULL);
+        printf("math with missing values is missing</B>");
         }
     }
 
@@ -5189,8 +5192,9 @@ cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);
 printf("</td><td align=leftv colspan=2>max:&nbsp;");
 safef(option, sizeof(option), "%s.%s", name, MAX_Y );
 cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, NO_VALUE, NO_VALUE);
-printf("&nbsp;(range: %g to %g)",
-       tDbMinY, tDbMaxY);
+if (!isCustomComposite(tdb))
+    printf("&nbsp;(range: %g to %g)",
+           tDbMinY, tDbMaxY);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Transform function:</th><td align=left>");
@@ -5297,6 +5301,15 @@ endControlGrid(&cg);
 cfgEndBox(boxed);
 }
 
+void genbankShowPatentControl(struct cart *cart, struct trackDb *tdb, char *prefix)
+/* controls for enabling display of GENBANK RNA patent sequences */
+{
+char name[256];
+safef(name, sizeof(name), "%s.%s", prefix, SHOW_PATENT_SEQUENCES_SUFFIX);
+printf("<P><B>Show patent sequences</B>:");
+cgiMakeCheckBox(name, cartUsualBoolean(cart, name, FALSE));
+}
+
 void mrnaCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
 /* Put up UI for an mRNA (or EST) track. */
 {
@@ -5332,6 +5345,8 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 baseColorDrawOptDropDown(cart, tdb);
 indelShowOptions(cart, tdb);
+if (sameString(tdb->track, "mrna") || sameString(tdb->track, "xenoMrna"))
+    genbankShowPatentControl(cart, tdb, prefix);
 wigOption(cart, prefix, title, tdb);
 cfgEndBox(boxed);
 }
@@ -8739,6 +8754,8 @@ else if (sameWord("bedDetail", tdb->type))
 else if (sameWord("pgSnp", tdb->type))
     asObj = pgSnpAsObj();
 else if (sameWord("barChart", tdb->type))
+    asObj = asParseText(barChartAutoSqlString);
+else if (sameWord("interact", tdb->type))
     asObj = asParseText(barChartAutoSqlString);
 else
     asObj = asFromTableDescriptions(conn, tdb->table);

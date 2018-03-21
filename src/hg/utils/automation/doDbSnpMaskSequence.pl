@@ -125,12 +125,13 @@ sub gzip {
   my $whatItDoes = "It gzips the per-chrom masked FASTA files.";
   my $bossScript = new HgRemoteScript("$runDir/gzip.csh", $paraHub,
 				      $runDir, $whatItDoes);
+  my $paraRun = &HgAutomate::paraRun();
   $bossScript->add(<<_EOF_
 cp /dev/null jobList
 foreach f (../substitutions/*.fa)
   echo gzip \$f >> jobList
 end
-$HgAutomate::paraRun
+$paraRun
 _EOF_
   );
   $bossScript->execute();

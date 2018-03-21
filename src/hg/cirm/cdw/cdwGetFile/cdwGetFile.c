@@ -30,6 +30,7 @@ void errExit(char *msg, char *field)
 /* print http header + message and exit. msg can contain %s */
 {
 printf("Content-Type: text/html\n\n");
+puts("ERROR: ");
 if (!field)
     puts(msg);
 else
@@ -136,7 +137,7 @@ char* filePath = cdwPathForFileId(conn, vf->fileId);
 if (addExt != NULL)
     {
     if (! (sameWord(addExt, ".bai") || sameWord(addExt, ".tbi")))
-        errAbort("The addExt argument to cdwGetFile can only be .bai or .tbi. No other values are allowed.");
+        errAbort("ERROR: The addExt argument to cdwGetFile can only be .bai or .tbi. No other values are allowed.");
     if ((endsWith(filePath, ".vcf") || endsWith(filePath, ".VCF")) && sameWord(addExt, ".tbi"))
         // the .tbi files of .vcf files are actually named .vcf.gz.tbi
         filePath = catTwoStrings(filePath, ".gz.tbi");

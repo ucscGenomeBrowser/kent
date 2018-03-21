@@ -45,7 +45,8 @@ void jsonWriteEndLine(struct jsonWrite *jw);
 /* Write comma if in middle, and then newline regardless. */
 
 void jsonWriteString(struct jsonWrite *jw, char *var, char *string);
-/* Print out "var": "val".  If var is NULL, print val only.  If string is NULL, "var": null . */
+/* Print out "var": "val" -- or rather, jsonStringEscape(val).
+ * If var is NULL, print val only.  If string is NULL, "var": null . */
 
 void jsonWriteDateFromUnix(struct jsonWrite *jw, char *var, long long unixTimeVal);
 /* Add "var": YYYY-MM-DDT-HH:MM:SSZ given a Unix time stamp. Var may be NULL. */

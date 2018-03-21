@@ -715,6 +715,20 @@ else
 return TRUE;
 }
 
+void touchFileFromFile(const char *oldFile, const char *newFile)
+/* Set access and mod time of newFile from oldFile. */
+{
+    struct stat buf;
+    if (stat(oldFile, &buf) != 0)
+        errnoAbort("stat failed on %s", oldFile);
+    struct utimbuf puttime;
+    puttime.modtime = buf.st_mtime;
+    puttime.actime = buf.st_atime;
+    if (utime(newFile, &puttime) != 0)
+	errnoAbort("utime failed on %s", newFile);
+}
+
+
 boolean isRegularFile(char *fileName)
 /* Return TRUE if fileName is a regular file. */
 {
@@ -726,6 +740,34 @@ if (S_ISREG(st.st_mode))
     return TRUE;
 return FALSE;
 }
+
+char *mustReadSymlinkExt(char *path, struct stat *sb)
+/* Read symlink or abort. FreeMem the returned value. */
+{
+ssize_t nbytes, bufsiz;
+// determine whether the buffer returned was truncated.
+bufsiz = sb->st_size + 1;
+char *symPath = needMem(bufsiz);
+nbytes = readlink(path, symPath, bufsiz);
+if (nbytes == -1) 
+    errnoAbort("readlink failure on symlink %s", path);
+if (nbytes == bufsiz)
+    errAbort("readlink returned buffer truncated\n");
+return symPath;
+}
+
+char *mustReadSymlink(char *path)
+/* Read symlink or abort. Checks that path is a symlink. 
+FreeMem the returned value. */
+{
+struct stat sb;
+if (lstat(path, &sb) == -1)
+    errnoAbort("lstat failure on %s", path);
+if ((sb.st_mode & S_IFMT) != S_IFLNK)
+    errnoAbort("path %s not a symlink.", path);
+return mustReadSymlinkExt(path, &sb);
+}
+
 
 void makeSymLink(char *oldName, char *newName)
 /* Return a symbolic link from newName to oldName or die trying */

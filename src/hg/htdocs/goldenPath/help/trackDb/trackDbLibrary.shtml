@@ -358,7 +358,7 @@
     All occurrences of the  string <code>$D</code> in the URL will be
     substituted with the genome assembly database name.  This allows a
     trackDb entry to be used with for multiple assemblies.  <code>$D</code>
-    substitution is not implement for track hubs.
+    substitution is not implemented for track hubs.
 
     </P> <P><B>Example:</B></P>
     <pre>   bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb</pre>
@@ -1236,7 +1236,6 @@ There are no extra options that can appear on the type bigBarChart line.
     <code>&lt;column&gt;FilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
     <code>&lt;column&gt;FilterByRange &lt;off/on&gt;</code>
     </div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>A number of
     numerical filters are available for bed tracks.  These are
     conveniently named by the field that is filtered on.  The most
@@ -1535,8 +1534,7 @@ There are no extra options that can appear on the type bigBarChart line.
     <pre>
     spectrum on
     scoreMin 700
-    scoreMax 900
-    color 0,0,128    </pre>
+    scoreMax 900</pre>
     <P>In this example, the track description will be
     displayed in blue, but the track will remain a gray scale.
     Items with scores less than or equal to 700 will be shown in very
@@ -1554,6 +1552,8 @@ There are no extra options that can appear on the type bigBarChart line.
     browser, or if there are more than one matches of that string, 
     will be give a list of the positions to choose from. See <A HREF="../bigBed.html#Ex3">HERE</A>
     for instructions on how to build an index for a bigBed file.
+    <b>Note:</b> The searchIndex setting currently does not work if
+    tracks are nested in composites.
     <P><B>Example:</B></P>
     <pre>   searchIndex name</pre>
 </DIV>
@@ -2727,6 +2727,20 @@ There are no extra options that can appear on the type bigBarChart line.
     <P><B>Example:</B></P>
     <pre>   showNames off</pre>
 </DIV>
+
+<div class="doWiggle"><span class="types bam"></span>
+<div class="format"><code>doWiggle on</code></div>
+    <p>The doWiggle setting enables the BAM data to be displayed as a bar graph where the
+    height is proportional to the number of reads mapped to each genomic position. Through
+    dynamic calculation of items in the current window, this feature plots a line similar
+    to a wiggle graph that can be customized with a number of graph-based configuration options
+    such as drawing indicator lines, smoothing plots, adjusting graph height and vertical range,
+    and switching from bars to points. Please note that the feature is best displayed with
+    &quot;Display mode&quot; set to full and that the default &quot;Data view scaling&quot;
+    is &quot;auto-scale to data view.&quot;</p>
+    <p><b>Example:</b></p>
+    <pre>   doWiggle on</pre>
+</div>
 
 <DIV class="bam_example"><span class="types bam"></span>
 <div class="format"><B>Example of a bam track</B></div>
@@ -4469,7 +4483,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
 <div class="format"><B>Example of a Supertrack</B></div>
     <pre>
     track myFolder
-    superTrack on
+    superTrack on show
     group regulation
     shortLabel My Folder
     longLabel My folder keeps my tracks together
@@ -4487,7 +4501,7 @@ barChartMatrixUrl file.  Used for generating a box plot on the details page.
     <P>The supertrack called "My Folder"
     contains two children.  All will be grouped under 
     "regulation".  Notice that the first track is visible by
-    default (if the supertrack itself is visible), but the second
+    default (if the supertrack itself is visible by adding &quot;show&quot;), but the second
     track is not.</P>
 </DIV>
 

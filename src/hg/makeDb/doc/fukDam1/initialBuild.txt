@@ -1,0 +1,804 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the fukDam1
+
+#########################################################################
+# photograph has been obtained Feb 2017
+#    (DONE - 2017-12-22 - Hiram)
+
+mkdir /hive/data/genomes/fukDam1
+cd /hive/data/genomes/fukDam1
+
+cat photoReference.txt
+
+photoCreditURL  http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0007477
+photoCreditName Sharry Goldman
+
+#########################################################################
+#  Initial steps (DONE - 2017-12-22 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/fukDam1
+cd ~/kent/src/hg/makeDb/doc/fukDam1
+
+# best to use a most recent document since it has the latest features and
+# procedures:
+sed -e 's/dipOrd2/fukDam1/g; s/DipOrd2/FukDam1/g; s/DONE/TBD/g;' \
+    ../dipOrd2/initialBuild.txt > initialBuild.txt
+
+mkdir /hive/data/genomes/fukDam1/refseq
+cd /hive/data/genomes/fukDam1/refseq
+
+rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Fukomys_damarensis/all_assembly_versions/GCF_000743615.1_DMR_v1.0/ ./
+
+# sent 527 bytes  received 2696170895 bytes  26827576.34 bytes/sec
+# total size is 2695839127  speedup is 1.00
+
+# real    1m39.460s
+
+# check assembly size for later reference:
+
+faSize G*0_genomic.fna.gz
+# 2333892479 bases (47907697 N's 2285984782 real 1580557809 upper
+#	705426973 lower) in 74730 sequences in 1 files
+# Total size: mean 31231.0 sd 453266.2 min 200 (NW_011046038.1)
+#	max 22231620 (NW_011044666.1) median 280
+# %30.23 masked total, %30.86 masked real
+
+# this information is from the top of 
+#    fukDam1/refseq/GCF_000743615.1_DMR_v1.0_assembly_report.txt
+
+# Assembly name:  DMR_v1.0
+# Organism name:  Fukomys damarensis (Damara mole-rat)
+# Sex:  male
+# Taxid:          885580
+# BioSample:      SAMN02339281
+# BioProject:     PRJNA190641
+# Submitter:      BGI
+# Date:           2014-9-4
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    AYUG01
+# Assembly method: SOAPdenovo v. 1.06
+# Genome coverage: 140x
+# Sequencing technology: Illumina Hiseq 2000
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000743615.1
+# RefSeq assembly accession: GCF_000743615.1
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000743625.1      GCF_000743625.1 Primary Assembly
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2017-12-22)
+    # arguments here are: <db> <clade> <trackDbDir> <assembly_report.txt>
+    cd /hive/data/genomes/fukDam1
+    $HOME/kent/src/hg/utils/automation/prepConfig.pl fukDam1 mammal \
+         mammal ./refseq/*_assembly_report.txt > fukDam1.config.ra
+
+    # there is no chrM sequence, set
+    # mitoAcc none
+
+    # fixup common name to eliminate the -
+    # commonName Damara mole-rat
+    # change to
+    # commonName Damara mole rat
+    # and orderKey wasn't correct since it is based on the commonName
+
+    # verify it looks sane
+    cat fukDam1.config.ra
+# config parameters for makeGenomeDb.pl:
+db fukDam1
+clade mammal
+genomeCladePriority 35
+scientificName Fukomys damarensis
+commonName Damara mole rat
+assemblyDate Sep. 2014
+assemblyLabel BGI
+assemblyShortLabel DMR_v1.0
+orderKey 4175
+mitoAcc none
+fastaFiles /hive/data/genomes/fukDam1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/fukDam1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir mammal
+photoCreditURL  http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0007477
+photoCreditName Sharry Goldman
+ncbiGenomeId 16808
+ncbiAssemblyId 207201
+ncbiAssemblyName DMR_v1.0
+ncbiBioProject 190641
+ncbiBioSample SAMN02339281
+genBankAccessionID GCF_000743615.1
+taxId 885580
+
+#############################################################################
+# setup UCSC named files (DONE - 2017-12-22 - Hiram)
+
+    mkdir /hive/data/genomes/fukDam1/ucsc
+    cd /hive/data/genomes/fukDam1/ucsc
+
+    # check for duplicate sequences:
+    time faToTwoBit -noMask ../refseq/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz refseq.2bit
+    #  real    0m55.711s
+
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+
+    # simple assembly of unplaced contigs, change the .1 names to v1:
+    time zcat ../refseq/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz  \
+	| sed -e 's/\.1 Fukomys.*/v1/;' | gzip -c > chrUn.fa.gz
+    # real    12m33.720s
+
+    zcat ../refseq/G*0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz  \
+	| sed -e 's/\.1\t/v1\t/;' > chrUn.agp
+
+    # verify fasta and AGPs agree
+    time faToTwoBit chr*.fa.gz test.2bit
+    # real    0m59.741s
+
+    time cat chr*.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+    # All AGP and FASTA entries agree - both files are valid
+    # real    0m49.830s
+
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 2333892479 bases (47907697 N's 2285984782 real 2285984782 upper 0 lower)
+#	in 74730 sequences in 1 files
+# Total size: mean 31231.0 sd 453266.2 min 200 (NW_011046038v1)
+#	max 22231620 (NW_011044666v1) median 280
+
+    # same numbers as above except for upper/lower masking
+# 2333892479 bases (47907697 N's 2285984782 real 1580557809 upper
+#	705426973 lower) in 74730 sequences in 1 files
+# Total size: mean 31231.0 sd 453266.2 min 200 (NW_011046038.1)
+#	max 22231620 (NW_011044666.1) median 280
+
+    # no longer need these temporary 2bit files
+    rm refseq.2bit test.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2017-12-22 - Hiram)
+
+    cd /hive/data/genomes/fukDam1
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp fukDam1.config.ra) > agp.log 2>&1
+    # real    2m44.855s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db fukDam1.config.ra) > db.log 2>&1
+    # real    18m59.234s
+
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add fukDam1 to trackDb/makefile
+
+    # temporary symlink until masked sequence is available
+    cd /hive/data/genomes/fukDam1
+    ln -s `pwd`/fukDam1.unmasked.2bit /gbdb/fukDam1/fukDam1.2bit
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2017-12-22 - Hiram)
+    mkdir /hive/data/genomes/fukDam1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/fukDam1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/fukDam1/fukDam1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku fukDam1) > do.log 2>&1
+    # real    18m4.093s
+
+    cat fb.fukDam1.cpgIslandExtUnmasked.txt
+    # 17269653 bases of 2285984782 (0.755%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2017-12-22 - Hiram)
+    mkdir /hive/data/genomes/fukDam1/bed/cytoBand
+    cd /hive/data/genomes/fukDam1/bed/cytoBand
+    makeCytoBandIdeo.csh fukDam1
+
+##########################################################################
+# run up idKeys files for chromAlias (DONE - 2017-12-22 - Hiram)
+    mkdir /hive/data/genomes/fukDam1/bed/idKeys
+    cd /hive/data/genomes/fukDam1/bed/idKeys
+
+    time (doIdKeys.pl -twoBit=/hive/data/genomes/fukDam1/fukDam1.unmasked.2bit -buildDir=`pwd`  fukDam1) > do.log 2>&1 &
+    # real    12m20.939s
+
+    cat fukDam1.keySignature.txt
+    #   8ae219619932349bebc17364408bf9d0
+
+##########################################################################
+# ucscToINSDC and ucscToRefSeq table/track (DONE - 2017-12-23 - Hiram)
+    # the sequence here is working for a 'refseq' assembly
+    # beware of a chrM situation may be specific depending upon what is
+    # available in the assembly
+
+    mkdir /hive/data/genomes/fukDam1/bed/ucscToINSDC
+    cd /hive/data/genomes/fukDam1/bed/ucscToINSDC
+
+    # this assembly has no chrM
+
+    # if there is a chrM, use its INSDC name as a second argument:
+    # this is a RefSeq assembly, use the chrM refSeq name:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+      ../../refseq/GCF_*structure/Primary_Assembly
+
+    # this is actually ucscToRefSeq since this is a RefSeq assembly
+    sort -k2 ucscToINSDC.txt > ucscToRefSeq.txt
+
+    rm -f ucscToINSDC.txt
+    # there is also a genbank release, need to make idKeys to match it
+    mkdir /hive/data/genomes/fukDam1/bed/ucscToINSDC/genbank
+    cd /hive/data/genomes/fukDam1/bed/ucscToINSDC/genbank
+    ln -s ../../../genbank/*ure/Pri*/unplaced_scaffolds/FASTA/*.fna.gz .
+    faToTwoBit unplaced.scaf.fna.gz genbank.fukDam1.2bit
+
+    time (doIdKeys.pl -buildDir=`pwd` \
+	-twoBit=`pwd`/genbank.fukDam1.2bit genbankFukDam1) > do.log 2>&1 &
+
+    cd /hive/data/genomes/fukDam1/bed/ucscToINSDC
+    join -t$'\t' \
+      ../idKeys/fukDam1.idKeys.txt genbank/genbankFukDam1.idKeys.txt \
+	| cut -f2- | sort > ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToRefSeq.txt \
+       | sort > refSeqToUcsc.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > ucsc.coordinate.tab
+
+    join -t$'\t' ucsc.coordinate.tab ucscToRefSeq.txt > ucscToRefSeq.bed
+    join -t$'\t' ucsc.coordinate.tab ucscToINSDC.txt > ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    # in this case one is missing in the final result due to the duplicate
+    # contig being removed
+    wc -l *
+    #	74730 ucsc.coordinate.tab
+    #	74730 ucscToINSDC.bed
+    #	74730 ucscToINSDC.txt
+    #	74730 ucscToRefSeq.bed
+    #	74730 ucscToRefSeq.txt
+
+    export chrSize=`cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab fukDam1 ucscToINSDC stdin ucscToINSDC.bed
+    # should be the same for ucscToRefSeq:
+    export chrSize=`cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  14
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab fukDam1 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    # checkTableCoords should be silent
+    checkTableCoords fukDam1
+    # each should cover %100 entirely:
+    featureBits -countGaps fukDam1 ucscToINSDC
+    # 2333892479 bases of 2333892479 (100.000%) in intersection
+
+    featureBits -countGaps fukDam1 ucscToRefSeq
+    # 2333892479 bases of 2333892479 (100.000%) in intersection
+
+###############################################################################
+# add chromAlias table (DONE - 2017-12-23 - Hiram)
+
+    mkdir /hive/data/genomes/fukDam1/bed/chromAlias
+    cd /hive/data/genomes/fukDam1/bed/chromAlias
+
+    # after ensembl idKeys have been made:
+    join -t$'\t'  ../idKeys/fukDam1.idKeys.txt \
+	../../ensembl/ensemblFukDam1.idKeys.txt | cut -f2- \
+	| sort > ucsc.ensembl.tab
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' fukDam1 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' fukDam1 \
+        > ucsc.genbank.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl ucsc.*.tab \
+	> fukDam1.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t fukDam1.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 74730 =? 74730 OK
+# checking genbank: 74730 =? 74730 OK
+# checking ensembl: 74730 =? 74730 OK
+
+    hgLoadSqlTab fukDam1 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        fukDam1.chromAlias.tab
+
+###############################################################################
+# run up ensGene after chromAlias is done (DONE - 2017-12-23 - Hiram)
+
+    cd /hive/data/genomes/fukDam1/jkStuff
+    join -t$'\t' <(sort -k1,1 ../chrom.sizes) \
+	<(sort ../bed/chromAlias/ucsc.ensembl.tab) \
+	   | awk '{printf "0\t%s\t%d\t%s\t%d\n", $3,$2,$1,$2}' > ensToUcsc.lift
+
+    cd /hive/data/genomes/fukDam1
+    # start with an simple fukDam1.ensGene.ra to see if it gets any errors:
+    printf '# required db variable
+db fukDam1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/fukDam1/jkStuff/ensToUcsc.lift
+' > fukDam1.ensGene.ra
+
+    time (doEnsGeneUpdate.pl -bigClusterHub=ku -smallClusterHub=ku \
+	-workhorse=hgwdev -dbHost=hgwdev -ensVersion=91 fukDam1.ensGene.ra) \
+	> ensGene.91.log 2>&1
+    # real    1m50.485s
+
+    # ended up with the fukDam1.ensGene.ra as:
+# required db variable
+db fukDam1
+# specific lifting to translate names:
+liftUp /hive/data/genomes/fukDam1/jkStuff/ensToUcsc.lift
+
+# Ensembl appears to have a chrom MT
+nameTranslation "/^MT/d"
+
+skipInvalid yes
+# ENSFDAT00000001669.1 txEnd 301 >= chromSize 295
+# ENSFDAT00000026393.1 txEnd 223 >= chromSize 221
+# checked: 41630 failed: 2
+
+    featureBits fukDam1 ensGene
+    # 56095017 bases of 2285984782 (2.454%) in intersection
+
+###############################################################################
+# fixup search rule for assembly track/gold table (DONE - 2017-12-22 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/mammal/fukDam1
+
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" fukDam1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+#  162545 AYUG.1
+
+
+    # implies a rule: 'AYUG[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all and eliminate them all:
+    hgsql -N -e "select frag from gold;" fukDam1 | wc -l
+    # 162545
+
+    hgsql -N -e "select frag from gold;" fukDam1 \
+       | egrep -e 'AYUG[0-9]+(\.[0-9]+)?' | wc -l
+    # 162545
+
+    hgsql -N -e "select frag from gold;" fukDam1 \
+       | egrep -v -e 'AYUG[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/chicken/fukDam1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex AYUG[0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box for these name patterns
+
+##########################################################################
+# running repeat masker (DONE - 2017-12-22 - Hiram)
+    mkdir /hive/data/genomes/fukDam1/bed/repeatMasker
+    cd /hive/data/genomes/fukDam1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku fukDam1) > do.log 2>&1 &
+    # real    459m30.512s
+
+    cat faSize.rmsk.txt
+# 2333892479 bases (47907697 N's 2285984782 real 1605170440 upper
+#	680814342 lower) in 74730 sequences in 1 files
+# Total size: mean 31231.0 sd 453266.2 min 200 (NW_011046038v1)
+#	max 22231620 (NW_011044666v1) median 280
+# %29.17 masked total, %29.78 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;                                            *
+
+    time featureBits -countGaps fukDam1 rmsk
+    #	680973059 bases of 2333892479 (29.178%) in intersection
+    #	real    0m50.946s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result on high contig count assemblies:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' fukDam1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    #	total 680973059.000000
+    #	real    0m30.620s
+
+##########################################################################
+# running simple repeat (DONE - 2017-12-22 - Hiram)
+
+    mkdir /hive/data/genomes/fukDam1/bed/simpleRepeat
+    cd /hive/data/genomes/fukDam1/bed/simpleRepeat
+    # using trf409 5 here a bit smaller genome (human == 6)
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        -trf409 5 fukDam1) > do.log 2>&1 &
+    # real    63m47.831s
+
+    cat fb.simpleRepeat
+    # 40571985 bases of 2285984782 (1.775%) in intersection
+
+    # adding this trfMask to the other masking
+    cd /hive/data/genomes/fukDam1
+
+    # when using the Window Masker result:
+#    twoBitMask bed/windowMasker/fukDam1.cleanWMSdust.2bit \
+#       -add bed/simpleRepeat/trfMask.bed  fukDam1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    # when using Rmsk results, add to rmsk after it is done:
+    twoBitMask fukDam1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed fukDam1.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa fukDam1.2bit stdout | faSize stdin > faSize.fukDam1.2bit.txt
+    cat faSize.fukDam1.2bit.txt
+# 2333892479 bases (47907697 N's 2285984782 real 1604639594 upper
+#	681345188 lower) in 74730 sequences in 1 files
+# Total size: mean 31231.0 sd 453266.2 min 200 (NW_011046038v1)
+#	max 22231620 (NW_011044666v1) median 280
+# %29.19 masked total, %29.81 masked real
+
+
+    # reset the symlink
+    rm /gbdb/fukDam1/fukDam1.2bit
+    ln -s `pwd`/fukDam1.2bit /gbdb/fukDam1/fukDam1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2017-12-23 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/fukDam1/bed/microsat
+    cd /cluster/data/fukDam1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed fukDam1 microsat microsat.bed
+    # Read 56967 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2017-12-23 - Hiram)
+
+    mkdir /hive/data/genomes/fukDam1/bed/windowMasker
+    cd /hive/data/genomes/fukDam1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev fukDam1) > do.log 2>&1
+    # real    196m16.257s
+
+    # Masking statistics
+    cat faSize.fukDam1.cleanWMSdust.txt
+# 2333892479 bases (47907697 N's 2285984782 real 1570590047 upper
+#	715394735 lower) in 74730 sequences in 1 files
+# Total size: mean 31231.0 sd 453266.2 min 200 (NW_011046038v1)
+#	max 22231620 (NW_011044666v1) median 280
+# %30.65 masked total, %31.29 masked real
+
+    cat fb.fukDam1.rmsk.windowmaskerSdust.txt
+    # 341367037 bases of 2333892479 (14.627%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2017-12-23 - Hiram)
+    mkdir /hive/data/genomes/fukDam1/bed/cpgIslands
+    cd /hive/data/genomes/fukDam1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku fukDam1) > do.log 2>&1 &
+    # real    7m51.234s
+
+    cat fb.fukDam1.cpgIslandExt.txt
+    # 15740458 bases of 2285984782 (0.689%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2017-12-23 - Hiram)
+    mkdir /hive/data/genomes/fukDam1/bed/genscan
+    cd /hive/data/genomes/fukDam1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku fukDam1) > do.log 2>&1 &
+    # real    34m46.291s
+
+    # three jobs failed, trying window=2000000
+    # real    6m50.406s
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku fukDam1) > makeBed.log 2>&1 &
+    # real    5m8.326s
+
+    cat fb.fukDam1.genscan.txt
+    # 61918798 bases of 2285984782 (2.709%) in intersection
+
+    cat fb.fukDam1.genscanSubopt.txt
+    # 56859794 bases of 2285984782 (2.487%) in intersection
+
+#############################################################################
+# augustus gene track (DONE - 2017-12-23 - Hiram)
+
+    mkdir /hive/data/genomes/fukDam1/bed/augustus
+    cd /hive/data/genomes/fukDam1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -species=human -dbHost=hgwdev -workhorse=hgwdev fukDam1) > do.log 2>&1 &
+    # real    67m6.616s
+
+    cat fb.fukDam1.augustusGene.txt
+    # 50499643 bases of 2285984782 (2.209%) in intersection
+
+    # compared to ensGene:
+    featureBits fukDam1 ensGene
+    56095017 bases of 2285984782 (2.454%) in intersection
+
+    featureBits -enrichment fukDam1 ensGene augustusGene
+# ensGene 2.454%, augustusGene 2.209%, both 1.232%, cover 50.22%, enrich 22.73x
+
+#############################################################################
+# lastz/chain/net swap human/hg38 (DONE - 2018-01-02 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzFukDam1.2018-01-01
+
+    cat fb.hg38.chainFukDam1Link.txt
+    # 1340852960 bases of 3049335806 (43.972%) in intersection
+    cat fb.hg38.chainSynFukDam1Link.txt
+    # 1276966958 bases of 3049335806 (41.877%) in intersection
+    cat fb.hg38.chainRBestFukDam1Link.txt
+    # 1236966410 bases of 3049335806 (40.565%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/fukDam1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/fukDam1/bed/blastz.hg38.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg38/bed/lastzFukDam1.2018-01-01/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -swap -syntenicNet) > swap.log 2>&1 &
+    # real    122m19.689s
+
+    cat fb.fukDam1.chainHg38Link.txt
+    # 1290829351 bases of 2285984782 (56.467%) in intersection
+    cat fb.fukDam1.chainSynHg38Link.txt
+    # 1233187886 bases of 2285984782 (53.946%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev \
+	-buildDir=`pwd` fukDam1 hg38) > rbest.log 2>&1 &
+    # real    456m33.399s
+
+    cat fb.fukDam1.chainRBestHg38Link.txt
+    # 1238697651 bases of 2285984782 (54.187%) in intersection
+
+##############################################################################
+# lastz/chain/net swap mouse/mm10 (DONE - 2018-01-02 - Hiram)
+    # alignment to mm10
+    cd /hive/data/genomes/mm10/bed/lastzFukDam1.2018-01-01
+
+    cat fb.mm10.chainFukDam1Link.txt
+    # 803448015 bases of 2652783500 (30.287%) in intersection
+    cat fb.mm10.chainRBestFukDam1Link.txt
+    # 760138280 bases of 2652783500 (28.654%) in intersection
+
+    # and for the swap
+    mkdir /hive/data/genomes/fukDam1/bed/blastz.mm10.swap
+    cd /hive/data/genomes/fukDam1/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzFukDam1.2018-01-01/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    79m46.564s
+
+    cat fb.fukDam1.chainMm10Link.txt
+    # 803988546 bases of 2285984782 (35.170%) in intersection
+    cat fb.fukDam1.chainSynMm10Link.txt
+    # 741604346 bases of 2285984782 (32.441%) in intersection
+
+    time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` fukDam1 mm10) \
+	> rbest.log 2>&1
+    # real    417m52.847s
+
+    cat fb.fukDam1.chainRBestMm10Link.txt
+    # 760190877 bases of 2285984782 (33.254%) in intersection
+
+##############################################################################
+# Create kluster run files (DONE - 2017-12-31 - Hiram)
+
+    # numerator is fukDam1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap fukDam1 gap
+    # 47907697 bases of 2285984782 (2.096%) in intersection
+    #                   ^^^
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2285984782 / 2861349177 \) \* 1024
+    #  ( 2285984782 / 2861349177 ) * 1024 = 818.092540
+
+    # ==> use -repMatch=850 according to size scaled down from 1024 for human.
+    #   and rounded up to nearest 50
+    cd /hive/data/genomes/fukDam1
+    blat fukDam1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/fukDam1.11.ooc \
+        -repMatch=850
+    #   Wrote 25035 overused 11-mers to jkStuff/fukDam1.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' fukDam1 \
+        | sort -k7,7nr | ave -col=7 stdin
+    # there are no non-bridged gaps in this assembly
+
+    # # all these gap sizes are 100
+    # # minimum gap size is 100 and produces a reasonable number of lifts
+    # gapToLift -verbose=2 -minGap=10 fukDam1 jkStuff/nonBridged.lft \
+    #    -bedFile=jkStuff/nonBridged.bed
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2017-12-31 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism             mrnaCnt   estCnt  refSeqCnt
+    # Fukomys anselli 37      0       0
+    # Fukomys damarensis      13      0       0
+    # Fukomys mechowii        1       0       0
+    # Fukomys micklemi        1       0       0
+    # Fukomys zechi   1       0       0
+
+    # edit etc/genbank.conf to add fukDam1 just before hetGla2
+
+# fukDam1 - Fukomys damarensis (Damara mole-rat)
+fukDam1.serverGenome = /hive/data/genomes/fukDam1/fukDam1.2bit
+fukDam1.clusterGenome = /hive/data/genomes/fukDam1/fukDam1.2bit
+fukDam1.ooc = /hive/data/fukDam1/jkStuff/fukDam1.11.ooc
+fukDam1.lift = no
+fukDam1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+fukDam1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+fukDam1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+fukDam1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+fukDam1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+fukDam1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+fukDam1.refseq.mrna.native.load  = yes
+fukDam1.refseq.mrna.xeno.load = yes
+fukDam1.genbank.mrna.native.load = no
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+fukDam1.genbank.mrna.xeno.load = yes
+fukDam1.genbank.est.native.load = no
+fukDam1.downloadDir = fukDam1
+fukDam1.perChromTables = no
+
+    git commit -m \
+	'adding fukDam1 - Fukomys damarensis - Damara mole-rat refs #20752' \
+	 etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/:
+    make install-server
+    make etc-update
+
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial fukDam1
+    # logFile: var/build/logs/2017.12.31-15:06:37.fukDam1.initalign.log
+    #   real    953m18.742s
+
+    tail -2 var/build/logs/2017.12.31-15:06:37.fukDam1.initalign.log
+
+    #	hgwdev 2018.01.01-06:42:05 fukDam1.initalign: Succeeded: fukDam1
+    #	hgwdev 2018.01.01-06:59:55 fukDam1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.fukDam1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad fukDam1
+    # logFile: var/dbload/hgwdev/logs/2018.01.01-13:06:01.fukDam1.dbload.log
+    #  real    99m33.779s
+
+    tail -1 var/dbload/hgwdev/logs/2018.01.01-13:06:01.fukDam1.dbload.log
+    #  hgwdev 2018.01.01-14:45:35 fukDam1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add fukDam1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m 'adding fukDam1 and dipOrd2 to the update alignments refs #20752 #20751' etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+#  BLATSERVERS ENTRY (DONE - 2018-01-03 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("fukDam1", "blat1d", "17892", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("fukDam1", "blat1d", "17893", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to same protein location as hg38 (DONE - 2018-01-03)
+##  found by blat (DONE - 2018-01-03 - Hiram)
+
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="NW_011044869v1:1115112-1228363"
+	where name="fukDam1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2018-01-03 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=fukDam1 -tableCoverage all.joiner
+    joinerCheck -database=fukDam1 -times all.joiner
+    joinerCheck -database=fukDam1 -keys all.joiner
+    git commit -m 'adding fukDam1 and dipOrd2 rules refs #20752 #20751' all.joiner
+
+    cd /hive/data/genomes/fukDam1
+    time (makeDownloads.pl -workhorse=hgwdev fukDam1) > downloads.log 2>&1
+    #  real    22m55.474s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/fukDam1/pushQ
+    cd /hive/data/genomes/fukDam1/pushQ
+   time (makePushQSql.pl -redmineList fukDam1) > fukDam1.pushQ.sql 2> stderr.out
+    #  real    3m54.273s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: fukDam1 does not have seq
+    # WARNING: fukDam1 does not have extFile
+    # WARNING: fukDam1 does not have estOrientInfo
+    # WARNING: fukDam1 does not have mrnaOrientInfo
+
+    ## there are warnings about the RBest and Syn chainNet tables, which we
+    ## are not interested in at this time.  They can be left out.
+
+    # verify the file listings are valid, should be no output to stderr:
+    cat redmine.fukDam1.file.list \
+        | while read L; do ls -ogL $L; done  > /dev/null
+
+    # to verify the database.table list is correct, should be the same
+    # line count for these two commands:
+    wc -l redmine.fukDam1.table.list
+    # 68 redmine.fukDam1.table.list
+    awk -F'.' '{
+printf "hgsql -N -e \"show table status like '"'"'%s'"'"';\" %s\n", $2, $1
+}' redmine.fukDam1.table.list | while read L; do eval $L; done | wc -l
+    # 68
+
+    # enter the path names to these files in the redmine issue to
+    # make QA Ready:
+    ls `pwd`/redmine*
+
+/hive/data/genomes/fukDam1/pushQ/redmine.fukDam1.file.list
+/hive/data/genomes/fukDam1/pushQ/redmine.fukDam1.releaseLog.txt
+/hive/data/genomes/fukDam1/pushQ/redmine.fukDam1.table.list
+
+#########################################################################

@@ -44,6 +44,7 @@ errAbort(
   "   -settings             - just list settings with support level\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                                     Will create this directory if not existing\n"
+  "   -printMeta            - print the metadaa for each track\n"
   "   -cacheTime=N          - set cache refresh time in seconds, default %d\n"
   "   -verbose=2            - output verbosely\n"
   , cacheTime
@@ -58,6 +59,7 @@ static struct optionSpec options[] = {
    {"settings", OPTION_BOOLEAN},
    {"checkSettings", OPTION_BOOLEAN},
    {"test", OPTION_BOOLEAN},
+   {"printMeta", OPTION_BOOLEAN},
    {"udcDir", OPTION_STRING},
    {"specHost", OPTION_STRING},
    {"cacheTime", OPTION_INT},
@@ -69,6 +71,7 @@ struct trackHubCheckOptions
     {
     boolean checkFiles;         /* check remote files exist and are correct type */
     boolean checkSettings;      /* check trackDb settings to spec */
+    boolean printMeta;          /* print out the metadata for each track */
     char *version;              /* hub spec version to check */
     char *specHost;             /* server hosting hub spec */
     char *level;                /* check hub is valid to this support level */
@@ -470,7 +473,10 @@ if (relativeUrl != NULL)
         struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
         bbiFileClose(&bbi);
         }
-    else if (startsWithWord("bigBed", type) || startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)|| startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) || startsWithWord("bigBarChart", type))
+    else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) || 
+                startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)|| 
+                startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) || 
+                startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type))
         {
         /* Just open and close to verify file exists and is correct type. */
         struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
@@ -540,6 +546,23 @@ if (options->checkSettings && options->settings)
     while ((hel = hashNext(&cookie)) != NULL)
         retVal |= hubCheckTrackSetting(hub, tdb, hel->name, options, errors);
     /* TODO: ? also need to check settings not in this list (other tdb fields) */
+    }
+
+if (options->printMeta)
+    {
+    struct slPair *metaPairs = trackDbMetaPairs(tdb);
+
+    if (metaPairs != NULL)
+        {
+        printf("%s\n", trackHubSkipHubName(tdb->track));
+        struct slPair *pair;
+        for(pair = metaPairs; pair; pair = pair->next)
+            {
+            printf("\t%s : %s\n", pair->name, (char *)pair->val);
+            }
+        printf("\n");
+        }
+    slPairFreeValsAndList(&metaPairs);
     }
 
 if (!options->checkFiles)
@@ -692,6 +715,7 @@ AllocVar(checkOptions);
 checkOptions->specHost = (optionExists("test") ? "genome-test.cse.ucsc.edu" : "genome.ucsc.edu");
 checkOptions->specHost = optionVal("specHost", checkOptions->specHost);
 
+checkOptions->printMeta = optionExists("printMeta");
 checkOptions->checkFiles = !optionExists("noTracks");
 checkOptions->checkSettings = optionExists("checkSettings");
 

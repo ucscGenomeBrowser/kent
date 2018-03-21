@@ -142,6 +142,42 @@ taxId 9685
 
     # check in the trackDb files created and add to trackDb/makefile
 
+#########################################################################
+# add chromAlias table (DONE - 2017-12-14 - Hiram)
+
+    mkdir /hive/data/genomes/felCat8/bed/chromAlias
+    cd /hive/data/genomes/felCat8/bed/chromAlias
+
+    hgsql -N -e 'select chrom,name from ucscToRefSeq;' felCat8 \
+        > ucsc.refseq.tab
+    hgsql -N -e 'select chrom,name from ucscToINSDC;' felCat8 \
+        | grep -v chrM > ucsc.genbank.tab
+    printf "chrM\tU20753.1\n" >> ucsc.genbank.tab
+
+    join -t$'\t' ../idKeys/felCat8.idKeys.txt \
+	../../ensembl/ensemblFelCat8.idKeys.txt \
+	| cut -f2,3 | sort > ucsc.ensembl.tab
+
+    ~/kent/src/hg/utils/automation/chromAlias.pl
+    sort -o felCat8.chromAlias.tab felCat8.chromAlias.tab
+
+for t in refseq genbank ensembl
+do
+  c0=`cat ucsc.$t.tab | wc -l`
+  c1=`grep $t felCat8.chromAlias.tab | wc -l`
+  ok="OK"
+  if [ "$c0" -ne "$c1" ]; then
+     ok="ERROR"
+  fi
+  printf "# checking $t: $c0 =? $c1 $ok\n"
+done
+# checking refseq: 267625 =? 267625 OK
+# checking genbank: 267625 =? 267625 OK
+# checking ensembl: 267625 =? 267625 OK
+
+    hgLoadSqlTab felCat8 chromAlias ~/kent/src/hg/lib/chromAlias.sql \
+        felCat8.chromAlias.tab
+
 ##########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2015-03-20 - Hiram)
     hgsql -N -e "select frag from gold;" felCat8 | sort | head -1

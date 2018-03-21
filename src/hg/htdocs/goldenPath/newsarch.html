@@ -12,26 +12,27 @@
   <div class="row">
   <div class="col-sm-4">
 <ul>
+  <li><a href="#2018">2018 News</a></li>
   <li><a href="#2017">2017 News</a></li>
   <li><a href="#2016">2016 News</a></li>
   <li><a href="#2015">2015 News</a></li>
   <li><a href="#2014">2014 News</a></li>
   <li><a href="#2013">2013 News</a></li>
-  <li><a href="#2012">2012 News</a></li>
 </ul>
 </div>
   <div class="col-sm-4">
 <ul>
+  <li><a href="#2012">2012 News</a></li>
   <li><a href="#2011">2011 News</a></li>
   <li><a href="#2010">2010 News</a></li>
   <li><a href="#2009">2009 News</a></li>
   <li><a href="#2008">2008 News</a></li>
   <li><a href="#2007">2007 News</a></li>
-  <li><a href="#2006">2006 News</a></li>
 </ul>
 </div>
   <div class="col-sm-4">
 <ul>
+  <li><a href="#2006">2006 News</a></li>
   <li><a href="#2005">2005 News</a></li>
   <li><a href="#2004">2004 News</a></li>
   <li><a href="#2003">2003 News</a></li>
@@ -42,8 +43,564 @@
 </div>
 </div>
 
+<!-- ============= 2018 archived news ============= -->
+<a name="2018"></a>
+
+<a name="032118"></a>
+<h2>Mar. 21, 2018 &nbsp;&nbsp; New genome browser: <em>Petromyzon marinus</em>, petMar3</h2>
+<p>A genome browser is now available for the <em>Petromyzon marinus</em> assembly released in
+December 2017 by the <a href="https://ukhealthcare.uky.edu/genomics-core-laboratory"
+target="_blank">University of Kentucky</a> (Pmar_germline 1.0, UCSC version petMar3).</p>
+<h3>About the assembly:</h3>
+<ul>
+   <li><b>UCSC Genome Browser assembly ID:</b>
+      <a href="../cgi-bin/hgGateway?db=petMar3" target="_blank">petMar3</a></li>
+   <li><b>Sequencing/Assembly provider ID:</b>
+      <a href="https://ukhealthcare.uky.edu/genomics-core-laboratory" target="_blank">
+      University of Kentucky</a></li>
+   <li><b>Assembly date:</b> December 2017</li>
+   <li><b>Accession ID:</b> GCA_002833325.1</li>
+   <li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/287" 
+      target="_blank"> 287</a> <em>(Petromyzon marinus)</em></li>
+   <li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/1474531" 
+      target="_blank"> 1474531</a> <em> (Pmar_germline 1.0) </em></li>
+   <li><b>BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/357048" 
+      target="_blank"> 357048</a></li>
+   <li><b>BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN06131802" 
+      target="_blank"> SAMN06131802</a></li>
+   <li><b>Contig+scaffold count:</b> 36,453</li>
+   <li><b>Total size:</b> 1,130,417,696</li>
+   <li><a href="../goldenPath/credits.html#lamprey_credits" target="_blank">Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+   <li><a href="../goldenPath/credits.html#lamprey_use" target="_blank">
+       Data use conditions and restrictions</a></li>
+   <li><a href="../goldenPath/help/ftp.html" target="_blank">Rsync</a> and 
+       <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/petMar3/" target="_blank">FTP</a></li>
+   <li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#lamprey" target="_blank">
+       Downloads page</a></li>
+</ul>
+
+<a name="022018"></a>
+<h2>Feb. 20, 2018 &nbsp;&nbsp; New video:  Visibility control in the Browser </h2>
+<p>
+We have released a new video demonstrating the
+<a href="https://www.youtube.com/watch?v=jKix2B3hwnw&list=UUQnUJepyNOw0p8s2otX4RYQ"
+   target=_blank>visibility controls</a> in the Browser.
+ In our Browser <a href = "http://bit.ly/ucscTraining" target = _blank>training
+ workshops</a> we are often asked about the meaning of the track controls:
+ squish, dense, pack and full.  In this tutorial we describe the controls for
+ BED, wiggle and conservation tracks.  There is also a discussion of visibility 
+ control in composite tracks (2-level nesting) and supertracks (3-level).
+
+ This brings to 16 the number of video tutorials available on our 
+ <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos" 
+   target="_blank"> YouTube channel</a>.  Most are accompanied by a transcript,
+ via a link on the video itself and from our <a href = "../../training/">training 
+ page</a>.
+</p>
+<p>
+ We thank Robert Kuhn and David Gibson for video production.
+</p>
+
+
+<a name="021618"></a>
+<h2>Feb. 16, 2018 &nbsp;&nbsp; New search support for chromosome aliases</h2>
+<p>
+Have you ever wanted to use 1 instead of chr1 to search for a chromosome position?</p>
+<p>
+The following assemblies now support a new feature for matching different chromosome aliases.
+Equivalent entries only exist in the new table, chromAlias, when an exact sequence match has been
+verified. This feature is limited to searching coordinates, it is not yet supported for custom
+tracks.</p>
+<p>
+<div class="container">
+  <div class="row">
+  <div class="col-sm-4">
+    <ul>
+      <li>American alligator <a href="../cgi-bin/hgGateway?db=allMis1"
+      target="_blank">(allMis1)</a></li>
+      <li>Armadillo <a href="../cgi-bin/hgGateway?db=dasNov3"
+      target="_blank">(dasNov3)</a></li>
+      <li>Baboon <a href="../cgi-bin/hgGateway?db=papAnu2"
+      target="_blank">(papAnu2)</a></li>
+      <li>Bonobo <a href="../cgi-bin/hgGateway?db=panPan1"
+      target="_blank">(panPan1)</a></li>
+      <li>Budgerigar <a href="../cgi-bin/hgGateway?db=melUnd1"
+      target="_blank">(melUnd1)</a></li>
+      <li>Bushbaby <a href="../cgi-bin/hgGateway?db=otoGar3"
+      target="_blank">(otoGar3)</a></li>
+      <li>C. elegans <a href="../cgi-bin/hgGateway?db=ce11"
+      target="_blank">(ce11)</a></li>
+      <li>Cat <a href="../cgi-bin/hgGateway?db=felCat5"
+      target="_blank">(felCat5)</a></li>
+      <li>Cat <a href="../cgi-bin/hgGateway?db=felCat8"
+      target="_blank">(felCat8)</a></li>
+      <li>Chicken <a href="../cgi-bin/hgGateway?db=galGal4"
+      target="_blank">(galGal4)</a></li>
+      <li>Chimp <a href="../cgi-bin/hgGateway?db=panTro4"
+      target="_blank">(panTro4)</a></li>
+      <li>Chimp <a href="../cgi-bin/hgGateway?db=panTro5"
+      target="_blank">(panTro5)</a></li>
+      <li>Coelacanth <a href="../cgi-bin/hgGateway?db=latCha1"
+      target="_blank">(latCha1)</a></li>
+      <li>Cow <a href="../cgi-bin/hgGateway?db=bosTau8"
+      target="_blank">(bosTau8)</a></li>
+      <li>Crab-eating macaque <a href="../cgi-bin/hgGateway?db=macFas5"
+      target="_blank">(macFas5)</a></li>
+      <li>D. melanogaster <a href="../cgi-bin/hgGateway?db=dm6"
+      target="_blank">(dm6)</a></li>
+    </ul></div>
+  <div class="col-sm-4">
+    <ul>
+      <li>D. persimilis <a href="../cgi-bin/hgGateway?db=droPer1"
+      target="_blank">(droPer1)</a></li>
+      <li>Dog <a href="../cgi-bin/hgGateway?db=canFam3"
+      target="_blank">(canFam3)</a></li>
+      <li>Elephant shark <a href="../cgi-bin/hgGateway?db=calMil1"
+      target="_blank">(calMil1)</a></li>
+      <li>Fugu <a href="../cgi-bin/hgGateway?db=fr3"
+      target="_blank">(fr3)</a></li>
+      <li>Green monkey <a href="../cgi-bin/hgGateway?db=chlSab2"
+      target="_blank">(chlSab2)</a></li>
+      <li>Guinea pig <a href="../cgi-bin/hgGateway?db=cavPor3"
+      target="_blank">(cavPor3)</a></li>
+      <li>Hedgehog <a href="../cgi-bin/hgGateway?db=eriEur2"
+      target="_blank">(eriEur2)</a></li>
+      <li>Lizard <a href="../cgi-bin/hgGateway?db=anoCar2"
+      target="_blank">(anoCar2)</a></li>
+      <li>Malayan flying lemur <a href="../cgi-bin/hgGateway?db=galVar1"
+      target="_blank">(galVar1)</a></li>
+      <li>Manatee <a href="../cgi-bin/hgGateway?db=triMan1"
+      target="_blank">(triMan1)</a></li>
+      <li>Marmoset <a href="../cgi-bin/hgGateway?db=calJac3"
+      target="_blank">(calJac3)</a></li>
+      <li>Medium ground finch <a href="../cgi-bin/hgGateway?db=geoFor1"
+      target="_blank">(geoFor1)</a></li>
+      <li>Microbat <a href="../cgi-bin/hgGateway?db=myoLuc2"
+      target="_blank">(myoLuc2)</a></li>
+      <li>Minke whale <a href="../cgi-bin/hgGateway?db=balAcu1"
+      target="_blank">(balAcu1)</a></li>
+      <li>Naked mole-rat <a href="../cgi-bin/hgGateway?db=hetGla2"
+      target="_blank">(hetGla2)</a></li>
+      <li>Nile tilapia <a href="../cgi-bin/hgGateway?db=oreNil2"
+      target="_blank">(oreNil2)</a></li>
+    </ul></div>
+  <div class="col-sm-4">
+    <ul>
+      <li>Panda <a href="../cgi-bin/hgGateway?db=ailMel1"
+      target="_blank">(ailMel1)</a></li>
+      <li>Pig <a href="../cgi-bin/hgGateway?db=susScr3"
+      target="_blank">(susScr3)</a></li>
+      <li>Rhesus <a href="../cgi-bin/hgGateway?db=rheMac8"
+      target="_blank">(rheMac8)</a></li>
+      <li>Sheep <a href="../cgi-bin/hgGateway?db=oviAri3"
+      target="_blank">(oviAri3)</a></li>
+      <li>Shrew <a href="../cgi-bin/hgGateway?db=sorAra2"
+      target="_blank">(sorAra2)</a></li>
+      <li>Squirrel <a href="../cgi-bin/hgGateway?db=speTri2"
+      target="_blank">(speTri2)</a></li>
+      <li>Tarsier <a href="../cgi-bin/hgGateway?db=tarSyr2"
+      target="_blank">(tarSyr2)</a></li>
+      <li>Tasmanian devil <a href="../cgi-bin/hgGateway?db=sarHar1"
+      target="_blank">(sarHar1)</a></li>
+      <li>Tenrec <a href="../cgi-bin/hgGateway?db=echTel2"
+      target="_blank">(echTel2)</a></li>
+      <li>Turkey <a href="../cgi-bin/hgGateway?db=melGal5"
+      target="_blank">(melGal5)</a></li>
+      <li>White rhinoceros <a href="../cgi-bin/hgGateway?db=cerSim1"
+      target="_blank">(cerSim1)</a></li>
+      <li>X. tropicalis <a href="../cgi-bin/hgGateway?db=xenTro7"
+      target="_blank">(xenTro7)</a></li>
+      <li>Zebra finch <a href="../cgi-bin/hgGateway?db=taeGut2"
+      target="_blank">(taeGut2)</a></li>
+      <li>Zebrafish <a href="../cgi-bin/hgGateway?db=danRer7"
+      target="_blank">(danRer7)</a></li>
+    </ul></div>
+</div></div></p>
+<p>
+For example, for <a href="../cgi-bin/hgTracks?db=felCat8" target="_blank">felCat8</a>, aliases that
+now map to chrA2 are NC_018724.2, CM001379.2, and A2. Search terms such as
+<code>CM001379.2 133,978,000 134,105,980</code> will be equivalent to
+<code>chrA2 133,978,000 134,105,980</code>.
+</p>
+
+<a name="020818"></a>
+<h2>Feb. 08, 2018 &nbsp;&nbsp; New video:  in-silico PCR (isPCR)</h2>
+<p>
+We have released a new video demonstrating the
+<a href="https://youtu.be/U8_QYwmdGYU?feature=player_detailpage&v=8ATcoDTOc0g&list=UUQnUJepyNOw0p8s2otX4RYQ"
+   target=_blank>in-silico PCR tool</a> (isPCR).
+ This tutorial shows how to use a pair of primers to amplify either DNA or RNA 
+ templates for human or mouse genomes and to visualize the results on the Genome 
+ Browser.
+ For other genomes, only DNA may serve as a template.  This brings to 15 the
+ number of video tutorials available on our 
+ <a href="https://www.youtube.com/channel/UCQnUJepyNOw0p8s2otX4RYQ/videos" 
+   target="_blank"> YouTube channel</a>.  Most are accompanied by a transcript,
+ via a link on the video itself and from our <a href = "../../training/">training page</a>.
+</p>
+<p>
+ We thank Robert Kuhn and David Gibson for video production.
+</p>
+
+<a name="020118"></a>
+<h2>Feb. 01, 2018 &nbsp;&nbsp; New Ensembl gene tracks for 66 assemblies</h2>
+<p>
+The UCSC Genome Browser has released updated
+<a href="http://www.ensembl.org/info/genome/genebuild/genome_annotation.html" target="_blank">
+Ensembl gene annotation</a> tracks, from <strong>v89 to v90</strong>, for the
+following assemblies:
+<ul>
+    <li>Baboon <a href="../cgi-bin/hgTrackUi?db=papAnu2&g=ensGene"
+    target="_blank">(papAnu2)</a></li>
+    <li>Cat <a href="../cgi-bin/hgTrackUi?db=felCat5&g=ensGene"
+    target="_blank">(felCat5)</a></li>
+    <li>Chimp <a href="../cgi-bin/hgTrackUi?db=panTro4&g=ensGene"
+    target="_blank">(panTro4)</a></li>
+    <li>Gibbon <a href="../cgi-bin/hgTrackUi?db=nomLeu1&g=ensGene"
+    target="_blank">(nomLeu1)</a></li>
+    <li>Gorilla <a href="../cgi-bin/hgTrackUi?db=gorGor3&g=ensGene"
+    target="_blank">(gorGor3)</a></li>
+    <li>Mouse lemur <a href="../cgi-bin/hgTrackUi?db=micMur2&g=ensGene"
+    target="_blank">(micMur2)</a></li>
+    <li>Tarsier <a href="../cgi-bin/hgTrackUi?db=tarSyr1&g=ensGene"
+    target="_blank">(tarSyr1)</a></li>
+</ul></p>
+
+<p>
+The UCSC Genome Browser has also released updated
+<a href="http://www.ensembl.org/info/genome/genebuild/genome_annotation.html" target="_blank">
+Ensembl gene annotation tracks</a>, from <strong>v89 to v91</strong>, for the
+following assemblies:
+<ul>
+    <li>Alpaca <a href="../cgi-bin/hgTrackUi?db=vicPac1&g=ensGene"
+    target="_blank">(vicPac1)</a></li>
+    <li>Armadillo <a href="../cgi-bin/hgTrackUi?db=dasNov3&g=ensGene"
+    target="_blank">(dasNov3)</a></li>
+    <li>Atlantic cod <a href="../cgi-bin/hgTrackUi?db=gadMor1&g=ensGene"
+    target="_blank">(gadMor1)</a></li>
+    <li>Bushbaby <a href="../cgi-bin/hgTrackUi?db=otoGar3&g=ensGene"
+    target="_blank">(otoGar3)</a></li>
+    <li>C. elegans <a href="../cgi-bin/hgTrackUi?db=ce11&g=ensGene"
+    target="_blank">(ce11)</a></li>
+    <li>Cat <a href="../cgi-bin/hgTrackUi?db=felCat8&g=ensGene"
+    target="_blank">(felCat8)</a></li>
+    <li>Chicken <a href="../cgi-bin/hgTrackUi?db=galGal5&g=ensGene"
+    target="_blank">(galGal5)</a></li>
+    <li>Chimp <a href="../cgi-bin/hgTrackUi?db=panTro5&g=ensGene"
+    target="_blank">(panTro5)</a></li>
+    <li>Chinese hamster <a href="../cgi-bin/hgTrackUi?db=criGriChoV1&g=ensGene"
+    target="_blank">(criGriChoV1)</a></li>
+    <li>Coelacanth <a href="../cgi-bin/hgTrackUi?db=latCha1&g=ensGene"
+    target="_blank">(latCha1)</a></li>
+    <li>Cow <a href="../cgi-bin/hgTrackUi?db=bosTau6&g=ensGene"
+    target="_blank">(bosTau6)</a></li>
+    <li>Crab-eating macaque <a href="../cgi-bin/hgTrackUi?db=macFas5&g=ensGene"
+    target="_blank">(macFas5)</a></li>
+    <li>D. melanogaster <a href="../cgi-bin/hgTrackUi?db=dm6&g=ensGene"
+    target="_blank">(dm6)</a></li>
+    <li>Dog <a href="../cgi-bin/hgTrackUi?db=canFam3&g=ensGene"
+    target="_blank">(canFam3)</a></li>
+    <li>Elephant <a href="../cgi-bin/hgTrackUi?db=loxAfr3&g=ensGene"
+    target="_blank">(loxAfr3)</a></li>
+    <li>Ferret <a href="../cgi-bin/hgTrackUi?db=musFur1&g=ensGene"
+    target="_blank">(musFur1)</a></li>
+    <li>Fugu <a href="../cgi-bin/hgTrackUi?db=fr2&g=ensGene"
+    target="_blank">(fr2)</a></li>
+    <li>Gibbon <a href="../cgi-bin/hgTrackUi?db=nomLeu3&g=ensGene"
+    target="_blank">(nomLeu3)</a></li>
+    <li>Golden snub-nosed monkey <a href="../cgi-bin/hgTrackUi?db=rhiRox1&g=ensGene"
+    target="_blank">(rhiRox1)</a></li>
+    <li>Gorilla <a href="../cgi-bin/hgTrackUi?db=gorGor4&g=ensGene"
+    target="_blank">(gorGor4)</a></li>
+    <li>Green monkey <a href="../cgi-bin/hgTrackUi?db=chlSab2&g=ensGene"
+    target="_blank">(chlSab2)</a></li>
+    <li>Guinea pig <a href="../cgi-bin/hgTrackUi?db=cavPor3&g=ensGene"
+    target="_blank">(cavPor3)</a></li>
+    <li>Hedgehog <a href="../cgi-bin/hgTrackUi?db=eriEur1&g=ensGene"
+    target="_blank">(eriEur1)</a></li>
+    <li>Horse <a href="../cgi-bin/hgTrackUi?db=equCab2&g=ensGene"
+    target="_blank">(equCab2)</a></li>
+    <li>Lamprey <a href="../cgi-bin/hgTrackUi?db=petMar2&g=ensGene"
+    target="_blank">(petMar2)</a></li>
+    <li>Lizard <a href="../cgi-bin/hgTrackUi?db=anoCar2&g=ensGene"
+    target="_blank">(anoCar2)</a></li>
+    <li>Marmoset <a href="../cgi-bin/hgTrackUi?db=calJac3&g=ensGene"
+    target="_blank">(calJac3)</a></li>
+    <li>Medaka <a href="../cgi-bin/hgTrackUi?db=oryLat2&g=ensGene"
+    target="_blank">(oryLat2)</a></li>
+    <li>Megabat <a href="../cgi-bin/hgTrackUi?db=pteVam1&g=ensGene"
+    target="_blank">(pteVam1)</a></li>
+    <li>Microbat <a href="../cgi-bin/hgTrackUi?db=myoLuc2&g=ensGene"
+    target="_blank">(myoLuc2)</a></li>
+    <li>Naked mole-rat <a href="../cgi-bin/hgTrackUi?db=hetGla1&g=ensGene"
+    target="_blank">(hetGla1)</a></li>
+    <li>Naked mole-rat <a href="../cgi-bin/hgTrackUi?db=hetGla2&g=ensGene"
+    target="_blank">(hetGla2)</a></li>
+    <li>Opossum <a href="../cgi-bin/hgTrackUi?db=monDom5&g=ensGene"
+    target="_blank">(monDom5)</a></li>
+    <li>Orangutan <a href="../cgi-bin/hgTrackUi?db=ponAbe2&g=ensGene"
+    target="_blank">(ponAbe2)</a></li>
+    <li>Panda <a href="../cgi-bin/hgTrackUi?db=ailMel1&g=ensGene"
+    target="_blank">(ailMel1)</a></li>
+    <li>Pig <a href="../cgi-bin/hgTrackUi?db=susScr11&g=ensGene"
+    target="_blank">(susScr11)</a></li>
+    <li>Pika <a href="../cgi-bin/hgTrackUi?db=ochPri2&g=ensGene"
+    target="_blank">(ochPri2)</a></li>
+    <li>Platypus <a href="../cgi-bin/hgTrackUi?db=ornAna1&g=ensGene"
+    target="_blank">(ornAna1)</a></li>
+    <li>Platypus <a href="../cgi-bin/hgTrackUi?db=ornAna2&g=ensGene"
+    target="_blank">(ornAna2)</a></li>
+    <li>Rabbit <a href="../cgi-bin/hgTrackUi?db=oryCun2&g=ensGene"
+    target="_blank">(oryCun2)</a></li>
+    <li>Rat <a href="../cgi-bin/hgTrackUi?db=rn6&g=ensGene"
+    target="_blank">(rn6)</a></li>
+    <li>Rhesus <a href="../cgi-bin/hgTrackUi?db=rheMac8&g=ensGene"
+    target="_blank">(rheMac8)</a></li>
+    <li>Rock hyrax <a href="../cgi-bin/hgTrackUi?db=proCap1&g=ensGene"
+    target="_blank">(proCap1)</a></li>
+    <li>S. cerevisiae <a href="../cgi-bin/hgTrackUi?db=sacCer3&g=ensGene"
+    target="_blank">(sacCer3)</a></li>
+    <li>Sheep <a href="../cgi-bin/hgTrackUi?db=oviAri3&g=ensGene"
+    target="_blank">(oviAri3)</a></li>
+    <li>Shrew <a href="../cgi-bin/hgTrackUi?db=sorAra1&g=ensGene"
+    target="_blank">(sorAra1)</a></li>
+    <li>Sloth <a href="../cgi-bin/hgTrackUi?db=choHof1&g=ensGene"
+    target="_blank">(choHof1)</a></li>
+    <li>Squirrel monkey <a href="../cgi-bin/hgTrackUi?db=saiBol1&g=ensGene"
+    target="_blank">(saiBol1)</a></li>
+    <li>Squirrel <a href="../cgi-bin/hgTrackUi?db=speTri2&g=ensGene"
+    target="_blank">(speTri2)</a></li>
+    <li>Stickleback <a href="../cgi-bin/hgTrackUi?db=gasAcu1&g=ensGene"
+    target="_blank">(gasAcu1)</a></li>
+    <li>Tarsier <a href="../cgi-bin/hgTrackUi?db=tarSyr2&g=ensGene"
+    target="_blank">(tarSyr2)</a></li>
+    <li>Tasmanian devil <a href="../cgi-bin/hgTrackUi?db=sarHar1&g=ensGene"
+    target="_blank">(sarHar1)</a></li>
+    <li>Tenrec <a href="../cgi-bin/hgTrackUi?db=echTel1&g=ensGene"
+    target="_blank">(echTel1)</a></li>
+    <li>Tetraodon <a href="../cgi-bin/hgTrackUi?db=tetNig2&g=ensGene"
+    target="_blank">(tetNig2)</a></li>
+    <li>Tree shrew <a href="../cgi-bin/hgTrackUi?db=tupBel1&g=ensGene"
+    target="_blank">(tupBel1)</a></li>
+    <li>Turkey <a href="../cgi-bin/hgTrackUi?db=melGal1&g=ensGene"
+    target="_blank">(melGal1)</a></li>
+    <li>X. tropicalis <a href="../cgi-bin/hgTrackUi?db=xenTro3&g=ensGene"
+    target="_blank">(xenTro3)</a></li>
+    <li>Zebra finch <a href="../cgi-bin/hgTrackUi?db=taeGut1&g=ensGene"
+    target="_blank">(taeGut1)</a></li>
+    <li>Zebrafish <a href="../cgi-bin/hgTrackUi?db=danRer10&g=ensGene"
+    target="_blank">(danRer10)</a></li>
+</ul></p>
+
+<a name="011518"></a>
+<h2>Jan. 15, 2018 &nbsp;&nbsp; New hg38 comparative genomics track: 30 mammals (27 primates) multiz 
+alignment &amp; conservation </h2>
+<p>
+A new <a href="../../cgi-bin/hgTrackUi?db=hg38&g=cons30way" target="_blank">30-way 
+comparative genomics track</a> has been added to the 
+<a href="../../cgi-bin/hgGateway?db=hg38" target="_blank">human GRCh38/hg38 browser</a>. This 
+composite track displays multiple alignments (Multiz) and measurements of evolutionary conservation 
+(phastCons and phyloP) for 30 species (27 primates). Developer: Hiram Clawson, UCSC Genome Browser.
+</p>
+<h3>Tracks</h3>
+<ul>
+<li>Multiz Alignments</li> 
+<li>Basewise Conservation by PhyloP</li>
+<li>Element Conservation by PhastCons</li>
+<li>Conserved Elements</li> 
+
+</ul>
+<h3>Species</h3>
+<p>
+Please see the <a href="../../cgi-bin/hgTrackUi?db=hg38&g=cons30way" target="_blank">
+30-way Multiz &amp; Conservation track description page</a> for assembly details of participating 
+assemblies: </p>
+<p>
+Human, chimp, bonobo, gorilla, orangutan, gibbon, rhesus, crab-eating macaque, pig-tailed macaque,
+ sooty mangabey, baboon, green monkey, drill, proboscis monkey, angolan colobus, 
+ golden snub-nosed monkey, black snub-nosed monkey, marmoset, squirrel monkey, white-faced sapajou,
+ ma's night monkey, tarsier, mouse lemur, coquerel's sifaka, black lemur, sclater's lemur, bushbaby,
+  mouse, dog, and armadillo.</p>
+
+<p>
+<a name="010518"></a>
+<h2>Jan. 05, 2018 &nbsp;&nbsp; New mappability data for human, hg38</h2>
+<p>
+We are pleased to announce the release of a new set of annotations from the
+<a href="https://hoffmanlab.org/" target="_blank">Hoffman Lab</a> that contains mappability data for
+both the reference genome and bisulfite-converted genome of
+<a href="../../cgi-bin/hgGateway?db=hg38" target="_blank">hg38/GRCh38</a>. These tracks indicate
+regions with uniquely mappable reads of particular lengths before and after bisulfite conversion.
+</p>
+
+<p>
+The <a href="../../cgi-bin/hgTrackUi?db=hg38&g=mappability" target="_blank">Mappability</a>
+supertrack contains two composite tracks, <a href="../../cgi-bin/hgTrackUi?db=hg38&g=mappability"
+target="_blank">Bismap</a> and <a href="../../cgi-bin/hgTrackUi?db=hg38&g=mappability"
+target="_blank">Umap</a>. Both Umap and Bismap tracks contain single-read and multi-read mappability
+tracks for four different read lengths: 24 bp, 36 bp, 50 bp, and 100 bp. You can use these tracks
+for many purposes, including filtering unreliable signal from sequencing assays. The Bismap track
+can help filter unreliable signal from sequencing assays involving bisulfite conversion, such as
+whole-genome bisulfite sequencing or reduced representation bisulfite sequencing.</p>
+
+<p>
+For greater detail and explanatory diagrams, see the
+<a href="https://www.biorxiv.org/content/early/2016/12/20/095463" target="_blank">preprint</a>,
+the <a href="http://bismap.hoffmanlab.org/" target="_blank">Umap and Bismap project website</a>,
+or the <a href="https://bitbucket.org/hoffmanlab/umap" target="_blank">Umap and Bismap software
+documentation</a>.</p>
+<p>
+A huge thank you to <a href="https://sites.google.com/site/anshulkundaje/"
+target="_blank">Anshul Kundaje</a> (Stanford University) who created the original Umap software in
+MATLAB and Mehran Karimzadeh (<a href="https://hoffmanlab.org/" target="_blank">Michael Hoffman
+lab</a>, Princess Margaret Cancer Centre) who implemented the Python version of Umap and added
+features, including Bismap. Thanks to Hiram Clawson, Chris Eisenhart, and Jairo Navarro of the UCSC
+Genome Browser.
+
 <!-- ============= 2017 archived news ============= -->
 <a name="2017"></a>
+
+<a name="121917"></a>
+<h2>Dec. 19, 2017 &nbsp;&nbsp; New genome browser: <em>Pan paniscus</em>, panPan2</h2>
+<p>A genome browser is now available for the <em>Pan paniscus</em> assembly released in August
+2015 by the <a href="http://www.eva.mpg.de/index.html">Max-Planck Institute for Evoluntionary
+Anthropology</a> (MPI-EVA panpan1.1, UCSC version panPan2).</p>
+<h3>About the assembly:</h3>
+<ul>
+<li><b>UCSC Genome Browser assembly ID:</b> panPan2</li>
+<li><b>Sequencing/Assembly provider ID:</b> <a href="http://www.eva.mpg.de/index.html">Max-Planck
+Institute for Evolutionary Anthropology</a></li>
+<li><b>Assembly date:</b> August 2015</li>
+<li><b>Accession ID:</b> GCF_000258655.2</li>
+<li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/10729" 
+target="_blank" > NCBI genome/10729</a> <em>(Pan paniscus)</em></li>
+<li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/474211" 
+target="_blank" >  NCBI assembly/474211 (panpan1.1) </a></li>
+<li><b>BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/169343" 
+target="_blank" > NCBI Bioproject: 169343</a></li>
+<li><b>BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMEA1029457" 
+target="_blank" > NCBI Biosample: SAMEA1029457</a></li>
+<li><b>Contig+scaffold count:</b> 132,340</li>
+<li><b>Total size:</b> 3,286,643,896</li>
+<li><a href="../goldenPath/credits.html#bonobo_credits" 
+target="_blank">Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+<li><a href="../goldenPath/credits.html#bonobo_use" 
+target="_blank">Data use conditions and restrictions</a></li>
+<li><a href="../goldenPath/help/ftp.html" 
+target="_blank">Rsync</a> and 
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/panPan2/" 
+target="_blank">FTP</a></li>
+<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#bonobo"
+target="_blank">Downloads page</a></li>
+</ul>
+
+<a name="121317"></a>
+<h2>Dec. 13, 2017 &nbsp;&nbsp; New NCBI RefSeq Functional Elements tracks for human and mouse</h2>
+<p>
+We are pleased to announce the release of a new set of 
+<a href="https://www.ncbi.nlm.nih.gov/refseq/functionalelements/" target="_blank">functional
+regulatory elements</a> for the <a href="../cgi-bin/hgTrackUi?db=hg38&g=refSeqFuncElems"
+target="_blank">hg38/GRCh38</a> and <a href="../cgi-bin/hgTrackUi?db=mm10&g=refSeqFuncElems"
+target="_blank">mm10/GRCm38</a> assemblies. NCBI is now providing
+<a href="https://www.ncbi.nlm.nih.gov/refseq/" target="_blank">RefSeq</a> and
+<a href="https://www.ncbi.nlm.nih.gov/gene/" target="_blank">Gene</a> records for non-genic
+functional elements that have been described in the literature and are experimentally validated.
+Elements in scope include experimentally-verified gene regulatory regions, known structural
+elements, well-characterized DNA replication origins, and clinically-significant sites of DNA
+recombination and genomic instability.</p>
+<p>
+Functional elements are colored by <a href="http://www.sequenceontology.org/"
+                                      target=_blank>Sequence Ontology (SO)</a> term
+using the same scheme as NCBI's Genome Data Viewer:
+  <ul>
+    <li><span style="color: #008080"><b>Regulatory elements</b></span>
+      (items labeled by <a href="http://www.insdc.org/controlled-vocabulary-regulatoryclass"
+                           target=_blank>INSDC regulatory class</a>)
+    <li><span style="color: #b00000"><b>Protein binding sites</b></span>
+      (items labeled by bound moiety)
+    <li><span style="color: #0000b0"><b>Mobile elements</b></span>
+    <li><span style="color: #a0522d"><b>Recombination features</b></span>
+    <li><span style="color: #b000b0"><b>Sequence features</b></span>
+    <li><span style="color: #000000"><b>Other</b></span>
+  </ul>
+</p>
+<p>
+A huge thank you to Terence Murphy from the RefSeq group, Angie Hinrichs, and many others from the
+UCSC Genome Browser staff for bringing this track to life.</p>
+
+<a name="121117"></a>
+<h2>Dec. 11, 2017 &nbsp;&nbsp;New bigNarrowPeak track format</h2>
+<p>
+We're happy to announce support for a new binary indexed track type called
+<a href="help/bigNarrowPeak.html">bigNarrowPeak</a>. This new track type joins
+the ranks of other recent &quot;big&quot; track types: bigMaf, bigChain, bigPsl,
+bigBarChart and bigGenePred</p>
+<p>
+With bigNarrowPeak, any narrowPeak files that were previously already made into bigBeds
+in the past with the bedToBigBed utility and the proper narrowPeak.as definitions should
+now display just as though they were narrowPeak custom tracks. For example here is a file
+from the ENCODE 2012 AWG Hub that can be pasted into the
+<a href="../../cgi-bin/hgCustom?db=hg19" target="_blank">Custom Tracks page</a> with
+<code>type=bigNarrowPeak</code> instead of <code>type=bigBed</code> used previously:</p>
+<pre><code>track type=bigNarrowPeak visibility=full db=hg19 name="nPk" description="AWG ENCODE narrowPeak Example" bigDataUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/byDataType/peaks/jan2011/spp/optimal/hub/spp.optimal.wgEncodeOpenChromChipGm12878Pol2AlnRep0_VS_wgEncodeOpenChromChipGm12878InputAln.bb
+</pre></code>
+<p>
+These tracks also support additional filter options for their additional fields,
+see more with this illustrated <a href="help/bigNarrowPeak.html#example3">example</a>.</p>
+
+<a name="120817"></a>
+<h2>Dec. 8, 2017 &nbsp;&nbsp;BLAT directly from the search box</h2>
+<p>
+Did you know you could BLAT from the search box?</p>
+<p>
+If you have short sequences (less than 2000 characters) you can directly search
+for them when Browsing without first visiting the BLAT tool to input the sequence.
+You can <a href ="#050417">also output your BLAT results as a custom track</a>,
+giving the results a name and description, and then save special results into Sessions
+allowing you to return to those findings when you wish to see them at a later date.</p>
+
+<a name="120617"></a>
+<h2>Dec. 6, 2017 &nbsp;&nbsp; New genome browser: <em>Xenopus tropicalis</em>, xenTro9</h2>
+<p>A genome browser is now available for the <em>X. tropicalis</em> assembly released in July
+2016 by the <a href="http://genome.jgi.doe.gov/">US DOE Joint Genome Institute</a> (JGI v9.1,
+UCSC version xenTro9).</p>
+<h3>About the assembly:</h3>
+<ul>
+<li><b>UCSC Genome Browser assembly ID:</b> xenTro9</li>
+<li><b>Sequencing/Assembly provider ID:</b> <a href="http://genome.jgi.doe.gov/">US DOE Joint 
+Genome Institute</a></li>
+<li><b>Assembly date:</b> July 2016</li>
+<li><b>Accession ID:</b> GCF_000004195.3</li>
+<li><b>NCBI Genome information:</b><a href="https://www.ncbi.nlm.nih.gov/genome/80" 
+target="_blank" > NCBI genome/80</a> <em>(Xenopus tropicalis)</em></li>
+<li><b>NCBI Assembly information:</b><a href="https://www.ncbi.nlm.nih.gov/assembly/768701" 
+target="_blank" >  NCBI assembly/768701 (US DOE Joint Genome Institute) </a></li>
+<li><b>BioProject information:</b><a href="https://www.ncbi.nlm.nih.gov/bioproject/12348" 
+target="_blank" > NCBI Bioproject: 12348</a></li>
+<li><b>BioSample information:</b><a href="https://www.ncbi.nlm.nih.gov/biosample/SAMN00000117" 
+target="_blank" > NCBI Biosample: SAMN00000117</a></li>
+<li><b>Contig+scaffold count:</b> 68,152</li>
+<li><b>Total size:</b> 1,440,398,454</li>
+<li><a href="../goldenPath/credits.html#xentro_credits" 
+target="_blank" >Acknowledgments</a></li>
+</ul>
+<h3>Data and Downloads:</h3>
+<ul>
+<li><a href="../goldenPath/credits.html#xentro_use" 
+target="_blank" >Data use conditions and restrictions</a></li>
+<li><a href="../goldenPath/help/ftp.html" 
+target="_blank" >Rsync</a> and 
+<a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/xenTro9/" 
+target="_blank" >FTP</a></li>
+<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#xentro"
+target="_blank" >Downloads page</a></li>
+</ul>
 
 <a name="112117"></a>
 <h2>Nov. 21, 2017 &nbsp;&nbsp; New NCBI RefSeq tracks for mouse, mm10</h2>
@@ -949,7 +1506,7 @@ bringing this track to life.</p>
 Please welcome the newest additions to the UCSC Genome Browser keyboard shortcuts menu, 
 now providing over 40 shortcuts. To view a menu of shortcuts, simply press the &quot;?&quot; 
 key on your keyboard while on an assembly&apos;s browser display page (e.g., 
-<a href="../cgi-bin/hgTracks?db=hg38" target=_blank">GRCh38/hg38 assembly display</a>). 
+<a href="../cgi-bin/hgTracks?db=hg38" target="_blank">GRCh38/hg38 assembly display</a>). 
 The new shortcut set utilizes the keyboard keys 1 - 6 to provide six levels of zoom views 
 for tracks in the browser display, as listed below:</p>
 <ul>
@@ -1892,7 +2449,7 @@ Lastly, at the bottom of the section for each selected track, you will see a dro
 labeled "Related tables" which allows you to select and add various tables to your output.
 <p>
 <img src="../images/hgIntegratorRelatedTablesAnnouncement.png" alt="hgIntegrator related
-tables"" width="684" height="418"></p>
+tables" width="684" height="418"></p>
 <p>
 For more information about using the Data Integrator, please see the 
 <a href="help/hgIntegratorHelp.html">User Guide</a>.</p>
@@ -2165,7 +2722,7 @@ bigGenePred, please see our
 <a href="help/bigGenePred.html">bigGenePred Track Format help page</a>.</p>
 
 <a name="040215b"></a>
-<h2>Apr. 2, 2015 `&nbsp;&nbsp; New tarsier (tarSyr2) assembly now available in the Genome
+<h2>Apr. 2, 2015 &nbsp;&nbsp; New tarsier (tarSyr2) assembly now available in the Genome
 Browser</h2>
 <p>
 We are pleased to announce the release of a Genome Browser for the Sep. 2013 assembly of tarsier, 
@@ -5391,7 +5948,7 @@ currently misrepresented, to close as many remaining gaps as possible and to pro
 assemblies of structurally variant loci when necessary. The hg19 browser corresponds to GRCh37.</p>
 <p> 
 Statistics for the GRCh37 build assembly can be found on the NCBI 
-<a href="https://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=9606&build=37&ver=1" 
+<a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.13/"
 target="_blank">Build 37.1 Statistics</a> web page.</p>  
 <p> 
 The hg19 browser contains 9 haplotypes. See the <a href="http://www.sanger.ac.uk/HGP/Chr6/MHC/" 
@@ -6098,7 +6655,7 @@ essentially finished.</p>
 The Build 37.1 assembly includes approximately 2.6 Gb of sequence on chromosomes 1-19, X, Y, M 
 (mitochondrial DNA) and Un (unmapped clone contigs). In-depth information about this assembly will 
 become available on the 
-<a href="https://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=10090&build=37&ver=1" 
+<a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000001635.16/"
 target="_blank">NCBI website</a>. On chromosome Y in this assembly, only the short arm has reliable 
 mapping data; therefore, most of the contigs on the Y chromosome are unplaced.</p> 
 <p> 
@@ -9335,7 +9892,7 @@ the past month.</p>
 To take full advantage of the new display features in this release, we recommend that you reset your
 browser to the new default settings. NOTE: you may not want to reset your browser if you have 
 customized settings that you wish to preserve. You can reset your browser by clicking the
-&quot;Click here to reset" link on the Browser Gateway page.</p>  
+&quot;Click here to reset&quot; link on the Browser Gateway page.</p>  
 <p> 
 We hope this new release facilitates your work with the UCSC Genome Browser. If you have any 
 questions or comments about the new release, send email to 
@@ -9390,7 +9947,7 @@ effort. The assembly process resulted in a 6.5-fold coverage of the rat genome, 
 to be approximately 2.8 Gigabases in size.</p> 
 <p> 
 Downloads of the rat data and annotations are available through our 
-ftp site at <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/rn1" target="_blank:>downloads 
+ftp site at <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/rn1" target="_blank">downloads 
 server</a>. This data contains <a href="credits.html#rat_use">specific conditions for use</a>. The 
 sequence is also available from the <a href="http://www.hgsc.bcm.tmc.edu/projects/rat" 
 target="_blank">Rat Genome Project website</a> for the Human Genome Sequencing Center at Baylor 

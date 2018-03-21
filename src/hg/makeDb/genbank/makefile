@@ -16,9 +16,12 @@ clean: ${SUBDIRS:%=%.subclean}
 
 install-server: all
 	${MAKE} install PREFIX=/cluster/data/genbank
+	${MAKE} install PREFIX=genbank-101:/data/genbank
 
 etc-update-server:
 	${MAKE} install-etc PREFIX=/cluster/data/genbank
+	${MAKE} install-etc PREFIX=genbank-101:/data/genbank
+
 etc-update: etc-update-server # alternative name
 
 install-rr: all ${GB_BINARCH}/hgsql ${GB_BINARCH}/hgLsSnpPdbLoad ${GB_BINARCH}/mrnaToGene ${GB_BINARCH}/hgLoadGenePred 

@@ -784,6 +784,9 @@ int differentStringNullOk(char *a, char *b);
 #define isEmpty(string) ((string) == NULL || (string)[0] == 0)
 #define isNotEmpty(string) (! isEmpty(string))
 
+boolean isEmptyTextField(char *s);
+/* Recognize empty string or dot as empty text */
+
 int cmpStringsWithEmbeddedNumbers(const char *a, const char *b);
 /* Compare strings such as gene names that may have embedded numbers,
  * so that bmp4a comes before bmp14a */

@@ -19,7 +19,8 @@ my ($raFile, $gffFile, $labelFile) = @ARGV;
 # this order list of items will keep the tab output consistent so all
 #  'columns' of the data in the tab output will be the same order always.
 # there is one other output before these items, the gene reviewed 'status'
-# and one column after these items, the 'description' string from gbProcess
+# and two columns after these items, the 'description' string from gbProcess
+# and the externalId for external URL outlinks
 my @tabOrderOutput = ( 'name', 'product', 'mrnaAcc', 'protAcc', 'locusLinkId',
    'omimId', 'hgnc', 'genbank', 'pseudo', 'gbkey', 'source',
    'gene_biotype', 'gene_synonym', 'ncrna_class', 'note' );
@@ -198,7 +199,35 @@ while (my $line = <$fh>) {
              }
              if ($xref =~ m/^mgi:/i) {
                my ($tag, $tag2, $value) = split(':', $xref);
-               $idDataPtr->{'mgi'} = uc($tag2).":$value";
+               $idDataPtr->{'mgi'} = uc($tag2)."$value";
+             }
+             if ($xref =~ m/^bgd/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'bgd'} = uc($tag2)."$value";
+             }
+             if ($xref =~ m/^rgd/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'rgd'} = uc($tag2)."$value";
+             }
+             if ($xref =~ m/^sgd/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'sgd'} = uc($tag2)."$value";
+             }
+             if ($xref =~ m/^zfin/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'zfin'} = uc($tag2)."$value";
+             }
+             if ($xref =~ m/^flybase/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'flybase'} = uc($tag2)."$value";
+             }
+             if ($xref =~ m/^wormbase/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'wormbase'} = uc($tag2)."$value";
+             }
+             if ($xref =~ m/^xenbase/i) {
+               my ($tag, $tag2, $value) = split(':', $xref);
+               $idDataPtr->{'xenbase'} = uc($tag2)."$value";
              }
           }
        }
@@ -305,11 +334,28 @@ foreach my $id (keys %idData) {
        $dataOut =~ s/%3B/;/g;
        $dataOut =~ s/%25/%/g;
        printf "\t%s", $dataOut;
-    } elsif ($tag eq 'hgnc' && exists $idDataPtr->{mgi}) {
-       printf "\t" . $idDataPtr->{mgi};
     } else { printf "\t$missingData"; }
   }
   if (exists($descriptionData{$id})) {
-    print "\t$descriptionData{$id}\n";
-  } else { print "\t$missingData\n"; }
+    print "\t$descriptionData{$id}";
+  } else { print "\t$missingData"; }
+  # last column is only one of these
+  if (exists $idDataPtr->{mgi}) {
+    print "\t$idDataPtr->{mgi}";
+  } elsif (exists $idDataPtr->{wormbase}) {
+    print "\t" . $idDataPtr->{wormbase};
+  } elsif (exists $idDataPtr->{xenbase}) {
+    print "\t" . $idDataPtr->{xenbase};
+  } elsif (exists $idDataPtr->{bgd}) {
+    print "\t" . $idDataPtr->{bgd};
+  } elsif (exists $idDataPtr->{rgd}) {
+    print "\t" . $idDataPtr->{rgd};
+  } elsif (exists $idDataPtr->{sgd}) {
+    print "\t" . $idDataPtr->{sgd};
+  } elsif (exists $idDataPtr->{zfin}) {
+    print "\t" . $idDataPtr->{zfin};
+  } elsif (exists $idDataPtr->{flybase}) {
+    print "\t" . $idDataPtr->{flybase};
+  } else { print "\t$missingData"; }
+  print "\n";
 }

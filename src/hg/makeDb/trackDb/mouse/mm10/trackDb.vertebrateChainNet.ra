@@ -114,6 +114,22 @@ html vertebrateChainNet
         type chain chrPic1
         otherDb chrPic1
 
+        track chainXenLae2
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=kFrog clade=cEutel
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain xenLae2
+        otherDb xenLae2
+
+        track chainXenTro9
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=kFrog clade=cEutel
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain xenTro9
+        otherDb xenTro9
+
         track chainXenTro3
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=kFrog clade=cEutel
@@ -201,6 +217,14 @@ html vertebrateChainNet
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain petMar2
         otherDb petMar2
+
+        track chainPetMar3
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=tLamprey clade=fPetro
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain petMar3
+        otherDb petMar3
 
     track vertebrateChainNetViewnet
     shortLabel Nets
@@ -298,6 +322,22 @@ include chainNetGalGal5.ra
         type netAlign chrPic1 chainChrPic1
         otherDb chrPic1
 
+        track netXenLae2
+        subTrack vertebrateChainNetViewnet on
+        subGroups view=net species=kFrog clade=cEutel
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign xenLae2 chainXenLae2
+        otherDb xenLae2
+
+        track netXenTro9
+        subTrack vertebrateChainNetViewnet on
+        subGroups view=net species=kFrog clade=cEutel
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign xenTro9 chainXenTro9
+        otherDb xenTro9
+
         track netXenTro3
         subTrack vertebrateChainNetViewnet on
         subGroups view=net species=kFrog clade=cEutel
@@ -379,9 +419,17 @@ include chainNetGalGal5.ra
         otherDb oryLat2
 
         track netPetMar2
-        subTrack vertebrateChainNetViewnet on
+        subTrack vertebrateChainNetViewnet off
         subGroups view=net species=tLamprey clade=fPetro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign petMar2 chainPetMar2
         otherDb petMar2
+
+        track netPetMar3
+        subTrack vertebrateChainNetViewnet on
+        subGroups view=net species=tLamprey clade=fPetro
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign petMar3 chainPetMar3
+        otherDb petMar3

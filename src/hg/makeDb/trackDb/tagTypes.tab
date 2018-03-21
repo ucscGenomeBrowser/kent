@@ -84,6 +84,8 @@ dataVersion *
 dateSubmitted bedGraph bed
 dateUnrestricted bed
 db *
+dbPrefixUrls bigBed bed bigPsl genePred psl
+dbPrefixLabels bigBed bed bigPsl genePred psl
 dbProfile *
 dbTrackType customTracks
 detailsTabUrls bigBed bigGenePred bigPsl
@@ -213,6 +215,7 @@ interTableKind encodeFiveC
 inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
 inputTableFieldDisplay bed factorSource
+interactDirectional interact bigInteract
 intronGap psl genePred bigPsl
 irows wigMaf
 isGencode genePred
@@ -445,7 +448,7 @@ url2 bed genePred
 url2Label bed genePred
 urlLabel *
 urlName genePred psl bigPsl
-urls bigBed bed bigPsl
+urls bigBed bed bigPsl genePred psl
 useScore *
 view *
 viewLimits *

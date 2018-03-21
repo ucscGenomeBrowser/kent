@@ -34,3 +34,7 @@ include cloneEnd.trackDb.ra
 track spMut override
 group varRep
 bigDataUrl /gbdb/$D/uniprot/unipMut.bb
+
+# change these two to switch to the new refSeqComposite 2018-02
+include trackDb.refGene.ra beta,public
+include ../../refSeqComposite.ra alpha

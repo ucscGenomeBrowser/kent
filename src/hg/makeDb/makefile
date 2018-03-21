@@ -16,6 +16,7 @@ UTILS_APPLIST = \
 	hgLoadNet \
 	hgLoadOut \
 	hgLoadOutJoined \
+	hgLoadSqlTab \
 	hgGcPercent \
 	hgLoadWiggle \
 	hgTrackDb \

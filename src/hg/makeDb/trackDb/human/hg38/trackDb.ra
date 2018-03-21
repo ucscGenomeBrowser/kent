@@ -2,7 +2,7 @@ include ../../refSeqComposite.ra
 
 include barCharts.ra
 
-include hoffMap.ra alpha
+include hoffMap.ra
 
 include cancerExpr.ra
 
@@ -277,6 +277,7 @@ group x
     html altSequence
 
 include trackDb.4way.ra alpha
+include trackDb.5way.ra alpha
 include trackDb.7way.ra
 include trackDb.17way.ra alpha
 include trackDb.20way.ra

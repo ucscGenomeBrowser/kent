@@ -425,6 +425,7 @@ typedef enum _eCfgType
     cfgSnake    =12,
     cfgLong     =13,
     cfgBarChart =14,
+    cfgInteract =15,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 
@@ -608,13 +609,14 @@ void tdbSetCartVisibility(struct trackDb *tdb, struct cart *cart, char *vis);
 INLINE boolean tdbIsBigBed(struct trackDb *tdb)
 // Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
 {
-// KRR TODO: replace with table lookup  (same as bigBedFind ?)
+// TODO: replace with table lookup  (same as bigBedFind ?)
 return startsWithWord("bigBed", tdb->type) || 
         startsWithWord("bigGenePred", tdb->type) || 
         startsWithWord("bigMaf", tdb->type) || 
         startsWithWord("bigPsl", tdb->type) || 
         startsWithWord("bigNarrowPeak", tdb->type) || 
         startsWithWord("bigBarChart", tdb->type) || 
+        startsWithWord("bigInteract", tdb->type) || 
         startsWithWord("bigChain", tdb->type);
 }
 
@@ -651,5 +653,10 @@ return startsWithWord("bedGraph", tdb->type);
 boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb, boolean onlyAjax);
 // Configuration dialogs may be explicitly blocked in tracDb settings
 
+struct slPair *trackDbMetaPairs(struct trackDb *tdb);
+/* Read in metadata given a trackDb entry.  This routine understands the three ways
+ * that metadata can be represented in a trackDb stanza: "metadata" lines per stanza,
+ * or a  tab-separated or tagStorm file with a foreign key specified by the "meta" tag.
+ */
 #endif /* TRACKDB_H */
 

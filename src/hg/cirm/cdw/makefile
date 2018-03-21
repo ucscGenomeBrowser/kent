@@ -46,6 +46,7 @@ UTIL_DIRS = \
     cdwTextForIndex \
     cdwUndeprecate \
     cdwUnlockSubmittedFile \
+    cdwUnlockSubmittedFiles \
     utils/cdwFastqPolyFilter \
     utils/cdwVcfStats
 

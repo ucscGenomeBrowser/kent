@@ -505,4 +505,7 @@ INLINE char* strOrNbsp(char* val)
 return isEmpty(val) ? "&nbsp;" : val;
 }
 
+void doInteractDetails(struct trackDb *tdb, char *item);
+/* Details of interaction item */
+
 #endif
