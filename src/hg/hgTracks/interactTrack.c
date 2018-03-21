@@ -110,7 +110,7 @@ return dyStringCannibalize(&ds);
 int regionCenter(int start, int end)
 /* Return center of genomic region */
 {
-return round((double)(end - start + .5) / 2) + start;
+return ((double)(end - start + .5) / 2) + start;
 }
 
 int regionFootWidth(int start, int end, double scale)
@@ -145,7 +145,7 @@ int getX(int pos, int seqStart, double scale, int xOff)
 {
 if (pos < seqStart)
     return -1;
-return round((double)(pos - seqStart + .5) * scale) + xOff;
+return ((double)(pos - seqStart + .5) * scale) + xOff;
 }
 
 struct interactTrackInfo {
@@ -191,7 +191,6 @@ for (inter = (struct interact *)tg->items; inter; inter = inter->next)
             continue;
         int labelWidth = vgGetFontStringWidth(hvg->vg, font, otherChrom);
         int x = getX(inter->chromStart, seqStart, scale, xOff);
-        assert(x > 0);
         int labelStart = round((double)(x - labelWidth)/2);
         int labelEnd = labelStart + labelWidth - 1;
         if (labelStart <= prevLabelEnd && 
@@ -237,6 +236,7 @@ char itemBuf[2048];
 
 // Gather info for layout
 struct interactTrackInfo *tInfo = interactGetTrackInfo(tg, seqStart, hvg, xOff, font, scale);
+
 
 // Draw items
 for (inter = (struct interact *)tg->items; inter; inter = inter->next)
