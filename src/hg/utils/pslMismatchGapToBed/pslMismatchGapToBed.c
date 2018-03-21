@@ -481,20 +481,22 @@ struct lineFile *pslLf = pslFileOpen(pslFile);
 struct psl *psl;
 while ((psl = pslNext(pslLf)) != NULL)
     {
-    struct dnaSeq *txSeq = hashFindVal(qSeqHash, psl->qName);
-    if (txSeq)
+    if (ignoreQNamePrefix == NULL || !startsWith(ignoreQNamePrefix, psl->qName))
         {
-        struct genbankCds *cds = cdsHash ? hashFindVal(cdsHash, psl->qName) : NULL;
-        checkTranscript(psl, gSeqWin, txSeq, cds,
-                        &baseMismatchList, &shortGapList, &shiftyGapList, &doubleGapList,
-                        &qSkippedList);
+        struct dnaSeq *txSeq = hashFindVal(qSeqHash, psl->qName);
+        if (txSeq)
+            {
+            struct genbankCds *cds = cdsHash ? hashFindVal(cdsHash, psl->qName) : NULL;
+            checkTranscript(psl, gSeqWin, txSeq, cds,
+                            &baseMismatchList, &shortGapList, &shiftyGapList, &doubleGapList,
+                            &qSkippedList);
+            }
+        else
+            {
+            errAbort("No sequence found for psl->qName = '%s' - exiting.", psl->qName);
+            }
+        pslFree(&psl);
         }
-    else if (ignoreQNamePrefix == NULL ||
-             !startsWith(ignoreQNamePrefix, psl->qName))
-        {
-        errAbort("No sequence found for psl->qName = '%s' - exiting.", psl->qName);
-        }
-    pslFree(&psl);
     }
 lineFileClose(&pslLf);
 sortAndDumpBedNPlus(outBaseName, "mismatch", baseMismatchList, 4);
