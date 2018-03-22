@@ -169,7 +169,7 @@ foreach my $table (sort keys %tableList) {
 printf STDERR "# verified %d tables, %d extra tables, %d optional tables\n", $tablesFound, $extraTableCount, $optionalCount;
 if ($optionalCount > 0) {
    foreach my $category (sort keys %optionsFound) {
-     printf "# %s\t%d tables\n", $category, $optionsFound{$category};
+     printf "# %s\t%d optional tables\n", $category, $optionsFound{$category};
    }
 }
 
@@ -178,12 +178,12 @@ foreach my $table (sort keys %extraTables) {
   ++$shownTables;
   if ($extraTableCount > 10) {
     if ( ($shownTables < 5) || ($shownTables > ($extraTableCount - 4)) ) {
-       printf STDERR "# %d\t%s\n", $shownTables, $table;
+       printf STDERR "# %d\t%s\t- extra table\n", $shownTables, $table;
     } elsif ($shownTables == 5) {
        printf STDERR "# . . . etc . . .\n";
     }
   } else {
-    printf STDERR "# %d\t%s\n", $shownTables, $table;
+    printf STDERR "# %d\t%s\t- extra table\n", $shownTables, $table;
   }
 }
 
@@ -229,7 +229,7 @@ printf STDERR "# verified %d tables, %d missing tables\n", $tablesFound, $missin
 my $missedOut = 0;
 foreach my $table (sort keys %missingTables) {
   ++$missedOut;
-  printf STDERR "# %d\t%s\n", $missedOut, $table;
+  printf STDERR "# %d\t%s\t- missing table\n", $missedOut, $table;
 }
 
 my @chainTypes = ("", "RBest", "Syn");
@@ -263,4 +263,29 @@ if ($dbVersion > 1) {
 my $blatServers=`hgsql -N -e 'select * from blatServers where db="$db";' hgcentraltest | wc -l`;
 if ($blatServers != 2) {
   printf STDERR "# ERROR: blat server not found in hgcentraltest.blatServers ?\n";
+}
+
+my $chainNet = `hgsql -e 'select * from trackDb;' hg38 | egrep "^chain$Db|^net$Db" | wc -l`;
+chomp $chainNet;
+if ($chainNet != 2) {
+  printf STDERR "# ERROR: missing chainNet hg38 trackDb definitions for $db\n";
+}
+
+$chainNet = `hgsql -e 'select * from trackDb;' mm10 | egrep "^chain$Db|^net$Db" | wc -l`;
+chomp $chainNet;
+if ($chainNet != 2) {
+  printf STDERR "# ERROR: missing chainNet mm10 trackDb definitions for $db\n";
+}
+
+my $goldSearch = `hgsql -N -e 'select termRegex from hgFindSpec where searchTable="gold" AND searchName="gold";' $db | grep "abuz" | wc -l`;
+chomp $goldSearch;
+
+if ($goldSearch == 1) {
+  printf STDERR "# ERROR: missing specific hgFindSpec rule for gold table\n";
+}
+
+my $allJoiner = `grep $db ~/kent/src/hg/makeDb/schema/all.joiner | head -1 | wc -l`;
+chomp $allJoiner;
+if ($allJoiner != 1) {
+  printf STDERR "# ERROR missing definitions in hg/makeDb/schema/all.joiner\n";
 }
