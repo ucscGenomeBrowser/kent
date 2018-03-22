@@ -15674,6 +15674,9 @@ TMPDIR=/dev/shm
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
     # real    307m18.396s
 
+    cat fb.mm10.chainRBestNeoSch1Link.txt
+    #   788489846 bases of 2652783500 (29.723%) in intersection
+
     mkdir /hive/data/genomes/neoSch1/bed/blastz.mm10.swap
     cd /hive/data/genomes/neoSch1/bed/blastz.mm10.swap
     time (doBlastzChainNet.pl -verbose=2 \
@@ -15691,6 +15694,9 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -load -workhorse=hgwdev neoSch1 mm10 \
       -buildDir=`pwd` -workhorse=hgwdev) > rbest.log 2>&1 &
     # real    242m31.157s
+
+    cat fb.neoSch1.chainRBestMm10Link.txt
+    # 787537751 bases of 2400839308 (32.803%) in intersection
 
 ##############################################################################
 # LASTZ Sooty mangabey cerAty1 (DONE - 2017-09-27 - Hiram)

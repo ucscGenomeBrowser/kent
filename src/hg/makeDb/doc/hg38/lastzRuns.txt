@@ -9818,10 +9818,15 @@ TMPDIR=/dev/shm
 
     cat fb.hg38.chainNeoSch1Link.txt
     # 1586260720 bases of 3049335806 (52.020%) in intersection
+    cat fb.hg38.chainSynNeoSch1Link.txt
+    # 1515015853 bases of 3049335806 (49.683%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` hg38 neoSch1) \
 	> rbest.log 2>&1 &
     # real    475m3.278s
+
+    cat fb.hg38.chainRBestNeoSch1Link.txt
+    # 1455520429 bases of 3049335806 (47.732%) in intersection
 
     # and for the swap:
     mkdir /hive/data/genomes/neoSch1/bed/blastz.hg38.swap
@@ -9836,10 +9841,15 @@ TMPDIR=/dev/shm
 
     cat fb.neoSch1.chainHg38Link.txt
     # 1483929997 bases of 2400839308 (61.809%) in intersection
+    cat fb.neoSch1.chainSynHg38Link.txt
+    # 1446564285 bases of 2400839308 (60.252%) in intersection
 
     time (doRecipBest.pl -load -workhorse=hgwdev -buildDir=`pwd` neoSch1 hg38) \
         > rbest.log 2>&1
     # real    404m14.530s
+
+    cat fb.neoSch1.chainRBestHg38Link.txt
+    # 1455431042 bases of 2400839308 (60.622%) in intersection
 
 #########################################################################
 # LASTZ human/hg38 vs. Sooty mangabey/cerAty1 - (DONE - 2017-09-27 - Hiram)
