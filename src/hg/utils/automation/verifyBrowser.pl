@@ -12,7 +12,7 @@ if ($argc != 1) {
   exit 255;
 }
 
-my %optionalCheckList = ( 'ensGene' => 1,
+my %optionalCheckList = ( 'ensGene' => "Ensembl genes",
 'ensGtp' => "Ensembl genes",
 'ensPep' => "Ensembl genes",
 'ensemblSource' => "Ensembl genes",
@@ -26,7 +26,21 @@ my %optionalCheckList = ( 'ensGene' => 1,
 'ncbiRefSeqPepTable' => "NCBI RefSeq genes",
 'ncbiRefSeqPredicted' => "NCBI RefSeq genes",
 'ncbiRefSeqPsl' => "NCBI RefSeq genes",
-'seqNcbiRefSeq' => "NCBI RefSeq genes"
+'seqNcbiRefSeq' => "NCBI RefSeq genes",
+'chainRBestHg38' => "chainNetRBestHg38",
+'chainRBestHg38Link' => "chainNetRBestHg38",
+'chainRBestMm10' => "chainNetRBestMm10",
+'chainRBestMm10Link' => "chainNetRBestMm10",
+'chainSynHg38' => "chainNetSynHg38",
+'chainSynHg38Link' => "chainNetSynHg38",
+'chainSynMm10' => "chainNetSynMm10",
+'chainSynMm10Link' => "chainNetSynMm10",
+'netRBestHg38' => "chainNetRBestHg38",
+'netRBestMm10' => "chainNetRBestMm10",
+'netSynHg38' => "chainNetSynHg38",
+'netSynMm10' => "chainNetSynMm10",
+'tandemDups' => "tandemDups",
+'gapOverlap' => "gapOverlap"
 );
 
 my %tableCheckList = ( 'augustusGene' => 1,
@@ -34,21 +48,12 @@ my %tableCheckList = ( 'augustusGene' => 1,
 'chainHg38Link' => 1,
 'chainMm10' => 1,
 'chainMm10Link' => 1,
-'chainRBestHg38' => 1,
-'chainRBestHg38Link' => 1,
-'chainRBestMm10' => 1,
-'chainRBestMm10Link' => 1,
-'chainSynHg38' => 1,
-'chainSynHg38Link' => 1,
-'chainSynMm10' => 1,
-'chainSynMm10Link' => 1,
 'chromAlias' => 1,
 'chromInfo' => 1,
 'cpgIslandExt' => 1,
 'cpgIslandExtUnmasked' => 1,
 'cytoBandIdeo' => 1,
 'gap' => 1,
-'gapOverlap' => 1,
 'gc5BaseBw' => 1,
 'genscan' => 1,
 'genscanSubopt' => 1,
@@ -60,14 +65,9 @@ my %tableCheckList = ( 'augustusGene' => 1,
 'nestedRepeats' => 1,
 'netHg38' => 1,
 'netMm10' => 1,
-'netRBestHg38' => 1,
-'netRBestMm10' => 1,
-'netSynHg38' => 1,
-'netSynMm10' => 1,
 'rmsk' => 1,
 'simpleRepeat' => 1,
 'tableDescriptions' => 1,
-'tandemDups' => 1,
 'trackDb' => 1,
 'ucscToINSDC' => 1,
 'ucscToRefSeq' => 1,
@@ -166,7 +166,7 @@ foreach my $table (sort keys %tableList) {
   }
 }
 
-printf STDERR "# verified %d tables, %d extra tables, %d optional tables\n", $tablesFound, $extraTableCount, $optionalCount;
+printf STDERR "# verified %d tables in database $db, %d extra tables, %d optional tables\n", $tablesFound, $extraTableCount, $optionalCount;
 if ($optionalCount > 0) {
    foreach my $category (sort keys %optionsFound) {
      printf "# %s\t%d optional tables\n", $category, $optionsFound{$category};
@@ -224,7 +224,7 @@ foreach my $table (sort keys %tableCheckList) {
   }
 }
 
-printf STDERR "# verified %d tables, %d missing tables\n", $tablesFound, $missingTableCount;
+printf STDERR "# verified %d required tables, %d missing tables\n", $tablesFound, $missingTableCount;
 
 my $missedOut = 0;
 foreach my $table (sort keys %missingTables) {
@@ -265,16 +265,21 @@ if ($blatServers != 2) {
   printf STDERR "# ERROR: blat server not found in hgcentraltest.blatServers ?\n";
 }
 
-my $chainNet = `hgsql -e 'select * from trackDb;' hg38 | egrep "^chain$Db|^net$Db" | wc -l`;
-chomp $chainNet;
-if ($chainNet != 2) {
-  printf STDERR "# ERROR: missing chainNet hg38 trackDb definitions for $db\n";
+my $chainNet = 0;
+if ( $db ne "hg38" ) {
+  $chainNet = `hgsql -e 'select * from trackDb;' hg38 | egrep "^chain$Db|^net$Db" | wc -l`;
+  chomp $chainNet;
+  if ($chainNet != 2) {
+   printf STDERR "# ERROR: missing hg38.chainNet trackDb definitions for $db (found: $chainNet instead of 2)\n";
+  }
 }
 
-$chainNet = `hgsql -e 'select * from trackDb;' mm10 | egrep "^chain$Db|^net$Db" | wc -l`;
-chomp $chainNet;
-if ($chainNet != 2) {
-  printf STDERR "# ERROR: missing chainNet mm10 trackDb definitions for $db\n";
+if ( $db ne "mm10" ) {
+  $chainNet = `hgsql -e 'select * from trackDb;' mm10 | egrep "^chain$Db|^net$Db" | wc -l`;
+  chomp $chainNet;
+  if ($chainNet != 2) {
+   printf STDERR "# ERROR: missing mm10.chainNet trackDb definitions for $db (found: $chainNet instead of 2)\n";
+  }
 }
 
 my $goldSearch = `hgsql -N -e 'select termRegex from hgFindSpec where searchTable="gold" AND searchName="gold";' $db | grep "abuz" | wc -l`;
