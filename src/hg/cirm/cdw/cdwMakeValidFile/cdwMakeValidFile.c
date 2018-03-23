@@ -726,11 +726,18 @@ void mustMakeValidFile(struct sqlConnection *conn, struct cdwFile *ef, struct cg
  * it will take a subset of the file as a sample so can do QA without processing the whole thing. */
 {
 /* Make up validFile from tags and id */
+
 struct cdwValidFile *vf;
 AllocVar(vf);
 vf->fileId = ef->id;
 cdwValidFileFieldsFromTags(vf, tags);
 vf->sampleBed = "";
+
+if (oldValidId == 0) // moving up here to mitigate race condition
+    {
+    cdwValidFileSaveToDb(conn, vf, "cdwValidFile", 512);
+    vf->id = sqlLastAutoId(conn);
+    }
 
 if (vf->format)	// We only can validate if we have something for format 
     {
@@ -909,8 +916,7 @@ if (vf->format)	// We only can validate if we have something for format
     /* Save record except for license plate to DB. */
     if (oldValidId == 0)
 	{
-	cdwValidFileSaveToDb(conn, vf, "cdwValidFile", 512);
-	vf->id = sqlLastAutoId(conn);
+	cdwValidFileUpdateDb(conn, vf, vf->id);
 
 	/* Create license plate around our ID.  File in warehouse to use license plate
 	 * instead of baby-babble IDs. */
