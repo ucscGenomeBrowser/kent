@@ -9,23 +9,50 @@
 #include "gencodeIntron.h"
 #include "genePredReader.h"
 #include "genePred.h"
+#include "encode/wgEncodeGencodeAttrs.h"
 
+/* item label symbolic names and constants.  This must be
+ * in sync with lib/hui.c:gencodeLabelControls() */
+enum
+/* bit set of item labels */
+{
+    ITEM_LABEL_GENE_NAME = 0x01,
+    ITEM_LABEL_GENE_ID = 0x02,
+    ITEM_LABEL_TRANSCRIPT_ID = 0x04
+};
+
+static struct
+/* label names to constant */
+{
+    char *name;
+    unsigned flag;
+} itemLabelCartVarNamesMap[] = {
+    {"geneName", ITEM_LABEL_GENE_NAME},
+    {"geneId", ITEM_LABEL_GENE_ID},
+    {"transcriptId", ITEM_LABEL_TRANSCRIPT_ID},
+    {NULL, 0}
+};
+
+
+/* function type that returns filter or highlight types */
 typedef filterBy_t* (*filterBySetGetFuncType)(struct trackDb *tdb, struct cart *cart, char *name);
 
 struct gencodeQuery
-/* structure used to store information about the query being assembled.
- * this allows a join to bring in additional data without having to
- * do repeated queries. */
+/* Structure used to store information about the query being assembled.
+ * Joins are for the purpose of filtering results, and in some cases, returning
+ * additional information. */
 {
     struct dyString *fields;                // select fields
     struct dyString *from;                  // from clause
     struct dyString *where;                 // where clause
+    int genePredNumColumns;                 // number of genePred columns returned
+    int attrsNumColumns;                    // number of attr columns returned
     boolean isGenePredX;                    // does this have the extended fields?
     boolean isFiltered;                     // are there filters on the query?
     boolean joinAttrs;                      // join the wgEncodeGencodeAttrs table
     boolean joinSupportLevel;               // join the wgEncodeGencodeTranscriptionSupportLevel table
     boolean joinTranscriptSource;           // join the wgEncodeGencodeTranscriptSource table
-    boolean joinTag;                        // join the wgEncodeGencodeTag table
+    boolean joinTag;                        // join the wgEncodeGencodeTag table (one to many, so filtering only)
 };
 
 static struct gencodeQuery *gencodeQueryNew(void)
@@ -67,6 +94,23 @@ static void gencodeQueryEndSubWhere(struct gencodeQuery *gencodeQuery)
 dyStringAppend(gencodeQuery->where, ")");
 }
 
+static struct genePred *gencodeQueryGenePred(struct gencodeQuery *gencodeQuery,
+                                             char **row)
+/* get genePred from a query results */
+{
+return genePredExtLoad(row, gencodeQuery->genePredNumColumns);
+}
+
+static struct wgEncodeGencodeAttrs *gencodeQueryAttrs(struct gencodeQuery *gencodeQuery,
+                                                      char **row)
+/* get attributes from a query results, or NULL if not requested */
+{
+if (gencodeQuery->attrsNumColumns > 0)
+    return wgEncodeGencodeAttrsLoad(row + gencodeQuery->genePredNumColumns, gencodeQuery->attrsNumColumns);
+else
+    return NULL;
+}
+
 static boolean anyFilterBy(struct track *tg, filterBySetGetFuncType filterBySetGetFunc)
 /* check if any filters were specified of the particular type */
 {
@@ -93,7 +137,7 @@ else
 }
 
 static void filterByMethodChoiceQuery(char *choice, struct gencodeQuery *gencodeQuery)
-/* add SQL expression GENCODE transcript method choice. */
+/* add SQL expression for GENCODE transcript method choice. */
 {
 /*
  * example sources and categories:
@@ -224,7 +268,7 @@ gencodeQuery->isFiltered = TRUE;
 }
 
 static void gencodeFilterBySetQuery(struct track *tg, filterBySetGetFuncType filterBySetGetFunc, struct gencodeQuery *gencodeQuery)
-/* build where clause based for filters or highlights filters. */
+/* build where sql clauses for filters or highlights. */
 {
 filterBy_t *filterBySet = filterBySetGetFunc(tg->tdb, cart, NULL);
 filterBy_t *filterBy;
@@ -284,7 +328,7 @@ dyStringFree(&query);
 return sr;
 }
 
-static boolean tableIsGenePredX(struct track *tg)
+static boolean annotIsGenePredExt(struct track *tg)
 /* determine if a table has genePred extended fields.  two-way consensus
  * pseudo doesn't have them. */
 {
@@ -296,16 +340,60 @@ slFreeList(&fields);
 return isGenePredX;
 }
 
-static struct gencodeQuery *geneQueryConstruct(struct track *tg)
-/* construct the query for a GENCODE genePred records, which includes filters. */
+static boolean attrsHasProteinId(struct track *tg)
+/* determine if the attributes table has the proteinId field.. */
 {
-static char *genePredXFields = "g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds, g.score, g.name2, g.cdsStartStat, g.cdsEndStat, g.exonFrames";
+struct sqlConnection *conn = hAllocConn(database);
+struct slName *fields = sqlFieldNames(conn, trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs"));
+hFreeConn(&conn);
+boolean hasProteinId = slNameInList(fields, "proteinId");
+slFreeList(&fields);
+return hasProteinId;
+}
+
+static void geneQueryAddGenePredCols(struct track *tg,
+                                     struct gencodeQuery *gencodeQuery)
+/* add genePred columns to query */
+{
 static char *genePredFields = "g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds";
+static char *genePredXFields = ", g.score, g.name2, g.cdsStartStat, g.cdsEndStat, g.exonFrames";
+gencodeQuery->isGenePredX = annotIsGenePredExt(tg);
+dyStringAppend(gencodeQuery->fields, genePredFields);
+gencodeQuery->genePredNumColumns = GENEPRED_NUM_COLS;
 
+if (gencodeQuery->isGenePredX)
+    {
+    dyStringAppend(gencodeQuery->fields, genePredXFields);
+    gencodeQuery->genePredNumColumns = GENEPREDX_NUM_COLS;
+    }
+}
+
+static void geneQueryAddAttrsCols(struct track *tg,
+                                  struct gencodeQuery *gencodeQuery)
+/* add attributes columns to query */
+{
+char *attrsBaseFields = "attrs.geneId, attrs.geneName, attrs.geneType, attrs.geneStatus, attrs.transcriptId, attrs.transcriptName, attrs.transcriptType, attrs.transcriptStatus, attrs.havanaGeneId, attrs.havanaTranscriptId, attrs.ccdsId, attrs.level, attrs.transcriptClass";
+char *attrsExtraFields = ", attrs.proteinId";
+
+dyStringAppend(gencodeQuery->fields, ", ");
+dyStringAppend(gencodeQuery->fields, attrsBaseFields);
+gencodeQuery->attrsNumColumns = WGENCODEGENCODEATTRS_NO_PROTEIN_ID_NUM_COLS;
+if (attrsHasProteinId(tg))
+    {
+    dyStringAppend(gencodeQuery->fields, attrsExtraFields);
+    gencodeQuery->attrsNumColumns = WGENCODEGENCODEATTRS_NUM_COLS;
+    }
+gencodeQuery->joinAttrs = TRUE;
+}
+
+static struct gencodeQuery *geneQueryConstruct(struct track *tg,
+                                               boolean includeAttrs)
+/* construct the query for a GENCODE records, which includes filters. */
+{
 struct gencodeQuery *gencodeQuery = gencodeQueryNew();
-gencodeQuery->isGenePredX = tableIsGenePredX(tg);
-dyStringAppend(gencodeQuery->fields, (gencodeQuery->isGenePredX ? genePredXFields : genePredFields));
-
+geneQueryAddGenePredCols(tg, gencodeQuery);
+if (includeAttrs)
+    geneQueryAddAttrsCols(tg, gencodeQuery);
 addQueryCommon(tg, filterBySetGet, gencodeQuery);
 return gencodeQuery;
 }
@@ -357,32 +445,112 @@ sqlFreeResult(&sr);
 return highlightIds;
 }
 
+static boolean getLabelCartVar(struct track *tg, char *labelName, boolean *anyExistsP)
+/* get the cart label value for a label type. Sort TRUE in anyExistsP if the variable exists. */
+{
+char varSuffix[64];
+safef(varSuffix, sizeof(varSuffix), "label.%s", labelName);
+char *value = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, varSuffix, NULL);
+if (value != NULL)
+    *anyExistsP = TRUE;
+return ((value != NULL) && !sameString(value, "0"));
+}
 
-static struct linkedFeatures *loadGencodeGenePred(struct track *tg, struct gencodeQuery *gencodeQuery, char **row,
-                                                  struct hash *highlightIds, unsigned highlightColor)
+static void setLabelCartVar(struct track *tg, char *labelName, boolean value)
+/* set one of the label type cart variables. */
+{
+char varName[256];
+safef(varName, sizeof(varName), "%s.label.%s", tg->track, labelName);
+cartSetBoolean(cart, varName, value);
+}
+
+static void setFromOldLabelsVarsInCart(struct track *tg)
+/* If the old gencode label variable are set for this track, migrate to the new
+ * variable.  This prevents labels from disappearing with the new old and an old cart.
+ */
+{
+// logic from simpleTracks.c:genePredAssignConfiguredName()
+char *geneLabel = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "label", "gene");
+if (sameString(geneLabel, "gene") || sameString(geneLabel, "name") || sameString(geneLabel, "both"))
+    setLabelCartVar(tg, "geneName", TRUE);
+if (sameString(geneLabel, "accession") || sameString(geneLabel, "both"))
+    setLabelCartVar(tg, "transcriptId", TRUE);
+cartRemoveVariableClosestToHome(cart, tg->tdb, FALSE, "label");
+}
+
+static unsigned getEnabledLabels(struct track *tg)
+/* Look up each of the label type names in the cart to see if they are enabled,
+ * Return bit set */
+{
+unsigned enabledLabels = 0;
+boolean anyExists = FALSE;
+int i;
+for (i = 0; itemLabelCartVarNamesMap[i].name != NULL; i++)
+    {
+    if (getLabelCartVar(tg, itemLabelCartVarNamesMap[i].name, &anyExists))
+        enabledLabels |= itemLabelCartVarNamesMap[i].flag;
+    }
+
+// if it looks like new track settings have never been configured, set from old.
+if ((enabledLabels == 0) && !anyExists)
+    setFromOldLabelsVarsInCart(tg);
+return enabledLabels;
+}
+
+static void concatItemName(char *name, int nameSize, char *value)
+/* add a name to the name buffer */
+{
+if (strlen(name) > 0)
+    safecat(name, nameSize, "/");
+safecat(name, nameSize, value);
+}
+
+static char* getTranscriptLabel(unsigned enabledLabels, struct genePred *gp,
+                                struct wgEncodeGencodeAttrs *attrs)
+/* one type of label for a item in track */
+{
+char name[256];
+name[0] = '\0';
+if (enabledLabels & ITEM_LABEL_GENE_NAME)
+    concatItemName(name, sizeof(name), gp->name2);
+if (enabledLabels & ITEM_LABEL_GENE_ID)
+    concatItemName(name, sizeof(name), attrs->geneId);
+if (enabledLabels & ITEM_LABEL_TRANSCRIPT_ID)
+    concatItemName(name, sizeof(name), gp->name);
+return cloneString(name);
+}
+
+static struct linkedFeatures *loadGencodeTranscript(struct track *tg, struct gencodeQuery *gencodeQuery, char **row,
+                                                    unsigned enabledLabels, struct hash *highlightIds, unsigned highlightColor)
 /* load one genePred record into a linkedFeatures object */
 {
-struct genePred *gp = genePredExtLoad(row, (gencodeQuery->isGenePredX ? GENEPREDX_NUM_COLS:  GENEPRED_NUM_COLS));
+struct genePred *gp = gencodeQueryGenePred(gencodeQuery, row);
+struct wgEncodeGencodeAttrs *attrs = gencodeQueryAttrs(gencodeQuery, row);  // maybe NULL
 struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, gp, TRUE);
 if (highlightIds != NULL)
     highlightByGetColor(gp, highlightIds, highlightColor, lf);
+lf->extra = getTranscriptLabel(enabledLabels, gp, attrs);
+genePredFree(&gp);
+wgEncodeGencodeAttrsFree(&attrs);
 return lf;
 }
 
-static void loadGencodeGenePreds(struct track *tg)
+static void loadGencodeTrack(struct track *tg)
 /* Load genePreds in window info linked feature, with filtering, etc. */
 {
 struct sqlConnection *conn = hAllocConn(database);
+unsigned enabledLabels = getEnabledLabels(tg);
+boolean needAttrs = (enabledLabels & ITEM_LABEL_GENE_ID) != 0;  // only for certain labels
 struct hash *highlightIds = NULL;
 if (anyFilterBy(tg, highlightBySetGet))
     highlightIds = loadHighlightIds(conn, tg);
-struct gencodeQuery *gencodeQuery = geneQueryConstruct(tg);
+struct gencodeQuery *gencodeQuery = geneQueryConstruct(tg, needAttrs);
 struct sqlResult *sr = executeQuery(conn, gencodeQuery);
 struct linkedFeatures *lfList = NULL;
 unsigned highlightColor = getHighlightColor(tg);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
-    slAddHead(&lfList, loadGencodeGenePred(tg, gencodeQuery, row, highlightIds, highlightColor));
+    slAddHead(&lfList, loadGencodeTranscript(tg, gencodeQuery, row, enabledLabels, highlightIds, highlightColor));
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 
@@ -391,8 +559,6 @@ if (tg->visibility != tvDense)
 else
     slReverse(&lfList);
 tg->items = lfList;
-genePredAssignConfiguredName(tg);
-
 if (gencodeQuery->isFiltered)
     labelTrackAsFiltered(tg);
 gencodeQueryFree(&gencodeQuery);
@@ -412,7 +578,7 @@ else
 static void gencodeGeneMethods(struct track *tg)
 /* Load up custom methods for ENCODE Gencode gene track */
 {
-tg->loadItems = loadGencodeGenePreds;
+tg->loadItems = loadGencodeTrack;
 tg->itemName = gencodeGeneName;
 }
 
@@ -425,44 +591,23 @@ registerTrackHandler("wgEncodeSangerGencode", gencodeGeneMethods);
 // uses trackHandler attribute
 registerTrackHandler("wgEncodeGencode", gencodeGeneMethods);
 
-// one per gencode version. Add a bunch in the future so
-// this doesn't have to be changed on every release.
-// FIXME: delete these CGI and tracks are all user trackHandler
-registerTrackHandler("wgEncodeGencodeV3", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV4", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV8", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV9", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV10", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV11", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV12", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV13", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV14", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV15", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV16", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV17", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV18", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV19", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV20", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV21", gencodeGeneMethods);
+}
 
-registerTrackHandler("wgEncodeGencodeVM2", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeVM3", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeVM4", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeVM5", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeVM6", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeVM7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeVM8", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeVM9", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeVM10", gencodeGeneMethods);
-
+static char *gencodePilotGeneName(struct track *tg, void *item)
+/* Get name to use for GENCODE pilot gene item. */
+{
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL)
+    return lf->extra;
+else
+    return lf->name;
 }
 
 static void gencodePilotGeneMethods(struct track *tg)
 /* Load up custom methods for ENCODE Gencode gene track */
 {
 tg->loadItems = loadGenePredWithConfiguredName;
-tg->itemName = gencodeGeneName;
+tg->itemName = gencodePilotGeneName;
 }
 
 static Color gencodeIntronPilotColorItem(struct track *tg, void *item, struct hvGfx *hvg)
@@ -520,7 +665,7 @@ registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronPilotMethods);
 registerTrackHandler("encodeGencodeGeneOct05", gencodePilotGeneMethods);
 registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronPilotMethods);
 registerTrackHandler("encodeGencodeGeneMar07", gencodePilotGeneMethods);
-registerTrackHandler("encodeGencodeGenePolyAMar07",bed9Methods);
+registerTrackHandler("encodeGencodeGenePolyAMar07", bed9Methods);
 registerTrackHandler("encodeGencodeRaceFrags", gencodePilotRaceFragsMethods);
 }
 
