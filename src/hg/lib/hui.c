@@ -8969,9 +8969,8 @@ freeMem(scName);
 return eUrl->string;
 }
 
-void printDataVersion(char *database, struct trackDb *tdb)
-/* If this annotation has a dataVersion setting, print it.
- * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
+char *checkDataVersion(char *database, struct trackDb *tdb)
+/* see if trackDb has a dataVersion setting and check that file for version */
 {
 // try the metadata
 metadataForTable(database, tdb, NULL);
@@ -8995,6 +8994,15 @@ if (version != NULL)
         lineFileClose(&lf);
         }
     }
+return version;
+}
+
+void printDataVersion(char *database, struct trackDb *tdb)
+/* If this annotation has a dataVersion setting, print it.
+ * check hgFixed.trackVersion, meta data and trackDb 'dataVersion'. */
+{
+char *version = checkDataVersion(database, tdb);
+
 if (version == NULL)
     {
     // try the hgFixed.trackVersion table
