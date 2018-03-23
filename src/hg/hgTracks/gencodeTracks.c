@@ -464,18 +464,26 @@ safef(varName, sizeof(varName), "%s.label.%s", tg->track, labelName);
 cartSetBoolean(cart, varName, value);
 }
 
-static void setFromOldLabelsVarsInCart(struct track *tg)
+static unsigned setFromOldLabelsVarsInCart(struct track *tg)
 /* If the old gencode label variable are set for this track, migrate to the new
  * variable.  This prevents labels from disappearing with the new old and an old cart.
  */
 {
 // logic from simpleTracks.c:genePredAssignConfiguredName()
+unsigned enabledLabels = 0;
 char *geneLabel = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "label", "gene");
 if (sameString(geneLabel, "gene") || sameString(geneLabel, "name") || sameString(geneLabel, "both"))
+    {
     setLabelCartVar(tg, "geneName", TRUE);
+    enabledLabels |= ITEM_LABEL_GENE_NAME;
+    }
 if (sameString(geneLabel, "accession") || sameString(geneLabel, "both"))
+    {
     setLabelCartVar(tg, "transcriptId", TRUE);
+    enabledLabels |= ITEM_LABEL_TRANSCRIPT_ID;
+    }
 cartRemoveVariableClosestToHome(cart, tg->tdb, FALSE, "label");
+return enabledLabels;
 }
 
 static unsigned getEnabledLabels(struct track *tg)
@@ -493,7 +501,7 @@ for (i = 0; itemLabelCartVarNamesMap[i].name != NULL; i++)
 
 // if it looks like new track settings have never been configured, set from old.
 if ((enabledLabels == 0) && !anyExists)
-    setFromOldLabelsVarsInCart(tg);
+    enabledLabels = setFromOldLabelsVarsInCart(tg);
 return enabledLabels;
 }
 
